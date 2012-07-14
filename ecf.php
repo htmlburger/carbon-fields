@@ -1,0 +1,22 @@
+<?php
+/*
+Plugin Name: Enhanced Custom Fields
+*/
+
+include_once 'EECF_DataStore.php';
+include_once 'EECF_Container.php';
+include_once 'EECF_Field.php';
+include_once 'EECF_Field_Repeater.php';
+
+
+/* EXAMPLE */
+
+$custom_fields_panel = new EECF_Container_CustomFields('Custom Fields Panel');
+$custom_fields_panel->setup(array(
+	'post_type'=>'post'
+));
+$custom_fields_panel->add_fields(array(
+	EECF_Field::factory('text', 'img'),
+	EECF_Field::factory('text', 'pdf'),
+));
+
