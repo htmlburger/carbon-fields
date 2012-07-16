@@ -68,6 +68,18 @@ class EECF_Container {
 	function get_nonce_name() {
 		return 'eecf_panel_' . $this->id . '_nonce';
 	}
+
+	function set_datastore(EECF_DataStore $store) {
+		$this->store = $store;
+
+		foreach ($this->fields as $field) {
+			$field->set_datastore($this->store);
+		}
+	}
+
+	function get_datastore() {
+		return $this->store;
+	}
 }
 
 class EECF_Container_CustomFields extends EECF_Container {
@@ -80,7 +92,9 @@ class EECF_Container_CustomFields extends EECF_Container {
 	);
 
 	function init() {
-		$this->store = new EECF_DataStore_CustomField();
+		if ( !$this->get_datastore() ) {
+			$this->set_datastore(new EECF_DataStore_CustomField());
+		}
 
 		if ( isset($_GET['post']) ) {
 			$this->set_post_id($_GET['post']);
@@ -91,9 +105,7 @@ class EECF_Container_CustomFields extends EECF_Container {
 	}
 
 	function save($post_id) {
-		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
-			return;
-		} else if (!isset($_REQUEST[$this->get_nonce_name()]) || !wp_verify_nonce($_REQUEST[$this->get_nonce_name()], $this->get_nonce_name())) {
+		if ( !$this->is_valid_save() ) {
 			return;
 		}
 
@@ -106,6 +118,16 @@ class EECF_Container_CustomFields extends EECF_Container {
 			$field->set_value_from_input();
 			$field->save();
 		}
+	}
+
+	function is_valid_save() {
+		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
+			return false;
+		} else if (!isset($_REQUEST[$this->get_nonce_name()]) || !wp_verify_nonce($_REQUEST[$this->get_nonce_name()], $this->get_nonce_name())) {
+			return false;
+		}
+
+		return true;
 	}
 
 	function attach() {
@@ -122,14 +144,6 @@ class EECF_Container_CustomFields extends EECF_Container {
 	function set_post_id($post_id) {
 		$this->post_id = $post_id;
 		$this->store->set_post_id($post_id);
-	}
-
-	function set_datastore(EECF_DataStore $store) {
-		$this->store = $store;
-
-		foreach ($this->fields as $field) {
-			$field->set_datastore($this->store);
-		}
 	}
 }
 

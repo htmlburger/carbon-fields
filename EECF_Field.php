@@ -5,6 +5,7 @@ class EECF_Field {
 	protected $name;
 	protected $label;
 	protected $store;
+	protected $render_fn;
 
 
 	static function factory($type, $name, $label=null) {
@@ -70,6 +71,7 @@ class EECF_Field {
 	
 	function set_datastore(EECF_DataStore $store) {
 		$this->store = $store;
+		return $this;
 	}
 	
 	function get_datastore() {
@@ -96,6 +98,15 @@ class EECF_Field {
 
 	function get_name() {
 		return $this->name;
+	}
+
+	function set_render($fn) {
+		if ( !is_callable($fn) ) {
+			throw new Exception('Render must be callable');
+		}
+
+		$this->render_fn = $fn;
+		return $this;
 	}
 }
 

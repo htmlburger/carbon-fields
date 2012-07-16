@@ -8,7 +8,6 @@ include_once 'EECF_Container.php';
 include_once 'EECF_Field.php';
 include_once 'EECF_Field_Repeater.php';
 
-
 /* EXAMPLE */
 
 $custom_fields_panel = new EECF_Container_CustomFields('Custom Fields Panel');

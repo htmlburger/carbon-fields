@@ -66,6 +66,10 @@ class EECF_Field_Repeater extends EECF_Field {
 		$group_rows = $this->store->load_groups($this);
 		$value_groups = array();
 
+		if ( empty($group_rows) ) {
+			return;
+		}
+
 		// load and parse values
 		foreach ($group_rows as $row) {
 			if ( !preg_match('~^' . preg_quote($this->name, '~') . '(?P<key>.*)_(?P<index>\d+)$~', $row['field_key'], $field_name) ) {
