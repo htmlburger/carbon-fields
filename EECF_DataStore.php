@@ -5,6 +5,7 @@ abstract class EECF_DataStore {
 	abstract function save(EECF_Field $field);
 	abstract function delete(EECF_Field $field);
 	abstract function load_groups(EECF_Field $field);
+	abstract function delete_groups(EECF_Field $field);
 }
 
 class EECF_DataStore_CustomField extends EECF_DataStore {
@@ -30,6 +31,15 @@ class EECF_DataStore_CustomField extends EECF_DataStore {
 			WHERE `meta_key` LIKE "' . $field->get_name() . '_%"
 			ORDER BY `meta_key`
 		', ARRAY_A);
+	}
+
+	function delete_groups(EECF_Field $field) {
+		global $wpdb;
+
+		return $wpdb->query('
+			DELETE FROM ' . $wpdb->postmeta . '
+			WHERE `meta_key` LIKE "' . $field->get_name() . '_%"
+		');
 	}
 
 	function set_post_id($post_id) {

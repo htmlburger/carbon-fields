@@ -15,6 +15,7 @@
 						</tr>
 					<?php endforeach ?>
 				</table>
+				<a href="#" onclick="javascript:jQuery(this).parent().remove(); return false;">Remove</a>
 			</td>
 		</tr>
 	<?php endforeach ?>

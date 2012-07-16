@@ -30,14 +30,20 @@ class EECF_Field_Repeater extends EECF_Field {
 	}
 
 	function save() {
-		// TODO: delete all
-		
+		$this->delete();
+
 		if ( !isset($_POST[$this->get_name()]) ) {
 			return;
 		}
 
 		$value_groups = $_POST[$this->get_name()];
-		foreach ($value_groups as $index => $values) {
+		$index = 0;
+		foreach ($value_groups as $values) {
+			if ( count(array_filter($values)) == 0 && !in_array('0', $values) ) {
+				// empty group
+				continue;
+			}
+
 			foreach ($this->fields as $field) {
 				// set value from the group
 				$tmp_field = clone $field;
@@ -48,11 +54,13 @@ class EECF_Field_Repeater extends EECF_Field {
 
 				$tmp_field->save();
 			}
+
+			$index++;
 		}
 	}
 
 	function delete() {
-		throw new Exception('TBD');
+		return $this->store->delete_groups($this);
 	}
 
 	function load_groups() {
