@@ -7,7 +7,6 @@ class EECF_Container {
 
 	protected $fields = array();
 	protected $store;
-	protected $post_id;
 
 	function __construct($title) {
 		$this->title = $title;
@@ -26,15 +25,7 @@ class EECF_Container {
 		include dirname(__FILE__) . '/admin-templates/panel.php';
 	}
 
-	function save($post_id) {
-		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
-			return;
-		} else if (!isset($_REQUEST[$this->get_nonce_name()]) || !wp_verify_nonce($_REQUEST[$this->get_nonce_name()], $this->get_nonce_name())) {
-			return;
-		}
-
-		$this->set_post_id($post_id);
-
+	function save() {
 		foreach ($this->fields as $field) {
 			$field->set_value_from_input();
 			$field->save();
@@ -43,6 +34,10 @@ class EECF_Container {
 
 	function add_fields($fields) {
 		foreach ($fields as $field) {
+			if ( !is_a($field, 'EECF_Field') ) {
+				throw new Exception('Object must be of type EECF_Field');
+			}
+
 			if ( !$field->get_datastore() ) {
 				$field->set_datastore($this->store);
 			}
@@ -55,11 +50,8 @@ class EECF_Container {
 		if ( in_array($id, self::$registered_panel_ids) ) {
 			throw new Exception ('Panel ID already registered');
 		}
-	}
 
-	function set_post_id($post_id) {
-		$this->post_id = $post_id;
-		$this->store->set_post_id($post_id);
+		self::$registered_panel_ids[] = $id;
 	}
 
 	function get_nonce_name() {
@@ -68,6 +60,8 @@ class EECF_Container {
 }
 
 class EECF_Container_CustomFields extends EECF_Container {
+	protected $post_id;
+
 	public $settings = array(
 		'post_type'=>'post',
 		'panel_context'=>'normal',
@@ -85,6 +79,21 @@ class EECF_Container_CustomFields extends EECF_Container {
 		add_action('save_post', array($this, 'save'));
 	}
 
+	function save($post_id) {
+		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
+			return;
+		} else if (!isset($_REQUEST[$this->get_nonce_name()]) || !wp_verify_nonce($_REQUEST[$this->get_nonce_name()], $this->get_nonce_name())) {
+			return;
+		}
+
+		$this->set_post_id($post_id);
+
+		foreach ($this->fields as $field) {
+			$field->set_value_from_input();
+			$field->save();
+		}
+	}
+
 	function attach() {
 		add_meta_box(
 	    	$this->id, 
@@ -94,6 +103,19 @@ class EECF_Container_CustomFields extends EECF_Container {
 	    	$this->settings['panel_context'],
 	    	$this->settings['panel_priority']
 	    );
+	}
+
+	function set_post_id($post_id) {
+		$this->post_id = $post_id;
+		$this->store->set_post_id($post_id);
+	}
+
+	function set_datastore(EECF_DataStore $store) {
+		$this->store = $store;
+
+		foreach ($this->fields as $field) {
+			$field->set_datastore($this->store);
+		}
 	}
 }
 

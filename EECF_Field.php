@@ -24,12 +24,6 @@ class EECF_Field {
 			$label = ucwords(str_replace('_', ' ', $label));
 		}
 
-		if (substr($name, 0, 1) != '_') {
-			// add underscore to custom field name -- this will remove it from
-			// custom fields list in administration
-			$name = '_' . $name;
-		}
-
 		$field = new $class($name, $label);
 		$field->type = $type;
 
@@ -37,7 +31,7 @@ class EECF_Field {
 	}
 
 	private function __construct($name, $label) {
-		$this->name = $name;
+		$this->set_name($name);
 		$this->label = $label;
 
 		$this->render_fn = array($this, '_render');
@@ -57,15 +51,15 @@ class EECF_Field {
 	}
 
 	function load() {
-		$this->store->load($this);
+		return $this->store->load($this);
 	}
 
 	function save() {
-		$this->store->save($this);
+		return $this->store->save($this);
 	}
 
 	function delete() {
-		$this->store->delete($this);
+		return $this->store->delete($this);
 	}
 	
 	function set_value_from_input() {
@@ -89,6 +83,12 @@ class EECF_Field {
 	}
 
 	function set_name($name) {
+		if (substr($name, 0, 1) != '_') {
+			// add underscore to custom field name -- this will remove it from
+			// custom fields list in administration
+			$name = '_' . $name;
+		}
+
 		$this->name = $name;
 	}
 

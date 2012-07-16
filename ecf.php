@@ -20,3 +20,10 @@ $custom_fields_panel->add_fields(array(
 	EECF_Field::factory('text', 'pdf'),
 ));
 
+/* Repeater */
+$custom_fields_panel->add_fields(array(
+	EECF_Field::factory('repeater', 'slideshow')->add_fields(array(
+		EECF_Field::factory('text', 'title'),
+		EECF_Field::factory('text', 'img_src'),
+	)),
+));
