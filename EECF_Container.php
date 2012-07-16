@@ -2,6 +2,7 @@
 
 class EECF_Container {
 	static $registered_panel_ids = array();
+	static $registered_field_names = array();
 	public $settings = array();
 	public $title = '';
 
@@ -38,6 +39,8 @@ class EECF_Container {
 				throw new Exception('Object must be of type EECF_Field');
 			}
 
+			$this->verify_unique_field_name($field->get_name());
+
 			if ( !$field->get_datastore() ) {
 				$field->set_datastore($this->store);
 			}
@@ -52,6 +55,14 @@ class EECF_Container {
 		}
 
 		self::$registered_panel_ids[] = $id;
+	}
+
+	function verify_unique_field_name($name) {
+		if ( in_array($name, self::$registered_field_names) ) {
+			throw new Exception ('Field name already registered');
+		}
+
+		self::$registered_field_names[] = $name;
 	}
 
 	function get_nonce_name() {

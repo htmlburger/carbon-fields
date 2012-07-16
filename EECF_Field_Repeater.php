@@ -25,8 +25,7 @@ class EECF_Field_Repeater extends EECF_Field {
 		$this->load_groups();
 
 		// TODO: remove this line, used for testing?
-		$group = $this->create_group();
-		$group->add_fields($this->fields);
+		$this->groups[] = $this->fields;
 	}
 
 	function save() {
@@ -87,53 +86,13 @@ class EECF_Field_Repeater extends EECF_Field {
 				$group_fields[] = $tmp_field;
 			}
 
-			$group = $this->create_group();
-			$group->add_fields($group_fields);
+			$this->groups[] = $group_fields;
 		}
-	}
-
-	function create_group() {
-		$group = new EECF_Field_Repeater_Group($this->get_name(), count($this->groups));
-		$this->groups[] = $group;
-
-		return $group;
 	}
 
 	function _render() {
 		$container_tag_class_name = get_class($this);
 		include dirname(__FILE__) . '/admin-templates/repeater.php';
-	}
-}
-
-class EECF_Field_Repeater_Group {
-	protected $fields = array();
-	protected $index;
-	protected $name;
-
-	function __construct($name, $index=0) {
-		$this->name = $name;
-		$this->index = intval($index);
-	}
-
-	function add_fields($fields) {
-		foreach ($fields as $index => $field) {
-			if ( !is_a($field, 'EECF_Field') ) {
-				throw new Exception('Object must be of type EECF_Field');
-			}
-
-			$field->set_name( $this->name . '[' . $this->get_index() . '][' . $field->get_name() . ']' );
-			$this->fields[] = $field;
-		}
-
-		return $this;
-	}
-
-	function get_fields() {
-		return $this->fields;
-	}
-
-	function get_index() {
-		return $this->index;
 	}
 }
 

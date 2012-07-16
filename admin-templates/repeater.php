@@ -1,12 +1,10 @@
 <table class="eecf-contaienr <?php echo $container_tag_class_name ?>">
-	<?php foreach ($this->groups as $group): ?>
+	<?php foreach ($this->groups as $index => $fields): ?>
 		<tr>
 			<td>
 				<table>
-					<?php 
-					$group_fields = $group->get_fields();
-					foreach ($group_fields as $field): 
-						// fields are already loaded
+					<?php foreach ($fields as $field): 
+						$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
 					?>
 						<tr>
 							<td>
