@@ -86,6 +86,9 @@ class EECF_Container_CustomFields extends EECF_Container {
 			return;
 		}
 
+		// Unhook action to garantee single save
+		remove_action('save_post', array($this, 'save'));
+
 		$this->set_post_id($post_id);
 
 		foreach ($this->fields as $field) {

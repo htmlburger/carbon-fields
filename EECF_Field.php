@@ -33,13 +33,11 @@ class EECF_Field {
 	private function __construct($name, $label) {
 		$this->set_name($name);
 		$this->label = $label;
-
-		$this->render_fn = array($this, '_render');
 	}
 
 	function render() {
 		if (!is_callable($this->render_fn)) {
-			throw new Exception('EECF_Field render funtion is invalid');
+			return $this->_render();
 		}
 
 		call_user_func($this->render_fn, $this);
@@ -62,8 +60,12 @@ class EECF_Field {
 		return $this->store->delete($this);
 	}
 	
-	function set_value_from_input() {
-		$this->set_value($_POST[$this->name]);
+	function set_value_from_input($input = null) {
+		if ( is_null($input) ) {
+			$input = $_POST;
+		}
+
+		$this->set_value($input[$this->name]);
 	}
 	
 	function set_datastore(EECF_DataStore $store) {

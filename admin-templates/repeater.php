@@ -1,10 +1,20 @@
 <table class="eecf-contaienr <?php echo $container_tag_class_name ?>">
-	<?php foreach ($this->fields as $field): 
-		$field->load();
-	?>
+	<?php foreach ($this->groups as $group): ?>
 		<tr>
 			<td>
-				<?php echo $field->render(); ?>
+				<table>
+					<?php 
+					$group_fields = $group->get_fields();
+					foreach ($group_fields as $field): 
+						// fields are already loaded
+					?>
+						<tr>
+							<td>
+								<?php echo $field->render(); ?>
+							</td>
+						</tr>
+					<?php endforeach ?>
+				</table>
 			</td>
 		</tr>
 	<?php endforeach ?>
