@@ -4,8 +4,8 @@ abstract class EECF_DataStore {
 	abstract function load(EECF_Field $field);
 	abstract function save(EECF_Field $field);
 	abstract function delete(EECF_Field $field);
-	abstract function load_groups(EECF_Field $field);
-	abstract function delete_groups(EECF_Field $field);
+	abstract function load_values(EECF_Field $field);
+	abstract function delete_values(EECF_Field $field);
 }
 
 class EECF_DataStore_CustomField extends EECF_DataStore {
@@ -23,7 +23,7 @@ class EECF_DataStore_CustomField extends EECF_DataStore {
 		delete_post_meta($this->post_id, $field->get_name(), $field->get_value());
 	}
 
-	function load_groups(EECF_Field $field) {
+	function load_values(EECF_Field $field) {
 		global $wpdb;
 
 		return $wpdb->get_results('
@@ -32,7 +32,7 @@ class EECF_DataStore_CustomField extends EECF_DataStore {
 		', ARRAY_A);
 	}
 
-	function delete_groups(EECF_Field $field) {
+	function delete_values(EECF_Field $field) {
 		global $wpdb;
 
 		return $wpdb->query('

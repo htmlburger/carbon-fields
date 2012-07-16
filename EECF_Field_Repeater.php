@@ -2,7 +2,7 @@
 
 class EECF_Field_Repeater extends EECF_Field {
 	protected $fields = array();
-	protected $groups = array();
+	protected $values = array();
 
 	function add_fields($fields) {
 		$this->fields = array_merge($this->fields, $fields);
@@ -22,22 +22,26 @@ class EECF_Field_Repeater extends EECF_Field {
 
 	function load() {
 		// load existing groups
-		$this->load_groups();
+		$this->load_values();
 
 		// TODO: remove this line, used for testing?
-		$this->groups[] = $this->fields;
+		$this->values[] = $this->fields;
 	}
+	
+	function set_value_from_input($input = null) {
+		if ( is_null($input) ) {
+			$input = $_POST;
+		}
 
-	function save() {
-		$this->delete();
-
-		if ( !isset($_POST[$this->get_name()]) ) {
+		if ( !isset($input[$this->get_name()]) ) {
 			return;
 		}
 
-		$value_groups = $_POST[$this->get_name()];
+		$value_groups = $input[$this->get_name()];
 		$index = 0;
+
 		foreach ($value_groups as $values) {
+			$group = array();
 			// check if group is empty
 			if ( count(array_filter($values)) == 0 && !in_array('0', $values) ) {
 				continue;
@@ -50,20 +54,30 @@ class EECF_Field_Repeater extends EECF_Field {
 
 				// update name to group name
 				$tmp_field->set_name( $this->get_name() . $field->get_name() . '_' . $index );
-
-				$tmp_field->save();
+				$group[] = $tmp_field;
 			}
 
+			$this->values[] = $group;
 			$index++;
 		}
 	}
 
-	function delete() {
-		return $this->store->delete_groups($this);
+	function save() {
+		$this->delete();
+
+		foreach ($this->values as $value) {
+			foreach ($value as $field) {
+				$field->save();
+			}
+		}
 	}
 
-	function load_groups() {
-		$group_rows = $this->store->load_groups($this);
+	function delete() {
+		return $this->store->delete_values($this);
+	}
+
+	function load_values() {
+		$group_rows = $this->store->load_values($this);
 		$value_groups = array();
 
 		if ( empty($group_rows) ) {
@@ -91,7 +105,7 @@ class EECF_Field_Repeater extends EECF_Field {
 				$group_fields[] = $tmp_field;
 			}
 
-			$this->groups[] = $group_fields;
+			$this->values[] = $group_fields;
 		}
 	}
 
