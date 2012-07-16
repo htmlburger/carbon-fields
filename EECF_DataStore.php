@@ -29,7 +29,6 @@ class EECF_DataStore_CustomField extends EECF_DataStore {
 		return $wpdb->get_results('
 			SELECT meta_key AS field_key, meta_value AS field_value FROM ' . $wpdb->postmeta . '
 			WHERE `meta_key` LIKE "' . $field->get_name() . '_%"
-			ORDER BY `meta_key`
 		', ARRAY_A);
 	}
 

@@ -38,8 +38,8 @@ class EECF_Field_Repeater extends EECF_Field {
 		$value_groups = $_POST[$this->get_name()];
 		$index = 0;
 		foreach ($value_groups as $values) {
+			// check if group is empty
 			if ( count(array_filter($values)) == 0 && !in_array('0', $values) ) {
-				// empty group
 				continue;
 			}
 
@@ -76,6 +76,7 @@ class EECF_Field_Repeater extends EECF_Field {
 		}
 
 		// create groups list with loaded fields
+		ksort($value_groups);
 		foreach ($value_groups as $index => $values) {
 			$group_fields = array();
 
