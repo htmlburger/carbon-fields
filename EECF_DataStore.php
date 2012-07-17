@@ -46,3 +46,27 @@ class EECF_DataStore_CustomField extends EECF_DataStore {
 	}
 }
 
+
+class EECF_DataStore_ThemeOptions extends EECF_DataStore {
+	protected $post_id;
+
+	function save(EECF_Field $field) {
+		
+	}
+
+	function load(EECF_Field $field) {
+		
+	}
+
+	function delete(EECF_Field $field) {
+		
+	}
+
+	function load_values(EECF_Field $field) {
+		
+	}
+
+	function delete_values(EECF_Field $field) {
+		
+	}
+}

@@ -58,11 +58,19 @@ class EECF_Container {
 	}
 
 	function verify_unique_field_name($name) {
-		if ( in_array($name, self::$registered_field_names) ) {
+		if ( !is_array($this::$registered_field_names) ) {
+			$this::$registered_field_names = array();
+		}
+		
+		var_dump( get_class($this) );
+		var_dump( $name );
+		print_r( $this::$registered_field_names );
+
+		if ( in_array($name, $this::$registered_field_names) ) {
 			throw new Exception ('Field name already registered');
 		}
 
-		self::$registered_field_names[] = $name;
+		$this::$registered_field_names[] = $name;
 	}
 
 	function get_nonce_name() {
