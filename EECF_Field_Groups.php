@@ -17,8 +17,16 @@ class EECF_Field_Groups extends EECF_Field_Repeater {
 		}
 		$group->set_label( $name );
 
-		$this->groups[] = $group;
+		$this->groups[$group->get_name()] = $group;
 		return $this;
+	}
+
+	function set_datastore(EECF_DataStore $store) {
+		$this->store = $store;
+
+		foreach ($this->groups as $group) {
+			$group->set_datastore($this->store);
+		}
 	}
 
 	function set_value_from_input($input = null) {
@@ -26,11 +34,92 @@ class EECF_Field_Groups extends EECF_Field_Repeater {
 			$input = $_POST;
 		}
 
-		throw new Exception('TBD');
+		if ( !isset($input[$this->get_name()]) ) {
+			return;
+		}
+
+		$input_groups = $input[$this->get_name()];
+		$index = 0;
+
+		foreach ($input_groups as $values) {
+			$value_group = array();
+			if ( !isset($values['group']) || !isset($this->groups[$values['group']]) ) {
+				continue;
+			}
+
+			$group = $this->groups[$values['group']];
+			unset($values['group']);
+
+			$group_fields = $group->get_fields();
+
+			// trim input values to those used by the field
+			$group_field_names = array_flip($group->get_field_names());
+			$values = array_intersect_key($values, $group_field_names);
+
+			// check if group is empty
+			if ( count(array_filter($values)) == 0 && !in_array('0', $values) ) {
+				continue;
+			}
+
+			foreach ($group_fields as $field) {
+				// set value from the group
+				$tmp_field = clone $field;
+				$tmp_field->set_value_from_input($values);
+
+				// update name to group name
+				$tmp_field->set_name( $this->get_name() . $group->get_name() . $field->get_name() . '_' . $index );
+				$value_group[] = $tmp_field;
+			}
+
+			$this->values[] = $value_group;
+			$index++;
+		}
 	}
 
 	function load() {
-		
+		// load existing groups
+		$this->load_values();
+	}
+
+	function load_values() {
+		$group_rows = $this->store->load_values($this);
+		$input_groups = array();
+
+		if ( empty($group_rows) ) {
+			return;
+		}
+
+		// quote group names for use in regex
+		$group_names = array_map('preg_quote', array_keys($this->groups), array('~'));
+		$group_names = implode('|', $group_names);
+
+		// load and parse values and group type
+		foreach ($group_rows as $row) {
+			if ( !preg_match('~^' . preg_quote($this->name, '~') . '(?P<group>' . $group_names . ')(?P<key>.*)_(?P<index>\d+)$~', $row['field_key'], $field_name) ) {
+				continue;
+			}
+
+			$input_groups[ $field_name['index'] ]['type'] = $field_name['group'];
+			$input_groups[ $field_name['index'] ][ $field_name['key'] ] = $row['field_value'];
+		}
+
+		// create groups list with loaded fields
+		ksort($input_groups);
+
+		foreach ($input_groups as $index => $values) {
+			$value_group = array('type' => $values['type']);
+			$group_fields = $this->groups[$values['type']]->get_fields();
+			unset($values['type']);
+
+			foreach ($group_fields as $field) {
+				// set value from the group
+				$tmp_field = clone $field;
+				$tmp_field->set_value_from_input($values);
+				$value_group[] = $tmp_field;
+			}
+
+			$this->values[] = $value_group;
+		}
 	}
 
 	function _render() {
@@ -51,6 +140,16 @@ class EECF_Field_Group {
 
 	function get_fields() {
 		return $this->fields;
+	}
+
+	function get_field_names() {
+		$names = array();
+
+		foreach ($this->fields as $field) {
+			$names[] = $field->get_name();
+		}
+
+		return $names;
 	}
 
 	function set_label($label) {
@@ -75,6 +174,15 @@ class EECF_Field_Group {
 
 	function get_name() {
 		return $this->name;
+	}
+
+
+	function set_datastore(EECF_DataStore $store) {
+		foreach ($this->fields as $field) {
+			if ( !$field->get_datastore() ) {
+				$field->set_datastore($store);
+			}
+		}
 	}
 }
 
