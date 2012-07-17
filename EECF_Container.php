@@ -2,7 +2,6 @@
 
 class EECF_Container {
 	static $registered_panel_ids = array();
-	static $registered_field_names = array();
 	public $settings = array();
 	public $title = '';
 
@@ -19,11 +18,6 @@ class EECF_Container {
 	function setup($settings = array()) {
 		$this->settings = array_merge($this->settings, $settings);
 		$this->init();
-	}
-
-	function render() {
-		$container_tag_class_name = get_class($this);
-		include dirname(__FILE__) . '/admin-templates/panel.php';
 	}
 
 	function save() {
@@ -51,26 +45,20 @@ class EECF_Container {
 
 	function verify_unique_panel_id($id) {
 		if ( in_array($id, self::$registered_panel_ids) ) {
-			throw new Exception ('Panel ID already registered');
+			throw new Exception ('Panel ID "' . $id .'" already registered');
 		}
 
 		self::$registered_panel_ids[] = $id;
 	}
 
 	function verify_unique_field_name($name) {
-		if ( !is_array($this::$registered_field_names) ) {
-			$this::$registered_field_names = array();
-		}
-		
-		var_dump( get_class($this) );
-		var_dump( $name );
-		print_r( $this::$registered_field_names );
+		static $registered_field_names = array();
 
-		if ( in_array($name, $this::$registered_field_names) ) {
-			throw new Exception ('Field name already registered');
+		if ( in_array($name, $registered_field_names) ) {
+			throw new Exception ('Field name "' . $name . '" already registered');
 		}
 
-		$this::$registered_field_names[] = $name;
+		$registered_field_names[] = $name;
 	}
 
 	function get_nonce_name() {
@@ -147,6 +135,11 @@ class EECF_Container_CustomFields extends EECF_Container {
 	    	$this->settings['panel_context'],
 	    	$this->settings['panel_priority']
 	    );
+	}
+
+	function render() {
+		$container_tag_class_name = get_class($this);
+		include dirname(__FILE__) . '/admin-templates/container-custom-fields.php';
 	}
 
 	function set_post_id($post_id) {

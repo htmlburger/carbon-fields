@@ -1,4 +1,4 @@
-<table class="eecf-contaienr <?php echo $container_tag_class_name ?>">
+<table class="eecf-container <?php echo $container_tag_class_name ?>">
 	<?php foreach ($this->values as $index => $fields): ?>
 		<tr>
 			<td>
