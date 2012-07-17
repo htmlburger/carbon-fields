@@ -21,16 +21,10 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 	    add_action('admin_menu', array($this, 'attach'));
 	}
 
-	function save() {
-		if ( !$this->is_valid_save() ) {
-			return;
-		}
-
-		throw new Exception('TBD');
-	}
-
 	function is_valid_save() {
-		if (!isset($_REQUEST[$this->get_nonce_name()]) || !wp_verify_nonce($_REQUEST[$this->get_nonce_name()], $this->get_nonce_name())) {
+		if ( $_SERVER['REQUEST_METHOD'] != 'POST' ) {
+			return false;
+		} else if ( !isset($_REQUEST[$this->get_nonce_name()]) || !wp_verify_nonce($_REQUEST[$this->get_nonce_name()], $this->get_nonce_name()) ) {
 			return false;
 		}
 
@@ -58,6 +52,9 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 		    $this->settings['file'],
 	    	array($this, 'render')
 		);
+
+		$page_hook = get_plugin_page_hookname( $this->settings['file'], '' );
+		add_action('load-' . $page_hook, array($this, 'save'));
 	}
 
 	function attach_main_page() {

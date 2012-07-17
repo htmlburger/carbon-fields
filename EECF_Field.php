@@ -4,6 +4,7 @@ class EECF_Field {
 	protected $value;
 	protected $name;
 	protected $label;
+	protected $help_text;
 	protected $store;
 	protected $render_fn;
 
@@ -117,11 +118,24 @@ class EECF_Field {
 		$this->render_fn = $fn;
 		return $this;
 	}
+
+	function set_help_text($help_text) {
+		$this->help_text = $help_text;
+		return $this;
+	}
+
+	function help_text($help_text) {
+		return $this->set_help_text($help_text);
+	}
+
+	function get_help_text() {
+		return $this->help_text;
+	}
 }
 
 class EECF_Field_Text extends EECF_Field {
 	function render() {
-		echo '<label>' . $this->label . '</label><input name="' . $this->name . '" value="' . htmlentities($this->value, ENT_COMPAT, 'UTF-8') . '" />';
+		echo '<input type="text" name="' . $this->name . '" value="' . htmlentities($this->value, ENT_COMPAT, 'UTF-8') . '" class="regular-text" />';
 	}
 }
 

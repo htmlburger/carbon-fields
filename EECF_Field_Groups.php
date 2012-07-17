@@ -30,6 +30,8 @@ class EECF_Field_Groups extends EECF_Field_Repeater {
 	}
 
 	function set_value_from_input($input = null) {
+		$this->values = array();
+
 		if ( is_null($input) ) {
 			$input = $_POST;
 		}
@@ -82,6 +84,8 @@ class EECF_Field_Groups extends EECF_Field_Repeater {
 	}
 
 	function load_values() {
+		$this->values = array();
+
 		$group_rows = $this->store->load_values($this);
 		$input_groups = array();
 

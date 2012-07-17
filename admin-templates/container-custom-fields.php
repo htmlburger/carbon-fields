@@ -3,6 +3,10 @@
 		$field->load();
 	?>
 		<tr>
+			<th scope="row">
+				<?php echo $field->get_label(); ?>
+				<?php echo $field->get_help_text(); ?>
+			</th>
 			<td>
 				<?php echo $field->render(); ?>
 			</td>

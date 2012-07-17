@@ -33,6 +33,8 @@ class EECF_Field_Repeater extends EECF_Field {
 			$input = $_POST;
 		}
 
+		$this->values = array();
+
 		if ( !isset($input[$this->get_name()]) ) {
 			return;
 		}
@@ -79,6 +81,8 @@ class EECF_Field_Repeater extends EECF_Field {
 	function load_values() {
 		$group_rows = $this->store->load_values($this);
 		$value_groups = array();
+		
+		$this->values = array();
 
 		if ( empty($group_rows) ) {
 			return;

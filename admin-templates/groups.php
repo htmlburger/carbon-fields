@@ -13,6 +13,10 @@
 						$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
 					?>
 						<tr>
+							<th scope="row">
+								<?php echo $field->get_label(); ?>
+								<?php echo $field->get_help_text(); ?>
+							</th>
 							<td>
 								<?php echo $field->render(); ?>
 							</td>
@@ -47,6 +51,10 @@
 						$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
 					?>
 						<tr>
+							<th scope="row">
+								<?php echo $field->get_label(); ?>
+								<?php echo $field->get_help_text(); ?>
+							</th>
 							<td>
 								<?php echo $field->render(); ?>
 							</td>

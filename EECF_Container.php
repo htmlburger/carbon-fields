@@ -21,10 +21,18 @@ class EECF_Container {
 	}
 
 	function save() {
+		if ( !$this->is_valid_save() ) {
+			return;
+		}
+
 		foreach ($this->fields as $field) {
 			$field->set_value_from_input();
 			$field->save();
 		}
+	}
+
+	function is_valid_save() {
+		return false;
 	}
 
 	function add_fields($fields) {
