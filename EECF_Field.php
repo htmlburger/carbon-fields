@@ -17,14 +17,6 @@ class EECF_Field {
 			throw new Exception ('Unknown field "' . $type . '".');
 		}
 
-		// Try to guess field label from it's name
-		if (is_null($label)) {
-			// remove the leading underscore(if it's there)
-			$label = preg_replace('~^_~', '', $name);
-			// split the name into words and make them capitalized
-			$label = ucwords(str_replace('_', ' ', $label));
-		}
-
 		$field = new $class($name, $label);
 		$field->type = $type;
 
@@ -33,7 +25,7 @@ class EECF_Field {
 
 	private function __construct($name, $label) {
 		$this->set_name($name);
-		$this->label = $label;
+		$this->set_label($label);
 	}
 
 	function render() {
@@ -87,6 +79,7 @@ class EECF_Field {
 	}
 
 	function set_name($name) {
+		$name = preg_replace('~\s+~', '_', strtolower($name));
 		if (substr($name, 0, 1) != '_') {
 			// add underscore to custom field name -- this will remove it from
 			// custom fields list in administration
@@ -98,6 +91,22 @@ class EECF_Field {
 
 	function get_name() {
 		return $this->name;
+	}
+
+	function set_label($label) {
+		// Try to guess field label from it's name
+		if (is_null($label)) {
+			// remove the leading underscore(if it's there)
+			$label = preg_replace('~^_~', '', $this->name);
+			// split the name into words and make them capitalized
+			$label = ucwords(str_replace('_', ' ', $label));
+		}
+
+		$this->label = $label;
+	}
+
+	function get_label() {
+		return $this->label;
 	}
 
 	function set_render($fn) {
