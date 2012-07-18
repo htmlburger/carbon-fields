@@ -173,3 +173,42 @@ class EECF_DataStore_TaxonomyMeta extends EECF_DataStore {
 	}
 }
 
+class EECF_DataStore_UserMeta extends EECF_DataStore {
+	protected $user_id;
+
+	function init() {}
+
+	function save(EECF_Field $field) {
+		update_user_meta($this->user_id, $field->get_name(), $field->get_value());
+	}
+
+	function load(EECF_Field $field) {
+		$field->set_value( get_user_meta($this->user_id, $field->get_name(), true) );
+	}
+
+	function delete(EECF_Field $field) {
+		delete_user_meta($this->user_id, $field->get_name(), $field->get_value());
+	}
+
+	function load_values(EECF_Field $field) {
+		global $wpdb;
+
+		return $wpdb->get_results('
+			SELECT meta_key AS field_key, meta_value AS field_value FROM ' . $wpdb->usermeta . '
+			WHERE `meta_key` LIKE "' . addslashes($field->get_name()) . '_%" AND `user_id`="' . intval($this->user_id) . '"
+		', ARRAY_A);
+	}
+
+	function delete_values(EECF_Field $field) {
+		global $wpdb;
+
+		return $wpdb->query('
+			DELETE FROM ' . $wpdb->usermeta . '
+			WHERE `meta_key` LIKE "' . addslashes($field->get_name()) . '_%" AND `user_id`="' . intval($this->user_id) . '"
+		');
+	}
+
+	function set_user_id($user_id) {
+		$this->user_id = $user_id;
+	}
+}
