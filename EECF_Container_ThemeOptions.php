@@ -54,7 +54,7 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 		);
 
 		$page_hook = get_plugin_page_hookname( $this->settings['file'], '' );
-		add_action('load-' . $page_hook, array($this, 'save'));
+		add_action('load-' . $page_hook, array($this, '_save'));
 	}
 
 	function attach_main_page() {

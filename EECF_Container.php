@@ -1,12 +1,15 @@
 <?php 
 
-class EECF_Container {
+abstract class EECF_Container {
 	static $registered_panel_ids = array();
 	public $settings = array();
 	public $title = '';
 
 	protected $fields = array();
 	protected $store;
+
+	abstract function init();
+	abstract function render();
 
 	function __construct($title) {
 		$this->title = $title;
@@ -20,11 +23,13 @@ class EECF_Container {
 		$this->init();
 	}
 
-	function save() {
-		if ( !$this->is_valid_save() ) {
-			return;
+	function _save() {
+		if ( $this->is_valid_save() ) {
+			call_user_func_array(array($this, 'save'), func_get_args());
 		}
+	}
 
+	function save() {
 		foreach ($this->fields as $field) {
 			$field->set_value_from_input();
 			$field->save();
@@ -84,6 +89,7 @@ class EECF_Container {
 	function get_datastore() {
 		return $this->store;
 	}
+
 }
 
 class EECF_Container_CustomFields extends EECF_Container {
@@ -105,14 +111,10 @@ class EECF_Container_CustomFields extends EECF_Container {
 		}
 
 	    add_action('admin_init', array($this, 'attach'));
-		add_action('save_post', array($this, 'save'));
+		add_action('save_post', array($this, '_save'));
 	}
 
 	function save($post_id) {
-		if ( !$this->is_valid_save() ) {
-			return;
-		}
-
 		// Unhook action to garantee single save
 		remove_action('save_post', array($this, 'save'));
 
