@@ -59,7 +59,11 @@ class EECF_Field {
 			$input = $_POST;
 		}
 
-		$this->set_value($input[$this->name]);
+		if ( !isset($input[$this->name]) ) {
+			$this->set_value(null);
+		} else {
+			$this->set_value( stripslashes_deep($input[$this->name]) );
+		}
 	}
 	
 	function set_datastore(EECF_DataStore $store) {
@@ -139,3 +143,117 @@ class EECF_Field_Text extends EECF_Field {
 	}
 }
 
+class EECF_Field_Textarea extends EECF_Field {
+	protected $rows = 2;
+
+	function rows($rows = 2) {
+		$this->rows = max(intval($rows), 0);
+		return $this;
+	}
+
+	function render($append = '') {
+		echo '<textarea name="' . $this->get_name() . '" rows="' . $this->rows . '">';
+		echo $this->get_value();
+		echo '</textarea>';
+	}
+}
+
+class EECF_Field_Select extends EECF_Field {
+	protected $options = array();
+
+	function add_options($options) {
+	    $this->options = $options;
+	    return $this;
+	}
+
+    function render() {
+    	if ( empty($this->options) ) {
+    		throw new Exception('No options added for field "' . $this->get_name() . '"');
+    	}
+
+		$options = array();
+
+		echo '<select name="' . $this->get_name() . '">';
+
+		foreach ($this->options as $key => $value) {
+			echo '<option value="' . htmlentities($key, ENT_COMPAT, 'UTF-8') . '"';
+
+			if ($this->value == $key) {
+				echo ' selected="selected"';
+			}
+
+			echo '>' . htmlentities($value, ENT_COMPAT, 'UTF-8') . '</option>';
+		}
+
+		echo '</select>';
+	}
+}
+
+class EECF_Field_Separator extends EECF_Field {
+	function render() {
+
+	}
+
+	function load() {
+		// skip;
+	}
+
+	function save() {
+		// skip;
+	}
+
+	function delete() {
+		// skip;
+	}
+}
+
+class EECF_Field_Set extends EECF_Field {
+	protected $options = array();
+	protected $limit_options = 0;
+
+	function add_options($options) {
+	    $this->options = $options;
+	    return $this;
+	}
+
+	function limit_options($limit) {
+		$this->limit_options = $limit;
+	    return $this;
+	}
+
+    function render() {
+    	if (!is_array($this->value)) {
+    		$this->value = array($this->value);
+    	}
+
+    	if (empty($this->options)) {
+    		throw new Exception('No options added for field "' . $this->name . '"');
+    	}
+
+		$loopCount = 0;
+
+		echo '<div class="eecf-set-list">';
+
+		foreach ($this->options as $key => $value) {
+			$loopCount ++;
+
+			$option = '<input type="checkbox" name="' . $this->get_name() . '[]" value="' . $key . '"';
+			if ( in_array($key, $this->value) ) {
+				$option .= ' checked="checked"';
+			}
+			$option .= '/>';
+
+			if ( $this->limit_options > 0 && $loopCount > $this->limit_options ) {
+				echo '<p style="display:none"><label>' . $option . $value . '</label></p>';				
+			} else {
+				echo '<p><label>' . $option . $value . '</label></p>';
+
+				if ( $loopCount == $this->limit_options ) {
+					echo '<p>... <a href="#" class="ecf-set-showall">Show All Options</a></p>';
+				}
+			}
+		}
+
+ 		echo '</div>';
+	}
+}
