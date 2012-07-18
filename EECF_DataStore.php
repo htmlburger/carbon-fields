@@ -35,7 +35,7 @@ class EECF_DataStore_CustomField extends EECF_DataStore {
 
 		return $wpdb->get_results('
 			SELECT meta_key AS field_key, meta_value AS field_value FROM ' . $wpdb->postmeta . '
-			WHERE `meta_key` LIKE "' . $field->get_name() . '_%"
+			WHERE `meta_key` LIKE "' . addslashes($field->get_name()) . '_%" AND `post_id`="' . intval($this->post_id) . '"
 		', ARRAY_A);
 	}
 
@@ -44,7 +44,7 @@ class EECF_DataStore_CustomField extends EECF_DataStore {
 
 		return $wpdb->query('
 			DELETE FROM ' . $wpdb->postmeta . '
-			WHERE `meta_key` LIKE "' . $field->get_name() . '_%"
+			WHERE `meta_key` LIKE "' . addslashes($field->get_name()) . '_%" AND `post_id`="' . intval($this->post_id) . '"
 		');
 	}
 
@@ -75,7 +75,7 @@ class EECF_DataStore_ThemeOptions extends EECF_DataStore {
 
 		return $wpdb->get_results('
 			SELECT option_name AS field_key, option_value AS field_value FROM ' . $wpdb->options . '
-			WHERE `option_name` LIKE "' . $field->get_name() . '_%"
+			WHERE `option_name` LIKE "' . addslashes($field->get_name()) . '_%"
 		', ARRAY_A);
 	}
 
@@ -84,7 +84,7 @@ class EECF_DataStore_ThemeOptions extends EECF_DataStore {
 
 		return $wpdb->query('
 			DELETE FROM ' . $wpdb->options . '
-			WHERE `option_name` LIKE "' . $field->get_name() . '_%"
+			WHERE `option_name` LIKE "' . addslashes($field->get_name()) . '_%"
 		');
 	}
 }
@@ -124,6 +124,9 @@ class EECF_DataStore_TaxonomyMeta extends EECF_DataStore {
 		global $wpdb;
 
 		$wpdb->taxonomymeta = $wpdb->prefix . 'taxonomymeta';
+
+		// Delete all meta associated with the deleted term
+		add_action('delete_term', array($this, 'on_delete_term'), 10, 3);
 	}
 
 	function save(EECF_Field $field) {
@@ -136,7 +139,6 @@ class EECF_DataStore_TaxonomyMeta extends EECF_DataStore {
 
 	function delete(EECF_Field $field) {
 		delete_metadata('taxonomy', $this->term_id, $field->get_name(), $field->get_value());
-		
 	}
 
 	function load_values(EECF_Field $field) {
@@ -144,9 +146,8 @@ class EECF_DataStore_TaxonomyMeta extends EECF_DataStore {
 
 		return $wpdb->get_results('
 			SELECT meta_key AS field_key, meta_value AS field_value FROM ' . $wpdb->taxonomymeta . '
-			WHERE `meta_key` LIKE "' . $field->get_name() . '_%"
+			WHERE `meta_key` LIKE "' . addslashes($field->get_name()) . '_%" AND taxonomy_id="' . intval($this->term_id) . '"
 		', ARRAY_A);
-		
 	}
 
 	function delete_values(EECF_Field $field) {
@@ -154,12 +155,21 @@ class EECF_DataStore_TaxonomyMeta extends EECF_DataStore {
 
 		return $wpdb->query('
 			DELETE FROM ' . $wpdb->taxonomymeta . '
-			WHERE `meta_key` LIKE "' . $field->get_name() . '_%"
+			WHERE `meta_key` LIKE "' . addslashes($field->get_name()) . '_%" AND taxonomy_id="' . intval($this->term_id) . '"
 		');
 	}
 
 	function set_term_id($term_id) {
 		$this->term_id = $term_id;
+	}
+
+	function on_delete_term($term_id, $tt_id, $taxonomy) {
+		global $wpdb;
+
+		return $wpdb->query('
+			DELETE FROM ' . $wpdb->taxonomymeta . '
+			WHERE `taxonomy_id` = "' . intval($term_id) . '"
+		');
 	}
 }
 
