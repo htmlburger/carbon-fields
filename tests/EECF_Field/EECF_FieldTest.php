@@ -1,14 +1,22 @@
 <?php 
 
-class EECF_Field_TextTest extends PHPUnit_Framework_TestCase {
+class EECF_FieldTest extends PHPUnit_Framework_TestCase {
     public function testFactory() {
         $field = EECF_Field::factory('text', 'label');
 
         $this->assertInstanceOf('EECF_Field_Text', $field);
+
+        try {
+            EECF_Field::factory('made_up_name', 'label');
+        } catch (EECF_Exception $e) {
+            return;
+        }
+
+        $this->fail('Invalid field names are expected to raise exception');
     }
 
     /**
-	 * @depends testFactory
+	   * @depends testFactory
      * @dataProvider nameProvider
      */
     public function testLabelFromName($name, $expected_name, $expected_label) {
