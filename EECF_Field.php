@@ -15,7 +15,7 @@ class EECF_Field {
 		$class = 'EECF_Field_' . $type;
 
 		if (!class_exists($class)) {
-			throw new Exception ('Unknown field "' . $type . '".');
+			throw new EECF_Exception ('Unknown field "' . $type . '".');
 		}
 
 		$field = new $class($name, $label);
@@ -116,7 +116,7 @@ class EECF_Field {
 
 	function set_render($fn) {
 		if ( !is_callable($fn) ) {
-			throw new Exception('Render must be callable');
+			throw new EECF_Exception('Render must be callable');
 		}
 
 		$this->render_fn = $fn;
@@ -168,7 +168,7 @@ class EECF_Field_Select extends EECF_Field {
 
     function render() {
     	if ( empty($this->options) ) {
-    		throw new Exception('No options added for field "' . $this->get_name() . '"');
+    		throw new EECF_Exception('No options added for field "' . $this->get_name() . '"');
     	}
 
 		$options = array();
@@ -227,7 +227,7 @@ class EECF_Field_Set extends EECF_Field {
     	}
 
     	if (empty($this->options)) {
-    		throw new Exception('No options added for field "' . $this->name . '"');
+    		throw new EECF_Exception('No options added for field "' . $this->name . '"');
     	}
 
 		$loopCount = 0;

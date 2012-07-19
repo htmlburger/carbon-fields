@@ -13,4 +13,4 @@
 		</tr>
 	<?php endforeach ?>
 </table>
-<?php wp_nonce_field('eecf_panel_' . $this->id . '_nonce', $this->get_nonce_name(), /*referer?*/ false, /*echo?*/ true); ?>
+<?php wp_nonce_field($this->get_nonce_name(), $this->get_nonce_name(), /*referer?*/ false, /*echo?*/ true); ?>

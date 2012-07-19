@@ -3,6 +3,8 @@
 Plugin Name: Enhanced Custom Fields
 */
 
+include_once 'EECF_Exception.php';
+
 include_once 'EECF_DataStore.php';
 
 include_once 'EECF_Container.php';

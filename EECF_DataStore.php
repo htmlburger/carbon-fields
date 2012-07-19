@@ -1,19 +1,21 @@
 <?php 
 
-abstract class EECF_DataStore {
-	abstract function init();
-	abstract function load(EECF_Field $field);
-	abstract function save(EECF_Field $field);
-	abstract function delete(EECF_Field $field);
-	abstract function load_values(EECF_Field $field);
-	abstract function delete_values(EECF_Field $field);
+interface EECF_DataStore {
+	function init();
+	function load(EECF_Field $field);
+	function save(EECF_Field $field);
+	function delete(EECF_Field $field);
+	function load_values(EECF_Field $field);
+	function delete_values(EECF_Field $field);
+}
 
+abstract class EECF_DataStore_Base implements EECF_DataStore {
 	function __construct() {
 		$this->init();
 	}
 }
 
-class EECF_DataStore_CustomField extends EECF_DataStore {
+class EECF_DataStore_CustomField extends EECF_DataStore_Base {
 	protected $post_id;
 
 	function init() {}
@@ -53,7 +55,7 @@ class EECF_DataStore_CustomField extends EECF_DataStore {
 	}
 }
 
-class EECF_DataStore_ThemeOptions extends EECF_DataStore {
+class EECF_DataStore_ThemeOptions extends EECF_DataStore_Base {
 	function init() {}
 
 	function save(EECF_Field $field) {
@@ -89,7 +91,7 @@ class EECF_DataStore_ThemeOptions extends EECF_DataStore {
 	}
 }
 
-class EECF_DataStore_TaxonomyMeta extends EECF_DataStore {
+class EECF_DataStore_TaxonomyMeta extends EECF_DataStore_Base {
 	protected $term_id;
 
 	static function create_table() {
@@ -173,7 +175,7 @@ class EECF_DataStore_TaxonomyMeta extends EECF_DataStore {
 	}
 }
 
-class EECF_DataStore_UserMeta extends EECF_DataStore {
+class EECF_DataStore_UserMeta extends EECF_DataStore_Base {
 	protected $user_id;
 
 	function init() {}

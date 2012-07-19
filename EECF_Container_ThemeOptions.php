@@ -90,7 +90,7 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 		}
 
 		if ( in_array($file, self::$registered_pages) ) {
-			throw new Exception ('Page "' . $file . '" already registered');
+			throw new EECF_Exception ('Page "' . $file . '" already registered');
 		}
 
 		self::$registered_pages[] = $file;
@@ -98,7 +98,7 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 
 	function verify_unique_field_name($name) {
 		if ( in_array($name, $this->registered_field_names) ) {
-			throw new Exception ('Field name "' . $name . '" already registered');
+			throw new EECF_Exception ('Field name "' . $name . '" already registered');
 		}
 
 		$this->registered_field_names[] = $name;

@@ -18,6 +18,10 @@ abstract class EECF_Container {
 		$this->verify_unique_panel_id($this->id);
 	}
 
+	function __destruct() {
+		$this->detach();
+	}
+
 	function setup($settings = array()) {
 		$this->settings = array_merge($this->settings, $settings);
 		$this->init();
@@ -39,11 +43,15 @@ abstract class EECF_Container {
 	function is_valid_save() {
 		return false;
 	}
+	
+	function detach() {
+		$this->drop_unique_panel_id($this->id);
+	}
 
 	function add_fields($fields) {
 		foreach ($fields as $field) {
 			if ( !is_a($field, 'EECF_Field') ) {
-				throw new Exception('Object must be of type EECF_Field');
+				throw new EECF_Exception('Object must be of type EECF_Field');
 			}
 
 			$this->verify_unique_field_name($field->get_name());
@@ -58,17 +66,23 @@ abstract class EECF_Container {
 
 	function verify_unique_panel_id($id) {
 		if ( in_array($id, self::$registered_panel_ids) ) {
-			throw new Exception ('Panel ID "' . $id .'" already registered');
+			throw new EECF_Exception ('Panel ID "' . $id .'" already registered');
 		}
 
 		self::$registered_panel_ids[] = $id;
+	}
+
+	function drop_unique_panel_id($id) {
+		if ( in_array($id, self::$registered_panel_ids) ) {
+			unset(self::$registered_panel_ids[ array_search($id, self::$registered_panel_ids) ]);
+		}
 	}
 
 	function verify_unique_field_name($name) {
 		static $registered_field_names = array();
 
 		if ( in_array($name, $registered_field_names) ) {
-			throw new Exception ('Field name "' . $name . '" already registered');
+			throw new EECF_Exception ('Field name "' . $name . '" already registered');
 		}
 
 		$registered_field_names[] = $name;

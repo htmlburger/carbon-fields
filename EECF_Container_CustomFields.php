@@ -54,6 +54,13 @@ class EECF_Container_CustomFields extends EECF_Container {
 	    	$this->settings['panel_priority']
 	    );
 	}
+	
+	function detach() {
+		parent::detach();
+
+	    remove_action('admin_init', array($this, 'attach'));
+		remove_action('save_post', array($this, '_save'));
+	}
 
 	function render() {
 		$container_tag_class_name = get_class($this);
