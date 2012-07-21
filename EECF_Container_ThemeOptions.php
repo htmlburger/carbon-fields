@@ -3,6 +3,8 @@
 class EECF_Container_ThemeOptions extends EECF_Container {
 	protected static $registered_pages = array();
 	protected $registered_field_names = array();
+	protected $notifications = array();
+	protected $errors = array();
 
 	public $settings = array(
 		'parent'=>'theme-options.php',
@@ -10,6 +12,15 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 		'permissions'=>'edit_themes',
 		'type' => 'sub'
 	);
+
+	function save() {
+		try {
+			parent::save();
+			$this->notifications[] = 'Settings saved.';
+		} catch (Exception $e) {
+			$this->errors[] = $e->getMessage();
+		}
+	}
 
 	function init() {
 		if ( !$this->get_datastore() ) {

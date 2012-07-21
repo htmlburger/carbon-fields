@@ -2,16 +2,18 @@
 	<div id="icon-options-general" class="icon32"><br /></div>
 	<h2><?php echo $this->title ?></h2>
 	
-	<?php if ( 0 /* errors */) : ?>
-		<div id="message" class="updated below-h2" style="background-color: #ffc6c6; border-color: red;">
-			<?php foreach ($this->tpl_vars['errors'] as $err) : ?>
-				<p><strong><?php echo $err['label']?></strong>: <?php echo $err['error']?></p>
+	<?php if ( !empty($this->errors) ) : ?>
+		<div class="error settings-error">
+			<?php foreach ($this->errors as $error) : ?>
+				<p><strong><?php echo $error?></strong></p>
 			<?php endforeach; ?>
 		</div>
-	<?php elseif ( 0 /* saved */): ?>
-		<div id="message" class="updated fade below-h2" style="background-color: rgb(255, 251, 204);">
-			<p>Settings Saved</p>
-		</div>
+	<?php elseif ( !empty($this->notifications) ): ?>
+		<?php foreach ($this->notifications as $notification): ?>
+			<div class="settings-error updated">
+				<p><strong><?php echo $notification ?></strong></p>
+			</div>
+		<?php endforeach ?>
 	<?php endif; ?>
 
 	<form method="post" class="" enctype="multipart/form-data">
