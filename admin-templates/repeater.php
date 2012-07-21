@@ -4,7 +4,8 @@
 			<td>
 				<table>
 					<?php foreach ($fields as $field): 
-						$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
+						$old_name = $field->get_name();
+						$field->set_name( $this->get_name() . '[' . $index . '][' . $old_name . ']' );
 					?>
 						<tr>
 							<th scope="row">
@@ -15,7 +16,9 @@
 								<?php echo $field->render(); ?>
 							</td>
 						</tr>
-					<?php endforeach ?>
+					<?php 
+						$field->set_name( $old_name );
+					endforeach ?>
 				</table>
 				<a href="#" onclick="javascript:jQuery(this).parent().remove(); return false;">Remove</a>
 			</td>

@@ -113,6 +113,16 @@ class EECF_Field_Repeater extends EECF_Field {
 		}
 	}
 
+	function set_prefix($prefix) {
+		$this->name = preg_replace('~^' . preg_quote($this->name_prefix, '~') . '~', '', $this->name);
+		$this->name_prefix = $prefix;
+		$this->name = $this->name_prefix . $this->name;
+
+		foreach ($this->fields as $field) {
+			$field->set_prefix($prefix);
+		}
+	}
+
 	function _render() {
 		$container_tag_class_name = get_class($this);
 		include dirname(__FILE__) . '/admin-templates/repeater.php';
