@@ -7,6 +7,7 @@ class EECF_Field {
 	protected $help_text;
 	protected $store;
 	protected $render_fn;
+	protected $name_prefix = '_';
 
 
 	static function factory($type, $name, $label=null) {
@@ -85,13 +86,17 @@ class EECF_Field {
 
 	function set_name($name) {
 		$name = preg_replace('~\s+~', '_', strtolower($name));
-		if (substr($name, 0, 1) != '_') {
-			// add underscore to custom field name -- this will remove it from
-			// custom fields list in administration
-			$name = '_' . $name;
+		if ( $this->name_prefix && strpos($name, $this->name_prefix) !== 0 ) {
+			$name = $this->name_prefix . $name;
 		}
 
 		$this->name = $name;
+	}
+
+	function set_prefix($prefix) {
+		$this->name = preg_replace('~^' . preg_quote($this->name_prefix, '~') . '~', '', $this->name);
+		$this->name_prefix = $prefix;
+		$this->name = $this->name_prefix . $this->name;
 	}
 
 	function get_name() {

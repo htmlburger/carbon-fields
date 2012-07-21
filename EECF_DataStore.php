@@ -84,6 +84,8 @@ class EECF_DataStore_ThemeOptions extends EECF_DataStore_Base {
 	function delete_values(EECF_Field $field) {
 		global $wpdb;
 
+		// TODO: refresh options cache
+
 		return $wpdb->query('
 			DELETE FROM ' . $wpdb->options . '
 			WHERE `option_name` LIKE "' . addslashes($field->get_name()) . '_%"
@@ -128,7 +130,7 @@ class EECF_DataStore_TaxonomyMeta extends EECF_DataStore_Base {
 		$wpdb->taxonomymeta = $wpdb->prefix . 'taxonomymeta';
 
 		// Delete all meta associated with the deleted term
-		add_action('delete_term', array($this, 'on_delete_term'), 10, 3);
+		add_action('delete_term', array(__CLASS__, 'on_delete_term'), 10, 3);
 	}
 
 	function save(EECF_Field $field) {
@@ -165,7 +167,7 @@ class EECF_DataStore_TaxonomyMeta extends EECF_DataStore_Base {
 		$this->term_id = $term_id;
 	}
 
-	function on_delete_term($term_id, $tt_id, $taxonomy) {
+	static function on_delete_term($term_id, $tt_id, $taxonomy) {
 		global $wpdb;
 
 		return $wpdb->query('

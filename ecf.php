@@ -17,6 +17,8 @@ include_once 'EECF_Field.php';
 include_once 'EECF_Field_Repeater.php';
 include_once 'EECF_Field_Groups.php';
 
+include_once 'EECF_Widget.php';
+
 function eecf_on_activate() {
 	EECF_DataStore_TaxonomyMeta::create_table();
 }
