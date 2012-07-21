@@ -10,6 +10,7 @@
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="<?php echo $group_name ?>" />
 				<table>
 					<?php foreach ($fields as $field): 
+						$old_name = $field->get_name();
 						$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
 					?>
 						<tr>
@@ -21,7 +22,9 @@
 								<?php echo $field->render(); ?>
 							</td>
 						</tr>
-					<?php endforeach ?>
+					<?php 
+						$field->set_name($old_name);
+					endforeach ?>
 				</table>
 				<a href="#" onclick="javascript:jQuery(this).parent().remove(); return false;">Remove</a>
 			</td>
@@ -48,6 +51,7 @@
 					<?php 
 					$fields = $group->get_fields();
 					foreach ($fields as $field): 
+						$old_name = $field->get_name();
 						$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
 					?>
 						<tr>
@@ -59,7 +63,9 @@
 								<?php echo $field->render(); ?>
 							</td>
 						</tr>
-					<?php endforeach ?>
+					<?php 
+						$field->set_name($old_name);
+					endforeach ?>
 				</table>
 				<a href="#" onclick="javascript:jQuery(this).parent().remove(); return false;">Remove</a>
 			</td>

@@ -126,6 +126,16 @@ class EECF_Field_Groups extends EECF_Field_Repeater {
 		}
 	}
 
+	function set_prefix($prefix) {
+		$this->name = preg_replace('~^' . preg_quote($this->name_prefix, '~') . '~', '', $this->name);
+		$this->name_prefix = $prefix;
+		$this->name = $this->name_prefix . $this->name;
+
+		foreach ($this->groups as $group) {
+			$group->set_prefix($prefix);
+		}
+	}
+
 	function _render() {
 		$container_tag_class_name = get_class($this);
 		include dirname(__FILE__) . '/admin-templates/groups.php';
@@ -180,12 +190,17 @@ class EECF_Field_Group {
 		return $this->name;
 	}
 
-
 	function set_datastore(EECF_DataStore $store) {
 		foreach ($this->fields as $field) {
 			if ( !$field->get_datastore() ) {
 				$field->set_datastore($store);
 			}
+		}
+	}
+
+	function set_prefix($prefix) {
+		foreach ($this->fields as $field) {
+			$field->set_prefix($prefix);
 		}
 	}
 }
