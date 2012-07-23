@@ -26,37 +26,6 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         // TODO: this case cannot be tested becuase it requires the definition of a constant - DOING_AUTOSAVE
     }
 
-    public function testSaveSimpleField() {
-        global $wpdb;
-        // prepare container
-        $container = new EECF_Container_CustomFields('Test Container');
-        $container->setup(array(
-            'post_type' => 'foo'
-        ));
-        $container->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
-        ));
-
-        // Prepare POST
-        $_POST['_test_field'] = 'Lorem Ipsum';
-
-        // execute
-        $container->save(123);
-
-        // check
-        $fields = $container->get_fields();
-
-        $db_value = $wpdb->get_results('
-            SELECT meta_value FROM ' . $wpdb->postmeta . '
-            WHERE post_id="123" AND meta_key="_test_field"
-        ', ARRAY_A);
-
-        $this->assertEquals($fields[0]->get_value(), 'Lorem Ipsum' );
-        $this->assertCount(1, $db_value);
-        $this->assertArrayHasKey('meta_value', $db_value[0]);
-        $this->assertEquals($db_value[0]['meta_value'], 'Lorem Ipsum');
-    }
-
     public function testRegisterEqualFieldNamesForDifferentPostTypes() {
         // prepare container
         $container1 = new EECF_Container_CustomFields('Test Container 1');
@@ -103,6 +72,71 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         $this->assertTrue(false);
     }
 
+    /**
+     * @group slow
+     */
+    public function testSaveSimpleFieldCheckDatabase() {
+        global $wpdb;
+        // prepare container
+        $container = new EECF_Container_CustomFields('Test Container');
+        $container->setup(array(
+            'post_type' => 'foo'
+        ));
+        $container->add_fields(array(
+            EECF_Field::factory('text', 'test_field'),
+        ));
+
+        // Prepare POST
+        $_POST['_test_field'] = 'Lorem Ipsum';
+
+        // execute
+        $container->save(123);
+
+        // check
+        $db_value = $wpdb->get_results('
+            SELECT meta_value FROM ' . $wpdb->postmeta . '
+            WHERE post_id="123" AND meta_key="_test_field"
+        ', ARRAY_A);
+
+        $this->assertCount(1, $db_value);
+        $this->assertArrayHasKey('meta_value', $db_value[0]);
+        $this->assertEquals($db_value[0]['meta_value'], 'Lorem Ipsum');
+    }
+
+    /**
+     * @group slow
+     */
+    public function testSaveSimpleFieldCheckLoad() {
+        global $wpdb;
+        // prepare container
+        $container = new EECF_Container_CustomFields('Test Container');
+        $container->setup(array(
+            'post_type' => 'foo'
+        ));
+        $container->add_fields(array(
+            EECF_Field::factory('text', 'test_field'),
+        ));
+
+        // Prepare POST
+        $_POST['_test_field'] = 'Lorem Ipsum';
+
+        // execute
+        $container->save(123);
+        $container->load();
+
+        // check
+        $fields = $container->get_fields();
+
+        $this->assertEquals($fields[0]->get_name(), '_test_field');
+        $this->assertEquals($fields[0]->get_value(), 'Lorem Ipsum');
+
+        // cleanup
+        $container->detach();
+    }
+
+    /**
+     * @group slow
+     */
     public function testSaveRepeaterAndCheckDatabase() {
         global $wpdb;
 
@@ -146,6 +180,9 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         $container->detach();
     }
 
+    /**
+     * @group slow
+     */
     public function testSaveRepeaterAndCheckLoad() {
         global $wpdb;
         // prepare container
@@ -195,6 +232,9 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         $container->detach();
     }
 
+    /**
+     * @group slow
+     */
     public function testSaveGroupAndCheckDatabase() {
         global $wpdb;
         
@@ -259,7 +299,9 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         $container->detach();
     }
 
-
+    /**
+     * @group slow
+     */
     public function testSaveGroupAndCheckLoad() {
         global $wpdb;
         
