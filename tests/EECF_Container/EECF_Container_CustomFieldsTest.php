@@ -30,7 +30,9 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         global $wpdb;
         // prepare container
         $container = new EECF_Container_CustomFields('Test Container');
-        $container->setup();
+        $container->setup(array(
+            'post_type' => 'foo'
+        ));
         $container->add_fields(array(
             EECF_Field::factory('text', 'test_field'),
         ));
@@ -88,9 +90,17 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         $container2->setup(array(
             'post_type' => 'bar'
         ));
-        $container2->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
-        ));
+
+        try {
+            $container2->add_fields(array(
+                EECF_Field::factory('text', 'test_field'),
+            ));
+        } catch (EECF_Exception $e) {
+            return;
+        }
+
+        // exception must be thrown
+        $this->assertTrue(false);
     }
 
     public function testSaveRepeaterAndCheckDatabase() {

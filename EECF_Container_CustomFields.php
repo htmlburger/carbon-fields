@@ -1,6 +1,7 @@
 <?php
 
 class EECF_Container_CustomFields extends EECF_Container {
+	static protected $registered_field_names;
 	protected $post_id;
 
 	public $settings = array(
@@ -60,6 +61,11 @@ class EECF_Container_CustomFields extends EECF_Container {
 
 	    remove_action('admin_init', array($this, 'attach'));
 		remove_action('save_post', array($this, '_save'));
+
+		// unregister field names
+		foreach ($this->fields as $field) {
+			$this->drop_unique_field_id($field->get_name());
+		}
 	}
 
 	function render() {
@@ -70,6 +76,29 @@ class EECF_Container_CustomFields extends EECF_Container {
 	function set_post_id($post_id) {
 		$this->post_id = $post_id;
 		$this->store->set_post_id($post_id);
+	}
+
+	function verify_unique_field_name($name) {
+		if ( empty($this->settings['post_type']) ) {
+			throw new EECF_Exception ('Panel instance is not setup correctly (missing post type)');
+		}
+
+		if ( !isset(self::$registered_field_names[$this->settings['post_type']]) ) {
+			self::$registered_field_names[$this->settings['post_type']] = array();
+		}
+
+		if ( in_array($name, self::$registered_field_names[$this->settings['post_type']]) ) {
+			throw new EECF_Exception ('Field name "' . $name . '" already registered');
+		}
+
+		self::$registered_field_names[$this->settings['post_type']][] = $name;
+	}
+
+	function drop_unique_field_id($name) {
+		$index = array_search($name, self::$registered_field_names[$this->settings['post_type']]);
+		if ( $index !== false ) {
+			unset(self::$registered_field_names[$this->settings['post_type']][$index]);
+		}
 	}
 }
 
