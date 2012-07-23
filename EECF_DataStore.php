@@ -1,7 +1,6 @@
 <?php 
 
 interface EECF_DataStore {
-	function init();
 	function load(EECF_Field $field);
 	function save(EECF_Field $field);
 	function delete(EECF_Field $field);
@@ -13,6 +12,8 @@ abstract class EECF_DataStore_Base implements EECF_DataStore {
 	function __construct() {
 		$this->init();
 	}
+
+	abstract function init();
 }
 
 class EECF_DataStore_CustomField extends EECF_DataStore_Base {

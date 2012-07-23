@@ -87,10 +87,6 @@ abstract class EECF_Widget extends WP_Widget implements EECF_DataStore {
     }
 
     /* Implment DataStore */
-	function init() {
-
-	}
-
 	function load(EECF_Field $field) {
 		if ( isset($this->store_data[$field->get_name()]) ) {
 			$field->set_value($this->store_data[$field->get_name()]);
@@ -102,7 +98,9 @@ abstract class EECF_Widget extends WP_Widget implements EECF_DataStore {
 	}
 	
 	function delete(EECF_Field $field) {
-
+		if ( isset($this->store_data[$field->get_name()]) ) {
+			unset($this->store_data[$field->get_name()]);
+		}
 	}
 	
 	function load_values(EECF_Field $field) {

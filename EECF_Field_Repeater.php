@@ -113,6 +113,10 @@ class EECF_Field_Repeater extends EECF_Field {
 		}
 	}
 
+	function get_values() {
+		return $this->values;
+	}
+
 	function set_prefix($prefix) {
 		$this->name = preg_replace('~^' . preg_quote($this->name_prefix, '~') . '~', '', $this->name);
 		$this->name_prefix = $prefix;

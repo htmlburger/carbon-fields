@@ -64,6 +64,10 @@ abstract class EECF_Container {
 		$this->fields = array_merge($this->fields, $fields);
 	}
 
+	function get_fields() {
+		return $this->fields;
+	}
+
 	function verify_unique_panel_id($id) {
 		if ( in_array($id, self::$registered_panel_ids) ) {
 			throw new EECF_Exception ('Panel ID "' . $id .'" already registered');
