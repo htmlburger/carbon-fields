@@ -68,8 +68,7 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
             return;
         }
 
-        // exception must be thrown
-        $this->assertTrue(false);
+        $this->fail('Field name duplication is expected to raise exception');
     }
 
     /**
