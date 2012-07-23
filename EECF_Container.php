@@ -43,6 +43,12 @@ abstract class EECF_Container {
 	function is_valid_save() {
 		return false;
 	}
+
+	function load() {
+		foreach ($this->fields as $field) {
+			$field->load();
+		}
+	}
 	
 	function detach() {
 		$this->drop_unique_panel_id($this->id);
