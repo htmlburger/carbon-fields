@@ -253,6 +253,76 @@ jQuery(function($) {
 		}
 	});
 
+	/* Groups Field */
+	EECF_Field.Groups = function() {
+		EECF_Field.apply(this, arguments);
+
+		this.group_selector = this.node.find('select[name$="[group]"]');
+		this.btn_add = this.node.find('a[data-action=add]');
+		this.num_rows = this.node.find('.eecf-repeater-row').length
+		this.name = this.node.data('name');
+
+		this.new_row_type = this.group_selector.val();
+	}
+
+	$.extend(EECF_Field.Groups.prototype, {
+		init: function() {
+			var th = this;
+
+			this.btn_add.click(function() {
+				th.addRow();
+				return false;
+			});
+
+			this.node.find('a[data-action=remove]').live('click', function() {
+				th.removeRow($(this).closest('.eecf-group-row'))
+				return false;
+			});
+
+			this.group_selector.change(function() {
+				th.new_row_type = $(this).val();
+			});
+		},
+		addRow: function() {
+			var th = this,
+				sample_row = this.node.find('.eecf-group-preview.eecf-group-' + th.new_row_type),
+				new_row = sample_row.clone();
+
+			this.num_rows++;
+
+			console.log( sample_row.length );
+
+			new_row.find('input[name*="__i__"]').each(function() {
+				var input = $(this);
+				input.attr('name', input.attr('name').replace(/\[__i__\]/, '[' + th.num_rows + ']'));
+			});
+
+			new_row.removeClass('eecf-group-preview').addClass('eecf-group-row').insertBefore(sample_row);
+			EECF_Field.init(new_row);
+		},
+		removeRow: function(row) {
+			row.remove();
+			this.onUpdateRows();
+		},
+		onUpdateRows: function() {
+			var th = this,
+				rows = this.node.find('.eecf-group-row'),
+				index = 0;
+
+			this.num_rows = rows.length;
+
+			rows.each(function() {
+				var row = $(this);
+				index ++;
+
+				row.find('input[name^="' + th.name + '"]').each(function() {
+					var input = $(this);
+					input.attr('name', input.attr('name').replace(/\[\d+\]/, '[' + index + ']'));
+				});
+			});
+		}
+	});
+
 
 	EECF_Field.init();
 });

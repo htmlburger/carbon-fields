@@ -28,26 +28,19 @@
 						$field->set_name($old_name);
 					endforeach ?>
 				</table>
-				<a href="#" onclick="javascript:jQuery(this).parent().remove(); return false;">Remove</a>
+				<p class="alignright"><a href="#" data-action="remove">Remove</a></p>
 			</td>
 		</tr>
 	<?php $index ++; endforeach ?>
 
 	<!-- New Group -->
 
-	<tr>
-		<td>
-			<select name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>">
-				<?php foreach ($this->groups as $group): ?>
-					<option value="<?php echo $group->get_name() ?>"><?php echo $group->get_label() ?></option>
-				<?php endforeach; ?>
-			</select>
-		</td>
-	</tr>
-
-	<?php foreach ($this->groups as $group): ?>
-		<tr>
+	<?php 
+	$index = '__i__';
+	foreach ($this->groups as $group): ?>
+		<tr class="eecf-group-preview eecf-group-<?php echo $group->get_name() ?>">
 			<td>
+				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="<?php echo $group_name ?>" />
 				<strong>Group <?php echo $group->get_label() ?></strong>
 				<table>
 					<?php 
@@ -71,8 +64,23 @@
 						$field->set_name($old_name);
 					endforeach ?>
 				</table>
-				<a href="#" onclick="javascript:jQuery(this).parent().remove(); return false;">Remove</a>
+				<p class="alignright"><a href="#" data-action="remove">Remove</a></p>
 			</td>
 		</tr>
 	<?php endforeach; ?>
+
+	<tr>
+		<td>
+			<p>
+				<label>New </label>
+				<select name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>">
+					<?php foreach ($this->groups as $group): ?>
+						<option value="<?php echo $group->get_name() ?>"><?php echo $group->get_label() ?></option>
+					<?php endforeach; ?>
+				</select>
+				row
+				<a href="#" data-action="add">Add</a>
+			</p>
+		</td>
+	</tr>
 </table>
