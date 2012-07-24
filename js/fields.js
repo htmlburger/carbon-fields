@@ -259,7 +259,7 @@ jQuery(function($) {
 
 		this.group_selector = this.node.find('select[name$="[group]"]');
 		this.btn_add = this.node.find('a[data-action=add]');
-		this.num_rows = this.node.find('.eecf-repeater-row').length
+		this.num_rows = this.node.find('.eecf-group-row').length
 		this.name = this.node.data('name');
 
 		this.new_row_type = this.group_selector.val();
@@ -290,14 +290,14 @@ jQuery(function($) {
 
 			this.num_rows++;
 
-			console.log( sample_row.length );
+			new_row.find('input[name$="[__i__][group]"]').val(th.new_row_type);
 
 			new_row.find('input[name*="__i__"]').each(function() {
 				var input = $(this);
 				input.attr('name', input.attr('name').replace(/\[__i__\]/, '[' + th.num_rows + ']'));
 			});
 
-			new_row.removeClass('eecf-group-preview').addClass('eecf-group-row').insertBefore(sample_row);
+			new_row.removeClass('eecf-group-preview').addClass('eecf-group-row').insertBefore( this.node.find('.eecf-group-preview:first') );
 			EECF_Field.init(new_row);
 		},
 		removeRow: function(row) {

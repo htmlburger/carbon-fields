@@ -6,16 +6,10 @@ class EECF_Field_Groups extends EECF_Field_Repeater {
 	function add_fields($fields, $name, $label=null) {
 		$group = new EECF_Field_Group();
 		$group->set_name( $name );
+		
 		$group->add_fields($fields);
+		$group->set_label( $label );
 
-		// Try to guess field label from it's name
-		if (is_null($label)) {
-			// remove the leading underscore(if it's there)
-			$label = preg_replace('~^_~', '', $name);
-			// split the name into words and make them capitalized
-			$label = ucwords(str_replace('_', ' ', $label));
-		}
-		$group->set_label( $name );
 
 		$this->groups[$group->get_name()] = $group;
 		return $this;
@@ -167,8 +161,15 @@ class EECF_Field_Group {
 	}
 
 	function set_label($label) {
+		// Try to guess field label from it's name
+		if (is_null($label)) {
+			// remove the leading underscore(if it's there)
+			$label = preg_replace('~^_~', '', $this->name);
+			// split the name into words and make them capitalized
+			$label = ucwords(str_replace('_', ' ', $label));
+		}
+
 		$this->label = $label;
-		return $this;
 	}
 
 	function get_label() {
@@ -176,6 +177,7 @@ class EECF_Field_Group {
 	}
 
 	function set_name($name) {
+		$name = preg_replace('~\s+~', '_', strtolower($name));
 		if (substr($name, 0, 1) != '_') {
 			// add underscore to custom field name -- this will remove it from
 			// custom fields list in administration
@@ -183,7 +185,6 @@ class EECF_Field_Group {
 		}
 
 		$this->name = $name;
-		return $this;
 	}
 
 	function get_name() {

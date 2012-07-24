@@ -5,29 +5,50 @@
 			$group_name = $fields['type'];
 			unset($fields['type']);
 		?>
-		<tr>
+		<tr class="eecf-group-row">
 			<td>
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="<?php echo $group_name ?>" />
-				<table>
-					<?php foreach ($fields as $field): 
-						$old_name = $field->get_name();
-						$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
-					?>
+				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
+					<table>
+						<?php foreach ($fields as $field): 
+							$old_name = $field->get_name();
+							$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
+						?>
+							<tr>
+								<th scope="row">
+									<?php echo $field->get_label(); ?>
+									<?php echo $field->get_help_text(); ?>
+								</th>
+								<td>
+									<div class="eecf-field" data-type="<?php echo $field->type ?>">
+										<?php echo $field->render(); ?>
+									</div>
+								</td>
+							</tr>
+						<?php 
+							$field->set_name($old_name);
+						endforeach ?>
+					</table>
+				<?php else: ?>
+					<table>
 						<tr>
-							<th scope="row">
-								<?php echo $field->get_label(); ?>
-								<?php echo $field->get_help_text(); ?>
-							</th>
-							<td>
-								<div class="eecf-field" data-type="<?php echo $field->type ?>">
-									<?php echo $field->render(); ?>
-								</div>
-							</td>
+							<?php foreach ($fields as $field): 
+								$old_name = $field->get_name();
+								$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
+							?>
+									<td>
+										<?php echo $field->get_label(); ?>
+										<?php echo $field->get_help_text(); ?>
+										<div class="eecf-field" data-type="<?php echo $field->type ?>">
+											<?php echo $field->render(); ?>
+										</div>
+									</td>
+							<?php 
+								$field->set_name($old_name);
+							endforeach ?>
 						</tr>
-					<?php 
-						$field->set_name($old_name);
-					endforeach ?>
-				</table>
+					</table>
+				<?php endif; ?>
 				<p class="alignright"><a href="#" data-action="remove">Remove</a></p>
 			</td>
 		</tr>
@@ -40,30 +61,54 @@
 	foreach ($this->groups as $group): ?>
 		<tr class="eecf-group-preview eecf-group-<?php echo $group->get_name() ?>">
 			<td>
-				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="<?php echo $group_name ?>" />
-				<strong>Group <?php echo $group->get_label() ?></strong>
-				<table>
-					<?php 
-					$fields = $group->get_fields();
-					foreach ($fields as $field): 
-						$old_name = $field->get_name();
-						$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
-					?>
+				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="" />
+				<strong><?php echo $group->get_label() ?></strong>
+
+				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
+					<table>
+						<?php 
+						$fields = $group->get_fields();
+						foreach ($fields as $field): 
+							$old_name = $field->get_name();
+							$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
+						?>
+							<tr>
+								<th scope="row">
+									<?php echo $field->get_label(); ?>
+									<?php echo $field->get_help_text(); ?>
+								</th>
+								<td>
+									<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+										<?php echo $field->render(); ?>
+									</div>
+								</td>
+							</tr>
+						<?php 
+							$field->set_name($old_name);
+						endforeach ?>
+					</table>
+				<?php else: ?>
+					<table>
 						<tr>
-							<th scope="row">
-								<?php echo $field->get_label(); ?>
-								<?php echo $field->get_help_text(); ?>
-							</th>
-							<td>
-								<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
-									<?php echo $field->render(); ?>
-								</div>
-							</td>
+							<?php 
+							$fields = $group->get_fields();
+							foreach ($fields as $field): 
+								$old_name = $field->get_name();
+								$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
+							?>
+									<td>
+										<?php echo $field->get_label(); ?>
+										<?php echo $field->get_help_text(); ?>
+										<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+											<?php echo $field->render(); ?>
+										</div>
+									</td>
+							<?php 
+								$field->set_name($old_name);
+							endforeach ?>
 						</tr>
-					<?php 
-						$field->set_name($old_name);
-					endforeach ?>
-				</table>
+					</table>
+				<?php endif; ?>
 				<p class="alignright"><a href="#" data-action="remove">Remove</a></p>
 			</td>
 		</tr>
