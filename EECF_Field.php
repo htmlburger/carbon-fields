@@ -319,10 +319,9 @@ class EECF_Field_File extends EECF_Field {
 	}
 
 	function add_correct_script_hooks() {
-		$css_directory = get_bloginfo('stylesheet_directory');
-		wp_enqueue_script('utf8_decode_js_userialize', $css_directory . '/lib/scripts/utf8.decode.js.unserialize.js');
-		wp_enqueue_script('fancybox', $css_directory . '/lib/scripts/fancybox/jquery.fancybox-1.3.4.pack.js');
-		wp_enqueue_style('fancybox-css', $css_directory . '/lib/scripts/fancybox/jquery.fancybox-1.3.4.css');
+		wp_enqueue_script('utf8_decode_js_userialize', EECF_PLUGIN_URL . '/js/utf8.decode.js.unserialize.js');
+		wp_enqueue_script('fancybox', EECF_PLUGIN_URL . '/js/fancybox/jquery.fancybox-1.3.4.pack.js');
+		wp_enqueue_style('fancybox-css', EECF_PLUGIN_URL . '/js/fancybox/jquery.fancybox-1.3.4.css');
 	}
 }
 
