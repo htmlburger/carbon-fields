@@ -60,8 +60,16 @@ class EECF_DataStore_ThemeOptions extends EECF_DataStore_Base {
 	function init() {}
 
 	function save(EECF_Field $field) {
-		if ( !add_option($field->get_name(), $field->get_value(), null, 'no') ) {
-			update_option($field->get_name(), $field->get_value());
+		$name = $field->get_name();
+		$autoload = $field->get_autoload() ? 'yes': 'no';
+
+		// Add value to the cache, so that add_option always works
+		$notoptions = wp_cache_get( 'notoptions', 'options' );
+		$notoptions[$name] = '';
+		wp_cache_set( 'notoptions', $notoptions, 'options' );
+
+		if ( !add_option($name, $field->get_value(), null, $autoload) ) {
+			update_option($name, $field->get_value());
 		}
 	}
 
@@ -84,8 +92,6 @@ class EECF_DataStore_ThemeOptions extends EECF_DataStore_Base {
 
 	function delete_values(EECF_Field $field) {
 		global $wpdb;
-
-		// TODO: refresh options cache
 
 		return $wpdb->query('
 			DELETE FROM ' . $wpdb->options . '

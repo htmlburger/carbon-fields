@@ -11,6 +11,7 @@ class EECF_Field {
 	protected $help_text;
 	protected $store;
 	protected $render_fn;
+	protected $autoload = false;
 	protected $name_prefix = '_';
 
 
@@ -159,6 +160,19 @@ class EECF_Field {
 
 	function get_help_text() {
 		return $this->help_text;
+	}
+
+	/**
+	 * Whether or not this value should be auto loaded. 
+	 * Applicable to theme options only.
+	 **/
+	function set_autoload($autoload) {
+		$this->autoload = $autoload;
+		return $this;
+	}
+
+	function get_autoload() {
+		return $this->autoload;
 	}
 
 	static function admin_hook_scripts() {
