@@ -2,8 +2,58 @@
 	<?php foreach ($this->values as $index => $fields): ?>
 		<tr class="eecf-repeater-row">
 			<td>
+				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
+					<table>
+						<?php foreach ($fields as $field): 
+							$old_name = $field->get_name();
+							$field->set_name( $this->get_name() . '[' . $index . '][' . $old_name . ']' );
+						?>
+							<tr>
+								<th scope="row">
+									<?php echo $field->get_label(); ?>
+									<?php echo $field->get_help_text(); ?>
+								</th>
+								<td>
+									<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+										<?php echo $field->render(); ?>
+									</div>
+								</td>
+							</tr>
+						<?php 
+							$field->set_name( $old_name );
+						endforeach ?>
+					</table>
+				<?php else: ?>
+					<table>
+						<tr>
+							<?php foreach ($fields as $field): 
+								$old_name = $field->get_name();
+								$field->set_name( $this->get_name() . '[' . $index . '][' . $old_name . ']' );
+							?>
+								<td>
+									<?php echo $field->get_label(); ?>
+									<?php echo $field->get_help_text(); ?>
+									<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+										<?php echo $field->render(); ?>
+									</div>
+								</td>
+							<?php 
+								$field->set_name( $old_name );
+							endforeach ?>
+						</tr>
+					</table>
+				<?php endif ?>
+				<p class=" alignright"><a href="#" data-action="remove">Remove</a></p>
+			</td>
+		</tr>
+	<?php endforeach ?>
+	<tr class="eecf-repeater-preview">
+		<td>
+			<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
 				<table>
-					<?php foreach ($fields as $field): 
+					<?php 
+					$index = '__i__';
+					foreach ($this->fields as $field): 
 						$old_name = $field->get_name();
 						$field->set_name( $this->get_name() . '[' . $index . '][' . $old_name . ']' );
 					?>
@@ -22,34 +72,28 @@
 						$field->set_name( $old_name );
 					endforeach ?>
 				</table>
-				<p class=" alignright"><a href="#" data-action="remove">Remove</a></p>
-			</td>
-		</tr>
-	<?php endforeach ?>
-	<tr class="eecf-repeater-preview">
-		<td>
-			<table>
-				<?php 
-				$index = '__i__';
-				foreach ($this->fields as $field): 
-					$old_name = $field->get_name();
-					$field->set_name( $this->get_name() . '[' . $index . '][' . $old_name . ']' );
-				?>
+			<?php else: ?>
+				<table>
 					<tr>
-						<th scope="row">
-							<?php echo $field->get_label(); ?>
-							<?php echo $field->get_help_text(); ?>
-						</th>
-						<td>
-							<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
-								<?php echo $field->render(); ?>
-							</div>
-						</td>
+						<?php 
+						$index = '__i__';
+						foreach ($this->fields as $field): 
+							$old_name = $field->get_name();
+							$field->set_name( $this->get_name() . '[' . $index . '][' . $old_name . ']' );
+						?>
+								<td>
+									<?php echo $field->get_label(); ?>
+									<?php echo $field->get_help_text(); ?>
+									<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+										<?php echo $field->render(); ?>
+									</div>
+								</td>
+						<?php 
+							$field->set_name( $old_name );
+						endforeach ?>
 					</tr>
-				<?php 
-					$field->set_name( $old_name );
-				endforeach ?>
-			</table>
+				</table>
+			<?php endif; ?>
 			<p class="alignright"><a href="#" data-action="remove">Remove</a></p>
 		</td>
 	</tr>

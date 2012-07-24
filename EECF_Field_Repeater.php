@@ -1,8 +1,12 @@
 <?php 
 
 class EECF_Field_Repeater extends EECF_Field {
+	const LAYOUT_TABLE = 'table';
+	const LAYOUT_LIST = 'list';
+
 	protected $fields = array();
 	protected $values = array();
+	protected $layout = self::LAYOUT_TABLE;
 
 	function add_fields($fields) {
 		$this->fields = array_merge($this->fields, $fields);
@@ -127,6 +131,16 @@ class EECF_Field_Repeater extends EECF_Field {
 	function _render() {
 		$container_tag_class_name = get_class($this);
 		include dirname(__FILE__) . '/admin-templates/repeater.php';
+	}
+
+	function set_layout($layout) {
+		if ( !in_array($layout, array(self::LAYOUT_TABLE, self::LAYOUT_LIST)) ) {
+			throw new EECF_Exception('Incorrect layout specifier. Available values are "<code>' . self::LAYOUT_TABLE . '</code>" and "<code>' . self::LAYOUT_LIST . '</code>"');
+		}
+
+		$this->layout = $layout;
+
+		return $this;
 	}
 }
 
