@@ -58,10 +58,12 @@ abstract class EECF_Widget extends WP_Widget implements EECF_DataStore {
 			$field_name = $this->get_field_name($tmp_field->get_name());
 			$tmp_field->set_name($field_name);
 		?>
-			<p>
+			<div>
 				<label for="<?php echo $field_id; ?>"><?php echo $tmp_field->get_label(); ?>:</label>
-				<?php $tmp_field->render(); ?>
-			</p>
+				<div class="eecf-field" data-type="<?php echo $tmp_field->type ?>">
+					<?php $tmp_field->render(); ?>
+				</div>
+			</div>
 		<?php endforeach; ?>
 		<?php
 	}

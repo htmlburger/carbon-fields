@@ -1,5 +1,7 @@
 <?php 
 
+add_action('admin_print_scripts', array('EECF_Field', 'admin_hook_scripts'));
+
 class EECF_Field {
 	protected $id;
 	protected $value;
@@ -157,6 +159,10 @@ class EECF_Field {
 	function get_help_text() {
 		return $this->help_text;
 	}
+
+	static function admin_hook_scripts() {
+		wp_enqueue_script('eecf_fields', EECF_PLUGIN_URL . '/js/fields.js');
+	}
 }
 
 class EECF_Field_Text extends EECF_Field {
@@ -290,10 +296,11 @@ class EECF_Field_File extends EECF_Field {
 	}
 
 	function admin_init() {
-		add_action('admin_print_styles-post.php', array($this, 'add_correct_script_hooks'), 1);
-		add_action('admin_print_styles-post-new.php', array($this, 'add_correct_script_hooks'), 1);
-		add_action('admin_footer-post.php', array($this, 'print_the_js'), 1);
-		add_action('admin_footer-post-new.php', array($this, 'print_the_js'), 1);
+		$hook_pages = array('post.php', 'post-new.php', 'edit-tags.php', 'profile.php', 'user-edit.php', 'widgets.php');
+
+		foreach ($hook_pages as $page) {
+			add_action('admin_print_styles-' . $page, array($this, 'add_correct_script_hooks'), 1);
+		}
 	}
 
 	function add_correct_script_hooks() {
@@ -301,81 +308,6 @@ class EECF_Field_File extends EECF_Field {
 		wp_enqueue_script('utf8_decode_js_userialize', $css_directory . '/lib/scripts/utf8.decode.js.unserialize.js');
 		wp_enqueue_script('fancybox', $css_directory . '/lib/scripts/fancybox/jquery.fancybox-1.3.4.pack.js');
 		wp_enqueue_style('fancybox-css', $css_directory . '/lib/scripts/fancybox/jquery.fancybox-1.3.4.css');
-	}
-	
-	function print_the_js() {
-	    ?>
-		<script type="text/javascript">
-			jQuery(function ($) {
-				var media_box_opened = false,
-					orig_send_to_editor = window.send_to_editor;
-
-				$('#c2_open_media<?php echo str_replace('-', '_', $this->id); ?>').click(function() {
-					var button = $(this),
-						url = button.attr('rel'),
-						input = button.parent().find('input:not(#' + button.attr('id') + ')');
-
-					$.fancybox({
-						href: url,
-						type: 'iframe',
-	        			width: 681,
-	        			height: 600,
-	        			onCleanup: function (){}
-					});
-
-					media_box_opened = true;
-					
-					window.pb_medialibrary = function(html) {
-						var data = c2_unserialize(html);
-						
-						if ( typeof data['url'] != 'undefined' && data.url ) {
-							input.val(data.url);
-							update_file_href(input, button, data.url);
-						} else {
-							alert('Something went wrong... \nPlease enter the file URL manually.');
-						};
-
-						$.fancybox.close();
-					}
-
-					window.send_to_editor = ( media_box_opened )? function(html) {
-						var a = ( $('a', html).length != 0 )? $('a', html) : $('a', html).prevObject,
-							file_url = a.attr('href');
-
-						input.val(file_url);
-						update_file_href(input, button, file_url);
-
-						$.fancybox.close();
-
-						media_box_opened = false;
-					} : orig_send_to_editor;
-					
-					if ( typeof(win) !== 'undefined' ) {
-						win.send_to_editor = function(html) {
-							var a = ( $('a', html).length != 0 )? $('a', html) : $('a', html).prevObject,
-								file_url = a.attr('href');
-							
-							input.val(file_url);
-							update_file_href(input, button, file_url);
-							
-							$.fancybox.close();
-						}
-					};
-				});
-
-				function update_file_href (input, button, href) {
-					var link = input.parent().find('a.eecf-view_file');
-
-					if ( link.length == 0 ) {
-						link = $('<a class="eecf-view_file" href="" target="_blank">View File</a>');
-						button.after(link).after('<br />');
-					};
-
-					link.attr('href', href);
-				}
-			});
-		</script>
-		<?php
 	}
 }
 
@@ -390,86 +322,6 @@ class EECF_Field_Image extends EECF_Field_File {
 		if ( $this->value != '' && in_array(array_pop(explode('.', $this->value)), $this->image_extensions) ) {
 			echo '<br /><img src="' . $this->value . '" alt="" height="100" class="eecf-view_image"/>';
 		}
-	}
-	
-	function print_the_js() {
-	    ?>
-		<script type="text/javascript">
-			jQuery(function ($) {
-				var media_box_opened = false,
-					orig_send_to_editor = window.send_to_editor;
-
-				$('#c2_open_media<?php echo str_replace('-', '_', $this->id); ?>').click(function() {
-					var button = $(this),
-						url = button.attr('rel'),
-						input = button.parent().find('input:not(#' + button.attr('id') + ')');
-
-					$.fancybox({
-						href: url,
-						type: 'iframe',
-	        			width: 681,
-	        			height: 600,
-	        			onCleanup: function (){}
-					});
-
-					media_box_opened = true;
-					
-					window.pb_medialibrary = function(html) {
-						var data = c2_unserialize(html);
-						
-						if ( typeof data['url'] != 'undefined' && data.url ) {
-							input.val(data.url);
-							update_img_src(input, button, data.url);
-						} else {
-							alert('Something went wrong... \nPlease enter the image URL manually.');
-						};
-
-						$.fancybox.close();
-					}
-
-					window.send_to_editor = ( media_box_opened )? function(html) {
-						var a = ( $('a', html).length != 0 )? $('a', html) : $('a', html).prevObject,
-							imgurl = ( $('img', html).length != 0 )? $('img', html).attr('src') : a.attr('href');
-
-						input.val(imgurl);
-						update_img_src(input, button, imgurl, $('img', html).length);
-
-						$.fancybox.close();
-
-						media_box_opened = false;
-					} : orig_send_to_editor;
-					
-					if ( typeof(win) !== 'undefined' ) {
-						win.send_to_editor = function(html) {
-							var a = ( $('a', html).length != 0 )? $('a', html) : $('a', html).prevObject,
-								imgurl = ( $('img', html).length != 0 )? $('img', html).attr('src') : a.attr('href');
-							
-							input.val(imgurl);
-							update_img_src(input, button, imgurl, $('img', html).length);
-							
-							$.fancybox.close();
-						}
-					};
-				});
-
-				function update_img_src (input, button, src, is_img) {
-					var view = input.parent().find('img.eecf-view_image');
-
-					if ( typeof('is_img') != 'undefined' && is_img == 0 ) {
-						view.replaceWith('');
-						return;
-					};
-
-					if ( view.length == 0 ) {
-						view = $('<img class="eecf-view_image" src="" alt="" />');
-						button.after(view).after('<br />');
-					};
-
-					view.attr('src', src);
-				}
-			});
-		</script>
-		<?php
 	}
 }
 

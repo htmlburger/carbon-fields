@@ -13,7 +13,9 @@
 								<?php echo $field->get_help_text(); ?>
 							</th>
 							<td>
-								<?php echo $field->render(); ?>
+								<div class="eecf-field" data-type="<?php echo $field->type ?>">
+									<?php echo $field->render(); ?>
+								</div>
 							</td>
 						</tr>
 					<?php 

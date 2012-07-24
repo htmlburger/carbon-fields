@@ -3,6 +3,9 @@
 Plugin Name: Enhanced Custom Fields
 */
 
+define('EECF_PLUGIN_ROOT', dirname(__FILE__));
+define('EECF_PLUGIN_URL', WP_PLUGIN_URL . '/' . basename(dirname(__FILE__)));
+
 include_once 'EECF_Exception.php';
 
 include_once 'EECF_DataStore.php';
