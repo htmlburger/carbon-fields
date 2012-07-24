@@ -10,8 +10,13 @@
 						?>
 							<tr>
 								<th scope="row">
-									<?php echo $field->get_label(); ?>
-									<?php echo $field->get_help_text(); ?>
+									<?php
+									echo $field->get_label(); 
+									if ( $field->is_required() ) {
+										echo ' *';
+									}
+									echo $field->get_help_text();
+									?>
 								</th>
 								<td>
 									<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
@@ -31,8 +36,13 @@
 								$field->set_name( $this->get_name() . '[' . $index . '][' . $old_name . ']' );
 							?>
 								<td>
-									<?php echo $field->get_label(); ?>
-									<?php echo $field->get_help_text(); ?>
+									<?php
+									echo $field->get_label(); 
+									if ( $field->is_required() ) {
+										echo ' *';
+									}
+									echo $field->get_help_text();
+									?>
 									<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 										<?php echo $field->render(); ?>
 									</div>
@@ -59,8 +69,13 @@
 					?>
 						<tr>
 							<th scope="row">
-								<?php echo $field->get_label(); ?>
-								<?php echo $field->get_help_text(); ?>
+								<?php
+								echo $field->get_label(); 
+								if ( $field->is_required() ) {
+									echo ' *';
+								}
+								echo $field->get_help_text();
+								?>
 							</th>
 							<td>
 								<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
@@ -82,8 +97,13 @@
 							$field->set_name( $this->get_name() . '[' . $index . '][' . $old_name . ']' );
 						?>
 								<td>
-									<?php echo $field->get_label(); ?>
-									<?php echo $field->get_help_text(); ?>
+									<?php
+									echo $field->get_label(); 
+									if ( $field->is_required() ) {
+										echo ' *';
+									}
+									echo $field->get_help_text();
+									?>
 									<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 										<?php echo $field->render(); ?>
 									</div>

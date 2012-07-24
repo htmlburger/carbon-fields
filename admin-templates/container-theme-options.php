@@ -16,15 +16,20 @@
 		<?php endforeach ?>
 	<?php endif; ?>
 
-	<form method="post" class="" enctype="multipart/form-data">
+	<form method="post" class="" enctype="multipart/form-data" action="<?php echo remove_query_arg(array('settings-updated')) ?>">
 		<table border="0" cellspacing="0" cellpadding="0" class="form-table">
 			<?php foreach ($this->fields as $field): 
 				$field->load();
 			?>
 				<tr>
 					<th scope="row">
-						<?php echo $field->get_label(); ?>
-						<?php echo $field->get_help_text(); ?>
+						<?php 
+						echo $field->get_label(); 
+						if ( $field->is_required() ) {
+							echo ' *';
+						}
+						echo $field->get_help_text();
+						?>
 					</th>
 					<td>
 						<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">

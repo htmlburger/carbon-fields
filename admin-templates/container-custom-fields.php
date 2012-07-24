@@ -4,8 +4,13 @@
 	?>
 		<tr>
 			<th scope="row">
-				<?php echo $field->get_label(); ?>
-				<?php echo $field->get_help_text(); ?>
+				<?php 
+				echo $field->get_label(); 
+				if ( $field->is_required() ) {
+					echo ' *';
+				}
+				echo $field->get_help_text(); 
+				?>
 			</th>
 			<td>
 				<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">

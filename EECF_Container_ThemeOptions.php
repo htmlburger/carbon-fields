@@ -3,8 +3,6 @@
 class EECF_Container_ThemeOptions extends EECF_Container {
 	protected static $registered_pages = array();
 	protected $registered_field_names = array();
-	protected $notifications = array();
-	protected $errors = array();
 
 	public $settings = array(
 		'parent'=>'theme-options.php',
@@ -16,10 +14,11 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 	function save() {
 		try {
 			parent::save();
-			$this->notifications[] = 'Settings saved.';
 		} catch (Exception $e) {
 			$this->errors[] = $e->getMessage();
 		}
+
+		wp_redirect(add_query_arg(array('settings-updated' => 'true')));
 	}
 
 	function init() {
@@ -86,6 +85,9 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 	}
 
 	function render() {
+		if ( isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'true' ) {
+			$this->notifications[] = 'Settings saved.';
+		}
 		$container_tag_class_name = get_class($this);
 		include dirname(__FILE__) . '/admin-templates/container-theme-options.php';
 	}

@@ -12,6 +12,7 @@ class EECF_Field {
 	protected $store;
 	protected $render_fn;
 	protected $autoload = false;
+	protected $required = false;
 	protected $name_prefix = '_';
 
 
@@ -173,6 +174,15 @@ class EECF_Field {
 
 	function get_autoload() {
 		return $this->autoload;
+	}
+
+	function set_required($required) {
+		$this->required = $required;
+		return $this;
+	}
+
+	function is_required() {
+		return $this->required;
 	}
 
 	static function admin_hook_scripts() {

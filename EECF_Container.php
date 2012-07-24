@@ -4,6 +4,9 @@ abstract class EECF_Container {
 	static $registered_panel_ids = array();
 	public $settings = array();
 	public $title = '';
+	
+	protected $notifications = array();
+	protected $errors = array();
 
 	protected $fields = array();
 	protected $store;
