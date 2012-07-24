@@ -2,8 +2,7 @@ jQuery(function($) {
 
 	function EECF_Field (node) {
 		if ( node.data('eecf_field') ) {
-			console.log('taken');
-			return;
+			$.error('Field already parsed');
 		};
 
 		node.data('eecf_field', this);
@@ -11,8 +10,14 @@ jQuery(function($) {
 	}
 
 	$.extend(EECF_Field, {
-		init: function() {
-			var fields = $('.eecf-field');
+		init: function(context) {
+			var fields;
+
+			if ( !context ) {
+				context = $('body');
+			};
+
+			fields = $('.eecf-field', context);
 
 			fields.each(function() {
 				var th = $(this),
@@ -183,6 +188,68 @@ jQuery(function($) {
 
 				view.attr('src', src);
 			}
+		}
+	});
+
+
+	/* Repeater Field */
+	EECF_Field.Repeater = function() {
+		EECF_Field.apply(this, arguments);
+
+		this.btn_add = this.node.find('a[data-action=add]');
+		this.num_rows = this.node.find('.eecf-repeater-row').length
+		this.name = this.node.data('name');
+	}
+
+	$.extend(EECF_Field.Repeater.prototype, {
+		init: function() {
+			var th = this;
+
+			this.btn_add.click(function() {
+				th.addRow();
+				return false;
+			});
+
+			this.node.find('a[data-action=remove]').live('click', function() {
+				th.removeRow($(this).closest('.eecf-repeater-row'))
+				return false;
+			});
+		},
+		addRow: function() {
+			var th = this,
+				sample_row = this.node.find('.eecf-repeater-preview'),
+				new_row = sample_row.clone();
+
+			this.num_rows++;
+
+			new_row.find('input[name*="__i__"]').each(function() {
+				var input = $(this);
+				input.attr('name', input.attr('name').replace(/\[__i__\]/, '[' + th.num_rows + ']'));
+			});
+
+			new_row.removeClass('eecf-repeater-preview').addClass('eecf-repeater-row').insertBefore(sample_row);
+			EECF_Field.init(new_row);
+		},
+		removeRow: function(row) {
+			row.remove();
+			this.onUpdateRows();
+		},
+		onUpdateRows: function() {
+			var th = this,
+				rows = this.node.find('.eecf-repeater-row'),
+				index = 0;
+
+			this.num_rows = rows.length;
+
+			rows.each(function() {
+				var row = $(this);
+				index ++;
+
+				row.find('input[name^="' + th.name + '"]').each(function() {
+					var input = $(this);
+					input.attr('name', input.attr('name').replace(/\[\d+\]/, '[' + index + ']'));
+				});
+			});
 		}
 	});
 

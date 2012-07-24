@@ -23,9 +23,6 @@ class EECF_Field_Repeater extends EECF_Field {
 	function load() {
 		// load existing groups
 		$this->load_values();
-
-		// TODO: remove this line, used for testing?
-		$this->values[] = $this->fields;
 	}
 	
 	function set_value_from_input($input = null) {

@@ -1,6 +1,7 @@
 <?php 
 
 add_action('admin_print_scripts', array('EECF_Field', 'admin_hook_scripts'));
+add_action('admin_print_styles', array('EECF_Field', 'admin_hook_styles'));
 
 class EECF_Field {
 	protected $id;
@@ -163,6 +164,10 @@ class EECF_Field {
 	static function admin_hook_scripts() {
 		wp_enqueue_script('eecf_fields', EECF_PLUGIN_URL . '/js/fields.js');
 	}
+
+	static function admin_hook_styles() {
+		wp_enqueue_style('eecf_fields', EECF_PLUGIN_URL . '/css/fields.css');
+	}
 }
 
 class EECF_Field_Text extends EECF_Field {
@@ -296,11 +301,7 @@ class EECF_Field_File extends EECF_Field {
 	}
 
 	function admin_init() {
-		$hook_pages = array('post.php', 'post-new.php', 'edit-tags.php', 'profile.php', 'user-edit.php', 'widgets.php');
-
-		foreach ($hook_pages as $page) {
-			add_action('admin_print_styles-' . $page, array($this, 'add_correct_script_hooks'), 1);
-		}
+		add_action('admin_print_styles', array($this, 'add_correct_script_hooks'), 1);
 	}
 
 	function add_correct_script_hooks() {

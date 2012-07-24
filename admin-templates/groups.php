@@ -62,7 +62,7 @@
 								<?php echo $field->get_help_text(); ?>
 							</th>
 							<td>
-								<div class="eecf-<?php echo $field->type ?>">
+								<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 									<?php echo $field->render(); ?>
 								</div>
 							</td>
