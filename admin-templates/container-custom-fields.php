@@ -1,4 +1,4 @@
-<table class="eecf-container <?php echo $container_tag_class_name ?>">
+<table class="eecf-container <?php echo $container_tag_class_name ?>" data-type="<?php echo $container_type ?>" data-options='<?php echo json_encode($container_options) ?>'>
 	<?php foreach ($this->fields as $field): 
 		$field->load();
 	?>

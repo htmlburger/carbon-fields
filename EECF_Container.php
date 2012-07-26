@@ -1,5 +1,8 @@
 <?php 
 
+add_action('admin_print_scripts', array('EECF_Container', 'admin_hook_scripts'));
+add_action('admin_print_styles', array('EECF_Container', 'admin_hook_styles'));
+
 abstract class EECF_Container {
 	static $registered_panel_ids = array();
 	public $settings = array();
@@ -28,6 +31,8 @@ abstract class EECF_Container {
 	function setup($settings = array()) {
 		$this->settings = array_merge($this->settings, $settings);
 		$this->init();
+
+		return $this;
 	}
 
 	function _save() {
@@ -115,6 +120,14 @@ abstract class EECF_Container {
 
 	function get_datastore() {
 		return $this->store;
+	}
+
+	static function admin_hook_scripts() {
+		wp_enqueue_script('eecf_fields', EECF_PLUGIN_URL . '/js/containers.js');
+	}
+
+	static function admin_hook_styles() {
+		wp_enqueue_style('eecf_fields', EECF_PLUGIN_URL . '/css/containers.css');
 	}
 
 }
