@@ -26,7 +26,7 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 			$this->set_datastore(new EECF_DataStore_ThemeOptions());
 		}
 
-		$this->verify_unique_page($this);
+		$this->verify_unique_page();
 
 	    add_action('admin_menu', array($this, 'attach'));
 	}
@@ -42,6 +42,12 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 	}
 
 	function attach() {
+		// Check file name setting
+		if ( empty($this->settings['file']) ) {
+			throw new EECF_Exception('Unspecified file name');
+		}
+
+		// Add menu page
 		if ( $this->settings['type'] == 'main' || !$this->settings['parent'] || $this->settings['parent'] == 'self' ) {
 		    add_menu_page(
 		    	$this->title, 
@@ -92,21 +98,26 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 		include dirname(__FILE__) . '/admin-templates/container-theme-options.php';
 	}
 
-	function verify_unique_page($file) {
-		if ( !is_string($file) ) {
-			// track only main pages
-			if ( $file->settings['parent'] && $file->settings['parent'] != 'self' ) {
-				return;
+	function verify_unique_page() {
+		$file = $this->settings['file'];
+		$parent = $this->settings['parent'];
+
+		// Register top level page
+		if ( !$parent || $parent == 'self' ) {
+			if ( isset(self::$registered_pages[$file]) ) {
+				throw new EECF_Exception ('Page "' . $file . '" already registered');
 			}
 
-			$file = $file->settings['parent'];
+			self::$registered_pages[$file] = array();
+			return;
 		}
 
-		if ( in_array($file, self::$registered_pages) ) {
-			throw new EECF_Exception ('Page "' . $file . '" already registered');
+		// Register sub-page
+		if ( !isset(self::$registered_pages[$parent]) ) {
+			self::$registered_pages[$parent] = array($file);
+		}  elseif ( in_array($file, self::$registered_pages[$parent]) ) {
+			throw new EECF_Exception ('Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a different file name using setup()');
 		}
-
-		self::$registered_pages[] = $file;
 	}
 
 	function verify_unique_field_name($name) {
