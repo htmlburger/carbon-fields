@@ -58,6 +58,16 @@ abstract class EECF_Container {
 		}
 	}
 	
+	function _attach() {
+		if ( $this->is_valid_attach() ) {
+			call_user_func_array(array($this, 'attach'), func_get_args());
+		}
+	}
+
+	function is_valid_attach() {
+		return true;
+	}
+
 	function detach() {
 		$this->drop_unique_panel_id($this->id);
 	}

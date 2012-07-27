@@ -96,12 +96,40 @@ jQuery(function($) {
 
 			// Check term/taxonomy
 			if ( typeof show_on['tax_slug'] != 'undefined' ) {
-				if (! $('#' + show_on['tax_slug'] + 'checklist input[value=' + show_on['tax_term_id'] + '], #' + show_on['tax_slug'] + '; ?>-pop input[value=' + show_on['tax_term_id'] + ']').is(':checked')) {
+				if (! $('#' + show_on['tax_slug'] + 'checklist input[value=' + show_on['tax_term_id'] + '], #' + show_on['tax_slug'] + '-pop input[value=' + show_on['tax_term_id'] + ']').is(':checked')) {
 					show = false;
 				};
 
 				if ( th.initCheckVisible ) {
 					$('#' + show_on['tax_slug'] + 'checklist input, #' + show_on['tax_slug'] + '-pop input').change(function() {
+						setTimeout(function() {
+							th.checkVisible();
+						}, 0);
+					});
+				};
+			};
+
+			// Check post format
+			if ( typeof show_on['post_formats'] != 'undefined' && show_on['post_formats'].length > 0 ) {
+				if ( $('#post-format-' + show_on['post_formats'].join(':checked, #post-format-') + ':checked').length == 0 ) {
+					show = false;
+				};
+
+				if ( th.initCheckVisible ) {
+					$('#post-formats-select input[name=post_format]').change(function() {
+						th.checkVisible();
+					});
+				};
+			};
+
+			// Check page parent
+			if ( typeof show_on['parent_page_id'] != 'undefined' ) {
+				if ( show_on['parent_page_id'] != $('select#parent_id').val() ) {
+					show = false;
+				};
+
+				if ( th.initCheckVisible ) {
+					$('select#parent_id').change(function() {
 						th.checkVisible();
 					});
 				};

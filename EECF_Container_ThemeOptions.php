@@ -28,7 +28,7 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 
 		$this->verify_unique_page();
 
-	    add_action('admin_menu', array($this, 'attach'));
+	    add_action('admin_menu', array($this, '_attach'));
 	}
 
 	function is_valid_save() {

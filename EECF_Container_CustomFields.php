@@ -24,7 +24,7 @@ class EECF_Container_CustomFields extends EECF_Container {
 			$this->set_post_id($_GET['post']);
 		}
 
-	    add_action('admin_init', array($this, 'attach'));
+	    add_action('admin_init', array($this, '_attach'));
 		add_action('save_post', array($this, '_save'));
 	}
 
@@ -60,11 +60,36 @@ class EECF_Container_CustomFields extends EECF_Container {
 	    	$this->settings['panel_priority']
 	    );
 	}
+
+	function is_valid_attach() {
+		$valid = true;
+
+		// Check show on conditions
+		foreach ($this->settings['show_on'] as $condition => $value) {
+			switch ($condition) {
+				case 'page_id':
+					if ( $value < 1 || $this->post_id != $value ) {
+						$valid = false;
+						break 2;
+					}
+					break;
+				case 'parent_page_id':
+					// Check if such page exists
+					if ( $value < 1 ) {
+						$valid = false;
+						break 2;
+					}
+					break;
+			}
+		}
+
+		return $valid;
+	}
 	
 	function detach() {
 		parent::detach();
 
-	    remove_action('admin_init', array($this, 'attach'));
+	    remove_action('admin_init', array($this, '_attach'));
 		remove_action('save_post', array($this, '_save'));
 
 		// unregister field names
@@ -111,21 +136,31 @@ class EECF_Container_CustomFields extends EECF_Container {
 
 	/* Display context filters */
 	function show_on_page_children($parent_page_path) {
-		$this->settings['show_on']['parent_page_path'] = $parent_page_path;
+	    $page = get_page_by_path($parent_page_path);
+
+	    if ( $page ) {
+	    	$this->settings['show_on']['parent_page_id'] = $page->ID;
+	    } else {
+	    	$this->settings['show_on']['parent_page_id'] = -1;
+	    }
 
 		return $this;
 	}
 	
 	function show_on_page($page_path) {
-	    $this->settings['show_on']['page_path'] = $page_path;
+	    $page = get_page_by_path($page_path);
+
+	    if ( $page ) {
+	    	$this->settings['show_on']['page_id'] = $page->ID;
+	    } else {
+	    	$this->settings['show_on']['page_id'] = -1;
+	    }
 
 		return $this;
 	}
 	
 	function show_on_category($category_slug) {
-	    $this->settings['show_on']['category_slug'] = $category_slug;
-
-		return $this;
+		return $this->show_on_taxonomy_term('category', $category_slug);
 	}
 	
 	// template file name

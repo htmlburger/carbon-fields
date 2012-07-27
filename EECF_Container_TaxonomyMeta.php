@@ -12,7 +12,7 @@ class EECF_Container_TaxonomyMeta extends EECF_Container {
 			$this->set_datastore(new EECF_DataStore_TaxonomyMeta());
 		}
 
-		add_action('admin_init', array($this, 'attach'));
+		add_action('admin_init', array($this, '_attach'));
 
 		add_action( 'edited_' . $this->settings['taxonomy'], array(&$this, '_save'), 10, 2);
 		add_action( 'created_' . $this->settings['taxonomy'], array(&$this, '_save'), 10, 2);

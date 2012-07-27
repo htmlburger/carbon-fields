@@ -10,7 +10,7 @@ class EECF_Container_UserMeta extends EECF_Container {
 			$this->set_datastore(new EECF_DataStore_UserMeta());
 		}
 
-		add_action('admin_init', array($this, 'attach'));
+		add_action('admin_init', array($this, '_attach'));
 		add_action('profile_update', array(&$this, '_save'), 10, 1);
 	}
 
