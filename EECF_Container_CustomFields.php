@@ -40,14 +40,95 @@ class EECF_Container_CustomFields extends EECF_Container {
 		}
 	}
 
-	function is_valid_save() {
+	function is_valid_save($post_id = 0) {
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
 			return false;
 		} else if (!isset($_REQUEST[$this->get_nonce_name()]) || !wp_verify_nonce($_REQUEST[$this->get_nonce_name()], $this->get_nonce_name())) {
 			return false;
+		} else if ($post_id < 1) {
+			return false;
 		}
 
-		return true;
+		$valid = true;
+		$post = get_post($post_id);
+
+		// Check post type
+		if ( $post->post_type != $this->settings['post_type'] ) {
+			return false;
+		}
+
+		// Check show on conditions
+		foreach ($this->settings['show_on'] as $condition => $value) {
+			switch ($condition) {
+				// show_on_post_format
+				case 'post_formats':
+					if ( empty($value) ) {
+						break;
+					}
+
+					$current_format = get_post_format($post_id);
+					if ( !in_array($current_format, $value) ) {
+						exit('formats');
+						$valid = false;
+						break 2;
+					}
+
+					break;
+
+				// show_on_taxonomy_term or show_on_category
+				case 'tax_term_id':
+					$current_terms = wp_get_object_terms( $post_id, $this->settings['show_on']['tax_slug'], array('fields' => 'ids') );
+
+					if ( !is_array($current_terms) || !in_array($this->settings['show_on']['tax_term_id'], $current_terms) ) {
+						$valid = false;
+						break 2;
+					}
+
+					break;
+
+				// show_on_level
+				case 'level_limit':
+					$post_level = count(geT_post_ancestors($post_id)) + 1;
+
+					if ( $post_level != $value ) {
+						$valid = false;
+						break 2;
+					}
+
+					break;
+
+				// show_on_page
+				case 'page_id':
+					if ( $post_id != $value ) {
+						$valid = false;
+						break 2;
+					}
+
+					break;
+
+				// show_on_page_children
+				case 'parent_page_id':
+					if ( $post->post_parent != $value ) {
+						$valid = false;
+						break 2;
+					}
+
+					break;
+
+				// show_on_template
+				case 'template_names':
+					$current_template = get_post_meta($post_id, '_wp_page_template', 1);
+
+					if ( !in_array($current_template, $value) ) {
+						$valid = false;
+						break 2;
+					}
+
+					break;
+			}
+		}
+
+		return $valid;
 	}
 
 	function attach() {

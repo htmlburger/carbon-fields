@@ -36,7 +36,7 @@ abstract class EECF_Container {
 	}
 
 	function _save() {
-		if ( $this->is_valid_save() ) {
+		if ( call_user_func_array(array($this, 'is_valid_save'), func_get_args()) ) {
 			call_user_func_array(array($this, 'save'), func_get_args());
 		}
 	}
