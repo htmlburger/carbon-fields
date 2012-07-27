@@ -5,7 +5,7 @@ class EECF_Container_CustomFields extends EECF_Container {
 	protected $post_id;
 
 	public $settings = array(
-		'post_type'=>'post',
+		'post_type' => array('post'),
 		'panel_context'=>'normal',
 		'panel_priority'=>'high',
 		'show_on' => array(
@@ -22,6 +22,11 @@ class EECF_Container_CustomFields extends EECF_Container {
 
 		if ( isset($_GET['post']) ) {
 			$this->set_post_id($_GET['post']);
+		}
+
+		// force post_type to be array
+		if ( !is_array($this->settings['post_type']) ) {
+			$this->settings['post_type'] = array($this->settings['post_type']);
 		}
 
 	    add_action('admin_init', array($this, '_attach'));
@@ -53,7 +58,7 @@ class EECF_Container_CustomFields extends EECF_Container {
 		$post = get_post($post_id);
 
 		// Check post type
-		if ( $post->post_type != $this->settings['post_type'] ) {
+		if ( !in_array($post->post_type, $this->settings['post_type']) ) {
 			return false;
 		}
 
@@ -135,14 +140,16 @@ class EECF_Container_CustomFields extends EECF_Container {
 	}
 
 	function attach() {
-		add_meta_box(
-	    	$this->id, 
-	    	$this->title, 
-	    	array($this, 'render'), 
-	    	$this->settings['post_type'], 
-	    	$this->settings['panel_context'],
-	    	$this->settings['panel_priority']
-	    );
+		foreach ($this->settings['post_type'] as $post_type) {
+			add_meta_box(
+				$this->id, 
+				$this->title, 
+				array($this, 'render'), 
+				$post_type, 
+				$this->settings['panel_context'],
+				$this->settings['panel_priority']
+			);
+		}
 	}
 
 	function is_valid_attach() {
@@ -185,7 +192,7 @@ class EECF_Container_CustomFields extends EECF_Container {
 	function render() {
 		$container_tag_class_name = get_class($this);
 		$container_type = 'CustomFields';
-		$container_options = array('show_on' => $this->settings['show_on'], 'post_type' => $this->settings['post_type']);
+		$container_options = array('show_on' => $this->settings['show_on']/*, 'post_type' => $this->settings['post_type']*/);
 
 		include dirname(__FILE__) . '/admin-templates/container-custom-fields.php';
 	}
@@ -200,21 +207,25 @@ class EECF_Container_CustomFields extends EECF_Container {
 			throw new EECF_Exception ('Panel instance is not setup correctly (missing post type)');
 		}
 
-		if ( !isset(self::$registered_field_names[$this->settings['post_type']]) ) {
-			self::$registered_field_names[$this->settings['post_type']] = array();
-		}
+		foreach ($this->settings['post_type'] as $post_type) {
+			if ( !isset(self::$registered_field_names[$post_type]) ) {
+				self::$registered_field_names[$post_type] = array();
+			}
 
-		if ( in_array($name, self::$registered_field_names[$this->settings['post_type']]) ) {
-			throw new EECF_Exception ('Field name "' . $name . '" already registered');
-		}
+			if ( in_array($name, self::$registered_field_names[$post_type]) ) {
+				throw new EECF_Exception ('Field name "' . $name . '" already registered');
+			}
 
-		self::$registered_field_names[$this->settings['post_type']][] = $name;
+			self::$registered_field_names[$post_type][] = $name;
+		}
 	}
 
 	function drop_unique_field_id($name) {
-		$index = array_search($name, self::$registered_field_names[$this->settings['post_type']]);
-		if ( $index !== false ) {
-			unset(self::$registered_field_names[$this->settings['post_type']][$index]);
+		foreach ($this->settings['post_type'] as $post_type) {
+			$index = array_search($name, self::$registered_field_names[$post_type]);
+			if ( $index !== false ) {
+				unset(self::$registered_field_names[$post_type][$index]);
+			}
 		}
 	}
 
