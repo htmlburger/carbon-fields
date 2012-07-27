@@ -133,11 +133,11 @@ abstract class EECF_Container {
 	}
 
 	static function admin_hook_scripts() {
-		wp_enqueue_script('eecf_fields', EECF_PLUGIN_URL . '/js/containers.js');
+		wp_enqueue_script('eecf_containers', EECF_PLUGIN_URL . '/js/containers.js');
 	}
 
 	static function admin_hook_styles() {
-		wp_enqueue_style('eecf_fields', EECF_PLUGIN_URL . '/css/containers.css');
+		wp_enqueue_style('eecf_containers', EECF_PLUGIN_URL . '/css/containers.css');
 	}
 
 }

@@ -117,6 +117,9 @@ class EECF_Container_CustomFields extends EECF_Container {
 
 				// show_on_template
 				case 'template_names':
+					if ( empty($value) ) {
+						break;
+					}
 					$current_template = get_post_meta($post_id, '_wp_page_template', 1);
 
 					if ( !in_array($current_template, $value) ) {
