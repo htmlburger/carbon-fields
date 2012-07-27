@@ -28,6 +28,8 @@ class EECF_Container_UserMeta extends EECF_Container {
 			return false;
 		} else if (!isset($_REQUEST[$this->get_nonce_name()]) || !wp_verify_nonce($_REQUEST[$this->get_nonce_name()], $this->get_nonce_name())) {
 			return false;
+		} else if ( !current_user_can('edit_users') ) {
+			return false;
 		}
 
 		return true;
@@ -36,6 +38,14 @@ class EECF_Container_UserMeta extends EECF_Container {
 	function attach() {
 		add_action('show_user_profile', array(&$this, 'render'), 10, 1);
 		add_action('edit_user_profile', array(&$this, 'render'), 10, 1);
+	}
+
+	function is_valid_attach() {
+		if ( !current_user_can('edit_users') ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	function render($user_profile = null) {
