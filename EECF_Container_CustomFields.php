@@ -1,9 +1,34 @@
 <?php
 
+/**
+ * Field container designed to extend WordPress custom fields functionality,
+ * providing easier user interface to add, edit and delete text, media files, 
+ * location information and more.
+ *
+ **/
 class EECF_Container_CustomFields extends EECF_Container {
+	/**
+	 * List of registered unique field names
+	 *
+	 * @see verify_unique_field_name()
+	 * @var array
+	 */
 	static protected $registered_field_names;
+
+	/**
+	 * ID of the post thw container is working with
+	 *
+	 * @see init()
+	 * @var int
+	 */
 	protected $post_id;
 
+	/**
+	 * List of default settings values
+	 *
+	 * @see init()
+	 * @var array
+	 */
 	public $settings = array(
 		'post_type' => array('post'),
 		'panel_context'=>'normal',
@@ -14,7 +39,12 @@ class EECF_Container_CustomFields extends EECF_Container {
 			),
 	);
 
-
+	/**
+	 * Create DataStore instance, set post ID to operate with (if such exists).
+	 * Bind attach() and save() to the appropriate WordPress actions.
+	 *
+	 * @return void
+	 **/
 	function init() {
 		if ( !$this->get_datastore() ) {
 			$this->set_datastore(new EECF_DataStore_CustomField());
@@ -33,6 +63,13 @@ class EECF_Container_CustomFields extends EECF_Container {
 		add_action('save_post', array($this, '_save'));
 	}
 
+	/**
+	 * Perform save operation after successful is_valid_save() check.
+	 * The call is propagated to all fields in the container.
+	 *
+	 * @param int $post_id ID of the post against which save() is ran
+	 * @return void
+	 **/
 	function save($post_id) {
 		// Unhook action to garantee single save
 		remove_action('save_post', array($this, 'save'));
@@ -45,6 +82,15 @@ class EECF_Container_CustomFields extends EECF_Container {
 		}
 	}
 
+	/**
+	 * Perform checks whether the current save() request is valid
+	 * Possible errors are triggering save() for autosave requests
+	 * or performing post save outside of the post edit page (like Quick Edit)
+	 *
+	 * @see is_valid_save_conditions()
+	 * @param int $post_id ID of the post against which save() is ran
+	 * @return void
+	 **/
 	function is_valid_save($post_id = 0) {
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
 			return false;
@@ -54,6 +100,18 @@ class EECF_Container_CustomFields extends EECF_Container {
 			return false;
 		}
 
+		return $this->is_valid_save_conditions($post_id);
+	}
+
+	/**
+	 * Perform checks whether the current save() request is valid
+	 * Possible errors are triggering save() for autosave requests
+	 * or performing post save outside of the post edit page (like Quick Edit)
+	 *
+	 * @param int $post_id ID of the post against which save() is ran
+	 * @return void
+	 **/
+	function is_valid_save_conditions($post_id) {
 		$valid = true;
 		$post = get_post($post_id);
 
@@ -139,6 +197,11 @@ class EECF_Container_CustomFields extends EECF_Container {
 		return $valid;
 	}
 
+	/**
+	 * Add meta box for each of the container port types
+	 *
+	 * @return void
+	 **/
 	function attach() {
 		foreach ($this->settings['post_type'] as $post_type) {
 			add_meta_box(
@@ -152,6 +215,11 @@ class EECF_Container_CustomFields extends EECF_Container {
 		}
 	}
 
+	/**
+	 * Perform checks whether the container should be attached for the current request
+	 *
+	 * @return bool True if the container is allowed to attach
+	 **/
 	function is_valid_attach() {
 		$valid = true;
 
@@ -177,6 +245,11 @@ class EECF_Container_CustomFields extends EECF_Container {
 		return $valid;
 	}
 	
+	/**
+	 * Revert the result of attach()
+	 *
+	 * @return void
+	 **/
 	function detach() {
 		parent::detach();
 
@@ -185,23 +258,41 @@ class EECF_Container_CustomFields extends EECF_Container {
 
 		// unregister field names
 		foreach ($this->fields as $field) {
-			$this->drop_unique_field_id($field->get_name());
+			$this->drop_unique_field_name($field->get_name());
 		}
 	}
 
+	/**
+	 * Output the container markup
+	 *
+	 * @return void
+	 **/
 	function render() {
 		$container_tag_class_name = get_class($this);
 		$container_type = 'CustomFields';
-		$container_options = array('show_on' => $this->settings['show_on']/*, 'post_type' => $this->settings['post_type']*/);
+		$container_options = array('show_on' => $this->settings['show_on']);
 
 		include dirname(__FILE__) . '/admin-templates/container-custom-fields.php';
 	}
 
+	/**
+	 * Set the post ID the container will operate with.
+	 *
+	 * @param int $post_id
+	 * @return void
+	 **/
 	function set_post_id($post_id) {
 		$this->post_id = $post_id;
 		$this->store->set_post_id($post_id);
 	}
 
+	/**
+	 * Perform checks whether there is a field registered with the name $name.
+	 * If not, record the field name.
+	 *
+	 * @param string $name
+	 * @return void
+	 **/
 	function verify_unique_field_name($name) {
 		if ( empty($this->settings['post_type']) ) {
 			throw new EECF_Exception ('Panel instance is not setup correctly (missing post type)');
@@ -220,7 +311,13 @@ class EECF_Container_CustomFields extends EECF_Container {
 		}
 	}
 
-	function drop_unique_field_id($name) {
+	/**
+	 * Remove field name $name from the list of unique field names
+	 *
+	 * @param string $name
+	 * @return void
+	 **/
+	function drop_unique_field_name($name) {
 		foreach ($this->settings['post_type'] as $post_type) {
 			$index = array_search($name, self::$registered_field_names[$post_type]);
 			if ( $index !== false ) {
@@ -229,7 +326,12 @@ class EECF_Container_CustomFields extends EECF_Container {
 		}
 	}
 
-	/* Display context filters */
+	/**
+	 * Show the container only on pages whose parent is referenced by $parent_page_path.
+	 *
+	 * @param string $page_path
+	 * @return object $this
+	 **/
 	function show_on_page_children($parent_page_path) {
 	    $page = get_page_by_path($parent_page_path);
 
@@ -242,6 +344,12 @@ class EECF_Container_CustomFields extends EECF_Container {
 		return $this;
 	}
 	
+	/**
+	 * Show the container only on particular page referenced by it's path.
+	 *
+	 * @param string $page_path
+	 * @return object $this
+	 **/
 	function show_on_page($page_path) {
 	    $page = get_page_by_path($page_path);
 
@@ -254,17 +362,30 @@ class EECF_Container_CustomFields extends EECF_Container {
 		return $this;
 	}
 	
+	/**
+	 * Show the container only on posts from the specified category.
+	 *
+	 * @see show_on_taxonomy_term()
+	 *
+	 * @param string $category_slug
+	 * @return object $this
+	 **/
 	function show_on_category($category_slug) {
 		return $this->show_on_taxonomy_term('category', $category_slug);
 	}
 	
-	// template file name
+	/**
+	 * Show the container only on pages whose template has filename $template_path.
+	 *
+	 * @param string|array $template_path
+	 * @return object $this
+	 **/
 	function show_on_template($template_path) {
 		if ( is_array($template_path) ) {
 			foreach ($template_path as $path) {
 				$this->show_on_template($path);
 			}
-			return;
+			return $this;
 		}
 
 		$this->settings['show_on']['template_names'][] = $template_path;
@@ -272,7 +393,13 @@ class EECF_Container_CustomFields extends EECF_Container {
 		return $this;
 	}
 	
-	/* Levels start from 1 (toplevel page) */
+	/**
+	 * Show the container only on hierarchical posts of level $level.
+	 * Levels start from 1 (top level post)
+	 *
+	 * @param int $level
+	 * @return object $this
+	 **/
 	function show_on_level($level) {
 		if ($level < 0 ) {
 			throw new EECF_Exception('Invalid level limitation (' . $level . ')');
@@ -283,6 +410,13 @@ class EECF_Container_CustomFields extends EECF_Container {
 		return $this;
 	}
 	
+	/**
+	 * Show the container only on posts which have term $term_slug from the $taxonomy_slug taxonomy.
+	 *
+	 * @param string $taxonomy_slug
+	 * @param string $term_slug
+	 * @return object $this
+	 **/
 	function show_on_taxonomy_term($taxonomy_slug, $term_slug) {
 		$term = get_term_by('slug', $term_slug, $taxonomy_slug);
 
@@ -297,17 +431,24 @@ class EECF_Container_CustomFields extends EECF_Container {
 		return $this;
 	}
 	
+	/**
+	 * Show the container only on posts from the specified format.
+	 * Learn more about {@link http://codex.wordpress.org/Post_Formats Post Formats (Codex)}
+	 *
+	 * @param string|array $post_format Name of the format as listed on Codex
+	 * @return object $this
+	 **/
 	function show_on_post_format($post_format) {
 		if ( is_array($post_format) ) {
 			foreach ($post_format as $format) {
 				$this->show_on_post_format($format);
 			}
-			return;
+			return $this;
 		}
 
 		$this->settings['show_on']['post_formats'][] = strtolower($post_format);
 
 		return $this;
 	}
-}
+} // END class 
 

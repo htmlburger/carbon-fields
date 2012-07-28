@@ -64,6 +64,8 @@ abstract class EECF_Container {
 		}
 	}
 
+	function attach() {}
+
 	function is_valid_attach() {
 		return true;
 	}
@@ -116,10 +118,6 @@ abstract class EECF_Container {
 		$registered_field_names[] = $name;
 	}
 
-	function get_nonce_name() {
-		return 'eecf_panel_' . $this->id . '_nonce';
-	}
-
 	function set_datastore(EECF_DataStore $store) {
 		$this->store = $store;
 
@@ -130,6 +128,10 @@ abstract class EECF_Container {
 
 	function get_datastore() {
 		return $this->store;
+	}
+
+	function get_nonce_name() {
+		return 'eecf_panel_' . $this->id . '_nonce';
 	}
 
 	static function admin_hook_scripts() {
