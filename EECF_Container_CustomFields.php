@@ -24,7 +24,7 @@ class EECF_Container_CustomFields extends EECF_Container {
 	protected $post_id;
 
 	/**
-	 * List of default settings values
+	 * List of default container settings
 	 *
 	 * @see init()
 	 * @var array
@@ -89,7 +89,7 @@ class EECF_Container_CustomFields extends EECF_Container {
 	 *
 	 * @see is_valid_save_conditions()
 	 * @param int $post_id ID of the post against which save() is ran
-	 * @return void
+	 * @return bool
 	 **/
 	function is_valid_save($post_id = 0) {
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
@@ -109,7 +109,7 @@ class EECF_Container_CustomFields extends EECF_Container {
 	 * or performing post save outside of the post edit page (like Quick Edit)
 	 *
 	 * @param int $post_id ID of the post against which save() is ran
-	 * @return void
+	 * @return bool
 	 **/
 	function is_valid_save_conditions($post_id) {
 		$valid = true;
@@ -216,9 +216,9 @@ class EECF_Container_CustomFields extends EECF_Container {
 	}
 
 	/**
-	 * Perform checks whether the container should be attached for the current request
+	 * Perform checks whether the container should be attached during the current request
 	 *
-	 * @return bool True if the container is allowed to attach
+	 * @return bool True if the container is allowed to be attached
 	 **/
 	function is_valid_attach() {
 		$valid = true;
@@ -288,7 +288,7 @@ class EECF_Container_CustomFields extends EECF_Container {
 
 	/**
 	 * Perform checks whether there is a field registered with the name $name.
-	 * If not, record the field name.
+	 * If not, the field name is recorded.
 	 *
 	 * @param string $name
 	 * @return void
@@ -450,5 +450,5 @@ class EECF_Container_CustomFields extends EECF_Container {
 
 		return $this;
 	}
-} // END class 
+} // END EECF_Container_CustomFields 
 
