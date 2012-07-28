@@ -66,7 +66,7 @@ abstract class EECF_Container {
 	protected $store;
 
 	/**
-	 * Perform instance initialisation after calling setup()
+	 * Perform instance initialization after calling setup()
 	 *
 	 * @return void
 	 **/
@@ -219,8 +219,7 @@ abstract class EECF_Container {
 
 	/**
 	 * Returns the private container array of fields.
-	 * Use only if you know you are completely aware 
-	 * what you are doing.
+	 * Use only if you are completely aware of what you are doing.
 	 *
 	 * @return array
 	 **/

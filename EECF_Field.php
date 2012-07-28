@@ -3,19 +3,101 @@
 add_action('admin_print_scripts', array('EECF_Field', 'admin_hook_scripts'));
 add_action('admin_print_styles', array('EECF_Field', 'admin_hook_styles'));
 
+/**
+ * Base field class. 
+ * Defines the key container methods and their default implementations.
+ * Implements factory design pattern
+ *
+ **/
 class EECF_Field {
+	/**
+	 * Globally unique field identificator. Generated randomly
+	 *
+	 * @var int
+	 */
 	protected $id;
+
+	/**
+	 * Field value
+	 *
+	 * @var mixed
+	 */
 	protected $value;
+
+	/**
+	 * Sanitized field name used as input name attribute during field render
+	 *
+	 * @see factory()
+	 * @see set_name()
+	 * @var string
+	 */
 	protected $name;
+
+	/**
+	 * Field name used as label during field render
+	 *
+	 * @see factory()
+	 * @see set_label()
+	 * @var string
+	 */
 	protected $label;
+
+	/**
+	 * Additional text containing information and guidance for the user
+	 *
+	 * @see help_text()
+	 * @var string
+	 */
 	protected $help_text;
+
+	/**
+	 * Field DataStore instance to which save, load and delete calls are delegated
+	 *
+	 * @see set_datastore()
+	 * @see get_datastore()
+	 * @var EECF_DataStore
+	 */
 	protected $store;
+
+	/**
+	 * Optional. Function, replacing the specific field rendering function
+	 *
+	 * @see render()
+	 * @var callable
+	 */
 	protected $render_fn;
+
+	/**
+	 * Whether or not this value should be auto loaded. Applicable to theme options only.
+	 * 
+	 * @see set_autoload()
+	 * @var bool
+	 **/
 	protected $autoload = false;
+
+	/**
+	 * Whether or not this field is required.
+	 * 
+	 * @see set_required()
+	 * @var bool
+	 **/
 	protected $required = false;
+
+	/**
+	 * Prefix to be pretended to the field name during load, save, delete and <strong>render</strong>
+	 *
+	 * @var string
+	 **/
 	protected $name_prefix = '_';
 
-
+	/**
+	 * Create a new field of type $type and name $name and label $label.
+	 *
+	 * @param string $type
+	 * @param string $name lower case and underscore-delimited
+	 * @param string $label (optional) Automatically generated from $name if not present
+	 * @return object $field
+	 **/
 	static function factory($type, $name, $label=null) {
 		$type = str_replace(" ", '_', ucwords(str_replace("_", ' ', $type)));
 
@@ -47,36 +129,83 @@ class EECF_Field {
 		add_action('admin_init', array(&$this, 'wp_init'));
 	}
 
-	// Action hookers
+	/**
+	 * Perform instance initialization after calling setup()
+	 *
+	 * @return void
+	 **/
 	function init() {}
+
+	/**
+	 * Instance initialization when in the admin area. Called during object construction
+	 *
+	 * @return void
+	 **/
 	function admin_init() {}
+
+	/**
+	 * Instance initialization when in the admin area. 
+	 * Called during the WordPress admin_init action
+	 *
+	 * @return void
+	 **/
 	function wp_init() {}
 
+	/**
+	 * Delegate rendering to the correct function
+	 *
+	 * @return void
+	 **/
 	function render() {
 		if (!is_callable($this->render_fn)) {
 			return $this->_render();
 		}
 
-		call_user_func($this->render_fn, $this);
-		return;
+		return call_user_func($this->render_fn, $this);
 	}
 
+	/**
+	 * Output the field markup
+	 *
+	 * @return void
+	 **/
 	function _render() {
 
 	}
 
+	/**
+	 * Delegate load to the field DataStore instance
+	 *
+	 * @return void
+	 **/
 	function load() {
 		return $this->store->load($this);
 	}
 
+	/**
+	 * Delegate save to the field DataStore instance
+	 *
+	 * @return void
+	 **/
 	function save() {
 		return $this->store->save($this);
 	}
 
+	/**
+	 * Delegate delete to the field DataStore instance
+	 *
+	 * @return void
+	 **/
 	function delete() {
 		return $this->store->delete($this);
 	}
 	
+	/**
+	 * Load the field value from an input array based on it's name
+	 *
+	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
+	 * @return void
+	 **/
 	function set_value_from_input($input = null) {
 		if ( is_null($input) ) {
 			$input = $_POST;
@@ -89,23 +218,52 @@ class EECF_Field {
 		}
 	}
 	
+	/**
+	 * Assign DataStore instance for use during load, save and delete
+	 *
+	 * @param object $store
+	 * @return object $this
+	 **/
 	function set_datastore(EECF_DataStore $store) {
 		$this->store = $store;
 		return $this;
 	}
-	
+
+	/**
+	 * Return the DataStore instance used by the field
+	 *
+	 * @return object $store
+	 **/
 	function get_datastore() {
 		return $this->store;
 	}
 
+	/**
+	 * Directly modify the field value
+	 *
+	 * @param mixed $value
+	 * @return void
+	 **/
 	function set_value($value) {
 		$this->value = $value;
 	}
 
+	/**
+	 * Return the field value
+	 *
+	 * @return mixed
+	 **/
 	function get_value() {
 		return $this->value;
 	}
 
+	/**
+	 * Set field name.
+	 * Use only if you are completely aware of what you are doing.
+	 *
+	 * @param string $name Field name, either sanitized or not
+	 * @return mixed
+	 **/
 	function set_name($name) {
 		$name = preg_replace('~\s+~', '_', strtolower($name));
 		if ( $this->name_prefix && strpos($name, $this->name_prefix) !== 0 ) {
@@ -115,16 +273,35 @@ class EECF_Field {
 		$this->name = $name;
 	}
 
-	function set_prefix($prefix) {
-		$this->name = preg_replace('~^' . preg_quote($this->name_prefix, '~') . '~', '', $this->name);
-		$this->name_prefix = $prefix;
-		$this->name = $this->name_prefix . $this->name;
-	}
-
+	/**
+	 * Return the field name
+	 *
+	 * @return string
+	 **/
 	function get_name() {
 		return $this->name;
 	}
 
+	/**
+	 * Set field name prefix. Calling this method will update the field name
+	 *
+	 * @param string $prefix
+	 * @return object $this
+	 **/
+	function set_prefix($prefix) {
+		$this->name = preg_replace('~^' . preg_quote($this->name_prefix, '~') . '~', '', $this->name);
+		$this->name_prefix = $prefix;
+		$this->name = $this->name_prefix . $this->name;
+
+		return $this;
+	}
+
+	/**
+	 * Set field label.
+	 *
+	 * @param string $label If null, the label will be generated from the field name
+	 * @return void
+	 **/
 	function set_label($label) {
 		// Try to guess field label from it's name
 		if (is_null($label)) {
@@ -141,6 +318,12 @@ class EECF_Field {
 		return $this->label;
 	}
 
+	/**
+	 * Set custom rendering function, replacing the default one.
+	 *
+	 * @param callable $fn
+	 * @return object $this
+	 **/
 	function set_render($fn) {
 		if ( !is_callable($fn) ) {
 			throw new EECF_Exception('Render must be callable');
@@ -150,37 +333,72 @@ class EECF_Field {
 		return $this;
 	}
 
+	/**
+	 * Set additional text to be displayed during field render, 
+	 * containing information and guidance for the user
+	 *
+	 * @return object $this
+	 **/
 	function set_help_text($help_text) {
 		$this->help_text = $help_text;
 		return $this;
 	}
 
+	/**
+	 * Alias for set_help_text()
+	 *
+	 * @see set_help_text()
+	 * @return object $this
+	 **/
 	function help_text($help_text) {
 		return $this->set_help_text($help_text);
 	}
 
+	/**
+	 * Return the field help text
+	 *
+	 * @return object $this
+	 **/
 	function get_help_text() {
 		return $this->help_text;
 	}
 
 	/**
-	 * Whether or not this value should be auto loaded. 
-	 * Applicable to theme options only.
+	 * Whether or not this value should be auto loaded. Applicable to theme options only.
+	 * 
+	 * @param bool $autoload
+	 * @return object $this
 	 **/
 	function set_autoload($autoload) {
 		$this->autoload = $autoload;
 		return $this;
 	}
 
+	/**
+	 * Return whether or not this value should be auto loaded
+	 * 
+	 * @return bool
+	 **/
 	function get_autoload() {
 		return $this->autoload;
 	}
 
+	/**
+	 * Whether this field is mandatory for the user
+	 *
+	 * @param bool $required
+	 * @return object $this
+	 **/
 	function set_required($required) {
 		$this->required = $required;
 		return $this;
 	}
 
+	/**
+	 * Return whether this field is mandatory for the user
+	 *
+	 * @return bool
+	 **/
 	function is_required() {
 		return $this->required;
 	}
@@ -192,7 +410,7 @@ class EECF_Field {
 	static function admin_hook_styles() {
 		wp_enqueue_style('eecf_fields', EECF_PLUGIN_URL . '/css/fields.css');
 	}
-}
+} // END EECF_Field 
 
 class EECF_Field_Text extends EECF_Field {
 	function render() {
