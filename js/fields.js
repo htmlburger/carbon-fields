@@ -28,8 +28,10 @@ jQuery(function($) {
 					return;
 				};
 
-				field = new EECF_Field[type](th);
-				field.init();
+				try {
+					field = new EECF_Field[type](th);
+					field.init();
+				} catch (e) {}
 			});
 		}
 	})
@@ -325,4 +327,6 @@ jQuery(function($) {
 
 
 	EECF_Field.init();
+
+	window.EECF_Field = EECF_Field;
 });

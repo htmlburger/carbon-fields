@@ -140,5 +140,42 @@ jQuery(function($) {
 	});
 
 
+	/* Widget Container */
+	EECF_Container.Widget = function() {
+		EECF_Container.apply(this, arguments);
+	}
+
+	$.extend(EECF_Container.Widget, {
+		initMonitorReady: false,
+		initMonitor: function() {
+			// monitor for new containers
+
+			if ( this.initMonitorReady ) {
+				return;
+			};
+
+			this.initMonitorReady = true;
+
+			/* Monitor for ajax requests that reload the container node */
+			$(document).ajaxSuccess(function(event, jqXHR, ajaxOptions) {
+				if ( jqXHR.status != 200 || ajaxOptions.data.indexOf('eecf_') == -1 ) {
+					return;
+				};
+
+				EECF_Field.init();
+			});
+		},
+		checkNew: function() {
+
+		}
+	});
+
+	$.extend(EECF_Container.Widget.prototype, {
+		init: function() {
+			EECF_Container.Widget.initMonitor();
+		}
+	});
+
+
 	EECF_Container.init();
 });

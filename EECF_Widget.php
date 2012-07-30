@@ -43,29 +43,11 @@ abstract class EECF_Widget extends WP_Widget implements EECF_DataStore {
 	}
  
 	function form($instance) {
-		if (empty($this->custom_fields)) {
-			echo 'No options are available for this widget';
-			return;
-		}
+		$container_tag_class_name = get_class($this);
+		$container_type = 'Widget';
+		$container_options = array();
 
-		$this->store_data = $instance;
-
-		foreach ($this->custom_fields as $field): 
-			$tmp_field = clone $field;
-			$tmp_field->load();
-
-			$field_id = $this->get_field_id($tmp_field->get_name());
-			$field_name = $this->get_field_name($tmp_field->get_name());
-			$tmp_field->set_name($field_name);
-		?>
-			<div>
-				<label for="<?php echo $field_id; ?>"><?php echo $tmp_field->get_label(); ?>:</label>
-				<div class="eecf-field" data-type="<?php echo $tmp_field->type ?>">
-					<?php $tmp_field->render(); ?>
-				</div>
-			</div>
-		<?php endforeach; ?>
-		<?php
+		include dirname(__FILE__) . '/admin-templates/container-widget.php';
 	}
 	
 	function widget($args, $instance) {
