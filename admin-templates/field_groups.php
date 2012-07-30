@@ -1,4 +1,4 @@
-<table class="eecf-container <?php echo $container_tag_class_name ?>">
+<table class="eecf-container <?php echo $container_tag_class_name ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
 	<?php 
 	$index = 0;
 	foreach ($this->values as $fields): 

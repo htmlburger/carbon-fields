@@ -132,7 +132,7 @@ class EECF_Field_Groups extends EECF_Field_Repeater {
 
 	function _render() {
 		$container_tag_class_name = get_class($this);
-		include dirname(__FILE__) . '/admin-templates/groups.php';
+		include dirname(__FILE__) . '/admin-templates/field_groups.php';
 	}
 }
 

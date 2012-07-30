@@ -199,13 +199,27 @@ jQuery(function($) {
 		EECF_Field.apply(this, arguments);
 
 		this.btn_add = this.node.find('a[data-action=add]');
-		this.num_rows = this.node.find('.eecf-repeater-row').length
+		this.num_rows = this.node.find('.eecf-repeater-row').length;
+		this.min_rows = this.node.children('.eecf-container').data('min-values');
+		this.max_rows = this.node.children('.eecf-container').data('max-values');
+
 		this.name = this.node.data('name');
 	}
 
 	$.extend(EECF_Field.Repeater.prototype, {
 		init: function() {
 			var th = this;
+
+			while( this.num_rows < this.min_rows ) {
+				this.addRow();
+			}
+
+			if ( this.num_rows >= this.max_rows ) {
+				this.btn_add.hide();
+			};
+
+
+			// Hook events
 
 			this.btn_add.click(function() {
 				th.addRow();
@@ -217,10 +231,18 @@ jQuery(function($) {
 				return false;
 			});
 		},
+
 		addRow: function() {
 			var th = this,
-				sample_row = this.node.find('.eecf-repeater-preview'),
-				new_row = sample_row.clone();
+				sample_row, new_row;
+
+			if ( this.max_rows <= this.num_rows ) {
+				alert('Maximum number of rows reached (' + this.num_rows + ')');
+				return;
+			};
+
+			sample_row = this.node.find('.eecf-repeater-preview');
+			new_row = sample_row.clone();
 
 			this.num_rows++;
 
@@ -233,11 +255,28 @@ jQuery(function($) {
 
 			new_row.removeClass('eecf-repeater-preview').addClass('eecf-repeater-row').insertBefore(sample_row);
 			EECF_Field.init(new_row);
+
+			if ( this.num_rows == this.max_rows ) {
+				this.btn_add.hide();
+			};
 		},
+
 		removeRow: function(row) {
+			var th = this;
 			row.remove();
 			this.onUpdateRows();
+
+			if ( this.min_rows > this.num_rows ) {
+				setTimeout(function() {
+					th.addRow();
+				}, 0);
+			};
+
+			if ( this.num_rows <= this.max_rows ) {
+				this.btn_add.show();
+			};
 		},
+
 		onUpdateRows: function() {
 			var th = this,
 				rows = this.node.find('.eecf-repeater-row'),
@@ -263,7 +302,10 @@ jQuery(function($) {
 
 		this.group_selector = this.node.find('select[name$="[group]"]');
 		this.btn_add = this.node.find('a[data-action=add]');
-		this.num_rows = this.node.find('.eecf-group-row').length
+		this.num_rows = this.node.find('.eecf-group-row').length;
+		this.min_rows = this.node.children('.eecf-container').data('min-values');
+		this.max_rows = this.node.children('.eecf-container').data('max-values');
+
 		this.name = this.node.data('name');
 
 		this.new_row_type = this.group_selector.val();
@@ -272,6 +314,14 @@ jQuery(function($) {
 	$.extend(EECF_Field.Groups.prototype, {
 		init: function() {
 			var th = this;
+
+
+			if ( this.num_rows >= this.max_rows ) {
+				this.btn_add.hide();
+			};
+
+
+			// Hook events
 
 			this.btn_add.click(function() {
 				th.addRow();
@@ -289,8 +339,15 @@ jQuery(function($) {
 		},
 		addRow: function() {
 			var th = this,
-				sample_row = this.node.find('.eecf-group-preview.eecf-group-' + th.new_row_type),
-				new_row = sample_row.clone();
+				sample_row, new_row;
+
+			if ( this.max_rows <= this.num_rows ) {
+				alert('Maximum number of rows reached (' + this.num_rows + ')');
+				return;
+			};
+
+			sample_row = this.node.find('.eecf-group-preview.eecf-group-' + th.new_row_type);
+			new_row = sample_row.clone();
 
 			this.num_rows++;
 
@@ -305,10 +362,22 @@ jQuery(function($) {
 
 			new_row.removeClass('eecf-group-preview').addClass('eecf-group-row').insertBefore( this.node.find('.eecf-group-preview:first') );
 			EECF_Field.init(new_row);
+
+			if ( this.num_rows == this.max_rows ) {
+				this.btn_add.hide();
+			};
 		},
 		removeRow: function(row) {
 			row.remove();
 			this.onUpdateRows();
+
+			if ( this.min_rows > this.num_rows ) {
+				// TODO: add the correct row type
+			};
+
+			if ( this.num_rows <= this.max_rows ) {
+				this.btn_add.show();
+			};
 		},
 		onUpdateRows: function() {
 			var th = this,

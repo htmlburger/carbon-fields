@@ -8,6 +8,9 @@ class EECF_Field_Repeater extends EECF_Field {
 	protected $values = array();
 	protected $layout = self::LAYOUT_TABLE;
 
+	protected $values_min = -1;
+	protected $values_max = -1;
+
 	function add_fields($fields) {
 		$this->fields = array_merge($this->fields, $fields);
 
@@ -130,7 +133,7 @@ class EECF_Field_Repeater extends EECF_Field {
 
 	function _render() {
 		$container_tag_class_name = get_class($this);
-		include dirname(__FILE__) . '/admin-templates/repeater.php';
+		include dirname(__FILE__) . '/admin-templates/field_repeater.php';
 	}
 
 	function set_layout($layout) {
@@ -141,6 +144,24 @@ class EECF_Field_Repeater extends EECF_Field {
 		$this->layout = $layout;
 
 		return $this;
+	}
+
+	function set_min($min) {
+		$this->values_min = intval($min);
+		return $this;
+	}
+
+	function get_min() {
+		return $this->values_min;
+	}
+
+	function set_max($max) {
+		$this->values_max = intval($max);
+		return $this;
+	}
+
+	function get_max() {
+		return $this->values_max;
 	}
 }
 
