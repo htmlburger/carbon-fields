@@ -9,16 +9,16 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
 
     public function testValidSaveRequest() {
         $container = new EECF_Container_CustomFields('Test Container');
-        $this->assertFalse( $container->is_valid_save() );
+        $this->assertFalse( $container->is_valid_save(1) );
 
         // Invalid Nonce
         $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = 'foo';
-        $this->assertFalse( $container->is_valid_save() );
+        $this->assertFalse( $container->is_valid_save(1) );
 
         // Valid Nonce
         $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = wp_create_nonce($container->get_nonce_name());
-        $this->assertTrue( $container->is_valid_save() );
-        $this->assertTrue( $container->is_valid_save() );
+        $this->assertTrue( $container->is_valid_save(1) );
+        $this->assertTrue( $container->is_valid_save(1) );
 
         $container->detach();
 
@@ -43,6 +43,10 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         $container2->add_fields(array(
             EECF_Field::factory('text', 'test_field'),
         ));
+
+        // cleanup
+        $container1->detach();
+        $container2->detach();
     }
 
     public function testRegisterEqualFieldNamesForSamePostTypes() {
@@ -69,6 +73,10 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         }
 
         $this->fail('Field name duplication is expected to raise exception');
+
+        // cleanup
+        $container1->detach();
+        $container2->detach();
     }
 
     /**
@@ -100,6 +108,9 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         $this->assertCount(1, $db_value);
         $this->assertArrayHasKey('meta_value', $db_value[0]);
         $this->assertEquals($db_value[0]['meta_value'], 'Lorem Ipsum');
+
+        // cleanup
+        $container->detach();
     }
 
     /**
