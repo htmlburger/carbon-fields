@@ -67,7 +67,7 @@
 	<!-- New Group -->
 
 	<?php 
-	$index = '__i__';
+	$index = '__ei__';
 	foreach ($this->groups as $group): ?>
 		<tr class="eecf-group-preview eecf-group-<?php echo $group->get_name() ?>">
 			<td>
@@ -93,7 +93,7 @@
 									?>
 								</th>
 								<td>
-									<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+									<div class="eecf-field eecf-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 										<?php echo $field->render(); ?>
 									</div>
 								</td>
@@ -119,7 +119,7 @@
 										}
 										echo $field->get_help_text();
 										?>
-										<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+										<div class="eecf-field  eecf-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 											<?php echo $field->render(); ?>
 										</div>
 									</td>

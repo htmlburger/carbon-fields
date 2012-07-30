@@ -17,7 +17,7 @@ jQuery(function($) {
 				context = $('body');
 			};
 
-			fields = $('.eecf-field', context);
+			fields = $('.eecf-field:not(.eecf-field-skip)', context);
 
 			fields.each(function() {
 				var th = $(this),
@@ -224,9 +224,11 @@ jQuery(function($) {
 
 			this.num_rows++;
 
-			new_row.find('input[name*="__i__"]').each(function() {
+			new_row.find('.eecf-field-skip').removeClass('eecf-field-skip');
+
+			new_row.find('input[name*="__ei__"]').each(function() {
 				var input = $(this);
-				input.attr('name', input.attr('name').replace(/\[__i__\]/, '[' + th.num_rows + ']'));
+				input.attr('name', input.attr('name').replace(/\[__ei__\]/, '[' + th.num_rows + ']'));
 			});
 
 			new_row.removeClass('eecf-repeater-preview').addClass('eecf-repeater-row').insertBefore(sample_row);
@@ -292,11 +294,13 @@ jQuery(function($) {
 
 			this.num_rows++;
 
-			new_row.find('input[name$="[__i__][group]"]').val(th.new_row_type);
+			new_row.find('.eecf-field-skip').removeClass('eecf-field-skip');
 
-			new_row.find('input[name*="__i__"]').each(function() {
+			new_row.find('input[name$="[__ei__][group]"]').val(th.new_row_type);
+
+			new_row.find('input[name*="__ei__"]').each(function() {
 				var input = $(this);
-				input.attr('name', input.attr('name').replace(/\[__i__\]/, '[' + th.num_rows + ']'));
+				input.attr('name', input.attr('name').replace(/\[__ei__\]/, '[' + th.num_rows + ']'));
 			});
 
 			new_row.removeClass('eecf-group-preview').addClass('eecf-group-row').insertBefore( this.node.find('.eecf-group-preview:first') );

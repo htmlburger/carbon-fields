@@ -62,7 +62,7 @@
 			<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
 				<table>
 					<?php 
-					$index = '__i__';
+					$index = '__ei__';
 					foreach ($this->fields as $field): 
 						$old_name = $field->get_name();
 						$field->set_name( $this->get_name() . '[' . $index . '][' . $old_name . ']' );
@@ -78,7 +78,7 @@
 								?>
 							</th>
 							<td>
-								<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+								<div class="eecf-field eecf-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 									<?php echo $field->render(); ?>
 								</div>
 							</td>
@@ -91,7 +91,7 @@
 				<table>
 					<tr>
 						<?php 
-						$index = '__i__';
+						$index = '__ei__';
 						foreach ($this->fields as $field): 
 							$old_name = $field->get_name();
 							$field->set_name( $this->get_name() . '[' . $index . '][' . $old_name . ']' );
@@ -104,7 +104,7 @@
 									}
 									echo $field->get_help_text();
 									?>
-									<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+									<div class="eecf-field eecf-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 										<?php echo $field->render(); ?>
 									</div>
 								</td>
