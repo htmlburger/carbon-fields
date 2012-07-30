@@ -1,9 +1,12 @@
 <?php
 
 abstract class EECF_Widget extends WP_Widget implements EECF_DataStore {
+	static $registered_widget_ids = array();
+	
 	protected $print_wrappers = true;
 	protected $store_data;
 	protected $form_options = array();
+	protected $custom_fields = array();
 
 	function setup($title, $description, $fields) {
 		// require title
@@ -11,20 +14,14 @@ abstract class EECF_Widget extends WP_Widget implements EECF_DataStore {
 			throw new EECF_Exception('Enter widget title');
 		}
 
-		// check fields and alter prefix
-		foreach ($fields as $field) {
-			if ( !is_a($field, 'EECF_Field') ) {
-				throw new EECF_Exception('Object must be of type EECF_Field');
-			}
-
-			$field->set_prefix('');
-			$field->set_datastore($this);
-		}
-		$this->custom_fields = $fields;
+		// add custom fields
+		$this->add_fields($fields);
 
 		// populate options
 		$classname = 'eecf_' . preg_replace('~\s+~', '_', strtolower(trim($title)));
 		$widget_options = compact('description', 'classname');
+
+		$this->verify_unique_widget_id($classname);
 
 		$this->WP_Widget($classname, $title, $widget_options, $this->form_options);
 	}
@@ -69,6 +66,42 @@ abstract class EECF_Widget extends WP_Widget implements EECF_DataStore {
     	print_r($instance);
     	echo '</pre></code>';
     }
+
+	function add_fields($fields) {
+		foreach ($fields as $field) {
+			if ( !is_a($field, 'EECF_Field') ) {
+				throw new EECF_Exception('Object must be of type EECF_Field');
+			}
+
+			$this->verify_unique_field_name($field->get_name());
+
+			$field->set_prefix('');
+
+			if ( !$field->get_datastore() ) {
+				$field->set_datastore($this);
+			}
+		}
+
+		$this->custom_fields = array_merge($this->custom_fields, $fields);
+	}
+
+	function verify_unique_field_name($name) {
+		static $registered_field_names = array();
+
+		if ( in_array($name, $registered_field_names) ) {
+			throw new EECF_Exception ('Field name "' . $name . '" already registered');
+		}
+
+		$registered_field_names[] = $name;
+	}
+
+	function verify_unique_widget_id($id) {
+		if ( in_array($id, self::$registered_widget_ids) ) {
+			throw new EECF_Exception ('Widget with ID "' . $id .'" already registered. Please change the widget title');
+		}
+
+		self::$registered_widget_ids[] = $id;
+	}
 
     /* Implment DataStore */
 	function load(EECF_Field $field) {
