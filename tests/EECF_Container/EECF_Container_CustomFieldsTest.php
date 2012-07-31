@@ -12,8 +12,11 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
 
         // Valid Nonce
         $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = wp_create_nonce($container->get_nonce_name());
+
+        // check
         $this->assertTrue( $container->is_valid_save(1) );
 
+        // cleanup
         $container->detach();
 
         // Autosave
@@ -26,8 +29,11 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
 
         // Invalid Nonce
         $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = 'foo';
+        
+        // check
         $this->assertFalse( $container->is_valid_save(1) );
 
+        // cleanup
         $container->detach();
     }
 

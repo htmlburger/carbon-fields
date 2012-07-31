@@ -1,6 +1,6 @@
 <?php 
 
-class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
+class EECF_Container_UserMetaTest extends WP_UnitTestCase {
     public $plugin_slug = 'ecf';
 
     function setUp() {
@@ -8,10 +8,15 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     }
 
     public function testValidSaveRequest() {
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
+        $container = new EECF_Container_UserMeta('Test Container');
+
+        // Authorized user
+        wp_set_current_user( 1 );
 
         // Valid Nonce
         $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = wp_create_nonce($container->get_nonce_name());
+
+        // check
         $this->assertTrue( $container->is_valid_save(1) );
 
         // cleanup
@@ -22,58 +27,39 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     }
 
     public function testInvalidSaveRequest() {
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
+        $container = new EECF_Container_UserMeta('Test Container');
         $this->assertFalse( $container->is_valid_save(1) );
 
+        // Unauthorized user
+        wp_set_current_user( 2 );
+        // Valid Nonce
+        $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = wp_create_nonce($container->get_nonce_name());
+        
+        // check
+        $this->assertFalse( $container->is_valid_save(1) );
+
+
+        // Authorized user
+        wp_set_current_user( 1 );
         // Invalid Nonce
         $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = 'foo';
+
+        // check
         $this->assertFalse( $container->is_valid_save(1) );
 
-        // Invalid taxonomy id
-        $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = wp_create_nonce($container->get_nonce_name());
-        $this->assertFalse( $container->is_valid_save(-2) );
-
-        // cleanup
         $container->detach();
     }
 
-    public function testRegisterEqualFieldNamesForDifferentTaxonomies() {
+    public function testRegisterEqualFieldNames() {
         // prepare container
-        $container1 = new EECF_Container_TaxonomyMeta('Test Container 1');
-        $container1->setup(array(
-            'taxonomy' => 'bar'
-        ));
+        $container1 = new EECF_Container_UserMeta('Test Container 1');
+        $container1->setup();
         $container1->add_fields(array(
             EECF_Field::factory('text', 'test_field'),
         ));
 
-        $container2 = new EECF_Container_TaxonomyMeta('Test Container 2');
-        $container2->setup(array(
-            'taxonomy' => 'foo'
-        ));
-        $container2->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
-        ));
-
-        // cleanup
-        $container1->detach();
-        $container2->detach();
-    }
-
-    public function testRegisterEqualFieldNamesForSameTaxonomies() {
-        // prepare container
-        $container1 = new EECF_Container_TaxonomyMeta('Test Container 1');
-        $container1->setup(array(
-            'taxonomy' => 'bar'
-        ));
-        $container1->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
-        ));
-
-        $container2 = new EECF_Container_TaxonomyMeta('Test Container 2');
-        $container2->setup(array(
-            'taxonomy' => 'bar'
-        ));
+        $container2 = new EECF_Container_UserMeta('Test Container 2');
+        $container2->setup();
 
         try {
             $container2->add_fields(array(
@@ -100,10 +86,8 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     public function testSaveSimpleFieldCheckDatabase() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
-        $container->setup(array(
-            'taxonomy' => 'foo'
-        ));
+        $container = new EECF_Container_UserMeta('Test Container');
+        $container->setup();
         $container->add_fields(array(
             EECF_Field::factory('text', 'test_field'),
         ));
@@ -116,8 +100,8 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
 
         // check
         $db_value = $wpdb->get_results('
-            SELECT meta_value FROM ' . $wpdb->taxonomymeta . '
-            WHERE taxonomy_id="123" AND meta_key="_test_field"
+            SELECT meta_value FROM ' . $wpdb->usermeta . '
+            WHERE user_id="123" AND meta_key="_test_field"
         ', ARRAY_A);
 
         $this->assertCount(1, $db_value);
@@ -134,10 +118,8 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     public function testSaveSimpleFieldCheckLoad() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
-        $container->setup(array(
-            'taxonomy' => 'foo'
-        ));
+        $container = new EECF_Container_UserMeta('Test Container');
+        $container->setup();
         $container->add_fields(array(
             EECF_Field::factory('text', 'test_field'),
         ));
@@ -166,7 +148,7 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
         global $wpdb;
 
         // prepare container
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
+        $container = new EECF_Container_UserMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
             EECF_Field::factory('repeater', 'repeater')->add_fields(array(
@@ -190,8 +172,8 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
 
         // check field
         $db_values = $wpdb->get_results('
-            SELECT meta_key, meta_value FROM ' . $wpdb->taxonomymeta . '
-            WHERE taxonomy_id="123" AND meta_key LIKE "_repeater%"
+            SELECT meta_key, meta_value FROM ' . $wpdb->usermeta . '
+            WHERE user_id="123" AND meta_key LIKE "_repeater%"
             ORDER BY meta_key
         ', ARRAY_A);
 
@@ -211,7 +193,7 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     public function testSaveRepeaterAndCheckLoad() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
+        $container = new EECF_Container_UserMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
             EECF_Field::factory('repeater', 'repeater')->add_fields(array(
@@ -264,7 +246,7 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
         global $wpdb;
         
         // prepare container
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
+        $container = new EECF_Container_UserMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
             EECF_Field::factory('groups', 'group')->add_fields(array(
@@ -301,8 +283,8 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
 
         // check field
         $db_values = $wpdb->get_results('
-            SELECT meta_key, meta_value FROM ' . $wpdb->taxonomymeta . '
-            WHERE taxonomy_id="123" AND meta_key LIKE "_group%"
+            SELECT meta_key, meta_value FROM ' . $wpdb->usermeta . '
+            WHERE user_id="123" AND meta_key LIKE "_group%"
             ORDER BY meta_key
         ', ARRAY_A);
 
@@ -331,7 +313,7 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
         global $wpdb;
         
         // prepare container
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
+        $container = new EECF_Container_UserMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
             EECF_Field::factory('groups', 'group')->add_fields(array(

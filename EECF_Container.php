@@ -18,6 +18,14 @@ abstract class EECF_Container {
 	static $registered_panel_ids = array();
 
 	/**
+	 * List of registered unique field names
+	 *
+	 * @see verify_unique_field_name()
+	 * @var array
+	 */
+	static protected $registered_field_names = array();
+
+	/**
 	 * List of default container settings
 	 *
 	 * @see init()
@@ -189,6 +197,11 @@ abstract class EECF_Container {
 	 **/
 	function detach() {
 		$this->drop_unique_panel_id($this->id);
+
+		// unregister field names
+		foreach ($this->fields as $field) {
+			$this->drop_unique_field_name($field->get_name());
+		}
 	}
 
 	/**
@@ -261,13 +274,24 @@ abstract class EECF_Container {
 	 * @return void
 	 **/
 	function verify_unique_field_name($name) {
-		static $registered_field_names = array();
-
-		if ( in_array($name, $registered_field_names) ) {
+		if ( in_array($name, self::$registered_field_names) ) {
 			throw new EECF_Exception ('Field name "' . $name . '" already registered');
 		}
 
-		$registered_field_names[] = $name;
+		self::$registered_field_names[] = $name;
+	}
+
+	/**
+	 * Remove field name $name from the list of unique field names
+	 *
+	 * @param string $name
+	 * @return void
+	 **/
+	function drop_unique_field_name($name) {
+		$index = array_search($name, self::$registered_field_names);
+		if ( $index !== false ) {
+			unset(self::$registered_field_names[$index]);
+		}
 	}
 
 	/**

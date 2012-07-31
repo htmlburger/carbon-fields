@@ -2,7 +2,7 @@
 
 class EECF_Container_ThemeOptions extends EECF_Container {
 	protected static $registered_pages = array();
-	protected $registered_field_names = array();
+	protected $to_registered_field_names = array();
 
 	public $settings = array(
 		'parent'=>'theme-options.php',
@@ -121,11 +121,11 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 	}
 
 	function verify_unique_field_name($name) {
-		if ( in_array($name, $this->registered_field_names) ) {
+		if ( in_array($name, $this->to_registered_field_names) ) {
 			throw new EECF_Exception ('Field name "' . $name . '" already registered');
 		}
 
-		$this->registered_field_names[] = $name;
+		$this->to_registered_field_names[] = $name;
 	}
 }
 
