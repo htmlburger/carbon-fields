@@ -214,7 +214,7 @@ jQuery(function($) {
 				this.addRow();
 			}
 
-			if ( this.num_rows >= this.max_rows ) {
+			if ( this.max_rows > 0 && this.num_rows >= this.max_rows ) {
 				this.btn_add.hide();
 			};
 
@@ -236,7 +236,7 @@ jQuery(function($) {
 			var th = this,
 				sample_row, new_row;
 
-			if ( this.max_rows <= this.num_rows ) {
+			if ( this.max_rows > 0 && this.max_rows <= this.num_rows ) {
 				alert('Maximum number of rows reached (' + this.num_rows + ')');
 				return;
 			};
@@ -256,7 +256,7 @@ jQuery(function($) {
 			new_row.removeClass('eecf-repeater-preview').addClass('eecf-repeater-row').insertBefore(sample_row);
 			EECF_Field.init(new_row);
 
-			if ( this.num_rows == this.max_rows ) {
+			if ( this.max_rows > 0 && this.num_rows == this.max_rows ) {
 				this.btn_add.hide();
 			};
 		},
@@ -272,7 +272,7 @@ jQuery(function($) {
 				}, 0);
 			};
 
-			if ( this.num_rows <= this.max_rows ) {
+			if ( this.max_rows > 0 && this.num_rows <= this.max_rows ) {
 				this.btn_add.show();
 			};
 		},
@@ -316,7 +316,7 @@ jQuery(function($) {
 			var th = this;
 
 
-			if ( this.num_rows >= this.max_rows ) {
+			if ( this.max_rows > 0 && this.num_rows >= this.max_rows ) {
 				this.btn_add.hide();
 			};
 
@@ -341,7 +341,7 @@ jQuery(function($) {
 			var th = this,
 				sample_row, new_row;
 
-			if ( this.max_rows <= this.num_rows ) {
+			if ( this.max_rows > 0 && this.max_rows <= this.num_rows ) {
 				alert('Maximum number of rows reached (' + this.num_rows + ')');
 				return;
 			};
@@ -363,7 +363,7 @@ jQuery(function($) {
 			new_row.removeClass('eecf-group-preview').addClass('eecf-group-row').insertBefore( this.node.find('.eecf-group-preview:first') );
 			EECF_Field.init(new_row);
 
-			if ( this.num_rows == this.max_rows ) {
+			if ( this.max_rows > 0 && this.num_rows == this.max_rows ) {
 				this.btn_add.hide();
 			};
 		},
@@ -375,7 +375,7 @@ jQuery(function($) {
 				// TODO: add the correct row type
 			};
 
-			if ( this.num_rows <= this.max_rows ) {
+			if ( this.max_rows > 0 && this.num_rows <= this.max_rows ) {
 				this.btn_add.show();
 			};
 		},

@@ -1,14 +1,20 @@
 <?php 
 
 class EECF_Container_ThemeOptions extends EECF_Container {
-	protected static $registered_pages = array();
-	protected $to_registered_field_names = array();
+	static protected $registered_pages = array();
+
+	/**
+	 * List of registered unique field names
+	 *
+	 * @see verify_unique_field_name()
+	 * @var array
+	 */
+	static protected $registered_field_names;
 
 	public $settings = array(
 		'parent'=>'theme-options.php',
 		'file'=>'theme-options.php',
-		'permissions'=>'edit_themes',
-		'type' => 'sub'
+		'permissions'=>'edit_themes'
 	);
 
 	function save() {
@@ -18,12 +24,18 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 			$this->errors[] = $e->getMessage();
 		}
 
-		wp_redirect(add_query_arg(array('settings-updated' => 'true')));
+		if ( !headers_sent() ) {
+			wp_redirect(add_query_arg(array('settings-updated' => 'true')));
+		}
 	}
 
 	function init() {
 		if ( !$this->get_datastore() ) {
 			$this->set_datastore(new EECF_DataStore_ThemeOptions());
+		}
+
+		if ( !$this->settings['parent'] || $this->settings['parent'] == 'self' ) {
+			$this->settings['parent'] = '';
 		}
 
 		$this->verify_unique_page();
@@ -32,7 +44,7 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 	}
 
 	function is_valid_save() {
-		if ( $_SERVER['REQUEST_METHOD'] != 'POST' ) {
+		if ( !isset($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] != 'POST' ) {
 			return false;
 		} else if ( !isset($_REQUEST[$this->get_nonce_name()]) || !wp_verify_nonce($_REQUEST[$this->get_nonce_name()], $this->get_nonce_name()) ) {
 			return false;
@@ -48,7 +60,7 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 		}
 
 		// Add menu page
-		if ( $this->settings['type'] == 'main' || !$this->settings['parent'] || $this->settings['parent'] == 'self' ) {
+		if ( !$this->settings['parent'] ) {
 		    add_menu_page(
 		    	$this->title, 
 		    	$this->title, 
@@ -90,6 +102,20 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 		);
 	}
 
+	/**
+	 * Revert the result of attach()
+	 *
+	 * @return void
+	 **/
+	function detach() {
+		parent::detach();
+
+		$this->drop_unique_page();
+
+		$page_hook = get_plugin_page_hookname( $this->settings['file'], '' );
+		remove_action('load-' . $page_hook, array($this, '_save'));
+	}
+
 	function render() {
 		if ( isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'true' ) {
 			$this->notifications[] = 'Settings saved.';
@@ -103,7 +129,7 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 		$parent = $this->settings['parent'];
 
 		// Register top level page
-		if ( !$parent || $parent == 'self' ) {
+		if ( !$parent ) {
 			if ( isset(self::$registered_pages[$file]) ) {
 				throw new EECF_Exception ('Page "' . $file . '" already registered');
 			}
@@ -117,15 +143,61 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 			self::$registered_pages[$parent] = array($file);
 		}  elseif ( in_array($file, self::$registered_pages[$parent]) ) {
 			throw new EECF_Exception ('Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a different file name using setup()');
+		} else {
+			self::$registered_pages[$parent][] = $file;
+		}
+	}
+
+	function drop_unique_page() {
+		$file = $this->settings['file'];
+		$parent = $this->settings['parent'];
+
+		// Register top level page
+		if ( !$parent ) {
+			if ( isset(self::$registered_pages[$file]) && empty( self::$registered_pages[$file] ) ) {
+				unset( self::$registered_pages[$file] );
+			}
+
+			return;
+		}
+
+		// Register sub-page
+		if ( isset(self::$registered_pages[$parent]) && in_array($file, self::$registered_pages[$parent]) ) {
+
+			$index = array_search($file, self::$registered_pages[$parent]);
+			if ( $index !== false ) {
+				unset(self::$registered_pages[$parent][$index]);
+			}
 		}
 	}
 
 	function verify_unique_field_name($name) {
-		if ( in_array($name, $this->to_registered_field_names) ) {
+		$page_id = $this->settings['parent'] . '/' . $this->settings['file'];
+
+		if ( !isset(self::$registered_field_names[$page_id]) ) {
+			self::$registered_field_names[$page_id] = array();
+		}
+
+		if ( in_array($name, self::$registered_field_names[$page_id]) ) {
 			throw new EECF_Exception ('Field name "' . $name . '" already registered');
 		}
 
-		$this->to_registered_field_names[] = $name;
+		self::$registered_field_names[$page_id][] = $name;
+	}
+
+	/**
+	 * Remove field name $name from the list of unique field names
+	 *
+	 * @param string $name
+	 * @return void
+	 **/
+	function drop_unique_field_name($name) {
+		$page_id = $this->settings['parent'] . '/' . $this->settings['file'];
+
+		$index = array_search($name, self::$registered_field_names[$page_id]);
+		if ( $index !== false ) {
+			unset(self::$registered_field_names[$page_id][$index]);
+		}
 	}
 }
 
