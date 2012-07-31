@@ -536,10 +536,12 @@ class EECF_Field_Set extends EECF_Field {
 class EECF_Field_File extends EECF_Field {
 	function render() {
 		echo '<input type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text" />';
-		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php" type="button" class="button-primary" value="Select Media" />';
+		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=file" type="button" class="button-primary" value="Select Media" />';
 		
 		// For image only
-		echo '<br /><a href="' . $this->value . '" target="_blank" class="eecf-view_file">View File</a>';
+		if ( !empty($this->value) ) {
+			echo '<br /><a href="' . $this->value . '" target="_blank" class="eecf-view_file">View File</a>';
+		}
 	}
 
 	function admin_init() {
@@ -558,11 +560,13 @@ class EECF_Field_Image extends EECF_Field_File {
 
 	function render() {
 		echo '<input type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text" />';
-		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php" type="button" class="button-primary" value="Select Media" />';
+		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=image" type="button" class="button-primary" value="Select Media" />';
 		
 		// For image only
 		if ( $this->value != '' && in_array(array_pop(explode('.', $this->value)), $this->image_extensions) ) {
 			echo '<br /><img src="' . $this->value . '" alt="" height="100" class="eecf-view_image"/>';
+		} else if ( !empty($this->value) ) {
+			echo '</br><em>This is not a valid image!</em>';
 		}
 	}
 }
