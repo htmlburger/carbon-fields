@@ -1,10 +1,18 @@
 <?php
 
 class EECF_Container_TaxonomyMeta extends EECF_Container {
+	/**
+	 * List of registered unique field names per taxonomy
+	 *
+	 * @see verify_unique_field_name()
+	 * @var array
+	 */
+	static protected $registered_field_names;
+
 	protected $term_id;
 
 	public $settings = array(
-		'taxonomy' => 'category'
+		'taxonomy' => array('category')
 	);
 
 	function init() {
@@ -12,10 +20,17 @@ class EECF_Container_TaxonomyMeta extends EECF_Container {
 			$this->set_datastore(new EECF_DataStore_TaxonomyMeta());
 		}
 
+		// force taxonomy to be array
+		if ( !is_array($this->settings['taxonomy']) ) {
+			$this->settings['taxonomy'] = array($this->settings['taxonomy']);
+		}
+
 		add_action('admin_init', array($this, '_attach'));
 
-		add_action( 'edited_' . $this->settings['taxonomy'], array(&$this, '_save'), 10, 2);
-		add_action( 'created_' . $this->settings['taxonomy'], array(&$this, '_save'), 10, 2);
+		foreach ($this->settings['taxonomy'] as $taxonomy) {
+			add_action( 'edited_' . $taxonomy, array(&$this, '_save'), 10, 2);
+			add_action( 'created_' . $taxonomy, array(&$this, '_save'), 10, 2);
+		}
 	}
 
 	function save($term_id) {
@@ -27,10 +42,12 @@ class EECF_Container_TaxonomyMeta extends EECF_Container {
 		}
 	}
 
-	function is_valid_save() {
+	function is_valid_save($term_id = null) {
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
 			return false;
 		} else if (!isset($_REQUEST[$this->get_nonce_name()]) || !wp_verify_nonce($_REQUEST[$this->get_nonce_name()], $this->get_nonce_name())) {
+			return false;
+		} else if ($term_id < 1) {
 			return false;
 		}
 
@@ -38,7 +55,30 @@ class EECF_Container_TaxonomyMeta extends EECF_Container {
 	}
 
 	function attach() {
-		add_action( $this->settings['taxonomy'] . '_edit_form_fields', array(&$this, 'render'), 10, 2);
+		foreach ($this->settings['taxonomy'] as $taxonomy) {
+			add_action( $taxonomy . '_edit_form_fields', array(&$this, 'render'), 10, 2);
+		}
+	}
+	
+	/**
+	 * Revert the result of attach()
+	 *
+	 * @return void
+	 **/
+	function detach() {
+		parent::detach();
+
+		remove_action('admin_init', array($this, '_attach'));
+
+		foreach ($this->settings['taxonomy'] as $taxonomy) {
+			remove_action( 'edited_' . $taxonomy, array(&$this, '_save'), 10, 2);
+			remove_action( 'created_' . $taxonomy, array(&$this, '_save'), 10, 2);
+		}
+
+		// unregister field names
+		foreach ($this->fields as $field) {
+			$this->drop_unique_field_name($field->get_name());
+		}
 	}
 
 	function render($term=null) {
@@ -55,6 +95,47 @@ class EECF_Container_TaxonomyMeta extends EECF_Container {
 	function set_term_id($term_id) {
 		$this->term_id = $term_id;
 		$this->store->set_term_id($term_id);
+	}
+
+
+	/**
+	 * Perform checks whether there is a field registered with the name $name.
+	 * If not, the field name is recorded.
+	 *
+	 * @param string $name
+	 * @return void
+	 **/
+	function verify_unique_field_name($name) {
+		if ( empty($this->settings['taxonomy']) ) {
+			throw new EECF_Exception ('Panel instance is not setup correctly (missing taxonomy)');
+		}
+
+		foreach ($this->settings['taxonomy'] as $taxonomy) {
+			if ( !isset(self::$registered_field_names[$taxonomy]) ) {
+				self::$registered_field_names[$taxonomy] = array();
+			}
+
+			if ( in_array($name, self::$registered_field_names[$taxonomy]) ) {
+				throw new EECF_Exception ('Field name "' . $name . '" already registered');
+			}
+
+			self::$registered_field_names[$taxonomy][] = $name;
+		}
+	}
+
+	/**
+	 * Remove field name $name from the list of unique field names
+	 *
+	 * @param string $name
+	 * @return void
+	 **/
+	function drop_unique_field_name($name) {
+		foreach ($this->settings['taxonomy'] as $taxonomy) {
+			$index = array_search($name, self::$registered_field_names[$taxonomy]);
+			if ( $index !== false ) {
+				unset(self::$registered_field_names[$taxonomy][$index]);
+			}
+		}
 	}
 }
 

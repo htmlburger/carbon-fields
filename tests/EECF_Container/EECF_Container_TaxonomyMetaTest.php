@@ -1,6 +1,6 @@
 <?php 
 
-class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
+class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     public $plugin_slug = 'ecf';
 
     function setUp() {
@@ -8,12 +8,13 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
     }
 
     public function testValidSaveRequest() {
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new EECF_Container_TaxonomyMeta('Test Container');
 
         // Valid Nonce
         $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = wp_create_nonce($container->get_nonce_name());
         $this->assertTrue( $container->is_valid_save(1) );
 
+        // cleanup
         $container->detach();
 
         // Autosave
@@ -21,29 +22,34 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
     }
 
     public function testInvalidSaveRequest() {
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new EECF_Container_TaxonomyMeta('Test Container');
         $this->assertFalse( $container->is_valid_save(1) );
 
         // Invalid Nonce
         $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = 'foo';
         $this->assertFalse( $container->is_valid_save(1) );
 
+        // Invalid taxonomy id
+        $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = wp_create_nonce($container->get_nonce_name());
+        $this->assertFalse( $container->is_valid_save(-2) );
+
+        // cleanup
         $container->detach();
     }
 
     public function testRegisterEqualFieldNamesForDifferentPostTypes() {
         // prepare container
-        $container1 = new EECF_Container_CustomFields('Test Container 1');
+        $container1 = new EECF_Container_TaxonomyMeta('Test Container 1');
         $container1->setup(array(
-            'post_type' => 'bar'
+            'taxonomy' => 'bar'
         ));
         $container1->add_fields(array(
             EECF_Field::factory('text', 'test_field'),
         ));
 
-        $container2 = new EECF_Container_CustomFields('Test Container 2');
+        $container2 = new EECF_Container_TaxonomyMeta('Test Container 2');
         $container2->setup(array(
-            'post_type' => 'foo'
+            'taxonomy' => 'foo'
         ));
         $container2->add_fields(array(
             EECF_Field::factory('text', 'test_field'),
@@ -56,17 +62,17 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
 
     public function testRegisterEqualFieldNamesForSamePostTypes() {
         // prepare container
-        $container1 = new EECF_Container_CustomFields('Test Container 1');
+        $container1 = new EECF_Container_TaxonomyMeta('Test Container 1');
         $container1->setup(array(
-            'post_type' => 'bar'
+            'taxonomy' => 'bar'
         ));
         $container1->add_fields(array(
             EECF_Field::factory('text', 'test_field'),
         ));
 
-        $container2 = new EECF_Container_CustomFields('Test Container 2');
+        $container2 = new EECF_Container_TaxonomyMeta('Test Container 2');
         $container2->setup(array(
-            'post_type' => 'bar'
+            'taxonomy' => 'bar'
         ));
 
         try {
@@ -94,9 +100,9 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
     public function testSaveSimpleFieldCheckDatabase() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new EECF_Container_TaxonomyMeta('Test Container');
         $container->setup(array(
-            'post_type' => 'foo'
+            'taxonomy' => 'foo'
         ));
         $container->add_fields(array(
             EECF_Field::factory('text', 'test_field'),
@@ -110,8 +116,8 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
 
         // check
         $db_value = $wpdb->get_results('
-            SELECT meta_value FROM ' . $wpdb->postmeta . '
-            WHERE post_id="123" AND meta_key="_test_field"
+            SELECT meta_value FROM ' . $wpdb->taxonomymeta . '
+            WHERE taxonomy_id="123" AND meta_key="_test_field"
         ', ARRAY_A);
 
         $this->assertCount(1, $db_value);
@@ -128,9 +134,9 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
     public function testSaveSimpleFieldCheckLoad() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new EECF_Container_TaxonomyMeta('Test Container');
         $container->setup(array(
-            'post_type' => 'foo'
+            'taxonomy' => 'foo'
         ));
         $container->add_fields(array(
             EECF_Field::factory('text', 'test_field'),
@@ -160,7 +166,7 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         global $wpdb;
 
         // prepare container
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new EECF_Container_TaxonomyMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
             EECF_Field::factory('repeater', 'repeater')->add_fields(array(
@@ -184,8 +190,8 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
 
         // check field
         $db_values = $wpdb->get_results('
-            SELECT meta_key, meta_value FROM ' . $wpdb->postmeta . '
-            WHERE post_id="123" AND meta_key LIKE "_repeater%"
+            SELECT meta_key, meta_value FROM ' . $wpdb->taxonomymeta . '
+            WHERE taxonomy_id="123" AND meta_key LIKE "_repeater%"
             ORDER BY meta_key
         ', ARRAY_A);
 
@@ -205,7 +211,7 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
     public function testSaveRepeaterAndCheckLoad() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new EECF_Container_TaxonomyMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
             EECF_Field::factory('repeater', 'repeater')->add_fields(array(
@@ -258,7 +264,7 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         global $wpdb;
         
         // prepare container
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new EECF_Container_TaxonomyMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
             EECF_Field::factory('groups', 'group')->add_fields(array(
@@ -295,8 +301,8 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
 
         // check field
         $db_values = $wpdb->get_results('
-            SELECT meta_key, meta_value FROM ' . $wpdb->postmeta . '
-            WHERE post_id="123" AND meta_key LIKE "_group%"
+            SELECT meta_key, meta_value FROM ' . $wpdb->taxonomymeta . '
+            WHERE taxonomy_id="123" AND meta_key LIKE "_group%"
             ORDER BY meta_key
         ', ARRAY_A);
 
@@ -325,7 +331,7 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         global $wpdb;
         
         // prepare container
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new EECF_Container_TaxonomyMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
             EECF_Field::factory('groups', 'group')->add_fields(array(
