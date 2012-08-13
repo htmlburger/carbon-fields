@@ -405,10 +405,16 @@ class EECF_Field {
 
 	static function admin_hook_scripts() {
 		wp_enqueue_script('eecf_fields', EECF_PLUGIN_URL . '/js/fields.js');
+
+		 wp_enqueue_script('media-upload');
+		 wp_enqueue_script('thickbox');
+
 	}
 
 	static function admin_hook_styles() {
 		wp_enqueue_style('eecf_fields', EECF_PLUGIN_URL . '/css/fields.css');
+		
+		wp_enqueue_style('thickbox');
 	}
 } // END EECF_Field 
 
@@ -550,8 +556,6 @@ class EECF_Field_File extends EECF_Field {
 
 	function add_correct_script_hooks() {
 		wp_enqueue_script('utf8_decode_js_userialize', EECF_PLUGIN_URL . '/js/utf8.decode.js.unserialize.js');
-		wp_enqueue_script('fancybox', EECF_PLUGIN_URL . '/js/fancybox/jquery.fancybox-1.3.4.pack.js');
-		wp_enqueue_style('fancybox-css', EECF_PLUGIN_URL . '/js/fancybox/jquery.fancybox-1.3.4.css');
 	}
 }
 

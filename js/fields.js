@@ -50,14 +50,8 @@ jQuery(function($) {
 				var button = $(this),
 					url = button.attr('rel'),
 					input = button.parent().find('input:not(#' + button.attr('id') + ')');
-
-				$.fancybox({
-					href: url,
-					type: 'iframe',
-        			width: 681,
-        			height: 600,
-        			onCleanup: function (){}
-				});
+				
+				tb_show('','media-upload.php?type=image&amp;TB_iframe=true');
 
 				media_box_opened = true;
 				
@@ -71,7 +65,7 @@ jQuery(function($) {
 						alert('Something went wrong... \nPlease enter the file URL manually.');
 					};
 
-					$.fancybox.close();
+					tb_remove();
 				}
 
 				window.send_to_editor = ( media_box_opened )? function(html) {
@@ -81,7 +75,7 @@ jQuery(function($) {
 					input.val(file_url);
 					update_file_href(input, button, file_url);
 
-					$.fancybox.close();
+					tb_remove();
 
 					media_box_opened = false;
 				} : orig_send_to_editor;
@@ -94,7 +88,7 @@ jQuery(function($) {
 						input.val(file_url);
 						update_file_href(input, button, file_url);
 						
-						$.fancybox.close();
+						tb_remove();
 					}
 				};
 			});
@@ -126,14 +120,8 @@ jQuery(function($) {
 				var button = $(this),
 					url = button.attr('rel'),
 					input = button.parent().find('input:not(#' + button.attr('id') + ')');
-
-				$.fancybox({
-					href: url,
-					type: 'iframe',
-        			width: 681,
-        			height: 600,
-        			onCleanup: function (){}
-				});
+				
+				tb_show('','media-upload.php?type=image&amp;TB_iframe=true');
 
 				media_box_opened = true;
 				
@@ -147,7 +135,7 @@ jQuery(function($) {
 						alert('Something went wrong... \nPlease enter the image URL manually.');
 					};
 
-					$.fancybox.close();
+					tb_remove();
 				}
 
 				window.send_to_editor = ( media_box_opened )? function(html) {
@@ -157,7 +145,7 @@ jQuery(function($) {
 					input.val(imgurl);
 					update_img_src(input, button, imgurl, $('img', html).length);
 
-					$.fancybox.close();
+					tb_remove();
 
 					media_box_opened = false;
 				} : orig_send_to_editor;
@@ -170,7 +158,7 @@ jQuery(function($) {
 						input.val(imgurl);
 						update_img_src(input, button, imgurl, $('img', html).length);
 						
-						$.fancybox.close();
+						tb_remove();
 					}
 				};
 			});
