@@ -1,6 +1,8 @@
 <?php
 /*
-Plugin Name: Enhanced Custom Fields
+Plugin Name: Carbon Fields
+Description: Provides additional custom fields for posts, categories, users, widgets and more
+Version: 0.1
 */
 
 define('EECF_PLUGIN_ROOT', dirname(__FILE__));

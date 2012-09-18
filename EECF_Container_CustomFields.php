@@ -36,8 +36,38 @@ class EECF_Container_CustomFields extends EECF_Container {
 		'show_on' => array(
 				'template_names' => array(),
 				'post_formats' => array(),
+				'level_limit' => null,
+				'tax_term_id' => null,
+				'page_id' => null,
+				'parent_page_id' => null,
+				'post_path' => null,
 			),
 	);
+
+	function check_setup_settings(&$settings = array()) {
+		if ( isset($settings['show_on']) ) {
+			$invalid_settings = array_diff_key($settings['show_on'], $this->settings['show_on']);
+			if ( !empty($invalid_settings) ) {
+				throw new EECF_Exception ('Invalid show_on settings supplied to setup(): "' . implode('", "', array_keys($invalid_settings)) . '"');
+			}
+		}
+
+		if ( isset($settings['show_on']['post_formats']) ) {
+			$settings['show_on']['post_formats'] = (array) $settings['show_on']['post_formats'];
+		}
+
+		if ( isset($settings['show_on']['post_path']) ) {
+		    $page = get_page_by_path($settings['show_on']['post_path']);
+
+		    if ( $page ) {
+		    	$settings['show_on']['page_id'] = $page->ID;
+		    } else {
+		    	$settings['show_on']['page_id'] = -1;
+		    }
+		}
+
+		return parent::check_setup_settings($settings);
+	}
 
 	/**
 	 * Create DataStore instance, set post ID to operate with (if such exists).
@@ -122,6 +152,10 @@ class EECF_Container_CustomFields extends EECF_Container {
 
 		// Check show on conditions
 		foreach ($this->settings['show_on'] as $condition => $value) {
+			if ( is_null($value) ) {
+				continue;
+			}
+
 			switch ($condition) {
 				// show_on_post_format
 				case 'post_formats':
@@ -226,6 +260,10 @@ class EECF_Container_CustomFields extends EECF_Container {
 
 		// Check show on conditions
 		foreach ($this->settings['show_on'] as $condition => $value) {
+			if ( is_null($value) ) {
+				continue;
+			}
+
 			switch ($condition) {
 				case 'page_id':
 					if ( $value < 1 || $this->post_id != $value ) {

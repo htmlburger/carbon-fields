@@ -39,6 +39,13 @@ abstract class EECF_Container {
 	 * @var string
 	 */
 	public $title = '';
+
+	/**
+	 * Whether the container was setup
+	 *
+	 * @var bool
+	 */
+	public $setup_ready = false;
 	
 
 	/**
@@ -102,10 +109,32 @@ abstract class EECF_Container {
 	 * @return void
 	 **/
 	function setup($settings = array()) {
+		if ( $this->setup_ready ) {
+			throw new EECF_Exception ('Panel "' . $this->title . '" already setup');
+		}
+
+		$this->check_setup_settings($settings);
+
 		$this->settings = array_merge($this->settings, $settings);
+
+		foreach ($this->settings as $key => $value) {
+			if ( is_null($value) ) {
+				unset($this->settings[$key]);
+			}
+		}
+
 		$this->init();
 
+		$this->setup_ready = true;
+
 		return $this;
+	}
+
+	function check_setup_settings(&$settings = array()) {
+		$invalid_settings = array_diff_key($settings, $this->settings);
+		if ( !empty($invalid_settings) ) {
+			throw new EECF_Exception ('Invalid settings supplied to setup(): "' . implode('", "', array_keys($invalid_settings)) . '"');
+		}
 	}
 
 	/**
@@ -215,6 +244,10 @@ abstract class EECF_Container {
 	 * @return void
 	 **/
 	function add_fields($fields) {
+		if ( !$this->setup_ready ) {
+			throw new Exception('Call setup() for container "' . $this->title . '" before adding fields');
+		}
+
 		foreach ($fields as $field) {
 			if ( !is_a($field, 'EECF_Field') ) {
 				throw new EECF_Exception('Object must be of type EECF_Field');

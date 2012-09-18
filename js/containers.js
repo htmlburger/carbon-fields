@@ -78,7 +78,7 @@ jQuery(function($) {
 			};
 
 			// Check hierarchy level
-			if ( typeof show_on['level_limit'] != 'undefined' ) {
+			if ( typeof show_on['level_limit'] != 'undefined' && show_on['level_limit'] != null  ) {
 				var level = $('select#parent_id option:checked').attr('class');
 
 				level = level ? parseInt(level.match(/^level-(\d+)/)[1]) + 2: 1;
@@ -123,7 +123,7 @@ jQuery(function($) {
 			};
 
 			// Check page parent
-			if ( typeof show_on['parent_page_id'] != 'undefined' ) {
+			if ( typeof show_on['parent_page_id'] != 'undefined' && show_on['parent_page_id'] != null ) {
 				if ( show_on['parent_page_id'] != $('select#parent_id').val() ) {
 					show = false;
 				};
