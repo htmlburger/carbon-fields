@@ -440,6 +440,36 @@ class Carbon_Field_Textarea extends Carbon_Field {
 	}
 }
 
+class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
+	var $rows = 10;
+	
+	function init() {
+		// TODO: fix problems with widgets, compound and complex fields
+		throw new Carbon_Exception('Rich_Text not supported, yet.');
+	}
+
+	function rows($rows = 10) {
+		$this->rows = max(intval($rows), 1);
+		return $this;
+	}
+	
+	function render() {
+		global $wp_version;
+
+		$val = $this->get_value(); //(isset($this->value) ? $this->value : ( isset($this->default_value) ? $this->default_value : '') );
+
+		if (version_compare($wp_version, '3.3') >= 0) {
+			$editor_id = preg_replace('~[\W_]~', '', $this->get_name());
+			wp_editor($val, $editor_id, array(
+				'textarea_rows' => $this->rows,
+				'textarea_name' => $this->get_name()
+				));
+		} else {
+			the_editor($val, $this->get_name());
+		}
+	}
+}
+
 class Carbon_Field_Select extends Carbon_Field {
 	protected $options = array();
 
