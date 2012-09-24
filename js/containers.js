@@ -1,181 +1,163 @@
 jQuery(function($) {
+	function init (context) {
+		var containers;
 
-	function EECF_Container (node) {
+		if ( !context ) {
+			context = $('body');
+		};
+
+		containers = $('.eecf-container', context);
+
+		containers.each(function() {
+			var th = $(this),
+				type = th.data('type'),
+				container;
+
+			container = eecf_container(th);
+
+			if ( typeof eecf_container[type] != 'undefined' ) {
+				eecf_container[type](th, container);
+			};
+		});
+	}
+
+	// Parse the DOM element and create container object for ease of use
+	function eecf_container(node) {
+		var container = {}
 		if ( node.data('eecf_container') ) {
 			$.error('Container already parsed');
 		};
 
-		node.data('eecf_container', this);
-		this.node = node;
+		node.data('eecf_container', container);
+		container.node = node;
 
-		this.options = this.node.data('options');
-		if ( typeof this.options != 'object' ) {
-			this.options = {};
+		container.options = container.node.data('options');
+		if ( typeof container.options != 'object' ) {
+			container.options = {};
 		};
+
+		return container;
 	}
 
-	$.extend(EECF_Container, {
-		init: function(context) {
-			var containers;
-
-			if ( !context ) {
-				context = $('body');
-			};
-
-			containers = $('.eecf-container', context);
-
-			containers.each(function() {
-				var th = $(this),
-					type = th.data('type'),
-					container;
-
-				if ( typeof EECF_Container[type] == 'undefined' ) {
-					return;
-				};
-
-				container = new EECF_Container[type](th);
-				container.init();
-			});
-		}
-	});
-
-	/* Custom Fields Container */
-	EECF_Container.CustomFields = function() {
-		EECF_Container.apply(this, arguments);
+	/* Custom Fields */
+	eecf_container.CustomFields = function (element, container_obj) {
+		container_obj.initCheckVisible = true;
+		custom_fields_check_visible(container_obj);
+		container_obj.initCheckVisible = false;
 	}
 
-	$.extend(EECF_Container.CustomFields.prototype, {
-		initCheckVisible: true,
-		init: function() {
-			this.checkVisible();
-			this.initCheckVisible = false;
-		},
+	function custom_fields_check_visible(container) {
+		var show_on,
+			show = true;
 
-		checkVisible: function() {
-			var th = this,
-				show_on,
-				show = true;
+		if ( typeof container.options['show_on'] == 'undefined' ) {
+			return true;
+		};
 
-			if ( typeof this.options['show_on'] == 'undefined' ) {
-				return true;
+		show_on = container.options['show_on'];
+
+		// Check page template
+		if ( typeof show_on['template_names'] != 'undefined' && show_on['template_names'].length > 0 ) {
+			var current_template = $('select#page_template').val();
+
+			if ( $.inArray(current_template, show_on['template_names']) < 0 ) {
+				show = false;
 			};
 
-			show_on = this.options['show_on'];
+			if ( container.initCheckVisible ) {
+				$('select#page_template').change(function() {
+					custom_fields_check_visible(container);
+				});
+			};
+		};
 
-			// Check page template
-			if ( typeof show_on['template_names'] != 'undefined' && show_on['template_names'].length > 0 ) {
-				var current_template = $('select#page_template').val();
+		// Check hierarchy level
+		if ( typeof show_on['level_limit'] != 'undefined' && show_on['level_limit'] != null  ) {
+			var level = $('select#parent_id option:checked').attr('class');
 
-				if ( $.inArray(current_template, show_on['template_names']) < 0 ) {
-					show = false;
-				};
+			level = level ? parseInt(level.match(/^level-(\d+)/)[1]) + 2: 1;
 
-				if ( th.initCheckVisible ) {
-					$('select#page_template').change(function() {
-						th.checkVisible();
-					});
-				};
+			if ( level != show_on['level_limit'] ) {
+				show = false;
+			};
+			
+			if ( container.initCheckVisible ) {
+				$('select#parent_id').change(function() {
+					custom_fields_check_visible(container);
+				});
+			};
+		};
+
+		// Check term/taxonomy
+		if ( typeof show_on['tax_slug'] != 'undefined' ) {
+			if (! $('#' + show_on['tax_slug'] + 'checklist input[value=' + show_on['tax_term_id'] + '], #' + show_on['tax_slug'] + '-pop input[value=' + show_on['tax_term_id'] + ']').is(':checked')) {
+				show = false;
 			};
 
-			// Check hierarchy level
-			if ( typeof show_on['level_limit'] != 'undefined' && show_on['level_limit'] != null  ) {
-				var level = $('select#parent_id option:checked').attr('class');
+			if ( container.initCheckVisible ) {
+				$('#' + show_on['tax_slug'] + 'checklist input, #' + show_on['tax_slug'] + '-pop input').change(function() {
+					setTimeout(function() {
+						custom_fields_check_visible(container);
+					}, 0);
+				});
+			};
+		};
 
-				level = level ? parseInt(level.match(/^level-(\d+)/)[1]) + 2: 1;
-
-				if ( level != show_on['level_limit'] ) {
-					show = false;
-				};
-				
-				if ( th.initCheckVisible ) {
-					$('select#parent_id').change(function() {
-						th.checkVisible();
-					});
-				};
+		// Check post format
+		if ( typeof show_on['post_formats'] != 'undefined' && show_on['post_formats'].length > 0 ) {
+			if ( $('#post-format-' + show_on['post_formats'].join(':checked, #post-format-') + ':checked').length == 0 ) {
+				show = false;
 			};
 
-			// Check term/taxonomy
-			if ( typeof show_on['tax_slug'] != 'undefined' ) {
-				if (! $('#' + show_on['tax_slug'] + 'checklist input[value=' + show_on['tax_term_id'] + '], #' + show_on['tax_slug'] + '-pop input[value=' + show_on['tax_term_id'] + ']').is(':checked')) {
-					show = false;
-				};
+			if ( container.initCheckVisible ) {
+				$('#post-formats-select input[name=post_format]').change(function() {
+					custom_fields_check_visible(container);
+				});
+			};
+		};
 
-				if ( th.initCheckVisible ) {
-					$('#' + show_on['tax_slug'] + 'checklist input, #' + show_on['tax_slug'] + '-pop input').change(function() {
-						setTimeout(function() {
-							th.checkVisible();
-						}, 0);
-					});
-				};
+		// Check page parent
+		if ( typeof show_on['parent_page_id'] != 'undefined' && show_on['parent_page_id'] != null ) {
+			if ( show_on['parent_page_id'] != $('select#parent_id').val() ) {
+				show = false;
 			};
 
-			// Check post format
-			if ( typeof show_on['post_formats'] != 'undefined' && show_on['post_formats'].length > 0 ) {
-				if ( $('#post-format-' + show_on['post_formats'].join(':checked, #post-format-') + ':checked').length == 0 ) {
-					show = false;
-				};
-
-				if ( th.initCheckVisible ) {
-					$('#post-formats-select input[name=post_format]').change(function() {
-						th.checkVisible();
-					});
-				};
+			if ( container.initCheckVisible ) {
+				$('select#parent_id').change(function() {
+					custom_fields_check_visible(container);
+				});
 			};
+		};
 
-			// Check page parent
-			if ( typeof show_on['parent_page_id'] != 'undefined' && show_on['parent_page_id'] != null ) {
-				if ( show_on['parent_page_id'] != $('select#parent_id').val() ) {
-					show = false;
-				};
-
-				if ( th.initCheckVisible ) {
-					$('select#parent_id').change(function() {
-						th.checkVisible();
-					});
-				};
-			};
-
-			this.node.closest('.postbox').toggle(show);
-		}
-	});
-
-
-	/* Widget Container */
-	EECF_Container.Widget = function() {
-		EECF_Container.apply(this, arguments);
+		container.node.closest('.postbox').toggle(show);
 	}
 
-	$.extend(EECF_Container.Widget, {
-		initMonitorReady: false,
-		initMonitor: function() {
-			// monitor for new containers
 
-			if ( this.initMonitorReady ) {
+	/* Widgets */
+	eecf_container.Widget = function (element, container_obj) {
+		widget_init_monitor(container_obj);
+	}
+	eecf_container.Widget.initMonitorReady = false;
+
+	function widget_init_monitor(container) {
+		// monitor for new containers
+		if ( eecf_container.Widget.initMonitorReady ) {
+			return;
+		};
+
+		eecf_container.Widget.initMonitorReady = true;
+
+		/* Monitor for ajax requests that reload the container node */
+		$(document).ajaxSuccess(function(event, jqXHR, ajaxOptions) {
+			if ( jqXHR.status != 200 || ajaxOptions.data.indexOf('eecf_') == -1 ) {
 				return;
 			};
 
-			this.initMonitorReady = true;
+			setTimeout(EECF_Field.init, 1);
+		});
+	}
+	
 
-			/* Monitor for ajax requests that reload the container node */
-			$(document).ajaxSuccess(function(event, jqXHR, ajaxOptions) {
-				if ( jqXHR.status != 200 || ajaxOptions.data.indexOf('eecf_') == -1 ) {
-					return;
-				};
-
-				EECF_Field.init();
-			});
-		},
-		checkNew: function() {
-
-		}
-	});
-
-	$.extend(EECF_Container.Widget.prototype, {
-		init: function() {
-			EECF_Container.Widget.initMonitor();
-		}
-	});
-
-
-	EECF_Container.init();
+	// Abracadabra! Poof! Containers everywhere ...
+	init();
 });
