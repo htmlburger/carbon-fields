@@ -671,6 +671,7 @@ class EECF_Field_File extends EECF_Field {
 							// update ecf_field
 							ecf_field.find('input.regular-text').val( json.url );
 				 			ecf_field.find('.eecf-view_image').attr( 'src', json.thumbnail );
+				 			ecf_field.find('.eecf-view_file').attr( 'href', json.url );
 				 			
 				 			// reset ecf_active_field and return false
 				 			self.parent.ecf_active_field = null;
