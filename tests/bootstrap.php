@@ -9,5 +9,5 @@ if( file_exists( $path ) ) {
     exit( "Couldn't find path to wordpress-tests/bootstrap.php\n" );
 }
 
-require_once dirname(dirname(__FILE__)) . '/ecf.php';
+require_once dirname(dirname(__FILE__)) . '/carbon-fields.php';
 

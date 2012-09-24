@@ -1,14 +1,14 @@
 <?php 
 
-class EECF_FieldTest extends PHPUnit_Framework_TestCase {
+class Carbon_FieldTest extends PHPUnit_Framework_TestCase {
     public function testFactory() {
-        $field = EECF_Field::factory('text', 'label');
+        $field = Carbon_Field::factory('text', 'label');
 
-        $this->assertInstanceOf('EECF_Field_Text', $field);
+        $this->assertInstanceOf('Carbon_Field_Text', $field);
 
         try {
-            EECF_Field::factory('made_up_name', 'label');
-        } catch (EECF_Exception $e) {
+            Carbon_Field::factory('made_up_name', 'label');
+        } catch (Carbon_Exception $e) {
             return;
         }
 
@@ -20,7 +20,7 @@ class EECF_FieldTest extends PHPUnit_Framework_TestCase {
      * @dataProvider nameProvider
      */
     public function testLabelFromName($name, $expected_name, $expected_label) {
-        $field = EECF_Field::factory('text', $name);
+        $field = Carbon_Field::factory('text', $name);
 
         $this->assertEquals($field->get_name(), $expected_name);
         $this->assertEquals($field->get_label(), $expected_label);
@@ -31,7 +31,7 @@ class EECF_FieldTest extends PHPUnit_Framework_TestCase {
      */
     public function testEscapedQuotes() {
     	// correct
-        $field = EECF_Field::factory('text', 'fancy_name');
+        $field = Carbon_Field::factory('text', 'fancy_name');
 
         // set_value must not alter the data
         $field->set_value('Lorem \\\' ipsum');

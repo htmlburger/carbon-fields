@@ -1,22 +1,17 @@
 <?php 
 
-class EECF_Container_UserMetaTest extends WP_UnitTestCase {
-    public $plugin_slug = 'ecf';
+class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
+    public $plugin_slug = 'carbon-fields';
 
     function setUp() {
         parent::setUp();
     }
 
     public function testValidSaveRequest() {
-        $container = new EECF_Container_UserMeta('Test Container');
-
-        // Authorized user
-        wp_set_current_user( 1 );
+        $container = new Carbon_Container_TaxonomyMeta('Test Container');
 
         // Valid Nonce
         $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = wp_create_nonce($container->get_nonce_name());
-
-        // check
         $this->assertTrue( $container->is_valid_save(1) );
 
         // cleanup
@@ -27,45 +22,64 @@ class EECF_Container_UserMetaTest extends WP_UnitTestCase {
     }
 
     public function testInvalidSaveRequest() {
-        $container = new EECF_Container_UserMeta('Test Container');
+        $container = new Carbon_Container_TaxonomyMeta('Test Container');
         $this->assertFalse( $container->is_valid_save(1) );
 
-        // Unauthorized user
-        wp_set_current_user( 2 );
-        // Valid Nonce
-        $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = wp_create_nonce($container->get_nonce_name());
-        
-        // check
-        $this->assertFalse( $container->is_valid_save(1) );
-
-
-        // Authorized user
-        wp_set_current_user( 1 );
         // Invalid Nonce
         $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = 'foo';
-
-        // check
         $this->assertFalse( $container->is_valid_save(1) );
 
+        // Invalid taxonomy id
+        $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = wp_create_nonce($container->get_nonce_name());
+        $this->assertFalse( $container->is_valid_save(-2) );
+
+        // cleanup
         $container->detach();
     }
 
-    public function testRegisterEqualFieldNames() {
+    public function testRegisterEqualFieldNamesForDifferentTaxonomies() {
         // prepare container
-        $container1 = new EECF_Container_UserMeta('Test Container 1');
-        $container1->setup();
+        $container1 = new Carbon_Container_TaxonomyMeta('Test Container 1');
+        $container1->setup(array(
+            'taxonomy' => 'bar'
+        ));
         $container1->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
+            Carbon_Field::factory('text', 'test_field'),
         ));
 
-        $container2 = new EECF_Container_UserMeta('Test Container 2');
-        $container2->setup();
+        $container2 = new Carbon_Container_TaxonomyMeta('Test Container 2');
+        $container2->setup(array(
+            'taxonomy' => 'foo'
+        ));
+        $container2->add_fields(array(
+            Carbon_Field::factory('text', 'test_field'),
+        ));
+
+        // cleanup
+        $container1->detach();
+        $container2->detach();
+    }
+
+    public function testRegisterEqualFieldNamesForSameTaxonomies() {
+        // prepare container
+        $container1 = new Carbon_Container_TaxonomyMeta('Test Container 1');
+        $container1->setup(array(
+            'taxonomy' => 'bar'
+        ));
+        $container1->add_fields(array(
+            Carbon_Field::factory('text', 'test_field'),
+        ));
+
+        $container2 = new Carbon_Container_TaxonomyMeta('Test Container 2');
+        $container2->setup(array(
+            'taxonomy' => 'bar'
+        ));
 
         try {
             $container2->add_fields(array(
-                EECF_Field::factory('text', 'test_field'),
+                Carbon_Field::factory('text', 'test_field'),
             ));
-        } catch (EECF_Exception $e) {
+        } catch (Carbon_Exception $e) {
             // cleanup
             $container1->detach();
             $container2->detach();
@@ -86,10 +100,12 @@ class EECF_Container_UserMetaTest extends WP_UnitTestCase {
     public function testSaveSimpleFieldCheckDatabase() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_UserMeta('Test Container');
-        $container->setup();
+        $container = new Carbon_Container_TaxonomyMeta('Test Container');
+        $container->setup(array(
+            'taxonomy' => 'foo'
+        ));
         $container->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
+            Carbon_Field::factory('text', 'test_field'),
         ));
 
         // Prepare POST
@@ -100,8 +116,8 @@ class EECF_Container_UserMetaTest extends WP_UnitTestCase {
 
         // check
         $db_value = $wpdb->get_results('
-            SELECT meta_value FROM ' . $wpdb->usermeta . '
-            WHERE user_id="123" AND meta_key="_test_field"
+            SELECT meta_value FROM ' . $wpdb->taxonomymeta . '
+            WHERE taxonomy_id="123" AND meta_key="_test_field"
         ', ARRAY_A);
 
         $this->assertCount(1, $db_value);
@@ -118,10 +134,12 @@ class EECF_Container_UserMetaTest extends WP_UnitTestCase {
     public function testSaveSimpleFieldCheckLoad() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_UserMeta('Test Container');
-        $container->setup();
+        $container = new Carbon_Container_TaxonomyMeta('Test Container');
+        $container->setup(array(
+            'taxonomy' => 'foo'
+        ));
         $container->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
+            Carbon_Field::factory('text', 'test_field'),
         ));
 
         // Prepare POST
@@ -148,12 +166,12 @@ class EECF_Container_UserMetaTest extends WP_UnitTestCase {
         global $wpdb;
 
         // prepare container
-        $container = new EECF_Container_UserMeta('Test Container');
+        $container = new Carbon_Container_TaxonomyMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('compound', 'compound')->add_fields(array(
-                EECF_Field::factory('text', 'field1'),
-                EECF_Field::factory('text', 'field2'),
+            Carbon_Field::factory('compound', 'compound')->add_fields(array(
+                Carbon_Field::factory('text', 'field1'),
+                Carbon_Field::factory('text', 'field2'),
             )),
         ));
 
@@ -172,8 +190,8 @@ class EECF_Container_UserMetaTest extends WP_UnitTestCase {
 
         // check field
         $db_values = $wpdb->get_results('
-            SELECT meta_key, meta_value FROM ' . $wpdb->usermeta . '
-            WHERE user_id="123" AND meta_key LIKE "_compound%"
+            SELECT meta_key, meta_value FROM ' . $wpdb->taxonomymeta . '
+            WHERE taxonomy_id="123" AND meta_key LIKE "_compound%"
             ORDER BY meta_key
         ', ARRAY_A);
 
@@ -193,12 +211,12 @@ class EECF_Container_UserMetaTest extends WP_UnitTestCase {
     public function testSaveCompoundAndCheckLoad() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_UserMeta('Test Container');
+        $container = new Carbon_Container_TaxonomyMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('compound', 'compound')->add_fields(array(
-                EECF_Field::factory('text', 'field1'),
-                EECF_Field::factory('text', 'field2'),
+            Carbon_Field::factory('compound', 'compound')->add_fields(array(
+                Carbon_Field::factory('text', 'field1'),
+                Carbon_Field::factory('text', 'field2'),
             )),
         ));
 
@@ -246,15 +264,15 @@ class EECF_Container_UserMetaTest extends WP_UnitTestCase {
         global $wpdb;
         
         // prepare container
-        $container = new EECF_Container_UserMeta('Test Container');
+        $container = new Carbon_Container_TaxonomyMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('complex', 'group')->add_fields(array(
-                    EECF_Field::factory('text', 'field1'),
-                    EECF_Field::factory('text', 'field2'),
+            Carbon_Field::factory('complex', 'group')->add_fields(array(
+                    Carbon_Field::factory('text', 'field1'),
+                    Carbon_Field::factory('text', 'field2'),
                 ), 'group1')->add_fields(array(
-                    EECF_Field::factory('text', 'field3'),
-                    EECF_Field::factory('text', 'field4'),
+                    Carbon_Field::factory('text', 'field3'),
+                    Carbon_Field::factory('text', 'field4'),
                 ), 'group2'),
         ));
 
@@ -283,8 +301,8 @@ class EECF_Container_UserMetaTest extends WP_UnitTestCase {
 
         // check field
         $db_values = $wpdb->get_results('
-            SELECT meta_key, meta_value FROM ' . $wpdb->usermeta . '
-            WHERE user_id="123" AND meta_key LIKE "_group%"
+            SELECT meta_key, meta_value FROM ' . $wpdb->taxonomymeta . '
+            WHERE taxonomy_id="123" AND meta_key LIKE "_group%"
             ORDER BY meta_key
         ', ARRAY_A);
 
@@ -313,15 +331,15 @@ class EECF_Container_UserMetaTest extends WP_UnitTestCase {
         global $wpdb;
         
         // prepare container
-        $container = new EECF_Container_UserMeta('Test Container');
+        $container = new Carbon_Container_TaxonomyMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('complex', 'group')->add_fields(array(
-                    EECF_Field::factory('text', 'field1'),
-                    EECF_Field::factory('text', 'field2'),
+            Carbon_Field::factory('complex', 'group')->add_fields(array(
+                    Carbon_Field::factory('text', 'field1'),
+                    Carbon_Field::factory('text', 'field2'),
                 ), 'group1')->add_fields(array(
-                    EECF_Field::factory('text', 'field3'),
-                    EECF_Field::factory('text', 'field4'),
+                    Carbon_Field::factory('text', 'field3'),
+                    Carbon_Field::factory('text', 'field4'),
                 ), 'group2'),
         ));
 

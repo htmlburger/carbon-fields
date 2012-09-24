@@ -1,4 +1,4 @@
-<div class="eecf-container <?php echo $container_tag_class_name ?>" data-type="<?php echo $container_type ?>" data-options='<?php echo json_encode($container_options) ?>'>
+<div class="carbon-container <?php echo $container_tag_class_name ?>" data-type="<?php echo $container_type ?>" data-options='<?php echo json_encode($container_options) ?>'>
 	<?php if ( empty($this->custom_fields) ): ?>
 		No options are available for this widget.
 	<?php else: 
@@ -24,7 +24,7 @@
 
 			<?php echo $tmp_field->get_help_text(); ?>
 			
-			<div class="eecf-field" data-type="<?php echo $tmp_field->type ?>" data-name="<?php echo $field->get_name() ?>">
+			<div class="carbon-field" data-type="<?php echo $tmp_field->type ?>" data-name="<?php echo $field->get_name() ?>">
 				<?php $tmp_field->render(); ?>
 			</div>
 		</div>

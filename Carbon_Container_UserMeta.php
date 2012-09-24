@@ -1,13 +1,13 @@
 <?php
 
-class EECF_Container_UserMeta extends EECF_Container {
+class Carbon_Container_UserMeta extends Carbon_Container {
 	protected $user_id;
 
 	public $settings = array();
 
 	function init() {
 		if ( !$this->get_datastore() ) {
-			$this->set_datastore(new EECF_DataStore_UserMeta());
+			$this->set_datastore(new Carbon_DataStore_UserMeta());
 		}
 
 		add_action('admin_init', array($this, '_attach'));

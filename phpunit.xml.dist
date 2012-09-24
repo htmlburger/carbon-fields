@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit bootstrap="tests/bootstrap.php" colors="false" stopOnError="true" stopOnFailure="true">
     <testsuites>
-        <testsuite name="EECF Test Suite">
+        <testsuite name="Carbon Test Suite">
             <directory>./tests/</directory>
         </testsuite>
     </testsuites>

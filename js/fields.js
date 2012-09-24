@@ -7,35 +7,35 @@ jQuery(function($) {
 			context = $('body');
 		};
 
-		fields = $('.eecf-field:not(.eecf-field-skip)', context);
+		fields = $('.carbon-field:not(.carbon-field-skip)', context);
 
 		fields.each(function() {
 			var th = $(this),
 				type = th.data('type'),
 				field;
 
-			if ( typeof eecf_field[type] == 'undefined' ) {
+			if ( typeof carbon_field[type] == 'undefined' ) {
 				return;
 			};
 
 			try {
-				field = eecf_field(th);
+				field = carbon_field(th);
 
-				if ( typeof eecf_field[type] != 'undefined' ) {
-					eecf_field[type](th, field);
+				if ( typeof carbon_field[type] != 'undefined' ) {
+					carbon_field[type](th, field);
 				};
 			} catch (e) {}
 		});
 	}
 
-	function eecf_field(node) {
+	function carbon_field(node) {
 		var field = {};
 
-		if ( node.data('eecf_field') ) {
+		if ( node.data('carbon_field') ) {
 			$.error('Field already parsed');
 		};
 
-		node.data('eecf_field', field);
+		node.data('carbon_field', field);
 		field.node = node;
 		field.type = node.data('type')
 
@@ -43,27 +43,27 @@ jQuery(function($) {
 	}
 
 	/* File and Image */
-	eecf_field.File = function(element, field_obj) {
+	carbon_field.File = function(element, field_obj) {
 		element.find('.button-primary').click(function() {
-			window.ecf_active_field = element;
+			window.carbon_active_field = element;
 			tb_show('','media-upload.php?TB_iframe=true');
 		});
 	}
 
-	eecf_field.Image = function(element, field_obj) {
+	carbon_field.Image = function(element, field_obj) {
 		element.find('.button-primary').click(function() {
-			window.ecf_active_field = element;
+			window.carbon_active_field = element;
 			tb_show('','media-upload.php?type=image&amp;TB_iframe=true');
 		});
 	}
 
 	/* Compound Field */
-	eecf_field.Compound = function(element, field_obj) {
+	carbon_field.Compound = function(element, field_obj) {
 		// prepare object
 		field_obj.btn_add = element.find('a[data-action=add]');
-		field_obj.num_rows = element.find('.eecf-compound-row').length;
-		field_obj.min_rows = element.children('.eecf-container').data('min-values');
-		field_obj.max_rows = element.children('.eecf-container').data('max-values');
+		field_obj.num_rows = element.find('.carbon-compound-row').length;
+		field_obj.min_rows = element.children('.carbon-container').data('min-values');
+		field_obj.max_rows = element.children('.carbon-container').data('max-values');
 
 		field_obj.name = element.data('name');
 
@@ -84,7 +84,7 @@ jQuery(function($) {
 		});
 
 		field_obj.node.find('a[data-action=remove]').live('click', function() {
-			compound_remove_row(field_obj, $(this).closest('.eecf-compound-row'));
+			compound_remove_row(field_obj, $(this).closest('.carbon-compound-row'));
 			return false;
 		});
 	}
@@ -97,19 +97,19 @@ jQuery(function($) {
 			return;
 		};
 
-		sample_row = field.node.find('.eecf-compound-preview');
+		sample_row = field.node.find('.carbon-compound-preview');
 		new_row = sample_row.clone();
 
 		field.num_rows++;
 
-		new_row.find('.eecf-field-skip').removeClass('eecf-field-skip');
+		new_row.find('.carbon-field-skip').removeClass('carbon-field-skip');
 
 		new_row.find('input[name*="__ei__"]').each(function() {
 			var input = $(this);
 			input.attr('name', input.attr('name').replace(/\[__ei__\]/, '[' + field.num_rows + ']'));
 		});
 
-		new_row.removeClass('eecf-compound-preview').addClass('eecf-compound-row').insertBefore(sample_row);
+		new_row.removeClass('carbon-compound-preview').addClass('carbon-compound-row').insertBefore(sample_row);
 		init(new_row);
 
 		if ( field.max_rows > 0 && field.num_rows == field.max_rows ) {
@@ -133,7 +133,7 @@ jQuery(function($) {
 	};
 
 	function compound_on_update_rows (field) {
-		var rows = field.node.find('.eecf-compound-row'),
+		var rows = field.node.find('.carbon-compound-row'),
 			index = 0;
 
 		field.num_rows = rows.length;
@@ -151,13 +151,13 @@ jQuery(function($) {
 
 
 	/* Complex Field */
-	eecf_field.Complex = function(element, field_obj) {
+	carbon_field.Complex = function(element, field_obj) {
 		// prepare object
 		field_obj.group_selector = element.find('select[name$="[group]"]');
 		field_obj.btn_add = element.find('a[data-action=add]');
-		field_obj.num_rows = element.find('.eecf-group-row').length;
-		field_obj.min_rows = element.children('.eecf-container').data('min-values');
-		field_obj.max_rows = element.children('.eecf-container').data('max-values');
+		field_obj.num_rows = element.find('.carbon-group-row').length;
+		field_obj.min_rows = element.children('.carbon-container').data('min-values');
+		field_obj.max_rows = element.children('.carbon-container').data('max-values');
 
 		field_obj.name = element.data('name');
 
@@ -176,7 +176,7 @@ jQuery(function($) {
 		});
 
 		field_obj.node.find('a[data-action=remove]').live('click', function() {
-			complex_remove_row(field_obj, $(this).closest('.eecf-group-row'));
+			complex_remove_row(field_obj, $(this).closest('.carbon-group-row'));
 			return false;
 		});
 
@@ -193,12 +193,12 @@ jQuery(function($) {
 			return;
 		};
 
-		sample_row = field.node.find('.eecf-group-preview.eecf-group-' + field.new_row_type);
+		sample_row = field.node.find('.carbon-group-preview.carbon-group-' + field.new_row_type);
 		new_row = sample_row.clone();
 
 		field.num_rows++;
 
-		new_row.find('.eecf-field-skip').removeClass('eecf-field-skip');
+		new_row.find('.carbon-field-skip').removeClass('carbon-field-skip');
 
 		new_row.find('input[name$="[__ei__][group]"]').val(field.new_row_type);
 
@@ -207,7 +207,7 @@ jQuery(function($) {
 			input.attr('name', input.attr('name').replace(/\[__ei__\]/, '[' + field.num_rows + ']'));
 		});
 
-		new_row.removeClass('eecf-group-preview').addClass('eecf-group-row').insertBefore( field.node.find('.eecf-group-preview:first') );
+		new_row.removeClass('carbon-group-preview').addClass('carbon-group-row').insertBefore( field.node.find('.carbon-group-preview:first') );
 		init(new_row);
 
 		if ( field.max_rows > 0 && field.num_rows == field.max_rows ) {
@@ -230,7 +230,7 @@ jQuery(function($) {
 
 	function complex_on_update_rows(field) {
 		var th = this,
-			rows = field.node.find('.eecf-group-row'),
+			rows = field.node.find('.carbon-group-row'),
 			index = 0;
 
 		field.num_rows = rows.length;
@@ -248,5 +248,5 @@ jQuery(function($) {
 
 	init();
 
-	window.eecf_field_init = init;
+	window.carbon_field_init = init;
 });

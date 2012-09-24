@@ -6,29 +6,29 @@ jQuery(function($) {
 			context = $('body');
 		};
 
-		containers = $('.eecf-container', context);
+		containers = $('.carbon-container', context);
 
 		containers.each(function() {
 			var th = $(this),
 				type = th.data('type'),
 				container;
 
-			container = eecf_container(th);
+			container = carbon_container(th);
 
-			if ( typeof eecf_container[type] != 'undefined' ) {
-				eecf_container[type](th, container);
+			if ( typeof carbon_container[type] != 'undefined' ) {
+				carbon_container[type](th, container);
 			};
 		});
 	}
 
 	// Parse the DOM element and create container object for ease of use
-	function eecf_container(node) {
+	function carbon_container(node) {
 		var container = {}
-		if ( node.data('eecf_container') ) {
+		if ( node.data('carbon_container') ) {
 			$.error('Container already parsed');
 		};
 
-		node.data('eecf_container', container);
+		node.data('carbon_container', container);
 		container.node = node;
 
 		container.options = container.node.data('options');
@@ -40,7 +40,7 @@ jQuery(function($) {
 	}
 
 	/* Custom Fields */
-	eecf_container.CustomFields = function (element, container_obj) {
+	carbon_container.CustomFields = function (element, container_obj) {
 		container_obj.initCheckVisible = true;
 		custom_fields_check_visible(container_obj);
 		container_obj.initCheckVisible = false;
@@ -134,26 +134,26 @@ jQuery(function($) {
 
 
 	/* Widgets */
-	eecf_container.Widget = function (element, container_obj) {
+	carbon_container.Widget = function (element, container_obj) {
 		widget_init_monitor(container_obj);
 	}
-	eecf_container.Widget.initMonitorReady = false;
+	carbon_container.Widget.initMonitorReady = false;
 
 	function widget_init_monitor(container) {
 		// monitor for new containers
-		if ( eecf_container.Widget.initMonitorReady ) {
+		if ( carbon_container.Widget.initMonitorReady ) {
 			return;
 		};
 
-		eecf_container.Widget.initMonitorReady = true;
+		carbon_container.Widget.initMonitorReady = true;
 
 		/* Monitor for ajax requests that reload the container node */
 		$(document).ajaxSuccess(function(event, jqXHR, ajaxOptions) {
-			if ( jqXHR.status != 200 || ajaxOptions.data.indexOf('eecf_') == -1 ) {
+			if ( jqXHR.status != 200 || ajaxOptions.data.indexOf('carbon_') == -1 ) {
 				return;
 			};
 
-			setTimeout(eecf_field_init, 1);
+			setTimeout(carbon_field_init, 1);
 		});
 	}
 	

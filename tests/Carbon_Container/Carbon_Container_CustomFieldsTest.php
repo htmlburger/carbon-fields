@@ -1,14 +1,14 @@
 <?php 
 
-class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
-    public $plugin_slug = 'ecf';
+class Carbon_Container_CustomFieldsTest extends WP_UnitTestCase {
+    public $plugin_slug = 'carbon-fields';
 
     function setUp() {
         parent::setUp();
     }
 
     public function testValidSaveRequest() {
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new Carbon_Container_CustomFields('Test Container');
 
         // Valid Nonce
         $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = wp_create_nonce($container->get_nonce_name());
@@ -24,7 +24,7 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
     }
 
     public function testInvalidSaveRequest() {
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new Carbon_Container_CustomFields('Test Container');
         $this->assertFalse( $container->is_valid_save(1) );
 
         // Invalid Nonce
@@ -39,20 +39,20 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
 
     public function testRegisterEqualFieldNamesForDifferentPostTypes() {
         // prepare container
-        $container1 = new EECF_Container_CustomFields('Test Container 1');
+        $container1 = new Carbon_Container_CustomFields('Test Container 1');
         $container1->setup(array(
             'post_type' => 'bar'
         ));
         $container1->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
+            Carbon_Field::factory('text', 'test_field'),
         ));
 
-        $container2 = new EECF_Container_CustomFields('Test Container 2');
+        $container2 = new Carbon_Container_CustomFields('Test Container 2');
         $container2->setup(array(
             'post_type' => 'foo'
         ));
         $container2->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
+            Carbon_Field::factory('text', 'test_field'),
         ));
 
         // cleanup
@@ -62,24 +62,24 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
 
     public function testRegisterEqualFieldNamesForSamePostTypes() {
         // prepare container
-        $container1 = new EECF_Container_CustomFields('Test Container 1');
+        $container1 = new Carbon_Container_CustomFields('Test Container 1');
         $container1->setup(array(
             'post_type' => 'bar'
         ));
         $container1->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
+            Carbon_Field::factory('text', 'test_field'),
         ));
 
-        $container2 = new EECF_Container_CustomFields('Test Container 2');
+        $container2 = new Carbon_Container_CustomFields('Test Container 2');
         $container2->setup(array(
             'post_type' => 'bar'
         ));
 
         try {
             $container2->add_fields(array(
-                EECF_Field::factory('text', 'test_field'),
+                Carbon_Field::factory('text', 'test_field'),
             ));
-        } catch (EECF_Exception $e) {
+        } catch (Carbon_Exception $e) {
             // cleanup
             $container1->detach();
             $container2->detach();
@@ -100,12 +100,12 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
     public function testSaveSimpleFieldCheckDatabase() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new Carbon_Container_CustomFields('Test Container');
         $container->setup(array(
             'post_type' => 'foo'
         ));
         $container->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
+            Carbon_Field::factory('text', 'test_field'),
         ));
 
         // Prepare POST
@@ -134,12 +134,12 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
     public function testSaveSimpleFieldCheckLoad() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new Carbon_Container_CustomFields('Test Container');
         $container->setup(array(
             'post_type' => 'foo'
         ));
         $container->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
+            Carbon_Field::factory('text', 'test_field'),
         ));
 
         // Prepare POST
@@ -166,12 +166,12 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         global $wpdb;
 
         // prepare container
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new Carbon_Container_CustomFields('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('compound', 'compound')->add_fields(array(
-                EECF_Field::factory('text', 'field1'),
-                EECF_Field::factory('text', 'field2'),
+            Carbon_Field::factory('compound', 'compound')->add_fields(array(
+                Carbon_Field::factory('text', 'field1'),
+                Carbon_Field::factory('text', 'field2'),
             )),
         ));
 
@@ -211,12 +211,12 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
     public function testSaveCompoundAndCheckLoad() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new Carbon_Container_CustomFields('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('compound', 'compound')->add_fields(array(
-                EECF_Field::factory('text', 'field1'),
-                EECF_Field::factory('text', 'field2'),
+            Carbon_Field::factory('compound', 'compound')->add_fields(array(
+                Carbon_Field::factory('text', 'field1'),
+                Carbon_Field::factory('text', 'field2'),
             )),
         ));
 
@@ -264,15 +264,15 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         global $wpdb;
         
         // prepare container
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new Carbon_Container_CustomFields('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('complex', 'group')->add_fields(array(
-                    EECF_Field::factory('text', 'field1'),
-                    EECF_Field::factory('text', 'field2'),
+            Carbon_Field::factory('complex', 'group')->add_fields(array(
+                    Carbon_Field::factory('text', 'field1'),
+                    Carbon_Field::factory('text', 'field2'),
                 ), 'group1')->add_fields(array(
-                    EECF_Field::factory('text', 'field3'),
-                    EECF_Field::factory('text', 'field4'),
+                    Carbon_Field::factory('text', 'field3'),
+                    Carbon_Field::factory('text', 'field4'),
                 ), 'group2'),
         ));
 
@@ -331,15 +331,15 @@ class EECF_Container_CustomFieldsTest extends WP_UnitTestCase {
         global $wpdb;
         
         // prepare container
-        $container = new EECF_Container_CustomFields('Test Container');
+        $container = new Carbon_Container_CustomFields('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('complex', 'group')->add_fields(array(
-                    EECF_Field::factory('text', 'field1'),
-                    EECF_Field::factory('text', 'field2'),
+            Carbon_Field::factory('complex', 'group')->add_fields(array(
+                    Carbon_Field::factory('text', 'field1'),
+                    Carbon_Field::factory('text', 'field2'),
                 ), 'group1')->add_fields(array(
-                    EECF_Field::factory('text', 'field3'),
-                    EECF_Field::factory('text', 'field4'),
+                    Carbon_Field::factory('text', 'field3'),
+                    Carbon_Field::factory('text', 'field4'),
                 ), 'group2'),
         ));
 

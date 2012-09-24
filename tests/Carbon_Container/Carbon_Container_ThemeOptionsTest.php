@@ -1,18 +1,28 @@
 <?php 
 
-class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
-    public $plugin_slug = 'ecf';
+class Carbon_Container_ThemeOptionsTest extends WP_UnitTestCase {
+    public $plugin_slug = 'carbon-fields';
 
     function setUp() {
         parent::setUp();
     }
 
-    public function testValidSaveRequest() {
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
+    static function setUpBeforeClass() {
+        parent::setUpBeforeClass();
 
+        include_once(ABSPATH . '/wp-admin/includes/plugin.php');
+    }
+
+    public function testValidSaveRequest() {
+        $container = new Carbon_Container_ThemeOptions('Test Container');
+
+        // Valid request method
+        $_SERVER['REQUEST_METHOD'] = 'POST';
         // Valid Nonce
         $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = wp_create_nonce($container->get_nonce_name());
-        $this->assertTrue( $container->is_valid_save(1) );
+
+        // check
+        $this->assertTrue( $container->is_valid_save() );
 
         // cleanup
         $container->detach();
@@ -22,37 +32,47 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     }
 
     public function testInvalidSaveRequest() {
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
-        $this->assertFalse( $container->is_valid_save(1) );
+        $container = new Carbon_Container_ThemeOptions('Test Container');
+        $this->assertFalse( $container->is_valid_save() );
 
+
+        // Invalid request method
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        // Valid Nonce
+        $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = 'foo';
+        
+        // check
+        $this->assertFalse( $container->is_valid_save() );
+
+
+        // Valid request method
+        $_SERVER['REQUEST_METHOD'] = 'POST';
         // Invalid Nonce
         $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = 'foo';
-        $this->assertFalse( $container->is_valid_save(1) );
-
-        // Invalid taxonomy id
-        $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = wp_create_nonce($container->get_nonce_name());
-        $this->assertFalse( $container->is_valid_save(-2) );
+        
+        // check
+        $this->assertFalse( $container->is_valid_save() );
 
         // cleanup
         $container->detach();
     }
 
-    public function testRegisterEqualFieldNamesForDifferentTaxonomies() {
+    public function testRegisterEqualFieldNames() {
         // prepare container
-        $container1 = new EECF_Container_TaxonomyMeta('Test Container 1');
+        $container1 = new Carbon_Container_ThemeOptions('Test Container 1');
         $container1->setup(array(
-            'taxonomy' => 'bar'
+            'file' => 'bar.php'
         ));
         $container1->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
+            Carbon_Field::factory('text', 'test_field'),
         ));
 
-        $container2 = new EECF_Container_TaxonomyMeta('Test Container 2');
+        $container2 = new Carbon_Container_ThemeOptions('Test Container 2');
         $container2->setup(array(
-            'taxonomy' => 'foo'
+            'file' => 'foo.php'
         ));
         $container2->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
+            Carbon_Field::factory('text', 'test_field'),
         ));
 
         // cleanup
@@ -60,26 +80,22 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
         $container2->detach();
     }
 
-    public function testRegisterEqualFieldNamesForSameTaxonomies() {
+    public function testRegisterEqualPages() {
         // prepare container
-        $container1 = new EECF_Container_TaxonomyMeta('Test Container 1');
+        $container1 = new Carbon_Container_ThemeOptions('Test Container 1');
         $container1->setup(array(
-            'taxonomy' => 'bar'
-        ));
-        $container1->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
+            'parent' => '',
+            'file' => 'bar.php'
         ));
 
-        $container2 = new EECF_Container_TaxonomyMeta('Test Container 2');
-        $container2->setup(array(
-            'taxonomy' => 'bar'
-        ));
+        $container2 = new Carbon_Container_ThemeOptions('Test Container 2');
 
         try {
-            $container2->add_fields(array(
-                EECF_Field::factory('text', 'test_field'),
+            $container2->setup(array(
+                'parent' => '',
+                'file' => 'bar.php'
             ));
-        } catch (EECF_Exception $e) {
+        } catch (Carbon_Exception $e) {
             // cleanup
             $container1->detach();
             $container2->detach();
@@ -87,7 +103,35 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
             return;
         }
 
-        $this->fail('Field name duplication is expected to raise exception');
+        $this->fail('Page name duplication is expected to raise exception');
+
+        // cleanup
+        $container1->detach();
+        $container2->detach();
+    }
+
+    public function testRegisterEqualSubPages() {
+        // prepare container
+        $container1 = new Carbon_Container_ThemeOptions('Test Container 1');
+        $container1->setup(array(
+            'file' => 'bar.php'
+        ));
+
+        $container2 = new Carbon_Container_ThemeOptions('Test Container 2');
+
+        try {
+            $container2->setup(array(
+                'file' => 'bar.php'
+            ));
+        } catch (Carbon_Exception $e) {
+            // cleanup
+            $container1->detach();
+            $container2->detach();
+            
+            return;
+        }
+
+        $this->fail('Sub page name duplication is expected to raise exception');
 
         // cleanup
         $container1->detach();
@@ -100,12 +144,12 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     public function testSaveSimpleFieldCheckDatabase() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
+        $container = new Carbon_Container_ThemeOptions('Test Container');
         $container->setup(array(
-            'taxonomy' => 'foo'
+            'file' => 'bar.php'
         ));
         $container->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
+            Carbon_Field::factory('text', 'test_field'),
         ));
 
         // Prepare POST
@@ -116,13 +160,13 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
 
         // check
         $db_value = $wpdb->get_results('
-            SELECT meta_value FROM ' . $wpdb->taxonomymeta . '
-            WHERE taxonomy_id="123" AND meta_key="_test_field"
+            SELECT option_value FROM ' . $wpdb->options . '
+            WHERE option_name="_test_field"
         ', ARRAY_A);
 
         $this->assertCount(1, $db_value);
-        $this->assertArrayHasKey('meta_value', $db_value[0]);
-        $this->assertEquals($db_value[0]['meta_value'], 'Lorem Ipsum');
+        $this->assertArrayHasKey('option_value', $db_value[0]);
+        $this->assertEquals($db_value[0]['option_value'], 'Lorem Ipsum');
 
         // cleanup
         $container->detach();
@@ -134,12 +178,12 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     public function testSaveSimpleFieldCheckLoad() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
+        $container = new Carbon_Container_ThemeOptions('Test Container');
         $container->setup(array(
-            'taxonomy' => 'foo'
+            'file' => 'bar.php'
         ));
         $container->add_fields(array(
-            EECF_Field::factory('text', 'test_field'),
+            Carbon_Field::factory('text', 'test_field'),
         ));
 
         // Prepare POST
@@ -166,12 +210,12 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
         global $wpdb;
 
         // prepare container
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
+        $container = new Carbon_Container_ThemeOptions('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('compound', 'compound')->add_fields(array(
-                EECF_Field::factory('text', 'field1'),
-                EECF_Field::factory('text', 'field2'),
+            Carbon_Field::factory('compound', 'compound')->add_fields(array(
+                Carbon_Field::factory('text', 'field1'),
+                Carbon_Field::factory('text', 'field2'),
             )),
         ));
 
@@ -190,16 +234,16 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
 
         // check field
         $db_values = $wpdb->get_results('
-            SELECT meta_key, meta_value FROM ' . $wpdb->taxonomymeta . '
-            WHERE taxonomy_id="123" AND meta_key LIKE "_compound%"
-            ORDER BY meta_key
+            SELECT option_name, option_value FROM ' . $wpdb->options . '
+            WHERE option_name LIKE "_compound%"
+            ORDER BY option_name
         ', ARRAY_A);
 
         $this->assertCount(2, $db_values);
-        $this->assertEquals($db_values[0]['meta_key'], '_compound_field1_0');
-        $this->assertEquals($db_values[0]['meta_value'], 'Lorem ipsum');
-        $this->assertEquals($db_values[1]['meta_key'], '_compound_field2_0');
-        $this->assertEquals($db_values[1]['meta_value'], 'Dolor sit amet');
+        $this->assertEquals($db_values[0]['option_name'], '_compound_field1_0');
+        $this->assertEquals($db_values[0]['option_value'], 'Lorem ipsum');
+        $this->assertEquals($db_values[1]['option_name'], '_compound_field2_0');
+        $this->assertEquals($db_values[1]['option_value'], 'Dolor sit amet');
 
         // cleanup
         $container->detach();
@@ -211,12 +255,12 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     public function testSaveCompoundAndCheckLoad() {
         global $wpdb;
         // prepare container
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
+        $container = new Carbon_Container_ThemeOptions('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('compound', 'compound')->add_fields(array(
-                EECF_Field::factory('text', 'field1'),
-                EECF_Field::factory('text', 'field2'),
+            Carbon_Field::factory('compound', 'compound')->add_fields(array(
+                Carbon_Field::factory('text', 'field1'),
+                Carbon_Field::factory('text', 'field2'),
             )),
         ));
 
@@ -264,15 +308,15 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
         global $wpdb;
         
         // prepare container
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
+        $container = new Carbon_Container_ThemeOptions('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('complex', 'group')->add_fields(array(
-                    EECF_Field::factory('text', 'field1'),
-                    EECF_Field::factory('text', 'field2'),
+            Carbon_Field::factory('complex', 'group')->add_fields(array(
+                    Carbon_Field::factory('text', 'field1'),
+                    Carbon_Field::factory('text', 'field2'),
                 ), 'group1')->add_fields(array(
-                    EECF_Field::factory('text', 'field3'),
-                    EECF_Field::factory('text', 'field4'),
+                    Carbon_Field::factory('text', 'field3'),
+                    Carbon_Field::factory('text', 'field4'),
                 ), 'group2'),
         ));
 
@@ -301,9 +345,9 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
 
         // check field
         $db_values = $wpdb->get_results('
-            SELECT meta_key, meta_value FROM ' . $wpdb->taxonomymeta . '
-            WHERE taxonomy_id="123" AND meta_key LIKE "_group%"
-            ORDER BY meta_key
+            SELECT option_name, option_value FROM ' . $wpdb->options . '
+            WHERE option_name LIKE "_group%"
+            ORDER BY option_name
         ', ARRAY_A);
 
         $expected_values = array(
@@ -316,8 +360,8 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
         $this->assertCount(4, $db_values);
 
         foreach ($expected_values as $index => $expected) {
-            $this->assertEquals($db_values[$index]['meta_key'], $expected[0]);
-            $this->assertEquals($db_values[$index]['meta_value'], $expected[1]);
+            $this->assertEquals($db_values[$index]['option_name'], $expected[0]);
+            $this->assertEquals($db_values[$index]['option_value'], $expected[1]);
         }
 
         // cleanup
@@ -331,15 +375,15 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
         global $wpdb;
         
         // prepare container
-        $container = new EECF_Container_TaxonomyMeta('Test Container');
+        $container = new Carbon_Container_ThemeOptions('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('complex', 'group')->add_fields(array(
-                    EECF_Field::factory('text', 'field1'),
-                    EECF_Field::factory('text', 'field2'),
+            Carbon_Field::factory('complex', 'group')->add_fields(array(
+                    Carbon_Field::factory('text', 'field1'),
+                    Carbon_Field::factory('text', 'field2'),
                 ), 'group1')->add_fields(array(
-                    EECF_Field::factory('text', 'field3'),
-                    EECF_Field::factory('text', 'field4'),
+                    Carbon_Field::factory('text', 'field3'),
+                    Carbon_Field::factory('text', 'field4'),
                 ), 'group2'),
         ));
 

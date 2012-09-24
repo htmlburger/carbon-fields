@@ -1,10 +1,10 @@
 <?php 
 
-class EECF_Field_Complex extends EECF_Field_Compound {
+class Carbon_Field_Complex extends Carbon_Field_Compound {
 	protected $groups = array();
 
 	function add_fields($fields, $name, $label=null) {
-		$group = new EECF_Field_Group();
+		$group = new Carbon_Field_Group();
 		$group->set_name( $name );
 		
 		$group->add_fields($fields);
@@ -15,7 +15,7 @@ class EECF_Field_Complex extends EECF_Field_Compound {
 		return $this;
 	}
 
-	function set_datastore(EECF_DataStore $store) {
+	function set_datastore(Carbon_DataStore $store) {
 		$this->store = $store;
 
 		foreach ($this->groups as $group) {
@@ -137,7 +137,7 @@ class EECF_Field_Complex extends EECF_Field_Compound {
 }
 
 
-class EECF_Field_Group {
+class Carbon_Field_Group {
 	protected $name;
 	protected $label;
 	protected $fields = array();
@@ -191,7 +191,7 @@ class EECF_Field_Group {
 		return $this->name;
 	}
 
-	function set_datastore(EECF_DataStore $store) {
+	function set_datastore(Carbon_DataStore $store) {
 		foreach ($this->fields as $field) {
 			if ( !$field->get_datastore() ) {
 				$field->set_datastore($store);

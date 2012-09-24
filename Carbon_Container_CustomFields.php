@@ -6,7 +6,7 @@
  * location information and more.
  *
  **/
-class EECF_Container_CustomFields extends EECF_Container {
+class Carbon_Container_CustomFields extends Carbon_Container {
 	/**
 	 * List of registered unique field names
 	 *
@@ -48,7 +48,7 @@ class EECF_Container_CustomFields extends EECF_Container {
 		if ( isset($settings['show_on']) ) {
 			$invalid_settings = array_diff_key($settings['show_on'], $this->settings['show_on']);
 			if ( !empty($invalid_settings) ) {
-				throw new EECF_Exception ('Invalid show_on settings supplied to setup(): "' . implode('", "', array_keys($invalid_settings)) . '"');
+				throw new Carbon_Exception ('Invalid show_on settings supplied to setup(): "' . implode('", "', array_keys($invalid_settings)) . '"');
 			}
 		}
 
@@ -77,7 +77,7 @@ class EECF_Container_CustomFields extends EECF_Container {
 	 **/
 	function init() {
 		if ( !$this->get_datastore() ) {
-			$this->set_datastore(new EECF_DataStore_CustomField());
+			$this->set_datastore(new Carbon_DataStore_CustomField());
 		}
 
 		if ( isset($_GET['post']) ) {
@@ -334,7 +334,7 @@ class EECF_Container_CustomFields extends EECF_Container {
 	 **/
 	function verify_unique_field_name($name) {
 		if ( empty($this->settings['post_type']) ) {
-			throw new EECF_Exception ('Panel instance is not setup correctly (missing post type)');
+			throw new Carbon_Exception ('Panel instance is not setup correctly (missing post type)');
 		}
 
 		foreach ($this->settings['post_type'] as $post_type) {
@@ -343,7 +343,7 @@ class EECF_Container_CustomFields extends EECF_Container {
 			}
 
 			if ( in_array($name, self::$registered_field_names[$post_type]) ) {
-				throw new EECF_Exception ('Field name "' . $name . '" already registered');
+				throw new Carbon_Exception ('Field name "' . $name . '" already registered');
 			}
 
 			self::$registered_field_names[$post_type][] = $name;
@@ -441,7 +441,7 @@ class EECF_Container_CustomFields extends EECF_Container {
 	 **/
 	function show_on_level($level) {
 		if ($level < 0 ) {
-			throw new EECF_Exception('Invalid level limitation (' . $level . ')');
+			throw new Carbon_Exception('Invalid level limitation (' . $level . ')');
 		}
 
 		$this->settings['show_on']['level_limit'] = $level;
@@ -489,5 +489,5 @@ class EECF_Container_CustomFields extends EECF_Container {
 
 		return $this;
 	}
-} // END EECF_Container_CustomFields 
+} // END Carbon_Container_CustomFields 
 

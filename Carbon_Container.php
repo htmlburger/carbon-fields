@@ -1,14 +1,14 @@
 <?php 
 
-add_action('admin_print_scripts', array('EECF_Container', 'admin_hook_scripts'));
-add_action('admin_print_styles', array('EECF_Container', 'admin_hook_styles'));
+add_action('admin_print_scripts', array('Carbon_Container', 'admin_hook_scripts'));
+add_action('admin_print_styles', array('Carbon_Container', 'admin_hook_styles'));
 
 /**
  * Base container class. 
  * Defines the key container methods and their default implementations.
  *
  **/
-abstract class EECF_Container {
+abstract class Carbon_Container {
 	/**
 	 * List of registered unique panel identificators
 	 *
@@ -76,7 +76,7 @@ abstract class EECF_Container {
 	 *
 	 * @see set_datastore()
 	 * @see get_datastore()
-	 * @var EECF_DataStore
+	 * @var Carbon_DataStore
 	 */
 	protected $store;
 
@@ -110,7 +110,7 @@ abstract class EECF_Container {
 	 **/
 	function setup($settings = array()) {
 		if ( $this->setup_ready ) {
-			throw new EECF_Exception ('Panel "' . $this->title . '" already setup');
+			throw new Carbon_Exception ('Panel "' . $this->title . '" already setup');
 		}
 
 		$this->check_setup_settings($settings);
@@ -133,7 +133,7 @@ abstract class EECF_Container {
 	function check_setup_settings(&$settings = array()) {
 		$invalid_settings = array_diff_key($settings, $this->settings);
 		if ( !empty($invalid_settings) ) {
-			throw new EECF_Exception ('Invalid settings supplied to setup(): "' . implode('", "', array_keys($invalid_settings)) . '"');
+			throw new Carbon_Exception ('Invalid settings supplied to setup(): "' . implode('", "', array_keys($invalid_settings)) . '"');
 		}
 	}
 
@@ -235,8 +235,8 @@ abstract class EECF_Container {
 
 	/**
 	 * Append array of fields to the current fields set. All items of the array
-	 * must be instances of EECF_Field and their names should be unique for all
-	 * EECF containers.
+	 * must be instances of Carbon_Field and their names should be unique for all
+	 * Carbon containers.
 	 * If a field does not have DataStore already, the container data store is 
 	 * assigned to them instead.
 	 *
@@ -249,8 +249,8 @@ abstract class EECF_Container {
 		}
 
 		foreach ($fields as $field) {
-			if ( !is_a($field, 'EECF_Field') ) {
-				throw new EECF_Exception('Object must be of type EECF_Field');
+			if ( !is_a($field, 'Carbon_Field') ) {
+				throw new Carbon_Exception('Object must be of type Carbon_Field');
 			}
 
 			$this->verify_unique_field_name($field->get_name());
@@ -280,7 +280,7 @@ abstract class EECF_Container {
 	 */
 	function verify_unique_panel_id($id) {
 		if ( in_array($id, self::$registered_panel_ids) ) {
-			throw new EECF_Exception ('Panel ID "' . $id .'" already registered');
+			throw new Carbon_Exception ('Panel ID "' . $id .'" already registered');
 		}
 
 		self::$registered_panel_ids[] = $id;
@@ -308,7 +308,7 @@ abstract class EECF_Container {
 	 **/
 	function verify_unique_field_name($name) {
 		if ( in_array($name, self::$registered_field_names) ) {
-			throw new EECF_Exception ('Field name "' . $name . '" already registered');
+			throw new Carbon_Exception ('Field name "' . $name . '" already registered');
 		}
 
 		self::$registered_field_names[] = $name;
@@ -333,7 +333,7 @@ abstract class EECF_Container {
 	 * @param object $store
 	 * @return void
 	 **/
-	function set_datastore(EECF_DataStore $store) {
+	function set_datastore(Carbon_DataStore $store) {
 		$this->store = $store;
 
 		foreach ($this->fields as $field) {
@@ -356,16 +356,16 @@ abstract class EECF_Container {
 	 * @return string
 	 **/
 	function get_nonce_name() {
-		return 'eecf_panel_' . $this->id . '_nonce';
+		return 'carbon_panel_' . $this->id . '_nonce';
 	}
 
 	static function admin_hook_scripts() {
-		wp_enqueue_script('eecf_containers', EECF_PLUGIN_URL . '/js/containers.js');
+		wp_enqueue_script('carbon_containers', CARBON_PLUGIN_URL . '/js/containers.js');
 	}
 
 	static function admin_hook_styles() {
-		wp_enqueue_style('eecf_containers', EECF_PLUGIN_URL . '/css/containers.css');
+		wp_enqueue_style('carbon_containers', CARBON_PLUGIN_URL . '/css/containers.css');
 	}
 
-} // END EECF_Container 
+} // END Carbon_Container 
 

@@ -1,11 +1,11 @@
-<table class="eecf-container <?php echo $container_tag_class_name ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
+<table class="carbon-container <?php echo $container_tag_class_name ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
 	<?php 
 	$index = 0;
 	foreach ($this->values as $fields): 
 			$group_name = $fields['type'];
 			unset($fields['type']);
 		?>
-		<tr class="eecf-group-row">
+		<tr class="carbon-group-row">
 			<td>
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="<?php echo $group_name ?>" />
 				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
@@ -25,7 +25,7 @@
 									?>
 								</th>
 								<td>
-									<div class="eecf-field" data-type="<?php echo $field->type ?>">
+									<div class="carbon-field" data-type="<?php echo $field->type ?>">
 										<?php echo $field->render(); ?>
 									</div>
 								</td>
@@ -49,7 +49,7 @@
 										}
 										echo $field->get_help_text();
 										?>
-										<div class="eecf-field" data-type="<?php echo $field->type ?>">
+										<div class="carbon-field" data-type="<?php echo $field->type ?>">
 											<?php echo $field->render(); ?>
 										</div>
 									</td>
@@ -69,7 +69,7 @@
 	<?php 
 	$index = '__ei__';
 	foreach ($this->groups as $group): ?>
-		<tr class="eecf-group-preview eecf-group-<?php echo $group->get_name() ?>">
+		<tr class="carbon-group-preview carbon-group-<?php echo $group->get_name() ?>">
 			<td>
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="" />
 				<strong><?php echo $group->get_label() ?></strong>
@@ -93,7 +93,7 @@
 									?>
 								</th>
 								<td>
-									<div class="eecf-field eecf-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+									<div class="carbon-field carbon-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 										<?php echo $field->render(); ?>
 									</div>
 								</td>
@@ -119,7 +119,7 @@
 										}
 										echo $field->get_help_text();
 										?>
-										<div class="eecf-field  eecf-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+										<div class="carbon-field  carbon-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 											<?php echo $field->render(); ?>
 										</div>
 									</td>

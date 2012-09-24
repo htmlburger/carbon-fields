@@ -1,6 +1,6 @@
 <?php
 
-abstract class EECF_Widget extends WP_Widget implements EECF_DataStore {
+abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 	static $registered_widget_ids = array();
 	
 	protected $print_wrappers = true;
@@ -11,14 +11,14 @@ abstract class EECF_Widget extends WP_Widget implements EECF_DataStore {
 	function setup($title, $description, $fields) {
 		// require title
 		if ( !$title ) {
-			throw new EECF_Exception('Enter widget title');
+			throw new Carbon_Exception('Enter widget title');
 		}
 
 		// add custom fields
 		$this->add_fields($fields);
 
 		// populate options
-		$classname = 'eecf_' . preg_replace('~\s+~', '_', strtolower(trim($title)));
+		$classname = 'carbon_' . preg_replace('~\s+~', '_', strtolower(trim($title)));
 		$widget_options = compact('description', 'classname');
 
 		$this->verify_unique_widget_id($classname);
@@ -69,8 +69,8 @@ abstract class EECF_Widget extends WP_Widget implements EECF_DataStore {
 
 	function add_fields($fields) {
 		foreach ($fields as $field) {
-			if ( !is_a($field, 'EECF_Field') ) {
-				throw new EECF_Exception('Object must be of type EECF_Field');
+			if ( !is_a($field, 'Carbon_Field') ) {
+				throw new Carbon_Exception('Object must be of type Carbon_Field');
 			}
 
 			$this->verify_unique_field_name($field->get_name());
@@ -89,7 +89,7 @@ abstract class EECF_Widget extends WP_Widget implements EECF_DataStore {
 		static $registered_field_names = array();
 
 		if ( in_array($name, $registered_field_names) ) {
-			throw new EECF_Exception ('Field name "' . $name . '" already registered');
+			throw new Carbon_Exception ('Field name "' . $name . '" already registered');
 		}
 
 		$registered_field_names[] = $name;
@@ -97,30 +97,30 @@ abstract class EECF_Widget extends WP_Widget implements EECF_DataStore {
 
 	function verify_unique_widget_id($id) {
 		if ( in_array($id, self::$registered_widget_ids) ) {
-			throw new EECF_Exception ('Widget with ID "' . $id .'" already registered. Please change the widget title');
+			throw new Carbon_Exception ('Widget with ID "' . $id .'" already registered. Please change the widget title');
 		}
 
 		self::$registered_widget_ids[] = $id;
 	}
 
     /* Implment DataStore */
-	function load(EECF_Field $field) {
+	function load(Carbon_Field $field) {
 		if ( isset($this->store_data[$field->get_name()]) ) {
 			$field->set_value($this->store_data[$field->get_name()]);
 		}
 	}
 
-	function save(EECF_Field $field) {
+	function save(Carbon_Field $field) {
 		$this->store_data[$field->get_name()] = $field->get_value();
 	}
 	
-	function delete(EECF_Field $field) {
+	function delete(Carbon_Field $field) {
 		if ( isset($this->store_data[$field->get_name()]) ) {
 			unset($this->store_data[$field->get_name()]);
 		}
 	}
 	
-	function load_values(EECF_Field $field) {
+	function load_values(Carbon_Field $field) {
 		$field_name = $field->get_name();
 		$result = array();
 
@@ -136,7 +136,7 @@ abstract class EECF_Widget extends WP_Widget implements EECF_DataStore {
 		return $result;
 	}
 	
-	function delete_values(EECF_Field $field) {
+	function delete_values(Carbon_Field $field) {
 		$field_name = $field->get_name();
 
 		foreach ($this->store_data as $key => $value) {

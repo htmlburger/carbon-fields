@@ -1,4 +1,4 @@
-<div class="wrap eecf-container <?php echo $container_tag_class_name ?>">
+<div class="wrap carbon-container <?php echo $container_tag_class_name ?>">
 	<div id="icon-options-general" class="icon32"><br /></div>
 	<h2><?php echo $this->title ?></h2>
 	
@@ -32,7 +32,7 @@
 						?>
 					</th>
 					<td>
-						<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+						<div class="carbon-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 							<?php echo $field->render(); ?>
 						</div>
 					</td>
@@ -40,6 +40,6 @@
 			<?php endforeach ?>
 		</table>
 		<p class="submit"><input type="submit" name="submit" id="submit" class="button-primary" value="Save Changes"></p>
-		<?php wp_nonce_field('eecf_panel_' . $this->id . '_nonce', $this->get_nonce_name(), /*referer?*/ false, /*echo?*/ true); ?>
+		<?php wp_nonce_field('carbon_panel_' . $this->id . '_nonce', $this->get_nonce_name(), /*referer?*/ false, /*echo?*/ true); ?>
 	</form>
 </div>

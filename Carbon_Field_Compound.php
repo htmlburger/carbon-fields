@@ -1,6 +1,6 @@
 <?php 
 
-class EECF_Field_Compound extends EECF_Field {
+class Carbon_Field_Compound extends Carbon_Field {
 	const LAYOUT_TABLE = 'table';
 	const LAYOUT_LIST = 'list';
 
@@ -17,7 +17,7 @@ class EECF_Field_Compound extends EECF_Field {
 		return $this;
 	}
 	
-	function set_datastore(EECF_DataStore $store) {
+	function set_datastore(Carbon_DataStore $store) {
 		$this->store = $store;
 
 		foreach ($this->fields as $field) {
@@ -138,7 +138,7 @@ class EECF_Field_Compound extends EECF_Field {
 
 	function set_layout($layout) {
 		if ( !in_array($layout, array(self::LAYOUT_TABLE, self::LAYOUT_LIST)) ) {
-			throw new EECF_Exception('Incorrect layout specifier. Available values are "<code>' . self::LAYOUT_TABLE . '</code>" and "<code>' . self::LAYOUT_LIST . '</code>"');
+			throw new Carbon_Exception('Incorrect layout specifier. Available values are "<code>' . self::LAYOUT_TABLE . '</code>" and "<code>' . self::LAYOUT_LIST . '</code>"');
 		}
 
 		$this->layout = $layout;

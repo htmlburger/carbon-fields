@@ -1,6 +1,6 @@
-<table class="eecf-container <?php echo $container_tag_class_name ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
+<table class="carbon-container <?php echo $container_tag_class_name ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
 	<?php foreach ($this->values as $index => $fields): ?>
-		<tr class="eecf-compound-row">
+		<tr class="carbon-compound-row">
 			<td>
 				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
 					<table>
@@ -19,7 +19,7 @@
 									?>
 								</th>
 								<td>
-									<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+									<div class="carbon-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 										<?php echo $field->render(); ?>
 									</div>
 								</td>
@@ -43,7 +43,7 @@
 									}
 									echo $field->get_help_text();
 									?>
-									<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+									<div class="carbon-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 										<?php echo $field->render(); ?>
 									</div>
 								</td>
@@ -57,7 +57,7 @@
 			</td>
 		</tr>
 	<?php endforeach ?>
-	<tr class="eecf-compound-preview">
+	<tr class="carbon-compound-preview">
 		<td>
 			<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
 				<table>
@@ -78,7 +78,7 @@
 								?>
 							</th>
 							<td>
-								<div class="eecf-field eecf-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+								<div class="carbon-field carbon-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 									<?php echo $field->render(); ?>
 								</div>
 							</td>
@@ -104,7 +104,7 @@
 									}
 									echo $field->get_help_text();
 									?>
-									<div class="eecf-field eecf-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+									<div class="carbon-field carbon-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 										<?php echo $field->render(); ?>
 									</div>
 								</td>

@@ -1,4 +1,4 @@
-<table class="eecf-container <?php echo $container_tag_class_name ?>" data-type="<?php echo $container_type ?>" data-options='<?php echo json_encode($container_options) ?>'>
+<table class="carbon-container <?php echo $container_tag_class_name ?>" data-type="<?php echo $container_type ?>" data-options='<?php echo json_encode($container_options) ?>'>
 	<?php foreach ($this->fields as $field): 
 		$field->load();
 	?>
@@ -13,7 +13,7 @@
 				?>
 			</th>
 			<td>
-				<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+				<div class="carbon-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 					<?php echo $field->render(); ?>
 				</div>
 			</td>

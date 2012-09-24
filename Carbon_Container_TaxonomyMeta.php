@@ -1,6 +1,6 @@
 <?php
 
-class EECF_Container_TaxonomyMeta extends EECF_Container {
+class Carbon_Container_TaxonomyMeta extends Carbon_Container {
 	/**
 	 * List of registered unique field names per taxonomy
 	 *
@@ -17,7 +17,7 @@ class EECF_Container_TaxonomyMeta extends EECF_Container {
 
 	function init() {
 		if ( !$this->get_datastore() ) {
-			$this->set_datastore(new EECF_DataStore_TaxonomyMeta());
+			$this->set_datastore(new Carbon_DataStore_TaxonomyMeta());
 		}
 
 		// force taxonomy to be array
@@ -107,7 +107,7 @@ class EECF_Container_TaxonomyMeta extends EECF_Container {
 	 **/
 	function verify_unique_field_name($name) {
 		if ( empty($this->settings['taxonomy']) ) {
-			throw new EECF_Exception ('Panel instance is not setup correctly (missing taxonomy)');
+			throw new Carbon_Exception ('Panel instance is not setup correctly (missing taxonomy)');
 		}
 
 		foreach ($this->settings['taxonomy'] as $taxonomy) {
@@ -116,7 +116,7 @@ class EECF_Container_TaxonomyMeta extends EECF_Container {
 			}
 
 			if ( in_array($name, self::$registered_field_names[$taxonomy]) ) {
-				throw new EECF_Exception ('Field name "' . $name . '" already registered');
+				throw new Carbon_Exception ('Field name "' . $name . '" already registered');
 			}
 
 			self::$registered_field_names[$taxonomy][] = $name;

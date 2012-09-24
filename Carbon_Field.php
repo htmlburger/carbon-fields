@@ -1,8 +1,8 @@
 <?php 
 
-add_action('admin_print_scripts', array('EECF_Field', 'admin_hook_scripts'));
-add_action('admin_print_styles', array('EECF_Field', 'admin_hook_styles'));
-add_action('wp_ajax_ecf_get_file_details', array('EECF_Field_File', 'ecf_get_file_details'));
+add_action('admin_print_scripts', array('Carbon_Field', 'admin_hook_scripts'));
+add_action('admin_print_styles', array('Carbon_Field', 'admin_hook_styles'));
+add_action('wp_ajax_carbon_get_file_details', array('Carbon_Field_File', 'carbon_get_file_details'));
 
 /**
  * Base field class. 
@@ -10,7 +10,7 @@ add_action('wp_ajax_ecf_get_file_details', array('EECF_Field_File', 'ecf_get_fil
  * Implements factory design pattern
  *
  **/
-class EECF_Field {
+class Carbon_Field {
 	/**
 	 * Globally unique field identificator. Generated randomly
 	 *
@@ -56,7 +56,7 @@ class EECF_Field {
 	 *
 	 * @see set_datastore()
 	 * @see get_datastore()
-	 * @var EECF_DataStore
+	 * @var Carbon_DataStore
 	 */
 	protected $store;
 
@@ -102,10 +102,10 @@ class EECF_Field {
 	static function factory($type, $name, $label=null) {
 		$type = str_replace(" ", '_', ucwords(str_replace("_", ' ', $type)));
 
-		$class = 'EECF_Field_' . $type;
+		$class = 'Carbon_Field_' . $type;
 
 		if (!class_exists($class)) {
-			throw new EECF_Exception ('Unknown field "' . $type . '".');
+			throw new Carbon_Exception ('Unknown field "' . $type . '".');
 		}
 
 		$field = new $class($name, $label);
@@ -121,7 +121,7 @@ class EECF_Field {
 		// Pick random ID
 	    $random_string = md5(mt_rand() . $this->get_name() . $this->get_label());
 	    $random_string = substr($random_string, 0, 5); // 5 chars should be enough
-	    $this->id = 'ecf-' . $random_string;
+	    $this->id = 'carbon-' . $random_string;
 
 	    $this->init();
 	    if (is_admin()) {
@@ -225,7 +225,7 @@ class EECF_Field {
 	 * @param object $store
 	 * @return object $this
 	 **/
-	function set_datastore(EECF_DataStore $store) {
+	function set_datastore(Carbon_DataStore $store) {
 		$this->store = $store;
 		return $this;
 	}
@@ -327,7 +327,7 @@ class EECF_Field {
 	 **/
 	function set_render($fn) {
 		if ( !is_callable($fn) ) {
-			throw new EECF_Exception('Render must be callable');
+			throw new Carbon_Exception('Render must be callable');
 		}
 
 		$this->render_fn = $fn;
@@ -405,7 +405,7 @@ class EECF_Field {
 	}
 
 	static function admin_hook_scripts() {
-		wp_enqueue_script('eecf_fields', EECF_PLUGIN_URL . '/js/fields.js');
+		wp_enqueue_script('carbon_fields', CARBON_PLUGIN_URL . '/js/fields.js');
 
 		 wp_enqueue_script('media-upload');
 		 wp_enqueue_script('thickbox');
@@ -413,19 +413,19 @@ class EECF_Field {
 	}
 
 	static function admin_hook_styles() {
-		wp_enqueue_style('eecf_fields', EECF_PLUGIN_URL . '/css/fields.css');
+		wp_enqueue_style('carbon_fields', CARBON_PLUGIN_URL . '/css/fields.css');
 		
 		wp_enqueue_style('thickbox');
 	}
-} // END EECF_Field 
+} // END Carbon_Field 
 
-class EECF_Field_Text extends EECF_Field {
+class Carbon_Field_Text extends Carbon_Field {
 	function render() {
 		echo '<input type="text" name="' . $this->name . '" value="' . htmlentities($this->value, ENT_COMPAT, 'UTF-8') . '" class="regular-text" />';
 	}
 }
 
-class EECF_Field_Textarea extends EECF_Field {
+class Carbon_Field_Textarea extends Carbon_Field {
 	protected $rows = 2;
 
 	function rows($rows = 2) {
@@ -440,7 +440,7 @@ class EECF_Field_Textarea extends EECF_Field {
 	}
 }
 
-class EECF_Field_Select extends EECF_Field {
+class Carbon_Field_Select extends Carbon_Field {
 	protected $options = array();
 
 	function add_options($options) {
@@ -450,7 +450,7 @@ class EECF_Field_Select extends EECF_Field {
 
     function render() {
     	if ( empty($this->options) ) {
-    		throw new EECF_Exception('No options added for field "' . $this->get_name() . '"');
+    		throw new Carbon_Exception('No options added for field "' . $this->get_name() . '"');
     	}
 
 		$options = array();
@@ -471,7 +471,7 @@ class EECF_Field_Select extends EECF_Field {
 	}
 }
 
-class EECF_Field_Separator extends EECF_Field {
+class Carbon_Field_Separator extends Carbon_Field {
 	function render() {
 
 	}
@@ -489,7 +489,7 @@ class EECF_Field_Separator extends EECF_Field {
 	}
 }
 
-class EECF_Field_Set extends EECF_Field {
+class Carbon_Field_Set extends Carbon_Field {
 	protected $options = array();
 	protected $limit_options = 0;
 
@@ -509,12 +509,12 @@ class EECF_Field_Set extends EECF_Field {
     	}
 
     	if (empty($this->options)) {
-    		throw new EECF_Exception('No options added for field "' . $this->name . '"');
+    		throw new Carbon_Exception('No options added for field "' . $this->name . '"');
     	}
 
 		$loopCount = 0;
 
-		echo '<div class="eecf-set-list">';
+		echo '<div class="carbon-set-list">';
 
 		foreach ($this->options as $key => $value) {
 			$loopCount ++;
@@ -531,7 +531,7 @@ class EECF_Field_Set extends EECF_Field {
 				echo '<p><label>' . $option . $value . '</label></p>';
 
 				if ( $loopCount == $this->limit_options ) {
-					echo '<p>... <a href="#" class="ecf-set-showall">Show All Options</a></p>';
+					echo '<p>... <a href="#" class="carbon-set-showall">Show All Options</a></p>';
 				}
 			}
 		}
@@ -540,7 +540,7 @@ class EECF_Field_Set extends EECF_Field {
 	}
 }
 
-class EECF_Field_File extends EECF_Field {
+class Carbon_Field_File extends Carbon_Field {
 	/**
 	 * Whether admin_head was attached for a file or image field
 	 *
@@ -555,7 +555,7 @@ class EECF_Field_File extends EECF_Field {
 		
 		// For image only
 		if ( !empty($this->value) ) {
-			echo '<br /><a href="' . $this->value . '" target="_blank" class="eecf-view_file">View File</a>';
+			echo '<br /><a href="' . $this->value . '" target="_blank" class="carbon-view_file">View File</a>';
 		}
 	}
 
@@ -564,12 +564,12 @@ class EECF_Field_File extends EECF_Field {
 
 		if ( !self::$attached_media_library_hook ) {
 			self::$attached_media_library_hook = true;
-			add_action('admin_head-media-upload-popup', array('EECF_Field_File', 'admin_media_library_popup_head'));
+			add_action('admin_head-media-upload-popup', array('Carbon_Field_File', 'admin_media_library_popup_head'));
 		}
 	}
 
 	function add_correct_script_hooks() {
-		wp_enqueue_script('utf8_decode_js_userialize', EECF_PLUGIN_URL . '/js/utf8.decode.js.unserialize.js');
+		wp_enqueue_script('utf8_decode_js_userialize', CARBON_PLUGIN_URL . '/js/utf8.decode.js.unserialize.js');
 	}
 
 
@@ -606,7 +606,7 @@ class EECF_Field_File extends EECF_Field {
 				display: block !important;
 			}
 
-			#media-items .media-item  .eecf-select { 
+			#media-items .media-item  .carbon-select { 
 				float: right; 
 				margin: 23px 12px 0 10px; 
 			}
@@ -617,9 +617,9 @@ class EECF_Field_File extends EECF_Field {
 		</style>
 		<script type="text/javascript">
 			(function($) {
-				function eecf_add_buttons() {
+				function carbon_add_buttons() {
 					// add buttons to media items
-					$('#media-items .media-item:not(.eecf-active)').each(function(){
+					$('#media-items .media-item:not(.carbon-active)').each(function(){
 						var th = $(this), id;
 
 						// needs attachment ID
@@ -628,23 +628,23 @@ class EECF_Field_File extends EECF_Field {
 						}
 						
 						// add buttons only once
-						th.addClass('eecf-active');
+						th.addClass('carbon-active');
 						
 						// find attachment id
 						id = th.children('input[id*="type-of-"]').attr('id').replace('type-of-', '');
 						
 						// Add select button
-						th.find('.filename.new').before('<a href="' + id + '" class="button eecf-select">Select File</a>');
+						th.find('.filename.new').before('<a href="' + id + '" class="button carbon-select">Select File</a>');
 					});
 				}
 
-				$('#media-items .media-item a.eecf-select').live('click', function(){
+				$('#media-items .media-item a.carbon-select').live('click', function(){
 					var id = $(this).attr('href'),
 						thumbnail = $(this).closest('.media-item').find('.pinkynail').attr('src'),
-						ecf_field = self.parent.ecf_active_field;
+						carbon_field = self.parent.carbon_active_field;
 
 					var data = {
-						action: 'ecf_get_file_details',
+						action: 'carbon_get_file_details',
 						id: id,
 					};
 
@@ -661,20 +661,20 @@ class EECF_Field_File extends EECF_Field {
 							}
 
 							// Presnet thumbnails is required for image fields
-							if(ecf_field.data('type') == 'Image' && !json.thumbnail) {
+							if(carbon_field.data('type') == 'Image' && !json.thumbnail) {
 								alert('Cannot select this file');
 								return false;
 							} else if ( !json.thumbnail ) {
 								json.thumbnail = thumbnail;
 							};
 
-							// update ecf_field
-							ecf_field.find('input.regular-text').val( json.url );
-				 			ecf_field.find('.eecf-view_image').attr( 'src', json.thumbnail ).removeClass('blank');
-				 			ecf_field.find('.eecf-view_file').attr( 'href', json.url );
+							// update carbon_field
+							carbon_field.find('input.regular-text').val( json.url );
+				 			carbon_field.find('.carbon-view_image').attr( 'src', json.thumbnail ).removeClass('blank');
+				 			carbon_field.find('.carbon-view_file').attr( 'href', json.url );
 				 			
-				 			// reset ecf_active_field and return false
-				 			self.parent.ecf_active_field = null;
+				 			// reset carbon_active_field and return false
+				 			self.parent.carbon_active_field = null;
 				 			self.parent.tb_remove();
 						}
 					});
@@ -684,13 +684,13 @@ class EECF_Field_File extends EECF_Field {
 
 				$(document).ready(function(){
 					setTimeout(function(){
-						eecf_add_buttons();
+						carbon_add_buttons();
 					}, 1);
 				});
 
 				<?php if(!isset($_GET['tab']) || $_GET['tab'] == 'type'): ?>
 					setInterval(function(){
-						eecf_add_buttons();
+						carbon_add_buttons();
 					}, 500);
 				<?php endif; ?>
 
@@ -699,7 +699,7 @@ class EECF_Field_File extends EECF_Field {
 		<?php
 	}
 
-	static function ecf_get_file_details() {
+	static function carbon_get_file_details() {
 		if ( empty($_GET['id']) ) {
 			echo json_encode(array());
 			exit;
@@ -721,7 +721,7 @@ class EECF_Field_File extends EECF_Field {
 	}
 }
 
-class EECF_Field_Image extends EECF_Field_File {
+class Carbon_Field_Image extends Carbon_Field_File {
 	public $image_extensions = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
 
 	function render() {
@@ -730,11 +730,11 @@ class EECF_Field_Image extends EECF_Field_File {
 		
 		// For image only
 		if ( $this->value != '' && in_array(array_pop(explode('.', $this->value)), $this->image_extensions) ) {
-			echo '<br /><img src="' . $this->value . '" alt="" height="100" class="eecf-view_image"/>';
+			echo '<br /><img src="' . $this->value . '" alt="" height="100" class="carbon-view_image"/>';
 		} else if ( !empty($this->value) ) {
-			echo '</br><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" height="100" class="eecf-view_image blank"/><em>This is not a valid image!</em>';
+			echo '</br><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" height="100" class="carbon-view_image blank"/><em>This is not a valid image!</em>';
 		} else {
-			echo '<br /><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" height="100" class="eecf-view_image blank"/>';
+			echo '<br /><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" height="100" class="carbon-view_image blank"/>';
 		}
 	}
 }

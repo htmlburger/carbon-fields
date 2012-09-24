@@ -1,14 +1,14 @@
 <?php 
 
-interface EECF_DataStore {
-	function load(EECF_Field $field);
-	function save(EECF_Field $field);
-	function delete(EECF_Field $field);
-	function load_values(EECF_Field $field);
-	function delete_values(EECF_Field $field);
+interface Carbon_DataStore {
+	function load(Carbon_Field $field);
+	function save(Carbon_Field $field);
+	function delete(Carbon_Field $field);
+	function load_values(Carbon_Field $field);
+	function delete_values(Carbon_Field $field);
 }
 
-abstract class EECF_DataStore_Base implements EECF_DataStore {
+abstract class Carbon_DataStore_Base implements Carbon_DataStore {
 	function __construct() {
 		$this->init();
 	}
@@ -16,24 +16,24 @@ abstract class EECF_DataStore_Base implements EECF_DataStore {
 	abstract function init();
 }
 
-class EECF_DataStore_CustomField extends EECF_DataStore_Base {
+class Carbon_DataStore_CustomField extends Carbon_DataStore_Base {
 	protected $post_id;
 
 	function init() {}
 
-	function save(EECF_Field $field) {
+	function save(Carbon_Field $field) {
 		update_post_meta($this->post_id, $field->get_name(), $field->get_value());
 	}
 
-	function load(EECF_Field $field) {
+	function load(Carbon_Field $field) {
 		$field->set_value( get_post_meta($this->post_id, $field->get_name(), true) );
 	}
 
-	function delete(EECF_Field $field) {
+	function delete(Carbon_Field $field) {
 		delete_post_meta($this->post_id, $field->get_name(), $field->get_value());
 	}
 
-	function load_values(EECF_Field $field) {
+	function load_values(Carbon_Field $field) {
 		global $wpdb;
 
 		return $wpdb->get_results('
@@ -42,7 +42,7 @@ class EECF_DataStore_CustomField extends EECF_DataStore_Base {
 		', ARRAY_A);
 	}
 
-	function delete_values(EECF_Field $field) {
+	function delete_values(Carbon_Field $field) {
 		global $wpdb;
 
 		return $wpdb->query('
@@ -56,10 +56,10 @@ class EECF_DataStore_CustomField extends EECF_DataStore_Base {
 	}
 }
 
-class EECF_DataStore_ThemeOptions extends EECF_DataStore_Base {
+class Carbon_DataStore_ThemeOptions extends Carbon_DataStore_Base {
 	function init() {}
 
-	function save(EECF_Field $field) {
+	function save(Carbon_Field $field) {
 		$name = $field->get_name();
 		$autoload = $field->get_autoload() ? 'yes': 'no';
 
@@ -73,15 +73,15 @@ class EECF_DataStore_ThemeOptions extends EECF_DataStore_Base {
 		}
 	}
 
-	function load(EECF_Field $field) {
+	function load(Carbon_Field $field) {
 		$field->set_value( get_option($field->get_name()) );
 	}
 
-	function delete(EECF_Field $field) {
+	function delete(Carbon_Field $field) {
 		delete_option($field->get_name());
 	}
 
-	function load_values(EECF_Field $field) {
+	function load_values(Carbon_Field $field) {
 		global $wpdb;
 
 		return $wpdb->get_results('
@@ -90,7 +90,7 @@ class EECF_DataStore_ThemeOptions extends EECF_DataStore_Base {
 		', ARRAY_A);
 	}
 
-	function delete_values(EECF_Field $field) {
+	function delete_values(Carbon_Field $field) {
 		global $wpdb;
 
 		return $wpdb->query('
@@ -100,7 +100,7 @@ class EECF_DataStore_ThemeOptions extends EECF_DataStore_Base {
 	}
 }
 
-class EECF_DataStore_TaxonomyMeta extends EECF_DataStore_Base {
+class Carbon_DataStore_TaxonomyMeta extends Carbon_DataStore_Base {
 	protected $term_id;
 
 	static function create_table() {
@@ -140,19 +140,19 @@ class EECF_DataStore_TaxonomyMeta extends EECF_DataStore_Base {
 		add_action('delete_term', array(__CLASS__, 'on_delete_term'), 10, 3);
 	}
 
-	function save(EECF_Field $field) {
+	function save(Carbon_Field $field) {
 		add_metadata('taxonomy', $this->term_id, $field->get_name(), $field->get_value(), true);
 	}
 
-	function load(EECF_Field $field) {
+	function load(Carbon_Field $field) {
 		$field->set_value( get_metadata('taxonomy', $this->term_id, $field->get_name(), true) );
 	}
 
-	function delete(EECF_Field $field) {
+	function delete(Carbon_Field $field) {
 		delete_metadata('taxonomy', $this->term_id, $field->get_name(), $field->get_value());
 	}
 
-	function load_values(EECF_Field $field) {
+	function load_values(Carbon_Field $field) {
 		global $wpdb;
 
 		return $wpdb->get_results('
@@ -161,7 +161,7 @@ class EECF_DataStore_TaxonomyMeta extends EECF_DataStore_Base {
 		', ARRAY_A);
 	}
 
-	function delete_values(EECF_Field $field) {
+	function delete_values(Carbon_Field $field) {
 		global $wpdb;
 
 		return $wpdb->query('
@@ -184,24 +184,24 @@ class EECF_DataStore_TaxonomyMeta extends EECF_DataStore_Base {
 	}
 }
 
-class EECF_DataStore_UserMeta extends EECF_DataStore_Base {
+class Carbon_DataStore_UserMeta extends Carbon_DataStore_Base {
 	protected $user_id;
 
 	function init() {}
 
-	function save(EECF_Field $field) {
+	function save(Carbon_Field $field) {
 		update_user_meta($this->user_id, $field->get_name(), $field->get_value());
 	}
 
-	function load(EECF_Field $field) {
+	function load(Carbon_Field $field) {
 		$field->set_value( get_user_meta($this->user_id, $field->get_name(), true) );
 	}
 
-	function delete(EECF_Field $field) {
+	function delete(Carbon_Field $field) {
 		delete_user_meta($this->user_id, $field->get_name(), $field->get_value());
 	}
 
-	function load_values(EECF_Field $field) {
+	function load_values(Carbon_Field $field) {
 		global $wpdb;
 
 		return $wpdb->get_results('
@@ -210,7 +210,7 @@ class EECF_DataStore_UserMeta extends EECF_DataStore_Base {
 		', ARRAY_A);
 	}
 
-	function delete_values(EECF_Field $field) {
+	function delete_values(Carbon_Field $field) {
 		global $wpdb;
 
 		return $wpdb->query('

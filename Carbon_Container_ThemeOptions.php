@@ -1,6 +1,6 @@
 <?php 
 
-class EECF_Container_ThemeOptions extends EECF_Container {
+class Carbon_Container_ThemeOptions extends Carbon_Container {
 	static protected $registered_pages = array();
 
 	/**
@@ -31,7 +31,7 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 
 	function init() {
 		if ( !$this->get_datastore() ) {
-			$this->set_datastore(new EECF_DataStore_ThemeOptions());
+			$this->set_datastore(new Carbon_DataStore_ThemeOptions());
 		}
 
 		if ( !$this->settings['parent'] || $this->settings['parent'] == 'self' ) {
@@ -56,7 +56,7 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 	function attach() {
 		// Check file name setting
 		if ( empty($this->settings['file']) ) {
-			throw new EECF_Exception('Unspecified file name');
+			throw new Carbon_Exception('Unspecified file name');
 		}
 
 		// Add menu page
@@ -131,7 +131,7 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 		// Register top level page
 		if ( !$parent ) {
 			if ( isset(self::$registered_pages[$file]) ) {
-				throw new EECF_Exception ('Page "' . $file . '" already registered');
+				throw new Carbon_Exception ('Page "' . $file . '" already registered');
 			}
 
 			self::$registered_pages[$file] = array();
@@ -142,7 +142,7 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 		if ( !isset(self::$registered_pages[$parent]) ) {
 			self::$registered_pages[$parent] = array($file);
 		}  elseif ( in_array($file, self::$registered_pages[$parent]) ) {
-			throw new EECF_Exception ('Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a different file name using setup()');
+			throw new Carbon_Exception ('Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a different file name using setup()');
 		} else {
 			self::$registered_pages[$parent][] = $file;
 		}
@@ -179,7 +179,7 @@ class EECF_Container_ThemeOptions extends EECF_Container {
 		}
 
 		if ( in_array($name, self::$registered_field_names[$page_id]) ) {
-			throw new EECF_Exception ('Field name "' . $name . '" already registered');
+			throw new Carbon_Exception ('Field name "' . $name . '" already registered');
 		}
 
 		self::$registered_field_names[$page_id][] = $name;

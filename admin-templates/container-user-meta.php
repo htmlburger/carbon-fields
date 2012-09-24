@@ -1,4 +1,4 @@
-<table class="form-table eecf-container <?php echo $container_tag_class_name ?>">
+<table class="form-table carbon-container <?php echo $container_tag_class_name ?>">
 	<?php foreach ($this->fields as $field): 
 		$field->load();
 	?>
@@ -13,11 +13,11 @@
 				?>
 			</th>
 			<td>
-				<div class="eecf-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+				<div class="carbon-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 					<?php echo $field->render(); ?>
 				</div>
 			</td>
 		</tr>
 	<?php endforeach ?>
 </table>
-<?php wp_nonce_field('eecf_panel_' . $this->id . '_nonce', $this->get_nonce_name(), /*referer?*/ false, /*echo?*/ true); ?>
+<?php wp_nonce_field('carbon_panel_' . $this->id . '_nonce', $this->get_nonce_name(), /*referer?*/ false, /*echo?*/ true); ?>
