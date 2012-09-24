@@ -43,7 +43,8 @@ jQuery(function($) {
 
 	$.extend(EECF_Field.File.prototype, {
 		init: function() {
-			var media_box_opened = false,
+			var node = this.node,
+				media_box_opened = false,
 				orig_send_to_editor = window.send_to_editor;
 
 			this.node.find('.button-primary').click(function() {
@@ -51,6 +52,8 @@ jQuery(function($) {
 					url = button.attr('rel'),
 					input = button.parent().find('input:not(#' + button.attr('id') + ')');
 				
+				window.ecf_active_field = node;
+
 				tb_show('','media-upload.php?type=image&amp;TB_iframe=true');
 
 				media_box_opened = true;
@@ -65,6 +68,7 @@ jQuery(function($) {
 						alert('Something went wrong... \nPlease enter the file URL manually.');
 					};
 
+					window.ecf_active_field = null;
 					tb_remove();
 				}
 
@@ -75,6 +79,7 @@ jQuery(function($) {
 					input.val(file_url);
 					update_file_href(input, button, file_url);
 
+					window.ecf_active_field = null;
 					tb_remove();
 
 					media_box_opened = false;
@@ -88,6 +93,7 @@ jQuery(function($) {
 						input.val(file_url);
 						update_file_href(input, button, file_url);
 						
+						window.ecf_active_field = null;
 						tb_remove();
 					}
 				};
@@ -113,7 +119,8 @@ jQuery(function($) {
 
 	$.extend(EECF_Field.Image.prototype, {
 		init: function() {
-			var media_box_opened = false,
+			var node = this.node,
+				media_box_opened = false,
 				orig_send_to_editor = window.send_to_editor;
 
 			this.node.find('.button-primary').click(function() {
@@ -121,6 +128,8 @@ jQuery(function($) {
 					url = button.attr('rel'),
 					input = button.parent().find('input:not(#' + button.attr('id') + ')');
 				
+				window.ecf_active_field = node;
+
 				tb_show('','media-upload.php?type=image&amp;TB_iframe=true');
 
 				media_box_opened = true;
@@ -135,6 +144,7 @@ jQuery(function($) {
 						alert('Something went wrong... \nPlease enter the image URL manually.');
 					};
 
+					window.ecf_active_field = null;
 					tb_remove();
 				}
 
@@ -145,6 +155,7 @@ jQuery(function($) {
 					input.val(imgurl);
 					update_img_src(input, button, imgurl, $('img', html).length);
 
+					window.ecf_active_field = null;
 					tb_remove();
 
 					media_box_opened = false;
@@ -158,6 +169,7 @@ jQuery(function($) {
 						input.val(imgurl);
 						update_img_src(input, button, imgurl, $('img', html).length);
 						
+						window.ecf_active_field = null;
 						tb_remove();
 					}
 				};

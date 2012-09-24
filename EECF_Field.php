@@ -540,6 +540,14 @@ class EECF_Field_Set extends EECF_Field {
 }
 
 class EECF_Field_File extends EECF_Field {
+	/**
+	 * Whether admin_head was attached for a file or image field
+	 *
+	 * @see admin_init()
+	 * @var bool
+	 */
+	static $attached_media_library_hook = false; 
+
 	function render() {
 		echo '<input type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text" />';
 		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=file" type="button" class="button-primary" value="Select Media" />';
@@ -552,10 +560,106 @@ class EECF_Field_File extends EECF_Field {
 
 	function admin_init() {
 		add_action('admin_print_styles', array($this, 'add_correct_script_hooks'), 1);
+
+		if ( !self::$attached_media_library_hook ) {
+			self::$attached_media_library_hook = true;
+			add_action('admin_head-media-upload-popup', array('EECF_Field_File', 'admin_media_library_popup_head'));
+		}
 	}
 
 	function add_correct_script_hooks() {
 		wp_enqueue_script('utf8_decode_js_userialize', EECF_PLUGIN_URL . '/js/utf8.decode.js.unserialize.js');
+	}
+
+
+	static function admin_media_library_popup_head() {
+		?>
+		<style type="text/css">
+			#media-upload-header #sidemenu li#tab-gallery,
+			#media-upload-header #sidemenu li#tab-type_url,
+			#media-items .media-item a.toggle,
+			#media-items .media-item tr.image-size,
+			#media-items .media-item tr.align,
+			#media-items .media-item tr.url,
+			#media-items .media-item .slidetoggle {
+				display: none !important;
+			}
+
+			#media-items { 
+				padding-bottom: 25px;
+			}
+
+			#media-items .media-item { 
+				min-height: 68px;
+			}
+
+			#media-items .media-item .filename.new {
+				min-height: 0;
+				padding: 27px 10px 10px;
+				line-height: 15px;
+			}
+
+			#media-items .media-item .pinkynail {
+				max-width: 64px;
+				max-height: 64px;
+				display: block !important;
+			}
+
+			#media-items .media-item  .eecf-select { 
+				float: right; 
+				margin: 23px 12px 0 10px; 
+			}
+	
+			#media-upload .ml-submit {
+				display: none !important;
+			}
+		</style>
+		<script type="text/javascript">
+			(function($) {
+				function eecf_image_add_buttons() {
+					// add buttons to media items
+					$('#media-items .media-item:not(.eecf-active)').each(function(){
+						var th = $(this), id;
+
+						// needs attachment ID
+						if( th.children('input[id*="type-of-"]').length == 0 ){ 
+							return false; 
+						}
+						
+						// add buttons only once
+						th.addClass('eecf-active');
+						
+						// find attachment id
+						id = th.children('input[id*="type-of-"]').attr('id').replace('type-of-', '');
+						
+						// Add select button
+						th.find('.filename.new').before('<a href="' + id + '" class="button eecf-select">Select File</a>');
+					});
+				}
+
+				$('#media-items .media-item a.eecf-select').live('click', function(){
+					var value = $(this).closest('.media-item').find('.pinkynail').attr('src'),
+						ecf_field = self.parent.ecf_active_field;
+					
+					// update ecf_field
+					ecf_field.find('input.regular-text').val( value );
+		 			ecf_field.find('.eecf-view_image').attr( 'src', value );
+		 			
+		 			// reset ecf_active_field and return false
+		 			self.parent.ecf_active_field = null;
+		 			self.parent.tb_remove();
+					
+					return false;
+				});
+
+				$(document).ready(function(){
+					setTimeout(function(){
+						eecf_image_add_buttons();
+					}, 1);
+				});
+			})(jQuery);
+		</script>
+		<?php
 	}
 }
 
