@@ -57,6 +57,17 @@ jQuery(function($) {
 		});
 	}
 
+	/* Date picker */
+	carbon_field.Date = function(element, field_obj) {
+		element.find('.carbon-datepicker').datepicker({
+			dateFormat: 'yy-mm-dd',
+			changeMonth: true,
+			changeYear: true,
+			showButtonPanel: true,
+			hideIfNoPrevNext: true
+		});
+	}
+
 	/* Compound Field */
 	carbon_field.Compound = function(element, field_obj) {
 		// prepare object
