@@ -1,6 +1,6 @@
 <?php 
 
-class EECF_Field_Repeater extends EECF_Field {
+class EECF_Field_Compound extends EECF_Field {
 	const LAYOUT_TABLE = 'table';
 	const LAYOUT_LIST = 'list';
 
@@ -133,7 +133,7 @@ class EECF_Field_Repeater extends EECF_Field {
 
 	function _render() {
 		$container_tag_class_name = get_class($this);
-		include dirname(__FILE__) . '/admin-templates/field_repeater.php';
+		include dirname(__FILE__) . '/admin-templates/field_compound.php';
 	}
 
 	function set_layout($layout) {

@@ -1,6 +1,6 @@
 <table class="eecf-container <?php echo $container_tag_class_name ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
 	<?php foreach ($this->values as $index => $fields): ?>
-		<tr class="eecf-repeater-row">
+		<tr class="eecf-compound-row">
 			<td>
 				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
 					<table>
@@ -57,7 +57,7 @@
 			</td>
 		</tr>
 	<?php endforeach ?>
-	<tr class="eecf-repeater-preview">
+	<tr class="eecf-compound-preview">
 		<td>
 			<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
 				<table>

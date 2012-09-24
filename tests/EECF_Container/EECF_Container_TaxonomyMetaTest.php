@@ -162,14 +162,14 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     /**
      * @group slow
      */
-    public function testSaveRepeaterAndCheckDatabase() {
+    public function testSaveCompoundAndCheckDatabase() {
         global $wpdb;
 
         // prepare container
         $container = new EECF_Container_TaxonomyMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('repeater', 'repeater')->add_fields(array(
+            EECF_Field::factory('compound', 'compound')->add_fields(array(
                 EECF_Field::factory('text', 'field1'),
                 EECF_Field::factory('text', 'field2'),
             )),
@@ -177,7 +177,7 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
 
         // Prepare POST
         $_POST = array(
-            '_repeater' => array(
+            '_compound' => array(
                 '0' => array(
                     '_field1' => 'Lorem ipsum',
                     '_field2' => 'Dolor sit amet',
@@ -191,14 +191,14 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
         // check field
         $db_values = $wpdb->get_results('
             SELECT meta_key, meta_value FROM ' . $wpdb->taxonomymeta . '
-            WHERE taxonomy_id="123" AND meta_key LIKE "_repeater%"
+            WHERE taxonomy_id="123" AND meta_key LIKE "_compound%"
             ORDER BY meta_key
         ', ARRAY_A);
 
         $this->assertCount(2, $db_values);
-        $this->assertEquals($db_values[0]['meta_key'], '_repeater_field1_0');
+        $this->assertEquals($db_values[0]['meta_key'], '_compound_field1_0');
         $this->assertEquals($db_values[0]['meta_value'], 'Lorem ipsum');
-        $this->assertEquals($db_values[1]['meta_key'], '_repeater_field2_0');
+        $this->assertEquals($db_values[1]['meta_key'], '_compound_field2_0');
         $this->assertEquals($db_values[1]['meta_value'], 'Dolor sit amet');
 
         // cleanup
@@ -208,13 +208,13 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     /**
      * @group slow
      */
-    public function testSaveRepeaterAndCheckLoad() {
+    public function testSaveCompoundAndCheckLoad() {
         global $wpdb;
         // prepare container
         $container = new EECF_Container_TaxonomyMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('repeater', 'repeater')->add_fields(array(
+            EECF_Field::factory('compound', 'compound')->add_fields(array(
                 EECF_Field::factory('text', 'field1'),
                 EECF_Field::factory('text', 'field2'),
             )),
@@ -222,7 +222,7 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
 
         // Prepare POST
         $_POST = array(
-            '_repeater' => array(
+            '_compound' => array(
                 '0' => array(
                     '_field1' => 'Lorem ipsum',
                     '_field2' => 'Dolor sit amet',
@@ -236,21 +236,21 @@ class EECF_Container_TaxonomyMetaTest extends WP_UnitTestCase {
 
         // check field
         $fields = $container->get_fields();
-        $repeater_values = $fields[0]->get_values();
+        $compound_values = $fields[0]->get_values();
 
-        $this->assertGreaterThanOrEqual(1, count($repeater_values));
-        $repeater_values = $repeater_values[0];
+        $this->assertGreaterThanOrEqual(1, count($compound_values));
+        $compound_values = $compound_values[0];
 
         $expected_values = array(
             array('_field1', 'Lorem ipsum'),
             array('_field2', 'Dolor sit amet'),
         );
 
-        $this->assertCount(2, $repeater_values);
+        $this->assertCount(2, $compound_values);
 
         foreach ($expected_values as $index => $expected) {
-            $this->assertEquals($repeater_values[$index]->get_name(), $expected[0]);
-            $this->assertEquals($repeater_values[$index]->get_value(), $expected[1]);
+            $this->assertEquals($compound_values[$index]->get_name(), $expected[0]);
+            $this->assertEquals($compound_values[$index]->get_value(), $expected[1]);
         }
 
         // cleanup

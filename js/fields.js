@@ -57,11 +57,11 @@ jQuery(function($) {
 		});
 	}
 
-	/* Repeater Field */
-	eecf_field.Repeater = function(element, field_obj) {
+	/* Compound Field */
+	eecf_field.Compound = function(element, field_obj) {
 		// prepare object
 		field_obj.btn_add = element.find('a[data-action=add]');
-		field_obj.num_rows = element.find('.eecf-repeater-row').length;
+		field_obj.num_rows = element.find('.eecf-compound-row').length;
 		field_obj.min_rows = element.children('.eecf-container').data('min-values');
 		field_obj.max_rows = element.children('.eecf-container').data('max-values');
 
@@ -69,7 +69,7 @@ jQuery(function($) {
 
 		// init
 		while( field_obj.num_rows < field_obj.min_rows ) {
-			repeater_add_row(field_obj);
+			compound_add_row(field_obj);
 		}
 
 		if ( field_obj.max_rows > 0 && field_obj.num_rows >= field_obj.max_rows ) {
@@ -79,17 +79,17 @@ jQuery(function($) {
 		// Hook events
 
 		field_obj.btn_add.click(function() {
-			repeater_add_row(field_obj);
+			compound_add_row(field_obj);
 			return false;
 		});
 
 		field_obj.node.find('a[data-action=remove]').live('click', function() {
-			repeater_remove_row(field_obj, $(this).closest('.eecf-repeater-row'));
+			compound_remove_row(field_obj, $(this).closest('.eecf-compound-row'));
 			return false;
 		});
 	}
 
-	function repeater_add_row(field) {
+	function compound_add_row(field) {
 		var sample_row, new_row;
 
 		if ( field.max_rows > 0 && field.max_rows <= field.num_rows ) {
@@ -97,7 +97,7 @@ jQuery(function($) {
 			return;
 		};
 
-		sample_row = field.node.find('.eecf-repeater-preview');
+		sample_row = field.node.find('.eecf-compound-preview');
 		new_row = sample_row.clone();
 
 		field.num_rows++;
@@ -109,7 +109,7 @@ jQuery(function($) {
 			input.attr('name', input.attr('name').replace(/\[__ei__\]/, '[' + field.num_rows + ']'));
 		});
 
-		new_row.removeClass('eecf-repeater-preview').addClass('eecf-repeater-row').insertBefore(sample_row);
+		new_row.removeClass('eecf-compound-preview').addClass('eecf-compound-row').insertBefore(sample_row);
 		init(new_row);
 
 		if ( field.max_rows > 0 && field.num_rows == field.max_rows ) {
@@ -117,13 +117,13 @@ jQuery(function($) {
 		};
 	}
 
-	function repeater_remove_row (field, row) {
+	function compound_remove_row (field, row) {
 		row.remove();
-		repeater_on_update_rows(field);
+		compound_on_update_rows(field);
 
 		if ( field.min_rows > field.num_rows ) {
 			setTimeout(function() {
-				repeater_add_row(field);
+				compound_add_row(field);
 			}, 0);
 		};
 
@@ -132,8 +132,8 @@ jQuery(function($) {
 		};
 	};
 
-	function repeater_on_update_rows (field) {
-		var rows = field.node.find('.eecf-repeater-row'),
+	function compound_on_update_rows (field) {
+		var rows = field.node.find('.eecf-compound-row'),
 			index = 0;
 
 		field.num_rows = rows.length;

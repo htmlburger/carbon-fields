@@ -23,10 +23,10 @@ $custom_fields_panel->add_fields(array(
 	ECF_Field::factory('file', 'pdf')->set_datastore(new EECF_DataStore({})),
 ));
 
-/* Repeater */
+/* Compound */
 $custom_fields_panel->add_fields(array(
 	ECF_Field::factory('image', 'img'),
-	ECF_Field::factory('repeater', 'slideshow')->add_fields(array(
+	ECF_Field::factory('compound', 'slideshow')->add_fields(array(
 		ECF_Field::factory('text', 'title'),
 		ECF_Field::factory('img', 'img'),
 	)),
@@ -41,7 +41,7 @@ $custom_fields_panel->add_fields(array(
 <h2><?php echo get_post_meta('subtitle') ?></h2>
 <?php
 
-$slides = ecf_get_repeater_fields('slideshow');
+$slides = ecf_get_compound_fields('slideshow');
 foreach ($slides as $slide) {
 	echo "<li>$slide[title] <img src='$slide[img]'/></li>";
 }

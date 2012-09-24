@@ -1,6 +1,6 @@
 <?php 
 
-class EECF_Field_Groups extends EECF_Field_Repeater {
+class EECF_Field_Groups extends EECF_Field_Compound {
 	protected $groups = array();
 
 	function add_fields($fields, $name, $label=null) {

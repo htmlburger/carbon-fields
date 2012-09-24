@@ -19,7 +19,7 @@ include_once 'EECF_Container_TaxonomyMeta.php';
 include_once 'EECF_Container_UserMeta.php';
 
 include_once 'EECF_Field.php';
-include_once 'EECF_Field_Repeater.php';
+include_once 'EECF_Field_Compound.php';
 include_once 'EECF_Field_Groups.php';
 
 include_once 'EECF_Widget.php';
