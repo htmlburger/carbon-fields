@@ -2,6 +2,7 @@
 
 add_action('admin_print_scripts', array('EECF_Field', 'admin_hook_scripts'));
 add_action('admin_print_styles', array('EECF_Field', 'admin_hook_styles'));
+add_action('wp_ajax_ecf_get_file_details', array('EECF_Field_File', 'ecf_get_file_details'));
 
 /**
  * Base field class. 
@@ -616,7 +617,7 @@ class EECF_Field_File extends EECF_Field {
 		</style>
 		<script type="text/javascript">
 			(function($) {
-				function eecf_image_add_buttons() {
+				function eecf_add_buttons() {
 					// add buttons to media items
 					$('#media-items .media-item:not(.eecf-active)').each(function(){
 						var th = $(this), id;
@@ -638,28 +639,84 @@ class EECF_Field_File extends EECF_Field {
 				}
 
 				$('#media-items .media-item a.eecf-select').live('click', function(){
-					var value = $(this).closest('.media-item').find('.pinkynail').attr('src'),
+					var id = $(this).attr('href'),
+						thumbnail = $(this).closest('.media-item').find('.pinkynail').attr('src'),
 						ecf_field = self.parent.ecf_active_field;
-					
-					// update ecf_field
-					ecf_field.find('input.regular-text').val( value );
-		 			ecf_field.find('.eecf-view_image').attr( 'src', value );
-		 			
-		 			// reset ecf_active_field and return false
-		 			self.parent.ecf_active_field = null;
-		 			self.parent.tb_remove();
+
+					var data = {
+						action: 'ecf_get_file_details',
+						id: id,
+					};
+
+					$.ajax({
+						url: ajaxurl,
+						data : data,
+						cache: false,
+						dataType: "json",
+						success: function( json ) {
+							// validate
+							if(!json) {
+								alert('Cannot select this file');
+								return false;
+							}
+
+							// Presnet thumbnails is required for image fields
+							if(ecf_field.data('type') == 'Image' && !json.thumbnail) {
+								alert('Cannot select this file');
+								return false;
+							} else if ( !json.thumbnail ) {
+								json.thumbnail = thumbnail;
+							};
+
+							// update ecf_field
+							ecf_field.find('input.regular-text').val( json.url );
+				 			ecf_field.find('.eecf-view_image').attr( 'src', json.thumbnail );
+				 			
+				 			// reset ecf_active_field and return false
+				 			self.parent.ecf_active_field = null;
+				 			self.parent.tb_remove();
+						}
+					});
 					
 					return false;
 				});
 
 				$(document).ready(function(){
 					setTimeout(function(){
-						eecf_image_add_buttons();
+						eecf_add_buttons();
 					}, 1);
 				});
+
+				<?php if(!isset($_GET['tab']) || $_GET['tab'] == 'type'): ?>
+					setInterval(function(){
+						eecf_add_buttons();
+					}, 500);
+				<?php endif; ?>
+
 			})(jQuery);
 		</script>
 		<?php
+	}
+
+	static function ecf_get_file_details() {
+		if ( empty($_GET['id']) ) {
+			echo json_encode(array());
+			exit;
+		}
+
+		$attachment_id = intval($_GET['id']);
+
+		$url = wp_get_attachment_url($attachment_id);
+		$thumbnail = wp_get_attachment_image_src($attachment_id, 'thumbnail');
+
+		$result = array(
+			'id' => $attachment_id,
+			'url' => $url,
+			'thumbnail' => $thumbnail[0],
+		);
+
+		echo json_encode($result);
+		exit;
 	}
 }
 
