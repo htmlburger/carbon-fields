@@ -208,7 +208,7 @@ jQuery(function($) {
 		});
 
 		new_row.removeClass('eecf-group-preview').addClass('eecf-group-row').insertBefore( field.node.find('.eecf-group-preview:first') );
-		EECF_Field.init(new_row);
+		init(new_row);
 
 		if ( field.max_rows > 0 && field.num_rows == field.max_rows ) {
 			field.btn_add.hide();
