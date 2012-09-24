@@ -670,7 +670,7 @@ class EECF_Field_File extends EECF_Field {
 
 							// update ecf_field
 							ecf_field.find('input.regular-text').val( json.url );
-				 			ecf_field.find('.eecf-view_image').attr( 'src', json.thumbnail );
+				 			ecf_field.find('.eecf-view_image').attr( 'src', json.thumbnail ).removeClass('blank');
 				 			ecf_field.find('.eecf-view_file').attr( 'href', json.url );
 				 			
 				 			// reset ecf_active_field and return false
@@ -732,7 +732,9 @@ class EECF_Field_Image extends EECF_Field_File {
 		if ( $this->value != '' && in_array(array_pop(explode('.', $this->value)), $this->image_extensions) ) {
 			echo '<br /><img src="' . $this->value . '" alt="" height="100" class="eecf-view_image"/>';
 		} else if ( !empty($this->value) ) {
-			echo '</br><em>This is not a valid image!</em>';
+			echo '</br><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" height="100" class="eecf-view_image blank"/><em>This is not a valid image!</em>';
+		} else {
+			echo '<br /><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" height="100" class="eecf-view_image blank"/>';
 		}
 	}
 }

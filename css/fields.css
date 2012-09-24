@@ -1,2 +1,4 @@
 .eecf-repeater-preview { display: none; }
 .eecf-group-preview { display: none; }
+
+.eecf-view_image.blank { height: auto; }

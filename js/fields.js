@@ -188,7 +188,7 @@ jQuery(function($) {
 					button.after(view).after('<br />');
 				};
 
-				view.attr('src', src);
+				view.attr('src', src).removeClass('blank');
 			}
 		}
 	});
