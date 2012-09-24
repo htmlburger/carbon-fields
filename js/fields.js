@@ -150,8 +150,8 @@ jQuery(function($) {
 	}
 
 
-	/* Groups Field */
-	eecf_field.Groups = function(element, field_obj) {
+	/* Complex Field */
+	eecf_field.Complex = function(element, field_obj) {
 		// prepare object
 		field_obj.group_selector = element.find('select[name$="[group]"]');
 		field_obj.btn_add = element.find('a[data-action=add]');
@@ -171,12 +171,12 @@ jQuery(function($) {
 		// Hook events
 
 		field_obj.btn_add.click(function() {
-			groups_add_row(field_obj);
+			complex_add_row(field_obj);
 			return false;
 		});
 
 		field_obj.node.find('a[data-action=remove]').live('click', function() {
-			groups_remove_row(field_obj, $(this).closest('.eecf-group-row'));
+			complex_remove_row(field_obj, $(this).closest('.eecf-group-row'));
 			return false;
 		});
 
@@ -185,7 +185,7 @@ jQuery(function($) {
 		});
 	}
 
-	function groups_add_row(field) {
+	function complex_add_row(field) {
 		var sample_row, new_row;
 
 		if ( field.max_rows > 0 && field.max_rows <= field.num_rows ) {
@@ -215,9 +215,9 @@ jQuery(function($) {
 		};
 	}
 
-	function groups_remove_row(field, row) {
+	function complex_remove_row(field, row) {
 		row.remove();
-		groups_on_update_rows(field);
+		complex_on_update_rows(field);
 
 		if ( field.min_rows > field.num_rows ) {
 			// TODO: add the correct row type
@@ -228,7 +228,7 @@ jQuery(function($) {
 		};
 	}
 
-	function groups_on_update_rows(field) {
+	function complex_on_update_rows(field) {
 		var th = this,
 			rows = field.node.find('.eecf-group-row'),
 			index = 0;

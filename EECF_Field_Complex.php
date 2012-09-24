@@ -1,6 +1,6 @@
 <?php 
 
-class EECF_Field_Groups extends EECF_Field_Compound {
+class EECF_Field_Complex extends EECF_Field_Compound {
 	protected $groups = array();
 
 	function add_fields($fields, $name, $label=null) {
@@ -132,7 +132,7 @@ class EECF_Field_Groups extends EECF_Field_Compound {
 
 	function _render() {
 		$container_tag_class_name = get_class($this);
-		include dirname(__FILE__) . '/admin-templates/field_groups.php';
+		include dirname(__FILE__) . '/admin-templates/field_complex.php';
 	}
 }
 

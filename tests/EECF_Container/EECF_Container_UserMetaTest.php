@@ -249,7 +249,7 @@ class EECF_Container_UserMetaTest extends WP_UnitTestCase {
         $container = new EECF_Container_UserMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('groups', 'group')->add_fields(array(
+            EECF_Field::factory('complex', 'group')->add_fields(array(
                     EECF_Field::factory('text', 'field1'),
                     EECF_Field::factory('text', 'field2'),
                 ), 'group1')->add_fields(array(
@@ -316,7 +316,7 @@ class EECF_Container_UserMetaTest extends WP_UnitTestCase {
         $container = new EECF_Container_UserMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
-            EECF_Field::factory('groups', 'group')->add_fields(array(
+            EECF_Field::factory('complex', 'group')->add_fields(array(
                     EECF_Field::factory('text', 'field1'),
                     EECF_Field::factory('text', 'field2'),
                 ), 'group1')->add_fields(array(
