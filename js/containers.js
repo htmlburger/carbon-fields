@@ -153,7 +153,7 @@ jQuery(function($) {
 				return;
 			};
 
-			setTimeout(EECF_Field.init, 1);
+			setTimeout(eecf_field_init, 1);
 		});
 	}
 	
