@@ -68,6 +68,36 @@ jQuery(function($) {
 		});
 	}
 
+	/* Color picker */
+	carbon_field.Color = function(element, field_obj) {
+		var color_container = element.find('.carbon-color-container'),
+			color_preview = element.find('.carbon-color-preview'),
+			color_button = element.find('.button'),
+			color_field = element.find('.carbon-color'),
+			farbtastic_obj;
+
+		farbtastic_obj = $.farbtastic(color_container, function(color) {
+			color_preview.css('background-color', color);
+			color_field.val(color);
+		});
+
+		farbtastic_obj.setColor(color_field.val());
+
+		color_preview.add(color_button).click(function() {
+			color_container.show();
+		});
+
+		$('body').click(function(e) {
+			var $target = $(e.target);
+
+			if ( $target.is(color_preview) || $target.is(color_button) ) {
+				return false;
+			};
+
+			color_container.hide();
+		});
+	}
+
 	/* Compound Field */
 	carbon_field.Compound = function(element, field_obj) {
 		// prepare object

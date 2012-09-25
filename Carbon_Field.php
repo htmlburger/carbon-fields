@@ -491,6 +491,29 @@ class Carbon_Field_Date extends Carbon_Field {
 	}
 }
 
+class Carbon_Field_Color extends Carbon_Field {
+	function init() {
+		global $wp_version;
+
+		if (defined('WP_ADMIN') && WP_ADMIN) {
+			wp_enqueue_script('farbtastic');
+			wp_enqueue_style('farbtastic');
+		}
+
+		Carbon_Field::init();
+	}
+
+	function render() {
+		echo '
+		<div class="carbon-color-row">
+			<input type="text" name="' . $this->get_name() . '" value="' . htmlentities($this->value, ENT_COMPAT, 'UTF-8') . '" class="regular-text carbon-color" />
+			<a class="carbon-color-preview hide-if-no-js"></a>
+			<input type="button" class="pickcolor button hide-if-no-js" value="Select a Color">
+			<div class="carbon-color-container hide-if-no-js"></div>
+		</div>';
+	}
+}
+
 class Carbon_Field_Select extends Carbon_Field {
 	protected $options = array();
 
