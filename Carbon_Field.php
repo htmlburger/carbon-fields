@@ -569,6 +569,32 @@ class Carbon_Field_Select extends Carbon_Field {
 	}
 }
 
+class Carbon_Field_Checkbox extends Carbon_Field {
+	protected $option_value = 'yes';
+
+	function set_option_value($value) {
+	    $this->option_value = $value;
+	    return $this;
+	}
+
+    function render() {
+    	if ( empty($this->option_value) ) {
+    		throw new Carbon_Exception('Set non-empty option value for field "' . $this->get_name() . '"');
+    	}
+
+		$checked_attr = $this->get_value() == $this->option_value ? ' checked="checked" ': '';
+
+		echo '<label>
+			<input type="checkbox" name="' . $this->get_name() . '" value="' . htmlentities($this->option_value, ENT_COMPAT, 'UTF-8') . '" ' . $checked_attr . ' />
+			' . 	$this->label . '
+		</label>';
+	}
+
+	function get_label() {
+		return '';
+	}
+}
+
 class Carbon_Field_Separator extends Carbon_Field {
 	function render() {
 
