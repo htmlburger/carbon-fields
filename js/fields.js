@@ -98,6 +98,70 @@ jQuery(function($) {
 		});
 	}
 
+	/* Map */
+	carbon_field.Map = function(element, field_obj) {
+		var field = element.find('.regular-text'),
+			map_container = element.find('.carbon-map'),
+			exists = 0,
+			marker = false,
+			zoom = field.data('zoom'),
+			coords = field.val();
+
+		if (coords === '' || coords.split(',').length != 2) {
+			lat = field.data('default-lat'); 
+			lng = field.data('default-lng');
+			zoom = 8;
+		} else {
+			temp = coords.split(',');
+			lat = parseFloat(temp[0]);
+			lng = parseFloat(temp[1]);
+			exists = 1;
+		}
+
+		//draw a map
+		var map = new google.maps.Map(map_container.get(0), {
+			zoom: zoom,
+			center: new google.maps.LatLng(lat, lng),
+			mapTypeId: google.maps.MapTypeId.ROADMAP
+		});
+		
+		// if we had coords in input field, put a marker on that spot
+		if(exists == 1) {
+			marker = new google.maps.Marker({
+				position: map.getCenter(),
+				map: map,
+				draggable: true
+			});
+
+			google.maps.event.addListener(marker, "dragend", function (mEvent) { 
+				update_value();
+			});
+		}
+
+		// on click move marker and set new position
+		google.maps.event.addListener(map, 'click', function(point) {
+			if ( marker ) {
+				marker.setPosition(point.latLng);
+			} else {
+				marker = new google.maps.Marker({
+					position: point.latLng,
+					map: map,
+					draggable: true
+				});
+
+				google.maps.event.addListener(marker, "dragend", function (mEvent) { 
+					update_value();
+				});
+			}
+
+			update_value();
+		});
+
+		function update_value() {
+			field.val(marker.getPosition().lat() + ',' + marker.getPosition().lng());
+		}
+	}
+
 	/* Compound Field */
 	carbon_field.Compound = function(element, field_obj) {
 		// prepare object

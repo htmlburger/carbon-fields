@@ -493,8 +493,6 @@ class Carbon_Field_Date extends Carbon_Field {
 
 class Carbon_Field_Color extends Carbon_Field {
 	function init() {
-		global $wp_version;
-
 		if (defined('WP_ADMIN') && WP_ADMIN) {
 			wp_enqueue_script('farbtastic');
 			wp_enqueue_style('farbtastic');
@@ -511,6 +509,32 @@ class Carbon_Field_Color extends Carbon_Field {
 			<input type="button" class="pickcolor button hide-if-no-js" value="Select a Color">
 			<div class="carbon-color-container hide-if-no-js"></div>
 		</div>';
+	}
+}
+
+class Carbon_Field_Map extends Carbon_Field {
+	protected $api_key;
+	private $default_lat = 37.423156;
+	private $default_long = -122.084917;
+	private $zoom = 10;
+
+	function admin_init() {
+		wp_enqueue_script('carbon-google-maps', 'http://maps.googleapis.com/maps/api/js?sensor=false');
+	}
+
+	function render() {
+		echo '
+		<input type="text" name="' . $this->get_name() . '" value="' . htmlentities($this->value, ENT_COMPAT, 'UTF-8') . '" class="regular-text" data-zoom="' . $this->zoom . '" data-default-lat="' . $this->default_lat . '" data-default-lng="' . $this->default_long . '" />
+		<div class="carbon-map">&nbsp;</div>
+		';
+	}
+
+	function set_position($lat, $long, $zoom) {
+		$this->default_lat = $lat;
+		$this->default_long = $long;
+		$this->zoom = $zoom;
+
+		return $this;
 	}
 }
 
