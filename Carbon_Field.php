@@ -472,18 +472,21 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 
 class Carbon_Field_Date extends Carbon_Field {
 	function init() {
-		if (defined('WP_ADMIN') && WP_ADMIN) {
-			wp_enqueue_script('jquery-ui-datepicker');
-			wp_enqueue_style('carbon-jquery-ui', CARBON_PLUGIN_URL . '/css/jquery-ui.css');
+		global $wp_version;
 
-			// wp_enqueue_script('jqueryui-datepicker', get_bloginfo('stylesheet_directory') . '/lib/enhanced-custom-fields/tpls/jqueryui/jquery-ui-1.7.3.custom.min.js');
-			// wp_enqueue_style('jqueryui-datepicker', get_bloginfo('stylesheet_directory') . '/lib/enhanced-custom-fields/tpls/jqueryui/ui-lightness/jquery-ui-1.7.3.custom.css');
-			// wp_enqueue_script('jqueryui-initiate', get_bloginfo('stylesheet_directory') . '/lib/enhanced-custom-fields/tpls/jqueryui/initiate.js');
+		if (defined('WP_ADMIN') && WP_ADMIN) {
+			if (version_compare($wp_version, '3.4') >= 0) {
+				wp_enqueue_script('jquery-ui-datepicker');
+			} else {
+				wp_enqueue_script('carbon-jquery-ui-datepicker', CARBON_PLUGIN_URL . '/js/jquery-ui.js');
+			}
+			
+			wp_enqueue_style('carbon-jquery-ui', CARBON_PLUGIN_URL . '/css/jquery-ui.css');
 		}
 		Carbon_Field::init();
 	}
-	function render() {
 
+	function render() {
 		echo '<input type="text" name="' . $this->get_name() . '" value="' . htmlentities($this->value, ENT_COMPAT, 'UTF-8') . '" class="regular-text carbon-datepicker" />';
 	}
 }
