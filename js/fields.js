@@ -162,6 +162,20 @@ jQuery(function($) {
 		}
 	}
 
+	/* Relationship */
+	carbon_field.Relationship = function(element, field_obj) {
+		var container = element.find('.carbon-relationship'),
+			name = container.data('name'),
+			values = [];
+
+		// TODO:
+		// keep local array of values
+		// gray out left list values
+		// sortable values list
+		// dynamically populate list of posts
+		// search (ajax powered)
+	}
+
 	/* Compound Field */
 	carbon_field.Compound = function(element, field_obj) {
 		// prepare object

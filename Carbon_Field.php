@@ -725,6 +725,62 @@ class Carbon_Field_Set extends Carbon_Field {
 	}
 }
 
+class Carbon_Field_Relationship extends Carbon_Field {
+	protected $post_type = 'post';
+
+    function render() {
+    	if (!is_array($this->value)) {
+    		$this->value = array($this->value);
+    	}
+
+		$posts = get_posts(array(
+			'post_type' => $this->post_type,
+			'numberposts' => 5
+		));
+
+		?>
+		<div class="carbon-relationship" data-name="<?php echo $this->get_name() ?>[]">
+			<div class="relationship-left">
+				<table class="widefat">
+					<thead>
+						<tr>
+							<th>
+								<input type="text" placeholder="Search" />
+							</th>
+						</tr>
+					</thead>
+				</table>
+
+				<ul>
+					<?php foreach ($posts as $post): ?>
+						<li>
+							<a href="#" data-post_id="<?php echo $post->ID ?>">
+								<?php echo $post->post_title ?>
+							</a>
+						</li>
+					<?php endforeach ?>
+				</ul>
+			</div>
+
+			<div class="relationship-right">
+				<ul>
+					<?php foreach ($this->value as $post_id): 
+						$post = get_post($post_id);
+					?>
+						<li>
+							<a href="#" data-post_id="<?php echo $post->ID ?>">
+								<?php echo $post->post_title ?>
+							</a>
+							<input type="hidden" name="<?php echo $this->get_name() ?>[]" value="<?php echo $post->ID ?>" />
+						</li>
+					<?php endforeach ?>
+				</ul>
+			</div>
+		</div>
+		<?php
+	}
+}
+
 class Carbon_Field_File extends Carbon_Field {
 	/**
 	 * Whether admin_head was attached for a file or image field
