@@ -551,8 +551,6 @@ class Carbon_Field_Select extends Carbon_Field {
     		throw new Carbon_Exception('No options added for field "' . $this->get_name() . '"');
     	}
 
-		$options = array();
-
 		echo '<select name="' . $this->get_name() . '">';
 
 		foreach ($this->options as $key => $value) {
@@ -566,6 +564,35 @@ class Carbon_Field_Select extends Carbon_Field {
 		}
 
 		echo '</select>';
+	}
+}
+
+class Carbon_Field_Radio extends Carbon_Field {
+	protected $options = array();
+
+	function add_options($options) {
+	    $this->options = $options;
+	    return $this;
+	}
+
+    function render() {
+    	if ( empty($this->options) ) {
+    		throw new Carbon_Exception('No options added for field "' . $this->get_name() . '"');
+    	}
+
+    	echo '<ul class="carbon-radio-list">';
+
+		foreach ($this->options as $key => $value) {
+			echo '<li><label><input type="radio" name="' . $this->get_name() . '" value="' . htmlentities($key, ENT_COMPAT, 'UTF-8') . '"';
+
+			if ($this->value == $key) {
+				echo ' checked="checked"';
+			}
+
+			echo '/>' . htmlentities($value, ENT_COMPAT, 'UTF-8') . '</label></li>';
+		}
+		
+    	echo '</ul>';
 	}
 }
 
