@@ -141,7 +141,9 @@ class Carbon_DataStore_TaxonomyMeta extends Carbon_DataStore_Base {
 	}
 
 	function save(Carbon_Field $field) {
-		add_metadata('taxonomy', $this->term_id, $field->get_name(), $field->get_value(), true);
+		if ( !add_metadata('taxonomy', $this->term_id, $field->get_name(), $field->get_value(), true) ) {
+			update_metadata('taxonomy', $this->term_id, $field->get_name(), $field->get_value());
+		}
 	}
 
 	function load(Carbon_Field $field) {
