@@ -41,6 +41,12 @@ $custom_fields_panel->add_fields(array(
 <h2><?php echo get_post_meta('subtitle') ?></h2>
 <?php
 
+// TODO:
+carbon_get_post_meta($id, 'test_check', 'complex|compound');
+carbon_get_tax_meta($id, 'test_check');
+carbon_get_theme_option($id, 'test_check');
+carbon_get_user_meta($id, 'test_check');
+
 $slides = carbon_get_compound_fields('slideshow');
 foreach ($slides as $slide) {
 	echo "<li>$slide[title] <img src='$slide[img]'/></li>";
