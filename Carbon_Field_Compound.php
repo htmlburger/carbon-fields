@@ -94,11 +94,15 @@ class Carbon_Field_Compound extends Carbon_Field {
 
 		// load and parse values
 		foreach ($group_rows as $row) {
-			if ( !preg_match('~^' . preg_quote($this->name, '~') . '(?P<key>.*)_(?P<index>\d+)$~', $row['field_key'], $field_name) ) {
+			if ( !preg_match('~^' . preg_quote($this->name, '~') . '(?P<key>.*)_(?P<index>\d+)_?(?P<sub>\w+)?$~', $row['field_key'], $field_name) ) {
 				continue;
 			}
 
-			$value_groups[ $field_name['index'] ][ $field_name['key'] ] = $row['field_value'];
+			if ( !empty($field_name['sub']) ) {
+				$value_groups[ $field_name['index'] ][ $field_name['key'] ][$field_name['sub'] ] = $row['field_value'];
+			} else {
+				$value_groups[ $field_name['index'] ][ $field_name['key'] ] = $row['field_value'];
+			}
 		}
 
 		// create groups list with loaded fields

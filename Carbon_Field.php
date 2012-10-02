@@ -536,6 +536,71 @@ class Carbon_Field_Map extends Carbon_Field {
 
 		return $this;
 	}
+
+	function save() {
+		$original_name = $this->get_name();
+		$original_value = $this->get_value();
+
+		$value = explode(',', $this->get_value());
+		if ( count($value) >= 2 ) {
+			$lat = floatval($value[0]);
+			$lng = floatval($value[1]);
+		} else {
+			$lat = $lng = '';
+		}
+
+		$this->set_name($original_name . '_lat');
+		$this->set_value($lat);
+		$this->store->save($this);
+
+		$this->set_name($original_name . '_lng');
+		$this->set_value($lng);
+		$this->store->save($this);
+
+		$this->set_name($original_name);
+		$this->set_value($original_value);
+
+		return true;
+	}
+
+	function load() {
+		$original_name = $this->get_name();
+
+		$lat = $lng = '';
+
+		$this->set_name($original_name . '_lat');
+		$this->store->load($this);
+		$lat = $this->get_value();
+
+
+		$this->set_name($original_name . '_lng');
+		$this->store->load($this);
+		$lng = $this->get_value();
+
+
+		$this->set_name($original_name);
+		$this->set_value($lat . ',' . $lng);
+	}
+
+
+	function set_value_from_input($input = null) {
+		if ( is_null($input) ) {
+			$input = $_POST;
+		}
+
+		if ( !isset($input[$this->name]) ) {
+			$this->set_value(null);
+		} else {
+			$value = stripslashes_deep($input[$this->name]);
+
+			if ( is_array($value) && isset($value['lat']) && isset($value['lng']) ) {
+				$value = $value['lat'] . ',' . $value['lng'];
+			}
+
+			$this->set_value( $value );
+		}
+	}
+
 }
 
 class Carbon_Field_Select extends Carbon_Field {
