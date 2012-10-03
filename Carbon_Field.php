@@ -125,7 +125,7 @@ class Carbon_Field {
 
 	    $this->init();
 	    if (is_admin()) {
-			$this->admin_init();
+	    	$this->admin_init();
 		}
 		add_action('admin_init', array(&$this, 'wp_init'));
 	}
@@ -442,9 +442,11 @@ class Carbon_Field_Textarea extends Carbon_Field {
 
 class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 	var $rows = 10;
+
+	static $attached_editor = false; 
 	
 	function init() {
-		// TODO: fix problems with widgets, compound and complex fields
+		// TODO: fix problems with compound, complex widgets fields
 		throw new Carbon_Exception('Rich_Text not supported, yet.');
 	}
 
@@ -454,19 +456,35 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 	}
 	
 	function render() {
-		global $wp_version;
-
 		$val = $this->get_value(); //(isset($this->value) ? $this->value : ( isset($this->default_value) ? $this->default_value : '') );
 
-		if (version_compare($wp_version, '3.3') >= 0) {
-			$editor_id = preg_replace('~[\W_]~', '', $this->get_name());
-			wp_editor($val, $editor_id, array(
-				'textarea_rows' => $this->rows,
-				'textarea_name' => $this->get_name()
-				));
-		} else {
-			the_editor($val, $this->get_name());
+		$id = 'wysiwyg-' . $this->get_name();
+
+		?>
+
+		<div id="wp-<?php echo $id; ?>-wrap" class="carbon-wysiwyg wp-editor-wrap" data-toolbar="full">
+			<div id="wp-<?php echo $id; ?>-editor-container" class="wp-editor-container">
+				<textarea id="<?php echo $id; ?>" class="wp-editor-area" name="<?php echo $this->get_name(); ?>" ><?php echo wp_richedit_pre($val); ?></textarea>
+			</div>
+		</div>
+
+		<?php
+
+	}
+
+	function admin_init() {
+		if ( !self::$attached_editor ) {
+			self::$attached_editor = true;
+			add_action('admin_footer', array('Carbon_Field_Rich_Text', 'admin_footer'));
 		}
+	}
+
+	function admin_footer() {
+		?>
+		<div style="display:none;">
+			<?php wp_editor( '', 'carbon_settings' ); ?>
+		</div>
+		<?php
 	}
 }
 

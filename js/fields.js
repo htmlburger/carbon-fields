@@ -28,6 +28,14 @@ jQuery(function($) {
 		});
 	}
 
+	function remove_fields(context) {
+		if ( !context ) {
+			return;
+		};
+
+		$('.carbon-field:not(.carbon-field-skip)', context).trigger('remove_fields.carbon');
+	}
+
 	function carbon_field(node) {
 		var field = {};
 
@@ -162,6 +170,25 @@ jQuery(function($) {
 		}
 	}
 
+	/* Rich text */
+	carbon_field.Rich_Text = function(element, field_obj) {
+		var textarea = element.find('.carbon-wysiwyg textarea');
+
+		if( typeof tinyMCE == 'undefined' ) {
+			console.log('no tiny mce: ', typeof tinyMCE);
+			return;
+		}
+
+		wpActiveEditor = null;
+		tinyMCE.execCommand('mceAddControl', false, textarea.attr('id'));
+
+		// remove editor before removing the node from DOM
+		element.bind('remove_fields.carbon', function() {
+			wpActiveEditor = null;
+			tinyMCE.execCommand("mceRemoveControl", false, textarea.attr('id'));
+		});
+	}
+
 	/* Relationship */
 	carbon_field.Relationship = function(element, field_obj) {
 		var container = element.find('.carbon-relationship'),
@@ -181,6 +208,7 @@ jQuery(function($) {
 		// prepare object
 		field_obj.btn_add = element.find('a[data-action=add]');
 		field_obj.num_rows = element.find('.carbon-compound-row').length;
+		field_obj.row_uid = field_obj.num_rows;
 		field_obj.min_rows = element.children('.carbon-container').data('min-values');
 		field_obj.max_rows = element.children('.carbon-container').data('max-values');
 
@@ -220,13 +248,11 @@ jQuery(function($) {
 		new_row = sample_row.clone();
 
 		field.num_rows++;
+		field.row_uid++;
 
 		new_row.find('.carbon-field-skip').removeClass('carbon-field-skip');
 
-		new_row.find('input[name*="__ei__"]').each(function() {
-			var input = $(this);
-			input.attr('name', input.attr('name').replace(/\[__ei__\]/, '[' + field.num_rows + ']'));
-		});
+		new_row.html( new_row.html().replace(/\[__ei__\]/g, '[' + field.row_uid + ']') );
 
 		new_row.removeClass('carbon-compound-preview').addClass('carbon-compound-row').insertBefore(sample_row);
 		init(new_row);
@@ -237,6 +263,7 @@ jQuery(function($) {
 	}
 
 	function compound_remove_row (field, row) {
+		remove_fields(row);
 		row.remove();
 		compound_on_update_rows(field);
 
@@ -256,16 +283,6 @@ jQuery(function($) {
 			index = 0;
 
 		field.num_rows = rows.length;
-
-		rows.each(function() {
-			var row = $(this);
-			index ++;
-
-			row.find('input[name^="' + field.name + '"]').each(function() {
-				var input = $(this);
-				input.attr('name', input.attr('name').replace(/\[\d+\]/, '[' + index + ']'));
-			});
-		});
 	}
 
 
@@ -275,6 +292,7 @@ jQuery(function($) {
 		field_obj.group_selector = element.find('select[name$="[group]"]');
 		field_obj.btn_add = element.find('a[data-action=add]');
 		field_obj.num_rows = element.find('.carbon-group-row').length;
+		field_obj.row_uid = field_obj.num_rows;
 		field_obj.min_rows = element.children('.carbon-container').data('min-values');
 		field_obj.max_rows = element.children('.carbon-container').data('max-values');
 
@@ -316,6 +334,7 @@ jQuery(function($) {
 		new_row = sample_row.clone();
 
 		field.num_rows++;
+		field.row_uid++;
 
 		new_row.find('.carbon-field-skip').removeClass('carbon-field-skip');
 
@@ -323,7 +342,7 @@ jQuery(function($) {
 
 		new_row.find('input[name*="__ei__"]').each(function() {
 			var input = $(this);
-			input.attr('name', input.attr('name').replace(/\[__ei__\]/, '[' + field.num_rows + ']'));
+			input.attr('name', input.attr('name').replace(/\[__ei__\]/, '[' + field.row_uid + ']'));
 		});
 
 		new_row.removeClass('carbon-group-preview').addClass('carbon-group-row').insertBefore( field.node.find('.carbon-group-preview:first') );
