@@ -279,10 +279,7 @@ jQuery(function($) {
 	};
 
 	function compound_on_update_rows (field) {
-		var rows = field.node.find('.carbon-compound-row'),
-			index = 0;
-
-		field.num_rows = rows.length;
+		field.num_rows = field.node.find('.carbon-compound-row').length;
 	}
 
 
@@ -340,10 +337,7 @@ jQuery(function($) {
 
 		new_row.find('input[name$="[__ei__][group]"]').val(field.new_row_type);
 
-		new_row.find('input[name*="__ei__"]').each(function() {
-			var input = $(this);
-			input.attr('name', input.attr('name').replace(/\[__ei__\]/, '[' + field.row_uid + ']'));
-		});
+		new_row.html( new_row.html().replace(/\[__ei__\]/g, '[' + field.row_uid + ']') );
 
 		new_row.removeClass('carbon-group-preview').addClass('carbon-group-row').insertBefore( field.node.find('.carbon-group-preview:first') );
 		init(new_row);
@@ -354,6 +348,7 @@ jQuery(function($) {
 	}
 
 	function complex_remove_row(field, row) {
+		remove_fields(row);
 		row.remove();
 		complex_on_update_rows(field);
 
@@ -367,21 +362,7 @@ jQuery(function($) {
 	}
 
 	function complex_on_update_rows(field) {
-		var th = this,
-			rows = field.node.find('.carbon-group-row'),
-			index = 0;
-
-		field.num_rows = rows.length;
-
-		rows.each(function() {
-			var row = $(this);
-			index ++;
-
-			row.find('input[name^="' + field.name + '"]').each(function() {
-				var input = $(this);
-				input.attr('name', input.attr('name').replace(/\[\d+\]/, '[' + index + ']'));
-			});
-		});
+		field.num_rows = field.node.find('.carbon-group-row').length;
 	}
 
 	init();
