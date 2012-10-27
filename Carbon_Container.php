@@ -81,6 +81,31 @@ abstract class Carbon_Container {
 	protected $store;
 
 	/**
+	 * Create a new container of type $type and name $name and label $label.
+	 *
+	 * @param string $type
+	 * @param string $name Human-readable name of the container
+	 * @param string $options (optional) Array to be passed to setup()
+	 * @return object $container
+	 **/
+	static function factory($type, $name, $options=array()) {
+		$type = str_replace(" ", '', ucwords(str_replace("_", ' ', $type)));
+
+		$class = 'Carbon_Container_' . $type;
+
+		if (!class_exists($class)) {
+			throw new Carbon_Exception ('Unknown container "' . $type . '".');
+		}
+
+		$container = new $class($name);
+		$container->type = $type;
+
+		$container->setup($options);
+
+	    return $container;
+	}
+
+	/**
 	 * Perform instance initialization after calling setup()
 	 *
 	 * @return void
@@ -261,6 +286,8 @@ abstract class Carbon_Container {
 		}
 
 		$this->fields = array_merge($this->fields, $fields);
+
+		return $this;
 	}
 
 	/**

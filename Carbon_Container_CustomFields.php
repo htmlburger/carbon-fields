@@ -34,6 +34,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 		'panel_context'=>'normal',
 		'panel_priority'=>'high',
 		'show_on' => array(
+				'category' => null,
 				'template_names' => array(),
 				'post_formats' => array(),
 				'level_limit' => null,
@@ -64,6 +65,17 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 		    } else {
 		    	$settings['show_on']['page_id'] = -1;
 		    }
+		}
+
+		// Transform category slug to taxonomy + term slug + term id
+		if ( isset($settings['show_on']['category']) ) {
+			$term = get_term_by('slug', $settings['show_on']['category'], 'category');
+
+			if ( $term ) {
+				$settings['show_on']['tax_slug'] = $term->taxonomy;
+				$settings['show_on']['tax_term'] = $term->slug;
+				$settings['show_on']['tax_term_id'] = $term->term_id;
+			}
 		}
 
 		return parent::check_setup_settings($settings);
@@ -174,6 +186,10 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 					break;
 
 				// show_on_taxonomy_term or show_on_category
+				case 'category':
+					$this->show_on_category($value);
+
+					/* fall-through intended */
 				case 'tax_term_id':
 					$current_terms = wp_get_object_terms( $post_id, $this->settings['show_on']['tax_slug'], array('fields' => 'ids') );
 
