@@ -96,6 +96,8 @@ class Carbon_Field_Complex extends Carbon_Field_Compound {
 			if ( !preg_match('~^' . preg_quote($this->name, '~') . '(?P<group>' . $group_names . ')(?P<key>.*)_(?P<index>\d+)_?(?P<sub>\w+)?$~', $row['field_key'], $field_name) ) {
 				continue;
 			}
+			
+			$row['field_value'] = maybe_unserialize($row['field_value']);
 
 			if ( !empty($field_name['sub']) ) {
 				$input_groups[ $field_name['index'] ]['type'] = $field_name['group'];

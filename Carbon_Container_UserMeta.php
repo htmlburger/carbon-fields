@@ -6,6 +6,8 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 	public $settings = array();
 
 	function init() {
+		throw new Carbon_Exception('User Meta? We are working on that!');
+
 		if ( !$this->get_datastore() ) {
 			$this->set_datastore(new Carbon_DataStore_UserMeta());
 		}

@@ -16,6 +16,8 @@ class Carbon_Container_TaxonomyMeta extends Carbon_Container {
 	);
 
 	function init() {
+		throw new Carbon_Exception('Taxonomy Meta? We are working on that!');
+
 		if ( !$this->get_datastore() ) {
 			$this->set_datastore(new Carbon_DataStore_TaxonomyMeta());
 		}

@@ -98,6 +98,8 @@ class Carbon_Field_Compound extends Carbon_Field {
 				continue;
 			}
 
+			$row['field_value'] = maybe_unserialize($row['field_value']);
+
 			if ( !empty($field_name['sub']) ) {
 				$value_groups[ $field_name['index'] ][ $field_name['key'] ][$field_name['sub'] ] = $row['field_value'];
 			} else {
