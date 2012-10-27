@@ -2,7 +2,7 @@
 	<?php foreach ($this->fields as $field): 
 		$field->load();
 	?>
-		<tr>
+		<tr <?php if($field->type == 'Separator') echo 'class="carbon-separator"' ?>>
 			<td>
 				<label>
 					<?php 

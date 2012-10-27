@@ -28,3 +28,6 @@
 .carbon-set-list p { margin: 0 0 8px; }
 .carbon-set-list label { font-weight: normal !important; }
 .carbon-set-list input { margin-right: 5px; }
+
+.carbon-separator td { padding: 0; border: 0 none; }
+.carbon-separator h3 {  margin-top: 20px !important; cursor: default; }

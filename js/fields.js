@@ -208,8 +208,8 @@ jQuery(function($) {
 		field_obj.btn_add = element.find('a[data-action=add]');
 		field_obj.num_rows = element.find('.carbon-compound-row').length;
 		field_obj.row_uid = field_obj.num_rows;
-		field_obj.min_rows = element.children('.carbon-container').data('min-values');
-		field_obj.max_rows = element.children('.carbon-container').data('max-values');
+		field_obj.min_rows = element.children('.carbon-subcontainer').data('min-values');
+		field_obj.max_rows = element.children('.carbon-subcontainer').data('max-values');
 
 		field_obj.name = element.data('name');
 
@@ -289,8 +289,8 @@ jQuery(function($) {
 		field_obj.btn_add = element.find('a[data-action=add]');
 		field_obj.num_rows = element.find('.carbon-group-row').length;
 		field_obj.row_uid = field_obj.num_rows;
-		field_obj.min_rows = element.children('.carbon-container').data('min-values');
-		field_obj.max_rows = element.children('.carbon-container').data('max-values');
+		field_obj.min_rows = element.children('.carbon-subcontainer').data('min-values');
+		field_obj.max_rows = element.children('.carbon-subcontainer').data('max-values');
 
 		field_obj.name = element.data('name');
 
