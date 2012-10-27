@@ -265,7 +265,9 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 			);
 		}
 
-		add_filter("postbox_classes_post_" . $this->id, array($this, 'postbox_classes'));
+		foreach ($this->settings['post_type'] as $post_type) {
+			add_filter("postbox_classes_{$post_type}_{$this->id}", array($this, 'postbox_classes'));
+		}
 	}
 
 	function postbox_classes($classes) {

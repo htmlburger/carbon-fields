@@ -199,5 +199,16 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 			unset(self::$registered_field_names[$page_id][$index]);
 		}
 	}
+
+	function add_fields($fields) {
+		parent::add_fields($fields);
+
+		foreach ($this->fields as $field) {
+			$field->set_prefix('');
+		}
+
+		return $this;
+	}
+
 }
 

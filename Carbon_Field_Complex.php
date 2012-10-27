@@ -3,7 +3,7 @@
 class Carbon_Field_Complex extends Carbon_Field_Compound {
 	protected $groups = array();
 
-	function add_fields($fields, $name, $label=null) {
+	function add_fields($name, $fields, $label=null) {
 		$group = new Carbon_Field_Group();
 		$group->set_name( $name );
 		
