@@ -444,11 +444,6 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 	var $rows = 10;
 
 	static $attached_editor = false; 
-	
-	function init() {
-		// TODO: fix problems with compound, complex widgets fields
-		throw new Carbon_Exception('Rich_Text not supported, yet.');
-	}
 
 	function rows($rows = 10) {
 		$this->rows = max(intval($rows), 1);

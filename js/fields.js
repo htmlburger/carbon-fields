@@ -175,7 +175,6 @@ jQuery(function($) {
 		var textarea = element.find('.carbon-wysiwyg textarea');
 
 		if( typeof tinyMCE == 'undefined' ) {
-			console.log('no tiny mce: ', typeof tinyMCE);
 			return;
 		}
 
