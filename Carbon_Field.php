@@ -739,6 +739,12 @@ class Carbon_Field_Separator extends Carbon_Field {
 
 	}
 
+	function get_label() {
+		$label = parent::get_label();
+
+		return '<h3>' . $label . '</h3>';
+	}
+
 	function load() {
 		// skip;
 	}
@@ -870,7 +876,7 @@ class Carbon_Field_File extends Carbon_Field {
 
 	function render() {
 		echo '<input type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text" />';
-		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=file" type="button" class="button-primary" value="Select Media" />';
+		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=file" type="button" class="button" value="Select Media" />';
 		
 		// For image only
 		if ( !empty($this->value) ) {
@@ -1045,15 +1051,15 @@ class Carbon_Field_Image extends Carbon_Field_File {
 
 	function render() {
 		echo '<input type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text" />';
-		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=image" type="button" class="button-primary" value="Select Media" />';
+		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=image" type="button" class="button" value="Select Media" />';
 		
 		// For image only
 		if ( $this->value != '' && in_array(array_pop(explode('.', $this->value)), $this->image_extensions) ) {
-			echo '<br /><img src="' . $this->value . '" alt="" height="100" class="carbon-view_image"/>';
+			echo '<img src="' . $this->value . '" alt="" height="100" class="carbon-view_image"/>';
 		} else if ( !empty($this->value) ) {
 			echo '</br><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" height="100" class="carbon-view_image blank"/><em>This is not a valid image!</em>';
 		} else {
-			echo '<br /><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" height="100" class="carbon-view_image blank"/>';
+			echo '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" height="100" class="carbon-view_image blank"/>';
 		}
 	}
 }

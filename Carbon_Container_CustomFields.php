@@ -248,6 +248,13 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 				$this->settings['panel_priority']
 			);
 		}
+
+		add_filter("postbox_classes_post_" . $this->id, array($this, 'postbox_classes'));
+	}
+
+	function postbox_classes($classes) {
+		$classes[] = 'carbon-postbox';
+		return $classes;
 	}
 
 	/**

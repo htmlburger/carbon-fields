@@ -1,4 +1,4 @@
-<table class="carbon-container <?php echo $container_tag_class_name ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
+<table class="carbon-subcontainer <?php echo $container_tag_class_name ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
 	<?php 
 	$index = 0;
 	foreach ($this->values as $fields): 
@@ -19,7 +19,7 @@
 									<?php
 									echo $field->get_label(); 
 									if ( $field->is_required() ) {
-										echo ' *';
+										echo ' <span class="carbon-required">*</span>';
 									}
 									echo $field->get_help_text();
 									?>
@@ -45,7 +45,7 @@
 										<?php
 										echo $field->get_label(); 
 										if ( $field->is_required() ) {
-											echo ' *';
+											echo ' <span class="carbon-required">*</span>';
 										}
 										echo $field->get_help_text();
 										?>
@@ -72,8 +72,6 @@
 		<tr class="carbon-group-preview carbon-group-<?php echo $group->get_name() ?>">
 			<td>
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="" />
-				<strong><?php echo $group->get_label() ?></strong>
-
 				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
 					<table>
 						<?php 
@@ -87,7 +85,7 @@
 									<?php
 									echo $field->get_label(); 
 									if ( $field->is_required() ) {
-										echo ' *';
+										echo ' <span class="carbon-required">*</span>';
 									}
 									echo $field->get_help_text();
 									?>
@@ -115,7 +113,7 @@
 										<?php 
 										echo $field->get_label(); 
 										if ( $field->is_required() ) {
-											echo ' *';
+											echo ' <span class="carbon-required">*</span>';
 										}
 										echo $field->get_help_text();
 										?>
@@ -134,18 +132,14 @@
 		</tr>
 	<?php endforeach; ?>
 
-	<tr>
+	<tr class="carbon-actions">
 		<td>
-			<p>
-				<label>New </label>
-				<select name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>">
-					<?php foreach ($this->groups as $group): ?>
-						<option value="<?php echo $group->get_name() ?>"><?php echo $group->get_label() ?></option>
-					<?php endforeach; ?>
-				</select>
-				row
-				<a href="#" data-action="add">Add</a>
-			</p>
+			<select name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>">
+				<?php foreach ($this->groups as $group): ?>
+					<option value="<?php echo $group->get_name() ?>"><?php echo $group->get_label() ?></option>
+				<?php endforeach; ?>
+			</select>
+			<a href="#" data-action="add" class="button">Add Row</a>
 		</td>
 	</tr>
 </table>

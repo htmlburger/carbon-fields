@@ -52,14 +52,14 @@ jQuery(function($) {
 
 	/* File and Image */
 	carbon_field.File = function(element, field_obj) {
-		element.find('.button-primary').click(function() {
+		element.find('.button').click(function() {
 			window.carbon_active_field = element;
 			tb_show('','media-upload.php?TB_iframe=true');
 		});
 	}
 
 	carbon_field.Image = function(element, field_obj) {
-		element.find('.button-primary').click(function() {
+		element.find('.button').click(function() {
 			window.carbon_active_field = element;
 			tb_show('','media-upload.php?type=image&amp;TB_iframe=true');
 		});

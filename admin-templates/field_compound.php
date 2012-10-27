@@ -1,4 +1,4 @@
-<table class="carbon-container <?php echo $container_tag_class_name ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
+<table class="carbon-subcontainer <?php echo $container_tag_class_name ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
 	<?php foreach ($this->values as $index => $fields): ?>
 		<tr class="carbon-compound-row">
 			<td>
@@ -13,7 +13,7 @@
 									<?php
 									echo $field->get_label(); 
 									if ( $field->is_required() ) {
-										echo ' *';
+										echo ' <span class="carbon-required">*</span>';
 									}
 									echo $field->get_help_text();
 									?>
@@ -39,7 +39,7 @@
 									<?php
 									echo $field->get_label(); 
 									if ( $field->is_required() ) {
-										echo ' *';
+										echo ' <span class="carbon-required">*</span>';
 									}
 									echo $field->get_help_text();
 									?>
@@ -72,7 +72,7 @@
 								<?php
 								echo $field->get_label(); 
 								if ( $field->is_required() ) {
-									echo ' *';
+									echo ' <span class="carbon-required">*</span>';
 								}
 								echo $field->get_help_text();
 								?>
@@ -100,7 +100,7 @@
 									<?php
 									echo $field->get_label(); 
 									if ( $field->is_required() ) {
-										echo ' *';
+										echo ' <span class="carbon-required">*</span>';
 									}
 									echo $field->get_help_text();
 									?>
@@ -117,9 +117,9 @@
 			<p class="alignright"><a href="#" data-action="remove">Remove</a></p>
 		</td>
 	</tr>
-	<tr>
+	<tr class="carbon-actions">
 		<td>
-			<a href="#" data-action="add">Add Row</a>
+			<a href="#" data-action="add" class="button">Add Row</a>
 		</td>
 	</tr>
 </table>
