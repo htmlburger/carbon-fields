@@ -21,5 +21,5 @@ body.no-js .carbon-container { display: none; }
 
 .carbon-container .carbon-subcontainer .carbon-actions td { padding: 15px 20px; }
 
-.carbon-container.Carbon_Container_ThemeOptions .wp-editor-container table { width: auto; }
-.carbon-container.Carbon_Container_ThemeOptions .wp-editor-container td { width: auto; padding: 0; }
+.carbon-container .carbon-subcontainer .wp-editor-container table { width: auto; }
+.carbon-container .carbon-subcontainer .wp-editor-container td { width: auto; padding: 0; }
