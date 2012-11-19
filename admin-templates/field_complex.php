@@ -1,11 +1,12 @@
 <table class="carbon-subcontainer <?php echo $container_tag_class_name ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
 	<?php 
 	$index = 0;
-	foreach ($this->values as $fields): 
+	foreach ($this->values as $fields_num => $fields): 
 			$group_name = $fields['type'];
 			unset($fields['type']);
 		?>
 		<tr class="carbon-group-row">
+			<td class="carbon-drag-handle"><span><?php echo ($fields_num+1) ?></span></td>
 			<td>
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="<?php echo $group_name ?>" />
 				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
@@ -59,7 +60,7 @@
 						</tr>
 					</table>
 				<?php endif; ?>
-				<p class="alignright"><a href="#" data-action="remove">Remove</a></p>
+				<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
 			</td>
 		</tr>
 	<?php $index ++; endforeach ?>
@@ -70,6 +71,7 @@
 	$index = '__ei__';
 	foreach ($this->groups as $group): ?>
 		<tr class="carbon-group-preview carbon-group-<?php echo $group->get_name() ?>">
+			<td class="carbon-drag-handle"><span></span></td>
 			<td>
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="" />
 				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
@@ -127,13 +129,13 @@
 						</tr>
 					</table>
 				<?php endif; ?>
-				<p class="alignright"><a href="#" data-action="remove">Remove</a></p>
+				<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
 			</td>
 		</tr>
 	<?php endforeach; ?>
 
 	<tr class="carbon-actions">
-		<td>
+		<td colspan="2">
 			<select name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" <?php if(count($this->groups)==1) echo 'style="display:none"'; ?>>
 				<?php foreach ($this->groups as $group): ?>
 					<option value="<?php echo $group->get_name() ?>"><?php echo $group->get_label() ?></option>

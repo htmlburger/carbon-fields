@@ -209,6 +209,7 @@ jQuery(function($) {
 		field_obj.btn_add = element.find('a[data-action=add]');
 		field_obj.num_rows = element.find('.carbon-group-row').length;
 		field_obj.row_uid = field_obj.num_rows;
+		field_obj.table = element.children('.carbon-subcontainer:first');
 		field_obj.min_rows = element.children('.carbon-subcontainer').data('min-values');
 		field_obj.max_rows = element.children('.carbon-subcontainer').data('max-values');
 
@@ -236,6 +237,23 @@ jQuery(function($) {
 		field_obj.group_selector.change(function() {
 			field_obj.new_row_type = $(this).val();
 		});
+
+		// Sortable
+		field_obj.table.children('tbody').sortable({
+			items : '> tr.carbon-group-row',
+			handle: '.carbon-drag-handle',
+			forceHelperSize: true,
+			forcePlaceholderSize: true,
+			helper: function(e, ui) {
+				ui.children().each(function() {
+					$(this).width($(this).width());
+				});
+				return ui;
+			},
+			update: function() {
+				complex_on_update_rows(field_obj);
+			}
+		});
 	}
 
 	function complex_add_row(field) {
@@ -261,27 +279,37 @@ jQuery(function($) {
 		new_row.removeClass('carbon-group-preview').addClass('carbon-group-row').insertBefore( field.node.find('.carbon-group-preview:first') );
 		init(new_row);
 
+		new_row.find('.carbon-drag-handle span').text(field.num_rows)
+
 		if ( field.max_rows > 0 && field.num_rows == field.max_rows ) {
 			field.btn_add.hide();
 		};
 	}
 
 	function complex_remove_row(field, row) {
-		remove_fields(row);
-		row.remove();
-		complex_on_update_rows(field);
+		row.fadeOut(function() {
+			remove_fields(row);
+			row.remove();
+			complex_on_update_rows(field);
 
-		if ( field.min_rows > field.num_rows ) {
-			// TODO: add the correct row type
-		};
+			if ( field.min_rows > field.num_rows ) {
+				// TODO: add the correct row type
+			};
 
-		if ( field.max_rows > 0 && field.num_rows <= field.max_rows ) {
-			field.btn_add.show();
-		};
+			if ( field.max_rows > 0 && field.num_rows <= field.max_rows ) {
+				field.btn_add.show();
+			};
+		});
 	}
 
 	function complex_on_update_rows(field) {
-		field.num_rows = field.node.find('.carbon-group-row').length;
+		var fields = field.node.find('.carbon-group-row'),
+			row_index = 0;
+		field.num_rows = fields.length;
+
+		for (var i = field.num_rows; i >= 0; i--) {
+			fields.eq(i).find('.carbon-drag-handle span').text(i+1);
+		};
 	}
 
 	init();

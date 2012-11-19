@@ -970,7 +970,7 @@ class Carbon_Field_File extends Carbon_Field {
 
 					var data = {
 						action: 'carbon_get_file_details',
-						id: id,
+						id: id
 					};
 
 					$.ajax({
