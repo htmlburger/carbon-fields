@@ -1,15 +1,47 @@
 <?php 
 
-class Carbon_Field_Complex extends Carbon_Field_Compound {
+class Carbon_Field_Complex extends Carbon_Field {
+	const LAYOUT_TABLE = 'table';
+	const LAYOUT_LIST = 'list';
+
+	protected $fields = array();
+	protected $values = array();
 	protected $groups = array();
 
-	function add_fields($name, $fields, $label=null) {
+	protected $layout = self::LAYOUT_TABLE;
+	protected $values_min = -1;
+	protected $values_max = -1;
+
+
+	function add_fields() {
+		$argv = func_get_args();
+		$argc = count($argv);
+
+		if ( $argc == 1 ) {
+			$fields = $argv[0];
+			$name = '';
+			$label = null;
+		} else if ($argc == 2) {
+			if ( is_array($argv[0]) ) {
+				list($fields, $name) = $argv;
+			} else {
+				list($name, $fields) = $argv;
+			}
+			$label = null;
+		} else if ( $argc == 3 ) {
+			if ( is_array($argv[0]) ) {
+				list($fields, $name, $label) = $argv;
+			} else {
+				list($name, $label, $fields) = $argv;
+			}
+		}
+
+		//  $name, $fields, $label=null;
 		$group = new Carbon_Field_Group();
 		$group->set_name( $name );
 		
 		$group->add_fields($fields);
 		$group->set_label( $label );
-
 
 		$this->groups[$group->get_name()] = $group;
 		return $this;
@@ -77,6 +109,20 @@ class Carbon_Field_Complex extends Carbon_Field_Compound {
 		$this->load_values();
 	}
 
+	function save() {
+		$this->delete();
+
+		foreach ($this->values as $value) {
+			foreach ($value as $field) {
+				$field->save();
+			}
+		}
+	}
+
+	function delete() {
+		return $this->store->delete_values($this);
+	}
+
 	function load_values() {
 		$this->values = array();
 
@@ -127,6 +173,10 @@ class Carbon_Field_Complex extends Carbon_Field_Compound {
 		}
 	}
 
+	function get_values() {
+		return $this->values;
+	}
+
 	function set_prefix($prefix) {
 		$this->name = preg_replace('~^' . preg_quote($this->name_prefix, '~') . '~', '', $this->name);
 		$this->name_prefix = $prefix;
@@ -140,6 +190,34 @@ class Carbon_Field_Complex extends Carbon_Field_Compound {
 	function _render() {
 		$container_tag_class_name = get_class($this);
 		include dirname(__FILE__) . '/admin-templates/field_complex.php';
+	}
+
+	function set_layout($layout) {
+		if ( !in_array($layout, array(self::LAYOUT_TABLE, self::LAYOUT_LIST)) ) {
+			throw new Carbon_Exception('Incorrect layout specifier. Available values are "<code>' . self::LAYOUT_TABLE . '</code>" and "<code>' . self::LAYOUT_LIST . '</code>"');
+		}
+
+		$this->layout = $layout;
+
+		return $this;
+	}
+
+	function set_min($min) {
+		$this->values_min = intval($min);
+		return $this;
+	}
+
+	function get_min() {
+		return $this->values_min;
+	}
+
+	function set_max($max) {
+		$this->values_max = intval($max);
+		return $this;
+	}
+
+	function get_max() {
+		return $this->values_max;
 	}
 }
 

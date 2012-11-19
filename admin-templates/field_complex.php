@@ -134,7 +134,7 @@
 
 	<tr class="carbon-actions">
 		<td>
-			<select name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>">
+			<select name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" <?php if(count($this->groups)==1) echo 'style="display:none"'; ?>>
 				<?php foreach ($this->groups as $group): ?>
 					<option value="<?php echo $group->get_name() ?>"><?php echo $group->get_label() ?></option>
 				<?php endforeach; ?>

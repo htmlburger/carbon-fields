@@ -25,7 +25,6 @@ include_once 'Carbon_Container_TaxonomyMeta.php';
 include_once 'Carbon_Container_UserMeta.php';
 
 include_once 'Carbon_Field.php';
-include_once 'Carbon_Field_Compound.php';
 include_once 'Carbon_Field_Complex.php';
 
 include_once 'Carbon_Widget.php';
