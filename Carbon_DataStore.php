@@ -107,18 +107,18 @@ class Carbon_DataStore_TaxonomyMeta extends Carbon_DataStore_Base {
 		global $wpdb;
 
 		// TODO: setup tables for each registered blog?
-
-		$charset_collate = '';	
-		if ( ! empty($wpdb->charset) ) {
-			$charset_collate = "DEFAULT CHARACTER SET " . $wpdb->charset;
-		}
-			
-		if ( ! empty($wpdb->collate) ) {
-			$charset_collate .= " COLLATE " . $wpdb->collate;
-		}
-	
 		$tables = $wpdb->get_results('SHOW TABLES LIKE "' . $wpdb->prefix . 'taxonomymeta"');
+
 		if ( empty($tables) ) {
+			$charset_collate = '';	
+			if ( ! empty($wpdb->charset) ) {
+				$charset_collate = "DEFAULT CHARACTER SET " . $wpdb->charset;
+			}
+				
+			if ( ! empty($wpdb->collate) ) {
+				$charset_collate .= " COLLATE " . $wpdb->collate;
+			}
+
 			$wpdb->query('CREATE TABLE ' . $wpdb->prefix . 'taxonomymeta (
 				meta_id bigint(20) unsigned NOT NULL auto_increment,
 				taxonomy_id bigint(20) unsigned NOT NULL default "0",

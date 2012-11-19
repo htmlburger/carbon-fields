@@ -5,8 +5,14 @@ Description: Provides additional custom fields for posts, categories, users, wid
 Version: 0.1
 */
 
+define('CARBON_IS_PLUGIN', true);
 define('CARBON_PLUGIN_ROOT', dirname(__FILE__));
-define('CARBON_PLUGIN_URL', WP_PLUGIN_URL . '/' . basename(dirname(__FILE__)));
+
+if ( CARBON_IS_PLUGIN ) {
+	define('CARBON_PLUGIN_URL', WP_PLUGIN_URL . '/' . basename(dirname(__FILE__)));
+} else {
+	define('CARBON_PLUGIN_URL', get_template_directory_uri() . '/lib/carbon-fields');
+}
 
 include_once 'Carbon_Exception.php';
 
@@ -24,9 +30,9 @@ include_once 'Carbon_Field_Complex.php';
 
 include_once 'Carbon_Widget.php';
 
-function carbon_on_activate() {
+function carbon_init() {
 	Carbon_DataStore_TaxonomyMeta::create_table();
 }
 
-register_activation_hook(__FILE__, 'carbon_on_activate');
+add_action('init', 'carbon_init');
 
