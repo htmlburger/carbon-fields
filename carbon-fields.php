@@ -31,9 +31,3 @@ include_once 'Carbon_Widget.php';
 
 include_once 'carbon-functions.php';
 
-function carbon_init() {
-	Carbon_DataStore_TaxonomyMeta::create_table();
-}
-
-add_action('init', 'carbon_init');
-
