@@ -12,7 +12,6 @@ class Carbon_Field_Complex extends Carbon_Field {
 	protected $values_min = -1;
 	protected $values_max = -1;
 
-
 	function add_fields() {
 		$argv = func_get_args();
 		$argc = count($argv);
@@ -95,7 +94,7 @@ class Carbon_Field_Complex extends Carbon_Field {
 				$tmp_field->set_value_from_input($values);
 
 				// update name to group name
-				$tmp_field->set_name( $this->get_name() . $group->get_name() . $field->get_name() . '_' . $index );
+				$tmp_field->set_name( $this->get_name() . $group->get_name() . '-' . $field->get_name() . '_' . $index );
 				$value_group[] = $tmp_field;
 			}
 
@@ -139,7 +138,7 @@ class Carbon_Field_Complex extends Carbon_Field {
 
 		// load and parse values and group type
 		foreach ($group_rows as $row) {
-			if ( !preg_match('~^' . preg_quote($this->name, '~') . '(?P<group>' . $group_names . ')(?P<key>.*)_(?P<index>\d+)_?(?P<sub>\w+)?$~', $row['field_key'], $field_name) ) {
+			if ( !preg_match('~^' . preg_quote($this->name, '~') . '(?P<group>' . $group_names . ')-(?P<key>.*)_(?P<index>\d+)_?(?P<sub>\w+)?$~', $row['field_key'], $field_name) ) {
 				continue;
 			}
 			

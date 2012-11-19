@@ -122,7 +122,7 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 		}
 	}
 	
-	function load_values(Carbon_Field $field) {
+	function load_values($field) {
 		$field_name = $field->get_name();
 		$result = array();
 

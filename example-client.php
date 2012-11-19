@@ -42,12 +42,12 @@ $custom_fields_panel->add_fields(array(
 <?php
 
 // TODO:
-carbon_get_post_meta($id, 'test_check', 'complex|compound');
+carbon_get_post_meta($id, 'test_check', 'complex');
 carbon_get_tax_meta($id, 'test_check');
-carbon_get_theme_option($id, 'test_check');
+carbon_get_theme_option('test_check');
 carbon_get_user_meta($id, 'test_check');
 
-$slides = carbon_get_compound_fields('slideshow');
+$slides = carbon_get_complex_fields('slideshow');
 foreach ($slides as $slide) {
 	echo "<li>$slide[title] <img src='$slide[img]'/></li>";
 }
