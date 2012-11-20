@@ -16,7 +16,8 @@ body.no-js .carbon-container { display: none; }
 .carbon-container .carbon-subcontainer table th { width: 20%; text-align: left; }
 .carbon-container .carbon-subcontainer table td { width: 80%; }
 .carbon-container .carbon-subcontainer table th,
-.carbon-container .carbon-subcontainer table td { width: 1%; padding: 10px; vertical-align: top; border-bottom: 1px solid #f5f5f5; border-top: 0 none; }
+.carbon-container .carbon-subcontainer table td { padding: 10px; vertical-align: top; border-bottom: 1px solid #f5f5f5; border-top: 0 none; }
+.carbon-container .carbon-subcontainer table.layout-list { width: 1%; }
 .carbon-container .carbon-subcontainer p.alignright { margin-right: 20px; }
 
 .carbon-container .carbon-subcontainer .carbon-actions td { padding: 15px 20px; }

@@ -13,7 +13,7 @@
 					<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
 				</div>
 				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
-					<table>
+					<table class="layout-<?php echo $this->layout ?>">
 						<?php foreach ($fields as $field): 
 							$old_name = $field->get_name();
 							$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
@@ -39,7 +39,7 @@
 						endforeach ?>
 					</table>
 				<?php else: ?>
-					<table>
+					<table class="layout-<?php echo $this->layout ?>">
 						<tr>
 							<?php foreach ($fields as $field): 
 								$old_name = $field->get_name();
@@ -82,7 +82,7 @@
 					<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
 				</div>
 				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
-					<table>
+					<table class="layout-<?php echo $this->layout ?>">
 						<?php 
 						$fields = $group->get_fields();
 						foreach ($fields as $field): 
@@ -110,7 +110,7 @@
 						endforeach ?>
 					</table>
 				<?php else: ?>
-					<table>
+					<table class="layout-<?php echo $this->layout ?>">
 						<tr>
 							<?php 
 							$fields = $group->get_fields();

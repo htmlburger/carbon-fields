@@ -8,9 +8,18 @@ class Carbon_Field_Complex extends Carbon_Field {
 	protected $values = array();
 	protected $groups = array();
 
-	protected $layout = self::LAYOUT_TABLE;
+	protected $layout = self::LAYOUT_LIST;
 	protected $values_min = -1;
 	protected $values_max = -1;
+
+	function init() {
+		global $wp_version;
+
+		if (defined('WP_ADMIN') && WP_ADMIN) {
+			wp_enqueue_script('jquery-ui-sortable');
+		}
+		Carbon_Field::init();
+	}
 
 	function add_fields() {
 		$argv = func_get_args();

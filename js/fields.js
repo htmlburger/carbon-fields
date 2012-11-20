@@ -40,6 +40,7 @@ jQuery(function($) {
 		var field = {};
 
 		if ( node.data('carbon_field') ) {
+			node.trigger('reinit_field.carbon');
 			$.error('Field already parsed');
 		};
 
@@ -183,8 +184,18 @@ jQuery(function($) {
 
 		// remove editor before removing the node from DOM
 		element.bind('remove_fields.carbon', function() {
+			var textarea_width = element.outerWidth(),
+				textarea_height = element.outerHeight();
+
+			element.width(textarea_width).height(textarea_height);
+			textarea.width(textarea_width - 4).height(textarea_height - 4);
+
 			wpActiveEditor = null;
 			tinyMCE.execCommand("mceRemoveControl", false, textarea.attr('id'));
+		});
+
+		element.bind('reinit_field.carbon', function() {
+			tinyMCE.execCommand('mceAddControl', false, textarea.attr('id'));
 		});
 	}
 
@@ -244,6 +255,7 @@ jQuery(function($) {
 			handle: '.carbon-drag-handle',
 			forceHelperSize: true,
 			forcePlaceholderSize: true,
+			scroll: true,
 			helper: function(e, ui) {
 				ui.children().each(function() {
 					$(this).width($(this).width());
@@ -252,6 +264,12 @@ jQuery(function($) {
 			},
 			update: function() {
 				complex_on_update_rows(field_obj);
+			},
+			start: function( ev, ui) {
+				remove_fields(ui.item);
+			},
+			stop: function( ev, ui) {
+				init(ui.item);
 			}
 		});
 	}

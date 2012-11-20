@@ -29,6 +29,8 @@
 .carbon-set-list label { font-weight: normal !important; }
 .carbon-set-list input { margin-right: 5px; }
 
+.carbon-field .wp-editor-container textarea { resize: none; }
+
 .carbon-separator td { padding: 0; border: 0 none; }
 .carbon-separator h3 {  margin-top: 20px !important; cursor: default; }
 
