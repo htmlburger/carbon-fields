@@ -287,19 +287,19 @@ jQuery(function($) {
 	}
 
 	function complex_remove_row(field, row) {
-		row.fadeOut(function() {
+		row.addClass('removed').fadeOut(500, function() {
 			remove_fields(row);
 			row.remove();
 			complex_on_update_rows(field);
 
 			if ( field.min_rows > field.num_rows ) {
-				// TODO: add the correct row type
+				field.btn_add.click();
 			};
 
 			if ( field.max_rows > 0 && field.num_rows <= field.max_rows ) {
 				field.btn_add.show();
 			};
-		});
+		});		
 	}
 
 	function complex_on_update_rows(field) {

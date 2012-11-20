@@ -12,11 +12,11 @@ body.no-js .carbon-container { display: none; }
 .carbon-container .carbon-subcontainer table { width: 100%; border-spacing: 0; }
 
 .carbon-container .carbon-subcontainer { margin-top: 10px; border: 1px solid #e8e8e8; background: #fcfcfc; }
-.carbon-container .carbon-subcontainer td { position: relative; padding: 0; border-bottom: 1px solid #e0e0e0; border-top: 2px solid #fff; }
+.carbon-container .carbon-subcontainer td { padding: 0; border-bottom: 1px solid #e0e0e0; border-top: 2px solid #fff; }
 .carbon-container .carbon-subcontainer table th { width: 20%; text-align: left; }
 .carbon-container .carbon-subcontainer table td { width: 80%; }
 .carbon-container .carbon-subcontainer table th,
-.carbon-container .carbon-subcontainer table td { padding: 10px; vertical-align: top; border-bottom: 1px solid #f5f5f5; border-top: 0 none; }
+.carbon-container .carbon-subcontainer table td { width: 1%; padding: 10px; vertical-align: top; border-bottom: 1px solid #f5f5f5; border-top: 0 none; }
 .carbon-container .carbon-subcontainer p.alignright { margin-right: 20px; }
 
 .carbon-container .carbon-subcontainer .carbon-actions td { padding: 15px 20px; }

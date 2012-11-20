@@ -35,4 +35,7 @@
 .carbon-subcontainer  { background: #E0E0E0 !important; }
 .carbon-subcontainer .carbon-drag-handle { width: 20px !important; background: #f5f5f5; border-right: 1px solid #E0E0E0; text-align: center; cursor: move; }
 .carbon-subcontainer .carbon-drag-handle span { display: block; background: url(images/icon-move.png) no-repeat center bottom; padding-bottom: 20px;}
-.carbon-subcontainer .carbon-btn-remove { position: absolute; top: 2px; right: 2px; width: 22px; height: 22px; background: url(images/icon-delete.png) no-repeat 0 0; font-size: 0; line-height: 0; text-indent: -4000px; }
+.carbon-subcontainer .carbon-btn-holder { position: relative; }
+.carbon-subcontainer .carbon-btn-remove { display: none; position: absolute; top: 2px; right: 2px; width: 22px; height: 22px; background: url(images/icon-delete.png) no-repeat 0 0; font-size: 0; line-height: 0; text-indent: -4000px; }
+.carbon-subcontainer .carbon-group-row:hover .carbon-btn-remove { display: block; }
+.carbon-subcontainer .carbon-group-row.removed .carbon-drag-handle { background: #e74444; }

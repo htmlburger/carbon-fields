@@ -959,12 +959,12 @@ class Carbon_Field_File extends Carbon_Field {
 						id = th.children('input[id*="type-of-"]').attr('id').replace('type-of-', '');
 						
 						// Add select button
-						th.find('.filename.new').before('<a href="' + id + '" class="button carbon-select">Select File</a>');
+						th.find('.filename.new').before('<a href="' + id + '" data-post-id="' + id + '" class="button carbon-select">Select File</a>');
 					});
 				}
 
 				$('#media-items .media-item a.carbon-select').live('click', function(){
-					var id = $(this).attr('href'),
+					var id = $(this).data('post-id'),
 						thumbnail = $(this).closest('.media-item').find('.pinkynail').attr('src'),
 						carbon_field = self.parent.carbon_active_field;
 

@@ -9,6 +9,9 @@
 			<td class="carbon-drag-handle"><span><?php echo ($fields_num+1) ?></span></td>
 			<td>
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="<?php echo $group_name ?>" />
+				<div class="carbon-btn-holder">
+					<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
+				</div>
 				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
 					<table>
 						<?php foreach ($fields as $field): 
@@ -43,13 +46,15 @@
 								$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
 							?>
 									<td>
-										<?php
-										echo $field->get_label(); 
-										if ( $field->is_required() ) {
-											echo ' <span class="carbon-required">*</span>';
-										}
-										echo $field->get_help_text();
-										?>
+										<strong>
+											<?php
+												echo $field->get_label(); 
+												if ( $field->is_required() ) {
+													echo ' <span class="carbon-required">*</span>';
+												}
+												echo $field->get_help_text();
+											?>
+										</strong>
 										<div class="carbon-field" data-type="<?php echo $field->type ?>">
 											<?php echo $field->render(); ?>
 										</div>
@@ -60,7 +65,6 @@
 						</tr>
 					</table>
 				<?php endif; ?>
-				<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
 			</td>
 		</tr>
 	<?php $index ++; endforeach ?>
@@ -74,6 +78,9 @@
 			<td class="carbon-drag-handle"><span></span></td>
 			<td>
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="" />
+				<div class="carbon-btn-holder">
+					<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
+				</div>
 				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
 					<table>
 						<?php 
@@ -112,13 +119,15 @@
 								$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
 							?>
 									<td>
-										<?php 
-										echo $field->get_label(); 
-										if ( $field->is_required() ) {
-											echo ' <span class="carbon-required">*</span>';
-										}
-										echo $field->get_help_text();
-										?>
+										<strong>
+											<?php 
+												echo $field->get_label(); 
+												if ( $field->is_required() ) {
+													echo ' <span class="carbon-required">*</span>';
+												}
+												echo $field->get_help_text();
+											?>
+										</strong>
 										<div class="carbon-field  carbon-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 											<?php echo $field->render(); ?>
 										</div>
@@ -129,7 +138,6 @@
 						</tr>
 					</table>
 				<?php endif; ?>
-				<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
 			</td>
 		</tr>
 	<?php endforeach; ?>
