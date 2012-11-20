@@ -31,3 +31,7 @@ include_once 'Carbon_Widget.php';
 
 include_once 'carbon-functions.php';
 
+
+# Add Actions
+add_action('wp_loaded', 'carbon_trigger_fields_register');
+

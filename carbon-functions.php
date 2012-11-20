@@ -1,5 +1,9 @@
 <?php
 
+function carbon_trigger_fields_register() {
+	do_action('carbon_register_fields');
+}
+
 function carbon_get_post_meta($id, $name = null, $type = null) {
 	if ( !is_numeric($id) ) {
 		$type = $name;
