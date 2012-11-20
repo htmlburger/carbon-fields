@@ -1,4 +1,4 @@
-<div class="wrap carbon-container <?php echo $container_tag_class_name ?>">
+<div class="wrap carbon-container <?php echo $container_tag_class_name ?>"  data-type="<?php echo $container_type ?>">
 	<div id="icon-options-general" class="icon32"><br /></div>
 	<h2><?php echo $this->title ?></h2>
 	

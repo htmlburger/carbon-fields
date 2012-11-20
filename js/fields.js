@@ -264,6 +264,7 @@ jQuery(function($) {
 			},
 			update: function() {
 				complex_on_update_rows(field_obj);
+				field_obj.node.trigger('reorder_groups.carbon');
 			},
 			start: function( ev, ui) {
 				remove_fields(ui.item);

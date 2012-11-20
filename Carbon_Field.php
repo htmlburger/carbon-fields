@@ -994,7 +994,7 @@ class Carbon_Field_File extends Carbon_Field {
 							};
 
 							// update carbon_field
-							carbon_field.find('input.regular-text').val( json.url );
+							carbon_field.find('input.regular-text').val( json.url ).trigger('change');
 				 			carbon_field.find('.carbon-view_image').attr( 'src', json.thumbnail ).removeClass('blank');
 				 			carbon_field.find('.carbon-view_file').attr( 'href', json.url );
 				 			

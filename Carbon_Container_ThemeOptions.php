@@ -121,6 +121,7 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 			$this->notifications[] = 'Settings saved.';
 		}
 		$container_tag_class_name = get_class($this);
+		$container_type = 'ThemeOptions';
 		include dirname(__FILE__) . '/admin-templates/container-theme-options.php';
 	}
 

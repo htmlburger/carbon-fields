@@ -39,11 +39,83 @@ jQuery(function($) {
 		return container;
 	}
 
+	/* Theme Options */
+	carbon_container.ThemeOptions = function (element, container_obj) {
+		theme_options_attach_save_alert();
+	}
+	carbon_container.ThemeOptions.attachedSaveAlert = false;
+	carbon_container.ThemeOptions.hasChanges = false;
+
+	function theme_options_attach_save_alert() {
+		if ( carbon_container.ThemeOptions.attachedSaveAlert ) {
+			return;
+		};
+		carbon_container.ThemeOptions.attachedSaveAlert = true;
+
+		setTimeout(function() {
+			var old_callback = window.onbeforeunload;
+
+			window.onbeforeunload = function (){
+				if ( carbon_container.ThemeOptions.hasChanges ) {
+					return (typeof autosaveL10n != 'undefined' ? autosaveL10n.saveAlert: 'The changes you made will be lost if you navigate away from this page.');
+				};
+
+				if ( old_callback ) {
+					return old_callback();
+				};
+			};
+
+			$('.carbon-container .carbon-field input, .carbon-container .carbon-field select, .carbon-container .carbon-field textarea').live('change', function() {
+				carbon_container.ThemeOptions.hasChanges = true;
+			});
+
+			$('body').on('remove_fields.carbon reorder_groups.carbon', function() {
+				carbon_container.ThemeOptions.hasChanges = true;
+			});
+
+			$('.carbon-container input[type="submit"]').click(function(){
+				window.onbeforeunload = null;
+			});
+		});
+	}
+
+
 	/* Custom Fields */
 	carbon_container.CustomFields = function (element, container_obj) {
 		container_obj.initCheckVisible = true;
 		custom_fields_check_visible(container_obj);
 		container_obj.initCheckVisible = false;
+
+		custom_fields_attach_save_alert();
+	}
+	carbon_container.CustomFields.attachedSaveAlert = false;
+	carbon_container.CustomFields.hasChanges = false;
+
+	function custom_fields_attach_save_alert() {
+		if ( carbon_container.CustomFields.attachedSaveAlert ) {
+			return;
+		};
+		carbon_container.CustomFields.attachedSaveAlert = true;
+
+		setTimeout(function() {
+			var old_callback = window.onbeforeunload;
+
+			window.onbeforeunload = function (){
+				if ( carbon_container.CustomFields.hasChanges ) {
+					return (autosaveL10n && autosaveL10n.saveAlert ? autosaveL10n.saveAlert: 'The changes you made will be lost if you navigate away from this page.');
+				};
+
+				return old_callback();
+			};
+
+			$('.carbon-container .carbon-field input, .carbon-container .carbon-field select, .carbon-container .carbon-field textarea').live('change', function() {
+				carbon_container.CustomFields.hasChanges = true;
+			});
+
+			$('body').on('remove_fields.carbon reorder_groups.carbon', function() {
+				carbon_container.CustomFields.hasChanges = true;
+			});
+		});
 	}
 
 	function custom_fields_check_visible(container) {
