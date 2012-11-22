@@ -115,16 +115,18 @@ jQuery(function($) {
 			zoom = field.data('zoom'),
 			coords = field.val();
 
-		if (coords === '' || coords.split(',').length != 2) {
-			lat = field.data('default-lat'); 
-			lng = field.data('default-lng');
-			zoom = 8;
-		} else {
+		if (coords !== '' || coords.split(',').length == 2) {
 			temp = coords.split(',');
 			lat = parseFloat(temp[0]);
 			lng = parseFloat(temp[1]);
 			exists = 1;
 		}
+
+		if ( !exists || isNaN(lat) ||isNaN(lng)  ) {
+			lat = field.data('default-lat'); 
+			lng = field.data('default-lng');
+			zoom = 5;
+		};
 
 		//draw a map
 		var map = new google.maps.Map(map_container.get(0), {

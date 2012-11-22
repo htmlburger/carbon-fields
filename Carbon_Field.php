@@ -565,8 +565,8 @@ class Carbon_Field_Color extends Carbon_Field {
 
 class Carbon_Field_Map extends Carbon_Field {
 	protected $api_key;
-	private $default_lat = 37.423156;
-	private $default_long = -122.084917;
+	private $default_lat = 40.346544;
+	private $default_long = -101.645507;
 	private $zoom = 10;
 
 	function admin_init() {
