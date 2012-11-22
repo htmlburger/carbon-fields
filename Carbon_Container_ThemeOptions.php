@@ -16,6 +16,14 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 		'file'=>'theme-options.php',
 		'permissions'=>'edit_themes'
 	);
+	
+	function __construct($title) {
+		parent::__construct($title);
+
+		if ( !$this->get_datastore() ) {
+			$this->set_datastore(new Carbon_DataStore_ThemeOptions());
+		}
+	}
 
 	function save() {
 		try {
@@ -30,10 +38,6 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 	}
 
 	function init() {
-		if ( !$this->get_datastore() ) {
-			$this->set_datastore(new Carbon_DataStore_ThemeOptions());
-		}
-
 		if ( !$this->settings['parent'] || $this->settings['parent'] == 'self' ) {
 			$this->settings['parent'] = '';
 		}
@@ -208,6 +212,21 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 			$field->set_prefix('');
 		}
 
+		return $this;
+	}
+
+	function set_page_parent($parent) {
+		$this->settings['parent'] = $parent;
+		return $this;
+	}
+
+	function set_page_file($file) {
+		$this->settings['file'] = $file;
+		return $this;
+	}
+
+	function set_page_permissions($permissions) {
+		$this->settings['permissions'] = $permissions;
 		return $this;
 	}
 

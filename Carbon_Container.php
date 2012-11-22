@@ -26,6 +26,15 @@ abstract class Carbon_Container {
 	static protected $registered_field_names = array();
 
 	/**
+	 * List of containers created via factory that 
+	 * should be initialized
+	 *
+	 * @see verify_unique_field_name()
+	 * @var array
+	 */
+	static protected $init_containers = array();
+
+	/**
 	 * List of default container settings
 	 *
 	 * @see init()
@@ -85,10 +94,9 @@ abstract class Carbon_Container {
 	 *
 	 * @param string $type
 	 * @param string $name Human-readable name of the container
-	 * @param string $options (optional) Array to be passed to setup()
 	 * @return object $container
 	 **/
-	static function factory($type, $name, $options=array()) {
+	static function factory($type, $name) {
 		$type = str_replace(" ", '', ucwords(str_replace("_", ' ', $type)));
 
 		$class = 'Carbon_Container_' . $type;
@@ -100,7 +108,20 @@ abstract class Carbon_Container {
 		$container = new $class($name);
 		$container->type = $type;
 
-		$container->setup($options);
+		self::$init_containers[] = $container;
+
+	    return $container;
+	}
+
+	/**
+	 * Init containers created via factory
+	 *
+	 * @return object $container
+	 **/
+	static function init_containers() {
+		while (($container = array_shift(self::$init_containers))) {
+			$container->init();
+		}
 
 	    return $container;
 	}
@@ -147,8 +168,6 @@ abstract class Carbon_Container {
 				unset($this->settings[$key]);
 			}
 		}
-
-		$this->init();
 
 		$this->setup_ready = true;
 
@@ -269,10 +288,6 @@ abstract class Carbon_Container {
 	 * @return void
 	 **/
 	function add_fields($fields) {
-		if ( !$this->setup_ready ) {
-			throw new Exception('Call setup() for container "' . $this->title . '" before adding fields');
-		}
-
 		foreach ($fields as $field) {
 			if ( !is_a($field, 'Carbon_Field') ) {
 				throw new Carbon_Exception('Object must be of type Carbon_Field');

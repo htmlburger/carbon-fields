@@ -45,6 +45,14 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 			),
 	);
 
+	function __construct($title) {
+		parent::__construct($title);
+
+		if ( !$this->get_datastore() ) {
+			$this->set_datastore(new Carbon_DataStore_CustomField());
+		}
+	}
+
 	function check_setup_settings(&$settings = array()) {
 		if ( isset($settings['show_on']) ) {
 			$invalid_settings = array_diff_key($settings['show_on'], $this->settings['show_on']);
@@ -88,10 +96,6 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	 * @return void
 	 **/
 	function init() {
-		if ( !$this->get_datastore() ) {
-			$this->set_datastore(new Carbon_DataStore_CustomField());
-		}
-
 		if ( isset($_GET['post']) ) {
 			$this->set_post_id($_GET['post']);
 		}
@@ -511,6 +515,20 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 		}
 
 		$this->settings['show_on']['post_formats'][] = strtolower($post_format);
+
+		return $this;
+	}
+
+	/**
+	 * Show the container only on posts from the specified type(s).
+	 *
+	 * @param string|array $post_type
+	 * @return object $this
+	 **/
+	function show_on_post_type($post_types) {
+		$post_types = (array)$post_types;
+
+		$this->settings['post_type'] = $post_types;
 
 		return $this;
 	}

@@ -34,4 +34,5 @@ include_once 'carbon-functions.php';
 
 # Add Actions
 add_action('wp_loaded', 'carbon_trigger_fields_register');
+add_action('carbon_after_register_fields', 'carbon_init_containers');
 

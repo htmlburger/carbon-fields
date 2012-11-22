@@ -2,6 +2,11 @@
 
 function carbon_trigger_fields_register() {
 	do_action('carbon_register_fields');
+	do_action('carbon_after_register_fields');
+}
+
+function carbon_init_containers() {
+	Carbon_Container::init_containers();
 }
 
 function carbon_get_post_meta($id, $name = null, $type = null) {
