@@ -23,13 +23,14 @@
 			?>
 				<tr>
 					<th scope="row">
-						<?php 
+						<label><?php 
 						echo $field->get_label(); 
 						if ( $field->is_required() ) {
 							echo ' <span class="carbon-required">*</span>';
 						}
-						echo $field->get_help_text();
-						?>
+						?></label>
+
+						<em><?php echo $field->get_help_text(); ?></em>
 					</th>
 					<td>
 						<div class="carbon-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">

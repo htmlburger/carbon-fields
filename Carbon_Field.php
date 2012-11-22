@@ -664,7 +664,8 @@ class Carbon_Field_Select extends Carbon_Field {
 
     function render() {
     	if ( empty($this->options) ) {
-    		throw new Carbon_Exception('No options added for field "' . $this->get_name() . '"');
+    		echo '<em>no options</em>';
+    		return;
     	}
 
 		echo '<select name="' . $this->get_name() . '">';
@@ -693,7 +694,8 @@ class Carbon_Field_Radio extends Carbon_Field {
 
     function render() {
     	if ( empty($this->options) ) {
-    		throw new Carbon_Exception('No options added for field "' . $this->get_name() . '"');
+    		echo '<em>no options</em>';
+    		return;
     	}
 
     	echo '<ul class="carbon-radio-list">';
@@ -816,7 +818,8 @@ class Carbon_Field_Set extends Carbon_Field {
     	}
 
     	if (empty($this->options)) {
-    		throw new Carbon_Exception('No options added for field "' . $this->name . '"');
+    		echo '<em>no options</em>';
+    		return;
     	}
 
 		$loopCount = 0;

@@ -20,13 +20,13 @@
 						?>
 							<tr>
 								<th scope="row">
-									<?php
+									<label><?php
 									echo $field->get_label(); 
 									if ( $field->is_required() ) {
 										echo ' <span class="carbon-required">*</span>';
 									}
-									echo $field->get_help_text();
-									?>
+									?></label>
+									<em><?php echo $field->get_help_text(); ?></em>
 								</th>
 								<td>
 									<div class="carbon-field" data-type="<?php echo $field->type ?>">
@@ -52,9 +52,9 @@
 												if ( $field->is_required() ) {
 													echo ' <span class="carbon-required">*</span>';
 												}
-												echo $field->get_help_text();
 											?>
 										</strong>
+										<em><?php echo $field->get_help_text(); ?></em>
 										<div class="carbon-field" data-type="<?php echo $field->type ?>">
 											<?php echo $field->render(); ?>
 										</div>
@@ -91,13 +91,13 @@
 						?>
 							<tr>
 								<th scope="row">
-									<?php
+									<label><?php
 									echo $field->get_label(); 
 									if ( $field->is_required() ) {
 										echo ' <span class="carbon-required">*</span>';
 									}
-									echo $field->get_help_text();
-									?>
+									?></label>
+									<em><?php echo $field->get_help_text(); ?></em>
 								</th>
 								<td>
 									<div class="carbon-field carbon-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
@@ -120,14 +120,14 @@
 							?>
 									<td>
 										<strong>
-											<?php 
+											<?php
 												echo $field->get_label(); 
 												if ( $field->is_required() ) {
 													echo ' <span class="carbon-required">*</span>';
 												}
-												echo $field->get_help_text();
 											?>
 										</strong>
+										<em><?php echo $field->get_help_text(); ?></em>
 										<div class="carbon-field  carbon-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 											<?php echo $field->render(); ?>
 										</div>
