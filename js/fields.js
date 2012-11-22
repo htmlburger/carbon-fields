@@ -1,5 +1,4 @@
 jQuery(function($) {
-
 	function init(context) {
 		var fields;
 
@@ -55,14 +54,14 @@ jQuery(function($) {
 	carbon_field.File = function(element, field_obj) {
 		element.find('.button').click(function() {
 			window.carbon_active_field = element;
-			tb_show('','media-upload.php?TB_iframe=true');
+			tb_show('','media-upload.php?post_id=0&carbon_type=file&TB_iframe=true');
 		});
 	}
 
 	carbon_field.Image = function(element, field_obj) {
 		element.find('.button').click(function() {
 			window.carbon_active_field = element;
-			tb_show('','media-upload.php?type=image&amp;TB_iframe=true');
+			tb_show('','media-upload.php?post_id=0&type=image&carbon_type=image&TB_iframe=true');
 		});
 	}
 
@@ -175,9 +174,12 @@ jQuery(function($) {
 	carbon_field.Rich_Text = function(element, field_obj) {
 		var textarea = element.find('.carbon-wysiwyg textarea');
 
-		if( typeof tinyMCE == 'undefined' ) {
+		if( typeof tinyMCE == 'undefined' || typeof tinyMCE['settings'] == undefined ) {
 			return;
 		}
+
+		tinyMCE.settings.theme_advanced_buttons1 = 'bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,wp_more,|,spellchecker,fullscreen,wp_adv';
+		tinyMCE.settings.theme_advanced_buttons2 = 'formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,charmap,|,outdent,indent,|,undo,redo,wp_help,code';
 
 		wpActiveEditor = null;
 		tinyMCE.execCommand('mceAddControl', false, textarea.attr('id'));
@@ -331,7 +333,11 @@ jQuery(function($) {
 		};
 	}
 
-	init();
+	$('#carbon_settings-tmce').trigger('click');
+
+	setTimeout(function() {
+		init();
+	}, 1);
 
 	window.carbon_field_init = init;
 });

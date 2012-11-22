@@ -458,6 +458,21 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 		?>
 
 		<div id="wp-<?php echo $id; ?>-wrap" class="carbon-wysiwyg wp-editor-wrap" data-toolbar="full">
+
+			<?php if(get_bloginfo('version') < "3.3"): ?>
+				<div id="editor-toolbar">
+					<div id="media-buttons" class="hide-if-no-js">
+						<?php do_action( 'media_buttons' ); ?>
+					</div>
+				</div>
+			<?php else: ?>
+				<div id="wp-<?php echo $id; ?>-editor-tools" class="wp-editor-tools">
+					<div id="wp-<?php echo $id; ?>-media-buttons" class="hide-if-no-js wp-media-buttons">
+						<?php do_action( 'media_buttons' ); ?>
+					</div>
+				</div>
+			<?php endif; ?>
+
 			<div id="wp-<?php echo $id; ?>-editor-container" class="wp-editor-container">
 				<textarea id="<?php echo $id; ?>" class="wp-editor-area" name="<?php echo $this->get_name(); ?>" ><?php echo wp_richedit_pre($val); ?></textarea>
 			</div>
@@ -475,6 +490,7 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 	}
 
 	function admin_footer() {
+		// TODO: why is this needed?
 		?>
 		<div style="display:none;">
 			<?php wp_editor( '', 'carbon_settings' ); ?>
@@ -876,7 +892,7 @@ class Carbon_Field_File extends Carbon_Field {
 
 	function render() {
 		echo '<input type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text" />';
-		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=file" type="button" class="button" value="Select Media" />';
+		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=file&amp;carbon_type=file" type="button" class="button" value="Select Media" />';
 		
 		// For image only
 		if ( !empty($this->value) ) {
@@ -899,6 +915,9 @@ class Carbon_Field_File extends Carbon_Field {
 
 
 	static function admin_media_library_popup_head() {
+		if ( !isset($_GET['carbon_type']) || !in_array($_GET['carbon_type'], array('file', 'image')) ) {
+			return;
+		}
 		?>
 		<style type="text/css">
 			#media-upload-header #sidemenu li#tab-gallery,
@@ -1051,7 +1070,7 @@ class Carbon_Field_Image extends Carbon_Field_File {
 
 	function render() {
 		echo '<input type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text" />';
-		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=image" type="button" class="button" value="Select Media" />';
+		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=image&amp;carbon_type=image" type="button" class="button" value="Select Media" />';
 		
 		// For image only
 		if ( $this->value != '' && in_array(array_pop(explode('.', $this->value)), $this->image_extensions) ) {
