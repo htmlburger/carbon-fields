@@ -26,6 +26,13 @@ class Carbon_Field {
 	protected $value;
 
 	/**
+	 * Default field value
+	 *
+	 * @var mixed
+	 */
+	protected $default_value;
+
+	/**
 	 * Sanitized field name used as input name attribute during field render
 	 *
 	 * @see factory()
@@ -180,7 +187,11 @@ class Carbon_Field {
 	 * @return void
 	 **/
 	function load() {
-		return $this->store->load($this);
+		$this->store->load($this);
+
+		if ( $this->get_value() === false ) {
+			$this->set_value( $this->default_value );
+		}
 	}
 
 	/**
@@ -247,6 +258,17 @@ class Carbon_Field {
 	 **/
 	function set_value($value) {
 		$this->value = $value;
+	}
+
+	/**
+	 * Set default field value
+	 *
+	 * @param mixed $value
+	 * @return void
+	 **/
+	function set_default_value($default_value) {
+		$this->default_value = $default_value;
+		return $this;
 	}
 
 	/**
