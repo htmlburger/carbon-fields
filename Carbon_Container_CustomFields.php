@@ -181,8 +181,6 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 
 					$current_format = get_post_format($post_id);
 					if ( !in_array($current_format, $value) ) {
-						// TODO: fix me
-						exit('formats');
 						$valid = false;
 						break 2;
 					}

@@ -512,7 +512,8 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 	}
 
 	function admin_footer() {
-		// TODO: why is this needed?
+		// Instead of enqueueing all required scripts and stylesheets and setting up TinyMCE,
+		// wp_editor() automatically enqueues and sets up everything.
 		?>
 		<div style="display:none;">
 			<?php wp_editor( '', 'carbon_settings' ); ?>
