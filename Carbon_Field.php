@@ -1109,4 +1109,123 @@ class Carbon_Field_Image extends Carbon_Field_File {
 	}
 }
 
+class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
+	public $enable_add_new = true; // Whether to allow the user to add new sidebars
+	public $sidebar_options = array(
+		'before_widget' => '<li id="%1$s" class="widget %2$s">',
+		'after_widget' => '</li>',
+		'before_title' => '<h2 class="widgettitle">',
+		'after_title' => '</h2>',
+	);
+
+	function init() {
+		$this->add_sidebar_opts_sidebars();
+		$this->setup_sidebars();
+	}
+
+	function add_sidebar_opts_sidebars() {
+		global $wp_registered_sidebars;
+		$sidebars = $this->_get_sidebars();
+
+		foreach ($wp_registered_sidebars as $sidebar) {
+			$sidebars[] = $sidebar['name'];
+		}
+
+		$options = array_combine($sidebars, $sidebars);
+
+		$this->add_options($options);
+	}
+
+	function disable_add_new() {
+	    $this->enable_add_new = false;
+	    return $this;
+	}
+
+	function set_sidebar_options($sidebar_options) {
+		// Make sure that all needed fields are in the options array
+		if ( count(array_diff($this->sidebar_options, sidebar_options)) ) {
+			throw new Carbon_Exception('Provide all sidebar options for ' . $this->name . ': <code>' .
+					implode(', ', array_keys($this->sidebar_options)) . '</code>');
+		}
+
+	    $this->sidebar_options = $sidebar_options;
+	    return $this;
+	}
+
+	function render() {
+	    if ($this->enable_add_new) {
+			$this->options['new'] = "Add New";
+		}
+
+		return parent::render();
+	}
+
+	function setup_sidebars() {
+		$sidebars = $this->_get_sidebars();
+		foreach ($sidebars as $sidebar) {
+			$associated_pages = get_posts(array(
+				'post_type' => array('page'),
+				'meta_query'=>array(
+					array( 'key' => $this->name, 'value' => urlencode($sidebar))
+				),
+				'numberposts'=>-1,
+			));
+
+			if (count($associated_pages)) {
+				$show_pages = 5;
+				$assoicated_pages_titles = array();
+				$i = 0;
+				foreach ($associated_pages as $associated_page) {
+					$assoicated_pages_titles[] = apply_filters('the_title', $associated_page->post_title);
+					if ($i==$show_pages) {
+						break;
+					}
+					$i++;
+				}
+				$msg = 'This sidebar is used on ' . implode(', ', $assoicated_pages_titles) . ' ';
+				if (count($associated_pages) > $show_pages) {
+					$msg .= ' and ' . count($associated_pages) - $show_pages . ' more pages';
+				}
+			} else {
+				$msg = '';
+			}
+
+			$slug = strtolower(preg_replace('~-{2,}~', '', preg_replace('~[^\w]~', '-', $sidebar)));
+
+			register_sidebar(array(
+				'name' => $sidebar,
+				'id' => $slug,
+				'description' => $msg,
+			    'before_widget' => $this->sidebar_options['before_widget'],
+			    'after_widget' => $this->sidebar_options['after_widget'],
+			    'before_title' => $this->sidebar_options['before_title'],
+			    'after_title' => $this->sidebar_options['after_title'],
+			));
+		}
+	}
+
+	function _get_sidebars() {
+		// TODO: Select all meta values directly
+		$pages_with_sidebars = get_posts(array(
+			'post_type' => array('page'),
+			'meta_query' => array(
+				array('key' => $this->name)
+			),
+			'numberposts' => -1,
+		));
+
+		$sidebars = array();
+		foreach ($pages_with_sidebars as $page_with_sidebar) {
+			$sidebar = get_post_meta($page_with_sidebar->ID, $this->name, 1);
+			if ($sidebar) {
+				$sidebars[$sidebar] = 1;
+			}
+		}
+
+		$sidebars = array_keys($sidebars);
+
+		return $sidebars;
+	}
+}
+
 
