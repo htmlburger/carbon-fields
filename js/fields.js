@@ -335,10 +335,12 @@ jQuery(function($) {
 		};
 	}
 
+	var current_editor = getUserSetting('editor');
 	$('#carbon_settings-tmce').trigger('click');
 
 	setTimeout(function() {
 		init();
+		setUserSetting('editor', current_editor);
 	}, 1);
 
 	window.carbon_field_init = init;
