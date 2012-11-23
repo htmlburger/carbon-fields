@@ -443,7 +443,7 @@ class Carbon_Field {
 
 class Carbon_Field_Text extends Carbon_Field {
 	function render() {
-		echo '<input type="text" name="' . $this->name . '" value="' . htmlentities($this->value, ENT_COMPAT, 'UTF-8') . '" class="regular-text" />';
+		echo '<input type="text" name="' . $this->name . '" value="' . esc_attr($this->value) . '" class="regular-text" />';
 	}
 }
 
@@ -457,7 +457,7 @@ class Carbon_Field_Textarea extends Carbon_Field {
 
 	function render($append = '') {
 		echo '<textarea name="' . $this->get_name() . '" rows="' . $this->rows . '">';
-		echo $this->get_value();
+		echo esc_textarea($this->get_value());
 		echo '</textarea>';
 	}
 }
@@ -473,7 +473,7 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 	}
 	
 	function render() {
-		$val = $this->get_value(); //(isset($this->value) ? $this->value : ( isset($this->default_value) ? $this->default_value : '') );
+		$val = $this->get_value();
 
 		$id = 'wysiwyg-' . $this->get_name();
 
@@ -539,7 +539,7 @@ class Carbon_Field_Date extends Carbon_Field {
 	}
 
 	function render() {
-		echo '<input type="text" name="' . $this->get_name() . '" value="' . htmlentities($this->value, ENT_COMPAT, 'UTF-8') . '" class="regular-text carbon-datepicker" />';
+		echo '<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-datepicker" />';
 	}
 }
 
@@ -556,7 +556,7 @@ class Carbon_Field_Color extends Carbon_Field {
 	function render() {
 		echo '
 		<div class="carbon-color-row">
-			<input type="text" name="' . $this->get_name() . '" value="' . htmlentities($this->value, ENT_COMPAT, 'UTF-8') . '" class="regular-text carbon-color" />
+			<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-color" />
 			<a class="carbon-color-preview hide-if-no-js"></a>
 			<input type="button" class="pickcolor button hide-if-no-js" value="Select a Color">
 			<div class="carbon-color-container hide-if-no-js"></div>
@@ -576,7 +576,7 @@ class Carbon_Field_Map extends Carbon_Field {
 
 	function render() {
 		echo '
-		<input type="text" name="' . $this->get_name() . '" value="' . htmlentities($this->value, ENT_COMPAT, 'UTF-8') . '" class="regular-text" data-zoom="' . $this->zoom . '" data-default-lat="' . $this->default_lat . '" data-default-lng="' . $this->default_long . '" />
+		<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_long) . '" />
 		<div class="carbon-map">&nbsp;</div>
 		';
 	}
@@ -702,13 +702,13 @@ class Carbon_Field_Radio extends Carbon_Field {
     	echo '<ul class="carbon-radio-list">';
 
 		foreach ($this->options as $key => $value) {
-			echo '<li><label><input type="radio" name="' . $this->get_name() . '" value="' . htmlentities($key, ENT_COMPAT, 'UTF-8') . '"';
+			echo '<li><label><input type="radio" name="' . $this->get_name() . '" value="' . esc_attr($key) . '"';
 
 			if ($this->value == $key) {
 				echo ' checked="checked"';
 			}
 
-			echo '/>' . htmlentities($value, ENT_COMPAT, 'UTF-8') . '</label></li>';
+			echo '/>' . esc_html($value) . '</label></li>';
 		}
 
     	echo '</ul>';
@@ -731,7 +731,7 @@ class Carbon_Field_Checkbox extends Carbon_Field {
 		$checked_attr = $this->get_value() == $this->option_value ? ' checked="checked" ': '';
 
 		echo '<label>
-			<input type="checkbox" name="' . $this->get_name() . '" value="' . htmlentities($this->option_value, ENT_COMPAT, 'UTF-8') . '" ' . $checked_attr . ' />
+			<input type="checkbox" name="' . $this->get_name() . '" value="' . esc_attr($this->option_value) . '" ' . $checked_attr . ' />
 			' . 	$this->label . '
 		</label>';
 	}
@@ -830,7 +830,7 @@ class Carbon_Field_Set extends Carbon_Field {
 		foreach ($this->options as $key => $value) {
 			$loopCount ++;
 
-			$option = '<input type="checkbox" name="' . $this->get_name() . '[]" value="' . $key . '"';
+			$option = '<input type="checkbox" name="' . $this->get_name() . '[]" value="' . esc_attr($key) . '"';
 			if ( in_array($key, $this->value) ) {
 				$option .= ' checked="checked"';
 			}
