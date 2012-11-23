@@ -77,6 +77,10 @@ class Carbon_Field_Complex extends Carbon_Field {
 		$input_groups = $input[$this->get_name()];
 		$index = 0;
 
+		if ( isset($input_groups['__ei__']) ) {
+			unset($input_groups['__ei__']);
+		}
+
 		foreach ($input_groups as $values) {
 			$value_group = array();
 			if ( !isset($values['group']) || !isset($this->groups[$values['group']]) ) {
