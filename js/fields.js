@@ -221,7 +221,7 @@ jQuery(function($) {
 	carbon_field.Complex = function(element, field_obj) {
 		// prepare object
 		field_obj.group_selector = element.find('select[name$="[group]"]');
-		field_obj.btn_add = element.find('a[data-action=add]');
+		field_obj.btn_add = element.find('> .carbon-subcontainer > tbody > tr.carbon-actions a[data-action=add]:first');
 		field_obj.num_rows = element.find('.carbon-group-row').length;
 		field_obj.row_uid = field_obj.num_rows;
 		field_obj.table = element.children('.carbon-subcontainer:first');
@@ -239,7 +239,7 @@ jQuery(function($) {
 
 		// Hook events
 
-		field_obj.btn_add.click(function() {
+		field_obj.btn_add.click(function(e) {
 			complex_add_row(field_obj);
 			return false;
 		});
@@ -287,7 +287,7 @@ jQuery(function($) {
 			return;
 		};
 
-		sample_row = field.node.find('.carbon-group-preview.carbon-group-' + field.new_row_type);
+		sample_row = field.node.find('> .carbon-subcontainer > tbody > .carbon-group-preview.carbon-group-' + field.new_row_type);
 		new_row = sample_row.clone();
 
 		field.num_rows++;
@@ -299,7 +299,7 @@ jQuery(function($) {
 
 		new_row.html( new_row.html().replace(/\[__ei__\]/g, '[' + field.row_uid + ']') );
 
-		new_row.removeClass('carbon-group-preview').addClass('carbon-group-row').insertBefore( field.node.find('.carbon-group-preview:first') );
+		new_row.removeClass('carbon-group-preview').addClass('carbon-group-row').insertBefore( field.node.find('> .carbon-subcontainer > tbody > .carbon-group-preview:first') );
 		init(new_row);
 
 		new_row.find('.carbon-drag-handle span').text(field.num_rows)

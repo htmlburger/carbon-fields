@@ -104,7 +104,15 @@ class Carbon_Field_Complex extends Carbon_Field {
 			foreach ($group_fields as $field) {
 				// set value from the group
 				$tmp_field = clone $field;
-				$tmp_field->set_value_from_input($values);
+				if ( is_a($tmp_field, 'Carbon_Field_Complex') ) {
+					$new_name = $this->get_name() . $group->get_name() . '-' . $field->get_name() . '_' . $index;
+					$new_values = array( $new_name => $values[$tmp_field->get_name()] );
+
+					$tmp_field->set_name( $new_name );
+					$tmp_field->set_value_from_input($new_values);
+				} else {
+					$tmp_field->set_value_from_input($values);
+				}
 
 				// update name to group name
 				$tmp_field->set_name( $this->get_name() . $group->get_name() . '-' . $field->get_name() . '_' . $index );
@@ -290,6 +298,9 @@ class Carbon_Field_Group {
 
 	function set_datastore(Carbon_DataStore $store) {
 		foreach ($this->fields as $field) {
+			if ( is_a($field, 'Carbon_Field_Complex') ) {
+				throw new Carbon_Exception('Nested of complex fields? We are working on that!');
+			}
 			if ( !$field->get_datastore() ) {
 				$field->set_datastore($store);
 			}
