@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Carbon Fields</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<!-- Le styles -->
+		<link href="css/bootstrap.css" rel="stylesheet">
+		<style type="text/css">
+			body {
+				padding-top: 60px;
+				padding-bottom: 40px;
+			}
+			.sidebar-nav {
+				padding: 9px 0;
+			}
+		</style>
+		<link href="css/bootstrap-responsive.css" rel="stylesheet">
+    	<link href="css/prettify.css" rel="stylesheet" />
+
+		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+		<!--[if lt IE 9]>
+			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+
+		<!-- Fav and touch icons -->
+		<link rel="shortcut icon" href="ico/favicon.ico">
+		<link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+		<link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+	</head>
+
+	<body>
+
+		<div class="navbar navbar-inverse navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container-fluid">
+					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</a>
+					<a class="brand" href="#">Project name</a>
+					<div class="nav-collapse collapse">
+						<p class="navbar-text pull-right">
+							Logged in as <a href="#" class="navbar-link">Username</a>
+						</p>
+						<ul class="nav">
+							<li class="active"><a href="#">Home</a></li>
+							<li><a href="#about">About</a></li>
+							<li><a href="#contact">Contact</a></li>
+						</ul>
+					</div><!--/.nav-collapse -->
+				</div>
+			</div>
+		</div>
+
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span3">
+					<div class="well sidebar-nav">
+						<ul class="nav nav-list">
+							<li class="nav-header">Containers</li>
+							<li class="active"><a href="#">Usage</a></li>
+							<li><a href="#">Link</a></li>
+							<li><a href="#">Link</a></li>
+							<li><a href="#">Link</a></li>
+							<li class="nav-header">Fields</li>
+							<li><a href="#">Link</a></li>
+							<li><a href="#">Link</a></li>
+							<li><a href="#">Link</a></li>
+							<li><a href="#">Link</a></li>
+							<li><a href="#">Link</a></li>
+							<li><a href="#">Link</a></li>
+							<li class="nav-header">Advanced Topics</li>
+							<li><a href="#">Link</a></li>
+							<li><a href="#">Link</a></li>
+							<li><a href="#">Link</a></li>
+						</ul>
+					</div><!--/.well -->
+				</div><!--/span-->
+				<div class="span9">
+					<div class="hero-unit">
+						<h1>Carbon Fields</h1>
+						<p>This is a template for a simple informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+						<p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+					</div>
+
+					<h2>Containers</h2>
+					<h3>Container creation and usage</h3>
+					<h4>What is a container?</h4>
+					<h4>Example</h4>
+
+					<pre class="prettyprint">
+Carbon_Container::factory('custom_fields', 'Custom Data')
+	-&gt;show_on_post_type('page')
+	-&gt;add_fields(array(
+		Carbon_Field::factory('complex', 'my_data')-&gt;add_fields(array(
+				Carbon_Field::factory('text', 'title')-&gt;help_text('lorem'),
+			)),
+		Carbon_Field::factory('map', 'location')-&gt;set_position(37.423156, -122.084917, 14),
+		Carbon_Field::factory('choose_sidebar', 'custom_sidebar'),
+		Carbon_Field::factory('image', 'img'),
+		Carbon_Field::factory('file', 'pdf'),
+	));</pre>
+
+					<h4>Explain factory</h4>
+
+
+
+						<h3>Types</h3>
+							<h4>Custom fields</h4>
+								<h5>What is a custom field container?</h5>
+								<h5>Example</h5>
+								<h5>Visibility options</h5>
+									<h6>post type</h6>
+									<h6>categories and custom taxonomies</h6>
+									<h6>post formats</h6>
+									<h6>pages and subpages</h6>
+									<h6>page templates</h6>
+								<h5>Accessing field values</h5>
+									<h6>Example</h6>
+							<h4>Theme Options</h4>
+								<h5>What is a theme option container?</h5>
+								<h5>Example</h5>
+								<h5>Multiple option pages</h5>
+									<h6>Use cases</h6>
+									<h6>Example</h6>
+									<h6>Page options (file, parent, etc)</h6>
+								<h5>Accessing field values</h5>
+									<h6>Example</h6>
+
+					<h2>Fields</h2>
+						<h3>Field creation and methods</h3>
+							<h4>Example</h4>
+							<h4>Explain factory</h4>
+							<h4>Common methods</h4>
+								<h5>default values</h5>
+								<h5>help text</h5>
+						<h3>Types</h3>
+							<h4>Field X</h4>
+								<h5>Field name (factory) and use case</h5>
+								<h5>Example</h5>
+								<h5>Specific methods </h5>
+									<h6>( add_options, set_location, etc )</h6>
+						<h3>Complex Field</h3>
+							<h4>What is a complex field?</h4>
+							<h4>Use cases and field types (single group, multiple groups)</h4>
+							<h4>Options </h4>
+								<h5>limit number of items (set_min and set_max)</h5>
+								<h5>select layout</h5>
+							<h4>Single group</h4>
+								<h5>Example</h5>
+								<h5>Retrieving data</h5>
+									<h6>function name</h6>
+									<h6>value format</h6>
+									<h6>example</h6>
+							<h4>Multiple groups</h4>
+								<h5>Example</h5>
+								<h5>Retrieving data</h5>
+									<h6>function name</h6>
+									<h6>value format</h6>
+									<h6>example</h6>
+
+
+					<h2>Advanced Topics</h2>
+						<h3>Create custom field classes</h3>
+						<h3>Create custom containers</h3>
+						<h3>How container registration works</h3>
+						<h3>Complex field storage and retrieval</h3>
+						<h3>Create custom data store</h3>
+
+				</div><!--/span-->
+			</div><!--/row-->
+
+			<hr>
+
+			<footer>
+				<p>&copy; Company 2012</p>
+			</footer>
+
+		</div><!--/.fluid-container-->
+
+		<!-- Le javascript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="js/jquery.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/prettify.js"></script>
+		<script type="text/javascript">
+			jQuery(function($) {
+				prettyPrint();
+			})
+		</script>
+	</body>
+</html>
