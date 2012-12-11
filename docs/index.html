@@ -94,40 +94,111 @@
 					<h2>Containers</h2>
 					<h3>Container creation and usage</h3>
 					<h4>What is a container?</h4>
+
+					<p>Carbon Container is a group of custom fields and display options. Containers are displayed on different parts of the backend, accoding to their type and display options.</p>
+					<p>Containers have a title, which must <strong>unique</strong> for every container you create. The title should reflect the purpose of the container.</p>
+
 					<h4>Example</h4>
 
 					<pre class="prettyprint">
 Carbon_Container::factory('custom_fields', 'Custom Data')
 	-&gt;show_on_post_type('page')
 	-&gt;add_fields(array(
-		Carbon_Field::factory('complex', 'my_data')-&gt;add_fields(array(
-				Carbon_Field::factory('text', 'title')-&gt;help_text('lorem'),
-			)),
 		Carbon_Field::factory('map', 'location')-&gt;set_position(37.423156, -122.084917, 14),
 		Carbon_Field::factory('choose_sidebar', 'custom_sidebar'),
-		Carbon_Field::factory('image', 'img'),
-		Carbon_Field::factory('file', 'pdf'),
+		Carbon_Field::factory('image', 'Photo'),
+	));</pre>
+					<h4>Container creation</h4>
+					<p>To create a new Carbon Container, you should use the container factory <code>Carbon_Container::factory($type, $title)</code>, where <code>$type</code> is identificator of the container type (currently accepted values are <code>custom_fields</code> or <code>theme_options</code>) and <code>$title</code> is the title of the container.</p>
+					
+
+					<h3>Types</h3>
+					<h4>Custom fields</h4>
+					<h5>What is a custom field container?</h5>
+					<p>Custom field containers are used to extend the post edit screens with additional fields. Field data is stored separately for each post as post meta (see <a href="http://codex.wordpress.org/Function_Reference/add_post_meta"><i class="icon-globe"></i> add_post_meta</a>). </p>
+
+					<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Container::factory('custom_fields', 'Post Properties')
+	-&gt;add_fields(array(
+		Carbon_Field::factory('map', 'location')-&gt;set_position(37.423156, -122.084917, 14),
+		Carbon_Field::factory('choose_sidebar', 'custom_sidebar'),
 	));</pre>
 
-					<h4>Explain factory</h4>
 
+					<h5>Visibility options</h5>
+					<p>Custom fields containers are very flexible in terms of display options. You can select specific post type they show on, as well as category, format, parent, etc. A list of all options is displayed below:</p>
 
+					<dl>
+						<dt>post type</dt>
+						<dd>
+							<p><code>Carbon_Container::factory(...)<strong>-&gt;show_on_post_type('page')</strong></code></p>
+							<p>You can also show a single container on multiple post types, as seen below:</p>
+							<p><code>Carbon_Container::factory(...)<strong>-&gt;show_on_post_type(array('page', 'my_custom_post_type', 'post'))</strong></code></p>
+						</dd>
 
-						<h3>Types</h3>
-							<h4>Custom fields</h4>
-								<h5>What is a custom field container?</h5>
-								<h5>Example</h5>
-								<h5>Visibility options</h5>
-									<h6>post type</h6>
-									<h6>categories and custom taxonomies</h6>
-									<h6>post formats</h6>
-									<h6>pages and subpages</h6>
-									<h6>page templates</h6>
-								<h5>Accessing field values</h5>
-									<h6>Example</h6>
-							<h4>Theme Options</h4>
-								<h5>What is a theme option container?</h5>
-								<h5>Example</h5>
+						<dt>categories and custom taxonomies</dt>
+						<dd>
+							<p>Containers may be assigned to posts from specific categories or taxonomies:</p>
+							<p><code>Carbon_Container::factory(...)<strong>-&gt;show_on_category($category_slug)</strong></code></p>
+							<p><code>Carbon_Container::factory(...)<strong>-&gt;show_on_taxonomy_term($term_slug, $taxonomy)</strong></code></p>
+						</dd>
+						
+						<dt>pages and subpages</dt>
+						<dd>
+							<p>Show container on a specific page, identified by path:</p>
+							<p><code>Carbon_Container::factory(...)<strong>-&gt;show_on_page($page_path)</strong></code></p>
+
+							<p>Show container on all <strong>subpages</strong> of a specific page, identified by path:</p>
+							<p><code>Carbon_Container::factory(...)<strong>-&gt;show_on_page_children($parent_page_path)</strong></code></p>
+						</dd>
+						
+						<dt>page templates</dt>
+						<dd>
+							<p>Containers may be assigned to pages using specific template:</p>
+							<p><code>Carbon_Container::factory(...)<strong>-&gt;show_on_template($template_path)</strong></code></p>
+							<p>The <code>$template_path</code> is the name of the template file, for example: <code>"about_us.php"</code></p>
+						</dd>
+						
+						<dt>post formats</dt>
+						<dd>
+							To display a container posts with specific <a href="http://codex.wordpress.org/Post_Formats"><i class="icon-globe"></i> format</a>, use:
+							<p><code>Carbon_Container::factory(...)<strong>-&gt;show_on_post_format($post_format)</strong></code></p>
+						</dd>
+					</dl>
+								
+					<h5>Accessing field values</h5>
+					<p>To access a value, stored by in the your theme, you need to use the function <code>carbon_get_post_meta($id, $name = null, $type = null)</code>, where: </p>
+					<dl>
+						<dt><code>$id</code> (optional)</dt>
+						<dd>Post ID where your value was entered. Defaults to current post ID.</dd>
+
+						<dt><code>$name</code></dt>
+						<dd>The name of the field to be retrieved.</dd>
+
+						<dt><code>$type</code> (optional)</dt>
+						<dd>If the field you want to retrieve is of type complex, you need to pass <code>"complex"</code>.</dd>
+					</dl>
+
+					<h6>Example</h6>
+					<pre class="prettyprint">
+&lt;p&gt;Article was published in: &lt;?php echo carbon_get_post_meta('location'); ?&gt;&lt;/p&gt;
+&lt;p&gt;Photo taken by: &lt;?php echo carbon_get_post_meta(132, 'photo_author'); ?&gt;&lt;/p&gt;
+</pre>
+
+					<h4>Theme Options</h4>
+					<h5>What is a theme option container?</h5>
+
+					<p>Theme option containers are used to add pages with options in the back-end. Field data is stored as <a href="http://codex.wordpress.org/Option_Reference"><i class="icon-globe"></i> options</a>. </p>
+
+					<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Container::factory('theme_options', 'General')
+	-&gt;add_fields(array(
+		Carbon_Field::factory('text', 'facebook_url'),
+		Carbon_Field::factory('textarea', 'footer_text')
+	));
+</pre>
 								<h5>Multiple option pages</h5>
 									<h6>Use cases</h6>
 									<h6>Example</h6>
