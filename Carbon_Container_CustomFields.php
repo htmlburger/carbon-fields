@@ -483,7 +483,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	 * @param string $term_slug
 	 * @return object $this
 	 **/
-	function show_on_taxonomy_term($taxonomy_slug, $term_slug) {
+	function show_on_taxonomy_term($term_slug, $taxonomy_slug) {
 		$term = get_term_by('slug', $term_slug, $taxonomy_slug);
 
 		if ( !$term ) {
