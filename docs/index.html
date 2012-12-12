@@ -168,7 +168,7 @@ Carbon_Container::factory('custom_fields', 'Post Properties')
 					</dl>
 								
 					<h5>Accessing field values</h5>
-					<p>To access a value, stored by in the your theme, you need to use the function <code>carbon_get_post_meta($id, $name = null, $type = null)</code>, where: </p>
+					<p>To access field values you need to use the function <code>carbon_get_post_meta($id, $name = null, $type = null)</code>, where: </p>
 					<dl>
 						<dt><code>$id</code> (optional)</dt>
 						<dd>Post ID where your value was entered. Defaults to current post ID.</dd>
@@ -190,6 +190,7 @@ Carbon_Container::factory('custom_fields', 'Post Properties')
 					<h5>What is a theme option container?</h5>
 
 					<p>Theme option containers are used to add pages with options in the back-end. Field data is stored as <a href="http://codex.wordpress.org/Option_Reference"><i class="icon-globe"></i> options</a>. </p>
+					<p>By default, theme options containers automatically create main page in the admin area menu named "Theme Options" and sub page named "General". In most cases these default settings are sufficient, but if you need to change the title or the location of a page in the menu, read the "Multiple option pages" section below.</p>
 
 					<h5>Example</h5>
 					<pre class="prettyprint">
@@ -199,12 +200,74 @@ Carbon_Container::factory('theme_options', 'General')
 		Carbon_Field::factory('textarea', 'footer_text')
 	));
 </pre>
-								<h5>Multiple option pages</h5>
-									<h6>Use cases</h6>
-									<h6>Example</h6>
-									<h6>Page options (file, parent, etc)</h6>
-								<h5>Accessing field values</h5>
-									<h6>Example</h6>
+
+
+					<h5>Multiple option pages</h5>
+					<p>It is sometimes needed to create more than one option page, at other times you need to place different pages in different sections in the admin menu. For example, you might have extensive list of settings for the background that you would want to place on a separate Theme options page under Appearance.</p>
+					<p>Below you see sample code for creating two theme option containers:</p>
+					<h6>Example</h6>
+					<pre class="prettyprint">
+// Default options page under "Theme Options"
+Carbon_Container::factory('theme_options', 'General')
+	-&gt;add_fields(array(
+		Carbon_Field::factory('header_scripts', 'header_script'),
+		Carbon_Field::factory('footer_scripts', 'footer_script'),
+	));
+
+// Add second options page under "Appearance"
+Carbon_Container::factory('theme_options', 'Customize Background')
+	-&gt;set_page_parent('themes.php')	// name of the "Appearance" admin section
+	-&gt;set_page_file('customize-background.php')
+	-&gt;add_fields(array(
+		Carbon_Field::factory('color', 'background_color'),
+		Carbon_Field::factory('image', 'background_image')
+	));
+</pre>
+					<h6>Page options</h6>
+					<p>Each theme options container is identified by it's title, page file and page parent.</p>
+
+					<dl>
+						<dt>Title</dt>
+						<dd>This is the title you give to the container. It is displayed in the admin menu, as well as on top of the page itself.</dd>
+
+						<dt>Page file</dt>
+						<dd>This is a name that WordPress will use to uniquely identify your page in the admin area. It should be URL friendly (lowercase, hyphen-separated) and end with ".php". This corresponds to the <code>$menu_slug</code> parameter of <a href="http://codex.wordpress.org/Function_Reference/add_submenu_page"><i class="icon-globe"></i>add_submenu_page</a>.</dd>
+						
+						<dt>Page parent</dt>
+						<dd>This is the identificator of a top level menu section in the admin menu sidebar. This corresponds to the <code>$parent_slug</code> parameter of <a href="http://codex.wordpress.org/Function_Reference/add_submenu_page"><i class="icon-globe"></i>add_submenu_page</a>. You can see all predefined page parents <a href="http://codex.wordpress.org/Function_Reference/add_submenu_page#Parameters"><i class="icon-globe"></i>here</a>.</dd>
+					</dl>
+
+					<p>For detailed information about managing admin pages, see <a href="http://codex.wordpress.org/Administration_Menus"><i class="icon-globe"></i>Administration_Menus</a>.</p>
+
+					<h6>Permissions</h6>
+					<p>Every theme options container requires a level of permission, which by default is set to <code>edit_themes</code> (read more about permissions: <a href="http://codex.wordpress.org/Roles_and_Capabilities"><i class="icon-globe"></i>Roles &amp; Capabilities</a>).<br/>You can change the permission required to view your options page using <code>set_page_permissions($permission)</code></p>
+
+
+					<h5>Accessing field values</h5>
+					<p>To retrieve field values from a theme options container, you need to use the function <code>carbon_get_theme_option($name, $type = null)</code>, where:</p>
+					<dl>
+						<dt><code>$name</code></dt>
+						<dd>The name of the field to be retrieved.</dd>
+
+						<dt><code>$type</code> (optional)</dt>
+						<dd>If the field you want to retrieve is of type complex, you need to pass <code>"complex"</code>.</dd>
+					</dl>
+
+					<h6>Example</h6>
+					<pre class="prettyprint">
+&lt;p&gt;Copyright &lt;?php echo carbon_get_theme_option('copyright'); ?&gt;&lt;/p&gt;
+&lt;p&gt;
+	Office locations:
+	&lt;?php 
+	$address_lines = carbon_get_theme_option('addresses', 'complex');
+	foreach ($address_lines as $line) {
+		echo $line . '&lt;br/&gt;';
+	}
+	?&gt;
+&lt;p&gt;
+</pre>
+
+
 
 					<h2>Fields</h2>
 						<h3>Field creation and methods</h3>
