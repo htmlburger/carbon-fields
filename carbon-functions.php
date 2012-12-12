@@ -23,7 +23,7 @@ function carbon_get_post_meta($id, $name = null, $type = null) {
 	return get_post_meta($id, '_' . $name, true);
 }
 
-function carbon_get_theme_option($name = null, $type = null) {
+function carbon_get_theme_option($name, $type = null) {
 	if ( $type == 'complex' ) {
 		return carbon_get_complex_fields('ThemeOptions', $name);
 	}
