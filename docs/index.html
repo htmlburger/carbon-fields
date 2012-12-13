@@ -87,8 +87,6 @@
 				<div class="span9">
 					<div class="hero-unit">
 						<h1>Carbon Fields</h1>
-						<p>This is a template for a simple informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
-						<p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
 					</div>
 
 					<h2>Containers</h2>
@@ -270,36 +268,225 @@ Carbon_Container::factory('theme_options', 'Customize Background')
 
 
 					<h2>Fields</h2>
-						<h3>Field creation and methods</h3>
-							<h4>Example</h4>
-							<h4>Explain factory</h4>
-							<h4>Common methods</h4>
-								<h5>default values</h5>
-								<h5>help text</h5>
-						<h3>Types</h3>
-							<h4>Field X</h4>
-								<h5>Field name (factory) and use case</h5>
-								<h5>Example</h5>
-								<h5>Specific methods </h5>
-									<h6>( add_options, set_location, etc )</h6>
-						<h3>Complex Field</h3>
-							<h4>What is a complex field?</h4>
-							<h4>Use cases and field types (single group, multiple groups)</h4>
-							<h4>Options </h4>
-								<h5>limit number of items (set_min and set_max)</h5>
-								<h5>select layout</h5>
-							<h4>Single group</h4>
-								<h5>Example</h5>
-								<h5>Retrieving data</h5>
-									<h6>function name</h6>
-									<h6>value format</h6>
-									<h6>example</h6>
-							<h4>Multiple groups</h4>
-								<h5>Example</h5>
-								<h5>Retrieving data</h5>
-									<h6>function name</h6>
-									<h6>value format</h6>
-									<h6>example</h6>
+					<p>Fields are the building block of every container.</p>
+
+					<h3>Field creation and methods</h3>
+					New field are created using the factory method <code>Carbon_Field::factory($type, $name, $label=null)</code>, where:
+					<dl>
+						<dt>$type</dt>
+						<dd>The type of the field. This parameter should be valid class name of a field. For example <code>text</code> will create field of class <code>Carbon_Field_Text</code>. For a complete list of field types, see <a href="#Types"><i class="icon-hand-right"></i> Types</a>.</dd>
+
+						<dt>$name</dt>
+						<dd>Name of the field. Used as a key when stored in the database and for you to retrieve it's value. Please note, that all fields in a Custom Field Container have their names automatically prefixed with an underscored (e.g. <code>bgcolor</code> becomes <code>_bgcolor</code>). For more information why, see <a href="http://codex.wordpress.org/Function_Reference/add_post_meta#Making_a_.22Hidden.22_Custom_Field"><i class="icon-globe"></i> here</a></dd>
+						
+						<dt>$label (optional)</dt>
+						<dd>The label of the field is displayed in the back-end only, where the container is visible. When the parameter is omitted it is automatically derived from the <code>$name</code></dd>
+					</dl>
+
+					<p>The factory greatly simplifies the field creation process, since it returns the field object itself and you don't need to assign it to a variable. The fields API supports <a href="http://en.wikipedia.org/wiki/Method_chaining"><i class="icon-globe"></i> method chaining</a> (as seen in the example below).</p>
+
+					<h4>Example</h4>
+					<pre class="prettyprint">
+// Create image field with name "customer_photo" and label "Photo"
+Carbon_Field::factory('image', 'customer_photo', 'Photo');
+
+// Here the title is automatically set to "Custom Sidebar"
+Carbon_Field::factory('choose_sidebar', 'custom_sidebar');
+
+// Method chaining
+Carbon_Field::factory('select', 'color')-&gt;addOptions(array('red', 'blue', 'green'))-&gt;help_text('Pick a color');
+</pre>
+
+
+					<h4>Common methods</h4>
+					<p>All field types originate from a single class named <code>Carbon_Field</code> and inherit the following basic features:</p>
+					<h5>Default Values</h5>
+					<p>You can assign a default value for each field in every container. The default value is used when there is currently no value for the particular field in the database. This is the case for example, when you add a new post, or you add a new theme options field to existing container.</p>
+					<p>To assign a default value, you use <code>Carbon_Field::factory(...)-&gt;<strong>set_default_value($default_value)</strong></code></p>
+					<h5>Help Text</h5>
+					<p>Help text is used as a hint to the user, who will use the field. It is usually rendered under the field and contains more information about what it should contain - requirements, examples, links, etc. HTML tags are allowed.</p>
+					<p>You add help text using <code>Carbon_Field::factory(...)-&gt;<strong>help_text($text)</strong></code></p>
+
+
+					<h3>Types</h3>
+
+
+					<h4>Text</h4>
+					<p><strong>Factory name: </strong><code>text</code></p>
+					<p>The text field is the simplest and most generic ECF field. It renders a text input field.</p>
+
+
+
+					<h4>Textarea</h4>
+					<p><strong>Factory name: </strong><code>textarea</code></p>
+					<p>Multiline text input with HTML allowed</p>
+					<h5>Methods</h5>
+					<dl>
+						<dt><code>rows($rows = 2)</code></dt>
+						<dd>Set the default number of rows visible to <code>$rows</code>.</dd>
+					</dl>
+					<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("textarea", "related_urls", "Related Links")-&gt;rows(10);
+</pre>
+
+					<h4>Rich text area</h4>
+					<p><strong>Factory name: </strong><code>rich_text</code></p>
+					<p>This field renders the built-in WordPress tinyMCE editor.</p>
+					<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("rich_text", "sidenote", "Sidenote Content");
+</pre>
+
+					<h4>Date</h4>
+					<p><strong>Factory name: </strong><code>date</code></p>
+					<p>Renders a date picker using jQuery UI. The value is stored in <code>YYYY-MM-DD</code> format.</p>
+					<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("date", "event_start_date", "Start");
+</pre>
+
+					<h4>Color</h4>
+					<p><strong>Factory name: </strong><code>color</code></p>
+					<p>Renders color picker using Farbtastic. Colors are represented with expressed with six hexadecimal digits prefixed with <code>#</code> (e.g. white is <code>#FFFFFF</code>)</p>
+					<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("color", "box_background", "Background Color");
+</pre>
+
+					<h4>Checkbox</h4>
+					<p><strong>Factory name: </strong><code>select</code></p>
+					<p>The checkbox field create a single tick-able option with a label next to it.</p>
+					<h5>Methods</h5>
+					<dl>
+						<dt><code>set_option_value($value)</code></dt>
+						<dd>Set the value that will be saved when the option is ticked.<br/><span class="label label-info">NB!</span> When unticked, the value is not saved in the database.</dd>
+					</dl>
+					<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("rich_text", "sidenote", "Sidenote Content");
+</pre>
+
+
+					<h4>Select</h4>
+					<p><strong>Factory name: </strong><code>select</code></p>
+					<p>Creates a select box with pre-defined options.</p>
+					<h5>Methods</h5>
+					<dl>
+						<dt><code>add_options($options)</code></dt>
+						<dd>Add an associative array with options. If you provide indexed array with no key values, the default indexes (0, 1, 2 ...) of the elements will be used.<br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</dd>
+					</dl>
+					<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("select", "content_align", "Text alignment")-&gt;add_options(array(
+	'left' =&gt; 'Left',
+	'center' =&gt; 'Center',
+	'right' =&gt; 'Right',
+));
+</pre>
+
+					<h4>Radio</h4>
+					<p><strong>Factory name: </strong><code>radio</code></p>
+					<p>Similar to the Select field, but instead of in a select box, options are rendered as a set of radio buttons.</p>
+					<h5>Methods</h5>
+					<dl>
+						<dt><code>add_options($options)</code></dt>
+						<dd>Add an associative array with options. If you provide indexed array with no key values, the default indexes (0, 1, 2 ...) of the elements will be used.<br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</dd>
+					</dl>
+					<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("radio", "subtitle_styling", "Subtitle text style")-&gt;add_options(array(
+	'em' =&gt; 'Italic',
+	'strong' =&gt; 'Bold',
+	'del' =&gt; 'Strike',
+));
+</pre>
+
+					<h4>Set</h4>
+					<p><strong>Factory name: </strong><code>set</code></p>
+					<p>The set field creates a list of tick-able options. This field enables to select multiple options. The value is retrieved as array containing the ticked options.</p>
+					<h5>Methods</h5>
+					<dl>
+						<dt><code>add_options($options)</code></dt>
+						<dd>Add an associative array with options. If you provide indexed array with no key values, the default indexes (0, 1, 2 ...) of the elements will be used.<br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</dd>
+					</dl>
+					<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("set", "product_features", "Features")-&gt;add_options(array(
+	'bluetooth' =&gt; 'Bluetooth',
+	'gps' =&gt; 'GPS navigation',
+	'nfc' =&gt; 'Near field communication',
+));
+</pre>
+
+					<h4>File</h4>
+					<p><strong>Factory name: </strong><code>file</code></p>
+					<p>Renders a text input with URL and file upload button. The built-in WordPress file handling interface is used.</p>
+					<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("file", "price_list", "Price list (PDF)");
+</pre>
+
+					<h4>Image</h4>
+					<p><strong>Factory name: </strong><code>image</code></p>
+					<p>Renders a text input with URL and image upload button. The built-in WordPress file handling interface is used.</p>
+					<p>Supported image formats are: jpg, jpeg, gif, png and bmp</p>
+					<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("image", "employee_photo", "Photo");
+</pre>
+
+					<h4>Map</h4>
+						<p><strong>Factory name: </strong><code>map</code></p>
+						<p>Creates a Google-powered map. The location is represented as longitude and latitude and is saved in three times in the database - one row for the latitude (with name <code>$field_name . '_lat'</code>), one row for the longitude (with name <code>$field_name . '_lng'</code>) and one row as a single string (<code>$latitude . ',' . $longitude</code> with name <code>$field_name</code>)</p>
+						<h5>Methods</h5>
+						<dl>
+							<dt><code>set_position($lat, $lng, $zoom)</code></dt>
+							<dd>Set the default position on the map specified by <code>$lat</code> and <code>$lng</code> and the default zoom level to <code>$zoom</code> (zoom <code>0</code> corresponds to a map of the Earth fully zoomed out).</dd>
+						</dl>
+						<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("map", "company_location", "Location")->help_text('drag and drop the pin on the map to select location');
+</pre>
+
+					<h4>Separator</h4>
+						<p><strong>Factory name: </strong><code>select</code></p>
+						<p>Creates a select box with pre-defined options.</p>
+						<h5>Methods</h5>
+						<dl>
+							<dt><code>rows($rows = 2)</code></dt>
+							<dd>Set the default number of rows visible.</dd>
+						</dl>
+						<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("rich_text", "sidenote", "Sidenote Content");
+</pre>
+
+					<h4>Choose Sidebar</h4>
+
+					<h4>Header scripts</h4>
+
+					<h4>Footer scripts</h4>
+
+
+					<h3>Complex Field</h3>
+						<h4>What is a complex field?</h4>
+						<h4>Use cases and field types (single group, multiple groups)</h4>
+						<h4>Options </h4>
+							<h5>limit number of items (set_min and set_max)</h5>
+							<h5>select layout</h5>
+						<h4>Single group</h4>
+							<h5>Example</h5>
+							<h5>Retrieving data</h5>
+								<h6>function name</h6>
+								<h6>value format</h6>
+								<h6>example</h6>
+						<h4>Multiple groups</h4>
+							<h5>Example</h5>
+							<h5>Retrieving data</h5>
+								<h6>function name</h6>
+								<h6>value format</h6>
+								<h6>example</h6>
 
 
 					<h2>Advanced Topics</h2>
