@@ -463,14 +463,7 @@ class Carbon_Field_Textarea extends Carbon_Field {
 }
 
 class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
-	var $rows = 10;
-
 	static $attached_editor = false; 
-
-	function rows($rows = 10) {
-		$this->rows = max(intval($rows), 1);
-		return $this;
-	}
 	
 	function render() {
 		$val = $this->get_value();
