@@ -532,7 +532,10 @@ class Carbon_Field_Date extends Carbon_Field {
 	}
 
 	function render() {
-		echo '<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-datepicker" />';
+		echo '
+		<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-datepicker" />
+		<a class="carbon-datepicker-trigger hide-if-no-js"></a>
+		';
 	}
 }
 
@@ -569,7 +572,7 @@ class Carbon_Field_Map extends Carbon_Field {
 
 	function render() {
 		echo '
-		<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_long) . '" />
+		<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_long) . '" />
 		<div class="carbon-map">&nbsp;</div>
 		';
 	}
@@ -910,7 +913,7 @@ class Carbon_Field_File extends Carbon_Field {
 	static $attached_media_library_hook = false; 
 
 	function render() {
-		echo '<input type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text" />';
+		echo '<input type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-file-field" />';
 		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=file&amp;carbon_type=file" type="button" class="button" value="Select Media" />';
 		
 		// For image only
@@ -1088,7 +1091,7 @@ class Carbon_Field_Image extends Carbon_Field_File {
 	public $image_extensions = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
 
 	function render() {
-		echo '<input type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text" />';
+		echo '<input type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-image-field" />';
 		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=image&amp;carbon_type=image" type="button" class="button" value="Select Media" />';
 		
 		// For image only

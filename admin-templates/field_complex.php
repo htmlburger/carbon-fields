@@ -26,7 +26,7 @@
 										echo ' <span class="carbon-required">*</span>';
 									}
 									?></label>
-									<em><?php echo $field->get_help_text(); ?></em>
+									<em class="help-text"><?php echo $field->get_help_text(); ?></em>
 								</th>
 								<td>
 									<div class="carbon-field" data-type="<?php echo $field->type ?>">
@@ -54,7 +54,7 @@
 												}
 											?>
 										</strong>
-										<em><?php echo $field->get_help_text(); ?></em>
+										<em class="help-text"><?php echo $field->get_help_text(); ?></em>
 										<div class="carbon-field" data-type="<?php echo $field->type ?>">
 											<?php echo $field->render(); ?>
 										</div>

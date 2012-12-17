@@ -1,8 +1,22 @@
 <table class="carbon-container <?php echo $container_tag_class_name ?>" data-type="<?php echo $container_type ?>" data-options='<?php echo json_encode($container_options) ?>'>
 	<?php foreach ($this->fields as $field): 
 		$field->load();
+		$help_text = $field->get_help_text();
 	?>
-		<tr <?php if($field->type == 'Separator') echo 'class="carbon-separator"' ?>>
+		
+		<?php if( $field->type == 'Separator' ) : ?>
+			<tr class="carbon-separator">
+				<td>
+					<?php 
+					echo $field->get_label(); 
+					?>
+					<?php if( !empty( $help_text ) ) :  ?><div class="help-text"><em><?php echo $help_text; ?></em></div> <?php endif; ?>
+				</td>
+			</tr>
+		<?php continue; endif; ?>
+
+
+		<tr>
 			<td>
 				<label>
 					<?php 
@@ -12,10 +26,10 @@
 						}
 					?>
 				</label>
-				<em><?php echo $field->get_help_text();  ?></em>
-				<div class="carbon-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+				<div class="carbon-field carbon-<?php echo $field->type ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 					<?php echo $field->render(); ?>
 				</div>
+				<?php if( !empty( $help_text ) ) :  ?><div class="help-text"><em><?php echo $help_text; ?></em></div> <?php endif; ?>
 			</td>
 		</tr>
 	<?php endforeach ?>

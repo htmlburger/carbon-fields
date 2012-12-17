@@ -20,7 +20,21 @@
 		<table border="0" cellspacing="0" cellpadding="0" class="form-table">
 			<?php foreach ($this->fields as $field): 
 				$field->load();
+				$help_text = $field->get_help_text();
+
 			?>
+
+				<?php if( $field->type == 'Separator' ) : ?>
+					<tr class="carbon-separator">
+						<td colspan="2">
+							<?php 
+							echo $field->get_label(); 
+							?>
+							<?php if( !empty( $help_text ) ) :  ?><div class="help-text"><em><?php echo $help_text; ?></em></div> <?php endif; ?>
+						</td>
+					</tr>
+				<?php continue; endif; ?>
+
 				<tr>
 					<th scope="row">
 						<label><?php 
@@ -29,15 +43,15 @@
 							echo ' <span class="carbon-required">*</span>';
 						}
 						?></label>
-
-						<em><?php echo $field->get_help_text(); ?></em>
 					</th>
 					<td>
-						<div class="carbon-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+						<div class="carbon-field carbon-<?php echo $field->type ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 							<?php echo $field->render(); ?>
 						</div>
+						<?php if( !empty( $help_text ) ) :  ?><div class="help-text"><em><?php echo $help_text; ?></em></div> <?php endif; ?>
 					</td>
 				</tr>
+
 			<?php endforeach ?>
 		</table>
 		<p class="submit"><input type="submit" name="submit" id="submit" class="button-primary" value="Save Changes"></p>
