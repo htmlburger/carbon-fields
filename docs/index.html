@@ -451,22 +451,59 @@ Carbon_Field::factory("map", "company_location", "Location")->help_text('drag an
 
 					<h4>Separator</h4>
 						<p><strong>Factory name: </strong><code>select</code></p>
-						<p>Creates a select box with pre-defined options.</p>
-						<h5>Methods</h5>
-						<dl>
-							<dt><code>rows($rows = 2)</code></dt>
-							<dd>Set the default number of rows visible.</dd>
-						</dl>
+						<p>Creates visual separator between adjacent fields. Has aesthetic function only, no data is saved.</p>
 						<h5>Example</h5>
 					<pre class="prettyprint">
-Carbon_Field::factory("rich_text", "sidenote", "Sidenote Content");
+Carbon_Field::factory("separator", "style_options", "Style");
 </pre>
 
 					<h4>Choose Sidebar</h4>
+						<p><strong>Factory name: </strong><code>choose_sidebar</code></p>
+						<p>Adds a drop-down field that lists existing sidebars and provides the ability to add new sidebars to the site.</p>
+						<h5>Methods</h5>
+						<dl>
+							<dt><code>disable_add_new()</code></dt>
+							<dd>Remove the ability to add new sidebars to the site.</dd>
+
+							<dt><code>set_sidebar_options($sidebar_options)</code></dt>
+							<dd>Set the options used for sidebars created by this field. See <a href="http://codex.wordpress.org/Function_Reference/register_sidebar"><i class="icon-globe"></i> register_sidebar</a> for more information (). The default options are:
+								<pre class="prettyprint">
+array(
+	'before_widget' =&gt; '&lt;li id="%1$s" class="widget %2$s"&gt;',
+	'after_widget' =&gt; '&lt;/li&gt;',
+	'before_title' =&gt; '&lt;h2 class="widgettitle"&gt;',
+	'after_title' =&gt; '&lt;/h2&gt;',
+)
+</pre>
+							 </dd>
+						</dl>
+						<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("choose_sidebar", "custom_sidebar", "Sidebar")
+	->help_text('Select which sidebar to show in this page, or click "Add New" to create a new one')
+	->set_sidebar_options(array(
+			'before_widget' =&gt; '&lt;div id="%1$s" class="widget %2$s"&gt;',
+			'after_widget' =&gt; '&lt;/div&gt;',
+			'before_title' =&gt; '&lt;h3 class="widgettitle"&gt;',
+			'after_title' =&gt; '&lt;div class="cl"&gt;&amp;nbsp;&lt;/div&gt;&lt;/h3&gt;',
+		));
+</pre>
 
 					<h4>Header scripts</h4>
+						<p><strong>Factory name: </strong><code>header_scripts</code></p>
+						<p>Applicable to Theme Options container only. Displays a text area, the contents of which will be automatically printed in the <code>&lt;head&gt;</code> of each page. Useful for printing user-defined javascript, as well as styles, meta tags, etc.</p>
+						<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("header_scripts", "header_script");
+</pre>
 
 					<h4>Footer scripts</h4>
+						<p><strong>Factory name: </strong><code>footer_scripts</code></p>
+						<p>Applicable to Theme Options container only. Displays a text area, the contents of which will be automatically printed before the closing <code>&lt;/body&gt;</code> of each page (during <code>wp_footer()</code>). Useful for printing Google Analytics code, or user-defined javascript.</p>
+						<h5>Example</h5>
+					<pre class="prettyprint">
+Carbon_Field::factory("footer_scripts", "footer_script");
+</pre>
 
 
 					<h3>Complex Field</h3>
