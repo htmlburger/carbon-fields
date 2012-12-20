@@ -13,8 +13,6 @@ class Carbon_Field_Complex extends Carbon_Field {
 	protected $values_max = -1;
 
 	function init() {
-		global $wp_version;
-
 		if (defined('WP_ADMIN') && WP_ADMIN) {
 			wp_enqueue_script('jquery-ui-sortable');
 		}

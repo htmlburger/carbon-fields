@@ -20,7 +20,7 @@
 						?>
 							<tr>
 								<th scope="row">
-									<label><?php
+									<label for="<?php echo $field->get_id() ?>"><?php
 									echo $field->get_label(); 
 									if ( $field->is_required() ) {
 										echo ' <span class="carbon-required">*</span>';
@@ -46,14 +46,14 @@
 								$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
 							?>
 									<td>
-										<strong>
+										<label for="<?php echo $field->get_id() ?>">
 											<?php
 												echo $field->get_label(); 
 												if ( $field->is_required() ) {
 													echo ' <span class="carbon-required">*</span>';
 												}
 											?>
-										</strong>
+										</label>
 										<em class="help-text"><?php echo $field->get_help_text(); ?></em>
 										<div class="carbon-field" data-type="<?php echo $field->type ?>">
 											<?php echo $field->render(); ?>
@@ -91,7 +91,7 @@
 						?>
 							<tr>
 								<th scope="row">
-									<label><?php
+									<label for="<?php echo $field->get_id() ?>"><?php
 									echo $field->get_label(); 
 									if ( $field->is_required() ) {
 										echo ' <span class="carbon-required">*</span>';
@@ -119,14 +119,14 @@
 								$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
 							?>
 									<td>
-										<strong>
+										<label for="<?php echo $field->get_id() ?>">
 											<?php
 												echo $field->get_label(); 
 												if ( $field->is_required() ) {
 													echo ' <span class="carbon-required">*</span>';
 												}
 											?>
-										</strong>
+										</label>
 										<em><?php echo $field->get_help_text(); ?></em>
 										<div class="carbon-field  carbon-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 											<?php echo $field->render(); ?>

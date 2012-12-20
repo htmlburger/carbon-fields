@@ -417,6 +417,10 @@ class Carbon_Field {
 		return $this;
 	}
 
+	function get_id() {
+		return $this->id;
+	}
+
 	/**
 	 * Return whether this field is mandatory for the user
 	 *
@@ -443,7 +447,7 @@ class Carbon_Field {
 
 class Carbon_Field_Text extends Carbon_Field {
 	function render() {
-		echo '<input type="text" name="' . $this->name . '" value="' . esc_attr($this->value) . '" class="regular-text" />';
+		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->name . '" value="' . esc_attr($this->value) . '" class="regular-text" />';
 	}
 }
 
@@ -456,7 +460,7 @@ class Carbon_Field_Textarea extends Carbon_Field {
 	}
 
 	function render($append = '') {
-		echo '<textarea name="' . $this->get_name() . '" rows="' . $this->rows . '">';
+		echo '<textarea id="' . $this->get_id() . '" name="' . $this->get_name() . '" rows="' . $this->rows . '">';
 		echo esc_textarea($this->get_value());
 		echo '</textarea>';
 	}
@@ -533,7 +537,7 @@ class Carbon_Field_Date extends Carbon_Field {
 
 	function render() {
 		echo '
-		<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-datepicker" />
+		<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-datepicker" />
 		<a class="carbon-datepicker-trigger hide-if-no-js"></a>
 		';
 	}
@@ -552,7 +556,7 @@ class Carbon_Field_Color extends Carbon_Field {
 	function render() {
 		echo '
 		<div class="carbon-color-row">
-			<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-color" />
+			<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-color" />
 			<a class="carbon-color-preview hide-if-no-js"></a>
 			<input type="button" class="pickcolor button hide-if-no-js" value="Select a Color">
 			<div class="carbon-color-container hide-if-no-js"></div>
@@ -665,7 +669,7 @@ class Carbon_Field_Select extends Carbon_Field {
     		return;
     	}
 
-		echo '<select name="' . $this->get_name() . '">';
+		echo '<select id="' . $this->get_id() . '" name="' . $this->get_name() . '">';
 
 		foreach ($this->options as $key => $value) {
 			echo '<option value="' . htmlentities($key, ENT_COMPAT, 'UTF-8') . '"';
@@ -913,7 +917,7 @@ class Carbon_Field_File extends Carbon_Field {
 	static $attached_media_library_hook = false; 
 
 	function render() {
-		echo '<input type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-file-field" />';
+		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-file-field" />';
 		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=file&amp;carbon_type=file" type="button" class="button" value="Select Media" />';
 		
 		// For image only
@@ -1091,7 +1095,7 @@ class Carbon_Field_Image extends Carbon_Field_File {
 	public $image_extensions = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
 
 	function render() {
-		echo '<input type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-image-field" />';
+		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-image-field" />';
 		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=image&amp;carbon_type=image" type="button" class="button" value="Select Media" />';
 		
 		// For image only

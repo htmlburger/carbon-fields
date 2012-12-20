@@ -67,12 +67,19 @@ jQuery(function($) {
 
 	/* Date picker */
 	carbon_field.Date = function(element, field_obj) {
-		element.find('.carbon-datepicker').datepicker({
+		var text_field = element.find('.carbon-datepicker');
+
+		text_field.datepicker({
 			dateFormat: 'yy-mm-dd',
 			changeMonth: true,
 			changeYear: true,
 			showButtonPanel: true,
 			hideIfNoPrevNext: true
+		});
+
+		element.find('.carbon-datepicker-trigger').click(function() {
+			text_field.focus();
+			return false;
 		});
 	}
 
@@ -92,7 +99,8 @@ jQuery(function($) {
 		farbtastic_obj.setColor(color_field.val());
 
 		color_preview.add(color_button).click(function() {
-			color_container.show();
+			color_container.toggle();
+			return false;
 		});
 
 		$('body').click(function(e) {
@@ -316,9 +324,20 @@ jQuery(function($) {
 
 		new_row.find('.carbon-field-skip').removeClass('carbon-field-skip');
 
+		// Set new row_uid
 		new_row.find('input[name$="[__ei__][group]"]').val(field.new_row_type);
-
 		new_row.html( new_row.html().replace(/\[__ei__\]/g, '[' + field.row_uid + ']') );
+
+		// Set new id
+		new_row.find('label[for]').each(function() {
+			var label = $(this),
+				id = label.attr('for'),
+				input = new_row.find('#' + id);
+
+			id = id + '-c' + field.row_uid;
+			label.attr('for', id);
+			input.attr('id', id);
+		});
 
 		new_row.removeClass('carbon-group-preview').addClass('carbon-group-row').insertBefore( field.node.find('> .carbon-subcontainer > tbody > .carbon-group-preview:first') );
 		init(new_row);

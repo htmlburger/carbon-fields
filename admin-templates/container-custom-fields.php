@@ -18,7 +18,7 @@
 
 		<tr>
 			<td>
-				<label>
+				<label for="<?php echo $field->get_id() ?>">
 					<?php 
 						echo $field->get_label(); 
 						if ( $field->is_required() ) {
