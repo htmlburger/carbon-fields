@@ -9,18 +9,18 @@ function carbon_init_containers() {
 	Carbon_Container::init_containers();
 }
 
-function carbon_get_post_meta($id, $name = null, $type = null) {
-	if ( !is_numeric($id) ) {
-		$type = $name;
-		$name = $id;
-		$id = get_the_id();
-	}
+function carbon_get_post_meta($id, $name, $type = null) {
+	$name = $name[0] == '_' ? $name: '_' . $name;
 
 	if ( $type == 'complex' ) {
-		return carbon_get_complex_fields('CustomField', '_' . $name, $id);
+		return carbon_get_complex_fields('CustomField', $name, $id);
 	}
 
-	return get_post_meta($id, '_' . $name, true);
+	return get_post_meta($id, $name, true);
+}
+
+function carbon_get_the_post_meta($name, $type = null) {
+	return carbon_get_post_meta(get_the_id(), $name, $type);
 }
 
 function carbon_get_theme_option($name, $type = null) {
