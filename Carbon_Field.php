@@ -659,7 +659,7 @@ class Carbon_Field_Select extends Carbon_Field {
 	protected $options = array();
 
 	function add_options($options) {
-	    $this->options = $options;
+	    $this->options = array_merge($this->options, $options);
 	    return $this;
 	}
 
@@ -689,7 +689,7 @@ class Carbon_Field_Radio extends Carbon_Field {
 	protected $options = array();
 
 	function add_options($options) {
-	    $this->options = $options;
+	    $this->options = array_merge($this->options, $options);
 	    return $this;
 	}
 
@@ -804,7 +804,7 @@ class Carbon_Field_Set extends Carbon_Field {
 	protected $limit_options = 0;
 
 	function add_options($options) {
-	    $this->options = $options;
+	    $this->options = array_merge($this->options, $options);
 	    return $this;
 	}
 
