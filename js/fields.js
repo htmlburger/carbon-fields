@@ -152,9 +152,8 @@ jQuery(function($) {
 		}
 
 		if ( !exists || isNaN(lat) ||isNaN(lng)  ) {
-			lat = field.data('default-lat'); 
+			lat = field.data('default-lat');
 			lng = field.data('default-lng');
-			zoom = 5;
 		};
 
 		//draw a map
