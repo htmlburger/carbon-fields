@@ -433,9 +433,8 @@ class Carbon_Field {
 	static function admin_hook_scripts() {
 		wp_enqueue_script('carbon_fields', CARBON_PLUGIN_URL . '/js/fields.js');
 
-		 wp_enqueue_script('media-upload');
-		 wp_enqueue_script('thickbox');
-
+		wp_enqueue_script('media-upload');
+		wp_enqueue_script('thickbox');
 	}
 
 	static function admin_hook_styles() {
@@ -504,6 +503,8 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 	function admin_init() {
 		if ( !self::$attached_editor ) {
 			self::$attached_editor = true;
+
+			add_action('admin_print_scripts', array('Carbon_Field_Rich_Text', 'admin_enqueue_scripts'));
 			add_action('admin_footer', array('Carbon_Field_Rich_Text', 'admin_footer'));
 		}
 	}
@@ -516,6 +517,10 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 			<?php wp_editor( '', 'carbon_settings' ); ?>
 		</div>
 		<?php
+	}
+
+	function admin_enqueue_scripts() {
+		wp_enqueue_script('editor');
 	}
 }
 
