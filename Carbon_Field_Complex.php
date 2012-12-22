@@ -42,7 +42,6 @@ class Carbon_Field_Complex extends Carbon_Field {
 			}
 		}
 
-		//  $name, $fields, $label=null;
 		$group = new Carbon_Field_Group();
 		$group->set_name( $name );
 		

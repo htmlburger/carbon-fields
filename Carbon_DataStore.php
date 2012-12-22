@@ -38,7 +38,9 @@ class Carbon_DataStore_CustomField extends Carbon_DataStore_Base {
 	function init() {}
 
 	function save(Carbon_Field $field) {
-		update_post_meta($this->post_id, $field->get_name(), $field->get_value());
+		if ( !update_post_meta($this->post_id, $field->get_name(), $field->get_value()) ) {
+			add_post_meta($this->post_id, $field->get_name(), $field->get_value(), true);
+		}
 	}
 
 	function load(Carbon_Field $field) {
