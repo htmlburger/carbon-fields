@@ -749,6 +749,7 @@ ol.unstyled {
 
 dl {
   margin-bottom: 20px;
+  padding-left: 25px;
 }
 
 dt,
@@ -5891,3 +5892,6 @@ a.badge:hover {
 .affix {
   position: fixed;
 }
+
+.field-docs { margin-bottom: 10px; border-bottom: solid 1px #eee; }
+.prettyprint { margin-top: 5px; }

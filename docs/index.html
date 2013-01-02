@@ -52,6 +52,8 @@
 				<div class="span3">
 					<div class="well sidebar-nav">
 						<ul class="nav nav-list">
+							<li class="nav-header">Carbon Fields</li>
+							<li><a href="#abstract">Abstract Overview</a></li>
 							<li class="nav-header">Containers</li>
 							<li><a href="#Containers">Usage</a></li>
 							<li><a href="#Custom_Fields">Custom Fields</a></li>
@@ -88,11 +90,21 @@
 					<div class="hero-unit">
 						<h1><img src="img/carbon_fileds.jpg"></img>Carbon Fields</h1>
 					</div>
+					<h2 id="abstract">Abstract</h2>
+					<p>Carbon fields is a library for easy creation of custom(meta) fields in WordPress administration panel. It allows theme developer to associate meta-information with various  entities in a WordPress site(such as posts, taxonomy terms, widgets and so on). </p>
+
+					<p>The main components of the library are:</p>
+					<ul>
+						<li><strong>Container</strong> - represents group of fields and controls disposition of the fields in the WordPress administration panel. </li>
+						<li><strong>Field</strong> - represents single field. </li>
+						<li><strong>Data Storage</strong> - controls the underlying data storage for field values. </li>
+					</ul>
 
 					<h2 id="Containers">Containers</h2>
 
-					<p>Carbon Container is a group of custom fields and display options. Containers are displayed on different parts of the backend, accoding to their type and display options.</p>
-					<p>Containers have a title, which must <strong>unique</strong> for every container you create. The title should reflect the purpose of the container.</p>
+					<p>Carbon Container is a group of custom fields and display options. Containers are displayed on different parts of the backend, according to their type and display options.</p>
+
+					<p>Containers have a title, which must be <strong>unique</strong> across the whole WordPress instance. </p>
 
 					<pre class="prettyprint">
 Carbon_Container::factory('custom_fields', 'Custom Data')
@@ -102,18 +114,17 @@ Carbon_Container::factory('custom_fields', 'Custom Data')
 		Carbon_Field::factory('choose_sidebar', 'custom_sidebar'),
 		Carbon_Field::factory('image', 'Photo'),
 	));</pre>
-					<p>To create a new Carbon Container, you should use the container factory <code>Carbon_Container::factory($type, $title)</code>, where:<p>
+					<p>To create a new Carbon Container, you just use the container factory method<code>Carbon_Container::factory($type, $title)</code>, where:<p>
 
 					<dl>
 						<dt><code>$type</code></dt>
-						<dd>Identificator of the container type (accepted values are <code>custom_fields</code> and <code>theme_options</code>)</dd>
+						<dd>Identifier of the container type (accepted values are <code>custom_fields</code> and <code>theme_options</code>)</dd>
 
 						<dt><code>$title</code></dt>
 						<dd>Unique title of the container</dd>
 					</dl>
 
-					<h3 id="Types">Types</h3>
-					<h4 id="Custom_Fields">Custom fields</h4>
+					<h3 id="Custom_Fields">Custom fields Container</h3>
 					<p>Custom field containers are used to extend the post edit screens with additional fields. Field data is stored separately for each post as post meta (see <a href="http://codex.wordpress.org/Function_Reference/add_post_meta"><i class="icon-globe"></i> add_post_meta</a>). </p>
 
 					<pre class="prettyprint">
@@ -124,7 +135,7 @@ Carbon_Container::factory('custom_fields', 'Post Properties')
 	));</pre>
 
 
-					<h5>Visibility options</h5>
+					<h4>Visibility options</h4>
 					<p>Custom fields containers are very flexible in terms of display options. You can select specific post type they show on, as well as category, format, parent, etc. A list of all options is displayed below:</p>
 
 					<dl>
@@ -165,7 +176,7 @@ Carbon_Container::factory('custom_fields', 'Post Properties')
 						</dd>
 					</dl>
 								
-					<h5>Accessing field values</h5>
+					<h4>Accessing field values</h4>
 					<p>To access field values you need to use the function <code>carbon_get_post_meta($id, $name, $type = null)</code>, where: </p>
 					<dl>
 						<dt><code>$id</code></dt>
@@ -184,7 +195,7 @@ Carbon_Container::factory('custom_fields', 'Post Properties')
 </pre>
 					<p>You can also use <code>carbon_get_the_post_meta($name, $type = null)</code> to access the values for the current post in <a href="http://codex.wordpress.org/The_Loop"><i class="icon-globe"></i> The Loop</a>.</p>
 
-					<h4 id="Theme_Options">Theme Options</h4>
+					<h3 id="Theme_Options">Theme Options Container</h3>
 
 					<p>Theme option containers are used to add pages with options in the back-end. Field data is stored as <a href="http://codex.wordpress.org/Option_Reference"><i class="icon-globe"></i> options</a>. </p>
 					<p>By default, theme options containers automatically create main page in the admin area menu named "Theme Options" and sub page named "General". In most cases these default settings are sufficient, but if you need to change the title or the location of a page in the menu, read the "Multiple option pages" section below.</p>
@@ -198,7 +209,7 @@ Carbon_Container::factory('theme_options', 'General')
 </pre>
 
 
-					<h5>Multiple option pages</h5>
+					<h4>Multiple option pages</h4>
 					<p>It is sometimes needed to create more than one option page. At other times you need to place different pages in different sections in the admin menu. For example, you might have extensive list of settings for the background that you would want to place on a separate Theme options page under Appearance.</p>
 					<p>Below you see sample code for creating two theme option containers:</p>
 					<pre class="prettyprint">
@@ -236,7 +247,7 @@ Carbon_Container::factory('theme_options', 'Customize Background')
 					<p>Every theme options container requires a level of permission, which by default is set to <code>edit_themes</code> (read more about permissions: <a href="http://codex.wordpress.org/Roles_and_Capabilities"><i class="icon-globe"></i>Roles &amp; Capabilities</a>).<br/>You can change the permission required to view your options page using <code>set_page_permissions($permission)</code></p>
 
 
-					<h5>Accessing field values</h5>
+					<h4>Accessing field values</h4>
 					<p>To retrieve field values from a theme options container, you need to use the function <code>carbon_get_theme_option($name, $type = null)</code>, where:</p>
 					<dl>
 						<dt><code>$name</code></dt>
@@ -266,13 +277,13 @@ Carbon_Container::factory('theme_options', 'Customize Background')
 
 					<p>New field are created using the factory method <code>Carbon_Field::factory($type, $name, $label=null)</code>, where:</p>
 					<dl>
-						<dt>$type</dt>
+						<dt><code>$type</code></dt>
 						<dd>The type of the field. This parameter should be valid class name of a field. For example <code>text</code> will create field of class <code>Carbon_Field_Text</code>. For a complete list of field types, see <a href="#Types"><i class="icon-hand-right"></i> Types</a>.</dd>
 
-						<dt>$name</dt>
+						<dt><code>$name</code></dt>
 						<dd>Name of the field. Used as a key when stored in the database and for you to retrieve it's value. Please note, that all fields in a Custom Field Container have their names automatically prefixed with an underscored (e.g. <code>bgcolor</code> becomes <code>_bgcolor</code>). For more information why, see <a href="http://codex.wordpress.org/Function_Reference/add_post_meta#Making_a_.22Hidden.22_Custom_Field"><i class="icon-globe"></i> here</a></dd>
 						
-						<dt>$label (optional)</dt>
+						<dt><code>$label</code> (optional)</dt>
 						<dd>The label of the field is displayed in the back-end only, where the container is visible. When the parameter is omitted it is automatically derived from the <code>$name</code></dd>
 					</dl>
 
@@ -299,147 +310,150 @@ Carbon_Field::factory('select', 'color')-&gt;addOptions(array('red', 'blue', 'gr
 					<p>You add help text using <code>Carbon_Field::factory(...)-&gt;<strong>help_text($text)</strong></code></p>
 
 
-					<h3 id="Field_Types">Types</h3>
+					<div class="field-docs">
+						<h4 id="Field_Text">Text Field <code>text</code></h4>
+						<p>The text field is the simplest and most generic field. It renders a text input field.</p>
+						<pre class="prettyprint">Carbon_Field::factory('text', 'subtitle')</pre>
+					</div>
 
+					<div class="field-docs">
+						<h4 id="Field_Textarea">Textarea <code>textarea</code></h4>
+						<p>Multiline text input with HTML allowed</p>
+						<pre class="prettyprint">Carbon_Field::factory('textarea', 'meta_description')</pre>
+						<strong>Setup methods</strong>
+						<dl>
+							<dt><code>rows($rows = 2)</code></dt>
+							<dd>
+								Set the default number of rows visible to <code>$rows</code>. 
 
-					<h4 id="Field_Text">Text</h4>
-					<p><strong>Factory name: </strong><code>text</code></p>
-					<p>The text field is the simplest and most generic ECF field. It renders a text input field.</p>
+								<pre class="prettyprint">Carbon_Field::factory("textarea", "related_urls", "Related Links")-&gt;rows(10);</pre>
+							</dd>
+						</dl>
+					</div>
+					
+					<div class="field-docs">
+						<h4 id="Field_RichText">Rich text area <code>rich_text</code></h4>
+						<p>This field renders the built-in WordPress tinyMCE editor.</p>
+						<pre class="prettyprint">
+Carbon_Field::factory("rich_text", "sidenote", "Sidenote Content");</pre>
 
+					</div>
+					<div class="field-docs">
+						<h4 id="Field_Date">Date <code>date</code></h4>
+						<p>Renders a date picker using jQuery UI. The value is stored in <code>YYYY-MM-DD</code> format.</p>
+						<pre class="prettyprint">
+Carbon_Field::factory("date", "event_start_date", "Start");</pre>
+					</div>
 
-
-					<h4 id="Field_Textarea">Textarea</h4>
-					<p><strong>Factory name: </strong><code>textarea</code></p>
-					<p>Multiline text input with HTML allowed</p>
-					<h5>Methods</h5>
-					<dl>
-						<dt><code>rows($rows = 2)</code></dt>
-						<dd>Set the default number of rows visible to <code>$rows</code>.</dd>
-					</dl>
-					<pre class="prettyprint">
-Carbon_Field::factory("textarea", "related_urls", "Related Links")-&gt;rows(10);
-</pre>
-
-					<h4 id="Field_RichText">Rich text area</h4>
-					<p><strong>Factory name: </strong><code>rich_text</code></p>
-					<p>This field renders the built-in WordPress tinyMCE editor.</p>
-					<pre class="prettyprint">
-Carbon_Field::factory("rich_text", "sidenote", "Sidenote Content");
-</pre>
-
-					<h4 id="Field_Date">Date</h4>
-					<p><strong>Factory name: </strong><code>date</code></p>
-					<p>Renders a date picker using jQuery UI. The value is stored in <code>YYYY-MM-DD</code> format.</p>
-					<pre class="prettyprint">
-Carbon_Field::factory("date", "event_start_date", "Start");
-</pre>
-
-					<h4 id="Field_Color">Color</h4>
-					<p><strong>Factory name: </strong><code>color</code></p>
-					<p>Renders color picker using Farbtastic. Colors are represented with expressed with six hexadecimal digits prefixed with <code>#</code> (e.g. white is <code>#FFFFFF</code>)</p>
-					<pre class="prettyprint">
+					<div class="field-docs">
+						<h4 id="Field_Color">Color <code>color</code></h4>
+						<p>Renders color picker using Farbtastic. Colors are represented with six hexadecimal digits prefixed with <code>#</code> (e.g. white is <code>#FFFFFF</code>)</p>
+						<pre class="prettyprint">
 Carbon_Field::factory("color", "box_background", "Background Color");
 </pre>
+					</div>
+					<div class="field-docs">
+						<h4 id="Field_Checkbox">Checkbox <code>checkbox</code></h4>
+						<p>The checkbox field create a single tick-able option with a label next to it.</p>
+						<h5>Setup methods</h5>
+						<dl>
+							<dt><code>set_option_value($value)</code></dt>
+							<dd>Set the value that will be saved when the option is ticked.<br/><span class="label label-info">NB!</span> When unticked, the value is not saved in the database.</dd>
+						</dl>
+						<pre class="prettyprint">
+Carbon_Field::factory("rich_text", "sidenote", "Sidenote Content");</pre>
+					</div>
 
-					<h4 id="Field_Checkbox">Checkbox</h4>
-					<p><strong>Factory name: </strong><code>select</code></p>
-					<p>The checkbox field create a single tick-able option with a label next to it.</p>
-					<h5>Methods</h5>
-					<dl>
-						<dt><code>set_option_value($value)</code></dt>
-						<dd>Set the value that will be saved when the option is ticked.<br/><span class="label label-info">NB!</span> When unticked, the value is not saved in the database.</dd>
-					</dl>
-					<pre class="prettyprint">
-Carbon_Field::factory("rich_text", "sidenote", "Sidenote Content");
-</pre>
-
-
-					<h4 id="Field_Select">Select</h4>
-					<p><strong>Factory name: </strong><code>select</code></p>
-					<p>Creates a select box with pre-defined options.</p>
-					<h5>Methods</h5>
-					<dl>
-						<dt><code>add_options($options)</code></dt>
-						<dd>Add an associative array with options. If you provide indexed array with no key values, the default indexes (0, 1, 2 ...) of the elements will be used.<br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</dd>
-					</dl>
-					<pre class="prettyprint">
+					<div class="field-docs">
+						<h4 id="Field_Select">Select <code>select</code></h4>
+						<p>Creates a select box with pre-defined options. </p>
+						<h5>Setup methods</h5>
+						<dl>
+							<dt><code>add_options($options)</code></dt>
+							<dd>Add an associative array with options. <span class="label label-info">NB!</span> If you provide indexed array with no key values, the <strong>default indexes (0, 1, 2 ...)</strong> of the elements will be used.<br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</dd>
+						</dl>
+						<pre class="prettyprint">
 Carbon_Field::factory("select", "content_align", "Text alignment")-&gt;add_options(array(
 	'left' =&gt; 'Left',
 	'center' =&gt; 'Center',
 	'right' =&gt; 'Right',
 ));
 </pre>
-
-					<h4 id="Field_Radio">Radio</h4>
-					<p><strong>Factory name: </strong><code>radio</code></p>
-					<p>Similar to the Select field, but instead of in a select box, options are rendered as a set of radio buttons.</p>
-					<h5>Methods</h5>
-					<dl>
-						<dt><code>add_options($options)</code></dt>
-						<dd>Add an associative array with options. If you provide indexed array with no key values, the default indexes (0, 1, 2 ...) of the elements will be used.<br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</dd>
-					</dl>
-					<pre class="prettyprint">
+					</div>
+					<div class="field-docs">
+						<h4 id="Field_Radio">Radio <code>radio</code></h4>
+						<p>Similar to the Select field, but instead of in a select box, options are rendered as a set of radio buttons.</p>
+						<h5>Setup methods</h5>
+						<dl>
+							<dt><code>add_options($options)</code></dt>
+							<dd>Add an associative array with options. If you provide indexed array with no key values, the default indexes (0, 1, 2 ...) of the elements will be used.<br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</dd>
+						</dl>
+						<pre class="prettyprint">
 Carbon_Field::factory("radio", "subtitle_styling", "Subtitle text style")-&gt;add_options(array(
 	'em' =&gt; 'Italic',
 	'strong' =&gt; 'Bold',
 	'del' =&gt; 'Strike',
 ));
 </pre>
+					</div>
 
-					<h4 id="Field_Set">Set</h4>
-					<p><strong>Factory name: </strong><code>set</code></p>
-					<p>The set field creates a list of tick-able options. This field enables to select multiple options. The value is retrieved as array containing the ticked options.</p>
-					<h5>Methods</h5>
-					<dl>
-						<dt><code>add_options($options)</code></dt>
-						<dd>Add an associative array with options. If you provide indexed array with no key values, the default indexes (0, 1, 2 ...) of the elements will be used.<br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</dd>
-					</dl>
-					<pre class="prettyprint">
+					<div class="field-docs">
+						<h4 id="Field_Set">Set <code>set</code></h4>
+						<p>The set field creates a list of tick-able options. This field enables to select multiple options. The value is retrieved as array containing the ticked options.</p>
+						<h5>Setup methods</h5>
+						<dl>
+							<dt><code>add_options($options)</code></dt>
+							<dd>Add an associative array with options. If you provide indexed array with no key values, the default indexes (0, 1, 2 ...) of the elements will be used.<br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</dd>
+						</dl>
+						<pre class="prettyprint">
 Carbon_Field::factory("set", "product_features", "Features")-&gt;add_options(array(
 	'bluetooth' =&gt; 'Bluetooth',
 	'gps' =&gt; 'GPS navigation',
 	'nfc' =&gt; 'Near field communication',
 ));
 </pre>
+					</div>
 
-					<h4 id="Field_File">File</h4>
-					<p><strong>Factory name: </strong><code>file</code></p>
-					<p>Renders a text input with URL and file upload button. The built-in WordPress file handling interface is used.</p>
-					<pre class="prettyprint">
+					<div class="field-docs">
+						<h4 id="Field_File">File <code>file</code></h4>
+						<p>Renders a text input with URL and file upload button. The built-in WordPress file handling interface is used.</p>
+						<pre class="prettyprint">
 Carbon_Field::factory("file", "price_list", "Price list (PDF)");
 </pre>
+					</div>
 
-					<h4 id="Field_Image">Image</h4>
-					<p><strong>Factory name: </strong><code>image</code></p>
-					<p>Renders a text input with URL and image upload button. The built-in WordPress file handling interface is used.</p>
-					<p>Supported image formats are: jpg, jpeg, gif, png and bmp</p>
-					<pre class="prettyprint">
+					<div class="field-docs">
+						<h4 id="Field_Image">Image <code>image</code></h4>
+						<p>Renders a text input with URL and image upload button. The built-in WordPress file handling interface is used.</p>
+						<p>Supported image formats are: jpg, jpeg, gif, png and bmp</p>
+						<pre class="prettyprint">
 Carbon_Field::factory("image", "employee_photo", "Photo");
 </pre>
+					</div>
 
-					<h4 id="Field_Map">Map</h4>
-						<p><strong>Factory name: </strong><code>map</code></p>
+					<div class="field-docs">
+						<h4 id="Field_Map">Map <code>map</code></h4>
 						<p>Creates a Google-powered map. The location is represented as longitude and latitude and is saved in three times in the database - one row for the latitude (with name <code>$field_name . '_lat'</code>), one row for the longitude (with name <code>$field_name . '_lng'</code>) and one row as a single string (<code>$latitude . ',' . $longitude</code> with name <code>$field_name</code>)</p>
-						<h5>Methods</h5>
+						<h5>Setup methods</h5>
 						<dl>
 							<dt><code>set_position($lat, $lng, $zoom)</code></dt>
 							<dd>Set the default position on the map specified by <code>$lat</code> and <code>$lng</code> and the default zoom level to <code>$zoom</code> (zoom <code>0</code> corresponds to a map of the Earth fully zoomed out).</dd>
 						</dl>
-					<pre class="prettyprint">
-Carbon_Field::factory("map", "company_location", "Location")->help_text('drag and drop the pin on the map to select location');
-</pre>
+						<pre class="prettyprint">
+Carbon_Field::factory("map", "company_location", "Location")->help_text('drag and drop the pin on the map to select location');</pre>
+					</div>
 
-					<h4 id="Field_Separator">Separator</h4>
-						<p><strong>Factory name: </strong><code>select</code></p>
-						<p>Creates visual separator between adjacent fields. Has aesthetic function only, no data is saved.</p>
-					<pre class="prettyprint">
-Carbon_Field::factory("separator", "style_options", "Style");
-</pre>
+					<div class="field-docs">
+						<h4 id="Field_Separator">Separator <code>separator</code></h4>
+							<p>Creates visual separator between adjacent fields. Has aesthetic function only, no data is saved.</p>
+						<pre class="prettyprint">
+Carbon_Field::factory("separator", "style_options", "Style");</pre>
+					</div>
 
-					<h4 id="Field_Choose_Sidebar">Choose Sidebar</h4>
-						<p><strong>Factory name: </strong><code>choose_sidebar</code></p>
+					<div class="field-docs">
+						<h4 id="Field_Choose_Sidebar">Choose Sidebar <code>choose_sidebar</code></h4>
 						<p>Adds a drop-down field that lists existing sidebars and provides the ability to add new sidebars to the site.</p>
-						<h5>Methods</h5>
+						<h5>Setup methods</h5>
 						<dl>
 							<dt><code>disable_add_new()</code></dt>
 							<dd>Remove the ability to add new sidebars to the site.</dd>
@@ -456,9 +470,8 @@ array(
 </pre>
 							 </dd>
 						</dl>
-
-					<p>The example below shows how to create a Choose Sidebar field with custom sidebar options and help text:</p>
-					<pre class="prettyprint">
+						<p>The example below shows how to create a Choose Sidebar field with custom sidebar options and help text:</p>
+						<pre class="prettyprint">
 Carbon_Field::factory("choose_sidebar", "custom_sidebar", "Sidebar")
 	->help_text('Select which sidebar to show in this page, or click "Add New" to create a new one')
 	->set_sidebar_options(array(
@@ -468,21 +481,22 @@ Carbon_Field::factory("choose_sidebar", "custom_sidebar", "Sidebar")
 			'after_title' =&gt; '&lt;div class="cl"&gt;&amp;nbsp;&lt;/div&gt;&lt;/h3&gt;',
 		));
 </pre>
-
-					<h4 id="Field_HeaderScripts">Header scripts</h4>
-						<p><strong>Factory name: </strong><code>header_scripts</code></p>
-						<p>Applicable to Theme Options container only. Displays a text area, the contents of which will be automatically printed in the <code>&lt;head&gt;</code> of each page. Useful for printing user-defined javascript, as well as styles, meta tags, etc.</p>
-					<pre class="prettyprint">
+					</div>
+					
+					<div class="field-docs">
+						<h4 id="Field_HeaderScripts">Header scripts <code>header_scripts</code></h4>
+							<p>Applicable to Theme Options container only. Displays a text area, the contents of which will be automatically printed in the <code>&lt;head&gt;</code> of each page. Useful for printing user-defined javascript, as well as styles, meta tags, etc.</p>
+						<pre class="prettyprint">
 Carbon_Field::factory("header_scripts", "header_script");
 </pre>
-
-					<h4 id="Field_FooterScripts">Footer scripts</h4>
-						<p><strong>Factory name: </strong><code>footer_scripts</code></p>
-						<p>Applicable to Theme Options container only. Displays a text area, the contents of which will be automatically printed before the closing <code>&lt;/body&gt;</code> of each page (during <code>wp_footer()</code>). Useful for printing Google Analytics code, or user-defined javascript.</p>
-					<pre class="prettyprint">
+					</div>
+					<div class="field-docs">
+						<h4 id="Field_FooterScripts">Footer scripts <code>footer_scripts</code></h4>
+							<p>Applicable to Theme Options container only. Displays a text area, the contents of which will be automatically printed before the closing <code>&lt;/body&gt;</code> of each page (during <code>wp_footer()</code>). Useful for printing Google Analytics code, or user-defined javascript.</p>
+						<pre class="prettyprint">
 Carbon_Field::factory("footer_scripts", "footer_script");
 </pre>
-
+					</div>
 
 					<h3 id="Complex_Field">Complex Field</h3>
 					<p>Complex fields act as containers to which you can add multiple groups of fields. It is represented as a table, where each row is a field group. The user is able to add infinite rows of each group. This allows to repeat a set of fields multiple times creating customizable and sortable lists. This is useful when creating image galleries, lists of data or advanced content and layout elements.</p>
@@ -493,6 +507,8 @@ Carbon_Field::factory('complex', 'slide')-&gt;add_fields(array(
 		Carbon_Field::factory('image', 'photo'),
 	)),
 </pre>
+					
+
 					<p>The example above shows how to make a slide show. We crated a single complex field named <code>slide</code>, to which we attached one group of fields that represents a single slide - <code>title</code> and <code>photo</code>. The user will be able to add multiple rows of title and photo, thus creating a list of slides for the slide show. </p>
 
 					<p>A more advanced usage of the complex field is shown below:</p>
@@ -615,11 +631,11 @@ array (
 					</dl>
 					<p><span class="label label-info">NB!</span> When in a Custom Fields container, the name of the complex field is prefixed with an underscore, but the name of the field (<code>field_name</code>) is not. Thus, the key format becomes: <code><strong>_</strong>{complex_field_name}_{group_name}-{field_name}_{number}</code></p>
 
-					<h2>Advanced Topics (TBD)</h2>
+					<!-- <h2>Advanced Topics (TBD)</h2>
 						<h3>Create custom field classes</h3>
 						<h3>Create custom containers</h3>
 						<h3>How container registration works</h3>
-						<h3>Create custom data store</h3>
+						<h3>Create custom data store</h3> -->
 
 				</div><!--/span-->
 			</div><!--/row-->
