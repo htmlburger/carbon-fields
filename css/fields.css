@@ -41,7 +41,7 @@
 .carbon-field .wp-editor-container textarea { resize: none; }
 
 .carbon-separator td { padding: 0; border: 0 none; }
-.carbon-separator h3 {  margin-top: 20px !important; cursor: default; }
+.js .carbon-separator h3, .carbon-separator h3 {  margin-top: 20px; cursor: default; }
 
 .carbon-subcontainer  { background: #E0E0E0 !important; }
 .carbon-subcontainer th { font-weight: normal; }
