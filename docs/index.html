@@ -591,27 +591,56 @@ array (
 					<h4>Limit the number of rows</h4>
 					<p>You can constrain the number of rows in a complex field using the following two functions: </p>
 
-					<p>Set the minimum number of rows - <code>set_min($min)</code>, where:</p>
-					<dl>
-						<dt><code>$min</code></dt>
-						<dd>Minimum number of rows. Must be greater than 1. Defaults to <code>-1</code> (no limit).</dd>
-					</dl>
 
-					<p>Set the maximum number of rows - <code>set_max($max)</code>, where:</p>
-					<dl>
-						<dt><code>$max</code></dt>
-						<dd>Maximum number of rows. Must be greater than 1. Defaults to <code>-1</code> (no limit). </dd>
-					</dl>
+					<h4 id="Setup_Methods">Setup Methods</h4>
+						<dl>
+							<dt><code>add_fields</code></dt>
+							<dd>
+								This method is identical to Container <code>add_fields</code> method. 
+							</dd>
 
-					<h4>Layout</h4>
-					<p>There are two layouts available for displaying a complex field</p>
-					<dl>
-						<dt><code>Carbon_Field_Complex::LAYOUT_LIST</code></dt>
-						<dd>This is the default layout. It lists groups as rows and their fields as a columns.</dd>
+							<dt><code>set_layout($layout = table | list)</code></dt>
+							<dd>
+								There are two layouts available for displaying a complex field: 
+								<ul>
+									<li><code>Carbon_Field_Complex::LAYOUT_LIST</code>(default) - lists groups as rows and their fields as a columns.</li>
+									<li><code>Carbon_Field_Complex::LAYOUT_TABLE</code> - lists groups as rows. Each field in the group is displayed in a new line with the label on the left and the user control on the right.</li>
+								</ul>
+							</dd>
 
-						<dt><code>Carbon_Field_Complex::LAYOUT_TABLE</code></dt>
-						<dd>Lists groups as rows. Each field in the group is displayed in a new line with the label on the left and the user control on the right.</dd>
-					</dl>
+							<dt><code>set_min($min)</code></dt>
+							<dd>
+								Minimum number of rows. Must be greater than 1. Defaults to <code>-1</code> (no limit).
+							</dd>
+
+							<dt><code>set_max($max)</code></dt>
+							<dd>
+								Maximum number of rows. Must be greater than 1. Defaults to <code>-1</code> (no limit). 
+							</dd>
+
+							<dt><code>setup_labels($labels)</code></dt>
+							<dd>
+								Allows client code to change labels for this complex field. The following items are accepted: 
+								<ul>
+									<li><strong>Add Row</strong> -- wording of the button for adding new field group. </li>
+								</ul>
+
+								Example usage:<pre class="prettyprint">$employees_labels = array(
+    'plural_name'=>'Employees',
+    'singular_name'=>'Employee',
+);
+Carbon_Field::factory('complex', 'employee_data')
+	-&gt;setup_labels($employees_labels)
+	-&gt;set_layout(Carbon_Field_Complex::LAYOUT_TABLE)
+	-&gt;add_fields(array(
+	    Carbon_Field::factory('text', 'name')->help_text('Name of employee'),
+	    Carbon_Field::factory('text', 'position')->help_text('Position title'),
+	    Carbon_Field::factory('image', 'image'),
+	    Carbon_Field::factory('rich_text', 'description'),
+	))</pre>
+							</dd>
+
+						</dl>
 
 					<h4 id="Data_Storage">Data Storage</h4>
 					<p>Complex field values are saved in the database in multiple rows - a row per field per group. To be able to distinguish which value for field is, a special format of the keys (<code>meta_key</code> or <code>option_name</code>) is adopted:</p>
