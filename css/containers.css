@@ -55,7 +55,7 @@ body.no-js .carbon-container { display: none; }
 
 */
 
-.carbon-container input.button { padding:2px 4px; border-radius:3px;}
+.carbon-container input.button { border-radius:3px;}
 .carbon-container a.button { padding-left:8px; padding-right:8px; border-radius:3px;}
 
 .carbon-radio-list { }
