@@ -1,5 +1,4 @@
 <?php 
-
 class Carbon_Field_Complex extends Carbon_Field {
 	const LAYOUT_TABLE = 'table';
 	const LAYOUT_LIST = 'list';
@@ -11,6 +10,11 @@ class Carbon_Field_Complex extends Carbon_Field {
 	protected $layout = self::LAYOUT_LIST;
 	protected $values_min = -1;
 	protected $values_max = -1;
+
+	public $labels = array(
+		'plural_name'=>'Entries',
+    	'singular_name'=>'Entry',
+	);
 
 	function init() {
 		if (defined('WP_ADMIN') && WP_ADMIN) {
@@ -49,6 +53,10 @@ class Carbon_Field_Complex extends Carbon_Field {
 		$group->set_label( $label );
 
 		$this->groups[$group->get_name()] = $group;
+		return $this;
+	}
+	function setup_labels($labels) {
+		$this->labels = array_merge($this->labels, $labels);
 		return $this;
 	}
 

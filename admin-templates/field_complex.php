@@ -77,10 +77,13 @@
 		<tr class="carbon-group-preview carbon-group-<?php echo $group->get_name() ?>">
 			<td class="carbon-drag-handle"><span></span></td>
 			<td>
+
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="" />
 				<div class="carbon-btn-holder">
 					<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
 				</div>
+				
+
 				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
 					<table class="layout-<?php echo $this->layout ?>">
 						<?php 
@@ -149,7 +152,7 @@
 					<option value="<?php echo $group->get_name() ?>"><?php echo $group->get_label() ?></option>
 				<?php endforeach; ?>
 			</select>
-			<a href="#" data-action="add" class="button">Add Row</a>
+			<a href="#" data-action="add" class="button">Add <?php echo $this->labels['singular_name'] ?></a>
 		</td>
 	</tr>
 </table>
