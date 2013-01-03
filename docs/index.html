@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -322,11 +321,10 @@ Carbon_Field::factory('select', 'color')-&gt;addOptions(array('red', 'blue', 'gr
 						<pre class="prettyprint">Carbon_Field::factory('textarea', 'meta_description')</pre>
 						<strong>Setup methods</strong>
 						<dl>
-							<dt><code>rows($rows = 2)</code></dt>
+							<dt><code>set_height($height = 170)</code></dt>
 							<dd>
-								Set the default number of rows visible to <code>$rows</code>. 
-
-								<pre class="prettyprint">Carbon_Field::factory("textarea", "related_urls", "Related Links")-&gt;rows(10);</pre>
+								Sets the height. 
+								<pre class="prettyprint">Carbon_Field::factory("textarea", "related_urls", "Related Links")-&gt;height(250);</pre>
 							</dd>
 						</dl>
 					</div>

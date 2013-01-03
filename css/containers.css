@@ -39,7 +39,7 @@ body.no-js .carbon-container { display: none; }
 .carbon-container .carbon-field input.carbon-color,
 .carbon-container .carbon-field select { width:25em; }
 
-.carbon-container .carbon-field textarea { width:100%; height:170px; }
+.carbon-container .carbon-field textarea { width:100%; }
 .carbon-container .carbon-map-field { display:none;  }
 
 .carbon-container .help-text { color:#666; }

@@ -451,15 +451,16 @@ class Carbon_Field_Text extends Carbon_Field {
 }
 
 class Carbon_Field_Textarea extends Carbon_Field {
-	protected $rows = 2;
+	protected $height = 170;
 
-	function rows($rows = 2) {
-		$this->rows = max(intval($rows), 0);
+	function set_height($height = 170) {
+		$min_height = 20;
+		$this->height = max(intval($height), $min_height);
 		return $this;
 	}
 
 	function render($append = '') {
-		echo '<textarea id="' . $this->get_id() . '" name="' . $this->get_name() . '" rows="' . $this->rows . '">';
+		echo '<textarea id="' . $this->get_id() . '" name="' . $this->get_name() . '" style="height: ' . $this->height . 'px; ">';
 		echo esc_textarea($this->get_value());
 		echo '</textarea>';
 	}
