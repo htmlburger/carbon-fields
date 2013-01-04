@@ -12,9 +12,9 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 	static protected $registered_field_names;
 
 	public $settings = array(
-		'parent'=>'theme-options.php',
-		'file'=>'theme-options.php',
-		'permissions'=>'edit_themes'
+		'parent' => 'self',
+		'file' => '',
+		'permissions' => 'edit_themes'
 	);
 	
 	function __construct($title) {
@@ -40,6 +40,14 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 	function init() {
 		if ( !$this->settings['parent'] || $this->settings['parent'] == 'self' ) {
 			$this->settings['parent'] = '';
+		} else if ( strpos($this->settings['parent'], '.php') === false ) {
+			$clear_title = $this->clear_string($this->settings['parent']);
+			$this->settings['parent'] = 'crbn-' . $clear_title . '.php';
+		}
+
+		if ( !$this->settings['file'] ) {
+			$clear_title = $this->clear_string($this->title);
+			$this->settings['file'] .= 'crbn-' . $clear_title . '.php';
 		}
 
 		$this->verify_unique_page();
@@ -58,10 +66,6 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 	}
 
 	function attach() {
-		// Check file name setting
-		if ( empty($this->settings['file']) ) {
-			throw new Carbon_Exception('Unspecified file name');
-		}
 
 		// Add menu page
 		if ( !$this->settings['parent'] ) {
@@ -72,8 +76,6 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 			    $this->settings['file'],
 		    	array($this, 'render')
 			);
-		} else {
-			$this->attach_main_page();
 		}
 
 	    add_submenu_page(
@@ -87,23 +89,6 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 
 		$page_hook = get_plugin_page_hookname( $this->settings['file'], '' );
 		add_action('load-' . $page_hook, array($this, '_save'));
-	}
-
-	function attach_main_page() {
-		// check if already registered?
-		if ( in_array('theme-options.php', self::$registered_pages) ) {
-			return;
-		}
-
-		self::$registered_pages[] = 'theme-options.php';
-
-		add_menu_page(
-			'Theme Options',
-			'Theme Options', 
-			'edit_themes', 
-			'theme-options.php',
-			create_function('', '')
-		);
 	}
 
 	/**
@@ -228,6 +213,10 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 	function set_page_permissions($permissions) {
 		$this->settings['permissions'] = $permissions;
 		return $this;
+	}
+
+	protected function clear_string($string) {
+		return preg_replace(array('~ +~', '~[^\w\d-]+~', '~-+~'), array('-', '-', '-'), strtolower($string));
 	}
 
 }
