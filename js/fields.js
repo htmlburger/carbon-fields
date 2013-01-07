@@ -59,9 +59,16 @@ jQuery(function($) {
 	}
 
 	carbon_field.Image = function(element, field_obj) {
-		element.find('.button').click(function() {
+		element.find('.button:not(.carbon-file-remove)').click(function() {
 			window.carbon_active_field = element;
 			tb_show('','media-upload.php?post_id=0&type=image&carbon_type=image&TB_iframe=true');
+		});
+
+		element.find('.carbon-file-remove').click(function() {
+			element.find('img').addClass('blank').attr('src', 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
+			element.find('.carbon-image-field').val('');
+			$(this).hide();
+			return false;
 		});
 	}
 

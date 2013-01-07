@@ -9,6 +9,8 @@
 
 .carbon-view_image { display: block; margin: 3px; border: 1px solid #e8e8e8; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
 .carbon-view_image.blank { height: auto; margin: 0; border: 0 none; box-shadow: 0 0; }
+.carbon-view_image { float: left; }
+.carbon-file-remove { float: left; margin: 3px !important; }
 
 .carbon-color-row { position: relative; }
 

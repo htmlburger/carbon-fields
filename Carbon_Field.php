@@ -1103,15 +1103,24 @@ class Carbon_Field_Image extends Carbon_Field_File {
 	function render() {
 		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-image-field" />';
 		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=image&amp;carbon_type=image" type="button" class="button" value="Select Media" />';
+		echo '<div class="cl"></div>';
+
+		$has_image = false;
 		
 		// For image only
 		if ( $this->value != '' && in_array(array_pop(explode('.', $this->value)), $this->image_extensions) ) {
 			echo '<img src="' . $this->value . '" alt="" height="100" class="carbon-view_image"/>';
+			$has_image = true;
 		} else if ( !empty($this->value) ) {
 			echo '</br><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" height="100" class="carbon-view_image blank"/><em>This is not a valid image!</em>';
+			$has_image = true;
 		} else {
 			echo '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" height="100" class="carbon-view_image blank"/>';
 		}
+
+		echo '<input class="carbon-file-remove button" type="button" value="Remove Image" ' . ($has_image ? '': 'style="display: none;"') . ' />';
+
+		echo '<div class="cl"></div>';
 	}
 }
 
