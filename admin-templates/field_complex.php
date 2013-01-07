@@ -2,7 +2,7 @@
 	
 	<tr class="carbon-empty-row" style="display: none">
 		<td colspan="2">
-			There are no <?php echo $this->labels['plural_name'] ?> yet. Click <em>Add <?php echo $this->labels['singular_name'] ?></em> to add one.
+			There are no <?php echo $this->labels['plural_name'] ?> yet. Click <a href="#">here</a> to add one.
 		</td>
 	</tr>
 

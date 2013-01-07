@@ -293,6 +293,13 @@ jQuery(function($) {
 			field_obj.new_row_type = $(this).val();
 		});
 
+		field_obj.empty_field_text.find('a:first').click(function() {
+			setTimeout(function() {
+				field_obj.btn_add.click();
+			}, 1);
+			return false;
+		});
+
 		// Sortable
 		field_obj.table.children('tbody').sortable({
 			items : '> tr.carbon-group-row',
