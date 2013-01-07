@@ -24,6 +24,7 @@ body.no-js .carbon-container { display: none; }
 .carbon-container .carbon-subcontainer p.alignright { margin-right: 20px; }
 
 .carbon-container .carbon-subcontainer .carbon-actions td { padding: 15px 20px; }
+.carbon-container .carbon-subcontainer .carbon-actions select { width: auto; }
 
 .carbon-container .carbon-subcontainer .wp-editor-container table { width: auto; }
 .carbon-container .carbon-subcontainer .wp-editor-container td { width: auto; padding: 0; }
@@ -43,17 +44,6 @@ body.no-js .carbon-container { display: none; }
 .carbon-container .carbon-map-field { display:none;  }
 
 .carbon-container .help-text { color:#666; }
-/*
-.carbon-container.Carbon_Container_ThemeOptions th { background:#f5f5f5;}
-.carbon-container.Carbon_Container_ThemeOptions th em{ color:#777; font-size:11px; font-style:normal; line-height:15px; display:block; }
-
-.carbon-container.Carbon_Container_ThemeOptions table { }
-.carbon-container.Carbon_Container_ThemeOptions th,
-.carbon-container.Carbon_Container_ThemeOptions td { border-bottom:solid 1px #e5e5e5; }
-.carbon-container.Carbon_Container_ThemeOptions table.form-table tr > td { padding-right:0; }
-
-
-*/
 
 .carbon-container input.button { border-radius:3px;}
 .carbon-container a.button { padding-left:8px; padding-right:8px; border-radius:3px;}

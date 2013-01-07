@@ -257,6 +257,7 @@ jQuery(function($) {
 		// prepare object
 		field_obj.group_selector = element.find('select[name$="[group]"]');
 		field_obj.btn_add = element.find('> .carbon-subcontainer > tbody > tr.carbon-actions a[data-action=add]:first');
+		field_obj.empty_field_text = element.find('> .carbon-subcontainer > tbody > tr.carbon-empty-row');
 		field_obj.num_rows = element.find('.carbon-group-row').length;
 		field_obj.row_uid = field_obj.num_rows;
 		field_obj.table = element.children('.carbon-subcontainer:first');
@@ -270,6 +271,10 @@ jQuery(function($) {
 		// init
 		if ( field_obj.max_rows > 0 && field_obj.num_rows >= field_obj.max_rows ) {
 			field_obj.btn_add.hide();
+		};
+
+		if ( field_obj.num_rows == 0 ) {
+			field_obj.empty_field_text.show();
 		};
 
 		// Hook events
@@ -353,6 +358,8 @@ jQuery(function($) {
 		if ( field.max_rows > 0 && field.num_rows == field.max_rows ) {
 			field.btn_add.hide();
 		};
+
+		complex_on_update_rows(field);
 	}
 
 	function complex_remove_row(field, row) {
@@ -379,6 +386,12 @@ jQuery(function($) {
 		for (var i = field.num_rows; i >= 0; i--) {
 			fields.eq(i).find('.carbon-drag-handle span').text(i+1);
 		};
+
+		if ( field.num_rows == 0 ) {
+			field.empty_field_text.show();
+		} else {
+			field.empty_field_text.hide();
+		}
 	}
 
 	var current_editor = getUserSetting('editor');

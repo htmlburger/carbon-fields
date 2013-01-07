@@ -5,6 +5,7 @@
 .carbon-field textarea { height: 5em; }
 
 .carbon-group-row td { background: #FCFCFC; }
+.carbon-empty-row td { background: #FCFCFC; padding: 15px 20px !important; }
 .carbon-group-preview { display: none; }
 
 .carbon-view_image { display: block; margin: 3px; border: 1px solid #e8e8e8; box-shadow: 0 1px 3px rgba(0,0,0,.3); }

@@ -1,4 +1,11 @@
 <table class="carbon-subcontainer <?php echo $container_tag_class_name ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
+	
+	<tr class="carbon-empty-row" style="display: none">
+		<td colspan="2">
+			There are no <?php echo $this->labels['plural_name'] ?> yet. Click <em>Add <?php echo $this->labels['singular_name'] ?></em> to add one.
+		</td>
+	</tr>
+
 	<?php 
 	$index = 0;
 	foreach ($this->values as $fields_num => $fields): 

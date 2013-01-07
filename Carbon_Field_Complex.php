@@ -12,8 +12,8 @@ class Carbon_Field_Complex extends Carbon_Field {
 	protected $values_max = -1;
 
 	public $labels = array(
+		'singular_name'=>'Entry',
 		'plural_name'=>'Entries',
-    	'singular_name'=>'Entry',
 	);
 
 	function init() {
