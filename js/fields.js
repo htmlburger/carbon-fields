@@ -224,10 +224,11 @@ jQuery(function($) {
 		// remove editor before removing the node from DOM
 		element.bind('remove_fields.carbon', function() {
 			var textarea_width = element.outerWidth(),
-				textarea_height = element.outerHeight();
+				field_height = element.outerHeight(),
+				textarea_height = field_height - 4 - 20 - element.find('.wp-editor-tools').height(); // 20 padding, 4 borders and stuff
 
-			element.width(textarea_width).height(textarea_height);
-			textarea.width(textarea_width - 4).height(textarea_height - 4);
+			element.width(textarea_width).height(field_height);
+			textarea.width(textarea_width - 4).height(textarea_height);
 
 			wpActiveEditor = null;
 			tinyMCE.execCommand("mceRemoveControl", false, textarea.attr('id'));
@@ -318,9 +319,11 @@ jQuery(function($) {
 				field_obj.node.trigger('reorder_groups.carbon');
 			},
 			start: function( ev, ui) {
+				field_obj.table.addClass('carbon-container-shrank')
 				remove_fields(ui.item);
 			},
 			stop: function( ev, ui) {
+				field_obj.table.removeClass('carbon-container-shrank')
 				init(ui.item);
 			}
 		});
