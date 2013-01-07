@@ -241,8 +241,9 @@ abstract class Carbon_Container {
 	 * @return void
 	 **/
 	function _attach() {
-		if ( call_user_func_array(array($this, 'is_valid_attach'), func_get_args()) ) {
-			call_user_func_array(array($this, 'attach'), func_get_args());
+		$param = func_get_args();
+		if ( call_user_func_array(array($this, 'is_valid_attach'), $param) ) {
+			call_user_func_array(array($this, 'attach'), $param);
 		}
 	}
 
