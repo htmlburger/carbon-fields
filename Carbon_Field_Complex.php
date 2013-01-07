@@ -244,6 +244,10 @@ class Carbon_Field_Complex extends Carbon_Field {
 	function get_max() {
 		return $this->values_max;
 	}
+
+	function get_group_names() {
+		return array_keys($this->groups);
+	}
 }
 
 

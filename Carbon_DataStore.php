@@ -69,9 +69,14 @@ class Carbon_DataStore_CustomField extends Carbon_DataStore_Base {
 	function delete_values(Carbon_Field $field) {
 		global $wpdb;
 
+		$group_names = $field->get_group_names();
+		$field_name = $field->get_name();
+
+		$meta_key_constraint = '`meta_key` LIKE "' . $field_name . implode('-%" OR `meta_key` LIKE "' . $field_name, $group_names) . '-%"';
+
 		return $wpdb->query('
 			DELETE FROM ' . $wpdb->postmeta . '
-			WHERE `meta_key` LIKE "' . addslashes($field->get_name()) . '_%" AND `post_id`="' . intval($this->post_id) . '"
+			WHERE (' . $meta_key_constraint . ') AND `post_id`="' . intval($this->post_id) . '"
 		');
 	}
 
@@ -123,9 +128,14 @@ class Carbon_DataStore_ThemeOptions extends Carbon_DataStore_Base {
 	function delete_values(Carbon_Field $field) {
 		global $wpdb;
 
+		$group_names = $field->get_group_names();
+		$field_name = $field->get_name();
+
+		$option_name_constraint = '`option_name` LIKE "' . $field_name . implode('-%" OR `option_name` LIKE "' . $field_name, $group_names) . '-%"';
+
 		return $wpdb->query('
 			DELETE FROM ' . $wpdb->options . '
-			WHERE `option_name` LIKE "' . addslashes($field->get_name()) . '_%"
+			WHERE (' . $option_name_constraint . ')
 		');
 	}
 }
@@ -202,9 +212,14 @@ class Carbon_DataStore_TaxonomyMeta extends Carbon_DataStore_Base {
 	function delete_values(Carbon_Field $field) {
 		global $wpdb;
 
+		$group_names = $field->get_group_names();
+		$field_name = $field->get_name();
+
+		$meta_key_constraint = '`meta_key` LIKE "' . $field_name . implode('-%" OR `meta_key` LIKE "' . $field_name, $group_names) . '-%"';
+
 		return $wpdb->query('
 			DELETE FROM ' . $wpdb->taxonomymeta . '
-			WHERE `meta_key` LIKE "' . addslashes($field->get_name()) . '_%" AND taxonomy_id="' . intval($this->term_id) . '"
+			WHERE (' . $meta_key_constraint . ') AND taxonomy_id="' . intval($this->term_id) . '"
 		');
 	}
 
@@ -257,9 +272,14 @@ class Carbon_DataStore_UserMeta extends Carbon_DataStore_Base {
 	function delete_values(Carbon_Field $field) {
 		global $wpdb;
 
+		$group_names = $field->get_group_names();
+		$field_name = $field->get_name();
+
+		$meta_key_constraint = '`meta_key` LIKE "' . $field_name . implode('-%" OR `meta_key` LIKE "' . $field_name, $group_names) . '-%"';
+
 		return $wpdb->query('
 			DELETE FROM ' . $wpdb->usermeta . '
-			WHERE `meta_key` LIKE "' . addslashes($field->get_name()) . '_%" AND `user_id`="' . intval($this->user_id) . '"
+			WHERE (' . $meta_key_constraint . ') AND `user_id`="' . intval($this->user_id) . '"
 		');
 	}
 
