@@ -191,8 +191,9 @@ abstract class Carbon_Container {
 	 * @return void
 	 **/
 	function _save() {
-		if ( call_user_func_array(array($this, 'is_valid_save'), func_get_args()) ) {
-			call_user_func_array(array($this, 'save'), func_get_args());
+		$param = func_get_args();
+		if ( call_user_func_array(array($this, 'is_valid_save'), $param) ) {
+			call_user_func_array(array($this, 'save'), $param);
 		}
 	}
 
@@ -260,7 +261,7 @@ abstract class Carbon_Container {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	function is_valid_attach() {
+	function is_valid_attach() {	
 		return true;
 	}
 
