@@ -44,7 +44,22 @@ class Carbon_DataStore_CustomField extends Carbon_DataStore_Base {
 	}
 
 	function load(Carbon_Field $field) {
-		$field->set_value( get_post_meta($this->post_id, $field->get_name(), true) );
+		global $wpdb;
+
+        $value = $wpdb->get_var('
+            SELECT `meta_value`
+            FROM ' . $wpdb->postmeta . '
+            WHERE `post_id`=' . intval($this->post_id) . '
+            AND `meta_key`=' . $field->get_name() . '
+            LIMIT 1
+		');
+
+		if ( is_null($value) ) {
+			$field->set_value(false);
+			return;
+		}
+
+		$field->set_value($value);
 	}
 
 	function delete(Carbon_Field $field) {

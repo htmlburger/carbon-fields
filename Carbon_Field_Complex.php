@@ -154,6 +154,14 @@ class Carbon_Field_Complex extends Carbon_Field {
 		$group_rows = $this->store->load_values($this);
 		$input_groups = array();
 
+		// Set default values
+		foreach ($this->groups as $group) {
+			$group_fields = $group->get_fields();
+			foreach ($group_fields as $field) {
+				$field->set_value($field->default_value);
+			}
+		}
+
 		if ( empty($group_rows) ) {
 			return;
 		}
