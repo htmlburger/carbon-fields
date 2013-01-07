@@ -189,10 +189,22 @@ Carbon_Container::factory('custom_fields', 'Post Properties')
 					</dl>
 
 					<pre class="prettyprint">
-&lt;p&gt;Article was published in: &lt;?php echo carbon_get_post_meta('location'); ?&gt;&lt;/p&gt;
-&lt;p&gt;Photo taken by: &lt;?php echo carbon_get_post_meta(132, 'photo_author'); ?&gt;&lt;/p&gt;
+&lt;!-- Simple field --&gt;
+&lt;p&gt;Article was published in: &lt;?php echo carbon_get_post_meta($article->ID, 'location'); ?&gt;&lt;/p&gt;
+
+&lt;!-- Complex field --&gt;
+&lt;?php 
+$slides = carbon_get_post_meta($page->ID, 'slides', 'complex');
+foreach ($slides as $slide) {
+	echo $slide['image'];
+}
+?&gt;
 </pre>
 					<p>You can also use <code>carbon_get_the_post_meta($name, $type = null)</code> to access the values for the current post in <a href="http://codex.wordpress.org/The_Loop"><i class="icon-globe"></i> The Loop</a>.</p>
+					<pre class="prettyprint">
+&lt;p&gt;Article was published in: &lt;?php echo carbon_get_the_post_meta('location'); ?&gt;&lt;/p&gt;
+&lt;?php $slides = carbon_get_the_post_meta('slides', 'complex'); ?&gt;
+</pre>
 
 					<h3 id="Theme_Options">Theme Options Container</h3>
 
