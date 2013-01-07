@@ -50,7 +50,7 @@ class Carbon_DataStore_CustomField extends Carbon_DataStore_Base {
             SELECT `meta_value`
             FROM ' . $wpdb->postmeta . '
             WHERE `post_id`=' . intval($this->post_id) . '
-            AND `meta_key`=' . $field->get_name() . '
+            AND `meta_key`="' . $field->get_name() . '"
             LIMIT 1
 		');
 
