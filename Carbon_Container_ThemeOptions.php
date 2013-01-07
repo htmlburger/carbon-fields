@@ -201,6 +201,10 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 	}
 
 	function set_page_parent($parent) {
+		if ( is_a($parent, 'Carbon_Container') ) {
+			$parent = $parent->title;
+		}
+		
 		$this->settings['parent'] = $parent;
 		return $this;
 	}
