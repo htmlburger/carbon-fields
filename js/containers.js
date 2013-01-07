@@ -232,4 +232,9 @@ jQuery(function($) {
 
 	// Abracadabra! Poof! Containers everywhere ...
 	init();
+
+	// Fix for mobile devices
+	if ( !$('body').is('.mobile') ) {
+		$('body').addClass('carbon-desktop');
+	};
 });

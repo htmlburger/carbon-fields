@@ -1,7 +1,8 @@
 .carbon-required { color: #c31d1d; font-weight: bold; text-shadow: 0 0 5px #c31d1d; }
 
 .carbon-field .regular-text,
-.carbon-field textarea { width: 25em; height: 5em; }
+.carbon-field textarea { width: 25em; }
+.carbon-field textarea { height: 5em; }
 
 .carbon-group-row td { background: #FCFCFC; }
 .carbon-empty-row td { background: #FCFCFC; padding: 15px 20px !important; }
@@ -50,9 +51,11 @@
 .carbon-subcontainer .carbon-drag-handle { width: 20px !important; background: #f5f5f5; border-right: 1px solid #E0E0E0; text-align: center; cursor: move; }
 .carbon-subcontainer .carbon-drag-handle span { display: block; background: url(images/icon-move.png) no-repeat center bottom; padding-bottom: 20px;}
 .carbon-subcontainer .carbon-btn-holder { position: relative; }
-.carbon-subcontainer .carbon-btn-remove { display: none; position: absolute; top: 2px; right: 2px; width: 22px; height: 22px; background: url(images/icon-delete.png) no-repeat 0 0; font-size: 0; line-height: 0; text-indent: -4000px; }
-.carbon-subcontainer .carbon-group-row:hover .carbon-btn-remove { display: block; }
 .carbon-subcontainer .carbon-group-row.removed .carbon-drag-handle { background: #e74444; }
+.carbon-subcontainer .carbon-btn-remove { position: absolute; top: 2px; right: 2px; width: 22px; height: 22px; background: url(images/icon-delete.png) no-repeat 0 0; font-size: 0; line-height: 0; text-indent: -4000px; }
+
+.carbon-desktop .carbon-subcontainer .carbon-btn-remove { visibility: hidden; }
+.carbon-desktop .carbon-subcontainer .carbon-group-row:hover .carbon-btn-remove { visibility: visible; }
 
 /*.carbon-subcontainer.carbon-container-shrank tr.ui-sortable-helper { max-height: 100px !important; overflow: hidden; }
 .carbon-subcontainer.carbon-container-shrank tr.ui-sortable-helper .carbon-drag-handle { vertical-align: top !important; }*/
