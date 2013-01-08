@@ -39,12 +39,67 @@ jQuery(function($) {
 		return container;
 	}
 
+	function check_required() {
+		var has_errors = false;
+
+		$('.carbon-highlight').removeClass('carbon-highlight');
+
+		// Find required fields
+		$('input[type="text"][data-carbon-required=true], textarea[data-carbon-required=true]').each(function() {
+			var th = $(this);
+
+			if ( th.val() != '' || th.closest('.carbon-group-preview').length > 0 ) {
+				return;
+			};
+
+			th.closest('td').addClass('carbon-highlight');
+			has_errors = true;
+		})
+		$('.carbon-radio-list[data-carbon-required=true], .carbon-set-list[data-carbon-required=true]').each(function() {
+			var th = $(this);
+
+			if ( th.find('input[type=radio]:checked, input[type=checkbox]:checked').length > 0 || th.closest('.carbon-group-preview').length > 0 ) {
+				return;
+			};
+
+			th.closest('td').addClass('carbon-highlight');
+			has_errors = true;
+		});
+
+		return has_errors;
+	}
+
 	/* Theme Options */
 	carbon_container.ThemeOptions = function (element, container_obj) {
 		theme_options_attach_save_alert();
+		theme_options_attach_validation_hook();
 	}
 	carbon_container.ThemeOptions.attachedSaveAlert = false;
+	carbon_container.ThemeOptions.attachedValidationHook = false;
 	carbon_container.ThemeOptions.hasChanges = false;
+
+	function theme_options_attach_validation_hook() {
+		if ( carbon_container.ThemeOptions.attachedValidationHook ) {
+			return;
+		};
+		carbon_container.ThemeOptions.attachedValidationHook = true;
+
+		$('.Carbon_Container_ThemeOptions:first > form').live("submit", function(){
+			var form = $(this),
+				has_errors = check_required();
+
+			if ( !has_errors ) {
+				return;
+			};
+			
+			$('body, html').animate({scrollTop: 0});
+
+			form.siblings('.carbon-error-required').remove();
+			form.before($('<div class="settings-error error below-h2 carbon-error-required"><p><strong>Please fill out all required fields highlighted below.</strong></p></div>'));
+
+			return false;
+		});
+	}
 
 	function theme_options_attach_save_alert() {
 		if ( carbon_container.ThemeOptions.attachedSaveAlert ) {
@@ -87,7 +142,9 @@ jQuery(function($) {
 		container_obj.initCheckVisible = false;
 
 		custom_fields_attach_save_alert();
+		custom_fields_attach_validation_hook();
 	}
+	carbon_container.CustomFields.attachedValidationHook = false;
 	carbon_container.CustomFields.attachedSaveAlert = false;
 	carbon_container.CustomFields.hasChanges = false;
 
@@ -115,6 +172,33 @@ jQuery(function($) {
 			$('body').on('remove_fields.carbon reorder_groups.carbon', function() {
 				carbon_container.CustomFields.hasChanges = true;
 			});
+		});
+	}
+
+	function custom_fields_attach_validation_hook() {
+		if ( carbon_container.CustomFields.attachedValidationHook ) {
+			return;
+		};
+		carbon_container.CustomFields.attachedValidationHook = true;
+
+		$('form#post').live("submit", function(){
+			var form = $(this),
+				has_errors = check_required();
+
+			if ( !has_errors ) {
+				return;
+			};
+
+			// reset submit button and hide spiner
+			$('#publish').removeClass('button-primary-disabled');
+			$('#ajax-loading, #publishing-action .spinner').attr('style','');
+
+			$('body, html').animate({scrollTop: 0});
+
+			form.siblings('.carbon-error-required').remove();
+			form.before($('<div class="settings-error error below-h2 carbon-error-required"><p><strong>Please fill out all required fields highlighted below.</strong></p></div>'));
+
+			return false;
 		});
 	}
 

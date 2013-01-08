@@ -446,7 +446,7 @@ class Carbon_Field {
 
 class Carbon_Field_Text extends Carbon_Field {
 	function render() {
-		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->name . '" value="' . esc_attr($this->value) . '" class="regular-text" />';
+		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->name . '" value="' . esc_attr($this->value) . '" class="regular-text" ' . ($this->required ? 'data-carbon-required="true"': '') . ' />';
 	}
 }
 
@@ -460,7 +460,7 @@ class Carbon_Field_Textarea extends Carbon_Field {
 	}
 
 	function render($append = '') {
-		echo '<textarea id="' . $this->get_id() . '" name="' . $this->get_name() . '" style="height: ' . $this->height . 'px; ">';
+		echo '<textarea id="' . $this->get_id() . '" name="' . $this->get_name() . '" style="height: ' . $this->height . 'px; " ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
 		echo esc_textarea($this->get_value());
 		echo '</textarea>';
 	}
@@ -493,7 +493,7 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 			<?php endif; ?>
 
 			<div id="wp-<?php echo $id; ?>-editor-container" class="wp-editor-container">
-				<textarea id="<?php echo $id; ?>" class="wp-editor-area" name="<?php echo $this->get_name(); ?>" ><?php echo wp_richedit_pre($val); ?></textarea>
+				<textarea id="<?php echo $id; ?>" class="wp-editor-area" name="<?php echo $this->get_name(); ?>" <?php echo ($this->required ? 'data-carbon-required="true"': '') ?>><?php echo wp_richedit_pre($val); ?></textarea>
 			</div>
 		</div>
 
@@ -543,7 +543,7 @@ class Carbon_Field_Date extends Carbon_Field {
 
 	function render() {
 		echo '
-		<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-datepicker" />
+		<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-datepicker"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
 		<a class="carbon-datepicker-trigger hide-if-no-js"></a>
 		';
 	}
@@ -562,7 +562,7 @@ class Carbon_Field_Color extends Carbon_Field {
 	function render() {
 		echo '
 		<div class="carbon-color-row">
-			<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-color" />
+			<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-color" ' . ($this->required ? 'data-carbon-required="true"': '') . ' />
 			<a class="carbon-color-preview hide-if-no-js"></a>
 			<input type="button" class="pickcolor button hide-if-no-js" value="Select a Color">
 			<div class="carbon-color-container hide-if-no-js"></div>
@@ -582,7 +582,7 @@ class Carbon_Field_Map extends Carbon_Field {
 
 	function render() {
 		echo '
-		<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_long) . '" />
+		<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_long) . '"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
 		<div class="carbon-map">&nbsp;</div>
 		';
 	}
@@ -675,7 +675,7 @@ class Carbon_Field_Select extends Carbon_Field {
     		return;
     	}
 
-		echo '<select id="' . $this->get_id() . '" name="' . $this->get_name() . '">';
+		echo '<select id="' . $this->get_id() . '" name="' . $this->get_name() . '" ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
 
 		foreach ($this->options as $key => $value) {
 			echo '<option value="' . htmlentities($key, ENT_COMPAT, 'UTF-8') . '"';
@@ -705,7 +705,7 @@ class Carbon_Field_Radio extends Carbon_Field {
     		return;
     	}
 
-    	echo '<ul class="carbon-radio-list">';
+    	echo '<ul class="carbon-radio-list" ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
 
 		foreach ($this->options as $key => $value) {
 			echo '<li><label><input type="radio" name="' . $this->get_name() . '" value="' . esc_attr($key) . '"';
@@ -831,7 +831,7 @@ class Carbon_Field_Set extends Carbon_Field {
 
 		$loopCount = 0;
 
-		echo '<div class="carbon-set-list">';
+		echo '<div class="carbon-set-list" ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
 
 		foreach ($this->options as $key => $value) {
 			$loopCount ++;
@@ -923,7 +923,7 @@ class Carbon_Field_File extends Carbon_Field {
 	static $attached_media_library_hook = false; 
 
 	function render() {
-		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-file-field" />';
+		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-file-field" ' . ($this->required ? 'data-carbon-required="true"': '') . '/>';
 		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=file&amp;carbon_type=file" type="button" class="button" value="Select Media" />';
 		
 		// For image only
@@ -1101,7 +1101,7 @@ class Carbon_Field_Image extends Carbon_Field_File {
 	public $image_extensions = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
 
 	function render() {
-		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-image-field" />';
+		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-image-field" ' . ($this->required ? 'data-carbon-required="true"': '') . '/>';
 		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=image&amp;carbon_type=image" type="button" class="button" value="Select Media" />';
 		echo '<div class="cl"></div>';
 
