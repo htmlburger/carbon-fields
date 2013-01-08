@@ -820,9 +820,12 @@ class Carbon_Field_Set extends Carbon_Field {
 	}
 
     function render() {
-    	if (!is_array($this->value)) {
-    		$this->value = array($this->value);
-    	}
+		if (!is_array($this->value)) {
+			$this->value = maybe_unserialize($this->value);
+			if (!is_array($this->value)) {
+				$this->value = array($this->value);
+			}
+		}
 
     	if (empty($this->options)) {
     		echo '<em>no options</em>';
