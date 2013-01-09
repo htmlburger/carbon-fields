@@ -322,6 +322,10 @@ Carbon_Field::factory('select', 'color')-&gt;addOptions(array('red', 'blue', 'gr
 					<h5>Default Values</h5>
 					<p>You can assign a default value for each field in every container. The default value is used when there is currently no value for the particular field in the database. This is the case for example, when you add a new post, or you add a new theme options field to existing container.</p>
 					<p>To assign a default value, you use <code>Carbon_Field::factory(...)-&gt;<strong>set_default_value($default_value)</strong></code></p>
+					
+					<h5>Required Fields</h5>
+					<p>You can mark any field as required, in which case the user will need to fill it out before submitting. To set a field as required, you use <code>Carbon_Field::factory(...)-&gt;<strong>set_required(true)</strong></code></p>
+					
 					<h5>Help Text</h5>
 					<p>Help text is used as a hint to the user, who will use the field. It is usually rendered under the field and contains more information about what it should contain - requirements, examples, links, etc. HTML tags are allowed.</p>
 					<p>You add help text using <code>Carbon_Field::factory(...)-&gt;<strong>help_text($text)</strong></code></p>
