@@ -1,6 +1,6 @@
 <?php 
 
-class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
+class Carbon_Container_TermMetaTest extends WP_UnitTestCase {
     public $plugin_slug = 'carbon-fields';
 
     function setUp() {
@@ -8,7 +8,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     }
 
     public function testValidSaveRequest() {
-        $container = new Carbon_Container_TaxonomyMeta('Test Container');
+        $container = new Carbon_Container_TermMeta('Test Container');
 
         // Valid Nonce
         $_REQUEST[$container->get_nonce_name()] = $_POST[$container->get_nonce_name()] = wp_create_nonce($container->get_nonce_name());
@@ -22,7 +22,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     }
 
     public function testInvalidSaveRequest() {
-        $container = new Carbon_Container_TaxonomyMeta('Test Container');
+        $container = new Carbon_Container_TermMeta('Test Container');
         $this->assertFalse( $container->is_valid_save(1) );
 
         // Invalid Nonce
@@ -39,7 +39,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
 
     public function testRegisterEqualFieldNamesForDifferentTaxonomies() {
         // prepare container
-        $container1 = new Carbon_Container_TaxonomyMeta('Test Container 1');
+        $container1 = new Carbon_Container_TermMeta('Test Container 1');
         $container1->setup(array(
             'taxonomy' => 'bar'
         ));
@@ -47,7 +47,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
             Carbon_Field::factory('text', 'test_field'),
         ));
 
-        $container2 = new Carbon_Container_TaxonomyMeta('Test Container 2');
+        $container2 = new Carbon_Container_TermMeta('Test Container 2');
         $container2->setup(array(
             'taxonomy' => 'foo'
         ));
@@ -62,7 +62,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
 
     public function testRegisterEqualFieldNamesForSameTaxonomies() {
         // prepare container
-        $container1 = new Carbon_Container_TaxonomyMeta('Test Container 1');
+        $container1 = new Carbon_Container_TermMeta('Test Container 1');
         $container1->setup(array(
             'taxonomy' => 'bar'
         ));
@@ -70,7 +70,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
             Carbon_Field::factory('text', 'test_field'),
         ));
 
-        $container2 = new Carbon_Container_TaxonomyMeta('Test Container 2');
+        $container2 = new Carbon_Container_TermMeta('Test Container 2');
         $container2->setup(array(
             'taxonomy' => 'bar'
         ));
@@ -100,7 +100,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     public function testSaveSimpleFieldCheckDatabase() {
         global $wpdb;
         // prepare container
-        $container = new Carbon_Container_TaxonomyMeta('Test Container');
+        $container = new Carbon_Container_TermMeta('Test Container');
         $container->setup(array(
             'taxonomy' => 'foo'
         ));
@@ -116,7 +116,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
 
         // check
         $db_value = $wpdb->get_results('
-            SELECT meta_value FROM ' . $wpdb->taxonomymeta . '
+            SELECT meta_value FROM ' . $wpdb->termmeta . '
             WHERE taxonomy_id="123" AND meta_key="_test_field"
         ', ARRAY_A);
 
@@ -134,7 +134,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     public function testSaveSimpleFieldCheckLoad() {
         global $wpdb;
         // prepare container
-        $container = new Carbon_Container_TaxonomyMeta('Test Container');
+        $container = new Carbon_Container_TermMeta('Test Container');
         $container->setup(array(
             'taxonomy' => 'foo'
         ));
@@ -166,7 +166,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
         global $wpdb;
 
         // prepare container
-        $container = new Carbon_Container_TaxonomyMeta('Test Container');
+        $container = new Carbon_Container_TermMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
             Carbon_Field::factory('compound', 'compound')->add_fields(array(
@@ -190,7 +190,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
 
         // check field
         $db_values = $wpdb->get_results('
-            SELECT meta_key, meta_value FROM ' . $wpdb->taxonomymeta . '
+            SELECT meta_key, meta_value FROM ' . $wpdb->termmeta . '
             WHERE taxonomy_id="123" AND meta_key LIKE "_compound%"
             ORDER BY meta_key
         ', ARRAY_A);
@@ -211,7 +211,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
     public function testSaveCompoundAndCheckLoad() {
         global $wpdb;
         // prepare container
-        $container = new Carbon_Container_TaxonomyMeta('Test Container');
+        $container = new Carbon_Container_TermMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
             Carbon_Field::factory('compound', 'compound')->add_fields(array(
@@ -264,7 +264,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
         global $wpdb;
         
         // prepare container
-        $container = new Carbon_Container_TaxonomyMeta('Test Container');
+        $container = new Carbon_Container_TermMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
             Carbon_Field::factory('complex', 'group')->add_fields(array(
@@ -301,7 +301,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
 
         // check field
         $db_values = $wpdb->get_results('
-            SELECT meta_key, meta_value FROM ' . $wpdb->taxonomymeta . '
+            SELECT meta_key, meta_value FROM ' . $wpdb->termmeta . '
             WHERE taxonomy_id="123" AND meta_key LIKE "_group%"
             ORDER BY meta_key
         ', ARRAY_A);
@@ -331,7 +331,7 @@ class Carbon_Container_TaxonomyMetaTest extends WP_UnitTestCase {
         global $wpdb;
         
         // prepare container
-        $container = new Carbon_Container_TaxonomyMeta('Test Container');
+        $container = new Carbon_Container_TermMeta('Test Container');
         $container->setup();
         $container->add_fields(array(
             Carbon_Field::factory('complex', 'group')->add_fields(array(

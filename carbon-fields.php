@@ -17,7 +17,7 @@ include_once 'Carbon_DataStore.php';
 include_once 'Carbon_Container.php';
 include_once 'Carbon_Container_CustomFields.php';
 include_once 'Carbon_Container_ThemeOptions.php';
-include_once 'Carbon_Container_TaxonomyMeta.php';
+include_once 'Carbon_Container_TermMeta.php';
 include_once 'Carbon_Container_UserMeta.php';
 
 include_once 'Carbon_Field.php';

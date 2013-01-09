@@ -1,6 +1,6 @@
 <?php
 
-class Carbon_Container_TaxonomyMeta extends Carbon_Container {
+class Carbon_Container_TermMeta extends Carbon_Container {
 	/**
 	 * List of registered unique field names per taxonomy
 	 *
@@ -15,13 +15,15 @@ class Carbon_Container_TaxonomyMeta extends Carbon_Container {
 		'taxonomy' => array('category')
 	);
 
-	function init() {
-		throw new Carbon_Exception('Taxonomy Meta? We are working on that!');
+	function __construct($title) {
+		parent::__construct($title);
 
 		if ( !$this->get_datastore() ) {
-			$this->set_datastore(new Carbon_DataStore_TaxonomyMeta());
+			$this->set_datastore(new Carbon_DataStore_TermMeta());
 		}
+	}
 
+	function init() {
 		// force taxonomy to be array
 		if ( !is_array($this->settings['taxonomy']) ) {
 			$this->settings['taxonomy'] = array($this->settings['taxonomy']);
@@ -91,7 +93,7 @@ class Carbon_Container_TaxonomyMeta extends Carbon_Container {
 		$this->set_term_id( $term->term_id );
 
 		$container_tag_class_name = get_class($this);
-		include dirname(__FILE__) . '/admin-templates/container-taxonomy-meta.php';
+		include dirname(__FILE__) . '/admin-templates/container-term-meta.php';
 	}
 
 	function set_term_id($term_id) {

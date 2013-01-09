@@ -155,58 +155,62 @@ class Carbon_DataStore_ThemeOptions extends Carbon_DataStore_Base {
 	}
 }
 
-class Carbon_DataStore_TaxonomyMeta extends Carbon_DataStore_Base {
+class Carbon_DataStore_TermMeta extends Carbon_DataStore_Base {
 	protected $term_id;
 
 	static function create_table() {
 		global $wpdb;
 
 		// TODO: setup tables for each registered blog?
-		$tables = $wpdb->get_results('SHOW TABLES LIKE "' . $wpdb->prefix . 'taxonomymeta"');
+		$tables = $wpdb->get_results('SHOW TABLES LIKE "' . $wpdb->prefix . 'termmeta"');
 
-		if ( empty($tables) ) {
-			$charset_collate = '';	
-			if ( ! empty($wpdb->charset) ) {
-				$charset_collate = "DEFAULT CHARACTER SET " . $wpdb->charset;
-			}
-				
-			if ( ! empty($wpdb->collate) ) {
-				$charset_collate .= " COLLATE " . $wpdb->collate;
-			}
-
-			$wpdb->query('CREATE TABLE ' . $wpdb->prefix . 'taxonomymeta (
-				meta_id bigint(20) unsigned NOT NULL auto_increment,
-				taxonomy_id bigint(20) unsigned NOT NULL default "0",
-				meta_key varchar(255) default NULL,
-				meta_value longtext,
-				PRIMARY KEY	(meta_id),
-				KEY taxonomy_id (taxonomy_id),
-				KEY meta_key (meta_key)
-			) ' . $charset_collate . ';');
+		if ( !empty($tables) ) {
+			return;
 		}
+
+		$charset_collate = '';	
+		if ( ! empty($wpdb->charset) ) {
+			$charset_collate = "DEFAULT CHARACTER SET " . $wpdb->charset;
+		}
+			
+		if ( ! empty($wpdb->collate) ) {
+			$charset_collate .= " COLLATE " . $wpdb->collate;
+		}
+
+		$wpdb->query('CREATE TABLE ' . $wpdb->prefix . 'termmeta (
+			meta_id bigint(20) unsigned NOT NULL auto_increment,
+			term_id bigint(20) unsigned NOT NULL default "0",
+			meta_key varchar(255) default NULL,
+			meta_value longtext,
+			PRIMARY KEY	(meta_id),
+			KEY term_id (term_id),
+			KEY meta_key (meta_key)
+		) ' . $charset_collate . ';');
 	}
 
 	function init() {
 		global $wpdb;
 
-		$wpdb->taxonomymeta = $wpdb->prefix . 'taxonomymeta';
+		$wpdb->termmeta = $wpdb->prefix . 'termmeta';
+
+		self::create_table();
 
 		// Delete all meta associated with the deleted term
 		add_action('delete_term', array(__CLASS__, 'on_delete_term'), 10, 3);
 	}
 
 	function save(Carbon_Field $field) {
-		if ( !add_metadata('taxonomy', $this->term_id, $field->get_name(), $field->get_value(), true) ) {
-			update_metadata('taxonomy', $this->term_id, $field->get_name(), $field->get_value());
+		if ( !add_metadata('term', $this->term_id, $field->get_name(), $field->get_value(), true) ) {
+			update_metadata('term', $this->term_id, $field->get_name(), $field->get_value());
 		}
 	}
 
 	function load(Carbon_Field $field) {
-		$field->set_value( get_metadata('taxonomy', $this->term_id, $field->get_name(), true) );
+		$field->set_value( get_metadata('term', $this->term_id, $field->get_name(), true) );
 	}
 
 	function delete(Carbon_Field $field) {
-		delete_metadata('taxonomy', $this->term_id, $field->get_name(), $field->get_value());
+		delete_metadata('term', $this->term_id, $field->get_name(), $field->get_value());
 	}
 
 	function load_values($field) {
@@ -219,8 +223,8 @@ class Carbon_DataStore_TaxonomyMeta extends Carbon_DataStore_Base {
 		}
 
 		return $wpdb->get_results('
-			SELECT meta_key AS field_key, meta_value AS field_value FROM ' . $wpdb->taxonomymeta . '
-			WHERE `meta_key` LIKE "' . addslashes($meta_key) . '_%" AND taxonomy_id="' . intval($this->term_id) . '"
+			SELECT meta_key AS field_key, meta_value AS field_value FROM ' . $wpdb->termmeta . '
+			WHERE `meta_key` LIKE "' . addslashes($meta_key) . '_%" AND term_id="' . intval($this->term_id) . '"
 		', ARRAY_A);
 	}
 
@@ -233,8 +237,8 @@ class Carbon_DataStore_TaxonomyMeta extends Carbon_DataStore_Base {
 		$meta_key_constraint = '`meta_key` LIKE "' . $field_name . implode('-%" OR `meta_key` LIKE "' . $field_name, $group_names) . '-%"';
 
 		return $wpdb->query('
-			DELETE FROM ' . $wpdb->taxonomymeta . '
-			WHERE (' . $meta_key_constraint . ') AND taxonomy_id="' . intval($this->term_id) . '"
+			DELETE FROM ' . $wpdb->termmeta . '
+			WHERE (' . $meta_key_constraint . ') AND term_id="' . intval($this->term_id) . '"
 		');
 	}
 
@@ -246,8 +250,8 @@ class Carbon_DataStore_TaxonomyMeta extends Carbon_DataStore_Base {
 		global $wpdb;
 
 		return $wpdb->query('
-			DELETE FROM ' . $wpdb->taxonomymeta . '
-			WHERE `taxonomy_id` = "' . intval($term_id) . '"
+			DELETE FROM ' . $wpdb->termmeta . '
+			WHERE `term_id` = "' . intval($term_id) . '"
 		');
 	}
 }
