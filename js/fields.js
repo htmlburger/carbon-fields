@@ -19,14 +19,12 @@ jQuery(function($) {
 
 			try {
 				field = carbon_field(th);
-
-				if ( typeof carbon_field[type] != 'undefined' ) {
-					carbon_field[type](th, field);
-				};
-			} catch (e) {}
+				carbon_field[type](th, field);
+			} catch (e) {
+				carbon_log_error("Couldn't render a field: " + e.message);
+			}
 		});
 	}
-
 	function remove_fields(context) {
 		if ( !context ) {
 			return;
@@ -144,7 +142,7 @@ jQuery(function($) {
 
 	/* Map */
 	carbon_field.Map = function(element, field_obj) {
-		var field = element.find('.regular-text'),
+		var field = element.find('.carbon-map-field'),
 			map_container = element.find('.carbon-map'),
 			exists = 0,
 			marker = false,
@@ -169,27 +167,16 @@ jQuery(function($) {
 			center: new google.maps.LatLng(lat, lng),
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		});
-		
-		// if we had coords in input field, put a marker on that spot
-		if(exists == 1) {
-			marker = new google.maps.Marker({
-				position: map.getCenter(),
-				map: map,
-				draggable: true
-			});
 
-			google.maps.event.addListener(marker, "dragend", function (mEvent) { 
-				update_value();
-			});
-		}
-
-		// on click move marker and set new position
-		google.maps.event.addListener(map, 'click', function(point) {
+		// export the map object
+		element.update_marker_position = function(point) {
+			var latLng = point.latLng || point;
 			if ( marker ) {
-				marker.setPosition(point.latLng);
+				marker.setPosition(latLng);
+				map.setCenter(latLng)
 			} else {
 				marker = new google.maps.Marker({
-					position: point.latLng,
+					position: latLng,
 					map: map,
 					draggable: true
 				});
@@ -198,14 +185,58 @@ jQuery(function($) {
 					update_value();
 				});
 			}
-
 			update_value();
+		}
+
+		// if we had coords in input field, put a marker on that spot
+		if(exists == 1) {
+			element.update_marker_position(map.getCenter())
+		}
+
+		// on click move marker and set new position
+		google.maps.event.addListener(map, 'click', function(point) {
+			element.update_marker_position(point);
 		});
 
 		function update_value() {
 			field.val(marker.getPosition().lat() + ',' + marker.getPosition().lng());
 		}
 	}
+	carbon_field.MapWithAddress = function(element, field_obj) {
+		var search_field = element.find('.address');
+
+		// Initialize the base map field
+		carbon_field.Map(element, field_obj);
+
+		// Decorate the base field with a geo coder
+		element.find('.address-search-btn').on('click', geocode_address);
+
+		// Disable the form submission with enter key; instead, initiate address geocoding
+		search_field.on('keypress', function (e) {
+			console.log("a");
+			var enter_keycode = 13;
+			if (e.keyCode == enter_keycode) {
+				geocode_address();
+				return false;
+			}
+		})
+
+
+		function geocode_address() {
+			var address = search_field.val();
+			search_field.attr('disabled', true);
+
+			geocoder = new google.maps.Geocoder();
+			geocoder.geocode( { 'address': address}, function(results, status) {
+				search_field.attr('disabled', false);
+				if (status == google.maps.GeocoderStatus.OK) {
+					element.update_marker_position(results[0].geometry.location);
+				} else {
+					alert("Geocode was not successful for the following reason: " + status);
+				}
+			});
+		}
+	};
 
 	/* Rich text */
 	carbon_field.Rich_Text = function(element, field_obj) {
@@ -413,4 +444,11 @@ jQuery(function($) {
 	}, 1);
 
 	window.carbon_field_init = init;
+
+	/**/
+	function carbon_log_error(error_message) {
+		if (typeof console != "undefined") {
+			console.log("*Carbon Error:* " + error_message);
+		}
+	}
 });

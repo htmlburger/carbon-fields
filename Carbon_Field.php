@@ -572,9 +572,9 @@ class Carbon_Field_Color extends Carbon_Field {
 
 class Carbon_Field_Map extends Carbon_Field {
 	protected $api_key;
-	private $default_lat = 40.346544;
-	private $default_long = -101.645507;
-	private $zoom = 10;
+	protected $default_lat = 40.346544;
+	protected $default_long = -101.645507;
+	protected $zoom = 10;
 
 	function admin_init() {
 		wp_enqueue_script('carbon-google-maps', 'http://maps.googleapis.com/maps/api/js?sensor=false');
@@ -659,6 +659,12 @@ class Carbon_Field_Map extends Carbon_Field {
 		}
 	}
 
+}
+class Carbon_Field_MapWithAddress extends Carbon_Field_Map {
+	function render() {
+		echo 'Locate Address on the map: <input type="text" class="regular-text address" /><input type="button" class="address-search-btn" value="Find">';
+		echo parent::render();
+	}
 }
 
 class Carbon_Field_Select extends Carbon_Field {
