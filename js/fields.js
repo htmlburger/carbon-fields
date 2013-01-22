@@ -169,7 +169,7 @@ jQuery(function($) {
 		});
 
 		// export the map object
-		element.update_marker_position = function(point) {
+		field_obj.update_marker_position = function(point) {
 			var latLng = point.latLng || point;
 			if ( marker ) {
 				marker.setPosition(latLng);
@@ -190,12 +190,12 @@ jQuery(function($) {
 
 		// if we had coords in input field, put a marker on that spot
 		if(exists == 1) {
-			element.update_marker_position(map.getCenter())
+			field_obj.update_marker_position(map.getCenter())
 		}
 
 		// on click move marker and set new position
 		google.maps.event.addListener(map, 'click', function(point) {
-			element.update_marker_position(point);
+			field_obj.update_marker_position(point);
 		});
 
 		function update_value() {
@@ -203,7 +203,8 @@ jQuery(function($) {
 		}
 	}
 	carbon_field.Map_With_Address = function(element, field_obj) {
-		var search_field = element.find('.address');
+		var search_field = element.find('.address'),
+			geocoder = new google.maps.Geocoder();
 
 		// Initialize the base map field
 		carbon_field.Map(element, field_obj);
@@ -213,7 +214,6 @@ jQuery(function($) {
 
 		// Disable the form submission with enter key; instead, initiate address geocoding
 		search_field.on('keypress', function (e) {
-			console.log("a");
 			var enter_keycode = 13;
 			if (e.keyCode == enter_keycode) {
 				geocode_address();
@@ -226,11 +226,10 @@ jQuery(function($) {
 			var address = search_field.val();
 			search_field.attr('disabled', true);
 
-			geocoder = new google.maps.Geocoder();
 			geocoder.geocode( { 'address': address}, function(results, status) {
 				search_field.attr('disabled', false);
 				if (status == google.maps.GeocoderStatus.OK) {
-					element.update_marker_position(results[0].geometry.location);
+					field_obj.update_marker_position(results[0].geometry.location);
 				} else {
 					alert("Geocode was not successful for the following reason: " + status);
 				}
