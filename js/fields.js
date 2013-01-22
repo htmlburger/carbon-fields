@@ -202,7 +202,7 @@ jQuery(function($) {
 			field.val(marker.getPosition().lat() + ',' + marker.getPosition().lng());
 		}
 	}
-	carbon_field.MapWithAddress = function(element, field_obj) {
+	carbon_field.Map_With_Address = function(element, field_obj) {
 		var search_field = element.find('.address');
 
 		// Initialize the base map field

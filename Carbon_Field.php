@@ -660,7 +660,7 @@ class Carbon_Field_Map extends Carbon_Field {
 	}
 
 }
-class Carbon_Field_MapWithAddress extends Carbon_Field_Map {
+class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 	function render() {
 		echo 'Locate Address on the map: <input type="text" class="regular-text address" /><input type="button" class="address-search-btn" value="Find">';
 		echo parent::render();
