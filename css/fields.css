@@ -1,7 +1,6 @@
 .carbon-required { color: #c31d1d; font-weight: bold; text-shadow: 0 0 5px #c31d1d; }
 
-.carbon-field .regular-text,
-.carbon-field textarea { width: 25em; }
+.carbon-field .regular-text { width: 25em; }
 .carbon-field textarea { height: 5em; }
 
 .carbon-group-row td { background: #FCFCFC; }
@@ -14,6 +13,7 @@
 .carbon-file-remove { float: left; margin: 3px !important; }
 
 .carbon-color-row { position: relative; }
+.carbon-color-row .button { width: auto; }
 
 .carbon-datepicker-trigger,
 .carbon-color-preview 
@@ -23,6 +23,18 @@
 .carbon-datepicker-trigger { background:url(images/icon-date.png) no-repeat center center; margin-left:6px;}
 
 .carbon-map { height: 400px; max-width: 800px; padding: 2px; border: 1px solid #ccc; }
+.carbon-map-field { display:none;  }
+
+.carbon-field .address-search-btn {}
+
+.carbon-radio-list { }
+ul.carbon-radio-list { margin:0;}
+ul.carbon-radio-list li{ margin-bottom:3px;}
+ul.carbon-radio-list label { font-weight:normal; }
+ul.carbon-radio-list input { width: auto; margin-right:5px; }
+
+.form-field .carbon-field label { font-weight: bold; }
+.form-field .carbon-field input { width: auto; }
 
 .carbon-relationship ul { border: 1px solid #ccc; }
 .carbon-relationship ul li { margin: 0; padding: 3px; display: block; border-bottom: 1px solid #f5f5f5; }

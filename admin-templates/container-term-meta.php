@@ -1,7 +1,7 @@
 	<?php foreach ($this->fields as $field): 
 		$field->load();
 	?>
-		<tr>
+		<tr class="form-field">
 			<th scope="row">
 				<?php
 				echo $field->get_label(); 

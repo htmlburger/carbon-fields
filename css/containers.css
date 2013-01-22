@@ -33,26 +33,19 @@ body.no-js .carbon-container { display: none; }
 
 .carbon-container .wp-editor-tools { padding-left:0; }
 
-.carbon-container .carbon-field input.regular-text,
-.carbon-container .carbon-field input.carbon-file-field,
-.carbon-container .carbon-field input.carbon-image-field,
-.carbon-container .carbon-field input.carbon-datepicker,
-.carbon-container .carbon-field input.carbon-color,
-.carbon-container .carbon-field select { width:25em; }
+.carbon-field input.regular-text,
+.carbon-field input.carbon-file-field,
+.carbon-field input.carbon-image-field,
+.carbon-field input.carbon-datepicker,
+.carbon-field input.carbon-color,
+.carbon-field select { width:25em; }
 
 .carbon-container .carbon-field textarea { width:100%; }
-.carbon-container .carbon-map-field { display:none;  }
 
 .carbon-container .help-text { color:#666; }
 
 .carbon-container input.button { border-radius:3px;}
 .carbon-container a.button { padding-left:8px; padding-right:8px; border-radius:3px;}
-
-.carbon-radio-list { }
-.carbon-container ul.carbon-radio-list { margin:0;}
-.carbon-container ul.carbon-radio-list li{ margin-bottom:3px;}
-.carbon-container ul.carbon-radio-list label{ font-weight:normal;  }
-.carbon-container ul.carbon-radio-list input{ margin-right:5px;}
 
 .carbon-container .carbon-set-list input{ margin-right:5px;}
 .carbon-container .carbon-set-list p{ margin:0 0 3px 0;}

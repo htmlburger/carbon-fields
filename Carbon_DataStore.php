@@ -161,7 +161,6 @@ class Carbon_DataStore_TermMeta extends Carbon_DataStore_Base {
 	static function create_table() {
 		global $wpdb;
 
-		// TODO: setup tables for each registered blog?
 		$tables = $wpdb->get_results('SHOW TABLES LIKE "' . $wpdb->prefix . 'termmeta"');
 
 		if ( !empty($tables) ) {
@@ -190,6 +189,11 @@ class Carbon_DataStore_TermMeta extends Carbon_DataStore_Base {
 
 	function init() {
 		global $wpdb;
+
+		// Setup termmeta table and hooks only once
+		if ( !empty($wpdb->termmeta) ) {
+			return;
+		}
 
 		$wpdb->termmeta = $wpdb->prefix . 'termmeta';
 
