@@ -1070,6 +1070,9 @@ class Carbon_Field_File extends Carbon_Field {
 				$(document).ready(function(){
 					setTimeout(function(){
 						carbon_add_buttons();
+
+						// add `carbon_type` param to the filter form
+						$('#filter').append('<input type="hidden" name="carbon_type" value="<?php echo $_GET['carbon_type'] ?>" />');
 					}, 1);
 				});
 
