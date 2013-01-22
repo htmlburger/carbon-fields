@@ -141,5 +141,19 @@ class Carbon_Container_TermMeta extends Carbon_Container {
 			}
 		}
 	}
+
+	/**
+	 * Show the container only on terms from the specified taxonomy(s).
+	 *
+	 * @param string|array $post_type
+	 * @return object $this
+	 **/
+	function show_on_taxonomy($taxonomies) {
+		$taxonomies = (array)$taxonomies;
+
+		$this->settings['taxonomy'] = $taxonomies;
+
+		return $this;
+	}
 }
 

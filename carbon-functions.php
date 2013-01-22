@@ -31,6 +31,17 @@ function carbon_get_theme_option($name, $type = null) {
 	return get_option($name, true);
 }
 
+
+function carbon_get_term_meta($id, $name, $type = null) {
+	$name = $name[0] == '_' ? $name: '_' . $name;
+
+	if ( $type == 'complex' ) {
+		return carbon_get_complex_fields('TermMeta', $name, $id);
+	}
+
+	return get_metadata('term', $id, $name, true);
+}
+
 function carbon_get_complex_fields($type, $name, $id = null) {
 	$datastore = Carbon_DataStore_Base::factory($type);
 	
