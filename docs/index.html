@@ -57,6 +57,7 @@
 							<li><a href="#Containers">Usage</a></li>
 							<li><a href="#Custom_Fields">Custom Fields</a></li>
 							<li><a href="#Theme_Options">Theme Options</a></li>
+							<li><a href="#Term_Meta">Term Meta</a></li>
 
 							<li class="nav-header">Fields</li>
 							<li><a href="#Fields">Usage</a></li>
@@ -287,6 +288,53 @@ Carbon_Container::factory('theme_options', 'Customize Background')
 	?&gt;
 &lt;p&gt;
 </pre>
+
+			<!-- SSSSSSTTTTTTTAAAAAAARRRRRRRRTTTTTTTTT -->
+
+					<h3 id="Term_Meta">Term meta Container</h3>
+					<p>Term meta containers are used to extend the term edit screens with additional fields. Field data is stored separately for each term in a custom table (<code>$wpdb-&gt;termmeta</code>). </p>
+
+					<pre class="prettyprint">
+Carbon_Container::factory('term_meta', 'Category Properties')
+	-&gt;add_fields(array(
+		Carbon_Field::factory('color', 'title_color'),
+		Carbon_Field::factory('image', 'thumb'),
+	));</pre>
+
+					<p>By default the term meta containers are displayed on <code>category</code> terms, but you can select specific taxonomies they show on using the method <code>show_on_taxonomy($taxonomy)</code>, where: </p>
+					<dl>
+						<dt><code>$taxonomy</code></dt>
+						<dd>Can be either name of a single taxonomy or an array of taxonomy names</dd>
+					</dl>
+								
+					<h4>Accessing field values</h4>
+					<p>To access field values you need to use the function <code>carbon_get_term_meta($term_d, $name, $type = null)</code>, where: </p>
+					<dl>
+						<dt><code>$term_d</code></dt>
+						<dd>Term ID where your value was entered.</dd>
+
+						<dt><code>$name</code></dt>
+						<dd>The name of the field to be retrieved.</dd>
+
+						<dt><code>$type</code> (optional)</dt>
+						<dd>If the field you want to retrieve is of type complex, you need to pass <code>"complex"</code>.</dd>
+					</dl>
+
+					<pre class="prettyprint">
+&lt;!-- Simple field --&gt;
+&lt;p&gt;Editor of this category: &lt;?php echo carbon_get_term_meta($category->ID, 'editor'); ?&gt;&lt;/p&gt;
+
+&lt;!-- Complex field --&gt;
+&lt;?php 
+$authors = carbon_get_term_meta($category->ID, 'authors', 'complex');
+foreach ($authors as $author) {
+	echo $author['name'];
+}
+?&gt;
+</pre>
+
+	
+		<!-- EEEEEEEEEEEEEENNNNNNNNNNNNNNNNNNDDDDDDDDDDDDDDDDD -->
 
 
 
