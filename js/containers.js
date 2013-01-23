@@ -13,11 +13,13 @@ jQuery(function($) {
 				type = th.data('type'),
 				container;
 
-			container = carbon_container(th);
-
-			if ( typeof carbon_container[type] != 'undefined' ) {
+			try {
+				container = carbon_container(th);
 				carbon_container[type](th, container);
-			};
+			} catch (e) {
+				carbon_log_error("Couldn't render container: " + e.message);
+			}
+
 		});
 	}
 
@@ -291,9 +293,30 @@ jQuery(function($) {
 
 	/* Widgets */
 	carbon_container.Widget = function (element, container_obj) {
+		var is_template_widget = element.closest('#widgets-left').length;
+
+		carbon_container.Widget.widgets_uid ++;
+
 		widget_init_monitor(container_obj);
+
+		// Set new id
+		if (is_template_widget) {
+			element.find('.carbon-field').addClass('carbon-field-skip');
+		} else {
+			element.find('.carbon-field').removeClass('carbon-field-skip');
+			element.find('label[for]').each(function() {
+				var label = $(this),
+					id = label.attr('for'),
+					input = element.find('#' + id);
+
+				id = id + '-c' + carbon_container.Widget.widgets_uid;
+				label.attr('for', id);
+				input.attr('id', id);
+			});
+		};
 	}
 	carbon_container.Widget.initMonitorReady = false;
+	carbon_container.Widget.widgets_uid = 0;
 
 	function widget_init_monitor(container) {
 		// monitor for new containers
@@ -309,10 +332,14 @@ jQuery(function($) {
 				return;
 			};
 
-			setTimeout(carbon_field_init, 1);
+			setTimeout(function() {
+				carbon_container_init();
+				carbon_field_init();
+			}, 1);
 		});
 	}
-	
+
+	window.carbon_container_init = init;
 
 	// Abracadabra! Poof! Containers everywhere ...
 	init();

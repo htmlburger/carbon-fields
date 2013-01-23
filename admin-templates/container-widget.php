@@ -14,7 +14,7 @@
 		$tmp_field->set_name($field_name);
 	?>
 		<div>
-			<label for="<?php echo $field_id; ?>"><?php 
+			<label for="<?php echo $tmp_field->get_id(); ?>"><?php 
 				echo $tmp_field->get_label(); 
 
 				if ( $tmp_field->is_required() ) {

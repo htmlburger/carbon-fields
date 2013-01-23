@@ -445,6 +445,7 @@ jQuery(function($) {
 	window.carbon_field_init = init;
 
 	/**/
+	window.carbon_log_error = carbon_log_error;
 	function carbon_log_error(error_message) {
 		if (typeof console != "undefined") {
 			console.log("*Carbon Error:* " + error_message);

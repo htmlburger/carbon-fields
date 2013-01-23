@@ -9,8 +9,6 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 	protected $custom_fields = array();
 
 	function setup($title, $description, $fields) {
-		throw new Carbon_Exception('Carbon Widgets? We are working on that!');
-
 		// require title
 		if ( !$title ) {
 			throw new Carbon_Exception('Enter widget title');
