@@ -1147,7 +1147,8 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 
 	function init() {
 		$this->add_sidebar_opts_sidebars();
-		$this->setup_sidebars();
+		
+		add_action('wp_loaded', array($this, 'setup_sidebars'), 20);
 	}
 
 	function add_sidebar_opts_sidebars() {
