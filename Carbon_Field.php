@@ -1170,9 +1170,12 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 
 	function set_sidebar_options($sidebar_options) {
 		// Make sure that all needed fields are in the options array
-		if ( count(array_diff($this->sidebar_options, sidebar_options)) ) {
-			throw new Carbon_Exception('Provide all sidebar options for ' . $this->name . ': <code>' .
-					implode(', ', array_keys($this->sidebar_options)) . '</code>');
+		$required_arguments = array('before_widget', 'after_widget', 'before_title', 'after_title');
+		foreach ($required_arguments as $arg) {
+			if (!isset($sidebar_options[$arg])) {
+				throw new Carbon_Exception('Provide all sidebar options for ' . $this->name . ': <code>' .
+						implode(', ', array_keys($this->sidebar_options)) . '</code>');
+			}
 		}
 
 	    $this->sidebar_options = $sidebar_options;
