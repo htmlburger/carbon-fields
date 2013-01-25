@@ -876,7 +876,7 @@ class Carbon_Field_Relationship extends Carbon_Field {
 
 		$posts = get_posts(array(
 			'post_type' => $this->post_type,
-			'numberposts' => 5
+			'posts_per_page' => 5
 		));
 
 		?>
@@ -1198,7 +1198,7 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 				'meta_query'=>array(
 					array( 'key' => $this->name, 'value' => urlencode($sidebar))
 				),
-				'numberposts'=>-1,
+				'posts_per_page'=>-1,
 			));
 
 			if (count($associated_pages)) {
@@ -1241,7 +1241,7 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 			'meta_query' => array(
 				array('key' => $this->name)
 			),
-			'numberposts' => -1,
+			'posts_per_page' => -1,
 		));
 
 		$sidebars = array();
