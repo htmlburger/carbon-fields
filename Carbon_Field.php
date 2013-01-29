@@ -1148,7 +1148,8 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 	function init() {
 		$this->add_sidebar_opts_sidebars();
 		
-		add_action('wp_loaded', array($this, 'setup_sidebars'), 20);
+		// Setup the sidebars after all fields are registered
+		add_action('carbon_after_register_fields', array($this, 'setup_sidebars'), 20);
 	}
 
 	function add_sidebar_opts_sidebars() {
@@ -1175,7 +1176,7 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 		foreach ($required_arguments as $arg) {
 			if (!isset($sidebar_options[$arg])) {
 				throw new Carbon_Exception('Provide all sidebar options for ' . $this->name . ': <code>' .
-						implode(', ', array_keys($this->sidebar_options)) . '</code>');
+						implode(', ', $required_arguments) . '</code>');
 			}
 		}
 
