@@ -922,6 +922,43 @@ class Carbon_Field_Relationship extends Carbon_Field {
 	}
 }
 
+class Carbon_Field_Attachment extends Carbon_Field_File {
+	function render() {
+		echo '<input id="' . $this->get_id() . '" type="hidden" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-image-field" ' . ($this->required ? 'data-carbon-required="true"': '') . '/>';
+		echo '<div class="cl"></div>';
+
+		$has_image = false;
+		
+		// For image only
+		$attachment = get_post($this->value);
+
+		if ( !$attachment || $attachment->post_type != 'attachment' ) {
+			echo '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" height="100" class="carbon-view_image blank"/>';
+			echo '<span class="carbon-attachment-title"></span><div class="cl"></div>';
+			echo '<span class="carbon-attachment-url"></span><div class="cl"></div>';
+		} else {
+			$url = wp_get_attachment_url($attachment->ID);
+			$attachment_thumbnail = wp_get_attachment_thumb_url($attachment->ID);
+
+			if ( empty($attachment_thumbnail) ) {
+				$attachment_thumbnail = wp_get_attachment_image_src($attachment->ID, array(100, 100), true);
+				$attachment_thumbnail = $attachment_thumbnail[0];
+			}
+
+			echo '<img src="' . $attachment_thumbnail . '" alt="" height="100" class="carbon-view_image"/>';
+			echo '<span class="carbon-attachment-title">' . $attachment->post_title . '</span><div class="cl"></div>';
+			echo '<span class="carbon-attachment-url">' . $url . '</span><div class="cl"></div>';
+			$has_image = true;
+		}
+
+		echo '<input class="carbon-file-remove button" type="button" value="Remove Image" ' . ($has_image ? '': 'style="display: none;"') . ' />';
+
+		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=file&amp;carbon_type=attachment" type="button" class="button" value="Select Media" ' . ($has_image ? 'style="display: none;"': '') . '/>';
+
+		echo '<div class="cl"></div>';
+	}
+}
+
 class Carbon_Field_File extends Carbon_Field {
 	/**
 	 * Whether admin_head was attached for a file or image field
@@ -956,7 +993,7 @@ class Carbon_Field_File extends Carbon_Field {
 
 
 	static function admin_media_library_popup_head() {
-		if ( !isset($_GET['carbon_type']) || !in_array($_GET['carbon_type'], array('file', 'image')) ) {
+		if ( !isset($_GET['carbon_type']) || !in_array($_GET['carbon_type'], array('file', 'image', 'attachment')) ) {
 			return;
 		}
 		?>
@@ -1045,7 +1082,7 @@ class Carbon_Field_File extends Carbon_Field {
 								return false;
 							}
 
-							// Presnet thumbnails is required for image fields
+							// Image fields require a present thumbnail
 							if(carbon_field.data('type') == 'Image' && !json.thumbnail) {
 								alert('Cannot select this file');
 								return false;
@@ -1054,7 +1091,15 @@ class Carbon_Field_File extends Carbon_Field {
 							};
 
 							// update carbon_field
-							carbon_field.find('input.regular-text').val( json.url ).trigger('change');
+							if ( carbon_field.data('type') == 'Attachment' ) {
+								carbon_field.find('input.regular-text').val( json.id ).trigger('change');
+								carbon_field.find('.carbon-file-remove').show();
+								carbon_field.find('.button:not(.carbon-file-remove)').hide();
+								carbon_field.find('.carbon-attachment-title').text(json.title);
+								carbon_field.find('.carbon-attachment-url').text(json.url);
+							} else {
+								carbon_field.find('input.regular-text').val( json.url ).trigger('change');
+							}
 				 			carbon_field.find('.carbon-view_image').attr( 'src', json.thumbnail ).removeClass('blank');
 				 			carbon_field.find('.carbon-view_file').attr( 'href', json.url );
 				 			
@@ -1095,11 +1140,13 @@ class Carbon_Field_File extends Carbon_Field {
 
 		$attachment_id = intval($_GET['id']);
 
+		$attachment = get_post($attachment_id);
 		$url = wp_get_attachment_url($attachment_id);
 		$thumbnail = wp_get_attachment_image_src($attachment_id, 'thumbnail');
 
 		$result = array(
 			'id' => $attachment_id,
+			'title' => $attachment->post_title,
 			'url' => $url,
 			'thumbnail' => $thumbnail[0],
 		);

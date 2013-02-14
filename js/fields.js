@@ -70,6 +70,23 @@ jQuery(function($) {
 		});
 	}
 
+	/* Attachment */
+	carbon_field.Attachment = function(element, field_obj) {
+		element.find('.button:not(.carbon-file-remove)').click(function() {
+			window.carbon_active_field = element;
+			tb_show('','media-upload.php?post_id=0&type=file&carbon_type=image&TB_iframe=true');
+		});
+
+		element.find('.carbon-file-remove').click(function() {
+			element.find('img').addClass('blank').attr('src', 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
+			element.find('.button:not(.carbon-file-remove)').show();
+			element.find('.carbon-image-field').val('');
+			element.find('.carbon-attachment-title, .carbon-attachment-url').html('');
+			$(this).hide();
+			return false;
+		});
+	}
+
 	/* Date picker */
 	carbon_field.Date = function(element, field_obj) {
 		var text_field = element.find('.carbon-datepicker');

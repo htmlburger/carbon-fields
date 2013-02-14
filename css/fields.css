@@ -12,6 +12,12 @@
 .carbon-view_image { float: left; }
 .carbon-file-remove { float: left; margin: 3px !important; }
 
+.carbon-attachment-title,
+.carbon-attachment-url { display: block; margin: 3px 0 0; word-break: break-all; }
+.carbon-attachment-url { font-family: monospace; } 
+.carbon-Attachment .carbon-file-remove { margin: 3px 0 0 !important; }
+.carbon-Attachment .carbon-view_image { margin-right: 6px; }
+
 .carbon-color-row { position: relative; }
 .carbon-color-row .button { width: auto; }
 
