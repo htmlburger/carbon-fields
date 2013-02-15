@@ -72,6 +72,7 @@
 							<li><a href="#Field_Set">Set</a></li>
 							<li><a href="#Field_File">File</a></li>
 							<li><a href="#Field_Image">Image</a></li>
+							<li><a href="#Field_Attachment">Attachment</a></li>
 							<li><a href="#Field_Map">Map</a></li>
 							<li><a href="#Field_MapWithAddress">Map with Address</a></li>
 							<li><a href="#Field_Separator">Separator</a></li>
@@ -497,6 +498,14 @@ Carbon_Field::factory("file", "price_list", "Price list (PDF)");
 						<p>Supported image formats are: jpg, jpeg, gif, png and bmp</p>
 						<pre class="prettyprint">
 Carbon_Field::factory("image", "employee_photo", "Photo");
+</pre>
+					</div>
+
+					<div class="field-docs">
+						<h4 id="Field_Attachment">Attachment <code>attachment</code></h4>
+						<p>Renders a button to choose file (attachment) from the Media library. Instead of the URL, the field saves the attachment's ID. This allows you to retrieve additional information such as titles, descriptions, captions and different thumbnail sizes.</p>
+						<pre class="prettyprint">
+Carbon_Field::factory("attachment", "relateD_file", "Related File");
 </pre>
 					</div>
 
