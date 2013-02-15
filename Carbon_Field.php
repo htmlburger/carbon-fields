@@ -951,7 +951,7 @@ class Carbon_Field_Attachment extends Carbon_Field_File {
 			$has_image = true;
 		}
 
-		echo '<input class="carbon-file-remove button" type="button" value="Remove Image" ' . ($has_image ? '': 'style="display: none;"') . ' />';
+		echo '<input class="carbon-file-remove button" type="button" value="Remove" ' . ($has_image ? '': 'style="display: none;"') . ' />';
 
 		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=file&amp;carbon_type=attachment" type="button" class="button" value="Select Media" ' . ($has_image ? 'style="display: none;"': '') . '/>';
 
