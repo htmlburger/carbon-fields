@@ -170,13 +170,15 @@ jQuery(function($) {
 			temp = coords.split(',');
 			lat = parseFloat(temp[0]);
 			lng = parseFloat(temp[1]);
-			exists = 1;
+
+			exists = temp[0] !== '0' && temp[1] !== '0';
 		}
 
 		if ( !exists || isNaN(lat) ||isNaN(lng)  ) {
 			lat = field.data('default-lat');
 			lng = field.data('default-lng');
 		};
+
 
 		//draw a map
 		var map = new google.maps.Map(map_container.get(0), {
@@ -207,17 +209,32 @@ jQuery(function($) {
 
 		// if we had coords in input field, put a marker on that spot
 		if(exists == 1) {
-			field_obj.update_marker_position(map.getCenter())
+			field_obj.update_marker_position(new google.maps.LatLng(lat, lng))
 		}
 
 		// on click move marker and set new position
 		google.maps.event.addListener(map, 'click', function(point) {
+			lat = point.latLng.lat();
+			lng = point.latLng.lng();
 			field_obj.update_marker_position(point);
 		});
 
 		function update_value() {
 			field.val(marker.getPosition().lat() + ',' + marker.getPosition().lng());
 		}
+
+		// If we are in a widget container, resize the map when the widget is revealed.
+		// This is a workaround since maps don't initialize in a hidden div (widget)
+		map_container.closest('div.widget').bind('click.widgets-toggle', function(e){
+			if ( $(e.target).parents('.widget-inside').length > 0 ) {
+				return;
+			};
+
+			setTimeout(function() {
+				google.maps.event.trigger(map, 'resize');
+				field_obj.update_marker_position(new google.maps.LatLng(lat, lng))
+			}, 1);
+		});
 	}
 	carbon_field.Map_With_Address = function(element, field_obj) {
 		var search_field = element.find('.address'),
@@ -266,12 +283,13 @@ jQuery(function($) {
 		tinyMCE.settings.theme_advanced_buttons2 = 'formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,charmap,|,outdent,indent,|,undo,redo,wp_help,code';
 
 		wpActiveEditor = null;
+		tinyMCE.execCommand('mceRemoveControl', false, textarea.attr('id'));
 		tinyMCE.execCommand('mceAddControl', false, textarea.attr('id'));
 
 		// remove editor before removing the node from DOM
 		element.bind('remove_fields.carbon', function() {
 			var textarea_width = element.outerWidth(),
-				field_height = element.outerHeight(),
+				field_height = Math.max(180, element.outerHeight()),
 				textarea_height = field_height - 4 - 20 - element.find('.wp-editor-tools').height(); // 20 padding, 4 borders and stuff
 
 			element.width(textarea_width).height(field_height);
@@ -283,6 +301,25 @@ jQuery(function($) {
 
 		element.bind('reinit_field.carbon', function() {
 			tinyMCE.execCommand('mceAddControl', false, textarea.attr('id'));
+			element.height('auto').width('auto');
+			textarea.height('auto').width('auto');
+		});
+
+		element.closest('div.widget').bind('click.widgets-toggle', function(e){
+			var target = $(e.target), css = {}, widget, inside, w;
+
+			if ( target.parents('.widget-top').length && ! target.parents('#available-widgets').length ) {
+				// pass
+			} else if ( target.hasClass('widget-control-save') ) {
+				tinyMCE.triggerSave();
+			}
+		});
+
+		element.closest('.widgets-sortables').on( "sortstart", function( event, ui ) {
+			if ( ui.item.get(0) != element.closest('.widget').get(0) ) {
+				return;
+			}
+			remove_fields(ui.item);
 		});
 	}
 
