@@ -58,6 +58,7 @@
 							<li><a href="#Custom_Fields">Custom Fields</a></li>
 							<li><a href="#Theme_Options">Theme Options</a></li>
 							<li><a href="#Term_Meta">Term Meta</a></li>
+							<li><a href="#Widgets">Widgets</a></li>
 
 							<li class="nav-header">Fields</li>
 							<li><a href="#Fields">Usage</a></li>
@@ -334,6 +335,50 @@ foreach ($authors as $author) {
 ?&gt;
 </pre>
 
+	
+		<!-- EEEEEEEEEEEEEENNNNNNNNNNNNNNNNNNDDDDDDDDDDDDDDDDD -->
+
+			<!-- SSSSSSTTTTTTTAAAAAAARRRRRRRRTTTTTTTTT -->
+
+					<h3 id="Widgets">Widgets</h3>
+					<p>Widget containers are used to create custom widgets for your theme. Each widget is defined as a PHP class. Widget classes must extend the <code>Carbon_Widget</code> class and must have at least two methods - constructor and <code>front_end</code> method.</p>
+
+					<p>The constructor must be named after the class and it must call the method <code>setup($name, $description, $fields)</code>, where: </p>
+					<dl>
+						<dt><code>$name</code></dt>
+						<dd>Name of the widget, used in the back-end</dd>
+						<dt><code>$description</code></dt>
+						<dd>Description of the widget, used in the back-end</dd>
+						<dt><code>$fields</code></dt>
+						<dd>Array of Carbon fields</dd>
+					</dl>
+
+					<p>The <code>front_end($args, $instance)</code> method is responsible for rendering your widget in the front-end. Here you have access to all values saved for the fields you defined in the constructor via the <code>$instance</code> parameter.</p>
+
+					<p>After you define your class, it is important that you register your new widget during the <code>widgets_init</code> action. </p>
+
+					<pre class="prettyprint">
+class ThemeWidgetExample extends Carbon_Widget {
+	// Register widget function. Must have the same name as the class
+	function ThemeWidgetExample() {
+		$this-&gt;setup('Theme Widget - Example', 'Displays a block with title/text', array(
+			Carbon_Field::factory('text', 'title', 'Title')-&gt;set_default_value('Hello World!'),
+			Carbon_Field::factory('textarea', 'content', 'Content')-&gt;set_default_value('Lorem Ipsum dolor sit amet')
+		));
+	}
+	
+	// Called when rendering the widget in the front-end
+	function front_end($args, $instance) {
+		extract($args);
+		echo $before_title . $instance['title'] . $after_title;
+		echo '&lt;p&gt;' . $instance['content'] . '&lt;/p&gt;';
+	}
+}
+
+function load_widgets() {
+	register_widget('ThemeWidgetExample');
+}
+add_action('widgets_init', 'load_widgets');</pre>
 	
 		<!-- EEEEEEEEEEEEEENNNNNNNNNNNNNNNNNNDDDDDDDDDDDDDDDDD -->
 
