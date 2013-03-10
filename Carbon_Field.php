@@ -1210,13 +1210,14 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 
 	function add_sidebar_opts_sidebars() {
 		global $wp_registered_sidebars;
-		$sidebars = $this->_get_sidebars();
+		$sidebars = array();
 
 		foreach ($wp_registered_sidebars as $sidebar) {
 			$sidebars[] = $sidebar['name'];
 		}
 
-		$options = array_combine($sidebars, $sidebars);
+		$options = array_merge($sidebars, $this->_get_sidebars());
+		$options = array_combine($options, $options);
 
 		$this->add_options($options);
 	}
