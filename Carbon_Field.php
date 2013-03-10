@@ -272,6 +272,15 @@ class Carbon_Field {
 	}
 
 	/**
+	 * Get default field value
+	 *
+	 * @return mixed $value
+	 **/
+	function get_default_value() {
+		return $this->default_value;
+	}
+
+	/**
 	 * Return the field value
 	 *
 	 * @return mixed

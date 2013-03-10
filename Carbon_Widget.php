@@ -107,6 +107,8 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 	function load(Carbon_Field $field) {
 		if ( isset($this->store_data[$field->get_name()]) ) {
 			$field->set_value($this->store_data[$field->get_name()]);
+		} else {
+			$field->set_value($field->get_default_value());
 		}
 	}
 
