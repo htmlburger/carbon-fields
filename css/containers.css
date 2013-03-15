@@ -11,6 +11,8 @@ body.no-js .carbon-container { display: none; }
 
 .carbon-container.Carbon_Container_CustomFields td label { display: block; }
 
+.carbon-container.Carbon_Container_UserMeta td { border: 0 none; }
+
 .carbon-container .carbon-subcontainer, 
 .carbon-container .carbon-subcontainer table { width: 100%; border-spacing: 0; }
 

@@ -3,20 +3,32 @@
 class Carbon_Container_UserMeta extends Carbon_Container {
 	protected $user_id;
 
-	public $settings = array();
+	public $settings = array(
+		'role' => null
+	);
 
-	function init() {
-		throw new Carbon_Exception('User Meta? We are working on that!');
+	function __construct($title) {
+		parent::__construct($title);
 
 		if ( !$this->get_datastore() ) {
 			$this->set_datastore(new Carbon_DataStore_UserMeta());
 		}
+	}
 
+	/**
+	 * Bind attach() and save() to the appropriate WordPress actions.
+	 *
+	 * @return void
+	 **/
+	function init() {
 		add_action('admin_init', array($this, '_attach'));
 		add_action('profile_update', array(&$this, '_save'), 10, 1);
 	}
 
 	function save($user_id) {
+		// Unhook action to garantee single save
+		remove_action('profile_update', array(&$this, '_save'));
+
 		$this->set_user_id($user_id);
 
 		foreach ($this->fields as $field) {
@@ -25,7 +37,7 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 		}
 	}
 
-	function is_valid_save() {
+	function is_valid_save($user_id = 0) {
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
 			return false;
 		} else if (!isset($_REQUEST[$this->get_nonce_name()]) || !wp_verify_nonce($_REQUEST[$this->get_nonce_name()], $this->get_nonce_name())) {
@@ -34,7 +46,32 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 			return false;
 		}
 
-		return true;
+		return $this->is_valid_save_conditions($user_id);
+	}
+
+	function is_valid_save_conditions($user_id) {
+		$valid = true;
+		$user = get_userdata($user_id);
+
+		if ( empty($user->roles) ) {
+			return;
+		}
+
+		// Check user role
+		if ( isset($this->settings['role']) ) {
+			$allowed_roles = (array) $this->settings['role'];
+			if ( !in_array($user->roles[0], $allowed_roles) ) {
+				$valid = false;
+			}
+		}
+		
+		return $valid;
+	}
+
+	function show_on_user_role($role) {
+	    $this->settings['role'] = $role;
+
+		return $this;
 	}
 
 	function attach() {
@@ -58,6 +95,9 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 		$this->set_user_id( $user_profile->ID );
 
 		$container_tag_class_name = get_class($this);
+		$container_type = 'UserMeta';
+		$container_options = array();
+
 		include dirname(__FILE__) . '/admin-templates/container-user-meta.php';
 	}
 

@@ -266,11 +266,28 @@ class Carbon_DataStore_UserMeta extends Carbon_DataStore_Base {
 	function init() {}
 
 	function save(Carbon_Field $field) {
-		update_user_meta($this->user_id, $field->get_name(), $field->get_value());
+		if ( !update_user_meta($this->user_id, $field->get_name(), $field->get_value()) ) {
+			add_user_meta($this->user_id, $field->get_name(), $field->get_value(), true);
+		}
 	}
 
 	function load(Carbon_Field $field) {
-		$field->set_value( get_user_meta($this->user_id, $field->get_name(), true) );
+		global $wpdb;
+
+        $value = $wpdb->get_var('
+            SELECT `meta_value`
+            FROM ' . $wpdb->usermeta . '
+            WHERE `user_id`=' . intval($this->user_id) . '
+            AND `meta_key`="' . $field->get_name() . '"
+            LIMIT 1
+		');
+
+		if ( is_null($value) ) {
+			$field->set_value(false);
+			return;
+		}
+
+		$field->set_value($value);
 	}
 
 	function delete(Carbon_Field $field) {
