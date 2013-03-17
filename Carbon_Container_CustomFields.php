@@ -349,7 +349,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	 **/
 	function set_post_id($post_id) {
 		$this->post_id = $post_id;
-		$this->store->set_post_id($post_id);
+		$this->store->set_id($post_id);
 	}
 
 	/**

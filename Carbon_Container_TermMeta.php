@@ -98,7 +98,7 @@ class Carbon_Container_TermMeta extends Carbon_Container {
 
 	function set_term_id($term_id) {
 		$this->term_id = $term_id;
-		$this->store->set_term_id($term_id);
+		$this->store->set_id($term_id);
 	}
 
 

@@ -95,7 +95,7 @@ class Carbon_DataStore_CustomField extends Carbon_DataStore_Base {
 		');
 	}
 
-	function set_post_id($post_id) {
+	function set_id($post_id) {
 		$this->post_id = $post_id;
 	}
 }
@@ -246,7 +246,7 @@ class Carbon_DataStore_TermMeta extends Carbon_DataStore_Base {
 		');
 	}
 
-	function set_term_id($term_id) {
+	function set_id($term_id) {
 		$this->term_id = $term_id;
 	}
 
@@ -323,7 +323,7 @@ class Carbon_DataStore_UserMeta extends Carbon_DataStore_Base {
 		');
 	}
 
-	function set_user_id($user_id) {
+	function set_id($user_id) {
 		$this->user_id = $user_id;
 	}
 }

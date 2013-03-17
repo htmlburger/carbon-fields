@@ -31,7 +31,6 @@ function carbon_get_theme_option($name, $type = null) {
 	return get_option($name, true);
 }
 
-
 function carbon_get_term_meta($id, $name, $type = null) {
 	$name = $name[0] == '_' ? $name: '_' . $name;
 
@@ -42,11 +41,21 @@ function carbon_get_term_meta($id, $name, $type = null) {
 	return get_metadata('term', $id, $name, true);
 }
 
+function carbon_get_user_meta($id, $name, $type = null) {
+	$name = $name[0] == '_' ? $name: '_' . $name;
+
+	if ( $type == 'complex' ) {
+		return carbon_get_complex_fields('UserMeta', $name, $id);
+	}
+
+	return get_metadata('user', $id, $name, true);
+}
+
 function carbon_get_complex_fields($type, $name, $id = null) {
 	$datastore = Carbon_DataStore_Base::factory($type);
 	
 	if ( $id ) {
-		$datastore->set_post_id($id);
+		$datastore->set_id($id);
 	}
 
 	$group_rows = $datastore->load_values($name);
