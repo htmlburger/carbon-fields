@@ -58,6 +58,7 @@
 							<li><a href="#Custom_Fields">Custom Fields</a></li>
 							<li><a href="#Theme_Options">Theme Options</a></li>
 							<li><a href="#Term_Meta">Term Meta</a></li>
+							<li><a href="#User_Meta">User Meta</a></li>
 							<li><a href="#Widgets">Widgets</a></li>
 
 							<li class="nav-header">Fields</li>
@@ -291,7 +292,6 @@ Carbon_Container::factory('theme_options', 'Customize Background')
 &lt;p&gt;
 </pre>
 
-			<!-- SSSSSSTTTTTTTAAAAAAARRRRRRRRTTTTTTTTT -->
 
 					<h3 id="Term_Meta">Term meta Container</h3>
 					<p>Term meta containers are used to extend the term edit screens with additional fields. Field data is stored separately for each term in a custom table (<code>$wpdb-&gt;termmeta</code>). </p>
@@ -324,11 +324,11 @@ Carbon_Container::factory('term_meta', 'Category Properties')
 
 					<pre class="prettyprint">
 &lt;!-- Simple field --&gt;
-&lt;p&gt;Editor of this category: &lt;?php echo carbon_get_term_meta($category->ID, 'editor'); ?&gt;&lt;/p&gt;
+&lt;p&gt;Editor of this category: &lt;?php echo carbon_get_term_meta($category-&gt;ID, 'editor'); ?&gt;&lt;/p&gt;
 
 &lt;!-- Complex field --&gt;
 &lt;?php 
-$authors = carbon_get_term_meta($category->ID, 'authors', 'complex');
+$authors = carbon_get_term_meta($category-&gt;ID, 'authors', 'complex');
 foreach ($authors as $author) {
 	echo $author['name'];
 }
@@ -336,9 +336,50 @@ foreach ($authors as $author) {
 </pre>
 
 	
-		<!-- EEEEEEEEEEEEEENNNNNNNNNNNNNNNNNNDDDDDDDDDDDDDDDDD -->
 
-			<!-- SSSSSSTTTTTTTAAAAAAARRRRRRRRTTTTTTTTT -->
+					<h3 id="User_Meta">User meta Container</h3>
+					<p>User meta containers add extra fields to the user edit screens. Field data is stored separately for each user as user meta (see <a href="http://codex.wordpress.org/Function_Reference/add_user_meta"><i class="icon-globe"></i> add_user_meta</a>). </p>
+
+					<pre class="prettyprint">
+Carbon_Container::factory('user_meta', 'Address')
+	-&gt;add_fields(array(
+		Carbon_Field::factory('text', 'city_and_post', 'City and post code'),
+		Carbon_Field::factory('text', 'street', 'Street Name'),
+	));</pre>
+
+					<p>By default the user meta containers are displayed for all users of all roles, but you can select specific user roles they show on using the method <code>show_on_role($role)</code>, where: </p>
+					<dl>
+						<dt><code>$role</code></dt>
+						<dd>Can be either name of a single role or an array of role names</dd>
+					</dl>
+								
+					<h4>Accessing field values</h4>
+					<p>To access field values you need to use the function <code>carbon_get_user_meta($user_d, $name, $type = null)</code>, where: </p>
+					<dl>
+						<dt><code>$user_d</code></dt>
+						<dd>User ID where your value was entered.</dd>
+
+						<dt><code>$name</code></dt>
+						<dd>The name of the field to be retrieved.</dd>
+
+						<dt><code>$type</code> (optional)</dt>
+						<dd>If the field you want to retrieve is of type complex, you need to pass <code>"complex"</code>.</dd>
+					</dl>
+
+					<pre class="prettyprint">
+&lt;!-- Simple field --&gt;
+&lt;?php $author = get_the_author(); ?&gt;
+&lt;p&gt;Author address: &lt;?php echo carbon_get_user_meta($author-&gt;ID, 'street'); ?&gt;&lt;/p&gt;
+
+&lt;!-- Complex field --&gt;
+&lt;?php 
+$phone_numbers = carbon_get_user_meta($author-&gt;ID, 'phone_numbers', 'complex');
+foreach ($phone_numbers as $phone) {
+	echo $phone['country_code'] . '-' . $phone['number'];
+}
+?&gt;
+</pre>
+
 
 					<h3 id="Widgets">Widgets</h3>
 					<p>Widget containers are used to create custom widgets for your theme. Each widget is defined as a PHP class. Widget classes must extend the <code>Carbon_Widget</code> class and must have at least two methods - constructor and <code>front_end</code> method.</p>
@@ -380,7 +421,6 @@ function load_widgets() {
 }
 add_action('widgets_init', 'load_widgets');</pre>
 	
-		<!-- EEEEEEEEEEEEEENNNNNNNNNNNNNNNNNNDDDDDDDDDDDDDDDDD -->
 
 
 
