@@ -1,4 +1,4 @@
-<table class="form-table carbon-container <?php echo $container_tag_class_name ?>" data-type="<?php echo $container_type ?>" data-options='<?php echo json_encode($container_options) ?>'>
+<table class="form-table carbon-container <?php echo $container_tag_class_name ?>" data-type="<?php echo $container_type ?>" data-options='<?php echo json_encode($container_options) ?>' data-profile-role="<?php echo $profile_role ?>">
 	<?php foreach ($this->fields as $field): 
 		$field->load();
 		$help_text = $field->get_help_text();

@@ -339,6 +339,102 @@ jQuery(function($) {
 		});
 	}
 
+
+	/* User Meta */
+	carbon_container.UserMeta = function (element, container_obj) {
+		container_obj.initCheckVisible = true;
+		user_meta_check_visible(container_obj);
+		container_obj.initCheckVisible = false;
+
+		user_meta_attach_save_alert();
+		user_meta_attach_validation_hook();
+	}
+	carbon_container.UserMeta.attachedValidationHook = false;
+	carbon_container.UserMeta.attachedSaveAlert = false;
+	carbon_container.UserMeta.hasChanges = false;
+
+	function user_meta_attach_save_alert() {
+		if ( carbon_container.UserMeta.attachedSaveAlert ) {
+			return;
+		};
+		carbon_container.UserMeta.attachedSaveAlert = true;
+
+		setTimeout(function() {
+			var old_callback = window.onbeforeunload || $.noop;
+
+			window.onbeforeunload = function (){
+				if ( carbon_container.UserMeta.hasChanges ) {
+					return (typeof autosaveL10n != 'undefined' && autosaveL10n.saveAlert ? autosaveL10n.saveAlert: 'The changes you made will be lost if you navigate away from this page.');
+				};
+
+				return old_callback();
+			};
+
+			$('.carbon-container .carbon-field input, .carbon-container .carbon-field select, .carbon-container .carbon-field textarea').live('change', function() {
+				carbon_container.UserMeta.hasChanges = true;
+			});
+
+			$('body').on('remove_fields.carbon reorder_groups.carbon', function() {
+				carbon_container.UserMeta.hasChanges = true;
+			});
+
+			$('form#your-profile input[type="submit"]').click(function(){
+				window.onbeforeunload = null;
+			});
+		});
+	}
+
+	function user_meta_attach_validation_hook() {
+		if ( carbon_container.UserMeta.attachedValidationHook ) {
+			return;
+		};
+		carbon_container.UserMeta.attachedValidationHook = true;
+
+		$('form#your-profile').live("submit", function(){
+			var form = $(this),
+				has_errors = check_required();
+
+			if ( !has_errors ) {
+				return;
+			};
+
+			$('body, html').animate({scrollTop: 0});
+
+			form.siblings('.carbon-error-required').remove();
+			form.before($('<div class="settings-error error below-h2 carbon-error-required"><p><strong>Please fill out all required fields highlighted below.</strong></p></div>'));
+
+			return false;
+		});
+	}
+
+	function user_meta_check_visible(container) {
+		var show_on,
+			show = true;
+
+		if ( typeof container.options['show_on'] == 'undefined' ) {
+			return true;
+		};
+
+		show_on = container.options['show_on'];
+
+		// Check page template
+		if ( typeof show_on['role'] != 'undefined' && show_on['role'].length > 0 ) {
+			var current_role = $('select#role').length > 0 ? $('select#role').val(): container.node.data('profile-role');
+
+			if ( $.inArray(current_role, show_on['role']) < 0 ) {
+				show = false;
+			};
+
+			if ( container.initCheckVisible ) {
+				$('select#role').change(function() {
+					user_meta_check_visible(container);
+				});
+			};
+		};
+
+		container.node.toggle(show);
+	}
+
 	window.carbon_container_init = init;
 
 	// Abracadabra! Poof! Containers everywhere ...

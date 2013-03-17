@@ -4,7 +4,9 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 	protected $user_id;
 
 	public $settings = array(
-		'role' => null
+		'show_on' => array(
+			'role' => array()
+		)
 	);
 
 	function __construct($title) {
@@ -58,8 +60,8 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 		}
 
 		// Check user role
-		if ( isset($this->settings['role']) ) {
-			$allowed_roles = (array) $this->settings['role'];
+		if ( isset($this->settings['show_on']['role']) ) {
+			$allowed_roles = (array) $this->settings['show_on']['role'];
 			if ( !in_array($user->roles[0], $allowed_roles) ) {
 				$valid = false;
 			}
@@ -69,7 +71,7 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 	}
 
 	function show_on_user_role($role) {
-	    $this->settings['role'] = $role;
+	    $this->settings['show_on']['role'] = (array) $role;
 
 		return $this;
 	}
@@ -87,7 +89,7 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 		return true;
 	}
 
-	function render($user_profile = null) {
+	function render($user_profile = null, $a=null, $b=null) {
 		if ( is_null($user_profile) ) {
 			return;
 		}
@@ -96,7 +98,8 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 
 		$container_tag_class_name = get_class($this);
 		$container_type = 'UserMeta';
-		$container_options = array();
+		$container_options = array('show_on' => $this->settings['show_on']);
+		$profile_role = $user_profile->roles[0];
 
 		include dirname(__FILE__) . '/admin-templates/container-user-meta.php';
 	}
