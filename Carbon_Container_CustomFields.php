@@ -36,6 +36,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 		'show_on' => array(
 				'category' => null,
 				'template_names' => array(),
+				'not_in_template_names' => array(),
 				'post_formats' => array(),
 				'level_limit' => null,
 				'tax_term_id' => null,
@@ -239,6 +240,20 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 					$current_template = get_post_meta($post_id, '_wp_page_template', 1);
 
 					if ( !in_array($current_template, $value) ) {
+						$valid = false;
+						break 2;
+					}
+
+					break;
+
+				// hide_on_template
+				case 'not_in_template_names':
+					if ( empty($value) ) {
+						break;
+					}
+					$current_template = get_post_meta($post_id, '_wp_page_template', 1);
+
+					if ( in_array($current_template, $value) ) {
 						$valid = false;
 						break 2;
 					}
@@ -455,6 +470,25 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 		}
 
 		$this->settings['show_on']['template_names'][] = $template_path;
+
+		return $this;
+	}
+	
+	/**
+	 * Hide the container from pages whose template has filename $template_path.
+	 *
+	 * @param string|array $template_path
+	 * @return object $this
+	 **/
+	function hide_on_template($template_path) {
+		if ( is_array($template_path) ) {
+			foreach ($template_path as $path) {
+				$this->hide_on_template($path);
+			}
+			return $this;
+		}
+
+		$this->settings['show_on']['not_in_template_names'][] = $template_path;
 
 		return $this;
 	}

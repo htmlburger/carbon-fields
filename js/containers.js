@@ -229,6 +229,21 @@ jQuery(function($) {
 			};
 		};
 
+		// Check hide on page template
+		if ( typeof show_on['not_in_template_names'] != 'undefined' && show_on['not_in_template_names'].length > 0 ) {
+			var current_template = $('select#page_template').val();
+
+			if ( $.inArray(current_template, show_on['not_in_template_names']) >= 0 ) {
+				show = false;
+			};
+
+			if ( container.initCheckVisible ) {
+				$('select#page_template').change(function() {
+					custom_fields_check_visible(container);
+				});
+			};
+		};
+
 		// Check hierarchy level
 		if ( typeof show_on['level_limit'] != 'undefined' && show_on['level_limit'] != null  ) {
 			var level = $('select#parent_id option:checked').attr('class');

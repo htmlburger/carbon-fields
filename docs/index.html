@@ -169,8 +169,13 @@ Carbon_Container::factory('custom_fields', 'Post Properties')
 						<dt>page templates</dt>
 						<dd>
 							<p>Containers may be assigned to pages using specific template:</p>
-							<p><code>-&gt;show_on_template($template_path)</code></p>
-							<p>The <code>$template_path</code> is the name of the template file, for example: <code>"about_us.php"</code></p>
+							<p>
+								<code>-&gt;show_on_template($template_path)</code> <br/>
+								The <code>$template_path</code> is the name of the template file (or array of template file names), for example: <code>"about_us.php"</code>
+							</p>
+
+							<p>You can also hide the continer from pages using specific template:</p>
+							<p><code>-&gt;hide_on_template($template_path)</code></p>
 						</dd>
 						
 						<dt>post formats</dt>
