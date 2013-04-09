@@ -340,7 +340,7 @@ jQuery(function($) {
 	/* Complex Field */
 	carbon_field.Complex = function(element, field_obj) {
 		// prepare object
-		field_obj.group_selector = element.find('select[name$="[group]"]');
+		field_obj.group_selector = element.find('select[name$="[group]"]:last');
 		field_obj.btn_add = element.find('> .carbon-subcontainer > tbody > tr.carbon-actions a[data-action=add]:first');
 		field_obj.empty_field_text = element.find('> .carbon-subcontainer > tbody > tr.carbon-empty-row');
 		field_obj.num_rows = element.find('.carbon-group-row').length;

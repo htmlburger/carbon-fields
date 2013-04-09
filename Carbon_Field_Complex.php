@@ -149,15 +149,47 @@ class Carbon_Field_Complex extends Carbon_Field {
 	}
 
 	function load_values() {
+		return $this->load_values_from_db();
+	}
+
+	function load_values_from_db() {
 		$this->values = array();
 
 		$group_rows = $this->store->load_values($this);
+
+		return $this->process_loaded_values($group_rows);
+	}
+
+	function load_values_from_array($values) {
+		$this->values = array();
+
+		$group_rows = array();
+
+		$meta_key = $this->get_name();
+
+		foreach ($values as $key => $value) {
+			if ( strpos($key, $meta_key) !== 0 ) {
+				continue;
+			}
+
+			$group_rows[] = array(
+				'field_key' => preg_replace('~^(' . preg_quote($this->name, '~') . ')_\d+_~', '$1_', $key),
+				'field_value' => $value
+			);
+		}
+
+		return $this->process_loaded_values($group_rows);
+	}
+
+	function process_loaded_values($group_rows) {
 		$input_groups = array();
 
 		// Set default values
+		$field_names = array();
 		foreach ($this->groups as $group) {
 			$group_fields = $group->get_fields();
 			foreach ($group_fields as $field) {
+				$field_names[] = $field->get_name();
 				$field->set_value($field->default_value);
 			}
 		}
@@ -170,15 +202,21 @@ class Carbon_Field_Complex extends Carbon_Field {
 		$group_names = array_map('preg_quote', array_keys($this->groups), array('~'));
 		$group_names = implode('|', $group_names);
 
+		$field_names = array_map('preg_quote', $field_names, array('~'));
+		$field_names = implode('|', $field_names);
+
 		// load and parse values and group type
 		foreach ($group_rows as $row) {
-			if ( !preg_match('~^' . preg_quote($this->name, '~') . '(?P<group>' . $group_names . ')-(?P<key>.*)_(?P<index>\d+)_?(?P<sub>\w+)?$~', $row['field_key'], $field_name) ) {
+			if ( !preg_match('~^' . preg_quote($this->name, '~') . '(?P<group>' . $group_names . ')-(?P<key>' . $field_names . ')_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~', $row['field_key'], $field_name) ) {
 				continue;
 			}
-			
+
 			$row['field_value'] = maybe_unserialize($row['field_value']);
 
-			if ( !empty($field_name['sub']) ) {
+			if ( !empty($field_name['trailing']) ) {
+				$input_groups[ $field_name['index'] ]['type'] = $field_name['group'];
+				$input_groups[ $field_name['index'] ][$field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing']] = $row['field_value'];
+			} else if ( !empty($field_name['sub']) ) {
 				$input_groups[ $field_name['index'] ]['type'] = $field_name['group'];
 				$input_groups[ $field_name['index'] ][ $field_name['key'] ][$field_name['sub'] ] = $row['field_value'];
 			} else {
@@ -189,7 +227,7 @@ class Carbon_Field_Complex extends Carbon_Field {
 
 		// create groups list with loaded fields
 		ksort($input_groups);
-
+		
 		foreach ($input_groups as $index => $values) {
 			$value_group = array('type' => $values['type']);
 			$group_fields = $this->groups[$values['type']]->get_fields();
@@ -198,7 +236,13 @@ class Carbon_Field_Complex extends Carbon_Field {
 			foreach ($group_fields as $field) {
 				// set value from the group
 				$tmp_field = clone $field;
-				$tmp_field->set_value_from_input($values);
+
+				if ( is_a($field, 'Carbon_Field_Complex') ) {
+					$tmp_field->load_values_from_array($values);
+				} else {
+					$tmp_field->set_value_from_input($values);
+				}
+
 				$value_group[] = $tmp_field;
 			}
 
@@ -316,7 +360,7 @@ class Carbon_Field_Group {
 	function set_datastore(Carbon_DataStore $store) {
 		foreach ($this->fields as $field) {
 			if ( is_a($field, 'Carbon_Field_Complex') ) {
-				throw new Carbon_Exception('Nested of complex fields? We are working on that!');
+				throw new Carbon_Exception('Nested complex fields? We are working on that!');
 			}
 			if ( !$field->get_datastore() ) {
 				$field->set_datastore($store);
