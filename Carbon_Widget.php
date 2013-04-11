@@ -7,6 +7,7 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 	protected $store_data;
 	protected $form_options = array();
 	protected $custom_fields = array();
+	protected $complex_field_names = array();
 
 	function setup($title, $description, $fields) {
 		// require title
@@ -50,6 +51,12 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 	function widget($args, $instance) {
         extract($args);
 
+        // prepare $instance values
+        if ( !empty($this->complex_field_names) ) {
+        	$instance = self::unwrap_complex_field_values($instance, $this->complex_field_names);
+        }
+
+        // output
         if ($this->print_wrappers) {
         	echo $before_widget;
         }
@@ -79,6 +86,10 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 
 			if ( !$field->get_datastore() ) {
 				$field->set_datastore($this);
+			}
+
+			if ( is_a($field, 'Carbon_Field_Complex') ) {
+				$this->complex_field_names[] = $field->get_name();
 			}
 		}
 
@@ -147,5 +158,38 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 			}
 		}
 	}
-}
 
+	static function unwrap_complex_field_values($instance, $complex_field_names) {
+		foreach ($complex_field_names as $name) {
+			foreach ($instance as $key => $value) {
+				if ( !preg_match('~^' . preg_quote($name, '~') . '(?P<group>\w*)-_?(?P<key>.*?)_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~', $key, $field_name) ) {
+						continue;
+				}
+				
+				$value = maybe_unserialize($value);
+
+				$instance[$name][ $field_name['index'] ]['_type'] = $field_name['group'];
+				if ( !empty($field_name['trailing']) ) {
+					if ( !preg_match('~^' . preg_quote($field_name['key'], '~') . '(?P<group>\w*)-_?(?P<key>.*)_(?P<index>\d+)_?(?P<sub>\w+)?$~', $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'], $subfield_name) ) {
+						continue;
+					}
+
+					$instance[$name][ $field_name['index'] ][$field_name['key']][ $subfield_name['index'] ]['_type'] = $subfield_name['group'];
+					if ( !empty($subfield_name['sub']) ) {
+						$instance[$name][ $field_name['index'] ][$field_name['key']][ $subfield_name['index'] ][$subfield_name['key']][$subfield_name['sub']] = $value;
+					} else {
+						$instance[$name][ $field_name['index'] ][$field_name['key']][ $subfield_name['index'] ][$subfield_name['key']] = $value;
+					}
+				} else if ( !empty($field_name['sub']) ) {
+					$instance[$name][ $field_name['index'] ][ $field_name['key'] ][$field_name['sub'] ] = $value;
+				} else {
+					$instance[$name][ $field_name['index'] ][ $field_name['key'] ] = $value;
+				}
+
+				unset($instance[$key]);
+			}
+		}
+
+		return $instance;
+	}
+}

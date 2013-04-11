@@ -115,6 +115,10 @@ class Carbon_Field {
 			throw new Carbon_Exception ('Unknown field "' . $type . '".');
 		}
 
+		if ( strpos($name, '-') !== false ) {
+			throw new Carbon_Exception ('Forbidden character "-" in name "' . $name . '".');
+		}
+
 		$field = new $class($name, $label);
 		$field->type = $type;
 

@@ -430,10 +430,10 @@ jQuery(function($) {
 		new_row.find('.carbon-field-skip').removeClass('carbon-field-skip');
 
 		// Set new row_uid
-		new_row.find('input[name$="' + field.name + '[__ei__][group]"]').val(field.new_row_type);
+		new_row.find('input[name$="[__ei__][group]"]:first').val(field.new_row_type);
 
-		field_name_regex = new RegExp("" + field.name.replace(/\[/g, '\\[').replace(/\]/g, '\\]') + "\\[__ei__\\]", "g")
-		new_row.html( new_row.html().replace(field_name_regex, field.name + '[' + field.row_uid + ']') );
+		field_name_regex = new RegExp("" + field.name.replace(/\[/g, '\\[').replace(/\]/g, '\\]') + "(\\])?\\[__ei__\\]", "g")
+		new_row.html( new_row.html().replace(field_name_regex, field.name + '$1[' + field.row_uid + ']') );
 
 		// Set new id
 		new_row.find('label[for]').each(function() {
