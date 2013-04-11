@@ -414,7 +414,7 @@ jQuery(function($) {
 	}
 
 	function complex_add_row(field) {
-		var sample_row, new_row;
+		var sample_row, new_row, field_name_regex;
 
 		if ( field.max_rows > 0 && field.max_rows <= field.num_rows ) {
 			alert('Maximum number of rows reached (' + field.num_rows + ')');
@@ -430,8 +430,10 @@ jQuery(function($) {
 		new_row.find('.carbon-field-skip').removeClass('carbon-field-skip');
 
 		// Set new row_uid
-		new_row.find('input[name$="[__ei__][group]"]').val(field.new_row_type);
-		new_row.html( new_row.html().replace(/\[__ei__\]/g, '[' + field.row_uid + ']') );
+		new_row.find('input[name$="' + field.name + '[__ei__][group]"]').val(field.new_row_type);
+
+		field_name_regex = new RegExp("" + field.name.replace(/\[/g, '\\[').replace(/\]/g, '\\]') + "\\[__ei__\\]", "g")
+		new_row.html( new_row.html().replace(field_name_regex, field.name + '[' + field.row_uid + ']') );
 
 		// Set new id
 		new_row.find('label[for]').each(function() {

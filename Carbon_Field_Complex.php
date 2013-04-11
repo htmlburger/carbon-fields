@@ -359,9 +359,6 @@ class Carbon_Field_Group {
 
 	function set_datastore(Carbon_DataStore $store) {
 		foreach ($this->fields as $field) {
-			if ( is_a($field, 'Carbon_Field_Complex') ) {
-				throw new Carbon_Exception('Nested complex fields? We are working on that!');
-			}
 			if ( !$field->get_datastore() ) {
 				$field->set_datastore($store);
 			}

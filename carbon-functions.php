@@ -62,17 +62,27 @@ function carbon_get_complex_fields($type, $name, $id = null) {
 	$input_groups = array();
 
 	foreach ($group_rows as $row) {
-		if ( !preg_match('~^' . preg_quote($name, '~') . '_(?P<group>\w*)-_?(?P<key>.*)_(?P<index>\d+)_?(?P<sub>\w+)?$~', $row['field_key'], $field_name) ) {
-			continue;
+		if ( !preg_match('~^' . preg_quote($name, '~') . '(?P<group>\w*)-_?(?P<key>.*?)_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~', $row['field_key'], $field_name) ) {
+				continue;
 		}
 		
 		$row['field_value'] = maybe_unserialize($row['field_value']);
 
-		if ( !empty($field_name['sub']) ) {
-			$input_groups[ $field_name['index'] ]['_type'] = $field_name['group'];
+		$input_groups[ $field_name['index'] ]['_type'] = $field_name['group'];
+		if ( !empty($field_name['trailing']) ) {
+			if ( !preg_match('~^' . preg_quote($field_name['key'], '~') . '(?P<group>\w*)-_?(?P<key>.*)_(?P<index>\d+)_?(?P<sub>\w+)?$~', $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'], $subfield_name) ) {
+				echo "nothing matched";
+			}
+
+			$input_groups[ $field_name['index'] ][$field_name['key']][ $subfield_name['index'] ]['_type'] = $subfield_name['group'];
+			if ( !empty($subfield_name['sub']) ) {
+				$input_groups[ $field_name['index'] ][$field_name['key']][ $subfield_name['index'] ][$subfield_name['key']][$subfield_name['sub']] = $row['field_value'];
+			} else {
+				$input_groups[ $field_name['index'] ][$field_name['key']][ $subfield_name['index'] ][$subfield_name['key']] = $row['field_value'];
+			}
+		} else if ( !empty($field_name['sub']) ) {
 			$input_groups[ $field_name['index'] ][ $field_name['key'] ][$field_name['sub'] ] = $row['field_value'];
 		} else {
-			$input_groups[ $field_name['index'] ]['_type'] = $field_name['group'];
 			$input_groups[ $field_name['index'] ][ $field_name['key'] ] = $row['field_value'];
 		}
 	}
