@@ -674,9 +674,39 @@ class Carbon_Field_Map extends Carbon_Field {
 
 }
 class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
+	protected $address = '';
+	
 	function render() {
-		echo 'Locate Address on the map: <input type="text" class="regular-text address" /><input type="button" class="address-search-btn button" value="Find">';
+		echo 'Locate Address on the map: <input type="text" name="' . esc_attr($this->get_name()) . '_address" value="' . esc_attr($this->address) . '" class="regular-text address" /><input type="button" class="address-search-btn button" value="Find">';
 		echo parent::render();
+	}
+	
+	function save() {
+		parent::save();
+		
+		$original_name = $this->get_name();
+		$original_value = $this->get_value();
+
+		$this->set_name($original_name . '_address');
+		$this->set_value_from_input();
+		$this->store->save($this);
+
+		$this->set_name($original_name);
+		$this->set_value($original_value);
+
+		return true;
+	}
+	
+	function load() {
+		$original_name = $this->get_name();
+		
+		$this->set_name($original_name . '_address');
+		$this->store->load($this);
+		$this->address = $this->get_value();
+		
+		$this->set_name($original_name);
+		
+		parent::load();
 	}
 }
 
