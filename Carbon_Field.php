@@ -712,9 +712,14 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 
 class Carbon_Field_Select extends Carbon_Field {
 	protected $options = array();
+	
+	function set_options($options) {
+		$this->options = (array)$options;
+		return $this;
+	}
 
 	function add_options($options) {
-	    $this->options = array_merge($this->options, $options);
+	    $this->options = (array)$this->options + (array)$options;
 	    return $this;
 	}
 
@@ -742,9 +747,14 @@ class Carbon_Field_Select extends Carbon_Field {
 
 class Carbon_Field_Radio extends Carbon_Field {
 	protected $options = array();
+	
+	function set_options($options) {
+		$this->options = (array)$options;
+		return $this;
+	}
 
 	function add_options($options) {
-	    $this->options = array_merge($this->options, $options);
+	    $this->options = (array)$this->options + (array)$options;
 	    return $this;
 	}
 
@@ -857,9 +867,14 @@ class Carbon_Field_Separator extends Carbon_Field {
 class Carbon_Field_Set extends Carbon_Field {
 	protected $options = array();
 	protected $limit_options = 0;
+	
+	function set_options($options) {
+		$this->options = (array)$options;
+		return $this;
+	}
 
 	function add_options($options) {
-	    $this->options = array_merge($this->options, $options);
+	    $this->options = (array)$this->options + (array)$options;
 	    return $this;
 	}
 
