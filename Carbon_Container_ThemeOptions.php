@@ -52,7 +52,7 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 
 		$this->verify_unique_page();
 
-	    add_action('admin_menu', array($this, '_attach'));
+		add_action('admin_menu', array($this, '_attach'));
 	}
 
 	function is_valid_save() {
@@ -69,22 +69,22 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 
 		// Add menu page
 		if ( !$this->settings['parent'] ) {
-		    add_menu_page(
-		    	$this->title, 
-		    	$this->title, 
-		    	$this->settings['permissions'], 
-			    $this->settings['file'],
-		    	array($this, 'render')
+			add_menu_page(
+				$this->title, 
+				$this->title, 
+				$this->settings['permissions'], 
+				$this->settings['file'],
+				array($this, 'render')
 			);
 		}
 
-	    add_submenu_page(
-	    	$this->settings['parent'],
-	    	$this->title, 
-	    	$this->title, 
-	    	$this->settings['permissions'], 
-		    $this->settings['file'],
-	    	array($this, 'render')
+		add_submenu_page(
+			$this->settings['parent'],
+			$this->title, 
+			$this->title, 
+			$this->settings['permissions'], 
+			$this->settings['file'],
+			array($this, 'render')
 		);
 
 		$page_hook = get_plugin_page_hookname( $this->settings['file'], '' );

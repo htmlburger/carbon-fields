@@ -28,7 +28,7 @@ abstract class Carbon_DataStore_Base implements Carbon_DataStore {
 
 		$field = new $class();
 
-	    return $field;
+		return $field;
 	}
 }
 
@@ -46,12 +46,12 @@ class Carbon_DataStore_CustomField extends Carbon_DataStore_Base {
 	function load(Carbon_Field $field) {
 		global $wpdb;
 
-        $value = $wpdb->get_var('
-            SELECT `meta_value`
-            FROM ' . $wpdb->postmeta . '
-            WHERE `post_id`=' . intval($this->post_id) . '
-            AND `meta_key`="' . $field->get_name() . '"
-            LIMIT 1
+		$value = $wpdb->get_var('
+			SELECT `meta_value`
+			FROM ' . $wpdb->postmeta . '
+			WHERE `post_id`=' . intval($this->post_id) . '
+			AND `meta_key`="' . $field->get_name() . '"
+			LIMIT 1
 		');
 
 		if ( is_null($value) ) {
@@ -274,12 +274,12 @@ class Carbon_DataStore_UserMeta extends Carbon_DataStore_Base {
 	function load(Carbon_Field $field) {
 		global $wpdb;
 
-        $value = $wpdb->get_var('
-            SELECT `meta_value`
-            FROM ' . $wpdb->usermeta . '
-            WHERE `user_id`=' . intval($this->user_id) . '
-            AND `meta_key`="' . $field->get_name() . '"
-            LIMIT 1
+		$value = $wpdb->get_var('
+			SELECT `meta_value`
+			FROM ' . $wpdb->usermeta . '
+			WHERE `user_id`=' . intval($this->user_id) . '
+			AND `meta_key`="' . $field->get_name() . '"
+			LIMIT 1
 		');
 
 		if ( is_null($value) ) {

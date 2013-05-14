@@ -71,7 +71,7 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 	}
 
 	function show_on_user_role($role) {
-	    $this->settings['show_on']['role'] = (array) $role;
+		$this->settings['show_on']['role'] = (array) $role;
 
 		return $this;
 	}

@@ -122,7 +122,7 @@ class Carbon_Field {
 		$field = new $class($name, $label);
 		$field->type = $type;
 
-	    return $field;
+		return $field;
 	}
 
 	private function __construct($name, $label) {
@@ -130,13 +130,13 @@ class Carbon_Field {
 		$this->set_label($label);
 
 		// Pick random ID
-	    $random_string = md5(mt_rand() . $this->get_name() . $this->get_label());
-	    $random_string = substr($random_string, 0, 5); // 5 chars should be enough
-	    $this->id = 'carbon-' . $random_string;
+		$random_string = md5(mt_rand() . $this->get_name() . $this->get_label());
+		$random_string = substr($random_string, 0, 5); // 5 chars should be enough
+		$this->id = 'carbon-' . $random_string;
 
-	    $this->init();
-	    if (is_admin()) {
-	    	$this->admin_init();
+		$this->init();
+		if (is_admin()) {
+			$this->admin_init();
 		}
 		add_action('admin_init', array(&$this, 'wp_init'));
 	}
@@ -719,15 +719,15 @@ class Carbon_Field_Select extends Carbon_Field {
 	}
 
 	function add_options($options) {
-	    $this->options = (array)$this->options + (array)$options;
-	    return $this;
+		$this->options = (array)$this->options + (array)$options;
+		return $this;
 	}
 
-    function render() {
-    	if ( empty($this->options) ) {
-    		echo '<em>no options</em>';
-    		return;
-    	}
+	function render() {
+		if ( empty($this->options) ) {
+			echo '<em>no options</em>';
+			return;
+		}
 
 		echo '<select id="' . $this->get_id() . '" name="' . $this->get_name() . '" ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
 
@@ -754,17 +754,17 @@ class Carbon_Field_Radio extends Carbon_Field {
 	}
 
 	function add_options($options) {
-	    $this->options = (array)$this->options + (array)$options;
-	    return $this;
+		$this->options = (array)$this->options + (array)$options;
+		return $this;
 	}
 
-    function render() {
-    	if ( empty($this->options) ) {
-    		echo '<em>no options</em>';
-    		return;
-    	}
+	function render() {
+		if ( empty($this->options) ) {
+			echo '<em>no options</em>';
+			return;
+		}
 
-    	echo '<ul class="carbon-radio-list" ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
+		echo '<ul class="carbon-radio-list" ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
 
 		foreach ($this->options as $key => $value) {
 			echo '<li><label><input type="radio" name="' . $this->get_name() . '" value="' . esc_attr($key) . '"';
@@ -776,7 +776,7 @@ class Carbon_Field_Radio extends Carbon_Field {
 			echo '/>' . esc_html($value) . '</label></li>';
 		}
 
-    	echo '</ul>';
+		echo '</ul>';
 	}
 }
 
@@ -784,14 +784,14 @@ class Carbon_Field_Checkbox extends Carbon_Field {
 	protected $option_value = 'yes';
 
 	function set_option_value($value) {
-	    $this->option_value = $value;
-	    return $this;
+		$this->option_value = $value;
+		return $this;
 	}
 
-    function render() {
-    	if ( empty($this->option_value) ) {
-    		throw new Carbon_Exception('Set non-empty option value for field "' . $this->get_name() . '"');
-    	}
+	function render() {
+		if ( empty($this->option_value) ) {
+			throw new Carbon_Exception('Set non-empty option value for field "' . $this->get_name() . '"');
+		}
 
 		$checked_attr = $this->get_value() == $this->option_value ? ' checked="checked" ': '';
 
@@ -819,7 +819,7 @@ class Carbon_Field_Header_Scripts extends Carbon_Field_Textarea {
 			return;
 		}
 
-	    echo get_option($this->name);
+		echo get_option($this->name);
 	}
 }
 
@@ -836,7 +836,7 @@ class Carbon_Field_Footer_Scripts extends Carbon_Field_Textarea {
 			return;
 		}
 		
-	    echo get_option($this->name);
+		echo get_option($this->name);
 	}
 }
 
@@ -874,16 +874,16 @@ class Carbon_Field_Set extends Carbon_Field {
 	}
 
 	function add_options($options) {
-	    $this->options = (array)$this->options + (array)$options;
-	    return $this;
+		$this->options = (array)$this->options + (array)$options;
+		return $this;
 	}
 
 	function limit_options($limit) {
 		$this->limit_options = $limit;
-	    return $this;
+		return $this;
 	}
 
-    function render() {
+	function render() {
 		if (!is_array($this->value)) {
 			$this->value = maybe_unserialize($this->value);
 			if (!is_array($this->value)) {
@@ -891,10 +891,10 @@ class Carbon_Field_Set extends Carbon_Field {
 			}
 		}
 
-    	if (empty($this->options)) {
-    		echo '<em>no options</em>';
-    		return;
-    	}
+		if (empty($this->options)) {
+			echo '<em>no options</em>';
+			return;
+		}
 
 		$loopCount = 0;
 
@@ -927,10 +927,10 @@ class Carbon_Field_Set extends Carbon_Field {
 class Carbon_Field_Relationship extends Carbon_Field {
 	protected $post_type = 'post';
 
-    function render() {
-    	if (!is_array($this->value)) {
-    		$this->value = array($this->value);
-    	}
+	function render() {
+		if (!is_array($this->value)) {
+			$this->value = array($this->value);
+		}
 
 		$posts = get_posts(array(
 			'post_type' => $this->post_type,
@@ -1272,8 +1272,8 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 	}
 
 	function disable_add_new() {
-	    $this->enable_add_new = false;
-	    return $this;
+		$this->enable_add_new = false;
+		return $this;
 	}
 
 	function set_sidebar_options($sidebar_options) {
@@ -1286,12 +1286,12 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 			}
 		}
 
-	    $this->sidebar_options = $sidebar_options;
-	    return $this;
+		$this->sidebar_options = $sidebar_options;
+		return $this;
 	}
 
 	function render() {
-	    if ($this->enable_add_new) {
+		if ($this->enable_add_new) {
 			$this->options['new'] = "Add New";
 		}
 
@@ -1334,10 +1334,10 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 				'name' => $sidebar,
 				'id' => $slug,
 				'description' => $msg,
-			    'before_widget' => $this->sidebar_options['before_widget'],
-			    'after_widget' => $this->sidebar_options['after_widget'],
-			    'before_title' => $this->sidebar_options['before_title'],
-			    'after_title' => $this->sidebar_options['after_title'],
+				'before_widget' => $this->sidebar_options['before_widget'],
+				'after_widget' => $this->sidebar_options['after_widget'],
+				'before_title' => $this->sidebar_options['before_title'],
+				'after_title' => $this->sidebar_options['after_title'],
 			));
 		}
 	}

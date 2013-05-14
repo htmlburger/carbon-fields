@@ -67,13 +67,13 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 		}
 
 		if ( isset($settings['show_on']['post_path']) ) {
-		    $page = get_page_by_path($settings['show_on']['post_path']);
+			$page = get_page_by_path($settings['show_on']['post_path']);
 
-		    if ( $page ) {
-		    	$settings['show_on']['page_id'] = $page->ID;
-		    } else {
-		    	$settings['show_on']['page_id'] = -1;
-		    }
+			if ( $page ) {
+				$settings['show_on']['page_id'] = $page->ID;
+			} else {
+				$settings['show_on']['page_id'] = -1;
+			}
 		}
 
 		// Transform category slug to taxonomy + term slug + term id
@@ -106,7 +106,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 			$this->settings['post_type'] = array($this->settings['post_type']);
 		}
 
-	    add_action('admin_init', array($this, '_attach'));
+		add_action('admin_init', array($this, '_attach'));
 		add_action('save_post', array($this, '_save'));
 	}
 
@@ -334,7 +334,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	function detach() {
 		parent::detach();
 
-	    remove_action('admin_init', array($this, '_attach'));
+		remove_action('admin_init', array($this, '_attach'));
 		remove_action('save_post', array($this, '_save'));
 
 		// unregister field names
@@ -414,13 +414,13 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	 * @return object $this
 	 **/
 	function show_on_page_children($parent_page_path) {
-	    $page = get_page_by_path($parent_page_path);
+		$page = get_page_by_path($parent_page_path);
 
-	    if ( $page ) {
-	    	$this->settings['show_on']['parent_page_id'] = $page->ID;
-	    } else {
-	    	$this->settings['show_on']['parent_page_id'] = -1;
-	    }
+		if ( $page ) {
+			$this->settings['show_on']['parent_page_id'] = $page->ID;
+		} else {
+			$this->settings['show_on']['parent_page_id'] = -1;
+		}
 
 		return $this;
 	}
@@ -432,13 +432,13 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	 * @return object $this
 	 **/
 	function show_on_page($page_path) {
-	    $page = get_page_by_path($page_path);
+		$page = get_page_by_path($page_path);
 
-	    if ( $page ) {
-	    	$this->settings['show_on']['page_id'] = $page->ID;
-	    } else {
-	    	$this->settings['show_on']['page_id'] = -1;
-	    }
+		if ( $page ) {
+			$this->settings['show_on']['page_id'] = $page->ID;
+		} else {
+			$this->settings['show_on']['page_id'] = -1;
+		}
 
 		return $this;
 	}

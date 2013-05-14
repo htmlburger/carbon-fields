@@ -138,23 +138,23 @@ jQuery(function($) {
 
 	/* Choose Sidebar */
 	carbon_field.Choose_Sidebar = function(element, field_obj) {
-	    element.find('select').change(function () {
-	        if ( $(this).val() == 'new' ) {
-	        	var new_sidebar, opt;
+		element.find('select').change(function () {
+			if ( $(this).val() == 'new' ) {
+				var new_sidebar, opt;
 
-	        	new_sidebar = window.prompt("Please enter the name of the new sidebar: ");
+				new_sidebar = window.prompt("Please enter the name of the new sidebar: ");
 
-	        	if ( new_sidebar == null || new_sidebar == '') {
-	        		$(this).find('option:first').attr('selected', true);
-	        		return false;
-	        	}
+				if ( new_sidebar == null || new_sidebar == '') {
+					$(this).find('option:first').attr('selected', true);
+					return false;
+				}
 
-	        	opt = $('<option value="' + new_sidebar + '">' + new_sidebar + '</option>').insertBefore($(this).find('option:last'));
-	        	
-	        	$(this).find('option').attr('selected', false);
-	        	opt.attr('selected', true);
-	        }
-	    });
+				opt = $('<option value="' + new_sidebar + '">' + new_sidebar + '</option>').insertBefore($(this).find('option:last'));
+				
+				$(this).find('option').attr('selected', false);
+				opt.attr('selected', true);
+			}
+		});
 	}
 
 	/* Map */

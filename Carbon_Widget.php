@@ -49,30 +49,30 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 	}
 	
 	function widget($args, $instance) {
-        extract($args);
+		extract($args);
 
-        // prepare $instance values
-        if ( !empty($this->complex_field_names) ) {
-        	$instance = self::unwrap_complex_field_values($instance, $this->complex_field_names);
-        }
+		// prepare $instance values
+		if ( !empty($this->complex_field_names) ) {
+			$instance = self::unwrap_complex_field_values($instance, $this->complex_field_names);
+		}
 
-        // output
-        if ($this->print_wrappers) {
-        	echo $before_widget;
-        }
+		// output
+		if ($this->print_wrappers) {
+			echo $before_widget;
+		}
 
-        $this->front_end($args, $instance);
+		$this->front_end($args, $instance);
 
-        if ($this->print_wrappers) {
-        	echo $after_widget;
-        }
-    }
-    
-    function front_end($args, $instance) {
-    	echo '<code><pre>';
-    	print_r($instance);
-    	echo '</pre></code>';
-    }
+		if ($this->print_wrappers) {
+			echo $after_widget;
+		}
+	}
+	
+	function front_end($args, $instance) {
+		echo '<code><pre>';
+		print_r($instance);
+		echo '</pre></code>';
+	}
 
 	function add_fields($fields) {
 		foreach ($fields as $field) {
@@ -114,7 +114,7 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 		self::$registered_widget_ids[] = $id;
 	}
 
-    /* Implment DataStore */
+	/* Implment DataStore */
 	function load(Carbon_Field $field) {
 		if ( isset($this->store_data[$field->get_name()]) ) {
 			$field->set_value($this->store_data[$field->get_name()]);
