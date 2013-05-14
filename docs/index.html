@@ -28,6 +28,7 @@
 				margin-right: 40px;
 				vertical-align: top;
 			}
+			.cf-nav { position: fixed; }
 		</style>
 		<link href="css/bootstrap-responsive.css" rel="stylesheet">
 		<link href="css/prettify.css" rel="stylesheet" />
@@ -49,8 +50,8 @@
 		<div class="container-fluid">
 			<div class="row-fluid">
 				<div class="span3">
-					<div class="well sidebar-nav">
-						<ul class="nav nav-list">
+					<div class="well sidebar-nav cf-nav span3">
+						<ul class="nav nav-list ">
 							<li class="nav-header">Carbon Fields</li>
 							<li><a href="#abstract">Abstract Overview</a></li>
 							<li class="nav-header">Containers</li>
@@ -86,7 +87,10 @@
 							<li><a href="#Complex_Field">Usage</a></li>
 							<li><a href="#Single_Group">Single Group</a></li>
 							<li><a href="#Multiple_Groups">Multiple Groups</a></li>
+							<li><a href="#Nested_Complex_Fields">Nested Complex Fields</a></li>
+							
 							<li><a href="#Data_Storage">Data Storage</a></li>
+
 						</ul>
 					</div><!--/.well -->
 				</div><!--/span-->
@@ -650,11 +654,11 @@ array(
 Carbon_Field::factory("choose_sidebar", "custom_sidebar", "Sidebar")
 	->help_text('Select which sidebar to show in this page, or click "Add New" to create a new one')
 	->set_sidebar_options(array(
-			'before_widget' =&gt; '&lt;div id="%1$s" class="widget %2$s"&gt;',
-			'after_widget' =&gt; '&lt;/div&gt;',
-			'before_title' =&gt; '&lt;h3 class="widgettitle"&gt;',
-			'after_title' =&gt; '&lt;div class="cl"&gt;&amp;nbsp;&lt;/div&gt;&lt;/h3&gt;',
-		));
+		'before_widget' =&gt; '&lt;div id="%1$s" class="widget %2$s"&gt;',
+		'after_widget' =&gt; '&lt;/div&gt;',
+		'before_title' =&gt; '&lt;h3 class="widgettitle"&gt;',
+		'after_title' =&gt; '&lt;div class="cl"&gt;&amp;nbsp;&lt;/div&gt;&lt;/h3&gt;',
+	));
 </pre>
 					</div>
 					
@@ -678,9 +682,9 @@ Carbon_Field::factory("footer_scripts", "footer_script");
 
 					<pre class="prettyprint">
 Carbon_Field::factory('complex', 'slide')-&gt;add_fields(array(
-		Carbon_Field::factory('text', 'title'),
-		Carbon_Field::factory('image', 'photo'),
-	)),
+	Carbon_Field::factory('text', 'title'),
+	Carbon_Field::factory('image', 'photo'),
+)),
 </pre>
 					
 
@@ -744,24 +748,41 @@ array (
 	0 =&gt; array (
 		'_type' =&gt; 'photograph',
 		'caption' =&gt; 'Lorem Ipsum',
-		'image' =&gt; 'http://siyan/new-ecfs/wp-content/uploads/2012/12/Jellyfish.jpg',
+		'image' =&gt; 'http://example.com/wp-content/uploads/2012/12/Jellyfish.jpg',
 	),
 	1 =&gt; array (
 		'_type' =&gt; 'movie',
 		'length' =&gt; '1:56',
 		'title' =&gt; 'Dolor sit amet',
-		'video' =&gt; 'http://siyan/new-ecfs/wp-content/uploads/2012/12/video_new.mp4',
+		'video' =&gt; 'http://example.com/wp-content/uploads/2012/12/video_new.mp4',
 	),
 	2 =&gt; array (
 		'_type' =&gt; 'photograph',
 		'caption' =&gt; 'Consectetur adipiscing elit',
-		'image' =&gt; 'http://siyan/new-ecfs/wp-content/uploads/2012/12/Koala.jpg',
+		'image' =&gt; 'http://example.com/wp-content/uploads/2012/12/Koala.jpg',
 	),
 )
 </pre>
 					<p>Each item represents the values stored by a single group. The name of the group is stored in element with key <code>_type</code>. When the complex field contains one group only, it's type will be an empty string - <code>""</code>.</p>
 
 					<p>Complex field values are retrieved using either <code>carbon_get_post_meta</code> or <code>carbon_get_theme_option</code> (depending on the container it is added to) and passing the string <code>"complex"</code> as <code>$type</code> argument (see <a href="#Types"><i class="icon-hand-right"></i> Types</a>).</p>
+					
+					<h4 id="Nested_Complex_Fields">Nested Complex Fields</h4>
+					<p>Complex fields can be nested. The following will define a container that creates multiple slides and allows positioning of multiple text fragments on each slide: </p>
+					<pre class="prettyprint">
+Carbon_Container::factory('custom_fields', 'Slider Data')
+	->show_on_post_type('post')
+	->add_fields(array(
+		Carbon_Field::factory('complex', 'slides')->add_fields(array(
+			Carbon_Field::factory('image', 'image'),
+			Carbon_Field::factory('complex', 'slide_fragments')->add_fields(array(
+				Carbon_Field::factory('text', 'fragment_text'),
+				Carbon_Field::factory('select', 'fragment_position')->add_options(array('Top Left', 'Top Right', "Bottom Left", "Bottom Right")),
+			))
+		)),
+	));
+					</pre>
+					
 
 					<h4>Limit the number of rows</h4>
 					<p>You can constrain the number of rows in a complex field using the following two functions: </p>
