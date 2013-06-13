@@ -93,3 +93,73 @@ function carbon_get_complex_fields($type, $name, $id = null) {
 	return $input_groups;
 }
 
+function carbon_twitter_widget_registered() {
+	global $wp_widget_factory;
+	$widget_enabled = !empty($wp_widget_factory->widgets) && !empty($wp_widget_factory->widgets['LatestTweets']);
+	$manually_enabled = defined('ENABLE_TWITTER_CONFIG') && ENABLE_TWITTER_CONFIG;
+
+	return $widget_enabled || $manually_enabled;
+}
+
+function carbon_twitter_widget_activated() {
+	return is_active_widget(false, false, 'carbon_latest_tweets', true);
+}
+
+function carbon_twitter_is_configured() {
+	$option_names = array(
+		'twitter_oauth_access_token',
+		'twitter_oauth_access_token_secret',
+		'twitter_consumer_key',
+		'twitter_consumer_secret'
+	);
+	$configured = true;
+
+	foreach ($option_names as $optname) {
+		if (!get_option($optname)) {
+			$configured = false;
+			break;
+		}
+	}
+
+	return $configured;
+}
+
+function carbon_twitter_is_config_valid() {
+	$tweets = TwitterHelper::get_tweets('cnn', 1, true);
+	if (!$tweets) {
+		return false;
+	}
+	return true;
+}
+
+function carbon_twitter_widget_no_config_warning() {
+	?>
+	<div id="message" class="error">
+		<p><strong>Warning: You've inserted a "Latest Tweets" widget, but it will NOT function unless you configure your twitter settings.</strong></p>
+		<p><strong>In order to do that, go to <a href="<?php echo admin_url('/admin.php?page=crbn-twitter-settings.php'); ?>">Theme Options -> Twitter Settings</a></strong></p>
+	</div>
+	<?php
+}
+
+function carbon_twitter_widget_wrong_config_warning() {
+	?>
+	<div id="message" class="error">
+		<p><strong>Warning: You seem to have configured your Twitter settings, but they are invalid. </strong></p>
+		<p><strong>Please, configure them in order to be able to use the "Latest Tweets" widget.</strong></p>
+		<p><strong>In order to do that, go to <a href="<?php echo admin_url('/admin.php?page=crbn-twitter-settings.php'); ?>">Theme Options -> Twitter Settings</a></strong></p>
+	</div>
+	<?php
+}
+
+add_action('admin_menu', 'carbon_twitter_widget_config_check');
+function carbon_twitter_widget_config_check() {
+	if (!carbon_twitter_widget_registered() || !carbon_twitter_widget_activated()) {
+		return;
+	}
+
+	if (!carbon_twitter_is_configured()) {
+		add_action('admin_notices', 'carbon_twitter_widget_no_config_warning');
+	} elseif(!carbon_twitter_is_config_valid()) {
+		add_action('admin_notices', 'carbon_twitter_widget_wrong_config_warning');
+	}
+}

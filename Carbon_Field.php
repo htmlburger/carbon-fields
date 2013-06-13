@@ -1366,4 +1366,31 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 	}
 }
 
+class Carbon_Field_HTML extends Carbon_Field {
+	public $field_html;
 
+	function set_html($html) {
+		$this->field_html = $html;
+		return $this;
+	}
+
+	function render() {
+		echo $this->field_html;
+	}
+
+	function get_label() {
+		// skip ;
+	}
+
+	function load() {
+		// skip;
+	}
+
+	function save() {
+		// skip;
+	}
+
+	function delete() {
+		// skip;
+	}
+}
