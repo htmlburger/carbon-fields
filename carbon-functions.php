@@ -95,7 +95,7 @@ function carbon_get_complex_fields($type, $name, $id = null) {
 
 function carbon_twitter_widget_registered() {
 	global $wp_widget_factory;
-	$widget_enabled = !empty($wp_widget_factory->widgets) && !empty($wp_widget_factory->widgets['LatestTweets']);
+	$widget_enabled = !empty($wp_widget_factory->widgets) && !empty($wp_widget_factory->widgets['CrbLatestTweetsWidget']);
 	$manually_enabled = defined('ENABLE_TWITTER_CONFIG') && ENABLE_TWITTER_CONFIG;
 
 	return $widget_enabled || $manually_enabled;
@@ -135,8 +135,7 @@ function carbon_twitter_is_config_valid() {
 function carbon_twitter_widget_no_config_warning() {
 	?>
 	<div id="message" class="error">
-		<p><strong>Warning: You've inserted a "Latest Tweets" widget, but it will NOT function unless you configure your twitter settings.</strong></p>
-		<p><strong>In order to do that, go to <a href="<?php echo admin_url('/admin.php?page=crbn-twitter-settings.php'); ?>">Theme Options -> Twitter Settings</a></strong></p>
+		<p>You've inserted a "Latest Tweets" widget, but it will <strong>not</strong> work unless you configure your twitter settings. In order to do that, go to <a href="<?php echo admin_url('/admin.php?page=crbn-twitter-settings.php'); ?>">Theme Options &raquo; Twitter Settings</a></p>
 	</div>
 	<?php
 }
@@ -144,9 +143,8 @@ function carbon_twitter_widget_no_config_warning() {
 function carbon_twitter_widget_wrong_config_warning() {
 	?>
 	<div id="message" class="error">
-		<p><strong>Warning: You seem to have configured your Twitter settings, but they are invalid. </strong></p>
-		<p><strong>Please, configure them in order to be able to use the "Latest Tweets" widget.</strong></p>
-		<p><strong>In order to do that, go to <a href="<?php echo admin_url('/admin.php?page=crbn-twitter-settings.php'); ?>">Theme Options -> Twitter Settings</a></strong></p>
+		<p>Warning: You seem to have configured your Twitter settings, but they are invalid. Please configure them in order to be able to use the "Latest Tweets" widget. </p>
+		<p>In order to do that, go to <a href="<?php echo admin_url('/admin.php?page=crbn-twitter-settings.php'); ?>">Theme Options &raquo; Twitter Settings</a></p>
 	</div>
 	<?php
 }

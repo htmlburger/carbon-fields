@@ -16,7 +16,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	static protected $registered_field_names;
 
 	/**
-	 * ID of the post thw container is working with
+	 * ID of the post the container is working with
 	 *
 	 * @see init()
 	 * @var int
@@ -266,7 +266,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	}
 
 	/**
-	 * Add meta box for each of the container port types
+	 * Add meta box for each of the container post types
 	 *
 	 * @return void
 	 **/
