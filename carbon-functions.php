@@ -70,16 +70,7 @@ function carbon_get_complex_fields($type, $name, $id = null) {
 
 		$input_groups[ $field_name['index'] ]['_type'] = $field_name['group'];
 		if ( !empty($field_name['trailing']) ) {
-			if ( !preg_match('~^' . preg_quote($field_name['key'], '~') . '(?P<group>\w*)-_?(?P<key>.*)_(?P<index>\d+)_?(?P<sub>\w+)?$~', $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'], $subfield_name) ) {
-				continue;
-			}
-
-			$input_groups[ $field_name['index'] ][$field_name['key']][ $subfield_name['index'] ]['_type'] = $subfield_name['group'];
-			if ( !empty($subfield_name['sub']) ) {
-				$input_groups[ $field_name['index'] ][$field_name['key']][ $subfield_name['index'] ][$subfield_name['key']][$subfield_name['sub']] = $row['field_value'];
-			} else {
-				$input_groups[ $field_name['index'] ][$field_name['key']][ $subfield_name['index'] ][$subfield_name['key']] = $row['field_value'];
-			}
+			$input_groups = carbon_expand_nested_field($input_groups, $row, $field_name);
 		} else if ( !empty($field_name['sub']) ) {
 			$input_groups[ $field_name['index'] ][ $field_name['key'] ][$field_name['sub'] ] = $row['field_value'];
 		} else {
@@ -89,6 +80,24 @@ function carbon_get_complex_fields($type, $name, $id = null) {
 
 	// create groups list with loaded fields
 	ksort($input_groups);
+
+	return $input_groups;
+}
+
+function carbon_expand_nested_field($input_groups, $row, $field_name) {
+	if ( !preg_match('~^' . preg_quote($field_name['key'], '~') . '(?P<group>\w*)-_?(?P<key>.*?)_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?~', $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'], $subfield_name) ) {
+		return $input_groups;
+	}
+
+	$input_groups[ $field_name['index'] ][$field_name['key']][ $subfield_name['index'] ]['_type'] = $subfield_name['group'];
+
+	if ( !empty($subfield_name['trailing']) ) {
+		$input_groups[ $field_name['index'] ][$field_name['key']] = carbon_expand_nested_field($input_groups[ $field_name['index'] ][$field_name['key']], $row, $subfield_name);
+	} else if ( !empty($subfield_name['sub']) ) {
+		$input_groups[ $field_name['index'] ][$field_name['key']][ $subfield_name['index'] ][$subfield_name['key']][$subfield_name['sub']] = $row['field_value'];
+	} else {
+		$input_groups[ $field_name['index'] ][$field_name['key']][ $subfield_name['index'] ][$subfield_name['key']] = $row['field_value'];
+	}
 
 	return $input_groups;
 }
