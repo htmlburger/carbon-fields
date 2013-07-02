@@ -283,6 +283,7 @@ jQuery(function($) {
 		tinyMCE.settings.theme_advanced_buttons2 = 'formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,charmap,|,outdent,indent,|,undo,redo,wp_help,code';
 
 		wpActiveEditor = null;
+		tinyMCE.settings.setup = $.noop;
 		tinyMCE.execCommand('mceRemoveControl', false, textarea.attr('id'));
 		tinyMCE.execCommand('mceAddControl', false, textarea.attr('id'));
 
