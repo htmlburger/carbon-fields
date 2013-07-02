@@ -9,7 +9,7 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 	protected $custom_fields = array();
 	protected $complex_field_names = array();
 
-	function setup($title, $description, $fields) {
+	function setup($title, $description, $fields, $classname = '') {
 		// require title
 		if ( !$title ) {
 			throw new Carbon_Exception('Enter widget title');
@@ -19,7 +19,9 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 		$this->add_fields($fields);
 
 		// populate options
-		$classname = 'carbon_' . preg_replace('~\s+~', '_', strtolower(trim($title)));
+		if ( empty($classname) ) {
+			$classname = 'carbon_' . preg_replace('~\s+~', '_', strtolower(trim(preg_replace('/[^\00-\255]+/u', '', $title))));
+		}
 		$widget_options = compact('description', 'classname');
 
 		$this->verify_unique_widget_id($classname);
