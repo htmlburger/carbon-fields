@@ -683,8 +683,12 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 	protected $address = '';
 	
 	function render() {
-		echo 'Locate Address on the map: <input type="text" name="' . esc_attr($this->get_name()) . '_address" value="' . esc_attr($this->address) . '" class="regular-text address" /><input type="button" class="address-search-btn button" value="Find">';
-		echo parent::render();
+		echo 'Locate Address on the map: <input type="text" name="' . esc_attr($this->get_name()) . '[address]" value="' . esc_attr($this->address) . '" class="regular-text address" /><input type="button" class="address-search-btn button" value="Find">';
+
+		echo '
+		<input type="text" name="' . $this->get_name() . '[coordinates]" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_long) . '"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
+		<div class="carbon-map">&nbsp;</div>
+		';
 	}
 	
 	function save() {
@@ -694,7 +698,7 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 		$original_value = $this->get_value();
 
 		$this->set_name($original_name . '_address');
-		$this->set_value_from_input();
+		$this->set_value($this->address);
 		$this->store->save($this);
 
 		$this->set_name($original_name);
@@ -713,6 +717,31 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 		$this->set_name($original_name);
 		
 		parent::load();
+	}
+
+	function set_value_from_input($input = null) {
+		if ( is_null($input) ) {
+			$input = $_POST;
+		}
+
+
+		if ( !isset($input[$this->name]['coordinates']) ) {
+			parent::set_value_from_input($input);
+		} else {
+			$value = stripslashes_deep($input[$this->name]['coordinates']);
+
+			if ( is_array($value) && isset($value['lat']) && isset($value['lng']) ) {
+				$value = $value['lat'] . ',' . $value['lng'];
+			}
+
+			$this->set_value( $value );
+		}
+
+
+		if ( isset($input[$this->name]['address']) ) {
+			$address = stripslashes_deep($input[$this->name]['address']);
+			$this->address = $address;
+		}
 	}
 }
 
