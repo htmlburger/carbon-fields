@@ -393,7 +393,7 @@ foreach ($phone_numbers as $phone) {
 					<h3 id="Widgets">Widgets</h3>
 					<p>Widget containers are used to create custom widgets for your theme. Each widget is defined as a PHP class. Widget classes must extend the <code>Carbon_Widget</code> class and must have at least two methods - constructor and <code>front_end</code> method.</p>
 
-					<p>The constructor must be named after the class and it must call the method <code>setup($name, $description, $fields)</code>, where: </p>
+					<p>The constructor must be named after the class and it must call the method <code>setup($name, $description, $fields, $classname)</code>, where: </p>
 					<dl>
 						<dt><code>$name</code></dt>
 						<dd>Name of the widget, used in the back-end</dd>
@@ -401,6 +401,8 @@ foreach ($phone_numbers as $phone) {
 						<dd>Description of the widget, used in the back-end</dd>
 						<dt><code>$fields</code></dt>
 						<dd>Array of Carbon fields</dd>
+						<dt><code>$classname</code></dt>
+						<dd><em>optional</em> | Provide a custom class attribute for the widget.</dd>
 					</dl>
 
 					<p>The <code>front_end($args, $instance)</code> method is responsible for rendering your widget in the front-end. Here you have access to all values saved for the fields you defined in the constructor via the <code>$instance</code> parameter.</p>
