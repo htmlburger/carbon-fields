@@ -784,6 +784,38 @@ Carbon_Container::factory('custom_fields', 'Slider Data')
 		)),
 	));
 					</pre>
+
+					<p>Values are retrieved as usual using either <code>carbon_get_post_meta</code> or <code>carbon_get_theme_option</code>. The format of the returned data is a multi-dimensional array, as follows:</p>
+					
+					<pre class="prettyprint">
+array (
+	0 =&gt; array (
+		'photo' =&gt; 'http://example.com/lorem.jpg',
+		'people_on_photo' =&gt; array (
+			0 =&gt; array (
+				'name' =&gt; 'John',
+			),
+			1 =&gt; array (
+				'name' =&gt; 'Karen',
+			),
+		)
+	),
+	1 =&gt; array (
+		'photo' =&gt; 'http://example.com/ipsum.jpg',
+		'people_on_photo' =&gt; array (
+			0 =&gt; array (
+				'name' =&gt; 'Paul',
+			),
+			1 =&gt; array (
+				'name' =&gt; 'Kasper',
+			),
+			2 =&gt; array (
+				'name' =&gt; 'Julie',
+			),
+		)
+	),
+)
+</pre>
 					
 
 					<h4>Limit the number of rows</h4>
