@@ -962,14 +962,36 @@ class Carbon_Field_Set extends Carbon_Field {
 
 class Carbon_Field_Relationship extends Carbon_Field {
 	protected $post_type = 'post';
+	protected $values_max = -1;
 
 	function set_post_type($post_type) {
 		$this->post_type = $post_type;
 		return $this;
 	}
 
+	function set_max($max) {
+		$this->values_max = intval($max);
+		return $this;
+	}
+
+	function get_max() {
+		return $this->values_max;
+	}
+
 	function admin_init() {
 		wp_enqueue_script('jquery-ui-sortable');
+	}
+
+	function set_value_from_input($input = null) {
+		if ( is_null($input) ) {
+			$input = $_POST;
+		}
+
+		if ( !isset($input[$this->name]) ) {
+			$this->set_value(null);
+		} else {
+			$this->set_value( stripslashes_deep($input[$this->name]) );
+		}
 	}
 
 	function render() {
@@ -978,15 +1000,27 @@ class Carbon_Field_Relationship extends Carbon_Field {
 			$this->value = array($this->value);
 		}
 
+		// Exclude the current post from the list
+		$screen = get_current_screen();
+		$exclude_id = '';
+		if ( $screen->base == 'post' && isset($_GET['post']) ) {
+			$exclude_id = intval($_GET['post']);
+		}
+
+		$this->post_type = (array) $this->post_type;
+
 		$posts = get_posts(array(
 			'post_type' => $this->post_type,
 			'posts_per_page' => 10,
 			'orderby' => 'title',
 			'order' => 'ASC',
+			'exclude' => $exclude_id
 		));
 
+		$post_types = get_post_types('','objects');
+
 		?>
-		<div class="carbon-relationship" data-post-type="<?php echo $this->post_type ?>" data-paged="1" data-name="<?php echo $this->get_name() ?>[]">
+		<div class="carbon-relationship" data-post-type="<?php echo implode(',', $this->post_type) ?>" data-max-values="<?php echo $this->get_max() ?>" data-exclude="<?php echo $exclude_id ?>" data-paged="1" data-name="<?php echo $this->get_name() ?>[]">
 			<div class="relationship-left">
 				<table class="widefat">
 					<thead>
@@ -999,9 +1033,12 @@ class Carbon_Field_Relationship extends Carbon_Field {
 				</table>
 
 				<ul class="relationship-list">
-					<?php foreach ($posts as $post): ?>
+					<?php foreach ($posts as $post): 
+					$type_title = $post->post_type;
+					$type_title = isset($post_types[$type_title]->labels->singular_name) ? $post_types[$type_title]->labels->singular_name: $type_title;
+					?>
 						<li <?php if(in_array($post->ID, $this->value)) echo 'class="inactive"' ?>>
-							<a href="#" data-post_id="<?php echo $post->ID ?>"><?php echo $post->post_title ?><span><!-- plus --></span></a>
+							<a href="#" data-post_id="<?php echo $post->ID ?>"><?php echo $post->post_title ?> <em><?php echo $type_title ?></em> <span><!-- plus --></span></a>
 						</li>
 					<?php endforeach ?>
 					<li class="load-more"><span class="spinner"></span></li>
@@ -1013,12 +1050,14 @@ class Carbon_Field_Relationship extends Carbon_Field {
 					<?php
 					foreach ($this->value as $post_id): 
 						$post = get_post($post_id);
-						if ( !$post ) {
+						if ( !$post || !$post_id ) {
 							continue;
 						}
+						$type_title = $post->post_type;
+						$type_title = isset($post_types[$type_title]->labels->singular_name) ? $post_types[$type_title]->labels->singular_name: $type_title;
 					?>
 						<li>
-							<a href="#" data-post_id="<?php echo $post->ID ?>"><?php echo $post->post_title ?><span><!-- minus --></span></a>
+							<a href="#" data-post_id="<?php echo $post->ID ?>"><em><?php echo $type_title ?></em><?php echo $post->post_title ?> <span><!-- minus --></span></a>
 							<input type="hidden" name="<?php echo $this->get_name() ?>[]" value="<?php echo $post->ID ?>" />
 						</li>
 					<?php endforeach ?>
@@ -1039,17 +1078,31 @@ class Carbon_Field_Relationship extends Carbon_Field {
 			add_filter('posts_where', array('Carbon_Field_Relationship', 'posts_where'), 10, 2 );
 		}
 
+		// Exclude the current post from the list
+		$exclude_id = '';
+		if ( isset($_POST['exclude']) ) {
+			$exclude_id = intval($_POST['exclude']);
+		}
+
+		$post_type = explode(',', $_POST['post-type']);
+
 		$posts = get_posts(array(
-			'post_type' => $_POST['post-type'],
+			'post_type' => $post_type,
 			'posts_per_page' => 10,
 			'orderby' => 'title',
 			'order' => 'ASC',
 			'paged' => intval($_POST['paged']),
-			'suppress_filters' => false
+			'suppress_filters' => false,
+			'exclude' => $exclude_id
 		));
 
+		$post_types = get_post_types('','objects');
+
 		foreach ($posts as $post){
-			echo '<li><a href="#" data-post_id="' . $post->ID . '">' . $post->post_title . '<span><!-- plus --></span></a></li>';
+			$type_title = $post->post_type;
+			$type_title = isset($post_types[$type_title]->labels->singular_name) ? $post_types[$type_title]->labels->singular_name: $type_title;
+
+			echo '<li><a href="#" data-post_id="' . $post->ID . '"><em>' . $type_title . '</em>' . $post->post_title . '<span><!-- plus --></span></a></li>';
 		}
 
 		exit;

@@ -587,10 +587,13 @@ Carbon_Field::factory("set", "product_features", "Features")-&gt;add_options(arr
 						<h5>Setup methods</h5>
 						<dl>
 							<dt><code>set_post_type($post_type)</code></dt>
-							<dd>Set the type of posts to choose from.</dd>
+							<dd>Set the type of posts to choose from (or array of post types).</dd>
+							<dt><code>set_max($max)</code></dt> 
+							<dd>Maximum number of posts to select. Must be greater than 1. Defaults to <code>-1</code> (no limit).</dd>
 						</dl>
 						<pre class="prettyprint">
-Carbon_Field::factory("relationship", "related_art", "Related Art")-&gt;set_post_type('painting');
+Carbon_Field::factory("relationship", "publications", "Publications")-&gt;set_post_type('publication');
+Carbon_Field::factory("relationship", "artworks", "Artworks")-&gt;set_post_type(array('painting', 'sculpture'));
 </pre>
 					</div>
 

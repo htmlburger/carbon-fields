@@ -330,6 +330,7 @@ jQuery(function($) {
 		var container = element.find('.carbon-relationship'),
 			name = container.data('name'),
 			post_type = container.data('post_type'),
+			max_values = container.data('max-values'),
 			left_list = container.find('.relationship-left .relationship-list'),
 			right_list = container.find('.relationship-right .relationship-list'),
 			search_box = container.find('.relationship-left thead input'),
@@ -347,6 +348,11 @@ jQuery(function($) {
 				new_li;
 
 			if ( $.inArray(id, values) > -1 ) {
+				return false;
+			};
+
+			if ( max_values > 0 && values.length == max_values ) {
+				alert('Maximum number of items reached ( ' + max_values + ' items )');
 				return false;
 			};
 
@@ -583,7 +589,7 @@ jQuery(function($) {
 		var sample_row, new_row, field_name_regex;
 
 		if ( field.max_rows > 0 && field.max_rows <= field.num_rows ) {
-			alert('Maximum number of rows reached (' + field.num_rows + ')');
+			alert('Maximum number of rows reached ( ' + field.num_rows + ' rows )');
 			return;
 		};
 
