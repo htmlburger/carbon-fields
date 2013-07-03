@@ -154,12 +154,16 @@
 
 	<tr class="carbon-actions">
 		<td colspan="2">
-			<select name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" <?php if(count($this->groups)==1) echo 'style="display:none"'; ?>>
-				<?php foreach ($this->groups as $group): ?>
-					<option value="<?php echo $group->get_name() ?>"><?php echo $group->get_label() ?></option>
-				<?php endforeach; ?>
-			</select>
-			<a href="#" data-action="add" class="button">Add <?php echo $this->labels['singular_name'] ?></a>
+			<div class="carbon-button">
+				<a href="#" data-action="add" class="button">Add <?php echo $this->labels['singular_name'] ?></a>
+				<ul>
+					<?php foreach ($this->groups as $group): ?>
+						<li><a href="#" data-group="<?php echo $group->get_name() ?>"><?php echo $group->get_label() ?></a></li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+
+
 		</td>
 	</tr>
 </table>

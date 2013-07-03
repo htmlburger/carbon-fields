@@ -490,8 +490,8 @@ jQuery(function($) {
 	/* Complex Field */
 	carbon_field.Complex = function(element, field_obj) {
 		// prepare object
-		field_obj.group_selector = element.find('select[name$="[group]"]:last');
-		field_obj.btn_add = element.find('> .carbon-subcontainer > tbody > tr.carbon-actions a[data-action=add]:first');
+		field_obj.btn_add = element.find('> .carbon-subcontainer > tbody > tr.carbon-actions a[data-action=add]:first').parent();
+		field_obj.group_selector = field_obj.btn_add.find('ul');
 		field_obj.empty_field_text = element.find('> .carbon-subcontainer > tbody > tr.carbon-empty-row');
 		field_obj.num_rows = element.find('.carbon-group-row').length;
 		field_obj.row_uid = field_obj.num_rows;
@@ -501,7 +501,7 @@ jQuery(function($) {
 
 		field_obj.name = element.data('name');
 
-		field_obj.new_row_type = field_obj.group_selector.val();
+		field_obj.new_row_type = field_obj.group_selector.find('a:first').data('group');
 
 		// init
 		if ( field_obj.max_rows > 0 && field_obj.num_rows >= field_obj.max_rows ) {
@@ -514,8 +514,13 @@ jQuery(function($) {
 
 		// Hook events
 
-		field_obj.btn_add.click(function(e) {
-			complex_add_row(field_obj);
+		field_obj.btn_add.children('a').click(function(e) {
+			if ( field_obj.group_selector.children().length > 1 ) {
+				field_obj.group_selector.show();
+			} else {
+				field_obj.group_selector.find('a:first').click();
+			}
+			
 			return false;
 		});
 
@@ -524,15 +529,26 @@ jQuery(function($) {
 			return false;
 		});
 
-		field_obj.group_selector.change(function() {
-			field_obj.new_row_type = $(this).val();
+		field_obj.group_selector.find('a').click(function() {
+			field_obj.new_row_type = $(this).data('group');
+			complex_add_row(field_obj);
 		});
 
 		field_obj.empty_field_text.find('a:first').click(function() {
 			setTimeout(function() {
-				field_obj.btn_add.click();
+				field_obj.group_selector.find('a:first').click();
 			}, 1);
 			return false;
+		});
+
+		$('body').click(function(e) {
+			var $target = $(e.target);
+
+			if ( $target.is(field_obj.btn_add) ) {
+				return false;
+			};
+
+			field_obj.group_selector.hide();
 		});
 
 		// Sortable
@@ -615,7 +631,7 @@ jQuery(function($) {
 			complex_on_update_rows(field);
 
 			if ( field.min_rows > field.num_rows ) {
-				field.btn_add.click();
+				field.group_selector.find('a:first').click();
 			};
 
 			if ( field.max_rows > 0 && field.num_rows <= field.max_rows ) {
