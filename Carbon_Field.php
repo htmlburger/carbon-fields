@@ -1308,6 +1308,11 @@ class Carbon_Field_Image extends Carbon_Field_File {
 		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=image&amp;carbon_type=image" type="button" class="button" value="Select Media" />';
 		echo '<div class="cl"></div>';
 
+		if( !empty( $this->help_text ) ) {
+			echo '<div class="help-text"><em>' . $this->help_text . '</em></div>';
+			echo '<div class="cl"></div>';
+		}
+
 		$has_image = false;
 		
 		// For image only
@@ -1324,6 +1329,10 @@ class Carbon_Field_Image extends Carbon_Field_File {
 		echo '<input class="carbon-file-remove button" type="button" value="Remove Image" ' . ($has_image ? '': 'style="display: none;"') . ' />';
 
 		echo '<div class="cl"></div>';
+	}
+
+	function get_help_text() {
+		return '';
 	}
 }
 
