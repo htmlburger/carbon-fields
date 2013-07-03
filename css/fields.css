@@ -42,7 +42,7 @@ ul.carbon-radio-list input { width: auto; margin-right:5px; }
 .form-field .carbon-field label { font-weight: bold; }
 .form-field .carbon-field input { width: auto; }
 
-.carbon-relationship ul { border: 1px solid #ccc; position: relative; }
+.carbon-relationship ul { border: 1px solid #ccc; position: relative; background: #fff; }
 .carbon-relationship ul li { margin: 0; padding: 0; display: block;}
 .carbon-relationship ul li a { display: block; position: relative; padding: 3px; border-bottom: 1px solid #f5f5f5; text-decoration: none; }
 .carbon-relationship ul li a span { display: none; position: absolute; width: 15px; height: 15px; cursor: pointer; background: red; right: 7px; top: 5px; }

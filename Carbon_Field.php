@@ -973,6 +973,7 @@ class Carbon_Field_Relationship extends Carbon_Field {
 	}
 
 	function render() {
+		$this->value = maybe_unserialize($this->value);
 		if (!is_array($this->value)) {
 			$this->value = array($this->value);
 		}
