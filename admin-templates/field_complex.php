@@ -155,7 +155,7 @@
 	<tr class="carbon-actions">
 		<td colspan="2">
 			<div class="carbon-button">
-				<a href="#" data-action="add" class="button">Add <?php echo $this->labels['singular_name'] ?></a>
+				<a href="#" data-action="add" class="button">Add <?php echo $this->labels['singular_name'] ?> <?php if(count($this->groups) > 1) echo '&#8681;'; ?></a>
 				<ul>
 					<?php foreach ($this->groups as $group): ?>
 						<li><a href="#" data-group="<?php echo $group->get_name() ?>"><?php echo $group->get_label() ?></a></li>
