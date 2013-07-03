@@ -73,6 +73,7 @@
 							<li><a href="#Field_Select">Select</a></li>
 							<li><a href="#Field_Radio">Radio</a></li>
 							<li><a href="#Field_Set">Set</a></li>
+							<li><a href="#Field_Relationship">Relationship</a></li>
 							<li><a href="#Field_File">File</a></li>
 							<li><a href="#Field_Image">Image</a></li>
 							<li><a href="#Field_Attachment">Attachment</a></li>
@@ -577,6 +578,19 @@ Carbon_Field::factory("set", "product_features", "Features")-&gt;add_options(arr
 	'gps' =&gt; 'GPS navigation',
 	'nfc' =&gt; 'Near field communication',
 ));
+</pre>
+					</div>
+
+					<div class="field-docs">
+						<h4 id="Field_Relationship">Relationship <code>relationship</code></h4>
+						<p>This field allows to select multiple posts, pages or custom post types. Useful for creating links between different posts.</p>
+						<h5>Setup methods</h5>
+						<dl>
+							<dt><code>set_post_type($post_type)</code></dt>
+							<dd>Set the type of posts to choose from.</dd>
+						</dl>
+						<pre class="prettyprint">
+Carbon_Field::factory("relationship", "related_art", "Related Art")-&gt;set_post_type('painting');
 </pre>
 					</div>
 

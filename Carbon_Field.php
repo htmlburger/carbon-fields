@@ -3,6 +3,7 @@
 add_action('admin_print_scripts', array('Carbon_Field', 'admin_hook_scripts'));
 add_action('admin_print_styles', array('Carbon_Field', 'admin_hook_styles'));
 add_action('wp_ajax_carbon_get_file_details', array('Carbon_Field_File', 'carbon_get_file_details'));
+add_action('wp_ajax_carbon_relationship_load_posts', array('Carbon_Field_Relationship', 'carbon_relationship_load_posts'));
 
 /**
  * Base field class. 
@@ -962,6 +963,15 @@ class Carbon_Field_Set extends Carbon_Field {
 class Carbon_Field_Relationship extends Carbon_Field {
 	protected $post_type = 'post';
 
+	function set_post_type($post_type) {
+		$this->post_type = $post_type;
+		return $this;
+	}
+
+	function admin_init() {
+		wp_enqueue_script('jquery-ui-sortable');
+	}
+
 	function render() {
 		if (!is_array($this->value)) {
 			$this->value = array($this->value);
@@ -969,11 +979,13 @@ class Carbon_Field_Relationship extends Carbon_Field {
 
 		$posts = get_posts(array(
 			'post_type' => $this->post_type,
-			'posts_per_page' => 5
+			'posts_per_page' => 10,
+			'orderby' => 'title',
+			'order' => 'ASC',
 		));
 
 		?>
-		<div class="carbon-relationship" data-name="<?php echo $this->get_name() ?>[]">
+		<div class="carbon-relationship" data-post-type="<?php echo $this->post_type ?>" data-paged="1" data-name="<?php echo $this->get_name() ?>[]">
 			<div class="relationship-left">
 				<table class="widefat">
 					<thead>
@@ -985,34 +997,73 @@ class Carbon_Field_Relationship extends Carbon_Field {
 					</thead>
 				</table>
 
-				<ul>
+				<ul class="relationship-list">
 					<?php foreach ($posts as $post): ?>
-						<li>
-							<a href="#" data-post_id="<?php echo $post->ID ?>">
-								<?php echo $post->post_title ?>
-							</a>
+						<li <?php if(in_array($post->ID, $this->value)) echo 'class="inactive"' ?>>
+							<a href="#" data-post_id="<?php echo $post->ID ?>"><?php echo $post->post_title ?><span><!-- plus --></span></a>
 						</li>
 					<?php endforeach ?>
+					<li class="load-more"><span class="spinner"></span></li>
 				</ul>
 			</div>
 
 			<div class="relationship-right">
-				<ul>
-					<?php foreach ($this->value as $post_id): 
+				<ul class="relationship-list">
+					<?php
+					foreach ($this->value as $post_id): 
 						$post = get_post($post_id);
+						if ( !$post ) {
+							continue;
+						}
 					?>
 						<li>
-							<a href="#" data-post_id="<?php echo $post->ID ?>">
-								<?php echo $post->post_title ?>
-							</a>
+							<a href="#" data-post_id="<?php echo $post->ID ?>"><?php echo $post->post_title ?><span><!-- minus --></span></a>
 							<input type="hidden" name="<?php echo $this->get_name() ?>[]" value="<?php echo $post->ID ?>" />
 						</li>
 					<?php endforeach ?>
 				</ul>
+
 			</div>
 		</div>
 		<?php
 	}
+
+	static function carbon_relationship_load_posts() {
+		if ( empty($_POST['paged']) || empty($_POST['post-type']) ) {
+			echo '';
+			exit;
+		}
+
+		if( !empty($_POST['s']) ) {
+			add_filter('posts_where', array('Carbon_Field_Relationship', 'posts_where'), 10, 2 );
+		}
+
+		$posts = get_posts(array(
+			'post_type' => $_POST['post-type'],
+			'posts_per_page' => 10,
+			'orderby' => 'title',
+			'order' => 'ASC',
+			'paged' => intval($_POST['paged']),
+			'suppress_filters' => false
+		));
+
+		foreach ($posts as $post){
+			echo '<li><a href="#" data-post_id="' . $post->ID . '">' . $post->post_title . '<span><!-- plus --></span></a></li>';
+		}
+
+		exit;
+	}
+
+   	static function posts_where( $where, &$wp_query ) {
+	    global $wpdb;
+	    
+	    if ( !empty($_POST['s']) )  {
+	        $where .= " AND " . $wpdb->posts . ".post_title LIKE '%" . esc_sql( like_escape(  $_POST['s'] ) ) . "%'";
+	    }
+	    
+	    return $where;
+	}
+
 }
 
 class Carbon_Field_Attachment extends Carbon_Field_File {

@@ -236,6 +236,8 @@ jQuery(function($) {
 			}, 1);
 		});
 	}
+
+	/* Map With Address */
 	carbon_field.Map_With_Address = function(element, field_obj) {
 		var search_field = element.find('.address'),
 			geocoder = new google.maps.Geocoder();
@@ -253,8 +255,7 @@ jQuery(function($) {
 				geocode_address();
 				return false;
 			}
-		})
-
+		});
 
 		function geocode_address() {
 			var address = search_field.val();
@@ -268,7 +269,7 @@ jQuery(function($) {
 					alert("Geocode was not successful for the following reason: " + status);
 				}
 			});
-		}
+		};
 	};
 
 	/* Rich text */
@@ -328,14 +329,162 @@ jQuery(function($) {
 	carbon_field.Relationship = function(element, field_obj) {
 		var container = element.find('.carbon-relationship'),
 			name = container.data('name'),
-			values = [];
+			post_type = container.data('post_type'),
+			left_list = container.find('.relationship-left .relationship-list'),
+			right_list = container.find('.relationship-right .relationship-list'),
+			search_box = container.find('.relationship-left thead input'),
+			values = [], // list of post IDs selected in the right pane
+			search_timeout = false;
 
-		// TODO:
-		// keep local array of values
-		// gray out left list values
-		// sortable values list
-		// dynamically populate list of posts
-		// search (ajax powered)
+		right_list.find('input[name="' + name + '"]').each(function() {
+			values.push(parseInt(this.value));
+		});
+
+		left_list.find('a').live('click', function() {
+			var th = $(this),
+				id = th.data('post_id'),
+				title = th.html(),
+				new_li;
+
+			if ( $.inArray(id, values) > -1 ) {
+				return false;
+			};
+
+			th.parent().addClass('inactive');
+
+			new_li = '<li><a href="#" data-post_id="' + id + '">' + title + '</a><input type="hidden" name="' + name + '" value="' + id + '" /></li>';
+
+			right_list.append(new_li);
+			values.push(id);
+
+			return false;
+		});
+
+		right_list.find('a').live('click', function() {
+			var th = $(this),
+				id = parseInt(th.siblings('input').val()),
+				position = $.inArray(id, values);
+
+			// check if in array of values
+			if ( position <= -1 ) {
+				return false;
+			};
+
+			values.splice(position, 1);
+
+			th.parent().remove();
+
+			left_list.find('a[data-post_id="' + id + '"]').parent().removeClass('inactive');
+			
+			return false;
+		});
+
+		search_box.keypress(function( e ) {
+			// don't submit form
+			if( e.which == 13 ) {
+				return false;
+			}
+		}).keyup(function() {
+			var val = $(this).val();
+			
+			container.attr('data-s', val);
+			container.attr('data-paged', 1);
+			
+			if ( search_timeout ) {
+				clearTimeout( search_timeout );	
+			};
+			search_timeout = setTimeout(function(){
+				left_list.scrollTop(0);
+				update_results();
+			}, 250);
+			
+			return false;
+		});
+
+		left_list.scrollTop( 0 ).scroll( function(){
+			var th = $(this);
+
+			if( container.is('.loading, .no-results')  ) {
+				return;
+			}
+
+			// Scrolled to bottom
+			if( th.scrollTop() + th.innerHeight() >= th.get(0).scrollHeight ) {
+				var paged = parseInt( container.attr('data-paged') );
+				
+				container.attr('data-paged', (paged + 1) );
+				
+				update_results();
+			}
+		});
+
+		right_list.sortable({
+			axis: "y",
+			items: '> li',
+			forceHelperSize: true,
+			forcePlaceholderSize: true,
+			scroll: true
+		});
+
+		function update_results(){
+			var attributes = {
+				action: 'carbon_relationship_load_posts',
+				post_type: post_type
+			}; 
+
+			// add loading class, stops scroll loading
+			container.addClass('loading');
+			
+			// find attributes
+			$.each( container[0].attributes, function( index, attr ) {
+				if( attr.name.substr(0, 5) != 'data-' ) {
+					return;
+				}
+				
+				attributes[ attr.name.replace('data-', '') ] = attr.value;
+			});
+			
+			// get results
+		    $.ajax({
+				url: ajaxurl,
+				type: 'post',
+				dataType: 'html',
+				data: attributes,
+				success: function( html ){
+					// new search?
+					if( attributes.paged == 1 ) {
+						left_list.find('li:not(.load-more)').remove();
+					}
+
+					if( !html ) {
+						container.removeClass('loading').addClass('no-results');
+						return;
+					}
+
+					html = $(html);
+					html.find('a').each(function(){
+						var id = $(this).attr('data-post_id');
+
+						id = parseInt(id);
+						
+						if( $.inArray(id, values) > -1 ) {
+							$(this).parent().addClass('inactive');
+						}
+					});
+					
+					left_list.find('.load-more').before( html );
+					
+					// less than 10 results?
+					if( html.length < 10 ) {
+						container.addClass('no-results');
+					} else {
+						container.removeClass('no-results');
+					}
+
+					container.removeClass('loading');
+				}
+			});
+		};
 	}
 
 	/* Complex Field */

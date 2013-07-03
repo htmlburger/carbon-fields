@@ -42,18 +42,30 @@ ul.carbon-radio-list input { width: auto; margin-right:5px; }
 .form-field .carbon-field label { font-weight: bold; }
 .form-field .carbon-field input { width: auto; }
 
-.carbon-relationship ul { border: 1px solid #ccc; }
-.carbon-relationship ul li { margin: 0; padding: 3px; display: block; border-bottom: 1px solid #f5f5f5; }
-.carbon-relationship ul li a { text-decoration: none; }
+.carbon-relationship ul { border: 1px solid #ccc; position: relative; }
+.carbon-relationship ul li { margin: 0; padding: 0; display: block;}
+.carbon-relationship ul li a { display: block; position: relative; padding: 3px; border-bottom: 1px solid #f5f5f5; text-decoration: none; }
+.carbon-relationship ul li a span { display: none; position: absolute; width: 15px; height: 15px; cursor: pointer; background: red; right: 7px; top: 5px; }
+.carbon-relationship ul li a:hover { background-color: #eaeff5; color: #333; }
+.carbon-relationship ul li a:hover span { display: block; }
 .carbon-relationship .widefat { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
 .carbon-relationship .widefat th { padding: 5px; border-bottom: 0 none; }
 .carbon-relationship .widefat input { width: 100%; margin: 0; font-size: 12px; line-height: 13px; border-radius: 13px; font-family: sans-serif; padding: 5px 9px !important; }
 
-.relationship-left { width: 50%; float: left; }
-.relationship-left ul { display: block; height: 150px; margin: 0; overflow: auto; border-top: 0 none; }
+.carbon-relationship .relationship-left { width: 50%; float: left; }
+.carbon-relationship .relationship-left ul { display: block; height: 150px; margin: 0; overflow: auto; border-top: 0 none; }
+.carbon-relationship .relationship-left ul a span { background: url(images/ui-icons_888888_256x240.png) no-repeat 0 -192px; }
 
-.relationship-right { width: 50%; float: left; }
-.relationship-right ul { height: 189px; margin: 0 0 0 20px; }
+.carbon-relationship .relationship-right { width: 50%; float: left; }
+.carbon-relationship .relationship-right ul { height: 189px; margin: 0 0 0 20px; overflow: auto; }
+.carbon-relationship .relationship-right ul a { cursor: move; }
+.carbon-relationship .relationship-right ul a span { background: url(images/ui-icons_888888_256x240.png) no-repeat -16px -192px; }
+
+.carbon-relationship .relationship-list li.inactive a { background-color: #f5f5f5; opacity: 0.6; cursor: default; }
+.carbon-relationship .relationship-list li.inactive a span { display: none; }
+.carbon-relationship .relationship-list li.load-more { text-align: center; }
+.carbon-relationship .relationship-list li.load-more .spinner { float: none; padding: 3px; margin: 0 auto; background-position: center center; }
+.carbon-relationship.loading .relationship-list li.load-more .spinner { display: block; }
 
 .carbon-set-list p { margin: 0 0 8px; }
 .carbon-set-list label { font-weight: normal !important; }
