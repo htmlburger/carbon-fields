@@ -21,7 +21,7 @@ jQuery(function($) {
 				field = carbon_field(th);
 				carbon_field[type](th, field);
 			} catch (e) {
-				carbon_log_error("Couldn't render a field: " + e.message);
+				carbon_log_error("Couldn't render a field: " + (e.message || e) );
 			}
 		});
 	}
@@ -279,6 +279,12 @@ jQuery(function($) {
 		if( typeof tinyMCE == 'undefined' || typeof tinyMCE['settings'] == undefined ) {
 			return;
 		}
+
+		if ( textarea.attr('id').indexOf('__ei__') >= 0 ) {
+			// textareas containing '__ei__' in their name are part of a complex field template.
+			// they should not be initialized
+			throw 'field is a template';
+		};
 
 		tinyMCE.settings.theme_advanced_buttons1 = 'bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,wp_more,|,spellchecker,fullscreen,wp_adv';
 		tinyMCE.settings.theme_advanced_buttons2 = 'formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,charmap,|,outdent,indent,|,undo,redo,wp_help,code';
