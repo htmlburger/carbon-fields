@@ -627,7 +627,7 @@ jQuery(function($) {
 		new_row.removeClass('carbon-group-preview').addClass('carbon-group-row').insertBefore( field.node.find('> .carbon-subcontainer > tbody > .carbon-group-preview:first') );
 		init(new_row);
 
-		new_row.find('.carbon-drag-handle span').text(field.num_rows)
+		new_row.find('.carbon-drag-handle:first span').text(field.num_rows)
 
 		if ( field.max_rows > 0 && field.num_rows == field.max_rows ) {
 			field.btn_add.hide();
@@ -653,12 +653,12 @@ jQuery(function($) {
 	}
 
 	function complex_on_update_rows(field) {
-		var fields = field.node.find('.carbon-group-row'),
+		var fields = field.node.find('.ui-sortable:first').children('.carbon-group-row'),
 			row_index = 0;
 		field.num_rows = fields.length;
 
 		for (var i = field.num_rows; i >= 0; i--) {
-			fields.eq(i).find('.carbon-drag-handle span').text(i+1);
+			fields.eq(i).find('.carbon-drag-handle:first span').text(i+1);
 		};
 
 		if ( field.num_rows == 0 ) {
