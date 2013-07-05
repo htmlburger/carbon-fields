@@ -5,7 +5,7 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 	
 	protected $print_wrappers = true;
 	protected $store_data;
-	protected $form_options = array();
+	protected $form_options = array('width' => 295);
 	protected $custom_fields = array();
 	protected $complex_field_names = array();
 
