@@ -50,7 +50,7 @@ jQuery(function($) {
 		$('input[type="text"][data-carbon-required=true], textarea[data-carbon-required=true]').each(function() {
 			var th = $(this);
 
-			if ( th.val() != '' || th.closest('.carbon-group-preview').length > 0 ) {
+			if ( th.val() != '' || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
 				return;
 			};
 
@@ -60,7 +60,7 @@ jQuery(function($) {
 		$('.carbon-radio-list[data-carbon-required=true], .carbon-set-list[data-carbon-required=true]').each(function() {
 			var th = $(this);
 
-			if ( th.find('input[type=radio]:checked, input[type=checkbox]:checked').length > 0 || th.closest('.carbon-group-preview').length > 0 ) {
+			if ( th.find('input[type=radio]:checked, input[type=checkbox]:checked').length > 0 || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
 				return;
 			};
 
@@ -302,6 +302,7 @@ jQuery(function($) {
 			};
 		};
 
+		container.node.toggleClass('carbon-skip-validation', !show);
 		container.node.closest('.postbox').toggle(show);
 	}
 

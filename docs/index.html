@@ -83,6 +83,7 @@
 							<li><a href="#Field_Choose_Sidebar">Choose Sidebar</a></li>
 							<li><a href="#Field_HeaderScripts">Header Scripts</a></li>
 							<li><a href="#Field_FooterScripts">Footer Scripts</a></li>
+							<li><a href="#Field_HTML">HTML</a></li>
 
 							<li class="nav-header">Complex Field</li>
 							<li><a href="#Complex_Field">Usage</a></li>
@@ -693,6 +694,21 @@ Carbon_Field::factory("header_scripts", "header_script");
 							<p>Applicable to Theme Options container only. Displays a text area, the contents of which will be automatically printed before the closing <code>&lt;/body&gt;</code> of each page (during <code>wp_footer()</code>). Useful for printing Google Analytics code, or user-defined javascript.</p>
 						<pre class="prettyprint">
 Carbon_Field::factory("footer_scripts", "footer_script");
+</pre>
+					</div>
+
+					<div class="field-docs">
+						<h4 id="Field_HTML">HTML <code>html</code></h4>
+						<p>Render custom HTML markup</p>
+						<h5>Setup methods</h5>
+						<dl>
+							<dt><code>set_html($html)</code></dt>
+							<dd>Set the HTML markup you would like to show to <code>$html</code>.</dd>
+							 </dd>
+						</dl>
+						<pre class="prettyprint">
+Carbon_Field::factory("html", "information_text")-&gt;set_html('&lt;h2&gt;Lorem ipsum&lt;/h2&gt;
+&lt;p&gt;Quisque mattis ligula eget placerat volutpat. Praesent tincidunt ultricies tempor.&lt;/p&gt;');
 </pre>
 					</div>
 

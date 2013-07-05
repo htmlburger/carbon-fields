@@ -1528,7 +1528,7 @@ class Carbon_Field_HTML extends Carbon_Field {
 	}
 
 	function get_label() {
-		// skip ;
+		return '';
 	}
 
 	function load() {
