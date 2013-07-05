@@ -308,7 +308,23 @@ class Carbon_Field_Group {
 	protected $label;
 	protected $fields = array();
 
+	/**
+	 * List of registered unique field names
+	 *
+	 * @see verify_unique_field_name()
+	 * @var array
+	 */
+	static protected $registered_field_names = array();
+
 	function add_fields($fields) {
+		foreach ($fields as $field) {
+			if ( !is_a($field, 'Carbon_Field') ) {
+				throw new Carbon_Exception('Object must be of type Carbon_Field');
+			}
+
+			$this->verify_unique_field_name($field->get_name());
+		}
+
 		$this->fields = array_merge($this->fields, $fields);
 	}
 
@@ -369,6 +385,21 @@ class Carbon_Field_Group {
 		foreach ($this->fields as $field) {
 			$field->set_prefix($prefix);
 		}
+	}
+
+	/**
+	 * Perform checks whether there is a field registered with the name $name.
+	 * If not, the field name is recorded.
+	 *
+	 * @param string $name
+	 * @return void
+	 **/
+	function verify_unique_field_name($name) {
+		if ( in_array($name, self::$registered_field_names) ) {
+			throw new Carbon_Exception ('Field name "' . $name . '" already registered');
+		}
+
+		self::$registered_field_names[] = $name;
 	}
 }
 
