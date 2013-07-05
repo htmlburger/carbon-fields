@@ -309,6 +309,7 @@ jQuery(function($) {
 	/* Widgets */
 	carbon_container.Widget = function (element, container_obj) {
 		var is_template_widget = element.closest('#widgets-left').length;
+		container_obj.classname = element.data('classname');
 
 		carbon_container.Widget.widgets_uid ++;
 
@@ -331,9 +332,16 @@ jQuery(function($) {
 		};
 	}
 	carbon_container.Widget.initMonitorReady = false;
+	carbon_container.Widget.monitored_keywords = [];
 	carbon_container.Widget.widgets_uid = 0;
 
 	function widget_init_monitor(container) {
+		var keyword_found = false,
+			keywords = carbon_container.Widget.monitored_keywords;
+
+		if ( $.inArray(container.classname, keywords) == -1 ) {
+			keywords.push(container.classname);
+		};
 		// monitor for new containers
 		if ( carbon_container.Widget.initMonitorReady ) {
 			return;
@@ -343,7 +351,19 @@ jQuery(function($) {
 
 		/* Monitor for ajax requests that reload the container node */
 		$(document).ajaxSuccess(function(event, jqXHR, ajaxOptions) {
-			if ( jqXHR.status != 200 || ajaxOptions.data.indexOf('carbon_') == -1 ) {
+			if ( jqXHR.status != 200 ) {
+				return;
+			};
+
+			for (var i = keywords.length - 1; i >= 0; i--) {
+				if ( ajaxOptions.data.indexOf(keywords[i]) == -1 ) {
+					continue;
+				};
+				keyword_found = true;
+				break;
+			};
+
+			if ( !keyword_found ) {
 				return;
 			};
 

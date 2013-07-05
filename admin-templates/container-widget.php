@@ -1,4 +1,4 @@
-<div class="carbon-container <?php echo $container_tag_class_name ?>" data-type="<?php echo $container_type ?>" data-options='<?php echo json_encode($container_options) ?>'>
+<div class="carbon-container <?php echo $container_tag_class_name ?>" data-type="<?php echo $container_type ?>" data-classname="<?php echo $container_classname ?>" data-options='<?php echo json_encode($container_options) ?>'>
 	<?php if ( empty($this->custom_fields) ): ?>
 		No options are available for this widget.
 	<?php else: 

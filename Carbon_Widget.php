@@ -46,6 +46,7 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 		$container_tag_class_name = get_class($this);
 		$container_type = 'Widget';
 		$container_options = array();
+		$container_classname = $this->widget_options['classname'];
 
 		include dirname(__FILE__) . '/admin-templates/container-widget.php';
 	}
