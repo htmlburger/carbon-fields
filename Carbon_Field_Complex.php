@@ -7,7 +7,7 @@ class Carbon_Field_Complex extends Carbon_Field {
 	protected $values = array();
 	protected $groups = array();
 
-	protected $layout = self::LAYOUT_LIST;
+	protected $layout = self::LAYOUT_TABLE;
 	protected $values_min = -1;
 	protected $values_max = -1;
 
