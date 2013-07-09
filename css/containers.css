@@ -84,3 +84,5 @@ body.no-js .carbon-container { display: none; }
 .carbon-button ul li { position: relative; margin: 0; }
 .carbon-button ul li a { display: block; padding: 5px 15px; line-height: 1.1em; text-decoration: none }
 .carbon-button ul li a:hover { background-color: #eaeff5; color: #333; }
+
+.cl { font-size: 0; line-height: 0; text-indent: -4000px; clear: both; }
