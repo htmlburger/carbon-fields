@@ -314,7 +314,7 @@ class Carbon_Field_Group {
 	 * @see verify_unique_field_name()
 	 * @var array
 	 */
-	static protected $registered_field_names = array();
+	protected $registered_field_names = array();
 
 	function add_fields($fields) {
 		foreach ($fields as $field) {
@@ -395,11 +395,11 @@ class Carbon_Field_Group {
 	 * @return void
 	 **/
 	function verify_unique_field_name($name) {
-		if ( in_array($name, self::$registered_field_names) ) {
+		if ( in_array($name, $this->registered_field_names) ) {
 			throw new Carbon_Exception ('Field name "' . $name . '" already registered');
 		}
 
-		self::$registered_field_names[] = $name;
+		$this->registered_field_names[] = $name;
 	}
 }
 
