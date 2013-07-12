@@ -69,6 +69,14 @@ class Carbon_Field {
 	protected $store;
 
 	/**
+	 * The type of the container this field is in
+	 *
+	 * @see get_context()
+	 * @var string
+	 */
+	protected $context;
+
+	/**
 	 * Optional. Function, replacing the specific field rendering function
 	 *
 	 * @see render()
@@ -253,6 +261,26 @@ class Carbon_Field {
 	 **/
 	function get_datastore() {
 		return $this->store;
+	}
+
+	/**
+	 * Assign the type of the container this field is in
+	 *
+	 * @param string
+	 * @return object $this
+	 **/
+	function set_context($context) {
+		$this->context = $context;
+		return $this;
+	}
+
+	/**
+	 * Return the type of the container this field is in
+	 *
+	 * @return string
+	 **/
+	function get_context() {
+		return $this->context;
 	}
 
 	/**
@@ -1391,8 +1419,9 @@ class Carbon_Field_Image extends Carbon_Field_File {
 }
 
 class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
-	public $enable_add_new = true; // Whether to allow the user to add new sidebars
-	public $sidebar_options = array(
+	private $enable_add_new = true; // Whether to allow the user to add new sidebars
+	private $custom_sidebars = array();
+	private $sidebar_options = array(
 		'before_widget' => '<li id="%1$s" class="widget %2$s">',
 		'after_widget' => '</li>',
 		'before_title' => '<h2 class="widgettitle">',
@@ -1400,24 +1429,9 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 	);
 
 	function init() {
-		$this->add_sidebar_opts_sidebars();
-		
 		// Setup the sidebars after all fields are registered
-		add_action('carbon_after_register_fields', array($this, 'setup_sidebars'), 20);
-	}
-
-	function add_sidebar_opts_sidebars() {
-		global $wp_registered_sidebars;
-		$sidebars = array();
-
-		foreach ($wp_registered_sidebars as $sidebar) {
-			$sidebars[] = $sidebar['name'];
-		}
-
-		$options = array_merge($sidebars, $this->_get_sidebars());
-		$options = array_combine($options, $options);
-
-		$this->add_options($options);
+		add_action('carbon_after_register_fields', array($this, 'setup_sidebar_options'), 20);
+		add_action('carbon_after_register_fields', array($this, 'register_custom_sidebars'), 21);
 	}
 
 	function disable_add_new() {
@@ -1447,42 +1461,32 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 		return parent::render();
 	}
 
-	function setup_sidebars() {
-		$sidebars = $this->_get_sidebars();
-		foreach ($sidebars as $sidebar) {
-			$associated_pages = get_posts(array(
-				'post_type' => array('page'),
-				'meta_query'=>array(
-					array( 'key' => $this->name, 'value' => urlencode($sidebar))
-				),
-				'posts_per_page'=>-1,
-			));
+	function setup_sidebar_options() {
+		global $wp_registered_sidebars;
+		$custom_sidebars = $this->get_custom_sidebars();
 
-			if (count($associated_pages)) {
-				$show_pages = 5;
-				$assoicated_pages_titles = array();
-				$i = 0;
-				foreach ($associated_pages as $associated_page) {
-					$assoicated_pages_titles[] = apply_filters('the_title', $associated_page->post_title);
-					if ($i==$show_pages) {
-						break;
-					}
-					$i++;
-				}
-				$msg = 'This sidebar is used on ' . implode(', ', $assoicated_pages_titles) . ' ';
-				if (count($associated_pages) > $show_pages) {
-					$msg .= ' and ' . count($associated_pages) - $show_pages . ' more pages';
-				}
-			} else {
-				$msg = '';
-			}
+		// Add field options
+		$sidebars = array();
 
+		foreach ($wp_registered_sidebars as $sidebar) {
+			$sidebars[] = $sidebar['name'];
+		}
+
+		$options = array_merge($sidebars, $custom_sidebars);
+		$options = array_combine($options, $options);
+		$this->add_options($options);
+	}
+
+	function register_custom_sidebars() {
+		$custom_sidebars = $this->get_custom_sidebars();
+
+		foreach ($custom_sidebars as $sidebar) {
 			$slug = strtolower(preg_replace('~-{2,}~', '', preg_replace('~[^\w]~', '-', $sidebar)));
 
 			register_sidebar(array(
 				'name' => $sidebar,
 				'id' => $slug,
-				'description' => $msg,
+				'description' => '',
 				'before_widget' => $this->sidebar_options['before_widget'],
 				'after_widget' => $this->sidebar_options['after_widget'],
 				'before_title' => $this->sidebar_options['before_title'],
@@ -1491,27 +1495,40 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 		}
 	}
 
-	function _get_sidebars() {
-		// TODO: Select all meta values directly
-		$pages_with_sidebars = get_posts(array(
-			'post_type' => array('page'),
-			'meta_query' => array(
-				array('key' => $this->name)
-			),
-			'posts_per_page' => -1,
-		));
+	function get_custom_sidebars() {
+		global $wpdb;
 
-		$sidebars = array();
-		foreach ($pages_with_sidebars as $page_with_sidebar) {
-			$sidebar = get_post_meta($page_with_sidebar->ID, $this->name, 1);
-			if ($sidebar) {
-				$sidebars[$sidebar] = 1;
-			}
+		if ( !empty($this->custom_sidebars) ) {
+			return $this->custom_sidebars;
 		}
 
-		$sidebars = array_keys($sidebars);
+		$sidebars = array();
 
-		return $sidebars;
+		$query_string = '';
+		switch ($this->context) {
+			case 'CustomFields':
+				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->postmeta . ' WHERE meta_key = "' .  $wpdb->escape($this->name) . '"';
+				break;
+			case 'TermMeta':
+				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->termmeta . ' WHERE meta_key = "' .  $wpdb->escape($this->name) . '"';
+				break;
+			case 'ThemeOptions':
+				$query_string = 'SELECT option_value AS sidebar FROM ' . $wpdb->options . ' WHERE option_name = "' .  $wpdb->escape($this->name) . '"';
+				break;
+			case 'UserMeta':
+				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->usermeta . ' WHERE meta_key = "' .  $wpdb->escape($this->name) . '"';
+				break;
+		}
+
+		$sidebar_names = $wpdb->get_col($query_string);
+		
+		foreach ($sidebar_names as $sidebar_name) {
+			$sidebars[$sidebar_name] = 1;
+		}
+
+		$this->custom_sidebars = array_keys($sidebars);
+
+		return $this->custom_sidebars;
 	}
 }
 

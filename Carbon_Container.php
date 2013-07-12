@@ -297,6 +297,7 @@ abstract class Carbon_Container {
 
 			$this->verify_unique_field_name($field->get_name());
 
+			$field->set_context($this->type);
 			if ( !$field->get_datastore() ) {
 				$field->set_datastore($this->store);
 			}
