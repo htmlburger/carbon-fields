@@ -89,8 +89,8 @@ ul.carbon-radio-list input { width: auto; margin-right:5px; }
 .carbon-subcontainer .carbon-btn-dropdown a.carbon-btn-remove { color: #bc0b0b; }
 .carbon-subcontainer .carbon-btn-dropdown a.carbon-btn-remove:hover { color: #fff; background: #bc0b0b; font-weight: bold; }
 
+.carbon-subcontainer .carbon-btn-dropdown:hover { padding: 22px 0 5px; width: 75px; height: auto; background-color: #fcfcfc; border: 1px solid #e0e0e0; z-index: 2; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
 .carbon-desktop .carbon-subcontainer .carbon-btn-dropdown { visibility: hidden; }
-.carbon-desktop .carbon-subcontainer .carbon-btn-dropdown:hover { padding: 22px 0 5px; width: 75px; height: auto; background-color: #fcfcfc; border: 1px solid #e0e0e0; z-index: 2; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
 .carbon-desktop .carbon-subcontainer .carbon-group-row:hover .carbon-btn-dropdown { visibility: visible; }
 
 .carbon-wysiwyg .mceIframeContainer { background:#fff; }
