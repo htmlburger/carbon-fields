@@ -83,12 +83,14 @@ ul.carbon-radio-list input { width: auto; margin-right:5px; }
 .carbon-subcontainer .carbon-drag-handle span { display: block; background: url(images/icon-move.png) no-repeat center bottom; padding-bottom: 20px;}
 .carbon-subcontainer .carbon-btn-holder { position: relative; }
 .carbon-subcontainer .carbon-group-row.removed .carbon-drag-handle { background: #e74444; }
-.carbon-subcontainer .carbon-btn-remove { position: absolute; top: 2px; right: 2px; width: 22px; height: 22px; background: url(images/icon-delete.png) no-repeat 0 0; font-size: 0; line-height: 0; text-indent: -4000px; }
+.carbon-subcontainer .carbon-group-row.duplicated .carbon-drag-handle { background: #82c0ec; }
+.carbon-subcontainer .carbon-btn-dropdown { position: absolute; top: 2px; right: 2px; width: 22px; height: 0; padding-top: 22px; background: url(images/icon-dropdown.png) no-repeat top right; overflow: hidden; cursor: pointer; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }
+.carbon-subcontainer .carbon-btn-dropdown a { padding: 2px 7px 0 0; display: block; border-top: 1px solid #eee; text-align: right; font-size: 11px; text-transform: uppercase; text-decoration: none }
+.carbon-subcontainer .carbon-btn-dropdown a.carbon-btn-remove { color: #bc0b0b; }
+.carbon-subcontainer .carbon-btn-dropdown a.carbon-btn-remove:hover { color: #fff; background: #bc0b0b; font-weight: bold; }
 
-.carbon-desktop .carbon-subcontainer .carbon-btn-remove { visibility: hidden; }
-.carbon-desktop .carbon-subcontainer .carbon-group-row:hover .carbon-btn-remove { visibility: visible; }
-
-/*.carbon-subcontainer.carbon-container-shrank tr.ui-sortable-helper { max-height: 100px !important; overflow: hidden; }
-.carbon-subcontainer.carbon-container-shrank tr.ui-sortable-helper .carbon-drag-handle { vertical-align: top !important; }*/
+.carbon-desktop .carbon-subcontainer .carbon-btn-dropdown { visibility: hidden; }
+.carbon-desktop .carbon-subcontainer .carbon-btn-dropdown:hover { padding: 22px 0 5px; width: 75px; height: auto; background-color: #fcfcfc; border: 1px solid #e0e0e0; z-index: 2; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.carbon-desktop .carbon-subcontainer .carbon-group-row:hover .carbon-btn-dropdown { visibility: visible; }
 
 .carbon-wysiwyg .mceIframeContainer { background:#fff; }

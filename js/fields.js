@@ -541,6 +541,11 @@ jQuery(function($) {
 			return false;
 		});
 
+		field_obj.node.find('a[data-action=duplicate]').live('click', function() {
+			complex_duplicate_row(field_obj, $(this).closest('.carbon-group-row'));
+			return false;
+		});
+
 		field_obj.group_selector.find('a').click(function() {
 			field_obj.new_row_type = $(this).data('group');
 			complex_add_row(field_obj);
@@ -650,6 +655,48 @@ jQuery(function($) {
 				field.btn_add.show();
 			};
 		});		
+	}
+
+	function complex_duplicate_row(field, row) {
+		// Remove fields because we want to clone a pure version of the original row
+		remove_fields(row);
+		new_row = row.clone();
+		init(row);
+
+		field.num_rows++;
+		field.row_uid++;
+
+		new_row.find('.carbon-field-skip').removeClass('carbon-field-skip');
+
+		// Set new row_uid
+		field_name_regex = new RegExp("" + field.name.replace(/\[/g, '\\[').replace(/\]/g, '\\]') + "(\\])?\\[\\d+\\]", "g")
+		new_row.html( new_row.html().replace(field_name_regex, field.name + '$1[' + field.row_uid + ']') );
+
+		// Set new id
+		new_row.find('label[for]').each(function() {
+			var label = $(this),
+				id = label.attr('for'),
+				input = new_row.find('#' + id);
+
+			id = id + '-c' + field.row_uid;
+			label.attr('for', id);
+			input.attr('id', id);
+		});
+
+		new_row.removeClass('carbon-group-preview').addClass('carbon-group-row').insertAfter( row );
+		init(new_row);
+
+		new_row.find('.carbon-drag-handle:first span').text(field.num_rows)
+
+		if ( field.max_rows > 0 && field.num_rows == field.max_rows ) {
+			field.btn_add.hide();
+		};
+
+		complex_on_update_rows(field);
+
+		new_row.hide().addClass('duplicated').fadeIn(function() {
+			$(this).removeClass('duplicated')
+		});
 	}
 
 	function complex_on_update_rows(field) {

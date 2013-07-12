@@ -17,7 +17,10 @@
 			<td>
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="<?php echo $group_name ?>" />
 				<div class="carbon-btn-holder">
-					<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
+					<div class="carbon-btn-dropdown">
+						<a class="carbon-btn-duplicate" href="#" data-action="duplicate">Clone</a>
+						<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
+					</div>
 				</div>
 				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
 					<table class="layout-<?php echo $this->layout ?>">
@@ -87,7 +90,10 @@
 
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="" />
 				<div class="carbon-btn-holder">
-					<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
+					<div class="carbon-btn-dropdown">
+						<a class="carbon-btn-duplicate" href="#" data-action="duplicate">Clone</a>
+						<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
+					</div>
 				</div>
 				
 
