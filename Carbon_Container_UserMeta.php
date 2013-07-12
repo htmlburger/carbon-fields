@@ -60,7 +60,7 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 		}
 
 		// Check user role
-		if ( isset($this->settings['show_on']['role']) ) {
+		if ( !empty($this->settings['show_on']['role']) ) {
 			$allowed_roles = (array) $this->settings['show_on']['role'];
 			if ( !in_array($user->roles[0], $allowed_roles) ) {
 				$valid = false;
