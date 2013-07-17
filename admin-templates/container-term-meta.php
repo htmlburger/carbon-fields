@@ -7,13 +7,12 @@
 				echo $field->get_label(); 
 				if ( $field->is_required() ) {
 					echo ' *';
-				}
-				echo $field->get_help_text();
-				?>
+				} ?>
 			</th>
 			<td>
 				<div class="carbon-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 					<?php echo $field->render(); ?>
+					<span class="description"><?php echo $field->get_help_text(); ?></span>
 				</div>
 			</td>
 		</tr>
