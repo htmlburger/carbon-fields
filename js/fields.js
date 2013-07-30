@@ -274,7 +274,8 @@ jQuery(function($) {
 
 	/* Rich text */
 	carbon_field.Rich_Text = function(element, field_obj) {
-		var textarea = element.find('.carbon-wysiwyg textarea');
+		var textarea = element.find('.carbon-wysiwyg textarea'),
+			editor;
 
 		if( typeof tinyMCE == 'undefined' || typeof tinyMCE['settings'] == undefined ) {
 			return;
@@ -293,6 +294,12 @@ jQuery(function($) {
 		tinyMCE.settings.setup = $.noop;
 		tinyMCE.execCommand('mceRemoveControl', false, textarea.attr('id'));
 		tinyMCE.execCommand('mceAddControl', false, textarea.attr('id'));
+		editor = tinyMCE.getInstanceById( textarea.attr('id') );
+
+		// save content to textare on blur
+		tinyMCE.dom.Event.add(editor.getWin(), "blur", function(a, b, c){
+			textarea.text(editor.save());
+		});
 
 		// remove editor before removing the node from DOM
 		element.bind('remove_fields.carbon', function() {
@@ -309,6 +316,13 @@ jQuery(function($) {
 
 		element.bind('reinit_field.carbon', function() {
 			tinyMCE.execCommand('mceAddControl', false, textarea.attr('id'));
+			editor = tinyMCE.getInstanceById( textarea.attr('id') );
+
+			// save content to textare on blur
+			tinyMCE.dom.Event.add(editor.getWin(), "blur", function(a, b, c){
+				textarea.text(editor.save());
+			});
+
 			element.height('auto').width('auto');
 			textarea.height('auto').width('auto');
 		});
@@ -457,7 +471,7 @@ jQuery(function($) {
 			});
 			
 			// get results
-		    $.ajax({
+			$.ajax({
 				url: ajaxurl,
 				type: 'post',
 				dataType: 'html',
@@ -557,6 +571,16 @@ jQuery(function($) {
 			setTimeout(function() {
 				field_obj.group_selector.find('a:first').click();
 			}, 1);
+			return false;
+		});
+
+		field_obj.node.on('change', 'input:text', function() {
+			$(this).attr('value', $(this).val());
+			return false;
+		});
+
+		field_obj.node.on('change', 'textarea', function() {
+			$(this).text($(this).val());
 			return false;
 		});
 
