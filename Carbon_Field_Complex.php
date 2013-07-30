@@ -322,6 +322,11 @@ class Carbon_Field_Group {
 				throw new Carbon_Exception('Object must be of type Carbon_Field');
 			}
 
+			// verify name validity
+			if ( preg_match('~_\d+~', $field->get_name()) ) {
+				throw new Carbon_Exception ('Subfield names cannot contain underscore followed by a digit(s). Replace "' . ltrim($field->get_name(), '_') . '" with "' . ltrim(preg_replace('~_+(\d+)~', '$1', $field->get_name()), '_') . '"');
+			}
+
 			$this->verify_unique_field_name($field->get_name());
 		}
 

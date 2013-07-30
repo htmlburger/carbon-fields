@@ -1,8 +1,16 @@
 <?php
 
 function carbon_trigger_fields_register() {
-	do_action('carbon_register_fields');
-	do_action('carbon_after_register_fields');
+	try {
+		do_action('carbon_register_fields');
+		do_action('carbon_after_register_fields');	
+	} catch (Carbon_Exception $e) {
+		$callback = '';
+		foreach ($e->getTrace() as $trace) {
+			$callback .= '<br/>' . (isset($trace['file']) ? $trace['file'] . ':' . $trace['line'] : $trace['function'] . '()');
+		}
+		wp_die( '<h3>' . $e->getMessage() . '</h3><small>' . $callback . '</small>' );
+	}
 }
 
 function carbon_init_containers() {
@@ -85,7 +93,7 @@ function carbon_get_complex_fields($type, $name, $id = null) {
 }
 
 function carbon_expand_nested_field($input_groups, $row, $field_name) {
-	if ( !preg_match('~^' . preg_quote($field_name['key'], '~') . '(?P<group>\w*)-_?(?P<key>.*?)_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?~', $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'], $subfield_name) ) {
+	if ( !preg_match('~^' . preg_quote($field_name['key'], '~') . '(?P<group>\w*)-_?(?P<key>.*?)_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~', $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'], $subfield_name) ) {
 		return $input_groups;
 	}
 
