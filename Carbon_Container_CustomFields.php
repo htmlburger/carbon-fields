@@ -176,7 +176,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 			switch ($condition) {
 				// show_on_post_format
 				case 'post_formats':
-					if ( empty($value) ) {
+					if ( empty($value) || $post->post_type != 'post' ) {
 						break;
 					}
 
@@ -234,7 +234,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 
 				// show_on_template
 				case 'template_names':
-					if ( empty($value) ) {
+					if ( empty($value) || $post->post_type != 'page' ) {
 						break;
 					}
 					$current_template = get_post_meta($post_id, '_wp_page_template', 1);
@@ -248,7 +248,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 
 				// hide_on_template
 				case 'not_in_template_names':
-					if ( empty($value) ) {
+					if ( empty($value) || $post->post_type != 'page' ) {
 						break;
 					}
 					$current_template = get_post_meta($post_id, '_wp_page_template', 1);
