@@ -546,9 +546,11 @@ jQuery(function($) {
 			return false;
 		});
 
-		field_obj.group_selector.find('a').click(function() {
+		field_obj.group_selector.find('a').click(function(e) {
 			field_obj.new_row_type = $(this).data('group');
 			complex_add_row(field_obj);
+
+			e.preventDefault();
 		});
 
 		field_obj.empty_field_text.find('a:first').click(function() {
