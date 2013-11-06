@@ -26,6 +26,14 @@
 					<table class="layout-<?php echo $this->layout ?>">
 						<?php foreach ($fields as $field): 
 							$old_name = $field->get_name();
+							$old_id = $field->get_id();
+							
+							// Add random chars in order to avoid ID collisions 
+							// in complex field groups. Just using index doesn't work in 
+							// some setups with nested complex fields. 
+							$id_salt = substr(md5(mt_rand()), 0, 6);
+
+							$field->set_id( $old_id . '-' . $id_salt );
 							$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
 						?>
 							<tr>
@@ -46,6 +54,7 @@
 							</tr>
 						<?php 
 							$field->set_name($old_name);
+							$field->set_id( $old_id);
 						endforeach ?>
 					</table>
 				<?php else: ?>

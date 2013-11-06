@@ -459,8 +459,20 @@ class Carbon_Field {
 		return $this;
 	}
 
+	/**
+	 * HTML id attribute getter. 
+	 * @return string
+	 */
 	function get_id() {
 		return $this->id;
+	}
+
+	/**
+	 * HTML id attribute setter
+	 * @param string $id
+	 */
+	function set_id($id) {
+		$this->id = $id;
 	}
 
 	/**
