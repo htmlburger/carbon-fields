@@ -26,7 +26,7 @@
 						}
 					?>
 				</label>
-				<div class="carbon-field carbon-<?php echo $field->type ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+				<div class="carbon-field carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 					<?php echo $field->render(); ?>
 				</div>
 				<?php if( !empty( $help_text ) ) :  ?><div class="help-text"><em><?php echo $help_text; ?></em></div> <?php endif; ?>

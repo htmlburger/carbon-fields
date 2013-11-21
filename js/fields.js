@@ -48,44 +48,101 @@ jQuery(function($) {
 		return field;
 	}
 
-	/* File and Image */
+	/*File*/
 	carbon_field.File = function(element, field_obj) {
-		element.find('.button').click(function() {
-			window.carbon_active_field = element;
-			tb_show('','media-upload.php?post_id=0&carbon_type=file&TB_iframe=true');
+		if (typeof(crb_media_types) == 'undefined') {
+			var crb_media_types = {};
+		}
+
+		// Runs when the image button is clicked.
+		$(element).find('.c2_open_media').click(function (e) {
+			e.preventDefault();
+			
+			var row = $(this).closest('.carbon-field'),
+				input_field = row.find('input.carbon-file-field'),
+				button_label = $(this).attr('data-window-button-label'),
+				window_label = $(this).attr('data-window-label'),
+				value_type = $(this).attr('data-value-type'),
+				file_type = $(this).attr('data-type'); // audio, video, image
+			
+			if (typeof(crb_media_types[element.data('type')] == 'undefined')) {
+				crb_media_types[element.data('type')] = wp.media.frames.crb_media_field = wp.media({
+					title: window_label ? window_label : meta_image.title,
+					library: { type: file_type }, // autio, video, image
+					button: { text: button_label },
+					multiple: false
+				});
+				
+				var crb_media_field = crb_media_types[element.data('type')];
+				
+				// Runs when an image is selected.
+				crb_media_field.on('select', function () {
+					// Grabs the attachment selection and creates a JSON representation of the model.
+					var media_attachment = crb_media_field.state().get('selection').first().toJSON();
+					//Object:
+					// alt, author, caption, dateFormatted, description, editLink, filename, height, icon, id, link, menuOrder, mime, name, status, subtype, title, type, uploadedTo, url, width
+					
+					// Sends the attachment URL to our custom image input field.
+					var media_value = media_attachment[value_type];
+
+					input_field.val(media_value);
+
+					switch (file_type) {
+						case 'image':
+							// image field type
+							row.find('.carbon-view_image').attr( 'src', media_value );
+							row.find('.carbon-view_file').attr( 'href', media_value );
+							row.find('.carbon-description, img').show();
+							break;
+						case 'audio':
+						case 'video':
+						default:
+							if (parseInt(media_value)==media_value) {
+								// attachment field type
+								if (media_attachment.type=='image') {
+									row.find('.carbon-view_image').attr( 'src', media_attachment.url );
+									row.find('.carbon-description, img').show();
+								}else{
+									// all other file types
+									row.find('.carbon-description, img').hide();
+								};
+							}else{
+								// file field type
+							};
+							row.find('span.attachment_url').html( media_attachment.url );
+							row.find('.carbon-view_file').attr('href', media_attachment.url);
+							row.find('.carbon-description').show();
+					}
+				});
+			}
+			
+			var crb_media_field = crb_media_types[element.data('type')];
+			
+			// Opens the media library frame
+			crb_media_field.open();
+		});
+
+		$(element).find('.carbon-file-remove').click(function (e) {
+			var description = $(this).closest('.carbon-description');
+			
+			description.hide();
+			description.find('input.carbon-file-field').val('');
+			description.find('span.attachment_url').html('');
+			description.find('img').hide();
 		});
 	}
-
-	carbon_field.Image = function(element, field_obj) {
-		element.find('.button:not(.carbon-file-remove)').click(function() {
-			window.carbon_active_field = element;
-			tb_show('','media-upload.php?post_id=0&type=image&carbon_type=image&TB_iframe=true');
-		});
-
-		element.find('.carbon-file-remove').click(function() {
-			element.find('img').addClass('blank').attr('src', 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
-			element.find('.carbon-image-field').val('');
-			$(this).hide();
-			return false;
-		});
-	}
-
+	
 	/* Attachment */
-	carbon_field.Attachment = function(element, field_obj) {
-		element.find('.button:not(.carbon-file-remove)').click(function() {
-			window.carbon_active_field = element;
-			tb_show('','media-upload.php?post_id=0&type=file&carbon_type=image&TB_iframe=true');
-		});
-
-		element.find('.carbon-file-remove').click(function() {
-			element.find('img').addClass('blank').attr('src', 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==');
-			element.find('.button:not(.carbon-file-remove)').show();
-			element.find('.carbon-image-field').val('');
-			element.find('.carbon-attachment-title, .carbon-attachment-url').html('');
-			$(this).hide();
-			return false;
-		});
-	}
+	carbon_field.Attachment = carbon_field.File;
+	
+	/* Image */
+	carbon_field.Image = carbon_field.File;
+	
+	/* Audio */
+	carbon_field.Audio = carbon_field.File;
+	
+	/* Video */
+	carbon_field.Video = carbon_field.File;
 
 	/* Date picker */
 	carbon_field.Date = function(element, field_obj) {

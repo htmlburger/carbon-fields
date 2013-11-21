@@ -18,6 +18,14 @@ class Carbon_Field {
 	 * @var int
 	 */
 	protected $id;
+	
+	/**
+	 * Stores the initial <kbd>$type</kbd> variable passed to the <code>factory()</code> method
+	 * 
+	 * @see factory
+	 * @var string
+	 */
+	public $type;
 
 	/**
 	 * Field value
@@ -483,9 +491,66 @@ class Carbon_Field {
 	function is_required() {
 		return $this->required;
 	}
+	
+	/**
+	 * Returns the type of the field based on the class
+	 * The class is stripped by the "Carbon_Field" prefix. Then underscores are replaced with a dash.
+	 * Finally the result is lowercased.
+	 * 
+	 * @return string
+	 */
+	public function get_type() {
+		$class = get_class($this);
+		
+		
+		return $this->clean_type($class);
+	}
+	
+	/**
+	 * Cleans up an object class for usage as HTML class
+	 * 
+	 * @return string
+	 */
+	private function clean_type($type) {
+		$clean_class = str_replace('Carbon_Field', '', $type);
+		$clean_class = trim($clean_class, '_');
+		$dashed_clean_class = str_replace('_', '-', $clean_class);
+		
+		return strtolower($dashed_clean_class);
+	}
+	
+	/**
+	 * Return an array of html classes to be used for the field container
+	 * 
+	 * @return array
+	 */
+	public function get_html_class() {
+		$html_classes = array();
+		
+		$object_class = get_class($this);
+		$html_classes[] = $this->get_type();
+		
+		$parent_class = $object_class;
+		while ($parent_class = get_parent_class($parent_class)) {
+			$clean_class = $this->clean_type($parent_class);
+			
+			if ($clean_class) {
+				$html_classes[] = $clean_class;
+			}
+		}
+		
+		return $html_classes;
+	}
 
 	static function admin_hook_scripts() {
+		wp_enqueue_media();
 		wp_enqueue_script('carbon_fields', CARBON_PLUGIN_URL . '/js/fields.js');
+		wp_localize_script( 'carbon_fields', 'meta_image',
+	        array(
+	            'title' => __('Files'),
+	            'button' => __('Select File'),
+	        )
+	    );
 
 		// Media Upload causes problems with thickbox popups in Gravity Forms
 		$screen = get_current_screen();
@@ -1160,274 +1225,131 @@ class Carbon_Field_Relationship extends Carbon_Field {
 
 }
 
-class Carbon_Field_Attachment extends Carbon_Field_File {
-	function render() {
-		echo '<input id="' . $this->get_id() . '" type="hidden" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-image-field" ' . ($this->required ? 'data-carbon-required="true"': '') . '/>';
-		echo '<div class="cl"></div>';
-
-		$has_image = false;
-		
-		// For image only
-		$attachment = get_post($this->value);
-
-		if ( !$attachment || $attachment->post_type != 'attachment' ) {
-			echo '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" height="100" class="carbon-view_image blank"/>';
-			echo '<span class="carbon-attachment-title"></span><div class="cl"></div>';
-			echo '<span class="carbon-attachment-url"></span><div class="cl"></div>';
-		} else {
-			$url = wp_get_attachment_url($attachment->ID);
-			$attachment_thumbnail = wp_get_attachment_thumb_url($attachment->ID);
-
-			if ( empty($attachment_thumbnail) ) {
-				$attachment_thumbnail = wp_get_attachment_image_src($attachment->ID, array(100, 100), true);
-				$attachment_thumbnail = $attachment_thumbnail[0];
-			}
-
-			echo '<img src="' . $attachment_thumbnail . '" alt="" height="100" class="carbon-view_image"/>';
-			echo '<span class="carbon-attachment-title">' . $attachment->post_title . '</span><div class="cl"></div>';
-			echo '<span class="carbon-attachment-url">' . $url . '</span><div class="cl"></div>';
-			$has_image = true;
-		}
-
-		echo '<input class="carbon-file-remove button" type="button" value="Remove" ' . ($has_image ? '': 'style="display: none;"') . ' />';
-
-		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=file&amp;carbon_type=attachment" type="button" class="button" value="Select Media" ' . ($has_image ? 'style="display: none;"': '') . '/>';
-
-		echo '<div class="cl"></div>';
-	}
-}
-
 class Carbon_Field_File extends Carbon_Field {
-	/**
-	 * Whether admin_head was attached for a file or image field
-	 *
-	 * @see admin_init()
-	 * @var bool
-	 */
-	static $attached_media_library_hook = false; 
-
-	function render() {
-		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-file-field" ' . ($this->required ? 'data-carbon-required="true"': '') . '/>';
-		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=file&amp;carbon_type=file" type="button" class="button" value="Select Media" />';
-		
-		// For image only
-		if ( !empty($this->value) ) {
-			echo '<br /><a href="' . $this->value . '" target="_blank" class="carbon-view_file">View File</a>';
-		}
-	}
-
-	function admin_init() {
-		add_action('admin_print_styles', array($this, 'add_correct_script_hooks'), 1);
-
-		if ( !self::$attached_media_library_hook ) {
-			self::$attached_media_library_hook = true;
-			add_action('admin_head-media-upload-popup', array('Carbon_Field_File', 'admin_media_library_popup_head'));
-		}
-	}
-
-	function add_correct_script_hooks() {
-		wp_enqueue_script('utf8_decode_js_userialize', CARBON_PLUGIN_URL . '/js/utf8.decode.js.unserialize.js');
-	}
-
-
-	static function admin_media_library_popup_head() {
-		if ( !isset($_GET['carbon_type']) || !in_array($_GET['carbon_type'], array('file', 'image', 'attachment')) ) {
-			return;
-		}
-		?>
-		<style type="text/css">
-			#media-upload-header #sidemenu li#tab-gallery,
-			#media-upload-header #sidemenu li#tab-type_url,
-			#media-items .media-item a.toggle,
-			#media-items .media-item tr.image-size,
-			#media-items .media-item tr.align,
-			#media-items .media-item tr.url,
-			#media-items .media-item .slidetoggle {
-				display: none !important;
-			}
-
-			#media-items { 
-				padding-bottom: 25px;
-			}
-
-			#media-items .media-item { 
-				min-height: 68px;
-			}
-
-			#media-items .media-item .filename.new {
-				min-height: 0;
-				padding: 27px 10px 10px;
-				line-height: 15px;
-			}
-
-			#media-items .media-item .pinkynail {
-				max-width: 64px;
-				max-height: 64px;
-				display: block !important;
-			}
-
-			#media-items .media-item  .carbon-select { 
-				float: right; 
-				margin: 23px 12px 0 10px; 
-			}
-	
-			#media-upload .ml-submit {
-				display: none !important;
-			}
-		</style>
-		<script type="text/javascript">
-			(function($) {
-				function carbon_add_buttons() {
-					// add buttons to media items
-					$('#media-items .media-item:not(.carbon-active)').each(function(){
-						var th = $(this), id;
-
-						// needs attachment ID
-						if( th.children('input[id*="type-of-"]').length == 0 ){ 
-							return false; 
-						}
-						
-						// add buttons only once
-						th.addClass('carbon-active');
-						
-						// find attachment id
-						id = th.children('input[id*="type-of-"]').attr('id').replace('type-of-', '');
-						
-						// Add select button
-						th.find('.filename.new').before('<a href="' + id + '" data-post-id="' + id + '" class="button carbon-select">Select File</a>');
-					});
-				}
-
-				$('#media-items .media-item a.carbon-select').live('click', function(){
-					var id = $(this).data('post-id'),
-						thumbnail = $(this).closest('.media-item').find('.pinkynail').attr('src'),
-						carbon_field = self.parent.carbon_active_field;
-
-					var data = {
-						action: 'carbon_get_file_details',
-						id: id
-					};
-
-					$.ajax({
-						url: ajaxurl,
-						data : data,
-						cache: false,
-						dataType: "json",
-						success: function( json ) {
-							// validate
-							if(!json) {
-								alert('Cannot select this file');
-								return false;
-							}
-
-							// Image fields require a present thumbnail
-							if(carbon_field.data('type') == 'Image' && !json.thumbnail) {
-								alert('Cannot select this file');
-								return false;
-							} else if ( !json.thumbnail ) {
-								json.thumbnail = thumbnail;
-							};
-
-							// update carbon_field
-							if ( carbon_field.data('type') == 'Attachment' ) {
-								carbon_field.find('input.regular-text').val( json.id ).trigger('change');
-								carbon_field.find('.carbon-file-remove').show();
-								carbon_field.find('.button:not(.carbon-file-remove)').hide();
-								carbon_field.find('.carbon-attachment-title').text(json.title);
-								carbon_field.find('.carbon-attachment-url').text(json.url);
-							} else {
-								carbon_field.find('input.regular-text').val( json.url ).trigger('change');
-							}
-				 			carbon_field.find('.carbon-view_image').attr( 'src', json.thumbnail ).removeClass('blank');
-				 			carbon_field.find('.carbon-view_file').attr( 'href', json.url );
-				 			
-				 			// reset carbon_active_field and return false
-				 			self.parent.carbon_active_field = null;
-				 			self.parent.tb_remove();
-						}
-					});
-					
-					return false;
-				});
-
-				$(document).ready(function(){
-					setTimeout(function(){
-						carbon_add_buttons();
-
-						// add `carbon_type` param to the filter form
-						$('#filter').append('<input type="hidden" name="carbon_type" value="<?php echo $_GET['carbon_type'] ?>" />');
-					}, 1);
-				});
-
-				<?php if(!isset($_GET['tab']) || $_GET['tab'] == 'type'): ?>
-					setInterval(function(){
-						carbon_add_buttons();
-					}, 500);
-				<?php endif; ?>
-
-			})(jQuery);
-		</script>
-		<?php
-	}
-
-	static function carbon_get_file_details() {
-		if ( empty($_GET['id']) ) {
-			echo json_encode(array());
-			exit;
-		}
-
-		$attachment_id = intval($_GET['id']);
-
-		$attachment = get_post($attachment_id);
-		$url = wp_get_attachment_url($attachment_id);
-		$thumbnail = wp_get_attachment_image_src($attachment_id, 'thumbnail');
-
-		$result = array(
-			'id' => $attachment_id,
-			'title' => $attachment->post_title,
-			'url' => $url,
-			'thumbnail' => $thumbnail[0],
-		);
-
-		echo json_encode($result);
-		exit;
-	}
-}
-
-class Carbon_Field_Image extends Carbon_Field_File {
+	public $button_label = 'Select File';
+	public $window_button_label = 'Select File';
+	public $window_label = 'Files';
 	public $image_extensions = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
 
+	// empty for all types. available types: audio, video, image
+	public $field_type = ''; 
+
+	// alt, author, caption, dateFormatted, description, editLink, filename, height, icon, id, link, menuOrder, mime, name, status, subtype, title, type, uploadedTo, url, width
+	public $value_type = 'url';
+	
+	const ICON_REMOVE_BASE_64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTMzNDkwMTMzMjY1MTFFMjhFNDhCRTUyMzlERjQ5M0IiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTMzNDkwMTQzMjY1MTFFMjhFNDhCRTUyMzlERjQ5M0IiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5MzM0OTAxMTMyNjUxMUUyOEU0OEJFNTIzOURGNDkzQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5MzM0OTAxMjMyNjUxMUUyOEU0OEJFNTIzOURGNDkzQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpjQbVUAAAT1SURBVHjajFVrbBRVFD6zM9vtbne7zy5Li1mqLdZWLI8SXiIPRXz9bcFETVRiAoTID3+atKUa/xD5QYqCrxgTmlB8QDRKE6mUgiUpFCltAZtst9hduu2+XzO78/C7YyFVifYkJ3PnzL3f/e653znD0T9M0zSuvb2dx7AklUqVO53O9Q6nc7XBYHiUfVdV9VYsGh1MJBKX7XZ7EqFCa2urwnGcNh+Hm//S1tZmYIAwGya+/sbu3bu9Hk8tPcBmYrHxz44f/1SSpC/wmmIbYL36L+Dm5mbe7/eXxmKxZXv37Tu8etWqzWo8QdGLA5QLBEnJZPR5vNVKlmo/uTesJYPLSVeHhvqOdnYewMluB4NBsbu7W7kPzJhmMhlzPB6vaz94sKuqsrJ29uzPFO09T0o6SxyPzBjmOKgaaYqsb+Deuok8z22nqVDodltr68sOh+OW1WrNM+Y8y+nw8HCJKIpesD7W0NCwMvRlF0VO/0BaUSakhCUWYIrubEzIpprLU/raMDbOUNWTG9wut7t+IhA4y/O82Nvbq/AA4icnJ+0Afu1NWLTnHIVPdBNnFHQgtVjUXZvz+++ywm6aMiNjZHTYqW7rZn9PT8+00Wi8MTMzIxlGR0eNOKCneefOVyiXo1DX16TKMql5UWf1n87m4FShE6dIy+aoedeuVwuFgjebzYIWUWk4HG5obGysjZ/ro3xgggwCT4VslhZiQlkZ5ZMpivddpMZnt9V83Nn5OFQVEkDdjLw0GnnelBj6DbefpZKlS8i2fuXftfgAY8LNjY6THJyixNB1cj2/nUm1EeF+AYIvxaCKXZL4R4iku3fJ/cwWWtbRtiDGt955l5KXr5AUCt8LLWZZEBRFYTlmhUFyKk35qTuUD94hOZFcEHB+8o6+Rk6m74V4WZb1HLMyjUF2WllNNccbzRQ730+X1mxZELCCS+NLzGR5ZClrB8xigiBoDLiANExORSKi74Ud5sCHnaSKuO18fkHAEDrxZjP5XtxB4dkZCZEgwzRgB7GiomLiu1OngpbVK8iz42mdBScIC3IFEnVv30Zla1bR6W++nfR4PBMAFg1gm4NPXxsaupBIpeS6D9rIVOkD+P/LjSmodEkVPXboPUplMsrVwcF+hpWHGVwulwRRz4L1pfc7Om6Y0GBWdn1OltoaXEgSFSbrFTavr+ox9s1S+zCt+OoTMvkfoo729utoRBeBOWs2myWDz+eTkY4owH8vFotn0FsDtrVNtLHvR/If2EsCylUVJZ0dc1WSSLDbyf/2Xsz5iWzrmlgTC0BdZ6CG26iJ2fr6+iKrAW7//v0lFoulAsBPYMIW+Etv7dlTs7y+3kioqsTAICQ1pRM2V1WRAxuTo5xGbo4Vjx39aBw/ge8B+AuK7Xoul5s5cuRIgalCc7vdRTxjAByb03T28KFD67yLFi3f+NQm94qmJqN32yZd65F4XOv/tb/Q33chGpmeHi4vLx9A+ArAx5CCGJxhafeqljt58iRrSCaMXel0uhrHqsO4BgyqkSYftG79S11cxmQy3QVAAONxaPamzWYLMGJIgdTS0qLOB9bXoB8b0EZZJVoB6EZqFmOxFydx4mmeK6Y8wOK4lwiOHkYKowhnRkZGivh7qHMthIT5PYX9VgCshUKhJBaLXq+XLbKAPQMt0SWmKEUwzrH+E0FR4acqVVZWKnOg9+1PAQYAZ/an4nN9VvkAAAAASUVORK5CYII=';
+
 	function render() {
-		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . $this->get_value() . '"  class="regular-text carbon-image-field" ' . ($this->required ? 'data-carbon-required="true"': '') . '/>';
-		echo '<input id="c2_open_media' . str_replace('-', '_', $this->id) .  '" rel="media-upload.php?type=image&amp;carbon_type=image" type="button" class="button" value="Select Media" />';
-		echo '<div class="cl"></div>';
+		echo '<input 
+				id="' . $this->get_id() . '" 
+				type="text" 
+				name="' . $this->get_name() . '" 
+				value="' . $this->get_value() . '"  
+				class="regular-text carbon-file-field" ' . ($this->required ? 'data-carbon-required="true"': '') . '
+				'.($this->value_type=='id' ? 'style="display:none"' : '').'
+			/>';
+		echo '<input 
+				id="c2_open_media' . str_replace('-', '_', $this->id) .  '" 
+				type="button" 
+				class="button c2_open_media" 
+				value="'.$this->button_label.'" 
+				data-window-label="'.$this->window_label.'"
+				data-window-button-label="'.$this->window_button_label.'"
+				data-type="' . $this->field_type . '"
+				data-value-type="'.$this->value_type.'"
+			/>';
+
+		echo $this->description();
 
 		if( !empty( $this->help_text ) ) {
 			echo '<div class="help-text"><em>' . $this->help_text . '</em></div>';
 			echo '<div class="cl"></div>';
 		}
-
-		$has_image = false;
+	}
+	
+	function description() {
+		$description = '<a href="' . $this->value . '" target="_blank" class="carbon-view_file" style="' . (!empty($this->value) ? '' : 'display:none;' ) . '" >View File</a>';
 		
-		// For image only
-		if ( $this->value != '' && in_array(array_pop(explode('.', $this->value)), $this->image_extensions) ) {
-			echo '<img src="' . $this->value . '" alt="" class="carbon-view_image"/>';
-			$has_image = true;
-		} else if ( !empty($this->value) ) {
-			echo '</br><img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" class="carbon-view_image blank"/><em>This is not a valid image!</em>';
-			$has_image = true;
-		} else {
-			echo '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" class="carbon-view_image blank"/>';
-		}
-
-		echo '<input class="carbon-file-remove button" type="button" value="Remove Image" ' . ($has_image ? '': 'style="display: none;"') . ' />';
-
-		echo '<div class="cl"></div>';
+		return apply_filters('carbon_field_' . $this->type . '_description', '<div class="carbon-description">' . $description . '</div>');
 	}
 
 	function get_help_text() {
 		return '';
 	}
+}
+
+class Carbon_Field_Attachment extends Carbon_Field_File {
+	public $value_type = 'id';
+
+	function description(){
+		$description = '';
+		$is_image = false;
+		$has_image = false;
+		$attachment_url = !empty($this->value) ? wp_get_attachment_url( $this->value ) : '';
+		$thumbnail_src = !empty($this->value) ? wp_get_attachment_image_src( $this->value, 'thumbnail' ) : '';
+		$attachment_type = wp_check_filetype($attachment_url);
+
+		if ( in_array($attachment_type['ext'], $this->image_extensions) ) {
+			// is_image
+			$is_image = true;
+		}
+
+		if ( $is_image ) {
+			$description .= '<div class="carbon-preview">';
+			$description .= '<img src="' . $thumbnail_src[0] . '" alt="" class="carbon-view_image"/>';
+			$description .= '<img src="' . Carbon_Field_File::ICON_REMOVE_BASE_64 . '" class="carbon-file-remove" />';
+			$description .= '</div>';
+		} else {
+			$description .= '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" class="carbon-view_image blank"/>';
+		}
+
+		$description .= '<div class="cl"></div>';
+
+		$description .= '<span class="attachment_url">'.$attachment_url.'</span>';
+
+		$is_image = false;
+
+		return apply_filters('carbon_field_' . $this->type . '_description', '<div class="carbon-description">' . $description . '</div>');
+	}
+}
+
+class Carbon_Field_Image extends Carbon_Field_File {
+	public $button_label = 'Select Image';
+	public $window_button_label = 'Select Image';
+	public $window_label = 'Images';
+	public $field_type = 'image';
+
+	function description(){
+		$description = '';
+
+		$has_image = false;
+		if ( $this->value != '' ) {
+			$description .= '<div class="carbon-preview">';
+			$description .= '<img src="' . $this->value . '" alt="" class="carbon-view_image"/>';
+			$description .= '<img src="' . Carbon_Field_File::ICON_REMOVE_BASE_64 . '" class="carbon-file-remove" />';
+			$description .= '</div>';
+		} else {
+			$description = '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" class="carbon-view_image blank"/>';
+		}
+
+		$description .= '<div class="cl"></div>';
+
+		return apply_filters('carbon_field_' . $this->type . '_description', '<div class="carbon-description">' . $description . '</div>');
+	}
+}
+
+class Carbon_Field_Audio extends Carbon_Field_File {
+	public $button_label = 'Select Audio';
+	public $window_button_label = 'Select Audio';
+	public $window_label = 'Audios';
+	public $field_type = 'audio'; 
+}
+
+class Carbon_Field_Video extends Carbon_Field_File {
+	public $button_label = 'Select Video';
+	public $window_button_label = 'Select Video';
+	public $window_label = 'Videos';
+	public $field_type = 'video'; 
 }
 
 class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {

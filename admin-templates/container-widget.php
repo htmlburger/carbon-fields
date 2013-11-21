@@ -24,7 +24,7 @@
 
 			<?php echo $tmp_field->get_help_text(); ?>
 			
-			<div class="carbon-field" data-type="<?php echo $tmp_field->type ?>" data-name="<?php echo $field->get_name() ?>">
+			<div class="carbon-field carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $tmp_field->type ?>" data-name="<?php echo $field->get_name() ?>">
 				<?php $tmp_field->render(); ?>
 			</div>
 		</div>

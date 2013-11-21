@@ -47,7 +47,7 @@
 									<em class="help-text"><?php echo $field->get_help_text(); ?></em>
 								</th>
 								<td>
-									<div class="carbon-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+									<div class="carbon-field carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 										<?php echo $field->render(); ?>
 									</div>
 								</td>
@@ -74,7 +74,7 @@
 											?>
 										</label>
 										<em class="help-text"><?php echo $field->get_help_text(); ?></em>
-										<div class="carbon-field" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+										<div class="carbon-field carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 											<?php echo $field->render(); ?>
 										</div>
 									</td>
@@ -125,7 +125,7 @@
 									<em><?php echo $field->get_help_text(); ?></em>
 								</th>
 								<td>
-									<div class="carbon-field carbon-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+									<div class="carbon-field carbon-field-skip carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 										<?php echo $field->render(); ?>
 									</div>
 								</td>
@@ -153,7 +153,7 @@
 											?>
 										</label>
 										<em><?php echo $field->get_help_text(); ?></em>
-										<div class="carbon-field  carbon-field-skip" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+										<div class="carbon-field  carbon-field-skip carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 											<?php echo $field->render(); ?>
 										</div>
 									</td>
