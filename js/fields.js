@@ -569,6 +569,14 @@ jQuery(function($) {
 			});
 		};
 	}
+	
+	carbon_field.Set = function (element, field_obj) {
+		element.find('a.carbon-set-showall').click(function (e) {
+			e.preventDefault();
+			
+			$(this).parent().hide().siblings().show();
+		});
+	}
 
 	/* Complex Field */
 	carbon_field.Complex = function(element, field_obj) {
