@@ -27,7 +27,7 @@
 
 .carbon-datepicker-trigger { background:url(images/icon-date.png) no-repeat center center; margin-left:6px;}
 
-.carbon-map { height: 400px; max-width: 800px; padding: 2px; border: 1px solid #ccc; }
+.carbon-map-canvas { height: 400px; max-width: 800px; padding: 2px; border: 1px solid #ccc; }
 .carbon-map-field { display:none;  }
 
 .carbon-field .address-search-btn {}

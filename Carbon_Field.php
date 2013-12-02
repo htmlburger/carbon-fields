@@ -708,7 +708,7 @@ class Carbon_Field_Map extends Carbon_Field {
 	function render() {
 		echo '
 		<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_long) . '"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
-		<div class="carbon-map">&nbsp;</div>
+		<div class="carbon-map-canvas">&nbsp;</div>
 		';
 	}
 
@@ -793,7 +793,7 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 
 		echo '
 		<input type="text" name="' . $this->get_name() . '[coordinates]" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_long) . '"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
-		<div class="carbon-map">&nbsp;</div>
+		<div class="carbon-map-canvas">&nbsp;</div>
 		';
 	}
 	

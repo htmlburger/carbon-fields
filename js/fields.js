@@ -217,7 +217,7 @@ jQuery(function($) {
 	/* Map */
 	carbon_field.Map = function(element, field_obj) {
 		var field = element.find('.carbon-map-field'),
-			map_container = element.find('.carbon-map'),
+			map_container = element.find('.carbon-map-canvas'),
 			exists = 0,
 			marker = false,
 			zoom = field.data('zoom'),
