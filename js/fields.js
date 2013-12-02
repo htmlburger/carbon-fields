@@ -137,12 +137,6 @@ jQuery(function($) {
 	
 	/* Image */
 	carbon_field.Image = carbon_field.File;
-	
-	/* Audio */
-	carbon_field.Audio = carbon_field.File;
-	
-	/* Video */
-	carbon_field.Video = carbon_field.File;
 
 	/* Date picker */
 	carbon_field.Date = function(element, field_obj) {
