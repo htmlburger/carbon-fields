@@ -2,7 +2,9 @@
 	
 	<tr class="carbon-empty-row" style="display: none">
 		<td colspan="2">
-			There are no <?php echo $this->labels['plural_name'] ?> yet. Click <a href="#">here</a> to add one.
+			<?php
+			printf(__('There are no %s yet. Click <a href="#">here</a> to add one.', 'crb'), $this->labels['plural_name']);
+			?>
 		</td>
 	</tr>
 
@@ -170,7 +172,10 @@
 	<tr class="carbon-actions">
 		<td colspan="2">
 			<div class="carbon-button">
-				<a href="#" data-action="add" class="button">Add <?php echo $this->labels['singular_name'] ?> <?php if(count($this->groups) > 1) echo '&#8681;'; ?></a>
+				<a href="#" data-action="add" class="button">
+					<?php printf(__('Add %s', 'crb'), $this->labels['singular_name']); ?>
+					<?php if(count($this->groups) > 1) echo '&#8681;'; ?>
+				</a>
 				<ul>
 					<?php foreach ($this->groups as $group): ?>
 						<li><a href="#" data-group="<?php echo $group->get_name() ?>"><?php echo $group->get_label() ?></a></li>

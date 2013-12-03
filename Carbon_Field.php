@@ -546,11 +546,11 @@ class Carbon_Field {
 		wp_enqueue_media();
 		wp_enqueue_script('carbon_fields', CARBON_PLUGIN_URL . '/js/fields.js');
 		wp_localize_script( 'carbon_fields', 'meta_image',
-	        array(
-	            'title' => __('Files'),
-	            'button' => __('Select File'),
-	        )
-	    );
+			array(
+				'title' => __('Files', 'crb'),
+				'button' => __('Select File', 'crb'),
+			)
+		);
 
 		// Media Upload causes problems with thickbox popups in Gravity Forms
 		$screen = get_current_screen();
@@ -689,7 +689,7 @@ class Carbon_Field_Color extends Carbon_Field {
 		<div class="carbon-color-row">
 			<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-color" ' . ($this->required ? 'data-carbon-required="true"': '') . ' />
 			<a class="carbon-color-preview hide-if-no-js"></a>
-			<input type="button" class="pickcolor button hide-if-no-js" value="Select a Color">
+			<input type="button" class="pickcolor button hide-if-no-js" value="' . __('Select a Color', 'crb') . '">
 			<div class="carbon-color-container hide-if-no-js"></div>
 		</div>';
 	}
@@ -789,7 +789,7 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 	protected $address = '';
 	
 	function render() {
-		echo 'Locate Address on the map: <input type="text" name="' . esc_attr($this->get_name()) . '[address]" value="' . esc_attr($this->address) . '" class="regular-text address" /><input type="button" class="address-search-btn button" value="Find">';
+		echo __('Locate Address on the map', 'crb') . ': <input type="text" name="' . esc_attr($this->get_name()) . '[address]" value="' . esc_attr($this->address) . '" class="regular-text address" /><input type="button" class="address-search-btn button" value="Find">';
 
 		echo '
 		<input type="text" name="' . $this->get_name() . '[coordinates]" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_long) . '"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
@@ -866,7 +866,7 @@ class Carbon_Field_Select extends Carbon_Field {
 
 	function render() {
 		if ( empty($this->options) ) {
-			echo '<em>no options</em>';
+			echo '<em>' . __('no options', 'crb') . '</em>';
 			return;
 		}
 
@@ -901,7 +901,7 @@ class Carbon_Field_Radio extends Carbon_Field {
 
 	function render() {
 		if ( empty($this->options) ) {
-			echo '<em>no options</em>';
+			echo '<em>' . __('no options', 'crb') . '</em>';
 			return;
 		}
 
@@ -949,7 +949,7 @@ class Carbon_Field_Checkbox extends Carbon_Field {
 
 class Carbon_Field_Header_Scripts extends Carbon_Field_Textarea {
 	function init() {
-		$this->help_text('If you need to add scripts to your header, you should enter them here.');
+		$this->help_text(__('If you need to add scripts to your header, you should enter them here.', 'crb'));
 
 		add_action('wp_head', array($this, 'print_scripts'));
 		Carbon_Field::init();
@@ -966,7 +966,7 @@ class Carbon_Field_Header_Scripts extends Carbon_Field_Textarea {
 
 class Carbon_Field_Footer_Scripts extends Carbon_Field_Textarea {
 	function init() {
-		$this->help_text('If you need to add scripts to your footer (like Google Analytics tracking code), you should enter them in this box.');
+		$this->help_text(__('If you need to add scripts to your footer (like Google Analytics tracking code), you should enter them in this box.', 'crb'));
 
 		add_action('wp_footer', array($this, 'print_scripts'));
 		Carbon_Field::init();
@@ -1033,7 +1033,7 @@ class Carbon_Field_Set extends Carbon_Field {
 		}
 
 		if (empty($this->options)) {
-			echo '<em>no options</em>';
+			echo '<em>' . __('no options', 'crb') . '</em>';
 			return;
 		}
 
@@ -1056,7 +1056,7 @@ class Carbon_Field_Set extends Carbon_Field {
 				echo '<p><label>' . $option . $value . '</label></p>';
 
 				if ( $loopCount == $this->limit_options ) {
-					echo '<p>... <a href="#" class="carbon-set-showall">Show All Options</a></p>';
+					echo '<p>... <a href="#" class="carbon-set-showall">' . __('Show All Options', 'crb') . '</a></p>';
 				}
 			}
 		}
@@ -1131,7 +1131,7 @@ class Carbon_Field_Relationship extends Carbon_Field {
 					<thead>
 						<tr>
 							<th>
-								<input type="text" placeholder="Search" />
+								<input type="text" placeholder="<?php esc_attr_e('Search', 'crb') ?>" />
 							</th>
 						</tr>
 					</thead>
@@ -1214,13 +1214,13 @@ class Carbon_Field_Relationship extends Carbon_Field {
 	}
 
    	static function posts_where( $where, &$wp_query ) {
-	    global $wpdb;
-	    
-	    if ( !empty($_POST['s']) )  {
-	        $where .= " AND " . $wpdb->posts . ".post_title LIKE '%" . esc_sql( like_escape(  $_POST['s'] ) ) . "%'";
-	    }
-	    
-	    return $where;
+		global $wpdb;
+		
+		if ( !empty($_POST['s']) )  {
+			$where .= " AND " . $wpdb->posts . ".post_title LIKE '%" . esc_sql( like_escape(  $_POST['s'] ) ) . "%'";
+		}
+		
+		return $where;
 	}
 
 }
@@ -1238,6 +1238,12 @@ class Carbon_Field_File extends Carbon_Field {
 	public $value_type = 'url';
 	
 	const ICON_REMOVE_BASE_64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYxIDY0LjE0MDk0OSwgMjAxMC8xMi8wNy0xMDo1NzowMSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNS4xIFdpbmRvd3MiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTMzNDkwMTMzMjY1MTFFMjhFNDhCRTUyMzlERjQ5M0IiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTMzNDkwMTQzMjY1MTFFMjhFNDhCRTUyMzlERjQ5M0IiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5MzM0OTAxMTMyNjUxMUUyOEU0OEJFNTIzOURGNDkzQiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo5MzM0OTAxMjMyNjUxMUUyOEU0OEJFNTIzOURGNDkzQiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpjQbVUAAAT1SURBVHjajFVrbBRVFD6zM9vtbne7zy5Li1mqLdZWLI8SXiIPRXz9bcFETVRiAoTID3+atKUa/xD5QYqCrxgTmlB8QDRKE6mUgiUpFCltAZtst9hduu2+XzO78/C7YyFVifYkJ3PnzL3f/e653znD0T9M0zSuvb2dx7AklUqVO53O9Q6nc7XBYHiUfVdV9VYsGh1MJBKX7XZ7EqFCa2urwnGcNh+Hm//S1tZmYIAwGya+/sbu3bu9Hk8tPcBmYrHxz44f/1SSpC/wmmIbYL36L+Dm5mbe7/eXxmKxZXv37Tu8etWqzWo8QdGLA5QLBEnJZPR5vNVKlmo/uTesJYPLSVeHhvqOdnYewMluB4NBsbu7W7kPzJhmMhlzPB6vaz94sKuqsrJ29uzPFO09T0o6SxyPzBjmOKgaaYqsb+Deuok8z22nqVDodltr68sOh+OW1WrNM+Y8y+nw8HCJKIpesD7W0NCwMvRlF0VO/0BaUSakhCUWYIrubEzIpprLU/raMDbOUNWTG9wut7t+IhA4y/O82Nvbq/AA4icnJ+0Afu1NWLTnHIVPdBNnFHQgtVjUXZvz+++ywm6aMiNjZHTYqW7rZn9PT8+00Wi8MTMzIxlGR0eNOKCneefOVyiXo1DX16TKMql5UWf1n87m4FShE6dIy+aoedeuVwuFgjebzYIWUWk4HG5obGysjZ/ro3xgggwCT4VslhZiQlkZ5ZMpivddpMZnt9V83Nn5OFQVEkDdjLw0GnnelBj6DbefpZKlS8i2fuXftfgAY8LNjY6THJyixNB1cj2/nUm1EeF+AYIvxaCKXZL4R4iku3fJ/cwWWtbRtiDGt955l5KXr5AUCt8LLWZZEBRFYTlmhUFyKk35qTuUD94hOZFcEHB+8o6+Rk6m74V4WZb1HLMyjUF2WllNNccbzRQ730+X1mxZELCCS+NLzGR5ZClrB8xigiBoDLiANExORSKi74Ud5sCHnaSKuO18fkHAEDrxZjP5XtxB4dkZCZEgwzRgB7GiomLiu1OngpbVK8iz42mdBScIC3IFEnVv30Zla1bR6W++nfR4PBMAFg1gm4NPXxsaupBIpeS6D9rIVOkD+P/LjSmodEkVPXboPUplMsrVwcF+hpWHGVwulwRRz4L1pfc7Om6Y0GBWdn1OltoaXEgSFSbrFTavr+ox9s1S+zCt+OoTMvkfoo729utoRBeBOWs2myWDz+eTkY4owH8vFotn0FsDtrVNtLHvR/If2EsCylUVJZ0dc1WSSLDbyf/2Xsz5iWzrmlgTC0BdZ6CG26iJ2fr6+iKrAW7//v0lFoulAsBPYMIW+Etv7dlTs7y+3kioqsTAICQ1pRM2V1WRAxuTo5xGbo4Vjx39aBw/ge8B+AuK7Xoul5s5cuRIgalCc7vdRTxjAByb03T28KFD67yLFi3f+NQm94qmJqN32yZd65F4XOv/tb/Q33chGpmeHi4vLx9A+ArAx5CCGJxhafeqljt58iRrSCaMXel0uhrHqsO4BgyqkSYftG79S11cxmQy3QVAAONxaPamzWYLMGJIgdTS0qLOB9bXoB8b0EZZJVoB6EZqFmOxFydx4mmeK6Y8wOK4lwiOHkYKowhnRkZGivh7qHMthIT5PYX9VgCshUKhJBaLXq+XLbKAPQMt0SWmKEUwzrH+E0FR4acqVVZWKnOg9+1PAQYAZ/an4nN9VvkAAAAASUVORK5CYII=';
+	
+	function init() {
+		$this->button_label = __('Select File', 'crb');
+		$this->window_button_label = __('Select File', 'crb');
+		$this->window_label = __('Files', 'crb');
+	}
 	
 	function set_type($type) {
 		$this->field_type = $type;
@@ -1273,7 +1279,7 @@ class Carbon_Field_File extends Carbon_Field {
 	}
 	
 	function description() {
-		$description = '<a href="' . $this->value . '" target="_blank" class="carbon-view_file" style="' . (!empty($this->value) ? '' : 'display:none;' ) . '" >View File</a>';
+		$description = '<a href="' . $this->value . '" target="_blank" class="carbon-view_file" style="' . (!empty($this->value) ? '' : 'display:none;' ) . '" >' . __('View File', 'crb') . '</a>';
 		
 		return apply_filters('carbon_field_' . $this->type . '_description', '<div class="carbon-description">' . $description . '</div>');
 	}
@@ -1323,6 +1329,12 @@ class Carbon_Field_Image extends Carbon_Field_File {
 	public $window_button_label = 'Select Image';
 	public $window_label = 'Images';
 	public $field_type = 'image';
+	
+	function init() {
+		$this->button_label = __('Select Image', 'crb');
+		$this->window_button_label = __('Select Image', 'crb');
+		$this->window_label = __('Images', 'crb');
+	}
 
 	function description(){
 		$description = '';
@@ -1380,7 +1392,7 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 
 	function render() {
 		if ($this->enable_add_new) {
-			$this->options['new'] = "Add New";
+			$this->options['new'] = _x('Add New', 'sidebar', 'crb');
 		}
 
 		return parent::render();

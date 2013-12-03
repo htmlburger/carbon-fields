@@ -17,6 +17,11 @@ class Carbon_Field_Complex extends Carbon_Field {
 	);
 
 	function init() {
+		$this->labels = array(
+			'singular_name'=>__('Entry', 'crb'),
+			'plural_name'=>__('Entries', 'crb'),
+		);
+		
 		if (defined('WP_ADMIN') && WP_ADMIN) {
 			wp_enqueue_script('jquery-ui-sortable');
 		}
