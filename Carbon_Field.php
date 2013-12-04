@@ -689,7 +689,7 @@ class Carbon_Field_Color extends Carbon_Field {
 class Carbon_Field_Map extends Carbon_Field {
 	protected $api_key;
 	protected $default_lat = 40.346544;
-	protected $default_long = -101.645507;
+	protected $default_lng = -101.645507;
 	protected $zoom = 10;
 
 	function admin_init() {
@@ -698,20 +698,22 @@ class Carbon_Field_Map extends Carbon_Field {
 
 	function render() {
 		echo '
-		<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_long) . '"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
+		<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_lng) . '"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
 		<div class="carbon-map-canvas">&nbsp;</div>
 		';
 	}
 
-	function set_position($lat, $long, $zoom) {
+	function set_position($lat, $lng, $zoom) {
 		$this->default_lat = $lat;
-		$this->default_long = $long;
+		$this->default_lng = $lng;
 		$this->zoom = $zoom;
 
 		return $this;
 	}
 
 	function save() {
+		$this->store->save($this);
+		
 		$original_name = $this->get_name();
 		$original_value = $this->get_value();
 
@@ -783,7 +785,7 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 		echo __('Locate Address on the map', 'crb') . ': <input type="text" name="' . esc_attr($this->get_name()) . '[address]" value="' . esc_attr($this->address) . '" class="regular-text address" /><input type="button" class="address-search-btn button" value="Find">';
 
 		echo '
-		<input type="text" name="' . $this->get_name() . '[coordinates]" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_long) . '"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
+		<input type="text" name="' . $this->get_name() . '[coordinates]" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_lng) . '"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
 		<div class="carbon-map-canvas">&nbsp;</div>
 		';
 	}

@@ -22,6 +22,16 @@ function carbon_get_post_meta($id, $name, $type = null) {
 
 	if ( $type == 'complex' ) {
 		return carbon_get_complex_fields('CustomField', $name, $id);
+	} else if ( $type == 'map' ) {
+		$raw_meta = get_post_meta($id, $name, true);
+		$coordinates = explode(',', $raw_meta);
+		
+		return array('lat'=>(float)$coordinates[0], 'lng'=>(float)$coordinates[1]);
+	} else if ( $type == 'map_with_address' ) {
+		$partial_meta = carbon_get_post_meta($id, $name, 'map');
+		$partial_meta['address'] = get_post_meta($id, $name . '_address', true);
+		
+		return $partial_meta;
 	}
 
 	return get_post_meta($id, $name, true);
