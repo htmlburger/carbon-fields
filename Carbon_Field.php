@@ -551,15 +551,6 @@ class Carbon_Field {
 				'button' => __('Select File', 'crb'),
 			)
 		);
-
-		// Media Upload causes problems with thickbox popups in Gravity Forms
-		$screen = get_current_screen();
-		$disabled_pages = array('toplevel_page_gf_edit_forms', 'forms_page_gf_new_form');
-		if ( !in_array($screen->base, $disabled_pages) ) {
-			wp_enqueue_script('media-upload');
-		}
-		
-		wp_enqueue_script('thickbox');
 	}
 
 	static function admin_hook_styles() {
