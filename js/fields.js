@@ -123,12 +123,12 @@ jQuery(function($) {
 		});
 
 		$(element).find('.carbon-file-remove').click(function (e) {
-			var description = $(this).closest('.carbon-description');
+			var fieldContainer = $(this).closest('.carbon-field');
 			
-			description.hide();
-			description.find('input.carbon-file-field').val('');
-			description.find('span.attachment_url').html('');
-			description.find('img').hide();
+			fieldContainer.find('.carbon-description').hide();
+			fieldContainer.find('input.carbon-file-field').val('');
+			fieldContainer.find('span.attachment_url').html('');
+			fieldContainer.find('img').hide();
 		});
 	}
 	
