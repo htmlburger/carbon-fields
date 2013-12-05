@@ -126,7 +126,7 @@ jQuery(function($) {
 			var fieldContainer = $(this).closest('.carbon-field');
 			
 			fieldContainer.find('.carbon-description').hide();
-			fieldContainer.find('input.carbon-file-field').val('');
+			fieldContainer.find('input.carbon-file-field').attr('value', '');
 			fieldContainer.find('span.attachment_url').html('');
 			fieldContainer.find('img').hide();
 		});
