@@ -29,8 +29,5 @@
 				<?php $tmp_field->render(); ?>
 			</div>
 		</div>
-	<?php 
-	endforeach; 
-
-	endif ?>
+	<?php endforeach; ?>
 </div>
