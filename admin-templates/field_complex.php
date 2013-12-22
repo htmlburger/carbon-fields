@@ -14,18 +14,19 @@
 			$group_name = $fields['type'];
 			unset($fields['type']);
 		?>
-		<tr class="carbon-group-row">
+		<tr id="carbon-<?php echo $this->get_name() . '-' . $index; ?>-complex-container" class="carbon-group-row"> <!-- .minimized -->
 			<td class="carbon-drag-handle"><span><?php echo ($fields_num+1) ?></span></td>
-			<td>
+			<td class="carbon-complex-entry-content">
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="<?php echo $group_name ?>" />
 				<div class="carbon-btn-holder">
-					<div class="carbon-btn-dropdown">
-						<a class="carbon-btn-duplicate" href="#" data-action="duplicate">Clone</a>
-						<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
+					<div class="carbon-complex-action">
+						<a class="carbon-btn-collapse" href="#" data-action="toggle-minimize" title="<?php esc_attr_e('Collapse/Expand', 'crb'); ?>"><?php _e('Collapse/Expand', 'crb'); ?></a>
+						<a class="carbon-btn-duplicate" href="#" data-action="duplicate" title="<?php esc_attr_e('Clone', 'crb'); ?>"><?php _e('Clone', 'crb'); ?></a>
+						<a class="carbon-btn-remove" href="#" data-action="remove" title="<?php esc_attr_e('Remove', 'crb'); ?>"><?php _e('Remove', 'crb'); ?></a>
 					</div>
 				</div>
 				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
-					<table class="layout-<?php echo $this->layout ?>">
+					<table class="layout layout-<?php echo $this->layout ?>">
 						<?php foreach ($fields as $field): 
 							$old_name = $field->get_name();
 							$old_id = $field->get_id();
@@ -60,7 +61,7 @@
 						endforeach ?>
 					</table>
 				<?php else: ?>
-					<table class="layout-<?php echo $this->layout ?>">
+					<table class="layout layout-<?php echo $this->layout ?>">
 						<tr>
 							<?php foreach ($fields as $field): 
 								$old_name = $field->get_name();

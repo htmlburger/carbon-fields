@@ -596,6 +596,12 @@ jQuery(function($) {
 		if ( field_obj.num_rows == 0 ) {
 			field_obj.empty_field_text.show();
 		};
+		
+		$('tr.carbon-group-row').each(function () {
+			if (getUserSetting($(this).attr('id').replace(/[^a-zA-Z0-9_]/, '')) == 'minimized') {
+				$(this).addClass('minimized');
+			}
+		});
 
 		// Hook events
 
@@ -608,15 +614,30 @@ jQuery(function($) {
 			
 			return false;
 		});
-
-		field_obj.node.find('a[data-action=remove]').live('click', function() {
-			complex_remove_row(field_obj, $(this).closest('.carbon-group-row'));
-			return false;
+		
+		field_obj.node.find('a[data-action="toggle-minimize"]').live('click', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			var groupRow = $(this).closest('.carbon-group-row');
+			groupRow.toggleClass('minimized');
+			if (groupRow.hasClass('minimized')) {
+				setUserSetting(groupRow.attr('id'), 'minimized');
+			} else {
+				deleteUserSetting(groupRow.attr('id'));
+			}
 		});
 
-		field_obj.node.find('a[data-action=duplicate]').live('click', function() {
+		field_obj.node.find('a[data-action="remove"]').live('click', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			complex_remove_row(field_obj, $(this).closest('.carbon-group-row'));
+		});
+
+		field_obj.node.find('a[data-action="duplicate"]').live('click', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
 			complex_duplicate_row(field_obj, $(this).closest('.carbon-group-row'));
-			return false;
 		});
 
 		field_obj.group_selector.find('a').click(function(e) {

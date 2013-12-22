@@ -1,16 +1,30 @@
+@font-face {
+	font-family: 'crb-icons';
+	src: url('fonts/crb-icons.eot');
+}
+@font-face {
+	font-family: 'crb-icons';
+	src: url(data:application/x-font-ttf;charset=utf-8;base64,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) format('truetype'),
+		 url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAAZIAAsAAAAABfwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABPUy8yAAABCAAAAGAAAABgDrIDLmNtYXAAAAFoAAAARAAAAETmFgCHZ2FzcAAAAawAAAAIAAAACAAAABBnbHlmAAABtAAAAoAAAAKATtV1/2hlYWQAAAQ0AAAANgAAADYAzfmbaGhlYQAABGwAAAAkAAAAJAfCA8hobXR4AAAEkAAAABwAAAAcFgACIGxvY2EAAASsAAAAEAAAABABlgJMbWF4cAAABLwAAAAgAAAAIAANAC1uYW1lAAAE3AAAAUsAAAFLX/wN2HBvc3QAAAYoAAAAIAAAACAAAwAAAAMEAAGQAAUAAAKZAswAAACPApkCzAAAAesAMwEJAAAAAAAAAAAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAQAAg5gQDwP/A/8ADwABAAAAAAQAAAAAAAAAAAAAAIAAAAAAAAgAAAAMAAAAUAAMAAQAAABQABAAwAAAACAAIAAIAAAAg5gT//f//AAAAIOYA//3////hGgIAAwABAAAAAAAAAAAAAQAB//8ADwABAAAAAAAAAAAAAgAANzkBAAAAAAUAAP/ABAADwAAKAA4AEgAZACIAAAEjNSchESERIREnFRcjNQEXIzUlIRUzESERASE1MxEzFTMRA0DAwP5AAYACgMBlZf6AZWX+gAFAwP4AA4D+AMCAwALAQMD9AP8AAkDAW2VlAQBlZRvA/kACgPyAwAHAwP5AAAUAAP/ABAADwAAJAA0AFgAaACEAAAERIQcRIREhESElFSM3AxEzNSEVBxEhARUjNwEhETM1IRECgP5AwAGAAoD+gP5AZWWAwAFAwP7AAgBlZQGA/gDAAUACwAEAwP3A/wADAKVlZf2bAcDAwMD/AAFlZWX9mwHAwP2AAAABAOcBHwMZAmkAKgAAAQ4DMQ4DIyIuAicwLgInLgE0Njc+ATIWHwE3PgEyFhceARQGBwMZCE1WRgQJCwsFBQsLCQRGVk0ICAgICAkTFRYKyMgKFhUTCQgICAgCFghKUkIEBwQCAgQHBEJSSggIFhcWCAkJCQnAwAkJCQkJFRcWCAAAAAABAOcBMAMZAnsAKgAAAS4DMS4DIyIOAgcwDgIHDgEUFhceATI2PwEXHgEyNjc+ATQmJwMZCE1WRgQJCwsFBQsLCQRGVk0ICAgICAkTFRYKyMgKFhUTCQgICAgBgwhKU0IEBgUCAgUGBEJTSggIFRcWCQgJCAnAwAkICQgJFhcVCAAAAAACAFIAHwOuA3sAFAAhAAABIg4CFRQeAjMyPgI1NC4CIxMXBycHJzcnNxc3FwcCAFmddEREdJ1ZWZ10RER0nVlZnFidnVicnFidnVicA3tEdJ1ZWZ11Q0N1nVlZnXRE/lKdWJycWJ2cWZ2dWJ0AAAAAAQAAAAEAALaW/RZfDzz1AAsEAAAAAADO11qPAAAAAM7XWo8AAP/ABAADwAAAAAgAAgAAAAAAAAABAAADwP/AAAAEAAAAAAAEAAABAAAAAAAAAAAAAAAAAAAABwAAAAACAAAABAAAAAQAAAAEAADnBAAA5wQAAFIAAAAAAAoARgCEAMYBCAFAAAEAAAAHACsABQAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAOAK4AAQAAAAAAAQASAAAAAQAAAAAAAgAOAFUAAQAAAAAAAwASACgAAQAAAAAABAASAGMAAQAAAAAABQAWABIAAQAAAAAABgAJADoAAQAAAAAACgAoAHUAAwABBAkAAQASAAAAAwABBAkAAgAOAFUAAwABBAkAAwASACgAAwABBAkABAASAGMAAwABBAkABQAWABIAAwABBAkABgASAEMAAwABBAkACgAoAHUAYwByAGIALQBpAGMAbwBuAHMAVgBlAHIAcwBpAG8AbgAgADAALgAwAGMAcgBiAC0AaQBjAG8AbgBzY3JiLWljb25zAGMAcgBiAC0AaQBjAG8AbgBzAFIAZQBnAHUAbABhAHIAYwByAGIALQBpAGMAbwBuAHMARwBlAG4AZQByAGEAdABlAGQAIABiAHkAIABJAGMAbwBNAG8AbwBuAAADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
 .carbon-required { color: #c31d1d; font-weight: bold; text-shadow: 0 0 5px #c31d1d; }
 
 .carbon-field .regular-text { width: 25em; }
 .carbon-field textarea { height: 5em; }
 
 .carbon-group-row td { background: #FCFCFC; }
+.carbon-group-row > td, .carbon-group-row > th { border-top: 1px solid #FFF; border-bottom: 1px solid #E0E0E0; }
 .carbon-empty-row td { background: #FCFCFC; padding: 15px 20px !important; }
 .carbon-group-preview { display: none; }
 
 .carbon-view_image { width: auto; height: auto; max-width: 200px; max-height: 100px; margin: 3px; border: 1px solid #e8e8e8; box-shadow: 0 1px 3px rgba(0,0,0,.3); }
 .carbon-view_image.blank { height: auto; margin: 0; border: 0 none; box-shadow: 0 0; }
 .carbon-preview { float: left; position: relative; }
-.carbon-preview .carbon-file-remove { position: absolute; top: 0; right: 0; cursor: pointer; }
+.carbon-preview .carbon-file-remove { position: absolute; top: 0; right: 0; width: 22px; height: 22px; cursor: pointer; }
+.carbon-preview .carbon-file-remove:before { content: "\e604"; background: #FFF; border-radius: 50%; color: red; color: #C00; font: normal normal normal 22px/1 'crb-icons'; speak: none; text-transform: none; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
 .carbon-attachment-title,
 .carbon-attachment-url { display: block; margin: 3px 0 0; word-break: break-all; }
@@ -78,9 +92,21 @@ ul.carbon-radio-list input { width: auto; margin-right:5px; }
 
 .carbon-subcontainer  { background: #E0E0E0 !important; }
 .carbon-subcontainer th { font-weight: normal; }
-.carbon-subcontainer .carbon-drag-handle { width: 20px !important; background: #f5f5f5; border-right: 1px solid #E0E0E0; text-align: center; cursor: move; }
+.carbon-subcontainer .carbon-drag-handle { width: 20px !important; padding: 0 !important; background: #f5f5f5; border-right: 1px solid #E0E0E0; text-align: center; vertical-align: middle !important; cursor: move; }
 .carbon-subcontainer .carbon-drag-handle span { display: block; background: url(images/icon-move.png) no-repeat center bottom; padding-bottom: 20px;}
+
 .carbon-subcontainer .carbon-btn-holder { position: relative; }
+.carbon-subcontainer .carbon-complex-action { position: absolute; top: 5px; right: 0; }
+.carbon-subcontainer .carbon-complex-action a { position: relative; display: inline-block; width: 22px; height: 22px; margin-right: 10px; color: transparent; font-size: 0; text-indent: -5000em; }
+.carbon-subcontainer .carbon-complex-action a:before { position: absolute; top: 0; left: 0; width: 22px; height: 22px; color: #000; font: normal normal normal 22px/1 'crb-icons';
+	speak: none; text-transform: none; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.carbon-subcontainer .carbon-complex-action a:hover:before { color: #36F; }
+.carbon-subcontainer .carbon-complex-action a.carbon-btn-duplicate:before { content: "\e600"; /* content: "\e601"; */ }
+.carbon-subcontainer .carbon-complex-action a.carbon-btn-collapse:before { content: "\e603"; }
+.carbon-subcontainer .minimized .carbon-complex-action a.carbon-btn-collapse:before { content: "\e602"; background: #36F; border-radius: 50%; color: #FFF; }
+.carbon-subcontainer .minimized .carbon-complex-action a.carbon-btn-collapse:hover:before { background: #69F; }
+.carbon-subcontainer .carbon-complex-action a.carbon-btn-remove:before { content: "\e604"; color: #C00; background: #FFF; border-radius: 50%; }
+
 .carbon-subcontainer .carbon-group-row.removed .carbon-drag-handle { background: #e74444; }
 .carbon-subcontainer .carbon-group-row.duplicated .carbon-drag-handle { background: #82c0ec; }
 .carbon-subcontainer .carbon-btn-dropdown { position: absolute; top: 2px; right: 2px; width: 22px; height: 0; padding-top: 22px; background: url(images/icon-dropdown.png) no-repeat top right; overflow: hidden; cursor: pointer; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }
