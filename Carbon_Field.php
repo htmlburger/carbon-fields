@@ -1435,16 +1435,16 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 		$query_string = '';
 		switch ($this->context) {
 			case 'CustomFields':
-				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->postmeta . ' WHERE meta_key = "' .  $wpdb->escape($this->name) . '"';
+				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->postmeta . ' WHERE meta_key = "' .  esc_sql($this->name) . '"';
 				break;
 			case 'TermMeta':
-				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->termmeta . ' WHERE meta_key = "' .  $wpdb->escape($this->name) . '"';
+				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->termmeta . ' WHERE meta_key = "' .  esc_sql($this->name) . '"';
 				break;
 			case 'ThemeOptions':
-				$query_string = 'SELECT option_value AS sidebar FROM ' . $wpdb->options . ' WHERE option_name = "' .  $wpdb->escape($this->name) . '"';
+				$query_string = 'SELECT option_value AS sidebar FROM ' . $wpdb->options . ' WHERE option_name = "' .  esc_sql($this->name) . '"';
 				break;
 			case 'UserMeta':
-				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->usermeta . ' WHERE meta_key = "' .  $wpdb->escape($this->name) . '"';
+				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->usermeta . ' WHERE meta_key = "' .  esc_sql($this->name) . '"';
 				break;
 		}
 
