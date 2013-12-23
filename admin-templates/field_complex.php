@@ -102,9 +102,10 @@
 
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="" />
 				<div class="carbon-btn-holder">
-					<div class="carbon-btn-dropdown">
-						<a class="carbon-btn-duplicate" href="#" data-action="duplicate">Clone</a>
-						<a class="carbon-btn-remove" href="#" data-action="remove">Remove</a>
+					<div class="carbon-complex-action">
+						<a class="carbon-btn-collapse" href="#" data-action="toggle-minimize" title="<?php esc_attr_e('Collapse/Expand', 'crb'); ?>"><?php _e('Collapse/Expand', 'crb'); ?></a>
+						<a class="carbon-btn-duplicate" href="#" data-action="duplicate" title="<?php esc_attr_e('Clone', 'crb'); ?>"><?php _e('Clone', 'crb'); ?></a>
+						<a class="carbon-btn-remove" href="#" data-action="remove" title="<?php esc_attr_e('Remove', 'crb'); ?>"><?php _e('Remove', 'crb'); ?></a>
 					</div>
 				</div>
 				
