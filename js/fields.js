@@ -764,6 +764,11 @@ jQuery(function($) {
 	}
 
 	function complex_duplicate_row(field, row) {
+		if ( field.max_rows > 0 && field.max_rows <= field.num_rows ) {
+			alert('Cannot create more than ' + field.num_rows + ' rows');
+			return;
+		};
+
 		// Remove fields because we want to clone a pure version of the original row
 		remove_fields(row);
 		new_row = row.clone();
