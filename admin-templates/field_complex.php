@@ -20,7 +20,9 @@
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="<?php echo $group_name ?>" />
 				<div class="carbon-btn-holder">
 					<div class="carbon-complex-action">
-						<a class="carbon-btn-collapse" href="#" data-action="toggle-minimize" title="<?php esc_attr_e('Collapse/Expand', 'crb'); ?>"><?php _e('Collapse/Expand', 'crb'); ?></a>
+						<?php if ( count($fields) > 1 ): ?>
+							<a class="carbon-btn-collapse" href="#" data-action="toggle-minimize" title="<?php esc_attr_e('Collapse/Expand', 'crb'); ?>"><?php _e('Collapse/Expand', 'crb'); ?></a>
+						<?php endif ?>
 						<a class="carbon-btn-duplicate" href="#" data-action="duplicate" title="<?php esc_attr_e('Clone', 'crb'); ?>"><?php _e('Clone', 'crb'); ?></a>
 						<a class="carbon-btn-remove" href="#" data-action="remove" title="<?php esc_attr_e('Remove', 'crb'); ?>"><?php _e('Remove', 'crb'); ?></a>
 					</div>
@@ -96,6 +98,7 @@
 	<?php 
 	$index = '__ei__';
 	foreach ($this->groups as $group): ?>
+		<?php $fields = $group->get_fields(); ?>
 		<tr class="carbon-group-preview carbon-group-<?php echo $group->get_name() ?>">
 			<td class="carbon-drag-handle"><span></span></td>
 			<td>
@@ -103,7 +106,9 @@
 				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="" />
 				<div class="carbon-btn-holder">
 					<div class="carbon-complex-action">
-						<a class="carbon-btn-collapse" href="#" data-action="toggle-minimize" title="<?php esc_attr_e('Collapse/Expand', 'crb'); ?>"><?php _e('Collapse/Expand', 'crb'); ?></a>
+						<?php if ( count($fields) > 1 ): ?>
+							<a class="carbon-btn-collapse" href="#" data-action="toggle-minimize" title="<?php esc_attr_e('Collapse/Expand', 'crb'); ?>"><?php _e('Collapse/Expand', 'crb'); ?></a>
+						<?php endif ?>
 						<a class="carbon-btn-duplicate" href="#" data-action="duplicate" title="<?php esc_attr_e('Clone', 'crb'); ?>"><?php _e('Clone', 'crb'); ?></a>
 						<a class="carbon-btn-remove" href="#" data-action="remove" title="<?php esc_attr_e('Remove', 'crb'); ?>"><?php _e('Remove', 'crb'); ?></a>
 					</div>
@@ -112,9 +117,7 @@
 
 				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
 					<table class="layout-<?php echo $this->layout ?>">
-						<?php 
-						$fields = $group->get_fields();
-						foreach ($fields as $field): 
+						<?php foreach ($fields as $field): 
 							$old_name = $field->get_name();
 							$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
 						?>

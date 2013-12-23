@@ -597,7 +597,7 @@ jQuery(function($) {
 			field_obj.empty_field_text.show();
 		};
 		
-		$('tr.carbon-group-row').each(function () {
+		$('tr.carbon-group-row[id]').each(function () {
 			if (getUserSetting($(this).attr('id').replace(/[^a-zA-Z0-9_]/, '')) == 'minimized') {
 				$(this).addClass('minimized');
 			}
