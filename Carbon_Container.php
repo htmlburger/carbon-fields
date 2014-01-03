@@ -405,11 +405,11 @@ abstract class Carbon_Container {
 	}
 
 	static function admin_hook_scripts() {
-		wp_enqueue_script('carbon_containers', CARBON_PLUGIN_URL . '/js/containers.js');
+		wp_enqueue_script('carbon_containers', CARBON_PLUGIN_URL . '/js/containers.js', array('jquery'), '0.4.1');
 	}
 
 	static function admin_hook_styles() {
-		wp_enqueue_style('carbon_containers', CARBON_PLUGIN_URL . '/css/containers.css');
+		wp_enqueue_style('carbon_containers', CARBON_PLUGIN_URL . '/css/containers.css', array(), '0.4.1');
 	}
 
 } // END Carbon_Container 

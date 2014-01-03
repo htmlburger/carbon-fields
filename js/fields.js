@@ -24,7 +24,16 @@ jQuery(function($) {
 				carbon_log_error("Couldn't render a field: " + (e.message || e) );
 			}
 		});
+		
+		$('table.layout-table em.help-text').each(function () {
+			var fileField = $(this).closest('tr').find('td div.carbon-file');
+			
+			if (fileField.length) {
+				$(this).insertBefore(fileField.find('div.carbon-description')).wrap('<div class="help-text" />');
+			}
+		});
 	}
+	
 	function remove_fields(context) {
 		if ( !context ) {
 			return;
@@ -67,7 +76,7 @@ jQuery(function($) {
 			
 			if (typeof(crb_media_types[element.data('type')] == 'undefined')) {
 				crb_media_types[element.data('type')] = wp.media.frames.crb_media_field = wp.media({
-					title: window_label ? window_label : meta_image.title,
+					title: window_label ? window_label : crbl10n.title,
 					library: { type: file_type }, // autio, video, image
 					button: { text: button_label },
 					multiple: false
@@ -317,7 +326,7 @@ jQuery(function($) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					field_obj.update_marker_position(results[0].geometry.location);
 				} else {
-					alert("Geocode was not successful for the following reason: " + status);
+					alert(crbl10n.geocode_not_successful + status);
 				}
 			});
 		};
@@ -412,7 +421,7 @@ jQuery(function($) {
 			values.push(parseInt(this.value));
 		});
 
-		left_list.find('a').live('click', function() {
+		left_list.find('a').live('click touchstart', function() {
 			var th = $(this),
 				id = th.data('post_id'),
 				title = th.html(),
@@ -423,7 +432,7 @@ jQuery(function($) {
 			};
 
 			if ( max_values > 0 && values.length == max_values ) {
-				alert('Maximum number of items reached ( ' + max_values + ' items )');
+				alert(crbl10n.max_num_items_reached.replace('%s', max_values));
 				return false;
 			};
 
@@ -706,7 +715,7 @@ jQuery(function($) {
 		var sample_row, new_row, field_name_regex;
 
 		if ( field.max_rows > 0 && field.max_rows <= field.num_rows ) {
-			alert('Maximum number of rows reached ( ' + field.num_rows + ' rows )');
+			alert(crbl10n.max_num_rows_reached.replace('%s', field.num_rows));
 			return;
 		};
 
@@ -765,7 +774,7 @@ jQuery(function($) {
 
 	function complex_duplicate_row(field, row) {
 		if ( field.max_rows > 0 && field.max_rows <= field.num_rows ) {
-			alert('Cannot create more than ' + field.num_rows + ' rows');
+			alert(crbl10n.cannot_create_more_rows.replace('%s', field.num_rows));
 			return;
 		};
 

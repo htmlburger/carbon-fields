@@ -195,7 +195,7 @@ class Carbon_Field_Complex extends Carbon_Field {
 			$group_fields = $group->get_fields();
 			foreach ($group_fields as $field) {
 				$field_names[] = $field->get_name();
-				$field->set_value($field->default_value);
+				$field->set_value($field->get_default_value());
 			}
 		}
 

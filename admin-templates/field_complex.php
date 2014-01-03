@@ -1,6 +1,6 @@
-<table class="carbon-subcontainer <?php echo $container_tag_class_name ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
+<table class="carbon-subcontainer <?php echo $container_tag_class_name . ' layout-' . $this->layout; ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
 	
-	<tr class="carbon-empty-row" style="display: none">
+	<tr class="carbon-row carbon-empty-row" style="display: none">
 		<td colspan="2">
 			<?php
 			printf(__('There are no %s yet. Click <a href="#">here</a> to add one.', 'crb'), $this->labels['plural_name']);
@@ -14,21 +14,14 @@
 			$group_name = $fields['type'];
 			unset($fields['type']);
 		?>
-		<tr id="carbon-<?php echo $this->get_name() . '-' . $index; ?>-complex-container" class="carbon-group-row"> <!-- .minimized -->
+		<tr id="carbon-<?php echo $this->get_name() . '-' . $index; ?>-complex-container" class="carbon-row carbon-group-row"> <!-- .minimized -->
 			<td class="carbon-drag-handle"><span><?php echo ($fields_num+1) ?></span></td>
 			<td class="carbon-complex-entry-content">
-				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="<?php echo $group_name ?>" />
-				<div class="carbon-btn-holder">
-					<div class="carbon-complex-action">
-						<?php if ( count($fields) > 1 ): ?>
-							<a class="carbon-btn-collapse" href="#" data-action="toggle-minimize" title="<?php esc_attr_e('Collapse/Expand', 'crb'); ?>"><?php _e('Collapse/Expand', 'crb'); ?></a>
-						<?php endif ?>
-						<a class="carbon-btn-duplicate" href="#" data-action="duplicate" title="<?php esc_attr_e('Clone', 'crb'); ?>"><?php _e('Clone', 'crb'); ?></a>
-						<a class="carbon-btn-remove" href="#" data-action="remove" title="<?php esc_attr_e('Remove', 'crb'); ?>"><?php _e('Remove', 'crb'); ?></a>
-					</div>
-				</div>
-				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
-					<table class="layout layout-<?php echo $this->layout ?>">
+				<?php if ( $this->layout == self::LAYOUT_TABLE ):
+					echo '<input type="hidden" name="' . $this->get_name() . '[' . $index . '][group]' . '" value="' . $group_name . '" />';
+					include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'complex-button-holder.php');
+					?>
+					<table class="fixed layout layout-<?php echo $this->layout ?>">
 						<?php foreach ($fields as $field): 
 							$old_name = $field->get_name();
 							$old_id = $field->get_id();
@@ -63,7 +56,7 @@
 						endforeach ?>
 					</table>
 				<?php else: ?>
-					<table class="layout layout-<?php echo $this->layout ?>">
+					<table class="fixed layout layout-<?php echo $this->layout ?>">
 						<tr>
 							<?php foreach ($fields as $field): 
 								$old_name = $field->get_name();
@@ -90,6 +83,14 @@
 					</table>
 				<?php endif; ?>
 			</td>
+			<?php
+			if ($this->layout == self::LAYOUT_LIST) {
+				echo '<td class="carbon-action-col">';
+				echo '<input type="hidden" name="' . $this->get_name() . '[' . $index . '][group]' . '" value="' . $group_name . '" />';
+				include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'complex-button-holder.php');
+				echo '</td>';
+			}
+			?>
 		</tr>
 	<?php $index ++; endforeach ?>
 
@@ -102,20 +103,10 @@
 		<tr class="carbon-group-preview carbon-group-<?php echo $group->get_name() ?>">
 			<td class="carbon-drag-handle"><span></span></td>
 			<td>
-
-				<input type="hidden" name="<?php echo $this->get_name() . '[' . $index . '][group]' ?>" value="" />
-				<div class="carbon-btn-holder">
-					<div class="carbon-complex-action">
-						<?php if ( count($fields) > 1 ): ?>
-							<a class="carbon-btn-collapse" href="#" data-action="toggle-minimize" title="<?php esc_attr_e('Collapse/Expand', 'crb'); ?>"><?php _e('Collapse/Expand', 'crb'); ?></a>
-						<?php endif ?>
-						<a class="carbon-btn-duplicate" href="#" data-action="duplicate" title="<?php esc_attr_e('Clone', 'crb'); ?>"><?php _e('Clone', 'crb'); ?></a>
-						<a class="carbon-btn-remove" href="#" data-action="remove" title="<?php esc_attr_e('Remove', 'crb'); ?>"><?php _e('Remove', 'crb'); ?></a>
-					</div>
-				</div>
-				
-
-				<?php if ( $this->layout == self::LAYOUT_TABLE ): ?>
+				<?php if ( $this->layout == self::LAYOUT_TABLE ):
+					echo '<input type="hidden" name="' . $this->get_name() . '[' . $index . '][group]' . '" value="' . $group_name . '" />';
+					include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'complex-button-holder.php');
+					?>
 					<table class="layout-<?php echo $this->layout ?>">
 						<?php foreach ($fields as $field): 
 							$old_name = $field->get_name();
@@ -171,6 +162,14 @@
 					</table>
 				<?php endif; ?>
 			</td>
+			<?php
+			if ($this->layout == self::LAYOUT_LIST) {
+				echo '<td class="carbon-action-col">';
+				echo '<input type="hidden" name="' . $this->get_name() . '[' . $index . '][group]' . '" value="' . $group_name . '" />';
+				include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'complex-button-holder.php');
+				echo '</td>';
+			}
+			?>
 		</tr>
 	<?php endforeach; ?>
 
@@ -187,8 +186,6 @@
 					<?php endforeach; ?>
 				</ul>
 			</div>
-
-
 		</td>
 	</tr>
 </table>

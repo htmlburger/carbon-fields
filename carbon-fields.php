@@ -2,9 +2,9 @@
 /*
 Plugin Name: Carbon Fields
 Description: Provides additional custom fields for posts, categories, users, widgets and more
-Version: 0.4
+Version: 0.4.1
 Requires at least: 3.5
-Tested up to: 3.7.1
+Tested up to: 3.8
 */
 
 define('CARBON_PLUGIN_ROOT', dirname(__FILE__));

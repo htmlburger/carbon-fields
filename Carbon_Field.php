@@ -544,17 +544,20 @@ class Carbon_Field {
 
 	static function admin_hook_scripts() {
 		wp_enqueue_media();
-		wp_enqueue_script('carbon_fields', CARBON_PLUGIN_URL . '/js/fields.js');
-		wp_localize_script( 'carbon_fields', 'meta_image',
+		wp_enqueue_script('carbon_fields', CARBON_PLUGIN_URL . '/js/fields.js', array('jquery', 'farbtastic', 'jquery-ui-datepicker'), '0.4.1');
+		wp_localize_script( 'carbon_fields', 'crbl10n',
 			array(
 				'title' => __('Files', 'crb'),
-				'button' => __('Select File', 'crb'),
+				'geocode_not_successful' => __('Geocode was not successful for the following reason: ', 'crb'),
+				'max_num_items_reached' => __('Maximum number of items reached (%s items)', 'crb'),
+				'max_num_rows_reached' => __('Maximum number of rows reached (%s rows)', 'crb'),
+				'cannot_create_more_rows' => __('Cannot create more than %s rows', 'crb')
 			)
 		);
 	}
 
 	static function admin_hook_styles() {
-		wp_enqueue_style('carbon_fields', CARBON_PLUGIN_URL . '/css/fields.css');
+		wp_enqueue_style('carbon_fields', CARBON_PLUGIN_URL . '/css/fields.css', array(), '0.4.1');
 		
 		wp_enqueue_style('thickbox');
 	}
@@ -646,12 +649,7 @@ class Carbon_Field_Date extends Carbon_Field {
 		global $wp_version;
 
 		if (defined('WP_ADMIN') && WP_ADMIN) {
-			if (version_compare($wp_version, '3.4') >= 0) {
-				wp_enqueue_script('jquery-ui-datepicker');
-			} else {
-				wp_enqueue_script('carbon-jquery-ui-datepicker', CARBON_PLUGIN_URL . '/js/jquery-ui.js');
-			}
-			
+			wp_enqueue_script('jquery-ui-datepicker');
 			wp_enqueue_style('carbon-jquery-ui', CARBON_PLUGIN_URL . '/css/jquery-ui.css');
 		}
 		Carbon_Field::init();
@@ -660,7 +658,7 @@ class Carbon_Field_Date extends Carbon_Field {
 	function render() {
 		echo '
 		<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-datepicker"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
-		<a class="carbon-datepicker-trigger hide-if-no-js"></a>
+		<span class="carbon-datepicker-trigger button hide-if-no-js">' . __('Date', 'crb') . '</span>
 		';
 	}
 }
@@ -680,7 +678,7 @@ class Carbon_Field_Color extends Carbon_Field {
 		<div class="carbon-color-row">
 			<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-color" ' . ($this->required ? 'data-carbon-required="true"': '') . ' />
 			<a class="carbon-color-preview hide-if-no-js"></a>
-			<input type="button" class="pickcolor button hide-if-no-js" value="' . __('Select a Color', 'crb') . '">
+			<span class="pickcolor button hide-if-no-js">' . __('Select a Color', 'crb') . '</span>
 			<div class="carbon-color-container hide-if-no-js"></div>
 		</div>';
 	}
@@ -782,7 +780,7 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 	protected $address = '';
 	
 	function render() {
-		echo __('Locate Address on the map', 'crb') . ': <input type="text" name="' . esc_attr($this->get_name()) . '[address]" value="' . esc_attr($this->address) . '" class="regular-text address" /><input type="button" class="address-search-btn button" value="Find">';
+		echo '<p>' . __('Locate Address on the map', 'crb') . ': <input type="text" name="' . esc_attr($this->get_name()) . '[address]" value="' . esc_attr($this->address) . '" class="regular-text address" /><span class="address-search-btn button">' . __('Find', 'crb') . '</span></p>';
 
 		echo '
 		<input type="text" name="' . $this->get_name() . '[coordinates]" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_lng) . '"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
@@ -982,7 +980,7 @@ class Carbon_Field_Separator extends Carbon_Field {
 	function get_label() {
 		$label = parent::get_label();
 
-		return '<h3>' . $label . '</h3>';
+		return '<h2>' . $label . '</h2>';
 	}
 
 	function load() {
@@ -1250,33 +1248,23 @@ class Carbon_Field_File extends Carbon_Field {
 				class="regular-text carbon-file-field" ' . ($this->required ? 'data-carbon-required="true"': '') . '
 				'.($this->value_type=='id' ? 'style="display:none"' : '').'
 			/>';
-		echo '<input 
-				id="c2_open_media' . str_replace('-', '_', $this->id) .  '" 
-				type="button" 
-				class="button c2_open_media" 
-				value="'.$this->button_label.'" 
+		
+		echo '<span 
+				id="c2_open_media' . str_replace('-', '_', $this->id) .  '"
+				class="button c2_open_media"
 				data-window-label="'.$this->window_label.'"
 				data-window-button-label="'.$this->window_button_label.'"
 				data-type="' . $this->field_type . '"
 				data-value-type="'.$this->value_type.'"
-			/>';
-
+			>' . $this->button_label . '</span>';
+		
 		echo $this->description();
-
-		if( !empty( $this->help_text ) ) {
-			echo '<div class="help-text"><em>' . $this->help_text . '</em></div>';
-			echo '<div class="cl"></div>';
-		}
 	}
 	
 	function description() {
 		$description = '<a href="' . $this->value . '" target="_blank" class="carbon-view_file" style="' . (!empty($this->value) ? '' : 'display:none;' ) . '" >' . __('View File', 'crb') . '</a>';
 		
 		return apply_filters('carbon_field_' . $this->type . '_description', '<div class="carbon-description">' . $description . '</div>');
-	}
-
-	function get_help_text() {
-		return '';
 	}
 }
 
