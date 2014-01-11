@@ -658,7 +658,7 @@ class Carbon_Field_Date extends Carbon_Field {
 	function render() {
 		echo '
 		<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-datepicker"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
-		<span class="carbon-datepicker-trigger button hide-if-no-js">' . __('Date', 'crb') . '</span>
+		<span class="carbon-datepicker-trigger button icon-button hide-if-no-js">' . __('Date', 'crb') . '</span>
 		';
 	}
 }
@@ -678,7 +678,7 @@ class Carbon_Field_Color extends Carbon_Field {
 		<div class="carbon-color-row">
 			<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-color" ' . ($this->required ? 'data-carbon-required="true"': '') . ' />
 			<a class="carbon-color-preview hide-if-no-js"></a>
-			<span class="pickcolor button hide-if-no-js">' . __('Select a Color', 'crb') . '</span>
+			<span class="pickcolor button icon-button hide-if-no-js">' . __('Select a Color', 'crb') . '</span>
 			<div class="carbon-color-container hide-if-no-js"></div>
 		</div>';
 	}
@@ -780,7 +780,7 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 	protected $address = '';
 	
 	function render() {
-		echo '<p>' . __('Locate Address on the map', 'crb') . ': <input type="text" name="' . esc_attr($this->get_name()) . '[address]" value="' . esc_attr($this->address) . '" class="regular-text address" /><span class="address-search-btn button">' . __('Find', 'crb') . '</span></p>';
+		echo '<p>' . __('Locate Address on the map', 'crb') . ': <input type="text" name="' . esc_attr($this->get_name()) . '[address]" value="' . esc_attr($this->address) . '" class="regular-text address" /><span class="address-search-btn button icon-button">' . __('Find', 'crb') . '</span></p>';
 
 		echo '
 		<input type="text" name="' . $this->get_name() . '[coordinates]" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_lng) . '"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
@@ -1251,7 +1251,7 @@ class Carbon_Field_File extends Carbon_Field {
 		
 		echo '<span 
 				id="c2_open_media' . str_replace('-', '_', $this->id) .  '"
-				class="button c2_open_media"
+				class="button c2_open_media button icon-button"
 				data-window-label="'.$this->window_label.'"
 				data-window-button-label="'.$this->window_button_label.'"
 				data-type="' . $this->field_type . '"
@@ -1287,7 +1287,7 @@ class Carbon_Field_Attachment extends Carbon_Field_File {
 		if ( $is_image ) {
 			$description .= '<div class="carbon-preview">';
 			$description .= '<img src="' . $thumbnail_src[0] . '" alt="" class="carbon-view_image"/>';
-			$description .= '<span class="carbon-file-remove"></span>';
+			$description .= '<span class="carbon-file-remove button icon-button"></span>';
 			$description .= '</div>';
 		} else {
 			$description .= '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" class="carbon-view_image blank"/>';

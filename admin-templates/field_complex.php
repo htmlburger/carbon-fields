@@ -104,7 +104,7 @@
 			<td class="carbon-drag-handle"><span></span></td>
 			<td>
 				<?php if ( $this->layout == self::LAYOUT_TABLE ):
-					echo '<input type="hidden" name="' . $this->get_name() . '[' . $index . '][group]' . '" value="' . $group_name . '" />';
+					echo '<input type="hidden" name="' . $this->get_name() . '[' . $index . '][group]' . '" value="" />';
 					include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'complex-button-holder.php');
 					?>
 					<table class="layout-<?php echo $this->layout ?>">
