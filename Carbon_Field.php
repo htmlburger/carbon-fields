@@ -656,10 +656,8 @@ class Carbon_Field_Date extends Carbon_Field {
 	}
 
 	function render() {
-		echo '
-		<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-datepicker"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
-		<span class="carbon-datepicker-trigger button icon-button hide-if-no-js">' . __('Date', 'crb') . '</span>
-		';
+		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-datepicker"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>';
+		echo '<span class="carbon-datepicker-trigger button icon-button hide-if-no-js">' . __('Date', 'crb') . '</span>';
 	}
 }
 
@@ -1134,7 +1132,11 @@ class Carbon_Field_Relationship extends Carbon_Field {
 					$type_title = isset($post_types[$type_title]->labels->singular_name) ? $post_types[$type_title]->labels->singular_name: $type_title;
 					?>
 						<li <?php if(in_array($post->ID, $this->value)) echo 'class="inactive"' ?>>
-							<a href="#" data-post_id="<?php echo $post->ID ?>"><?php echo $post->post_title ?> <em><?php echo $type_title ?></em> <span><!-- plus --></span></a>
+							<a href="#" data-post_id="<?php echo $post->ID ?>">
+								<em><?php echo $type_title ?></em>
+								<span><!-- plus --></span>
+								<?php echo $post->post_title ?>
+							</a>
 						</li>
 					<?php endforeach ?>
 					<li class="load-more"><span class="spinner"></span></li>
@@ -1142,6 +1144,8 @@ class Carbon_Field_Relationship extends Carbon_Field {
 			</div>
 
 			<div class="relationship-right">
+				<label><?php _e('Associated:', 'crb'); ?></label>
+				
 				<ul class="relationship-list">
 					<?php
 					foreach ($this->value as $post_id): 

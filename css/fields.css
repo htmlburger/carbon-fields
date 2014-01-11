@@ -101,15 +101,16 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 .carbon-relationship ul li a:hover span { display: block; }
 .carbon-relationship .widefat { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
 .carbon-relationship .widefat th { padding: 5px; border-bottom: 0 none; }
-.carbon-relationship .widefat input { width: 100%; margin: 0; font-size: 12px; line-height: 13px; border-radius: 13px; font-family: sans-serif; padding: 5px 9px !important; }
+.carbon-relationship .widefat input { width: 100%; margin: 0; font-size: 12px; line-height: 15px; border-radius: 13px; font-family: sans-serif; padding: 5px 9px !important; }
 .mobile .carbon-relationship ul li a { padding: 7px; }
 
-.carbon-relationship .relationship-left { width: 50%; float: left; }
+.carbon-relationship .relationship-left { width: 48.5%; float: left; }
 .carbon-relationship .relationship-left ul { display: block; height: 150px; margin: 0; overflow: auto; border-top: 0 none; }
 .carbon-relationship .relationship-left ul a span { background: url(images/ui-icons_888888_256x240.png) no-repeat 0 -192px; }
 
-.carbon-relationship .relationship-right { width: 50%; float: left; }
-.carbon-relationship .relationship-right ul { height: 189px; margin: 0 0 0 20px; overflow: auto; }
+.carbon-relationship .relationship-right { width: 48.5%; float: right; }
+.carbon-relationship .relationship-right label { display: none; }
+.carbon-relationship .relationship-right ul { height: 199px; min-height: 199px; /* min-height set for touch devices */ margin: 0; overflow: auto; }
 .carbon-relationship .relationship-right ul a { cursor: move; }
 .carbon-relationship .relationship-right ul a span { background: url(images/ui-icons_888888_256x240.png) no-repeat -16px -192px; }
 
@@ -155,6 +156,8 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 .carbon-wysiwyg .mceIframeContainer { background:#fff; }
 .carbon-html ul { margin: 14px 28px; list-style-type: disc; }
 
+body.touchscreen .carbon-relationship .relationship-right ul { height: auto; }
+
 @media screen and (max-width: 1120px) {
 	.carbon-subcontainer.layout-table .carbon-complex-action { position: static; padding: 8px 0; float: right; }
 	.carbon-subcontainer .carbon-complex-action a { width: 26px; height: 26px; }
@@ -176,4 +179,12 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 	.carbon-field input.carbon-datepicker { width: calc(100% - 50px); }
 	
 	.carbon-field input.carbon-color { width: calc(100% - 100px); }
+}
+
+@media screen and (max-width: 600px) {
+	.carbon-relationship .relationship-left,
+	.carbon-relationship .relationship-right { width: auto; float: none; }
+	.carbon-relationship .relationship-right { padding-top: 10px; }
+	.carbon-relationship .relationship-right label { display: block; }
+	.carbon-relationship .relationship-right ul { min-height: 97px; }
 }

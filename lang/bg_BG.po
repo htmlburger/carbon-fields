@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Carbon Fields\n"
-"POT-Creation-Date: 2014-01-02 15:12+0200\n"
-"PO-Revision-Date: 2014-01-02 15:13+0200\n"
+"POT-Creation-Date: 2014-01-11 14:22+0200\n"
+"PO-Revision-Date: 2014-01-11 14:24+0200\n"
 "Last-Translator: Example <example@example.com>\n"
 "Language-Team:  <info@carbonfields.net>\n"
 "Language: en\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../Carbon_Field.php:550 ../Carbon_Field.php:1239
+#: ../Carbon_Field.php:550 ../Carbon_Field.php:1238
 msgid "Files"
 msgstr "Файлове"
 
@@ -39,27 +39,31 @@ msgstr "Достигнат е максималният брой редове (%s
 msgid "Cannot create more than %s rows"
 msgstr "Не може да се създадат повече от %s реда"
 
-#: ../Carbon_Field.php:686
+#: ../Carbon_Field.php:660
+msgid "Date"
+msgstr "Дата"
+
+#: ../Carbon_Field.php:679
 msgid "Select a Color"
 msgstr "Изберете цвят"
 
-#: ../Carbon_Field.php:788
+#: ../Carbon_Field.php:781
 msgid "Locate Address on the map"
 msgstr "Намери адреса на картата"
 
-#: ../Carbon_Field.php:788
+#: ../Carbon_Field.php:781
 msgid "Find"
 msgstr "Намери"
 
-#: ../Carbon_Field.php:865 ../Carbon_Field.php:900 ../Carbon_Field.php:1032
+#: ../Carbon_Field.php:858 ../Carbon_Field.php:893 ../Carbon_Field.php:1025
 msgid "no options"
 msgstr "няма опции"
 
-#: ../Carbon_Field.php:948
+#: ../Carbon_Field.php:941
 msgid "If you need to add scripts to your header, you should enter them here."
 msgstr "Ако се налага да добавите скриптове в хедъра ги въведете тук"
 
-#: ../Carbon_Field.php:965
+#: ../Carbon_Field.php:958
 msgid ""
 "If you need to add scripts to your footer (like Google Analytics tracking "
 "code), you should enter them in this box."
@@ -67,31 +71,35 @@ msgstr ""
 "Ако се налага да добавите скриптове във футъра (като Google Analytics) ги "
 "въведете тук"
 
-#: ../Carbon_Field.php:1055
+#: ../Carbon_Field.php:1048
 msgid "Show All Options"
 msgstr "Покажи всички"
 
-#: ../Carbon_Field.php:1130
+#: ../Carbon_Field.php:1123
 msgid "Search"
 msgstr "Търси"
 
-#: ../Carbon_Field.php:1237 ../Carbon_Field.php:1238
+#: ../Carbon_Field.php:1147
+msgid "Associated:"
+msgstr "Асоциирани:"
+
+#: ../Carbon_Field.php:1236 ../Carbon_Field.php:1237
 msgid "Select File"
 msgstr "Изберете файл"
 
-#: ../Carbon_Field.php:1276
+#: ../Carbon_Field.php:1269
 msgid "View File"
 msgstr "Прегледай файла"
 
-#: ../Carbon_Field.php:1328 ../Carbon_Field.php:1329
+#: ../Carbon_Field.php:1317 ../Carbon_Field.php:1318
 msgid "Select Image"
 msgstr "Изберете изображение"
 
-#: ../Carbon_Field.php:1330
+#: ../Carbon_Field.php:1319
 msgid "Images"
 msgstr "Изображения"
 
-#: ../Carbon_Field.php:1389
+#: ../Carbon_Field.php:1378
 msgid "Add New"
 msgstr "Добави нов"
 
@@ -103,6 +111,18 @@ msgstr "Запис"
 msgid "Entries"
 msgstr "Записи"
 
+#: ../admin-templates/complex-button-holder.php:4
+msgid "Collapse/Expand"
+msgstr "Скрий/Покажи"
+
+#: ../admin-templates/complex-button-holder.php:6
+msgid "Clone"
+msgstr "Дублирай"
+
+#: ../admin-templates/complex-button-holder.php:7
+msgid "Remove"
+msgstr "Изтрий"
+
 #: ../admin-templates/container-widget.php:4
 msgid "No options are available for this widget."
 msgstr "Тази джаджа няма настройки"
@@ -112,22 +132,7 @@ msgstr "Тази джаджа няма настройки"
 msgid "There are no %s yet. Click <a href=\"#\">here</a> to add one."
 msgstr "Все още няма %s. Кликнете <a href=\"#\">тук</a> за да добавите."
 
-#: ../admin-templates/field_complex.php:24
-#: ../admin-templates/field_complex.php:110
-msgid "Collapse/Expand"
-msgstr "Скрий/Покажи"
-
-#: ../admin-templates/field_complex.php:26
-#: ../admin-templates/field_complex.php:112
-msgid "Clone"
-msgstr "Дублирай"
-
-#: ../admin-templates/field_complex.php:27
-#: ../admin-templates/field_complex.php:113
-msgid "Remove"
-msgstr "Изтрий"
-
-#: ../admin-templates/field_complex.php:181
+#: ../admin-templates/field_complex.php:180
 #, php-format
 msgid "Add %s"
 msgstr "Добави %s"

@@ -7,9 +7,9 @@ body.no-js .carbon-container { display: none; }
 .carbon-container td { padding: 10px; margin: 0; }
 .carbon-container td label { font-weight: bold;  }
 
-.carbon-container.Carbon_Container_ThemeOptions th label { display: block; }
+.Carbon_Container_ThemeOptions th label,
+.Carbon_Container_CustomFields td label { display: block; }
 
-.carbon-container.Carbon_Container_CustomFields td label { display: block; }
 .carbon-container.Carbon_Container_CustomFields td,
 .carbon-container.Carbon_Container_CustomFields th { padding: 10px; border-bottom: 1px solid #e8e8e8; }
 .carbon-container.Carbon_Container_CustomFields td.mceIframeContainer,

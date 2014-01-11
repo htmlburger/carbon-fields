@@ -1,4 +1,8 @@
 jQuery(function($) {
+	if ('ontouchstart' in document.documentElement) {
+		$('body').addClass('touchscreen');
+	}
+	
 	function init(context) {
 		var fields;
 
@@ -421,7 +425,7 @@ jQuery(function($) {
 			values.push(parseInt(this.value));
 		});
 
-		left_list.find('a').live('click touchstart', function() {
+		left_list.find('a').live('click', function() {
 			var th = $(this),
 				id = th.data('post_id'),
 				title = th.html(),
