@@ -52,18 +52,9 @@ body.no-js .carbon-container { display: none; }
 
 
 .carbon-container tr.carbon-separator {}
-.carbon-container tr.carbon-separator td{ padding:0; }
-.carbon-container tr.carbon-separator h3{ 
-	border:solid 1px #DDD; padding:7px 10px; margin:0; font-family:Georgia, serif; font-size:15px; line-height:18px; font-weight:normal; 
-	background-color:#EEE;
-	background-image:-ms-linear-gradient(bottom,#EEE,#F9F9F9);
-	background-image:-moz-linear-gradient(bottom,#EEE,#F9F9F9);
-	background-image:-o-linear-gradient(bottom,#EEE,#F9F9F9);
-	background-image:-webkit-gradient(linear,left bottom,left top,from(#EEE),to(#F9F9F9));
-	background-image:-webkit-linear-gradient(bottom,#EEE,#F9F9F9);
-	background-image:linear-gradient(bottom,#EEE,#F9F9F9);
-	border-radius:6px;
-}
+.carbon-container tr.carbon-separator td { padding:0; }
+.carbon-container tr.carbon-separator th { padding: 20px 0 0; }
+.carbon-container tr.carbon-separator h3 { font-weight: 400; font-size: 1.4em; }
 .carbon-container tr.carbon-separator .help-text { padding:5px 10px;}
 
 .carbon-container.Carbon_Container_CustomFields tr.carbon-separator td { border:0; }
