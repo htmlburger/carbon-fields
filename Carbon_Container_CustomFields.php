@@ -452,7 +452,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	 * @return object $this
 	 **/
 	function show_on_category($category_slug) {
-		return $this->show_on_taxonomy_term($category_slug, 'category');
+		return $this->show_on_taxonomy_term('category', $category_slug);
 	}
 	
 	/**
