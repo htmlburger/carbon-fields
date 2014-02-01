@@ -1255,7 +1255,7 @@ class Carbon_Field_File extends Carbon_Field {
 		
 		echo '<span 
 				id="c2_open_media' . str_replace('-', '_', $this->id) .  '"
-				class="button c2_open_media button icon-button"
+				class="button c2_open_media icon-button"
 				data-window-label="'.$this->window_label.'"
 				data-window-button-label="'.$this->window_button_label.'"
 				data-type="' . $this->field_type . '"
@@ -1291,7 +1291,7 @@ class Carbon_Field_Attachment extends Carbon_Field_File {
 		if ( $is_image ) {
 			$description .= '<div class="carbon-preview">';
 			$description .= '<img src="' . $thumbnail_src[0] . '" alt="" class="carbon-view_image"/>';
-			$description .= '<span class="carbon-file-remove button icon-button"></span>';
+			$description .= '<span class="carbon-file-remove icon-button"></span>';
 			$description .= '</div>';
 		} else {
 			$description .= '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" class="carbon-view_image blank"/>';

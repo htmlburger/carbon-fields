@@ -131,6 +131,7 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 
 .carbon-subcontainer  { background: #E0E0E0 !important; }
 .carbon-subcontainer th { font-weight: normal; }
+.carbon-subcontainer td { background: #FFF; }
 .carbon-subcontainer .carbon-drag-handle { width: 20px !important; padding: 0 !important; background: #F5F5F5; border-right: 1px solid #E0E0E0; text-align: center; vertical-align: middle !important; cursor: move; }
 .carbon-subcontainer .carbon-drag-handle span { display: block; background: url(images/icon-move.png) no-repeat center bottom; padding-bottom: 20px;}
 .carbon-subcontainer .carbon-action-col { width: 25px !important; padding: 0 !important; background: #F5F5F5; border-left: 1px solid #E0E0E0; text-align: center; vertical-align: middle !important; }
