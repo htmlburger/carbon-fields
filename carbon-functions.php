@@ -44,6 +44,16 @@ function carbon_get_the_post_meta($name, $type = null) {
 function carbon_get_theme_option($name, $type = null) {
 	if ( $type == 'complex' ) {
 		return carbon_get_complex_fields('ThemeOptions', $name);
+	} else if ( $type == 'map' ) {
+		$raw_meta = get_option($name);
+		$coordinates = explode(',', $raw_meta);
+		
+		return array('lat'=>(float)$coordinates[0], 'lng'=>(float)$coordinates[1]);
+	} else if ( $type == 'map_with_address' ) {
+		$partial_meta = carbon_get_theme_option($name, 'map');
+		$partial_meta['address'] = get_option($name . '_address');
+		
+		return $partial_meta;
 	}
 
 	return get_option($name, true);

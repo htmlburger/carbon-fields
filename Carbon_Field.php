@@ -721,11 +721,11 @@ class Carbon_Field_Map extends Carbon_Field {
 			$lat = $lng = '';
 		}
 
-		$this->set_name($original_name . '_lat');
+		$this->set_name($original_name . '-lat');
 		$this->set_value($lat);
 		$this->store->save($this);
 
-		$this->set_name($original_name . '_lng');
+		$this->set_name($original_name . '-lng');
 		$this->set_value($lng);
 		$this->store->save($this);
 
@@ -740,12 +740,12 @@ class Carbon_Field_Map extends Carbon_Field {
 
 		$lat = $lng = '';
 
-		$this->set_name($original_name . '_lat');
+		$this->set_name($original_name . '-lat');
 		$this->store->load($this);
 		$lat = $this->get_value();
 
 
-		$this->set_name($original_name . '_lng');
+		$this->set_name($original_name . '-lng');
 		$this->store->load($this);
 		$lng = $this->get_value();
 
@@ -792,7 +792,7 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 		$original_name = $this->get_name();
 		$original_value = $this->get_value();
 
-		$this->set_name($original_name . '_address');
+		$this->set_name($original_name . '-address');
 		$this->set_value($this->address);
 		$this->store->save($this);
 
@@ -805,7 +805,7 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 	function load() {
 		$original_name = $this->get_name();
 		
-		$this->set_name($original_name . '_address');
+		$this->set_name($original_name . '-address');
 		$this->store->load($this);
 		$this->address = $this->get_value();
 		
