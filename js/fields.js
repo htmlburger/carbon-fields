@@ -416,6 +416,7 @@ jQuery(function($) {
 			post_type = container.data('post_type'),
 			max_values = container.data('max-values'),
 			left_list = container.find('.relationship-left .relationship-list'),
+			left_list_last_item = left_list.find('li:not(.load-more):last');
 			right_list = container.find('.relationship-right .relationship-list'),
 			search_box = container.find('.relationship-left thead input'),
 			values = [], // list of post IDs selected in the right pane
@@ -499,7 +500,7 @@ jQuery(function($) {
 			}
 
 			// Scrolled to bottom
-			if( th.scrollTop() + th.innerHeight() >= th.get(0).scrollHeight - th.find('li:not(.load-more):last').height() ) {
+			if( th.scrollTop() + th.innerHeight() >= th.get(0).scrollHeight - left_list_last_item.height() ) {
 				var paged = parseInt( container.attr('data-paged') );
 				
 				container.attr('data-paged', (paged + 1) );
@@ -563,6 +564,7 @@ jQuery(function($) {
 					});
 					
 					left_list.find('.load-more').before( html );
+					left_list_last_item = left_list.find('li:not(.load-more):last');
 					
 					// less than 10 results?
 					if( html.length < 10 ) {
