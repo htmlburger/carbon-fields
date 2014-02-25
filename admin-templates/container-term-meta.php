@@ -29,6 +29,7 @@ foreach ($this->fields as $field) {
 			<td>
 				<div class="carbon-field carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
 					<?php echo $field->render(); ?>
+					<br/>
 					<span class="description"><?php echo $field->get_help_text(); ?></span>
 				</div>
 			</td>
