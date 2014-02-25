@@ -499,7 +499,7 @@ jQuery(function($) {
 			}
 
 			// Scrolled to bottom
-			if( th.scrollTop() + th.innerHeight() >= th.get(0).scrollHeight ) {
+			if( th.scrollTop() + th.innerHeight() + 5 >= th.get(0).scrollHeight ) {
 				var paged = parseInt( container.attr('data-paged') );
 				
 				container.attr('data-paged', (paged + 1) );
