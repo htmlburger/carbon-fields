@@ -29,7 +29,7 @@ function carbon_get_post_meta($id, $name, $type = null) {
 		return array('lat'=>(float)$coordinates[0], 'lng'=>(float)$coordinates[1]);
 	} else if ( $type == 'map_with_address' ) {
 		$partial_meta = carbon_get_post_meta($id, $name, 'map');
-		$partial_meta['address'] = get_post_meta($id, $name . '_address', true);
+		$partial_meta['address'] = get_post_meta($id, $name . '-address', true);
 		
 		return $partial_meta;
 	}
@@ -51,7 +51,7 @@ function carbon_get_theme_option($name, $type = null) {
 		return array('lat'=>(float)$coordinates[0], 'lng'=>(float)$coordinates[1]);
 	} else if ( $type == 'map_with_address' ) {
 		$partial_meta = carbon_get_theme_option($name, 'map');
-		$partial_meta['address'] = get_option($name . '_address');
+		$partial_meta['address'] = get_option($name . '-address');
 		
 		return $partial_meta;
 	}
