@@ -14,7 +14,7 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 	public $settings = array(
 		'parent' => 'self',
 		'file' => '',
-		'permissions' => 'edit_themes'
+		'permissions' => 'manage_options'
 	);
 	
 	function __construct($title) {
