@@ -2,7 +2,6 @@
 
 add_action('admin_print_scripts', array('Carbon_Field', 'admin_hook_scripts'));
 add_action('admin_print_styles', array('Carbon_Field', 'admin_hook_styles'));
-add_action('wp_ajax_carbon_get_file_details', array('Carbon_Field_File', 'carbon_get_file_details'));
 add_action('wp_ajax_carbon_relationship_load_posts', array('Carbon_Field_Relationship', 'carbon_relationship_load_posts'));
 
 /**
