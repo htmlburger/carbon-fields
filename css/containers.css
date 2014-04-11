@@ -39,7 +39,7 @@ body.no-js .carbon-container { display: none; }
 
 .carbon-container .carbon-field textarea { width:100%; }
 
-.carbon-container .help-text { color:#666; }
+.help-text { display: block; padding: 2px 0; color: #666; }
 
 .carbon-container input.button { border-radius:3px;}
 .carbon-container a.button { padding-left:8px; padding-right:8px; border-radius:3px;}

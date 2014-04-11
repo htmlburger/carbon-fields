@@ -34,21 +34,32 @@
 							$field->set_id( $old_id . '-' . $id_salt );
 							$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
 						?>
-							<tr>
-								<th scope="row">
-									<label for="<?php echo $field->get_id() ?>"><?php
-									echo $field->get_label(); 
-									if ( $field->is_required() ) {
-										echo ' <span class="carbon-required">*</span>';
-									}
-									?></label>
-									<em class="help-text"><?php echo $field->get_help_text(); ?></em>
-								</th>
-								<td>
-									<div class="carbon-field carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
-										<?php echo $field->render(); ?>
-									</div>
-								</td>
+							<tr class="<?php echo implode( ' ', apply_filters( 'crb_complex_subrow_class', array( 'carbon-row', 'carbon-subrow', 'subrow-' . $field->get_type() ) ) ); ?>">
+								<?php if ($field->get_type() == 'separator'): ?>
+									<th scope="row" colspan="2">
+										<?php
+										echo $field->get_label(); 
+										if ( $field->is_required() ) {
+											echo ' <span class="carbon-required">*</span>';
+										}
+										?>
+									</th>
+								<?php else: ?>
+									<th scope="row">
+										<label for="<?php echo $field->get_id() ?>"><?php
+										echo $field->get_label(); 
+										if ( $field->is_required() ) {
+											echo ' <span class="carbon-required">*</span>';
+										}
+										?></label>
+										<em class="help-text"><?php echo $field->get_help_text(); ?></em>
+									</th>
+									<td>
+										<div class="carbon-field carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+											<?php echo $field->render(); ?>
+										</div>
+									</td>
+								<?php endif ?>
 							</tr>
 						<?php 
 							$field->set_name($old_name);
@@ -61,22 +72,34 @@
 							<?php foreach ($fields as $field): 
 								$old_name = $field->get_name();
 								$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
-							?>
-									<td>
-										<label for="<?php echo $field->get_id() ?>">
-											<?php
-												echo $field->get_label(); 
-												if ( $field->is_required() ) {
-													echo ' <span class="carbon-required">*</span>';
-												}
-											?>
-										</label>
-										<em class="help-text"><?php echo $field->get_help_text(); ?></em>
-										<div class="carbon-field carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
-											<?php echo $field->render(); ?>
-										</div>
-									</td>
-							<?php 
+								
+								echo '<td class="' . implode( ' ', apply_filters( 'crb_complex_col_class', array( 'carbon-col', 'col-' . $field->get_type() ) ) ) . '">';
+								
+								if ($field->get_type() == 'separator') {
+									echo $field->get_label();
+									
+									if ( $field->is_required() ) {
+										echo ' <span class="carbon-required">*</span>';
+									}
+								} else {
+									?>
+									<label for="<?php echo $field->get_id() ?>">
+										<?php
+											echo $field->get_label(); 
+											if ( $field->is_required() ) {
+												echo ' <span class="carbon-required">*</span>';
+											}
+										?>
+									</label>
+									<em class="help-text"><?php echo $field->get_help_text(); ?></em>
+									<div class="carbon-field carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+										<?php echo $field->render(); ?>
+									</div>
+									<?php
+								}
+								
+								echo '</td>';
+								
 								$field->set_name($old_name);
 							endforeach ?>
 						</tr>
@@ -107,55 +130,78 @@
 					echo '<input type="hidden" name="' . $this->get_name() . '[' . $index . '][group]' . '" value="" />';
 					include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'complex-button-holder.php');
 					?>
-					<table class="layout-<?php echo $this->layout ?>">
+					<table class="fixed layout layout-<?php echo $this->layout ?>">
 						<?php foreach ($fields as $field): 
 							$old_name = $field->get_name();
 							$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
 						?>
-							<tr>
-								<th scope="row">
-									<label for="<?php echo $field->get_id() ?>"><?php
-									echo $field->get_label(); 
-									if ( $field->is_required() ) {
-										echo ' <span class="carbon-required">*</span>';
-									}
-									?></label>
-									<em><?php echo $field->get_help_text(); ?></em>
-								</th>
-								<td>
-									<div class="carbon-field carbon-field-skip carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
-										<?php echo $field->render(); ?>
-									</div>
-								</td>
+							<tr class="<?php echo implode( ' ', apply_filters( 'crb_complex_subrow_class', array( 'carbon-row', 'carbon-subrow', 'subrow-' . $field->get_type() ) ) ); ?>">
+								<?php if ($field->get_type() == 'separator'): ?>
+									<th scope="row" colspan="2">
+										<?php
+										echo $field->get_label(); 
+										if ( $field->is_required() ) {
+											echo ' <span class="carbon-required">*</span>';
+										}
+										?>
+									</th>
+								<?php else: ?>
+									<th scope="row">
+										<label for="<?php echo $field->get_id() ?>"><?php
+										echo $field->get_label(); 
+										if ( $field->is_required() ) {
+											echo ' <span class="carbon-required">*</span>';
+										}
+										?></label>
+										<em class="help-text"><?php echo $field->get_help_text(); ?></em>
+									</th>
+									<td>
+										<div class="carbon-field carbon-field-skip carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+											<?php echo $field->render(); ?>
+										</div>
+									</td>
+								<?php endif ?>
 							</tr>
 						<?php 
 							$field->set_name($old_name);
 						endforeach ?>
 					</table>
 				<?php else: ?>
-					<table class="layout-<?php echo $this->layout ?>">
+					<table class="fixed layout layout-<?php echo $this->layout ?>">
 						<tr>
 							<?php 
 							$fields = $group->get_fields();
 							foreach ($fields as $field): 
 								$old_name = $field->get_name();
 								$field->set_name( $this->get_name() . '[' . $index . '][' . $field->get_name() . ']' );
-							?>
-									<td>
-										<label for="<?php echo $field->get_id() ?>">
-											<?php
-												echo $field->get_label(); 
-												if ( $field->is_required() ) {
-													echo ' <span class="carbon-required">*</span>';
-												}
-											?>
-										</label>
-										<em><?php echo $field->get_help_text(); ?></em>
-										<div class="carbon-field  carbon-field-skip carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
-											<?php echo $field->render(); ?>
-										</div>
-									</td>
-							<?php 
+								
+								echo '<td class="' . implode( ' ', apply_filters( 'crb_complex_subrow_class', array( 'carbon-col', 'col-' . $field->get_type() ) ) ) . '">';
+								
+								if ($field->get_type() == 'separator') {
+									echo $field->get_label(); 
+									
+									if ( $field->is_required() ) {
+										echo ' <span class="carbon-required">*</span>';
+									}
+								} else {
+									?>
+									<label for="<?php echo $field->get_id() ?>">
+										<?php
+											echo $field->get_label(); 
+											if ( $field->is_required() ) {
+												echo ' <span class="carbon-required">*</span>';
+											}
+										?>
+									</label>
+									<em class="help-text"><?php echo $field->get_help_text(); ?></em>
+									<div class="carbon-field carbon-field-skip carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+										<?php echo $field->render(); ?>
+									</div>
+									<?php
+								}
+								
+								echo '</td>';
+								
 								$field->set_name($old_name);
 							endforeach ?>
 						</tr>
@@ -174,7 +220,7 @@
 	<?php endforeach; ?>
 
 	<tr class="carbon-actions">
-		<td colspan="2">
+		<td colspan="<?php echo $this->layout == self::LAYOUT_TABLE ? '2' : '3'; ?>">
 			<div class="carbon-button">
 				<a href="#" data-action="add" class="button">
 					<?php printf(__('Add %s', 'crb'), $this->labels['singular_name']); ?>

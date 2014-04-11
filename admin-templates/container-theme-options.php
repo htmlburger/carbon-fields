@@ -34,7 +34,7 @@
 							<?php 
 							echo $field->get_label(); 
 							?>
-							<?php if( !empty( $help_text ) ) :  ?><div class="help-text"><em><?php echo $help_text; ?></em></div> <?php endif; ?>
+							<?php if( !empty( $help_text ) ) :  ?><em class="help-text"><?php echo $help_text; ?></em><?php endif; ?>
 						</th>
 					</tr>
 					<?php
@@ -56,7 +56,7 @@
 							</div>
 							<?php
 							if ( !empty( $help_text ) ) {
-								echo '<div class="help-text"><em>' . $help_text . '</em></div>';
+								echo '<em class="help-text">' . $help_text . '</em>';
 							}
 							?>
 						</td>

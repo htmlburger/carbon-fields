@@ -977,7 +977,7 @@ class Carbon_Field_Separator extends Carbon_Field {
 	function get_label() {
 		$label = parent::get_label();
 
-		return '<h3 class="title">' . $label . '</h3>';
+		return '<h3 class="title carbon-separator">' . $label . '</h3>';
 	}
 
 	function load() {
@@ -1161,8 +1161,9 @@ class Carbon_Field_Relationship extends Carbon_Field {
 						</li>
 					<?php endforeach ?>
 				</ul>
-
 			</div>
+			
+			<div class="cl">&nbsp;</div>
 		</div>
 		<?php
 	}

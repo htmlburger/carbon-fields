@@ -50,6 +50,7 @@
 .carbon-preview { float: left; position: relative; }
 .carbon-preview .carbon-file-remove { position: absolute; top: 0; right: 0; width: 22px; height: 22px; cursor: pointer; }
 .carbon-preview .carbon-file-remove:before { content: "\e604"; background: #FFF; border-radius: 50%; color: #C00; }
+.carbon-preview ~ .attachment_url { word-wrap: break-word; }
 
 .carbon-attachment-title,
 .carbon-attachment-url { display: block; margin: 3px 0 0; word-break: break-all; }
@@ -127,7 +128,10 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 .carbon-field .wp-editor-container textarea { resize: none; }
 
 .carbon-separator td { padding: 0; border: 0 none; }
-.js .carbon-separator h3, .carbon-separator h3 { margin: 0; cursor: default; }
+.js .carbon-separator h3, .carbon-separator h3, .carbon-row.subrow-separator h3 { margin: 0; border: none; cursor: default; }
+
+.carbon-container .carbon-subcontainer .col-separator { position: relative; width: 25px !important; padding: 0; border: 1px solid #E0E0E0; border-top: none; border-bottom-color: #E8E8E8; background: #F5F5F5; }
+.carbon-container .carbon-subcontainer .col-separator h3.carbon-separator { word-wrap: break-word; padding: 8px !important; }
 
 .carbon-subcontainer  { background: #E0E0E0 !important; }
 .carbon-subcontainer th { font-weight: normal; }

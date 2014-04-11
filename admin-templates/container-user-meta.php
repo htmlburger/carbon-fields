@@ -12,7 +12,7 @@
 					echo $field->get_label();
 					
 					if ( !empty( $help_text ) ) {
-						echo '<div class="help-text"><em>' . $help_text . '</em></div>';
+						echo '<em class="help-text">' . $help_text . '</em>';
 					}
 					?>
 				</th>
@@ -38,7 +38,7 @@
 					</div>
 					<?php
 					if ( !empty( $help_text ) ) {
-						echo '<div class="help-text"><em>' . $help_text . '</em></div>';
+						echo '<em class="help-text">' . $help_text . '</em>';
 					}
 					?>
 				</td>
