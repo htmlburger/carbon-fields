@@ -628,7 +628,7 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 		}
 	}
 
-	function admin_footer() {
+	static function admin_footer() {
 		// Instead of enqueueing all required scripts and stylesheets and setting up TinyMCE,
 		// wp_editor() automatically enqueues and sets up everything.
 		?>
@@ -638,7 +638,7 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 		<?php
 	}
 
-	function admin_enqueue_scripts() {
+	static function admin_enqueue_scripts() {
 		wp_enqueue_script('editor');
 	}
 }
