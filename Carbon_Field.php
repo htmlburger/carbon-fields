@@ -578,7 +578,7 @@ class Carbon_Field_Textarea extends Carbon_Field {
 		return $this;
 	}
 
-	function render($append = '') {
+	function render() {
 		echo '<textarea id="' . $this->get_id() . '" name="' . $this->get_name() . '" style="height: ' . $this->height . 'px; " ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
 		echo esc_textarea($this->get_value());
 		echo '</textarea>';

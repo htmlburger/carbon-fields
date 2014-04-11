@@ -203,7 +203,7 @@ abstract class Carbon_Container {
 	 * @see is_valid_save()
 	 * @return void
 	 **/
-	function save() {
+	function save($user_data) {
 		foreach ($this->fields as $field) {
 			$field->set_value_from_input();
 			$field->save();

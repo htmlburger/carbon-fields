@@ -25,7 +25,7 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 		}
 	}
 
-	function save() {
+	function save($user_data) {
 		try {
 			parent::save();
 		} catch (Exception $e) {
