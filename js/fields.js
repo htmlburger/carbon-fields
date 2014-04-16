@@ -416,7 +416,7 @@ jQuery(function($) {
 			post_type = container.data('post_type'),
 			max_values = container.data('max-values'),
 			left_list = container.find('.relationship-left .relationship-list'),
-			left_list_last_item = left_list.find('li:not(.load-more):last');
+			left_list_last_item = left_list.find('li:not(.load-more):last'),
 			right_list = container.find('.relationship-right .relationship-list'),
 			search_box = container.find('.relationship-left thead input'),
 			values = [], // list of post IDs selected in the right pane
