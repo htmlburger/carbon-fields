@@ -356,39 +356,29 @@ jQuery(function($) {
 
 		wpActiveEditor = null;
 		tinyMCE.settings.setup = $.noop;
-		tinyMCE.execCommand('mceRemoveControl', false, textarea.attr('id'));
-		tinyMCE.execCommand('mceAddControl', false, textarea.attr('id'));
-		editor = tinyMCE.getInstanceById( textarea.attr('id') );
+		tinyMCE.execCommand('mceRemoveEditor', false, textarea.attr('id'));
+		tinyMCE.execCommand('mceAddEditor', false, textarea.attr('id'));
+		editor = tinyMCE.get( textarea.attr('id') );
 
 		// save content to textare on blur
-		tinyMCE.dom.Event.add(editor.getWin(), "blur", function(a, b, c){
+		editor.on("blur", function(){
 			textarea.text(editor.save());
 		});
 
 		// remove editor before removing the node from DOM
 		element.bind('remove_fields.carbon', function() {
-			var textarea_width = element.outerWidth(),
-				field_height = Math.max(180, element.outerHeight()),
-				textarea_height = field_height - 4 - 20 - element.find('.wp-editor-tools').height(); // 20 padding, 4 borders and stuff
-
-			element.width(textarea_width).height(field_height);
-			textarea.width(textarea_width - 4).height(textarea_height);
-
 			wpActiveEditor = null;
-			tinyMCE.execCommand("mceRemoveControl", false, textarea.attr('id'));
+			tinyMCE.execCommand("mceRemoveEditor", false, textarea.attr('id'));
 		});
 
 		element.bind('reinit_field.carbon', function() {
-			tinyMCE.execCommand('mceAddControl', false, textarea.attr('id'));
-			editor = tinyMCE.getInstanceById( textarea.attr('id') );
+			tinyMCE.execCommand('mceAddEditor', false, textarea.attr('id'));
+			editor = tinyMCE.get( textarea.attr('id') );
 
 			// save content to textare on blur
-			tinyMCE.dom.Event.add(editor.getWin(), "blur", function(a, b, c){
+			editor.on("blur", function(){
 				textarea.text(editor.save());
 			});
-
-			element.height('auto').width('auto');
-			textarea.height('auto').width('auto');
 		});
 
 		element.closest('div.widget').bind('click.widgets-toggle', function(e){
