@@ -25,9 +25,9 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 		}
 	}
 
-	function save($user_data) {
+	function save($user_data = null) {
 		try {
-			parent::save();
+			parent::save($user_data);
 		} catch (Exception $e) {
 			$this->errors[] = $e->getMessage();
 		}
