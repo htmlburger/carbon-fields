@@ -179,6 +179,12 @@ jQuery(function($) {
 
 		farbtastic_obj = $.farbtastic(color_container, function(color) {
 			color_preview.css('background-color', color);
+
+			// Fix IE bug - rgb() values for color not redrawing automatically
+			color_preview.hide(0, function() {
+				color_preview.css('display', 'inline');
+			});
+			
 			color_field.val(color);
 		});
 
