@@ -593,28 +593,21 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 		$id = 'wysiwyg-' . $this->get_name();
 
 		?>
-
-		<div id="wp-<?php echo $id; ?>-wrap" class="carbon-wysiwyg wp-editor-wrap" data-toolbar="full">
-
-			<?php if(get_bloginfo('version') < "3.3"): ?>
-				<div id="editor-toolbar">
-					<div id="media-buttons" class="hide-if-no-js">
-						<?php do_action( 'media_buttons' ); ?>
-					</div>
+		<div id="wp-<?php echo $id; ?>-wrap" class="carbon-wysiwyg wp-editor-wrap tmce-active" data-toolbar="full">
+			<div id="wp-<?php echo $id; ?>-editor-tools" class="wp-editor-tools">
+				<div id="wp-<?php echo $id; ?>-media-buttons" class="hide-if-no-js wp-media-buttons">
+					<?php do_action( 'media_buttons' ); ?>
 				</div>
-			<?php else: ?>
-				<div id="wp-<?php echo $id; ?>-editor-tools" class="wp-editor-tools">
-					<div id="wp-<?php echo $id; ?>-media-buttons" class="hide-if-no-js wp-media-buttons">
-						<?php do_action( 'media_buttons' ); ?>
-					</div>
-				</div>
-			<?php endif; ?>
+			</div>
+			<div class="wp-editor-tabs">
+				<a class="wp-switch-editor switch-html">Text</a>
+				<a class="wp-switch-editor switch-tmce">Visual</a>
+			</div>
 
 			<div id="wp-<?php echo $id; ?>-editor-container" class="wp-editor-container">
 				<textarea id="<?php echo $id; ?>" class="wp-editor-area" name="<?php echo $this->get_name(); ?>" <?php echo ($this->required ? 'data-carbon-required="true"': '') ?>><?php echo wp_richedit_pre($val); ?></textarea>
 			</div>
 		</div>
-
 		<?php
 
 	}

@@ -371,6 +371,10 @@ jQuery(function($) {
 	/* Rich text */
 	carbon_field.Rich_Text = function(element, field_obj) {
 		var textarea = element.find('.carbon-wysiwyg textarea'),
+			editor_wrap = element.find('.wp-editor-wrap'),
+			visual_button = element.find('.wp-switch-editor.switch-tmce'),
+			text_button = element.find('.wp-switch-editor.switch-html'),
+			init_info = {},
 			editor;
 
 		if( typeof tinyMCE == 'undefined' || typeof tinyMCE['settings'] == undefined ) {
@@ -383,24 +387,46 @@ jQuery(function($) {
 			throw 'field is a template';
 		};
 
-		tinyMCE.settings.theme_advanced_buttons1 = 'bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,wp_more,|,spellchecker,fullscreen,wp_adv';
-		tinyMCE.settings.theme_advanced_buttons2 = 'formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,charmap,|,outdent,indent,|,undo,redo,wp_help,code';
+		tinyMCE.settings.theme_advanced_buttons1 = 'bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,wp_more,|,fullscreen,wp_adv';
+		tinyMCE.settings.theme_advanced_buttons2 = 'formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,charmap,|,outdent,indent,|,undo,redo,wp_help';
+		tinyMCE.settings.setup = function(ed) {
+			editor = ed;
+
+			editor.on("blur", function(){
+				textarea.text(editor.save());
+			});
+		};
 
 		wpActiveEditor = null;
-		tinyMCE.settings.setup = $.noop;
 		tinyMCE.execCommand('mceRemoveEditor', false, textarea.attr('id'));
 		tinyMCE.execCommand('mceAddEditor', false, textarea.attr('id'));
-		editor = tinyMCE.get( textarea.attr('id') );
 
-		// save content to textare on blur
-		editor.on("blur", function(){
-			textarea.text(editor.save());
+		visual_button.on('click', function() {
+			editor_wrap.removeClass('html-active').addClass('tmce-active');
+			textarea.get(0).value = switchEditors.wpautop( textarea.get(0).value );
+			editor.show();
+		});
+
+		text_button.on('click', function() {
+			var editor_height = editor_wrap.find('.wp-editor-container').height();
+
+			editor_wrap.removeClass('tmce-active').addClass('html-active');
+			editor.hide();
+			textarea.height(editor_height);
 		});
 
 		// remove editor before removing the node from DOM
 		element.bind('remove_fields.carbon', function() {
+			if ( editor_wrap.is('.html-active') ) {
+				textarea.get(0).value = switchEditors.wpautop( textarea.get(0).value );
+				editor.load();
+			}
+
 			wpActiveEditor = null;
 			tinyMCE.execCommand("mceRemoveEditor", false, textarea.attr('id'));
+
+			textarea.height('auto');
+			editor_wrap.removeClass('html-active').addClass('tmce-active');
 		});
 
 		element.bind('reinit_field.carbon', function() {
