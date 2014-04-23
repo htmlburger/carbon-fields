@@ -192,11 +192,37 @@ jQuery(function($) {
 		$('body').click(function(e) {
 			var $target = $(e.target);
 
-			if ( $target.is(color_preview) || $target.is(color_button) ) {
+			if ( $target.closest('.carbon-color-container').length > 0 ) {
 				return false;
 			};
-
+			
 			color_container.hide();
+		});
+
+		// Update Color field after changing the value manually
+		color_field.on('blur', function(e) {
+			var new_color = color_field.val();
+
+			new_color = $.trim(new_color);
+			if ( new_color.length === 0 ) {
+				farbtastic_obj.setColor('#000');
+				color_preview.css('background-color', '#fff');
+				color_field.val('');
+				return;
+			};
+
+			if ( new_color[0] !== '#' ) {
+				new_color = '#' + new_color;
+			};
+
+			if ( /^#([0-9A-F]{3}){1,2}$/i.test(new_color) ) {
+				farbtastic_obj.setColor(new_color);
+			} else {
+				color_field
+					.val(farbtastic_obj.color)
+					.css({'background-color': '#e74444'})
+					.animate({'background-color': '#fff'});
+			}
 		});
 	}
 
