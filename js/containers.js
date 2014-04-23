@@ -159,13 +159,21 @@ jQuery(function($) {
 		setTimeout(function() {
 			var old_callback = window.onbeforeunload;
 
-			window.onbeforeunload = function (){
-				if ( carbon_container.CustomFields.hasChanges ) {
-					return (autosaveL10n && autosaveL10n.saveAlert ? autosaveL10n.saveAlert: 'The changes you made will be lost if you navigate away from this page.');
-				};
+			if ( old_callback == null ) {
+				$(window).on( 'beforeunload.edit-post', function (){
+					if ( carbon_container.CustomFields.hasChanges ) {
+						return (postL10n && postL10n.saveAlert ? postL10n.saveAlert: 'The changes you made will be lost if you navigate away from this page.');
+					};
+				})
+			} else {
+				window.onbeforeunload = function (){
+					if ( carbon_container.CustomFields.hasChanges ) {
+						return (autosaveL10n && autosaveL10n.saveAlert ? autosaveL10n.saveAlert: 'The changes you made will be lost if you navigate away from this page.');
+					};
 
-				return old_callback();
-			};
+					return old_callback();
+				};
+			}
 
 			$('.carbon-container .carbon-field input, .carbon-container .carbon-field select, .carbon-container .carbon-field textarea').live('change', function() {
 				carbon_container.CustomFields.hasChanges = true;
@@ -403,6 +411,7 @@ jQuery(function($) {
 
 		setTimeout(function() {
 			var old_callback = window.onbeforeunload || $.noop;
+			console.log( old_callback );
 
 			window.onbeforeunload = function (){
 				if ( carbon_container.UserMeta.hasChanges ) {
