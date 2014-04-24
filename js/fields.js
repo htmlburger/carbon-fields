@@ -403,23 +403,25 @@ jQuery(function($) {
 
 		visual_button.on('click', function() {
 			editor_wrap.removeClass('html-active').addClass('tmce-active');
-			textarea.get(0).value = switchEditors.wpautop( textarea.get(0).value );
+			rich_text_save_textarea_content_to_editor(textarea, editor);
 			editor.show();
 		});
 
 		text_button.on('click', function() {
-			var editor_height = editor_wrap.find('.wp-editor-container').height();
+			var editor_height = editor_wrap.find('.wp-editor-container').innerHeight();
 
 			editor_wrap.removeClass('tmce-active').addClass('html-active');
 			editor.hide();
+
+			editor_height -= parseInt(textarea.css('padding-top'));
+			editor_height -= parseInt(textarea.css('padding-bottom'));
 			textarea.height(editor_height);
 		});
 
 		// remove editor before removing the node from DOM
 		element.bind('remove_fields.carbon', function() {
 			if ( editor_wrap.is('.html-active') ) {
-				textarea.get(0).value = switchEditors.wpautop( textarea.get(0).value );
-				editor.load();
+				rich_text_save_textarea_content_to_editor(textarea, editor);
 			}
 
 			wpActiveEditor = null;
@@ -445,7 +447,13 @@ jQuery(function($) {
 			if ( target.parents('.widget-top').length && ! target.parents('#available-widgets').length ) {
 				// pass
 			} else if ( target.hasClass('widget-control-save') ) {
+				if ( editor_wrap.is('.html-active') ) {
+					rich_text_save_textarea_content_to_editor(textarea, editor);
+				}
+
 				tinyMCE.triggerSave();
+
+				$( this ).unbind( e );
 			}
 		});
 
@@ -453,8 +461,14 @@ jQuery(function($) {
 			if ( ui.item.get(0) != element.closest('.widget').get(0) ) {
 				return;
 			}
+			
 			remove_fields(ui.item);
 		});
+	}
+
+	function rich_text_save_textarea_content_to_editor(textarea, editor) {
+		textarea.get(0).value = switchEditors.wpautop( textarea.get(0).value );
+		editor.load();
 	}
 
 	/* Relationship */
