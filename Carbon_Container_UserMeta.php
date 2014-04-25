@@ -24,12 +24,12 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 	 **/
 	function init() {
 		add_action('admin_init', array($this, '_attach'));
-		add_action('profile_update', array(&$this, '_save'), 10, 1);
+		add_action('profile_update', array($this, '_save'), 10, 1);
 	}
 
 	function save($user_id) {
 		// Unhook action to garantee single save
-		remove_action('profile_update', array(&$this, '_save'));
+		remove_action('profile_update', array($this, '_save'));
 
 		$this->set_user_id($user_id);
 
@@ -77,8 +77,8 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 	}
 
 	function attach() {
-		add_action('show_user_profile', array(&$this, 'render'), 10, 1);
-		add_action('edit_user_profile', array(&$this, 'render'), 10, 1);
+		add_action('show_user_profile', array($this, 'render'), 10, 1);
+		add_action('edit_user_profile', array($this, 'render'), 10, 1);
 	}
 
 	function is_valid_attach() {

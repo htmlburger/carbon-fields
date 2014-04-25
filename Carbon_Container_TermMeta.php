@@ -32,8 +32,8 @@ class Carbon_Container_TermMeta extends Carbon_Container {
 		add_action('admin_init', array($this, '_attach'));
 
 		foreach ($this->settings['taxonomy'] as $taxonomy) {
-			add_action( 'edited_' . $taxonomy, array(&$this, '_save'), 10, 2);
-			add_action( 'created_' . $taxonomy, array(&$this, '_save'), 10, 2);
+			add_action( 'edited_' . $taxonomy, array($this, '_save'), 10, 2);
+			add_action( 'created_' . $taxonomy, array($this, '_save'), 10, 2);
 		}
 	}
 
@@ -60,7 +60,7 @@ class Carbon_Container_TermMeta extends Carbon_Container {
 
 	function attach() {
 		foreach ($this->settings['taxonomy'] as $taxonomy) {
-			add_action( $taxonomy . '_edit_form_fields', array(&$this, 'render'), 10, 2);
+			add_action( $taxonomy . '_edit_form_fields', array($this, 'render'), 10, 2);
 		}
 	}
 	
@@ -75,8 +75,8 @@ class Carbon_Container_TermMeta extends Carbon_Container {
 		remove_action('admin_init', array($this, '_attach'));
 
 		foreach ($this->settings['taxonomy'] as $taxonomy) {
-			remove_action( 'edited_' . $taxonomy, array(&$this, '_save'), 10, 2);
-			remove_action( 'created_' . $taxonomy, array(&$this, '_save'), 10, 2);
+			remove_action( 'edited_' . $taxonomy, array($this, '_save'), 10, 2);
+			remove_action( 'created_' . $taxonomy, array($this, '_save'), 10, 2);
 		}
 
 		// unregister field names

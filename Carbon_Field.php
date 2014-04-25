@@ -154,7 +154,6 @@ class Carbon_Field {
 		if (is_admin()) {
 			$this->admin_init();
 		}
-		add_action('admin_init', array(&$this, 'wp_init'));
 	}
 
 	/**
@@ -170,14 +169,6 @@ class Carbon_Field {
 	 * @return void
 	 **/
 	function admin_init() {}
-
-	/**
-	 * Instance initialization when in the admin area. 
-	 * Called during the WordPress admin_init action
-	 *
-	 * @return void
-	 **/
-	function wp_init() {}
 
 	/**
 	 * Delegate rendering to the correct function
