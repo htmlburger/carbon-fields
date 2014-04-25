@@ -374,6 +374,7 @@ jQuery(function($) {
 			editor_wrap = element.find('.wp-editor-wrap'),
 			visual_button = element.find('.wp-switch-editor.switch-tmce'),
 			text_button = element.find('.wp-switch-editor.switch-html'),
+			command_remove_editor, command_add_editor,
 			init_info = {},
 			editor;
 
@@ -387,19 +388,34 @@ jQuery(function($) {
 			throw 'field is a template';
 		};
 
+		// WP 3.9 comes with TinyMCE 4
+		if ( tinymce.majorVersion == 4 ) {
+			command_remove_editor = 'mceRemoveEditor';
+			command_add_editor = 'mceAddEditor';
+		} else {
+			command_remove_editor = 'mceRemoveControl';
+			command_add_editor = 'mceAddControl';
+		}
+
 		tinyMCE.settings.theme_advanced_buttons1 = 'bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,wp_more,|,fullscreen,wp_adv';
 		tinyMCE.settings.theme_advanced_buttons2 = 'formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,charmap,|,outdent,indent,|,undo,redo,wp_help';
 		tinyMCE.settings.setup = function(ed) {
 			editor = ed;
 
-			editor.on("blur", function(){
-				textarea.text(editor.save());
-			});
+			if ( tinymce.majorVersion == 4 ) {
+				editor.on("blur", function(){
+					textarea.text(editor.save());
+				});
+			} else {
+				tinyMCE.dom.Event.add(editor.getWin(), "blur", function(){
+					textarea.text(editor.save());
+				});
+			}
 		};
 
 		wpActiveEditor = null;
-		tinyMCE.execCommand('mceRemoveEditor', false, textarea.attr('id'));
-		tinyMCE.execCommand('mceAddEditor', false, textarea.attr('id'));
+		tinyMCE.execCommand(command_remove_editor, false, textarea.attr('id'));
+		tinyMCE.execCommand(command_add_editor, false, textarea.attr('id'));
 
 		visual_button.on('click', function() {
 			editor_wrap.removeClass('html-active').addClass('tmce-active');
@@ -425,20 +441,26 @@ jQuery(function($) {
 			}
 
 			wpActiveEditor = null;
-			tinyMCE.execCommand("mceRemoveEditor", false, textarea.attr('id'));
+			tinyMCE.execCommand(command_remove_editor, false, textarea.attr('id'));
 
 			textarea.height('auto');
 			editor_wrap.removeClass('html-active').addClass('tmce-active');
 		});
 
 		element.bind('reinit_field.carbon', function() {
-			tinyMCE.execCommand('mceAddEditor', false, textarea.attr('id'));
+			tinyMCE.execCommand(command_add_editor, false, textarea.attr('id'));
 			editor = tinyMCE.get( textarea.attr('id') );
 
 			// save content to textare on blur
-			editor.on("blur", function(){
-				textarea.text(editor.save());
-			});
+			if ( tinymce.majorVersion == 4 ) {
+				editor.on("blur", function(){
+					textarea.text(editor.save());
+				});
+			} else {
+				tinyMCE.dom.Event.add(editor.getWin(), "blur", function(){
+					textarea.text(editor.save());
+				});
+			}
 		});
 
 		element.closest('div.widget').bind('click.widgets-toggle', function(e){
