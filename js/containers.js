@@ -200,7 +200,7 @@ jQuery(function($) {
 			};
 
 			// reset submit button and hide spiner
-			$('#publish').removeClass('button-primary-disabled');
+			$('#publish').removeClass('button-primary-disabled disabled');
 			$('#ajax-loading, #publishing-action .spinner').attr('style','');
 
 			$('body, html').animate({scrollTop: 0});
