@@ -591,7 +591,7 @@ Carbon_Field::factory("set", "product_features", "Features")-&gt;add_options(arr
 							<dt><code>set_post_type($post_type)</code></dt>
 							<dd>Set the type of posts to choose from (or array of post types).</dd>
 							<dt><code>set_max($max)</code></dt> 
-							<dd>Maximum number of posts to select. Must be greater than 1. Defaults to <code>-1</code> (no limit).</dd>
+							<dd>Maximum number of posts to select. Must be greater than 0. Defaults to <code>-1</code> (no limit).</dd>
 						</dl>
 						<pre class="prettyprint">
 Carbon_Field::factory("relationship", "publications", "Publications")-&gt;set_post_type('publication');
@@ -874,12 +874,12 @@ array (
 
 							<dt><code>set_min($min)</code></dt>
 							<dd>
-								Minimum number of rows. Must be greater than 1. Defaults to <code>-1</code> (no limit).
+								Minimum number of rows. Must be greater than 0. Defaults to <code>-1</code> (no limit).
 							</dd>
 
 							<dt><code>set_max($max)</code></dt>
 							<dd>
-								Maximum number of rows. Must be greater than 1. Defaults to <code>-1</code> (no limit). 
+								Maximum number of rows. Must be greater than 0. Defaults to <code>-1</code> (no limit). 
 							</dd>
 
 							<dt><code>setup_labels($labels)</code></dt>
