@@ -71,11 +71,7 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 		}
 	}
 	
-	function front_end($args, $instance) {
-		echo '<code><pre>';
-		print_r($instance);
-		echo '</pre></code>';
-	}
+	function front_end($args, $instance) { }
 
 	function add_fields($fields) {
 		foreach ($fields as $field) {

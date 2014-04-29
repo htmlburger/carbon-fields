@@ -411,7 +411,6 @@ jQuery(function($) {
 
 		setTimeout(function() {
 			var old_callback = window.onbeforeunload || $.noop;
-			console.log( old_callback );
 
 			window.onbeforeunload = function (){
 				if ( carbon_container.UserMeta.hasChanges ) {
