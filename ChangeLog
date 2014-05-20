@@ -1,3 +1,7 @@
+Carbon Fields 0.4.2
+-------------------
+ * updated rich text field to work with Tiny MCE 4
+
 Carbon Fields 0.4.1
 -------------------
  * updated to match new admin panel styling
