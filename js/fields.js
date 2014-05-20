@@ -400,18 +400,29 @@ jQuery(function($) {
 		tinyMCE.settings.theme_advanced_buttons1 = 'bold,italic,strikethrough,|,bullist,numlist,blockquote,|,justifyleft,justifycenter,justifyright,|,link,unlink,wp_more,|,fullscreen,wp_adv';
 		tinyMCE.settings.theme_advanced_buttons2 = 'formatselect,underline,justifyfull,forecolor,|,pastetext,pasteword,removeformat,|,charmap,|,outdent,indent,|,undo,redo,wp_help';
 		tinyMCE.settings.setup = function(ed) {
-			editor = ed;
+			// This is called for every editor that is setup on the page, 
+			// not only the current carbon field. 
+			// Thus we need to trigger a setup_tinymce.carbon event to update
+			// the current editor instance for the particular textarea
+			var local_editor = ed;
+			var editor_element = $( local_editor.getElement() );
 
 			if ( tinymce.majorVersion == 4 ) {
-				editor.on("blur", function(){
-					textarea.text(editor.save());
+				local_editor.on("blur", function(){
+					editor_element.text(local_editor.save());
 				});
 			} else {
-				tinyMCE.dom.Event.add(editor.getWin(), "blur", function(){
-					textarea.text(editor.save());
+				tinyMCE.dom.Event.add(local_editor.getWin(), "blur", function(){
+					editor_element.text(local_editor.save());
 				});
 			}
+
+			editor_element.trigger('setup_tinymce.carbon', local_editor);
 		};
+
+		textarea.bind('setup_tinymce.carbon', function(e, tinymce_editor) {
+			editor = tinymce_editor;
+		});
 
 		wpActiveEditor = null;
 		tinyMCE.execCommand(command_remove_editor, false, textarea.attr('id'));
@@ -451,7 +462,7 @@ jQuery(function($) {
 			tinyMCE.execCommand(command_add_editor, false, textarea.attr('id'));
 			editor = tinyMCE.get( textarea.attr('id') );
 
-			// save content to textare on blur
+			// save content to textarea on blur
 			if ( tinymce.majorVersion == 4 ) {
 				editor.on("blur", function(){
 					textarea.text(editor.save());
@@ -474,6 +485,9 @@ jQuery(function($) {
 				}
 
 				tinyMCE.triggerSave();
+
+				wpActiveEditor = null;
+				tinyMCE.execCommand(command_remove_editor, false, textarea.attr('id'));
 
 				$( this ).unbind( e );
 			}
