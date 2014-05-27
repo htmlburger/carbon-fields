@@ -56,7 +56,7 @@ function carbon_get_theme_option($name, $type = null) {
 		return $partial_meta;
 	}
 
-	return get_option($name, true);
+	return get_option($name);
 }
 
 function carbon_get_term_meta($id, $name, $type = null) {
