@@ -414,7 +414,7 @@ foreach ($phone_numbers as $phone) {
 					<pre class="prettyprint">
 class ThemeWidgetExample extends Carbon_Widget {
 	// Register widget function. Must have the same name as the class
-	function ThemeWidgetExample() {
+	function __construct() {
 		$this-&gt;setup('Theme Widget - Example', 'Displays a block with title/text', array(
 			Carbon_Field::factory('text', 'title', 'Title')-&gt;set_default_value('Hello World!'),
 			Carbon_Field::factory('textarea', 'content', 'Content')-&gt;set_default_value('Lorem Ipsum dolor sit amet')
