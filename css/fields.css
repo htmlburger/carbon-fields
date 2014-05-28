@@ -133,7 +133,7 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 .carbon-container .carbon-subcontainer .col-separator { position: relative; width: 25px !important; padding: 0; border: 1px solid #E0E0E0; border-top: none; border-bottom-color: #E8E8E8; background: #F5F5F5; }
 .carbon-container .carbon-subcontainer .col-separator h3.carbon-separator { word-wrap: break-word; padding: 8px !important; }
 
-.carbon-subcontainer  { background: #E0E0E0 !important; }
+.carbon-subcontainer  { background: #E0E0E0 !important; width: 100%; }
 .carbon-subcontainer th { font-weight: normal; }
 .carbon-subcontainer td { background: #FFF; }
 .carbon-subcontainer .carbon-drag-handle { width: 20px !important; padding: 0 !important; background: #F5F5F5; border-right: 1px solid #E0E0E0; text-align: center; vertical-align: middle !important; cursor: move; }
@@ -150,6 +150,7 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 .carbon-subcontainer .minimized .carbon-complex-action a.carbon-btn-collapse:before { content: "\e602"; background: #36F; border-radius: 50%; color: #FFF; }
 .carbon-subcontainer .minimized .carbon-complex-action a.carbon-btn-collapse:hover:before { background: #69F; }
 
+.carbon-subcontainer .layout-table { width: 100%; padding-top: 25px; }
 .carbon-subcontainer.layout-table .carbon-btn-holder { position: relative; }
 .carbon-subcontainer.layout-table .carbon-complex-action { position: absolute; top: 5px; right: 0; }
 .carbon-subcontainer.layout-table .carbon-complex-action a { margin: 0 5px 0 0; }
@@ -158,6 +159,7 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 .carbon-subcontainer .carbon-group-row.duplicated .carbon-drag-handle { background: #82c0ec; }
 
 .carbon-wysiwyg .mceIframeContainer { background:#fff; }
+.carbon-wysiwyg .wp-editor-area { border: 0; }
 .carbon-html ul { margin: 14px 28px; list-style-type: disc; }
 
 body.touchscreen .carbon-relationship .relationship-right ul { height: auto; }
@@ -183,6 +185,18 @@ body.touchscreen .carbon-relationship .relationship-right ul { height: auto; }
 	.carbon-field input.carbon-datepicker { width: calc(100% - 50px); }
 	
 	.carbon-field input.carbon-color { width: calc(100% - 100px); }
+
+	.carbon-subcontainer .layout-table { padding-top: 0; }
+
+	.carbon-subcontainer .carbon-empty-row td { display: table-cell; }
+
+	.carbon-subcontainer .carbon-drag-handle { display: table-cell; }
+	.carbon-subcontainer .carbon-drag-handle + td,
+	.carbon-subcontainer .carbon-complex-entry-content { padding-left: 15px; display: table-cell; }
+	.carbon-subcontainer .carbon-actions td { padding-left: 15px; display: table-cell; }
+
+	.carbon-subcontainer tr.carbon-row th { display: block; width: 100%; border-bottom: 0; }
+	.carbon-subcontainer tr.carbon-row th + td { display: block; }
 }
 
 @media screen and (max-width: 600px) {
