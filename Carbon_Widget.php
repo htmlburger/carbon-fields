@@ -18,15 +18,21 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 		// add custom fields
 		$this->add_fields($fields);
 
-		// populate options
-		if ( empty($classname) ) {
-			$classname = 'carbon_' . preg_replace('~\s+~', '_', strtolower(trim(preg_replace('/[^\00-\255]+/u', '', $title))));
+		# Generate Widget ID
+		$widget_ID = 'carbon_' . preg_replace('~\s+~', '_', strtolower(trim(preg_replace('/[^\00-\255]+/u', '', $title))));
+
+		# Generate Classes
+		if ( !is_array($classname) ) {
+			$classname = (array)$classname;
 		}
+		$classname[] = $widget_ID;
+		$classname = implode(' ', $classname);
+
 		$widget_options = compact('description', 'classname');
 
-		$this->verify_unique_widget_id($classname);
+		$this->verify_unique_widget_id($widget_ID);
 
-		$this->WP_Widget($classname, $title, $widget_options, $this->form_options);
+		$this->WP_Widget($widget_ID, $title, $widget_options, $this->form_options);
 	}
 
 	function update($new_instance, $old_instance) {
