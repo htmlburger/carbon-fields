@@ -58,8 +58,6 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 	}
 	
 	function widget($args, $instance) {
-		extract($args);
-
 		// prepare $instance values
 		if ( !empty($this->complex_field_names) ) {
 			$instance = self::unwrap_complex_field_values($instance, $this->complex_field_names);
@@ -67,13 +65,13 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 
 		// output
 		if ($this->print_wrappers) {
-			echo $before_widget;
+			echo $args['before_widget'];
 		}
 
 		$this->front_end($args, $instance);
 
 		if ($this->print_wrappers) {
-			echo $after_widget;
+			echo $args['after_widget'];
 		}
 	}
 	

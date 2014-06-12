@@ -423,8 +423,7 @@ class ThemeWidgetExample extends Carbon_Widget {
 	
 	// Called when rendering the widget in the front-end
 	function front_end($args, $instance) {
-		extract($args);
-		echo $before_title . $instance['title'] . $after_title;
+		echo $args['before_title'] . $instance['title'] . $args['after_title'];
 		echo '&lt;p&gt;' . $instance['content'] . '&lt;/p&gt;';
 	}
 }
