@@ -51,14 +51,18 @@ class Carbon_Field_Complex extends Carbon_Field {
 			}
 		}
 
-		$group = new Carbon_Field_Group();
-		$group->set_name( $name );
-		
-		$group->add_fields($fields);
-		$group->set_label( $label );
+		if ( array_key_exists('_' . $name, $this->groups) ) {
+			throw new Carbon_Exception('Group with name "' . $name . '" in Complex Field "' . $this->get_label() . '" already exists.');
+		} else {
+			$group = new Carbon_Field_Group();
+			$group->set_name( $name );
+			
+			$group->add_fields($fields);
+			$group->set_label( $label );
 
-		$this->groups[$group->get_name()] = $group;
-		return $this;
+			$this->groups[$group->get_name()] = $group;
+			return $this;
+		}
 	}
 	function setup_labels($labels) {
 		$this->labels = array_merge($this->labels, $labels);
