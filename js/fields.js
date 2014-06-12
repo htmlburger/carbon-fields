@@ -29,7 +29,7 @@ jQuery(function($) {
 			}
 		});
 		
-		$('table.layout-table em.help-text').each(function () {
+		$('table.layout-table em.help-text', context).each(function () {
 			var fileField = $(this).closest('tr').find('td div.carbon-file');
 			
 			if (fileField.length) {
