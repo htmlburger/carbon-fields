@@ -28,7 +28,7 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 		$classname[] = $widget_ID;
 		$classname = implode(' ', $classname);
 
-		$widget_options = compact('description', 'classname');
+		$widget_options = compact('description', 'classname', 'widget_ID');
 
 		$this->verify_unique_widget_id($widget_ID);
 
@@ -52,7 +52,7 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 		$container_tag_class_name = get_class($this);
 		$container_type = 'Widget';
 		$container_options = array();
-		$container_classname = $this->widget_options['classname'];
+		$container_classname = $this->widget_options['widget_ID'];
 
 		include dirname(__FILE__) . '/admin-templates/container-widget.php';
 	}
