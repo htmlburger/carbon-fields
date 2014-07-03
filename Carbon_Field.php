@@ -802,23 +802,42 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 			$input = $_POST;
 		}
 
+		if ( is_array($input[$this->name]) ) {
+			/**
+			 * Function is called on save
+			 */
 
-		if ( !isset($input[$this->name]['coordinates']) ) {
-			parent::set_value_from_input($input);
-		} else {
-			$value = stripslashes_deep($input[$this->name]['coordinates']);
+			if ( !isset($input[$this->name]['coordinates']) ) {
+				parent::set_value_from_input($input);
+			} else {
+				$value = stripslashes_deep($input[$this->name]['coordinates']);
 
-			if ( is_array($value) && isset($value['lat']) && isset($value['lng']) ) {
-				$value = $value['lat'] . ',' . $value['lng'];
+				if ( is_array($value) && isset($value['lat']) && isset($value['lng']) ) {
+					$value = $value['lat'] . ',' . $value['lng'];
+				}
+
+				$this->set_value($value);
 			}
 
-			$this->set_value( $value );
-		}
+			if ( isset($input[$this->name]['address']) ) {
+				$address = stripslashes_deep($input[$this->name]['address']);
 
+				$this->address = $address;
+			}
+		} else {
+			/**
+			 * Function is called on render
+			 */
 
-		if ( isset($input[$this->name]['address']) ) {
-			$address = stripslashes_deep($input[$this->name]['address']);
-			$this->address = $address;
+			# Set Map Value
+			$this->set_value( $input[$this->name] );
+
+			# Set Map Address
+			if ( isset($input[$this->name . '_-address']) ) {
+				$address = stripslashes_deep( $input[$this->name . '_-address'] );
+
+				$this->address = $address;
+			}
 		}
 	}
 }

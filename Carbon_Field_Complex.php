@@ -111,7 +111,7 @@ class Carbon_Field_Complex extends Carbon_Field {
 			$values = array_intersect_key($values, $group_field_names);
 
 			// check if group is empty
-			if ( count(array_filter($values)) == 0 && !in_array('0', $values) ) {
+			if ( count( array_filter( $values, array($this, 'array_filter_remove_empty_values') ) ) == 0 && !in_array('0', $values) ) {
 				continue;
 			}
 
@@ -135,6 +135,22 @@ class Carbon_Field_Complex extends Carbon_Field {
 
 			$this->values[] = $value_group;
 			$index++;
+		}
+	}
+
+	/**
+	 * Recursive callback function for array_filter()
+	 * 
+	 * Checks if the given value is an array and calls itself recursively
+	 * Otherwise, works as usual
+	 */
+	function array_filter_remove_empty_values($value) {
+		if ( is_array($value) ) {
+			return array_filter($value, array($this, 'array_filter_remove_empty_values'));
+		}
+
+		if ( !empty($value) ) {
+			return true;
 		}
 	}
 
