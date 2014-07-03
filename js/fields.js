@@ -691,7 +691,7 @@ jQuery(function($) {
 		field_obj.btn_add = element.find('> .carbon-subcontainer > tbody > tr.carbon-actions a[data-action=add]:first').parent();
 		field_obj.group_selector = field_obj.btn_add.find('ul');
 		field_obj.empty_field_text = element.find('> .carbon-subcontainer > tbody > tr.carbon-empty-row');
-		field_obj.num_rows = element.find('.carbon-group-row').length;
+		field_obj.num_rows = element.find('> .carbon-subcontainer > tbody > tr.carbon-group-row').length;
 		field_obj.row_uid = field_obj.num_rows;
 		field_obj.table = element.children('.carbon-subcontainer:first');
 		field_obj.min_rows = element.children('.carbon-subcontainer').data('min-values');
