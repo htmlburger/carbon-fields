@@ -99,7 +99,7 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 .carbon-relationship ul li a em { float: right; font-style: normal; color: #999; margin-right: 20px; text-transform: uppercase; font-size: 11px; }
 .carbon-relationship ul li a:hover { background-color: #eaeff5; color: #333; }
 .carbon-relationship ul li a:hover span { display: block; }
-.carbon-relationship .widefat { border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.carbon-relationship .widefat { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-color: #ccc; }
 .carbon-relationship .widefat th { padding: 5px; border-bottom: 0 none; }
 .carbon-relationship .widefat input { width: 100%; margin: 0; font-size: 12px; line-height: 15px; border-radius: 13px; font-family: sans-serif; padding: 5px 9px !important; }
 .mobile .carbon-relationship ul li a { padding: 7px; }
@@ -110,7 +110,7 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 
 .carbon-relationship .relationship-right { width: 48.5%; float: right; }
 .carbon-relationship .relationship-right label { display: none; }
-.carbon-relationship .relationship-right ul { height: 199px; min-height: 199px; /* min-height set for touch devices */ margin: 0; overflow: auto; }
+.carbon-relationship .relationship-right ul { height: 188px; min-height: 188px; /* min-height set for touch devices */ margin: 0; overflow: auto; }
 .carbon-relationship .relationship-right ul a { cursor: move; }
 .carbon-relationship .relationship-right ul a span { background: url(images/ui-icons_888888_256x240.png) no-repeat -16px -192px; }
 
@@ -132,6 +132,11 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 
 .carbon-container .carbon-subcontainer .col-separator { position: relative; width: 25px !important; padding: 0; border: 1px solid #E0E0E0; border-top: none; border-bottom-color: #E8E8E8; background: #F5F5F5; }
 .carbon-container .carbon-subcontainer .col-separator h3.carbon-separator { word-wrap: break-word; padding: 8px !important; }
+
+/* Widget Carbon Container */
+.widget-content .carbon-container { margin: 13px 0 0; }
+.widget-content .carbon-container > div { margin-bottom: 13px; }
+.widget-content .carbon-container .carbon-field { margin-top: 1px; }
 
 .carbon-subcontainer  { background: #E0E0E0 !important; width: 100%; }
 .carbon-subcontainer th { font-weight: normal; }

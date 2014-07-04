@@ -15,19 +15,37 @@
 		$tmp_field->set_name($field_name);
 		?>
 		<div>
-			<label for="<?php echo $tmp_field->get_id(); ?>"><?php 
-				echo $tmp_field->get_label(); 
+			<?php
+			# Label
+			$label = $tmp_field->get_label();
+			if ( !empty($label) ) {
+				?>
+				<label for="<?php echo $tmp_field->get_id(); ?>">
+					<?php
+					echo $label;
+					if ( $tmp_field->get_type() != 'separator' ) {
+						echo ':';
+					}
 
-				if ( $tmp_field->is_required() ) {
-					echo ' *';
-				}
-			?>:</label>
+					if ( $tmp_field->is_required() ) {
+						echo ' <span class="carbon-required">*</span>';
+					}
+					?>
+				</label>
+				<?php
+			}
+			?>
 
-			<?php echo $tmp_field->get_help_text(); ?>
-			
 			<div class="carbon-field carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $tmp_field->type ?>" data-name="<?php echo $field->get_name() ?>">
 				<?php $tmp_field->render(); ?>
 			</div>
+			<?php
+			# Help Text
+			$help_text = $tmp_field->get_help_text();
+			if ( !empty($help_text) ) {
+				echo '<em class="help-text">' . $help_text . '</em>';
+			}
+			?>
 		</div>
 	<?php endforeach; ?>
 </div>
