@@ -14,7 +14,7 @@
 		$field_name = $this->get_field_name($tmp_field->get_name());
 		$tmp_field->set_name($field_name);
 		?>
-		<div>
+		<div class="carbon-widget-field-wrapper">
 			<?php
 			# Label
 			$label = $tmp_field->get_label();

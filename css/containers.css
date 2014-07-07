@@ -63,6 +63,8 @@ body.no-js .carbon-container { display: none; }
 
 .carbon-highlight { background: #ffebe8 !important; border: #cc0000 solid 1px !important; }
 
+.carbon-widget-field-wrapper.carbon-highlight { margin: 0 -10px; padding: 0 10px; }
+
 .carbon-button, 
 .carbon-button a { position: relative }
 .carbon-button ul { position: absolute; display: none; top: 26px; left: 0; padding: 5px 0; margin: 0; background: white; border: 1px solid #aaa; box-shadow: 3px 3px 5px rgba(60, 60, 60, .3); z-index: 1; -webkit-border-bottom-right-radius: 3px; -webkit-border-bottom-left-radius: 3px; -moz-border-radius-bottomright: 3px; -moz-border-radius-bottomleft: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; }
