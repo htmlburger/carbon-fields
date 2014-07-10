@@ -948,6 +948,7 @@ jQuery(function($) {
 	}, 1);
 
 	window.carbon_field_init = init;
+	window.carbon_field = carbon_field;
 
 	/**/
 	window.carbon_log_error = carbon_log_error;
