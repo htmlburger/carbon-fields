@@ -1344,14 +1344,12 @@ class Carbon_Field_Image extends Carbon_Field_File {
 class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 	private $enable_add_new = true; // Whether to allow the user to add new sidebars
 	private $custom_sidebars = array();
-	private $sidebar_options = array(
-		'before_widget' => '<li id="%1$s" class="widget %2$s">',
-		'after_widget' => '</li>',
-		'before_title' => '<h2 class="widgettitle">',
-		'after_title' => '</h2>',
-	);
+	private $sidebar_options = array();
 
 	function init() {
+		// Set Default Sidebar Options
+		$this->sidebar_options['default'] = $this->get_default_sidebar_options();
+
 		// Setup the sidebars after all fields are registered
 		add_action('carbon_after_register_fields', array($this, 'setup_sidebar_options'), 20);
 		add_action('carbon_after_register_fields', array($this, 'register_custom_sidebars'), 21);
@@ -1362,13 +1360,59 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 		return $this;
 	}
 
+	/**
+	 * Returns an array with the default sidebar options
+	 */
+	function get_default_sidebar_options() {
+		return array(
+			'before_widget' => '<li id="%1$s" class="widget %2$s">',
+			'after_widget'  => '</li>',
+			'before_title'  => '<h2 class="widgettitle">',
+			'after_title'   => '</h2>',
+		);
+	}
+
+	/**
+	 * Sets the Sidebar Options
+	 */
 	function set_sidebar_options($sidebar_options) {
 		// Make sure that all needed fields are in the options array
 		$required_arguments = array('before_widget', 'after_widget', 'before_title', 'after_title');
-		foreach ($required_arguments as $arg) {
-			if (!isset($sidebar_options[$arg])) {
-				throw new Carbon_Exception('Provide all sidebar options for ' . $this->name . ': <code>' .
-						implode(', ', $required_arguments) . '</code>');
+
+		/**
+		 * Set default settings
+		 */
+		$sidebar_options_first_element = array_values($sidebar_options)[0];
+
+		if ( !is_array($sidebar_options_first_element) ) {
+			/**
+			 * Enters here, if one array with settings is passed
+			 * Makes the passed settings, the default ones
+			 */
+			$sidebar_options = array(
+				'default' => $sidebar_options,
+			);
+		} elseif ( !isset($sidebar_options['default']) ) {
+			/**
+			 * Enters here, if the default settings are not passed
+			 * Sets the default settings
+			 * 
+			 * @see get_default_sidebar_options()
+			 */
+			$sidebar_options['default'] = $this->get_default_sidebar_options();
+		}
+
+		/**
+		 * Check if all required arguments are passed for each of the sidebars
+		 */
+		foreach ($sidebar_options as $options) {
+			foreach ($required_arguments as $arg) {
+				if ( !isset($options[$arg]) ) {
+					throw new Carbon_Exception(
+						'Provide all sidebar options for ' . $this->name . ': <code>' .
+						implode(', ', $required_arguments) . '</code>'
+					);
+				}
 			}
 		}
 
@@ -1406,15 +1450,20 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 		foreach ($custom_sidebars as $sidebar) {
 			$slug = strtolower(preg_replace('~-{2,}~', '', preg_replace('~[^\w]~', '-', $sidebar)));
 
-			register_sidebar(array(
+			$sidebar_options = array();
+
+			// Handles which options to use for the current sidebar
+			if ( isset($this->sidebar_options[$slug]) ) {
+				$sidebar_options = $this->sidebar_options[$slug];
+			} else {
+				$sidebar_options = $this->sidebar_options['default'];
+			}
+
+			// Registers the Sidebar
+			register_sidebar(array_merge($sidebar_options, array(
 				'name' => $sidebar,
-				'id' => $slug,
-				'description' => '',
-				'before_widget' => $this->sidebar_options['before_widget'],
-				'after_widget' => $this->sidebar_options['after_widget'],
-				'before_title' => $this->sidebar_options['before_title'],
-				'after_title' => $this->sidebar_options['after_title'],
-			));
+				'id'   => $slug,
+			)));
 		}
 	}
 
