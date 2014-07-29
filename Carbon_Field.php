@@ -1382,7 +1382,8 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 		/**
 		 * Set default settings
 		 */
-		$sidebar_options_first_element = array_values($sidebar_options)[0];
+		$sidebar_options_first_element = array_values($sidebar_options);
+		$sidebar_options_first_element = $sidebar_options_first_element[0];
 
 		if ( !is_array($sidebar_options_first_element) ) {
 			/**
