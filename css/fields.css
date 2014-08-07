@@ -114,6 +114,8 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 .carbon-relationship .relationship-right ul a { cursor: move; }
 .carbon-relationship .relationship-right ul a span { background: url(images/ui-icons_888888_256x240.png) no-repeat -16px -192px; }
 
+.carbon-relationship .relationship-right ul.ui-sortable { touch-action: auto; }
+
 .carbon-relationship .relationship-list li.inactive a { background-color: #f5f5f5; opacity: 0.6; cursor: default; }
 .carbon-relationship .relationship-list li.inactive a span { display: none; }
 .carbon-relationship .relationship-list li.load-more { text-align: center; }
