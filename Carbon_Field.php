@@ -1137,7 +1137,7 @@ class Carbon_Field_Relationship extends Carbon_Field {
 							<a href="#" data-post_id="<?php echo $post->ID ?>">
 								<em><?php echo $type_title ?></em>
 								<span><!-- plus --></span>
-								<?php echo $post->post_title ?>
+								<?php echo get_the_title($post->ID); ?>
 							</a>
 						</li>
 					<?php endforeach ?>
@@ -1159,7 +1159,7 @@ class Carbon_Field_Relationship extends Carbon_Field {
 						$type_title = isset($post_types[$type_title]->labels->singular_name) ? $post_types[$type_title]->labels->singular_name: $type_title;
 					?>
 						<li>
-							<a href="#" data-post_id="<?php echo $post->ID ?>"><em><?php echo $type_title ?></em><?php echo $post->post_title ?> <span><!-- minus --></span></a>
+							<a href="#" data-post_id="<?php echo $post->ID ?>"><em><?php echo $type_title ?></em><?php echo get_the_title($post->ID); ?> <span><!-- minus --></span></a>
 							<input type="hidden" name="<?php echo $this->get_name() ?>[]" value="<?php echo $post->ID ?>" />
 						</li>
 					<?php endforeach ?>
