@@ -1099,7 +1099,7 @@ class Carbon_Field_Relationship extends Carbon_Field {
 		// Exclude the current post from the list
 		$screen = get_current_screen();
 		$exclude_id = '';
-		if ( $screen->base == 'post' && isset($_GET['post']) ) {
+		if ( is_object($screen) && $screen->base == 'post' && isset($_GET['post']) ) {
 			$exclude_id = intval($_GET['post']);
 		}
 
