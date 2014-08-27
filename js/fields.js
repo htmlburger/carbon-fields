@@ -280,7 +280,8 @@ jQuery(function($) {
 		var map = new google.maps.Map(map_container.get(0), {
 			zoom: zoom,
 			center: new google.maps.LatLng(lat, lng),
-			mapTypeId: google.maps.MapTypeId.ROADMAP
+			mapTypeId: google.maps.MapTypeId.ROADMAP,
+			disableDoubleClickZoom: true
 		});
 
 		// export the map object
@@ -309,7 +310,7 @@ jQuery(function($) {
 		}
 
 		// on click move marker and set new position
-		google.maps.event.addListener(map, 'click', function(point) {
+		google.maps.event.addListener(map, 'dblclick', function(point) {
 			lat = point.latLng.lat();
 			lng = point.latLng.lng();
 			field_obj.update_marker_position(point);
