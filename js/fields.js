@@ -885,6 +885,12 @@ jQuery(function($) {
 
 		// Remove fields because we want to clone a pure version of the original row
 		remove_fields(row);
+
+		// Touch all input/textarea values to make sure the input DOM nodes are updated
+		row.find('input:text, textarea').each(function() {
+		    $(this).attr('value', $(this).val());
+		});
+
 		new_row = row.clone();
 		init(row);
 
