@@ -1297,7 +1297,9 @@ class Carbon_Field_Attachment extends Carbon_Field_File {
 			$description .= '<span class="carbon-file-remove icon-button"></span>';
 			$description .= '</div>';
 		} else {
+			$description .= '<div class="carbon-preview">';
 			$description .= '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" class="carbon-view_image blank"/>';
+			$description .= '</div>';
 		}
 
 		$description .= '<div class="cl"></div>';
@@ -1332,7 +1334,9 @@ class Carbon_Field_Image extends Carbon_Field_File {
 			$description .= '<span class="carbon-file-remove"></span>';
 			$description .= '</div>';
 		} else {
-			$description = '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" class="carbon-view_image blank"/>';
+			$description .= '<div class="carbon-preview">';
+			$description .= '<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" class="carbon-view_image blank"/>';
+			$description .= '</div>';
 		}
 
 		$description .= '<div class="cl"></div>';

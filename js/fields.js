@@ -106,6 +106,9 @@ jQuery(function($) {
 							row.find('.carbon-view_image').attr( 'src', media_value );
 							row.find('.carbon-view_file').attr( 'href', media_value );
 							row.find('.carbon-description, img').show();
+							if (!row.find('.carbon-file-remove').length) {
+								row.find('.carbon-preview').append('<span class="carbon-file-remove"></span>');
+							}
 							break;
 						case 'audio':
 						case 'video':
@@ -115,6 +118,9 @@ jQuery(function($) {
 								if (media_attachment.type=='image') {
 									row.find('.carbon-view_image').attr( 'src', media_attachment.url );
 									row.find('.carbon-description, img').show();
+									if (!row.find('.carbon-file-remove').length) {
+										row.find('.carbon-preview').append('<span class="carbon-file-remove"></span>');
+									}
 								}else{
 									// all other file types
 									row.find('.carbon-description, img').hide();
@@ -135,7 +141,7 @@ jQuery(function($) {
 			crb_media_field.open();
 		});
 
-		$(element).find('.carbon-file-remove').click(function (e) {
+		$(element).on('click', '.carbon-file-remove', function (e) {
 			var fieldContainer = $(this).closest('.carbon-field');
 			
 			fieldContainer.find('.carbon-description').hide();
