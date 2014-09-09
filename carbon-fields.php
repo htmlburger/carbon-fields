@@ -12,8 +12,6 @@ define('CARBON_PLUGIN_ROOT', dirname(__FILE__));
 // define('CARBON_PLUGIN_URL', WP_PLUGIN_URL . '/' . basename(dirname(__FILE__)));
 define('CARBON_PLUGIN_URL', get_template_directory_uri() . '/lib/carbon-fields');
 
-include_once 'carbon-i18n.php';
-
 include_once 'Carbon_Exception.php';
 
 include_once 'Carbon_DataStore.php';
