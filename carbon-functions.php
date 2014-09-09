@@ -172,7 +172,15 @@ function carbon_twitter_is_config_valid() {
 function carbon_twitter_widget_no_config_warning() {
 	?>
 	<div id="message" class="error">
-		<p>You've inserted a "Latest Tweets" widget, but it will <strong>not</strong> work unless you configure your twitter settings. In order to do that, go to <a href="<?php echo admin_url('/admin.php?page=crbn-twitter-settings.php'); ?>">Theme Options &raquo; Twitter Settings</a></p>
+		<p>
+			<?php 
+			printf(
+				__("You've inserted a \"Latest Tweets\" widget, but it will not work unless you configure your twitter settings. In order to do that, go to %sTheme Options &raquo; Twitter Settings%s", 'crb'),
+				'<a href="' . admin_url('/admin.php?page=crbn-twitter-settings.php') . '">',
+				'</a>'
+			);
+			?>
+		</p>
 	</div>
 	<?php
 }
@@ -180,8 +188,16 @@ function carbon_twitter_widget_no_config_warning() {
 function carbon_twitter_widget_wrong_config_warning() {
 	?>
 	<div id="message" class="error">
-		<p>Warning: You seem to have configured your Twitter settings, but they are invalid. Please configure them in order to be able to use the "Latest Tweets" widget. </p>
-		<p>In order to do that, go to <a href="<?php echo admin_url('/admin.php?page=crbn-twitter-settings.php'); ?>">Theme Options &raquo; Twitter Settings</a></p>
+		<p><?php _e('Warning: You seem to have configured your Twitter settings, but they are invalid. Please configure them in order to be able to use the "Latest Tweets" widget.', 'crb'); ?></p>
+		<p>
+			<?php 
+			printf(
+				__("In order to do that, go to %sTheme Options &raquo; Twitter Settings%s", 'crb'),
+				'<a href="' . admin_url('/admin.php?page=crbn-twitter-settings.php') . '">',
+				'</a>'
+			);
+			?>
+		</p>
 	</div>
 	<?php
 }

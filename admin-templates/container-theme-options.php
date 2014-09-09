@@ -66,7 +66,7 @@
 			}
 			?>
 		</table>
-		<p class="submit"><input type="submit" name="submit" id="submit" class="button-primary" value="Save Changes"></p>
+		<p class="submit"><input type="submit" name="submit" id="submit" class="button-primary" value="<?php esc_attr_e('Save Changes', 'crb'); ?>"></p>
 		<?php wp_nonce_field('carbon_panel_' . $this->id . '_nonce', $this->get_nonce_name(), /*referer?*/ false, /*echo?*/ true); ?>
 	</form>
 </div>

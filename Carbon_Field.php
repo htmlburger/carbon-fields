@@ -591,8 +591,8 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 				</div>
 			</div>
 			<div class="wp-editor-tabs">
-				<a class="wp-switch-editor switch-html">Text</a>
-				<a class="wp-switch-editor switch-tmce">Visual</a>
+				<a class="wp-switch-editor switch-html"><?php _e('Text', 'crb'); ?></a>
+				<a class="wp-switch-editor switch-tmce"><?php _e('Visual', 'crb'); ?></a>
 			</div>
 
 			<div id="wp-<?php echo $id; ?>-editor-container" class="wp-editor-container">

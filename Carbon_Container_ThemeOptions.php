@@ -107,7 +107,7 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 
 	function render() {
 		if ( isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'true' ) {
-			$this->notifications[] = 'Settings saved.';
+			$this->notifications[] = __('Settings saved.', 'crb');
 		}
 		$container_tag_class_name = get_class($this);
 		$container_type = 'ThemeOptions';
