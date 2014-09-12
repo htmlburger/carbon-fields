@@ -244,7 +244,7 @@ jQuery(function($) {
 			if ( $(this).val() == 'new' ) {
 				var new_sidebar, opt;
 
-				new_sidebar = window.prompt("Please enter the name of the new sidebar: ");
+				new_sidebar = window.prompt( crbl10n.enter_name_of_new_sidebar );
 
 				if ( new_sidebar == null || new_sidebar == '') {
 					$(this).find('option:first').attr('selected', true);
