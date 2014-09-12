@@ -4,6 +4,8 @@ add_action('admin_print_scripts', array('Carbon_Field', 'admin_hook_scripts'));
 add_action('admin_print_styles', array('Carbon_Field', 'admin_hook_styles'));
 add_action('wp_ajax_carbon_relationship_load_posts', array('Carbon_Field_Relationship', 'carbon_relationship_load_posts'));
 
+if ( !class_exists('Carbon_Field') ) :
+
 /**
  * Base field class. 
  * Defines the key container methods and their default implementations.
@@ -554,11 +556,21 @@ class Carbon_Field {
 	}
 } // END Carbon_Field 
 
+endif; // END Class Exists check
+
+
+if ( !class_exists('Carbon_Field_Text') ) :
+
 class Carbon_Field_Text extends Carbon_Field {
 	function render() {
 		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->name . '" value="' . esc_attr($this->value) . '" class="regular-text" ' . ($this->required ? 'data-carbon-required="true"': '') . ' />';
 	}
 }
+
+endif; // END Carbon_Field_Text
+
+
+if ( !class_exists('Carbon_Field_Textarea') ) :
 
 class Carbon_Field_Textarea extends Carbon_Field {
 	protected $height = 170;
@@ -575,6 +587,11 @@ class Carbon_Field_Textarea extends Carbon_Field {
 		echo '</textarea>';
 	}
 }
+
+endif; // END Carbon_Field_Textarea
+
+
+if ( !class_exists('Carbon_Field_Rich_Text') ) :
 
 class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 	static $attached_editor = false; 
@@ -628,6 +645,11 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 	}
 }
 
+endif;
+
+
+if ( !class_exists('Carbon_Field_Date') ) :
+
 class Carbon_Field_Date extends Carbon_Field {
 	function init() {
 		global $wp_version;
@@ -644,6 +666,11 @@ class Carbon_Field_Date extends Carbon_Field {
 		echo '<span class="carbon-datepicker-trigger button icon-button hide-if-no-js">' . __('Date', 'crb') . '</span>';
 	}
 }
+
+endif;
+
+
+if ( !class_exists('Carbon_Field_Color') ) :
 
 class Carbon_Field_Color extends Carbon_Field {
 	function init() {
@@ -665,6 +692,11 @@ class Carbon_Field_Color extends Carbon_Field {
 		</div>';
 	}
 }
+
+endif;
+
+
+if ( !class_exists('Carbon_Field_Map') ) :
 
 class Carbon_Field_Map extends Carbon_Field {
 	protected $api_key;
@@ -756,8 +788,13 @@ class Carbon_Field_Map extends Carbon_Field {
 			$this->set_value( $value );
 		}
 	}
-
 }
+
+endif;
+
+
+if ( !class_exists('Carbon_Field_Map_With_Address') ) :
+
 class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 	protected $address = '';
 	
@@ -843,6 +880,11 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 	}
 }
 
+endif;
+
+
+if ( !class_exists('Carbon_Field_Select') ) :
+
 class Carbon_Field_Select extends Carbon_Field {
 	protected $options = array();
 	
@@ -877,6 +919,11 @@ class Carbon_Field_Select extends Carbon_Field {
 		echo '</select>';
 	}
 }
+
+endif;
+
+
+if ( !class_exists('Carbon_Field_Radio') ) :
 
 class Carbon_Field_Radio extends Carbon_Field {
 	protected $options = array();
@@ -913,6 +960,11 @@ class Carbon_Field_Radio extends Carbon_Field {
 	}
 }
 
+endif;
+
+
+if ( !class_exists('Carbon_Field_Checkbox') ) :
+
 class Carbon_Field_Checkbox extends Carbon_Field {
 	protected $option_value = 'yes';
 
@@ -939,6 +991,11 @@ class Carbon_Field_Checkbox extends Carbon_Field {
 	}
 }
 
+endif;
+
+
+if ( !class_exists('Carbon_Field_Header_Scripts') ) :
+
 class Carbon_Field_Header_Scripts extends Carbon_Field_Textarea {
 	function init() {
 		$this->help_text(__('If you need to add scripts to your header, you should enter them here.', 'crb'));
@@ -956,6 +1013,11 @@ class Carbon_Field_Header_Scripts extends Carbon_Field_Textarea {
 	}
 }
 
+endif;
+
+
+if ( !class_exists('Carbon_Field_Footer_Scripts') ) :
+
 class Carbon_Field_Footer_Scripts extends Carbon_Field_Textarea {
 	function init() {
 		$this->help_text(__('If you need to add scripts to your footer (like Google Analytics tracking code), you should enter them in this box.', 'crb'));
@@ -972,6 +1034,11 @@ class Carbon_Field_Footer_Scripts extends Carbon_Field_Textarea {
 		echo get_option($this->name);
 	}
 }
+
+endif;
+
+
+if ( !class_exists('Carbon_Field_Separator') ) :
 
 class Carbon_Field_Separator extends Carbon_Field {
 	function render() {
@@ -996,6 +1063,11 @@ class Carbon_Field_Separator extends Carbon_Field {
 		// skip;
 	}
 }
+
+endif;
+
+
+if ( !class_exists('Carbon_Field_Set') ) :
 
 class Carbon_Field_Set extends Carbon_Field {
 	protected $options = array();
@@ -1056,6 +1128,11 @@ class Carbon_Field_Set extends Carbon_Field {
  		echo '</div>';
 	}
 }
+
+endif;
+
+
+if ( !class_exists('Carbon_Field_Relationship') ) :
 
 class Carbon_Field_Relationship extends Carbon_Field {
 	protected $post_type = 'post';
@@ -1221,8 +1298,12 @@ class Carbon_Field_Relationship extends Carbon_Field {
 		
 		return $where;
 	}
-
 }
+
+endif;
+
+
+if ( !class_exists('Carbon_Field_File') ) :
 
 class Carbon_Field_File extends Carbon_Field {
 	public $button_label = 'Select File';
@@ -1276,6 +1357,11 @@ class Carbon_Field_File extends Carbon_Field {
 	}
 }
 
+endif;
+
+
+if ( !class_exists('Carbon_Field_Attachment') ) :
+
 class Carbon_Field_Attachment extends Carbon_Field_File {
 	public $value_type = 'id';
 
@@ -1313,6 +1399,11 @@ class Carbon_Field_Attachment extends Carbon_Field_File {
 	}
 }
 
+endif;
+
+
+if ( !class_exists('Carbon_Field_Image') ) :
+
 class Carbon_Field_Image extends Carbon_Field_File {
 	public $button_label = 'Select Image';
 	public $window_button_label = 'Select Image';
@@ -1345,6 +1436,11 @@ class Carbon_Field_Image extends Carbon_Field_File {
 		return apply_filters('carbon_field_' . $this->type . '_description', '<div class="carbon-description">' . $description . '</div>');
 	}
 }
+
+endif;
+
+
+if ( !class_exists('Carbon_Field_Choose_Sidebar') ) :
 
 class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 	private $enable_add_new = true; // Whether to allow the user to add new sidebars
@@ -1510,6 +1606,11 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 	}
 }
 
+endif;
+
+
+if ( !class_exists('Carbon_Field_HTML') ) :
+
 class Carbon_Field_HTML extends Carbon_Field {
 	public $field_html;
 
@@ -1538,6 +1639,11 @@ class Carbon_Field_HTML extends Carbon_Field {
 		// skip;
 	}
 }
+
+endif;
+
+
+if ( !class_exists('Carbon_Field_Gravity_Form') ) :
 
 /**
  * Gravity Form Select
@@ -1602,3 +1708,5 @@ class Carbon_Field_Gravity_Form extends Carbon_Field_Select {
 		parent::render();
 	}
 }
+
+endif;
