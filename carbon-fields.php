@@ -12,6 +12,8 @@ define('CARBON_PLUGIN_ROOT', dirname(__FILE__));
 // define('CARBON_PLUGIN_URL', WP_PLUGIN_URL . '/' . basename(dirname(__FILE__)));
 define('CARBON_PLUGIN_URL', get_template_directory_uri() . '/lib/carbon-fields');
 
+do_action('carbon_before_include');
+
 include_once 'Carbon_Exception.php';
 
 include_once 'Carbon_DataStore.php';
@@ -29,6 +31,7 @@ include_once 'Carbon_Widget.php';
 
 include_once 'carbon-functions.php';
 
+do_action('carbon_after_include');
 
 # Add Actions
 add_action('wp_loaded', 'carbon_trigger_fields_register');
