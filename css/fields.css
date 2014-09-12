@@ -25,8 +25,9 @@
 .carbon-field input.carbon-file-field,
 .carbon-field input.carbon-image-field,
 .carbon-field input.carbon-datepicker,
-.carbon-field input.carbon-color,
-.carbon-field select { width: 100%; }
+.carbon-field input.carbon-color { width: 100%; }
+
+.carbon-field select { width: 100%; max-width: 25em; }
 
 .carbon-field input.carbon-file-field,
 .carbon-field input.address,
