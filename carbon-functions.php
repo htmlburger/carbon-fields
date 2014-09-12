@@ -1,5 +1,7 @@
 <?php
 
+if ( !function_exists('carbon_trigger_fields_register') ) :
+
 function carbon_trigger_fields_register() {
 	try {
 		do_action('carbon_register_fields');
@@ -13,9 +15,19 @@ function carbon_trigger_fields_register() {
 	}
 }
 
+endif;
+
+
+if ( !function_exists('carbon_init_containers') ) :
+
 function carbon_init_containers() {
 	Carbon_Container::init_containers();
 }
+
+endif;
+
+
+if ( !function_exists('carbon_get_post_meta') ) :
 
 function carbon_get_post_meta($id, $name, $type = null) {
 	$name = $name[0] == '_' ? $name: '_' . $name;
@@ -37,9 +49,19 @@ function carbon_get_post_meta($id, $name, $type = null) {
 	return get_post_meta($id, $name, true);
 }
 
+endif;
+
+
+if ( !function_exists('carbon_get_the_post_meta') ) :
+
 function carbon_get_the_post_meta($name, $type = null) {
 	return carbon_get_post_meta(get_the_id(), $name, $type);
 }
+
+endif;
+
+
+if ( !function_exists('carbon_get_theme_option') ) :
 
 function carbon_get_theme_option($name, $type = null) {
 	if ( $type == 'complex' ) {
@@ -59,6 +81,11 @@ function carbon_get_theme_option($name, $type = null) {
 	return get_option($name);
 }
 
+endif;
+
+
+if ( !function_exists('carbon_get_term_meta') ) :
+
 function carbon_get_term_meta($id, $name, $type = null) {
 	$name = $name[0] == '_' ? $name: '_' . $name;
 
@@ -69,6 +96,11 @@ function carbon_get_term_meta($id, $name, $type = null) {
 	return get_metadata('term', $id, $name, true);
 }
 
+endif;
+
+
+if ( !function_exists('carbon_get_user_meta') ) :
+
 function carbon_get_user_meta($id, $name, $type = null) {
 	$name = $name[0] == '_' ? $name: '_' . $name;
 
@@ -78,6 +110,11 @@ function carbon_get_user_meta($id, $name, $type = null) {
 
 	return get_metadata('user', $id, $name, true);
 }
+
+endif;
+
+
+if ( !function_exists('carbon_get_complex_fields') ) :
 
 function carbon_get_complex_fields($type, $name, $id = null) {
 	$datastore = Carbon_DataStore_Base::factory($type);
@@ -112,6 +149,11 @@ function carbon_get_complex_fields($type, $name, $id = null) {
 	return $input_groups;
 }
 
+endif;
+
+
+if ( !function_exists('carbon_expand_nested_field') ) :
+
 function carbon_expand_nested_field($input_groups, $row, $field_name) {
 	if ( !preg_match('~^' . preg_quote($field_name['key'], '~') . '(?P<group>\w*)-_?(?P<key>.*?)_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~', $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'], $subfield_name) ) {
 		return $input_groups;
@@ -130,6 +172,11 @@ function carbon_expand_nested_field($input_groups, $row, $field_name) {
 	return $input_groups;
 }
 
+endif;
+
+
+if ( !function_exists('carbon_twitter_widget_registered') ) :
+
 function carbon_twitter_widget_registered() {
 	global $wp_widget_factory;
 	$widget_enabled = !empty($wp_widget_factory->widgets) && !empty($wp_widget_factory->widgets['CrbLatestTweetsWidget']);
@@ -138,9 +185,19 @@ function carbon_twitter_widget_registered() {
 	return $widget_enabled || $manually_enabled;
 }
 
+endif;
+
+
+if ( !function_exists('carbon_twitter_widget_activated') ) :
+
 function carbon_twitter_widget_activated() {
 	return is_active_widget(false, false, 'carbon_latest_tweets', true);
 }
+
+endif;
+
+
+if ( !function_exists('carbon_twitter_is_configured') ) :
 
 function carbon_twitter_is_configured() {
 	$option_names = array(
@@ -161,6 +218,11 @@ function carbon_twitter_is_configured() {
 	return $configured;
 }
 
+endif;
+
+
+if ( !function_exists('carbon_twitter_is_config_valid') ) :
+
 function carbon_twitter_is_config_valid() {
 	$tweets = TwitterHelper::get_tweets('cnn', 1, true);
 	if (!$tweets) {
@@ -168,6 +230,11 @@ function carbon_twitter_is_config_valid() {
 	}
 	return true;
 }
+
+endif;
+
+
+if ( !function_exists('carbon_twitter_widget_no_config_warning') ) :
 
 function carbon_twitter_widget_no_config_warning() {
 	?>
@@ -184,6 +251,11 @@ function carbon_twitter_widget_no_config_warning() {
 	</div>
 	<?php
 }
+
+endif;
+
+
+if ( !function_exists('carbon_twitter_widget_wrong_config_warning') ) :
 
 function carbon_twitter_widget_wrong_config_warning() {
 	?>
@@ -202,7 +274,13 @@ function carbon_twitter_widget_wrong_config_warning() {
 	<?php
 }
 
+endif;
+
+
 add_action('admin_menu', 'carbon_twitter_widget_config_check');
+
+if ( !function_exists('carbon_twitter_widget_config_check') ) :
+
 function carbon_twitter_widget_config_check() {
 	if (!carbon_twitter_widget_registered() || !carbon_twitter_widget_activated()) {
 		return;
@@ -214,3 +292,5 @@ function carbon_twitter_widget_config_check() {
 		add_action('admin_notices', 'carbon_twitter_widget_wrong_config_warning');
 	}
 }
+
+endif;
