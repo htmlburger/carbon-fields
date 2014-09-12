@@ -97,7 +97,7 @@ jQuery(function($) {
 			$('body, html').animate({scrollTop: 0});
 
 			form.siblings('.carbon-error-required').remove();
-			form.before($('<div class="settings-error error below-h2 carbon-error-required"><p><strong>Please fill out all required fields highlighted below.</strong></p></div>'));
+			form.before($('<div class="settings-error error below-h2 carbon-error-required"><p><strong>' + carbon_containers_l10n.please_fill_the_required_fields + '</strong></p></div>'));
 
 			return false;
 		});
@@ -114,7 +114,7 @@ jQuery(function($) {
 
 			window.onbeforeunload = function (){
 				if ( carbon_container.ThemeOptions.hasChanges ) {
-					return (typeof autosaveL10n != 'undefined' ? autosaveL10n.saveAlert: 'The changes you made will be lost if you navigate away from this page.');
+					return (typeof autosaveL10n != 'undefined' ? autosaveL10n.saveAlert: carbon_containers_l10n.changes_made_save_alert);
 				};
 
 				if ( old_callback ) {
@@ -162,13 +162,13 @@ jQuery(function($) {
 			if ( old_callback == null ) {
 				$(window).on( 'beforeunload.edit-post', function (){
 					if ( carbon_container.CustomFields.hasChanges ) {
-						return (postL10n && postL10n.saveAlert ? postL10n.saveAlert: 'The changes you made will be lost if you navigate away from this page.');
+						return (postL10n && postL10n.saveAlert ? postL10n.saveAlert: carbon_containers_l10n.changes_made_save_alert);
 					};
 				})
 			} else {
 				window.onbeforeunload = function (){
 					if ( carbon_container.CustomFields.hasChanges ) {
-						return (autosaveL10n && autosaveL10n.saveAlert ? autosaveL10n.saveAlert: 'The changes you made will be lost if you navigate away from this page.');
+						return (autosaveL10n && autosaveL10n.saveAlert ? autosaveL10n.saveAlert: carbon_containers_l10n.changes_made_save_alert);
 					};
 
 					return old_callback();
@@ -206,7 +206,7 @@ jQuery(function($) {
 			$('body, html').animate({scrollTop: 0});
 
 			form.siblings('.carbon-error-required').remove();
-			form.before($('<div class="settings-error error below-h2 carbon-error-required"><p><strong>Please fill out all required fields highlighted below.</strong></p></div>'));
+			form.before($('<div class="settings-error error below-h2 carbon-error-required"><p><strong>' + carbon_containers_l10n.please_fill_the_required_fields + '</strong></p></div>'));
 
 			return false;
 		});
@@ -396,7 +396,7 @@ jQuery(function($) {
 			var old_callback = window.onbeforeunload;
 
 			window.onbeforeunload = function (){
-				var response = (typeof autosaveL10n != 'undefined' ? autosaveL10n.saveAlert: 'The changes you made will be lost if you navigate away from this page.');
+				var response = (typeof autosaveL10n != 'undefined' ? autosaveL10n.saveAlert: carbon_containers_l10n.changes_made_save_alert);
 				var custom_carbon_widgets_has_errors = false;
 				var $custom_carbon_widgets = $('.widget-liquid-right .carbon-container', document).closest('form');
 
@@ -455,7 +455,7 @@ jQuery(function($) {
 			};
 			
 			$('body, html').animate({scrollTop: 0});
-			$('body .wrap > h2').after( $('<div class="settings-error error below-h2 carbon-error-required"><p><strong>Please fill out all required fields highlighted below.</strong></p></div>') );
+			$('body .wrap > h2').after( $('<div class="settings-error error below-h2 carbon-error-required"><p><strong>' + carbon_containers_l10n.please_fill_the_required_fields + '</strong></p></div>') );
 			carbon_container.Widget.attachedSaveAlert = false;
 			widget_attach_save_alert(container);
 
@@ -527,7 +527,7 @@ jQuery(function($) {
 
 			window.onbeforeunload = function (){
 				if ( carbon_container.UserMeta.hasChanges ) {
-					return (typeof autosaveL10n != 'undefined' && autosaveL10n.saveAlert ? autosaveL10n.saveAlert: 'The changes you made will be lost if you navigate away from this page.');
+					return (typeof autosaveL10n != 'undefined' && autosaveL10n.saveAlert ? autosaveL10n.saveAlert: carbon_containers_l10n.changes_made_save_alert);
 				};
 
 				return old_callback();
@@ -564,7 +564,7 @@ jQuery(function($) {
 			$('body, html').animate({scrollTop: 0});
 
 			form.siblings('.carbon-error-required').remove();
-			form.before($('<div class="settings-error error below-h2 carbon-error-required"><p><strong>Please fill out all required fields highlighted below.</strong></p></div>'));
+			form.before($('<div class="settings-error error below-h2 carbon-error-required"><p><strong>' + carbon_containers_l10n.please_fill_the_required_fields + '</strong></p></div>'));
 
 			return false;
 		});

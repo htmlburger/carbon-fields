@@ -406,6 +406,12 @@ abstract class Carbon_Container {
 
 	static function admin_hook_scripts() {
 		wp_enqueue_script('carbon_containers', CARBON_PLUGIN_URL . '/js/containers.js', array('jquery'), '0.4.1');
+		wp_localize_script('carbon_containers', 'carbon_containers_l10n',
+			array(
+				'please_fill_the_required_fields' => __('Please fill out all required fields highlighted below.', 'crb'),
+				'changes_made_save_alert' => __('The changes you made will be lost if you navigate away from this page.', 'crb'),
+			)
+		);
 	}
 
 	static function admin_hook_styles() {
