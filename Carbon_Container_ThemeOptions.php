@@ -32,6 +32,8 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 			$this->errors[] = $e->getMessage();
 		}
 
+		do_action('carbon_after_save_theme_options', $user_data);
+
 		if ( !headers_sent() ) {
 			wp_redirect(add_query_arg(array('settings-updated' => 'true')));
 		}

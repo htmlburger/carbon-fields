@@ -127,6 +127,8 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 			$field->set_value_from_input();
 			$field->save();
 		}
+
+		do_action('carbon_after_save_custom_fields', $post_id);
 	}
 
 	/**

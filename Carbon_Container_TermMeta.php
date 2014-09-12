@@ -44,6 +44,8 @@ class Carbon_Container_TermMeta extends Carbon_Container {
 			$field->set_value_from_input();
 			$field->save();
 		}
+
+		do_action('carbon_after_save_term_meta', $term_id);
 	}
 
 	function is_valid_save($term_id = null) {

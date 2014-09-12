@@ -37,6 +37,8 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 			$field->set_value_from_input();
 			$field->save();
 		}
+
+		do_action('carbon_after_save_user_meta', $user_id);
 	}
 
 	function is_valid_save($user_id = 0) {
