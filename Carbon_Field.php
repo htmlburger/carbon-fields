@@ -541,7 +541,8 @@ class Carbon_Field {
 				'geocode_not_successful' => __('Geocode was not successful for the following reason: ', 'crb'),
 				'max_num_items_reached' => __('Maximum number of items reached (%s items)', 'crb'),
 				'max_num_rows_reached' => __('Maximum number of rows reached (%s rows)', 'crb'),
-				'cannot_create_more_rows' => __('Cannot create more than %s rows', 'crb')
+				'cannot_create_more_rows' => __('Cannot create more than %s rows', 'crb'),
+				'enter_name_of_new_sidebar' => __('Please enter the name of the new sidebar:', 'crb')
 			)
 		);
 	}
