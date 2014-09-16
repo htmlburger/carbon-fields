@@ -372,6 +372,10 @@ class Carbon_Field {
 		if (is_null($label)) {
 			// remove the leading underscore(if it's there)
 			$label = preg_replace('~^_~', '', $this->name);
+
+			// remove the leading "crb_"(if it's there)
+			$label = preg_replace('~^crb_~', '', $label);
+			
 			// split the name into words and make them capitalized
 			$label = ucwords(str_replace('_', ' ', $label));
 		}
