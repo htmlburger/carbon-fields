@@ -211,7 +211,7 @@
 			<?php
 			if ($this->layout == self::LAYOUT_LIST) {
 				echo '<td class="carbon-action-col">';
-				echo '<input type="hidden" name="' . $this->get_name() . '[' . $index . '][group]' . '" value="' . $group_name . '" />';
+				echo '<input type="hidden" name="' . $this->get_name() . '[' . $index . '][group]' . '" value="' . $group->get_name() . '" />';
 				include(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'complex-button-holder.php');
 				echo '</td>';
 			}
