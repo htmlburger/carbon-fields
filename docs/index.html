@@ -84,6 +84,7 @@
 							<li><a href="#Field_HeaderScripts">Header Scripts</a></li>
 							<li><a href="#Field_FooterScripts">Footer Scripts</a></li>
 							<li><a href="#Field_HTML">HTML</a></li>
+							<li><a href="#Field_GravityForm">Gravity Form</a></li>
 
 							<li class="nav-header">Complex Field</li>
 							<li><a href="#Complex_Field">Usage</a></li>
@@ -709,6 +710,15 @@ Carbon_Field::factory("footer_scripts", "footer_script");
 						<pre class="prettyprint">
 Carbon_Field::factory("html", "information_text")-&gt;set_html('&lt;h2&gt;Lorem ipsum&lt;/h2&gt;
 &lt;p&gt;Quisque mattis ligula eget placerat volutpat. Praesent tincidunt ultricies tempor.&lt;/p&gt;');
+</pre>
+					</div>
+
+					<div class="field-docs">
+						<h4 id="Field_GravityForm">Gravity Form <code>gravity_form</code></h4>
+							<p>Similar to select field, but automatically populated with all available gravity forms. If the plugin is not installed or not activated, an appropriate message will be displayed to the user.</p>
+							<p>There is a <code>crb_gravity_form_options</code> filter which you can use to override the options that are passed to the select field.</p>
+						<pre class="prettyprint">
+Carbon_Field::factory("gravity_form", "crb_gravity_form", "Select a Form");
 </pre>
 					</div>
 
