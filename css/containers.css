@@ -37,7 +37,7 @@ body.no-js .carbon-container { display: none; }
 
 .carbon-container .wp-editor-tools { padding-left:0; }
 
-.carbon-container .carbon-field textarea { width:100%; }
+.carbon-container .carbon-field textarea { width:100%; resize: vertical; }
 
 .help-text { display: block; padding: 2px 0; color: #666; }
 
