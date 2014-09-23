@@ -465,8 +465,23 @@ function load_widgets() {
 }
 add_action('widgets_init', 'load_widgets');</pre>
 	
+					<p>You can setup control options (like width) of your widget by adding a <code>$form_options</code> definition at beginning of your custom widget class. Example:</p>
+					<pre class="prettyprint">
+protected $form_options = array(
+	'width' => 500
+);
+</pre>
 
+					<p>In case you want to disable the default widget wrappers that come from your sidebar, you can disable <code>$this->print_wrappers</code> in the <code>__construct()</code> method of your widget. Example:</p>
+					<pre class="prettyprint">
+function __construct() {
+	$this->setup('Widget Title', __('Widget Description', 'crb'), array(
+		Carbon_Field::factory('text', 'title', 'Title')-&gt;set_default_value('Hello World!'),
+	));
 
+	$this->print_wrappers = false;
+}
+</pre>
 
 					<h2 id="Fields">Fields</h2>
 					<p>Fields are the building block of every container.</p>
