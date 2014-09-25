@@ -580,6 +580,7 @@ class Carbon_Field_Textarea extends Carbon_Field {
 	protected $height = 170;
 	protected $rows = 0;
 
+	// deprecated in favor of set_rows()
 	function set_height($height = 170) {
 		$min_height = 28;
 		$this->height = max(intval($height), $min_height);

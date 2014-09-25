@@ -540,12 +540,18 @@ Carbon_Field::factory('select', 'color')-&gt;add_options(array('red', 'blue', 'g
 						<pre class="prettyprint">Carbon_Field::factory('textarea', 'meta_description')</pre>
 						<strong>Setup methods</strong>
 						<dl>
-							<dt><code>set_height($height = 170)</code></dt>
+							<dt><code>set_rows($rows = 0)</code></dt>
 							<dd>
-								Sets the height. 
+								Sets the number of rows. Must be greater than or equal to 0. Default is <code>0</code>, which falls back to <code>->set_height(170)</code>
+								<pre class="prettyprint">Carbon_Field::factory("textarea", "services_offered", "Services Offered")-&gt;set_rows(4);</pre>
+							</dd>
+							<dt><code>set_height($height = 170)</code> <em>(DEPRECATED)</em></dt>
+							<dd>
+								Sets the field height. <strong>Deprecated</strong> in favor of <code>set_rows()</code>
 								<pre class="prettyprint">Carbon_Field::factory("textarea", "related_urls", "Related Links")-&gt;set_height(250);</pre>
 							</dd>
 						</dl>
+						<p><span class="label label-info">NB!</span> The <code>set_height()</code> method is now <strong>deprecated</strong> - <code>set_rows()</code> should be used instead due to differences in the visual appearance of the textarea between desktop and mobile devices.</p>
 					</div>
 					
 					<div class="field-docs">
