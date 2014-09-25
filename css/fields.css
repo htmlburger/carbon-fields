@@ -35,8 +35,6 @@
 
 .carbon-field input.carbon-color { width: calc(100% - 80px); }
 
-.carbon-field textarea { height: 5em; }
-
 .carbon-row td { background: #FCFCFC; }
 .carbon-empty-row td { padding: 15px 20px !important; }
 

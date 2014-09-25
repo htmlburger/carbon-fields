@@ -578,15 +578,26 @@ if ( !class_exists('Carbon_Field_Textarea') ) :
 
 class Carbon_Field_Textarea extends Carbon_Field {
 	protected $height = 170;
+	protected $rows = 0;
 
 	function set_height($height = 170) {
-		$min_height = 20;
+		$min_height = 28;
 		$this->height = max(intval($height), $min_height);
 		return $this;
 	}
 
+	function set_rows($rows = 0) {
+		$this->rows = absint($rows);
+		return $this;
+	}
+
 	function render() {
-		echo '<textarea id="' . $this->get_id() . '" name="' . $this->get_name() . '" style="height: ' . $this->height . 'px; " ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
+		if ($this->rows) {
+			$additional_attrs = 'rows="' . $this->rows . '"';
+		} else {
+			$additional_attrs = 'style="height: ' . $this->height . 'px; "';
+		}
+		echo '<textarea id="' . $this->get_id() . '" name="' . $this->get_name() . '" ' . $additional_attrs . ' ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
 		echo esc_textarea($this->get_value());
 		echo '</textarea>';
 	}
