@@ -46,7 +46,7 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 			return false;
 		} else if (!isset($_REQUEST[$this->get_nonce_name()]) || !wp_verify_nonce($_REQUEST[$this->get_nonce_name()], $this->get_nonce_name())) {
 			return false;
-		} else if ( !current_user_can('edit_users') ) {
+		} else if ( !$this->is_valid_attach() ) {
 			return false;
 		}
 
@@ -83,8 +83,13 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 		add_action('edit_user_profile', array($this, 'render'), 10, 1);
 	}
 
+	function is_profile_page() {
+		global $pagenow;
+		return $pagenow == 'profile.php';
+	}
+
 	function is_valid_attach() {
-		if ( !current_user_can('edit_users') ) {
+		if ( !current_user_can('edit_users') && !$this->is_profile_page() ) {
 			return false;
 		}
 
