@@ -182,6 +182,10 @@ jQuery(function($) {
 			$('body').on('remove_fields.carbon reorder_groups.carbon', function() {
 				carbon_container.CustomFields.hasChanges = true;
 			});
+
+			$('#publish').click(function(){
+				window.onbeforeunload = null;
+			});
 		});
 	}
 
