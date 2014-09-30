@@ -36,9 +36,12 @@ function carbon_get_post_meta($id, $name, $type = null) {
 		return carbon_get_complex_fields('CustomField', $name, $id);
 	} else if ( $type == 'map' ) {
 		$raw_meta = get_post_meta($id, $name, true);
-		$coordinates = explode(',', $raw_meta);
+		if ($raw_meta) {
+			$coordinates = explode(',', $raw_meta);
+			return array('lat'=>(float)$coordinates[0], 'lng'=>(float)$coordinates[1]);
+		}
 		
-		return array('lat'=>(float)$coordinates[0], 'lng'=>(float)$coordinates[1]);
+		return array();
 	} else if ( $type == 'map_with_address' ) {
 		$partial_meta = carbon_get_post_meta($id, $name, 'map');
 		$partial_meta['address'] = get_post_meta($id, $name . '-address', true);
@@ -68,9 +71,12 @@ function carbon_get_theme_option($name, $type = null) {
 		return carbon_get_complex_fields('ThemeOptions', $name);
 	} else if ( $type == 'map' ) {
 		$raw_meta = get_option($name);
-		$coordinates = explode(',', $raw_meta);
-		
-		return array('lat'=>(float)$coordinates[0], 'lng'=>(float)$coordinates[1]);
+		if ($raw_meta) {
+			$coordinates = explode(',', $raw_meta);
+			return array('lat'=>(float)$coordinates[0], 'lng'=>(float)$coordinates[1]);
+		}
+
+		return array();
 	} else if ( $type == 'map_with_address' ) {
 		$partial_meta = carbon_get_theme_option($name, 'map');
 		$partial_meta['address'] = get_option($name . '-address');
