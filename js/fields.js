@@ -897,7 +897,26 @@ jQuery(function($) {
 		    $(this).attr('value', $(this).val());
 		});
 
+		// Touch all checkbox & radio checked states to update the DOM nodes
+		row.find('input:checkbox, input:radio').each(function() {
+		    if ($(this).is(':checked')) {
+		    	$(this).attr('checked', 'checked');
+		    } else {
+		    	$(this).removeAttr('checked');
+		    }
+		});
+
+		// Touch all select fields to update the DOM nodes
+		row.find('select option').each(function() {
+	    	if (!$(this).is(':selected')) {
+	    		$(this).removeAttr('selected');
+	    	} else {
+	    		$(this).attr('selected', 'selected');
+	    	}
+		});
+
 		new_row = row.clone();
+
 		init(row);
 
 		field.num_rows++;
