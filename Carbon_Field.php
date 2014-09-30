@@ -1566,7 +1566,7 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 		$custom_sidebars = $this->get_custom_sidebars();
 
 		foreach ($custom_sidebars as $sidebar) {
-			$slug = strtolower(preg_replace('~-{2,}~', '', preg_replace('~[^\w]~', '-', $sidebar)));
+			$slug = sanitize_title_with_dashes($sidebar);
 
 			$sidebar_options = array();
 
