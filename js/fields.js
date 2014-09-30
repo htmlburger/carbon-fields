@@ -251,7 +251,7 @@ jQuery(function($) {
 					return false;
 				}
 
-				opt = $('<option value="' + new_sidebar + '">' + new_sidebar + '</option>').insertBefore($(this).find('option:last'));
+				opt = $('<option value="' + esc_attr(new_sidebar) + '">' + new_sidebar + '</option>').insertBefore($(this).find('option:last'));
 				
 				$(this).find('option').attr('selected', false);
 				opt.attr('selected', true);
@@ -950,6 +950,19 @@ jQuery(function($) {
 		} else {
 			field.empty_field_text.hide();
 		}
+	}
+
+	function esc_attr(s, preserveCR) {
+	    preserveCR = preserveCR ? '&#13;' : '\n';
+	    return ('' + s) /* Forces the conversion to string. */
+	        .replace(/&/g, '&amp;') /* This MUST be the 1st replacement. */
+	        .replace(/'/g, '&apos;') /* The 4 other predefined entities, required. */
+	        .replace(/"/g, '&quot;')
+	        .replace(/</g, '&lt;')
+	        .replace(/>/g, '&gt;')
+	        .replace(/\r\n/g, preserveCR) /* Must be before the next replacement. */
+	        .replace(/[\r\n]/g, preserveCR);
+	        ;
 	}
 
 	var current_editor = getUserSetting('editor');
