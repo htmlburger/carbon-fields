@@ -185,6 +185,9 @@ body.touchscreen .carbon-relationship .relationship-right ul { height: auto; }
 	
 	.carbon-color-preview { padding: 7px 17px; }
 	
+	.carbon-field input[type=checkbox], 
+	.carbon-field input[type=radio] { width: 25px; height: 25px; margin-top: 0; }
+
 	.carbon-field input.carbon-file-field,
 	.carbon-field input.address,
 	.carbon-field input.carbon-datepicker { width: calc(100% - 50px) !important; display: inline !important; }
