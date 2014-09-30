@@ -894,25 +894,25 @@ jQuery(function($) {
 
 		// Touch all input/textarea values to make sure the input DOM nodes are updated
 		row.find('input:text, textarea').each(function() {
-		    $(this).attr('value', $(this).val());
+			$(this).attr('value', $(this).val());
 		});
 
 		// Touch all checkbox & radio checked states to update the DOM nodes
 		row.find('input:checkbox, input:radio').each(function() {
-		    if ($(this).is(':checked')) {
-		    	$(this).attr('checked', 'checked');
-		    } else {
-		    	$(this).removeAttr('checked');
-		    }
+			if ($(this).is(':checked')) {
+				$(this).attr('checked', 'checked');
+			} else {
+				$(this).removeAttr('checked');
+			}
 		});
 
 		// Touch all select fields to update the DOM nodes
 		row.find('select option').each(function() {
-	    	if (!$(this).is(':selected')) {
-	    		$(this).removeAttr('selected');
-	    	} else {
-	    		$(this).attr('selected', 'selected');
-	    	}
+			if (!$(this).is(':selected')) {
+				$(this).removeAttr('selected');
+			} else {
+				$(this).attr('selected', 'selected');
+			}
 		});
 
 		new_row = row.clone();
@@ -972,16 +972,16 @@ jQuery(function($) {
 	}
 
 	function esc_attr(s, preserveCR) {
-	    preserveCR = preserveCR ? '&#13;' : '\n';
-	    return ('' + s) /* Forces the conversion to string. */
-	        .replace(/&/g, '&amp;') /* This MUST be the 1st replacement. */
-	        .replace(/'/g, '&apos;') /* The 4 other predefined entities, required. */
-	        .replace(/"/g, '&quot;')
-	        .replace(/</g, '&lt;')
-	        .replace(/>/g, '&gt;')
-	        .replace(/\r\n/g, preserveCR) /* Must be before the next replacement. */
-	        .replace(/[\r\n]/g, preserveCR);
-	        ;
+		preserveCR = preserveCR ? '&#13;' : '\n';
+		return ('' + s) /* Forces the conversion to string. */
+			.replace(/&/g, '&amp;') /* This MUST be the 1st replacement. */
+			.replace(/'/g, '&apos;') /* The 4 other predefined entities, required. */
+			.replace(/"/g, '&quot;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/\r\n/g, preserveCR) /* Must be before the next replacement. */
+			.replace(/[\r\n]/g, preserveCR);
+			;
 	}
 
 	var current_editor = getUserSetting('editor');
