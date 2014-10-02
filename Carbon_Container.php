@@ -142,7 +142,7 @@ abstract class Carbon_Container {
 
 	function __construct($title) {
 		$this->title = $title;
-		$this->id = preg_replace('~\W~', '', $title);
+		$this->id = preg_replace('~\W~u', '', remove_accents($title));
 
 		$this->verify_unique_panel_id($this->id);
 	}

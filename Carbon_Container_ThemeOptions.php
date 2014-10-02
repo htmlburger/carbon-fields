@@ -222,7 +222,7 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 	}
 
 	protected function clear_string($string) {
-		return preg_replace(array('~ +~', '~[^\w\d-]+~', '~-+~'), array('-', '-', '-'), strtolower($string));
+		return preg_replace(array('~ +~', '~[^\w\d-]+~u', '~-+~'), array('-', '-', '-'), strtolower(remove_accents($string)));
 	}
 
 }

@@ -19,7 +19,7 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 		$this->add_fields($fields);
 
 		# Generate Widget ID
-		$widget_ID = 'carbon_' . preg_replace('~\s+~', '_', strtolower(trim(preg_replace('/[^\00-\255]+/u', '', $title))));
+		$widget_ID = 'carbon_' . preg_replace('~\s+~', '_', strtolower(trim(preg_replace('/[^a-zA-Z0-9]+/u', '', remove_accents($title)))));
 
 		# Generate Classes
 		if ( !is_array($classname) ) {
