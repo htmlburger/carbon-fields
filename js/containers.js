@@ -488,7 +488,7 @@ jQuery(function($) {
 			};
 
 			for (var i = keywords.length - 1; i >= 0; i--) {
-				if ( ajaxOptions.data.indexOf(keywords[i]) == -1 ) {
+				if ( !ajaxOptions.data.length || ajaxOptions.data.indexOf(keywords[i]) == -1 ) {
 					continue;
 				};
 				keyword_found = true;
