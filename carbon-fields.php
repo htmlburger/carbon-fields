@@ -10,7 +10,9 @@ Tested up to: 3.9.1
 define('CARBON_PLUGIN_ROOT', dirname(__FILE__));
 
 // define('CARBON_PLUGIN_URL', WP_PLUGIN_URL . '/' . basename(dirname(__FILE__)));
-define('CARBON_PLUGIN_URL', get_template_directory_uri() . '/lib/carbon-fields');
+if (!defined('CARBON_PLUGIN_URL')) {
+	define('CARBON_PLUGIN_URL', get_template_directory_uri() . '/lib/carbon-fields');	
+}
 
 do_action('carbon_before_include');
 
