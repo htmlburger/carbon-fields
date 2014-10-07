@@ -51,7 +51,7 @@ class Carbon_Container_TermMeta extends Carbon_Container {
 	function is_valid_save($term_id = null) {
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
 			return false;
-		} else if (!isset($_REQUEST[$this->get_nonce_name()]) || !wp_verify_nonce($_REQUEST[$this->get_nonce_name()], $this->get_nonce_name())) {
+		} else if ( !wp_verify_nonce( crb_request_param($this->get_nonce_name()), $this->get_nonce_name() ) ) {
 			return false;
 		} else if ($term_id < 1) {
 			return false;

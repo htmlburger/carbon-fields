@@ -143,7 +143,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	function is_valid_save($post_id = 0) {
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
 			return false;
-		} else if (!isset($_REQUEST[$this->get_nonce_name()]) || !wp_verify_nonce($_REQUEST[$this->get_nonce_name()], $this->get_nonce_name())) {
+		} else if ( !wp_verify_nonce( crb_request_param($this->get_nonce_name()), $this->get_nonce_name() ) ) {
 			return false;
 		} else if ($post_id < 1) {
 			return false;
