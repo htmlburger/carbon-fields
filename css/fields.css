@@ -167,6 +167,8 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 .carbon-wysiwyg .wp-editor-area { border: 0; }
 .carbon-html ul { margin: 14px 28px; list-style-type: disc; }
 
+#profile-page .form-table textarea { max-width: 100%; width: 100%; }
+
 body.touchscreen .carbon-relationship .relationship-right ul { height: auto; }
 
 @media screen and (max-width: 1120px) {
