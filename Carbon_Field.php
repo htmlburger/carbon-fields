@@ -672,7 +672,7 @@ class Carbon_Field_Date extends Carbon_Field {
 
 		if (defined('WP_ADMIN') && WP_ADMIN) {
 			wp_enqueue_script('jquery-ui-datepicker');
-			wp_enqueue_style('carbon-jquery-ui', CARBON_PLUGIN_URL . '/css/jquery-ui.css');
+			wp_enqueue_style('jquery-ui', 'https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.min.css');
 		}
 		Carbon_Field::init();
 	}

@@ -93,7 +93,8 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 .carbon-relationship ul { border: 1px solid #ccc; position: relative; background: #fff; }
 .carbon-relationship ul li { margin: 0; padding: 0; display: block;}
 .carbon-relationship ul li a { display: block; position: relative; padding: 3px; border-bottom: 1px solid #f5f5f5; text-decoration: none; }
-.carbon-relationship ul li a span { display: none; position: absolute; width: 15px; height: 15px; cursor: pointer; background: red; right: 5px; top: 3px; }
+.carbon-relationship ul li a span { display: none; position: absolute; width: 15px; height: 15px; cursor: pointer; right: 5px; top: 3px; }
+.carbon-relationship ul li a span:before { display: inline-block; -webkit-font-smoothing: antialiased; font: normal 15px/1 'dashicons'; vertical-align: top; }
 .carbon-relationship ul li a em { float: right; font-style: normal; color: #999; margin-right: 20px; text-transform: uppercase; font-size: 11px; }
 .carbon-relationship ul li a:hover { background-color: #eaeff5; color: #333; }
 .carbon-relationship ul li a:hover span { display: block; }
@@ -104,13 +105,13 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 
 .carbon-relationship .relationship-left { width: 48.5%; float: left; }
 .carbon-relationship .relationship-left ul { display: block; height: 150px; margin: 0; overflow: auto; border-top: 0 none; }
-.carbon-relationship .relationship-left ul a span { background: url(images/ui-icons_888888_256x240.png) no-repeat 0 -192px; }
+.carbon-relationship .relationship-left ul a span:before { content: "\f502"; }
 
 .carbon-relationship .relationship-right { width: 48.5%; float: right; }
 .carbon-relationship .relationship-right label { display: none; }
 .carbon-relationship .relationship-right ul { height: 188px; min-height: 188px; /* min-height set for touch devices */ margin: 0; overflow: auto; }
 .carbon-relationship .relationship-right ul a { cursor: move; }
-.carbon-relationship .relationship-right ul a span { background: url(images/ui-icons_888888_256x240.png) no-repeat -16px -192px; }
+.carbon-relationship .relationship-right ul a span:before { content: "\f153"; }
 
 .carbon-relationship .relationship-right ul.ui-sortable { touch-action: auto; }
 
