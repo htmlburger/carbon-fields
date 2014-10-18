@@ -207,10 +207,10 @@ if ( !function_exists('carbon_twitter_is_configured') ) :
 
 function carbon_twitter_is_configured() {
 	$option_names = array(
-		'twitter_oauth_access_token',
-		'twitter_oauth_access_token_secret',
-		'twitter_consumer_key',
-		'twitter_consumer_secret'
+		'crb_twitter_oauth_access_token',
+		'crb_twitter_oauth_access_token_secret',
+		'crb_twitter_consumer_key',
+		'crb_twitter_consumer_secret'
 	);
 	$configured = true;
 
