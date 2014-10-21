@@ -103,7 +103,7 @@ jQuery(function($) {
 					switch (file_type) {
 						case 'image':
 							// image field type
-							row.find('.carbon-view_image').attr( 'src', media_value );
+							row.find('.carbon-view_image').attr( 'src', media_value ).removeClass('blank');
 							row.find('.carbon-view_file').attr( 'href', media_value );
 							row.find('.carbon-description, img').show();
 							if (!row.find('.carbon-file-remove').length) {
@@ -116,7 +116,7 @@ jQuery(function($) {
 							if (parseInt(media_value)==media_value) {
 								// attachment field type
 								if (media_attachment.type=='image') {
-									row.find('.carbon-view_image').attr( 'src', media_attachment.url );
+									row.find('.carbon-view_image').attr( 'src', media_attachment.url ).removeClass('blank');
 									row.find('.carbon-description, img').show();
 									if (!row.find('.carbon-file-remove').length) {
 										row.find('.carbon-preview').append('<span class="carbon-file-remove"></span>');
@@ -124,6 +124,7 @@ jQuery(function($) {
 								}else{
 									// all other file types
 									row.find('.carbon-description, img').hide();
+									row.find('img').addClass('blank');
 								};
 							}else{
 								// file field type
@@ -147,7 +148,7 @@ jQuery(function($) {
 			fieldContainer.find('.carbon-description').hide();
 			fieldContainer.find('input.carbon-file-field').attr('value', '');
 			fieldContainer.find('span.attachment_url').html('');
-			fieldContainer.find('img').hide();
+			fieldContainer.find('img').hide().addClass('blank');
 		});
 	}
 	

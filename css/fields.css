@@ -42,7 +42,10 @@
 .carbon-attachment-title,
 .carbon-attachment-url { display: block; margin: 3px 0 0; word-break: break-all; }
 .carbon-attachment-url { font-family: monospace; } 
-.carbon-attachment .carbon-file-remove { margin: 3px 3px 0 !important; }
+.carbon-attachment .carbon-file-remove,
+.carbon-file .carbon-file-remove { margin: 6px 6px 0 !important; }
+.carbon-field .carbon-view_image.blank ~ .carbon-file-remove { position: static; margin-left: 3px !important; }
+.carbon-field.carbon-attachment input.carbon-file-field { display: none !important; }
 
 .carbon-datepicker-trigger,
 .carbon-color-preview { display: inline; margin: 0 0 0 7px; padding: 3px 13px; line-height: 20px; -webkit-border-radius: 4px; border-radius: 4px; border: 1px solid #DFDFDF; cursor: pointer; }
