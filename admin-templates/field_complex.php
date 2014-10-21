@@ -1,4 +1,4 @@
-<table class="carbon-subcontainer <?php echo $container_tag_class_name . ' layout-' . $this->layout; ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>">
+<table class="carbon-subcontainer <?php echo $container_tag_class_name . ' layout-' . $this->layout; ?>" data-min-values="<?php echo $this->get_min() ?>" data-max-values="<?php echo $this->get_max() ?>" <?php echo $this->is_required() ? 'data-carbon-required="true"' : ''; ?>>
 	
 	<tr class="carbon-row carbon-empty-row" style="display: none">
 		<td colspan="2">
