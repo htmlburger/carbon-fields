@@ -1309,7 +1309,7 @@ class Carbon_Field_Relationship extends Carbon_Field {
 		global $wpdb;
 		
 		if ( !empty($_POST['s']) )  {
-			$where .= " AND " . $wpdb->posts . ".post_title LIKE '%" . esc_sql( like_escape(  $_POST['s'] ) ) . "%'";
+			$where .= " AND " . $wpdb->posts . ".post_title LIKE '%" . esc_sql( $wpdb->esc_like(  $_POST['s'] ) ) . "%'";
 		}
 		
 		return $where;
