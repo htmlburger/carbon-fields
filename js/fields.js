@@ -741,10 +741,12 @@ jQuery(function($) {
 			
 			var groupRow = $(this).closest('.carbon-group-row');
 			groupRow.toggleClass('minimized');
-			if (groupRow.hasClass('minimized')) {
-				setUserSetting(groupRow.attr('id'), 'minimized');
-			} else {
-				deleteUserSetting(groupRow.attr('id'));
+			if (groupRow.attr('id')) {
+				if (groupRow.hasClass('minimized')) {
+					setUserSetting(groupRow.attr('id'), 'minimized');
+				} else {
+					deleteUserSetting(groupRow.attr('id'));
+				}
 			}
 		});
 
