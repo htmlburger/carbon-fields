@@ -57,12 +57,24 @@ jQuery(function($) {
 			th.closest('td').addClass('carbon-highlight');
 			has_errors = true;
 		})
+
 		$('.carbon-radio-list[data-carbon-required=true], .carbon-set-list[data-carbon-required=true]').each(function() {
 			var th = $(this);
 
 			if ( th.find('input[type=radio]:checked, input[type=checkbox]:checked').length > 0 || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
 				return;
 			};
+
+			th.closest('td').addClass('carbon-highlight');
+			has_errors = true;
+		});
+
+		$('.Carbon_Field_Complex[data-carbon-required=true]').each(function() {
+			var th = $(this);
+
+			if ( th.find('.carbon-group-row').length > 0 || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
+				return;
+			}
 
 			th.closest('td').addClass('carbon-highlight');
 			has_errors = true;
