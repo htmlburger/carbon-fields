@@ -63,6 +63,7 @@ class Carbon_Container_TermMeta extends Carbon_Container {
 	function attach() {
 		foreach ($this->settings['taxonomy'] as $taxonomy) {
 			add_action( $taxonomy . '_edit_form_fields', array($this, 'render'), 10, 2);
+			add_action( $taxonomy . '_add_form_fields', array($this, 'render'), 10, 2);
 		}
 	}
 	
@@ -88,11 +89,10 @@ class Carbon_Container_TermMeta extends Carbon_Container {
 	}
 
 	function render($term=null) {
-		if ( is_null($term) ) {
-			return;
-		}
 
-		$this->set_term_id( $term->term_id );
+		if (is_object($term)) {
+			$this->set_term_id( $term->term_id );
+		}
 
 		$container_tag_class_name = get_class($this);
 		include dirname(__FILE__) . '/admin-templates/container-term-meta.php';

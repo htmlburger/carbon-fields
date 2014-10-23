@@ -23,7 +23,7 @@ foreach ($this->fields as $field) {
 				<?php
 				echo $field->get_label(); 
 				if ( $field->is_required() ) {
-					echo ' *';
+					echo ' <span class="carbon-required">*</span>';
 				} ?>
 			</th>
 			<td>

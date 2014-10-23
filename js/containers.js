@@ -21,6 +21,18 @@ jQuery(function($) {
 			}
 
 		});
+
+		$('#edittag, #addtag').each(function() {
+			var th = $(this),
+				container;
+
+			try {
+				container = carbon_container(th);
+				carbon_container['TermMeta'](th, container);
+			} catch (e) {
+				carbon_log_error("Couldn't render container: " + e.message);
+			}
+		});
 	}
 
 	// Parse the DOM element and create container object for ease of use
@@ -518,6 +530,118 @@ jQuery(function($) {
 		});
 	}
 
+	/* Term Meta */
+	carbon_container.TermMeta = function (element, container_obj) {
+		term_meta_attach_validation_hook();
+
+		term_meta_init_monitor(container_obj);
+
+		carbon_container.TermMeta.attachedValidationHook = false;
+		carbon_container.TermMeta.hasChanges = false;
+	}
+	carbon_container.TermMeta.initMonitorReady = false;
+	carbon_container.TermMeta.monitored_keywords = ['carbon_panel_Test_nonce'];
+
+	function term_meta_check_required() {
+		var has_errors = false;
+		var error_classes = 'carbon-highlight form-invalid form-required';
+
+		$('.carbon-highlight').removeClass(error_classes);
+
+		// Find required fields
+		$('input[type="text"][data-carbon-required=true], textarea[data-carbon-required=true]').each(function() {
+			var th = $(this);
+
+			if ( th.val() != '' || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
+				return;
+			};
+
+			th.closest('.carbon-field').addClass(error_classes);
+			has_errors = true;
+		})
+
+		$('.carbon-radio-list[data-carbon-required=true], .carbon-set-list[data-carbon-required=true]').each(function() {
+			var th = $(this);
+
+			if ( th.find('input[type=radio]:checked, input[type=checkbox]:checked').length > 0 || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
+				return;
+			};
+
+			th.closest('.carbon-field').addClass(error_classes);
+			has_errors = true;
+		});
+
+		$('.Carbon_Field_Complex[data-carbon-required=true]').each(function() {
+			var th = $(this);
+
+			if ( th.find('.carbon-group-row').length > 0 || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
+				return;
+			}
+
+			th.closest('.carbon-field').addClass(error_classes);
+			has_errors = true;
+		});
+
+		return has_errors;
+	}
+
+	function term_meta_attach_validation_hook() {
+		$('#addtag #submit, #edittag #submit').on('click', function() {
+			var form = $(this).closest('form'),
+				has_errors = term_meta_check_required();
+
+			if ( !has_errors ) {
+				return;
+			};
+
+			$('body, html').animate({scrollTop: 0});
+
+			form.siblings('.carbon-error-required').remove();
+			form.before($('<div class="settings-error error below-h2 carbon-error-required"><p><strong>' + carbon_containers_l10n.please_fill_the_required_fields + '</strong></p></div>'));
+
+			return false;
+		});
+	}
+
+	function term_meta_init_monitor(container) {
+		var keyword_found = false,
+			keywords = carbon_container.TermMeta.monitored_keywords;
+
+		// monitor for new containers
+		if ( carbon_container.TermMeta.initMonitorReady ) {
+			return;
+		};
+
+		carbon_container.TermMeta.initMonitorReady = true;
+
+		/* Monitor for ajax requests that reload the container node */
+		$(document).ajaxSuccess(function(event, jqXHR, ajaxOptions) {
+			if ( jqXHR.status != 200 ) {
+				return;
+			};
+
+			for (var i = keywords.length - 1; i >= 0; i--) {
+				if ( !ajaxOptions.data.length || ajaxOptions.data.indexOf(keywords[i]) == -1 ) {
+					continue;
+				};
+				keyword_found = true;
+				break;
+			};
+
+			if ( !keyword_found ) {
+				return;
+			};			
+
+			if (!$('.carbon-field.carbon-highlight').length) {
+				$('.carbon-error-required').remove();
+			}
+
+			setTimeout(function() {
+				carbon_container_init();
+				carbon_field_init();
+			}, 1);
+		});
+	}
 
 	/* User Meta */
 	carbon_container.UserMeta = function (element, container_obj) {

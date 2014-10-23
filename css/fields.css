@@ -160,7 +160,15 @@ ul.carbon-radio-list input { width: auto; margin-right: 5px; }
 .carbon-wysiwyg .wp-editor-area { border: 0; }
 .carbon-html ul { margin: 14px 28px; list-style-type: disc; }
 
-#profile-page .form-table textarea { max-width: 100%; width: 100%; }
+#profile-page .form-table textarea,
+#addtag textarea,
+#edittag textarea { max-width: 100%; width: 100%; }
+
+#addtag .carbon-field { margin-bottom: 15px; }
+#addtag .carbon-field.carbon-highlight,
+#edittag .carbon-field.carbon-highlight,
+#addtag .carbon-field.carbon-complex td { padding: 15px 10px; }
+#addtag .carbon-field.carbon-complex th { text-align: left; vertical-align: top; }
 
 body.touchscreen .carbon-relationship .relationship-right ul { height: auto; }
 
