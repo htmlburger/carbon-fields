@@ -1090,6 +1090,13 @@ jQuery(function($) {
 				field_object.update_marker_position( new google.maps.LatLng(lat, lng) );
 
 				break;
+
+			case 'Complex': 
+
+				// remove all complex entries
+				field.find('.carbon-btn-remove').trigger('click');
+
+				break;
 		}
 	}
 
