@@ -974,6 +974,125 @@ jQuery(function($) {
 		}
 	}
 
+	// reset a field to its initial state
+	function reset_field(field) {
+		var type = field.data('type');
+		var default_value = field.data('default-value');
+
+		switch(type) {
+			case 'Text':
+			case 'Date':
+			case 'File':
+				field.find('input:eq(0)').val(default_value);
+				break;
+
+			case 'Textarea':
+				field.find('textarea:eq(0)').val(default_value);
+				break;
+
+			case 'Color':
+				var input = field.find('input:eq(0)');
+
+				// reset farbtastic
+				input.val('#ffffff').trigger('blur');
+
+				// apply default value, if any
+				input.val(default_value).trigger('blur');
+				
+				break;
+
+			case 'Checkbox':
+			case 'Set':
+			case 'Radio':
+				var inputs = field.find(':checkbox, :radio');
+
+				inputs.each(function() {
+					var input = $(this);
+
+					// uncheck all fields
+					input.removeAttr('checked');
+
+					// check all fields that are set as default value (if any)
+					if (default_value) {
+						default_values = default_value.split(',');
+
+						$(default_values).each(function() {
+							if (input.val() == this) {
+								input.attr('checked', 'checked');
+							}
+						});
+					}
+				});
+				break;
+
+			case 'Select':
+			case 'Choose_Sidebar':
+			case 'Gravity_Form':
+				var new_val,
+					select = field.find('select:eq(0)');
+
+				// select either the default value, or the first option
+				if (default_value) {
+					new_val = default_value;
+				} else {
+					new_val = select.find('option:eq(0)').attr('value');
+				}
+				select.val(new_val);
+
+				break;
+
+			case 'Rich_Text':
+				var editor_id = 'wysiwyg-' + field.data('name'),
+					editor = tinymce.get(editor_id);
+
+				editor.setContent(default_value);
+
+				break;
+
+			case 'Relationship':
+				// remove the falue from the Search field
+				field.find('.relationship-left input:text').val('');
+
+				// unselect current posts
+				field.find('.relationship-right .relationship-list a').trigger('click');
+
+				// if there is a default value, select the corresponding entry (or entries)
+				if (default_value) {
+					var default_values = default_value.split(',');
+					$(default_values).each(function() {
+						field.find('.relationship-left .relationship-list a[data-post_id="' + this + '"]').trigger('click');
+					});
+				}
+
+				break;
+
+			case 'Image':
+			case 'Attachment':
+				// reset field value
+				field.find('input:text').val(default_value);
+
+				// remove & hide the preview image
+				field.find('.carbon-file-remove').trigger('click');
+
+				break;
+
+			case 'Map_With_Address':
+				// reset the address text field
+				field.find('input:text').val('');
+
+			case 'Map':
+				var field_object = field.data('carbon_field')
+					map_field = field.find('.carbon-map-field:eq(0)'),
+					lat = map_field.data('default-lat'),
+					lng = map_field.data('default-lng');
+
+				// reset and redraw map
+				field_object.update_marker_position( new google.maps.LatLng(lat, lng) );
+
+				break;
+		}
+	}
+
 	function esc_attr(s, preserveCR) {
 		preserveCR = preserveCR ? '&#13;' : '\n';
 		return ('' + s) /* Forces the conversion to string. */
@@ -997,6 +1116,7 @@ jQuery(function($) {
 
 	window.carbon_field_init = init;
 	window.carbon_field = carbon_field;
+	window.reset_field = reset_field;
 
 	/**/
 	window.carbon_log_error = carbon_log_error;

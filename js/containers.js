@@ -628,6 +628,15 @@ jQuery(function($) {
 				break;
 			};
 
+			// check if a new term has been created
+			var add_tag_occurences = (jqXHR.responseText.match(/add-tag_/g) || []).length;
+			if (add_tag_occurences >= 2) {
+				// reset all fields
+				$('.carbon-field').each(function() {
+					reset_field($(this));
+				});
+			}
+
 			if ( !keyword_found ) {
 				return;
 			};			

@@ -17,6 +17,10 @@ foreach ($this->fields as $field) {
 		</tr>
 		<?php
 	} else {
+		$default_value = $field->get_default_value();
+		if (is_array($default_value)) {
+			$default_value = implode(',', $default_value);
+		}
 		?>
 		<tr class="form-field">
 			<th scope="row">
@@ -27,7 +31,7 @@ foreach ($this->fields as $field) {
 				} ?>
 			</th>
 			<td>
-				<div class="carbon-field carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>">
+				<div class="carbon-field carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $field->type ?>" data-name="<?php echo $field->get_name() ?>" data-default-value="<?php echo esc_attr($default_value); ?>">
 					<?php echo $field->render(); ?>
 					<em class="help-text"><?php echo $field->get_help_text(); ?></em>
 				</div>

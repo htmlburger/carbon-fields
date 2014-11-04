@@ -13,6 +13,11 @@
 		$field_id = $this->get_field_id($tmp_field->get_name());
 		$field_name = $this->get_field_name($tmp_field->get_name());
 		$tmp_field->set_name($field_name);
+		
+		$default_value = $field->get_default_value();
+		if (is_array($default_value)) {
+			$default_value = implode(',', $default_value);
+		}
 		?>
 		<div class="carbon-widget-field-wrapper">
 			<?php
@@ -36,7 +41,7 @@
 			}
 			?>
 
-			<div class="carbon-field carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $tmp_field->type ?>" data-name="<?php echo $field->get_name() ?>">
+			<div class="carbon-field carbon-<?php echo implode(' carbon-', $field->get_html_class()); ?>" data-type="<?php echo $tmp_field->type ?>" data-name="<?php echo $field->get_name() ?>" data-default-value="<?php echo esc_attr($field->get_default_value()); ?>">
 				<?php $tmp_field->render(); ?>
 			</div>
 			<?php
