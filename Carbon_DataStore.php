@@ -46,7 +46,7 @@ class Carbon_DataStore_CustomField extends Carbon_DataStore_Base {
 	function load(Carbon_Field $field) {
 		global $wpdb;
 
-		$value = $wpdb->get_var('
+		$value = $wpdb->get_col('
 			SELECT `meta_value`
 			FROM ' . $wpdb->postmeta . '
 			WHERE `post_id`=' . intval($this->post_id) . '
@@ -54,12 +54,12 @@ class Carbon_DataStore_CustomField extends Carbon_DataStore_Base {
 			LIMIT 1
 		');
 
-		if ( is_null($value) ) {
+		if ( !is_array($value) || count($value) < 1 ) {
 			$field->set_value(false);
 			return;
 		}
 
-		$field->set_value($value);
+		$field->set_value($value[0]);
 	}
 
 	function delete(Carbon_Field $field) {
@@ -212,7 +212,7 @@ class Carbon_DataStore_TermMeta extends Carbon_DataStore_Base {
 	function load(Carbon_Field $field) {
 		global $wpdb;
 
-		$value = $wpdb->get_var('
+		$value = $wpdb->get_col('
 			SELECT `meta_value`
 			FROM ' . $wpdb->termmeta . '
 			WHERE `term_id`=' . intval($this->term_id) . '
@@ -220,12 +220,12 @@ class Carbon_DataStore_TermMeta extends Carbon_DataStore_Base {
 			LIMIT 1
 		');
 
-		if ( is_null($value) ) {
+		if ( !is_array($value) || count($value) < 1 ) {
 			$field->set_value(false);
 			return;
 		}
 
-		$field->set_value($value);
+		$field->set_value($value[0]);
 	}
 
 	function delete(Carbon_Field $field) {
@@ -289,7 +289,7 @@ class Carbon_DataStore_UserMeta extends Carbon_DataStore_Base {
 	function load(Carbon_Field $field) {
 		global $wpdb;
 
-		$value = $wpdb->get_var('
+		$value = $wpdb->get_col('
 			SELECT `meta_value`
 			FROM ' . $wpdb->usermeta . '
 			WHERE `user_id`=' . intval($this->user_id) . '
@@ -297,12 +297,12 @@ class Carbon_DataStore_UserMeta extends Carbon_DataStore_Base {
 			LIMIT 1
 		');
 
-		if ( is_null($value) ) {
+		if ( !is_array($value) || count($value) < 1 ) {
 			$field->set_value(false);
 			return;
 		}
 
-		$field->set_value($value);
+		$field->set_value($value[0]);
 	}
 
 	function delete(Carbon_Field $field) {
