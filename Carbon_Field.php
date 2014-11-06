@@ -1204,7 +1204,8 @@ class Carbon_Field_Relationship extends Carbon_Field {
 			'posts_per_page' => 10,
 			'orderby' => 'title',
 			'order' => 'ASC',
-			'exclude' => $exclude_id
+			'exclude' => $exclude_id,
+			'suppress_filters' => false,
 		));
 
 		$post_types = get_post_types('','objects');
