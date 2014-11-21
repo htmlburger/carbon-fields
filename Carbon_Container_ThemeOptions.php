@@ -16,6 +16,8 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 		'file' => '',
 		'permissions' => 'manage_options'
 	);
+
+	public $icon = '';
 	
 	function __construct($title) {
 		parent::__construct($title);
@@ -76,7 +78,8 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 				$this->title, 
 				$this->settings['permissions'], 
 				$this->settings['file'],
-				array($this, 'render')
+				array($this, 'render'),
+				$this->icon
 			);
 		}
 
@@ -86,7 +89,8 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 			$this->title, 
 			$this->settings['permissions'], 
 			$this->settings['file'],
-			array($this, 'render')
+			array($this, 'render'),
+			$this->icon
 		);
 
 		$page_hook = get_plugin_page_hookname( $this->settings['file'], '' );
@@ -208,6 +212,11 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 		}
 		
 		$this->settings['parent'] = $parent;
+		return $this;
+	}
+
+	function set_icon($icon) {
+		$this->icon = $icon;
 		return $this;
 	}
 

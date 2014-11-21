@@ -294,6 +294,26 @@ Carbon_Container::factory('theme_options', 'Customize Background')
 
 					<p>Every theme options container requires a level of permission, which by default is set to <code>edit_themes</code> (read more about permissions: <a href="http://codex.wordpress.org/Roles_and_Capabilities"><i class="icon-globe"></i>Roles &amp; Capabilities</a>).<br/>You can change the permission required to view your options page using <code>set_page_permissions($permission)</code></p>
 
+					<h4>Custom menu icon</h4>
+					<p>To change the icon of your Theme Options page, you use <code>set_icon($icon)</code>, where: </p>
+					<dl>
+						<dt><code>$icon</code></dt>
+						<dd>
+							This can be one of the values, supported in the <code>$icon_url</code> parameter of the <a href="http://codex.wordpress.org/Function_Reference/add_menu_page"><i class="icon-globe"></i>add_menu_page</a> function.
+						</dd>
+					</dl>
+
+					<p>Below you see an example for setting up the icon of the theme options page:</p>
+					<pre class="prettyprint">
+Carbon_Container::factory('theme_options', 'Basic Options')
+	-&gt;set_icon('dashicons-carrot')
+	-&gt;add_fields(array(
+		Carbon_Field::factory('text', 'crb_test_field'),
+	));
+</pre>
+
+						<p><span class="label label-info">NB!</span> You can specify custom icons only to parent theme options pages.</p>
+
 
 					<h4>Accessing field values</h4>
 					<p>To retrieve field values from a theme options container, you need to use the function <code>carbon_get_theme_option($name, $type = null)</code>, where:</p>
