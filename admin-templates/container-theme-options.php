@@ -33,8 +33,16 @@
 						<th colspan="2">
 							<?php 
 							echo $field->get_label(); 
+							if( $field->type == 'Html' ) {
+								$field->render();
+							} else {
+								if( !empty( $help_text ) ) {
+									?>
+									<em class="help-text"><?php echo $help_text; ?></em>
+									<?php 
+								}
+							}
 							?>
-							<?php if( !empty( $help_text ) ) :  ?><em class="help-text"><?php echo $help_text; ?></em><?php endif; ?>
 						</th>
 					</tr>
 					<?php
