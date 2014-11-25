@@ -27,7 +27,7 @@
 				$field->load();
 				$help_text = $field->get_help_text();
 				
-				if ( $field->type == 'Separator' ) {
+				if ( $field->type == 'Separator' || $field->type == 'Html' ) {
 					?>
 					<tr class="carbon-separator">
 						<th colspan="2">
