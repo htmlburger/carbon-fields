@@ -15,13 +15,6 @@
 .carbon-field input.carbon-datepicker,
 .carbon-field input.carbon-color { width: 100%; }
 
-.Carbon_Container_UserMeta > tbody > tr > td > .carbon-field > input.regular-text,
-.Carbon_Container_UserMeta > tbody > tr > td > .carbon-field > input.carbon-file-field,
-.Carbon_Container_UserMeta > tbody > tr > td > .carbon-field > input.carbon-image-field,
-.Carbon_Container_UserMeta > tbody > tr > td > .carbon-field > input.carbon-datepicker,
-.Carbon_Container_UserMeta > tbody > tr > td > .carbon-map input.address,
-.Carbon_Container_UserMeta > tbody > tr > td > .carbon-field > input.carbon-color { width: 25em; }
-
 .carbon-field select { width: 100%; max-width: 25em; }
 
 .carbon-field input.carbon-file-field,
@@ -197,8 +190,6 @@ body.touchscreen .carbon-relationship .relationship-right ul { height: auto; }
 	
 	.carbon-field input[type=checkbox], 
 	.carbon-field input[type=radio] { width: 25px; height: 25px; margin-top: 0; }
-
-	.Carbon_Container_UserMeta .carbon-field input.regular-text { width: 100% !important; }
 
 	.carbon-field input.carbon-file-field,
 	.carbon-field input.address,
