@@ -690,7 +690,7 @@ jQuery(function($) {
 				carbon_container.UserMeta.hasChanges = true;
 			});
 
-			$('form#your-profile input[type="submit"]').click(function(){
+			$('form#your-profile input[type="submit"], form#createuser input[type="submit"]').click(function(){
 				window.onbeforeunload = null;
 			});
 		});
@@ -702,7 +702,7 @@ jQuery(function($) {
 		};
 		carbon_container.UserMeta.attachedValidationHook = true;
 
-		$('form#your-profile').live("submit", function(){
+		$('form#your-profile, form#createuser').live("submit", function(){
 			var form = $(this),
 				has_errors = check_required();
 

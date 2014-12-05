@@ -25,6 +25,7 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 	function init() {
 		add_action('admin_init', array($this, '_attach'));
 		add_action('profile_update', array($this, '_save'), 10, 1);
+		add_action('user_register', array($this, '_save'), 10, 1);
 	}
 
 	function save($user_id) {
@@ -81,6 +82,7 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 	function attach() {
 		add_action('show_user_profile', array($this, 'render'), 10, 1);
 		add_action('edit_user_profile', array($this, 'render'), 10, 1);
+		add_action('user_new_form', array($this, 'render'), 10, 1);
 	}
 
 	function is_profile_page() {
@@ -97,16 +99,16 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 	}
 
 	function render($user_profile = null, $a=null, $b=null) {
-		if ( is_null($user_profile) ) {
-			return;
-		}
+		$profile_role = '';
 
-		$this->set_user_id( $user_profile->ID );
+		if ( is_object($user_profile) ) {
+			$this->set_user_id( $user_profile->ID );
+			$profile_role = $user_profile->roles[0];
+		}
 
 		$container_tag_class_name = get_class($this);
 		$container_type = 'UserMeta';
 		$container_options = array('show_on' => $this->settings['show_on']);
-		$profile_role = $user_profile->roles[0];
 
 		include dirname(__FILE__) . '/admin-templates/container-user-meta.php';
 	}
