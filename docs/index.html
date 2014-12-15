@@ -371,11 +371,11 @@ Carbon_Container::factory('term_meta', 'Category Properties')
 
 					<pre class="prettyprint">
 &lt;!-- Simple field --&gt;
-&lt;p&gt;Editor of this category: &lt;?php echo carbon_get_term_meta($category-&gt;ID, 'crb_editor'); ?&gt;&lt;/p&gt;
+&lt;p&gt;Editor of this category: &lt;?php echo carbon_get_term_meta($category-&gt;term_id, 'crb_editor'); ?&gt;&lt;/p&gt;
 
 &lt;!-- Complex field --&gt;
 &lt;?php 
-$authors = carbon_get_term_meta($category-&gt;ID, 'crb_authors', 'complex');
+$authors = carbon_get_term_meta($category-&gt;term_id, 'crb_authors', 'complex');
 foreach ($authors as $author) {
 	echo $author['name'];
 }
