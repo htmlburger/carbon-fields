@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 add_action('admin_print_scripts', array('Carbon_Field', 'admin_hook_scripts'));
 add_action('admin_print_styles', array('Carbon_Field', 'admin_hook_styles'));
@@ -7,7 +7,7 @@ add_action('wp_ajax_carbon_relationship_load_posts', array('Carbon_Field_Relatio
 if ( !class_exists('Carbon_Field') ) :
 
 /**
- * Base field class. 
+ * Base field class.
  * Defines the key container methods and their default implementations.
  * Implements factory design pattern
  *
@@ -19,10 +19,10 @@ class Carbon_Field {
 	 * @var int
 	 */
 	protected $id;
-	
+
 	/**
 	 * Stores the initial <kbd>$type</kbd> variable passed to the <code>factory()</code> method
-	 * 
+	 *
 	 * @see factory
 	 * @var string
 	 */
@@ -95,7 +95,7 @@ class Carbon_Field {
 
 	/**
 	 * Whether or not this value should be auto loaded. Applicable to theme options only.
-	 * 
+	 *
 	 * @see set_autoload()
 	 * @var bool
 	 **/
@@ -103,7 +103,7 @@ class Carbon_Field {
 
 	/**
 	 * Whether or not this field is required.
-	 * 
+	 *
 	 * @see set_required()
 	 * @var bool
 	 **/
@@ -224,7 +224,7 @@ class Carbon_Field {
 	function delete() {
 		return $this->store->delete($this);
 	}
-	
+
 	/**
 	 * Load the field value from an input array based on it's name
 	 *
@@ -242,7 +242,7 @@ class Carbon_Field {
 			$this->set_value( stripslashes_deep($input[$this->name]) );
 		}
 	}
-	
+
 	/**
 	 * Assign DataStore instance for use during load, save and delete
 	 *
@@ -375,7 +375,7 @@ class Carbon_Field {
 
 			// remove the leading "crb_"(if it's there)
 			$label = preg_replace('~^crb_~', '', $label);
-			
+
 			// split the name into words and make them capitalized
 			$label = ucwords(str_replace('_', ' ', $label));
 		}
@@ -403,7 +403,7 @@ class Carbon_Field {
 	}
 
 	/**
-	 * Set additional text to be displayed during field render, 
+	 * Set additional text to be displayed during field render,
 	 * containing information and guidance for the user
 	 *
 	 * @return object $this
@@ -434,7 +434,7 @@ class Carbon_Field {
 
 	/**
 	 * Whether or not this value should be auto loaded. Applicable to theme options only.
-	 * 
+	 *
 	 * @param bool $autoload
 	 * @return object $this
 	 **/
@@ -445,7 +445,7 @@ class Carbon_Field {
 
 	/**
 	 * Return whether or not this value should be auto loaded
-	 * 
+	 *
 	 * @return bool
 	 **/
 	function get_autoload() {
@@ -464,7 +464,7 @@ class Carbon_Field {
 	}
 
 	/**
-	 * HTML id attribute getter. 
+	 * HTML id attribute getter.
 	 * @return string
 	 */
 	function get_id() {
@@ -487,54 +487,54 @@ class Carbon_Field {
 	function is_required() {
 		return $this->required;
 	}
-	
+
 	/**
 	 * Returns the type of the field based on the class
 	 * The class is stripped by the "Carbon_Field" prefix. Then underscores are replaced with a dash.
 	 * Finally the result is lowercased.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function get_type() {
 		$class = get_class($this);
-		
-		
+
+
 		return $this->clean_type($class);
 	}
-	
+
 	/**
 	 * Cleans up an object class for usage as HTML class
-	 * 
+	 *
 	 * @return string
 	 */
 	private function clean_type($type) {
 		$clean_class = str_replace('Carbon_Field', '', $type);
 		$clean_class = trim($clean_class, '_');
 		$dashed_clean_class = str_replace('_', '-', $clean_class);
-		
+
 		return strtolower($dashed_clean_class);
 	}
-	
+
 	/**
 	 * Return an array of html classes to be used for the field container
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_html_class() {
 		$html_classes = array();
-		
+
 		$object_class = get_class($this);
 		$html_classes[] = $this->get_type();
-		
+
 		$parent_class = $object_class;
 		while ($parent_class = get_parent_class($parent_class)) {
 			$clean_class = $this->clean_type($parent_class);
-			
+
 			if ($clean_class) {
 				$html_classes[] = $clean_class;
 			}
 		}
-		
+
 		return $html_classes;
 	}
 
@@ -555,10 +555,10 @@ class Carbon_Field {
 
 	static function admin_hook_styles() {
 		wp_enqueue_style('carbon_fields', CARBON_PLUGIN_URL . '/css/fields.css', array(), '0.4.1');
-		
+
 		wp_enqueue_style('thickbox');
 	}
-} // END Carbon_Field 
+} // END Carbon_Field
 
 endif; // END Class Exists check
 
@@ -610,8 +610,8 @@ endif; // END Carbon_Field_Textarea
 if ( !class_exists('Carbon_Field_Rich_Text') ) :
 
 class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
-	static $attached_editor = false; 
-	
+	static $attached_editor = false;
+
 	function render() {
 		$val = $this->get_value();
 
@@ -741,7 +741,7 @@ class Carbon_Field_Map extends Carbon_Field {
 
 	function save() {
 		$this->store->save($this);
-		
+
 		$original_name = $this->get_name();
 		$original_value = $this->get_value();
 
@@ -813,7 +813,7 @@ if ( !class_exists('Carbon_Field_Map_With_Address') ) :
 
 class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 	protected $address = '';
-	
+
 	function render() {
 		echo '<p>' . __('Locate Address on the map', 'crb') . ': <input type="text" name="' . esc_attr($this->get_name()) . '[address]" value="' . esc_attr($this->address) . '" class="regular-text address" /><span class="address-search-btn button icon-button">' . __('Find', 'crb') . '</span></p>';
 
@@ -822,10 +822,10 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 		<div class="carbon-map-canvas">&nbsp;</div>
 		';
 	}
-	
+
 	function save() {
 		parent::save();
-		
+
 		$original_name = $this->get_name();
 		$original_value = $this->get_value();
 
@@ -838,16 +838,16 @@ class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
 
 		return true;
 	}
-	
+
 	function load() {
 		$original_name = $this->get_name();
-		
+
 		$this->set_name($original_name . '-address');
 		$this->store->load($this);
 		$this->address = $this->get_value();
-		
+
 		$this->set_name($original_name);
-		
+
 		parent::load();
 	}
 
@@ -903,7 +903,7 @@ if ( !class_exists('Carbon_Field_Select') ) :
 
 class Carbon_Field_Select extends Carbon_Field {
 	protected $options = array();
-	
+
 	function set_options($options) {
 		$this->options = (array)$options;
 		return $this;
@@ -943,7 +943,7 @@ if ( !class_exists('Carbon_Field_Radio') ) :
 
 class Carbon_Field_Radio extends Carbon_Field {
 	protected $options = array();
-	
+
 	function set_options($options) {
 		$this->options = (array)$options;
 		return $this;
@@ -1019,7 +1019,7 @@ class Carbon_Field_Header_Scripts extends Carbon_Field_Textarea {
 		add_action('wp_head', array($this, 'print_scripts'));
 		Carbon_Field::init();
 	}
-	
+
 	function print_scripts() {
 		if ( !$this->store || !is_a($this->store, 'Carbon_DataStore_ThemeOptions') ) {
 			return;
@@ -1041,12 +1041,12 @@ class Carbon_Field_Footer_Scripts extends Carbon_Field_Textarea {
 		add_action('wp_footer', array($this, 'print_scripts'));
 		Carbon_Field::init();
 	}
-	
+
 	function print_scripts() {
 		if ( !$this->store || !is_a($this->store, 'Carbon_DataStore_ThemeOptions') ) {
 			return;
 		}
-		
+
 		echo get_option($this->name);
 	}
 }
@@ -1088,7 +1088,7 @@ if ( !class_exists('Carbon_Field_Set') ) :
 class Carbon_Field_Set extends Carbon_Field {
 	protected $options = array();
 	protected $limit_options = 0;
-	
+
 	function set_options($options) {
 		$this->options = (array)$options;
 		return $this;
@@ -1131,7 +1131,7 @@ class Carbon_Field_Set extends Carbon_Field {
 			$option .= '/>';
 
 			if ( $this->limit_options > 0 && $loopCount > $this->limit_options ) {
-				echo '<p style="display:none"><label>' . $option . $value . '</label></p>';				
+				echo '<p style="display:none"><label>' . $option . $value . '</label></p>';
 			} else {
 				echo '<p><label>' . $option . $value . '</label></p>';
 
@@ -1224,15 +1224,20 @@ class Carbon_Field_Relationship extends Carbon_Field {
 				</table>
 
 				<ul class="relationship-list">
-					<?php foreach ($posts as $post): 
+					<?php foreach ($posts as $post):
 					$type_title = $post->post_type;
 					$type_title = isset($post_types[$type_title]->labels->singular_name) ? $post_types[$type_title]->labels->singular_name: $type_title;
+
+					$post_title = $post->post_title;
+					if ( !$post_title ) {
+						$post_title = __('(no title)') . ' - post_id = ' . $post->ID;
+					}
 					?>
 						<li <?php if(in_array($post->ID, $this->value)) echo 'class="inactive"' ?>>
 							<a href="#" data-post_id="<?php echo $post->ID ?>">
 								<em><?php echo $type_title ?></em>
 								<span><!-- plus --></span>
-								<?php echo get_the_title($post->ID); ?>
+								<?php echo apply_filters('the_title', $post_title); ?>
 							</a>
 						</li>
 					<?php endforeach ?>
@@ -1242,25 +1247,30 @@ class Carbon_Field_Relationship extends Carbon_Field {
 
 			<div class="relationship-right">
 				<label><?php _e('Associated:', 'crb'); ?></label>
-				
+
 				<ul class="relationship-list">
 					<?php
-					foreach ($this->value as $post_id): 
+					foreach ($this->value as $post_id):
 						$post = get_post($post_id);
 						if ( !$post || !$post_id ) {
 							continue;
 						}
 						$type_title = $post->post_type;
 						$type_title = isset($post_types[$type_title]->labels->singular_name) ? $post_types[$type_title]->labels->singular_name: $type_title;
+
+						$post_title = $post->post_title;
+						if ( !$post_title ) {
+							$post_title = __('(no title)') . ' - post_id = ' . $post->ID;
+						}
 					?>
 						<li>
-							<a href="#" data-post_id="<?php echo $post->ID ?>"><em><?php echo $type_title ?></em><?php echo get_the_title($post->ID); ?> <span><!-- minus --></span></a>
+							<a href="#" data-post_id="<?php echo $post->ID ?>"><em><?php echo $type_title ?></em><?php echo apply_filters('the_title', $post_title); ?> <span><!-- minus --></span></a>
 							<input type="hidden" name="<?php echo $this->get_name() ?>[]" value="<?php echo $post->ID ?>" />
 						</li>
 					<?php endforeach ?>
 				</ul>
 			</div>
-			
+
 			<div class="cl">&nbsp;</div>
 		</div>
 		<?php
@@ -1300,7 +1310,12 @@ class Carbon_Field_Relationship extends Carbon_Field {
 			$type_title = $post->post_type;
 			$type_title = isset($post_types[$type_title]->labels->singular_name) ? $post_types[$type_title]->labels->singular_name: $type_title;
 
-			echo '<li><a href="#" data-post_id="' . $post->ID . '"><em>' . $type_title . '</em>' . $post->post_title . '<span><!-- plus --></span></a></li>';
+			$post_title = $post->post_title;
+			if ( !$post_title ) {
+				$post_title = __('(no title)') . ' - post_id = ' . $post->ID;
+			}
+
+			echo '<li><a href="#" data-post_id="' . $post->ID . '"><em>' . $type_title . '</em>' . apply_filters('the_title', $post_title) . '<span><!-- plus --></span></a></li>';
 		}
 
 		exit;
@@ -1308,7 +1323,7 @@ class Carbon_Field_Relationship extends Carbon_Field {
 
    	static function posts_where( $where, &$wp_query ) {
 		global $wpdb;
-		
+
 		if ( !empty($_POST['s']) )  {
 
 			// backward compatibility - $wpdb->esc_like() was introduced in 4.0
@@ -1317,10 +1332,10 @@ class Carbon_Field_Relationship extends Carbon_Field {
 			} else {
 				$like = like_escape( $_POST['s'] );
 			}
-			
+
 			$where .= " AND " . $wpdb->posts . ".post_title LIKE '%" . esc_sql($like) . "%'";
 		}
-		
+
 		return $where;
 	}
 }
@@ -1337,33 +1352,33 @@ class Carbon_Field_File extends Carbon_Field {
 	public $image_extensions = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
 
 	// empty for all types. available types: audio, video, image
-	public $field_type = ''; 
+	public $field_type = '';
 
 	// alt, author, caption, dateFormatted, description, editLink, filename, height, icon, id, link, menuOrder, mime, name, status, subtype, title, type, uploadedTo, url, width
 	public $value_type = 'url';
-	
+
 	function init() {
 		$this->button_label = __('Select File', 'crb');
 		$this->window_button_label = __('Select File', 'crb');
 		$this->window_label = __('Files', 'crb');
 	}
-	
+
 	function set_type($type) {
 		$this->field_type = $type;
 		return $this;
 	}
 
 	function render() {
-		echo '<input 
-				id="' . $this->get_id() . '" 
-				type="text" 
-				name="' . $this->get_name() . '" 
-				value="' . $this->get_value() . '"  
+		echo '<input
+				id="' . $this->get_id() . '"
+				type="text"
+				name="' . $this->get_name() . '"
+				value="' . $this->get_value() . '"
 				class="regular-text carbon-file-field" ' . ($this->required ? 'data-carbon-required="true"': '') . '
 				'.($this->value_type=='id' ? 'style="display:none"' : '').'
 			/>';
-		
-		echo '<span 
+
+		echo '<span
 				id="c2_open_media' . str_replace('-', '_', $this->id) .  '"
 				class="button c2_open_media icon-button"
 				data-window-label="'.$this->window_label.'"
@@ -1371,13 +1386,13 @@ class Carbon_Field_File extends Carbon_Field {
 				data-type="' . $this->field_type . '"
 				data-value-type="'.$this->value_type.'"
 			>' . $this->button_label . '</span>';
-		
+
 		echo $this->description();
 	}
-	
+
 	function description() {
 		$description = '<a href="' . $this->value . '" target="_blank" class="carbon-view_file" style="' . (!empty($this->value) ? '' : 'display:none;' ) . '" >' . __('View File', 'crb') . '</a>';
-		
+
 		return apply_filters('carbon_field_' . $this->type . '_description', '<div class="carbon-description">' . $description . '</div>');
 	}
 }
@@ -1434,7 +1449,7 @@ class Carbon_Field_Image extends Carbon_Field_File {
 	public $window_button_label = 'Select Image';
 	public $window_label = 'Images';
 	public $field_type = 'image';
-	
+
 	function init() {
 		$this->button_label = __('Select Image', 'crb');
 		$this->window_button_label = __('Select Image', 'crb');
@@ -1523,7 +1538,7 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 			/**
 			 * Enters here, if the default settings are not passed
 			 * Sets the default settings
-			 * 
+			 *
 			 * @see get_default_sidebar_options()
 			 */
 			$sidebar_options['default'] = $this->get_default_sidebar_options();
@@ -1620,7 +1635,7 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 		}
 
 		$sidebar_names = $wpdb->get_col($query_string);
-		
+
 		foreach ($sidebar_names as $sidebar_name) {
 			$sidebars[$sidebar_name] = 1;
 		}
