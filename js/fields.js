@@ -118,14 +118,15 @@ jQuery(function($) {
 								if (media_attachment.type=='image') {
 									row.find('.carbon-view_image').attr( 'src', media_attachment.url ).removeClass('blank');
 									row.find('.carbon-description, img').show();
-									if (!row.find('.carbon-file-remove').length) {
-										row.find('.carbon-preview').append('<span class="carbon-file-remove"></span>');
-									}
 								}else{
 									// all other file types
 									row.find('.carbon-description, img').hide();
 									row.find('img').addClass('blank');
 								};
+								
+								if (!row.find('.carbon-file-remove').length) {
+									row.find('.carbon-preview').append('<span class="carbon-file-remove"></span>');
+								}
 							}else{
 								// file field type
 							};

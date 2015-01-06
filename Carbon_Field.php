@@ -1418,19 +1418,20 @@ class Carbon_Field_Attachment extends Carbon_Field_File {
 			$is_image = true;
 		}
 
+		$description .= '<div class="carbon-preview">';
+
 		if ( $is_image ) {
-			$description .= '<div class="carbon-preview">';
 			$description .= '<img src="' . $thumbnail_src[0] . '" alt="" class="carbon-view_image"/>';
-			$description .= '<span class="carbon-file-remove icon-button"></span>';
-			$description .= '</div>';
 		} else {
-			$description .= '<div class="carbon-preview">';
 			$description .= '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="" class="carbon-view_image blank"/>';
-			$description .= '</div>';
 		}
 
-		$description .= '<div class="cl"></div>';
+		if (!empty($this->value)) {
+			$description .= '<span class="carbon-file-remove icon-button"></span>';
+		}
 
+		$description .= '</div>';
+		$description .= '<div class="cl"></div>';
 		$description .= '<span class="attachment_url">'.$attachment_url.'</span>';
 
 		$is_image = false;
