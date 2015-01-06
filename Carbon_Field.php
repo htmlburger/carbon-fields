@@ -923,13 +923,13 @@ class Carbon_Field_Select extends Carbon_Field {
 		echo '<select id="' . $this->get_id() . '" name="' . $this->get_name() . '" ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
 
 		foreach ($this->options as $key => $value) {
-			echo '<option value="' . htmlentities($key, ENT_COMPAT, 'UTF-8') . '"';
+			echo '<option value="' . esc_attr($key) . '"';
 
 			if ($this->value == $key) {
 				echo ' selected="selected"';
 			}
 
-			echo '>' . htmlentities($value, ENT_COMPAT, 'UTF-8') . '</option>';
+			echo '>' . esc_html($value) . '</option>';
 		}
 
 		echo '</select>';
