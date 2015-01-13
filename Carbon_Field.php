@@ -651,7 +651,18 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 		// wp_editor() automatically enqueues and sets up everything.
 		?>
 		<div style="display:none;">
-			<?php wp_editor( '', 'carbon_settings' ); ?>
+			<?php
+			wp_editor(
+				'',
+				'carbon_settings',
+				array(
+					'tinymce' => array(
+						'resize' => false,
+						'wp_autoresize_on' => true,
+					)
+				)
+			);
+			?>
 		</div>
 		<?php
 	}
