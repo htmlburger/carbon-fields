@@ -580,9 +580,9 @@ class Carbon_Field {
 		$options = array();
 		foreach ($this->options as $key => $value) {
 			if (is_callable($value)) {
-				$options = array_merge($options, call_user_func($value));
+				$options = $options + (array) call_user_func($value);
 			} else if (is_array($value)) {
-				$options = array_merge($options, $value);
+				$options = $options + $value;
 			} else {
 				$options[$key] = $value;
 			}
