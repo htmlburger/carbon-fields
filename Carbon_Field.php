@@ -117,6 +117,13 @@ class Carbon_Field {
 	protected $name_prefix = '_';
 
 	/**
+	 * Stores the field options (if any)
+	 *
+	 * @var string
+	 **/
+	protected $options = array();
+
+	/**
 	 * Create a new field of type $type and name $name and label $label.
 	 *
 	 * @param string $type
@@ -538,6 +545,52 @@ class Carbon_Field {
 		return $html_classes;
 	}
 
+	/**
+	 * Set the field options
+	 * Callbacks are supported
+	 *
+	 * @param array|callback $options
+	 * @return void
+	 */
+	protected function _set_options($options) {
+		$this->options = (array) $options;
+	}
+
+	/**
+	 * Add options to the field
+	 * Callbacks are supported
+	 *
+	 * @param array|callback $options
+	 * @return void
+	 */
+	protected function _add_options($options) {
+		$this->options[] = $options;
+	}
+
+	/**
+	 * Check if there are callbacks and populate the options
+	 *
+	 * @return void
+	 */
+	protected function _load_options() {
+		if (empty($this->options)) {
+			return false;
+		}
+
+		$options = array();
+		foreach ($this->options as $key => $value) {
+			if (is_callable($value)) {
+				$options = array_merge($options, call_user_func($value));
+			} else if (is_array($value)) {
+				$options = array_merge($options, $value);
+			} else {
+				$options[$key] = $value;
+			}
+		}
+
+		$this->options = $options;
+	}
+
 	static function admin_hook_scripts() {
 		wp_enqueue_media();
 		wp_enqueue_script('carbon_fields', CARBON_PLUGIN_URL . '/js/fields.js', array('jquery', 'farbtastic', 'jquery-ui-datepicker'), '0.4.1');
@@ -913,19 +966,19 @@ endif;
 if ( !class_exists('Carbon_Field_Select') ) :
 
 class Carbon_Field_Select extends Carbon_Field {
-	protected $options = array();
-
 	function set_options($options) {
-		$this->options = (array)$options;
+		$this->_set_options($options);
 		return $this;
 	}
 
 	function add_options($options) {
-		$this->options = (array)$this->options + (array)$options;
+		$this->_add_options($options);
 		return $this;
 	}
 
 	function render() {
+		$this->_load_options();
+
 		if ( empty($this->options) ) {
 			echo '<em>' . __('no options', 'crb') . '</em>';
 			return;
@@ -953,19 +1006,19 @@ endif;
 if ( !class_exists('Carbon_Field_Radio') ) :
 
 class Carbon_Field_Radio extends Carbon_Field {
-	protected $options = array();
-
 	function set_options($options) {
-		$this->options = (array)$options;
+		$this->_set_options($options);
 		return $this;
 	}
 
 	function add_options($options) {
-		$this->options = (array)$this->options + (array)$options;
+		$this->_add_options($options);
 		return $this;
 	}
 
 	function render() {
+		$this->_load_options();
+
 		if ( empty($this->options) ) {
 			echo '<em>' . __('no options', 'crb') . '</em>';
 			return;
@@ -1097,16 +1150,15 @@ endif;
 if ( !class_exists('Carbon_Field_Set') ) :
 
 class Carbon_Field_Set extends Carbon_Field {
-	protected $options = array();
 	protected $limit_options = 0;
 
 	function set_options($options) {
-		$this->options = (array)$options;
+		$this->_set_options($options);
 		return $this;
 	}
 
 	function add_options($options) {
-		$this->options = (array)$this->options + (array)$options;
+		$this->_add_options($options);
 		return $this;
 	}
 
@@ -1116,6 +1168,8 @@ class Carbon_Field_Set extends Carbon_Field {
 	}
 
 	function render() {
+		$this->_load_options();
+
 		if (!is_array($this->value)) {
 			$this->value = maybe_unserialize($this->value);
 			if (!is_array($this->value)) {
