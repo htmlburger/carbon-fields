@@ -197,7 +197,7 @@ endif;
 if ( !function_exists('carbon_twitter_widget_activated') ) :
 
 function carbon_twitter_widget_activated() {
-	return is_active_widget(false, false, 'carbon_latest_tweets', true);
+	return is_active_widget(false, false, 'carbon_latesttweets', true);
 }
 
 endif;
