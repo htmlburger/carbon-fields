@@ -298,7 +298,7 @@ class Carbon_DataStore_UserMeta extends Carbon_DataStore_Base {
 		');
 
 		if ( !is_array($value) || count($value) < 1 ) {
-			$field->set_value(false);
+			$field->set_value_from_input();
 			return;
 		}
 
@@ -318,10 +318,27 @@ class Carbon_DataStore_UserMeta extends Carbon_DataStore_Base {
 			$meta_key = $field;
 		}
 
-		return $wpdb->get_results('
+		$results = $wpdb->get_results('
 			SELECT meta_key AS field_key, meta_value AS field_value FROM ' . $wpdb->usermeta . '
 			WHERE `meta_key` LIKE "' . addslashes($meta_key) . '_%" AND `user_id`="' . intval($this->user_id) . '"
 		', ARRAY_A);
+		if (!$results) {
+			$tmp_field = clone $field;
+			$tmp_field->set_value_from_input();
+
+			$values = $tmp_field->get_values();
+
+			foreach ($values as $single_value) {
+				foreach ($single_value as $value_field) {
+					$results[] = array(
+						'field_key' => $value_field->get_name(),
+						'field_value' => $value_field->get_value()
+					);	
+				}
+			}
+		}
+
+		return $results;
 	}
 
 	function delete_values(Carbon_Field $field) {
