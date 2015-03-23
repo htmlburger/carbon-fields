@@ -59,7 +59,7 @@ jQuery(function($) {
 		$('.carbon-highlight').removeClass('carbon-highlight');
 
 		// Find required fields
-		$('input[type="text"][data-carbon-required=true], textarea[data-carbon-required=true]').each(function() {
+		$('input[type="text"][data-carbon-required=true], textarea[data-carbon-required=true], select[data-carbon-required=true]').each(function() {
 			var th = $(this);
 
 			if ( th.val() != '' || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
@@ -390,7 +390,7 @@ jQuery(function($) {
 		$('.carbon-highlight', context).removeClass('carbon-highlight');
 
 		// Find required fields
-		$('input[type="text"][data-carbon-required=true], textarea[data-carbon-required=true]', context).each(function() {
+		$('input[type="text"][data-carbon-required=true], textarea[data-carbon-required=true], select[data-carbon-required=true]', context).each(function() {
 			var th = $(this);
 
 			if ( th.val() != '' || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
@@ -549,7 +549,7 @@ jQuery(function($) {
 		$('.carbon-highlight').removeClass(error_classes);
 
 		// Find required fields
-		$('input[type="text"][data-carbon-required=true], textarea[data-carbon-required=true]').each(function() {
+		$('input[type="text"][data-carbon-required=true], textarea[data-carbon-required=true], select[data-carbon-required=true]').each(function() {
 			var th = $(this);
 
 			if ( th.val() != '' || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
