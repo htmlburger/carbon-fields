@@ -10,38 +10,51 @@
 		<!-- Le styles -->
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/2.2.1/css/bootstrap.min.css" rel="stylesheet">
 		<style type="text/css">
-			body { padding-top: 20px; padding-bottom: 40px; }
+			body { padding-top: 20px; padding-bottom: 40px; color: #525252; }
+			h4 { margin-top: 30px; }
+			p { margin: 10px 0 20px; }
+			dl { margin: 15px 0; padding: 20px 19px 10px; border: 1px solid #ddd; border-radius: 3px; }
+			dd { margin: 10px 25px; }
+			dd p { margin: 8px 0; }
+			code { border: 0; background: #f0f2f1; }
+			hr { margin: 40px 0; }
+			li { margin: 5px 0; }
+			footer p { text-align: right; }
+
 			.sidebar-nav { padding: 9px 0; }
-			.hero-unit { padding-left: 0; background-color: transparent; }
+			.hero-unit { padding-left: 0; background-color: transparent; padding-top: 0; }
 			.hero-unit h1 { line-height: 64px; }
 			.hero-unit img { margin-right: 40px; vertical-align: top; }
 			.cf-nav { position: fixed; }
 			.scrollable { overflow-y: scroll; max-height: 90%; }
-			.field-docs { margin-bottom: 10px; border-bottom: solid 1px #eee; } 
+			.field-docs:after { content: ""; display: block; margin: 40px 0; border-bottom: solid 1px #eee; } 
+			.field-docs:last-child:after { border-bottom: 0; }
 			.prettyprint { margin-top: 5px; } 
-			footer p { text-align: right; }
-			dl { padding-left: 25px; }
+
+			.left-hash a { position: relative; color: #525252; text-decoration: none; }
+			.left-hash a:hover:before { opacity: 1; }
+			.left-hash a:before { content: "#"; position: absolute; margin-left: -25px; color: #0088cc; font-size: 23px; font-weight: normal; opacity: 0.6; }
 			
 			/* prettify CSS start */
-			.pln{color:#000}@media screen{.str{color:#080}.kwd{color:#008}.com{color:#800}.typ{color:#606}.lit{color:#066}.pun,.opn,.clo{color:#660}.tag{color:#008}.atn{color:#606}.atv{color:#080}.dec,.var{color:#606}.fun{color:red}}@media print,projection{.str{color:#060}.kwd{color:#006;font-weight:bold}.com{color:#600;font-style:italic}.typ{color:#404;font-weight:bold}.lit{color:#044}.pun,.opn,.clo{color:#440}.tag{color:#006;font-weight:bold}.atn{color:#404}.atv{color:#060}}pre.prettyprint{padding:2px;border:1px solid #888}ol.linenums{margin-top:0;margin-bottom:0}li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8{list-style-type:none}li.L1,li.L3,li.L5,li.L7,li.L9{background:#eee}
+			.pln{color:#000}@media screen{.str{color:#080}.kwd{color:#008}.com{color:#800}.typ{color:#606}.lit{color:#066}.pun,.opn,.clo{color:#660}.tag{color:#008}.atn{color:#606}.atv{color:#080}.dec,.var{color:#606}.fun{color:red}}@media print,projection{.str{color:#060}.kwd{color:#006;font-weight:bold}.com{color:#600;font-style:italic}.typ{color:#404;font-weight:bold}.lit{color:#044}.pun,.opn,.clo{color:#440}.tag{color:#006;font-weight:bold}.atn{color:#404}.atv{color:#060}}pre.prettyprint{padding:2px;border:0;border-radius:3px;padding:1em;}ol.linenums{margin-top:0;margin-bottom:0}li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8{list-style-type:none}li.L1,li.L3,li.L5,li.L7,li.L9{background:#eee}
 			/* prettify CSS end */
 		</style>
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/2.2.1/css/bootstrap-responsive.min.css" rel="stylesheet">
 
 		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 		<!--[if lt IE 9]>
-			<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
 	</head>
 
 	<body>
 		<div class="container-fluid">
 			<div class="row-fluid">
-				<div class="span3">
-					<div class="well sidebar-nav cf-nav span3 scrollable">
+				<div class="span2">
+					<div class="well sidebar-nav cf-nav span2 scrollable">
 						<ul class="nav nav-list ">
 							<li class="nav-header">Carbon Fields</li>
-							<li><a href="#abstract">Abstract Overview</a></li>
+							<li><a href="#Abstract">Abstract Overview</a></li>
 							<li class="nav-header">Containers</li>
 							<li><a href="#Containers">Usage</a></li>
 							<li><a href="#Custom_Fields">Custom Fields</a></li>
@@ -62,11 +75,11 @@
 							<li><a href="#Field_Radio">Radio</a></li>
 							<li><a href="#Field_Set">Set</a></li>
 							<li><a href="#Field_Relationship">Relationship</a></li>
+							<li><a href="#Field_Association">Association</a></li>
 							<li><a href="#Field_File">File</a></li>
 							<li><a href="#Field_Image">Image</a></li>
 							<li><a href="#Field_Attachment">Attachment</a></li>
 							<li><a href="#Field_Map">Map</a></li>
-							<li><a href="#Field_MapWithAddress">Map with Address</a></li>
 							<li><a href="#Field_Separator">Separator</a></li>
 							<li><a href="#Field_Choose_Sidebar">Choose Sidebar</a></li>
 							<li><a href="#Field_HeaderScripts">Header Scripts</a></li>
@@ -83,8 +96,9 @@
 							<li><a href="#Data_Storage">Data Storage</a></li>
 
 							<li class="nav-header">Advanced Topics</li>
-							<li><a href="#extending_carbon_fields">Extending</a></li>
-
+							<li><a href="#Extending">Extending</a></li>
+							<li><a href="#Templates">Templates</a></li>
+							<li><a href="#Hooks">Hooks</a></li>
 						</ul>
 					</div><!--/.well -->
 				</div><!--/span-->
@@ -92,7 +106,7 @@
 					<div class="hero-unit">
 						<h1>Carbon Fields</h1>
 					</div>
-					<h2 id="abstract">Abstract</h2>
+					<h2 id="Abstract" class="left-hash"><a href="#Abstract">Abstract</a></h2>
 					<p>Carbon fields is a library for easy creation of custom(meta) fields in WordPress administration panel. It allows theme developer to associate meta-information with various  entities in a WordPress site(such as posts, taxonomy terms, widgets and so on). </p>
 
 					<p>The main components of the library are:</p>
@@ -102,7 +116,9 @@
 						<li><strong>Data Storage</strong> - controls the underlying data storage for field values. </li>
 					</ul>
 
-					<h2 id="Containers">Containers</h2>
+					<hr>
+
+					<h2 id="Containers" class="left-hash"><a href="#Containers">Containers</a></h2>
 
 					<p>Carbon Container is a group of custom fields and display options. Containers are displayed on different parts of the backend, according to their type and display options.</p>
 
@@ -120,14 +136,16 @@ Carbon_Container::factory('custom_fields', 'Custom Data')
 
 					<dl>
 						<dt><code>$type</code></dt>
-						<dd>Identifier of the container type (accepted values are <code>custom_fields</code> and <code>theme_options</code>)</dd>
+						<dd><p>Identifier of the container type (accepted values are <code>custom_fields</code> and <code>theme_options</code>)</p></dd>
 
 						<dt><code>$title</code></dt>
-						<dd>Unique title of the container</dd>
+						<dd><p>Unique title of the container</p></dd>
 					</dl>
 
-					<h3 id="Custom_Fields">Custom Fields Container</h3>
-					<p>Custom Field containers are used to extend the post edit screens with additional fields. Field data is stored separately for each post as post meta (see <a href="http://codex.wordpress.org/Function_Reference/add_post_meta"><i class="icon-globe"></i> add_post_meta</a>). </p>
+					<hr>
+
+					<h3 id="Custom_Fields" class="left-hash"><a href="#Custom_Fields">Custom Fields Container</a></h3>
+					<p>Custom Field containers are used to extend the post edit screens with additional fields. Field data is stored separately for each post as post meta (see <a href="http://codex.wordpress.org/Function_Reference/add_post_meta" target="_blank"><i class="icon-globe"></i> add_post_meta</a>). </p>
 
 					<pre class="prettyprint">
 Carbon_Container::factory('custom_fields', 'Post Properties')
@@ -141,21 +159,21 @@ Carbon_Container::factory('custom_fields', 'Post Properties')
 					<p>Custom fields containers are very flexible in terms of display options. You can select specific post type they show on, as well as category, format, parent, etc. A list of all options is displayed below:</p>
 
 					<dl>
-						<dt>post type</dt>
+						<dt>Post type</dt>
 						<dd>
 							<p><code>-&gt;show_on_post_type('page')</code></p>
 							<p>You can also show a single container on multiple post types, as seen below:</p>
 							<p><code>-&gt;show_on_post_type(array('page', 'my_custom_post_type', 'post'))</code></p>
 						</dd>
 
-						<dt>categories and custom taxonomies</dt>
+						<dt>Categories and custom taxonomies</dt>
 						<dd>
 							<p>Containers may be assigned to posts from specific categories or taxonomies:</p>
 							<p><code>-&gt;show_on_category($category_slug)</code></p>
 							<p><code>-&gt;show_on_taxonomy_term($term_slug, $taxonomy)</code></p>
 						</dd>
 						
-						<dt>pages and subpages</dt>
+						<dt>Pages and subpages</dt>
 						<dd>
 							<p>Show container on a specific page, identified by path, for example: <code>"parent-page/sub-page"</code>:</p>
 							<p><code>-&gt;show_on_page($page_path)</code></p>
@@ -164,7 +182,7 @@ Carbon_Container::factory('custom_fields', 'Post Properties')
 							<p><code>-&gt;show_on_page_children($parent_page_path)</code></p>
 						</dd>
 						
-						<dt>page templates</dt>
+						<dt>Page templates</dt>
 						<dd>
 							<p>Containers may be assigned to pages using specific template:</p>
 							<p><code>-&gt;show_on_template($template_path)</code></p>
@@ -173,16 +191,16 @@ Carbon_Container::factory('custom_fields', 'Post Properties')
 
 							<p>You can also hide the container from pages using specific template:</p>
 							<p><code>-&gt;hide_on_template($template_path)</code></p>
-							<p>where the <code>$template_path</code> is the name of the template file (or array of template file names), as in <code>show_on_template()</code> above.</code>
+							<p>where the <code>$template_path</code> is the name of the template file (or array of template file names), as in <code>show_on_template()</code> above.</p>
 						</dd>
 						
-						<dt>post formats</dt>
+						<dt>Post formats</dt>
 						<dd>
 							<p>To display a container on posts with specific <a href="http://codex.wordpress.org/Post_Formats"><i class="icon-globe"></i> post format</a>, use:</p>
 							<p><code>-&gt;show_on_post_format($post_format)</code></p>
 						</dd>
 
-						<dt>level</dt>
+						<dt>Level</dt>
 						<dd>
 							<p>To display a container on hierarchical posts from a specific level, use:</p>
 							<p><code>-&gt;show_on_level($level)</code></p>
@@ -199,7 +217,7 @@ Carbon_Container::factory('custom_fields', 'Post Properties')
 						<dt><code>$name</code></dt>
 						<dd>The name of the field to be retrieved.</dd>
 
-						<dt><code>$type</code> (optional)</dt>
+						<dt><code>$type</code> <small>(optional)</small></dt>
 						<dd>If the field you want to retrieve is of type complex, you need to pass <code>"complex"</code>.</dd>
 					</dl>
 
@@ -215,31 +233,34 @@ foreach ($slides as $slide) {
 }
 ?&gt;
 </pre>
-					<p>You can also use <code>carbon_get_the_post_meta($name, $type = null)</code> to access the values for the current post in <a href="http://codex.wordpress.org/The_Loop"><i class="icon-globe"></i> The Loop</a>.</p>
+					<p>You can also use <code>carbon_get_the_post_meta($name, $type = null)</code> to access the values for the current post in <a href="http://codex.wordpress.org/The_Loop" target="_blank"><i class="icon-globe"></i> The Loop</a>.</p>
 					<pre class="prettyprint">
 &lt;p&gt;Article was published in: &lt;?php echo carbon_get_the_post_meta('crb_location'); ?&gt;&lt;/p&gt;
+
 &lt;?php $slides = carbon_get_the_post_meta('crb_slides', 'complex'); ?&gt;
 </pre>
 
 					<p>After saving, the <code>carbon_after_save_custom_fields</code> hook is called, which allows you to hook additional functionality after saving. It accepts the <code>$post_id</code> parameter, which is the ID of the post being updated. Example:</p>
 					<pre class="prettyprint">
-&lt;?php
 add_action('carbon_after_save_custom_fields', 'crb_after_save_event');
 function crb_after_save_event($post_id) {
-	if ( get_post_type() == 'crb_event' ) {
-		$event_date = carbon_get_post_meta($post_id, 'crb_event_date');
-		if ( $event_date ) {
-			$timestamp = strtotime($event_date);
-			update_post_meta($post_id, '_crb_event_timestamp', $timestamp);
-		}
+	if ( get_post_type($post_id) !== 'crb_event' ) {
+		return false;
+	}
+
+	$event_date = carbon_get_post_meta($post_id, 'crb_event_date');
+	if ( $event_date ) {
+		$timestamp = strtotime($event_date);
+		update_post_meta($post_id, '_crb_event_timestamp', $timestamp);
 	}
 }
-?&gt;						
 </pre>
 
-					<h3 id="Theme_Options">Theme Options Container</h3>
+					<hr>
 
-					<p>Theme option containers are used to add pages with options in the back-end. Field data is stored as <a href="http://codex.wordpress.org/Option_Reference"><i class="icon-globe"></i> options</a>. </p>
+					<h3 id="Theme_Options" class="left-hash"><a href="#Theme_Options">Theme Options Container</a></h3>
+
+					<p>Theme option containers are used to add pages with options in the back-end. Field data is stored as <a href="http://codex.wordpress.org/Option_Reference" target="_blank"><i class="icon-globe"></i> options</a>. </p>
 					<p>By default, theme options containers automatically create main page in the admin area menu named "Theme Options". In most cases these default settings are sufficient, but if you need to change the title or the location of a page in the menu, read the "Multiple option pages" section below.</p>
 
 					<pre class="prettyprint">
@@ -259,8 +280,8 @@ Carbon_Container::factory('theme_options', 'Theme Options')
 						<dt><code>$parent</code></dt>
 						<dd>
 							This can be either:<br/>
-							- title of a top level Theme Options page.
-							- indentificator of a top level menu section in the admin menu sidebar. This corresponds to the <code>$parent_slug</code> parameter of <a href="http://codex.wordpress.org/Function_Reference/add_submenu_page"><i class="icon-globe"></i>add_submenu_page</a>. You can see all predefined page parents <a href="http://codex.wordpress.org/Function_Reference/add_submenu_page#Parameters"><i class="icon-globe"></i>here</a>.<br/>
+							- Title of a top level Theme Options page.<br/>
+							- Indentificator of a top level menu section in the admin menu sidebar. This corresponds to the <code>$parent_slug</code> parameter of <a href="http://codex.wordpress.org/Function_Reference/add_submenu_page" target="_blank"><i class="icon-globe"></i>add_submenu_page</a>. You can see all predefined page parents <a href="http://codex.wordpress.org/Function_Reference/add_submenu_page#Parameters" target="_blank"><i class="icon-globe"></i>here</a>.<br/>
 						</dd>
 					</dl>
 
@@ -290,16 +311,16 @@ Carbon_Container::factory('theme_options', 'Customize Background')
 	));
 </pre>
 
-					<p>For detailed information on managing admin pages, see <a href="http://codex.wordpress.org/Administration_Menus"><i class="icon-globe"></i>Administration_Menus</a>.</p>
+					<p>For detailed information on managing admin pages, see <a href="http://codex.wordpress.org/Administration_Menus" target="_blank"><i class="icon-globe"></i>Administration_Menus</a>.</p>
 
-					<p>Every theme options container requires a level of permission, which by default is set to <code>edit_themes</code> (read more about permissions: <a href="http://codex.wordpress.org/Roles_and_Capabilities"><i class="icon-globe"></i>Roles &amp; Capabilities</a>).<br/>You can change the permission required to view your options page using <code>set_page_permissions($permission)</code></p>
+					<p>Every theme options container requires a level of permission, which by default is set to <code>edit_themes</code> (read more about permissions: <a href="http://codex.wordpress.org/Roles_and_Capabilities" target="_blank"><i class="icon-globe"></i>Roles &amp; Capabilities</a>).<br/>You can change the permission required to view your options page using <code>set_page_permissions($permission)</code></p>
 
 					<h4>Custom menu icon</h4>
 					<p>To change the icon of your Theme Options page, you use <code>set_icon($icon)</code>, where: </p>
 					<dl>
 						<dt><code>$icon</code></dt>
 						<dd>
-							This can be one of the values, supported in the <code>$icon_url</code> parameter of the <a href="http://codex.wordpress.org/Function_Reference/add_menu_page"><i class="icon-globe"></i>add_menu_page</a> function.
+							This can be one of the values, supported in the <code>$icon_url</code> parameter of the <a href="http://codex.wordpress.org/Function_Reference/add_menu_page" target="_blank"><i class="icon-globe"></i>add_menu_page</a> function.
 						</dd>
 					</dl>
 
@@ -321,7 +342,7 @@ Carbon_Container::factory('theme_options', 'Basic Options')
 						<dt><code>$name</code></dt>
 						<dd>The name of the field to be retrieved.</dd>
 
-						<dt><code>$type</code> (optional)</dt>
+						<dt><code>$type</code> <small>(optional)</small></dt>
 						<dd>If the field you want to retrieve is of type complex, you need to pass <code>"complex"</code>.</dd>
 					</dl>
 
@@ -340,7 +361,9 @@ Carbon_Container::factory('theme_options', 'Basic Options')
 
 					<p>After saving, the <code>carbon_after_save_theme_options</code> hook is called, which allows you to hook additional functionality after saving.</p>
 
-					<h3 id="Term_Meta">Term meta Container</h3>
+					<hr>
+
+					<h3 id="Term_Meta" class="left-hash"><a href="#Term_Meta">Term meta Container</a></h3>
 					<p>Term meta containers are used to extend the term edit screens with additional fields. Field data is stored separately for each term in a custom table (<code>$wpdb-&gt;termmeta</code>). </p>
 
 					<pre class="prettyprint">
@@ -365,7 +388,7 @@ Carbon_Container::factory('term_meta', 'Category Properties')
 						<dt><code>$name</code></dt>
 						<dd>The name of the field to be retrieved.</dd>
 
-						<dt><code>$type</code> (optional)</dt>
+						<dt><code>$type</code> <small>(optional)</small></dt>
 						<dd>If the field you want to retrieve is of type complex, you need to pass <code>"complex"</code>.</dd>
 					</dl>
 
@@ -384,8 +407,10 @@ foreach ($authors as $author) {
 
 					<p>After saving, the <code>carbon_after_save_term_meta</code> hook is called, which allows you to hook additional functionality after saving. It accepts the <code>$term_id</code> parameter, which is the term_id of the taxonomy term that was updated.</p>
 
-					<h3 id="User_Meta">User meta Container</h3>
-					<p>User meta containers add extra fields to the user edit screens. Field data is stored separately for each user as user meta (see <a href="http://codex.wordpress.org/Function_Reference/add_user_meta"><i class="icon-globe"></i> add_user_meta</a>). </p>
+					<hr>
+
+					<h3 id="User_Meta" class="left-hash"><a href="#User_Meta">User meta Container</a></h3>
+					<p>User meta containers add extra fields to the user edit screens. Field data is stored separately for each user as user meta (see <a href="http://codex.wordpress.org/Function_Reference/add_user_meta" target="_blank"><i class="icon-globe"></i> add_user_meta</a>). </p>
 
 					<pre class="prettyprint">
 Carbon_Container::factory('user_meta', 'Address')
@@ -409,7 +434,7 @@ Carbon_Container::factory('user_meta', 'Address')
 						<dt><code>$name</code></dt>
 						<dd>The name of the field to be retrieved.</dd>
 
-						<dt><code>$type</code> (optional)</dt>
+						<dt><code>$type</code> <small>(optional)</small></dt>
 						<dd>If the field you want to retrieve is of type complex, you need to pass <code>"complex"</code>.</dd>
 					</dl>
 
@@ -429,8 +454,9 @@ foreach ($phone_numbers as $phone) {
 
 					<p>After saving, the <code>carbon_after_save_user_meta</code> hook is called, which allows you to hook additional functionality after saving. It accepts the <code>$user_id</code> parameter, which is the ID of the user that was updated.</p>
 
+					<hr>
 
-					<h3 id="Widgets">Widgets</h3>
+					<h3 id="Widgets" class="left-hash"><a href="#Widgets">Widgets</a></h3>
 					<p>Widget containers are used to create custom widgets for your theme. Each widget is defined as a PHP class. Widget classes must extend the <code>Carbon_Widget</code> class and must have at least two methods - constructor and <code>front_end</code> method.</p>
 
 					<p>The constructor must be named after the class and it must call the method <code>setup($name, $description, $fields, $classname)</code>, where: </p>
@@ -489,7 +515,9 @@ function __construct() {
 }
 </pre>
 
-					<h2 id="Fields">Fields</h2>
+					<hr>
+
+					<h2 id="Fields" class="left-hash"><a href="#Fields">Fields</a></h2>
 					<p>Fields are the building block of every container.</p>
 
 					<p>New field are created using the factory method <code>Carbon_Field::factory($type, $name, $label=null)</code>, where:</p>
@@ -498,16 +526,16 @@ function __construct() {
 						<dd>The type of the field. This parameter should be valid class name of a field. For example <code>text</code> will create field of class <code>Carbon_Field_Text</code>. For a complete list of field types, see <a href="#Types"><i class="icon-hand-right"></i> Types</a>.</dd>
 
 						<dt><code>$name</code></dt>
-						<dd>Name of the field. Used as a key when stored in the database and for you to retrieve it's value. Please note, that all fields in a Custom Field Container have their names automatically prefixed with an underscored (e.g. <code>bgcolor</code> becomes <code>_bgcolor</code>). For more information why, see <a href="http://codex.wordpress.org/Function_Reference/add_post_meta#Making_a_.22Hidden.22_Custom_Field"><i class="icon-globe"></i> here</a></dd>
+						<dd>Name of the field. Used as a key when stored in the database and for you to retrieve it's value. Please note, that all fields in a Custom Field Container have their names automatically prefixed with an underscored (e.g. <code>bgcolor</code> becomes <code>_bgcolor</code>). For more information why, see <a href="http://codex.wordpress.org/Function_Reference/add_post_meta#Making_a_.22Hidden.22_Custom_Field" target="_blank"><i class="icon-globe"></i> here</a></dd>
 						
-						<dt><code>$label</code> (optional)</dt>
+						<dt><code>$label</code> <small>(optional)</small></dt>
 						<dd>
 							<p>The label of the field is displayed in the back-end only, where the container is visible. When the parameter is omitted it is automatically derived from the <code>$name</code></p>
 							<p>If this parameter is omitted, and the <code>$name</code> starts with <code>crb_</code>, the "Crb " part will not be displayed in the generated label.</p>
 						</dd>
 					</dl>
 
-					<p>The factory greatly simplifies the field creation process, since it returns the field object itself and you don't need to assign it to a variable. The fields API supports <a href="http://en.wikipedia.org/wiki/Method_chaining"><i class="icon-globe"></i> method chaining</a> (as seen in the example below).</p>
+					<p>The factory greatly simplifies the field creation process, since it returns the field object itself and you don't need to assign it to a variable. The fields API supports <a href="http://en.wikipedia.org/wiki/Method_chaining" target="_blank"><i class="icon-globe"></i> method chaining</a> (as seen in the example below).</p>
 
 					<pre class="prettyprint">
 // Create image field with name "customer_photo" and label "Photo"
@@ -533,15 +561,16 @@ Carbon_Field::factory('select', 'crb_color')-&gt;add_options(array('red', 'blue'
 					<p>Help text is used as a hint to the user, who will use the field. It is usually rendered under the field and contains more information about what it should contain - requirements, examples, links, etc. HTML tags are allowed.</p>
 					<p>You add help text using <code>Carbon_Field::factory(...)-&gt;<strong>help_text($text)</strong></code></p>
 
+					<hr>
 
 					<div class="field-docs">
-						<h4 id="Field_Text">Text Field <code>text</code></h4>
+						<h3 id="Field_Text" class="left-hash"><a href="#Field_Text">Text Field <code>text</code></a></h3>
 						<p>The text field is the simplest and most generic field. It renders a text input field.</p>
 						<pre class="prettyprint">Carbon_Field::factory('text', 'crb_subtitle')</pre>
 					</div>
 
 					<div class="field-docs">
-						<h4 id="Field_Textarea">Textarea <code>textarea</code></h4>
+						<h3 id="Field_Textarea" class="left-hash"><a href="#Field_Textarea">Textarea <code>textarea</code></a></h3>
 						<p>Multiline text input with HTML allowed</p>
 						<pre class="prettyprint">Carbon_Field::factory('textarea', 'crb_meta_description')</pre>
 						<strong>Setup methods</strong>
@@ -561,28 +590,28 @@ Carbon_Field::factory('select', 'crb_color')-&gt;add_options(array('red', 'blue'
 					</div>
 					
 					<div class="field-docs">
-						<h4 id="Field_RichText">Rich text area <code>rich_text</code></h4>
+						<h3 id="Field_RichText" class="left-hash"><a href="#Field_RichText">Rich text area <code>rich_text</code></a></h3>
 						<p>This field renders the built-in WordPress tinyMCE editor.</p>
 						<pre class="prettyprint">
 Carbon_Field::factory("rich_text", "crb_sidenote", "Sidenote Content");</pre>
 
 					</div>
 					<div class="field-docs">
-						<h4 id="Field_Date">Date <code>date</code></h4>
+						<h3 id="Field_Date" class="left-hash"><a href="#Field_Date">Date <code>date</code></a></h3>
 						<p>Renders a date picker using jQuery UI. The value is stored in <code>YYYY-MM-DD</code> format.</p>
 						<pre class="prettyprint">
 Carbon_Field::factory("date", "crb_event_start_date", "Start");</pre>
 					</div>
 
 					<div class="field-docs">
-						<h4 id="Field_Color">Color <code>color</code></h4>
+						<h3 id="Field_Color" class="left-hash"><a href="#Field_Color">Color <code>color</code></a></h3>
 						<p>Renders color picker using Farbtastic. Colors are represented with six hexadecimal digits prefixed with <code>#</code> (e.g. white is <code>#FFFFFF</code>)</p>
 						<pre class="prettyprint">
 Carbon_Field::factory("color", "crb_box_background", "Background Color");
 </pre>
 					</div>
 					<div class="field-docs">
-						<h4 id="Field_Checkbox">Checkbox <code>checkbox</code></h4>
+						<h3 id="Field_Checkbox" class="left-hash"><a href="#Field_Checkbox">Checkbox <code>checkbox</code></a></h3>
 						<p>The checkbox field create a single tick-able option with a label next to it.</p>
 						<h5>Setup methods</h5>
 						<dl>
@@ -595,14 +624,14 @@ Carbon_Field::factory("checkbox", "crb_show_content", "Show content")
 					</div>
 
 					<div class="field-docs">
-						<h4 id="Field_Select">Select <code>select</code></h4>
+						<h3 id="Field_Select" class="left-hash"><a href="#Field_Select">Select <code>select</code></a></h3>
 						<p>Creates a select box with pre-defined options. </p>
 						<h5>Setup methods</h5>
 						<dl>
 							<dt><code>add_options($options)</code></dt>
-							<dd><p>Add an associative array with options. <br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</p></dd>
+							<dd><p>Add an associative array with options or a <a href="http://php.net/manual/en/language.types.callable.php" target="_blank"><i class="icon-globe"></i> callback</a>. <br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</p></dd>
 							<dt><code>set_options($options)</code></dt>
-							<dd><p>Set options as an associative array. <br/>The method is not indented to be called multiple times - each call will overwrite the previous options.</p></dd>
+							<dd><p>Set options as an associative array  or a <a href="http://php.net/manual/en/language.types.callable.php" target="_blank"><i class="icon-globe"></i> callback</a>. <br/>The method is not indented to be called multiple times - each call will overwrite the previous options.</p></dd>
 						</dl>
 						<p><span class="label label-info">NB!</span> If you provide indexed array with no key values, the <strong>default indexes (0, 1, 2 ...)</strong> of the elements will be used.</p>
 						<pre class="prettyprint">
@@ -614,14 +643,14 @@ Carbon_Field::factory("select", "crb_content_align", "Text alignment")-&gt;add_o
 </pre>
 					</div>
 					<div class="field-docs">
-						<h4 id="Field_Radio">Radio <code>radio</code></h4>
+						<h3 id="Field_Radio" class="left-hash"><a href="#Field_Radio">Radio <code>radio</code></a></h3>
 						<p>Similar to the Select field, but instead of in a select box, options are rendered as a set of radio buttons.</p>
 						<h5>Setup methods</h5>
 						<dl>
 							<dt><code>add_options($options)</code></dt>
-							<dd>Add an associative array with options. <br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</dd>
+							<dd>Add an associative array with options or a <a href="http://php.net/manual/en/language.types.callable.php" target="_blank"><i class="icon-globe"></i> callback</a>. <br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</dd>
 							<dt><code>set_options($options)</code></dt>
-							<dd><p>Set options as an associative array. <br/>The method is not indented to be called multiple times - each call will overwrite the previous options.</p></dd>
+							<dd><p>Set options as an associative array or a <a href="http://php.net/manual/en/language.types.callable.php" target="_blank"><i class="icon-globe"></i> callback</a>. <br/>The method is not indented to be called multiple times - each call will overwrite the previous options.</p></dd>
 						</dl>
 						<p><span class="label label-info">NB!</span> If you provide indexed array with no key values, the <strong>default indexes (0, 1, 2 ...)</strong> of the elements will be used.</p>
 						<pre class="prettyprint">
@@ -634,14 +663,14 @@ Carbon_Field::factory("radio", "crb_subtitle_styling", "Subtitle text style")-&g
 					</div>
 
 					<div class="field-docs">
-						<h4 id="Field_Set">Set <code>set</code></h4>
+						<h3 id="Field_Set" class="left-hash"><a href="#Field_Set">Set <code>set</code></a></h3>
 						<p>The set field creates a list of tick-able options. This field enables to select multiple options. The value is retrieved as array containing the ticked options.</p>
 						<h5>Setup methods</h5>
 						<dl>
 							<dt><code>add_options($options)</code></dt>
-							<dd>Add an associative array with options. <br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</dd>
+							<dd>Add an associative array with options or a <a href="http://php.net/manual/en/language.types.callable.php" target="_blank"><i class="icon-globe"></i> callback</a>. <br/>The method can be called multiple times, in which case the options between the calls will be appended (instead of overwritten).</dd>
 							<dt><code>set_options($options)</code></dt>
-							<dd><p>Set options as an associative array. <br/>The method is not indented to be called multiple times - each call will overwrite the previous options.</p></dd>
+							<dd><p>Set options as an associative array or a <a href="http://php.net/manual/en/language.types.callable.php" target="_blank"><i class="icon-globe"></i> callback</a>. <br/>The method is not indented to be called multiple times - each call will overwrite the previous options.</p></dd>
 							<dt><code>limit_options($count)</code></dt>
 							<dd><p>Shows only the first <code>$count</code> options, while the others are hidden and can be shown by clicking the <em>"Show All Options"</em> link. <br/>This method is useful when there are many options in the Set field. <br />Must be greater than or equal to 0. Default is <code>0</code> (no limit, all options are visible).</p></dd>
 						</dl>
@@ -656,78 +685,206 @@ Carbon_Field::factory("set", "crb_product_features", "Features")-&gt;add_options
 					</div>
 
 					<div class="field-docs">
-						<h4 id="Field_Relationship">Relationship <code>relationship</code></h4>
-						<p>This field allows to select multiple posts, pages or custom post types. Useful for creating links between different posts.</p>
+						<h3 id="Field_Relationship" class="left-hash"><a href="#Field_Relationship">Relationship <code>relationship</code></a></h3>
+						<p>This field allows to select and reorder posts of any post type. Useful for creating links between any of the post type entries.</p>
 						<h5>Setup methods</h5>
 						<dl>
-							<dt><code>set_post_type($post_type)</code></dt>
-							<dd>Set the type of posts to choose from (or array of post types).</dd>
-							<dt><code>set_max($max)</code></dt> 
-							<dd>Maximum number of posts to select. Must be greater than 0. Defaults to <code>-1</code> (no limit).</dd>
+							<dt><code>set_post_type($type)</code></dt>
+							<dd>It allows you to specify the post type types you want to have available in this relationship field. </dd>
+							<dt><code>set_max($max)</code></dt>
+							<dd>Allows you to limit the maximum number of selected items in a relationship field. By default, there is no limit.
+								<pre class="prettyprint">
+Carbon_Field::factory('relationship', 'crb_relationship')
+	->set_max(5);</pre>
+							<dt><code>allow_duplicates($allow)</code></dt>
+							<dd>If enabled will allow the same item to be selected more than once. By default, duplicates are not allowed.
+								<pre class="prettyprint">
+Carbon_Field::factory('relationship', 'crb_relationship')
+	->allow_duplicates(true);</pre>
+							</dd>
 						</dl>
+						<h5>Example</h5>
+						<p>The example below registers a relationship field with all posts from the <code>post</code> post type:</p>
 						<pre class="prettyprint">
-Carbon_Field::factory("relationship", "crb_publications", "Publications")-&gt;set_post_type('publication');
-Carbon_Field::factory("relationship", "crb_artworks", "Artworks")-&gt;set_post_type(array('painting', 'sculpture'));
-</pre>
+Carbon_Field::factory('relationship', 'crb_relationship')
+	->set_post_type('post');</pre>
 					</div>
 
 					<div class="field-docs">
-						<h4 id="Field_File">File <code>file</code></h4>
+						<h3 id="Field_Association" class="left-hash"><a href="#Field_Association">Association <code>association</code></a></h3>
+						<p>This field allows to select and reorder multiple post type posts, taxonomy terms, users or comments. Useful for creating links between any of these items.</p>
+						<h5>Setup methods</h5>
+						<dl>
+							<dt><code>set_types($types)</code></dt>
+							<dd>It allows you to specify the types of data that you want to have available in this association field. 
+								<br />In this context:
+								<ul>
+									<li><code>type</code> is the data type - <code>post</code>, <code>term</code>, <code>user</code>, <code>comment</code>, or a custom value (if implemented).</li>
+									<li><code>subtype</code> clarifies the exact type to be used. <br />For the <code>post_type</code> type, you can use <code>post</code>, <code>page</code> or any other registered custom post type. <br />For the <code>taxonomy</code> type, you can use <code>category</code>, <code>post_tag</code> or any other registered custom taxonomy. <br />The <code>subtype</code> is not used for the <code>user</code> and <code>comments</code> types.</li>
+								</ul>
+							</dd>
+							<dt><code>set_max($max)</code></dt>
+							<dd>Allows you to limit the maximum number of selected items in a association field. By default, there is no limit.
+								<pre class="prettyprint">
+Carbon_Field::factory('association', 'crb_association')
+	->set_max(5);</pre>
+							<dt><code>allow_duplicates($allow)</code></dt>
+							<dd>If enabled will allow the same item to be selected more than once. By default, duplicates are not allowed.
+								<pre class="prettyprint">
+Carbon_Field::factory('association', 'crb_association')
+	->allow_duplicates(true);</pre>
+							</dd>
+						</dl>
+						<p><span class="label label-info">NB!</span> To get all the association data (each entry containing id, type, subtype) array, you can set the <code>association</code> type in the retrieval functions. Example:</p>
+						<pre class="prettyprint">
+/* Get the association data as an array */
+carbon_get_post_meta($id, $name, 'association'); // array( 0 => array('id' => 20, 'type' => 'post', 'post_type' => 'page'), 1 => array('id' => 16, 'type' => 'term', 'taxonomy' => 'category')
+
+/* Get the association data as plain array with IDs */
+carbon_get_post_meta($id, $name); // array( 0 => 20, 1 => 16 )
+
+</pre>
+
+						<h5>Example</h5>
+						<p>The example below registers the following options for the association field:</p>
+								<ul>
+									<li>Post Type: Page</li>
+									<li>Post Type: Post</li>
+									<li>Taxonomy: Category</li>
+									<li>Taxonomy: Post Tag</li>
+									<li>Users</li>
+									<li>Comments</li>
+								</ul>
+						<pre class="prettyprint">
+Carbon_Field::factory('association', 'crb_association')
+	->set_types(array(
+		array(
+			'type' => 'post',
+			'post_type' => 'page',
+		),
+		array(
+			'type' => 'post',
+			'post_type' => 'post',
+		),
+		array(
+			'type' => 'term',
+			'taxonomy' => 'category',
+		),
+		array(
+			'type' => 'term',
+			'taxonomy' => 'post_tag',
+		),
+		array(
+			'type' => 'user',
+		),
+		array(
+			'type' => 'comment',
+		),
+	));</pre>
+					</div>
+
+					<div class="field-docs">
+						<h3 id="Field_File" class="left-hash"><a href="#Field_File">File <code>file</code></a></h3>
 						<p>Renders a text input with URL and file upload button. The built-in WordPress file handling interface is used.</p>
 						<pre class="prettyprint">
 Carbon_Field::factory("file", "crb_price_list", "Price list (PDF)");
 </pre>
-						<p>You can use the <code>carbon_field_file_description</code> filter to modify the description of the field. <br />The description may contain controls that are important to the field, so please use this filter only if you really know what you're doing.</p>
 					</div>
 
 					<div class="field-docs">
-						<h4 id="Field_Image">Image <code>image</code></h4>
+						<h3 id="Field_Image" class="left-hash"><a href="#Field_Image">Image <code>image</code></a></h3>
 						<p>Renders a text input with URL and image upload button. The built-in WordPress file handling interface is used.</p>
 						<p>Supported image formats are: jpg, jpeg, gif, png and bmp</p>
 						<pre class="prettyprint">
 Carbon_Field::factory("image", "crb_employee_photo", "Photo");
 </pre>
-						<p>You can use the <code>carbon_field_image_description</code> filter to modify the description of the field. <br />The description may contain controls that are important to the field, so please use this filter only if you really know what you're doing.</p>
 					</div>
 
 					<div class="field-docs">
-						<h4 id="Field_Attachment">Attachment <code>attachment</code></h4>
+						<h3 id="Field_Attachment" class="left-hash"><a href="#Field_Attachment">Attachment <code>attachment</code></a></h3>
 						<p>Renders a button to choose file (attachment) from the Media library. Instead of the URL, the field saves the attachment's ID. This allows you to retrieve additional information such as titles, descriptions, captions and different thumbnail sizes.</p>
 						<pre class="prettyprint">
 Carbon_Field::factory("attachment", "crb_related_file", "Related File");
 </pre>
-						<p>You can use the <code>carbon_field_attachment_description</code> filter to modify the description of the field. <br />The description may contain controls that are important to the field, so please use this filter only if you really know what you're doing.</p>
 					</div>
 
 					<div class="field-docs">
-						<h4 id="Field_Map">Map <code>map</code></h4>
-						<p>Creates a Google-powered map. The location is represented as longitude and latitude and is saved in three times in the database - one row for the latitude (with name <code>$field_name . '_lat'</code>), one row for the longitude (with name <code>$field_name . '_lng'</code>) and one row as a single string (<code>$latitude . ',' . $longitude</code> with name <code>$field_name</code>)</p>
+						<h3 id="Field_Map" class="left-hash"><a href="#Field_Map">Map <code>map</code></a></h3>
+						<p>Creates a Google-powered map with an address search field.</p>
+						<p>The location data is saved in multiple meta entries:</p>
+
+						<table class="table">
+							<thead>
+								<tr>
+									<th>Meta Key</th>
+									<th>Description</th>
+									<th>Value Type</th>
+									<th>Value</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><code>$field_name</code></td>
+									<td>Latitude &amp; Longitude</td>
+									<td>(string)</td>
+									<td>40.74866,-73.97982</td>
+								</tr>
+								<tr>
+									<td><code>$field_name . '_lat'</code></td>
+									<td>Latitude</td>
+									<td>(float)</td>
+									<td>40.74866</td>
+								</tr>
+								<tr>
+									<td><code>$field_name . '_lng'</code></td>
+									<td>Longitude</td>
+									<td>(float)</td>
+									<td>-73.97982</td>
+								</tr>
+								<tr>
+									<td><code>$field_name . '_address'</code></td>
+									<td>Address</td>
+									<td>(string)</td>
+									<td>45 Park Avenue,  New York, NY 10016</td>
+								</tr>
+								<tr>
+									<td><code>$field_name . '_zoom'</code></td>
+									<td>Zoom level</td>
+									<td>(int)</td>
+									<td>8</td>
+								</tr>
+							</tbody>
+						</table>
+
 						<h5>Setup methods</h5>
 						<dl>
 							<dt><code>set_position($lat, $lng, $zoom)</code></dt>
 							<dd>Set the default position on the map specified by <code>$lat</code> and <code>$lng</code> and the default zoom level to <code>$zoom</code> (zoom <code>0</code> corresponds to a map of the Earth fully zoomed out).</dd>
 						</dl>
 						<pre class="prettyprint">
-Carbon_Field::factory("map", "crb_company_location", "Location")->help_text('drag and drop the pin on the map to select location');</pre>
-					</div>
-					<div class="field-docs">
-						<h4 id="Field_MapWithAddress">Map with Address <code>map_with_address</code></h4>
-						<p><code>Map</code> field with additional field for address search. </p>
-						<pre class="prettyprint">
-Carbon_Field::factory("map_with_address", "crb_company_location", "Location")</pre>
-						<p>Since the Map with Address field extends the Map field, the <code>set_position()</code> method can also be used with it.</p>
-					</div>
-					
+Carbon_Field::factory("map", "crb_company_location", "Location")
+	->help_text('drag and drop the pin on the map to select location');</pre>
 
+						<h5>Usage</h5>
+						<p><span class="label label-info">NB!</span> To get all the location data as an array, you can set the <code>map</code> type in the retrieval functions. Example:</p>
+						<pre class="prettyprint">
+/* Get the location data as an array */
+carbon_get_post_meta($id, $name, 'map'); // array('lat' => 40.74866, 'lng' => -73.97982, 'address' => '45 Park Avenue,  New York, NY 10016', 'zoom' => 8)
+
+/* Get the location latitude and longitude */
+carbon_get_post_meta($id, $name); // '40.74866,-73.97982'
+
+</pre>
+					</div>
 					<div class="field-docs">
-						<h4 id="Field_Separator">Separator <code>separator</code></h4>
+						<h3 id="Field_Separator" class="left-hash"><a href="#Field_Separator">Separator <code>separator</code></a></h3>
 							<p>Creates visual separator between adjacent fields. Has aesthetic function only, no data is saved.</p>
 						<pre class="prettyprint">
 Carbon_Field::factory("separator", "crb_style_options", "Style");</pre>
 					</div>
 
 					<div class="field-docs">
-						<h4 id="Field_Choose_Sidebar">Choose Sidebar <code>choose_sidebar</code></h4>
+						<h3 id="Field_Choose_Sidebar" class="left-hash"><a href="#Field_Choose_Sidebar">Choose Sidebar <code>choose_sidebar</code></a></h3>
 						<p>Adds a drop-down field that lists existing sidebars and provides the ability to add new sidebars to the site.</p>
 						<h5>Setup methods</h5>
 						<dl>
@@ -736,7 +893,7 @@ Carbon_Field::factory("separator", "crb_style_options", "Style");</pre>
 
 							<dt><code>set_sidebar_options($sidebar_options)</code></dt>
 							<dd>
-								<p>Set the options used for sidebars created by this field. See <a href="http://codex.wordpress.org/Function_Reference/register_sidebar"><i class="icon-globe"></i> register_sidebar</a> for more information ().</p>
+								<p>Set the options used for sidebars created by this field. See <a href="http://codex.wordpress.org/Function_Reference/register_sidebar" target="_blank"><i class="icon-globe"></i> register_sidebar</a> for more information ().</p>
 								<p>This method can accept an associative array of options, or an array of associative arrays with options for each sidebar.</p>
 								<p> The default options are:</p>
 								<pre class="prettyprint">
@@ -781,14 +938,14 @@ Carbon_Field::factory( 'choose_sidebar', 'crb_custom_sidebar', __('Sidebar', 'cr
 					</div>
 					
 					<div class="field-docs">
-						<h4 id="Field_HeaderScripts">Header scripts <code>header_scripts</code></h4>
+						<h3 id="Field_HeaderScripts" class="left-hash"><a href="#Field_HeaderScripts">Header Scripts <code>header_scripts</code></a></h3>
 							<p>Applicable to Theme Options container only. Displays a text area, the contents of which will be automatically printed in the <code>&lt;head&gt;</code> of each page. Useful for printing user-defined javascript, as well as styles, meta tags, etc.</p>
 						<pre class="prettyprint">
 Carbon_Field::factory("header_scripts", "crb_header_script");
 </pre>
 					</div>
 					<div class="field-docs">
-						<h4 id="Field_FooterScripts">Footer scripts <code>footer_scripts</code></h4>
+						<h3 id="Field_FooterScripts" class="left-hash"><a href="#Field_FooterScripts">Footer Scripts <code>footer_scripts</code></a></h3>
 							<p>Applicable to Theme Options container only. Displays a text area, the contents of which will be automatically printed before the closing <code>&lt;/body&gt;</code> of each page (during <code>wp_footer()</code>). Useful for printing Google Analytics code, or user-defined javascript.</p>
 						<pre class="prettyprint">
 Carbon_Field::factory("footer_scripts", "crb_footer_script");
@@ -796,22 +953,21 @@ Carbon_Field::factory("footer_scripts", "crb_footer_script");
 					</div>
 
 					<div class="field-docs">
-						<h4 id="Field_HTML">HTML <code>html</code></h4>
+						<h3 id="Field_HTML" class="left-hash"><a href="#Field_HTML">HTML <code>html</code></a></h3>
 						<p>Render custom HTML markup</p>
 						<h5>Setup methods</h5>
 						<dl>
 							<dt><code>set_html($html)</code></dt>
 							<dd>Set the HTML markup you would like to show to <code>$html</code>.</dd>
-							 </dd>
 						</dl>
 						<pre class="prettyprint">
-Carbon_Field::factory("html", "crb_information_text")-&gt;set_html('&lt;h2&gt;Lorem ipsum&lt;/h2&gt;
-&lt;p&gt;Quisque mattis ligula eget placerat volutpat. Praesent tincidunt ultricies tempor.&lt;/p&gt;');
+Carbon_Field::factory("html", "crb_information_text")
+	-&gt;set_html('&lt;h2&gt;Lorem ipsum&lt;/h2&gt;&lt;p&gt;Quisque mattis ligula eget placerat volutpat. Praesent tincidunt ultricies tempor.&lt;/p&gt;');
 </pre>
 					</div>
 
 					<div class="field-docs">
-						<h4 id="Field_GravityForm">Gravity Form <code>gravity_form</code></h4>
+						<h3 id="Field_GravityForm" class="left-hash"><a href="#Field_GravityForm">Gravity Form <code>gravity_form</code></a></h3>
 							<p>Similar to select field, but automatically populated with all available gravity forms. If the plugin is not installed or not activated, an appropriate message will be displayed to the user.</p>
 						<pre class="prettyprint">
 Carbon_Field::factory("gravity_form", "crb_gravity_form", "Select a Form");
@@ -829,7 +985,7 @@ function crb_my_gravity_form_options($options) {
 					</div>
 
 					<div class="field-docs">
-						<h3 id="Complex_Field">Complex Field</h3>
+						<h2 id="Complex_Field" class="left-hash"><a href="#Complex_Field">Complex Field</a></h2>
 						<p>Complex fields act as containers to which you can add multiple groups of fields. It is represented as a table, where each row is a field group. The user is able to add infinite rows of each group. This allows to repeat a set of fields multiple times creating customizable and sortable lists. This is useful when creating image galleries, lists of data or advanced content and layout elements.</p>
 
 						<pre class="prettyprint">
@@ -859,7 +1015,7 @@ Carbon_Field::factory('complex', 'crb_media_item')
 
 						<p>As you can see, depending on their usage, complex fields can either contain a single unnamed group or multiple named groups.</p>
 
-						<h4 id="Single_Group">Single group</h4>
+						<h3 id="Single_Group" class="left-hash"><a href="#Single_Group">Single group</a></h3>
 						<p>To add a single group of fields you use <code>add_fields($fields)</code>, where:</p>
 						<dl>
 							<dt><code>$fields</code></dt>
@@ -871,7 +1027,7 @@ add_fields(array(
 	Carbon_Field::factory('text', 'job_title'),
 )),
 </pre>
-						<h4 id="Multiple_Groups">Multiple groups</h4>
+						<h3 id="Multiple_Groups" class="left-hash"><a href="#Multiple_Groups">Multiple groups</a></h3>
 						<p>To add multiple groups of fields you use <code>add_fields($name, $fields)</code>, where:</p>
 						<dl>
 							<dt><code>$name</code></dt>
@@ -919,7 +1075,7 @@ array (
 
 						<p>Complex field values are retrieved using either <code>carbon_get_post_meta</code> or <code>carbon_get_theme_option</code> (depending on the container it is added to) and passing the string <code>"complex"</code> as <code>$type</code> argument (see <a href="#Types"><i class="icon-hand-right"></i> Types</a>).</p>
 						
-						<h4 id="Nested_Complex_Fields">Nested Complex Fields</h4>
+						<h3 id="Nested_Complex_Fields" class="left-hash"><a href="#Nested_Complex_Fields">Nested Complex Fields</a></h3>
 						<p>Complex fields can be nested. The following will define a container that creates multiple slides and allows positioning of multiple text fragments on each slide: </p>
 						<pre class="prettyprint">
 Carbon_Container::factory('custom_fields', 'Slider Data')
@@ -929,7 +1085,8 @@ Carbon_Container::factory('custom_fields', 'Slider Data')
 			Carbon_Field::factory('image', 'image'),
 			Carbon_Field::factory('complex', 'slide_fragments')->add_fields(array(
 				Carbon_Field::factory('text', 'fragment_text'),
-				Carbon_Field::factory('select', 'fragment_position')->add_options(array('Top Left', 'Top Right', "Bottom Left", "Bottom Right")),
+				Carbon_Field::factory('select', 'fragment_position')
+					->add_options(array('Top Left', 'Top Right', "Bottom Left", "Bottom Right")),
 			))
 		)),
 	));
@@ -967,7 +1124,7 @@ array (
 )
 </pre>
 					
-						<h4 id="Setup_Methods">Setup Methods</h4>
+						<h3 id="Setup_Methods" class="left-hash"><a href="#Setup_Methods">Setup Methods</a></h3>
 							<dl>
 								<dt><code>add_fields</code></dt>
 								<dd>
@@ -1017,7 +1174,7 @@ Carbon_Field::factory('complex', 'crb_employee_data')
 
 							</dl>
 
-						<h4 id="Data_Storage">Data Storage</h4>
+						<h3 id="Data_Storage" class="left-hash"><a href="#Data_Storage">Data Storage</a></h3>
 						<p>Complex field values are saved in the database in multiple rows - a row per field per group. To be able to distinguish which value for field is, a special format of the keys (<code>meta_key</code> or <code>option_name</code>) is adopted:</p>
 						<p><code>{complex_field_name}_{group_name}-{field_name}_{number}</code>, where</p>
 						<dl>
@@ -1033,27 +1190,179 @@ Carbon_Field::factory('complex', 'crb_employee_data')
 							<dt>number</dt>
 							<dd>Identifies the number of the row this value is part of.</dd>
 						</dl>
-						<p><span class="label label-info">NB!</span> When in a Custom Fields container, the name of the complex field is prefixed with an underscore, but the name of the field (<code>field_name</code>) is not. Thus, the key format becomes: <code><strong>_</strong>{complex_field_name}_{group_name}-{field_name}_{number}</code></p>
+						<p><span class="label label-info">NB!</span> When in a Custom Fields container, the name of the complex field is prefixed with an underscore, but the name of the field (<code>field_name</code>) is not. Thus, the key format becomes:<br/><code><strong>_</strong>{complex_field_name}_{group_name}-{field_name}_{number}</code></p>
 					</div>
 
-					<h3 id="advanced-topics">Advanced Topics</h3>
+					<h2>Advanced Topics</h2>
 
 					<div class="field-docs">
-						<h4 id="extending_carbon_fields">Extending</h4>
-						<p>Carbon Fields can be easily extended. Each of the Carbon_Field classes is optionally declared, and each function is optionally defined. This way early custom declaration and definitions can be made in your theme or plugin. Also, you can create custom Carbon Fields, Carbon Containers, Carbon Exceptions and others by extending the existing classes.</p>
-						<p>Additionally, there are several hooks that allow you to include your custom classes and functionality at the right time, in the right place:</p>
+						<h3 id="Extending" class="left-hash"><a href="#Extending">Extending</a></h3>
+						<p>Carbon Fields can be easily extended. Each of the Carbon_Field classes is optionally declared, and each function is optionally defined. This way early custom declaration and definitions can be made in your theme or plugin. Also, you can create custom Carbon Fields, Carbon Containers, Carbon Exceptions and others by extending the existing PHP classes.</p>
+
+						<p>On the JavaScript side, the library is designed to be lightweight and flexible and sits on top of <a href="http://backbonejs.org/" target="_blank"><i class="icon-globe"></i> Backbone</a>, providing the framework for building a scalable application.</p>
+						
+						<p>To get a better understanding of how the library works, checkout our step-by-step guide of <a href="guide.html">how to create a new custom Carbon Field</a>.</p>
+					</div>
+
+					<div class="field-docs">
+						<h3 id="Templates" class="left-hash"><a href="#Templates">Templates</a></h3>
+						<p>Carbon Fields use <a href="http://underscorejs.org/#template" target="_blank"><i class="icon-globe"></i>Underscore template engine</a>. Each field has a <code>template</code> method that prints the Underscore template code.</p>
+
+						<pre class="prettyprint">
+class Carbon_Field_Example extends Carbon_Field {
+	// Main template
+	function template() {
+		?&gt;
+		&lt;input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text" /&gt;
+		&lt;span&gt;This is an example field. &lt;/span&gt;
+		&lt;?php
+	}
+}</pre>
+
+						Some fields have more than one template - in those cases the extra templates should be printed in separate methods and registered via <code>add_template($name, $callback)</code> method. 
+						<pre class="prettyprint">
+class Carbon_Field_Example extends Carbon_Field {
+	function admin_init() {
+		// Add the description template
+		$this->add_template($this->get_type() . '-Description', array($this, 'template_description'));
+	}
+	...
+	// Description template
+	function template_description() {
+		?&gt;
+		&lt;div class="carbon-description {{{ value ? '' : 'hidden' }}}"&gt;
+			&lt;p&gt;Some really helpful description.&lt;/p&gt;
+		&lt;/div&gt;
+		&lt;?php
+	}
+}</pre>
+
+						<h4>Template Syntax</h4>
 						<dl>
-							<dt><code>carbon_before_include</code></dt>
+							<dt><code>&lt;% ... %&gt;</code></dt>
+							<dd><p>Execute arbitrary JavaScript code.</p></dd>
+
+							<dt><code>{{ ... }}</code></dt>
+							<dd><p>Interpolate a value.</p></dd>
+							
+							<dt><code>{{{ ... }}}</code></dt>
+							<dd><p>Interpolate a value, and have it be HTML-escaped.</p></dd>
+						</dl>
+
+						<h4>Template Variables</h4>
+						<p>The variables that can be used inside a template are added by the <code>to_json()</code> PHP method. Here is an example of adding two new variables (rows &amp; height):</p>
+						<pre class="prettyprint">
+// Textarea Field PHP Class
+class Carbon_Field_Textarea extends Carbon_Field {
+	protected $height = 170;
+	protected $rows = 0;
+	...
+	function to_json($load) {
+		$field_data = parent::to_json($load);
+
+		$field_data = array_merge($field_data, array(
+			'rows'   => $this->rows,
+			'height' => $this->height,
+		));
+
+		return $field_data;
+	}
+}</pre>
+						<p>Template variables can also be added using <strong>JavaScript</strong>, by extending the <code>templateVariables</code> object. This should be done on the <code>field:beforeRender</code> event. For example:</p>
+
+						<pre class="prettyprint">
+// File Field Backbone View
+carbon.fields.View.File = carbon.fields.View.extend({
+	initialize: function() {
+		carbon.fields.View.prototype.initialize.apply(this);
+
+		this.on('field:beforeRender', this.loadDescriptionTemplate);
+	},
+	...
+	/**
+	 * Loads the description template and sets it as a variable ("description") for the base template
+	 */
+	loadDescriptionTemplate: function() {
+		var type = this.model.get('type');
+		var descTemplate = carbon.template(type + '-Description');
+
+		_.extend(this.templateVariables, {
+			description: descTemplate(this.templateVariables)
+		});
+	}
+});</pre>
+
+					</div>
+
+					<div class="field-docs">
+						<h3 id="Hooks" class="left-hash"><a href="#Hooks">Hooks</a></h3>
+
+						<p>There are several hooks that allow you to include your custom classes and functionality at the right time, in the right place:</p>
+
+						<h5>General</h5>
+						<dl>
+							<dt><small>(action)</small> <code>carbon_before_include</code></dt>
 							<dd><p>Called before including the main classes and functions.</p></dd>
 
-							<dt><code>carbon_after_include</code></dt>
+							<dt><small>(action)</small> <code>carbon_after_include</code></dt>
 							<dd><p>Called after including the main classes and functions.</p></dd>
 							
-							<dt><code>carbon_register_fields</code></dt>
+							<dt><small>(action)</small> <code>carbon_register_fields</code></dt>
 							<dd><p>Called prior to registering the Carbon Fields</p></dd>
 							
-							<dt><code>carbon_after_register_fields</code></dt>
+							<dt><small>(action)</small> <code>carbon_after_register_fields</code></dt>
 							<dd><p>Called after all Carbon Fields have been registered</p></dd>
+						</dl>
+
+						<h5>Templates</h5>
+						<dl>
+							<dt><small>(filter)</small> <code>carbon_template</code> <code><small>($hmtl, $name)</small></code></dt>
+							<dd><p>Applied to the template html before putting it into the admin footer.</p></dd>
+
+							<dt><small>(filter)</small> <code>carbon_template_{template-name}</code> <code><small>($hmtl)</small></code></dt>
+							<dd><p>Same as <code>carbon_template</code>, but you can specify a template name.</p></dd>
+						</dl>
+
+						<h5>Relationship &amp; Association Fields</h5>
+						<dl>
+							<dt><small>(filter)</small> <code>carbon_relationship_title</code> <code><small>($title, $name, $id, $type, $subtype)</small></code></dt>
+							<dd>Allows you to modify the title of the relationship / association items. Helpful when implementing custom relationship / association items. Passes the following parameters:
+								<ul>
+									 <li><em>string</em> <code>$title</code> The unfiltered item title.</li>
+									 <li><em>string</em> <code>$name</code> Name of the relationship / association field.</li>
+									 <li><em>int</em>    <code>$id</code> The database ID of the item.</li>
+									 <li><em>string</em> <code>$type</code> Item type (post, term, user, comment, or a custom one).</li>
+									 <li><em>string</em> <code>$subtype</code> Subtype - "page", "post", "category", etc.</li>
+								</ul>
+							</dd>
+							<dt><small>(filter)</small> <code>carbon_relationship_comment_length</code> <code><small>($number, $name)</small></code></dt>
+							<dd>Allows you to change the number of characters, visible from the comment text in an item. Passes the following parameters:
+								<ul>
+									<li><em>int</em> <code>$number</code> Number of characters. Default: <strong>30</strong></li>
+									<li><em>string</em> <code>$name</code> Name of the relationship / association field.</li>
+								</ul>
+							</dd>
+							<dt><small>(filter)</small> <code>carbon_relationship_options_{name}_post_{post_type}</code> <code><small>($options)</small></code></dt>
+							<dd>Allows you to modify the available options of the relationship / association field with name <code>{name}</code> from the <code>{post_type}</code> post type. <br />For example, if you want to filter the <code>page</code> post type options of the <code>crb_relationship</code> field, you would use the following filter: <code>carbon_relationship_options_crb_relationship_post_page</code></dd>
+							<dt><small>(filter)</small> <code>carbon_relationship_options_{name}_taxonomy_{taxonomy}</code> <code><small>($options)</small></code></dt>
+							<dd>Allows you to modify the available options of the relationship / association field with name <code>{name}</code> from the <code>{taxonomy}</code> taxonomy. <br />For example, if you want to filter the <code>category</code> taxonomy options of the <code>crb_relationship</code> field, you would use the following filter: <code>carbon_relationship_options_crb_relationship_taxonomy_category</code></dd>
+							<dt><small>(filter)</small> <code>carbon_relationship_options_{name}_user</code> <code><small>($options)</small></code></dt>
+							<dd>Allows you to modify the available options of the relationship / association field with name <code>{name}</code> that are users. <br />For example, if you want to filter the users options of the <code>crb_relationship</code> field, you would use the following filter: <code>carbon_relationship_options_crb_relationship_user</code></dd>
+							<dt><small>(filter)</small> <code>carbon_relationship_options_{name}_comment</code> <code><small>($options)</small></code></dt>
+							<dd>Allows you to modify the available options of the relationship / association field with name <code>{name}</code> that are comments. <br />For example, if you want to filter the comments options of the <code>crb_relationship</code> field, you would use the following filter: <code>carbon_relationship_options_crb_relationship_comment</code></dd>
+							<dt><small>(filter)</small> <code>carbon_relationship_options</code>  <code><small>($options, $name)</small></code></dt>
+							<dd>Allows you to filter the available options of a relationship / association field. Passes the following parameters:
+								<ul>
+									<li><em>array</em> <code>$options</code> Unfiltered options.</li>
+									<li><em>string</em> <code>$name</code> Name of the relationship / association field.</li>
+								</ul>
+							</dd>
+						</dl>
+
+						<h5>Gravity Form Field</h5>
+						<dl>
+							<dt><small>(filter)</small>  <code>crb_gravity_form_options</code> <code><small>($options)</small></code></dt>
+							<dd>Applied to the gravity form options.</dd>
 						</dl>
 					</div>
 
@@ -1069,7 +1378,7 @@ Carbon_Field::factory('complex', 'crb_employee_data')
 			<hr>
 
 			<footer>
-				<p>&copy; 2create 2014</p>
+				<p class="text-center">&copy; 2create 2015</p>
 			</footer>
 
 		</div><!--/.fluid-container-->

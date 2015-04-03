@@ -97,6 +97,14 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 		add_action('load-' . $page_hook, array($this, '_save'));
 	}
 
+	function is_active() {
+		if (isset($_GET['page']) && $_GET['page'] === $this->settings['file']) {
+			return true;
+		}
+
+		return false;
+	}
+
 	/**
 	 * Revert the result of attach()
 	 *
@@ -118,6 +126,40 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 		$container_tag_class_name = get_class($this);
 		$container_type = 'ThemeOptions';
 		include dirname(__FILE__) . '/admin-templates/container-theme-options.php';
+	}
+
+	function template() {
+		?>
+		<table border="0" cellspacing="0" cellpadding="0" class="form-table {{{ classes }}}">
+			<% _.each(fields, function(field) { %>
+				<tr class="{{{ field.classes }}}">
+					<% if (!field.wide) { %>
+						<th scope="row">
+							<% if (field.label || field.required) { %>
+								<label for="{{{ field.id }}}">
+									{{ field.label }}
+
+									<% if (field.required) { %>
+										 <span class="carbon-required">*</span>
+									<% } %>
+								</label>
+							<% } %>
+						</th>
+					<% } %>
+
+					<td {{{ field.wide ? 'colspan="2"' : '' }}}>
+						<div class="field-holder {{{ field.id }}}"></div>
+
+						<% if (field.help_text) { %>
+							<em class="help-text">
+								{{{ field.help_text }}}
+							</em>
+						<% } %>
+					</td>
+				</tr>
+			<% }); %>
+		</table>
+		<?php
 	}
 
 	function verify_unique_page() {

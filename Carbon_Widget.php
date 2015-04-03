@@ -49,12 +49,23 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 	}
  
 	function form($instance) {
-		$container_tag_class_name = get_class($this);
-		$container_type = 'Widget';
-		$container_options = array();
-		$container_classname = $this->widget_options['widget_ID'];
+		$this->store_data = $instance;
+		$custom_fields = array();
 
-		include dirname(__FILE__) . '/admin-templates/container-widget.php';
+		foreach ($this->custom_fields as $field) {
+			$tmp_field = clone $field;
+			$tmp_field->load();
+
+			$field_id = $this->get_field_id($tmp_field->get_name());
+			$field_name = $this->get_field_name($tmp_field->get_name());
+			$tmp_field->set_name($field_name);
+
+			$custom_fields[] = $tmp_field;
+		}
+
+		Carbon_Container::factory('widget', $this->id)
+			->add_fields($custom_fields)
+			->init();
 	}
 	
 	function widget($args, $instance) {
@@ -117,7 +128,7 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 		self::$registered_widget_ids[] = $id;
 	}
 
-	/* Implment DataStore */
+	/* Implement DataStore */
 	function load(Carbon_Field $field) {
 		if ( isset($this->store_data[$field->get_name()]) ) {
 			$field->set_value($this->store_data[$field->get_name()]);

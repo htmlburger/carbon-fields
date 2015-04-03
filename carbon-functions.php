@@ -27,29 +27,100 @@ function carbon_init_containers() {
 endif;
 
 
+if ( !function_exists('carbon_init_scripts') ) :
+
+function carbon_init_scripts() {
+	crb_enqueue_script('carbon-app', CARBON_PLUGIN_URL . '/js/app.js', array('jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable'));
+	crb_enqueue_script('carbon-ext', CARBON_PLUGIN_URL . '/js/ext.js', array('carbon-app'));
+
+	$active_fields = Carbon_Container::get_active_fields();
+	$active_field_types = array();
+
+	foreach ($active_fields as $field) {
+		if (in_array($field->type, $active_field_types)) {
+			continue;
+		}
+
+		$active_field_types[] = $field->type;
+
+		$field->admin_enqueue_scripts();
+	}
+}
+
+endif;
+
+if ( !function_exists('carbon_json') ) :
+
+function carbon_json() {
+	$json_data = carbon_get_json_data();
+
+	if (wp_script_is('carbon-app', 'enqueued')) {
+		?>
+		<script>
+			/* <![CDATA[ */
+			var carbon_json = <?php echo wp_json_encode($json_data); ?>;
+			/* ]]> */
+		</script>
+		<?php
+	}
+}
+
+endif;
+
+if ( !function_exists('carbon_get_json_data') ) :
+
+function carbon_get_json_data() {
+	$containers = Carbon_Container::get_active_containers();
+
+	$carbon_data = array(
+		'containers' => array(),
+	);
+
+	foreach ($containers as $container) {
+		$container_data = $container->to_json(true);
+
+		$carbon_data['containers'][] = $container_data;
+	}
+
+	return $carbon_data;
+}
+
+endif;
+
+
 if ( !function_exists('carbon_get_post_meta') ) :
 
 function carbon_get_post_meta($id, $name, $type = null) {
-	$name = $name[0] == '_' ? $name: '_' . $name;
+	$name = $name[0] == '_' ? $name : '_' . $name;
 
-	if ( $type == 'complex' ) {
-		return carbon_get_complex_fields('CustomField', $name, $id);
-	} else if ( $type == 'map' ) {
-		$raw_meta = get_post_meta($id, $name, true);
-		if ($raw_meta) {
-			$coordinates = explode(',', $raw_meta);
-			return array('lat'=>(float)$coordinates[0], 'lng'=>(float)$coordinates[1]);
-		}
-		
-		return array();
-	} else if ( $type == 'map_with_address' ) {
-		$partial_meta = carbon_get_post_meta($id, $name, 'map');
-		$partial_meta['address'] = get_post_meta($id, $name . '-address', true);
-		
-		return $partial_meta;
+	switch ($type) {
+		case 'complex':
+			$value = carbon_get_complex_fields('CustomField', $name, $id);
+		break;
+
+		case 'map':
+		case 'map_with_address':
+			$value =  array(
+				'lat' => (float) get_post_meta($id, $name . '-lat', true),
+				'lng' => (float) get_post_meta($id, $name . '-lng', true),
+				'address' => get_post_meta($id, $name . '-address', true),
+				'zoom' => (int) get_post_meta($id, $name . '-zoom', true),
+			);
+		break;
+
+		case 'association':
+			$raw_value = get_post_meta($id, $name, true);
+			$value = carbon_parse_relationship_field($raw_value, $type);
+		break;
+
+		default:
+			$value = get_post_meta($id, $name, true);
+
+			// backward compatibility for the old Relationship field
+			$value = crb_maybe_old_relationship_field($value);
 	}
 
-	return get_post_meta($id, $name, true);
+	return $value;
 }
 
 endif;
@@ -58,7 +129,7 @@ endif;
 if ( !function_exists('carbon_get_the_post_meta') ) :
 
 function carbon_get_the_post_meta($name, $type = null) {
-	return carbon_get_post_meta(get_the_id(), $name, $type);
+	return carbon_get_post_meta(get_the_ID(), $name, $type);
 }
 
 endif;
@@ -67,24 +138,34 @@ endif;
 if ( !function_exists('carbon_get_theme_option') ) :
 
 function carbon_get_theme_option($name, $type = null) {
-	if ( $type == 'complex' ) {
-		return carbon_get_complex_fields('ThemeOptions', $name);
-	} else if ( $type == 'map' ) {
-		$raw_meta = get_option($name);
-		if ($raw_meta) {
-			$coordinates = explode(',', $raw_meta);
-			return array('lat'=>(float)$coordinates[0], 'lng'=>(float)$coordinates[1]);
-		}
+	switch ($type) {
+		case 'complex':
+			$value = carbon_get_complex_fields('ThemeOptions', $name);
+		break;
 
-		return array();
-	} else if ( $type == 'map_with_address' ) {
-		$partial_meta = carbon_get_theme_option($name, 'map');
-		$partial_meta['address'] = get_option($name . '-address');
-		
-		return $partial_meta;
+		case 'map':
+		case 'map_with_address':
+			$value =  array(
+				'lat' => (float) get_option($name . '-lat'),
+				'lng' => (float) get_option($name . '-lng'),
+				'address' => get_option($name . '-address'),
+				'zoom' => (int) get_option($name . '-zoom'),
+			);
+		break;
+
+		case 'association':
+			$raw_value = get_option($name);
+			$value = carbon_parse_relationship_field($raw_value, $type);
+		break;
+
+		default:
+			$value = get_option($name);
+
+			// backward compatibility for the old Relationship field
+			$value = crb_maybe_old_relationship_field($value);
 	}
 
-	return get_option($name);
+	return $value;
 }
 
 endif;
@@ -95,11 +176,34 @@ if ( !function_exists('carbon_get_term_meta') ) :
 function carbon_get_term_meta($id, $name, $type = null) {
 	$name = $name[0] == '_' ? $name: '_' . $name;
 
-	if ( $type == 'complex' ) {
-		return carbon_get_complex_fields('TermMeta', $name, $id);
+	switch ($type) {
+		case 'complex':
+			$value = carbon_get_complex_fields('TermMeta', $name, $id);
+		break;
+
+		case 'map':
+		case 'map_with_address':
+			$value =  array(
+				'lat' => (float) get_metadata('term', $id, $name . '-lat', true),
+				'lng' => (float) get_metadata('term', $id, $name . '-lng', true),
+				'address' => get_metadata('term', $id, $name . '-address', true),
+				'zoom' => (int) get_metadata('term', $id, $name . '-zoom', true),
+			);
+		break;
+
+		case 'association':
+			$raw_value = get_metadata('term', $id, $name, true);
+			$value = carbon_parse_relationship_field($raw_value, $type);
+		break;
+
+		default:
+			$value = get_metadata('term', $id, $name, true);
+
+			// backward compatibility for the old Relationship field
+			$value = crb_maybe_old_relationship_field($value);
 	}
 
-	return get_metadata('term', $id, $name, true);
+	return $value;
 }
 
 endif;
@@ -110,11 +214,34 @@ if ( !function_exists('carbon_get_user_meta') ) :
 function carbon_get_user_meta($id, $name, $type = null) {
 	$name = $name[0] == '_' ? $name: '_' . $name;
 
-	if ( $type == 'complex' ) {
-		return carbon_get_complex_fields('UserMeta', $name, $id);
+	switch ($type) {
+		case 'complex':
+			$value = carbon_get_complex_fields('UserMeta', $name, $id);
+		break;
+
+		case 'map':
+		case 'map_with_address':
+			$value =  array(
+				'lat' => (float) get_metadata('user', $id, $name . '-lat', true),
+				'lng' => (float) get_metadata('user', $id, $name . '-lng', true),
+				'address' => get_metadata('user', $id, $name . '-address', true),
+				'zoom' => (int) get_metadata('user', $id, $name . '-zoom', true),
+			);
+		break;
+
+		case 'association':
+			$raw_value = get_metadata('user', $id, $name, true);
+			$value = carbon_parse_relationship_field($raw_value, $type);
+		break;
+
+		default:
+			$value = get_metadata('user', $id, $name, true);
+
+			// backward compatibility for the old Relationship field
+			$value = crb_maybe_old_relationship_field($value);
 	}
 
-	return get_metadata('user', $id, $name, true);
+	return $value;
 }
 
 endif;
@@ -138,6 +265,9 @@ function carbon_get_complex_fields($type, $name, $id = null) {
 		}
 		
 		$row['field_value'] = maybe_unserialize($row['field_value']);
+
+		// backward compatibility for Relationship field
+		$row['field_value'] = carbon_parse_relationship_field($row['field_value']);
 
 		$input_groups[ $field_name['index'] ]['_type'] = $field_name['group'];
 		if ( !empty($field_name['trailing']) ) {
@@ -180,123 +310,60 @@ function carbon_expand_nested_field($input_groups, $row, $field_name) {
 
 endif;
 
+if ( !function_exists('carbon_parse_relationship_field') ) :
 
-if ( !function_exists('carbon_twitter_widget_registered') ) :
+function carbon_parse_relationship_field($raw_value = '', $type = '') {
+	if ($raw_value && is_array($raw_value)) {
+		$value = array();
+		foreach ($raw_value as $raw_value_item) {
+			if (strpos($raw_value_item, ':') !== false) {
+				$item_data = explode(':', $raw_value_item);
+				$item = array(
+					'id' => $item_data[2],
+					'type' => $item_data[0],
+				);
 
-function carbon_twitter_widget_registered() {
-	global $wp_widget_factory;
-	$widget_enabled = !empty($wp_widget_factory->widgets) && !empty($wp_widget_factory->widgets['CrbLatestTweetsWidget']);
-	$manually_enabled = defined('ENABLE_TWITTER_CONFIG') && ENABLE_TWITTER_CONFIG;
+				if ($item_data[0] === 'post') {
+					$item['post_type'] = $item_data[1];
+				} elseif ($item_data[0] === 'taxonomy') {
+					$item['taxonomy'] = $item_data[1];
+				}
 
-	return $widget_enabled || $manually_enabled;
+				$value[] = $item;
+			} elseif ( $type === 'association' ) {
+				$value[] = array(
+					'id' => $raw_value_item,
+					'type' => 'post',
+					'post_type' => get_post_type($raw_value_item),
+				);
+			} else {
+				$value[] = $raw_value_item;
+			}
+		}
+
+		$raw_value = $value;
+	}
+
+	return $raw_value;
 }
 
 endif;
 
+if ( !function_exists('crb_maybe_old_relationship_field') ) :
 
-if ( !function_exists('carbon_twitter_widget_activated') ) :
-
-function carbon_twitter_widget_activated() {
-	return is_active_widget(false, false, 'carbon_latesttweets', true);
-}
-
-endif;
-
-
-if ( !function_exists('carbon_twitter_is_configured') ) :
-
-function carbon_twitter_is_configured() {
-	$option_names = array(
-		'crb_twitter_oauth_access_token',
-		'crb_twitter_oauth_access_token_secret',
-		'crb_twitter_consumer_key',
-		'crb_twitter_consumer_secret'
-	);
-	$configured = true;
-
-	foreach ($option_names as $optname) {
-		if (!get_option($optname)) {
-			$configured = false;
-			break;
+function crb_maybe_old_relationship_field($value) {
+	if (is_array($value) && !empty($value)) {
+		if (preg_match('~^\w+:\w+:\d+$~', $value[0])) {
+			$new_value = array();
+			foreach ($value as $value_entry) {
+				$pieces = explode(':', $value_entry);
+				$new_value[] = $pieces[2];
+			}
+			$value = $new_value;
 		}
 	}
 
-	return $configured;
-}
-
-endif;
-
-
-if ( !function_exists('carbon_twitter_is_config_valid') ) :
-
-function carbon_twitter_is_config_valid() {
-	$tweets = TwitterHelper::get_tweets('cnn', 1, true);
-	if (!$tweets) {
-		return false;
-	}
-	return true;
-}
-
-endif;
-
-
-if ( !function_exists('carbon_twitter_widget_no_config_warning') ) :
-
-function carbon_twitter_widget_no_config_warning() {
-	?>
-	<div id="message" class="error">
-		<p>
-			<?php 
-			printf(
-				__("You've inserted a \"Latest Tweets\" widget, but it will not work unless you configure your twitter settings. In order to do that, go to %sTheme Options &raquo; Twitter Settings%s", 'crb'),
-				'<a href="' . admin_url('/admin.php?page=crbn-twitter-settings.php') . '">',
-				'</a>'
-			);
-			?>
-		</p>
-	</div>
-	<?php
-}
-
-endif;
-
-
-if ( !function_exists('carbon_twitter_widget_wrong_config_warning') ) :
-
-function carbon_twitter_widget_wrong_config_warning() {
-	?>
-	<div id="message" class="error">
-		<p><?php _e('Warning: You seem to have configured your Twitter settings, but they are invalid. Please configure them in order to be able to use the "Latest Tweets" widget.', 'crb'); ?></p>
-		<p>
-			<?php 
-			printf(
-				__("In order to do that, go to %sTheme Options &raquo; Twitter Settings%s", 'crb'),
-				'<a href="' . admin_url('/admin.php?page=crbn-twitter-settings.php') . '">',
-				'</a>'
-			);
-			?>
-		</p>
-	</div>
-	<?php
-}
-
-endif;
-
-
-add_action('admin_menu', 'carbon_twitter_widget_config_check');
-
-if ( !function_exists('carbon_twitter_widget_config_check') ) :
-
-function carbon_twitter_widget_config_check() {
-	if (!carbon_twitter_widget_registered() || !carbon_twitter_widget_activated()) {
-		return;
-	}
-
-	if (!carbon_twitter_is_configured()) {
-		add_action('admin_notices', 'carbon_twitter_widget_no_config_warning');
-	} elseif(!carbon_twitter_is_config_valid()) {
-		add_action('admin_notices', 'carbon_twitter_widget_wrong_config_warning');
-	}
+	return $value;
 }
 
 endif;

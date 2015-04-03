@@ -19,12 +19,14 @@ do_action('carbon_before_include');
 include_once 'Carbon_Exception.php';
 
 include_once 'Carbon_DataStore.php';
+include_once 'Carbon_Templater.php';
 
 include_once 'Carbon_Container.php';
 include_once 'Carbon_Container_CustomFields.php';
 include_once 'Carbon_Container_ThemeOptions.php';
 include_once 'Carbon_Container_TermMeta.php';
 include_once 'Carbon_Container_UserMeta.php';
+include_once 'Carbon_Container_Widget.php';
 
 include_once 'Carbon_Field.php';
 include_once 'Carbon_Field_Complex.php';
@@ -38,4 +40,5 @@ do_action('carbon_after_include');
 # Add Actions
 add_action('wp_loaded', 'carbon_trigger_fields_register');
 add_action('carbon_after_register_fields', 'carbon_init_containers');
-
+add_action('admin_footer', 'carbon_init_scripts', 0);
+add_action('admin_print_footer_scripts', 'carbon_json', 999);

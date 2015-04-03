@@ -48,6 +48,14 @@ class Carbon_Container_TermMeta extends Carbon_Container {
 		do_action('carbon_after_save_term_meta', $term_id);
 	}
 
+	function is_valid_attach() {
+		if (isset($_GET['taxonomy']) && in_array($_GET['taxonomy'], $this->settings['taxonomy'])) {
+			return true;
+		}
+
+		return false;
+	}
+
 	function is_valid_save($term_id = null) {
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
 			return false;
@@ -89,13 +97,83 @@ class Carbon_Container_TermMeta extends Carbon_Container {
 	}
 
 	function render($term=null) {
-
 		if (is_object($term)) {
 			$this->set_term_id( $term->term_id );
 		}
 
-		$container_tag_class_name = get_class($this);
 		include dirname(__FILE__) . '/admin-templates/container-term-meta.php';
+	}
+
+	function template() {
+		$edit = isset($_GET['action']) && $_GET['action'] === 'edit';
+
+		if ($edit) {
+			$this->template_edit();
+		} else {
+			$this->template_add();
+		}
+	}
+
+	function template_add() {
+		?>
+		<div class="{{{ classes }}}">
+			<% _.each(fields, function(field) { %>
+				<div class="form-field {{{ field.classes }}}">
+					<% if ( !field.wide && (field.label || field.required) ) { %>
+						<label for="{{{ field.id }}}">
+							{{ field.label }}
+
+							<% if (field.required) { %>
+								 <span class="carbon-required">*</span>
+							<% } %>
+						</label>
+					<% } %>
+
+					<div class="field-holder {{{ field.id }}}"></div>
+
+					<% if (field.help_text) { %>
+						<p class="description">
+							{{{ field.help_text }}}
+						</p>
+					<% } %>
+				</div>
+			<% }); %>
+		</div>
+		<?php
+	}
+
+	function template_edit() {
+		?>
+		<table class="{{{ classes }}}">
+			<% _.each(fields, function(field) { %>
+				<tr class="form-field {{{ field.classes }}}">
+					<% if (!field.wide) { %>
+						<th scope="row">
+							<% if (field.label || field.required) { %>
+								<label for="{{{ field.id }}}">
+									{{ field.label }}
+
+									<% if (field.required) { %>
+										 <span class="carbon-required">*</span>
+									<% } %>
+								</label>
+							<% } %>
+						</th>
+					<% } %>
+
+					<td {{{ field.wide ? 'colspan="2"' : '' }}}>
+						<div class="field-holder {{{ field.id }}}"></div>
+
+						<% if (field.help_text) { %>
+							<p class="description">
+								{{{ field.help_text }}}
+							</p>
+						<% } %>
+					</td>
+				</tr>
+			<% }); %>
+		</table>
+		<?php
 	}
 
 	function set_term_id($term_id) {

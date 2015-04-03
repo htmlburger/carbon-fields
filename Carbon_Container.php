@@ -35,6 +35,31 @@ abstract class Carbon_Container {
 	static protected $init_containers = array();
 
 	/**
+	 * List of containers attached to the current page view
+	 *
+	 * @see _attach()
+	 * @var array
+	 */
+	static protected $active_containers = array();
+
+	/**
+	 * List of fields attached to the current page view
+	 *
+	 * @see _attach()
+	 * @var array
+	 */
+	static protected $active_fields = array();
+
+	/**
+	 * Stores all the container backbone templates
+	 *
+	 * @see factory()
+	 * @see add_template()
+	 * @var array
+	 */
+	protected $templates = array();
+
+	/**
 	 * List of default container settings
 	 *
 	 * @see init()
@@ -55,7 +80,6 @@ abstract class Carbon_Container {
 	 * @var bool
 	 */
 	public $setup_ready = false;
-	
 
 	/**
 	 * List of notification messages to be displayed on the front-end
@@ -70,7 +94,6 @@ abstract class Carbon_Container {
 	 * @var array
 	 */
 	protected $errors = array();
-
 
 	/**
 	 * List of container fields
@@ -107,6 +130,7 @@ abstract class Carbon_Container {
 
 		$container = new $class($name);
 		$container->type = $type;
+		$container->add_template($type, array($container, 'template'));
 
 		self::$init_containers[] = $container;
 
@@ -116,7 +140,7 @@ abstract class Carbon_Container {
 	/**
 	 * Init containers created via factory
 	 *
-	 * @return object $container
+	 * @return object
 	 **/
 	static function init_containers() {
 		while (($container = array_shift(self::$init_containers))) {
@@ -127,6 +151,54 @@ abstract class Carbon_Container {
 	}
 
 	/**
+	 * Returns all the active containers created via factory
+	 *
+	 * @return array
+	 **/
+	static function get_active_containers() {
+		return self::$active_containers;
+	}
+
+	/**
+	 * Adds a container to the active containers array and triggers an action
+	 *
+	 * @return void
+	 **/
+	static function add_active_container($container) {
+		self::$active_containers[] = $container;
+
+		do_action('crb_container_activated', $container);
+	}
+
+	/**
+	 * Returns all the active fields created via factory
+	 *
+	 * @return array
+	 **/
+	static function get_active_fields() {
+		return self::$active_fields;
+	}
+
+	/**
+	 * Adds a field to the active fields array and triggers an action
+	 *
+	 * @return void
+	 **/
+	static function add_active_field($field) {
+		self::$active_fields[] = $field;
+
+		if (method_exists($field, 'get_fields')) {
+			$fields = $field->get_fields();
+
+			foreach ($fields as $inner_field) {
+				self::add_active_field($inner_field);
+			}
+		}
+
+		do_action('crb_field_activated', $field);
+	}
+
+	/**
 	 * Perform instance initialization after calling setup()
 	 *
 	 * @return void
@@ -134,11 +206,11 @@ abstract class Carbon_Container {
 	abstract function init();
 
 	/**
-	 * Output the container markup
+	 * Prints the main Underscore template
 	 *
 	 * @return void
 	 **/
-	abstract function render();
+	abstract function template();
 
 	function __construct($title) {
 		$this->title = $title;
@@ -243,9 +315,36 @@ abstract class Carbon_Container {
 	 **/
 	function _attach() {
 		$param = func_get_args();
-		if ( call_user_func_array(array($this, 'is_valid_attach'), $param) ) {
+		if (call_user_func_array(array($this, 'is_valid_attach'), $param)) {
 			call_user_func_array(array($this, 'attach'), $param);
+
+			if (call_user_func_array(array($this, 'is_active'), $param)) {
+				self::add_active_container($this);
+
+				$fields = $this->get_fields(); 
+				foreach ($fields as $field) {
+					self::add_active_field($field);
+				}
+			}
 		}
+	}
+
+	/**
+	 * Returns all the backbone templates
+	 *
+	 * @return array
+	 **/
+	function get_templates() {
+		return $this->templates;
+	}
+
+	/**
+	 * Adds a new backbone template
+	 *
+	 * @return void
+	 **/
+	function add_template($name, $callback) {
+		$this->templates[$name] = $callback;
 	}
 
 	/**
@@ -257,11 +356,20 @@ abstract class Carbon_Container {
 	function attach() {}
 
 	/**
+	 * Perform checks whether the container is active for current request
+	 *
+	 * @return bool True if the container is active
+	 **/
+	function is_active() {
+		return $this->is_valid_attach();
+	}
+
+	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	function is_valid_attach() {	
+	function is_valid_attach() {
 		return true;
 	}
 
@@ -316,6 +424,15 @@ abstract class Carbon_Container {
 	 **/
 	function get_fields() {
 		return $this->fields;
+	}
+
+	/**
+	 * Perform a check whether the current container has fields
+	 *
+	 * @return bool
+	 **/
+	function has_fields() {
+		return (bool) $this->fields;
 	}
 
 	/**
@@ -404,9 +521,44 @@ abstract class Carbon_Container {
 		return 'carbon_panel_' . $this->id . '_nonce';
 	}
 
+	/**
+	 * Return WordPress nonce field
+	 *
+	 * @return string
+	 **/
+	function get_nonce_field() {
+		return wp_nonce_field($this->get_nonce_name(), $this->get_nonce_name(), /*referer?*/ false, /*echo?*/ false);
+	}
+
+	/**
+	 * Returns an array that holds the container data, suitable for JSON representation.
+	 * This data will be available in the Underscore template and the Backbone Model.
+	 * 
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
+	public function to_json($load) {
+		$container_data = array(
+			'id' => $this->id,
+			'type' => $this->type,
+			'title' => $this->title,
+			'settings' => $this->settings,
+			'fields' => array(),
+		);
+
+		$fields = $this->get_fields();
+		foreach ($fields as $field) {
+			$field_data = $field->to_json($load);
+			$container_data['fields'][] = $field_data;
+		}
+
+		return $container_data;
+	}
+
 	static function admin_hook_scripts() {
-		wp_enqueue_script('carbon_containers', CARBON_PLUGIN_URL . '/js/containers.js', array('jquery'), '0.4.1');
-		wp_localize_script('carbon_containers', 'carbon_containers_l10n',
+		crb_enqueue_script('carbon-containers', CARBON_PLUGIN_URL . '/js/containers.js', array('carbon-app'));
+
+		wp_localize_script('carbon-containers', 'carbon_containers_l10n',
 			array(
 				'please_fill_the_required_fields' => __('Please fill out all required fields highlighted below.', 'crb'),
 				'changes_made_save_alert' => __('The changes you made will be lost if you navigate away from this page.', 'crb'),
@@ -415,7 +567,7 @@ abstract class Carbon_Container {
 	}
 
 	static function admin_hook_styles() {
-		wp_enqueue_style('carbon_containers', CARBON_PLUGIN_URL . '/css/containers.css', array(), '0.4.1');
+		crb_enqueue_style('carbon-main', CARBON_PLUGIN_URL . '/css/main.css');
 	}
 
 } // END Carbon_Container 

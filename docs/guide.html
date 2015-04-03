@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>How to create a new custom Carbon Field</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<!-- Le styles -->
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/2.2.1/css/bootstrap.min.css" rel="stylesheet">
+		<style type="text/css">
+			body { padding-top: 20px; padding-bottom: 40px; color: #525252; }
+			h4 { margin-top: 30px; }
+			p { margin: 10px 0 20px; }
+			dl { margin: 15px 0; padding: 20px 19px 10px; border: 1px solid #ddd; border-radius: 3px; }
+			dd { margin: 10px 25px; }
+			dd p { margin: 8px 0; }
+			code { border: 0; background: #f0f2f1; }
+			hr { margin: 40px 0; }
+			li { margin: 5px 0; }
+			footer p { text-align: center; }
+
+			.hero-unit { padding-left: 0; background-color: transparent; padding-top: 0; }
+			.hero-unit h1 { line-height: 64px; }
+			.hero-unit img { margin-right: 40px; vertical-align: top; }
+			.prettyprint { margin-top: 5px; } 
+
+			/* prettify CSS start */
+			.pln{color:#000}@media screen{.str{color:#080}.kwd{color:#008}.com{color:#800}.typ{color:#606}.lit{color:#066}.pun,.opn,.clo{color:#660}.tag{color:#008}.atn{color:#606}.atv{color:#080}.dec,.var{color:#606}.fun{color:red}}@media print,projection{.str{color:#060}.kwd{color:#006;font-weight:bold}.com{color:#600;font-style:italic}.typ{color:#404;font-weight:bold}.lit{color:#044}.pun,.opn,.clo{color:#440}.tag{color:#006;font-weight:bold}.atn{color:#404}.atv{color:#060}}pre.prettyprint{padding:2px;border:0;border-radius:3px;padding:1em;}ol.linenums{margin-top:0;margin-bottom:0}li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8{list-style-type:none}li.L1,li.L3,li.L5,li.L7,li.L9{background:#eee}
+			/* prettify CSS end */
+		</style>
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/2.2.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+
+		<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+		<!--[if lt IE 9]>
+			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span8 offset2">
+					<div class="hero-unit">
+						<h1>How to create a new custom Carbon Field</h1>
+						<h3>Step-by-step Guide</h3>
+					</div>
+					
+					<h2>Introduction</h2>
+					<p>The Carbon Fields library has many build-in fields, but you may find it necessery to define a new type of field for your project needs.</p>
+					<p>The following tutorial will explain how to create a custom Carbon Field.</p>
+
+					<hr>
+
+					<h2>Step 1 <small>Download the template</small></h2>
+					<p>To make it as easy as possible, we have prepared a Carbon Field template, which is a WP plugin that contains a frame for the PHP Carbon Field class and the Backbone structure.</p>
+					<p>You can download the template from here: <a href="https://github.com/m1r0/carbon-field-template" target="_blank">https://github.com/m1r0/carbon-field-template</a></p>
+
+					<h4>Template Structure</h4>
+					<ul>
+						<li><code>/css</code>: css folder</li>
+						<li><code>/images</code>: images folder</li>
+						<li><code>/js</code>: JavaScript files folder</li>
+						<li><code>/languages</code>: folder for .po, .mo and .pot files</li>
+						<li><code>carbon-field-NAME.php</code>: main plugin file</li>
+						<li><code>Carbon_Field_NAME.php</code>: Carbon Field class file</li>
+					</ul>
+
+					<hr>
+
+					<h2>Step 2 <small>Name your field</small></h2>
+					<p>Replace the <code>FIELD_NAME</code> placeholder in the template files with the name of your custom field. Also rename the PHP files.</p>
+					<p><span class="label label-info">NB!</span> If your field name contains multiple words, for example <code>Image Gallery</code>, your class names should look like this:</p>
+					<ul>
+						<li>PHP class: <code>Carbon_Field_Image_Gallery</code> <small>(underscore between words)</small></li>
+						<li>Backbone Model: <code>carbon.fields.Model.ImageGallery</code> <small>(no word separator)</small></li>
+						<li>Backbone View: <code>carbon.fields.View.ImageGallery</code> <small>(no word separator)</small></li>
+					</ul>
+
+					<hr>
+
+					<h2>Step 3 <small>Customize</small></h2>
+					<p>Here is a quick overview of some of the methods you can customize:</p>
+
+					<h4>PHP</h4>
+					<dl>
+						<dt><code>to_json()</code></dt>
+						<dd>
+							<p>You can use this method to modify the field properties that are added to the JSON object.</p>
+							<p>The JSON object is used by the Backbone Model and the Underscore template.</p>
+						</dd>
+
+						<dt><code>template()</code></dt>
+						<dd>
+							<p>Prints the main Underscore template.</p>
+						</dd>
+
+						<dt><code>admin_enqueue_scripts()</code></dt>
+						<dd>
+							<p>Used to enqueue CSS/JavaScript files.</p>
+						</dd>
+
+						<dt><code>admin_init()</code></dt>
+						<dd>
+							<p>Called for each field instance when the field is initialized. (back-end)</p>
+						</dd>
+
+						<dt><code>init()</code></dt>
+						<dd>
+							<p>Called for each field instance when the field is initialized. (back-end, front-end)</p>
+						</dd>
+					</dl>
+
+					<h4>Backbone Model</h4>
+					<dl>
+						<dt><code>initialize()</code></dt>
+						<dd>
+							<p>Initialize function which can be used for field data manipulations.</p>
+						</dd>
+
+						<dt><code>validate()</code></dt>
+						<dd>
+							<p>The validate method is an internal Backbone method. It will check if the field model data is valid.</p>
+						</dd>
+					</dl>
+
+					<h4>Backbone View</h4>
+					<dl>
+						<dt><code>initialize()</code></dt>
+						<dd>
+							<p>Initialize function for the view. It will be called when the view is first created.</p>
+							<p>Used for events hookup and DOM manipulations.</p>
+						</dd>
+
+						<dt><code>sync()</code></dt>
+						<dd>
+							<p>Syncs the user entered value with the fields Backbone model.</p>
+							<p>By default this method is fired when the input value has changed.</p>
+							<p><span class="label label-info">NB!</span> If the field has more then one input, this method should be overwritten!</p>
+						</dd>
+					</dl>
+				</div><!--/span-->
+			</div><!--/row-->
+
+			<hr>
+
+			<footer>
+				<p class="text-center">&copy; 2create 2015</p>
+			</footer>
+		</div><!--/.fluid-container-->
+
+		<!-- Le javascript
+		================================================== -->
+		<!-- Placed at the end of the document so the pages load faster -->
+		<script src="//code.jquery.com/jquery-1.8.3.min.js"></script>
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/2.2.1/js/bootstrap.min.js"></script>
+		<script src="prettify.js"></script>
+		<script type="text/javascript">
+			jQuery(function($) {
+				prettyPrint();
+			})
+		</script>
+	</body>
+</html>

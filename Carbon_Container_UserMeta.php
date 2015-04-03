@@ -87,30 +87,61 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 
 	function is_profile_page() {
 		global $pagenow;
-		return $pagenow == 'profile.php';
+
+		return $pagenow === 'profile.php' || $pagenow === 'user-new.php' || $pagenow === 'user-edit.php';
 	}
 
 	function is_valid_attach() {
-		if ( !current_user_can('edit_users') && !$this->is_profile_page() ) {
+		if ( !current_user_can('edit_users') || !$this->is_profile_page() ) {
 			return false;
 		}
 
 		return true;
 	}
 
-	function render($user_profile = null, $a=null, $b=null) {
+	function render($user_profile = null) {
 		$profile_role = '';
 
-		if ( is_object($user_profile) ) {
-			$this->set_user_id( $user_profile->ID );
+		if (is_object($user_profile)) {
+			$this->set_user_id($user_profile->ID);
 			$profile_role = $user_profile->roles[0];
 		}
 
-		$container_tag_class_name = get_class($this);
-		$container_type = 'UserMeta';
-		$container_options = array('show_on' => $this->settings['show_on']);
-
 		include dirname(__FILE__) . '/admin-templates/container-user-meta.php';
+	}
+
+	function template() {
+		?>
+		<table class="form-table {{{ classes }}}">
+			<% _.each(fields, function(field) { %>
+				<tr class="{{{ field.classes }}}">
+					<% if (!field.wide) { %>
+						<th scope="row">
+							<% if (field.label || field.required) { %>
+								<label for="{{{ field.id }}}">
+									{{ field.label }}
+
+									<% if (field.required) { %>
+										 <span class="carbon-required">*</span>
+									<% } %>
+								</label>
+							<% } %>
+						</th>
+					<% } %>
+
+					<td {{{ field.wide ? 'colspan="2"' : '' }}}>
+						<div class="field-holder {{{ field.id }}}"></div>
+
+						<% if (field.help_text) { %>
+							<em class="help-text">
+								{{{ field.help_text }}}
+							</em>
+						<% } %>
+					</td>
+				</tr>
+			<% }); %>
+		</table>
+		<?php
 	}
 
 	function set_user_id($user_id) {

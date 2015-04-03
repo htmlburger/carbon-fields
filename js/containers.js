@@ -1,759 +1,621 @@
-jQuery(function($) {
-	function init (context) {
-		var containers;
+window.carbon = window.carbon || {};
 
-		if ( !context ) {
-			context = $('body');
-		};
+(function($) {
 
-		containers = $('.carbon-container', context);
+	var carbon = window.carbon;
 
-		containers.each(function() {
-			var th = $(this),
-				type = th.data('type'),
-				container;
+	/*
+	|--------------------------------------------------------------------------
+	| Base Container MODEL
+	|--------------------------------------------------------------------------
+	|
+	| This class represents the default model for a container.
+	| The app will fallback to this class if a container has no dedicated model.
+	|
+	| A model is responsible for holding the containers current state (data).
+	| It also holds all the logic surrounding the data management, like: 
+	|  - conversion
+	|  - validation
+	|  - access control
+	|
+	*/
+	carbon.containers.Model = Backbone.Model.extend({
+		defaults: {
+			'error': false,
+			'visible': true,
+			'has_changes': false,
+			'classes': ''
+		},
 
-			try {
-				container = carbon_container(th);
-				carbon_container[type](th, container);
-			} catch (e) {
-				carbon_log_error("Couldn't render container: " + e.message);
+		initialize: function() {
+			this.setClasses(['carbon-container', 'carbon-container-' + this.get('type')]);
+		},
+
+		setClasses: function(classes) {
+			for (var i = 0; i < classes.length; i++) {
+				this.addClass(classes[i]);
+			}
+		},
+
+		addClass: function(newClass) {
+			var classes = this.get('classes') || '';
+			classes = classes ? classes.split(' ') : [];
+
+			if ($.inArray(newClass, classes) === -1) {
+				classes.push(newClass);
 			}
 
-		});
+			this.set('classes', classes.join(' '));
+		},
 
-		$('#edittag, #addtag').each(function() {
-			var th = $(this),
-				container;
-
-			try {
-				container = carbon_container(th);
-				carbon_container['TermMeta'](th, container);
-			} catch (e) {
-				carbon_log_error("Couldn't render container: " + e.message);
-			}
-		});
-	}
-
-	// Parse the DOM element and create container object for ease of use
-	function carbon_container(node) {
-		var container = {}
-		if ( node.data('carbon_container') ) {
-			$.error('Container already parsed');
-		};
-
-		node.data('carbon_container', container);
-		container.node = node;
-
-		container.options = container.node.data('options');
-		if ( typeof container.options != 'object' ) {
-			container.options = {};
-		};
-
-		return container;
-	}
-
-	function check_required() {
-		var has_errors = false;
-
-		$('.carbon-highlight').removeClass('carbon-highlight');
-
-		// Find required fields
-		$('input[type="text"][data-carbon-required=true], textarea[data-carbon-required=true], select[data-carbon-required=true]').each(function() {
-			var th = $(this);
-
-			if ( th.val() != '' || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
-				return;
-			};
-
-			th.closest('td').addClass('carbon-highlight');
-			has_errors = true;
-		})
-
-		$('.carbon-radio-list[data-carbon-required=true], .carbon-set-list[data-carbon-required=true]').each(function() {
-			var th = $(this);
-
-			if ( th.find('input[type=radio]:checked, input[type=checkbox]:checked').length > 0 || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
-				return;
-			};
-
-			th.closest('td').addClass('carbon-highlight');
-			has_errors = true;
-		});
-
-		$('.Carbon_Field_Complex[data-carbon-required=true]').each(function() {
-			var th = $(this);
-
-			if ( th.find('.carbon-group-row').length > 0 || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
-				return;
+		/*
+		 * The validate method is an internal Backbone method.
+		 * @see http://backbonejs.org/#Model-validate
+		 */
+		validate: function(attrs, options) {
+			if (attrs.visible === false) {
+				return false;
 			}
 
-			th.closest('td').addClass('carbon-highlight');
-			has_errors = true;
-		});
-
-		return has_errors;
-	}
-
-	/* Theme Options */
-	carbon_container.ThemeOptions = function (element, container_obj) {
-		theme_options_attach_save_alert();
-		theme_options_attach_validation_hook();
-	}
-	carbon_container.ThemeOptions.attachedSaveAlert = false;
-	carbon_container.ThemeOptions.attachedValidationHook = false;
-	carbon_container.ThemeOptions.hasChanges = false;
-
-	function theme_options_attach_validation_hook() {
-		if ( carbon_container.ThemeOptions.attachedValidationHook ) {
-			return;
-		};
-		carbon_container.ThemeOptions.attachedValidationHook = true;
-
-		$('.Carbon_Container_ThemeOptions:first > form').live("submit", function(){
-			var form = $(this),
-				has_errors = check_required();
-
-			if ( !has_errors ) {
-				return;
-			};
-			
-			$('body, html').animate({scrollTop: 0});
-
-			form.siblings('.carbon-error-required').remove();
-			form.before($('<div class="settings-error error below-h2 carbon-error-required"><p><strong>' + carbon_containers_l10n.please_fill_the_required_fields + '</strong></p></div>'));
-
-			return false;
-		});
-	}
-
-	function theme_options_attach_save_alert() {
-		if ( carbon_container.ThemeOptions.attachedSaveAlert ) {
-			return;
-		};
-		carbon_container.ThemeOptions.attachedSaveAlert = true;
-
-		setTimeout(function() {
-			var old_callback = window.onbeforeunload;
-
-			window.onbeforeunload = function (){
-				if ( carbon_container.ThemeOptions.hasChanges ) {
-					return (typeof autosaveL10n != 'undefined' ? autosaveL10n.saveAlert: carbon_containers_l10n.changes_made_save_alert);
-				};
-
-				if ( old_callback ) {
-					return old_callback();
-				};
-			};
-
-			$('.carbon-container .carbon-field input, .carbon-container .carbon-field select, .carbon-container .carbon-field textarea').live('change', function() {
-				carbon_container.ThemeOptions.hasChanges = true;
-			});
-
-			$('body').on('remove_fields.carbon reorder_groups.carbon', function() {
-				carbon_container.ThemeOptions.hasChanges = true;
-			});
-
-			$('.carbon-container input[type="submit"]').click(function(){
-				window.onbeforeunload = null;
-			});
-		});
-	}
-
-
-	/* Custom Fields */
-	carbon_container.CustomFields = function (element, container_obj) {
-		container_obj.initCheckVisible = true;
-		custom_fields_check_visible(container_obj);
-		container_obj.initCheckVisible = false;
-
-		custom_fields_attach_save_alert();
-		custom_fields_attach_validation_hook();
-	}
-	carbon_container.CustomFields.attachedValidationHook = false;
-	carbon_container.CustomFields.attachedSaveAlert = false;
-	carbon_container.CustomFields.hasChanges = false;
-
-	function custom_fields_attach_save_alert() {
-		if ( carbon_container.CustomFields.attachedSaveAlert ) {
-			return;
-		};
-		carbon_container.CustomFields.attachedSaveAlert = true;
-
-		setTimeout(function() {
-			var old_callback = window.onbeforeunload;
-
-			if ( old_callback == null ) {
-				$(window).on( 'beforeunload.edit-post', function (){
-					if ( carbon_container.CustomFields.hasChanges ) {
-						return (postL10n && postL10n.saveAlert ? postL10n.saveAlert: carbon_containers_l10n.changes_made_save_alert);
-					};
-				})
-			} else {
-				window.onbeforeunload = function (){
-					if ( carbon_container.CustomFields.hasChanges ) {
-						return (autosaveL10n && autosaveL10n.saveAlert ? autosaveL10n.saveAlert: carbon_containers_l10n.changes_made_save_alert);
-					};
-
-					return old_callback();
-				};
-			}
-
-			$('.carbon-container .carbon-field input, .carbon-container .carbon-field select, .carbon-container .carbon-field textarea').live('change', function() {
-				carbon_container.CustomFields.hasChanges = true;
-			});
-
-			$('body').on('remove_fields.carbon reorder_groups.carbon', function() {
-				carbon_container.CustomFields.hasChanges = true;
-			});
-
-			$('#publish').click(function(){
-				window.onbeforeunload = null;
-			});
-		});
-	}
-
-	function custom_fields_attach_validation_hook() {
-		if ( carbon_container.CustomFields.attachedValidationHook ) {
-			return;
-		};
-		carbon_container.CustomFields.attachedValidationHook = true;
-
-		$('form#post').live("submit", function(){
-			var form = $(this),
-				has_errors = check_required();
-
-			if ( !has_errors ) {
-				return;
-			};
-
-			// reset submit button and hide spiner
-			$('#publish').removeClass('button-primary-disabled disabled');
-			$('#ajax-loading, #publishing-action .spinner').attr('style','');
-
-			$('body, html').animate({scrollTop: 0});
-
-			form.siblings('.carbon-error-required').remove();
-			form.before($('<div class="settings-error error below-h2 carbon-error-required"><p><strong>' + carbon_containers_l10n.please_fill_the_required_fields + '</strong></p></div>'));
-
-			return false;
-		});
-	}
-
-	function custom_fields_check_visible(container) {
-		var show_on,
-			show = true;
-
-		if ( typeof container.options['show_on'] == 'undefined' ) {
-			return true;
-		};
-
-		show_on = container.options['show_on'];
-
-		// Page-only options
-		if ( $('#post input[name=post_type]').val() == 'page' ) {
-			// Check page template
-			if ( typeof show_on['template_names'] != 'undefined' && show_on['template_names'].length > 0 ) {
-				var current_template = $('select#page_template').val();
-
-				if ( $.inArray(current_template, show_on['template_names']) < 0 ) {
-					show = false;
-				};
-
-				if ( container.initCheckVisible ) {
-					$('select#page_template').change(function() {
-						custom_fields_check_visible(container);
-					});
-				};
-			};
-
-			// Check hide on page template
-			if ( typeof show_on['not_in_template_names'] != 'undefined' && show_on['not_in_template_names'].length > 0 ) {
-				var current_template = $('select#page_template').val();
-
-				if ( $.inArray(current_template, show_on['not_in_template_names']) >= 0 ) {
-					show = false;
-				};
-
-				if ( container.initCheckVisible ) {
-					$('select#page_template').change(function() {
-						custom_fields_check_visible(container);
-					});
-				};
-			};
-
-			// Check page parent
-			if ( typeof show_on['parent_page_id'] != 'undefined' && show_on['parent_page_id'] != null ) {
-				if ( show_on['parent_page_id'] != $('select#parent_id').val() ) {
-					show = false;
-				};
-
-				if ( container.initCheckVisible ) {
-					$('select#parent_id').change(function() {
-						custom_fields_check_visible(container);
-					});
-				};
-			};
-		};
-
-		// Check hierarchy level
-		if ( typeof show_on['level_limit'] != 'undefined' && show_on['level_limit'] != null  ) {
-			var level = $('select#parent_id option:checked').attr('class');
-
-			level = level ? parseInt(level.match(/^level-(\d+)/)[1]) + 2: 1;
-
-			if ( level != show_on['level_limit'] ) {
-				show = false;
-			};
-			
-			if ( container.initCheckVisible ) {
-				$('select#parent_id').change(function() {
-					custom_fields_check_visible(container);
-				});
-			};
-		};
-
-		// Check term/taxonomy
-		if ( typeof show_on['tax_slug'] != 'undefined' ) {
-			if (! $('#' + show_on['tax_slug'] + 'checklist input[value=' + show_on['tax_term_id'] + '], #' + show_on['tax_slug'] + '-pop input[value=' + show_on['tax_term_id'] + ']').is(':checked')) {
-				show = false;
-			};
-
-			if ( container.initCheckVisible ) {
-				$('#' + show_on['tax_slug'] + 'checklist input, #' + show_on['tax_slug'] + '-pop input').change(function() {
-					setTimeout(function() {
-						custom_fields_check_visible(container);
-					}, 0);
-				});
-			};
-		};
-
-		// Post-only options
-		if ( $('#post input[name=post_type]').val() == 'post' ) {
-			// Check post format
-			if ( typeof show_on['post_formats'] != 'undefined' && show_on['post_formats'].length > 0 ) {
-				if ( $('#post-format-' + show_on['post_formats'].join(':checked, #post-format-') + ':checked').length == 0 ) {
-					show = false;
-				};
-
-				if ( container.initCheckVisible ) {
-					$('#post-formats-select input[name=post_format]').change(function() {
-						custom_fields_check_visible(container);
-					});
-				};
-			};
-		};
-
-		container.node.toggleClass('carbon-skip-validation', !show);
-		container.node.closest('.postbox').toggle(show);
-	}
-
-
-	/* Widgets */
-	carbon_container.Widget = function (element, container_obj) {
-		var is_template_widget = element.closest('#widgets-left').length;
-		container_obj.classname = element.data('classname');
-
-		carbon_container.Widget.widgets_uid ++;
-
-		widget_init_monitor(container_obj);
-
-		carbon_container.Widget.attachedSaveAlert = false;
-		carbon_container.Widget.attachedValidationHook = false;
-		carbon_container.Widget.hasChanges = false;
-		widget_attach_save_alert(element);
-		widget_attach_validation_hook(element);
-
-		// Set new id
-		if (is_template_widget) {
-			element.find('.carbon-field').addClass('carbon-field-skip');
-		} else {
-			element.find('.carbon-field').removeClass('carbon-field-skip');
-			element.find('label[for]').each(function() {
-				var label = $(this),
-					id = label.attr('for'),
-					input = element.find('#' + id);
-
-				id = id + '-c' + carbon_container.Widget.widgets_uid;
-				label.attr('for', id);
-				input.attr('id', id);
-			});
-		};
-	}
-	carbon_container.Widget.initMonitorReady = false;
-	carbon_container.Widget.monitored_keywords = [];
-	carbon_container.Widget.widgets_uid = 0;
-
-	function widget_check_required(context) {
-		var has_errors = false;
-
-		$('.carbon-highlight', context).removeClass('carbon-highlight');
-
-		// Find required fields
-		$('input[type="text"][data-carbon-required=true], textarea[data-carbon-required=true], select[data-carbon-required=true]', context).each(function() {
-			var th = $(this);
-
-			if ( th.val() != '' || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
-				return;
-			};
-
-			th.closest('.carbon-widget-field-wrapper').addClass('carbon-highlight');
-			has_errors = true;
-		})
-		$('.carbon-radio-list[data-carbon-required=true], .carbon-set-list[data-carbon-required=true]', context).each(function() {
-			var th = $(this);
-
-			if ( th.find('input[type=radio]:checked, input[type=checkbox]:checked').length > 0 || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
-				return;
-			};
-
-			th.closest('.carbon-widget-field-wrapper').addClass('carbon-highlight');
-			has_errors = true;
-		});
-
-		return has_errors;
-	}
-
-	function widget_attach_save_alert(container) {
-		if ( carbon_container.Widget.attachedSaveAlert ) {
-			return;
-		};
-		carbon_container.Widget.attachedSaveAlert = true;
-
-		setTimeout(function () {
-			var old_callback = window.onbeforeunload;
-
-			window.onbeforeunload = function (){
-				var response = (typeof autosaveL10n != 'undefined' ? autosaveL10n.saveAlert: carbon_containers_l10n.changes_made_save_alert);
-				var custom_carbon_widgets_has_errors = false;
-				var $custom_carbon_widgets = $('.widget-liquid-right .carbon-container', document).closest('form');
-
-				if ( $custom_carbon_widgets.length ) {
-					$custom_carbon_widgets.each(function () {
-						var $this = $(this);
-						var current_widget_has_errors = widget_check_required($this);
-
-						if (current_widget_has_errors) {
-							custom_carbon_widgets_has_errors = true;
-							$this.closest('.widget-inside').toggle(true).slideToggle(400);
-							return false;
-						};
-					});
+			var hasErrors = false;
+			var view = carbon.views[this.get('id')];
+
+			_.each(view.fieldsCollection.models, function(field) {
+				if (!field.isRequired()) {
+					return;
 				}
 
-				if ( custom_carbon_widgets_has_errors ) {
-					return response;
-				};
-
-				if ( old_callback ) {
-					return old_callback();
-				};
-			};
-
-			$('.carbon-field input, .carbon-field select, .carbon-field textarea', container).on('change', function() {
-				carbon_container.Widget.hasChanges = true;
+				if (field.isValid()) {
+					field.set('error', false);
+				} else {
+					field.set('error', true);
+					hasErrors = true;
+					return;
+				}
 			});
 
-			$('body').on('remove_fields.carbon reorder_groups.carbon', function() {
-				carbon_container.Widget.hasChanges = true;
+			this.set('error', hasErrors);
+
+			if (hasErrors) {
+				return carbon_containers_l10n.please_fill_the_required_fields;
+			}
+		}
+	});
+
+	/*
+	|--------------------------------------------------------------------------
+	| Base Container VIEW
+	|--------------------------------------------------------------------------
+	|
+	| Responsible for fields initialization and rendering.
+	| Updates the container DOM (visibility, errors, etc..).
+	| The app will fallback to this class if a container has no dedicated view.
+	|
+	| Views reflect what the applications data models look like.
+	| They also listen to events and react accordingly.
+	|
+	| @element: .container-[id]
+	| @holder:  carbon.views[id]
+	|
+	*/
+	carbon.containers.View = Backbone.View.extend({
+		/*
+		 * Set the view DOM events
+		 */
+		events: {},
+
+		/*
+		 * Used to include additional variables that can be used inside the template
+		 * Can be extended on the "field:beforeRender" event.
+		 */
+		templateVariables: {},
+
+		initialize: function() {
+			this.fieldsCollection = new carbon.fields.Collection(this.model.get('fields'));
+
+			// Listen for adding fields in the collection and render them
+			this.listenTo(this.fieldsCollection, 'add', this.renderField);
+
+			// Listen for model changes in the fields collection.
+			this.listenToOnce(this.fieldsCollection, 'change:value', this.changeListener);
+
+			// Check the container visibility before it's rendered.
+			// Containers are visible by default. Overwrite the checkVisibility method for custom logic.
+			this.on('container:beforeRender', this.checkVisibility);
+
+			// Repopulate the fields collection after the container is rendered
+			this.on('container:rendered', this.setFields);
+
+			// Check for not saved changes on "onbeforeunload"
+			this.on('container:rendered form:invalid', this.onSaveAlert);
+			this.on('form:valid', this.resetOnBeforeUnload);
+
+			// Listen to visibility change
+			this.listenTo(this.model, 'change:visible', this.toggleVisibility);
+		},
+
+		changeListener: function(model, collection) {
+			this.model.set('has_changes', true);
+		},
+
+		checkVisibility: function() {
+			this.model.set('visible', true);
+		},
+
+		toggleVisibility: function(model) {
+			var id = model.get('id');
+			var visible = model.get('visible');
+			var $holder = carbon.views.main.$body.find('#' + id);
+
+			$holder.toggle(visible);
+		},
+
+		onSaveAlert: function() {
+			var _this = this;
+			var oldCallback = window.onbeforeunload || $.noop;
+
+			window.onbeforeunload = function() {
+				var hasChanges = _this.model.get('has_changes');
+				var postL10n = postL10n || {};
+				var alert = postL10n.saveAlert ? postL10n.saveAlert : carbon_containers_l10n.changes_made_save_alert
+
+				if (hasChanges && alert) {
+					return alert;
+				}
+
+				return oldCallback();
+			}
+		},
+
+		resetOnBeforeUnload: function() {
+			window.onbeforeunload = null;
+		},
+
+		render: function() {
+			var type = this.model.get('type');
+			var template = carbon.template(type);
+
+			this.templateVariables = _.extend(this.templateVariables, this.model.attributes, {
+				container: this.model,
+				fields: this.fieldsCollection.toJSON()
 			});
 
-			container.closest('form').find('input[type="submit"]').on('click', function () {
-				window.onbeforeunload = null;
+			this.trigger('container:beforeRender');
+
+			var containerHTML = template(this.templateVariables);
+
+			this.$el.html(containerHTML)
+			this.trigger('container:rendered');
+
+			return this;
+		},
+
+		setFields: function() {
+			this.fieldsCollection.reset(); // Need to clear the collection, otherwise no events will trigger
+			this.fieldsCollection.set(this.model.get('fields')); // This will emit the "add" event
+		},
+
+		// Render a field when its added in the fieldsCollection
+		renderField: function(model, collection) {
+			var type = model.get('type');
+			var id = model.get('id');
+
+			var FieldView = carbon.fields.View[type];
+			if (typeof FieldView === 'undefined') {
+				FieldView = carbon.fields.View; // Fallback to the base view
+			}
+
+			carbon.views[id] = new FieldView({
+				el: '.' + id,
+				model: model
 			});
-		});
-	}
 
-	function widget_attach_validation_hook(container) {
-		if ( carbon_container.Widget.attachedValidationHook ) {
-			return;
-		};
-		carbon_container.Widget.attachedValidationHook = true;
+			carbon.views[id].render();
+		},
 
-		var $carbon_widget_container_form = container.closest('form');
+		validateForm: function(event) {
+			var _this = event.data; 			// the view object
+			var $target = $(event.currentTarget);
+			var $errorHolder = $('.carbon-error-required');
+			var valid = _this.model.isValid(); 	// this method will also set the validationError
+			var errorText = _this.model.validationError;
 
-		$carbon_widget_container_form.find('input[type="submit"]').on('click', function() {
-			var form = $(this).closest('form'),
-				has_errors = widget_check_required(form);
+			if (valid) { 						// valid
+				_this.trigger('form:valid');
 
-			$('body .wrap').find('> .carbon-error-required').remove();
+				if (event.type === 'click') {
+					$errorHolder.slideUp(function() {
+						$(this).remove();
+					});
+				}
+			} else { 							// invalid
+				_this.trigger('form:invalid');
 
-			if ( !has_errors ) {
-				return;
-			};
-			
-			$('body, html').animate({scrollTop: 0});
-			$('body .wrap > h2').after( $('<div class="settings-error error below-h2 carbon-error-required"><p><strong>' + carbon_containers_l10n.please_fill_the_required_fields + '</strong></p></div>') );
-			carbon_container.Widget.attachedSaveAlert = false;
-			widget_attach_save_alert(container);
+				if (errorText) {
+					if ($errorHolder.length) {
+						$errorHolder.find('strong').text(errorText);
+					} else {
+						$errorHolder = $('<div class="settings-error error hidden below-h2 carbon-error-required"><p><strong>' + errorText + '</strong></p></div>');
+						$errorHolder.insertAfter('#wpbody-content > .wrap > h2').slideDown();
+					}
+				}
 
-			return false;
-		});
-	}
+				if ($target.is('#post')) {
+					$target.find('#publish').removeClass('button-primary-disabled disabled');
+					$target.find('#ajax-loading, #publishing-action .spinner').attr('style','');
+				}
 
-	function widget_init_monitor(container) {
-		var keyword_found = false,
-			keywords = carbon_container.Widget.monitored_keywords;
+				if (event.type === 'click') {
+					event.stopImmediatePropagation();
+				}
 
-		if ( $.inArray(container.classname, keywords) == -1 ) {
-			keywords.push(container.classname);
-		};
-		// monitor for new containers
-		if ( carbon_container.Widget.initMonitorReady ) {
-			return;
-		};
+				event.preventDefault();
+			}
+		}
+	});
 
-		carbon_container.Widget.initMonitorReady = true;
+	/*
+	|--------------------------------------------------------------------------
+	| Base Container COLLECTION
+	|--------------------------------------------------------------------------
+	|
+	| Holds a set of container models.
+	| Also includes model class initialization logic.
+	| 
+	*/
+	carbon.containers.Collection = Backbone.Collection.extend({
+		model: function(attrs, options) {
+			var ContainerModel = carbon.containers.Model[attrs.type];
 
-		/* Monitor for ajax requests that reload the container node */
-		$(document).ajaxSuccess(function(event, jqXHR, ajaxOptions) {
-			if ( jqXHR.status != 200 ) {
-				return;
-			};
+			// Set the container model. If the model is not found, fallback to the base model
+			if (typeof ContainerModel === 'undefined') {
+				ContainerModel = carbon.containers.Model; // Fallback to the base model
+			}
 
-			for (var i = keywords.length - 1; i >= 0; i--) {
-				if ( !ajaxOptions.data.length || ajaxOptions.data.indexOf(keywords[i]) == -1 ) {
-					continue;
-				};
-				keyword_found = true;
-				break;
-			};
+			return new ContainerModel(attrs, options);
+		}
+	});
 
-			if ( !keyword_found ) {
-				return;
-			};
+	/******************************** BASE END ********************************/
 
-			setTimeout(function() {
-				carbon_container_init();
-				carbon_field_init();
-			}, 1);
-		});
-	}
 
-	/* Term Meta */
-	carbon_container.TermMeta = function (element, container_obj) {
-		term_meta_attach_validation_hook();
 
-		term_meta_init_monitor(container_obj);
+	/*--------------------------------------------------------------------------
+	 * CUSTOM FIELDS
+	 *------------------------------------------------------------------------*/
 
-		carbon_container.TermMeta.attachedValidationHook = false;
-		carbon_container.TermMeta.hasChanges = false;
-	}
-	carbon_container.TermMeta.initMonitorReady = false;
-	carbon_container.TermMeta.monitored_keywords = ['carbon_panel_Test_nonce'];
+	// CustomFields MODEL
+	carbon.containers.Model.CustomFields = carbon.containers.Model.extend({
+		defaults: {
+			'page_template': 'default',
+			'level': 1,
+			'parent_id': null,
+			'post_format': null,
+			'terms': []
+		},
 
-	function term_meta_check_required() {
-		var has_errors = false;
-		var error_classes = 'carbon-highlight form-invalid form-required';
+		initialize: function() {
+			carbon.containers.Model.prototype.initialize.apply(this);
+		}
+	});
 
-		$('.carbon-highlight').removeClass(error_classes);
+	// CustomFields VIEW
+	carbon.containers.View.CustomFields = carbon.containers.View.extend({
+		initialize: function() {
+			carbon.containers.View.prototype.initialize.apply(this);
 
-		// Find required fields
-		$('input[type="text"][data-carbon-required=true], textarea[data-carbon-required=true], select[data-carbon-required=true]').each(function() {
-			var th = $(this);
+			this.$form = this.$el.closest('form#post');
+			this.$form.on('submit', null, this, this.validateForm);
 
-			if ( th.val() != '' || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
-				return;
-			};
+			this.syncTemplate();
+			this.syncParent();
+			this.syncLevel();
+			this.syncPostFormat();
+			this.syncTaxonomy();
 
-			th.closest('.carbon-field').addClass(error_classes);
-			has_errors = true;
-		})
+			this.listenTo(this.model, 'change:page_template change:parent_id change:level change:post_format change:terms', this.checkVisibility);
+		},
 
-		$('.carbon-radio-list[data-carbon-required=true], .carbon-set-list[data-carbon-required=true]').each(function() {
-			var th = $(this);
+		syncTemplate: function() {
+			var _this = this;
+			var $select = $('select#page_template');
 
-			if ( th.find('input[type=radio]:checked, input[type=checkbox]:checked').length > 0 || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
-				return;
-			};
+			$select
+				.on('change', function(event) {
+					var template = $(this).val();
 
-			th.closest('.carbon-field').addClass(error_classes);
-			has_errors = true;
-		});
+					_this.model.set('page_template', template);
+				})
+				.trigger('change');
+		},
 
-		$('.Carbon_Field_Complex[data-carbon-required=true]').each(function() {
-			var th = $(this);
+		syncParent: function() {
+			var _this = this;
+			var $select = $('select#parent_id');
 
-			if ( th.find('.carbon-group-row').length > 0 || th.closest('.carbon-group-preview, .carbon-skip-validation').length > 0 ) {
+			$select
+				.on('change', function(event) {
+					var parentId = parseInt($(this).val());
+
+					_this.model.set('parent_id', parentId);
+				})
+				.trigger('change');
+		},
+
+		syncLevel: function() {
+			var _this = this;
+			var $select = $('select#parent_id');
+
+			$select
+				.on('change', function(event) {
+					var levelClass = $(this).find('option:checked').attr('class');
+					var level = levelClass ? parseInt(levelClass.match(/^level-(\d+)/)[1]) + 1: 1;
+
+					_this.model.set('level', level);
+				})
+				.trigger('change');
+		},
+
+		syncPostFormat: function() {
+			var _this = this;
+			var $radio = $('input[name="post_format"]');
+
+			$radio
+				.on('change', function(event) {
+					var checked = $(this).is(':checked');
+					var postFormat = $(this).val();
+
+					if (checked) {
+						_this.model.set('post_format', postFormat);
+					}
+				})
+				.trigger('change');
+		},
+
+		syncTaxonomy: function() {
+			var _this = this;
+			var settings = this.model.get('settings');
+			var taxonomy = settings.show_on.tax_slug;
+			var termId = settings.show_on.tax_term_id;
+			var $holder = $('#taxonomy-' + taxonomy);
+			var $input = $('.' + taxonomy + 'checklist input');
+
+			if (!taxonomy || !termId || !$holder.length) {
+				return false;
+			}
+
+			$holder.on('change', $input.selector, function(event) {
+				var checked = $(this).is(':checked');
+				var termId = parseInt($(this).val());
+				var terms = _this.model.get('terms');
+
+				if (checked) {
+					terms.push(termId);
+				} else {
+					var index = terms.indexOf(termId);
+
+					if (index !== -1) {
+						terms.splice(index, 1);
+					}
+				}
+
+				terms = _.uniq(terms);
+
+				_this.model.set('terms', terms);
+				_this.model.trigger('change:terms');
+			});
+
+			$input.trigger('change')
+		},
+
+		checkVisibility: function(model) {
+			var _this = this;
+			var settings = this.model.get('settings');
+			var visible = true;
+
+			_.each(settings.show_on, function(req, type) {
+				if ( !req || ( _.isArray(req) && _.isEmpty(req) ) ) {
+					return;
+				}
+
+				switch(type) {
+					case 'template_names':
+						var template = _this.model.get('page_template');
+
+						if ($.inArray(template, req) === -1) {
+							visible = false;
+						}
+					break;
+
+					case 'not_in_template_names':
+						var template = _this.model.get('page_template');
+						
+						if ($.inArray(template, req) !== -1) {
+							visible = false;
+						}
+					break;
+
+					case 'parent_page_id':
+						var parentId = _this.model.get('parent_id');
+
+						if (parentId != req) {
+							visible = false;
+						}
+					break;
+
+					case 'level_limit':
+						var level = _this.model.get('level');
+
+
+						if (level != req) {
+							visible = false;
+						}
+					break;
+
+					case 'post_formats':
+						var post_format = _this.model.get('post_format');
+
+						if ($.inArray(post_format, req) === -1) {
+							visible = false;
+						}
+					break;
+
+					case 'tax_slug':
+						var terms = _this.model.get('terms');
+						var termId = settings.show_on.tax_term_id;
+
+						if ($.inArray(termId, terms) === -1) {
+							visible = false;
+						}
+					break;
+				}
+			});
+
+			this.model.set('visible', visible);
+		}
+	});
+
+
+	/*--------------------------------------------------------------------------
+	 * THEME OPTIONS
+	 *------------------------------------------------------------------------*/
+
+	// ThemeOptions VIEW
+	carbon.containers.View.ThemeOptions = carbon.containers.View.extend({
+		initialize: function() {
+			carbon.containers.View.prototype.initialize.apply(this);
+
+			this.$form = this.$el.closest('form#theme-options-form');
+			this.$form.on('submit', null, this, this.validateForm);
+		}
+	});
+
+
+	/*--------------------------------------------------------------------------
+	 * TERM META
+	 *------------------------------------------------------------------------*/
+
+	// TermMeta VIEW
+	carbon.containers.View.TermMeta = carbon.containers.View.extend({
+		initialize: function() {
+			carbon.containers.View.prototype.initialize.apply(this);
+
+			var _this = this;
+
+			this.$editForm = this.$el.closest('form#edittag');
+			this.$editForm.on('submit', null, this, this.validateForm);
+
+			this.$addForm = this.$el.closest('form#addtag');
+			this.$submitButton = this.$addForm.find('#submit');
+			this.$submitButton.on('click', null, this, this.validateForm);
+
+			carbon.views.main.$el.ajaxSuccess(function() {
+				_this.initMonitor.apply(_this, arguments);
+			});
+		},
+
+		initMonitor: function(event, jqXHR, ajaxOptions) {
+			if (jqXHR.status != 200 || !ajaxOptions.data.length) {
 				return;
 			}
 
-			th.closest('.carbon-field').addClass(error_classes);
-			has_errors = true;
-		});
+			var id = this.model.get('id');
+			if (ajaxOptions.data.indexOf('carbon_panel_' + id) !== -1) {
+				carbon.collections.containers.reset();
+			}
+		}
+	});
 
-		return has_errors;
-	}
 
-	function term_meta_attach_validation_hook() {
-		$('#addtag #submit, #edittag #submit').on('click', function() {
-			var form = $(this).closest('form'),
-				has_errors = term_meta_check_required();
+	/*--------------------------------------------------------------------------
+	 * USER META
+	 *------------------------------------------------------------------------*/
 
-			if ( !has_errors ) {
-				return;
-			};
+	// UserMeta MODEL
+	carbon.containers.Model.UserMeta = carbon.containers.Model.extend({
+		defaults: {
+			'role': null
+		},
 
-			$('body, html').animate({scrollTop: 0});
+		initialize: function() {
+			carbon.containers.Model.prototype.initialize.apply(this);
+		}
+	});
 
-			form.siblings('.carbon-error-required').remove();
-			form.before($('<div class="settings-error error below-h2 carbon-error-required"><p><strong>' + carbon_containers_l10n.please_fill_the_required_fields + '</strong></p></div>'));
+	// UserMeta VIEW
+	carbon.containers.View.UserMeta = carbon.containers.View.extend({
+		initialize: function() {
+			carbon.containers.View.prototype.initialize.apply(this);
 
-			return false;
-		});
-	}
+			this.$form = this.$el.closest('form#your-profile, form#createuser');
+			this.$form.on('submit', null, this, this.validateForm);
 
-	function term_meta_init_monitor(container) {
-		var keyword_found = false,
-			keywords = carbon_container.TermMeta.monitored_keywords;
+			this.syncRole();
 
-		// monitor for new containers
-		if ( carbon_container.TermMeta.initMonitorReady ) {
-			return;
-		};
+			this.listenTo(this.model, 'change:role', this.checkVisibility);
+		},
 
-		carbon_container.TermMeta.initMonitorReady = true;
+		syncRole: function() {
+			var _this = this;
+			var $select = $('select#role');
+			var profileRole = this.$el.data('profile-role');
 
-		/* Monitor for ajax requests that reload the container node */
-		$(document).ajaxSuccess(function(event, jqXHR, ajaxOptions) {
-			if ( jqXHR.status != 200 ) {
-				return;
-			};
+			this.model.set('role', profileRole);
 
-			for (var i = keywords.length - 1; i >= 0; i--) {
-				if ( !ajaxOptions.data.length || ajaxOptions.data.indexOf(keywords[i]) == -1 ) {
-					continue;
-				};
-				keyword_found = true;
-				break;
-			};
+			$select.on('change', function(event) {
+				var role = $(this).val();
 
-			// check if a new term has been created
-			var add_tag_occurences = (jqXHR.responseText.match(/add-tag_/g) || []).length;
-			if (add_tag_occurences >= 2) {
-				// reset all fields
-				$('.carbon-field').each(function() {
-					reset_field($(this));
-				});
+				_this.model.set('role', role);
+			});
+
+		},
+
+		checkVisibility: function(model) {
+			var _this = this;
+			var settings = this.model.get('settings');
+			var profileRole = this.model.get('role');
+			var roles = settings.show_on.role || [];
+			var visible = true;
+
+			if (roles.length && $.inArray(profileRole, roles) === -1) {
+				visible = false;
 			}
 
-			if ( !keyword_found ) {
-				return;
-			};			
+			this.model.set('visible', visible);
+		}
+	});
 
-			if (!$('.carbon-field.carbon-highlight').length) {
-				$('.carbon-error-required').remove();
-			}
 
-			setTimeout(function() {
-				carbon_container_init();
-				carbon_field_init();
-			}, 1);
-		});
-	}
+	/*--------------------------------------------------------------------------
+	 * WIDGETS
+	 *------------------------------------------------------------------------*/
 
-	/* User Meta */
-	carbon_container.UserMeta = function (element, container_obj) {
-		container_obj.initCheckVisible = true;
-		user_meta_check_visible(container_obj);
-		container_obj.initCheckVisible = false;
+	// Widget MODEL
+	carbon.containers.Model.Widget = carbon.containers.Model.extend({
+		initialize: function() {
+			carbon.containers.Model.prototype.initialize.apply(this);
 
-		user_meta_attach_save_alert();
-		user_meta_attach_validation_hook();
-	}
-	carbon_container.UserMeta.attachedValidationHook = false;
-	carbon_container.UserMeta.attachedSaveAlert = false;
-	carbon_container.UserMeta.hasChanges = false;
+			var cid = this.cid;
+			var fields = this.get('fields');
 
-	function user_meta_attach_save_alert() {
-		if ( carbon_container.UserMeta.attachedSaveAlert ) {
-			return;
-		};
-		carbon_container.UserMeta.attachedSaveAlert = true;
-
-		setTimeout(function() {
-			var old_callback = window.onbeforeunload || $.noop;
-
-			window.onbeforeunload = function (){
-				if ( carbon_container.UserMeta.hasChanges ) {
-					return (typeof autosaveL10n != 'undefined' && autosaveL10n.saveAlert ? autosaveL10n.saveAlert: carbon_containers_l10n.changes_made_save_alert);
-				};
-
-				return old_callback();
-			};
-
-			$('.carbon-container .carbon-field input, .carbon-container .carbon-field select, .carbon-container .carbon-field textarea').live('change', function() {
-				carbon_container.UserMeta.hasChanges = true;
+			_.each(fields, function(field) {
+				field.id = field.id + '-' + cid;
 			});
 
-			$('body').on('remove_fields.carbon reorder_groups.carbon', function() {
-				carbon_container.UserMeta.hasChanges = true;
-			});
+			this.set('fields', fields);
+		}
+	});
 
-			$('form#your-profile input[type="submit"], form#createuser input[type="submit"]').click(function(){
-				window.onbeforeunload = null;
-			});
-		});
-	}
+	// Widget VIEW
+	carbon.containers.View.Widget = carbon.containers.View.extend({
+		initialize: function() {
+			carbon.containers.View.prototype.initialize.apply(this);
 
-	function user_meta_attach_validation_hook() {
-		if ( carbon_container.UserMeta.attachedValidationHook ) {
-			return;
-		};
-		carbon_container.UserMeta.attachedValidationHook = true;
+			this.$submitButton = this.$el.closest('form').find('input[type="submit"]');
+			this.$submitButton
+				.off('click', this.validateForm)
+				.on('click', null, this, this.validateForm);
+		}
+	});
 
-		$('form#your-profile, form#createuser').live("submit", function(){
-			var form = $(this),
-				has_errors = check_required();
-
-			if ( !has_errors ) {
-				return;
-			};
-
-			$('body, html').animate({scrollTop: 0});
-
-			form.siblings('.carbon-error-required').remove();
-			form.before($('<div class="settings-error error below-h2 carbon-error-required"><p><strong>' + carbon_containers_l10n.please_fill_the_required_fields + '</strong></p></div>'));
-
-			return false;
-		});
-	}
-
-	function user_meta_check_visible(container) {
-		var show_on,
-			show = true;
-
-		if ( typeof container.options['show_on'] == 'undefined' ) {
-			return true;
-		};
-
-		show_on = container.options['show_on'];
-
-		// Check page template
-		if ( typeof show_on['role'] != 'undefined' && show_on['role'].length > 0 ) {
-			var current_role = $('select#role').length > 0 ? $('select#role').val(): container.node.data('profile-role');
-
-			if ( $.inArray(current_role, show_on['role']) < 0 ) {
-				show = false;
-			};
-
-			if ( container.initCheckVisible ) {
-				$('select#role').change(function() {
-					user_meta_check_visible(container);
-				});
-			};
-		};
-
-		container.node.toggle(show);
-	}
-
-	window.carbon_container_init = init;
-
-	// Abracadabra! Poof! Containers everywhere ...
-	init();
-
-	// Fix for mobile devices
-	if ( !$('body').is('.mobile') ) {
-		$('body').addClass('carbon-desktop');
-	};
-});
+}(jQuery));

@@ -34,16 +34,16 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 		'panel_context'=>'normal',
 		'panel_priority'=>'high',
 		'show_on' => array(
-				'category' => null,
-				'template_names' => array(),
-				'not_in_template_names' => array(),
-				'post_formats' => array(),
-				'level_limit' => null,
-				'tax_term_id' => null,
-				'page_id' => null,
-				'parent_page_id' => null,
-				'post_path' => null,
-			),
+			'category' => null,
+			'template_names' => array(),
+			'not_in_template_names' => array(),
+			'post_formats' => array(),
+			'level_limit' => null,
+			'tax_term_id' => null,
+			'page_id' => null,
+			'parent_page_id' => null,
+			'post_path' => null,
+		),
 	);
 
 	function __construct($title) {
@@ -207,7 +207,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 
 				// show_on_level
 				case 'level_limit':
-					$post_level = count(geT_post_ancestors($post_id)) + 1;
+					$post_level = count(get_post_ancestors($post_id)) + 1;
 
 					if ( $post_level != $value ) {
 						$valid = false;
@@ -300,7 +300,28 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	 * @return bool True if the container is allowed to be attached
 	 **/
 	function is_valid_attach() {
-		$valid = true;
+		global $pagenow;
+
+		if ($pagenow !== 'post.php' && $pagenow !== 'post-new.php') {
+			return false;
+		}
+
+		// Post types check
+		if (!empty($this->settings['post_type'])) {
+			$post_type = '';
+
+			if ($this->post_id) {
+				$post_type = get_post_type($this->post_id);
+			} elseif (!empty($_GET['post_type'])) {
+				$post_type = $_GET['post_type'];
+			} elseif ($pagenow === 'post-new.php') {
+				$post_type = 'post';
+			}
+
+			if (!$post_type || !in_array($post_type, $this->settings['post_type'])) {
+				return false;
+			}
+		}
 
 		// Check show on conditions
 		foreach ($this->settings['show_on'] as $condition => $value) {
@@ -311,21 +332,19 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 			switch ($condition) {
 				case 'page_id':
 					if ( $value < 1 || $this->post_id != $value ) {
-						$valid = false;
-						break 2;
+						return false;
 					}
 					break;
 				case 'parent_page_id':
 					// Check if such page exists
 					if ( $value < 1 ) {
-						$valid = false;
-						break 2;
+						return false;
 					}
 					break;
 			}
 		}
 
-		return $valid;
+		return true;
 	}
 	
 	/**
@@ -351,11 +370,42 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	 * @return void
 	 **/
 	function render() {
-		$container_tag_class_name = get_class($this);
-		$container_type = 'CustomFields';
-		$container_options = array('show_on' => $this->settings['show_on']);
-
 		include dirname(__FILE__) . '/admin-templates/container-custom-fields.php';
+	}
+
+	/**
+	 * Holds the backbone template
+	 *
+	 * @return void
+	 **/
+	function template() {
+		?>
+		<table class="{{{ classes }}}">
+			<% _.each(fields, function(field) { %>
+				<tr class="{{{ field.classes }}}">
+					<td>
+						<% if ( !field.wide && (field.label || field.required) ) { %>
+							<label for="{{{ field.id }}}">
+								{{ field.label }}
+
+								<% if (field.required) { %>
+									 <span class="carbon-required">*</span>
+								<% } %>
+							</label>
+						<% } %>
+
+						<div class="field-holder {{{ field.id }}}"></div>
+
+						<% if (field.help_text) { %>
+							<em class="help-text">
+								{{{ field.help_text }}}
+							</em>
+						<% } %>
+					</td>
+				</tr>
+			<% }); %>
+		</table>
+		<?php
 	}
 
 	/**
@@ -454,6 +504,8 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	 * @return object $this
 	 **/
 	function show_on_category($category_slug) {
+		$this->settings['show_on']['category'] = $category_slug;
+
 		return $this->show_on_taxonomy_term($category_slug, 'category');
 	}
 	
@@ -522,13 +574,9 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	function show_on_taxonomy_term($term_slug, $taxonomy_slug) {
 		$term = get_term_by('slug', $term_slug, $taxonomy_slug);
 
-		if ( !$term ) {
-			return $this;
-		}
-
 		$this->settings['show_on']['tax_slug'] = $taxonomy_slug;
 		$this->settings['show_on']['tax_term'] = $term_slug;
-		$this->settings['show_on']['tax_term_id'] = $term->term_id;
+		$this->settings['show_on']['tax_term_id'] = $term ? $term->term_id : null;
 
 		return $this;
 	}

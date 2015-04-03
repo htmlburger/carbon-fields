@@ -2,7 +2,6 @@
 
 add_action('admin_print_scripts', array('Carbon_Field', 'admin_hook_scripts'));
 add_action('admin_print_styles', array('Carbon_Field', 'admin_hook_styles'));
-add_action('wp_ajax_carbon_relationship_load_posts', array('Carbon_Field_Relationship', 'carbon_relationship_load_posts'));
 
 if ( !class_exists('Carbon_Field') ) :
 
@@ -13,6 +12,15 @@ if ( !class_exists('Carbon_Field') ) :
  *
  **/
 class Carbon_Field {
+	/**
+	 * Stores all the field backbone templates
+	 *
+	 * @see factory()
+	 * @see add_template()
+	 * @var array
+	 */
+	protected $templates = array();
+
 	/**
 	 * Globally unique field identificator. Generated randomly
 	 *
@@ -86,20 +94,28 @@ class Carbon_Field {
 	protected $context;
 
 	/**
-	 * Optional. Function, replacing the specific field rendering function
-	 *
-	 * @see render()
-	 * @var callable
-	 */
-	protected $render_fn;
-
-	/**
 	 * Whether or not this value should be auto loaded. Applicable to theme options only.
 	 *
 	 * @see set_autoload()
 	 * @var bool
 	 **/
 	protected $autoload = false;
+
+	/**
+	 * Whether or not this field will be initialized when the field is in the viewport (visible).
+	 * 
+	 * @see set_lazyload()
+	 * @var bool
+	 **/
+	protected $lazyload = false;
+
+	/**
+	 * Whether or not this field should take two columns (colspan="2"). Applicable to theme options and term fields only.
+	 * 
+	 * @see set_wide()
+	 * @var bool
+	 **/
+	protected $wide = false;
 
 	/**
 	 * Whether or not this field is required.
@@ -146,6 +162,7 @@ class Carbon_Field {
 
 		$field = new $class($name, $label);
 		$field->type = $type;
+		$field->add_template($field->get_type(), array($field, 'template'));
 
 		return $field;
 	}
@@ -180,25 +197,36 @@ class Carbon_Field {
 	function admin_init() {}
 
 	/**
-	 * Delegate rendering to the correct function
+	 * Enqueue admin scripts.
+	 * Called once per field type.
 	 *
 	 * @return void
 	 **/
-	function render() {
-		if (!is_callable($this->render_fn)) {
-			return $this->_render();
-		}
+	function admin_enqueue_scripts() {}
 
-		return call_user_func($this->render_fn, $this);
+	/**
+	 * Prints the main Underscore template
+	 *
+	 * @return void
+	 **/
+	function template() { }
+
+	/**
+	 * Returns all the backbone templates
+	 *
+	 * @return array
+	 **/
+	function get_templates() {
+		return $this->templates;
 	}
 
 	/**
-	 * Output the field markup
+	 * Adds a new backbone template
 	 *
 	 * @return void
 	 **/
-	function _render() {
-
+	function add_template($name, $callback) {
+		$this->templates[$name] = $callback;
 	}
 
 	/**
@@ -395,21 +423,6 @@ class Carbon_Field {
 	}
 
 	/**
-	 * Set custom rendering function, replacing the default one.
-	 *
-	 * @param callable $fn
-	 * @return object $this
-	 **/
-	function set_render($fn) {
-		if ( !is_callable($fn) ) {
-			throw new Carbon_Exception('Render must be callable');
-		}
-
-		$this->render_fn = $fn;
-		return $this;
-	}
-
-	/**
 	 * Set additional text to be displayed during field render,
 	 * containing information and guidance for the user
 	 *
@@ -451,12 +464,52 @@ class Carbon_Field {
 	}
 
 	/**
-	 * Return whether or not this value should be auto loaded
+	 * Return whether or not this value should be auto loaded.
 	 *
 	 * @return bool
 	 **/
 	function get_autoload() {
 		return $this->autoload;
+	}
+
+	/**
+	 * Whether or not this field will be initialized when the field is in the viewport (visible).
+	 * 
+	 * @param bool $autoload
+	 * @return object $this
+	 **/
+	function set_lazyload($lazyload) {
+		$this->lazyload = $lazyload;
+		return $this;
+	}
+
+	/**
+	 * Return whether or not this field should be lazyloaded.
+	 * 
+	 * @return bool
+	 **/
+	function get_lazyload() {
+		return $this->lazyload;
+	}
+
+	/**
+	 * Whether or not this field should take two columns (colspan="2"). Applicable to theme options and term fields only.
+	 * 
+	 * @param bool $wide
+	 * @return object $this
+	 **/
+	function set_wide($wide) {
+		$this->wide = $wide;
+		return $this;
+	}
+
+	/**
+	 * Return whether or not this field is wide (takes more then two columns).
+	 * 
+	 * @return bool
+	 **/
+	function is_wide() {
+		return $this->wide;
 	}
 
 	/**
@@ -505,7 +558,6 @@ class Carbon_Field {
 	public function get_type() {
 		$class = get_class($this);
 
-
 		return $this->clean_type($class);
 	}
 
@@ -514,12 +566,11 @@ class Carbon_Field {
 	 *
 	 * @return string
 	 */
-	private function clean_type($type) {
+	protected function clean_type($type) {
 		$clean_class = str_replace('Carbon_Field', '', $type);
-		$clean_class = trim($clean_class, '_');
-		$dashed_clean_class = str_replace('_', '-', $clean_class);
+		$clean_class = str_replace('_', '', $clean_class);
 
-		return strtolower($dashed_clean_class);
+		return $clean_class;
 	}
 
 	/**
@@ -543,6 +594,47 @@ class Carbon_Field {
 		}
 
 		return $html_classes;
+	}
+
+	/**
+	 * Allows the value of a field to be processed after loading.
+	 * Can be implemented by the extending class if necessary.
+	 * 
+	 * @return array
+	 */
+	public function process_value() {
+
+	}
+
+	/**
+	 * Returns an array that holds the field data, suitable for JSON representation.
+	 * This data will be available in the Underscore template and the Backbone Model.
+	 * 
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
+	public function to_json($load) {
+		if ($load) {
+			$this->load();
+		}
+
+		$this->process_value();
+
+		$field_data = array(
+			'id' => $this->get_id(),
+			'type' => $this->get_type(),
+			'label' => $this->get_label(),
+			'name' => $this->get_name(),
+			'value' => $this->get_value(),
+			'default_value' => $this->get_default_value(),
+			'help_text' => $this->get_help_text(),
+			'context' => $this->get_context(),
+			'required' => $this->is_required(),
+			'lazyload' => $this->get_lazyload(),
+			'wide' => $this->is_wide(),
+		);
+
+		return $field_data;
 	}
 
 	/**
@@ -572,7 +664,7 @@ class Carbon_Field {
 	 *
 	 * @return void
 	 */
-	protected function _load_options() {
+	protected function load_options() {
 		if (empty($this->options)) {
 			return false;
 		}
@@ -591,24 +683,44 @@ class Carbon_Field {
 		$this->options = $options;
 	}
 
+	/**
+	 * Changes the options array structure. This is needed to keep the array items order when it is JSON encoded.
+	 *
+	 * @param array $options
+	 * @return array
+	 */
+	public function parse_options($options) {
+		$parsed = array();
+
+		foreach ($options as $key => $value) {
+			$parsed[] = array(
+				'name' => $value,
+				'value' => $key,
+			);
+		}
+
+		return $parsed;
+	}
+
 	static function admin_hook_scripts() {
 		wp_enqueue_media();
-		wp_enqueue_script('carbon_fields', CARBON_PLUGIN_URL . '/js/fields.js', array('jquery', 'farbtastic', 'jquery-ui-datepicker'), '0.4.1');
-		wp_localize_script( 'carbon_fields', 'crbl10n',
+		crb_enqueue_script('carbon-fields', CARBON_PLUGIN_URL . '/js/fields.js', array('carbon-app'));
+		wp_localize_script('carbon-fields', 'crbl10n',
 			array(
 				'title' => __('Files', 'crb'),
 				'geocode_not_successful' => __('Geocode was not successful for the following reason: ', 'crb'),
 				'max_num_items_reached' => __('Maximum number of items reached (%s items)', 'crb'),
 				'max_num_rows_reached' => __('Maximum number of rows reached (%s rows)', 'crb'),
 				'cannot_create_more_rows' => __('Cannot create more than %s rows', 'crb'),
-				'enter_name_of_new_sidebar' => __('Please enter the name of the new sidebar:', 'crb')
+				'enter_name_of_new_sidebar' => __('Please enter the name of the new sidebar:', 'crb'),
+				'enter_name_of_new_sidebar' => __('Please enter the name of the new sidebar:', 'crb'),
+				'complex_no_rows' => __('There are no %s yet. Click <a href="#">here</a> to add one.', 'crb'),
+				'complex_add_button' => __('Add %s', 'crb'),
 			)
 		);
 	}
 
 	static function admin_hook_styles() {
-		wp_enqueue_style('carbon_fields', CARBON_PLUGIN_URL . '/css/fields.css', array(), '0.4.1');
-
 		wp_enqueue_style('thickbox');
 	}
 } // END Carbon_Field
@@ -619,8 +731,10 @@ endif; // END Class Exists check
 if ( !class_exists('Carbon_Field_Text') ) :
 
 class Carbon_Field_Text extends Carbon_Field {
-	function render() {
-		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->name . '" value="' . esc_attr($this->value) . '" class="regular-text" ' . ($this->required ? 'data-carbon-required="true"': '') . ' />';
+	function template() {
+		?>
+		<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text" />
+		<?php
 	}
 }
 
@@ -645,15 +759,21 @@ class Carbon_Field_Textarea extends Carbon_Field {
 		return $this;
 	}
 
-	function render() {
-		if ($this->rows) {
-			$additional_attrs = 'rows="' . $this->rows . '"';
-		} else {
-			$additional_attrs = 'style="height: ' . $this->height . 'px; "';
-		}
-		echo '<textarea id="' . $this->get_id() . '" name="' . $this->get_name() . '" ' . $additional_attrs . ' ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
-		echo esc_textarea($this->get_value());
-		echo '</textarea>';
+	function to_json($load) {
+		$field_data = parent::to_json($load);
+
+		$field_data = array_merge($field_data, array(
+			'rows' => $this->rows,
+			'height' => $this->height,
+		));
+
+		return $field_data;
+	}
+
+	function template() {
+		?>
+		<textarea id="{{{ id }}}" name="{{{ name }}}" {{{ rows ? 'rows="' + rows + '"' : 'style="height: ' + height + 'px;"' }}}>{{ value }}</textarea>
+		<?php
 	}
 }
 
@@ -663,65 +783,57 @@ endif; // END Carbon_Field_Textarea
 if ( !class_exists('Carbon_Field_Rich_Text') ) :
 
 class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
-	static $attached_editor = false;
+	protected $lazyload = true;
+	static $initialized = false;
 
-	function render() {
-		$val = $this->get_value();
+	function admin_init() {
+		if (!self::$initialized) {
+			self::$initialized = true;
 
-		$id = 'wysiwyg-' . $this->get_name();
+			add_action('admin_footer', array($this, 'editor_init'));
+		}
+	}
 
+	function template() {
 		?>
-		<div id="wp-<?php echo $id; ?>-wrap" class="carbon-wysiwyg wp-editor-wrap tmce-active" data-toolbar="full">
-			<div id="wp-<?php echo $id; ?>-editor-tools" class="wp-editor-tools">
-				<div id="wp-<?php echo $id; ?>-media-buttons" class="hide-if-no-js wp-media-buttons">
+		<div id="wp-{{{ id }}}-wrap" class="carbon-wysiwyg wp-editor-wrap tmce-active" data-toolbar="full">
+			<div id="wp-{{{ id }}}-editor-tools" class="wp-editor-tools">
+				<div id="wp-{{{ id }}}-media-buttons" class="hide-if-no-js wp-media-buttons">
 					<?php do_action( 'media_buttons' ); ?>
 				</div>
 			</div>
 			<div class="wp-editor-tabs">
-				<a class="wp-switch-editor switch-tmce"><?php _e('Visual', 'crb'); ?></a>
-				<a class="wp-switch-editor switch-html"><?php _e('Text', 'crb'); ?></a>
+				<button id="{{{ id }}}-tmce" class="wp-switch-editor switch-tmce" onclick="switchEditors.switchto(this);" type="button">
+					<?php _e('Visual', 'crb'); ?>
+				</button>
+				<button id="{{{ id }}}-html" class="wp-switch-editor switch-html" onclick="switchEditors.switchto(this);" type="button">
+					<?php _e( 'Text', 'crb' ); ?>
+				</button>
 			</div>
-
-			<div id="wp-<?php echo $id; ?>-editor-container" class="wp-editor-container">
-				<textarea id="<?php echo $id; ?>" class="wp-editor-area" name="<?php echo $this->get_name(); ?>" <?php echo ($this->required ? 'data-carbon-required="true"': '') ?>><?php echo wp_richedit_pre($val); ?></textarea>
+			<div id="wp-{{{ id }}}-editor-container" class="wp-editor-container">
+				<textarea id="{{{ id }}}" class="wp-editor-area" name="{{{ name }}}">{{ value ? switchEditors.wpautop(value) : value }}</textarea>
 			</div>
 		</div>
 		<?php
-
 	}
 
-	function admin_init() {
-		if ( !self::$attached_editor ) {
-			self::$attached_editor = true;
-
-			add_action('admin_print_scripts', array('Carbon_Field_Rich_Text', 'admin_enqueue_scripts'));
-			add_action('admin_footer', array('Carbon_Field_Rich_Text', 'admin_footer'));
-		}
-	}
-
-	static function admin_footer() {
-		// Instead of enqueueing all required scripts and stylesheets and setting up TinyMCE,
-		// wp_editor() automatically enqueues and sets up everything.
+	// Instead of enqueueing all required scripts and stylesheets and setting up TinyMCE,
+	// wp_editor() automatically enqueues and sets up everything.
+	function editor_init() {
 		?>
 		<div style="display:none;">
 			<?php
-			wp_editor(
-				'',
-				'carbon_settings',
-				array(
+				$settings = array(
 					'tinymce' => array(
-						'resize' => false,
+						'resize' => true,
 						'wp_autoresize_on' => true,
 					)
-				)
-			);
+				);
+
+				wp_editor('', 'carbon_settings', $settings);
 			?>
 		</div>
 		<?php
-	}
-
-	static function admin_enqueue_scripts() {
-		wp_enqueue_script('editor');
 	}
 }
 
@@ -731,19 +843,20 @@ endif;
 if ( !class_exists('Carbon_Field_Date') ) :
 
 class Carbon_Field_Date extends Carbon_Field {
-	function init() {
-		global $wp_version;
-
-		if (defined('WP_ADMIN') && WP_ADMIN) {
-			wp_enqueue_script('jquery-ui-datepicker');
-			wp_enqueue_style('jquery-ui', 'https://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.min.css');
-		}
-		Carbon_Field::init();
+	function template() {
+		?>
+		<div class="input-with-button">
+			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-datepicker" />
+			<span class="carbon-datepicker-trigger button icon-button hide-if-no-js"><?php _e('Date', 'crb'); ?></span>
+		</div>
+		<?php
 	}
 
-	function render() {
-		echo '<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-datepicker"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>';
-		echo '<span class="carbon-datepicker-trigger button icon-button hide-if-no-js">' . __('Date', 'crb') . '</span>';
+	function admin_enqueue_scripts() {
+		wp_enqueue_script('jquery-ui-datepicker');
+
+		wp_enqueue_style('jquery-ui', '//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css');
+		wp_enqueue_style('carbon-jquery-ui', CARBON_PLUGIN_URL . '/css/jquery-ui.css');
 	}
 }
 
@@ -753,23 +866,21 @@ endif;
 if ( !class_exists('Carbon_Field_Color') ) :
 
 class Carbon_Field_Color extends Carbon_Field {
-	function init() {
-		if (defined('WP_ADMIN') && WP_ADMIN) {
-			wp_enqueue_script('farbtastic');
-			wp_enqueue_style('farbtastic');
-		}
-
-		Carbon_Field::init();
+	function template() {
+		?>
+		<div class="carbon-color-row">
+			<div class="input-with-button">
+				<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-color" />
+				<span class="pickcolor button icon-button hide-if-no-js"><?php _e('Select a Color', 'crb'); ?></span>
+			</div>
+			<div class="carbon-color-container hide-if-no-js"></div>
+		</div>
+		<?php
 	}
 
-	function render() {
-		echo '
-		<div class="carbon-color-row">
-			<input id="' . $this->get_id() . '" type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-color" ' . ($this->required ? 'data-carbon-required="true"': '') . ' />
-			<a class="carbon-color-preview hide-if-no-js"></a>
-			<span class="pickcolor button icon-button hide-if-no-js">' . __('Select a Color', 'crb') . '</span>
-			<div class="carbon-color-container hide-if-no-js"></div>
-		</div>';
+	function admin_enqueue_scripts() {
+		wp_enqueue_script('farbtastic');
+		wp_enqueue_style('farbtastic');
 	}
 }
 
@@ -779,77 +890,130 @@ endif;
 if ( !class_exists('Carbon_Field_Map') ) :
 
 class Carbon_Field_Map extends Carbon_Field {
-	protected $api_key;
+	protected $lazyload = true;
 	protected $default_lat = 40.346544;
 	protected $default_lng = -101.645507;
-	protected $zoom = 10;
+	protected $default_zoom = 10;
+	protected $lat = null;
+	protected $lng = null;
+	protected $zoom = null;
+	protected $address = '';
 
-	function admin_init() {
-		wp_enqueue_script('carbon-google-maps', 'http://maps.googleapis.com/maps/api/js?sensor=false');
+	function admin_enqueue_scripts() {
+		wp_enqueue_script('carbon-google-maps', '//maps.googleapis.com/maps/api/js?sensor=false');
 	}
 
-	function render() {
-		echo '
-		<input type="text" name="' . $this->get_name() . '" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_lng) . '"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
+	function to_json($load) {
+		$field_data = parent::to_json($load);
+
+		$field_data = array_merge($field_data, array(
+			'lat' => is_float($this->lat) ? $this->lat : $this->default_lat,
+			'lng' => is_float($this->lng) ? $this->lng : $this->default_lng,
+			'zoom' => is_int($this->zoom) ? $this->zoom : $this->default_zoom,
+			'address' => $this->address,
+		));
+
+		return $field_data;
+	}
+
+	function template() {
+		?>
+		<div class="carbon-map-search">
+			<p><?php _e('Locate Address on the map', 'crb'); ?>: </p>
+			
+			<div class="input-with-button">
+				<input type="text" name="{{{ name }}}[address]" value="{{{ address }}}" class="regular-text address" />
+				<span class="address-search-btn button icon-button">
+					<?php _e('Find', 'crb'); ?>
+				</span>
+			</div>
+				
+			<input type="hidden" name="{{{ name }}}[lat]" value="{{{ lat }}}" />
+			<input type="hidden" name="{{{ name }}}[lng]" value="{{{ lng }}}" />
+			<input type="hidden" name="{{{ name }}}[zoom]" value="{{{ zoom }}}" />
+		</div>
 		<div class="carbon-map-canvas">&nbsp;</div>
-		';
+		<?php
 	}
 
 	function set_position($lat, $lng, $zoom) {
 		$this->default_lat = $lat;
 		$this->default_lng = $lng;
-		$this->zoom = $zoom;
+		$this->default_zoom = $zoom;
 
 		return $this;
 	}
 
-	function save() {
-		$this->store->save($this);
+	function load() {
+		$this->store->load($this);
 
-		$original_name = $this->get_name();
-		$original_value = $this->get_value();
+		$name = $this->get_name();
 
-		$value = explode(',', $this->get_value());
-		if ( count($value) >= 2 ) {
-			$lat = floatval($value[0]);
-			$lng = floatval($value[1]);
-		} else {
-			$lat = $lng = '';
+		// Set the "lat"
+		$this->set_name($name . '-lat');
+		$this->store->load($this);
+		if ($this->get_value()) {
+			$this->lat = (float) $this->get_value();
 		}
 
-		$this->set_name($original_name . '-lat');
-		$this->set_value($lat);
-		$this->store->save($this);
+		// Set the "lng"
+		$this->set_name($name . '-lng');
+		$this->store->load($this);
+		if ($this->get_value()) {
+			$this->lng = (float) $this->get_value();
+		}
 
-		$this->set_name($original_name . '-lng');
-		$this->set_value($lng);
-		$this->store->save($this);
+		// Set the "address"
+		$this->set_name($name . '-address');
+		$this->store->load($this);
+		if ($this->get_value()) {
+			$this->address = $this->get_value();
+		}
 
-		$this->set_name($original_name);
-		$this->set_value($original_value);
+		// Set the "zoom"
+		$this->set_name($name . '-zoom');
+		$this->store->load($this);
+		if ($this->get_value() || $this->get_value() === '0') {
+			$this->zoom = (int) $this->get_value();
+		}
 
-		return true;
+		// Set the field value
+		$this->set_name($name);
+		$value = $this->lat && $this->lng ? $this->lat . ',' . $this->lng : '';
+		$this->set_value($value);
 	}
 
-	function load() {
-		$original_name = $this->get_name();
+	function save() {
+		$name = $this->get_name();
+		$value = $this->get_value();
 
-		$lat = $lng = '';
+		// Add the "lat" meta in the database
+		$this->set_name($name . '-lat');
+		$this->set_value($value['lat']);
+		$this->store->save($this);
 
-		$this->set_name($original_name . '-lat');
-		$this->store->load($this);
-		$lat = $this->get_value();
+		// Add the "lng" meta in the database
+		$this->set_name($name . '-lng');
+		$this->set_value($value['lng']);
+		$this->store->save($this);
 
+		// Add the "zoom" meta in the database
+		$this->set_name($name . '-zoom');
+		$this->set_value($value['zoom']);
+		$this->store->save($this);
 
-		$this->set_name($original_name . '-lng');
-		$this->store->load($this);
-		$lng = $this->get_value();
+		// Add the "address" meta in the database
+		$this->set_name($name . '-address');
+		$this->set_value($value['address']);
+		$this->store->save($this);
 
+		// Set the value for the field
+		$this->set_name($name);
+		$field_value = !empty($value['lat']) && !empty($value['lng']) ? $value['lat'] . ',' . $value['lng'] : '';
+		$this->set_value($field_value);
 
-		$this->set_name($original_name);
-		$this->set_value($lat . ',' . $lng);
+		parent::save();
 	}
-
 
 	function set_value_from_input($input = null) {
 		if ( is_null($input) ) {
@@ -861,8 +1025,20 @@ class Carbon_Field_Map extends Carbon_Field {
 		} else {
 			$value = stripslashes_deep($input[$this->name]);
 
-			if ( is_array($value) && isset($value['lat']) && isset($value['lng']) ) {
-				$value = $value['lat'] . ',' . $value['lng'];
+			if (isset($input[$this->name . '_-lat'])) {
+				$this->lat = (float) $input[$this->name . '_-lat'];
+			}
+
+			if (isset($input[$this->name . '_-lng'])) {
+				$this->lng = (float) $input[$this->name . '_-lng'];
+			}
+
+			if (isset($input[$this->name . '_-zoom'])) {
+				$this->zoom = (int) $input[$this->name . '_-zoom'];
+			}
+
+			if (isset($input[$this->name . '_-address'])) {
+				$this->address = $input[$this->name . '_-address'];
 			}
 
 			$this->set_value( $value );
@@ -876,87 +1052,10 @@ endif;
 if ( !class_exists('Carbon_Field_Map_With_Address') ) :
 
 class Carbon_Field_Map_With_Address extends Carbon_Field_Map {
-	protected $address = '';
+	function get_type() {
+		$class = get_parent_class($this); // setting the type to be the same as the map field
 
-	function render() {
-		echo '<p>' . __('Locate Address on the map', 'crb') . ': <input type="text" name="' . esc_attr($this->get_name()) . '[address]" value="' . esc_attr($this->address) . '" class="regular-text address" /><span class="address-search-btn button icon-button">' . __('Find', 'crb') . '</span></p>';
-
-		echo '
-		<input type="text" name="' . $this->get_name() . '[coordinates]" value="' . esc_attr($this->value) . '" class="regular-text carbon-map-field" data-zoom="' . esc_attr($this->zoom) . '" data-default-lat="' . esc_attr($this->default_lat) . '" data-default-lng="' . esc_attr($this->default_lng) . '"  ' . ($this->required ? 'data-carbon-required="true"': '') . '/>
-		<div class="carbon-map-canvas">&nbsp;</div>
-		';
-	}
-
-	function save() {
-		parent::save();
-
-		$original_name = $this->get_name();
-		$original_value = $this->get_value();
-
-		$this->set_name($original_name . '-address');
-		$this->set_value($this->address);
-		$this->store->save($this);
-
-		$this->set_name($original_name);
-		$this->set_value($original_value);
-
-		return true;
-	}
-
-	function load() {
-		$original_name = $this->get_name();
-
-		$this->set_name($original_name . '-address');
-		$this->store->load($this);
-		$this->address = $this->get_value();
-
-		$this->set_name($original_name);
-
-		parent::load();
-	}
-
-	function set_value_from_input($input = null) {
-		if ( is_null($input) ) {
-			$input = $_POST;
-		}
-
-		if ( is_array($input[$this->name]) ) {
-			/**
-			 * Function is called on save
-			 */
-
-			if ( !isset($input[$this->name]['coordinates']) ) {
-				parent::set_value_from_input($input);
-			} else {
-				$value = stripslashes_deep($input[$this->name]['coordinates']);
-
-				if ( is_array($value) && isset($value['lat']) && isset($value['lng']) ) {
-					$value = $value['lat'] . ',' . $value['lng'];
-				}
-
-				$this->set_value($value);
-			}
-
-			if ( isset($input[$this->name]['address']) ) {
-				$address = stripslashes_deep($input[$this->name]['address']);
-
-				$this->address = $address;
-			}
-		} else {
-			/**
-			 * Function is called on render
-			 */
-
-			# Set Map Value
-			$this->set_value( $input[$this->name] );
-
-			# Set Map Address
-			if ( isset($input[$this->name . '_-address']) ) {
-				$address = stripslashes_deep( $input[$this->name . '_-address'] );
-
-				$this->address = $address;
-			}
-		}
+		return $this->clean_type($class);
 	}
 }
 
@@ -976,27 +1075,31 @@ class Carbon_Field_Select extends Carbon_Field {
 		return $this;
 	}
 
-	function render() {
-		$this->_load_options();
+	function to_json($load) {
+		$field_data = parent::to_json($load);
+		$this->load_options();
 
-		if ( empty($this->options) ) {
-			echo '<em>' . __('no options', 'crb') . '</em>';
-			return;
-		}
+		$field_data = array_merge($field_data, array(
+			'options' => $this->parse_options($this->options),
+		));
 
-		echo '<select id="' . $this->get_id() . '" name="' . $this->get_name() . '" ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
+		return $field_data;
+	}
 
-		foreach ($this->options as $key => $value) {
-			echo '<option value="' . esc_attr($key) . '"';
-
-			if ($this->value == $key) {
-				echo ' selected="selected"';
-			}
-
-			echo '>' . esc_html($value) . '</option>';
-		}
-
-		echo '</select>';
+	function template() {
+		?>
+		<% if (_.isEmpty(options)) { %>
+			<em><?php _e('no options', 'crb'); ?></em>
+		<% } else { %>
+			<select id="{{{ id }}}" name="{{{ name }}}">
+				<% _.each(options, function(option) { %>
+					<option value="{{ option.value }}" {{{ option.value == value ? 'selected="selected"' : '' }}}>
+						{{{ option.name }}}
+					</option>
+				<% }) %>
+			</select>
+		<% } %>
+		<?php
 	}
 }
 
@@ -1005,38 +1108,24 @@ endif;
 
 if ( !class_exists('Carbon_Field_Radio') ) :
 
-class Carbon_Field_Radio extends Carbon_Field {
-	function set_options($options) {
-		$this->_set_options($options);
-		return $this;
-	}
-
-	function add_options($options) {
-		$this->_add_options($options);
-		return $this;
-	}
-
-	function render() {
-		$this->_load_options();
-
-		if ( empty($this->options) ) {
-			echo '<em>' . __('no options', 'crb') . '</em>';
-			return;
-		}
-
-		echo '<ul class="carbon-radio-list" ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
-
-		foreach ($this->options as $key => $value) {
-			echo '<li><label><input type="radio" name="' . $this->get_name() . '" value="' . esc_attr($key) . '"';
-
-			if ($this->value == $key) {
-				echo ' checked="checked"';
-			}
-
-			echo '/>' . esc_html($value) . '</label></li>';
-		}
-
-		echo '</ul>';
+class Carbon_Field_Radio extends Carbon_Field_Select {
+	function template() {
+		?>
+		<% if (_.isEmpty(options)) { %>
+			<em><?php _e('no options', 'crb'); ?></em>
+		<% } else { %>
+			<ul class="carbon-radio-list">
+				<% _.each(options, function(option) { %>
+					<li>
+						<label>
+							<input type="radio" name="{{{ name }}}" value="{{ option.value }}" {{{ option.value == value ? 'checked="checked"' : '' }}} />
+							{{{ option.name }}}
+						</label>
+					</li>
+				<% }) %>
+			</ul>
+		<% } %>
+		<?php
 	}
 }
 
@@ -1053,21 +1142,32 @@ class Carbon_Field_Checkbox extends Carbon_Field {
 		return $this;
 	}
 
-	function render() {
-		if ( empty($this->option_value) ) {
-			throw new Carbon_Exception('Set non-empty option value for field "' . $this->get_name() . '"');
-		}
+	function to_json($load) {
+		$field_data = parent::to_json($load);
 
-		$checked_attr = $this->get_value() == $this->option_value ? ' checked="checked" ': '';
+		$field_data = array_merge($field_data, array(
+			'option_value' => $this->option_value,
+			'option_label' => parent::get_label(),
+		));
 
-		echo '<label>
-			<input type="checkbox" name="' . $this->get_name() . '" value="' . esc_attr($this->option_value) . '" ' . $checked_attr . ' />
-			' . 	$this->label . '
-		</label>';
+		return $field_data;
+	}
+
+	function template() {
+		?>
+		<label>
+			<input type="checkbox" name="{{{ name }}}" value="{{ option_value }}" {{{ option_value == value ? 'checked="checked"' : '' }}} />
+			{{{ option_label }}}
+		</label>
+		<?php
 	}
 
 	function get_label() {
 		return '';
+	}
+
+	function is_required() {
+		return false;
 	}
 }
 
@@ -1081,7 +1181,8 @@ class Carbon_Field_Header_Scripts extends Carbon_Field_Textarea {
 		$this->help_text(__('If you need to add scripts to your header, you should enter them here.', 'crb'));
 
 		add_action('wp_head', array($this, 'print_scripts'));
-		Carbon_Field::init();
+
+		parent::init();
 	}
 
 	function print_scripts() {
@@ -1103,7 +1204,8 @@ class Carbon_Field_Footer_Scripts extends Carbon_Field_Textarea {
 		$this->help_text(__('If you need to add scripts to your footer (like Google Analytics tracking code), you should enter them in this box.', 'crb'));
 
 		add_action('wp_footer', array($this, 'print_scripts'));
-		Carbon_Field::init();
+
+		parent::init();
 	}
 
 	function print_scripts() {
@@ -1121,14 +1223,12 @@ endif;
 if ( !class_exists('Carbon_Field_Separator') ) :
 
 class Carbon_Field_Separator extends Carbon_Field {
-	function render() {
+	protected $wide = true;
 
-	}
-
-	function get_label() {
-		$label = parent::get_label();
-
-		return '<h3 class="title carbon-separator">' . $label . '</h3>';
+	function template() {
+		?>
+		<h3>{{{ label }}}</h3>
+		<?php
 	}
 
 	function load() {
@@ -1141,6 +1241,10 @@ class Carbon_Field_Separator extends Carbon_Field {
 
 	function delete() {
 		// skip;
+	}
+
+	function is_required() {
+		return false;
 	}
 }
 
@@ -1167,46 +1271,64 @@ class Carbon_Field_Set extends Carbon_Field {
 		return $this;
 	}
 
-	function render() {
-		$this->_load_options();
+	function get_value() {
+		if ($this->value === false) {
+			return array();
+		}
+
+		$this->load_options();
 
 		if (!is_array($this->value)) {
 			$this->value = maybe_unserialize($this->value);
 			if (!is_array($this->value)) {
-				$this->value = array($this->value);
+				return array($this->value);
 			}
 		}
 
-		if (empty($this->options)) {
-			echo '<em>' . __('no options', 'crb') . '</em>';
-			return;
-		}
+		return (array) $this->value;
+	}
 
-		$loopCount = 0;
+	function to_json($load) {
+		$field_data = parent::to_json($load);
 
-		echo '<div class="carbon-set-list" ' . ($this->required ? 'data-carbon-required="true"': '') . '>';
+		$this->load_options();
 
-		foreach ($this->options as $key => $value) {
-			$loopCount ++;
+		$field_data = array_merge($field_data, array(
+			'limit_options' => $this->limit_options,
+			'options' => $this->parse_options($this->options),
+		));
 
-			$option = '<input type="checkbox" name="' . $this->get_name() . '[]" value="' . esc_attr($key) . '"';
-			if ( in_array($key, $this->value) ) {
-				$option .= ' checked="checked"';
-			}
-			$option .= '/>';
+		return $field_data;
+	}
 
-			if ( $this->limit_options > 0 && $loopCount > $this->limit_options ) {
-				echo '<p style="display:none"><label>' . $option . $value . '</label></p>';
-			} else {
-				echo '<p><label>' . $option . $value . '</label></p>';
+	function template() {
+		?>
+		<% if (_.isEmpty(options)) { %>
+			<em><?php _e('no options', 'crb'); ?></em>
+		<% } else { %>
+			<div class="carbon-set-list">
+				<% _.each(options, function(option, i) { %>
+					<% 
+						var selected = jQuery.inArray(String(option.value), value) > -1;
+						var counter = i + 1;
+						var exceed = limit_options > 0 && counter > limit_options;
+						var last = options.length === counter;
+					%>
 
-				if ( $loopCount == $this->limit_options ) {
-					echo '<p>... <a href="#" class="carbon-set-showall">' . __('Show All Options', 'crb') . '</a></p>';
-				}
-			}
-		}
+					<p {{{ exceed ? 'style="display:none"' : '' }}}>
+						<label>
+							<input type="checkbox" name="{{{ name }}}[]" value="{{ option.value }}" {{{ selected ? 'checked="checked"' : '' }}} />
+							{{{ option.name }}}
+						</label>
+					</p>
 
- 		echo '</div>';
+					<% if (!exceed && !last && counter == limit_options) { %>
+						<p>... <a href="#" class="carbon-set-showall"><?php _e('Show All Options', 'crb'); ?></a></p>
+					<% } %>
+				<% }) %>
+			</div>
+		<% } %>
+		<?php
 	}
 }
 
@@ -1216,8 +1338,15 @@ endif;
 if ( !class_exists('Carbon_Field_Relationship') ) :
 
 class Carbon_Field_Relationship extends Carbon_Field {
-	protected $post_type = 'post';
-	protected $values_max = -1;
+	protected $post_type = '';
+	protected $max = -1;
+	protected $allow_duplicates = false;
+
+	function admin_init() {
+		$this->add_template($this->get_type() . '_item', array($this, 'item_template'));
+
+		parent::admin_init();
+	}
 
 	function set_post_type($post_type) {
 		$this->post_type = $post_type;
@@ -1225,88 +1354,124 @@ class Carbon_Field_Relationship extends Carbon_Field {
 	}
 
 	function set_max($max) {
-		$this->values_max = intval($max);
+		$this->max = intval($max);
 		return $this;
 	}
 
-	function get_max() {
-		return $this->values_max;
+	function allow_duplicates($allow = true) {
+		$this->allow_duplicates = (bool)$allow;
+		return $this;
 	}
 
-	function admin_init() {
-		wp_enqueue_script('jquery-ui-sortable');
+	/**
+	 * Used to get the title of an item. 
+	 *
+	 * Can be overriden or extended by the `carbon_relationship_title` filter.
+	 * 
+	 * @param int     $id      The database ID of the item.
+	 * @param string  $type    Item type (post, term, user, comment, or a custom one).
+	 * @param string  $subtype The subtype - "page", "post", "category", etc.
+	 * @return string $title The title of the item.
+	 */
+	function get_title_by_type($id, $type, $subtype = '') {
+		$title = get_the_title($id);
+
+		/**
+		 * Filter the title of the relationship item.
+		 *
+		 * @param string $title   The unfiltered item title.
+		 * @param string $name    Name of the relationship field.
+		 * @param int    $id      The database ID of the item.
+		 * @param string $type    Item type (post, term, user, comment, or a custom one).
+		 * @param string $subtype Subtype - "page", "post", "category", etc.
+		 */
+		return apply_filters('carbon_relationship_title', $title, $this->get_name(), $id, $type, $subtype);
 	}
 
-	function set_value_from_input($input = null) {
-		if ( is_null($input) ) {
-			$input = $_POST;
-		}
-
-		if ( !isset($input[$this->name]) ) {
-			$this->set_value(null);
-		} else {
-			$this->set_value( stripslashes_deep($input[$this->name]) );
-		}
-	}
-
-	function render() {
-		$this->value = maybe_unserialize($this->value);
-		if (!is_array($this->value)) {
-			$this->value = array($this->value);
-		}
-
-		// Exclude the current post from the list
-		$screen = get_current_screen();
-		$exclude_id = '';
-		if ( is_object($screen) && $screen->base == 'post' && isset($_GET['post']) ) {
-			$exclude_id = intval($_GET['post']);
-		}
-
-		$this->post_type = (array) $this->post_type;
-
-		$posts = get_posts(array(
+	/**
+	 * Generate the item options for the relationship field.
+	 *
+	 * @return array $options The selectable options of the relationship field.
+	 */
+	function get_options() {
+		/**
+		 * Filter the default query when fetching posts for a particular field.
+		 *
+		 * @param array $args The parameters, passed to get_posts().
+		 */
+		$filter_name = 'carbon_relationship_options_' . $this->get_name() . '_post_' . $this->post_type;
+		$args = apply_filters($filter_name, array(
 			'post_type' => $this->post_type,
-			'posts_per_page' => 10,
-			'orderby' => 'title',
-			'order' => 'ASC',
-			'exclude' => $exclude_id,
+			'posts_per_page' => -1,
+			'fields' => 'ids',
 			'suppress_filters' => false,
 		));
 
-		$post_types = get_post_types('','objects');
+		// fetch and prepare posts as relationship items
+		$options = get_posts($args);
+		foreach ($options as &$p) {
+			$p = array(
+				'id' => $p,
+				'title' => $this->get_title_by_type($p, 'post', $this->post_type),
+				'type' => 'post',
+				'subtype' => $this->post_type,
+				'is_trashed' => (get_post_status($p) == 'trash'),
+			);
+		}
 
+		/**
+		 * Filter the final list of options, available to a certain relationship field.
+		 *
+		 * @param array $options Unfiltered options items.
+		 * @param string $name Name of the relationship field.
+		 */
+		$options = apply_filters('carbon_relationship_options', $options, $this->get_name());
+
+		return $options;
+	}
+
+	function to_json($load) {
+		$field_data = parent::to_json($load);
+
+		if (!empty($field_data['value'])) {
+			$value = array();
+
+			$field_data['value'] = maybe_unserialize($field_data['value']);
+			foreach ($field_data['value'] as $single_value) {
+				$value[] = array(
+					'id' => $single_value,
+					'title' => $this->get_title_by_type($single_value, 'post', $this->post_type),
+					'type' => 'post',
+					'subtype' => $this->post_type,
+					'is_trashed' => (get_post_status($single_value) == 'trash'),
+				);
+			}
+			$field_data['value'] = $value;
+		}
+
+		$field_data = array_merge($field_data, array(
+			'options' => $this->get_options(),
+			'max' => $this->max,
+			'allow_duplicates' => $this->allow_duplicates,
+		));
+
+		return $field_data;
+	}
+
+	function template() {
 		?>
-		<div class="carbon-relationship" data-post-type="<?php echo implode(',', $this->post_type) ?>" data-max-values="<?php echo $this->get_max() ?>" data-exclude="<?php echo $exclude_id ?>" data-paged="1" data-name="<?php echo $this->get_name() ?>[]">
+		<div class="relationship-container">
 			<div class="relationship-left">
-				<table class="widefat">
-					<thead>
-						<tr>
-							<th>
-								<input type="text" placeholder="<?php esc_attr_e('Search', 'crb') ?>" />
-							</th>
-						</tr>
-					</thead>
-				</table>
+				<div class="search-field">
+					<input type="text" class="search-field" placeholder="<?php esc_attr_e('Search', 'crb'); ?>" />
+				</div>
 
 				<ul class="relationship-list">
-					<?php foreach ($posts as $post):
-					$type_title = $post->post_type;
-					$type_title = isset($post_types[$type_title]->labels->singular_name) ? $post_types[$type_title]->labels->singular_name: $type_title;
-
-					$post_title = $post->post_title;
-					if ( !$post_title ) {
-						$post_title = __('(no title)') . ' - post_id = ' . $post->ID;
-					}
-					?>
-						<li <?php if(in_array($post->ID, $this->value)) echo 'class="inactive"' ?>>
-							<a href="#" data-post_id="<?php echo $post->ID ?>">
-								<em><?php echo $type_title ?></em>
-								<span><!-- plus --></span>
-								<?php echo apply_filters('the_title', $post_title); ?>
-							</a>
-						</li>
-					<?php endforeach ?>
-					<li class="load-more"><span class="spinner"></span></li>
+					<% if (options) { %>
+						<% _.each(options, function(item) { %>
+							<?php echo $this->item_template(false); ?>
+						<% }); %>
+					<% } %>
 				</ul>
 			</div>
 
@@ -1314,107 +1479,327 @@ class Carbon_Field_Relationship extends Carbon_Field {
 				<label><?php _e('Associated:', 'crb'); ?></label>
 
 				<ul class="relationship-list">
-					<?php
-					foreach ($this->value as $post_id):
-						$post = get_post($post_id);
-						if ( !$post || !$post_id ) {
-							continue;
-						}
-						$type_title = $post->post_type;
-						$type_title = isset($post_types[$type_title]->labels->singular_name) ? $post_types[$type_title]->labels->singular_name: $type_title;
-
-						$post_title = $post->post_title;
-						if ( !$post_title ) {
-							$post_title = __('(no title)') . ' - post_id = ' . $post->ID;
-						}
-					?>
-						<li>
-							<a href="#" data-post_id="<?php echo $post->ID ?>"><em><?php echo $type_title ?></em><?php echo apply_filters('the_title', $post_title); ?> <span><!-- minus --></span></a>
-							<input type="hidden" name="<?php echo $this->get_name() ?>[]" value="<?php echo $post->ID ?>" />
-						</li>
-					<?php endforeach ?>
+					<% if (value) { %>
+						<% _.each(value, function(item) { %>
+							<?php echo $this->item_template(); ?>
+						<% }); %>
+					<% } %>
 				</ul>
 			</div>
-
-			<div class="cl">&nbsp;</div>
 		</div>
 		<?php
 	}
 
-	static function carbon_relationship_load_posts() {
-		if ( empty($_POST['paged']) || empty($_POST['post-type']) ) {
-			echo '';
-			exit;
-		}
-
-		if( !empty($_POST['s']) ) {
-			add_filter('posts_where', array('Carbon_Field_Relationship', 'posts_where'), 10, 2 );
-		}
-
-		// Exclude the current post from the list
-		$exclude_id = '';
-		if ( isset($_POST['exclude']) ) {
-			$exclude_id = intval($_POST['exclude']);
-		}
-
-		$post_type = explode(',', $_POST['post-type']);
-
-		$posts = get_posts(array(
-			'post_type' => $post_type,
-			'posts_per_page' => 10,
-			'orderby' => 'title',
-			'order' => 'ASC',
-			'paged' => intval($_POST['paged']),
-			'suppress_filters' => false,
-			'exclude' => $exclude_id
-		));
-
-		$post_types = get_post_types('','objects');
-
-		foreach ($posts as $post){
-			$type_title = $post->post_type;
-			$type_title = isset($post_types[$type_title]->labels->singular_name) ? $post_types[$type_title]->labels->singular_name: $type_title;
-
-			$post_title = $post->post_title;
-			if ( !$post_title ) {
-				$post_title = __('(no title)') . ' - post_id = ' . $post->ID;
-			}
-
-			echo '<li><a href="#" data-post_id="' . $post->ID . '"><em>' . $type_title . '</em>' . apply_filters('the_title', $post_title) . '<span><!-- plus --></span></a></li>';
-		}
-
-		exit;
+	/**
+	 * Serves as a backbone template for the relationship items.
+	 * Used for both the selected and the selectable options.
+	 *
+	 * @param bool $display_input Whether to display the selected item input field.
+	 */
+	function item_template($display_input = true) {
+		?>
+		<li>
+			<span class="mobile-handle"></span>
+			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-value="{{{ item.id }}}">
+				<em>{{{ item.subtype }}}</em>
+				<span></span>
+				{{{ item.title }}}
+			</a>
+			<?php if ($display_input): ?>
+				<input type="hidden" name="{{{ name }}}[]" value="{{{ item.id }}}" />
+			<?php endif; ?>
+		</li>
+		<?php
 	}
 
-   	static function posts_where( $where, &$wp_query ) {
-		global $wpdb;
-
-		if ( !empty($_POST['s']) )  {
-
-			// backward compatibility - $wpdb->esc_like() was introduced in 4.0
-			if (method_exists($wpdb, 'esc_like')) {
-				$like = $wpdb->esc_like( $_POST['s'] );
-			} else {
-				$like = like_escape( $_POST['s'] );
-			}
-
-			$where .= " AND " . $wpdb->posts . ".post_title LIKE '%" . esc_sql($like) . "%'";
-		}
-
-		return $where;
-	}
 }
 
 endif;
 
+if ( !class_exists('Carbon_Field_Association') ) :
+
+class Carbon_Field_Association extends Carbon_Field_Relationship {
+	protected $types = array();
+
+	function set_types($types) {
+		$this->types = $types;
+		return $this;
+	}
+
+	/**
+	 * @deprecated 
+	 * @see set_types()
+	 */
+	function set_post_type($post_type) {
+		$this->set_types(array(
+			array(
+				'type' => 'post',
+				'post_type' => $post_type
+			)
+		));
+
+		return $this;
+	}
+
+	/**
+	* Converts the database values into a usable associative array.
+	* 
+	* The relationship data is saved in the database in the following format:
+	* 	array (
+	*		0 => 'post:page:4',
+	*		1 => 'term:category:2',
+	*		2 => 'user:user:1',
+	* 	)
+	* where the value of each array item contains:
+	* 	- Type of data (post, term, user or comment)
+	* 	- Subtype of data (the particular post type or taxonomy)
+	* 	- ID of the item (the database ID of the item)
+	*/
+	function process_value() {
+		$raw_value = maybe_unserialize($this->get_value());
+		if (!$raw_value) {
+			$raw_value = array();
+		}
+
+		$value = array();
+		foreach ($raw_value as $raw_value_entry) {
+			if (is_string($raw_value_entry)) {
+				$value_pieces = explode(':', $raw_value_entry);
+			} else {
+				$value_pieces = array_values($raw_value_entry);
+			}
+
+			$item = array(
+				'type' => $value_pieces[0],
+				'subtype' => $value_pieces[1],
+				'id' => $value_pieces[2],
+				'title' => $this->get_title_by_type($value_pieces[2], $value_pieces[0], $value_pieces[1]),
+				'is_trashed' => ($value_pieces[0] == 'post' && get_post_status($value_pieces[2]) == 'trash'),
+			);
+			$value[] = $item;
+		}
+
+		$this->set_value($value);
+	}
+
+	/**
+	 * Used to get the title of an item. 
+	 *
+	 * Can be overriden or extended by the `carbon_relationship_title` filter.
+	 * 
+	 * @param int     $id      The database ID of the item.
+	 * @param string  $type    Item type (post, term, user, comment, or a custom one).
+	 * @param string  $subtype The subtype - "page", "post", "category", etc.
+	 * @return string $title The title of the item.
+	 */
+	function get_title_by_type($id, $type, $subtype = '') {
+		$title = '';
+
+		if ($type === 'post') {
+			$title = get_the_title($id);
+		} elseif($type === 'term') {
+			$term = get_term_by('id', $id, $subtype);
+			$title = $term->name;
+		} elseif($type === 'user') {
+			$title = get_the_author_meta('user_login', $id);
+		} elseif($type === 'comment') {
+			$title = get_comment_text($id);
+			$max = apply_filters('carbon_relationship_comment_length', 30, $this->get_name());
+			if (strlen($title) > $max) {
+				$title = substr($title, 0, $max) . '...';
+			}
+		}
+
+		/**
+		 * Filter the title of the relationship item.
+		 *
+		 * @param string $title   The unfiltered item title.
+		 * @param string $name    Name of the relationship field.
+		 * @param int    $id      The database ID of the item.
+		 * @param string $type    Item type (post, term, user, comment, or a custom one).
+		 * @param string $subtype Subtype - "page", "post", "category", etc.
+		 */
+		return apply_filters('carbon_relationship_title', $title, $this->get_name(), $id, $type, $subtype);
+	}
+
+	/**
+	 * Generate the item options for the relationship field.
+	 *
+	 * @return array $options The selectable options of the relationship field.
+	 */
+	function get_options() {
+		$options = array();
+
+		foreach ($this->types as $type) {
+
+			// populate posts
+			if ($type['type'] === 'post') {
+
+				/**
+				 * Filter the default query when fetching posts for a particular field.
+				 *
+				 * @param array $args The parameters, passed to get_posts().
+				 */
+				$filter_name = 'carbon_relationship_options_' . $this->get_name() . '_' . $type['type'] . '_' . $type['post_type'];
+				$args = apply_filters($filter_name, array(
+					'post_type' => $type['post_type'],
+					'posts_per_page' => -1,
+					'fields' => 'ids',
+					'suppress_filters' => false,
+				));
+
+				// fetch and prepare posts as relationship items
+				$posts = get_posts($args);
+				foreach ($posts as &$p) {
+					$p = array(
+						'id' => $p,
+						'title' => $this->get_title_by_type($p, $type['type'], $type['post_type']),
+						'type' => $type['type'],
+						'subtype' => $type['post_type'],
+						'is_trashed' => (get_post_status($p) == 'trash'),
+					);
+				}
+				$options = array_merge($options, $posts);
+
+			// populate taxonomy terms
+			} elseif ($type['type'] === 'term') {
+
+				/**
+				 * Filter the default parameters when fetching terms for a particular field.
+				 *
+				 * @param array $args The parameters, passed to get_terms().
+				 */
+				$filter_name = 'carbon_relationship_options_' . $this->get_name() . '_' . $type['type'] . '_' . $type['taxonomy'];
+				$args = apply_filters($filter_name, array(
+					'hide_empty' => 0,
+					'fields' => 'id=>name',
+				));
+
+				// fetch and prepare terms as relationship items
+				$terms = get_terms($type['taxonomy'], $args);
+				foreach ($terms as $term_id => &$term) {
+					$term = array(
+						'id' => $term_id,
+						'title' => $term,
+						'type' => $type['type'],
+						'subtype' => $type['taxonomy'],
+						'is_trashed' => false,
+					);
+				}
+				$options = array_merge($options, $terms);
+
+			// populate users
+			} elseif ($type['type'] === 'user') {
+
+				/**
+				 * Filter the default parameters when fetching users for a particular field.
+				 *
+				 * @param array $args The parameters, passed to get_users().
+				 */
+				$filter_name = 'carbon_relationship_options_' . $this->get_name() . '_' . $type['type'];
+				$args = apply_filters($filter_name, array(
+					'fields' => 'ID'
+				));
+
+				// fetch and prepare users as relationship items
+				$users = get_users($args);
+				foreach ($users as &$u) {
+					$u = array(
+						'id' => $u,
+						'title' => $this->get_title_by_type($u, $type['type']),
+						'type' => $type['type'],
+						'subtype' => 'user',
+						'is_trashed' => false,
+					);
+				}
+				$options = array_merge($options, $users);
+
+			// populate comments
+			} elseif($type['type'] === 'comment') {
+
+				/**
+				 * Filter the default parameters when fetching comments for a particular field.
+				 *
+				 * @param array $args The parameters, passed to get_comments().
+				 */
+				$filter_name = 'carbon_relationship_options_' . $this->get_name() . '_' . $type['type'];
+				$args = apply_filters($filter_name, array(
+					'fields' => 'ids'
+				));
+
+				// fetch and prepare comments as relationship items
+				$comments = get_comments($args);
+				foreach ($comments as &$c) {
+					$c = array(
+						'id' => $c,
+						'title' => $this->get_title_by_type($c, $type['type']),
+						'type' => $type['type'],
+						'subtype' => 'comment',
+						'is_trashed' => false,
+					);
+				}
+				$options = array_merge($options, $comments);
+
+			}
+		}
+
+		/**
+		 * Filter the final list of options, available to a certain relationship field.
+		 *
+		 * @param array $options Unfiltered options items.
+		 * @param string $name Name of the relationship field.
+		 */
+		$options = apply_filters('carbon_relationship_options', $options, $this->get_name());
+
+		return $options;
+	}
+
+	function to_json($load) {
+		$field_data = Carbon_Field::to_json($load);
+
+		$field_data = array_merge($field_data, array(
+			'options' => $this->get_options(),
+			'max' => $this->max,
+			'allow_duplicates' => $this->allow_duplicates,
+		));
+
+		return $field_data;
+	}
+
+	/**
+	 * Serves as a backbone template for the relationship items.
+	 * Used for both the selected and the selectable options.
+	 *
+	 * @param bool $display_input Whether to display the selected item input field.
+	 */
+	function item_template($display_input = true) {
+		?>
+		<li>
+			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}">
+				<em>{{{ item.subtype }}}</em>
+				<span></span>
+				{{{ item.title }}}
+				<% if (item.is_trashed) { %>
+					<i class="trashed"></i>
+				<% } %>
+			</a>
+			<?php if ($display_input): ?>
+				<input type="hidden" name="{{{ name }}}[]" value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}" />
+			<?php endif; ?>
+		</li>
+		<?php
+	}
+
+}
+
+endif;
 
 if ( !class_exists('Carbon_Field_File') ) :
 
 class Carbon_Field_File extends Carbon_Field {
-	public $button_label = 'Select File';
-	public $window_button_label = 'Select File';
-	public $window_label = 'Files';
-	public $image_extensions = array('jpg', 'jpeg', 'gif', 'png', 'bmp');
+	public $button_label = '';
+	public $window_button_label = '';
+	public $window_label = '';
 
 	// empty for all types. available types: audio, video, image
 	public $field_type = '';
@@ -1422,10 +1807,12 @@ class Carbon_Field_File extends Carbon_Field {
 	// alt, author, caption, dateFormatted, description, editLink, filename, height, icon, id, link, menuOrder, mime, name, status, subtype, title, type, uploadedTo, url, width
 	public $value_type = 'url';
 
-	function init() {
+	function admin_init() {
 		$this->button_label = __('Select File', 'crb');
 		$this->window_button_label = __('Select File', 'crb');
 		$this->window_label = __('Files', 'crb');
+
+		$this->add_template($this->get_type() . '-Description', array($this, 'template_description'));
 	}
 
 	function set_type($type) {
@@ -1433,32 +1820,76 @@ class Carbon_Field_File extends Carbon_Field {
 		return $this;
 	}
 
-	function render() {
-		echo '<input
-				id="' . $this->get_id() . '"
-				type="text"
-				name="' . $this->get_name() . '"
-				value="' . $this->get_value() . '"
-				class="regular-text carbon-file-field" ' . ($this->required ? 'data-carbon-required="true"': '') . '
-				'.($this->value_type=='id' ? 'style="display:none"' : '').'
-			/>';
+	function to_json($load) {
+		$field_data = parent::to_json($load);
 
-		echo '<span
-				id="c2_open_media' . str_replace('-', '_', $this->id) .  '"
-				class="button c2_open_media icon-button"
-				data-window-label="'.$this->window_label.'"
-				data-window-button-label="'.$this->window_button_label.'"
-				data-type="' . $this->field_type . '"
-				data-value-type="'.$this->value_type.'"
-			>' . $this->button_label . '</span>';
+		$url = '';
+		$thumb_url = '';
+		$file_ext = '';
+		$file_type = '';
+		$value = $this->get_value();
 
-		echo $this->description();
+		if ($value) {
+			$url = is_numeric($value) ? wp_get_attachment_url($value) : $value;
+			$filetype = wp_check_filetype($url);
+
+			$file_ext = $filetype['ext']; // png, mp3, etc..
+			$file_type = preg_replace('~\/.+$~', '', $filetype['type']); // image, video, etc..
+
+			if ($file_type == 'image') {
+				$thumb_url = $url;
+
+				if ($this->value_type == 'id') {
+					$thumb_src = wp_get_attachment_image_src($value, 'thumbnail');
+					$thumb_url = $thumb_src[0];
+				}
+			}
+		}
+
+		$field_data = array_merge($field_data, array(
+			'url' => (string) $url,
+			'thumb_url' => $thumb_url,
+			'file_ext' => $file_ext,
+			'file_type' => $file_type,
+			'button_label' => $this->button_label,
+			'window_button_label' => $this->window_button_label,
+			'window_label' => $this->window_label,
+			'type_filter' => $this->field_type,
+			'value_type' => $this->value_type,
+		));
+
+		return $field_data;
 	}
 
-	function description() {
-		$description = '<a href="' . $this->value . '" target="_blank" class="carbon-view_file" style="' . (!empty($this->value) ? '' : 'display:none;' ) . '" >' . __('View File', 'crb') . '</a>';
+	function template() {
+		?>
+		<div class="input-with-button">
+			<input 
+				id="{{ id }}" 
+				type="text" 
+				name="{{ name }}" 
+				value="{{ value }}" 
+				class="regular-text carbon-file-field" 
+				{{{ value_type === 'id' ? 'style="display:none"' : '' }}} 
+			/>
 
-		return apply_filters('carbon_field_' . $this->type . '_description', '<div class="carbon-description">' . $description . '</div>');
+			<span id="c2_open_media{{ id.replace('-', '_') }}" class="button c2_open_media icon-button">
+				{{{ button_label }}}
+			</span>
+		</div>
+		
+		{{{ description }}}
+		<?php
+	}
+
+	function template_description() {
+		?>
+		<div class="carbon-description {{{ value ? '' : 'hidden' }}}">
+			<a href="{{ value }}" target="_blank" class="button carbon-view_file">
+				<?php _e('View File', 'crb'); ?>
+			</a>
+		</div>
+		<?php
 	}
 }
 
@@ -1470,38 +1901,25 @@ if ( !class_exists('Carbon_Field_Attachment') ) :
 class Carbon_Field_Attachment extends Carbon_Field_File {
 	public $value_type = 'id';
 
-	function description(){
-		$description = '';
-		$is_image = false;
-		$has_image = false;
-		$attachment_url = !empty($this->value) ? wp_get_attachment_url( $this->value ) : '';
-		$thumbnail_src = !empty($this->value) ? wp_get_attachment_image_src( $this->value, 'thumbnail' ) : '';
-		$attachment_type = wp_check_filetype($attachment_url);
+	function template_description() {
+		?>
+		<div class="carbon-description {{{ value ? '' : 'hidden' }}}">
+			<div class="carbon-attachment-preview {{{ thumb_url ? '' : 'hidden' }}}">
+				<div class="carbon-preview">
+					<div class="thumbnail">
+						<div class="centered">
+							<img src="{{ thumb_url }}" class="thumbnail-image" />
+						</div>
+					</div>
+					<div class="carbon-file-remove"></div>
+				</div>
+			</div>
 
-		if ( in_array($attachment_type['ext'], $this->image_extensions) ) {
-			// is_image
-			$is_image = true;
-		}
-
-		$description .= '<div class="carbon-preview">';
-
-		if ( $is_image ) {
-			$description .= '<img src="' . $thumbnail_src[0] . '" alt="" class="carbon-view_image"/>';
-		} else {
-			$description .= '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="" class="carbon-view_image blank"/>';
-		}
-
-		if (!empty($this->value)) {
-			$description .= '<span class="carbon-file-remove icon-button"></span>';
-		}
-
-		$description .= '</div>';
-		$description .= '<div class="cl"></div>';
-		$description .= '<span class="attachment_url">'.$attachment_url.'</span>';
-
-		$is_image = false;
-
-		return apply_filters('carbon_field_' . $this->type . '_description', '<div class="carbon-description">' . $description . '</div>');
+			<% if (value_type === 'id') { %>
+				<div class="attachment-url">{{ url }}</div>
+			<% } %>
+		</div>
+		<?php
 	}
 }
 
@@ -1510,36 +1928,16 @@ endif;
 
 if ( !class_exists('Carbon_Field_Image') ) :
 
-class Carbon_Field_Image extends Carbon_Field_File {
-	public $button_label = 'Select Image';
-	public $window_button_label = 'Select Image';
-	public $window_label = 'Images';
+class Carbon_Field_Image extends Carbon_Field_Attachment {
 	public $field_type = 'image';
-
-	function init() {
+	public $value_type = 'url';
+	
+	function admin_init() {
 		$this->button_label = __('Select Image', 'crb');
 		$this->window_button_label = __('Select Image', 'crb');
 		$this->window_label = __('Images', 'crb');
-	}
 
-	function description(){
-		$description = '';
-
-		$has_image = false;
-		if ( $this->value != '' ) {
-			$description .= '<div class="carbon-preview">';
-			$description .= '<img src="' . $this->value . '" alt="" class="carbon-view_image"/>';
-			$description .= '<span class="carbon-file-remove"></span>';
-			$description .= '</div>';
-		} else {
-			$description .= '<div class="carbon-preview">';
-			$description .= '<img src="data:image/gif;base64,R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="" class="carbon-view_image blank"/>';
-			$description .= '</div>';
-		}
-
-		$description .= '<div class="cl"></div>';
-
-		return apply_filters('carbon_field_' . $this->type . '_description', '<div class="carbon-description">' . $description . '</div>');
+		parent::admin_init();
 	}
 }
 
@@ -1553,7 +1951,7 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 	private $custom_sidebars = array();
 	private $sidebar_options = array();
 
-	function init() {
+	function admin_init() {
 		// Set Default Sidebar Options
 		$this->sidebar_options['default'] = $this->get_default_sidebar_options();
 
@@ -1628,12 +2026,14 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 		return $this;
 	}
 
-	function render() {
+	function to_json($load) {
 		if ($this->enable_add_new) {
 			$this->options['new'] = _x('Add New', 'sidebar', 'crb');
 		}
 
-		return parent::render();
+		$field_data = parent::to_json($load);
+
+		return $field_data;
 	}
 
 	function setup_sidebar_options() {
@@ -1719,14 +2119,31 @@ if ( !class_exists('Carbon_Field_HTML') ) :
 
 class Carbon_Field_HTML extends Carbon_Field {
 	public $field_html;
+	protected $wide = true;
 
 	function set_html($html) {
 		$this->field_html = $html;
 		return $this;
 	}
 
-	function render() {
-		echo $this->field_html;
+	function to_json($load) {
+		$field_data = parent::to_json($load);
+
+		$field_data = array_merge($field_data, array(
+			'html' => $this->field_html,
+		));
+
+		return $field_data;
+	}
+
+	function template() {
+		?>
+		{{{ html }}}
+		<?php
+	}
+
+	function is_required() {
+		return false;
 	}
 
 	function get_label() {
@@ -1755,7 +2172,7 @@ if ( !class_exists('Carbon_Field_Gravity_Form') ) :
  * Gravity Form Select
  */
 class Carbon_Field_Gravity_Form extends Carbon_Field_Select {
-	function init() {
+	function admin_init() {
 		// Setup Form Options
 		add_action( 'carbon_after_register_fields', array($this, 'setup_gravity_form_options'), 20 );
 	}
@@ -1796,14 +2213,24 @@ class Carbon_Field_Gravity_Form extends Carbon_Field_Select {
 		$this->set_options($options);
 	}
 
-	function render() {
+	function to_json($load) {
+		$field_data = parent::to_json($load);
+
+		$this->set_options( apply_filters( 'crb_gravity_form_options', $this->options ) );
+
+		$field_data = array_merge($field_data, array(
+			'options' => $this->parse_options($this->options),
+		));
+
+		return $field_data;
+	}
+
+	function template() {
 		// Gravity Forms not installed
 		if ( !$this->is_plugin_active() ) {
 			?><em><?php _e('Please install Gravity Forms plugin', 'crb'); ?></em><?php
 			return;
 		}
-
-		$this->set_options( apply_filters( 'crb_gravity_form_options', $this->options ) );
 
 		// No forms have been found
 		if ( empty($this->options) ) {
@@ -1811,7 +2238,7 @@ class Carbon_Field_Gravity_Form extends Carbon_Field_Select {
 			return;
 		}
 
-		parent::render();
+		parent::template();
 	}
 }
 
