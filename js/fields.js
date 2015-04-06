@@ -1069,7 +1069,8 @@ window.carbon = window.carbon || {};
 					link.data('item-id'), 
 					link.data('item-title'), 
 					link.data('item-type'), 
-					link.data('item-subtype')
+					link.data('item-subtype'),
+					link.data('item-label')
 				);
 				value.push(item);
 			});
@@ -1088,6 +1089,7 @@ window.carbon = window.carbon || {};
 			var id = $element.data('item-id');
 			var type = $element.data('item-type');
 			var subtype = $element.data('item-subtype');
+			var label = $element.data('item-label');
 			var title = $element.data('item-title');
 			var value = this.buildItemValue(id, type, subtype);
 			var liTemplate = carbon.template(this.model.get('type') + '_item');
@@ -1113,7 +1115,7 @@ window.carbon = window.carbon || {};
 			// Build the new <li> item to append in the right list
 			newLi = liTemplate({
 				name: this.model.get('name'),
-				item: this.buildItem(id, title, type, subtype)
+				item: this.buildItem(id, title, type, subtype, label)
 			});
 
 			this.$rightList.append(newLi);
@@ -1173,12 +1175,13 @@ window.carbon = window.carbon || {};
 			event.preventDefault();
 		},
 
-		buildItem: function(id, title, type, subtype) {
+		buildItem: function(id, title, type, subtype, label) {
 			return {
 				id: id,
 				title: title,
 				type: type,
-				subtype: subtype
+				subtype: subtype,
+				label: label
 			};
 		},
 

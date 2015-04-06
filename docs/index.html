@@ -1335,6 +1335,16 @@ carbon.fields.View.File = carbon.fields.View.extend({
 									 <li><em>string</em> <code>$subtype</code> Subtype - "page", "post", "category", etc.</li>
 								</ul>
 							</dd>
+							<dt><small>(filter)</small> <code>carbon_relationship_label</code> <code><small>($label, $name, $id, $type, $subtype)</small></code></dt>
+							<dd>Allows you to modify the label of the relationship / association items. Helpful when implementing custom relationship / association items, or when you want to change the default label. Passes the following parameters:
+								<ul>
+									 <li><em>string</em> <code>$label</code> The unfiltered item label.</li>
+									 <li><em>string</em> <code>$name</code> Name of the relationship / association field.</li>
+									 <li><em>int</em>    <code>$id</code> The database ID of the item.</li>
+									 <li><em>string</em> <code>$type</code> Item type (post, term, user, comment, or a custom one).</li>
+									 <li><em>string</em> <code>$subtype</code> Subtype - "page", "post", "category", etc.</li>
+								</ul>
+							</dd>
 							<dt><small>(filter)</small> <code>carbon_relationship_comment_length</code> <code><small>($number, $name)</small></code></dt>
 							<dd>Allows you to change the number of characters, visible from the comment text in an item. Passes the following parameters:
 								<ul>

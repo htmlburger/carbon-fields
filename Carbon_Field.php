@@ -1396,6 +1396,32 @@ class Carbon_Field_Relationship extends Carbon_Field {
 	}
 
 	/**
+	 * Used to get the label of an item. 
+	 *
+	 * Can be overriden or extended by the `carbon_relationship_item_label` filter.
+	 * 
+	 * @param int     $id      The database ID of the item.
+	 * @param string  $type    Item type (post, term, user, comment, or a custom one).
+	 * @param string  $subtype Subtype - "page", "post", "category", etc.
+	 * @return string $label The label of the item.
+	 */
+	function get_item_label($id, $type, $subtype = '') {
+		$object = get_post_type_object($subtype);
+		$label = $object->labels->singular_name;
+
+		/**
+		 * Filter the label of the relationship item.
+		 *
+		 * @param string $label   The unfiltered item label.
+		 * @param string $name    Name of the relationship field.
+		 * @param int    $id      The database ID of the item.
+		 * @param string $type    Item type (post, term, user, comment, or a custom one).
+		 * @param string $subtype Subtype - "page", "post", "category", etc.
+		 */
+		return apply_filters('carbon_relationship_item_label', $label, $this->get_name(), $id, $type, $subtype);
+	}
+
+	/**
 	 * Generate the item options for the relationship field.
 	 *
 	 * @return array $options The selectable options of the relationship field.
@@ -1422,6 +1448,7 @@ class Carbon_Field_Relationship extends Carbon_Field {
 				'title' => $this->get_title_by_type($p, 'post', $this->post_type),
 				'type' => 'post',
 				'subtype' => $this->post_type,
+				'label' => $this->get_item_label($p, 'post', $this->post_type),
 				'is_trashed' => (get_post_status($p) == 'trash'),
 			);
 		}
@@ -1450,6 +1477,7 @@ class Carbon_Field_Relationship extends Carbon_Field {
 					'title' => $this->get_title_by_type($single_value, 'post', $this->post_type),
 					'type' => 'post',
 					'subtype' => $this->post_type,
+					'label' => $this->get_item_label($single_value, 'post', $this->post_type),
 					'is_trashed' => (get_post_status($single_value) == 'trash'),
 				);
 			}
@@ -1507,8 +1535,8 @@ class Carbon_Field_Relationship extends Carbon_Field {
 		?>
 		<li>
 			<span class="mobile-handle"></span>
-			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-value="{{{ item.id }}}">
-				<em>{{{ item.subtype }}}</em>
+			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-item-label="{{{ item.label }}}" data-value="{{{ item.id }}}">
+				<em>{{{ item.label }}}</em>
 				<span></span>
 				{{{ item.title }}}
 			</a>
@@ -1581,6 +1609,7 @@ class Carbon_Field_Association extends Carbon_Field_Relationship {
 				'subtype' => $value_pieces[1],
 				'id' => $value_pieces[2],
 				'title' => $this->get_title_by_type($value_pieces[2], $value_pieces[0], $value_pieces[1]),
+				'label' => $this->get_item_label($value_pieces[2], $value_pieces[0], $value_pieces[1]),
 				'is_trashed' => ($value_pieces[0] == 'post' && get_post_status($value_pieces[2]) == 'trash'),
 			);
 			$value[] = $item;
@@ -1630,6 +1659,39 @@ class Carbon_Field_Association extends Carbon_Field_Relationship {
 	}
 
 	/**
+	 * Used to get the label of an item. 
+	 *
+	 * Can be overriden or extended by the `carbon_relationship_item_label` filter.
+	 * 
+	 * @param int     $id      The database ID of the item.
+	 * @param string  $type    Item type (post, term, user, comment, or a custom one).
+	 * @param string  $subtype Subtype - "page", "post", "category", etc.
+	 * @return string $label The label of the item.
+	 */
+	function get_item_label($id, $type, $subtype = '') {
+		$label = $subtype ? $subtype : $type;
+
+		if ($type === 'post') {
+			$post_type_object = get_post_type_object($subtype);
+			$label = $post_type_object->labels->singular_name;
+		} elseif($type === 'term') {
+			$taxonomy_object = get_taxonomy($subtype);
+			$label = $taxonomy_object->labels->singular_name;
+		}
+
+		/**
+		 * Filter the label of the relationship item.
+		 *
+		 * @param string $label   The unfiltered item label.
+		 * @param string $name    Name of the relationship field.
+		 * @param int    $id      The database ID of the item.
+		 * @param string $type    Item type (post, term, user, comment, or a custom one).
+		 * @param string $subtype Subtype - "page", "post", "category", etc.
+		 */
+		return apply_filters('carbon_relationship_item_label', $label, $this->get_name(), $id, $type, $subtype);
+	}
+
+	/**
 	 * Generate the item options for the relationship field.
 	 *
 	 * @return array $options The selectable options of the relationship field.
@@ -1663,6 +1725,7 @@ class Carbon_Field_Association extends Carbon_Field_Relationship {
 						'title' => $this->get_title_by_type($p, $type['type'], $type['post_type']),
 						'type' => $type['type'],
 						'subtype' => $type['post_type'],
+						'label' => $this->get_item_label($p, $type['type'], $type['post_type']),
 						'is_trashed' => (get_post_status($p) == 'trash'),
 					);
 				}
@@ -1690,6 +1753,7 @@ class Carbon_Field_Association extends Carbon_Field_Relationship {
 						'title' => $term,
 						'type' => $type['type'],
 						'subtype' => $type['taxonomy'],
+						'label' => $this->get_item_label($term_id, $type['type'], $type['taxonomy']),
 						'is_trashed' => false,
 					);
 				}
@@ -1716,6 +1780,7 @@ class Carbon_Field_Association extends Carbon_Field_Relationship {
 						'title' => $this->get_title_by_type($u, $type['type']),
 						'type' => $type['type'],
 						'subtype' => 'user',
+						'label' => $this->get_item_label($u, $type['type']),
 						'is_trashed' => false,
 					);
 				}
@@ -1742,6 +1807,7 @@ class Carbon_Field_Association extends Carbon_Field_Relationship {
 						'title' => $this->get_title_by_type($c, $type['type']),
 						'type' => $type['type'],
 						'subtype' => 'comment',
+						'label' => $this->get_item_label($c, $type['type']),
 						'is_trashed' => false,
 					);
 				}
@@ -1782,8 +1848,8 @@ class Carbon_Field_Association extends Carbon_Field_Relationship {
 	function item_template($display_input = true) {
 		?>
 		<li>
-			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}">
-				<em>{{{ item.subtype }}}</em>
+			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-item-label="{{{ item.label }}}" data-value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}">
+				<em>{{{ item.label }}}</em>
 				<span></span>
 				{{{ item.title }}}
 				<% if (item.is_trashed) { %>
