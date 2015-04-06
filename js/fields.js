@@ -212,6 +212,7 @@ window.carbon = window.carbon || {};
 
 			this.map = null;
 			this.marker = null;
+			this.markerUpdated = false;
 
 			this.listenTo(this.model, 'change:address', this.geocodeAddress);
 			this.listenTo(this.model, 'change:lat change:lng', this.sync);
@@ -265,9 +266,11 @@ window.carbon = window.carbon || {};
 				_this.$el.trigger('update:marker');
 			});
 
-			// on zoom change, set the new zoom level
+			// on zoom change, set the new zoom level, but only if the maker is updated
 			google.maps.event.addListener(map, 'zoom_changed', function() {
-				_this.model.set('zoom', map.getZoom());
+				if (_this.markerUpdated) {
+					_this.model.set('zoom', map.getZoom());
+				}
 			});
 
 			// If we are in a widget container, resize the map when the widget is revealed.
@@ -301,6 +304,11 @@ window.carbon = window.carbon || {};
 			if (this.marker) {
 				this.marker.setPosition(latLng);
 				this.map.setCenter(latLng);
+
+				this.markerUpdated = true;
+
+				// Sync the current zoom level by triggering the zoom_changed event
+				google.maps.event.trigger(this.map, 'zoom_changed');
 			}
 		},
 
@@ -373,6 +381,8 @@ window.carbon = window.carbon || {};
 		initialize: function() {
 			carbon.fields.View.prototype.initialize.apply(this);
 
+			this.active = false;
+
 			this.on('field:rendered', this.initEditor);
 			this.on('sortstart', this.disableEditor);
 			this.on('sortstop', this.enableEditor);
@@ -383,25 +393,26 @@ window.carbon = window.carbon || {};
 				return false;
 			}
 
-			var $editor = this.$el.find('.carbon-wysiwyg');
 			var mceInit = this.get_mceInit();
 			var qtInit = this.get_qtInit();
 
 			tinyMCEPreInit.mceInit[ mceInit.id ] = mceInit;
 			tinyMCEPreInit.qtInit[ qtInit.id ] = qtInit;
-			
-			// initialize mceInit
-			if ($editor.hasClass('tmce-active')) {
-				try {
-					tinymce.init(mceInit);
-				} catch(e){}
-			}
 
-			// initialize qtInit (quicktags)
-			try {
-				var qtag = quicktags( qtInit );
-				this.buttonsInit( qtag );
-			} catch(e){}
+			if (!this.active) {
+				try {
+					// initialize mceInit
+					tinymce.init(mceInit);
+
+					// initialize qtInit (quicktags)
+					var qtag = quicktags( qtInit );
+					this.buttonsInit( qtag );
+
+					this.active = true;
+				} catch(e) {
+					console.log(e);
+				}
+			}
 		},
 
 		get_mceInit: function(){
@@ -516,19 +527,33 @@ window.carbon = window.carbon || {};
 		},
 
 		disableEditor: function(){
+			if (!this.active) {
+				return false;
+			}
+
 			try {
 				var id = this.model.get('id');
 				var ed = tinyMCE.get(id);
+
+				if (!ed) {
+					$.error('RichText Field - tinyMCE editor not found.');
+				}
 				
 				// save
 				ed.save();
 				
 				// destroy editor
 				ed.destroy();
-			} catch(e) {}
+			} catch(e) {
+				console.log(e);
+			}
 		},
 		
 		enableEditor: function(){
+			if (!this.active) {
+				return false;
+			}
+
 			var $editor = this.$el.find('.carbon-wysiwyg');
 
 			if($editor.hasClass('tmce-active') && window.switchEditors ) {
@@ -682,7 +707,7 @@ window.carbon = window.carbon || {};
 
 			// If no value, set the first option as value
 			if (!value) {
-				_.each(options, function(option) {
+				$.each(options, function(i, option) {
 					_this.set('value', option.value);
 					return false;
 				});
@@ -1385,16 +1410,7 @@ window.carbon = window.carbon || {};
 			this.$groupsHolder.sortable({
 				items : '> tr.carbon-group-row',
 				handle: '.carbon-drag-handle',
-				forceHelperSize: true,
-				forcePlaceholderSize: true,
 				placeholder: 'ui-placeholder-highlight',
-				scroll: true,
-				helper: function(event, ui) {
-					ui.children().each(function() {
-						$(this).width($(this).width());
-					});
-					return ui;
-				},
 				start: function(event, ui) {
 					_this.$groupsHolder.addClass('carbon-container-shrank');
 

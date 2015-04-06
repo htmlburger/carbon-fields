@@ -799,7 +799,14 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 		<div id="wp-{{{ id }}}-wrap" class="carbon-wysiwyg wp-editor-wrap tmce-active" data-toolbar="full">
 			<div id="wp-{{{ id }}}-editor-tools" class="wp-editor-tools">
 				<div id="wp-{{{ id }}}-media-buttons" class="hide-if-no-js wp-media-buttons">
-					<?php do_action( 'media_buttons' ); ?>
+					<a href="#" class="button insert-media add_media" data-editor="{{{ id }}}" title="<?php _e('Add Media'); ?>">
+						<span class="wp-media-buttons-icon"></span> <?php _e('Add Media'); ?>
+					</a>
+					<?php
+						remove_action('media_buttons', 'media_buttons');
+						do_action('media_buttons');
+						add_action('media_buttons', 'media_buttons');
+					?>
 				</div>
 			</div>
 			<div class="wp-editor-tabs">

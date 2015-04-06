@@ -231,12 +231,14 @@
 }
 
 .carbon-Complex .carbon-row .carbon-button { float: none; }
+.carbon-Complex .description { padding-top: 10px; margin-top: 0; }
 .carbon-Complex .carbon-group-row { padding: 0; }
 .carbon-Complex .carbon-group-row.removed > .carbon-drag-handle { background: #e74444 !important; transition: all 0.5s ease; }
 .carbon-Complex .help-text { display: block; padding-bottom: 10px; margin-top: -6px; font-size: 11px; text-align: left; font-style: normal; }
 .carbon-Complex .carbon-Separator { margin-left: 0; margin-right: 0; }
 
 .carbon-Complex .carbon-complex-entry-content th label { display: block; padding: 0 0 8px; font-size: 14px; line-height: 1.2; font-weight: bold; text-align: left; }
+
 .carbon-Complex .carbon-complex-entry-content th { padding: 0; }
 .carbon-Complex .carbon-complex-entry-content p { padding: 0 0 6px; margin-top: -6px; }
 .carbon-Complex .carbon-complex-entry-content { padding: 0; }
@@ -339,7 +341,7 @@
 .theme-options-container > .carbon-container > tbody > .carbon-field > td { padding: 10px 0; }
 .theme-options-container > .carbon-container > tbody > .carbon-field > th label { display: block; padding: 15px 0 0; }
 .theme-options-container > .carbon-container > tbody > .carbon-field > td > .field-holder { padding: 10px; border: 1px solid #ddd; background: #fff; }
-.theme-options-container > .carbon-container > tbody > .carbon-field > td > .help-text { padding: 5px 10px; border: 1px solid #ddd; border-top: 0; font-size: 12px; background: #fff; }
+.theme-options-container > .carbon-container > tbody > .carbon-field > td > .help-text { padding: 5px 10px; border: 1px solid #ddd; border-top: 0; margin: 0; font-size: 12px; background: #fff; }
 .theme-options-container > .carbon-container > tbody > .carbon-HTML td .field-holder  { padding: 0; border: 0; }
 .theme-options-container > .carbon-container > tbody > .carbon-HTML td .help-text { border: 0; background: transparent; }
 
@@ -364,12 +366,15 @@
 .theme-options-container .carbon-map-canvas { margin: 10px -11px -11px; }
 
 /* Custom Fields */
+.postbox.carbon-postbox { display: none; }
 .postbox .container-holder { padding-bottom: 0; margin: -6px -12px -12px; }
 .postbox .container-holder > .carbon-container { padding: 0; border: 0; border-spacing: 0; border-collapse: collapse; margin: 0; }
 .postbox .container-holder > .carbon-container > tbody > .carbon-field { padding: 0; border: 0; margin: 0; }
 .postbox .container-holder > .carbon-container > tbody > .carbon-field label { padding-bottom: 6px; }
 .postbox .container-holder > .carbon-container > tbody > .carbon-field > td > label { font-weight: bold; }
+.postbox .container-holder > .carbon-container > tbody > .carbon-field > td > .help-text { font-style: italic; font-size: 14px; }
 .postbox .container-holder > .carbon-container > tbody > .carbon-field th .help-text { padding-bottom: 5px; }
+.postbox .container-holder > .carbon-container > tbody > .carbon-Complex > td > .help-text { clear:both; padding-top: 8px; margin-top: 0; }
 .postbox .container-holder > .carbon-container > tbody > .carbon-field .carbon-empty-row td { padding-top: 0; padding-bottom: 7px;  }
 .postbox .container-holder > .carbon-container > tbody > .carbon-field .carbon-field .carbon-empty-row td  { padding-bottom: 0; }
 .postbox .container-holder > .carbon-container > tbody > .carbon-field .help-text { padding-top: 3px; padding-bottom: 0; }
