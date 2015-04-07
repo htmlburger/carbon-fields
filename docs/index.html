@@ -690,7 +690,7 @@ Carbon_Field::factory("set", "crb_product_features", "Features")-&gt;add_options
 						<h5>Setup methods</h5>
 						<dl>
 							<dt><code>set_post_type($type)</code></dt>
-							<dd>It allows you to specify the post type types you want to have available in this relationship field. </dd>
+							<dd>It allows you to specify the post type types you want to have available in this relationship field. Defaults to <code>post</code></dd>
 							<dt><code>set_max($max)</code></dt>
 							<dd>Allows you to limit the maximum number of selected items in a relationship field. By default, there is no limit.
 								<pre class="prettyprint">
@@ -722,6 +722,7 @@ Carbon_Field::factory('relationship', 'crb_relationship')
 									<li><code>type</code> is the data type - <code>post</code>, <code>term</code>, <code>user</code>, <code>comment</code>, or a custom value (if implemented).</li>
 									<li><code>subtype</code> clarifies the exact type to be used. <br />For the <code>post_type</code> type, you can use <code>post</code>, <code>page</code> or any other registered custom post type. <br />For the <code>taxonomy</code> type, you can use <code>category</code>, <code>post_tag</code> or any other registered custom taxonomy. <br />The <code>subtype</code> is not used for the <code>user</code> and <code>comments</code> types.</li>
 								</ul>
+								Defaults to <code>array('type' => 'post', 'post_type' => 'post')</code>
 							</dd>
 							<dt><code>set_max($max)</code></dt>
 							<dd>Allows you to limit the maximum number of selected items in a association field. By default, there is no limit.

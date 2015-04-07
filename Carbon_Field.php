@@ -1345,7 +1345,7 @@ endif;
 if ( !class_exists('Carbon_Field_Relationship') ) :
 
 class Carbon_Field_Relationship extends Carbon_Field {
-	protected $post_type = '';
+	protected $post_type = 'post';
 	protected $max = -1;
 	protected $allow_duplicates = false;
 
@@ -1554,7 +1554,12 @@ endif;
 if ( !class_exists('Carbon_Field_Association') ) :
 
 class Carbon_Field_Association extends Carbon_Field_Relationship {
-	protected $types = array();
+	protected $types = array(
+		array(
+			'type' => 'post',
+			'post_type' => 'post',
+		)
+	);
 
 	function set_types($types) {
 		$this->types = $types;
