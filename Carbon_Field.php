@@ -1382,6 +1382,9 @@ class Carbon_Field_Relationship extends Carbon_Field {
 	 */
 	function get_title_by_type($id, $type, $subtype = '') {
 		$title = get_the_title($id);
+		if (!$title) {
+			$title = '(no title) - ID: ' . $id;
+		}
 
 		/**
 		 * Filter the title of the relationship item.
@@ -1649,6 +1652,10 @@ class Carbon_Field_Association extends Carbon_Field_Relationship {
 			if (strlen($title) > $max) {
 				$title = substr($title, 0, $max) . '...';
 			}
+		}
+
+		if (!$title) {
+			$title = '(no title) - ID: ' . $id;
 		}
 
 		/**
