@@ -600,6 +600,7 @@ window.carbon = window.carbon || {};
 
 			_.each(fields, function(field) {
 				field.id = field.id + '-' + cid;
+				field.lazyload = false;
 			});
 
 			this.set('fields', fields);
