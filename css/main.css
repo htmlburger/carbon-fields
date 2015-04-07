@@ -306,6 +306,7 @@
 
 /* Widgets */
 .widget-content .carbon-widget-field-wrapper { padding: 10px 0; }
+.widget-content .carbon-highlight { margin-left: -15px; margin-right: -15px; padding-left: 15px; padding-right: 15px; }
 .widget-content .carbon-HTML,
 .widget-content .carbon-Separator { margin: 10px -15px; padding: 12px 10px; }
 .widget-content .carbon-HTML { margin-top: 0; margin-bottom: 0; }
