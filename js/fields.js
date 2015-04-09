@@ -419,7 +419,6 @@ window.carbon = window.carbon || {};
 			var $field = this.$el;
 			var id = this.model.get('id');
 			var mceInit = $.extend({}, tinyMCEPreInit.mceInit.carbon_settings);
-			var toolbar = {"1":"bold,italic,strikethrough,bullist,numlist,blockquote,hr,alignleft,aligncenter,alignright,link,unlink,wp_more,spellchecker,fullscreen,wp_adv","2":"formatselect,underline,alignjustify,forecolor,pastetext,removeformat,charmap,outdent,indent,undo,redo,wp_help","3":"","4":""};
 			var isTouchscreen = carbon.views.main.$body.hasClass('touchscreen');
 
 			// set selector
@@ -428,15 +427,6 @@ window.carbon = window.carbon || {};
 			// set id
 			mceInit.id = id; // tinymce v4
 			mceInit.elements = id; // tinymce v3
-
-			// set toolbar
-			if(toolbar) {
-				var k = (tinymce.majorVersion < 4) ? 'theme_advanced_buttons' : 'toolbar';
-				
-				for(var i = 1; i < 5; i++) {
-					mceInit[k + i] = toolbar[i];
-				}
-			}
 
 			// events
 			if(tinymce.majorVersion < 4) {
