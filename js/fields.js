@@ -640,7 +640,7 @@ window.carbon = window.carbon || {};
 			// Hide the ColorPicker when the user clicks outside of the field
 			carbon.views.main.$body.on('click', function(event) {
 				if ($colorpicker.is(':visible')) {
-					var clickedOutside = !$(event.target).closest('.carbon-color-row').length;
+					var clickedOutside = $(event.target).closest('.carbon-color-row')[0] !== $colorpicker.closest('.carbon-color-row')[0];
 
 					if (clickedOutside) {
 						$colorpicker.hide();
