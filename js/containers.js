@@ -502,9 +502,11 @@ window.carbon = window.carbon || {};
 
 			var _this = this;
 
+			/* Edit Form */
 			this.$editForm = this.$el.closest('form#edittag');
 			this.$editForm.on('submit', null, this, this.validateForm);
 
+			/* Add Form */
 			this.$addForm = this.$el.closest('form#addtag');
 			this.$submitButton = this.$addForm.find('#submit');
 
@@ -513,6 +515,7 @@ window.carbon = window.carbon || {};
 			// This is required because WP stops the click event propagation.
 			this.$submitButton.bindFirst('click', this, this.validateForm);
 
+			/* Ajax Monitor */
 			carbon.views.main.$el.ajaxSuccess(function() {
 				_this.initMonitor.apply(_this, arguments);
 			});

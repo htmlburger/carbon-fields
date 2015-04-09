@@ -1705,7 +1705,17 @@ window.carbon = window.carbon || {};
 			event.preventDefault();
 		},
 
+		syncBeforeDuplicate: function(event) {
+			var $focused = $(':focus');
+
+			if ($focused.length) {
+				$focused.trigger('change');
+			}
+		},
+
 		duplicateGroup: function(event) {
+			this.syncBeforeDuplicate(event);
+
 			var groupsCollection = this.model.collection;
 
 			var attributes = $.extend(true, {}, this.model.attributes);
