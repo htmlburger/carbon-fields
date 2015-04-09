@@ -72,6 +72,13 @@ window.carbon = window.carbon || {};
 
 			// Initialize the Lazyload listener
 			this.on('app:rendered', this.lazyload);
+
+			// Trigger the lazyloader
+			$(window).load(function() {
+				setTimeout(function() {
+					$(window).trigger('lazyload');
+				}, 100);
+			});
 		},
 
 		/*
@@ -141,20 +148,18 @@ window.carbon = window.carbon || {};
 		 * Handles the initialization of fields that should be rendered when they are in the viewport.
 		 */
 		lazyload: function() {
-			$(window).on('load resize scroll', function(event) {
+			$(window).on('load resize scroll lazyload', function(event) {
 				if (_.isEmpty(carbon.lazyload)) {
 					return;
 				}
 
-				setTimeout(function() {
-					for (var id in carbon.lazyload) {
-						var view = carbon.lazyload[id];
+				for (var id in carbon.lazyload) {
+					var view = carbon.lazyload[id];
 
-						if (!view.rendered && carbon.isElementInViewport(view.$el)) {
-							view.trigger('field:rendered');
-						}
+					if (!view.rendered && carbon.isElementInViewport(view.$el)) {
+						view.trigger('field:rendered');
 					}
-				}, 0);
+				}
 			});
 		}
 	});
