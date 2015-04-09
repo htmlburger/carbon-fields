@@ -120,7 +120,7 @@ window.carbon = window.carbon || {};
 			var widgetID = $(widget).attr('id')
 			var containerID = widgetID.replace(/widget-\d+_/, '');
 			var containerData = $(widget).find('.container-' + containerID).data('json');
-			var containerJSON = carbon.urldecode(containerData);
+			var containerJSON = $.parseJSON(carbon.urldecode(containerData));
 
 			if (!containerJSON) {
 				return true;
