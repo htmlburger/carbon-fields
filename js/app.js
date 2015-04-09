@@ -119,7 +119,8 @@ window.carbon = window.carbon || {};
 		widgetsHandler: function(event, widget) {
 			var widgetID = $(widget).attr('id')
 			var containerID = widgetID.replace(/widget-\d+_/, '');
-			var containerJSON = $(widget).find('.container-' + containerID).data('json');
+			var containerData = $(widget).find('.container-' + containerID).data('json');
+			var containerJSON = carbon.urldecode(containerData);
 
 			if (!containerJSON) {
 				return true;
@@ -217,6 +218,24 @@ window.carbon = window.carbon || {};
 			rect.top <= $(window).height() && 
 			rect.left <= $(window).width()
 		);
+	}
+
+	/**
+	 * carbon.decodeURIComponent( str )
+	 *
+	 * A JavaScript equivalent of PHP's urldecode
+	 *
+	 * @param  {string} str
+	 *
+	 * @return {string}
+	 */
+	carbon.urldecode = function(str) {
+		return decodeURIComponent((str + '')
+			.replace(/%(?![\da-f]{2})/gi, function() {
+				// PHP tolerates poorly formed escape sequences
+				return '%25';
+			})
+			.replace(/\+/g, '%20'));
 	}
 
 	/**
