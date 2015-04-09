@@ -1,16 +1,22 @@
 (function($) {
 
-	// Case insensitive :contains selector for jQuery
-	// @uses :containsInsensitive
+	/**
+	 * Case insensitive :contains selector for jQuery
+	 *
+	 * @uses: $('selector:containsInsensitive(value)')
+	 */
 	$.extend($.expr[':'], {
 		containsInsensitive: function(elem, i, match, array) {
 			return (elem.textContent || elem.innerText || '').toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
 		}
 	});
 
-	// Method for moving event handler to the beginning of the event queue so that this handler will be executed first,
-	// regardless of how many other handlers you had already attached.
-	// @uses $('selector').bindFirst('click', function(){})
+	/**
+	 * Method for moving event handler to the beginning of the event queue so that this handler will be executed first,
+	 * regardless of how many other handlers you had already attached.
+	 *
+	 * @uses: $('selector').bindFirst('click', handler)
+	 */
 	$.fn.bindFirst = function(/*String*/ eventType, /*[Object], Function*/ eventData, /*Function*/ handler) {
 		var indexOfDot = eventType.indexOf(".");
 		var eventNameSpace = indexOfDot > 0 ? eventType.substring(indexOfDot) : "";
