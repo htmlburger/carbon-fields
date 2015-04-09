@@ -507,7 +507,11 @@ window.carbon = window.carbon || {};
 
 			this.$addForm = this.$el.closest('form#addtag');
 			this.$submitButton = this.$addForm.find('#submit');
-			this.$submitButton.on('click', null, this, this.validateForm);
+
+			// Fields validation should run before WP validation.
+			// The 'bindFirst'custom method is used to move our event at the top of the events stack.
+			// This is required because WP stops the click event propagation.
+			this.$submitButton.bindFirst('click', this, this.validateForm);
 
 			carbon.views.main.$el.ajaxSuccess(function() {
 				_this.initMonitor.apply(_this, arguments);
@@ -600,7 +604,7 @@ window.carbon = window.carbon || {};
 
 			_.each(fields, function(field) {
 				field.id = field.id + '-' + cid;
-				field.lazyload = false;
+				field.lazyload = false; // disable lazyloading in widgets
 			});
 
 			this.set('fields', fields);
