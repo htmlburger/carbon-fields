@@ -598,15 +598,9 @@ window.carbon = window.carbon || {};
 	carbon.fields.View.Color = carbon.fields.View.extend({
 		events: function() {
 			return _.extend({}, carbon.fields.View.prototype.events, {
-				'click .pickcolor.button': 'showColorPicker',
-				'click input.carbon-color': 'showColorPicker'
+				'click .pickcolor.button': 'focusField',
+				'focus input.carbon-color': 'showColorPicker'
 			});
-		},
-
-		showColorPicker: function() {
-			var $colorpicker = this.$('.carbon-color-container');
-
-			$colorpicker.show();
 		},
 
 		initialize: function() {
@@ -615,9 +609,21 @@ window.carbon = window.carbon || {};
 			this.on('field:rendered', this.initColorPicker);
 		},
 
+		showColorPicker: function(event) {
+			var $colorpicker = this.$('.carbon-color-container');
+
+			$colorpicker.show();
+		},
+
+		focusField: function(event) {
+			var $field = this.$('input.carbon-color');
+			var $colorpicker = this.$('.carbon-color-container');
+
+			$field.focus();
+		},
+
 		initColorPicker: function() {
 			var $colorpicker = this.$('.carbon-color-container');
-			var $preview = this.$('.carbon-color-preview');
 			var $button = this.$('.button');
 			var $field = this.$('input.carbon-color');
 			var farbtasticObj = {};
@@ -637,20 +643,11 @@ window.carbon = window.carbon || {};
 
 			farbtasticObj.setColor($field.val());
 
-			// Hide the ColorPicker when the user clicks outside of the field
-			carbon.views.main.$body.on('click', function(event) {
-				if ($colorpicker.is(':visible')) {
-					var clickedOutside = $(event.target).closest('.carbon-color-row')[0] !== $colorpicker.closest('.carbon-color-row')[0];
-
-					if (clickedOutside) {
-						$colorpicker.hide();
-					}
-				}
-			});
-
 			// Update Color field after changing the value manually
-			$field.on('blur', function(e) {
+			$field.on('blur', function(event) {
 				var newColor = $field.val();
+
+				$colorpicker.hide();
 
 				newColor = $.trim(newColor);
 				if ( newColor.length === 0 ) {
