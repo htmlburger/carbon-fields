@@ -2036,7 +2036,7 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 	private $custom_sidebars = array();
 	private $sidebar_options = array();
 
-	function admin_init() {
+	function init() {
 		// Set Default Sidebar Options
 		$this->sidebar_options['default'] = $this->get_default_sidebar_options();
 
