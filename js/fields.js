@@ -320,7 +320,7 @@ window.carbon = window.carbon || {};
 			}
 
 			var name = this.model.get('name');
-			var $input = this.$el.find(':input[name="' + name + '[address]"]');
+			var $input = this.$(':input[name="' + name + '[address]"]');
 			var address = $input.val();
 
 			this.model.set('address', address);
@@ -336,7 +336,7 @@ window.carbon = window.carbon || {};
 					continue;
 				}
 
-				var $input = this.$el.find(':input[name="' + name + '[' + key + ']"]');
+				var $input = this.$(':input[name="' + name + '[' + key + ']"]');
 				var value = model.changed[key];
 
 				if ($input.length) {
@@ -544,7 +544,7 @@ window.carbon = window.carbon || {};
 				return false;
 			}
 
-			var $editor = this.$el.find('.carbon-wysiwyg');
+			var $editor = this.$('.carbon-wysiwyg');
 
 			if($editor.hasClass('tmce-active') && window.switchEditors ) {
 				var id = this.model.get('id');
@@ -567,8 +567,8 @@ window.carbon = window.carbon || {};
 		},
 
 		initDatePicker: function() {
-			var $field = this.$el.find('.carbon-datepicker');
-			var $trigger = this.$el.find('.carbon-datepicker-trigger');
+			var $field = this.$('.carbon-datepicker');
+			var $trigger = this.$('.carbon-datepicker-trigger');
 
 			$field.datepicker({
 				dateFormat: 'yy-mm-dd',
@@ -604,7 +604,7 @@ window.carbon = window.carbon || {};
 		},
 
 		showColorPicker: function() {
-			var $colorpicker = this.$el.find('.carbon-color-container');
+			var $colorpicker = this.$('.carbon-color-container');
 
 			$colorpicker.show();
 		},
@@ -616,10 +616,10 @@ window.carbon = window.carbon || {};
 		},
 
 		initColorPicker: function() {
-			var $colorpicker = this.$el.find('.carbon-color-container');
-			var $preview = this.$el.find('.carbon-color-preview');
-			var $button = this.$el.find('.button');
-			var $field = this.$el.find('input.carbon-color');
+			var $colorpicker = this.$('.carbon-color-container');
+			var $preview = this.$('.carbon-color-preview');
+			var $button = this.$('.button');
+			var $field = this.$('input.carbon-color');
 			var farbtasticObj = {};
 
 			farbtasticObj = $.farbtastic($colorpicker, function(color) {
@@ -862,7 +862,7 @@ window.carbon = window.carbon || {};
 		},
 
 		updateInput: function(model) {
-			var $input = this.$el.find('input.carbon-file-field');
+			var $input = this.$('input.carbon-file-field');
 			var value = model.get('value');
 
 			if (!value) {
@@ -875,9 +875,9 @@ window.carbon = window.carbon || {};
 		updateView: function(model) {
 			var url = model.get('url');
 
-			this.$el.find('.attachment-url').html(url);
-			this.$el.find('.carbon-view_file').attr('href', url);
-			this.$el.find('.carbon-description').toggleClass('hidden', !url);
+			this.$('.attachment-url').html(url);
+			this.$('.carbon-view_file').attr('href', url);
+			this.$('.carbon-description').toggleClass('hidden', !url);
 		}
 	});
 
@@ -903,15 +903,15 @@ window.carbon = window.carbon || {};
 		updateThumb: function(model) {
 			var thumbUrl = model.get('thumb_url');
 
-			this.$el.find('img.thumbnail-image').attr('src', thumbUrl);
-			this.$el.find('.carbon-attachment-preview').toggleClass('hidden', !thumbUrl);
+			this.$('img.thumbnail-image').attr('src', thumbUrl);
+			this.$('.carbon-attachment-preview').toggleClass('hidden', !thumbUrl);
 		},
 
 		removeFile: function(event) {
-			this.$el.find('.carbon-description').addClass('hidden');
-			this.$el.find('.carbon-attachment-preview').addClass('hidden');
-			this.$el.find('input.carbon-file-field').attr('value', '').trigger('change');
-			this.$el.find('.attachment-url').html('');
+			this.$('.carbon-description').addClass('hidden');
+			this.$('.carbon-attachment-preview').addClass('hidden');
+			this.$('input.carbon-file-field').attr('value', '').trigger('change');
+			this.$('.attachment-url').html('');
 
 			this.model.set('url', '');
 			this.model.set('thumb_url', '');
@@ -937,10 +937,6 @@ window.carbon = window.carbon || {};
 
 	// Set MODEL
 	carbon.fields.Model.Set = carbon.fields.Model.extend({
-		initialize: function() {
-			carbon.fields.Model.prototype.initialize.apply(this);
-		},
-
 		validate: function(attrs, options) {
 			return _.isEmpty(attrs.value);
 		}
@@ -955,7 +951,7 @@ window.carbon = window.carbon || {};
 		},
 
 		showAll: function() {
-			this.$el.find('a.carbon-set-showall').one('click', function (event) {
+			this.$('a.carbon-set-showall').one('click', function (event) {
 				$(this).parent().hide().siblings().show();
 
 				event.preventDefault();
@@ -965,7 +961,7 @@ window.carbon = window.carbon || {};
 		sync: function(event) {
 			var value = [];
 
-			this.$el.find('input[type="checkbox"]:checked').each(function() {
+			this.$('input[type="checkbox"]:checked').each(function() {
 				value.push($(this).val());
 			});
 
@@ -980,10 +976,6 @@ window.carbon = window.carbon || {};
 
 	// Relationship MODEL
 	carbon.fields.Model.Relationship = carbon.fields.Model.extend({
-		initialize: function() {
-			carbon.fields.Model.prototype.initialize.apply(this);
-		},
-
 		validate: function(attrs, options) {
 			return _.isEmpty(attrs.value);
 		}
@@ -1015,9 +1007,9 @@ window.carbon = window.carbon || {};
 			var name = this.model.get('name');
 			var isTouchscreen = carbon.views.main.$body.hasClass('touchscreen');
 
-			this.$leftList = this.$el.find('.relationship-left .relationship-list');
-			this.$rightList = this.$el.find('.relationship-right .relationship-list');
-			this.$searchBox = this.$el.find('.relationship-left .search-field');
+			this.$leftList = this.$('.relationship-left .relationship-list');
+			this.$rightList = this.$('.relationship-right .relationship-list');
+			this.$searchBox = this.$('.relationship-left .search-field');
 
 			// Fetch the selected items and deactivate them 
 			// in the left list (if duplicate items are not allowed)
@@ -1218,10 +1210,6 @@ window.carbon = window.carbon || {};
 			'force_required': true
 		},
 
-		initialize: function() {
-			carbon.fields.Model.prototype.initialize.apply(this);
-		},
-
 		validate: function(attrs, options) {
 			var hasErrors = false;
 			var view = carbon.views[this.get('id')];
@@ -1365,10 +1353,10 @@ window.carbon = window.carbon || {};
 		},
 
 		setDOMVariables: function() {
-			this.$actions = this.$el.find('.carbon-actions');
-			this.$introRow = this.$el.find('.carbon-empty-row');
+			this.$actions = this.$('.carbon-actions');
+			this.$introRow = this.$('.carbon-empty-row');
 			this.$groupsList = this.$actions.find('ul');
-			this.$groupsHolder = this.$el.find('.carbon-groups-holder > tbody');
+			this.$groupsHolder = this.$('.carbon-groups-holder > tbody');
 		},
 
 		setGroups: function() {
@@ -1618,7 +1606,7 @@ window.carbon = window.carbon || {};
 		updateOrderNumber: function(model) {
 			var groupOrder = model.get('order');
 
-			this.$el.find('> .carbon-drag-handle .group-number').text(groupOrder + 1);
+			this.$('> .carbon-drag-handle .group-number').text(groupOrder + 1);
 		},
 
 		render: function(complexModel) {

@@ -292,10 +292,6 @@ window.carbon = window.carbon || {};
 			'parent_id': null,
 			'post_format': null,
 			'terms': []
-		},
-
-		initialize: function() {
-			carbon.containers.Model.prototype.initialize.apply(this);
 		}
 	});
 
@@ -542,10 +538,6 @@ window.carbon = window.carbon || {};
 	carbon.containers.Model.UserMeta = carbon.containers.Model.extend({
 		defaults: {
 			'role': null
-		},
-
-		initialize: function() {
-			carbon.containers.Model.prototype.initialize.apply(this);
 		}
 	});
 

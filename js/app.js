@@ -45,7 +45,7 @@ window.carbon = window.carbon || {};
 		initialize: function() {
 			var _this = this;
 
-			this.$body = this.$el.find('body');
+			this.$body = this.$('body');
 			this.$body.addClass('carbon-fields');
 
 			if ( !this.$body.is('.mobile') ) {

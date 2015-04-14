@@ -704,7 +704,7 @@ class Carbon_Field {
 
 	static function admin_hook_scripts() {
 		wp_enqueue_media();
-		crb_enqueue_script('carbon-fields', CARBON_PLUGIN_URL . '/js/fields.js', array('carbon-app'));
+		crb_enqueue_script('carbon-fields', CARBON_PLUGIN_URL . '/js/fields.js', array('carbon-app', 'carbon-containers'));
 		wp_localize_script('carbon-fields', 'crbl10n',
 			array(
 				'title' => __('Files', 'crb'),
