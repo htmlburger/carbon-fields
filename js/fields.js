@@ -1214,27 +1214,12 @@ window.carbon = window.carbon || {};
 	// Complex MODEL
 	carbon.fields.Model.Complex = carbon.fields.Model.extend({
 		defaults: {
-			'index': 0
+			'index': 0,
+			'force_required': true
 		},
 
 		initialize: function() {
 			carbon.fields.Model.prototype.initialize.apply(this);
-
-			var groups = this.get('groups');
-			var hasRequiredFields = false;
-
-			_.each(groups, function(group) {
-				_.each(group.fields, function(field) {
-					if (field.required) {
-						hasRequiredFields = true;
-						return;
-					}
-				});
-
-				if (hasRequiredFields) return;
-			});
-
-			this.set('force_required', hasRequiredFields);
 		},
 
 		validate: function(attrs, options) {
