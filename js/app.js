@@ -120,11 +120,12 @@ window.carbon = window.carbon || {};
 			var widgetID = $(widget).attr('id')
 			var containerID = widgetID.replace(/widget-\d+_/, '');
 			var containerData = $(widget).find('.container-' + containerID).data('json');
-			var containerJSON = $.parseJSON(carbon.urldecode(containerData));
 
-			if (!containerJSON) {
-				return true;
+			if (!containerData) {
+				return;
 			}
+
+			var containerJSON = $.parseJSON(carbon.urldecode(containerData));
 
 			if (event.type === 'widget-updated') {
 				var containerView = carbon.views[containerID];
