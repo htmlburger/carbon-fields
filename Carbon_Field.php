@@ -1356,6 +1356,10 @@ class Carbon_Field_Relationship extends Carbon_Field {
 	}
 
 	function set_post_type($post_type) {
+		if (!is_array($post_type)) {
+			$post_type = array($post_type);
+		}
+
 		$this->post_type = $post_type;
 		return $this;
 	}
@@ -1430,30 +1434,35 @@ class Carbon_Field_Relationship extends Carbon_Field {
 	 * @return array $options The selectable options of the relationship field.
 	 */
 	function get_options() {
+		$options = array();
 		/**
 		 * Filter the default query when fetching posts for a particular field.
 		 *
 		 * @param array $args The parameters, passed to get_posts().
 		 */
-		$filter_name = 'carbon_relationship_options_' . $this->get_name() . '_post_' . $this->post_type;
-		$args = apply_filters($filter_name, array(
-			'post_type' => $this->post_type,
-			'posts_per_page' => -1,
-			'fields' => 'ids',
-			'suppress_filters' => false,
-		));
+		foreach ($this->post_type as $post_type) {
+			$filter_name = 'carbon_relationship_options_' . $this->get_name() . '_post_' . $post_type;
+			$args = apply_filters($filter_name, array(
+				'post_type' => $post_type,
+				'posts_per_page' => -1,
+				'fields' => 'ids',
+				'suppress_filters' => false,
+			));
 
-		// fetch and prepare posts as relationship items
-		$options = get_posts($args);
-		foreach ($options as &$p) {
-			$p = array(
-				'id' => $p,
-				'title' => $this->get_title_by_type($p, 'post', $this->post_type),
-				'type' => 'post',
-				'subtype' => $this->post_type,
-				'label' => $this->get_item_label($p, 'post', $this->post_type),
-				'is_trashed' => (get_post_status($p) == 'trash'),
-			);
+			// fetch and prepare posts as relationship items
+			$new_options = get_posts($args);
+			foreach ($new_options as &$p) {
+				$p = array(
+					'id' => $p,
+					'title' => $this->get_title_by_type($p, 'post', $post_type),
+					'type' => 'post',
+					'subtype' => $post_type,
+					'label' => $this->get_item_label($p, 'post', $post_type),
+					'is_trashed' => (get_post_status($p) == 'trash'),
+				);
+			}
+
+			$options = $options + $new_options;
 		}
 
 		/**
@@ -1475,12 +1484,13 @@ class Carbon_Field_Relationship extends Carbon_Field {
 
 			$field_data['value'] = maybe_unserialize($field_data['value']);
 			foreach ($field_data['value'] as $single_value) {
+				$post_type = get_post_type($single_value);
 				$value[] = array(
 					'id' => $single_value,
-					'title' => $this->get_title_by_type($single_value, 'post', $this->post_type),
+					'title' => $this->get_title_by_type($single_value, 'post', $post_type),
 					'type' => 'post',
-					'subtype' => $this->post_type,
-					'label' => $this->get_item_label($single_value, 'post', $this->post_type),
+					'subtype' => $post_type,
+					'label' => $this->get_item_label($single_value, 'post', $post_type),
 					'is_trashed' => (get_post_status($single_value) == 'trash'),
 				);
 			}
