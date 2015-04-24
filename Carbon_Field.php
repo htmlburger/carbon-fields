@@ -2064,12 +2064,18 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 	 * Returns an array with the default sidebar options
 	 */
 	function get_default_sidebar_options() {
-		return array(
+		$sidebar_options = array(
 			'before_widget' => '<li id="%1$s" class="widget %2$s">',
 			'after_widget'  => '</li>',
 			'before_title'  => '<h2 class="widgettitle">',
 			'after_title'   => '</h2>',
 		);
+
+		if ( function_exists( 'crb_get_default_sidebar_options' ) ) {
+			$sidebar_options = crb_get_default_sidebar_options();
+		}
+
+		return $sidebar_options;
 	}
 
 	/**
