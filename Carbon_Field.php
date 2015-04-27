@@ -2201,7 +2201,7 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 				break;
 		}
 
-		$sidebar_names = $wpdb->get_col($query_string);
+		$sidebar_names = array_filter($wpdb->get_col($query_string));
 
 		foreach ($sidebar_names as $sidebar_name) {
 			$sidebars[$sidebar_name] = 1;
