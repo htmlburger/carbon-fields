@@ -480,14 +480,18 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	/**
 	 * Show the container only on particular page referenced by it's path.
 	 *
-	 * @param string $page_path
+	 * @param int|string $page page ID or page path
 	 * @return object $this
 	 **/
-	function show_on_page($page_path) {
-		$page = get_page_by_path($page_path);
+	function show_on_page($page) {
+		if ( is_int($page) ) {
+			$page_obj = get_post($page);
+		} else {
+			$page_obj = get_page_by_path($page);
+		}
 
-		if ( $page ) {
-			$this->settings['show_on']['page_id'] = $page->ID;
+		if ( $page_obj ) {
+			$this->settings['show_on']['page_id'] = $page_obj->ID;
 		} else {
 			$this->settings['show_on']['page_id'] = -1;
 		}
