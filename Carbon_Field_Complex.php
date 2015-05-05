@@ -362,13 +362,13 @@ class Carbon_Field_Complex extends Carbon_Field {
 							{{{ multiple_groups ? '&#8681;' : '' }}}
 						</a>
 
-						<% if (multiple_groups) { %>
+						<# if (multiple_groups) { #>
 							<ul>
-								<% _.each(groups, function(group) { %>
+								<# _.each(groups, function(group) { #>
 									<li><a href="#" data-group="{{{ group.name }}}">{{{ group.label }}}</a></li>
-								<% }); %>
+								<# }); #>
 							</ul>
-						<% } %>
+						<# } #>
 					</div>
 				</td>
 			</tr>
@@ -391,33 +391,33 @@ class Carbon_Field_Complex extends Carbon_Field {
 				<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[group]" value="{{ name }}" />
 
 				<table class="fixed layout layout-{{{ layout }}}">
-					<% _.each(fields, function(field) { %>
+					<# _.each(fields, function(field) { #>
 						<tr class="carbon-row carbon-subrow subrow-{{{ field.type }}} {{{ field.classes }}}">
-							<% if (!field.wide) { %>
+							<# if (!field.wide) { #>
 								<th scope="row">
-									<% if (field.label || field.required) { %>
+									<# if (field.label || field.required) { #>
 										<label for="{{{ complex_id + '-' + field.id + '-' + index }}}">
 											{{ field.label }}
 
-											<% if (field.required) { %>
+											<# if (field.required) { #>
 												 <span class="carbon-required">*</span>
-											<% } %>
+											<# } #>
 										</label>
-									<% } %>
+									<# } #>
 									
-									<% if (field.help_text) { %>
+									<# if (field.help_text) { #>
 										<em class="help-text">
 											{{{ field.help_text }}}
 										</em>
-									<% } %>
+									<# } #>
 								</th>
-							<% } %>
+							<# } #>
 
 							<td {{{ field.wide ? 'colspan="2"' : '' }}}>
 								<div class="field-holder {{{ complex_id + '-' + field.id + '-' + index }}}"></div>
 							</td>
 						</tr>
-					<% }) %>
+					<# }) #>
 				</table>
 			</td>
 		</tr>

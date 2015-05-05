@@ -178,7 +178,7 @@ window.carbon = window.carbon || {};
 	carbon.template = _.memoize(function(id) {
 		var compiled;
 		var options = {
-			evaluate:    /<%([\s\S]+?)%>/g,
+			evaluate:    /<#([\s\S]+?)#>/g,
 			interpolate: /\{\{\{([\s\S]+?)\}\}\}/g,
 			escape:      /\{\{([^\}]+?)\}\}(?!\})/g
 		};

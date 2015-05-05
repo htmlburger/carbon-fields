@@ -117,27 +117,27 @@ class Carbon_Container_TermMeta extends Carbon_Container {
 	function template_add() {
 		?>
 		<div class="{{{ classes }}}">
-			<% _.each(fields, function(field) { %>
+			<# _.each(fields, function(field) { #>
 				<div class="form-field {{{ field.classes }}}">
-					<% if ( !field.wide && (field.label || field.required) ) { %>
+					<# if ( !field.wide && (field.label || field.required) ) { #>
 						<label for="{{{ field.id }}}">
 							{{ field.label }}
 
-							<% if (field.required) { %>
+							<# if (field.required) { #>
 								 <span class="carbon-required">*</span>
-							<% } %>
+							<# } #>
 						</label>
-					<% } %>
+					<# } #>
 
 					<div class="field-holder {{{ field.id }}}"></div>
 
-					<% if (field.help_text) { %>
+					<# if (field.help_text) { #>
 						<p class="description">
 							{{{ field.help_text }}}
 						</p>
-					<% } %>
+					<# } #>
 				</div>
-			<% }); %>
+			<# }); #>
 		</div>
 		<?php
 	}
@@ -145,33 +145,33 @@ class Carbon_Container_TermMeta extends Carbon_Container {
 	function template_edit() {
 		?>
 		<table class="{{{ classes }}}">
-			<% _.each(fields, function(field) { %>
+			<# _.each(fields, function(field) { #>
 				<tr class="form-field {{{ field.classes }}}">
-					<% if (!field.wide) { %>
+					<# if (!field.wide) { #>
 						<th scope="row">
-							<% if (field.label || field.required) { %>
+							<# if (field.label || field.required) { #>
 								<label for="{{{ field.id }}}">
 									{{ field.label }}
 
-									<% if (field.required) { %>
+									<# if (field.required) { #>
 										 <span class="carbon-required">*</span>
-									<% } %>
+									<# } #>
 								</label>
-							<% } %>
+							<# } #>
 						</th>
-					<% } %>
+					<# } #>
 
 					<td {{{ field.wide ? 'colspan="2"' : '' }}}>
 						<div class="field-holder {{{ field.id }}}"></div>
 
-						<% if (field.help_text) { %>
+						<# if (field.help_text) { #>
 							<p class="description">
 								{{{ field.help_text }}}
 							</p>
-						<% } %>
+						<# } #>
 					</td>
 				</tr>
-			<% }); %>
+			<# }); #>
 		</table>
 		<?php
 	}

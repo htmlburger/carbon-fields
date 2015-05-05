@@ -32,27 +32,27 @@ class Carbon_Container_Widget extends Carbon_Container {
 
 	function template() {
 		?>
-		<% _.each(fields, function(field) { %>
+		<# _.each(fields, function(field) { #>
 			<div class="carbon-widget-field-wrapper {{{ field.classes }}}">
-				<% if (field.label) { %>
+				<# if (field.label) { #>
 					<label for="{{{ field.id }}}">
 						{{ field.label }}
 
-						<% if (field.required) { %>
+						<# if (field.required) { #>
 							 <span class="carbon-required">*</span>
-						<% } %>
+						<# } #>
 					</label>
-				<% } %>
+				<# } #>
 
 				<div class="field-holder {{{ field.id }}}"></div>
 
-				<% if (field.help_text) { %>
+				<# if (field.help_text) { #>
 					<em class="help-text">
 						{{{ field.help_text }}}
 					</em>
-				<% } %>
+				<# } #>
 			</div>
-		<% }); %>
+		<# }); #>
 		<?php
 	}
 }

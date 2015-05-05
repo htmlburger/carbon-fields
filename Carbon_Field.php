@@ -1095,17 +1095,17 @@ class Carbon_Field_Select extends Carbon_Field {
 
 	function template() {
 		?>
-		<% if (_.isEmpty(options)) { %>
+		<# if (_.isEmpty(options)) { #>
 			<em><?php _e('no options', 'crb'); ?></em>
-		<% } else { %>
+		<# } else { #>
 			<select id="{{{ id }}}" name="{{{ name }}}">
-				<% _.each(options, function(option) { %>
+				<# _.each(options, function(option) { #>
 					<option value="{{ option.value }}" {{{ option.value == value ? 'selected="selected"' : '' }}}>
 						{{{ option.name }}}
 					</option>
-				<% }) %>
+				<# }) #>
 			</select>
-		<% } %>
+		<# } #>
 		<?php
 	}
 }
@@ -1118,20 +1118,20 @@ if ( !class_exists('Carbon_Field_Radio') ) :
 class Carbon_Field_Radio extends Carbon_Field_Select {
 	function template() {
 		?>
-		<% if (_.isEmpty(options)) { %>
+		<# if (_.isEmpty(options)) { #>
 			<em><?php _e('no options', 'crb'); ?></em>
-		<% } else { %>
+		<# } else { #>
 			<ul class="carbon-radio-list">
-				<% _.each(options, function(option) { %>
+				<# _.each(options, function(option) { #>
 					<li>
 						<label>
 							<input type="radio" name="{{{ name }}}" value="{{ option.value }}" {{{ option.value == value ? 'checked="checked"' : '' }}} />
 							{{{ option.name }}}
 						</label>
 					</li>
-				<% }) %>
+				<# }) #>
 			</ul>
-		<% } %>
+		<# } #>
 		<?php
 	}
 }
@@ -1310,17 +1310,17 @@ class Carbon_Field_Set extends Carbon_Field {
 
 	function template() {
 		?>
-		<% if (_.isEmpty(options)) { %>
+		<# if (_.isEmpty(options)) { #>
 			<em><?php _e('no options', 'crb'); ?></em>
-		<% } else { %>
+		<# } else { #>
 			<div class="carbon-set-list">
-				<% _.each(options, function(option, i) { %>
-					<% 
+				<# _.each(options, function(option, i) { #>
+					<# 
 						var selected = jQuery.inArray(String(option.value), value) > -1;
 						var counter = i + 1;
 						var exceed = limit_options > 0 && counter > limit_options;
 						var last = options.length === counter;
-					%>
+					#>
 
 					<p {{{ exceed ? 'style="display:none"' : '' }}}>
 						<label>
@@ -1329,12 +1329,12 @@ class Carbon_Field_Set extends Carbon_Field {
 						</label>
 					</p>
 
-					<% if (!exceed && !last && counter == limit_options) { %>
+					<# if (!exceed && !last && counter == limit_options) { #>
 						<p>... <a href="#" class="carbon-set-showall"><?php _e('Show All Options', 'crb'); ?></a></p>
-					<% } %>
-				<% }) %>
+					<# } #>
+				<# }) #>
 			</div>
-		<% } %>
+		<# } #>
 		<?php
 	}
 }
@@ -1515,11 +1515,11 @@ class Carbon_Field_Relationship extends Carbon_Field {
 				</div>
 
 				<ul class="relationship-list">
-					<% if (options) { %>
-						<% _.each(options, function(item) { %>
+					<# if (options) { #>
+						<# _.each(options, function(item) { #>
 							<?php echo $this->item_template(false); ?>
-						<% }); %>
-					<% } %>
+						<# }); #>
+					<# } #>
 				</ul>
 			</div>
 
@@ -1527,11 +1527,11 @@ class Carbon_Field_Relationship extends Carbon_Field {
 				<label><?php _e('Associated:', 'crb'); ?></label>
 
 				<ul class="relationship-list">
-					<% if (value) { %>
-						<% _.each(value, function(item) { %>
+					<# if (value) { #>
+						<# _.each(value, function(item) { #>
 							<?php echo $this->item_template(); ?>
-						<% }); %>
-					<% } %>
+						<# }); #>
+					<# } #>
 				</ul>
 			</div>
 		</div>
@@ -1874,9 +1874,9 @@ class Carbon_Field_Association extends Carbon_Field_Relationship {
 				<em>{{{ item.label }}}</em>
 				<span></span>
 				{{{ item.title }}}
-				<% if (item.is_trashed) { %>
+				<# if (item.is_trashed) { #>
 					<i class="trashed"></i>
-				<% } %>
+				<# } #>
 			</a>
 			<?php if ($display_input): ?>
 				<input type="hidden" name="{{{ name }}}[]" value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}" />
@@ -2010,9 +2010,9 @@ class Carbon_Field_Attachment extends Carbon_Field_File {
 				</div>
 			</div>
 
-			<% if (value_type === 'id') { %>
+			<# if (value_type === 'id') { #>
 				<div class="attachment-url">{{ url }}</div>
-			<% } %>
+			<# } #>
 		</div>
 		<?php
 	}
