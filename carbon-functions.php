@@ -55,10 +55,11 @@ function carbon_json() {
 	$json_data = carbon_get_json_data();
 
 	if (wp_script_is('carbon-app', 'enqueued')) {
+		$json_data_encoded = function_exists('wp_json_encode') ? wp_json_encode($json_data) : json_encode($json_data);
 		?>
 		<script>
 			/* <![CDATA[ */
-			var carbon_json = <?php echo wp_json_encode($json_data); ?>;
+			var carbon_json = <?php echo $json_data_encoded; ?>;
 			/* ]]> */
 		</script>
 		<?php
