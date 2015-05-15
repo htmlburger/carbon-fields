@@ -265,12 +265,9 @@
 .carbon-Complex .carbon-field .carbon-empty-row td  { padding-top: 0; padding-bottom: 0; }
 
 /* Complex Groups - List */
-.carbon-Complex .layout-list .layout-list tbody { float: none; clear: none; display: table; }
-.carbon-Complex .layout-list .layout-list .carbon-row { float: none; clear: none; display: table-cell; width: 1px; border-top: 0; border-left: 1px solid #ddd; vertical-align: top; }
+.carbon-Complex .layout-list .layout-list tbody { float: none; clear: none; display: table; table-layout: fixed; }
+.carbon-Complex .layout-list .layout-list .carbon-row { float: none; clear: none; display: table-cell; width: 100%; border-top: 0; border-left: 1px solid #ddd; vertical-align: top; }
 .carbon-Complex .layout-list .layout-list .carbon-row:first-child { border-left: 0; }
-.carbon-Complex .layout-list .layout-list .carbon-field .input-with-button { width: 1px; padding-right: 0; }
-.carbon-Complex .layout-list .layout-list .carbon-field .carbon-description { width: 1px; }
-.carbon-Complex .layout-list .layout-list .carbon-Attachment .attachment-url { display: none; }
 
 /* Edit Term */
 .carbon-container-term > td { padding: 0; }
