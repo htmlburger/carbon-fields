@@ -212,7 +212,6 @@ window.carbon = window.carbon || {};
 
 			this.map = null;
 			this.marker = null;
-			this.markerUpdated = false;
 
 			this.listenTo(this.model, 'change:address', this.geocodeAddress);
 			this.listenTo(this.model, 'change:lat change:lng', this.sync);
@@ -238,7 +237,8 @@ window.carbon = window.carbon || {};
 				zoom: zoom,
 				center: latLng,
 				mapTypeId: google.maps.MapTypeId.ROADMAP,
-				disableDoubleClickZoom: true
+				disableDoubleClickZoom: true,
+				scrollwheel: false
 			});
 
 			// add the marker
@@ -247,6 +247,10 @@ window.carbon = window.carbon || {};
 				map: map,
 				draggable: true
 			});
+
+			// enable the scrollwheel zoom when the user interacts with the map
+			google.maps.event.addListenerOnce(map, 'click', this.enableScrollZoom);
+			google.maps.event.addListenerOnce(map, 'dragend', this.enableScrollZoom);
 
 			// on marker drag, set the new position in the model
 			google.maps.event.addListener(marker, "dragend", function (mEvent) { 
@@ -266,11 +270,9 @@ window.carbon = window.carbon || {};
 				_this.$el.trigger('update:marker');
 			});
 
-			// on zoom change, set the new zoom level, but only if the maker is updated
+			// on zoom change, set the new zoom level
 			google.maps.event.addListener(map, 'zoom_changed', function() {
-				if (_this.markerUpdated) {
-					_this.model.set('zoom', map.getZoom());
-				}
+				_this.model.set('zoom', map.getZoom());
 			});
 
 			// If we are in a widget container, resize the map when the widget is revealed.
@@ -304,8 +306,6 @@ window.carbon = window.carbon || {};
 			if (this.marker) {
 				this.marker.setPosition(latLng);
 				this.map.setCenter(latLng);
-
-				this.markerUpdated = true;
 
 				// Sync the current zoom level by triggering the zoom_changed event
 				google.maps.event.trigger(this.map, 'zoom_changed');
@@ -366,6 +366,15 @@ window.carbon = window.carbon || {};
 					_this.$el.trigger('update:marker');
 				} else {
 					alert(crbl10n.geocode_not_successful + status);
+				}
+			});
+		},
+
+		enableScrollZoom: function() {
+			this.setOptions({
+				scrollwheel: true,
+				zoomControlOptions: {
+					style: google.maps.ZoomControlStyle.LARGE
 				}
 			});
 		}
