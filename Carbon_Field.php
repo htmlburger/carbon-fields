@@ -1462,7 +1462,7 @@ class Carbon_Field_Relationship extends Carbon_Field {
 				);
 			}
 
-			$options = $options + $new_options;
+			$options = array_merge($options, $new_options);
 		}
 
 		/**
