@@ -850,6 +850,22 @@ endif;
 if ( !class_exists('Carbon_Field_Date') ) :
 
 class Carbon_Field_Date extends Carbon_Field {
+
+	/**
+	 * Datepicker options
+	 */
+	public $options = array();
+
+	function to_json($load) {
+		$field_data = parent::to_json($load);
+
+		$field_data = array_merge($field_data, array(
+			'options' => $this->options,
+		));
+
+		return $field_data;
+	}
+
 	function template() {
 		?>
 		<div class="input-with-button">
@@ -864,6 +880,12 @@ class Carbon_Field_Date extends Carbon_Field {
 
 		wp_enqueue_style('jquery-ui', '//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css');
 		wp_enqueue_style('carbon-jquery-ui', CARBON_PLUGIN_URL . '/css/jquery-ui.css');
+	}
+
+	function set_options($options) {
+		$this->options = $options;
+
+		return $this;
 	}
 }
 

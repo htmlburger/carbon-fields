@@ -578,8 +578,8 @@ window.carbon = window.carbon || {};
 		initDatePicker: function() {
 			var $field = this.$('.carbon-datepicker');
 			var $trigger = this.$('.carbon-datepicker-trigger');
-
-			$field.datepicker({
+			var options = this.model.get('options');
+			var args = {
 				dateFormat: 'yy-mm-dd',
 				changeMonth: true,
 				changeYear: true,
@@ -588,7 +588,11 @@ window.carbon = window.carbon || {};
 				beforeShow: function(input, inst) {
 					$('#ui-datepicker-div').addClass('carbon-jquery-ui');
 				}
-			});
+			};
+
+			$.extend(args, options);
+
+			$field.datepicker(args);
 
 			$trigger.on('click', function(e) {
 				$field.focus();
