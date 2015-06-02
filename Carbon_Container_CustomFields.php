@@ -119,7 +119,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	 **/
 	function save($post_id) {
 		// Unhook action to garantee single save
-		remove_action('save_post', array($this, 'save'));
+		remove_action('save_post', array($this, '_save'));
 
 		$this->set_post_id($post_id);
 
