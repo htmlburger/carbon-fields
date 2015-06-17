@@ -69,9 +69,14 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 	}
 	
 	function widget($args, $instance) {
-		// prepare $instance values
+		// prepare $instance values for complex fields
 		if ( !empty($this->complex_field_names) ) {
 			$instance = self::unwrap_complex_field_values($instance, $this->complex_field_names);
+		}
+
+		// prepare $instance values for association fields
+		foreach ($instance as &$field_value) {
+			$field_value = carbon_parse_relationship_field($field_value);
 		}
 
 		// output
