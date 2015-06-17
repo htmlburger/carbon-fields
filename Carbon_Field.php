@@ -2244,8 +2244,13 @@ class Carbon_Field_HTML extends Carbon_Field {
 	public $field_html;
 	protected $wide = true;
 
-	function set_html($html) {
-		$this->field_html = $html;
+	function set_html($callback_or_html) {
+		if ( is_callable($callback_or_html) ) {
+			$this->field_html = call_user_func($callback_or_html);
+		} else {
+			$this->field_html = $callback_or_html;
+		}
+		
 		return $this;
 	}
 
