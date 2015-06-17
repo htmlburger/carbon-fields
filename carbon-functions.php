@@ -326,7 +326,7 @@ function carbon_parse_relationship_field($raw_value = '', $type = '') {
 
 				if ($item_data[0] === 'post') {
 					$item['post_type'] = $item_data[1];
-				} elseif ($item_data[0] === 'taxonomy') {
+				} elseif ($item_data[0] === 'term') {
 					$item['taxonomy'] = $item_data[1];
 				}
 
