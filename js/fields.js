@@ -354,6 +354,17 @@ window.carbon = window.carbon || {};
 				return false;
 			}
 
+			if (coords = address.match(/^(-?\d{1,3}\.\d+),\s?(-?\d{1,3}\.\d+)$/)) {
+				model.set({
+					lat: parseFloat(coords[1]),
+					lng: parseFloat(coords[2])
+				});
+
+				this.$el.trigger('update:marker');
+
+				return true;
+			}
+
 			geocoder.geocode( { 'address': address }, function(results, status) {
 				if (status == google.maps.GeocoderStatus.OK) {
 					var latLng = results[0].geometry.location;
