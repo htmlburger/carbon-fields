@@ -345,7 +345,7 @@ window.carbon = window.carbon || {};
 			$select
 				.on('change', function(event) {
 					var levelClass = $(this).find('option:checked').attr('class');
-					var level = levelClass ? parseInt(levelClass.match(/^level-(\d+)/)[1]) + 1: 1;
+					var level = levelClass ? parseInt(levelClass.match(/^level-(\d+)/)[1]) + 2: 1;
 
 					_this.model.set('level', level);
 				})
