@@ -322,7 +322,7 @@ class Carbon_DataStore_UserMeta extends Carbon_DataStore_Base {
 			SELECT meta_key AS field_key, meta_value AS field_value FROM ' . $wpdb->usermeta . '
 			WHERE `meta_key` LIKE "' . addslashes($meta_key) . '_%" AND `user_id`="' . intval($this->user_id) . '"
 		', ARRAY_A);
-		if (!$results) {
+		if (!$results && is_object($field)) {
 			$tmp_field = clone $field;
 			$tmp_field->set_value_from_input();
 
