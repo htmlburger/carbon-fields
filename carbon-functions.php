@@ -317,7 +317,7 @@ function carbon_parse_relationship_field($raw_value = '', $type = '') {
 	if ($raw_value && is_array($raw_value)) {
 		$value = array();
 		foreach ($raw_value as $raw_value_item) {
-			if (strpos($raw_value_item, ':') !== false) {
+			if (is_string($raw_value_item) && strpos($raw_value_item, ':') !== false) {
 				$item_data = explode(':', $raw_value_item);
 				$item = array(
 					'id' => $item_data[2],
