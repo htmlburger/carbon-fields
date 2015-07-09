@@ -281,7 +281,7 @@ function carbon_get_complex_fields($type, $name, $id = null) {
 	}
 
 	// create groups list with loaded fields
-	ksort($input_groups);
+	crb_ksort_recursive($input_groups);
 
 	return $input_groups;
 }
@@ -365,6 +365,23 @@ function crb_maybe_old_relationship_field($value) {
 	}
 
 	return $value;
+}
+
+endif;
+
+if ( !function_exists('crb_ksort_recursive') ) :
+
+function crb_ksort_recursive( &$array, $sort_flags = SORT_REGULAR ) {
+	if (!is_array($array)) {
+		return false;
+	}
+
+	ksort($array, $sort_flags);
+	foreach ($array as $key => $value) {
+		crb_ksort_recursive($array[$key], $sort_flags);
+	}
+
+	return true;
 }
 
 endif;
