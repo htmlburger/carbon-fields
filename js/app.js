@@ -229,7 +229,7 @@ window.carbon = window.carbon || {};
 	}
 
 	/**
-	 * carbon.decodeURIComponent( str )
+	 * carbon.urldecode( str )
 	 *
 	 * A JavaScript equivalent of PHP's urldecode
 	 *

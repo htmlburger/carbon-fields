@@ -475,14 +475,6 @@ window.carbon = window.carbon || {};
 			}
 		},
 
-		mediaButtonsInit: function() {
-			var id = this.model.get('id');
-
-			this.$('.wp-media-buttons .button:not([data-editor])').each(function() {
-				$(this).attr('data-editor', id);
-			});
-		},
-
 		get_mceInit: function(){
 			var $field = this.$el;
 			var id = this.model.get('id');
@@ -535,15 +527,23 @@ window.carbon = window.carbon || {};
 			return qtInit;
 		},
 
-		textButtonsInit: function( ed ) {
+		mediaButtonsInit: function() {
+			var id = this.model.get('id');
+
+			this.$('.wp-media-buttons .button:not([data-editor])').each(function() {
+				$(this).attr('data-editor', id);
+			});
+		},
+
+		textButtonsInit: function(ed) {
 			var defaults = ',strong,em,link,block,del,ins,img,ul,ol,li,code,more,close,';
 
-			canvas = ed.canvas;
-			name = ed.name;
-			settings = ed.settings;
-			html = '';
-			theButtons = {};
-			use = '';
+			var canvas = ed.canvas;
+			var name = ed.name;
+			var settings = ed.settings;
+			var theButtons = {};
+			var html = '';
+			var use = '';
 
 			// set buttons
 			if ( settings.buttons ) {
@@ -583,7 +583,7 @@ window.carbon = window.carbon || {};
 			ed.theButtons = theButtons;
 		},
 
-		disableEditor: function(){
+		disableEditor: function() {
 			if (!this.active) {
 				return false;
 			}
@@ -606,7 +606,7 @@ window.carbon = window.carbon || {};
 			}
 		},
 		
-		enableEditor: function(){
+		enableEditor: function() {
 			if (!this.active) {
 				return false;
 			}

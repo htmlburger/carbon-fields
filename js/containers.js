@@ -324,6 +324,8 @@ window.carbon = window.carbon || {};
 				return $(this).offset().top;
 			});
 
+			console.log( topPositions );
+
 			if(_.uniq(topPositions).length > 1) {
 				$tabsContainer.addClass('carbon-tabs-stacked');
 			}
