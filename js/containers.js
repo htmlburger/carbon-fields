@@ -344,6 +344,9 @@ window.carbon = window.carbon || {};
 
 			$li.addClass('active').siblings().removeClass('active');
 
+			// Load fields that should be lazyloaded
+			$(window).trigger('lazyload');
+
 			e.preventDefault();
 		},
 
