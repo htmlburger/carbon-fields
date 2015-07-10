@@ -410,6 +410,8 @@ class Carbon_Field_Complex extends Carbon_Field {
 	}
 
 	function set_layout($layout) {
+		_doing_it_wrong(__METHOD__, __('Complex field layouts are deprecated, please use <code>set_width()</code> instead.', 'crb'), null);
+
 		if ( !in_array($layout, array(self::LAYOUT_TABLE, self::LAYOUT_LIST)) ) {
 			throw new Carbon_Exception('Incorrect layout specifier. Available values are "<code>' . self::LAYOUT_TABLE . '</code>" and "<code>' . self::LAYOUT_LIST . '</code>"');
 		}
