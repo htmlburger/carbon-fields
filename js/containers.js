@@ -24,28 +24,24 @@ window.carbon = window.carbon || {};
 			'error': false,
 			'visible': true,
 			'has_changes': false,
-			'classes': ''
+			'classes': [],
 		},
 
 		initialize: function() {
-			this.setClasses(['carbon-container', 'carbon-container-' + this.get('type')]);
-		},
-
-		setClasses: function(classes) {
-			for (var i = 0; i < classes.length; i++) {
-				this.addClass(classes[i]);
-			}
+			this.addClass(['carbon-container', 'carbon-container-' + this.get('type')]);
 		},
 
 		addClass: function(newClass) {
-			var classes = this.get('classes') || '';
-			classes = classes ? classes.split(' ') : [];
-
-			if ($.inArray(newClass, classes) === -1) {
-				classes.push(newClass);
+			if (!_.isArray(newClass)) {
+				newClass = [newClass];
 			}
 
-			this.set('classes', classes.join(' '));
+			var oldClasses = this.get('classes') || [];
+			var classes = _.union(oldClasses, newClass);
+
+			if (classes.length !== oldClasses.length) {
+				this.set('classes', classes);
+			}
 		},
 
 		/*
@@ -59,6 +55,10 @@ window.carbon = window.carbon || {};
 
 			var hasErrors = false;
 			var view = carbon.views[this.get('id')];
+
+			if (!view) {
+				return;
+			}
 
 			_.each(view.fieldsCollection.models, function(field) {
 				if (!field.isRequired()) {
@@ -102,7 +102,10 @@ window.carbon = window.carbon || {};
 		/*
 		 * Set the view DOM events
 		 */
-		events: {},
+		events: {
+			"click ul.carbon-tabs-nav a": "switchTab",
+			"switchToTab .carbon-tab": "switchTab"
+		},
 
 		/*
 		 * Used to include additional variables that can be used inside the template
@@ -119,6 +122,9 @@ window.carbon = window.carbon || {};
 			// Listen for model changes in the fields collection.
 			this.listenToOnce(this.fieldsCollection, 'change:value', this.changeListener);
 
+			// Listen for container class updates
+			this.listenTo(this.model, 'change:classes', this.updateClass);
+
 			// Check the container visibility before it's rendered.
 			// Containers are visible by default. Overwrite the checkVisibility method for custom logic.
 			this.on('container:beforeRender', this.checkVisibility);
@@ -126,12 +132,27 @@ window.carbon = window.carbon || {};
 			// Repopulate the fields collection after the container is rendered
 			this.on('container:rendered', this.setFields);
 
+			// Handle tab setup
+			this.on('container:rendered', this.setupTabs);
+
+			// Propagate an event to all fields in this container
+			this.on('propagate', function(event) {
+				this.eventPropagator( this.fieldsCollection, event );
+			});
+
+			// Wrap fields that should be on one row
+			this.on('layoutUpdated', this.addFieldRows);
+
 			// Check for not saved changes on "onbeforeunload"
 			this.on('container:rendered form:invalid', this.onSaveAlert);
+			this.on('container:rendered form:invalid', this.showFirstHightlithedFieldTab);
 			this.on('form:valid', this.resetOnBeforeUnload);
 
 			// Listen to visibility change
 			this.listenTo(this.model, 'change:visible', this.toggleVisibility);
+
+			// Initial visibility check
+			this.toggleVisibility(this.model);
 		},
 
 		changeListener: function(model, collection) {
@@ -148,6 +169,61 @@ window.carbon = window.carbon || {};
 			var $holder = carbon.views.main.$body.find('#' + id);
 
 			$holder.toggle(visible);
+		},
+
+		eventPropagator: function(collection, event) {
+			var collection = collection.toJSON();
+
+			for (var i = 0; i < collection.length; i++) {
+				var fieldId = collection[i].id;
+				var view = carbon.views[fieldId];
+
+				if (typeof view !== 'undefined') {
+					view.trigger(event.type, event);
+					view.trigger('propagate', event);
+				}
+			}
+		},
+
+		addFieldRows: function() {
+			var $fields = this.$(':not(.carbon-fields-row) > .carbon-field.has-width');
+			var $group = $();
+			var groupWidth = 0;
+
+			var wrapGroup = function() {
+				if ($group.length > 0) {
+					$group.wrapAll('<div class="carbon-fields-row"/>');
+					$group = $();
+					groupWidth = 0;
+				}
+			}
+
+			$fields.each(function() {
+				var matches = this.className.match(/width-(\d+)/);
+				var width = parseInt(matches[1]);
+
+				// stupid repetition; fix when brain is working
+				if (groupWidth + width > 100) {
+					wrapGroup();
+				}
+
+				groupWidth += width;
+				$group = $group.add($(this));
+
+				if (!$(this).next().hasClass('has-width')) {
+					wrapGroup();
+				}
+			});
+		},
+
+		updateClass: function(model) {
+			var classes = model.get('classes');
+
+			this.$el.closest('.carbon-container').addClass(classes.join(' '));
+		},
+
+		showFirstHightlithedFieldTab: function() {
+			this.$el.find('.carbon-highlight').first().closest('.carbon-tab').trigger('switchToTab');
 		},
 
 		onSaveAlert: function() {
@@ -173,18 +249,59 @@ window.carbon = window.carbon || {};
 
 		render: function() {
 			var type = this.model.get('type');
+			var tabsTemplate = carbon.template('tabs');
 			var template = carbon.template(type);
+			var settings = this.model.attributes.settings;
+			var fields = this.fieldsCollection.toJSON();
+			var tabs = {};
 
-			this.templateVariables = _.extend(this.templateVariables, this.model.attributes, {
-				container: this.model,
-				fields: this.fieldsCollection.toJSON()
-			});
+			var templateVariables, containerHTML;
 
 			this.trigger('container:beforeRender');
 
-			var containerHTML = template(this.templateVariables);
+			if (settings.tabs) {
+				_.each(settings.tabs, function (fieldNames, tab) {
+					var tabFields = [];
+					var field;
 
-			this.$el.html(containerHTML)
+					for (var i = 0; i < fieldNames.length; i++) {
+						for (var j = 0; j < fields.length; j++) {
+							field = fields[j];
+
+							if (fieldNames[i] === field.name) {
+								tabFields.push(field)
+							}
+						}
+					}
+
+					tabs[tab] = {
+						fields: tabFields
+					};
+				});
+
+				_.map(tabs, function (tab) {
+					templateVariables = _.extend(this.templateVariables, this.model.attributes, {
+						container: this.model,
+						fields: tab.fields
+					});
+
+					tab.html = template(templateVariables);
+
+					return tab;
+				}, this);
+
+				containerHTML = tabsTemplate({
+					tabs: tabs
+				});
+			} else {
+				this.templateVariables = _.extend(this.templateVariables, this.model.attributes, {
+					container: this.model,
+					fields: fields
+				});
+				containerHTML = template(this.templateVariables);
+			}
+
+			this.$el.html(containerHTML);
 			this.trigger('container:rendered');
 
 			return this;
@@ -195,8 +312,44 @@ window.carbon = window.carbon || {};
 			this.fieldsCollection.set(this.model.get('fields')); // This will emit the "add" event
 		},
 
+		setupTabs: function() {
+			var $tabsContainer = this.$el.find('.carbon-tabs');
+
+			if ($tabsContainer.length === 0) {
+				// this is not a tabbed container, ignore
+				return;
+			}
+
+			// Open the first tab. 
+			$tabsContainer.find('ul.carbon-tabs-nav a:first').trigger('click');
+		},
+
+		switchTab: function (e) {
+			var $element = $(e.target);
+			var $li, activeTabIndex;
+
+			if ($element.is('a')) {
+				$li = $(e.target).closest('li');
+				activeTabIndex = $li.index();
+			} else if ($element.is('.carbon-tab')) {
+				activeTabIndex = $element.index();
+				$li = $element.closest('.carbon-tabs').find('.carbon-tabs-nav li:eq(' + activeTabIndex + ')');
+			}
+
+			var $tabs = $('.carbon-tab', this.$el);
+
+			$tabs
+				.removeClass('active')
+				.eq(activeTabIndex).addClass('active');
+
+			$li.addClass('active').siblings().removeClass('active');
+
+			e.preventDefault();
+		},
+
 		// Render a field when its added in the fieldsCollection
-		renderField: function(model, collection) {
+		renderField: function(model) {
+			var _this = this;
 			var type = model.get('type');
 			var id = model.get('id');
 
@@ -210,6 +363,10 @@ window.carbon = window.carbon || {};
 				model: model
 			});
 
+			carbon.views[id].on('field:rendered layoutUpdated', function() {
+				_this.trigger('layoutUpdated');
+			});
+
 			carbon.views[id].render();
 		},
 
@@ -217,8 +374,11 @@ window.carbon = window.carbon || {};
 			var _this = event.data; 			// the view object
 			var $target = $(event.currentTarget);
 			var $errorHolder = $('.carbon-error-required');
+			var $spinner = $target.find('#publishing-action .spinner');
 			var valid = _this.model.isValid(); 	// this method will also set the validationError
 			var errorText = _this.model.validationError;
+
+			$spinner.addClass('is-active');
 
 			if (valid) { 						// valid
 				_this.trigger('form:valid');
@@ -231,6 +391,8 @@ window.carbon = window.carbon || {};
 			} else { 							// invalid
 				_this.trigger('form:invalid');
 
+				$spinner.addClass('disabled');
+
 				if (errorText) {
 					if ($errorHolder.length) {
 						$errorHolder.find('strong').text(errorText);
@@ -238,12 +400,24 @@ window.carbon = window.carbon || {};
 						$errorHolder = $('<div class="settings-error error hidden below-h2 carbon-error-required"><p><strong>' + errorText + '</strong></p></div>');
 						$errorHolder.insertAfter('#wpbody-content > .wrap > h2').slideDown();
 					}
+					var $firstErrorField = $('.carbon-highlight :input:first');
+					
+					// Expand the post meta box if it's closed
+					$firstErrorField.closest('.postbox').removeClass('closed');
+
+					// Focus the first error field. 
+					$firstErrorField.focus();
 				}
 
-				if ($target.is('#post')) {
-					$target.find('#publish').removeClass('button-primary-disabled disabled');
-					$target.find('#ajax-loading, #publishing-action .spinner').attr('style','');
-				}
+				setTimeout(function() {
+					if ($target.is('#post')) {
+						$target.find('#publish').removeClass('button-primary-disabled button-disabled disabled');
+						$target.find('#ajax-loading, #publishing-action .spinner').attr('style','');
+					}
+
+					$spinner.removeClass('disabled');
+					$spinner.removeClass('is-active');
+				}, 0);
 
 				if (event.type === 'click') {
 					event.stopImmediatePropagation();
@@ -481,8 +655,27 @@ window.carbon = window.carbon || {};
 		initialize: function() {
 			carbon.containers.View.prototype.initialize.apply(this);
 
+			var _this = this;
+
 			this.$form = this.$el.closest('form#theme-options-form');
 			this.$form.on('submit', null, this, this.validateForm);
+
+			$(window).on('scroll', function() {
+				_this.positionActionPanel.apply(_this);
+			});
+		},
+
+		positionActionPanel: function() {
+			var $panel = $('#postbox-container-1');
+			var topOffset = $('#wpadminbar').height() + 10;
+			var top = this.$el.offset().top - topOffset;
+			var scrollTop = $(window).scrollTop();
+
+			if (scrollTop >= top) {
+				$panel.addClass('fixed').css('top', topOffset);
+			} else {
+				$panel.removeClass('fixed');
+			}
 		}
 	});
 

@@ -30,30 +30,5 @@ class Carbon_Container_Widget extends Carbon_Container {
 		return $screen && $screen->id === 'widgets';
 	}
 
-	function template() {
-		?>
-		<# _.each(fields, function(field) { #>
-			<div class="carbon-widget-field-wrapper {{{ field.classes }}}">
-				<# if (field.label) { #>
-					<label for="{{{ field.id }}}">
-						{{ field.label }}
-
-						<# if (field.required) { #>
-							 <span class="carbon-required">*</span>
-						<# } #>
-					</label>
-				<# } #>
-
-				<div class="field-holder {{{ field.id }}}"></div>
-
-				<# if (field.help_text) { #>
-					<em class="help-text">
-						{{{ field.help_text }}}
-					</em>
-				<# } #>
-			</div>
-		<# }); #>
-		<?php
-	}
 }
 

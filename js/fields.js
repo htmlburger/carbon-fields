@@ -23,34 +23,35 @@ window.carbon = window.carbon || {};
 		defaults: {
 			'error': false,
 			'force_required': false,
-			'classes': ''
 		},
 
 		initialize: function() {
 			var classes = ['carbon-field', 'carbon-' + this.get('type')]
+			var width = this.get('width');
 
 			if (this.get('lazyload')) {
 				classes.push('carbon-lazyload');
 			}
 
-			this.setClasses(classes);
-		},
-
-		setClasses: function(classes) {
-			for (var i = 0; i < classes.length; i++) {
-				this.addClass(classes[i]);
+			if (width && _.isNumber(width)) {
+				classes.push('has-width');
+				classes.push('width-' + width);
 			}
+
+			this.addClass(classes);
 		},
 
 		addClass: function(newClass) {
-			var classes = this.get('classes') || '';
-			classes = classes ? classes.split(' ') : [];
-
-			if ($.inArray(newClass, classes) === -1) {
-				classes.push(newClass);
+			if (!_.isArray(newClass)) {
+				newClass = [newClass];
 			}
 
-			this.set('classes', classes.join(' '));
+			var oldClasses = this.get('classes') || [];
+			var classes = _.union(oldClasses, newClass);
+
+			if (classes.length !== oldClasses.length) {
+				this.set('classes', classes);
+			}
 		},
 
 		isRequired: function() {
@@ -64,13 +65,9 @@ window.carbon = window.carbon || {};
 		 * @see http://backbonejs.org/#Model-validate
 		 */
 		validate: function(attrs, options) {
-			var hasErrors = false;
-
-			if (!attrs.value) {
-				hasErrors = true;
+			if (this.isRequired() && !attrs.value) {
+				return crbl10n.message_required_field;
 			}
-
-			return hasErrors;
 		}
 	});
 
@@ -104,6 +101,11 @@ window.carbon = window.carbon || {};
 		 */
 		templateVariables: {}, 
 
+		/*
+		 * Whether there was validation error at some point
+		 */
+		hadErrors: false,
+
 		initialize: function() {
 			this.rendered = false;
 
@@ -111,11 +113,22 @@ window.carbon = window.carbon || {};
 				this.rendered = true;
 			});
 
+			// Set width
+			this.on('field:rendered', this.setWidth);
+
+			this.listenTo(this.model, 'change:height', this.equalizeHeight);
+
+			// Listen for field class updates
+			this.listenTo(this.model, 'change:classes', this.updateClass);
+
 			// Listen for an error change and toggle the error class on the holder
 			this.listenTo(this.model, 'change:error', this.toggleError);
 
+			// Listen for value change and revalidate the model
+			this.listenTo(this.model, 'change:value', this.revalidate);
+
 			// Set the initial error state
-			this.toggleError(this.model);
+			this.toggleError();
 		},
 
 		render: function() {
@@ -156,17 +169,50 @@ window.carbon = window.carbon || {};
 			this.model.set('value', value);
 		},
 
-		toggleError: function(model) {
-			var error = model.get('error');
-			var forceRequired = model.get('force_required');
-			var $holder = this.$el.closest('.carbon-field');
-
-			if (error && !forceRequired) {
-				$holder.addClass('carbon-highlight');
-			} else {
-				$holder.removeClass('carbon-highlight');
+		/* 
+		 * If the field has had validation error (after form submission), 
+		 * re-validate it after each value change. 
+		 */
+		revalidate: function(model) {
+			if (model.isRequired() && this.hadErrors) {
+				model.isValid();
+				this.toggleError();
 			}
+		},
+
+		toggleError: function() {
+			var errorText = this.model.validationError;
+			var $holder = this.$el.closest('.carbon-field');
+			var $errorHolder = $holder.find('> .carbon-error');
+			var hasError = !!errorText;
+
+			$holder.toggleClass('carbon-highlight', hasError);
+
+			$errorHolder.html(errorText);
+
+			if (hasError) {
+				this.hadErrors = true;
+			}
+		},
+
+		setWidth: function() {
+			var width = this.model.get('width');
+
+			if (width && _.isNumber(width)) {
+				this.$el.closest('.carbon-field').css('width', width + '%');
+			}
+		},
+
+		updateClass: function(model) {
+			var classes = model.get('classes');
+
+			this.$el.closest('.carbon-field').addClass(classes.join(' '));
+		},
+
+		layoutUpdated: function() {
+			this.trigger('layoutUpdated');
 		}
+
 	});
 
 	/*
@@ -237,7 +283,6 @@ window.carbon = window.carbon || {};
 				zoom: zoom,
 				center: latLng,
 				mapTypeId: google.maps.MapTypeId.ROADMAP,
-				disableDoubleClickZoom: true,
 				scrollwheel: false
 			});
 
@@ -258,16 +303,6 @@ window.carbon = window.carbon || {};
 					lat: marker.getPosition().lat(),
 					lng: marker.getPosition().lng()
 				});
-			});
-
-			// on click, move the marker and set new position
-			google.maps.event.addListener(map, 'dblclick', function(point) {
-				_this.model.set({
-					lat: point.latLng.lat(),
-					lng: point.latLng.lng()
-				});
-
-				_this.$el.trigger('update:marker');
 			});
 
 			// on zoom change, set the new zoom level
@@ -375,6 +410,8 @@ window.carbon = window.carbon || {};
 					});
 
 					_this.$el.trigger('update:marker');
+				} else if(status === 'ZERO_RESULTS') {
+					alert(crbl10n.geocode_zero_results);
 				} else {
 					alert(crbl10n.geocode_not_successful + status);
 				}
@@ -635,7 +672,6 @@ window.carbon = window.carbon || {};
 
 		showColorPicker: function(event) {
 			var $colorpicker = this.$('.carbon-color-container');
-
 			$colorpicker.show();
 		},
 
@@ -675,7 +711,6 @@ window.carbon = window.carbon || {};
 
 				newColor = $.trim(newColor);
 				if ( newColor.length === 0 ) {
-					farbtasticObj.setColor('#000');
 					$button
 						.css('background-color', '#fff')
 						.removeClass('has-color');
@@ -726,14 +761,11 @@ window.carbon = window.carbon || {};
 		},
 
 		validate: function(attrs, options) {
-			var hasErrors = false;
 			var value = attrs.value;
 
-			if (!value || value === '0') {
-				hasErrors = true;
+			if (this.isRequired() && (!value || value === '0')) {
+				return crbl10n.message_choose_option;
 			}
-
-			return hasErrors;
 		}
 	});
 
@@ -959,7 +991,9 @@ window.carbon = window.carbon || {};
 	// Set MODEL
 	carbon.fields.Model.Set = carbon.fields.Model.extend({
 		validate: function(attrs, options) {
-			return _.isEmpty(attrs.value);
+			if (this.isRequired() && _.isEmpty(attrs.value)) {
+				return crbl10n.message_required_field;
+			}
 		}
 	});
 
@@ -998,7 +1032,9 @@ window.carbon = window.carbon || {};
 	// Relationship MODEL
 	carbon.fields.Model.Relationship = carbon.fields.Model.extend({
 		validate: function(attrs, options) {
-			return _.isEmpty(attrs.value);
+			if (this.isRequired() && _.isEmpty(attrs.value)) {
+				return crbl10n.message_required_field;
+			}
 		}
 	});
 
@@ -1199,12 +1235,10 @@ window.carbon = window.carbon || {};
 
 	// Association MODEL
 	carbon.fields.Model.Association = carbon.fields.Model.Relationship.extend({
-		defaults: {
-			classes: 'carbon-Relationship'
-		},
-
 		initialize: function() {
 			carbon.fields.Model.Relationship.prototype.initialize.apply(this);
+
+			this.addClass('carbon-Relationship');
 		}
 	});
 
@@ -1235,22 +1269,28 @@ window.carbon = window.carbon || {};
 			var hasErrors = false;
 			var view = carbon.views[this.get('id')];
 
+			if (!view) {
+				return;
+			}
+
 			_.each(view.groupsCollection.models, function(group) {
 				if (!group.isValid()) {
 					hasErrors = true;
-					return;
+					return; // break the loop
 				}
 			});
 
-			return hasErrors;
+			if (hasErrors) {
+				return crbl10n.message_form_validation_failed;
+			}
 		}
 	});
 
 	// Complex VIEW
 	carbon.fields.View.Complex = carbon.fields.View.extend({
 		events: {
-			'click > .carbon-subcontainer > tbody > .carbon-actions a': 'buttonAction',
-			'click > .carbon-subcontainer > tbody > .carbon-empty-row a': 'buttonAction'
+			'click > .carbon-subcontainer > .carbon-actions a': 'buttonAction',
+			'click > .carbon-subcontainer > .carbon-empty-row a': 'buttonAction'
 		},
 
 		initialize: function() {
@@ -1281,6 +1321,11 @@ window.carbon = window.carbon || {};
 			/*
 			 * View Events
 			 */
+
+			// Propagate the event to all groups
+			this.on('propagate', function(event) {
+				carbon.containers.View.prototype.eventPropagator.apply(this, [this.groupsCollection, event]);
+			});
 
 			// Set some jQuery variables.
 			// This should be done before the groups population (to avoid getting elements from inner views) and after the template has rendered
@@ -1377,7 +1422,7 @@ window.carbon = window.carbon || {};
 			this.$actions = this.$('.carbon-actions');
 			this.$introRow = this.$('.carbon-empty-row');
 			this.$groupsList = this.$actions.find('ul');
-			this.$groupsHolder = this.$('.carbon-groups-holder > tbody');
+			this.$groupsHolder = this.$('.carbon-groups-holder');
 		},
 
 		setGroups: function() {
@@ -1395,9 +1440,9 @@ window.carbon = window.carbon || {};
 			var _this = this;
 
 			this.$groupsHolder.sortable({
-				items : '> tr.carbon-group-row',
+				items : '> .carbon-group-row',
 				handle: '.carbon-drag-handle',
-				placeholder: 'ui-placeholder-highlight',
+				placeholder: 'carbon-group-row ui-placeholder-highlight',
 				start: function(event, ui) {
 					_this.$groupsHolder.addClass('carbon-container-shrank');
 
@@ -1495,11 +1540,16 @@ window.carbon = window.carbon || {};
 		},
 
 		renderGroup: function(model) {
+			var _this = this;
 			var id = model.get('id');
 
 			carbon.views[id] = new carbon.fields.View.Complex.Group({
 				el: this.$groupsHolder,
 				model: model
+			});
+
+			carbon.views[id].on('layoutUpdated', function() {
+				_this.trigger('layoutUpdated');
 			});
 
 			carbon.views[id].render(this.model);
@@ -1544,9 +1594,9 @@ window.carbon = window.carbon || {};
 	// Group VIEW
 	carbon.fields.View.Complex.Group = Backbone.View.extend({
 		events: {
-			'click .carbon-complex-action:first a.carbon-btn-remove': 'removeGroup',
-			'click .carbon-complex-action:first a.carbon-btn-collapse': 'collapseGroup',
-			'click .carbon-complex-action:first a.carbon-btn-duplicate': 'duplicateGroup'
+			'click .carbon-group-actions:first a.carbon-btn-remove': 'removeGroup',
+			'click .carbon-group-actions:first a.carbon-btn-collapse': 'collapseGroup',
+			'click .carbon-group-actions:first a.carbon-btn-duplicate': 'duplicateGroup'
 		},
 
 		templateVariables: {},
@@ -1564,6 +1614,11 @@ window.carbon = window.carbon || {};
 
 			// Triggers the "sortstart", "sortstop" or "sortupdate" event on each field/group view
 			this.on('sortable', this.eventPropagator);
+
+			// Propagate an event to all fields
+			this.on('propagate', function(event) {
+				carbon.containers.View.prototype.eventPropagator.apply(this, [this.fieldsCollection, event]);
+			});
 
 			this.listenTo(this.model, 'change:collapsed', this.toggleCollapse);
 
@@ -1732,21 +1787,33 @@ window.carbon = window.carbon || {};
 			this.fieldsCollection.set(this.model.get('fields')); // This will emit the "add" event on the collection
 		},
 
-		renderField: function(model) {
+		setHelperClasses: function(model) {
 			var type = model.get('type');
-			var id = model.get('id');
 
-			var FieldView = carbon.fields.View[type];
-			if (typeof FieldView === 'undefined') {
-				FieldView = carbon.fields.View; // Fallback to the base view
+			// Add "odd", "even" classes on complex fields
+			if (type === 'Complex') {
+				var complexClasses = this.complexModel.get('classes');
+
+				var isEven = $.inArray('even', complexClasses) !== -1;
+				var isOdd = $.inArray('odd', complexClasses) !== -1;
+
+				if (!isEven && !isOdd) {
+					this.complexModel.addClass('odd');
+					isOdd = true;
+				}
+
+				if (isEven) {
+					model.addClass('odd');
+				} else if (isOdd) {
+					model.addClass('even');
+				}
 			}
+		},
 
-			carbon.views[id] = new FieldView({
-				el: '.' + id,
-				model: model
-			});
+		renderField: function(model) {
+			carbon.containers.View.prototype.renderField.apply(this, arguments);
 
-			carbon.views[id].render();
+			this.setHelperClasses(model);
 		}
 	});
 

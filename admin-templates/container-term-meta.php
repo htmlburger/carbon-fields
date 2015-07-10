@@ -1,7 +1,7 @@
-<tr class="form-field carbon-container-term">
-	<td colspan="2">
+<tr class="carbon-table-row <?php echo $this->is_tabbed() ? "" : "carbon-fields-collection" ?>">
+	<td></td>
+	<td>
+		<div class="container-holder carbon-term-container <?php echo !empty($_GET['tag_ID']) ? 'edit-term-container' : 'add-term-container'; ?> container-<?php echo $this->id; ?>"></div>
 		<?php echo $this->get_nonce_field(); ?>
-
-		<div class="container-holder <?php echo !empty($_GET['tag_ID']) ? 'edit-term-container' : 'add-term-container'; ?> container-<?php echo $this->id; ?>"></div>
 	</td>
 </tr>

@@ -340,87 +340,72 @@ class Carbon_Field_Complex extends Carbon_Field {
 
 	function template() {
 		?>
-		<table class="carbon-subcontainer layout-{{ layout }} {{ multiple_groups ? 'multiple-groups' : '' }}">
+		<div class="carbon-subcontainer carbon-grid {{ multiple_groups ? 'multiple-groups' : '' }}">
 	
-			<tr class="carbon-row carbon-empty-row">
-				<td colspan="2">
-					{{{ crbl10n.complex_no_rows.replace('%s', labels.plural_name) }}}
-				</td>
-			</tr>
+			<div class="carbon-empty-row">
+				{{{ crbl10n.complex_no_rows.replace('%s', labels.plural_name) }}}
+			</div>
 
-			<tr class="carbon-row carbon-holder">
-				<td>
-					<table class="carbon-groups-holder"><tbody></tbody></table>
-				</td>
-			</tr>
+			<div class="carbon-groups-holder layout-{{ layout }}"></div>
 
-			<tr class="carbon-actions">
-				<td colspan="{{ layout === 'table' ? 2 : 3 }}">
-					<div class="carbon-button">
-						<a href="#" class="button" data-group="{{{ multiple_groups ? '' : groups[0].name }}}">
-							{{{ crbl10n.complex_add_button.replace('%s', labels.singular_name) }}}
-							{{{ multiple_groups ? '&#8681;' : '' }}}
-						</a>
+			<div class="carbon-actions">
+				<div class="carbon-button">
+					<a href="#" class="button" data-group="{{{ multiple_groups ? '' : groups[0].name }}}">
+						{{{ crbl10n.complex_add_button.replace('%s', labels.singular_name) }}}
+						{{{ multiple_groups ? '&#8681;' : '' }}}
+					</a>
 
-						<# if (multiple_groups) { #>
-							<ul>
-								<# _.each(groups, function(group) { #>
-									<li><a href="#" data-group="{{{ group.name }}}">{{{ group.label }}}</a></li>
-								<# }); #>
-							</ul>
-						<# } #>
-					</div>
-				</td>
-			</tr>
-		</table>
+					<# if (multiple_groups) { #>
+						<ul>
+							<# _.each(groups, function(group) { #>
+								<li><a href="#" data-group="{{{ group.name }}}">{{{ group.label }}}</a></li>
+							<# }); #>
+						</ul>
+					<# } #>
+				</div>
+			</div>
+		</div>
 		<?php
 	}
 
 	function template_group() {
 		?>
-		<tr id="carbon-{{{ complex_name }}}-complex-container" class="carbon-row carbon-group-row" data-group-id="{{ id }}">
-			<td class="carbon-drag-handle">
+		<div id="carbon-{{{ complex_name }}}-complex-container" class="carbon-row carbon-group-row" data-group-id="{{ id }}">
+			<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[group]" value="{{ name }}" />
+
+			<div class="carbon-drag-handle">
 				<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label }}}</span>
-				<div class="carbon-complex-action">
+				<div class="carbon-group-actions">
 					<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e('Collapse/Expand', 'crb'); ?>"><?php _e('Collapse/Expand', 'crb'); ?></a>
 					<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e('Clone', 'crb'); ?>"><?php _e('Clone', 'crb'); ?></a>
 					<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e('Remove', 'crb'); ?>"><?php _e('Remove', 'crb'); ?></a>
 				</div>
-			</td>
-			<td class="carbon-complex-entry-content">
-				<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[group]" value="{{ name }}" />
+			</div>
 
-				<table class="fixed layout layout-{{{ layout }}}">
-					<# _.each(fields, function(field) { #>
-						<tr class="carbon-row carbon-subrow subrow-{{{ field.type }}} {{{ field.classes }}}">
-							<# if (!field.wide) { #>
-								<th scope="row">
-									<# if (field.label || field.required) { #>
-										<label for="{{{ complex_id + '-' + field.id + '-' + index }}}">
-											{{ field.label }}
+			<div class="fields-container">
+				<# _.each(fields, function(field) { #>
+					<div class="carbon-row carbon-subrow subrow-{{{ field.type }}} {{{ field.classes.join(' ') }}}">
+						<label for="{{{ complex_id + '-' + field.id + '-' + index }}}">
+							{{ field.label }}
 
-											<# if (field.required) { #>
-												 <span class="carbon-required">*</span>
-											<# } #>
-										</label>
-									<# } #>
-									
-									<# if (field.help_text) { #>
-										<em class="help-text">
-											{{{ field.help_text }}}
-										</em>
-									<# } #>
-								</th>
+							<# if (field.required) { #>
+								 <span class="carbon-required">*</span>
 							<# } #>
+						</label>
 
-							<td {{{ field.wide ? 'colspan="2"' : '' }}}>
-								<div class="field-holder {{{ complex_id + '-' + field.id + '-' + index }}}"></div>
-							</td>
-						</tr>
-					<# }) #>
-				</table>
-			</td>
-		</tr>
+						<div class="field-holder {{{ complex_id + '-' + field.id + '-' + index }}}"></div>
+
+						<# if (field.help_text) { #>
+							<em class="help-text">
+								{{{ field.help_text }}}
+							</em>
+						<# } #>
+
+						<em class="carbon-error"></em>
+					</div>
+				<# }) #>
+			</div>
+		</div>
 		<?php
 	}
 

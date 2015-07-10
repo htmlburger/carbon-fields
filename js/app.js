@@ -65,6 +65,19 @@ window.carbon = window.carbon || {};
 			// Render each container when it's added to the collection
 			this.listenTo(this.containersCollection, 'add', this.renderContainer);
 
+			// When a container is sorted (using ui-sortable), send the event to all fields using our custom "propagate" event
+			this.$('div.widgets-sortables, .meta-box-sortables').on('sortstart sortstop', function(event, ui) {
+				var containerID = $(ui.item).attr('id')
+
+				if (containerID.indexOf('widget-') === 0) {
+					var containerID = containerID.replace(/widget-\d+_/, '');
+				}
+
+				if (typeof carbon.views[containerID] !== 'undefined') {
+					carbon.views[containerID].trigger('propagate', event);
+				}
+			});
+
 			// Listen for the WordPress widget events and handle the widget initialization/update
 			this.$el.on('widget-added widget-updated', function() { 
 				_this.widgetsHandler.apply(_this, arguments);

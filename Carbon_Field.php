@@ -110,12 +110,20 @@ class Carbon_Field {
 	protected $lazyload = false;
 
 	/**
-	 * Whether or not this field should take two columns (colspan="2"). Applicable to theme options and term fields only.
+	 * The width of the field.
 	 * 
-	 * @see set_wide()
-	 * @var bool
+	 * @see set_width()
+	 * @var int
 	 **/
-	protected $wide = false;
+	protected $width = 0;
+
+	/**
+	 * Custom CSS classes.
+	 * 
+	 * @see add_class()
+	 * @var array
+	 **/
+	protected $classes = array();
 
 	/**
 	 * Whether or not this field is required.
@@ -493,23 +501,47 @@ class Carbon_Field {
 	}
 
 	/**
-	 * Whether or not this field should take two columns (colspan="2"). Applicable to theme options and term fields only.
+	 * Set the field width.
 	 * 
-	 * @param bool $wide
+	 * @param int $width
 	 * @return object $this
 	 **/
-	function set_wide($wide) {
-		$this->wide = $wide;
+	function set_width($width) {
+		$this->width = (int) $width;
 		return $this;
 	}
 
 	/**
-	 * Return whether or not this field is wide (takes more then two columns).
+	 * Get the field width.
 	 * 
-	 * @return bool
+	 * @return int $width
 	 **/
-	function is_wide() {
-		return $this->wide;
+	function get_width() {
+		return $this->width;
+	}
+
+	/**
+	 *  Add custom CSS class to the field html container.
+	 * 
+	 * @param string|array $classes
+	 * @return object $this
+	 **/
+	function add_class($classes) {
+		if (!is_array($classes)) {
+			$classes = array_values( array_filter( explode(' ', $classes) ) );
+		}
+
+		$this->classes = array_map('sanitize_html_class', $classes);
+		return $this;
+	}
+
+	/**
+	 * Get the field custom CSS classes.
+	 * 
+	 * @return array
+	 **/
+	function get_classes() {
+		return $this->classes;
 	}
 
 	/**
@@ -631,7 +663,8 @@ class Carbon_Field {
 			'context' => $this->get_context(),
 			'required' => $this->is_required(),
 			'lazyload' => $this->get_lazyload(),
-			'wide' => $this->is_wide(),
+			'width' => $this->get_width(),
+			'classes' => $this->get_classes(),
 		);
 
 		return $field_data;
@@ -708,6 +741,7 @@ class Carbon_Field {
 		wp_localize_script('carbon-fields', 'crbl10n',
 			array(
 				'title' => __('Files', 'crb'),
+				'geocode_zero_results' => __('The address could not be found. ', 'crb'),
 				'geocode_not_successful' => __('Geocode was not successful for the following reason: ', 'crb'),
 				'max_num_items_reached' => __('Maximum number of items reached (%s items)', 'crb'),
 				'max_num_rows_reached' => __('Maximum number of rows reached (%s rows)', 'crb'),
@@ -716,6 +750,10 @@ class Carbon_Field {
 				'enter_name_of_new_sidebar' => __('Please enter the name of the new sidebar:', 'crb'),
 				'complex_no_rows' => __('There are no %s yet. Click <a href="#">here</a> to add one.', 'crb'),
 				'complex_add_button' => __('Add %s', 'crb'),
+
+				'message_form_validation_failed' => __('Please fill out all fields correctly. ', 'crb'),
+				'message_required_field' => __("This field is required. ", 'crb'),
+				'message_choose_option' => __("Please choose an option. ", 'crb'),
 			)
 		);
 	}
@@ -1252,8 +1290,6 @@ endif;
 if ( !class_exists('Carbon_Field_Separator') ) :
 
 class Carbon_Field_Separator extends Carbon_Field {
-	protected $wide = true;
-
 	function template() {
 		?>
 		<h3>{{{ label }}}</h3>
@@ -2242,7 +2278,6 @@ if ( !class_exists('Carbon_Field_HTML') ) :
 
 class Carbon_Field_HTML extends Carbon_Field {
 	public $field_html;
-	protected $wide = true;
 
 	function set_html($callback_or_html) {
 		if ( is_callable($callback_or_html) ) {

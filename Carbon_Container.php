@@ -10,6 +10,12 @@ add_action('admin_print_styles', array('Carbon_Container', 'admin_hook_styles'))
  **/
 abstract class Carbon_Container {
 	/**
+	 * Where to put a particular tab -- at the head or the tail. Tail by default
+	 */
+	const TABS_TAIL = 1;
+	const TABS_HEAD = 2;
+
+	/**
 	 * List of registered unique panel identificators
 	 *
 	 * @see verify_unique_panel_id()
@@ -58,6 +64,11 @@ abstract class Carbon_Container {
 	 * @var array
 	 */
 	protected $templates = array();
+
+	/**
+	 * Tabs availabl
+	 */
+	protected $tabs = array();
 
 	/**
 	 * List of default container settings
@@ -206,11 +217,37 @@ abstract class Carbon_Container {
 	abstract function init();
 
 	/**
-	 * Prints the main Underscore template
+	 * Prints the container Underscore template
 	 *
 	 * @return void
 	 **/
-	abstract function template();
+	function template() {
+		?>
+		<div class="{{{ classes.join(' ') }}}">
+			<# _.each(fields, function(field) { #>
+				<div class="{{{ field.classes.join(' ') }}}">
+					<label for="{{{ field.id }}}">
+						{{ field.label }}
+
+						<# if (field.required) { #>
+							 <span class="carbon-required">*</span>
+						<# } #>
+					</label>
+
+					<div class="field-holder {{{ field.id }}}"></div>
+
+					<# if (field.help_text) { #>
+						<em class="help-text">
+							{{{ field.help_text }}}
+						</em>
+					<# } #>
+
+					<em class="carbon-error"></em>
+				</div>
+			<# }); #>
+		</div>
+		<?php
+	}
 
 	function __construct($title) {
 		$this->title = $title;
@@ -417,6 +454,93 @@ abstract class Carbon_Container {
 	}
 
 	/**
+	 * Configuration function for adding tab with fields
+	 */
+	function add_tab($tab_name, $fields) {
+		$this->add_template('tabs', array($this, 'template_tabs'));
+		
+		$this->add_fields($fields);
+		$this->create_tab($tab_name, $fields);
+
+		return $this;
+	}
+
+	/**
+	 * Internal function that creates the tab and associates it with particular field set
+	 */
+	private function create_tab($tab_name, $fields, $queue_end=self::TABS_TAIL) {
+		if (isset($this->tabs[$tab_name])) {
+			throw new Exception("Tab name duplication for $tab_name");
+		}
+
+		if ($queue_end === self::TABS_TAIL) {
+			$this->tabs[$tab_name] = array();
+		} else if ($queue_end === self::TABS_HEAD) {
+			$this->tabs = array_merge(
+				array($tab_name => array()),
+				$this->tabs
+			);
+		}
+
+		foreach ($fields as $field) {
+			$field_name = $field->get_name();
+			$this->tabs[$tab_name][$field_name] = $field;
+		}
+
+		$this->settings['tabs'] = $this->get_tabs_json();
+	}
+
+	function is_tabbed() {
+		return (bool) $this->tabs;
+	}
+
+	function get_untabbed_fields() {
+		$tabbed_fields_names = array();
+		foreach ($this->tabs as $tab_fields) {
+			$tabbed_fields_names = array_merge($tabbed_fields_names, array_keys($tab_fields));
+		}
+
+		$all_fields_names = array();
+		foreach ($this->fields as $field) {
+			$all_fields_names[] = $field->get_name();
+		}
+
+		$fields_not_in_tabs = array_diff($all_fields_names, $tabbed_fields_names);
+
+		$untabbed_fields = array();
+		foreach ($this->fields as $field) {
+			if (in_array($field->get_name(), $fields_not_in_tabs)) {
+				$untabbed_fields[] = $field;
+			}
+		}
+
+		return $untabbed_fields;
+	}
+
+	function get_tabs() {
+		$untabbed_fields = $this->get_untabbed_fields();
+
+		if (!empty($untabbed_fields)) {
+			$this->create_tab(__('General'), $untabbed_fields, self::TABS_HEAD);
+		}
+
+		return $this->tabs;
+	}
+
+	function get_tabs_json() {
+		$tabs_json = array();	
+		$tabs = $this->get_tabs();
+
+		foreach ($tabs as $tab_name => $fields) {
+			foreach ($fields as $field_name => $field) {
+				$tabs_json[$tab_name][] = $field_name;
+			}
+		}
+
+		return $tabs_json;
+	}
+
+	/**
 	 * Returns the private container array of fields.
 	 * Use only if you are completely aware of what you are doing.
 	 *
@@ -553,6 +677,26 @@ abstract class Carbon_Container {
 		}
 
 		return $container_data;
+	}
+
+	function template_tabs() {
+		?>
+		<div class="carbon-tabs">
+			<ul class="carbon-tabs-nav">
+				<# _.each(tabs, function (tab, tabName) { #>
+					<li><a href="#">{{{ tabName }}}</a></li>
+				<# }); #>
+			</ul> 
+
+			<div class="carbon-tabs-body">
+				<# _.each(tabs, function (tab) { #>
+					<div class="carbon-fields-collection carbon-tab">
+						{{{ tab.html }}}
+					</div>
+				<# }); #>
+			</div>
+		</div>
+		<?php
 	}
 
 	static function admin_hook_scripts() {

@@ -290,7 +290,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	}
 
 	function postbox_classes($classes) {
-		$classes[] = 'carbon-postbox';
+		$classes[] = 'carbon-box';
 		return $classes;
 	}
 
@@ -371,41 +371,6 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	 **/
 	function render() {
 		include dirname(__FILE__) . '/admin-templates/container-custom-fields.php';
-	}
-
-	/**
-	 * Holds the backbone template
-	 *
-	 * @return void
-	 **/
-	function template() {
-		?>
-		<table class="{{{ classes }}}">
-			<# _.each(fields, function(field) { #>
-				<tr class="{{{ field.classes }}}">
-					<td>
-						<# if ( !field.wide && (field.label || field.required) ) { #>
-							<label for="{{{ field.id }}}">
-								{{ field.label }}
-
-								<# if (field.required) { #>
-									 <span class="carbon-required">*</span>
-								<# } #>
-							</label>
-						<# } #>
-
-						<div class="field-holder {{{ field.id }}}"></div>
-
-						<# if (field.help_text) { #>
-							<em class="help-text">
-								{{{ field.help_text }}}
-							</em>
-						<# } #>
-					</td>
-				</tr>
-			<# }); #>
-		</table>
-		<?php
 	}
 
 	/**

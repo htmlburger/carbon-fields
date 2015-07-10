@@ -62,6 +62,7 @@
 							<li><a href="#Term_Meta">Term Meta</a></li>
 							<li><a href="#User_Meta">User Meta</a></li>
 							<li><a href="#Widgets">Widgets</a></li>
+							<li><a href="#Tabs">Tabs</a></li>
 
 							<li class="nav-header">Fields</li>
 							<li><a href="#Fields">Usage</a></li>
@@ -517,6 +518,23 @@ function __construct() {
 
 					<hr>
 
+					<h3 id="Tabs" class="left-hash"><a href="#Tabs">Tabs</a></h3>
+					<p>The tabs allow you to group multiple fields under different tab panels using the Container method <code>add_tab</code>. Tabs can be used on every container type. Example:</p>
+					<pre class="prettyprint">
+Carbon_Container::factory('custom_fields', __('User Settings', 'crb'))
+	->add_tab(__('Profile', 'crb'), array(
+		Carbon_Field::factory('text', '_crb_first_name', 'First Name'),
+		Carbon_Field::factory('text', '_crb_last_name', 'Last Name'),
+		Carbon_Field::factory('text', '_crb_position', 'Position'),
+	))
+	->add_tab(__('Notification', 'crb'), array(
+		Carbon_Field::factory('text', '_crb_email', 'Notification Email'),
+		Carbon_Field::factory('text', '_crb_phone', 'Phone Number'),
+	));
+</pre>
+
+					<hr>
+
 					<h2 id="Fields" class="left-hash"><a href="#Fields">Fields</a></h2>
 					<p>Fields are the building block of every container.</p>
 
@@ -552,14 +570,27 @@ Carbon_Field::factory('select', 'crb_color')-&gt;add_options(array('red', 'blue'
 					<p>All field types originate from a single class named <code>Carbon_Field</code> and inherit the following basic features:</p>
 					<h5>Default Values</h5>
 					<p>You can assign a default value for each field in every container. The default value is used when there is currently no value for the particular field in the database. This is the case for example, when you add a new post, or you add a new theme options field to existing container.</p>
-					<p>To assign a default value, you use <code>Carbon_Field::factory(...)-&gt;<strong>set_default_value($default_value)</strong></code></p>
+					<p>To assign a default value, you use:</p>
+					<p><code>Carbon_Field::factory(...)-&gt;<strong>set_default_value($default_value)</strong></code></p>
 					
 					<h5>Required Fields</h5>
-					<p>You can mark any field as required, in which case the user will need to fill it out before submitting. To set a field as required, you use <code>Carbon_Field::factory(...)-&gt;<strong>set_required(true)</strong></code></p>
+					<p>You can mark any field as required, in which case the user will need to fill it out before submitting. To set a field as required, you use: </p>
+					<p><code>Carbon_Field::factory(...)-&gt;<strong>set_required(true)</strong></code></p>
 					
 					<h5>Help Text</h5>
 					<p>Help text is used as a hint to the user, who will use the field. It is usually rendered under the field and contains more information about what it should contain - requirements, examples, links, etc. HTML tags are allowed.</p>
-					<p>You add help text using <code>Carbon_Field::factory(...)-&gt;<strong>help_text($text)</strong></code></p>
+					<p>You add help text using:</p>
+					<p><code>Carbon_Field::factory(...)-&gt;<strong>help_text($text)</strong></code></p>
+
+					<h5>Width</h5>
+					<p>You can set the width to fields that are next to each other and they will align on one row. To set the field width %, use:</p>
+					<p><code>Carbon_Field::factory(...)-&gt;<strong>set_width(50)</strong></code></p>
+
+					<h5>Classes</h5>
+					<p>Custom field classes can be added using the <code>add_class</code> method, for example:</p>
+					<p>
+						<code>Carbon_Field::factory(...)-&gt;<strong>add_class('my-custom-class')</strong></code><br>
+					</p>
 
 					<hr>
 
@@ -1137,12 +1168,12 @@ array (
 									This method is identical to Container <code>add_fields</code> method. 
 								</dd>
 
-								<dt><code>set_layout($layout = table | list)</code></dt>
+								<dt><code>set_layout($layout = table | list)</code> <strong>Deprecated</strong></dt>
 								<dd>
 									There are two layouts available for displaying a complex field: 
 									<ul>
-										<li><code>Carbon_Field_Complex::LAYOUT_LIST</code> - lists groups as rows and their fields as a columns.</li>
 										<li><code>Carbon_Field_Complex::LAYOUT_TABLE</code>(default) - lists groups as rows. Each field in the group is displayed in a new line with the label first and the user control after it.</li>
+										<li><code>Carbon_Field_Complex::LAYOUT_LIST</code> - lists groups as rows and their fields as a columns.</li>
 									</ul>
 								</dd>
 

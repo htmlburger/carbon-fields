@@ -110,43 +110,8 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 		include dirname(__FILE__) . '/admin-templates/container-user-meta.php';
 	}
 
-	function template() {
-		?>
-		<table class="form-table {{{ classes }}}">
-			<# _.each(fields, function(field) { #>
-				<tr class="{{{ field.classes }}}">
-					<# if (!field.wide) { #>
-						<th scope="row">
-							<# if (field.label || field.required) { #>
-								<label for="{{{ field.id }}}">
-									{{ field.label }}
-
-									<# if (field.required) { #>
-										 <span class="carbon-required">*</span>
-									<# } #>
-								</label>
-							<# } #>
-						</th>
-					<# } #>
-
-					<td {{{ field.wide ? 'colspan="2"' : '' }}}>
-						<div class="field-holder {{{ field.id }}}"></div>
-
-						<# if (field.help_text) { #>
-							<em class="help-text">
-								{{{ field.help_text }}}
-							</em>
-						<# } #>
-					</td>
-				</tr>
-			<# }); #>
-		</table>
-		<?php
-	}
-
 	function set_user_id($user_id) {
 		$this->user_id = $user_id;
 		$this->store->set_id($user_id);
 	}
 }
-
