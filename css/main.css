@@ -396,6 +396,9 @@
 }
 
 @media screen and (max-width: 600px) {
+	.carbon-tabs.carbon-tabs-stacked .carbon-tabs-nav li { display: block; margin-right: 8px; }
+	.carbon-tabs.carbon-tabs-stacked .carbon-tabs-nav li a { display: block; }
+
 	.carbon-Relationship .relationship-container { margin: 3px 0 0; }
 	.carbon-Relationship .relationship-left,
 	.carbon-Relationship .relationship-right { float: none; display: block; width: auto; padding: 0 0 10px; }

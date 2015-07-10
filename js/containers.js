@@ -319,6 +319,14 @@ window.carbon = window.carbon || {};
 				// this is not a tabbed container, ignore
 				return;
 			}
+			
+			var topPositions = this.$('.carbon-tabs-nav li').map(function() {
+				return $(this).offset().top;
+			});
+
+			if(_.uniq(topPositions).length > 1) {
+				$tabsContainer.addClass('carbon-tabs-stacked');
+			}
 
 			// Open the first tab. 
 			$tabsContainer.find('ul.carbon-tabs-nav a:first').trigger('click');
