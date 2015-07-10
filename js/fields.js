@@ -1604,11 +1604,6 @@ window.carbon = window.carbon || {};
 		initialize: function() {
 			this.on('group:rendered', this.setFields);
 
-			// Trigger the lazyloader, needed for initial rendering
-			this.on('group:rendered', function() {
-				$(window).trigger('lazyload');
-			});
-
 			// Updates the order number in the DOM
 			this.listenTo(this.model, 'change:order', this.updateOrderNumber);
 
@@ -1738,9 +1733,6 @@ window.carbon = window.carbon || {};
 
 				// Remove the group from the groupsCollection, this will trigger the "remove" event on the collection
 				_this.model.collection.remove(_this.model);
-
-				// Trigger the lazyloader, necessary because we need to initialize the lower group
-				$(window).trigger('lazyload');
 			});
 
 			event.preventDefault();

@@ -67,13 +67,13 @@ window.carbon = window.carbon || {};
 
 			// When a container is sorted (using ui-sortable), send the event to all fields using our custom "propagate" event
 			this.$('div.widgets-sortables, .meta-box-sortables').on('sortstart sortstop', function(event, ui) {
-				var containerID = $(ui.item).attr('id')
+				var containerID = $(ui.item).attr('id') || '';
 
 				if (containerID.indexOf('widget-') === 0) {
 					var containerID = containerID.replace(/widget-\d+_/, '');
 				}
 
-				if (typeof carbon.views[containerID] !== 'undefined') {
+				if (containerID && typeof carbon.views[containerID] !== 'undefined') {
 					carbon.views[containerID].trigger('propagate', event);
 				}
 			});
@@ -83,14 +83,10 @@ window.carbon = window.carbon || {};
 				_this.widgetsHandler.apply(_this, arguments);
 			});
 
-			// Initialize the Lazyload listener
-			this.on('app:rendered', this.lazyload);
-
-			// Trigger the lazyloader
-			$(window).load(function() {
-				setTimeout(function() {
-					$(window).trigger('lazyload');
-				}, 100);
+			// Initialize the Lazyload interval
+			this.on('app:rendered', function() {
+				setTimeout(this.lazyload, 0);
+				setInterval(this.lazyload, 1000);
 			});
 		},
 
@@ -163,19 +159,17 @@ window.carbon = window.carbon || {};
 		 * Handles the initialization of fields that should be rendered when they are in the viewport.
 		 */
 		lazyload: function() {
-			$(window).on('load resize scroll lazyload', function(event) {
-				if (_.isEmpty(carbon.lazyload)) {
-					return;
-				}
+			if (_.isEmpty(carbon.lazyload)) {
+				return;
+			}
 
-				for (var id in carbon.lazyload) {
-					var view = carbon.lazyload[id];
+			for (var id in carbon.lazyload) {
+				var view = carbon.lazyload[id];
 
-					if (!view.rendered && carbon.isElementInViewport(view.$el)) {
-						view.trigger('field:rendered');
-					}
+				if (!view.rendered && carbon.isElementInViewport(view.$el)) {
+					view.trigger('field:rendered');
 				}
-			});
+			}
 		}
 	});
 
