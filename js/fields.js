@@ -458,18 +458,29 @@ window.carbon = window.carbon || {};
 
 			if (!this.active) {
 				try {
+					// Set the editor ID on media buttons
+					this.mediaButtonsInit();
+
 					// initialize mceInit
 					tinymce.init(mceInit);
 
 					// initialize qtInit (quicktags)
 					var qtag = quicktags( qtInit );
-					this.buttonsInit( qtag );
+					this.textButtonsInit( qtag );
 
 					this.active = true;
 				} catch(e) {
 					console.log(e);
 				}
 			}
+		},
+
+		mediaButtonsInit: function() {
+			var id = this.model.get('id');
+
+			this.$('.wp-media-buttons .button:not([data-editor])').each(function() {
+				$(this).attr('data-editor', id);
+			});
 		},
 
 		get_mceInit: function(){
@@ -524,7 +535,7 @@ window.carbon = window.carbon || {};
 			return qtInit;
 		},
 
-		buttonsInit: function( ed ) {
+		textButtonsInit: function( ed ) {
 			var defaults = ',strong,em,link,block,del,ins,img,ul,ol,li,code,more,close,';
 
 			canvas = ed.canvas;
