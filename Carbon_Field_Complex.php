@@ -375,11 +375,11 @@ class Carbon_Field_Complex extends Carbon_Field {
 
 			<div class="carbon-drag-handle">
 				<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label }}}</span>
-				<div class="carbon-group-actions">
-					<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e('Collapse/Expand', 'crb'); ?>"><?php _e('Collapse/Expand', 'crb'); ?></a>
-					<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e('Clone', 'crb'); ?>"><?php _e('Clone', 'crb'); ?></a>
-					<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e('Remove', 'crb'); ?>"><?php _e('Remove', 'crb'); ?></a>
-				</div>
+			</div>
+			<div class="carbon-group-actions">
+				<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e('Collapse/Expand', 'crb'); ?>"><?php _e('Collapse/Expand', 'crb'); ?></a>
+				<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e('Clone', 'crb'); ?>"><?php _e('Clone', 'crb'); ?></a>
+				<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e('Remove', 'crb'); ?>"><?php _e('Remove', 'crb'); ?></a>
 			</div>
 
 			<div class="fields-container">

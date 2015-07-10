@@ -298,6 +298,7 @@
 .carbon-Complex .carbon-field label { font-weight: bold; }
 
 /* Complex Groups */
+.carbon-group-row { position: relative; }
 .carbon-group-row + .carbon-group-row { margin-top: 14px; }
 .carbon-group-row .carbon-row { padding: 10px 12px 12px; }
 .carbon-group-row .carbon-row.carbon-group-row { padding: 0; }
@@ -316,8 +317,8 @@
 .carbon-Complex.even > .field-holder > .carbon-subcontainer > .carbon-groups-holder > .carbon-group-row > .fields-container > div,
 .carbon-Complex.even > .field-holder > .carbon-subcontainer > .carbon-groups-holder > .carbon-group-row > .carbon-drag-handle { background: #fff; }
 
-.carbon-group-actions { position: absolute; top: 3px; right: 10px; line-height: 36px; }
-.carbon-group-actions a { position: relative; display: inline-block; width: 19px; height: 19px; margin: 0 3px; color: transparent; font-size: 0; text-indent: -5000em; }
+.carbon-group-actions { position: absolute; top: 0; right: 0; padding: 8px 10px; }
+.carbon-group-actions a { position: relative; display: inline-block; width: 19px; height: 19px; margin: 0 3px; vertical-align: middle; color: transparent; font-size: 0; text-indent: -5000em; }
 .carbon-group-actions a:focus,
 .carbon-group-actions a:active { outline: none !important; box-shadow: none; }
 .carbon-group-actions a:before { width: 19px; height: 19px; font-size: 19px; line-height: 1; text-align: center; color: #000; }

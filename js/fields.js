@@ -495,7 +495,6 @@ window.carbon = window.carbon || {};
 
 							// trigger change on textarea
 							$field.find('textarea').trigger('change');
-							
 						});
 					});
 				};
