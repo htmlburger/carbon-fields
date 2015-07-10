@@ -32,7 +32,7 @@ abstract class Carbon_Widget extends WP_Widget implements Carbon_DataStore {
 
 		$this->verify_unique_widget_id($widget_ID);
 
-		$this->WP_Widget($widget_ID, $title, $widget_options, $this->form_options);
+		parent::__construct($widget_ID, $title, $widget_options, $this->form_options);
 	}
 
 	function update($new_instance, $old_instance) {
