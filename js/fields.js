@@ -137,7 +137,7 @@ window.carbon = window.carbon || {};
 			var lazyload = this.model.get('lazyload');
 			var template = carbon.template(type);
 
-			_.extend(this.templateVariables, this.model.attributes, {
+			$.extend(true, this.templateVariables, this.model.attributes, {
 				model: this.model
 			});
 
@@ -886,11 +886,23 @@ window.carbon = window.carbon || {};
 			var valueType = this.model.get('value_type');
 			var mediaTypes = {};
 
+			var getAttachmentThumb = function(attachment) {
+				var thumbUrl = '';
+
+				// Get the thumbnail (if any)
+				if (attachment.type === 'image' && attachment.sizes) {
+					var size = attachment.sizes.thumbnail || attachment.sizes.full;
+					thumbUrl = size.url;
+				}
+
+				return thumbUrl;
+			};
+
 			mediaTypes[type] = wp.media.frames.crbMediaField = wp.media({
 				title: windowLabel ? windowLabel : crbl10n.title,
 				library: { type: typeFilter }, // audio, video, image
 				button: { text: buttonLabel },
-				multiple: false
+				multiple: true
 			});
 
 			var mediaField = mediaTypes[type];
@@ -898,25 +910,33 @@ window.carbon = window.carbon || {};
 			// Runs when an image is selected.
 			mediaField.on('select', function () {
 				// Grabs the attachment selection and creates a JSON representation of the model.
-				var mediaAttachment = mediaField.state().get('selection').first().toJSON();
+				var mediaAttachments = mediaField.state().get('selection').toJSON();
+
+				// Get the first attachment and remove it from the array
+				var mediaAttachment = mediaAttachments.shift();
+
+				// If multiple attachments, multiply the field
+				_.each(mediaAttachments, function(att) {
+					_this.model.set('multiply', {
+						'value': att[valueType],
+						'file_type': att.type,
+						'url': att.url,
+						'thumb_url': getAttachmentThumb(att)
+					});
+				});
+
 				var mediaValue = mediaAttachment[valueType];
-				var thumbUrl = '';
+				var thumbUrl = getAttachmentThumb(mediaAttachment);
 
 				// Update the model
-				_this.model.set('file_type', mediaAttachment.type);
-				_this.model.set('value', mediaValue);
-				_this.model.set('url', mediaAttachment.url);
-
-				// Set the thumbnail (if any)
-				if (mediaAttachment.type === 'image' && mediaAttachment.sizes) {
-					var size = mediaAttachment.sizes.thumbnail || mediaAttachment.sizes.full;
-					thumbUrl = size.url;
-				}
-				_this.model.set('thumb_url', thumbUrl);
+				this.model.set('file_type', mediaAttachment.type);
+				this.model.set('value', mediaValue);
+				this.model.set('url', mediaAttachment.url);
+				this.model.set('thumb_url', thumbUrl);
 
 				// Trigger an event that notifies that a media file is selected
-				_this.trigger('media:updated', mediaAttachment);
-			});
+				this.trigger('media:updated', mediaAttachment);
+			}, this);
 
 			// Opens the media library frame
 			mediaField.open();
@@ -1275,6 +1295,22 @@ window.carbon = window.carbon || {};
 			'force_required': true
 		},
 
+		getGroupByName: function(name) {
+			var groups = this.get('groups') || [];
+			var group = null;
+
+			for (var i = 0; i < groups.length; i++) {
+				var grp = groups[i];
+
+				if (grp.hasOwnProperty('name') && grp.name == name) {
+					group = grp;
+					break;
+				}
+			}
+
+			return group;
+		},
+
 		validate: function(attrs, options) {
 			var hasErrors = false;
 			var view = carbon.views[this.get('id')];
@@ -1318,15 +1354,15 @@ window.carbon = window.carbon || {};
 			this.groupsCollection.comparator = 'order'; 
 
 			// Groups collection events (order matters)
-			this.listenTo(this.groupsCollection, 'add', this.setGroupOrder);		// Set the initial group order
-			this.listenTo(this.groupsCollection, 'add', this.setGroupIndex);		// Set the group index, the index should be unique for each group
-			this.listenTo(this.groupsCollection, 'remove', this.checkMin);			// Checks the minimum number of rows
-			this.listenTo(this.groupsCollection, 'add remove', this.checkMax);		// Checks the maximum number of rows
-			this.listenTo(this.groupsCollection, 'add remove', this.toggleIntroRow);// Show/Hide the "There are no Entries" row
-			this.listenTo(this.groupsCollection, 'add remove', this.sortGroups);	// Forces group sorting while they are added/removed and not after that
-			this.listenTo(this.groupsCollection, 'sort', this.reorderGroups);		// Sort event is trigger after the "add" event
-			this.listenTo(this.groupsCollection, 'add', this.setGroupID);			// Sets an unique ID for each group
-			this.listenTo(this.groupsCollection, 'add', this.renderGroup);			// Render the added group
+			this.listenTo(this.groupsCollection, 'add',        this.setGroupOrder);  // Set the initial group order
+			this.listenTo(this.groupsCollection, 'add',        this.setGroupIndex);  // Set the group index, the index should be unique for each group
+			this.listenTo(this.groupsCollection, 'remove',     this.checkMin);       // Checks the minimum number of rows
+			this.listenTo(this.groupsCollection, 'add remove', this.checkMax);       // Checks the maximum number of rows
+			this.listenTo(this.groupsCollection, 'add remove', this.toggleIntroRow); // Show/Hide the "There are no Entries" row
+			this.listenTo(this.groupsCollection, 'add remove', this.sortGroups);     // Forces group sorting while they are added/removed and not after that
+			this.listenTo(this.groupsCollection, 'sort',       this.reorderGroups);  // Sort event is trigger after the "add" event
+			this.listenTo(this.groupsCollection, 'add',        this.setGroupID);     // Sets an unique ID for each group
+			this.listenTo(this.groupsCollection, 'add',        this.renderGroup);    // Render the added group
 
 			/*
 			 * View Events
@@ -1515,30 +1551,14 @@ window.carbon = window.carbon || {};
 			});
 		},
 
-		addNewGroup: function(groupName) {
-			var group = this.getGroupByName(groupName);;
-
-			if (group) {
-				this.groupsCollection.add(group, {
-					sort: false
-				});
-			}
-		},
-
-		getGroupByName: function(name) {
-			var groups = this.model.get('groups') || [];
-			var group = null;
-
-			for (var i = 0; i < groups.length; i++) {
-				var grp = groups[i];
-
-				if (grp.hasOwnProperty('name') && grp.name == name) {
-					group = grp;
-					break;
-				}
+		addNewGroup: function(group) {
+			if (_.isString(group)) {
+				group = this.model.getGroupByName(group);
 			}
 
-			return group;
+			this.groupsCollection.add(group, {
+				sort: false
+			});
 		},
 
 		setGroupID: function(model) {
@@ -1635,6 +1655,35 @@ window.carbon = window.carbon || {};
 			this.listenTo(this.fieldsCollection, 'add', this.updateFieldNameID);
 			this.listenTo(this.fieldsCollection, 'add', this.renderField);
 			this.listenTo(this.fieldsCollection, 'change', this.sync);
+
+			// Listen for fields that want to multiply and create new groups with them
+			this.listenTo(this.fieldsCollection, 'change:multiply', this.multiplier);
+		},
+
+		multiplier: function(model) {
+			var fieldData = model.get('multiply');
+			var fieldID = model.get('old_id');
+			var groupsCollection = this.model.collection;
+			var groupName = this.model.get('name');
+			var group = $.extend(true, {}, this.complexModel.getGroupByName(groupName));
+
+			// loop the group fields and set the new model data
+			_.each(group.fields, function(field) {
+				// check if this is the right field
+				if (fieldID !== field.id) {
+					return; // continue
+				}
+
+				// update the field data
+				_.each(_.keys(fieldData), function(key) {
+					field[key] = fieldData[key];
+				});
+			});
+
+			// Add the new group with the proper field data
+			groupsCollection.add(group, {
+				sort: false
+			});
 		},
 
 		toggleCollapse: function(model) {
