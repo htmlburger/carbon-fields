@@ -137,7 +137,7 @@ window.carbon = window.carbon || {};
 			var lazyload = this.model.get('lazyload');
 			var template = carbon.template(type);
 
-			$.extend(true, this.templateVariables, this.model.attributes, {
+			_.extend(this.templateVariables, this.model.attributes, {
 				model: this.model
 			});
 
