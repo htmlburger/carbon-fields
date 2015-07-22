@@ -261,6 +261,9 @@ window.carbon = window.carbon || {};
 		carbon.views.main.setContainers();
 	}
 
+	/**
+	 *	Run the app when the dom is ready
+	 */
 	$(document).ready(function() {
 		carbon.init(); // Abracadabra! Poof! Containers everywhere ...
 	});

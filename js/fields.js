@@ -22,7 +22,8 @@ window.carbon = window.carbon || {};
 	carbon.fields.Model = Backbone.Model.extend({
 		defaults: {
 			'error': false,
-			'force_required': false,
+			'visible': true,
+			'force_required': false
 		},
 
 		initialize: function() {
@@ -55,7 +56,7 @@ window.carbon = window.carbon || {};
 		},
 
 		isRequired: function() {
-			return !! ( this.get('required') || this.get('force_required') );
+			return !! this.get('visible') && ( this.get('required') || this.get('force_required') );
 		},
 
 		/*
@@ -113,9 +114,6 @@ window.carbon = window.carbon || {};
 				this.rendered = true;
 			});
 
-			// Set width
-			this.on('field:rendered', this.setWidth);
-
 			this.listenTo(this.model, 'change:height', this.equalizeHeight);
 
 			// Listen for field class updates
@@ -127,8 +125,56 @@ window.carbon = window.carbon || {};
 			// Listen for value change and revalidate the model
 			this.listenTo(this.model, 'change:value', this.revalidate);
 
-			// Set the initial error state
-			this.toggleError();
+			// Listen to visibility change and hide/show the field
+			this.listenTo(this.model, 'change:visible', this.toggleVisibility);
+
+			// Set initial states
+			this.on('field:rendered', this.setWidth);
+			this.on('field:rendered', this.toggleError);
+			this.on('field:rendered', this.toggleVisibility);
+
+			// Initialize conditional logic
+			this.conditionalLogicInit();
+		},
+
+		conditionalLogicInit: function() {
+			var conditionalLogicRules = this.model.get('conditional_logic');
+
+			// Bail if there are no conditional logic rules
+			if (_.isEmpty(conditionalLogicRules)) {
+				return;
+			}
+
+			// The field should be invisible until the rules are met
+			this.model.set('visible', false);
+
+			// Initialize the conditional logic model
+			var conditionalLogic = new carbon.fields.ConditionalLogic({
+				'targetCollection': this.model.collection,
+				'rules': conditionalLogicRules.rules,
+				'relation': conditionalLogicRules.relation
+			});
+
+			// Bind the conditional logic validation state to the field visibility
+			this.listenTo(conditionalLogic, 'change:valid', function(model) {
+				this.model.set('visible', model.get('valid'));
+			});
+
+			// Initial rules check
+			conditionalLogic.validate();
+		},
+
+		toggleVisibility: function() {
+			var id = this.model.get('id');
+			var visible = this.model.get('visible');
+			var $holder = this.$el.closest('.carbon-field');
+
+			// Disable all inputs if not visible
+			$holder.find(':input').attr('disabled', function() {
+				return !visible;
+			});
+
+			$holder.toggle(visible);
 		},
 
 		render: function() {
@@ -173,9 +219,9 @@ window.carbon = window.carbon || {};
 		 * If the field has had validation error (after form submission), 
 		 * re-validate it after each value change. 
 		 */
-		revalidate: function(model) {
-			if (model.isRequired() && this.hadErrors) {
-				model.isValid();
+		revalidate: function() {
+			if (this.model.isRequired() && this.hadErrors) {
+				this.model.isValid();
 				this.toggleError();
 			}
 		},
@@ -234,6 +280,100 @@ window.carbon = window.carbon || {};
 			}
 
 			return new FieldModel(attrs, options);
+		}
+	});
+
+	/*
+	|--------------------------------------------------------------------------
+	| Conditional Logic MODEL
+	|--------------------------------------------------------------------------
+	|
+	| A model that handles the field conditional logic rules.
+	|
+	| It listens on the target fields collection and validates the rules
+	| every time the values are changed. 
+	|
+	| The "valid" model attribute is "true" if the rule conditions are met.
+	|
+	*/
+	carbon.fields.ConditionalLogic = Backbone.Model.extend({
+		defaults: {
+			'targetCollection': new Backbone.Collection(),
+			'rules': [],
+			'relation': 'AND',
+			'valid': false
+		},
+
+		initialize: function() {
+			var fields = this.getFields();
+
+			// Check the rules when a field value has changed
+			this.listenTo(fields, 'change:value', this.validate);
+		},
+
+		validate: function() {
+			var rules = this.get('rules');
+			var fields = this.getFields();
+			var relation = this.get('relation');
+
+			for (var i in rules) {
+				var rule = rules[i];
+				var fieldModel = this.getFieldByName(rule.field);
+				var fieldValue = fieldModel.get('value');
+
+				rule.valid = this.compare(fieldValue, rule.value, rule.compare);
+			}
+
+			var rulesStates = _.pluck(rules, 'valid');
+
+			if (relation === 'AND') {
+				valid = _.every(rulesStates);
+			}
+
+			if (relation === 'OR') {
+				valid = _.some(rulesStates);
+			}
+
+			this.set('valid', valid);
+		},
+
+		getFields: function() {
+			var rules = this.get('rules');
+
+			var targetCollection = this.get('targetCollection');
+			var collection = new Backbone.Collection();
+
+			// Loop the rules and get the fields from the target collection based on the field name
+			_.each(rules, function(rule) {
+				var fieldModel = targetCollection.findWhere({base_name: rule.field});
+
+				if (!fieldModel) {
+					$.error('ConditionalLogic: Field name "' + rule.field + '" not found.');
+				}
+
+				collection.add(fieldModel);
+			});
+
+			return collection;
+		},
+
+		getFieldByName: function(name) {
+			var fields = this.getFields();
+
+			return fields.findWhere({base_name: name});
+		},
+
+		compare: function(value1, value2, oparator) {
+			switch (oparator) {
+				case '='  : return value1 == value2;
+				case '!=' : return value1 != value2;
+				case '>'  : return value1 >  value2;
+				case '<'  : return value1 <  value2;
+				case '>=' : return value1 >= value2;
+				case '<=' : return value1 <= value2;
+				case 'IN' : return _.some(value2, function(value) { return value == value1; });
+				case 'NOT IN' : return _.every(value2, function(value) { return value != value1; });
+			}
 		}
 	});
 
@@ -667,12 +807,10 @@ window.carbon = window.carbon || {};
 
 	// Color VIEW
 	carbon.fields.View.Color = carbon.fields.View.extend({
-		events: function() {
-			return _.extend({}, carbon.fields.View.prototype.events, {
-				'click .pickcolor.button': 'focusField',
-				'focus input.carbon-color': 'showColorPicker'
-			});
-		},
+		events: _.extend({}, carbon.fields.View.prototype.events, {
+			'click .pickcolor.button': 'focusField',
+			'focus input.carbon-color': 'showColorPicker'
+		}),
 
 		initialize: function() {
 			carbon.fields.View.prototype.initialize.apply(this);
@@ -809,11 +947,9 @@ window.carbon = window.carbon || {};
 
 	// Choose Sidebar VIEW
 	carbon.fields.View.ChooseSidebar = carbon.fields.View.extend({
-		events: function() {
-			return _.extend({}, carbon.fields.View.prototype.events, {
-				'change select': 'addNew'
-			});
-		},
+		events: _.extend({}, carbon.fields.View.prototype.events, {
+			'change select': 'addNew'
+		}),
 
 		initialize: function() {
 			carbon.fields.View.prototype.initialize.apply(this);
@@ -850,11 +986,9 @@ window.carbon = window.carbon || {};
 
 	// File VIEW
 	carbon.fields.View.File = carbon.fields.View.extend({
-		events: function() {
-			return _.extend({}, carbon.fields.View.prototype.events, {
-				'click .c2_open_media': 'openMedia'
-			});
-		},
+		events: _.extend({}, carbon.fields.View.prototype.events, {
+			'click .c2_open_media': 'openMedia'
+		}),
 
 		initialize: function() {
 			carbon.fields.View.prototype.initialize.apply(this);
@@ -971,11 +1105,9 @@ window.carbon = window.carbon || {};
 
 	// Attachment VIEW
 	carbon.fields.View.Attachment = carbon.fields.View.File.extend({
-		events: function() {
-			return _.extend({}, carbon.fields.View.File.prototype.events(), {
-				'click .carbon-file-remove': 'removeFile'
-			});
-		},
+		events: _.extend({}, carbon.fields.View.File.prototype.events, {
+			'click .carbon-file-remove': 'removeFile'
+		}),
 
 		initialize: function() {
 			carbon.fields.View.File.prototype.initialize.apply(this);
@@ -1010,6 +1142,20 @@ window.carbon = window.carbon || {};
 	carbon.fields.View.Image = carbon.fields.View.Attachment.extend({
 		initialize: function() {
 			carbon.fields.View.Attachment.prototype.initialize.apply(this);
+		}
+	});
+
+
+	/*--------------------------------------------------------------------------
+	 * CHECKBOX
+	 *------------------------------------------------------------------------*/
+
+	// Checkbox VIEW
+	carbon.fields.View.Checkbox = carbon.fields.View.extend({
+		sync: function(event) {
+			var value = this.$('input[type="checkbox"]:checked').val() || '';
+
+			this.model.set('value', value);
 		}
 	});
 
@@ -1290,10 +1436,10 @@ window.carbon = window.carbon || {};
 
 	// Complex MODEL
 	carbon.fields.Model.Complex = carbon.fields.Model.extend({
-		defaults: {
+		defaults: _.extend({}, carbon.fields.Model.prototype.defaults, {
 			'index': 0,
 			'force_required': true
-		},
+		}),
 
 		getGroupByName: function(name) {
 			var groups = this.get('groups') || [];
@@ -1357,6 +1503,7 @@ window.carbon = window.carbon || {};
 			this.listenTo(this.groupsCollection, 'add',        this.setGroupOrder);  // Set the initial group order
 			this.listenTo(this.groupsCollection, 'add',        this.setGroupIndex);  // Set the group index, the index should be unique for each group
 			this.listenTo(this.groupsCollection, 'remove',     this.checkMin);       // Checks the minimum number of rows
+			this.listenTo(this.groupsCollection, 'remove',     this.revalidate);     // Revalidate the field if a group is removed
 			this.listenTo(this.groupsCollection, 'add remove', this.checkMax);       // Checks the maximum number of rows
 			this.listenTo(this.groupsCollection, 'add remove', this.toggleIntroRow); // Show/Hide the "There are no Entries" row
 			this.listenTo(this.groupsCollection, 'add remove', this.sortGroups);     // Forces group sorting while they are added/removed and not after that

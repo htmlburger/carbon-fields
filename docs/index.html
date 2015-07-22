@@ -585,12 +585,72 @@ Carbon_Field::factory('select', 'crb_color')-&gt;add_options(array('red', 'blue'
 					<h5>Width</h5>
 					<p>You can set the width to fields that are next to each other and they will align on one row. To set the field width %, use:</p>
 					<p><code>Carbon_Field::factory(...)-&gt;<strong>set_width(50)</strong></code></p>
+					<p>This feature does nothing in term meta container due to the table layout used by WordPress term editing screen. </p>
 
 					<h5>Classes</h5>
 					<p>Custom field classes can be added using the <code>add_class</code> method, for example:</p>
 					<p>
 						<code>Carbon_Field::factory(...)-&gt;<strong>add_class('my-custom-class')</strong></code><br>
 					</p>
+
+					<h5>Conditional Logic</h5>
+					<p>
+						You can apply conditional logic to a field, using <code>set_conditional_logic($rules)</code>, to show or hide it based on other field(s) in the same container. The syntax is similar to <code>meta_query</code>.
+					</p>
+
+					<p>The conditional rules are passed in a two-dimensional array and each rule can have the following arguments as key=&gt;value pairs:</p>
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Key</th>
+								<th>Description</th>
+								<th>Value</th>
+								<th>Required</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><code>field</code></td>
+								<td>The field name to which the rule is applied. The name should be the same as defined in the container.</td>
+								<td>(string)</td>
+								<td>Yes</td>
+							</tr>
+							<tr>
+								<td><code>value</code></td>
+								<td>The value of the field. It can be an array only when compare is <code>IN</code> or <code>NOT IN</code>.</td>
+								<td>(string|array), defaults to ''</td>
+								<td>No</td>
+							</tr>
+							<tr>
+								<td><code>compare</code></td>
+								<td>Operator to test. Possible values are: <code>=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>, <code>IN</code>, <code>NOT IN</code>.</td>
+								<td>(string), defaults to <code>=</code></td>
+								<td>No</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<p>You can optionally pass the <code>relation</code> key and set it to either <code>AND</code> (default) or <code>OR</code>. It defines the relation, when there is more than one rule.</p>
+
+					<p>Example:</p>
+					<pre class="prettyprint">
+Carbon_Field::factory('select', 'crb_show_socials', 'Show Socials')
+	->add_options(array(
+		'yes' => 'Yes',
+		'no' => 'No',
+	)),
+
+Carbon_Field::factory('text', 'crb_facebook', 'Facebook URL')
+	->set_conditional_logic(array(
+		'relation' => 'AND', // Optional, defaults to "AND"
+		array(
+			'field' => 'crb_show_socials',
+			'value' => 'yes', // Optional, defaults to "". Should be an array if "IN" or "NOT IN" operators are used.
+			'compare' => '=', // Optional, defaults to "=". Available operators: =, &lt;, &gt;, &lt;=, &gt;=, IN, NOT IN
+		)
+	)),
+</pre>
 
 					<hr>
 

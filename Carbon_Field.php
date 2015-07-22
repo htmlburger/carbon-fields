@@ -60,6 +60,14 @@ class Carbon_Field {
 	protected $name;
 
 	/**
+	 * The base field name which is used in the container.
+	 *
+	 * @see set_base_name()
+	 * @var string
+	 */
+	protected $base_name;
+
+	/**
 	 * Field name used as label during field render
 	 *
 	 * @see factory()
@@ -141,6 +149,13 @@ class Carbon_Field {
 	protected $name_prefix = '_';
 
 	/**
+	 * Stores the field conditional logic rules.
+	 *
+	 * @var array
+	 **/
+	protected $conditional_logic = array();
+
+	/**
 	 * Stores the field options (if any)
 	 *
 	 * @var string
@@ -178,6 +193,7 @@ class Carbon_Field {
 	private function __construct($name, $label) {
 		$this->set_name($name);
 		$this->set_label($label);
+		$this->set_base_name($name);
 
 		// Pick random ID
 		$random_string = md5(mt_rand() . $this->get_name() . $this->get_label());
@@ -350,7 +366,7 @@ class Carbon_Field {
 	/**
 	 * Get default field value
 	 *
-	 * @return mixed $value
+	 * @return mixed
 	 **/
 	function get_default_value() {
 		return $this->default_value;
@@ -370,10 +386,10 @@ class Carbon_Field {
 	 * Use only if you are completely aware of what you are doing.
 	 *
 	 * @param string $name Field name, either sanitized or not
-	 * @return mixed
 	 **/
 	function set_name($name) {
 		$name = preg_replace('~\s+~', '_', strtolower($name));
+
 		if ( $this->name_prefix && strpos($name, $this->name_prefix) !== 0 ) {
 			$name = $this->name_prefix . $name;
 		}
@@ -391,7 +407,23 @@ class Carbon_Field {
 	}
 
 	/**
-	 * Set field name prefix. Calling this method will update the field name
+	 * Set field base name as defined in the container.
+	 **/
+	function set_base_name($name) {
+		$this->base_name = $name;
+	}
+
+	/**
+	 * Return the field base name.
+	 *
+	 * @return string
+	 **/
+	function get_base_name() {
+		return $this->base_name;
+	}
+
+	/**
+	 * Set field name prefix. Calling this method will update the current field name and the conditional logic fields.
 	 *
 	 * @param string $prefix
 	 * @return object $this
@@ -657,6 +689,7 @@ class Carbon_Field {
 			'type' => $this->get_type(),
 			'label' => $this->get_label(),
 			'name' => $this->get_name(),
+			'base_name' => $this->get_base_name(),
 			'value' => $this->get_value(),
 			'default_value' => $this->get_default_value(),
 			'help_text' => $this->get_help_text(),
@@ -665,9 +698,87 @@ class Carbon_Field {
 			'lazyload' => $this->get_lazyload(),
 			'width' => $this->get_width(),
 			'classes' => $this->get_classes(),
+			'conditional_logic' => $this->get_conditional_logic(),
 		);
 
 		return $field_data;
+	}
+
+	/**
+	 * Set the field visibility conditional logic.
+	 *
+	 * @param array
+	 */
+	public function set_conditional_logic($rules) {
+		$this->conditional_logic = $this->parse_conditional_rules($rules);
+
+		return $this;
+	}
+
+	/**
+	 * Get the conditional logic rules
+	 *
+	 * @return array
+	 */
+	protected function get_conditional_logic() {
+		return $this->conditional_logic;
+	}
+
+	/**
+	 * Validate and parse the conditional logic rules.
+	 *
+	 * @param array $rules
+	 * @return array
+	 */
+	protected function parse_conditional_rules($rules) {
+		if ( ! is_array( $rules ) ) {
+			throw new Carbon_Exception('Conditional logic rules argument should be an array.');
+		}
+
+		$parsed_rules = array(
+			'relation' => 'AND',
+			'rules' => array(),
+		);
+
+		$allowed_operators = array('=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN');
+
+		foreach ( $rules as $key => $rule ) {
+			// Check if we have a relation key
+			if ( $key === 'relation' ) {
+				if ($rule === 'OR') {
+					$parsed_rules['relation'] = $rule;
+				}
+				continue;
+			}
+
+			// Check if the rule is valid
+			if ( ! is_array($rule) || empty( $rule['field'] ) ) {
+				throw new Carbon_Exception('Invalid conditional logic rule format. The rule should be an array with the "field" key set.');
+			}
+
+			// Check the compare oparator
+			if ( empty( $rule['compare'] ) ) {
+				$rule['compare'] = '=';
+			}
+			if ( ! in_array( $rule['compare'], $allowed_operators ) ) {
+				throw new Carbon_Exception('Invalid conditional logic compare oparator: <code>' . $rule['compare'] . '</code><br>' . 
+					'Allowed oparators are: <code>' . implode(', ', $allowed_operators) . '</code>');
+			}
+			if ( $rule['compare'] === 'IN' || $rule['compare'] === 'NOT IN' ) {
+				if ( ! is_array( $rule['value'] ) ) {
+					throw new Carbon_Exception('Invalid conditional logic value format. An array is expected, when using the "' . $rule['compare'] . '" operator.');
+				}
+			}
+
+			// Check the value
+			if ( ! isset( $rule['value'] ) ) {
+				$rule['value'] = '';
+			}
+
+			$parsed_rules['rules'][] = $rule;
+		}
+
+		return $parsed_rules;
 	}
 
 	/**
