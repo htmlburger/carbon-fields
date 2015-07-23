@@ -55,7 +55,8 @@ function carbon_json() {
 	$json_data = carbon_get_json_data();
 
 	if (wp_script_is('carbon-app', 'enqueued')) {
-		$json_data_encoded = function_exists('wp_json_encode') ? wp_json_encode($json_data, WP_DEBUG && defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : null)  : json_encode($json_data);
+		$json_options = WP_DEBUG && defined('JSON_PRETTY_PRINT') ? JSON_PRETTY_PRINT : null;
+		$json_data_encoded = function_exists('wp_json_encode') ? wp_json_encode($json_data, $json_options) : json_encode($json_data, $json_options);
 		?>
 		<script>
 			/* <![CDATA[ */
@@ -71,16 +72,30 @@ endif;
 if ( !function_exists('carbon_get_json_data') ) :
 
 function carbon_get_json_data() {
-	$containers = Carbon_Container::get_active_containers();
+	global $wp_registered_sidebars;
 
 	$carbon_data = array(
 		'containers' => array(),
+		'sidebars' => array(),
 	);
+
+	$containers = Carbon_Container::get_active_containers();
 
 	foreach ($containers as $container) {
 		$container_data = $container->to_json(true);
 
 		$carbon_data['containers'][] = $container_data;
+	}
+
+	foreach ($wp_registered_sidebars as $sidebar) {
+		// Check if we have inactive sidebars
+		if (isset($sidebar['class']) && strpos($sidebar['class'], 'inactive-sidebar') !== false) {
+			continue;
+		}
+
+		$carbon_data['sidebars'][] = array(
+			'name' => $sidebar['name'],
+		);
 	}
 
 	return $carbon_data;

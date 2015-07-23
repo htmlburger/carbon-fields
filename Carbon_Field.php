@@ -858,7 +858,8 @@ class Carbon_Field {
 				'max_num_rows_reached' => __('Maximum number of rows reached (%s rows)', 'crb'),
 				'cannot_create_more_rows' => __('Cannot create more than %s rows', 'crb'),
 				'enter_name_of_new_sidebar' => __('Please enter the name of the new sidebar:', 'crb'),
-				'enter_name_of_new_sidebar' => __('Please enter the name of the new sidebar:', 'crb'),
+				'remove_sidebar_confirmation' => __('Are you sure you wish to remove this sidebar?', 'crb'),
+				'add_sidebar' => __('Add Sidebar', 'crb'),
 				'complex_no_rows' => __('There are no %s yet. Click <a href="#">here</a> to add one.', 'crb'),
 				'complex_add_button' => __('Add %s', 'crb'),
 
@@ -2208,10 +2209,33 @@ class Carbon_Field_Image extends Carbon_Field_Attachment {
 endif;
 
 
+if ( !class_exists('Carbon_Field_Sidebar') ) :
+
+class Carbon_Field_Sidebar extends Carbon_Field_Select {
+	private $enable_add_new = true; // Whether to allow the user to add new sidebars
+
+	function disable_add_new() {
+		$this->enable_add_new = false;
+		return $this;
+	}
+
+	function to_json($load) {
+		if ($this->enable_add_new) {
+			$this->options['new'] = _x('Add New', 'sidebar', 'crb');
+		}
+
+		$field_data = parent::to_json($load);
+
+		return $field_data;
+	}
+}
+
+endif;
+
+
 if ( !class_exists('Carbon_Field_Choose_Sidebar') ) :
 
-class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
-	private $enable_add_new = true; // Whether to allow the user to add new sidebars
+class Carbon_Field_Choose_Sidebar extends Carbon_Field_Sidebar {
 	private $custom_sidebars = array();
 	private $sidebar_options = array();
 
@@ -2222,11 +2246,6 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 		// Setup the sidebars after all fields are registered
 		add_action('carbon_after_register_fields', array($this, 'setup_sidebar_options'), 20);
 		add_action('carbon_after_register_fields', array($this, 'register_custom_sidebars'), 21);
-	}
-
-	function disable_add_new() {
-		$this->enable_add_new = false;
-		return $this;
 	}
 
 	/**
@@ -2294,16 +2313,6 @@ class Carbon_Field_Choose_Sidebar extends Carbon_Field_Select {
 
 		$this->sidebar_options = $sidebar_options;
 		return $this;
-	}
-
-	function to_json($load) {
-		if ($this->enable_add_new) {
-			$this->options['new'] = _x('Add New', 'sidebar', 'crb');
-		}
-
-		$field_data = parent::to_json($load);
-
-		return $field_data;
 	}
 
 	function setup_sidebar_options() {

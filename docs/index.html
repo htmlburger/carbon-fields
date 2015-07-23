@@ -82,6 +82,7 @@
 							<li><a href="#Field_Attachment">Attachment</a></li>
 							<li><a href="#Field_Map">Map</a></li>
 							<li><a href="#Field_Separator">Separator</a></li>
+							<li><a href="#Field_Sidebar">Sidebar</a></li>
 							<li><a href="#Field_Choose_Sidebar">Choose Sidebar</a></li>
 							<li><a href="#Field_HeaderScripts">Header Scripts</a></li>
 							<li><a href="#Field_FooterScripts">Footer Scripts</a></li>
@@ -981,7 +982,23 @@ Carbon_Field::factory("separator", "crb_style_options", "Style");</pre>
 					</div>
 
 					<div class="field-docs">
+						<h3 id="Field_Sidebar" class="left-hash"><a href="#Field_Sidebar">Sidebar <code>sidebar</code></a></h3>
+						<p>Adds a drop-down field that lists existing sidebars and provides the ability to add new sidebars to the site. Sidebars registered through this field can be removed from the Widgets panel using the "x" icon that will appear next to the sidebar name.</p>
+						<h5>Setup methods</h5>
+						<dl>
+							<dt><code>disable_add_new()</code></dt>
+							<dd>Remove the ability to add new sidebars to the site.</dd>
+						</dl>
+						<h5>Helper functions</h5>
+						<dl>
+							<dt><code>crb_dynamic_sidebar($id, $sidebar_options)</code></dt>
+							<dd>This function overwrites the sidebar options and prints the sidebar with the specified id.</dd>
+						</dl>
+					</div>
+
+					<div class="field-docs">
 						<h3 id="Field_Choose_Sidebar" class="left-hash"><a href="#Field_Choose_Sidebar">Choose Sidebar <code>choose_sidebar</code></a></h3>
+						<p><strong><em>Deprecated</em></strong> in favor of the Sidebar field.</p>
 						<p>Adds a drop-down field that lists existing sidebars and provides the ability to add new sidebars to the site.</p>
 						<h5>Setup methods</h5>
 						<dl>
@@ -1014,8 +1031,8 @@ Carbon_Field::factory("choose_sidebar", "crb_custom_sidebar", __('Sidebar', 'crb
 		'after_title' =&gt; '&lt;div class="cl"&gt;&amp;nbsp;&lt;/div&gt;&lt;/h3&gt;',
 	));
 </pre>
-					<p>The following example sets different sidebar options for each of the specified sidebars:</p>
-					<pre class="prettyprint">
+						<p>The following example sets different sidebar options for each of the specified sidebars:</p>
+						<pre class="prettyprint">
 Carbon_Field::factory( 'choose_sidebar', 'crb_custom_sidebar', __('Sidebar', 'crb') )
 	->set_sidebar_options(array(
 		'default' => array(
@@ -1031,7 +1048,7 @@ Carbon_Field::factory( 'choose_sidebar', 'crb_custom_sidebar', __('Sidebar', 'cr
 			'after_title'   =&gt; '&lt;/h4&gt;',
 		)
 	)),
-					</pre>
+						</pre>
 					</div>
 					
 					<div class="field-docs">

@@ -20,6 +20,7 @@ include_once 'Carbon_Exception.php';
 
 include_once 'Carbon_DataStore.php';
 include_once 'Carbon_Templater.php';
+include_once 'Carbon_Sidebar_Manager.php';
 
 include_once 'Carbon_Container.php';
 include_once 'Carbon_Container_CustomFields.php';

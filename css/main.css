@@ -32,11 +32,16 @@
 
 .carbon-field .icon-button { width: 28px; height: 28px; padding: 0; margin-left: 6px; font-size: 0; line-height: 0; text-align: center; vertical-align: top !important; }
 .carbon-group-actions a:before,
+.carbon-btn-remove-sidebar:before,
 .carbon-preview .carbon-file-remove,
 .carbon-field .icon-button:before { font: normal normal normal 22px/26px 'dashicons'; speak: none; text-transform: none; text-align: center; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; vertical-align: top; }
 .carbon-preview .carbon-file-remove { font-size: 20px; }
 .carbon-Attachment .icon-button { width: auto; padding-right: 10px; font-size: 13px; line-height: 26px; }
 .carbon-Attachment .icon-button:before { line-height: 26px; }
+
+.carbon-btn-remove-sidebar { position: absolute; top: 10px; right: 33px; padding: 0; margin: 0; font-size: 0; line-height: 0; text-decoration: none; color: #c00; opacity: 0.7; }
+.carbon-btn-remove-sidebar:hover { color: #c00; opacity: 1; }
+.carbon-btn-remove-sidebar:before { font-size: 16px; line-height: 1.5; }
 
 .carbon-group-actions a.carbon-btn-remove:before { content: "\f153"; background: #fff; border-radius: 50%; }
 .carbon-group-actions a.carbon-btn-remove:hover:before { color: #f33; }
@@ -46,6 +51,7 @@
 .carbon-Map .address-search-btn:before { content: "\f179"; }
 .button.pickcolor:before { content: "\f309"; }
 .button.carbon-datepicker-trigger:before { content: "\f508"; }
+.carbon-btn-remove-sidebar:before { content: "\f335"; }
 
 /* ------------------------------------------------------------ *\
 	Containers
@@ -300,13 +306,13 @@
 /* Complex Groups */
 .carbon-group-row { position: relative; }
 .carbon-group-row + .carbon-group-row { margin-top: 14px; }
+.carbon-group-row.ui-sortable-helper:first-child + .ui-placeholder-highlight { margin-top: 0; }
 .carbon-group-row .carbon-row { padding: 10px 12px 12px; }
 .carbon-group-row .carbon-row.carbon-group-row { padding: 0; }
 
-.carbon-group-row .carbon-drag-handle { background: #fff; }
-.carbon-group-row .carbon-drag-handle { position: relative; background: #f7f6f6; border: 1px solid #d9d9d9; padding: 8px 10px; cursor: move; }
+.carbon-group-row .carbon-drag-handle { position: relative; background: #f7f6f6; border: 1px solid #d9d9d9; padding: 8px 10px; cursor: move; line-height: 18px; }
 .carbon-group-row .carbon-drag-handle .group-number { position: absolute; border-right: 1px solid #d9d9d9; top: 0; height: 100%; width: 40px; line-height: 34px; margin-left: -10px; text-align: center; font-weight: bold; }
-.carbon-group-row .carbon-drag-handle .group-name { display: inline-block; margin-left: 45px; font-weight: bold; min-height: 18px; }
+.carbon-group-row .carbon-drag-handle .group-name { display: inline-block; margin-left: 45px; font-weight: bold; }
 .carbon-group-row.removed > .carbon-drag-handle { background: #e74444 !important; transition: all 0.5s ease; }
 
 .carbon-group-row .fields-container { border-width: 0 1px 1px; border-style: solid; border-color: #d9d9d9; }

@@ -129,8 +129,8 @@ window.carbon = window.carbon || {};
 			// Containers are visible by default. Overwrite the checkVisibility method for custom logic.
 			this.on('container:beforeRender', this.checkVisibility);
 
-			// Repopulate the fields collection after the container is rendered
-			this.on('container:rendered', this.setFields);
+			// Initialize fields rendering after the container has rendered
+			this.on('container:rendered', this.afterRenderInit);
 
 			// Handle tab setup
 			this.on('container:rendered', this.setupTabs);
@@ -307,9 +307,13 @@ window.carbon = window.carbon || {};
 			return this;
 		},
 
-		setFields: function() {
-			this.fieldsCollection.reset(); // Need to clear the collection, otherwise no events will trigger
-			this.fieldsCollection.set(this.model.get('fields')); // This will emit the "add" event
+		afterRenderInit: function() {
+			var _this = this;
+
+			// Trigger the add event on the collection, this should initialize the fields rendering
+			this.fieldsCollection.each(function(model) {
+				_this.fieldsCollection.trigger('add', model);
+			});
 		},
 
 		setupTabs: function() {

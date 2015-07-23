@@ -65,6 +65,16 @@ window.carbon = window.carbon || {};
 			// Render each container when it's added to the collection
 			this.listenTo(this.containersCollection, 'add', this.renderContainer);
 
+			// Create the sidebars collection and populate it.
+			this.sidebarsCollection = carbon.collections.sidebars = new Backbone.Collection(carbon_json.sidebars);
+
+			// Pass the sidebars collection event to the sidebar manager.
+			this.listenTo(this.sidebarsCollection, 'add remove', function(model, collection, event) {
+				var action = event.add ? 'add' : 'remove';
+				var name = model.get('name');
+				carbon.sidebarManager(name, action);
+			});
+
 			// When a container is sorted (using ui-sortable), send the event to all fields using our custom "propagate" event
 			this.$('div.widgets-sortables, .meta-box-sortables').on('sortstart sortstop', function(event, ui) {
 				var containerID = $(ui.item).attr('id') || '';
@@ -244,6 +254,44 @@ window.carbon = window.carbon || {};
 				return '%25';
 			})
 			.replace(/\+/g, '%20'));
+	}
+
+	/**
+	 * Handles sidebar requests
+	 *
+	 * @param  {string} name
+	 * @param  {string} action
+	 *
+	 * @return {promise}
+	 */
+	carbon.sidebarManager = function(name, action, reload) {
+		var request = $.ajax({
+			url: ajaxurl,
+			method: 'POST',
+			dataType: 'json',
+			data: {
+				action: 'carbon_' + action + '_sidebar',
+				name: name
+			}
+		});
+
+		request.done(function( response ) {
+			if ( !response || !response.success ) {
+				alert( response.error || 'An error occurred while trying to ' + action + ' the sidebar.' );
+			}
+		});
+
+		request.fail(function( jqXHR, textStatus ) {
+			alert( 'Request failed: ' + textStatus );
+		});
+
+		if (reload) {
+			request.always(function() {
+				window.location.reload();
+			});
+		}
+
+		return request;
 	}
 
 	/**

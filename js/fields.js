@@ -923,9 +923,97 @@ window.carbon = window.carbon || {};
 	 *------------------------------------------------------------------------*/
 
 	// Gravity Form MODEL
-	carbon.fields.Model.GravityForm = carbon.fields.Model.Select.extend({
+	carbon.fields.Model.GravityForm = carbon.fields.Model.Select.extend();
+
+
+	/*--------------------------------------------------------------------------
+	 * SIDEBAR
+	 *------------------------------------------------------------------------*/
+
+	// Sidebar MODEL
+	carbon.fields.Model.Sidebar = carbon.fields.Model.Select.extend({
 		initialize: function() {
+			this.setSidebarOptions();
+
 			carbon.fields.Model.Select.prototype.initialize.apply(this);
+		},
+
+		setSidebarOptions: function() {
+			var options = this.get('options');
+			var sidebars = [];
+
+			carbon.collections.sidebars.each(function(model) {
+				var sidebarName = model.get('name');
+				var sidebar = {
+					name: sidebarName,
+					value: sidebarName
+				};
+
+				if (!!_.findWhere(options, sidebar)) {
+					return; // sidebar already added, continue
+				}
+
+				sidebars.push(sidebar);
+			});
+
+			this.set('options', _.union(sidebars, options));
+		},
+
+		validate: function(attrs, options) {
+			return carbon.fields.Model.prototype.validate.apply(this, arguments);
+		}
+	});
+
+	// Sidebar VIEW
+	carbon.fields.View.Sidebar = carbon.fields.View.extend({
+		events: _.extend({}, carbon.fields.View.prototype.events, {
+			'change select': 'addNewSidebar'
+		}),
+
+		initialize: function() {
+			carbon.fields.View.prototype.initialize.apply(this);
+
+			this.listenTo(carbon.collections.sidebars, 'add', this.addSidebarOption);
+		},
+
+		addSidebarOption: function(model) {
+			var sidebarName = model.get('name');
+			var $select = this.$('select');
+
+			if (!sidebarName) {
+				return;
+			}
+
+			$('<option value="' + _.escape(sidebarName) + '">' + sidebarName + '</option>').insertBefore($select.find('option:last'));
+		},
+
+		addNewSidebar: function(event) {
+			var $select = this.$('select');
+
+			if ($select.val() !== 'new') {
+				return true;
+			}
+
+			var sidebarName = $.trim( window.prompt( crbl10n.enter_name_of_new_sidebar ) );
+
+			if (sidebarName) {
+				var sidebarExists = carbon.collections.sidebars.findWhere({
+					name: sidebarName
+				});
+
+				if (!sidebarExists) {
+					// Add the new sidebar to the sidebars collection
+					carbon.collections.sidebars.add({
+						name: sidebarName
+					});
+				}
+
+				$select.find('option[value="' + _.escape(sidebarName) + '"]').prop('selected', true);
+			} else {
+				$select.find('option:first').prop('selected', true);
+			}
+
+			$select.trigger('change');
 		}
 	});
 
@@ -935,39 +1023,30 @@ window.carbon = window.carbon || {};
 	 *------------------------------------------------------------------------*/
 
 	// Choose Sidebar MODEL
-	carbon.fields.Model.ChooseSidebar = carbon.fields.Model.Select.extend({
-		initialize: function() {
-			carbon.fields.Model.Select.prototype.initialize.apply(this);
-		},
-
-		validate: function(attrs, options) {
-			return carbon.fields.Model.prototype.validate.apply(this, arguments);
-		}
+	carbon.fields.Model.ChooseSidebar = carbon.fields.Model.Sidebar.extend({
+		setSidebarOptions: function() {}
 	});
 
 	// Choose Sidebar VIEW
-	carbon.fields.View.ChooseSidebar = carbon.fields.View.extend({
-		events: _.extend({}, carbon.fields.View.prototype.events, {
-			'change select': 'addNew'
-		}),
-
+	carbon.fields.View.ChooseSidebar = carbon.fields.View.Sidebar.extend({
 		initialize: function() {
-			carbon.fields.View.prototype.initialize.apply(this);
+			carbon.fields.View.Sidebar.prototype.initialize.apply(this);
+
+			// Remove the addSidebarOption listener, we are not using the sidebars collection for this field.
+			this.stopListening(carbon.collections.sidebars, 'add', this.addSidebarOption);
 		},
 
-		addNew: function(event) {
+		addNewSidebar: function(event) {
 			var $select = $(event.target);
-			var $option;
-			var newSidebar;
 
 			if ($select.val() !== 'new') {
 				return true;
 			}
 
-			newSidebar = $.trim( window.prompt(crbl10n.enter_name_of_new_sidebar) );
+			var sidebarName = $.trim( window.prompt( crbl10n.enter_name_of_new_sidebar ) );
 
-			if (newSidebar) {
-				$option = $('<option value="' + _.escape(newSidebar) + '">' + newSidebar + '</option>').insertBefore($select.find('option:last'));
+			if (sidebarName) {
+				var $option = $('<option value="' + _.escape(sidebarName) + '">' + sidebarName + '</option>').insertBefore($select.find('option:last'));
 				
 				$select.find('option').prop('selected', false);
 				$option.prop('selected', true);
@@ -1139,11 +1218,7 @@ window.carbon = window.carbon || {};
 	 *------------------------------------------------------------------------*/
 
 	// Image VIEW
-	carbon.fields.View.Image = carbon.fields.View.Attachment.extend({
-		initialize: function() {
-			carbon.fields.View.Attachment.prototype.initialize.apply(this);
-		}
-	});
+	carbon.fields.View.Image = carbon.fields.View.Attachment.extend();
 
 
 	/*--------------------------------------------------------------------------
@@ -1420,10 +1495,6 @@ window.carbon = window.carbon || {};
 
 	// Association VIEW
 	carbon.fields.View.Association = carbon.fields.View.Relationship.extend({
-		initialize: function() {
-			carbon.fields.View.Relationship.prototype.initialize.apply(this);
-		},
-
 		buildItemValue: function(id, type, subtype) {
 			var sep = ':';
 			return type + sep + subtype + sep + id;
@@ -1779,7 +1850,7 @@ window.carbon = window.carbon || {};
 		templateVariables: {},
 
 		initialize: function() {
-			this.on('group:rendered', this.setFields);
+			this.on('group:rendered', this.afterRenderInit);
 
 			// Updates the order number in the DOM
 			this.listenTo(this.model, 'change:order', this.updateOrderNumber);
@@ -1860,7 +1931,7 @@ window.carbon = window.carbon || {};
 			this.model.set('fields', this.fieldsCollection.toJSON());
 		},
 
-		updateFieldNameID: function(model, collection) {
+		updateFieldNameID: function(model) {
 			var id = model.get('id');
 			var name = model.get('name');
 
@@ -1980,9 +2051,13 @@ window.carbon = window.carbon || {};
 			event.preventDefault();
 		},
 
-		setFields: function() {
-			this.fieldsCollection.reset();
-			this.fieldsCollection.set(this.model.get('fields')); // This will emit the "add" event on the collection
+		afterRenderInit: function() {
+			var _this = this;
+
+			// Trigger the add event on the collection, this should initialize the fields rendering
+			this.fieldsCollection.each(function(model) {
+				_this.fieldsCollection.trigger('add', model);
+			});
 		},
 
 		setHelperClasses: function(model) {
