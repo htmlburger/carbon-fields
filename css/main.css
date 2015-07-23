@@ -320,6 +320,7 @@
 .carbon-groups-holder .ui-placeholder-highlight { display: block; background: #fff; border: 1px dashed #bbb; height: 34px; margin-bottom: 14px; }
 
 .carbon-groups-holder > .carbon-group-row > .fields-container > div { background: #f7f6f6; }
+.carbon-Complex > .field-holder.max-reached > .carbon-subcontainer > .carbon-groups-holder > .carbon-group-row > .carbon-group-actions .carbon-btn-duplicate { display: none; }
 .carbon-Complex.even > .field-holder > .carbon-subcontainer > .carbon-groups-holder > .carbon-group-row > .fields-container > div,
 .carbon-Complex.even > .field-holder > .carbon-subcontainer > .carbon-groups-holder > .carbon-group-row > .carbon-drag-handle { background: #fff; }
 

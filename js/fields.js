@@ -1566,6 +1566,7 @@ window.carbon = window.carbon || {};
 			 */
 
 			this.groupsCollection = new carbon.fields.Collection.Group;
+			this.groupsCollection.limit = this.model.get('max');
 
 			// Set the model attribute on which the collection will be sorted. Think of it as "orderBy".
 			this.groupsCollection.comparator = 'order'; 
@@ -1636,13 +1637,14 @@ window.carbon = window.carbon || {};
 
 		checkMax: function(model, collection) {
 			var max = this.model.get('max');
-			var hideActions = max > collection.length;
+			var maxReached = collection.length >= max;
 
 			if (max <= 0) {
 				return false;
 			}
 
-			this.$actions.toggle(hideActions);
+			this.$el.toggleClass('max-reached', maxReached);
+			this.$actions.toggle(!maxReached);
 		},
 
 		checkMin: function(model, collection) {
@@ -2093,6 +2095,15 @@ window.carbon = window.carbon || {};
 	// Complex Group COLLECTION
 	carbon.fields.Collection.Group = Backbone.Collection.extend({
 		model: carbon.fields.Model.Complex.Group,
+
+		add: function() {
+			// Check if the collection limit is reached
+			if (this.limit > 0 && this.length >= this.limit) {
+				return;
+			}
+
+			Backbone.Collection.prototype.add.apply(this, arguments);
+		},
 
 		moveTo: function(oldIndex, newIndex) {
 			var spliced = this.models.splice(oldIndex, 1);
