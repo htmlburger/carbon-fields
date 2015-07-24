@@ -902,6 +902,11 @@ Carbon_Field::factory('association', 'crb_association')
 					<div class="field-docs">
 						<h3 id="Field_File" class="left-hash"><a href="#Field_File">File <code>file</code></a></h3>
 						<p>Renders a text input with URL and file upload button. The built-in WordPress file handling interface is used.</p>
+						<h5>Setup methods</h5>
+						<dl>
+							<dt><code>set_type($mime_type)</code></dt>
+							<dd>Set the allowed files type. Short mime types are also supported (audio, video, image).</dd>
+						</dl>
 						<pre class="prettyprint">
 Carbon_Field::factory("file", "crb_price_list", "Price list (PDF)");
 </pre>
@@ -911,6 +916,11 @@ Carbon_Field::factory("file", "crb_price_list", "Price list (PDF)");
 						<h3 id="Field_Image" class="left-hash"><a href="#Field_Image">Image <code>image</code></a></h3>
 						<p>Renders a text input with URL and image upload button. The built-in WordPress file handling interface is used.</p>
 						<p>Supported image formats are: jpg, jpeg, gif, png and bmp</p>
+						<h5>Setup methods</h5>
+						<dl>
+							<dt><code>set_type($mime_type)</code> <small>defaults to 'image'</small></dt>
+							<dd>Set the allowed files type. Short mime types are also supported (audio, video, image).</dd>
+						</dl>
 						<pre class="prettyprint">
 Carbon_Field::factory("image", "crb_employee_photo", "Photo");
 </pre>
@@ -919,6 +929,11 @@ Carbon_Field::factory("image", "crb_employee_photo", "Photo");
 					<div class="field-docs">
 						<h3 id="Field_Attachment" class="left-hash"><a href="#Field_Attachment">Attachment <code>attachment</code></a></h3>
 						<p>Renders a button to choose file (attachment) from the Media library. Instead of the URL, the field saves the attachment's ID. This allows you to retrieve additional information such as titles, descriptions, captions and different thumbnail sizes.</p>
+						<h5>Setup methods</h5>
+						<dl>
+							<dt><code>set_type($mime_type)</code></dt>
+							<dd>Set the allowed files type. Short mime types are also supported (audio, video, image).</dd>
+						</dl>
 						<pre class="prettyprint">
 Carbon_Field::factory("attachment", "crb_related_file", "Related File");
 </pre>
