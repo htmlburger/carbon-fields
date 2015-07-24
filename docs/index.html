@@ -209,6 +209,24 @@ Carbon_Container::factory('custom_fields', 'Post Properties')
 							<p>where <code>$level</code> is the level of hierarchy depth, starting from 1 and increasing when going into further hierarchy depth. </p>
 						</dd>
 					</dl>
+
+					<h4>Container position</h4>
+
+					<p>More information about the position options can be found in the <a href="https://codex.wordpress.org/Function_Reference/add_meta_box"><i class="icon-globe"></i> add_meta_box()</a> function.</p>
+
+					<dl>
+						<dt>Context</dt>
+						<dd>
+							<p>The part of the page where the container should be shown ('normal' (default), 'advanced', or 'side')</p>
+							<p><code>-&gt;set_context('normal')</code></p>
+						</dd>
+
+						<dt>Priority</dt>
+						<dd>
+							<p>The priority within the context where the container should show ('high' (default), 'core', 'default' or 'low')</p>
+							<p><code>-&gt;set_priority('high')</code></p>
+						</dd>
+					</dl>
 								
 					<h4>Accessing field values</h4>
 					<p>To access field values you need to use the function <code>carbon_get_post_meta($id, $name, $type = null)</code>, where: </p>

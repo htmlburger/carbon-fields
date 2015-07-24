@@ -583,5 +583,29 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 
 		return $this;
 	}
-} // END Carbon_Container_CustomFields 
 
+	/**
+	 * Sets the meta box container context
+	 *
+	 * @see https://codex.wordpress.org/Function_Reference/add_meta_box
+	 * @param string $context ('normal', 'advanced' or 'side')
+	 */
+	function set_context($context) {
+		$this->settings['panel_context'] = $context;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the meta box container priority
+	 *
+	 * @see https://codex.wordpress.org/Function_Reference/add_meta_box
+	 * @param string $context ('high', 'core', 'default' or 'low')
+	 */
+	function set_priority($priority) {
+		$this->settings['panel_priority'] = $priority;
+
+		return $this;
+	}
+
+} // END Carbon_Container_CustomFields 
