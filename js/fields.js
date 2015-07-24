@@ -823,21 +823,24 @@ window.carbon = window.carbon || {};
 			var $field = this.$field = this.$('input.carbon-color');
 			var $button = this.$('.button');
 
+			var updateButtonColor = function(color) {
+				$button
+					.css('background-color', color)
+					.toggleClass('has-color', !!color);
+			}
+
 			$field.iris({
-				palettes: true
+				palettes: true,
+				change: function(event, ui) {
+					updateButtonColor( ui.color.toString() );
+				}
 			});
 
 			$field.on('change', function() {
 				var color = $(this).val();
 				var isValidColor = /^#([0-9A-F]{3}){1,2}$/i.test(color);
 
-				if ( !color ) {
-
-					$button
-						.css('background-color', '')
-						.removeClass('has-color');
-
-				} else if ( !isValidColor ) {
+				if ( color && !isValidColor ) {
 
 					$(this)
 						.addClass('error')
@@ -847,13 +850,9 @@ window.carbon = window.carbon || {};
 						$field.removeClass('error');
 					}, 100);
 
-				} else {
-
-					$button
-						.css('background-color', color)
-						.addClass('has-color');
-
 				}
+
+				updateButtonColor(color);
 			});
 
 			$field.trigger('change');
