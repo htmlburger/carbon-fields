@@ -809,7 +809,8 @@ window.carbon = window.carbon || {};
 	carbon.fields.View.Color = carbon.fields.View.extend({
 		events: _.extend({}, carbon.fields.View.prototype.events, {
 			'click .pickcolor.button': 'focusField',
-			'focus input.carbon-color': 'showColorPicker'
+			'focus input.carbon-color': 'showColorPicker',
+			'blur input.carbon-color': 'hideColorPicker'
 		}),
 
 		initialize: function() {
@@ -818,69 +819,63 @@ window.carbon = window.carbon || {};
 			this.on('field:rendered', this.initColorPicker);
 		},
 
-		showColorPicker: function(event) {
-			var $colorpicker = this.$('.carbon-color-container');
-			$colorpicker.show();
-		},
-
-		focusField: function(event) {
-			var $field = this.$('input.carbon-color');
-			var $colorpicker = this.$('.carbon-color-container');
-
-			$field.focus();
-		},
-
 		initColorPicker: function() {
-			var $colorpicker = this.$('.carbon-color-container');
+			var $field = this.$field = this.$('input.carbon-color');
 			var $button = this.$('.button');
-			var $field = this.$('input.carbon-color');
-			var farbtasticObj = {};
 
-			farbtasticObj = $.farbtastic($colorpicker, function(color) {
-				$button
-					.css('background-color', color)
-					.addClass('has-color');
-
-				// Fix IE bug - rgb() values for color not redrawing automatically
-				$button.hide(0, function() {
-					$button.css('display', 'inline');
-				});
-				
-				$field.val(color).trigger('change');
+			$field.iris({
+				palettes: true
 			});
 
-			farbtasticObj.setColor($field.val());
+			$field.on('change', function() {
+				var color = $(this).val();
+				var isValidColor = /^#([0-9A-F]{3}){1,2}$/i.test(color);
 
-			// Update Color field after changing the value manually
-			$field.on('blur', function(event) {
-				var newColor = $field.val();
+				if ( !color ) {
 
-				$colorpicker.hide();
-
-				newColor = $.trim(newColor);
-				if ( newColor.length === 0 ) {
 					$button
-						.css('background-color', '#fff')
+						.css('background-color', '')
 						.removeClass('has-color');
-					$field.val('').trigger('change');
-					return;
-				};
 
-				if (newColor[0] !== '#') {
-					newColor = '#' + newColor;
-				};
+				} else if ( !isValidColor ) {
 
-				if ( /^#([0-9A-F]{3}){1,2}$/i.test(newColor) ) {
-					farbtasticObj.setColor(newColor);
-				} else {
-					$field
-						.val(farbtasticObj.color)
+					$(this)
 						.addClass('error')
-						.trigger('change');
+						.val( $(this).iris('color') )
 
 					setTimeout(function() {
 						$field.removeClass('error');
-					}, 150);
+					}, 100);
+
+				} else {
+
+					$button
+						.css('background-color', color)
+						.addClass('has-color');
+
+				}
+			});
+
+			$field.trigger('change');
+		},
+
+		focusField: function() {
+			this.$field.focus();
+		},
+
+		showColorPicker: function() {
+			this.$field.iris('show');
+		},
+
+		hideColorPicker: function() {
+			var $field = this.$field;
+
+			setTimeout(function() {
+				if ( !$(document.activeElement).closest('.iris-picker').length ) {
+					$field.iris('hide');
+					$field.trigger('change');
+				} else {
+					$field.focus();
 				}
 			});
 		}

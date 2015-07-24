@@ -1058,8 +1058,8 @@ class Carbon_Field_Color extends Carbon_Field {
 	}
 
 	function admin_enqueue_scripts() {
-		wp_enqueue_script('farbtastic');
-		wp_enqueue_style('farbtastic');
+		wp_enqueue_style('wp-color-picker');
+		wp_enqueue_script('iris');
 	}
 }
 
