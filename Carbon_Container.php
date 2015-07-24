@@ -700,7 +700,7 @@ abstract class Carbon_Container {
 	}
 
 	static function admin_hook_scripts() {
-		crb_enqueue_script('carbon-containers', CARBON_PLUGIN_URL . '/js/containers.js', array('carbon-app'));
+		wp_enqueue_script('carbon-containers', CARBON_PLUGIN_URL . '/js/containers.js', array('carbon-app'));
 
 		wp_localize_script('carbon-containers', 'carbon_containers_l10n',
 			array(
@@ -711,7 +711,7 @@ abstract class Carbon_Container {
 	}
 
 	static function admin_hook_styles() {
-		crb_enqueue_style('carbon-main', CARBON_PLUGIN_URL . '/css/main.css');
+		wp_enqueue_style('carbon-main', CARBON_PLUGIN_URL . '/css/main.css');
 	}
 
 } // END Carbon_Container 

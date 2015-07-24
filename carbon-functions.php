@@ -30,8 +30,8 @@ endif;
 if ( !function_exists('carbon_init_scripts') ) :
 
 function carbon_init_scripts() {
-	crb_enqueue_script('carbon-app', CARBON_PLUGIN_URL . '/js/app.js', array('jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable'));
-	crb_enqueue_script('carbon-ext', CARBON_PLUGIN_URL . '/js/ext.js', array('carbon-app'));
+	wp_enqueue_script('carbon-app', CARBON_PLUGIN_URL . '/js/app.js', array('jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable'));
+	wp_enqueue_script('carbon-ext', CARBON_PLUGIN_URL . '/js/ext.js', array('carbon-app'));
 
 	$active_fields = Carbon_Container::get_active_fields();
 	$active_field_types = array();

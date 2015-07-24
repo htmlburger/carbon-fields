@@ -162,7 +162,7 @@ class Carbon_Sidebar_Manager {
 	 * Enqueue the UI scripts.
 	 */
 	public function enqueue_scripts() {
-		crb_enqueue_script( 'carbon-sidebar-ui', CARBON_PLUGIN_URL . '/js/sidebar-ui.js', array('carbon-app') );
+		wp_enqueue_script( 'carbon-sidebar-ui', CARBON_PLUGIN_URL . '/js/sidebar-ui.js', array('carbon-app') );
 	}
 
 }
