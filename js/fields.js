@@ -1525,20 +1525,30 @@ window.carbon = window.carbon || {};
 		validate: function(attrs, options) {
 			var hasErrors = false;
 			var view = carbon.views[this.get('id')];
+			var min = this.get('min');
+			var minValid = min <= 0 || !view.groupsCollection.length || min <= view.groupsCollection.length;
 
-			if (!view) {
-				return;
-			}
-
+			// Validate each group
 			_.each(view.groupsCollection.models, function(group) {
 				if (!group.isValid()) {
 					hasErrors = true;
-					return; // break the loop
+					return; // we have an error, break the loop
 				}
 			});
 
+			// If the groups are invalid, return a validation error
 			if (hasErrors) {
 				return crbl10n.message_form_validation_failed;
+			}
+
+			// Check if minimum group count is reached
+			if (!minValid) {
+				var rowLabels = this.get('labels');
+				var rowLabel = min == 1 ? rowLabels.singular_name : rowLabels.plural_name;
+
+				return crbl10n.complex_min_num_rows_reached
+					.replace( '%d', min )
+					.replace( '%s', rowLabel.toLowerCase() );
 			}
 		}
 	});
@@ -1568,7 +1578,6 @@ window.carbon = window.carbon || {};
 			// Groups collection events (order matters)
 			this.listenTo(this.groupsCollection, 'add',        this.setGroupOrder);  // Set the initial group order
 			this.listenTo(this.groupsCollection, 'add',        this.setGroupIndex);  // Set the group index, the index should be unique for each group
-			this.listenTo(this.groupsCollection, 'remove',     this.checkMin);       // Checks the minimum number of rows
 			this.listenTo(this.groupsCollection, 'remove',     this.revalidate);     // Revalidate the field if a group is removed
 			this.listenTo(this.groupsCollection, 'add remove', this.checkMax);       // Checks the maximum number of rows
 			this.listenTo(this.groupsCollection, 'add remove', this.toggleIntroRow); // Show/Hide the "There are no Entries" row
@@ -1639,21 +1648,6 @@ window.carbon = window.carbon || {};
 
 			this.$el.toggleClass('max-reached', maxReached);
 			this.$actions.toggle(!maxReached);
-		},
-
-		checkMin: function(model, collection) {
-			var min = this.model.get('min');
-			var addRow = min > 0 && min > collection.length;
-
-			if (!addRow) {
-				return false;
-			}
-
-			if (this.multipleGroups) {
-				this.$groupsList.find('a:first').trigger('click');
-			} else {
-				this.$actions.find('a.button').trigger('click');
-			}
 		},
 
 		setGroupIndex: function(model, collection) {

@@ -862,6 +862,7 @@ class Carbon_Field {
 				'add_sidebar' => __('Add Sidebar', 'crb'),
 				'complex_no_rows' => __('There are no %s yet. Click <a href="#">here</a> to add one.', 'crb'),
 				'complex_add_button' => __('Add %s', 'crb'),
+				'complex_min_num_rows_reached' => __('Minimum number of rows reached (%d %s)', 'crb'),
 
 				'message_form_validation_failed' => __('Please fill out all fields correctly. ', 'crb'),
 				'message_required_field' => __("This field is required. ", 'crb'),
