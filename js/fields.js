@@ -590,21 +590,25 @@ window.carbon = window.carbon || {};
 				return false;
 			}
 
+			var $textarea = this.$('textarea.wp-editor-area');
 			var mceInit = this.get_mceInit();
 			var qtInit = this.get_qtInit();
 
 			tinyMCEPreInit.mceInit[ mceInit.id ] = mceInit;
 			tinyMCEPreInit.qtInit[ qtInit.id ] = qtInit;
 
-			if (!this.active) {
+			if ( !this.active ) {
 				try {
+					// Wpautop the value before the initialization
+					$textarea.val( switchEditors.wpautop( $textarea.val() ) );
+
 					// Set the editor ID on media buttons
 					this.mediaButtonsInit();
 
-					// initialize mceInit
+					// Initialize mceInit
 					tinymce.init(mceInit);
 
-					// initialize qtInit (quicktags)
+					// Initialize qtInit (quicktags)
 					var qtag = quicktags( qtInit );
 					this.textButtonsInit( qtag );
 

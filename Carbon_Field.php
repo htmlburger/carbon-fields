@@ -969,7 +969,7 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 				</button>
 			</div>
 			<div id="wp-{{{ id }}}-editor-container" class="wp-editor-container">
-				<textarea id="{{{ id }}}" class="wp-editor-area" name="{{{ name }}}">{{ value ? switchEditors.wpautop(value) : value }}</textarea>
+				<textarea id="{{{ id }}}" class="wp-editor-area" name="{{{ name }}}">{{ value }}</textarea>
 			</div>
 		</div>
 		<?php
