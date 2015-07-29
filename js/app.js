@@ -79,11 +79,11 @@ window.carbon = window.carbon || {};
 			this.$('div.widgets-sortables, .meta-box-sortables').on('sortstart sortstop', function(event, ui) {
 				var containerID = $(ui.item).attr('id') || '';
 
-				if (containerID.indexOf('widget-') === 0) {
+				if ( containerID.indexOf('widget-') === 0 ) {
 					var containerID = containerID.replace(/widget-\d+_/, '');
 				}
 
-				if (containerID && typeof carbon.views[containerID] !== 'undefined') {
+				if ( containerID && !_.isUndefined( carbon.views[containerID] ) ) {
 					carbon.views[containerID].trigger('propagate', event);
 				}
 			});
@@ -117,7 +117,7 @@ window.carbon = window.carbon || {};
 
 			// Set the container view. If the view is not found, fallback to the base view
 			var ContainerView = carbon.containers.View[type];
-			if (typeof ContainerView === 'undefined') {
+			if ( _.isUndefined(ContainerView) ) {
 				ContainerView = carbon.containers.View; // fallback to the base view
 			}
 
@@ -298,7 +298,7 @@ window.carbon = window.carbon || {};
 	 * Initializes the main view
 	 */
 	carbon.init = function() {
-		if ( typeof carbon_json === 'undefined' || _.isEmpty(carbon_json.containers) ) {
+		if ( _.isUndefined(carbon_json) || _.isEmpty(carbon_json.containers) ) {
 			return false;
 		}
 

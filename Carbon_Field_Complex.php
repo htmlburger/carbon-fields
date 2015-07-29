@@ -454,11 +454,6 @@ class Carbon_Field_Complex extends Carbon_Field {
 
 		return $group_object;
 	}
-
-	function set_required($required) {
-		$this->required = false;
-		return $this;
-	}
 }
 
 

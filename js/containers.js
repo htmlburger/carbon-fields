@@ -178,7 +178,7 @@ window.carbon = window.carbon || {};
 				var fieldId = collection[i].id;
 				var view = carbon.views[fieldId];
 
-				if (typeof view !== 'undefined') {
+				if ( !_.isUndefined(view) ) {
 					view.trigger(event.type, event);
 					view.trigger('propagate', event);
 				}
@@ -366,7 +366,7 @@ window.carbon = window.carbon || {};
 			var id = model.get('id');
 
 			var FieldView = carbon.fields.View[type];
-			if (typeof FieldView === 'undefined') {
+			if ( _.isUndefined(FieldView) ) {
 				FieldView = carbon.fields.View; // Fallback to the base view
 			}
 
@@ -454,7 +454,7 @@ window.carbon = window.carbon || {};
 			var ContainerModel = carbon.containers.Model[attrs.type];
 
 			// Set the container model. If the model is not found, fallback to the base model
-			if (typeof ContainerModel === 'undefined') {
+			if ( _.isUndefined(ContainerModel) ) {
 				ContainerModel = carbon.containers.Model; // Fallback to the base model
 			}
 

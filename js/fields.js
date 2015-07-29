@@ -275,7 +275,7 @@ window.carbon = window.carbon || {};
 			var FieldModel = carbon.fields.Model[attrs.type];
 
 			// Set the field model. If the model is not found, fallback to the base model
-			if (typeof FieldModel === 'undefined') {
+			if ( _.isUndefined(FieldModel) ) {
 				FieldModel = carbon.fields.Model; // Fallback to the base model
 			}
 
@@ -586,7 +586,7 @@ window.carbon = window.carbon || {};
 		},
 
 		initEditor: function() {
-			if( typeof tinyMCEPreInit === 'undefined' || typeof tinymce === 'undefined' ) {
+			if( _.isUndefined(tinyMCEPreInit) || _.isUndefined(tinymce) ) {
 				return false;
 			}
 
@@ -1527,26 +1527,37 @@ window.carbon = window.carbon || {};
 		},
 
 		validate: function(attrs, options) {
-			var hasErrors = false;
 			var view = carbon.views[this.get('id')];
+
+			if ( _.isUndefined(view) ) {
+				return;
+			}
+
 			var min = this.get('min');
-			var minValid = min <= 0 || !view.groupsCollection.length || min <= view.groupsCollection.length;
+			var groupsCount = view.groupsCollection.length;
+			var minValid = min <= 0 || !groupsCount || min <= groupsCount;
+			var groupsValid = true;
 
 			// Validate each group
 			_.each(view.groupsCollection.models, function(group) {
-				if (!group.isValid()) {
-					hasErrors = true;
+				if ( !group.isValid() ) {
+					groupsValid = false;
 					return; // we have an error, break the loop
 				}
 			});
 
 			// If the groups are invalid, return a validation error
-			if (hasErrors) {
+			if ( !groupsValid ) {
 				return crbl10n.message_form_validation_failed;
 			}
 
-			// Check if minimum group count is reached
-			if (!minValid) {
+			// Check if the field is required
+			if ( !groupsCount && this.get('required') ) {
+				return crbl10n.message_required_field;
+			}
+
+			// Check if the minimum group count is reached
+			if ( !minValid ) {
 				var rowLabels = this.get('labels');
 				var rowLabel = min == 1 ? rowLabels.singular_name : rowLabels.plural_name;
 
