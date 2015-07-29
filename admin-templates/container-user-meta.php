@@ -1,3 +1,4 @@
+<h3><?php echo $this->title; ?></h3>
 <table class="form-table">
 	<tr class="carbon-table-row">
 		<th></th>
