@@ -565,6 +565,10 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 			return $this;
 		}
 
+		if ($post_format === 'standard') {
+			$post_format = 0;
+		}
+
 		$this->settings['show_on']['post_formats'][] = strtolower($post_format);
 
 		return $this;

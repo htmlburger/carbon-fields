@@ -547,10 +547,6 @@ window.carbon = window.carbon || {};
 					var checked = $(this).is(':checked');
 					var postFormat = $(this).val();
 
-					if (postFormat === '0') {
-						postFormat = 'standard';
-					}
-
 					if (checked) {
 						_this.model.set('post_format', postFormat);
 					}
