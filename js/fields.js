@@ -593,6 +593,7 @@ window.carbon = window.carbon || {};
 			var $textarea = this.$('textarea.wp-editor-area');
 			var mceInit = this.get_mceInit();
 			var qtInit = this.get_qtInit();
+			var value = this.model.get('value');
 
 			tinyMCEPreInit.mceInit[ mceInit.id ] = mceInit;
 			tinyMCEPreInit.qtInit[ qtInit.id ] = qtInit;
@@ -600,7 +601,11 @@ window.carbon = window.carbon || {};
 			if ( !this.active ) {
 				try {
 					// Wpautop the value before the initialization
-					$textarea.val( switchEditors.wpautop( $textarea.val() ) );
+					if ( value ) {
+						value = switchEditors.pre_wpautop( value );
+						value = switchEditors.wpautop( value );
+						$textarea.val( value );
+					}
 
 					// Set the editor ID on media buttons
 					this.mediaButtonsInit();
