@@ -128,6 +128,10 @@ class Carbon_Field_Complex extends Carbon_Field {
 				// set value from the group
 				$tmp_field = clone $field;
 				if ( is_a($tmp_field, 'Carbon_Field_Complex') ) {
+					if (!isset($values[$tmp_field->get_name()])) {
+						continue; // bail if the complex field is empty
+					}
+
 					$new_name = $this->get_name() . $group->get_name() . '-' . $field->get_name() . '_' . $index;
 					$new_values = array( $new_name => $values[$tmp_field->get_name()] );
 
