@@ -829,42 +829,43 @@ window.carbon = window.carbon || {};
 		},
 
 		initColorPicker: function() {
+			var _this = this;
 			var $field = this.$field = this.$('input.carbon-color');
-			var $button = this.$('.button');
+			var color = this.model.get('value');
 
-			var updateButtonColor = function(color) {
-				$button
-					.css('background-color', color)
-					.toggleClass('has-color', !!color);
-			}
+			_this.setColor(color);
 
 			$field.iris({
 				palettes: true,
 				change: function(event, ui) {
-					updateButtonColor( ui.color.toString() );
+					_this.setColor( ui.color.toString() );
 				}
 			});
 
 			$field.on('change', function() {
-				var color = $(this).val();
-				var isValidColor = /^#([0-9A-F]{3}){1,2}$/i.test(color);
-
-				if ( color && !isValidColor ) {
-
-					$(this)
-						.addClass('error')
-						.val( $(this).iris('color') )
-
-					setTimeout(function() {
-						$field.removeClass('error');
-					}, 100);
-
-				}
-
-				updateButtonColor(color);
+				_this.setColor( $(this).val() );
 			});
+		},
 
-			$field.trigger('change');
+		setColor: function(color) {
+			var _this = this;
+			var isValidColor = /^#([0-9A-F]{3}){1,2}$/i.test(color);
+
+			if ( color && !isValidColor ) {
+
+				this.$field
+					.addClass('error')
+					.val( this.$field.iris('color') )
+
+				setTimeout(function() {
+					_this.$field.removeClass('error');
+				}, 100);
+
+			}
+
+			this.$('.button')
+				.css('background-color', color)
+				.toggleClass('has-color', !!color);
 		},
 
 		focusField: function() {
