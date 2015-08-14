@@ -30,7 +30,7 @@
 	Icons
 \* ------------------------------------------------------------ */
 
-.carbon-field .icon-button { width: 28px; height: 28px; padding: 0; margin-left: 6px; font-size: 0; line-height: 0; text-align: center; vertical-align: top !important; }
+.carbon-field .icon-button { width: 28px; height: 28px; padding: 0; margin-left: 6px; font-size: 0; line-height: 0; text-align: center; vertical-align: top !important; font-family: inherit; }
 .carbon-group-actions a:before,
 .carbon-btn-remove-sidebar:before,
 .carbon-preview .carbon-file-remove,
