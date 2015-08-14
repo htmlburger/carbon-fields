@@ -988,7 +988,9 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 					)
 				);
 
+				add_filter('user_can_richedit', '__return_true');
 				wp_editor('', 'carbon_settings', $settings);
+				remove_filter('user_can_richedit', '__return_true');
 			?>
 		</div>
 		<?php
