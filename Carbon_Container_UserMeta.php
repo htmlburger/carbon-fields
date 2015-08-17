@@ -104,7 +104,7 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 
 		if (is_object($user_profile)) {
 			$this->set_user_id($user_profile->ID);
-			$profile_role = $user_profile->roles[0];
+			$profile_role = array_shift($user_profile->roles);
 		}
 
 		include dirname(__FILE__) . '/admin-templates/container-user-meta.php';
