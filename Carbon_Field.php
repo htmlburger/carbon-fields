@@ -961,10 +961,10 @@ class Carbon_Field_Rich_Text extends Carbon_Field_Textarea {
 				</div>
 			</div>
 			<div class="wp-editor-tabs">
-				<button id="{{{ id }}}-tmce" class="wp-switch-editor switch-tmce" onclick="switchEditors.switchto(this);" type="button">
+				<button type="button" id="{{{ id }}}-tmce" class="wp-switch-editor switch-tmce" data-wp-editor-id="{{{ id }}}">
 					<?php _e('Visual', 'crb'); ?>
 				</button>
-				<button id="{{{ id }}}-html" class="wp-switch-editor switch-html" onclick="switchEditors.switchto(this);" type="button">
+				<button type="button" id="{{{ id }}}-html" class="wp-switch-editor switch-html" data-wp-editor-id="{{{ id }}}">
 					<?php _e( 'Text', 'crb' ); ?>
 				</button>
 			</div>
