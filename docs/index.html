@@ -388,6 +388,7 @@ Carbon_Container::factory('theme_options', 'Basic Options')
 
 					<pre class="prettyprint">
 Carbon_Container::factory('term_meta', 'Category Properties')
+	-&gt;show_on_taxonomy('category')
 	-&gt;add_fields(array(
 		Carbon_Field::factory('color', 'crb_title_color'),
 		Carbon_Field::factory('image', 'crb_thumb'),
