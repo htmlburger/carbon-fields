@@ -1461,6 +1461,9 @@ class Carbon_Field_Set extends Carbon_Field {
 		if (!is_array($this->value)) {
 			$this->value = maybe_unserialize($this->value);
 			if (!is_array($this->value)) {
+				if ( is_null($this->value) ) {
+					return array();
+				}
 				return array($this->value);
 			}
 		}
