@@ -19,7 +19,7 @@ window.carbon = window.carbon || {};
 			event.preventDefault();
 		});
 
-		$('#wpbody-content > .wrap > h2').append($addButton);
+		$('#wpbody-content > .wrap > :first').append($addButton);
 
 		// Add a remove sidebar button to each carbon-sidebar
 		$('.sidebar-carbon-sidebar').each(function() {
