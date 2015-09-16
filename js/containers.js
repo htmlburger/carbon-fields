@@ -560,7 +560,7 @@ window.carbon = window.carbon || {};
 			var taxonomy = settings.show_on.tax_slug;
 			var termId = settings.show_on.tax_term_id;
 			var $holder = $('#taxonomy-' + taxonomy);
-			var $input = $('.' + taxonomy + 'checklist input');
+			var $input = $('#' + taxonomy + 'checklist input');
 
 			if (!taxonomy || !termId || !$holder.length) {
 				return false;
