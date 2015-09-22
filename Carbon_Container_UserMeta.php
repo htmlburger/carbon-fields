@@ -65,12 +65,16 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 		// Check user role
 		if ( !empty($this->settings['show_on']['role']) ) {
 			$allowed_roles = (array) $this->settings['show_on']['role'];
-			$profile_role = array_shift($user->roles);
+
+			// array_shift removed the returned role from the $user_profile->roles
+			// $roles_to_shift prevents changing of the $user_profile->roles variable
+			$roles_to_shift = $user->roles;
+			$profile_role = array_shift($roles_to_shift);
 			if ( !in_array($profile_role, $allowed_roles) ) {
 				$valid = false;
 			}
 		}
-		
+
 		return $valid;
 	}
 
@@ -105,7 +109,11 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 
 		if (is_object($user_profile)) {
 			$this->set_user_id($user_profile->ID);
-			$profile_role = array_shift($user_profile->roles);
+
+			// array_shift removed the returned role from the $user_profile->roles
+			// $roles_to_shift prevents changing of the $user_profile->roles variable
+			$roles_to_shift = $user_profile->roles;
+			$profile_role = array_shift($roles_to_shift);
 		}
 
 		include dirname(__FILE__) . '/admin-templates/container-user-meta.php';
