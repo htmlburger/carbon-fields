@@ -125,6 +125,7 @@
 
 /* Users */
 .carbon-user-container { max-width: 800px; }
+.carbon-user-container label { width: 200px; }
 #profile-page .carbon-user-container textarea { width: 100%; max-width: none; }
 
 /* ------------------------------------------------------------ *\
@@ -399,6 +400,8 @@
 	.carbon-set-list label { padding: 6px 0; line-height: 2.3; }
 
 	.carbon-Relationship ul { font-size: 15px; }
+
+	.carbon-user-container label { width: auto; }
 }
 
 @media screen and (max-width: 600px) {
