@@ -122,6 +122,10 @@ function carbon_get_post_meta($id, $name, $type = null) {
 				'address' => get_post_meta($id, $name . '-address', true),
 				'zoom' => (int) get_post_meta($id, $name . '-zoom', true),
 			);
+			
+			if ( !array_filter($value) ) {
+				$value = array();
+			}
 		break;
 
 		case 'association':
@@ -167,6 +171,10 @@ function carbon_get_theme_option($name, $type = null) {
 				'address' => get_option($name . '-address'),
 				'zoom' => (int) get_option($name . '-zoom'),
 			);
+
+			if ( !array_filter($value) ) {
+				$value = array();
+			}
 		break;
 
 		case 'association':
@@ -205,6 +213,10 @@ function carbon_get_term_meta($id, $name, $type = null) {
 				'address' => get_metadata('term', $id, $name . '-address', true),
 				'zoom' => (int) get_metadata('term', $id, $name . '-zoom', true),
 			);
+
+			if ( !array_filter($value) ) {
+				$value = array();
+			}
 		break;
 
 		case 'association':
@@ -243,6 +255,10 @@ function carbon_get_user_meta($id, $name, $type = null) {
 				'address' => get_metadata('user', $id, $name . '-address', true),
 				'zoom' => (int) get_metadata('user', $id, $name . '-zoom', true),
 			);
+
+			if ( !array_filter($value) ) {
+				$value = array();
+			}
 		break;
 
 		case 'association':
