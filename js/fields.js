@@ -1567,7 +1567,7 @@ window.carbon = window.carbon || {};
 				var rowLabels = this.get('labels');
 				var rowLabel = min == 1 ? rowLabels.singular_name : rowLabels.plural_name;
 
-				return crbl10n.complex_min_num_rows_reached
+				return crbl10n.complex_min_num_rows_not_reached
 					.replace( '%d', min )
 					.replace( '%s', rowLabel.toLowerCase() );
 			}
