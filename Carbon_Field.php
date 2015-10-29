@@ -2096,6 +2096,7 @@ class Carbon_Field_File extends Carbon_Field {
 
 		$url = '';
 		$thumb_url = '';
+		$default_thumb_url = home_url('/wp-includes/images/media/default.png');
 		$file_ext = '';
 		$file_type = '';
 		$value = $this->get_value();
@@ -2120,6 +2121,7 @@ class Carbon_Field_File extends Carbon_Field {
 		$field_data = array_merge($field_data, array(
 			'url' => (string) $url,
 			'thumb_url' => $thumb_url,
+			'default_thumb_url' => $default_thumb_url,
 			'file_ext' => $file_ext,
 			'file_type' => $file_type,
 			'button_label' => $this->button_label,

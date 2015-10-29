@@ -1134,16 +1134,23 @@ window.carbon = window.carbon || {};
 
 				// If multiple attachments, multiply the field
 				_.each(mediaAttachments, function(att) {
+					var thumbUrl = getAttachmentThumb(att);
+					if ( ! thumbUrl ) {
+						thumbUrl = _this.model.get('default_thumb_url')
+					}
 					_this.model.set('multiply', {
 						'value': att[valueType],
 						'file_type': att.type,
 						'url': att.url,
-						'thumb_url': getAttachmentThumb(att)
+						'thumb_url': thumbUrl
 					});
 				});
 
 				var mediaValue = mediaAttachment[valueType];
 				var thumbUrl = getAttachmentThumb(mediaAttachment);
+				if ( ! thumbUrl ) {
+					thumbUrl = _this.model.get('default_thumb_url');
+				}
 
 				// Update the model
 				this.model.set('file_type', mediaAttachment.type);
