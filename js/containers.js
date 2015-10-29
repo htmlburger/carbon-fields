@@ -332,8 +332,11 @@ window.carbon = window.carbon || {};
 				$tabsContainer.addClass('carbon-tabs-stacked');
 			}
 
-			// Open the first tab. 
-			$tabsContainer.find('ul.carbon-tabs-nav a:first').trigger('click');
+			// Open the first tab, if none is open yet. 
+			if ( ! $tabsContainer.find('ul.carbon-tabs-nav li.active').length ) {
+				$tabsContainer.find('ul.carbon-tabs-nav a:first').trigger('click');
+			}
+			
 		},
 
 		switchTab: function (e) {
@@ -688,6 +691,48 @@ window.carbon = window.carbon || {};
 			} else {
 				$panel.removeClass('fixed');
 			}
+		},
+
+		setupTabs: function() {
+			var $tabsContainer = this.$el.find('.carbon-tabs');
+			if ($tabsContainer.length === 0) {
+				// this is not a tabbed container, ignore
+				return;
+			}
+
+			var $tabLinks = $tabsContainer.find('ul.carbon-tabs-nav a');
+			var currentTabString = window.location.hash.replace(/^#/, '');
+
+			// Retrieve the current tab
+			var $currentTabLink = $tabLinks.filter(function() {
+				return '!' + $(this).text() === currentTabString;
+			}).eq(0);
+
+			// If there is no current tab, use the first one
+			if ( ! $currentTabLink.length ) {
+				var $currentTabLink = $tabLinks.eq(0);
+			}
+
+			// Open the current tab
+			$currentTabLink.trigger('click');
+
+			carbon.containers.View.prototype.setupTabs.apply(this);
+		},
+
+		switchTab: function (e) {
+			carbon.containers.View.prototype.switchTab.apply(this, [e]);
+
+			var $element = $(e.target);
+			var $li;
+
+			if ($element.is('a')) {
+				$li = $element.closest('li');
+			} else if ($element.is('.carbon-tab')) {
+				var activeTabIndex = $element.index();
+				$li = $element.closest('.carbon-tabs').find('.carbon-tabs-nav li:eq(' + activeTabIndex + ')');
+			}
+
+			window.location.hash = '!' + $li.text();
 		}
 	});
 
