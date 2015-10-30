@@ -21,7 +21,7 @@ class Carbon_Container_Widget extends Carbon_Container {
 	}
 
 	function render() {
-		include dirname(__FILE__) . '/admin-templates/container-widget.php';
+		include CARBON_PLUGIN_ROOT . '/admin-templates/container-widget.php';
 	}
 
 	function is_valid_attach() {

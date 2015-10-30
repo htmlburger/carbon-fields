@@ -124,7 +124,7 @@ class Carbon_Container_ThemeOptions extends Carbon_Container {
 			$this->notifications[] = __('Settings saved.', 'crb');
 		}
 
-		include dirname(__FILE__) . '/admin-templates/container-theme-options.php';
+		include CARBON_PLUGIN_ROOT . '/admin-templates/container-theme-options.php';
 	}
 
 	function verify_unique_page() {

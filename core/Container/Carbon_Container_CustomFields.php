@@ -370,7 +370,7 @@ class Carbon_Container_CustomFields extends Carbon_Container {
 	 * @return void
 	 **/
 	function render() {
-		include dirname(__FILE__) . '/admin-templates/container-custom-fields.php';
+		include CARBON_PLUGIN_ROOT . '/admin-templates/container-custom-fields.php';
 	}
 
 	/**

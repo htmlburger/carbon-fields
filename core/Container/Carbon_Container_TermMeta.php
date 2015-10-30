@@ -101,7 +101,7 @@ class Carbon_Container_TermMeta extends Carbon_Container {
 			$this->set_term_id( $term->term_id );
 		}
 
-		include dirname(__FILE__) . '/admin-templates/container-term-meta.php';
+		include CARBON_PLUGIN_ROOT . '/admin-templates/container-term-meta.php';
 	}
 
 	function set_term_id($term_id) {

@@ -60,5 +60,3 @@ class Carbon_Templater {
 		}
 	}
 }
-
-$carbon_templater = new Carbon_Templater();

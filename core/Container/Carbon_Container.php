@@ -1,8 +1,5 @@
 <?php 
 
-add_action('admin_print_scripts', array('Carbon_Container', 'admin_hook_scripts'));
-add_action('admin_print_styles', array('Carbon_Container', 'admin_hook_styles'));
-
 /**
  * Base container class. 
  * Defines the key container methods and their default implementations.
@@ -254,6 +251,9 @@ abstract class Carbon_Container {
 		$this->id = preg_replace('~\W~u', '', remove_accents($title));
 
 		$this->verify_unique_panel_id($this->id);
+
+		add_action('admin_print_scripts', array($this, 'admin_hook_scripts'));
+		add_action('admin_print_styles', array($this, 'admin_hook_styles'));
 	}
 
 	/**
@@ -699,7 +699,7 @@ abstract class Carbon_Container {
 		<?php
 	}
 
-	static function admin_hook_scripts() {
+	function admin_hook_scripts() {
 		wp_enqueue_script('carbon-containers', CARBON_PLUGIN_URL . '/js/containers.js', array('carbon-app'));
 
 		wp_localize_script('carbon-containers', 'carbon_containers_l10n',
@@ -710,7 +710,7 @@ abstract class Carbon_Container {
 		);
 	}
 
-	static function admin_hook_styles() {
+	function admin_hook_styles() {
 		wp_enqueue_style('carbon-main', CARBON_PLUGIN_URL . '/css/main.css');
 	}
 

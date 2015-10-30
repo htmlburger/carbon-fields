@@ -116,7 +116,7 @@ class Carbon_Container_UserMeta extends Carbon_Container {
 			$profile_role = array_shift($roles_to_shift);
 		}
 
-		include dirname(__FILE__) . '/admin-templates/container-user-meta.php';
+		include CARBON_PLUGIN_ROOT . '/admin-templates/container-user-meta.php';
 	}
 
 	function set_user_id($user_id) {
