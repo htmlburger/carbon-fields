@@ -1,12 +1,17 @@
 <?php
 
+use Carbon_Fields\Datastore\Base_Datastore;
+use Carbon_Fields\Container\Base_Container;
+use Carbon_Fields\Templater\Templater;
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+
 if ( !function_exists('carbon_trigger_fields_register') ) :
 
 function carbon_trigger_fields_register() {
 	try {
 		do_action('carbon_register_fields');
 		do_action('carbon_after_register_fields');	
-	} catch (Carbon_Exception $e) {
+	} catch (Incorrect_Syntax_Exception $e) {
 		$callback = '';
 		foreach ($e->getTrace() as $trace) {
 			$callback .= '<br/>' . (isset($trace['file']) ? $trace['file'] . ':' . $trace['line'] : $trace['function'] . '()');
@@ -21,7 +26,7 @@ endif;
 if ( !function_exists('carbon_init_containers') ) :
 
 function carbon_init_containers() {
-	Carbon_Container::init_containers();
+	Base_Container::init_containers();
 }
 
 endif;
@@ -33,7 +38,7 @@ function carbon_init_scripts() {
 	wp_enqueue_script('carbon-app', CARBON_PLUGIN_URL . '/js/app.js', array('jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable'));
 	wp_enqueue_script('carbon-ext', CARBON_PLUGIN_URL . '/js/ext.js', array('carbon-app'));
 
-	$active_fields = Carbon_Container::get_active_fields();
+	$active_fields = Base_Container::get_active_fields();
 	$active_field_types = array();
 
 	foreach ($active_fields as $field) {
@@ -79,7 +84,7 @@ function carbon_get_json_data() {
 		'sidebars' => array(),
 	);
 
-	$containers = Carbon_Container::get_active_containers();
+	$containers = Base_Container::get_active_containers();
 
 	foreach ($containers as $container) {
 		$container_data = $container->to_json(true);
@@ -111,7 +116,7 @@ function carbon_get_post_meta($id, $name, $type = null) {
 
 	switch ($type) {
 		case 'complex':
-			$value = carbon_get_complex_fields('CustomField', $name, $id);
+			$value = carbon_get_complex_fields('Custom_Fields', $name, $id);
 		break;
 
 		case 'map':
@@ -160,7 +165,7 @@ if ( !function_exists('carbon_get_theme_option') ) :
 function carbon_get_theme_option($name, $type = null) {
 	switch ($type) {
 		case 'complex':
-			$value = carbon_get_complex_fields('ThemeOptions', $name);
+			$value = carbon_get_complex_fields('Theme_Options', $name);
 		break;
 
 		case 'map':
@@ -202,7 +207,7 @@ function carbon_get_term_meta($id, $name, $type = null) {
 
 	switch ($type) {
 		case 'complex':
-			$value = carbon_get_complex_fields('TermMeta', $name, $id);
+			$value = carbon_get_complex_fields('Term_Meta', $name, $id);
 		break;
 
 		case 'map':
@@ -244,7 +249,7 @@ function carbon_get_user_meta($id, $name, $type = null) {
 
 	switch ($type) {
 		case 'complex':
-			$value = carbon_get_complex_fields('UserMeta', $name, $id);
+			$value = carbon_get_complex_fields('User_Meta', $name, $id);
 		break;
 
 		case 'map':
@@ -282,7 +287,7 @@ endif;
 if ( !function_exists('carbon_get_complex_fields') ) :
 
 function carbon_get_complex_fields($type, $name, $id = null) {
-	$datastore = Carbon_DataStore_Base::factory($type);
+	$datastore = Base_Datastore::factory($type);
 	
 	if ( $id ) {
 		$datastore->set_id($id);
@@ -416,3 +421,30 @@ function crb_ksort_recursive( &$array, $sort_flags = SORT_REGULAR ) {
 }
 
 endif;
+
+/**
+ * Adds the field/container template(s) to the templates stack.
+ *
+ * @param object $object field or container object
+ * @return void
+ **/
+add_action('crb_field_activated', 'carbon_add_templates');
+add_action('crb_container_activated', 'carbon_add_templates');
+function carbon_add_templates($object) {
+	$templates = $object->get_templates();
+
+	if (!$templates) {
+		return false;
+	}
+
+	foreach ($templates as $name => $callback) {
+		ob_start();
+
+		call_user_func($callback);
+
+		$html = ob_get_clean();
+
+		// Add the template to the stack
+		Templater::add_template($name, $html);
+	}
+}
