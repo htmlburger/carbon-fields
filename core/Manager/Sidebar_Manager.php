@@ -162,24 +162,7 @@ class Sidebar_Manager {
 	 * Enqueue the UI scripts.
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'carbon-sidebar-ui', CARBON_PLUGIN_URL . '/assets/js/sidebar-ui.js', array('carbon-app') );
+		wp_enqueue_script( 'carbon-sidebar-ui', URL . '/assets/js/sidebar-ui.js', array('carbon-app') );
 	}
 
 }
-
-/**
- * The main function responsible for returning the Sidebar_Manager instance.
- *
- * Use this function like you would a global variable, except without needing
- * to declare the global.
- *
- * @example $carbon_sidebar_manager = carbon_sidebar_manager()
- *
- * @return Sidebar_Manager instance
- */
-function carbon_sidebar_manager() {
-	return Sidebar_Manager::instance();
-}
-
-// Initialization
-carbon_sidebar_manager();

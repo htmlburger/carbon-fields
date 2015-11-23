@@ -375,7 +375,7 @@ class Custom_Fields_Container extends Container {
 	 * @return void
 	 **/
 	function render() {
-		include CARBON_PLUGIN_ROOT . '/templates/container/custom_fields.php';
+		include DIR . '/templates/container/custom_fields.php';
 	}
 
 	/**

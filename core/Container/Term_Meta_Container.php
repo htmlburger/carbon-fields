@@ -106,7 +106,7 @@ class Term_Meta_Container extends Container {
 			$this->set_term_id( $term->term_id );
 		}
 
-		include CARBON_PLUGIN_ROOT . '/templates/container/term_meta.php';
+		include DIR . '/templates/container/term_meta.php';
 	}
 
 	function set_term_id($term_id) {

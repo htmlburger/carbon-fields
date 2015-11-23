@@ -9,24 +9,12 @@ Tested up to: 4.3.1
 
 namespace Carbon_Fields;
 
-use Carbon_Fields\Templater\Templater;
+use Carbon_Fields\Helper\Helper;
 
-define('CARBON_PLUGIN_ROOT', dirname(__FILE__));
+define('DIR', dirname(__FILE__));
+define('URL', str_replace('\\', '/', str_replace(untrailingslashit(ABSPATH), site_url(), DIR)));
 
-if (!defined('CARBON_PLUGIN_URL')) {
-	define('CARBON_PLUGIN_URL', get_template_directory_uri() . '/lib/carbon-fields');
-}
+include_once( DIR . '/vendor/autoload.php' );
 
-include_once( CARBON_PLUGIN_ROOT . '/vendor/autoload.php' );
-
-# Load custom functions
-include_once( CARBON_PLUGIN_ROOT . '/core/functions.php' );
-
-# Add Actions
-add_action('wp_loaded', 'carbon_trigger_fields_register');
-add_action('carbon_after_register_fields', 'carbon_init_containers');
-add_action('admin_footer', 'carbon_init_scripts', 0);
-add_action('admin_print_footer_scripts', 'carbon_json', 999);
-
-# Initialize templater
-$carbon_templater = new Templater();
+# Initialize helper 
+$carbon_helper = new Helper();

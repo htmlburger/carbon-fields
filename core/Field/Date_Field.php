@@ -32,7 +32,7 @@ class Date_Field extends Field {
 		wp_enqueue_script('jquery-ui-datepicker');
 
 		wp_enqueue_style('jquery-ui', '//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css');
-		wp_enqueue_style('carbon-jquery-ui', CARBON_PLUGIN_URL . '/assets/css/jquery-ui.css');
+		wp_enqueue_style('carbon-jquery-ui', URL . '/assets/css/jquery-ui.css');
 	}
 
 	function set_options($options) {

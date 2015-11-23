@@ -23,7 +23,7 @@ class Widget_Container extends Container {
 	}
 
 	function render() {
-		include CARBON_PLUGIN_ROOT . '/templates/container/widget.php';
+		include DIR . '/templates/container/widget.php';
 	}
 
 	function is_valid_attach() {
