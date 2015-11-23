@@ -152,6 +152,15 @@ abstract class Container {
 	}
 
 	/**
+	 * An alias of factory().
+	 *
+	 * @see Container::factory()
+	 **/
+	static function make($type, $name) {
+		return self::factory($type, $name);
+	}
+
+	/**
 	 * Init containers created via factory
 	 *
 	 * @return object

@@ -190,6 +190,15 @@ class Field {
 		return $field;
 	}
 
+	/**
+	 * An alias of factory().
+	 *
+	 * @see Field::factory()
+	 **/
+	static function make($type, $name, $label=null) {
+		return self::factory($type, $name, $label);
+	}
+
 	private function __construct($name, $label) {
 		$this->set_name($name);
 		$this->set_label($label);
