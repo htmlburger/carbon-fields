@@ -13,6 +13,9 @@
     "autoload": {
         "psr-4": {
             "Carbon_Fields\\": "core/"
-        }
+        },
+        "files": [
+            "carbon-fields.php"
+        ]
     }
 }

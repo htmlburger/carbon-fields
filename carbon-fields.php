@@ -14,7 +14,5 @@ use Carbon_Fields\Helper\Helper;
 define('DIR', dirname(__FILE__));
 define('URL', str_replace('\\', '/', str_replace(untrailingslashit(ABSPATH), site_url(), DIR)));
 
-include_once( DIR . '/vendor/autoload.php' );
-
 # Initialize helper 
 $carbon_helper = new Helper();
