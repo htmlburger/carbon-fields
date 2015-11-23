@@ -2,12 +2,12 @@
 
 namespace Carbon_Fields\Datastore;
 
-use Carbon_Fields\Field\Base_Field;
+use Carbon_Fields\Field\Field;
 
-class Theme_Options_Datastore extends Base_Datastore {
+class Theme_Options_Datastore extends Datastore {
 	function init() {}
 
-	function save(Base_Field $field) {
+	function save(Field $field) {
 		$name = $field->get_name();
 		$autoload = $field->get_autoload() ? 'yes': 'no';
 
@@ -21,18 +21,18 @@ class Theme_Options_Datastore extends Base_Datastore {
 		}
 	}
 
-	function load(Base_Field $field) {
+	function load(Field $field) {
 		$field->set_value( get_option($field->get_name()) );
 	}
 
-	function delete(Base_Field $field) {
+	function delete(Field $field) {
 		delete_option($field->get_name());
 	}
 
 	function load_values($field) {
 		global $wpdb;
 
-		if ( is_object($field) && is_subclass_of($field, 'Carbon_Fields\\Field\\Base_Field') ) {
+		if ( is_object($field) && is_subclass_of($field, 'Carbon_Fields\\Field\\Field') ) {
 			$meta_key = $field->get_name();
 		} else {
 			$meta_key = $field;
@@ -44,7 +44,7 @@ class Theme_Options_Datastore extends Base_Datastore {
 		', ARRAY_A);
 	}
 
-	function delete_values(Base_Field $field) {
+	function delete_values(Field $field) {
 		global $wpdb;
 
 		$group_names = $field->get_group_names();

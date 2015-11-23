@@ -11,7 +11,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Implements factory design pattern
  *
  **/
-class Base_Field {
+class Field {
 	/**
 	 * Stores all the field backbone templates
 	 *
@@ -882,4 +882,4 @@ class Base_Field {
 	function admin_hook_styles() {
 		wp_enqueue_style('thickbox');
 	}
-} // END Base_Field
+} // END Field

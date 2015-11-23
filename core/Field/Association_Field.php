@@ -286,7 +286,7 @@ class Association_Field extends Relationship_Field {
 	}
 
 	function to_json($load) {
-		$field_data = Base_Field::to_json($load);
+		$field_data = Field::to_json($load);
 
 		$field_data = array_merge($field_data, array(
 			'options' => $this->get_options(),

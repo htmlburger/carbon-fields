@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
-class File_Field extends Base_Field {
+class File_Field extends Field {
 	public $button_label = '';
 	public $window_button_label = '';
 	public $window_label = '';

@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
-class Separator_Field extends Base_Field {
+class Separator_Field extends Field {
 	function template() {
 		?>
 		<h3>{{{ label }}}</h3>

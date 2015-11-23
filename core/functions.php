@@ -1,7 +1,7 @@
 <?php
 
-use Carbon_Fields\Datastore\Base_Datastore;
-use Carbon_Fields\Container\Base_Container;
+use Carbon_Fields\Datastore\Datastore;
+use Carbon_Fields\Container\Container;
 use Carbon_Fields\Templater\Templater;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
@@ -26,7 +26,7 @@ endif;
 if ( !function_exists('carbon_init_containers') ) :
 
 function carbon_init_containers() {
-	Base_Container::init_containers();
+	Container::init_containers();
 }
 
 endif;
@@ -38,7 +38,7 @@ function carbon_init_scripts() {
 	wp_enqueue_script('carbon-app', CARBON_PLUGIN_URL . '/js/app.js', array('jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable'));
 	wp_enqueue_script('carbon-ext', CARBON_PLUGIN_URL . '/js/ext.js', array('carbon-app'));
 
-	$active_fields = Base_Container::get_active_fields();
+	$active_fields = Container::get_active_fields();
 	$active_field_types = array();
 
 	foreach ($active_fields as $field) {
@@ -84,7 +84,7 @@ function carbon_get_json_data() {
 		'sidebars' => array(),
 	);
 
-	$containers = Base_Container::get_active_containers();
+	$containers = Container::get_active_containers();
 
 	foreach ($containers as $container) {
 		$container_data = $container->to_json(true);
@@ -287,7 +287,7 @@ endif;
 if ( !function_exists('carbon_get_complex_fields') ) :
 
 function carbon_get_complex_fields($type, $name, $id = null) {
-	$datastore = Base_Datastore::factory($type);
+	$datastore = Datastore::factory($type);
 	
 	if ( $id ) {
 		$datastore->set_id($id);

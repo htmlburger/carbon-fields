@@ -2,8 +2,8 @@
 
 namespace Carbon_Fields\Container;
 
-use Carbon_Fields\Field\Base_Field;
-use Carbon_Fields\Datastore\Base_Datastore;
+use Carbon_Fields\Field\Field;
+use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -11,7 +11,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Defines the key container methods and their default implementations.
  *
  **/
-abstract class Base_Container {
+abstract class Container {
 	/**
 	 * Where to put a particular tab -- at the head or the tail. Tail by default
 	 */
@@ -122,7 +122,7 @@ abstract class Base_Container {
 	 *
 	 * @see set_datastore()
 	 * @see get_datastore()
-	 * @var Base_Datastore
+	 * @var Datastore
 	 */
 	protected $store;
 
@@ -442,8 +442,8 @@ abstract class Base_Container {
 	 **/
 	function add_fields($fields) {
 		foreach ($fields as $field) {
-			if ( !is_a($field, 'Carbon_Fields\\Field\\Base_Field') ) {
-				throw new Incorrect_Syntax_Exception('Object must be of type Carbon_Fields\\Field\\Base_Field');
+			if ( !is_a($field, 'Carbon_Fields\\Field\\Field') ) {
+				throw new Incorrect_Syntax_Exception('Object must be of type Carbon_Fields\\Field\\Field');
 			}
 
 			$this->verify_unique_field_name($field->get_name());
@@ -625,7 +625,7 @@ abstract class Base_Container {
 	 * @param object $store
 	 * @return void
 	 **/
-	function set_datastore(Base_Datastore $store) {
+	function set_datastore(Datastore $store) {
 		$this->store = $store;
 
 		foreach ($this->fields as $field) {
@@ -720,5 +720,5 @@ abstract class Base_Container {
 		wp_enqueue_style('carbon-main', CARBON_PLUGIN_URL . '/css/main.css');
 	}
 
-} // END Base_Container 
+} // END Container 
 

@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
-class Map_Field extends Base_Field {
+class Map_Field extends Field {
 	protected $lazyload = true;
 	protected $default_lat = 40.346544;
 	protected $default_lng = -101.645507;

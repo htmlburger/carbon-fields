@@ -2,9 +2,9 @@
 
 namespace Carbon_Fields\Widget;
 
-use Carbon_Fields\Field\Base_Field;
+use Carbon_Fields\Field\Field;
 use Carbon_Fields\Datastore\Datastore_Interface;
-use Carbon_Fields\Container\Base_Container;
+use Carbon_Fields\Container\Container;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 abstract class Widget extends \WP_Widget implements Datastore_Interface {
@@ -70,7 +70,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 			$custom_fields[] = $tmp_field;
 		}
 
-		Base_Container::factory('widget', $this->id)
+		Container::factory('widget', $this->id)
 			->add_fields($custom_fields)
 			->init();
 	}
@@ -102,8 +102,8 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 
 	function add_fields($fields) {
 		foreach ($fields as $field) {
-			if ( !is_a($field, 'Carbon_Fields\\Field\\Base_Field') ) {
-				throw new Incorrect_Syntax_Exception('Object must be of type Carbon_Fields\\Field\\Base_Field');
+			if ( !is_a($field, 'Carbon_Fields\\Field\\Field') ) {
+				throw new Incorrect_Syntax_Exception('Object must be of type Carbon_Fields\\Field\\Field');
 			}
 
 			$this->verify_unique_field_name($field->get_name());
@@ -141,7 +141,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	}
 
 	/* Implement DataStore */
-	function load(Base_Field $field) {
+	function load(Field $field) {
 		if ( isset($this->store_data[$field->get_name()]) ) {
 			$field->set_value($this->store_data[$field->get_name()]);
 		} else {
@@ -149,11 +149,11 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		}
 	}
 
-	function save(Base_Field $field) {
+	function save(Field $field) {
 		$this->store_data[$field->get_name()] = $field->get_value();
 	}
 	
-	function delete(Base_Field $field) {
+	function delete(Field $field) {
 		if ( isset($this->store_data[$field->get_name()]) ) {
 			unset($this->store_data[$field->get_name()]);
 		}
@@ -175,7 +175,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		return $result;
 	}
 	
-	function delete_values(Base_Field $field) {
+	function delete_values(Field $field) {
 		$field_name = $field->get_name();
 
 		foreach ($this->store_data as $key => $value) {

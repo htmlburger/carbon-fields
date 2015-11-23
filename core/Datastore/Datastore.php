@@ -4,7 +4,7 @@ namespace Carbon_Fields\Datastore;
 
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
-abstract class Base_Datastore implements Datastore_Interface {
+abstract class Datastore implements Datastore_Interface {
 	function __construct() {
 		$this->init();
 	}

@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
-class Date_Field extends Base_Field {
+class Date_Field extends Field {
 
 	/**
 	 * Datepicker options

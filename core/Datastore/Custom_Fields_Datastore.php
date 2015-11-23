@@ -2,20 +2,20 @@
 
 namespace Carbon_Fields\Datastore;
 
-use Carbon_Fields\Field\Base_Field;
+use Carbon_Fields\Field\Field;
 
-class Custom_Fields_Datastore extends Base_Datastore {
+class Custom_Fields_Datastore extends Datastore {
 	protected $post_id;
 
 	function init() {}
 
-	function save(Base_Field $field) {
+	function save(Field $field) {
 		if ( !update_post_meta($this->post_id, $field->get_name(), $field->get_value()) ) {
 			add_post_meta($this->post_id, $field->get_name(), $field->get_value(), true);
 		}
 	}
 
-	function load(Base_Field $field) {
+	function load(Field $field) {
 		global $wpdb;
 
 		$value = $wpdb->get_col('
@@ -34,14 +34,14 @@ class Custom_Fields_Datastore extends Base_Datastore {
 		$field->set_value($value[0]);
 	}
 
-	function delete(Base_Field $field) {
+	function delete(Field $field) {
 		delete_post_meta($this->post_id, $field->get_name(), $field->get_value());
 	}
 
 	function load_values($field) {
 		global $wpdb;
 
-		if ( is_object($field) && is_subclass_of($field, 'Carbon_Fields\\Field\\Base_Field') ) {
+		if ( is_object($field) && is_subclass_of($field, 'Carbon_Fields\\Field\\Field') ) {
 			$meta_key = $field->get_name();
 		} else {
 			$meta_key = $field;
@@ -53,7 +53,7 @@ class Custom_Fields_Datastore extends Base_Datastore {
 		', ARRAY_A);
 	}
 
-	function delete_values(Base_Field $field) {
+	function delete_values(Field $field) {
 		global $wpdb;
 
 		$group_names = $field->get_group_names();

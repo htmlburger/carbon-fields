@@ -5,7 +5,7 @@ namespace Carbon_Fields\Container;
 use Carbon_Fields\Datastore\Term_Meta_Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
-class Term_Meta_Container extends Base_Container {
+class Term_Meta_Container extends Container {
 	/**
 	 * List of registered unique field names per taxonomy
 	 *

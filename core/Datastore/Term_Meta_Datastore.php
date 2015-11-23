@@ -2,9 +2,9 @@
 
 namespace Carbon_Fields\Datastore;
 
-use Carbon_Fields\Field\Base_Field;
+use Carbon_Fields\Field\Field;
 
-class Term_Meta_Datastore extends Base_Datastore {
+class Term_Meta_Datastore extends Datastore {
 	protected $term_id;
 
 	static function create_table() {
@@ -52,13 +52,13 @@ class Term_Meta_Datastore extends Base_Datastore {
 		add_action('delete_term', array(__CLASS__, 'on_delete_term'), 10, 3);
 	}
 
-	function save(Base_Field $field) {
+	function save(Field $field) {
 		if ( !add_metadata('term', $this->term_id, $field->get_name(), $field->get_value(), true) ) {
 			update_metadata('term', $this->term_id, $field->get_name(), $field->get_value());
 		}
 	}
 
-	function load(Base_Field $field) {
+	function load(Field $field) {
 		global $wpdb;
 
 		$value = $wpdb->get_col('
@@ -77,14 +77,14 @@ class Term_Meta_Datastore extends Base_Datastore {
 		$field->set_value($value[0]);
 	}
 
-	function delete(Base_Field $field) {
+	function delete(Field $field) {
 		delete_metadata('term', $this->term_id, $field->get_name(), $field->get_value());
 	}
 
 	function load_values($field) {
 		global $wpdb;
 
-		if ( is_object($field) && is_subclass_of($field, 'Carbon_Fields\\Field\\Base_Field') ) {
+		if ( is_object($field) && is_subclass_of($field, 'Carbon_Fields\\Field\\Field') ) {
 			$meta_key = $field->get_name();
 		} else {
 			$meta_key = $field;
@@ -96,7 +96,7 @@ class Term_Meta_Datastore extends Base_Datastore {
 		', ARRAY_A);
 	}
 
-	function delete_values(Base_Field $field) {
+	function delete_values(Field $field) {
 		global $wpdb;
 
 		$group_names = $field->get_group_names();

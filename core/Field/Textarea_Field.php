@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
-class Textarea_Field extends Base_Field {
+class Textarea_Field extends Field {
 	protected $height = 170;
 	protected $rows = 0;
 

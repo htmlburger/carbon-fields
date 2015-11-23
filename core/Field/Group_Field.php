@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
-use Carbon_Fields\Datastore\Base_Datastore;
+use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class Group_Field {
@@ -20,8 +20,8 @@ class Group_Field {
 
 	function add_fields($fields) {
 		foreach ($fields as $field) {
-			if ( !is_a($field, __NAMESPACE__ . '\\Base_Field') ) {
-				throw new Incorrect_Syntax_Exception('Object must be of type ' . __NAMESPACE__ . '\\Base_Field');
+			if ( !is_a($field, __NAMESPACE__ . '\\Field') ) {
+				throw new Incorrect_Syntax_Exception('Object must be of type ' . __NAMESPACE__ . '\\Field');
 			}
 
 			// verify name validity
@@ -107,7 +107,7 @@ class Group_Field {
 		return $this->name;
 	}
 
-	function set_datastore(Base_Datastore $store) {
+	function set_datastore(Datastore $store) {
 		foreach ($this->fields as $field) {
 			if ( !$field->get_datastore() ) {
 				$field->set_datastore($store);

@@ -4,7 +4,7 @@ namespace Carbon_Fields\Container;
 
 use Carbon_Fields\Datastore\User_Meta_Datastore;
 
-class User_Meta_Container extends Base_Container {
+class User_Meta_Container extends Container {
 	protected $user_id;
 
 	public $settings = array(

@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
-class Relationship_Field extends Base_Field {
+class Relationship_Field extends Field {
 	protected $post_type = 'post';
 	protected $max = -1;
 	protected $allow_duplicates = false;

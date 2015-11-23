@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
-class Color_Field extends Base_Field {
+class Color_Field extends Field {
 	function template() {
 		?>
 		<div class="carbon-color-row">

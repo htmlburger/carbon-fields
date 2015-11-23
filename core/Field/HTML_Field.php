@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
-class HTML_Field extends Base_Field {
+class HTML_Field extends Field {
 	public $field_html;
 
 	function set_html($callback_or_html) {

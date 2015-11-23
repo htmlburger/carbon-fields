@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
-class Set_Field extends Base_Field {
+class Set_Field extends Field {
 	protected $limit_options = 0;
 
 	function set_options($options) {

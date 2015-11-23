@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
-class Select_Field extends Base_Field {
+class Select_Field extends Field {
 	function set_options($options) {
 		$this->_set_options($options);
 		return $this;

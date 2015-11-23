@@ -5,7 +5,7 @@ namespace Carbon_Fields\Container;
 use Carbon_Fields\Datastore\Theme_Options_Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
-class Theme_Options_Container extends Base_Container {
+class Theme_Options_Container extends Container {
 	static protected $registered_pages = array();
 
 	/**

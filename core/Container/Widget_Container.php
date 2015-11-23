@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Container;
 
-class Widget_Container extends Base_Container {
+class Widget_Container extends Container {
 
 	function __construct($id) {
 		// Reset the registerd fields array, this is required so we can have fields with same names

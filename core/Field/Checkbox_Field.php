@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
-class Checkbox_Field extends Base_Field {
+class Checkbox_Field extends Field {
 	protected $option_value = 'yes';
 
 	function set_option_value($value) {

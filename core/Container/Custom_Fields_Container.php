@@ -11,7 +11,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * location information and more.
  *
  **/
-class Custom_Fields_Container extends Base_Container {
+class Custom_Fields_Container extends Container {
 	/**
 	 * List of registered unique field names
 	 *
