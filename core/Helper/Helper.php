@@ -266,6 +266,24 @@ class Helper {
 		}
 	}
 
+	public static function get_complex_field_regex( $field_name, $group_names = array(), $field_names = array() ) {
+		if ( $group_names ) {
+			$group_names = array_map('preg_quote', array_keys($group_names), array('~'));
+			$group_regex = implode('|', $group_names);
+		} else {
+			$group_regex = '\w*';
+		}
+
+		if ( $field_names ) {
+			$field_names = array_map('preg_quote', $field_names, array('~'));
+			$field_regex = implode('|', $field_names);
+		} else {
+			$field_regex = '.*?';
+		}
+
+		return '~^' . preg_quote($field_name, '~') . '(?P<group>' . $group_regex . ')-_?(?P<key>' . $field_regex . ')_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~';
+	}
+
 	public static function get_complex_fields($type, $name, $id = null) {
 		$datastore = Datastore::factory($type);
 		
@@ -277,7 +295,7 @@ class Helper {
 		$input_groups = array();
 
 		foreach ($group_rows as $row) {
-			if ( !preg_match('~^' . preg_quote($name, '~') . '(?P<group>\w*)-_?(?P<key>.*?)_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~', $row['field_key'], $field_name) ) {
+			if ( !preg_match( self::get_complex_field_regex($name), $row['field_key'], $field_name ) ) {
 					continue;
 			}
 			
@@ -303,7 +321,8 @@ class Helper {
 	}
 
 	public static function expand_nested_field($input_groups, $row, $field_name) {
-		if ( !preg_match('~^' . preg_quote($field_name['key'], '~') . '(?P<group>\w*)-_?(?P<key>.*?)_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~', $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'], $subfield_name) ) {
+		$subfield_key_token = $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'];
+		if ( !preg_match( self::get_complex_field_regex($field_name['key']), $subfield_key_token, $subfield_name ) ) {
 			return $input_groups;
 		}
 

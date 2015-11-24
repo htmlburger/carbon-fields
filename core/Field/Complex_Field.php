@@ -3,6 +3,7 @@
 namespace Carbon_Fields\Field;
 
 use Carbon_Fields\Datastore\Datastore_Interface;
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Field\Group_Field;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
@@ -244,16 +245,9 @@ class Complex_Field extends Field {
 			return;
 		}
 
-		// quote group names for use in regex
-		$group_names = array_map('preg_quote', array_keys($this->groups), array('~'));
-		$group_names = implode('|', $group_names);
-
-		$field_names = array_map('preg_quote', $field_names, array('~'));
-		$field_names = implode('|', $field_names);
-
 		// load and parse values and group type
 		foreach ($group_rows as $row) {
-			if ( !preg_match('~^' . preg_quote($this->name, '~') . '(?P<group>' . $group_names . ')-(?P<key>' . $field_names . ')_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~', $row['field_key'], $field_name) ) {
+			if ( !preg_match( Helper::get_complex_field_regex( $this->name, $this->groups, $field_names ), $row['field_key'], $field_name ) ) {
 				continue;
 			}
 
