@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit bootstrap="./tests/bootstrap.php" colors="true" stopOnError="true">
+	<testsuites>
+		<testsuite name="Carbon Fields Test Suite">
+			<directory suffix=".php">./tests/unit-tests/</directory>
+		</testsuite>
+	</testsuites>
+	<filter>
+		<blacklist>
+			<directory suffix=".php">./assets/</directory>
+			<directory suffix=".php">./docs/</directory>
+			<directory suffix=".php">./templates/</directory>
+			<directory suffix=".php">./tests/</directory>
+			<directory suffix=".php">./tmp/</directory>
+			<directory suffix=".php">./vendor/</directory>
+		</blacklist>
+	</filter>
+</phpunit>
