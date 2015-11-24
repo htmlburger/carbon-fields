@@ -247,7 +247,7 @@ class Complex_Field extends Field {
 
 		// load and parse values and group type
 		foreach ($group_rows as $row) {
-			if ( !preg_match( Helper::get_complex_field_regex( $this->name, $this->groups, $field_names ), $row['field_key'], $field_name ) ) {
+			if ( !preg_match( Helper::get_complex_field_regex( $this->name, array_keys( $this->groups ), $field_names ), $row['field_key'], $field_name ) ) {
 				continue;
 			}
 

@@ -268,7 +268,7 @@ class Helper {
 
 	public static function get_complex_field_regex( $field_name, $group_names = array(), $field_names = array() ) {
 		if ( $group_names ) {
-			$group_names = array_map('preg_quote', array_keys($group_names), array('~'));
+			$group_names = array_map('preg_quote', $group_names, array('~'));
 			$group_regex = implode('|', $group_names);
 		} else {
 			$group_regex = '\w*';
