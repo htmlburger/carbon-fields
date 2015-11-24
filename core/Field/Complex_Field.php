@@ -252,15 +252,13 @@ class Complex_Field extends Field {
 			}
 
 			$row['field_value'] = maybe_unserialize($row['field_value']);
+			$input_groups[ $field_name['index'] ]['type'] = $field_name['group'];
 
 			if ( !empty($field_name['trailing']) ) {
-				$input_groups[ $field_name['index'] ]['type'] = $field_name['group'];
 				$input_groups[ $field_name['index'] ][$field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing']] = $row['field_value'];
 			} else if ( !empty($field_name['sub']) ) {
-				$input_groups[ $field_name['index'] ]['type'] = $field_name['group'];
 				$input_groups[ $field_name['index'] ][ $field_name['key'] ][$field_name['sub'] ] = $row['field_value'];
 			} else {
-				$input_groups[ $field_name['index'] ]['type'] = $field_name['group'];
 				$input_groups[ $field_name['index'] ][ $field_name['key'] ] = $row['field_value'];
 			}
 		}
