@@ -283,7 +283,7 @@ class Complex_Field extends Field {
 				// set value from the group
 				$tmp_field = clone $field;
 
-				if ( is_a($field, 'Carbon_Field_Complex') ) {
+				if ( is_a($field, __NAMESPACE__ . '\\Complex_Field') ) {
 					$tmp_field->load_values_from_array($values);
 				} else {
 					$tmp_field->set_value_from_input($values);
