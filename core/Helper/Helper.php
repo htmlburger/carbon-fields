@@ -266,17 +266,21 @@ class Helper {
 		}
 	}
 
+	public static function preg_quote_array( $pieces, $glue = '|' ) {
+		$pieces = array_map('preg_quote', $pieces, array('~'));
+		
+		return implode($glue, $pieces);
+	}
+
 	public static function get_complex_field_regex( $field_name, $group_names = array(), $field_names = array() ) {
 		if ( $group_names ) {
-			$group_names = array_map('preg_quote', $group_names, array('~'));
-			$group_regex = implode('|', $group_names);
+			$group_regex = self::preg_quote_array( $group_names );
 		} else {
 			$group_regex = '\w*';
 		}
 
 		if ( $field_names ) {
-			$field_names = array_map('preg_quote', $field_names, array('~'));
-			$field_regex = implode('|', $field_names);
+			$field_regex = self::preg_quote_array( $field_names );
 		} else {
 			$field_regex = '.*?';
 		}
