@@ -134,7 +134,7 @@ class Choose_Sidebar_Field extends Sidebar_Field {
 
 		$query_string = '';
 		switch ($this->context) {
-			case 'CustomFields':
+			case 'PostMeta':
 				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->postmeta . ' WHERE meta_key = "' .  esc_sql($this->name) . '"';
 				break;
 			case 'TermMeta':

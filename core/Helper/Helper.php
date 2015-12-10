@@ -96,7 +96,7 @@ class Helper {
 
 		switch ($type) {
 			case 'complex':
-				$value = self::get_complex_fields('Custom_Fields', $name, $id);
+				$value = self::get_complex_fields('Post_Meta', $name, $id);
 			break;
 
 			case 'map':

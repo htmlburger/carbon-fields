@@ -57,7 +57,7 @@
 							<li><a href="#Abstract">Abstract Overview</a></li>
 							<li class="nav-header">Containers</li>
 							<li><a href="#Containers">Usage</a></li>
-							<li><a href="#Custom_Fields">Custom Fields</a></li>
+							<li><a href="#Post_Meta">Post Meta</a></li>
 							<li><a href="#Theme_Options">Theme Options</a></li>
 							<li><a href="#Term_Meta">Term Meta</a></li>
 							<li><a href="#User_Meta">User Meta</a></li>
@@ -127,7 +127,7 @@
 					<p>Containers have a title, which must be <strong>unique</strong> across the whole WordPress instance. </p>
 
 					<pre class="prettyprint">
-Carbon_Container::factory('custom_fields', 'Custom Data')
+Carbon_Container::factory('post_meta', 'Custom Data')
 	-&gt;show_on_post_type('page')
 	-&gt;add_fields(array(
 		Carbon_Field::factory('map', 'crb_location')-&gt;set_position(37.423156, -122.084917, 14),
@@ -138,7 +138,7 @@ Carbon_Container::factory('custom_fields', 'Custom Data')
 
 					<dl>
 						<dt><code>$type</code></dt>
-						<dd><p>Identifier of the container type (accepted values are <code>custom_fields</code> and <code>theme_options</code>)</p></dd>
+						<dd><p>Identifier of the container type (accepted values are <code>post_meta</code> and <code>theme_options</code>)</p></dd>
 
 						<dt><code>$title</code></dt>
 						<dd><p>Unique title of the container</p></dd>
@@ -146,11 +146,11 @@ Carbon_Container::factory('custom_fields', 'Custom Data')
 
 					<hr>
 
-					<h3 id="Custom_Fields" class="left-hash"><a href="#Custom_Fields">Custom Fields Container</a></h3>
+					<h3 id="Post_Meta" class="left-hash"><a href="#Post_Meta">Post Meta Container</a></h3>
 					<p>Custom Field containers are used to extend the post edit screens with additional fields. Field data is stored separately for each post as post meta (see <a href="http://codex.wordpress.org/Function_Reference/add_post_meta" target="_blank"><i class="icon-globe"></i> add_post_meta</a>). </p>
 
 					<pre class="prettyprint">
-Carbon_Container::factory('custom_fields', 'Post Properties')
+Carbon_Container::factory('post_meta', 'Post Properties')
 	-&gt;add_fields(array(
 		Carbon_Field::factory('map', 'crb_location')-&gt;set_position(37.423156, -122.084917, 14),
 		Carbon_Field::factory('choose_sidebar', 'crb_custom_sidebar'),
@@ -260,9 +260,9 @@ foreach ($slides as $slide) {
 &lt;?php $slides = carbon_get_the_post_meta('crb_slides', 'complex'); ?&gt;
 </pre>
 
-					<p>After saving, the <code>carbon_after_save_custom_fields</code> hook is called, which allows you to hook additional functionality after saving. It accepts the <code>$post_id</code> parameter, which is the ID of the post being updated. Example:</p>
+					<p>After saving, the <code>carbon_after_save_post_meta</code> hook is called, which allows you to hook additional functionality after saving. It accepts the <code>$post_id</code> parameter, which is the ID of the post being updated. Example:</p>
 					<pre class="prettyprint">
-add_action('carbon_after_save_custom_fields', 'crb_after_save_event');
+add_action('carbon_after_save_post_meta', 'crb_after_save_event');
 function crb_after_save_event($post_id) {
 	if ( get_post_type($post_id) !== 'crb_event' ) {
 		return false;
@@ -541,7 +541,7 @@ function __construct() {
 					<h3 id="Tabs" class="left-hash"><a href="#Tabs">Tabs</a></h3>
 					<p>The tabs allow you to group multiple fields under different tab panels using the Container method <code>add_tab</code>. Tabs can be used on every container type. Example:</p>
 					<pre class="prettyprint">
-Carbon_Container::factory('custom_fields', __('User Settings', 'crb'))
+Carbon_Container::factory('post_meta', __('User Settings', 'crb'))
 	->add_tab(__('Profile', 'crb'), array(
 		Carbon_Field::factory('text', '_crb_first_name', 'First Name'),
 		Carbon_Field::factory('text', '_crb_last_name', 'Last Name'),
@@ -1226,7 +1226,7 @@ array (
 						<h3 id="Nested_Complex_Fields" class="left-hash"><a href="#Nested_Complex_Fields">Nested Complex Fields</a></h3>
 						<p>Complex fields can be nested. The following will define a container that creates multiple slides and allows positioning of multiple text fragments on each slide: </p>
 						<pre class="prettyprint">
-Carbon_Container::factory('custom_fields', 'Slider Data')
+Carbon_Container::factory('post_meta', 'Slider Data')
 	->show_on_post_type('post')
 	->add_fields(array(
 		Carbon_Field::factory('complex', 'crb_slides')->add_fields(array(
@@ -1338,7 +1338,7 @@ Carbon_Field::factory('complex', 'crb_employee_data')
 							<dt>number</dt>
 							<dd>Identifies the number of the row this value is part of.</dd>
 						</dl>
-						<p><span class="label label-info">NB!</span> When in a Custom Fields container, the name of the complex field is prefixed with an underscore, but the name of the field (<code>field_name</code>) is not. Thus, the key format becomes:<br/><code><strong>_</strong>{complex_field_name}_{group_name}-{field_name}_{number}</code></p>
+						<p><span class="label label-info">NB!</span> When in a Post Meta container, the name of the complex field is prefixed with an underscore, but the name of the field (<code>field_name</code>) is not. Thus, the key format becomes:<br/><code><strong>_</strong>{complex_field_name}_{group_name}-{field_name}_{number}</code></p>
 					</div>
 
 					<h2>Advanced Topics</h2>

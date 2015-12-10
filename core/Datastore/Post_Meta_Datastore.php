@@ -4,7 +4,7 @@ namespace Carbon_Fields\Datastore;
 
 use Carbon_Fields\Field\Field;
 
-class Custom_Fields_Datastore extends Datastore {
+class Post_Meta_Datastore extends Datastore {
 	protected $post_id;
 
 	function init() {}

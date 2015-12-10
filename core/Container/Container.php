@@ -134,6 +134,11 @@ abstract class Container {
 	 * @return object $container
 	 **/
 	static function factory($type, $name) {
+		// backward compatibility: post_meta container used to be called custom_fields
+		if ($type === 'custom_fields' ) {
+			$type = 'post_meta';
+		}
+
 		$type = str_replace(" ", '_', ucwords(str_replace("_", ' ', $type)));
 
 		$class = __NAMESPACE__ . '\\' . $type . '_Container';

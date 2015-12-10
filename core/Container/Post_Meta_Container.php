@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Container;
 
-use Carbon_Fields\Datastore\Custom_Fields_Datastore;
+use Carbon_Fields\Datastore\Post_Meta_Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -11,7 +11,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * location information and more.
  *
  **/
-class Custom_Fields_Container extends Container {
+class Post_Meta_Container extends Container {
 	/**
 	 * List of registered unique field names
 	 *
@@ -55,7 +55,7 @@ class Custom_Fields_Container extends Container {
 		parent::__construct($title);
 
 		if ( !$this->get_datastore() ) {
-			$this->set_datastore(new Custom_Fields_Datastore());
+			$this->set_datastore(new Post_Meta_Datastore());
 		}
 	}
 
@@ -134,6 +134,7 @@ class Custom_Fields_Container extends Container {
 		}
 
 		do_action('carbon_after_save_custom_fields', $post_id);
+		do_action('carbon_after_save_post_meta', $post_id);
 	}
 
 	/**
@@ -375,7 +376,7 @@ class Custom_Fields_Container extends Container {
 	 * @return void
 	 **/
 	function render() {
-		include DIR . '/templates/container/custom_fields.php';
+		include DIR . '/templates/container/post_meta.php';
 	}
 
 	/**
@@ -617,4 +618,4 @@ class Custom_Fields_Container extends Container {
 		return $this;
 	}
 
-} // END Custom_Fields_Container 
+} // END Post_Meta_Container 

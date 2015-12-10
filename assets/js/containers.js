@@ -473,8 +473,8 @@ window.carbon = window.carbon || {};
 	 * CUSTOM FIELDS
 	 *------------------------------------------------------------------------*/
 
-	// CustomFields MODEL
-	carbon.containers.Model.CustomFields = carbon.containers.Model.extend({
+	// PostMeta MODEL
+	carbon.containers.Model.PostMeta = carbon.containers.Model.extend({
 		defaults: {
 			'page_template': 'default',
 			'level': 1,
@@ -484,8 +484,8 @@ window.carbon = window.carbon || {};
 		}
 	});
 
-	// CustomFields VIEW
-	carbon.containers.View.CustomFields = carbon.containers.View.extend({
+	// PostMeta VIEW
+	carbon.containers.View.PostMeta = carbon.containers.View.extend({
 		initialize: function() {
 			carbon.containers.View.prototype.initialize.apply(this);
 
