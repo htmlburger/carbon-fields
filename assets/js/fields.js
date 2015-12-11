@@ -929,7 +929,6 @@ window.carbon = window.carbon || {};
 	// Gravity Form MODEL
 	carbon.fields.Model.GravityForm = carbon.fields.Model.Select.extend();
 
-
 	/*--------------------------------------------------------------------------
 	 * SIDEBAR
 	 *------------------------------------------------------------------------*/
@@ -938,20 +937,28 @@ window.carbon = window.carbon || {};
 	carbon.fields.Model.Sidebar = carbon.fields.Model.Select.extend({
 		initialize: function() {
 			this.setSidebarOptions();
-
 			carbon.fields.Model.Select.prototype.initialize.apply(this);
 		},
 
 		setSidebarOptions: function() {
-			var options = this.get('options');
+
+			var options  = this.get('options');
+			var excluded_sidebars = this.get('excluded_sidebars');
 			var sidebars = [];
 
 			carbon.collections.sidebars.each(function(model) {
+
 				var sidebarName = model.get('name');
+				var sidebarId   = model.get('id');
 				var sidebar = {
 					name: sidebarName,
 					value: sidebarName
 				};
+
+				// If this sidebar is excluded ( by name or by ID), do not add it to the options. 
+				if ( typeof(excluded_sidebars) !== 'undefined' && ( excluded_sidebars.indexOf(sidebarName) > -1 || excluded_sidebars.indexOf(sidebarId) > -1 ) ) {
+					return;
+				}
 
 				if (!!_.findWhere(options, sidebar)) {
 					return; // sidebar already added, continue
@@ -961,6 +968,7 @@ window.carbon = window.carbon || {};
 			});
 
 			this.set('options', _.union(sidebars, options));
+
 		},
 
 		validate: function(attrs, options) {
@@ -976,7 +984,6 @@ window.carbon = window.carbon || {};
 
 		initialize: function() {
 			carbon.fields.View.prototype.initialize.apply(this);
-
 			this.listenTo(carbon.collections.sidebars, 'add', this.addSidebarOption);
 		},
 
@@ -1308,7 +1315,8 @@ window.carbon = window.carbon || {};
 			'click .relationship-left .relationship-list a': 'addItem',
 			'click .relationship-right .relationship-list a': 'removeItem',
 			'keypress .relationship-left .search-field': 'searchFieldKeyPress',
-			'keyup .relationship-left .search-field': 'searchFilter'
+			'keyup .relationship-left .search-field': 'searchFilter',
+			'click a .edit-link' : 'editLink'
 		},
 
 		initialize: function() {
@@ -1407,6 +1415,8 @@ window.carbon = window.carbon || {};
 				return false;
 			};
 
+			this.setSelectedItemsLabel($element, this.selectedItems.length, 'add');
+
 			this.trigger('field:relationship:beforeAdd');
 
 			if (!allowDuplicates) {
@@ -1443,6 +1453,7 @@ window.carbon = window.carbon || {};
 			};
 
 			this.trigger('field:relationship:beforeRemove');
+			this.setSelectedItemsLabel($element, this.selectedItems.length, 'remove');
 
 			this.selectedItems.splice(position, 1);
 			$element.parent().remove();
@@ -1454,6 +1465,39 @@ window.carbon = window.carbon || {};
 			this.trigger('field:relationship:afterRemove');
 			
 			event.preventDefault();
+		},
+
+		setSelectedItemsLabel: function(element, items_number, action) {
+
+			var selected_items_container = element.parents('.relationship-container').find('.selected-items-container .selected-counter');
+			var selected_items_label_element = selected_items_container.siblings('.selected-label');
+			var selected_label;
+
+			if ( action === 'add' ) {
+				items_number++;
+			} else {
+				items_number--;
+			}
+
+			if ( items_number == 1) {
+				selected_label = selected_items_label_element.data('single-label');
+			} else {
+				selected_label = selected_items_label_element.data('plural-label');
+			}
+
+			selected_items_label_element.html(selected_label);
+			selected_items_container.html(items_number);
+
+
+		},
+
+		editLink: function(event) {
+			var href = $(event.target).data('href');
+			if ( typeof href != 'undefined' ) {
+				event.preventDefault();
+				event.stopPropagation();
+				window.open($(event.target).data('href'), '_blank');
+			}
 		},
 
 		searchFieldKeyPress: function(event) {

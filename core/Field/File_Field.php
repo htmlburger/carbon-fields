@@ -50,6 +50,8 @@ class File_Field extends Field {
 					$thumb_src = wp_get_attachment_image_src($value, 'thumbnail');
 					$thumb_url = $thumb_src[0];
 				}
+			} else {
+				$thumb_url = $default_thumb_url;
 			}
 		}
 

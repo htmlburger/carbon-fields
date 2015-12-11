@@ -17,7 +17,8 @@ class Term_Meta_Container extends Container {
 	protected $term_id;
 
 	public $settings = array(
-		'taxonomy' => array('category')
+		'taxonomy' => array('category'),
+		'show_on_level' => false,
 	);
 
 	function __construct($title) {
@@ -168,5 +169,16 @@ class Term_Meta_Container extends Container {
 
 		return $this;
 	}
-}
 
+	/** 
+	 * Show the container only on particular term level. 
+	 *
+	 * @param $string $term_level 
+	 * @return object $this 
+	 */ 
+	function show_on_level($term_level) {                    
+		$this->settings['show_on_level'] = $term_level; 
+		return $this; 
+	} 
+
+}

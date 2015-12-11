@@ -117,6 +117,7 @@ class Relationship_Field extends Field {
 					'subtype' => $post_type,
 					'label' => $this->get_item_label($p, 'post', $post_type),
 					'is_trashed' => (get_post_status($p) == 'trash'),
+					'edit_link'  => get_edit_post_link($p),
 				);
 			}
 
@@ -167,6 +168,27 @@ class Relationship_Field extends Field {
 	function template() {
 		?>
 		<div class="relationship-container">
+			<div class="selected-items-container">
+				<strong>
+					<# 
+					var selected_items_length = 0;
+					if ( value ) {
+						selected_items_length = value.length;
+					} #>
+					<span class="selected-counter">{{{ selected_items_length }}}</span> 
+					<span class="selected-label" data-single-label="<?php _e('selected item', 'crb'); ?>" data-plural-label="<?php _e('selected items', 'crb'); ?>">
+						<?php _e('selected items', 'crb'); ?>
+					</span>
+
+					<?php
+					/* If set_max() has been set, show the allowed maximum items number */
+					?>
+					<# if ( max !== -1 ) { #>
+						<span class="remaining"><?php _e('out of', 'crb'); ?> {{{ max }}}</span>
+					<# } #>
+				</strong>
+				
+			</div>
 			<div class="relationship-left">
 				<div class="search-field">
 					<input type="text" class="search-field" placeholder="<?php esc_attr_e('Search', 'crb'); ?>" />
@@ -207,9 +229,13 @@ class Relationship_Field extends Field {
 		<li>
 			<span class="mobile-handle"></span>
 			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-item-label="{{{ item.label }}}" data-value="{{{ item.id }}}">
+				<# if ( item.edit_link ) { #>
+					<em class="edit-link" data-href="{{{ item.edit_link }}}"><?php _e('Edit', 'crb'); ?></em>
+				<# } #>
 				<em>{{{ item.label }}}</em>
 				<span></span>
 				{{{ item.title }}}
+				
 			</a>
 			<?php if ($display_input): ?>
 				<input type="hidden" name="{{{ name }}}[]" value="{{{ item.id }}}" />

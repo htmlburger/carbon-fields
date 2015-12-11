@@ -104,7 +104,8 @@
 
 #poststuff .carbon-box,
 #poststuff .spinner.disabled { display: none; }
-#poststuff .carbon-box .inside { margin: 0; padding: 0; }
+#poststuff .carbon-box .inside,
+body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; }
 
 .carbon-box .carbon-fields-collection { padding-bottom: 0; }
 
@@ -168,8 +169,9 @@
 	Field - Relationship
 \* ------------------------------------------------------------ */
 
-.carbon-Relationship .relationship-container { clear: both; overflow: hidden; margin: 3px -10px 0; }
+.carbon-Relationship .relationship-container { clear: both; margin: 3px -10px 0; }
 .carbon-Relationship .relationship-container .relationship-right label { display: none; }
+.carbon-Relationship .relationship-container:after { content: ''; display: block; clear: both; width: 100%; }
 .carbon-Relationship .relationship-left,
 .carbon-Relationship .relationship-right { width: 50%; padding: 0 10px; border: 0; margin: 0; }
 .carbon-Relationship .relationship-left { float: left; }
@@ -208,6 +210,18 @@
 .carbon-Relationship .relationship-list li.load-more { text-align: center; }
 .carbon-Relationship .relationship-list li.load-more .spinner { float: none; padding: 3px; margin: 0 auto; background-position: center center; }
 .carbon-Relationship.loading .relationship-list li.load-more .spinner { display: block; }
+
+.carbon-Relationship .relationship-list em.edit-link { cursor: pointer; }
+.carbon-Relationship .relationship-list em.edit-link:hover { color: #0073aa; }
+.relationship-container  { position: relative; }
+.carbon-Relationship .selected-items-container { position: absolute; right: 12px; top: 15px; }
+.edit-term-container .carbon-Relationship .selected-items-container { top: -18px; }
+
+.add-term-container .carbon-Relationship .selected-items-container,
+.edit-term-container .carbon-row .carbon-Relationship .selected-items-container,
+.carbon-box .carbon-Relationship .selected-items-container,
+.carbon-box .carbon-row .carbon-Relationship .selected-items-container,
+.comment-container-holder .carbon-Relationship .selected-items-container { top: -26px; }
 
 /* ------------------------------------------------------------ *\
 	Field - File, Image, Attachment
@@ -320,6 +334,7 @@
 .carbon-groups-holder .ui-placeholder-highlight { display: block; background: #fff; border: 1px dashed #bbb; height: 34px; margin-bottom: 14px; }
 
 .carbon-groups-holder > .carbon-group-row > .fields-container > div { background: #f7f6f6; }
+
 .carbon-Complex > .field-holder.max-reached > .carbon-subcontainer > .carbon-groups-holder > .carbon-group-row > .carbon-group-actions .carbon-btn-duplicate { display: none; }
 .carbon-Complex.even > .field-holder > .carbon-subcontainer > .carbon-groups-holder > .carbon-group-row > .fields-container > div,
 .carbon-Complex.even > .field-holder > .carbon-subcontainer > .carbon-groups-holder > .carbon-group-row > .carbon-drag-handle { background: #fff; }

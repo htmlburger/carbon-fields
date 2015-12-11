@@ -164,6 +164,7 @@ window.carbon = window.carbon || {};
 		},
 
 		toggleVisibility: function(model) {
+
 			var id = model.get('id');
 			var visible = model.get('visible');
 			var $holder = carbon.views.main.$body.find('#' + id);
@@ -233,7 +234,7 @@ window.carbon = window.carbon || {};
 			window.onbeforeunload = function() {
 				var hasChanges = _this.model.get('has_changes');
 				var postL10n = postL10n || {};
-				var alert = postL10n.saveAlert ? postL10n.saveAlert : carbon_containers_l10n.changes_made_save_alert
+				var alert = postL10n.saveAlert ? postL10n.saveAlert : carbon_containers_l10n.changes_made_save_alert;
 
 				if (hasChanges && alert) {
 					return alert;
@@ -662,6 +663,21 @@ window.carbon = window.carbon || {};
 
 
 	/*--------------------------------------------------------------------------
+	 * COMMENTS META
+	 *------------------------------------------------------------------------*/
+
+	// CommentMeta VIEW
+	carbon.containers.View.CommentMeta = carbon.containers.View.extend({
+		initialize: function() {
+			carbon.containers.View.prototype.initialize.apply(this);
+
+			this.$form = this.$el.closest('form#post');
+			this.$form.on('submit', null, this, this.validateForm);
+		},
+
+	});
+
+	/*--------------------------------------------------------------------------
 	 * THEME OPTIONS
 	 *------------------------------------------------------------------------*/
 
@@ -741,8 +757,16 @@ window.carbon = window.carbon || {};
 	 * TERM META
 	 *------------------------------------------------------------------------*/
 
+	 // TermMeta MODEL
+	carbon.containers.Model.TermMeta = carbon.containers.Model.extend({
+		defaults: {
+			'level': 0,
+		}
+	});
+
 	// TermMeta VIEW
 	carbon.containers.View.TermMeta = carbon.containers.View.extend({
+
 		initialize: function() {
 			carbon.containers.View.prototype.initialize.apply(this);
 
@@ -765,9 +789,16 @@ window.carbon = window.carbon || {};
 			carbon.views.main.$el.ajaxSuccess(function() {
 				_this.initMonitor.apply(_this, arguments);
 			});
+
+
+			this.syncLevel();
+
+			this.listenTo(this.model, 'change:level', this.checkVisibility);
+
 		},
 
 		initMonitor: function(event, jqXHR, ajaxOptions) {
+
 			if (jqXHR.status != 200 || !ajaxOptions.data.length) {
 				return;
 			}
@@ -776,7 +807,39 @@ window.carbon = window.carbon || {};
 			if (ajaxOptions.data.indexOf('carbon_panel_' + id) !== -1) {
 				carbon.collections.containers.reset();
 			}
-		}
+
+		},
+
+		syncLevel: function() {
+			var _this = this;
+			var $select = $('select#parent');
+
+			$select
+				.on('change', function(event) {
+					var levelClass = $(this).find('option:checked').attr('class');
+					var level = levelClass ? parseInt(levelClass.match(/^level-(\d+)/)[1]) + 2 : 1;
+					_this.model.set('level', level);
+				})
+				.trigger('change');
+		},
+
+		checkVisibility: function(model) {
+			var _this = this;
+			var settings = this.model.get('settings');
+			var visible = true;
+
+			var level 		   		 = _this.model.get('level');
+			var term_container_level = settings.show_on_level;
+
+			if ( !term_container_level ) {
+				visible = true;
+			} else if ( level !== term_container_level ) {
+				visible = false;
+			}
+			
+			this.model.set('visible', visible);
+		},
+
 	});
 
 

@@ -185,6 +185,7 @@ class Association_Field extends Relationship_Field {
 						'subtype' => $type['post_type'],
 						'label' => $this->get_item_label($p, $type['type'], $type['post_type']),
 						'is_trashed' => (get_post_status($p) == 'trash'),
+						'edit_link' => $this->get_object_edit_link($type, $p),
 					);
 				}
 				$options = array_merge($options, $posts);
@@ -213,6 +214,7 @@ class Association_Field extends Relationship_Field {
 						'subtype' => $type['taxonomy'],
 						'label' => $this->get_item_label($term_id, $type['type'], $type['taxonomy']),
 						'is_trashed' => false,
+						'edit_link' => $this->get_object_edit_link($type, $term_id),
 					);
 				}
 				$options = array_merge($options, $terms);
@@ -240,6 +242,7 @@ class Association_Field extends Relationship_Field {
 						'subtype' => 'user',
 						'label' => $this->get_item_label($u, $type['type']),
 						'is_trashed' => false,
+						'edit_link' => $this->get_object_edit_link($type, $u),
 					);
 				}
 				$options = array_merge($options, $users);
@@ -267,6 +270,7 @@ class Association_Field extends Relationship_Field {
 						'subtype' => 'comment',
 						'label' => $this->get_item_label($c, $type['type']),
 						'is_trashed' => false,
+						'edit_link' => $this->get_object_edit_link($type, $c),
 					);
 				}
 				$options = array_merge($options, $comments);
@@ -283,6 +287,38 @@ class Association_Field extends Relationship_Field {
 		$options = apply_filters('carbon_relationship_options', $options, $this->get_name());
 
 		return $options;
+	}
+
+	function get_object_edit_link($type, $id) {
+		switch ( $type['type'] ) {
+
+			case 'post' : {
+				$edit_link = get_edit_post_link($id);
+				break;
+			}
+
+			case 'term' : {
+				$edit_link = get_edit_term_link($id, $type['taxonomy'], $type['type']);
+				break;
+			}
+
+			case 'comment' : {
+				$edit_link = get_edit_comment_link($id);
+				break;
+			}
+
+			case 'user' : {
+				$edit_link = get_edit_user_link($id);
+				break;
+			}
+
+			default : {
+				$edit_link = false;
+			}
+
+		}
+
+		return $edit_link;
 	}
 
 	function to_json($load) {
@@ -307,6 +343,9 @@ class Association_Field extends Relationship_Field {
 		?>
 		<li>
 			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-item-label="{{{ item.label }}}" data-value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}">
+				<# if ( item.edit_link ) { #>
+					<em class="edit-link" data-href="{{{ item.edit_link }}}"><?php _e('Edit', 'crb'); ?></em>
+				<# } #>
 				<em>{{{ item.label }}}</em>
 				<span></span>
 				{{{ item.title }}}

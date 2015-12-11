@@ -61,6 +61,7 @@
 							<li><a href="#Theme_Options">Theme Options</a></li>
 							<li><a href="#Term_Meta">Term Meta</a></li>
 							<li><a href="#User_Meta">User Meta</a></li>
+							<li><a href="#Comment_Meta">Comment Meta</a></li> 
 							<li><a href="#Widgets">Widgets</a></li>
 							<li><a href="#Tabs">Tabs</a></li>
 
@@ -400,6 +401,18 @@ Carbon_Container::factory('term_meta', 'Category Properties')
 						<dd>Can be either name of a single taxonomy or an array of taxonomy names</dd>
 					</dl>
 								
+					<h4>Visibility options</h4>
+					<p>Custom fields containers are very flexible in terms of display options. You can select specific post type they show on, as well as category, format, parent, etc. A list of all options is displayed below:</p>
+
+					<dl>
+						<dt>Level</dt>
+						<dd>
+							<p>To display a container on hierarchical terms from a specific level, use:</p>
+							<p><code>-&gt;show_on_level($level)</code></p>
+							<p>where <code>$level</code> is the level of hierarchy depth, starting from 1 and increasing when going into further hierarchy depth. </p>
+						</dd>
+					</dl>
+
 					<h4>Accessing field values</h4>
 					<p>To access field values you need to use the function <code>carbon_get_term_meta($term_id, $name, $type = null)</code>, where: </p>
 					<dl>
@@ -474,6 +487,51 @@ foreach ($phone_numbers as $phone) {
 </pre>
 
 					<p>After saving, the <code>carbon_after_save_user_meta</code> hook is called, which allows you to hook additional functionality after saving. It accepts the <code>$user_id</code> parameter, which is the ID of the user that was updated.</p>
+
+					<hr>
+
+					<h3 id="Comment_Meta" class="left-hash"><a href="#Comment_Meta">Comment meta Container</a></h3>
+					<p>Comment meta containers add extra fields to the comment edit screens. Field data is stored separately for each comment as comment meta (see <a href="http://codex.wordpress.org/Function_Reference/add_comment_meta" target="_blank"><i class="icon-globe"></i> add_comment_meta</a>). </p>
+
+					<pre class="prettyprint">
+Carbon_Container::factory('comment_meta', 'Comment Information')
+	-&gt;add_fields(array(
+		Carbon_Field::factory('text', 'crb_comment_rating', 'Comment Rating'),
+		Carbon_Field::factory('text', 'crb_comment_additional_info', 'Additional Comment Information'),
+	));</pre>
+					
+					<h4>Accessing field values</h4>
+					<p>To access field values you need to use the function <code>carbon_get_comment_meta($comment_id, $name, $type = null)</code>, where: </p>
+					<dl>
+						<dt><code>$comment_id</code></dt>
+						<dd>Comment ID where your value was entered.</dd>
+
+						<dt><code>$name</code></dt>
+						<dd>The name of the field to be retrieved.</dd>
+
+						<dt><code>$type</code> <small>(optional)</small></dt>
+						<dd>If the field you want to retrieve is of type complex, you need to pass <code>"complex"</code>.</dd>
+					</dl>
+
+					<pre class="prettyprint">
+&lt;?php $comments = get_comments(array(
+	'post_id' => get_the_ID(),
+));
+
+foreach ( $comments as $comment ) {
+	$comment_additional_info = carbon_get_comment_meta($comment->comment_ID, 'crb_comment_info');
+	$comment_rating	= carbon_get_comment_meta($comment->comment_ID, 'crb_comment_rating');
+
+	if ( !empty($comment_additional_info) ) {
+		echo $comment->comment_ID . ' info: '. $comment_additional_info;
+	}
+
+	if ( !empty($comment_rating) ) {
+		echo 'Rating: ' . $comment_rating;
+	}
+}
+?&gt;
+</pre>
 
 					<hr>
 
@@ -1022,6 +1080,8 @@ Carbon_Field::factory("separator", "crb_style_options", "Style");</pre>
 						<dl>
 							<dt><code>disable_add_new()</code></dt>
 							<dd>Remove the ability to add new sidebars to the site.</dd>
+							<dt><code>exclude_sidebars($sidebars)</code></dt>
+							<dd>Add the ability to exclude one or more sidebars from the select menu. <code>$sidebars</code> parameter can be an array ( of sidebar IDs or sidebar names) or a single sidebar ( ID or name ).</dd>
 						</dl>
 						<h5>Helper functions</h5>
 						<dl>

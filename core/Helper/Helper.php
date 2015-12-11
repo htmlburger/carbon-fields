@@ -85,6 +85,7 @@ class Helper {
 
 			$carbon_data['sidebars'][] = array(
 				'name' => $sidebar['name'],
+				'id'   => $sidebar['id'],
 			);
 		}
 
@@ -233,6 +234,43 @@ class Helper {
 
 			default:
 				$value = get_metadata('user', $id, $name, true);
+
+				// backward compatibility for the old Relationship field
+				$value = self::maybe_old_relationship_field($value);
+		}
+
+		return $value;
+	}
+
+	public static function get_comment_meta($id, $name, $type = null) {
+		$name = $name[0] == '_' ? $name: '_' . $name;
+
+		switch ($type) {
+			case 'complex':
+				$value = self::get_complex_fields('Comment_Meta', $name, $id);
+			break;
+
+			case 'map':
+			case 'map_with_address':
+				$value =  array(
+					'lat' => (float) get_metadata('comment', $id, $name . '-lat', true),
+					'lng' => (float) get_metadata('comment', $id, $name . '-lng', true),
+					'address' => get_metadata('comment', $id, $name . '-address', true),
+					'zoom' => (int) get_metadata('comment', $id, $name . '-zoom', true),
+				);
+
+				if ( !array_filter($value) ) {
+					$value = array();
+				}
+			break;
+
+			case 'association':
+				$raw_value = get_metadata('comment', $id, $name, true);
+				$value = self::parse_relationship_field($raw_value, $type);
+			break;
+
+			default:
+				$value = get_metadata('comment', $id, $name, true);
 
 				// backward compatibility for the old Relationship field
 				$value = self::maybe_old_relationship_field($value);
