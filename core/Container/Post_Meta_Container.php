@@ -376,7 +376,7 @@ class Post_Meta_Container extends Container {
 	 * @return void
 	 **/
 	function render() {
-		include DIR . '/templates/container/post_meta.php';
+		include DIR . '/templates/Container/post_meta.php';
 	}
 
 	/**

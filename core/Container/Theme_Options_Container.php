@@ -129,7 +129,7 @@ class Theme_Options_Container extends Container {
 			$this->notifications[] = __('Settings saved.', 'crb');
 		}
 
-		include DIR . '/templates/container/theme_options.php';
+		include DIR . '/templates/Container/theme_options.php';
 	}
 
 	function verify_unique_page() {

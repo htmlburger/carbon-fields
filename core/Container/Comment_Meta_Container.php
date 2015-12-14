@@ -75,7 +75,7 @@ class Comment_Meta_Container extends Container {
 	}
 
 	function render() {
-		include DIR . '/templates/container/comment_meta.php';
+		include DIR . '/templates/Container/comment_meta.php';
 	}
 
 	function set_comment_id($comment_id) {

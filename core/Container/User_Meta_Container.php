@@ -120,7 +120,7 @@ class User_Meta_Container extends Container {
 			$profile_role = array_shift($roles_to_shift);
 		}
 
-		include DIR . '/templates/container/user_meta.php';
+		include DIR . '/templates/Container/user_meta.php';
 	}
 
 	function set_user_id($user_id) {

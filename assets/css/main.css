@@ -137,6 +137,12 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .carbon-container-Widget > .carbon-field:first-child { margin-top: -1px; }
 
 /* ------------------------------------------------------------ *\
+	Container - Nav Menu
+\* ------------------------------------------------------------ */
+
+.carbon-container-Nav_Menu > .carbon-field { padding: 10px 0; }
+
+/* ------------------------------------------------------------ *\
 	Fields
 \* ------------------------------------------------------------ */
 

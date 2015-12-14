@@ -23,7 +23,7 @@ class Widget_Container extends Container {
 	}
 
 	function render() {
-		include DIR . '/templates/container/widget.php';
+		include DIR . '/templates/Container/widget.php';
 	}
 
 	function is_valid_attach() {

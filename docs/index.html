@@ -63,6 +63,7 @@
 							<li><a href="#User_Meta">User Meta</a></li>
 							<li><a href="#Comment_Meta">Comment Meta</a></li> 
 							<li><a href="#Widgets">Widgets</a></li>
+							<li><a href="#Nav_Menu">Nav Menu</a></li> 
 							<li><a href="#Tabs">Tabs</a></li>
 
 							<li class="nav-header">Fields</li>
@@ -592,6 +593,124 @@ function __construct() {
 
 	$this->print_wrappers = false;
 }
+</pre>
+
+					<hr>
+
+					<h3 id="Nav_Menu" class="left-hash"><a href="#Nav_Menu">Nav Menu</a></h3>
+					<p>Nav Menu containers are used to extend the Nav Menu edit screens with additional fields. Field data is stored separately for each post as post meta.</p>
+
+					<pre class="prettyprint">
+Carbon_Container::factory('nav_menu', 'Menu Settings')
+	-&gt;add_fields(array(
+		Carbon_Field::factory('color', 'crb_color'),
+	));</pre>
+
+
+					<h4>Visibility options</h4>
+					<p>Custom Nav Menu containers does not support any visibility options. All containers are visible in all menu items.</p>
+
+					<h4>Container position</h4>
+					<p>Containers are rendered in the order they are initialized.</p>
+								
+					<h4>Accessing field values</h4>
+					<p>Since each menu entry is a post from post type "nav_menu_item" with status "published", the values can be accessed with the function <code>carbon_get_post_meta($nav_menu_item_ID, $name)</code>, where: </p>
+
+					<dl>
+						<dt><code>$nav_menu_item_ID</code></dt>
+						<dd>Nav Menu Item Post ID where your value was entered. </dd>
+
+						<dt><code>$name</code></dt>
+						<dd>The name of the field to be retrieved.</dd>
+
+						<dt><code>$type</code> <small>(optional)</small></dt>
+						<dd>Complex fields are not yet supported.</dd>
+					</dl>
+
+					<h4>Custom Walkers or Walker Filters</h4>
+					<p>In order to use the values setup from Nav Menus, you need to use a custom Menu Walker or a filter from the default walker located in <code>wp-includes/nav-menu-template.php</code>.</p>
+					<p>Here is a Walker example:</p>
+					<pre class="prettyprint">
+/**
+ * Location:
+ * 	wp-includes/nav-menu-template.php
+ * 	source: Walker_Nav_Menu
+ */
+class Crb_Main_Menu_Walker extends Walker_Nav_Menu {
+	public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+		$indent = ( $depth ) ? str_repeat( "\t", $depth ) : '';
+
+		$classes = empty( $item->classes ) ? array() : (array) $item->classes;
+		$classes[] = 'menu-item-' . $item->ID;
+
+		$class_names = join( ' ', apply_filters( 'nav_menu_css_class', array_filter( $classes ), $item, $args, $depth ) );
+		$class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
+
+		$id = apply_filters( 'nav_menu_item_id', 'menu-item-'. $item->ID, $item, $args, $depth );
+		$id = $id ? ' id="' . esc_attr( $id ) . '"' : '';
+
+		$output .= $indent . '<li' . $id . $class_names .'>';
+
+		$atts = array();
+		$atts['title']  = ! empty( $item->attr_title ) ? $item->attr_title : '';
+		$atts['target'] = ! empty( $item->target )     ? $item->target     : '';
+		$atts['rel']    = ! empty( $item->xfn )        ? $item->xfn        : '';
+		$atts['href']   = ! empty( $item->url )        ? $item->url        : '';
+
+
+		// Adding a custom color to the links
+		$crb_color = carbon_get_post_meta($item->ID, 'crb_color');
+		$atts['style'] = ! empty( $crb_color ) ? 'color: ' . $crb_color . '; ' : '';
+		// --- END --- "Adding a custom color to the links"
+
+		$atts = apply_filters( 'nav_menu_link_attributes', $atts, $item, $args, $depth );
+
+		$attributes = '';
+		foreach ( $atts as $attr => $value ) {
+			if ( ! empty( $value ) ) {
+				$value = ( 'href' === $attr ) ? esc_url( $value ) : esc_attr( $value );
+				$attributes .= ' ' . $attr . '="' . $value . '"';
+			}
+		}
+
+		$item_output = $args->before;
+		$item_output .= '<a'. $attributes .'>';
+
+		$item_output .= $args->link_before . apply_filters( 'the_title', $item->title, $item->ID ) . $args->link_after;
+		$item_output .= '</a>';
+		$item_output .= $args->after;
+
+		$output .= apply_filters( 'walker_nav_menu_start_el', $item_output, $item, $depth, $args );
+	}
+
+} // Walker_Nav_Menu
+</pre>
+					<p>Here is a Filter example, doing the same thing:</p>
+					<pre class="prettyprint">
+// Adding a custom color to the links
+add_filter('nav_menu_link_attributes', 'crb_nav_menu_link_attributes', 10, 4);
+function crb_nav_menu_link_attributes($atts, $item, $args, $depth) {
+	$crb_color = carbon_get_post_meta($item->ID, 'crb_color');
+	$atts['style'] = ! empty( $crb_color ) ? 'color: ' . $crb_color . '; ' : '';
+
+	return $atts;
+}
+</pre>
+					<p>Both examples will result in:</p>
+					<pre class="prettyprint">
+&lt;div class="menu-main-menu-container"&gt;
+	&lt;ul id="menu-main-menu" class="menu"&gt;
+		&lt;li id="menu-item-23" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-23"&gt;
+			&lt;a href="#" style="color: #2020f3; "&gt;Sample Page&lt;/a&gt;
+		&lt;/li&gt;
+		&lt;li id="menu-item-24" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-24"&gt;
+			&lt;a href="#" style="color: #f94c4c; "&gt;Sample Page&lt;/a&gt;
+		&lt;/li&gt;
+		&lt;li id="menu-item-26" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-26"&gt;
+			&lt;a href="#" style="color: #81d742; "&gt;Sample Page&lt;/a&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+&lt;/div&gt;
 </pre>
 
 					<hr>

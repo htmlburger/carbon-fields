@@ -93,6 +93,11 @@ window.carbon = window.carbon || {};
 				_this.widgetsHandler.apply(_this, arguments);
 			});
 
+			// Listen for menu item expanding, to inject new fields
+			this.$('#update-nav-menu').on('click', '.menu-item-edit-inactive .item-edit', function(e) { 
+				_this.navMenuHandler.apply(_this, arguments);
+			});
+
 			// Initialize the Lazyload interval
 			this.on('app:rendered', function() {
 				setTimeout(this.lazyload, 0);
@@ -163,6 +168,30 @@ window.carbon = window.carbon || {};
 
 			// Add the new/updated model to the collection, this will also render the widget
 			this.containersCollection.add(containerJSON);
+		},
+
+		/*
+		 * Handles the adding a new item to menu.
+		 * Hooked to the "click" on the arrow for expanding the menu item.
+		 */
+		navMenuHandler: function(event) {
+			var $menuItem = $(event.target).closest('.menu-item');
+			var _this = this;
+
+			$menuItem.find('.carbon-nav-menu-container').each(function() {
+				var $container = $(this);
+
+				// Skip already initialized Containers
+				if ( $container.find('.carbon-container').length > 0 ) {
+					return true;
+				};
+
+				var containerData = $container.data('json');
+				var containerJSON = $.parseJSON(carbon.urldecode(containerData));
+
+				// Add the new/updated model to the collection, this will also render the widget
+				_this.containersCollection.add(containerJSON);
+			});
 		},
 
 		/*
