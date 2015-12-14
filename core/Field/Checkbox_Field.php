@@ -10,6 +10,13 @@ class Checkbox_Field extends Field {
 		return $this;
 	}
 
+	function set_value_from_input($input = null) {
+		parent::set_value_from_input();
+		if ( $this->get_value() === NULL ) {
+			$this->set_value('');
+		}
+	}
+
 	function to_json($load) {
 		$field_data = parent::to_json($load);
 
