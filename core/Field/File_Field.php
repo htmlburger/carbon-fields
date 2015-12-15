@@ -2,6 +2,9 @@
 
 namespace Carbon_Fields\Field;
 
+/**
+ * File upload field class.
+ */
 class File_Field extends Field {
 	public $button_label = '';
 	public $window_button_label = '';
@@ -13,6 +16,9 @@ class File_Field extends Field {
 	// alt, author, caption, dateFormatted, description, editLink, filename, height, icon, id, link, menuOrder, mime, name, status, subtype, title, type, uploadedTo, url, width
 	public $value_type = 'url';
 
+	/**
+	 * Admin initialization actions
+	 */
 	function admin_init() {
 		$this->button_label = __('Select File', 'crb');
 		$this->window_button_label = __('Select File', 'crb');
@@ -21,11 +27,22 @@ class File_Field extends Field {
 		$this->add_template($this->get_type() . '-Description', array($this, 'template_description'));
 	}
 
+	/**
+	 * Change the type of the field
+	 * @param string $type 
+	 */
 	function set_type($type) {
 		$this->field_type = $type;
 		return $this;
 	}
 
+	/**
+	 * Returns an array that holds the field data, suitable for JSON representation.
+	 * This data will be available in the Underscore template and the Backbone Model.
+	 * 
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
 	function to_json($load) {
 		$field_data = parent::to_json($load);
 
@@ -71,6 +88,9 @@ class File_Field extends Field {
 		return $field_data;
 	}
 
+	/**
+	 * The main Underscore template of this field
+	 **/
 	function template() {
 		?>
 		<div class="input-with-button">
@@ -92,6 +112,9 @@ class File_Field extends Field {
 		<?php
 	}
 
+	/**
+	 * The description Underscore template of this field
+	 **/
 	function template_description() {
 		?>
 		<div class="carbon-description {{{ value ? '' : 'hidden' }}}">

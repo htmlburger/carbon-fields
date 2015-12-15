@@ -2,7 +2,13 @@
 
 namespace Carbon_Fields\Field;
 
+/**
+ * Color picker field class.
+ */
 class Color_Field extends Field {
+	/**
+	 * Underscore template of the field.
+	 */
 	function template() {
 		?>
 		<div class="carbon-color-row">
@@ -15,6 +21,9 @@ class Color_Field extends Field {
 		<?php
 	}
 
+	/**
+	 * Hook administration scripts and styles.
+	 */
 	function admin_enqueue_scripts() {
 		wp_enqueue_style('wp-color-picker');
 		wp_enqueue_script('iris');

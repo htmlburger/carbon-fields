@@ -283,7 +283,6 @@ class Helper {
 	 * Adds the field/container template(s) to the templates stack.
 	 *
 	 * @param object $object field or container object
-	 * @return void
 	 **/
 	public function add_templates($object) {
 		$templates = $object->get_templates();

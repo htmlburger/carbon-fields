@@ -2,6 +2,11 @@
 
 namespace Carbon_Fields\Field;
 
+/**
+ * Google Maps with Address field class.
+ * Allows to manually select a pin, or to position a pin based on a specified address.
+ * Coords (lat, lng), address and zoom are saved in the database.
+ */
 class Map_Field extends Field {
 	protected $lazyload = true;
 	protected $default_lat = 40.346544;
@@ -12,10 +17,20 @@ class Map_Field extends Field {
 	protected $zoom = null;
 	protected $address = '';
 
+	/**
+	 * Enqueue scripts in the administration
+	 */
 	function admin_enqueue_scripts() {
 		wp_enqueue_script('carbon-google-maps', '//maps.googleapis.com/maps/api/js?sensor=false');
 	}
 
+	/**
+	 * Returns an array that holds the field data, suitable for JSON representation.
+	 * This data will be available in the Underscore template and the Backbone Model.
+	 * 
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
 	function to_json($load) {
 		$field_data = parent::to_json($load);
 
@@ -29,6 +44,9 @@ class Map_Field extends Field {
 		return $field_data;
 	}
 
+	/**
+	 * Underscore template of this field.
+	 */
 	function template() {
 		?>
 		<div class="carbon-map-search">
@@ -49,6 +67,12 @@ class Map_Field extends Field {
 		<?php
 	}
 
+	/**
+	 * Set the coords and zoom of this field.
+	 * @param string $lat  Latitude
+	 * @param string $lng  Longitude
+	 * @param int $zoom Zoom level
+	 */
 	function set_position($lat, $lng, $zoom) {
 		$this->default_lat = $lat;
 		$this->default_lng = $lng;
@@ -57,6 +81,10 @@ class Map_Field extends Field {
 		return $this;
 	}
 
+	/**
+	 * Load data from the datastore.
+	 * Manually set the map field data fragments.
+	 **/
 	function load() {
 		$this->store->load($this);
 
@@ -96,6 +124,10 @@ class Map_Field extends Field {
 		$this->set_value($value);
 	}
 
+	/**
+	 * Save data to the datastore.
+	 * Manually save the map field data fragments.
+	 **/
 	function save() {
 		$name = $this->get_name();
 		$value = $this->get_value();
@@ -128,6 +160,11 @@ class Map_Field extends Field {
 		parent::save();
 	}
 
+	/**
+	 * Load the field value from an input array based on it's name
+	 *
+	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
+	 **/
 	function set_value_from_input($input = null) {
 		if ( is_null($input) ) {
 			$input = $_POST;

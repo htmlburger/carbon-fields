@@ -121,7 +121,6 @@ class Comment_Meta_Container extends Container {
 	 * If not, the field name is recorded.
 	 *
 	 * @param string $name
-	 * @return void
 	 **/
 	function verify_unique_field_name($name) {
 		if ( !isset(self::$registered_field_names['comment']) ) {
@@ -139,7 +138,6 @@ class Comment_Meta_Container extends Container {
 	 * Remove field name $name from the list of unique field names
 	 *
 	 * @param string $name
-	 * @return void
 	 **/
 	function drop_unique_field_name($name) {		
 		$index = array_search($name, self::$registered_field_names['comment']);

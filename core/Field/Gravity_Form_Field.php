@@ -3,16 +3,21 @@
 namespace Carbon_Fields\Field;
 
 /**
- * Gravity Form Select
+ * Gravity Form selection field class
  */
 class Gravity_Form_Field extends Select_Field {
+	/**
+	 * Admin initialization actions
+	 */
 	function admin_init() {
-		// Setup Form Options
+		// Setup form options
 		add_action( 'carbon_after_register_fields', array($this, 'setup_gravity_form_options'), 20 );
 	}
 
 	/**
-	 * Performs a check whether the Gravity Form is installed and activated
+	 * Whether the Gravity Forms plugin is installed and activated.
+	 *
+	 * @return bool
 	 */
 	function is_plugin_active() {
 		if ( class_exists('RGFormsModel') && method_exists('RGFormsModel', 'get_forms') ) {
@@ -23,7 +28,7 @@ class Gravity_Form_Field extends Select_Field {
 	}
 
 	/**
-	 * Sets the Gravity Form Options
+	 * Set the available forms as field options
 	 */
 	function setup_gravity_form_options() {
 		if ( !$this->is_plugin_active() ) {
@@ -47,6 +52,13 @@ class Gravity_Form_Field extends Select_Field {
 		$this->set_options($options);
 	}
 
+	/**
+	 * Returns an array that holds the field data, suitable for JSON representation.
+	 * This data will be available in the Underscore template and the Backbone Model.
+	 * 
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
 	function to_json($load) {
 		$field_data = parent::to_json($load);
 
@@ -59,6 +71,9 @@ class Gravity_Form_Field extends Select_Field {
 		return $field_data;
 	}
 
+	/**
+	 * The main Underscore template of this field.
+	 */
 	function template() {
 		// Gravity Forms not installed
 		if ( !$this->is_plugin_active() ) {

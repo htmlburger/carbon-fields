@@ -2,17 +2,29 @@
 
 namespace Carbon_Fields\Field;
 
+/**
+ * Relationship field class.
+ * Allows selecting and manually sorting entries from any custom post type.
+ */
 class Relationship_Field extends Field {
 	protected $post_type = 'post';
 	protected $max = -1;
 	protected $allow_duplicates = false;
 
+	/**
+	 * Admin initialization actions
+	 */
 	function admin_init() {
 		$this->add_template($this->get_type() . '_item', array($this, 'item_template'));
 
 		parent::admin_init();
 	}
 
+	/**
+	 * Set the post type of the entries.
+	 *
+	 * @param string $post_type Post type
+	 */
 	function set_post_type($post_type) {
 		if (!is_array($post_type)) {
 			$post_type = array($post_type);
@@ -22,11 +34,21 @@ class Relationship_Field extends Field {
 		return $this;
 	}
 
+	/**
+	 * Set the maximum allowed number of selected entries.
+	 * 
+	 * @param int $max 
+	 */
 	function set_max($max) {
 		$this->max = intval($max);
 		return $this;
 	}
 
+	/**
+	 * Specify whether to allow each entry to be selected multiple times.
+	 * 
+	 * @param  boolean $allow 
+	 */
 	function allow_duplicates($allow = true) {
 		$this->allow_duplicates = (bool)$allow;
 		return $this;
@@ -135,6 +157,13 @@ class Relationship_Field extends Field {
 		return $options;
 	}
 
+	/**
+	 * Returns an array that holds the field data, suitable for JSON representation.
+	 * This data will be available in the Underscore template and the Backbone Model.
+	 * 
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
 	function to_json($load) {
 		$field_data = parent::to_json($load);
 
@@ -165,6 +194,9 @@ class Relationship_Field extends Field {
 		return $field_data;
 	}
 
+	/**
+	 * The main Underscore template of this field.
+	 */
 	function template() {
 		?>
 		<div class="relationship-container">
@@ -219,7 +251,7 @@ class Relationship_Field extends Field {
 	}
 
 	/**
-	 * Serves as a backbone template for the relationship items.
+	 * Serves as a Underscore template for the relationship items.
 	 * Used for both the selected and the selectable options.
 	 *
 	 * @param bool $display_input Whether to display the selected item input field.

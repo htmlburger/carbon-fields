@@ -2,9 +2,17 @@
 
 namespace Carbon_Fields\Field;
 
+/**
+ * Attachment field class.
+ * Allows selecting and saving a media attachment file,
+ * where the attachment ID is saved in the database.
+ */
 class Attachment_Field extends File_Field {
 	public $value_type = 'id';
 
+	/**
+	 * Underscore template of the file description section.
+	 */
 	function template_description() {
 		?>
 		<div class="carbon-description {{{ value ? '' : 'hidden' }}}">

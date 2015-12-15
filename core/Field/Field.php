@@ -8,8 +8,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 /**
  * Base field class.
  * Defines the key container methods and their default implementations.
- * Implements factory design pattern
- *
+ * Implements factory design pattern.
  **/
 class Field {
 	/**
@@ -199,6 +198,11 @@ class Field {
 		return self::factory($type, $name, $label);
 	}
 
+	/**
+	 * Create a field from a certain type with the specified label.
+	 * @param string $name  Field name
+	 * @param string $label Field label
+	 */
 	private function __construct($name, $label) {
 		$this->set_name($name);
 		$this->set_label($label);
@@ -220,30 +224,22 @@ class Field {
 
 	/**
 	 * Perform instance initialization after calling setup()
-	 *
-	 * @return void
 	 **/
 	function init() {}
 
 	/**
 	 * Instance initialization when in the admin area. Called during object construction
-	 *
-	 * @return void
 	 **/
 	function admin_init() {}
 
 	/**
 	 * Enqueue admin scripts.
 	 * Called once per field type.
-	 *
-	 * @return void
 	 **/
 	function admin_enqueue_scripts() {}
 
 	/**
 	 * Prints the main Underscore template
-	 *
-	 * @return void
 	 **/
 	function template() { }
 
@@ -258,8 +254,6 @@ class Field {
 
 	/**
 	 * Adds a new backbone template
-	 *
-	 * @return void
 	 **/
 	function add_template($name, $callback) {
 		$this->templates[$name] = $callback;
@@ -267,8 +261,6 @@ class Field {
 
 	/**
 	 * Delegate load to the field DataStore instance
-	 *
-	 * @return void
 	 **/
 	function load() {
 		$this->store->load($this);
@@ -280,8 +272,6 @@ class Field {
 
 	/**
 	 * Delegate save to the field DataStore instance
-	 *
-	 * @return void
 	 **/
 	function save() {
 		return $this->store->save($this);
@@ -289,8 +279,6 @@ class Field {
 
 	/**
 	 * Delegate delete to the field DataStore instance
-	 *
-	 * @return void
 	 **/
 	function delete() {
 		return $this->store->delete($this);
@@ -300,7 +288,6 @@ class Field {
 	 * Load the field value from an input array based on it's name
 	 *
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
-	 * @return void
 	 **/
 	function set_value_from_input($input = null) {
 		if ( is_null($input) ) {
@@ -358,7 +345,6 @@ class Field {
 	 * Directly modify the field value
 	 *
 	 * @param mixed $value
-	 * @return void
 	 **/
 	function set_value($value) {
 		$this->value = $value;
@@ -368,7 +354,6 @@ class Field {
 	 * Set default field value
 	 *
 	 * @param mixed $value
-	 * @return void
 	 **/
 	function set_default_value($default_value) {
 		$this->default_value = $default_value;
@@ -452,7 +437,6 @@ class Field {
 	 * Set field label.
 	 *
 	 * @param string $label If null, the label will be generated from the field name
-	 * @return void
 	 **/
 	function set_label($label) {
 		// Try to guess field label from it's name
@@ -470,6 +454,11 @@ class Field {
 		$this->label = $label;
 	}
 
+	/**
+	 * Return field label.
+	 * 
+	 * @return string
+	 **/
 	function get_label() {
 		return $this->label;
 	}
@@ -804,7 +793,6 @@ class Field {
 	 * Callbacks are supported
 	 *
 	 * @param array|callback $options
-	 * @return void
 	 */
 	protected function _set_options($options) {
 		$this->options = (array) $options;
@@ -815,7 +803,6 @@ class Field {
 	 * Callbacks are supported
 	 *
 	 * @param array|callback $options
-	 * @return void
 	 */
 	protected function _add_options($options) {
 		$this->options[] = $options;
@@ -823,8 +810,6 @@ class Field {
 
 	/**
 	 * Check if there are callbacks and populate the options
-	 *
-	 * @return void
 	 */
 	protected function load_options() {
 		if (empty($this->options)) {
@@ -864,6 +849,9 @@ class Field {
 		return $parsed;
 	}
 
+	/**
+	 * Hook administration scripts.
+	 */
 	function admin_hook_scripts() {
 		wp_enqueue_media();
 		wp_enqueue_script('carbon-fields', URL . '/assets/js/fields.js', array('carbon-app', 'carbon-containers'));
@@ -889,6 +877,9 @@ class Field {
 		);
 	}
 
+	/**
+	 * Hook administration styles.
+	 */
 	function admin_hook_styles() {
 		wp_enqueue_style('thickbox');
 	}

@@ -56,7 +56,6 @@ class Nav_Menu_Container extends Container {
 	 * Set the menu item ID the container will operate with.
 	 *
 	 * @param int $menu_id
-	 * @return void
 	 **/
 	function set_menu_id($menu_id) {
 		$this->menu_id = $menu_id;

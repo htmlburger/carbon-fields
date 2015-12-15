@@ -2,6 +2,9 @@
 
 namespace Carbon_Fields\Field;
 
+/**
+ * Date picker field class.
+ */
 class Date_Field extends Field {
 
 	/**
@@ -9,6 +12,13 @@ class Date_Field extends Field {
 	 */
 	public $options = array();
 
+	/**
+	 * Returns an array that holds the field data, suitable for JSON representation.
+	 * This data will be available in the Underscore template and the Backbone Model.
+	 * 
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
 	function to_json($load) {
 		$field_data = parent::to_json($load);
 
@@ -19,6 +29,9 @@ class Date_Field extends Field {
 		return $field_data;
 	}
 
+	/**
+	 * The Underscore template of this field
+	 **/
 	function template() {
 		?>
 		<div class="input-with-button">
@@ -28,6 +41,9 @@ class Date_Field extends Field {
 		<?php
 	}
 
+	/**
+	 * Hook administration scripts and styles.
+	 */
 	function admin_enqueue_scripts() {
 		wp_enqueue_script('jquery-ui-datepicker');
 
@@ -35,6 +51,9 @@ class Date_Field extends Field {
 		wp_enqueue_style('carbon-jquery-ui', URL . '/assets/css/jquery-ui.css');
 	}
 
+	/**
+	 * Set datepicker options 
+	 */
 	function set_options($options) {
 		$this->options = $options;
 

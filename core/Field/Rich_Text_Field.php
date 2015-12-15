@@ -2,10 +2,16 @@
 
 namespace Carbon_Fields\Field;
 
+/**
+ * WYSIWYG rich text area field class.
+ */
 class Rich_Text_Field extends Textarea_Field {
 	protected $lazyload = true;
 	static $initialized = false;
 
+	/**
+	 * Admin initialization actions.
+	 */
 	function admin_init() {
 		if (!self::$initialized) {
 			self::$initialized = true;
@@ -14,6 +20,9 @@ class Rich_Text_Field extends Textarea_Field {
 		}
 	}
 
+	/**
+	 * The main Underscore template of this field.
+	 */
 	function template() {
 		?>
 		<div id="wp-{{{ id }}}-wrap" class="carbon-wysiwyg wp-editor-wrap tmce-active" data-toolbar="full">
@@ -44,8 +53,12 @@ class Rich_Text_Field extends Textarea_Field {
 		<?php
 	}
 
-	// Instead of enqueueing all required scripts and stylesheets and setting up TinyMCE,
-	// wp_editor() automatically enqueues and sets up everything.
+	/**
+	 * Display the editor.
+	 * 
+	 * Instead of enqueueing all required scripts and stylesheets and setting up TinyMCE,
+	 * wp_editor() automatically enqueues and sets up everything.
+	 */
 	function editor_init() {
 		?>
 		<div style="display:none;">

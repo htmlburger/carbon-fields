@@ -126,7 +126,6 @@ class Group_Field {
 	 * If not, the field name is recorded.
 	 *
 	 * @param string $name
-	 * @return void
 	 **/
 	function verify_unique_field_name($name) {
 		if ( in_array($name, $this->registered_field_names) ) {

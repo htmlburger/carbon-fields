@@ -2,17 +2,39 @@
 
 namespace Carbon_Fields\Field;
 
+/**
+ * Select dropdown field class.
+ */
 class Select_Field extends Field {
+	/**
+	 * Set the options of this field.
+	 * Accepts either array of data or a callback that returns the data.
+	 * 
+	 * @param array|callable $options 
+	 */
 	function set_options($options) {
 		$this->_set_options($options);
 		return $this;
 	}
 
+	/**
+	 * Add new options to this field.
+	 * Accepts either array of data or a callback that returns the data.
+	 * 
+	 * @param array|callbacle $options
+	 */
 	function add_options($options) {
 		$this->_add_options($options);
 		return $this;
 	}
 
+	/**
+	 * Returns an array that holds the field data, suitable for JSON representation.
+	 * This data will be available in the Underscore template and the Backbone Model.
+	 * 
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
 	function to_json($load) {
 		$field_data = parent::to_json($load);
 		$this->load_options();
@@ -24,6 +46,9 @@ class Select_Field extends Field {
 		return $field_data;
 	}
 
+	/**
+	 * The main Underscore template of this field.
+	 */
 	function template() {
 		?>
 		<# if (_.isEmpty(options)) { #>

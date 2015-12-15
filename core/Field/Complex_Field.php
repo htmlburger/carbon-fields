@@ -8,6 +8,10 @@ use Carbon_Fields\Field\Field;
 use Carbon_Fields\Field\Group_Field;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
+/**
+ * Complex field class.
+ * Allows nested repeaters with multiple field groups to be created.
+ */
 class Complex_Field extends Field {
 	const LAYOUT_TABLE = 'table';
 	const LAYOUT_LIST = 'list';
@@ -25,6 +29,9 @@ class Complex_Field extends Field {
 		'plural_name'=>'Entries',
 	);
 
+	/**
+	 * Initialization tasks
+	 */
 	function init() {
 		$this->labels = array(
 			'singular_name'=>__('Entry', 'crb'),
@@ -37,6 +44,9 @@ class Complex_Field extends Field {
 		parent::init();
 	}
 
+	/**
+	 * Add a set/group of fields.
+	 */
 	function add_fields() {
 		$argv = func_get_args();
 		$argc = count($argv);
@@ -74,6 +84,11 @@ class Complex_Field extends Field {
 		}
 	}
 
+	/**
+	 * Retrieve all groups of fields.
+	 * 
+	 * @return array $fields
+	 */
 	function get_fields() {
 		$fields = array();
 
@@ -86,11 +101,24 @@ class Complex_Field extends Field {
 		return $fields;
 	}
 
+	/**
+	 * Set the field labels.
+	 * Currently supported values:
+	 *  - singular_name - the singular entry label
+	 *  - plural_name - the plural entries label
+	 * 
+	 * @param  array $labels Labels
+	 */
 	function setup_labels($labels) {
 		$this->labels = array_merge($this->labels, $labels);
 		return $this;
 	}
 
+	/**
+	 * Set the datastore of this field.
+	 * 
+	 * @param Datastore_Interface $store
+	 */
 	function set_datastore(Datastore_Interface $store) {
 		$this->store = $store;
 
@@ -99,6 +127,11 @@ class Complex_Field extends Field {
 		}
 	}
 
+	/**
+	 * Load the field value from an input array based on it's name
+	 *
+	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
+	 **/
 	function set_value_from_input($input = null) {
 		$this->values = array();
 
@@ -176,11 +209,17 @@ class Complex_Field extends Field {
 		}
 	}
 
+	/**
+	 * Load all groups of fields and their data.
+	 */
 	function load() {
 		// load existing groups
 		$this->load_values();
 	}
 
+	/**
+	 * Save all contained groups of fields.
+	 */
 	function save() {
 		$this->delete();
 
@@ -191,14 +230,23 @@ class Complex_Field extends Field {
 		}
 	}
 
+	/**
+	 * Delete the values of all contained fields.
+	 */
 	function delete() {
 		return $this->store->delete_values($this);
 	}
 
+	/**
+	 * Load and parse the field data
+	 */
 	function load_values() {
 		return $this->load_values_from_db();
 	}
 
+	/**
+	 * Load and parse the field data from the database.
+	 */
 	function load_values_from_db() {
 		$this->values = array();
 
@@ -207,6 +255,12 @@ class Complex_Field extends Field {
 		return $this->process_loaded_values($group_rows);
 	}
 
+	/**
+	 * Load and parse a raw set of field data.
+	 * 
+	 * @param  array $values Raw data entries
+	 * @return array 		 Processed data entries
+	 */
 	function load_values_from_array($values) {
 		$this->values = array();
 
@@ -228,6 +282,11 @@ class Complex_Field extends Field {
 		return $this->process_loaded_values($group_rows);
 	}
 
+	/**
+	 * Parse groups of raw field data into the actual field hierarchy.
+	 * 
+	 * @param  array $group_rows Group rows
+	 */
 	function process_loaded_values($group_rows) {
 		$input_groups = array();
 
@@ -288,10 +347,18 @@ class Complex_Field extends Field {
 		}
 	}
 
+	/**
+	 * Retrieve the field values
+	 * @return array
+	 */
 	function get_values() {
 		return $this->values;
 	}
 
+	/**
+	 * Generate and set the field prefix.
+	 * @param string $prefix
+	 */
 	function set_prefix($prefix) {
 		$this->name = preg_replace('~^' . preg_quote($this->name_prefix, '~') . '~', '', $this->name);
 		$this->name_prefix = $prefix;
@@ -302,6 +369,13 @@ class Complex_Field extends Field {
 		}
 	}
 
+	/**
+	 * Returns an array that holds the field data, suitable for JSON representation.
+	 * This data will be available in the Underscore template and the Backbone Model.
+	 * 
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
 	function to_json($load) {
 		$complex_data = parent::to_json($load);
 
@@ -342,6 +416,9 @@ class Complex_Field extends Field {
 		return $complex_data;
 	}
 
+	/**
+	 * The main Underscore template
+	 */
 	function template() {
 		?>
 		<div class="carbon-subcontainer carbon-grid {{ multiple_groups ? 'multiple-groups' : '' }}">
@@ -372,6 +449,9 @@ class Complex_Field extends Field {
 		<?php
 	}
 
+	/**
+	 * The Underscore template for a complex field group
+	 */
 	function template_group() {
 		?>
 		<div id="carbon-{{{ complex_name }}}-complex-container" class="carbon-row carbon-group-row" data-group-id="{{ id }}">
@@ -413,6 +493,14 @@ class Complex_Field extends Field {
 		<?php
 	}
 
+	/**
+	 * Modify the layout of this field.
+	 * Deprecated in favor of set_width().
+	 *
+	 * @deprecated
+	 * 
+	 * @param string $layout
+	 */
 	function set_layout($layout) {
 		_doing_it_wrong(__METHOD__, __('Complex field layouts are deprecated, please use <code>set_width()</code> instead.', 'crb'), null);
 
@@ -425,28 +513,58 @@ class Complex_Field extends Field {
 		return $this;
 	}
 
+	/**
+	 * Set the minimum number of entries.
+	 * 
+	 * @param int $min
+	 */
 	function set_min($min) {
 		$this->values_min = intval($min);
 		return $this;
 	}
 
+	/**
+	 * Get the minimum number of entries.
+	 * 
+	 * @return int $min
+	 */
 	function get_min() {
 		return $this->values_min;
 	}
 
+	/**
+	 * Set the maximum number of entries.
+	 * 
+	 * @param int $max
+	 */
 	function set_max($max) {
 		$this->values_max = intval($max);
 		return $this;
 	}
 
+	/**
+	 * Get the maximum number of entries.
+	 * 
+	 * @return int $max
+	 */
 	function get_max() {
 		return $this->values_max;
 	}
 
+	/**
+	 * Retrieve the groups of this field.
+	 * 
+	 * @return array 
+	 */
 	function get_group_names() {
 		return array_keys($this->groups);
 	}
 
+	/**
+	 * Retrieve a group by its name
+	 * @param  string $group_name        Group name
+	 * @return Group_Field $group_object Group object
+	 */
 	function get_group_by_name($group_name) {
 		$group_object = null;
 

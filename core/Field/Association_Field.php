@@ -2,7 +2,19 @@
 
 namespace Carbon_Fields\Field;
 
+/**
+ * Association field class.
+ * Allows selecting and manually sorting entries from various types:
+ *  - Posts
+ *  - Terms
+ *  - Users
+ *  - Comments
+ */
 class Association_Field extends Relationship_Field {
+	/**
+	 * Types of entries to associate with.
+	 * @var array
+	 */
 	protected $types = array(
 		array(
 			'type' => 'post',
@@ -10,14 +22,23 @@ class Association_Field extends Relationship_Field {
 		)
 	);
 
+	/**
+	 * Modify the types.
+	 * @param array $types New types
+	 */
 	function set_types($types) {
 		$this->types = $types;
 		return $this;
 	}
 
 	/**
+	 * Deprecated way to set the types.
+	 * Works only for post types.
+	 * 
 	 * @deprecated 
 	 * @see set_types()
+	 *
+	 * @param string $post_type Post type
 	 */
 	function set_post_type($post_type) {
 		$this->set_types(array(
@@ -31,19 +52,19 @@ class Association_Field extends Relationship_Field {
 	}
 
 	/**
-	* Converts the database values into a usable associative array.
-	* 
-	* The relationship data is saved in the database in the following format:
-	* 	array (
-	*		0 => 'post:page:4',
-	*		1 => 'term:category:2',
-	*		2 => 'user:user:1',
-	* 	)
-	* where the value of each array item contains:
-	* 	- Type of data (post, term, user or comment)
-	* 	- Subtype of data (the particular post type or taxonomy)
-	* 	- ID of the item (the database ID of the item)
-	*/
+	 * Converts the database values into a usable associative array.
+	 * 
+	 * The relationship data is saved in the database in the following format:
+	 * 	array (
+	 *		0 => 'post:page:4',
+	 *		1 => 'term:category:2',
+	 *		2 => 'user:user:1',
+	 * 	)
+	 * where the value of each array item contains:
+	 * 	- Type of data (post, term, user or comment)
+	 * 	- Subtype of data (the particular post type or taxonomy)
+	 * 	- ID of the item (the database ID of the item)
+	 */
 	function process_value() {
 		$raw_value = maybe_unserialize($this->get_value());
 		if (!$raw_value) {
@@ -289,6 +310,13 @@ class Association_Field extends Relationship_Field {
 		return $options;
 	}
 
+	/**
+	 * Retrieve the edit link of a particular object.
+	 * 
+	 * @param  string $type Object type.
+	 * @param  int $id      ID of the object.
+	 * @return string       URL of the edit link.
+	 */
 	function get_object_edit_link($type, $id) {
 		switch ( $type['type'] ) {
 
@@ -321,6 +349,11 @@ class Association_Field extends Relationship_Field {
 		return $edit_link;
 	}
 
+	/**
+	 * Convert the field data into JSON representation.
+	 * @param  bool $load Whether to load data from the datastore.
+	 * @return mixed      The JSON field data.
+	 */
 	function to_json($load) {
 		$field_data = Field::to_json($load);
 

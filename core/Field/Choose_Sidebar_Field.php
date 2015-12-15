@@ -4,12 +4,21 @@ namespace Carbon_Fields\Field;
 
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
+/**
+ * Choose sidebar field.
+ * Deprecated in favor of the 'Sidebar' field and its sidebar manager.
+ * 
+ * @deprecated
+ */
 class Choose_Sidebar_Field extends Sidebar_Field {
 	private $custom_sidebars = array();
 	private $sidebar_options = array();
 
+	/**
+	 * Initialization tasks
+	 */
 	function init() {
-		// Set Default Sidebar Options
+		// Set default sidebar options
 		$this->sidebar_options['default'] = $this->get_default_sidebar_options();
 
 		// Setup the sidebars after all fields are registered
@@ -84,6 +93,9 @@ class Choose_Sidebar_Field extends Sidebar_Field {
 		return $this;
 	}
 
+	/**
+	 * Generate options for the choose sidebar field.
+	 */
 	function setup_sidebar_options() {
 		global $wp_registered_sidebars;
 		$custom_sidebars = $this->get_custom_sidebars();
@@ -100,6 +112,9 @@ class Choose_Sidebar_Field extends Sidebar_Field {
 		$this->add_options($options);
 	}
 
+	/**
+	 * Register all custom sidebars.
+	 */
 	function register_custom_sidebars() {
 		$custom_sidebars = $this->get_custom_sidebars();
 
@@ -123,6 +138,11 @@ class Choose_Sidebar_Field extends Sidebar_Field {
 		}
 	}
 
+	/**
+	 * Retrieve all custom sidebars from the database.
+	 * 
+	 * @return array
+	 */
 	function get_custom_sidebars() {
 		global $wpdb;
 

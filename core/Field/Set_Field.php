@@ -2,24 +2,50 @@
 
 namespace Carbon_Fields\Field;
 
+/**
+ * Set field class.
+ * Allows to create a set of checkboxes where multiple can be selected.
+ */
 class Set_Field extends Field {
 	protected $limit_options = 0;
 
+	/**
+	 * Set the options of this field.
+	 * Accepts either array of data or a callback that returns the data.
+	 * 
+	 * @param array|callable $options 
+	 */
 	function set_options($options) {
 		$this->_set_options($options);
 		return $this;
 	}
 
+	/**
+	 * Add new options to this field.
+	 * Accepts either array of data or a callback that returns the data.
+	 * 
+	 * @param array|callbacle $options
+	 */
 	function add_options($options) {
 		$this->_add_options($options);
 		return $this;
 	}
 
+	/**
+	 * Set the number of the options to be displayed at the initial field display.
+	 * 
+	 * @param  int $limit
+	 */
 	function limit_options($limit) {
 		$this->limit_options = $limit;
 		return $this;
 	}
 
+	/**
+	 * Retrieve the field value(s).
+	 * 
+	 * @return array
+	 */
 	function get_value() {
 		if ($this->value === false) {
 			return array();
@@ -40,6 +66,13 @@ class Set_Field extends Field {
 		return (array) $this->value;
 	}
 
+	/**
+	 * Returns an array that holds the field data, suitable for JSON representation.
+	 * This data will be available in the Underscore template and the Backbone Model.
+	 * 
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
 	function to_json($load) {
 		$field_data = parent::to_json($load);
 
@@ -53,6 +86,9 @@ class Set_Field extends Field {
 		return $field_data;
 	}
 
+	/**
+	 * The Underscore template of this field.
+	 */
 	function template() {
 		?>
 		<# if (_.isEmpty(options)) { #>

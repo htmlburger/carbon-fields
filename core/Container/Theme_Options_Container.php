@@ -133,8 +133,6 @@ class Theme_Options_Container extends Container {
 
 	/**
 	 * Revert the result of attach()
-	 *
-	 * @return void
 	 **/
 	function detach() {
 		parent::detach();
@@ -230,7 +228,6 @@ class Theme_Options_Container extends Container {
 	 * Remove field name $name from the list of unique field names
 	 *
 	 * @param string $name
-	 * @return void
 	 **/
 	function drop_unique_field_name($name) {
 		$page_id = $this->settings['parent'] . '/' . $this->settings['file'];

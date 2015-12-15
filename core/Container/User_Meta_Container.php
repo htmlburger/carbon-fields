@@ -28,8 +28,6 @@ class User_Meta_Container extends Container {
 
 	/**
 	 * Bind attach() and save() to the appropriate WordPress actions.
-	 *
-	 * @return void
 	 **/
 	function init() {
 		add_action('admin_init', array($this, '_attach'));
