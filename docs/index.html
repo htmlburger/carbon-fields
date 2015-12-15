@@ -113,6 +113,8 @@
 					<h2 id="Abstract" class="left-hash"><a href="#Abstract">Abstract</a></h2>
 					<p>Carbon fields is a library for easy creation of custom(meta) fields in WordPress administration panel. It allows theme developer to associate meta-information with various  entities in a WordPress site(such as posts, taxonomy terms, widgets and so on). </p>
 
+					<p>The library supports PHP 5.3+ and uses PHP namespaces. </p>
+
 					<p>The main components of the library are:</p>
 					<ul>
 						<li><strong>Container</strong> - represents group of fields and controls disposition of the fields in the WordPress administration panel. </li>
@@ -124,19 +126,22 @@
 
 					<h2 id="Containers" class="left-hash"><a href="#Containers">Containers</a></h2>
 
-					<p>Carbon Container is a group of custom fields and display options. Containers are displayed on different parts of the backend, according to their type and display options.</p>
+					<p>Container is a group of custom fields and display options. Containers are displayed on different parts of the backend, according to their type and display options.</p>
 
 					<p>Containers have a title, which must be <strong>unique</strong> across the whole WordPress instance. </p>
 
 					<pre class="prettyprint">
-Carbon_Container::factory('post_meta', 'Custom Data')
+use Carbon_Fields\Container\Container;
+use Carbon_Fields\Field\Field;
+
+Container::factory('post_meta', 'Custom Data')
 	-&gt;show_on_post_type('page')
 	-&gt;add_fields(array(
-		Carbon_Field::factory('map', 'crb_location')-&gt;set_position(37.423156, -122.084917, 14),
-		Carbon_Field::factory('choose_sidebar', 'crb_custom_sidebar'),
-		Carbon_Field::factory('image', 'crb_photo'),
+		Field::factory('map', 'crb_location')-&gt;set_position(37.423156, -122.084917, 14),
+		Field::factory('choose_sidebar', 'crb_custom_sidebar'),
+		Field::factory('image', 'crb_photo'),
 	));</pre>
-					<p>To create a new Carbon Container, you just use the container factory method<code>Carbon_Container::factory($type, $title)</code>, where:<p>
+					<p>To create a new Container, you just use the container factory method<code>Container::factory($type, $title)</code>, where:<p>
 
 					<dl>
 						<dt><code>$type</code></dt>
@@ -152,10 +157,13 @@ Carbon_Container::factory('post_meta', 'Custom Data')
 					<p>Custom Field containers are used to extend the post edit screens with additional fields. Field data is stored separately for each post as post meta (see <a href="http://codex.wordpress.org/Function_Reference/add_post_meta" target="_blank"><i class="icon-globe"></i> add_post_meta</a>). </p>
 
 					<pre class="prettyprint">
-Carbon_Container::factory('post_meta', 'Post Properties')
+use Carbon_Fields\Container\Container;
+use Carbon_Fields\Field\Field;
+
+Container::factory('post_meta', 'Post Properties')
 	-&gt;add_fields(array(
-		Carbon_Field::factory('map', 'crb_location')-&gt;set_position(37.423156, -122.084917, 14),
-		Carbon_Field::factory('choose_sidebar', 'crb_custom_sidebar'),
+		Field::factory('map', 'crb_location')-&gt;set_position(37.423156, -122.084917, 14),
+		Field::factory('choose_sidebar', 'crb_custom_sidebar'),
 	));</pre>
 
 
@@ -286,10 +294,13 @@ function crb_after_save_event($post_id) {
 					<p>By default, theme options containers automatically create main page in the admin area menu named "Theme Options". In most cases these default settings are sufficient, but if you need to change the title or the location of a page in the menu, read the "Multiple option pages" section below.</p>
 
 					<pre class="prettyprint">
-Carbon_Container::factory('theme_options', 'Theme Options')
+use Carbon_Fields\Container\Container;
+use Carbon_Fields\Field\Field;
+
+Container::factory('theme_options', 'Theme Options')
 	-&gt;add_fields(array(
-		Carbon_Field::factory('text', 'crb_facebook_url'),
-		Carbon_Field::factory('textarea', 'crb_footer_text')
+		Field::factory('text', 'crb_facebook_url'),
+		Field::factory('textarea', 'crb_footer_text')
 	));
 </pre>
 
@@ -309,27 +320,30 @@ Carbon_Container::factory('theme_options', 'Theme Options')
 
 					<p>Below you see sample code for creating three theme option containers:</p>
 					<pre class="prettyprint">
+use Carbon_Fields\Container\Container;
+use Carbon_Fields\Field\Field;
+
 // Default options page
-Carbon_Container::factory('theme_options', 'Basic Options')
+Container::factory('theme_options', 'Basic Options')
 	-&gt;add_fields(array(
-		Carbon_Field::factory('header_scripts', 'crb_header_script'),
-		Carbon_Field::factory('footer_scripts', 'crb_footer_script'),
+		Field::factory('header_scripts', 'crb_header_script'),
+		Field::factory('footer_scripts', 'crb_footer_script'),
 	));
 
 // Add second options page under 'Basic Options'
-Carbon_Container::factory('theme_options', 'Social Links')
+Container::factory('theme_options', 'Social Links')
 	-&gt;set_page_parent('Basic Options')	// title of a top level Theme Options page
 	-&gt;add_fields(array(
-		Carbon_Field::factory('text', 'crb_facebook_link'),
-		Carbon_Field::factory('text', 'crb_twitter_link')
+		Field::factory('text', 'crb_facebook_link'),
+		Field::factory('text', 'crb_twitter_link')
 	));
 
 // Add third options page under "Appearance"
-Carbon_Container::factory('theme_options', 'Customize Background')
+Container::factory('theme_options', 'Customize Background')
 	-&gt;set_page_parent('themes.php')	// identificator of the "Appearance" admin section
 	-&gt;add_fields(array(
-		Carbon_Field::factory('color', 'crb_background_color'),
-		Carbon_Field::factory('image', 'crb_background_image')
+		Field::factory('color', 'crb_background_color'),
+		Field::factory('image', 'crb_background_image')
 	));
 </pre>
 
@@ -348,10 +362,13 @@ Carbon_Container::factory('theme_options', 'Customize Background')
 
 					<p>Below you see an example for setting up the icon of the theme options page:</p>
 					<pre class="prettyprint">
-Carbon_Container::factory('theme_options', 'Basic Options')
+use Carbon_Fields\Container\Container;
+use Carbon_Fields\Field\Field;
+
+Container::factory('theme_options', 'Basic Options')
 	-&gt;set_icon('dashicons-carrot')
 	-&gt;add_fields(array(
-		Carbon_Field::factory('text', 'crb_test_field'),
+		Field::factory('text', 'crb_test_field'),
 	));
 </pre>
 
@@ -389,11 +406,14 @@ Carbon_Container::factory('theme_options', 'Basic Options')
 					<p>Term meta containers are used to extend the term edit screens with additional fields. Field data is stored separately for each term in a custom table (<code>$wpdb-&gt;termmeta</code>). </p>
 
 					<pre class="prettyprint">
-Carbon_Container::factory('term_meta', 'Category Properties')
+use Carbon_Fields\Container\Container;
+use Carbon_Fields\Field\Field;
+
+Container::factory('term_meta', 'Category Properties')
 	-&gt;show_on_taxonomy('category')
 	-&gt;add_fields(array(
-		Carbon_Field::factory('color', 'crb_title_color'),
-		Carbon_Field::factory('image', 'crb_thumb'),
+		Field::factory('color', 'crb_title_color'),
+		Field::factory('image', 'crb_thumb'),
 	));</pre>
 
 					<p>By default the term meta containers are displayed on <code>category</code> terms, but you can select specific taxonomies they show on using the method <code>show_on_taxonomy($taxonomy)</code>, where: </p>
@@ -448,10 +468,13 @@ foreach ($authors as $author) {
 					<p>User meta containers add extra fields to the user edit screens. Field data is stored separately for each user as user meta (see <a href="http://codex.wordpress.org/Function_Reference/add_user_meta" target="_blank"><i class="icon-globe"></i> add_user_meta</a>). </p>
 
 					<pre class="prettyprint">
-Carbon_Container::factory('user_meta', 'Address')
+use Carbon_Fields\Container\Container;
+use Carbon_Fields\Field\Field;
+
+Container::factory('user_meta', 'Address')
 	-&gt;add_fields(array(
-		Carbon_Field::factory('text', 'crb_city_and_post', 'City and post code'),
-		Carbon_Field::factory('text', 'crb_street', 'Street Name'),
+		Field::factory('text', 'crb_city_and_post', 'City and post code'),
+		Field::factory('text', 'crb_street', 'Street Name'),
 	));</pre>
 
 					<p>By default the user meta containers are displayed for all users of all roles, but you can select specific user roles they show on using the method <code>show_on_user_role($role)</code>, where: </p>
@@ -495,10 +518,13 @@ foreach ($phone_numbers as $phone) {
 					<p>Comment meta containers add extra fields to the comment edit screens. Field data is stored separately for each comment as comment meta (see <a href="http://codex.wordpress.org/Function_Reference/add_comment_meta" target="_blank"><i class="icon-globe"></i> add_comment_meta</a>). </p>
 
 					<pre class="prettyprint">
-Carbon_Container::factory('comment_meta', 'Comment Information')
+use Carbon_Fields\Container\Container;
+use Carbon_Fields\Field\Field;
+
+Container::factory('comment_meta', 'Comment Information')
 	-&gt;add_fields(array(
-		Carbon_Field::factory('text', 'crb_comment_rating', 'Comment Rating'),
-		Carbon_Field::factory('text', 'crb_comment_additional_info', 'Additional Comment Information'),
+		Field::factory('text', 'crb_comment_rating', 'Comment Rating'),
+		Field::factory('text', 'crb_comment_additional_info', 'Additional Comment Information'),
 	));</pre>
 					
 					<h4>Accessing field values</h4>
@@ -537,7 +563,7 @@ foreach ( $comments as $comment ) {
 					<hr>
 
 					<h3 id="Widgets" class="left-hash"><a href="#Widgets">Widgets</a></h3>
-					<p>Widget containers are used to create custom widgets for your theme. Each widget is defined as a PHP class. Widget classes must extend the <code>Carbon_Widget</code> class and must have at least two methods - constructor and <code>front_end</code> method.</p>
+					<p>Widget containers are used to create custom widgets for your theme. Each widget is defined as a PHP class. Widget classes must extend the <code>Widget</code> class and must have at least two methods - constructor and <code>front_end</code> method.</p>
 
 					<p>The constructor must be named after the class and it must call the method <code>setup($name, $description, $fields, $classname)</code>, where: </p>
 					<dl>
@@ -546,7 +572,7 @@ foreach ( $comments as $comment ) {
 						<dt><code>$description</code></dt>
 						<dd>Description of the widget, used in the back-end</dd>
 						<dt><code>$fields</code></dt>
-						<dd>Array of Carbon fields</dd>
+						<dd>Array of fields</dd>
 						<dt><code>$classname</code></dt>
 						<dd><em>optional</em> | Provide a custom class attribute for the widget.</dd>
 					</dl>
@@ -556,12 +582,15 @@ foreach ( $comments as $comment ) {
 					<p>After you define your class, it is important that you register your new widget during the <code>widgets_init</code> action. </p>
 
 					<pre class="prettyprint">
-class ThemeWidgetExample extends Carbon_Widget {
+use Carbon_Fields\Widget\Widget;
+use Carbon_Fields\Field\Field;
+
+class ThemeWidgetExample extends Widget {
 	// Register widget function. Must have the same name as the class
 	function __construct() {
 		$this-&gt;setup('Theme Widget - Example', 'Displays a block with title/text', array(
-			Carbon_Field::factory('text', 'title', 'Title')-&gt;set_default_value('Hello World!'),
-			Carbon_Field::factory('textarea', 'content', 'Content')-&gt;set_default_value('Lorem Ipsum dolor sit amet')
+			Field::factory('text', 'title', 'Title')-&gt;set_default_value('Hello World!'),
+			Field::factory('textarea', 'content', 'Content')-&gt;set_default_value('Lorem Ipsum dolor sit amet')
 		));
 	}
 	
@@ -588,7 +617,7 @@ protected $form_options = array(
 					<pre class="prettyprint">
 function __construct() {
 	$this->setup('Widget Title', __('Widget Description', 'crb'), array(
-		Carbon_Field::factory('text', 'title', 'Title')-&gt;set_default_value('Hello World!'),
+		Field::factory('text', 'title', 'Title')-&gt;set_default_value('Hello World!'),
 	));
 
 	$this->print_wrappers = false;
@@ -601,9 +630,12 @@ function __construct() {
 					<p>Nav Menu containers are used to extend the Nav Menu edit screens with additional fields. Field data is stored separately for each post as post meta.</p>
 
 					<pre class="prettyprint">
-Carbon_Container::factory('nav_menu', 'Menu Settings')
+use Carbon_Fields\Container\Container;
+use Carbon_Fields\Field\Field;
+
+Container::factory('nav_menu', 'Menu Settings')
 	-&gt;add_fields(array(
-		Carbon_Field::factory('color', 'crb_color'),
+		Field::factory('color', 'crb_color'),
 	));</pre>
 
 
@@ -718,15 +750,18 @@ function crb_nav_menu_link_attributes($atts, $item, $args, $depth) {
 					<h3 id="Tabs" class="left-hash"><a href="#Tabs">Tabs</a></h3>
 					<p>The tabs allow you to group multiple fields under different tab panels using the Container method <code>add_tab</code>. Tabs can be used on every container type. Example:</p>
 					<pre class="prettyprint">
-Carbon_Container::factory('post_meta', __('User Settings', 'crb'))
+use Carbon_Fields\Container\Container;
+use Carbon_Fields\Field\Field;
+
+Container::factory('post_meta', __('User Settings', 'crb'))
 	->add_tab(__('Profile', 'crb'), array(
-		Carbon_Field::factory('text', '_crb_first_name', 'First Name'),
-		Carbon_Field::factory('text', '_crb_last_name', 'Last Name'),
-		Carbon_Field::factory('text', '_crb_position', 'Position'),
+		Field::factory('text', '_crb_first_name', 'First Name'),
+		Field::factory('text', '_crb_last_name', 'Last Name'),
+		Field::factory('text', '_crb_position', 'Position'),
 	))
 	->add_tab(__('Notification', 'crb'), array(
-		Carbon_Field::factory('text', '_crb_email', 'Notification Email'),
-		Carbon_Field::factory('text', '_crb_phone', 'Phone Number'),
+		Field::factory('text', '_crb_email', 'Notification Email'),
+		Field::factory('text', '_crb_phone', 'Phone Number'),
 	));
 </pre>
 
@@ -735,10 +770,10 @@ Carbon_Container::factory('post_meta', __('User Settings', 'crb'))
 					<h2 id="Fields" class="left-hash"><a href="#Fields">Fields</a></h2>
 					<p>Fields are the building block of every container.</p>
 
-					<p>New field are created using the factory method <code>Carbon_Field::factory($type, $name, $label=null)</code>, where:</p>
+					<p>New field are created using the factory method <code>Field::factory($type, $name, $label=null)</code>, where:</p>
 					<dl>
 						<dt><code>$type</code></dt>
-						<dd>The type of the field. This parameter should be valid class name of a field. For example <code>text</code> will create field of class <code>Carbon_Field_Text</code>. For a complete list of field types, see <a href="#Types"><i class="icon-hand-right"></i> Types</a>.</dd>
+						<dd>The type of the field. This parameter should be valid class name of a field. For example <code>text</code> will create field of class <code>Field_Text</code>. For a complete list of field types, see <a href="#Types"><i class="icon-hand-right"></i> Types</a>.</dd>
 
 						<dt><code>$name</code></dt>
 						<dd>Name of the field. Used as a key when stored in the database and for you to retrieve it's value. Please note, that all fields in a Custom Field Container have their names automatically prefixed with an underscored (e.g. <code>bgcolor</code> becomes <code>_bgcolor</code>). For more information why, see <a href="http://codex.wordpress.org/Function_Reference/add_post_meta#Making_a_.22Hidden.22_Custom_Field" target="_blank"><i class="icon-globe"></i> here</a></dd>
@@ -754,40 +789,40 @@ Carbon_Container::factory('post_meta', __('User Settings', 'crb'))
 
 					<pre class="prettyprint">
 // Create image field with name "customer_photo" and label "Photo"
-Carbon_Field::factory('image', 'crb_customer_photo', 'Photo');
+Field::factory('image', 'crb_customer_photo', 'Photo');
 
 // Here the title is automatically set to "Custom Sidebar"
-Carbon_Field::factory('choose_sidebar', 'crb_custom_sidebar');
+Field::factory('choose_sidebar', 'crb_custom_sidebar');
 
 // Method chaining
-Carbon_Field::factory('select', 'crb_color')-&gt;add_options(array('red', 'blue', 'green'))-&gt;help_text('Pick a color');
+Field::factory('select', 'crb_color')-&gt;add_options(array('red', 'blue', 'green'))-&gt;help_text('Pick a color');
 </pre>
 
 
-					<p>All field types originate from a single class named <code>Carbon_Field</code> and inherit the following basic features:</p>
+					<p>All field types originate from a single class named <code>Field</code> and inherit the following basic features:</p>
 					<h5>Default Values</h5>
 					<p>You can assign a default value for each field in every container. The default value is used when there is currently no value for the particular field in the database. This is the case for example, when you add a new post, or you add a new theme options field to existing container.</p>
 					<p>To assign a default value, you use:</p>
-					<p><code>Carbon_Field::factory(...)-&gt;<strong>set_default_value($default_value)</strong></code></p>
+					<p><code>Field::factory(...)-&gt;<strong>set_default_value($default_value)</strong></code></p>
 					
 					<h5>Required Fields</h5>
 					<p>You can mark any field as required, in which case the user will need to fill it out before submitting. To set a field as required, you use: </p>
-					<p><code>Carbon_Field::factory(...)-&gt;<strong>set_required(true)</strong></code></p>
+					<p><code>Field::factory(...)-&gt;<strong>set_required(true)</strong></code></p>
 					
 					<h5>Help Text</h5>
 					<p>Help text is used as a hint to the user, who will use the field. It is usually rendered under the field and contains more information about what it should contain - requirements, examples, links, etc. HTML tags are allowed.</p>
 					<p>You add help text using:</p>
-					<p><code>Carbon_Field::factory(...)-&gt;<strong>help_text($text)</strong></code></p>
+					<p><code>Field::factory(...)-&gt;<strong>help_text($text)</strong></code></p>
 
 					<h5>Width</h5>
 					<p>You can set the width to fields that are next to each other and they will align on one row. To set the field width %, use:</p>
-					<p><code>Carbon_Field::factory(...)-&gt;<strong>set_width(50)</strong></code></p>
+					<p><code>Field::factory(...)-&gt;<strong>set_width(50)</strong></code></p>
 					<p>This feature does nothing in term meta container due to the table layout used by WordPress term editing screen. </p>
 
 					<h5>Classes</h5>
 					<p>Custom field classes can be added using the <code>add_class</code> method, for example:</p>
 					<p>
-						<code>Carbon_Field::factory(...)-&gt;<strong>add_class('my-custom-class')</strong></code><br>
+						<code>Field::factory(...)-&gt;<strong>add_class('my-custom-class')</strong></code><br>
 					</p>
 
 					<h5>Conditional Logic</h5>
@@ -832,13 +867,13 @@ Carbon_Field::factory('select', 'crb_color')-&gt;add_options(array('red', 'blue'
 
 					<p>Example:</p>
 					<pre class="prettyprint">
-Carbon_Field::factory('select', 'crb_show_socials', 'Show Socials')
+Field::factory('select', 'crb_show_socials', 'Show Socials')
 	->add_options(array(
 		'yes' => 'Yes',
 		'no' => 'No',
 	)),
 
-Carbon_Field::factory('text', 'crb_facebook', 'Facebook URL')
+Field::factory('text', 'crb_facebook', 'Facebook URL')
 	->set_conditional_logic(array(
 		'relation' => 'AND', // Optional, defaults to "AND"
 		array(
@@ -854,24 +889,24 @@ Carbon_Field::factory('text', 'crb_facebook', 'Facebook URL')
 					<div class="field-docs">
 						<h3 id="Field_Text" class="left-hash"><a href="#Field_Text">Text Field <code>text</code></a></h3>
 						<p>The text field is the simplest and most generic field. It renders a text input field.</p>
-						<pre class="prettyprint">Carbon_Field::factory('text', 'crb_subtitle')</pre>
+						<pre class="prettyprint">Field::factory('text', 'crb_subtitle')</pre>
 					</div>
 
 					<div class="field-docs">
 						<h3 id="Field_Textarea" class="left-hash"><a href="#Field_Textarea">Textarea <code>textarea</code></a></h3>
 						<p>Multiline text input with HTML allowed</p>
-						<pre class="prettyprint">Carbon_Field::factory('textarea', 'crb_meta_description')</pre>
+						<pre class="prettyprint">Field::factory('textarea', 'crb_meta_description')</pre>
 						<strong>Setup methods</strong>
 						<dl>
 							<dt><code>set_rows($rows = 0)</code></dt>
 							<dd>
 								Sets the number of rows. Must be greater than or equal to 0. Default is <code>0</code>, which falls back to <code>->set_height(170)</code>
-								<pre class="prettyprint">Carbon_Field::factory("textarea", "crb_services_offered", "Services Offered")-&gt;set_rows(4);</pre>
+								<pre class="prettyprint">Field::factory("textarea", "crb_services_offered", "Services Offered")-&gt;set_rows(4);</pre>
 							</dd>
 							<dt><code>set_height($height = 170)</code> <em>(DEPRECATED)</em></dt>
 							<dd>
 								Sets the field height. <strong>Deprecated</strong> in favor of <code>set_rows()</code>
-								<pre class="prettyprint">Carbon_Field::factory("textarea", "crb_related_urls", "Related Links")-&gt;set_height(250);</pre>
+								<pre class="prettyprint">Field::factory("textarea", "crb_related_urls", "Related Links")-&gt;set_height(250);</pre>
 							</dd>
 						</dl>
 						<p><span class="label label-info">NB!</span> The <code>set_height()</code> method is now <strong>deprecated</strong> - <code>set_rows()</code> should be used instead due to differences in the visual appearance of the textarea between desktop and mobile devices.</p>
@@ -881,14 +916,14 @@ Carbon_Field::factory('text', 'crb_facebook', 'Facebook URL')
 						<h3 id="Field_RichText" class="left-hash"><a href="#Field_RichText">Rich text area <code>rich_text</code></a></h3>
 						<p>This field renders the built-in WordPress tinyMCE editor.</p>
 						<pre class="prettyprint">
-Carbon_Field::factory("rich_text", "crb_sidenote", "Sidenote Content");</pre>
+Field::factory("rich_text", "crb_sidenote", "Sidenote Content");</pre>
 
 					</div>
 					<div class="field-docs">
 						<h3 id="Field_Date" class="left-hash"><a href="#Field_Date">Date <code>date</code></a></h3>
 						<p>Renders a date picker using jQuery UI. The value is stored in <code>YYYY-MM-DD</code> format.</p>
 						<pre class="prettyprint">
-Carbon_Field::factory("date", "crb_event_start_date", "Start");</pre>
+Field::factory("date", "crb_event_start_date", "Start");</pre>
 						<h5>Setup methods</h5>
 						<dl>
 							<dt><code>set_options($options)</code></dt>
@@ -900,7 +935,7 @@ Carbon_Field::factory("date", "crb_event_start_date", "Start");</pre>
 						<h3 id="Field_Color" class="left-hash"><a href="#Field_Color">Color <code>color</code></a></h3>
 						<p>Renders color picker using Farbtastic. Colors are represented with six hexadecimal digits prefixed with <code>#</code> (e.g. white is <code>#FFFFFF</code>)</p>
 						<pre class="prettyprint">
-Carbon_Field::factory("color", "crb_box_background", "Background Color");
+Field::factory("color", "crb_box_background", "Background Color");
 </pre>
 					</div>
 					<div class="field-docs">
@@ -912,7 +947,7 @@ Carbon_Field::factory("color", "crb_box_background", "Background Color");
 							<dd>Set the value that will be saved when the option is ticked.<br/><span class="label label-info">NB!</span> When unticked, the value is not saved in the database.</dd>
 						</dl>
 						<pre class="prettyprint">
-Carbon_Field::factory("checkbox", "crb_show_content", "Show content")
+Field::factory("checkbox", "crb_show_content", "Show content")
 	->set_option_value('yes');</pre>
 					</div>
 
@@ -928,7 +963,7 @@ Carbon_Field::factory("checkbox", "crb_show_content", "Show content")
 						</dl>
 						<p><span class="label label-info">NB!</span> If you provide indexed array with no key values, the <strong>default indexes (0, 1, 2 ...)</strong> of the elements will be used.</p>
 						<pre class="prettyprint">
-Carbon_Field::factory("select", "crb_content_align", "Text alignment")-&gt;add_options(array(
+Field::factory("select", "crb_content_align", "Text alignment")-&gt;add_options(array(
 	'left' =&gt; 'Left',
 	'center' =&gt; 'Center',
 	'right' =&gt; 'Right',
@@ -947,7 +982,7 @@ Carbon_Field::factory("select", "crb_content_align", "Text alignment")-&gt;add_o
 						</dl>
 						<p><span class="label label-info">NB!</span> If you provide indexed array with no key values, the <strong>default indexes (0, 1, 2 ...)</strong> of the elements will be used.</p>
 						<pre class="prettyprint">
-Carbon_Field::factory("radio", "crb_subtitle_styling", "Subtitle text style")-&gt;add_options(array(
+Field::factory("radio", "crb_subtitle_styling", "Subtitle text style")-&gt;add_options(array(
 	'em' =&gt; 'Italic',
 	'strong' =&gt; 'Bold',
 	'del' =&gt; 'Strike',
@@ -969,7 +1004,7 @@ Carbon_Field::factory("radio", "crb_subtitle_styling", "Subtitle text style")-&g
 						</dl>
 						<p><span class="label label-info">NB!</span> If you provide indexed array with no key values, the <strong>default indexes (0, 1, 2 ...)</strong> of the elements will be used.</p>
 						<pre class="prettyprint">
-Carbon_Field::factory("set", "crb_product_features", "Features")-&gt;add_options(array(
+Field::factory("set", "crb_product_features", "Features")-&gt;add_options(array(
 	'bluetooth' =&gt; 'Bluetooth',
 	'gps' =&gt; 'GPS navigation',
 	'nfc' =&gt; 'Near field communication',
@@ -987,19 +1022,19 @@ Carbon_Field::factory("set", "crb_product_features", "Features")-&gt;add_options
 							<dt><code>set_max($max)</code></dt>
 							<dd>Allows you to limit the maximum number of selected items in a relationship field. By default, there is no limit.
 								<pre class="prettyprint">
-Carbon_Field::factory('relationship', 'crb_relationship')
+Field::factory('relationship', 'crb_relationship')
 	->set_max(5);</pre>
 							<dt><code>allow_duplicates($allow)</code></dt>
 							<dd>If enabled will allow the same item to be selected more than once. By default, duplicates are not allowed.
 								<pre class="prettyprint">
-Carbon_Field::factory('relationship', 'crb_relationship')
+Field::factory('relationship', 'crb_relationship')
 	->allow_duplicates(true);</pre>
 							</dd>
 						</dl>
 						<h5>Example</h5>
 						<p>The example below registers a relationship field with all posts from the <code>post</code> post type:</p>
 						<pre class="prettyprint">
-Carbon_Field::factory('relationship', 'crb_relationship')
+Field::factory('relationship', 'crb_relationship')
 	->set_post_type('post');</pre>
 					</div>
 
@@ -1020,12 +1055,12 @@ Carbon_Field::factory('relationship', 'crb_relationship')
 							<dt><code>set_max($max)</code></dt>
 							<dd>Allows you to limit the maximum number of selected items in a association field. By default, there is no limit.
 								<pre class="prettyprint">
-Carbon_Field::factory('association', 'crb_association')
+Field::factory('association', 'crb_association')
 	->set_max(5);</pre>
 							<dt><code>allow_duplicates($allow)</code></dt>
 							<dd>If enabled will allow the same item to be selected more than once. By default, duplicates are not allowed.
 								<pre class="prettyprint">
-Carbon_Field::factory('association', 'crb_association')
+Field::factory('association', 'crb_association')
 	->allow_duplicates(true);</pre>
 							</dd>
 						</dl>
@@ -1050,7 +1085,7 @@ carbon_get_post_meta($id, $name); // array( 0 => 20, 1 => 16 )
 									<li>Comments</li>
 								</ul>
 						<pre class="prettyprint">
-Carbon_Field::factory('association', 'crb_association')
+Field::factory('association', 'crb_association')
 	->set_types(array(
 		array(
 			'type' => 'post',
@@ -1086,7 +1121,7 @@ Carbon_Field::factory('association', 'crb_association')
 							<dd>Set the allowed files type. Short mime types are also supported (audio, video, image).</dd>
 						</dl>
 						<pre class="prettyprint">
-Carbon_Field::factory("file", "crb_price_list", "Price list (PDF)");
+Field::factory("file", "crb_price_list", "Price list (PDF)");
 </pre>
 					</div>
 
@@ -1100,7 +1135,7 @@ Carbon_Field::factory("file", "crb_price_list", "Price list (PDF)");
 							<dd>Set the allowed files type. Short mime types are also supported (audio, video, image).</dd>
 						</dl>
 						<pre class="prettyprint">
-Carbon_Field::factory("image", "crb_employee_photo", "Photo");
+Field::factory("image", "crb_employee_photo", "Photo");
 </pre>
 					</div>
 
@@ -1113,7 +1148,7 @@ Carbon_Field::factory("image", "crb_employee_photo", "Photo");
 							<dd>Set the allowed files type. Short mime types are also supported (audio, video, image).</dd>
 						</dl>
 						<pre class="prettyprint">
-Carbon_Field::factory("attachment", "crb_related_file", "Related File");
+Field::factory("attachment", "crb_related_file", "Related File");
 </pre>
 					</div>
 
@@ -1171,7 +1206,7 @@ Carbon_Field::factory("attachment", "crb_related_file", "Related File");
 							<dd>Set the default position on the map specified by <code>$lat</code> and <code>$lng</code> and the default zoom level to <code>$zoom</code> (zoom <code>0</code> corresponds to a map of the Earth fully zoomed out).</dd>
 						</dl>
 						<pre class="prettyprint">
-Carbon_Field::factory("map", "crb_company_location", "Location")
+Field::factory("map", "crb_company_location", "Location")
 	->help_text('drag and drop the pin on the map to select location');</pre>
 
 						<h5>Usage</h5>
@@ -1189,7 +1224,7 @@ carbon_get_post_meta($id, $name); // '40.74866,-73.97982'
 						<h3 id="Field_Separator" class="left-hash"><a href="#Field_Separator">Separator <code>separator</code></a></h3>
 							<p>Creates visual separator between adjacent fields. Has aesthetic function only, no data is saved.</p>
 						<pre class="prettyprint">
-Carbon_Field::factory("separator", "crb_style_options", "Style");</pre>
+Field::factory("separator", "crb_style_options", "Style");</pre>
 					</div>
 
 					<div class="field-docs">
@@ -1235,7 +1270,7 @@ array(
 						</dl>
 						<p>The example below shows how to create a Choose Sidebar field with custom sidebar options and help text:</p>
 						<pre class="prettyprint">
-Carbon_Field::factory("choose_sidebar", "crb_custom_sidebar", __('Sidebar', 'crb'))
+Field::factory("choose_sidebar", "crb_custom_sidebar", __('Sidebar', 'crb'))
 	->help_text('Select which sidebar to show in this page, or click "Add New" to create a new one')
 	->set_sidebar_options(array(
 		'before_widget' =&gt; '&lt;div id="%1$s" class="widget %2$s"&gt;',
@@ -1246,7 +1281,7 @@ Carbon_Field::factory("choose_sidebar", "crb_custom_sidebar", __('Sidebar', 'crb
 </pre>
 						<p>The following example sets different sidebar options for each of the specified sidebars:</p>
 						<pre class="prettyprint">
-Carbon_Field::factory( 'choose_sidebar', 'crb_custom_sidebar', __('Sidebar', 'crb') )
+Field::factory( 'choose_sidebar', 'crb_custom_sidebar', __('Sidebar', 'crb') )
 	->set_sidebar_options(array(
 		'default' => array(
 			'before_widget' =&gt; '&lt;li id="%1$s" class="widget %2$s"&gt;',
@@ -1268,14 +1303,14 @@ Carbon_Field::factory( 'choose_sidebar', 'crb_custom_sidebar', __('Sidebar', 'cr
 						<h3 id="Field_HeaderScripts" class="left-hash"><a href="#Field_HeaderScripts">Header Scripts <code>header_scripts</code></a></h3>
 							<p>Applicable to Theme Options container only. Displays a text area, the contents of which will be automatically printed in the <code>&lt;head&gt;</code> of each page. Useful for printing user-defined javascript, as well as styles, meta tags, etc.</p>
 						<pre class="prettyprint">
-Carbon_Field::factory("header_scripts", "crb_header_script");
+Field::factory("header_scripts", "crb_header_script");
 </pre>
 					</div>
 					<div class="field-docs">
 						<h3 id="Field_FooterScripts" class="left-hash"><a href="#Field_FooterScripts">Footer Scripts <code>footer_scripts</code></a></h3>
 							<p>Applicable to Theme Options container only. Displays a text area, the contents of which will be automatically printed before the closing <code>&lt;/body&gt;</code> of each page (during <code>wp_footer()</code>). Useful for printing Google Analytics code, or user-defined javascript.</p>
 						<pre class="prettyprint">
-Carbon_Field::factory("footer_scripts", "crb_footer_script");
+Field::factory("footer_scripts", "crb_footer_script");
 </pre>
 					</div>
 
@@ -1288,7 +1323,7 @@ Carbon_Field::factory("footer_scripts", "crb_footer_script");
 							<dd>Set the HTML markup you would like to show to <code>$html</code>.</dd>
 						</dl>
 						<pre class="prettyprint">
-Carbon_Field::factory("html", "crb_information_text")
+Field::factory("html", "crb_information_text")
 	-&gt;set_html('&lt;h2&gt;Lorem ipsum&lt;/h2&gt;&lt;p&gt;Quisque mattis ligula eget placerat volutpat. Praesent tincidunt ultricies tempor.&lt;/p&gt;');
 </pre>
 					</div>
@@ -1297,7 +1332,7 @@ Carbon_Field::factory("html", "crb_information_text")
 						<h3 id="Field_GravityForm" class="left-hash"><a href="#Field_GravityForm">Gravity Form <code>gravity_form</code></a></h3>
 							<p>Similar to select field, but automatically populated with all available gravity forms. If the plugin is not installed or not activated, an appropriate message will be displayed to the user.</p>
 						<pre class="prettyprint">
-Carbon_Field::factory("gravity_form", "crb_gravity_form", "Select a Form");
+Field::factory("gravity_form", "crb_gravity_form", "Select a Form");
 </pre>
 						<p>There is a <code>crb_gravity_form_options</code> filter which you can use to override the options that are passed to the select field. Example:</p>
 						<pre class="prettyprint">
@@ -1316,9 +1351,9 @@ function crb_my_gravity_form_options($options) {
 						<p>Complex fields act as containers to which you can add multiple groups of fields. It is represented as a table, where each row is a field group. The user is able to add infinite rows of each group. This allows to repeat a set of fields multiple times creating customizable and sortable lists. This is useful when creating image galleries, lists of data or advanced content and layout elements.</p>
 
 						<pre class="prettyprint">
-Carbon_Field::factory('complex', 'crb_slide')-&gt;add_fields(array(
-	Carbon_Field::factory('text', 'title'),
-	Carbon_Field::factory('image', 'photo'),
+Field::factory('complex', 'crb_slide')-&gt;add_fields(array(
+	Field::factory('text', 'title'),
+	Field::factory('image', 'photo'),
 )),
 </pre>
 						
@@ -1327,15 +1362,15 @@ Carbon_Field::factory('complex', 'crb_slide')-&gt;add_fields(array(
 
 						<p>A more advanced usage of the complex field is shown below:</p>
 						<pre class="prettyprint">
-Carbon_Field::factory('complex', 'crb_media_item')
+Field::factory('complex', 'crb_media_item')
 	-&gt;add_fields('photograph', array(
-		Carbon_Field::factory('image', 'image'),
-		Carbon_Field::factory('text', 'caption'),
+		Field::factory('image', 'image'),
+		Field::factory('text', 'caption'),
 	))
 	-&gt;add_fields('movie', array(
-		Carbon_Field::factory('file', 'video'),
-		Carbon_Field::factory('text', 'title'),
-		Carbon_Field::factory('text', 'length'),
+		Field::factory('file', 'video'),
+		Field::factory('text', 'title'),
+		Field::factory('text', 'length'),
 	)),
 </pre>
 						<p>Here we have to create a list of media items, lets say for an art exhibition. There are two types of items - photos (defined by an <code>image</code> and a <code>caption</code>) and movies (having a <code>title</code>, <code>length</code> and the <code>video</code> file itself). Since items have different properties, we need to define separate group for each one. Groups also must have a name, by which they will be recognized later - <code>photograph</code> and <code>movie</code>.</p>
@@ -1350,8 +1385,8 @@ Carbon_Field::factory('complex', 'crb_media_item')
 						</dl>
 						<pre class="prettyprint">
 add_fields(array(
-	Carbon_Field::factory('text', 'name'),
-	Carbon_Field::factory('text', 'job_title'),
+	Field::factory('text', 'name'),
+	Field::factory('text', 'job_title'),
 )),
 </pre>
 						<h3 id="Multiple_Groups" class="left-hash"><a href="#Multiple_Groups">Multiple groups</a></h3>
@@ -1364,14 +1399,14 @@ add_fields(array(
 							<dd>Numeric array of fields.</dd>
 						</dl>
 						<pre class="prettyprint">
-Carbon_Field::factory('complex', 'crb_job')
+Field::factory('complex', 'crb_job')
 	-&gt;add_fields('driver', array(
-		Carbon_Field::factory('text', 'name'),
-		Carbon_Field::factory('text', 'drivers_license_id'),
+		Field::factory('text', 'name'),
+		Field::factory('text', 'drivers_license_id'),
 	))
 	-&gt;add_fields('teacher', array(
-		Carbon_Field::factory('image', 'name'),
-		Carbon_Field::factory('image', 'years_of_experience'),
+		Field::factory('image', 'name'),
+		Field::factory('image', 'years_of_experience'),
 	)),
 </pre>
 						<p>Each call to <code>add_fields($name, $fields)</code> creates a new group and adds it to the complex field.</p>
@@ -1405,14 +1440,17 @@ array (
 						<h3 id="Nested_Complex_Fields" class="left-hash"><a href="#Nested_Complex_Fields">Nested Complex Fields</a></h3>
 						<p>Complex fields can be nested. The following will define a container that creates multiple slides and allows positioning of multiple text fragments on each slide: </p>
 						<pre class="prettyprint">
-Carbon_Container::factory('post_meta', 'Slider Data')
+use Carbon_Fields\Container\Container;
+use Carbon_Fields\Field\Field;
+
+Container::factory('post_meta', 'Slider Data')
 	->show_on_post_type('post')
 	->add_fields(array(
-		Carbon_Field::factory('complex', 'crb_slides')->add_fields(array(
-			Carbon_Field::factory('image', 'image'),
-			Carbon_Field::factory('complex', 'slide_fragments')->add_fields(array(
-				Carbon_Field::factory('text', 'fragment_text'),
-				Carbon_Field::factory('select', 'fragment_position')
+		Field::factory('complex', 'crb_slides')->add_fields(array(
+			Field::factory('image', 'image'),
+			Field::factory('complex', 'slide_fragments')->add_fields(array(
+				Field::factory('text', 'fragment_text'),
+				Field::factory('select', 'fragment_position')
 					->add_options(array('Top Left', 'Top Right', "Bottom Left", "Bottom Right")),
 			))
 		)),
@@ -1462,8 +1500,8 @@ array (
 								<dd>
 									There are two layouts available for displaying a complex field: 
 									<ul>
-										<li><code>Carbon_Field_Complex::LAYOUT_TABLE</code>(default) - lists groups as rows. Each field in the group is displayed in a new line with the label first and the user control after it.</li>
-										<li><code>Carbon_Field_Complex::LAYOUT_LIST</code> - lists groups as rows and their fields as a columns.</li>
+										<li><code>Complex_Field::LAYOUT_TABLE</code>(default) - lists groups as rows. Each field in the group is displayed in a new line with the label first and the user control after it.</li>
+										<li><code>Complex_Field::LAYOUT_LIST</code> - lists groups as rows and their fields as a columns.</li>
 									</ul>
 								</dd>
 
@@ -1484,18 +1522,21 @@ array (
 										<li><strong>Add Row</strong> -- wording of the button for adding new field group. </li>
 									</ul>
 
-									Example usage:<pre class="prettyprint">$employees_labels = array(
+									Example usage:<pre class="prettyprint">
+use Carbon_Fields\Container\Container;
+use Carbon_Fields\Field\Field;
+$employees_labels = array(
 	'plural_name'=>'Employees',
 	'singular_name'=>'Employee',
 );
-Carbon_Field::factory('complex', 'crb_employee_data')
+Field::factory('complex', 'crb_employee_data')
 	-&gt;setup_labels($employees_labels)
-	-&gt;set_layout(Carbon_Field_Complex::LAYOUT_TABLE)
+	-&gt;set_layout(Complex_Field::LAYOUT_TABLE)
 	-&gt;add_fields(array(
-		Carbon_Field::factory('text', 'name')->help_text('Name of employee'),
-		Carbon_Field::factory('text', 'position')->help_text('Position title'),
-		Carbon_Field::factory('image', 'image'),
-		Carbon_Field::factory('rich_text', 'description'),
+		Field::factory('text', 'name')->help_text('Name of employee'),
+		Field::factory('text', 'position')->help_text('Position title'),
+		Field::factory('image', 'image'),
+		Field::factory('rich_text', 'description'),
 	))</pre>
 								</dd>
 
@@ -1506,13 +1547,13 @@ Carbon_Field::factory('complex', 'crb_employee_data')
 						<p><code>{complex_field_name}_{group_name}-{field_name}_{number}</code>, where</p>
 						<dl>
 							<dt>complex_field_name</dt>
-							<dd>Name of the complex field, as passed to <code>Carbon_Field::factory()</code></dd>
+							<dd>Name of the complex field, as passed to <code>Field::factory()</code></dd>
 
 							<dt>group_name</dt>
 							<dd>Name of the group as passed to <code>add_fields()</code>, or <code>""</code> if only one group is present.</dd>
 							
 							<dt>field_name</dt>
-							<dd>Name of the field in the group, as passed to <code>Carbon_Field::factory()</code></dd>
+							<dd>Name of the field in the group, as passed to <code>Field::factory()</code></dd>
 							
 							<dt>number</dt>
 							<dd>Identifies the number of the row this value is part of.</dd>
@@ -1524,19 +1565,19 @@ Carbon_Field::factory('complex', 'crb_employee_data')
 
 					<div class="field-docs">
 						<h3 id="Extending" class="left-hash"><a href="#Extending">Extending</a></h3>
-						<p>Carbon Fields can be easily extended. Each of the Carbon_Field classes is optionally declared, and each function is optionally defined. This way early custom declaration and definitions can be made in your theme or plugin. Also, you can create custom Carbon Fields, Carbon Containers, Carbon Exceptions and others by extending the existing PHP classes.</p>
+						<p>Carbon Fields can be easily extended. Each of the Field classes is optionally declared, and each function is optionally defined. This way early custom declaration and definitions can be made in your theme or plugin. Also, you can create custom Fields, Containers, Exceptions and others by extending the existing PHP classes.</p>
 
 						<p>On the JavaScript side, the library is designed to be lightweight and flexible and sits on top of <a href="http://backbonejs.org/" target="_blank"><i class="icon-globe"></i> Backbone</a>, providing the framework for building a scalable application.</p>
 						
-						<p>To get a better understanding of how the library works, checkout our step-by-step guide of <a href="guide.html">how to create a new custom Carbon Field</a>.</p>
+						<p>To get a better understanding of how the library works, checkout our step-by-step guide of <a href="guide.html">how to create a new custom Field</a>.</p>
 					</div>
 
 					<div class="field-docs">
 						<h3 id="Templates" class="left-hash"><a href="#Templates">Templates</a></h3>
-						<p>Carbon Fields use <a href="http://underscorejs.org/#template" target="_blank"><i class="icon-globe"></i>Underscore template engine</a>. Each field has a <code>template</code> method that prints the Underscore template code.</p>
+						<p>Carbon Fields are using the <a href="http://underscorejs.org/#template" target="_blank"><i class="icon-globe"></i>Underscore template engine</a>. Each field has a <code>template</code> method that prints the Underscore template code.</p>
 
 						<pre class="prettyprint">
-class Carbon_Field_Example extends Carbon_Field {
+class Example_Field extends Field {
 	// Main template
 	function template() {
 		?&gt;
@@ -1548,7 +1589,7 @@ class Carbon_Field_Example extends Carbon_Field {
 
 						Some fields have more than one template - in those cases the extra templates should be printed in separate methods and registered via <code>add_template($name, $callback)</code> method. 
 						<pre class="prettyprint">
-class Carbon_Field_Example extends Carbon_Field {
+class Example_Field extends Field {
 	function admin_init() {
 		// Add the description template
 		$this->add_template($this->get_type() . '-Description', array($this, 'template_description'));
@@ -1580,7 +1621,7 @@ class Carbon_Field_Example extends Carbon_Field {
 						<p>The variables that can be used inside a template are added by the <code>to_json()</code> PHP method. Here is an example of adding two new variables (rows &amp; height):</p>
 						<pre class="prettyprint">
 // Textarea Field PHP Class
-class Carbon_Field_Textarea extends Carbon_Field {
+class Textarea_Field extends Field {
 	protected $height = 170;
 	protected $rows = 0;
 	...
@@ -1635,10 +1676,10 @@ carbon.fields.View.File = carbon.fields.View.extend({
 							<dd><p>Called after including the main classes and functions.</p></dd>
 							
 							<dt><small>(action)</small> <code>carbon_register_fields</code></dt>
-							<dd><p>Called prior to registering the Carbon Fields</p></dd>
+							<dd><p>Called prior to registering the Fields</p></dd>
 							
 							<dt><small>(action)</small> <code>carbon_after_register_fields</code></dt>
-							<dd><p>Called after all Carbon Fields have been registered</p></dd>
+							<dd><p>Called after all Fields have been registered</p></dd>
 						</dl>
 
 						<h5>Templates</h5>
