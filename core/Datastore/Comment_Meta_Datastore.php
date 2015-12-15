@@ -7,14 +7,27 @@ use Carbon_Fields\Field\Field;
 class Comment_Meta_Datastore extends Datastore {
 	protected $comment_id;
 
+	/**
+	 * Initialization tasks.
+	 **/
 	function init() {}
 
+	/**
+	 * Save the field value(s) into the database.
+	 * 
+	 * @param Field $field The field to save.
+	 */
 	function save(Field $field) {
 		if ( !update_comment_meta($this->comment_id, $field->get_name(), $field->get_value()) ) {
 			add_comment_meta($this->comment_id, $field->get_name(), $field->get_value(), true);
 		}
 	}
 
+	/**
+	 * Load the field value(s) from the database.
+	 *
+	 * @param Field $field The field to retrieve value for.
+	 */
 	function load(Field $field) {
 		global $wpdb;
 
@@ -34,11 +47,21 @@ class Comment_Meta_Datastore extends Datastore {
 		$field->set_value($value[0]);
 	}
 
+	/**
+	 * Delete the field value(s) from the database.
+	 * 
+	 * @param Field $field The field to delete.
+	 */
 	function delete(Field $field) {
 		delete_comment_meta($this->comment_id, $field->get_name(), $field->get_value());
 	}
 
-	function load_values($field) {
+	/**
+	 * Load complex field value(s) from the database.
+	 *
+	 * @param Field $field The field to load values for.
+	 */
+	function load_values(Field $field) {
 		global $wpdb;
 
 		if ( is_object($field) && is_subclass_of($field, 'Carbon_Fields\\Field\\Field') ) {
@@ -53,6 +76,11 @@ class Comment_Meta_Datastore extends Datastore {
 		', ARRAY_A);
 	}
 
+	/**
+	 * Delete complex field value(s) from the database.
+	 *
+	 * @param Field $field The field to delete values for.
+	 */
 	function delete_values(Field $field) {
 		global $wpdb;
 
@@ -67,6 +95,11 @@ class Comment_Meta_Datastore extends Datastore {
 		');
 	}
 
+	/**
+	 * Set the comment ID of the datastore.
+	 * 
+	 * @param int $comment_id ID of the comment.
+	 */
 	function set_id($comment_id) {
 		$this->comment_id = $comment_id;
 	}

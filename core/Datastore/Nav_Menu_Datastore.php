@@ -7,12 +7,22 @@ use Carbon_Fields\Field\Field;
 class Nav_Menu_Datastore extends Post_Meta_Datastore {
 	public $post_id;
 
+	/**
+	 * Save the field value(s) into the database.
+	 * 
+	 * @param Field $field The field to save.
+	 */
 	function save(Field $field) {
 		if ( !update_post_meta($this->post_id, $this->get_field_name($field), $field->get_value()) ) {
 			add_post_meta($this->post_id, $this->get_field_name($field), $field->get_value(), true);
 		}
 	}
 
+	/**
+	 * Load the field value(s) from the database.
+	 *
+	 * @param Field $field The field to retrieve value for.
+	 */
 	function load(Field $field) {
 		global $wpdb;
 
@@ -32,15 +42,30 @@ class Nav_Menu_Datastore extends Post_Meta_Datastore {
 		$field->set_value($value[0]);
 	}
 
+	/**
+	 * Delete the field value(s) from the database.
+	 * 
+	 * @param Field $field The field to delete.
+	 */
 	function delete(Field $field) {
 		// Not needed, the deletion is handled on delete_post automatically
 	}
 
+	/**
+	 * Delete complex field value(s) from the database.
+	 *
+	 * @param Field $field The field to delete values for.
+	 */
 	function delete_values(Field $field) {
 		// Not needed, the deletion is handled on delete_post automatically
 	}
 
-	function load_values($field) {
+	/**
+	 * Load complex field value(s) from the database.
+	 *
+	 * @param Field $field The field to load values for.
+	 */
+	function load_values(Field $field) {
 		// Not implemented, Complex functionality would need this in order to work
 	}
 

@@ -625,9 +625,10 @@ class Field {
 	}
 
 	/**
-	 * Returns the type of the field based on the class
-	 * The class is stripped by the "Carbon_Field" prefix. Then underscores are replaced with a dash.
-	 * Finally the result is lowercased.
+	 * Returns the type of the field based on the class.
+	 * The class is stripped by the "CarbonFields" prefix. 
+	 * Also the "Field" suffix is removed. 
+	 * Then underscores and backslashes are removed.
 	 *
 	 * @return string
 	 */

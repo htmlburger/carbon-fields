@@ -7,14 +7,27 @@ use Carbon_Fields\Field\Field;
 class User_Meta_Datastore extends Datastore {
 	protected $user_id;
 
+	/**
+	 * Initialization tasks.
+	 **/
 	function init() {}
 
+	/**
+	 * Save the field value(s) into the database.
+	 * 
+	 * @param Field $field The field to save.
+	 */
 	function save(Field $field) {
 		if ( !update_user_meta($this->user_id, $field->get_name(), $field->get_value()) ) {
 			add_user_meta($this->user_id, $field->get_name(), $field->get_value(), true);
 		}
 	}
 
+	/**
+	 * Load the field value(s) from the database.
+	 *
+	 * @param Field $field The field to retrieve value for.
+	 */
 	function load(Field $field) {
 		global $wpdb;
 
@@ -34,11 +47,21 @@ class User_Meta_Datastore extends Datastore {
 		$field->set_value($value[0]);
 	}
 
+	/**
+	 * Delete the field value(s) from the database.
+	 * 
+	 * @param Field $field The field to delete.
+	 */
 	function delete(Field $field) {
 		delete_user_meta($this->user_id, $field->get_name(), $field->get_value());
 	}
 
-	function load_values($field) {
+	/**
+	 * Load complex field value(s) from the database.
+	 *
+	 * @param Field $field The field to load values for.
+	 */
+	function load_values(Field $field) {
 		global $wpdb;
 
 		if ( is_object($field) && is_subclass_of($field, 'Carbon_Fields\\Field\\Field') ) {
@@ -70,6 +93,11 @@ class User_Meta_Datastore extends Datastore {
 		return $results;
 	}
 
+	/**
+	 * Delete complex field value(s) from the database.
+	 *
+	 * @param Field $field The field to delete values for.
+	 */
 	function delete_values(Field $field) {
 		global $wpdb;
 
@@ -84,6 +112,11 @@ class User_Meta_Datastore extends Datastore {
 		');
 	}
 
+	/**
+	 * Set the user ID of the datastore.
+	 * 
+	 * @param int $user_id ID of the user.
+	 */
 	function set_id($user_id) {
 		$this->user_id = $user_id;
 	}

@@ -4,17 +4,33 @@ namespace Carbon_Fields\Datastore;
 
 use Carbon_Fields\Field\Field;
 
+/**
+ * Post meta (custom fields) datastore class.
+ */
 class Post_Meta_Datastore extends Datastore {
 	protected $post_id;
 
+	/**
+	 * Initialization tasks.
+	 **/
 	function init() {}
 
+	/**
+	 * Save the field value(s) into the database.
+	 * 
+	 * @param Field $field The field to save.
+	 */
 	function save(Field $field) {
 		if ( !update_post_meta($this->post_id, $field->get_name(), $field->get_value()) ) {
 			add_post_meta($this->post_id, $field->get_name(), $field->get_value(), true);
 		}
 	}
 
+	/**
+	 * Load the field value(s) from the database.
+	 *
+	 * @param Field $field The field to retrieve value for.
+	 */
 	function load(Field $field) {
 		global $wpdb;
 
@@ -34,11 +50,21 @@ class Post_Meta_Datastore extends Datastore {
 		$field->set_value($value[0]);
 	}
 
+	/**
+	 * Delete the field value(s) from the database.
+	 * 
+	 * @param Field $field The field to delete.
+	 */
 	function delete(Field $field) {
 		delete_post_meta($this->post_id, $field->get_name(), $field->get_value());
 	}
 
-	function load_values($field) {
+	/**
+	 * Load complex field value(s) from the database.
+	 *
+	 * @param Field $field The field to load values for.
+	 */
+	function load_values(Field $field) {
 		global $wpdb;
 
 		if ( is_object($field) && is_subclass_of($field, 'Carbon_Fields\\Field\\Field') ) {
@@ -53,6 +79,11 @@ class Post_Meta_Datastore extends Datastore {
 		', ARRAY_A);
 	}
 
+	/**
+	 * Delete complex field value(s) from the database.
+	 *
+	 * @param Field $field The field to delete values for.
+	 */
 	function delete_values(Field $field) {
 		global $wpdb;
 
@@ -67,6 +98,11 @@ class Post_Meta_Datastore extends Datastore {
 		');
 	}
 
+	/**
+	 * Set the post ID of the datastore.
+	 * 
+	 * @param int $post_id ID of the post.
+	 */
 	function set_id($post_id) {
 		$this->post_id = $post_id;
 	}

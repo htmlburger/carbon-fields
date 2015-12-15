@@ -8,6 +8,9 @@ use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Container\Container;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
+/**
+ * Widget datastore and container class.
+ */
 abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	static $registered_widget_ids = array();
 	
@@ -17,6 +20,15 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	protected $custom_fields = array();
 	protected $complex_field_names = array();
 
+	/**
+	 * Create the widget.
+	 * A wrapper around the default WP widget constructor.
+	 * 
+	 * @param  string $title       Widget name
+	 * @param  string $description Widget description
+	 * @param  array $fields       Array of fields
+	 * @param  string $classname   String of CSS classes
+	 */
 	function setup($title, $description, $fields, $classname = '') {
 		// require title
 		if ( !$title ) {
@@ -43,6 +55,14 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		parent::__construct($widget_ID, $title, $widget_options, $this->form_options);
 	}
 
+	/**
+	 * Updates a particular instance of a widget.
+	 *
+	 * @param array $new_instance New settings for this instance as input by the user via
+	 *                            WP_Widget::form().
+	 * @param array $old_instance Old settings for this instance.
+	 * @return array Settings to save or bool false to cancel saving.
+	 */
 	function update($new_instance, $old_instance) {
 		$instance = $old_instance;
 
@@ -56,6 +76,11 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		return $instance;
 	}
  
+ 	/**
+	 * Outputs the settings update form.
+	 *
+	 * @param array $instance Current settings.
+	 */
 	function form($instance) {
 		$this->store_data = $instance;
 		$custom_fields = array();
@@ -76,6 +101,15 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 			->init();
 	}
 	
+	/**
+	 * Echoes the widget content.
+	 * Sub-classes can over-ride this method to generate their widget code
+	 * but it is best to override front_end().
+	 *
+	 * @param array $args     Display arguments including 'before_title', 'after_title',
+	 *                        'before_widget', and 'after_widget'.
+	 * @param array $instance The settings for the particular instance of the widget.
+	 */
 	function widget($args, $instance) {
 		// prepare $instance values for complex fields
 		if ( !empty($this->complex_field_names) ) {
@@ -99,8 +133,22 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		}
 	}
 	
+	/**
+	 * The actual content of the widget. 
+	 * Generally should be overriden by the specific widget classes.
+	 * @param array $args     Display arguments including 'before_title', 'after_title',
+	 *                        'before_widget', and 'after_widget'.
+	 * @param array $instance The settings for the particular instance of the widget.
+	 */
 	function front_end($args, $instance) { }
 
+	/**
+	 * Append array of fields to the current fields set. All items of the array
+	 * must be instances of Field and their names should be unique for all
+	 * Carbon containers.
+	 *
+	 * @param array $fields
+	 **/
 	function add_fields($fields) {
 		foreach ($fields as $field) {
 			if ( !is_a($field, 'Carbon_Fields\\Field\\Field') ) {
@@ -115,7 +163,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 				$field->set_datastore($this);
 			}
 
-			if ( is_a($field, 'Carbon_Field_Complex') ) {
+			if ( is_a($field, 'Carbon_Fields\\Field\\Carbon_Field_Complex') ) {
 				$this->complex_field_names[] = $field->get_name();
 			}
 		}
@@ -123,6 +171,11 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		$this->custom_fields = array_merge($this->custom_fields, $fields);
 	}
 
+	/**
+	 * Verify widget field names are unique.
+	 * 
+	 * @param  string $name Field name
+	 */
 	function verify_unique_field_name($name) {
 		static $registered_field_names = array();
 
@@ -133,6 +186,11 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		$registered_field_names[] = $name;
 	}
 
+	/**
+	 * Verify widget IDs are unique.
+	 * 
+	 * @param  string $id Widget ID
+	 */
 	function verify_unique_widget_id($id) {
 		if ( in_array($id, self::$registered_widget_ids) ) {
 			throw new Incorrect_Syntax_Exception ('Widget with ID "' . $id .'" already registered. Please change the widget title');
@@ -141,7 +199,11 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		self::$registered_widget_ids[] = $id;
 	}
 
-	/* Implement DataStore */
+	/**
+	 * Load the field value(s) from the database.
+	 *
+	 * @param Field $field The field to retrieve value for.
+	 */
 	function load(Field $field) {
 		if ( isset($this->store_data[$field->get_name()]) ) {
 			$field->set_value($this->store_data[$field->get_name()]);
@@ -150,17 +212,32 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		}
 	}
 
+	/**
+	 * Save the field value(s) into the database.
+	 * 
+	 * @param Field $field The field to save.
+	 */
 	function save(Field $field) {
 		$this->store_data[$field->get_name()] = $field->get_value();
 	}
 	
+	/**
+	 * Delete the field value(s) from the database.
+	 * 
+	 * @param Field $field The field to delete.
+	 */
 	function delete(Field $field) {
 		if ( isset($this->store_data[$field->get_name()]) ) {
 			unset($this->store_data[$field->get_name()]);
 		}
 	}
 	
-	function load_values($field) {
+	/**
+	 * Load complex field value(s) from the database.
+	 *
+	 * @param Field $field The field to load values for.
+	 */
+	function load_values(Field $field) {
 		$field_name = $field->get_name();
 		$result = array();
 
@@ -176,6 +253,11 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		return $result;
 	}
 	
+	/**
+	 * Delete complex field value(s) from the database.
+	 *
+	 * @param Field $field The field to delete values for.
+	 */
 	function delete_values(Field $field) {
 		$field_name = $field->get_name();
 
@@ -186,6 +268,9 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		}
 	}
 
+	/**
+	 * Expand complex fields from raw data.
+	 */
 	static function unwrap_complex_field_values($instance, $complex_field_names) {
 		foreach ($complex_field_names as $name) {
 			foreach ($instance as $key => $value) {

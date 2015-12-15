@@ -243,7 +243,7 @@ class Theme_Options_Container extends Container {
 
 	/**
 	 * Append array of fields to the current fields set. All items of the array
-	 * must be instances of Carbon_Field and their names should be unique for all
+	 * must be instances of Field and their names should be unique for all
 	 * Carbon containers.
 	 * If a field does not have DataStore already, the container data store is 
 	 * assigned to them instead.

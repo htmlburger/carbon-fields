@@ -4,9 +4,15 @@ namespace Carbon_Fields\Datastore;
 
 use Carbon_Fields\Field\Field;
 
+/**
+ * Term meta datastore class.
+ */
 class Term_Meta_Datastore extends Datastore {
 	protected $term_id;
 
+	/**
+	 * Create term meta database table (for WP < 4.4)
+	 **/
 	static function create_table() {
 		global $wpdb;
 
@@ -36,6 +42,9 @@ class Term_Meta_Datastore extends Datastore {
 		) ' . $charset_collate . ';');
 	}
 
+	/**
+	 * Initialization tasks.
+	 **/
 	function init() {
 		global $wpdb;
 
@@ -52,12 +61,22 @@ class Term_Meta_Datastore extends Datastore {
 		add_action('delete_term', array(__CLASS__, 'on_delete_term'), 10, 3);
 	}
 
+	/**
+	 * Save the field value(s) into the database.
+	 * 
+	 * @param Field $field The field to save.
+	 */
 	function save(Field $field) {
 		if ( !add_metadata('term', $this->term_id, $field->get_name(), $field->get_value(), true) ) {
 			update_metadata('term', $this->term_id, $field->get_name(), $field->get_value());
 		}
 	}
 
+	/**
+	 * Load the field value(s) from the database.
+	 *
+	 * @param Field $field The field to retrieve value for.
+	 */
 	function load(Field $field) {
 		global $wpdb;
 
@@ -77,11 +96,21 @@ class Term_Meta_Datastore extends Datastore {
 		$field->set_value($value[0]);
 	}
 
+	/**
+	 * Delete the field value(s) from the database.
+	 * 
+	 * @param Field $field The field to delete.
+	 */
 	function delete(Field $field) {
 		delete_metadata('term', $this->term_id, $field->get_name(), $field->get_value());
 	}
 
-	function load_values($field) {
+	/**
+	 * Load complex field value(s) from the database.
+	 *
+	 * @param Field $field The field to load values for.
+	 */
+	function load_values(Field $field) {
 		global $wpdb;
 
 		if ( is_object($field) && is_subclass_of($field, 'Carbon_Fields\\Field\\Field') ) {
@@ -96,6 +125,11 @@ class Term_Meta_Datastore extends Datastore {
 		', ARRAY_A);
 	}
 
+	/**
+	 * Delete complex field value(s) from the database.
+	 *
+	 * @param Field $field The field to delete values for.
+	 */
 	function delete_values(Field $field) {
 		global $wpdb;
 
@@ -110,10 +144,24 @@ class Term_Meta_Datastore extends Datastore {
 		');
 	}
 
+	/**
+	 * Set the term ID of the datastore.
+	 * 
+	 * @param int $term_id ID of the term.
+	 */
 	function set_id($term_id) {
 		$this->term_id = $term_id;
 	}
 
+	/**
+	 * Delete term meta on term deletion. 
+	 * Useful for WP < 4.4.
+	 * 
+	 * @param  int $term_id  Term ID.
+	 * @param  int $tt_id    Term taxonomy ID
+	 * @param  string $taxonomy Taxonomy.
+	 * @return bool Result of the deletion operation.
+	 */
 	static function on_delete_term($term_id, $tt_id, $taxonomy) {
 		global $wpdb;
 
