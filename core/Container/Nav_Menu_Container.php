@@ -6,9 +6,22 @@ use Carbon_Fields\Datastore\Nav_Menu_Datastore;
 use Carbon_Fields\Walker\Nav_Menu_Edit_Walker;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
+/**
+ * Nav menu item fields container class. 
+ */
 class Nav_Menu_Container extends Container {
+
+	public static $instances = array();
+	public static $active_containers = false;
+	public static $initialized = false;
+
+	/**
+	 * Create a new nav menu item fields container
+	 *
+	 * @param string $title Unique title of the container
+	 **/
 	function __construct($id) {
-		// Reset the registerd fields array, this is required so we can have fields with same names
+		// Reset the registered fields array, this is required so we can have fields with same names
 		self::$registered_field_names = array();
 
 		$id = str_replace(" ", '', ucwords(str_replace("_", ' ', $id)));
@@ -21,11 +34,13 @@ class Nav_Menu_Container extends Container {
 	}
 
 	/**
-	 * $menu_id  => used to pass the correct menu_item_id to the Container object
-	 * $render   => bool value, controlling if the container will render fields
+	 * Perform instance initialization after calling setup()
+	 * 
+	 * @param int $menu_id Used to pass the correct menu_item_id to the Container object
+	 * @param bool $render Whether the container will render the fields.
 	 */
 	function init($menu_id = 0, $render = true) {
-		$this->set_post_id($menu_id);
+		$this->set_menu_id($menu_id);
 
 		$this->load();
 		$this->_attach();
@@ -37,28 +52,46 @@ class Nav_Menu_Container extends Container {
 		return $this;
 	}
 
-	function set_post_id($menu_id) {
+	/**
+	 * Set the menu item ID the container will operate with.
+	 *
+	 * @param int $menu_id
+	 * @return void
+	 **/
+	function set_menu_id($menu_id) {
 		$this->menu_id = $menu_id;
 		$this->store->set_id($menu_id);
 	}
 
 	/**
 	 * Checks whether the current request is valid
+	 * 
 	 * @return bool
 	 **/
 	function is_valid_save() {
 		return true;
 	}
 
-	function save($user_data = null) {
+	/**
+	 * Perform save operation after successful is_valid_save() check.
+	 * The call is propagated to all fields in the container.
+	 **/
+	function save() {
 		foreach ($this->fields as $field) {
 			$field->set_value_from_input();
 			$field->save();
 		}
 
-		do_action('carbon_after_save_custom_fields', $this);
+		do_action('carbon_after_save_nav_menu', $this);
 	}
 
+	/**
+	 * Returns an array that holds the container data, suitable for JSON representation.
+	 * This data will be available in the Underscore template and the Backbone Model.
+	 * 
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
 	function to_json($load) {
 		$carbon_data = parent::to_json(false);
 
@@ -70,11 +103,16 @@ class Nav_Menu_Container extends Container {
 		return $carbon_data;
 	}
 
+	/**
+	 * Output the container markup
+	 **/
 	function render() {
 		include DIR . '/templates/Container/nav_menu.php';
 	}
 
-	// This needs to be fixed, so the containers for nav menus are not printed everywhere
+	/**
+	 * TODO: make sure the containers for nav menus are not printed everywhere
+	 */
 	function is_valid_attach() {
 		return true;
 		$screen = get_current_screen();
@@ -82,15 +120,9 @@ class Nav_Menu_Container extends Container {
 		return $screen && $screen->id === 'nav-menus';
 	}
 
-	/* ==========================================================================
-		# Attach Containers to menus
-	========================================================================== */
-
-	public static $instances = array();
-	public static $active_containers = false;
-	public static $initialized = false;
-
-	// Initialize filters. This will be executed only once
+	/**
+	 * Initialize filters. This will be executed only once
+	 */
 	public static function initialize_filters() {
 		if ( self::$initialized ) {
 			return;
@@ -102,7 +134,9 @@ class Nav_Menu_Container extends Container {
 		add_action( 'wp_update_nav_menu_item', array( $self, 'update'), 10, 3 );
 	}
 
-	// Get containers only once, and store in instance memory.
+	/**
+	 * Get containers only once, and store in instance memory.
+	 */
 	public static function get_containers() {
 		if ( empty(self::$active_containers) ) {
 			self::$active_containers = Container::get_active_containers();
@@ -111,19 +145,25 @@ class Nav_Menu_Container extends Container {
 		return self::$active_containers;
 	}
 
-	// Render custom fields inside each Nav Menu entry
+	/**
+	 * Render custom fields inside each Nav Menu entry
+	 */
 	public static function form($output, $item, $depth, $args, $id) {
 		$current_menu_item_id = $item->ID;
 
 		self::set_instance_for_id($current_menu_item_id, true);
 	}
 
-	// Setup custom walker for the Nav Menu entries
+	/**
+	 * Setup custom walker for the Nav Menu entries
+	 */
 	public static function edit_walker($walker, $menu_id) {
 		return 'Carbon_Fields\Walker\Nav_Menu_Edit_Walker';
 	}
 
-	// Trigger Save for all instances
+	/**
+	 * Trigger Save for all instances
+	 */
 	public static function update($menu_id, $current_menu_item_id, $args) {
 		$instance = self::set_instance_for_id($current_menu_item_id, false);
 		$instance->_save();
@@ -131,7 +171,9 @@ class Nav_Menu_Container extends Container {
 		return $instance;
 	}
 
-	// Render attribute prevents field containers showing on menu save
+	/**
+	 * Render attribute prevents field containers showing on menu save
+	 */
 	public static function set_instance_for_id($current_menu_item_id, $render = true) {
 		$active_containers = self::get_containers();
 		$suffix = '-' . $current_menu_item_id;

@@ -5,16 +5,11 @@ namespace Carbon_Fields\Container;
 use Carbon_Fields\Datastore\Theme_Options_Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
+/**
+ * Theme options container class. 
+ */
 class Theme_Options_Container extends Container {
 	static protected $registered_pages = array();
-
-	/**
-	 * List of registered unique field names
-	 *
-	 * @see verify_unique_field_name()
-	 * @var array
-	 */
-	static protected $registered_field_names;
 
 	public $settings = array(
 		'parent' => 'self',
@@ -24,6 +19,11 @@ class Theme_Options_Container extends Container {
 
 	public $icon = '';
 	
+	/**
+	 * Create a new theme options fields container
+	 *
+	 * @param string $title Unique title of the container
+	 **/
 	function __construct($title) {
 		parent::__construct($title);
 
@@ -32,6 +32,12 @@ class Theme_Options_Container extends Container {
 		}
 	}
 
+	/**
+	 * Perform save operation after successful is_valid_save() check.
+	 * The call is propagated to all fields in the container.
+	 *
+	 * @param mixed $user_data
+	 **/
 	function save($user_data = null) {
 		try {
 			parent::save($user_data);
@@ -46,6 +52,9 @@ class Theme_Options_Container extends Container {
 		}
 	}
 
+	/**
+	 * Attach container as a theme options page/subpage.
+	 **/
 	function init() {
 		if ( !$this->settings['parent'] || $this->settings['parent'] == 'self' ) {
 			$this->settings['parent'] = '';
@@ -64,6 +73,11 @@ class Theme_Options_Container extends Container {
 		add_action('admin_menu', array($this, '_attach'));
 	}
 
+	/**
+	 * Perform checks whether the current save() request is valid.
+	 * 
+	 * @return bool
+	 **/
 	function is_valid_save() {
 		if ( !isset($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] != 'POST' ) {
 			return false;
@@ -74,6 +88,10 @@ class Theme_Options_Container extends Container {
 		return true;
 	}
 
+	/**
+	 * Add theme options container pages.
+	 * Hook the container saving action.
+	 **/
 	function attach() {
 
 		// Add menu page
@@ -102,6 +120,9 @@ class Theme_Options_Container extends Container {
 		add_action('load-' . $page_hook, array($this, '_save'));
 	}
 
+	/**
+	 * Whether this container is currently viewed.
+	 **/
 	function is_active() {
 		if (isset($_GET['page']) && $_GET['page'] === $this->settings['file']) {
 			return true;
@@ -124,6 +145,9 @@ class Theme_Options_Container extends Container {
 		remove_action('load-' . $page_hook, array($this, '_save'));
 	}
 
+	/**
+	 * Output the container markup
+	 **/
 	function render() {
 		if ( isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'true' ) {
 			$this->notifications[] = __('Settings saved.', 'crb');
@@ -132,6 +156,9 @@ class Theme_Options_Container extends Container {
 		include DIR . '/templates/Container/theme_options.php';
 	}
 
+	/**
+	 * Make sure that there are no duplicate containers with the same name.
+	 **/
 	function verify_unique_page() {
 		$file = $this->settings['file'];
 		$parent = $this->settings['parent'];
@@ -156,6 +183,9 @@ class Theme_Options_Container extends Container {
 		}
 	}
 
+	/**
+	 * Unregister the container parent and child pages.
+	 **/
 	function drop_unique_page() {
 		$file = $this->settings['file'];
 		$parent = $this->settings['parent'];
@@ -179,6 +209,9 @@ class Theme_Options_Container extends Container {
 		}
 	}
 
+	/**
+	 * Make sure a field certain name can't be registered multiple times.
+	 **/
 	function verify_unique_field_name($name) {
 		$page_id = $this->settings['parent'] . '/' . $this->settings['file'];
 
@@ -208,6 +241,15 @@ class Theme_Options_Container extends Container {
 		}
 	}
 
+	/**
+	 * Append array of fields to the current fields set. All items of the array
+	 * must be instances of Carbon_Field and their names should be unique for all
+	 * Carbon containers.
+	 * If a field does not have DataStore already, the container data store is 
+	 * assigned to them instead.
+	 *
+	 * @param array $fields
+	 **/
 	function add_fields($fields) {
 		parent::add_fields($fields);
 
@@ -218,6 +260,9 @@ class Theme_Options_Container extends Container {
 		return $this;
 	}
 
+	/**
+	 * Change the parent theme options page of this container
+	 **/
 	function set_page_parent($parent) {
 		if ( is_a($parent, 'Carbon_Container') ) {
 			$parent = $parent->title;
@@ -227,21 +272,36 @@ class Theme_Options_Container extends Container {
 		return $this;
 	}
 
+	/**
+	 * Set the icon of this theme options page.
+	 * Applicable only for parent theme option pages.
+	 **/
 	function set_icon($icon) {
 		$this->icon = $icon;
 		return $this;
 	}
 
+	/**
+	 * Set the theme options file name of this container.
+	 **/
 	function set_page_file($file) {
 		$this->settings['file'] = $file;
 		return $this;
 	}
 
+	/**
+	 * Set the permissions necessary to view 
+	 * the corresponding theme options page
+	 **/
 	function set_page_permissions($permissions) {
 		$this->settings['permissions'] = $permissions;
 		return $this;
 	}
 
+	/**
+	 * Sanitize the container title for use in 
+	 * the theme options file name.
+	 **/
 	protected function clear_string($string) {
 		return preg_replace(array('~ +~', '~[^\w\d-]+~u', '~-+~'), array('-', '-', '-'), strtolower(remove_accents($string)));
 	}

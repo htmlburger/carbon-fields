@@ -9,8 +9,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Field container designed to extend WordPress custom fields functionality,
  * providing easier user interface to add, edit and delete text, media files, 
  * location information and more.
- *
- **/
+ */
 class Post_Meta_Container extends Container {
 	/**
 	 * List of registered unique field names
@@ -51,6 +50,11 @@ class Post_Meta_Container extends Container {
 		),
 	);
 
+	/**
+	 * Create a new post meta fields container
+	 *
+	 * @param string $title Unique title of the container
+	 **/
 	function __construct($title) {
 		parent::__construct($title);
 
@@ -59,6 +63,11 @@ class Post_Meta_Container extends Container {
 		}
 	}
 
+	/**
+	 * Check if all required container settings have been specified
+	 *
+	 * @param array $settings Container settings
+	 **/
 	function check_setup_settings(&$settings = array()) {
 		if ( isset($settings['show_on']) ) {
 			$invalid_settings = array_diff_key($settings['show_on'], $this->settings['show_on']);
@@ -98,8 +107,6 @@ class Post_Meta_Container extends Container {
 	/**
 	 * Create DataStore instance, set post ID to operate with (if such exists).
 	 * Bind attach() and save() to the appropriate WordPress actions.
-	 *
-	 * @return void
 	 **/
 	function init() {
 		if ( isset($_GET['post']) ) {
@@ -120,7 +127,6 @@ class Post_Meta_Container extends Container {
 	 * The call is propagated to all fields in the container.
 	 *
 	 * @param int $post_id ID of the post against which save() is ran
-	 * @return void
 	 **/
 	function save($post_id) {
 		// Unhook action to garantee single save
@@ -275,8 +281,6 @@ class Post_Meta_Container extends Container {
 
 	/**
 	 * Add meta box for each of the container post types
-	 *
-	 * @return void
 	 **/
 	function attach() {
 		foreach ($this->settings['post_type'] as $post_type) {
@@ -295,6 +299,9 @@ class Post_Meta_Container extends Container {
 		}
 	}
 
+	/**
+	 * Classes to add to the post meta box
+	 */
 	function postbox_classes($classes) {
 		$classes[] = 'carbon-box';
 		return $classes;
@@ -355,8 +362,6 @@ class Post_Meta_Container extends Container {
 	
 	/**
 	 * Revert the result of attach()
-	 *
-	 * @return void
 	 **/
 	function detach() {
 		parent::detach();
@@ -372,8 +377,6 @@ class Post_Meta_Container extends Container {
 
 	/**
 	 * Output the container markup
-	 *
-	 * @return void
 	 **/
 	function render() {
 		include DIR . '/templates/Container/post_meta.php';
@@ -383,7 +386,6 @@ class Post_Meta_Container extends Container {
 	 * Set the post ID the container will operate with.
 	 *
 	 * @param int $post_id
-	 * @return void
 	 **/
 	function set_post_id($post_id) {
 		$this->post_id = $post_id;
@@ -395,7 +397,6 @@ class Post_Meta_Container extends Container {
 	 * If not, the field name is recorded.
 	 *
 	 * @param string $name
-	 * @return void
 	 **/
 	function verify_unique_field_name($name) {
 		if ( empty($this->settings['post_type']) ) {
@@ -419,7 +420,6 @@ class Post_Meta_Container extends Container {
 	 * Remove field name $name from the list of unique field names
 	 *
 	 * @param string $name
-	 * @return void
 	 **/
 	function drop_unique_field_name($name) {
 		foreach ($this->settings['post_type'] as $post_type) {

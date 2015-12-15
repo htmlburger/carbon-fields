@@ -9,8 +9,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 /**
  * Base container class. 
  * Defines the key container methods and their default implementations.
- *
- **/
+ */
 abstract class Container {
 	/**
 	 * Where to put a particular tab -- at the head or the tail. Tail by default
@@ -69,7 +68,7 @@ abstract class Container {
 	protected $templates = array();
 
 	/**
-	 * Tabs availabl
+	 * Tabs available
 	 */
 	protected $tabs = array();
 
@@ -166,7 +165,7 @@ abstract class Container {
 	}
 
 	/**
-	 * Init containers created via factory
+	 * Initialize containers created via factory
 	 *
 	 * @return object
 	 **/
@@ -189,8 +188,6 @@ abstract class Container {
 
 	/**
 	 * Adds a container to the active containers array and triggers an action
-	 *
-	 * @return void
 	 **/
 	static function add_active_container($container) {
 		self::$active_containers[] = $container;
@@ -209,8 +206,6 @@ abstract class Container {
 
 	/**
 	 * Adds a field to the active fields array and triggers an action
-	 *
-	 * @return void
 	 **/
 	static function add_active_field($field) {
 		self::$active_fields[] = $field;
@@ -228,15 +223,11 @@ abstract class Container {
 
 	/**
 	 * Perform instance initialization after calling setup()
-	 *
-	 * @return void
 	 **/
 	abstract function init();
 
 	/**
 	 * Prints the container Underscore template
-	 *
-	 * @return void
 	 **/
 	function template() {
 		?>
@@ -266,6 +257,11 @@ abstract class Container {
 		<?php
 	}
 
+	/**
+	 * Create a new container
+	 *
+	 * @param string $title Unique title of the container
+	 **/
 	function __construct($title) {
 		$this->title = $title;
 		$this->id = preg_replace('~\W~u', '', remove_accents($title));
@@ -281,7 +277,6 @@ abstract class Container {
 	 *
 	 * @see init()
 	 * @param array $settings
-	 * @return void
 	 **/
 	function setup($settings = array()) {
 		if ( $this->setup_ready ) {
@@ -303,6 +298,11 @@ abstract class Container {
 		return $this;
 	}
 
+	/**
+	 * Check if all required container settings have been specified
+	 *
+	 * @param array $settings Container settings
+	 **/
 	function check_setup_settings(&$settings = array()) {
 		$invalid_settings = array_diff_key($settings, $this->settings);
 		if ( !empty($invalid_settings) ) {
@@ -317,7 +317,6 @@ abstract class Container {
 	 *
 	 * @see save()
 	 * @see is_valid_save()
-	 * @return void
 	 **/
 	function _save() {
 		$param = func_get_args();
@@ -330,7 +329,6 @@ abstract class Container {
 	 * Load submitted data and save each field in the container
 	 *
 	 * @see is_valid_save()
-	 * @return void
 	 **/
 	function save($user_data) {
 		foreach ($this->fields as $field) {
@@ -351,8 +349,6 @@ abstract class Container {
 	/**
 	 * Load the value for each field in the container.
 	 * Could be used internally during container rendering
-	 *
-	 * @return void
 	 **/
 	function load() {
 		foreach ($this->fields as $field) {
@@ -368,7 +364,6 @@ abstract class Container {
 	 *
 	 * @see attach()
 	 * @see is_valid_attach()
-	 * @return void
 	 **/
 	function _attach() {
 		$param = func_get_args();
@@ -397,8 +392,6 @@ abstract class Container {
 
 	/**
 	 * Adds a new backbone template
-	 *
-	 * @return void
 	 **/
 	function add_template($name, $callback) {
 		$this->templates[$name] = $callback;
@@ -407,8 +400,6 @@ abstract class Container {
 	/**
 	 * Attach the container rendering and helping methods 
 	 * to concrete WordPress Action hooks
-	 *
-	 * @return void
 	 **/
 	function attach() {}
 
@@ -432,8 +423,6 @@ abstract class Container {
 
 	/**
 	 * Revert the result of attach()
-	 *
-	 * @return void
 	 **/
 	function detach() {
 		$this->drop_unique_panel_id($this->id);
@@ -452,7 +441,6 @@ abstract class Container {
 	 * assigned to them instead.
 	 *
 	 * @param array $fields
-	 * @return void
 	 **/
 	function add_fields($fields) {
 		foreach ($fields as $field) {
@@ -510,10 +498,16 @@ abstract class Container {
 		$this->settings['tabs'] = $this->get_tabs_json();
 	}
 
+	/**
+	 * Whether the container is tabbed or not
+	 */
 	function is_tabbed() {
 		return (bool) $this->tabs;
 	}
 
+	/**
+	 * Retrieve all fields that are not defined under a specific tab
+	 */
 	function get_untabbed_fields() {
 		$tabbed_fields_names = array();
 		foreach ($this->tabs as $tab_fields) {
@@ -537,6 +531,10 @@ abstract class Container {
 		return $untabbed_fields;
 	}
 
+	/**
+	 * Retrieve all tabs.
+	 * Create a default tab if there are any untabbed fields.
+	 */
 	function get_tabs() {
 		$untabbed_fields = $this->get_untabbed_fields();
 
@@ -547,6 +545,9 @@ abstract class Container {
 		return $this->tabs;
 	}
 
+	/**
+	 * Build the tabs JSON
+	 */
 	function get_tabs_json() {
 		$tabs_json = array();	
 		$tabs = $this->get_tabs();
@@ -581,8 +582,6 @@ abstract class Container {
 
 	/**
 	 * Perform checks whether there is a container registered with identificator $id
-	 *
-	 * @return void
 	 */
 	function verify_unique_panel_id($id) {
 		if ( in_array($id, self::$registered_panel_ids) ) {
@@ -597,7 +596,6 @@ abstract class Container {
 	 * Remove container identificator $id from the list of unique container ids
 	 *
 	 * @param string $id
-	 * @return void
 	 **/
 	function drop_unique_panel_id($id) {
 		if ( in_array($id, self::$registered_panel_ids) ) {
@@ -610,7 +608,6 @@ abstract class Container {
 	 * If not, the field name is recorded.
 	 *
 	 * @param string $name
-	 * @return void
 	 **/
 	function verify_unique_field_name($name) {
 		if ( in_array($name, self::$registered_field_names) ) {
@@ -624,7 +621,6 @@ abstract class Container {
 	 * Remove field name $name from the list of unique field names
 	 *
 	 * @param string $name
-	 * @return void
 	 **/
 	function drop_unique_field_name($name) {
 		$index = array_search($name, self::$registered_field_names);
@@ -637,7 +633,6 @@ abstract class Container {
 	 * Assign DataStore instance for use by the container fields
 	 *
 	 * @param object $store
-	 * @return void
 	 **/
 	function set_datastore(Datastore $store) {
 		$this->store = $store;
@@ -699,6 +694,9 @@ abstract class Container {
 		return $container_data;
 	}
 
+	/**
+	 * Underscore template for tabs
+	 */
 	function template_tabs() {
 		?>
 		<div class="carbon-tabs">
@@ -719,6 +717,9 @@ abstract class Container {
 		<?php
 	}
 
+	/**
+	 * Enqueue admin scripts
+	 */
 	function admin_hook_scripts() {
 		wp_enqueue_script('carbon-containers', URL . '/assets/js/containers.js', array('carbon-app'));
 
@@ -730,6 +731,9 @@ abstract class Container {
 		);
 	}
 
+	/**
+	 * Enqueue admin styles
+	 */
 	function admin_hook_styles() {
 		wp_enqueue_style('carbon-main', URL . '/assets/css/main.css');
 	}

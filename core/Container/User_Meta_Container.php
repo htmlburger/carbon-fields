@@ -13,6 +13,11 @@ class User_Meta_Container extends Container {
 		)
 	);
 
+	/**
+	 * Create a new user meta container
+	 *
+	 * @param string $title Unique title of the container
+	 **/
 	function __construct($title) {
 		parent::__construct($title);
 
@@ -32,6 +37,12 @@ class User_Meta_Container extends Container {
 		add_action('user_register', array($this, '_save'), 10, 1);
 	}
 
+	/**
+	 * Perform save operation after successful is_valid_save() check.
+	 * The call is propagated to all fields in the container.
+	 *
+	 * @param int $user_id ID of the user against which save() is ran
+	 **/
 	function save($user_id) {
 		// Unhook action to garantee single save
 		remove_action('profile_update', array($this, '_save'));
@@ -46,6 +57,11 @@ class User_Meta_Container extends Container {
 		do_action('carbon_after_save_user_meta', $user_id);
 	}
 
+	/**
+	 * Checks whether the current request is valid
+	 *
+	 * @return bool
+	 **/
 	function is_valid_save($user_id = 0) {
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
 			return false;
@@ -58,6 +74,12 @@ class User_Meta_Container extends Container {
 		return $this->is_valid_save_conditions($user_id);
 	}
 
+	/**
+	 * Perform checks whether the current save() request is valid
+	 *
+	 * @param int $user_id ID of the user against which save() is ran
+	 * @return bool
+	 **/
 	function is_valid_save_conditions($user_id) {
 		$valid = true;
 		$user = get_userdata($user_id);
@@ -82,24 +104,41 @@ class User_Meta_Container extends Container {
 		return $valid;
 	}
 
+	/**
+	 * Show the container only on users who have the $role role.
+	 *
+	 * @param string $role
+	 * @return object $this
+	 **/
 	function show_on_user_role($role) {
 		$this->settings['show_on']['role'] = (array) $role;
 
 		return $this;
 	}
 
+	/**
+	 * Add the container to the user
+	 **/
 	function attach() {
 		add_action('show_user_profile', array($this, 'render'), 10, 1);
 		add_action('edit_user_profile', array($this, 'render'), 10, 1);
 		add_action('user_new_form', array($this, 'render'), 10, 1);
 	}
 
+	/**
+	 * Whether we're on the user profile page
+	 **/
 	function is_profile_page() {
 		global $pagenow;
 
 		return $pagenow === 'profile.php' || $pagenow === 'user-new.php' || $pagenow === 'user-edit.php';
 	}
 
+	/**
+	 * Perform checks whether the container should be attached during the current request
+	 *
+	 * @return bool True if the container is allowed to be attached
+	 **/
 	function is_valid_attach() {
 		if ( !current_user_can('edit_users') || !$this->is_profile_page() ) {
 			return false;
@@ -108,6 +147,9 @@ class User_Meta_Container extends Container {
 		return true;
 	}
 
+	/**
+	 * Output the container markup
+	 **/
 	function render($user_profile = null) {
 		$profile_role = '';
 
@@ -123,6 +165,11 @@ class User_Meta_Container extends Container {
 		include DIR . '/templates/Container/user_meta.php';
 	}
 
+	/**
+	 * Set the user ID the container will operate with.
+	 *
+	 * @param int $user_id
+	 **/
 	function set_user_id($user_id) {
 		$this->user_id = $user_id;
 		$this->store->set_id($user_id);

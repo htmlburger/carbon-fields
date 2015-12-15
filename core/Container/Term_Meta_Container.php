@@ -5,15 +5,10 @@ namespace Carbon_Fields\Container;
 use Carbon_Fields\Datastore\Term_Meta_Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
+/**
+ * Term meta container class. 
+ */
 class Term_Meta_Container extends Container {
-	/**
-	 * List of registered unique field names per taxonomy
-	 *
-	 * @see verify_unique_field_name()
-	 * @var array
-	 */
-	static protected $registered_field_names;
-
 	protected $term_id;
 
 	public $settings = array(
@@ -21,6 +16,11 @@ class Term_Meta_Container extends Container {
 		'show_on_level' => false,
 	);
 
+	/**
+	 * Create a new term meta fields container
+	 *
+	 * @param string $title Unique title of the container
+	 **/
 	function __construct($title) {
 		parent::__construct($title);
 
@@ -29,6 +29,9 @@ class Term_Meta_Container extends Container {
 		}
 	}
 
+	/**
+	 * Bind attach() and save() to the appropriate WordPress actions.
+	 **/
 	function init() {
 		// force taxonomy to be array
 		if ( !is_array($this->settings['taxonomy']) ) {
@@ -43,6 +46,12 @@ class Term_Meta_Container extends Container {
 		}
 	}
 
+	/**
+	 * Perform save operation after successful is_valid_save() check.
+	 * The call is propagated to all fields in the container.
+	 *
+	 * @param int $term_id ID of the term against which save() is ran
+	 **/
 	function save($term_id) {
 		$this->set_term_id($term_id);
 
@@ -54,6 +63,11 @@ class Term_Meta_Container extends Container {
 		do_action('carbon_after_save_term_meta', $term_id);
 	}
 
+	/**
+	 * Perform checks whether the container should be attached during the current request
+	 *
+	 * @return bool True if the container is allowed to be attached
+	 **/
 	function is_valid_attach() {
 		if (isset($_GET['taxonomy']) && in_array($_GET['taxonomy'], $this->settings['taxonomy'])) {
 			return true;
@@ -62,6 +76,12 @@ class Term_Meta_Container extends Container {
 		return false;
 	}
 
+	/**
+	 * Perform checks whether the current save() request is valid.
+	 *
+	 * @param int $term_id ID of the term against which save() is ran
+	 * @return bool
+	 **/
 	function is_valid_save($term_id = null) {
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
 			return false;
@@ -74,6 +94,9 @@ class Term_Meta_Container extends Container {
 		return true;
 	}
 
+	/**
+	 * Add term meta for each of the container taxonomies
+	 **/
 	function attach() {
 		foreach ($this->settings['taxonomy'] as $taxonomy) {
 			add_action( $taxonomy . '_edit_form_fields', array($this, 'render'), 10, 2);
@@ -84,7 +107,6 @@ class Term_Meta_Container extends Container {
 	/**
 	 * Revert the result of attach()
 	 *
-	 * @return void
 	 **/
 	function detach() {
 		parent::detach();
@@ -102,6 +124,9 @@ class Term_Meta_Container extends Container {
 		}
 	}
 
+	/**
+	 * Output the container markup
+	 **/
 	function render($term=null) {
 		if (is_object($term)) {
 			$this->set_term_id( $term->term_id );
@@ -110,6 +135,11 @@ class Term_Meta_Container extends Container {
 		include DIR . '/templates/Container/term_meta.php';
 	}
 
+	/**
+	 * Set the term ID the container will operate with.
+	 *
+	 * @param int $term_id
+	 **/
 	function set_term_id($term_id) {
 		$this->term_id = $term_id;
 		$this->store->set_id($term_id);
@@ -121,7 +151,6 @@ class Term_Meta_Container extends Container {
 	 * If not, the field name is recorded.
 	 *
 	 * @param string $name
-	 * @return void
 	 **/
 	function verify_unique_field_name($name) {
 		if ( empty($this->settings['taxonomy']) ) {
@@ -145,7 +174,6 @@ class Term_Meta_Container extends Container {
 	 * Remove field name $name from the list of unique field names
 	 *
 	 * @param string $name
-	 * @return void
 	 **/
 	function drop_unique_field_name($name) {
 		foreach ($this->settings['taxonomy'] as $taxonomy) {
@@ -157,7 +185,7 @@ class Term_Meta_Container extends Container {
 	}
 
 	/**
-	 * Show the container only on terms from the specified taxonomy(s).
+	 * Show the container only on terms from the specified taxonomies.
 	 *
 	 * @param string|array $post_type
 	 * @return object $this
@@ -173,7 +201,7 @@ class Term_Meta_Container extends Container {
 	/** 
 	 * Show the container only on particular term level. 
 	 *
-	 * @param $string $term_level 
+	 * @param int $term_level 
 	 * @return object $this 
 	 */ 
 	function show_on_level($term_level) {                    
