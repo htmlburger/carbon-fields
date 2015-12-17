@@ -3,7 +3,7 @@
 namespace Carbon_Fields\Container;
 
 use Carbon_Fields\Field\Field;
-use Carbon_Fields\Datastore\Datastore;
+use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -634,7 +634,7 @@ abstract class Container {
 	 *
 	 * @param object $store
 	 **/
-	function set_datastore(Datastore $store) {
+	function set_datastore(Datastore_Interface $store) {
 		$this->store = $store;
 
 		foreach ($this->fields as $field) {

@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
-use Carbon_Fields\Datastore\Datastore;
+use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class Group_Field {
@@ -107,7 +107,7 @@ class Group_Field {
 		return $this->name;
 	}
 
-	function set_datastore(Datastore $store) {
+	function set_datastore(Datastore_Interface $store) {
 		foreach ($this->fields as $field) {
 			if ( !$field->get_datastore() ) {
 				$field->set_datastore($store);
