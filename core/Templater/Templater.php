@@ -9,10 +9,20 @@ namespace Carbon_Fields\Templater;
 class Templater {
 	static protected $templates = array();
 
+	/**
+	 * Initialize a new templater.
+	 * Hook all templates to the administration footer.
+	 */
 	function __construct() {
 		add_action('admin_footer', array($this, 'render_templates'), 999);
 	}
 
+	/**
+	 * Register a new template.
+	 * 
+	 * @param string $name Template name
+	 * @param string $html Template content
+	 */
 	static function add_template($name, $html) {
 		// Check if the template is already added
 		if (isset(self::$templates[$name])) {
@@ -23,6 +33,9 @@ class Templater {
 		self::$templates[$name] = $html;
 	}
 
+	/**
+	 * Render all registered templates.
+	 */
 	function render_templates() {
 		foreach (self::$templates as $name => $html) {
 			?>

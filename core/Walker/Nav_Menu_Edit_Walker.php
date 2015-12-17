@@ -2,10 +2,39 @@
 
 namespace Carbon_Fields\Walker;
 
+/**
+ * Walker for the administration nav menu editing.
+ *
+ * @uses Walker_Nav_Menu
+ */
 class Nav_Menu_Edit_Walker extends \Walker_Nav_Menu {
+	/**
+	 * Starts the list before the elements are added.
+	 *
+	 * @param string $output Passed by reference. Used to append additional content.
+	 * @param int    $depth  Depth of menu item. Used for padding.
+	 * @param array  $args   An array of arguments. @see wp_nav_menu()
+	 */
 	public function start_lvl( &$output, $depth = 0, $args = array() ) {}
+
+	/**
+	 * Ends the list of after the elements are added.
+	 *
+	 * @param string $output Passed by reference. Used to append additional content.
+	 * @param int    $depth  Depth of menu item. Used for padding.
+	 * @param array  $args   An array of arguments. @see wp_nav_menu()
+	 */
 	public function end_lvl( &$output, $depth = 0, $args = array() ) {}
 
+	/**
+	 * Start the element output.
+	 *
+	 * @param string $output Passed by reference. Used to append additional content.
+	 * @param object $item   Menu item data object.
+	 * @param int    $depth  Depth of menu item. Used for padding.
+	 * @param array  $args   An array of arguments. @see wp_nav_menu()
+	 * @param int    $id     Current item ID.
+	 */
 	public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
 		global $_wp_nav_menu_max_depth;
 		$_wp_nav_menu_max_depth = $depth > $_wp_nav_menu_max_depth ? $depth : $_wp_nav_menu_max_depth;

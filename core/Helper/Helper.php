@@ -8,8 +8,15 @@ use Carbon_Fields\Templater\Templater;
 use Carbon_Fields\Manager\Sidebar_Manager;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
+/**
+ * Helper functions and main initialization class.
+ */
 class Helper {
 
+	/**
+	 * Create a new helper. 
+	 * Hook the main Carbon Fields initialization functionality.
+	 */
 	public function __construct() {
 		add_action('wp_loaded', array($this, 'trigger_fields_register'));
 		add_action('carbon_after_register_fields', array($this, 'init_containers'));
@@ -24,6 +31,9 @@ class Helper {
 		Sidebar_Manager::instance();
 	}
 
+	/**
+	 * Register containers and fields.
+	 */
 	public function trigger_fields_register() {
 		try {
 			do_action('carbon_register_fields');
@@ -37,10 +47,16 @@ class Helper {
 		}
 	}
 
+	/**
+	 * Initialize containers.
+	 */
 	public function init_containers() {
 		Container::init_containers();
 	}
 
+	/**
+	 * Initialize main scripts
+	 */
 	public function init_scripts() {
 		wp_enqueue_script('carbon-app', URL . '/assets/js/app.js', array('jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable'));
 		wp_enqueue_script('carbon-ext', URL . '/assets/js/ext.js', array('carbon-app'));
@@ -61,6 +77,11 @@ class Helper {
 		}
 	}
 
+	/**
+	 * Retrieve containers and sidebars for use in the JS.
+	 * 
+	 * @return array $carbon_data
+	 */
 	public function get_json_data() {
 		global $wp_registered_sidebars;
 
@@ -92,6 +113,14 @@ class Helper {
 		return $carbon_data;
 	}
 
+	/**
+	 * Retrieve post meta field for a post.
+	 * 
+	 * @param  int    $id   Post ID.
+	 * @param  string $name Custom field name.
+	 * @param  string $type Custom field type (optional).
+	 * @return mixed        Meta value.
+	 */
 	public static function get_post_meta($id, $name, $type = null) {
 		$name = $name[0] == '_' ? $name : '_' . $name;
 
@@ -129,10 +158,25 @@ class Helper {
 		return $value;
 	}
 
+	/**
+	 * Shorthand for get_post_meta().
+	 * Uses the ID of the current post in the loop.
+	 *
+	 * @param  string $name Custom field name.
+	 * @param  string $type Custom field type (optional).
+	 * @return mixed        Meta value.
+	 */
 	public static function get_the_post_meta($name, $type = null) {
 		return self::get_post_meta(get_the_ID(), $name, $type);
 	}
 
+	/**
+	 * Retrieve theme option field value.
+	 * 
+	 * @param  string $name Custom field name.
+	 * @param  string $type Custom field type (optional).
+	 * @return mixed        Option value.
+	 */
 	public static function get_theme_option($name, $type = null) {
 		switch ($type) {
 			case 'complex':
@@ -168,6 +212,14 @@ class Helper {
 		return $value;
 	}
 
+	/**
+	 * Retrieve term meta field for a term.
+	 * 
+	 * @param  int    $id   Term ID.
+	 * @param  string $name Custom field name.
+	 * @param  string $type Custom field type (optional).
+	 * @return mixed        Meta value.
+	 */
 	public static function get_term_meta($id, $name, $type = null) {
 		$name = $name[0] == '_' ? $name: '_' . $name;
 
@@ -205,6 +257,14 @@ class Helper {
 		return $value;
 	}
 
+	/**
+	 * Retrieve user meta field for a user.
+	 * 
+	 * @param  int    $id   User ID.
+	 * @param  string $name Custom field name.
+	 * @param  string $type Custom field type (optional).
+	 * @return mixed        Meta value.
+	 */
 	public static function get_user_meta($id, $name, $type = null) {
 		$name = $name[0] == '_' ? $name: '_' . $name;
 
@@ -242,6 +302,14 @@ class Helper {
 		return $value;
 	}
 
+	/**
+	 * Retrieve comment meta field for a comment.
+	 * 
+	 * @param  int    $id   Comment ID.
+	 * @param  string $name Custom field name.
+	 * @param  string $type Custom field type (optional).
+	 * @return mixed        Meta value.
+	 */
 	public static function get_comment_meta($id, $name, $type = null) {
 		$name = $name[0] == '_' ? $name: '_' . $name;
 
@@ -303,12 +371,27 @@ class Helper {
 		}
 	}
 
+	/**
+	 * Build a string of concatenated pieces for an OR regex.
+	 * 
+	 * @param  array  $pieces Pieces
+	 * @param  string $glue   Glue between the pieces
+	 * @return string         Result string
+	 */
 	public static function preg_quote_array( $pieces, $glue = '|' ) {
 		$pieces = array_map('preg_quote', $pieces, array('~'));
 		
 		return implode($glue, $pieces);
 	}
 
+	/**
+	 * Build the regex for parsing a certain complex field.
+	 * 
+	 * @param  string $field_name  Name of the complex field.
+	 * @param  array  $group_names Array of group names.
+	 * @param  array  $field_names Array of subfield names.
+	 * @return string              Regex
+	 */
 	public static function get_complex_field_regex( $field_name, $group_names = array(), $field_names = array() ) {
 		if ( $group_names ) {
 			$group_regex = self::preg_quote_array( $group_names );
@@ -325,6 +408,14 @@ class Helper {
 		return '~^' . preg_quote($field_name, '~') . '(?P<group>' . $group_regex . ')-_?(?P<key>' . $field_regex . ')_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~';
 	}
 
+	/**
+	 * Retrieve the complex field data for a certain field.
+	 * 
+	 * @param  string $type Datastore type.
+	 * @param  string $name Name of the field.
+	 * @param  int    $id   ID of the entry (optional).
+	 * @return array        Complex data entries.
+	 */
 	public static function get_complex_fields($type, $name, $id = null) {
 		$datastore = Datastore::factory($type);
 		
@@ -361,6 +452,14 @@ class Helper {
 		return $input_groups;
 	}
 
+	/**
+	 * Recursively expand the subfields of a complex field.
+	 * 
+	 * @param  array  $input_groups Input groups.
+	 * @param  array  $row          Data row (key and value).
+	 * @param  string $field_name   Name of the field.
+	 * @return array                Expanded data.
+	 */
 	public static function expand_nested_field($input_groups, $row, $field_name) {
 		$subfield_key_token = $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'];
 		if ( !preg_match( self::get_complex_field_regex($field_name['key']), $subfield_key_token, $subfield_name ) ) {
@@ -380,6 +479,13 @@ class Helper {
 		return $input_groups;
 	}
 
+	/**
+	 * Parse the raw value of the relationship and association fields.
+	 * 
+	 * @param  string $raw_value Raw relationship value.
+	 * @param  string $type      Field type.
+	 * @return array             Array of parsed data.
+	 */
 	public static function parse_relationship_field($raw_value = '', $type = '') {
 		if ($raw_value && is_array($raw_value)) {
 			$value = array();
@@ -415,6 +521,13 @@ class Helper {
 		return $raw_value;
 	}
 
+	/**
+	 * Detect if using the old way of storing the relationship field values.
+	 * If so, parse them to the new way of storing the data. 
+	 * 
+	 * @param  mixed $value Old field value.
+	 * @return mixed        New field value.
+	 */
 	public static function maybe_old_relationship_field($value) {
 		if (is_array($value) && !empty($value)) {
 			if (preg_match('~^\w+:\w+:\d+$~', $value[0])) {
@@ -430,6 +543,12 @@ class Helper {
 		return $value;
 	}
 
+	/**
+	 * Recursive sorting function by array key.
+	 * @param  array  &$array     The input array.
+	 * @param  int    $sort_flags Flags for controlling sorting behavior.
+	 * @return array              Sorted array.
+	 */
 	public static function ksort_recursive( &$array, $sort_flags = SORT_REGULAR ) {
 		if (!is_array($array)) {
 			return false;
