@@ -235,9 +235,9 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	/**
 	 * Load complex field value(s) from the database.
 	 *
-	 * @param Field $field The field to load values for.
+	 * @param mixed $field The field to load values for.
 	 */
-	function load_values(Field $field) {
+	function load_values($field) {
 		$field_name = $field->get_name();
 		$result = array();
 
@@ -256,9 +256,9 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	/**
 	 * Delete complex field value(s) from the database.
 	 *
-	 * @param Field $field The field to delete values for.
+	 * @param mixed $field The field to delete values for.
 	 */
-	function delete_values(Field $field) {
+	function delete_values($field) {
 		$field_name = $field->get_name();
 
 		foreach ($this->store_data as $key => $value) {

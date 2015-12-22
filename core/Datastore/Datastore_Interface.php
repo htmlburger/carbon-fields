@@ -32,14 +32,14 @@ interface Datastore_Interface {
 	/**
 	 * Load complex field value(s) from the database.
 	 *
-	 * @param Field $field The field to load values for.
+	 * @param mixed $field The field to load values for.
 	 */
-	function load_values(Field $field);
+	function load_values($field);
 
 	/**
 	 * Delete complex field value(s) from the database.
 	 *
-	 * @param Field $field The field to delete values for.
+	 * @param mixed $field The field to delete values for.
 	 */
-	function delete_values(Field $field);
+	function delete_values($field);
 }

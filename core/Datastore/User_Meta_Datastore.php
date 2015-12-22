@@ -59,9 +59,9 @@ class User_Meta_Datastore extends Datastore {
 	/**
 	 * Load complex field value(s) from the database.
 	 *
-	 * @param Field $field The field to load values for.
+	 * @param mixed $field The field to load values for.
 	 */
-	function load_values(Field $field) {
+	function load_values($field) {
 		global $wpdb;
 
 		if ( is_object($field) && is_subclass_of($field, 'Carbon_Fields\\Field\\Field') ) {
@@ -96,9 +96,9 @@ class User_Meta_Datastore extends Datastore {
 	/**
 	 * Delete complex field value(s) from the database.
 	 *
-	 * @param Field $field The field to delete values for.
+	 * @param mixed $field The field to delete values for.
 	 */
-	function delete_values(Field $field) {
+	function delete_values($field) {
 		global $wpdb;
 
 		$group_names = $field->get_group_names();

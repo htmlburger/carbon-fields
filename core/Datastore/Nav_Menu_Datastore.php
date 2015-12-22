@@ -54,18 +54,18 @@ class Nav_Menu_Datastore extends Post_Meta_Datastore {
 	/**
 	 * Delete complex field value(s) from the database.
 	 *
-	 * @param Field $field The field to delete values for.
+	 * @param mixed $field The field to delete values for.
 	 */
-	function delete_values(Field $field) {
+	function delete_values($field) {
 		// Not needed, the deletion is handled on delete_post automatically
 	}
 
 	/**
 	 * Load complex field value(s) from the database.
 	 *
-	 * @param Field $field The field to load values for.
+	 * @param mixed $field The field to load values for.
 	 */
-	function load_values(Field $field) {
+	function load_values($field) {
 		// Not implemented, Complex functionality would need this in order to work
 	}
 
