@@ -474,8 +474,8 @@ window.carbon = window.carbon || {};
 	 * CUSTOM FIELDS
 	 *------------------------------------------------------------------------*/
 
-	// PostMeta MODEL
-	carbon.containers.Model.PostMeta = carbon.containers.Model.extend({
+	// Post_Meta MODEL
+	carbon.containers.Model.Post_Meta = carbon.containers.Model.extend({
 		defaults: {
 			'page_template': 'default',
 			'level': 1,
@@ -485,8 +485,8 @@ window.carbon = window.carbon || {};
 		}
 	});
 
-	// PostMeta VIEW
-	carbon.containers.View.PostMeta = carbon.containers.View.extend({
+	// Post_Meta VIEW
+	carbon.containers.View.Post_Meta = carbon.containers.View.extend({
 		initialize: function() {
 			carbon.containers.View.prototype.initialize.apply(this);
 
@@ -681,8 +681,8 @@ window.carbon = window.carbon || {};
 	 * THEME OPTIONS
 	 *------------------------------------------------------------------------*/
 
-	// ThemeOptions VIEW
-	carbon.containers.View.ThemeOptions = carbon.containers.View.extend({
+	// Theme_Options VIEW
+	carbon.containers.View.Theme_Options = carbon.containers.View.extend({
 		initialize: function() {
 			carbon.containers.View.prototype.initialize.apply(this);
 
@@ -757,15 +757,15 @@ window.carbon = window.carbon || {};
 	 * TERM META
 	 *------------------------------------------------------------------------*/
 
-	 // TermMeta MODEL
-	carbon.containers.Model.TermMeta = carbon.containers.Model.extend({
+	 // Term_Meta MODEL
+	carbon.containers.Model.Term_Meta = carbon.containers.Model.extend({
 		defaults: {
 			'level': 0,
 		}
 	});
 
-	// TermMeta VIEW
-	carbon.containers.View.TermMeta = carbon.containers.View.extend({
+	// Term_Meta VIEW
+	carbon.containers.View.Term_Meta = carbon.containers.View.extend({
 
 		initialize: function() {
 			carbon.containers.View.prototype.initialize.apply(this);
@@ -847,15 +847,15 @@ window.carbon = window.carbon || {};
 	 * USER META
 	 *------------------------------------------------------------------------*/
 
-	// UserMeta MODEL
-	carbon.containers.Model.UserMeta = carbon.containers.Model.extend({
+	// User_Meta MODEL
+	carbon.containers.Model.User_Meta = carbon.containers.Model.extend({
 		defaults: {
 			'role': null
 		}
 	});
 
-	// UserMeta VIEW
-	carbon.containers.View.UserMeta = carbon.containers.View.extend({
+	// User_Meta VIEW
+	carbon.containers.View.User_Meta = carbon.containers.View.extend({
 		initialize: function() {
 			carbon.containers.View.prototype.initialize.apply(this);
 
