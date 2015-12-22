@@ -48,7 +48,7 @@ abstract class Container {
 	 * @see _attach()
 	 * @var array
 	 */
-	static protected $active_containers = array();
+	static public $active_containers = array();
 
 	/**
 	 * List of fields attached to the current page view
