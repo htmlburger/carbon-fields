@@ -20,7 +20,7 @@ class Gravity_Form_Field extends Select_Field {
 	 * @return bool
 	 */
 	function is_plugin_active() {
-		if ( class_exists('RGFormsModel') && method_exists('RGFormsModel', 'get_forms') ) {
+		if ( class_exists('\RGFormsModel') && method_exists('\RGFormsModel', 'get_forms') ) {
 			return true;
 		}
 
@@ -35,7 +35,7 @@ class Gravity_Form_Field extends Select_Field {
 			return;
 		}
 
-		$forms = RGFormsModel::get_forms(null, 'title');
+		$forms = \RGFormsModel::get_forms(null, 'title');
 
 		if ( !is_array($forms) || empty($forms) ) {
 			return;
