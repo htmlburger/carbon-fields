@@ -1,0 +1,23 @@
+filter:
+  excluded_paths:
+  - assets/*
+  - docs/*
+  - tests/*
+  - tmp/*
+  - vendor/*
+
+checks:
+  php:
+    verify_argument_usable_as_reference: false
+    verify_property_names: false
+    no_global_keyword: false
+    psr2_class_declaration: false
+    avoid_superglobals: false
+    one_class_per_file: false
+    code_rating: true
+    coding_standard:
+        name: WordPress
+
+tools:
+  sensiolabs_security_checker: true
+  external_code_coverage: true
