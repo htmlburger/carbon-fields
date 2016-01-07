@@ -1,13 +1,17 @@
 {
-    "name": "2createstudio/carbon-fields",
+    "name": "htmlburger/carbon-fields",
     "description": "Provides additional custom fields for posts, categories, users, widgets and more",
     "type": "library",
     "license": "GPL-2.0",
     "authors": [
         {
-            "name": "2create Studio",
-            "email": "info@2create.bg"
-        }
+            "name": "htmlBurger",
+            "email": "wordpress@htmlburger.com"
+        },
+        {
+            "name": "Marin Atanasov",
+            "email": "contact@marinatanasov.com"
+        },
     ],
     "require": {},
     "autoload": {

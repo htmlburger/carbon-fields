@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: Carbon Fields
-Description: Provides additional custom fields for posts, categories, users, widgets and more
-Version: 0.4.2
-Requires at least: 3.9
-Tested up to: 4.3.1
+Description: Provides additional custom fields for posts, categories, users, widgets, options and more.
+Version: 1.0
+Requires at least: 4.0
+Tested up to: 4.4
 */
 
 namespace Carbon_Fields;
