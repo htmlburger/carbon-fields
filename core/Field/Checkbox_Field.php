@@ -31,7 +31,7 @@ class Checkbox_Field extends Field {
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
 	 **/
 	function set_value_from_input($input = null) {
-		parent::set_value_from_input();
+		parent::set_value_from_input( $input );
 		if ( $this->get_value() === NULL ) {
 			$this->set_value('');
 		}
