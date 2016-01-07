@@ -154,16 +154,16 @@ class Choose_Sidebar_Field extends Sidebar_Field {
 
 		$query_string = '';
 		switch ($this->context) {
-			case 'PostMeta':
+			case 'Post_Meta':
 				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->postmeta . ' WHERE meta_key = "' .  esc_sql($this->name) . '"';
 				break;
-			case 'TermMeta':
+			case 'Term_Meta':
 				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->termmeta . ' WHERE meta_key = "' .  esc_sql($this->name) . '"';
 				break;
-			case 'ThemeOptions':
+			case 'Theme_Options':
 				$query_string = 'SELECT option_value AS sidebar FROM ' . $wpdb->options . ' WHERE option_name = "' .  esc_sql($this->name) . '"';
 				break;
-			case 'UserMeta':
+			case 'User_Meta':
 				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->usermeta . ' WHERE meta_key = "' .  esc_sql($this->name) . '"';
 				break;
 		}
