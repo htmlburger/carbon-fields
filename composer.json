@@ -1,6 +1,6 @@
 {
     "name": "htmlburger/carbon-fields",
-    "description": "Provides additional custom fields for posts, categories, users, widgets and more",
+    "description": "WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options and more.",
     "type": "library",
     "license": "GPL-2.0",
     "authors": [
