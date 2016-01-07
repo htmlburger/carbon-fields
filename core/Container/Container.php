@@ -132,23 +132,23 @@ abstract class Container {
 	 * @param string $name Human-readable name of the container
 	 * @return object $container
 	 **/
-	static function factory($type, $name) {
+	static function factory( $type, $name ) {
 		// backward compatibility: post_meta container used to be called custom_fields
-		if ($type === 'custom_fields' ) {
+		if ( $type === 'custom_fields' ) {
 			$type = 'post_meta';
 		}
 
-		$type = str_replace(" ", '_', ucwords(str_replace("_", ' ', $type)));
+		$type = str_replace( " ", '_', ucwords( str_replace( "_", ' ', $type ) ) );
 
 		$class = __NAMESPACE__ . '\\' . $type . '_Container';
 
-		if (!class_exists($class)) {
-			throw new Incorrect_Syntax_Exception ('Unknown container "' . $type . '".');
+		if ( ! class_exists( $class ) ) {
+			throw new Incorrect_Syntax_Exception( 'Unknown container "' . $type . '".' );
 		}
 
-		$container = new $class($name);
+		$container = new $class( $name );
 		$container->type = $type;
-		$container->add_template($type, array($container, 'template'));
+		$container->add_template( $type, array( $container, 'template' ) );
 
 		self::$init_containers[] = $container;
 
@@ -160,8 +160,8 @@ abstract class Container {
 	 *
 	 * @see Container::factory()
 	 **/
-	static function make($type, $name) {
-		return self::factory($type, $name);
+	static function make( $type, $name ) {
+		return self::factory( $type, $name );
 	}
 
 	/**
@@ -170,7 +170,7 @@ abstract class Container {
 	 * @return object
 	 **/
 	static function init_containers() {
-		while (($container = array_shift(self::$init_containers))) {
+		while ( ( $container = array_shift( self::$init_containers ) ) ) {
 			$container->init();
 		}
 
@@ -189,10 +189,10 @@ abstract class Container {
 	/**
 	 * Adds a container to the active containers array and triggers an action
 	 **/
-	static function add_active_container($container) {
+	static function add_active_container( $container ) {
 		self::$active_containers[] = $container;
 
-		do_action('crb_container_activated', $container);
+		do_action( 'crb_container_activated', $container );
 	}
 
 	/**
@@ -207,18 +207,18 @@ abstract class Container {
 	/**
 	 * Adds a field to the active fields array and triggers an action
 	 **/
-	static function add_active_field($field) {
+	static function add_active_field( $field ) {
 		self::$active_fields[] = $field;
 
-		if (method_exists($field, 'get_fields')) {
+		if ( method_exists( $field, 'get_fields' ) ) {
 			$fields = $field->get_fields();
 
-			foreach ($fields as $inner_field) {
-				self::add_active_field($inner_field);
+			foreach ( $fields as $inner_field ) {
+				self::add_active_field( $inner_field );
 			}
 		}
 
-		do_action('crb_field_activated', $field);
+		do_action( 'crb_field_activated', $field );
 	}
 
 	/**
@@ -262,14 +262,14 @@ abstract class Container {
 	 *
 	 * @param string $title Unique title of the container
 	 **/
-	function __construct($title) {
+	function __construct( $title ) {
 		$this->title = $title;
-		$this->id = preg_replace('~\W~u', '', remove_accents($title));
+		$this->id = preg_replace( '~\W~u', '', remove_accents( $title ) );
 
-		$this->verify_unique_panel_id($this->id);
+		$this->verify_unique_panel_id( $this->id );
 
-		add_action('admin_print_scripts', array($this, 'admin_hook_scripts'));
-		add_action('admin_print_styles', array($this, 'admin_hook_styles'));
+		add_action( 'admin_print_scripts', array( $this, 'admin_hook_scripts' ) );
+		add_action( 'admin_print_styles', array( $this, 'admin_hook_styles' ) );
 	}
 
 	/**
@@ -278,18 +278,18 @@ abstract class Container {
 	 * @see init()
 	 * @param array $settings
 	 **/
-	function setup($settings = array()) {
+	function setup( $settings = array() ) {
 		if ( $this->setup_ready ) {
-			throw new Incorrect_Syntax_Exception ('Panel "' . $this->title . '" already setup');
+			throw new Incorrect_Syntax_Exception( 'Panel "' . $this->title . '" already setup' );
 		}
 
-		$this->check_setup_settings($settings);
+		$this->check_setup_settings( $settings );
 
-		$this->settings = array_merge($this->settings, $settings);
+		$this->settings = array_merge( $this->settings, $settings );
 
-		foreach ($this->settings as $key => $value) {
-			if ( is_null($value) ) {
-				unset($this->settings[$key]);
+		foreach ( $this->settings as $key => $value ) {
+			if ( is_null( $value ) ) {
+				unset( $this->settings[ $key ] );
 			}
 		}
 
@@ -303,10 +303,10 @@ abstract class Container {
 	 *
 	 * @param array $settings Container settings
 	 **/
-	function check_setup_settings(&$settings = array()) {
-		$invalid_settings = array_diff_key($settings, $this->settings);
-		if ( !empty($invalid_settings) ) {
-			throw new Incorrect_Syntax_Exception ('Invalid settings supplied to setup(): "' . implode('", "', array_keys($invalid_settings)) . '"');
+	function check_setup_settings( &$settings = array() ) {
+		$invalid_settings = array_diff_key( $settings, $this->settings );
+		if ( ! empty( $invalid_settings ) ) {
+			throw new Incorrect_Syntax_Exception( 'Invalid settings supplied to setup(): "' . implode( '", "', array_keys( $invalid_settings ) ) . '"' );
 		}
 	}
 
@@ -320,8 +320,8 @@ abstract class Container {
 	 **/
 	function _save() {
 		$param = func_get_args();
-		if ( call_user_func_array(array($this, 'is_valid_save'), $param) ) {
-			call_user_func_array(array($this, 'save'), $param);
+		if ( call_user_func_array( array( $this, 'is_valid_save' ), $param ) ) {
+			call_user_func_array( array( $this, 'save' ), $param );
 		}
 	}
 
@@ -330,8 +330,8 @@ abstract class Container {
 	 *
 	 * @see is_valid_save()
 	 **/
-	function save($user_data) {
-		foreach ($this->fields as $field) {
+	function save( $user_data ) {
+		foreach ( $this->fields as $field ) {
 			$field->set_value_from_input();
 			$field->save();
 		}
@@ -351,7 +351,7 @@ abstract class Container {
 	 * Could be used internally during container rendering
 	 **/
 	function load() {
-		foreach ($this->fields as $field) {
+		foreach ( $this->fields as $field ) {
 			$field->load();
 		}
 	}
@@ -367,15 +367,15 @@ abstract class Container {
 	 **/
 	function _attach() {
 		$param = func_get_args();
-		if (call_user_func_array(array($this, 'is_valid_attach'), $param)) {
-			call_user_func_array(array($this, 'attach'), $param);
+		if ( call_user_func_array( array( $this, 'is_valid_attach' ), $param ) ) {
+			call_user_func_array( array( $this, 'attach' ), $param );
 
-			if (call_user_func_array(array($this, 'is_active'), $param)) {
-				self::add_active_container($this);
+			if ( call_user_func_array( array( $this, 'is_active' ), $param ) ) {
+				self::add_active_container( $this );
 
 				$fields = $this->get_fields(); 
-				foreach ($fields as $field) {
-					self::add_active_field($field);
+				foreach ( $fields as $field ) {
+					self::add_active_field( $field );
 				}
 			}
 		}
@@ -393,8 +393,8 @@ abstract class Container {
 	/**
 	 * Adds a new backbone template
 	 **/
-	function add_template($name, $callback) {
-		$this->templates[$name] = $callback;
+	function add_template( $name, $callback ) {
+		$this->templates[ $name ] = $callback;
 	}
 
 	/**
@@ -425,11 +425,11 @@ abstract class Container {
 	 * Revert the result of attach()
 	 **/
 	function detach() {
-		$this->drop_unique_panel_id($this->id);
+		$this->drop_unique_panel_id( $this->id );
 
 		// unregister field names
-		foreach ($this->fields as $field) {
-			$this->drop_unique_field_name($field->get_name());
+		foreach ( $this->fields as $field ) {
+			$this->drop_unique_field_name( $field->get_name() );
 		}
 	}
 
@@ -442,21 +442,21 @@ abstract class Container {
 	 *
 	 * @param array $fields
 	 **/
-	function add_fields($fields) {
-		foreach ($fields as $field) {
-			if ( !is_a($field, 'Carbon_Fields\\Field\\Field') ) {
-				throw new Incorrect_Syntax_Exception('Object must be of type Carbon_Fields\\Field\\Field');
+	function add_fields( $fields ) {
+		foreach ( $fields as $field ) {
+			if ( ! is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
+				throw new Incorrect_Syntax_Exception( 'Object must be of type Carbon_Fields\\Field\\Field' );
 			}
 
-			$this->verify_unique_field_name($field->get_name());
+			$this->verify_unique_field_name( $field->get_name() );
 
-			$field->set_context($this->type);
-			if ( !$field->get_datastore() ) {
-				$field->set_datastore($this->store);
+			$field->set_context( $this->type );
+			if ( ! $field->get_datastore() ) {
+				$field->set_datastore( $this->store );
 			}
 		}
 
-		$this->fields = array_merge($this->fields, $fields);
+		$this->fields = array_merge( $this->fields, $fields );
 
 		return $this;
 	}
@@ -464,11 +464,11 @@ abstract class Container {
 	/**
 	 * Configuration function for adding tab with fields
 	 */
-	function add_tab($tab_name, $fields) {
-		$this->add_template('tabs', array($this, 'template_tabs'));
+	function add_tab( $tab_name, $fields ) {
+		$this->add_template( 'tabs', array( $this, 'template_tabs' ) );
 		
-		$this->add_fields($fields);
-		$this->create_tab($tab_name, $fields);
+		$this->add_fields( $fields );
+		$this->create_tab( $tab_name, $fields );
 
 		return $this;
 	}
@@ -476,23 +476,23 @@ abstract class Container {
 	/**
 	 * Internal function that creates the tab and associates it with particular field set
 	 */
-	private function create_tab($tab_name, $fields, $queue_end=self::TABS_TAIL) {
-		if (isset($this->tabs[$tab_name])) {
-			throw new Incorrect_Syntax_Exception("Tab name duplication for $tab_name");
+	private function create_tab( $tab_name, $fields, $queue_end=self::TABS_TAIL ) {
+		if ( isset( $this->tabs[ $tab_name ] ) ) {
+			throw new Incorrect_Syntax_Exception( "Tab name duplication for $tab_name" );
 		}
 
-		if ($queue_end === self::TABS_TAIL) {
-			$this->tabs[$tab_name] = array();
-		} else if ($queue_end === self::TABS_HEAD) {
+		if ( $queue_end === self::TABS_TAIL ) {
+			$this->tabs[ $tab_name ] = array();
+		} else if ( $queue_end === self::TABS_HEAD ) {
 			$this->tabs = array_merge(
-				array($tab_name => array()),
+				array( $tab_name => array() ),
 				$this->tabs
 			);
 		}
 
-		foreach ($fields as $field) {
+		foreach ( $fields as $field ) {
 			$field_name = $field->get_name();
-			$this->tabs[$tab_name][$field_name] = $field;
+			$this->tabs[ $tab_name ][ $field_name ] = $field;
 		}
 
 		$this->settings['tabs'] = $this->get_tabs_json();
@@ -510,20 +510,20 @@ abstract class Container {
 	 */
 	function get_untabbed_fields() {
 		$tabbed_fields_names = array();
-		foreach ($this->tabs as $tab_fields) {
-			$tabbed_fields_names = array_merge($tabbed_fields_names, array_keys($tab_fields));
+		foreach ( $this->tabs as $tab_fields ) {
+			$tabbed_fields_names = array_merge( $tabbed_fields_names, array_keys( $tab_fields ) );
 		}
 
 		$all_fields_names = array();
-		foreach ($this->fields as $field) {
+		foreach ( $this->fields as $field ) {
 			$all_fields_names[] = $field->get_name();
 		}
 
-		$fields_not_in_tabs = array_diff($all_fields_names, $tabbed_fields_names);
+		$fields_not_in_tabs = array_diff( $all_fields_names, $tabbed_fields_names );
 
 		$untabbed_fields = array();
-		foreach ($this->fields as $field) {
-			if (in_array($field->get_name(), $fields_not_in_tabs)) {
+		foreach ( $this->fields as $field ) {
+			if ( in_array( $field->get_name(), $fields_not_in_tabs ) ) {
 				$untabbed_fields[] = $field;
 			}
 		}
@@ -538,8 +538,8 @@ abstract class Container {
 	function get_tabs() {
 		$untabbed_fields = $this->get_untabbed_fields();
 
-		if (!empty($untabbed_fields)) {
-			$this->create_tab(__('General'), $untabbed_fields, self::TABS_HEAD);
+		if ( ! empty( $untabbed_fields ) ) {
+			$this->create_tab( __( 'General' ), $untabbed_fields, self::TABS_HEAD );
 		}
 
 		return $this->tabs;
@@ -552,9 +552,9 @@ abstract class Container {
 		$tabs_json = array();	
 		$tabs = $this->get_tabs();
 
-		foreach ($tabs as $tab_name => $fields) {
-			foreach ($fields as $field_name => $field) {
-				$tabs_json[$tab_name][] = $field_name;
+		foreach ( $tabs as $tab_name => $fields ) {
+			foreach ( $fields as $field_name => $field ) {
+				$tabs_json[ $tab_name ][] = $field_name;
 			}
 		}
 
@@ -583,9 +583,9 @@ abstract class Container {
 	/**
 	 * Perform checks whether there is a container registered with identificator $id
 	 */
-	function verify_unique_panel_id($id) {
-		if ( in_array($id, self::$registered_panel_ids) ) {
-			throw new Incorrect_Syntax_Exception ('Panel ID "' . $id .'" already registered');
+	function verify_unique_panel_id( $id ) {
+		if ( in_array( $id, self::$registered_panel_ids ) ) {
+			throw new Incorrect_Syntax_Exception( 'Panel ID "' . $id .'" already registered' );
 		}
 
 		self::$registered_panel_ids[] = $id;
@@ -597,9 +597,9 @@ abstract class Container {
 	 *
 	 * @param string $id
 	 **/
-	function drop_unique_panel_id($id) {
-		if ( in_array($id, self::$registered_panel_ids) ) {
-			unset(self::$registered_panel_ids[ array_search($id, self::$registered_panel_ids) ]);
+	function drop_unique_panel_id( $id ) {
+		if ( in_array( $id, self::$registered_panel_ids ) ) {
+			unset( self::$registered_panel_ids[ array_search( $id, self::$registered_panel_ids ) ] );
 		}
 	}
 
@@ -609,9 +609,9 @@ abstract class Container {
 	 *
 	 * @param string $name
 	 **/
-	function verify_unique_field_name($name) {
-		if ( in_array($name, self::$registered_field_names) ) {
-			throw new Incorrect_Syntax_Exception ('Field name "' . $name . '" already registered');
+	function verify_unique_field_name( $name ) {
+		if ( in_array( $name, self::$registered_field_names ) ) {
+			throw new Incorrect_Syntax_Exception( 'Field name "' . $name . '" already registered' );
 		}
 
 		self::$registered_field_names[] = $name;
@@ -622,10 +622,10 @@ abstract class Container {
 	 *
 	 * @param string $name
 	 **/
-	function drop_unique_field_name($name) {
-		$index = array_search($name, self::$registered_field_names);
+	function drop_unique_field_name( $name ) {
+		$index = array_search( $name, self::$registered_field_names );
 		if ( $index !== false ) {
-			unset(self::$registered_field_names[$index]);
+			unset( self::$registered_field_names[ $index ] );
 		}
 	}
 
@@ -634,11 +634,11 @@ abstract class Container {
 	 *
 	 * @param object $store
 	 **/
-	function set_datastore(Datastore_Interface $store) {
+	function set_datastore( Datastore_Interface $store ) {
 		$this->store = $store;
 
-		foreach ($this->fields as $field) {
-			$field->set_datastore($this->store);
+		foreach ( $this->fields as $field ) {
+			$field->set_datastore( $this->store );
 		}
 	}
 
@@ -666,7 +666,7 @@ abstract class Container {
 	 * @return string
 	 **/
 	function get_nonce_field() {
-		return wp_nonce_field($this->get_nonce_name(), $this->get_nonce_name(), /*referer?*/ false, /*echo?*/ false);
+		return wp_nonce_field( $this->get_nonce_name(), $this->get_nonce_name(), /*referer?*/ false, /*echo?*/ false );
 	}
 
 	/**
@@ -676,7 +676,7 @@ abstract class Container {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	public function to_json($load) {
+	public function to_json( $load ) {
 		$container_data = array(
 			'id' => $this->id,
 			'type' => $this->type,
@@ -686,8 +686,8 @@ abstract class Container {
 		);
 
 		$fields = $this->get_fields();
-		foreach ($fields as $field) {
-			$field_data = $field->to_json($load);
+		foreach ( $fields as $field ) {
+			$field_data = $field->to_json( $load );
 			$container_data['fields'][] = $field_data;
 		}
 
@@ -721,12 +721,12 @@ abstract class Container {
 	 * Enqueue admin scripts
 	 */
 	function admin_hook_scripts() {
-		wp_enqueue_script('carbon-containers', URL . '/assets/js/containers.js', array('carbon-app'));
+		wp_enqueue_script( 'carbon-containers', URL . '/assets/js/containers.js', array( 'carbon-app' ) );
 
-		wp_localize_script('carbon-containers', 'carbon_containers_l10n',
+		wp_localize_script( 'carbon-containers', 'carbon_containers_l10n',
 			array(
-				'please_fill_the_required_fields' => __('Please fill out all required fields highlighted below.', 'crb'),
-				'changes_made_save_alert' => __('The changes you made will be lost if you navigate away from this page.', 'crb'),
+				'please_fill_the_required_fields' => __( 'Please fill out all required fields highlighted below.', 'crb' ),
+				'changes_made_save_alert' => __( 'The changes you made will be lost if you navigate away from this page.', 'crb' ),
 			)
 		);
 	}
@@ -735,7 +735,7 @@ abstract class Container {
 	 * Enqueue admin styles
 	 */
 	function admin_hook_styles() {
-		wp_enqueue_style('carbon-main', URL . '/assets/css/main.css');
+		wp_enqueue_style( 'carbon-main', URL . '/assets/css/main.css' );
 	}
 
 } // END Container 

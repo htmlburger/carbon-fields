@@ -34,9 +34,9 @@ class Post_Meta_Container extends Container {
 	 * @var array
 	 */
 	public $settings = array(
-		'post_type' => array('post'),
-		'panel_context'=>'normal',
-		'panel_priority'=>'high',
+		'post_type' => array( 'post' ),
+		'panel_context' => 'normal',
+		'panel_priority' => 'high',
 		'show_on' => array(
 			'category' => null,
 			'template_names' => array(),
@@ -55,11 +55,11 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param string $title Unique title of the container
 	 **/
-	function __construct($title) {
-		parent::__construct($title);
+	function __construct( $title ) {
+		parent::__construct( $title );
 
-		if ( !$this->get_datastore() ) {
-			$this->set_datastore(new Post_Meta_Datastore());
+		if ( ! $this->get_datastore() ) {
+			$this->set_datastore( new Post_Meta_Datastore() );
 		}
 	}
 
@@ -68,20 +68,20 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param array $settings Container settings
 	 **/
-	function check_setup_settings(&$settings = array()) {
-		if ( isset($settings['show_on']) ) {
-			$invalid_settings = array_diff_key($settings['show_on'], $this->settings['show_on']);
-			if ( !empty($invalid_settings) ) {
-				throw new Incorrect_Syntax_Exception ('Invalid show_on settings supplied to setup(): "' . implode('", "', array_keys($invalid_settings)) . '"');
+	function check_setup_settings( &$settings = array() ) {
+		if ( isset( $settings['show_on'] ) ) {
+			$invalid_settings = array_diff_key( $settings['show_on'], $this->settings['show_on'] );
+			if ( ! empty( $invalid_settings ) ) {
+				throw new Incorrect_Syntax_Exception( 'Invalid show_on settings supplied to setup(): "' . implode( '", "', array_keys( $invalid_settings ) ) . '"' );
 			}
 		}
 
-		if ( isset($settings['show_on']['post_formats']) ) {
+		if ( isset( $settings['show_on']['post_formats'] ) ) {
 			$settings['show_on']['post_formats'] = (array) $settings['show_on']['post_formats'];
 		}
 
-		if ( isset($settings['show_on']['post_path']) ) {
-			$page = get_page_by_path($settings['show_on']['post_path']);
+		if ( isset( $settings['show_on']['post_path'] ) ) {
+			$page = get_page_by_path( $settings['show_on']['post_path'] );
 
 			if ( $page ) {
 				$settings['show_on']['page_id'] = $page->ID;
@@ -91,8 +91,8 @@ class Post_Meta_Container extends Container {
 		}
 
 		// Transform category slug to taxonomy + term slug + term id
-		if ( isset($settings['show_on']['category']) ) {
-			$term = get_term_by('slug', $settings['show_on']['category'], 'category');
+		if ( isset( $settings['show_on']['category'] ) ) {
+			$term = get_term_by( 'slug', $settings['show_on']['category'], 'category' );
 
 			if ( $term ) {
 				$settings['show_on']['tax_slug'] = $term->taxonomy;
@@ -101,7 +101,7 @@ class Post_Meta_Container extends Container {
 			}
 		}
 
-		return parent::check_setup_settings($settings);
+		return parent::check_setup_settings( $settings );
 	}
 
 	/**
@@ -109,17 +109,17 @@ class Post_Meta_Container extends Container {
 	 * Bind attach() and save() to the appropriate WordPress actions.
 	 **/
 	function init() {
-		if ( isset($_GET['post']) ) {
-			$this->set_post_id($_GET['post']);
+		if ( isset( $_GET['post'] ) ) {
+			$this->set_post_id( $_GET['post'] );
 		}
 
 		// force post_type to be array
-		if ( !is_array($this->settings['post_type']) ) {
-			$this->settings['post_type'] = array($this->settings['post_type']);
+		if ( ! is_array( $this->settings['post_type'] ) ) {
+			$this->settings['post_type'] = array( $this->settings['post_type'] );
 		}
 
-		add_action('admin_init', array($this, '_attach'));
-		add_action('save_post', array($this, '_save'));
+		add_action( 'admin_init', array( $this, '_attach' ) );
+		add_action( 'save_post', array( $this, '_save' ) );
 	}
 
 	/**
@@ -128,19 +128,19 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param int $post_id ID of the post against which save() is ran
 	 **/
-	function save($post_id) {
+	function save( $post_id ) {
 		// Unhook action to garantee single save
-		remove_action('save_post', array($this, '_save'));
+		remove_action( 'save_post', array( $this, '_save' ) );
 
-		$this->set_post_id($post_id);
+		$this->set_post_id( $post_id );
 
-		foreach ($this->fields as $field) {
+		foreach ( $this->fields as $field ) {
 			$field->set_value_from_input();
 			$field->save();
 		}
 
-		do_action('carbon_after_save_custom_fields', $post_id);
-		do_action('carbon_after_save_post_meta', $post_id);
+		do_action( 'carbon_after_save_custom_fields', $post_id );
+		do_action( 'carbon_after_save_post_meta', $post_id );
 	}
 
 	/**
@@ -152,16 +152,16 @@ class Post_Meta_Container extends Container {
 	 * @param int $post_id ID of the post against which save() is ran
 	 * @return bool
 	 **/
-	function is_valid_save($post_id = 0) {
-		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
+	function is_valid_save( $post_id = 0 ) {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return false;
-		} else if ( !wp_verify_nonce( crb_request_param($this->get_nonce_name()), $this->get_nonce_name() ) ) {
+		} else if ( ! wp_verify_nonce( crb_request_param( $this->get_nonce_name() ), $this->get_nonce_name() ) ) {
 			return false;
-		} else if ($post_id < 1) {
+		} else if ( $post_id < 1 ) {
 			return false;
 		}
 
-		return $this->is_valid_save_conditions($post_id);
+		return $this->is_valid_save_conditions( $post_id );
 	}
 
 	/**
@@ -172,30 +172,30 @@ class Post_Meta_Container extends Container {
 	 * @param int $post_id ID of the post against which save() is ran
 	 * @return bool
 	 **/
-	function is_valid_save_conditions($post_id) {
+	function is_valid_save_conditions( $post_id ) {
 		$valid = true;
-		$post = get_post($post_id);
+		$post = get_post( $post_id );
 
 		// Check post type
-		if ( !in_array($post->post_type, $this->settings['post_type']) ) {
+		if ( ! in_array( $post->post_type, $this->settings['post_type'] ) ) {
 			return false;
 		}
 
 		// Check show on conditions
-		foreach ($this->settings['show_on'] as $condition => $value) {
-			if ( is_null($value) ) {
+		foreach ( $this->settings['show_on'] as $condition => $value ) {
+			if ( is_null( $value ) ) {
 				continue;
 			}
 
-			switch ($condition) {
+			switch ( $condition ) {
 				// show_on_post_format
 				case 'post_formats':
-					if ( empty($value) || $post->post_type != 'post' ) {
+					if ( empty( $value ) || $post->post_type != 'post' ) {
 						break;
 					}
 
-					$current_format = get_post_format($post_id);
-					if ( !in_array($current_format, $value) ) {
+					$current_format = get_post_format( $post_id );
+					if ( ! in_array( $current_format, $value ) ) {
 						$valid = false;
 						break 2;
 					}
@@ -204,13 +204,13 @@ class Post_Meta_Container extends Container {
 
 				// show_on_taxonomy_term or show_on_category
 				case 'category':
-					$this->show_on_category($value);
+					$this->show_on_category( $value );
 
 					/* fall-through intended */
 				case 'tax_term_id':
-					$current_terms = wp_get_object_terms( $post_id, $this->settings['show_on']['tax_slug'], array('fields' => 'ids') );
+					$current_terms = wp_get_object_terms( $post_id, $this->settings['show_on']['tax_slug'], array( 'fields' => 'ids' ) );
 
-					if ( !is_array($current_terms) || !in_array($this->settings['show_on']['tax_term_id'], $current_terms) ) {
+					if ( ! is_array( $current_terms ) || ! in_array( $this->settings['show_on']['tax_term_id'], $current_terms ) ) {
 						$valid = false;
 						break 2;
 					}
@@ -219,7 +219,7 @@ class Post_Meta_Container extends Container {
 
 				// show_on_level
 				case 'level_limit':
-					$post_level = count(get_post_ancestors($post_id)) + 1;
+					$post_level = count( get_post_ancestors( $post_id ) ) + 1;
 
 					if ( $post_level != $value ) {
 						$valid = false;
@@ -248,12 +248,12 @@ class Post_Meta_Container extends Container {
 
 				// show_on_template
 				case 'template_names':
-					if ( empty($value) || $post->post_type != 'page' ) {
+					if ( empty( $value ) || $post->post_type != 'page' ) {
 						break;
 					}
-					$current_template = get_post_meta($post_id, '_wp_page_template', 1);
+					$current_template = get_post_meta( $post_id, '_wp_page_template', 1 );
 
-					if ( !in_array($current_template, $value) ) {
+					if ( ! in_array( $current_template, $value ) ) {
 						$valid = false;
 						break 2;
 					}
@@ -262,12 +262,12 @@ class Post_Meta_Container extends Container {
 
 				// hide_on_template
 				case 'not_in_template_names':
-					if ( empty($value) || $post->post_type != 'page' ) {
+					if ( empty( $value ) || $post->post_type != 'page' ) {
 						break;
 					}
-					$current_template = get_post_meta($post_id, '_wp_page_template', 1);
+					$current_template = get_post_meta( $post_id, '_wp_page_template', 1 );
 
-					if ( in_array($current_template, $value) ) {
+					if ( in_array( $current_template, $value ) ) {
 						$valid = false;
 						break 2;
 					}
@@ -283,26 +283,26 @@ class Post_Meta_Container extends Container {
 	 * Add meta box for each of the container post types
 	 **/
 	function attach() {
-		foreach ($this->settings['post_type'] as $post_type) {
+		foreach ( $this->settings['post_type'] as $post_type ) {
 			add_meta_box(
 				$this->id, 
 				$this->title, 
-				array($this, 'render'), 
+				array( $this, 'render' ), 
 				$post_type, 
 				$this->settings['panel_context'],
 				$this->settings['panel_priority']
 			);
 		}
 
-		foreach ($this->settings['post_type'] as $post_type) {
-			add_filter("postbox_classes_{$post_type}_{$this->id}", array($this, 'postbox_classes'));
+		foreach ( $this->settings['post_type'] as $post_type ) {
+			add_filter( "postbox_classes_{$post_type}_{$this->id}", array( $this, 'postbox_classes' ) );
 		}
 	}
 
 	/**
 	 * Classes to add to the post meta box
 	 */
-	function postbox_classes($classes) {
+	function postbox_classes( $classes ) {
 		$classes[] = 'carbon-box';
 		return $classes;
 	}
@@ -315,34 +315,34 @@ class Post_Meta_Container extends Container {
 	function is_valid_attach() {
 		global $pagenow;
 
-		if ($pagenow !== 'post.php' && $pagenow !== 'post-new.php') {
+		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
 			return false;
 		}
 
 		// Post types check
-		if (!empty($this->settings['post_type'])) {
+		if ( ! empty( $this->settings['post_type'] ) ) {
 			$post_type = '';
 
-			if ($this->post_id) {
-				$post_type = get_post_type($this->post_id);
-			} elseif (!empty($_GET['post_type'])) {
+			if ( $this->post_id ) {
+				$post_type = get_post_type( $this->post_id );
+			} elseif ( ! empty($_GET['post_type'] ) ) {
 				$post_type = $_GET['post_type'];
-			} elseif ($pagenow === 'post-new.php') {
+			} elseif ( $pagenow === 'post-new.php' ) {
 				$post_type = 'post';
 			}
 
-			if (!$post_type || !in_array($post_type, $this->settings['post_type'])) {
+			if ( ! $post_type || ! in_array( $post_type, $this->settings['post_type'] ) ) {
 				return false;
 			}
 		}
 
 		// Check show on conditions
-		foreach ($this->settings['show_on'] as $condition => $value) {
-			if ( is_null($value) ) {
+		foreach ( $this->settings['show_on'] as $condition => $value ) {
+			if ( is_null( $value ) ) {
 				continue;
 			}
 
-			switch ($condition) {
+			switch ( $condition ) {
 				case 'page_id':
 					if ( $value < 1 || $this->post_id != $value ) {
 						return false;
@@ -366,12 +366,12 @@ class Post_Meta_Container extends Container {
 	function detach() {
 		parent::detach();
 
-		remove_action('admin_init', array($this, '_attach'));
-		remove_action('save_post', array($this, '_save'));
+		remove_action( 'admin_init', array( $this, '_attach' ) );
+		remove_action( 'save_post', array( $this, '_save' ) );
 
 		// unregister field names
-		foreach ($this->fields as $field) {
-			$this->drop_unique_field_name($field->get_name());
+		foreach ( $this->fields as $field ) {
+			$this->drop_unique_field_name( $field->get_name() );
 		}
 	}
 
@@ -387,9 +387,9 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param int $post_id
 	 **/
-	function set_post_id($post_id) {
+	function set_post_id( $post_id ) {
 		$this->post_id = $post_id;
-		$this->store->set_id($post_id);
+		$this->store->set_id( $post_id );
 	}
 
 	/**
@@ -398,21 +398,21 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param string $name
 	 **/
-	function verify_unique_field_name($name) {
-		if ( empty($this->settings['post_type']) ) {
-			throw new Incorrect_Syntax_Exception ('Panel instance is not setup correctly (missing post type)');
+	function verify_unique_field_name( $name ) {
+		if ( empty( $this->settings['post_type'] ) ) {
+			throw new Incorrect_Syntax_Exception( 'Panel instance is not setup correctly (missing post type)' );
 		}
 
-		foreach ($this->settings['post_type'] as $post_type) {
-			if ( !isset(self::$registered_field_names[$post_type]) ) {
-				self::$registered_field_names[$post_type] = array();
+		foreach ( $this->settings['post_type'] as $post_type ) {
+			if ( ! isset( self::$registered_field_names[ $post_type ] ) ) {
+				self::$registered_field_names[ $post_type ] = array();
 			}
 
-			if ( in_array($name, self::$registered_field_names[$post_type]) ) {
-				throw new Incorrect_Syntax_Exception ('Field name "' . $name . '" already registered');
+			if ( in_array( $name, self::$registered_field_names[ $post_type ] ) ) {
+				throw new Incorrect_Syntax_Exception( 'Field name "' . $name . '" already registered' );
 			}
 
-			self::$registered_field_names[$post_type][] = $name;
+			self::$registered_field_names[ $post_type ][] = $name;
 		}
 	}
 
@@ -421,11 +421,11 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param string $name
 	 **/
-	function drop_unique_field_name($name) {
-		foreach ($this->settings['post_type'] as $post_type) {
-			$index = array_search($name, self::$registered_field_names[$post_type]);
+	function drop_unique_field_name( $name ) {
+		foreach ( $this->settings['post_type'] as $post_type ) {
+			$index = array_search( $name, self::$registered_field_names[ $post_type ] );
 			if ( $index !== false ) {
-				unset(self::$registered_field_names[$post_type][$index]);
+				unset( self::$registered_field_names[ $post_type ][ $index ] );
 			}
 		}
 	}
@@ -436,8 +436,8 @@ class Post_Meta_Container extends Container {
 	 * @param string $page_path
 	 * @return object $this
 	 **/
-	function show_on_page_children($parent_page_path) {
-		$page = get_page_by_path($parent_page_path);
+	function show_on_page_children( $parent_page_path ) {
+		$page = get_page_by_path( $parent_page_path );
 
 		if ( $page ) {
 			$this->settings['show_on']['parent_page_id'] = $page->ID;
@@ -454,11 +454,11 @@ class Post_Meta_Container extends Container {
 	 * @param int|string $page page ID or page path
 	 * @return object $this
 	 **/
-	function show_on_page($page) {
-		if ( is_int($page) ) {
-			$page_obj = get_post($page);
+	function show_on_page( $page ) {
+		if ( is_int( $page ) ) {
+			$page_obj = get_post( $page );
 		} else {
-			$page_obj = get_page_by_path($page);
+			$page_obj = get_page_by_path( $page );
 		}
 
 		if ( $page_obj ) {
@@ -478,10 +478,10 @@ class Post_Meta_Container extends Container {
 	 * @param string $category_slug
 	 * @return object $this
 	 **/
-	function show_on_category($category_slug) {
+	function show_on_category( $category_slug ) {
 		$this->settings['show_on']['category'] = $category_slug;
 
-		return $this->show_on_taxonomy_term($category_slug, 'category');
+		return $this->show_on_taxonomy_term( $category_slug, 'category' );
 	}
 	
 	/**
@@ -490,10 +490,10 @@ class Post_Meta_Container extends Container {
 	 * @param string|array $template_path
 	 * @return object $this
 	 **/
-	function show_on_template($template_path) {
-		if ( is_array($template_path) ) {
-			foreach ($template_path as $path) {
-				$this->show_on_template($path);
+	function show_on_template( $template_path ) {
+		if ( is_array( $template_path ) ) {
+			foreach ( $template_path as $path ) {
+				$this->show_on_template( $path );
 			}
 			return $this;
 		}
@@ -509,10 +509,10 @@ class Post_Meta_Container extends Container {
 	 * @param string|array $template_path
 	 * @return object $this
 	 **/
-	function hide_on_template($template_path) {
-		if ( is_array($template_path) ) {
-			foreach ($template_path as $path) {
-				$this->hide_on_template($path);
+	function hide_on_template( $template_path ) {
+		if ( is_array( $template_path ) ) {
+			foreach ( $template_path as $path ) {
+				$this->hide_on_template( $path );
 			}
 			return $this;
 		}
@@ -529,9 +529,9 @@ class Post_Meta_Container extends Container {
 	 * @param int $level
 	 * @return object $this
 	 **/
-	function show_on_level($level) {
-		if ($level < 0 ) {
-			throw new Incorrect_Syntax_Exception('Invalid level limitation (' . $level . ')');
+	function show_on_level( $level ) {
+		if ( $level < 0 ) {
+			throw new Incorrect_Syntax_Exception( 'Invalid level limitation (' . $level . ')' );
 		}
 
 		$this->settings['show_on']['level_limit'] = $level;
@@ -546,8 +546,8 @@ class Post_Meta_Container extends Container {
 	 * @param string $term_slug
 	 * @return object $this
 	 **/
-	function show_on_taxonomy_term($term_slug, $taxonomy_slug) {
-		$term = get_term_by('slug', $term_slug, $taxonomy_slug);
+	function show_on_taxonomy_term( $term_slug, $taxonomy_slug ) {
+		$term = get_term_by( 'slug', $term_slug, $taxonomy_slug );
 
 		$this->settings['show_on']['tax_slug'] = $taxonomy_slug;
 		$this->settings['show_on']['tax_term'] = $term_slug;
@@ -563,19 +563,19 @@ class Post_Meta_Container extends Container {
 	 * @param string|array $post_format Name of the format as listed on Codex
 	 * @return object $this
 	 **/
-	function show_on_post_format($post_format) {
-		if ( is_array($post_format) ) {
-			foreach ($post_format as $format) {
-				$this->show_on_post_format($format);
+	function show_on_post_format( $post_format ) {
+		if ( is_array( $post_format ) ) {
+			foreach ( $post_format as $format ) {
+				$this->show_on_post_format( $format );
 			}
 			return $this;
 		}
 
-		if ($post_format === 'standard') {
+		if ( $post_format === 'standard' ) {
 			$post_format = 0;
 		}
 
-		$this->settings['show_on']['post_formats'][] = strtolower($post_format);
+		$this->settings['show_on']['post_formats'][] = strtolower( $post_format );
 
 		return $this;
 	}
@@ -586,8 +586,8 @@ class Post_Meta_Container extends Container {
 	 * @param string|array $post_type
 	 * @return object $this
 	 **/
-	function show_on_post_type($post_types) {
-		$post_types = (array)$post_types;
+	function show_on_post_type( $post_types ) {
+		$post_types = (array) $post_types;
 
 		$this->settings['post_type'] = $post_types;
 
@@ -600,7 +600,7 @@ class Post_Meta_Container extends Container {
 	 * @see https://codex.wordpress.org/Function_Reference/add_meta_box
 	 * @param string $context ('normal', 'advanced' or 'side')
 	 */
-	function set_context($context) {
+	function set_context( $context ) {
 		$this->settings['panel_context'] = $context;
 
 		return $this;
@@ -612,7 +612,7 @@ class Post_Meta_Container extends Container {
 	 * @see https://codex.wordpress.org/Function_Reference/add_meta_box
 	 * @param string $context ('high', 'core', 'default' or 'low')
 	 */
-	function set_priority($priority) {
+	function set_priority( $priority ) {
 		$this->settings['panel_priority'] = $priority;
 
 		return $this;

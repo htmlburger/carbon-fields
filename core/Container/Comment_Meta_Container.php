@@ -16,24 +16,24 @@ class Comment_Meta_Container extends Container {
 	 *
 	 * @param string $title Unique title of the container
 	 **/
-	function __construct($title) {
-		parent::__construct($title);
+	public function __construct( $title ) {
+		parent::__construct( $title );
 
-		if ( !$this->get_datastore() ) {
-			$this->set_datastore(new Comment_Meta_Datastore());
+		if ( ! $this->get_datastore() ) {
+			$this->set_datastore( new Comment_Meta_Datastore() );
 		}
 	}
 
 	/**
 	 * Perform instance initialization after calling setup()
 	 **/
-	function init() {
-		if ( isset($_GET['c']) ) {
-			$this->set_comment_id($_GET['c']);
+	public function init() {
+		if ( isset( $_GET['c'] ) ) {
+			$this->set_comment_id( $_GET['c'] );
 		}
 
-		add_action('admin_init', array($this, '_attach'));
-		add_action('edit_comment', array($this, '_save'));
+		add_action( 'admin_init', array( $this, '_attach' ) );
+		add_action( 'edit_comment', array( $this, '_save' ) );
 	}
 
 	/**
@@ -41,10 +41,10 @@ class Comment_Meta_Container extends Container {
 	 *
 	 * @return bool
 	 **/
-	function is_valid_save() {
+	public function is_valid_save() {
 		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
 			return false;
-		} else if ( !wp_verify_nonce( crb_request_param($this->get_nonce_name()), $this->get_nonce_name() ) ) {
+		} else if ( ! wp_verify_nonce( crb_request_param( $this->get_nonce_name() ), $this->get_nonce_name() ) ) {
 			return false;
 		} 
 
@@ -54,11 +54,11 @@ class Comment_Meta_Container extends Container {
 	/**
 	 * Add meta box to the comment
 	 **/
-	function attach() {
+	public function attach() {
 		add_meta_box(
 			$this->id, 
 			$this->title, 
-			array($this, 'render'), 
+			array( $this, 'render' ), 
 			'comment', 
 			'normal',
 			'high'
@@ -68,22 +68,22 @@ class Comment_Meta_Container extends Container {
 	/**
 	 * Revert the result of attach()
 	 **/
-	function detach() {
+	public function detach() {
 		parent::detach();
 
-		remove_action('admin_init', array($this, '_attach'));
-		remove_action('edit_comment', array($this, '_save'));
+		remove_action( 'admin_init', array( $this, '_attach' ) );
+		remove_action( 'edit_comment', array( $this, '_save' ) );
 
 		// unregister field names
-		foreach ($this->fields as $field) {
-			$this->drop_unique_field_name($field->get_name());
+		foreach ( $this->fields as $field ) {
+			$this->drop_unique_field_name( $field->get_name() );
 		}
 	}
 
 	/**
 	 * Output the container markup
 	 **/
-	function render() {
+	public function render() {
 		include DIR . '/templates/Container/comment_meta.php';
 	}
 
@@ -92,9 +92,9 @@ class Comment_Meta_Container extends Container {
 	 *
 	 * @param int $comment_id
 	 **/
-	function set_comment_id($comment_id) {
+	public function set_comment_id( $comment_id ) {
 		$this->comment_id = $comment_id;
-		$this->store->set_id($comment_id);
+		$this->store->set_id( $comment_id );
 	}
 
 	/**
@@ -103,14 +103,14 @@ class Comment_Meta_Container extends Container {
 	 *
 	 * @param int $comment_id ID of the comment against which save() is ran
 	 **/
-	function save($comment_id) {
+	public function save( $comment_id ) {
 
 		// Unhook action to guarantee single save
-		remove_action('edit_comment', array($this, '_save'));
+		remove_action( 'edit_comment', array( $this, '_save' ) );
 
-		$this->set_comment_id($comment_id);
+		$this->set_comment_id( $comment_id );
 
-		foreach ($this->fields as $field) {
+		foreach ( $this->fields as $field ) {
 			$field->set_value_from_input();
 			$field->save();
 		}
@@ -122,13 +122,13 @@ class Comment_Meta_Container extends Container {
 	 *
 	 * @param string $name
 	 **/
-	function verify_unique_field_name($name) {
-		if ( !isset(self::$registered_field_names['comment']) ) {
+	public function verify_unique_field_name( $name ) {
+		if ( ! isset( self::$registered_field_names['comment'] ) ) {
 			self::$registered_field_names['comment'] = array();
 		}
 
-		if ( in_array($name, self::$registered_field_names['comment']) ) {
-			throw new Incorrect_Syntax_Exception('Field name "' . $name . '" already registered');
+		if ( in_array( $name, self::$registered_field_names['comment'] ) ) {
+			throw new Incorrect_Syntax_Exception( 'Field name "' . $name . '" already registered' );
 		}
 
 		self::$registered_field_names['comment'][] = $name;
@@ -139,10 +139,10 @@ class Comment_Meta_Container extends Container {
 	 *
 	 * @param string $name
 	 **/
-	function drop_unique_field_name($name) {		
-		$index = array_search($name, self::$registered_field_names['comment']);
+	public function drop_unique_field_name( $name ) {		
+		$index = array_search( $name, self::$registered_field_names['comment'] );
 		if ( $index !== false ) {
-			unset(self::$registered_field_names['comment'][$index]);
+			unset( self::$registered_field_names['comment'][ $index ] );
 		}
 	}
 

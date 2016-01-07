@@ -41,7 +41,7 @@ class Theme_Options_Container extends Container {
 	function save($user_data = null) {
 		try {
 			parent::save($user_data);
-		} catch (Exception $e) {
+		} catch (Incorrect_Syntax_Exception $e) {
 			$this->errors[] = $e->getMessage();
 		}
 

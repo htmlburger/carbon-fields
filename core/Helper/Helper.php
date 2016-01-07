@@ -25,7 +25,7 @@ class Helper {
 		add_action('crb_container_activated', array($this, 'add_templates'));
 
 		# Initialize templater
-		$carbon_templater = new Templater();
+		new Templater();
 
 		# Initialize sidebar manager
 		Sidebar_Manager::instance();
@@ -419,7 +419,7 @@ class Helper {
 	public static function get_complex_fields($type, $name, $id = null) {
 		$datastore = Datastore::factory($type);
 		
-		if ( $id ) {
+		if ( $id !== null ) {
 			$datastore->set_id($id);
 		}
 

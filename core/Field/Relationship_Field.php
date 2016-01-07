@@ -23,7 +23,7 @@ class Relationship_Field extends Field {
 	/**
 	 * Set the post type of the entries.
 	 *
-	 * @param string $post_type Post type
+	 * @param string|array $post_type Post type
 	 */
 	function set_post_type($post_type) {
 		if (!is_array($post_type)) {

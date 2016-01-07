@@ -136,7 +136,7 @@ class Sidebar_Manager {
 	/**
 	 * Get all the registered custom sidebars.
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function get_sidebars() {
 		return apply_filters( 'carbon_custom_sidebars', get_option( 'carbon_custom_sidebars', array() ) );
