@@ -17,6 +17,9 @@ class Widget_Container extends Container {
 		self::$registered_field_names = array();
 
 		$this->id = $id;
+
+		add_action('admin_footer', array($this, 'admin_hook_scripts'));
+		add_action('admin_footer', array($this, 'admin_hook_styles'));
 	}
 
 	/**
