@@ -4,14 +4,12 @@
 
 [Carbon Fields](https://github.com/htmlburger/carbon-fields) - developer-oriented library for WordPress custom fields for all types of WordPress content. 
 
-Carbon fields is a plugin that can be used as alibrary for easy creation of custom fields in the WordPress administration panel. 
+Carbon fields is a WordPress plugin that can be used as a library for easy creation of custom fields in the WordPress administration panel. 
 
 Custom fields can be created for post types, taxonomy terms, users, comments, options and even widgets.
-
-Can be used as a WordPress plugin as well.
 
 Supports PHP5.3 or higher.
 
 ### Documentation
 
-You can find the documentation in /docs/index.html.
+You can reach the documentation by opening **/docs/index.html** in your web browser.
