@@ -11,7 +11,7 @@
         {
             "name": "Marin Atanasov",
             "email": "contact@marinatanasov.com"
-        },
+        }
     ],
     "require": {},
     "autoload": {
