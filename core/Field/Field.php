@@ -169,22 +169,22 @@ class Field {
 	 * @param string $label (optional) Automatically generated from $name if not present
 	 * @return object $field
 	 **/
-	static function factory($type, $name, $label=null) {
-		$type = str_replace(" ", '_', ucwords(str_replace("_", ' ', $type)));
+	static public function factory( $type, $name, $label=null ) {
+		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
 
 		$class = __NAMESPACE__ . "\\" . $type . '_Field';
 
-		if (!class_exists($class)) {
-			throw new Incorrect_Syntax_Exception ('Unknown field "' . $type . '".');
+		if ( ! class_exists( $class ) ) {
+			throw new Incorrect_Syntax_Exception( 'Unknown field "' . $type . '".' );
 		}
 
-		if ( strpos($name, '-') !== false ) {
-			throw new Incorrect_Syntax_Exception ('Forbidden character "-" in name "' . $name . '".');
+		if ( strpos( $name, '-' ) !== false ) {
+			throw new Incorrect_Syntax_Exception( 'Forbidden character "-" in name "' . $name . '".' );
 		}
 
-		$field = new $class($name, $label);
+		$field = new $class( $name, $label );
 		$field->type = $type;
-		$field->add_template($field->get_type(), array($field, 'template'));
+		$field->add_template( $field->get_type(), array( $field, 'template' ) );
 
 		return $field;
 	}
@@ -194,8 +194,8 @@ class Field {
 	 *
 	 * @see Field::factory()
 	 **/
-	static function make($type, $name, $label=null) {
-		return self::factory($type, $name, $label);
+	static public function make( $type, $name, $label=null ) {
+		return self::factory( $type, $name, $label );
 	}
 
 	/**
@@ -203,67 +203,67 @@ class Field {
 	 * @param string $name  Field name
 	 * @param string $label Field label
 	 */
-	private function __construct($name, $label) {
-		$this->set_name($name);
-		$this->set_label($label);
-		$this->set_base_name($name);
+	private function __construct( $name, $label ) {
+		$this->set_name( $name );
+		$this->set_label( $label );
+		$this->set_base_name( $name );
 
 		// Pick random ID
-		$random_string = md5(mt_rand() . $this->get_name() . $this->get_label());
-		$random_string = substr($random_string, 0, 5); // 5 chars should be enough
+		$random_string = md5( mt_rand() . $this->get_name() . $this->get_label() );
+		$random_string = substr( $random_string, 0, 5 ); // 5 chars should be enough
 		$this->id = 'carbon-' . $random_string;
 
 		$this->init();
-		if (is_admin()) {
+		if ( is_admin() ) {
 			$this->admin_init();
 		}
 
-		add_action('admin_print_scripts', array($this, 'admin_hook_scripts'));
-		add_action('admin_print_styles', array($this, 'admin_hook_styles'));
+		add_action( 'admin_print_scripts', array( $this, 'admin_hook_scripts' ) );
+		add_action( 'admin_print_styles', array( $this, 'admin_hook_styles' ) );
 	}
 
 	/**
 	 * Perform instance initialization after calling setup()
 	 **/
-	function init() {}
+	public function init() {}
 
 	/**
 	 * Instance initialization when in the admin area. Called during object construction
 	 **/
-	function admin_init() {}
+	public function admin_init() {}
 
 	/**
 	 * Enqueue admin scripts.
 	 * Called once per field type.
 	 **/
-	function admin_enqueue_scripts() {}
+	public function admin_enqueue_scripts() {}
 
 	/**
 	 * Prints the main Underscore template
 	 **/
-	function template() { }
+	public function template() { }
 
 	/**
 	 * Returns all the backbone templates
 	 *
 	 * @return array
 	 **/
-	function get_templates() {
+	public function get_templates() {
 		return $this->templates;
 	}
 
 	/**
 	 * Adds a new backbone template
 	 **/
-	function add_template($name, $callback) {
-		$this->templates[$name] = $callback;
+	public function add_template( $name, $callback ) {
+		$this->templates[ $name ] = $callback;
 	}
 
 	/**
 	 * Delegate load to the field DataStore instance
 	 **/
-	function load() {
-		$this->store->load($this);
+	public function load() {
+		$this->store->load( $this );
 
 		if ( $this->get_value() === false ) {
 			$this->set_value( $this->default_value );
@@ -273,15 +273,15 @@ class Field {
 	/**
 	 * Delegate save to the field DataStore instance
 	 **/
-	function save() {
-		return $this->store->save($this);
+	public function save() {
+		return $this->store->save( $this );
 	}
 
 	/**
 	 * Delegate delete to the field DataStore instance
 	 **/
-	function delete() {
-		return $this->store->delete($this);
+	public function delete() {
+		return $this->store->delete( $this );
 	}
 
 	/**
@@ -289,15 +289,15 @@ class Field {
 	 *
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
 	 **/
-	function set_value_from_input($input = null) {
-		if ( is_null($input) ) {
+	public function set_value_from_input( $input = null ) {
+		if ( is_null( $input ) ) {
 			$input = $_POST;
 		}
 
-		if ( !isset($input[$this->name]) ) {
-			$this->set_value(null);
+		if ( ! isset( $input[ $this->name ] ) ) {
+			$this->set_value( null );
 		} else {
-			$this->set_value( stripslashes_deep($input[$this->name]) );
+			$this->set_value( stripslashes_deep( $input[ $this->name ] ) );
 		}
 	}
 
@@ -307,7 +307,7 @@ class Field {
 	 * @param object $store
 	 * @return object $this
 	 **/
-	function set_datastore(Datastore_Interface $store) {
+	public function set_datastore( Datastore_Interface $store ) {
 		$this->store = $store;
 		return $this;
 	}
@@ -317,7 +317,7 @@ class Field {
 	 *
 	 * @return object $store
 	 **/
-	function get_datastore() {
+	public function get_datastore() {
 		return $this->store;
 	}
 
@@ -327,7 +327,7 @@ class Field {
 	 * @param string
 	 * @return object $this
 	 **/
-	function set_context($context) {
+	public function set_context( $context ) {
 		$this->context = $context;
 		return $this;
 	}
@@ -337,7 +337,7 @@ class Field {
 	 *
 	 * @return string
 	 **/
-	function get_context() {
+	public function get_context() {
 		return $this->context;
 	}
 
@@ -346,7 +346,7 @@ class Field {
 	 *
 	 * @param mixed $value
 	 **/
-	function set_value($value) {
+	public function set_value( $value ) {
 		$this->value = $value;
 	}
 
@@ -355,7 +355,7 @@ class Field {
 	 *
 	 * @param mixed $value
 	 **/
-	function set_default_value($default_value) {
+	public function set_default_value( $default_value ) {
 		$this->default_value = $default_value;
 		return $this;
 	}
@@ -365,7 +365,7 @@ class Field {
 	 *
 	 * @return mixed
 	 **/
-	function get_default_value() {
+	public function get_default_value() {
 		return $this->default_value;
 	}
 
@@ -374,7 +374,7 @@ class Field {
 	 *
 	 * @return mixed
 	 **/
-	function get_value() {
+	public function get_value() {
 		return $this->value;
 	}
 
@@ -384,10 +384,10 @@ class Field {
 	 *
 	 * @param string $name Field name, either sanitized or not
 	 **/
-	function set_name($name) {
-		$name = preg_replace('~\s+~', '_', strtolower($name));
+	public function set_name( $name ) {
+		$name = preg_replace( '~\s+~', '_', strtolower( $name ) );
 
-		if ( $this->name_prefix && strpos($name, $this->name_prefix) !== 0 ) {
+		if ( $this->name_prefix && strpos( $name, $this->name_prefix ) !== 0 ) {
 			$name = $this->name_prefix . $name;
 		}
 
@@ -399,14 +399,14 @@ class Field {
 	 *
 	 * @return string
 	 **/
-	function get_name() {
+	public function get_name() {
 		return $this->name;
 	}
 
 	/**
 	 * Set field base name as defined in the container.
 	 **/
-	function set_base_name($name) {
+	public function set_base_name( $name ) {
 		$this->base_name = $name;
 	}
 
@@ -415,7 +415,7 @@ class Field {
 	 *
 	 * @return string
 	 **/
-	function get_base_name() {
+	public function get_base_name() {
 		return $this->base_name;
 	}
 
@@ -425,8 +425,8 @@ class Field {
 	 * @param string $prefix
 	 * @return object $this
 	 **/
-	function set_prefix($prefix) {
-		$this->name = preg_replace('~^' . preg_quote($this->name_prefix, '~') . '~', '', $this->name);
+	public function set_prefix( $prefix ) {
+		$this->name = preg_replace( '~^' . preg_quote( $this->name_prefix, '~' ) . '~', '', $this->name );
 		$this->name_prefix = $prefix;
 		$this->name = $this->name_prefix . $this->name;
 
@@ -438,17 +438,17 @@ class Field {
 	 *
 	 * @param string $label If null, the label will be generated from the field name
 	 **/
-	function set_label($label) {
+	public function set_label( $label ) {
 		// Try to guess field label from it's name
-		if (is_null($label)) {
+		if ( is_null( $label ) ) {
 			// remove the leading underscore(if it's there)
-			$label = preg_replace('~^_~', '', $this->name);
+			$label = preg_replace( '~^_~', '', $this->name );
 
 			// remove the leading "crb_"(if it's there)
-			$label = preg_replace('~^crb_~', '', $label);
+			$label = preg_replace( '~^crb_~', '', $label );
 
 			// split the name into words and make them capitalized
-			$label = ucwords(str_replace('_', ' ', $label));
+			$label = ucwords( str_replace( '_', ' ', $label ) );
 		}
 
 		$this->label = $label;
@@ -459,7 +459,7 @@ class Field {
 	 * 
 	 * @return string
 	 **/
-	function get_label() {
+	public function get_label() {
 		return $this->label;
 	}
 
@@ -469,7 +469,7 @@ class Field {
 	 *
 	 * @return object $this
 	 **/
-	function set_help_text($help_text) {
+	public function set_help_text( $help_text ) {
 		$this->help_text = $help_text;
 		return $this;
 	}
@@ -480,8 +480,8 @@ class Field {
 	 * @see set_help_text()
 	 * @return object $this
 	 **/
-	function help_text($help_text) {
-		return $this->set_help_text($help_text);
+	public function help_text( $help_text ) {
+		return $this->set_help_text( $help_text );
 	}
 
 	/**
@@ -489,7 +489,7 @@ class Field {
 	 *
 	 * @return object $this
 	 **/
-	function get_help_text() {
+	public function get_help_text() {
 		return $this->help_text;
 	}
 
@@ -499,7 +499,7 @@ class Field {
 	 * @param bool $autoload
 	 * @return object $this
 	 **/
-	function set_autoload($autoload) {
+	public function set_autoload( $autoload ) {
 		$this->autoload = $autoload;
 		return $this;
 	}
@@ -509,7 +509,7 @@ class Field {
 	 *
 	 * @return bool
 	 **/
-	function get_autoload() {
+	public function get_autoload() {
 		return $this->autoload;
 	}
 
@@ -519,7 +519,7 @@ class Field {
 	 * @param bool $autoload
 	 * @return object $this
 	 **/
-	function set_lazyload($lazyload) {
+	public function set_lazyload( $lazyload ) {
 		$this->lazyload = $lazyload;
 		return $this;
 	}
@@ -529,7 +529,7 @@ class Field {
 	 * 
 	 * @return bool
 	 **/
-	function get_lazyload() {
+	public function get_lazyload() {
 		return $this->lazyload;
 	}
 
@@ -539,7 +539,7 @@ class Field {
 	 * @param int $width
 	 * @return object $this
 	 **/
-	function set_width($width) {
+	public function set_width( $width ) {
 		$this->width = (int) $width;
 		return $this;
 	}
@@ -549,7 +549,7 @@ class Field {
 	 * 
 	 * @return int $width
 	 **/
-	function get_width() {
+	public function get_width() {
 		return $this->width;
 	}
 
@@ -559,12 +559,12 @@ class Field {
 	 * @param string|array $classes
 	 * @return object $this
 	 **/
-	function add_class($classes) {
-		if (!is_array($classes)) {
-			$classes = array_values( array_filter( explode(' ', $classes) ) );
+	public function add_class( $classes ) {
+		if ( ! is_array( $classes ) ) {
+			$classes = array_values( array_filter( explode( ' ', $classes ) ) );
 		}
 
-		$this->classes = array_map('sanitize_html_class', $classes);
+		$this->classes = array_map( 'sanitize_html_class', $classes );
 		return $this;
 	}
 
@@ -573,7 +573,7 @@ class Field {
 	 * 
 	 * @return array
 	 **/
-	function get_classes() {
+	public function get_classes() {
 		return $this->classes;
 	}
 
@@ -583,7 +583,7 @@ class Field {
 	 * @param bool $required
 	 * @return object $this
 	 **/
-	function set_required($required) {
+	public function set_required( $required ) {
 		$this->required = $required;
 		return $this;
 	}
@@ -592,7 +592,7 @@ class Field {
 	 * HTML id attribute getter.
 	 * @return string
 	 */
-	function get_id() {
+	public function get_id() {
 		return $this->id;
 	}
 
@@ -600,7 +600,7 @@ class Field {
 	 * HTML id attribute setter
 	 * @param string $id
 	 */
-	function set_id($id) {
+	public function set_id( $id ) {
 		$this->id = $id;
 	}
 
@@ -609,7 +609,7 @@ class Field {
 	 *
 	 * @return bool
 	 **/
-	function is_required() {
+	public function is_required() {
 		return $this->required;
 	}
 
@@ -622,9 +622,9 @@ class Field {
 	 * @return string
 	 */
 	public function get_type() {
-		$class = get_class($this);
+		$class = get_class( $this );
 
-		return $this->clean_type($class);
+		return $this->clean_type( $class );
 	}
 
 	/**
@@ -632,14 +632,14 @@ class Field {
 	 *
 	 * @return string
 	 */
-	protected function clean_type($type) {
+	protected function clean_type( $type ) {
 		$remove = array(
 			'_',
 			'\\',
 			'CarbonFields',
 			'Field',
 		);
-		$clean_class = str_replace($remove, '', $type);
+		$clean_class = str_replace( $remove, '', $type );
 
 		return $clean_class;
 	}
@@ -652,14 +652,14 @@ class Field {
 	public function get_html_class() {
 		$html_classes = array();
 
-		$object_class = get_class($this);
+		$object_class = get_class( $this );
 		$html_classes[] = $this->get_type();
 
 		$parent_class = $object_class;
-		while ($parent_class = get_parent_class($parent_class)) {
-			$clean_class = $this->clean_type($parent_class);
+		while ( $parent_class = get_parent_class( $parent_class ) ) {
+			$clean_class = $this->clean_type( $parent_class );
 
-			if ($clean_class) {
+			if ( $clean_class ) {
 				$html_classes[] = $clean_class;
 			}
 		}
@@ -684,8 +684,8 @@ class Field {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	public function to_json($load) {
-		if ($load) {
+	public function to_json( $load ) {
+		if ( $load ) {
 			$this->load();
 		}
 
@@ -716,8 +716,8 @@ class Field {
 	 *
 	 * @param array
 	 */
-	public function set_conditional_logic($rules) {
-		$this->conditional_logic = $this->parse_conditional_rules($rules);
+	public function set_conditional_logic( $rules ) {
+		$this->conditional_logic = $this->parse_conditional_rules( $rules );
 
 		return $this;
 	}
@@ -737,9 +737,9 @@ class Field {
 	 * @param array $rules
 	 * @return array
 	 */
-	protected function parse_conditional_rules($rules) {
+	protected function parse_conditional_rules( $rules ) {
 		if ( ! is_array( $rules ) ) {
-			throw new Incorrect_Syntax_Exception('Conditional logic rules argument should be an array.');
+			throw new Incorrect_Syntax_Exception( 'Conditional logic rules argument should be an array.' );
 		}
 
 		$parsed_rules = array(
@@ -747,20 +747,20 @@ class Field {
 			'rules' => array(),
 		);
 
-		$allowed_operators = array('=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN');
+		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN' );
 
 		foreach ( $rules as $key => $rule ) {
 			// Check if we have a relation key
 			if ( $key === 'relation' ) {
-				if ($rule === 'OR') {
+				if ( $rule === 'OR' ) {
 					$parsed_rules['relation'] = $rule;
 				}
 				continue;
 			}
 
 			// Check if the rule is valid
-			if ( ! is_array($rule) || empty( $rule['field'] ) ) {
-				throw new Incorrect_Syntax_Exception('Invalid conditional logic rule format. The rule should be an array with the "field" key set.');
+			if ( ! is_array( $rule ) || empty( $rule['field'] ) ) {
+				throw new Incorrect_Syntax_Exception( 'Invalid conditional logic rule format. The rule should be an array with the "field" key set.' );
 			}
 
 			// Check the compare oparator
@@ -768,12 +768,12 @@ class Field {
 				$rule['compare'] = '=';
 			}
 			if ( ! in_array( $rule['compare'], $allowed_operators ) ) {
-				throw new Incorrect_Syntax_Exception('Invalid conditional logic compare oparator: <code>' . $rule['compare'] . '</code><br>' . 
-					'Allowed oparators are: <code>' . implode(', ', $allowed_operators) . '</code>');
+				throw new Incorrect_Syntax_Exception( 'Invalid conditional logic compare oparator: <code>' . $rule['compare'] . '</code><br>' . 
+					'Allowed oparators are: <code>' . implode( ', ', $allowed_operators ) . '</code>' );
 			}
 			if ( $rule['compare'] === 'IN' || $rule['compare'] === 'NOT IN' ) {
 				if ( ! is_array( $rule['value'] ) ) {
-					throw new Incorrect_Syntax_Exception('Invalid conditional logic value format. An array is expected, when using the "' . $rule['compare'] . '" operator.');
+					throw new Incorrect_Syntax_Exception( 'Invalid conditional logic value format. An array is expected, when using the "' . $rule['compare'] . '" operator.' );
 				}
 			}
 
@@ -794,7 +794,7 @@ class Field {
 	 *
 	 * @param array|callback $options
 	 */
-	protected function _set_options($options) {
+	protected function _set_options( $options ) {
 		$this->options = (array) $options;
 	}
 
@@ -804,7 +804,7 @@ class Field {
 	 *
 	 * @param array|callback $options
 	 */
-	protected function _add_options($options) {
+	protected function _add_options( $options ) {
 		$this->options[] = $options;
 	}
 
@@ -812,18 +812,18 @@ class Field {
 	 * Check if there are callbacks and populate the options
 	 */
 	protected function load_options() {
-		if (empty($this->options)) {
+		if ( empty( $this->options ) ) {
 			return false;
 		}
 
 		$options = array();
-		foreach ($this->options as $key => $value) {
-			if (is_callable($value)) {
-				$options = $options + (array) call_user_func($value);
-			} else if (is_array($value)) {
+		foreach ( $this->options as $key => $value ) {
+			if ( is_callable( $value ) ) {
+				$options = $options + (array) call_user_func( $value );
+			} else if ( is_array( $value ) ) {
 				$options = $options + $value;
 			} else {
-				$options[$key] = $value;
+				$options[ $key ] = $value;
 			}
 		}
 
@@ -836,10 +836,10 @@ class Field {
 	 * @param array $options
 	 * @return array
 	 */
-	public function parse_options($options) {
+	public function parse_options( $options ) {
 		$parsed = array();
 
-		foreach ($options as $key => $value) {
+		foreach ( $options as $key => $value ) {
 			$parsed[] = array(
 				'name' => $value,
 				'value' => $key,
@@ -852,27 +852,26 @@ class Field {
 	/**
 	 * Hook administration scripts.
 	 */
-	function admin_hook_scripts() {
+	public function admin_hook_scripts() {
 		wp_enqueue_media();
-		wp_enqueue_script('carbon-fields', URL . '/assets/js/fields.js', array('carbon-app', 'carbon-containers'));
-		wp_localize_script('carbon-fields', 'crbl10n',
+		wp_enqueue_script( 'carbon-fields', URL . '/assets/js/fields.js', array( 'carbon-app', 'carbon-containers' ) );
+		wp_localize_script( 'carbon-fields', 'crbl10n',
 			array(
-				'title' => __('Files', 'crb'),
-				'geocode_zero_results' => __('The address could not be found. ', 'crb'),
-				'geocode_not_successful' => __('Geocode was not successful for the following reason: ', 'crb'),
-				'max_num_items_reached' => __('Maximum number of items reached (%s items)', 'crb'),
-				'max_num_rows_reached' => __('Maximum number of rows reached (%s rows)', 'crb'),
-				'cannot_create_more_rows' => __('Cannot create more than %s rows', 'crb'),
-				'enter_name_of_new_sidebar' => __('Please enter the name of the new sidebar:', 'crb'),
-				'remove_sidebar_confirmation' => __('Are you sure you wish to remove this sidebar?', 'crb'),
-				'add_sidebar' => __('Add Sidebar', 'crb'),
-				'complex_no_rows' => __('There are no %s yet. Click <a href="#">here</a> to add one.', 'crb'),
-				'complex_add_button' => __('Add %s', 'crb'),
-				'complex_min_num_rows_not_reached' => __('Minimum number of rows not reached (%d %s)', 'crb'),
-
-				'message_form_validation_failed' => __('Please fill out all fields correctly. ', 'crb'),
-				'message_required_field' => __("This field is required. ", 'crb'),
-				'message_choose_option' => __("Please choose an option. ", 'crb'),
+				'title' => __( 'Files', 'crb' ),
+				'geocode_zero_results' => __( 'The address could not be found. ', 'crb' ),
+				'geocode_not_successful' => __( 'Geocode was not successful for the following reason: ', 'crb' ),
+				'max_num_items_reached' => __( 'Maximum number of items reached (%s items)', 'crb' ),
+				'max_num_rows_reached' => __( 'Maximum number of rows reached (%s rows)', 'crb' ),
+				'cannot_create_more_rows' => __( 'Cannot create more than %s rows', 'crb' ),
+				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', 'crb' ),
+				'remove_sidebar_confirmation' => __( 'Are you sure you wish to remove this sidebar?', 'crb' ),
+				'add_sidebar' => __( 'Add Sidebar', 'crb' ),
+				'complex_no_rows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'crb' ),
+				'complex_add_button' => __( 'Add %s', 'crb' ),
+				'complex_min_num_rows_not_reached' => __( 'Minimum number of rows not reached (%d %s)', 'crb' ),
+				'message_form_validation_failed' => __( 'Please fill out all fields correctly. ', 'crb' ),
+				'message_required_field' => __( 'This field is required. ', 'crb' ),
+				'message_choose_option' => __( 'Please choose an option. ', 'crb' ),
 			)
 		);
 	}
@@ -880,7 +879,7 @@ class Field {
 	/**
 	 * Hook administration styles.
 	 */
-	function admin_hook_styles() {
-		wp_enqueue_style('thickbox');
+	public function admin_hook_styles() {
+		wp_enqueue_style( 'thickbox' );
 	}
 } // END Field

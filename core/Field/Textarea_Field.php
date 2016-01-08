@@ -17,9 +17,9 @@ class Textarea_Field extends Field {
 	 * 
 	 * @param integer $height Height (in pixels)
 	 */
-	function set_height($height = 170) {
+	public function set_height( $height = 170 ) {
 		$min_height = 28;
-		$this->height = max(intval($height), $min_height);
+		$this->height = max( intval( $height ), $min_height );
 		return $this;
 	}
 
@@ -28,8 +28,8 @@ class Textarea_Field extends Field {
 	 * 
 	 * @param integer $rows Number of rows
 	 */
-	function set_rows($rows = 0) {
-		$this->rows = absint($rows);
+	public function set_rows( $rows = 0 ) {
+		$this->rows = absint( $rows );
 		return $this;
 	}
 
@@ -40,13 +40,13 @@ class Textarea_Field extends Field {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	function to_json($load) {
-		$field_data = parent::to_json($load);
+	public function to_json( $load ) {
+		$field_data = parent::to_json( $load );
 
-		$field_data = array_merge($field_data, array(
+		$field_data = array_merge( $field_data, array(
 			'rows' => $this->rows,
 			'height' => $this->height,
-		));
+		) );
 
 		return $field_data;
 	}
@@ -54,7 +54,7 @@ class Textarea_Field extends Field {
 	/**
 	 * Underscore template of this field.
 	 */
-	function template() {
+	public function template() {
 		?>
 		<textarea id="{{{ id }}}" name="{{{ name }}}" {{{ rows ? 'rows="' + rows + '"' : 'style="height: ' + height + 'px;"' }}}>{{ value }}</textarea>
 		<?php

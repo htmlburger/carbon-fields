@@ -13,7 +13,7 @@ class Attachment_Field extends File_Field {
 	/**
 	 * Underscore template of the file description section.
 	 */
-	function template_description() {
+	public function template_description() {
 		?>
 		<div class="carbon-description {{{ value ? '' : 'hidden' }}}">
 			<div class="carbon-attachment-preview {{{ thumb_url ? '' : 'hidden' }}}">

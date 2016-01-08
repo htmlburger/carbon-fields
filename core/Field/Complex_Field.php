@@ -25,21 +25,21 @@ class Complex_Field extends Field {
 	protected $values_max = -1;
 
 	public $labels = array(
-		'singular_name'=>'Entry',
-		'plural_name'=>'Entries',
+		'singular_name' => 'Entry',
+		'plural_name' => 'Entries',
 	);
 
 	/**
 	 * Initialization tasks
 	 */
-	function init() {
+	public function init() {
 		$this->labels = array(
-			'singular_name'=>__('Entry', 'crb'),
-			'plural_name'=>__('Entries', 'crb'),
+			'singular_name'=>__( 'Entry', 'crb' ),
+			'plural_name'=>__( 'Entries', 'crb' ),
 		);
 
 		// Include the complex group backbone template
-		$this->add_template('Complex-Group', array($this, 'template_group'));
+		$this->add_template( 'Complex-Group', array( $this, 'template_group' ) );
 
 		parent::init();
 	}
@@ -47,39 +47,39 @@ class Complex_Field extends Field {
 	/**
 	 * Add a set/group of fields.
 	 */
-	function add_fields() {
+	public function add_fields() {
 		$argv = func_get_args();
-		$argc = count($argv);
+		$argc = count( $argv );
 
 		if ( $argc == 1 ) {
 			$fields = $argv[0];
 			$name = '';
 			$label = null;
-		} else if ($argc == 2) {
-			if ( is_array($argv[0]) ) {
-				list($fields, $name) = $argv;
+		} else if ( $argc == 2 ) {
+			if ( is_array( $argv[0] ) ) {
+				list( $fields, $name ) = $argv;
 			} else {
-				list($name, $fields) = $argv;
+				list( $name, $fields ) = $argv;
 			}
 			$label = null;
 		} else if ( $argc == 3 ) {
-			if ( is_array($argv[0]) ) {
-				list($fields, $name, $label) = $argv;
+			if ( is_array( $argv[0] ) ) {
+				list( $fields, $name, $label ) = $argv;
 			} else {
-				list($name, $label, $fields) = $argv;
+				list( $name, $label, $fields ) = $argv;
 			}
 		}
 
-		if ( array_key_exists('_' . $name, $this->groups) ) {
-			throw new Incorrect_Syntax_Exception('Group with name "' . $name . '" in Complex Field "' . $this->get_label() . '" already exists.');
+		if ( array_key_exists( '_' . $name, $this->groups ) ) {
+			throw new Incorrect_Syntax_Exception( 'Group with name "' . $name . '" in Complex Field "' . $this->get_label() . '" already exists.' );
 		} else {
 			$group = new Group_Field();
 			$group->set_name( $name );
 			
-			$group->add_fields($fields);
+			$group->add_fields( $fields );
 			$group->set_label( $label );
 
-			$this->groups[$group->get_name()] = $group;
+			$this->groups[ $group->get_name() ] = $group;
 			return $this;
 		}
 	}
@@ -89,13 +89,13 @@ class Complex_Field extends Field {
 	 * 
 	 * @return array $fields
 	 */
-	function get_fields() {
+	public function get_fields() {
 		$fields = array();
 
-		foreach ($this->groups as $group) {
+		foreach ( $this->groups as $group ) {
 			$group_fields = $group->get_fields();
 
-			$fields = array_merge($fields, $group_fields);
+			$fields = array_merge( $fields, $group_fields );
 		}
 
 		return $fields;
@@ -109,8 +109,8 @@ class Complex_Field extends Field {
 	 * 
 	 * @param  array $labels Labels
 	 */
-	function setup_labels($labels) {
-		$this->labels = array_merge($this->labels, $labels);
+	public function setup_labels( $labels ) {
+		$this->labels = array_merge( $this->labels, $labels );
 		return $this;
 	}
 
@@ -119,11 +119,11 @@ class Complex_Field extends Field {
 	 * 
 	 * @param Datastore_Interface $store
 	 */
-	function set_datastore(Datastore_Interface $store) {
+	public function set_datastore( Datastore_Interface $store ) {
 		$this->store = $store;
 
-		foreach ($this->groups as $group) {
-			$group->set_datastore($this->store);
+		foreach ( $this->groups as $group ) {
+			$group->set_datastore( $this->store );
 		}
 	}
 
@@ -132,55 +132,55 @@ class Complex_Field extends Field {
 	 *
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
 	 **/
-	function set_value_from_input($input = null) {
+	public function set_value_from_input( $input = null ) {
 		$this->values = array();
 
-		if ( is_null($input) ) {
+		if ( is_null( $input ) ) {
 			$input = $_POST;
 		}
 
-		if ( !isset($input[$this->get_name()]) ) {
+		if ( ! isset( $input[ $this->get_name() ] ) ) {
 			return;
 		}
 
-		$input_groups = $input[$this->get_name()];
+		$input_groups = $input[ $this->get_name() ];
 		$index = 0;
 
-		foreach ($input_groups as $values) {
+		foreach ( $input_groups as $values ) {
 			$value_group = array();
-			if ( !isset($values['group']) || !isset($this->groups[$values['group']]) ) {
+			if ( ! isset( $values['group'] ) || ! isset( $this->groups[ $values['group'] ] ) ) {
 				continue;
 			}
 
-			$group = $this->groups[$values['group']];
-			unset($values['group']);
+			$group = $this->groups[ $values['group'] ];
+			unset( $values['group'] );
 
 			$group_fields = $group->get_fields();
 
 			// trim input values to those used by the field
-			$group_field_names = array_flip($group->get_field_names());
-			$values = array_intersect_key($values, $group_field_names);
+			$group_field_names = array_flip( $group->get_field_names() );
+			$values = array_intersect_key( $values, $group_field_names );
 
 			// check if group is empty
-			if ( count( array_filter( $values, array($this, 'array_filter_remove_empty_values') ) ) == 0 && !in_array('0', $values) ) {
+			if ( count( array_filter( $values, array( $this, 'array_filter_remove_empty_values' ) ) ) == 0 && ! in_array( '0', $values ) ) {
 				continue;
 			}
 
-			foreach ($group_fields as $field) {
+			foreach ( $group_fields as $field ) {
 				// set value from the group
 				$tmp_field = clone $field;
-				if ( is_a($tmp_field, __NAMESPACE__ . '\\Complex_Field') ) {
-					if (!isset($values[$tmp_field->get_name()])) {
+				if ( is_a( $tmp_field, __NAMESPACE__ . '\\Complex_Field' ) ) {
+					if ( ! isset( $values[ $tmp_field->get_name() ] ) ) {
 						continue; // bail if the complex field is empty
 					}
 
 					$new_name = $this->get_name() . $group->get_name() . '-' . $field->get_name() . '_' . $index;
-					$new_values = array( $new_name => $values[$tmp_field->get_name()] );
+					$new_values = array( $new_name => $values[ $tmp_field->get_name() ] );
 
 					$tmp_field->set_name( $new_name );
-					$tmp_field->set_value_from_input($new_values);
+					$tmp_field->set_value_from_input( $new_values );
 				} else {
-					$tmp_field->set_value_from_input($values);
+					$tmp_field->set_value_from_input( $values );
 				}
 
 				// update name to group name
@@ -199,12 +199,12 @@ class Complex_Field extends Field {
 	 * Checks if the given value is an array and calls itself recursively
 	 * Otherwise, works as usual
 	 */
-	function array_filter_remove_empty_values($value) {
-		if ( is_array($value) ) {
-			return array_filter($value, array($this, 'array_filter_remove_empty_values'));
+	public function array_filter_remove_empty_values( $value ) {
+		if ( is_array( $value ) ) {
+			return array_filter( $value, array( $this, 'array_filter_remove_empty_values' ) );
 		}
 
-		if ( !empty($value) ) {
+		if ( ! empty( $value ) ) {
 			return true;
 		}
 	}
@@ -212,7 +212,7 @@ class Complex_Field extends Field {
 	/**
 	 * Load all groups of fields and their data.
 	 */
-	function load() {
+	public function load() {
 		// load existing groups
 		$this->load_values();
 	}
@@ -220,11 +220,11 @@ class Complex_Field extends Field {
 	/**
 	 * Save all contained groups of fields.
 	 */
-	function save() {
+	public function save() {
 		$this->delete();
 
-		foreach ($this->values as $value) {
-			foreach ($value as $field) {
+		foreach ( $this->values as $value ) {
+			foreach ( $value as $field ) {
 				$field->save();
 			}
 		}
@@ -233,26 +233,26 @@ class Complex_Field extends Field {
 	/**
 	 * Delete the values of all contained fields.
 	 */
-	function delete() {
-		return $this->store->delete_values($this);
+	public function delete() {
+		return $this->store->delete_values( $this );
 	}
 
 	/**
 	 * Load and parse the field data
 	 */
-	function load_values() {
+	public function load_values() {
 		return $this->load_values_from_db();
 	}
 
 	/**
 	 * Load and parse the field data from the database.
 	 */
-	function load_values_from_db() {
+	public function load_values_from_db() {
 		$this->values = array();
 
-		$group_rows = $this->store->load_values($this);
+		$group_rows = $this->store->load_values( $this );
 
-		return $this->process_loaded_values($group_rows);
+		return $this->process_loaded_values( $group_rows );
 	}
 
 	/**
@@ -261,25 +261,25 @@ class Complex_Field extends Field {
 	 * @param  array $values Raw data entries
 	 * @return array 		 Processed data entries
 	 */
-	function load_values_from_array($values) {
+	public function load_values_from_array( $values ) {
 		$this->values = array();
 
 		$group_rows = array();
 
 		$meta_key = $this->get_name();
 
-		foreach ($values as $key => $value) {
-			if ( strpos($key, $meta_key) !== 0 ) {
+		foreach ( $values as $key => $value ) {
+			if ( strpos( $key, $meta_key ) !== 0 ) {
 				continue;
 			}
 
 			$group_rows[] = array(
-				'field_key' => preg_replace('~^(' . preg_quote($this->name, '~') . ')_\d+_~', '$1_', $key),
+				'field_key' => preg_replace( '~^(' . preg_quote( $this->name, '~' ) . ')_\d+_~', '$1_', $key ),
 				'field_value' => $value
 			);
 		}
 
-		return $this->process_loaded_values($group_rows);
+		return $this->process_loaded_values( $group_rows );
 	}
 
 	/**
@@ -287,35 +287,35 @@ class Complex_Field extends Field {
 	 * 
 	 * @param  array $group_rows Group rows
 	 */
-	function process_loaded_values($group_rows) {
+	public function process_loaded_values( $group_rows ) {
 		$input_groups = array();
 
 		// Set default values
 		$field_names = array();
-		foreach ($this->groups as $group) {
+		foreach ( $this->groups as $group ) {
 			$group_fields = $group->get_fields();
-			foreach ($group_fields as $field) {
+			foreach ( $group_fields as $field ) {
 				$field_names[] = $field->get_name();
-				$field->set_value($field->get_default_value());
+				$field->set_value( $field->get_default_value() );
 			}
 		}
 
-		if ( empty($group_rows) ) {
+		if ( empty( $group_rows ) ) {
 			return;
 		}
 
 		// load and parse values and group type
-		foreach ($group_rows as $row) {
-			if ( !preg_match( Helper::get_complex_field_regex( $this->name, array_keys( $this->groups ), $field_names ), $row['field_key'], $field_name ) ) {
+		foreach ( $group_rows as $row ) {
+			if ( ! preg_match( Helper::get_complex_field_regex( $this->name, array_keys( $this->groups ), $field_names ), $row['field_key'], $field_name ) ) {
 				continue;
 			}
 
-			$row['field_value'] = maybe_unserialize($row['field_value']);
+			$row['field_value'] = maybe_unserialize( $row['field_value'] );
 			$input_groups[ $field_name['index'] ]['type'] = $field_name['group'];
 
-			if ( !empty($field_name['trailing']) ) {
-				$input_groups[ $field_name['index'] ][$field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing']] = $row['field_value'];
-			} else if ( !empty($field_name['sub']) ) {
+			if ( ! empty( $field_name['trailing'] ) ) {
+				$input_groups[ $field_name['index'] ][ $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'] ] = $row['field_value'];
+			} else if ( ! empty( $field_name['sub'] ) ) {
 				$input_groups[ $field_name['index'] ][ $field_name['key'] ][$field_name['sub'] ] = $row['field_value'];
 			} else {
 				$input_groups[ $field_name['index'] ][ $field_name['key'] ] = $row['field_value'];
@@ -323,21 +323,21 @@ class Complex_Field extends Field {
 		}
 
 		// create groups list with loaded fields
-		ksort($input_groups);
+		ksort( $input_groups );
 		
-		foreach ($input_groups as $index => $values) {
-			$value_group = array('type' => $values['type']);
-			$group_fields = $this->groups[$values['type']]->get_fields();
-			unset($values['type']);
+		foreach ( $input_groups as $index => $values ) {
+			$value_group = array( 'type' => $values['type'] );
+			$group_fields = $this->groups[ $values['type'] ]->get_fields();
+			unset( $values['type'] );
 
-			foreach ($group_fields as $field) {
+			foreach ( $group_fields as $field ) {
 				// set value from the group
 				$tmp_field = clone $field;
 
-				if ( is_a($field, __NAMESPACE__ . '\\Complex_Field') ) {
-					$tmp_field->load_values_from_array($values);
+				if ( is_a( $field, __NAMESPACE__ . '\\Complex_Field' ) ) {
+					$tmp_field->load_values_from_array( $values );
 				} else {
-					$tmp_field->set_value_from_input($values);
+					$tmp_field->set_value_from_input( $values );
 				}
 
 				$value_group[] = $tmp_field;
@@ -351,7 +351,7 @@ class Complex_Field extends Field {
 	 * Retrieve the field values
 	 * @return array
 	 */
-	function get_values() {
+	public function get_values() {
 		return $this->values;
 	}
 
@@ -359,13 +359,13 @@ class Complex_Field extends Field {
 	 * Generate and set the field prefix.
 	 * @param string $prefix
 	 */
-	function set_prefix($prefix) {
-		$this->name = preg_replace('~^' . preg_quote($this->name_prefix, '~') . '~', '', $this->name);
+	public function set_prefix($prefix) {
+		$this->name = preg_replace( '~^' . preg_quote( $this->name_prefix, '~' ) . '~', '', $this->name );
 		$this->name_prefix = $prefix;
 		$this->name = $this->name_prefix . $this->name;
 
-		foreach ($this->groups as $group) {
-			$group->set_prefix($prefix);
+		foreach ( $this->groups as $group ) {
+			$group->set_prefix( $prefix );
 		}
 	}
 
@@ -376,19 +376,19 @@ class Complex_Field extends Field {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	function to_json($load) {
-		$complex_data = parent::to_json($load);
+	public function to_json( $load ) {
+		$complex_data = parent::to_json( $load );
 
 		$groups_data = array();
 		$values_data = array();
 
-		foreach ($this->groups as $group) {
-			$groups_data[] = $group->to_json(false);
+		foreach ( $this->groups as $group ) {
+			$groups_data[] = $group->to_json( false );
 		}
 
-		foreach ($this->values as $fields) {
-			$group = $this->get_group_by_name($fields['type']);
-			unset($fields['type']);
+		foreach ( $this->values as $fields ) {
+			$group = $this->get_group_by_name( $fields['type'] );
+			unset( $fields['type'] );
 
 			$data = array(
 				'name' => $group->get_name(),
@@ -396,22 +396,22 @@ class Complex_Field extends Field {
 				'fields' => array(),
 			);
 
-			foreach ($fields as $index => $field) {
-				$data['fields'][] = $field->to_json(false);
+			foreach ( $fields as $index => $field ) {
+				$data['fields'][] = $field->to_json( false );
 			}
 
 			$values_data[] = $data;
 		}
 
-		$complex_data = array_merge($complex_data, array(
+		$complex_data = array_merge( $complex_data, array(
 			'layout' => $this->layout,
 			'labels' => $this->labels,
 			'min' => $this->get_min(),
 			'max' => $this->get_max(),
-			'multiple_groups' => count($groups_data) > 1,
+			'multiple_groups' => count( $groups_data ) > 1,
 			'groups' => $groups_data,
 			'value' => $values_data,
-		));
+		) );
 
 		return $complex_data;
 	}
@@ -419,7 +419,7 @@ class Complex_Field extends Field {
 	/**
 	 * The main Underscore template
 	 */
-	function template() {
+	public function template() {
 		?>
 		<div class="carbon-subcontainer carbon-grid {{ multiple_groups ? 'multiple-groups' : '' }}">
 	
@@ -452,7 +452,7 @@ class Complex_Field extends Field {
 	/**
 	 * The Underscore template for a complex field group
 	 */
-	function template_group() {
+	public function template_group() {
 		?>
 		<div id="carbon-{{{ complex_name }}}-complex-container" class="carbon-row carbon-group-row" data-group-id="{{ id }}">
 			<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[group]" value="{{ name }}" />
@@ -501,11 +501,11 @@ class Complex_Field extends Field {
 	 * 
 	 * @param string $layout
 	 */
-	function set_layout($layout) {
-		_doing_it_wrong(__METHOD__, __('Complex field layouts are deprecated, please use <code>set_width()</code> instead.', 'crb'), null);
+	public function set_layout( $layout ) {
+		_doing_it_wrong( __METHOD__, __( 'Complex field layouts are deprecated, please use <code>set_width()</code> instead.', 'crb' ), null );
 
-		if ( !in_array($layout, array(self::LAYOUT_TABLE, self::LAYOUT_LIST)) ) {
-			throw new Incorrect_Syntax_Exception('Incorrect layout specifier. Available values are "<code>' . self::LAYOUT_TABLE . '</code>" and "<code>' . self::LAYOUT_LIST . '</code>"');
+		if ( ! in_array( $layout, array( self::LAYOUT_TABLE, self::LAYOUT_LIST ) ) ) {
+			throw new Incorrect_Syntax_Exception( 'Incorrect layout specifier. Available values are "<code>' . self::LAYOUT_TABLE . '</code>" and "<code>' . self::LAYOUT_LIST . '</code>"' );
 		}
 
 		$this->layout = $layout;
@@ -518,8 +518,8 @@ class Complex_Field extends Field {
 	 * 
 	 * @param int $min
 	 */
-	function set_min($min) {
-		$this->values_min = intval($min);
+	public function set_min( $min ) {
+		$this->values_min = intval( $min );
 		return $this;
 	}
 
@@ -528,7 +528,7 @@ class Complex_Field extends Field {
 	 * 
 	 * @return int $min
 	 */
-	function get_min() {
+	public function get_min() {
 		return $this->values_min;
 	}
 
@@ -537,8 +537,8 @@ class Complex_Field extends Field {
 	 * 
 	 * @param int $max
 	 */
-	function set_max($max) {
-		$this->values_max = intval($max);
+	public function set_max( $max ) {
+		$this->values_max = intval( $max );
 		return $this;
 	}
 
@@ -547,7 +547,7 @@ class Complex_Field extends Field {
 	 * 
 	 * @return int $max
 	 */
-	function get_max() {
+	public function get_max() {
 		return $this->values_max;
 	}
 
@@ -556,8 +556,8 @@ class Complex_Field extends Field {
 	 * 
 	 * @return array 
 	 */
-	function get_group_names() {
-		return array_keys($this->groups);
+	public function get_group_names() {
+		return array_keys( $this->groups );
 	}
 
 	/**
@@ -565,11 +565,11 @@ class Complex_Field extends Field {
 	 * @param  string $group_name        Group name
 	 * @return Group_Field $group_object Group object
 	 */
-	function get_group_by_name($group_name) {
+	public function get_group_by_name( $group_name ) {
 		$group_object = null;
 
-		foreach ($this->groups as $group) {
-			if ($group->get_name() == $group_name) {
+		foreach ( $this->groups as $group ) {
+			if ( $group->get_name() == $group_name ) {
 				$group_object = $group;
 			}
 		}

@@ -15,8 +15,8 @@ class Set_Field extends Field {
 	 * 
 	 * @param array|callable $options 
 	 */
-	function set_options($options) {
-		$this->_set_options($options);
+	public function set_options( $options ) {
+		$this->_set_options( $options );
 		return $this;
 	}
 
@@ -26,8 +26,8 @@ class Set_Field extends Field {
 	 * 
 	 * @param array|callbacle $options
 	 */
-	function add_options($options) {
-		$this->_add_options($options);
+	public function add_options( $options ) {
+		$this->_add_options( $options );
 		return $this;
 	}
 
@@ -36,7 +36,7 @@ class Set_Field extends Field {
 	 * 
 	 * @param  int $limit
 	 */
-	function limit_options($limit) {
+	public function limit_options( $limit ) {
 		$this->limit_options = $limit;
 		return $this;
 	}
@@ -46,20 +46,20 @@ class Set_Field extends Field {
 	 * 
 	 * @return array
 	 */
-	function get_value() {
-		if ($this->value === false) {
+	public function get_value() {
+		if ( $this->value === false ) {
 			return array();
 		}
 
 		$this->load_options();
 
-		if (!is_array($this->value)) {
-			$this->value = maybe_unserialize($this->value);
-			if (!is_array($this->value)) {
-				if ( is_null($this->value) ) {
+		if ( ! is_array( $this->value ) ) {
+			$this->value = maybe_unserialize( $this->value );
+			if ( ! is_array( $this->value ) ) {
+				if ( is_null( $this->value ) ) {
 					return array();
 				}
-				return array($this->value);
+				return array( $this->value );
 			}
 		}
 
@@ -73,15 +73,15 @@ class Set_Field extends Field {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	function to_json($load) {
-		$field_data = parent::to_json($load);
+	public function to_json( $load ) {
+		$field_data = parent::to_json( $load );
 
 		$this->load_options();
 
-		$field_data = array_merge($field_data, array(
+		$field_data = array_merge( $field_data, array(
 			'limit_options' => $this->limit_options,
-			'options' => $this->parse_options($this->options),
-		));
+			'options' => $this->parse_options( $this->options ),
+		) );
 
 		return $field_data;
 	}
@@ -89,10 +89,10 @@ class Set_Field extends Field {
 	/**
 	 * The Underscore template of this field.
 	 */
-	function template() {
+	public function template() {
 		?>
 		<# if (_.isEmpty(options)) { #>
-			<em><?php _e('no options', 'crb'); ?></em>
+			<em><?php _e( 'no options', 'crb' ); ?></em>
 		<# } else { #>
 			<div class="carbon-set-list">
 				<# _.each(options, function(option, i) { #>
@@ -111,7 +111,7 @@ class Set_Field extends Field {
 					</p>
 
 					<# if (!exceed && !last && counter == limit_options) { #>
-						<p>... <a href="#" class="carbon-set-showall"><?php _e('Show All Options', 'crb'); ?></a></p>
+						<p>... <a href="#" class="carbon-set-showall"><?php _e( 'Show All Options', 'crb' ); ?></a></p>
 					<# } #>
 				<# }) #>
 			</div>

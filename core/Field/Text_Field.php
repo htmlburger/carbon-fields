@@ -9,7 +9,7 @@ class Text_Field extends Field {
 	/**
 	 * Underscore template of this field.
 	 */
-	function template() {
+	public function template() {
 		?>
 		<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text" />
 		<?php

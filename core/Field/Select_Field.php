@@ -12,8 +12,8 @@ class Select_Field extends Field {
 	 * 
 	 * @param array|callable $options 
 	 */
-	function set_options($options) {
-		$this->_set_options($options);
+	public function set_options( $options ) {
+		$this->_set_options( $options );
 		return $this;
 	}
 
@@ -23,8 +23,8 @@ class Select_Field extends Field {
 	 * 
 	 * @param array|callbacle $options
 	 */
-	function add_options($options) {
-		$this->_add_options($options);
+	public function add_options( $options ) {
+		$this->_add_options( $options );
 		return $this;
 	}
 
@@ -35,13 +35,13 @@ class Select_Field extends Field {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	function to_json($load) {
-		$field_data = parent::to_json($load);
+	public function to_json( $load ) {
+		$field_data = parent::to_json( $load );
 		$this->load_options();
 
-		$field_data = array_merge($field_data, array(
-			'options' => $this->parse_options($this->options),
-		));
+		$field_data = array_merge( $field_data, array(
+			'options' => $this->parse_options( $this->options ),
+		) );
 
 		return $field_data;
 	}
@@ -49,10 +49,10 @@ class Select_Field extends Field {
 	/**
 	 * The main Underscore template of this field.
 	 */
-	function template() {
+	public function template() {
 		?>
 		<# if (_.isEmpty(options)) { #>
-			<em><?php _e('no options', 'crb'); ?></em>
+			<em><?php _e( 'no options', 'crb' ); ?></em>
 		<# } else { #>
 			<select id="{{{ id }}}" name="{{{ name }}}">
 				<# _.each(options, function(option) { #>

@@ -11,7 +11,7 @@ class Gravity_Form_Field extends Select_Field {
 	 */
 	function admin_init() {
 		// Setup form options
-		add_action( 'carbon_after_register_fields', array($this, 'setup_gravity_form_options'), 20 );
+		add_action( 'carbon_after_register_fields', array( $this, 'setup_gravity_form_options' ), 20 );
 	}
 
 	/**
@@ -20,7 +20,7 @@ class Gravity_Form_Field extends Select_Field {
 	 * @return bool
 	 */
 	function is_plugin_active() {
-		if ( class_exists('\RGFormsModel') && method_exists('\RGFormsModel', 'get_forms') ) {
+		if ( class_exists( '\RGFormsModel' ) && method_exists( '\RGFormsModel', 'get_forms' ) ) {
 			return true;
 		}
 
@@ -31,25 +31,25 @@ class Gravity_Form_Field extends Select_Field {
 	 * Set the available forms as field options
 	 */
 	function setup_gravity_form_options() {
-		if ( !$this->is_plugin_active() ) {
+		if ( ! $this->is_plugin_active() ) {
 			return;
 		}
 
-		$forms = \RGFormsModel::get_forms(null, 'title');
+		$forms = \RGFormsModel::get_forms( null, 'title' );
 
-		if ( !is_array($forms) || empty($forms) ) {
+		if ( ! is_array( $forms ) || empty( $forms ) ) {
 			return;
 		}
 
 		$options = array(
-			'0' => __('No form', 'crb'),
+			'0' => __( 'No form', 'crb' ),
 		);
 
 		foreach ($forms as $form) {
-			$options[$form->id] = $form->title;
+			$options[ $form->id ] = $form->title;
 		}
 
-		$this->set_options($options);
+		$this->set_options( $options );
 	}
 
 	/**
@@ -59,14 +59,14 @@ class Gravity_Form_Field extends Select_Field {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	function to_json($load) {
-		$field_data = parent::to_json($load);
+	function to_json( $load ) {
+		$field_data = parent::to_json( $load );
 
 		$this->set_options( apply_filters( 'crb_gravity_form_options', $this->options ) );
 
-		$field_data = array_merge($field_data, array(
-			'options' => $this->parse_options($this->options),
-		));
+		$field_data = array_merge( $field_data, array(
+			'options' => $this->parse_options( $this->options ),
+		) );
 
 		return $field_data;
 	}
@@ -76,14 +76,14 @@ class Gravity_Form_Field extends Select_Field {
 	 */
 	function template() {
 		// Gravity Forms not installed
-		if ( !$this->is_plugin_active() ) {
-			?><em><?php _e('Please install Gravity Forms plugin', 'crb'); ?></em><?php
+		if ( ! $this->is_plugin_active() ) {
+			?><em><?php _e( 'Please install Gravity Forms plugin', 'crb' ); ?></em><?php
 			return;
 		}
 
 		// No forms have been found
-		if ( empty($this->options) ) {
-			?><em><?php _e('No Gravity Forms have been found.', 'crb'); ?></em><?php
+		if ( empty( $this->options ) ) {
+			?><em><?php _e( 'No Gravity Forms have been found.', 'crb' ); ?></em><?php
 			return;
 		}
 

@@ -19,7 +19,7 @@ class Checkbox_Field extends Field {
 	 * 
 	 * @param string $value New value
 	 */
-	function set_option_value($value) {
+	public function set_option_value( $value ) {
 		$this->option_value = $value;
 		return $this;
 	}
@@ -30,10 +30,10 @@ class Checkbox_Field extends Field {
 	 *
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
 	 **/
-	function set_value_from_input($input = null) {
+	public function set_value_from_input( $input = null ) {
 		parent::set_value_from_input( $input );
 		if ( $this->get_value() === NULL ) {
-			$this->set_value('');
+			$this->set_value( '' );
 		}
 	}
 
@@ -45,13 +45,13 @@ class Checkbox_Field extends Field {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	function to_json($load) {
-		$field_data = parent::to_json($load);
+	public function to_json( $load ) {
+		$field_data = parent::to_json( $load );
 
-		$field_data = array_merge($field_data, array(
+		$field_data = array_merge( $field_data, array(
 			'option_value' => $this->option_value,
 			'option_label' => parent::get_label(),
-		));
+		) );
 
 		return $field_data;
 	}
@@ -59,7 +59,7 @@ class Checkbox_Field extends Field {
 	/**
 	 * Underscore template of the field.
 	 */
-	function template() {
+	public function template() {
 		?>
 		<label>
 			<input type="checkbox" name="{{{ name }}}" value="{{ option_value }}" {{{ option_value == value ? 'checked="checked"' : '' }}} />
@@ -74,7 +74,7 @@ class Checkbox_Field extends Field {
 	 * 
 	 * @return [type] [description]
 	 */
-	function get_label() {
+	public function get_label() {
 		return '';
 	}
 
@@ -84,7 +84,7 @@ class Checkbox_Field extends Field {
 	 * 
 	 * @return boolean false
 	 */
-	function is_required() {
+	public function is_required() {
 		return false;
 	}
 }

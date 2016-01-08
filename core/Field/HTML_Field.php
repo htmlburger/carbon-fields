@@ -13,9 +13,9 @@ class HTML_Field extends Field {
 	 * Set the field HTML or callback that returns the HTML.
 	 * @param string|callable $callback_or_html HTML or callable that returns the HTML.
 	 */
-	function set_html($callback_or_html) {
-		if ( is_callable($callback_or_html) ) {
-			$this->field_html = call_user_func($callback_or_html);
+	public function set_html( $callback_or_html ) {
+		if ( is_callable( $callback_or_html ) ) {
+			$this->field_html = call_user_func( $callback_or_html );
 		} else {
 			$this->field_html = $callback_or_html;
 		}
@@ -30,12 +30,12 @@ class HTML_Field extends Field {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	function to_json($load) {
-		$field_data = parent::to_json($load);
+	public function to_json( $load ) {
+		$field_data = parent::to_json( $load );
 
-		$field_data = array_merge($field_data, array(
+		$field_data = array_merge( $field_data, array(
 			'html' => $this->field_html,
-		));
+		) );
 
 		return $field_data;
 	}
@@ -43,7 +43,7 @@ class HTML_Field extends Field {
 	/**
 	 * Underscore template of this field
 	 */
-	function template() {
+	public function template() {
 		?>
 		{{{ html }}}
 		<?php
@@ -55,7 +55,7 @@ class HTML_Field extends Field {
 	 * 
 	 * @return false
 	 */
-	function is_required() {
+	public function is_required() {
 		return false;
 	}
 
@@ -65,7 +65,7 @@ class HTML_Field extends Field {
 	 * 
 	 * @return string 
 	 */
-	function get_label() {
+	public function get_label() {
 		return '';
 	}
 
@@ -73,7 +73,7 @@ class HTML_Field extends Field {
 	 * Load the field value.
 	 * Skipped, no value to be loaded.
 	 */
-	function load() {
+	public function load() {
 		// skip;
 	}
 
@@ -81,7 +81,7 @@ class HTML_Field extends Field {
 	 * Save the field value.
 	 * Skipped, no value to be saved.
 	 */
-	function save() {
+	public function save() {
 		// skip;
 	}
 
@@ -89,7 +89,7 @@ class HTML_Field extends Field {
 	 * Delete the field value.
 	 * Skipped, no value to be deleted.
 	 */
-	function delete() {
+	public function delete() {
 		// skip;
 	}
 }

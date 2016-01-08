@@ -19,12 +19,12 @@ class Date_Field extends Field {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	function to_json($load) {
-		$field_data = parent::to_json($load);
+	public function to_json( $load ) {
+		$field_data = parent::to_json( $load );
 
-		$field_data = array_merge($field_data, array(
+		$field_data = array_merge( $field_data, array(
 			'options' => $this->options,
-		));
+		) );
 
 		return $field_data;
 	}
@@ -32,11 +32,11 @@ class Date_Field extends Field {
 	/**
 	 * The Underscore template of this field
 	 **/
-	function template() {
+	public function template() {
 		?>
 		<div class="input-with-button">
 			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-datepicker" />
-			<span class="carbon-datepicker-trigger button icon-button hide-if-no-js"><?php _e('Date', 'crb'); ?></span>
+			<span class="carbon-datepicker-trigger button icon-button hide-if-no-js"><?php _e( 'Date', 'crb' ); ?></span>
 		</div>
 		<?php
 	}
@@ -44,17 +44,17 @@ class Date_Field extends Field {
 	/**
 	 * Hook administration scripts and styles.
 	 */
-	function admin_enqueue_scripts() {
-		wp_enqueue_script('jquery-ui-datepicker');
+	public function admin_enqueue_scripts() {
+		wp_enqueue_script( 'jquery-ui-datepicker' );
 
-		wp_enqueue_style('jquery-ui', '//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css');
-		wp_enqueue_style('carbon-jquery-ui', URL . '/assets/css/jquery-ui.css');
+		wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css' );
+		wp_enqueue_style( 'carbon-jquery-ui', URL . '/assets/css/jquery-ui.css' );
 	}
 
 	/**
 	 * Set datepicker options 
 	 */
-	function set_options($options) {
+	public function set_options( $options ) {
 		$this->options = $options;
 
 		return $this;

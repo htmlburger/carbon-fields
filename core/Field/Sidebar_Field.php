@@ -9,7 +9,7 @@ class Sidebar_Field extends Select_Field {
 	/**
 	 * Disable adding new sidebars.
 	 */
-	function disable_add_new() {
+	public function disable_add_new() {
 		$this->enable_add_new = false;
 		return $this;
 	}
@@ -18,7 +18,7 @@ class Sidebar_Field extends Select_Field {
 	 * Specify sidebars to be excluded.
 	 * @param  array $sidebars
 	 */
-	function exclude_sidebars($sidebars) {
+	public function exclude_sidebars( $sidebars ) {
 		$this->excluded_sidebars = $sidebars;
 		return $this;
 	}
@@ -30,21 +30,21 @@ class Sidebar_Field extends Select_Field {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	function to_json($load) {
-		if ($this->enable_add_new) {
-			$this->options['new'] = _x('Add New', 'sidebar', 'crb');
+	public function to_json( $load ) {
+		if ( $this->enable_add_new ) {
+			$this->options['new'] = _x( 'Add New', 'sidebar', 'crb' );
 		}
 
-		$field_data = parent::to_json($load);
+		$field_data = parent::to_json( $load );
 
 		if ( $this->excluded_sidebars ) {
-			if ( !array($this->excluded_sidebars) ) {
-				$this->excluded_sidebars = array($this->excluded_sidebars);
+			if ( ! array( $this->excluded_sidebars ) ) {
+				$this->excluded_sidebars = array( $this->excluded_sidebars );
 			}
 
-			$field_data = array_merge($field_data, array(
+			$field_data = array_merge( $field_data, array(
 				'excluded_sidebars' => $this->excluded_sidebars
-			));
+			) );
 		}
 
 		return $field_data;

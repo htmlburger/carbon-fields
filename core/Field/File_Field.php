@@ -19,19 +19,19 @@ class File_Field extends Field {
 	/**
 	 * Admin initialization actions
 	 */
-	function admin_init() {
-		$this->button_label = __('Select File', 'crb');
-		$this->window_button_label = __('Select File', 'crb');
-		$this->window_label = __('Files', 'crb');
+	public function admin_init() {
+		$this->button_label = __( 'Select File', 'crb' );
+		$this->window_button_label = __( 'Select File', 'crb' );
+		$this->window_label = __( 'Files', 'crb' );
 
-		$this->add_template($this->get_type() . '-Description', array($this, 'template_description'));
+		$this->add_template( $this->get_type() . '-Description', array( $this, 'template_description' ) );
 	}
 
 	/**
 	 * Change the type of the field
 	 * @param string $type 
 	 */
-	function set_type($type) {
+	public function set_type( $type ) {
 		$this->field_type = $type;
 		return $this;
 	}
@@ -43,28 +43,28 @@ class File_Field extends Field {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	function to_json($load) {
-		$field_data = parent::to_json($load);
+	public function to_json( $load ) {
+		$field_data = parent::to_json( $load );
 
 		$url = '';
 		$thumb_url = '';
-		$default_thumb_url = home_url('/wp-includes/images/media/default.png');
+		$default_thumb_url = home_url( '/wp-includes/images/media/default.png' );
 		$file_ext = '';
 		$file_type = '';
 		$value = $this->get_value();
 
-		if ($value) {
-			$url = is_numeric($value) ? wp_get_attachment_url($value) : $value;
-			$filetype = wp_check_filetype($url);
+		if ( $value ) {
+			$url = is_numeric( $value ) ? wp_get_attachment_url( $value ) : $value;
+			$filetype = wp_check_filetype( $url );
 
 			$file_ext = $filetype['ext']; // png, mp3, etc..
-			$file_type = preg_replace('~\/.+$~', '', $filetype['type']); // image, video, etc..
+			$file_type = preg_replace( '~\/.+$~', '', $filetype['type'] ); // image, video, etc..
 
-			if ($file_type == 'image') {
+			if ( $file_type == 'image' ) {
 				$thumb_url = $url;
 
-				if ($this->value_type == 'id') {
-					$thumb_src = wp_get_attachment_image_src($value, 'thumbnail');
+				if ( $this->value_type == 'id' ) {
+					$thumb_src = wp_get_attachment_image_src( $value, 'thumbnail' );
 					$thumb_url = $thumb_src[0];
 				}
 			} else {
@@ -72,7 +72,7 @@ class File_Field extends Field {
 			}
 		}
 
-		$field_data = array_merge($field_data, array(
+		$field_data = array_merge( $field_data, array(
 			'url' => (string) $url,
 			'thumb_url' => $thumb_url,
 			'default_thumb_url' => $default_thumb_url,
@@ -83,7 +83,7 @@ class File_Field extends Field {
 			'window_label' => $this->window_label,
 			'type_filter' => $this->field_type,
 			'value_type' => $this->value_type,
-		));
+		) );
 
 		return $field_data;
 	}
@@ -91,7 +91,7 @@ class File_Field extends Field {
 	/**
 	 * The main Underscore template of this field
 	 **/
-	function template() {
+	public function template() {
 		?>
 		<div class="input-with-button">
 			<input 
@@ -115,11 +115,11 @@ class File_Field extends Field {
 	/**
 	 * The description Underscore template of this field
 	 **/
-	function template_description() {
+	public function template_description() {
 		?>
 		<div class="carbon-description {{{ value ? '' : 'hidden' }}}">
 			<a href="{{ value }}" target="_blank" class="button carbon-view_file">
-				<?php _e('View File', 'crb'); ?>
+				<?php _e( 'View File', 'crb' ); ?>
 			</a>
 		</div>
 		<?php

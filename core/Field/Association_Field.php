@@ -26,7 +26,7 @@ class Association_Field extends Relationship_Field {
 	 * Modify the types.
 	 * @param array $types New types
 	 */
-	function set_types($types) {
+	public function set_types( $types ) {
 		$this->types = $types;
 		return $this;
 	}
@@ -40,13 +40,13 @@ class Association_Field extends Relationship_Field {
 	 *
 	 * @param string $post_type Post type
 	 */
-	function set_post_type($post_type) {
-		$this->set_types(array(
+	public function set_post_type( $post_type ) {
+		$this->set_types( array(
 			array(
 				'type' => 'post',
 				'post_type' => $post_type
 			)
-		));
+		) );
 
 		return $this;
 	}
@@ -65,32 +65,32 @@ class Association_Field extends Relationship_Field {
 	 * 	- Subtype of data (the particular post type or taxonomy)
 	 * 	- ID of the item (the database ID of the item)
 	 */
-	function process_value() {
-		$raw_value = maybe_unserialize($this->get_value());
-		if (!$raw_value) {
+	public function process_value() {
+		$raw_value = maybe_unserialize( $this->get_value() );
+		if ( ! $raw_value ) {
 			$raw_value = array();
 		}
 
 		$value = array();
-		foreach ($raw_value as $raw_value_entry) {
-			if (is_string($raw_value_entry)) {
-				$value_pieces = explode(':', $raw_value_entry);
+		foreach ( $raw_value as $raw_value_entry ) {
+			if ( is_string( $raw_value_entry ) ) {
+				$value_pieces = explode( ':', $raw_value_entry );
 			} else {
-				$value_pieces = array_values($raw_value_entry);
+				$value_pieces = array_values( $raw_value_entry );
 			}
 
 			$item = array(
 				'type' => $value_pieces[0],
 				'subtype' => $value_pieces[1],
 				'id' => $value_pieces[2],
-				'title' => $this->get_title_by_type($value_pieces[2], $value_pieces[0], $value_pieces[1]),
-				'label' => $this->get_item_label($value_pieces[2], $value_pieces[0], $value_pieces[1]),
-				'is_trashed' => ($value_pieces[0] == 'post' && get_post_status($value_pieces[2]) == 'trash'),
+				'title' => $this->get_title_by_type( $value_pieces[2], $value_pieces[0], $value_pieces[1] ),
+				'label' => $this->get_item_label( $value_pieces[2], $value_pieces[0], $value_pieces[1] ),
+				'is_trashed' => ( $value_pieces[0] == 'post' && get_post_status( $value_pieces[2] ) == 'trash' ),
 			);
 			$value[] = $item;
 		}
 
-		$this->set_value($value);
+		$this->set_value( $value );
 	}
 
 	/**
@@ -103,25 +103,25 @@ class Association_Field extends Relationship_Field {
 	 * @param string  $subtype The subtype - "page", "post", "category", etc.
 	 * @return string $title The title of the item.
 	 */
-	function get_title_by_type($id, $type, $subtype = '') {
+	public function get_title_by_type( $id, $type, $subtype = '' ) {
 		$title = '';
 
-		if ($type === 'post') {
-			$title = get_the_title($id);
-		} elseif($type === 'term') {
-			$term = get_term_by('id', $id, $subtype);
+		if ( $type === 'post' ) {
+			$title = get_the_title( $id );
+		} elseif( $type === 'term' ) {
+			$term = get_term_by( 'id', $id, $subtype );
 			$title = $term->name;
-		} elseif($type === 'user') {
-			$title = get_the_author_meta('user_login', $id);
-		} elseif($type === 'comment') {
-			$title = get_comment_text($id);
-			$max = apply_filters('carbon_relationship_comment_length', 30, $this->get_name());
-			if (strlen($title) > $max) {
-				$title = substr($title, 0, $max) . '...';
+		} elseif( $type === 'user' ) {
+			$title = get_the_author_meta( 'user_login', $id );
+		} elseif( $type === 'comment' ) {
+			$title = get_comment_text( $id );
+			$max = apply_filters( 'carbon_relationship_comment_length', 30, $this->get_name() );
+			if ( strlen( $title ) > $max ) {
+				$title = substr( $title, 0, $max ) . '...';
 			}
 		}
 
-		if (!$title) {
+		if ( ! $title ) {
 			$title = '(no title) - ID: ' . $id;
 		}
 
@@ -134,7 +134,7 @@ class Association_Field extends Relationship_Field {
 		 * @param string $type    Item type (post, term, user, comment, or a custom one).
 		 * @param string $subtype Subtype - "page", "post", "category", etc.
 		 */
-		return apply_filters('carbon_relationship_title', $title, $this->get_name(), $id, $type, $subtype);
+		return apply_filters( 'carbon_relationship_title', $title, $this->get_name(), $id, $type, $subtype );
 	}
 
 	/**
@@ -147,14 +147,14 @@ class Association_Field extends Relationship_Field {
 	 * @param string  $subtype Subtype - "page", "post", "category", etc.
 	 * @return string $label The label of the item.
 	 */
-	function get_item_label($id, $type, $subtype = '') {
+	public function get_item_label( $id, $type, $subtype = '' ) {
 		$label = $subtype ? $subtype : $type;
 
-		if ($type === 'post') {
-			$post_type_object = get_post_type_object($subtype);
+		if ( $type === 'post' ) {
+			$post_type_object = get_post_type_object( $subtype );
 			$label = $post_type_object->labels->singular_name;
-		} elseif($type === 'term') {
-			$taxonomy_object = get_taxonomy($subtype);
+		} elseif( $type === 'term' ) {
+			$taxonomy_object = get_taxonomy( $subtype );
 			$label = $taxonomy_object->labels->singular_name;
 		}
 
@@ -167,7 +167,7 @@ class Association_Field extends Relationship_Field {
 		 * @param string $type    Item type (post, term, user, comment, or a custom one).
 		 * @param string $subtype Subtype - "page", "post", "category", etc.
 		 */
-		return apply_filters('carbon_relationship_item_label', $label, $this->get_name(), $id, $type, $subtype);
+		return apply_filters( 'carbon_relationship_item_label', $label, $this->get_name(), $id, $type, $subtype );
 	}
 
 	/**
@@ -175,13 +175,13 @@ class Association_Field extends Relationship_Field {
 	 *
 	 * @return array $options The selectable options of the relationship field.
 	 */
-	function get_options() {
+	public function get_options() {
 		$options = array();
 
-		foreach ($this->types as $type) {
+		foreach ( $this->types as $type ) {
 
 			// populate posts
-			if ($type['type'] === 'post') {
+			if ( $type['type'] === 'post' ) {
 
 				/**
 				 * Filter the default query when fetching posts for a particular field.
@@ -189,30 +189,30 @@ class Association_Field extends Relationship_Field {
 				 * @param array $args The parameters, passed to get_posts().
 				 */
 				$filter_name = 'carbon_relationship_options_' . $this->get_name() . '_' . $type['type'] . '_' . $type['post_type'];
-				$args = apply_filters($filter_name, array(
+				$args = apply_filters( $filter_name, array(
 					'post_type' => $type['post_type'],
 					'posts_per_page' => -1,
 					'fields' => 'ids',
 					'suppress_filters' => false,
-				));
+				) );
 
 				// fetch and prepare posts as relationship items
-				$posts = get_posts($args);
-				foreach ($posts as &$p) {
+				$posts = get_posts( $args );
+				foreach ( $posts as &$p ) {
 					$p = array(
 						'id' => $p,
-						'title' => $this->get_title_by_type($p, $type['type'], $type['post_type']),
+						'title' => $this->get_title_by_type( $p, $type['type'], $type['post_type'] ),
 						'type' => $type['type'],
 						'subtype' => $type['post_type'],
-						'label' => $this->get_item_label($p, $type['type'], $type['post_type']),
-						'is_trashed' => (get_post_status($p) == 'trash'),
-						'edit_link' => $this->get_object_edit_link($type, $p),
+						'label' => $this->get_item_label( $p, $type['type'], $type['post_type'] ),
+						'is_trashed' => ( get_post_status( $p ) == 'trash' ),
+						'edit_link' => $this->get_object_edit_link( $type, $p ),
 					);
 				}
-				$options = array_merge($options, $posts);
+				$options = array_merge( $options, $posts );
 
 			// populate taxonomy terms
-			} elseif ($type['type'] === 'term') {
+			} elseif ( $type['type'] === 'term' ) {
 
 				/**
 				 * Filter the default parameters when fetching terms for a particular field.
@@ -220,25 +220,25 @@ class Association_Field extends Relationship_Field {
 				 * @param array $args The parameters, passed to get_terms().
 				 */
 				$filter_name = 'carbon_relationship_options_' . $this->get_name() . '_' . $type['type'] . '_' . $type['taxonomy'];
-				$args = apply_filters($filter_name, array(
+				$args = apply_filters( $filter_name, array(
 					'hide_empty' => 0,
 					'fields' => 'id=>name',
-				));
+				) );
 
 				// fetch and prepare terms as relationship items
-				$terms = get_terms($type['taxonomy'], $args);
-				foreach ($terms as $term_id => &$term) {
+				$terms = get_terms( $type['taxonomy'], $args );
+				foreach ( $terms as $term_id => &$term ) {
 					$term = array(
 						'id' => $term_id,
 						'title' => $term,
 						'type' => $type['type'],
 						'subtype' => $type['taxonomy'],
-						'label' => $this->get_item_label($term_id, $type['type'], $type['taxonomy']),
+						'label' => $this->get_item_label( $term_id, $type['type'], $type['taxonomy'] ),
 						'is_trashed' => false,
-						'edit_link' => $this->get_object_edit_link($type, $term_id),
+						'edit_link' => $this->get_object_edit_link( $type, $term_id ),
 					);
 				}
-				$options = array_merge($options, $terms);
+				$options = array_merge( $options, $terms );
 
 			// populate users
 			} elseif ($type['type'] === 'user') {
@@ -249,27 +249,27 @@ class Association_Field extends Relationship_Field {
 				 * @param array $args The parameters, passed to get_users().
 				 */
 				$filter_name = 'carbon_relationship_options_' . $this->get_name() . '_' . $type['type'];
-				$args = apply_filters($filter_name, array(
+				$args = apply_filters( $filter_name, array(
 					'fields' => 'ID'
-				));
+				) );
 
 				// fetch and prepare users as relationship items
-				$users = get_users($args);
-				foreach ($users as &$u) {
+				$users = get_users( $args );
+				foreach ( $users as &$u ) {
 					$u = array(
 						'id' => $u,
-						'title' => $this->get_title_by_type($u, $type['type']),
+						'title' => $this->get_title_by_type( $u, $type['type'] ),
 						'type' => $type['type'],
 						'subtype' => 'user',
-						'label' => $this->get_item_label($u, $type['type']),
+						'label' => $this->get_item_label( $u, $type['type'] ),
 						'is_trashed' => false,
-						'edit_link' => $this->get_object_edit_link($type, $u),
+						'edit_link' => $this->get_object_edit_link( $type, $u ),
 					);
 				}
-				$options = array_merge($options, $users);
+				$options = array_merge( $options, $users );
 
 			// populate comments
-			} elseif($type['type'] === 'comment') {
+			} elseif( $type['type'] === 'comment' ) {
 
 				/**
 				 * Filter the default parameters when fetching comments for a particular field.
@@ -277,24 +277,24 @@ class Association_Field extends Relationship_Field {
 				 * @param array $args The parameters, passed to get_comments().
 				 */
 				$filter_name = 'carbon_relationship_options_' . $this->get_name() . '_' . $type['type'];
-				$args = apply_filters($filter_name, array(
+				$args = apply_filters( $filter_name, array(
 					'fields' => 'ids'
-				));
+				) );
 
 				// fetch and prepare comments as relationship items
-				$comments = get_comments($args);
-				foreach ($comments as &$c) {
+				$comments = get_comments( $args );
+				foreach ( $comments as &$c ) {
 					$c = array(
 						'id' => $c,
-						'title' => $this->get_title_by_type($c, $type['type']),
+						'title' => $this->get_title_by_type( $c, $type['type'] ),
 						'type' => $type['type'],
 						'subtype' => 'comment',
-						'label' => $this->get_item_label($c, $type['type']),
+						'label' => $this->get_item_label( $c, $type['type'] ),
 						'is_trashed' => false,
-						'edit_link' => $this->get_object_edit_link($type, $c),
+						'edit_link' => $this->get_object_edit_link( $type, $c ),
 					);
 				}
-				$options = array_merge($options, $comments);
+				$options = array_merge( $options, $comments );
 
 			}
 		}
@@ -305,7 +305,7 @@ class Association_Field extends Relationship_Field {
 		 * @param array $options Unfiltered options items.
 		 * @param string $name Name of the relationship field.
 		 */
-		$options = apply_filters('carbon_relationship_options', $options, $this->get_name());
+		$options = apply_filters( 'carbon_relationship_options', $options, $this->get_name() );
 
 		return $options;
 	}
@@ -317,26 +317,26 @@ class Association_Field extends Relationship_Field {
 	 * @param  int $id      ID of the object.
 	 * @return string       URL of the edit link.
 	 */
-	function get_object_edit_link($type, $id) {
+	public function get_object_edit_link( $type, $id ) {
 		switch ( $type['type'] ) {
 
 			case 'post' : {
-				$edit_link = get_edit_post_link($id);
+				$edit_link = get_edit_post_link( $id );
 				break;
 			}
 
 			case 'term' : {
-				$edit_link = get_edit_term_link($id, $type['taxonomy'], $type['type']);
+				$edit_link = get_edit_term_link( $id, $type['taxonomy'], $type['type'] );
 				break;
 			}
 
 			case 'comment' : {
-				$edit_link = get_edit_comment_link($id);
+				$edit_link = get_edit_comment_link( $id );
 				break;
 			}
 
 			case 'user' : {
-				$edit_link = get_edit_user_link($id);
+				$edit_link = get_edit_user_link( $id );
 				break;
 			}
 
@@ -354,14 +354,14 @@ class Association_Field extends Relationship_Field {
 	 * @param  bool $load Whether to load data from the datastore.
 	 * @return mixed      The JSON field data.
 	 */
-	function to_json($load) {
-		$field_data = Field::to_json($load);
+	public function to_json( $load ) {
+		$field_data = Field::to_json( $load );
 
-		$field_data = array_merge($field_data, array(
+		$field_data = array_merge( $field_data, array(
 			'options' => $this->get_options(),
 			'max' => $this->max,
 			'allow_duplicates' => $this->allow_duplicates,
-		));
+		) );
 
 		return $field_data;
 	}
@@ -372,12 +372,12 @@ class Association_Field extends Relationship_Field {
 	 *
 	 * @param bool $display_input Whether to display the selected item input field.
 	 */
-	function item_template($display_input = true) {
+	public function item_template( $display_input = true ) {
 		?>
 		<li>
 			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-item-label="{{{ item.label }}}" data-value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}">
 				<# if ( item.edit_link ) { #>
-					<em class="edit-link" data-href="{{{ item.edit_link }}}"><?php _e('Edit', 'crb'); ?></em>
+					<em class="edit-link" data-href="{{{ item.edit_link }}}"><?php _e( 'Edit', 'crb' ); ?></em>
 				<# } #>
 				<em>{{{ item.label }}}</em>
 				<span></span>
@@ -386,7 +386,7 @@ class Association_Field extends Relationship_Field {
 					<i class="trashed"></i>
 				<# } #>
 			</a>
-			<?php if ($display_input): ?>
+			<?php if ( $display_input ): ?>
 				<input type="hidden" name="{{{ name }}}[]" value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}" />
 			<?php endif; ?>
 		</li>

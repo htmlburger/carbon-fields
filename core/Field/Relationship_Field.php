@@ -14,8 +14,8 @@ class Relationship_Field extends Field {
 	/**
 	 * Admin initialization actions
 	 */
-	function admin_init() {
-		$this->add_template($this->get_type() . '_item', array($this, 'item_template'));
+	public function admin_init() {
+		$this->add_template( $this->get_type() . '_item', array( $this, 'item_template' ) );
 
 		parent::admin_init();
 	}
@@ -25,9 +25,9 @@ class Relationship_Field extends Field {
 	 *
 	 * @param string|array $post_type Post type
 	 */
-	function set_post_type($post_type) {
-		if (!is_array($post_type)) {
-			$post_type = array($post_type);
+	public function set_post_type( $post_type ) {
+		if ( ! is_array( $post_type ) ) {
+			$post_type = array( $post_type );
 		}
 
 		$this->post_type = $post_type;
@@ -39,8 +39,8 @@ class Relationship_Field extends Field {
 	 * 
 	 * @param int $max 
 	 */
-	function set_max($max) {
-		$this->max = intval($max);
+	public function set_max( $max ) {
+		$this->max = intval( $max );
 		return $this;
 	}
 
@@ -49,8 +49,8 @@ class Relationship_Field extends Field {
 	 * 
 	 * @param  boolean $allow 
 	 */
-	function allow_duplicates($allow = true) {
-		$this->allow_duplicates = (bool)$allow;
+	public function allow_duplicates( $allow = true ) {
+		$this->allow_duplicates = (bool) $allow;
 		return $this;
 	}
 
@@ -64,9 +64,9 @@ class Relationship_Field extends Field {
 	 * @param string  $subtype The subtype - "page", "post", "category", etc.
 	 * @return string $title The title of the item.
 	 */
-	function get_title_by_type($id, $type, $subtype = '') {
-		$title = get_the_title($id);
-		if (!$title) {
+	public function get_title_by_type( $id, $type, $subtype = '' ) {
+		$title = get_the_title( $id );
+		if ( ! $title ) {
 			$title = '(no title) - ID: ' . $id;
 		}
 
@@ -79,7 +79,7 @@ class Relationship_Field extends Field {
 		 * @param string $type    Item type (post, term, user, comment, or a custom one).
 		 * @param string $subtype Subtype - "page", "post", "category", etc.
 		 */
-		return apply_filters('carbon_relationship_title', $title, $this->get_name(), $id, $type, $subtype);
+		return apply_filters( 'carbon_relationship_title', $title, $this->get_name(), $id, $type, $subtype );
 	}
 
 	/**
@@ -92,8 +92,8 @@ class Relationship_Field extends Field {
 	 * @param string  $subtype Subtype - "page", "post", "category", etc.
 	 * @return string $label The label of the item.
 	 */
-	function get_item_label($id, $type, $subtype = '') {
-		$object = get_post_type_object($subtype);
+	public function get_item_label( $id, $type, $subtype = '' ) {
+		$object = get_post_type_object( $subtype );
 		$label = $object->labels->singular_name;
 
 		/**
@@ -105,7 +105,7 @@ class Relationship_Field extends Field {
 		 * @param string $type    Item type (post, term, user, comment, or a custom one).
 		 * @param string $subtype Subtype - "page", "post", "category", etc.
 		 */
-		return apply_filters('carbon_relationship_item_label', $label, $this->get_name(), $id, $type, $subtype);
+		return apply_filters( 'carbon_relationship_item_label', $label, $this->get_name(), $id, $type, $subtype );
 	}
 
 	/**
@@ -113,37 +113,37 @@ class Relationship_Field extends Field {
 	 *
 	 * @return array $options The selectable options of the relationship field.
 	 */
-	function get_options() {
+	public function get_options() {
 		$options = array();
 		/**
 		 * Filter the default query when fetching posts for a particular field.
 		 *
 		 * @param array $args The parameters, passed to get_posts().
 		 */
-		foreach ($this->post_type as $post_type) {
+		foreach ( $this->post_type as $post_type ) {
 			$filter_name = 'carbon_relationship_options_' . $this->get_name() . '_post_' . $post_type;
-			$args = apply_filters($filter_name, array(
+			$args = apply_filters( $filter_name, array(
 				'post_type' => $post_type,
 				'posts_per_page' => -1,
 				'fields' => 'ids',
 				'suppress_filters' => false,
-			));
+			) );
 
 			// fetch and prepare posts as relationship items
-			$new_options = get_posts($args);
-			foreach ($new_options as &$p) {
+			$new_options = get_posts( $args );
+			foreach ( $new_options as &$p ) {
 				$p = array(
 					'id' => $p,
-					'title' => $this->get_title_by_type($p, 'post', $post_type),
+					'title' => $this->get_title_by_type( $p, 'post', $post_type ),
 					'type' => 'post',
 					'subtype' => $post_type,
-					'label' => $this->get_item_label($p, 'post', $post_type),
-					'is_trashed' => (get_post_status($p) == 'trash'),
-					'edit_link'  => get_edit_post_link($p),
+					'label' => $this->get_item_label( $p, 'post', $post_type ),
+					'is_trashed' => ( get_post_status( $p ) == 'trash' ),
+					'edit_link'  => get_edit_post_link( $p ),
 				);
 			}
 
-			$options = array_merge($options, $new_options);
+			$options = array_merge( $options, $new_options );
 		}
 
 		/**
@@ -152,7 +152,7 @@ class Relationship_Field extends Field {
 		 * @param array $options Unfiltered options items.
 		 * @param string $name Name of the relationship field.
 		 */
-		$options = apply_filters('carbon_relationship_options', $options, $this->get_name());
+		$options = apply_filters( 'carbon_relationship_options', $options, $this->get_name() );
 
 		return $options;
 	}
@@ -164,32 +164,32 @@ class Relationship_Field extends Field {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	function to_json($load) {
-		$field_data = parent::to_json($load);
+	public function to_json( $load ) {
+		$field_data = parent::to_json( $load );
 
-		if (!empty($field_data['value'])) {
+		if ( ! empty( $field_data['value'] ) ) {
 			$value = array();
 
-			$field_data['value'] = maybe_unserialize($field_data['value']);
-			foreach ($field_data['value'] as $single_value) {
-				$post_type = get_post_type($single_value);
+			$field_data['value'] = maybe_unserialize( $field_data['value'] );
+			foreach ( $field_data['value'] as $single_value ) {
+				$post_type = get_post_type( $single_value );
 				$value[] = array(
 					'id' => $single_value,
-					'title' => $this->get_title_by_type($single_value, 'post', $post_type),
+					'title' => $this->get_title_by_type( $single_value, 'post', $post_type ),
 					'type' => 'post',
 					'subtype' => $post_type,
-					'label' => $this->get_item_label($single_value, 'post', $post_type),
-					'is_trashed' => (get_post_status($single_value) == 'trash'),
+					'label' => $this->get_item_label( $single_value, 'post', $post_type ),
+					'is_trashed' => ( get_post_status( $single_value ) == 'trash' ),
 				);
 			}
 			$field_data['value'] = $value;
 		}
 
-		$field_data = array_merge($field_data, array(
+		$field_data = array_merge( $field_data, array(
 			'options' => $this->get_options(),
 			'max' => $this->max,
 			'allow_duplicates' => $this->allow_duplicates,
-		));
+		) );
 
 		return $field_data;
 	}
@@ -197,7 +197,7 @@ class Relationship_Field extends Field {
 	/**
 	 * The main Underscore template of this field.
 	 */
-	function template() {
+	public function template() {
 		?>
 		<div class="relationship-container">
 			<div class="selected-items-container">
@@ -208,35 +208,35 @@ class Relationship_Field extends Field {
 						selected_items_length = value.length;
 					} #>
 					<span class="selected-counter">{{{ selected_items_length }}}</span> 
-					<span class="selected-label" data-single-label="<?php _e('selected item', 'crb'); ?>" data-plural-label="<?php _e('selected items', 'crb'); ?>">
-						<?php _e('selected items', 'crb'); ?>
+					<span class="selected-label" data-single-label="<?php _e( 'selected item', 'crb' ); ?>" data-plural-label="<?php _e( 'selected items', 'crb' ); ?>">
+						<?php _e( 'selected items', 'crb' ); ?>
 					</span>
 
 					<?php
 					/* If set_max() has been set, show the allowed maximum items number */
 					?>
 					<# if ( max !== -1 ) { #>
-						<span class="remaining"><?php _e('out of', 'crb'); ?> {{{ max }}}</span>
+						<span class="remaining"><?php _e( 'out of', 'crb' ); ?> {{{ max }}}</span>
 					<# } #>
 				</strong>
 				
 			</div>
 			<div class="relationship-left">
 				<div class="search-field">
-					<input type="text" class="search-field" placeholder="<?php esc_attr_e('Search', 'crb'); ?>" />
+					<input type="text" class="search-field" placeholder="<?php esc_attr_e( 'Search', 'crb' ); ?>" />
 				</div>
 
 				<ul class="relationship-list">
 					<# if (options) { #>
 						<# _.each(options, function(item) { #>
-							<?php echo $this->item_template(false); ?>
+							<?php echo $this->item_template( false ); ?>
 						<# }); #>
 					<# } #>
 				</ul>
 			</div>
 
 			<div class="relationship-right">
-				<label><?php _e('Associated:', 'crb'); ?></label>
+				<label><?php _e( 'Associated:', 'crb' ); ?></label>
 
 				<ul class="relationship-list">
 					<# if (value) { #>
@@ -256,20 +256,20 @@ class Relationship_Field extends Field {
 	 *
 	 * @param bool $display_input Whether to display the selected item input field.
 	 */
-	function item_template($display_input = true) {
+	public function item_template( $display_input = true ) {
 		?>
 		<li>
 			<span class="mobile-handle"></span>
 			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-item-label="{{{ item.label }}}" data-value="{{{ item.id }}}">
 				<# if ( item.edit_link ) { #>
-					<em class="edit-link" data-href="{{{ item.edit_link }}}"><?php _e('Edit', 'crb'); ?></em>
+					<em class="edit-link" data-href="{{{ item.edit_link }}}"><?php _e( 'Edit', 'crb' ); ?></em>
 				<# } #>
 				<em>{{{ item.label }}}</em>
 				<span></span>
 				{{{ item.title }}}
 				
 			</a>
-			<?php if ($display_input): ?>
+			<?php if ( $display_input ): ?>
 				<input type="hidden" name="{{{ name }}}[]" value="{{{ item.id }}}" />
 			<?php endif; ?>
 		</li>

@@ -10,7 +10,7 @@ class Separator_Field extends Field {
 	/**
 	 * Underscore template of this field.
 	 */
-	function template() {
+	public function template() {
 		?>
 		<h3>{{{ label }}}</h3>
 		<?php
@@ -20,7 +20,7 @@ class Separator_Field extends Field {
 	 * Load the field value.
 	 * Skipped, no value to be loaded.
 	 */
-	function load() {
+	public function load() {
 		// skip;
 	}
 
@@ -28,7 +28,7 @@ class Separator_Field extends Field {
 	 * Save the field value.
 	 * Skipped, no value to be saved.
 	 */
-	function save() {
+	public function save() {
 		// skip;
 	}
 
@@ -36,7 +36,7 @@ class Separator_Field extends Field {
 	 * Delete the field value.
 	 * Skipped, no value to be deleted.
 	 */
-	function delete() {
+	public function delete() {
 		// skip;
 	}
 
@@ -46,7 +46,7 @@ class Separator_Field extends Field {
 	 * 
 	 * @return false
 	 */
-	function is_required() {
+	public function is_required() {
 		return false;
 	}
 }
