@@ -12,7 +12,7 @@ abstract class Datastore implements Datastore_Interface {
 	/**
 	 * Initialize the datastore.
 	 **/
-	function __construct() {
+	public function __construct() {
 		$this->init();
 	}
 
@@ -21,7 +21,7 @@ abstract class Datastore implements Datastore_Interface {
 	 *
 	 * @abstract
 	 **/
-	abstract function init();
+	abstract public function init();
 
 	/**
 	 * Create a new datastore of type $type.
@@ -29,13 +29,13 @@ abstract class Datastore implements Datastore_Interface {
 	 * @param string $type
 	 * @return Datastore $datastore
 	 **/
-	static function factory($type) {
-		$type = str_replace(" ", '_', ucwords(str_replace("_", ' ', $type)));
+	static public function factory( $type ) {
+		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
 
 		$class = __NAMESPACE__ . '\\' . $type . '_Datastore';
 
-		if (!class_exists($class)) {
-			throw new Incorrect_Syntax_Exception ('Unknown data store type "' . $type . '".');
+		if ( ! class_exists( $class ) ) {
+			throw new Incorrect_Syntax_Exception( 'Unknown data store type "' . $type . '".' );
 		}
 
 		$field = new $class();
@@ -48,7 +48,7 @@ abstract class Datastore implements Datastore_Interface {
 	 *
 	 * @see Datastore::factory()
 	 **/
-	static function make($type) {
-		return self::factory($type);
+	static public function make( $type ) {
+		return self::factory( $type );
 	}
 }

@@ -10,16 +10,16 @@ class Comment_Meta_Datastore extends Datastore {
 	/**
 	 * Initialization tasks.
 	 **/
-	function init() {}
+	public function init() {}
 
 	/**
 	 * Save the field value(s) into the database.
 	 * 
 	 * @param Field $field The field to save.
 	 */
-	function save(Field $field) {
-		if ( !update_comment_meta($this->comment_id, $field->get_name(), $field->get_value()) ) {
-			add_comment_meta($this->comment_id, $field->get_name(), $field->get_value(), true);
+	public function save( Field $field ) {
+		if ( ! update_comment_meta( $this->comment_id, $field->get_name(), $field->get_value() ) ) {
+			add_comment_meta( $this->comment_id, $field->get_name(), $field->get_value(), true );
 		}
 	}
 
@@ -28,23 +28,23 @@ class Comment_Meta_Datastore extends Datastore {
 	 *
 	 * @param Field $field The field to retrieve value for.
 	 */
-	function load(Field $field) {
+	public function load( Field $field ) {
 		global $wpdb;
 
-		$value = $wpdb->get_col('
+		$value = $wpdb->get_col( '
 			SELECT `meta_value`
 			FROM ' . $wpdb->commentmeta . '
-			WHERE `comment_id`=' . intval($this->comment_id) . '
+			WHERE `comment_id`=' . intval( $this->comment_id ) . '
 			AND `meta_key`="' . $field->get_name() . '"
 			LIMIT 1
-		');
+		' );
 
-		if ( !is_array($value) || count($value) < 1 ) {
-			$field->set_value(false);
+		if ( ! is_array( $value ) || count( $value ) < 1 ) {
+			$field->set_value( false );
 			return;
 		}
 
-		$field->set_value($value[0]);
+		$field->set_value( $value[0] );
 	}
 
 	/**
@@ -52,8 +52,8 @@ class Comment_Meta_Datastore extends Datastore {
 	 * 
 	 * @param Field $field The field to delete.
 	 */
-	function delete(Field $field) {
-		delete_comment_meta($this->comment_id, $field->get_name(), $field->get_value());
+	public function delete( Field $field ) {
+		delete_comment_meta( $this->comment_id, $field->get_name(), $field->get_value() );
 	}
 
 	/**
@@ -61,19 +61,19 @@ class Comment_Meta_Datastore extends Datastore {
 	 *
 	 * @param mixed $field The field to load values for.
 	 */
-	function load_values($field) {
+	public function load_values( $field ) {
 		global $wpdb;
 
-		if ( is_object($field) && is_subclass_of($field, 'Carbon_Fields\\Field\\Field') ) {
+		if ( is_object( $field ) && is_subclass_of( $field, 'Carbon_Fields\\Field\\Field' ) ) {
 			$meta_key = $field->get_name();
 		} else {
 			$meta_key = $field;
 		}
 
-		return $wpdb->get_results('
+		return $wpdb->get_results( '
 			SELECT meta_key AS field_key, meta_value AS field_value FROM ' . $wpdb->commentmeta . '
-			WHERE `meta_key` LIKE "' . addslashes($meta_key) . '_%" AND `comment_id`="' . intval($this->comment_id) . '"
-		', ARRAY_A);
+			WHERE `meta_key` LIKE "' . addslashes( $meta_key ) . '_%" AND `comment_id`="' . intval( $this->comment_id ) . '"
+		', ARRAY_A );
 	}
 
 	/**
@@ -81,18 +81,18 @@ class Comment_Meta_Datastore extends Datastore {
 	 *
 	 * @param mixed $field The field to delete values for.
 	 */
-	function delete_values($field) {
+	public function delete_values( $field ) {
 		global $wpdb;
 
 		$group_names = $field->get_group_names();
 		$field_name = $field->get_name();
 
-		$meta_key_constraint = '`meta_key` LIKE "' . $field_name . implode('-%" OR `meta_key` LIKE "' . $field_name, $group_names) . '-%"';
+		$meta_key_constraint = '`meta_key` LIKE "' . $field_name . implode( '-%" OR `meta_key` LIKE "' . $field_name, $group_names ) . '-%"';
 
-		return $wpdb->query('
+		return $wpdb->query( '
 			DELETE FROM ' . $wpdb->commentmeta . '
-			WHERE (' . $meta_key_constraint . ') AND `comment_id`="' . intval($this->comment_id) . '"
-		');
+			WHERE (' . $meta_key_constraint . ') AND `comment_id`="' . intval( $this->comment_id ) . '"
+		' );
 	}
 
 	/**
@@ -100,7 +100,7 @@ class Comment_Meta_Datastore extends Datastore {
 	 * 
 	 * @param int $comment_id ID of the comment.
 	 */
-	function set_id($comment_id) {
+	public function set_id( $comment_id ) {
 		$this->comment_id = $comment_id;
 	}
 }
