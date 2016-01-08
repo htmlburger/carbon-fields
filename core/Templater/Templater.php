@@ -13,8 +13,8 @@ class Templater {
 	 * Initialize a new templater.
 	 * Hook all templates to the administration footer.
 	 */
-	function __construct() {
-		add_action('admin_footer', array($this, 'render_templates'), 999);
+	public function __construct() {
+		add_action( 'admin_footer', array( $this, 'render_templates' ), 999 );
 	}
 
 	/**
@@ -23,24 +23,24 @@ class Templater {
 	 * @param string $name Template name
 	 * @param string $html Template content
 	 */
-	static function add_template($name, $html) {
+	public static function add_template( $name, $html ) {
 		// Check if the template is already added
-		if (isset(self::$templates[$name])) {
+		if ( isset( self::$templates[ $name ] ) ) {
 			return false;
 		}
 
 		// Add the template to the stack
-		self::$templates[$name] = $html;
+		self::$templates[ $name ] = $html;
 	}
 
 	/**
 	 * Render all registered templates.
 	 */
-	function render_templates() {
-		foreach (self::$templates as $name => $html) {
+	public function render_templates() {
+		foreach ( self::$templates as $name => $html ) {
 			?>
 			<script type="text/html" id="crb-tmpl-<?php echo $name; ?>">
-				<?php echo apply_filters('carbon_template', apply_filters('carbon_template_' . $name, $html), $name); ?>
+				<?php echo apply_filters( 'carbon_template', apply_filters( 'carbon_template_' . $name, $html ), $name ); ?>
 			</script>
 			<?php
 		}

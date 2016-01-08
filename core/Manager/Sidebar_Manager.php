@@ -15,6 +15,7 @@ class Sidebar_Manager {
 	public static function instance() {
 		// Store the instance locally to avoid private static replication.
 		static $instance;
+
 		if ( ! is_a( $instance, 'Sidebar_Manager' ) ) {
 			$instance = new Sidebar_Manager;
 			$instance->setup();
@@ -61,7 +62,7 @@ class Sidebar_Manager {
 		$name = $_POST['name'];
 		$result = false;
 
-		switch ($action) {
+		switch ( $action ) {
 			case 'carbon_add_sidebar':
 				$result = $this->add_sidebar( $name );
 			break;
@@ -103,7 +104,7 @@ class Sidebar_Manager {
 			return new \WP_Error( 'sidebar-exists', __( 'Sidebar with the same ID is already registered.', 'crb' ) );
 		}
 
-		$registered_sidebars[$id] = array(
+		$registered_sidebars[ $id ] = array(
 			'id' => $id,
 			'name' => $name,
 		);
@@ -124,8 +125,8 @@ class Sidebar_Manager {
 		// Sanitize the sidebar ID the same way as dynamic_sidebar()
 		$id = sanitize_title( $id );
 
-		if ( isset( $registered_sidebars[$id] ) ) {
-			unset( $registered_sidebars[$id] );
+		if ( isset( $registered_sidebars[ $id ] ) ) {
+			unset( $registered_sidebars[ $id ] );
 		} else {
 			return new \WP_Error( 'sidebar-not-found', __( 'Sidebar not found.', 'crb' ) );
 		}
@@ -162,7 +163,7 @@ class Sidebar_Manager {
 	 * Enqueue the UI scripts.
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'carbon-sidebar-ui', URL . '/assets/js/sidebar-ui.js', array('carbon-app') );
+		wp_enqueue_script( 'carbon-sidebar-ui', URL . '/assets/js/sidebar-ui.js', array( 'carbon-app' ) );
 	}
 
 }
