@@ -28,8 +28,8 @@ class Comment_Meta_Container extends Container {
 	 * Perform instance initialization after calling setup()
 	 **/
 	public function init() {
-		if ( isset( $_GET['c'] ) && absint( $_GET['c'] ) ) {
-			$this->set_comment_id( absint( $_GET['c'] ) );
+		if ( isset( $_GET['c'] ) && $comment_id = absint( $_GET['c'] ) ) { // Input var okay.
+			$this->set_comment_id( $comment_id );
 		}
 
 		add_action( 'admin_init', array( $this, '_attach' ) );

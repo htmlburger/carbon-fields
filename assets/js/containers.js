@@ -666,8 +666,8 @@ window.carbon = window.carbon || {};
 	 * COMMENTS META
 	 *------------------------------------------------------------------------*/
 
-	// CommentMeta VIEW
-	carbon.containers.View.CommentMeta = carbon.containers.View.extend({
+	// Comment_Meta VIEW
+	carbon.containers.View.Comment_Meta = carbon.containers.View.extend({
 		initialize: function() {
 			carbon.containers.View.prototype.initialize.apply(this);
 
