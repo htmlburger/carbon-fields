@@ -3,6 +3,7 @@ filter:
   - assets/*
   - docs/*
   - tests/*
+  - templates/*
   - tmp/*
   - vendor/*
 
