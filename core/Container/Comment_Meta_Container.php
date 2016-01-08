@@ -42,9 +42,9 @@ class Comment_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_save() {
-		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return false;
-		} else if ( ! wp_verify_nonce( crb_request_param( $this->get_nonce_name() ), $this->get_nonce_name() ) ) {
+		} else if ( ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) {
 			return false;
 		} 
 

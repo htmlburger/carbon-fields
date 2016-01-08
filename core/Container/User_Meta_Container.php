@@ -18,21 +18,21 @@ class User_Meta_Container extends Container {
 	 *
 	 * @param string $title Unique title of the container
 	 **/
-	function __construct($title) {
-		parent::__construct($title);
+	public function __construct( $title ) {
+		parent::__construct( $title );
 
-		if ( !$this->get_datastore() ) {
-			$this->set_datastore(new User_Meta_Datastore());
+		if ( ! $this->get_datastore() ) {
+			$this->set_datastore( new User_Meta_Datastore() );
 		}
 	}
 
 	/**
 	 * Bind attach() and save() to the appropriate WordPress actions.
 	 **/
-	function init() {
-		add_action('admin_init', array($this, '_attach'));
-		add_action('profile_update', array($this, '_save'), 10, 1);
-		add_action('user_register', array($this, '_save'), 10, 1);
+	public function init() {
+		add_action( 'admin_init', array( $this, '_attach' ) );
+		add_action( 'profile_update', array( $this, '_save' ), 10, 1 );
+		add_action( 'user_register', array( $this, '_save' ), 10, 1 );
 	}
 
 	/**
@@ -41,18 +41,18 @@ class User_Meta_Container extends Container {
 	 *
 	 * @param int $user_id ID of the user against which save() is ran
 	 **/
-	function save($user_id) {
+	public function save( $user_id ) {
 		// Unhook action to garantee single save
-		remove_action('profile_update', array($this, '_save'));
+		remove_action( 'profile_update', array( $this, '_save' ) );
 
-		$this->set_user_id($user_id);
+		$this->set_user_id( $user_id );
 
-		foreach ($this->fields as $field) {
+		foreach ( $this->fields as $field ) {
 			$field->set_value_from_input();
 			$field->save();
 		}
 
-		do_action('carbon_after_save_user_meta', $user_id);
+		do_action( 'carbon_after_save_user_meta', $user_id );
 	}
 
 	/**
@@ -60,16 +60,16 @@ class User_Meta_Container extends Container {
 	 *
 	 * @return bool
 	 **/
-	function is_valid_save($user_id = 0) {
-		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
+	public function is_valid_save( $user_id = 0 ) {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return false;
-		} else if ( !wp_verify_nonce( crb_request_param($this->get_nonce_name()), $this->get_nonce_name() ) ) {
+		} else if ( ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) {
 			return false;
-		} else if ( !$this->is_valid_attach() ) {
+		} else if ( ! $this->is_valid_attach() ) {
 			return false;
 		}
 
-		return $this->is_valid_save_conditions($user_id);
+		return $this->is_valid_save_conditions( $user_id );
 	}
 
 	/**
@@ -78,23 +78,23 @@ class User_Meta_Container extends Container {
 	 * @param int $user_id ID of the user against which save() is ran
 	 * @return bool
 	 **/
-	function is_valid_save_conditions($user_id) {
+	public function is_valid_save_conditions( $user_id ) {
 		$valid = true;
-		$user = get_userdata($user_id);
+		$user = get_userdata( $user_id );
 
-		if ( empty($user->roles) ) {
+		if ( empty( $user->roles ) ) {
 			return;
 		}
 
 		// Check user role
-		if ( !empty($this->settings['show_on']['role']) ) {
+		if ( ! empty( $this->settings['show_on']['role'] ) ) {
 			$allowed_roles = (array) $this->settings['show_on']['role'];
 
 			// array_shift removed the returned role from the $user_profile->roles
 			// $roles_to_shift prevents changing of the $user_profile->roles variable
 			$roles_to_shift = $user->roles;
-			$profile_role = array_shift($roles_to_shift);
-			if ( !in_array($profile_role, $allowed_roles) ) {
+			$profile_role = array_shift( $roles_to_shift );
+			if ( ! in_array( $profile_role, $allowed_roles ) ) {
 				$valid = false;
 			}
 		}
@@ -108,7 +108,7 @@ class User_Meta_Container extends Container {
 	 * @param string $role
 	 * @return object $this
 	 **/
-	function show_on_user_role($role) {
+	public function show_on_user_role( $role ) {
 		$this->settings['show_on']['role'] = (array) $role;
 
 		return $this;
@@ -117,16 +117,16 @@ class User_Meta_Container extends Container {
 	/**
 	 * Add the container to the user
 	 **/
-	function attach() {
-		add_action('show_user_profile', array($this, 'render'), 10, 1);
-		add_action('edit_user_profile', array($this, 'render'), 10, 1);
-		add_action('user_new_form', array($this, 'render'), 10, 1);
+	public function attach() {
+		add_action( 'show_user_profile', array( $this, 'render' ), 10, 1 );
+		add_action( 'edit_user_profile', array( $this, 'render' ), 10, 1 );
+		add_action( 'user_new_form', array( $this, 'render' ), 10, 1 );
 	}
 
 	/**
 	 * Whether we're on the user profile page
 	 **/
-	function is_profile_page() {
+	public function is_profile_page() {
 		global $pagenow;
 
 		return $pagenow === 'profile.php' || $pagenow === 'user-new.php' || $pagenow === 'user-edit.php';
@@ -137,8 +137,8 @@ class User_Meta_Container extends Container {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	function is_valid_attach() {
-		if ( !current_user_can('edit_users') || !$this->is_profile_page() ) {
+	public function is_valid_attach() {
+		if ( ! current_user_can( 'edit_users' ) || ! $this->is_profile_page() ) {
 			return false;
 		}
 
@@ -148,16 +148,16 @@ class User_Meta_Container extends Container {
 	/**
 	 * Output the container markup
 	 **/
-	function render($user_profile = null) {
+	public function render( $user_profile = null ) {
 		$profile_role = '';
 
-		if (is_object($user_profile)) {
-			$this->set_user_id($user_profile->ID);
+		if ( is_object( $user_profile ) ) {
+			$this->set_user_id( $user_profile->ID );
 
 			// array_shift removed the returned role from the $user_profile->roles
 			// $roles_to_shift prevents changing of the $user_profile->roles variable
 			$roles_to_shift = $user_profile->roles;
-			$profile_role = array_shift($roles_to_shift);
+			$profile_role = array_shift( $roles_to_shift );
 		}
 
 		include DIR . '/templates/Container/user_meta.php';
@@ -168,8 +168,8 @@ class User_Meta_Container extends Container {
 	 *
 	 * @param int $user_id
 	 **/
-	function set_user_id($user_id) {
+	public function set_user_id( $user_id ) {
 		$this->user_id = $user_id;
-		$this->store->set_id($user_id);
+		$this->store->set_id( $user_id );
 	}
 }

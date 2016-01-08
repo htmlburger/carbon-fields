@@ -12,20 +12,20 @@ class Widget_Container extends Container {
 	 *
 	 * @param string $id Unique ID of the widget
 	 **/
-	function __construct($id) {
+	public function __construct( $id ) {
 		// Reset the registered fields array, this is required so we can have fields with same names
 		self::$registered_field_names = array();
 
 		$this->id = $id;
 
-		add_action('admin_footer', array($this, 'admin_hook_scripts'));
-		add_action('admin_footer', array($this, 'admin_hook_styles'));
+		add_action( 'admin_footer', array( $this, 'admin_hook_scripts' ) );
+		add_action( 'admin_footer', array( $this, 'admin_hook_styles' ) );
 	}
 
 	/**
 	 * Perform instance initialization after calling setup()
 	 **/
-	function init() {
+	public function init() {
 		$this->_attach();
 		$this->render();
 
@@ -39,14 +39,14 @@ class Widget_Container extends Container {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	function to_json($load) {
-		return parent::to_json(false);
+	public function to_json( $load ) {
+		return parent::to_json( false );
 	}
 
 	/**
 	 * Output the container markup
 	 **/
-	function render() {
+	public function render() {
 		include DIR . '/templates/Container/widget.php';
 	}
 
@@ -55,7 +55,7 @@ class Widget_Container extends Container {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	function is_valid_attach() {
+	public function is_valid_attach() {
 		$screen = get_current_screen();
 
 		return $screen && $screen->id === 'widgets';

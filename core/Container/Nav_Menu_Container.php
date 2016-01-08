@@ -20,11 +20,11 @@ class Nav_Menu_Container extends Container {
 	 *
 	 * @param string $title Unique title of the container
 	 **/
-	function __construct($id) {
+	public function __construct( $id ) {
 		// Reset the registered fields array, this is required so we can have fields with same names
 		self::$registered_field_names = array();
 
-		$id = str_replace(" ", '', ucwords(str_replace("_", ' ', $id)));
+		$id = str_replace( ' ', '', ucwords( str_replace( '_', ' ', $id ) ) );
 
 		$this->id = $id;
 
@@ -39,13 +39,13 @@ class Nav_Menu_Container extends Container {
 	 * @param int $menu_id Used to pass the correct menu_item_id to the Container object
 	 * @param bool $render Whether the container will render the fields.
 	 */
-	function init($menu_id = 0, $render = true) {
-		$this->set_menu_id($menu_id);
+	public function init( $menu_id = 0, $render = true ) {
+		$this->set_menu_id( $menu_id );
 
 		$this->load();
 		$this->_attach();
 
-		if ( !empty($menu_id) && $render === true ) {
+		if ( ! empty( $menu_id ) && $render === true ) {
 			$this->render();
 		}
 
@@ -57,9 +57,9 @@ class Nav_Menu_Container extends Container {
 	 *
 	 * @param int $menu_id
 	 **/
-	function set_menu_id($menu_id) {
+	public function set_menu_id( $menu_id ) {
 		$this->menu_id = $menu_id;
-		$this->store->set_id($menu_id);
+		$this->store->set_id( $menu_id );
 	}
 
 	/**
@@ -67,7 +67,7 @@ class Nav_Menu_Container extends Container {
 	 * 
 	 * @return bool
 	 **/
-	function is_valid_save() {
+	public function is_valid_save() {
 		return true;
 	}
 
@@ -75,13 +75,13 @@ class Nav_Menu_Container extends Container {
 	 * Perform save operation after successful is_valid_save() check.
 	 * The call is propagated to all fields in the container.
 	 **/
-	function save() {
-		foreach ($this->fields as $field) {
+	public function save() {
+		foreach ( $this->fields as $field ) {
 			$field->set_value_from_input();
 			$field->save();
 		}
 
-		do_action('carbon_after_save_nav_menu', $this);
+		do_action( 'carbon_after_save_nav_menu', $this );
 	}
 
 	/**
@@ -91,13 +91,13 @@ class Nav_Menu_Container extends Container {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	function to_json($load) {
-		$carbon_data = parent::to_json(false);
+	public function to_json( $load ) {
+		$carbon_data = parent::to_json( false );
 
 		// Sends the menu_id to javascript
-		$carbon_data = array_merge($carbon_data, array(
+		$carbon_data = array_merge( $carbon_data, array(
 			'menu_id' => $this->menu_id,
-		));
+		) );
 
 		return $carbon_data;
 	}
@@ -105,14 +105,14 @@ class Nav_Menu_Container extends Container {
 	/**
 	 * Output the container markup
 	 **/
-	function render() {
+	public function render() {
 		include DIR . '/templates/Container/nav_menu.php';
 	}
 
 	/**
 	 * TODO: make sure the containers for nav menus are not printed everywhere
 	 */
-	function is_valid_attach() {
+	public function is_valid_attach() {
 		return true;
 		$screen = get_current_screen();
 
@@ -128,16 +128,16 @@ class Nav_Menu_Container extends Container {
 		}
 
 		$self = 'Carbon_Fields\Container\Nav_Menu_Container';
-		add_action( 'crb_print_carbon_container_nav_menu_fields_html', array($self, 'form'), 10, 5 );
-		add_filter( 'wp_edit_nav_menu_walker', array( $self, 'edit_walker'), 10, 2 );
-		add_action( 'wp_update_nav_menu_item', array( $self, 'update'), 10, 3 );
+		add_action( 'crb_print_carbon_container_nav_menu_fields_html', array( $self, 'form' ), 10, 5 );
+		add_filter( 'wp_edit_nav_menu_walker', array( $self, 'edit_walker' ), 10, 2 );
+		add_action( 'wp_update_nav_menu_item', array( $self, 'update' ), 10, 3 );
 	}
 
 	/**
 	 * Get containers only once, and store in instance memory.
 	 */
 	public static function get_containers() {
-		if ( empty(self::$active_containers) ) {
+		if ( empty( self::$active_containers ) ) {
 			self::$active_containers = Container::get_active_containers();
 		}
 
@@ -147,24 +147,24 @@ class Nav_Menu_Container extends Container {
 	/**
 	 * Render custom fields inside each Nav Menu entry
 	 */
-	public static function form($output, $item, $depth, $args, $id) {
+	public static function form( $output, $item, $depth, $args, $id ) {
 		$current_menu_item_id = $item->ID;
 
-		self::set_instance_for_id($current_menu_item_id, true);
+		self::set_instance_for_id( $current_menu_item_id, true );
 	}
 
 	/**
 	 * Setup custom walker for the Nav Menu entries
 	 */
-	public static function edit_walker($walker, $menu_id) {
+	public static function edit_walker( $walker, $menu_id ) {
 		return 'Carbon_Fields\Walker\Nav_Menu_Edit_Walker';
 	}
 
 	/**
 	 * Trigger Save for all instances
 	 */
-	public static function update($menu_id, $current_menu_item_id, $args) {
-		$instance = self::set_instance_for_id($current_menu_item_id, false);
+	public static function update( $menu_id, $current_menu_item_id, $args ) {
+		$instance = self::set_instance_for_id( $current_menu_item_id, false );
 		$instance->_save();
 
 		return $instance;
@@ -173,11 +173,11 @@ class Nav_Menu_Container extends Container {
 	/**
 	 * Render attribute prevents field containers showing on menu save
 	 */
-	public static function set_instance_for_id($current_menu_item_id, $render = true) {
+	public static function set_instance_for_id( $current_menu_item_id, $render = true ) {
 		$active_containers = self::get_containers();
 		$suffix = '-' . $current_menu_item_id;
 
-		foreach ($active_containers as $container) {
+		foreach ( $active_containers as $container ) {
 			if ( $container->type != 'Nav_Menu' ) {
 				continue;
 			}
@@ -185,7 +185,7 @@ class Nav_Menu_Container extends Container {
 			$custom_fields = array();
 			$fields = $container->get_fields();
 
-			foreach ($fields as $field) {
+			foreach ( $fields as $field ) {
 				$tmp_field = clone $field;
 
 				// Setup Public properties
@@ -193,22 +193,22 @@ class Nav_Menu_Container extends Container {
 				$tmp_field->initial_name = $tmp_field->get_name();
 
 				// Setup Field ID and Name
-				$tmp_field->set_id($tmp_field->get_id() . $suffix);
-				$tmp_field->set_name($tmp_field->get_name() . $suffix);
+				$tmp_field->set_id( $tmp_field->get_id() . $suffix );
+				$tmp_field->set_name( $tmp_field->get_name() . $suffix );
 
 				// Update Datastore instance
 				$new_datastore = new Nav_Menu_Datastore();
-				$new_datastore->set_id($current_menu_item_id);
-				$tmp_field->set_datastore($new_datastore);
+				$new_datastore->set_id( $current_menu_item_id );
+				$tmp_field->set_datastore( $new_datastore );
 
 				$custom_fields[] = $tmp_field;
 			}
 
-			self::$instances[$current_menu_item_id] = Container::factory('nav_menu', $container->id . $suffix)
-				->add_fields($custom_fields)
-				->init($current_menu_item_id, $render);
+			self::$instances[ $current_menu_item_id ] = Container::factory( 'nav_menu', $container->id . $suffix )
+				->add_fields( $custom_fields )
+				->init( $current_menu_item_id, $render );
 		}
 
-		return self::$instances[$current_menu_item_id];
+		return self::$instances[ $current_menu_item_id ];
 	}
 }

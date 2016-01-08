@@ -55,7 +55,7 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param string $title Unique title of the container
 	 **/
-	function __construct( $title ) {
+	public function __construct( $title ) {
 		parent::__construct( $title );
 
 		if ( ! $this->get_datastore() ) {
@@ -68,7 +68,7 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param array $settings Container settings
 	 **/
-	function check_setup_settings( &$settings = array() ) {
+	public function check_setup_settings( &$settings = array() ) {
 		if ( isset( $settings['show_on'] ) ) {
 			$invalid_settings = array_diff_key( $settings['show_on'], $this->settings['show_on'] );
 			if ( ! empty( $invalid_settings ) ) {
@@ -108,7 +108,7 @@ class Post_Meta_Container extends Container {
 	 * Create DataStore instance, set post ID to operate with (if such exists).
 	 * Bind attach() and save() to the appropriate WordPress actions.
 	 **/
-	function init() {
+	public function init() {
 		if ( isset( $_GET['post'] ) ) {
 			$this->set_post_id( $_GET['post'] );
 		}
@@ -128,7 +128,7 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param int $post_id ID of the post against which save() is ran
 	 **/
-	function save( $post_id ) {
+	public function save( $post_id ) {
 		// Unhook action to garantee single save
 		remove_action( 'save_post', array( $this, '_save' ) );
 
@@ -152,10 +152,10 @@ class Post_Meta_Container extends Container {
 	 * @param int $post_id ID of the post against which save() is ran
 	 * @return bool
 	 **/
-	function is_valid_save( $post_id = 0 ) {
+	public function is_valid_save( $post_id = 0 ) {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return false;
-		} else if ( ! wp_verify_nonce( crb_request_param( $this->get_nonce_name() ), $this->get_nonce_name() ) ) {
+		} else if ( ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) {
 			return false;
 		} else if ( $post_id < 1 ) {
 			return false;
@@ -172,7 +172,7 @@ class Post_Meta_Container extends Container {
 	 * @param int $post_id ID of the post against which save() is ran
 	 * @return bool
 	 **/
-	function is_valid_save_conditions( $post_id ) {
+	public function is_valid_save_conditions( $post_id ) {
 		$valid = true;
 		$post = get_post( $post_id );
 
@@ -282,7 +282,7 @@ class Post_Meta_Container extends Container {
 	/**
 	 * Add meta box for each of the container post types
 	 **/
-	function attach() {
+	public function attach() {
 		foreach ( $this->settings['post_type'] as $post_type ) {
 			add_meta_box(
 				$this->id, 
@@ -302,7 +302,7 @@ class Post_Meta_Container extends Container {
 	/**
 	 * Classes to add to the post meta box
 	 */
-	function postbox_classes( $classes ) {
+	public function postbox_classes( $classes ) {
 		$classes[] = 'carbon-box';
 		return $classes;
 	}
@@ -312,7 +312,7 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	function is_valid_attach() {
+	public function is_valid_attach() {
 		global $pagenow;
 
 		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
@@ -363,7 +363,7 @@ class Post_Meta_Container extends Container {
 	/**
 	 * Revert the result of attach()
 	 **/
-	function detach() {
+	public function detach() {
 		parent::detach();
 
 		remove_action( 'admin_init', array( $this, '_attach' ) );
@@ -378,7 +378,7 @@ class Post_Meta_Container extends Container {
 	/**
 	 * Output the container markup
 	 **/
-	function render() {
+	public function render() {
 		include DIR . '/templates/Container/post_meta.php';
 	}
 
@@ -387,7 +387,7 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param int $post_id
 	 **/
-	function set_post_id( $post_id ) {
+	public function set_post_id( $post_id ) {
 		$this->post_id = $post_id;
 		$this->store->set_id( $post_id );
 	}
@@ -398,7 +398,7 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param string $name
 	 **/
-	function verify_unique_field_name( $name ) {
+	public function verify_unique_field_name( $name ) {
 		if ( empty( $this->settings['post_type'] ) ) {
 			throw new Incorrect_Syntax_Exception( 'Panel instance is not setup correctly (missing post type)' );
 		}
@@ -421,7 +421,7 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param string $name
 	 **/
-	function drop_unique_field_name( $name ) {
+	public function drop_unique_field_name( $name ) {
 		foreach ( $this->settings['post_type'] as $post_type ) {
 			$index = array_search( $name, self::$registered_field_names[ $post_type ] );
 			if ( $index !== false ) {
@@ -436,7 +436,7 @@ class Post_Meta_Container extends Container {
 	 * @param string $page_path
 	 * @return object $this
 	 **/
-	function show_on_page_children( $parent_page_path ) {
+	public function show_on_page_children( $parent_page_path ) {
 		$page = get_page_by_path( $parent_page_path );
 
 		if ( $page ) {
@@ -454,7 +454,7 @@ class Post_Meta_Container extends Container {
 	 * @param int|string $page page ID or page path
 	 * @return object $this
 	 **/
-	function show_on_page( $page ) {
+	public function show_on_page( $page ) {
 		if ( is_int( $page ) ) {
 			$page_obj = get_post( $page );
 		} else {
@@ -478,7 +478,7 @@ class Post_Meta_Container extends Container {
 	 * @param string $category_slug
 	 * @return object $this
 	 **/
-	function show_on_category( $category_slug ) {
+	public function show_on_category( $category_slug ) {
 		$this->settings['show_on']['category'] = $category_slug;
 
 		return $this->show_on_taxonomy_term( $category_slug, 'category' );
@@ -490,7 +490,7 @@ class Post_Meta_Container extends Container {
 	 * @param string|array $template_path
 	 * @return object $this
 	 **/
-	function show_on_template( $template_path ) {
+	public function show_on_template( $template_path ) {
 		if ( is_array( $template_path ) ) {
 			foreach ( $template_path as $path ) {
 				$this->show_on_template( $path );
@@ -509,7 +509,7 @@ class Post_Meta_Container extends Container {
 	 * @param string|array $template_path
 	 * @return object $this
 	 **/
-	function hide_on_template( $template_path ) {
+	public function hide_on_template( $template_path ) {
 		if ( is_array( $template_path ) ) {
 			foreach ( $template_path as $path ) {
 				$this->hide_on_template( $path );
@@ -529,7 +529,7 @@ class Post_Meta_Container extends Container {
 	 * @param int $level
 	 * @return object $this
 	 **/
-	function show_on_level( $level ) {
+	public function show_on_level( $level ) {
 		if ( $level < 0 ) {
 			throw new Incorrect_Syntax_Exception( 'Invalid level limitation (' . $level . ')' );
 		}
@@ -546,7 +546,7 @@ class Post_Meta_Container extends Container {
 	 * @param string $term_slug
 	 * @return object $this
 	 **/
-	function show_on_taxonomy_term( $term_slug, $taxonomy_slug ) {
+	public function show_on_taxonomy_term( $term_slug, $taxonomy_slug ) {
 		$term = get_term_by( 'slug', $term_slug, $taxonomy_slug );
 
 		$this->settings['show_on']['tax_slug'] = $taxonomy_slug;
@@ -563,7 +563,7 @@ class Post_Meta_Container extends Container {
 	 * @param string|array $post_format Name of the format as listed on Codex
 	 * @return object $this
 	 **/
-	function show_on_post_format( $post_format ) {
+	public function show_on_post_format( $post_format ) {
 		if ( is_array( $post_format ) ) {
 			foreach ( $post_format as $format ) {
 				$this->show_on_post_format( $format );
@@ -586,7 +586,7 @@ class Post_Meta_Container extends Container {
 	 * @param string|array $post_type
 	 * @return object $this
 	 **/
-	function show_on_post_type( $post_types ) {
+	public function show_on_post_type( $post_types ) {
 		$post_types = (array) $post_types;
 
 		$this->settings['post_type'] = $post_types;
@@ -600,7 +600,7 @@ class Post_Meta_Container extends Container {
 	 * @see https://codex.wordpress.org/Function_Reference/add_meta_box
 	 * @param string $context ('normal', 'advanced' or 'side')
 	 */
-	function set_context( $context ) {
+	public function set_context( $context ) {
 		$this->settings['panel_context'] = $context;
 
 		return $this;
@@ -612,7 +612,7 @@ class Post_Meta_Container extends Container {
 	 * @see https://codex.wordpress.org/Function_Reference/add_meta_box
 	 * @param string $context ('high', 'core', 'default' or 'low')
 	 */
-	function set_priority( $priority ) {
+	public function set_priority( $priority ) {
 		$this->settings['panel_priority'] = $priority;
 
 		return $this;

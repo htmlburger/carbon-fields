@@ -229,7 +229,7 @@ abstract class Container {
 	/**
 	 * Prints the container Underscore template
 	 **/
-	function template() {
+	public function template() {
 		?>
 		<div class="{{{ classes.join(' ') }}}">
 			<# _.each(fields, function(field) { #>
@@ -262,7 +262,7 @@ abstract class Container {
 	 *
 	 * @param string $title Unique title of the container
 	 **/
-	function __construct( $title ) {
+	public function __construct( $title ) {
 		$this->title = $title;
 		$this->id = preg_replace( '~\W~u', '', remove_accents( $title ) );
 
@@ -278,7 +278,7 @@ abstract class Container {
 	 * @see init()
 	 * @param array $settings
 	 **/
-	function setup( $settings = array() ) {
+	public function setup( $settings = array() ) {
 		if ( $this->setup_ready ) {
 			throw new Incorrect_Syntax_Exception( 'Panel "' . $this->title . '" already setup' );
 		}
@@ -303,7 +303,7 @@ abstract class Container {
 	 *
 	 * @param array $settings Container settings
 	 **/
-	function check_setup_settings( &$settings = array() ) {
+	public function check_setup_settings( &$settings = array() ) {
 		$invalid_settings = array_diff_key( $settings, $this->settings );
 		if ( ! empty( $invalid_settings ) ) {
 			throw new Incorrect_Syntax_Exception( 'Invalid settings supplied to setup(): "' . implode( '", "', array_keys( $invalid_settings ) ) . '"' );
@@ -318,7 +318,7 @@ abstract class Container {
 	 * @see save()
 	 * @see is_valid_save()
 	 **/
-	function _save() {
+	public function _save() {
 		$param = func_get_args();
 		if ( call_user_func_array( array( $this, 'is_valid_save' ), $param ) ) {
 			call_user_func_array( array( $this, 'save' ), $param );
@@ -330,7 +330,7 @@ abstract class Container {
 	 *
 	 * @see is_valid_save()
 	 **/
-	function save( $user_data ) {
+	public function save( $user_data ) {
 		foreach ( $this->fields as $field ) {
 			$field->set_value_from_input();
 			$field->save();
@@ -342,7 +342,7 @@ abstract class Container {
 	 *
 	 * @return bool
 	 **/
-	function is_valid_save() {
+	public function is_valid_save() {
 		return false;
 	}
 
@@ -350,7 +350,7 @@ abstract class Container {
 	 * Load the value for each field in the container.
 	 * Could be used internally during container rendering
 	 **/
-	function load() {
+	public function load() {
 		foreach ( $this->fields as $field ) {
 			$field->load();
 		}
@@ -365,7 +365,7 @@ abstract class Container {
 	 * @see attach()
 	 * @see is_valid_attach()
 	 **/
-	function _attach() {
+	public function _attach() {
 		$param = func_get_args();
 		if ( call_user_func_array( array( $this, 'is_valid_attach' ), $param ) ) {
 			call_user_func_array( array( $this, 'attach' ), $param );
@@ -386,14 +386,14 @@ abstract class Container {
 	 *
 	 * @return array
 	 **/
-	function get_templates() {
+	public function get_templates() {
 		return $this->templates;
 	}
 
 	/**
 	 * Adds a new backbone template
 	 **/
-	function add_template( $name, $callback ) {
+	public function add_template( $name, $callback ) {
 		$this->templates[ $name ] = $callback;
 	}
 
@@ -401,14 +401,14 @@ abstract class Container {
 	 * Attach the container rendering and helping methods 
 	 * to concrete WordPress Action hooks
 	 **/
-	function attach() {}
+	public function attach() {}
 
 	/**
 	 * Perform checks whether the container is active for current request
 	 *
 	 * @return bool True if the container is active
 	 **/
-	function is_active() {
+	public function is_active() {
 		return $this->is_valid_attach();
 	}
 
@@ -417,14 +417,14 @@ abstract class Container {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	function is_valid_attach() {
+	public function is_valid_attach() {
 		return true;
 	}
 
 	/**
 	 * Revert the result of attach()
 	 **/
-	function detach() {
+	public function detach() {
 		$this->drop_unique_panel_id( $this->id );
 
 		// unregister field names
@@ -442,7 +442,7 @@ abstract class Container {
 	 *
 	 * @param array $fields
 	 **/
-	function add_fields( $fields ) {
+	public function add_fields( $fields ) {
 		foreach ( $fields as $field ) {
 			if ( ! is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
 				throw new Incorrect_Syntax_Exception( 'Object must be of type Carbon_Fields\\Field\\Field' );
@@ -464,7 +464,7 @@ abstract class Container {
 	/**
 	 * Configuration function for adding tab with fields
 	 */
-	function add_tab( $tab_name, $fields ) {
+	public function add_tab( $tab_name, $fields ) {
 		$this->add_template( 'tabs', array( $this, 'template_tabs' ) );
 		
 		$this->add_fields( $fields );
@@ -501,14 +501,14 @@ abstract class Container {
 	/**
 	 * Whether the container is tabbed or not
 	 */
-	function is_tabbed() {
+	public function is_tabbed() {
 		return (bool) $this->tabs;
 	}
 
 	/**
 	 * Retrieve all fields that are not defined under a specific tab
 	 */
-	function get_untabbed_fields() {
+	public function get_untabbed_fields() {
 		$tabbed_fields_names = array();
 		foreach ( $this->tabs as $tab_fields ) {
 			$tabbed_fields_names = array_merge( $tabbed_fields_names, array_keys( $tab_fields ) );
@@ -535,7 +535,7 @@ abstract class Container {
 	 * Retrieve all tabs.
 	 * Create a default tab if there are any untabbed fields.
 	 */
-	function get_tabs() {
+	public function get_tabs() {
 		$untabbed_fields = $this->get_untabbed_fields();
 
 		if ( ! empty( $untabbed_fields ) ) {
@@ -548,7 +548,7 @@ abstract class Container {
 	/**
 	 * Build the tabs JSON
 	 */
-	function get_tabs_json() {
+	public function get_tabs_json() {
 		$tabs_json = array();	
 		$tabs = $this->get_tabs();
 
@@ -567,7 +567,7 @@ abstract class Container {
 	 *
 	 * @return array
 	 **/
-	function get_fields() {
+	public function get_fields() {
 		return $this->fields;
 	}
 
@@ -576,14 +576,14 @@ abstract class Container {
 	 *
 	 * @return bool
 	 **/
-	function has_fields() {
+	public function has_fields() {
 		return (bool) $this->fields;
 	}
 
 	/**
 	 * Perform checks whether there is a container registered with identificator $id
 	 */
-	function verify_unique_panel_id( $id ) {
+	public function verify_unique_panel_id( $id ) {
 		if ( in_array( $id, self::$registered_panel_ids ) ) {
 			throw new Incorrect_Syntax_Exception( 'Panel ID "' . $id .'" already registered' );
 		}
@@ -597,7 +597,7 @@ abstract class Container {
 	 *
 	 * @param string $id
 	 **/
-	function drop_unique_panel_id( $id ) {
+	public function drop_unique_panel_id( $id ) {
 		if ( in_array( $id, self::$registered_panel_ids ) ) {
 			unset( self::$registered_panel_ids[ array_search( $id, self::$registered_panel_ids ) ] );
 		}
@@ -609,7 +609,7 @@ abstract class Container {
 	 *
 	 * @param string $name
 	 **/
-	function verify_unique_field_name( $name ) {
+	public function verify_unique_field_name( $name ) {
 		if ( in_array( $name, self::$registered_field_names ) ) {
 			throw new Incorrect_Syntax_Exception( 'Field name "' . $name . '" already registered' );
 		}
@@ -622,7 +622,7 @@ abstract class Container {
 	 *
 	 * @param string $name
 	 **/
-	function drop_unique_field_name( $name ) {
+	public function drop_unique_field_name( $name ) {
 		$index = array_search( $name, self::$registered_field_names );
 		if ( $index !== false ) {
 			unset( self::$registered_field_names[ $index ] );
@@ -634,7 +634,7 @@ abstract class Container {
 	 *
 	 * @param object $store
 	 **/
-	function set_datastore( Datastore_Interface $store ) {
+	public function set_datastore( Datastore_Interface $store ) {
 		$this->store = $store;
 
 		foreach ( $this->fields as $field ) {
@@ -647,7 +647,7 @@ abstract class Container {
 	 *
 	 * @return object $store
 	 **/
-	function get_datastore() {
+	public function get_datastore() {
 		return $this->store;
 	}
 
@@ -656,7 +656,7 @@ abstract class Container {
 	 *
 	 * @return string
 	 **/
-	function get_nonce_name() {
+	public function get_nonce_name() {
 		return 'carbon_panel_' . $this->id . '_nonce';
 	}
 
@@ -665,7 +665,7 @@ abstract class Container {
 	 *
 	 * @return string
 	 **/
-	function get_nonce_field() {
+	public function get_nonce_field() {
 		return wp_nonce_field( $this->get_nonce_name(), $this->get_nonce_name(), /*referer?*/ false, /*echo?*/ false );
 	}
 
@@ -697,7 +697,7 @@ abstract class Container {
 	/**
 	 * Underscore template for tabs
 	 */
-	function template_tabs() {
+	public function template_tabs() {
 		?>
 		<div class="carbon-tabs">
 			<ul class="carbon-tabs-nav">
@@ -720,7 +720,7 @@ abstract class Container {
 	/**
 	 * Enqueue admin scripts
 	 */
-	function admin_hook_scripts() {
+	public function admin_hook_scripts() {
 		wp_enqueue_script( 'carbon-containers', URL . '/assets/js/containers.js', array( 'carbon-app' ) );
 
 		wp_localize_script( 'carbon-containers', 'carbon_containers_l10n',
@@ -734,7 +734,7 @@ abstract class Container {
 	/**
 	 * Enqueue admin styles
 	 */
-	function admin_hook_styles() {
+	public function admin_hook_styles() {
 		wp_enqueue_style( 'carbon-main', URL . '/assets/css/main.css' );
 	}
 

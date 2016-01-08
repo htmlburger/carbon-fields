@@ -24,11 +24,11 @@ class Theme_Options_Container extends Container {
 	 *
 	 * @param string $title Unique title of the container
 	 **/
-	function __construct($title) {
-		parent::__construct($title);
+	public function __construct( $title ) {
+		parent::__construct( $title );
 
-		if ( !$this->get_datastore() ) {
-			$this->set_datastore(new Theme_Options_Datastore());
+		if ( ! $this->get_datastore() ) {
+			$this->set_datastore( new Theme_Options_Datastore() );
 		}
 	}
 
@@ -38,39 +38,39 @@ class Theme_Options_Container extends Container {
 	 *
 	 * @param mixed $user_data
 	 **/
-	function save($user_data = null) {
+	public function save( $user_data = null ) {
 		try {
-			parent::save($user_data);
-		} catch (Incorrect_Syntax_Exception $e) {
+			parent::save( $user_data );
+		} catch ( Incorrect_Syntax_Exception $e ) {
 			$this->errors[] = $e->getMessage();
 		}
 
-		do_action('carbon_after_save_theme_options', $user_data);
+		do_action( 'carbon_after_save_theme_options', $user_data );
 
-		if ( !headers_sent() ) {
-			wp_redirect(add_query_arg(array('settings-updated' => 'true')));
+		if ( ! headers_sent() ) {
+			wp_redirect( add_query_arg( array( 'settings-updated' => 'true' ) ) );
 		}
 	}
 
 	/**
 	 * Attach container as a theme options page/subpage.
 	 **/
-	function init() {
-		if ( !$this->settings['parent'] || $this->settings['parent'] == 'self' ) {
+	public function init() {
+		if ( ! $this->settings['parent'] || $this->settings['parent'] == 'self' ) {
 			$this->settings['parent'] = '';
-		} else if ( strpos($this->settings['parent'], '.php') === false ) {
-			$clear_title = $this->clear_string($this->settings['parent']);
+		} else if ( strpos( $this->settings['parent'], '.php' ) === false ) {
+			$clear_title = $this->clear_string( $this->settings['parent'] );
 			$this->settings['parent'] = 'crbn-' . $clear_title . '.php';
 		}
 
-		if ( !$this->settings['file'] ) {
-			$clear_title = $this->clear_string($this->title);
+		if ( ! $this->settings['file'] ) {
+			$clear_title = $this->clear_string( $this->title );
 			$this->settings['file'] .= 'crbn-' . $clear_title . '.php';
 		}
 
 		$this->verify_unique_page();
 
-		add_action('admin_menu', array($this, '_attach'));
+		add_action( 'admin_menu', array( $this, '_attach' ) );
 	}
 
 	/**
@@ -78,10 +78,10 @@ class Theme_Options_Container extends Container {
 	 * 
 	 * @return bool
 	 **/
-	function is_valid_save() {
-		if ( !isset($_SERVER['REQUEST_METHOD']) || $_SERVER['REQUEST_METHOD'] != 'POST' ) {
+	public function is_valid_save() {
+		if ( ! isset( $_SERVER['REQUEST_METHOD'] ) || $_SERVER['REQUEST_METHOD'] != 'POST' ) {
 			return false;
-		} else if ( !wp_verify_nonce( crb_request_param($this->get_nonce_name()), $this->get_nonce_name() ) ) {
+		} else if ( ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) {
 			return false;
 		}
 
@@ -92,16 +92,16 @@ class Theme_Options_Container extends Container {
 	 * Add theme options container pages.
 	 * Hook the container saving action.
 	 **/
-	function attach() {
+	public function attach() {
 
 		// Add menu page
-		if ( !$this->settings['parent'] ) {
+		if ( ! $this->settings['parent'] ) {
 			add_menu_page(
 				$this->title, 
 				$this->title, 
 				$this->settings['permissions'], 
 				$this->settings['file'],
-				array($this, 'render'),
+				array( $this, 'render' ),
 				$this->icon
 			);
 		}
@@ -112,19 +112,19 @@ class Theme_Options_Container extends Container {
 			$this->title, 
 			$this->settings['permissions'], 
 			$this->settings['file'],
-			array($this, 'render'),
+			array( $this, 'render' ),
 			$this->icon
 		);
 
 		$page_hook = get_plugin_page_hookname( $this->settings['file'], '' );
-		add_action('load-' . $page_hook, array($this, '_save'));
+		add_action( 'load-' . $page_hook, array( $this, '_save' ) );
 	}
 
 	/**
 	 * Whether this container is currently viewed.
 	 **/
-	function is_active() {
-		if (isset($_GET['page']) && $_GET['page'] === $this->settings['file']) {
+	public function is_active() {
+		if ( isset( $_GET['page'] ) && $_GET['page'] === $this->settings['file'] ) {
 			return true;
 		}
 
@@ -134,21 +134,21 @@ class Theme_Options_Container extends Container {
 	/**
 	 * Revert the result of attach()
 	 **/
-	function detach() {
+	public function detach() {
 		parent::detach();
 
 		$this->drop_unique_page();
 
 		$page_hook = get_plugin_page_hookname( $this->settings['file'], '' );
-		remove_action('load-' . $page_hook, array($this, '_save'));
+		remove_action( 'load-' . $page_hook, array( $this, '_save' ) );
 	}
 
 	/**
 	 * Output the container markup
 	 **/
-	function render() {
-		if ( isset($_GET['settings-updated']) && $_GET['settings-updated'] == 'true' ) {
-			$this->notifications[] = __('Settings saved.', 'crb');
+	public function render() {
+		if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == 'true' ) {
+			$this->notifications[] = __( 'Settings saved.', 'crb' );
 		}
 
 		include DIR . '/templates/Container/theme_options.php';
@@ -157,14 +157,14 @@ class Theme_Options_Container extends Container {
 	/**
 	 * Make sure that there are no duplicate containers with the same name.
 	 **/
-	function verify_unique_page() {
+	public function verify_unique_page() {
 		$file = $this->settings['file'];
 		$parent = $this->settings['parent'];
 
 		// Register top level page
-		if ( !$parent ) {
-			if ( isset(self::$registered_pages[$file]) ) {
-				throw new Incorrect_Syntax_Exception ('Page "' . $file . '" already registered');
+		if ( ! $parent ) {
+			if ( isset( self::$registered_pages[ $file ] ) ) {
+				throw new Incorrect_Syntax_Exception( 'Page "' . $file . '" already registered' );
 			}
 
 			self::$registered_pages[$file] = array();
@@ -172,37 +172,37 @@ class Theme_Options_Container extends Container {
 		}
 
 		// Register sub-page
-		if ( !isset(self::$registered_pages[$parent]) ) {
-			self::$registered_pages[$parent] = array($file);
-		}  elseif ( in_array($file, self::$registered_pages[$parent]) ) {
-			throw new Incorrect_Syntax_Exception ('Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a different file name using setup()');
+		if ( ! isset( self::$registered_pages[ $parent ] ) ) {
+			self::$registered_pages[ $parent ] = array( $file );
+		}  elseif ( in_array( $file, self::$registered_pages[ $parent ] ) ) {
+			throw new Incorrect_Syntax_Exception( 'Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a different file name using setup()' );
 		} else {
-			self::$registered_pages[$parent][] = $file;
+			self::$registered_pages[ $parent ][] = $file;
 		}
 	}
 
 	/**
 	 * Unregister the container parent and child pages.
 	 **/
-	function drop_unique_page() {
+	public function drop_unique_page() {
 		$file = $this->settings['file'];
 		$parent = $this->settings['parent'];
 
 		// Register top level page
-		if ( !$parent ) {
-			if ( isset(self::$registered_pages[$file]) && empty( self::$registered_pages[$file] ) ) {
-				unset( self::$registered_pages[$file] );
+		if ( ! $parent ) {
+			if ( isset( self::$registered_pages[ $file ] ) && empty( self::$registered_pages[ $file ] ) ) {
+				unset( self::$registered_pages[ $file ] );
 			}
 
 			return;
 		}
 
 		// Register sub-page
-		if ( isset(self::$registered_pages[$parent]) && in_array($file, self::$registered_pages[$parent]) ) {
+		if ( isset( self::$registered_pages[ $parent ] ) && in_array( $file, self::$registered_pages[ $parent ] ) ) {
 
-			$index = array_search($file, self::$registered_pages[$parent]);
+			$index = array_search( $file, self::$registered_pages[ $parent ] );
 			if ( $index !== false ) {
-				unset(self::$registered_pages[$parent][$index]);
+				unset( self::$registered_pages[ $parent ][ $index ] );
 			}
 		}
 	}
@@ -210,18 +210,18 @@ class Theme_Options_Container extends Container {
 	/**
 	 * Make sure a field certain name can't be registered multiple times.
 	 **/
-	function verify_unique_field_name($name) {
+	public function verify_unique_field_name( $name ) {
 		$page_id = $this->settings['parent'] . '/' . $this->settings['file'];
 
-		if ( !isset(self::$registered_field_names[$page_id]) ) {
-			self::$registered_field_names[$page_id] = array();
+		if ( ! isset( self::$registered_field_names[ $page_id ] ) ) {
+			self::$registered_field_names[ $page_id ] = array();
 		}
 
-		if ( in_array($name, self::$registered_field_names[$page_id]) ) {
-			throw new Incorrect_Syntax_Exception ('Field name "' . $name . '" already registered');
+		if ( in_array( $name, self::$registered_field_names[ $page_id ] ) ) {
+			throw new Incorrect_Syntax_Exception( 'Field name "' . $name . '" already registered' );
 		}
 
-		self::$registered_field_names[$page_id][] = $name;
+		self::$registered_field_names[ $page_id ][] = $name;
 	}
 
 	/**
@@ -229,12 +229,12 @@ class Theme_Options_Container extends Container {
 	 *
 	 * @param string $name
 	 **/
-	function drop_unique_field_name($name) {
+	public function drop_unique_field_name( $name ) {
 		$page_id = $this->settings['parent'] . '/' . $this->settings['file'];
 
-		$index = array_search($name, self::$registered_field_names[$page_id]);
+		$index = array_search( $name, self::$registered_field_names[ $page_id ] );
 		if ( $index !== false ) {
-			unset(self::$registered_field_names[$page_id][$index]);
+			unset( self::$registered_field_names[ $page_id ][ $index ] );
 		}
 	}
 
@@ -247,11 +247,11 @@ class Theme_Options_Container extends Container {
 	 *
 	 * @param array $fields
 	 **/
-	function add_fields($fields) {
-		parent::add_fields($fields);
+	public function add_fields( $fields ) {
+		parent::add_fields( $fields );
 
-		foreach ($this->fields as $field) {
-			$field->set_prefix('');
+		foreach ( $this->fields as $field ) {
+			$field->set_prefix( '' );
 		}
 
 		return $this;
@@ -260,8 +260,8 @@ class Theme_Options_Container extends Container {
 	/**
 	 * Change the parent theme options page of this container
 	 **/
-	function set_page_parent($parent) {
-		if ( is_a($parent, 'Carbon_Container') ) {
+	public function set_page_parent( $parent ) {
+		if ( is_a( $parent, 'Carbon_Container' ) ) {
 			$parent = $parent->title;
 		}
 		
@@ -273,7 +273,7 @@ class Theme_Options_Container extends Container {
 	 * Set the icon of this theme options page.
 	 * Applicable only for parent theme option pages.
 	 **/
-	function set_icon($icon) {
+	public function set_icon( $icon ) {
 		$this->icon = $icon;
 		return $this;
 	}
@@ -281,7 +281,7 @@ class Theme_Options_Container extends Container {
 	/**
 	 * Set the theme options file name of this container.
 	 **/
-	function set_page_file($file) {
+	public function set_page_file( $file ) {
 		$this->settings['file'] = $file;
 		return $this;
 	}
@@ -290,7 +290,7 @@ class Theme_Options_Container extends Container {
 	 * Set the permissions necessary to view 
 	 * the corresponding theme options page
 	 **/
-	function set_page_permissions($permissions) {
+	public function set_page_permissions( $permissions ) {
 		$this->settings['permissions'] = $permissions;
 		return $this;
 	}
@@ -299,8 +299,8 @@ class Theme_Options_Container extends Container {
 	 * Sanitize the container title for use in 
 	 * the theme options file name.
 	 **/
-	protected function clear_string($string) {
-		return preg_replace(array('~ +~', '~[^\w\d-]+~u', '~-+~'), array('-', '-', '-'), strtolower(remove_accents($string)));
+	protected function clear_string( $string ) {
+		return preg_replace( array( '~ +~', '~[^\w\d-]+~u', '~-+~' ), array( '-', '-', '-' ), strtolower( remove_accents( $string ) ) );
 	}
 
 }

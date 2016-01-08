@@ -12,7 +12,7 @@ class Term_Meta_Container extends Container {
 	protected $term_id;
 
 	public $settings = array(
-		'taxonomy' => array('category'),
+		'taxonomy' => array( 'category' ),
 		'show_on_level' => false,
 	);
 
@@ -21,28 +21,28 @@ class Term_Meta_Container extends Container {
 	 *
 	 * @param string $title Unique title of the container
 	 **/
-	function __construct($title) {
-		parent::__construct($title);
+	public function __construct( $title ) {
+		parent::__construct( $title );
 
-		if ( !$this->get_datastore() ) {
-			$this->set_datastore(new Term_Meta_Datastore());
+		if ( ! $this->get_datastore() ) {
+			$this->set_datastore( new Term_Meta_Datastore() );
 		}
 	}
 
 	/**
 	 * Bind attach() and save() to the appropriate WordPress actions.
 	 **/
-	function init() {
+	public function init() {
 		// force taxonomy to be array
-		if ( !is_array($this->settings['taxonomy']) ) {
-			$this->settings['taxonomy'] = array($this->settings['taxonomy']);
+		if ( ! is_array( $this->settings['taxonomy'] ) ) {
+			$this->settings['taxonomy'] = array( $this->settings['taxonomy'] );
 		}
 
-		add_action('admin_init', array($this, '_attach'));
+		add_action( 'admin_init', array( $this, '_attach' ) );
 
-		foreach ($this->settings['taxonomy'] as $taxonomy) {
-			add_action( 'edited_' . $taxonomy, array($this, '_save'), 10, 2);
-			add_action( 'created_' . $taxonomy, array($this, '_save'), 10, 2);
+		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
+			add_action( 'edited_' . $taxonomy, array( $this, '_save' ), 10, 2 );
+			add_action( 'created_' . $taxonomy, array( $this, '_save' ), 10, 2 );
 		}
 	}
 
@@ -52,15 +52,15 @@ class Term_Meta_Container extends Container {
 	 *
 	 * @param int $term_id ID of the term against which save() is ran
 	 **/
-	function save($term_id) {
-		$this->set_term_id($term_id);
+	public function save( $term_id ) {
+		$this->set_term_id( $term_id );
 
-		foreach ($this->fields as $field) {
+		foreach ( $this->fields as $field ) {
 			$field->set_value_from_input();
 			$field->save();
 		}
 
-		do_action('carbon_after_save_term_meta', $term_id);
+		do_action( 'carbon_after_save_term_meta', $term_id );
 	}
 
 	/**
@@ -68,8 +68,8 @@ class Term_Meta_Container extends Container {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	function is_valid_attach() {
-		if (isset($_GET['taxonomy']) && in_array($_GET['taxonomy'], $this->settings['taxonomy'])) {
+	public function is_valid_attach() {
+		if ( isset( $_GET['taxonomy'] ) && in_array( $_GET['taxonomy'], $this->settings['taxonomy'] ) ) {
 			return true;
 		}
 
@@ -82,12 +82,12 @@ class Term_Meta_Container extends Container {
 	 * @param int $term_id ID of the term against which save() is ran
 	 * @return bool
 	 **/
-	function is_valid_save($term_id = null) {
-		if ( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
+	public function is_valid_save( $term_id = null ) {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return false;
-		} else if ( !wp_verify_nonce( crb_request_param($this->get_nonce_name()), $this->get_nonce_name() ) ) {
+		} else if ( ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) {
 			return false;
-		} else if ($term_id < 1) {
+		} else if ( $term_id < 1 ) {
 			return false;
 		}
 
@@ -97,10 +97,10 @@ class Term_Meta_Container extends Container {
 	/**
 	 * Add term meta for each of the container taxonomies
 	 **/
-	function attach() {
-		foreach ($this->settings['taxonomy'] as $taxonomy) {
-			add_action( $taxonomy . '_edit_form_fields', array($this, 'render'), 10, 2);
-			add_action( $taxonomy . '_add_form_fields', array($this, 'render'), 10, 2);
+	public function attach() {
+		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
+			add_action( $taxonomy . '_edit_form_fields', array( $this, 'render' ), 10, 2 );
+			add_action( $taxonomy . '_add_form_fields', array( $this, 'render' ), 10, 2 );
 		}
 	}
 	
@@ -108,27 +108,27 @@ class Term_Meta_Container extends Container {
 	 * Revert the result of attach()
 	 *
 	 **/
-	function detach() {
+	public function detach() {
 		parent::detach();
 
-		remove_action('admin_init', array($this, '_attach'));
+		remove_action( 'admin_init', array( $this, '_attach' ) );
 
-		foreach ($this->settings['taxonomy'] as $taxonomy) {
-			remove_action( 'edited_' . $taxonomy, array($this, '_save'), 10, 2);
-			remove_action( 'created_' . $taxonomy, array($this, '_save'), 10, 2);
+		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
+			remove_action( 'edited_' . $taxonomy, array( $this, '_save' ), 10, 2 );
+			remove_action( 'created_' . $taxonomy, array( $this, '_save' ), 10, 2 );
 		}
 
 		// unregister field names
-		foreach ($this->fields as $field) {
-			$this->drop_unique_field_name($field->get_name());
+		foreach ( $this->fields as $field ) {
+			$this->drop_unique_field_name( $field->get_name() );
 		}
 	}
 
 	/**
 	 * Output the container markup
 	 **/
-	function render($term=null) {
-		if (is_object($term)) {
+	public function render( $term=null ) {
+		if ( is_object( $term ) ) {
 			$this->set_term_id( $term->term_id );
 		}
 
@@ -140,9 +140,9 @@ class Term_Meta_Container extends Container {
 	 *
 	 * @param int $term_id
 	 **/
-	function set_term_id($term_id) {
+	public function set_term_id( $term_id ) {
 		$this->term_id = $term_id;
-		$this->store->set_id($term_id);
+		$this->store->set_id( $term_id );
 	}
 
 
@@ -152,21 +152,21 @@ class Term_Meta_Container extends Container {
 	 *
 	 * @param string $name
 	 **/
-	function verify_unique_field_name($name) {
-		if ( empty($this->settings['taxonomy']) ) {
-			throw new Incorrect_Syntax_Exception ('Panel instance is not setup correctly (missing taxonomy)');
+	public function verify_unique_field_name( $name ) {
+		if ( empty( $this->settings['taxonomy'] ) ) {
+			throw new Incorrect_Syntax_Exception( 'Panel instance is not setup correctly (missing taxonomy)' );
 		}
 
-		foreach ($this->settings['taxonomy'] as $taxonomy) {
-			if ( !isset(self::$registered_field_names[$taxonomy]) ) {
-				self::$registered_field_names[$taxonomy] = array();
+		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
+			if ( ! isset( self::$registered_field_names[ $taxonomy ] ) ) {
+				self::$registered_field_names[ $taxonomy ] = array();
 			}
 
-			if ( in_array($name, self::$registered_field_names[$taxonomy]) ) {
-				throw new Incorrect_Syntax_Exception ('Field name "' . $name . '" already registered');
+			if ( in_array( $name, self::$registered_field_names[ $taxonomy ] ) ) {
+				throw new Incorrect_Syntax_Exception( 'Field name "' . $name . '" already registered' );
 			}
 
-			self::$registered_field_names[$taxonomy][] = $name;
+			self::$registered_field_names[ $taxonomy ][] = $name;
 		}
 	}
 
@@ -175,11 +175,11 @@ class Term_Meta_Container extends Container {
 	 *
 	 * @param string $name
 	 **/
-	function drop_unique_field_name($name) {
-		foreach ($this->settings['taxonomy'] as $taxonomy) {
-			$index = array_search($name, self::$registered_field_names[$taxonomy]);
+	public function drop_unique_field_name( $name ) {
+		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
+			$index = array_search( $name, self::$registered_field_names[ $taxonomy ] );
 			if ( $index !== false ) {
-				unset(self::$registered_field_names[$taxonomy][$index]);
+				unset( self::$registered_field_names[ $taxonomy ][ $index ] );
 			}
 		}
 	}
@@ -190,8 +190,8 @@ class Term_Meta_Container extends Container {
 	 * @param string|array $post_type
 	 * @return object $this
 	 **/
-	function show_on_taxonomy($taxonomies) {
-		$taxonomies = (array)$taxonomies;
+	public function show_on_taxonomy( $taxonomies ) {
+		$taxonomies = (array) $taxonomies;
 
 		$this->settings['taxonomy'] = $taxonomies;
 
@@ -204,7 +204,7 @@ class Term_Meta_Container extends Container {
 	 * @param int $term_level 
 	 * @return object $this 
 	 */ 
-	function show_on_level($term_level) {                    
+	public function show_on_level( $term_level ) {                    
 		$this->settings['show_on_level'] = $term_level; 
 		return $this; 
 	} 
