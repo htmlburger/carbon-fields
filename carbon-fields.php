@@ -11,8 +11,8 @@ namespace Carbon_Fields;
 
 use Carbon_Fields\Helper\Helper;
 
-define('DIR', dirname(__FILE__));
-define('URL', str_replace('\\', '/', str_replace(untrailingslashit(ABSPATH), site_url(), DIR)));
+define( 'DIR', dirname( __FILE__ ) );
+define( 'URL', str_replace( '\\', '/', str_replace( untrailingslashit( ABSPATH ), site_url(), DIR ) ) );
 
 # Initialize helper 
 $carbon_helper = new Helper();
