@@ -23,12 +23,24 @@ class Helper {
 		add_action( 'admin_footer', array( $this, 'init_scripts' ), 0 );
 		add_action( 'crb_field_activated', array( $this, 'add_templates' ) );
 		add_action( 'crb_container_activated', array( $this, 'add_templates' ) );
+		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
 
 		# Initialize templater
 		new Templater();
 
 		# Initialize sidebar manager
 		Sidebar_Manager::instance();
+	}
+
+	/**
+	 * Load the plugin textdomain.
+	 */
+	public function load_textdomain() {
+		$dir = dirname( dirname( dirname( __FILE__ ) ) ) . '/languages/';
+		$domain = 'carbon_fields';
+		$locale = get_locale();
+		$path = $dir . $domain . '-' . $locale . '.mo';
+		load_textdomain( $domain, $path );
 	}
 
 	/**
