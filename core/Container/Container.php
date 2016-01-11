@@ -23,7 +23,7 @@ abstract class Container {
 	 * @see verify_unique_panel_id()
 	 * @var array
 	 */
-	static $registered_panel_ids = array();
+	public static $registered_panel_ids = array();
 
 	/**
 	 * List of registered unique field names
@@ -48,7 +48,7 @@ abstract class Container {
 	 * @see _attach()
 	 * @var array
 	 */
-	static public $active_containers = array();
+	public static $active_containers = array();
 
 	/**
 	 * List of fields attached to the current page view
@@ -132,7 +132,7 @@ abstract class Container {
 	 * @param string $name Human-readable name of the container
 	 * @return object $container
 	 **/
-	static function factory( $type, $name ) {
+	public static function factory( $type, $name ) {
 		// backward compatibility: post_meta container used to be called custom_fields
 		if ( $type === 'custom_fields' ) {
 			$type = 'post_meta';
@@ -160,7 +160,7 @@ abstract class Container {
 	 *
 	 * @see Container::factory()
 	 **/
-	static function make( $type, $name ) {
+	public static function make( $type, $name ) {
 		return self::factory( $type, $name );
 	}
 
@@ -169,7 +169,7 @@ abstract class Container {
 	 *
 	 * @return object
 	 **/
-	static function init_containers() {
+	public static function init_containers() {
 		while ( ( $container = array_shift( self::$init_containers ) ) ) {
 			$container->init();
 		}
@@ -182,14 +182,14 @@ abstract class Container {
 	 *
 	 * @return array
 	 **/
-	static function get_active_containers() {
+	public static function get_active_containers() {
 		return self::$active_containers;
 	}
 
 	/**
 	 * Adds a container to the active containers array and triggers an action
 	 **/
-	static function add_active_container( $container ) {
+	public static function add_active_container( $container ) {
 		self::$active_containers[] = $container;
 
 		do_action( 'crb_container_activated', $container );
@@ -200,14 +200,14 @@ abstract class Container {
 	 *
 	 * @return array
 	 **/
-	static function get_active_fields() {
+	public static function get_active_fields() {
 		return self::$active_fields;
 	}
 
 	/**
 	 * Adds a field to the active fields array and triggers an action
 	 **/
-	static function add_active_field( $field ) {
+	public static function add_active_field( $field ) {
 		self::$active_fields[] = $field;
 
 		if ( method_exists( $field, 'get_fields' ) ) {

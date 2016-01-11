@@ -18,7 +18,7 @@ class Nav_Menu_Container extends Container {
 	/**
 	 * Create a new nav menu item fields container
 	 *
-	 * @param string $title Unique title of the container
+	 * @param string $id ID of the container
 	 **/
 	public function __construct( $id ) {
 		// Reset the registered fields array, this is required so we can have fields with same names
@@ -114,9 +114,6 @@ class Nav_Menu_Container extends Container {
 	 */
 	public function is_valid_attach() {
 		return true;
-		$screen = get_current_screen();
-
-		return $screen && $screen->id === 'nav-menus';
 	}
 
 	/**

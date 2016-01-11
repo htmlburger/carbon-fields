@@ -169,10 +169,10 @@ class Field {
 	 * @param string $label (optional) Automatically generated from $name if not present
 	 * @return object $field
 	 **/
-	static public function factory( $type, $name, $label=null ) {
+	public static function factory( $type, $name, $label = null ) {
 		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
 
-		$class = __NAMESPACE__ . "\\" . $type . '_Field';
+		$class = __NAMESPACE__ . '\\' . $type . '_Field';
 
 		if ( ! class_exists( $class ) ) {
 			throw new Incorrect_Syntax_Exception( 'Unknown field "' . $type . '".' );
@@ -194,7 +194,7 @@ class Field {
 	 *
 	 * @see Field::factory()
 	 **/
-	static public function make( $type, $name, $label=null ) {
+	public static function make( $type, $name, $label = null ) {
 		return self::factory( $type, $name, $label );
 	}
 
@@ -353,7 +353,7 @@ class Field {
 	/**
 	 * Set default field value
 	 *
-	 * @param mixed $value
+	 * @param mixed $default_value
 	 **/
 	public function set_default_value( $default_value ) {
 		$this->default_value = $default_value;
@@ -516,7 +516,7 @@ class Field {
 	/**
 	 * Whether or not this field will be initialized when the field is in the viewport (visible).
 	 * 
-	 * @param bool $autoload
+	 * @param bool $lazyload
 	 * @return object $this
 	 **/
 	public function set_lazyload( $lazyload ) {

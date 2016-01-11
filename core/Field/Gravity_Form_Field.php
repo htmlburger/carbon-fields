@@ -9,7 +9,7 @@ class Gravity_Form_Field extends Select_Field {
 	/**
 	 * Admin initialization actions
 	 */
-	function admin_init() {
+	public function admin_init() {
 		// Setup form options
 		add_action( 'carbon_after_register_fields', array( $this, 'setup_gravity_form_options' ), 20 );
 	}
@@ -19,7 +19,7 @@ class Gravity_Form_Field extends Select_Field {
 	 *
 	 * @return bool
 	 */
-	function is_plugin_active() {
+	public function is_plugin_active() {
 		if ( class_exists( '\RGFormsModel' ) && method_exists( '\RGFormsModel', 'get_forms' ) ) {
 			return true;
 		}
@@ -30,7 +30,7 @@ class Gravity_Form_Field extends Select_Field {
 	/**
 	 * Set the available forms as field options
 	 */
-	function setup_gravity_form_options() {
+	public function setup_gravity_form_options() {
 		if ( ! $this->is_plugin_active() ) {
 			return;
 		}
@@ -59,7 +59,7 @@ class Gravity_Form_Field extends Select_Field {
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
-	function to_json( $load ) {
+	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
 		$this->set_options( apply_filters( 'crb_gravity_form_options', $this->options ) );
@@ -74,7 +74,7 @@ class Gravity_Form_Field extends Select_Field {
 	/**
 	 * The main Underscore template of this field.
 	 */
-	function template() {
+	public function template() {
 		// Gravity Forms not installed
 		if ( ! $this->is_plugin_active() ) {
 			?><em><?php _e( 'Please install Gravity Forms plugin', 'carbon_fields' ); ?></em><?php

@@ -17,7 +17,7 @@ class Post_Meta_Container extends Container {
 	 * @see verify_unique_field_name()
 	 * @var array
 	 */
-	static protected $registered_field_names;
+	protected static $registered_field_names;
 
 	/**
 	 * ID of the post the container is working with
@@ -583,7 +583,7 @@ class Post_Meta_Container extends Container {
 	/**
 	 * Show the container only on posts from the specified type(s).
 	 *
-	 * @param string|array $post_type
+	 * @param string|array $post_types
 	 * @return object $this
 	 **/
 	public function show_on_post_type( $post_types ) {
@@ -610,7 +610,7 @@ class Post_Meta_Container extends Container {
 	 * Sets the meta box container priority
 	 *
 	 * @see https://codex.wordpress.org/Function_Reference/add_meta_box
-	 * @param string $context ('high', 'core', 'default' or 'low')
+	 * @param string $priority ('high', 'core', 'default' or 'low')
 	 */
 	public function set_priority( $priority ) {
 		$this->settings['panel_priority'] = $priority;

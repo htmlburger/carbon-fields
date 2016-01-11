@@ -67,7 +67,7 @@ class Term_Meta_Datastore extends Datastore {
 	 * @param Field $field The field to save.
 	 */
 	public function save( Field $field ) {
-		if ( ! add_metadata('term', $this->term_id, $field->get_name(), $field->get_value(), true ) ) {
+		if ( ! add_metadata( 'term', $this->term_id, $field->get_name(), $field->get_value(), true ) ) {
 			update_metadata( 'term', $this->term_id, $field->get_name(), $field->get_value() );
 		}
 	}

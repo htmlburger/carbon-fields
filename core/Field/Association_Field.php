@@ -19,7 +19,7 @@ class Association_Field extends Relationship_Field {
 		array(
 			'type' => 'post',
 			'post_type' => 'post',
-		)
+		),
 	);
 
 	/**
@@ -44,8 +44,8 @@ class Association_Field extends Relationship_Field {
 		$this->set_types( array(
 			array(
 				'type' => 'post',
-				'post_type' => $post_type
-			)
+				'post_type' => $post_type,
+			),
 		) );
 
 		return $this;
@@ -108,12 +108,12 @@ class Association_Field extends Relationship_Field {
 
 		if ( $type === 'post' ) {
 			$title = get_the_title( $id );
-		} elseif( $type === 'term' ) {
+		} elseif ( $type === 'term' ) {
 			$term = get_term_by( 'id', $id, $subtype );
 			$title = $term->name;
-		} elseif( $type === 'user' ) {
+		} elseif ( $type === 'user' ) {
 			$title = get_the_author_meta( 'user_login', $id );
-		} elseif( $type === 'comment' ) {
+		} elseif ( $type === 'comment' ) {
 			$title = get_comment_text( $id );
 			$max = apply_filters( 'carbon_relationship_comment_length', 30, $this->get_name() );
 			if ( strlen( $title ) > $max ) {
@@ -153,7 +153,7 @@ class Association_Field extends Relationship_Field {
 		if ( $type === 'post' ) {
 			$post_type_object = get_post_type_object( $subtype );
 			$label = $post_type_object->labels->singular_name;
-		} elseif( $type === 'term' ) {
+		} elseif ( $type === 'term' ) {
 			$taxonomy_object = get_taxonomy( $subtype );
 			$label = $taxonomy_object->labels->singular_name;
 		}
@@ -241,7 +241,7 @@ class Association_Field extends Relationship_Field {
 				$options = array_merge( $options, $terms );
 
 			// populate users
-			} elseif ($type['type'] === 'user') {
+			} elseif ( $type['type'] === 'user' ) {
 
 				/**
 				 * Filter the default parameters when fetching users for a particular field.
@@ -250,7 +250,7 @@ class Association_Field extends Relationship_Field {
 				 */
 				$filter_name = 'carbon_relationship_options_' . $this->get_name() . '_' . $type['type'];
 				$args = apply_filters( $filter_name, array(
-					'fields' => 'ID'
+					'fields' => 'ID',
 				) );
 
 				// fetch and prepare users as relationship items
@@ -269,7 +269,7 @@ class Association_Field extends Relationship_Field {
 				$options = array_merge( $options, $users );
 
 			// populate comments
-			} elseif( $type['type'] === 'comment' ) {
+			} elseif ( $type['type'] === 'comment' ) {
 
 				/**
 				 * Filter the default parameters when fetching comments for a particular field.
@@ -278,7 +278,7 @@ class Association_Field extends Relationship_Field {
 				 */
 				$filter_name = 'carbon_relationship_options_' . $this->get_name() . '_' . $type['type'];
 				$args = apply_filters( $filter_name, array(
-					'fields' => 'ids'
+					'fields' => 'ids',
 				) );
 
 				// fetch and prepare comments as relationship items
@@ -320,30 +320,25 @@ class Association_Field extends Relationship_Field {
 	public function get_object_edit_link( $type, $id ) {
 		switch ( $type['type'] ) {
 
-			case 'post' : {
+			case 'post' :
 				$edit_link = get_edit_post_link( $id );
 				break;
-			}
 
-			case 'term' : {
+			case 'term' :
 				$edit_link = get_edit_term_link( $id, $type['taxonomy'], $type['type'] );
 				break;
-			}
 
-			case 'comment' : {
+			case 'comment' :
 				$edit_link = get_edit_comment_link( $id );
 				break;
-			}
 
-			case 'user' : {
+			case 'user' :
 				$edit_link = get_edit_user_link( $id );
 				break;
-			}
 
-			default : {
+			default :
 				$edit_link = false;
-			}
-
+				
 		}
 
 		return $edit_link;
