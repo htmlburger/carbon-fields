@@ -2,6 +2,7 @@ filter:
   excluded_paths:
   - assets/*
   - docs/*
+  - languages/*
   - tests/*
   - templates/*
   - tmp/*
