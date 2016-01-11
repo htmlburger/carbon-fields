@@ -320,23 +320,23 @@ class Association_Field extends Relationship_Field {
 	public function get_object_edit_link( $type, $id ) {
 		switch ( $type['type'] ) {
 
-			case 'post' :
+			case 'post':
 				$edit_link = get_edit_post_link( $id );
 				break;
 
-			case 'term' :
+			case 'term':
 				$edit_link = get_edit_term_link( $id, $type['taxonomy'], $type['type'] );
 				break;
 
-			case 'comment' :
+			case 'comment':
 				$edit_link = get_edit_comment_link( $id );
 				break;
 
-			case 'user' :
+			case 'user':
 				$edit_link = get_edit_user_link( $id );
 				break;
 
-			default :
+			default:
 				$edit_link = false;
 				
 		}
