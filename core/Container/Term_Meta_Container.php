@@ -127,7 +127,7 @@ class Term_Meta_Container extends Container {
 	/**
 	 * Output the container markup
 	 **/
-	public function render( $term=null ) {
+	public function render( $term = null ) {
 		if ( is_object( $term ) ) {
 			$this->set_term_id( $term->term_id );
 		}
@@ -187,7 +187,7 @@ class Term_Meta_Container extends Container {
 	/**
 	 * Show the container only on terms from the specified taxonomies.
 	 *
-	 * @param string|array $post_type
+	 * @param string|array $taxonomies
 	 * @return object $this
 	 **/
 	public function show_on_taxonomy( $taxonomies ) {

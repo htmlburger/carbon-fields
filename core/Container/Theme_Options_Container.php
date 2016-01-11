@@ -14,7 +14,7 @@ class Theme_Options_Container extends Container {
 	public $settings = array(
 		'parent' => 'self',
 		'file' => '',
-		'permissions' => 'manage_options'
+		'permissions' => 'manage_options',
 	);
 
 	public $icon = '';
@@ -167,7 +167,7 @@ class Theme_Options_Container extends Container {
 				throw new Incorrect_Syntax_Exception( 'Page "' . $file . '" already registered' );
 			}
 
-			self::$registered_pages[$file] = array();
+			self::$registered_pages[ $file ] = array();
 			return;
 		}
 

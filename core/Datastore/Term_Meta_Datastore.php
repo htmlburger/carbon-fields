@@ -13,7 +13,7 @@ class Term_Meta_Datastore extends Datastore {
 	/**
 	 * Create term meta database table (for WP < 4.4)
 	 **/
-	static public function create_table() {
+	public static function create_table() {
 		global $wpdb;
 
 		$tables = $wpdb->get_results( 'SHOW TABLES LIKE "' . $wpdb->prefix . 'termmeta"' );
@@ -24,11 +24,11 @@ class Term_Meta_Datastore extends Datastore {
 
 		$charset_collate = '';	
 		if ( ! empty( $wpdb->charset ) ) {
-			$charset_collate = "DEFAULT CHARACTER SET " . $wpdb->charset;
+			$charset_collate = 'DEFAULT CHARACTER SET ' . $wpdb->charset;
 		}
 			
 		if ( ! empty( $wpdb->collate ) ) {
-			$charset_collate .= " COLLATE " . $wpdb->collate;
+			$charset_collate .= ' COLLATE ' . $wpdb->collate;
 		}
 
 		$wpdb->query( 'CREATE TABLE ' . $wpdb->prefix . 'termmeta (
@@ -162,7 +162,7 @@ class Term_Meta_Datastore extends Datastore {
 	 * @param  string $taxonomy Taxonomy.
 	 * @return bool Result of the deletion operation.
 	 */
-	static public function on_delete_term( $term_id, $tt_id, $taxonomy ) {
+	public static function on_delete_term( $term_id, $tt_id, $taxonomy ) {
 		global $wpdb;
 
 		return $wpdb->query( '

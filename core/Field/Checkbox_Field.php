@@ -32,7 +32,7 @@ class Checkbox_Field extends Field {
 	 **/
 	public function set_value_from_input( $input = null ) {
 		parent::set_value_from_input( $input );
-		if ( $this->get_value() === NULL ) {
+		if ( $this->get_value() === null ) {
 			$this->set_value( '' );
 		}
 	}
@@ -72,7 +72,7 @@ class Checkbox_Field extends Field {
 	 * Get the field label.
 	 * Label here is empty because it is displayed in the underscore template.
 	 * 
-	 * @return [type] [description]
+	 * @return string Label of the field.
 	 */
 	public function get_label() {
 		return '';
