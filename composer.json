@@ -6,11 +6,62 @@
     "authors": [
         {
             "name": "htmlBurger",
-            "email": "wordpress@htmlburger.com"
+            "email": "wordpress@htmlburger.com",
+            "homepage": "https://htmlburger.com/",
+            "role": "Developer"
         },
         {
             "name": "Marin Atanasov",
-            "email": "contact@marinatanasov.com"
+            "email": "contact@marinatanasov.com",
+            "homepage": "http://marinatanasov.com/",
+            "role": "Developer"
+        },
+        {
+            "name": "Siyan Panayotov",
+            "homepage": "http://siyanpanayotov.com/",
+            "role": "Developer"
+        },
+        {
+            "name": "Georgi Stoyanov",
+            "email": "stoyanov.gs@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Stanimir Panchev",
+            "email": "Stan4omir@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Peter Petrov",
+            "email": "peter.petrov89@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Plamen Kostadinov",
+            "email": "pkostadinov.2create@gmail.com",
+            "homepage": "http://plasmen.info/",
+            "role": "Developer"
+        },
+        {
+            "name": "Stanimir Stoyanov",
+            "email": "stanimir.k.stoyanov@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Kaloyan Ivanov",
+            "email": "kaloyanxivanov@gmail.com",
+            "homepage": "http://codepeace.net/",
+            "role": "Developer"
+        },
+        {
+            "name": "Georgi Popov",
+            "homepage": "http://magadanski.com/",
+            "role": "Developer"
+        },
+        {
+            "name": "German Velchev",
+            "email": "germozy@gmail.com",
+            "role": "Developer"
         }
     ],
     "require": {},
