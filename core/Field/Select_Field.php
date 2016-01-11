@@ -52,7 +52,7 @@ class Select_Field extends Field {
 	public function template() {
 		?>
 		<# if (_.isEmpty(options)) { #>
-			<em><?php _e( 'no options', 'crb' ); ?></em>
+			<em><?php _e( 'no options', 'carbon_fields' ); ?></em>
 		<# } else { #>
 			<select id="{{{ id }}}" name="{{{ name }}}">
 				<# _.each(options, function(option) { #>

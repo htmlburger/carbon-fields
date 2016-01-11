@@ -34,8 +34,8 @@ class Complex_Field extends Field {
 	 */
 	public function init() {
 		$this->labels = array(
-			'singular_name'=>__( 'Entry', 'crb' ),
-			'plural_name'=>__( 'Entries', 'crb' ),
+			'singular_name'=>__( 'Entry', 'carbon_fields' ),
+			'plural_name'=>__( 'Entries', 'carbon_fields' ),
 		);
 
 		// Include the complex group backbone template
@@ -461,9 +461,9 @@ class Complex_Field extends Field {
 				<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label }}}</span>
 			</div>
 			<div class="carbon-group-actions">
-				<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e('Collapse/Expand', 'crb'); ?>"><?php _e('Collapse/Expand', 'crb'); ?></a>
-				<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e('Clone', 'crb'); ?>"><?php _e('Clone', 'crb'); ?></a>
-				<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e('Remove', 'crb'); ?>"><?php _e('Remove', 'crb'); ?></a>
+				<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e('Collapse/Expand', 'carbon_fields'); ?>"><?php _e('Collapse/Expand', 'carbon_fields'); ?></a>
+				<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e('Clone', 'carbon_fields'); ?>"><?php _e('Clone', 'carbon_fields'); ?></a>
+				<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e('Remove', 'carbon_fields'); ?>"><?php _e('Remove', 'carbon_fields'); ?></a>
 			</div>
 
 			<div class="fields-container">
@@ -502,7 +502,7 @@ class Complex_Field extends Field {
 	 * @param string $layout
 	 */
 	public function set_layout( $layout ) {
-		_doing_it_wrong( __METHOD__, __( 'Complex field layouts are deprecated, please use <code>set_width()</code> instead.', 'crb' ), null );
+		_doing_it_wrong( __METHOD__, __( 'Complex field layouts are deprecated, please use <code>set_width()</code> instead.', 'carbon_fields' ), null );
 
 		if ( ! in_array( $layout, array( self::LAYOUT_TABLE, self::LAYOUT_LIST ) ) ) {
 			throw new Incorrect_Syntax_Exception( 'Incorrect layout specifier. Available values are "<code>' . self::LAYOUT_TABLE . '</code>" and "<code>' . self::LAYOUT_LIST . '</code>"' );

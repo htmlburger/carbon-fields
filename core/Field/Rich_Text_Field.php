@@ -28,8 +28,8 @@ class Rich_Text_Field extends Textarea_Field {
 		<div id="wp-{{{ id }}}-wrap" class="carbon-wysiwyg wp-editor-wrap tmce-active" data-toolbar="full">
 			<div id="wp-{{{ id }}}-editor-tools" class="wp-editor-tools">
 				<div id="wp-{{{ id }}}-media-buttons" class="hide-if-no-js wp-media-buttons">
-					<a href="#" class="button insert-media add_media" data-editor="{{{ id }}}" title="<?php _e( 'Add Media' ); ?>">
-						<span class="wp-media-buttons-icon"></span> <?php _e( 'Add Media' ); ?>
+					<a href="#" class="button insert-media add_media" data-editor="{{{ id }}}" title="<?php _e( 'Add Media', 'carbon_fields' ); ?>">
+						<span class="wp-media-buttons-icon"></span> <?php _e( 'Add Media', 'carbon_fields' ); ?>
 					</a>
 					<?php
 						remove_action( 'media_buttons', 'media_buttons' );
@@ -40,10 +40,10 @@ class Rich_Text_Field extends Textarea_Field {
 			</div>
 			<div class="wp-editor-tabs">
 				<button type="button" id="{{{ id }}}-tmce" class="wp-switch-editor switch-tmce" data-wp-editor-id="{{{ id }}}">
-					<?php _e( 'Visual', 'crb' ); ?>
+					<?php _e( 'Visual', 'carbon_fields' ); ?>
 				</button>
 				<button type="button" id="{{{ id }}}-html" class="wp-switch-editor switch-html" data-wp-editor-id="{{{ id }}}">
-					<?php _e( 'Text', 'crb' ); ?>
+					<?php _e( 'Text', 'carbon_fields' ); ?>
 				</button>
 			</div>
 			<div id="wp-{{{ id }}}-editor-container" class="wp-editor-container">

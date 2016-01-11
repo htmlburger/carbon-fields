@@ -20,9 +20,9 @@ class File_Field extends Field {
 	 * Admin initialization actions
 	 */
 	public function admin_init() {
-		$this->button_label = __( 'Select File', 'crb' );
-		$this->window_button_label = __( 'Select File', 'crb' );
-		$this->window_label = __( 'Files', 'crb' );
+		$this->button_label = __( 'Select File', 'carbon_fields' );
+		$this->window_button_label = __( 'Select File', 'carbon_fields' );
+		$this->window_label = __( 'Files', 'carbon_fields' );
 
 		$this->add_template( $this->get_type() . '-Description', array( $this, 'template_description' ) );
 	}
@@ -119,7 +119,7 @@ class File_Field extends Field {
 		?>
 		<div class="carbon-description {{{ value ? '' : 'hidden' }}}">
 			<a href="{{ value }}" target="_blank" class="button carbon-view_file">
-				<?php _e( 'View File', 'crb' ); ?>
+				<?php _e( 'View File', 'carbon_fields' ); ?>
 			</a>
 		</div>
 		<?php

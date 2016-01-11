@@ -15,9 +15,9 @@ class Image_Field extends Attachment_Field {
 	 * Administration initialization actions
 	 */
 	public function admin_init() {
-		$this->button_label = __( 'Select Image', 'crb' );
-		$this->window_button_label = __( 'Select Image', 'crb' );
-		$this->window_label = __( 'Images', 'crb' );
+		$this->button_label = __( 'Select Image', 'carbon_fields' );
+		$this->window_button_label = __( 'Select Image', 'carbon_fields' );
+		$this->window_label = __( 'Images', 'carbon_fields' );
 
 		parent::admin_init();
 	}

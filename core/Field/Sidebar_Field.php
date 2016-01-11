@@ -32,7 +32,7 @@ class Sidebar_Field extends Select_Field {
 	 */
 	public function to_json( $load ) {
 		if ( $this->enable_add_new ) {
-			$this->options['new'] = _x( 'Add New', 'sidebar', 'crb' );
+			$this->options['new'] = _x( 'Add New', 'sidebar', 'carbon_fields' );
 		}
 
 		$field_data = parent::to_json( $load );

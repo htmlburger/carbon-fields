@@ -616,7 +616,7 @@ protected $form_options = array(
 					<p>In case you want to disable the default widget wrappers that come from your sidebar, you can disable <code>$this->print_wrappers</code> in the <code>__construct()</code> method of your widget. Example:</p>
 					<pre class="prettyprint">
 function __construct() {
-	$this->setup('Widget Title', __('Widget Description', 'crb'), array(
+	$this->setup('Widget Title', __('Widget Description'), array(
 		Field::make('text', 'title', 'Title')-&gt;set_default_value('Hello World!'),
 	));
 
@@ -755,13 +755,13 @@ function crb_nav_menu_link_attributes($atts, $item, $args, $depth) {
 use Carbon_Fields\Container\Container;
 use Carbon_Fields\Field\Field;
 
-Container::make('post_meta', __('User Settings', 'crb'))
-	->add_tab(__('Profile', 'crb'), array(
+Container::make('post_meta', __('User Settings'))
+	->add_tab(__('Profile'), array(
 		Field::make('text', '_crb_first_name', 'First Name'),
 		Field::make('text', '_crb_last_name', 'Last Name'),
 		Field::make('text', '_crb_position', 'Position'),
 	))
-	->add_tab(__('Notification', 'crb'), array(
+	->add_tab(__('Notification'), array(
 		Field::make('text', '_crb_email', 'Notification Email'),
 		Field::make('text', '_crb_phone', 'Phone Number'),
 	));
@@ -1272,7 +1272,7 @@ array(
 						</dl>
 						<p>The example below shows how to create a Choose Sidebar field with custom sidebar options and help text:</p>
 						<pre class="prettyprint">
-Field::make("choose_sidebar", "crb_custom_sidebar", __('Sidebar', 'crb'))
+Field::make("choose_sidebar", "crb_custom_sidebar", __('Sidebar'))
 	->help_text('Select which sidebar to show in this page, or click "Add New" to create a new one')
 	->set_sidebar_options(array(
 		'before_widget' =&gt; '&lt;div id="%1$s" class="widget %2$s"&gt;',
@@ -1283,7 +1283,7 @@ Field::make("choose_sidebar", "crb_custom_sidebar", __('Sidebar', 'crb'))
 </pre>
 						<p>The following example sets different sidebar options for each of the specified sidebars:</p>
 						<pre class="prettyprint">
-Field::make( 'choose_sidebar', 'crb_custom_sidebar', __('Sidebar', 'crb') )
+Field::make( 'choose_sidebar', 'crb_custom_sidebar', __('Sidebar') )
 	->set_sidebar_options(array(
 		'default' => array(
 			'before_widget' =&gt; '&lt;li id="%1$s" class="widget %2$s"&gt;',

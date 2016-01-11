@@ -11,7 +11,7 @@ class Header_Scripts_Field extends Textarea_Field {
 	 * Initialization actions
 	 */
 	public function init() {
-		$this->help_text( __( 'If you need to add scripts to your header, you should enter them here.', 'crb' ) );
+		$this->help_text( __( 'If you need to add scripts to your header, you should enter them here.', 'carbon_fields' ) );
 
 		add_action( 'wp_head', array( $this, 'print_scripts' ) );
 

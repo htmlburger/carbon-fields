@@ -539,7 +539,7 @@ abstract class Container {
 		$untabbed_fields = $this->get_untabbed_fields();
 
 		if ( ! empty( $untabbed_fields ) ) {
-			$this->create_tab( __( 'General' ), $untabbed_fields, self::TABS_HEAD );
+			$this->create_tab( __( 'General', 'carbon_fields' ), $untabbed_fields, self::TABS_HEAD );
 		}
 
 		return $this->tabs;
@@ -725,8 +725,8 @@ abstract class Container {
 
 		wp_localize_script( 'carbon-containers', 'carbon_containers_l10n',
 			array(
-				'please_fill_the_required_fields' => __( 'Please fill out all required fields highlighted below.', 'crb' ),
-				'changes_made_save_alert' => __( 'The changes you made will be lost if you navigate away from this page.', 'crb' ),
+				'please_fill_the_required_fields' => __( 'Please fill out all required fields highlighted below.', 'carbon_fields' ),
+				'changes_made_save_alert' => __( 'The changes you made will be lost if you navigate away from this page.', 'carbon_fields' ),
 			)
 		);
 	}

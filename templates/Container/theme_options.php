@@ -28,13 +28,13 @@
 
 				<div id="postbox-container-1" class="postbox-container">
 					<div id="submitdiv" class="postbox">
-						<h3><?php _e('Actions', 'crb'); ?></h3>
+						<h3><?php _e('Actions', 'carbon_fields'); ?></h3>
 						
 						<div id="major-publishing-actions">
 
 							<div id="publishing-action">
 								<span class="spinner"></span>
-								<input type="submit" value="<?php esc_attr_e('Save Changes', 'crb'); ?>" name="publish" id="publish" class="button button-primary button-large">
+								<input type="submit" value="<?php esc_attr_e('Save Changes', 'carbon_fields'); ?>" name="publish" id="publish" class="button button-primary button-large">
 							</div>
 							
 							<div class="clear"></div>

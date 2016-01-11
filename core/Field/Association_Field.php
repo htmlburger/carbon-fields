@@ -377,7 +377,7 @@ class Association_Field extends Relationship_Field {
 		<li>
 			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-item-label="{{{ item.label }}}" data-value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}">
 				<# if ( item.edit_link ) { #>
-					<em class="edit-link" data-href="{{{ item.edit_link }}}"><?php _e( 'Edit', 'crb' ); ?></em>
+					<em class="edit-link" data-href="{{{ item.edit_link }}}"><?php _e( 'Edit', 'carbon_fields' ); ?></em>
 				<# } #>
 				<em>{{{ item.label }}}</em>
 				<span></span>

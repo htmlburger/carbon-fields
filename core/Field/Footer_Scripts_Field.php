@@ -11,7 +11,7 @@ class Footer_Scripts_Field extends Textarea_Field {
 	 * Initialization actions
 	 */
 	public function init() {
-		$this->help_text( __( 'If you need to add scripts to your footer (like Google Analytics tracking code), you should enter them in this box.', 'crb' ) );
+		$this->help_text( __( 'If you need to add scripts to your footer (like Google Analytics tracking code), you should enter them in this box.', 'carbon_fields' ) );
 
 		add_action( 'wp_footer', array( $this, 'print_scripts' ) );
 
