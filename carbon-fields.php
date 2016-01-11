@@ -12,4 +12,7 @@ if ( ! defined( __NAMESPACE__ . '\URL' ) ) {
 }
 
 # Initialize helper 
-$carbon_helper = new Helper();
+global $carbon_fields_helper;
+if ( ! isset( $carbon_fields_helper ) ) {
+	$carbon_fields_helper = new Helper();
+}
