@@ -47,7 +47,7 @@ class Widget_Container extends Container {
 	 * Output the container markup
 	 **/
 	public function render() {
-		include DIR . '/templates/Container/widget.php';
+		include \Carbon_Fields\DIR . '/templates/Container/widget.php';
 	}
 
 	/**

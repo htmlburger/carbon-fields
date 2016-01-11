@@ -132,7 +132,7 @@ class Term_Meta_Container extends Container {
 			$this->set_term_id( $term->term_id );
 		}
 
-		include DIR . '/templates/Container/term_meta.php';
+		include \Carbon_Fields\DIR . '/templates/Container/term_meta.php';
 	}
 
 	/**

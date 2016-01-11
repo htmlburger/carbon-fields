@@ -84,7 +84,7 @@ class Comment_Meta_Container extends Container {
 	 * Output the container markup
 	 **/
 	public function render() {
-		include DIR . '/templates/Container/comment_meta.php';
+		include \Carbon_Fields\DIR . '/templates/Container/comment_meta.php';
 	}
 
 	/**

@@ -854,7 +854,7 @@ class Field {
 	 */
 	public function admin_hook_scripts() {
 		wp_enqueue_media();
-		wp_enqueue_script( 'carbon-fields', URL . '/assets/js/fields.js', array( 'carbon-app', 'carbon-containers' ) );
+		wp_enqueue_script( 'carbon-fields', \Carbon_Fields\URL . '/assets/js/fields.js', array( 'carbon-app', 'carbon-containers' ) );
 		wp_localize_script( 'carbon-fields', 'crbl10n',
 			array(
 				'title' => __( 'Files', 'crb' ),

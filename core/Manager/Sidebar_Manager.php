@@ -163,7 +163,7 @@ class Sidebar_Manager {
 	 * Enqueue the UI scripts.
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'carbon-sidebar-ui', URL . '/assets/js/sidebar-ui.js', array( 'carbon-app' ) );
+		wp_enqueue_script( 'carbon-sidebar-ui', \Carbon_Fields\URL . '/assets/js/sidebar-ui.js', array( 'carbon-app' ) );
 	}
 
 }

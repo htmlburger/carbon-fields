@@ -379,7 +379,7 @@ class Post_Meta_Container extends Container {
 	 * Output the container markup
 	 **/
 	public function render() {
-		include DIR . '/templates/Container/post_meta.php';
+		include \Carbon_Fields\DIR . '/templates/Container/post_meta.php';
 	}
 
 	/**

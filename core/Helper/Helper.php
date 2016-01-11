@@ -58,8 +58,8 @@ class Helper {
 	 * Initialize main scripts
 	 */
 	public function init_scripts() {
-		wp_enqueue_script( 'carbon-app', URL . '/assets/js/app.js', array( 'jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable' ) );
-		wp_enqueue_script( 'carbon-ext', URL . '/assets/js/ext.js', array( 'carbon-app' ) );
+		wp_enqueue_script( 'carbon-app', \Carbon_Fields\URL . '/assets/js/app.js', array( 'jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable' ) );
+		wp_enqueue_script( 'carbon-ext', \Carbon_Fields\URL . '/assets/js/ext.js', array( 'carbon-app' ) );
 
 		wp_localize_script( 'carbon-app', 'carbon_json', $this->get_json_data() );
 

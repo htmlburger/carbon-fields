@@ -106,7 +106,7 @@ class Nav_Menu_Container extends Container {
 	 * Output the container markup
 	 **/
 	public function render() {
-		include DIR . '/templates/Container/nav_menu.php';
+		include \Carbon_Fields\DIR . '/templates/Container/nav_menu.php';
 	}
 
 	/**

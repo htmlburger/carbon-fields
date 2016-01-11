@@ -151,7 +151,7 @@ class Theme_Options_Container extends Container {
 			$this->notifications[] = __( 'Settings saved.', 'crb' );
 		}
 
-		include DIR . '/templates/Container/theme_options.php';
+		include \Carbon_Fields\DIR . '/templates/Container/theme_options.php';
 	}
 
 	/**
