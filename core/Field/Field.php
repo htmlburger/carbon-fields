@@ -203,7 +203,7 @@ class Field {
 	 * @param string $name  Field name
 	 * @param string $label Field label
 	 */
-	private function __construct( $name, $label ) {
+	protected function __construct( $name, $label ) {
 		$this->set_name( $name );
 		$this->set_label( $label );
 		$this->set_base_name( $name );

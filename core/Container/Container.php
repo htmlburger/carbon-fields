@@ -121,7 +121,7 @@ abstract class Container {
 	 *
 	 * @see set_datastore()
 	 * @see get_datastore()
-	 * @var Datastore
+	 * @var Datastore_Interface
 	 */
 	protected $store;
 
@@ -138,7 +138,7 @@ abstract class Container {
 			$type = 'post_meta';
 		}
 
-		$type = str_replace( " ", '_', ucwords( str_replace( "_", ' ', $type ) ) );
+		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
 
 		$class = __NAMESPACE__ . '\\' . $type . '_Container';
 
@@ -224,7 +224,7 @@ abstract class Container {
 	/**
 	 * Perform instance initialization after calling setup()
 	 **/
-	abstract function init();
+	public abstract function init();
 
 	/**
 	 * Prints the container Underscore template
@@ -476,7 +476,7 @@ abstract class Container {
 	/**
 	 * Internal function that creates the tab and associates it with particular field set
 	 */
-	private function create_tab( $tab_name, $fields, $queue_end=self::TABS_TAIL ) {
+	private function create_tab( $tab_name, $fields, $queue_end = self::TABS_TAIL ) {
 		if ( isset( $this->tabs[ $tab_name ] ) ) {
 			throw new Incorrect_Syntax_Exception( "Tab name duplication for $tab_name" );
 		}

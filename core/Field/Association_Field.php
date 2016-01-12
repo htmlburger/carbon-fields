@@ -180,8 +180,7 @@ class Association_Field extends Relationship_Field {
 
 		foreach ( $this->types as $type ) {
 
-			// populate posts
-			if ( $type['type'] === 'post' ) {
+			if ( $type['type'] === 'post' ) { // populate posts
 
 				/**
 				 * Filter the default query when fetching posts for a particular field.
@@ -211,8 +210,7 @@ class Association_Field extends Relationship_Field {
 				}
 				$options = array_merge( $options, $posts );
 
-			// populate taxonomy terms
-			} elseif ( $type['type'] === 'term' ) {
+			} elseif ( $type['type'] === 'term' ) { // populate taxonomy terms
 
 				/**
 				 * Filter the default parameters when fetching terms for a particular field.
@@ -240,8 +238,7 @@ class Association_Field extends Relationship_Field {
 				}
 				$options = array_merge( $options, $terms );
 
-			// populate users
-			} elseif ( $type['type'] === 'user' ) {
+			} elseif ( $type['type'] === 'user' ) { // populate users
 
 				/**
 				 * Filter the default parameters when fetching users for a particular field.
@@ -268,8 +265,7 @@ class Association_Field extends Relationship_Field {
 				}
 				$options = array_merge( $options, $users );
 
-			// populate comments
-			} elseif ( $type['type'] === 'comment' ) {
+			} elseif ( $type['type'] === 'comment' ) { // populate comments
 
 				/**
 				 * Filter the default parameters when fetching comments for a particular field.

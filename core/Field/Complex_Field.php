@@ -34,8 +34,8 @@ class Complex_Field extends Field {
 	 */
 	public function init() {
 		$this->labels = array(
-			'singular_name'=>__( 'Entry', 'carbon_fields' ),
-			'plural_name'=>__( 'Entries', 'carbon_fields' ),
+			'singular_name' => __( 'Entry', 'carbon_fields' ),
+			'plural_name' => __( 'Entries', 'carbon_fields' ),
 		);
 
 		// Include the complex group backbone template
@@ -275,7 +275,7 @@ class Complex_Field extends Field {
 
 			$group_rows[] = array(
 				'field_key' => preg_replace( '~^(' . preg_quote( $this->name, '~' ) . ')_\d+_~', '$1_', $key ),
-				'field_value' => $value
+				'field_value' => $value,
 			);
 		}
 
@@ -316,7 +316,7 @@ class Complex_Field extends Field {
 			if ( ! empty( $field_name['trailing'] ) ) {
 				$input_groups[ $field_name['index'] ][ $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'] ] = $row['field_value'];
 			} else if ( ! empty( $field_name['sub'] ) ) {
-				$input_groups[ $field_name['index'] ][ $field_name['key'] ][$field_name['sub'] ] = $row['field_value'];
+				$input_groups[ $field_name['index'] ][ $field_name['key'] ][ $field_name['sub'] ] = $row['field_value'];
 			} else {
 				$input_groups[ $field_name['index'] ][ $field_name['key'] ] = $row['field_value'];
 			}
@@ -461,9 +461,9 @@ class Complex_Field extends Field {
 				<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label }}}</span>
 			</div>
 			<div class="carbon-group-actions">
-				<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e('Collapse/Expand', 'carbon_fields'); ?>"><?php _e('Collapse/Expand', 'carbon_fields'); ?></a>
-				<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e('Clone', 'carbon_fields'); ?>"><?php _e('Clone', 'carbon_fields'); ?></a>
-				<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e('Remove', 'carbon_fields'); ?>"><?php _e('Remove', 'carbon_fields'); ?></a>
+				<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>"><?php _e( 'Collapse/Expand', 'carbon_fields' ); ?></a>
+				<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>"><?php _e( 'Clone', 'carbon_fields' ); ?></a>
+				<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>"><?php _e( 'Remove', 'carbon_fields' ); ?></a>
 			</div>
 
 			<div class="fields-container">

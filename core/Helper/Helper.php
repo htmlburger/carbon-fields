@@ -143,7 +143,7 @@ class Helper {
 
 			case 'map':
 			case 'map_with_address':
-				$value =  array(
+				$value = array(
 					'lat' => (float) get_post_meta( $id, $name . '-lat', true ),
 					'lng' => (float) get_post_meta( $id, $name . '-lng', true ),
 					'address' => get_post_meta( $id, $name . '-address', true ),
@@ -197,7 +197,7 @@ class Helper {
 
 			case 'map':
 			case 'map_with_address':
-				$value =  array(
+				$value = array(
 					'lat' => (float) get_option( $name . '-lat' ),
 					'lng' => (float) get_option( $name . '-lng' ),
 					'address' => get_option( $name . '-address' ),
@@ -242,7 +242,7 @@ class Helper {
 
 			case 'map':
 			case 'map_with_address':
-				$value =  array(
+				$value = array(
 					'lat' => (float) get_metadata( 'term', $id, $name . '-lat', true ),
 					'lng' => (float) get_metadata( 'term', $id, $name . '-lng', true ),
 					'address' => get_metadata( 'term', $id, $name . '-address', true ),
@@ -287,7 +287,7 @@ class Helper {
 
 			case 'map':
 			case 'map_with_address':
-				$value =  array(
+				$value = array(
 					'lat' => (float) get_metadata( 'user', $id, $name . '-lat', true ),
 					'lng' => (float) get_metadata( 'user', $id, $name . '-lng', true ),
 					'address' => get_metadata( 'user', $id, $name . '-address', true ),
@@ -332,7 +332,7 @@ class Helper {
 
 			case 'map':
 			case 'map_with_address':
-				$value =  array(
+				$value = array(
 					'lat' => (float) get_metadata( 'comment', $id, $name . '-lat', true ),
 					'lng' => (float) get_metadata( 'comment', $id, $name . '-lng', true ),
 					'address' => get_metadata( 'comment', $id, $name . '-address', true ),
@@ -405,13 +405,13 @@ class Helper {
 	 * @return string              Regex
 	 */
 	public static function get_complex_field_regex( $field_name, $group_names = array(), $field_names = array() ) {
-		if ( $group_names ) {
+		if ( ! empty( $group_names ) ) {
 			$group_regex = self::preg_quote_array( $group_names );
 		} else {
 			$group_regex = '\w*';
 		}
 
-		if ( $field_names ) {
+		if ( ! empty( $field_names ) ) {
 			$field_regex = self::preg_quote_array( $field_names );
 		} else {
 			$field_regex = '.*?';

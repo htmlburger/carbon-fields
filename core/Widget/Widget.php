@@ -12,7 +12,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Widget datastore and container class.
  */
 abstract class Widget extends \WP_Widget implements Datastore_Interface {
-	static $registered_widget_ids = array();
+	public static $registered_widget_ids = array();
 	
 	protected $print_wrappers = true;
 	protected $store_data;
@@ -75,8 +75,8 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		
 		return $instance;
 	}
- 
- 	/**
+
+	/**
 	 * Outputs the settings update form.
 	 *
 	 * @param array $instance Current settings.
@@ -89,7 +89,6 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 			$tmp_field = clone $field;
 			$tmp_field->load();
 
-			$field_id = $this->get_field_id( $tmp_field->get_name() );
 			$field_name = $this->get_field_name( $tmp_field->get_name() );
 			$tmp_field->set_name( $field_name );
 
@@ -245,7 +244,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 			if ( strpos( $key, $field_name ) === 0 ) {
 				$result[] = array(
 					'field_key' => $key,
-					'field_value' => $value
+					'field_value' => $value,
 				);
 			}
 		}
@@ -271,7 +270,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	/**
 	 * Expand complex fields from raw data.
 	 */
-	static function unwrap_complex_field_values( $instance, $complex_field_names ) {
+	public static function unwrap_complex_field_values( $instance, $complex_field_names ) {
 		foreach ( $complex_field_names as $name ) {
 			foreach ( $instance as $key => $value ) {
 				if ( ! preg_match( '~^' . preg_quote( $name, '~' ) . '(?P<group>\w*)-_?(?P<key>.*?)_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~', $key, $field_name ) ) {
@@ -282,7 +281,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 
 				$instance[ $name ][ $field_name['index'] ]['_type'] = $field_name['group'];
 				if ( ! empty( $field_name['trailing'] ) ) {
-					if ( ! preg_match('~^' . preg_quote( $field_name['key'], '~' ) . '(?P<group>\w*)-_?(?P<key>.*)_(?P<index>\d+)_?(?P<sub>\w+)?$~', $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'], $subfield_name ) ) {
+					if ( ! preg_match( '~^' . preg_quote( $field_name['key'], '~' ) . '(?P<group>\w*)-_?(?P<key>.*)_(?P<index>\d+)_?(?P<sub>\w+)?$~', $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'], $subfield_name ) ) {
 						continue;
 					}
 
