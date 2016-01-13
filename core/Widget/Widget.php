@@ -162,7 +162,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 				$field->set_datastore( $this );
 			}
 
-			if ( is_a( $field, 'Carbon_Fields\\Field\\Carbon_Field_Complex' ) ) {
+			if ( is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
 				$this->complex_field_names[] = $field->get_name();
 			}
 		}
