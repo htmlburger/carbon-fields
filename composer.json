@@ -62,6 +62,12 @@
             "name": "German Velchev",
             "email": "germozy@gmail.com",
             "role": "Developer"
+        },
+        {
+            "name": "Rashko Petrov",
+            "email": "brutalenemy666@gmail.com",
+            "homepage": "http://errorfactory.com/",
+            "role": "Developer"
         }
     ],
     "require": {},
