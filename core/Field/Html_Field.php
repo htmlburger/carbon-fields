@@ -6,7 +6,7 @@ namespace Carbon_Fields\Field;
  * HTML field class.
  * Allows to create a field that displays any HTML in a container.
  */
-class HTML_Field extends Field {
+class Html_Field extends Field {
 	public $field_html;
 
 	/**
