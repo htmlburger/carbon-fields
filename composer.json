@@ -76,7 +76,8 @@
             "Carbon_Fields\\": "core/"
         },
         "files": [
-            "carbon-fields.php"
+            "carbon-fields.php",
+            "core/functions.php"
         ]
     }
 }

@@ -32,3 +32,4 @@ if ( file_exists( $dir . '/vendor/autoload.php' ) ) {
 }
 
 include_once( dirname( __FILE__ ) . '/carbon-fields.php' );
+include_once( dirname( __FILE__ ) . '/core/functions.php' );
