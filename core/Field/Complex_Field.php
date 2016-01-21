@@ -71,7 +71,7 @@ class Complex_Field extends Field {
 		}
 
 		if ( array_key_exists( '_' . $name, $this->groups ) ) {
-			throw new Incorrect_Syntax_Exception( 'Group with name "' . $name . '" in Complex Field "' . $this->get_label() . '" already exists.' );
+			Incorrect_Syntax_Exception::raise( 'Group with name "' . $name . '" in Complex Field "' . $this->get_label() . '" already exists.' );
 		} else {
 			$group = new Group_Field();
 			$group->set_name( $name );
@@ -505,7 +505,7 @@ class Complex_Field extends Field {
 		_doing_it_wrong( __METHOD__, __( 'Complex field layouts are deprecated, please use <code>set_width()</code> instead.', 'carbon_fields' ), null );
 
 		if ( ! in_array( $layout, array( self::LAYOUT_TABLE, self::LAYOUT_LIST ) ) ) {
-			throw new Incorrect_Syntax_Exception( 'Incorrect layout specifier. Available values are "<code>' . self::LAYOUT_TABLE . '</code>" and "<code>' . self::LAYOUT_LIST . '</code>"' );
+			Incorrect_Syntax_Exception::raise( 'Incorrect layout specifier. Available values are "<code>' . self::LAYOUT_TABLE . '</code>" and "<code>' . self::LAYOUT_LIST . '</code>"' );
 		}
 
 		$this->layout = $layout;

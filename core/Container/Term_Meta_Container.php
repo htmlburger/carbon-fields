@@ -154,7 +154,7 @@ class Term_Meta_Container extends Container {
 	 **/
 	public function verify_unique_field_name( $name ) {
 		if ( empty( $this->settings['taxonomy'] ) ) {
-			throw new Incorrect_Syntax_Exception( 'Panel instance is not setup correctly (missing taxonomy)' );
+			Incorrect_Syntax_Exception::raise( 'Panel instance is not setup correctly (missing taxonomy)' );
 		}
 
 		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
@@ -163,7 +163,7 @@ class Term_Meta_Container extends Container {
 			}
 
 			if ( in_array( $name, self::$registered_field_names[ $taxonomy ] ) ) {
-				throw new Incorrect_Syntax_Exception( 'Field name "' . $name . '" already registered' );
+				Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
 			}
 
 			self::$registered_field_names[ $taxonomy ][] = $name;

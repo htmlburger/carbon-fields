@@ -175,11 +175,13 @@ class Field {
 		$class = __NAMESPACE__ . '\\' . $type . '_Field';
 
 		if ( ! class_exists( $class ) ) {
-			throw new Incorrect_Syntax_Exception( 'Unknown field "' . $type . '".' );
+			Incorrect_Syntax_Exception::raise( 'Unknown field "' . $type . '".' );
+			$class = __NAMESPACE__ . "\\Broken_Field";
 		}
 
 		if ( strpos( $name, '-' ) !== false ) {
-			throw new Incorrect_Syntax_Exception( 'Forbidden character "-" in name "' . $name . '".' );
+			Incorrect_Syntax_Exception::raise( 'Forbidden character "-" in name "' . $name . '".' );
+			$class = __NAMESPACE__ . "\\Broken_Field";
 		}
 
 		$field = new $class( $name, $label );
@@ -739,7 +741,7 @@ class Field {
 	 */
 	protected function parse_conditional_rules( $rules ) {
 		if ( ! is_array( $rules ) ) {
-			throw new Incorrect_Syntax_Exception( 'Conditional logic rules argument should be an array.' );
+			Incorrect_Syntax_Exception::raise( 'Conditional logic rules argument should be an array.' );
 		}
 
 		$parsed_rules = array(
@@ -760,7 +762,7 @@ class Field {
 
 			// Check if the rule is valid
 			if ( ! is_array( $rule ) || empty( $rule['field'] ) ) {
-				throw new Incorrect_Syntax_Exception( 'Invalid conditional logic rule format. The rule should be an array with the "field" key set.' );
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic rule format. The rule should be an array with the "field" key set.' );
 			}
 
 			// Check the compare oparator
@@ -768,12 +770,12 @@ class Field {
 				$rule['compare'] = '=';
 			}
 			if ( ! in_array( $rule['compare'], $allowed_operators ) ) {
-				throw new Incorrect_Syntax_Exception( 'Invalid conditional logic compare oparator: <code>' . $rule['compare'] . '</code><br>' . 
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare oparator: <code>' . $rule['compare'] . '</code><br>' . 
 					'Allowed oparators are: <code>' . implode( ', ', $allowed_operators ) . '</code>' );
 			}
 			if ( $rule['compare'] === 'IN' || $rule['compare'] === 'NOT IN' ) {
 				if ( ! is_array( $rule['value'] ) ) {
-					throw new Incorrect_Syntax_Exception( 'Invalid conditional logic value format. An array is expected, when using the "' . $rule['compare'] . '" operator.' );
+					Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. An array is expected, when using the "' . $rule['compare'] . '" operator.' );
 				}
 			}
 

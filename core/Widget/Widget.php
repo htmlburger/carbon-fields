@@ -32,7 +32,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	public function setup( $title, $description, $fields, $classname = '' ) {
 		// require title
 		if ( ! $title ) {
-			throw new Incorrect_Syntax_Exception( 'Enter widget title' );
+			Incorrect_Syntax_Exception::raise( 'Enter widget title' );
 		}
 
 		// add custom fields
@@ -151,7 +151,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	public function add_fields( $fields ) {
 		foreach ( $fields as $field ) {
 			if ( ! is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
-				throw new Incorrect_Syntax_Exception( 'Object must be of type Carbon_Fields\\Field\\Field' );
+				Incorrect_Syntax_Exception::raise( 'Object must be of type Carbon_Fields\\Field\\Field' );
 			}
 
 			$this->verify_unique_field_name( $field->get_name() );
@@ -179,7 +179,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		static $registered_field_names = array();
 
 		if ( in_array( $name, $registered_field_names ) ) {
-			throw new Incorrect_Syntax_Exception( 'Field name "' . $name . '" already registered' );
+			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
 		}
 
 		$registered_field_names[] = $name;
@@ -192,7 +192,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 */
 	public function verify_unique_widget_id( $id ) {
 		if ( in_array( $id, self::$registered_widget_ids ) ) {
-			throw new Incorrect_Syntax_Exception( 'Widget with ID "' . $id .'" already registered. Please change the widget title' );
+			Incorrect_Syntax_Exception::raise( 'Widget with ID "' . $id .'" already registered. Please change the widget title' );
 		}
 
 		self::$registered_widget_ids[] = $id;

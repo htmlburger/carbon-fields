@@ -21,12 +21,12 @@ class Group_Field {
 	public function add_fields( $fields ) {
 		foreach ( $fields as $field ) {
 			if ( ! is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
-				throw new Incorrect_Syntax_Exception( 'Object must be of type ' . __NAMESPACE__ . '\\Field' );
+				Incorrect_Syntax_Exception::raise( 'Object must be of type ' . __NAMESPACE__ . '\\Field' );
 			}
 
 			// verify name validity
 			if ( preg_match( '~_\d+~', $field->get_name() ) ) {
-				throw new Incorrect_Syntax_Exception ( 'Subfield names cannot contain underscore followed by a digit(s). Replace "' . ltrim( $field->get_name(), '_' ) . '" with "' . ltrim( preg_replace( '~_+(\d+)~', '$1', $field->get_name() ), '_' ) . '"' );
+				Incorrect_Syntax_Exception::raise( 'Subfield names cannot contain underscore followed by a digit(s). Replace "' . ltrim( $field->get_name(), '_' ) . '" with "' . ltrim( preg_replace( '~_+(\d+)~', '$1', $field->get_name() ), '_' ) . '"' );
 			}
 
 			$this->verify_unique_field_name( $field->get_name() );
@@ -129,7 +129,7 @@ class Group_Field {
 	 **/
 	public function verify_unique_field_name( $name ) {
 		if ( in_array( $name, $this->registered_field_names ) ) {
-			throw new Incorrect_Syntax_Exception( 'Field name "' . $name . '" already registered' );
+			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
 		}
 
 		$this->registered_field_names[] = $name;

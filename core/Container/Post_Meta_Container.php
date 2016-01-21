@@ -72,7 +72,7 @@ class Post_Meta_Container extends Container {
 		if ( isset( $settings['show_on'] ) ) {
 			$invalid_settings = array_diff_key( $settings['show_on'], $this->settings['show_on'] );
 			if ( ! empty( $invalid_settings ) ) {
-				throw new Incorrect_Syntax_Exception( 'Invalid show_on settings supplied to setup(): "' . implode( '", "', array_keys( $invalid_settings ) ) . '"' );
+				Incorrect_Syntax_Exception::raise( 'Invalid show_on settings supplied to setup(): "' . implode( '", "', array_keys( $invalid_settings ) ) . '"' );
 			}
 		}
 
@@ -400,7 +400,7 @@ class Post_Meta_Container extends Container {
 	 **/
 	public function verify_unique_field_name( $name ) {
 		if ( empty( $this->settings['post_type'] ) ) {
-			throw new Incorrect_Syntax_Exception( 'Panel instance is not setup correctly (missing post type)' );
+			Incorrect_Syntax_Exception::raise( 'Panel instance is not setup correctly (missing post type)' );
 		}
 
 		foreach ( $this->settings['post_type'] as $post_type ) {
@@ -409,7 +409,7 @@ class Post_Meta_Container extends Container {
 			}
 
 			if ( in_array( $name, self::$registered_field_names[ $post_type ] ) ) {
-				throw new Incorrect_Syntax_Exception( 'Field name "' . $name . '" already registered' );
+				Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
 			}
 
 			self::$registered_field_names[ $post_type ][] = $name;
@@ -531,7 +531,7 @@ class Post_Meta_Container extends Container {
 	 **/
 	public function show_on_level( $level ) {
 		if ( $level < 0 ) {
-			throw new Incorrect_Syntax_Exception( 'Invalid level limitation (' . $level . ')' );
+			Incorrect_Syntax_Exception::raise( 'Invalid level limitation (' . $level . ')' );
 		}
 
 		$this->settings['show_on']['level_limit'] = $level;

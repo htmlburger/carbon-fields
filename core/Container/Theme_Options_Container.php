@@ -164,7 +164,7 @@ class Theme_Options_Container extends Container {
 		// Register top level page
 		if ( ! $parent ) {
 			if ( isset( self::$registered_pages[ $file ] ) ) {
-				throw new Incorrect_Syntax_Exception( 'Page "' . $file . '" already registered' );
+				Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" already registered' );
 			}
 
 			self::$registered_pages[ $file ] = array();
@@ -175,7 +175,7 @@ class Theme_Options_Container extends Container {
 		if ( ! isset( self::$registered_pages[ $parent ] ) ) {
 			self::$registered_pages[ $parent ] = array( $file );
 		}  elseif ( in_array( $file, self::$registered_pages[ $parent ] ) ) {
-			throw new Incorrect_Syntax_Exception( 'Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a different file name using setup()' );
+			Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a different file name using setup()' );
 		} else {
 			self::$registered_pages[ $parent ][] = $file;
 		}
@@ -218,7 +218,7 @@ class Theme_Options_Container extends Container {
 		}
 
 		if ( in_array( $name, self::$registered_field_names[ $page_id ] ) ) {
-			throw new Incorrect_Syntax_Exception( 'Field name "' . $name . '" already registered' );
+			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
 		}
 
 		self::$registered_field_names[ $page_id ][] = $name;

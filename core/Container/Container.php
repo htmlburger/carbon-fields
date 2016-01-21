@@ -143,7 +143,8 @@ abstract class Container {
 		$class = __NAMESPACE__ . '\\' . $type . '_Container';
 
 		if ( ! class_exists( $class ) ) {
-			throw new Incorrect_Syntax_Exception( 'Unknown container "' . $type . '".' );
+			Incorrect_Syntax_Exception::raise( 'Unknown container "' . $type . '".' );
+			$class = __NAMESPACE__ . "\\Broken_Container";
 		}
 
 		$container = new $class( $name );
@@ -280,7 +281,7 @@ abstract class Container {
 	 **/
 	public function setup( $settings = array() ) {
 		if ( $this->setup_ready ) {
-			throw new Incorrect_Syntax_Exception( 'Panel "' . $this->title . '" already setup' );
+			Incorrect_Syntax_Exception::raise( 'Panel "' . $this->title . '" already setup' );
 		}
 
 		$this->check_setup_settings( $settings );
@@ -306,7 +307,7 @@ abstract class Container {
 	public function check_setup_settings( &$settings = array() ) {
 		$invalid_settings = array_diff_key( $settings, $this->settings );
 		if ( ! empty( $invalid_settings ) ) {
-			throw new Incorrect_Syntax_Exception( 'Invalid settings supplied to setup(): "' . implode( '", "', array_keys( $invalid_settings ) ) . '"' );
+			Incorrect_Syntax_Exception::raise( 'Invalid settings supplied to setup(): "' . implode( '", "', array_keys( $invalid_settings ) ) . '"' );
 		}
 	}
 
@@ -445,7 +446,7 @@ abstract class Container {
 	public function add_fields( $fields ) {
 		foreach ( $fields as $field ) {
 			if ( ! is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
-				throw new Incorrect_Syntax_Exception( 'Object must be of type Carbon_Fields\\Field\\Field' );
+				Incorrect_Syntax_Exception::raise( 'Object must be of type Carbon_Fields\\Field\\Field' );
 			}
 
 			$this->verify_unique_field_name( $field->get_name() );
@@ -478,7 +479,7 @@ abstract class Container {
 	 */
 	private function create_tab( $tab_name, $fields, $queue_end = self::TABS_TAIL ) {
 		if ( isset( $this->tabs[ $tab_name ] ) ) {
-			throw new Incorrect_Syntax_Exception( "Tab name duplication for $tab_name" );
+			Incorrect_Syntax_Exception::raise( "Tab name duplication for $tab_name" );
 		}
 
 		if ( $queue_end === self::TABS_TAIL ) {
@@ -585,7 +586,7 @@ abstract class Container {
 	 */
 	public function verify_unique_panel_id( $id ) {
 		if ( in_array( $id, self::$registered_panel_ids ) ) {
-			throw new Incorrect_Syntax_Exception( 'Panel ID "' . $id .'" already registered' );
+			Incorrect_Syntax_Exception::raise( 'Panel ID "' . $id .'" already registered' );
 		}
 
 		self::$registered_panel_ids[] = $id;
@@ -611,7 +612,7 @@ abstract class Container {
 	 **/
 	public function verify_unique_field_name( $name ) {
 		if ( in_array( $name, self::$registered_field_names ) ) {
-			throw new Incorrect_Syntax_Exception( 'Field name "' . $name . '" already registered' );
+			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
 		}
 
 		self::$registered_field_names[] = $name;
