@@ -7,7 +7,7 @@ namespace Carbon_Fields\Field;
  */
 class Rich_Text_Field extends Textarea_Field {
 	protected $lazyload = true;
-	static $initialized = false;
+	public static $initialized = false;
 
 	/**
 	 * Admin initialization actions.

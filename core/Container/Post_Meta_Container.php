@@ -433,7 +433,7 @@ class Post_Meta_Container extends Container {
 	/**
 	 * Show the container only on pages whose parent is referenced by $parent_page_path.
 	 *
-	 * @param string $page_path
+	 * @param string $parent_page_path
 	 * @return object $this
 	 **/
 	public function show_on_page_children( $parent_page_path ) {

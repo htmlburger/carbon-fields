@@ -4,7 +4,7 @@ use Carbon_Fields\Helper\Helper;
 
 if ( ! function_exists( 'carbon_get_post_meta' ) ) {
 	function carbon_get_post_meta( $id, $name, $type = null ) {
-		return Helper::get_post_meta( $id, $name, $type);
+		return Helper::get_post_meta( $id, $name, $type );
 	}	
 }
 

@@ -7,7 +7,7 @@ namespace Carbon_Fields\Field;
  * Allows selecting and manually sorting entries from any custom post type.
  */
 class Relationship_Field extends Field {
-	protected $post_type = 'post';
+	protected $post_type = array( 'post' );
 	protected $max = -1;
 	protected $allow_duplicates = false;
 

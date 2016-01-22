@@ -23,7 +23,7 @@ class Field {
 	/**
 	 * Globally unique field identificator. Generated randomly
 	 *
-	 * @var int
+	 * @var string
 	 */
 	protected $id;
 
@@ -157,7 +157,7 @@ class Field {
 	/**
 	 * Stores the field options (if any)
 	 *
-	 * @var string
+	 * @var array
 	 **/
 	protected $options = array();
 
@@ -176,12 +176,12 @@ class Field {
 
 		if ( ! class_exists( $class ) ) {
 			Incorrect_Syntax_Exception::raise( 'Unknown field "' . $type . '".' );
-			$class = __NAMESPACE__ . "\\Broken_Field";
+			$class = __NAMESPACE__ . '\\Broken_Field';
 		}
 
 		if ( strpos( $name, '-' ) !== false ) {
 			Incorrect_Syntax_Exception::raise( 'Forbidden character "-" in name "' . $name . '".' );
-			$class = __NAMESPACE__ . "\\Broken_Field";
+			$class = __NAMESPACE__ . '\\Broken_Field';
 		}
 
 		$field = new $class( $name, $label );
@@ -770,8 +770,7 @@ class Field {
 				$rule['compare'] = '=';
 			}
 			if ( ! in_array( $rule['compare'], $allowed_operators ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare oparator: <code>' . $rule['compare'] . '</code><br>' . 
-					'Allowed oparators are: <code>' . implode( ', ', $allowed_operators ) . '</code>' );
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare oparator: <code>' . $rule['compare'] . '</code><br>Allowed oparators are: <code>' . implode( ', ', $allowed_operators ) . '</code>' );
 			}
 			if ( $rule['compare'] === 'IN' || $rule['compare'] === 'NOT IN' ) {
 				if ( ! is_array( $rule['value'] ) ) {

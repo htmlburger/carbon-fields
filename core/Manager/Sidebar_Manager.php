@@ -100,7 +100,7 @@ class Sidebar_Manager {
 		// Sanitize the sidebar ID the same way as dynamic_sidebar()
 		$id = sanitize_title( $id );
 
-		if ( isset( $registered_sidebars[$id] ) ) {
+		if ( isset( $registered_sidebars[ $id ] ) ) {
 			return new \WP_Error( 'sidebar-exists', __( 'Sidebar with the same ID is already registered.', 'carbon_fields' ) );
 		}
 

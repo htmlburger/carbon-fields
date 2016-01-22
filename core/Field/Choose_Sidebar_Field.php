@@ -121,10 +121,8 @@ class Choose_Sidebar_Field extends Sidebar_Field {
 		foreach ( $custom_sidebars as $sidebar ) {
 			$slug = sanitize_title_with_dashes( $sidebar );
 
-			$sidebar_options = array();
-
 			// Handles which options to use for the current sidebar
-			if ( isset( $this->sidebar_options[$slug] ) ) {
+			if ( isset( $this->sidebar_options[ $slug ] ) ) {
 				$sidebar_options = $this->sidebar_options[ $slug ];
 			} else {
 				$sidebar_options = $this->sidebar_options['default'];

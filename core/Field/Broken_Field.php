@@ -7,7 +7,7 @@ namespace Carbon_Fields\Field;
  */
 class Broken_Field extends Field {
 
-	function template() {
+	public function template() {
 		_e( 'This field is misconfigured', 'carbon_fields' );
 
 		parent::template();

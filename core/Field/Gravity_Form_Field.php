@@ -45,7 +45,7 @@ class Gravity_Form_Field extends Select_Field {
 			'0' => __( 'No form', 'carbon_fields' ),
 		);
 
-		foreach ($forms as $form) {
+		foreach ( $forms as $form ) {
 			$options[ $form->id ] = $form->title;
 		}
 
