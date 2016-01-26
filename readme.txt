@@ -15,7 +15,7 @@ Developer-oriented library for WordPress custom fields for all types of WordPres
 
 Carbon fields is a plugin that can be used as a library for easy creation of custom fields in the WordPress administration panel.
 
-Custom fields can be created for post types, taxonomy terms, users, comments, options and even widgets.
+Custom fields can be created for post types, taxonomy terms, users, comments, options, navigation menus and even widgets.
 
 Supports PHP5.3 or higher.
 
