@@ -120,6 +120,10 @@ class Post_Meta_Container extends Container {
 
 		add_action( 'admin_init', array( $this, '_attach' ) );
 		add_action( 'save_post', array( $this, '_save' ) );
+
+		// support for attachments
+		add_action( 'add_attachment', array( $this, '_save' ) );
+		add_action( 'edit_attachment', array( $this, '_save' ) );
 	}
 
 	/**
