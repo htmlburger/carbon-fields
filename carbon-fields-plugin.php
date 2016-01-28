@@ -5,7 +5,7 @@
  * Version: 1.0
  * Author: htmlburger
  * Author URI: https://htmlburger.com/
- * Plugin URI: https://github.com/htmlburger/carbon-fields
+ * Plugin URI: http://carbonfields.net/
  * License: GPL2
  * Requires at least: 4.0
  * Tested up to: 4.4.1
