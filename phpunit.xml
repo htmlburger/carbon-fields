@@ -8,7 +8,6 @@
 	<filter>
 		<blacklist>
 			<directory suffix=".php">./assets/</directory>
-			<directory suffix=".php">./docs/</directory>
 			<directory suffix=".php">./languages/</directory>
 			<directory suffix=".php">./templates/</directory>
 			<directory suffix=".php">./tests/</directory>
