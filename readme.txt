@@ -60,6 +60,20 @@ A. Yes.
 = Q. Can I use Carbon Fields for commercial purposes? =
 A. Sure, go ahead! It is completely open source.
 
+== Screenshots ==
+
+1. Simple Post Meta container with a Rich Text field.
+
+2. Post Meta container with 2 side-by-side fields - text field and select field.
+
+3. Complex (repeater) field with several fields within it.
+
+4. Nested complex field - repeatable field groups within repeatable field groups.
+
+5. Custom widget with a set ot preferred custom fields.
+
+6. Example that contains most of the available fields, nested fields included.
+
 == Changelog ==
 
 = 1.0 =
