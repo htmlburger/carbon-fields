@@ -2,7 +2,7 @@
 Contributors: htmlburger, tyxla, m1r0, stoyanov.gs, catahac, avakul, panchev, kamenarov, dilirity, sstoqnov, iceberg_, pkostadinov, brutalenemy666, magadanski_uchen, germozy
 Tags: custom, field, custom field, advanced, repeater, post, type, text, textarea, file, image, rich text, wysiwyg, select, dropdown, checkbox, radio, association, relationship, map, taxonomy, term, user, comment, option, options, widget, simple fields, magic fields, more fields, post meta, term meta, user meta, comment meta, theme options, custom widget, nested fields
 Requires at least: 4.0
-Tested up to: 4.4
+Tested up to: 4.4.1
 Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -18,6 +18,15 @@ Carbon fields is a plugin that can be used as a library for easy creation of cus
 Custom fields can be created for post types, taxonomy terms, users, comments, options, navigation menus and even widgets.
 
 Supports PHP5.3 or higher.
+
+= Usage, Documentation & Resources =
+
+* WordPress Plugin: https://wordpress.org/plugins/carbon-fields/
+* Website: http://carbonfields.net/
+* Documentation: http://carbonfields.net/docs/
+* FAQ: http://carbonfields.net/faq/
+* Support: http://carbonfields.net/support/
+* GitHub Repository: https://github.com/htmlburger/carbon-fields
 
 == Installation ==
 
@@ -50,10 +59,6 @@ A. Yes.
 
 = Q. Can I use Carbon Fields for commercial purposes? =
 A. Sure, go ahead! It is completely open source.
-
-== Usage & Documentation ==
-
-You can reach the documentation here: http://carbonfields.net/docs/
 
 == Changelog ==
 
