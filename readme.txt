@@ -53,7 +53,7 @@ A. Sure, go ahead! It is completely open source.
 
 == Usage & Documentation ==
 
-You can reach the documentation by opening **/docs/index.html** in your web browser.
+You can reach the documentation here: http://carbonfields.net/docs/
 
 == Changelog ==
 

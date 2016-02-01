@@ -12,4 +12,4 @@ Supports PHP5.3 or higher.
 
 ### Documentation
 
-You can reach the documentation by opening **/docs/index.html** in your web browser.
+You can reach the documentation here: [Carbon Fields: Documentation](http://carbonfields.net/docs/)
