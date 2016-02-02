@@ -25,6 +25,7 @@ if ( file_exists( $dir . '/vendor/autoload.php' ) ) {
 		}
 
 		$file_path = dirname( __FILE__ ) . '/core/' . str_ireplace( 'Carbon_Fields\\', '', $class ) . '.php';
+		$file_path = str_replace( '\\', DIRECTORY_SEPARATOR, $file_path );
 		include_once( $file_path );
 	}
 
