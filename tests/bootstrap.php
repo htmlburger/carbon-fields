@@ -33,13 +33,12 @@ class Carbon_Fields_Tests_Bootstrap {
 	 * Setup the unit testing environment
 	 */
 	private function __construct() {
-
 		ini_set( 'display_errors','on' );
 		error_reporting( E_ALL );
 
 		$this->tests_dir    = dirname( __FILE__ );
 		$this->plugin_dir   = dirname( $this->tests_dir );
-		$this->wp_tests_dir = getenv( 'WP_TESTS_DIR' ) ? getenv( 'WP_TESTS_DIR' ) : $this->plugin_dir . '/tmp/wordpress-tests-lib';
+		$this->wp_tests_dir = getenv( 'WP_TESTS_DIR' ) ? getenv( 'WP_TESTS_DIR' ) : $this->plugin_dir . '/tmp/wordpress-tests-lib/tests/phpunit';
 
 		// load test function so tests_add_filter() is available
 		require_once( $this->wp_tests_dir . '/includes/functions.php' );
