@@ -2,7 +2,7 @@ Vagrant.configure(2) do |config|
   config.vm.box = "ubuntu/trusty64"
   config.vm.box_check_update = false
 
-  # For time being, HTTP is not exposed ... the VM is used for unit testing only
+  # For time being, HTTP is not exposed ... the VM is used for unit testnig only
   # config.vm.network "forwarded_port", guest: 80, host: 8080
 
   config.vm.synced_folder ".", "/home/vagrant/wordpress/wp-content/plugins/carbon-fields"
@@ -28,7 +28,8 @@ Vagrant.configure(2) do |config|
     sudo curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
     echo -e "\n--- Install phpUnit ---\n"
-    sudo composer global require "phpunit/phpunit=5.0.*"
+    su - vagrant -c 'composer global require "phpunit/phpunit=5.0.*"'
+    echo 'PATH=$PATH:~/.composer/vendor/bin/' >> ~vagrant/.bash_profile && chown vagrant:vagrant ~vagrant/.bash_profile
 
     echo -e "\n--- Install MySQL ---\n"
     echo "mysql-server mysql-server/root_password password $DBPASSWD" | debconf-set-selections
