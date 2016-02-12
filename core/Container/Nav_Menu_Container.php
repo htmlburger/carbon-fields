@@ -75,7 +75,7 @@ class Nav_Menu_Container extends Container {
 	 * Perform save operation after successful is_valid_save() check.
 	 * The call is propagated to all fields in the container.
 	 **/
-	public function save() {
+	public function save( $user_data = null ) {
 		foreach ( $this->fields as $field ) {
 			$field->set_value_from_input();
 			$field->save();
