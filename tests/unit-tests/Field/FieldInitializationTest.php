@@ -1,9 +1,7 @@
 <?php
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
-/**
- * @group field
- */
+
 class FieldInitializationTest extends WP_UnitTestCase {
 	function setup() {
 		$this->fieldName = '_color';
@@ -83,10 +81,10 @@ class FieldInitializationTest extends WP_UnitTestCase {
 		$field = Field::make('text', 'something-anything');
 	}
 
-
+	/*
 	public function test () {
 		$field = Field::make('text', '');
 	}
-
-
+	*/
+	
 }
