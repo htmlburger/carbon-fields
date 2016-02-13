@@ -729,7 +729,7 @@ class Field {
 	 *
 	 * @return array
 	 */
-	protected function get_conditional_logic() {
+	public function get_conditional_logic() {
 		return $this->conditional_logic;
 	}
 
