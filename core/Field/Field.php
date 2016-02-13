@@ -765,12 +765,12 @@ class Field {
 				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic rule format. The rule should be an array with the "field" key set.' );
 			}
 
-			// Check the compare oparator
+			// Check the compare operator
 			if ( empty( $rule['compare'] ) ) {
 				$rule['compare'] = '=';
 			}
 			if ( ! in_array( $rule['compare'], $allowed_operators ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare oparator: <code>' . $rule['compare'] . '</code><br>Allowed oparators are: <code>' . implode( ', ', $allowed_operators ) . '</code>' );
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare operator: <code>' . $rule['compare'] . '</code><br>Allowed operators are: <code>' . implode( ', ', $allowed_operators ) . '</code>' );
 			}
 			if ( $rule['compare'] === 'IN' || $rule['compare'] === 'NOT IN' ) {
 				if ( ! is_array( $rule['value'] ) ) {
