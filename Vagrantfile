@@ -5,11 +5,16 @@ Vagrant.configure(2) do |config|
   # For time being, HTTP is not exposed ... the VM is used for unit testnig only
   # config.vm.network "forwarded_port", guest: 80, host: 8080
 
-  config.vm.synced_folder ".", "/home/vagrant/wordpress/wp-content/plugins/carbon-fields"
+  config.vm.provider "virtualbox" do |v|
+     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+     v.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+  end
+
+  config.vm.synced_folder ".", "/home/vagrant/carbon-fields"
 
   config.vm.provision "shell", inline: <<-SHELL
     DBHOST=localhost
-    DBNAME=wordpress
+    DBNAME=wp
     DBUSER=wp
     DBPASSWD=secret
     
@@ -39,21 +44,8 @@ Vagrant.configure(2) do |config|
     echo -e "\n--- Setup MySQL ---\n"
     mysql -uroot -p$DBPASSWD -e "CREATE DATABASE $DBNAME"
     mysql -uroot -p$DBPASSWD -e "grant all privileges on $DBNAME.* to '$DBUSER'@'localhost' identified by '$DBPASSWD'"
-  
-    echo -e "\n--- Setup WordPress core ---\n"
-    wget http://wordpress.org/latest.zip -o /dev/null -O /home/vagrant/latest-wp.zip
-    unzip -q /home/vagrant/latest-wp.zip
-    rm /home/vagrant/latest-wp.zip
 
-    svn co https://develop.svn.wordpress.org/trunk/ /home/vagrant/wordpress/wp-content/plugins/carbon-fields/tmp/wordpress-tests-lib
-    # Create the tests config file
+    su - vagrant -c "cd /home/vagrant/carbon-fields && ./tests/bin/install.sh $DBNAME $DBUSER $DBPASSWD"
     
-    cp /home/vagrant/wordpress/wp-content/plugins/carbon-fields/tmp/wordpress-tests-lib/wp-tests-config-sample.php /home/vagrant/wordpress/wp-content/plugins/carbon-fields/tmp/wordpress-tests-lib/wp-tests-config.php
-
-    # Update database credentials
-    sed -i s/youremptytestdbnamehere/$DBNAME/ /home/vagrant/wordpress/wp-content/plugins/carbon-fields/tmp/wordpress-tests-lib/wp-tests-config.php
-    sed -i s/yourusernamehere/$DBUSER/ /home/vagrant/wordpress/wp-content/plugins/carbon-fields/tmp/wordpress-tests-lib/wp-tests-config.php
-    sed -i s/yourpasswordhere/$DBPASSWD/ /home/vagrant/wordpress/wp-content/plugins/carbon-fields/tmp/wordpress-tests-lib/wp-tests-config.php
-
   SHELL
 end
