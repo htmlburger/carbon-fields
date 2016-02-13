@@ -387,7 +387,7 @@ class Field {
 	 * @param string $name Field name, either sanitized or not
 	 **/
 	public function set_name( $name ) {
-		$name = preg_replace( '~\s+~', '_', strtolower( $name ) );
+		$name = preg_replace( '~\s+~', '_', mb_strtolower( $name ) );
 
 		if ( $this->name_prefix && strpos( $name, $this->name_prefix ) !== 0 ) {
 			$name = $this->name_prefix . $name;
