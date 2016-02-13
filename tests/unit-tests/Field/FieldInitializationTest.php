@@ -4,7 +4,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 /**
  * @group field
  */
-class FieldFactoryTest extends WP_UnitTestCase {
+class FieldInitializationTest extends WP_UnitTestCase {
 	function setup() {
 		$this->fieldName = '_color';
 	}
@@ -41,6 +41,7 @@ class FieldFactoryTest extends WP_UnitTestCase {
 	 */
 	public function testDashIsNotAllowedInFieldType() {
 		$field = Field::make('choose-sidebar', $this->fieldName);
+		$this->assertEquals($this->fieldName, $field->get_name());
 	}
 
 	public function testFieldTypeCaseIsIgnored() {
@@ -49,6 +50,42 @@ class FieldFactoryTest extends WP_UnitTestCase {
 
 	public function testSpacesInFieldTypeAreSupported() {
 		$field = Field::make('Choose Sidebar', $this->fieldName);
+		$this->assertTrue(true); // no exception ... 
+	}
+
+	public function testFieldNameIsPrependedWithUnderscoreAutomatically() {
+		$field = Field::make('text', 'something');
+		$this->assertEquals('_something', $field->get_name());
+	}
+
+	public function testFieldNameAutomaticallyConvertsNonAlphanumericCharactersToUnderscores() {
+		$field = Field::make('text', 'This is a strange name');
+		$this->assertEquals('_this_is_a_strange_name', $field->get_name());
+	}
+	public function testFieldNameRemovesSpaces() {
+		// XXX: Is this really expected? 
+		$field = Field::make('text', '## Even a weirder name! :)');
+		$this->assertEquals('_##_even_a_weirder_name!_:)', $field->get_name());
+	}
+
+	public function testNonAsciiFieldNamesAreHandledProperly() {
+		// This text includes a capital cyrillic letter ... it actually assures that
+		// field names in non-english are converted to lowercase
+		$field = Field::make('text', 'bulgarian: България');
+		$this->assertEquals('_bulgarian:_българия', $field->get_name());
+	}
+
+	/**
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedExceptionMessage Forbidden character
+	 */
+	public function testSlashesInFieldNamesAreNotAllowed() {
+		$field = Field::make('text', 'something-anything');
+	}
+
+
+	public function test () {
+		$field = Field::make('text', '');
 	}
 
 
