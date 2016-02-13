@@ -422,13 +422,15 @@ class Field {
 	}
 
 	/**
-	 * Set field name prefix. Calling this method will update the current field name and the conditional logic fields.
+	 * Set field name prefix. Calling this method will update the current field
+	 * name and the conditional logic fields.
 	 *
 	 * @param string $prefix
 	 * @return object $this
 	 **/
 	public function set_prefix( $prefix ) {
-		$this->name = preg_replace( '~^' . preg_quote( $this->name_prefix, '~' ) . '~', '', $this->name );
+		$escaped_prefix = preg_quote( $this->name_prefix, '~' );
+		$this->name = preg_replace( '~^' . $escaped_prefix . '~', '', $this->name );
 		$this->name_prefix = $prefix;
 		$this->name = $this->name_prefix . $this->name;
 
@@ -762,7 +764,8 @@ class Field {
 
 			// Check if the rule is valid
 			if ( ! is_array( $rule ) || empty( $rule['field'] ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic rule format. The rule should be an array with the "field" key set.' );
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic rule format.' .
+					'The rule should be an array with the "field" key set.' );
 			}
 
 			// Check the compare operator
@@ -770,11 +773,14 @@ class Field {
 				$rule['compare'] = '=';
 			}
 			if ( ! in_array( $rule['compare'], $allowed_operators ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare operator: <code>' . $rule['compare'] . '</code><br>Allowed operators are: <code>' . implode( ', ', $allowed_operators ) . '</code>' );
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare operator: <code>' .
+					$rule['compare'] . '</code><br>Allowed operators are: <code>' .
+					implode( ', ', $allowed_operators ) . '</code>' );
 			}
 			if ( $rule['compare'] === 'IN' || $rule['compare'] === 'NOT IN' ) {
 				if ( ! is_array( $rule['value'] ) ) {
-					Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. An array is expected, when using the "' . $rule['compare'] . '" operator.' );
+					Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format.' . 
+						'An array is expected, when using the "' . $rule['compare'] . '" operator.' );
 				}
 			}
 
