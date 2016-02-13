@@ -764,7 +764,7 @@ class Field {
 
 			// Check if the rule is valid
 			if ( ! is_array( $rule ) || empty( $rule['field'] ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic rule format.' .
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic rule format. ' .
 					'The rule should be an array with the "field" key set.' );
 			}
 
@@ -779,7 +779,7 @@ class Field {
 			}
 			if ( $rule['compare'] === 'IN' || $rule['compare'] === 'NOT IN' ) {
 				if ( ! is_array( $rule['value'] ) ) {
-					Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format.' . 
+					Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. ' . 
 						'An array is expected, when using the "' . $rule['compare'] . '" operator.' );
 				}
 			}
