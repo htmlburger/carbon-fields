@@ -746,19 +746,25 @@ class Field {
 			Incorrect_Syntax_Exception::raise( 'Conditional logic rules argument should be an array.' );
 		}
 
+		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN' );
+		$allowed_relations = array( 'AND', 'OR' );
+
 		$parsed_rules = array(
 			'relation' => 'AND',
 			'rules' => array(),
 		);
 
-		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN' );
-
 		foreach ( $rules as $key => $rule ) {
 			// Check if we have a relation key
 			if ( $key === 'relation' ) {
-				if ( $rule === 'OR' ) {
-					$parsed_rules['relation'] = $rule;
+				$relation = strtoupper($rule);
+
+				if (!in_array($relation, $allowed_relations)) {
+					Incorrect_Syntax_Exception::raise( 'Invalid relation type ' . $rule . '. ' .
+						'The rule should be one of the following: "' . implode('", "', $allowed_relations) . '"' );
 				}
+
+				$parsed_rules['relation'] = $relation;
 				continue;
 			}
 
