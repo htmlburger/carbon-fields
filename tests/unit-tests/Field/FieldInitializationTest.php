@@ -81,6 +81,29 @@ class FieldInitializationTest extends WP_UnitTestCase {
 		$field = Field::make('text', 'something-anything');
 	}
 
+	public function testLabelIsSetupProperlyWhenPassedExplicitly() {
+		$field = Field::make('text', 'color', "Field Color");
+		$this->assertEquals("Field Color", $field->get_label());
+
+		// Make sure that non-UTF8 labels are properlly supported
+		$field = Field::make('text', 'color', "Цвят");
+		$this->assertEquals("Цвят", $field->get_label());
+
+		$field = Field::make('text', 'цвят');
+		$this->assertEquals("Цвят", $field->get_label());
+	}
+
+	public function testLabelIsDerivedProperly() {
+		$field = Field::make('text', 'field_color');
+		$this->assertEquals("Field Color", $field->get_label());
+
+		$field = Field::make('text', '_field_color');
+		$this->assertEquals("Field Color", $field->get_label());
+
+		$field = Field::make('text', '_crb_field_color');
+		$this->assertEquals("Field Color", $field->get_label());
+	}
+
 	/*
 	public function test () {
 		$field = Field::make('text', '');
