@@ -89,8 +89,9 @@ class FieldInitializationTest extends WP_UnitTestCase {
 		$field = Field::make('text', 'color', "Цвят");
 		$this->assertEquals("Цвят", $field->get_label());
 
-		$field = Field::make('text', 'цвят');
-		$this->assertEquals("Цвят", $field->get_label());
+		// Derive the label in proper case
+		$field = Field::make('text', 'цвят_на_нещо');
+		$this->assertEquals("Цвят На Нещо", $field->get_label());
 	}
 
 	public function testLabelIsDerivedProperly() {
