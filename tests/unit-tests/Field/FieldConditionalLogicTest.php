@@ -121,6 +121,10 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 
 	}
 
+	/**
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedExceptionMessage Invalid relation
+	 */
 	function testBadRelationOperatorThrowsError() {
 		$this->field->set_conditional_logic([
 			'relation' => 'maybe',
