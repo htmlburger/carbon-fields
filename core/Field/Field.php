@@ -155,13 +155,6 @@ class Field {
 	protected $conditional_logic = array();
 
 	/**
-	 * Stores the field options (if any)
-	 *
-	 * @var array
-	 **/
-	protected $options = array();
-
-	/**
 	 * Create a new field of type $type and name $name and label $label.
 	 *
 	 * @param string $type
@@ -389,9 +382,14 @@ class Field {
 	public function set_name( $name ) {
 		$name = preg_replace( '~\s+~', '_', mb_strtolower( $name ) );
 
+		if ( empty( $name ) ) {
+			Incorrect_Syntax_Exception::raise('Field name can\'t be empty');
+		}
+
 		if ( $this->name_prefix && strpos( $name, $this->name_prefix ) !== 0 ) {
 			$name = $this->name_prefix . $name;
 		}
+
 
 		$this->name = $name;
 	}
@@ -801,66 +799,6 @@ class Field {
 		return $parsed_rules;
 	}
 
-	/**
-	 * Set the field options
-	 * Callbacks are supported
-	 *
-	 * @param array|callback $options
-	 */
-	protected function _set_options( $options ) {
-		$this->options = (array) $options;
-	}
-
-	/**
-	 * Add options to the field
-	 * Callbacks are supported
-	 *
-	 * @param array|callback $options
-	 */
-	protected function _add_options( $options ) {
-		$this->options[] = $options;
-	}
-
-	/**
-	 * Check if there are callbacks and populate the options
-	 */
-	protected function load_options() {
-		if ( empty( $this->options ) ) {
-			return false;
-		}
-
-		$options = array();
-		foreach ( $this->options as $key => $value ) {
-			if ( is_callable( $value ) ) {
-				$options = $options + (array) call_user_func( $value );
-			} else if ( is_array( $value ) ) {
-				$options = $options + $value;
-			} else {
-				$options[ $key ] = $value;
-			}
-		}
-
-		$this->options = $options;
-	}
-
-	/**
-	 * Changes the options array structure. This is needed to keep the array items order when it is JSON encoded.
-	 *
-	 * @param array $options
-	 * @return array
-	 */
-	public function parse_options( $options ) {
-		$parsed = array();
-
-		foreach ( $options as $key => $value ) {
-			$parsed[] = array(
-				'name' => $value,
-				'value' => $key,
-			);
-		}
-
-		return $parsed;
-	}
 
 	/**
 	 * Hook administration scripts.

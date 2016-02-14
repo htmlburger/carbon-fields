@@ -6,30 +6,8 @@ namespace Carbon_Fields\Field;
  * Set field class.
  * Allows to create a set of checkboxes where multiple can be selected.
  */
-class Set_Field extends Field {
+class Set_Field extends Predefined_Options_Field {
 	protected $limit_options = 0;
-
-	/**
-	 * Set the options of this field.
-	 * Accepts either array of data or a callback that returns the data.
-	 * 
-	 * @param array|callable $options 
-	 */
-	public function set_options( $options ) {
-		$this->_set_options( $options );
-		return $this;
-	}
-
-	/**
-	 * Add new options to this field.
-	 * Accepts either array of data or a callback that returns the data.
-	 * 
-	 * @param array|callbacle $options
-	 */
-	public function add_options( $options ) {
-		$this->_add_options( $options );
-		return $this;
-	}
 
 	/**
 	 * Set the number of the options to be displayed at the initial field display.
