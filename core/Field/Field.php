@@ -452,7 +452,7 @@ class Field {
 			$label = preg_replace( '~^crb_~', '', $label );
 
 			// split the name into words and make them capitalized
-			$label = ucwords( str_replace( '_', ' ', $label ) );
+			$label = mb_convert_case( str_replace( '_', ' ', $label ), MB_CASE_TITLE );
 		}
 
 		$this->label = $label;
