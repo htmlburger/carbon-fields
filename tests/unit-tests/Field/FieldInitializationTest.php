@@ -105,6 +105,14 @@ class FieldInitializationTest extends WP_UnitTestCase {
 		$this->assertEquals("Field Color", $field->get_label());
 	}
 
+	/**
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedExceptionMessage can't be empty
+	 */
+	public function testFieldNameCantBeEmpty() {
+		Field::make('text', '');
+	}
+
 	/*
 	public function test () {
 		$field = Field::make('text', '');
