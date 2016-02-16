@@ -5,29 +5,7 @@ namespace Carbon_Fields\Field;
 /**
  * Select dropdown field class.
  */
-class Select_Field extends Field {
-	/**
-	 * Set the options of this field.
-	 * Accepts either array of data or a callback that returns the data.
-	 * 
-	 * @param array|callable $options 
-	 */
-	public function set_options( $options ) {
-		$this->_set_options( $options );
-		return $this;
-	}
-
-	/**
-	 * Add new options to this field.
-	 * Accepts either array of data or a callback that returns the data.
-	 * 
-	 * @param array|callbacle $options
-	 */
-	public function add_options( $options ) {
-		$this->_add_options( $options );
-		return $this;
-	}
-
+class Select_Field extends Predefined_Options_Field {
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.

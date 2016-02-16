@@ -155,13 +155,6 @@ class Field {
 	protected $conditional_logic = array();
 
 	/**
-	 * Stores the field options (if any)
-	 *
-	 * @var array
-	 **/
-	protected $options = array();
-
-	/**
 	 * Create a new field of type $type and name $name and label $label.
 	 *
 	 * @param string $type
@@ -387,11 +380,16 @@ class Field {
 	 * @param string $name Field name, either sanitized or not
 	 **/
 	public function set_name( $name ) {
-		$name = preg_replace( '~\s+~', '_', strtolower( $name ) );
+		$name = preg_replace( '~\s+~', '_', mb_strtolower( $name ) );
+
+		if ( empty( $name ) ) {
+			Incorrect_Syntax_Exception::raise('Field name can\'t be empty');
+		}
 
 		if ( $this->name_prefix && strpos( $name, $this->name_prefix ) !== 0 ) {
 			$name = $this->name_prefix . $name;
 		}
+
 
 		$this->name = $name;
 	}
@@ -422,13 +420,15 @@ class Field {
 	}
 
 	/**
-	 * Set field name prefix. Calling this method will update the current field name and the conditional logic fields.
+	 * Set field name prefix. Calling this method will update the current field
+	 * name and the conditional logic fields.
 	 *
 	 * @param string $prefix
 	 * @return object $this
 	 **/
 	public function set_prefix( $prefix ) {
-		$this->name = preg_replace( '~^' . preg_quote( $this->name_prefix, '~' ) . '~', '', $this->name );
+		$escaped_prefix = preg_quote( $this->name_prefix, '~' );
+		$this->name = preg_replace( '~^' . $escaped_prefix . '~', '', $this->name );
 		$this->name_prefix = $prefix;
 		$this->name = $this->name_prefix . $this->name;
 
@@ -450,7 +450,7 @@ class Field {
 			$label = preg_replace( '~^crb_~', '', $label );
 
 			// split the name into words and make them capitalized
-			$label = ucwords( str_replace( '_', ' ', $label ) );
+			$label = mb_convert_case( str_replace( '_', ' ', $label ), MB_CASE_TITLE );
 		}
 
 		$this->label = $label;
@@ -729,7 +729,7 @@ class Field {
 	 *
 	 * @return array
 	 */
-	protected function get_conditional_logic() {
+	public function get_conditional_logic() {
 		return $this->conditional_logic;
 	}
 
@@ -744,37 +744,47 @@ class Field {
 			Incorrect_Syntax_Exception::raise( 'Conditional logic rules argument should be an array.' );
 		}
 
+		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN' );
+		$allowed_relations = array( 'AND', 'OR' );
+
 		$parsed_rules = array(
 			'relation' => 'AND',
 			'rules' => array(),
 		);
 
-		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN' );
-
 		foreach ( $rules as $key => $rule ) {
 			// Check if we have a relation key
 			if ( $key === 'relation' ) {
-				if ( $rule === 'OR' ) {
-					$parsed_rules['relation'] = $rule;
+				$relation = strtoupper($rule);
+
+				if (!in_array($relation, $allowed_relations)) {
+					Incorrect_Syntax_Exception::raise( 'Invalid relation type ' . $rule . '. ' .
+						'The rule should be one of the following: "' . implode('", "', $allowed_relations) . '"' );
 				}
+
+				$parsed_rules['relation'] = $relation;
 				continue;
 			}
 
 			// Check if the rule is valid
 			if ( ! is_array( $rule ) || empty( $rule['field'] ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic rule format. The rule should be an array with the "field" key set.' );
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic rule format. ' .
+					'The rule should be an array with the "field" key set.' );
 			}
 
-			// Check the compare oparator
+			// Check the compare operator
 			if ( empty( $rule['compare'] ) ) {
 				$rule['compare'] = '=';
 			}
 			if ( ! in_array( $rule['compare'], $allowed_operators ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare oparator: <code>' . $rule['compare'] . '</code><br>Allowed oparators are: <code>' . implode( ', ', $allowed_operators ) . '</code>' );
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare operator: <code>' .
+					$rule['compare'] . '</code><br>Allowed operators are: <code>' .
+					implode( ', ', $allowed_operators ) . '</code>' );
 			}
 			if ( $rule['compare'] === 'IN' || $rule['compare'] === 'NOT IN' ) {
 				if ( ! is_array( $rule['value'] ) ) {
-					Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. An array is expected, when using the "' . $rule['compare'] . '" operator.' );
+					Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. ' . 
+						'An array is expected, when using the "' . $rule['compare'] . '" operator.' );
 				}
 			}
 
@@ -789,66 +799,6 @@ class Field {
 		return $parsed_rules;
 	}
 
-	/**
-	 * Set the field options
-	 * Callbacks are supported
-	 *
-	 * @param array|callback $options
-	 */
-	protected function _set_options( $options ) {
-		$this->options = (array) $options;
-	}
-
-	/**
-	 * Add options to the field
-	 * Callbacks are supported
-	 *
-	 * @param array|callback $options
-	 */
-	protected function _add_options( $options ) {
-		$this->options[] = $options;
-	}
-
-	/**
-	 * Check if there are callbacks and populate the options
-	 */
-	protected function load_options() {
-		if ( empty( $this->options ) ) {
-			return false;
-		}
-
-		$options = array();
-		foreach ( $this->options as $key => $value ) {
-			if ( is_callable( $value ) ) {
-				$options = $options + (array) call_user_func( $value );
-			} else if ( is_array( $value ) ) {
-				$options = $options + $value;
-			} else {
-				$options[ $key ] = $value;
-			}
-		}
-
-		$this->options = $options;
-	}
-
-	/**
-	 * Changes the options array structure. This is needed to keep the array items order when it is JSON encoded.
-	 *
-	 * @param array $options
-	 * @return array
-	 */
-	public function parse_options( $options ) {
-		$parsed = array();
-
-		foreach ( $options as $key => $value ) {
-			$parsed[] = array(
-				'name' => $value,
-				'value' => $key,
-			);
-		}
-
-		return $parsed;
-	}
 
 	/**
 	 * Hook administration scripts.

@@ -10,7 +10,7 @@ class Date_Field extends Field {
 	/**
 	 * Datepicker options
 	 */
-	public $options = array();
+	public $datepicker_options = array();
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
@@ -23,7 +23,7 @@ class Date_Field extends Field {
 		$field_data = parent::to_json( $load );
 
 		$field_data = array_merge( $field_data, array(
-			'options' => $this->options,
+			'options' => $this->datepicker_options,
 		) );
 
 		return $field_data;
@@ -52,10 +52,18 @@ class Date_Field extends Field {
 	}
 
 	/**
-	 * Set datepicker options 
+	 * This function is depratected since it conflicts with the options concept in predefined option fields.
+	 * @deprecated
 	 */
 	public function set_options( $options ) {
-		$this->options = $options;
+		return $this->set_datepicker_options( $options );
+	}
+
+	/**
+	 * Set datepicker options 
+	 */
+	public function set_datepicker_options( $options ) {
+		$this->datepicker_options = $options;
 
 		return $this;
 	}

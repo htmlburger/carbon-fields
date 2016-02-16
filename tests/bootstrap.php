@@ -33,7 +33,6 @@ class Carbon_Fields_Tests_Bootstrap {
 	 * Setup the unit testing environment
 	 */
 	private function __construct() {
-
 		ini_set( 'display_errors','on' );
 		error_reporting( E_ALL );
 
