@@ -10,7 +10,7 @@ use Carbon_Fields\Container\Container as Abstract_Container;
  **/
 class Container {
 	/**
-	 * A proxy for the abstract field factory method.
+	 * A proxy for the abstract container factory method.
 	 *
 	 * @see Carbon_Fields\Container\Container::factory()
 	 **/
