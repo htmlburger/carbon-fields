@@ -14,8 +14,8 @@ class Container {
 	 *
 	 * @see Carbon_Fields\Container\Container::factory()
 	 **/
-	public static function factory( $type, $name, $label = null ) {
-		return Abstract_Container::factory( $type, $name, $label );
+	public static function factory( $type, $name ) {
+		return Abstract_Container::factory( $type, $name );
 	}
 
 	/**
@@ -23,7 +23,7 @@ class Container {
 	 *
 	 * @see Container::factory()
 	 **/
-	public static function make( $type, $name, $label = null ) {
-		return self::factory( $type, $name, $label );
+	public static function make( $type, $name ) {
+		return self::factory( $type, $name );
 	}
 }
