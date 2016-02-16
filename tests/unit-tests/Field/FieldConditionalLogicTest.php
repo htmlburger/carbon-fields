@@ -26,10 +26,10 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 */	
 	function testErrorIsThrownWhenFlatArrayIsProvided() {
-		$this->field->set_conditional_logic([
+		$this->field->set_conditional_logic(array(
 			'field' => 'is_product',
 			'value' => 'yes',
-		]);
+		));
 	}
 
 	/**
@@ -47,23 +47,23 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	}
 
 	function testBasicCondLogic() {
-		$user_defined_cond_logic = [
-			[
+		$user_defined_cond_logic = array(
+			array(
 				'field' => 'is_product',
 				'value' => 'yes',
-			]
-		];
+			)
+		);
 
-		$expected_parsed_cond_logic = [
+		$expected_parsed_cond_logic = array(
 			'relation' => 'AND',
-			'rules' => [
-				[
+			'rules' => array(
+				array(
 					'field' => 'is_product',
 					'value' => 'yes',
 					'compare' => '=',
-				]
-			]
-		];
+				)
+			)
+		);
 		$this->verify_cond_logic(
 			$user_defined_cond_logic,
 			$expected_parsed_cond_logic
@@ -71,23 +71,23 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	}
 
 	function testValueDefaultsToEmptyString() {
-		$user_defined_cond_logic = [
-			[
+		$user_defined_cond_logic = array(
+			array(
 				'field' => 'is_product',
 				'compare' => '!=',
-			]
-		];
+			)
+		);
 
-		$expected_parsed_cond_logic = [
+		$expected_parsed_cond_logic = array(
 			'relation' => 'AND',
-			'rules' => [
-				[
+			'rules' => array(
+				array(
 					'field' => 'is_product',
 					'value' => '',
 					'compare' => '!=',
-				]
-			]
-		];
+				)
+			)
+		);
 
 		$this->verify_cond_logic(
 			$user_defined_cond_logic,
@@ -96,24 +96,24 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	}
 
 	function testRelationOperatorIsProvidedInLowercase() {
-		$user_defined_cond_logic = [
+		$user_defined_cond_logic = array(
 			'relation' => 'or',
-			[
+			array(
 				'field' => 'is_product',
 				'value' => 'yes',
-			]
-		];
+			)
+		);
 
-		$expected_parsed_cond_logic = [
+		$expected_parsed_cond_logic = array(
 			'relation' => 'OR',
-			'rules' => [
-				[
+			'rules' => array(
+				array(
 					'field' => 'is_product',
 					'value' => 'yes',
 					'compare' => '=',
-				]
-			]
-		];
+				)
+			)
+		);
 		$this->verify_cond_logic(
 			$user_defined_cond_logic,
 			$expected_parsed_cond_logic
@@ -126,13 +126,13 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage Invalid relation
 	 */
 	function testBadRelationOperatorThrowsError() {
-		$this->field->set_conditional_logic([
+		$this->field->set_conditional_logic(array(
 			'relation' => 'maybe',
-			[
+			array(
 				'field' => 'is_product',
 				'value' => 'yes',
-			]
-		]);
+			)
+		));
 	}
 
 	/**
@@ -140,13 +140,13 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage compare operator
 	 */
 	function testBadCompareOperatorThrowsError() {
-		$this->field->set_conditional_logic([
-			[
+		$this->field->set_conditional_logic(array(
+			array(
 				'field' => 'is_product',
 				'value' => 'yes',
 				'compare' => '!==' // There is no `!==` operator
-			]
-		]);
+			)
+		));
 	}
 
 	/**
@@ -154,13 +154,13 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage An array is expected
 	 */
 	function testInCompareOperatorRequiresArrayAsValue() {
-		$this->field->set_conditional_logic([
-			[
+		$this->field->set_conditional_logic(array(
+			array(
 				'field' => 'is_product',
 				'value' => 'yes',
 				'compare' => 'IN'
-			]
-		]);
+			)
+		));
 
 	}
 }
