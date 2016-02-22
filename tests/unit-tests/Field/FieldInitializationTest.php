@@ -39,11 +39,11 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 */
 	public function testDashIsNotAllowedInFieldType() {
 		$field = Field::make('choose-sidebar', $this->fieldName);
-		$this->assertEquals($this->fieldName, $field->get_name());
 	}
 
 	public function testFieldTypeCaseIsIgnored() {
 		$field = Field::make('Text', $this->fieldName);
+		$this->assertInstanceOf('Carbon_Fields\Field\Text_Field', $field);
 	}
 
 	public function testSpacesInFieldTypeAreSupported() {
