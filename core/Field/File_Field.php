@@ -48,7 +48,7 @@ class File_Field extends Field {
 
 		$url = '';
 		$thumb_url = '';
-		$default_thumb_url = home_url( '/wp-includes/images/media/default.png' );
+		$default_thumb_url = includes_url( '/images/media/default.png' );
 		$file_ext = '';
 		$file_type = '';
 		$value = $this->get_value();
