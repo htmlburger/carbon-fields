@@ -14,7 +14,8 @@ Supports PHP5.3 or higher.
 
 * [WordPress Plugin](https://wordpress.org/plugins/carbon-fields/)
 * [Website](http://carbonfields.net/)
-* [Documentation](http://carbonfields.net/docs/)
+* [Documentation (website)](http://carbonfields.net/docs/)
+* [Documentation (GitHub)](https://github.com/htmlburger/carbon-fields-docs)
 * [FAQ](http://carbonfields.net/faq/)
 * [Support](http://carbonfields.net/support/)
 * [GitHub Repository](https://github.com/htmlburger/carbon-fields)
