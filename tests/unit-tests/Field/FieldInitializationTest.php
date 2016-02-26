@@ -20,6 +20,13 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	/**
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 */
+	function testExceptionIsThrownWhenFieldTypeIsEmpty() {
+		$field = Field::make('', $this->fieldName);
+	}
+
+	/**
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 */
 	function testExceptionIsThrownWhenFieldTypeIsInvalid() {
 		$field = Field::make('__no_such_field_type__', $this->fieldName);
 	}
@@ -99,6 +106,9 @@ class FieldInitializationTest extends WP_UnitTestCase {
 		$this->assertEquals("Field Color", $field->get_label());
 
 		$field = Field::make('text', '_field_color');
+		$this->assertEquals("Field Color", $field->get_label());
+
+		$field = Field::make('text', 'crb_field_color');
 		$this->assertEquals("Field Color", $field->get_label());
 
 		$field = Field::make('text', '_crb_field_color');
