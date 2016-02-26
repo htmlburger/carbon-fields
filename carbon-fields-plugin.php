@@ -8,7 +8,7 @@
  * Plugin URI: http://carbonfields.net/
  * License: GPL2
  * Requires at least: 4.0
- * Tested up to: 4.4.1
+ * Tested up to: 4.4.2
  * Text Domain: carbon_fields
  * Domain Path: /languages
  */
