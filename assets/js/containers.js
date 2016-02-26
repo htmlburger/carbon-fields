@@ -276,6 +276,7 @@ window.carbon = window.carbon || {};
 					}
 
 					tabs[tab] = {
+						id: tab.toLowerCase().replace(/[^\w]+/g, '-'),
 						fields: tabFields
 					};
 				});
@@ -721,7 +722,7 @@ window.carbon = window.carbon || {};
 
 			// Retrieve the current tab
 			var $currentTabLink = $tabLinks.filter(function() {
-				return '!' + $(this).text() === currentTabString;
+				return '!' + $(this).data('id') === currentTabString;
 			}).eq(0);
 
 			// If there is no current tab, use the first one
@@ -748,7 +749,7 @@ window.carbon = window.carbon || {};
 				$li = $element.closest('.carbon-tabs').find('.carbon-tabs-nav li:eq(' + activeTabIndex + ')');
 			}
 
-			window.location.hash = '!' + $li.text();
+			window.location.hash = '!' + $li.find('a:eq(0)').data('id');
 		}
 	});
 

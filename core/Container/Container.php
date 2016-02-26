@@ -707,7 +707,7 @@ abstract class Container {
 		<div class="carbon-tabs">
 			<ul class="carbon-tabs-nav">
 				<# _.each(tabs, function (tab, tabName) { #>
-					<li><a href="#">{{{ tabName }}}</a></li>
+					<li><a href="#" data-id="{{{ tab.id }}}">{{{ tabName }}}</a></li>
 				<# }); #>
 			</ul> 
 
