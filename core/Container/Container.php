@@ -271,7 +271,7 @@ abstract class Container {
 		$this->title = $title;
 		$this->id = preg_replace( '~\W~u', '', remove_accents( $title ) );
 
-		$this->verify_unique_panel_id( $this->id );
+		self::verify_unique_panel_id( $this->id );
 
 		add_action( 'admin_print_scripts', array( $this, 'admin_hook_scripts' ) );
 		add_action( 'admin_print_styles', array( $this, 'admin_hook_styles' ) );
@@ -588,7 +588,7 @@ abstract class Container {
 	/**
 	 * Perform checks whether there is a container registered with identificator $id
 	 */
-	public function verify_unique_panel_id( $id ) {
+	public static function verify_unique_panel_id( $id ) {
 		if ( in_array( $id, self::$registered_panel_ids ) ) {
 			Incorrect_Syntax_Exception::raise( 'Panel ID "' . $id .'" already registered' );
 		}
