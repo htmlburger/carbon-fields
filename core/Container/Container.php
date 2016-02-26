@@ -430,7 +430,7 @@ abstract class Container {
 	 * Revert the result of attach()
 	 **/
 	public function detach() {
-		$this->drop_unique_panel_id( $this->id );
+		self::drop_unique_panel_id( $this->id );
 
 		// unregister field names
 		foreach ( $this->fields as $field ) {
@@ -602,7 +602,7 @@ abstract class Container {
 	 *
 	 * @param string $id
 	 **/
-	public function drop_unique_panel_id( $id ) {
+	public static function drop_unique_panel_id( $id ) {
 		if ( in_array( $id, self::$registered_panel_ids ) ) {
 			unset( self::$registered_panel_ids[ array_search( $id, self::$registered_panel_ids ) ] );
 		}
