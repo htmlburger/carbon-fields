@@ -122,11 +122,5 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	public function testFieldNameCantBeEmpty() {
 		Field::make('text', '');
 	}
-
-	/*
-	public function test () {
-		$field = Field::make('text', '');
-	}
-	*/
 	
 }
