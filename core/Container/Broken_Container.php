@@ -7,9 +7,9 @@ namespace Carbon_Fields\Container;
  * Used when a container is gets misconfigured.
  **/
 class Broken_Container extends Container {
-	public function add_template() {}
+	public function add_template( $name, $callback ) {}
 
-	public function add_fields() {}
+	public function add_fields( $fields ) {}
 	
 	public function init() {}
 }
