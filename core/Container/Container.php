@@ -144,7 +144,7 @@ abstract class Container {
 
 		if ( ! class_exists( $class ) ) {
 			Incorrect_Syntax_Exception::raise( 'Unknown container "' . $type . '".' );
-			$class = __NAMESPACE__ . "\\Broken_Container";
+			$class = __NAMESPACE__ . '\\Broken_Container';
 		}
 
 		$container = new $class( $name );
@@ -225,7 +225,7 @@ abstract class Container {
 	/**
 	 * Perform instance initialization after calling setup()
 	 **/
-	public abstract function init();
+	abstract public function init();
 
 	/**
 	 * Prints the container Underscore template

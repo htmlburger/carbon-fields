@@ -82,9 +82,9 @@ class Nav_Menu_Edit_Walker extends \Walker_Nav_Menu {
 		$title = ( ! isset( $item->label ) || '' == $item->label ) ? $title : $item->label;
 
 		$submenu_text = '';
-		if ( 0 == $depth )
+		if ( 0 == $depth ) {
 			$submenu_text = 'style="display: none;"';
-
+		}
 		?>
 		<li id="menu-item-<?php echo esc_attr( $item_id ); ?>" class="<?php echo implode( ' ', $classes ); ?>">
 			<div class="menu-item-bar">
@@ -156,7 +156,7 @@ class Nav_Menu_Edit_Walker extends \Walker_Nav_Menu {
 				<p class="field-css-classes description description-thin">
 					<label for="edit-menu-item-classes-<?php echo esc_attr( $item_id ); ?>">
 						<?php _e( 'CSS Classes (optional)', 'carbon_fields' ); ?><br />
-						<input type="text" id="edit-menu-item-classes-<?php echo esc_attr( $item_id ); ?>" class="widefat code edit-menu-item-classes" name="menu-item-classes[<?php echo esc_attr( $item_id ); ?>]" value="<?php echo esc_attr( implode(' ', $item->classes ) ); ?>" />
+						<input type="text" id="edit-menu-item-classes-<?php echo esc_attr( $item_id ); ?>" class="widefat code edit-menu-item-classes" name="menu-item-classes[<?php echo esc_attr( $item_id ); ?>]" value="<?php echo esc_attr( implode( ' ', $item->classes ) ); ?>" />
 					</label>
 				</p>
 				<p class="field-xfn description description-thin">
@@ -169,7 +169,7 @@ class Nav_Menu_Edit_Walker extends \Walker_Nav_Menu {
 					<label for="edit-menu-item-description-<?php echo esc_attr( $item_id ); ?>">
 						<?php _e( 'Description', 'carbon_fields' ); ?><br />
 						<textarea id="edit-menu-item-description-<?php echo esc_attr( $item_id ); ?>" class="widefat edit-menu-item-description" rows="3" cols="20" name="menu-item-description[<?php echo esc_attr( $item_id ); ?>]"><?php echo esc_html( $item->description ); // textarea_escaped ?></textarea>
-						<span class="description"><?php _e('The description will be displayed in the menu if the current theme supports it.', 'carbon_fields'); ?></span>
+						<span class="description"><?php _e( 'The description will be displayed in the menu if the current theme supports it.', 'carbon_fields' ); ?></span>
 					</label>
 				</p>
 

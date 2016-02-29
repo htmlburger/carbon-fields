@@ -467,10 +467,10 @@ class Helper {
 	/**
 	 * Recursively expand the subfields of a complex field.
 	 * 
-	 * @param  array  $input_groups Input groups.
-	 * @param  array  $row          Data row (key and value).
-	 * @param  string $field_name   Name of the field.
-	 * @return array                Expanded data.
+	 * @param  array $input_groups Input groups.
+	 * @param  array $row          Data row (key and value).
+	 * @param  array $field_name   Field name pieces.
+	 * @return array               Expanded data.
 	 */
 	public static function expand_nested_field( $input_groups, $row, $field_name ) {
 		$subfield_key_token = $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'];

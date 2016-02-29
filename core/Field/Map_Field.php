@@ -37,7 +37,7 @@ class Map_Field extends Field {
 		$field_data = array_merge( $field_data, array(
 			'lat' => is_float( $this->lat ) ? $this->lat : $this->default_lat,
 			'lng' => is_float( $this->lng ) ? $this->lng : $this->default_lng,
-			'zoom' => is_int($this->zoom ) ? $this->zoom : $this->default_zoom,
+			'zoom' => is_int( $this->zoom ) ? $this->zoom : $this->default_zoom,
 			'address' => $this->address,
 		) );
 

@@ -88,7 +88,7 @@ class Field {
 	 *
 	 * @see set_datastore()
 	 * @see get_datastore()
-	 * @var Carbon_DataStore
+	 * @var Datastore_Interface
 	 */
 	protected $store;
 
@@ -383,13 +383,12 @@ class Field {
 		$name = preg_replace( '~\s+~', '_', mb_strtolower( $name ) );
 
 		if ( empty( $name ) ) {
-			Incorrect_Syntax_Exception::raise('Field name can\'t be empty');
+			Incorrect_Syntax_Exception::raise( 'Field name can\'t be empty' );
 		}
 
 		if ( $this->name_prefix && strpos( $name, $this->name_prefix ) !== 0 ) {
 			$name = $this->name_prefix . $name;
 		}
-
 
 		$this->name = $name;
 	}
@@ -755,11 +754,11 @@ class Field {
 		foreach ( $rules as $key => $rule ) {
 			// Check if we have a relation key
 			if ( $key === 'relation' ) {
-				$relation = strtoupper($rule);
+				$relation = strtoupper( $rule );
 
-				if (!in_array($relation, $allowed_relations)) {
+				if ( ! in_array( $relation, $allowed_relations ) ) {
 					Incorrect_Syntax_Exception::raise( 'Invalid relation type ' . $rule . '. ' .
-						'The rule should be one of the following: "' . implode('", "', $allowed_relations) . '"' );
+						'The rule should be one of the following: "' . implode( '", "', $allowed_relations ) . '"' );
 				}
 
 				$parsed_rules['relation'] = $relation;

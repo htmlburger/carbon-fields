@@ -12,7 +12,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 class Nav_Menu_Container extends Container {
 
 	public static $instances = array();
-	public static $active_containers = false;
+	public static $active_containers = array();
 	public static $initialized = false;
 
 	/**
