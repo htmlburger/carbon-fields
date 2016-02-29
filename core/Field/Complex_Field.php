@@ -359,10 +359,8 @@ class Complex_Field extends Field {
 	 * Generate and set the field prefix.
 	 * @param string $prefix
 	 */
-	public function set_prefix($prefix) {
-		$this->name = preg_replace( '~^' . preg_quote( $this->name_prefix, '~' ) . '~', '', $this->name );
-		$this->name_prefix = $prefix;
-		$this->name = $this->name_prefix . $this->name;
+	public function set_prefix( $prefix ) {
+		parent::set_prefix( $prefix );
 
 		foreach ( $this->groups as $group ) {
 			$group->set_prefix( $prefix );

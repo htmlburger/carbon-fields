@@ -264,7 +264,7 @@ class Helper {
 		$args = array( $id, $name, true );
 		$function = '';
 
-		switch( $store_type ) {
+		switch ( $store_type ) {
 			case 'post_meta':
 				$function = 'get_post_meta';
 			break;
