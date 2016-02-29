@@ -329,7 +329,7 @@ class Post_Meta_Container extends Container {
 
 			if ( $this->post_id ) {
 				$post_type = get_post_type( $this->post_id );
-			} elseif ( ! empty($_GET['post_type'] ) ) {
+			} elseif ( ! empty( $_GET['post_type'] ) ) {
 				$post_type = $_GET['post_type'];
 			} elseif ( $pagenow === 'post-new.php' ) {
 				$post_type = 'post';

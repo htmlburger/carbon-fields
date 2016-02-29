@@ -37,7 +37,7 @@ class Sidebar_Field extends Select_Field {
 
 		$field_data = parent::to_json( $load );
 
-		if ( $this->excluded_sidebars ) {
+		if ( ! empty( $this->excluded_sidebars ) ) {
 			if ( ! is_array( $this->excluded_sidebars ) ) {
 				$this->excluded_sidebars = array( $this->excluded_sidebars );
 			}

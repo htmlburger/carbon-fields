@@ -264,7 +264,7 @@ abstract class Container {
 	 * @param string $title Unique title of the container
 	 **/
 	public function __construct( $title ) {
-		if ( empty($title) ) {
+		if ( empty( $title ) ) {
 			Incorrect_Syntax_Exception::raise( 'Empty container title is not supported' );
 		}
 

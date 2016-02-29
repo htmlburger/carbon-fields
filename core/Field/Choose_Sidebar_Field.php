@@ -80,7 +80,7 @@ class Choose_Sidebar_Field extends Sidebar_Field {
 		 */
 		foreach ( $sidebar_options as $options ) {
 			foreach ( $required_arguments as $arg ) {
-				if ( ! isset($options[ $arg ] ) ) {
+				if ( ! isset( $options[ $arg ] ) ) {
 					throw new Incorrect_Syntax_Exception(
 						'Provide all sidebar options for ' . $this->name . ': <code>' .
 						implode( ', ', $required_arguments ) . '</code>'

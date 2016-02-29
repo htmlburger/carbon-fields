@@ -136,38 +136,7 @@ class Helper {
 	public static function get_post_meta( $id, $name, $type = null ) {
 		$name = $name[0] == '_' ? $name : '_' . $name;
 
-		switch ( $type ) {
-			case 'complex':
-				$value = self::get_complex_fields( 'Post_Meta', $name, $id );
-			break;
-
-			case 'map':
-			case 'map_with_address':
-				$value = array(
-					'lat' => (float) get_post_meta( $id, $name . '-lat', true ),
-					'lng' => (float) get_post_meta( $id, $name . '-lng', true ),
-					'address' => get_post_meta( $id, $name . '-address', true ),
-					'zoom' => (int) get_post_meta( $id, $name . '-zoom', true ),
-				);
-				
-				if ( ! array_filter( $value ) ) {
-					$value = array();
-				}
-			break;
-
-			case 'association':
-				$raw_value = get_post_meta( $id, $name, true );
-				$value = self::parse_relationship_field( $raw_value, $type );
-			break;
-
-			default:
-				$value = get_post_meta( $id, $name, true );
-
-				// backward compatibility for the old Relationship field
-				$value = self::maybe_old_relationship_field( $value );
-		}
-
-		return $value;
+		return self::get_field_value( 'post_meta', $name, $type, $id );
 	}
 
 	/**
@@ -190,38 +159,7 @@ class Helper {
 	 * @return mixed        Option value.
 	 */
 	public static function get_theme_option( $name, $type = null ) {
-		switch ( $type ) {
-			case 'complex':
-				$value = self::get_complex_fields( 'Theme_Options', $name );
-			break;
-
-			case 'map':
-			case 'map_with_address':
-				$value = array(
-					'lat' => (float) get_option( $name . '-lat' ),
-					'lng' => (float) get_option( $name . '-lng' ),
-					'address' => get_option( $name . '-address' ),
-					'zoom' => (int) get_option( $name . '-zoom' ),
-				);
-
-				if ( ! array_filter( $value ) ) {
-					$value = array();
-				}
-			break;
-
-			case 'association':
-				$raw_value = get_option( $name );
-				$value = self::parse_relationship_field( $raw_value, $type );
-			break;
-
-			default:
-				$value = get_option( $name );
-
-				// backward compatibility for the old Relationship field
-				$value = self::maybe_old_relationship_field( $value );
-		}
-
-		return $value;
+		return self::get_field_value( 'theme_options', $name, $type );
 	}
 
 	/**
@@ -235,38 +173,7 @@ class Helper {
 	public static function get_term_meta( $id, $name, $type = null ) {
 		$name = $name[0] == '_' ? $name: '_' . $name;
 
-		switch ( $type ) {
-			case 'complex':
-				$value = self::get_complex_fields( 'Term_Meta', $name, $id );
-			break;
-
-			case 'map':
-			case 'map_with_address':
-				$value = array(
-					'lat' => (float) get_metadata( 'term', $id, $name . '-lat', true ),
-					'lng' => (float) get_metadata( 'term', $id, $name . '-lng', true ),
-					'address' => get_metadata( 'term', $id, $name . '-address', true ),
-					'zoom' => (int) get_metadata( 'term', $id, $name . '-zoom', true ),
-				);
-
-				if ( ! array_filter( $value ) ) {
-					$value = array();
-				}
-			break;
-
-			case 'association':
-				$raw_value = get_metadata( 'term', $id, $name, true );
-				$value = self::parse_relationship_field( $raw_value, $type );
-			break;
-
-			default:
-				$value = get_metadata( 'term', $id, $name, true );
-
-				// backward compatibility for the old Relationship field
-				$value = self::maybe_old_relationship_field( $value );
-		}
-
-		return $value;
+		return self::get_field_value( 'term_meta', $name, $type, $id );
 	}
 
 	/**
@@ -280,38 +187,7 @@ class Helper {
 	public static function get_user_meta( $id, $name, $type = null ) {
 		$name = $name[0] == '_' ? $name: '_' . $name;
 
-		switch ( $type ) {
-			case 'complex':
-				$value = self::get_complex_fields( 'User_Meta', $name, $id );
-			break;
-
-			case 'map':
-			case 'map_with_address':
-				$value = array(
-					'lat' => (float) get_metadata( 'user', $id, $name . '-lat', true ),
-					'lng' => (float) get_metadata( 'user', $id, $name . '-lng', true ),
-					'address' => get_metadata( 'user', $id, $name . '-address', true ),
-					'zoom' => (int) get_metadata( 'user', $id, $name . '-zoom', true ),
-				);
-
-				if ( ! array_filter( $value ) ) {
-					$value = array();
-				}
-			break;
-
-			case 'association':
-				$raw_value = get_metadata( 'user', $id, $name, true );
-				$value = self::parse_relationship_field( $raw_value, $type );
-			break;
-
-			default:
-				$value = get_metadata( 'user', $id, $name, true );
-
-				// backward compatibility for the old Relationship field
-				$value = self::maybe_old_relationship_field( $value );
-		}
-
-		return $value;
+		return self::get_field_value( 'user_meta', $name, $type, $id );
 	}
 
 	/**
@@ -325,18 +201,34 @@ class Helper {
 	public static function get_comment_meta( $id, $name, $type = null ) {
 		$name = $name[0] == '_' ? $name: '_' . $name;
 
+		return self::get_field_value( 'comment_meta', $name, $type, $id );
+	}
+
+	/**
+	 * Retrieve a certain field value from the database.
+	 * Handles the logic for different field types.
+	 *
+	 * @param  string $data_type Data type.
+	 * @param  string $name      Custom field name.
+	 * @param  string $type      Custom field type (optional).
+	 * @param  int    $id        ID (optional).
+	 * @return mixed             Meta value.
+	 */
+	public static function get_field_value( $data_type, $name, $type = null, $id = null ) {
+		$datastore_name = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $data_type ) ) );
+
 		switch ( $type ) {
 			case 'complex':
-				$value = self::get_complex_fields( 'Comment_Meta', $name, $id );
+				$value = self::get_complex_fields( $datastore_name, $name, $id );
 			break;
 
 			case 'map':
 			case 'map_with_address':
 				$value = array(
-					'lat' => (float) get_metadata( 'comment', $id, $name . '-lat', true ),
-					'lng' => (float) get_metadata( 'comment', $id, $name . '-lng', true ),
-					'address' => get_metadata( 'comment', $id, $name . '-address', true ),
-					'zoom' => (int) get_metadata( 'comment', $id, $name . '-zoom', true ),
+					'lat' => (float) self::get_field_value_by_store( $data_type, $name . '-lat', $id ),
+					'lng' => (float) self::get_field_value_by_store( $data_type, $name . '-lng', $id ),
+					'address' => self::get_field_value_by_store( $data_type, $name . '-address', $id ),
+					'zoom' => (int) self::get_field_value_by_store( $data_type, $name . '-zoom', $id ),
 				);
 
 				if ( ! array_filter( $value ) ) {
@@ -345,18 +237,62 @@ class Helper {
 			break;
 
 			case 'association':
-				$raw_value = get_metadata( 'comment', $id, $name, true );
+				$raw_value = self::get_field_value_by_store( $data_type, $name, $id );
 				$value = self::parse_relationship_field( $raw_value, $type );
 			break;
 
 			default:
-				$value = get_metadata( 'comment', $id, $name, true );
+				$value = self::get_field_value_by_store( $data_type, $name, $id );
 
 				// backward compatibility for the old Relationship field
 				$value = self::maybe_old_relationship_field( $value );
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Retrieve a certain field value from the database.
+	 * Handles the logic for different data stores (containers).
+	 *
+	 * @param  string $store_type Data store type.
+	 * @param  string $name       Custom field name.
+	 * @param  int    $id         ID (optional).
+	 * @return mixed              Meta value.
+	 */
+	public static function get_field_value_by_store( $store_type, $name, $id = null ) {
+		$args = array( $id, $name, true );
+		$function = '';
+
+		switch( $store_type ) {
+			case 'post_meta':
+				$function = 'get_post_meta';
+			break;
+
+			case 'user_meta':
+				$function = 'get_user_meta';
+			break;
+
+			case 'comment_meta':
+				$function = 'get_comment_meta';
+			break;
+
+			case 'term_meta':
+				$function = 'get_metadata';
+				$args = array( 'term', $id, $name, true );
+			break;
+
+			case 'theme_options':
+				$function = 'get_option';
+				$args = array( $name );
+			break;
+		}
+
+		if ( ! empty( $function ) && function_exists( $function ) ) {
+			return call_user_func_array( $function, $args );
+		}
+
+		return false;
 	}
 
 	/**
