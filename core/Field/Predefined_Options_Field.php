@@ -2,37 +2,19 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+
 /**
  * Base class for fields with predefined options. 
- * Mainly used to reduce the bloat on the base Field class
+ * Mainly used to reduce the bloat on the base Field class.
  **/
 abstract class Predefined_Options_Field extends Field {
 	/**
 	 * Stores the field options (if any)
 	 *
-	 * @var array
+	 * @var array|callable
 	 **/
 	protected $options = array();
-
-	/**
-	 * Set the field options
-	 * Callbacks are supported
-	 *
-	 * @param array|callable $options
-	 */
-	protected function _set_options( $options ) {
-		$this->options = (array) $options;
-	}
-
-	/**
-	 * Add options to the field
-	 * Callbacks are supported
-	 *
-	 * @param array|callable $options
-	 */
-	protected function _add_options( $options ) {
-		$this->options[] = $options;
-	}
 
 	/**
 	 * Set the options of this field.
@@ -41,18 +23,35 @@ abstract class Predefined_Options_Field extends Field {
 	 * @param array|callable $options 
 	 */
 	public function set_options( $options ) {
-		$this->_set_options( $options );
+		$this->options = array();
+
+		if ( is_callable( $options ) ) {
+			$this->options = $options;
+		} elseif ( is_array( $options ) ) {
+			$this->add_options( $options );
+		} else {
+			$this->options = array();
+			Incorrect_Syntax_Exception::raise( 'Only arrays and callbacks are allowed in the <code>set_options()</code> method.' );
+		}
+
 		return $this;
 	}
 
 	/**
 	 * Add new options to this field.
-	 * Accepts either array of data or a callback that returns the data.
+	 * Accepts an array of data.
 	 * 
 	 * @param array|callable $options
 	 */
 	public function add_options( $options ) {
-		$this->_add_options( $options );
+		if ( is_array( $options ) ) {
+			$old_options = is_callable( $this->options ) ? array() : $this->options;
+			$this->options = array_merge( $old_options, $options );
+		} else {
+			$this->options = array();
+			Incorrect_Syntax_Exception::raise( 'Only arrays are allowed in the <code>add_options()</code> method.' );
+		}
+		
 		return $this;
 	}
 
@@ -64,14 +63,19 @@ abstract class Predefined_Options_Field extends Field {
 			return false;
 		}
 
-		$options = array();
-		foreach ( $this->options as $key => $value ) {
-			if ( is_callable( $value ) ) {
-				$options = $options + (array) call_user_func( $value );
-			} else if ( is_array( $value ) ) {
-				$options = $options + $value;
-			} else {
-				$options[ $key ] = $value;
+		if ( is_callable( $this->options ) ) {
+			$options = call_user_func( $this->options );
+			if ( ! is_array( $options ) ) {
+				$options = array();
+			}
+		} else {
+			$options = array();
+			foreach ( $this->options as $key => $value ) {
+				if ( is_array( $value ) ) {
+					$options = $options + $value;
+				} else {
+					$options[ $key ] = $value;
+				}
 			}
 		}
 
@@ -95,6 +99,15 @@ abstract class Predefined_Options_Field extends Field {
 		}
 
 		return $parsed;
+	}
+
+	/**
+	 * Retrieve the current options.
+	 *
+	 * @return array|callable $options 
+	 */
+	public function get_options() {
+		return $this->options;
 	}
 
 } // END Field
