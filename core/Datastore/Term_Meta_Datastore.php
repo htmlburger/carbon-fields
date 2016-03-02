@@ -158,11 +158,9 @@ class Term_Meta_Datastore extends Datastore {
 	 * Useful for WP < 4.4.
 	 * 
 	 * @param  int $term_id  Term ID.
-	 * @param  int $tt_id    Term taxonomy ID
-	 * @param  string $taxonomy Taxonomy.
 	 * @return bool Result of the deletion operation.
 	 */
-	public static function on_delete_term( $term_id, $tt_id, $taxonomy ) {
+	public static function on_delete_term( $term_id ) {
 		global $wpdb;
 
 		return $wpdb->query( '
