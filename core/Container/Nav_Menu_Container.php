@@ -151,14 +151,14 @@ class Nav_Menu_Container extends Container {
 	/**
 	 * Setup custom walker for the Nav Menu entries
 	 */
-	public static function edit_walker( $walker, $menu_id ) {
+	public static function edit_walker() {
 		return 'Carbon_Fields\Walker\Nav_Menu_Edit_Walker';
 	}
 
 	/**
 	 * Trigger Save for all instances
 	 */
-	public static function update( $menu_id, $current_menu_item_id, $args ) {
+	public static function update( $menu_id, $current_menu_item_id ) {
 		$instance = self::set_instance_for_id( $current_menu_item_id, false );
 		$instance->_save();
 
