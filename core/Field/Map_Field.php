@@ -8,13 +8,60 @@ namespace Carbon_Fields\Field;
  * Coords (lat, lng), address and zoom are saved in the database.
  */
 class Map_Field extends Field {
+	/**
+	 * Whether to lazy load this field.
+	 *
+	 * @var bool
+	 */
 	protected $lazyload = true;
+
+	/**
+	 * Default latitude.
+	 *
+	 * @var float
+	 */
 	protected $default_lat = 40.346544;
+
+	/**
+	 * Default longitude.
+	 *
+	 * @var float
+	 */
 	protected $default_lng = -101.645507;
+
+	/**
+	 * Default zoom.
+	 *
+	 * @var int
+	 */
 	protected $default_zoom = 10;
+
+	/**
+	 * Current latitude.
+	 *
+	 * @var float|string
+	 */
 	protected $lat = null;
+
+	/**
+	 * Current longitude.
+	 *
+	 * @var float|string
+	 */
 	protected $lng = null;
+
+	/**
+	 * Current zoom.
+	 *
+	 * @var int
+	 */
 	protected $zoom = null;
+
+	/**
+	 * Current address.
+	 *
+	 * @var string
+	 */
 	protected $address = '';
 
 	/**
