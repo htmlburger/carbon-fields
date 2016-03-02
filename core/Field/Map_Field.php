@@ -74,8 +74,8 @@ class Map_Field extends Field {
 	 * @param int $zoom Zoom level
 	 */
 	public function set_position( $lat, $lng, $zoom ) {
-		$this->default_lat = $lat;
-		$this->default_lng = $lng;
+		$this->default_lat = floatval( $lat );
+		$this->default_lng = floatval( $lng );
 		$this->default_zoom = $zoom;
 
 		return $this;

@@ -84,12 +84,17 @@ abstract class Predefined_Options_Field extends Field {
 
 	/**
 	 * Changes the options array structure. This is needed to keep the array items order when it is JSON encoded.
+	 * Will also work with a callable that returns an array.
 	 *
-	 * @param array $options
+	 * @param array|callable $options
 	 * @return array
 	 */
 	public function parse_options( $options ) {
 		$parsed = array();
+
+		if ( is_callable( $options ) ) {
+			$options = call_user_func( $options );
+		}
 
 		foreach ( $options as $key => $value ) {
 			$parsed[] = array(
