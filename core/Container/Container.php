@@ -121,7 +121,7 @@ abstract class Container {
 	 *
 	 * @see set_datastore()
 	 * @see get_datastore()
-	 * @var Datastore_Interface
+	 * @var object
 	 */
 	protected $store;
 
@@ -639,7 +639,7 @@ abstract class Container {
 	 *
 	 * @param object $store
 	 **/
-	public function set_datastore( Datastore_Interface $store ) {
+	public function set_datastore( $store ) {
 		$this->store = $store;
 
 		foreach ( $this->fields as $field ) {

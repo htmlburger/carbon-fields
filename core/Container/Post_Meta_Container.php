@@ -65,15 +65,6 @@ class Post_Meta_Container extends Container {
 	}
 
 	/**
-	 * Assign DataStore instance for use by the container fields
-	 *
-	 * @param object $store
-	 **/
-	public function set_datastore( Meta_Datastore $store ) {
-		parent::set_datastore( $store );
-	}
-
-	/**
 	 * Check if all required container settings have been specified
 	 *
 	 * @param array $settings Container settings
