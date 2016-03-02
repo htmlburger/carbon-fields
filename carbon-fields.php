@@ -10,7 +10,7 @@ if ( ! defined( __NAMESPACE__ . '\DIR' ) ) {
 
 # Define root URL
 if ( ! defined( __NAMESPACE__ . '\URL' ) ) {
-	$url = trailingslashit( DIR );
+	$url = \trailingslashit( DIR );
 	$count = 0;
 
 	# Sanitize directory separator on Windows
@@ -18,21 +18,21 @@ if ( ! defined( __NAMESPACE__ . '\URL' ) ) {
 
 	# If installed as a plugin
 	$wp_plugin_dir = str_replace( '\\' ,'/', WP_PLUGIN_DIR );
-	$url = str_replace( $wp_plugin_dir, plugins_url(), $url, $count );
+	$url = str_replace( $wp_plugin_dir, \plugins_url(), $url, $count );
 
 	if ( $count < 1 ) {
 		# If anywhere in wp-content
 		$wp_content_dir = str_replace( '\\' ,'/', WP_CONTENT_DIR );
-		$url = str_replace( $wp_content_dir, content_url(), $url, $count );
+		$url = str_replace( $wp_content_dir, \content_url(), $url, $count );
 	}
 
 	if ( $count < 1 ) {
 		# If anywhere else within the WordPress installation
 		$wp_dir = str_replace( '\\' ,'/', ABSPATH );
-		$url = str_replace( $wp_dir, site_url( '/' ), $url );
+		$url = str_replace( $wp_dir, \site_url( '/' ), $url );
 	}
 
-	define( __NAMESPACE__ . '\URL', untrailingslashit( $url ) );
+	define( __NAMESPACE__ . '\URL', \untrailingslashit( $url ) );
 }
 
 # Initialize helper 
