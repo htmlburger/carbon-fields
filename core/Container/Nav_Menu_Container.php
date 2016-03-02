@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Container;
 
+use Carbon_Fields\Datastore\Meta_Datastore;
 use Carbon_Fields\Datastore\Nav_Menu_Datastore;
 use Carbon_Fields\Walker\Nav_Menu_Edit_Walker;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
@@ -50,6 +51,15 @@ class Nav_Menu_Container extends Container {
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Assign DataStore instance for use by the container fields
+	 *
+	 * @param object $store
+	 **/
+	public function set_datastore( Meta_Datastore $store ) {
+		parent::set_datastore( $store );
 	}
 
 	/**

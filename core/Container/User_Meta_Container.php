@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Container;
 
+use Carbon_Fields\Datastore\Meta_Datastore;
 use Carbon_Fields\Datastore\User_Meta_Datastore;
 
 class User_Meta_Container extends Container {
@@ -24,6 +25,15 @@ class User_Meta_Container extends Container {
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( new User_Meta_Datastore() );
 		}
+	}
+
+	/**
+	 * Assign DataStore instance for use by the container fields
+	 *
+	 * @param object $store
+	 **/
+	public function set_datastore( Meta_Datastore $store ) {
+		parent::set_datastore( $store );
 	}
 
 	/**
