@@ -79,7 +79,7 @@ class Theme_Options_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_save() {
-		if ( ! isset( $_POST[ $this->get_nonce_name() ] ) || ! wp_verify_nonce( $_POST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) {
+		if ( ! isset( $_POST[ $this->get_nonce_name() ] ) || ! wp_verify_nonce( $_POST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) { // Input var okay.
 			return false;
 		}
 

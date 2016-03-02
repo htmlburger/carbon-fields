@@ -61,7 +61,7 @@ class User_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_save( $user_id = 0 ) {
-		if ( ! isset( $_REQUEST[ $this->get_nonce_name() ] ) || ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) {
+		if ( ! isset( $_REQUEST[ $this->get_nonce_name() ] ) || ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) { // Input var okay.
 			return false;
 		} else if ( ! $this->is_valid_attach() ) {
 			return false;

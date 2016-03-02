@@ -83,7 +83,7 @@ class Term_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_save( $term_id = null ) {
-		if ( ! isset( $_REQUEST[ $this->get_nonce_name() ] ) || ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) {
+		if ( ! isset( $_REQUEST[ $this->get_nonce_name() ] ) || ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) { // Input var okay.
 			return false;
 		} else if ( $term_id < 1 ) {
 			return false;
