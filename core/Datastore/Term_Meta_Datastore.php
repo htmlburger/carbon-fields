@@ -7,8 +7,32 @@ use Carbon_Fields\Field\Field;
 /**
  * Term meta datastore class.
  */
-class Term_Meta_Datastore extends Datastore {
+class Term_Meta_Datastore extends Meta_Datastore {
+	/**
+	 * ID of the term.
+	 *
+	 * @var int
+	 */
 	protected $term_id;
+
+	/**
+	 * Initialization tasks.
+	 **/
+	public function init() {
+		global $wpdb;
+
+		// Setup termmeta table and hooks only once
+		if ( ! empty( $wpdb->termmeta ) ) {
+			return;
+		}
+
+		$wpdb->termmeta = $wpdb->prefix . 'termmeta';
+
+		self::create_table();
+
+		// Delete all meta associated with the deleted term
+		add_action( 'delete_term', array( __CLASS__, 'on_delete_term' ), 10, 3 );
+	}
 
 	/**
 	 * Create term meta database table (for WP < 4.4)
@@ -43,118 +67,7 @@ class Term_Meta_Datastore extends Datastore {
 	}
 
 	/**
-	 * Initialization tasks.
-	 **/
-	public function init() {
-		global $wpdb;
-
-		// Setup termmeta table and hooks only once
-		if ( ! empty( $wpdb->termmeta ) ) {
-			return;
-		}
-
-		$wpdb->termmeta = $wpdb->prefix . 'termmeta';
-
-		self::create_table();
-
-		// Delete all meta associated with the deleted term
-		add_action( 'delete_term', array( __CLASS__, 'on_delete_term' ), 10, 3 );
-	}
-
-	/**
-	 * Save the field value(s) into the database.
-	 * 
-	 * @param Field $field The field to save.
-	 */
-	public function save( Field $field ) {
-		if ( ! add_metadata( 'term', $this->term_id, $field->get_name(), $field->get_value(), true ) ) {
-			update_metadata( 'term', $this->term_id, $field->get_name(), $field->get_value() );
-		}
-	}
-
-	/**
-	 * Load the field value(s) from the database.
-	 *
-	 * @param Field $field The field to retrieve value for.
-	 */
-	public function load( Field $field ) {
-		global $wpdb;
-
-		$value = $wpdb->get_col( '
-			SELECT `meta_value`
-			FROM ' . $wpdb->termmeta . '
-			WHERE `term_id`=' . intval( $this->term_id ) . '
-			AND `meta_key`="' . $field->get_name() . '"
-			LIMIT 1
-		' );
-
-		if ( ! is_array( $value ) || count( $value ) < 1 ) {
-			$field->set_value( false );
-			return;
-		}
-
-		$field->set_value( $value[0] );
-	}
-
-	/**
-	 * Delete the field value(s) from the database.
-	 * 
-	 * @param Field $field The field to delete.
-	 */
-	public function delete( Field $field ) {
-		delete_metadata( 'term', $this->term_id, $field->get_name(), $field->get_value() );
-	}
-
-	/**
-	 * Load complex field value(s) from the database.
-	 *
-	 * @param mixed $field The field to load values for.
-	 */
-	public function load_values( $field ) {
-		global $wpdb;
-
-		if ( is_object( $field ) && is_subclass_of( $field, 'Carbon_Fields\\Field\\Field' ) ) {
-			$meta_key = $field->get_name();
-		} else {
-			$meta_key = $field;
-		}
-
-		return $wpdb->get_results( '
-			SELECT meta_key AS field_key, meta_value AS field_value FROM ' . $wpdb->termmeta . '
-			WHERE `meta_key` LIKE "' . addslashes( $meta_key ) . '_%" AND term_id="' . intval( $this->term_id ) . '"
-		', ARRAY_A );
-	}
-
-	/**
-	 * Delete complex field value(s) from the database.
-	 *
-	 * @param mixed $field The field to delete values for.
-	 */
-	public function delete_values( $field ) {
-		global $wpdb;
-
-		$group_names = $field->get_group_names();
-		$field_name = $field->get_name();
-
-		$meta_key_constraint = '`meta_key` LIKE "' . $field_name . implode( '-%" OR `meta_key` LIKE "' . $field_name, $group_names ) . '-%"';
-
-		return $wpdb->query( '
-			DELETE FROM ' . $wpdb->termmeta . '
-			WHERE (' . $meta_key_constraint . ') AND term_id="' . intval( $this->term_id ) . '"
-		' );
-	}
-
-	/**
-	 * Set the term ID of the datastore.
-	 * 
-	 * @param int $term_id ID of the term.
-	 */
-	public function set_id( $term_id ) {
-		$this->term_id = $term_id;
-	}
-
-	/**
-	 * Delete term meta on term deletion. 
+	 * Delete term meta on term deletion.
 	 * Useful for WP < 4.4.
 	 * 
 	 * @param  int $term_id  Term ID.
@@ -168,4 +81,51 @@ class Term_Meta_Datastore extends Datastore {
 			WHERE `term_id` = "' . intval( $term_id ) . '"
 		' );
 	}
+
+	/**
+	 * Retrieve the type of meta data.
+	 *
+	 * @return string
+	 */
+	public function get_meta_type() {
+		return 'term';
+	}
+
+	/**
+	 * Retrieve the meta table name to query.
+	 *
+	 * @return string
+	 */
+	public function get_table_name() {
+		global $wpdb;
+		return $wpdb->termmeta;
+	}
+
+	/**
+	 * Retrieve the meta table field name to query by.
+	 *
+	 * @return string
+	 */
+	public function get_table_field_name() {
+		return 'term_id';
+	}
+
+	/**
+	 * Set the term ID of the datastore.
+	 * 
+	 * @param int $term_id ID of the term.
+	 */
+	public function set_id( $term_id ) {
+		$this->term_id = $term_id;
+	}
+
+	/**
+	 * Retrieve the term ID of the datastore.
+	 * 
+	 * @return int ID of the term.
+	 */
+	public function get_id() {
+		return $this->term_id;
+	}
+
 }
