@@ -3,12 +3,36 @@ namespace Carbon_Fields;
 
 use Carbon_Fields\Helper\Helper;
 
+# Define root directory
 if ( ! defined( __NAMESPACE__ . '\DIR' ) ) {
 	define( __NAMESPACE__ . '\DIR', dirname( __FILE__ ) );
 }
 
+# Define root URL
 if ( ! defined( __NAMESPACE__ . '\URL' ) ) {
-	define( __NAMESPACE__ . '\URL', str_replace( '\\', '/', str_replace( untrailingslashit( ABSPATH ), site_url(), DIR ) ) );
+	$url = trailingslashit( DIR );
+	$count = 0;
+
+	# Sanitize directory separator on Windows
+	$url = str_replace( '\\' ,'/', $url );
+
+	# If installed as a plugin
+	$wp_plugin_dir = str_replace( '\\' ,'/', WP_PLUGIN_DIR );
+	$url = str_replace( $wp_plugin_dir, plugins_url(), $url, $count );
+
+	if ( $count < 1 ) {
+		# If anywhere in wp-content
+		$wp_content_dir = str_replace( '\\' ,'/', WP_CONTENT_DIR );
+		$url = str_replace( $wp_content_dir, content_url(), $url, $count );
+	}
+
+	if ( $count < 1 ) {
+		# If anywhere else within the WordPress installation
+		$wp_dir = str_replace( '\\' ,'/', ABSPATH );
+		$url = str_replace( $wp_dir, site_url( '/' ), $url );
+	}
+
+	define( __NAMESPACE__ . '\URL', untrailingslashit( $url ) );
 }
 
 # Initialize helper 
