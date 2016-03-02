@@ -144,10 +144,8 @@ class Nav_Menu_Container extends Container {
 	/**
 	 * Render custom fields inside each Nav Menu entry
 	 */
-	public static function form( $output, $item, $depth, $args, $id ) {
-		$current_menu_item_id = $item->ID;
-
-		self::set_instance_for_id( $current_menu_item_id, true );
+	public static function form( $item ) {
+		self::set_instance_for_id( $item->ID, true );
 	}
 
 	/**

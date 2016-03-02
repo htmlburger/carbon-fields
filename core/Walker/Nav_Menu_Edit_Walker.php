@@ -184,7 +184,7 @@ class Nav_Menu_Edit_Walker extends \Walker_Nav_Menu {
 				 * 
 				 * (This comment marks the only change to the default walker)
 				 */
-				do_action( 'crb_print_carbon_container_nav_menu_fields_html', $output, $item, $depth, $args, $id );
+				do_action( 'crb_print_carbon_container_nav_menu_fields_html', $item, $output, $depth, $args, $id );
 				?>
 
 				<p class="field-move hide-if-no-js description description-wide">
