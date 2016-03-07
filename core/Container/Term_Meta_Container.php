@@ -113,8 +113,8 @@ class Term_Meta_Container extends Container {
 		remove_action( 'admin_init', array( $this, '_attach' ) );
 
 		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
-			remove_action( 'edited_' . $taxonomy, array( $this, '_save' ), 10, 2 );
-			remove_action( 'created_' . $taxonomy, array( $this, '_save' ), 10, 2 );
+			remove_action( 'edited_' . $taxonomy, array( $this, '_save' ), 10 );
+			remove_action( 'created_' . $taxonomy, array( $this, '_save' ), 10 );
 		}
 
 		// unregister field names
