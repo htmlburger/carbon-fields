@@ -4,28 +4,30 @@ use Carbon_Fields\Field\Field;
 class FieldConditionalLogicTest extends WP_UnitTestCase {
 	private $field;
 
-	function setup() {
+	public function setup() {
 		$this->field = Field::make('text', 'color');
 	}
 
-	function tearDown() {
+	public function tearDown() {
 		unset($this->field);
 	}
 
-
-
 	/**
+	 * @covers Carbon_Fields\Field\Field::set_conditional_logic
+	 * 
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage should be an array
 	 */	
-	function testErrorIsThrownWhenCondLogicIsNotArray() {
+	public function testErrorIsThrownWhenCondLogicIsNotArray() {
 		$this->field->set_conditional_logic("this should actually be array");
 	}
 
 	/**
+	 * @covers Carbon_Fields\Field\Field::set_conditional_logic
+	 * 
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 */	
-	function testErrorIsThrownWhenFlatArrayIsProvided() {
+	public function testErrorIsThrownWhenFlatArrayIsProvided() {
 		$this->field->set_conditional_logic(array(
 			'field' => 'is_product',
 			'value' => 'yes',
@@ -35,7 +37,7 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	/**
 	 * Private helper method for brevity
 	 */
-	function verify_cond_logic($user_defined_cond_logic, $expected_parsed_cond_logic) {
+	public function verify_cond_logic($user_defined_cond_logic, $expected_parsed_cond_logic) {
 		$actual_parsed_cond_logic = $this->field
 			->set_conditional_logic($user_defined_cond_logic)
 			->get_conditional_logic();
@@ -46,7 +48,11 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 		);
 	}
 
-	function testBasicCondLogic() {
+	/**
+	 * @covers Carbon_Fields\Field\Field::set_conditional_logic
+	 * @covers Carbon_Fields\Field\Field::get_conditional_logic
+	 */
+	public function testBasicCondLogic() {
 		$user_defined_cond_logic = array(
 			array(
 				'field' => 'is_product',
@@ -70,7 +76,11 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 		);
 	}
 
-	function testValueDefaultsToEmptyString() {
+	/**
+	 * @covers Carbon_Fields\Field\Field::set_conditional_logic
+	 * @covers Carbon_Fields\Field\Field::get_conditional_logic
+	 */
+	public function testValueDefaultsToEmptyString() {
 		$user_defined_cond_logic = array(
 			array(
 				'field' => 'is_product',
@@ -95,7 +105,11 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 		);
 	}
 
-	function testRelationOperatorIsProvidedInLowercase() {
+	/**
+	 * @covers Carbon_Fields\Field\Field::set_conditional_logic
+	 * @covers Carbon_Fields\Field\Field::get_conditional_logic
+	 */
+	public function testRelationOperatorIsProvidedInLowercase() {
 		$user_defined_cond_logic = array(
 			'relation' => 'or',
 			array(
@@ -122,10 +136,12 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers Carbon_Fields\Field\Field::set_conditional_logic
+	 * 
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Invalid relation
 	 */
-	function testBadRelationOperatorThrowsError() {
+	public function testBadRelationOperatorThrowsError() {
 		$this->field->set_conditional_logic(array(
 			'relation' => 'maybe',
 			array(
@@ -136,10 +152,12 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers Carbon_Fields\Field\Field::set_conditional_logic
+	 * 
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage compare operator
 	 */
-	function testBadCompareOperatorThrowsError() {
+	public function testBadCompareOperatorThrowsError() {
 		$this->field->set_conditional_logic(array(
 			array(
 				'field' => 'is_product',
@@ -150,10 +168,12 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * @covers Carbon_Fields\Field\Field::set_conditional_logic
+	 * 
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage An array is expected
 	 */
-	function testInCompareOperatorRequiresArrayAsValue() {
+	public function testInCompareOperatorRequiresArrayAsValue() {
 		$this->field->set_conditional_logic(array(
 			array(
 				'field' => 'is_product',
