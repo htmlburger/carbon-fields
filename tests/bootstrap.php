@@ -36,7 +36,7 @@ class Carbon_Fields_Tests_Bootstrap {
 		ini_set( 'display_errors','on' );
 		error_reporting( E_ALL );
 
-		$this->tests_dir    = dirname( __FILE__ );
+		$this->tests_dir    = __DIR__;
 		$this->plugin_dir   = dirname( $this->tests_dir );
 		$this->wp_tests_dir = getenv( 'WP_TESTS_DIR' ) ? getenv( 'WP_TESTS_DIR' ) : $this->plugin_dir . '/tmp/wordpress-tests-lib';
 

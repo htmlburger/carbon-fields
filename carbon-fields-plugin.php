@@ -13,10 +13,8 @@
  * Domain Path: /languages
  */
 
-$dir = dirname( __FILE__ );
-
-if ( file_exists( $dir . '/vendor/autoload.php' ) ) {
-	require( $dir . '/vendor/autoload.php' );
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	require( __DIR__ . '/vendor/autoload.php' );
 } else {
 	function carbon_fields_spl_autoload_register( $class ) {
 		$prefix = 'Carbon_Fields';
@@ -24,7 +22,7 @@ if ( file_exists( $dir . '/vendor/autoload.php' ) ) {
 			return;
 		}
 
-		$file_path = dirname( __FILE__ ) . '/core/' . str_ireplace( 'Carbon_Fields\\', '', $class ) . '.php';
+		$file_path = __DIR__ . '/core/' . str_ireplace( 'Carbon_Fields\\', '', $class ) . '.php';
 		$file_path = str_replace( '\\', DIRECTORY_SEPARATOR, $file_path );
 		include_once( $file_path );
 	}
@@ -32,5 +30,5 @@ if ( file_exists( $dir . '/vendor/autoload.php' ) ) {
 	spl_autoload_register( 'carbon_fields_spl_autoload_register' );
 }
 
-include_once( dirname( __FILE__ ) . '/carbon-fields.php' );
-include_once( dirname( __FILE__ ) . '/core/functions.php' );
+include_once( __DIR__ . '/carbon-fields.php' );
+include_once( __DIR__ . '/core/functions.php' );
