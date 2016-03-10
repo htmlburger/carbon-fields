@@ -12,7 +12,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  **/
 class Field {
 	/**
-	 * Stores all the field backbone templates
+	 * Stores all the field Backbone templates
 	 *
 	 * @see factory()
 	 * @see add_template()
@@ -141,7 +141,7 @@ class Field {
 	protected $required = false;
 
 	/**
-	 * Prefix to be pretended to the field name during load, save, delete and <strong>render</strong>
+	 * Prefix to be prepended to the field name during load, save, delete and <strong>render</strong>
 	 *
 	 * @var string
 	 **/
@@ -223,7 +223,8 @@ class Field {
 	public function init() {}
 
 	/**
-	 * Instance initialization when in the admin area. Called during object construction
+	 * Instance initialization when in the admin area. 
+	 * Called during object construction.
 	 **/
 	public function admin_init() {}
 
@@ -239,7 +240,7 @@ class Field {
 	public function template() { }
 
 	/**
-	 * Returns all the backbone templates
+	 * Returns all the Backbone templates
 	 *
 	 * @return array
 	 **/
@@ -248,7 +249,7 @@ class Field {
 	}
 
 	/**
-	 * Adds a new backbone template
+	 * Adds a new Backbone template
 	 **/
 	public function add_template( $name, $callback ) {
 		$this->templates[ $name ] = $callback;

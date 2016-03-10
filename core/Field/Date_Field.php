@@ -52,7 +52,8 @@ class Date_Field extends Field {
 	}
 
 	/**
-	 * This function is depratected since it conflicts with the options concept in predefined option fields.
+	 * This method is deprecated since it conflicts with the options concept in predefined option fields.
+	 * 
 	 * @deprecated
 	 */
 	public function set_options( $options ) {

@@ -70,7 +70,7 @@ class Checkbox_Field extends Field {
 
 	/**
 	 * Get the field label.
-	 * Label here is empty because it is displayed in the underscore template.
+	 * Label here is empty because it is displayed in the Underscore template.
 	 * 
 	 * @return string Label of the field.
 	 */

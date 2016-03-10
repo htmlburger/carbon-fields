@@ -59,7 +59,7 @@ abstract class Container {
 	static protected $active_fields = array();
 
 	/**
-	 * Stores all the container backbone templates
+	 * Stores all the container Backbone templates
 	 *
 	 * @see factory()
 	 * @see add_template()
@@ -364,7 +364,7 @@ abstract class Container {
 
 	/**
 	 * Called first as part of the container attachment procedure.
-	 * Responsible for checking  it's ok to attach the container 
+	 * Responsible for checking it's OK to attach the container 
 	 * and if it is, calling the container-specific attach() method
 	 *
 	 * @see attach()
@@ -387,7 +387,7 @@ abstract class Container {
 	}
 
 	/**
-	 * Returns all the backbone templates
+	 * Returns all the Backbone templates
 	 *
 	 * @return array
 	 **/
@@ -396,7 +396,7 @@ abstract class Container {
 	}
 
 	/**
-	 * Adds a new backbone template
+	 * Adds a new Backbone template
 	 **/
 	public function add_template( $name, $callback ) {
 		$this->templates[ $name ] = $callback;
