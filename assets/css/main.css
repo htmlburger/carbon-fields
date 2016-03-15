@@ -247,6 +247,8 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .carbon-preview .carbon-file-remove { position: absolute; top: -10px; right: -10px; cursor: pointer; }
 .carbon-preview .carbon-file-remove:before { content: "\f153"; background: #fff; border-radius: 50%; color: #C00; }
 
+.carbon-File .input-with-button { padding-right: 0; }
+.carbon-File .input-with-button .carbon-file-field { margin-bottom: 5px; }
 .carbon-File .input-with-button .button { position: relative; margin: 0 0 6px; }
 .carbon-File .attachment-url { overflow: hidden; clear: both; padding: 3px 5px; border: 1px solid #ddd; margin: 0 0 4px; font-size: 14px; line-height: 19px; word-break: break-all; background: #f6f6f6; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1); }
 
@@ -408,9 +410,10 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 	.carbon-container .carbon-field .button span { margin: -3px 0 -1px 4px !important; vertical-align: middle; }
 	.carbon-container .carbon-Separator { margin-left: 0; margin-right: 0; }
 
-	.carbon-File .icon-button { font-size: 14px; line-height: 40px; }
-
 	.carbon-field .input-with-button { padding-right: 48px; }
+
+	.carbon-File .icon-button { font-size: 14px; line-height: 40px; }
+	.carbon-File .input-with-button { padding-right: 0; }
 
 	.add-term-container .carbon-Relationship .relationship-container { margin: 3px 0 0; }
 	.add-term-container .carbon-Relationship .relationship-left,
