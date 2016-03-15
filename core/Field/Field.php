@@ -163,6 +163,11 @@ class Field {
 	 * @return object $field
 	 **/
 	public static function factory( $type, $name, $label = null ) {
+		// backward compatibility: `file` type used to be called `attachment`
+		if ( $type === 'attachment' ) {
+			$type = 'file';
+		}
+
 		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
 
 		$class = __NAMESPACE__ . '\\' . $type . '_Field';
