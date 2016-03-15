@@ -7,7 +7,7 @@
 .carbon-Relationship .relationship-left,
 .carbon-Relationship .relationship-right,
 .carbon-Relationship .search-field,
-.carbon-Attachment .attachment-url {
+.carbon-File .attachment-url {
 	-webkit-box-sizing: border-box;
 	   -moz-box-sizing: border-box;
 		-ms-box-sizing: border-box;
@@ -36,8 +36,8 @@
 .carbon-preview .carbon-file-remove,
 .carbon-field .icon-button:before { font: normal normal normal 22px/26px 'dashicons'; speak: none; text-transform: none; text-align: center; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; vertical-align: top; }
 .carbon-preview .carbon-file-remove { font-size: 20px; }
-.carbon-Attachment .icon-button { width: auto; padding-right: 10px; font-size: 13px; line-height: 26px; }
-.carbon-Attachment .icon-button:before { line-height: 26px; }
+.carbon-File .icon-button { width: auto; padding-right: 10px; font-size: 13px; line-height: 26px; }
+.carbon-File .icon-button:before { line-height: 26px; }
 
 .carbon-btn-remove-sidebar { position: absolute; top: 10px; right: 33px; padding: 0; margin: 0; font-size: 0; line-height: 0; text-decoration: none; color: #c00; opacity: 0.7; }
 .carbon-btn-remove-sidebar:hover { color: #c00; opacity: 1; }
@@ -45,7 +45,6 @@
 
 .carbon-group-actions a.carbon-btn-remove:before { content: "\f153"; background: #fff; border-radius: 50%; }
 .carbon-group-actions a.carbon-btn-remove:hover:before { color: #f33; }
-.carbon-Attachment .c2_open_media:before { content: "\f497"; }
 .carbon-File .c2_open_media:before { content: "\f497"; }
 .carbon-Image .c2_open_media:before { content: "\f128"; }
 .carbon-Map .address-search-btn:before { content: "\f179"; }
@@ -230,13 +229,13 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .comment-container-holder .carbon-Relationship .selected-items-container { top: -26px; }
 
 /* ------------------------------------------------------------ *\
-	Field - File, Image, Attachment
+	Field - File, Image
 \* ------------------------------------------------------------ */
 
 .carbon-File .carbon-view_file { margin: 6px 0 0; }
 
 .carbon-attachment-preview { width: 150px; position: relative; float: left; padding: 5px 0 10px; margin: 0; color: #464646; list-style: none; text-align: center; }
-.carbon-Image .carbon-attachment-preview { padding-top: 10px; padding-bottom: 4px; }
+.carbon-File .carbon-attachment-preview { padding-top: 10px; padding-bottom: 4px; }
 
 .carbon-preview { position: relative; -webkit-box-shadow: inset 0 0 15px rgba( 0, 0, 0, 0.1 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.05 ); box-shadow: inset 0 0 15px rgba( 0, 0, 0, 0.1 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.05 ); background: #eee; }
 .carbon-preview:before { content: ''; display: block; padding-top: 100%; }
@@ -248,8 +247,8 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .carbon-preview .carbon-file-remove { position: absolute; top: -10px; right: -10px; cursor: pointer; }
 .carbon-preview .carbon-file-remove:before { content: "\f153"; background: #fff; border-radius: 50%; color: #C00; }
 
-.carbon-Attachment .input-with-button .button { position: relative; margin: 0 0 6px; }
-.carbon-Attachment .attachment-url { overflow: hidden; clear: both; padding: 3px 5px; border: 1px solid #ddd; margin: 0 0 4px; font-size: 14px; line-height: 19px; word-break: break-all; background: #f6f6f6; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1); }
+.carbon-File .input-with-button .button { position: relative; margin: 0 0 6px; }
+.carbon-File .attachment-url { overflow: hidden; clear: both; padding: 3px 5px; border: 1px solid #ddd; margin: 0 0 4px; font-size: 14px; line-height: 19px; word-break: break-all; background: #f6f6f6; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1); }
 
 /* ------------------------------------------------------------ *\
 	Field - RichText
@@ -409,7 +408,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 	.carbon-container .carbon-field .button span { margin: -3px 0 -1px 4px !important; vertical-align: middle; }
 	.carbon-container .carbon-Separator { margin-left: 0; margin-right: 0; }
 
-	.carbon-Attachment .icon-button { font-size: 14px; line-height: 40px; }
+	.carbon-File .icon-button { font-size: 14px; line-height: 40px; }
 
 	.carbon-field .input-with-button { padding-right: 48px; }
 

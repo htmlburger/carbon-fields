@@ -4,6 +4,9 @@ namespace Carbon_Fields\Field;
 
 /**
  * File upload field class.
+ *
+ * Allows selecting and saving a media attachment file,
+ * where the file ID is saved in the database.
  */
 class File_Field extends Field {
 	public $button_label = '';
@@ -14,7 +17,7 @@ class File_Field extends Field {
 	public $field_type = '';
 
 	// alt, author, caption, dateFormatted, description, editLink, filename, height, icon, id, link, menuOrder, mime, name, status, subtype, title, type, uploadedTo, url, width
-	public $value_type = 'url';
+	public $value_type = 'id';
 
 	/**
 	 * Admin initialization actions
@@ -113,15 +116,27 @@ class File_Field extends Field {
 	}
 
 	/**
-	 * The description Underscore template of this field
-	 **/
+	 * Underscore template of the file description section.
+	 */
 	public function template_description() {
 		?>
 		<div class="carbon-description {{{ value ? '' : 'hidden' }}}">
-			<a href="{{ value }}" target="_blank" class="button carbon-view_file">
-				<?php _e( 'View File', 'carbon_fields' ); ?>
-			</a>
+			<div class="carbon-attachment-preview {{{ thumb_url ? '' : 'hidden' }}}">
+				<div class="carbon-preview">
+					<div class="thumbnail">
+						<div class="centered">
+							<img src="{{ thumb_url }}" class="thumbnail-image" />
+						</div>
+					</div>
+					<div class="carbon-file-remove"></div>
+				</div>
+			</div>
+
+			<# if (value_type === 'id') { #>
+				<div class="attachment-url">{{ url }}</div>
+			<# } #>
 		</div>
 		<?php
 	}
+
 }

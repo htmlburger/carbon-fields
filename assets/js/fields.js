@@ -1077,7 +1077,8 @@ window.carbon = window.carbon || {};
 	// File VIEW
 	carbon.fields.View.File = carbon.fields.View.extend({
 		events: _.extend({}, carbon.fields.View.prototype.events, {
-			'click .c2_open_media': 'openMedia'
+			'click .c2_open_media': 'openMedia',
+			'click .carbon-file-remove': 'removeFile'
 		}),
 
 		initialize: function() {
@@ -1087,6 +1088,7 @@ window.carbon = window.carbon || {};
 
 			this.listenTo(this.model, 'change:value', this.updateInput);
 			this.listenTo(this.model, 'change:url', this.updateView);
+			this.listenTo(this.model, 'change:thumb_url', this.updateThumb);
 		},
 
 		/**
@@ -1192,24 +1194,6 @@ window.carbon = window.carbon || {};
 			this.$('.attachment-url').html(url);
 			this.$('.carbon-view_file').attr('href', url);
 			this.$('.carbon-description').toggleClass('hidden', !url);
-		}
-	});
-
-	
-	/*--------------------------------------------------------------------------
-	 * ATTACHMENT
-	 *------------------------------------------------------------------------*/
-
-	// Attachment VIEW
-	carbon.fields.View.Attachment = carbon.fields.View.File.extend({
-		events: _.extend({}, carbon.fields.View.File.prototype.events, {
-			'click .carbon-file-remove': 'removeFile'
-		}),
-
-		initialize: function() {
-			carbon.fields.View.File.prototype.initialize.apply(this);
-
-			this.listenTo(this.model, 'change:thumb_url', this.updateThumb);
 		},
 
 		updateThumb: function(model) {
@@ -1236,7 +1220,13 @@ window.carbon = window.carbon || {};
 	 *------------------------------------------------------------------------*/
 
 	// Image VIEW
-	carbon.fields.View.Image = carbon.fields.View.Attachment.extend();
+	carbon.fields.View.Image = carbon.fields.View.File.extend({
+		initialize: function() {
+			carbon.fields.View.File.prototype.initialize.apply(this);
+
+			this.model.addClass('carbon-File');
+		},
+	});
 
 
 	/*--------------------------------------------------------------------------
