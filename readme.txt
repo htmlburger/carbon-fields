@@ -77,5 +77,18 @@ A. Sure, go ahead! It is completely open source.
 
 == Changelog ==
 
+= 1.1 =
+Removed `Attachment` field type, with backward compatibility.
+The `File` and `Image` field types now save the attachment ID by default.
+Introduced `File_Field::set_value_type()` to easily change the saved value type.
+Added a Vagrantfile.
+Added some `Field` and `Container` tests.
+Renamed `Date_Field::set_options()` to `Date_Field::set_datepicker_options()`.
+Introduced an abstract `Predefined_Options_Field` base for `Select`, `Radio` and `Set` field types.
+Added proxy Container, Field and Widget for shorter `use` statements.
+Introduced an abstract `Scripts_Field` base for `Header Scripts` and `Footer Scripts` field types.
+Introduced an abstract `Meta_Datastore` base for all meta datastore classes.
+Performed various other code fixes and improvements.
+
 = 1.0 =
 Initial version.
