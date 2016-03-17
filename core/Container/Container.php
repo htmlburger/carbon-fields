@@ -273,6 +273,13 @@ abstract class Container {
 
 		self::verify_unique_panel_id( $this->id );
 
+		$this->load_scripts_styles();
+	}
+
+	/**
+	 * Load the admin scripts and styles.
+	 **/
+	public function load_scripts_styles() {
 		add_action( 'admin_print_scripts', array( $this, 'admin_hook_scripts' ) );
 		add_action( 'admin_print_styles', array( $this, 'admin_hook_styles' ) );
 	}

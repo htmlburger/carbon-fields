@@ -32,6 +32,8 @@ class Nav_Menu_Container extends Container {
 		$this->store = new Nav_Menu_Datastore();
 
 		self::initialize_filters();
+
+		$this->load_scripts_styles();
 	}
 
 	/**
