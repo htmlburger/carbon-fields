@@ -26,15 +26,6 @@ class Comment_Meta_Container extends Container {
 	}
 
 	/**
-	 * Assign DataStore instance for use by the container fields
-	 *
-	 * @param object $store
-	 **/
-	public function set_datastore( Meta_Datastore $store ) {
-		parent::set_datastore( $store );
-	}
-
-	/**
 	 * Perform instance initialization after calling setup()
 	 **/
 	public function init() {
