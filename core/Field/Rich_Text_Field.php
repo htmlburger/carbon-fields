@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -55,7 +55,7 @@ class Rich_Text_Field extends Textarea_Field {
 
 	/**
 	 * Display the editor.
-	 * 
+	 *
 	 * Instead of enqueueing all required scripts and stylesheets and setting up TinyMCE,
 	 * wp_editor() automatically enqueues and sets up everything.
 	 */
@@ -67,7 +67,7 @@ class Rich_Text_Field extends Textarea_Field {
 					'tinymce' => array(
 						'resize' => true,
 						'wp_autoresize_on' => true,
-					)
+					),
 				);
 
 				add_filter( 'user_can_richedit', '__return_true' );

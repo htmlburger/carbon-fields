@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -12,5 +12,4 @@ class Broken_Field extends Field {
 
 		parent::template();
 	}
-
 }

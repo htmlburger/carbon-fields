@@ -36,8 +36,8 @@ class Relationship_Field extends Field {
 
 	/**
 	 * Set the maximum allowed number of selected entries.
-	 * 
-	 * @param int $max 
+	 *
+	 * @param int $max
 	 */
 	public function set_max( $max ) {
 		$this->max = intval( $max );
@@ -46,8 +46,8 @@ class Relationship_Field extends Field {
 
 	/**
 	 * Specify whether to allow each entry to be selected multiple times.
-	 * 
-	 * @param  boolean $allow 
+	 *
+	 * @param  boolean $allow
 	 */
 	public function allow_duplicates( $allow = true ) {
 		$this->allow_duplicates = (bool) $allow;
@@ -55,10 +55,10 @@ class Relationship_Field extends Field {
 	}
 
 	/**
-	 * Used to get the title of an item. 
+	 * Used to get the title of an item.
 	 *
 	 * Can be overriden or extended by the `carbon_relationship_title` filter.
-	 * 
+	 *
 	 * @param int     $id      The database ID of the item.
 	 * @param string  $type    Item type (post, term, user, comment, or a custom one).
 	 * @param string  $subtype The subtype - "page", "post", "category", etc.
@@ -83,10 +83,10 @@ class Relationship_Field extends Field {
 	}
 
 	/**
-	 * Used to get the label of an item. 
+	 * Used to get the label of an item.
 	 *
 	 * Can be overriden or extended by the `carbon_relationship_item_label` filter.
-	 * 
+	 *
 	 * @param int     $id      The database ID of the item.
 	 * @param string  $type    Item type (post, term, user, comment, or a custom one).
 	 * @param string  $subtype Subtype - "page", "post", "category", etc.
@@ -160,7 +160,7 @@ class Relationship_Field extends Field {
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -269,11 +269,10 @@ class Relationship_Field extends Field {
 				{{{ item.title }}}
 				
 			</a>
-			<?php if ( $display_input ): ?>
+			<?php if ( $display_input ) :  ?>
 				<input type="hidden" name="{{{ name }}}[]" value="{{{ item.id }}}" />
 			<?php endif; ?>
 		</li>
 		<?php
 	}
-
 }

@@ -18,7 +18,7 @@
 
 		$('.carbon-errors-dismiss').on('click', function () {
 			$container.slideUp();
-			carbon.docCookies.setItem(<?php echo json_encode($hideErrorsCookieName) ?>, "1", Infinity);
+			carbon.docCookies.setItem(<?php echo json_encode( $hideErrorsCookieName ) ?>, "1", Infinity);
 		});
 	})
 </script>
@@ -32,8 +32,8 @@
 		<p>Carbon Fields library encountered errors that may prevent your custom fields or theme options to work properly. Here's a quick summary of the issue<?php echo $plural ?>: </p>
 
 		<ol>
-			<?php foreach ($errors as $error): ?>
-				<li><?php echo htmlspecialchars($error->getMessage()) ?></li>
+			<?php foreach ( $errors as $error ) :  ?>
+				<li><?php echo htmlspecialchars( $error->getMessage() ) ?></li>
 			<?php endforeach ?>	
 		</ol>
 

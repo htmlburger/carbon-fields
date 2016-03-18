@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Datastore;
 
@@ -33,8 +33,8 @@ class User_Meta_Datastore extends Meta_Datastore {
 				foreach ( $single_value as $value_field ) {
 					$results[] = array(
 						'field_key' => $value_field->get_name(),
-						'field_value' => $value_field->get_value()
-					);	
+						'field_value' => $value_field->get_value(),
+					);
 				}
 			}
 		}
@@ -72,7 +72,7 @@ class User_Meta_Datastore extends Meta_Datastore {
 
 	/**
 	 * Set the user ID of the datastore.
-	 * 
+	 *
 	 * @param int $user_id ID of the user.
 	 */
 	public function set_id( $user_id ) {

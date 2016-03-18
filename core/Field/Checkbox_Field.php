@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -9,14 +9,14 @@ class Checkbox_Field extends Field {
 	/**
 	 * The value that is saved in the database when
 	 * this checkbox field is enabled.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $option_value = 'yes';
 
 	/**
 	 * Modify the option value.
-	 * 
+	 *
 	 * @param string $value New value
 	 */
 	public function set_option_value( $value ) {
@@ -41,7 +41,7 @@ class Checkbox_Field extends Field {
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * In addition to default data, option value and label are added.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -71,7 +71,7 @@ class Checkbox_Field extends Field {
 	/**
 	 * Get the field label.
 	 * Label here is empty because it is displayed in the Underscore template.
-	 * 
+	 *
 	 * @return string Label of the field.
 	 */
 	public function get_label() {
@@ -81,7 +81,7 @@ class Checkbox_Field extends Field {
 	/**
 	 * Whether this field is required.
 	 * A single checkbox field is non-required by design.
-	 * 
+	 *
 	 * @return boolean false
 	 */
 	public function is_required() {

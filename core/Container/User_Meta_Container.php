@@ -10,8 +10,8 @@ class User_Meta_Container extends Container {
 
 	public $settings = array(
 		'show_on' => array(
-			'role' => array()
-		)
+			'role' => array(),
+		),
 	);
 
 	/**

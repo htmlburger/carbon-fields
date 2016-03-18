@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -11,7 +11,7 @@ class Set_Field extends Predefined_Options_Field {
 
 	/**
 	 * Set the number of the options to be displayed at the initial field display.
-	 * 
+	 *
 	 * @param  int $limit
 	 */
 	public function limit_options( $limit ) {
@@ -21,7 +21,7 @@ class Set_Field extends Predefined_Options_Field {
 
 	/**
 	 * Retrieve the field value(s).
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_value() {
@@ -47,7 +47,7 @@ class Set_Field extends Predefined_Options_Field {
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */

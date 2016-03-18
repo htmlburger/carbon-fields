@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Datastore;
 
@@ -15,10 +15,10 @@ abstract class Meta_Datastore extends Datastore {
 
 	/**
 	 * Save the field value(s) into the database.
-	 * 
+	 *
 	 * @param Field $field The field to save.
 	 */
-	public function save(Field $field) {
+	public function save( Field $field ) {
 		if ( ! update_metadata( $this->get_meta_type(), $this->get_id(), $field->get_name(), $field->get_value() ) ) {
 			add_metadata( $this->get_meta_type(), $this->get_id(), $field->get_name(), $field->get_value(), true );
 		}
@@ -50,7 +50,7 @@ abstract class Meta_Datastore extends Datastore {
 
 	/**
 	 * Delete the field value(s) from the database.
-	 * 
+	 *
 	 * @param Field $field The field to delete.
 	 */
 	public function delete( Field $field ) {

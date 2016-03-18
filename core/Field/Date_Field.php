@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -15,7 +15,7 @@ class Date_Field extends Field {
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -53,7 +53,7 @@ class Date_Field extends Field {
 
 	/**
 	 * This method is deprecated since it conflicts with the options concept in predefined option fields.
-	 * 
+	 *
 	 * @deprecated
 	 */
 	public function set_options( $options ) {
@@ -61,7 +61,7 @@ class Date_Field extends Field {
 	}
 
 	/**
-	 * Set datepicker options 
+	 * Set datepicker options
 	 */
 	public function set_datepicker_options( $options ) {
 		$this->datepicker_options = $options;

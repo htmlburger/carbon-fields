@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -43,7 +43,7 @@ class Separator_Field extends Field {
 	/**
 	 * Whether this field is required.
 	 * The Separator field is non-required by design.
-	 * 
+	 *
 	 * @return false
 	 */
 	public function is_required() {

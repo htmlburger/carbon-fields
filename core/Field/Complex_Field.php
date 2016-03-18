@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -75,7 +75,7 @@ class Complex_Field extends Field {
 		} else {
 			$group = new Group_Field();
 			$group->set_name( $name );
-			
+
 			$group->add_fields( $fields );
 			$group->set_label( $label );
 
@@ -86,7 +86,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Retrieve all groups of fields.
-	 * 
+	 *
 	 * @return array $fields
 	 */
 	public function get_fields() {
@@ -106,7 +106,7 @@ class Complex_Field extends Field {
 	 * Currently supported values:
 	 *  - singular_name - the singular entry label
 	 *  - plural_name - the plural entries label
-	 * 
+	 *
 	 * @param  array $labels Labels
 	 */
 	public function setup_labels( $labels ) {
@@ -116,7 +116,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Set the datastore of this field.
-	 * 
+	 *
 	 * @param Datastore_Interface $store
 	 */
 	public function set_datastore( Datastore_Interface $store ) {
@@ -195,7 +195,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Recursive callback function for array_filter()
-	 * 
+	 *
 	 * Checks if the given value is an array and calls itself recursively
 	 * Otherwise, works as usual
 	 */
@@ -257,7 +257,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Load and parse a raw set of field data.
-	 * 
+	 *
 	 * @param  array $values Raw data entries
 	 * @return array 		 Processed data entries
 	 */
@@ -284,7 +284,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Parse groups of raw field data into the actual field hierarchy.
-	 * 
+	 *
 	 * @param  array $group_rows Group rows
 	 */
 	public function process_loaded_values( $group_rows ) {
@@ -324,7 +324,7 @@ class Complex_Field extends Field {
 
 		// create groups list with loaded fields
 		ksort( $input_groups );
-		
+
 		foreach ( $input_groups as $index => $values ) {
 			$value_group = array( 'type' => $values['type'] );
 			$group_fields = $this->groups[ $values['type'] ]->get_fields();
@@ -370,7 +370,7 @@ class Complex_Field extends Field {
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -496,7 +496,7 @@ class Complex_Field extends Field {
 	 * Deprecated in favor of set_width().
 	 *
 	 * @deprecated
-	 * 
+	 *
 	 * @param string $layout
 	 */
 	public function set_layout( $layout ) {
@@ -513,7 +513,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Set the minimum number of entries.
-	 * 
+	 *
 	 * @param int $min
 	 */
 	public function set_min( $min ) {
@@ -523,7 +523,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Get the minimum number of entries.
-	 * 
+	 *
 	 * @return int $min
 	 */
 	public function get_min() {
@@ -532,7 +532,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Set the maximum number of entries.
-	 * 
+	 *
 	 * @param int $max
 	 */
 	public function set_max( $max ) {
@@ -542,7 +542,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Get the maximum number of entries.
-	 * 
+	 *
 	 * @return int $max
 	 */
 	public function get_max() {
@@ -551,8 +551,8 @@ class Complex_Field extends Field {
 
 	/**
 	 * Retrieve the groups of this field.
-	 * 
-	 * @return array 
+	 *
+	 * @return array
 	 */
 	public function get_group_names() {
 		return array_keys( $this->groups );
