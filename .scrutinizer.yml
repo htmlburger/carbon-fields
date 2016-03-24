@@ -20,7 +20,7 @@ checks:
         name: WordPress
     custom_coding_standard:
       git_repository: 'https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards'
-        ruleset_path: /WordPress/ruleset.xml
+        ruleset_path: '/WordPress/ruleset.xml'
 
 tools:
   sensiolabs_security_checker: true
