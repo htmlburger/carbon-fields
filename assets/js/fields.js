@@ -1547,6 +1547,53 @@ window.carbon = window.carbon || {};
 	});
 
 	/*--------------------------------------------------------------------------
+	 * TIME
+	 *------------------------------------------------------------------------*/
+
+	// Time VIEW
+	carbon.fields.View.Time = carbon.fields.View.extend({
+		// Add the events from the parent view and also include new ones
+		events: function() {
+			return _.extend({}, carbon.fields.View.prototype.events, {
+				'click .carbon-timepicker-trigger': 'showTimepicker'
+			});
+		},
+
+		initialize: function() {
+			// Initialize the parent view
+			carbon.fields.View.prototype.initialize.apply(this); // do not delete
+
+			// Wait for the field to be added to the DOM and run an init method
+			this.on('field:rendered', this.initTimepicker);
+		},
+
+		initTimepicker: function() {
+			var $field = this.$el.find('.carbon-timepicker');
+			var $trigger = this.$el.find('.carbon-timepicker-trigger');
+			var type = this.model.get('timepicker_type');
+			var intervalStep = this.model.get('interval_step');
+			var restraints = this.model.get('restraints');
+			var timepickerOptions = this.model.get('timepicker_options');
+			var args = {
+				timeFormat: this.model.get('time_format'),
+				beforeShow: function(input, inst) {
+					$('#ui-datepicker-div').addClass('carbon-jquery-ui');
+				}
+			};
+
+			$.extend(args, intervalStep, restraints, timepickerOptions);
+
+			$field[type](args);
+		},
+
+		showTimepicker: function(event) {
+			this.$el.find('.carbon-timepicker').trigger('focus');
+
+			event.preventDefault();
+		}
+	});
+
+	/*--------------------------------------------------------------------------
 	 * COMPLEX
 	 *------------------------------------------------------------------------*/
 
