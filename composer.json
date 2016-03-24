@@ -77,7 +77,6 @@
         "issues": "https://github.com/htmlburger/carbon-fields/issues",
         "email": "wordpress@htmlburger.com"
     },
-    "require": {},
     "require-dev": {
         "wp-coding-standards/wpcs": "dev-develop"
     },
@@ -88,13 +87,15 @@
             "if [ -f vendor/bin/phpcs ]; then \"vendor/bin/phpcs\" --config-set show_progress 0; fi",
             "if [ -f vendor/bin/phpcs ]; then \"vendor/bin/phpcs\" --config-set report_width auto; fi",
             "if [ -f vendor/bin/phpcs ]; then \"vendor/bin/phpcs\" --config-set encoding utf-8; fi"
-        ],
-        "post-install-cmd": "@configure-phpcs",
-        "post-update-cmd":  "@configure-phpcs"
+        ]
     },
     "autoload": {
         "psr-4": {
             "Carbon_Fields\\": "core/"
-        }
+        },
+        "files": [
+            "carbon-fields.php",
+            "core/functions.php"
+        ]
     }
 }
