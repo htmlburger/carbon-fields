@@ -1,27 +1,28 @@
 filter:
-  excluded_paths:
-  - assets/*
-  - languages/*
-  - tests/*
-  - templates/*
-  - tmp/*
-  - vendor/*
+    excluded_paths:
+    - assets/*
+    - languages/*
+    - tests/*
+    - templates/*
+    - tmp/*
+    - vendor/*
 
 checks:
-  php:
-    verify_argument_usable_as_reference: false
-    verify_property_names: false
-    no_global_keyword: false
-    psr2_class_declaration: false
-    avoid_superglobals: false
-    one_class_per_file: false
-    code_rating: true
-    custom_coding_standard:
-      git_repository: 'https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards'
-        ruleset_path: 'WordPress-Core/ruleset.xml'
+    php:
+        verify_argument_usable_as_reference: false
+        verify_property_names: false
+        no_global_keyword: false
+        psr2_class_declaration: false
+        avoid_superglobals: false
+        one_class_per_file: false
+        code_rating: true
+        custom_coding_standard:
+            git_repository: 'https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards'
+            ruleset_path: 'WordPress-Core/ruleset.xml'
 
 tools:
-  sensiolabs_security_checker: true
-  external_code_coverage: true
-  php_code_sniffer:
-    config: { standard: WordPress }
+    sensiolabs_security_checker: true
+    external_code_coverage: true
+    php_code_sniffer:
+        config:
+            standard: "WordPress"
