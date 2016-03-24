@@ -47,7 +47,7 @@ class Time_Field extends Field {
 	/**
 	 * You can use this method to modify the field properties that are added to the JSON object.
 	 * The JSON object is used by the Backbone Model and the Underscore template.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -91,7 +91,7 @@ class Time_Field extends Field {
 	}
 
 	/**
-	 * Sets the time format
+	 * Sets the time format.
 	 */
 	public function set_time_format( $time_format ) {
 		$this->time_format = $time_format;
@@ -100,14 +100,14 @@ class Time_Field extends Field {
 	}
 
 	/**
-	 * Returns the time format
+	 * Returns the time format.
 	 */
 	public function get_time_format() {
 		return $this->time_format;
 	}
 
 	/**
-	 * Sets the interval step
+	 * Sets the interval step.
 	 */
 	public function set_interval_step( $interval_steps ) {
 		$output = array();
@@ -123,14 +123,14 @@ class Time_Field extends Field {
 	}
 
 	/**
-	 * Returns the interval step
+	 * Returns the interval step.
 	 */
 	public function get_interval_step() {
 		return $this->interval_step;
 	}
 
 	/**
-	 * Sets the restraints
+	 * Sets the restraints.
 	 */
 	public function set_restraints( $restraints ) {
 		$this->restraints = array_map( 'intval', $restraints );
@@ -139,14 +139,14 @@ class Time_Field extends Field {
 	}
 
 	/**
-	 * Returns the restraints
+	 * Returns the restraints.
 	 */
 	public function get_restraints() {
 		return $this->restraints;
 	}
 
 	/**
-	 * Sets other timepicker options
+	 * Sets other timepicker options.
 	 */
 	public function set_timepicker_options( $timepicker_options ) {
 		$this->timepicker_options = $timepicker_options;
@@ -155,7 +155,7 @@ class Time_Field extends Field {
 	}
 
 	/**
-	 * Returns the timepicker options
+	 * Returns the timepicker options.
 	 */
 	public function get_timepicker_options() {
 		return $this->timepicker_options;
