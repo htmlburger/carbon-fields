@@ -22,3 +22,5 @@ checks:
 tools:
   sensiolabs_security_checker: true
   external_code_coverage: true
+  php_code_sniffer:
+    config: { standard: WordPress }
