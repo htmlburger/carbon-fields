@@ -114,7 +114,7 @@ class Time_Field extends Field {
 
 		foreach ( $interval_steps as $step_name => $step_value ) {
 			$name = 'step' . ucwords( $step_name );
-			$output[ $name ] =  (int) $step_value;
+			$output[ $name ] = (int) $step_value;
 		}
 
 		$this->interval_step = $output;
