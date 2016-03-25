@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -34,8 +34,8 @@ class Association_Field extends Relationship_Field {
 	/**
 	 * Deprecated way to set the types.
 	 * Works only for post types.
-	 * 
-	 * @deprecated 
+	 *
+	 * @deprecated
 	 * @see set_types()
 	 *
 	 * @param string $post_type Post type
@@ -53,7 +53,7 @@ class Association_Field extends Relationship_Field {
 
 	/**
 	 * Converts the database values into a usable associative array.
-	 * 
+	 *
 	 * The relationship data is saved in the database in the following format:
 	 * 	array (
 	 *		0 => 'post:page:4',
@@ -94,10 +94,10 @@ class Association_Field extends Relationship_Field {
 	}
 
 	/**
-	 * Used to get the title of an item. 
+	 * Used to get the title of an item.
 	 *
 	 * Can be overriden or extended by the `carbon_relationship_title` filter.
-	 * 
+	 *
 	 * @param int     $id      The database ID of the item.
 	 * @param string  $type    Item type (post, term, user, comment, or a custom one).
 	 * @param string  $subtype The subtype - "page", "post", "category", etc.
@@ -138,10 +138,10 @@ class Association_Field extends Relationship_Field {
 	}
 
 	/**
-	 * Used to get the label of an item. 
+	 * Used to get the label of an item.
 	 *
 	 * Can be overriden or extended by the `carbon_relationship_item_label` filter.
-	 * 
+	 *
 	 * @param int     $id      The database ID of the item.
 	 * @param string  $type    Item type (post, term, user, comment, or a custom one).
 	 * @param string  $subtype Subtype - "page", "post", "category", etc.
@@ -308,7 +308,7 @@ class Association_Field extends Relationship_Field {
 
 	/**
 	 * Retrieve the edit link of a particular object.
-	 * 
+	 *
 	 * @param  string $type Object type.
 	 * @param  int $id      ID of the object.
 	 * @return string       URL of the edit link.
@@ -334,7 +334,7 @@ class Association_Field extends Relationship_Field {
 
 			default:
 				$edit_link = false;
-				
+
 		}
 
 		return $edit_link;
@@ -377,11 +377,10 @@ class Association_Field extends Relationship_Field {
 					<i class="trashed"></i>
 				<# } #>
 			</a>
-			<?php if ( $display_input ): ?>
+			<?php if ( $display_input ) :  ?>
 				<input type="hidden" name="{{{ name }}}[]" value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}" />
 			<?php endif; ?>
 		</li>
 		<?php
 	}
-
 }

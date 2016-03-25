@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Container;
 
 /**
- * Widget container class 
+ * Widget container class
  */
 class Widget_Container extends Container {
 
@@ -35,7 +35,7 @@ class Widget_Container extends Container {
 	/**
 	 * Returns an array that holds the container data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -60,6 +60,5 @@ class Widget_Container extends Container {
 
 		return $screen && $screen->id === 'widgets';
 	}
-
 }
 

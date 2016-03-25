@@ -77,7 +77,6 @@
         "issues": "https://github.com/htmlburger/carbon-fields/issues",
         "email": "wordpress@htmlburger.com"
     },
-    "require": {},
     "autoload": {
         "psr-4": {
             "Carbon_Fields\\": "core/"

@@ -8,7 +8,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Field container designed to extend WordPress custom fields functionality,
- * providing easier user interface to add, edit and delete text, media files, 
+ * providing easier user interface to add, edit and delete text, media files,
  * location information and more.
  */
 class Post_Meta_Container extends Container {
@@ -290,10 +290,10 @@ class Post_Meta_Container extends Container {
 	public function attach() {
 		foreach ( $this->settings['post_type'] as $post_type ) {
 			add_meta_box(
-				$this->id, 
-				$this->title, 
-				array( $this, 'render' ), 
-				$post_type, 
+				$this->id,
+				$this->title,
+				array( $this, 'render' ),
+				$post_type,
 				$this->settings['panel_context'],
 				$this->settings['panel_priority']
 			);
@@ -364,7 +364,7 @@ class Post_Meta_Container extends Container {
 
 		return true;
 	}
-	
+
 	/**
 	 * Revert the result of attach()
 	 **/
@@ -452,7 +452,7 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Show the container only on particular page referenced by it's path.
 	 *
@@ -474,7 +474,7 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Show the container only on posts from the specified category.
 	 *
@@ -488,7 +488,7 @@ class Post_Meta_Container extends Container {
 
 		return $this->show_on_taxonomy_term( $category_slug, 'category' );
 	}
-	
+
 	/**
 	 * Show the container only on pages whose template has filename $template_path.
 	 *
@@ -507,7 +507,7 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Hide the container from pages whose template has filename $template_path.
 	 *
@@ -526,7 +526,7 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Show the container only on hierarchical posts of level $level.
 	 * Levels start from 1 (top level post)
@@ -543,7 +543,7 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Show the container only on posts which have term $term_slug from the $taxonomy_slug taxonomy.
 	 *
@@ -560,7 +560,7 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Show the container only on posts from the specified format.
 	 * Learn more about {@link http://codex.wordpress.org/Post_Formats Post Formats (Codex)}
@@ -622,5 +622,4 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-
-} // END Post_Meta_Container 
+} // END Post_Meta_Container

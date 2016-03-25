@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -11,7 +11,7 @@ namespace Carbon_Fields\Field;
 class Map_With_Address_Field extends Map_Field {
 	/**
 	 * Return field type.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function get_type() {

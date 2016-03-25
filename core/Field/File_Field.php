@@ -32,8 +32,8 @@ class File_Field extends Field {
 
 	/**
 	 * Change the type of the field
-	 * 
-	 * @param string $type 
+	 *
+	 * @param string $type
 	 */
 	public function set_type( $type ) {
 		$this->field_type = $type;
@@ -42,7 +42,7 @@ class File_Field extends Field {
 
 	/**
 	 * Change the value type of the field.
-	 * 
+	 *
 	 * @param string $value_type
 	 */
 	public function set_value_type( $value_type ) {
@@ -53,7 +53,7 @@ class File_Field extends Field {
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -149,5 +149,4 @@ class File_Field extends Field {
 		</div>
 		<?php
 	}
-
 }

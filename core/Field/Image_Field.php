@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -10,7 +10,7 @@ namespace Carbon_Fields\Field;
  */
 class Image_Field extends File_Field {
 	public $field_type = 'image';
-	
+
 	/**
 	 * Administration initialization actions
 	 */

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Datastore;
 
@@ -46,11 +46,11 @@ class Term_Meta_Datastore extends Meta_Datastore {
 			return;
 		}
 
-		$charset_collate = '';	
+		$charset_collate = '';
 		if ( ! empty( $wpdb->charset ) ) {
 			$charset_collate = 'DEFAULT CHARACTER SET ' . $wpdb->charset;
 		}
-			
+
 		if ( ! empty( $wpdb->collate ) ) {
 			$charset_collate .= ' COLLATE ' . $wpdb->collate;
 		}
@@ -69,7 +69,7 @@ class Term_Meta_Datastore extends Meta_Datastore {
 	/**
 	 * Delete term meta on term deletion.
 	 * Useful for WP < 4.4.
-	 * 
+	 *
 	 * @param  int $term_id  Term ID.
 	 * @return bool Result of the deletion operation.
 	 */
@@ -112,7 +112,7 @@ class Term_Meta_Datastore extends Meta_Datastore {
 
 	/**
 	 * Set the term ID of the datastore.
-	 * 
+	 *
 	 * @param int $term_id ID of the term.
 	 */
 	public function set_id( $term_id ) {
@@ -121,11 +121,10 @@ class Term_Meta_Datastore extends Meta_Datastore {
 
 	/**
 	 * Retrieve the term ID of the datastore.
-	 * 
+	 *
 	 * @return int ID of the term.
 	 */
 	public function get_id() {
 		return $this->term_id;
 	}
-
 }

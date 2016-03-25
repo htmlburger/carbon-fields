@@ -19,7 +19,7 @@ class Templater {
 
 	/**
 	 * Register a new template.
-	 * 
+	 *
 	 * @param string $name Template name
 	 * @param string $html Template content
 	 */

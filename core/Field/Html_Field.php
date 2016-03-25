@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -19,14 +19,14 @@ class Html_Field extends Field {
 		} else {
 			$this->field_html = $callback_or_html;
 		}
-		
+
 		return $this;
 	}
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -52,7 +52,7 @@ class Html_Field extends Field {
 	/**
 	 * Whether this field is required.
 	 * The HTML field is non-required by design.
-	 * 
+	 *
 	 * @return false
 	 */
 	public function is_required() {
@@ -62,8 +62,8 @@ class Html_Field extends Field {
 	/**
 	 * Retrieve field label.
 	 * The label for the HTML field is hidden by design.
-	 * 
-	 * @return string 
+	 *
+	 * @return string
 	 */
 	public function get_label() {
 		return '';
