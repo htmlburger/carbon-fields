@@ -16,6 +16,13 @@
 }
 
 /* ------------------------------------------------------------ *\
+	Term Page Overrides	
+\* ------------------------------------------------------------ */
+.carbon-fields.edit-tags-php #col-container,
+.carbon-fields.edit-tags-php #col-left { overflow: visible; }
+.carbon-fields.edit-tags-php #col-left:after { content: ''; display: block; clear: both; width: 100%; }
+
+/* ------------------------------------------------------------ *\
 	Buttons
 \* ------------------------------------------------------------ */
 
