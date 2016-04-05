@@ -46,7 +46,12 @@ abstract class Predefined_Options_Field extends Field {
 	public function add_options( $options ) {
 		if ( is_array( $options ) ) {
 			$old_options = is_callable( $this->options ) ? array() : $this->options;
-			$this->options = array_merge( $old_options, $options );
+
+			if ( ! empty( $old_options ) ) {
+				$this->options = array_merge( $old_options, $options );
+			} else {
+				$this->options = $options;
+			}
 		} else {
 			$this->options = array();
 			Incorrect_Syntax_Exception::raise( 'Only arrays are allowed in the <code>add_options()</code> method.' );
