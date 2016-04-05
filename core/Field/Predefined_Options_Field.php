@@ -56,7 +56,7 @@ abstract class Predefined_Options_Field extends Field {
 			$this->options = array();
 			Incorrect_Syntax_Exception::raise( 'Only arrays are allowed in the <code>add_options()</code> method.' );
 		}
-		
+
 		return $this;
 	}
 
