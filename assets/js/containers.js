@@ -205,8 +205,6 @@ window.carbon = window.carbon || {};
 				}
 			}
 
-			var last_added_element;
-
 			for ( i=0; i<fields_groups.length; i++ ) {
 
 				fields_groups[i].each(function() {
