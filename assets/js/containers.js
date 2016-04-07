@@ -187,11 +187,17 @@ window.carbon = window.carbon || {};
 		},
 
 		addFieldRows: function() {
-			var $fields = this.$(':not(.carbon-fields-row) > .carbon-field.has-width');
+
+			var $fields    = this.$(':not(.carbon-fields-row) > .carbon-field.has-width:not(.carbon-subrow)');
+			var $subfields = this.$(':not(.carbon-fields-row) > .carbon-field.has-width.carbon-subrow');
+
+			var fields_groups = new Array($fields, $subfields);
+
 			var $group = $();
 			var groupWidth = 0;
 
 			var wrapGroup = function() {
+
 				if ($group.length > 0) {
 					$group.wrapAll('<div class="carbon-fields-row"/>');
 					$group = $();
@@ -199,22 +205,31 @@ window.carbon = window.carbon || {};
 				}
 			}
 
-			$fields.each(function() {
-				var matches = this.className.match(/width-(\d+)/);
-				var width = parseInt(matches[1]);
+			var last_added_element;
 
-				// stupid repetition; fix when brain is working
-				if (groupWidth + width > 100) {
-					wrapGroup();
-				}
+			for ( i=0; i<fields_groups.length; i++ ) {
 
-				groupWidth += width;
-				$group = $group.add($(this));
+				fields_groups[i].each(function() {
 
-				if (!$(this).next().hasClass('has-width')) {
-					wrapGroup();
-				}
-			});
+					var matches = this.className.match(/width-(\d+)/);
+					var width = parseInt(matches[1]);
+
+					// stupid repetition; fix when brain is working
+					if (groupWidth + width > 100) {
+						wrapGroup();
+					}
+
+					groupWidth += width;
+					$group = $group.add($(this));
+
+					if (!$(this).next().hasClass('has-width') ) {
+						wrapGroup();
+					}
+
+
+				});
+			}
+
 		},
 
 		updateClass: function(model) {
