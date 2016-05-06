@@ -4,6 +4,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class ContainerInitializationTest extends WP_UnitTestCase {
 	public function setup() {
+		$this->containerId = 'page_settings';
 		$this->containerTitle = 'Page Settings';
 	}
 
@@ -17,7 +18,8 @@ class ContainerInitializationTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Container\Container::__construct
 	 */
 	public function testMakePostMetaContainer() {
-		$container = Container::make('post_meta', $this->containerTitle);
+		$container = Container::make('post_meta', $this->containerId, $this->containerTitle);
+        $this->assertEquals($this->containerId, $container->id);
 		$this->assertEquals($this->containerTitle, $container->title);
 	}
 
@@ -30,7 +32,7 @@ class ContainerInitializationTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage Unknown container "".
 	 */
 	public function testExceptionIsThrownWhenContainerTypeIsEmpty() {
-		$container = Container::make('', $this->containerTitle);
+		$container = Container::make('', $this->containerId);
 	}
 
 	/**
@@ -42,7 +44,7 @@ class ContainerInitializationTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage Unknown container "__No_Such_Container_Type__".
 	 */
 	public function testExceptionIsThrownWhenContainerTypeIsInvalid() {
-		$container = Container::make('__no_such_container_type__', $this->containerTitle);
+		$container = Container::make('__no_such_container_type__', $this->containerId);
 	}
 
 	/**
@@ -51,9 +53,9 @@ class ContainerInitializationTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Container\Container::__construct
 	 *
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Empty container title is not supported
+	 * @expectedExceptionMessage Empty container id is not supported
 	 */
-	public function testExceptionIsThrownWhenContainerTitleIsEmpty() {
+	public function testExceptionIsThrownWhenContainerIdIsEmpty() {
 		$container = Container::make('post_meta', '');
 	}
 
@@ -66,7 +68,7 @@ class ContainerInitializationTest extends WP_UnitTestCase {
 		$old_val = Incorrect_Syntax_Exception::$throw_errors;
 
 		Incorrect_Syntax_Exception::$throw_errors = false;
-		$container = Container::make('__no_such_container_type__', $this->containerTitle);
+		$container = Container::make('__no_such_container_type__', $this->containerId);
 		$this->assertInstanceOf('Carbon_Fields\Container\Broken_Container', $container);
 
 		Incorrect_Syntax_Exception::$throw_errors = $old_val;
@@ -78,7 +80,7 @@ class ContainerInitializationTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Container\Container::__construct
 	 */
 	public function testContainerTypeCaseIsIgnored() {
-		$container = Container::make('Post_Meta', $this->containerTitle);
+		$container = Container::make('Post_Meta', $this->containerId);
 		$this->assertInstanceOf('Carbon_Fields\Container\Post_Meta_Container', $container);
 	}
 
@@ -88,7 +90,7 @@ class ContainerInitializationTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Container\Container::__construct
 	 */
 	public function testSpacesInContainerTypeAreSupported() {
-		$container = Container::make('Post Meta', $this->containerTitle);
+		$container = Container::make('Post Meta', $this->containerId);
 		$this->assertTrue(true); // no exception ... 
 	}
 
@@ -101,7 +103,7 @@ class ContainerInitializationTest extends WP_UnitTestCase {
 		// This text includes a capital cyrillic letter ... it actually assures that
 		// container titles in non-english are converted to lowercase
 		$container = Container::make('post_meta', 'bulgarian: България');
-		$this->assertEquals('bulgarian: България', $container->title);
+		$this->assertEquals('bulgarian: България', $container->id);
 	}
 	
 	/**
@@ -110,11 +112,11 @@ class ContainerInitializationTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Container\Container::__construct
 	 *
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Panel ID "PageSettings" already registered
+	 * @expectedExceptionMessage Panel ID "page_settings" already registered
 	 */
 	public function testSameContainerNamesAreNotAllowedWithinSameContainerType() {
-		$container1 = Container::make('Post Meta', $this->containerTitle);
-		$container2 = Container::make('Post_Meta', $this->containerTitle);
+		$container1 = Container::make('Post Meta', $this->containerId);
+		$container2 = Container::make('Post_Meta', $this->containerId);
 	}
 
 	/**
@@ -123,11 +125,11 @@ class ContainerInitializationTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Container\Container::__construct
 	 *
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Panel ID "PageSettings" already registered
+	 * @expectedExceptionMessage Panel ID "page_settings" already registered
 	 */
 	public function testSameContainerNamesAreNotAllowedAtAll() {
-		$container1 = Container::make('Theme_Options', $this->containerTitle);
-		$container2 = Container::make('User_Meta', $this->containerTitle);
+		$container1 = Container::make('Theme_Options', $this->containerId);
+		$container2 = Container::make('User_Meta', $this->containerId);
 	}
 
 	/**
@@ -136,7 +138,7 @@ class ContainerInitializationTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Container\Container::__construct
 	 */
 	public function testContainerTypeCustomFieldsBackwardsCompatibility() {
-		$container = Container::make('custom_fields', $this->containerTitle);
+		$container = Container::make('custom_fields', $this->containerId);
 		$this->assertInstanceOf('Carbon_Fields\Container\Post_Meta_Container', $container);
 	}
 
