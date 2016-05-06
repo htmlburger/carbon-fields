@@ -17,10 +17,11 @@ class User_Meta_Container extends Container {
 	/**
 	 * Create a new user meta container
 	 *
-	 * @param string $title Unique title of the container
+	 * @param string $id Unique id of the container
+	 * @param string $title Title of the container
 	 **/
-	public function __construct( $title ) {
-		parent::__construct( $title );
+	public function __construct( $id, $title = '' ) {
+		parent::__construct( $id, $title );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( new User_Meta_Datastore() );

@@ -129,10 +129,11 @@ abstract class Container {
 	 * Create a new container of type $type and name $name and label $label.
 	 *
 	 * @param string $type
+	 * @param string $id Unique id of the container
 	 * @param string $name Human-readable name of the container
 	 * @return object $container
 	 **/
-	public static function factory( $type, $name ) {
+	public static function factory( $type, $id, $name = '' ) {
 		// backward compatibility: post_meta container used to be called custom_fields
 		if ( $type === 'custom_fields' ) {
 			$type = 'post_meta';
@@ -147,7 +148,7 @@ abstract class Container {
 			$class = __NAMESPACE__ . '\\Broken_Container';
 		}
 
-		$container = new $class( $name );
+		$container = new $class( $id, $name );
 		$container->type = $type;
 		$container->add_template( $type, array( $container, 'template' ) );
 
@@ -161,8 +162,8 @@ abstract class Container {
 	 *
 	 * @see Container::factory()
 	 **/
-	public static function make( $type, $name ) {
-		return self::factory( $type, $name );
+	public static function make( $type, $id, $name = '' ) {
+		return self::factory( $type, $id, $name );
 	}
 
 	/**
@@ -261,15 +262,20 @@ abstract class Container {
 	/**
 	 * Create a new container
 	 *
-	 * @param string $title Unique title of the container
+	 * @param string $id Unique id of the container
+	 * @param string $title Title of the container
 	 **/
-	public function __construct( $title ) {
+	public function __construct( $id, $title = '' ) {
+		if ( empty( $id ) ) {
+			Incorrect_Syntax_Exception::raise( 'Empty container id is not supported' );
+		}
+
 		if ( empty( $title ) ) {
-			Incorrect_Syntax_Exception::raise( 'Empty container title is not supported' );
+			$title = $id;
 		}
 
 		$this->title = $title;
-		$this->id = preg_replace( '~\W~u', '', remove_accents( $title ) );
+		$this->id = preg_replace( '~\W~u', '', remove_accents( $id ) );
 
 		self::verify_unique_panel_id( $this->id );
 
