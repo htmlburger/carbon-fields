@@ -102,8 +102,8 @@ class ContainerInitializationTest extends WP_UnitTestCase {
 	public function testNonAsciiContainerTitlesAreHandledProperly() {
 		// This text includes a capital cyrillic letter ... it actually assures that
 		// container titles in non-english are converted to lowercase
-		$container = Container::make('post_meta', 'bulgarian: България');
-		$this->assertEquals('bulgarian: България', $container->id);
+		$container = Container::make('post_meta', $this->containerId, 'bulgarian: България');
+		$this->assertEquals('bulgarian: България', $container->title);
 	}
 	
 	/**
