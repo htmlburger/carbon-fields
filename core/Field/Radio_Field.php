@@ -18,7 +18,7 @@ class Radio_Field extends Select_Field {
 				<# _.each(options, function(option) { #>
 					<li>
 						<label>
-							<input type="radio" name="{{{ name }}}" value="{{ option.value }}" {{{ option.value == value ? 'checked="checked"' : '' }}} />
+							<input type="radio" name="{{{ name }}}" value="{{ option.value }}" {{{ option.value == value ? 'checked="checked"' : '' }}} {{{ special_attrs }}} />
 							{{{ option.name }}}
 						</label>
 					</li>

@@ -71,7 +71,7 @@ class Time_Field extends Field {
 	public function template() {
 		?>
 		<div class="input-with-button">
-			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-timepicker" />
+			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-timepicker" {{{ special_attrs }}} />
 			<span class="carbon-timepicker-trigger button icon-button dashicons-clock hide-if-no-js"><?php _e( 'Timepicker', 'crb' ); ?></span>
 		</div>
 		<?php

@@ -62,7 +62,7 @@ class Checkbox_Field extends Field {
 	public function template() {
 		?>
 		<label>
-			<input type="checkbox" name="{{{ name }}}" value="{{ option_value }}" {{{ option_value == value ? 'checked="checked"' : '' }}} />
+			<input type="checkbox" name="{{{ name }}}" value="{{ option_value }}" {{{ option_value == value ? 'checked="checked"' : '' }}} {{{ special_attrs }}} />
 			{{{ option_label }}}
 		</label>
 		<?php

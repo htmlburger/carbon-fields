@@ -56,7 +56,7 @@ class Textarea_Field extends Field {
 	 */
 	public function template() {
 		?>
-		<textarea id="{{{ id }}}" name="{{{ name }}}" {{{ rows ? 'rows="' + rows + '"' : 'style="height: ' + height + 'px;"' }}}>{{ value }}</textarea>
+		<textarea id="{{{ id }}}" name="{{{ name }}}" {{{ rows ? 'rows="' + rows + '"' : 'style="height: ' + height + 'px;"' }}} {{{ special_attrs }}} >{{ value }}</textarea>
 		<?php
 	}
 }

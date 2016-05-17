@@ -155,6 +155,13 @@ class Field {
 	protected $conditional_logic = array();
 
 	/**
+	 * HTML other attributes ( like data-var="value", or anything you need ).
+	 *
+	 * @var string
+	 **/
+	protected $special_attrs = '';
+
+	/**
 	 * Create a new field of type $type and name $name and label $label.
 	 *
 	 * @param string $type
@@ -713,6 +720,7 @@ class Field {
 			'width' => $this->get_width(),
 			'classes' => $this->get_classes(),
 			'conditional_logic' => $this->get_conditional_logic(),
+            'special_attrs' => $this->get_special_attrs(),
 		);
 
 		return $field_data;
@@ -802,6 +810,27 @@ class Field {
 		}
 
 		return $parsed_rules;
+	}
+
+
+	/**
+	 *  Add other atttribute to the field html container (data-var="val" for example).
+	 *
+	 * @param string $special_attrs
+	 * @return object $this
+	 **/
+	public function add_special_attrs( $special_attrs ) {
+		$this->special_attrs = sanitize_text_field( $special_attrs );
+		return $this;
+	}
+
+    /**
+	 * Return field data-attrs.
+	 *
+	 * @return array
+	 **/
+	public function get_special_attrs() {
+		return $this->special_attrs;
 	}
 
 

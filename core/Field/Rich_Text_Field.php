@@ -47,7 +47,7 @@ class Rich_Text_Field extends Textarea_Field {
 				</button>
 			</div>
 			<div id="wp-{{{ id }}}-editor-container" class="wp-editor-container">
-				<textarea id="{{{ id }}}" class="wp-editor-area" name="{{{ name }}}">{{ value }}</textarea>
+				<textarea id="{{{ id }}}" class="wp-editor-area" name="{{{ name }}}" {{{ special_attrs }}} >{{ value }}</textarea>
 			</div>
 		</div>
 		<?php
