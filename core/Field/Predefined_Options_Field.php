@@ -48,7 +48,7 @@ abstract class Predefined_Options_Field extends Field {
 			$old_options = is_callable( $this->options ) ? array() : $this->options;
 
 			if ( ! empty( $old_options ) ) {
-				$this->options = array_merge( $old_options, $options );
+				$this->options = $options + $old_options;
 			} else {
 				$this->options = $options;
 			}
