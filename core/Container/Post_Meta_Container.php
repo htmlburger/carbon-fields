@@ -468,6 +468,7 @@ class Post_Meta_Container extends Container {
 		}
 
 		if ( $page_obj ) {
+			$this->show_on_post_type( 'page' );
 			$this->settings['show_on']['page_id'] = $page_obj->ID;
 		} else {
 			$this->settings['show_on']['page_id'] = -1;
