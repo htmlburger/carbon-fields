@@ -445,6 +445,7 @@ class Post_Meta_Container extends Container {
 		$page = get_page_by_path( $parent_page_path );
 
 		if ( $page ) {
+			$this->show_on_post_type( 'page' );
 			$this->settings['show_on']['parent_page_id'] = $page->ID;
 		} else {
 			$this->settings['show_on']['parent_page_id'] = -1;
