@@ -27,4 +27,22 @@ class PostMetaContainerConditions extends WP_UnitTestCase {
 		$this->assertSame( array( 'page' ), $container->settings['post_type'] );
 	}
 
+	/**
+	 * @covers Carbon_Fields\Container\Post_Meta_Container::show_on_page
+	 */
+	public function testShowOnPageByIdResultPostType() {
+		$container = Container::make('post_meta', $this->containerTitle);
+		$container->show_on_page( $this->page->ID );
+		$this->assertSame( array( 'page' ), $container->settings['post_type'] );
+	}
+
+	/**
+	 * @covers Carbon_Fields\Container\Post_Meta_Container::show_on_page
+	 */
+	public function testShowOnPageByPathResultPostType() {
+		$container = Container::make('post_meta', $this->containerTitle);
+		$container->show_on_page( $this->page->post_name );
+		$this->assertSame( array( 'page' ), $container->settings['post_type'] );
+	}
+
 }
