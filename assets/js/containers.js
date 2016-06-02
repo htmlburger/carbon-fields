@@ -189,9 +189,10 @@ window.carbon = window.carbon || {};
 		addFieldRows: function() {
 
 			var $fields    = this.$(':not(.carbon-fields-row) > .carbon-field.has-width:not(.carbon-subrow)');
-			var $subfields = this.$(':not(.carbon-fields-row) > .carbon-field.has-width.carbon-subrow');
+			var $subfields = this.$(':not(.carbon-fields-row) > .carbon-field.has-width.carbon-subrow:not(.carbon-Complex)');
+			var $complex_groups = this.$(':not(.carbon-fields-row) > .carbon-field.has-width.carbon-subrow.carbon-Complex');
 
-			var fields_groups = new Array($fields, $subfields);
+			var fields_groups = new Array($fields, $subfields, $complex_groups);
 
 			var $group = $();
 			var groupWidth = 0;
