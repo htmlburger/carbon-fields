@@ -38,7 +38,7 @@ class Complex_Field extends Field {
 			'plural_name' => __( 'Entries', 'carbon_fields' ),
 		);
 
-		// Include the complex group backbone template
+		// Include the complex group Underscore template
 		$this->add_template( 'Complex-Group', array( $this, 'template_group' ) );
 
 		parent::init();
@@ -46,6 +46,8 @@ class Complex_Field extends Field {
 
 	/**
 	 * Add a set/group of fields.
+	 *
+	 * @return $this
 	 */
 	public function add_fields() {
 		$argv = func_get_args();
@@ -72,16 +74,38 @@ class Complex_Field extends Field {
 
 		if ( array_key_exists( '_' . $name, $this->groups ) ) {
 			Incorrect_Syntax_Exception::raise( 'Group with name "' . $name . '" in Complex Field "' . $this->get_label() . '" already exists.' );
-		} else {
-			$group = new Group_Field();
-			$group->set_name( $name );
-
-			$group->add_fields( $fields );
-			$group->set_label( $label );
-
-			$this->groups[ $group->get_name() ] = $group;
-			return $this;
 		}
+
+		$group = new Group_Field($name, $label, $fields);
+
+		$this->groups[ $group->get_name() ] = $group;
+
+		return $this;
+	}
+
+	/**
+	 * Set the group label Underscore template.
+	 *
+	 * @param  string|callable $template
+	 * @return $this
+	 */
+	public function set_header_template( $template ) {
+		if ( count($this->groups) === 0 ) {
+			Incorrect_Syntax_Exception::raise( "Can't set group label template. There are no present groups for Complex Field " . $this->get_label() . "." );
+		}
+
+		$template = is_callable( $template ) ? call_user_func( $template ) : $template;
+
+		// Assign the template to the group that was added last
+		$group = end( array_values( $this->groups ) );
+		$group->set_label_template( $template );
+
+		// Include the group label Underscore template
+		$this->add_template( $group->get_group_id(), array( $group, 'template_label' ) );
+
+		$this->groups[ $group->get_name() ] = $group;
+
+		return $this;
 	}
 
 	/**
@@ -391,6 +415,7 @@ class Complex_Field extends Field {
 			$data = array(
 				'name' => $group->get_name(),
 				'label' => $group->get_label(),
+				'group_id' => $group->get_group_id(),
 				'fields' => array(),
 			);
 
@@ -456,7 +481,7 @@ class Complex_Field extends Field {
 			<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[group]" value="{{ name }}" />
 
 			<div class="carbon-drag-handle">
-				<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label }}}</span>
+				<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label_template || label }}}</span>
 			</div>
 			<div class="carbon-group-actions">
 				<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>"><?php _e( 'Collapse/Expand', 'carbon_fields' ); ?></a>

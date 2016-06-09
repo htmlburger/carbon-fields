@@ -1979,6 +1979,7 @@ window.carbon = window.carbon || {};
 			this.listenTo(this.fieldsCollection, 'add', this.updateFieldNameID);
 			this.listenTo(this.fieldsCollection, 'add', this.renderField);
 			this.listenTo(this.fieldsCollection, 'change', this.sync);
+			this.listenTo(this.fieldsCollection, 'change', this.updateLabel);
 
 			// Listen for fields that want to multiply and create new groups with them
 			this.listenTo(this.fieldsCollection, 'change:multiply', this.multiplier);
@@ -2037,6 +2038,21 @@ window.carbon = window.carbon || {};
 			this.model.set('fields', this.fieldsCollection.toJSON());
 		},
 
+		updateLabel: function() {
+			if ( !this.hasLabelTemplate() ) {
+				return;
+			}
+
+			var labelTemplate = this.getLabelTemplate();
+			var label = labelTemplate || this.model.get('label');
+
+			this.$('> .carbon-drag-handle .group-name').html( label );
+		},
+
+		hasLabelTemplate: function() {
+			return this.getLabelTemplate() !== null;
+		},
+
 		updateFieldNameID: function(model) {
 			var id = model.get('id');
 			var name = model.get('name');
@@ -2063,6 +2079,29 @@ window.carbon = window.carbon || {};
 			this.$('> .carbon-drag-handle .group-number').text(groupOrder + 1);
 		},
 
+		getLabelTemplate: function() {
+			try {
+				var template = carbon.template( this.model.get('group_id') );
+				var templateVariables = {
+					_models: {}
+				};
+
+				_.each(this.fieldsCollection.models, function(fieldModel) {
+					var fieldName = fieldModel.get('base_name');
+					var fieldValue = fieldModel.get('value');
+
+					templateVariables[ fieldName ] = fieldValue;
+					templateVariables._models[ fieldName ] = fieldModel; // pass the field model to the template, useful to advanced users
+				});
+
+				return template(templateVariables);
+			} catch (e) {
+				// no label template found
+			}
+
+			return null;
+		},
+
 		render: function(complexModel) {
 			this.complexModel = complexModel;
 
@@ -2073,6 +2112,7 @@ window.carbon = window.carbon || {};
 				complex_id: this.complexModel.get('id'),
 				complex_name: this.complexModel.get('name'),
 				layout: this.complexModel.get('layout'),
+				label_template: this.getLabelTemplate(),
 				fields: this.fieldsCollection.toJSON()
 			});
 
