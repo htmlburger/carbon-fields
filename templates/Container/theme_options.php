@@ -34,7 +34,13 @@
 
 							<div id="publishing-action">
 								<span class="spinner"></span>
-								<input type="submit" value="<?php esc_attr_e( 'Save Changes', 'carbon_fields' ); ?>" name="publish" id="publish" class="button button-primary button-large">
+
+								<?php
+									$filter_name  = 'carbon_' . str_replace( '-', '_', sanitize_title( $this->title ) ) . '_button_label';
+									$button_label = apply_filters( $filter_name, __( 'Save Changes', 'carbon_fields' ) );
+								?>
+
+								<input type="submit" value="<?php echo esc_attr( $button_label ); ?>" name="publish" id="publish" class="button button-primary button-large">
 							</div>
 							
 							<div class="clear"></div>
