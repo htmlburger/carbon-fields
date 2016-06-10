@@ -3,9 +3,9 @@
 namespace Carbon_Fields\Field;
 
 /**
- * Select dropdown field class.
+ * Select dropdown field class wtih multiple selection enabled.
  */
-class Select_Field extends Predefined_Options_Field {
+class Multiselect_Field extends Predefined_Options_Field {
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
@@ -20,7 +20,6 @@ class Select_Field extends Predefined_Options_Field {
 		$field_data = array_merge( $field_data, array(
 			'options' => $this->parse_options( $this->options ),
 		) );
-
 		return $field_data;
 	}
 
@@ -32,9 +31,9 @@ class Select_Field extends Predefined_Options_Field {
 		<# if (_.isEmpty(options)) { #>
 			<em><?php _e( 'no options', 'carbon_fields' ); ?></em>
 		<# } else { #>
-			<select id="{{{ id }}}" name="{{{ name }}}" {{{ special_attrs }}} {{{ special_attrs }}} >
+			<select id="{{{ id }}}" name="{{{ name }}}[]" multiple {{{ special_attrs }}}>
 				<# _.each(options, function(option) { #>
-					<option value="{{ option.value }}" {{{ option.value == value ? 'selected="selected"' : '' }}}>
+                    <option value="{{ option.value }}" {{{ value && ( value.indexOf(option.value) != -1 ) ? 'selected="selected"' : '' }}}>
 						{{{ option.name }}}
 					</option>
 				<# }) #>

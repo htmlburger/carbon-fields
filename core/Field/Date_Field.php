@@ -35,7 +35,7 @@ class Date_Field extends Field {
 	public function template() {
 		?>
 		<div class="input-with-button">
-			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-datepicker" />
+			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-datepicker" {{{ special_attrs }}} />
 			<span class="carbon-datepicker-trigger button icon-button hide-if-no-js"><?php _e( 'Date', 'carbon_fields' ); ?></span>
 		</div>
 		<?php

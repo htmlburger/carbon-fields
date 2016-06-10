@@ -11,7 +11,7 @@ class Text_Field extends Field {
 	 */
 	public function template() {
 		?>
-		<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text" />
+		<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text" {{{ special_attrs }}} />
 		<?php
 	}
 }

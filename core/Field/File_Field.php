@@ -114,7 +114,8 @@ class File_Field extends Field {
 				name="{{ name }}" 
 				value="{{ value }}" 
 				class="regular-text carbon-file-field" 
-				{{{ value_type === 'id' ? 'style="display:none"' : '' }}} 
+				{{{ value_type === 'id' ? 'style="display:none"' : '' }}}
+                {{{ special_attrs }}}
 			/>
 
 			<span id="c2_open_media{{ id.replace('-', '_') }}" class="button c2_open_media icon-button">

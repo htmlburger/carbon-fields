@@ -100,7 +100,7 @@ class Map_Field extends Field {
 			<p><?php _e( 'Locate Address on the map', 'carbon_fields' ); ?>: </p>
 			
 			<div class="input-with-button">
-				<input type="text" name="{{{ name }}}[address]" value="{{{ address }}}" class="regular-text address" />
+				<input type="text" name="{{{ name }}}[address]" value="{{{ address }}}" class="regular-text address" {{{ special_attrs }}} />
 				<span class="address-search-btn button icon-button">
 					<?php _e( 'Find', 'carbon_fields' ); ?>
 				</span>
