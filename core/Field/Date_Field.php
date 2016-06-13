@@ -36,7 +36,7 @@ class Date_Field extends Field {
 		?>
 		<div class="input-with-button">
 			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-datepicker" />
-			<span class="carbon-datepicker-trigger button icon-button hide-if-no-js"><?php _e( 'Date', 'carbon_fields' ); ?></span>
+			<span class="carbon-datepicker-trigger button icon-button hide-if-no-js"><?php _e( 'Date', 'carbon-fields' ); ?></span>
 		</div>
 		<?php
 	}

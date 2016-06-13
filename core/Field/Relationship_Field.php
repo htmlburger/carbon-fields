@@ -208,22 +208,22 @@ class Relationship_Field extends Field {
 						selected_items_length = value.length;
 					} #>
 					<span class="selected-counter">{{{ selected_items_length }}}</span> 
-					<span class="selected-label" data-single-label="<?php _e( 'selected item', 'carbon_fields' ); ?>" data-plural-label="<?php _e( 'selected items', 'carbon_fields' ); ?>">
-						<?php _e( 'selected items', 'carbon_fields' ); ?>
+					<span class="selected-label" data-single-label="<?php _e( 'selected item', 'carbon-fields' ); ?>" data-plural-label="<?php _e( 'selected items', 'carbon-fields' ); ?>">
+						<?php _e( 'selected items', 'carbon-fields' ); ?>
 					</span>
 
 					<?php
 					/* If set_max() has been set, show the allowed maximum items number */
 					?>
 					<# if ( max !== -1 ) { #>
-						<span class="remaining"><?php _e( 'out of', 'carbon_fields' ); ?> {{{ max }}}</span>
+						<span class="remaining"><?php _e( 'out of', 'carbon-fields' ); ?> {{{ max }}}</span>
 					<# } #>
 				</strong>
 				
 			</div>
 			<div class="relationship-left">
 				<div class="search-field">
-					<input type="text" class="search-field" placeholder="<?php esc_attr_e( 'Search', 'carbon_fields' ); ?>" />
+					<input type="text" class="search-field" placeholder="<?php esc_attr_e( 'Search', 'carbon-fields' ); ?>" />
 				</div>
 
 				<ul class="relationship-list">
@@ -236,7 +236,7 @@ class Relationship_Field extends Field {
 			</div>
 
 			<div class="relationship-right">
-				<label><?php _e( 'Associated:', 'carbon_fields' ); ?></label>
+				<label><?php _e( 'Associated:', 'carbon-fields' ); ?></label>
 
 				<ul class="relationship-list">
 					<# if (value) { #>
@@ -262,7 +262,7 @@ class Relationship_Field extends Field {
 			<span class="mobile-handle"></span>
 			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-item-label="{{{ item.label }}}" data-value="{{{ item.id }}}">
 				<# if ( item.edit_link ) { #>
-					<em class="edit-link" data-href="{{{ item.edit_link }}}"><?php _e( 'Edit', 'carbon_fields' ); ?></em>
+					<em class="edit-link" data-href="{{{ item.edit_link }}}"><?php _e( 'Edit', 'carbon-fields' ); ?></em>
 				<# } #>
 				<em>{{{ item.label }}}</em>
 				<span></span>

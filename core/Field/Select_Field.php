@@ -30,7 +30,7 @@ class Select_Field extends Predefined_Options_Field {
 	public function template() {
 		?>
 		<# if (_.isEmpty(options)) { #>
-			<em><?php _e( 'no options', 'carbon_fields' ); ?></em>
+			<em><?php _e( 'no options', 'carbon-fields' ); ?></em>
 		<# } else { #>
 			<select id="{{{ id }}}" name="{{{ name }}}">
 				<# _.each(options, function(option) { #>

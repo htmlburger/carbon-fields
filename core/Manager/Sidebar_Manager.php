@@ -101,7 +101,7 @@ class Sidebar_Manager {
 		$id = sanitize_title( $id );
 
 		if ( isset( $registered_sidebars[ $id ] ) ) {
-			return new \WP_Error( 'sidebar-exists', __( 'Sidebar with the same ID is already registered.', 'carbon_fields' ) );
+			return new \WP_Error( 'sidebar-exists', __( 'Sidebar with the same ID is already registered.', 'carbon-fields' ) );
 		}
 
 		$registered_sidebars[ $id ] = array(
@@ -128,7 +128,7 @@ class Sidebar_Manager {
 		if ( isset( $registered_sidebars[ $id ] ) ) {
 			unset( $registered_sidebars[ $id ] );
 		} else {
-			return new \WP_Error( 'sidebar-not-found', __( 'Sidebar not found.', 'carbon_fields' ) );
+			return new \WP_Error( 'sidebar-not-found', __( 'Sidebar not found.', 'carbon-fields' ) );
 		}
 
 		return update_option( 'carbon_custom_sidebars', $registered_sidebars );
