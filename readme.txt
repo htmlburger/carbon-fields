@@ -2,8 +2,8 @@
 Contributors: htmlburger, tyxla, m1r0, xsisqox, stoyanov.gs, catahac, avakul, panchev, kamenarov, dilirity, sstoqnov, kaloyanivanov, pkostadinov, brutalenemy666, magadanski_uchen, germozy
 Tags: custom, field, custom field, advanced, repeater, post, type, text, textarea, file, image, rich text, wysiwyg, select, dropdown, checkbox, radio, association, relationship, map, taxonomy, term, user, comment, option, options, widget, simple fields, magic fields, more fields, post meta, term meta, user meta, comment meta, theme options, custom widget, nested fields
 Requires at least: 4.0
-Tested up to: 4.5
-Stable tag: 1.1
+Tested up to: 4.6
+Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,22 @@ A. Sure, go ahead! It is completely open source.
 6. Example that contains most of the available fields, nested fields included.
 
 == Changelog ==
+
+= 1.2 =
+* Ensured compabitility with the WordPress Coding Standards.
+* Introduced new `Time` field type.
+* Introduced new `Date_Time` field type.
+* Enhanced the Composer configuration.
+* Fixed an issue with handling numeric indexes in `Predefined_Options_Field` field types.
+* Fixed several issues with `set_width()` in nested or sibling `Complex` fields.
+* Fixed issue with attaching `user_meta` container under certain conditions.
+* Enhanced `post_meta` container to use `page` post type when calling the `show_on_page_children()`, `show_on_page()` and `show_on_template()` methods.
+* Added French translation.
+* Introduced interface for managing header template for `Complex` field groups.
+* Introduced a filter for the save button on the `theme_options` container.
+* Renamed the textdomain to be compatible with the one, used in GlotPress.
+* Added new tests.
+* Performed various other code and UI fixes and improvements.
 
 = 1.1 =
 * Removed `Attachment` field type, with backwards compatibility.
