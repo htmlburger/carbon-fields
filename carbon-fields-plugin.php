@@ -9,7 +9,7 @@
  * License: GPL2
  * Requires at least: 4.0
  * Tested up to: 4.5
- * Text Domain: carbon_fields
+ * Text Domain: carbon-fields
  * Domain Path: /languages
  */
 

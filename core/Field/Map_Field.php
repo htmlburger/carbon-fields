@@ -97,12 +97,12 @@ class Map_Field extends Field {
 	public function template() {
 		?>
 		<div class="carbon-map-search">
-			<p><?php _e( 'Locate Address on the map', 'carbon_fields' ); ?>: </p>
+			<p><?php _e( 'Locate Address on the map', 'carbon-fields' ); ?>: </p>
 			
 			<div class="input-with-button">
 				<input type="text" name="{{{ name }}}[address]" value="{{{ address }}}" class="regular-text address" />
 				<span class="address-search-btn button icon-button">
-					<?php _e( 'Find', 'carbon_fields' ); ?>
+					<?php _e( 'Find', 'carbon-fields' ); ?>
 				</span>
 			</div>
 				

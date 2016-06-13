@@ -37,7 +37,7 @@ class Helper {
 	 */
 	public function load_textdomain() {
 		$dir = dirname( dirname( __DIR__ ) ) . '/languages/';
-		$domain = 'carbon_fields';
+		$domain = 'carbon-fields';
 		$locale = get_locale();
 		$path = $dir . $domain . '-' . $locale . '.mo';
 		load_textdomain( $domain, $path );
