@@ -371,6 +371,19 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 			transform: rotate(180deg) translateX(-1px) translateY(-2px);
 }
 
+/* Tabs */
+.groups-wrapper.tabbed { display: table; width: 100%; border-collapse: collapse; background: #f7f6f6; }
+.group-tabs-nav { width: 20%; background: #fafafa; }
+.group-tabs-nav,
+.group-tabs-nav + .carbon-groups-holder { display: table-cell; border: 1px solid #d9d9d9; vertical-align: top; }
+.group-tabs-nav + .carbon-groups-holder { width: 80%; }
+.group-tabs-nav + .carbon-groups-holder > .carbon-group-row { display: none !important; margin-top: 0; }
+.group-tabs-nav + .carbon-groups-holder > .carbon-group-row.active { display: block !important; }
+.group-tabs-nav + .carbon-groups-holder > .carbon-group-row > .fields-container { border: 0; }
+
+.group-tabs-nav > li { position: relative; border-bottom: 1px solid #d9d9d9; }
+.group-tabs-nav > li > a { display: block; padding: 10px; text-decoration: none; line-height: 20px; }
+.group-tabs-nav > li.active > a { background: #eee; color: #555; }
 
 /* ------------------------------------------------------------ *\
 	Media 

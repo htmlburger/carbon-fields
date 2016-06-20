@@ -23,6 +23,7 @@ class Complex_Field extends Field {
 	protected $layout = self::LAYOUT_TABLE;
 	protected $values_min = -1;
 	protected $values_max = -1;
+	protected $tabbed = false;
 
 	public $labels = array(
 		'singular_name' => 'Entry',
@@ -30,7 +31,7 @@ class Complex_Field extends Field {
 	);
 
 	/**
-	 * Initialization tasks
+	 * Initialization tasks.
 	 */
 	public function init() {
 		$this->labels = array(
@@ -38,8 +39,9 @@ class Complex_Field extends Field {
 			'plural_name' => __( 'Entries', 'carbon_fields' ),
 		);
 
-		// Include the complex group Underscore template
+		// Include the complex group Underscore templates
 		$this->add_template( 'Complex-Group', array( $this, 'template_group' ) );
+		$this->add_template( 'Complex-Group-Tab-Item', array( $this, 'template_group_tab_item' ) );
 
 		parent::init();
 	}
@@ -152,7 +154,7 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Load the field value from an input array based on it's name
+	 * Load the field value from an input array based on it's name.
 	 *
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
 	 **/
@@ -262,7 +264,7 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Load and parse the field data
+	 * Load and parse the field data.
 	 */
 	public function load_values() {
 		return $this->load_values_from_db();
@@ -372,7 +374,7 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Retrieve the field values
+	 * Retrieve the field values.
 	 * @return array
 	 */
 	public function get_values() {
@@ -429,6 +431,7 @@ class Complex_Field extends Field {
 		$complex_data = array_merge( $complex_data, array(
 			'layout' => $this->layout,
 			'labels' => $this->labels,
+			'tabbed' => $this->tabbed,
 			'min' => $this->get_min(),
 			'max' => $this->get_max(),
 			'multiple_groups' => count( $groups_data ) > 1,
@@ -440,17 +443,23 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * The main Underscore template
+	 * The main Underscore template.
 	 */
 	public function template() {
 		?>
 		<div class="carbon-subcontainer carbon-grid {{ multiple_groups ? 'multiple-groups' : '' }}">
-	
 			<div class="carbon-empty-row">
 				{{{ crbl10n.complex_no_rows.replace('%s', labels.plural_name) }}}
 			</div>
 
-			<div class="carbon-groups-holder layout-{{ layout }}"></div>
+			<div class="groups-wrapper {{ tabbed ? 'tabbed' : '' }}">
+				<# if (tabbed) { #>
+					<ul class="group-tabs-nav"></ul>
+				<# } #>
+
+				<div class="carbon-groups-holder layout-{{ layout }}"></div>
+				<div class="clear"></div>
+			</div>
 
 			<div class="carbon-actions">
 				<div class="carbon-button">
@@ -473,20 +482,31 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * The Underscore template for a complex field group
+	 * The Underscore template for the complex field group.
 	 */
 	public function template_group() {
 		?>
 		<div id="carbon-{{{ complex_name }}}-complex-container" class="carbon-row carbon-group-row" data-group-id="{{ id }}">
 			<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[group]" value="{{ name }}" />
 
-			<div class="carbon-drag-handle">
-				<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label_template || label }}}</span>
-			</div>
+			<# if (!tabbed) { #>
+				<div class="carbon-drag-handle">
+					<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label_template || label }}}</span>
+				</div>
+			<# } #>
+
 			<div class="carbon-group-actions">
-				<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>"><?php _e( 'Collapse/Expand', 'carbon_fields' ); ?></a>
-				<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>"><?php _e( 'Clone', 'carbon_fields' ); ?></a>
-				<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>"><?php _e( 'Remove', 'carbon_fields' ); ?></a>
+				<# if (!tabbed) { #>
+					<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>">
+						<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?>
+					</a>
+				<# } #>
+				<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>">
+					<?php _e( 'Clone', 'carbon_fields' ); ?>
+				</a>
+				<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>">
+					<?php _e( 'Remove', 'carbon_fields' ); ?>
+				</a>
 			</div>
 
 			<div class="fields-container">
@@ -513,6 +533,19 @@ class Complex_Field extends Field {
 				<# }) #>
 			</div>
 		</div>
+		<?php
+	}
+
+	/**
+	 * The Underscore template for the group item tab.
+	 */
+	public function template_group_tab_item() {
+		?>
+		<li class="group-tab-item" data-group-id="{{ id }}">
+			<a href="#">
+				<span class="group-name">{{{ label_template || label }}}</span>
+			</a>
+		</li>
 		<?php
 	}
 
@@ -584,7 +617,8 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Retrieve a group by its name
+	 * Retrieve a group by its name.
+	 *
 	 * @param  string $group_name        Group name
 	 * @return Group_Field $group_object Group object
 	 */
@@ -598,5 +632,14 @@ class Complex_Field extends Field {
 		}
 
 		return $group_object;
+	}
+
+	/**
+	 * Enable tabs.
+	 */
+	public function tabbed() {
+		$this->tabbed = true;
+
+		return $this;
 	}
 }
