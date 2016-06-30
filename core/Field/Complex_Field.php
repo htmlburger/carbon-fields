@@ -170,6 +170,7 @@ class Complex_Field extends Field {
 		$input_groups = $input[ $this->get_name() ];
 		$index = 0;
 
+
 		foreach ( $input_groups as $values ) {
 			$value_group = array();
 			if ( ! isset( $values['group'] ) || ! isset( $this->groups[ $values['group'] ] ) ) {
@@ -184,11 +185,6 @@ class Complex_Field extends Field {
 			// trim input values to those used by the field
 			$group_field_names = array_flip( $group->get_field_names() );
 			$values = array_intersect_key( $values, $group_field_names );
-
-			// check if group is empty
-			if ( count( array_filter( $values, array( $this, 'array_filter_remove_empty_values' ) ) ) == 0 && ! in_array( '0', $values ) ) {
-				continue;
-			}
 
 			foreach ( $group_fields as $field ) {
 				// set value from the group
@@ -214,22 +210,6 @@ class Complex_Field extends Field {
 
 			$this->values[] = $value_group;
 			$index++;
-		}
-	}
-
-	/**
-	 * Recursive callback function for array_filter()
-	 *
-	 * Checks if the given value is an array and calls itself recursively
-	 * Otherwise, works as usual
-	 */
-	public function array_filter_remove_empty_values( $value ) {
-		if ( is_array( $value ) ) {
-			return array_filter( $value, array( $this, 'array_filter_remove_empty_values' ) );
-		}
-
-		if ( ! empty( $value ) ) {
-			return true;
 		}
 	}
 
