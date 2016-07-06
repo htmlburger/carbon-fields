@@ -24,6 +24,13 @@ class Complex_Field extends Field {
 	protected $values_min = -1;
 	protected $values_max = -1;
 
+	/**
+	 * Defines how complex field data is saved:
+	 *  - multiple_fields - default. All sub-fields are stored as seperated postmeta fields.
+	 *  - single_field - All sub-fields are stored serialized in a single postmeta field.
+	 */
+	protected $save_mode = 'multiple_fields';
+
 	public $labels = array(
 		'singular_name' => 'Entry',
 		'plural_name' => 'Entries',
@@ -152,6 +159,104 @@ class Complex_Field extends Field {
 	}
 
 	/**
+	 * Restructures data in single field mode so it emulates the data retrieved and saved via multiple fields.
+	 *
+	 * @param     array	$data	input data to be restructured
+	 * @param     string	$mode	Defines type of transformation: "db_to_process" (transforms database data to a linear key-value-array to be used to display the fields in the backend), "db_save" (transforms input data to the database save-format)
+	 * @param     array	$args	Arguments mainly used for recursion metadata. Initially only "complex_field_name" is required for mode "db_to_process"
+	 * @return    array restructured data
+	 */
+	private function get_single_field_restructured_data( array $data = null, $mode, array $args = array() ) {
+		if ( empty($data) ) return $data;
+
+		switch ( $mode ) {
+			case 'db_to_process':
+				$complex_field_name = isset( $args[ 'complex_field_name' ] ) ? $args[ 'complex_field_name' ] : null;
+				if ( ! $complex_field_name ) Incorrect_Syntax_Exception::raise( "complex_field_name missing" );
+				$level = isset( $args[ 'level' ] ) ? $args[ 'level' ] : 0;
+				$prefix = isset( $args[ 'prefix' ] ) ? $args[ 'prefix' ] : $complex_field_name;
+
+				$output = array();
+				$i = -1;
+				foreach ( $data as $index => $item ) {
+					$i++;
+
+					if ( ! isset( $item[ '_type' ] ) || ! is_array( $item ) || empty( $item ) ) {
+						continue;
+					}
+
+					$type = $item[ '_type' ];
+
+					foreach ( $item as $key => $val ) {
+						if ( $key === '_type' ) continue;
+
+						$field_key = $prefix . $type . '-_' . $key . '_' . $i;
+						$field_value = null;
+
+						if ( is_array( $val ) ) {
+							if ( isset( $val[ 0 ][ '_type' ] ) ) {
+								$outputInner = $this->get_single_field_restructured_data( $val, $mode, array_merge( $args, array(
+									'level' => $level + 1,
+									'prefix' => $field_key,
+								) ) );
+								$output = array_merge( $output, $outputInner );
+							}
+							else {
+								$field_value = serialize( $val );
+							}
+						}
+						else if ( $val !== null ) {
+							$field_value = (string) $val;
+						}
+
+						if ( $field_value !== null ) {
+							$output[] = array(
+								'field_key' => $field_key,
+								'field_value' => $field_value,
+							);
+						}
+					}
+				}
+				$data = $output;
+
+				break;
+			case 'db_save':
+				$indices = array_keys( $data );
+				foreach ( $indices as $index ) {
+					if ( ! isset( $data[ $index ][ 'group' ] ) || ! is_array( $data[ $index ] ) || empty( $data[ $index ] ) ) {
+						continue;
+					}
+
+					$keys = array_keys( $data[ $index ] );
+					foreach ( $keys as $key ) {
+						// rename key "group" to "_type"
+						if ( $key === 'group' ) {
+							$new_key = '_type';
+							$data[ $index ][ $new_key ] = $data[ $index ][ $key ];
+							unset( $data[ $index ][ $key ] );
+							$key = $new_key;
+						}
+						// remove underline-prefix from keys
+						else if ( preg_match( '/^_/', $key ) ) {
+							$new_key = substr( $key, 1 );
+							$data[ $index ][ $new_key ] = $data[ $index ][ $key ];
+							unset( $data[ $index ][ $key ] );
+							$key = $new_key;
+						}
+
+						if ( is_array( $data[ $index ][ $key ] ) ) {
+							$data[ $index ][ $key ] = $this->get_single_field_restructured_data( $data[ $index ][ $key ], $mode );
+						}
+					}
+				}
+
+				break;
+		}
+
+		return $data;
+	}
+
+	/**
 	 * Load the field value from an input array based on it's name
 	 *
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
@@ -170,6 +275,12 @@ class Complex_Field extends Field {
 		$input_groups = $input[ $this->get_name() ];
 		$index = 0;
 
+		// transform data
+		if ( $this->save_mode === 'single_field' ) {
+			$input_groups = stripslashes_deep( $input_groups );
+			$input_groups = $this->get_single_field_restructured_data( $input_groups, 'db_save' );
+			$this->set_value( $input_groups );
+		}
 
 		foreach ( $input_groups as $values ) {
 			$value_group = array();
@@ -225,6 +336,15 @@ class Complex_Field extends Field {
 	 * Save all contained groups of fields.
 	 */
 	public function save() {
+		if ( $this->save_mode === 'single_field' ) {
+			if ( $this->value !== null) {
+				return $this->store->save( $this );
+			}
+			else {
+				return $this->delete();
+			}
+		}
+
 		$this->delete();
 
 		foreach ( $this->values as $value ) {
@@ -238,6 +358,10 @@ class Complex_Field extends Field {
 	 * Delete the values of all contained fields.
 	 */
 	public function delete() {
+		if ( $this->save_mode === 'single_field' ) {
+			return $this->store->delete( $this );
+		}
+
 		return $this->store->delete_values( $this );
 	}
 
@@ -245,6 +369,22 @@ class Complex_Field extends Field {
 	 * Load and parse the field data
 	 */
 	public function load_values() {
+		if ( $this->save_mode === 'single_field' ) {
+			$tmp_value = $this->value;
+			$this->store->load( $this );
+			$data = maybe_unserialize( $this->value );
+			$this->value = $tmp_value;
+
+			// transform data
+			if ( is_array($data) ) {
+				$data = $this->get_single_field_restructured_data( $data, 'db_to_process', array(
+					'complex_field_name' => $this->get_name(),
+				) );
+			}
+
+			return $this->process_loaded_values($data);
+		}
+
 		return $this->load_values_from_db();
 	}
 
@@ -578,5 +718,11 @@ class Complex_Field extends Field {
 		}
 
 		return $group_object;
+	}
+
+	public function set_save_mode( $save_mode ) {
+		$this->save_mode = $save_mode;
+
+		return $this;
 	}
 }
