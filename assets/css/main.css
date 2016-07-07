@@ -387,9 +387,8 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .group-tabs-nav > li .group-name { position: relative; overflow: hidden; display: block; white-space: nowrap; text-overflow: ellipsis; }
 .group-tabs-nav > li .group-number { display: inline-block; min-width: 15px; text-align: center; }
 .group-tabs-nav > li .group-name + .group-number { display: none; }
-.group-tabs-nav > li.ui-sortable-placeholder { width: auto; }
+.group-tabs-nav > li.ui-placeholder-highlight { margin-bottom: 0; }
 .group-tabs-nav .active a { background: #f7f6f6; border-bottom-color: #f7f6f6; }
-.group-tabs-nav .ui-placeholder-highlight { margin-bottom: 0; }
 
 .group-tabs-nav.show-group-number > li .group-name { display: none; }
 .group-tabs-nav.show-group-number > li .group-number { display: block; }
