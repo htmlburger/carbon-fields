@@ -454,7 +454,25 @@ class Complex_Field extends Field {
 
 			<div class="groups-wrapper {{ tabbed ? 'tabbed' : '' }}">
 				<# if (tabbed) { #>
-					<ul class="group-tabs-nav"></ul>
+					<div class="group-tabs-nav-holder">
+						<ul class="group-tabs-nav">
+
+						</ul>
+
+						<div class="carbon-actions">
+							<div class="carbon-button">
+								<a href="#" class="button" data-group="">
+									+
+								</a>
+								
+								<ul>
+									<li><a href="#" data-group="_driver">Driver</a></li>
+								
+									<li><a href="#" data-group="_passenger">Passenger</a></li>
+								</ul>
+							</div>
+						</div>
+					</div><!-- /.group-tabs-nav-holder -->
 				<# } #>
 
 				<div class="carbon-groups-holder layout-{{ layout }}"></div>
@@ -489,18 +507,15 @@ class Complex_Field extends Field {
 		<div id="carbon-{{{ complex_name }}}-complex-container" class="carbon-row carbon-group-row" data-group-id="{{ id }}">
 			<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[group]" value="{{ name }}" />
 
-			<# if (!tabbed) { #>
-				<div class="carbon-drag-handle">
-					<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label_template || label }}}</span>
-				</div>
-			<# } #>
+			<div class="carbon-drag-handle">
+				<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label_template || label }}}</span>
+			</div>
 
 			<div class="carbon-group-actions">
-				<# if (!tabbed) { #>
-					<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>">
-						<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?>
-					</a>
-				<# } #>
+				<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>">
+					<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?>
+				</a>
+
 				<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>">
 					<?php _e( 'Clone', 'carbon_fields' ); ?>
 				</a>
@@ -543,6 +558,8 @@ class Complex_Field extends Field {
 		?>
 		<li class="group-tab-item" data-group-id="{{ id }}">
 			<a href="#">
+				<span class="group-number">{{{ order }}}</span>
+
 				<span class="group-name">{{{ label_template || label }}}</span>
 			</a>
 		</li>

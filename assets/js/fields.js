@@ -1673,8 +1673,9 @@ window.carbon = window.carbon || {};
 	carbon.fields.View.Complex = carbon.fields.View.extend({
 		events: {
 			'click > .carbon-subcontainer > .carbon-actions a': 'buttonAction',
+			'click > .carbon-subcontainer > .groups-wrapper > .group-tabs-nav-holder > .carbon-actions a': 'buttonAction',
 			'click > .carbon-subcontainer > .carbon-empty-row a': 'buttonAction',
-			'click > .carbon-subcontainer > .groups-wrapper > .group-tabs-nav > li > a': 'showGroupTab'
+			'click > .carbon-subcontainer > .groups-wrapper > .group-tabs-nav-holder > .group-tabs-nav > li > a': 'showGroupTab'
 		},
 
 		initialize: function() {
