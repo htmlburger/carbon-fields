@@ -1692,7 +1692,7 @@ window.carbon = window.carbon || {};
 			this.groupsCollection.limit = this.model.get('max');
 
 			// Set the model attribute on which the collection will be sorted. Think of it as "orderBy".
-			this.groupsCollection.comparator = 'order'; 
+			this.groupsCollection.comparator = 'order';
 
 			// Groups collection events (order matters)
 			this.listenTo(this.groupsCollection, 'add',        this.setGroupOrder);  // Set the initial group order
@@ -1879,11 +1879,12 @@ window.carbon = window.carbon || {};
 
 		hideGroupsListListener: function() {
 			var _this = this;
-			var $actionButton = this.$actions.find('a.button');
 			var $introButton = this.$introRow.find('a');
 
 			carbon.views.main.$body.on('click', function(event) {
-				if (event.target !== $actionButton[0] && event.target !== $introButton[0]) {
+				var isActionButton = $(event.target).parent().hasClass('carbon-button') || event.target === $introButton[0];
+
+				if ( !isActionButton ) {
 					_this.$groupsList.hide();
 				}
 			});
@@ -1927,11 +1928,17 @@ window.carbon = window.carbon || {};
 
 		renderGroupTab: function(model) {
 			var groupId = model.get('id');
-			var view = carbon.views[groupId];
+			var groupOrder = model.get('order');
+			var groupView = carbon.views[groupId];
 			var template = carbon.template('Complex-Group-Tab-Item');
-			var tabItemHTML = template(view.templateVariables);
+			var tabItemHTML = template(groupView.templateVariables);
+			var $groupTabs = this.$tabsNav.children();
 
-			this.$tabsNav.append(tabItemHTML);
+			if ($groupTabs.length) {
+				$groupTabs.eq(groupOrder - 1).after(tabItemHTML);
+			} else {
+				this.$tabsNav.append(tabItemHTML);
+			}
 		},
 
 		initGroupTabs: function() {
@@ -1946,7 +1953,10 @@ window.carbon = window.carbon || {};
 			var $groupsHolder = this.$groupsHolder;
 
 			$tabsNav.sortable({
-				items : '.group-tab-item',
+				axis: 'x',
+				items: '.group-tab-item',
+				placeholder: 'group-tab-item ui-placeholder-highlight',
+				forcePlaceholderSize: true,
 				start: function(event, ui) {
 					$tabsNav.addClass('carbon-container-shrank');
 
@@ -2174,13 +2184,9 @@ window.carbon = window.carbon || {};
 
 			var labelTemplate = this.getLabelTemplate();
 			var label = labelTemplate || this.model.get('label');
-			var tabbed = this.complexModel.get('tabbed');
 
-			if (tabbed) {
-				var complexModelId = this.complexModel.get('id')
-				var complexView = carbon.views[complexModelId];
-				var groupId = this.model.get('id');
-				var $groupName = complexView.$tabsNav.find('[data-group-id="' + groupId + '"] .group-name');
+			if ( this.isTabbed() ) {
+				var $groupName = this.getTabElement().find('.group-name');
 			} else {
 				var $groupName = this.$('> .carbon-drag-handle .group-name');
 			}
@@ -2216,6 +2222,22 @@ window.carbon = window.carbon || {};
 			var groupOrder = model.get('order');
 
 			this.$('> .carbon-drag-handle .group-number').text(groupOrder + 1);
+
+			if ( this.isTabbed() ) {
+				this.getTabElement().find('.group-number').text(groupOrder + 1);
+			}
+		},
+
+		isTabbed: function() {
+			return this.complexModel.get('tabbed');
+		},
+
+		getTabElement: function() {
+			var complexModelId = this.complexModel.get('id');
+			var complexView = carbon.views[complexModelId];
+			var groupId = this.model.get('id');
+
+			return complexView.$tabsNav.find('[data-group-id="' + groupId + '"]');
 		},
 
 		getLabelTemplate: function() {
@@ -2289,7 +2311,7 @@ window.carbon = window.carbon || {};
 
 			// Completely unbind the view
 			this.undelegateEvents();
-			this.$el.removeData().unbind(); 
+			this.$el.removeData().unbind();
 
 			this.$el.addClass('removed').fadeOut(function() {
 				// Remove view from the DOM

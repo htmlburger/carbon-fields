@@ -461,15 +461,17 @@ class Complex_Field extends Field {
 
 						<div class="carbon-actions">
 							<div class="carbon-button">
-								<a href="#" class="button" data-group="">
+								<a href="#" class="button" data-group="{{{ multiple_groups ? '' : groups[0].name }}}">
 									+
 								</a>
-								
-								<ul>
-									<li><a href="#" data-group="_driver">Driver</a></li>
-								
-									<li><a href="#" data-group="_passenger">Passenger</a></li>
-								</ul>
+
+								<# if (multiple_groups) { #>
+									<ul>
+										<# _.each(groups, function(group) { #>
+											<li><a href="#" data-group="{{{ group.name }}}">{{{ group.label }}}</a></li>
+										<# }); #>
+									</ul>
+								<# } #>
 							</div>
 						</div>
 					</div><!-- /.group-tabs-nav-holder -->
@@ -558,9 +560,10 @@ class Complex_Field extends Field {
 		?>
 		<li class="group-tab-item" data-group-id="{{ id }}">
 			<a href="#">
-				<span class="group-number">{{{ order }}}</span>
-
-				<span class="group-name">{{{ label_template || label }}}</span>
+				<# if (label_template || label) { #>
+					<span class="group-name">{{{ label_template || label }}}</span>
+				<# } #>
+				<span class="group-number">{{{ order + 1 }}}</span>
 			</a>
 		</li>
 		<?php
