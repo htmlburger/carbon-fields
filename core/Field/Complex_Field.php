@@ -13,17 +13,17 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Allows nested repeaters with multiple field groups to be created.
  */
 class Complex_Field extends Field {
-	const LAYOUT_TABLE = 'table';
+	const LAYOUT_GRID = 'table';
 	const LAYOUT_LIST = 'list';
+	const LAYOUT_TABBED = 'tabbed';
 
 	protected $fields = array();
 	protected $values = array();
 	protected $groups = array();
 
-	protected $layout = self::LAYOUT_TABLE;
+	protected $layout = self::LAYOUT_GRID;
 	protected $values_min = -1;
 	protected $values_max = -1;
-	protected $tabbed = false;
 
 	public $labels = array(
 		'singular_name' => 'Entry',
@@ -431,7 +431,6 @@ class Complex_Field extends Field {
 		$complex_data = array_merge( $complex_data, array(
 			'layout' => $this->layout,
 			'labels' => $this->labels,
-			'tabbed' => $this->tabbed,
 			'min' => $this->get_min(),
 			'max' => $this->get_max(),
 			'multiple_groups' => count( $groups_data ) > 1,
@@ -452,12 +451,10 @@ class Complex_Field extends Field {
 				{{{ crbl10n.complex_no_rows.replace('%s', labels.plural_name) }}}
 			</div>
 
-			<div class="groups-wrapper {{ tabbed ? 'tabbed' : '' }}">
-				<# if (tabbed) { #>
+			<div class="groups-wrapper layout-{{ layout }}">
+				<# if (layout === '<?php echo self::LAYOUT_TABBED ?>') { #>
 					<div class="group-tabs-nav-holder">
-						<ul class="group-tabs-nav">
-
-						</ul>
+						<ul class="group-tabs-nav"></ul>
 
 						<div class="carbon-actions">
 							<div class="carbon-button">
@@ -477,7 +474,7 @@ class Complex_Field extends Field {
 					</div><!-- /.group-tabs-nav-holder -->
 				<# } #>
 
-				<div class="carbon-groups-holder layout-{{ layout }}"></div>
+				<div class="carbon-groups-holder"></div>
 				<div class="clear"></div>
 			</div>
 
@@ -578,10 +575,12 @@ class Complex_Field extends Field {
 	 * @param string $layout
 	 */
 	public function set_layout( $layout ) {
-		_doing_it_wrong( __METHOD__, __( 'Complex field layouts are deprecated, please use <code>set_width()</code> instead.', 'carbon_fields' ), null );
+		if ( ! in_array( $layout, array( self::LAYOUT_GRID, self::LAYOUT_TABBED, self::LAYOUT_LIST ) ) ) {
+			Incorrect_Syntax_Exception::raise( 'Incorrect layout specifier. Available values are "<code>' . self::LAYOUT_GRID . '</code>" and "<code>' . self::LAYOUT_TABBED . '</code>"' );
+		}
 
-		if ( ! in_array( $layout, array( self::LAYOUT_TABLE, self::LAYOUT_LIST ) ) ) {
-			Incorrect_Syntax_Exception::raise( 'Incorrect layout specifier. Available values are "<code>' . self::LAYOUT_TABLE . '</code>" and "<code>' . self::LAYOUT_LIST . '</code>"' );
+		if ( $layout === self::LAYOUT_LIST ) {
+			_doing_it_wrong( __METHOD__, __( 'Complex field <code>' . self::LAYOUT_LIST . '</code> layout is deprecated, please use <code>set_width()</code> instead.', 'carbon_fields' ), null );
 		}
 
 		$this->layout = $layout;
@@ -652,14 +651,5 @@ class Complex_Field extends Field {
 		}
 
 		return $group_object;
-	}
-
-	/**
-	 * Enable tabs.
-	 */
-	public function tabbed() {
-		$this->tabbed = true;
-
-		return $this;
 	}
 }

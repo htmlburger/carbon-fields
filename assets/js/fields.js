@@ -1627,6 +1627,10 @@ window.carbon = window.carbon || {};
 			return group;
 		},
 
+		isTabbed: function() {
+			return this.get('layout') === 'tabbed';
+		},
+
 		validate: function(attrs, options) {
 			var view = carbon.views[this.get('id')];
 
@@ -1682,7 +1686,7 @@ window.carbon = window.carbon || {};
 			carbon.fields.View.prototype.initialize.apply(this);
 
 			this.multipleGroups = this.model.get('multiple_groups');
-			this.tabbed = this.model.get('tabbed');
+			this.isTabbed = this.model.isTabbed();
 
 			/*
 			 * Groups Collection
@@ -1705,7 +1709,7 @@ window.carbon = window.carbon || {};
 			this.listenTo(this.groupsCollection, 'add',        this.setGroupID);     // Sets an unique ID for each group
 			this.listenTo(this.groupsCollection, 'add',        this.renderGroup);    // Render the added group
 
-			if (this.tabbed) {
+			if (this.isTabbed) {
 				this.listenTo(this.groupsCollection, 'add',    this.renderGroupTab); // Render the group tab
 				this.listenTo(this.groupsCollection, 'remove', this.removeGroupTab); // Remove the group tab
 			}
@@ -1740,7 +1744,7 @@ window.carbon = window.carbon || {};
 			}
 
 			// Group Tabs initialization
-			if (this.tabbed) {
+			if (this.isTabbed) {
 				this.on('field:rendered', this.initGroupTabs);
 			}
 		},
@@ -2185,7 +2189,7 @@ window.carbon = window.carbon || {};
 			var labelTemplate = this.getLabelTemplate();
 			var label = labelTemplate || this.model.get('label');
 
-			if ( this.isTabbed() ) {
+			if ( this.complexModel.isTabbed() ) {
 				var $groupName = this.getTabElement().find('.group-name');
 			} else {
 				var $groupName = this.$('> .carbon-drag-handle .group-name');
@@ -2223,13 +2227,9 @@ window.carbon = window.carbon || {};
 
 			this.$('> .carbon-drag-handle .group-number').text(groupOrder + 1);
 
-			if ( this.isTabbed() ) {
+			if ( this.complexModel.isTabbed() ) {
 				this.getTabElement().find('.group-number').text(groupOrder + 1);
 			}
-		},
-
-		isTabbed: function() {
-			return this.complexModel.get('tabbed');
 		},
 
 		getTabElement: function() {
@@ -2274,7 +2274,6 @@ window.carbon = window.carbon || {};
 				complex_id: this.complexModel.get('id'),
 				complex_name: this.complexModel.get('name'),
 				layout: this.complexModel.get('layout'),
-				tabbed: this.complexModel.get('tabbed'),
 				label_template: this.getLabelTemplate(),
 				fields: this.fieldsCollection.toJSON()
 			});
