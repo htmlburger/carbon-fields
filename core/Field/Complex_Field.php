@@ -97,7 +97,8 @@ class Complex_Field extends Field {
 		$template = is_callable( $template ) ? call_user_func( $template ) : $template;
 
 		// Assign the template to the group that was added last
-		$group = end( array_values( $this->groups ) );
+		$values = array_values( $this->groups );
+		$group = end( $values );
 		$group->set_label_template( $template );
 
 		// Include the group label Underscore template
