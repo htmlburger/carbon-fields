@@ -68,7 +68,9 @@ class Map_Field extends Field {
 	 * Enqueue scripts in the administration
 	 */
 	public function admin_enqueue_scripts() {
-		wp_enqueue_script( 'carbon-google-maps', '//maps.googleapis.com/maps/api/js?sensor=false' );
+		$api_key = apply_filters( 'carbon_map_api_key', false );
+
+		wp_enqueue_script( 'carbon-google-maps', '//maps.googleapis.com/maps/api/js?sensor=false' . ( $api_key ? '&key=' . $api_key : '' ) );
 	}
 
 	/**
