@@ -611,7 +611,9 @@ window.carbon = window.carbon || {};
 					this.mediaButtonsInit();
 
 					// Initialize mceInit
-					tinymce.init(mceInit);
+					setTimeout(function() {
+						tinymce.init(mceInit);
+					}, 0);
 
 					// Initialize qtInit (quicktags)
 					var qtag = quicktags( qtInit );
