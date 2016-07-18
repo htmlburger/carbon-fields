@@ -13,8 +13,8 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Allows nested repeaters with multiple field groups to be created.
  */
 class Complex_Field extends Field {
-	const LAYOUT_GRID = 'table';
-	const LAYOUT_LIST = 'list';
+	const LAYOUT_GRID = 'grid';
+	const LAYOUT_LIST = 'list'; // deprecated
 	const LAYOUT_TABBED = 'tabbed';
 
 	protected $fields = array();
