@@ -112,6 +112,10 @@ class Post_Meta_Container extends Container {
 	public function init() {
 		if ( isset( $_GET['post'] ) ) {
 			$this->set_post_id( $_GET['post'] );
+			foreach ( $this->fields as $field ) {
+				$datastore = $field->get_datastore();
+				$datastore->set_id($_GET['post']);
+			}
 		}
 
 		// force post_type to be array
@@ -140,6 +144,8 @@ class Post_Meta_Container extends Container {
 		$this->set_post_id( $post_id );
 
 		foreach ( $this->fields as $field ) {
+			$datastore = $field->get_datastore();
+			$datastore->set_id($post_id);
 			$field->set_value_from_input();
 			$field->save();
 		}
