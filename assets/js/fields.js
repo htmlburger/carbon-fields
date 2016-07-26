@@ -2245,24 +2245,19 @@ window.carbon = window.carbon || {};
 		getLabelTemplate: function() {
 			try {
 				var template = carbon.template( this.model.get('group_id') );
-				var templateVariables = {
-					_models: {}
-				};
+				var templateVariables = {};
 
 				_.each(this.fieldsCollection.models, function(fieldModel) {
 					var fieldName = fieldModel.get('base_name');
 					var fieldValue = fieldModel.get('value');
 
 					templateVariables[ fieldName ] = fieldValue;
-					templateVariables._models[ fieldName ] = fieldModel; // pass the field model to the template, useful to advanced users
 				});
 
 				return template(templateVariables);
 			} catch (e) {
 				// no label template found
 			}
-
-			return null;
 		},
 
 		render: function(complexModel) {
