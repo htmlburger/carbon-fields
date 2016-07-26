@@ -1,9 +1,9 @@
 === Carbon Fields ===
-Contributors: htmlburger, tyxla, m1r0, xsisqox, stoyanov.gs, catahac, avakul, panchev, kamenarov, dilirity, sstoqnov, kaloyanivanov, pkostadinov, brutalenemy666, magadanski_uchen, germozy
+Contributors: htmlburger, m1r0, kamenarov, stoyanov.gs, pkostadinov, panchev, tyxla, xsisqox, catahac, avakul, dilirity, sstoqnov, kaloyanivanov, brutalenemy666, magadanski_uchen, germozy
 Tags: custom, field, custom field, advanced, repeater, post, type, text, textarea, file, image, rich text, wysiwyg, select, dropdown, checkbox, radio, association, relationship, map, taxonomy, term, user, comment, option, options, widget, simple fields, magic fields, more fields, post meta, term meta, user meta, comment meta, theme options, custom widget, nested fields
 Requires at least: 4.0
 Tested up to: 4.6
-Stable tag: 1.2
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,7 +38,7 @@ Supports PHP5.3 or higher.
 == Frequently Asked Questions ==
 
 = Q. What is the minimum supported PHP version? =
-A. The plugin supports PHP 5.3 and higher. 
+A. The plugin supports PHP 5.3 and higher.
 
 = Q. I don't know much about PHP. Where is the administration interface for creating containers and fields? =
 A. There is no admin interface. Containers and fields are created programatically, please refer to the Usage & Documentation section for more information.
@@ -76,6 +76,13 @@ A. Sure, go ahead! It is completely open source.
 6. Example that contains most of the available fields, nested fields included.
 
 == Changelog ==
+
+= 1.3 =
+ * Introduced the Complex Field tabbed layout ([example](https://cloud.githubusercontent.com/assets/1612178/17105196/ea28f2f4-528e-11e6-9841-b93c0f12b283.jpg)).
+ * Added Portuguese (pt_PT) translation (thanks @pedro-mendonca).
+ * Allow saving empty complex field groups.
+ * Added a filter for the Google Maps API key.
+ * Minor improvements and fixes.
 
 = 1.2 =
 * Ensured compabitility with the WordPress Coding Standards.
