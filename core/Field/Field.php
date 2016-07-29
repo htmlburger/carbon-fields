@@ -177,11 +177,6 @@ class Field {
 			$class = __NAMESPACE__ . '\\Broken_Field';
 		}
 
-		if ( strpos( $name, '-' ) !== false ) {
-			Incorrect_Syntax_Exception::raise( 'Forbidden character "-" in name "' . $name . '".' );
-			$class = __NAMESPACE__ . '\\Broken_Field';
-		}
-
 		$field = new $class( $name, $label );
 		$field->type = $type;
 		$field->add_template( $field->get_type(), array( $field, 'template' ) );
