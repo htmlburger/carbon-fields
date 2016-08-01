@@ -384,8 +384,8 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .group-tabs-nav > li { display: inline-block; vertical-align: top; white-space: nowrap; overflow: hidden; margin-left: 2px; -webkit-order: 0; order: 0; -webkit-flex-grow: 0; flex-grow: 0; -webkit-flex-shrink: 1; flex-shrink: 1; -webkit-flex-basis: auto; flex-basis: auto; -webkit-align-self: auto; align-self: auto; }
 .group-tabs-nav > li:first-child { margin-left: 0; }
 
-.group-tabs-nav > li > a { position: relative; display: block; width: 150px; max-width: 100%; margin-top: 4px; box-sizing: border-box; text-align: center; border: 1px solid #d9d9d9; padding: 8px 6px; font-size: 13px; color: #555; text-decoration: none; background: #ebebeb; }
-.group-tabs-nav > li .group-name { position: relative; overflow: hidden; display: block; white-space: nowrap; }
+.group-tabs-nav > li > a { position: relative; display: block; max-width: 100%; margin-top: 4px; box-sizing: border-box; text-align: center; border: 1px solid #d9d9d9; padding: 8px 6px; font-size: 13px; color: #555; text-decoration: none; background: #ebebeb; }
+.group-tabs-nav > li .group-name { position: relative; width: 140px; max-width: 100%; overflow: hidden; display: block; white-space: nowrap; }
 .group-tabs-nav > li .group-name:after { content: ''; position: absolute; top: 0; right: 0; width: 10px; height: 100%; 
 	background: -moz-linear-gradient(left,  rgba(30,87,153,0) 0%, rgba(30,87,153,0.01) 1%, rgba(235,235,235,1) 100%);
 	background: -webkit-linear-gradient(left,  rgba(30,87,153,0) 0%,rgba(30,87,153,0.01) 1%,rgba(235,235,235,1) 100%);
@@ -393,7 +393,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#001e5799', endColorstr='#ebebeb',GradientType=1 );
 
 }
-.group-tabs-nav > li .group-number { display: inline-block; min-width: 15px; text-align: center; }
+.group-tabs-nav > li .group-number { display: inline-block; margin: 0 3px; min-width: 15px; text-align: center; }
 .group-tabs-nav > li .group-name + .group-number { display: none; }
 .group-tabs-nav > li.ui-placeholder-highlight { margin-bottom: 0; }
 .group-tabs-nav .active a { margin-top: 0; border-left-width: 1px; padding-top: 10px; padding-bottom: 10px; background: #f7f6f6; border-bottom-color: #f7f6f6; }
