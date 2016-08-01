@@ -397,7 +397,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .group-tabs-nav-holder .carbon-actions { position: absolute; top: 0; right: 0; display: none; }
 .group-tabs-nav-holder .carbon-actions .carbon-button { display: block; margin: 0; }
 .group-tabs-nav-holder .carbon-actions .carbon-button .button { display: block; height: auto; padding: 8px 12px; border: 1px solid #d9d9d9; font-size: 13px; color: #555; text-decoration: none; font-size: 20px; line-height: inherit; font-weight: bold; text-align: center; background: #ebebeb; border-radius: 0; box-shadow: none; }
-.group-tabs-nav-holder .carbon-actions .carbon-button ul { left: auto; right: 0; }
+.group-tabs-nav-holder .carbon-actions .carbon-button ul.right-aligned { left: auto; right: 0; }
 
 
 .layout-tabbed > .carbon-groups-holder { clear: both; }

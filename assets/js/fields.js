@@ -1876,6 +1876,10 @@ window.carbon = window.carbon || {};
 				this.addNewGroup(groupName);
 			} else if (this.multipleGroups) {
 				this.$groupsList.toggle();
+
+				var list_position = this.$groupsHolder.offset().left + this.$groupsHolder.width() - this.$actions.offset().left - this.$groupsList.width();
+
+				this.$groupsList.toggleClass('right-aligned', 0 > list_position);
 			} else {
 				this.$actions.find('a.button').trigger('click');
 			}
