@@ -381,21 +381,35 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .groups-wrapper.layout-tabbed > .carbon-groups-holder > .carbon-group-row > .carbon-group-actions > .carbon-btn-collapse { display: none; }
 
 .group-tabs-nav { width: 100%; margin-bottom: -1px; font-size: 0; display: -webkit-flex; display: flex; overflow: hidden; -webkit-flex-direction: row; flex-direction: row; -webkit-flex-wrap: nowrap; flex-wrap: nowrap; -webkit-justify-content: flex-start; justify-content: flex-start; -webkit-align-items: stretch; align-items: stretch; -webkit-align-content: stretch; align-content: stretch; }
-.group-tabs-nav > li { display: inline-block; vertical-align: top; white-space: nowrap; margin-right: 5px; overflow: hidden; -webkit-order: 0; order: 0; -webkit-flex-grow: 0; flex-grow: 0; -webkit-flex-shrink: 1; flex-shrink: 1; -webkit-flex-basis: auto; flex-basis: auto; -webkit-align-self: auto; align-self: auto; }
+.group-tabs-nav > li { display: inline-block; vertical-align: top; white-space: nowrap; overflow: hidden; margin-left: 2px; -webkit-order: 0; order: 0; -webkit-flex-grow: 0; flex-grow: 0; -webkit-flex-shrink: 1; flex-shrink: 1; -webkit-flex-basis: auto; flex-basis: auto; -webkit-align-self: auto; align-self: auto; }
+.group-tabs-nav > li:first-child { margin-left: 0; }
 
-.group-tabs-nav > li > a { display: block; text-align: center; border: 1px solid #d9d9d9; padding: 8px; font-size: 13px; color: #555; text-decoration: none; background: #ebebeb; }
-.group-tabs-nav > li .group-name { position: relative; overflow: hidden; display: block; white-space: nowrap; text-overflow: ellipsis; }
-.group-tabs-nav > li .group-number { display: inline-block; min-width: 15px; text-align: center; }
+.group-tabs-nav > li > a { position: relative; display: block; max-width: 100%; margin-top: 4px; box-sizing: border-box; text-align: center; border: 1px solid #d9d9d9; padding: 8px 6px; font-size: 13px; color: #555; text-decoration: none; background: #ebebeb; }
+.group-tabs-nav > li .group-name { position: relative; width: 140px; max-width: 100%; overflow: hidden; display: block; white-space: nowrap; }
+.group-tabs-nav > li .group-name:after { content: ''; position: absolute; top: 0; right: 0; width: 10px; height: 100%; 
+	background: -moz-linear-gradient(left,  rgba(30,87,153,0) 0%, rgba(30,87,153,0.01) 1%, rgba(235,235,235,1) 100%);
+	background: -webkit-linear-gradient(left,  rgba(30,87,153,0) 0%,rgba(30,87,153,0.01) 1%,rgba(235,235,235,1) 100%);
+	background: linear-gradient(to right,  rgba(30,87,153,0) 0%,rgba(30,87,153,0.01) 1%,rgba(235,235,235,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#001e5799', endColorstr='#ebebeb',GradientType=1 );
+
+}
+.group-tabs-nav > li .group-number { display: inline-block; margin: 0 3px; min-width: 15px; text-align: center; }
 .group-tabs-nav > li .group-name + .group-number { display: none; }
 .group-tabs-nav > li.ui-placeholder-highlight { margin-bottom: 0; }
-.group-tabs-nav .active a { background: #f7f6f6; border-bottom-color: #f7f6f6; }
+.group-tabs-nav .active a { margin-top: 0; border-left-width: 1px; padding-top: 10px; padding-bottom: 10px; background: #f7f6f6; border-bottom-color: #f7f6f6; }
+.group-tabs-nav .active .group-name:after { 
+	background: -moz-linear-gradient(left,  rgba(30,87,153,0) 0%, rgba(30,87,153,0.01) 1%, rgba(247,246,246,1) 100%);
+	background: -webkit-linear-gradient(left,  rgba(30,87,153,0) 0%,rgba(30,87,153,0.01) 1%,rgba(247,246,246,1) 100%);
+	background: linear-gradient(to right,  rgba(30,87,153,0) 0%,rgba(30,87,153,0.01) 1%,rgba(247,246,246,1) 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#001e5799', endColorstr='#f7f6f6',GradientType=1 );
+}
 
 .group-tabs-nav.show-group-number > li .group-name { display: none; }
 .group-tabs-nav.show-group-number > li .group-number { display: block; }
 
-.group-tabs-nav-holder { box-sizing: border-box; position: relative; z-index: 30; float: left; max-width: 100%; padding-right: 40px; line-height: 18px; }
-.group-tabs-nav-holder .carbon-actions { position: absolute; top: 0; right: 0; display: none; }
-.group-tabs-nav-holder .carbon-actions .carbon-button { display: block; margin: 0; }
+.group-tabs-nav-holder { box-sizing: border-box; position: relative; z-index: 30; float: left; max-width: 100%; padding-right: 39px; line-height: 18px; }
+.group-tabs-nav-holder .carbon-actions { position: absolute; top: 2px; right: 0; display: none; }
+.group-tabs-nav-holder .carbon-actions .carbon-button { display: block; margin: 2px 0 0; }
 .group-tabs-nav-holder .carbon-actions .carbon-button .button { display: block; height: auto; padding: 8px 12px; border: 1px solid #d9d9d9; font-size: 13px; color: #555; text-decoration: none; font-size: 20px; line-height: inherit; font-weight: bold; text-align: center; background: #ebebeb; border-radius: 0; box-shadow: none; }
 .group-tabs-nav-holder .carbon-actions .carbon-button ul.right-aligned { left: auto; right: 0; }
 
