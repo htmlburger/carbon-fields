@@ -418,8 +418,11 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 
 .layout-tabbed > .carbon-groups-holder > .carbon-row > .fields-container { border-width: 1px; }
 .layout-tabbed > .carbon-groups-holder > .carbon-row > .carbon-drag-handle { display: none; }
+
+.layout-tabbed > .carbon-groups-holder > .carbon-row > .carbon-fields-row,
 .layout-tabbed > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-row { border-color: transparent; }
 .layout-tabbed > .carbon-groups-holder > .carbon-row > .fields-container:after { content: ''; display: block; width: 100%; height: 34px; border-top: 1px solid #d9d9d9; background: #f7f6f6; }
+.layout-tabbed > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-fields-row + .carbon-row { border-top-color: #d9d9d9; }
 .layout-tabbed > .carbon-groups-holder > .carbon-row > .carbon-group-actions { position: absolute; top: auto; right: auto; bottom: -3px; left: 0; }
 .layout-tabbed > .carbon-groups-holder > .carbon-row > .carbon-group-actions a { text-decoration: none; width: auto; font-size: 13px; line-height: 1; text-indent: 0; color: #0073aa; }
 .layout-tabbed > .carbon-groups-holder > .carbon-row > .carbon-group-actions a:hover { color: #00a0d2; }
