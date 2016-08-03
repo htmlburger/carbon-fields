@@ -408,6 +408,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .group-tabs-nav.show-group-number > li .group-number { display: block; }
 
 .group-tabs-nav-holder { box-sizing: border-box; position: relative; z-index: 30; float: left; max-width: 100%; padding-right: 39px; line-height: 18px; }
+.group-tabs-nav-holder.active { z-index: 200; }
 .group-tabs-nav-holder .carbon-actions { position: absolute; top: 2px; right: 0; display: none; }
 .group-tabs-nav-holder .carbon-actions .carbon-button { display: block; margin: 2px 0 0; }
 .group-tabs-nav-holder .carbon-actions .carbon-button .button { display: block; height: auto; padding: 8px 12px; border: 1px solid #d9d9d9; font-size: 13px; color: #555; text-decoration: none; font-size: 20px; line-height: inherit; font-weight: bold; text-align: center; background: #ebebeb; border-radius: 0; box-shadow: none; }

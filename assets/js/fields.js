@@ -1876,6 +1876,8 @@ window.carbon = window.carbon || {};
 				this.addNewGroup(groupName);
 			} else if (this.multipleGroups) {
 				this.$groupsList.toggle();
+				
+				this.$tabsNav.closest('.group-tabs-nav-holder').toggleClass('active');
 
 				var list_position = this.$groupsHolder.offset().left + this.$groupsHolder.width() - this.$actions.offset().left - this.$groupsList.width();
 
@@ -1896,6 +1898,8 @@ window.carbon = window.carbon || {};
 
 				if ( !isActionButton ) {
 					_this.$groupsList.hide();
+
+					_this.$tabsNav.closest('.group-tabs-nav-holder').removeClass('active');
 				}
 			});
 		},
