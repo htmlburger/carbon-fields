@@ -540,6 +540,8 @@ class Complex_Field extends Field {
 		?>
 		<li class="group-tab-item" data-group-id="{{ id }}">
 			<a href="#">
+				<span class="group-handle"></span>
+				
 				<# if (label_template || label) { #>
 					<span class="group-name">{{{ label_template || label }}}</span>
 				<# } #>
