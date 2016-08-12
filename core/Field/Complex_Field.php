@@ -13,9 +13,10 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Allows nested repeaters with multiple field groups to be created.
  */
 class Complex_Field extends Field {
-	const LAYOUT_GRID = 'grid';
+	const LAYOUT_GRID = 'grid'; // default
 	const LAYOUT_LIST = 'list'; // deprecated
 	const LAYOUT_TABBED = 'tabbed';
+	const LAYOUT_TABBED_VERTICAL = 'tabbed-vertical';
 
 	protected $fields = array();
 	protected $values = array();
@@ -433,7 +434,7 @@ class Complex_Field extends Field {
 			</div>
 
 			<div class="groups-wrapper layout-{{ layout }}">
-				<# if (layout === '<?php echo self::LAYOUT_TABBED ?>') { #>
+				<# if (layout === '<?php echo self::LAYOUT_TABBED ?>' || layout === '<?php echo self::LAYOUT_TABBED_VERTICAL ?>' ) { #>
 					<div class="group-tabs-nav-holder">
 						<ul class="group-tabs-nav"></ul>
 
@@ -557,7 +558,7 @@ class Complex_Field extends Field {
 	 * @param string $layout
 	 */
 	public function set_layout( $layout ) {
-		if ( ! in_array( $layout, array( self::LAYOUT_GRID, self::LAYOUT_TABBED, self::LAYOUT_LIST ) ) ) {
+		if ( ! in_array( $layout, array( self::LAYOUT_GRID, self::LAYOUT_TABBED, self::LAYOUT_TABBED_VERTICAL, self::LAYOUT_LIST ) ) ) {
 			Incorrect_Syntax_Exception::raise( 'Incorrect layout specified. Available values are "<code>' . self::LAYOUT_GRID . '</code>" and "<code>' . self::LAYOUT_TABBED . '</code>"' );
 		}
 
