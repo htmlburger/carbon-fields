@@ -79,7 +79,7 @@
 
 .carbon-grid .carbon-field + .carbon-field,
 .carbon-grid .carbon-field + .carbon-fields-row,
-.carbon-grid .carbon-fields-row + .carbon-field { border-top: 1px solid #d9d9d9; }
+.carbon-grid .carbon-fields-row + .carbon-row { border-top: 1px solid #d9d9d9; }
 
 /* Table layout */
 .carbon-table-row > td { padding: 0; }
@@ -437,8 +437,9 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 
 .carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .carbon-drag-handle { display: none; }
 .carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container { border-width: 1px; border-bottom-color: transparent; }
-.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .carbon-fields-row,
+.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-fields-row { border-top: 1px solid #d9d9d9; }
 .carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-row { border-color: transparent; }
+.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-fields-row + .carbon-row { border-top-color: #d9d9d9; }
 
 /* Complet Layout Tabbed */
 
@@ -490,8 +491,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .layout-tabbed-vertical > .carbon-groups-holder:before { content: ''; position: absolute; top: 0; right: 0; bottom: 0; left: 0; border: 1px solid #d9d9d9; background: #f7f6f6; }
 .layout-tabbed-vertical > .carbon-groups-holder:after { content: ''; position: absolute; bottom: 0; left: 0; display: block; width: 100%; height: 34px; border-top: 1px solid #d9d9d9; }
 
-.layout-tabbed-vertical > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-fields-row + .carbon-row { border-top-color: #d9d9d9; }
-.layout-tabbed-vertical > .carbon-groups-holder > .carbon-row > .fields-container:after { content: ''; display: block; width: 100%; height: 34px; border-top: 1px solid transparent; background: #f7f6f6; }
+.layout-tabbed-vertical > .carbon-groups-holder > .carbon-row > .fields-container:after { content: ''; display: block; width: 100%; height: 33px; border-top: 1px solid transparent; background: #f7f6f6; }
 
 .layout-tabbed-vertical > .carbon-groups-holder > .carbon-row > .carbon-group-actions { position: absolute; top: auto; right: auto; bottom: -3px; left: 0; z-index: 5; }
 .layout-tabbed-vertical > .carbon-groups-holder > .carbon-row > .carbon-group-actions a { text-decoration: none; width: auto; font-size: 13px; line-height: 1; text-indent: 0; color: #0073aa; }
