@@ -438,6 +438,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .carbon-drag-handle { display: none; }
 .carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container { border-width: 1px; border-bottom-color: transparent; }
 .carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-fields-row { border-top: 1px solid #d9d9d9; }
+.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-fields-row:first-child { border-top: 0; }
 .carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-row { border-color: transparent; }
 .carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-fields-row + .carbon-row { border-top-color: #d9d9d9; }
 
