@@ -547,6 +547,7 @@ class Complex_Field extends Field {
 					<span class="group-name">{{{ label_template || label }}}</span>
 				<# } #>
 				<span class="group-number">{{{ order + 1 }}}</span>
+				<span class="dashicons dashicons-warning carbon-complex-group-error-badge" ></span>
 			</a>
 		</li>
 		<?php

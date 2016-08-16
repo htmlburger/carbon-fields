@@ -394,6 +394,8 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .group-tabs-nav-holder.active { z-index: 200; }
 .group-tabs-nav-holder > .group-tabs-nav { list-style: none outside none; }
 .group-tabs-nav-holder > .group-tabs-nav a { position: relative; display: block; max-width: 100%; box-sizing: border-box; border: 1px solid #d9d9d9; padding: 8px 6px 8px 12px; font-size: 13px; color: #555; text-decoration: none; background: #ebebeb; }
+.group-tabs-nav-holder > .group-tabs-nav .carbon-complex-group-error-badge { position: absolute; top: 1px; right: 1px; z-index: 5; width: auto; height: auto; font-size: 13px; color:#cc0000; display: none; }
+.group-tabs-nav-holder > .group-tabs-nav .carbon-complex-group-has-error .carbon-complex-group-error-badge { display: inline; }
 .group-tabs-nav-holder > .group-tabs-nav a:focus { box-shadow: none; }
 .group-tabs-nav-holder > .group-tabs-nav .group-name { position: relative; max-width: 100%; overflow: hidden; display: block; white-space: nowrap; }
 .group-tabs-nav-holder > .group-tabs-nav .group-name:after { content: ''; position: absolute; top: 0; right: 0; display: block; width: 10px; height: 100%; -webkit-appearance: none;

@@ -1649,7 +1649,6 @@ window.carbon = window.carbon || {};
 			_.each(view.groupsCollection.models, function(group) {
 				if ( !group.isValid() ) {
 					groupsValid = false;
-					return; // we have an error, break the loop
 				}
 			});
 
@@ -2141,6 +2140,8 @@ window.carbon = window.carbon || {};
 
 			// Listen for fields that want to multiply and create new groups with them
 			this.listenTo(this.fieldsCollection, 'change:multiply', this.multiplier);
+
+			this.listenTo(this.model, 'change:error', this.toggleGroupError);
 		},
 
 		multiplier: function(model) {
@@ -2173,6 +2174,11 @@ window.carbon = window.carbon || {};
 			var collapsed = model.get('collapsed');
 
 			this.$el.toggleClass('collapsed', collapsed);
+		},
+		toggleGroupError: function (model) {
+			var hasClass = this.model.get('error');
+
+			$('.group-tab-item[data-group-id="' + this.model.id + '"]').toggleClass('carbon-complex-group-has-error', hasClass);
 		},
 
 		eventPropagator: function(event) {
