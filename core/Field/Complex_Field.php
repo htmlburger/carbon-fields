@@ -13,9 +13,11 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Allows nested repeaters with multiple field groups to be created.
  */
 class Complex_Field extends Field {
-	const LAYOUT_GRID = 'grid';
+	const LAYOUT_GRID = 'grid'; // default
 	const LAYOUT_LIST = 'list'; // deprecated
-	const LAYOUT_TABBED = 'tabbed';
+	const LAYOUT_TABBED = 'tabbed'; // deprecated
+	const LAYOUT_TABBED_HORIZONTAL = 'tabbed-horizontal';
+	const LAYOUT_TABBED_VERTICAL = 'tabbed-vertical';
 
 	protected $fields = array();
 	protected $values = array();
@@ -433,7 +435,7 @@ class Complex_Field extends Field {
 			</div>
 
 			<div class="groups-wrapper layout-{{ layout }}">
-				<# if (layout === '<?php echo self::LAYOUT_TABBED ?>') { #>
+				<# if (layout === '<?php echo self::LAYOUT_TABBED_HORIZONTAL ?>' || layout === '<?php echo self::LAYOUT_TABBED_VERTICAL ?>' ) { #>
 					<div class="group-tabs-nav-holder">
 						<ul class="group-tabs-nav"></ul>
 
@@ -532,13 +534,15 @@ class Complex_Field extends Field {
 		<?php
 	}
 
-	/**
+	 /**
 	 * The Underscore template for the group item tab.
 	 */
 	public function template_group_tab_item() {
 		?>
 		<li class="group-tab-item" data-group-id="{{ id }}">
 			<a href="#">
+				<span class="group-handle"></span>
+				
 				<# if (label_template || label) { #>
 					<span class="group-name">{{{ label_template || label }}}</span>
 				<# } #>
@@ -550,15 +554,30 @@ class Complex_Field extends Field {
 
 	/**
 	 * Modify the layout of this field.
-	 * Deprecated in favor of set_width().
-	 *
-	 * @deprecated
 	 *
 	 * @param string $layout
 	 */
 	public function set_layout( $layout ) {
-		if ( ! in_array( $layout, array( self::LAYOUT_GRID, self::LAYOUT_TABBED, self::LAYOUT_LIST ) ) ) {
-			Incorrect_Syntax_Exception::raise( 'Incorrect layout specified. Available values are "<code>' . self::LAYOUT_GRID . '</code>" and "<code>' . self::LAYOUT_TABBED . '</code>"' );
+		$available_layouts = array(
+			self::LAYOUT_GRID,
+			self::LAYOUT_TABBED_HORIZONTAL,
+			self::LAYOUT_TABBED_VERTICAL,
+			self::LAYOUT_LIST,
+		);
+
+		if ( $layout === self::LAYOUT_TABBED ) {
+			// The library used to provide just one kind of tabs -- horizontal ones. Later vertical tabs were added.
+			// So the "tabbed" name was renamed to "tabbed-horizontal" and "tabbed-vertical" layout was introduced.
+			_doing_it_wrong( __METHOD__, __( 'Complex field "' . self::LAYOUT_TABBED . '" layout is deprecated, please use "' . self::LAYOUT_TABBED_HORIZONTAL . '" or "' . self::LAYOUT_TABBED_VERTICAL . '"  instead', 'carbon_fields' ), null );
+
+			$layout = self::LAYOUT_TABBED_HORIZONTAL;
+		}
+
+		if ( ! in_array( $layout,  $available_layouts ) ) {
+			$error_message = 'Incorrect layout ``' . $layout . '" specified. ' .
+				'Available layouts: ' . implode( ', ', $available_layouts );
+
+			Incorrect_Syntax_Exception::raise( $error_message );
 		}
 
 		if ( $layout === self::LAYOUT_LIST ) {

@@ -1630,7 +1630,7 @@ window.carbon = window.carbon || {};
 		},
 
 		isTabbed: function() {
-			return this.get('layout') === 'tabbed';
+			return /^tabbed/.test(this.get('layout'));
 		},
 
 		validate: function(attrs, options) {
@@ -1747,6 +1747,8 @@ window.carbon = window.carbon || {};
 
 			// Group Tabs initialization
 			if (this.isTabbed) {
+				this.model.addClass('carbon-Complex-tabbed');
+				
 				this.on('field:rendered', this.initGroupTabs);
 			}
 		},
@@ -1965,11 +1967,14 @@ window.carbon = window.carbon || {};
 		sortableGroupTabs: function() {
 			var $tabsNav = this.$tabsNav;
 			var $groupsHolder = this.$groupsHolder;
+			var layout = this.model.get('layout');
+			var isVertical = layout === 'tabbed-vertical';
 
 			$tabsNav.sortable({
-				axis: 'x',
+				axis: isVertical ? 'y' : 'x',
 				items: '.group-tab-item',
 				placeholder: 'group-tab-item ui-placeholder-highlight',
+				handle: isVertical ? '.group-handle': false,
 				forcePlaceholderSize: true,
 				start: function(event, ui) {
 					$tabsNav.addClass('carbon-container-shrank');
