@@ -137,18 +137,6 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Field::make
 	 * @covers Carbon_Fields\Field\Field::factory
 	 * @covers Carbon_Fields\Field\Field::__construct
-	 * 
-	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Forbidden character
-	 */
-	public function testSlashesInFieldNamesAreNotAllowed() {
-		$field = Field::make('text', 'something-anything');
-	}
-
-	/**
-	 * @covers Carbon_Fields\Field\Field::make
-	 * @covers Carbon_Fields\Field\Field::factory
-	 * @covers Carbon_Fields\Field\Field::__construct
 	 */
 	public function testLabelIsSetupProperlyWhenPassedExplicitly() {
 		$field = Field::make('text', 'color', "Field Color");

@@ -7,7 +7,7 @@ use Carbon_Fields\Datastore\Term_Meta_Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
- * Term meta container class. 
+ * Term meta container class.
  */
 class Term_Meta_Container extends Container {
 	protected $term_id;
@@ -102,7 +102,7 @@ class Term_Meta_Container extends Container {
 			add_action( $taxonomy . '_add_form_fields', array( $this, 'render' ), 10, 2 );
 		}
 	}
-	
+
 	/**
 	 * Revert the result of attach()
 	 *
@@ -197,15 +197,14 @@ class Term_Meta_Container extends Container {
 		return $this;
 	}
 
-	/** 
-	 * Show the container only on particular term level. 
+	/**
+	 * Show the container only on particular term level.
 	 *
-	 * @param int $term_level 
-	 * @return object $this 
-	 */ 
-	public function show_on_level( $term_level ) {                    
-		$this->settings['show_on_level'] = $term_level; 
-		return $this; 
-	} 
-
+	 * @param int $term_level
+	 * @return object $this
+	 */
+	public function show_on_level( $term_level ) {
+		$this->settings['show_on_level'] = $term_level;
+		return $this;
+	}
 }

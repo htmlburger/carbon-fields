@@ -13,7 +13,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	public static $registered_widget_ids = array();
-	
+
 	protected $print_wrappers = true;
 	protected $store_data;
 	protected $form_options = array( 'width' => 295 );
@@ -23,7 +23,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	/**
 	 * Create the widget.
 	 * A wrapper around the default WP widget constructor.
-	 * 
+	 *
 	 * @param  string $title       Widget name
 	 * @param  string $description Widget description
 	 * @param  array $fields       Array of fields
@@ -72,7 +72,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 			$field->set_value_from_input( $new_instance );
 			$field->save();
 		}
-		
+
 		return $instance;
 	}
 
@@ -99,7 +99,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 			->add_fields( $custom_fields )
 			->init();
 	}
-	
+
 	/**
 	 * Echoes the widget content.
 	 * Sub-classes can over-ride this method to generate their widget code
@@ -131,9 +131,9 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 			echo $args['after_widget'];
 		}
 	}
-	
+
 	/**
-	 * The actual content of the widget. 
+	 * The actual content of the widget.
 	 * Generally should be overriden by the specific widget classes.
 	 * @param array $args     Display arguments including 'before_title', 'after_title',
 	 *                        'before_widget', and 'after_widget'.
@@ -172,7 +172,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 
 	/**
 	 * Verify widget field names are unique.
-	 * 
+	 *
 	 * @param  string $name Field name
 	 */
 	public function verify_unique_field_name( $name ) {
@@ -187,12 +187,12 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 
 	/**
 	 * Verify widget IDs are unique.
-	 * 
+	 *
 	 * @param  string $id Widget ID
 	 */
 	public function verify_unique_widget_id( $id ) {
 		if ( in_array( $id, self::$registered_widget_ids ) ) {
-			Incorrect_Syntax_Exception::raise( 'Widget with ID "' . $id .'" already registered. Please change the widget title' );
+			Incorrect_Syntax_Exception::raise( 'Widget with ID "' . $id . '" already registered. Please change the widget title' );
 		}
 
 		self::$registered_widget_ids[] = $id;
@@ -213,16 +213,16 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 
 	/**
 	 * Save the field value(s) into the database.
-	 * 
+	 *
 	 * @param Field $field The field to save.
 	 */
 	public function save( Field $field ) {
 		$this->store_data[ $field->get_name() ] = $field->get_value();
 	}
-	
+
 	/**
 	 * Delete the field value(s) from the database.
-	 * 
+	 *
 	 * @param Field $field The field to delete.
 	 */
 	public function delete( Field $field ) {
@@ -230,7 +230,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 			unset( $this->store_data[ $field->get_name() ] );
 		}
 	}
-	
+
 	/**
 	 * Load complex field value(s) from the database.
 	 *
@@ -251,7 +251,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 
 		return $result;
 	}
-	
+
 	/**
 	 * Delete complex field value(s) from the database.
 	 *
@@ -276,7 +276,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 				if ( ! preg_match( '~^' . preg_quote( $name, '~' ) . '(?P<group>\w*)-_?(?P<key>.*?)_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~', $key, $field_name ) ) {
 					continue;
 				}
-				
+
 				$value = maybe_unserialize( $value );
 
 				$instance[ $name ][ $field_name['index'] ]['_type'] = $field_name['group'];

@@ -110,7 +110,7 @@ class Field {
 
 	/**
 	 * Whether or not this field will be initialized when the field is in the viewport (visible).
-	 * 
+	 *
 	 * @see set_lazyload()
 	 * @var bool
 	 **/
@@ -118,7 +118,7 @@ class Field {
 
 	/**
 	 * The width of the field.
-	 * 
+	 *
 	 * @see set_width()
 	 * @var int
 	 **/
@@ -126,7 +126,7 @@ class Field {
 
 	/**
 	 * Custom CSS classes.
-	 * 
+	 *
 	 * @see add_class()
 	 * @var array
 	 **/
@@ -177,11 +177,6 @@ class Field {
 			$class = __NAMESPACE__ . '\\Broken_Field';
 		}
 
-		if ( strpos( $name, '-' ) !== false ) {
-			Incorrect_Syntax_Exception::raise( 'Forbidden character "-" in name "' . $name . '".' );
-			$class = __NAMESPACE__ . '\\Broken_Field';
-		}
-
 		$field = new $class( $name, $label );
 		$field->type = $type;
 		$field->add_template( $field->get_type(), array( $field, 'template' ) );
@@ -228,7 +223,7 @@ class Field {
 	public function init() {}
 
 	/**
-	 * Instance initialization when in the admin area. 
+	 * Instance initialization when in the admin area.
 	 * Called during object construction.
 	 **/
 	public function admin_init() {}
@@ -463,7 +458,7 @@ class Field {
 
 	/**
 	 * Return field label.
-	 * 
+	 *
 	 * @return string
 	 **/
 	public function get_label() {
@@ -522,7 +517,7 @@ class Field {
 
 	/**
 	 * Whether or not this field will be initialized when the field is in the viewport (visible).
-	 * 
+	 *
 	 * @param bool $lazyload
 	 * @return object $this
 	 **/
@@ -533,7 +528,7 @@ class Field {
 
 	/**
 	 * Return whether or not this field should be lazyloaded.
-	 * 
+	 *
 	 * @return bool
 	 **/
 	public function get_lazyload() {
@@ -542,7 +537,7 @@ class Field {
 
 	/**
 	 * Set the field width.
-	 * 
+	 *
 	 * @param int $width
 	 * @return object $this
 	 **/
@@ -553,7 +548,7 @@ class Field {
 
 	/**
 	 * Get the field width.
-	 * 
+	 *
 	 * @return int $width
 	 **/
 	public function get_width() {
@@ -562,7 +557,7 @@ class Field {
 
 	/**
 	 *  Add custom CSS class to the field html container.
-	 * 
+	 *
 	 * @param string|array $classes
 	 * @return object $this
 	 **/
@@ -577,7 +572,7 @@ class Field {
 
 	/**
 	 * Get the field custom CSS classes.
-	 * 
+	 *
 	 * @return array
 	 **/
 	public function get_classes() {
@@ -622,8 +617,8 @@ class Field {
 
 	/**
 	 * Returns the type of the field based on the class.
-	 * The class is stripped by the "CarbonFields" prefix. 
-	 * Also the "Field" suffix is removed. 
+	 * The class is stripped by the "CarbonFields" prefix.
+	 * Also the "Field" suffix is removed.
 	 * Then underscores and backslashes are removed.
 	 *
 	 * @return string
@@ -677,7 +672,7 @@ class Field {
 	/**
 	 * Allows the value of a field to be processed after loading.
 	 * Can be implemented by the extending class if necessary.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function process_value() {
@@ -687,7 +682,7 @@ class Field {
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -764,7 +759,7 @@ class Field {
 
 				if ( ! in_array( $relation, $allowed_relations ) ) {
 					Incorrect_Syntax_Exception::raise( 'Invalid relation type ' . $rule . '. ' .
-						'The rule should be one of the following: "' . implode( '", "', $allowed_relations ) . '"' );
+					'The rule should be one of the following: "' . implode( '", "', $allowed_relations ) . '"' );
 				}
 
 				$parsed_rules['relation'] = $relation;
@@ -774,7 +769,7 @@ class Field {
 			// Check if the rule is valid
 			if ( ! is_array( $rule ) || empty( $rule['field'] ) ) {
 				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic rule format. ' .
-					'The rule should be an array with the "field" key set.' );
+				'The rule should be an array with the "field" key set.' );
 			}
 
 			// Check the compare operator
@@ -784,12 +779,12 @@ class Field {
 			if ( ! in_array( $rule['compare'], $allowed_operators ) ) {
 				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare operator: <code>' .
 					$rule['compare'] . '</code><br>Allowed operators are: <code>' .
-					implode( ', ', $allowed_operators ) . '</code>' );
+				implode( ', ', $allowed_operators ) . '</code>' );
 			}
 			if ( $rule['compare'] === 'IN' || $rule['compare'] === 'NOT IN' ) {
 				if ( ! is_array( $rule['value'] ) ) {
-					Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. ' . 
-						'An array is expected, when using the "' . $rule['compare'] . '" operator.' );
+					Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. ' .
+					'An array is expected, when using the "' . $rule['compare'] . '" operator.' );
 				}
 			}
 
@@ -813,21 +808,21 @@ class Field {
 		wp_enqueue_script( 'carbon-fields', \Carbon_Fields\URL . '/assets/js/fields.js', array( 'carbon-app', 'carbon-containers' ) );
 		wp_localize_script( 'carbon-fields', 'crbl10n',
 			array(
-				'title' => __( 'Files', 'carbon_fields' ),
-				'geocode_zero_results' => __( 'The address could not be found. ', 'carbon_fields' ),
-				'geocode_not_successful' => __( 'Geocode was not successful for the following reason: ', 'carbon_fields' ),
-				'max_num_items_reached' => __( 'Maximum number of items reached (%s items)', 'carbon_fields' ),
-				'max_num_rows_reached' => __( 'Maximum number of rows reached (%s rows)', 'carbon_fields' ),
-				'cannot_create_more_rows' => __( 'Cannot create more than %s rows', 'carbon_fields' ),
-				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', 'carbon_fields' ),
-				'remove_sidebar_confirmation' => __( 'Are you sure you wish to remove this sidebar?', 'carbon_fields' ),
-				'add_sidebar' => __( 'Add Sidebar', 'carbon_fields' ),
-				'complex_no_rows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon_fields' ),
-				'complex_add_button' => __( 'Add %s', 'carbon_fields' ),
-				'complex_min_num_rows_not_reached' => __( 'Minimum number of rows not reached (%d %s)', 'carbon_fields' ),
-				'message_form_validation_failed' => __( 'Please fill out all fields correctly. ', 'carbon_fields' ),
-				'message_required_field' => __( 'This field is required. ', 'carbon_fields' ),
-				'message_choose_option' => __( 'Please choose an option. ', 'carbon_fields' ),
+				'title' => __( 'Files', 'carbon-fields' ),
+				'geocode_zero_results' => __( 'The address could not be found. ', 'carbon-fields' ),
+				'geocode_not_successful' => __( 'Geocode was not successful for the following reason: ', 'carbon-fields' ),
+				'max_num_items_reached' => __( 'Maximum number of items reached (%s items)', 'carbon-fields' ),
+				'max_num_rows_reached' => __( 'Maximum number of rows reached (%s rows)', 'carbon-fields' ),
+				'cannot_create_more_rows' => __( 'Cannot create more than %s rows', 'carbon-fields' ),
+				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', 'carbon-fields' ),
+				'remove_sidebar_confirmation' => __( 'Are you sure you wish to remove this sidebar?', 'carbon-fields' ),
+				'add_sidebar' => __( 'Add Sidebar', 'carbon-fields' ),
+				'complex_no_rows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),
+				'complex_add_button' => __( 'Add %s', 'carbon-fields' ),
+				'complex_min_num_rows_not_reached' => __( 'Minimum number of rows not reached (%d %s)', 'carbon-fields' ),
+				'message_form_validation_failed' => __( 'Please fill out all fields correctly. ', 'carbon-fields' ),
+				'message_required_field' => __( 'This field is required. ', 'carbon-fields' ),
+				'message_choose_option' => __( 'Please choose an option. ', 'carbon-fields' ),
 			)
 		);
 	}

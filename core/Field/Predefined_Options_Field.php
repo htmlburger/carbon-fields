@@ -5,7 +5,7 @@ namespace Carbon_Fields\Field;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
- * Base class for fields with predefined options. 
+ * Base class for fields with predefined options.
  * Mainly used to reduce the bloat on the base Field class.
  **/
 abstract class Predefined_Options_Field extends Field {
@@ -19,8 +19,8 @@ abstract class Predefined_Options_Field extends Field {
 	/**
 	 * Set the options of this field.
 	 * Accepts either array of data or a callback that returns the data.
-	 * 
-	 * @param array|callable $options 
+	 *
+	 * @param array|callable $options
 	 */
 	public function set_options( $options ) {
 		$this->options = array();
@@ -40,18 +40,23 @@ abstract class Predefined_Options_Field extends Field {
 	/**
 	 * Add new options to this field.
 	 * Accepts an array of data.
-	 * 
+	 *
 	 * @param array|callable $options
 	 */
 	public function add_options( $options ) {
 		if ( is_array( $options ) ) {
 			$old_options = is_callable( $this->options ) ? array() : $this->options;
-			$this->options = array_merge( $old_options, $options );
+
+			if ( ! empty( $old_options ) ) {
+				$this->options = array_merge( $old_options, $options );
+			} else {
+				$this->options = $options;
+			}
 		} else {
 			$this->options = array();
 			Incorrect_Syntax_Exception::raise( 'Only arrays are allowed in the <code>add_options()</code> method.' );
 		}
-		
+
 		return $this;
 	}
 
@@ -109,10 +114,9 @@ abstract class Predefined_Options_Field extends Field {
 	/**
 	 * Retrieve the current options.
 	 *
-	 * @return array|callable $options 
+	 * @return array|callable $options
 	 */
 	public function get_options() {
 		return $this->options;
 	}
-
 } // END Field

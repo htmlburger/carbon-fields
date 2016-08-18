@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -68,13 +68,15 @@ class Map_Field extends Field {
 	 * Enqueue scripts in the administration
 	 */
 	public function admin_enqueue_scripts() {
-		wp_enqueue_script( 'carbon-google-maps', '//maps.googleapis.com/maps/api/js?sensor=false' );
+		$api_key = apply_filters( 'carbon_map_api_key', false );
+
+		wp_enqueue_script( 'carbon-google-maps', '//maps.googleapis.com/maps/api/js?sensor=false' . ( $api_key ? '&key=' . $api_key : '' ) );
 	}
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -97,12 +99,12 @@ class Map_Field extends Field {
 	public function template() {
 		?>
 		<div class="carbon-map-search">
-			<p><?php _e( 'Locate Address on the map', 'carbon_fields' ); ?>: </p>
+			<p><?php _e( 'Locate Address on the map', 'carbon-fields' ); ?>: </p>
 			
 			<div class="input-with-button">
 				<input type="text" name="{{{ name }}}[address]" value="{{{ address }}}" class="regular-text address" />
 				<span class="address-search-btn button icon-button">
-					<?php _e( 'Find', 'carbon_fields' ); ?>
+					<?php _e( 'Find', 'carbon-fields' ); ?>
 				</span>
 			</div>
 				

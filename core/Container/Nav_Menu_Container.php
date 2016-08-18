@@ -8,7 +8,7 @@ use Carbon_Fields\Walker\Nav_Menu_Edit_Walker;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
- * Nav menu item fields container class. 
+ * Nav menu item fields container class.
  */
 class Nav_Menu_Container extends Container {
 
@@ -38,7 +38,7 @@ class Nav_Menu_Container extends Container {
 
 	/**
 	 * Perform instance initialization after calling setup()
-	 * 
+	 *
 	 * @param int $menu_id Used to pass the correct menu_item_id to the Container object
 	 * @param bool $render Whether the container will render the fields.
 	 */
@@ -67,7 +67,7 @@ class Nav_Menu_Container extends Container {
 
 	/**
 	 * Checks whether the current request is valid
-	 * 
+	 *
 	 * @return bool
 	 **/
 	public function is_valid_save() {
@@ -90,7 +90,7 @@ class Nav_Menu_Container extends Container {
 	/**
 	 * Returns an array that holds the container data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
