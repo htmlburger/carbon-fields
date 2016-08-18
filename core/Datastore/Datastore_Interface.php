@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Datastore;
 
@@ -17,14 +17,14 @@ interface Datastore_Interface {
 
 	/**
 	 * Save the field value(s) into the database.
-	 * 
+	 *
 	 * @param Field $field The field to save.
 	 */
 	public function save( Field $field );
 
 	/**
 	 * Delete the field value(s) from the database.
-	 * 
+	 *
 	 * @param Field $field The field to delete.
 	 */
 	public function delete( Field $field );

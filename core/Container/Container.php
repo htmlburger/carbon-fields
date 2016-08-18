@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Container;
 
@@ -7,7 +7,7 @@ use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
- * Base container class. 
+ * Base container class.
  * Defines the key container methods and their default implementations.
  */
 abstract class Container {
@@ -34,7 +34,7 @@ abstract class Container {
 	static protected $registered_field_names = array();
 
 	/**
-	 * List of containers created via factory that 
+	 * List of containers created via factory that
 	 * should be initialized
 	 *
 	 * @see verify_unique_field_name()
@@ -324,7 +324,7 @@ abstract class Container {
 
 	/**
 	 * Called first as part of the container save procedure.
-	 * Responsible for checking the request validity and 
+	 * Responsible for checking the request validity and
 	 * calling the container-specific save() method
 	 *
 	 * @see save()
@@ -367,11 +367,11 @@ abstract class Container {
 			$field->load();
 		}
 	}
-	
+
 
 	/**
 	 * Called first as part of the container attachment procedure.
-	 * Responsible for checking it's OK to attach the container 
+	 * Responsible for checking it's OK to attach the container
 	 * and if it is, calling the container-specific attach() method
 	 *
 	 * @see attach()
@@ -385,7 +385,7 @@ abstract class Container {
 			if ( call_user_func_array( array( $this, 'is_active' ), $param ) ) {
 				self::add_active_container( $this );
 
-				$fields = $this->get_fields(); 
+				$fields = $this->get_fields();
 				foreach ( $fields as $field ) {
 					self::add_active_field( $field );
 				}
@@ -410,7 +410,7 @@ abstract class Container {
 	}
 
 	/**
-	 * Attach the container rendering and helping methods 
+	 * Attach the container rendering and helping methods
 	 * to concrete WordPress Action hooks
 	 **/
 	public function attach() {}
@@ -449,7 +449,7 @@ abstract class Container {
 	 * Append array of fields to the current fields set. All items of the array
 	 * must be instances of Field and their names should be unique for all
 	 * Carbon containers.
-	 * If a field does not have DataStore already, the container data store is 
+	 * If a field does not have DataStore already, the container data store is
 	 * assigned to them instead.
 	 *
 	 * @param array $fields
@@ -478,7 +478,7 @@ abstract class Container {
 	 */
 	public function add_tab( $tab_name, $fields ) {
 		$this->add_template( 'tabs', array( $this, 'template_tabs' ) );
-		
+
 		$this->add_fields( $fields );
 		$this->create_tab( $tab_name, $fields );
 
@@ -551,7 +551,7 @@ abstract class Container {
 		$untabbed_fields = $this->get_untabbed_fields();
 
 		if ( ! empty( $untabbed_fields ) ) {
-			$this->create_tab( __( 'General', 'carbon_fields' ), $untabbed_fields, self::TABS_HEAD );
+			$this->create_tab( __( 'General', 'carbon-fields' ), $untabbed_fields, self::TABS_HEAD );
 		}
 
 		return $this->tabs;
@@ -561,7 +561,7 @@ abstract class Container {
 	 * Build the tabs JSON
 	 */
 	public function get_tabs_json() {
-		$tabs_json = array();	
+		$tabs_json = array();
 		$tabs = $this->get_tabs();
 
 		foreach ( $tabs as $tab_name => $fields ) {
@@ -597,7 +597,7 @@ abstract class Container {
 	 */
 	public static function verify_unique_panel_id( $id ) {
 		if ( in_array( $id, self::$registered_panel_ids ) ) {
-			Incorrect_Syntax_Exception::raise( 'Panel ID "' . $id .'" already registered' );
+			Incorrect_Syntax_Exception::raise( 'Panel ID "' . $id . '" already registered' );
 		}
 
 		self::$registered_panel_ids[] = $id;
@@ -684,7 +684,7 @@ abstract class Container {
 	/**
 	 * Returns an array that holds the container data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -737,8 +737,8 @@ abstract class Container {
 
 		wp_localize_script( 'carbon-containers', 'carbon_containers_l10n',
 			array(
-				'please_fill_the_required_fields' => __( 'Please fill out all required fields highlighted below.', 'carbon_fields' ),
-				'changes_made_save_alert' => __( 'The changes you made will be lost if you navigate away from this page.', 'carbon_fields' ),
+				'please_fill_the_required_fields' => __( 'Please fill out all required fields highlighted below.', 'carbon-fields' ),
+				'changes_made_save_alert' => __( 'The changes you made will be lost if you navigate away from this page.', 'carbon-fields' ),
 			)
 		);
 	}
@@ -749,6 +749,5 @@ abstract class Container {
 	public function admin_hook_styles() {
 		wp_enqueue_style( 'carbon-main', \Carbon_Fields\URL . '/assets/css/main.css' );
 	}
-
-} // END Container 
+} // END Container
 

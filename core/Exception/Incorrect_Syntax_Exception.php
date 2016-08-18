@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Exception;
 
@@ -37,5 +37,4 @@ class Incorrect_Syntax_Exception extends \Exception {
 
 		include \Carbon_Fields\DIR . '/templates/Exception/incorrect-syntax.php';
 	}
-
 }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -7,7 +7,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 /**
  * Choose sidebar field.
  * Deprecated in favor of the 'Sidebar' field and its sidebar manager.
- * 
+ *
  * @deprecated
  */
 class Choose_Sidebar_Field extends Sidebar_Field {
@@ -138,7 +138,7 @@ class Choose_Sidebar_Field extends Sidebar_Field {
 
 	/**
 	 * Retrieve all custom sidebars from the database.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_custom_sidebars() {
@@ -153,16 +153,16 @@ class Choose_Sidebar_Field extends Sidebar_Field {
 		$query_string = '';
 		switch ( $this->context ) {
 			case 'Post_Meta':
-				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->postmeta . ' WHERE meta_key = "' .  esc_sql( $this->name ) . '"';
+				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->postmeta . ' WHERE meta_key = "' . esc_sql( $this->name ) . '"';
 				break;
 			case 'Term_Meta':
-				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->termmeta . ' WHERE meta_key = "' .  esc_sql( $this->name ) . '"';
+				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->termmeta . ' WHERE meta_key = "' . esc_sql( $this->name ) . '"';
 				break;
 			case 'Theme_Options':
-				$query_string = 'SELECT option_value AS sidebar FROM ' . $wpdb->options . ' WHERE option_name = "' .  esc_sql( $this->name ) . '"';
+				$query_string = 'SELECT option_value AS sidebar FROM ' . $wpdb->options . ' WHERE option_name = "' . esc_sql( $this->name ) . '"';
 				break;
 			case 'User_Meta':
-				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->usermeta . ' WHERE meta_key = "' .  esc_sql( $this->name ) . '"';
+				$query_string = 'SELECT meta_value AS sidebar FROM ' . $wpdb->usermeta . ' WHERE meta_key = "' . esc_sql( $this->name ) . '"';
 				break;
 		}
 

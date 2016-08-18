@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -8,9 +8,8 @@ namespace Carbon_Fields\Field;
 class Broken_Field extends Field {
 
 	public function template() {
-		_e( 'This field is misconfigured', 'carbon_fields' );
+		_e( 'This field is misconfigured', 'carbon-fields' );
 
 		parent::template();
 	}
-
 }

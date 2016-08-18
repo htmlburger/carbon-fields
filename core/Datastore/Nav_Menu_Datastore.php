@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Datastore;
 
@@ -7,7 +7,7 @@ use Carbon_Fields\Field\Field;
 class Nav_Menu_Datastore extends Post_Meta_Datastore {
 	/**
 	 * Delete the field value(s) from the database.
-	 * 
+	 *
 	 * @param Field $field The field to delete.
 	 */
 	public function delete( Field $field ) {

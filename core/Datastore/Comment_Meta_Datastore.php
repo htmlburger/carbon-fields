@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Datastore;
 
@@ -54,7 +54,7 @@ class Comment_Meta_Datastore extends Meta_Datastore {
 
 	/**
 	 * Retrieve the comment ID of the datastore.
-	 * 
+	 *
 	 * @return int ID of the comment.
 	 */
 	public function get_id() {
