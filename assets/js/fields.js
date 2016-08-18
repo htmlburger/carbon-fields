@@ -1601,6 +1601,98 @@ window.carbon = window.carbon || {};
 	carbon.fields.View.DateTime = carbon.fields.View.Time;
 
 	/*--------------------------------------------------------------------------
+	 * NUMBER
+	 *------------------------------------------------------------------------*/
+
+	 // Number Model
+	 carbon.fields.Model.Number = carbon.fields.Model.extend({
+		/*
+		 * The validate method is an internal Backbone method.
+		 * It will check if the field model data is valid.
+		 * Used to check required fields
+		 *
+		 * @see http://backbonejs.org/#Model-validate
+		 */
+		validate: function(attrs, options) {
+			var hasErrors = false;
+
+			if (attrs.value === '') {
+				hasErrors = true;
+			}
+
+			return hasErrors;
+		}
+	});
+
+	 // Number View
+	 carbon.fields.View.Number = carbon.fields.View.extend({
+		// Add the events from the parent view and also include new ones
+		events: function() {
+			return _.extend({}, carbon.fields.View.prototype.events, {
+				'blur input[type="number"]': 'checkValue',
+			});
+		},
+
+		initialize: function() {
+			carbon.fields.View.prototype.initialize.apply(this);
+
+			this.on('field:rendered', this.initNumberField);
+		},
+
+		initNumberField: function() {
+			var _this = this;
+			var model = this.model;
+			var min = model.get('min');
+			var max = model.get('max');
+			var step = model.get('step');
+
+			if ( step == 1 ) {
+				_this.$('input').attr('step', 'any');
+			} else if ( step != 1 ) {
+				_this.$('input').attr('step', step);
+			};
+
+			_this.$('input').attr('min', min);
+			_this.$('input').attr('max', max);
+		},
+
+		stepValue: function(number, step, min) {
+			step = step || 1;
+
+			// No change needed
+			if ( (number % step).toFixed(0) ) {
+				return number;
+			};
+
+			number = number - min;
+
+			var base = number/step;
+
+			return (base * step) + min;
+		},
+
+		checkValue: function(event) {
+			var $input = this.$('input[type="number"]');
+			var value = $input.val();
+			var min = this.model.get('min');
+			var max = this.model.get('max');
+			var step = this.model.get('step');
+
+			var floatval = parseFloat(value);
+			floatval = this.stepValue(floatval, step, min);
+
+			if ( !isNaN(floatval) && min <= floatval && floatval <= max ) {
+				value = floatval;
+			} else {
+				value = '';
+			}
+
+			this.model.set('value', value);
+			$input.val(value);
+		},
+	});
+
+	/*--------------------------------------------------------------------------
 	 * COMPLEX
 	 *------------------------------------------------------------------------*/
 
