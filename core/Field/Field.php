@@ -177,11 +177,6 @@ class Field {
 			$class = __NAMESPACE__ . '\\Broken_Field';
 		}
 
-		if ( strpos( $name, '-' ) !== false ) {
-			Incorrect_Syntax_Exception::raise( 'Forbidden character "-" in name "' . $name . '".' );
-			$class = __NAMESPACE__ . '\\Broken_Field';
-		}
-
 		$field = new $class( $name, $label );
 		$field->type = $type;
 		$field->add_template( $field->get_type(), array( $field, 'template' ) );
@@ -813,21 +808,21 @@ class Field {
 		wp_enqueue_script( 'carbon-fields', \Carbon_Fields\URL . '/assets/js/fields.js', array( 'carbon-app', 'carbon-containers' ) );
 		wp_localize_script( 'carbon-fields', 'crbl10n',
 			array(
-				'title' => __( 'Files', 'carbon_fields' ),
-				'geocode_zero_results' => __( 'The address could not be found. ', 'carbon_fields' ),
-				'geocode_not_successful' => __( 'Geocode was not successful for the following reason: ', 'carbon_fields' ),
-				'max_num_items_reached' => __( 'Maximum number of items reached (%s items)', 'carbon_fields' ),
-				'max_num_rows_reached' => __( 'Maximum number of rows reached (%s rows)', 'carbon_fields' ),
-				'cannot_create_more_rows' => __( 'Cannot create more than %s rows', 'carbon_fields' ),
-				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', 'carbon_fields' ),
-				'remove_sidebar_confirmation' => __( 'Are you sure you wish to remove this sidebar?', 'carbon_fields' ),
-				'add_sidebar' => __( 'Add Sidebar', 'carbon_fields' ),
-				'complex_no_rows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon_fields' ),
-				'complex_add_button' => __( 'Add %s', 'carbon_fields' ),
-				'complex_min_num_rows_not_reached' => __( 'Minimum number of rows not reached (%d %s)', 'carbon_fields' ),
-				'message_form_validation_failed' => __( 'Please fill out all fields correctly. ', 'carbon_fields' ),
-				'message_required_field' => __( 'This field is required. ', 'carbon_fields' ),
-				'message_choose_option' => __( 'Please choose an option. ', 'carbon_fields' ),
+				'title' => __( 'Files', 'carbon-fields' ),
+				'geocode_zero_results' => __( 'The address could not be found. ', 'carbon-fields' ),
+				'geocode_not_successful' => __( 'Geocode was not successful for the following reason: ', 'carbon-fields' ),
+				'max_num_items_reached' => __( 'Maximum number of items reached (%s items)', 'carbon-fields' ),
+				'max_num_rows_reached' => __( 'Maximum number of rows reached (%s rows)', 'carbon-fields' ),
+				'cannot_create_more_rows' => __( 'Cannot create more than %s rows', 'carbon-fields' ),
+				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', 'carbon-fields' ),
+				'remove_sidebar_confirmation' => __( 'Are you sure you wish to remove this sidebar?', 'carbon-fields' ),
+				'add_sidebar' => __( 'Add Sidebar', 'carbon-fields' ),
+				'complex_no_rows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),
+				'complex_add_button' => __( 'Add %s', 'carbon-fields' ),
+				'complex_min_num_rows_not_reached' => __( 'Minimum number of rows not reached (%d %s)', 'carbon-fields' ),
+				'message_form_validation_failed' => __( 'Please fill out all fields correctly. ', 'carbon-fields' ),
+				'message_required_field' => __( 'This field is required. ', 'carbon-fields' ),
+				'message_choose_option' => __( 'Please choose an option. ', 'carbon-fields' ),
 			)
 		);
 	}

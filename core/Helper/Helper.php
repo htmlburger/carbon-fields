@@ -21,6 +21,7 @@ class Helper {
 		add_action( 'wp_loaded', array( $this, 'trigger_fields_register' ) );
 		add_action( 'carbon_after_register_fields', array( $this, 'init_containers' ) );
 		add_action( 'admin_footer', array( $this, 'init_scripts' ), 0 );
+		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data_script' ), 9 );
 		add_action( 'crb_field_activated', array( $this, 'add_templates' ) );
 		add_action( 'crb_container_activated', array( $this, 'add_templates' ) );
 		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
@@ -37,7 +38,7 @@ class Helper {
 	 */
 	public function load_textdomain() {
 		$dir = dirname( dirname( __DIR__ ) ) . '/languages/';
-		$domain = 'carbon_fields';
+		$domain = 'carbon-fields';
 		$locale = get_locale();
 		$path = $dir . $domain . '-' . $locale . '.mo';
 		load_textdomain( $domain, $path );
@@ -73,8 +74,6 @@ class Helper {
 		wp_enqueue_script( 'carbon-app', \Carbon_Fields\URL . '/assets/js/app.js', array( 'jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable' ) );
 		wp_enqueue_script( 'carbon-ext', \Carbon_Fields\URL . '/assets/js/ext.js', array( 'carbon-app' ) );
 
-		wp_localize_script( 'carbon-app', 'carbon_json', $this->get_json_data() );
-
 		$active_fields = Container::get_active_fields();
 		$active_field_types = array();
 
@@ -87,6 +86,19 @@ class Helper {
 
 			$field->admin_enqueue_scripts();
 		}
+	}
+
+	/**
+	 * Print the carbon JSON data script.
+	 */
+	public function print_json_data_script() {
+		?>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
+//--><!]]>
+</script>
+		<?php
 	}
 
 	/**

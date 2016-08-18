@@ -16,7 +16,7 @@ WP_VERSION=${5-latest}
 BASEDIR="${PWD}"
 
 # Handle Windows drive paths
-if [ "$(expr substr $(uname -s) 1 10)" == "MINGW32_NT" ]; then
+if [ "$(expr substr $(uname -s) 1 5)" == "MINGW" ]; then
 	BASEDIR=$(echo $BASEDIR | sed -r 's/\/([a-zA-Z])\//\1:\//g')
 fi
 
