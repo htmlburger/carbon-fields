@@ -439,10 +439,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 
 .carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .carbon-drag-handle { display: none; }
 .carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container { border-width: 1px; border-bottom-color: transparent; }
-.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-fields-row { border-top: 1px solid #d9d9d9; }
-.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-fields-row:first-child { border-top: 0; }
 .carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-row { border-color: transparent; }
-.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-fields-row + .carbon-row { border-top-color: #d9d9d9; }
 
 /* Complet Layout Tabbed */
 
@@ -511,7 +508,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 @media screen and (min-width: 1100px) {
 	/* Field Rows */
 	.carbon-grid .carbon-fields-row:first-child { border-top: 0; }
-	.carbon-grid .carbon-fields-row { display: table; width: 100%; border-top: 1px solid #d9d9d9; }
+	.carbon-grid .carbon-fields-row { display: table; width: 100%; border-bottom: 1px solid #d9d9d9; }
 	.carbon-grid .carbon-fields-row > .carbon-field { display: table-cell; min-width: 0; vertical-align: top; border: 0; }
 	.carbon-grid .carbon-fields-row > .carbon-field + .carbon-field { border-left: 1px solid #d9d9d9; }
 
