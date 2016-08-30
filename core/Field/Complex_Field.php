@@ -569,7 +569,7 @@ class Complex_Field extends Field {
 		if ( $layout === self::LAYOUT_TABBED ) {
 			// The library used to provide just one kind of tabs -- horizontal ones. Later vertical tabs were added.
 			// So the "tabbed" name was renamed to "tabbed-horizontal" and "tabbed-vertical" layout was introduced.
-			_doing_it_wrong( __METHOD__, __( 'Complex field "' . self::LAYOUT_TABBED . '" layout is deprecated, please use "' . self::LAYOUT_TABBED_HORIZONTAL . '" or "' . self::LAYOUT_TABBED_VERTICAL . '"  instead', 'carbon_fields' ), null );
+			_doing_it_wrong( __METHOD__, sprintf( __( 'Complex field "%1$s" layout is deprecated, please use "%2$s" or "%3$s" instead.', 'carbon_fields' ), self::LAYOUT_TABBED, self::LAYOUT_TABBED_HORIZONTAL, self::LAYOUT_TABBED_VERTICAL ), null );
 
 			$layout = self::LAYOUT_TABBED_HORIZONTAL;
 		}
