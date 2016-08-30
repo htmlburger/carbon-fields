@@ -289,6 +289,7 @@ abstract class Container {
 	 *
 	 * @see init()
 	 * @param array $settings
+	 * @return object $this
 	 **/
 	public function setup( $settings = array() ) {
 		if ( $this->setup_ready ) {
@@ -342,7 +343,7 @@ abstract class Container {
 	 *
 	 * @see is_valid_save()
 	 **/
-	public function save( $user_data ) {
+	public function save( $data ) {
 		foreach ( $this->fields as $field ) {
 			$field->set_value_from_input();
 			$field->save();
@@ -453,6 +454,7 @@ abstract class Container {
 	 * assigned to them instead.
 	 *
 	 * @param array $fields
+	 * @return object $this
 	 **/
 	public function add_fields( $fields ) {
 		foreach ( $fields as $field ) {
@@ -475,6 +477,10 @@ abstract class Container {
 
 	/**
 	 * Configuration function for adding tab with fields
+	 *
+	 * @param string $tab_name
+	 * @param array $fields
+	 * @return object $this
 	 */
 	public function add_tab( $tab_name, $fields ) {
 		$this->add_template( 'tabs', array( $this, 'template_tabs' ) );
@@ -487,6 +493,11 @@ abstract class Container {
 
 	/**
 	 * Internal function that creates the tab and associates it with particular field set
+	 *
+	 * @param string $tab_name
+	 * @param array $fields
+	 * @param int $queue_end
+	 * @return object $this
 	 */
 	private function create_tab( $tab_name, $fields, $queue_end = self::TABS_TAIL ) {
 		if ( isset( $this->tabs[ $tab_name ] ) ) {
@@ -512,6 +523,8 @@ abstract class Container {
 
 	/**
 	 * Whether the container is tabbed or not
+	 *
+	 * @return bool
 	 */
 	public function is_tabbed() {
 		return (bool) $this->tabs;
@@ -519,6 +532,8 @@ abstract class Container {
 
 	/**
 	 * Retrieve all fields that are not defined under a specific tab
+	 *
+	 * @return array
 	 */
 	public function get_untabbed_fields() {
 		$tabbed_fields_names = array();
@@ -546,6 +561,8 @@ abstract class Container {
 	/**
 	 * Retrieve all tabs.
 	 * Create a default tab if there are any untabbed fields.
+	 *
+	 * @return array
 	 */
 	public function get_tabs() {
 		$untabbed_fields = $this->get_untabbed_fields();
@@ -559,6 +576,8 @@ abstract class Container {
 
 	/**
 	 * Build the tabs JSON
+	 *
+	 * @return array
 	 */
 	public function get_tabs_json() {
 		$tabs_json = array();
@@ -645,6 +664,7 @@ abstract class Container {
 	 * Assign DataStore instance for use by the container fields
 	 *
 	 * @param object $store
+	 * @return object $this
 	 **/
 	public function set_datastore( $store ) {
 		$this->store = $store;
@@ -652,6 +672,8 @@ abstract class Container {
 		foreach ( $this->fields as $field ) {
 			$field->set_datastore( $this->store );
 		}
+
+		return $this;
 	}
 
 	/**
