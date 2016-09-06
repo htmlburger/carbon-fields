@@ -7,17 +7,12 @@ namespace Carbon_Fields\Field;
  */
 class Rich_Text_Field extends Textarea_Field {
 	protected $lazyload = true;
-	public static $initialized = false;
 
 	/**
 	 * Admin initialization actions.
 	 */
 	public function admin_init() {
-		if ( ! self::$initialized ) {
-			self::$initialized = true;
-
-			add_action( 'admin_footer', array( $this, 'editor_init' ) );
-		}
+		add_action( 'admin_footer', array( get_class( $this ), 'editor_init' ) );
 	}
 
 	/**
@@ -59,7 +54,7 @@ class Rich_Text_Field extends Textarea_Field {
 	 * Instead of enqueueing all required scripts and stylesheets and setting up TinyMCE,
 	 * wp_editor() automatically enqueues and sets up everything.
 	 */
-	public function editor_init() {
+	public static function editor_init() {
 		?>
 		<div style="display:none;">
 			<?php

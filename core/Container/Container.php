@@ -149,7 +149,6 @@ abstract class Container {
 
 		$container = new $class( $name );
 		$container->type = $type;
-		$container->add_template( $type, array( $container, 'template' ) );
 
 		self::$init_containers[] = $container;
 
@@ -190,8 +189,10 @@ abstract class Container {
 	/**
 	 * Adds a container to the active containers array and triggers an action
 	 **/
-	public static function add_active_container( $container ) {
+	public static function activate_container( $container ) {
 		self::$active_containers[] = $container;
+
+		$container->boot();
 
 		do_action( 'crb_container_activated', $container );
 	}
@@ -208,16 +209,18 @@ abstract class Container {
 	/**
 	 * Adds a field to the active fields array and triggers an action
 	 **/
-	public static function add_active_field( $field ) {
+	public static function activate_field( $field ) {
 		self::$active_fields[] = $field;
 
 		if ( method_exists( $field, 'get_fields' ) ) {
 			$fields = $field->get_fields();
 
 			foreach ( $fields as $inner_field ) {
-				self::add_active_field( $inner_field );
+				self::activate_field( $inner_field );
 			}
 		}
+
+		$field->boot();
 
 		do_action( 'crb_field_activated', $field );
 	}
@@ -272,16 +275,16 @@ abstract class Container {
 		$this->id = preg_replace( '~\W~u', '', remove_accents( $title ) );
 
 		self::verify_unique_panel_id( $this->id );
-
-		$this->load_scripts_styles();
 	}
 
 	/**
-	 * Load the admin scripts and styles.
+	 * Boot the container once it's attached.
 	 **/
-	public function load_scripts_styles() {
-		add_action( 'admin_print_scripts', array( $this, 'admin_hook_scripts' ) );
-		add_action( 'admin_print_styles', array( $this, 'admin_hook_styles' ) );
+	public function boot() {
+		$this->add_template( $this->type, array( $this, 'template' ) );
+
+		add_action( 'admin_footer', array( get_class(), 'admin_hook_scripts' ), 5 );
+		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
 	}
 
 	/**
@@ -384,11 +387,11 @@ abstract class Container {
 			call_user_func_array( array( $this, 'attach' ), $param );
 
 			if ( call_user_func_array( array( $this, 'is_active' ), $param ) ) {
-				self::add_active_container( $this );
+				self::activate_container( $this );
 
 				$fields = $this->get_fields();
 				foreach ( $fields as $field ) {
-					self::add_active_field( $field );
+					self::activate_field( $field );
 				}
 			}
 		}
@@ -754,7 +757,7 @@ abstract class Container {
 	/**
 	 * Enqueue admin scripts
 	 */
-	public function admin_hook_scripts() {
+	public static function admin_hook_scripts() {
 		wp_enqueue_script( 'carbon-containers', \Carbon_Fields\URL . '/assets/js/containers.js', array( 'carbon-app' ) );
 
 		wp_localize_script( 'carbon-containers', 'carbon_containers_l10n',
@@ -768,7 +771,7 @@ abstract class Container {
 	/**
 	 * Enqueue admin styles
 	 */
-	public function admin_hook_styles() {
+	public static function admin_hook_styles() {
 		wp_enqueue_style( 'carbon-main', \Carbon_Fields\URL . '/assets/css/main.css' );
 	}
 } // END Container

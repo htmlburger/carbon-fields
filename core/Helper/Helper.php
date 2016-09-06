@@ -71,21 +71,8 @@ class Helper {
 	 * Initialize main scripts
 	 */
 	public function init_scripts() {
-		wp_enqueue_script( 'carbon-app', \Carbon_Fields\URL . '/assets/js/app.js', array( 'jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable' ) );
-		wp_enqueue_script( 'carbon-ext', \Carbon_Fields\URL . '/assets/js/ext.js', array( 'carbon-app' ) );
-
-		$active_fields = Container::get_active_fields();
-		$active_field_types = array();
-
-		foreach ( $active_fields as $field ) {
-			if ( in_array( $field->type, $active_field_types ) ) {
-				continue;
-			}
-
-			$active_field_types[] = $field->type;
-
-			$field->admin_enqueue_scripts();
-		}
+		wp_enqueue_script( 'carbon-ext', \Carbon_Fields\URL . '/assets/js/ext.js', array( 'jquery' ) );
+		wp_enqueue_script( 'carbon-app', \Carbon_Fields\URL . '/assets/js/app.js', array( 'jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable', 'carbon-ext' ) );
 	}
 
 	/**
