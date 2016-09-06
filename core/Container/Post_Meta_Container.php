@@ -461,7 +461,7 @@ class Post_Meta_Container extends Container {
 	 * @return object $this
 	 **/
 	public function show_on_page( $page ) {
-		if ( is_int( $page ) ) {
+		if ( absint( $page ) == $page ) {
 			$page_obj = get_post( $page );
 		} else {
 			$page_obj = get_page_by_path( $page );
