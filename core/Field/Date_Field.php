@@ -44,7 +44,7 @@ class Date_Field extends Field {
 	/**
 	 * Hook administration scripts and styles.
 	 */
-	public function admin_enqueue_scripts() {
+	public static function admin_enqueue_scripts() {
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 
 		wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css' );

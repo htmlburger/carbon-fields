@@ -63,7 +63,8 @@
 	Containers
 \* ------------------------------------------------------------ */
 
-.carbon-container * { margin: 0; padding: 0; }
+.carbon-container ul,
+.carbon-container li { margin: 0; padding: 0; }
 .carbon-container p { margin: 0; padding: 0 0 3px; font-style: normal; }
 .carbon-container h3 { font-size: 17px; margin: 0 0 4px; color: #000; }
 .carbon-container label { display: block; padding: 2px 0; color: #000; }

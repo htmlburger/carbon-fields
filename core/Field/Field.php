@@ -179,7 +179,6 @@ class Field {
 
 		$field = new $class( $name, $label );
 		$field->type = $type;
-		$field->add_template( $field->get_type(), array( $field, 'template' ) );
 
 		return $field;
 	}
@@ -209,12 +208,20 @@ class Field {
 		$this->id = 'carbon-' . $random_string;
 
 		$this->init();
-		if ( is_admin() ) {
-			$this->admin_init();
-		}
+	}
 
-		add_action( 'admin_print_scripts', array( $this, 'admin_hook_scripts' ) );
-		add_action( 'admin_print_styles', array( $this, 'admin_hook_styles' ) );
+	/**
+	 * Boot the field once the container is attached.
+	 **/
+	public function boot() {
+		$this->admin_init();
+
+		$this->add_template( $this->get_type(), array( $this, 'template' ) );
+
+		add_action( 'admin_footer', array( get_class(), 'admin_hook_scripts' ), 5 );
+		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
+
+		add_action( 'admin_footer', array( get_class( $this ), 'admin_enqueue_scripts' ), 5 );
 	}
 
 	/**
@@ -224,7 +231,7 @@ class Field {
 
 	/**
 	 * Instance initialization when in the admin area.
-	 * Called during object construction.
+	 * Called during field boot.
 	 **/
 	public function admin_init() {}
 
@@ -232,7 +239,7 @@ class Field {
 	 * Enqueue admin scripts.
 	 * Called once per field type.
 	 **/
-	public function admin_enqueue_scripts() {}
+	public static function admin_enqueue_scripts() {}
 
 	/**
 	 * Prints the main Underscore template
@@ -803,7 +810,7 @@ class Field {
 	/**
 	 * Hook administration scripts.
 	 */
-	public function admin_hook_scripts() {
+	public static function admin_hook_scripts() {
 		wp_enqueue_media();
 		wp_enqueue_script( 'carbon-fields', \Carbon_Fields\URL . '/assets/js/fields.js', array( 'carbon-app', 'carbon-containers' ) );
 		wp_localize_script( 'carbon-fields', 'crbl10n',
@@ -830,7 +837,7 @@ class Field {
 	/**
 	 * Hook administration styles.
 	 */
-	public function admin_hook_styles() {
+	public static function admin_hook_styles() {
 		wp_enqueue_style( 'thickbox' );
 	}
 } // END Field

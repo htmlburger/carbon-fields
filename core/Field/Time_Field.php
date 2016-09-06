@@ -81,7 +81,7 @@ class Time_Field extends Field {
 	 * This method is called in the admin_enqueue_scripts action. It is called once per field type.
 	 * Enqueues field scripts and styles.
 	 */
-	public function admin_enqueue_scripts() {
+	public static function admin_enqueue_scripts() {
 		# Enqueue JS
 		wp_enqueue_script( 'carbon-jquery-timepicker', \Carbon_Fields\URL . '/assets/js/lib/jquery-ui-timepicker.js', array( 'jquery-ui-datepicker', 'jquery-ui-slider' ) );
 
