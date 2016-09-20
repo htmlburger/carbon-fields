@@ -1265,12 +1265,6 @@ window.carbon = window.carbon || {};
 				opacity: 0.75,
 				forceHelperSize: false,
 				placeholder: 'carbon-sortable-placeholder',
-				start: function(event, ui) {
-					//ui.item.css( 'background-color', '#f6f6f6' );
-				},
-				stop: function(event, ui) {
-					ui.item.removeAttr( 'style' );
-				},
 				update: function() {
 					var images = [];
 

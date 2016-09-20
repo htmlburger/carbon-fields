@@ -266,7 +266,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .carbon-File .input-with-button .carbon-file-field,
 .carbon-ImageGallery .input-with-button .carbon-file-field { margin-bottom: 5px; }
 .carbon-File .input-with-button .button,
-.carbon-ImageGallery .input-with-button .button{ position: relative; margin: 0 0 6px; }
+.carbon-ImageGallery .input-with-button .button { position: relative; margin: 0 0 6px; }
 .carbon-File .attachment-url { overflow: hidden; clear: both; padding: 3px 5px; border: 1px solid #ddd; margin: 0 0 4px; font-size: 14px; line-height: 19px; word-break: break-all; background: #f6f6f6; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1); }
 
 .carbon-ImageGallery .carbon-image-gallery { display: flex; flex-wrap: wrap; align-items: flex-start; }
@@ -276,6 +276,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .carbon-ImageGallery .carbon-sortable-placeholder { background: #f7f7f7; border: 3px dashed #dddddd; }
 
 #side-sortables .carbon-ImageGallery .carbon-attachment-preview,
+#side-sortables .carbon-ImageGallery .carbon-image,
 #side-sortables .carbon-ImageGallery .carbon-sortable-placeholder { width: 75px; height: 75px; }
 
 /* ------------------------------------------------------------ *\
