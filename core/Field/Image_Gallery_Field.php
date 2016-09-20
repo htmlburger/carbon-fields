@@ -102,7 +102,7 @@ class Image_Gallery_Field extends Image_Field {
 		<div class="carbon-description {{{ value ? '' : 'hidden' }}}">
 			<ul class="carbon-image-gallery">
 				<# _.each(images, function(image) { #>
-					<li class="carbon-image">
+					<li class="carbon-image" data-image-value="{{ image.value }}">
 						<div class="carbon-attachment-preview">
 							<div class="carbon-preview">
 								<div class="thumbnail">

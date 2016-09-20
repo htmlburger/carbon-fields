@@ -1245,11 +1245,50 @@ window.carbon = window.carbon || {};
 			carbon.fields.View.prototype.initialize.apply(this);
 
 			this.on('field:beforeRender', this.loadDescriptionTemplate);
+			this.on('field:rendered', this.sortableImages);
 
 			this.listenTo(this.model, 'change:images', this.updateInput);
 			this.listenTo(this.model, 'change:value', this.render);
 		},
 
+		sortableImages: function() {
+			var _this = this,
+				$imageGallery = this.$('ul.carbon-image-gallery');
+
+			// Image ordering.
+			$imageGallery.sortable({
+				items: 'li.carbon-image',
+				cursor: 'move',
+				helper: 'clone',
+				scrollSensitivity: 42,
+				forcePlaceholderSize: true,
+				opacity: 0.75,
+				forceHelperSize: false,
+				placeholder: 'carbon-sortable-placeholder',
+				start: function(event, ui) {
+					//ui.item.css( 'background-color', '#f6f6f6' );
+				},
+				stop: function(event, ui) {
+					ui.item.removeAttr( 'style' );
+				},
+				update: function() {
+					var images = [];
+
+					$imageGallery.find('li.carbon-image').each(function() {
+						var image = $(this),
+							value = image.attr('data-image-value'),
+							url = image.find('img').attr('src');
+
+						images.push({
+							value: value,
+							url: url
+						});
+					});
+
+					_this.model.set('images', images);
+				}
+			});
+		},
 		openMedia: function(event) {
 			var _this = this;
 			var type = this.model.get('type');

@@ -244,7 +244,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 
 .carbon-File .carbon-view_file { margin: 6px 0 0; }
 
-.carbon-attachment-preview { width: 150px; position: relative; float: left; padding: 5px 0 10px; margin: 0; color: #464646; list-style: none; text-align: center; }
+.carbon-attachment-preview { width: 150px; position: relative; float: left; margin: 0; color: #464646; list-style: none; text-align: center; }
 .carbon-File .carbon-attachment-preview { padding-top: 10px; padding-bottom: 4px; }
 
 .carbon-preview { position: relative; -webkit-box-shadow: inset 0 0 15px rgba( 0, 0, 0, 0.1 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.05 ); box-shadow: inset 0 0 15px rgba( 0, 0, 0, 0.1 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.05 ); background: #eee; }
@@ -253,10 +253,11 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .carbon-preview .thumbnail:after { content: ''; display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; -webkit-box-shadow: inset 0 0 0 1px rgba( 0, 0, 0, 0.1 ); box-shadow: inset 0 0 0 1px rgba( 0, 0, 0, 0.1 ); overflow: hidden; }
 .carbon-preview .thumbnail .centered { position: absolute; top: 0; left: 0; width: 100%; height: 100%; -webkit-transform: translate( 50%, 50% ); -ms-transform: translate(50%,50%); transform: translate( 50%, 50% ); }
 .carbon-preview .thumbnail .centered img { position: absolute; top: 0; left: 0; max-width: 100%; -webkit-transform: translate( -50%, -50% ); -ms-transform: translate(-50%,-50%); transform: translate( -50%, -50% ); }
-#side-sortables .carbon-ImageGallery .carbon-attachment-preview  {width: 75px; height: 75px;}
 
 .carbon-preview .carbon-file-remove,
-.carbon-preview .carbon-image-remove { position: absolute; top: -10px; right: -10px; cursor: pointer; }
+.carbon-preview .carbon-image-remove { visibility: hidden; display: inline; position: absolute; top: -10px; right: -10px; cursor: pointer; box-sizing: border-box; }
+.carbon-preview:hover .carbon-file-remove,
+.carbon-preview:hover .carbon-image-remove { visibility: visible; }
 .carbon-preview .carbon-file-remove:before,
 .carbon-preview .carbon-image-remove:before { content: "\f153"; background: #fff; border-radius: 50%; color: #C00; }
 
@@ -268,7 +269,14 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .carbon-ImageGallery .input-with-button .button{ position: relative; margin: 0 0 6px; }
 .carbon-File .attachment-url { overflow: hidden; clear: both; padding: 3px 5px; border: 1px solid #ddd; margin: 0 0 4px; font-size: 14px; line-height: 19px; word-break: break-all; background: #f6f6f6; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1); }
 
-.carbon-ImageGallery .carbon-image .carbon-attachment-preview { margin-right: 10px; }
+.carbon-ImageGallery .carbon-image-gallery { display: flex; flex-wrap: wrap; align-items: flex-start; }
+
+.carbon-ImageGallery .carbon-image,
+.carbon-ImageGallery .carbon-sortable-placeholder { width: 150px; height: 150px; float: left; cursor: move; margin: 0 10px 10px 0; position: relative; box-sizing: border-box; }
+.carbon-ImageGallery .carbon-sortable-placeholder { background: #f7f7f7; border: 3px dashed #dddddd; }
+
+#side-sortables .carbon-ImageGallery .carbon-attachment-preview,
+#side-sortables .carbon-ImageGallery .carbon-sortable-placeholder { width: 75px; height: 75px; }
 
 /* ------------------------------------------------------------ *\
 	Field - RichText
