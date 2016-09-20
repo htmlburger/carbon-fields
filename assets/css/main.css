@@ -41,10 +41,12 @@
 .carbon-group-actions a:before,
 .carbon-btn-remove-sidebar:before,
 .carbon-preview .carbon-file-remove,
+.carbon-preview .carbon-image-remove,
 .carbon-field .icon-button:before { font: normal normal normal 22px/26px 'dashicons'; speak: none; text-transform: none; text-align: center; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; vertical-align: top; }
-.carbon-preview .carbon-file-remove { font-size: 20px; }
-.carbon-File .icon-button { width: auto; padding-right: 10px; font-size: 13px; line-height: 26px; }
-.carbon-File .icon-button:before { line-height: 26px; }
+.carbon-preview .carbon-file-remove,
+.carbon-preview .carbon-image-remove { font-size: 20px; }
+.carbon-File .icon-button, .carbon-ImageGallery .icon-button  { width: auto; padding-right: 10px; font-size: 13px; line-height: 26px; }
+.carbon-File .icon-button:before, .carbon-ImageGallery .icon-button:before { line-height: 26px; }
 
 .carbon-btn-remove-sidebar { position: absolute; top: 10px; right: 33px; padding: 0; margin: 0; font-size: 0; line-height: 0; text-decoration: none; color: #c00; opacity: 0.7; }
 .carbon-btn-remove-sidebar:hover { color: #c00; opacity: 1; }
@@ -54,6 +56,7 @@
 .carbon-group-actions a.carbon-btn-remove:hover:before { color: #f33; }
 .carbon-File .c2_open_media:before { content: "\f497"; }
 .carbon-Image .c2_open_media:before { content: "\f128"; }
+.carbon-ImageGallery .c2_open_media:before { content: "\f128"; }
 .carbon-Map .address-search-btn:before { content: "\f179"; }
 .button.pickcolor:before { content: "\f309"; }
 .button.carbon-datepicker-trigger:before { content: "\f508"; }
@@ -236,7 +239,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .comment-container-holder .carbon-Relationship .selected-items-container { top: -26px; }
 
 /* ------------------------------------------------------------ *\
-	Field - File, Image
+	Field - File, Image, Image Gallery
 \* ------------------------------------------------------------ */
 
 .carbon-File .carbon-view_file { margin: 6px 0 0; }
@@ -251,13 +254,20 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .carbon-preview .thumbnail .centered { position: absolute; top: 0; left: 0; width: 100%; height: 100%; -webkit-transform: translate( 50%, 50% ); -ms-transform: translate(50%,50%); transform: translate( 50%, 50% ); }
 .carbon-preview .thumbnail .centered img { position: absolute; top: 0; left: 0; max-width: 100%; -webkit-transform: translate( -50%, -50% ); -ms-transform: translate(-50%,-50%); transform: translate( -50%, -50% ); }
 
-.carbon-preview .carbon-file-remove { position: absolute; top: -10px; right: -10px; cursor: pointer; }
-.carbon-preview .carbon-file-remove:before { content: "\f153"; background: #fff; border-radius: 50%; color: #C00; }
+.carbon-preview .carbon-file-remove,
+.carbon-preview .carbon-image-remove { position: absolute; top: -10px; right: -10px; cursor: pointer; }
+.carbon-preview .carbon-file-remove:before,
+.carbon-preview .carbon-image-remove:before { content: "\f153"; background: #fff; border-radius: 50%; color: #C00; }
 
-.carbon-File .input-with-button { padding-right: 0; }
-.carbon-File .input-with-button .carbon-file-field { margin-bottom: 5px; }
-.carbon-File .input-with-button .button { position: relative; margin: 0 0 6px; }
+.carbon-File .input-with-button,
+.carbon-ImageGallery .input-with-button { padding-right: 0; }
+.carbon-File .input-with-button .carbon-file-field,
+.carbon-ImageGallery .input-with-button .carbon-file-field { margin-bottom: 5px; }
+.carbon-File .input-with-button .button,
+.carbon-ImageGallery .input-with-button .button{ position: relative; margin: 0 0 6px; }
 .carbon-File .attachment-url { overflow: hidden; clear: both; padding: 3px 5px; border: 1px solid #ddd; margin: 0 0 4px; font-size: 14px; line-height: 19px; word-break: break-all; background: #f6f6f6; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1); }
+
+.carbon-ImageGallery .carbon-image .carbon-attachment-preview { margin-right: 10px; }
 
 /* ------------------------------------------------------------ *\
 	Field - RichText
@@ -539,6 +549,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 	.carbon-field .icon-button { min-width: 40px; height: 40px; }
 
 	.carbon-preview .carbon-file-remove,
+	.carbon-preview .carbon-image-remove,
 	.carbon-field .icon-button:before { font-size: 32px; line-height: 40px; }
 
 	.carbon-field input[type="text"],
