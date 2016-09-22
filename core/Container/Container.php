@@ -26,21 +26,12 @@ abstract class Container {
 	public static $registered_panel_ids = array();
 
 	/**
-	 * List of registered unique field names
-	 *
-	 * @see verify_unique_field_name()
-	 * @var array
-	 */
-	static protected $registered_field_names = array();
-
-	/**
 	 * List of containers created via factory that
 	 * should be initialized
 	 *
-	 * @see verify_unique_field_name()
 	 * @var array
 	 */
-	static protected $init_containers = array();
+	protected static $init_containers = array();
 
 	/**
 	 * List of containers attached to the current page view
@@ -56,7 +47,15 @@ abstract class Container {
 	 * @see _attach()
 	 * @var array
 	 */
-	static protected $active_fields = array();
+	protected static $active_fields = array();
+
+	/**
+	 * List of registered unique field names for this container instance
+	 *
+	 * @see verify_unique_field_name()
+	 * @var array
+	 */
+	protected $registered_field_names = array();
 
 	/**
 	 * Stores all the container Backbone templates
@@ -644,11 +643,11 @@ abstract class Container {
 	 * @param string $name
 	 **/
 	public function verify_unique_field_name( $name ) {
-		if ( in_array( $name, self::$registered_field_names ) ) {
+		if ( in_array( $name, $this->registered_field_names ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
 		}
 
-		self::$registered_field_names[] = $name;
+		$this->registered_field_names[] = $name;
 	}
 
 	/**
@@ -657,9 +656,10 @@ abstract class Container {
 	 * @param string $name
 	 **/
 	public function drop_unique_field_name( $name ) {
-		$index = array_search( $name, self::$registered_field_names );
+		$index = array_search( $name, $this->registered_field_names );
+
 		if ( $index !== false ) {
-			unset( self::$registered_field_names[ $index ] );
+			unset( $this->registered_field_names[ $index ] );
 		}
 	}
 

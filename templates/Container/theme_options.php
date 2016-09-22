@@ -22,14 +22,14 @@
 			<div id="post-body" class="metabox-holder columns-2">
 				<div id="post-body-content">
 					<div class="postbox carbon-box" id="<?php echo $this->id; ?>">
-						<div class="inside container-holder carbon-grid theme-options-container container-<?php echo $this->id; ?> <?php echo $this->is_tabbed() ? '' : 'carbon-fields-collection' ?>"></div>
+						<fieldset class="inside container-holder carbon-grid theme-options-container container-<?php echo $this->id; ?> <?php echo $this->is_tabbed() ? '' : 'carbon-fields-collection' ?>"></fieldset>
 					</div>
 				</div>
 
 				<div id="postbox-container-1" class="postbox-container">
 					<div id="submitdiv" class="postbox">
 						<h3><?php _e( 'Actions', 'carbon-fields' ); ?></h3>
-						
+
 						<div id="major-publishing-actions">
 
 							<div id="publishing-action">
@@ -42,7 +42,7 @@
 
 								<input type="submit" value="<?php echo esc_attr( $button_label ); ?>" name="publish" id="publish" class="button button-primary button-large">
 							</div>
-							
+
 							<div class="clear"></div>
 						</div>
 					</div>

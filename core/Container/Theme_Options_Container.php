@@ -206,37 +206,6 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
-	 * Make sure a field certain name can't be registered multiple times.
-	 **/
-	public function verify_unique_field_name( $name ) {
-		$page_id = $this->settings['parent'] . '/' . $this->settings['file'];
-
-		if ( ! isset( self::$registered_field_names[ $page_id ] ) ) {
-			self::$registered_field_names[ $page_id ] = array();
-		}
-
-		if ( in_array( $name, self::$registered_field_names[ $page_id ] ) ) {
-			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
-		}
-
-		self::$registered_field_names[ $page_id ][] = $name;
-	}
-
-	/**
-	 * Remove field name $name from the list of unique field names
-	 *
-	 * @param string $name
-	 **/
-	public function drop_unique_field_name( $name ) {
-		$page_id = $this->settings['parent'] . '/' . $this->settings['file'];
-
-		$index = array_search( $name, self::$registered_field_names[ $page_id ] );
-		if ( $index !== false ) {
-			unset( self::$registered_field_names[ $page_id ][ $index ] );
-		}
-	}
-
-	/**
 	 * Append array of fields to the current fields set. All items of the array
 	 * must be instances of Field and their names should be unique for all
 	 * Carbon containers.

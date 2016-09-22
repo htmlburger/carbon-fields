@@ -122,6 +122,9 @@ window.carbon = window.carbon || {};
 			// Listen for model changes in the fields collection.
 			this.listenToOnce(this.fieldsCollection, 'change:value', this.changeListener);
 
+			// Disable/enable the container's inputs when visibility changes
+			this.listenTo(this.model, 'change:visible', this.disableInputs);
+
 			// Listen for container class updates
 			this.listenTo(this.model, 'change:classes', this.updateClass);
 
@@ -229,6 +232,15 @@ window.carbon = window.carbon || {};
 				});
 			}
 
+		},
+
+		disableInputs: function(model) {
+			if ( ! this.$el.is('fieldset') ) {
+				return;
+			}
+
+			var disabled = !model.get('visible');
+			this.$el.attr('disabled', disabled);
 		},
 
 		updateClass: function(model) {

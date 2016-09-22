@@ -13,14 +13,6 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 class Post_Meta_Container extends Container {
 	/**
-	 * List of registered unique field names
-	 *
-	 * @see verify_unique_field_name()
-	 * @var array
-	 */
-	protected static $registered_field_names;
-
-	/**
 	 * ID of the post the container is working with
 	 *
 	 * @see init()
@@ -395,44 +387,6 @@ class Post_Meta_Container extends Container {
 	public function set_post_id( $post_id ) {
 		$this->post_id = $post_id;
 		$this->store->set_id( $post_id );
-	}
-
-	/**
-	 * Perform checks whether there is a field registered with the name $name.
-	 * If not, the field name is recorded.
-	 *
-	 * @param string $name
-	 **/
-	public function verify_unique_field_name( $name ) {
-		if ( empty( $this->settings['post_type'] ) ) {
-			Incorrect_Syntax_Exception::raise( 'Panel instance is not setup correctly (missing post type)' );
-		}
-
-		foreach ( $this->settings['post_type'] as $post_type ) {
-			if ( ! isset( self::$registered_field_names[ $post_type ] ) ) {
-				self::$registered_field_names[ $post_type ] = array();
-			}
-
-			if ( in_array( $name, self::$registered_field_names[ $post_type ] ) ) {
-				Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
-			}
-
-			self::$registered_field_names[ $post_type ][] = $name;
-		}
-	}
-
-	/**
-	 * Remove field name $name from the list of unique field names
-	 *
-	 * @param string $name
-	 **/
-	public function drop_unique_field_name( $name ) {
-		foreach ( $this->settings['post_type'] as $post_type ) {
-			$index = array_search( $name, self::$registered_field_names[ $post_type ] );
-			if ( $index !== false ) {
-				unset( self::$registered_field_names[ $post_type ][ $index ] );
-			}
-		}
 	}
 
 	/**

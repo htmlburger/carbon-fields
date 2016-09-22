@@ -13,9 +13,6 @@ class Widget_Container extends Container {
 	 * @param string $id Unique ID of the widget
 	 **/
 	public function __construct( $id ) {
-		// Reset the registered fields array, this is required so we can have fields with same names
-		self::$registered_field_names = array();
-
 		$this->id = $id;
 	}
 
