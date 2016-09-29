@@ -398,8 +398,9 @@ class Post_Meta_Container extends Container {
 	public function show_on_page_children( $parent_page_path ) {
 		$page = get_page_by_path( $parent_page_path );
 
+		$this->show_on_post_type( 'page' );
+
 		if ( $page ) {
-			$this->show_on_post_type( 'page' );
 			$this->settings['show_on']['parent_page_id'] = $page->ID;
 		} else {
 			$this->settings['show_on']['parent_page_id'] = -1;
@@ -421,8 +422,9 @@ class Post_Meta_Container extends Container {
 			$page_obj = get_page_by_path( $page );
 		}
 
+		$this->show_on_post_type( 'page' );
+
 		if ( $page_obj ) {
-			$this->show_on_post_type( 'page' );
 			$this->settings['show_on']['page_id'] = $page_obj->ID;
 		} else {
 			$this->settings['show_on']['page_id'] = -1;
