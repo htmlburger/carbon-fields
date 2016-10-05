@@ -634,8 +634,9 @@ window.carbon = window.carbon || {};
 				switch(type) {
 					case 'template_names':
 						var template = _this.model.get('page_template');
+						var isPage = typeof typenow !== 'undefined' && typenow === 'page';
 
-						if ($.inArray(template, req) === -1) {
+						if (isPage && $.inArray(template, req) === -1) {
 							visible = false;
 						}
 					break;
