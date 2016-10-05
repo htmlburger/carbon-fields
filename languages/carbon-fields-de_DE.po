@@ -1,0 +1,345 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2016-08-26 14:26+0200\n"
+"PO-Revision-Date: 2016-08-26 15:35+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.8\n"
+"X-Poedit-Basepath: .\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: core/Container/Container.php:542
+msgid "General"
+msgstr "Allgemein"
+
+#: core/Container/Container.php:728
+msgid "Please fill out all required fields highlighted below."
+msgstr "Bitte fülle alle markierten Pflichtfelder unten aus."
+
+#: core/Container/Container.php:729
+msgid "The changes you made will be lost if you navigate away from this page."
+msgstr ""
+"Deine getättigten Änderungen gehen verloren, wenn du diese Seite verlässt."
+
+#: core/Container/Theme_Options_Container.php:151
+msgid "Settings saved."
+msgstr "Deine Einstellungen wurden gespeichert."
+
+#: core/Field/Association_Field.php:380 core/Field/Relationship_Field.php:265
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: core/Field/Color_Field.php:17
+msgid "Select a Color"
+msgstr "Wähle eine Farbe"
+
+#: core/Field/Complex_Field.php:37
+msgid "Entry"
+msgstr "Eintrag"
+
+#: core/Field/Complex_Field.php:38
+msgid "Entries"
+msgstr "Einträge"
+
+#: core/Field/Complex_Field.php:464
+msgid "Collapse/Expand"
+msgstr "Ein/Ausklappen"
+
+#: core/Field/Complex_Field.php:465
+msgid "Clone"
+msgstr "Klonen"
+
+#: core/Field/Complex_Field.php:466 core/Walker/Nav_Menu_Edit_Walker.php:217
+msgid "Remove"
+msgstr "Entfernen"
+
+#: core/Field/Complex_Field.php:505
+msgid ""
+"Complex field layouts are deprecated, please use <code>set_width()</code> "
+"instead."
+msgstr ""
+"Komplexe Felder Layouts sind veraltet. Bitte benutze <code>set_width()</"
+"code> stattdessen."
+
+#: core/Field/Date_Field.php:39
+msgid "Date"
+msgstr "Datum"
+
+#: core/Field/Field.php:860 core/Field/File_Field.php:25
+msgid "Files"
+msgstr "Dateien"
+
+#: core/Field/Field.php:861
+msgid "The address could not be found. "
+msgstr "Die Adresse wurde nicht gefunden."
+
+#: core/Field/Field.php:862
+msgid "Geocode was not successful for the following reason: "
+msgstr "Der Geocode war nicht erfolgreich aus folgenden Gründen:"
+
+#: core/Field/Field.php:863
+#, php-format
+msgid "Maximum number of items reached (%s items)"
+msgstr "Maximale Anzahl von Einträgen wurde erreicht. (%s Einträge)"
+
+#: core/Field/Field.php:864
+#, php-format
+msgid "Maximum number of rows reached (%s rows)"
+msgstr "Maximale Anzahl von Reihen erreicht (%s Reihen)."
+
+#: core/Field/Field.php:865
+#, php-format
+msgid "Cannot create more than %s rows"
+msgstr "Mehr als %s Reihen können nicht erstellt werden"
+
+#: core/Field/Field.php:866
+msgid "Please enter the name of the new sidebar:"
+msgstr "Bitte benenne die neue Seitenleiste:"
+
+#: core/Field/Field.php:867
+msgid "Are you sure you wish to remove this sidebar?"
+msgstr "Möchest du diese Seitenleiste wirklich entfernen?"
+
+#: core/Field/Field.php:868
+msgid "Add Sidebar"
+msgstr "Seitenleiste hinzufügen"
+
+#: core/Field/Field.php:869
+#, php-format
+msgid "There are no %s yet. Click <a href=\"#\">here</a> to add one."
+msgstr ""
+"Es gibt noch keine %s bis jetzt. Klicke <a href=\"#\">hier</a> zum "
+"Hinzufügen."
+
+#: core/Field/Field.php:870
+#, php-format
+msgid "Add %s"
+msgstr "%s hinzufügen"
+
+#: core/Field/Field.php:871
+#, php-format
+msgid "Minimum number of rows not reached (%d %s)"
+msgstr "Minimale Anzahl von Reihen wurde nicht erreicht (%d %s)"
+
+#: core/Field/Field.php:872
+msgid "Please fill out all fields correctly. "
+msgstr "Bitte fülle alle Felder korrekt aus."
+
+#: core/Field/Field.php:873
+msgid "This field is required. "
+msgstr "Dieses Feld erforderlich."
+
+#: core/Field/Field.php:874
+msgid "Please choose an option. "
+msgstr "Bitte wähle eine Option."
+
+#: core/Field/File_Field.php:23 core/Field/File_Field.php:24
+msgid "Select File"
+msgstr "Datei auswählen"
+
+#: core/Field/File_Field.php:122
+msgid "View File"
+msgstr "Datei ansehen"
+
+#: core/Field/Footer_Scripts_Field.php:14
+msgid ""
+"If you need to add scripts to your footer (like Google Analytics tracking "
+"code), you should enter them in this box."
+msgstr ""
+"Wenn du Skripte in deinen Footer hinzufügen möchtest (z.B. Google Analytics "
+"Tracking Code), solltest du sie in diese Box einfügen."
+
+#: core/Field/Gravity_Form_Field.php:45
+msgid "No form"
+msgstr "Kein Formular"
+
+#: core/Field/Gravity_Form_Field.php:80
+msgid "Please install Gravity Forms plugin"
+msgstr "Bitte installiere das Gravity Forms Plugins"
+
+#: core/Field/Gravity_Form_Field.php:86
+msgid "No Gravity Forms have been found."
+msgstr "Es wurden keine Gravity Formulare gefunden."
+
+#: core/Field/Header_Scripts_Field.php:14
+msgid "If you need to add scripts to your header, you should enter them here."
+msgstr ""
+"Wenn du Skripte in deinen Header hinzufügen möchtest, solltest du sie hier "
+"einfügen."
+
+#: core/Field/Image_Field.php:18 core/Field/Image_Field.php:19
+msgid "Select Image"
+msgstr "Bild auswählen"
+
+#: core/Field/Image_Field.php:20
+msgid "Images"
+msgstr "Bilder"
+
+#: core/Field/Map_Field.php:53
+msgid "Locate Address on the map"
+msgstr "Adresse auf der Karte finden"
+
+#: core/Field/Map_Field.php:58
+msgid "Find"
+msgstr "Finden"
+
+#: core/Field/Radio_Field.php:15 core/Field/Select_Field.php:55
+#: core/Field/Set_Field.php:95
+msgid "no options"
+msgstr "keine Optionen"
+
+#: core/Field/Relationship_Field.php:211
+msgid "selected item"
+msgstr "Ausgewählter Eintrag"
+
+#: core/Field/Relationship_Field.php:211 core/Field/Relationship_Field.php:212
+msgid "selected items"
+msgstr "Ausgewählte Einträge"
+
+#: core/Field/Relationship_Field.php:219
+msgid "out of"
+msgstr "außerhalb"
+
+#: core/Field/Relationship_Field.php:226
+msgid "Search"
+msgstr "Suchen"
+
+#: core/Field/Relationship_Field.php:239
+msgid "Associated:"
+msgstr "Assoziiert:"
+
+#: core/Field/Rich_Text_Field.php:31 core/Field/Rich_Text_Field.php:32
+msgid "Add Media"
+msgstr "Medien hinzufügen"
+
+#: core/Field/Rich_Text_Field.php:43
+msgid "Visual"
+msgstr "Visuell"
+
+#: core/Field/Rich_Text_Field.php:46
+msgid "Text"
+msgstr "Text"
+
+#: core/Field/Set_Field.php:114
+msgid "Show All Options"
+msgstr "Alle Optionen anzeigen"
+
+#: core/Field/Sidebar_Field.php:35
+msgctxt "sidebar"
+msgid "Add New"
+msgstr "Erstellen"
+
+#: core/Manager/Sidebar_Manager.php:104
+msgid "Sidebar with the same ID is already registered."
+msgstr "Eine Seitenleiste mit der selben ID ist bereits registriert."
+
+#: core/Manager/Sidebar_Manager.php:131
+msgid "Sidebar not found."
+msgstr "Seitenleiste wurde nicht gefunden"
+
+#. translators: %s: title of menu item which is invalid
+#: core/Walker/Nav_Menu_Edit_Walker.php:75
+#, php-format
+msgid "%s (Invalid)"
+msgstr "%s (ungültig)"
+
+#. translators: %s: title of menu item in draft status
+#: core/Walker/Nav_Menu_Edit_Walker.php:79
+#, php-format
+msgid "%s (Pending)"
+msgstr "%s (anstehend)"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:92
+msgid "sub item"
+msgstr "Unterpunkt"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:107
+msgid "Move up"
+msgstr "Nach oben"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:120
+msgid "Move down"
+msgstr "Nach unten"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:122
+#: core/Walker/Nav_Menu_Edit_Walker.php:124
+msgid "Edit Menu Item"
+msgstr "Menüpunkt bearbeiten"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:133
+msgid "URL"
+msgstr "URL"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:140
+msgid "Navigation Label"
+msgstr "Navigationsetikett"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:146
+msgid "Title Attribute"
+msgstr "Titelattribut"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:153
+msgid "Open link in a new window/tab"
+msgstr "Link in einem neuen Fenster/Tab öffnen"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:158
+msgid "CSS Classes (optional)"
+msgstr "CSS Klassen (optional)"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:164
+msgid "Link Relationship (XFN)"
+msgstr "Linkbeziehungen (XFN)"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:170
+msgid "Description"
+msgstr "Beschreibung"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:172
+msgid ""
+"The description will be displayed in the menu if the current theme supports "
+"it."
+msgstr ""
+"Diese Beschreibung wird im aktuellen Menu angezeigt, wenn das Theme es "
+"untersützt."
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:192
+msgid "Move"
+msgstr "Bewegen"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:193
+msgid "Up one"
+msgstr "Eins nach oben"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:194
+msgid "Down one"
+msgstr "Eins nach unten"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:197
+msgid "To the top"
+msgstr "Zum Anfang"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:204
+#, php-format
+msgid "Original: %s"
+msgstr "Original: %s"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:218
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: templates/Container/theme_options.php:31
+msgid "Actions"
+msgstr "Aktionen"
+
+#: templates/Container/theme_options.php:37
+msgid "Save Changes"
+msgstr "Änderungen speichern"
+
+#: templates/Container/widget.php:5
+msgid "No options are available for this widget."
+msgstr "Keine Optionen sind für dieses Widget verfügbar."

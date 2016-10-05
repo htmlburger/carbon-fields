@@ -63,7 +63,8 @@
 	Containers
 \* ------------------------------------------------------------ */
 
-.carbon-container * { margin: 0; padding: 0; }
+.carbon-container ul,
+.carbon-container li { margin: 0; padding: 0; }
 .carbon-container p { margin: 0; padding: 0 0 3px; font-style: normal; }
 .carbon-container h3 { font-size: 17px; margin: 0 0 4px; color: #000; }
 .carbon-container label { display: block; padding: 2px 0; color: #000; }
@@ -93,7 +94,7 @@
 
 .carbon-tabs-nav { border-bottom: solid 1px #ddd; margin: -5px 0px -1px 0px; padding: 15px 0 0 10px; background: #F9F9F9; }
 .carbon-tabs-nav li { display: inline-block; position: relative; top: 1px; margin-bottom: 0;}
-.carbon-tabs-nav li a {display: inline-block; margin: 0 4px 0px 0; padding: 6px 10px; border: solid 1px #ccc; background: #E4E4E4; color: #000; font-size: 14px; line-height: 24px; text-decoration: none; font-weight: bold; }
+.carbon-tabs-nav li a {display: inline-block; margin: 0 4px 0px 0; padding: 6px 10px; border: solid 1px #ccc; background: #E4E4E4; color: #000; font-size: 14px; line-height: 24px; text-decoration: none; font-weight: 600; }
 .carbon-tabs-nav li.active a { text-decoration: none; background: white; margin-bottom: -1px; border-bottom-color: #fff; }
 .carbon-tabs-nav li.active a:focus, .carbon-tabs-nav li.active a:active { box-shadow: none; }
 .carbon-tabs-nav li a:hover { background: white; }
@@ -155,7 +156,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .carbon-field { padding: 10px; margin: 0; }
 .carbon-field .help-text { padding-top: 3px; font-style: italic; font-size: 14px; }
 
-.carbon-field label { padding-bottom: 6px; font-weight: bold; }
+.carbon-field label { padding-bottom: 6px; font-weight: 600; }
 .carbon-field input[type="text"],
 .carbon-field textarea { display: block; padding: 4px 5px 3px; width: 100%; resize: vertical; }
 .carbon-field select { width: 100%; }
@@ -329,7 +330,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .carbon-Complex .description { padding-top: 10px; margin-top: 0; }
 .carbon-Complex .help-text { clear: both; padding-top: 10px; margin-top: 0; }
 
-.carbon-Complex .carbon-field label { font-weight: bold; }
+.carbon-Complex .carbon-field label { font-weight: 600; }
 
 /* Complex Groups */
 .carbon-group-row { position: relative; }
@@ -339,8 +340,8 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .carbon-group-row .carbon-row.carbon-group-row { padding: 0; }
 
 .carbon-group-row .carbon-drag-handle { position: relative; background: #f7f6f6; border: 1px solid #d9d9d9; padding: 8px 10px; cursor: move; line-height: 18px; }
-.carbon-group-row .carbon-drag-handle .group-number { position: absolute; border-right: 1px solid #d9d9d9; top: 0; height: 100%; width: 40px; line-height: 34px; margin-left: -10px; text-align: center; font-weight: bold; }
-.carbon-group-row .carbon-drag-handle .group-name { display: inline-block; margin-left: 45px; font-weight: bold; }
+.carbon-group-row .carbon-drag-handle .group-number { position: absolute; border-right: 1px solid #d9d9d9; top: 0; height: 100%; width: 40px; line-height: 34px; margin-left: -10px; text-align: center; font-weight: 600; }
+.carbon-group-row .carbon-drag-handle .group-name { display: inline-block; margin-left: 45px; font-weight: 600; }
 .carbon-group-row.removed > .carbon-drag-handle { background: #e74444 !important; transition: all 0.5s ease; }
 
 .carbon-group-row .fields-container { border-width: 0 1px 1px; border-style: solid; border-color: #d9d9d9; }
@@ -439,10 +440,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 
 .carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .carbon-drag-handle { display: none; }
 .carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container { border-width: 1px; border-bottom-color: transparent; }
-.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-fields-row { border-top: 1px solid #d9d9d9; }
-.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-fields-row:first-child { border-top: 0; }
 .carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-row { border-color: transparent; }
-.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-fields-row + .carbon-row { border-top-color: #d9d9d9; }
 
 /* Complet Layout Tabbed */
 
@@ -452,7 +450,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .layout-tabbed-horizontal > .group-tabs-nav-holder > .group-tabs-nav .active a { padding: 10px 6px 10px; margin-top: 0; }
 .layout-tabbed-horizontal > .group-tabs-nav-holder > .group-tabs-nav .ui-placeholder-highlight { margin: 2px -1px 0 1px; }
 
-.layout-tabbed-horizontal > .group-tabs-nav-holder { box-sizing: border-box; position: relative; z-index: 30; float: left; max-width: 100%; padding-right: 39px; line-height: 18px; }
+.layout-tabbed-horizontal > .group-tabs-nav-holder { box-sizing: border-box; position: relative; z-index: 1; float: left; max-width: 100%; padding-right: 39px; line-height: 18px; }
 .layout-tabbed-horizontal > .group-tabs-nav-holder.active { z-index: 200; }
 
 .layout-tabbed-horizontal > .group-tabs-nav-holder > .group-tabs-nav { width: 100%; margin-bottom: -1px; font-size: 0; display: -webkit-flex; display: flex; overflow: hidden; -webkit-flex-direction: row; flex-direction: row; -webkit-flex-wrap: nowrap; flex-wrap: nowrap; -webkit-justify-content: flex-start; justify-content: flex-start; -webkit-align-items: stretch; align-items: stretch; -webkit-align-content: stretch; align-content: stretch; }
@@ -462,7 +460,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 
 .layout-tabbed-horizontal > .group-tabs-nav-holder .carbon-actions { position: absolute; top: 2px; right: 0; display: none; }
 .layout-tabbed-horizontal > .group-tabs-nav-holder .carbon-actions .carbon-button { display: block; margin: 2px 0 0; }
-.layout-tabbed-horizontal > .group-tabs-nav-holder .carbon-actions .carbon-button .button { display: block; height: auto; padding: 8px 12px; border: 1px solid #d9d9d9; font-size: 13px; color: #555; text-decoration: none; font-size: 20px; line-height: inherit; font-weight: bold; text-align: center; background: #ebebeb; border-radius: 0; box-shadow: none; }
+.layout-tabbed-horizontal > .group-tabs-nav-holder .carbon-actions .carbon-button .button { display: block; height: auto; padding: 8px 12px; border: 1px solid #d9d9d9; font-size: 13px; color: #555; text-decoration: none; font-size: 20px; line-height: inherit; font-weight: 600; text-align: center; background: #ebebeb; border-radius: 0; box-shadow: none; }
 .layout-tabbed-horizontal > .group-tabs-nav-holder .carbon-actions .carbon-button ul.right-aligned { left: auto; right: 0; }
 
 .layout-tabbed-horizontal > .carbon-groups-holder { clear: both; }
@@ -483,7 +481,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav .ui-placeholder-highlight { margin: 1px 0 0;  }
 
 .layout-tabbed-vertical > .group-tabs-nav-holder .carbon-actions .carbon-button { float: none; display: block; width: auto; margin: 0; }
-.layout-tabbed-vertical > .group-tabs-nav-holder .carbon-actions .carbon-button .button { display: block; width: auto; height: auto; margin-right: -1px; text-align: center; border-radius: 0; font-size: 20px; font-weight: bold; box-shadow: none; text-shadow: none; border-color: #d9d9d9; }
+.layout-tabbed-vertical > .group-tabs-nav-holder .carbon-actions .carbon-button .button { display: block; width: auto; height: auto; margin-right: -1px; text-align: center; border-radius: 0; font-size: 20px; font-weight: 600; box-shadow: none; text-shadow: none; border-color: #d9d9d9; }
 
 
 .layout-tabbed-vertical > .carbon-groups-holder { width: 80%; }
@@ -511,7 +509,7 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 @media screen and (min-width: 1100px) {
 	/* Field Rows */
 	.carbon-grid .carbon-fields-row:first-child { border-top: 0; }
-	.carbon-grid .carbon-fields-row { display: table; width: 100%; border-top: 1px solid #d9d9d9; }
+	.carbon-grid .carbon-fields-row { display: table; width: 100%; border-bottom: 1px solid #d9d9d9; }
 	.carbon-grid .carbon-fields-row > .carbon-field { display: table-cell; min-width: 0; vertical-align: top; border: 0; }
 	.carbon-grid .carbon-fields-row > .carbon-field + .carbon-field { border-left: 1px solid #d9d9d9; }
 

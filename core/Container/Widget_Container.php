@@ -13,13 +13,7 @@ class Widget_Container extends Container {
 	 * @param string $id Unique ID of the widget
 	 **/
 	public function __construct( $id ) {
-		// Reset the registered fields array, this is required so we can have fields with same names
-		self::$registered_field_names = array();
-
 		$this->id = $id;
-
-		add_action( 'admin_footer', array( $this, 'admin_hook_scripts' ) );
-		add_action( 'admin_footer', array( $this, 'admin_hook_styles' ) );
 	}
 
 	/**
@@ -57,8 +51,9 @@ class Widget_Container extends Container {
 	 **/
 	public function is_valid_attach() {
 		$screen = get_current_screen();
+		$is_widget_save = isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'save-widget';
 
-		return $screen && $screen->id === 'widgets';
+		return $screen && $screen->id === 'widgets' || $is_widget_save;
 	}
 }
 

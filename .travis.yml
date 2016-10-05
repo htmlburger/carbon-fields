@@ -11,7 +11,8 @@ php:
   - hhvm
 
 env:
-  - WP_VERSION=latest WP_MULTISITE=0
+# - WP_VERSION=latest WP_MULTISITE=0
+  - WP_VERSION=4.6 WP_MULTISITE=0
   - WP_VERSION=4.5 WP_MULTISITE=0
   - WP_VERSION=4.4 WP_MULTISITE=0
   - WP_VERSION=4.3 WP_MULTISITE=0
@@ -20,7 +21,7 @@ env:
 matrix:
   include:
   - php: 5.3
-    env: WP_VERSION=latest WP_MULTISITE=1
+    env: WP_VERSION=4.6 WP_MULTISITE=1
 
 before_install:
   - composer self-update
