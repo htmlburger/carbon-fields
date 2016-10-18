@@ -24,6 +24,7 @@ class Complex_Field extends Field {
 	protected $groups = array();
 
 	protected $layout = self::LAYOUT_GRID;
+	public $static = false;
 	protected $values_min = -1;
 	protected $values_max = -1;
 
@@ -401,6 +402,7 @@ class Complex_Field extends Field {
 				'name' => $group->get_name(),
 				'label' => $group->get_label(),
 				'group_id' => $group->get_group_id(),
+				'static' => $this->static,
 				'fields' => array(),
 			);
 
@@ -413,9 +415,10 @@ class Complex_Field extends Field {
 
 		$complex_data = array_merge( $complex_data, array(
 			'layout' => $this->layout,
+			'static' => $this->static,
 			'labels' => $this->labels,
-			'min' => $this->get_min(),
-			'max' => $this->get_max(),
+			'min' => $this->static ? count( $groups_data ) : $this->get_min(),
+			'max' => $this->static ? count( $groups_data ) : $this->get_max(),
 			'multiple_groups' => count( $groups_data ) > 1,
 			'groups' => $groups_data,
 			'value' => $values_data,
@@ -486,7 +489,7 @@ class Complex_Field extends Field {
 	 */
 	public function template_group() {
 		?>
-		<div id="carbon-{{{ complex_name }}}-complex-container" class="carbon-row carbon-group-row" data-group-id="{{ id }}">
+		<div id="carbon-{{{ complex_name }}}-complex-container" class="carbon-row carbon-group-row {{ static ? 'static' : '' }}" data-group-id="{{ id }}">
 			<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[group]" value="{{ name }}" />
 
 			<div class="carbon-drag-handle">
@@ -495,16 +498,18 @@ class Complex_Field extends Field {
 
 			<div class="carbon-group-actions">
 				<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>">
-					<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?>
+					<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?> {{{ fields.static }}}
 				</a>
 
-				<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>">
-					<?php _e( 'Clone', 'carbon_fields' ); ?>
-				</a>
+				<# if (!static) { #>
+					<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>">
+						<?php _e( 'Clone', 'carbon_fields' ); ?>
+					</a>
 
-				<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>">
-					<?php _e( 'Remove', 'carbon_fields' ); ?>
-				</a>
+					<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>">
+						<?php _e( 'Remove', 'carbon_fields' ); ?>
+					</a>
+				<# } #>
 			</div>
 
 			<div class="fields-container">
@@ -557,6 +562,7 @@ class Complex_Field extends Field {
 	 * Modify the layout of this field.
 	 *
 	 * @param string $layout
+	 * @return Complex_Field
 	 */
 	public function set_layout( $layout ) {
 		$available_layouts = array(
@@ -591,9 +597,23 @@ class Complex_Field extends Field {
 	}
 
 	/**
+	 * Set the complex fields to static.
+	 * If you set the type to static, there will be no options to add or remove any group.
+	 * Min and max values are going to be ignored.
+	 *
+	 * @param string $static
+	 * @return Complex_Field
+	 */
+	public function set_static($static) {
+		$this->static = $static;
+		return $this;
+	}
+
+	/**
 	 * Set the minimum number of entries.
 	 *
 	 * @param int $min
+	 * @return Complex_Field
 	 */
 	public function set_min( $min ) {
 		$this->values_min = intval( $min );
@@ -613,6 +633,7 @@ class Complex_Field extends Field {
 	 * Set the maximum number of entries.
 	 *
 	 * @param int $max
+	 * @return Complex_Field
 	 */
 	public function set_max( $max ) {
 		$this->values_max = intval( $max );
