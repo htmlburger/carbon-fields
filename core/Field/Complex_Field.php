@@ -432,7 +432,7 @@ class Complex_Field extends Field {
 	 */
 	public function template() {
 		?>
-		<div class="carbon-subcontainer carbon-grid {{ multiple_groups ? 'multiple-groups' : '' }}">
+		<div class="carbon-subcontainer carbon-grid {{ multiple_groups ? 'multiple-groups' : '' }} {{ static ? 'static' : '' }}">
 			<div class="carbon-empty-row">
 				{{{ crbl10n.complex_no_rows.replace('%s', labels.plural_name) }}}
 			</div>
@@ -489,7 +489,7 @@ class Complex_Field extends Field {
 	 */
 	public function template_group() {
 		?>
-		<div id="carbon-{{{ complex_name }}}-complex-container" class="carbon-row carbon-group-row {{ static ? 'static' : '' }}" data-group-id="{{ id }}">
+		<div id="carbon-{{{ complex_name }}}-complex-container" class="carbon-row carbon-group-row" data-group-id="{{ id }}">
 			<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[group]" value="{{ name }}" />
 
 			<div class="carbon-drag-handle">
@@ -501,15 +501,13 @@ class Complex_Field extends Field {
 					<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?>
 				</a>
 
-				<# if (!static) { #>
-					<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>">
-						<?php _e( 'Clone', 'carbon_fields' ); ?>
-					</a>
+				<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>">
+					<?php _e( 'Clone', 'carbon_fields' ); ?>
+				</a>
 
-					<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>">
-						<?php _e( 'Remove', 'carbon_fields' ); ?>
-					</a>
-				<# } #>
+				<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>">
+					<?php _e( 'Remove', 'carbon_fields' ); ?>
+				</a>
 			</div>
 
 			<div class="fields-container">
