@@ -498,7 +498,7 @@ class Complex_Field extends Field {
 
 			<div class="carbon-group-actions">
 				<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>">
-					<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?> {{{ fields.static }}}
+					<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?>
 				</a>
 
 				<# if (!static) { #>
