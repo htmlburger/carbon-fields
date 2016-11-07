@@ -1,0 +1,33 @@
+.carbon-jquery-ui,
+.carbon-jquery-ui select,
+.carbon-jquery-ui button { font-family: inherit; }
+.carbon-jquery-ui { border-radius: 0; padding: 0; box-shadow: 0 0 5px rgba(0,0,0,.2); border-color: #e5e5e5; }
+.carbon-jquery-ui .ui-widget-header,
+.carbon-jquery-ui .ui-datepicker-header { background: #fefefe; border-width: 0 0 1px; border-style: solid; border-color: #e5e5e5; border-radius: 0; }
+.carbon-jquery-ui .ui-datepicker-prev,
+.carbon-jquery-ui .ui-datepicker-next,
+.carbon-jquery-ui .ui-datepicker-prev.ui-state-hover,
+.carbon-jquery-ui .ui-datepicker-next.ui-state-hover { top: 5px; right: 5px; border-radius: 0; }
+.carbon-jquery-ui .ui-datepicker-prev,
+.carbon-jquery-ui .ui-datepicker-prev.ui-state-hover { left: 5px; }
+.carbon-jquery-ui .ui-datepicker-prev,
+.carbon-jquery-ui .ui-datepicker-prev.ui-state-hover { right: 5px; }
+.carbon-jquery-ui .ui-datepicker-prev.ui-state-hover,
+.carbon-jquery-ui .ui-datepicker-next.ui-state-hover { border: 0 none; background: #fefefe; }
+.carbon-jquery-ui .ui-datepicker-calendar { table-layout: fixed; margin: 0; border-collapse: collapse; }
+.carbon-jquery-ui .ui-state-highlight { background: #0074a2; color: #fff; }
+.carbon-jquery-ui .ui-datepicker-buttonpane { margin: 1px 0 0; border-color: #e5e5e5; }
+.carbon-jquery-ui button.ui-state-default { border: 1px solid #ccc; font-size: 13px; border-radius: 2px; }
+
+/* Time and Date_Time fields */
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 40%; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+.ui-timepicker-rtl{ direction: rtl; }
+.ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
+.ui-timepicker-rtl dl dt{ float: right; clear: right; }
+.ui-timepicker-rtl dl dd { margin: 0 40% 10px 10px; }
