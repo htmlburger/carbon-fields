@@ -1,0 +1,89 @@
+/* ------------------------------------------------------------ *\
+	Containers
+\* ------------------------------------------------------------ */
+
+.carbon-container ul,
+.carbon-container li { margin: 0; padding: 0; }
+.carbon-container p { margin: 0; padding: 0 0 3px; font-style: normal; }
+.carbon-container h3 { font-size: 17px; margin: 0 0 4px; color: #000; }
+.carbon-container label { display: block; padding: 2px 0; color: #000; }
+.carbon-container .carbon-button { margin-top: 15px; }
+.carbon-container .help-text,
+.carbon-container .description { display: block; padding-top: 3px; padding-bottom: 1px; font-style: italic; }
+
+.carbon-container-Widget .collapsed > .fields-container,
+.carbon-fields-collection .collapsed > .fields-container { display: none; }
+.carbon-fields-collection  { padding-bottom: 20px; }
+
+.carbon-fields-row > .carbon-field { min-width: 100%; }
+
+.carbon-grid .carbon-field + .carbon-field,
+.carbon-grid .carbon-field + .carbon-fields-row,
+.carbon-grid .carbon-fields-row + .carbon-row { border-top: 1px solid #d9d9d9; }
+
+/* Table layout */
+.carbon-table-row > td { padding: 0; }
+.carbon-table-row .container-holder > .carbon-tabs > .carbon-tabs-nav { background: transparent; }
+
+/* Tabs */
+.carbon-tabs { margin-top: 5px; }
+.carbon-tabs .carbon-tab { display: none; }
+.carbon-tabs .carbon-tab.active { display: block; }
+.carbon-tabs .carbon-tabs-body { margin-top: 1px }
+
+.carbon-tabs-nav { border-bottom: solid 1px #ddd; margin: -5px 0px -1px 0px; padding: 15px 0 0 10px; background: #F9F9F9; }
+.carbon-tabs-nav li { display: inline-block; position: relative; top: 1px; margin-bottom: 0;}
+.carbon-tabs-nav li a {display: inline-block; margin: 0 4px 0px 0; padding: 6px 10px; border: solid 1px #ccc; background: #E4E4E4; color: #000; font-size: 14px; line-height: 24px; text-decoration: none; font-weight: 600; }
+.carbon-tabs-nav li.active a { text-decoration: none; background: white; margin-bottom: -1px; border-bottom-color: #fff; }
+.carbon-tabs-nav li.active a:focus, .carbon-tabs-nav li.active a:active { box-shadow: none; }
+.carbon-tabs-nav li a:hover { background: white; }
+
+/* Error State */
+.carbon-container .carbon-highlight { background: #fff0ee !important; -webkit-transition: background 2s; transition: background 2s;}
+.carbon-container .carbon-highlight > .carbon-error { display: block; }
+.carbon-container .carbon-error { display: none; padding-top: 5px; color: #c31d1d }
+.carbon-container .help-text + .carbon-error { padding-top: 0; }
+
+/* ------------------------------------------------------------ *\
+	Container - Custom Fields, Theme Options
+\* ------------------------------------------------------------ */
+
+#poststuff .carbon-box,
+#poststuff .spinner.disabled { display: none; }
+#poststuff .carbon-box .inside,
+body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; }
+
+.carbon-box .carbon-fields-collection { padding-bottom: 0; }
+
+.carbon-theme-options #post-body.columns-2 #postbox-container-1.fixed { position: fixed; right: 0; margin-right: 20px; }
+
+/* ------------------------------------------------------------ *\
+	Container - Terms, Users
+\* ------------------------------------------------------------ */
+
+.carbon-term-container { width: 95%; }
+.carbon-term-container .carbon-field > label { color: #23282d; }
+
+/* Add Term */
+.add-term-container .carbon-container { margin-left: -10px; margin-right: -10px; }
+.add-term-container .carbon-field > label { font-weight: normal; }
+.add-term-container .carbon-field .help-text { font-size: 13px; color: #666; }
+.add-term-container > .carbon-tabs > .carbon-tabs-nav { background: transparent; }
+
+/* Users */
+.carbon-user-container { max-width: 800px; }
+.carbon-user-container label { width: 200px; }
+#profile-page .carbon-user-container textarea { width: 100%; max-width: none; }
+
+/* ------------------------------------------------------------ *\
+	Container - Widgets
+\* ------------------------------------------------------------ */
+
+.carbon-container-Widget { margin: 0 -15px 15px -15px; width: auto; border-bottom: 1px solid #d9d9d9; }
+.carbon-container-Widget > .carbon-field:first-child { margin-top: -1px; }
+
+/* ------------------------------------------------------------ *\
+	Container - Nav Menu
+\* ------------------------------------------------------------ */
+
+.carbon-container-Nav_Menu > .carbon-field { padding: 10px 0; }
