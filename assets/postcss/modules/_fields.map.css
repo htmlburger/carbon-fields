@@ -1,0 +1,6 @@
+/* ------------------------------------------------------------ *\
+	Field - Map
+\* ------------------------------------------------------------ */
+
+.carbon-Map .carbon-map-search p { margin-top: 0; }
+.carbon-map-canvas { height: 300px; border: 1px solid #ddd; margin: 10px 0 4px; }

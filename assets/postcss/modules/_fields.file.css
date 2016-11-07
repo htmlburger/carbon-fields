@@ -1,0 +1,23 @@
+/* ------------------------------------------------------------ *\
+	Field - File, Image
+\* ------------------------------------------------------------ */
+
+.carbon-File .carbon-view_file { margin: 6px 0 0; }
+
+.carbon-attachment-preview { width: 150px; position: relative; float: left; padding: 5px 0 10px; margin: 0; color: #464646; list-style: none; text-align: center; }
+.carbon-File .carbon-attachment-preview { padding-top: 10px; padding-bottom: 4px; }
+
+.carbon-preview { position: relative; -webkit-box-shadow: inset 0 0 15px rgba( 0, 0, 0, 0.1 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.05 ); box-shadow: inset 0 0 15px rgba( 0, 0, 0, 0.1 ), inset 0 0 0 1px rgba( 0, 0, 0, 0.05 ); background: #eee; }
+.carbon-preview:before { content: ''; display: block; padding-top: 100%; }
+.carbon-preview .thumbnail { position: absolute; top: 0; right: 0; bottom: 0; left: 0; overflow: hidden; opacity: 1; -webkit-transition: opacity .1s; transition: opacity .1s; }
+.carbon-preview .thumbnail:after { content: ''; display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; -webkit-box-shadow: inset 0 0 0 1px rgba( 0, 0, 0, 0.1 ); box-shadow: inset 0 0 0 1px rgba( 0, 0, 0, 0.1 ); overflow: hidden; }
+.carbon-preview .thumbnail .centered { position: absolute; top: 0; left: 0; width: 100%; height: 100%; -webkit-transform: translate( 50%, 50% ); -ms-transform: translate(50%,50%); transform: translate( 50%, 50% ); }
+.carbon-preview .thumbnail .centered img { position: absolute; top: 0; left: 0; max-width: 100%; -webkit-transform: translate( -50%, -50% ); -ms-transform: translate(-50%,-50%); transform: translate( -50%, -50% ); }
+
+.carbon-preview .carbon-file-remove { position: absolute; top: -10px; right: -10px; cursor: pointer; }
+.carbon-preview .carbon-file-remove:before { content: "\f153"; background: #fff; border-radius: 50%; color: #C00; }
+
+.carbon-File .input-with-button { padding-right: 0; }
+.carbon-File .input-with-button .carbon-file-field { margin-bottom: 5px; }
+.carbon-File .input-with-button .button { position: relative; margin: 0 0 6px; }
+.carbon-File .attachment-url { overflow: hidden; clear: both; padding: 3px 5px; border: 1px solid #ddd; margin: 0 0 4px; font-size: 14px; line-height: 19px; word-break: break-all; background: #f6f6f6; box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1); }

@@ -1,0 +1,35 @@
+/* ------------------------------------------------------------ *\
+	Field
+\* ------------------------------------------------------------ */
+
+.carbon-field { padding: 10px 12px 16px; margin: 0; }
+.carbon-field .help-text { padding-top: 3px; font-style: normal; font-size: 12px; color: #767a7f; }
+
+.carbon-field label { padding: 0 0 8px; font-weight: 600; }
+.carbon-field input[type="text"],
+.carbon-field textarea { display: block; padding: 4px 5px 3px; width: 100%; resize: vertical; }
+.carbon-field select { width: 100%; }
+
+.carbon-field .multiple-groups { margin-top: 6px; }
+.carbon-field .carbon-required { color: #cd4c15; }
+
+.carbon-field .input-with-button { position: relative; padding-right: 38px; }
+.carbon-field .input-with-button .button { position: absolute; top: 0; right: 0; }
+
+/* Set and Radio list */
+
+.carbon-field p label input[type="checkbox"],
+.carbon-field p input[type="checkbox"],
+.carbon-field p input[type="radio"],
+.carbon-field > input[type="checkbox"] { float: left; margin: 2px 8px 0 0; }
+
+.carbon-field .carbon-radio-list,
+.carbon-field .carbon-set-list { padding-top: 6px; }
+
+.carbon-field .carbon-radio-list li,
+.carbon-field .carbon-set-list p { position: relative; overflow: hidden; padding: 0 0 8px; margin: 0; }
+
+.carbon-field .carbon-set-list label,
+.carbon-field .carbon-radio-list label { font-weight: normal; padding: 0; }
+
+.carbon-field .carbon-description:after { content: ''; display: block; clear: both; width: 100%; }

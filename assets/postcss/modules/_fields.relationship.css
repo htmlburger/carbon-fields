@@ -1,0 +1,57 @@
+/* ------------------------------------------------------------ *\
+	Field - Relationship
+\* ------------------------------------------------------------ */
+
+.carbon-Relationship .relationship-container { clear: both; margin: 3px -10px 0; }
+.carbon-Relationship .relationship-container .relationship-right label { display: none; }
+.carbon-Relationship .relationship-container:after { content: ''; display: block; clear: both; width: 100%; }
+.carbon-Relationship .relationship-left,
+.carbon-Relationship .relationship-right { width: 50%; padding: 0 10px; border: 0; margin: 0; }
+.carbon-Relationship .relationship-left { float: left; }
+.carbon-Relationship .relationship-right { float: right; }
+
+.carbon-Relationship ul { position: relative; border: 1px solid #ddd; background: #fff; }
+.carbon-Relationship ul li { position: relative; display: block; padding: 0; margin: 0; background: #fff; }
+.carbon-Relationship ul li a { position: relative; display: block; padding: 5px 6px; border-bottom: 1px solid #f5f5f5; text-decoration: none; }
+.carbon-Relationship ul li a span { position: absolute; top: 7px; right: 5px; display: none; width: 15px; height: 15px; cursor: pointer; }
+.carbon-Relationship ul li a span:before { display: inline-block; -webkit-font-smoothing: antialiased; font: normal 15px/1 'dashicons'; vertical-align: top; color: #666; }
+.carbon-Relationship .relationship-right li a span:before { color: #c00;  }
+.carbon-Relationship ul li a em { float: right; margin-right: 20px; font-size: 11px; font-style: normal; text-transform: uppercase; color: #999; }
+.carbon-Relationship ul li a i.trashed { display: inline-block; margin: 0 3px; }
+.carbon-Relationship ul li a i.trashed:before { font: normal 15px/19px 'dashicons'; content: "\f182"; display: inline-block; color: #666; vertical-align: top; }
+.carbon-Relationship ul li a:hover { background-color: #eaeff5; color: #333; }
+.carbon-Relationship ul li a:hover span { display: block; }
+.carbon-Relationship .search-field { width: 100%; padding: 0; border: 1px solid #ddd; border-spacing: 0; margin: 0; }
+.carbon-Relationship .search-field input { width: 100%; padding: 5px 9px !important; border: 0; margin: 0; font-size: 13px; line-height: 18px; border-radius: 0; font-family: sans-serif; }
+.carbon-Relationship .mobile-handle { display: none; }
+.mobile .carbon-Relationship ul li a { padding: 7px; }
+.touchscreen .carbon-Relationship .relationship-right .mobile-handle:before { content: '\f333'; font-family: 'dashicons', sans-serif; font-size: 16px; line-height: 1.88; }
+.touchscreen .carbon-Relationship .relationship-right .mobile-handle { position: absolute; top: 0; left: 0; z-index: 30; display: block; width: 30px; height: 100%; text-align: center; }
+.touchscreen .carbon-Relationship .relationship-right a { padding-left: 30px; }
+
+.carbon-Relationship .relationship-left ul { overflow: auto; display: block; height: 162px; border-top: 0 none; margin: 0; -webkit-overflow-scrolling: touch; }
+.carbon-Relationship .relationship-left ul a span:before { content: "\f502"; }
+
+.carbon-Relationship .relationship-right label { display: none; }
+.carbon-Relationship .relationship-right ul { overflow: auto; height: 188px; min-height: 188px; margin: 0; -webkit-overflow-scrolling: touch; }
+.carbon-Relationship .relationship-right ul a { cursor: move; }
+.carbon-Relationship .relationship-right ul a span:before { content: "\f153"; }
+.carbon-Relationship .relationship-right ul.ui-sortable { touch-action: auto; }
+
+.carbon-Relationship .relationship-list li.inactive a { background-color: #f5f5f5; opacity: 0.6; cursor: default; }
+.carbon-Relationship .relationship-list li.inactive a span { display: none; }
+.carbon-Relationship .relationship-list li.load-more { text-align: center; }
+.carbon-Relationship .relationship-list li.load-more .spinner { float: none; padding: 3px; margin: 0 auto; background-position: center center; }
+.carbon-Relationship.loading .relationship-list li.load-more .spinner { display: block; }
+
+.carbon-Relationship .relationship-list em.edit-link { cursor: pointer; }
+.carbon-Relationship .relationship-list em.edit-link:hover { color: #0073aa; }
+.relationship-container  { position: relative; }
+.carbon-Relationship .selected-items-container { position: absolute; right: 12px; top: 15px; }
+.edit-term-container .carbon-Relationship .selected-items-container { top: -18px; }
+
+.add-term-container .carbon-Relationship .selected-items-container,
+.edit-term-container .carbon-row .carbon-Relationship .selected-items-container,
+.carbon-box .carbon-Relationship .selected-items-container,
+.carbon-box .carbon-row .carbon-Relationship .selected-items-container,
+.comment-container-holder .carbon-Relationship .selected-items-container { top: -26px; }
