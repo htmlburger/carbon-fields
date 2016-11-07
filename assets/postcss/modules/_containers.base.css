@@ -39,7 +39,11 @@
 .carbon-tabs-nav li a:hover { background: white; }
 
 /* Error State */
-.carbon-container .carbon-highlight { background: #fff0ee !important; -webkit-transition: background 2s; transition: background 2s;}
-.carbon-container .carbon-highlight > .carbon-error { display: block; }
-.carbon-container .carbon-error { display: none; padding-top: 5px; color: #c31d1d }
+.carbon-container .carbon-highlight { position: relative; outline: 1px solid $color-state-error; outline-offset: -1px; border-color: $color-state-error; }
+.carbon-container .carbon-highlight label { color: $color-state-error; }
+.carbon-container .carbon-highlight > .carbon-error { visibility: visible; opacity: 1; }
+
+.carbon-container .carbon-error { position: absolute; left: 50%; bottom: 100%; padding: 2px 8px; margin-bottom: 8px; border-radius: 2px; background: $color-state-error; color: #fff; font-style: normal; font-size: 12px; transform: translateX(-50%); visibility: hidden; opacity: 0; }
+.carbon-container .carbon-error:after { content: ''; position: absolute; left: 50%; top: 100%; border-width: 5px 5px 0; margin-left: -5px; border-style: solid; border-color: $color-state-error transparent; }
+
 .carbon-container .help-text + .carbon-error { padding-top: 0; }

@@ -11,7 +11,7 @@
 .carbon-field select { width: 100%; }
 
 .carbon-field .multiple-groups { margin-top: 6px; }
-.carbon-field .carbon-required { color: #cd4c15; }
+.carbon-field .carbon-required { color: $color-state-error; }
 
 .carbon-field .input-with-button { position: relative; padding-right: 38px; }
 .carbon-field .input-with-button .button { position: absolute; top: 0; right: 0; }
