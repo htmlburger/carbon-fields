@@ -1,1 +1,12 @@
-$color-state-error: #cd4c15;
+/* ------------------------------------------------------------ *\
+	Colors
+\* ------------------------------------------------------------ */
+
+$color-label:         #24282d;
+
+$color-grey-bg:       #fafafa;
+
+$color-border:        #e5e5e5;
+$color-border-darker: #cccccc;
+
+$color-state-error:   #cd4c15;

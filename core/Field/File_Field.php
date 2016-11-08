@@ -107,22 +107,22 @@ class File_Field extends Field {
 	 **/
 	public function template() {
 		?>
-		<div class="input-with-button">
-			<input 
-				id="{{ id }}" 
-				type="text" 
-				name="{{ name }}" 
-				value="{{ value }}" 
-				class="regular-text carbon-file-field" 
-				{{{ value_type === 'id' ? 'style="display:none"' : '' }}} 
+		<div class="carbon-attachment">
+			<input
+				id="{{ id }}"
+				type="text"
+				name="{{ name }}"
+				value="{{ value }}"
+				class="regular-text carbon-file-field"
+				{{{ value_type === 'id' ? 'style="display:none"' : '' }}}
 			/>
 
-			<span id="c2_open_media{{ id.replace('-', '_') }}" class="button c2_open_media icon-button">
+			{{{ description }}}
+
+			<span id="c2_open_media{{ id.replace('-', '_') }}" class="button c2_open_media">
 				{{{ button_label }}}
 			</span>
 		</div>
-		
-		{{{ description }}}
 		<?php
 	}
 
@@ -133,14 +133,8 @@ class File_Field extends Field {
 		?>
 		<div class="carbon-description {{{ value ? '' : 'hidden' }}}">
 			<div class="carbon-attachment-preview {{{ thumb_url ? '' : 'hidden' }}}">
-				<div class="carbon-preview">
-					<div class="thumbnail">
-						<div class="centered">
-							<img src="{{ thumb_url }}" class="thumbnail-image" />
-						</div>
-					</div>
-					<div class="carbon-file-remove"></div>
-				</div>
+				<img src="{{ thumb_url }}" class="thumbnail-image" />
+				<div class="carbon-file-remove"></div>
 			</div>
 
 			<# if (value_type === 'id') { #>
