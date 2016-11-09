@@ -18,7 +18,7 @@ class Helper {
 	 * Hook the main Carbon Fields initialization functionality.
 	 */
 	public function __construct() {
-		add_action( 'wp_loaded', array( $this, 'trigger_fields_register' ) );
+		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
 		add_action( 'carbon_after_register_fields', array( $this, 'init_containers' ) );
 		add_action( 'admin_footer', array( $this, 'init_scripts' ), 0 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data_script' ), 9 );
