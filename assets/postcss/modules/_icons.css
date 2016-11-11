@@ -16,6 +16,4 @@
 .carbon-group-actions a.carbon-btn-remove:before { content: "\f153"; background: #fff; border-radius: 50%; }
 .carbon-group-actions a.carbon-btn-remove:hover:before { color: #f33; }
 .carbon-Map .address-search-btn:before { content: "\f179"; }
-.button.pickcolor:before { content: "\f309"; }
-.button.carbon-datepicker-trigger:before { content: "\f508"; }
 .carbon-btn-remove-sidebar:before { content: "\f335"; }

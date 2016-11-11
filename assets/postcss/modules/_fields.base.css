@@ -13,8 +13,10 @@
 .carbon-field .multiple-groups { margin-top: 6px; }
 .carbon-field .carbon-required { color: $color-state-error; }
 
-.carbon-field .input-with-button { position: relative; padding-right: 38px; }
-.carbon-field .input-with-button .button { position: absolute; top: 0; right: 0; }
+.carbon-field .carbon-field-group { display: table; width: 100%; }
+.carbon-field .carbon-field-group-input { display: table-cell; width: 100%; vertical-align: top; margin: 0; }
+.carbon-field .carbon-field-group-button { display: table-cell; width: 1%; vertical-align: top; }
+.carbon-field .carbon-field-group-button .button { height: 27px; line-height: 25px; text-align: center; border-top-left-radius: 0; border-bottom-left-radius: 0; }
 
 /* Set and Radio list */
 

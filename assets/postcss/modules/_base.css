@@ -7,7 +7,7 @@
 .carbon-Relationship .relationship-left,
 .carbon-Relationship .relationship-right,
 .carbon-Relationship .search-field,
-.carbon-File .attachment-url {
+.carbon-File .carbon-attachment-file-name {
 	-webkit-box-sizing: border-box;
 	   -moz-box-sizing: border-box;
 		-ms-box-sizing: border-box;

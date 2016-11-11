@@ -20,6 +20,7 @@
 @media screen and (min-width: 783px) {
 	.carbon-table-row .carbon-container > .carbon-fields-row > .carbon-field > label,
 	.carbon-table-row .carbon-container > .carbon-field > label { position: absolute; left: 0; }
+	.carbon-table-row .carbon-container > .carbon-Separator { position: static; }
 }
 
 /* Phones */

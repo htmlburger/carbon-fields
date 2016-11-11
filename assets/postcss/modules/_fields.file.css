@@ -6,7 +6,7 @@
 
 .carbon-attachment .carbon-description { position: absolute; left: -1px; top: -1px; right: -1px; bottom: -1px; }
 
-.carbon-attachment .carbon-attachment-preview { position: relative; z-index: 5; padding: 0; margin: 0; list-style: none outside none; text-align: center; box-shadow: inset 0 0 15px rgba(0,0,0,.1 ), inset 0 0 0 1px rgba(0,0,0,.05 ); background: #eee; }
+.carbon-attachment .carbon-attachment-preview { position: relative; z-index: 5; padding: 0; margin: 0; list-style: none outside none; text-align: center; box-shadow: inset 0 0 15px rgba(0,0,0,.1 ), inset 0 0 0 1px rgba(0,0,0,.05 ); background: #eee; overflow: hidden; }
 .carbon-attachment .carbon-attachment-preview:before { content: ''; display: block; padding-top: 100%; }
 .carbon-attachment .carbon-attachment-preview:after { content: ''; display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; box-shadow: inset 0 0 0 1px rgba(0,0,0,.1 ); overflow: hidden; }
 
@@ -21,12 +21,12 @@
 .carbon-attachment:hover .button,
 .carbon-attachment .carbon-description.hidden + .button { visibility: visible; opacity: 1; }
 
-.carbon-attachment .attachment-url { position: absolute; z-index: 10; left: 0; bottom: 0; width: 100%; height: 28px; padding: 0 5px; background: $color-grey-bg; border: 1px solid $color-border-darker; color: $color-label; font-size: 13px; line-height: 26px; white-space: nowrap; overflow: hidden; text-align: center; }
+.carbon-attachment .carbon-attachment-file-name { position: absolute; z-index: 10; left: 0; bottom: 0; width: 100%; height: 28px; padding: 0 5px; background: $color-grey-bg; border: 1px solid $color-border-darker; color: $color-label; font-size: 13px; line-height: 26px; white-space: nowrap; overflow: hidden; text-align: center; text-overflow: ellipsis; }
 
 /* ------------------------------------------------------------ *\
 	Field - Image
 \* ------------------------------------------------------------ */
 
-.carbon-Image .carbon-attachment .attachment-url { display: none; }
+.carbon-Image .carbon-attachment .carbon-attachment-file-name { display: none; }
 
 .carbon-Image .carbon-attachment .carbon-attachment-preview img { margin-top: 0; }

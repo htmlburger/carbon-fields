@@ -64,11 +64,13 @@ class File_Field extends Field {
 		$thumb_url = '';
 		$default_thumb_url = includes_url( '/images/media/default.png' );
 		$file_ext = '';
+		$file_name = '';
 		$file_type = '';
 		$value = $this->get_value();
 
 		if ( $value ) {
 			$url = is_numeric( $value ) ? wp_get_attachment_url( $value ) : $value;
+			$file_name = basename($url);
 			$filetype = wp_check_filetype( $url );
 
 			$file_ext = $filetype['ext']; // png, mp3, etc..
@@ -87,11 +89,11 @@ class File_Field extends Field {
 		}
 
 		$field_data = array_merge( $field_data, array(
-			'url' => (string) $url,
 			'thumb_url' => $thumb_url,
 			'default_thumb_url' => $default_thumb_url,
 			'file_ext' => $file_ext,
 			'file_type' => $file_type,
+			'file_name' => $file_name,
 			'button_label' => $this->button_label,
 			'window_button_label' => $this->window_button_label,
 			'window_label' => $this->window_label,
@@ -137,9 +139,7 @@ class File_Field extends Field {
 				<div class="carbon-file-remove"></div>
 			</div>
 
-			<# if (value_type === 'id') { #>
-				<div class="attachment-url">{{ url }}</div>
-			<# } #>
+			<div class="carbon-attachment-file-name">{{ file_name }}</div>
 		</div>
 		<?php
 	}

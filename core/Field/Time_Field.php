@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -8,7 +8,7 @@ namespace Carbon_Fields\Field;
 class Time_Field extends Field {
 	/**
 	 * Timepicker type.
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $timepicker_type = 'timepicker';
@@ -70,9 +70,12 @@ class Time_Field extends Field {
 	 **/
 	public function template() {
 		?>
-		<div class="input-with-button">
-			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-timepicker" />
-			<span class="carbon-timepicker-trigger button icon-button dashicons-clock hide-if-no-js"><?php _e( 'Timepicker', 'crb' ); ?></span>
+		<div class="carbon-field-group">
+			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-field-group-input carbon-timepicker" />
+
+			<div class="carbon-field-group-button">
+				<span class="carbon-timepicker-trigger button hide-if-no-js"><?php _e( 'Select Time', 'crb' ); ?></span>
+			</div>
 		</div>
 		<?php
 	}
@@ -87,7 +90,6 @@ class Time_Field extends Field {
 
 		# Enqueue CSS
 		wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css' );
-		wp_enqueue_style( 'carbon-jquery-ui', \Carbon_Fields\URL . '/assets/css/jquery-ui.css' );
 	}
 
 	/**

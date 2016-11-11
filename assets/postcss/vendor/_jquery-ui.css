@@ -2,6 +2,8 @@
 	jQuery UI
 \* ------------------------------------------------------------ */
 
+.carbon-jquery-ui { z-index: 1000 !important; }
+
 .carbon-jquery-ui,
 .carbon-jquery-ui select,
 .carbon-jquery-ui button { font-family: inherit; }
