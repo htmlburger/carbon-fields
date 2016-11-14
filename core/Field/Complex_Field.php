@@ -26,6 +26,7 @@ class Complex_Field extends Field {
 	protected $layout = self::LAYOUT_GRID;
 	protected $values_min = -1;
 	protected $values_max = -1;
+	protected $collapsed = false;
 
 	public $labels = array(
 		'singular_name' => 'Entry',
@@ -419,6 +420,7 @@ class Complex_Field extends Field {
 			'multiple_groups' => count( $groups_data ) > 1,
 			'groups' => $groups_data,
 			'value' => $values_data,
+			'collapsed' => $this->collapsed,
 		) );
 
 		return $complex_data;
@@ -479,6 +481,15 @@ class Complex_Field extends Field {
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Collapse the complex field entries.
+	 */
+	public function collapse() {
+		$this->collapsed = true;
+
+		return $this;
 	}
 
 	/**

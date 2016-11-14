@@ -2078,7 +2078,7 @@ window.carbon = window.carbon || {};
 		defaults: {
 			'order': null,
 			'index': null,
-			'collapsed': false
+			'collapsed': null
 		},
 
 		initialize: function() {
@@ -2362,7 +2362,7 @@ window.carbon = window.carbon || {};
 
 			var attributes = $.extend(true, {}, this.model.attributes);
 			attributes.id = null;
-			attributes.collapsed = false;
+			attributes.collapsed = this.model.get('collapsed');
 
 			if (attributes.hasOwnProperty('fields')) {
 				attributes.fields = this.fieldsCollection.toJSON();
@@ -2377,6 +2377,15 @@ window.carbon = window.carbon || {};
 
 		afterRenderInit: function() {
 			var _this = this;
+
+			// Initialize the local `collapsed` value with `collapsed` value defined in PHP land
+			// If it's already set is because it's a duplicate row
+			if (this.model.get('collapsed') === null) {
+				this.model.set('collapsed', this.complexModel.get('collapsed'));
+			}
+
+			// Update collapse state/visibility
+			this.toggleCollapse(this.model);
 
 			// Trigger the add event on the collection, this should initialize the fields rendering
 			this.fieldsCollection.each(function(model) {
