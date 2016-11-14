@@ -35,3 +35,8 @@
 .carbon-field .carbon-radio-list label { font-weight: normal; padding: 0; }
 
 .carbon-field .carbon-description:after { content: ''; display: block; clear: both; width: 100%; }
+
+@media (max-width: 782px) {
+	.carbon-field .carbon-field-group-button .button { height: 39px; line-height: 27px; }
+}
+
