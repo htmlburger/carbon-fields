@@ -4,10 +4,16 @@
 
 .carbon-button { position: relative; float: left; }
 
-.carbon-button ul { display: none; position: absolute; z-index: 9999; top: 100%; left: 0; min-width: 100%; margin: 0 0 10px; background: #fff; border: 1px solid $color-border; box-shadow: 0 0 3px rgba(0,0,0,.2); }
+.carbon-button ul { display: none; position: absolute; z-index: 9999; left: 100%; top: 50%; min-width: 180px; margin: 0; background: $color-label; border-radius: 3px; transform: translate(10px, -50%); }
+.carbon-button ul:before { content: ''; position: absolute; right: 100%; top: 50%; margin-top: -5px; border-width: 5px 5px 5px 0; border-style: solid; border-color: transparent $color-label; }
 
 .carbon-button li { margin: 0; }
-.carbon-button li ~ li { border-top: 1px solid $color-border; }
 
-.carbon-button li a { display: block; font-size: 12px; line-height: 18px; padding: 5px 10px; text-decoration: none; white-space: nowrap; }
-.carbon-button li a:hover { background: $color-grey-bg; }
+.carbon-button li a { display: block; padding: 8px 10px; font-size: 12px; font-weight: 600; line-height: 1.5; text-decoration: none; white-space: nowrap; color: #fff; box-shadow: none; }
+.carbon-button li a:hover { background: $color-border-darkgrey; }
+.carbon-button li a:focus { outline: none; box-shadow: none; }
+
+.carbon-button li ~ li { border-top: 1px solid $color-border-darkgrey; }
+.carbon-button li ~ li a { padding-top: 7px; }
+.carbon-button li:first-child a { border-radius: 3px 3px 0 0; }
+.carbon-button li:last-child a { border-radius: 0 0 3px 3px; }

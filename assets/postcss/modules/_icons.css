@@ -3,7 +3,6 @@
 \* ------------------------------------------------------------ */
 
 .carbon-field .icon-button { width: 28px; height: 28px; padding: 0; margin-left: 6px; font-size: 0; line-height: 0; text-align: center; vertical-align: top !important; font-family: inherit; }
-.carbon-group-actions a:before,
 .carbon-btn-remove-sidebar:before,
 .carbon-attachment .carbon-file-remove,
 .carbon-field .icon-button:before { font: normal normal normal 22px/26px 'dashicons'; speak: none; text-transform: none; text-align: center; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; vertical-align: top; }
@@ -13,7 +12,4 @@
 .carbon-btn-remove-sidebar:hover { color: #c00; opacity: 1; }
 .carbon-btn-remove-sidebar:before { font-size: 16px; line-height: 1.5; }
 
-.carbon-group-actions a.carbon-btn-remove:before { content: "\f153"; background: #fff; border-radius: 50%; }
-.carbon-group-actions a.carbon-btn-remove:hover:before { color: #f33; }
-.carbon-Map .address-search-btn:before { content: "\f179"; }
 .carbon-btn-remove-sidebar:before { content: "\f335"; }

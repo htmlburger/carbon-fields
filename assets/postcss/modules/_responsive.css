@@ -60,48 +60,42 @@
 
 	.carbon-user-container label { width: auto; }
 
-
 	.group-tabs-nav-holder { display: none; }
 
-	.groups-wrapper.layout-tabbed-horizontal > .carbon-groups-holder > .carbon-group-row > .carbon-group-actions > .carbon-btn-collapse { display: inline-block; }
+	.group-tabs-nav-holder ~ .carbon-groups-holder { border-top: 0; }
+	.group-tabs-nav-holder ~ .carbon-groups-holder > .carbon-row { display: block !important; margin-bottom: 10px; }
+	.group-tabs-nav-holder ~ .carbon-groups-holder > .carbon-row:last-child { margin-bottom: 0; }
+	.group-tabs-nav-holder ~ .carbon-groups-holder > .carbon-row > .carbon-drag-handle { display: block; }
 
-	.carbon-empty-row[style*="none;"] + .layout-tabbed-horizontal ~ .carbon-actions { display: block; }
+	.layout-tabbed-horizontal + .carbon-actions,
+	.layout-tabbed-vertical + .carbon-actions { display: inline-block; }
 
-	.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .carbon-empty-row[style*="none;"] + .groups-wrapper ~ .carbon-actions { display: block; }
+	.layout-tabbed-horizontal > .carbon-groups-holder > .carbon-row,
+	.layout-tabbed-vertical > .carbon-groups-holder > .carbon-row { padding-bottom: 0; }
 
-	.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row { position: relative; }
-	.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .carbon-drag-handle { display: block; }
+	.layout-tabbed-vertical { display: block; }
+	.layout-tabbed-vertical > .carbon-groups-holder { width: auto; }
 
-	.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container { border-width: 0 1px 1px; border-color: $color-border; }
-	.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container:after { content: none; }
-	.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .fields-container > .carbon-row { border-color: $color-border; }
-	.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .carbon-group-actions { position: absolute; top: 0; right: 0; bottom: auto; left: auto; }
-	.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .carbon-group-actions a { text-decoration: none; width: auto; font-size: 0; line-height: inherit; text-indent: -5000px; color: transparent; }
-	.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .carbon-group-actions a:hover { width: 19px; text-decoration: none; }
-	.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-row > .carbon-group-actions a:before { display: block; text-indent: 0; }
+	.carbon-groups-holder .carbon-group-actions-tabbed-horizontal,
+	.carbon-groups-holder .carbon-group-actions-tabbed-vertical { height: auto; padding: 0; right: 12px; top: 12px; bottom: auto; left: auto; background: none; border: 0; }
 
-	.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-group-row { display: block !important; margin-top: 14px; }
-	.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-group-row:first-child { margin-top: 0; }
-	.carbon-Complex-tabbed > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-group-row > .carbon-group-actions > .carbon-btn-collapse { display: inline-block; }
+	.carbon-groups-holder .carbon-group-actions-tabbed-horizontal a,
+	.carbon-groups-holder .carbon-group-actions-tabbed-vertical a { display: inline-block; padding: 0; line-height: 1.5; text-indent: 0; color: $color-grey-font; font-size: 0; line-height: 0; text-indent: -4004px; }
 
-	.carbon-Complex-tabbed .carbon-group-row .carbon-drag-handle .group-name { display: block; position: relative; overflow: hidden; max-width: 140px; min-width: 20px; min-height: 18px; margin-right: 80px; white-space: nowrap; }
-	.carbon-Complex-tabbed .carbon-group-row .carbon-drag-handle .group-name:after { content: ''; position: absolute; top: 0; right: 0; width: 10px; height: 100%;
-		background: -moz-linear-gradient(left,  rgba(30,87,153,0) 0%, rgba(30,87,153,0.01) 1%, rgba(247,246,246,1) 100%);
-		background: -webkit-linear-gradient(left,  rgba(30,87,153,0) 0%,rgba(30,87,153,0.01) 1%,rgba(247,246,246,1) 100%);
-		background: linear-gradient(to right,  rgba(30,87,153,0) 0%,rgba(30,87,153,0.01) 1%,rgba(247,246,246,1) 100%);
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#001e5799', endColorstr='#f7f6f6',GradientType=1 );
-	}
+	.carbon-groups-holder .carbon-group-actions-tabbed-horizontal a:hover,
+	.carbon-groups-holder .carbon-group-actions-tabbed-vertical a:hover { color: $color-blue-font; }
 
-	.layout-tabbed-vertical > .carbon-groups-holder:before,
-	.layout-tabbed-vertical > .carbon-groups-holder:after { content: none; }
+	.carbon-groups-holder .carbon-group-actions-tabbed-horizontal a:before,
+	.carbon-groups-holder .carbon-group-actions-tabbed-vertical a:before { display: block; }
 
-	.carbon-Complex.even > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-group-row > .carbon-drag-handle .group-name:after {
-		background: -moz-linear-gradient(left,  rgba(255,255,255,0) 0%, rgba(255,255,255,0.01) 1%, rgba(255,255,255,1) 100%);
-		background: -webkit-linear-gradient(left,  rgba(255,255,255,0) 0%,rgba(255,255,255,0.01) 1%,rgba(255,255,255,1) 100%);
-		background: linear-gradient(to right,  rgba(255,255,255,0) 0%,rgba(255,255,255,0.01) 1%,rgba(255,255,255,1) 100%);
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 );
-	}
-	.carbon-Complex > .field-holder > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-group-row.removed .group-name:after { content: none; }
+	.carbon-groups-holder .carbon-group-actions-tabbed-horizontal .carbon-btn-collapse,
+	.carbon-groups-holder .carbon-group-actions-tabbed-vertical .carbon-btn-collapse { display: inline-block; }
+
+	.carbon-groups-holder .carbon-group-actions-tabbed-horizontal .carbon-btn-remove,
+	.carbon-groups-holder .carbon-group-actions-tabbed-vertical .carbon-btn-remove { color: $color-grey-font; }
+
+	.carbon-groups-holder .carbon-group-actions-tabbed-horizontal .carbon-btn-remove:hover,
+	.carbon-groups-holder .carbon-group-actions-tabbed-vertical .carbon-btn-remove:hover { color: $color-darkred-font; }
 }
 
 @media screen and (max-width: 600px) {

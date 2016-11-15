@@ -21,24 +21,40 @@
 .carbon-grid .carbon-field + .carbon-fields-row,
 .carbon-grid .carbon-fields-row + .carbon-row { border-top: 1px solid $color-border; }
 
+
 /* Table layout */
+
 .carbon-table-row > td { padding: 0; }
 .carbon-table-row .container-holder > .carbon-tabs > .carbon-tabs-nav { background: transparent; }
 
+
 /* Tabs */
-.carbon-tabs { margin-top: 5px; }
+
+.carbon-tabs { margin: 0; }
+
 .carbon-tabs .carbon-tab { display: none; }
+
 .carbon-tabs .carbon-tab.active { display: block; }
 .carbon-tabs .carbon-tabs-body { margin-top: 1px }
 
-.carbon-tabs-nav { border-bottom: solid 1px #ddd; margin: -5px 0px -1px 0px; padding: 15px 0 0 10px; background: #F9F9F9; }
-.carbon-tabs-nav li { display: inline-block; position: relative; top: 1px; margin-bottom: 0;}
-.carbon-tabs-nav li a {display: inline-block; margin: 0 4px 0px 0; padding: 6px 10px; border: solid 1px #ccc; background: #E4E4E4; color: #000; font-size: 14px; line-height: 24px; text-decoration: none; font-weight: 600; }
-.carbon-tabs-nav li.active a { text-decoration: none; background: white; margin-bottom: -1px; border-bottom-color: #fff; }
-.carbon-tabs-nav li.active a:focus, .carbon-tabs-nav li.active a:active { box-shadow: none; }
-.carbon-tabs-nav li a:hover { background: white; }
+.carbon-tabs-nav { border-bottom: solid 1px $color-border; padding: 12px 10px 0; margin: 0 0 -1px; background: $color-grey-bg; font-size: 0; }
+
+.carbon-tabs-nav li { display: inline-block; vertical-align: top; margin: 0 6px -1px 0; }
+.carbon-tabs-nav li a { display: block; padding: 8px 12px; border: solid 1px $color-border; background: $color-grey-bg; color: $color-label; font-size: 12px; line-height: 1.5; text-decoration: none; font-weight: 600; }
+
+.carbon-tabs-nav li a:hover { background: #fff; }
+
+.carbon-tabs-nav li a:focus,
+.carbon-tabs-nav li a:active { outline: none; box-shadow: none; }
+
+.carbon-tabs-nav .active a { text-decoration: none; background: #fff; border-bottom-color: #fff; }
+
+.carbon-tabs-nav .active a:focus,
+.carbon-tabs-nav .active a:active { box-shadow: none; }
+
 
 /* Error State */
+
 .carbon-container .carbon-error { position: absolute; left: 50%; bottom: 100%; padding: 2px 8px; margin-bottom: 8px; border-radius: 2px; background: $color-state-error; color: #fff; font-style: normal; font-size: 12px; transform: translateX(-50%); visibility: hidden; opacity: 0; }
 .carbon-container .carbon-error:after { content: ''; position: absolute; left: 50%; top: 100%; border-width: 5px 5px 0; margin-left: -5px; border-style: solid; border-color: $color-state-error transparent; }
 
