@@ -373,6 +373,9 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 			transform: rotate(180deg) translateX(-1px) translateY(-2px);
 }
 
+.carbon-subcontainer.static > .groups-wrapper.layout-tabbed-horizontal  > .carbon-groups-holder > .carbon-group-row > .fields-container:after {  height: 0;  border-top: none; }
+.carbon-subcontainer.static > .groups-wrapper > .carbon-groups-holder > .carbon-group-row > .carbon-group-actions .carbon-btn-duplicate,
+.carbon-subcontainer.static > .groups-wrapper > .carbon-groups-holder > .carbon-group-row > .carbon-group-actions .carbon-btn-remove {  display: none; }
 
 /* Tabs */
 

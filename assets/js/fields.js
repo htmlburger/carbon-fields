@@ -1688,6 +1688,7 @@ window.carbon = window.carbon || {};
 
 			this.multipleGroups = this.model.get('multiple_groups');
 			this.isTabbed = this.model.isTabbed();
+			this.isStatic = this.model.get('static');
 
 			/*
 			 * Groups Collection
@@ -1747,8 +1748,12 @@ window.carbon = window.carbon || {};
 			// Group Tabs initialization
 			if (this.isTabbed) {
 				this.model.addClass('carbon-Complex-tabbed');
-				
 				this.on('field:rendered', this.initGroupTabs);
+			}
+
+			// Render the groups as static ones without add or remove actions
+			if(this.isStatic) {
+				this.on('field:rendered', this.renderStaticGroups);
 			}
 		},
 
@@ -1866,6 +1871,23 @@ window.carbon = window.carbon || {};
 
 					ui.item.groupView.trigger('sortable', event);
 				}
+			});
+		},
+
+		renderStaticGroups: function() {
+			var _this = this;
+			var groups = this.model.get('groups') || [];
+
+			_.each(groups, function(group) {
+				var contains = _.some(_this.groupsCollection.model, function(model) {
+					return model.attributes.name == group.name;
+				});
+
+				if(!contains) {
+					_this.addNewGroup(group.name);
+				}
+			}, function(){
+				_this.model.set('value', _this.groupsCollection.toJSON());
 			});
 		},
 
