@@ -1821,6 +1821,10 @@ window.carbon = window.carbon || {};
 			var groups = this.model.get('value');
 
 			_.each(groups, function(group) {
+				// Set the value defined by the user in PHP land
+				// This code will run only the first time that the groups are created
+				group.collapsed = _this.model.get('collapsed');
+				
 				_this.groupsCollection.add(group, {
 					sort: false
 				});
@@ -1929,16 +1933,13 @@ window.carbon = window.carbon || {};
 
 			var view = carbon.views[id] = new carbon.fields.View.Complex.Group({
 				el: this.$groupsHolder,
-				model: model,
-				attributes: {
-					collapsed: this.model.get('collapsed')
-				}
+				model: model
 			});
 
 			view.on('layoutUpdated', function() {
 				_this.trigger('layoutUpdated');
 			});
-console.log(this.model.get('collapsed'));
+
 			view.render(this.model);
 
 			return this;
@@ -2086,7 +2087,7 @@ console.log(this.model.get('collapsed'));
 
 		initialize: function() {
 			var fields = this.get('fields');
-console.log(this);
+
 			_.each(fields, function(field) {
 				if (field.hasOwnProperty('old_id') && field.hasOwnProperty('old_name')) {
 					field.id = field.old_id;
