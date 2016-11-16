@@ -12,9 +12,9 @@
 
 .carbon-attachment .carbon-attachment-preview img { position: absolute; left: 50%; top: 50%; margin-top: -14px; max-width: 100%; height: auto; transform: translate(-50%, -50%); }
 
-.carbon-attachment .carbon-file-remove { position: absolute; z-index: 15; top: 5px; right: 5px; cursor: pointer; transition: opacity .2s ease-out; }
+.carbon-attachment .carbon-file-remove { position: absolute; z-index: 15; top: 5px; right: 5px; cursor: pointer; font-size: 20px; line-height: 1; transition: opacity .2s ease-out; }
 .carbon-attachment .carbon-file-remove:hover { opacity: .8; }
-.carbon-attachment .carbon-file-remove:before { content: '\f153'; background: #fff; border-radius: 50%; color: $color-label; }
+.carbon-attachment .carbon-file-remove:before { content: '\f153'; background: #fff; border-radius: 50%; color: $color-label; font-family: 'dashicons'; }
 
 .carbon-attachment .button { position: relative; z-index: 10; display: inline-block; vertical-align: middle; margin: 0; visibility: hidden; opacity: 0; transition: visibility .2s ease-out, opacity .2s ease-out; }
 

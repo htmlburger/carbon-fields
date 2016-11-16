@@ -1798,7 +1798,7 @@ window.carbon = window.carbon || {};
 		},
 
 		toggleIntroRow: function() {
-			this.$introRow.toggle(this.groupsCollection.length === 0);
+			this.$introRow.toggleClass('carbon-empty-row-visible', this.groupsCollection.length === 0);
 		},
 
 		sortGroups: function() {

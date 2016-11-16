@@ -268,8 +268,8 @@ class Relationship_Field extends Field {
 				<# } #>
 				<em>{{{ item.label }}}</em>
 				<span></span>
-				{{{ item.title }}}
 
+				{{{ item.title }}}
 			</a>
 			<?php if ( $display_input ) :  ?>
 				<input type="hidden" name="{{{ name }}}[]" value="{{{ item.id }}}" />

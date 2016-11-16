@@ -7,12 +7,15 @@
 .carbon-container p { margin: 0; padding: 0 0 3px; font-style: normal; }
 .carbon-container h3 { font-size: 17px; font-weight: 300; margin: 0 0 4px; color: $color-label; }
 .carbon-container label { display: block; padding: 2px 0; color: $color-label; }
+
 .carbon-container .carbon-button { margin-top: 15px; }
+
 .carbon-container .help-text,
 .carbon-container .description { display: block; padding-top: 3px; padding-bottom: 1px; font-style: italic; }
 
 .carbon-container-Widget .collapsed > .fields-container,
 .carbon-fields-collection .collapsed > .fields-container { display: none; }
+
 .carbon-fields-collection  { padding-bottom: 20px; }
 
 .carbon-fields-row > .carbon-field { min-width: 100%; }
@@ -22,13 +25,46 @@
 .carbon-grid .carbon-fields-row + .carbon-row { border-top: 1px solid $color-border; }
 
 
-/* Table layout */
+/*  Error State  */
+
+.carbon-container .carbon-error { position: absolute; left: 50%; bottom: 100%; padding: 2px 8px; margin-bottom: 8px; border-radius: 2px; background: $color-state-error; color: #fff; font-style: normal; font-size: 12px; transform: translateX(-50%); visibility: hidden; opacity: 0; }
+.carbon-container .carbon-error:after { content: ''; position: absolute; left: 50%; top: 100%; border-width: 5px 5px 0; margin-left: -5px; border-style: solid; border-color: $color-state-error transparent; }
+
+.carbon-container .carbon-highlight { position: relative; outline: 1px solid $color-state-error; outline-offset: -1px; border-color: $color-state-error; }
+
+.carbon-container .carbon-highlight > label { color: $color-state-error; }
+.carbon-container .carbon-highlight > .carbon-error { visibility: visible; opacity: 1; }
+
+
+@media screen and (min-width: $breakpoint-desktop-min) {
+	.carbon-grid .carbon-fields-row:first-child { border-top: 0; }
+	.carbon-grid .carbon-fields-row { display: table; width: 100%; border-bottom: 1px solid $color-border; }
+	.carbon-grid .carbon-fields-row > .carbon-field { display: table-cell; min-width: 0; vertical-align: top; border: 0; }
+	.carbon-grid .carbon-fields-row > .carbon-field + .carbon-field { border-left: 1px solid $color-border; }
+}
+
+
+/* ------------------------------------------------------------ *\
+	Table Layout
+\* ------------------------------------------------------------ */
 
 .carbon-table-row > td { padding: 0; }
 .carbon-table-row .container-holder > .carbon-tabs > .carbon-tabs-nav { background: transparent; }
 
 
-/* Tabs */
+@media screen and (min-width: $breakpoint-tablet-min) {
+	.carbon-table-row .carbon-container > .carbon-fields-row > .carbon-field > label,
+	.carbon-table-row .carbon-container > .carbon-field > label { position: absolute; left: 0; }
+}
+
+@media screen and (max-width: $breakpoint-mobile-max) {
+	.carbon-table-row .carbon-container { margin-left: -10px; }
+}
+
+
+/* ------------------------------------------------------------ *\
+	Tabs
+\* ------------------------------------------------------------ */
 
 .carbon-tabs { margin: 0; }
 
@@ -52,13 +88,7 @@
 .carbon-tabs-nav .active a:focus,
 .carbon-tabs-nav .active a:active { box-shadow: none; }
 
-
-/* Error State */
-
-.carbon-container .carbon-error { position: absolute; left: 50%; bottom: 100%; padding: 2px 8px; margin-bottom: 8px; border-radius: 2px; background: $color-state-error; color: #fff; font-style: normal; font-size: 12px; transform: translateX(-50%); visibility: hidden; opacity: 0; }
-.carbon-container .carbon-error:after { content: ''; position: absolute; left: 50%; top: 100%; border-width: 5px 5px 0; margin-left: -5px; border-style: solid; border-color: $color-state-error transparent; }
-
-.carbon-container .carbon-highlight { position: relative; outline: 1px solid $color-state-error; outline-offset: -1px; border-color: $color-state-error; }
-
-.carbon-container .carbon-highlight > label { color: $color-state-error; }
-.carbon-container .carbon-highlight > .carbon-error { visibility: visible; opacity: 1; }
+@media screen and (max-width: $breakpoint-mobile-landscape) {
+	.carbon-tabs.carbon-tabs-stacked .carbon-tabs-nav li { display: block; margin-right: 8px; }
+	.carbon-tabs.carbon-tabs-stacked .carbon-tabs-nav li a { display: block; }
+}

@@ -19,7 +19,6 @@
 @import url(modules/_base);
 
 @import url(modules/_buttons);
-@import url(modules/_icons);
 
 @import url(modules/_containers.base);
 @import url(modules/_containers.theme-options);
@@ -36,5 +35,3 @@
 @import url(modules/_fields.map);
 @import url(modules/_fields.separator);
 @import url(modules/_fields.complex);
-
-@import url(modules/_responsive);

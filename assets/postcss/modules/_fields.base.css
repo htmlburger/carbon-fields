@@ -36,7 +36,19 @@
 
 .carbon-field .carbon-description:after { content: ''; display: block; clear: both; width: 100%; }
 
-@media (max-width: 782px) {
-	.carbon-field .carbon-field-group-button .button { height: 39px; line-height: 27px; }
-}
 
+@media screen and (max-width: $breakpoint-mobile-max) {
+	.carbon-field .icon-button { min-width: 40px; height: 40px; }
+
+	.carbon-preview .carbon-file-remove,
+	.carbon-field .icon-button:before { font-size: 32px; line-height: 40px; }
+
+	.carbon-field input[type="text"],
+	.carbon-field textarea,
+	.carbon-field select { padding: 7px 10px; font-size: 16px; line-height: 1.5; }
+
+	.carbon-field .carbon-field-group-button .button { height: 39px; line-height: 27px; }
+
+	.carbon-radio-list label,
+	.carbon-set-list label { padding: 6px 0; line-height: 2.3; }
+}

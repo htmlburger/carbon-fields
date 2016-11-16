@@ -430,7 +430,7 @@ class Complex_Field extends Field {
 	public function template() {
 		?>
 		<div class="carbon-subcontainer carbon-grid {{ multiple_groups ? 'multiple-groups' : '' }}">
-			<div class="carbon-empty-row">
+			<div class="carbon-empty-row carbon-empty-row-visible">
 				{{{ crbl10n.complex_no_rows.replace('%s', labels.plural_name) }}}
 			</div>
 
