@@ -179,15 +179,6 @@ body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; 
 .carbon-field .carbon-description:after { content: ''; display: block; clear: both; width: 100%; }
 
 /* ------------------------------------------------------------ *\
-	Field - Radio Image
-\* ------------------------------------------------------------ */
-
-.carbon-field .carbon-radio-image-list li { display:inline-block; padding: 5px; }
-.carbon-field .carbon-radio-image-list input[type="radio"] { display: none; }
-.carbon-field .carbon-radio-image-list label { display: block; padding: 3px; border-radius: 4px; }
-.carbon-field .carbon-radio-image-list .selected label { display: block; box-shadow: inset 0 0 3px 1px #00a0d2 }
-
-/* ------------------------------------------------------------ *\
 	Field - Relationship
 \* ------------------------------------------------------------ */
 
