@@ -1,0 +1,6 @@
+/* ------------------------------------------------------------ *\
+	Container - Widgets
+\* ------------------------------------------------------------ */
+
+.carbon-container-Widget { margin: 0 -15px 15px -15px; width: auto; border-bottom: 1px solid $color-border; }
+.carbon-container-Widget > .carbon-field:first-child { margin-top: -1px; }

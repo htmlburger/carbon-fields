@@ -1,0 +1,35 @@
+/* ------------------------------------------------------------ *\
+	Container - Terms, Users
+\* ------------------------------------------------------------ */
+
+.carbon-term-container { width: 95%; }
+.carbon-term-container .carbon-field > label { color: #23282d; }
+
+
+/*  Add Term  */
+
+.add-term-container .carbon-container { margin-left: -10px; margin-right: -10px; }
+
+.add-term-container .carbon-field > label { font-weight: normal; }
+.add-term-container .carbon-field .help-text { font-size: 13px; color: #666; }
+
+.add-term-container > .carbon-tabs > .carbon-tabs-nav { background: transparent; }
+
+
+/*  Users  */
+
+.carbon-user-container { max-width: 800px; }
+.carbon-user-container label { width: 200px; }
+
+#profile-page .carbon-user-container textarea { width: 100%; max-width: none; }
+
+
+@media screen and (max-width: $breakpoint-mobile-max) {
+	.edit-term-container { width: auto; }
+
+	.add-term-container .carbon-Relationship .relationship-container { margin: 3px 0 0; }
+	.add-term-container .carbon-Relationship .relationship-left,
+	.add-term-container .carbon-Relationship .relationship-right { float: none; display: block; width: auto; padding: 0 0 5px; }
+
+	.carbon-user-container label { width: auto; }
+}

@@ -11,11 +11,15 @@ class Color_Field extends Field {
 	 */
 	public function template() {
 		?>
-		<div class="carbon-color-row">
-			<div class="input-with-button">
-				<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-color" />
-				<span class="pickcolor button icon-button hide-if-no-js"><?php _e( 'Select a Color', 'carbon-fields' ); ?></span>
-			</div>
+		<div class="carbon-color">
+			<span class="pickcolor button carbon-color-button hide-if-no-js">
+				<span class="carbon-color-preview"></span>
+
+				<span class="carbon-color-button-text"><?php _e( 'Select a Color', 'carbon-fields' ); ?></span>
+			</span>
+
+			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-color-field" />
+
 			<div class="carbon-color-container hide-if-no-js"></div>
 		</div>
 		<?php
