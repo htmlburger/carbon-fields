@@ -82,7 +82,7 @@ class Radio_Image_Field extends Predefined_Options_Field {
 				<# _.each(options, function(option) { #>
 					<li>
 						<label>
-                            <img class="carbon-radio-image" src="{{{ option.imgUrl }}}" title="{{{ option.name }}}">
+                                                        <img class="carbon-radio-image" src="{{{ option.imgUrl }}}" title="{{{ option.name }}}">
 							<input type="radio" name="{{{ name }}}" value="{{ option.value }}" {{{ option.value == value ? 'checked="checked"' : '' }}} />
 						</label>
 					</li>
