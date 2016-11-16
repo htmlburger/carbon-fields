@@ -486,8 +486,8 @@ class Complex_Field extends Field {
 	/**
 	 * Collapse the complex field entries.
 	 */
-	public function collapse() {
-		$this->collapsed = true;
+	public function collapse( $state = true ) {
+		$this->collapsed = $state;
 
 		return $this;
 	}
