@@ -1929,13 +1929,16 @@ window.carbon = window.carbon || {};
 
 			var view = carbon.views[id] = new carbon.fields.View.Complex.Group({
 				el: this.$groupsHolder,
-				model: model
+				model: model,
+				attributes: {
+					collapsed: this.model.get('collapsed')
+				}
 			});
 
 			view.on('layoutUpdated', function() {
 				_this.trigger('layoutUpdated');
 			});
-
+console.log(this.model.get('collapsed'));
 			view.render(this.model);
 
 			return this;
@@ -2078,12 +2081,12 @@ window.carbon = window.carbon || {};
 		defaults: {
 			'order': null,
 			'index': null,
-			'collapsed': null
+			'collapsed': false
 		},
 
 		initialize: function() {
 			var fields = this.get('fields');
-
+console.log(this);
 			_.each(fields, function(field) {
 				if (field.hasOwnProperty('old_id') && field.hasOwnProperty('old_name')) {
 					field.id = field.old_id;
@@ -2362,7 +2365,7 @@ window.carbon = window.carbon || {};
 
 			var attributes = $.extend(true, {}, this.model.attributes);
 			attributes.id = null;
-			attributes.collapsed = this.model.get('collapsed');
+			attributes.collapsed = false;
 
 			if (attributes.hasOwnProperty('fields')) {
 				attributes.fields = this.fieldsCollection.toJSON();
@@ -2377,12 +2380,6 @@ window.carbon = window.carbon || {};
 
 		afterRenderInit: function() {
 			var _this = this;
-
-			// Initialize the local `collapsed` value with `collapsed` value defined in PHP land
-			// If it's already set is because it's a duplicate row
-			if (this.model.get('collapsed') === null) {
-				this.model.set('collapsed', this.complexModel.get('collapsed'));
-			}
 
 			// Update collapse state/visibility
 			this.toggleCollapse(this.model);
