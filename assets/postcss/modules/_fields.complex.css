@@ -10,7 +10,7 @@
 /*  Sub Container  */
 
 .carbon-subcontainer > .carbon-actions { position: relative; display: inline-block; vertical-align: top; }
-.carbon-subcontainer > .carbon-actions .carbon-button { float: none; }
+.carbon-subcontainer > .carbon-actions .carbon-button { display: inline-block; vertical-align: top; float: none; }
 
 .carbon-subcontainer > .carbon-empty-row { display: none; }
 .carbon-subcontainer > .carbon-empty-row-visible { display: block; }
@@ -74,7 +74,7 @@
 .group-tabs-nav-holder .group-tabs-nav li a:hover { background: #fff; }
 .group-tabs-nav-holder .group-tabs-nav li a:focus { box-shadow: none; outline: none; }
 
-.group-tabs-nav-holder .group-tabs-nav .group-number { display: none; }
+.group-tabs-nav-holder .group-tabs-nav .group-name + .group-number { display: none; }
 .group-tabs-nav-holder .group-tabs-nav .carbon-complex-group-error-badge { position: absolute; right: 0; top: 50%; margin-top: -6px; color: $color-state-error; font-size: 12px; line-height: 1; visibility: hidden; }
 .group-tabs-nav-holder .group-tabs-nav .ui-placeholder-highlight { height: 33px; margin-bottom: 0; border: 1px dashed $color-border-darker; }
 

@@ -16,7 +16,7 @@
 .carbon-attachment .carbon-file-remove:hover { opacity: .8; }
 .carbon-attachment .carbon-file-remove:before { content: '\f153'; background: #fff; border-radius: 50%; color: $color-label; font-family: 'dashicons'; }
 
-.carbon-attachment .button { position: relative; z-index: 10; display: inline-block; vertical-align: middle; margin: 0; visibility: hidden; opacity: 0; transition: visibility .2s ease-out, opacity .2s ease-out; }
+.carbon-attachment .button { position: relative; z-index: 10; display: inline-block; vertical-align: middle; max-width: 100%; height: auto; padding-top: 3px; padding-bottom: 3px; margin: 0; visibility: hidden; opacity: 0; white-space: normal; white-space: normal; line-height: 1.5; transition: visibility .2s ease-out, opacity .2s ease-out; }
 
 .carbon-attachment:hover .button,
 .carbon-attachment .carbon-description.hidden + .button { visibility: visible; opacity: 1; }
