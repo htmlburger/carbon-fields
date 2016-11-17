@@ -924,7 +924,42 @@ window.carbon = window.carbon || {};
 		}
 	});
 
+    	/*--------------------------------------------------------------------------
+	 * RADIO IMAGE
+	 *------------------------------------------------------------------------*/
 
+    	// RadioImage VIEW
+	carbon.fields.View.RadioImage = carbon.fields.View.extend({
+	    initialize: function () {
+	        carbon.fields.View.prototype.initialize.apply(this);
+
+            //Adds the 'selected' class to the parent li of checked input, on fields render event
+	        this.on('field:rendered', this.updateChecked);
+	    },
+
+	    sync: function (event) {
+	        var $radio = this.$('input[type="radio"]:checked');
+	        
+	        if ($radio.length) {
+	            $radio.parents('ul').children('li.selected').removeClass('selected');
+	            $radio.parents('li').addClass('selected');
+	        }
+	        else {
+	            $radio.parents('ul').children('li.selected').removeClass('selected');
+	        }
+
+	        this.model.set('value', value);
+	    },
+
+	    updateChecked: function () {
+	        var $radio = this.$('input[type="radio"]:checked');
+
+	        if ($radio.length) {
+	            $radio.parents('li').addClass('selected');
+	        }
+	    }
+	});
+	
 	/*--------------------------------------------------------------------------
 	 * GRAVITY FORM
 	 *------------------------------------------------------------------------*/
