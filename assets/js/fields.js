@@ -2267,13 +2267,20 @@ window.carbon = window.carbon || {};
 		getLabelTemplate: function() {
 			try {
 				var template = carbon.template( this.model.get('group_id') );
-				var templateVariables = {};
+				var templateVariables = {
+					_models: {}
+				};
 
 				_.each(this.fieldsCollection.models, function(fieldModel) {
 					var fieldName = fieldModel.get('base_name');
 					var fieldValue = fieldModel.get('value');
 
 					templateVariables[ fieldName ] = fieldValue;
+					
+					// pass the field model to the template, useful to advanced users
+					// e.g.: the user can show an image thumbnail on a collapsed complex
+					//       field to create a "gallery".
+					templateVariables._models[ fieldName ] = fieldModel;
 				});
 
 				return template(templateVariables);
