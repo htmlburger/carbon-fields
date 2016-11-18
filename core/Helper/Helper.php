@@ -476,7 +476,7 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 	 * @return mixed        New field value.
 	 */
 	public static function maybe_old_relationship_field( $value ) {
-		if ( is_array( $value ) && ! empty( $value ) ) {
+		if ( is_array( $value ) && ! empty( $value ) && ! empty( $value[0] ) ) {
 			if ( preg_match( '~^\w+:\w+:\d+$~', $value[0] ) ) {
 				$new_value = array();
 				foreach ( $value as $value_entry ) {
