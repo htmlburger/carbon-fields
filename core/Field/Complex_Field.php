@@ -465,7 +465,6 @@ class Complex_Field extends Field {
 				<div class="carbon-button">
 					<a href="#" class="button" data-group="{{{ multiple_groups ? '' : groups[0].name }}}">
 						{{{ crbl10n.complex_add_button.replace('%s', labels.singular_name) }}}
-						{{{ multiple_groups ? '&#8681;' : '' }}}
 					</a>
 
 					<# if (multiple_groups) { #>
