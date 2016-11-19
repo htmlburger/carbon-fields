@@ -103,7 +103,7 @@ class Map_Field extends Field {
 
 			<div class="carbon-map-search-row">
 				<input type="text" name="{{{ name }}}[address]" value="{{{ address }}}" class="regular-text address carbon-map-search-address" placeholder="Search..." />
-				<span class="carbon-map-search-button">
+				<span class="carbon-map-search-button dashicons-before dashicons-search">
 					<?php _e( 'Find', 'carbon-fields' ); ?>
 				</span>
 			</div>

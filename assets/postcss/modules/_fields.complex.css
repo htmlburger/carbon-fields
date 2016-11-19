@@ -27,17 +27,14 @@
 .carbon-groups-holder .ui-sortable-helper { border-color: $color-border-darker; opacity: .8; }
 .carbon-groups-holder .ui-placeholder-highlight { height: 42px; margin-bottom: 10px; border: 1px dashed $color-border-darker; }
 
-.carbon-groups-holder .carbon-group-actions { position: absolute; right: 12px; top: 12px; }
-.carbon-groups-holder .carbon-group-actions a { display: inline-block; vertical-align: top; margin-left: 8px; color: $color-grey-font; text-decoration: none; font-size: 0; line-height: 0; text-indent: -4004px; }
+.carbon-groups-holder .carbon-group-actions { position: absolute; right: 12px; top: 12px; font-size: 0; }
+.carbon-groups-holder .carbon-group-actions a { display: inline-block; vertical-align: top; margin-left: 12px; color: $color-grey-font; text-decoration: none; font-size: 0; line-height: 0; text-indent: -4004px; }
 .carbon-groups-holder .carbon-group-actions a:first-child { margin-left: 0; }
-.carbon-groups-holder .carbon-group-actions a:last-child { margin-left: 4px; }
+.carbon-groups-holder .carbon-group-actions a:last-child { margin-left: 8px; }
 .carbon-groups-holder .carbon-group-actions a:hover { color: $color-border-darkgrey; }
 .carbon-groups-holder .carbon-group-actions a:focus { box-shadow: none; outline: none; }
-.carbon-groups-holder .carbon-group-actions a:before { display: block; font-family: 'dashicons'; font-weight: normal; font-size: 20px; line-height: 1; text-indent: 0; }
+.carbon-groups-holder .carbon-group-actions a:before { display: block; text-indent: 0; }
 
-.carbon-groups-holder .carbon-btn-remove:before { content: '\f182'; }
-.carbon-groups-holder .carbon-btn-duplicate:before { content: '\f105'; }
-.carbon-groups-holder .carbon-btn-collapse:before { content: '\f142'; }
 .carbon-groups-holder .collapsed .carbon-btn-collapse:before { content: '\f140'; }
 
 .carbon-groups-holder .carbon-group-actions .carbon-btn-remove:hover { color: $color-border-darkgrey; }

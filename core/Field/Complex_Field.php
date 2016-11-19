@@ -493,15 +493,15 @@ class Complex_Field extends Field {
 			</div>
 
 			<div class="carbon-group-actions carbon-group-actions-{{ layout }}">
-				<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>">
+				<a class="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>">
 					<?php _e( 'Clone', 'carbon_fields' ); ?>
 				</a>
 
-				<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>">
+				<a class="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>">
 					<?php _e( 'Remove', 'carbon_fields' ); ?>
 				</a>
 
-				<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>">
+				<a class="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>">
 					<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?>
 				</a>
 			</div>
