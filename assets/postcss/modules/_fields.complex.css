@@ -28,9 +28,10 @@
 .carbon-groups-holder .ui-placeholder-highlight { height: 42px; margin-bottom: 10px; border: 1px dashed $color-border-darker; }
 
 .carbon-groups-holder .carbon-group-actions { position: absolute; right: 12px; top: 12px; }
-.carbon-groups-holder .carbon-group-actions a { display: inline-block; vertical-align: top; margin-right: 2px; color: $color-grey-font; font-weight: 600; text-decoration: none; font-size: 0; line-height: 0; text-indent: -4004px; }
-.carbon-groups-holder .carbon-group-actions a:last-child { margin-right: 0; }
-.carbon-groups-holder .carbon-group-actions a:hover { color: $color-blue-font; }
+.carbon-groups-holder .carbon-group-actions a { display: inline-block; vertical-align: top; margin-left: 8px; color: $color-grey-font; text-decoration: none; font-size: 0; line-height: 0; text-indent: -4004px; }
+.carbon-groups-holder .carbon-group-actions a:first-child { margin-left: 0; }
+.carbon-groups-holder .carbon-group-actions a:last-child { margin-left: 4px; }
+.carbon-groups-holder .carbon-group-actions a:hover { color: $color-border-darkgrey; }
 .carbon-groups-holder .carbon-group-actions a:focus { box-shadow: none; outline: none; }
 .carbon-groups-holder .carbon-group-actions a:before { display: block; font-family: 'dashicons'; font-weight: normal; font-size: 20px; line-height: 1; text-indent: 0; }
 
@@ -39,15 +40,16 @@
 .carbon-groups-holder .carbon-btn-collapse:before { content: '\f142'; }
 .carbon-groups-holder .collapsed .carbon-btn-collapse:before { content: '\f140'; }
 
-.carbon-groups-holder .carbon-group-actions .carbon-btn-remove:hover { color: $color-darkred-font; }
+.carbon-groups-holder .carbon-group-actions .carbon-btn-remove:hover { color: $color-border-darkgrey; }
 
-.carbon-groups-holder .fields-container { border-width: 0 1px 1px; border-style: solid; border-color: $color-border; }
+.carbon-groups-holder .fields-container { border-width: 0 1px 0 1px; border-style: solid; border-color: $color-border; }
 
 
 /*  Drag Handle  */
 
-.carbon-drag-handle { position: relative; min-height: 1.5em; padding: 12px 78px 12px 54px; background: $color-grey-bg; border: 1px solid $color-border; cursor: move; font-size: 12px; font-weight: 600; line-height: 1.5; color: $color-label; }
-.carbon-drag-handle .group-number { position: absolute; left: 0; top: 0; width: 42px; height: 100%; line-height: 42px; border-right: 1px solid $color-border; text-align: center; }
+.carbon-drag-handle { position: relative; min-height: 1.5em; padding: 12px 90px 12px 54px; background: $color-grey-bg; border: 1px solid $color-border; cursor: move; font-size: 12px; font-weight: 600; line-height: 1.5; color: $color-label; }
+.carbon-drag-handle:hover { border-color: $color-border-active; }
+.carbon-drag-handle .group-number { position: absolute; left: 0; top: 0; width: 43px; height: 100%; line-height: 42px; border-right: 1px solid $color-border; text-align: center; }
 
 
 /*  Tabs  */
@@ -56,6 +58,7 @@
 .group-tabs-nav-holder > .carbon-actions { position: absolute; right: 0; top: 0; }
 .group-tabs-nav-holder > .carbon-actions .carbon-button { margin-top: 0; }
 .group-tabs-nav-holder > .carbon-actions .button { width: 36px; height: 36px; padding: 0; line-height: 28px; background: $color-grey-bg; border: 1px solid $color-border; border-radius: 0; box-shadow: none; text-align: center; font-size: 24px; font-weight: 600; color: $color-label; }
+.group-tabs-nav-holder > .carbon-actions .button:active { transform: none; }
 .group-tabs-nav-holder > .carbon-actions .button:hover { color: $color-blue-font; }
 
 .group-tabs-nav-holder ~ .carbon-groups-holder { border-top: 1px solid $color-border; }
@@ -93,7 +96,7 @@
 .carbon-groups-holder .carbon-group-actions-tabbed-vertical { position: absolute; top: auto; right: 0; left: 0; bottom: 0; height: 36px; padding: 0 12px; background: $color-grey-bg; border: 1px solid $color-border; }
 
 .carbon-groups-holder .carbon-group-actions-tabbed-horizontal a,
-.carbon-groups-holder .carbon-group-actions-tabbed-vertical a { display: inline-block; padding: 8px 0; font-size: 12px; line-height: 1.5; text-indent: 0; color: $color-blue-font; }
+.carbon-groups-holder .carbon-group-actions-tabbed-vertical a { display: inline-block; padding: 9px 0; font-size: 12px; line-height: 1.5; text-indent: 0; color: $color-blue-font; }
 
 .carbon-groups-holder .carbon-group-actions-tabbed-horizontal a:before,
 .carbon-groups-holder .carbon-group-actions-tabbed-vertical a:before { display: none; }
@@ -115,7 +118,7 @@
 
 .layout-tabbed-vertical { display: flex; }
 
-.layout-tabbed-vertical > .group-tabs-nav-holder { width: 20%; padding: 5px 0; margin: 0; }
+.layout-tabbed-vertical > .group-tabs-nav-holder { width: 20%; padding: 0; margin: 0; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav li { display: block; width: auto; margin-right: 0; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav a { padding-left: 20px; margin-right: -1px; max-width: none; border-bottom: 0; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav .active a { position: relative; z-index: 5; border-right-color: #fff; }

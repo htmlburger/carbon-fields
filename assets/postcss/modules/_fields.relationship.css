@@ -17,11 +17,11 @@
 
 .carbon-relationship-list li { position: relative; display: block; padding: 0; margin: 0; background: #fff; }
 
-.carbon-relationship-list li a { position: relative; display: block; padding: 6px 18px 6px 8px; border-bottom: 1px solid $color-border; text-decoration: none; color: $color-label; font-weight: bold; }
-.carbon-relationship-list li a span { position: absolute; top: 6px; right: 8px; width: 16px; height: 16px; color: $color-grey-font; cursor: pointer; }
+.carbon-relationship-list li a { position: relative; display: block; padding: 8px 18px 8px 8px; border-bottom: 1px solid $color-border; text-decoration: none; color: $color-label; font-weight: bold; }
+.carbon-relationship-list li a span { position: absolute; top: 8px; right: 8px; width: 16px; height: 16px; color: $color-grey-font; cursor: pointer; }
 .carbon-relationship-list li a span:before { display: inline-block; vertical-align: top; font-style: normal; font-size: 18px; font-family: 'dashicons'; -webkit-font-smoothing: antialiased; }
 
-.carbon-relationship-list li a em { float: right; height: 16px; line-height: 16px; margin-right: 14px; font-size: 11px; font-style: normal; font-weight: normal; text-transform: uppercase; color: $color-grey-font; }
+.carbon-relationship-list li a em { float: right; height: 16px; line-height: 16px; margin-right: 14px; margin-top: 1px; font-size: 11px; font-style: normal; font-weight: normal; text-transform: uppercase; color: $color-grey-font; }
 .carbon-relationship-list li a em.edit-link { font-size: 0; }
 .carbon-relationship-list li a em.edit-link:before { content: '\f464'; font-size: 20px; font-family: 'dashicons'; }
 
@@ -32,9 +32,9 @@
 .carbon-relationship-list li a:hover { background-color: $color-grey-bg; color: $color-label; }
 .carbon-relationship-list li a span:hover:before { color: $color-blue-font; }
 
-.carbon-relationship-search { position: relative; width: 100%; border: 0;  border-spacing: 0; margin: 0; }
+.carbon-relationship-search { position: relative; width: 100%; border: 0;  border-spacing: 0; margin: 0; z-index: 1; }
 .carbon-relationship-search:after { content: '\f179'; position: absolute; left: 8px; top: 50%; margin-top: -8px; font-family: 'dashicons'; line-height: 1; font-size: 16px; color: $color-grey-font; pointer-events: none; }
-.carbon-relationship-search input { width: 100%; height: 40px; padding: 10px 9px 10px 32px !important; border: 1px solid $color-border; margin: 0; font-size: 13px; line-height: 18px; border-radius: 0; font-family: sans-serif; }
+.carbon-relationship-search input { width: 100%; height: 40px; padding: 10px 9px 10px 32px !important; border: 1px solid $color-border; margin: 0; font-size: 13px; line-height: 18px; border-radius: 0; }
 
 .carbon-relationship-container .mobile-handle { display: none; }
 
