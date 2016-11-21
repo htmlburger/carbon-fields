@@ -14,7 +14,7 @@
 
 .carbon-attachment .carbon-file-remove { position: absolute; z-index: 15; top: 5px; right: 5px; cursor: pointer; font-size: 20px; line-height: 1; transition: opacity .2s ease-out; }
 .carbon-attachment .carbon-file-remove:hover { opacity: .8; }
-.carbon-attachment .carbon-file-remove:before { content: '\f153'; background: #fff; border-radius: 50%; color: $color-label; font-family: 'dashicons'; }
+.carbon-attachment .carbon-file-remove:before { background: $color-label; color: #fff; border-radius: 50%;  }
 
 .carbon-attachment .button { position: relative; z-index: 10; display: inline-block; vertical-align: middle; max-width: 100%; height: auto; padding-top: 3px; padding-bottom: 3px; margin: 0; visibility: hidden; opacity: 0; white-space: normal; white-space: normal; line-height: 1.5; transition: visibility .2s ease-out, opacity .2s ease-out; }
 
