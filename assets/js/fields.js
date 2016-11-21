@@ -792,7 +792,6 @@ window.carbon = window.carbon || {};
 				dateFormat: 'yy-mm-dd',
 				changeMonth: true,
 				changeYear: true,
-				showButtonPanel: true,
 				hideIfNoPrevNext: true,
 				beforeShow: function(input, inst) {
 					$('#ui-datepicker-div').addClass('carbon-jquery-ui');
@@ -1581,6 +1580,7 @@ window.carbon = window.carbon || {};
 			var timepickerOptions = this.model.get('timepicker_options');
 			var args = {
 				timeFormat: this.model.get('time_format'),
+				showTime: false,
 				beforeShow: function(input, inst) {
 					$('#ui-datepicker-div').addClass('carbon-jquery-ui');
 				}
@@ -2267,13 +2267,20 @@ window.carbon = window.carbon || {};
 		getLabelTemplate: function() {
 			try {
 				var template = carbon.template( this.model.get('group_id') );
-				var templateVariables = {};
+				var templateVariables = {
+					_models: {}
+				};
 
 				_.each(this.fieldsCollection.models, function(fieldModel) {
 					var fieldName = fieldModel.get('base_name');
 					var fieldValue = fieldModel.get('value');
 
 					templateVariables[ fieldName ] = fieldValue;
+					
+					// pass the field model to the template, useful to advanced users
+					// e.g.: the user can show an image thumbnail on a collapsed complex
+					//       field to create a "gallery".
+					templateVariables._models[ fieldName ] = fieldModel;
 				});
 
 				return template(templateVariables);
