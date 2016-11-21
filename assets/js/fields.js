@@ -1581,6 +1581,8 @@ window.carbon = window.carbon || {};
 			var args = {
 				timeFormat: this.model.get('time_format'),
 				showTime: false,
+				changeMonth: true,
+				changeYear: true,
 				beforeShow: function(input, inst) {
 					$('#ui-datepicker-div').addClass('carbon-jquery-ui');
 				}
@@ -2276,7 +2278,7 @@ window.carbon = window.carbon || {};
 					var fieldValue = fieldModel.get('value');
 
 					templateVariables[ fieldName ] = fieldValue;
-					
+
 					// pass the field model to the template, useful to advanced users
 					// e.g.: the user can show an image thumbnail on a collapsed complex
 					//       field to create a "gallery".
