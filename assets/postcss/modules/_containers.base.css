@@ -5,7 +5,7 @@
 .carbon-container ul,
 .carbon-container li { margin: 0; padding: 0; }
 .carbon-container p { margin: 0; padding: 0 0 3px; font-style: normal; }
-.carbon-container h3 { font-size: 17px; font-weight: 300; margin: 0 0 4px; color: $color-label; }
+.carbon-container h3 { font-size: 17px; font-weight: 200; margin: 0 0 4px; color: $color-label; }
 .carbon-container label { display: block; padding: 2px 0; color: $color-label; }
 
 .carbon-container .carbon-button { margin-top: 15px; }
@@ -27,7 +27,7 @@
 
 /*  Error State  */
 
-.carbon-container .carbon-error { position: absolute; left: 50%; bottom: 100%; padding: 2px 8px; margin-bottom: 8px; border-radius: 2px; background: $color-state-error; color: #fff; font-style: normal; font-size: 12px; transform: translateX(-50%); visibility: hidden; opacity: 0; }
+.carbon-container .carbon-error { position: absolute; left: 50%; bottom: 100%; padding: 4px 8px; margin-bottom: 8px; border-radius: 2px; background: $color-state-error; color: #fff; font-style: normal; font-size: 12px; transform: translateX(-50%); visibility: hidden; opacity: 0; }
 .carbon-container .carbon-error:after { content: ''; position: absolute; left: 50%; top: 100%; border-width: 5px 5px 0; margin-left: -5px; border-style: solid; border-color: $color-state-error transparent; }
 
 .carbon-container .carbon-highlight { position: relative; outline: 1px solid $color-state-error; outline-offset: -1px; border-color: $color-state-error; }

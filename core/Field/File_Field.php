@@ -136,7 +136,7 @@ class File_Field extends Field {
 		<div class="carbon-description {{{ value ? '' : 'hidden' }}}">
 			<div class="carbon-attachment-preview {{{ thumb_url ? '' : 'hidden' }}}">
 				<img src="{{ thumb_url }}" class="thumbnail-image" />
-				<div class="carbon-file-remove"></div>
+				<div class="carbon-file-remove dashicons-before dashicons-no-alt"></div>
 			</div>
 
 			<div class="carbon-attachment-file-name">{{ file_name }}</div>
