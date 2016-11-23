@@ -29,6 +29,18 @@ module.exports = {
 		]
 	},
 
+	// Add aliases to allow easier importing of the modules.
+	resolve: {
+		root: __dirname,
+		alias: {
+			'lib': 'assets/react/lib',
+			'containers': 'assets/react/containers',
+			'reducers': 'assets/react/reducers',
+			'selectors': 'assets/react/selectors',
+			'store': 'assets/react/store.js'
+		}
+	},
+
 	// Faster sourcemaps without column mappings.
 	devtool: 'cheap-module-source-map'
 };

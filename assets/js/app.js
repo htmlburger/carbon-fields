@@ -92,12 +92,12 @@ window.carbon = window.carbon || {};
 			});
 
 			// Listen for the WordPress widget events and handle the widget initialization/update
-			this.$el.on('widget-added widget-updated', function() { 
+			this.$el.on('widget-added widget-updated', function() {
 				_this.widgetsHandler.apply(_this, arguments);
 			});
 
 			// Listen for menu item expanding, to inject new fields
-			this.$('#update-nav-menu').on('click', '.menu-item-edit-inactive .item-edit', function(e) { 
+			this.$('#update-nav-menu').on('click', '.menu-item-edit-inactive .item-edit', function(e) {
 				_this.navMenuHandler.apply(_this, arguments);
 			});
 
@@ -160,7 +160,7 @@ window.carbon = window.carbon || {};
 
 				// Completely unbind the old widget view
 				containerView.undelegateEvents();
-				containerView.$el.removeData().unbind(); 
+				containerView.$el.removeData().unbind();
 
 				// Remove the old widget model from the collection
 				this.containersCollection.remove(containerModel);
@@ -263,9 +263,9 @@ window.carbon = window.carbon || {};
 		var rect = $el[0].getBoundingClientRect();
 
 		return (
-			rect.bottom >= 0 && 
-			rect.right >= 0 && 
-			rect.top <= $(window).height() && 
+			rect.bottom >= 0 &&
+			rect.right >= 0 &&
+			rect.top <= $(window).height() &&
 			rect.left <= $(window).width()
 		);
 	}
@@ -350,7 +350,7 @@ window.carbon = window.carbon || {};
 	 *	Run the app when the dom is ready
 	 */
 	$(document).ready(function() {
-		carbon.init(); // Abracadabra! Poof! Containers everywhere ...
+		// carbon.init(); // Abracadabra! Poof! Containers everywhere ...
 	});
 
 }(jQuery));

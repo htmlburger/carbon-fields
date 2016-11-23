@@ -13,7 +13,7 @@ window.carbon = window.carbon || {};
 	| The app will fallback to this class if a container has no dedicated model.
 	|
 	| A model is responsible for holding the containers current state (data).
-	| It also holds all the logic surrounding the data management, like: 
+	| It also holds all the logic surrounding the data management, like:
 	|  - conversion
 	|  - validation
 	|  - access control
@@ -351,7 +351,7 @@ window.carbon = window.carbon || {};
 				// this is not a tabbed container, ignore
 				return;
 			}
-			
+
 			var topPositions = this.$('.carbon-tabs-nav li').map(function() {
 				return $(this).offset().top;
 			});
@@ -360,11 +360,11 @@ window.carbon = window.carbon || {};
 				$tabsContainer.addClass('carbon-tabs-stacked');
 			}
 
-			// Open the first tab, if none is open yet. 
+			// Open the first tab, if none is open yet.
 			if ( ! $tabsContainer.find('ul.carbon-tabs-nav li.active').length ) {
 				$tabsContainer.find('ul.carbon-tabs-nav a:first').trigger('click');
 			}
-			
+
 		},
 
 		switchTab: function (e) {
@@ -448,11 +448,11 @@ window.carbon = window.carbon || {};
 						$errorHolder.insertAfter( $target ).show();
 					}
 					var $firstErrorField = $('.carbon-highlight :input:first');
-					
+
 					// Expand the post meta box if it's closed
 					$firstErrorField.closest('.postbox').removeClass('closed');
 
-					// Focus the first error field. 
+					// Focus the first error field.
 					$firstErrorField.focus();
 				}
 
@@ -482,7 +482,7 @@ window.carbon = window.carbon || {};
 	|
 	| Holds a set of container models.
 	| Also includes model class initialization logic.
-	| 
+	|
 	*/
 	carbon.containers.Collection = Backbone.Collection.extend({
 		model: function(attrs, options) {
@@ -638,16 +638,18 @@ window.carbon = window.carbon || {};
 				switch(type) {
 					case 'template_names':
 						var template = _this.model.get('page_template');
+						var isPage = typeof typenow !== 'undefined' && typenow === 'page';
 
-						if ($.inArray(template, req) === -1) {
+						if (isPage && $.inArray(template, req) === -1) {
 							visible = false;
 						}
 					break;
 
 					case 'not_in_template_names':
 						var template = _this.model.get('page_template');
-						
-						if ($.inArray(template, req) !== -1) {
+						var isPage = typeof typenow !== 'undefined' && typenow === 'page';
+
+						if (isPage && $.inArray(template, req) !== -1) {
 							visible = false;
 						}
 					break;
@@ -867,7 +869,7 @@ window.carbon = window.carbon || {};
 			} else if ( level !== term_container_level ) {
 				visible = false;
 			}
-			
+
 			this.model.set('visible', visible);
 		},
 

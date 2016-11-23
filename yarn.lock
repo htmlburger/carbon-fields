@@ -2063,7 +2063,7 @@ loader-utils@^0.2.11:
     json5 "^0.5.0"
     object-assign "^4.0.1"
 
-lodash-es@^4.2.1:
+lodash-es@^4.2.0, lodash-es@^4.2.1:
   version "4.17.2"
   resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.2.tgz#59011b585166e613eb9dd5fc256b2cd1a30f3712"
 
@@ -2818,13 +2818,14 @@ react-dom@^15.4.0:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
 
-react-redux@^4.4.6:
-  version "4.4.6"
-  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-4.4.6.tgz#4b9d32985307a11096a2dd61561980044fcc6209"
+react-redux@5.0.0-beta.3:
+  version "5.0.0-beta.3"
+  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.0.0-beta.3.tgz#d50bfb00799cf7d2a9fd55fe34d6b3ecc24d3072"
   dependencies:
     hoist-non-react-statics "^1.0.3"
     invariant "^2.0.0"
     lodash "^4.2.0"
+    lodash-es "^4.2.0"
     loose-envify "^1.1.0"
 
 react@^15.4.0:
@@ -3027,6 +3028,10 @@ require-directory@^2.1.1:
 require-main-filename@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-1.0.1.tgz#97f717b69d48784f5f526a6c5aa8ffdda055a4d1"
+
+reselect@^2.5.4:
+  version "2.5.4"
+  resolved "https://registry.yarnpkg.com/reselect/-/reselect-2.5.4.tgz#b7d23fdf00b83fa7ad0279546f8dbbbd765c7047"
 
 resolve-dir@^0.1.0:
   version "0.1.1"
