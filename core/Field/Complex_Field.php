@@ -430,7 +430,7 @@ class Complex_Field extends Field {
 	public function template() {
 		?>
 		<div class="carbon-subcontainer carbon-grid {{ multiple_groups ? 'multiple-groups' : '' }}">
-			<div class="carbon-empty-row">
+			<div class="carbon-empty-row carbon-empty-row-visible">
 				{{{ crbl10n.complex_no_rows.replace('%s', labels.plural_name) }}}
 			</div>
 
@@ -465,7 +465,6 @@ class Complex_Field extends Field {
 				<div class="carbon-button">
 					<a href="#" class="button" data-group="{{{ multiple_groups ? '' : groups[0].name }}}">
 						{{{ crbl10n.complex_add_button.replace('%s', labels.singular_name) }}}
-						{{{ multiple_groups ? '&#8681;' : '' }}}
 					</a>
 
 					<# if (multiple_groups) { #>
@@ -493,17 +492,17 @@ class Complex_Field extends Field {
 				<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label_template || label }}}</span>
 			</div>
 
-			<div class="carbon-group-actions">
-				<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>">
-					<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?>
-				</a>
-
-				<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>">
+			<div class="carbon-group-actions carbon-group-actions-{{ layout }}">
+				<a class="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>">
 					<?php _e( 'Clone', 'carbon_fields' ); ?>
 				</a>
 
-				<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>">
+				<a class="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>">
 					<?php _e( 'Remove', 'carbon_fields' ); ?>
+				</a>
+
+				<a class="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>">
+					<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?>
 				</a>
 			</div>
 
@@ -542,7 +541,7 @@ class Complex_Field extends Field {
 		<li class="group-tab-item" data-group-id="{{ id }}">
 			<a href="#">
 				<span class="group-handle"></span>
-				
+
 				<# if (label_template || label) { #>
 					<span class="group-name">{{{ label_template || label }}}</span>
 				<# } #>

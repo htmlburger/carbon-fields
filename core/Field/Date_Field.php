@@ -34,9 +34,12 @@ class Date_Field extends Field {
 	 **/
 	public function template() {
 		?>
-		<div class="input-with-button">
-			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-datepicker" />
-			<span class="carbon-datepicker-trigger button icon-button hide-if-no-js"><?php _e( 'Date', 'carbon-fields' ); ?></span>
+		<div class="carbon-field-group">
+			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-field-group-input carbon-datepicker" />
+
+			<div class="carbon-field-group-button">
+				<span class="carbon-datepicker-trigger button hide-if-no-js"><?php _e( 'Select Date', 'carbon-fields' ); ?></span>
+			</div>
 		</div>
 		<?php
 	}
@@ -48,7 +51,6 @@ class Date_Field extends Field {
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 
 		wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css' );
-		wp_enqueue_style( 'carbon-jquery-ui', \Carbon_Fields\URL . '/assets/css/jquery-ui.css' );
 	}
 
 	/**

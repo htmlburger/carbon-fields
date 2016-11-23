@@ -100,14 +100,14 @@ class Map_Field extends Field {
 		?>
 		<div class="carbon-map-search">
 			<p><?php _e( 'Locate Address on the map', 'carbon-fields' ); ?>: </p>
-			
-			<div class="input-with-button">
-				<input type="text" name="{{{ name }}}[address]" value="{{{ address }}}" class="regular-text address" />
-				<span class="address-search-btn button icon-button">
+
+			<div class="carbon-map-search-row">
+				<input type="text" name="{{{ name }}}[address]" value="{{{ address }}}" class="regular-text address carbon-map-search-address" placeholder="Search..." />
+				<span class="carbon-map-search-button dashicons-before dashicons-search">
 					<?php _e( 'Find', 'carbon-fields' ); ?>
 				</span>
 			</div>
-				
+
 			<input type="hidden" name="{{{ name }}}[lat]" value="{{{ lat }}}" />
 			<input type="hidden" name="{{{ name }}}[lng]" value="{{{ lng }}}" />
 			<input type="hidden" name="{{{ name }}}[zoom]" value="{{{ zoom }}}" />

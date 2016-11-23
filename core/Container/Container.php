@@ -741,7 +741,7 @@ abstract class Container {
 				<# _.each(tabs, function (tab, tabName) { #>
 					<li><a href="#" data-id="{{{ tab.id }}}">{{{ tabName }}}</a></li>
 				<# }); #>
-			</ul> 
+			</ul>
 
 			<div class="carbon-tabs-body">
 				<# _.each(tabs, function (tab) { #>
@@ -772,7 +772,7 @@ abstract class Container {
 	 * Enqueue admin styles
 	 */
 	public static function admin_hook_styles() {
-		wp_enqueue_style( 'carbon-main', \Carbon_Fields\URL . '/assets/css/main.css' );
+		wp_enqueue_style( 'carbon-main', \Carbon_Fields\URL . '/assets/bundle.css' );
 	}
 } // END Container
 

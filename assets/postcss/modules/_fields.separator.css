@@ -1,0 +1,27 @@
+/* ------------------------------------------------------------ *\
+	Field - Separator
+\* ------------------------------------------------------------ */
+
+.carbon-Separator { position: relative; padding: 14px 12px 15px; background: #fff; }
+
+.carbon-Separator .help-text { padding-top: 5px; }
+
+.carbon-Separator label { display: none; }
+
+.carbon-Separator h3,
+#poststuff .carbon-Separator h3 { padding: 0; font-size: 28px; margin: 0; line-height: 1; }
+
+.add-term-container .carbon-container > .carbon-Separator,
+.carbon-table-row .carbon-container > .carbon-Separator { margin: 10px; min-width: 0; }
+
+.add-term-container .carbon-container > .carbon-Separator,
+.carbon-table-row .carbon-container > .carbon-Separator { border: 1px solid $color-border; }
+
+
+@media screen and (min-width: $breakpoint-tablet-min) {
+	.carbon-table-row .carbon-container > .carbon-Separator { position: static; }
+}
+
+@media screen and (max-width: $breakpoint-mobile-max) {
+	.carbon-container .carbon-Separator { margin-left: 0; margin-right: 0; }
+}
