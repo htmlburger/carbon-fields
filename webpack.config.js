@@ -2,6 +2,7 @@ module.exports = {
 	// There are the "entry points" to our application.
 	// This means they wll be the "root" import that are included in JS bundle.
 	entry: [
+		'babel-polyfill',
 		'./assets/react/bootstrap.js'
 	],
 
@@ -35,10 +36,15 @@ module.exports = {
 		alias: {
 			'lib': 'assets/react/lib',
 			'containers': 'assets/react/containers',
-			'reducers': 'assets/react/reducers',
-			'selectors': 'assets/react/selectors',
+			'sidebars': 'assets/react/sidebars',
 			'store': 'assets/react/store.js'
 		}
+	},
+
+	// Some of our dependencies are already loaded by WordPress.
+	// So let's use them.
+	externals: {
+		'jquery': 'jQuery'
 	},
 
 	// Faster sourcemaps without column mappings.

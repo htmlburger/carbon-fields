@@ -3,10 +3,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { forEach } from 'lodash';
 
 import store from 'store';
 import { makeContainer } from 'lib/factory';
-import { getContainers } from 'selectors/containers';
+import { getContainers } from 'containers/selectors';
 
 /**
  * Every Carbon container will be treated as separate React application because
@@ -15,6 +16,11 @@ import { getContainers } from 'selectors/containers';
  *
  * Abracadabra! Poof! Containers everywhere ...
  */
-getContainers(store.getState()).forEach(({ id, type }) => {
-	ReactDOM.render(makeContainer(type, { id }), document.querySelector(`.container-${id}`));
+forEach(getContainers(store.getState()), ({ id, type }) => {
+	ReactDOM.render(
+		<Provider store={store}>
+			{makeContainer(type, { id })}
+		</Provider>,
+		document.querySelector(`.container-${id}`)
+	);
 });

@@ -1,8 +1,8 @@
 /* @flow */
 
 import React from 'react';
-import Container from 'containers/container';
-import ContainerPostMeta from 'containers/container-post-meta';
+import Container from 'containers/components/container';
+import ContainerPostMeta from 'containers/components/container-post-meta';
 
 /**
  * A dictionary of the supported containers.
@@ -10,7 +10,7 @@ import ContainerPostMeta from 'containers/container-post-meta';
  * @type {Object}
  */
 const containers: Object = {
-	'Post_Meta': ContainerPostMeta,
+	// 'Post_Meta': ContainerPostMeta,
 };
 
 /**

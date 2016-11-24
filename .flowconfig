@@ -1,6 +1,5 @@
 [options]
 module.name_mapper='^lib\/\(.*\)$' -> '<PROJECT_ROOT>/assets/react/lib/\1'
 module.name_mapper='^containers\/\(.*\)$' -> '<PROJECT_ROOT>/assets/react/containers/\1'
-module.name_mapper='^reducers\/\(.*\)$' -> '<PROJECT_ROOT>/assets/react/reducers/\1'
-module.name_mapper='^selectors\/\(.*\)$' -> '<PROJECT_ROOT>/assets/react/selectors/\1'
+module.name_mapper='^sidebars\/\(.*\)$' -> '<PROJECT_ROOT>/assets/react/sidebars/\1'
 module.name_mapper='^store$' -> '<PROJECT_ROOT>/assets/react/store.js'
