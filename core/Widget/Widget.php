@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Widget;
 
-use Carbon_Fields\Helper\Helper;
+use Carbon_Fields\Helper\Meta_Helper;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Container\Container;
@@ -117,7 +117,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 
 		// prepare $instance values for association fields
 		foreach ( $instance as &$field_value ) {
-			$field_value = Helper::parse_relationship_field( $field_value );
+			$field_value = Meta_Helper::parse_relationship_field( $field_value );
 		}
 
 		// output

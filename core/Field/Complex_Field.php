@@ -3,7 +3,7 @@
 namespace Carbon_Fields\Field;
 
 use Carbon_Fields\Datastore\Datastore_Interface;
-use Carbon_Fields\Helper\Helper;
+use Carbon_Fields\Helper\Meta_Helper;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Field\Group_Field;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
@@ -315,7 +315,7 @@ class Complex_Field extends Field {
 
 		// load and parse values and group type
 		foreach ( $group_rows as $row ) {
-			if ( ! preg_match( Helper::get_complex_field_regex( $this->name, array_keys( $this->groups ), $field_names ), $row['field_key'], $field_name ) ) {
+			if ( ! preg_match( Meta_Helper::get_complex_field_regex( $this->name, array_keys( $this->groups ), $field_names ), $row['field_key'], $field_name ) ) {
 				continue;
 			}
 
