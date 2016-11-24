@@ -172,6 +172,12 @@ class Relationship_Field extends Field {
 
 			$field_data['value'] = maybe_unserialize( $field_data['value'] );
 			foreach ( $field_data['value'] as $single_value ) {
+				// Catch field type being changed from Association to Relationship
+				$pieces = explode(':', $single_value);
+				if ( count( $pieces ) === 3 ) {
+					$single_value = $pieces[2];
+				}
+
 				$post_type = get_post_type( $single_value );
 				$value[] = array(
 					'id' => $single_value,

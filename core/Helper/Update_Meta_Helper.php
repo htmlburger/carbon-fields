@@ -137,9 +137,42 @@ class Update_Meta_Helper {
 			break;
 
 			case 'association':
-				$field->set_value( $value );
-				// $raw_value = self::update_field_value_by_store( $data_type, $name, $id );
-				// $value = self::parse_relationship_field( $raw_value, $type );
+				$formatted_value = array();
+
+				foreach ($value as $index => $data) {
+					if (
+						count( $data ) === 3
+						&& !empty( $data['type'] )
+						&& ( !empty( $data['post_type'] ) || !empty( $data['taxonomy'] ) )
+						&& !empty( $data['id'] )
+					) {
+						$formatted_value[$index] = array(
+							0 => $data['type'],
+							1 => !empty( $data['post_type'] ) ? $data['post_type'] : $data['taxonomy'],
+							2 => strval( $data['id'] ),
+						);
+
+						$formatted_value[$index] = implode( ':', $formatted_value[$index] );
+					} else {
+						Incorrect_Syntax_Exception::raise( 'Incorrect arguments passed to carbon_update_' . $data_type . ' for the "' . $type. '" field.' );
+					}
+				}
+
+				$field->set_value( $formatted_value );
+			break;
+
+			case 'relationship':
+				$formatted_value = array();
+
+				foreach ($value as $index => $data) {
+					if ( is_numeric( $data ) ) {
+						$formatted_value[$index] = strval( $data );
+					} else {
+						Incorrect_Syntax_Exception::raise( 'Incorrect arguments passed to carbon_update_' . $data_type . ' for the "' . $type. '" field.' );
+					}
+				}
+
+				$field->set_value( $formatted_value );
 			break;
 
 			default:
