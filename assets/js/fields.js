@@ -1623,8 +1623,11 @@ window.carbon = window.carbon || {};
 		// Add the events from the parent view and also include new ones
 		events: function() {
 			return _.extend({}, carbon.fields.View.prototype.events, {
-				'click .carbon-fontawesome-value': 'openPopup',
-				'click .carbon-fontawesome-icon-trigger': 'changeValue'
+				'change :input': '',
+				'change :input[type="hidden"]:first': 'sync',
+				'click .carbon-fontawesome-preview': 'togglePopup',
+				'click .carbon-fontawesome-icon-trigger': 'changeValue',
+				'keyup .carbon-fontawesome-search input:first': 'search'
 			});
 		},
 
@@ -1632,10 +1635,24 @@ window.carbon = window.carbon || {};
 			// Initialize the parent view
 			carbon.fields.View.prototype.initialize.apply(this); // do not delete
 
+			this.on('field:rendered', (function() {
+				this.$searchField = this.$('.carbon-fontawesome-search input:first');
+				this.$preview = this.$('.carbon-fontawesome-preview:first');
+				this.$previewIcon = this.$preview.find('i:first');
+				this.$popup = this.$('.carbon-fontawesome-popup:first');
+			}).bind(this));
 			this.listenTo(this.model, 'change:value', this.syncView);
 		},
 
-		openPopup: function(event) {
+		closePopup: function() {
+			this.$popup.addClass('hidden');
+		},
+
+		togglePopup: function(event) {
+			this.$popup.toggleClass('hidden');
+			if ( !this.$popup.hasClass('hidden') ) {
+				this.$searchField.focus();
+			}
 			event.preventDefault();
 		},
 
@@ -1643,24 +1660,52 @@ window.carbon = window.carbon || {};
 			var $a = this.$(event.currentTarget);
 			var value = $a.attr('data-value');
 			this.$('.carbon-fontawesome-value').val(value).trigger('change');
+			this.closePopup();
 			event.preventDefault();
 		},
 
 		syncView: function(model) {
-			var $preview = this.$('.carbon-fontawesome-preview:first');
-			var $previewIcon = $preview.find('i:first');
-
 			this.$('.carbon-fontawesome-icon-trigger').removeClass('active');
 			this.$('.carbon-fontawesome-icon-trigger[data-value="' + model.get('value') + '"]').addClass('active');
 
 			if ( model.previous('value') ) {
-				$previewIcon.removeClass('fa fa-' + model.previous('value'));
+				this.$previewIcon.removeClass('fa fa-' + model.previous('value'));
 			}
 			if ( model.get('value') ) {
-				$previewIcon.addClass('fa fa-' + model.get('value'));
-				$previewIcon.removeClass('hidden');
+				this.$previewIcon.addClass('fa fa-' + model.get('value'));
+				this.$previewIcon.removeClass('hidden');
 			} else {
-				$previewIcon.addClass('hidden');
+				this.$previewIcon.addClass('hidden');
+			}
+		},
+
+		search: function(event) {
+			var query = $.trim( this.$(event.target).val().toLowerCase() );
+			var options = this.model.get('options');
+
+			if ( !query ) {
+				this.$('.carbon-fontawesome-icon-container').removeClass('hidden');
+				return;
+			}
+
+			for (var id in options) {
+				var option = options[id];
+				var compareTo = [option.id, option.name].concat(option.categories);
+				var match = false;
+				for (var i = 0; i < compareTo.length; i++) {
+					var str = compareTo[i].toLowerCase();
+					if ( str.indexOf(query) !== -1 ) {
+						match = true;
+						break;
+					}
+				}
+
+				var $container = this.$('.carbon-fontawesome-icon-container-' + option.id);
+				if ( match ) {
+					$container.removeClass('hidden');
+				} else {
+					$container.addClass('hidden');
+				}
 			}
 		}
 	});

@@ -97,27 +97,29 @@ class FontAwesome_Field extends Field {
 				<span class="button">{{{ button_label }}}</span>
 			</a>
 
-			<div class="search-field carbon-fontawesome-search dashicons-before dashicons-search">
-				<input type="text" class="search-field" placeholder="<?php esc_attr_e( 'Search...', 'carbon-fields' ); ?>" />
-			</div>
-			<div class="carbon-fontawesome-scroll">
-				<ul class="carbon-fontawesome-list">
-					<# if (options) { #>
-						<# _.each(options, function(item) { #>
-							<li>
-								<a href="#" class="carbon-fontawesome-icon-trigger {{{ value == item.id ? 'active' : '' }}}" data-value="{{{ item.id }}}">
-									<# if (item.id) { #>
-										<i class="fa fa-{{{ item.id }}}"></i>
-										<span>{{{ item.name }}}</span>
-									<# } else { #>
-										<i class="fa">&nbsp;</i>
-										<span>{{{ item.name }}}</span>
-									<# } #>
-								</a>
-							</li>
-						<# }); #>
-					<# } #>
-				</ul>
+			<div class="carbon-fontawesome-popup hidden">
+				<div class="carbon-fontawesome-search dashicons-before dashicons-search">
+					<input type="text" value="" placeholder="<?php esc_attr_e( 'Search...', 'carbon-fields' ); ?>" />
+				</div>
+				<div class="carbon-fontawesome-scroll">
+					<ul class="carbon-fontawesome-list">
+						<# if (options) { #>
+							<# _.each(options, function(item) { #>
+								<li class="carbon-fontawesome-icon-container carbon-fontawesome-icon-container-{{{ item.id }}}">
+									<a href="#" class="carbon-fontawesome-icon-trigger {{{ value == item.id ? 'active' : '' }}}" data-value="{{{ item.id }}}">
+										<# if (item.id) { #>
+											<i class="fa fa-{{{ item.id }}}"></i>
+											<span>{{{ item.name }}}</span>
+										<# } else { #>
+											<i class="fa">&nbsp;</i>
+											<span>{{{ item.name }}}</span>
+										<# } #>
+									</a>
+								</li>
+							<# }); #>
+						<# } #>
+					</ul>
+				</div>
 			</div>
 		</div>
 		<?php
