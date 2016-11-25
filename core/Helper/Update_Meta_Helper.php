@@ -4,10 +4,7 @@ namespace Carbon_Fields\Helper;
 
 use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Field\Field;
-use Carbon_Fields\Container\Container;
-use Carbon_Fields\Templater\Templater;
-use Carbon_Fields\Manager\Sidebar_Manager;
-use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+use Carbon_Fields\Field\Group_Field;
 
 /**
  * Helper functions and main initialization class.
@@ -105,11 +102,10 @@ class Update_Meta_Helper {
 	 * @param  string $data_type Data type.
 	 * @param  string $name      Custom field name.
 	 * @param  mixed  $value     Custom field content.
-	 * @param  string $type      Custom field type (optional).
-	 * @param  int    $id        ID (optional).
+	 * @param  string $type      Custom field type.
+	 * @param  int    $id        ID.
 	 */
-	public static function update_field_value( $data_type, $name, $value, $type = null, $id = null ) {
-		// update_field_value( 'post_meta', $name, $value, $type, $id )
+	public static function update_field_value( $data_type, $name, $value, $type = null, $id ) {
 		$datastore_name = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $data_type ) ) );
 
 		// Default Field Type
@@ -119,16 +115,20 @@ class Update_Meta_Helper {
 
 		$field = Field::make( $type, $name );
 
-		if ( ! $field->get_datastore() ) {
-			$datastore = Datastore::factory( $data_type );
-			$datastore->set_id( $id );
-
-			$field->set_datastore( $datastore );
-		}
-
 		switch ( $type ) {
 			case 'complex':
-				self::update_complex_fields( $datastore_name, $name, $value, $id );
+				$groups = array();
+
+				// Initialize $field object
+				$groups = self::get_complex_groups( $value );
+				self::initialize_complex_groups( $field, $groups, $data_type, $id );
+
+				// Convert input data format
+				$formatted_value = self::maybe_parse_complex( $value );
+
+				$field->set_value_from_input( array(
+					$name => $formatted_value,
+				) );
 			break;
 
 			case 'map':
@@ -137,40 +137,13 @@ class Update_Meta_Helper {
 			break;
 
 			case 'association':
-				$formatted_value = array();
-
-				foreach ($value as $index => $data) {
-					if (
-						count( $data ) === 3
-						&& !empty( $data['type'] )
-						&& ( !empty( $data['post_type'] ) || !empty( $data['taxonomy'] ) )
-						&& !empty( $data['id'] )
-					) {
-						$formatted_value[$index] = array(
-							0 => $data['type'],
-							1 => !empty( $data['post_type'] ) ? $data['post_type'] : $data['taxonomy'],
-							2 => strval( $data['id'] ),
-						);
-
-						$formatted_value[$index] = implode( ':', $formatted_value[$index] );
-					} else {
-						Incorrect_Syntax_Exception::raise( 'Incorrect arguments passed to carbon_update_' . $data_type . ' for the "' . $type. '" field.' );
-					}
-				}
+				$formatted_value = self::maybe_parse_association( $value );
 
 				$field->set_value( $formatted_value );
 			break;
 
 			case 'relationship':
-				$formatted_value = array();
-
-				foreach ($value as $index => $data) {
-					if ( is_numeric( $data ) ) {
-						$formatted_value[$index] = strval( $data );
-					} else {
-						Incorrect_Syntax_Exception::raise( 'Incorrect arguments passed to carbon_update_' . $data_type . ' for the "' . $type. '" field.' );
-					}
-				}
+				$formatted_value = array_map( 'strval', array_values( $value ) );
 
 				$field->set_value( $formatted_value );
 			break;
@@ -179,197 +152,176 @@ class Update_Meta_Helper {
 				$field->set_value( $value );
 		}
 
+		// Setup Datastore, must run just before save()
+		if ( ! $field->get_datastore() ) {
+			$datastore = Datastore::factory( $data_type );
+			$datastore->set_id( $id );
+
+			$field->set_datastore( $datastore );
+		}
+
 		$field->save();
 	}
 
 	/**
-	 * Build a string of concatenated pieces for an OR regex.
+	 * Return Complex Groups and all Fields associated with them, that are present in the input data
 	 *
-	 * @param  array  $pieces Pieces
-	 * @param  string $glue   Glue between the pieces
-	 * @return string         Result string
+	 * @param  mixed $complex_array Maybe array of complex values
+	 * @return array $groups Array of all groups=>fields
 	 */
-	public static function preg_quote_array( $pieces, $glue = '|' ) {
-		$pieces = array_map( 'preg_quote', $pieces, array( '~' ) );
+	public static function get_complex_groups( $complex_array ) {
+		$groups = array();
 
-		return implode( $glue, $pieces );
-	}
-
-	/**
-	 * Build the regex for parsing a certain complex field.
-	 *
-	 * @param  string $field_name  Name of the complex field.
-	 * @param  array  $group_names Array of group names.
-	 * @param  array  $field_names Array of subfield names.
-	 * @return string              Regex
-	 */
-	public static function update_complex_field_regex( $field_name, $group_names = array(), $field_names = array() ) {
-		if ( ! empty( $group_names ) ) {
-			$group_regex = self::preg_quote_array( $group_names );
-		} else {
-			$group_regex = '\w*';
+		if ( ! is_array( $complex_array ) ) {
+			return $groups;
 		}
 
-		if ( ! empty( $field_names ) ) {
-			$field_regex = self::preg_quote_array( $field_names );
-		} else {
-			$field_regex = '.*?';
+		if ( ! self::is_complex( $complex_array ) ) {
+			return $groups;
 		}
 
-		return '~^' . preg_quote( $field_name, '~' ) . '(?P<group>' . $group_regex . ')-_?(?P<key>' . $field_regex . ')_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~';
-	}
+		foreach ( $complex_array as $index => $complex_row ) {
 
-	/**
-	 * Update the complex field data for a certain field.
-	 *
-	 * @param  string $type Datastore type.
-	 * @param  string $name Name of the field.
-	 * @param  int    $id   ID of the entry (optional).
-	 * @return array        Complex data entries.
-	 */
-	public static function update_complex_fields( $type, $name, $value, $id = null ) {
-		$datastore = Datastore::factory( $type );
+			$type = $complex_row['_type'];
+			if ( empty( $groups[$type] ) ) {
+				$groups[$type] = array();
+			}
 
-		if ( $id !== null ) {
-			$datastore->set_id( $id );
-		}
-
-		$group_rows = $datastore->load_values( $name );
-		$input_groups = array();
-
-		foreach ( $group_rows as $row ) {
-			if ( ! preg_match( self::update_complex_field_regex( $name ), $row['field_key'], $field_name ) ) {
+			foreach ( $complex_row as $field_key => $field_value ) {
+				if ( $field_key === '_type' ) {
 					continue;
-			}
+				}
 
-			$row['field_value'] = maybe_unserialize( $row['field_value'] );
-
-			// backward compatibility for Relationship field
-			$row['field_value'] = self::parse_relationship_field( $row['field_value'] );
-
-			$input_groups[ $field_name['index'] ]['_type'] = $field_name['group'];
-			if ( ! empty( $field_name['trailing'] ) ) {
-				$input_groups = self::expand_nested_field( $input_groups, $row, $field_name );
-			} else if ( ! empty( $field_name['sub'] ) ) {
-				$input_groups[ $field_name['index'] ][ $field_name['key'] ][ $field_name['sub'] ] = $row['field_value'];
-			} else {
-				$input_groups[ $field_name['index'] ][ $field_name['key'] ] = $row['field_value'];
-			}
-		}
-
-		// create groups list with loaded fields
-		self::ksort_recursive( $input_groups );
-
-		return $input_groups;
-	}
-
-	/**
-	 * Recursively expand the subfields of a complex field.
-	 *
-	 * @param  array $input_groups Input groups.
-	 * @param  array $row          Data row (key and value).
-	 * @param  array $field_name   Field name pieces.
-	 * @return array               Expanded data.
-	 */
-	public static function expand_nested_field( $input_groups, $row, $field_name ) {
-		$subfield_key_token = $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'];
-		if ( ! preg_match( self::update_complex_field_regex( $field_name['key'] ), $subfield_key_token, $subfield_name ) ) {
-			return $input_groups;
-		}
-
-		$input_groups[ $field_name['index'] ][ $field_name['key'] ][ $subfield_name['index'] ]['_type'] = $subfield_name['group'];
-
-		if ( ! empty( $subfield_name['trailing'] ) ) {
-			$input_groups[ $field_name['index'] ][ $field_name['key'] ] = self::expand_nested_field( $input_groups[ $field_name['index'] ][ $field_name['key'] ], $row, $subfield_name );
-		} else if ( ! empty( $subfield_name['sub'] ) ) {
-			$input_groups[ $field_name['index'] ][ $field_name['key'] ][ $subfield_name['index'] ][ $subfield_name['key'] ][ $subfield_name['sub'] ] = $row['field_value'];
-		} else {
-			$input_groups[ $field_name['index'] ][ $field_name['key'] ][ $subfield_name['index'] ][ $subfield_name['key'] ] = $row['field_value'];
-		}
-
-		return $input_groups;
-	}
-
-	/**
-	 * Parse the raw value of the relationship and association fields.
-	 *
-	 * @param  string $raw_value Raw relationship value.
-	 * @param  string $type      Field type.
-	 * @return array             Array of parsed data.
-	 */
-	public static function parse_relationship_field( $raw_value = '', $type = '' ) {
-		if ( $raw_value && is_array( $raw_value ) ) {
-			$value = array();
-			foreach ( $raw_value as $raw_value_item ) {
-				if ( is_string( $raw_value_item ) && strpos( $raw_value_item, ':' ) !== false ) {
-					$item_data = explode( ':', $raw_value_item );
-					$item = array(
-						'id' => $item_data[2],
-						'type' => $item_data[0],
-					);
-
-					if ( $item_data[0] === 'post' ) {
-						$item['post_type'] = $item_data[1];
-					} elseif ( $item_data[0] === 'term' ) {
-						$item['taxonomy'] = $item_data[1];
-					}
-
-					$value[] = $item;
-				} elseif ( $type === 'association' ) {
-					$value[] = array(
-						'id' => $raw_value_item,
-						'type' => 'post',
-						'post_type' => get_post_type( $raw_value_item ),
-					);
+				if ( self::is_complex( $field_value ) ) {
+					$groups[$type][$field_key] = self::get_complex_groups( $field_value, $groups );
 				} else {
-					$value[] = $raw_value_item;
+					$groups[$type][$field_key] = 'text';
 				}
 			}
-
-			$raw_value = $value;
 		}
 
-		return $raw_value;
+		return $groups;
 	}
 
 	/**
-	 * Detect if using the old way of storing the relationship field values.
-	 * If so, parse them to the new way of storing the data.
+	 * Register Field Groups
 	 *
-	 * @param  mixed $value Old field value.
-	 * @return mixed        New field value.
+	 * @param  mixed  $complex_field Refference to Complex Field object
+	 * @param  array  $groups        Array of already existing groups (generated by the get_complex_groups)
+	 * @param  string $data_type     Data type.
+	 * @param  int    $id            ID.
 	 */
-	public static function maybe_old_relationship_field( $value ) {
-		if ( is_array( $value ) && ! empty( $value ) && ! empty( $value[0] ) ) {
-			if ( preg_match( '~^\w+:\w+:\d+$~', $value[0] ) ) {
-				$new_value = array();
-				foreach ( $value as $value_entry ) {
-					$pieces = explode( ':', $value_entry );
-					$new_value[] = $pieces[2];
-				}
-				$value = $new_value;
-			}
+	public static function initialize_complex_groups( &$complex_field, $groups, $data_type, $id ) {
+		if ( ! is_array( $groups ) ) {
+			return;
 		}
 
-		return $value;
+		foreach ( $groups as $group_label => $group_fields ) {
+			$current_group_fields = array();
+
+			foreach ( $group_fields as $field_name => $field_type ) {
+				// Recursively walk complex fields
+				if ( is_array( $field_type ) ) {
+					$tmp_field = Field::make( 'complex', $field_name );
+					self::initialize_complex_groups( $tmp_field, $field_type, $data_type, $id );
+				} else {
+					$tmp_field = Field::make( $field_type, $field_name );
+				}
+
+				if ( ! $tmp_field->get_datastore() ) {
+					$datastore = Datastore::factory( $data_type );
+					$datastore->set_id( $id );
+
+					$tmp_field->set_datastore( $datastore );
+				}
+
+				$current_group_fields[] = $tmp_field;
+			}
+
+			$complex_field->add_fields( $group_label, $current_group_fields );
+		}
 	}
 
 	/**
-	 * Recursive sorting function by array key.
-	 * @param  array  &$array     The input array.
-	 * @param  int    $sort_flags Flags for controlling sorting behavior.
-	 * @return array              Sorted array.
+	 * Recursively Build an array of complex field values, that matches the Post Data when normally publishing complex entries
+	 *
+	 * @param  mixed  $complex_array  Maybe Complex array
+	 * @return mixed                  Formatted array or Original input
 	 */
-	public static function ksort_recursive( &$array, $sort_flags = SORT_REGULAR ) {
-		if ( ! is_array( $array ) ) {
-			return false;
+	public static function maybe_parse_complex( $complex_array ) {
+		// Check if the current entry is complex entry
+		if ( ! is_array( $complex_array ) ) {
+			return $complex_array;
 		}
 
-		ksort( $array, $sort_flags );
-		foreach ( $array as $key => $value ) {
-			self::ksort_recursive( $array[ $key ], $sort_flags );
+		$complex_array = self::maybe_parse_association( $complex_array );
+
+		if ( ! self::is_complex( $complex_array ) ) {
+			return $complex_array;
 		}
 
-		return true;
+		$new_complex_array = array();
+		foreach ( $complex_array as $index => $complex_row ) {
+			$new_complex_row = array();
+
+			foreach ( $complex_row as $field_key => $field_value ) {
+				$field_key = $field_key[0] == '_' ? $field_key: '_' . $field_key;
+
+				if ( $field_key === '_type' ) {
+					$new_complex_row['group'] = $field_value;
+					continue;
+				}
+
+				$new_complex_row[$field_key] = self::maybe_parse_complex( $field_value );
+			}
+
+			$new_complex_array[$index] = $new_complex_row;
+		}
+
+		return $new_complex_array;
+	}
+
+	/**
+	 * Check if a given array contains Complex field data
+	 *
+	 * @param  mixed $value Maybe Complex Values
+	 * @return bool         True if $value is complex data
+	 */
+	public static function is_complex ( $value ) {
+		return ! empty( $value[0] ) && ! empty( $value[0]['_type'] );
+	}
+
+	/**
+	 * Parse an Association array to an array of strings containing "type:subtype:id"
+	 *
+	 * @param  mixed $value Maybe Association array
+	 * @return mixed        Formatted array or Original input
+	 */
+	public static function maybe_parse_association( $association_array ) {
+		// Check if the current entry is association entry
+		if ( ! is_array( $association_array ) ) {
+			return $association_array;
+		}
+
+		$formatted_value = array();
+		foreach ( $association_array as $index => $data ) {
+			if (
+				!empty( $data['type'] )
+				&& ( !empty( $data['post_type'] ) || !empty( $data['taxonomy'] ) )
+				&& !empty( $data['id'] )
+			) {
+				$formatted_value[$index] = array(
+					0 => $data['type'],
+					1 => !empty( $data['post_type'] ) ? $data['post_type'] : $data['taxonomy'],
+					2 => strval( $data['id'] ),
+				);
+
+				$formatted_value[$index] = implode( ':', $formatted_value[$index] );
+			} else {
+				$formatted_value[$index] = $data;
+			}
+		}
+
+		return $formatted_value;
 	}
 }
