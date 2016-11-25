@@ -1,12 +1,12 @@
 /* @flow */
 
 import { connect } from 'react-redux';
-import { setupDefaultUIMeta, checkVisibility } from 'containers/actions';
+import { setupContainer, checkVisibility } from 'containers/actions';
 
 const mapStateToProps = null;
 
 const mapDispatchToProps = {
-	setupDefaultUIMeta,
+	setupContainer,
 	checkVisibility,
 };
 

@@ -9,7 +9,13 @@ import withInitialSideEffects from 'containers/hocs/withInitialSideEffects';
  * Add the UI fields that are specific for this container.
  */
 const withDefaultUI = defaultProps({
-	ui: {}
+	ui: {
+		'page_template': 'default',
+		'level': 1,
+		'parent_id': null,
+		'post_format': null,
+		'terms': []
+	}
 });
 
 export default compose(

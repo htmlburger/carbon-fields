@@ -4,15 +4,15 @@ import { takeEvery } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 import { getContainerById } from 'containers/selectors';
 import { setUIMeta } from 'containers/actions';
-import { SETUP_DEFAULT_UI_META, SET_UI_META } from 'containers/actions';
+import { SETUP_CONTAINER, SET_UI_META } from 'containers/actions';
 
 /**
- * Setup the initial UI's meta for the container.
+ * Setup the initial state of the container.
  *
  * @param  {Object} action
  * @return {void}
  */
-export function* workerSetupDefaultUIMeta({ payload }: { payload: Object }): any {
+export function* workerSetupContainer({ payload }: { payload: Object }): any {
 	const defaults: Object = {
 		'has_error': false,
 		'is_dirty': false,
@@ -20,9 +20,9 @@ export function* workerSetupDefaultUIMeta({ payload }: { payload: Object }): any
 		'classes': [],
 	};
 
-	payload.fields = {
+	payload.ui = {
 		...defaults,
-		...payload.fields,
+		...payload.ui,
 	};
 
 	yield put(setUIMeta(payload));
@@ -43,7 +43,7 @@ export function* workerToggleMetaBoxVisibility(action: Object): any {
 		throw new Error(`Cannot find the metabox for container "${containerId}"`);
 	}
 
-	el.style.display = container.meta.is_visible ? 'block' : 'none';
+	el.style.display = container.ui.is_visible ? 'block' : 'none';
 }
 
 /**
@@ -53,7 +53,7 @@ export function* workerToggleMetaBoxVisibility(action: Object): any {
  */
 export default function* foreman(): any {
 	yield [
-		takeEvery(SETUP_DEFAULT_UI_META, workerSetupDefaultUIMeta),
+		takeEvery(SETUP_CONTAINER, workerSetupContainer),
 		takeEvery(SET_UI_META, workerToggleMetaBoxVisibility),
 	];
 }

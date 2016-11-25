@@ -1,13 +1,19 @@
 /* @flow */
 
+import _ from 'lodash';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { forEach } from 'lodash';
 
 import store from 'store';
 import { makeContainer } from 'lib/factory';
 import { getContainers } from 'containers/selectors';
+
+/**
+ * Put Lodash in noConflict mode to avoid conflicts with Underscore lib
+ * loaded by WordPress.
+ */
+_.noConflict();
 
 /**
  * Every Carbon container will be treated as separate React application because
@@ -16,7 +22,7 @@ import { getContainers } from 'containers/selectors';
  *
  * Abracadabra! Poof! Containers everywhere ...
  */
-forEach(getContainers(store.getState()), ({ id, type }) => {
+_.forEach(getContainers(store.getState()), ({ id, type }) => {
 	ReactDOM.render(
 		<Provider store={store}>
 			{makeContainer(type, { id })}

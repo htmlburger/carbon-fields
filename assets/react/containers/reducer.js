@@ -25,7 +25,7 @@ export default function(state: Object = {}, action: Object): Object {
  * @return {Object}
  */
 function setUIMeta(state: Object, action: Object): Object {
-	const { containerId, fields } = action.payload;
+	const { containerId, ui } = action.payload;
 
-	return immutable.assign(state, `${containerId}.meta`, fields);
+	return immutable.assign(state, `${containerId}.ui`, ui);
 }
