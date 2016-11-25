@@ -45,14 +45,20 @@ class Glyph_Field extends Field {
 			static::$options = array(
 				''=>array(
 					'name' => $this->none_label,
-		            'id' => '',
-		            'unicode' => '',
-		            'created' => '',
-		            'categories' => array(),
+					'id' => '',
+					'categories' => array(),
+					'class'=>'fa',
+					'contents'=>'&nbsp;',
 				),
 			);
 			foreach ( $data['icons'] as $icon ) {
-				static::$options[ $icon['id'] ] = $icon;
+				static::$options[ $icon['id'] ] = array(
+					'name'=>$icon['name'],
+					'id'=>$icon['id'],
+					'categories'=>$icon['categories'],
+					'class'=>'fa fa-' . $icon['id'],
+					'contents'=>'',
+				);
 			}
 		}
 
@@ -93,7 +99,7 @@ class Glyph_Field extends Field {
 		<div class="carbon-glyph-container">
 			<input type="hidden" name="{{{ name }}}" value="{{{ value }}}" class="carbon-glyph-value" />
 			<a href="#" class="carbon-glyph-preview">
-				<i class="{{{ value ? 'fa fa-' + value : 'hidden' }}}"></i>
+				<i class="{{{ (value && typeof options[value] !== 'undefined') ? options[value].class : 'hidden' }}}"></i>
 				<span class="button">{{{ button_label }}}</span>
 			</a>
 
@@ -107,13 +113,8 @@ class Glyph_Field extends Field {
 							<# _.each(options, function(item) { #>
 								<li class="carbon-glyph-icon-container carbon-glyph-icon-container-{{{ item.id }}}">
 									<a href="#" class="carbon-glyph-icon-trigger {{{ value == item.id ? 'active' : '' }}}" data-value="{{{ item.id }}}">
-										<# if (item.id) { #>
-											<i class="fa fa-{{{ item.id }}}"></i>
-											<span>{{{ item.name }}}</span>
-										<# } else { #>
-											<i class="fa">&nbsp;</i>
-											<span>{{{ item.name }}}</span>
-										<# } #>
+										<i class="{{{ item.class }}}">{{{ item.contents }}}</i>
+										<span>{{{ item.name }}}</span>
 									</a>
 								</li>
 							<# }); #>

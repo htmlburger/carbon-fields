@@ -1645,14 +1645,11 @@ window.carbon = window.carbon || {};
 		},
 
 		closePopup: function() {
-			this.$popup.addClass('hidden');
+			this.$popup.stop().slideUp(300);
 		},
 
 		togglePopup: function(event) {
-			this.$popup.toggleClass('hidden');
-			if ( !this.$popup.hasClass('hidden') ) {
-				this.$searchField.focus();
-			}
+			this.$popup.stop().slideToggle(300);
 			event.preventDefault();
 		},
 
@@ -1668,11 +1665,16 @@ window.carbon = window.carbon || {};
 			this.$('.carbon-glyph-icon-trigger').removeClass('active');
 			this.$('.carbon-glyph-icon-trigger[data-value="' + model.get('value') + '"]').addClass('active');
 
-			if ( model.previous('value') ) {
-				this.$previewIcon.removeClass('fa fa-' + model.previous('value'));
+			var options = model.get('options');
+			var value = model.get('value');
+			var previousValue = model.previous('value');
+
+			if ( previousValue && typeof options[previousValue] != 'undefined' ) {
+				this.$previewIcon.removeClass(options[previousValue].class);
 			}
-			if ( model.get('value') ) {
-				this.$previewIcon.addClass('fa fa-' + model.get('value'));
+			if ( value && typeof options[value] != 'undefined' ) {
+				this.$previewIcon.addClass(options[value].class);
+				this.$previewIcon.html(options[value].contents);
 				this.$previewIcon.removeClass('hidden');
 			} else {
 				this.$previewIcon.addClass('hidden');
