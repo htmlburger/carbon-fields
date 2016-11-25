@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Container from 'containers/components/container';
+import BrokenContainer from 'containers/components/broken-container';
 import ContainerPostMeta from 'containers/components/container-post-meta';
 
 /**
@@ -21,7 +22,7 @@ const containers: Object = {
  * @return {React.Element}
  */
 export function makeContainer(type: string, props?: Object = {}): React$Element<*> {
-	const Component = containers[type] || Container;
+	const Component = containers[type] || BrokenContainer;
 
 	return <Component {...props} />;
 }
