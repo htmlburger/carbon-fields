@@ -2,7 +2,6 @@
 
 namespace Carbon_Fields\Helper;
 
-use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Container\Container;
 use Carbon_Fields\Templater\Templater;
 use Carbon_Fields\Manager\Sidebar_Manager;
