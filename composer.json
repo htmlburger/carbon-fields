@@ -90,5 +90,8 @@
             "carbon-fields.php",
             "core/functions.php"
         ]
+    },
+    "require": {
+        "symfony/yaml": "^3.1"
     }
 }

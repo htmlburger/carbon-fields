@@ -1,0 +1,40 @@
+/* ------------------------------------------------------------ *\
+	Field - RichText
+\* ------------------------------------------------------------ */
+
+.carbon-FontAwesome {  }
+.carbon-FontAwesome .carbon-fontawesome-preview { position: relative; display: block; width: 128px; height: 128px; line-height: 128px; border: 1px dashed #ccc; text-align: center; color: inherit; text-decoration: none; }
+.carbon-FontAwesome .carbon-fontawesome-preview i { font-size: 64px; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); }
+.carbon-FontAwesome .carbon-fontawesome-preview .button {
+	position: relative;
+    z-index: 3;
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 100%;
+    height: auto;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    margin: 0;
+    visibility: hidden;
+    opacity: 0;
+    white-space: normal;
+    line-height: 1.5;
+    transition: visibility .2s ease-out,opacity .2s ease-out;
+}
+.carbon-FontAwesome .carbon-fontawesome-preview i.hidden + .button {
+	visibility: visible;
+	opacity: 1;
+}
+
+.carbon-FontAwesome .carbon-fontawesome-scroll { max-height: 300px; overflow-y: auto; }
+.carbon-FontAwesome .carbon-fontawesome-list {  }
+.carbon-FontAwesome .carbon-fontawesome-list li { width: 32%; display: inline-block; text-align: center; margin: 5px 5px 5px 0; }
+.carbon-FontAwesome .carbon-fontawesome-list li a { display: block; text-decoration: none; color: inherit; padding: 5px 0; }
+.carbon-FontAwesome .carbon-fontawesome-list li a:focus { outline: none; box-shadow: none; }
+.carbon-FontAwesome .carbon-fontawesome-list li a.active { background: #eee; }
+.carbon-FontAwesome .carbon-fontawesome-list li i { display: block; margin-bottom: 5px; font-size: 36px; }
+.carbon-FontAwesome .carbon-fontawesome-list li span {  }
+
+.carbon-FontAwesome .carbon-fontawesome-search { position: relative; width: 100%; border: 0;  border-spacing: 0; margin: 0; z-index: 1; }
+.carbon-FontAwesome .carbon-fontawesome-search:before { position: absolute; left: 8px; top: 50%; margin-top: -10px; color: $color-grey-font; pointer-events: none; }
+.carbon-FontAwesome .carbon-fontawesome-search input { width: 100%; height: 40px; padding: 10px 9px 10px 32px !important; border: 1px solid $color-border; margin: 0; font-size: 13px; line-height: 18px; border-radius: 0; }

@@ -1608,6 +1608,64 @@ window.carbon = window.carbon || {};
 	carbon.fields.View.DateTime = carbon.fields.View.Time;
 
 	/*--------------------------------------------------------------------------
+	 * FONTAWESOME
+	 *------------------------------------------------------------------------*/
+
+	// FontAwesome MODEL
+	carbon.fields.Model.FontAwesome = carbon.fields.Model.extend({
+		defaults: _.extend({}, carbon.fields.Model.prototype.defaults, {
+			'value': ''
+		})
+	});
+
+	// FontAwesome VIEW
+	carbon.fields.View.FontAwesome = carbon.fields.View.extend({
+		// Add the events from the parent view and also include new ones
+		events: function() {
+			return _.extend({}, carbon.fields.View.prototype.events, {
+				'click .carbon-fontawesome-value': 'openPopup',
+				'click .carbon-fontawesome-icon-trigger': 'changeValue'
+			});
+		},
+
+		initialize: function() {
+			// Initialize the parent view
+			carbon.fields.View.prototype.initialize.apply(this); // do not delete
+
+			this.listenTo(this.model, 'change:value', this.syncView);
+		},
+
+		openPopup: function(event) {
+			event.preventDefault();
+		},
+
+		changeValue: function(event) {
+			var $a = this.$(event.currentTarget);
+			var value = $a.attr('data-value');
+			this.$('.carbon-fontawesome-value').val(value).trigger('change');
+			event.preventDefault();
+		},
+
+		syncView: function(model) {
+			var $preview = this.$('.carbon-fontawesome-preview:first');
+			var $previewIcon = $preview.find('i:first');
+
+			this.$('.carbon-fontawesome-icon-trigger').removeClass('active');
+			this.$('.carbon-fontawesome-icon-trigger[data-value="' + model.get('value') + '"]').addClass('active');
+
+			if ( model.previous('value') ) {
+				$previewIcon.removeClass('fa fa-' + model.previous('value'));
+			}
+			if ( model.get('value') ) {
+				$previewIcon.addClass('fa fa-' + model.get('value'));
+				$previewIcon.removeClass('hidden');
+			} else {
+				$previewIcon.addClass('hidden');
+			}
+		}
+	});
+
+	/*--------------------------------------------------------------------------
 	 * COMPLEX
 	 *------------------------------------------------------------------------*/
 
