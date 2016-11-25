@@ -1608,26 +1608,26 @@ window.carbon = window.carbon || {};
 	carbon.fields.View.DateTime = carbon.fields.View.Time;
 
 	/*--------------------------------------------------------------------------
-	 * FONTAWESOME
+	 * GLYPH
 	 *------------------------------------------------------------------------*/
 
-	// FontAwesome MODEL
-	carbon.fields.Model.FontAwesome = carbon.fields.Model.extend({
+	// Glyph MODEL
+	carbon.fields.Model.Glyph = carbon.fields.Model.extend({
 		defaults: _.extend({}, carbon.fields.Model.prototype.defaults, {
 			'value': ''
 		})
 	});
 
-	// FontAwesome VIEW
-	carbon.fields.View.FontAwesome = carbon.fields.View.extend({
+	// Glyph VIEW
+	carbon.fields.View.Glyph = carbon.fields.View.extend({
 		// Add the events from the parent view and also include new ones
 		events: function() {
 			return _.extend({}, carbon.fields.View.prototype.events, {
 				'change :input': '',
 				'change :input[type="hidden"]:first': 'sync',
-				'click .carbon-fontawesome-preview': 'togglePopup',
-				'click .carbon-fontawesome-icon-trigger': 'changeValue',
-				'keyup .carbon-fontawesome-search input:first': 'search'
+				'click .carbon-glyph-preview': 'togglePopup',
+				'click .carbon-glyph-icon-trigger': 'changeValue',
+				'keyup .carbon-glyph-search input:first': 'search'
 			});
 		},
 
@@ -1636,10 +1636,10 @@ window.carbon = window.carbon || {};
 			carbon.fields.View.prototype.initialize.apply(this); // do not delete
 
 			this.on('field:rendered', (function() {
-				this.$searchField = this.$('.carbon-fontawesome-search input:first');
-				this.$preview = this.$('.carbon-fontawesome-preview:first');
+				this.$searchField = this.$('.carbon-glyph-search input:first');
+				this.$preview = this.$('.carbon-glyph-preview:first');
 				this.$previewIcon = this.$preview.find('i:first');
-				this.$popup = this.$('.carbon-fontawesome-popup:first');
+				this.$popup = this.$('.carbon-glyph-popup:first');
 			}).bind(this));
 			this.listenTo(this.model, 'change:value', this.syncView);
 		},
@@ -1659,14 +1659,14 @@ window.carbon = window.carbon || {};
 		changeValue: function(event) {
 			var $a = this.$(event.currentTarget);
 			var value = $a.attr('data-value');
-			this.$('.carbon-fontawesome-value').val(value).trigger('change');
+			this.$('.carbon-glyph-value').val(value).trigger('change');
 			this.closePopup();
 			event.preventDefault();
 		},
 
 		syncView: function(model) {
-			this.$('.carbon-fontawesome-icon-trigger').removeClass('active');
-			this.$('.carbon-fontawesome-icon-trigger[data-value="' + model.get('value') + '"]').addClass('active');
+			this.$('.carbon-glyph-icon-trigger').removeClass('active');
+			this.$('.carbon-glyph-icon-trigger[data-value="' + model.get('value') + '"]').addClass('active');
 
 			if ( model.previous('value') ) {
 				this.$previewIcon.removeClass('fa fa-' + model.previous('value'));
@@ -1684,7 +1684,7 @@ window.carbon = window.carbon || {};
 			var options = this.model.get('options');
 
 			if ( !query ) {
-				this.$('.carbon-fontawesome-icon-container').removeClass('hidden');
+				this.$('.carbon-glyph-icon-container').removeClass('hidden');
 				return;
 			}
 
@@ -1700,7 +1700,7 @@ window.carbon = window.carbon || {};
 					}
 				}
 
-				var $container = this.$('.carbon-fontawesome-icon-container-' + option.id);
+				var $container = this.$('.carbon-glyph-icon-container-' + option.id);
 				if ( match ) {
 					$container.removeClass('hidden');
 				} else {

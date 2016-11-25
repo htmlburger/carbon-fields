@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Yaml;
  *  - Users
  *  - Comments
  */
-class FontAwesome_Field extends Field {
+class Glyph_Field extends Field {
 	static $options = array();
 
 	public $none_label = '';
@@ -35,9 +35,9 @@ class FontAwesome_Field extends Field {
 	}
 
 	/**
-	 * Generate the item options for the fontawesome field.
+	 * Generate the item options for the glyph field.
 	 *
-	 * @return array $options The selectable options of the fontawesome field.
+	 * @return array $options The selectable options of the glyph field.
 	 */
 	public function get_options() {
 		if ( empty( $options ) ) {
@@ -57,12 +57,12 @@ class FontAwesome_Field extends Field {
 		}
 
 		/**
-		 * Filter the final list of options, available to a certain fontawesome field.
+		 * Filter the final list of options, available to a certain glyph field.
 		 *
 		 * @param array $options Unfiltered options items.
-		 * @param string $name Name of the fontawesome field.
+		 * @param string $name Name of the glyph field.
 		 */
-		$options = apply_filters( 'carbon_fontawesome_options', static::$options, $this->get_name() );
+		$options = apply_filters( 'carbon_glyph_options', static::$options, $this->get_name() );
 
 		return $options;
 	}
@@ -90,23 +90,23 @@ class FontAwesome_Field extends Field {
 	 */
 	public function template() {
 		?>
-		<div class="carbon-fontawesome-container">
-			<input type="hidden" name="{{{ name }}}" value="{{{ value }}}" class="carbon-fontawesome-value" />
-			<a href="#" class="carbon-fontawesome-preview">
+		<div class="carbon-glyph-container">
+			<input type="hidden" name="{{{ name }}}" value="{{{ value }}}" class="carbon-glyph-value" />
+			<a href="#" class="carbon-glyph-preview">
 				<i class="{{{ value ? 'fa fa-' + value : 'hidden' }}}"></i>
 				<span class="button">{{{ button_label }}}</span>
 			</a>
 
-			<div class="carbon-fontawesome-popup hidden">
-				<div class="carbon-fontawesome-search dashicons-before dashicons-search">
+			<div class="carbon-glyph-popup hidden">
+				<div class="carbon-glyph-search dashicons-before dashicons-search">
 					<input type="text" value="" placeholder="<?php esc_attr_e( 'Search...', 'carbon-fields' ); ?>" />
 				</div>
-				<div class="carbon-fontawesome-scroll">
-					<ul class="carbon-fontawesome-list">
+				<div class="carbon-glyph-scroll">
+					<ul class="carbon-glyph-list">
 						<# if (options) { #>
 							<# _.each(options, function(item) { #>
-								<li class="carbon-fontawesome-icon-container carbon-fontawesome-icon-container-{{{ item.id }}}">
-									<a href="#" class="carbon-fontawesome-icon-trigger {{{ value == item.id ? 'active' : '' }}}" data-value="{{{ item.id }}}">
+								<li class="carbon-glyph-icon-container carbon-glyph-icon-container-{{{ item.id }}}">
+									<a href="#" class="carbon-glyph-icon-trigger {{{ value == item.id ? 'active' : '' }}}" data-value="{{{ item.id }}}">
 										<# if (item.id) { #>
 											<i class="fa fa-{{{ item.id }}}"></i>
 											<span>{{{ item.name }}}</span>
