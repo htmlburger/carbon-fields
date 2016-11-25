@@ -195,7 +195,7 @@ class Update_Meta_Helper {
 				if ( self::is_complex( $field_value ) ) {
 					$groups[$type][$field_key] = self::get_complex_groups( $field_value, $groups );
 				} else {
-					$groups[$type][$field_key] = 'text';
+					$groups[$type][$field_key] = self::get_field_type( $field_value );
 				}
 			}
 		}
@@ -282,16 +282,6 @@ class Update_Meta_Helper {
 	}
 
 	/**
-	 * Check if a given array contains Complex field data
-	 *
-	 * @param  mixed $value Maybe Complex Values
-	 * @return bool         True if $value is complex data
-	 */
-	public static function is_complex ( $value ) {
-		return ! empty( $value[0] ) && ! empty( $value[0]['_type'] );
-	}
-
-	/**
 	 * Parse an Association array to an array of strings containing "type:subtype:id"
 	 *
 	 * @param  mixed $value Maybe Association array
@@ -305,11 +295,7 @@ class Update_Meta_Helper {
 
 		$formatted_value = array();
 		foreach ( $association_array as $index => $data ) {
-			if (
-				!empty( $data['type'] )
-				&& ( !empty( $data['post_type'] ) || !empty( $data['taxonomy'] ) )
-				&& !empty( $data['id'] )
-			) {
+			if ( self::is_association( $data ) ) {
 				$formatted_value[$index] = array(
 					0 => $data['type'],
 					1 => !empty( $data['post_type'] ) ? $data['post_type'] : $data['taxonomy'],
@@ -323,5 +309,55 @@ class Update_Meta_Helper {
 		}
 
 		return $formatted_value;
+	}
+
+	/**
+	 * Return the field type
+	 */
+	public static function get_field_type( $value ) {
+		// Default Field Type
+		$type = 'text';
+
+		if ( !empty( $value['_field_type'] ) ) {
+			$type = $value['_field_type'];
+		} elseif ( self::is_map( $value ) ) {
+			$type = 'map';
+		} elseif ( self::is_association( $value ) ) {
+			$type = 'association';
+		}
+
+		return $type;
+	}
+
+	/**
+	 * Check if a given array contains Complex field data
+	 *
+	 * @param  mixed $value Maybe Complex values array
+	 * @return bool         True if $value is Complex array
+	 */
+	public static function is_complex( $value ) {
+		return ! empty( $value[0] ) && ! empty( $value[0]['_type'] );
+	}
+
+	/**
+	 * Check if a given array contains Association field data
+	 *
+	 * @param  mixed $value Maybe Association array
+	 * @return bool         True if $value is Association array
+	 */
+	public static function is_association( $value ) {
+		return !empty( $value['type'] )
+			&& ( !empty( $value['post_type'] ) || !empty( $value['taxonomy'] ) )
+			&& !empty( $value['id'] );
+	}
+
+	/**
+	 * Check if a given array contains Map field data
+	 *
+	 * @param  mixed $value Maybe Map array
+	 * @return bool         True if $value is Map array
+	 */
+	public static function is_map( $value ) {
+		return !empty( $value['lat'] ) && !empty( $value['lng'] );
 	}
 }
