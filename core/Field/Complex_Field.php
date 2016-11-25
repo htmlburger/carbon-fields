@@ -175,7 +175,6 @@ class Complex_Field extends Field {
 		$input_groups = $input[ $this->get_name() ];
 		$index = 0;
 
-
 		foreach ( $input_groups as $values ) {
 			$value_group = array();
 			if ( ! isset( $values['group'] ) || ! isset( $this->groups[ $values['group'] ] ) ) {
