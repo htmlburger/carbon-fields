@@ -44272,8 +44272,10 @@
 	  var action = arguments[1];
 
 	  switch (action.type) {
-	    case _actions.SET_UI_META:
-	      return setUIMeta(state, action);
+	    case _actions.SET_META:
+	      return setMeta(state, action);
+	    case _actions.SET_UI:
+	      return setUI(state, action);
 	    default:
 	      return state;
 	  }
@@ -44288,20 +44290,29 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
-	 * Update the UI meta for the specified container.
+	 * Update the meta fields for the specified container.
 	 *
 	 * @param  {Object} state
 	 * @param  {Object} action
 	 * @return {Object}
 	 */
-	function setUIMeta(state, action) {
+	function setMeta(state, action) {
 	  var _action$payload = action.payload,
 	      containerId = _action$payload.containerId,
-	      ui = _action$payload.ui;
+	      meta = _action$payload.meta;
 
 
-	  return _objectPathImmutable2.default.assign(state, containerId + '.ui', ui);
+	  return _objectPathImmutable2.default.assign(state, containerId + '.meta', meta);
 	}
+
+	/**
+	 * Update the UI fields for the specified container.
+	 *
+	 * @param  {Object} state
+	 * @param  {Object} action
+	 * @return {Object}
+	 */
+
 
 	/**
 	 * The reducer that handles manipulation to container's state.
@@ -44310,6 +44321,14 @@
 	 * @param  {Object} action
 	 * @return {Object}
 	 */
+	function setUI(state, action) {
+	  var _action$payload2 = action.payload,
+	      containerId = _action$payload2.containerId,
+	      ui = _action$payload2.ui;
+
+
+	  return _objectPathImmutable2.default.assign(state, containerId + '.ui', ui);
+	}
 
 /***/ },
 /* 530 */
@@ -44548,7 +44567,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.checkVisibility = exports.CHECK_VISIBILITY = exports.setUIMeta = exports.SET_UI_META = exports.setupContainer = exports.SETUP_CONTAINER = undefined;
+	exports.checkVisibility = exports.CHECK_VISIBILITY = exports.setUI = exports.SET_UI = exports.setMeta = exports.SET_META = exports.setupContainer = exports.SETUP_CONTAINER = undefined;
 
 	var _reduxActions = __webpack_require__(532);
 
@@ -44562,20 +44581,32 @@
 	var SETUP_CONTAINER = exports.SETUP_CONTAINER = 'containers/SETUP_CONTAINER';
 
 	var setupContainer = exports.setupContainer = (0, _reduxActions.createAction)(SETUP_CONTAINER, function (containerId) {
-	  var ui = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-	  return { containerId: containerId, ui: ui };
+	  var meta = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	  var ui = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+	  return { containerId: containerId, meta: meta, ui: ui };
 	});
 
 	/**
-	 * Update the meta object that contains information about container's UI.
+	 * Update the object that holds additional fields for the container.
+	 *
+	 * @param  {Object} payload
+	 * @param  {String} payload.containerId
+	 * @param  {Object} payload.meta
+	 * @return {Object}
+	 */
+	var SET_META = exports.SET_META = 'containers/SET_META';
+	var setMeta = exports.setMeta = (0, _reduxActions.createAction)(SET_META);
+
+	/**
+	 * Update the object that contains information about container's UI.
 	 *
 	 * @param  {Object} payload
 	 * @param  {String} payload.containerId
 	 * @param  {Object} payload.ui
 	 * @return {Object}
 	 */
-	var SET_UI_META = exports.SET_UI_META = 'containers/SET_UI_META';
-	var setUIMeta = exports.setUIMeta = (0, _reduxActions.createAction)(SET_UI_META);
+	var SET_UI = exports.SET_UI = 'containers/SET_UI';
+	var setUI = exports.setUI = (0, _reduxActions.createAction)(SET_UI);
 
 	/**
 	 * Initialize a visibility check for the container.
@@ -49999,7 +50030,8 @@
 	 * @return {void}
 	 */
 	function workerSetupContainer(action) {
-		var defaults, payload;
+		var defaults, _action$payload, containerId, meta, ui;
+
 		return regeneratorRuntime.wrap(function workerSetupContainer$(_context) {
 			while (1) {
 				switch (_context.prev = _context.next) {
@@ -50010,15 +50042,23 @@
 							'is_visible': true,
 							'classes': []
 						};
-						payload = action.payload;
 
 
-						payload.ui = _extends({}, defaults, payload.ui);
+						console.log(action);
 
-						_context.next = 5;
-						return (0, _effects.put)((0, _actions.setUIMeta)(payload));
+						_action$payload = action.payload, containerId = _action$payload.containerId, meta = _action$payload.meta, ui = _action$payload.ui;
 
-					case 5:
+
+						ui = _extends({}, defaults, ui);
+
+						_context.next = 6;
+						return (0, _effects.put)((0, _actions.setMeta)({ containerId: containerId, meta: meta }));
+
+					case 6:
+						_context.next = 8;
+						return (0, _effects.put)((0, _actions.setUI)({ containerId: containerId, ui: ui }));
+
+					case 8:
 					case 'end':
 						return _context.stop();
 				}
@@ -50080,7 +50120,7 @@
 				switch (_context3.prev = _context3.next) {
 					case 0:
 						_context3.next = 2;
-						return [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer), (0, _reduxSaga.takeEvery)(_actions.SET_UI_META, workerToggleMetaBoxVisibility)];
+						return [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer), (0, _reduxSaga.takeEvery)(_actions.SET_UI, workerToggleMetaBoxVisibility)];
 
 					case 2:
 					case 'end':
@@ -50178,9 +50218,9 @@
 						_ref = _context.sent;
 						value = _ref.value;
 						_context.next = 10;
-						return (0, _effects.put)((0, _actions.setUIMeta)({
+						return (0, _effects.put)((0, _actions.setMeta)({
 							containerId: containerId,
-							ui: {
+							meta: {
 								page_template: value
 							}
 						}));
@@ -50247,9 +50287,9 @@
 						}
 
 						_context2.next = 15;
-						return (0, _effects.put)((0, _actions.setUIMeta)({
+						return (0, _effects.put)((0, _actions.setMeta)({
 							containerId: containerId,
-							ui: {
+							meta: {
 								parent_id: _value,
 								level: level
 							}
@@ -50299,9 +50339,9 @@
 						_ref3 = _context3.sent;
 						values = _ref3.values;
 						_context3.next = 10;
-						return (0, _effects.put)((0, _actions.setUIMeta)({
+						return (0, _effects.put)((0, _actions.setMeta)({
 							containerId: containerId,
-							ui: {
+							meta: {
 								post_format: values[0]
 							}
 						}));
@@ -50361,9 +50401,9 @@
 						});
 
 						_context4.next = 14;
-						return (0, _effects.put)((0, _actions.setUIMeta)({
+						return (0, _effects.put)((0, _actions.setMeta)({
 							containerId: containerId,
-							ui: {
+							meta: {
 								terms: _values
 							}
 						}));
@@ -50686,13 +50726,14 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
-	 * Add the UI fields that are specific for this container.
+	 * Add the fields that are specific for this container.
 	 */
-	var withDefaultUI = (0, _recompose.defaultProps)({
+	var withProps = (0, _recompose.defaultProps)({
+		meta: {},
 		ui: {}
 	});
 
-		exports.default = (0, _recompose.compose)(withDefaultUI, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
+		exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
 
 /***/ },
 /* 691 */
@@ -53165,7 +53206,7 @@
 
 	exports.default = (0, _recompose.lifecycle)({
 		componentWillMount: function componentWillMount() {
-			this.props.setupContainer(this.props.id, this.props.ui);
+			this.props.setupContainer(this.props.id, this.props.meta, this.props.ui);
 			this.props.checkVisibility(this.props.id);
 		}
 		});
@@ -53197,19 +53238,20 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
-	 * Add the UI fields that are specific for this container.
+	 * Add the fields that are specific for this container.
 	 */
-	var withDefaultUI = (0, _recompose.defaultProps)({
-		ui: {
+	var withProps = (0, _recompose.defaultProps)({
+		meta: {
 			'page_template': 'default',
 			'level': 1,
 			'parent_id': null,
 			'post_format': null,
 			'terms': []
-		}
+		},
+		ui: {}
 	});
 
-		exports.default = (0, _recompose.compose)(withDefaultUI, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
+		exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
 
 /***/ }
 /******/ ]);

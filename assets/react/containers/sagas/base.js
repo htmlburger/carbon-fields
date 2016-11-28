@@ -5,8 +5,8 @@ import type { ReduxAction } from 'defs';
 import { takeEvery } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 import { getContainerById } from 'containers/selectors';
-import { setUIMeta } from 'containers/actions';
-import { SETUP_CONTAINER, SET_UI_META } from 'containers/actions';
+import { setMeta, setUI } from 'containers/actions';
+import { SETUP_CONTAINER, SET_UI } from 'containers/actions';
 
 /**
  * Setup the initial state of the container.
@@ -22,14 +22,17 @@ export function* workerSetupContainer(action: ReduxAction): any {
 		'classes': [],
 	};
 
-	const { payload }: { payload: Object } = action;
+	console.log(action);
 
-	payload.ui = {
+	let { containerId, meta, ui } = action.payload;
+
+	ui = {
 		...defaults,
-		...payload.ui,
+		...ui,
 	};
 
-	yield put(setUIMeta(payload));
+	yield put(setMeta({ containerId, meta }));
+	yield put(setUI({ containerId, ui }));
 }
 
 /**
@@ -58,6 +61,6 @@ export function* workerToggleMetaBoxVisibility(action: ReduxAction): any {
 export default function* foreman(): any {
 	yield [
 		takeEvery(SETUP_CONTAINER, workerSetupContainer),
-		takeEvery(SET_UI_META, workerToggleMetaBoxVisibility),
+		takeEvery(SET_UI, workerToggleMetaBoxVisibility),
 	];
 }

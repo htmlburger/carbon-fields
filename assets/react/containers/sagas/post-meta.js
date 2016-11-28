@@ -7,7 +7,7 @@ import { take, call, put, fork, select } from 'redux-saga/effects';
 import { createSelectboxChannel, createCheckableChannel } from 'lib/events';
 import { canProcessAction } from 'containers/helpers';
 import { getContainerById } from 'containers/selectors';
-import { setUIMeta } from 'containers/actions';
+import { setMeta } from 'containers/actions';
 import { SETUP_CONTAINER } from 'containers/actions';
 import { TYPE_POST_META } from 'containers/constants';
 
@@ -23,9 +23,9 @@ export function* workerSyncPageTemplate(containerId: string): any {
 	while (true) {
 		const { value }: { value: string } = yield take(channel);
 
-		yield put(setUIMeta({
+		yield put(setMeta({
 			containerId,
-			ui: {
+			meta: {
 				page_template: value,
 			}
 		}));
@@ -57,9 +57,9 @@ export function* workerSyncParentId(containerId: string): any {
 			}
 		}
 
-		yield put(setUIMeta({
+		yield put(setMeta({
 			containerId,
-			ui: {
+			meta: {
 				parent_id: value,
 				level: level,
 			}
@@ -79,9 +79,9 @@ export function* workerSyncPostFormat(containerId: string): any {
 	while (true) {
 		const { values }: { values: string[] } = yield take(channel);
 
-		yield put(setUIMeta({
+		yield put(setMeta({
 			containerId,
-			ui: {
+			meta: {
 				post_format: values[0],
 			}
 		}));
@@ -103,9 +103,9 @@ export function* workerSyncTerms(containerId: string): any {
 
 		values = values.map(value => parseInt(value, 10));
 
-		yield put(setUIMeta({
+		yield put(setMeta({
 			containerId,
-			ui: {
+			meta: {
 				terms: values,
 			}
 		}));

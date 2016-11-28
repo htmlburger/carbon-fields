@@ -6,14 +6,15 @@ import withConnectToStore from 'containers/hocs/withConnectToStore';
 import withInitialSideEffects from 'containers/hocs/withInitialSideEffects';
 
 /**
- * Add the UI fields that are specific for this container.
+ * Add the fields that are specific for this container.
  */
-const withDefaultUI = defaultProps({
+const withProps = defaultProps({
+	meta: {},
 	ui: {}
 });
 
 export default compose(
-	withDefaultUI,
+	withProps,
 	withConnectToStore,
 	withInitialSideEffects,
 )(Container);

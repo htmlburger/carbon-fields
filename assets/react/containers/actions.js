@@ -10,18 +10,29 @@ import { createAction } from 'redux-actions';
  * @return {Object}
  */
 export const SETUP_CONTAINER = 'containers/SETUP_CONTAINER';
-export const setupContainer: Function = createAction(SETUP_CONTAINER, (containerId: string, ui: Object = {}) => ({ containerId, ui }));
+export const setupContainer: Function = createAction(SETUP_CONTAINER, (containerId: string, meta: Object = {}, ui: Object = {}) => ({ containerId, meta, ui }));
 
 /**
- * Update the meta object that contains information about container's UI.
+ * Update the object that holds additional fields for the container.
+ *
+ * @param  {Object} payload
+ * @param  {String} payload.containerId
+ * @param  {Object} payload.meta
+ * @return {Object}
+ */
+export const SET_META = 'containers/SET_META';
+export const setMeta: Function = createAction(SET_META);
+
+/**
+ * Update the object that contains information about container's UI.
  *
  * @param  {Object} payload
  * @param  {String} payload.containerId
  * @param  {Object} payload.ui
  * @return {Object}
  */
-export const SET_UI_META = 'containers/SET_UI_META';
-export const setUIMeta: Function = createAction(SET_UI_META);
+export const SET_UI = 'containers/SET_UI';
+export const setUI: Function = createAction(SET_UI);
 
 /**
  * Initialize a visibility check for the container.
