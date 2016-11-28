@@ -2,10 +2,11 @@
 
 import { takeEvery } from 'redux-saga';
 import { take, call, put, select, fork } from 'redux-saga/effects';
+import { createSelectboxChannel, createRadioChannel } from 'lib/events';
 import { setUIMeta } from 'containers/actions';
 import { SETUP_CONTAINER } from 'containers/actions';
 import { TYPE_POST_META } from 'containers/constants';
-import { canProcessAction, createSelectboxChannel } from 'containers/helpers';
+import { canProcessAction } from 'containers/helpers';
 
 /**
  * Keep in sync the `page_template` property.
@@ -57,6 +58,27 @@ export function* workerSyncParentId(containerId: string): any {
 }
 
 /**
+ * Keep in sync the `post_format` property.
+ *
+ * @param  {String} containerId
+ * @return {void}
+ */
+export function* workerSyncPostFormat(containerId: string): any {
+	const channel = yield call(createRadioChannel, 'input[name="post_format"]');
+
+	while (true) {
+		const { value } = yield take(channel);
+
+		yield put(setUIMeta({
+			containerId,
+			ui: {
+				post_format: value,
+			}
+		}));
+	}
+}
+
+/**
  * Setup the initial state of the container.
  *
  * @param  {Object} action
@@ -72,6 +94,7 @@ export function* workerSetupContainer(action: Object): any {
 
 	yield fork(workerSyncPageTemplate, containerId);
 	yield fork(workerSyncParentId, containerId);
+	yield fork(workerSyncPostFormat, containerId);
 }
 
 /**
