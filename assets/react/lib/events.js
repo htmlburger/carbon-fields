@@ -1,7 +1,7 @@
 /* @flow */
 
 import $ from 'jquery';
-import { eventChannel, buffers } from 'redux-saga';
+import { eventChannel, buffers, END } from 'redux-saga';
 
 /**
  * Create a Saga Channel that will listen for DOM changes on specified selectbox.
@@ -18,13 +18,19 @@ export function createSelectboxChannel(selector: string): Object {
 		const changeHandler: Function = (event?: Event) => {
 			emit({
 				value: $select.val(),
-				$option: $select.find(':selected').first(),
+				option: $select.find(':selected').first().get(0),
 			});
 		};
 
 		// Cancel the subscription.
 		const unsubscribe: Function = () => {
 			$select.off('change', changeHandler);
+		}
+
+		// Close the channel since the element doesn't exists.
+		if (!$select.length) {
+			emit(END);
+			return unsubscribe;
 		}
 
 		// Setup the subscription.
@@ -72,6 +78,12 @@ export function createRadioChannel(selector: string): Object {
 		// Cancel the subscription.
 		const unsubscribe: Function = () => {
 			$inputs.off('change', changeHandler);
+		}
+
+		// Close the channel since the elements don't exists.
+		if (!$inputs.length) {
+			emit(END);
+			return unsubscribe;
 		}
 
 		// Setup the subscription.

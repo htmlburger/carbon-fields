@@ -41,13 +41,12 @@ export function* workerSyncParentId(containerId: string): any {
 	const channel = yield call(createSelectboxChannel, 'select#parent_id');
 
 	while (true) {
-		let { value, $option } = yield take(channel);
+		let { value, option } = yield take(channel);
 
 		value = parseInt(value, 10);
 		value = isNaN(value) ? null : value;
 
-		const classes = $option.attr('class');
-		const level = classes ? parseInt(classes.match(/^level-(\d+)/)[1], 10) + 2 : 1;
+		const level = option.className ? parseInt(option.className.match(/^level-(\d+)/)[1], 10) + 2 : 1;
 
 		yield put(setUIMeta({
 			containerId,

@@ -50201,7 +50201,7 @@
 	 * @return {void}
 	 */
 	function workerSyncParentId(containerId) {
-		var channel, _ref2, _value, $option, classes, level;
+		var channel, _ref2, _value, option, level;
 
 		return regeneratorRuntime.wrap(function workerSyncParentId$(_context2) {
 			while (1) {
@@ -50215,7 +50215,7 @@
 
 					case 3:
 						if (false) {
-							_context2.next = 17;
+							_context2.next = 16;
 							break;
 						}
 
@@ -50225,15 +50225,14 @@
 					case 6:
 						_ref2 = _context2.sent;
 						_value = _ref2.value;
-						$option = _ref2.$option;
+						option = _ref2.option;
 
 
 						_value = parseInt(_value, 10);
 						_value = isNaN(_value) ? null : _value;
 
-						classes = $option.attr('class');
-						level = classes ? parseInt(classes.match(/^level-(\d+)/)[1], 10) + 2 : 1;
-						_context2.next = 15;
+						level = option.className ? parseInt(option.className.match(/^level-(\d+)/)[1], 10) + 2 : 1;
+						_context2.next = 14;
 						return (0, _effects.put)((0, _actions.setUIMeta)({
 							containerId: containerId,
 							ui: {
@@ -50242,11 +50241,11 @@
 							}
 						}));
 
-					case 15:
+					case 14:
 						_context2.next = 3;
 						break;
 
-					case 17:
+					case 16:
 					case 'end':
 						return _context2.stop();
 				}
@@ -50408,7 +50407,7 @@
 			var changeHandler = function changeHandler(event) {
 				emit({
 					value: $select.val(),
-					$option: $select.find(':selected').first()
+					option: $select.find(':selected').first().get(0)
 				});
 			};
 
@@ -50416,6 +50415,12 @@
 			var unsubscribe = function unsubscribe() {
 				$select.off('change', changeHandler);
 			};
+
+			// Close the channel since the element doesn't exists.
+			if (!$select.length) {
+				emit(_reduxSaga.END);
+				return unsubscribe;
+			}
 
 			// Setup the subscription.
 			$select.on('change', changeHandler);
@@ -50460,6 +50465,12 @@
 			var unsubscribe = function unsubscribe() {
 				$inputs.off('change', changeHandler);
 			};
+
+			// Close the channel since the elements don't exists.
+			if (!$inputs.length) {
+				emit(_reduxSaga.END);
+				return unsubscribe;
+			}
 
 			// Setup the subscription.
 			$inputs.on('change', changeHandler);
