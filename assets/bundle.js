@@ -49953,7 +49953,7 @@
 /* 680 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
@@ -49998,9 +49998,8 @@
 	 * @param  {Object} action
 	 * @return {void}
 	 */
-	function workerSetupContainer(_ref) {
-		var payload = _ref.payload;
-		var defaults;
+	function workerSetupContainer(action) {
+		var defaults, payload;
 		return regeneratorRuntime.wrap(function workerSetupContainer$(_context) {
 			while (1) {
 				switch (_context.prev = _context.next) {
@@ -50011,14 +50010,15 @@
 							'is_visible': true,
 							'classes': []
 						};
+						payload = action.payload;
 
 
 						payload.ui = _extends({}, defaults, payload.ui);
 
-						_context.next = 4;
+						_context.next = 5;
 						return (0, _effects.put)((0, _actions.setUIMeta)(payload));
 
-					case 4:
+					case 5:
 					case 'end':
 						return _context.stop();
 				}
@@ -50444,6 +50444,8 @@
 					return;
 				}
 
+				// Use `any` instead of `HTMLInputElement` to avoid conflicts
+				// with the `get` method.
 				var target = $inputs.filter(':checked').first().get(0);
 
 				if (target.checked) {

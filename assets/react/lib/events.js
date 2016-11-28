@@ -12,10 +12,10 @@ import { eventChannel, buffers } from 'redux-saga';
  */
 export function createSelectboxChannel(selector: string): Object {
 	return eventChannel((emit) => {
-		const $select = $(selector);
+		const $select: JQuery = $(selector);
 
 		// Emit the value of selectbox through the channel.
-		const changeHandler = (event) => {
+		const changeHandler: Function = (event?: Event) => {
 			emit({
 				value: $select.val(),
 				$option: $select.find(':selected').first(),
@@ -23,7 +23,7 @@ export function createSelectboxChannel(selector: string): Object {
 		};
 
 		// Cancel the subscription.
-		const unsubscribe = () => {
+		const unsubscribe: Function = () => {
 			$select.off('change', changeHandler);
 		}
 
@@ -46,15 +46,17 @@ export function createSelectboxChannel(selector: string): Object {
  */
 export function createRadioChannel(selector: string): Object {
 	return eventChannel((emit) => {
-		const $inputs = $(selector);
+		const $inputs: JQuery = $(selector);
 
 		// Emit the value of selectbox through the channel.
-		const changeHandler = (event) => {
+		const changeHandler: Function = (event?: Event) => {
 			if (event && !event.target.checked) {
 				return;
 			}
 
-			const target = $inputs
+			// Use `any` instead of `HTMLInputElement` to avoid conflicts
+			// with the `get` method.
+			const target: any = $inputs
 				.filter(':checked')
 				.first()
 				.get(0);
@@ -68,7 +70,7 @@ export function createRadioChannel(selector: string): Object {
 		};
 
 		// Cancel the subscription.
-		const unsubscribe = () => {
+		const unsubscribe: Function = () => {
 			$inputs.off('change', changeHandler);
 		}
 

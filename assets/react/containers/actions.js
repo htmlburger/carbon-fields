@@ -10,7 +10,7 @@ import { createAction } from 'redux-actions';
  * @return {Object}
  */
 export const SETUP_CONTAINER = 'containers/SETUP_CONTAINER';
-export const setupContainer = createAction(SETUP_CONTAINER, (containerId: string, ui: Object = {}) => ({ containerId, ui }));
+export const setupContainer: Function = createAction(SETUP_CONTAINER, (containerId: string, ui: Object = {}) => ({ containerId, ui }));
 
 /**
  * Update the meta object that contains information about container's UI.
@@ -21,7 +21,7 @@ export const setupContainer = createAction(SETUP_CONTAINER, (containerId: string
  * @return {Object}
  */
 export const SET_UI_META = 'containers/SET_UI_META';
-export const setUIMeta = createAction(SET_UI_META);
+export const setUIMeta: Function = createAction(SET_UI_META);
 
 /**
  * Initialize a visibility check for the container.
@@ -30,4 +30,4 @@ export const setUIMeta = createAction(SET_UI_META);
  * @return {Object}
  */
 export const CHECK_VISIBILITY = 'containers/CHECK_VISIBILITY';
-export const checkVisibility = createAction(CHECK_VISIBILITY);
+export const checkVisibility: Function = createAction(CHECK_VISIBILITY);

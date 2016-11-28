@@ -37,7 +37,8 @@ module.exports = {
 			'lib': 'assets/react/lib',
 			'containers': 'assets/react/containers',
 			'sidebars': 'assets/react/sidebars',
-			'store': 'assets/react/store.js'
+			'store': 'assets/react/store.js',
+			'defs': 'assets/react/defs.js'
 		}
 	},
 

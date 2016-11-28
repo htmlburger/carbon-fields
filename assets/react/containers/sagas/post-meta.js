@@ -1,5 +1,7 @@
 /* @flow */
 
+import type { ReduxAction } from 'defs';
+
 import { takeEvery } from 'redux-saga';
 import { take, call, put, select, fork } from 'redux-saga/effects';
 import { createSelectboxChannel, createRadioChannel } from 'lib/events';
@@ -18,7 +20,7 @@ export function* workerSyncPageTemplate(containerId: string): any {
 	const channel = yield call(createSelectboxChannel, 'select#page_template');
 
 	while (true) {
-		const { value } = yield take(channel);
+		const { value }: { value: string } = yield take(channel);
 
 		yield put(setUIMeta({
 			containerId,
@@ -67,7 +69,7 @@ export function* workerSyncPostFormat(containerId: string): any {
 	const channel = yield call(createRadioChannel, 'input[name="post_format"]');
 
 	while (true) {
-		const { value } = yield take(channel);
+		const { value }: { value: string } = yield take(channel);
 
 		yield put(setUIMeta({
 			containerId,
@@ -84,7 +86,7 @@ export function* workerSyncPostFormat(containerId: string): any {
  * @param  {Object} action
  * @return {void}
  */
-export function* workerSetupContainer(action: Object): any {
+export function* workerSetupContainer(action: ReduxAction): any {
 	const containerId: string = action.payload.containerId;
 
 	// Don't do anything if the type isn't correct.

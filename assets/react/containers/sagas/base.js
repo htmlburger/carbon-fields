@@ -1,5 +1,7 @@
 /* @flow */
 
+import type { ReduxAction } from 'defs';
+
 import { takeEvery } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 import { getContainerById } from 'containers/selectors';
@@ -12,13 +14,15 @@ import { SETUP_CONTAINER, SET_UI_META } from 'containers/actions';
  * @param  {Object} action
  * @return {void}
  */
-export function* workerSetupContainer({ payload }: { payload: Object }): any {
+export function* workerSetupContainer(action: ReduxAction): any {
 	const defaults: Object = {
 		'has_error': false,
 		'is_dirty': false,
 		'is_visible': true,
 		'classes': [],
 	};
+
+	const { payload }: { payload: Object } = action;
 
 	payload.ui = {
 		...defaults,
@@ -34,7 +38,7 @@ export function* workerSetupContainer({ payload }: { payload: Object }): any {
  * @param  {Object} action
  * @return {void}
  */
-export function* workerToggleMetaBoxVisibility(action: Object): any {
+export function* workerToggleMetaBoxVisibility(action: ReduxAction): any {
 	const { containerId }: { containerId: string } = action.payload;
 	const container: Object = yield select(getContainerById, containerId);
 	const el: HTMLElement = yield call([document, document.querySelector], `#${containerId}`);

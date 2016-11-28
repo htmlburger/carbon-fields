@@ -1,5 +1,7 @@
 /* @flow */
 
+import type { ReduxAction } from 'defs';
+
 import immutable from 'object-path-immutable';
 import { SET_UI_META } from 'containers/actions';
 
@@ -10,7 +12,7 @@ import { SET_UI_META } from 'containers/actions';
  * @param  {Object} action
  * @return {Object}
  */
-export default function(state: Object = {}, action: Object): Object {
+export default function(state: Object = {}, action: ReduxAction): Object {
 	switch (action.type) {
 		case SET_UI_META: return setUIMeta(state, action);
 		default: return state;
@@ -24,7 +26,7 @@ export default function(state: Object = {}, action: Object): Object {
  * @param  {Object} action
  * @return {Object}
  */
-function setUIMeta(state: Object, action: Object): Object {
+function setUIMeta(state: Object, action: ReduxAction): Object {
 	const { containerId, ui } = action.payload;
 
 	return immutable.assign(state, `${containerId}.ui`, ui);
