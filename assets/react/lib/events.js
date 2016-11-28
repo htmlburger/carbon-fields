@@ -18,6 +18,7 @@ export function createSelectboxChannel(selector: string): Object {
 		const changeHandler: Function = (event?: Event) => {
 			emit({
 				value: $select.val(),
+				element: $select.get(0),
 				option: $select.find(':selected').first().get(0),
 			});
 		};
