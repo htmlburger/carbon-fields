@@ -1,39 +1,11 @@
 /* @flow */
 
-import $ from 'jquery';
-import { takeEvery, eventChannel } from 'redux-saga';
+import { takeEvery } from 'redux-saga';
 import { take, call, put, select, fork } from 'redux-saga/effects';
-import { getContainerById } from 'containers/selectors';
 import { setUIMeta } from 'containers/actions';
 import { SETUP_CONTAINER } from 'containers/actions';
 import { TYPE_POST_META } from 'containers/constants';
-
-/**
- * Create a Channel that will be a bridge between other DOM elements
- * and our React application.
- *
- * @return {Object}
- */
-function createPageTemplateChannel(): Object {
-	return eventChannel((emit) => {
-		const $select = $('select#page_template');
-
-		// Emit the value of selectbox through the channel.
-		const changeHandler = (event) => {
-			emit({ value: event.target.value });
-		};
-
-		// Cancel the subscription.
-		const unsubscribe = () => {
-			$select.off('change', changeHandler);
-		}
-
-		// Setup the subscription.
-		$select.on('change', changeHandler);
-
-		return unsubscribe;
-	});
-}
+import { canProcessAction, createSelectboxChannel } from 'containers/helpers';
 
 /**
  * Keep in sync the `page_template` property.
@@ -42,7 +14,7 @@ function createPageTemplateChannel(): Object {
  * @return {void}
  */
 export function* workerSyncPageTemplate(containerId: string): any {
-	const channel = yield call(createPageTemplateChannel);
+	const channel = yield call(createSelectboxChannel, 'select#page_template');
 
 	while (true) {
 		const { value } = yield take(channel);
@@ -57,6 +29,34 @@ export function* workerSyncPageTemplate(containerId: string): any {
 }
 
 /**
+ * Keep in sync the `parent_id` property.
+ *
+ * @param  {String} containerId
+ * @return {void}
+ */
+export function* workerSyncParentId(containerId: string): any {
+	const channel = yield call(createSelectboxChannel, 'select#parent_id');
+
+	while (true) {
+		let { value, $option } = yield take(channel);
+
+		value = parseInt(value, 10);
+		value = isNaN(value) ? null : value;
+
+		const classes = $option.attr('class');
+		const level = classes ? parseInt(classes.match(/^level-(\d+)/)[1], 10) + 2 : 1;
+
+		yield put(setUIMeta({
+			containerId,
+			ui: {
+				parent_id: value,
+				level: level,
+			}
+		}));
+	}
+}
+
+/**
  * Setup the initial state of the container.
  *
  * @param  {Object} action
@@ -64,14 +64,14 @@ export function* workerSyncPageTemplate(containerId: string): any {
  */
 export function* workerSetupContainer(action: Object): any {
 	const containerId: string = action.payload.containerId;
-	const container: Object = yield select(getContainerById, containerId);
 
 	// Don't do anything if the type isn't correct.
-	if (!container.type === TYPE_POST_META) {
+	if (!(yield call(canProcessAction, containerId, TYPE_POST_META))) {
 		return;
 	}
 
 	yield fork(workerSyncPageTemplate, containerId);
+	yield fork(workerSyncParentId, containerId);
 }
 
 /**
