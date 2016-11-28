@@ -3,12 +3,12 @@
 import type { ReduxAction } from 'defs';
 
 import { takeEvery } from 'redux-saga';
-import { take, call, put, select, fork } from 'redux-saga/effects';
+import { take, call, put, fork } from 'redux-saga/effects';
 import { createSelectboxChannel, createRadioChannel } from 'lib/events';
+import { canProcessAction } from 'containers/helpers';
 import { setUIMeta } from 'containers/actions';
 import { SETUP_CONTAINER } from 'containers/actions';
 import { TYPE_POST_META } from 'containers/constants';
-import { canProcessAction } from 'containers/helpers';
 
 /**
  * Keep in sync the `page_template` property.
@@ -41,12 +41,20 @@ export function* workerSyncParentId(containerId: string): any {
 	const channel = yield call(createSelectboxChannel, 'select#parent_id');
 
 	while (true) {
-		let { value, option } = yield take(channel);
+		let { value, option }: { value: any, option: HTMLElement } = yield take(channel);
 
 		value = parseInt(value, 10);
 		value = isNaN(value) ? null : value;
 
-		const level = option.className ? parseInt(option.className.match(/^level-(\d+)/)[1], 10) + 2 : 1;
+		let level: number = 1;
+
+		if (option.className) {
+			const matches: ?string[] = option.className.match(/^level-(\d+)/);
+
+			if (matches) {
+				level = parseInt(matches[1], 10) + 2;
+			}
+		}
 
 		yield put(setUIMeta({
 			containerId,
@@ -86,7 +94,7 @@ export function* workerSyncPostFormat(containerId: string): any {
  * @return {void}
  */
 export function* workerSetupContainer(action: ReduxAction): any {
-	const containerId: string = action.payload.containerId;
+	const { containerId }: { containerId: string } = action.payload;
 
 	// Don't do anything if the type isn't correct.
 	if (!(yield call(canProcessAction, containerId, TYPE_POST_META))) {

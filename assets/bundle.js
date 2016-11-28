@@ -50135,11 +50135,11 @@
 
 	var _events = __webpack_require__(685);
 
+	var _helpers = __webpack_require__(687);
+
 	var _actions = __webpack_require__(531);
 
-	var _constants = __webpack_require__(687);
-
-	var _helpers = __webpack_require__(688);
+	var _constants = __webpack_require__(688);
 
 	var _marked = [workerSyncPageTemplate, workerSyncParentId, workerSyncPostFormat, workerSetupContainer, foreman].map(regeneratorRuntime.mark);
 
@@ -50201,7 +50201,7 @@
 	 * @return {void}
 	 */
 	function workerSyncParentId(containerId) {
-		var channel, _ref2, _value, option, level;
+		var channel, _ref2, _value, option, level, matches;
 
 		return regeneratorRuntime.wrap(function workerSyncParentId$(_context2) {
 			while (1) {
@@ -50215,7 +50215,7 @@
 
 					case 3:
 						if (false) {
-							_context2.next = 16;
+							_context2.next = 17;
 							break;
 						}
 
@@ -50231,8 +50231,19 @@
 						_value = parseInt(_value, 10);
 						_value = isNaN(_value) ? null : _value;
 
-						level = option.className ? parseInt(option.className.match(/^level-(\d+)/)[1], 10) + 2 : 1;
-						_context2.next = 14;
+						level = 1;
+
+
+						if (option.className) {
+							matches = option.className.match(/^level-(\d+)/);
+
+
+							if (matches) {
+								level = parseInt(matches[1], 10) + 2;
+							}
+						}
+
+						_context2.next = 15;
 						return (0, _effects.put)((0, _actions.setUIMeta)({
 							containerId: containerId,
 							ui: {
@@ -50241,11 +50252,11 @@
 							}
 						}));
 
-					case 14:
+					case 15:
 						_context2.next = 3;
 						break;
 
-					case 16:
+					case 17:
 					case 'end':
 						return _context2.stop();
 				}
@@ -50407,6 +50418,7 @@
 			var changeHandler = function changeHandler(event) {
 				emit({
 					value: $select.val(),
+					element: $select.get(0),
 					option: $select.find(':selected').first().get(0)
 				});
 			};
@@ -50490,17 +50502,6 @@
 
 /***/ },
 /* 687 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-		var TYPE_POST_META = exports.TYPE_POST_META = 'Post_Meta';
-
-/***/ },
-/* 688 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50531,6 +50532,17 @@
 
 	  return (0, _selectors.getContainerById)(state, containerId).type === containerType;
 	}
+
+/***/ },
+/* 688 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+		var TYPE_POST_META = exports.TYPE_POST_META = 'Post_Meta';
 
 /***/ },
 /* 689 */
