@@ -50126,6 +50126,7 @@
 	exports.workerSyncPageTemplate = workerSyncPageTemplate;
 	exports.workerSyncParentId = workerSyncParentId;
 	exports.workerSyncPostFormat = workerSyncPostFormat;
+	exports.workerSyncTerms = workerSyncTerms;
 	exports.workerSetupContainer = workerSetupContainer;
 	exports.default = foreman;
 
@@ -50137,11 +50138,13 @@
 
 	var _helpers = __webpack_require__(687);
 
+	var _selectors = __webpack_require__(683);
+
 	var _actions = __webpack_require__(531);
 
 	var _constants = __webpack_require__(688);
 
-	var _marked = [workerSyncPageTemplate, workerSyncParentId, workerSyncPostFormat, workerSetupContainer, foreman].map(regeneratorRuntime.mark);
+	var _marked = [workerSyncPageTemplate, workerSyncParentId, workerSyncPostFormat, workerSyncTerms, workerSetupContainer, foreman].map(regeneratorRuntime.mark);
 
 	/**
 	 * Keep in sync the `page_template` property.
@@ -50271,14 +50274,14 @@
 	 * @return {void}
 	 */
 	function workerSyncPostFormat(containerId) {
-		var channel, _ref3, _value2;
+		var channel, _ref3, values;
 
 		return regeneratorRuntime.wrap(function workerSyncPostFormat$(_context3) {
 			while (1) {
 				switch (_context3.prev = _context3.next) {
 					case 0:
 						_context3.next = 2;
-						return (0, _effects.call)(_events.createRadioChannel, 'input[name="post_format"]');
+						return (0, _effects.call)(_events.createCheckableChannel, '#post-formats-select');
 
 					case 2:
 						channel = _context3.sent;
@@ -50294,12 +50297,12 @@
 
 					case 6:
 						_ref3 = _context3.sent;
-						_value2 = _ref3.value;
+						values = _ref3.values;
 						_context3.next = 10;
 						return (0, _effects.put)((0, _actions.setUIMeta)({
 							containerId: containerId,
 							ui: {
-								post_format: _value2
+								post_format: values[0]
 							}
 						}));
 
@@ -50316,45 +50319,60 @@
 	}
 
 	/**
-	 * Setup the initial state of the container.
+	 * Keep in sync the `terms` property.
 	 *
-	 * @param  {Object} action
+	 * @param  {String} containerId
 	 * @return {void}
 	 */
-	function workerSetupContainer(action) {
-		var containerId;
-		return regeneratorRuntime.wrap(function workerSetupContainer$(_context4) {
+	function workerSyncTerms(containerId) {
+		var container, channel, _ref4, _values;
+
+		return regeneratorRuntime.wrap(function workerSyncTerms$(_context4) {
 			while (1) {
 				switch (_context4.prev = _context4.next) {
 					case 0:
-						containerId = action.payload.containerId;
+						_context4.next = 2;
+						return (0, _effects.select)(_selectors.getContainerById, containerId);
 
-						// Don't do anything if the type isn't correct.
+					case 2:
+						container = _context4.sent;
+						_context4.next = 5;
+						return (0, _effects.call)(_events.createCheckableChannel, '#' + container.settings.show_on.tax_slug + 'checklist');
 
-						_context4.next = 3;
-						return (0, _effects.call)(_helpers.canProcessAction, containerId, _constants.TYPE_POST_META);
+					case 5:
+						channel = _context4.sent;
 
-					case 3:
-						if (_context4.sent) {
-							_context4.next = 5;
+					case 6:
+						if (false) {
+							_context4.next = 16;
 							break;
 						}
 
-						return _context4.abrupt('return');
-
-					case 5:
-						_context4.next = 7;
-						return (0, _effects.fork)(workerSyncPageTemplate, containerId);
-
-					case 7:
 						_context4.next = 9;
-						return (0, _effects.fork)(workerSyncParentId, containerId);
+						return (0, _effects.take)(channel);
 
 					case 9:
-						_context4.next = 11;
-						return (0, _effects.fork)(workerSyncPostFormat, containerId);
+						_ref4 = _context4.sent;
+						_values = _ref4.values;
 
-					case 11:
+
+						_values = _values.map(function (value) {
+							return parseInt(value, 10);
+						});
+
+						_context4.next = 14;
+						return (0, _effects.put)((0, _actions.setUIMeta)({
+							containerId: containerId,
+							ui: {
+								terms: _values
+							}
+						}));
+
+					case 14:
+						_context4.next = 6;
+						break;
+
+					case 16:
 					case 'end':
 						return _context4.stop();
 				}
@@ -50363,24 +50381,75 @@
 	}
 
 	/**
-	 * Start to work.
+	 * Setup the initial state of the container.
 	 *
+	 * @param  {Object} action
 	 * @return {void}
 	 */
-	function foreman() {
-		return regeneratorRuntime.wrap(function foreman$(_context5) {
+	function workerSetupContainer(action) {
+		var containerId;
+		return regeneratorRuntime.wrap(function workerSetupContainer$(_context5) {
 			while (1) {
 				switch (_context5.prev = _context5.next) {
 					case 0:
-						_context5.next = 2;
-						return [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer)];
+						containerId = action.payload.containerId;
 
-					case 2:
+						// Don't do anything if the type isn't correct.
+
+						_context5.next = 3;
+						return (0, _effects.call)(_helpers.canProcessAction, containerId, _constants.TYPE_POST_META);
+
+					case 3:
+						if (_context5.sent) {
+							_context5.next = 5;
+							break;
+						}
+
+						return _context5.abrupt('return');
+
+					case 5:
+						_context5.next = 7;
+						return (0, _effects.fork)(workerSyncPageTemplate, containerId);
+
+					case 7:
+						_context5.next = 9;
+						return (0, _effects.fork)(workerSyncParentId, containerId);
+
+					case 9:
+						_context5.next = 11;
+						return (0, _effects.fork)(workerSyncPostFormat, containerId);
+
+					case 11:
+						_context5.next = 13;
+						return (0, _effects.fork)(workerSyncTerms, containerId);
+
+					case 13:
 					case 'end':
 						return _context5.stop();
 				}
 			}
 		}, _marked[4], this);
+	}
+
+	/**
+	 * Start to work.
+	 *
+	 * @return {void}
+	 */
+	function foreman() {
+		return regeneratorRuntime.wrap(function foreman$(_context6) {
+			while (1) {
+				switch (_context6.prev = _context6.next) {
+					case 0:
+						_context6.next = 2;
+						return [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer)];
+
+					case 2:
+					case 'end':
+						return _context6.stop();
+				}
+			}
+		}, _marked[5], this);
 		}
 
 /***/ },
@@ -50393,7 +50462,7 @@
 		value: true
 	});
 	exports.createSelectboxChannel = createSelectboxChannel;
-	exports.createRadioChannel = createRadioChannel;
+	exports.createCheckableChannel = createCheckableChannel;
 
 	var _jquery = __webpack_require__(686);
 
@@ -50445,47 +50514,42 @@
 	}
 
 	/**
-	 * Create a Saga Channel that will listen for DOM changes on specified radio buttons.
-	 * The buffer is used to emit the initial value of the selectbox when the channel is created.
+	 * Create a Saga Channel that will listen for DOM changes on specified radios/checkboxes.
+	 * The buffer is used to emit the initial value of the inputs when the channel is created.
 	 *
 	 * @param  {String} selector
 	 * @return {Object}
 	 */
-	function createRadioChannel(selector) {
+	function createCheckableChannel(selector) {
 		return (0, _reduxSaga.eventChannel)(function (emit) {
-			var $inputs = (0, _jquery2.default)(selector);
+			var $container = (0, _jquery2.default)(selector);
 
-			// Emit the value of selectbox through the channel.
+			// Emit the value of inputs through the channel.
 			var changeHandler = function changeHandler(event) {
-				if (event && !event.target.checked) {
-					return;
-				}
+				var elements = $container.find('input:checked').get();
+				var values = elements.map(function (element) {
+					return element.value;
+				});
 
-				// Use `any` instead of `HTMLInputElement` to avoid conflicts
-				// with the `get` method.
-				var target = $inputs.filter(':checked').first().get(0);
-
-				if (target.checked) {
-					emit({
-						value: target.value,
-						element: target
-					});
-				}
+				emit({
+					values: values,
+					elements: elements
+				});
 			};
 
 			// Cancel the subscription.
 			var unsubscribe = function unsubscribe() {
-				$inputs.off('change', changeHandler);
+				$container.off('change', 'input', changeHandler);
 			};
 
-			// Close the channel since the elements don't exists.
-			if (!$inputs.length) {
+			// Close the channel since the container doesn't exists.
+			if (!$container.length) {
 				emit(_reduxSaga.END);
 				return unsubscribe;
 			}
 
 			// Setup the subscription.
-			$inputs.on('change', changeHandler);
+			$container.on('change', 'input', changeHandler);
 
 			// Emit the initial value.
 			changeHandler();

@@ -3,9 +3,10 @@
 import type { ReduxAction } from 'defs';
 
 import { takeEvery } from 'redux-saga';
-import { take, call, put, fork } from 'redux-saga/effects';
-import { createSelectboxChannel, createRadioChannel } from 'lib/events';
+import { take, call, put, fork, select } from 'redux-saga/effects';
+import { createSelectboxChannel, createCheckableChannel } from 'lib/events';
 import { canProcessAction } from 'containers/helpers';
+import { getContainerById } from 'containers/selectors';
 import { setUIMeta } from 'containers/actions';
 import { SETUP_CONTAINER } from 'containers/actions';
 import { TYPE_POST_META } from 'containers/constants';
@@ -73,15 +74,39 @@ export function* workerSyncParentId(containerId: string): any {
  * @return {void}
  */
 export function* workerSyncPostFormat(containerId: string): any {
-	const channel = yield call(createRadioChannel, 'input[name="post_format"]');
+	const channel = yield call(createCheckableChannel, '#post-formats-select');
 
 	while (true) {
-		const { value }: { value: string } = yield take(channel);
+		const { values }: { values: string[] } = yield take(channel);
 
 		yield put(setUIMeta({
 			containerId,
 			ui: {
-				post_format: value,
+				post_format: values[0],
+			}
+		}));
+	}
+}
+
+/**
+ * Keep in sync the `terms` property.
+ *
+ * @param  {String} containerId
+ * @return {void}
+ */
+export function* workerSyncTerms(containerId: string): any {
+	const container = yield select(getContainerById, containerId);
+	const channel = yield call(createCheckableChannel, `#${container.settings.show_on.tax_slug}checklist`);
+
+	while (true) {
+		let { values } = yield take(channel);
+
+		values = values.map(value => parseInt(value, 10));
+
+		yield put(setUIMeta({
+			containerId,
+			ui: {
+				terms: values,
 			}
 		}));
 	}
@@ -104,6 +129,7 @@ export function* workerSetupContainer(action: ReduxAction): any {
 	yield fork(workerSyncPageTemplate, containerId);
 	yield fork(workerSyncParentId, containerId);
 	yield fork(workerSyncPostFormat, containerId);
+	yield fork(workerSyncTerms, containerId);
 }
 
 /**

@@ -45,50 +45,40 @@ export function createSelectboxChannel(selector: string): Object {
 }
 
 /**
- * Create a Saga Channel that will listen for DOM changes on specified radio buttons.
- * The buffer is used to emit the initial value of the selectbox when the channel is created.
+ * Create a Saga Channel that will listen for DOM changes on specified radios/checkboxes.
+ * The buffer is used to emit the initial value of the inputs when the channel is created.
  *
  * @param  {String} selector
  * @return {Object}
  */
-export function createRadioChannel(selector: string): Object {
+export function createCheckableChannel(selector: string): Object {
 	return eventChannel((emit) => {
-		const $inputs: JQuery = $(selector);
+		const $container: JQuery = $(selector);
 
-		// Emit the value of selectbox through the channel.
+		// Emit the value of inputs through the channel.
 		const changeHandler: Function = (event?: Event) => {
-			if (event && !event.target.checked) {
-				return;
-			}
+			const elements: HTMLInputElement[] = $container.find('input:checked').get();
+			const values: string[] = elements.map(element => element.value);
 
-			// Use `any` instead of `HTMLInputElement` to avoid conflicts
-			// with the `get` method.
-			const target: any = $inputs
-				.filter(':checked')
-				.first()
-				.get(0);
-
-			if (target.checked) {
-				emit({
-					value: target.value,
-					element: target,
-				});
-			}
+			emit({
+				values,
+				elements,
+			});
 		};
 
 		// Cancel the subscription.
 		const unsubscribe: Function = () => {
-			$inputs.off('change', changeHandler);
+			$container.off('change', 'input', changeHandler);
 		}
 
-		// Close the channel since the elements don't exists.
-		if (!$inputs.length) {
+		// Close the channel since the container doesn't exists.
+		if (!$container.length) {
 			emit(END);
 			return unsubscribe;
 		}
 
 		// Setup the subscription.
-		$inputs.on('change', changeHandler)
+		$container.on('change', 'input', changeHandler);
 
 		// Emit the initial value.
 		changeHandler();
