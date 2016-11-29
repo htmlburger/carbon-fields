@@ -20,7 +20,7 @@ class Number_Field extends Field {
 	 */
 	function template() {
 		?>
-		<input id="{{{ id }}}" type="number" name="{{{ name }}}" value="{{ value }}" max="{{ max }}" min="{{ min }}" step="{{ step }}" class="regular-text" />
+		<input id="{{{ id }}}" type="number" name="{{{ name }}}" value="{{ value }}" max="{{ max }}" min="{{ min }}" step="{{ step }}" pattern="[0-9]*" class="regular-text" />
 		<?php
 	}
 
@@ -49,8 +49,9 @@ class Number_Field extends Field {
 
 			$is_valid_min = $this->min <= $value;
 			$is_valid_max = $value <= $this->max;
+			$is_valid_step = ( $value % $this->step ) === 0;
 
-			if ( $value !== '' && $is_valid_min && $is_valid_max ) {
+			if ( $value !== '' && $is_valid_min && $is_valid_max && $is_valid_step ) {
 				$field_value = $value;
 			}
 		}
