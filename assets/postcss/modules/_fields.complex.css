@@ -116,6 +116,7 @@
 .layout-tabbed-vertical { display: flex; }
 
 .layout-tabbed-vertical > .group-tabs-nav-holder { width: 20%; padding: 0; margin: 0; }
+.layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav { border-bottom: 1px solid $color-border; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav li { display: block; width: auto; margin-right: 0; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav a { padding-left: 20px; margin-right: -1px; max-width: none; border-bottom: 0; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav .active a { position: relative; z-index: 5; border-right-color: #fff; }
@@ -131,6 +132,11 @@
 .layout-tabbed-vertical > .carbon-groups-holder { width: 80%; }
 
 .layout-tabbed-vertical .group-tabs-nav .ui-placeholder-highlight { height: 33px; border-right: 0; }
+
+/*  Max Reached  */
+
+.max-reached > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-group-row > .carbon-group-actions > .carbon-btn-duplicate { display: none; }
+.max-reached > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-group-row > .carbon-group-actions > .carbon-btn-duplicate + .carbon-btn-remove { margin-left: 0; }
 
 
 @media screen and (max-width: 782px) {
