@@ -22,9 +22,6 @@ class Nav_Menu_Container extends Container {
 	 * @param string $id ID of the container
 	 **/
 	public function __construct( $id ) {
-		// Reset the registered fields array, this is required so we can have fields with same names
-		self::$registered_field_names = array();
-
 		$id = str_replace( ' ', '', ucwords( str_replace( '_', ' ', $id ) ) );
 
 		$this->id = $id;
@@ -32,8 +29,6 @@ class Nav_Menu_Container extends Container {
 		$this->store = new Nav_Menu_Datastore();
 
 		self::initialize_filters();
-
-		$this->load_scripts_styles();
 	}
 
 	/**

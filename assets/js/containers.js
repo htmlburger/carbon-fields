@@ -122,6 +122,9 @@ window.carbon = window.carbon || {};
 			// Listen for model changes in the fields collection.
 			this.listenToOnce(this.fieldsCollection, 'change:value', this.changeListener);
 
+			// Disable/enable the container's inputs when visibility changes
+			this.listenTo(this.model, 'change:visible', this.disableInputs);
+
 			// Listen for container class updates
 			this.listenTo(this.model, 'change:classes', this.updateClass);
 
@@ -229,6 +232,15 @@ window.carbon = window.carbon || {};
 				});
 			}
 
+		},
+
+		disableInputs: function(model) {
+			if ( ! this.$el.is('fieldset') ) {
+				return;
+			}
+
+			var disabled = !model.get('visible');
+			this.$el.attr('disabled', disabled);
 		},
 
 		updateClass: function(model) {
@@ -622,16 +634,18 @@ window.carbon = window.carbon || {};
 				switch(type) {
 					case 'template_names':
 						var template = _this.model.get('page_template');
+						var isPage = typeof typenow !== 'undefined' && typenow === 'page';
 
-						if ($.inArray(template, req) === -1) {
+						if (isPage && $.inArray(template, req) === -1) {
 							visible = false;
 						}
 					break;
 
 					case 'not_in_template_names':
 						var template = _this.model.get('page_template');
+						var isPage = typeof typenow !== 'undefined' && typenow === 'page';
 						
-						if ($.inArray(template, req) !== -1) {
+						if (isPage && $.inArray(template, req) !== -1) {
 							visible = false;
 						}
 					break;

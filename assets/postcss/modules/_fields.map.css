@@ -1,0 +1,11 @@
+/* ------------------------------------------------------------ *\
+	Field - Map
+\* ------------------------------------------------------------ */
+
+.carbon-map-canvas { height: 300px; border: 1px solid #ddd; border-top-style: none; margin: 0 0 4px; }
+
+.carbon-map-search-row { position: relative; z-index: 1; }
+
+.carbon-map-search-address { vertical-align: top; height:40px; margin: 0; padding: 10px 9px 10px 32px!important; font-size: 13px; }
+
+.carbon-map-search-button { position: absolute; left: 8px; top: 50%; margin-top: -10px; font-size: 0; color: $color-grey-font; background: none; border: none; box-shadow: none; cursor: pointer; }

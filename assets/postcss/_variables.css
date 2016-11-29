@@ -1,0 +1,35 @@
+/* ------------------------------------------------------------ *\
+	Colors
+\* ------------------------------------------------------------ */
+
+$color-label:           #24282d;
+
+$color-grey-font:       #73777c;
+$color-blue-font:       #388dc0;
+$color-darkred-font:    #b40000;
+
+$color-grey-bg:         #fafafa;
+$color-grey-button:     #f7f7f7;
+$color-lightred-bg:     #f7d8d8;
+
+$color-border:          #e5e5e5;
+$color-border-dark:     #dddddd;
+$color-border-darker:   #cccccc;
+$color-border-active:   #999999;
+$color-border-darkgrey: #3d3d3d;
+
+$color-state-error:     #cd4c15;
+
+
+/* ------------------------------------------------------------ *\
+	Breakpoins
+\* ------------------------------------------------------------ */
+
+$breakpoint-desktop-min: 1100px;
+
+$breakpoint-tablet-max: 850px;
+$breakpoint-tablet-min: 783px;
+
+$breakpoint-mobile-max: 782px;
+$breakpoint-mobile-landscape: 783px;
+

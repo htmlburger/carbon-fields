@@ -10,8 +10,7 @@ class Gravity_Form_Field extends Select_Field {
 	 * Admin initialization actions
 	 */
 	public function admin_init() {
-		// Setup form options
-		add_action( 'carbon_after_register_fields', array( $this, 'setup_gravity_form_options' ), 20 );
+		$this->setup_gravity_form_options();
 	}
 
 	/**

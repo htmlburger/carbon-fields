@@ -137,7 +137,7 @@ class User_Meta_Container extends Container {
 	 * @return bool True if the container is allowed to be attached
 	 **/
 	public function is_valid_attach() {
-		if ( ! current_user_can( 'edit_users' ) && ! $this->is_profile_page() ) {
+		if ( ! current_user_can( 'edit_users' ) || ! $this->is_profile_page() ) {
 			return false;
 		}
 

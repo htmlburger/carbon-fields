@@ -1,0 +1,18 @@
+/* ------------------------------------------------------------ *\
+	Container - Custom Fields, Theme Options
+\* ------------------------------------------------------------ */
+
+#poststuff .carbon-box,
+#poststuff .spinner.disabled { display: none; }
+
+#poststuff .carbon-box .inside,
+body.comment-php #poststuff .postbox-container .inside { margin: 0; padding: 0; }
+
+.carbon-box .carbon-fields-collection { padding-bottom: 0; }
+
+.carbon-theme-options #post-body.columns-2 #postbox-container-1.fixed { position: fixed; right: 0; margin-right: 20px; }
+
+
+@media screen and (max-width: $breakpoint-tablet-max) {
+	.carbon-theme-options #post-body.columns-2 #postbox-container-1.fixed { position: static; }
+}
