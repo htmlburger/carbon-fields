@@ -1,0 +1,12 @@
+{
+	"bail": true,
+	"verbose": true,
+	"testPathDirs": ["assets/tests"],
+	"unmockedModulePathPatterns": [
+		"<rootDir>/node_modules/react/",
+		"<rootDir>/node_modules/enzyme/"
+	],
+	"moduleNameMapper": {
+		"^containers(.*)$": "<rootDir>/assets/react/containers$1"
+	}
+}

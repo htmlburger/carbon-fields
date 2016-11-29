@@ -10,7 +10,7 @@
     "postcss": "node_modules/.bin/postcss"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --config .jest",
     "postcss": "postcss -c postcss.config.js -w",
     "webpack:watch": "webpack -w",
     "flowtype": "watch \"flow || exit 0\" assets/react",
@@ -33,6 +33,7 @@
   "devDependencies": {
     "autoprefixer": "^6.5.2",
     "babel-core": "^6.18.2",
+    "babel-jest": "^17.0.2",
     "babel-loader": "^6.2.8",
     "babel-polyfill": "^6.16.0",
     "babel-preset-latest": "^6.16.0",
@@ -40,7 +41,9 @@
     "babel-preset-stage-3": "^6.17.0",
     "concurrently": "^3.1.0",
     "cssnano": "^3.8.0",
+    "enzyme": "^2.6.0",
     "flow-bin": "^0.35.0",
+    "jest": "^17.0.3",
     "postcss-cli": "^2.6.0",
     "postcss-import": "^8.1.3",
     "postcss-simple-vars": "^3.0.0",
