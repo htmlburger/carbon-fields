@@ -350,7 +350,7 @@ window.carbon = window.carbon || {};
 	 *	Run the app when the dom is ready
 	 */
 	$(document).ready(function() {
-		// carbon.init(); // Abracadabra! Poof! Containers everywhere ...
+		carbon.init(); // Abracadabra! Poof! Containers everywhere ...
 	});
 
 }(jQuery));

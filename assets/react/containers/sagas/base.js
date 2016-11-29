@@ -22,8 +22,6 @@ export function* workerSetupContainer(action: ReduxAction): any {
 		'classes': [],
 	};
 
-	console.log(action);
-
 	let { containerId, meta, ui } = action.payload;
 
 	ui = {

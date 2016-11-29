@@ -2,14 +2,18 @@
 
 import type { ReduxAction } from 'defs';
 
+import { reduce, isEmpty, isFunction, camelCase } from 'lodash';
 import { takeEvery } from 'redux-saga';
 import { take, call, put, fork, select } from 'redux-saga/effects';
+
 import { createSelectboxChannel, createCheckableChannel } from 'lib/events';
-import { canProcessAction } from 'containers/helpers';
+import { TYPE_NOW_PAGE } from 'lib/constants';
+
 import { getContainerById } from 'containers/selectors';
-import { setMeta } from 'containers/actions';
-import { SETUP_CONTAINER } from 'containers/actions';
+import { canProcessAction } from 'containers/helpers';
+import { setMeta, setUI } from 'containers/actions';
 import { TYPE_POST_META } from 'containers/constants';
+import { SETUP_CONTAINER, SET_META } from 'containers/actions';
 
 /**
  * Keep in sync the `page_template` property.
@@ -133,12 +137,154 @@ export function* workerSetupContainer(action: ReduxAction): any {
 }
 
 /**
+ * Keep in sync the `is_visible` property.
+ *
+ * @param  {Object} action
+ * @return {void}
+ */
+export function* workerCheckVisibility(action: ReduxAction): any {
+	const { containerId }: { containerId: string } = action.payload;
+
+	// Don't do anything if the type isn't correct.
+	if (!(yield call(canProcessAction, containerId, TYPE_POST_META))) {
+		return;
+	}
+
+	const container = yield select(getContainerById, containerId);
+	const isVisible = reduce(container.settings.show_on, (isVisible, value, key) => {
+		const checker = camelCase(`check_${key}`);
+
+		if (isFunction(checker) && !isEmpty(value)) {
+			return checker(isVisible, container.settings.show_on, container.meta);;
+		}
+
+		return isVisible;
+	}, true);
+
+	yield put(setUI({
+		containerId,
+		ui: {
+			is_visible: isVisible
+		}
+	}));
+}
+
+/**
+ * Check whether the container should be visible.
+ *
+ * @param  {boolean} isVisible
+ * @param  {Object}  settings
+ * @param  {Object}  meta
+ * @return {boolean}
+ */
+function checkTemplateNames(isVisible: boolean, settings: Object, meta: Object): boolean {
+	const { page_template }: { page_template: ?string } = meta;
+	const { typenow }: { typenow: ?string } = window;
+
+	if (typenow === TYPE_NOW_PAGE && settings.template_names.indexOf(page_template) === -1) {
+		isVisible = false;
+	}
+
+	return isVisible;
+}
+
+/**
+ * Check whether the container should be visible.
+ *
+ * @param  {boolean} isVisible
+ * @param  {Object}  settings
+ * @param  {Object}  meta
+ * @return {boolean}
+ */
+function checkNotInTemplateNames(isVisible: boolean, settings: Object, meta: Object): boolean {
+	const { page_template }: { page_template: ?string } = meta;
+	const { typenow }: { typenow: ?string } = window;
+
+	if (typenow === TYPE_NOW_PAGE && settings.not_in_template_names.indexOf(page_template) !== -1) {
+		isVisible = false;
+	}
+
+	return isVisible;
+}
+
+/**
+ * Check whether the container should be visible.
+ *
+ * @param  {boolean} isVisible
+ * @param  {Object}  settings
+ * @param  {Object}  meta
+ * @return {boolean}
+ */
+function checkParentPageId(isVisible: boolean, settings: Object, meta: Object): boolean {
+	const { parent_id }: { parent_id: ?number } = meta;
+
+	if (parent_id != settings.parent_page_id) {
+		isVisible = false;
+	}
+
+	return isVisible;
+}
+
+/**
+ * Check whether the container should be visible.
+ *
+ * @param  {boolean} isVisible
+ * @param  {Object}  settings
+ * @param  {Object}  meta
+ * @return {boolean}
+ */
+function checkLevelLimit(isVisible: boolean, settings: Object, meta: Object): boolean {
+	const { level }: { level: ?number } = meta;
+
+	if (level != settings.level_limit) {
+		isVisible = false;
+	}
+
+	return isVisible;
+}
+
+/**
+ * Check whether the container should be visible.
+ *
+ * @param  {boolean} isVisible
+ * @param  {Object}  settings
+ * @param  {Object}  meta
+ * @return {boolean}
+ */
+function checkPostFormats(isVisible: boolean, settings: Object, meta: Object): boolean {
+	const { post_format }: { post_format: ?string } = meta;
+
+	if (settings.post_formats.indexOf(post_format) === -1) {
+		isVisible = false;
+	}
+
+	return isVisible;
+}
+
+/**
+ * Check whether the container should be visible.
+ *
+ * @param  {boolean} isVisible
+ * @param  {Object}  settings
+ * @param  {Object}  meta
+ * @return {boolean}
+ */
+function checkTaxSlug(isVisible: boolean, settings: Object, meta: Object): boolean {
+	const { tax_term_id }: { tax_term_id: ?string } = meta;
+
+	if (meta.terms.indexOf(tax_term_id) === -1) {
+		isVisible = false;
+	}
+
+	return isVisible;
+}
+
+/**
  * Start to work.
  *
  * @return {void}
  */
 export default function* foreman(): any {
-	yield [
-		takeEvery(SETUP_CONTAINER, workerSetupContainer),
-	];
+	yield takeEvery(SETUP_CONTAINER, workerSetupContainer);
+	yield takeEvery(SET_META, workerCheckVisibility);
 }
