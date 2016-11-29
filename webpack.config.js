@@ -1,6 +1,6 @@
 module.exports = {
-	// There are the "entry points" to our application.
-	// This means they wll be the "root" import that are included in JS bundle.
+	// These are the "entry points" to our application.
+	// This means they will be the "root" imports that are included in JS bundle.
 	entry: [
 		'babel-polyfill',
 		'./assets/react/bootstrap.js'
