@@ -2,7 +2,7 @@
 
 import type { ReduxAction } from 'defs';
 
-import { reduce, isEmpty, isFunction, camelCase } from 'lodash';
+import { reduce, isEmpty, isArray, camelCase } from 'lodash';
 import { takeEvery } from 'redux-saga';
 import { take, call, put, fork, select } from 'redux-saga/effects';
 
@@ -134,6 +134,7 @@ export function* workerSetupContainer(action: ReduxAction): any {
 	yield fork(workerSyncParentId, containerId);
 	yield fork(workerSyncPostFormat, containerId);
 	yield fork(workerSyncTerms, containerId);
+
 }
 
 /**
@@ -150,12 +151,25 @@ export function* workerCheckVisibility(action: ReduxAction): any {
 		return;
 	}
 
-	const container = yield select(getContainerById, containerId);
-	const isVisible = reduce(container.settings.show_on, (isVisible, value, key) => {
+	const container: Object = yield select(getContainerById, containerId);
+	const checkers: Object = {
+		checkTemplateNames,
+		checkNotInTemplateNames,
+		checkParentPageId,
+		checkLevelLimit,
+		checkPostFormats,
+		checkTaxSlug,
+	};
+
+	const isVisible: boolean = reduce(container.settings.show_on, (isVisible: boolean, value: any, key: string) => {
 		const checker = camelCase(`check_${key}`);
 
-		if (isFunction(checker) && !isEmpty(value)) {
-			return checker(isVisible, container.settings.show_on, container.meta);;
+		if (checkers[checker]) {
+			if (!value || (isArray(value) && isEmpty(value))) {
+				return isVisible;
+			}
+
+			isVisible = checkers[checker](isVisible, container.settings.show_on, container.meta);;
 		}
 
 		return isVisible;
