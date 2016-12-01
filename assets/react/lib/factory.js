@@ -3,6 +3,8 @@
 import React from 'react';
 import BrokenContainer from 'containers/components/broken-container';
 import PostMetaContainer from 'containers/components/post-meta-container';
+import CommentMetaContainer from 'containers/components/comment-meta-container';
+import * as ContainerConst from 'containers/constants';
 
 /**
  * A dictionary of the supported containers.
@@ -10,7 +12,8 @@ import PostMetaContainer from 'containers/components/post-meta-container';
  * @type {Object}
  */
 const containers: Object = {
-	'Post_Meta': PostMetaContainer,
+	[ContainerConst.TYPE_POST_META]: PostMetaContainer,
+	[ContainerConst.TYPE_COMMENT_META]: CommentMetaContainer,
 };
 
 /**
