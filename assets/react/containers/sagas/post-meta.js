@@ -2,15 +2,14 @@
 
 import type { ReduxAction } from 'defs';
 
-import { reduce, isEmpty, isArray, camelCase } from 'lodash';
 import { takeEvery } from 'redux-saga';
 import { take, call, put, fork, select } from 'redux-saga/effects';
+import { reduce, isEmpty, isArray, camelCase } from 'lodash';
 
 import { createSelectboxChannel, createCheckableChannel } from 'lib/events';
 import { TYPE_NOW_PAGE } from 'lib/constants';
 
 import { getContainerById } from 'containers/selectors';
-import { canProcessAction } from 'containers/helpers';
 import { setMeta, setUI } from 'containers/actions';
 import { TYPE_POST_META } from 'containers/constants';
 import { SETUP_CONTAINER, SET_META } from 'containers/actions';
@@ -114,73 +113,6 @@ export function* workerSyncTerms(containerId: string): any {
 			}
 		}));
 	}
-}
-
-/**
- * Setup the initial state of the container.
- *
- * @param  {Object} action
- * @return {void}
- */
-export function* workerSetupContainer(action: ReduxAction): any {
-	const { containerId }: { containerId: string } = action.payload;
-
-	// Don't do anything if the type isn't correct.
-	if (!(yield call(canProcessAction, containerId, TYPE_POST_META))) {
-		return;
-	}
-
-	yield fork(workerSyncPageTemplate, containerId);
-	yield fork(workerSyncParentId, containerId);
-	yield fork(workerSyncPostFormat, containerId);
-	yield fork(workerSyncTerms, containerId);
-
-}
-
-/**
- * Keep in sync the `is_visible` property.
- *
- * @param  {Object} action
- * @return {void}
- */
-export function* workerCheckVisibility(action: ReduxAction): any {
-	const { containerId }: { containerId: string } = action.payload;
-
-	// Don't do anything if the type isn't correct.
-	if (!(yield call(canProcessAction, containerId, TYPE_POST_META))) {
-		return;
-	}
-
-	const container: Object = yield select(getContainerById, containerId);
-	const checkers: Object = {
-		checkTemplateNames,
-		checkNotInTemplateNames,
-		checkParentPageId,
-		checkLevelLimit,
-		checkPostFormats,
-		checkTaxSlug,
-	};
-
-	const isVisible: boolean = reduce(container.settings.show_on, (isVisible: boolean, value: any, key: string) => {
-		const checker = camelCase(`check_${key}`);
-
-		if (checkers[checker]) {
-			if (!value || (isArray(value) && isEmpty(value))) {
-				return isVisible;
-			}
-
-			isVisible = checkers[checker](isVisible, container.settings.show_on, container.meta);;
-		}
-
-		return isVisible;
-	}, true);
-
-	yield put(setUI({
-		containerId,
-		ui: {
-			is_visible: isVisible
-		}
-	}));
 }
 
 /**
@@ -294,11 +226,80 @@ function checkTaxSlug(isVisible: boolean, settings: Object, meta: Object): boole
 }
 
 /**
+ * Setup the initial state of the container.
+ *
+ * @param  {Object} action
+ * @return {void}
+ */
+export function* workerSetupContainer(action: ReduxAction): any {
+	const { containerId }: { containerId: string } = action.payload;
+	const container: Object = select(getContainerById, containerId);
+
+	// Don't do anything if the type isn't correct.
+	if (container.type !== TYPE_POST_META) {
+		return;
+	}
+
+	yield fork(workerSyncPageTemplate, containerId);
+	yield fork(workerSyncParentId, containerId);
+	yield fork(workerSyncPostFormat, containerId);
+	yield fork(workerSyncTerms, containerId);
+}
+
+/**
+ * Keep in sync the `is_visible` property.
+ *
+ * @param  {Object} action
+ * @return {void}
+ */
+export function* workerCheckVisibility(action: ReduxAction): any {
+	const { containerId }: { containerId: string } = action.payload;
+	const container: Object = yield select(getContainerById, containerId);
+
+	// Don't do anything if the type isn't correct.
+	if (container.type !== TYPE_POST_META) {
+		return;
+	}
+
+	const checkers: Object = {
+		checkTemplateNames,
+		checkNotInTemplateNames,
+		checkParentPageId,
+		checkLevelLimit,
+		checkPostFormats,
+		checkTaxSlug,
+	};
+
+	const isVisible: boolean = reduce(container.settings.show_on, (isVisible: boolean, value: any, key: string) => {
+		const checker = camelCase(`check_${key}`);
+
+		if (checkers[checker]) {
+			if (!value || (isArray(value) && isEmpty(value))) {
+				return isVisible;
+			}
+
+			isVisible = checkers[checker](isVisible, container.settings.show_on, container.meta);
+		}
+
+		return isVisible;
+	}, true);
+
+	yield put(setUI({
+		containerId,
+		ui: {
+			is_visible: isVisible
+		}
+	}));
+}
+
+/**
  * Start to work.
  *
  * @return {void}
  */
 export default function* foreman(): any {
-	yield takeEvery(SETUP_CONTAINER, workerSetupContainer);
-	yield takeEvery(SET_META, workerCheckVisibility);
+	yield [
+		takeEvery(SETUP_CONTAINER, workerSetupContainer),
+		takeEvery(SET_META, workerCheckVisibility),
+	];
 }

@@ -7,6 +7,10 @@
 		"<rootDir>/node_modules/enzyme/"
 	],
 	"moduleNameMapper": {
-		"^containers(.*)$": "<rootDir>/assets/react/containers$1"
+		"^lib(.*)$": "<rootDir>/assets/react/lib$1",
+		"^containers(.*)$": "<rootDir>/assets/react/containers$1",
+		"^sidebars(.*)$": "<rootDir>/assets/react/sidebars$1",
+		"^store$": "<rootDir>/assets/react/store.js",
+		"^jquery$": "jquery"
 	}
 }
