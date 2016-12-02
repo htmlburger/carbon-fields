@@ -139,6 +139,23 @@
 .max-reached > .carbon-subcontainer > .groups-wrapper > .carbon-groups-holder > .carbon-group-row > .carbon-group-actions > .carbon-btn-duplicate + .carbon-btn-remove { margin-left: 0; }
 
 
+/*  Right-to-Left  */
+
+.rtl .carbon-groups-holder .carbon-group-actions { left: 12px; right: auto; }
+.rtl .carbon-groups-holder .carbon-group-actions a { margin-left: 0; margin-right: 10px; }
+
+.rtl .carbon-groups-holder .carbon-group-actions-tabbed-horizontal,
+.rtl .carbon-groups-holder .carbon-group-actions-tabbed-vertical { left: 0; right: 0; }
+
+.rtl .carbon-drag-handle { padding-left: 90px; padding-right: 54px; }
+.rtl .carbon-drag-handle .group-number { left: auto; right: 0; border-right: 0; border-left: 1px solid $color-border; }
+
+.rtl .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav a,
+.rtl .layout-tabbed-vertical > .group-tabs-nav-holder .carbon-actions .button { margin-left: -1px; margin-right: 0; }
+
+.rtl .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav .active a { border-right-color: $color-border; border-left-color: #fff; }
+
+
 @media screen and (max-width: 782px) {
 	.group-tabs-nav-holder { display: none; }
 
@@ -176,4 +193,7 @@
 
 	.carbon-groups-holder .carbon-group-actions-tabbed-horizontal .carbon-btn-remove:hover,
 	.carbon-groups-holder .carbon-group-actions-tabbed-vertical .carbon-btn-remove:hover { color: $color-darkred-font; }
+
+	.rtl .carbon-groups-holder .carbon-group-actions-tabbed-horizontal,
+	.rtl .carbon-groups-holder .carbon-group-actions-tabbed-vertical { left: 12px; right: auto; }
 }

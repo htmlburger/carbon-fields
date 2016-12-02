@@ -18,6 +18,10 @@
 .carbon-button li:first-child a { border-radius: 3px 3px 0 0; }
 .carbon-button li:last-child a { border-radius: 0 0 3px 3px; }
 
+/*  Right-to-Left  */
+.rtl .carbon-button ul { left: auto; right: 100%; transform: translate(-10px, -50%); }
+.rtl .carbon-button ul:before { right: auto; left: 100%; border-width: 5px 0 5px 5px; }
+
 
 /* ------------------------------------------------------------ *\
 	Icon Button
