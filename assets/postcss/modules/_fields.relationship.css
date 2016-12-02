@@ -71,6 +71,12 @@
 .carbon-box .carbon-row .carbon-relationship-container .selected-items-container,
 .comment-container-holder .carbon-relationship-container .selected-items-container { top: -26px; }
 
+/*  Right-to-Left  */
+
+.rtl .carbon-relationship-container .selected-items-container { left: 0; right: auto; }
+.rtl .carbon-relationship-list li a em { margin-left: 10px; }
+.rtl .carbon-relationship-list li a em.edit-link { margin-left: 0; }
+
 @media screen and (max-width: $breakpoint-mobile-max) {
 	.carbon-relationship-container ul { font-size: 14px; }
 }
