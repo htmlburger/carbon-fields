@@ -14,10 +14,10 @@ import { SETUP_CONTAINER, SET_UI } from 'containers/actions';
  */
 export function* workerSetupContainer(action: ReduxAction): any {
 	const defaults: Object = {
-		'has_error': false,
-		'is_dirty': false,
-		'is_visible': true,
-		'classes': [],
+		has_error: false,
+		is_dirty: false,
+		is_visible: true,
+		classes: [],
 	};
 
 	let { containerId, meta, ui } = action.payload;

@@ -16,7 +16,6 @@ module.exports = {
 			'./assets/react/containers/reducer.js',
 			'./assets/react/containers/actions.js',
 			'./assets/react/containers/selectors.js',
-			'./assets/react/containers/helpers.js',
 			'./assets/react/containers/constants.js',
 
 			'./assets/react/containers/sagas/base.js',
@@ -84,7 +83,7 @@ module.exports = {
 	},
 
 	// Faster sourcemaps without column mappings.
-	devtool: 'eval',
+	// devtool: 'eval',
 
 	// Setup the plugins.
 	plugins: [

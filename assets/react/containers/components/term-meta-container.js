@@ -10,11 +10,7 @@ import withInitialSideEffects from 'containers/hocs/withInitialSideEffects';
  */
 const withProps = defaultProps({
 	meta: {
-		page_template: 'default',
-		level: 1,
-		parent_id: null,
-		post_format: null,
-		terms: []
+		level: 1
 	},
 	ui: {},
 });

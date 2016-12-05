@@ -1844,7 +1844,7 @@
 /* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("'use strict';\n\nvar _lodash = __webpack_require__(301);\n\nvar _lodash2 = _interopRequireDefault(_lodash);\n\nvar _react = __webpack_require__(302);\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _reactDom = __webpack_require__(303);\n\nvar _reactDom2 = _interopRequireDefault(_reactDom);\n\nvar _reactRedux = __webpack_require__(304);\n\nvar _store = __webpack_require__(305);\n\nvar _store2 = _interopRequireDefault(_store);\n\nvar _factory = __webpack_require__(307);\n\nvar _selectors = __webpack_require__(308);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * Put Lodash in noConflict mode to avoid conflicts with Underscore lib\n * loaded by WordPress.\n */\n_lodash2.default.noConflict();\n\n/**\n * Every Carbon container will be treated as separate React application because\n * we don't want to modify the core behaviour/markup of the WordPress's admin area.\n * Although the store will be shared between the applications.\n *\n * Abracadabra! Poof! Containers everywhere ...\n */\n\n\n_lodash2.default.forEach((0, _selectors.getContainers)(_store2.default.getState()), function (_ref) {\n  var id = _ref.id,\n      type = _ref.type;\n\n  _reactDom2.default.render(_react2.default.createElement(\n    _reactRedux.Provider,\n    { store: _store2.default },\n    (0, _factory.makeContainer)(type, { id: id })\n  ), document.querySelector('.container-' + id));\n});\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/bootstrap.js\n// module id = 300\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/bootstrap.js?");
+	eval("'use strict';\n\nvar _lodash = __webpack_require__(301);\n\nvar _lodash2 = _interopRequireDefault(_lodash);\n\nvar _react = __webpack_require__(302);\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _reactDom = __webpack_require__(303);\n\nvar _reactDom2 = _interopRequireDefault(_reactDom);\n\nvar _reactRedux = __webpack_require__(304);\n\nvar _store = __webpack_require__(305);\n\nvar _store2 = _interopRequireDefault(_store);\n\nvar _factory = __webpack_require__(320);\n\nvar _selectors = __webpack_require__(317);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * Put Lodash in noConflict mode to avoid conflicts with Underscore lib\n * loaded by WordPress.\n */\n_lodash2.default.noConflict();\n\n/**\n * Every Carbon container will be treated as separate React application because\n * we don't want to modify the core behaviour/markup of the WordPress's admin area.\n * Although the store will be shared between the applications.\n *\n * Abracadabra! Poof! Containers everywhere ...\n */\n\n\n_lodash2.default.forEach((0, _selectors.getContainers)(_store2.default.getState()), function (_ref) {\n  var id = _ref.id,\n      type = _ref.type;\n\n  _reactDom2.default.render(_react2.default.createElement(\n    _reactRedux.Provider,\n    { store: _store2.default },\n    (0, _factory.makeContainer)(type, { id: id })\n  ), document.querySelector('.container-' + id));\n});\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/bootstrap.js\n// module id = 300\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/bootstrap.js?");
 
 /***/ },
 /* 301 */
@@ -1874,25 +1874,97 @@
 /* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("module.exports = (__webpack_require__(306))(79);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/store.js from dll-reference carbon.app\n// module id = 305\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/store.js_from_dll-reference_carbon.app?");
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _redux = __webpack_require__(306);\n\nvar _reduxSaga = __webpack_require__(307);\n\nvar _reduxSaga2 = _interopRequireDefault(_reduxSaga);\n\nvar _normalize = __webpack_require__(308);\n\nvar _reducer = __webpack_require__(310);\n\nvar _reducer2 = _interopRequireDefault(_reducer);\n\nvar _reducer3 = __webpack_require__(311);\n\nvar _reducer4 = _interopRequireDefault(_reducer3);\n\nvar _base = __webpack_require__(312);\n\nvar _base2 = _interopRequireDefault(_base);\n\nvar _postMeta = __webpack_require__(313);\n\nvar _postMeta2 = _interopRequireDefault(_postMeta);\n\nvar _termMeta = __webpack_require__(314);\n\nvar _termMeta2 = _interopRequireDefault(_termMeta);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar preloadedState = (0, _normalize.normalizePreloadedState)(window.carbon_json);\nvar saga = (0, _reduxSaga2.default)();\nvar reducer = (0, _redux.combineReducers)({ containers: _reducer2.default, sidebars: _reducer4.default });\nvar store = (0, _redux.createStore)(reducer, preloadedState, (0, _redux.applyMiddleware)(saga));\n\nsaga.run(_base2.default);\nsaga.run(_postMeta2.default);\nsaga.run(_termMeta2.default);\n\nexports.default = store;\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/store.js\n// module id = 305\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/store.js?");
 
 /***/ },
 /* 306 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	eval("(function() { module.exports = this[\"carbon.app\"]; }());\n\n//////////////////\n// WEBPACK FOOTER\n// external \"carbon.app\"\n// module id = 306\n// module chunks = 0\n//# sourceURL=webpack:///external_%22carbon.app%22?");
+	eval("module.exports = (__webpack_require__(295))(145);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/redux/lib/index.js from dll-reference carbon.vendor\n// module id = 306\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/redux/lib/index.js_from_dll-reference_carbon.vendor?");
 
 /***/ },
 /* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("module.exports = (__webpack_require__(306))(75);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/lib/factory.js from dll-reference carbon.app\n// module id = 307\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/lib/factory.js_from_dll-reference_carbon.app?");
+	eval("module.exports = (__webpack_require__(295))(367);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/redux-saga/lib/index.js from dll-reference carbon.vendor\n// module id = 307\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/redux-saga/lib/index.js_from_dll-reference_carbon.vendor?");
 
 /***/ },
 /* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("module.exports = (__webpack_require__(306))(11);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/containers/selectors.js from dll-reference carbon.app\n// module id = 308\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/containers/selectors.js_from_dll-reference_carbon.app?");
+	eval("module.exports = (__webpack_require__(309))(2);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/lib/normalize.js from dll-reference carbon.app\n// module id = 308\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/lib/normalize.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 309 */
+/***/ function(module, exports) {
+
+	eval("(function() { module.exports = this[\"carbon.app\"]; }());\n\n//////////////////\n// WEBPACK FOOTER\n// external \"carbon.app\"\n// module id = 309\n// module chunks = 0\n//# sourceURL=webpack:///external_%22carbon.app%22?");
+
+/***/ },
+/* 310 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(309))(78);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/containers/reducer.js from dll-reference carbon.app\n// module id = 310\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/containers/reducer.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(309))(75);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/sidebars/reducer.js from dll-reference carbon.app\n// module id = 311\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/sidebars/reducer.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 312 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(309))(81);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/containers/sagas/base.js from dll-reference carbon.app\n// module id = 312\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/containers/sagas/base.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(309))(5);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/containers/sagas/post-meta.js from dll-reference carbon.app\n// module id = 313\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/containers/sagas/post-meta.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 314 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\nexports.workerSyncLevel = workerSyncLevel;\nexports.workerSetupContainer = workerSetupContainer;\nexports.workerCheckVisibility = workerCheckVisibility;\nexports.default = foreman;\n\nvar _reduxSaga = __webpack_require__(307);\n\nvar _effects = __webpack_require__(315);\n\nvar _events = __webpack_require__(316);\n\nvar _selectors = __webpack_require__(317);\n\nvar _actions = __webpack_require__(318);\n\nvar _constants = __webpack_require__(319);\n\nvar _marked = [workerSyncLevel, workerSetupContainer, workerCheckVisibility, foreman].map(regeneratorRuntime.mark);\n\n/**\n * Keep in sync the `level` property.\n *\n * @param  {String} containerId\n * @return {void}\n */\nfunction workerSyncLevel(containerId) {\n\tvar channel, _ref, option, level, matches;\n\n\treturn regeneratorRuntime.wrap(function workerSyncLevel$(_context) {\n\t\twhile (1) {\n\t\t\tswitch (_context.prev = _context.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\t_context.next = 2;\n\t\t\t\t\treturn (0, _effects.call)(_events.createSelectboxChannel, 'select#parent');\n\n\t\t\t\tcase 2:\n\t\t\t\t\tchannel = _context.sent;\n\n\t\t\t\tcase 3:\n\t\t\t\t\tif (false) {\n\t\t\t\t\t\t_context.next = 14;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\t_context.next = 6;\n\t\t\t\t\treturn (0, _effects.take)(channel);\n\n\t\t\t\tcase 6:\n\t\t\t\t\t_ref = _context.sent;\n\t\t\t\t\toption = _ref.option;\n\t\t\t\t\tlevel = 1;\n\n\n\t\t\t\t\tif (option.className) {\n\t\t\t\t\t\tmatches = option.className.match(/^level-(\\d+)/);\n\n\n\t\t\t\t\t\tif (matches) {\n\t\t\t\t\t\t\tlevel = parseInt(matches[1], 10) + 2;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\n\t\t\t\t\t_context.next = 12;\n\t\t\t\t\treturn (0, _effects.put)((0, _actions.setMeta)({\n\t\t\t\t\t\tcontainerId: containerId,\n\t\t\t\t\t\tmeta: {\n\t\t\t\t\t\t\tlevel: level\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\tcase 12:\n\t\t\t\t\t_context.next = 3;\n\t\t\t\t\tbreak;\n\n\t\t\t\tcase 14:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[0], this);\n}\n\n/**\n * Setup the initial state of the container.\n *\n * @param  {Object} action\n * @return {void}\n */\nfunction workerSetupContainer(action) {\n\tvar containerId;\n\treturn regeneratorRuntime.wrap(function workerSetupContainer$(_context2) {\n\t\twhile (1) {\n\t\t\tswitch (_context2.prev = _context2.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\tcontainerId = action.payload.containerId;\n\n\t\t\t\t\t// Don't do anything if the type isn't correct.\n\n\t\t\t\t\t_context2.next = 3;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_TERM_META);\n\n\t\t\t\tcase 3:\n\t\t\t\t\tif (_context2.sent) {\n\t\t\t\t\t\t_context2.next = 5;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\treturn _context2.abrupt('return');\n\n\t\t\t\tcase 5:\n\t\t\t\t\t_context2.next = 7;\n\t\t\t\t\treturn (0, _effects.fork)(workerSyncLevel, containerId);\n\n\t\t\t\tcase 7:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context2.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[1], this);\n}\n\n/**\n * Keep in sync the `is_visible` property.\n *\n * @param  {Object} action\n * @return {void}\n */\nfunction workerCheckVisibility(action) {\n\tvar containerId, container, isVisible;\n\treturn regeneratorRuntime.wrap(function workerCheckVisibility$(_context3) {\n\t\twhile (1) {\n\t\t\tswitch (_context3.prev = _context3.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\tcontainerId = action.payload.containerId;\n\n\t\t\t\t\t// Don't do anything if the type isn't correct.\n\n\t\t\t\t\t_context3.next = 3;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_TERM_META);\n\n\t\t\t\tcase 3:\n\t\t\t\t\tif (_context3.sent) {\n\t\t\t\t\t\t_context3.next = 5;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\treturn _context3.abrupt('return');\n\n\t\t\t\tcase 5:\n\t\t\t\t\t_context3.next = 7;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.getContainerById, containerId);\n\n\t\t\t\tcase 7:\n\t\t\t\t\tcontainer = _context3.sent;\n\t\t\t\t\tisVisible = true;\n\n\n\t\t\t\t\tif (container.settings.show_on_level && container.meta.level != container.settings.show_on_level) {\n\t\t\t\t\t\tisVisible = false;\n\t\t\t\t\t}\n\n\t\t\t\t\t_context3.next = 12;\n\t\t\t\t\treturn (0, _effects.put)((0, _actions.setUI)({\n\t\t\t\t\t\tcontainerId: containerId,\n\t\t\t\t\t\tui: {\n\t\t\t\t\t\t\tis_visible: isVisible\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\tcase 12:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context3.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[2], this);\n}\n\n/**\n * Start to work.\n *\n * @return {void}\n */\nfunction foreman() {\n\treturn regeneratorRuntime.wrap(function foreman$(_context4) {\n\t\twhile (1) {\n\t\t\tswitch (_context4.prev = _context4.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\t_context4.next = 2;\n\t\t\t\t\treturn [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer), (0, _reduxSaga.takeEvery)(_actions.SET_META, workerCheckVisibility)];\n\n\t\t\t\tcase 2:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context4.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[3], this);\n}\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/sagas/term-meta.js\n// module id = 314\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/sagas/term-meta.js?");
+
+/***/ },
+/* 315 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(309))(7);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/redux-saga/effects.js from dll-reference carbon.app\n// module id = 315\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/redux-saga/effects.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 316 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(309))(9);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/lib/events.js from dll-reference carbon.app\n// module id = 316\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/lib/events.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 317 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(309))(11);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/containers/selectors.js from dll-reference carbon.app\n// module id = 317\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/containers/selectors.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 318 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(309))(13);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/containers/actions.js from dll-reference carbon.app\n// module id = 318\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/containers/actions.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 319 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(309))(15);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/containers/constants.js from dll-reference carbon.app\n// module id = 319\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/containers/constants.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 320 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(309))(76);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/lib/factory.js from dll-reference carbon.app\n// module id = 320\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/lib/factory.js_from_dll-reference_carbon.app?");
 
 /***/ }
 /******/ ]);

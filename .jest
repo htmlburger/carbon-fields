@@ -13,5 +13,9 @@
 
 	"modulePaths": [
 		"<rootDir>/assets/react"
-	]
+	],
+
+	"moduleNameMapper": {
+		"^tests/helpers$": "<rootDir>/assets/tests/helpers.js"
+	}
 }
