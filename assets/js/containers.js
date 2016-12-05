@@ -926,6 +926,7 @@ window.carbon = window.carbon || {};
 				visible = false;
 			}
 
+
 			this.model.set('visible', visible);
 		},
 

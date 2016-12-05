@@ -2835,6 +2835,10 @@ this["carbon.app"] =
 
 	var _termMetaContainer2 = _interopRequireDefault(_termMetaContainer);
 
+	var _userMetaContainer = __webpack_require__(80);
+
+	var _userMetaContainer2 = _interopRequireDefault(_userMetaContainer);
+
 	var _constants = __webpack_require__(69);
 
 	var ContainerConst = _interopRequireWildcard(_constants);
@@ -2850,7 +2854,7 @@ this["carbon.app"] =
 	 *
 	 * @type {Object}
 	 */
-	var containers = (_containers = {}, _defineProperty(_containers, ContainerConst.TYPE_POST_META, _postMetaContainer2.default), _defineProperty(_containers, ContainerConst.TYPE_COMMENT_META, _commentMetaContainer2.default), _defineProperty(_containers, ContainerConst.TYPE_TERM_META, _termMetaContainer2.default), _containers);
+	var containers = (_containers = {}, _defineProperty(_containers, ContainerConst.TYPE_POST_META, _postMetaContainer2.default), _defineProperty(_containers, ContainerConst.TYPE_COMMENT_META, _commentMetaContainer2.default), _defineProperty(_containers, ContainerConst.TYPE_TERM_META, _termMetaContainer2.default), _defineProperty(_containers, ContainerConst.TYPE_USER_META, _userMetaContainer2.default), _containers);
 
 	/**
 	 * Determine which container should be rendered for the specified type.
@@ -2917,6 +2921,7 @@ this["carbon.app"] =
 	var TYPE_POST_META = exports.TYPE_POST_META = 'Post_Meta';
 	var TYPE_COMMENT_META = exports.TYPE_COMMENT_META = 'Comment_Meta';
 	var TYPE_TERM_META = exports.TYPE_TERM_META = 'Term_Meta';
+	var TYPE_USER_META = exports.TYPE_USER_META = 'User_Meta';
 
 /***/ },
 /* 70 */
@@ -3807,6 +3812,44 @@ this["carbon.app"] =
 			}
 		}, _marked[6], this);
 	}
+
+/***/ },
+/* 80 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _recompose = __webpack_require__(10);
+
+	var _container = __webpack_require__(62);
+
+	var _container2 = _interopRequireDefault(_container);
+
+	var _withConnectToStore = __webpack_require__(5);
+
+	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
+
+	var _withInitialSideEffects = __webpack_require__(9);
+
+	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Add the fields that are specific for this container.
+	 */
+	var withProps = (0, _recompose.defaultProps)({
+		meta: {
+			role: null
+		},
+		ui: {}
+	});
+
+	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
 
 /***/ }
 /******/ ]);
