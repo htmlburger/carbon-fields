@@ -7,6 +7,7 @@
 
 .carbon-field label { padding: 0 0 8px; font-weight: 600; }
 .carbon-field input[type="text"],
+.carbon-field input[type="number"],
 .carbon-field textarea { display: block; padding: 4px 5px 3px; width: 100%; resize: vertical; }
 .carbon-field select { width: 100%; }
 
@@ -36,6 +37,12 @@
 
 .carbon-field .carbon-description:after { content: ''; display: block; clear: both; width: 100%; }
 
+/*  Right-to-Left  */
+
+.rtl .carbon-field-group { display: flex; align-items: stretch; }
+.rtl .carbon-field-group .carbon-field-group-input { flex: 1 1 auto; width: auto; order: 2; }
+.rtl .carbon-field-group .carbon-field-group-button { flex: 0 0 auto; width: auto; order: 1; }
+
 
 @media screen and (max-width: $breakpoint-mobile-max) {
 	.carbon-field .icon-button { min-width: 40px; height: 40px; }
@@ -44,6 +51,7 @@
 	.carbon-field .icon-button:before { font-size: 32px; line-height: 40px; }
 
 	.carbon-field input[type="text"],
+	.carbon-field input[type="number"],
 	.carbon-field textarea,
 	.carbon-field select { padding: 7px 10px; font-size: 16px; line-height: 1.5; }
 

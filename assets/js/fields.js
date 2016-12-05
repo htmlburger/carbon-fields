@@ -1308,8 +1308,8 @@ window.carbon = window.carbon || {};
 		events: {
 			'click .carbon-relationship-left .carbon-relationship-list a': 'addItem',
 			'click .carbon-relationship-right .carbon-relationship-list a': 'removeItem',
-			'keypress .carbon-relationship-left .search-field': 'searchFieldKeyPress',
-			'keyup .carbon-relationship-left .search-field': 'searchFilter',
+			'keypress .carbon-relationship-search': 'searchFieldKeyPress',
+			'keyup .carbon-relationship-search': 'searchFilter',
 			'click a .edit-link' : 'editLink'
 		},
 
