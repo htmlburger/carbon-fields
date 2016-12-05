@@ -21,8 +21,8 @@ module.exports = {
 			'./assets/react/containers/sagas/base.js',
 			'./assets/react/containers/sagas/post-meta.js',
 
-			'./assets/react/containers/hocs/withConnectToStore.js',
-			'./assets/react/containers/hocs/withInitialSideEffects.js',
+			'./assets/react/containers/hocs/with-connect-to-store.js',
+			'./assets/react/containers/hocs/with-initial-side-effects.js',
 
 			'./assets/react/containers/components/container.js',
 			'./assets/react/containers/components/broken-container.js',

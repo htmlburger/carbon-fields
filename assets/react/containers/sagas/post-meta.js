@@ -15,7 +15,7 @@ import { SETUP_CONTAINER, SET_META } from 'containers/actions';
 /**
  * Keep in sync the `page_template` property.
  *
- * @param  {String} containerId
+ * @param  {string} containerId
  * @return {void}
  */
 export function* workerSyncPageTemplate(containerId: string): any {
@@ -36,7 +36,7 @@ export function* workerSyncPageTemplate(containerId: string): any {
 /**
  * Keep in sync the `parent_id` property.
  *
- * @param  {String} containerId
+ * @param  {string} containerId
  * @return {void}
  */
 export function* workerSyncParentId(containerId: string): any {
@@ -71,7 +71,7 @@ export function* workerSyncParentId(containerId: string): any {
 /**
  * Keep in sync the `post_format` property.
  *
- * @param  {String} containerId
+ * @param  {string} containerId
  * @return {void}
  */
 export function* workerSyncPostFormat(containerId: string): any {
@@ -92,7 +92,7 @@ export function* workerSyncPostFormat(containerId: string): any {
 /**
  * Keep in sync the `terms` property.
  *
- * @param  {String} containerId
+ * @param  {string} containerId
  * @return {void}
  */
 export function* workerSyncTerms(containerId: string): any {

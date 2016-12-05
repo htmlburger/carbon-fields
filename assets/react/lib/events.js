@@ -7,7 +7,7 @@ import { eventChannel, buffers, END } from 'redux-saga';
  * Create a Saga Channel that will listen for DOM changes on specified selectbox.
  * The buffer is used to emit the initial value of the selectbox when the channel is created.
  *
- * @param  {String} selector
+ * @param  {string} selector
  * @return {Object}
  */
 export function createSelectboxChannel(selector: string): Object {
@@ -48,7 +48,7 @@ export function createSelectboxChannel(selector: string): Object {
  * Create a Saga Channel that will listen for DOM changes on specified radios/checkboxes.
  * The buffer is used to emit the initial value of the inputs when the channel is created.
  *
- * @param  {String} selector
+ * @param  {string} selector
  * @return {Object}
  */
 export function createCheckableChannel(selector: string): Object {

@@ -144,7 +144,7 @@ this["carbon.app"] =
 	/**
 	 * Perform the initial setup of the container.
 	 *
-	 * @param  {String} containerId
+	 * @param  {string} containerId
 	 * @param  {Object} [ui]
 	 * @return {Object}
 	 */
@@ -160,7 +160,7 @@ this["carbon.app"] =
 	 * Update the object that holds additional fields for the container.
 	 *
 	 * @param  {Object} payload
-	 * @param  {String} payload.containerId
+	 * @param  {string} payload.containerId
 	 * @param  {Object} payload.meta
 	 * @return {Object}
 	 */
@@ -171,7 +171,7 @@ this["carbon.app"] =
 	 * Update the object that contains information about container's UI.
 	 *
 	 * @param  {Object} payload
-	 * @param  {String} payload.containerId
+	 * @param  {string} payload.containerId
 	 * @param  {Object} payload.ui
 	 * @return {Object}
 	 */
@@ -181,7 +181,7 @@ this["carbon.app"] =
 	/**
 	 * Initialize a visibility check for the container.
 	 *
-	 * @param  {String} containerId
+	 * @param  {string} containerId
 	 * @return {Object}
 	 */
 	var CHECK_VISIBILITY = exports.CHECK_VISIBILITY = 'containers/CHECK_VISIBILITY';
@@ -2942,7 +2942,7 @@ this["carbon.app"] =
 	 * Create a Saga Channel that will listen for DOM changes on specified selectbox.
 	 * The buffer is used to emit the initial value of the selectbox when the channel is created.
 	 *
-	 * @param  {String} selector
+	 * @param  {string} selector
 	 * @return {Object}
 	 */
 	function createSelectboxChannel(selector) {
@@ -2983,7 +2983,7 @@ this["carbon.app"] =
 	 * Create a Saga Channel that will listen for DOM changes on specified radios/checkboxes.
 	 * The buffer is used to emit the initial value of the inputs when the channel is created.
 	 *
-	 * @param  {String} selector
+	 * @param  {string} selector
 	 * @return {Object}
 	 */
 	function createCheckableChannel(selector) {
@@ -3317,7 +3317,7 @@ this["carbon.app"] =
 	/**
 	 * Keep in sync the `page_template` property.
 	 *
-	 * @param  {String} containerId
+	 * @param  {string} containerId
 	 * @return {void}
 	 */
 	function workerSyncPageTemplate(containerId) {
@@ -3368,7 +3368,7 @@ this["carbon.app"] =
 	/**
 	 * Keep in sync the `parent_id` property.
 	 *
-	 * @param  {String} containerId
+	 * @param  {string} containerId
 	 * @return {void}
 	 */
 	function workerSyncParentId(containerId) {
@@ -3438,7 +3438,7 @@ this["carbon.app"] =
 	/**
 	 * Keep in sync the `post_format` property.
 	 *
-	 * @param  {String} containerId
+	 * @param  {string} containerId
 	 * @return {void}
 	 */
 	function workerSyncPostFormat(containerId) {
@@ -3489,7 +3489,7 @@ this["carbon.app"] =
 	/**
 	 * Keep in sync the `terms` property.
 	 *
-	 * @param  {String} containerId
+	 * @param  {string} containerId
 	 * @return {void}
 	 */
 	function workerSyncTerms(containerId) {

@@ -5,7 +5,7 @@ import { createAction } from 'redux-actions';
 /**
  * Perform the initial setup of the container.
  *
- * @param  {String} containerId
+ * @param  {string} containerId
  * @param  {Object} [ui]
  * @return {Object}
  */
@@ -16,7 +16,7 @@ export const setupContainer: Function = createAction(SETUP_CONTAINER, (container
  * Update the object that holds additional fields for the container.
  *
  * @param  {Object} payload
- * @param  {String} payload.containerId
+ * @param  {string} payload.containerId
  * @param  {Object} payload.meta
  * @return {Object}
  */
@@ -27,7 +27,7 @@ export const setMeta: Function = createAction(SET_META);
  * Update the object that contains information about container's UI.
  *
  * @param  {Object} payload
- * @param  {String} payload.containerId
+ * @param  {string} payload.containerId
  * @param  {Object} payload.ui
  * @return {Object}
  */
@@ -37,7 +37,7 @@ export const setUI: Function = createAction(SET_UI);
 /**
  * Initialize a visibility check for the container.
  *
- * @param  {String} containerId
+ * @param  {string} containerId
  * @return {Object}
  */
 export const CHECK_VISIBILITY = 'containers/CHECK_VISIBILITY';

@@ -3,9 +3,9 @@
   "content": {
     "./assets/react/lib/constants.js": 1,
     "./assets/react/lib/normalize.js": 2,
-    "./assets/react/containers/hocs/withConnectToStore.js": 5,
+    "./assets/react/containers/hocs/with-connect-to-store.js": 5,
     "./assets/react/containers/actions.js": 7,
-    "./assets/react/containers/hocs/withInitialSideEffects.js": 9,
+    "./assets/react/containers/hocs/with-initial-side-effects.js": 9,
     "./node_modules/recompose/index.js": 10,
     "./node_modules/recompose/mapProps.js": 11,
     "./node_modules/recompose/createHelper.js": 12,
