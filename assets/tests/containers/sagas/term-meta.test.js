@@ -5,9 +5,15 @@ import { createSelectboxChannel } from 'lib/events';
 
 import { TYPE_TERM_META } from 'containers/constants';
 import { setMeta, setUI } from 'containers/actions';
-import { workerSyncLevel, workerCheckVisibility } from 'containers/sagas/term-meta';
+import {
+	workerSyncLevel,
+	workerCheckVisibility
+} from 'containers/sagas/term-meta';
 
-import { stubContainerVisibilityAction, stubContainerState } from "tests/helpers";
+import {
+	stubContainerVisibilityAction,
+	stubContainerState
+} from "tests/helpers";
 
 const containerId = 'TermMetaContainer';
 

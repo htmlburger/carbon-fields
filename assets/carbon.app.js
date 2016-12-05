@@ -3673,40 +3673,43 @@ this["carbon.app"] =
 	 * @return {void}
 	 */
 	function workerSetupContainer(action) {
-		var containerId, container;
+		var containerId;
 		return regeneratorRuntime.wrap(function workerSetupContainer$(_context5) {
 			while (1) {
 				switch (_context5.prev = _context5.next) {
 					case 0:
 						containerId = action.payload.containerId;
-						container = (0, _effects.select)(_selectors.getContainerById, containerId);
 
 						// Don't do anything if the type isn't correct.
 
-						if (!(container.type !== _constants2.TYPE_POST_META)) {
-							_context5.next = 4;
+						_context5.next = 3;
+						return (0, _effects.select)(_selectors.canProcessAction, containerId, _constants2.TYPE_POST_META);
+
+					case 3:
+						if (_context5.sent) {
+							_context5.next = 5;
 							break;
 						}
 
 						return _context5.abrupt('return');
 
-					case 4:
-						_context5.next = 6;
+					case 5:
+						_context5.next = 7;
 						return (0, _effects.fork)(workerSyncPageTemplate, containerId);
 
-					case 6:
-						_context5.next = 8;
+					case 7:
+						_context5.next = 9;
 						return (0, _effects.fork)(workerSyncParentId, containerId);
 
-					case 8:
-						_context5.next = 10;
+					case 9:
+						_context5.next = 11;
 						return (0, _effects.fork)(workerSyncPostFormat, containerId);
 
-					case 10:
-						_context5.next = 12;
+					case 11:
+						_context5.next = 13;
 						return (0, _effects.fork)(workerSyncTerms, containerId);
 
-					case 12:
+					case 13:
 					case 'end':
 						return _context5.stop();
 				}
@@ -3727,20 +3730,26 @@ this["carbon.app"] =
 				switch (_context6.prev = _context6.next) {
 					case 0:
 						containerId = action.payload.containerId;
+
+						// Don't do anything if the type isn't correct.
+
 						_context6.next = 3;
-						return (0, _effects.select)(_selectors.getContainerById, containerId);
+						return (0, _effects.select)(_selectors.canProcessAction, containerId, _constants2.TYPE_POST_META);
 
 					case 3:
-						container = _context6.sent;
-
-						if (!(container.type !== _constants2.TYPE_POST_META)) {
-							_context6.next = 6;
+						if (_context6.sent) {
+							_context6.next = 5;
 							break;
 						}
 
 						return _context6.abrupt('return');
 
-					case 6:
+					case 5:
+						_context6.next = 7;
+						return (0, _effects.select)(_selectors.getContainerById, containerId);
+
+					case 7:
+						container = _context6.sent;
 						checkers = {
 							checkTemplateNames: checkTemplateNames,
 							checkNotInTemplateNames: checkNotInTemplateNames,
@@ -3762,7 +3771,7 @@ this["carbon.app"] =
 
 							return isVisible;
 						}, true);
-						_context6.next = 10;
+						_context6.next = 12;
 						return (0, _effects.put)((0, _actions.setUI)({
 							containerId: containerId,
 							ui: {
@@ -3770,7 +3779,7 @@ this["carbon.app"] =
 							}
 						}));
 
-					case 10:
+					case 12:
 					case 'end':
 						return _context6.stop();
 				}

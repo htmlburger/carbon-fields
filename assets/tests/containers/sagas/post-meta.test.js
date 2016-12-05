@@ -1,3 +1,4 @@
+import { partial } from 'lodash';
 import { put, select, call } from 'redux-saga/effects';
 
 import { createSelectboxChannel, createCheckableChannel } from 'lib/events';
@@ -13,7 +14,17 @@ import {
 	workerCheckVisibility
 } from 'containers/sagas/post-meta';
 
-describe('containers/sagas/base', () => {
+import {
+	stubContainerVisibilityAction,
+	stubContainerState
+} from "tests/helpers";
+
+const containerId = 'PostMetaContainer';
+
+describe('containers/sagas/post-meta', () => {
+	//////////////////////////////////////////
+	// Test `workerSyncPageTemplate` method //
+	//////////////////////////////////////////
 	describe('syncPageTemplate', () => {
 		it('should yield "SET_META" action', () => {
 			document.body.innerHTML = `
@@ -25,14 +36,14 @@ describe('containers/sagas/base', () => {
 				</select>
 			`;
 
-			const generator = workerSyncPageTemplate('PostMetaContainer');
+			const generator = workerSyncPageTemplate(containerId);
 
 			generator.next();
 			generator.next(createSelectboxChannel('#page_template'));
 
 			const actual = generator.next({ value: 'default' }).value;
 			const expected = put(setMeta({
-				containerId: 'PostMetaContainer',
+				containerId: containerId,
 				meta: {
 					'page_template': 'default'
 				}
@@ -42,6 +53,9 @@ describe('containers/sagas/base', () => {
 		});
 	});
 
+	//////////////////////////////////////
+	// Test `workerSyncParentId` method //
+	//////////////////////////////////////
 	describe('syncParentId', () => {
 		it('should yield "SET_META" action', () => {
 			document.body.innerHTML = `
@@ -55,14 +69,14 @@ describe('containers/sagas/base', () => {
 				</select>
 			`;
 
-			const generator = workerSyncParentId('PostMetaContainer');
+			const generator = workerSyncParentId(containerId);
 
 			generator.next();
 			generator.next(createSelectboxChannel('#parent_id'));
 
 			const actual = generator.next({ value: '5', option: document.querySelector('option[value="5"]') }).value;
 			const expected = put(setMeta({
-				containerId: 'PostMetaContainer',
+				containerId: containerId,
 				meta: {
 					'parent_id': 5,
 					'level': 2
@@ -73,6 +87,9 @@ describe('containers/sagas/base', () => {
 		});
 	});
 
+	////////////////////////////////////////
+	// Test `workerSyncPostFormat` method //
+	////////////////////////////////////////
 	describe('syncPostFormat', () => {
 		it('should yield "SET_META" action', () => {
 			document.body.innerHTML = `
@@ -96,14 +113,14 @@ describe('containers/sagas/base', () => {
 				</div>
 			`;
 
-			const generator = workerSyncPostFormat('PostMetaContainer');
+			const generator = workerSyncPostFormat(containerId);
 
 			generator.next();
 			generator.next(createSelectboxChannel('#post-formats-select'));
 
 			const actual = generator.next({ values: ['0'] }).value;
 			const expected = put(setMeta({
-				containerId: 'PostMetaContainer',
+				containerId: containerId,
 				meta: {
 					'post_format': '0',
 				}
@@ -113,6 +130,9 @@ describe('containers/sagas/base', () => {
 		});
 	});
 
+	///////////////////////////////////
+	// Test `workerSyncTerms` method //
+	///////////////////////////////////
 	describe('syncTerms', () => {
 		it('should yield "SET_META" action', () => {
 			document.body.innerHTML = `
@@ -143,7 +163,7 @@ describe('containers/sagas/base', () => {
 				</ul>
 			`;
 
-			const generator = workerSyncTerms('PostMetaContainer');
+			const generator = workerSyncTerms(containerId);
 
 			generator.next();
 			generator.next({
@@ -158,7 +178,7 @@ describe('containers/sagas/base', () => {
 
 			const actual = generator.next({ values: ['18', '12', '9'] }).value;
 			const expected = put(setMeta({
-				containerId: 'PostMetaContainer',
+				containerId: containerId,
 				meta: {
 					terms: [18, 12, 9],
 				}
@@ -172,39 +192,29 @@ describe('containers/sagas/base', () => {
 	// Test `workerCheckVisibility` method //
 	/////////////////////////////////////////
 	describe('checkVisibility', () => {
-		const containerId = 'PostMetaContainer';
 		let generator;
 
 		beforeEach(() => {
-			generator = workerCheckVisibility({ payload: { containerId }});
+			generator = workerCheckVisibility({
+				payload: { containerId }
+			});
+
 			generator.next();
+			generator.next(true); // Pass the type check.
 		});
 
 		afterEach(() => {
 			generator = null;
 		});
 
-		const setupExpectation = (isVisible) => {
-			return put(setUI({
-				containerId,
-				ui: {
-					is_visible: isVisible
-				}
-			}));
-		}
-
-		const setupActual = (state) => {
-			return {
-				type: TYPE_POST_META,
-				...state
-			};
-		}
+		const stubPostMetaVisibilityAction = partial(stubContainerVisibilityAction, containerId);
+		const stubPostMetaContainer = partial(stubContainerState, TYPE_POST_META, containerId);
 
 		it('should handle "show_on_template"', () => {
 			window.typenow = TYPE_NOW_PAGE;
 
-			const expected = setupExpectation(true);
-			const actual = generator.next(setupActual({
+			const expected = stubPostMetaVisibilityAction(true);
+			const actual = generator.next(stubPostMetaContainer({
 				settings: {
 					show_on: {
 						template_names: ['template/in-the-news.php']
@@ -222,8 +232,8 @@ describe('containers/sagas/base', () => {
 		it('should handle "hide_on_template"', () => {
 			window.typenow = TYPE_NOW_PAGE;
 
-			const expected = setupExpectation(true);
-			const actual = generator.next(setupActual({
+			const expected = stubPostMetaVisibilityAction(true);
+			const actual = generator.next(stubPostMetaContainer({
 				settings: {
 					show_on: {
 						not_in_template_names: ['template/in-the-news.php']
@@ -239,8 +249,8 @@ describe('containers/sagas/base', () => {
 		});
 
 		it('should handle "show_on_page_children"', () => {
-			const expected = setupExpectation(true);
-			const actual = generator.next(setupActual({
+			const expected = stubPostMetaVisibilityAction(true);
+			const actual = generator.next(stubPostMetaContainer({
 				settings: {
 					show_on: {
 						parent_page_id: 12
@@ -256,8 +266,8 @@ describe('containers/sagas/base', () => {
 		});
 
 		it('should handle "show_on_level"', () => {
-			const expected = setupExpectation(true);
-			const actual = generator.next(setupActual({
+			const expected = stubPostMetaVisibilityAction(true);
+			const actual = generator.next(stubPostMetaContainer({
 				settings: {
 					show_on: {
 						level_limit: 2
@@ -273,8 +283,8 @@ describe('containers/sagas/base', () => {
 		});
 
 		it('should handle "show_on_post_format"', () => {
-			const expected = setupExpectation(true);
-			const actual = generator.next(setupActual({
+			const expected = stubPostMetaVisibilityAction(true);
+			const actual = generator.next(stubPostMetaContainer({
 				settings: {
 					show_on: {
 						post_formats: ['aside', 'gallery']
@@ -290,8 +300,8 @@ describe('containers/sagas/base', () => {
 		});
 
 		it('should handle "show_on_taxonomy_term"', () => {
-			const expected = setupExpectation(true);
-			const actual = generator.next(setupActual({
+			const expected = stubPostMetaVisibilityAction(true);
+			const actual = generator.next(stubPostMetaContainer({
 				settings: {
 					show_on: {
 						tax_term_id: '13'

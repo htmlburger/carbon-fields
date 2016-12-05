@@ -7,7 +7,7 @@ import { reduce, isEmpty, isArray, camelCase } from 'lodash';
 import { createSelectboxChannel, createCheckableChannel } from 'lib/events';
 import { TYPE_NOW_PAGE } from 'lib/constants';
 
-import { getContainerById } from 'containers/selectors';
+import { getContainerById, canProcessAction } from 'containers/selectors';
 import { setMeta, setUI } from 'containers/actions';
 import { TYPE_POST_META } from 'containers/constants';
 import { SETUP_CONTAINER, SET_META } from 'containers/actions';
@@ -231,10 +231,9 @@ function checkTaxSlug(isVisible: boolean, settings: Object, meta: Object): boole
  */
 export function* workerSetupContainer(action: ReduxAction): any {
 	const { containerId }: { containerId: string } = action.payload;
-	const container: Object = select(getContainerById, containerId);
 
 	// Don't do anything if the type isn't correct.
-	if (container.type !== TYPE_POST_META) {
+	if (!(yield select(canProcessAction, containerId, TYPE_POST_META))) {
 		return;
 	}
 
@@ -252,13 +251,13 @@ export function* workerSetupContainer(action: ReduxAction): any {
  */
 export function* workerCheckVisibility(action: ReduxAction): any {
 	const { containerId }: { containerId: string } = action.payload;
-	const container: Object = yield select(getContainerById, containerId);
 
 	// Don't do anything if the type isn't correct.
-	if (container.type !== TYPE_POST_META) {
+	if (!(yield select(canProcessAction, containerId, TYPE_POST_META))) {
 		return;
 	}
 
+	const container: Object = yield select(getContainerById, containerId);
 	const checkers: Object = {
 		checkTemplateNames,
 		checkNotInTemplateNames,
