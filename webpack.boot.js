@@ -1,3 +1,6 @@
+var path = require('path');
+var webpack = require('webpack');
+
 module.exports = {
 	// These are the "entry points" to our application.
 	// This means they will be the "root" imports that are included in JS bundle.
@@ -12,7 +15,7 @@ module.exports = {
 		path: 'assets/',
 
 		// This is the JS bundle containing code from the entry points.
-		filename: 'bundle.js'
+		filename: 'carbon.bootstrap.js',
 	},
 
 	// Setup the transformation of the modules.
@@ -37,17 +40,25 @@ module.exports = {
 			'lib': 'assets/react/lib',
 			'containers': 'assets/react/containers',
 			'sidebars': 'assets/react/sidebars',
-			'store': 'assets/react/store.js',
-			'defs': 'assets/react/defs.js'
+			'store': 'assets/react/store.js'
 		}
 	},
 
-	// Some of our dependencies are already loaded by WordPress.
-	// So let's use them.
-	externals: {
-		'jquery': 'jQuery'
-	},
-
 	// Faster sourcemaps without column mappings.
-	devtool: 'cheap-module-source-map'
+	devtool: 'eval',
+
+	// Setup the plugins.
+	plugins: [
+		new webpack.DllReferencePlugin({
+			context: __dirname,
+			sourceType: 'this',
+			manifest: require('./assets/carbon.vendor.json'),
+		}),
+
+		new webpack.DllReferencePlugin({
+			context: __dirname,
+			sourceType: 'this',
+			manifest: require('./assets/carbon.app.json'),
+		})
+	],
 };

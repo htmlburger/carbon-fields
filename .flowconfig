@@ -1,9 +1,11 @@
-[libs]
-<PROJECT_ROOT>/assets/react/defs.js
+[ignore]
+<PROJECT_ROOT>/assets/tests/.*
+<PROJECT_ROOT>/assets/carbon.vendor.js
+<PROJECT_ROOT>/assets/carbon.app.js
+<PROJECT_ROOT>/assets/carbon.bootstrap.js
 
 [options]
 module.name_mapper='^lib\/\(.*\)$' -> '<PROJECT_ROOT>/assets/react/lib/\1'
 module.name_mapper='^containers\/\(.*\)$' -> '<PROJECT_ROOT>/assets/react/containers/\1'
 module.name_mapper='^sidebars\/\(.*\)$' -> '<PROJECT_ROOT>/assets/react/sidebars/\1'
 module.name_mapper='^store$' -> '<PROJECT_ROOT>/assets/react/store.js'
-module.name_mapper='^defs$' -> '<PROJECT_ROOT>/assets/react/defs.js'

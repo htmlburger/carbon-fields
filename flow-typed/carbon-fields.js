@@ -1,6 +1,6 @@
 export type ReduxAction = {
 	type: string,
-	payload?: mixed,
-	meta?: mixed,
+	payload: any,
+	meta?: any,
 	error?: boolean
 };

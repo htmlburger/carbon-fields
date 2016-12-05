@@ -1,16 +1,17 @@
 {
 	"bail": true,
 	"verbose": true,
-	"testPathDirs": ["assets/tests"],
+
+	"testPathDirs": [
+		"assets/tests"
+	],
+
 	"unmockedModulePathPatterns": [
 		"<rootDir>/node_modules/react/",
 		"<rootDir>/node_modules/enzyme/"
 	],
-	"moduleNameMapper": {
-		"^lib(.*)$": "<rootDir>/assets/react/lib$1",
-		"^containers(.*)$": "<rootDir>/assets/react/containers$1",
-		"^sidebars(.*)$": "<rootDir>/assets/react/sidebars$1",
-		"^store$": "<rootDir>/assets/react/store.js",
-		"^jquery$": "jquery"
-	}
+
+	"modulePaths": [
+		"<rootDir>/assets/react"
+	]
 }

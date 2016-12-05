@@ -1,7 +1,5 @@
 /* @flow */
 
-import type { ReduxAction } from 'defs';
-
 import { takeEvery } from 'redux-saga';
 import { take, call, put, fork, select } from 'redux-saga/effects';
 import { reduce, isEmpty, isArray, camelCase } from 'lodash';

@@ -1,7 +1,5 @@
 /* @flow */
 
-import type { ReduxAction } from 'defs';
-
 import immutable from 'object-path-immutable';
 import { SET_META, SET_UI } from 'containers/actions';
 

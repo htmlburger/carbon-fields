@@ -1,7 +1,5 @@
 /* @flow */
 
-import type { ReduxAction } from 'defs';
-
 import { takeEvery } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 import { getContainerById } from 'containers/selectors';
