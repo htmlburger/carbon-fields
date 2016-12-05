@@ -1,12 +1,19 @@
 import { put, select, call } from 'redux-saga/effects';
 import { getContainerById } from 'containers/selectors';
 import { setupContainer, setMeta, setUI } from 'containers/actions';
-import { workerSetupContainer, workerToggleMetaBoxVisibility } from 'containers/sagas/base';
+import {
+	workerSetupContainer,
+	workerToggleMetaBoxVisibility
+} from 'containers/sagas/base';
+
+const containerId = 'ContainerId';
 
 describe('containers/sagas/base', () => {
+	////////////////////////////////////////
+	// Test `workerSetupContainer` method //
+	////////////////////////////////////////
 	describe('setupContainer', () => {
 		it('should yield "SET_META" action', () => {
-			const containerId = 'ContainerId';
 			const meta = {};
 			const ui = {};
 
@@ -19,16 +26,15 @@ describe('containers/sagas/base', () => {
 		});
 
 		it('should yield "SET_UI" action with default options', () => {
-			const containerId = 'ContainerId';
 			const meta = {};
 			const ui = {};
 			const expected = put(setUI({
 				containerId,
 				ui: {
-					'has_error': false,
-					'is_dirty': false,
-					'is_visible': true,
-					'classes': [],
+					has_error: false,
+					is_dirty: false,
+					is_visible: true,
+					classes: [],
 				}
 			}));
 
@@ -42,7 +48,6 @@ describe('containers/sagas/base', () => {
 		});
 
 		it('should yield "SET_UI" action with custom options', () => {
-			const containerId = 'ContainerId';
 			const meta = {};
 			const ui = {
 				'is_visible': true
@@ -50,10 +55,10 @@ describe('containers/sagas/base', () => {
 			const expected = put(setUI({
 				containerId,
 				ui: {
-					'has_error': false,
-					'is_dirty': false,
-					'is_visible': true,
-					'classes': [],
+					has_error: false,
+					is_dirty: false,
+					is_visible: true,
+					classes: [],
 				}
 			}));
 
@@ -67,9 +72,11 @@ describe('containers/sagas/base', () => {
 		});
 	});
 
+	/////////////////////////////////////////////////
+	// Test `workerToggleMetaboxVisibility` method //
+	/////////////////////////////////////////////////
 	describe('toggleMetaboxVisibility', () => {
 		it('should get the container from the state', () => {
-			const containerId = 'ContainerId';
 			const ui = {};
 			const expected = select(getContainerById, containerId);
 
@@ -80,7 +87,6 @@ describe('containers/sagas/base', () => {
 		});
 
 		it('should find the parent in DOM', () => {
-			const containerId = 'ContainerId';
 			const ui = {};
 			const expected = call([document, document.querySelector], `#${containerId}`)
 
@@ -94,7 +100,6 @@ describe('containers/sagas/base', () => {
 		});
 
 		it('should throw an error if cannot find the parent', () => {
-			const containerId = 'ContainerId';
 			const ui = {};
 			const element = document.querySelector(`#${containerId}`);
 
@@ -113,7 +118,6 @@ describe('containers/sagas/base', () => {
 				<div id="ContainerId" style="display: none;"></div>;
 			`;
 
-			const containerId = 'ContainerId';
 			const ui = { is_visible: true };
 			const element = document.querySelector(`#${containerId}`);
 
