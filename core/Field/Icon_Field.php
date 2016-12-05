@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Yaml;
  *  - Users
  *  - Comments
  */
-class Glyph_Field extends Field {
+class Icon_Field extends Field {
 	static $options = array();
 
 	public $none_label = '';
@@ -35,9 +35,9 @@ class Glyph_Field extends Field {
 	}
 
 	/**
-	 * Generate the item options for the glyph field.
+	 * Generate the item options for the icon field.
 	 *
-	 * @return array $options The selectable options of the glyph field.
+	 * @return array $options The selectable options of the icon field.
 	 */
 	public function get_options() {
 		if ( empty( $options ) ) {
@@ -63,12 +63,12 @@ class Glyph_Field extends Field {
 		}
 
 		/**
-		 * Filter the final list of options, available to a certain glyph field.
+		 * Filter the final list of options, available to a certain icon field.
 		 *
 		 * @param array $options Unfiltered options items.
-		 * @param string $name Name of the glyph field.
+		 * @param string $name Name of the icon field.
 		 */
-		$options = apply_filters( 'carbon_glyph_options', static::$options, $this->get_name() );
+		$options = apply_filters( 'carbon_icon_options', static::$options, $this->get_name() );
 
 		return $options;
 	}
@@ -96,23 +96,23 @@ class Glyph_Field extends Field {
 	 */
 	public function template() {
 		?>
-		<div class="carbon-glyph-container">
-			<input type="hidden" name="{{{ name }}}" value="{{{ value }}}" class="carbon-glyph-value" />
-			<a href="#" class="carbon-glyph-preview">
+		<div class="carbon-icon-container">
+			<input type="hidden" name="{{{ name }}}" value="{{{ value }}}" class="carbon-icon-value" />
+			<a href="#" class="carbon-icon-preview">
 				<i class="{{{ (value && typeof options[value] !== 'undefined') ? options[value].class : 'hidden' }}}"></i>
 				<span class="button">{{{ button_label }}}</span>
 			</a>
 
-			<div class="carbon-glyph-popup hidden">
-				<div class="carbon-glyph-search dashicons-before dashicons-search">
+			<div class="carbon-icon-popup hidden">
+				<div class="carbon-icon-search dashicons-before dashicons-search">
 					<input type="text" value="" placeholder="<?php esc_attr_e( 'Search...', 'carbon-fields' ); ?>" />
 				</div>
-				<div class="carbon-glyph-scroll">
-					<ul class="carbon-glyph-list">
+				<div class="carbon-icon-scroll">
+					<ul class="carbon-icon-list">
 						<# if (options) { #>
 							<# _.each(options, function(item) { #>
-								<li class="carbon-glyph-icon-container carbon-glyph-icon-container-{{{ item.id }}}">
-									<a href="#" class="carbon-glyph-icon-trigger {{{ value == item.id ? 'active' : '' }}}" data-value="{{{ item.id }}}">
+								<li class="carbon-icon-icon-container carbon-icon-icon-container-{{{ item.id }}}">
+									<a href="#" class="carbon-icon-icon-trigger {{{ value == item.id ? 'active' : '' }}}" data-value="{{{ item.id }}}">
 										<i class="{{{ item.class }}}">{{{ item.contents }}}</i>
 										<span>{{{ item.name }}}</span>
 									</a>
