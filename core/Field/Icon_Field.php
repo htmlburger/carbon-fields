@@ -12,9 +12,7 @@ use Symfony\Component\Yaml\Yaml;
  *  - Users
  *  - Comments
  */
-class Icon_Field extends Field {
-	static $options = array();
-
+class Icon_Field extends Predefined_Options_Field {
 	public $none_label = '';
 
 	public $button_label = '';
@@ -34,25 +32,27 @@ class Icon_Field extends Field {
 		wp_enqueue_style( 'fontawesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', array(), '4.7.0' );
 	}
 
-	/**
-	 * Generate the item options for the icon field.
-	 *
-	 * @return array $options The selectable options of the icon field.
-	 */
-	public function get_options() {
+	public function get_default_options() {
+		$options = array(
+			''=>array(
+				'name' => $this->none_label,
+				'id' => '',
+				'categories' => array(),
+				'class'=>'fa',
+				'contents'=>'&nbsp;',
+			),
+		);
+		return $options;
+	}
+
+	public static function get_fontawesome_options() {
+		static $options = array();
+
 		if ( empty( $options ) ) {
 			$data = Yaml::parse( file_get_contents( \Carbon_Fields\DIR . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'fontawesome' . DIRECTORY_SEPARATOR . 'fontawesome.yml' ) );
-			static::$options = array(
-				''=>array(
-					'name' => $this->none_label,
-					'id' => '',
-					'categories' => array(),
-					'class'=>'fa',
-					'contents'=>'&nbsp;',
-				),
-			);
+			$options = array();
 			foreach ( $data['icons'] as $icon ) {
-				static::$options[ $icon['id'] ] = array(
+				$options[ $icon['id'] ] = array(
 					'name'=>$icon['name'],
 					'id'=>$icon['id'],
 					'categories'=>$icon['categories'],
@@ -61,15 +61,22 @@ class Icon_Field extends Field {
 				);
 			}
 		}
+		
+		return $options;
+	}
 
-		/**
-		 * Filter the final list of options, available to a certain icon field.
-		 *
-		 * @param array $options Unfiltered options items.
-		 * @param string $name Name of the icon field.
-		 */
-		$options = apply_filters( 'carbon_icon_options', static::$options, $this->get_name() );
-
+	public static function get_dashicons_options() {
+		$data = include( \Carbon_Fields\DIR . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'dashicons' . DIRECTORY_SEPARATOR . 'dashicons.php' );
+		$options = array();
+		foreach ( $data as $icon ) {
+			$options[ $icon ] = array(
+				'name'=>$icon,
+				'id'=>$icon,
+				'categories'=>array(),
+				'class'=>'dashicons-before ' . $icon,
+				'contents'=>'',
+			);
+		}
 		return $options;
 	}
 
@@ -83,8 +90,14 @@ class Icon_Field extends Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
+		$options = $this->options;
+		if ( empty( $options ) ) {
+			$options = $this->get_default_options() + static::get_fontawesome_options();
+		}
+		$options = apply_filters( 'carbon_icon_options', $options, $this->get_name() );
+
 		$field_data = array_merge( $field_data, array(
-			'options' => $this->get_options(),
+			'options' => $options,
 			'button_label' => $this->button_label,
 		) );
 
