@@ -13,6 +13,10 @@ use Symfony\Component\Yaml\Yaml;
  *  - Comments
  */
 class Icon_Field extends Predefined_Options_Field {
+	private static $fontawesome_options_cache = array();
+
+	private static $dashicons_options_cache = array();
+
 	public $none_label = '';
 
 	public $button_label = '';
@@ -46,13 +50,10 @@ class Icon_Field extends Predefined_Options_Field {
 	}
 
 	public static function get_fontawesome_options() {
-		static $options = array();
-
-		if ( empty( $options ) ) {
+		if ( empty( static::$fontawesome_options_cache ) ) {
 			$data = Yaml::parse( file_get_contents( \Carbon_Fields\DIR . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'fontawesome' . DIRECTORY_SEPARATOR . 'fontawesome.yml' ) );
-			$options = array();
 			foreach ( $data['icons'] as $icon ) {
-				$options[ $icon['id'] ] = array(
+				static::$fontawesome_options_cache[ $icon['id'] ] = array(
 					'name'=>$icon['name'],
 					'id'=>$icon['id'],
 					'categories'=>$icon['categories'],
@@ -61,23 +62,51 @@ class Icon_Field extends Predefined_Options_Field {
 				);
 			}
 		}
-		
-		return $options;
+		return static::$fontawesome_options_cache;
+	}
+
+	public function add_fontawesome_options() {
+		return $this->add_options( static::get_fontawesome_options() );
 	}
 
 	public static function get_dashicons_options() {
-		$data = include( \Carbon_Fields\DIR . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'dashicons' . DIRECTORY_SEPARATOR . 'dashicons.php' );
-		$options = array();
-		foreach ( $data as $icon ) {
-			$options[ $icon ] = array(
-				'name'=>$icon,
-				'id'=>$icon,
-				'categories'=>array(),
-				'class'=>'dashicons-before ' . $icon,
-				'contents'=>'',
-			);
+		if ( empty( static::$dashicons_options_cache ) ) {
+			$data = include( \Carbon_Fields\DIR . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'dashicons' . DIRECTORY_SEPARATOR . 'dashicons.php' );
+			foreach ( $data as $icon ) {
+				static::$dashicons_options_cache[ $icon ] = array(
+					'name'=>$icon,
+					'id'=>$icon,
+					'categories'=>array(),
+					'class'=>'dashicons-before ' . $icon,
+					'contents'=>'',
+				);
+			}
 		}
-		return $options;
+		return static::$dashicons_options_cache;
+	}
+
+	public function add_dashicons_options() {
+		return $this->add_options( static::get_dashicons_options() );
+	}
+
+	/**
+	 * Check if there are callbacks and populate the options
+	 */
+	protected function load_options() {
+		if ( empty( $this->options ) ) {
+			return false;
+		}
+
+		if ( is_callable( $this->options ) ) {
+			$options = call_user_func( $this->options );
+			if ( ! is_array( $options ) ) {
+				$options = array();
+			}
+		} else {
+			$options = $this->options;
+		}
+
+		$this->options = $options;
 	}
 
 	/**
@@ -89,11 +118,13 @@ class Icon_Field extends Predefined_Options_Field {
 	 */
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
+		$this->load_options();
 
 		$options = $this->options;
 		if ( empty( $options ) ) {
-			$options = $this->get_default_options() + static::get_fontawesome_options();
+			$options = static::get_fontawesome_options();
 		}
+		$options = $this->get_default_options() + $options;
 		$options = apply_filters( 'carbon_icon_options', $options, $this->get_name() );
 
 		$field_data = array_merge( $field_data, array(
