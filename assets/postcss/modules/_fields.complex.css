@@ -52,7 +52,7 @@
 /*  Tabs  */
 
 .group-tabs-nav-holder { display: inline-block; vertical-align: top; position: relative; padding-right: 36px; }
-.group-tabs-nav-holder > .carbon-actions { position: absolute; right: 0; top: 0; }
+.group-tabs-nav-holder > .carbon-actions { position: absolute; right: 0; bottom: -1px; }
 .group-tabs-nav-holder > .carbon-actions .carbon-button { margin-top: 0; }
 .group-tabs-nav-holder > .carbon-actions .button { width: 36px; height: 36px; padding: 0; line-height: 28px; background: $color-grey-bg; border: 1px solid $color-border; border-radius: 0; box-shadow: none; text-align: center; font-size: 24px; font-weight: 600; color: $color-label; }
 .group-tabs-nav-holder > .carbon-actions .button:active { transform: none; }
@@ -68,8 +68,8 @@
 
 /*  Tabs Nav  */
 
-.group-tabs-nav-holder .group-tabs-nav { margin-bottom: -1px; list-style: none outside none; white-space: nowrap; }
-.group-tabs-nav-holder .group-tabs-nav li { display: inline-block; vertical-align: top; margin-right: 6px; }
+.group-tabs-nav-holder .group-tabs-nav { margin-bottom: -3px; list-style: none outside none; }
+.group-tabs-nav-holder .group-tabs-nav li { display: inline-block; vertical-align: top; margin-right: 6px; margin-bottom: 2px; }
 .group-tabs-nav-holder .group-tabs-nav li a { position: relative; display: block; max-width: 140px; padding: 8px 12px; background: $color-grey-bg; border: 1px solid $color-border; color: $color-label; font-size: 12px; font-weight: 600; line-height: 1.5; text-decoration: none; overflow: hidden; text-overflow: ellipsis; }
 .group-tabs-nav-holder .group-tabs-nav li a:hover { background: #fff; }
 .group-tabs-nav-holder .group-tabs-nav li a:focus { box-shadow: none; outline: none; }
@@ -117,7 +117,7 @@
 
 .layout-tabbed-vertical > .group-tabs-nav-holder { flex: 0 0 20%; padding: 0; margin: 0; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav { border-bottom: 1px solid $color-border; }
-.layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav li { display: block; width: auto; margin-right: 0; }
+.layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav li { display: block; width: auto; margin-right: 0; margin-bottom: 0; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav a { padding-left: 20px; margin-right: -1px; max-width: none; border-bottom: 0; white-space: normal; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav .active a { position: relative; z-index: 5; border-right-color: #fff; }
 
@@ -131,7 +131,7 @@
 
 .layout-tabbed-vertical > .carbon-groups-holder { flex: 0 0 80%; }
 
-.layout-tabbed-vertical .group-tabs-nav .ui-placeholder-highlight { height: 33px; border-right: 0; }
+.layout-tabbed-vertical .group-tabs-nav .ui-placeholder-highlight { height: 33px; }
 
 /*  Max Reached  */
 

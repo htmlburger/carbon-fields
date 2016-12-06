@@ -1975,7 +1975,7 @@ window.carbon = window.carbon || {};
 			var isVertical = layout === 'tabbed-vertical';
 
 			$tabsNav.sortable({
-				axis: isVertical ? 'y' : 'x',
+				axis: isVertical ? 'y' : 'xy',
 				items: '.group-tab-item',
 				placeholder: 'group-tab-item ui-placeholder-highlight',
 				handle: isVertical ? '.group-handle': false,
