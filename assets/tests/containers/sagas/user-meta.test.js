@@ -3,7 +3,7 @@ import { put } from 'redux-saga/effects';
 
 import { createSelectboxChannel } from 'lib/events';
 
-import { TYPE_TERM_META } from 'containers/constants';
+import { TYPE_USER_META } from 'containers/constants';
 import { setMeta, setUI } from 'containers/actions';
 import {
 	workerSyncRole,
@@ -38,16 +38,16 @@ describe('containers/sagas/user-meta', () => {
 			generator.next();
 			generator.next(createSelectboxChannel('#role'));
 
-			const actual = generator.next({
-				value: 'contributor'
-			}).value;
-
 			const expected = put(setMeta({
 				containerId: containerId,
 				meta: {
 					role: 'contributor'
 				}
 			}));
+
+			const actual = generator.next({
+				value: 'contributor'
+			}).value;
 
 			expect(actual).toEqual(expected);
 		});
@@ -78,6 +78,80 @@ describe('containers/sagas/user-meta', () => {
 			}));
 
 			const actual = generator.next(element).value;
+
+			expect(actual).toEqual(expected);
+		});
+	});
+
+	/////////////////////////////////////////
+	// Test `workerCheckVisibility` method //
+	/////////////////////////////////////////
+	describe('checkVisibility', () => {
+		let generator;
+
+		beforeEach(() => {
+			generator = workerCheckVisibility({
+				payload: { containerId }
+			});
+
+			generator.next();
+			generator.next(true); // Pass the type check.
+		});
+
+		afterEach(() => {
+			generator = null;
+		});
+
+		const stubVisibilityAction = partial(stubContainerVisibilityAction, containerId);
+		const stubContainer = partial(stubContainerState, TYPE_USER_META, containerId);
+
+		it('should be visible when the role is empty', () => {
+			const expected = stubVisibilityAction(true);
+			const actual = generator.next(stubContainer({
+				settings: {
+					show_on: {
+						role: []
+					}
+				},
+
+				meta: {
+					role: 'subscriber'
+				}
+			})).value;
+
+			expect(actual).toEqual(expected);
+		});
+
+		it('should be hidden when the role doesn\'t match', () => {
+			const expected = stubVisibilityAction(false);
+			const actual = generator.next(stubContainer({
+				settings: {
+					show_on: {
+						role: ['author']
+					}
+				},
+
+				meta: {
+					role: 'subscriber'
+				}
+			})).value;
+
+			expect(actual).toEqual(expected);
+		});
+
+		it('should be hidden when the role does match', () => {
+			const expected = stubVisibilityAction(true);
+			const actual = generator.next(stubContainer({
+				settings: {
+					show_on: {
+						role: ['author']
+					}
+				},
+
+				meta: {
+					role: 'author'
+				}
+			})).value;
 
 			expect(actual).toEqual(expected);
 		});
