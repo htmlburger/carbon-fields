@@ -12,7 +12,7 @@ import { SETUP_CONTAINER, SET_META } from 'containers/actions';
 /**
  * Keep in sync the `level` property.
  *
- * @param  {string} containerId
+ * @param  {String} containerId
  * @return {void}
  */
 export function* workerSyncLevel(containerId: string): any {

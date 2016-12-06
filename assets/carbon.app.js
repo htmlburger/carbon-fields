@@ -144,7 +144,7 @@ this["carbon.app"] =
 	/**
 	 * Perform the initial setup of the container.
 	 *
-	 * @param  {string} containerId
+	 * @param  {String} containerId
 	 * @param  {Object} [ui]
 	 * @return {Object}
 	 */
@@ -160,7 +160,7 @@ this["carbon.app"] =
 	 * Update the object that holds additional fields for the container.
 	 *
 	 * @param  {Object} payload
-	 * @param  {string} payload.containerId
+	 * @param  {String} payload.containerId
 	 * @param  {Object} payload.meta
 	 * @return {Object}
 	 */
@@ -171,7 +171,7 @@ this["carbon.app"] =
 	 * Update the object that contains information about container's UI.
 	 *
 	 * @param  {Object} payload
-	 * @param  {string} payload.containerId
+	 * @param  {String} payload.containerId
 	 * @param  {Object} payload.ui
 	 * @return {Object}
 	 */
@@ -181,7 +181,7 @@ this["carbon.app"] =
 	/**
 	 * Initialize a visibility check for the container.
 	 *
-	 * @param  {string} containerId
+	 * @param  {String} containerId
 	 * @return {Object}
 	 */
 	var CHECK_VISIBILITY = exports.CHECK_VISIBILITY = 'containers/CHECK_VISIBILITY';
@@ -2663,7 +2663,7 @@ this["carbon.app"] =
 	var Container = function Container(props) {
 	  return _react2.default.createElement(
 	    'div',
-	    { style: { height: 1300 } },
+	    null,
 	    'container here'
 	  );
 	};
@@ -3332,7 +3332,7 @@ this["carbon.app"] =
 	/**
 	 * Keep in sync the `page_template` property.
 	 *
-	 * @param  {string} containerId
+	 * @param  {String} containerId
 	 * @return {void}
 	 */
 	function workerSyncPageTemplate(containerId) {
@@ -3383,7 +3383,7 @@ this["carbon.app"] =
 	/**
 	 * Keep in sync the `parent_id` property.
 	 *
-	 * @param  {string} containerId
+	 * @param  {String} containerId
 	 * @return {void}
 	 */
 	function workerSyncParentId(containerId) {
@@ -3453,7 +3453,7 @@ this["carbon.app"] =
 	/**
 	 * Keep in sync the `post_format` property.
 	 *
-	 * @param  {string} containerId
+	 * @param  {String} containerId
 	 * @return {void}
 	 */
 	function workerSyncPostFormat(containerId) {
@@ -3504,7 +3504,7 @@ this["carbon.app"] =
 	/**
 	 * Keep in sync the `terms` property.
 	 *
-	 * @param  {string} containerId
+	 * @param  {String} containerId
 	 * @return {void}
 	 */
 	function workerSyncTerms(containerId) {
@@ -3566,10 +3566,10 @@ this["carbon.app"] =
 	/**
 	 * Check whether the container should be visible.
 	 *
-	 * @param  {boolean} isVisible
+	 * @param  {Boolean} isVisible
 	 * @param  {Object}  settings
 	 * @param  {Object}  meta
-	 * @return {boolean}
+	 * @return {Boolean}
 	 */
 	function checkTemplateNames(isVisible, settings, meta) {
 		var page_template = meta.page_template;
@@ -3587,10 +3587,10 @@ this["carbon.app"] =
 	/**
 	 * Check whether the container should be visible.
 	 *
-	 * @param  {boolean} isVisible
+	 * @param  {Boolean} isVisible
 	 * @param  {Object}  settings
 	 * @param  {Object}  meta
-	 * @return {boolean}
+	 * @return {Boolean}
 	 */
 	function checkNotInTemplateNames(isVisible, settings, meta) {
 		var page_template = meta.page_template;
@@ -3608,10 +3608,10 @@ this["carbon.app"] =
 	/**
 	 * Check whether the container should be visible.
 	 *
-	 * @param  {boolean} isVisible
+	 * @param  {Boolean} isVisible
 	 * @param  {Object}  settings
 	 * @param  {Object}  meta
-	 * @return {boolean}
+	 * @return {Boolean}
 	 */
 	function checkParentPageId(isVisible, settings, meta) {
 		var parent_id = meta.parent_id;
@@ -3627,10 +3627,10 @@ this["carbon.app"] =
 	/**
 	 * Check whether the container should be visible.
 	 *
-	 * @param  {boolean} isVisible
+	 * @param  {Boolean} isVisible
 	 * @param  {Object}  settings
 	 * @param  {Object}  meta
-	 * @return {boolean}
+	 * @return {Boolean}
 	 */
 	function checkLevelLimit(isVisible, settings, meta) {
 		var level = meta.level;
@@ -3646,10 +3646,10 @@ this["carbon.app"] =
 	/**
 	 * Check whether the container should be visible.
 	 *
-	 * @param  {boolean} isVisible
+	 * @param  {Boolean} isVisible
 	 * @param  {Object}  settings
 	 * @param  {Object}  meta
-	 * @return {boolean}
+	 * @return {Boolean}
 	 */
 	function checkPostFormats(isVisible, settings, meta) {
 		var post_format = meta.post_format;
@@ -3665,10 +3665,10 @@ this["carbon.app"] =
 	/**
 	 * Check whether the container should be visible.
 	 *
-	 * @param  {boolean} isVisible
+	 * @param  {Boolean} isVisible
 	 * @param  {Object}  settings
 	 * @param  {Object}  meta
-	 * @return {boolean}
+	 * @return {Boolean}
 	 */
 	function checkTaxSlug(isVisible, settings, meta) {
 		var tax_term_id = meta.tax_term_id;

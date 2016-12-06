@@ -13,7 +13,7 @@ import { SETUP_CONTAINER, SET_META } from 'containers/actions';
 /**
  * Keep in sync the `role` property.
  *
- * @param  {string} containerId
+ * @param  {String} containerId
  * @return {void}
  */
 export function* workerSyncRole(containerId: string): any {

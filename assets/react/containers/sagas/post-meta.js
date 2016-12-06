@@ -15,7 +15,7 @@ import { SETUP_CONTAINER, SET_META } from 'containers/actions';
 /**
  * Keep in sync the `page_template` property.
  *
- * @param  {string} containerId
+ * @param  {String} containerId
  * @return {void}
  */
 export function* workerSyncPageTemplate(containerId: string): any {
@@ -36,7 +36,7 @@ export function* workerSyncPageTemplate(containerId: string): any {
 /**
  * Keep in sync the `parent_id` property.
  *
- * @param  {string} containerId
+ * @param  {String} containerId
  * @return {void}
  */
 export function* workerSyncParentId(containerId: string): any {
@@ -71,7 +71,7 @@ export function* workerSyncParentId(containerId: string): any {
 /**
  * Keep in sync the `post_format` property.
  *
- * @param  {string} containerId
+ * @param  {String} containerId
  * @return {void}
  */
 export function* workerSyncPostFormat(containerId: string): any {
@@ -92,7 +92,7 @@ export function* workerSyncPostFormat(containerId: string): any {
 /**
  * Keep in sync the `terms` property.
  *
- * @param  {string} containerId
+ * @param  {String} containerId
  * @return {void}
  */
 export function* workerSyncTerms(containerId: string): any {
@@ -116,10 +116,10 @@ export function* workerSyncTerms(containerId: string): any {
 /**
  * Check whether the container should be visible.
  *
- * @param  {boolean} isVisible
+ * @param  {Boolean} isVisible
  * @param  {Object}  settings
  * @param  {Object}  meta
- * @return {boolean}
+ * @return {Boolean}
  */
 function checkTemplateNames(isVisible: boolean, settings: Object, meta: Object): boolean {
 	const { page_template }: { page_template: ?string } = meta;
@@ -135,10 +135,10 @@ function checkTemplateNames(isVisible: boolean, settings: Object, meta: Object):
 /**
  * Check whether the container should be visible.
  *
- * @param  {boolean} isVisible
+ * @param  {Boolean} isVisible
  * @param  {Object}  settings
  * @param  {Object}  meta
- * @return {boolean}
+ * @return {Boolean}
  */
 function checkNotInTemplateNames(isVisible: boolean, settings: Object, meta: Object): boolean {
 	const { page_template }: { page_template: ?string } = meta;
@@ -154,10 +154,10 @@ function checkNotInTemplateNames(isVisible: boolean, settings: Object, meta: Obj
 /**
  * Check whether the container should be visible.
  *
- * @param  {boolean} isVisible
+ * @param  {Boolean} isVisible
  * @param  {Object}  settings
  * @param  {Object}  meta
- * @return {boolean}
+ * @return {Boolean}
  */
 function checkParentPageId(isVisible: boolean, settings: Object, meta: Object): boolean {
 	const { parent_id }: { parent_id: ?number } = meta;
@@ -172,10 +172,10 @@ function checkParentPageId(isVisible: boolean, settings: Object, meta: Object): 
 /**
  * Check whether the container should be visible.
  *
- * @param  {boolean} isVisible
+ * @param  {Boolean} isVisible
  * @param  {Object}  settings
  * @param  {Object}  meta
- * @return {boolean}
+ * @return {Boolean}
  */
 function checkLevelLimit(isVisible: boolean, settings: Object, meta: Object): boolean {
 	const { level }: { level: ?number } = meta;
@@ -190,10 +190,10 @@ function checkLevelLimit(isVisible: boolean, settings: Object, meta: Object): bo
 /**
  * Check whether the container should be visible.
  *
- * @param  {boolean} isVisible
+ * @param  {Boolean} isVisible
  * @param  {Object}  settings
  * @param  {Object}  meta
- * @return {boolean}
+ * @return {Boolean}
  */
 function checkPostFormats(isVisible: boolean, settings: Object, meta: Object): boolean {
 	const { post_format }: { post_format: ?string } = meta;
@@ -208,10 +208,10 @@ function checkPostFormats(isVisible: boolean, settings: Object, meta: Object): b
 /**
  * Check whether the container should be visible.
  *
- * @param  {boolean} isVisible
+ * @param  {Boolean} isVisible
  * @param  {Object}  settings
  * @param  {Object}  meta
- * @return {boolean}
+ * @return {Boolean}
  */
 function checkTaxSlug(isVisible: boolean, settings: Object, meta: Object): boolean {
 	const { tax_term_id }: { tax_term_id: ?string } = meta;
