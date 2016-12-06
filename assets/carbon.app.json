@@ -68,6 +68,7 @@
     "./assets/react/containers/sagas/base.js": 76,
     "./node_modules/redux-saga/effects.js": 77,
     "./assets/react/containers/sagas/post-meta.js": 79,
-    "./assets/react/containers/components/user-meta-container.js": 80
+    "./assets/react/containers/components/user-meta-container.js": 80,
+    "./assets/react/containers/components/theme-options-container.js": 81
   }
 }

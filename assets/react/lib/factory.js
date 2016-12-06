@@ -6,6 +6,7 @@ import PostMetaContainer from 'containers/components/post-meta-container';
 import CommentMetaContainer from 'containers/components/comment-meta-container';
 import TermMetaContainer from 'containers/components/term-meta-container';
 import UserMetaContainer from 'containers/components/user-meta-container';
+import ThemeOptionsContainer from 'containers/components/theme-options-container';
 import * as ContainerConst from 'containers/constants';
 
 /**
@@ -18,6 +19,7 @@ const containers: Object = {
 	[ContainerConst.TYPE_COMMENT_META]: CommentMetaContainer,
 	[ContainerConst.TYPE_TERM_META]: TermMetaContainer,
 	[ContainerConst.TYPE_USER_META]: UserMetaContainer,
+	[ContainerConst.TYPE_THEME_OPTIONS]: ThemeOptionsContainer,
 };
 
 /**
