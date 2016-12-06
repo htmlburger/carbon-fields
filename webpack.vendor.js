@@ -15,7 +15,8 @@ module.exports = {
 			'redux-actions',
 			'reselect',
 			'lodash',
-			'object-path-immutable'
+			'object-path-immutable',
+			'classnames'
 		]
 	},
 

@@ -91,7 +91,7 @@ this["carbon.app"] =
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(256);
+	module.exports = (__webpack_require__(4))(257);
 
 /***/ },
 /* 4 */
@@ -310,7 +310,7 @@ this["carbon.app"] =
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(367);
+	module.exports = (__webpack_require__(4))(368);
 
 /***/ },
 /* 7 */
@@ -324,7 +324,7 @@ this["carbon.app"] =
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(366);
+	module.exports = (__webpack_require__(4))(367);
 
 /***/ },
 /* 9 */
@@ -525,7 +525,7 @@ this["carbon.app"] =
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(364);
+	module.exports = (__webpack_require__(4))(365);
 
 /***/ },
 /* 14 */
@@ -914,7 +914,7 @@ this["carbon.app"] =
 /* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(347);
+	module.exports = (__webpack_require__(4))(348);
 
 /***/ },
 /* 19 */
@@ -3007,7 +3007,7 @@ this["carbon.app"] =
 /* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(161);
+	module.exports = (__webpack_require__(4))(162);
 
 /***/ },
 /* 65 */
@@ -3375,6 +3375,10 @@ this["carbon.app"] =
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _classnames = __webpack_require__(87);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
@@ -3384,9 +3388,11 @@ this["carbon.app"] =
 	 * @abstract
 	 */
 	var Container = function Container(props) {
+	  var classes = (0, _classnames2.default)('carbon-container', 'carbon-container-' + props.id);
+
 	  return _react2.default.createElement(
 	    'div',
-	    null,
+	    { className: classes },
 	    'container here'
 	  );
 	};
@@ -3856,7 +3862,7 @@ this["carbon.app"] =
 /* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(267);
+	module.exports = (__webpack_require__(4))(268);
 
 /***/ },
 /* 85 */
@@ -4515,6 +4521,12 @@ this["carbon.app"] =
 			}
 		}, _marked[6], this);
 	}
+
+/***/ },
+/* 87 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = (__webpack_require__(4))(147);
 
 /***/ }
 /******/ ]);
