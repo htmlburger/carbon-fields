@@ -31,6 +31,9 @@ module.exports = {
 			'./assets/react/containers/components/broken-container.js',
 			'./assets/react/containers/components/post-meta-container.js',
 			'./assets/react/containers/components/comment-meta-container.js',
+			'./assets/react/containers/components/user-meta-container.js',
+			'./assets/react/containers/components/term-meta-container.js',
+			'./assets/react/containers/components/theme-options-container.js',
 
 			// Load the sidebars.
 			'./assets/react/sidebars/reducer.js',

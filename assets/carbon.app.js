@@ -3509,20 +3509,41 @@ this["carbon.app"] =
 
 /***/ },
 /* 76 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 
-	exports.default = function () {
-		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-		var action = arguments[1];
+	var _recompose = __webpack_require__(20);
 
-		return state;
-	};
+	var _container = __webpack_require__(72);
+
+	var _container2 = _interopRequireDefault(_container);
+
+	var _withConnectToStore = __webpack_require__(17);
+
+	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
+
+	var _withInitialSideEffects = __webpack_require__(19);
+
+	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Add the fields that are specific for this container.
+	 */
+	var withProps = (0, _recompose.defaultProps)({
+		meta: {
+			role: null
+		},
+		ui: {}
+	});
+
+	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
 
 /***/ },
 /* 77 */
@@ -3558,11 +3579,11 @@ this["carbon.app"] =
 
 	var _termMetaContainer2 = _interopRequireDefault(_termMetaContainer);
 
-	var _userMetaContainer = __webpack_require__(79);
+	var _userMetaContainer = __webpack_require__(76);
 
 	var _userMetaContainer2 = _interopRequireDefault(_userMetaContainer);
 
-	var _themeOptionsContainer = __webpack_require__(80);
+	var _themeOptionsContainer = __webpack_require__(79);
 
 	var _themeOptionsContainer2 = _interopRequireDefault(_themeOptionsContainer);
 
@@ -3666,9 +3687,7 @@ this["carbon.app"] =
 	 * Add the fields that are specific for this container.
 	 */
 	var withProps = (0, _recompose.defaultProps)({
-		meta: {
-			role: null
-		},
+		meta: {},
 		ui: {}
 	});
 
@@ -3676,39 +3695,20 @@ this["carbon.app"] =
 
 /***/ },
 /* 80 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 
-	var _recompose = __webpack_require__(20);
+	exports.default = function () {
+		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+		var action = arguments[1];
 
-	var _container = __webpack_require__(72);
-
-	var _container2 = _interopRequireDefault(_container);
-
-	var _withConnectToStore = __webpack_require__(17);
-
-	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
-
-	var _withInitialSideEffects = __webpack_require__(19);
-
-	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Add the fields that are specific for this container.
-	 */
-	var withProps = (0, _recompose.defaultProps)({
-		meta: {},
-		ui: {}
-	});
-
-	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
+		return state;
+	};
 
 /***/ },
 /* 81 */
@@ -3732,7 +3732,7 @@ this["carbon.app"] =
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
-	var _reducer3 = __webpack_require__(76);
+	var _reducer3 = __webpack_require__(80);
 
 	var _reducer4 = _interopRequireDefault(_reducer3);
 
