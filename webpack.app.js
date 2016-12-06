@@ -20,6 +20,9 @@ module.exports = {
 
 			'./assets/react/containers/sagas/base.js',
 			'./assets/react/containers/sagas/post-meta.js',
+			'./assets/react/containers/sagas/term-meta.js',
+			'./assets/react/containers/sagas/user-meta.js',
+			'./assets/react/containers/sagas/theme-options.js',
 
 			'./assets/react/containers/hocs/with-connect-to-store.js',
 			'./assets/react/containers/hocs/with-initial-side-effects.js',
@@ -30,7 +33,10 @@ module.exports = {
 			'./assets/react/containers/components/comment-meta-container.js',
 
 			// Load the sidebars.
-			'./assets/react/sidebars/reducer.js'
+			'./assets/react/sidebars/reducer.js',
+
+			// Load the store.
+			'./assets/react/store.js'
 		]
 	},
 

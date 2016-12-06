@@ -108,28 +108,362 @@ this["carbon.app"] =
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+	exports.workerSyncLevel = workerSyncLevel;
+	exports.workerSetupContainer = workerSetupContainer;
+	exports.workerCheckVisibility = workerCheckVisibility;
+	exports.default = foreman;
 
-	var _reactRedux = __webpack_require__(6);
+	var _reduxSaga = __webpack_require__(6);
 
-	var _actions = __webpack_require__(7);
+	var _effects = __webpack_require__(7);
 
-	var mapStateToProps = null;
+	var _events = __webpack_require__(9);
 
-	var mapDispatchToProps = {
-		setupContainer: _actions.setupContainer,
-		checkVisibility: _actions.checkVisibility
-	};
+	var _selectors = __webpack_require__(11);
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps);
+	var _actions = __webpack_require__(12);
+
+	var _constants = __webpack_require__(14);
+
+	var _marked = [workerSyncLevel, workerSetupContainer, workerCheckVisibility, foreman].map(regeneratorRuntime.mark);
+
+	/**
+	 * Keep in sync the `level` property.
+	 *
+	 * @param  {String} containerId
+	 * @return {void}
+	 */
+	function workerSyncLevel(containerId) {
+		var channel, _ref, option, level, matches;
+
+		return regeneratorRuntime.wrap(function workerSyncLevel$(_context) {
+			while (1) {
+				switch (_context.prev = _context.next) {
+					case 0:
+						_context.next = 2;
+						return (0, _effects.call)(_events.createSelectboxChannel, 'select#parent');
+
+					case 2:
+						channel = _context.sent;
+
+					case 3:
+						if (false) {
+							_context.next = 14;
+							break;
+						}
+
+						_context.next = 6;
+						return (0, _effects.take)(channel);
+
+					case 6:
+						_ref = _context.sent;
+						option = _ref.option;
+						level = 1;
+
+
+						if (option.className) {
+							matches = option.className.match(/^level-(\d+)/);
+
+
+							if (matches) {
+								level = parseInt(matches[1], 10) + 2;
+							}
+						}
+
+						_context.next = 12;
+						return (0, _effects.put)((0, _actions.setMeta)({
+							containerId: containerId,
+							meta: {
+								level: level
+							}
+						}));
+
+					case 12:
+						_context.next = 3;
+						break;
+
+					case 14:
+					case 'end':
+						return _context.stop();
+				}
+			}
+		}, _marked[0], this);
+	}
+
+	/**
+	 * Setup the initial state of the container.
+	 *
+	 * @param  {Object} action
+	 * @return {void}
+	 */
+	function workerSetupContainer(action) {
+		var containerId;
+		return regeneratorRuntime.wrap(function workerSetupContainer$(_context2) {
+			while (1) {
+				switch (_context2.prev = _context2.next) {
+					case 0:
+						containerId = action.payload.containerId;
+
+						// Don't do anything if the type isn't correct.
+
+						_context2.next = 3;
+						return (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_TERM_META);
+
+					case 3:
+						if (_context2.sent) {
+							_context2.next = 5;
+							break;
+						}
+
+						return _context2.abrupt('return');
+
+					case 5:
+						_context2.next = 7;
+						return (0, _effects.fork)(workerSyncLevel, containerId);
+
+					case 7:
+					case 'end':
+						return _context2.stop();
+				}
+			}
+		}, _marked[1], this);
+	}
+
+	/**
+	 * Keep in sync the `is_visible` property.
+	 *
+	 * @param  {Object} action
+	 * @return {void}
+	 */
+	function workerCheckVisibility(action) {
+		var containerId, container, isVisible;
+		return regeneratorRuntime.wrap(function workerCheckVisibility$(_context3) {
+			while (1) {
+				switch (_context3.prev = _context3.next) {
+					case 0:
+						containerId = action.payload.containerId;
+
+						// Don't do anything if the type isn't correct.
+
+						_context3.next = 3;
+						return (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_TERM_META);
+
+					case 3:
+						if (_context3.sent) {
+							_context3.next = 5;
+							break;
+						}
+
+						return _context3.abrupt('return');
+
+					case 5:
+						_context3.next = 7;
+						return (0, _effects.select)(_selectors.getContainerById, containerId);
+
+					case 7:
+						container = _context3.sent;
+						isVisible = true;
+
+
+						if (container.settings.show_on_level && container.meta.level != container.settings.show_on_level) {
+							isVisible = false;
+						}
+
+						_context3.next = 12;
+						return (0, _effects.put)((0, _actions.setUI)({
+							containerId: containerId,
+							ui: {
+								is_visible: isVisible
+							}
+						}));
+
+					case 12:
+					case 'end':
+						return _context3.stop();
+				}
+			}
+		}, _marked[2], this);
+	}
+
+	/**
+	 * Start to work.
+	 *
+	 * @return {void}
+	 */
+	function foreman() {
+		return regeneratorRuntime.wrap(function foreman$(_context4) {
+			while (1) {
+				switch (_context4.prev = _context4.next) {
+					case 0:
+						_context4.next = 2;
+						return [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer), (0, _reduxSaga.takeEvery)(_actions.SET_META, workerCheckVisibility)];
+
+					case 2:
+					case 'end':
+						return _context4.stop();
+				}
+			}
+		}, _marked[3], this);
+	}
 
 /***/ },
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(347);
+	module.exports = (__webpack_require__(4))(367);
 
 /***/ },
 /* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = __webpack_require__(8);
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = (__webpack_require__(4))(366);
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.createChannel = createChannel;
+	exports.createSelectboxChannel = createSelectboxChannel;
+	exports.createCheckableChannel = createCheckableChannel;
+	exports.createScrollChannel = createScrollChannel;
+
+	var _jquery = __webpack_require__(10);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _reduxSaga = __webpack_require__(6);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Create a Saga Channel that will listen for DOM events.
+	 * The buffer is used to emit the initial value of the inputs when the channel is created.
+	 *
+	 * @param  {String}   selector
+	 * @param  {String}   event
+	 * @param  {Function} handler
+	 * @param  {String}   [childSelector]
+	 * @return {Object}
+	 */
+	function createChannel(selector, event, handler) {
+		var childSelector = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+
+		return (0, _reduxSaga.eventChannel)(function (emit) {
+			// Find the element in DOM.
+			var $element = (0, _jquery2.default)(selector);
+
+			// Cancel the subscription.
+			var unsubscribe = function unsubscribe() {
+				$element.off(event, childSelector, handler);
+			};
+
+			// Close the channel since the element doesn't exists.
+			if (!$element.length) {
+				emit(_reduxSaga.END);
+				return unsubscribe;
+			}
+
+			// Setup the subscription.
+			$element.on(event, childSelector, function (event) {
+				handler(emit, $element, event);
+			});
+
+			// Emit the initial value.
+			handler(emit, $element);
+
+			return unsubscribe;
+		}, _reduxSaga.buffers.fixed(1));
+	}
+
+	/**
+	 * Create a channel that will listen for `change` events on selectbox.
+	 *
+	 * @param  {String} selector
+	 * @return {Object}
+	 */
+	function createSelectboxChannel(selector) {
+		return createChannel(selector, 'change', function (emit, $element) {
+			emit({
+				value: $element.val(),
+				option: $element.find(':selected').first().get(0)
+			});
+		});
+	}
+
+	/**
+	 * Create a channel that will listen for `change` events on radio/checkbox inputs.
+	 *
+	 * @param  {String} selector
+	 * @return {Object}
+	 */
+	function createCheckableChannel(selector) {
+		return createChannel(selector, 'change', function (emit, $element) {
+			var elements = $element.find('input:checked').get();
+			var values = elements.map(function (element) {
+				return element.value;
+			});
+
+			emit({
+				values: values,
+				elements: elements
+			});
+		}, 'input');
+	}
+
+	/**
+	 * Create a channel that will listen for `scroll` events.
+	 *
+	 * @param  {String} selector
+	 * @return {Object}
+	 */
+	function createScrollChannel(selector) {
+		return createChannel(selector, 'scroll', function (emit, $element) {
+			emit({
+				value: $element.scrollTop()
+			});
+		});
+	}
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	(function() { module.exports = this["jQuery"]; }());
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var getContainers = exports.getContainers = function getContainers(state) {
+	  return state.containers;
+	};
+	var getContainerById = exports.getContainerById = function getContainerById(state, containerId) {
+	  return state.containers[containerId];
+	};
+	var canProcessAction = exports.canProcessAction = function canProcessAction(state, containerId, containerType) {
+	  return getContainerById(state, containerId).type === containerType;
+	};
+
+/***/ },
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -139,7 +473,7 @@ this["carbon.app"] =
 	});
 	exports.checkVisibility = exports.CHECK_VISIBILITY = exports.setUI = exports.SET_UI = exports.setMeta = exports.SET_META = exports.setupContainer = exports.SETUP_CONTAINER = undefined;
 
-	var _reduxActions = __webpack_require__(8);
+	var _reduxActions = __webpack_require__(13);
 
 	/**
 	 * Perform the initial setup of the container.
@@ -188,13 +522,373 @@ this["carbon.app"] =
 	var checkVisibility = exports.checkVisibility = (0, _reduxActions.createAction)(CHECK_VISIBILITY);
 
 /***/ },
-/* 8 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = (__webpack_require__(4))(364);
 
 /***/ },
-/* 9 */
+/* 14 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var TYPE_POST_META = exports.TYPE_POST_META = 'Post_Meta';
+	var TYPE_COMMENT_META = exports.TYPE_COMMENT_META = 'Comment_Meta';
+	var TYPE_TERM_META = exports.TYPE_TERM_META = 'Term_Meta';
+	var TYPE_USER_META = exports.TYPE_USER_META = 'User_Meta';
+	var TYPE_THEME_OPTIONS = exports.TYPE_THEME_OPTIONS = 'Theme_Options';
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.workerSyncRole = workerSyncRole;
+	exports.workerSetupContainer = workerSetupContainer;
+	exports.workerCheckVisibility = workerCheckVisibility;
+	exports.default = foreman;
+
+	var _lodash = __webpack_require__(3);
+
+	var _reduxSaga = __webpack_require__(6);
+
+	var _effects = __webpack_require__(7);
+
+	var _events = __webpack_require__(9);
+
+	var _selectors = __webpack_require__(11);
+
+	var _actions = __webpack_require__(12);
+
+	var _constants = __webpack_require__(14);
+
+	var _marked = [workerSyncRole, workerSetupContainer, workerCheckVisibility, foreman].map(regeneratorRuntime.mark);
+
+	/**
+	 * Keep in sync the `role` property.
+	 *
+	 * @param  {String} containerId
+	 * @return {void}
+	 */
+	function workerSyncRole(containerId) {
+		var channel, _ref, value, el;
+
+		return regeneratorRuntime.wrap(function workerSyncRole$(_context) {
+			while (1) {
+				switch (_context.prev = _context.next) {
+					case 0:
+						_context.next = 2;
+						return (0, _effects.call)(_events.createSelectboxChannel, 'select#role');
+
+					case 2:
+						channel = _context.sent;
+						_context.prev = 3;
+
+					case 4:
+						if (false) {
+							_context.next = 13;
+							break;
+						}
+
+						_context.next = 7;
+						return (0, _effects.take)(channel);
+
+					case 7:
+						_ref = _context.sent;
+						value = _ref.value;
+						_context.next = 11;
+						return (0, _effects.put)((0, _actions.setMeta)({
+							containerId: containerId,
+							meta: {
+								role: value
+							}
+						}));
+
+					case 11:
+						_context.next = 4;
+						break;
+
+					case 13:
+						_context.prev = 13;
+						_context.next = 16;
+						return (0, _effects.call)([document, document.querySelector], '#' + containerId);
+
+					case 16:
+						el = _context.sent;
+
+						if (!el.dataset.profileRole) {
+							_context.next = 20;
+							break;
+						}
+
+						_context.next = 20;
+						return (0, _effects.put)((0, _actions.setMeta)({
+							containerId: containerId,
+							meta: {
+								role: el.dataset.profileRole
+							}
+						}));
+
+					case 20:
+						return _context.finish(13);
+
+					case 21:
+					case 'end':
+						return _context.stop();
+				}
+			}
+		}, _marked[0], this, [[3,, 13, 21]]);
+	}
+
+	/**
+	 * Setup the initial state of the container.
+	 *
+	 * @param  {Object} action
+	 * @return {void}
+	 */
+	function workerSetupContainer(action) {
+		var containerId;
+		return regeneratorRuntime.wrap(function workerSetupContainer$(_context2) {
+			while (1) {
+				switch (_context2.prev = _context2.next) {
+					case 0:
+						containerId = action.payload.containerId;
+
+						// Don't do anything if the type isn't correct.
+
+						_context2.next = 3;
+						return (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_USER_META);
+
+					case 3:
+						if (_context2.sent) {
+							_context2.next = 5;
+							break;
+						}
+
+						return _context2.abrupt('return');
+
+					case 5:
+						_context2.next = 7;
+						return (0, _effects.fork)(workerSyncRole, containerId);
+
+					case 7:
+					case 'end':
+						return _context2.stop();
+				}
+			}
+		}, _marked[1], this);
+	}
+
+	/**
+	 * Keep in sync the `is_visible` property.
+	 *
+	 * @param  {Object} action
+	 * @return {void}
+	 */
+	function workerCheckVisibility(action) {
+		var containerId, container, isVisible;
+		return regeneratorRuntime.wrap(function workerCheckVisibility$(_context3) {
+			while (1) {
+				switch (_context3.prev = _context3.next) {
+					case 0:
+						containerId = action.payload.containerId;
+
+						// Don't do anything if the type isn't correct.
+
+						_context3.next = 3;
+						return (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_USER_META);
+
+					case 3:
+						if (_context3.sent) {
+							_context3.next = 5;
+							break;
+						}
+
+						return _context3.abrupt('return');
+
+					case 5:
+						_context3.next = 7;
+						return (0, _effects.select)(_selectors.getContainerById, containerId);
+
+					case 7:
+						container = _context3.sent;
+						isVisible = true;
+
+
+						if (!(0, _lodash.isEmpty)(container.settings.show_on.role) && container.settings.show_on.role.indexOf(container.meta.role) === -1) {
+							isVisible = false;
+						}
+
+						_context3.next = 12;
+						return (0, _effects.put)((0, _actions.setUI)({
+							containerId: containerId,
+							ui: {
+								is_visible: isVisible
+							}
+						}));
+
+					case 12:
+					case 'end':
+						return _context3.stop();
+				}
+			}
+		}, _marked[2], this);
+	}
+
+	/**
+	 * Start to work.
+	 *
+	 * @return {void}
+	 */
+	function foreman() {
+		return regeneratorRuntime.wrap(function foreman$(_context4) {
+			while (1) {
+				switch (_context4.prev = _context4.next) {
+					case 0:
+						_context4.next = 2;
+						return [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer), (0, _reduxSaga.takeEvery)(_actions.SET_META, workerCheckVisibility)];
+
+					case 2:
+					case 'end':
+						return _context4.stop();
+				}
+			}
+		}, _marked[3], this);
+	}
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.workerStickyActionsPanel = workerStickyActionsPanel;
+	exports.default = foreman;
+
+	var _jquery = __webpack_require__(10);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _reduxSaga = __webpack_require__(6);
+
+	var _effects = __webpack_require__(7);
+
+	var _events = __webpack_require__(9);
+
+	var _selectors = __webpack_require__(11);
+
+	var _constants = __webpack_require__(14);
+
+	var _actions = __webpack_require__(12);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var _marked = [workerStickyActionsPanel, foreman].map(regeneratorRuntime.mark);
+
+	/**
+	 * Handle the sticky position of the actions panel.
+	 *
+	 * @param  {Object} action
+	 * @return {void}
+	 */
+	function workerStickyActionsPanel(action) {
+		var containerId, channel, $container, $panel, $bar, _ref, value, offset, threshold;
+
+		return regeneratorRuntime.wrap(function workerStickyActionsPanel$(_context) {
+			while (1) {
+				switch (_context.prev = _context.next) {
+					case 0:
+						containerId = action.payload.containerId;
+
+						// Don't do anything if the type isn't correct.
+
+						_context.next = 3;
+						return (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_THEME_OPTIONS);
+
+					case 3:
+						if (_context.sent) {
+							_context.next = 5;
+							break;
+						}
+
+						return _context.abrupt('return');
+
+					case 5:
+						_context.next = 7;
+						return (0, _effects.call)(_events.createScrollChannel, window);
+
+					case 7:
+						channel = _context.sent;
+						$container = (0, _jquery2.default)('#' + containerId);
+						$panel = (0, _jquery2.default)('#postbox-container-1');
+						$bar = (0, _jquery2.default)('#wpadminbar');
+
+					case 11:
+						if (false) {
+							_context.next = 21;
+							break;
+						}
+
+						_context.next = 14;
+						return (0, _effects.take)(channel);
+
+					case 14:
+						_ref = _context.sent;
+						value = _ref.value;
+						offset = $bar.height() + 10;
+						threshold = $container.offset().top - offset;
+
+						// In some situations the threshold is negative number because
+						// the container element isn't rendered yet.
+
+						if (threshold > 0) {
+							$panel.toggleClass('fixed', value >= threshold).css('top', offset);
+						}
+						_context.next = 11;
+						break;
+
+					case 21:
+					case 'end':
+						return _context.stop();
+				}
+			}
+		}, _marked[0], this);
+	}
+
+	/**
+	 * Start to work.
+	 *
+	 * @return {void}
+	 */
+	function foreman() {
+		return regeneratorRuntime.wrap(function foreman$(_context2) {
+			while (1) {
+				switch (_context2.prev = _context2.next) {
+					case 0:
+						_context2.next = 2;
+						return [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerStickyActionsPanel)];
+
+					case 2:
+					case 'end':
+						return _context2.stop();
+				}
+			}
+		}, _marked[1], this);
+	}
+
+/***/ },
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -203,7 +897,36 @@ this["carbon.app"] =
 		value: true
 	});
 
-	var _recompose = __webpack_require__(10);
+	var _reactRedux = __webpack_require__(18);
+
+	var _actions = __webpack_require__(12);
+
+	var mapStateToProps = null;
+
+	var mapDispatchToProps = {
+		setupContainer: _actions.setupContainer,
+		checkVisibility: _actions.checkVisibility
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps);
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = (__webpack_require__(4))(347);
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _recompose = __webpack_require__(20);
 
 	exports.default = (0, _recompose.lifecycle)({
 		componentWillMount: function componentWillMount() {
@@ -213,7 +936,7 @@ this["carbon.app"] =
 	});
 
 /***/ },
-/* 10 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -221,159 +944,159 @@ this["carbon.app"] =
 	exports.__esModule = true;
 	exports.setObservableConfig = exports.createEventHandler = exports.mapPropsStream = exports.componentFromStream = exports.hoistStatics = exports.nest = exports.componentFromProp = exports.createSink = exports.createEagerFactory = exports.createEagerElement = exports.isClassComponent = exports.shallowEqual = exports.wrapDisplayName = exports.getDisplayName = exports.compose = exports.setDisplayName = exports.setPropTypes = exports.setStatic = exports.toClass = exports.lifecycle = exports.getContext = exports.withContext = exports.onlyUpdateForPropTypes = exports.onlyUpdateForKeys = exports.pure = exports.shouldUpdate = exports.renderNothing = exports.renderComponent = exports.branch = exports.withReducer = exports.withState = exports.flattenProp = exports.renameProps = exports.renameProp = exports.defaultProps = exports.withHandlers = exports.withPropsOnChange = exports.withProps = exports.mapProps = undefined;
 
-	var _mapProps2 = __webpack_require__(11);
+	var _mapProps2 = __webpack_require__(21);
 
 	var _mapProps3 = _interopRequireDefault(_mapProps2);
 
-	var _withProps2 = __webpack_require__(21);
+	var _withProps2 = __webpack_require__(31);
 
 	var _withProps3 = _interopRequireDefault(_withProps2);
 
-	var _withPropsOnChange2 = __webpack_require__(22);
+	var _withPropsOnChange2 = __webpack_require__(32);
 
 	var _withPropsOnChange3 = _interopRequireDefault(_withPropsOnChange2);
 
-	var _withHandlers2 = __webpack_require__(26);
+	var _withHandlers2 = __webpack_require__(36);
 
 	var _withHandlers3 = _interopRequireDefault(_withHandlers2);
 
-	var _defaultProps2 = __webpack_require__(27);
+	var _defaultProps2 = __webpack_require__(37);
 
 	var _defaultProps3 = _interopRequireDefault(_defaultProps2);
 
-	var _renameProp2 = __webpack_require__(28);
+	var _renameProp2 = __webpack_require__(38);
 
 	var _renameProp3 = _interopRequireDefault(_renameProp2);
 
-	var _renameProps2 = __webpack_require__(30);
+	var _renameProps2 = __webpack_require__(40);
 
 	var _renameProps3 = _interopRequireDefault(_renameProps2);
 
-	var _flattenProp2 = __webpack_require__(31);
+	var _flattenProp2 = __webpack_require__(41);
 
 	var _flattenProp3 = _interopRequireDefault(_flattenProp2);
 
-	var _withState2 = __webpack_require__(32);
+	var _withState2 = __webpack_require__(42);
 
 	var _withState3 = _interopRequireDefault(_withState2);
 
-	var _withReducer2 = __webpack_require__(33);
+	var _withReducer2 = __webpack_require__(43);
 
 	var _withReducer3 = _interopRequireDefault(_withReducer2);
 
-	var _branch2 = __webpack_require__(34);
+	var _branch2 = __webpack_require__(44);
 
 	var _branch3 = _interopRequireDefault(_branch2);
 
-	var _renderComponent2 = __webpack_require__(35);
+	var _renderComponent2 = __webpack_require__(45);
 
 	var _renderComponent3 = _interopRequireDefault(_renderComponent2);
 
-	var _renderNothing2 = __webpack_require__(36);
+	var _renderNothing2 = __webpack_require__(46);
 
 	var _renderNothing3 = _interopRequireDefault(_renderNothing2);
 
-	var _shouldUpdate2 = __webpack_require__(37);
+	var _shouldUpdate2 = __webpack_require__(47);
 
 	var _shouldUpdate3 = _interopRequireDefault(_shouldUpdate2);
 
-	var _pure2 = __webpack_require__(38);
+	var _pure2 = __webpack_require__(48);
 
 	var _pure3 = _interopRequireDefault(_pure2);
 
-	var _onlyUpdateForKeys2 = __webpack_require__(39);
+	var _onlyUpdateForKeys2 = __webpack_require__(49);
 
 	var _onlyUpdateForKeys3 = _interopRequireDefault(_onlyUpdateForKeys2);
 
-	var _onlyUpdateForPropTypes2 = __webpack_require__(40);
+	var _onlyUpdateForPropTypes2 = __webpack_require__(50);
 
 	var _onlyUpdateForPropTypes3 = _interopRequireDefault(_onlyUpdateForPropTypes2);
 
-	var _withContext2 = __webpack_require__(41);
+	var _withContext2 = __webpack_require__(51);
 
 	var _withContext3 = _interopRequireDefault(_withContext2);
 
-	var _getContext2 = __webpack_require__(42);
+	var _getContext2 = __webpack_require__(52);
 
 	var _getContext3 = _interopRequireDefault(_getContext2);
 
-	var _lifecycle2 = __webpack_require__(43);
+	var _lifecycle2 = __webpack_require__(53);
 
 	var _lifecycle3 = _interopRequireDefault(_lifecycle2);
 
-	var _toClass2 = __webpack_require__(44);
+	var _toClass2 = __webpack_require__(54);
 
 	var _toClass3 = _interopRequireDefault(_toClass2);
 
-	var _setStatic2 = __webpack_require__(45);
+	var _setStatic2 = __webpack_require__(55);
 
 	var _setStatic3 = _interopRequireDefault(_setStatic2);
 
-	var _setPropTypes2 = __webpack_require__(46);
+	var _setPropTypes2 = __webpack_require__(56);
 
 	var _setPropTypes3 = _interopRequireDefault(_setPropTypes2);
 
-	var _setDisplayName2 = __webpack_require__(47);
+	var _setDisplayName2 = __webpack_require__(57);
 
 	var _setDisplayName3 = _interopRequireDefault(_setDisplayName2);
 
-	var _compose2 = __webpack_require__(48);
+	var _compose2 = __webpack_require__(58);
 
 	var _compose3 = _interopRequireDefault(_compose2);
 
-	var _getDisplayName2 = __webpack_require__(15);
+	var _getDisplayName2 = __webpack_require__(25);
 
 	var _getDisplayName3 = _interopRequireDefault(_getDisplayName2);
 
-	var _wrapDisplayName2 = __webpack_require__(14);
+	var _wrapDisplayName2 = __webpack_require__(24);
 
 	var _wrapDisplayName3 = _interopRequireDefault(_wrapDisplayName2);
 
-	var _shallowEqual2 = __webpack_require__(24);
+	var _shallowEqual2 = __webpack_require__(34);
 
 	var _shallowEqual3 = _interopRequireDefault(_shallowEqual2);
 
-	var _isClassComponent2 = __webpack_require__(20);
+	var _isClassComponent2 = __webpack_require__(30);
 
 	var _isClassComponent3 = _interopRequireDefault(_isClassComponent2);
 
-	var _createEagerElement2 = __webpack_require__(49);
+	var _createEagerElement2 = __webpack_require__(59);
 
 	var _createEagerElement3 = _interopRequireDefault(_createEagerElement2);
 
-	var _createEagerFactory2 = __webpack_require__(16);
+	var _createEagerFactory2 = __webpack_require__(26);
 
 	var _createEagerFactory3 = _interopRequireDefault(_createEagerFactory2);
 
-	var _createSink2 = __webpack_require__(50);
+	var _createSink2 = __webpack_require__(60);
 
 	var _createSink3 = _interopRequireDefault(_createSink2);
 
-	var _componentFromProp2 = __webpack_require__(51);
+	var _componentFromProp2 = __webpack_require__(61);
 
 	var _componentFromProp3 = _interopRequireDefault(_componentFromProp2);
 
-	var _nest2 = __webpack_require__(52);
+	var _nest2 = __webpack_require__(62);
 
 	var _nest3 = _interopRequireDefault(_nest2);
 
-	var _hoistStatics2 = __webpack_require__(53);
+	var _hoistStatics2 = __webpack_require__(63);
 
 	var _hoistStatics3 = _interopRequireDefault(_hoistStatics2);
 
-	var _componentFromStream2 = __webpack_require__(55);
+	var _componentFromStream2 = __webpack_require__(65);
 
 	var _componentFromStream3 = _interopRequireDefault(_componentFromStream2);
 
-	var _mapPropsStream2 = __webpack_require__(60);
+	var _mapPropsStream2 = __webpack_require__(70);
 
 	var _mapPropsStream3 = _interopRequireDefault(_mapPropsStream2);
 
-	var _createEventHandler2 = __webpack_require__(61);
+	var _createEventHandler2 = __webpack_require__(71);
 
 	var _createEventHandler3 = _interopRequireDefault(_createEventHandler2);
 
-	var _setObservableConfig2 = __webpack_require__(59);
+	var _setObservableConfig2 = __webpack_require__(69);
 
 	var _setObservableConfig3 = _interopRequireDefault(_setObservableConfig2);
 
@@ -435,18 +1158,18 @@ this["carbon.app"] =
 	exports.setObservableConfig = _setObservableConfig3.default;
 
 /***/ },
-/* 11 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
@@ -466,7 +1189,7 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(mapProps, 'mapProps');
 
 /***/ },
-/* 12 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -481,7 +1204,7 @@ this["carbon.app"] =
 	  if (process.env.NODE_ENV !== 'production' && setDisplayName) {
 	    var _ret = function () {
 	      /* eslint-disable global-require */
-	      var wrapDisplayName = __webpack_require__(14).default;
+	      var wrapDisplayName = __webpack_require__(24).default;
 	      /* eslint-enable global-require */
 
 	      if (noArgs) {
@@ -523,23 +1246,23 @@ this["carbon.app"] =
 	};
 
 	exports.default = createHelper;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
 
 /***/ },
-/* 13 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = (__webpack_require__(4))(1);
 
 /***/ },
-/* 14 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _getDisplayName = __webpack_require__(15);
+	var _getDisplayName = __webpack_require__(25);
 
 	var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
 
@@ -554,7 +1277,7 @@ this["carbon.app"] =
 	exports.default = wrapDisplayName;
 
 /***/ },
-/* 15 */
+/* 25 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -575,18 +1298,18 @@ this["carbon.app"] =
 	exports.default = getDisplayName;
 
 /***/ },
-/* 16 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _createEagerElementUtil = __webpack_require__(17);
+	var _createEagerElementUtil = __webpack_require__(27);
 
 	var _createEagerElementUtil2 = _interopRequireDefault(_createEagerElementUtil);
 
-	var _isReferentiallyTransparentFunctionComponent = __webpack_require__(19);
+	var _isReferentiallyTransparentFunctionComponent = __webpack_require__(29);
 
 	var _isReferentiallyTransparentFunctionComponent2 = _interopRequireDefault(_isReferentiallyTransparentFunctionComponent);
 
@@ -604,7 +1327,7 @@ this["carbon.app"] =
 	exports.default = createFactory;
 
 /***/ },
-/* 17 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -621,7 +1344,7 @@ this["carbon.app"] =
 	  }return target;
 	};
 
-	var _react = __webpack_require__(18);
+	var _react = __webpack_require__(28);
 
 	var _react2 = _interopRequireDefault(_react);
 
@@ -649,20 +1372,20 @@ this["carbon.app"] =
 	exports.default = createEagerElementUtil;
 
 /***/ },
-/* 18 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = (__webpack_require__(4))(53);
 
 /***/ },
-/* 19 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _isClassComponent = __webpack_require__(20);
+	var _isClassComponent = __webpack_require__(30);
 
 	var _isClassComponent2 = _interopRequireDefault(_isClassComponent);
 
@@ -677,7 +1400,7 @@ this["carbon.app"] =
 	exports.default = isReferentiallyTransparentFunctionComponent;
 
 /***/ },
-/* 20 */
+/* 30 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -692,7 +1415,7 @@ this["carbon.app"] =
 	exports.default = isClassComponent;
 
 /***/ },
-/* 21 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -709,11 +1432,11 @@ this["carbon.app"] =
 	  }return target;
 	};
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _mapProps = __webpack_require__(11);
+	var _mapProps = __webpack_require__(21);
 
 	var _mapProps2 = _interopRequireDefault(_mapProps);
 
@@ -730,7 +1453,7 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(withProps, 'withProps');
 
 /***/ },
-/* 22 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -749,21 +1472,21 @@ this["carbon.app"] =
 	  }return target;
 	};
 
-	var _react = __webpack_require__(18);
+	var _react = __webpack_require__(28);
 
-	var _pick = __webpack_require__(23);
+	var _pick = __webpack_require__(33);
 
 	var _pick2 = _interopRequireDefault(_pick);
 
-	var _shallowEqual = __webpack_require__(24);
+	var _shallowEqual = __webpack_require__(34);
 
 	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
@@ -829,7 +1552,7 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(withPropsOnChange, 'withPropsOnChange');
 
 /***/ },
-/* 23 */
+/* 33 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -849,14 +1572,14 @@ this["carbon.app"] =
 	exports.default = pick;
 
 /***/ },
-/* 24 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _shallowEqual = __webpack_require__(25);
+	var _shallowEqual = __webpack_require__(35);
 
 	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 
@@ -867,13 +1590,13 @@ this["carbon.app"] =
 	exports.default = _shallowEqual2.default;
 
 /***/ },
-/* 25 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = (__webpack_require__(4))(58);
 
 /***/ },
-/* 26 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -892,13 +1615,13 @@ this["carbon.app"] =
 	  }return target;
 	};
 
-	var _react = __webpack_require__(18);
+	var _react = __webpack_require__(28);
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
@@ -993,21 +1716,21 @@ this["carbon.app"] =
 	};
 
 	exports.default = (0, _createHelper2.default)(withHandlers, 'withHandlers');
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
 
 /***/ },
-/* 27 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
@@ -1029,7 +1752,7 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(defaultProps, 'defaultProps');
 
 /***/ },
-/* 28 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1046,15 +1769,15 @@ this["carbon.app"] =
 	  }return target;
 	};
 
-	var _omit = __webpack_require__(29);
+	var _omit = __webpack_require__(39);
 
 	var _omit2 = _interopRequireDefault(_omit);
 
-	var _mapProps = __webpack_require__(11);
+	var _mapProps = __webpack_require__(21);
 
 	var _mapProps2 = _interopRequireDefault(_mapProps);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
@@ -1073,7 +1796,7 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(renameProp, 'renameProp');
 
 /***/ },
-/* 29 */
+/* 39 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -1101,7 +1824,7 @@ this["carbon.app"] =
 	exports.default = omit;
 
 /***/ },
-/* 30 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1118,19 +1841,19 @@ this["carbon.app"] =
 	  }return target;
 	};
 
-	var _omit = __webpack_require__(29);
+	var _omit = __webpack_require__(39);
 
 	var _omit2 = _interopRequireDefault(_omit);
 
-	var _pick = __webpack_require__(23);
+	var _pick = __webpack_require__(33);
 
 	var _pick2 = _interopRequireDefault(_pick);
 
-	var _mapProps = __webpack_require__(11);
+	var _mapProps = __webpack_require__(21);
 
 	var _mapProps2 = _interopRequireDefault(_mapProps);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
@@ -1161,7 +1884,7 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(renameProps, 'renameProps');
 
 /***/ },
-/* 31 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1178,11 +1901,11 @@ this["carbon.app"] =
 	  }return target;
 	};
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
@@ -1202,7 +1925,7 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(flattenProp, 'flattenProp');
 
 /***/ },
-/* 32 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1221,13 +1944,13 @@ this["carbon.app"] =
 	  }return target;
 	};
 
-	var _react = __webpack_require__(18);
+	var _react = __webpack_require__(28);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
@@ -1294,7 +2017,7 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(withState, 'withState');
 
 /***/ },
-/* 33 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1313,13 +2036,13 @@ this["carbon.app"] =
 	  }return target;
 	};
 
-	var _react = __webpack_require__(18);
+	var _react = __webpack_require__(28);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
@@ -1386,7 +2109,7 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(withReducer, 'withReducer');
 
 /***/ },
-/* 34 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1395,15 +2118,15 @@ this["carbon.app"] =
 
 	exports.__esModule = true;
 
-	var _react = __webpack_require__(18);
+	var _react = __webpack_require__(28);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
@@ -1472,18 +2195,18 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(branch, 'branch');
 
 /***/ },
-/* 35 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	exports.__esModule = true;
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
@@ -1503,7 +2226,7 @@ this["carbon.app"] =
 	    // const RenderComponent = props => <Component {...props} />
 	    if (process.env.NODE_ENV !== 'production') {
 	      /* eslint-disable global-require */
-	      var wrapDisplayName = __webpack_require__(14).default;
+	      var wrapDisplayName = __webpack_require__(24).default;
 	      /* eslint-enable global-require */
 	      RenderComponent.displayName = wrapDisplayName(Component, 'renderComponent');
 	    }
@@ -1512,17 +2235,17 @@ this["carbon.app"] =
 	};
 
 	exports.default = (0, _createHelper2.default)(renderComponent, 'renderComponent', false);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
 
 /***/ },
-/* 36 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
@@ -1541,7 +2264,7 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(renderNothing, 'renderNothing', false, true);
 
 /***/ },
-/* 37 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1550,13 +2273,13 @@ this["carbon.app"] =
 
 	exports.__esModule = true;
 
-	var _react = __webpack_require__(18);
+	var _react = __webpack_require__(28);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
@@ -1610,22 +2333,22 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(shouldUpdate, 'shouldUpdate');
 
 /***/ },
-/* 38 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _shouldUpdate = __webpack_require__(37);
+	var _shouldUpdate = __webpack_require__(47);
 
 	var _shouldUpdate2 = _interopRequireDefault(_shouldUpdate);
 
-	var _shallowEqual = __webpack_require__(24);
+	var _shallowEqual = __webpack_require__(34);
 
 	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
@@ -1640,26 +2363,26 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(pure, 'pure', true, true);
 
 /***/ },
-/* 39 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _shouldUpdate = __webpack_require__(37);
+	var _shouldUpdate = __webpack_require__(47);
 
 	var _shouldUpdate2 = _interopRequireDefault(_shouldUpdate);
 
-	var _shallowEqual = __webpack_require__(24);
+	var _shallowEqual = __webpack_require__(34);
 
 	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _pick = __webpack_require__(23);
+	var _pick = __webpack_require__(33);
 
 	var _pick2 = _interopRequireDefault(_pick);
 
@@ -1676,18 +2399,18 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(onlyUpdateForKeys, 'onlyUpdateForKeys');
 
 /***/ },
-/* 40 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	exports.__esModule = true;
 
-	var _onlyUpdateForKeys = __webpack_require__(39);
+	var _onlyUpdateForKeys = __webpack_require__(49);
 
 	var _onlyUpdateForKeys2 = _interopRequireDefault(_onlyUpdateForKeys);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
@@ -1700,7 +2423,7 @@ this["carbon.app"] =
 
 	  if (process.env.NODE_ENV !== 'production') {
 	    /* eslint-disable global-require */
-	    var getDisplayName = __webpack_require__(15).default;
+	    var getDisplayName = __webpack_require__(25).default;
 	    /* eslint-enable global-require */
 	    if (!propTypes) {
 	      /* eslint-disable */
@@ -1716,10 +2439,10 @@ this["carbon.app"] =
 	};
 
 	exports.default = (0, _createHelper2.default)(onlyUpdateForPropTypes, 'onlyUpdateForPropTypes', true, true);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
 
 /***/ },
-/* 41 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1728,13 +2451,13 @@ this["carbon.app"] =
 
 	exports.__esModule = true;
 
-	var _react = __webpack_require__(18);
+	var _react = __webpack_require__(28);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
@@ -1797,7 +2520,7 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(withContext, 'withContext');
 
 /***/ },
-/* 42 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1814,11 +2537,11 @@ this["carbon.app"] =
 	  }return target;
 	};
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
@@ -1842,7 +2565,7 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(getContext, 'getContext');
 
 /***/ },
-/* 43 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -1859,13 +2582,13 @@ this["carbon.app"] =
 	  }return target;
 	};
 
-	var _react = __webpack_require__(18);
+	var _react = __webpack_require__(28);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
@@ -1892,10 +2615,10 @@ this["carbon.app"] =
 	};
 
 	exports.default = (0, _createHelper2.default)(lifecycle, 'lifecycle');
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
 
 /***/ },
-/* 44 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1904,15 +2627,15 @@ this["carbon.app"] =
 
 	exports.__esModule = true;
 
-	var _react = __webpack_require__(18);
+	var _react = __webpack_require__(28);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _getDisplayName = __webpack_require__(15);
+	var _getDisplayName = __webpack_require__(25);
 
 	var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
 
-	var _isClassComponent = __webpack_require__(20);
+	var _isClassComponent = __webpack_require__(30);
 
 	var _isClassComponent2 = _interopRequireDefault(_isClassComponent);
 
@@ -1973,14 +2696,14 @@ this["carbon.app"] =
 	exports.default = toClass;
 
 /***/ },
-/* 45 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
@@ -2000,18 +2723,18 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(setStatic, 'setStatic', false);
 
 /***/ },
-/* 46 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _setStatic = __webpack_require__(45);
+	var _setStatic = __webpack_require__(55);
 
 	var _setStatic2 = _interopRequireDefault(_setStatic);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
@@ -2026,18 +2749,18 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(setPropTypes, 'setPropTypes', false);
 
 /***/ },
-/* 47 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _setStatic = __webpack_require__(45);
+	var _setStatic = __webpack_require__(55);
 
 	var _setStatic2 = _interopRequireDefault(_setStatic);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
@@ -2052,7 +2775,7 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(setDisplayName, 'setDisplayName', false);
 
 /***/ },
-/* 48 */
+/* 58 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2086,18 +2809,18 @@ this["carbon.app"] =
 	}
 
 /***/ },
-/* 49 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _createEagerElementUtil = __webpack_require__(17);
+	var _createEagerElementUtil = __webpack_require__(27);
 
 	var _createEagerElementUtil2 = _interopRequireDefault(_createEagerElementUtil);
 
-	var _isReferentiallyTransparentFunctionComponent = __webpack_require__(19);
+	var _isReferentiallyTransparentFunctionComponent = __webpack_require__(29);
 
 	var _isReferentiallyTransparentFunctionComponent2 = _interopRequireDefault(_isReferentiallyTransparentFunctionComponent);
 
@@ -2116,7 +2839,7 @@ this["carbon.app"] =
 	exports.default = createEagerElement;
 
 /***/ },
-/* 50 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2125,7 +2848,7 @@ this["carbon.app"] =
 
 	exports.__esModule = true;
 
-	var _react = __webpack_require__(18);
+	var _react = __webpack_require__(28);
 
 	function _classCallCheck(instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -2174,18 +2897,18 @@ this["carbon.app"] =
 	exports.default = createSink;
 
 /***/ },
-/* 51 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _omit = __webpack_require__(29);
+	var _omit = __webpack_require__(39);
 
 	var _omit2 = _interopRequireDefault(_omit);
 
-	var _createEagerElement = __webpack_require__(49);
+	var _createEagerElement = __webpack_require__(59);
 
 	var _createEagerElement2 = _interopRequireDefault(_createEagerElement);
 
@@ -2204,14 +2927,14 @@ this["carbon.app"] =
 	exports.default = componentFromProp;
 
 /***/ },
-/* 52 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
 	exports.__esModule = true;
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
@@ -2242,7 +2965,7 @@ this["carbon.app"] =
 
 	  if (process.env.NODE_ENV !== 'production') {
 	    /* eslint-disable global-require */
-	    var getDisplayName = __webpack_require__(15).default;
+	    var getDisplayName = __webpack_require__(25).default;
 	    /* eslint-enable global-require */
 	    var displayNames = Components.map(getDisplayName);
 	    Nest.displayName = 'nest(' + displayNames.join(', ') + ')';
@@ -2252,17 +2975,17 @@ this["carbon.app"] =
 	};
 
 	exports.default = nest;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(13)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
 
 /***/ },
-/* 53 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	exports.__esModule = true;
 
-	var _hoistNonReactStatics = __webpack_require__(54);
+	var _hoistNonReactStatics = __webpack_require__(64);
 
 	var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
 
@@ -2281,13 +3004,13 @@ this["carbon.app"] =
 	exports.default = hoistStatics;
 
 /***/ },
-/* 54 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = (__webpack_require__(4))(161);
 
 /***/ },
-/* 55 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2297,15 +3020,15 @@ this["carbon.app"] =
 	exports.__esModule = true;
 	exports.componentFromStreamWithConfig = undefined;
 
-	var _react = __webpack_require__(18);
+	var _react = __webpack_require__(28);
 
-	var _changeEmitter = __webpack_require__(56);
+	var _changeEmitter = __webpack_require__(66);
 
-	var _symbolObservable = __webpack_require__(57);
+	var _symbolObservable = __webpack_require__(67);
 
 	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
-	var _setObservableConfig = __webpack_require__(59);
+	var _setObservableConfig = __webpack_require__(69);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -2403,7 +3126,7 @@ this["carbon.app"] =
 	exports.default = componentFromStream;
 
 /***/ },
-/* 56 */
+/* 66 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2459,17 +3182,17 @@ this["carbon.app"] =
 	};
 
 /***/ },
-/* 57 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/* global window */
 	'use strict';
 
-	module.exports = __webpack_require__(58)(global || window || undefined);
+	module.exports = __webpack_require__(68)(global || window || undefined);
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 58 */
+/* 68 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2493,7 +3216,7 @@ this["carbon.app"] =
 	};
 
 /***/ },
-/* 59 */
+/* 69 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2520,7 +3243,7 @@ this["carbon.app"] =
 	exports.default = configureObservable;
 
 /***/ },
-/* 60 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2528,21 +3251,21 @@ this["carbon.app"] =
 	exports.__esModule = true;
 	exports.mapPropsStreamWithConfig = undefined;
 
-	var _symbolObservable = __webpack_require__(57);
+	var _symbolObservable = __webpack_require__(67);
 
 	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
-	var _createEagerFactory = __webpack_require__(16);
+	var _createEagerFactory = __webpack_require__(26);
 
 	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
 
-	var _createHelper = __webpack_require__(12);
+	var _createHelper = __webpack_require__(22);
 
 	var _createHelper2 = _interopRequireDefault(_createHelper);
 
-	var _componentFromStream = __webpack_require__(55);
+	var _componentFromStream = __webpack_require__(65);
 
-	var _setObservableConfig = __webpack_require__(59);
+	var _setObservableConfig = __webpack_require__(69);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -2592,7 +3315,7 @@ this["carbon.app"] =
 	exports.default = (0, _createHelper2.default)(mapPropsStream, 'mapPropsStream');
 
 /***/ },
-/* 61 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2600,13 +3323,13 @@ this["carbon.app"] =
 	exports.__esModule = true;
 	exports.createEventHandlerWithConfig = undefined;
 
-	var _symbolObservable = __webpack_require__(57);
+	var _symbolObservable = __webpack_require__(67);
 
 	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
-	var _changeEmitter = __webpack_require__(56);
+	var _changeEmitter = __webpack_require__(66);
 
-	var _setObservableConfig = __webpack_require__(59);
+	var _setObservableConfig = __webpack_require__(69);
 
 	function _interopRequireDefault(obj) {
 	  return obj && obj.__esModule ? obj : { default: obj };
@@ -2639,7 +3362,7 @@ this["carbon.app"] =
 	exports.default = createEventHandler;
 
 /***/ },
-/* 62 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2648,7 +3371,7 @@ this["carbon.app"] =
 	  value: true
 	});
 
-	var _react = __webpack_require__(18);
+	var _react = __webpack_require__(28);
 
 	var _react2 = _interopRequireDefault(_react);
 
@@ -2671,7 +3394,7 @@ this["carbon.app"] =
 	exports.default = Container;
 
 /***/ },
-/* 63 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2680,17 +3403,17 @@ this["carbon.app"] =
 		value: true
 	});
 
-	var _recompose = __webpack_require__(10);
+	var _recompose = __webpack_require__(20);
 
-	var _container = __webpack_require__(62);
+	var _container = __webpack_require__(72);
 
 	var _container2 = _interopRequireDefault(_container);
 
-	var _withConnectToStore = __webpack_require__(5);
+	var _withConnectToStore = __webpack_require__(17);
 
 	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
 
-	var _withInitialSideEffects = __webpack_require__(9);
+	var _withInitialSideEffects = __webpack_require__(19);
 
 	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
 
@@ -2707,7 +3430,7 @@ this["carbon.app"] =
 	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
 
 /***/ },
-/* 64 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2716,17 +3439,17 @@ this["carbon.app"] =
 		value: true
 	});
 
-	var _recompose = __webpack_require__(10);
+	var _recompose = __webpack_require__(20);
 
-	var _container = __webpack_require__(62);
+	var _container = __webpack_require__(72);
 
 	var _container2 = _interopRequireDefault(_container);
 
-	var _withConnectToStore = __webpack_require__(5);
+	var _withConnectToStore = __webpack_require__(17);
 
 	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
 
-	var _withInitialSideEffects = __webpack_require__(9);
+	var _withInitialSideEffects = __webpack_require__(19);
 
 	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
 
@@ -2749,7 +3472,7 @@ this["carbon.app"] =
 	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
 
 /***/ },
-/* 65 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2758,17 +3481,17 @@ this["carbon.app"] =
 		value: true
 	});
 
-	var _recompose = __webpack_require__(10);
+	var _recompose = __webpack_require__(20);
 
-	var _container = __webpack_require__(62);
+	var _container = __webpack_require__(72);
 
 	var _container2 = _interopRequireDefault(_container);
 
-	var _withConnectToStore = __webpack_require__(5);
+	var _withConnectToStore = __webpack_require__(17);
 
 	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
 
-	var _withInitialSideEffects = __webpack_require__(9);
+	var _withInitialSideEffects = __webpack_require__(19);
 
 	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
 
@@ -2785,7 +3508,7 @@ this["carbon.app"] =
 	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
 
 /***/ },
-/* 66 */
+/* 76 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -2802,7 +3525,7 @@ this["carbon.app"] =
 	};
 
 /***/ },
-/* 67 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2815,35 +3538,35 @@ this["carbon.app"] =
 
 	exports.makeContainer = makeContainer;
 
-	var _react = __webpack_require__(18);
+	var _react = __webpack_require__(28);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _brokenContainer = __webpack_require__(63);
+	var _brokenContainer = __webpack_require__(73);
 
 	var _brokenContainer2 = _interopRequireDefault(_brokenContainer);
 
-	var _postMetaContainer = __webpack_require__(64);
+	var _postMetaContainer = __webpack_require__(74);
 
 	var _postMetaContainer2 = _interopRequireDefault(_postMetaContainer);
 
-	var _commentMetaContainer = __webpack_require__(65);
+	var _commentMetaContainer = __webpack_require__(75);
 
 	var _commentMetaContainer2 = _interopRequireDefault(_commentMetaContainer);
 
-	var _termMetaContainer = __webpack_require__(68);
+	var _termMetaContainer = __webpack_require__(78);
 
 	var _termMetaContainer2 = _interopRequireDefault(_termMetaContainer);
 
-	var _userMetaContainer = __webpack_require__(80);
+	var _userMetaContainer = __webpack_require__(79);
 
 	var _userMetaContainer2 = _interopRequireDefault(_userMetaContainer);
 
-	var _themeOptionsContainer = __webpack_require__(81);
+	var _themeOptionsContainer = __webpack_require__(80);
 
 	var _themeOptionsContainer2 = _interopRequireDefault(_themeOptionsContainer);
 
-	var _constants = __webpack_require__(69);
+	var _constants = __webpack_require__(14);
 
 	var ContainerConst = _interopRequireWildcard(_constants);
 
@@ -2876,7 +3599,7 @@ this["carbon.app"] =
 	}
 
 /***/ },
-/* 68 */
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2885,17 +3608,17 @@ this["carbon.app"] =
 		value: true
 	});
 
-	var _recompose = __webpack_require__(10);
+	var _recompose = __webpack_require__(20);
 
-	var _container = __webpack_require__(62);
+	var _container = __webpack_require__(72);
 
 	var _container2 = _interopRequireDefault(_container);
 
-	var _withConnectToStore = __webpack_require__(5);
+	var _withConnectToStore = __webpack_require__(17);
 
 	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
 
-	var _withInitialSideEffects = __webpack_require__(9);
+	var _withInitialSideEffects = __webpack_require__(19);
 
 	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
 
@@ -2914,22 +3637,7 @@ this["carbon.app"] =
 	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
 
 /***/ },
-/* 69 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var TYPE_POST_META = exports.TYPE_POST_META = 'Post_Meta';
-	var TYPE_COMMENT_META = exports.TYPE_COMMENT_META = 'Comment_Meta';
-	var TYPE_TERM_META = exports.TYPE_TERM_META = 'Term_Meta';
-	var TYPE_USER_META = exports.TYPE_USER_META = 'User_Meta';
-	var TYPE_THEME_OPTIONS = exports.TYPE_THEME_OPTIONS = 'Theme_Options';
-
-/***/ },
-/* 70 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -2937,122 +3645,140 @@ this["carbon.app"] =
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.createChannel = createChannel;
-	exports.createSelectboxChannel = createSelectboxChannel;
-	exports.createCheckableChannel = createCheckableChannel;
-	exports.createScrollChannel = createScrollChannel;
 
-	var _jquery = __webpack_require__(71);
+	var _recompose = __webpack_require__(20);
 
-	var _jquery2 = _interopRequireDefault(_jquery);
+	var _container = __webpack_require__(72);
 
-	var _reduxSaga = __webpack_require__(72);
+	var _container2 = _interopRequireDefault(_container);
+
+	var _withConnectToStore = __webpack_require__(17);
+
+	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
+
+	var _withInitialSideEffects = __webpack_require__(19);
+
+	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	/**
-	 * Create a Saga Channel that will listen for DOM events.
-	 * The buffer is used to emit the initial value of the inputs when the channel is created.
-	 *
-	 * @param  {String}   selector
-	 * @param  {String}   event
-	 * @param  {Function} handler
-	 * @param  {String}   [childSelector]
-	 * @return {Object}
+	 * Add the fields that are specific for this container.
 	 */
-	function createChannel(selector, event, handler) {
-		var childSelector = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+	var withProps = (0, _recompose.defaultProps)({
+		meta: {
+			role: null
+		},
+		ui: {}
+	});
 
-		return (0, _reduxSaga.eventChannel)(function (emit) {
-			// Find the element in DOM.
-			var $element = (0, _jquery2.default)(selector);
-
-			// Cancel the subscription.
-			var unsubscribe = function unsubscribe() {
-				$element.off(event, childSelector, handler);
-			};
-
-			// Close the channel since the element doesn't exists.
-			if (!$element.length) {
-				emit(_reduxSaga.END);
-				return unsubscribe;
-			}
-
-			// Setup the subscription.
-			$element.on(event, childSelector, function (event) {
-				handler(emit, $element, event);
-			});
-
-			// Emit the initial value.
-			handler(emit, $element);
-
-			return unsubscribe;
-		}, _reduxSaga.buffers.fixed(1));
-	}
-
-	/**
-	 * Create a channel that will listen for `change` events on selectbox.
-	 *
-	 * @param  {String} selector
-	 * @return {Object}
-	 */
-	function createSelectboxChannel(selector) {
-		return createChannel(selector, 'change', function (emit, $element) {
-			emit({
-				value: $element.val(),
-				option: $element.find(':selected').first().get(0)
-			});
-		});
-	}
-
-	/**
-	 * Create a channel that will listen for `change` events on radio/checkbox inputs.
-	 *
-	 * @param  {String} selector
-	 * @return {Object}
-	 */
-	function createCheckableChannel(selector) {
-		return createChannel(selector, 'change', function (emit, $element) {
-			var elements = $element.find('input:checked').get();
-			var values = elements.map(function (element) {
-				return element.value;
-			});
-
-			emit({
-				values: values,
-				elements: elements
-			});
-		}, 'input');
-	}
-
-	/**
-	 * Create a channel that will listen for `scroll` events.
-	 *
-	 * @param  {String} selector
-	 * @return {Object}
-	 */
-	function createScrollChannel(selector) {
-		return createChannel(selector, 'scroll', function (emit, $element) {
-			emit({
-				value: $element.scrollTop()
-			});
-		});
-	}
+	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
 
 /***/ },
-/* 71 */
-/***/ function(module, exports) {
-
-	(function() { module.exports = this["jQuery"]; }());
-
-/***/ },
-/* 72 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(367);
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _recompose = __webpack_require__(20);
+
+	var _container = __webpack_require__(72);
+
+	var _container2 = _interopRequireDefault(_container);
+
+	var _withConnectToStore = __webpack_require__(17);
+
+	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
+
+	var _withInitialSideEffects = __webpack_require__(19);
+
+	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/**
+	 * Add the fields that are specific for this container.
+	 */
+	var withProps = (0, _recompose.defaultProps)({
+		meta: {},
+		ui: {}
+	});
+
+	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
 
 /***/ },
-/* 73 */
+/* 81 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _redux = __webpack_require__(82);
+
+	var _reduxSaga = __webpack_require__(6);
+
+	var _reduxSaga2 = _interopRequireDefault(_reduxSaga);
+
+	var _normalize = __webpack_require__(2);
+
+	var _reducer = __webpack_require__(83);
+
+	var _reducer2 = _interopRequireDefault(_reducer);
+
+	var _reducer3 = __webpack_require__(76);
+
+	var _reducer4 = _interopRequireDefault(_reducer3);
+
+	var _base = __webpack_require__(85);
+
+	var _base2 = _interopRequireDefault(_base);
+
+	var _postMeta = __webpack_require__(86);
+
+	var _postMeta2 = _interopRequireDefault(_postMeta);
+
+	var _termMeta = __webpack_require__(5);
+
+	var _termMeta2 = _interopRequireDefault(_termMeta);
+
+	var _userMeta = __webpack_require__(15);
+
+	var _userMeta2 = _interopRequireDefault(_userMeta);
+
+	var _themeOptions = __webpack_require__(16);
+
+	var _themeOptions2 = _interopRequireDefault(_themeOptions);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var preloadedState = (0, _normalize.normalizePreloadedState)(window.carbon_json);
+	var saga = (0, _reduxSaga2.default)();
+	var reducer = (0, _redux.combineReducers)({ containers: _reducer2.default, sidebars: _reducer4.default });
+	var store = (0, _redux.createStore)(reducer, preloadedState, (0, _redux.applyMiddleware)(saga));
+
+	saga.run(_base2.default);
+	saga.run(_postMeta2.default);
+	saga.run(_termMeta2.default);
+	saga.run(_userMeta2.default);
+	saga.run(_themeOptions2.default);
+
+	exports.default = store;
+
+/***/ },
+/* 82 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = (__webpack_require__(4))(145);
+
+/***/ },
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3075,11 +3801,11 @@ this["carbon.app"] =
 	  }
 	};
 
-	var _objectPathImmutable = __webpack_require__(74);
+	var _objectPathImmutable = __webpack_require__(84);
 
 	var _objectPathImmutable2 = _interopRequireDefault(_objectPathImmutable);
 
-	var _actions = __webpack_require__(7);
+	var _actions = __webpack_require__(12);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3127,32 +3853,13 @@ this["carbon.app"] =
 	}
 
 /***/ },
-/* 74 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = (__webpack_require__(4))(267);
 
 /***/ },
-/* 75 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var getContainers = exports.getContainers = function getContainers(state) {
-	  return state.containers;
-	};
-	var getContainerById = exports.getContainerById = function getContainerById(state, containerId) {
-	  return state.containers[containerId];
-	};
-	var canProcessAction = exports.canProcessAction = function canProcessAction(state, containerId, containerType) {
-	  return getContainerById(state, containerId).type === containerType;
-	};
-
-/***/ },
-/* 76 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3167,13 +3874,13 @@ this["carbon.app"] =
 	exports.workerToggleMetaBoxVisibility = workerToggleMetaBoxVisibility;
 	exports.default = foreman;
 
-	var _reduxSaga = __webpack_require__(72);
+	var _reduxSaga = __webpack_require__(6);
 
-	var _effects = __webpack_require__(77);
+	var _effects = __webpack_require__(7);
 
-	var _selectors = __webpack_require__(75);
+	var _selectors = __webpack_require__(11);
 
-	var _actions = __webpack_require__(7);
+	var _actions = __webpack_require__(12);
 
 	var _marked = [workerSetupContainer, workerToggleMetaBoxVisibility, foreman].map(regeneratorRuntime.mark);
 
@@ -3281,21 +3988,7 @@ this["carbon.app"] =
 	}
 
 /***/ },
-/* 77 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = __webpack_require__(78);
-
-/***/ },
-/* 78 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = (__webpack_require__(4))(366);
-
-/***/ },
-/* 79 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3311,21 +4004,21 @@ this["carbon.app"] =
 	exports.workerCheckVisibility = workerCheckVisibility;
 	exports.default = foreman;
 
-	var _reduxSaga = __webpack_require__(72);
+	var _reduxSaga = __webpack_require__(6);
 
-	var _effects = __webpack_require__(77);
+	var _effects = __webpack_require__(7);
 
 	var _lodash = __webpack_require__(3);
 
-	var _events = __webpack_require__(70);
+	var _events = __webpack_require__(9);
 
 	var _constants = __webpack_require__(1);
 
-	var _selectors = __webpack_require__(75);
+	var _selectors = __webpack_require__(11);
 
-	var _actions = __webpack_require__(7);
+	var _actions = __webpack_require__(12);
 
-	var _constants2 = __webpack_require__(69);
+	var _constants2 = __webpack_require__(14);
 
 	var _marked = [workerSyncPageTemplate, workerSyncParentId, workerSyncPostFormat, workerSyncTerms, workerSetupContainer, workerCheckVisibility, foreman].map(regeneratorRuntime.mark);
 
@@ -3822,80 +4515,6 @@ this["carbon.app"] =
 			}
 		}, _marked[6], this);
 	}
-
-/***/ },
-/* 80 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _recompose = __webpack_require__(10);
-
-	var _container = __webpack_require__(62);
-
-	var _container2 = _interopRequireDefault(_container);
-
-	var _withConnectToStore = __webpack_require__(5);
-
-	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
-
-	var _withInitialSideEffects = __webpack_require__(9);
-
-	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Add the fields that are specific for this container.
-	 */
-	var withProps = (0, _recompose.defaultProps)({
-		meta: {
-			role: null
-		},
-		ui: {}
-	});
-
-	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
-
-/***/ },
-/* 81 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _recompose = __webpack_require__(10);
-
-	var _container = __webpack_require__(62);
-
-	var _container2 = _interopRequireDefault(_container);
-
-	var _withConnectToStore = __webpack_require__(5);
-
-	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
-
-	var _withInitialSideEffects = __webpack_require__(9);
-
-	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Add the fields that are specific for this container.
-	 */
-	var withProps = (0, _recompose.defaultProps)({
-		meta: {},
-		ui: {}
-	});
-
-	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
 
 /***/ }
 /******/ ]);
