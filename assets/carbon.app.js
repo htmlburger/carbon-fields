@@ -2663,7 +2663,7 @@ this["carbon.app"] =
 	var Container = function Container(props) {
 	  return _react2.default.createElement(
 	    'div',
-	    null,
+	    { style: { height: 1300 } },
 	    'container here'
 	  );
 	};
@@ -2939,6 +2939,8 @@ this["carbon.app"] =
 	});
 	exports.createSelectboxChannel = createSelectboxChannel;
 	exports.createCheckableChannel = createCheckableChannel;
+	exports.createChannel = createChannel;
+	exports.createScrollChannel = createScrollChannel;
 
 	var _jquery = __webpack_require__(71);
 
@@ -3032,6 +3034,60 @@ this["carbon.app"] =
 
 			return unsubscribe;
 		}, _reduxSaga.buffers.fixed(1));
+	}
+
+	/**
+	 * Create a Saga Channel that will listen for DOM events.
+	 * The buffer is used to emit the initial value of the inputs when the channel is created.
+	 *
+	 * @param  {String}   selector
+	 * @param  {String}   event
+	 * @param  {Function} handler
+	 * @param  {String}   [childSelector]
+	 * @return {Object}
+	 */
+	function createChannel(selector, event, handler) {
+		var childSelector = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+
+		return (0, _reduxSaga.eventChannel)(function (emit) {
+			// Find the element in DOM.
+			var $element = (0, _jquery2.default)(selector);
+
+			// Cancel the subscription.
+			var unsubscribe = function unsubscribe() {
+				$element.off(event, childSelector, handler);
+			};
+
+			// Close the channel since the element doesn't exists.
+			if (!$element.length) {
+				emit(_reduxSaga.END);
+				return unsubscribe;
+			}
+
+			// Setup the subscription.
+			$element.on(event, childSelector, function (event) {
+				handler(emit, $element, event);
+			});
+
+			// Emit the initial value.
+			handler(emit, $element);
+
+			return unsubscribe;
+		}, _reduxSaga.buffers.fixed(1));
+	}
+
+	/**
+	 * Create a channel that will listen for scroll events.
+	 *
+	 * @param  {String} selector
+	 * @return {Object}
+	 */
+	function createScrollChannel(selector) {
+		return createChannel(selector, 'scroll', function (emit, $element) {
+			emit({
+				value: $element.scrollTop()
+			});
+		});
 	}
 
 /***/ },

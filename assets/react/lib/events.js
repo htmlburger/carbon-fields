@@ -86,3 +86,55 @@ export function createCheckableChannel(selector: string): Object {
 		return unsubscribe;
 	}, buffers.fixed(1));
 }
+
+/**
+ * Create a Saga Channel that will listen for DOM events.
+ * The buffer is used to emit the initial value of the inputs when the channel is created.
+ *
+ * @param  {String}   selector
+ * @param  {String}   event
+ * @param  {Function} handler
+ * @param  {String}   [childSelector]
+ * @return {Object}
+ */
+export function createChannel(selector, event, handler, childSelector = null) {
+	return eventChannel((emit) => {
+		// Find the element in DOM.
+		const $element = $(selector);
+
+		// Cancel the subscription.
+		const unsubscribe = () => {
+			$element.off(event, childSelector, handler);
+		};
+
+		// Close the channel since the element doesn't exists.
+		if (!$element.length) {
+			emit(END);
+			return unsubscribe;
+		}
+
+		// Setup the subscription.
+		$element.on(event, childSelector, (event) => {
+			handler(emit, $element, event);
+		});
+
+		// Emit the initial value.
+		handler(emit, $element);
+
+		return unsubscribe;
+	}, buffers.fixed(1));
+}
+
+/**
+ * Create a channel that will listen for scroll events.
+ *
+ * @param  {String} selector
+ * @return {Object}
+ */
+export function createScrollChannel(selector) {
+	return createChannel(selector, 'scroll', (emit, $element) => {
+		emit({
+			value: $element.scrollTop()
+		});
+	});
+}

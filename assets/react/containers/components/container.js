@@ -9,7 +9,7 @@ import React from 'react';
  * @abstract
  */
 const Container = (props: Object) => {
-	return <div>
+	return <div style={{ height: 1300 }}>
 		container here
 	</div>;
 };

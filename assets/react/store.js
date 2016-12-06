@@ -10,6 +10,7 @@ import baseForeman from 'containers/sagas/base';
 import postMetaForeman from 'containers/sagas/post-meta';
 import termMetaForeman from 'containers/sagas/term-meta';
 import userMetaForeman from 'containers/sagas/user-meta';
+import themeOptionsForeman from 'containers/sagas/theme-options';
 
 const preloadedState = normalizePreloadedState(window.carbon_json);
 const saga = createSagaMiddleware();
@@ -20,5 +21,6 @@ saga.run(baseForeman);
 saga.run(postMetaForeman);
 saga.run(termMetaForeman);
 saga.run(userMetaForeman);
+saga.run(themeOptionsForeman);
 
 export default store;
