@@ -17,9 +17,13 @@ describe('containers/sagas/base', () => {
 			const meta = {};
 			const ui = {};
 
-			const expected = put(setMeta({ containerId, meta }));
-
 			const generator = workerSetupContainer(setupContainer(containerId, meta, ui));
+
+			const expected = put(setMeta({
+				containerId,
+				meta
+			}));
+
 			const actual = generator.next().value;
 
 			expect(actual).toEqual(expected);
@@ -28,6 +32,10 @@ describe('containers/sagas/base', () => {
 		it('should yield "SET_UI" action with default options', () => {
 			const meta = {};
 			const ui = {};
+			const generator = workerSetupContainer(setupContainer(containerId, meta, ui));
+
+			generator.next();
+
 			const expected = put(setUI({
 				containerId,
 				ui: {
@@ -37,10 +45,6 @@ describe('containers/sagas/base', () => {
 					classes: [],
 				}
 			}));
-
-			const generator = workerSetupContainer(setupContainer(containerId, meta, ui));
-
-			generator.next();
 
 			const actual = generator.next().value;
 
@@ -52,6 +56,11 @@ describe('containers/sagas/base', () => {
 			const ui = {
 				'is_visible': true
 			};
+
+			const generator = workerSetupContainer(setupContainer(containerId, meta, ui));
+
+			generator.next();
+
 			const expected = put(setUI({
 				containerId,
 				ui: {
@@ -61,10 +70,6 @@ describe('containers/sagas/base', () => {
 					classes: [],
 				}
 			}));
-
-			const generator = workerSetupContainer(setupContainer(containerId, meta, ui));
-
-			generator.next();
 
 			const actual = generator.next().value;
 
@@ -78,9 +83,9 @@ describe('containers/sagas/base', () => {
 	describe('toggleMetaboxVisibility', () => {
 		it('should get the container from the state', () => {
 			const ui = {};
-			const expected = select(getContainerById, containerId);
-
 			const generator = workerToggleMetaBoxVisibility(setUI({ containerId, ui }));
+
+			const expected = select(getContainerById, containerId);
 			const actual = generator.next().value;
 
 			expect(actual).toEqual(expected);
@@ -88,12 +93,11 @@ describe('containers/sagas/base', () => {
 
 		it('should find the parent in DOM', () => {
 			const ui = {};
-			const expected = call([document, document.querySelector], `#${containerId}`)
-
 			const generator = workerToggleMetaBoxVisibility(setUI({ containerId, ui }));
 
 			generator.next();
 
+			const expected = call([document, document.querySelector], `#${containerId}`)
 			const actual = generator.next().value;
 
 			expect(actual).toEqual(expected);
@@ -102,7 +106,6 @@ describe('containers/sagas/base', () => {
 		it('should throw an error if cannot find the parent', () => {
 			const ui = {};
 			const element = document.querySelector(`#${containerId}`);
-
 			const generator = workerToggleMetaBoxVisibility(setUI({ containerId, ui }));
 
 			generator.next();
@@ -120,7 +123,6 @@ describe('containers/sagas/base', () => {
 
 			const ui = { is_visible: true };
 			const element = document.querySelector(`#${containerId}`);
-
 			const generator = workerToggleMetaBoxVisibility(setUI({ containerId, ui }));
 
 			expect(element.style.display).toBe('none');

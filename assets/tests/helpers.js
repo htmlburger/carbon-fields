@@ -4,8 +4,8 @@ import { setUI } from 'containers/actions';
 /**
  * Small helper to generate a dummy action that will change the container's visibility.
  *
- * @param  {string}  containerId
- * @param  {boolean} isVisible
+ * @param  {String}  containerId
+ * @param  {Boolean} isVisible
  * @return {Object}
  */
 export function stubContainerVisibilityAction(containerId, isVisible) {
@@ -20,8 +20,8 @@ export function stubContainerVisibilityAction(containerId, isVisible) {
 /**
  * Generate a dummy object that represents a container.
  *
- * @param  {string} containerType
- * @param  {string} containerId
+ * @param  {String} containerType
+ * @param  {String} containerId
  * @param  {Object} state
  * @return {Object}
  */

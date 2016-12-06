@@ -37,37 +37,17 @@ describe('containers/sagas/term-meta', () => {
 			generator.next();
 			generator.next(createSelectboxChannel('#parent'));
 
-			// Initial value of the select.
-			let actual = generator.next({
-				value: '-1',
-				option: document.querySelector('option[value="-1"]')
-			}).value;
-
-			let expected = put(setMeta({
+			const expected = put(setMeta({
 				containerId: containerId,
 				meta: {
 					'level': 1
 				}
 			}));
 
-			expect(actual).toEqual(expected);
-
-			// When the value of select is changed.
-			document.querySelector('#parent').value = '17';
-
-			generator.next();
-
-			actual = generator.next({
-				value: '17',
-				option: document.querySelector('option[value="17"]')
+			const actual = generator.next({
+				value: '-1',
+				option: document.querySelector('option[value="-1"]')
 			}).value;
-
-			expected = put(setMeta({
-				containerId: containerId,
-				meta: {
-					'level': 2
-				}
-			}));
 
 			expect(actual).toEqual(expected);
 		});
@@ -92,12 +72,12 @@ describe('containers/sagas/term-meta', () => {
 			generator = null;
 		});
 
-		const stubTermMetaVisibilityAction = partial(stubContainerVisibilityAction, containerId);
-		const stubTermMetaContainer = partial(stubContainerState, TYPE_TERM_META, containerId);
+		const stubVisibilityAction = partial(stubContainerVisibilityAction, containerId);
+		const stubContainer = partial(stubContainerState, TYPE_TERM_META, containerId);
 
 		it('should handle "show_on_level"', () => {
-			const expected = stubTermMetaVisibilityAction(true);
-			const actual = generator.next(stubTermMetaContainer({
+			const expected = stubVisibilityAction(true);
+			const actual = generator.next(stubContainer({
 				settings: {
 					show_on_level: 2
 				},

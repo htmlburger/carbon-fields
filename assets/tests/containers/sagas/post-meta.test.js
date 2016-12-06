@@ -41,13 +41,16 @@ describe('containers/sagas/post-meta', () => {
 			generator.next();
 			generator.next(createSelectboxChannel('#page_template'));
 
-			const actual = generator.next({ value: 'default' }).value;
 			const expected = put(setMeta({
 				containerId: containerId,
 				meta: {
 					'page_template': 'default'
 				}
 			}));
+
+			const actual = generator.next({
+				value: 'default'
+			}).value;
 
 			expect(actual).toEqual(expected);
 		});
@@ -74,7 +77,6 @@ describe('containers/sagas/post-meta', () => {
 			generator.next();
 			generator.next(createSelectboxChannel('#parent_id'));
 
-			const actual = generator.next({ value: '5', option: document.querySelector('option[value="5"]') }).value;
 			const expected = put(setMeta({
 				containerId: containerId,
 				meta: {
@@ -82,6 +84,11 @@ describe('containers/sagas/post-meta', () => {
 					'level': 2
 				}
 			}));
+
+			const actual = generator.next({
+				value: '5',
+				option: document.querySelector('option[value="5"]')
+			}).value;
 
 			expect(actual).toEqual(expected);
 		});
@@ -118,13 +125,16 @@ describe('containers/sagas/post-meta', () => {
 			generator.next();
 			generator.next(createSelectboxChannel('#post-formats-select'));
 
-			const actual = generator.next({ values: ['0'] }).value;
 			const expected = put(setMeta({
 				containerId: containerId,
 				meta: {
 					'post_format': '0',
 				}
 			}));
+
+			const actual = generator.next({
+				values: ['0']
+			}).value;
 
 			expect(actual).toEqual(expected);
 		});
@@ -176,13 +186,16 @@ describe('containers/sagas/post-meta', () => {
 
 			generator.next(createSelectboxChannel('#crb_resource_categorychecklist'));
 
-			const actual = generator.next({ values: ['18', '12', '9'] }).value;
 			const expected = put(setMeta({
 				containerId: containerId,
 				meta: {
 					terms: [18, 12, 9],
 				}
 			}));
+
+			const actual = generator.next({
+				values: ['18', '12', '9']
+			}).value;
 
 			expect(actual).toEqual(expected);
 		});
@@ -207,14 +220,14 @@ describe('containers/sagas/post-meta', () => {
 			generator = null;
 		});
 
-		const stubPostMetaVisibilityAction = partial(stubContainerVisibilityAction, containerId);
-		const stubPostMetaContainer = partial(stubContainerState, TYPE_POST_META, containerId);
+		const stubVisibilityAction = partial(stubContainerVisibilityAction, containerId);
+		const stubContainer = partial(stubContainerState, TYPE_POST_META, containerId);
 
 		it('should handle "show_on_template"', () => {
 			window.typenow = TYPE_NOW_PAGE;
 
-			const expected = stubPostMetaVisibilityAction(true);
-			const actual = generator.next(stubPostMetaContainer({
+			const expected = stubVisibilityAction(true);
+			const actual = generator.next(stubContainer({
 				settings: {
 					show_on: {
 						template_names: ['template/in-the-news.php']
@@ -232,8 +245,8 @@ describe('containers/sagas/post-meta', () => {
 		it('should handle "hide_on_template"', () => {
 			window.typenow = TYPE_NOW_PAGE;
 
-			const expected = stubPostMetaVisibilityAction(true);
-			const actual = generator.next(stubPostMetaContainer({
+			const expected = stubVisibilityAction(true);
+			const actual = generator.next(stubContainer({
 				settings: {
 					show_on: {
 						not_in_template_names: ['template/in-the-news.php']
@@ -249,8 +262,8 @@ describe('containers/sagas/post-meta', () => {
 		});
 
 		it('should handle "show_on_page_children"', () => {
-			const expected = stubPostMetaVisibilityAction(true);
-			const actual = generator.next(stubPostMetaContainer({
+			const expected = stubVisibilityAction(true);
+			const actual = generator.next(stubContainer({
 				settings: {
 					show_on: {
 						parent_page_id: 12
@@ -266,8 +279,8 @@ describe('containers/sagas/post-meta', () => {
 		});
 
 		it('should handle "show_on_level"', () => {
-			const expected = stubPostMetaVisibilityAction(true);
-			const actual = generator.next(stubPostMetaContainer({
+			const expected = stubVisibilityAction(true);
+			const actual = generator.next(stubContainer({
 				settings: {
 					show_on: {
 						level_limit: 2
@@ -283,8 +296,8 @@ describe('containers/sagas/post-meta', () => {
 		});
 
 		it('should handle "show_on_post_format"', () => {
-			const expected = stubPostMetaVisibilityAction(true);
-			const actual = generator.next(stubPostMetaContainer({
+			const expected = stubVisibilityAction(true);
+			const actual = generator.next(stubContainer({
 				settings: {
 					show_on: {
 						post_formats: ['aside', 'gallery']
@@ -300,8 +313,8 @@ describe('containers/sagas/post-meta', () => {
 		});
 
 		it('should handle "show_on_taxonomy_term"', () => {
-			const expected = stubPostMetaVisibilityAction(true);
-			const actual = generator.next(stubPostMetaContainer({
+			const expected = stubVisibilityAction(true);
+			const actual = generator.next(stubContainer({
 				settings: {
 					show_on: {
 						tax_term_id: '13'
