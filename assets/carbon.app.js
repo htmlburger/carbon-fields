@@ -2937,9 +2937,9 @@ this["carbon.app"] =
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+	exports.createChannel = createChannel;
 	exports.createSelectboxChannel = createSelectboxChannel;
 	exports.createCheckableChannel = createCheckableChannel;
-	exports.createChannel = createChannel;
 	exports.createScrollChannel = createScrollChannel;
 
 	var _jquery = __webpack_require__(71);
@@ -2949,92 +2949,6 @@ this["carbon.app"] =
 	var _reduxSaga = __webpack_require__(72);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Create a Saga Channel that will listen for DOM changes on specified selectbox.
-	 * The buffer is used to emit the initial value of the selectbox when the channel is created.
-	 *
-	 * @param  {string} selector
-	 * @return {Object}
-	 */
-	function createSelectboxChannel(selector) {
-		return (0, _reduxSaga.eventChannel)(function (emit) {
-			var $select = (0, _jquery2.default)(selector);
-
-			// Emit the value of selectbox through the channel.
-			var changeHandler = function changeHandler(event) {
-				emit({
-					value: $select.val(),
-					element: $select.get(0),
-					option: $select.find(':selected').first().get(0)
-				});
-			};
-
-			// Cancel the subscription.
-			var unsubscribe = function unsubscribe() {
-				$select.off('change', changeHandler);
-			};
-
-			// Close the channel since the element doesn't exists.
-			if (!$select.length) {
-				emit(_reduxSaga.END);
-				return unsubscribe;
-			}
-
-			// Setup the subscription.
-			$select.on('change', changeHandler);
-
-			// Emit the initial value.
-			changeHandler();
-
-			return unsubscribe;
-		}, _reduxSaga.buffers.fixed(1));
-	}
-
-	/**
-	 * Create a Saga Channel that will listen for DOM changes on specified radios/checkboxes.
-	 * The buffer is used to emit the initial value of the inputs when the channel is created.
-	 *
-	 * @param  {string} selector
-	 * @return {Object}
-	 */
-	function createCheckableChannel(selector) {
-		return (0, _reduxSaga.eventChannel)(function (emit) {
-			var $container = (0, _jquery2.default)(selector);
-
-			// Emit the value of inputs through the channel.
-			var changeHandler = function changeHandler(event) {
-				var elements = $container.find('input:checked').get();
-				var values = elements.map(function (element) {
-					return element.value;
-				});
-
-				emit({
-					values: values,
-					elements: elements
-				});
-			};
-
-			// Cancel the subscription.
-			var unsubscribe = function unsubscribe() {
-				$container.off('change', 'input', changeHandler);
-			};
-
-			// Close the channel since the container doesn't exists.
-			if (!$container.length) {
-				emit(_reduxSaga.END);
-				return unsubscribe;
-			}
-
-			// Setup the subscription.
-			$container.on('change', 'input', changeHandler);
-
-			// Emit the initial value.
-			changeHandler();
-
-			return unsubscribe;
-		}, _reduxSaga.buffers.fixed(1));
-	}
 
 	/**
 	 * Create a Saga Channel that will listen for DOM events.
@@ -3077,7 +2991,42 @@ this["carbon.app"] =
 	}
 
 	/**
-	 * Create a channel that will listen for scroll events.
+	 * Create a channel that will listen for `change` events on selectbox.
+	 *
+	 * @param  {String} selector
+	 * @return {Object}
+	 */
+	function createSelectboxChannel(selector) {
+		return createChannel(selector, 'change', function (emit, $element) {
+			emit({
+				value: $element.val(),
+				option: $element.find(':selected').first().get(0)
+			});
+		});
+	}
+
+	/**
+	 * Create a channel that will listen for `change` events on radio/checkbox inputs.
+	 *
+	 * @param  {String} selector
+	 * @return {Object}
+	 */
+	function createCheckableChannel(selector) {
+		return createChannel(selector, 'change', function (emit, $element) {
+			var elements = $element.find('input:checked').get();
+			var values = elements.map(function (element) {
+				return element.value;
+			});
+
+			emit({
+				values: values,
+				elements: elements
+			});
+		}, 'input');
+	}
+
+	/**
+	 * Create a channel that will listen for `scroll` events.
 	 *
 	 * @param  {String} selector
 	 * @return {Object}
