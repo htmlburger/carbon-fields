@@ -13,13 +13,13 @@ import { eventChannel, buffers, END } from 'redux-saga';
  * @param  {String}   [childSelector]
  * @return {Object}
  */
-export function createChannel(selector, event, handler, childSelector = null) {
+export function createChannel(selector: string, event: string, handler: Function, childSelector: ?string = null): Object {
 	return eventChannel((emit) => {
 		// Find the element in DOM.
-		const $element = $(selector);
+		const $element: JQuery = $(selector);
 
 		// Cancel the subscription.
-		const unsubscribe = () => {
+		const unsubscribe: Function = () => {
 			$element.off(event, childSelector, handler);
 		};
 
@@ -30,7 +30,7 @@ export function createChannel(selector, event, handler, childSelector = null) {
 		}
 
 		// Setup the subscription.
-		$element.on(event, childSelector, (event) => {
+		$element.on(event, childSelector, (event?: Event) => {
 			handler(emit, $element, event);
 		});
 
@@ -80,7 +80,7 @@ export function createCheckableChannel(selector: string): Object {
  * @param  {String} selector
  * @return {Object}
  */
-export function createScrollChannel(selector) {
+export function createScrollChannel(selector: string): Object {
 	return createChannel(selector, 'scroll', (emit, $element) => {
 		emit({
 			value: $element.scrollTop()
