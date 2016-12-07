@@ -69,7 +69,7 @@ class PostMetaContainerConditions extends WP_UnitTestCase {
 	public function testShowOnTemplateStringResultPostType() {
 		$container = Container::make('post_meta', $this->containerTitle);
 		$container->show_on_template( 'default' );
-		$container->set_post_type( 'page' );
+		$container->show_on_post_type( 'page' );
 		$this->assertSame( array( 'page' ), $container->settings['post_type'] );
 	}
 
@@ -79,7 +79,7 @@ class PostMetaContainerConditions extends WP_UnitTestCase {
 	public function testShowOnTemplateArrayResultPostType() {
 		$container = Container::make('post_meta', $this->containerTitle);
 		$container->show_on_template( array( 'default' ) );
-		$container->set_post_type( 'page' );
+		$container->show_on_post_type( 'page' );
 		$this->assertSame( array( 'page' ), $container->settings['post_type'] );
 	}
 
