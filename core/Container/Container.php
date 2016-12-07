@@ -386,13 +386,24 @@ abstract class Container {
 			call_user_func_array( array( $this, 'attach' ), $param );
 
 			if ( call_user_func_array( array( $this, 'is_active' ), $param ) ) {
-				self::activate_container( $this );
-
-				$fields = $this->get_fields();
-				foreach ( $fields as $field ) {
-					self::activate_field( $field );
-				}
+				$this->_attach_containers();
 			}
+		}
+	}
+
+	public function _attach_when_rest() {
+		$this->_attach_containers();
+	}
+
+	/**
+	 * Calls the container-specific attach() method
+	 */
+	private function _attach_containers() {
+		self::activate_container( $this );
+
+		$fields = $this->get_fields();
+		foreach ( $fields as $field ) {
+			self::activate_field( $field );
 		}
 	}
 

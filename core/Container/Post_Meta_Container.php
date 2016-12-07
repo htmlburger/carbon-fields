@@ -101,9 +101,11 @@ class Post_Meta_Container extends Container {
 	 * Create DataStore instance, set post ID to operate with (if such exists).
 	 * Bind attach() and save() to the appropriate WordPress actions.
 	 **/
-	public function init() {
+	public function init( $id = '' ) {
 		if ( isset( $_GET['post'] ) ) {
 			$this->set_post_id( $_GET['post'] );
+		} elseif ( $id ) {
+			$this->set_post_id( $id );
 		}
 
 		// force post_type to be array
@@ -112,6 +114,7 @@ class Post_Meta_Container extends Container {
 		}
 
 		add_action( 'admin_init', array( $this, '_attach' ) );
+		add_action( 'rest_api_init', array( $this, '_attach_when_rest' ) );
 		add_action( 'save_post', array( $this, '_save' ) );
 
 		// support for attachments
