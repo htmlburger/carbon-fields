@@ -38,6 +38,14 @@ module.exports = {
 			// Load the sidebars.
 			'./assets/react/sidebars/reducer.js',
 
+			// Load the fields.
+			'./assets/react/fields/constants',
+			'./assets/react/fields/selectors',
+			'./assets/react/fields/decorators/with-connect-to-store.js',
+
+			'./assets/react/fields/components/field.js',
+			'./assets/react/fields/components/separator-field.js',
+
 			// Load the store.
 			'./assets/react/store.js'
 		]
@@ -92,7 +100,7 @@ module.exports = {
 	},
 
 	// Faster sourcemaps without column mappings.
-	// devtool: 'eval',
+	devtool: 'eval',
 
 	// Setup the plugins.
 	plugins: [

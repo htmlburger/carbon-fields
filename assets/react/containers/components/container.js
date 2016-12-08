@@ -2,6 +2,7 @@
 
 import React from 'react';
 import cx from 'classnames';
+import { makeField } from 'lib/factory';
 
 /**
  * The base UI component used for rendering.
@@ -9,11 +10,9 @@ import cx from 'classnames';
  *
  * @abstract
  */
-const Container = (props: Object) => {
-	const classes = cx('carbon-container', `carbon-container-${props.id}`);
-
-	return <div className={classes}>
-		container here
+const Container = ({ id, fields }: { id: string, fields: Object[] }) => {
+	return <div className={cx('carbon-container', `carbon-container-${id}`)}>
+		{fields.map(({ id, type }) => makeField(type, { id }))}
 	</div>;
 };
 

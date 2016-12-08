@@ -45,4488 +45,571 @@ this["carbon.app"] =
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__;
+	eval("module.exports = __webpack_require__;\n\n//////////////////\n// WEBPACK FOOTER\n// dll carbon.app\n// module id = 0\n// module chunks = 0\n//# sourceURL=webpack:///dll_carbon.app?");
 
 /***/ },
 /* 1 */
 /***/ function(module, exports) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var TYPE_NOW_PAGE = exports.TYPE_NOW_PAGE = 'page';
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nvar TYPE_NOW_PAGE = exports.TYPE_NOW_PAGE = 'page';\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/lib/constants.js\n// module id = 1\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/lib/constants.js?");
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.normalizePreloadedState = normalizePreloadedState;
-
-	var _lodash = __webpack_require__(3);
-
-	/**
-	 * Change the shape of preloaded state so it can be used easier through Redux.
-	 *
-	 * @param  {Object} state
-	 * @return {Object}
-	 */
-	function normalizePreloadedState(state) {
-	  var _merge = (0, _lodash.merge)({}, state),
-	      containers = _merge.containers,
-	      sidebars = _merge.sidebars;
-
-	  containers = (0, _lodash.keyBy)(containers, 'id');
-
-	  return { containers: containers, sidebars: sidebars };
-	}
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\nexports.normalizePreloadedState = normalizePreloadedState;\n\nvar _lodash = __webpack_require__(3);\n\n/**\n * Change the shape of preloaded state so it can be used easier through Redux.\n *\n * @param  {Object} state\n * @return {Object}\n */\nfunction normalizePreloadedState(state) {\n\tvar _merge = (0, _lodash.merge)({}, state),\n\t    containers = _merge.containers,\n\t    sidebars = _merge.sidebars;\n\n\tvar fields = (0, _lodash.keyBy)((0, _lodash.flatten)((0, _lodash.map)(containers, 'fields')), 'id');\n\n\tcontainers = (0, _lodash.keyBy)(containers, 'id');\n\tcontainers = (0, _lodash.mapValues)(containers, function (container) {\n\t\tcontainer.fields = (0, _lodash.map)(container.fields, function (field) {\n\t\t\treturn (0, _lodash.pick)(field, 'id', 'type');\n\t\t});\n\n\t\treturn container;\n\t});\n\n\treturn { containers: containers, sidebars: sidebars, fields: fields };\n}\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/lib/normalize.js\n// module id = 2\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/lib/normalize.js?");
 
 /***/ },
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(257);
+	eval("module.exports = (__webpack_require__(4))(257);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/lodash/lodash.js from dll-reference carbon.vendor\n// module id = 3\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/lodash/lodash.js_from_dll-reference_carbon.vendor?");
 
 /***/ },
 /* 4 */
 /***/ function(module, exports) {
 
-	(function() { module.exports = this["carbon.vendor"]; }());
+	eval("(function() { module.exports = this[\"carbon.vendor\"]; }());\n\n//////////////////\n// WEBPACK FOOTER\n// external \"carbon.vendor\"\n// module id = 4\n// module chunks = 0\n//# sourceURL=webpack:///external_%22carbon.vendor%22?");
 
 /***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.workerSyncLevel = workerSyncLevel;
-	exports.workerSetupContainer = workerSetupContainer;
-	exports.workerCheckVisibility = workerCheckVisibility;
-	exports.default = foreman;
-
-	var _reduxSaga = __webpack_require__(6);
-
-	var _effects = __webpack_require__(7);
-
-	var _events = __webpack_require__(9);
-
-	var _selectors = __webpack_require__(11);
-
-	var _actions = __webpack_require__(12);
-
-	var _constants = __webpack_require__(14);
-
-	var _marked = [workerSyncLevel, workerSetupContainer, workerCheckVisibility, foreman].map(regeneratorRuntime.mark);
-
-	/**
-	 * Keep in sync the `level` property.
-	 *
-	 * @param  {String} containerId
-	 * @return {void}
-	 */
-	function workerSyncLevel(containerId) {
-		var channel, _ref, option, level, matches;
-
-		return regeneratorRuntime.wrap(function workerSyncLevel$(_context) {
-			while (1) {
-				switch (_context.prev = _context.next) {
-					case 0:
-						_context.next = 2;
-						return (0, _effects.call)(_events.createSelectboxChannel, 'select#parent');
-
-					case 2:
-						channel = _context.sent;
-
-					case 3:
-						if (false) {
-							_context.next = 14;
-							break;
-						}
-
-						_context.next = 6;
-						return (0, _effects.take)(channel);
-
-					case 6:
-						_ref = _context.sent;
-						option = _ref.option;
-						level = 1;
-
-
-						if (option.className) {
-							matches = option.className.match(/^level-(\d+)/);
-
-
-							if (matches) {
-								level = parseInt(matches[1], 10) + 2;
-							}
-						}
-
-						_context.next = 12;
-						return (0, _effects.put)((0, _actions.setMeta)({
-							containerId: containerId,
-							meta: {
-								level: level
-							}
-						}));
-
-					case 12:
-						_context.next = 3;
-						break;
-
-					case 14:
-					case 'end':
-						return _context.stop();
-				}
-			}
-		}, _marked[0], this);
-	}
-
-	/**
-	 * Setup the initial state of the container.
-	 *
-	 * @param  {Object} action
-	 * @return {void}
-	 */
-	function workerSetupContainer(action) {
-		var containerId;
-		return regeneratorRuntime.wrap(function workerSetupContainer$(_context2) {
-			while (1) {
-				switch (_context2.prev = _context2.next) {
-					case 0:
-						containerId = action.payload.containerId;
-
-						// Don't do anything if the type isn't correct.
-
-						_context2.next = 3;
-						return (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_TERM_META);
-
-					case 3:
-						if (_context2.sent) {
-							_context2.next = 5;
-							break;
-						}
-
-						return _context2.abrupt('return');
-
-					case 5:
-						_context2.next = 7;
-						return (0, _effects.fork)(workerSyncLevel, containerId);
-
-					case 7:
-					case 'end':
-						return _context2.stop();
-				}
-			}
-		}, _marked[1], this);
-	}
-
-	/**
-	 * Keep in sync the `is_visible` property.
-	 *
-	 * @param  {Object} action
-	 * @return {void}
-	 */
-	function workerCheckVisibility(action) {
-		var containerId, container, isVisible;
-		return regeneratorRuntime.wrap(function workerCheckVisibility$(_context3) {
-			while (1) {
-				switch (_context3.prev = _context3.next) {
-					case 0:
-						containerId = action.payload.containerId;
-
-						// Don't do anything if the type isn't correct.
-
-						_context3.next = 3;
-						return (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_TERM_META);
-
-					case 3:
-						if (_context3.sent) {
-							_context3.next = 5;
-							break;
-						}
-
-						return _context3.abrupt('return');
-
-					case 5:
-						_context3.next = 7;
-						return (0, _effects.select)(_selectors.getContainerById, containerId);
-
-					case 7:
-						container = _context3.sent;
-						isVisible = true;
-
-
-						if (container.settings.show_on_level && container.meta.level != container.settings.show_on_level) {
-							isVisible = false;
-						}
-
-						_context3.next = 12;
-						return (0, _effects.put)((0, _actions.setUI)({
-							containerId: containerId,
-							ui: {
-								is_visible: isVisible
-							}
-						}));
-
-					case 12:
-					case 'end':
-						return _context3.stop();
-				}
-			}
-		}, _marked[2], this);
-	}
-
-	/**
-	 * Start to work.
-	 *
-	 * @return {void}
-	 */
-	function foreman() {
-		return regeneratorRuntime.wrap(function foreman$(_context4) {
-			while (1) {
-				switch (_context4.prev = _context4.next) {
-					case 0:
-						_context4.next = 2;
-						return [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer), (0, _reduxSaga.takeEvery)(_actions.SET_META, workerCheckVisibility)];
-
-					case 2:
-					case 'end':
-						return _context4.stop();
-				}
-			}
-		}, _marked[3], this);
-	}
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\nexports.workerSyncLevel = workerSyncLevel;\nexports.workerSetupContainer = workerSetupContainer;\nexports.workerCheckVisibility = workerCheckVisibility;\nexports.default = foreman;\n\nvar _reduxSaga = __webpack_require__(6);\n\nvar _effects = __webpack_require__(7);\n\nvar _events = __webpack_require__(9);\n\nvar _selectors = __webpack_require__(11);\n\nvar _actions = __webpack_require__(13);\n\nvar _constants = __webpack_require__(15);\n\nvar _marked = [workerSyncLevel, workerSetupContainer, workerCheckVisibility, foreman].map(regeneratorRuntime.mark);\n\n/**\n * Keep in sync the `level` property.\n *\n * @param  {String} containerId\n * @return {void}\n */\nfunction workerSyncLevel(containerId) {\n\tvar channel, _ref, option, level, matches;\n\n\treturn regeneratorRuntime.wrap(function workerSyncLevel$(_context) {\n\t\twhile (1) {\n\t\t\tswitch (_context.prev = _context.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\t_context.next = 2;\n\t\t\t\t\treturn (0, _effects.call)(_events.createSelectboxChannel, 'select#parent');\n\n\t\t\t\tcase 2:\n\t\t\t\t\tchannel = _context.sent;\n\n\t\t\t\tcase 3:\n\t\t\t\t\tif (false) {\n\t\t\t\t\t\t_context.next = 14;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\t_context.next = 6;\n\t\t\t\t\treturn (0, _effects.take)(channel);\n\n\t\t\t\tcase 6:\n\t\t\t\t\t_ref = _context.sent;\n\t\t\t\t\toption = _ref.option;\n\t\t\t\t\tlevel = 1;\n\n\n\t\t\t\t\tif (option.className) {\n\t\t\t\t\t\tmatches = option.className.match(/^level-(\\d+)/);\n\n\n\t\t\t\t\t\tif (matches) {\n\t\t\t\t\t\t\tlevel = parseInt(matches[1], 10) + 2;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\n\t\t\t\t\t_context.next = 12;\n\t\t\t\t\treturn (0, _effects.put)((0, _actions.setMeta)({\n\t\t\t\t\t\tcontainerId: containerId,\n\t\t\t\t\t\tmeta: {\n\t\t\t\t\t\t\tlevel: level\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\tcase 12:\n\t\t\t\t\t_context.next = 3;\n\t\t\t\t\tbreak;\n\n\t\t\t\tcase 14:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[0], this);\n}\n\n/**\n * Setup the initial state of the container.\n *\n * @param  {Object} action\n * @return {void}\n */\nfunction workerSetupContainer(action) {\n\tvar containerId;\n\treturn regeneratorRuntime.wrap(function workerSetupContainer$(_context2) {\n\t\twhile (1) {\n\t\t\tswitch (_context2.prev = _context2.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\tcontainerId = action.payload.containerId;\n\n\t\t\t\t\t// Don't do anything if the type isn't correct.\n\n\t\t\t\t\t_context2.next = 3;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_TERM_META);\n\n\t\t\t\tcase 3:\n\t\t\t\t\tif (_context2.sent) {\n\t\t\t\t\t\t_context2.next = 5;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\treturn _context2.abrupt('return');\n\n\t\t\t\tcase 5:\n\t\t\t\t\t_context2.next = 7;\n\t\t\t\t\treturn (0, _effects.fork)(workerSyncLevel, containerId);\n\n\t\t\t\tcase 7:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context2.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[1], this);\n}\n\n/**\n * Keep in sync the `is_visible` property.\n *\n * @param  {Object} action\n * @return {void}\n */\nfunction workerCheckVisibility(action) {\n\tvar containerId, container, isVisible;\n\treturn regeneratorRuntime.wrap(function workerCheckVisibility$(_context3) {\n\t\twhile (1) {\n\t\t\tswitch (_context3.prev = _context3.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\tcontainerId = action.payload.containerId;\n\n\t\t\t\t\t// Don't do anything if the type isn't correct.\n\n\t\t\t\t\t_context3.next = 3;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_TERM_META);\n\n\t\t\t\tcase 3:\n\t\t\t\t\tif (_context3.sent) {\n\t\t\t\t\t\t_context3.next = 5;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\treturn _context3.abrupt('return');\n\n\t\t\t\tcase 5:\n\t\t\t\t\t_context3.next = 7;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.getContainerById, containerId);\n\n\t\t\t\tcase 7:\n\t\t\t\t\tcontainer = _context3.sent;\n\t\t\t\t\tisVisible = true;\n\n\n\t\t\t\t\tif (container.settings.show_on_level && container.meta.level != container.settings.show_on_level) {\n\t\t\t\t\t\tisVisible = false;\n\t\t\t\t\t}\n\n\t\t\t\t\t_context3.next = 12;\n\t\t\t\t\treturn (0, _effects.put)((0, _actions.setUI)({\n\t\t\t\t\t\tcontainerId: containerId,\n\t\t\t\t\t\tui: {\n\t\t\t\t\t\t\tis_visible: isVisible\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\tcase 12:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context3.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[2], this);\n}\n\n/**\n * Start to work.\n *\n * @return {void}\n */\nfunction foreman() {\n\treturn regeneratorRuntime.wrap(function foreman$(_context4) {\n\t\twhile (1) {\n\t\t\tswitch (_context4.prev = _context4.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\t_context4.next = 2;\n\t\t\t\t\treturn [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer), (0, _reduxSaga.takeEvery)(_actions.SET_META, workerCheckVisibility)];\n\n\t\t\t\tcase 2:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context4.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[3], this);\n}\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/sagas/term-meta.js\n// module id = 5\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/sagas/term-meta.js?");
 
 /***/ },
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(368);
+	eval("module.exports = (__webpack_require__(4))(368);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/redux-saga/lib/index.js from dll-reference carbon.vendor\n// module id = 6\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/redux-saga/lib/index.js_from_dll-reference_carbon.vendor?");
 
 /***/ },
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	module.exports = __webpack_require__(8);
+	eval("'use strict';\n\nmodule.exports = __webpack_require__(8);\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/redux-saga/effects.js\n// module id = 7\n// module chunks = 0\n//# sourceURL=webpack:///./~/redux-saga/effects.js?");
 
 /***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(367);
+	eval("module.exports = (__webpack_require__(4))(367);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/redux-saga/lib/effects.js from dll-reference carbon.vendor\n// module id = 8\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/redux-saga/lib/effects.js_from_dll-reference_carbon.vendor?");
 
 /***/ },
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.createChannel = createChannel;
-	exports.createSelectboxChannel = createSelectboxChannel;
-	exports.createCheckableChannel = createCheckableChannel;
-	exports.createScrollChannel = createScrollChannel;
-
-	var _jquery = __webpack_require__(10);
-
-	var _jquery2 = _interopRequireDefault(_jquery);
-
-	var _reduxSaga = __webpack_require__(6);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Create a Saga Channel that will listen for DOM events.
-	 * The buffer is used to emit the initial value of the inputs when the channel is created.
-	 *
-	 * @param  {String}   selector
-	 * @param  {String}   event
-	 * @param  {Function} handler
-	 * @param  {String}   [childSelector]
-	 * @return {Object}
-	 */
-	function createChannel(selector, event, handler) {
-		var childSelector = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
-
-		return (0, _reduxSaga.eventChannel)(function (emit) {
-			// Find the element in DOM.
-			var $element = (0, _jquery2.default)(selector);
-
-			// Cancel the subscription.
-			var unsubscribe = function unsubscribe() {
-				$element.off(event, childSelector, handler);
-			};
-
-			// Close the channel since the element doesn't exists.
-			if (!$element.length) {
-				emit(_reduxSaga.END);
-				return unsubscribe;
-			}
-
-			// Setup the subscription.
-			$element.on(event, childSelector, function (event) {
-				handler(emit, $element, event);
-			});
-
-			// Emit the initial value.
-			handler(emit, $element);
-
-			return unsubscribe;
-		}, _reduxSaga.buffers.fixed(1));
-	}
-
-	/**
-	 * Create a channel that will listen for `change` events on selectbox.
-	 *
-	 * @param  {String} selector
-	 * @return {Object}
-	 */
-	function createSelectboxChannel(selector) {
-		return createChannel(selector, 'change', function (emit, $element) {
-			emit({
-				value: $element.val(),
-				option: $element.find(':selected').first().get(0)
-			});
-		});
-	}
-
-	/**
-	 * Create a channel that will listen for `change` events on radio/checkbox inputs.
-	 *
-	 * @param  {String} selector
-	 * @return {Object}
-	 */
-	function createCheckableChannel(selector) {
-		return createChannel(selector, 'change', function (emit, $element) {
-			var elements = $element.find('input:checked').get();
-			var values = elements.map(function (element) {
-				return element.value;
-			});
-
-			emit({
-				values: values,
-				elements: elements
-			});
-		}, 'input');
-	}
-
-	/**
-	 * Create a channel that will listen for `scroll` events.
-	 *
-	 * @param  {String} selector
-	 * @return {Object}
-	 */
-	function createScrollChannel(selector) {
-		return createChannel(selector, 'scroll', function (emit, $element) {
-			emit({
-				value: $element.scrollTop()
-			});
-		});
-	}
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\nexports.createChannel = createChannel;\nexports.createSelectboxChannel = createSelectboxChannel;\nexports.createCheckableChannel = createCheckableChannel;\nexports.createScrollChannel = createScrollChannel;\n\nvar _jquery = __webpack_require__(10);\n\nvar _jquery2 = _interopRequireDefault(_jquery);\n\nvar _reduxSaga = __webpack_require__(6);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * Create a Saga Channel that will listen for DOM events.\n * The buffer is used to emit the initial value of the inputs when the channel is created.\n *\n * @param  {String}   selector\n * @param  {String}   event\n * @param  {Function} handler\n * @param  {String}   [childSelector]\n * @return {Object}\n */\nfunction createChannel(selector, event, handler) {\n\tvar childSelector = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;\n\n\treturn (0, _reduxSaga.eventChannel)(function (emit) {\n\t\t// Find the element in DOM.\n\t\tvar $element = (0, _jquery2.default)(selector);\n\n\t\t// Cancel the subscription.\n\t\tvar unsubscribe = function unsubscribe() {\n\t\t\t$element.off(event, childSelector, handler);\n\t\t};\n\n\t\t// Close the channel since the element doesn't exists.\n\t\tif (!$element.length) {\n\t\t\temit(_reduxSaga.END);\n\t\t\treturn unsubscribe;\n\t\t}\n\n\t\t// Setup the subscription.\n\t\t$element.on(event, childSelector, function (event) {\n\t\t\thandler(emit, $element, event);\n\t\t});\n\n\t\t// Emit the initial value.\n\t\thandler(emit, $element);\n\n\t\treturn unsubscribe;\n\t}, _reduxSaga.buffers.fixed(1));\n}\n\n/**\n * Create a channel that will listen for `change` events on selectbox.\n *\n * @param  {String} selector\n * @return {Object}\n */\nfunction createSelectboxChannel(selector) {\n\treturn createChannel(selector, 'change', function (emit, $element) {\n\t\temit({\n\t\t\tvalue: $element.val(),\n\t\t\toption: $element.find(':selected').first().get(0)\n\t\t});\n\t});\n}\n\n/**\n * Create a channel that will listen for `change` events on radio/checkbox inputs.\n *\n * @param  {String} selector\n * @return {Object}\n */\nfunction createCheckableChannel(selector) {\n\treturn createChannel(selector, 'change', function (emit, $element) {\n\t\tvar elements = $element.find('input:checked').get();\n\t\tvar values = elements.map(function (element) {\n\t\t\treturn element.value;\n\t\t});\n\n\t\temit({\n\t\t\tvalues: values,\n\t\t\telements: elements\n\t\t});\n\t}, 'input');\n}\n\n/**\n * Create a channel that will listen for `scroll` events.\n *\n * @param  {String} selector\n * @return {Object}\n */\nfunction createScrollChannel(selector) {\n\treturn createChannel(selector, 'scroll', function (emit, $element) {\n\t\temit({\n\t\t\tvalue: $element.scrollTop()\n\t\t});\n\t});\n}\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/lib/events.js\n// module id = 9\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/lib/events.js?");
 
 /***/ },
 /* 10 */
 /***/ function(module, exports) {
 
-	(function() { module.exports = this["jQuery"]; }());
+	eval("(function() { module.exports = this[\"jQuery\"]; }());\n\n//////////////////\n// WEBPACK FOOTER\n// external \"jQuery\"\n// module id = 10\n// module chunks = 0\n//# sourceURL=webpack:///external_%22jQuery%22?");
 
 /***/ },
 /* 11 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var getContainers = exports.getContainers = function getContainers(state) {
-	  return state.containers;
-	};
-	var getContainerById = exports.getContainerById = function getContainerById(state, containerId) {
-	  return state.containers[containerId];
-	};
-	var canProcessAction = exports.canProcessAction = function canProcessAction(state, containerId, containerType) {
-	  return getContainerById(state, containerId).type === containerType;
-	};
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\nexports.getContainerFieldsById = exports.canProcessAction = exports.getContainerById = exports.getContainers = undefined;\n\nvar _reselect = __webpack_require__(12);\n\nvar getContainers = exports.getContainers = function getContainers(state) {\n\treturn state.containers;\n};\n\nvar getContainerById = exports.getContainerById = function getContainerById(state, containerId) {\n\treturn state.containers[containerId];\n};\nvar canProcessAction = exports.canProcessAction = function canProcessAction(state, containerId, containerType) {\n\treturn getContainerById(state, containerId).type === containerType;\n};\n\nvar getContainerFieldsById = exports.getContainerFieldsById = (0, _reselect.createSelector)([getContainerById], function (container) {\n\treturn container.fields;\n});\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/selectors.js\n// module id = 11\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/selectors.js?");
 
 /***/ },
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.checkVisibility = exports.CHECK_VISIBILITY = exports.setUI = exports.SET_UI = exports.setMeta = exports.SET_META = exports.setupContainer = exports.SETUP_CONTAINER = undefined;
-
-	var _reduxActions = __webpack_require__(13);
-
-	/**
-	 * Perform the initial setup of the container.
-	 *
-	 * @param  {String} containerId
-	 * @param  {Object} [ui]
-	 * @return {Object}
-	 */
-	var SETUP_CONTAINER = exports.SETUP_CONTAINER = 'containers/SETUP_CONTAINER';
-
-	var setupContainer = exports.setupContainer = (0, _reduxActions.createAction)(SETUP_CONTAINER, function (containerId) {
-	  var meta = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-	  var ui = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-	  return { containerId: containerId, meta: meta, ui: ui };
-	});
-
-	/**
-	 * Update the object that holds additional fields for the container.
-	 *
-	 * @param  {Object} payload
-	 * @param  {String} payload.containerId
-	 * @param  {Object} payload.meta
-	 * @return {Object}
-	 */
-	var SET_META = exports.SET_META = 'containers/SET_META';
-	var setMeta = exports.setMeta = (0, _reduxActions.createAction)(SET_META);
-
-	/**
-	 * Update the object that contains information about container's UI.
-	 *
-	 * @param  {Object} payload
-	 * @param  {String} payload.containerId
-	 * @param  {Object} payload.ui
-	 * @return {Object}
-	 */
-	var SET_UI = exports.SET_UI = 'containers/SET_UI';
-	var setUI = exports.setUI = (0, _reduxActions.createAction)(SET_UI);
-
-	/**
-	 * Initialize a visibility check for the container.
-	 *
-	 * @param  {String} containerId
-	 * @return {Object}
-	 */
-	var CHECK_VISIBILITY = exports.CHECK_VISIBILITY = 'containers/CHECK_VISIBILITY';
-	var checkVisibility = exports.checkVisibility = (0, _reduxActions.createAction)(CHECK_VISIBILITY);
+	eval("module.exports = (__webpack_require__(4))(379);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/reselect/lib/index.js from dll-reference carbon.vendor\n// module id = 12\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/reselect/lib/index.js_from_dll-reference_carbon.vendor?");
 
 /***/ },
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(365);
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.checkVisibility = exports.CHECK_VISIBILITY = exports.setUI = exports.SET_UI = exports.setMeta = exports.SET_META = exports.setupContainer = exports.SETUP_CONTAINER = undefined;\n\nvar _reduxActions = __webpack_require__(14);\n\n/**\n * Perform the initial setup of the container.\n *\n * @param  {String} containerId\n * @param  {Object} [ui]\n * @return {Object}\n */\nvar SETUP_CONTAINER = exports.SETUP_CONTAINER = 'containers/SETUP_CONTAINER';\n\nvar setupContainer = exports.setupContainer = (0, _reduxActions.createAction)(SETUP_CONTAINER, function (containerId) {\n  var meta = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};\n  var ui = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};\n  return { containerId: containerId, meta: meta, ui: ui };\n});\n\n/**\n * Update the object that holds additional fields for the container.\n *\n * @param  {Object} payload\n * @param  {String} payload.containerId\n * @param  {Object} payload.meta\n * @return {Object}\n */\nvar SET_META = exports.SET_META = 'containers/SET_META';\nvar setMeta = exports.setMeta = (0, _reduxActions.createAction)(SET_META);\n\n/**\n * Update the object that contains information about container's UI.\n *\n * @param  {Object} payload\n * @param  {String} payload.containerId\n * @param  {Object} payload.ui\n * @return {Object}\n */\nvar SET_UI = exports.SET_UI = 'containers/SET_UI';\nvar setUI = exports.setUI = (0, _reduxActions.createAction)(SET_UI);\n\n/**\n * Initialize a visibility check for the container.\n *\n * @param  {String} containerId\n * @return {Object}\n */\nvar CHECK_VISIBILITY = exports.CHECK_VISIBILITY = 'containers/CHECK_VISIBILITY';\nvar checkVisibility = exports.checkVisibility = (0, _reduxActions.createAction)(CHECK_VISIBILITY);\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/actions.js\n// module id = 13\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/actions.js?");
 
 /***/ },
 /* 14 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var TYPE_POST_META = exports.TYPE_POST_META = 'Post_Meta';
-	var TYPE_COMMENT_META = exports.TYPE_COMMENT_META = 'Comment_Meta';
-	var TYPE_TERM_META = exports.TYPE_TERM_META = 'Term_Meta';
-	var TYPE_USER_META = exports.TYPE_USER_META = 'User_Meta';
-	var TYPE_THEME_OPTIONS = exports.TYPE_THEME_OPTIONS = 'Theme_Options';
+	eval("module.exports = (__webpack_require__(4))(365);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/redux-actions/lib/index.js from dll-reference carbon.vendor\n// module id = 14\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/redux-actions/lib/index.js_from_dll-reference_carbon.vendor?");
 
 /***/ },
 /* 15 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.workerSyncRole = workerSyncRole;
-	exports.workerSetupContainer = workerSetupContainer;
-	exports.workerCheckVisibility = workerCheckVisibility;
-	exports.default = foreman;
-
-	var _lodash = __webpack_require__(3);
-
-	var _reduxSaga = __webpack_require__(6);
-
-	var _effects = __webpack_require__(7);
-
-	var _events = __webpack_require__(9);
-
-	var _selectors = __webpack_require__(11);
-
-	var _actions = __webpack_require__(12);
-
-	var _constants = __webpack_require__(14);
-
-	var _marked = [workerSyncRole, workerSetupContainer, workerCheckVisibility, foreman].map(regeneratorRuntime.mark);
-
-	/**
-	 * Keep in sync the `role` property.
-	 *
-	 * @param  {String} containerId
-	 * @return {void}
-	 */
-	function workerSyncRole(containerId) {
-		var channel, _ref, value, el;
-
-		return regeneratorRuntime.wrap(function workerSyncRole$(_context) {
-			while (1) {
-				switch (_context.prev = _context.next) {
-					case 0:
-						_context.next = 2;
-						return (0, _effects.call)(_events.createSelectboxChannel, 'select#role');
-
-					case 2:
-						channel = _context.sent;
-						_context.prev = 3;
-
-					case 4:
-						if (false) {
-							_context.next = 13;
-							break;
-						}
-
-						_context.next = 7;
-						return (0, _effects.take)(channel);
-
-					case 7:
-						_ref = _context.sent;
-						value = _ref.value;
-						_context.next = 11;
-						return (0, _effects.put)((0, _actions.setMeta)({
-							containerId: containerId,
-							meta: {
-								role: value
-							}
-						}));
-
-					case 11:
-						_context.next = 4;
-						break;
-
-					case 13:
-						_context.prev = 13;
-						_context.next = 16;
-						return (0, _effects.call)([document, document.querySelector], '#' + containerId);
-
-					case 16:
-						el = _context.sent;
-
-						if (!el.dataset.profileRole) {
-							_context.next = 20;
-							break;
-						}
-
-						_context.next = 20;
-						return (0, _effects.put)((0, _actions.setMeta)({
-							containerId: containerId,
-							meta: {
-								role: el.dataset.profileRole
-							}
-						}));
-
-					case 20:
-						return _context.finish(13);
-
-					case 21:
-					case 'end':
-						return _context.stop();
-				}
-			}
-		}, _marked[0], this, [[3,, 13, 21]]);
-	}
-
-	/**
-	 * Setup the initial state of the container.
-	 *
-	 * @param  {Object} action
-	 * @return {void}
-	 */
-	function workerSetupContainer(action) {
-		var containerId;
-		return regeneratorRuntime.wrap(function workerSetupContainer$(_context2) {
-			while (1) {
-				switch (_context2.prev = _context2.next) {
-					case 0:
-						containerId = action.payload.containerId;
-
-						// Don't do anything if the type isn't correct.
-
-						_context2.next = 3;
-						return (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_USER_META);
-
-					case 3:
-						if (_context2.sent) {
-							_context2.next = 5;
-							break;
-						}
-
-						return _context2.abrupt('return');
-
-					case 5:
-						_context2.next = 7;
-						return (0, _effects.fork)(workerSyncRole, containerId);
-
-					case 7:
-					case 'end':
-						return _context2.stop();
-				}
-			}
-		}, _marked[1], this);
-	}
-
-	/**
-	 * Keep in sync the `is_visible` property.
-	 *
-	 * @param  {Object} action
-	 * @return {void}
-	 */
-	function workerCheckVisibility(action) {
-		var containerId, container, isVisible;
-		return regeneratorRuntime.wrap(function workerCheckVisibility$(_context3) {
-			while (1) {
-				switch (_context3.prev = _context3.next) {
-					case 0:
-						containerId = action.payload.containerId;
-
-						// Don't do anything if the type isn't correct.
-
-						_context3.next = 3;
-						return (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_USER_META);
-
-					case 3:
-						if (_context3.sent) {
-							_context3.next = 5;
-							break;
-						}
-
-						return _context3.abrupt('return');
-
-					case 5:
-						_context3.next = 7;
-						return (0, _effects.select)(_selectors.getContainerById, containerId);
-
-					case 7:
-						container = _context3.sent;
-						isVisible = true;
-
-
-						if (!(0, _lodash.isEmpty)(container.settings.show_on.role) && container.settings.show_on.role.indexOf(container.meta.role) === -1) {
-							isVisible = false;
-						}
-
-						_context3.next = 12;
-						return (0, _effects.put)((0, _actions.setUI)({
-							containerId: containerId,
-							ui: {
-								is_visible: isVisible
-							}
-						}));
-
-					case 12:
-					case 'end':
-						return _context3.stop();
-				}
-			}
-		}, _marked[2], this);
-	}
-
-	/**
-	 * Start to work.
-	 *
-	 * @return {void}
-	 */
-	function foreman() {
-		return regeneratorRuntime.wrap(function foreman$(_context4) {
-			while (1) {
-				switch (_context4.prev = _context4.next) {
-					case 0:
-						_context4.next = 2;
-						return [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer), (0, _reduxSaga.takeEvery)(_actions.SET_META, workerCheckVisibility)];
-
-					case 2:
-					case 'end':
-						return _context4.stop();
-				}
-			}
-		}, _marked[3], this);
-	}
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nvar TYPE_POST_META = exports.TYPE_POST_META = 'Post_Meta';\nvar TYPE_COMMENT_META = exports.TYPE_COMMENT_META = 'Comment_Meta';\nvar TYPE_TERM_META = exports.TYPE_TERM_META = 'Term_Meta';\nvar TYPE_USER_META = exports.TYPE_USER_META = 'User_Meta';\nvar TYPE_THEME_OPTIONS = exports.TYPE_THEME_OPTIONS = 'Theme_Options';\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/constants.js\n// module id = 15\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/constants.js?");
 
 /***/ },
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.workerStickyActionsPanel = workerStickyActionsPanel;
-	exports.default = foreman;
-
-	var _jquery = __webpack_require__(10);
-
-	var _jquery2 = _interopRequireDefault(_jquery);
-
-	var _reduxSaga = __webpack_require__(6);
-
-	var _effects = __webpack_require__(7);
-
-	var _events = __webpack_require__(9);
-
-	var _selectors = __webpack_require__(11);
-
-	var _constants = __webpack_require__(14);
-
-	var _actions = __webpack_require__(12);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var _marked = [workerStickyActionsPanel, foreman].map(regeneratorRuntime.mark);
-
-	/**
-	 * Handle the sticky position of the actions panel.
-	 *
-	 * @param  {Object} action
-	 * @return {void}
-	 */
-	function workerStickyActionsPanel(action) {
-		var containerId, channel, $container, $panel, $bar, _ref, value, offset, threshold;
-
-		return regeneratorRuntime.wrap(function workerStickyActionsPanel$(_context) {
-			while (1) {
-				switch (_context.prev = _context.next) {
-					case 0:
-						containerId = action.payload.containerId;
-
-						// Don't do anything if the type isn't correct.
-
-						_context.next = 3;
-						return (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_THEME_OPTIONS);
-
-					case 3:
-						if (_context.sent) {
-							_context.next = 5;
-							break;
-						}
-
-						return _context.abrupt('return');
-
-					case 5:
-						_context.next = 7;
-						return (0, _effects.call)(_events.createScrollChannel, window);
-
-					case 7:
-						channel = _context.sent;
-						$container = (0, _jquery2.default)('#' + containerId);
-						$panel = (0, _jquery2.default)('#postbox-container-1');
-						$bar = (0, _jquery2.default)('#wpadminbar');
-
-					case 11:
-						if (false) {
-							_context.next = 21;
-							break;
-						}
-
-						_context.next = 14;
-						return (0, _effects.take)(channel);
-
-					case 14:
-						_ref = _context.sent;
-						value = _ref.value;
-						offset = $bar.height() + 10;
-						threshold = $container.offset().top - offset;
-
-						// In some situations the threshold is negative number because
-						// the container element isn't rendered yet.
-
-						if (threshold > 0) {
-							$panel.toggleClass('fixed', value >= threshold).css('top', offset);
-						}
-						_context.next = 11;
-						break;
-
-					case 21:
-					case 'end':
-						return _context.stop();
-				}
-			}
-		}, _marked[0], this);
-	}
-
-	/**
-	 * Start to work.
-	 *
-	 * @return {void}
-	 */
-	function foreman() {
-		return regeneratorRuntime.wrap(function foreman$(_context2) {
-			while (1) {
-				switch (_context2.prev = _context2.next) {
-					case 0:
-						_context2.next = 2;
-						return [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerStickyActionsPanel)];
-
-					case 2:
-					case 'end':
-						return _context2.stop();
-				}
-			}
-		}, _marked[1], this);
-	}
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\nexports.workerSyncRole = workerSyncRole;\nexports.workerSetupContainer = workerSetupContainer;\nexports.workerCheckVisibility = workerCheckVisibility;\nexports.default = foreman;\n\nvar _lodash = __webpack_require__(3);\n\nvar _reduxSaga = __webpack_require__(6);\n\nvar _effects = __webpack_require__(7);\n\nvar _events = __webpack_require__(9);\n\nvar _selectors = __webpack_require__(11);\n\nvar _actions = __webpack_require__(13);\n\nvar _constants = __webpack_require__(15);\n\nvar _marked = [workerSyncRole, workerSetupContainer, workerCheckVisibility, foreman].map(regeneratorRuntime.mark);\n\n/**\n * Keep in sync the `role` property.\n *\n * @param  {String} containerId\n * @return {void}\n */\nfunction workerSyncRole(containerId) {\n\tvar channel, _ref, value, el;\n\n\treturn regeneratorRuntime.wrap(function workerSyncRole$(_context) {\n\t\twhile (1) {\n\t\t\tswitch (_context.prev = _context.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\t_context.next = 2;\n\t\t\t\t\treturn (0, _effects.call)(_events.createSelectboxChannel, 'select#role');\n\n\t\t\t\tcase 2:\n\t\t\t\t\tchannel = _context.sent;\n\t\t\t\t\t_context.prev = 3;\n\n\t\t\t\tcase 4:\n\t\t\t\t\tif (false) {\n\t\t\t\t\t\t_context.next = 13;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\t_context.next = 7;\n\t\t\t\t\treturn (0, _effects.take)(channel);\n\n\t\t\t\tcase 7:\n\t\t\t\t\t_ref = _context.sent;\n\t\t\t\t\tvalue = _ref.value;\n\t\t\t\t\t_context.next = 11;\n\t\t\t\t\treturn (0, _effects.put)((0, _actions.setMeta)({\n\t\t\t\t\t\tcontainerId: containerId,\n\t\t\t\t\t\tmeta: {\n\t\t\t\t\t\t\trole: value\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\tcase 11:\n\t\t\t\t\t_context.next = 4;\n\t\t\t\t\tbreak;\n\n\t\t\t\tcase 13:\n\t\t\t\t\t_context.prev = 13;\n\t\t\t\t\t_context.next = 16;\n\t\t\t\t\treturn (0, _effects.call)([document, document.querySelector], '#' + containerId);\n\n\t\t\t\tcase 16:\n\t\t\t\t\tel = _context.sent;\n\n\t\t\t\t\tif (!el.dataset.profileRole) {\n\t\t\t\t\t\t_context.next = 20;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\t_context.next = 20;\n\t\t\t\t\treturn (0, _effects.put)((0, _actions.setMeta)({\n\t\t\t\t\t\tcontainerId: containerId,\n\t\t\t\t\t\tmeta: {\n\t\t\t\t\t\t\trole: el.dataset.profileRole\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\tcase 20:\n\t\t\t\t\treturn _context.finish(13);\n\n\t\t\t\tcase 21:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[0], this, [[3,, 13, 21]]);\n}\n\n/**\n * Setup the initial state of the container.\n *\n * @param  {Object} action\n * @return {void}\n */\nfunction workerSetupContainer(action) {\n\tvar containerId;\n\treturn regeneratorRuntime.wrap(function workerSetupContainer$(_context2) {\n\t\twhile (1) {\n\t\t\tswitch (_context2.prev = _context2.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\tcontainerId = action.payload.containerId;\n\n\t\t\t\t\t// Don't do anything if the type isn't correct.\n\n\t\t\t\t\t_context2.next = 3;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_USER_META);\n\n\t\t\t\tcase 3:\n\t\t\t\t\tif (_context2.sent) {\n\t\t\t\t\t\t_context2.next = 5;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\treturn _context2.abrupt('return');\n\n\t\t\t\tcase 5:\n\t\t\t\t\t_context2.next = 7;\n\t\t\t\t\treturn (0, _effects.fork)(workerSyncRole, containerId);\n\n\t\t\t\tcase 7:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context2.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[1], this);\n}\n\n/**\n * Keep in sync the `is_visible` property.\n *\n * @param  {Object} action\n * @return {void}\n */\nfunction workerCheckVisibility(action) {\n\tvar containerId, container, isVisible;\n\treturn regeneratorRuntime.wrap(function workerCheckVisibility$(_context3) {\n\t\twhile (1) {\n\t\t\tswitch (_context3.prev = _context3.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\tcontainerId = action.payload.containerId;\n\n\t\t\t\t\t// Don't do anything if the type isn't correct.\n\n\t\t\t\t\t_context3.next = 3;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_USER_META);\n\n\t\t\t\tcase 3:\n\t\t\t\t\tif (_context3.sent) {\n\t\t\t\t\t\t_context3.next = 5;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\treturn _context3.abrupt('return');\n\n\t\t\t\tcase 5:\n\t\t\t\t\t_context3.next = 7;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.getContainerById, containerId);\n\n\t\t\t\tcase 7:\n\t\t\t\t\tcontainer = _context3.sent;\n\t\t\t\t\tisVisible = true;\n\n\n\t\t\t\t\tif (!(0, _lodash.isEmpty)(container.settings.show_on.role) && container.settings.show_on.role.indexOf(container.meta.role) === -1) {\n\t\t\t\t\t\tisVisible = false;\n\t\t\t\t\t}\n\n\t\t\t\t\t_context3.next = 12;\n\t\t\t\t\treturn (0, _effects.put)((0, _actions.setUI)({\n\t\t\t\t\t\tcontainerId: containerId,\n\t\t\t\t\t\tui: {\n\t\t\t\t\t\t\tis_visible: isVisible\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\tcase 12:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context3.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[2], this);\n}\n\n/**\n * Start to work.\n *\n * @return {void}\n */\nfunction foreman() {\n\treturn regeneratorRuntime.wrap(function foreman$(_context4) {\n\t\twhile (1) {\n\t\t\tswitch (_context4.prev = _context4.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\t_context4.next = 2;\n\t\t\t\t\treturn [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer), (0, _reduxSaga.takeEvery)(_actions.SET_META, workerCheckVisibility)];\n\n\t\t\t\tcase 2:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context4.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[3], this);\n}\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/sagas/user-meta.js\n// module id = 16\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/sagas/user-meta.js?");
 
 /***/ },
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _reactRedux = __webpack_require__(18);
-
-	var _actions = __webpack_require__(12);
-
-	var mapStateToProps = null;
-
-	var mapDispatchToProps = {
-		setupContainer: _actions.setupContainer,
-		checkVisibility: _actions.checkVisibility
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps);
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\nexports.workerStickyActionsPanel = workerStickyActionsPanel;\nexports.default = foreman;\n\nvar _jquery = __webpack_require__(10);\n\nvar _jquery2 = _interopRequireDefault(_jquery);\n\nvar _reduxSaga = __webpack_require__(6);\n\nvar _effects = __webpack_require__(7);\n\nvar _events = __webpack_require__(9);\n\nvar _selectors = __webpack_require__(11);\n\nvar _constants = __webpack_require__(15);\n\nvar _actions = __webpack_require__(13);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar _marked = [workerStickyActionsPanel, foreman].map(regeneratorRuntime.mark);\n\n/**\n * Handle the sticky position of the actions panel.\n *\n * @param  {Object} action\n * @return {void}\n */\nfunction workerStickyActionsPanel(action) {\n\tvar containerId, channel, $container, $panel, $bar, _ref, value, offset, threshold;\n\n\treturn regeneratorRuntime.wrap(function workerStickyActionsPanel$(_context) {\n\t\twhile (1) {\n\t\t\tswitch (_context.prev = _context.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\tcontainerId = action.payload.containerId;\n\n\t\t\t\t\t// Don't do anything if the type isn't correct.\n\n\t\t\t\t\t_context.next = 3;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.canProcessAction, containerId, _constants.TYPE_THEME_OPTIONS);\n\n\t\t\t\tcase 3:\n\t\t\t\t\tif (_context.sent) {\n\t\t\t\t\t\t_context.next = 5;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\treturn _context.abrupt('return');\n\n\t\t\t\tcase 5:\n\t\t\t\t\t_context.next = 7;\n\t\t\t\t\treturn (0, _effects.call)(_events.createScrollChannel, window);\n\n\t\t\t\tcase 7:\n\t\t\t\t\tchannel = _context.sent;\n\t\t\t\t\t$container = (0, _jquery2.default)('#' + containerId);\n\t\t\t\t\t$panel = (0, _jquery2.default)('#postbox-container-1');\n\t\t\t\t\t$bar = (0, _jquery2.default)('#wpadminbar');\n\n\t\t\t\tcase 11:\n\t\t\t\t\tif (false) {\n\t\t\t\t\t\t_context.next = 21;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\t_context.next = 14;\n\t\t\t\t\treturn (0, _effects.take)(channel);\n\n\t\t\t\tcase 14:\n\t\t\t\t\t_ref = _context.sent;\n\t\t\t\t\tvalue = _ref.value;\n\t\t\t\t\toffset = $bar.height() + 10;\n\t\t\t\t\tthreshold = $container.offset().top - offset;\n\n\t\t\t\t\t// In some situations the threshold is negative number because\n\t\t\t\t\t// the container element isn't rendered yet.\n\n\t\t\t\t\tif (threshold > 0) {\n\t\t\t\t\t\t$panel.toggleClass('fixed', value >= threshold).css('top', offset);\n\t\t\t\t\t}\n\t\t\t\t\t_context.next = 11;\n\t\t\t\t\tbreak;\n\n\t\t\t\tcase 21:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[0], this);\n}\n\n/**\n * Start to work.\n *\n * @return {void}\n */\nfunction foreman() {\n\treturn regeneratorRuntime.wrap(function foreman$(_context2) {\n\t\twhile (1) {\n\t\t\tswitch (_context2.prev = _context2.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\t_context2.next = 2;\n\t\t\t\t\treturn [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerStickyActionsPanel)];\n\n\t\t\t\tcase 2:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context2.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[1], this);\n}\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/sagas/theme-options.js\n// module id = 17\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/sagas/theme-options.js?");
 
 /***/ },
 /* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(348);
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _reactRedux = __webpack_require__(19);\n\nvar _selectors = __webpack_require__(11);\n\nvar _actions = __webpack_require__(13);\n\nvar mapStateToProps = function mapStateToProps(state, ownProps) {\n\treturn {\n\t\tfields: (0, _selectors.getContainerFieldsById)(state, ownProps.id)\n\t};\n};\n\nvar mapDispatchToProps = {\n\tsetupContainer: _actions.setupContainer,\n\tcheckVisibility: _actions.checkVisibility\n};\n\nexports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps);\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/hocs/with-connect-to-store.js\n// module id = 18\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/hocs/with-connect-to-store.js?");
 
 /***/ },
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _recompose = __webpack_require__(20);
-
-	exports.default = (0, _recompose.lifecycle)({
-		componentWillMount: function componentWillMount() {
-			this.props.setupContainer(this.props.id, this.props.meta, this.props.ui);
-			this.props.checkVisibility(this.props.id);
-		}
-	});
+	eval("module.exports = (__webpack_require__(4))(348);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/react-redux/lib/index.js from dll-reference carbon.vendor\n// module id = 19\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/react-redux/lib/index.js_from_dll-reference_carbon.vendor?");
 
 /***/ },
 /* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-	exports.setObservableConfig = exports.createEventHandler = exports.mapPropsStream = exports.componentFromStream = exports.hoistStatics = exports.nest = exports.componentFromProp = exports.createSink = exports.createEagerFactory = exports.createEagerElement = exports.isClassComponent = exports.shallowEqual = exports.wrapDisplayName = exports.getDisplayName = exports.compose = exports.setDisplayName = exports.setPropTypes = exports.setStatic = exports.toClass = exports.lifecycle = exports.getContext = exports.withContext = exports.onlyUpdateForPropTypes = exports.onlyUpdateForKeys = exports.pure = exports.shouldUpdate = exports.renderNothing = exports.renderComponent = exports.branch = exports.withReducer = exports.withState = exports.flattenProp = exports.renameProps = exports.renameProp = exports.defaultProps = exports.withHandlers = exports.withPropsOnChange = exports.withProps = exports.mapProps = undefined;
-
-	var _mapProps2 = __webpack_require__(21);
-
-	var _mapProps3 = _interopRequireDefault(_mapProps2);
-
-	var _withProps2 = __webpack_require__(31);
-
-	var _withProps3 = _interopRequireDefault(_withProps2);
-
-	var _withPropsOnChange2 = __webpack_require__(32);
-
-	var _withPropsOnChange3 = _interopRequireDefault(_withPropsOnChange2);
-
-	var _withHandlers2 = __webpack_require__(36);
-
-	var _withHandlers3 = _interopRequireDefault(_withHandlers2);
-
-	var _defaultProps2 = __webpack_require__(37);
-
-	var _defaultProps3 = _interopRequireDefault(_defaultProps2);
-
-	var _renameProp2 = __webpack_require__(38);
-
-	var _renameProp3 = _interopRequireDefault(_renameProp2);
-
-	var _renameProps2 = __webpack_require__(40);
-
-	var _renameProps3 = _interopRequireDefault(_renameProps2);
-
-	var _flattenProp2 = __webpack_require__(41);
-
-	var _flattenProp3 = _interopRequireDefault(_flattenProp2);
-
-	var _withState2 = __webpack_require__(42);
-
-	var _withState3 = _interopRequireDefault(_withState2);
-
-	var _withReducer2 = __webpack_require__(43);
-
-	var _withReducer3 = _interopRequireDefault(_withReducer2);
-
-	var _branch2 = __webpack_require__(44);
-
-	var _branch3 = _interopRequireDefault(_branch2);
-
-	var _renderComponent2 = __webpack_require__(45);
-
-	var _renderComponent3 = _interopRequireDefault(_renderComponent2);
-
-	var _renderNothing2 = __webpack_require__(46);
-
-	var _renderNothing3 = _interopRequireDefault(_renderNothing2);
-
-	var _shouldUpdate2 = __webpack_require__(47);
-
-	var _shouldUpdate3 = _interopRequireDefault(_shouldUpdate2);
-
-	var _pure2 = __webpack_require__(48);
-
-	var _pure3 = _interopRequireDefault(_pure2);
-
-	var _onlyUpdateForKeys2 = __webpack_require__(49);
-
-	var _onlyUpdateForKeys3 = _interopRequireDefault(_onlyUpdateForKeys2);
-
-	var _onlyUpdateForPropTypes2 = __webpack_require__(50);
-
-	var _onlyUpdateForPropTypes3 = _interopRequireDefault(_onlyUpdateForPropTypes2);
-
-	var _withContext2 = __webpack_require__(51);
-
-	var _withContext3 = _interopRequireDefault(_withContext2);
-
-	var _getContext2 = __webpack_require__(52);
-
-	var _getContext3 = _interopRequireDefault(_getContext2);
-
-	var _lifecycle2 = __webpack_require__(53);
-
-	var _lifecycle3 = _interopRequireDefault(_lifecycle2);
-
-	var _toClass2 = __webpack_require__(54);
-
-	var _toClass3 = _interopRequireDefault(_toClass2);
-
-	var _setStatic2 = __webpack_require__(55);
-
-	var _setStatic3 = _interopRequireDefault(_setStatic2);
-
-	var _setPropTypes2 = __webpack_require__(56);
-
-	var _setPropTypes3 = _interopRequireDefault(_setPropTypes2);
-
-	var _setDisplayName2 = __webpack_require__(57);
-
-	var _setDisplayName3 = _interopRequireDefault(_setDisplayName2);
-
-	var _compose2 = __webpack_require__(58);
-
-	var _compose3 = _interopRequireDefault(_compose2);
-
-	var _getDisplayName2 = __webpack_require__(25);
-
-	var _getDisplayName3 = _interopRequireDefault(_getDisplayName2);
-
-	var _wrapDisplayName2 = __webpack_require__(24);
-
-	var _wrapDisplayName3 = _interopRequireDefault(_wrapDisplayName2);
-
-	var _shallowEqual2 = __webpack_require__(34);
-
-	var _shallowEqual3 = _interopRequireDefault(_shallowEqual2);
-
-	var _isClassComponent2 = __webpack_require__(30);
-
-	var _isClassComponent3 = _interopRequireDefault(_isClassComponent2);
-
-	var _createEagerElement2 = __webpack_require__(59);
-
-	var _createEagerElement3 = _interopRequireDefault(_createEagerElement2);
-
-	var _createEagerFactory2 = __webpack_require__(26);
-
-	var _createEagerFactory3 = _interopRequireDefault(_createEagerFactory2);
-
-	var _createSink2 = __webpack_require__(60);
-
-	var _createSink3 = _interopRequireDefault(_createSink2);
-
-	var _componentFromProp2 = __webpack_require__(61);
-
-	var _componentFromProp3 = _interopRequireDefault(_componentFromProp2);
-
-	var _nest2 = __webpack_require__(62);
-
-	var _nest3 = _interopRequireDefault(_nest2);
-
-	var _hoistStatics2 = __webpack_require__(63);
-
-	var _hoistStatics3 = _interopRequireDefault(_hoistStatics2);
-
-	var _componentFromStream2 = __webpack_require__(65);
-
-	var _componentFromStream3 = _interopRequireDefault(_componentFromStream2);
-
-	var _mapPropsStream2 = __webpack_require__(70);
-
-	var _mapPropsStream3 = _interopRequireDefault(_mapPropsStream2);
-
-	var _createEventHandler2 = __webpack_require__(71);
-
-	var _createEventHandler3 = _interopRequireDefault(_createEventHandler2);
-
-	var _setObservableConfig2 = __webpack_require__(69);
-
-	var _setObservableConfig3 = _interopRequireDefault(_setObservableConfig2);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	exports.mapProps = _mapProps3.default; // Higher-order component helpers
-
-	exports.withProps = _withProps3.default;
-	exports.withPropsOnChange = _withPropsOnChange3.default;
-	exports.withHandlers = _withHandlers3.default;
-	exports.defaultProps = _defaultProps3.default;
-	exports.renameProp = _renameProp3.default;
-	exports.renameProps = _renameProps3.default;
-	exports.flattenProp = _flattenProp3.default;
-	exports.withState = _withState3.default;
-	exports.withReducer = _withReducer3.default;
-	exports.branch = _branch3.default;
-	exports.renderComponent = _renderComponent3.default;
-	exports.renderNothing = _renderNothing3.default;
-	exports.shouldUpdate = _shouldUpdate3.default;
-	exports.pure = _pure3.default;
-	exports.onlyUpdateForKeys = _onlyUpdateForKeys3.default;
-	exports.onlyUpdateForPropTypes = _onlyUpdateForPropTypes3.default;
-	exports.withContext = _withContext3.default;
-	exports.getContext = _getContext3.default;
-	exports.lifecycle = _lifecycle3.default;
-	exports.toClass = _toClass3.default;
-
-	// Static property helpers
-
-	exports.setStatic = _setStatic3.default;
-	exports.setPropTypes = _setPropTypes3.default;
-	exports.setDisplayName = _setDisplayName3.default;
-
-	// Composition function
-
-	exports.compose = _compose3.default;
-
-	// Other utils
-
-	exports.getDisplayName = _getDisplayName3.default;
-	exports.wrapDisplayName = _wrapDisplayName3.default;
-	exports.shallowEqual = _shallowEqual3.default;
-	exports.isClassComponent = _isClassComponent3.default;
-	exports.createEagerElement = _createEagerElement3.default;
-	exports.createEagerFactory = _createEagerFactory3.default;
-	exports.createSink = _createSink3.default;
-	exports.componentFromProp = _componentFromProp3.default;
-	exports.nest = _nest3.default;
-	exports.hoistStatics = _hoistStatics3.default;
-
-	// Observable helpers
-
-	exports.componentFromStream = _componentFromStream3.default;
-	exports.mapPropsStream = _mapPropsStream3.default;
-	exports.createEventHandler = _createEventHandler3.default;
-	exports.setObservableConfig = _setObservableConfig3.default;
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _recompose = __webpack_require__(21);\n\nexports.default = (0, _recompose.lifecycle)({\n\tcomponentWillMount: function componentWillMount() {\n\t\tthis.props.setupContainer(this.props.id, this.props.meta, this.props.ui);\n\t\tthis.props.checkVisibility(this.props.id);\n\t}\n});\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/hocs/with-initial-side-effects.js\n// module id = 20\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/hocs/with-initial-side-effects.js?");
 
 /***/ },
 /* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var mapProps = function mapProps(propsMapper) {
-	  return function (BaseComponent) {
-	    var factory = (0, _createEagerFactory2.default)(BaseComponent);
-	    return function (props) {
-	      return factory(propsMapper(props));
-	    };
-	  };
-	};
-
-	exports.default = (0, _createHelper2.default)(mapProps, 'mapProps');
+	eval("'use strict';\n\nexports.__esModule = true;\nexports.setObservableConfig = exports.createEventHandler = exports.mapPropsStream = exports.componentFromStream = exports.hoistStatics = exports.nest = exports.componentFromProp = exports.createSink = exports.createEagerFactory = exports.createEagerElement = exports.isClassComponent = exports.shallowEqual = exports.wrapDisplayName = exports.getDisplayName = exports.compose = exports.setDisplayName = exports.setPropTypes = exports.setStatic = exports.toClass = exports.lifecycle = exports.getContext = exports.withContext = exports.onlyUpdateForPropTypes = exports.onlyUpdateForKeys = exports.pure = exports.shouldUpdate = exports.renderNothing = exports.renderComponent = exports.branch = exports.withReducer = exports.withState = exports.flattenProp = exports.renameProps = exports.renameProp = exports.defaultProps = exports.withHandlers = exports.withPropsOnChange = exports.withProps = exports.mapProps = undefined;\n\nvar _mapProps2 = __webpack_require__(22);\n\nvar _mapProps3 = _interopRequireDefault(_mapProps2);\n\nvar _withProps2 = __webpack_require__(32);\n\nvar _withProps3 = _interopRequireDefault(_withProps2);\n\nvar _withPropsOnChange2 = __webpack_require__(33);\n\nvar _withPropsOnChange3 = _interopRequireDefault(_withPropsOnChange2);\n\nvar _withHandlers2 = __webpack_require__(37);\n\nvar _withHandlers3 = _interopRequireDefault(_withHandlers2);\n\nvar _defaultProps2 = __webpack_require__(38);\n\nvar _defaultProps3 = _interopRequireDefault(_defaultProps2);\n\nvar _renameProp2 = __webpack_require__(39);\n\nvar _renameProp3 = _interopRequireDefault(_renameProp2);\n\nvar _renameProps2 = __webpack_require__(41);\n\nvar _renameProps3 = _interopRequireDefault(_renameProps2);\n\nvar _flattenProp2 = __webpack_require__(42);\n\nvar _flattenProp3 = _interopRequireDefault(_flattenProp2);\n\nvar _withState2 = __webpack_require__(43);\n\nvar _withState3 = _interopRequireDefault(_withState2);\n\nvar _withReducer2 = __webpack_require__(44);\n\nvar _withReducer3 = _interopRequireDefault(_withReducer2);\n\nvar _branch2 = __webpack_require__(45);\n\nvar _branch3 = _interopRequireDefault(_branch2);\n\nvar _renderComponent2 = __webpack_require__(46);\n\nvar _renderComponent3 = _interopRequireDefault(_renderComponent2);\n\nvar _renderNothing2 = __webpack_require__(47);\n\nvar _renderNothing3 = _interopRequireDefault(_renderNothing2);\n\nvar _shouldUpdate2 = __webpack_require__(48);\n\nvar _shouldUpdate3 = _interopRequireDefault(_shouldUpdate2);\n\nvar _pure2 = __webpack_require__(49);\n\nvar _pure3 = _interopRequireDefault(_pure2);\n\nvar _onlyUpdateForKeys2 = __webpack_require__(50);\n\nvar _onlyUpdateForKeys3 = _interopRequireDefault(_onlyUpdateForKeys2);\n\nvar _onlyUpdateForPropTypes2 = __webpack_require__(51);\n\nvar _onlyUpdateForPropTypes3 = _interopRequireDefault(_onlyUpdateForPropTypes2);\n\nvar _withContext2 = __webpack_require__(52);\n\nvar _withContext3 = _interopRequireDefault(_withContext2);\n\nvar _getContext2 = __webpack_require__(53);\n\nvar _getContext3 = _interopRequireDefault(_getContext2);\n\nvar _lifecycle2 = __webpack_require__(54);\n\nvar _lifecycle3 = _interopRequireDefault(_lifecycle2);\n\nvar _toClass2 = __webpack_require__(55);\n\nvar _toClass3 = _interopRequireDefault(_toClass2);\n\nvar _setStatic2 = __webpack_require__(56);\n\nvar _setStatic3 = _interopRequireDefault(_setStatic2);\n\nvar _setPropTypes2 = __webpack_require__(57);\n\nvar _setPropTypes3 = _interopRequireDefault(_setPropTypes2);\n\nvar _setDisplayName2 = __webpack_require__(58);\n\nvar _setDisplayName3 = _interopRequireDefault(_setDisplayName2);\n\nvar _compose2 = __webpack_require__(59);\n\nvar _compose3 = _interopRequireDefault(_compose2);\n\nvar _getDisplayName2 = __webpack_require__(26);\n\nvar _getDisplayName3 = _interopRequireDefault(_getDisplayName2);\n\nvar _wrapDisplayName2 = __webpack_require__(25);\n\nvar _wrapDisplayName3 = _interopRequireDefault(_wrapDisplayName2);\n\nvar _shallowEqual2 = __webpack_require__(35);\n\nvar _shallowEqual3 = _interopRequireDefault(_shallowEqual2);\n\nvar _isClassComponent2 = __webpack_require__(31);\n\nvar _isClassComponent3 = _interopRequireDefault(_isClassComponent2);\n\nvar _createEagerElement2 = __webpack_require__(60);\n\nvar _createEagerElement3 = _interopRequireDefault(_createEagerElement2);\n\nvar _createEagerFactory2 = __webpack_require__(27);\n\nvar _createEagerFactory3 = _interopRequireDefault(_createEagerFactory2);\n\nvar _createSink2 = __webpack_require__(61);\n\nvar _createSink3 = _interopRequireDefault(_createSink2);\n\nvar _componentFromProp2 = __webpack_require__(62);\n\nvar _componentFromProp3 = _interopRequireDefault(_componentFromProp2);\n\nvar _nest2 = __webpack_require__(63);\n\nvar _nest3 = _interopRequireDefault(_nest2);\n\nvar _hoistStatics2 = __webpack_require__(64);\n\nvar _hoistStatics3 = _interopRequireDefault(_hoistStatics2);\n\nvar _componentFromStream2 = __webpack_require__(66);\n\nvar _componentFromStream3 = _interopRequireDefault(_componentFromStream2);\n\nvar _mapPropsStream2 = __webpack_require__(71);\n\nvar _mapPropsStream3 = _interopRequireDefault(_mapPropsStream2);\n\nvar _createEventHandler2 = __webpack_require__(72);\n\nvar _createEventHandler3 = _interopRequireDefault(_createEventHandler2);\n\nvar _setObservableConfig2 = __webpack_require__(70);\n\nvar _setObservableConfig3 = _interopRequireDefault(_setObservableConfig2);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nexports.mapProps = _mapProps3.default; // Higher-order component helpers\n\nexports.withProps = _withProps3.default;\nexports.withPropsOnChange = _withPropsOnChange3.default;\nexports.withHandlers = _withHandlers3.default;\nexports.defaultProps = _defaultProps3.default;\nexports.renameProp = _renameProp3.default;\nexports.renameProps = _renameProps3.default;\nexports.flattenProp = _flattenProp3.default;\nexports.withState = _withState3.default;\nexports.withReducer = _withReducer3.default;\nexports.branch = _branch3.default;\nexports.renderComponent = _renderComponent3.default;\nexports.renderNothing = _renderNothing3.default;\nexports.shouldUpdate = _shouldUpdate3.default;\nexports.pure = _pure3.default;\nexports.onlyUpdateForKeys = _onlyUpdateForKeys3.default;\nexports.onlyUpdateForPropTypes = _onlyUpdateForPropTypes3.default;\nexports.withContext = _withContext3.default;\nexports.getContext = _getContext3.default;\nexports.lifecycle = _lifecycle3.default;\nexports.toClass = _toClass3.default;\n\n// Static property helpers\n\nexports.setStatic = _setStatic3.default;\nexports.setPropTypes = _setPropTypes3.default;\nexports.setDisplayName = _setDisplayName3.default;\n\n// Composition function\n\nexports.compose = _compose3.default;\n\n// Other utils\n\nexports.getDisplayName = _getDisplayName3.default;\nexports.wrapDisplayName = _wrapDisplayName3.default;\nexports.shallowEqual = _shallowEqual3.default;\nexports.isClassComponent = _isClassComponent3.default;\nexports.createEagerElement = _createEagerElement3.default;\nexports.createEagerFactory = _createEagerFactory3.default;\nexports.createSink = _createSink3.default;\nexports.componentFromProp = _componentFromProp3.default;\nexports.nest = _nest3.default;\nexports.hoistStatics = _hoistStatics3.default;\n\n// Observable helpers\n\nexports.componentFromStream = _componentFromStream3.default;\nexports.mapPropsStream = _mapPropsStream3.default;\nexports.createEventHandler = _createEventHandler3.default;\nexports.setObservableConfig = _setObservableConfig3.default;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/index.js\n// module id = 21\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/index.js?");
 
 /***/ },
 /* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	exports.__esModule = true;
-	var createHelper = function createHelper(func, helperName) {
-	  var setDisplayName = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
-	  var noArgs = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];
-
-	  if (process.env.NODE_ENV !== 'production' && setDisplayName) {
-	    var _ret = function () {
-	      /* eslint-disable global-require */
-	      var wrapDisplayName = __webpack_require__(24).default;
-	      /* eslint-enable global-require */
-
-	      if (noArgs) {
-	        return {
-	          v: function v(BaseComponent) {
-	            var Component = func(BaseComponent);
-	            Component.displayName = wrapDisplayName(BaseComponent, helperName);
-	            return Component;
-	          }
-	        };
-	      }
-
-	      return {
-	        v: function v() {
-	          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	            args[_key] = arguments[_key];
-	          }
-
-	          if (args.length > func.length) {
-	            /* eslint-disable */
-	            console.error(
-	            /* eslint-enable */
-	            'Too many arguments passed to ' + helperName + '(). It should called ' + ('like so: ' + helperName + '(...args)(BaseComponent).'));
-	          }
-
-	          return function (BaseComponent) {
-	            var Component = func.apply(undefined, args)(BaseComponent);
-	            Component.displayName = wrapDisplayName(BaseComponent, helperName);
-	            return Component;
-	          };
-	        }
-	      };
-	    }();
-
-	    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
-	  }
-
-	  return func;
-	};
-
-	exports.default = createHelper;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar mapProps = function mapProps(propsMapper) {\n  return function (BaseComponent) {\n    var factory = (0, _createEagerFactory2.default)(BaseComponent);\n    return function (props) {\n      return factory(propsMapper(props));\n    };\n  };\n};\n\nexports.default = (0, _createHelper2.default)(mapProps, 'mapProps');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/mapProps.js\n// module id = 22\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/mapProps.js?");
 
 /***/ },
 /* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(1);
+	eval("/* WEBPACK VAR INJECTION */(function(process) {'use strict';\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; };\n\nexports.__esModule = true;\nvar createHelper = function createHelper(func, helperName) {\n  var setDisplayName = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];\n  var noArgs = arguments.length <= 3 || arguments[3] === undefined ? false : arguments[3];\n\n  if (process.env.NODE_ENV !== 'production' && setDisplayName) {\n    var _ret = function () {\n      /* eslint-disable global-require */\n      var wrapDisplayName = __webpack_require__(25).default;\n      /* eslint-enable global-require */\n\n      if (noArgs) {\n        return {\n          v: function v(BaseComponent) {\n            var Component = func(BaseComponent);\n            Component.displayName = wrapDisplayName(BaseComponent, helperName);\n            return Component;\n          }\n        };\n      }\n\n      return {\n        v: function v() {\n          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {\n            args[_key] = arguments[_key];\n          }\n\n          if (args.length > func.length) {\n            /* eslint-disable */\n            console.error(\n            /* eslint-enable */\n            'Too many arguments passed to ' + helperName + '(). It should called ' + ('like so: ' + helperName + '(...args)(BaseComponent).'));\n          }\n\n          return function (BaseComponent) {\n            var Component = func.apply(undefined, args)(BaseComponent);\n            Component.displayName = wrapDisplayName(BaseComponent, helperName);\n            return Component;\n          };\n        }\n      };\n    }();\n\n    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === \"object\") return _ret.v;\n  }\n\n  return func;\n};\n\nexports.default = createHelper;\n/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24)))\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/createHelper.js\n// module id = 23\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/createHelper.js?");
 
 /***/ },
 /* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _getDisplayName = __webpack_require__(25);
-
-	var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var wrapDisplayName = function wrapDisplayName(BaseComponent, hocName) {
-	  return hocName + '(' + (0, _getDisplayName2.default)(BaseComponent) + ')';
-	};
-
-	exports.default = wrapDisplayName;
+	eval("module.exports = (__webpack_require__(4))(1);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/process/browser.js from dll-reference carbon.vendor\n// module id = 24\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/process/browser.js_from_dll-reference_carbon.vendor?");
 
 /***/ },
 /* 25 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-	var getDisplayName = function getDisplayName(Component) {
-	  if (typeof Component === 'string') {
-	    return Component;
-	  }
-
-	  if (!Component) {
-	    return undefined;
-	  }
-
-	  return Component.displayName || Component.name || 'Component';
-	};
-
-	exports.default = getDisplayName;
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _getDisplayName = __webpack_require__(26);\n\nvar _getDisplayName2 = _interopRequireDefault(_getDisplayName);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar wrapDisplayName = function wrapDisplayName(BaseComponent, hocName) {\n  return hocName + '(' + (0, _getDisplayName2.default)(BaseComponent) + ')';\n};\n\nexports.default = wrapDisplayName;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/wrapDisplayName.js\n// module id = 25\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/wrapDisplayName.js?");
 
 /***/ },
 /* 26 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _createEagerElementUtil = __webpack_require__(27);
-
-	var _createEagerElementUtil2 = _interopRequireDefault(_createEagerElementUtil);
-
-	var _isReferentiallyTransparentFunctionComponent = __webpack_require__(29);
-
-	var _isReferentiallyTransparentFunctionComponent2 = _interopRequireDefault(_isReferentiallyTransparentFunctionComponent);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var createFactory = function createFactory(type) {
-	  var isReferentiallyTransparent = (0, _isReferentiallyTransparentFunctionComponent2.default)(type);
-	  return function (p, c) {
-	    return (0, _createEagerElementUtil2.default)(false, isReferentiallyTransparent, type, p, c);
-	  };
-	};
-
-	exports.default = createFactory;
+	eval("'use strict';\n\nexports.__esModule = true;\nvar getDisplayName = function getDisplayName(Component) {\n  if (typeof Component === 'string') {\n    return Component;\n  }\n\n  if (!Component) {\n    return undefined;\n  }\n\n  return Component.displayName || Component.name || 'Component';\n};\n\nexports.default = getDisplayName;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/getDisplayName.js\n// module id = 26\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/getDisplayName.js?");
 
 /***/ },
 /* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _extends = Object.assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }return target;
-	};
-
-	var _react = __webpack_require__(28);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var createEagerElementUtil = function createEagerElementUtil(hasKey, isReferentiallyTransparent, type, props, children) {
-	  if (!hasKey && isReferentiallyTransparent) {
-	    if (children) {
-	      return type(_extends({}, props, { children: children }));
-	    }
-	    return type(props);
-	  }
-
-	  var Component = type;
-
-	  if (children) {
-	    return _react2.default.createElement(Component, props, children);
-	  }
-
-	  return _react2.default.createElement(Component, props);
-	};
-
-	exports.default = createEagerElementUtil;
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _createEagerElementUtil = __webpack_require__(28);\n\nvar _createEagerElementUtil2 = _interopRequireDefault(_createEagerElementUtil);\n\nvar _isReferentiallyTransparentFunctionComponent = __webpack_require__(30);\n\nvar _isReferentiallyTransparentFunctionComponent2 = _interopRequireDefault(_isReferentiallyTransparentFunctionComponent);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar createFactory = function createFactory(type) {\n  var isReferentiallyTransparent = (0, _isReferentiallyTransparentFunctionComponent2.default)(type);\n  return function (p, c) {\n    return (0, _createEagerElementUtil2.default)(false, isReferentiallyTransparent, type, p, c);\n  };\n};\n\nexports.default = createFactory;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/createEagerFactory.js\n// module id = 27\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/createEagerFactory.js?");
 
 /***/ },
 /* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(53);
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _extends = Object.assign || function (target) {\n  for (var i = 1; i < arguments.length; i++) {\n    var source = arguments[i];for (var key in source) {\n      if (Object.prototype.hasOwnProperty.call(source, key)) {\n        target[key] = source[key];\n      }\n    }\n  }return target;\n};\n\nvar _react = __webpack_require__(29);\n\nvar _react2 = _interopRequireDefault(_react);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar createEagerElementUtil = function createEagerElementUtil(hasKey, isReferentiallyTransparent, type, props, children) {\n  if (!hasKey && isReferentiallyTransparent) {\n    if (children) {\n      return type(_extends({}, props, { children: children }));\n    }\n    return type(props);\n  }\n\n  var Component = type;\n\n  if (children) {\n    return _react2.default.createElement(Component, props, children);\n  }\n\n  return _react2.default.createElement(Component, props);\n};\n\nexports.default = createEagerElementUtil;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/utils/createEagerElementUtil.js\n// module id = 28\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/utils/createEagerElementUtil.js?");
 
 /***/ },
 /* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _isClassComponent = __webpack_require__(30);
-
-	var _isClassComponent2 = _interopRequireDefault(_isClassComponent);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var isReferentiallyTransparentFunctionComponent = function isReferentiallyTransparentFunctionComponent(Component) {
-	  return Boolean(typeof Component === 'function' && !(0, _isClassComponent2.default)(Component) && !Component.defaultProps && !Component.contextTypes && !Component.propTypes);
-	};
-
-	exports.default = isReferentiallyTransparentFunctionComponent;
+	eval("module.exports = (__webpack_require__(4))(53);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/react/react.js from dll-reference carbon.vendor\n// module id = 29\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/react/react.js_from_dll-reference_carbon.vendor?");
 
 /***/ },
 /* 30 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	exports.__esModule = true;
-	var isClassComponent = function isClassComponent(Component) {
-	  return Boolean(Component && Component.prototype && _typeof(Component.prototype.isReactComponent) === 'object');
-	};
-
-	exports.default = isClassComponent;
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _isClassComponent = __webpack_require__(31);\n\nvar _isClassComponent2 = _interopRequireDefault(_isClassComponent);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar isReferentiallyTransparentFunctionComponent = function isReferentiallyTransparentFunctionComponent(Component) {\n  return Boolean(typeof Component === 'function' && !(0, _isClassComponent2.default)(Component) && !Component.defaultProps && !Component.contextTypes && !Component.propTypes);\n};\n\nexports.default = isReferentiallyTransparentFunctionComponent;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/isReferentiallyTransparentFunctionComponent.js\n// module id = 30\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/isReferentiallyTransparentFunctionComponent.js?");
 
 /***/ },
 /* 31 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _extends = Object.assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }return target;
-	};
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _mapProps = __webpack_require__(21);
-
-	var _mapProps2 = _interopRequireDefault(_mapProps);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var withProps = function withProps(input) {
-	  return (0, _mapProps2.default)(function (props) {
-	    return _extends({}, props, typeof input === 'function' ? input(props) : input);
-	  });
-	};
-
-	exports.default = (0, _createHelper2.default)(withProps, 'withProps');
+	eval("'use strict';\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; };\n\nexports.__esModule = true;\nvar isClassComponent = function isClassComponent(Component) {\n  return Boolean(Component && Component.prototype && _typeof(Component.prototype.isReactComponent) === 'object');\n};\n\nexports.default = isClassComponent;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/isClassComponent.js\n// module id = 31\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/isClassComponent.js?");
 
 /***/ },
 /* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	exports.__esModule = true;
-
-	var _extends = Object.assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }return target;
-	};
-
-	var _react = __webpack_require__(28);
-
-	var _pick = __webpack_require__(33);
-
-	var _pick2 = _interopRequireDefault(_pick);
-
-	var _shallowEqual = __webpack_require__(34);
-
-	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-
-	function _possibleConstructorReturn(self, call) {
-	  if (!self) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-	}
-
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
-	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	}
-
-	var withPropsOnChange = function withPropsOnChange(shouldMapOrKeys, propsMapper) {
-	  return function (BaseComponent) {
-	    var factory = (0, _createEagerFactory2.default)(BaseComponent);
-	    var shouldMap = typeof shouldMapOrKeys === 'function' ? shouldMapOrKeys : function (props, nextProps) {
-	      return !(0, _shallowEqual2.default)((0, _pick2.default)(props, shouldMapOrKeys), (0, _pick2.default)(nextProps, shouldMapOrKeys));
-	    };
-
-	    return function (_Component) {
-	      _inherits(_class2, _Component);
-
-	      function _class2() {
-	        var _temp, _this, _ret;
-
-	        _classCallCheck(this, _class2);
-
-	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	          args[_key] = arguments[_key];
-	        }
-
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.computedProps = propsMapper(_this.props), _temp), _possibleConstructorReturn(_this, _ret);
-	      }
-
-	      _class2.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-	        if (shouldMap(this.props, nextProps)) {
-	          this.computedProps = propsMapper(nextProps);
-	        }
-	      };
-
-	      _class2.prototype.render = function render() {
-	        return factory(_extends({}, this.props, this.computedProps));
-	      };
-
-	      return _class2;
-	    }(_react.Component);
-	  };
-	};
-
-	exports.default = (0, _createHelper2.default)(withPropsOnChange, 'withPropsOnChange');
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _extends = Object.assign || function (target) {\n  for (var i = 1; i < arguments.length; i++) {\n    var source = arguments[i];for (var key in source) {\n      if (Object.prototype.hasOwnProperty.call(source, key)) {\n        target[key] = source[key];\n      }\n    }\n  }return target;\n};\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _mapProps = __webpack_require__(22);\n\nvar _mapProps2 = _interopRequireDefault(_mapProps);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar withProps = function withProps(input) {\n  return (0, _mapProps2.default)(function (props) {\n    return _extends({}, props, typeof input === 'function' ? input(props) : input);\n  });\n};\n\nexports.default = (0, _createHelper2.default)(withProps, 'withProps');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/withProps.js\n// module id = 32\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/withProps.js?");
 
 /***/ },
 /* 33 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-
-	exports.__esModule = true;
-	var pick = function pick(obj, keys) {
-	  var result = {};
-	  for (var i = 0; i < keys.length; i++) {
-	    var key = keys[i];
-	    if (obj.hasOwnProperty(key)) {
-	      result[key] = obj[key];
-	    }
-	  }
-	  return result;
-	};
-
-	exports.default = pick;
+	eval("'use strict';\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; };\n\nexports.__esModule = true;\n\nvar _extends = Object.assign || function (target) {\n  for (var i = 1; i < arguments.length; i++) {\n    var source = arguments[i];for (var key in source) {\n      if (Object.prototype.hasOwnProperty.call(source, key)) {\n        target[key] = source[key];\n      }\n    }\n  }return target;\n};\n\nvar _react = __webpack_require__(29);\n\nvar _pick = __webpack_require__(34);\n\nvar _pick2 = _interopRequireDefault(_pick);\n\nvar _shallowEqual = __webpack_require__(35);\n\nvar _shallowEqual2 = _interopRequireDefault(_shallowEqual);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n}\n\nfunction _possibleConstructorReturn(self, call) {\n  if (!self) {\n    throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\");\n  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === \"object\" || typeof call === \"function\") ? call : self;\n}\n\nfunction _inherits(subClass, superClass) {\n  if (typeof superClass !== \"function\" && superClass !== null) {\n    throw new TypeError(\"Super expression must either be null or a function, not \" + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));\n  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;\n}\n\nvar withPropsOnChange = function withPropsOnChange(shouldMapOrKeys, propsMapper) {\n  return function (BaseComponent) {\n    var factory = (0, _createEagerFactory2.default)(BaseComponent);\n    var shouldMap = typeof shouldMapOrKeys === 'function' ? shouldMapOrKeys : function (props, nextProps) {\n      return !(0, _shallowEqual2.default)((0, _pick2.default)(props, shouldMapOrKeys), (0, _pick2.default)(nextProps, shouldMapOrKeys));\n    };\n\n    return function (_Component) {\n      _inherits(_class2, _Component);\n\n      function _class2() {\n        var _temp, _this, _ret;\n\n        _classCallCheck(this, _class2);\n\n        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {\n          args[_key] = arguments[_key];\n        }\n\n        return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.computedProps = propsMapper(_this.props), _temp), _possibleConstructorReturn(_this, _ret);\n      }\n\n      _class2.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {\n        if (shouldMap(this.props, nextProps)) {\n          this.computedProps = propsMapper(nextProps);\n        }\n      };\n\n      _class2.prototype.render = function render() {\n        return factory(_extends({}, this.props, this.computedProps));\n      };\n\n      return _class2;\n    }(_react.Component);\n  };\n};\n\nexports.default = (0, _createHelper2.default)(withPropsOnChange, 'withPropsOnChange');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/withPropsOnChange.js\n// module id = 33\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/withPropsOnChange.js?");
 
 /***/ },
 /* 34 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _shallowEqual = __webpack_require__(35);
-
-	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	exports.default = _shallowEqual2.default;
+	eval("\"use strict\";\n\nexports.__esModule = true;\nvar pick = function pick(obj, keys) {\n  var result = {};\n  for (var i = 0; i < keys.length; i++) {\n    var key = keys[i];\n    if (obj.hasOwnProperty(key)) {\n      result[key] = obj[key];\n    }\n  }\n  return result;\n};\n\nexports.default = pick;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/utils/pick.js\n// module id = 34\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/utils/pick.js?");
 
 /***/ },
 /* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(58);
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _shallowEqual = __webpack_require__(36);\n\nvar _shallowEqual2 = _interopRequireDefault(_shallowEqual);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nexports.default = _shallowEqual2.default;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/shallowEqual.js\n// module id = 35\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/shallowEqual.js?");
 
 /***/ },
 /* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	exports.__esModule = true;
-
-	var _extends = Object.assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }return target;
-	};
-
-	var _react = __webpack_require__(28);
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-
-	function _possibleConstructorReturn(self, call) {
-	  if (!self) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-	}
-
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
-	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	}
-
-	var mapValues = function mapValues(obj, func) {
-	  var result = [];
-	  var i = 0;
-	  /* eslint-disable no-restricted-syntax */
-	  for (var key in obj) {
-	    if (obj.hasOwnProperty(key)) {
-	      i += 1;
-	      result[key] = func(obj[key], key, i);
-	    }
-	  }
-	  /* eslint-enable no-restricted-syntax */
-	  return result;
-	};
-
-	var withHandlers = function withHandlers(handlers) {
-	  return function (BaseComponent) {
-	    var _class, _temp2, _initialiseProps;
-
-	    var factory = (0, _createEagerFactory2.default)(BaseComponent);
-	    return _temp2 = _class = function (_Component) {
-	      _inherits(_class, _Component);
-
-	      function _class() {
-	        var _temp, _this, _ret;
-
-	        _classCallCheck(this, _class);
-
-	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	          args[_key] = arguments[_key];
-	        }
-
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);
-	      }
-
-	      _class.prototype.componentWillReceiveProps = function componentWillReceiveProps() {
-	        this.cachedHandlers = {};
-	      };
-
-	      _class.prototype.render = function render() {
-	        return factory(_extends({}, this.props, this.handlers));
-	      };
-
-	      return _class;
-	    }(_react.Component), _initialiseProps = function _initialiseProps() {
-	      var _this2 = this;
-
-	      this.cachedHandlers = {};
-	      this.handlers = mapValues(handlers, function (createHandler, handlerName) {
-	        return function () {
-	          var cachedHandler = _this2.cachedHandlers[handlerName];
-	          if (cachedHandler) {
-	            return cachedHandler.apply(undefined, arguments);
-	          }
-
-	          var handler = createHandler(_this2.props);
-	          _this2.cachedHandlers[handlerName] = handler;
-
-	          if (process.env.NODE_ENV !== 'production' && typeof handler !== 'function') {
-	            console.error('withHandlers(): Expected a map of higher-order functions. ' + 'Refer to the docs for more info.');
-	          }
-
-	          return handler.apply(undefined, arguments);
-	        };
-	      });
-	    }, _temp2;
-	  };
-	};
-
-	exports.default = (0, _createHelper2.default)(withHandlers, 'withHandlers');
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
+	eval("module.exports = (__webpack_require__(4))(58);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/fbjs/lib/shallowEqual.js from dll-reference carbon.vendor\n// module id = 36\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/fbjs/lib/shallowEqual.js_from_dll-reference_carbon.vendor?");
 
 /***/ },
 /* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var defaultProps = function defaultProps(props) {
-	  return function (BaseComponent) {
-	    var factory = (0, _createEagerFactory2.default)(BaseComponent);
-	    var DefaultProps = function DefaultProps(ownerProps) {
-	      return factory(ownerProps);
-	    };
-	    DefaultProps.defaultProps = props;
-	    return DefaultProps;
-	  };
-	};
-
-	exports.default = (0, _createHelper2.default)(defaultProps, 'defaultProps');
+	eval("/* WEBPACK VAR INJECTION */(function(process) {'use strict';\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; };\n\nexports.__esModule = true;\n\nvar _extends = Object.assign || function (target) {\n  for (var i = 1; i < arguments.length; i++) {\n    var source = arguments[i];for (var key in source) {\n      if (Object.prototype.hasOwnProperty.call(source, key)) {\n        target[key] = source[key];\n      }\n    }\n  }return target;\n};\n\nvar _react = __webpack_require__(29);\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n}\n\nfunction _possibleConstructorReturn(self, call) {\n  if (!self) {\n    throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\");\n  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === \"object\" || typeof call === \"function\") ? call : self;\n}\n\nfunction _inherits(subClass, superClass) {\n  if (typeof superClass !== \"function\" && superClass !== null) {\n    throw new TypeError(\"Super expression must either be null or a function, not \" + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));\n  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;\n}\n\nvar mapValues = function mapValues(obj, func) {\n  var result = [];\n  var i = 0;\n  /* eslint-disable no-restricted-syntax */\n  for (var key in obj) {\n    if (obj.hasOwnProperty(key)) {\n      i += 1;\n      result[key] = func(obj[key], key, i);\n    }\n  }\n  /* eslint-enable no-restricted-syntax */\n  return result;\n};\n\nvar withHandlers = function withHandlers(handlers) {\n  return function (BaseComponent) {\n    var _class, _temp2, _initialiseProps;\n\n    var factory = (0, _createEagerFactory2.default)(BaseComponent);\n    return _temp2 = _class = function (_Component) {\n      _inherits(_class, _Component);\n\n      function _class() {\n        var _temp, _this, _ret;\n\n        _classCallCheck(this, _class);\n\n        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {\n          args[_key] = arguments[_key];\n        }\n\n        return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _initialiseProps.call(_this), _temp), _possibleConstructorReturn(_this, _ret);\n      }\n\n      _class.prototype.componentWillReceiveProps = function componentWillReceiveProps() {\n        this.cachedHandlers = {};\n      };\n\n      _class.prototype.render = function render() {\n        return factory(_extends({}, this.props, this.handlers));\n      };\n\n      return _class;\n    }(_react.Component), _initialiseProps = function _initialiseProps() {\n      var _this2 = this;\n\n      this.cachedHandlers = {};\n      this.handlers = mapValues(handlers, function (createHandler, handlerName) {\n        return function () {\n          var cachedHandler = _this2.cachedHandlers[handlerName];\n          if (cachedHandler) {\n            return cachedHandler.apply(undefined, arguments);\n          }\n\n          var handler = createHandler(_this2.props);\n          _this2.cachedHandlers[handlerName] = handler;\n\n          if (process.env.NODE_ENV !== 'production' && typeof handler !== 'function') {\n            console.error('withHandlers(): Expected a map of higher-order functions. ' + 'Refer to the docs for more info.');\n          }\n\n          return handler.apply(undefined, arguments);\n        };\n      });\n    }, _temp2;\n  };\n};\n\nexports.default = (0, _createHelper2.default)(withHandlers, 'withHandlers');\n/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24)))\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/withHandlers.js\n// module id = 37\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/withHandlers.js?");
 
 /***/ },
 /* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _extends = Object.assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }return target;
-	};
-
-	var _omit = __webpack_require__(39);
-
-	var _omit2 = _interopRequireDefault(_omit);
-
-	var _mapProps = __webpack_require__(21);
-
-	var _mapProps2 = _interopRequireDefault(_mapProps);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var renameProp = function renameProp(oldName, newName) {
-	  return (0, _mapProps2.default)(function (props) {
-	    var _extends2;
-
-	    return _extends({}, (0, _omit2.default)(props, [oldName]), (_extends2 = {}, _extends2[newName] = props[oldName], _extends2));
-	  });
-	};
-
-	exports.default = (0, _createHelper2.default)(renameProp, 'renameProp');
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar defaultProps = function defaultProps(props) {\n  return function (BaseComponent) {\n    var factory = (0, _createEagerFactory2.default)(BaseComponent);\n    var DefaultProps = function DefaultProps(ownerProps) {\n      return factory(ownerProps);\n    };\n    DefaultProps.defaultProps = props;\n    return DefaultProps;\n  };\n};\n\nexports.default = (0, _createHelper2.default)(defaultProps, 'defaultProps');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/defaultProps.js\n// module id = 38\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/defaultProps.js?");
 
 /***/ },
 /* 39 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-
-	exports.__esModule = true;
-
-	function _objectWithoutProperties(obj, keys) {
-	  var target = {};for (var i in obj) {
-	    if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
-	  }return target;
-	}
-
-	var omit = function omit(obj, keys) {
-	  var rest = _objectWithoutProperties(obj, []);
-
-	  for (var i = 0; i < keys.length; i++) {
-	    var key = keys[i];
-	    if (rest.hasOwnProperty(key)) {
-	      delete rest[key];
-	    }
-	  }
-	  return rest;
-	};
-
-	exports.default = omit;
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _extends = Object.assign || function (target) {\n  for (var i = 1; i < arguments.length; i++) {\n    var source = arguments[i];for (var key in source) {\n      if (Object.prototype.hasOwnProperty.call(source, key)) {\n        target[key] = source[key];\n      }\n    }\n  }return target;\n};\n\nvar _omit = __webpack_require__(40);\n\nvar _omit2 = _interopRequireDefault(_omit);\n\nvar _mapProps = __webpack_require__(22);\n\nvar _mapProps2 = _interopRequireDefault(_mapProps);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar renameProp = function renameProp(oldName, newName) {\n  return (0, _mapProps2.default)(function (props) {\n    var _extends2;\n\n    return _extends({}, (0, _omit2.default)(props, [oldName]), (_extends2 = {}, _extends2[newName] = props[oldName], _extends2));\n  });\n};\n\nexports.default = (0, _createHelper2.default)(renameProp, 'renameProp');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/renameProp.js\n// module id = 39\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/renameProp.js?");
 
 /***/ },
 /* 40 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _extends = Object.assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }return target;
-	};
-
-	var _omit = __webpack_require__(39);
-
-	var _omit2 = _interopRequireDefault(_omit);
-
-	var _pick = __webpack_require__(33);
-
-	var _pick2 = _interopRequireDefault(_pick);
-
-	var _mapProps = __webpack_require__(21);
-
-	var _mapProps2 = _interopRequireDefault(_mapProps);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var keys = Object.keys;
-
-	var mapKeys = function mapKeys(obj, func) {
-	  return keys(obj).reduce(function (result, key) {
-	    var val = obj[key];
-	    /* eslint-disable no-param-reassign */
-	    result[func(val, key)] = val;
-	    /* eslint-enable no-param-reassign */
-	    return result;
-	  }, {});
-	};
-
-	var renameProps = function renameProps(nameMap) {
-	  return (0, _mapProps2.default)(function (props) {
-	    return _extends({}, (0, _omit2.default)(props, keys(nameMap)), mapKeys((0, _pick2.default)(props, keys(nameMap)), function (_, oldName) {
-	      return nameMap[oldName];
-	    }));
-	  });
-	};
-
-	exports.default = (0, _createHelper2.default)(renameProps, 'renameProps');
+	eval("\"use strict\";\n\nexports.__esModule = true;\n\nfunction _objectWithoutProperties(obj, keys) {\n  var target = {};for (var i in obj) {\n    if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];\n  }return target;\n}\n\nvar omit = function omit(obj, keys) {\n  var rest = _objectWithoutProperties(obj, []);\n\n  for (var i = 0; i < keys.length; i++) {\n    var key = keys[i];\n    if (rest.hasOwnProperty(key)) {\n      delete rest[key];\n    }\n  }\n  return rest;\n};\n\nexports.default = omit;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/utils/omit.js\n// module id = 40\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/utils/omit.js?");
 
 /***/ },
 /* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _extends = Object.assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }return target;
-	};
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var flattenProp = function flattenProp(propName) {
-	  return function (BaseComponent) {
-	    var factory = (0, _createEagerFactory2.default)(BaseComponent);
-	    return function (props) {
-	      return factory(_extends({}, props, props[propName]));
-	    };
-	  };
-	};
-
-	exports.default = (0, _createHelper2.default)(flattenProp, 'flattenProp');
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _extends = Object.assign || function (target) {\n  for (var i = 1; i < arguments.length; i++) {\n    var source = arguments[i];for (var key in source) {\n      if (Object.prototype.hasOwnProperty.call(source, key)) {\n        target[key] = source[key];\n      }\n    }\n  }return target;\n};\n\nvar _omit = __webpack_require__(40);\n\nvar _omit2 = _interopRequireDefault(_omit);\n\nvar _pick = __webpack_require__(34);\n\nvar _pick2 = _interopRequireDefault(_pick);\n\nvar _mapProps = __webpack_require__(22);\n\nvar _mapProps2 = _interopRequireDefault(_mapProps);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar keys = Object.keys;\n\nvar mapKeys = function mapKeys(obj, func) {\n  return keys(obj).reduce(function (result, key) {\n    var val = obj[key];\n    /* eslint-disable no-param-reassign */\n    result[func(val, key)] = val;\n    /* eslint-enable no-param-reassign */\n    return result;\n  }, {});\n};\n\nvar renameProps = function renameProps(nameMap) {\n  return (0, _mapProps2.default)(function (props) {\n    return _extends({}, (0, _omit2.default)(props, keys(nameMap)), mapKeys((0, _pick2.default)(props, keys(nameMap)), function (_, oldName) {\n      return nameMap[oldName];\n    }));\n  });\n};\n\nexports.default = (0, _createHelper2.default)(renameProps, 'renameProps');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/renameProps.js\n// module id = 41\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/renameProps.js?");
 
 /***/ },
 /* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	exports.__esModule = true;
-
-	var _extends = Object.assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }return target;
-	};
-
-	var _react = __webpack_require__(28);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-
-	function _possibleConstructorReturn(self, call) {
-	  if (!self) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-	}
-
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
-	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	}
-
-	var withState = function withState(stateName, stateUpdaterName, initialState) {
-	  return function (BaseComponent) {
-	    var factory = (0, _createEagerFactory2.default)(BaseComponent);
-	    return function (_Component) {
-	      _inherits(_class2, _Component);
-
-	      function _class2() {
-	        var _temp, _this, _ret;
-
-	        _classCallCheck(this, _class2);
-
-	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	          args[_key] = arguments[_key];
-	        }
-
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.state = {
-	          stateValue: typeof initialState === 'function' ? initialState(_this.props) : initialState
-	        }, _this.updateStateValue = function (updateFn, callback) {
-	          return _this.setState(function (_ref) {
-	            var stateValue = _ref.stateValue;
-	            return {
-	              stateValue: typeof updateFn === 'function' ? updateFn(stateValue) : updateFn
-	            };
-	          }, callback);
-	        }, _temp), _possibleConstructorReturn(_this, _ret);
-	      }
-
-	      _class2.prototype.render = function render() {
-	        var _extends2;
-
-	        return factory(_extends({}, this.props, (_extends2 = {}, _extends2[stateName] = this.state.stateValue, _extends2[stateUpdaterName] = this.updateStateValue, _extends2)));
-	      };
-
-	      return _class2;
-	    }(_react.Component);
-	  };
-	};
-
-	exports.default = (0, _createHelper2.default)(withState, 'withState');
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _extends = Object.assign || function (target) {\n  for (var i = 1; i < arguments.length; i++) {\n    var source = arguments[i];for (var key in source) {\n      if (Object.prototype.hasOwnProperty.call(source, key)) {\n        target[key] = source[key];\n      }\n    }\n  }return target;\n};\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar flattenProp = function flattenProp(propName) {\n  return function (BaseComponent) {\n    var factory = (0, _createEagerFactory2.default)(BaseComponent);\n    return function (props) {\n      return factory(_extends({}, props, props[propName]));\n    };\n  };\n};\n\nexports.default = (0, _createHelper2.default)(flattenProp, 'flattenProp');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/flattenProp.js\n// module id = 42\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/flattenProp.js?");
 
 /***/ },
 /* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	exports.__esModule = true;
-
-	var _extends = Object.assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }return target;
-	};
-
-	var _react = __webpack_require__(28);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-
-	function _possibleConstructorReturn(self, call) {
-	  if (!self) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-	}
-
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
-	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	}
-
-	var withReducer = function withReducer(stateName, dispatchName, reducer, initialState) {
-	  return function (BaseComponent) {
-	    var factory = (0, _createEagerFactory2.default)(BaseComponent);
-	    return function (_Component) {
-	      _inherits(_class2, _Component);
-
-	      function _class2() {
-	        var _temp, _this, _ret;
-
-	        _classCallCheck(this, _class2);
-
-	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	          args[_key] = arguments[_key];
-	        }
-
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.state = {
-	          stateValue: typeof initialState === 'function' ? initialState(_this.props) : initialState
-	        }, _this.dispatch = function (action) {
-	          return _this.setState(function (_ref) {
-	            var stateValue = _ref.stateValue;
-	            return {
-	              stateValue: reducer(stateValue, action)
-	            };
-	          });
-	        }, _temp), _possibleConstructorReturn(_this, _ret);
-	      }
-
-	      _class2.prototype.render = function render() {
-	        var _extends2;
-
-	        return factory(_extends({}, this.props, (_extends2 = {}, _extends2[stateName] = this.state.stateValue, _extends2[dispatchName] = this.dispatch, _extends2)));
-	      };
-
-	      return _class2;
-	    }(_react.Component);
-	  };
-	};
-
-	exports.default = (0, _createHelper2.default)(withReducer, 'withReducer');
+	eval("'use strict';\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; };\n\nexports.__esModule = true;\n\nvar _extends = Object.assign || function (target) {\n  for (var i = 1; i < arguments.length; i++) {\n    var source = arguments[i];for (var key in source) {\n      if (Object.prototype.hasOwnProperty.call(source, key)) {\n        target[key] = source[key];\n      }\n    }\n  }return target;\n};\n\nvar _react = __webpack_require__(29);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n}\n\nfunction _possibleConstructorReturn(self, call) {\n  if (!self) {\n    throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\");\n  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === \"object\" || typeof call === \"function\") ? call : self;\n}\n\nfunction _inherits(subClass, superClass) {\n  if (typeof superClass !== \"function\" && superClass !== null) {\n    throw new TypeError(\"Super expression must either be null or a function, not \" + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));\n  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;\n}\n\nvar withState = function withState(stateName, stateUpdaterName, initialState) {\n  return function (BaseComponent) {\n    var factory = (0, _createEagerFactory2.default)(BaseComponent);\n    return function (_Component) {\n      _inherits(_class2, _Component);\n\n      function _class2() {\n        var _temp, _this, _ret;\n\n        _classCallCheck(this, _class2);\n\n        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {\n          args[_key] = arguments[_key];\n        }\n\n        return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.state = {\n          stateValue: typeof initialState === 'function' ? initialState(_this.props) : initialState\n        }, _this.updateStateValue = function (updateFn, callback) {\n          return _this.setState(function (_ref) {\n            var stateValue = _ref.stateValue;\n            return {\n              stateValue: typeof updateFn === 'function' ? updateFn(stateValue) : updateFn\n            };\n          }, callback);\n        }, _temp), _possibleConstructorReturn(_this, _ret);\n      }\n\n      _class2.prototype.render = function render() {\n        var _extends2;\n\n        return factory(_extends({}, this.props, (_extends2 = {}, _extends2[stateName] = this.state.stateValue, _extends2[stateUpdaterName] = this.updateStateValue, _extends2)));\n      };\n\n      return _class2;\n    }(_react.Component);\n  };\n};\n\nexports.default = (0, _createHelper2.default)(withState, 'withState');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/withState.js\n// module id = 43\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/withState.js?");
 
 /***/ },
 /* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	exports.__esModule = true;
-
-	var _react = __webpack_require__(28);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-
-	function _possibleConstructorReturn(self, call) {
-	  if (!self) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-	}
-
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
-	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	}
-
-	var branch = function branch(test, left, right) {
-	  return function (BaseComponent) {
-	    return function (_React$Component) {
-	      _inherits(_class2, _React$Component);
-
-	      function _class2(props, context) {
-	        _classCallCheck(this, _class2);
-
-	        var _this = _possibleConstructorReturn(this, _React$Component.call(this, props, context));
-
-	        _this.LeftComponent = null;
-	        _this.RightComponent = null;
-
-	        _this.computeChildComponent(_this.props);
-	        return _this;
-	      }
-
-	      _class2.prototype.computeChildComponent = function computeChildComponent(props) {
-	        if (test(props)) {
-	          this.leftFactory = this.leftFactory || (0, _createEagerFactory2.default)(left(BaseComponent));
-	          this.factory = this.leftFactory;
-	        } else {
-	          this.rightFactory = this.rightFactory || (0, _createEagerFactory2.default)(right(BaseComponent));
-	          this.factory = this.rightFactory;
-	        }
-	      };
-
-	      _class2.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-	        this.computeChildComponent(nextProps);
-	      };
-
-	      _class2.prototype.render = function render() {
-	        return this.factory(this.props);
-	      };
-
-	      return _class2;
-	    }(_react2.default.Component);
-	  };
-	};
-
-	exports.default = (0, _createHelper2.default)(branch, 'branch');
+	eval("'use strict';\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; };\n\nexports.__esModule = true;\n\nvar _extends = Object.assign || function (target) {\n  for (var i = 1; i < arguments.length; i++) {\n    var source = arguments[i];for (var key in source) {\n      if (Object.prototype.hasOwnProperty.call(source, key)) {\n        target[key] = source[key];\n      }\n    }\n  }return target;\n};\n\nvar _react = __webpack_require__(29);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n}\n\nfunction _possibleConstructorReturn(self, call) {\n  if (!self) {\n    throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\");\n  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === \"object\" || typeof call === \"function\") ? call : self;\n}\n\nfunction _inherits(subClass, superClass) {\n  if (typeof superClass !== \"function\" && superClass !== null) {\n    throw new TypeError(\"Super expression must either be null or a function, not \" + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));\n  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;\n}\n\nvar withReducer = function withReducer(stateName, dispatchName, reducer, initialState) {\n  return function (BaseComponent) {\n    var factory = (0, _createEagerFactory2.default)(BaseComponent);\n    return function (_Component) {\n      _inherits(_class2, _Component);\n\n      function _class2() {\n        var _temp, _this, _ret;\n\n        _classCallCheck(this, _class2);\n\n        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {\n          args[_key] = arguments[_key];\n        }\n\n        return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.state = {\n          stateValue: typeof initialState === 'function' ? initialState(_this.props) : initialState\n        }, _this.dispatch = function (action) {\n          return _this.setState(function (_ref) {\n            var stateValue = _ref.stateValue;\n            return {\n              stateValue: reducer(stateValue, action)\n            };\n          });\n        }, _temp), _possibleConstructorReturn(_this, _ret);\n      }\n\n      _class2.prototype.render = function render() {\n        var _extends2;\n\n        return factory(_extends({}, this.props, (_extends2 = {}, _extends2[stateName] = this.state.stateValue, _extends2[dispatchName] = this.dispatch, _extends2)));\n      };\n\n      return _class2;\n    }(_react.Component);\n  };\n};\n\nexports.default = (0, _createHelper2.default)(withReducer, 'withReducer');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/withReducer.js\n// module id = 44\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/withReducer.js?");
 
 /***/ },
 /* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-
-	exports.__esModule = true;
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	// import React from 'react'
-
-
-	var renderComponent = function renderComponent(Component) {
-	  return function (_) {
-	    var factory = (0, _createEagerFactory2.default)(Component);
-	    var RenderComponent = function RenderComponent(props) {
-	      return factory(props);
-	    };
-	    // const RenderComponent = props => <Component {...props} />
-	    if (process.env.NODE_ENV !== 'production') {
-	      /* eslint-disable global-require */
-	      var wrapDisplayName = __webpack_require__(24).default;
-	      /* eslint-enable global-require */
-	      RenderComponent.displayName = wrapDisplayName(Component, 'renderComponent');
-	    }
-	    return RenderComponent;
-	  };
-	};
-
-	exports.default = (0, _createHelper2.default)(renderComponent, 'renderComponent', false);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
+	eval("'use strict';\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; };\n\nexports.__esModule = true;\n\nvar _react = __webpack_require__(29);\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n}\n\nfunction _possibleConstructorReturn(self, call) {\n  if (!self) {\n    throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\");\n  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === \"object\" || typeof call === \"function\") ? call : self;\n}\n\nfunction _inherits(subClass, superClass) {\n  if (typeof superClass !== \"function\" && superClass !== null) {\n    throw new TypeError(\"Super expression must either be null or a function, not \" + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));\n  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;\n}\n\nvar branch = function branch(test, left, right) {\n  return function (BaseComponent) {\n    return function (_React$Component) {\n      _inherits(_class2, _React$Component);\n\n      function _class2(props, context) {\n        _classCallCheck(this, _class2);\n\n        var _this = _possibleConstructorReturn(this, _React$Component.call(this, props, context));\n\n        _this.LeftComponent = null;\n        _this.RightComponent = null;\n\n        _this.computeChildComponent(_this.props);\n        return _this;\n      }\n\n      _class2.prototype.computeChildComponent = function computeChildComponent(props) {\n        if (test(props)) {\n          this.leftFactory = this.leftFactory || (0, _createEagerFactory2.default)(left(BaseComponent));\n          this.factory = this.leftFactory;\n        } else {\n          this.rightFactory = this.rightFactory || (0, _createEagerFactory2.default)(right(BaseComponent));\n          this.factory = this.rightFactory;\n        }\n      };\n\n      _class2.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {\n        this.computeChildComponent(nextProps);\n      };\n\n      _class2.prototype.render = function render() {\n        return this.factory(this.props);\n      };\n\n      return _class2;\n    }(_react2.default.Component);\n  };\n};\n\nexports.default = (0, _createHelper2.default)(branch, 'branch');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/branch.js\n// module id = 45\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/branch.js?");
 
 /***/ },
 /* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var renderNothing = function renderNothing(_) {
-	  var Nothing = function Nothing() {
-	    return null;
-	  };
-	  Nothing.displayName = 'Nothing';
-	  return Nothing;
-	};
-
-	exports.default = (0, _createHelper2.default)(renderNothing, 'renderNothing', false, true);
+	eval("/* WEBPACK VAR INJECTION */(function(process) {'use strict';\n\nexports.__esModule = true;\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\n// import React from 'react'\n\n\nvar renderComponent = function renderComponent(Component) {\n  return function (_) {\n    var factory = (0, _createEagerFactory2.default)(Component);\n    var RenderComponent = function RenderComponent(props) {\n      return factory(props);\n    };\n    // const RenderComponent = props => <Component {...props} />\n    if (process.env.NODE_ENV !== 'production') {\n      /* eslint-disable global-require */\n      var wrapDisplayName = __webpack_require__(25).default;\n      /* eslint-enable global-require */\n      RenderComponent.displayName = wrapDisplayName(Component, 'renderComponent');\n    }\n    return RenderComponent;\n  };\n};\n\nexports.default = (0, _createHelper2.default)(renderComponent, 'renderComponent', false);\n/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24)))\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/renderComponent.js\n// module id = 46\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/renderComponent.js?");
 
 /***/ },
 /* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	exports.__esModule = true;
-
-	var _react = __webpack_require__(28);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-
-	function _possibleConstructorReturn(self, call) {
-	  if (!self) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-	}
-
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
-	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	}
-
-	var shouldUpdate = function shouldUpdate(test) {
-	  return function (BaseComponent) {
-	    var factory = (0, _createEagerFactory2.default)(BaseComponent);
-	    return function (_Component) {
-	      _inherits(_class, _Component);
-
-	      function _class() {
-	        _classCallCheck(this, _class);
-
-	        return _possibleConstructorReturn(this, _Component.apply(this, arguments));
-	      }
-
-	      _class.prototype.shouldComponentUpdate = function shouldComponentUpdate(nextProps) {
-	        return test(this.props, nextProps);
-	      };
-
-	      _class.prototype.render = function render() {
-	        return factory(this.props);
-	      };
-
-	      return _class;
-	    }(_react.Component);
-	  };
-	};
-
-	exports.default = (0, _createHelper2.default)(shouldUpdate, 'shouldUpdate');
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar renderNothing = function renderNothing(_) {\n  var Nothing = function Nothing() {\n    return null;\n  };\n  Nothing.displayName = 'Nothing';\n  return Nothing;\n};\n\nexports.default = (0, _createHelper2.default)(renderNothing, 'renderNothing', false, true);\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/renderNothing.js\n// module id = 47\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/renderNothing.js?");
 
 /***/ },
 /* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _shouldUpdate = __webpack_require__(47);
-
-	var _shouldUpdate2 = _interopRequireDefault(_shouldUpdate);
-
-	var _shallowEqual = __webpack_require__(34);
-
-	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var pure = (0, _shouldUpdate2.default)(function (props, nextProps) {
-	  return !(0, _shallowEqual2.default)(props, nextProps);
-	});
-
-	exports.default = (0, _createHelper2.default)(pure, 'pure', true, true);
+	eval("'use strict';\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; };\n\nexports.__esModule = true;\n\nvar _react = __webpack_require__(29);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n}\n\nfunction _possibleConstructorReturn(self, call) {\n  if (!self) {\n    throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\");\n  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === \"object\" || typeof call === \"function\") ? call : self;\n}\n\nfunction _inherits(subClass, superClass) {\n  if (typeof superClass !== \"function\" && superClass !== null) {\n    throw new TypeError(\"Super expression must either be null or a function, not \" + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));\n  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;\n}\n\nvar shouldUpdate = function shouldUpdate(test) {\n  return function (BaseComponent) {\n    var factory = (0, _createEagerFactory2.default)(BaseComponent);\n    return function (_Component) {\n      _inherits(_class, _Component);\n\n      function _class() {\n        _classCallCheck(this, _class);\n\n        return _possibleConstructorReturn(this, _Component.apply(this, arguments));\n      }\n\n      _class.prototype.shouldComponentUpdate = function shouldComponentUpdate(nextProps) {\n        return test(this.props, nextProps);\n      };\n\n      _class.prototype.render = function render() {\n        return factory(this.props);\n      };\n\n      return _class;\n    }(_react.Component);\n  };\n};\n\nexports.default = (0, _createHelper2.default)(shouldUpdate, 'shouldUpdate');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/shouldUpdate.js\n// module id = 48\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/shouldUpdate.js?");
 
 /***/ },
 /* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _shouldUpdate = __webpack_require__(47);
-
-	var _shouldUpdate2 = _interopRequireDefault(_shouldUpdate);
-
-	var _shallowEqual = __webpack_require__(34);
-
-	var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _pick = __webpack_require__(33);
-
-	var _pick2 = _interopRequireDefault(_pick);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var onlyUpdateForKeys = function onlyUpdateForKeys(propKeys) {
-	  return (0, _shouldUpdate2.default)(function (props, nextProps) {
-	    return !(0, _shallowEqual2.default)((0, _pick2.default)(nextProps, propKeys), (0, _pick2.default)(props, propKeys));
-	  });
-	};
-
-	exports.default = (0, _createHelper2.default)(onlyUpdateForKeys, 'onlyUpdateForKeys');
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _shouldUpdate = __webpack_require__(48);\n\nvar _shouldUpdate2 = _interopRequireDefault(_shouldUpdate);\n\nvar _shallowEqual = __webpack_require__(35);\n\nvar _shallowEqual2 = _interopRequireDefault(_shallowEqual);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar pure = (0, _shouldUpdate2.default)(function (props, nextProps) {\n  return !(0, _shallowEqual2.default)(props, nextProps);\n});\n\nexports.default = (0, _createHelper2.default)(pure, 'pure', true, true);\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/pure.js\n// module id = 49\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/pure.js?");
 
 /***/ },
 /* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-
-	exports.__esModule = true;
-
-	var _onlyUpdateForKeys = __webpack_require__(49);
-
-	var _onlyUpdateForKeys2 = _interopRequireDefault(_onlyUpdateForKeys);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var onlyUpdateForPropTypes = function onlyUpdateForPropTypes(BaseComponent) {
-	  var propTypes = BaseComponent.propTypes;
-
-	  if (process.env.NODE_ENV !== 'production') {
-	    /* eslint-disable global-require */
-	    var getDisplayName = __webpack_require__(25).default;
-	    /* eslint-enable global-require */
-	    if (!propTypes) {
-	      /* eslint-disable */
-	      console.error('A component without any `propTypes` was passed to ' + '`onlyUpdateForPropTypes()`. Check the implementation of the ' + ('component with display name "' + getDisplayName(BaseComponent) + '".'));
-	      /* eslint-enable */
-	    }
-	  }
-
-	  var propKeys = Object.keys(propTypes || {});
-	  var OnlyUpdateForPropTypes = (0, _onlyUpdateForKeys2.default)(propKeys)(BaseComponent);
-
-	  return OnlyUpdateForPropTypes;
-	};
-
-	exports.default = (0, _createHelper2.default)(onlyUpdateForPropTypes, 'onlyUpdateForPropTypes', true, true);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _shouldUpdate = __webpack_require__(48);\n\nvar _shouldUpdate2 = _interopRequireDefault(_shouldUpdate);\n\nvar _shallowEqual = __webpack_require__(35);\n\nvar _shallowEqual2 = _interopRequireDefault(_shallowEqual);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _pick = __webpack_require__(34);\n\nvar _pick2 = _interopRequireDefault(_pick);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar onlyUpdateForKeys = function onlyUpdateForKeys(propKeys) {\n  return (0, _shouldUpdate2.default)(function (props, nextProps) {\n    return !(0, _shallowEqual2.default)((0, _pick2.default)(nextProps, propKeys), (0, _pick2.default)(props, propKeys));\n  });\n};\n\nexports.default = (0, _createHelper2.default)(onlyUpdateForKeys, 'onlyUpdateForKeys');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/onlyUpdateForKeys.js\n// module id = 50\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/onlyUpdateForKeys.js?");
 
 /***/ },
 /* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	exports.__esModule = true;
-
-	var _react = __webpack_require__(28);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-
-	function _possibleConstructorReturn(self, call) {
-	  if (!self) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-	}
-
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
-	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	}
-
-	var withContext = function withContext(childContextTypes, getChildContext) {
-	  return function (BaseComponent) {
-	    var factory = (0, _createEagerFactory2.default)(BaseComponent);
-
-	    var WithContext = function (_Component) {
-	      _inherits(WithContext, _Component);
-
-	      function WithContext() {
-	        var _temp, _this, _ret;
-
-	        _classCallCheck(this, WithContext);
-
-	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	          args[_key] = arguments[_key];
-	        }
-
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.getChildContext = function () {
-	          return getChildContext(_this.props);
-	        }, _temp), _possibleConstructorReturn(_this, _ret);
-	      }
-
-	      WithContext.prototype.render = function render() {
-	        return factory(this.props);
-	      };
-
-	      return WithContext;
-	    }(_react.Component);
-
-	    WithContext.childContextTypes = childContextTypes;
-
-	    return WithContext;
-	  };
-	};
-
-	exports.default = (0, _createHelper2.default)(withContext, 'withContext');
+	eval("/* WEBPACK VAR INJECTION */(function(process) {'use strict';\n\nexports.__esModule = true;\n\nvar _onlyUpdateForKeys = __webpack_require__(50);\n\nvar _onlyUpdateForKeys2 = _interopRequireDefault(_onlyUpdateForKeys);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar onlyUpdateForPropTypes = function onlyUpdateForPropTypes(BaseComponent) {\n  var propTypes = BaseComponent.propTypes;\n\n  if (process.env.NODE_ENV !== 'production') {\n    /* eslint-disable global-require */\n    var getDisplayName = __webpack_require__(26).default;\n    /* eslint-enable global-require */\n    if (!propTypes) {\n      /* eslint-disable */\n      console.error('A component without any `propTypes` was passed to ' + '`onlyUpdateForPropTypes()`. Check the implementation of the ' + ('component with display name \"' + getDisplayName(BaseComponent) + '\".'));\n      /* eslint-enable */\n    }\n  }\n\n  var propKeys = Object.keys(propTypes || {});\n  var OnlyUpdateForPropTypes = (0, _onlyUpdateForKeys2.default)(propKeys)(BaseComponent);\n\n  return OnlyUpdateForPropTypes;\n};\n\nexports.default = (0, _createHelper2.default)(onlyUpdateForPropTypes, 'onlyUpdateForPropTypes', true, true);\n/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24)))\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/onlyUpdateForPropTypes.js\n// module id = 51\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/onlyUpdateForPropTypes.js?");
 
 /***/ },
 /* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _extends = Object.assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }return target;
-	};
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var getContext = function getContext(contextTypes) {
-	  return function (BaseComponent) {
-	    var factory = (0, _createEagerFactory2.default)(BaseComponent);
-	    var GetContext = function GetContext(ownerProps, context) {
-	      return factory(_extends({}, ownerProps, context));
-	    };
-
-	    GetContext.contextTypes = contextTypes;
-
-	    return GetContext;
-	  };
-	};
-
-	exports.default = (0, _createHelper2.default)(getContext, 'getContext');
+	eval("'use strict';\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; };\n\nexports.__esModule = true;\n\nvar _react = __webpack_require__(29);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n}\n\nfunction _possibleConstructorReturn(self, call) {\n  if (!self) {\n    throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\");\n  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === \"object\" || typeof call === \"function\") ? call : self;\n}\n\nfunction _inherits(subClass, superClass) {\n  if (typeof superClass !== \"function\" && superClass !== null) {\n    throw new TypeError(\"Super expression must either be null or a function, not \" + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));\n  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;\n}\n\nvar withContext = function withContext(childContextTypes, getChildContext) {\n  return function (BaseComponent) {\n    var factory = (0, _createEagerFactory2.default)(BaseComponent);\n\n    var WithContext = function (_Component) {\n      _inherits(WithContext, _Component);\n\n      function WithContext() {\n        var _temp, _this, _ret;\n\n        _classCallCheck(this, WithContext);\n\n        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {\n          args[_key] = arguments[_key];\n        }\n\n        return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.getChildContext = function () {\n          return getChildContext(_this.props);\n        }, _temp), _possibleConstructorReturn(_this, _ret);\n      }\n\n      WithContext.prototype.render = function render() {\n        return factory(this.props);\n      };\n\n      return WithContext;\n    }(_react.Component);\n\n    WithContext.childContextTypes = childContextTypes;\n\n    return WithContext;\n  };\n};\n\nexports.default = (0, _createHelper2.default)(withContext, 'withContext');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/withContext.js\n// module id = 52\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/withContext.js?");
 
 /***/ },
 /* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-
-	exports.__esModule = true;
-
-	var _extends = Object.assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }return target;
-	};
-
-	var _react = __webpack_require__(28);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var lifecycle = function lifecycle(spec) {
-	  return function (BaseComponent) {
-	    var factory = (0, _createEagerFactory2.default)(BaseComponent);
-
-	    if (process.env.NODE_ENV !== 'production' && spec.hasOwnProperty('render')) {
-	      console.error('lifecycle() does not support the render method; its behavior is to ' + 'pass all props and state to the base component.');
-	    }
-
-	    /* eslint-disable react/prefer-es6-class */
-	    return (0, _react.createClass)(_extends({}, spec, {
-	      render: function render() {
-	        return factory(_extends({}, this.props, this.state));
-	      }
-	    }));
-	    /* eslint-enable react/prefer-es6-class */
-	  };
-	};
-
-	exports.default = (0, _createHelper2.default)(lifecycle, 'lifecycle');
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _extends = Object.assign || function (target) {\n  for (var i = 1; i < arguments.length; i++) {\n    var source = arguments[i];for (var key in source) {\n      if (Object.prototype.hasOwnProperty.call(source, key)) {\n        target[key] = source[key];\n      }\n    }\n  }return target;\n};\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar getContext = function getContext(contextTypes) {\n  return function (BaseComponent) {\n    var factory = (0, _createEagerFactory2.default)(BaseComponent);\n    var GetContext = function GetContext(ownerProps, context) {\n      return factory(_extends({}, ownerProps, context));\n    };\n\n    GetContext.contextTypes = contextTypes;\n\n    return GetContext;\n  };\n};\n\nexports.default = (0, _createHelper2.default)(getContext, 'getContext');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/getContext.js\n// module id = 53\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/getContext.js?");
 
 /***/ },
 /* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	exports.__esModule = true;
-
-	var _react = __webpack_require__(28);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _getDisplayName = __webpack_require__(25);
-
-	var _getDisplayName2 = _interopRequireDefault(_getDisplayName);
-
-	var _isClassComponent = __webpack_require__(30);
-
-	var _isClassComponent2 = _interopRequireDefault(_isClassComponent);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-
-	function _possibleConstructorReturn(self, call) {
-	  if (!self) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-	}
-
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
-	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	}
-
-	var toClass = function toClass(baseComponent) {
-	  if ((0, _isClassComponent2.default)(baseComponent)) {
-	    return baseComponent;
-	  }
-
-	  var ToClass = function (_Component) {
-	    _inherits(ToClass, _Component);
-
-	    function ToClass() {
-	      _classCallCheck(this, ToClass);
-
-	      return _possibleConstructorReturn(this, _Component.apply(this, arguments));
-	    }
-
-	    ToClass.prototype.render = function render() {
-	      if (typeof baseComponent === 'string') {
-	        return _react2.default.createElement('baseComponent', this.props);
-	      }
-	      return baseComponent(this.props, this.context);
-	    };
-
-	    return ToClass;
-	  }(_react.Component);
-
-	  ToClass.displayName = (0, _getDisplayName2.default)(baseComponent);
-	  ToClass.propTypes = baseComponent.propTypes;
-	  ToClass.contextTypes = baseComponent.contextTypes;
-	  ToClass.defaultProps = baseComponent.defaultProps;
-
-	  return ToClass;
-	};
-
-	exports.default = toClass;
+	eval("/* WEBPACK VAR INJECTION */(function(process) {'use strict';\n\nexports.__esModule = true;\n\nvar _extends = Object.assign || function (target) {\n  for (var i = 1; i < arguments.length; i++) {\n    var source = arguments[i];for (var key in source) {\n      if (Object.prototype.hasOwnProperty.call(source, key)) {\n        target[key] = source[key];\n      }\n    }\n  }return target;\n};\n\nvar _react = __webpack_require__(29);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar lifecycle = function lifecycle(spec) {\n  return function (BaseComponent) {\n    var factory = (0, _createEagerFactory2.default)(BaseComponent);\n\n    if (process.env.NODE_ENV !== 'production' && spec.hasOwnProperty('render')) {\n      console.error('lifecycle() does not support the render method; its behavior is to ' + 'pass all props and state to the base component.');\n    }\n\n    /* eslint-disable react/prefer-es6-class */\n    return (0, _react.createClass)(_extends({}, spec, {\n      render: function render() {\n        return factory(_extends({}, this.props, this.state));\n      }\n    }));\n    /* eslint-enable react/prefer-es6-class */\n  };\n};\n\nexports.default = (0, _createHelper2.default)(lifecycle, 'lifecycle');\n/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24)))\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/lifecycle.js\n// module id = 54\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/lifecycle.js?");
 
 /***/ },
 /* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var setStatic = function setStatic(key, value) {
-	  return function (BaseComponent) {
-	    /* eslint-disable no-param-reassign */
-	    BaseComponent[key] = value;
-	    /* eslint-enable no-param-reassign */
-	    return BaseComponent;
-	  };
-	};
-
-	exports.default = (0, _createHelper2.default)(setStatic, 'setStatic', false);
+	eval("'use strict';\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; };\n\nexports.__esModule = true;\n\nvar _react = __webpack_require__(29);\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _getDisplayName = __webpack_require__(26);\n\nvar _getDisplayName2 = _interopRequireDefault(_getDisplayName);\n\nvar _isClassComponent = __webpack_require__(31);\n\nvar _isClassComponent2 = _interopRequireDefault(_isClassComponent);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n}\n\nfunction _possibleConstructorReturn(self, call) {\n  if (!self) {\n    throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\");\n  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === \"object\" || typeof call === \"function\") ? call : self;\n}\n\nfunction _inherits(subClass, superClass) {\n  if (typeof superClass !== \"function\" && superClass !== null) {\n    throw new TypeError(\"Super expression must either be null or a function, not \" + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));\n  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;\n}\n\nvar toClass = function toClass(baseComponent) {\n  if ((0, _isClassComponent2.default)(baseComponent)) {\n    return baseComponent;\n  }\n\n  var ToClass = function (_Component) {\n    _inherits(ToClass, _Component);\n\n    function ToClass() {\n      _classCallCheck(this, ToClass);\n\n      return _possibleConstructorReturn(this, _Component.apply(this, arguments));\n    }\n\n    ToClass.prototype.render = function render() {\n      if (typeof baseComponent === 'string') {\n        return _react2.default.createElement('baseComponent', this.props);\n      }\n      return baseComponent(this.props, this.context);\n    };\n\n    return ToClass;\n  }(_react.Component);\n\n  ToClass.displayName = (0, _getDisplayName2.default)(baseComponent);\n  ToClass.propTypes = baseComponent.propTypes;\n  ToClass.contextTypes = baseComponent.contextTypes;\n  ToClass.defaultProps = baseComponent.defaultProps;\n\n  return ToClass;\n};\n\nexports.default = toClass;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/toClass.js\n// module id = 55\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/toClass.js?");
 
 /***/ },
 /* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _setStatic = __webpack_require__(55);
-
-	var _setStatic2 = _interopRequireDefault(_setStatic);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var setPropTypes = function setPropTypes(propTypes) {
-	  return (0, _setStatic2.default)('propTypes', propTypes);
-	};
-
-	exports.default = (0, _createHelper2.default)(setPropTypes, 'setPropTypes', false);
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar setStatic = function setStatic(key, value) {\n  return function (BaseComponent) {\n    /* eslint-disable no-param-reassign */\n    BaseComponent[key] = value;\n    /* eslint-enable no-param-reassign */\n    return BaseComponent;\n  };\n};\n\nexports.default = (0, _createHelper2.default)(setStatic, 'setStatic', false);\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/setStatic.js\n// module id = 56\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/setStatic.js?");
 
 /***/ },
 /* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _setStatic = __webpack_require__(55);
-
-	var _setStatic2 = _interopRequireDefault(_setStatic);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var setDisplayName = function setDisplayName(displayName) {
-	  return (0, _setStatic2.default)('displayName', displayName);
-	};
-
-	exports.default = (0, _createHelper2.default)(setDisplayName, 'setDisplayName', false);
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _setStatic = __webpack_require__(56);\n\nvar _setStatic2 = _interopRequireDefault(_setStatic);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar setPropTypes = function setPropTypes(propTypes) {\n  return (0, _setStatic2.default)('propTypes', propTypes);\n};\n\nexports.default = (0, _createHelper2.default)(setPropTypes, 'setPropTypes', false);\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/setPropTypes.js\n// module id = 57\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/setPropTypes.js?");
 
 /***/ },
 /* 58 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-
-	exports.__esModule = true;
-	exports.default = compose;
-	function compose() {
-	  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
-	    funcs[_key] = arguments[_key];
-	  }
-
-	  if (funcs.length === 0) {
-	    return function (arg) {
-	      return arg;
-	    };
-	  }
-
-	  if (funcs.length === 1) {
-	    return funcs[0];
-	  }
-
-	  var last = funcs[funcs.length - 1];
-	  return function () {
-	    var result = last.apply(undefined, arguments);
-	    for (var i = funcs.length - 2; i >= 0; i--) {
-	      var f = funcs[i];
-	      result = f(result);
-	    }
-	    return result;
-	  };
-	}
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _setStatic = __webpack_require__(56);\n\nvar _setStatic2 = _interopRequireDefault(_setStatic);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar setDisplayName = function setDisplayName(displayName) {\n  return (0, _setStatic2.default)('displayName', displayName);\n};\n\nexports.default = (0, _createHelper2.default)(setDisplayName, 'setDisplayName', false);\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/setDisplayName.js\n// module id = 58\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/setDisplayName.js?");
 
 /***/ },
 /* 59 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _createEagerElementUtil = __webpack_require__(27);
-
-	var _createEagerElementUtil2 = _interopRequireDefault(_createEagerElementUtil);
-
-	var _isReferentiallyTransparentFunctionComponent = __webpack_require__(29);
-
-	var _isReferentiallyTransparentFunctionComponent2 = _interopRequireDefault(_isReferentiallyTransparentFunctionComponent);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var createEagerElement = function createEagerElement(type, props, children) {
-	  var isReferentiallyTransparent = (0, _isReferentiallyTransparentFunctionComponent2.default)(type);
-	  /* eslint-disable */
-	  var hasKey = props && props.hasOwnProperty('key');
-	  /* eslint-enable */
-	  return (0, _createEagerElementUtil2.default)(hasKey, isReferentiallyTransparent, type, props, children);
-	};
-
-	exports.default = createEagerElement;
+	eval("\"use strict\";\n\nexports.__esModule = true;\nexports.default = compose;\nfunction compose() {\n  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {\n    funcs[_key] = arguments[_key];\n  }\n\n  if (funcs.length === 0) {\n    return function (arg) {\n      return arg;\n    };\n  }\n\n  if (funcs.length === 1) {\n    return funcs[0];\n  }\n\n  var last = funcs[funcs.length - 1];\n  return function () {\n    var result = last.apply(undefined, arguments);\n    for (var i = funcs.length - 2; i >= 0; i--) {\n      var f = funcs[i];\n      result = f(result);\n    }\n    return result;\n  };\n}\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/compose.js\n// module id = 59\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/compose.js?");
 
 /***/ },
 /* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	exports.__esModule = true;
-
-	var _react = __webpack_require__(28);
-
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-
-	function _possibleConstructorReturn(self, call) {
-	  if (!self) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-	}
-
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
-	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	}
-
-	var createSink = function createSink(callback) {
-	  return function (_Component) {
-	    _inherits(Sink, _Component);
-
-	    function Sink() {
-	      _classCallCheck(this, Sink);
-
-	      return _possibleConstructorReturn(this, _Component.apply(this, arguments));
-	    }
-
-	    Sink.prototype.componentWillMount = function componentWillMount() {
-	      callback(this.props);
-	    };
-
-	    Sink.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-	      callback(nextProps);
-	    };
-
-	    Sink.prototype.render = function render() {
-	      return null;
-	    };
-
-	    return Sink;
-	  }(_react.Component);
-	};
-
-	exports.default = createSink;
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _createEagerElementUtil = __webpack_require__(28);\n\nvar _createEagerElementUtil2 = _interopRequireDefault(_createEagerElementUtil);\n\nvar _isReferentiallyTransparentFunctionComponent = __webpack_require__(30);\n\nvar _isReferentiallyTransparentFunctionComponent2 = _interopRequireDefault(_isReferentiallyTransparentFunctionComponent);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar createEagerElement = function createEagerElement(type, props, children) {\n  var isReferentiallyTransparent = (0, _isReferentiallyTransparentFunctionComponent2.default)(type);\n  /* eslint-disable */\n  var hasKey = props && props.hasOwnProperty('key');\n  /* eslint-enable */\n  return (0, _createEagerElementUtil2.default)(hasKey, isReferentiallyTransparent, type, props, children);\n};\n\nexports.default = createEagerElement;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/createEagerElement.js\n// module id = 60\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/createEagerElement.js?");
 
 /***/ },
 /* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _omit = __webpack_require__(39);
-
-	var _omit2 = _interopRequireDefault(_omit);
-
-	var _createEagerElement = __webpack_require__(59);
-
-	var _createEagerElement2 = _interopRequireDefault(_createEagerElement);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var componentFromProp = function componentFromProp(propName) {
-	  var Component = function Component(props) {
-	    return (0, _createEagerElement2.default)(props[propName], (0, _omit2.default)(props, [propName]));
-	  };
-	  Component.displayName = 'componentFromProp(' + propName + ')';
-	  return Component;
-	};
-
-	exports.default = componentFromProp;
+	eval("'use strict';\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; };\n\nexports.__esModule = true;\n\nvar _react = __webpack_require__(29);\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n}\n\nfunction _possibleConstructorReturn(self, call) {\n  if (!self) {\n    throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\");\n  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === \"object\" || typeof call === \"function\") ? call : self;\n}\n\nfunction _inherits(subClass, superClass) {\n  if (typeof superClass !== \"function\" && superClass !== null) {\n    throw new TypeError(\"Super expression must either be null or a function, not \" + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));\n  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;\n}\n\nvar createSink = function createSink(callback) {\n  return function (_Component) {\n    _inherits(Sink, _Component);\n\n    function Sink() {\n      _classCallCheck(this, Sink);\n\n      return _possibleConstructorReturn(this, _Component.apply(this, arguments));\n    }\n\n    Sink.prototype.componentWillMount = function componentWillMount() {\n      callback(this.props);\n    };\n\n    Sink.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {\n      callback(nextProps);\n    };\n\n    Sink.prototype.render = function render() {\n      return null;\n    };\n\n    return Sink;\n  }(_react.Component);\n};\n\nexports.default = createSink;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/createSink.js\n// module id = 61\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/createSink.js?");
 
 /***/ },
 /* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-
-	exports.__esModule = true;
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _objectWithoutProperties(obj, keys) {
-	  var target = {};for (var i in obj) {
-	    if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];
-	  }return target;
-	}
-
-	var nest = function nest() {
-	  for (var _len = arguments.length, Components = Array(_len), _key = 0; _key < _len; _key++) {
-	    Components[_key] = arguments[_key];
-	  }
-
-	  var factories = Components.map(_createEagerFactory2.default);
-	  var Nest = function Nest(_ref) {
-	    var props = _objectWithoutProperties(_ref, []);
-
-	    var children = _ref.children;
-	    return factories.reduceRight(function (child, factory) {
-	      return factory(props, child);
-	    }, children);
-	  };
-
-	  if (process.env.NODE_ENV !== 'production') {
-	    /* eslint-disable global-require */
-	    var getDisplayName = __webpack_require__(25).default;
-	    /* eslint-enable global-require */
-	    var displayNames = Components.map(getDisplayName);
-	    Nest.displayName = 'nest(' + displayNames.join(', ') + ')';
-	  }
-
-	  return Nest;
-	};
-
-	exports.default = nest;
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(23)))
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _omit = __webpack_require__(40);\n\nvar _omit2 = _interopRequireDefault(_omit);\n\nvar _createEagerElement = __webpack_require__(60);\n\nvar _createEagerElement2 = _interopRequireDefault(_createEagerElement);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar componentFromProp = function componentFromProp(propName) {\n  var Component = function Component(props) {\n    return (0, _createEagerElement2.default)(props[propName], (0, _omit2.default)(props, [propName]));\n  };\n  Component.displayName = 'componentFromProp(' + propName + ')';\n  return Component;\n};\n\nexports.default = componentFromProp;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/componentFromProp.js\n// module id = 62\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/componentFromProp.js?");
 
 /***/ },
 /* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-
-	var _hoistNonReactStatics = __webpack_require__(64);
-
-	var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var hoistStatics = function hoistStatics(higherOrderComponent) {
-	  return function (BaseComponent) {
-	    var NewComponent = higherOrderComponent(BaseComponent);
-	    (0, _hoistNonReactStatics2.default)(NewComponent, BaseComponent);
-	    return NewComponent;
-	  };
-	};
-
-	exports.default = hoistStatics;
+	eval("/* WEBPACK VAR INJECTION */(function(process) {'use strict';\n\nexports.__esModule = true;\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nfunction _objectWithoutProperties(obj, keys) {\n  var target = {};for (var i in obj) {\n    if (keys.indexOf(i) >= 0) continue;if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;target[i] = obj[i];\n  }return target;\n}\n\nvar nest = function nest() {\n  for (var _len = arguments.length, Components = Array(_len), _key = 0; _key < _len; _key++) {\n    Components[_key] = arguments[_key];\n  }\n\n  var factories = Components.map(_createEagerFactory2.default);\n  var Nest = function Nest(_ref) {\n    var props = _objectWithoutProperties(_ref, []);\n\n    var children = _ref.children;\n    return factories.reduceRight(function (child, factory) {\n      return factory(props, child);\n    }, children);\n  };\n\n  if (process.env.NODE_ENV !== 'production') {\n    /* eslint-disable global-require */\n    var getDisplayName = __webpack_require__(26).default;\n    /* eslint-enable global-require */\n    var displayNames = Components.map(getDisplayName);\n    Nest.displayName = 'nest(' + displayNames.join(', ') + ')';\n  }\n\n  return Nest;\n};\n\nexports.default = nest;\n/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(24)))\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/nest.js\n// module id = 63\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/nest.js?");
 
 /***/ },
 /* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(162);
+	eval("'use strict';\n\nexports.__esModule = true;\n\nvar _hoistNonReactStatics = __webpack_require__(65);\n\nvar _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar hoistStatics = function hoistStatics(higherOrderComponent) {\n  return function (BaseComponent) {\n    var NewComponent = higherOrderComponent(BaseComponent);\n    (0, _hoistNonReactStatics2.default)(NewComponent, BaseComponent);\n    return NewComponent;\n  };\n};\n\nexports.default = hoistStatics;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/hoistStatics.js\n// module id = 64\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/hoistStatics.js?");
 
 /***/ },
 /* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	exports.__esModule = true;
-	exports.componentFromStreamWithConfig = undefined;
-
-	var _react = __webpack_require__(28);
-
-	var _changeEmitter = __webpack_require__(66);
-
-	var _symbolObservable = __webpack_require__(67);
-
-	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
-
-	var _setObservableConfig = __webpack_require__(69);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-
-	function _possibleConstructorReturn(self, call) {
-	  if (!self) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-	}
-
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
-	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	}
-
-	var componentFromStreamWithConfig = exports.componentFromStreamWithConfig = function componentFromStreamWithConfig(config) {
-	  return function (propsToVdom) {
-	    return function (_Component) {
-	      _inherits(ComponentFromStream, _Component);
-
-	      function ComponentFromStream() {
-	        var _config$fromESObserva;
-
-	        var _temp, _this, _ret;
-
-	        _classCallCheck(this, ComponentFromStream);
-
-	        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	          args[_key] = arguments[_key];
-	        }
-
-	        return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.state = { vdom: null }, _this.propsEmitter = (0, _changeEmitter.createChangeEmitter)(), _this.props$ = config.fromESObservable((_config$fromESObserva = {
-	          subscribe: function subscribe(observer) {
-	            var unsubscribe = _this.propsEmitter.listen(function (props) {
-	              return observer.next(props);
-	            });
-	            return { unsubscribe: unsubscribe };
-	          }
-	        }, _config$fromESObserva[_symbolObservable2.default] = function () {
-	          return this;
-	        }, _config$fromESObserva)), _this.vdom$ = config.toESObservable(propsToVdom(_this.props$)), _temp), _possibleConstructorReturn(_this, _ret);
-	      }
-
-	      // Stream of props
-
-
-	      // Stream of vdom
-
-
-	      ComponentFromStream.prototype.componentWillMount = function componentWillMount() {
-	        var _this2 = this;
-
-	        // Subscribe to child prop changes so we know when to re-render
-	        this.subscription = this.vdom$.subscribe({
-	          next: function next(vdom) {
-	            _this2.setState({ vdom: vdom });
-	          }
-	        });
-	        this.propsEmitter.emit(this.props);
-	      };
-
-	      ComponentFromStream.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-	        // Receive new props from the owner
-	        this.propsEmitter.emit(nextProps);
-	      };
-
-	      ComponentFromStream.prototype.shouldComponentUpdate = function shouldComponentUpdate(nextProps, nextState) {
-	        return nextState.vdom !== this.state.vdom;
-	      };
-
-	      ComponentFromStream.prototype.componentWillUnmount = function componentWillUnmount() {
-	        // Clean-up subscription before un-mounting
-	        this.subscription.unsubscribe();
-	      };
-
-	      ComponentFromStream.prototype.render = function render() {
-	        return this.state.vdom;
-	      };
-
-	      return ComponentFromStream;
-	    }(_react.Component);
-	  };
-	};
-
-	var componentFromStream = componentFromStreamWithConfig(_setObservableConfig.config);
-
-	exports.default = componentFromStream;
+	eval("module.exports = (__webpack_require__(4))(162);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/hoist-non-react-statics/index.js from dll-reference carbon.vendor\n// module id = 65\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/hoist-non-react-statics/index.js_from_dll-reference_carbon.vendor?");
 
 /***/ },
 /* 66 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var createChangeEmitter = exports.createChangeEmitter = function createChangeEmitter() {
-	  var currentListeners = [];
-	  var nextListeners = currentListeners;
-
-	  function ensureCanMutateNextListeners() {
-	    if (nextListeners === currentListeners) {
-	      nextListeners = currentListeners.slice();
-	    }
-	  }
-
-	  function listen(listener) {
-	    if (typeof listener !== 'function') {
-	      throw new Error('Expected listener to be a function.');
-	    }
-
-	    var isSubscribed = true;
-
-	    ensureCanMutateNextListeners();
-	    nextListeners.push(listener);
-
-	    return function () {
-	      if (!isSubscribed) {
-	        return;
-	      }
-
-	      isSubscribed = false;
-
-	      ensureCanMutateNextListeners();
-	      var index = nextListeners.indexOf(listener);
-	      nextListeners.splice(index, 1);
-	    };
-	  }
-
-	  function emit() {
-	    currentListeners = nextListeners;
-	    var listeners = currentListeners;
-	    for (var i = 0; i < listeners.length; i++) {
-	      listeners[i].apply(listeners, arguments);
-	    }
-	  }
-
-	  return {
-	    listen: listen,
-	    emit: emit
-	  };
-	};
+	eval("'use strict';\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; };\n\nexports.__esModule = true;\nexports.componentFromStreamWithConfig = undefined;\n\nvar _react = __webpack_require__(29);\n\nvar _changeEmitter = __webpack_require__(67);\n\nvar _symbolObservable = __webpack_require__(68);\n\nvar _symbolObservable2 = _interopRequireDefault(_symbolObservable);\n\nvar _setObservableConfig = __webpack_require__(70);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n}\n\nfunction _possibleConstructorReturn(self, call) {\n  if (!self) {\n    throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\");\n  }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === \"object\" || typeof call === \"function\") ? call : self;\n}\n\nfunction _inherits(subClass, superClass) {\n  if (typeof superClass !== \"function\" && superClass !== null) {\n    throw new TypeError(\"Super expression must either be null or a function, not \" + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));\n  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;\n}\n\nvar componentFromStreamWithConfig = exports.componentFromStreamWithConfig = function componentFromStreamWithConfig(config) {\n  return function (propsToVdom) {\n    return function (_Component) {\n      _inherits(ComponentFromStream, _Component);\n\n      function ComponentFromStream() {\n        var _config$fromESObserva;\n\n        var _temp, _this, _ret;\n\n        _classCallCheck(this, ComponentFromStream);\n\n        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {\n          args[_key] = arguments[_key];\n        }\n\n        return _ret = (_temp = (_this = _possibleConstructorReturn(this, _Component.call.apply(_Component, [this].concat(args))), _this), _this.state = { vdom: null }, _this.propsEmitter = (0, _changeEmitter.createChangeEmitter)(), _this.props$ = config.fromESObservable((_config$fromESObserva = {\n          subscribe: function subscribe(observer) {\n            var unsubscribe = _this.propsEmitter.listen(function (props) {\n              return observer.next(props);\n            });\n            return { unsubscribe: unsubscribe };\n          }\n        }, _config$fromESObserva[_symbolObservable2.default] = function () {\n          return this;\n        }, _config$fromESObserva)), _this.vdom$ = config.toESObservable(propsToVdom(_this.props$)), _temp), _possibleConstructorReturn(_this, _ret);\n      }\n\n      // Stream of props\n\n\n      // Stream of vdom\n\n\n      ComponentFromStream.prototype.componentWillMount = function componentWillMount() {\n        var _this2 = this;\n\n        // Subscribe to child prop changes so we know when to re-render\n        this.subscription = this.vdom$.subscribe({\n          next: function next(vdom) {\n            _this2.setState({ vdom: vdom });\n          }\n        });\n        this.propsEmitter.emit(this.props);\n      };\n\n      ComponentFromStream.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {\n        // Receive new props from the owner\n        this.propsEmitter.emit(nextProps);\n      };\n\n      ComponentFromStream.prototype.shouldComponentUpdate = function shouldComponentUpdate(nextProps, nextState) {\n        return nextState.vdom !== this.state.vdom;\n      };\n\n      ComponentFromStream.prototype.componentWillUnmount = function componentWillUnmount() {\n        // Clean-up subscription before un-mounting\n        this.subscription.unsubscribe();\n      };\n\n      ComponentFromStream.prototype.render = function render() {\n        return this.state.vdom;\n      };\n\n      return ComponentFromStream;\n    }(_react.Component);\n  };\n};\n\nvar componentFromStream = componentFromStreamWithConfig(_setObservableConfig.config);\n\nexports.default = componentFromStream;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/componentFromStream.js\n// module id = 66\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/componentFromStream.js?");
 
 /***/ },
 /* 67 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {/* global window */
-	'use strict';
-
-	module.exports = __webpack_require__(68)(global || window || undefined);
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nvar createChangeEmitter = exports.createChangeEmitter = function createChangeEmitter() {\n  var currentListeners = [];\n  var nextListeners = currentListeners;\n\n  function ensureCanMutateNextListeners() {\n    if (nextListeners === currentListeners) {\n      nextListeners = currentListeners.slice();\n    }\n  }\n\n  function listen(listener) {\n    if (typeof listener !== 'function') {\n      throw new Error('Expected listener to be a function.');\n    }\n\n    var isSubscribed = true;\n\n    ensureCanMutateNextListeners();\n    nextListeners.push(listener);\n\n    return function () {\n      if (!isSubscribed) {\n        return;\n      }\n\n      isSubscribed = false;\n\n      ensureCanMutateNextListeners();\n      var index = nextListeners.indexOf(listener);\n      nextListeners.splice(index, 1);\n    };\n  }\n\n  function emit() {\n    currentListeners = nextListeners;\n    var listeners = currentListeners;\n    for (var i = 0; i < listeners.length; i++) {\n      listeners[i].apply(listeners, arguments);\n    }\n  }\n\n  return {\n    listen: listen,\n    emit: emit\n  };\n};\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/change-emitter/lib/index.js\n// module id = 67\n// module chunks = 0\n//# sourceURL=webpack:///./~/change-emitter/lib/index.js?");
 
 /***/ },
 /* 68 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	module.exports = function symbolObservablePonyfill(root) {
-		var result;
-		var _Symbol = root.Symbol;
-
-		if (typeof _Symbol === 'function') {
-			if (_Symbol.observable) {
-				result = _Symbol.observable;
-			} else {
-				result = _Symbol('observable');
-				_Symbol.observable = result;
-			}
-		} else {
-			result = '@@observable';
-		}
-
-		return result;
-	};
+	eval("/* WEBPACK VAR INJECTION */(function(global) {/* global window */\n'use strict';\n\nmodule.exports = __webpack_require__(69)(global || window || undefined);\n/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/symbol-observable/index.js\n// module id = 68\n// module chunks = 0\n//# sourceURL=webpack:///./~/symbol-observable/index.js?");
 
 /***/ },
 /* 69 */
 /***/ function(module, exports) {
 
-	'use strict';
-
-	exports.__esModule = true;
-	var _config = {
-	  fromESObservable: null,
-	  toESObservable: null
-	};
-
-	var configureObservable = function configureObservable(c) {
-	  _config = c;
-	};
-
-	var config = exports.config = {
-	  fromESObservable: function fromESObservable(observable) {
-	    return typeof _config.fromESObservable === 'function' ? _config.fromESObservable(observable) : observable;
-	  },
-	  toESObservable: function toESObservable(stream) {
-	    return typeof _config.toESObservable === 'function' ? _config.toESObservable(stream) : stream;
-	  }
-	};
-
-	exports.default = configureObservable;
+	eval("'use strict';\n\nmodule.exports = function symbolObservablePonyfill(root) {\n\tvar result;\n\tvar _Symbol = root.Symbol;\n\n\tif (typeof _Symbol === 'function') {\n\t\tif (_Symbol.observable) {\n\t\t\tresult = _Symbol.observable;\n\t\t} else {\n\t\t\tresult = _Symbol('observable');\n\t\t\t_Symbol.observable = result;\n\t\t}\n\t} else {\n\t\tresult = '@@observable';\n\t}\n\n\treturn result;\n};\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/symbol-observable/ponyfill.js\n// module id = 69\n// module chunks = 0\n//# sourceURL=webpack:///./~/symbol-observable/ponyfill.js?");
 
 /***/ },
 /* 70 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	exports.__esModule = true;
-	exports.mapPropsStreamWithConfig = undefined;
-
-	var _symbolObservable = __webpack_require__(67);
-
-	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
-
-	var _createEagerFactory = __webpack_require__(26);
-
-	var _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);
-
-	var _createHelper = __webpack_require__(22);
-
-	var _createHelper2 = _interopRequireDefault(_createHelper);
-
-	var _componentFromStream = __webpack_require__(65);
-
-	var _setObservableConfig = __webpack_require__(69);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var identity = function identity(t) {
-	  return t;
-	};
-	var componentFromStream = (0, _componentFromStream.componentFromStreamWithConfig)({
-	  fromESObservable: identity,
-	  toESObservable: identity
-	});
-
-	var mapPropsStreamWithConfig = exports.mapPropsStreamWithConfig = function mapPropsStreamWithConfig(config) {
-	  return function (transform) {
-	    return function (BaseComponent) {
-	      var factory = (0, _createEagerFactory2.default)(BaseComponent);
-	      var fromESObservable = config.fromESObservable;
-	      var toESObservable = config.toESObservable;
-
-	      return componentFromStream(function (props$) {
-	        var _ref;
-
-	        return _ref = {
-	          subscribe: function subscribe(observer) {
-	            var subscription = toESObservable(transform(fromESObservable(props$))).subscribe({
-	              next: function next(childProps) {
-	                return observer.next(factory(childProps));
-	              }
-	            });
-	            return {
-	              unsubscribe: function unsubscribe() {
-	                return subscription.unsubscribe();
-	              }
-	            };
-	          }
-	        }, _ref[_symbolObservable2.default] = function () {
-	          return this;
-	        }, _ref;
-	      });
-	    };
-	  };
-	};
-
-	var mapPropsStream = mapPropsStreamWithConfig(_setObservableConfig.config);
-
-	exports.default = (0, _createHelper2.default)(mapPropsStream, 'mapPropsStream');
+	eval("'use strict';\n\nexports.__esModule = true;\nvar _config = {\n  fromESObservable: null,\n  toESObservable: null\n};\n\nvar configureObservable = function configureObservable(c) {\n  _config = c;\n};\n\nvar config = exports.config = {\n  fromESObservable: function fromESObservable(observable) {\n    return typeof _config.fromESObservable === 'function' ? _config.fromESObservable(observable) : observable;\n  },\n  toESObservable: function toESObservable(stream) {\n    return typeof _config.toESObservable === 'function' ? _config.toESObservable(stream) : stream;\n  }\n};\n\nexports.default = configureObservable;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/setObservableConfig.js\n// module id = 70\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/setObservableConfig.js?");
 
 /***/ },
 /* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	exports.__esModule = true;
-	exports.createEventHandlerWithConfig = undefined;
-
-	var _symbolObservable = __webpack_require__(67);
-
-	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
-
-	var _changeEmitter = __webpack_require__(66);
-
-	var _setObservableConfig = __webpack_require__(69);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var createEventHandlerWithConfig = exports.createEventHandlerWithConfig = function createEventHandlerWithConfig(config) {
-	  return function () {
-	    var _config$fromESObserva;
-
-	    var emitter = (0, _changeEmitter.createChangeEmitter)();
-	    var stream = config.fromESObservable((_config$fromESObserva = {
-	      subscribe: function subscribe(observer) {
-	        var unsubscribe = emitter.listen(function (value) {
-	          return observer.next(value);
-	        });
-	        return { unsubscribe: unsubscribe };
-	      }
-	    }, _config$fromESObserva[_symbolObservable2.default] = function () {
-	      return this;
-	    }, _config$fromESObserva));
-	    return {
-	      handler: emitter.emit,
-	      stream: stream
-	    };
-	  };
-	};
-
-	var createEventHandler = createEventHandlerWithConfig(_setObservableConfig.config);
-
-	exports.default = createEventHandler;
+	eval("'use strict';\n\nexports.__esModule = true;\nexports.mapPropsStreamWithConfig = undefined;\n\nvar _symbolObservable = __webpack_require__(68);\n\nvar _symbolObservable2 = _interopRequireDefault(_symbolObservable);\n\nvar _createEagerFactory = __webpack_require__(27);\n\nvar _createEagerFactory2 = _interopRequireDefault(_createEagerFactory);\n\nvar _createHelper = __webpack_require__(23);\n\nvar _createHelper2 = _interopRequireDefault(_createHelper);\n\nvar _componentFromStream = __webpack_require__(66);\n\nvar _setObservableConfig = __webpack_require__(70);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar identity = function identity(t) {\n  return t;\n};\nvar componentFromStream = (0, _componentFromStream.componentFromStreamWithConfig)({\n  fromESObservable: identity,\n  toESObservable: identity\n});\n\nvar mapPropsStreamWithConfig = exports.mapPropsStreamWithConfig = function mapPropsStreamWithConfig(config) {\n  return function (transform) {\n    return function (BaseComponent) {\n      var factory = (0, _createEagerFactory2.default)(BaseComponent);\n      var fromESObservable = config.fromESObservable;\n      var toESObservable = config.toESObservable;\n\n      return componentFromStream(function (props$) {\n        var _ref;\n\n        return _ref = {\n          subscribe: function subscribe(observer) {\n            var subscription = toESObservable(transform(fromESObservable(props$))).subscribe({\n              next: function next(childProps) {\n                return observer.next(factory(childProps));\n              }\n            });\n            return {\n              unsubscribe: function unsubscribe() {\n                return subscription.unsubscribe();\n              }\n            };\n          }\n        }, _ref[_symbolObservable2.default] = function () {\n          return this;\n        }, _ref;\n      });\n    };\n  };\n};\n\nvar mapPropsStream = mapPropsStreamWithConfig(_setObservableConfig.config);\n\nexports.default = (0, _createHelper2.default)(mapPropsStream, 'mapPropsStream');\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/mapPropsStream.js\n// module id = 71\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/mapPropsStream.js?");
 
 /***/ },
 /* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(28);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _classnames = __webpack_require__(87);
-
-	var _classnames2 = _interopRequireDefault(_classnames);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * The base UI component used for rendering.
-	 * All containers should use composition to extend this component.
-	 *
-	 * @abstract
-	 */
-	var Container = function Container(props) {
-	  var classes = (0, _classnames2.default)('carbon-container', 'carbon-container-' + props.id);
-
-	  return _react2.default.createElement(
-	    'div',
-	    { className: classes },
-	    'container here'
-	  );
-	};
-
-	exports.default = Container;
+	eval("'use strict';\n\nexports.__esModule = true;\nexports.createEventHandlerWithConfig = undefined;\n\nvar _symbolObservable = __webpack_require__(68);\n\nvar _symbolObservable2 = _interopRequireDefault(_symbolObservable);\n\nvar _changeEmitter = __webpack_require__(67);\n\nvar _setObservableConfig = __webpack_require__(70);\n\nfunction _interopRequireDefault(obj) {\n  return obj && obj.__esModule ? obj : { default: obj };\n}\n\nvar createEventHandlerWithConfig = exports.createEventHandlerWithConfig = function createEventHandlerWithConfig(config) {\n  return function () {\n    var _config$fromESObserva;\n\n    var emitter = (0, _changeEmitter.createChangeEmitter)();\n    var stream = config.fromESObservable((_config$fromESObserva = {\n      subscribe: function subscribe(observer) {\n        var unsubscribe = emitter.listen(function (value) {\n          return observer.next(value);\n        });\n        return { unsubscribe: unsubscribe };\n      }\n    }, _config$fromESObserva[_symbolObservable2.default] = function () {\n      return this;\n    }, _config$fromESObserva));\n    return {\n      handler: emitter.emit,\n      stream: stream\n    };\n  };\n};\n\nvar createEventHandler = createEventHandlerWithConfig(_setObservableConfig.config);\n\nexports.default = createEventHandler;\n\n//////////////////\n// WEBPACK FOOTER\n// ./~/recompose/createEventHandler.js\n// module id = 72\n// module chunks = 0\n//# sourceURL=webpack:///./~/recompose/createEventHandler.js?");
 
 /***/ },
 /* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _recompose = __webpack_require__(20);
-
-	var _container = __webpack_require__(72);
-
-	var _container2 = _interopRequireDefault(_container);
-
-	var _withConnectToStore = __webpack_require__(17);
-
-	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
-
-	var _withInitialSideEffects = __webpack_require__(19);
-
-	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Add the fields that are specific for this container.
-	 */
-	var withProps = (0, _recompose.defaultProps)({
-		meta: {},
-		ui: {}
-	});
-
-	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _react = __webpack_require__(29);\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _classnames = __webpack_require__(74);\n\nvar _classnames2 = _interopRequireDefault(_classnames);\n\nvar _factory = __webpack_require__(75);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * The base UI component used for rendering.\n * All containers should use composition to extend this component.\n *\n * @abstract\n */\nvar Container = function Container(_ref) {\n  var id = _ref.id,\n      fields = _ref.fields;\n\n  return _react2.default.createElement(\n    'div',\n    { className: (0, _classnames2.default)('carbon-container', 'carbon-container-' + id) },\n    fields.map(function (_ref2) {\n      var id = _ref2.id,\n          type = _ref2.type;\n      return (0, _factory.makeField)(type, { id: id });\n    })\n  );\n};\n\nexports.default = Container;\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/components/container.js\n// module id = 73\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/components/container.js?");
 
 /***/ },
 /* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _recompose = __webpack_require__(20);
-
-	var _container = __webpack_require__(72);
-
-	var _container2 = _interopRequireDefault(_container);
-
-	var _withConnectToStore = __webpack_require__(17);
-
-	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
-
-	var _withInitialSideEffects = __webpack_require__(19);
-
-	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Add the fields that are specific for this container.
-	 */
-	var withProps = (0, _recompose.defaultProps)({
-		meta: {
-			page_template: 'default',
-			level: 1,
-			parent_id: null,
-			post_format: null,
-			terms: []
-		},
-		ui: {}
-	});
-
-	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
+	eval("module.exports = (__webpack_require__(4))(147);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/classnames/index.js from dll-reference carbon.vendor\n// module id = 74\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/classnames/index.js_from_dll-reference_carbon.vendor?");
 
 /***/ },
 /* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _recompose = __webpack_require__(20);
-
-	var _container = __webpack_require__(72);
-
-	var _container2 = _interopRequireDefault(_container);
-
-	var _withConnectToStore = __webpack_require__(17);
-
-	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
-
-	var _withInitialSideEffects = __webpack_require__(19);
-
-	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Add the fields that are specific for this container.
-	 */
-	var withProps = (0, _recompose.defaultProps)({
-		meta: {},
-		ui: {}
-	});
-
-	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };\n\nvar _containers;\n\nexports.makeContainer = makeContainer;\nexports.makeField = makeField;\n\nvar _react = __webpack_require__(29);\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _brokenContainer = __webpack_require__(76);\n\nvar _brokenContainer2 = _interopRequireDefault(_brokenContainer);\n\nvar _postMetaContainer = __webpack_require__(77);\n\nvar _postMetaContainer2 = _interopRequireDefault(_postMetaContainer);\n\nvar _commentMetaContainer = __webpack_require__(78);\n\nvar _commentMetaContainer2 = _interopRequireDefault(_commentMetaContainer);\n\nvar _termMetaContainer = __webpack_require__(79);\n\nvar _termMetaContainer2 = _interopRequireDefault(_termMetaContainer);\n\nvar _userMetaContainer = __webpack_require__(80);\n\nvar _userMetaContainer2 = _interopRequireDefault(_userMetaContainer);\n\nvar _themeOptionsContainer = __webpack_require__(81);\n\nvar _themeOptionsContainer2 = _interopRequireDefault(_themeOptionsContainer);\n\nvar _constants = __webpack_require__(15);\n\nvar ContainerConst = _interopRequireWildcard(_constants);\n\nvar _field = __webpack_require__(82);\n\nvar _field2 = _interopRequireDefault(_field);\n\nvar _separatorField = __webpack_require__(83);\n\nvar _separatorField2 = _interopRequireDefault(_separatorField);\n\nvar _constants2 = __webpack_require__(86);\n\nvar FieldConst = _interopRequireWildcard(_constants2);\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }\n\n/**\n * A dictionary of the supported containers.\n *\n * @type {Object}\n */\nvar containers = (_containers = {}, _defineProperty(_containers, ContainerConst.TYPE_POST_META, _postMetaContainer2.default), _defineProperty(_containers, ContainerConst.TYPE_COMMENT_META, _commentMetaContainer2.default), _defineProperty(_containers, ContainerConst.TYPE_TERM_META, _termMetaContainer2.default), _defineProperty(_containers, ContainerConst.TYPE_USER_META, _userMetaContainer2.default), _defineProperty(_containers, ContainerConst.TYPE_THEME_OPTIONS, _themeOptionsContainer2.default), _containers);\n\n/**\n * Determine which container should be rendered for the specified type.\n *\n * @param  {String} type\n * @param  {Object} props\n * @return {React.Element}\n */\nfunction makeContainer(type) {\n  var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};\n\n  var Component = containers[type] || _brokenContainer2.default;\n\n  return _react2.default.createElement(Component, props);\n}\n\n/**\n * A dictionary of the supported containers.\n *\n * @type {Object}\n */\nvar fields = _defineProperty({}, FieldConst.TYPE_SEPARATOR, _separatorField2.default);\n\n/**\n * Determine which field should be rendered for the specified type.\n *\n * @param  {String} type\n * @param  {Object} props\n * @return {React.Element}\n */\nfunction makeField(type, props) {\n  var Component = fields[type];\n\n  if (!Component) {\n    return null;\n  }\n\n  return _react2.default.createElement(Component, _extends({ key: props.id }, props));\n}\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/lib/factory.js\n// module id = 75\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/lib/factory.js?");
 
 /***/ },
 /* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _recompose = __webpack_require__(20);
-
-	var _container = __webpack_require__(72);
-
-	var _container2 = _interopRequireDefault(_container);
-
-	var _withConnectToStore = __webpack_require__(17);
-
-	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
-
-	var _withInitialSideEffects = __webpack_require__(19);
-
-	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Add the fields that are specific for this container.
-	 */
-	var withProps = (0, _recompose.defaultProps)({
-		meta: {
-			role: null
-		},
-		ui: {}
-	});
-
-	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _recompose = __webpack_require__(21);\n\nvar _container = __webpack_require__(73);\n\nvar _container2 = _interopRequireDefault(_container);\n\nvar _withConnectToStore = __webpack_require__(18);\n\nvar _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);\n\nvar _withInitialSideEffects = __webpack_require__(20);\n\nvar _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * Add the fields that are specific for this container.\n */\nvar withProps = (0, _recompose.defaultProps)({\n\tmeta: {},\n\tui: {}\n});\n\nexports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/components/broken-container.js\n// module id = 76\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/components/broken-container.js?");
 
 /***/ },
 /* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _containers;
-
-	exports.makeContainer = makeContainer;
-
-	var _react = __webpack_require__(28);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _brokenContainer = __webpack_require__(73);
-
-	var _brokenContainer2 = _interopRequireDefault(_brokenContainer);
-
-	var _postMetaContainer = __webpack_require__(74);
-
-	var _postMetaContainer2 = _interopRequireDefault(_postMetaContainer);
-
-	var _commentMetaContainer = __webpack_require__(75);
-
-	var _commentMetaContainer2 = _interopRequireDefault(_commentMetaContainer);
-
-	var _termMetaContainer = __webpack_require__(78);
-
-	var _termMetaContainer2 = _interopRequireDefault(_termMetaContainer);
-
-	var _userMetaContainer = __webpack_require__(76);
-
-	var _userMetaContainer2 = _interopRequireDefault(_userMetaContainer);
-
-	var _themeOptionsContainer = __webpack_require__(79);
-
-	var _themeOptionsContainer2 = _interopRequireDefault(_themeOptionsContainer);
-
-	var _constants = __webpack_require__(14);
-
-	var ContainerConst = _interopRequireWildcard(_constants);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-	/**
-	 * A dictionary of the supported containers.
-	 *
-	 * @type {Object}
-	 */
-	var containers = (_containers = {}, _defineProperty(_containers, ContainerConst.TYPE_POST_META, _postMetaContainer2.default), _defineProperty(_containers, ContainerConst.TYPE_COMMENT_META, _commentMetaContainer2.default), _defineProperty(_containers, ContainerConst.TYPE_TERM_META, _termMetaContainer2.default), _defineProperty(_containers, ContainerConst.TYPE_USER_META, _userMetaContainer2.default), _defineProperty(_containers, ContainerConst.TYPE_THEME_OPTIONS, _themeOptionsContainer2.default), _containers);
-
-	/**
-	 * Determine which container should be rendered for the specified type.
-	 *
-	 * @param  {String} type
-	 * @param  {Object} props
-	 * @return {React.Element}
-	 */
-	function makeContainer(type) {
-	  var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-	  var Component = containers[type] || _brokenContainer2.default;
-
-	  return _react2.default.createElement(Component, props);
-	}
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _recompose = __webpack_require__(21);\n\nvar _container = __webpack_require__(73);\n\nvar _container2 = _interopRequireDefault(_container);\n\nvar _withConnectToStore = __webpack_require__(18);\n\nvar _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);\n\nvar _withInitialSideEffects = __webpack_require__(20);\n\nvar _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * Add the fields that are specific for this container.\n */\nvar withProps = (0, _recompose.defaultProps)({\n\tmeta: {\n\t\tpage_template: 'default',\n\t\tlevel: 1,\n\t\tparent_id: null,\n\t\tpost_format: null,\n\t\tterms: []\n\t},\n\tui: {}\n});\n\nexports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/components/post-meta-container.js\n// module id = 77\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/components/post-meta-container.js?");
 
 /***/ },
 /* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _recompose = __webpack_require__(20);
-
-	var _container = __webpack_require__(72);
-
-	var _container2 = _interopRequireDefault(_container);
-
-	var _withConnectToStore = __webpack_require__(17);
-
-	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
-
-	var _withInitialSideEffects = __webpack_require__(19);
-
-	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Add the fields that are specific for this container.
-	 */
-	var withProps = (0, _recompose.defaultProps)({
-		meta: {
-			level: 1
-		},
-		ui: {}
-	});
-
-	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _recompose = __webpack_require__(21);\n\nvar _container = __webpack_require__(73);\n\nvar _container2 = _interopRequireDefault(_container);\n\nvar _withConnectToStore = __webpack_require__(18);\n\nvar _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);\n\nvar _withInitialSideEffects = __webpack_require__(20);\n\nvar _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * Add the fields that are specific for this container.\n */\nvar withProps = (0, _recompose.defaultProps)({\n\tmeta: {},\n\tui: {}\n});\n\nexports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/components/comment-meta-container.js\n// module id = 78\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/components/comment-meta-container.js?");
 
 /***/ },
 /* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _recompose = __webpack_require__(20);
-
-	var _container = __webpack_require__(72);
-
-	var _container2 = _interopRequireDefault(_container);
-
-	var _withConnectToStore = __webpack_require__(17);
-
-	var _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);
-
-	var _withInitialSideEffects = __webpack_require__(19);
-
-	var _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Add the fields that are specific for this container.
-	 */
-	var withProps = (0, _recompose.defaultProps)({
-		meta: {},
-		ui: {}
-	});
-
-	exports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _recompose = __webpack_require__(21);\n\nvar _container = __webpack_require__(73);\n\nvar _container2 = _interopRequireDefault(_container);\n\nvar _withConnectToStore = __webpack_require__(18);\n\nvar _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);\n\nvar _withInitialSideEffects = __webpack_require__(20);\n\nvar _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * Add the fields that are specific for this container.\n */\nvar withProps = (0, _recompose.defaultProps)({\n\tmeta: {\n\t\tlevel: 1\n\t},\n\tui: {}\n});\n\nexports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/components/term-meta-container.js\n// module id = 79\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/components/term-meta-container.js?");
 
 /***/ },
 /* 80 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	exports.default = function () {
-		var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-		var action = arguments[1];
-
-		return state;
-	};
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _recompose = __webpack_require__(21);\n\nvar _container = __webpack_require__(73);\n\nvar _container2 = _interopRequireDefault(_container);\n\nvar _withConnectToStore = __webpack_require__(18);\n\nvar _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);\n\nvar _withInitialSideEffects = __webpack_require__(20);\n\nvar _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * Add the fields that are specific for this container.\n */\nvar withProps = (0, _recompose.defaultProps)({\n\tmeta: {\n\t\trole: null\n\t},\n\tui: {}\n});\n\nexports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/components/user-meta-container.js\n// module id = 80\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/components/user-meta-container.js?");
 
 /***/ },
 /* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _redux = __webpack_require__(82);
-
-	var _reduxSaga = __webpack_require__(6);
-
-	var _reduxSaga2 = _interopRequireDefault(_reduxSaga);
-
-	var _normalize = __webpack_require__(2);
-
-	var _reducer = __webpack_require__(83);
-
-	var _reducer2 = _interopRequireDefault(_reducer);
-
-	var _reducer3 = __webpack_require__(80);
-
-	var _reducer4 = _interopRequireDefault(_reducer3);
-
-	var _base = __webpack_require__(85);
-
-	var _base2 = _interopRequireDefault(_base);
-
-	var _postMeta = __webpack_require__(86);
-
-	var _postMeta2 = _interopRequireDefault(_postMeta);
-
-	var _termMeta = __webpack_require__(5);
-
-	var _termMeta2 = _interopRequireDefault(_termMeta);
-
-	var _userMeta = __webpack_require__(15);
-
-	var _userMeta2 = _interopRequireDefault(_userMeta);
-
-	var _themeOptions = __webpack_require__(16);
-
-	var _themeOptions2 = _interopRequireDefault(_themeOptions);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var preloadedState = (0, _normalize.normalizePreloadedState)(window.carbon_json);
-	var saga = (0, _reduxSaga2.default)();
-	var reducer = (0, _redux.combineReducers)({ containers: _reducer2.default, sidebars: _reducer4.default });
-	var store = (0, _redux.createStore)(reducer, preloadedState, (0, _redux.applyMiddleware)(saga));
-
-	saga.run(_base2.default);
-	saga.run(_postMeta2.default);
-	saga.run(_termMeta2.default);
-	saga.run(_userMeta2.default);
-	saga.run(_themeOptions2.default);
-
-	exports.default = store;
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _recompose = __webpack_require__(21);\n\nvar _container = __webpack_require__(73);\n\nvar _container2 = _interopRequireDefault(_container);\n\nvar _withConnectToStore = __webpack_require__(18);\n\nvar _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);\n\nvar _withInitialSideEffects = __webpack_require__(20);\n\nvar _withInitialSideEffects2 = _interopRequireDefault(_withInitialSideEffects);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * Add the fields that are specific for this container.\n */\nvar withProps = (0, _recompose.defaultProps)({\n\tmeta: {},\n\tui: {}\n});\n\nexports.default = (0, _recompose.compose)(withProps, _withConnectToStore2.default, _withInitialSideEffects2.default)(_container2.default);\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/components/theme-options-container.js\n// module id = 81\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/components/theme-options-container.js?");
 
 /***/ },
 /* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(145);
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _react = __webpack_require__(29);\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _classnames = __webpack_require__(74);\n\nvar _classnames2 = _interopRequireDefault(_classnames);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * The base UI component used for rendering.\n * All fields should use composition to extend this component.\n *\n * @abstract\n */\nvar Field = function Field(_ref) {\n\tvar field = _ref.field,\n\t    children = _ref.children;\n\n\treturn _react2.default.createElement(\n\t\t'div',\n\t\t{ className: (0, _classnames2.default)('carbon-field', 'carbon-' + field.type) },\n\t\t_react2.default.createElement(\n\t\t\t'label',\n\t\t\t{ htmlFor: field.id },\n\t\t\tfield.label,\n\t\t\tfield.required ? _react2.default.createElement(\n\t\t\t\t'span',\n\t\t\t\t{ className: 'carbon-required' },\n\t\t\t\t'*'\n\t\t\t) : ''\n\t\t),\n\t\t_react2.default.createElement(\n\t\t\t'div',\n\t\t\t{ className: (0, _classnames2.default)('field-holder', field.id) },\n\t\t\tchildren\n\t\t),\n\t\tfield.help_text ? _react2.default.createElement(\n\t\t\t'em',\n\t\t\t{ className: 'help-text' },\n\t\t\tfield.help_text\n\t\t) : '',\n\t\t_react2.default.createElement('em', { className: 'carbon-error' })\n\t);\n};\n\nexports.default = Field;\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/fields/components/field.js\n// module id = 82\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/fields/components/field.js?");
 
 /***/ },
 /* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	exports.default = function () {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-	  var action = arguments[1];
-
-	  switch (action.type) {
-	    case _actions.SET_META:
-	      return setMeta(state, action);
-	    case _actions.SET_UI:
-	      return setUI(state, action);
-	    default:
-	      return state;
-	  }
-	};
-
-	var _objectPathImmutable = __webpack_require__(84);
-
-	var _objectPathImmutable2 = _interopRequireDefault(_objectPathImmutable);
-
-	var _actions = __webpack_require__(12);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/**
-	 * Update the meta fields for the specified container.
-	 *
-	 * @param  {Object} state
-	 * @param  {Object} action
-	 * @return {Object}
-	 */
-	function setMeta(state, action) {
-	  var _action$payload = action.payload,
-	      containerId = _action$payload.containerId,
-	      meta = _action$payload.meta;
-
-
-	  return _objectPathImmutable2.default.assign(state, containerId + '.meta', meta);
-	}
-
-	/**
-	 * Update the UI fields for the specified container.
-	 *
-	 * @param  {Object} state
-	 * @param  {Object} action
-	 * @return {Object}
-	 */
-
-
-	/**
-	 * The reducer that handles manipulation to container's state.
-	 *
-	 * @param  {Object} state
-	 * @param  {Object} action
-	 * @return {Object}
-	 */
-
-
-	function setUI(state, action) {
-	  var _action$payload2 = action.payload,
-	      containerId = _action$payload2.containerId,
-	      ui = _action$payload2.ui;
-
-
-	  return _objectPathImmutable2.default.assign(state, containerId + '.ui', ui);
-	}
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _react = __webpack_require__(29);\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _field = __webpack_require__(82);\n\nvar _field2 = _interopRequireDefault(_field);\n\nvar _withConnectToStore = __webpack_require__(84);\n\nvar _withConnectToStore2 = _interopRequireDefault(_withConnectToStore);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * Used for presentation purposes to create sections between fields.\n *\n * @param  {Object} props\n * @return {React.Element}\n */\nvar SeparatorField = function SeparatorField(_ref) {\n  var id = _ref.id,\n      field = _ref.field;\n\n  return _react2.default.createElement(\n    _field2.default,\n    { id: id, field: field },\n    _react2.default.createElement(\n      'h3',\n      null,\n      field.label\n    )\n  );\n};\n\nexports.default = (0, _withConnectToStore2.default)(SeparatorField);\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/fields/components/separator-field.js\n// module id = 83\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/fields/components/separator-field.js?");
 
 /***/ },
 /* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(268);
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _reactRedux = __webpack_require__(19);\n\nvar _selectors = __webpack_require__(85);\n\nvar mapStateToProps = function mapStateToProps(state, ownProps) {\n\treturn {\n\t\tfield: (0, _selectors.getFieldById)(state, ownProps.id)\n\t};\n};\n\nexports.default = (0, _reactRedux.connect)(mapStateToProps);\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/fields/decorators/with-connect-to-store.js\n// module id = 84\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/fields/decorators/with-connect-to-store.js?");
 
 /***/ },
 /* 85 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	exports.workerSetupContainer = workerSetupContainer;
-	exports.workerToggleMetaBoxVisibility = workerToggleMetaBoxVisibility;
-	exports.default = foreman;
-
-	var _reduxSaga = __webpack_require__(6);
-
-	var _effects = __webpack_require__(7);
-
-	var _selectors = __webpack_require__(11);
-
-	var _actions = __webpack_require__(12);
-
-	var _marked = [workerSetupContainer, workerToggleMetaBoxVisibility, foreman].map(regeneratorRuntime.mark);
-
-	/**
-	 * Setup the initial state of the container.
-	 *
-	 * @param  {Object} action
-	 * @return {void}
-	 */
-	function workerSetupContainer(action) {
-		var defaults, _action$payload, containerId, meta, ui;
-
-		return regeneratorRuntime.wrap(function workerSetupContainer$(_context) {
-			while (1) {
-				switch (_context.prev = _context.next) {
-					case 0:
-						defaults = {
-							has_error: false,
-							is_dirty: false,
-							is_visible: true,
-							classes: []
-						};
-						_action$payload = action.payload, containerId = _action$payload.containerId, meta = _action$payload.meta, ui = _action$payload.ui;
-
-
-						ui = _extends({}, defaults, ui);
-
-						_context.next = 5;
-						return (0, _effects.put)((0, _actions.setMeta)({ containerId: containerId, meta: meta }));
-
-					case 5:
-						_context.next = 7;
-						return (0, _effects.put)((0, _actions.setUI)({ containerId: containerId, ui: ui }));
-
-					case 7:
-					case 'end':
-						return _context.stop();
-				}
-			}
-		}, _marked[0], this);
-	}
-
-	/**
-	 * Show or hide the container's metabox.
-	 *
-	 * @param  {Object} action
-	 * @return {void}
-	 */
-	function workerToggleMetaBoxVisibility(action) {
-		var containerId, container, el;
-		return regeneratorRuntime.wrap(function workerToggleMetaBoxVisibility$(_context2) {
-			while (1) {
-				switch (_context2.prev = _context2.next) {
-					case 0:
-						containerId = action.payload.containerId;
-						_context2.next = 3;
-						return (0, _effects.select)(_selectors.getContainerById, containerId);
-
-					case 3:
-						container = _context2.sent;
-						_context2.next = 6;
-						return (0, _effects.call)([document, document.querySelector], '#' + containerId);
-
-					case 6:
-						el = _context2.sent;
-
-						if (el) {
-							_context2.next = 9;
-							break;
-						}
-
-						throw new Error('Cannot find the metabox for container "' + containerId + '"');
-
-					case 9:
-
-						el.style.display = container.ui.is_visible ? 'block' : 'none';
-
-					case 10:
-					case 'end':
-						return _context2.stop();
-				}
-			}
-		}, _marked[1], this);
-	}
-
-	/**
-	 * Start to work.
-	 *
-	 * @return {void}
-	 */
-	function foreman() {
-		return regeneratorRuntime.wrap(function foreman$(_context3) {
-			while (1) {
-				switch (_context3.prev = _context3.next) {
-					case 0:
-						_context3.next = 2;
-						return [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer), (0, _reduxSaga.takeEvery)(_actions.SET_UI, workerToggleMetaBoxVisibility)];
-
-					case 2:
-					case 'end':
-						return _context3.stop();
-				}
-			}
-		}, _marked[2], this);
-	}
+	eval("\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nvar getFieldById = exports.getFieldById = function getFieldById(state, fieldId) {\n  return state.fields[fieldId];\n};\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/fields/selectors.js\n// module id = 85\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/fields/selectors.js?");
 
 /***/ },
 /* 86 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.workerSyncPageTemplate = workerSyncPageTemplate;
-	exports.workerSyncParentId = workerSyncParentId;
-	exports.workerSyncPostFormat = workerSyncPostFormat;
-	exports.workerSyncTerms = workerSyncTerms;
-	exports.workerSetupContainer = workerSetupContainer;
-	exports.workerCheckVisibility = workerCheckVisibility;
-	exports.default = foreman;
-
-	var _reduxSaga = __webpack_require__(6);
-
-	var _effects = __webpack_require__(7);
-
-	var _lodash = __webpack_require__(3);
-
-	var _events = __webpack_require__(9);
-
-	var _constants = __webpack_require__(1);
-
-	var _selectors = __webpack_require__(11);
-
-	var _actions = __webpack_require__(12);
-
-	var _constants2 = __webpack_require__(14);
-
-	var _marked = [workerSyncPageTemplate, workerSyncParentId, workerSyncPostFormat, workerSyncTerms, workerSetupContainer, workerCheckVisibility, foreman].map(regeneratorRuntime.mark);
-
-	/**
-	 * Keep in sync the `page_template` property.
-	 *
-	 * @param  {String} containerId
-	 * @return {void}
-	 */
-	function workerSyncPageTemplate(containerId) {
-		var channel, _ref, value;
-
-		return regeneratorRuntime.wrap(function workerSyncPageTemplate$(_context) {
-			while (1) {
-				switch (_context.prev = _context.next) {
-					case 0:
-						_context.next = 2;
-						return (0, _effects.call)(_events.createSelectboxChannel, 'select#page_template');
-
-					case 2:
-						channel = _context.sent;
-
-					case 3:
-						if (false) {
-							_context.next = 12;
-							break;
-						}
-
-						_context.next = 6;
-						return (0, _effects.take)(channel);
-
-					case 6:
-						_ref = _context.sent;
-						value = _ref.value;
-						_context.next = 10;
-						return (0, _effects.put)((0, _actions.setMeta)({
-							containerId: containerId,
-							meta: {
-								page_template: value
-							}
-						}));
-
-					case 10:
-						_context.next = 3;
-						break;
-
-					case 12:
-					case 'end':
-						return _context.stop();
-				}
-			}
-		}, _marked[0], this);
-	}
-
-	/**
-	 * Keep in sync the `parent_id` property.
-	 *
-	 * @param  {String} containerId
-	 * @return {void}
-	 */
-	function workerSyncParentId(containerId) {
-		var channel, _ref2, _value, option, level, matches;
-
-		return regeneratorRuntime.wrap(function workerSyncParentId$(_context2) {
-			while (1) {
-				switch (_context2.prev = _context2.next) {
-					case 0:
-						_context2.next = 2;
-						return (0, _effects.call)(_events.createSelectboxChannel, 'select#parent_id');
-
-					case 2:
-						channel = _context2.sent;
-
-					case 3:
-						if (false) {
-							_context2.next = 17;
-							break;
-						}
-
-						_context2.next = 6;
-						return (0, _effects.take)(channel);
-
-					case 6:
-						_ref2 = _context2.sent;
-						_value = _ref2.value;
-						option = _ref2.option;
-
-
-						_value = parseInt(_value, 10);
-						_value = isNaN(_value) ? null : _value;
-
-						level = 1;
-
-
-						if (option.className) {
-							matches = option.className.match(/^level-(\d+)/);
-
-
-							if (matches) {
-								level = parseInt(matches[1], 10) + 2;
-							}
-						}
-
-						_context2.next = 15;
-						return (0, _effects.put)((0, _actions.setMeta)({
-							containerId: containerId,
-							meta: {
-								parent_id: _value,
-								level: level
-							}
-						}));
-
-					case 15:
-						_context2.next = 3;
-						break;
-
-					case 17:
-					case 'end':
-						return _context2.stop();
-				}
-			}
-		}, _marked[1], this);
-	}
-
-	/**
-	 * Keep in sync the `post_format` property.
-	 *
-	 * @param  {String} containerId
-	 * @return {void}
-	 */
-	function workerSyncPostFormat(containerId) {
-		var channel, _ref3, values;
-
-		return regeneratorRuntime.wrap(function workerSyncPostFormat$(_context3) {
-			while (1) {
-				switch (_context3.prev = _context3.next) {
-					case 0:
-						_context3.next = 2;
-						return (0, _effects.call)(_events.createCheckableChannel, '#post-formats-select');
-
-					case 2:
-						channel = _context3.sent;
-
-					case 3:
-						if (false) {
-							_context3.next = 12;
-							break;
-						}
-
-						_context3.next = 6;
-						return (0, _effects.take)(channel);
-
-					case 6:
-						_ref3 = _context3.sent;
-						values = _ref3.values;
-						_context3.next = 10;
-						return (0, _effects.put)((0, _actions.setMeta)({
-							containerId: containerId,
-							meta: {
-								post_format: values[0]
-							}
-						}));
-
-					case 10:
-						_context3.next = 3;
-						break;
-
-					case 12:
-					case 'end':
-						return _context3.stop();
-				}
-			}
-		}, _marked[2], this);
-	}
-
-	/**
-	 * Keep in sync the `terms` property.
-	 *
-	 * @param  {String} containerId
-	 * @return {void}
-	 */
-	function workerSyncTerms(containerId) {
-		var container, channel, _ref4, _values;
-
-		return regeneratorRuntime.wrap(function workerSyncTerms$(_context4) {
-			while (1) {
-				switch (_context4.prev = _context4.next) {
-					case 0:
-						_context4.next = 2;
-						return (0, _effects.select)(_selectors.getContainerById, containerId);
-
-					case 2:
-						container = _context4.sent;
-						_context4.next = 5;
-						return (0, _effects.call)(_events.createCheckableChannel, '#' + container.settings.show_on.tax_slug + 'checklist');
-
-					case 5:
-						channel = _context4.sent;
-
-					case 6:
-						if (false) {
-							_context4.next = 16;
-							break;
-						}
-
-						_context4.next = 9;
-						return (0, _effects.take)(channel);
-
-					case 9:
-						_ref4 = _context4.sent;
-						_values = _ref4.values;
-
-
-						_values = _values.map(function (value) {
-							return parseInt(value, 10);
-						});
-
-						_context4.next = 14;
-						return (0, _effects.put)((0, _actions.setMeta)({
-							containerId: containerId,
-							meta: {
-								terms: _values
-							}
-						}));
-
-					case 14:
-						_context4.next = 6;
-						break;
-
-					case 16:
-					case 'end':
-						return _context4.stop();
-				}
-			}
-		}, _marked[3], this);
-	}
-
-	/**
-	 * Check whether the container should be visible.
-	 *
-	 * @param  {Boolean} isVisible
-	 * @param  {Object}  settings
-	 * @param  {Object}  meta
-	 * @return {Boolean}
-	 */
-	function checkTemplateNames(isVisible, settings, meta) {
-		var page_template = meta.page_template;
-		var _window = window,
-		    typenow = _window.typenow;
-
-
-		if (typenow === _constants.TYPE_NOW_PAGE && settings.template_names.indexOf(page_template) === -1) {
-			isVisible = false;
-		}
-
-		return isVisible;
-	}
-
-	/**
-	 * Check whether the container should be visible.
-	 *
-	 * @param  {Boolean} isVisible
-	 * @param  {Object}  settings
-	 * @param  {Object}  meta
-	 * @return {Boolean}
-	 */
-	function checkNotInTemplateNames(isVisible, settings, meta) {
-		var page_template = meta.page_template;
-		var _window2 = window,
-		    typenow = _window2.typenow;
-
-
-		if (typenow === _constants.TYPE_NOW_PAGE && settings.not_in_template_names.indexOf(page_template) !== -1) {
-			isVisible = false;
-		}
-
-		return isVisible;
-	}
-
-	/**
-	 * Check whether the container should be visible.
-	 *
-	 * @param  {Boolean} isVisible
-	 * @param  {Object}  settings
-	 * @param  {Object}  meta
-	 * @return {Boolean}
-	 */
-	function checkParentPageId(isVisible, settings, meta) {
-		var parent_id = meta.parent_id;
-
-
-		if (parent_id != settings.parent_page_id) {
-			isVisible = false;
-		}
-
-		return isVisible;
-	}
-
-	/**
-	 * Check whether the container should be visible.
-	 *
-	 * @param  {Boolean} isVisible
-	 * @param  {Object}  settings
-	 * @param  {Object}  meta
-	 * @return {Boolean}
-	 */
-	function checkLevelLimit(isVisible, settings, meta) {
-		var level = meta.level;
-
-
-		if (level != settings.level_limit) {
-			isVisible = false;
-		}
-
-		return isVisible;
-	}
-
-	/**
-	 * Check whether the container should be visible.
-	 *
-	 * @param  {Boolean} isVisible
-	 * @param  {Object}  settings
-	 * @param  {Object}  meta
-	 * @return {Boolean}
-	 */
-	function checkPostFormats(isVisible, settings, meta) {
-		var post_format = meta.post_format;
-
-
-		if (settings.post_formats.indexOf(post_format) === -1) {
-			isVisible = false;
-		}
-
-		return isVisible;
-	}
-
-	/**
-	 * Check whether the container should be visible.
-	 *
-	 * @param  {Boolean} isVisible
-	 * @param  {Object}  settings
-	 * @param  {Object}  meta
-	 * @return {Boolean}
-	 */
-	function checkTaxSlug(isVisible, settings, meta) {
-		var tax_term_id = meta.tax_term_id;
-
-
-		if (meta.terms.indexOf(tax_term_id) === -1) {
-			isVisible = false;
-		}
-
-		return isVisible;
-	}
-
-	/**
-	 * Setup the initial state of the container.
-	 *
-	 * @param  {Object} action
-	 * @return {void}
-	 */
-	function workerSetupContainer(action) {
-		var containerId;
-		return regeneratorRuntime.wrap(function workerSetupContainer$(_context5) {
-			while (1) {
-				switch (_context5.prev = _context5.next) {
-					case 0:
-						containerId = action.payload.containerId;
-
-						// Don't do anything if the type isn't correct.
-
-						_context5.next = 3;
-						return (0, _effects.select)(_selectors.canProcessAction, containerId, _constants2.TYPE_POST_META);
-
-					case 3:
-						if (_context5.sent) {
-							_context5.next = 5;
-							break;
-						}
-
-						return _context5.abrupt('return');
-
-					case 5:
-						_context5.next = 7;
-						return (0, _effects.fork)(workerSyncPageTemplate, containerId);
-
-					case 7:
-						_context5.next = 9;
-						return (0, _effects.fork)(workerSyncParentId, containerId);
-
-					case 9:
-						_context5.next = 11;
-						return (0, _effects.fork)(workerSyncPostFormat, containerId);
-
-					case 11:
-						_context5.next = 13;
-						return (0, _effects.fork)(workerSyncTerms, containerId);
-
-					case 13:
-					case 'end':
-						return _context5.stop();
-				}
-			}
-		}, _marked[4], this);
-	}
-
-	/**
-	 * Keep in sync the `is_visible` property.
-	 *
-	 * @param  {Object} action
-	 * @return {void}
-	 */
-	function workerCheckVisibility(action) {
-		var containerId, container, checkers, isVisible;
-		return regeneratorRuntime.wrap(function workerCheckVisibility$(_context6) {
-			while (1) {
-				switch (_context6.prev = _context6.next) {
-					case 0:
-						containerId = action.payload.containerId;
-
-						// Don't do anything if the type isn't correct.
-
-						_context6.next = 3;
-						return (0, _effects.select)(_selectors.canProcessAction, containerId, _constants2.TYPE_POST_META);
-
-					case 3:
-						if (_context6.sent) {
-							_context6.next = 5;
-							break;
-						}
-
-						return _context6.abrupt('return');
-
-					case 5:
-						_context6.next = 7;
-						return (0, _effects.select)(_selectors.getContainerById, containerId);
-
-					case 7:
-						container = _context6.sent;
-						checkers = {
-							checkTemplateNames: checkTemplateNames,
-							checkNotInTemplateNames: checkNotInTemplateNames,
-							checkParentPageId: checkParentPageId,
-							checkLevelLimit: checkLevelLimit,
-							checkPostFormats: checkPostFormats,
-							checkTaxSlug: checkTaxSlug
-						};
-						isVisible = (0, _lodash.reduce)(container.settings.show_on, function (isVisible, value, key) {
-							var checker = (0, _lodash.camelCase)('check_' + key);
-
-							if (checkers[checker]) {
-								if (!value || (0, _lodash.isArray)(value) && (0, _lodash.isEmpty)(value)) {
-									return isVisible;
-								}
-
-								isVisible = checkers[checker](isVisible, container.settings.show_on, container.meta);
-							}
-
-							return isVisible;
-						}, true);
-						_context6.next = 12;
-						return (0, _effects.put)((0, _actions.setUI)({
-							containerId: containerId,
-							ui: {
-								is_visible: isVisible
-							}
-						}));
-
-					case 12:
-					case 'end':
-						return _context6.stop();
-				}
-			}
-		}, _marked[5], this);
-	}
-
-	/**
-	 * Start to work.
-	 *
-	 * @return {void}
-	 */
-	function foreman() {
-		return regeneratorRuntime.wrap(function foreman$(_context7) {
-			while (1) {
-				switch (_context7.prev = _context7.next) {
-					case 0:
-						_context7.next = 2;
-						return [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer), (0, _reduxSaga.takeEvery)(_actions.SET_META, workerCheckVisibility)];
-
-					case 2:
-					case 'end':
-						return _context7.stop();
-				}
-			}
-		}, _marked[6], this);
-	}
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nvar TYPE_SEPARATOR = exports.TYPE_SEPARATOR = 'Separator';\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/fields/constants.js\n// module id = 86\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/fields/constants.js?");
 
 /***/ },
 /* 87 */
+/***/ function(module, exports) {
+
+	eval("\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nexports.default = function () {\n\tvar state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];\n\tvar action = arguments[1];\n\n\treturn state;\n};\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/sidebars/reducer.js\n// module id = 87\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/sidebars/reducer.js?");
+
+/***/ },
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = (__webpack_require__(4))(147);
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _redux = __webpack_require__(89);\n\nvar _reduxSaga = __webpack_require__(6);\n\nvar _reduxSaga2 = _interopRequireDefault(_reduxSaga);\n\nvar _normalize = __webpack_require__(2);\n\nvar _reducer = __webpack_require__(90);\n\nvar _reducer2 = _interopRequireDefault(_reducer);\n\nvar _reducer3 = __webpack_require__(87);\n\nvar _reducer4 = _interopRequireDefault(_reducer3);\n\nvar _reducer5 = __webpack_require__(92);\n\nvar _reducer6 = _interopRequireDefault(_reducer5);\n\nvar _base = __webpack_require__(93);\n\nvar _base2 = _interopRequireDefault(_base);\n\nvar _postMeta = __webpack_require__(94);\n\nvar _postMeta2 = _interopRequireDefault(_postMeta);\n\nvar _termMeta = __webpack_require__(5);\n\nvar _termMeta2 = _interopRequireDefault(_termMeta);\n\nvar _userMeta = __webpack_require__(16);\n\nvar _userMeta2 = _interopRequireDefault(_userMeta);\n\nvar _themeOptions = __webpack_require__(17);\n\nvar _themeOptions2 = _interopRequireDefault(_themeOptions);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar preloadedState = (0, _normalize.normalizePreloadedState)(window.carbon_json);\n\nvar saga = (0, _reduxSaga2.default)();\nvar reducer = (0, _redux.combineReducers)({ containers: _reducer2.default, sidebars: _reducer4.default, fields: _reducer6.default });\nvar store = (0, _redux.createStore)(reducer, preloadedState, (0, _redux.applyMiddleware)(saga));\n\nsaga.run(_base2.default);\nsaga.run(_postMeta2.default);\nsaga.run(_termMeta2.default);\nsaga.run(_userMeta2.default);\nsaga.run(_themeOptions2.default);\n\nexports.default = store;\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/store.js\n// module id = 88\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/store.js?");
+
+/***/ },
+/* 89 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(4))(145);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/redux/lib/index.js from dll-reference carbon.vendor\n// module id = 89\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/redux/lib/index.js_from_dll-reference_carbon.vendor?");
+
+/***/ },
+/* 90 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nexports.default = function () {\n  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};\n  var action = arguments[1];\n\n  switch (action.type) {\n    case _actions.SET_META:\n      return setMeta(state, action);\n    case _actions.SET_UI:\n      return setUI(state, action);\n    default:\n      return state;\n  }\n};\n\nvar _objectPathImmutable = __webpack_require__(91);\n\nvar _objectPathImmutable2 = _interopRequireDefault(_objectPathImmutable);\n\nvar _actions = __webpack_require__(13);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * Update the meta fields for the specified container.\n *\n * @param  {Object} state\n * @param  {Object} action\n * @return {Object}\n */\nfunction setMeta(state, action) {\n  var _action$payload = action.payload,\n      containerId = _action$payload.containerId,\n      meta = _action$payload.meta;\n\n\n  return _objectPathImmutable2.default.assign(state, containerId + '.meta', meta);\n}\n\n/**\n * Update the UI fields for the specified container.\n *\n * @param  {Object} state\n * @param  {Object} action\n * @return {Object}\n */\n\n\n/**\n * The reducer that handles manipulation to container's state.\n *\n * @param  {Object} state\n * @param  {Object} action\n * @return {Object}\n */\n\n\nfunction setUI(state, action) {\n  var _action$payload2 = action.payload,\n      containerId = _action$payload2.containerId,\n      ui = _action$payload2.ui;\n\n\n  return _objectPathImmutable2.default.assign(state, containerId + '.ui', ui);\n}\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/reducer.js\n// module id = 90\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/reducer.js?");
+
+/***/ },
+/* 91 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(4))(268);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/object-path-immutable/index.js from dll-reference carbon.vendor\n// module id = 91\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/object-path-immutable/index.js_from_dll-reference_carbon.vendor?");
+
+/***/ },
+/* 92 */
+/***/ function(module, exports) {
+
+	eval("\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nexports.default = function () {\n\tvar state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};\n\tvar action = arguments[1];\n\n\treturn state;\n};\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/fields/reducer.js\n// module id = 92\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/fields/reducer.js?");
+
+/***/ },
+/* 93 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };\n\nexports.workerSetupContainer = workerSetupContainer;\nexports.workerToggleMetaBoxVisibility = workerToggleMetaBoxVisibility;\nexports.default = foreman;\n\nvar _reduxSaga = __webpack_require__(6);\n\nvar _effects = __webpack_require__(7);\n\nvar _selectors = __webpack_require__(11);\n\nvar _actions = __webpack_require__(13);\n\nvar _marked = [workerSetupContainer, workerToggleMetaBoxVisibility, foreman].map(regeneratorRuntime.mark);\n\n/**\n * Setup the initial state of the container.\n *\n * @param  {Object} action\n * @return {void}\n */\nfunction workerSetupContainer(action) {\n\tvar defaults, _action$payload, containerId, meta, ui;\n\n\treturn regeneratorRuntime.wrap(function workerSetupContainer$(_context) {\n\t\twhile (1) {\n\t\t\tswitch (_context.prev = _context.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\tdefaults = {\n\t\t\t\t\t\thas_error: false,\n\t\t\t\t\t\tis_dirty: false,\n\t\t\t\t\t\tis_visible: true,\n\t\t\t\t\t\tclasses: []\n\t\t\t\t\t};\n\t\t\t\t\t_action$payload = action.payload, containerId = _action$payload.containerId, meta = _action$payload.meta, ui = _action$payload.ui;\n\n\n\t\t\t\t\tui = _extends({}, defaults, ui);\n\n\t\t\t\t\t_context.next = 5;\n\t\t\t\t\treturn (0, _effects.put)((0, _actions.setMeta)({ containerId: containerId, meta: meta }));\n\n\t\t\t\tcase 5:\n\t\t\t\t\t_context.next = 7;\n\t\t\t\t\treturn (0, _effects.put)((0, _actions.setUI)({ containerId: containerId, ui: ui }));\n\n\t\t\t\tcase 7:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[0], this);\n}\n\n/**\n * Show or hide the container's metabox.\n *\n * @param  {Object} action\n * @return {void}\n */\nfunction workerToggleMetaBoxVisibility(action) {\n\tvar containerId, container, el;\n\treturn regeneratorRuntime.wrap(function workerToggleMetaBoxVisibility$(_context2) {\n\t\twhile (1) {\n\t\t\tswitch (_context2.prev = _context2.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\tcontainerId = action.payload.containerId;\n\t\t\t\t\t_context2.next = 3;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.getContainerById, containerId);\n\n\t\t\t\tcase 3:\n\t\t\t\t\tcontainer = _context2.sent;\n\t\t\t\t\t_context2.next = 6;\n\t\t\t\t\treturn (0, _effects.call)([document, document.querySelector], '#' + containerId);\n\n\t\t\t\tcase 6:\n\t\t\t\t\tel = _context2.sent;\n\n\t\t\t\t\tif (el) {\n\t\t\t\t\t\t_context2.next = 9;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\tthrow new Error('Cannot find the metabox for container \"' + containerId + '\"');\n\n\t\t\t\tcase 9:\n\n\t\t\t\t\tel.style.display = container.ui.is_visible ? 'block' : 'none';\n\n\t\t\t\tcase 10:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context2.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[1], this);\n}\n\n/**\n * Start to work.\n *\n * @return {void}\n */\nfunction foreman() {\n\treturn regeneratorRuntime.wrap(function foreman$(_context3) {\n\t\twhile (1) {\n\t\t\tswitch (_context3.prev = _context3.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\t_context3.next = 2;\n\t\t\t\t\treturn [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer), (0, _reduxSaga.takeEvery)(_actions.SET_UI, workerToggleMetaBoxVisibility)];\n\n\t\t\t\tcase 2:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context3.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[2], this);\n}\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/sagas/base.js\n// module id = 93\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/sagas/base.js?");
+
+/***/ },
+/* 94 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\nexports.workerSyncPageTemplate = workerSyncPageTemplate;\nexports.workerSyncParentId = workerSyncParentId;\nexports.workerSyncPostFormat = workerSyncPostFormat;\nexports.workerSyncTerms = workerSyncTerms;\nexports.workerSetupContainer = workerSetupContainer;\nexports.workerCheckVisibility = workerCheckVisibility;\nexports.default = foreman;\n\nvar _reduxSaga = __webpack_require__(6);\n\nvar _effects = __webpack_require__(7);\n\nvar _lodash = __webpack_require__(3);\n\nvar _events = __webpack_require__(9);\n\nvar _constants = __webpack_require__(1);\n\nvar _selectors = __webpack_require__(11);\n\nvar _actions = __webpack_require__(13);\n\nvar _constants2 = __webpack_require__(15);\n\nvar _marked = [workerSyncPageTemplate, workerSyncParentId, workerSyncPostFormat, workerSyncTerms, workerSetupContainer, workerCheckVisibility, foreman].map(regeneratorRuntime.mark);\n\n/**\n * Keep in sync the `page_template` property.\n *\n * @param  {String} containerId\n * @return {void}\n */\nfunction workerSyncPageTemplate(containerId) {\n\tvar channel, _ref, value;\n\n\treturn regeneratorRuntime.wrap(function workerSyncPageTemplate$(_context) {\n\t\twhile (1) {\n\t\t\tswitch (_context.prev = _context.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\t_context.next = 2;\n\t\t\t\t\treturn (0, _effects.call)(_events.createSelectboxChannel, 'select#page_template');\n\n\t\t\t\tcase 2:\n\t\t\t\t\tchannel = _context.sent;\n\n\t\t\t\tcase 3:\n\t\t\t\t\tif (false) {\n\t\t\t\t\t\t_context.next = 12;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\t_context.next = 6;\n\t\t\t\t\treturn (0, _effects.take)(channel);\n\n\t\t\t\tcase 6:\n\t\t\t\t\t_ref = _context.sent;\n\t\t\t\t\tvalue = _ref.value;\n\t\t\t\t\t_context.next = 10;\n\t\t\t\t\treturn (0, _effects.put)((0, _actions.setMeta)({\n\t\t\t\t\t\tcontainerId: containerId,\n\t\t\t\t\t\tmeta: {\n\t\t\t\t\t\t\tpage_template: value\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\tcase 10:\n\t\t\t\t\t_context.next = 3;\n\t\t\t\t\tbreak;\n\n\t\t\t\tcase 12:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[0], this);\n}\n\n/**\n * Keep in sync the `parent_id` property.\n *\n * @param  {String} containerId\n * @return {void}\n */\nfunction workerSyncParentId(containerId) {\n\tvar channel, _ref2, _value, option, level, matches;\n\n\treturn regeneratorRuntime.wrap(function workerSyncParentId$(_context2) {\n\t\twhile (1) {\n\t\t\tswitch (_context2.prev = _context2.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\t_context2.next = 2;\n\t\t\t\t\treturn (0, _effects.call)(_events.createSelectboxChannel, 'select#parent_id');\n\n\t\t\t\tcase 2:\n\t\t\t\t\tchannel = _context2.sent;\n\n\t\t\t\tcase 3:\n\t\t\t\t\tif (false) {\n\t\t\t\t\t\t_context2.next = 17;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\t_context2.next = 6;\n\t\t\t\t\treturn (0, _effects.take)(channel);\n\n\t\t\t\tcase 6:\n\t\t\t\t\t_ref2 = _context2.sent;\n\t\t\t\t\t_value = _ref2.value;\n\t\t\t\t\toption = _ref2.option;\n\n\n\t\t\t\t\t_value = parseInt(_value, 10);\n\t\t\t\t\t_value = isNaN(_value) ? null : _value;\n\n\t\t\t\t\tlevel = 1;\n\n\n\t\t\t\t\tif (option.className) {\n\t\t\t\t\t\tmatches = option.className.match(/^level-(\\d+)/);\n\n\n\t\t\t\t\t\tif (matches) {\n\t\t\t\t\t\t\tlevel = parseInt(matches[1], 10) + 2;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\n\t\t\t\t\t_context2.next = 15;\n\t\t\t\t\treturn (0, _effects.put)((0, _actions.setMeta)({\n\t\t\t\t\t\tcontainerId: containerId,\n\t\t\t\t\t\tmeta: {\n\t\t\t\t\t\t\tparent_id: _value,\n\t\t\t\t\t\t\tlevel: level\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\tcase 15:\n\t\t\t\t\t_context2.next = 3;\n\t\t\t\t\tbreak;\n\n\t\t\t\tcase 17:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context2.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[1], this);\n}\n\n/**\n * Keep in sync the `post_format` property.\n *\n * @param  {String} containerId\n * @return {void}\n */\nfunction workerSyncPostFormat(containerId) {\n\tvar channel, _ref3, values;\n\n\treturn regeneratorRuntime.wrap(function workerSyncPostFormat$(_context3) {\n\t\twhile (1) {\n\t\t\tswitch (_context3.prev = _context3.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\t_context3.next = 2;\n\t\t\t\t\treturn (0, _effects.call)(_events.createCheckableChannel, '#post-formats-select');\n\n\t\t\t\tcase 2:\n\t\t\t\t\tchannel = _context3.sent;\n\n\t\t\t\tcase 3:\n\t\t\t\t\tif (false) {\n\t\t\t\t\t\t_context3.next = 12;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\t_context3.next = 6;\n\t\t\t\t\treturn (0, _effects.take)(channel);\n\n\t\t\t\tcase 6:\n\t\t\t\t\t_ref3 = _context3.sent;\n\t\t\t\t\tvalues = _ref3.values;\n\t\t\t\t\t_context3.next = 10;\n\t\t\t\t\treturn (0, _effects.put)((0, _actions.setMeta)({\n\t\t\t\t\t\tcontainerId: containerId,\n\t\t\t\t\t\tmeta: {\n\t\t\t\t\t\t\tpost_format: values[0]\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\tcase 10:\n\t\t\t\t\t_context3.next = 3;\n\t\t\t\t\tbreak;\n\n\t\t\t\tcase 12:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context3.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[2], this);\n}\n\n/**\n * Keep in sync the `terms` property.\n *\n * @param  {String} containerId\n * @return {void}\n */\nfunction workerSyncTerms(containerId) {\n\tvar container, channel, _ref4, _values;\n\n\treturn regeneratorRuntime.wrap(function workerSyncTerms$(_context4) {\n\t\twhile (1) {\n\t\t\tswitch (_context4.prev = _context4.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\t_context4.next = 2;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.getContainerById, containerId);\n\n\t\t\t\tcase 2:\n\t\t\t\t\tcontainer = _context4.sent;\n\t\t\t\t\t_context4.next = 5;\n\t\t\t\t\treturn (0, _effects.call)(_events.createCheckableChannel, '#' + container.settings.show_on.tax_slug + 'checklist');\n\n\t\t\t\tcase 5:\n\t\t\t\t\tchannel = _context4.sent;\n\n\t\t\t\tcase 6:\n\t\t\t\t\tif (false) {\n\t\t\t\t\t\t_context4.next = 16;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\t_context4.next = 9;\n\t\t\t\t\treturn (0, _effects.take)(channel);\n\n\t\t\t\tcase 9:\n\t\t\t\t\t_ref4 = _context4.sent;\n\t\t\t\t\t_values = _ref4.values;\n\n\n\t\t\t\t\t_values = _values.map(function (value) {\n\t\t\t\t\t\treturn parseInt(value, 10);\n\t\t\t\t\t});\n\n\t\t\t\t\t_context4.next = 14;\n\t\t\t\t\treturn (0, _effects.put)((0, _actions.setMeta)({\n\t\t\t\t\t\tcontainerId: containerId,\n\t\t\t\t\t\tmeta: {\n\t\t\t\t\t\t\tterms: _values\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\tcase 14:\n\t\t\t\t\t_context4.next = 6;\n\t\t\t\t\tbreak;\n\n\t\t\t\tcase 16:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context4.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[3], this);\n}\n\n/**\n * Check whether the container should be visible.\n *\n * @param  {Boolean} isVisible\n * @param  {Object}  settings\n * @param  {Object}  meta\n * @return {Boolean}\n */\nfunction checkTemplateNames(isVisible, settings, meta) {\n\tvar page_template = meta.page_template;\n\tvar _window = window,\n\t    typenow = _window.typenow;\n\n\n\tif (typenow === _constants.TYPE_NOW_PAGE && settings.template_names.indexOf(page_template) === -1) {\n\t\tisVisible = false;\n\t}\n\n\treturn isVisible;\n}\n\n/**\n * Check whether the container should be visible.\n *\n * @param  {Boolean} isVisible\n * @param  {Object}  settings\n * @param  {Object}  meta\n * @return {Boolean}\n */\nfunction checkNotInTemplateNames(isVisible, settings, meta) {\n\tvar page_template = meta.page_template;\n\tvar _window2 = window,\n\t    typenow = _window2.typenow;\n\n\n\tif (typenow === _constants.TYPE_NOW_PAGE && settings.not_in_template_names.indexOf(page_template) !== -1) {\n\t\tisVisible = false;\n\t}\n\n\treturn isVisible;\n}\n\n/**\n * Check whether the container should be visible.\n *\n * @param  {Boolean} isVisible\n * @param  {Object}  settings\n * @param  {Object}  meta\n * @return {Boolean}\n */\nfunction checkParentPageId(isVisible, settings, meta) {\n\tvar parent_id = meta.parent_id;\n\n\n\tif (parent_id != settings.parent_page_id) {\n\t\tisVisible = false;\n\t}\n\n\treturn isVisible;\n}\n\n/**\n * Check whether the container should be visible.\n *\n * @param  {Boolean} isVisible\n * @param  {Object}  settings\n * @param  {Object}  meta\n * @return {Boolean}\n */\nfunction checkLevelLimit(isVisible, settings, meta) {\n\tvar level = meta.level;\n\n\n\tif (level != settings.level_limit) {\n\t\tisVisible = false;\n\t}\n\n\treturn isVisible;\n}\n\n/**\n * Check whether the container should be visible.\n *\n * @param  {Boolean} isVisible\n * @param  {Object}  settings\n * @param  {Object}  meta\n * @return {Boolean}\n */\nfunction checkPostFormats(isVisible, settings, meta) {\n\tvar post_format = meta.post_format;\n\n\n\tif (settings.post_formats.indexOf(post_format) === -1) {\n\t\tisVisible = false;\n\t}\n\n\treturn isVisible;\n}\n\n/**\n * Check whether the container should be visible.\n *\n * @param  {Boolean} isVisible\n * @param  {Object}  settings\n * @param  {Object}  meta\n * @return {Boolean}\n */\nfunction checkTaxSlug(isVisible, settings, meta) {\n\tvar tax_term_id = meta.tax_term_id;\n\n\n\tif (meta.terms.indexOf(tax_term_id) === -1) {\n\t\tisVisible = false;\n\t}\n\n\treturn isVisible;\n}\n\n/**\n * Setup the initial state of the container.\n *\n * @param  {Object} action\n * @return {void}\n */\nfunction workerSetupContainer(action) {\n\tvar containerId;\n\treturn regeneratorRuntime.wrap(function workerSetupContainer$(_context5) {\n\t\twhile (1) {\n\t\t\tswitch (_context5.prev = _context5.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\tcontainerId = action.payload.containerId;\n\n\t\t\t\t\t// Don't do anything if the type isn't correct.\n\n\t\t\t\t\t_context5.next = 3;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.canProcessAction, containerId, _constants2.TYPE_POST_META);\n\n\t\t\t\tcase 3:\n\t\t\t\t\tif (_context5.sent) {\n\t\t\t\t\t\t_context5.next = 5;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\treturn _context5.abrupt('return');\n\n\t\t\t\tcase 5:\n\t\t\t\t\t_context5.next = 7;\n\t\t\t\t\treturn (0, _effects.fork)(workerSyncPageTemplate, containerId);\n\n\t\t\t\tcase 7:\n\t\t\t\t\t_context5.next = 9;\n\t\t\t\t\treturn (0, _effects.fork)(workerSyncParentId, containerId);\n\n\t\t\t\tcase 9:\n\t\t\t\t\t_context5.next = 11;\n\t\t\t\t\treturn (0, _effects.fork)(workerSyncPostFormat, containerId);\n\n\t\t\t\tcase 11:\n\t\t\t\t\t_context5.next = 13;\n\t\t\t\t\treturn (0, _effects.fork)(workerSyncTerms, containerId);\n\n\t\t\t\tcase 13:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context5.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[4], this);\n}\n\n/**\n * Keep in sync the `is_visible` property.\n *\n * @param  {Object} action\n * @return {void}\n */\nfunction workerCheckVisibility(action) {\n\tvar containerId, container, checkers, isVisible;\n\treturn regeneratorRuntime.wrap(function workerCheckVisibility$(_context6) {\n\t\twhile (1) {\n\t\t\tswitch (_context6.prev = _context6.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\tcontainerId = action.payload.containerId;\n\n\t\t\t\t\t// Don't do anything if the type isn't correct.\n\n\t\t\t\t\t_context6.next = 3;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.canProcessAction, containerId, _constants2.TYPE_POST_META);\n\n\t\t\t\tcase 3:\n\t\t\t\t\tif (_context6.sent) {\n\t\t\t\t\t\t_context6.next = 5;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\n\t\t\t\t\treturn _context6.abrupt('return');\n\n\t\t\t\tcase 5:\n\t\t\t\t\t_context6.next = 7;\n\t\t\t\t\treturn (0, _effects.select)(_selectors.getContainerById, containerId);\n\n\t\t\t\tcase 7:\n\t\t\t\t\tcontainer = _context6.sent;\n\t\t\t\t\tcheckers = {\n\t\t\t\t\t\tcheckTemplateNames: checkTemplateNames,\n\t\t\t\t\t\tcheckNotInTemplateNames: checkNotInTemplateNames,\n\t\t\t\t\t\tcheckParentPageId: checkParentPageId,\n\t\t\t\t\t\tcheckLevelLimit: checkLevelLimit,\n\t\t\t\t\t\tcheckPostFormats: checkPostFormats,\n\t\t\t\t\t\tcheckTaxSlug: checkTaxSlug\n\t\t\t\t\t};\n\t\t\t\t\tisVisible = (0, _lodash.reduce)(container.settings.show_on, function (isVisible, value, key) {\n\t\t\t\t\t\tvar checker = (0, _lodash.camelCase)('check_' + key);\n\n\t\t\t\t\t\tif (checkers[checker]) {\n\t\t\t\t\t\t\tif (!value || (0, _lodash.isArray)(value) && (0, _lodash.isEmpty)(value)) {\n\t\t\t\t\t\t\t\treturn isVisible;\n\t\t\t\t\t\t\t}\n\n\t\t\t\t\t\t\tisVisible = checkers[checker](isVisible, container.settings.show_on, container.meta);\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\treturn isVisible;\n\t\t\t\t\t}, true);\n\t\t\t\t\t_context6.next = 12;\n\t\t\t\t\treturn (0, _effects.put)((0, _actions.setUI)({\n\t\t\t\t\t\tcontainerId: containerId,\n\t\t\t\t\t\tui: {\n\t\t\t\t\t\t\tis_visible: isVisible\n\t\t\t\t\t\t}\n\t\t\t\t\t}));\n\n\t\t\t\tcase 12:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context6.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[5], this);\n}\n\n/**\n * Start to work.\n *\n * @return {void}\n */\nfunction foreman() {\n\treturn regeneratorRuntime.wrap(function foreman$(_context7) {\n\t\twhile (1) {\n\t\t\tswitch (_context7.prev = _context7.next) {\n\t\t\t\tcase 0:\n\t\t\t\t\t_context7.next = 2;\n\t\t\t\t\treturn [(0, _reduxSaga.takeEvery)(_actions.SETUP_CONTAINER, workerSetupContainer), (0, _reduxSaga.takeEvery)(_actions.SET_META, workerCheckVisibility)];\n\n\t\t\t\tcase 2:\n\t\t\t\tcase 'end':\n\t\t\t\t\treturn _context7.stop();\n\t\t\t}\n\t\t}\n\t}, _marked[6], this);\n}\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/sagas/post-meta.js\n// module id = 94\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/sagas/post-meta.js?");
 
 /***/ }
 /******/ ]);

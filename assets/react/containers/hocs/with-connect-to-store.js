@@ -1,9 +1,14 @@
 /* @flow */
 
 import { connect } from 'react-redux';
+import { getContainerFieldsById } from 'containers/selectors';
 import { setupContainer, checkVisibility } from 'containers/actions';
 
-const mapStateToProps: any = null;
+const mapStateToProps: Function = (state: Object, ownProps: Object) => {
+	return {
+		fields: getContainerFieldsById(state, ownProps.id),
+	};
+};
 
 const mapDispatchToProps: Object = {
 	setupContainer,

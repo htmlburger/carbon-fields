@@ -40,6 +40,7 @@ module.exports = {
 			'lib': 'assets/react/lib',
 			'containers': 'assets/react/containers',
 			'sidebars': 'assets/react/sidebars',
+			'fields': 'assets/react/fields',
 			'store': 'assets/react/store.js'
 		}
 	},

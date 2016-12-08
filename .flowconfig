@@ -8,4 +8,5 @@
 module.name_mapper='^lib\/\(.*\)$' -> '<PROJECT_ROOT>/assets/react/lib/\1'
 module.name_mapper='^containers\/\(.*\)$' -> '<PROJECT_ROOT>/assets/react/containers/\1'
 module.name_mapper='^sidebars\/\(.*\)$' -> '<PROJECT_ROOT>/assets/react/sidebars/\1'
+module.name_mapper='^fields\/\(.*\)$' -> '<PROJECT_ROOT>/assets/react/fields/\1'
 module.name_mapper='^store$' -> '<PROJECT_ROOT>/assets/react/store.js'
