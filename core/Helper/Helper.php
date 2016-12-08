@@ -4,7 +4,7 @@ namespace Carbon_Fields\Helper;
 
 use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Container\Container;
-use Carbon_Fields\REST_Endpoints\REST_Endpoints;
+use Carbon_Fields\REST\Routes;
 use Carbon_Fields\Templater\Templater;
 use Carbon_Fields\Manager\Sidebar_Manager;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
@@ -21,7 +21,7 @@ class Helper {
 	public function __construct() {
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
 		add_action( 'carbon_after_register_fields', array( $this, 'init_containers' ) );
-		add_action( 'carbon_after_register_fields', array( $this, 'init_rest_endpoints' ) );
+		add_action( 'carbon_after_register_fields', array( $this, 'init_rest_routes' ) );
 		add_action( 'admin_footer', array( $this, 'init_scripts' ), 0 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data_script' ), 9 );
 		add_action( 'crb_field_activated', array( $this, 'add_templates' ) );
@@ -70,10 +70,10 @@ class Helper {
 	}
 	
 	/**
-	 * Initialize REST endpoints
+	 * Initialize REST routes
 	 */
-	public function init_rest_endpoints() {
-		new REST_Endpoints();
+	public function init_rest_routes() {
+		new Routes();
 	}
 
 	/**
