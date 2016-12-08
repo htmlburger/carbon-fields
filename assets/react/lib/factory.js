@@ -13,6 +13,7 @@ import * as ContainerConst from 'containers/constants';
 import Field from 'fields/components/field';
 import SeparatorField from 'fields/components/separator-field';
 import TextField from 'fields/components/text-field';
+import TextareaField from 'fields/components/textarea-field';
 import * as FieldConst from 'fields/constants';
 
 /**
@@ -49,6 +50,7 @@ export function makeContainer(type: string, props?: Object = {}): React$Element<
 const fields: Object = {
 	[FieldConst.TYPE_SEPARATOR]: SeparatorField,
 	[FieldConst.TYPE_TEXT]: TextField,
+	[FieldConst.TYPE_TEXTAREA]: TextareaField,
 };
 
 /**
@@ -62,6 +64,8 @@ const fields: Object = {
  */
 export function makeField(type: string, props: Object): any {
 	const Component = fields[type];
+
+	console.log(type);
 
 	if (!Component) {
 		return null;

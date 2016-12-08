@@ -5,8 +5,6 @@ import Field from 'fields/components/field';
 import withConnectToStore from 'fields/decorators/with-connect-to-store';
 
 /**
- * Used for presentation purposes to create sections between fields.
- *
  * @param  {Object} props
  * @return {React.Element}
  */

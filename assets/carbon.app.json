@@ -74,12 +74,13 @@
     "./assets/react/fields/decorators/with-connect-to-store.js": 84,
     "./assets/react/fields/selectors.js": 85,
     "./assets/react/fields/components/text-field.js": 86,
-    "./assets/react/fields/constants.js": 87,
-    "./assets/react/sidebars/reducer.js": 88,
-    "./assets/react/store.js": 89,
-    "./assets/react/containers/reducer.js": 91,
-    "./assets/react/fields/reducer.js": 93,
-    "./assets/react/containers/sagas/base.js": 94,
-    "./assets/react/containers/sagas/post-meta.js": 95
+    "./assets/react/fields/components/textarea-field.js": 87,
+    "./assets/react/fields/constants.js": 88,
+    "./assets/react/sidebars/reducer.js": 89,
+    "./assets/react/store.js": 90,
+    "./assets/react/containers/reducer.js": 92,
+    "./assets/react/fields/reducer.js": 94,
+    "./assets/react/containers/sagas/base.js": 95,
+    "./assets/react/containers/sagas/post-meta.js": 96
   }
 }
