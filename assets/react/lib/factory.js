@@ -11,9 +11,10 @@ import ThemeOptionsContainer from 'containers/components/theme-options-container
 import * as ContainerConst from 'containers/constants';
 
 import Field from 'fields/components/field';
-import SeparatorField from 'fields/components/separator-field';
+import FileField from 'fields/components/file-field';
 import TextField from 'fields/components/text-field';
 import TextareaField from 'fields/components/textarea-field';
+import SeparatorField from 'fields/components/separator-field';
 import HeaderScriptsField from 'fields/components/header-scripts-field';
 import FooterScriptsField from 'fields/components/footer-scripts-field';
 import * as FieldConst from 'fields/constants';
@@ -50,9 +51,10 @@ export function makeContainer(type: string, props?: Object = {}): React$Element<
  * @type {Object}
  */
 const fields: Object = {
-	[FieldConst.TYPE_SEPARATOR]: SeparatorField,
+	[FieldConst.TYPE_FILE]: FileField,
 	[FieldConst.TYPE_TEXT]: TextField,
 	[FieldConst.TYPE_TEXTAREA]: TextareaField,
+	[FieldConst.TYPE_SEPARATOR]: SeparatorField,
 	[FieldConst.TYPE_HEADER_SCRIPTS]: HeaderScriptsField,
 	[FieldConst.TYPE_FOOTER_SCRIPTS]: FooterScriptsField,
 };

@@ -44,9 +44,10 @@ module.exports = {
 			'./assets/react/fields/decorators/with-connect-to-store.js',
 
 			'./assets/react/fields/components/field.js',
-			'./assets/react/fields/components/separator-field.js',
+			'./assets/react/fields/components/file-field.js',
 			'./assets/react/fields/components/text-field.js',
 			'./assets/react/fields/components/textarea-field.js',
+			'./assets/react/fields/components/separator-field.js',
 			'./assets/react/fields/components/header-scripts-field.js',
 			'./assets/react/fields/components/footer-scripts-field.js',
 
