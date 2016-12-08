@@ -45,6 +45,7 @@ module.exports = {
 
 			'./assets/react/fields/components/field.js',
 			'./assets/react/fields/components/separator-field.js',
+			'./assets/react/fields/components/text-field.js',
 
 			// Load the store.
 			'./assets/react/store.js'
