@@ -69,7 +69,7 @@
 /*  Tabs Nav  */
 
 .group-tabs-nav-holder .group-tabs-nav { margin-bottom: -3px; list-style: none outside none; }
-.group-tabs-nav-holder .group-tabs-nav li { display: inline-block; vertical-align: top; margin-right: 6px; margin-bottom: 2px; }
+.group-tabs-nav-holder .group-tabs-nav li { display: inline-block; vertical-align: top; margin-right: 6px; margin-bottom: 2px; line-height: 1.4; }
 .group-tabs-nav-holder .group-tabs-nav li a { position: relative; display: block; max-width: 140px; padding: 8px 12px; background: $color-grey-bg; border: 1px solid $color-border; color: $color-label; font-size: 12px; font-weight: 600; line-height: 1.5; text-decoration: none; overflow: hidden; text-overflow: ellipsis; }
 .group-tabs-nav-holder .group-tabs-nav li a:hover { background: #fff; }
 .group-tabs-nav-holder .group-tabs-nav li a:focus { box-shadow: none; outline: none; }
