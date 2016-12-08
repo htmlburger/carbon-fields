@@ -75,12 +75,14 @@
     "./assets/react/fields/selectors.js": 85,
     "./assets/react/fields/components/text-field.js": 86,
     "./assets/react/fields/components/textarea-field.js": 87,
-    "./assets/react/fields/constants.js": 88,
-    "./assets/react/sidebars/reducer.js": 89,
-    "./assets/react/store.js": 90,
-    "./assets/react/containers/reducer.js": 92,
-    "./assets/react/fields/reducer.js": 94,
-    "./assets/react/containers/sagas/base.js": 95,
-    "./assets/react/containers/sagas/post-meta.js": 96
+    "./assets/react/fields/components/header-scripts-field.js": 88,
+    "./assets/react/fields/components/footer-scripts-field.js": 89,
+    "./assets/react/fields/constants.js": 90,
+    "./assets/react/sidebars/reducer.js": 91,
+    "./assets/react/store.js": 92,
+    "./assets/react/containers/reducer.js": 94,
+    "./assets/react/fields/reducer.js": 96,
+    "./assets/react/containers/sagas/base.js": 97,
+    "./assets/react/containers/sagas/post-meta.js": 98
   }
 }

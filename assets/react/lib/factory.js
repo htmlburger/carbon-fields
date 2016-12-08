@@ -14,6 +14,8 @@ import Field from 'fields/components/field';
 import SeparatorField from 'fields/components/separator-field';
 import TextField from 'fields/components/text-field';
 import TextareaField from 'fields/components/textarea-field';
+import HeaderScriptsField from 'fields/components/header-scripts-field';
+import FooterScriptsField from 'fields/components/footer-scripts-field';
 import * as FieldConst from 'fields/constants';
 
 /**
@@ -51,6 +53,8 @@ const fields: Object = {
 	[FieldConst.TYPE_SEPARATOR]: SeparatorField,
 	[FieldConst.TYPE_TEXT]: TextField,
 	[FieldConst.TYPE_TEXTAREA]: TextareaField,
+	[FieldConst.TYPE_HEADER_SCRIPTS]: HeaderScriptsField,
+	[FieldConst.TYPE_FOOTER_SCRIPTS]: FooterScriptsField,
 };
 
 /**

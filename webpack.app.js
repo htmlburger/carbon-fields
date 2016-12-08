@@ -47,6 +47,8 @@ module.exports = {
 			'./assets/react/fields/components/separator-field.js',
 			'./assets/react/fields/components/text-field.js',
 			'./assets/react/fields/components/textarea-field.js',
+			'./assets/react/fields/components/header-scripts-field.js',
+			'./assets/react/fields/components/footer-scripts-field.js',
 
 			// Load the store.
 			'./assets/react/store.js'
