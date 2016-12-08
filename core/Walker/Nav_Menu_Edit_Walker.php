@@ -31,7 +31,9 @@ class Nav_Menu_Edit_Walker extends \Walker_Nav_Menu_Edit {
 
 		// List of possible insertion markers, this may vary between WP Core versions
 		$markers = array(
+			# WordPress < 4.7
 			preg_quote( '<p class="field-move hide-if-no-js description description-wide">' ),
+			# WordPress 4.7
 			preg_quote( '<fieldset class="field-move hide-if-no-js description description-wide">' ),
 		);
 
