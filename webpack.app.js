@@ -24,8 +24,8 @@ module.exports = {
 			'./assets/react/containers/sagas/user-meta.js',
 			'./assets/react/containers/sagas/theme-options.js',
 
-			'./assets/react/containers/hocs/with-connect-to-store.js',
-			'./assets/react/containers/hocs/with-initial-side-effects.js',
+			'./assets/react/containers/decorators/with-connect-to-store.js',
+			'./assets/react/containers/decorators/with-initial-side-effects.js',
 
 			'./assets/react/containers/components/container.js',
 			'./assets/react/containers/components/broken-container.js',

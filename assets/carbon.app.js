@@ -153,7 +153,7 @@ this["carbon.app"] =
 /* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _reactRedux = __webpack_require__(19);\n\nvar _selectors = __webpack_require__(11);\n\nvar _actions = __webpack_require__(13);\n\nvar mapStateToProps = function mapStateToProps(state, ownProps) {\n\treturn {\n\t\tfields: (0, _selectors.getContainerFieldsById)(state, ownProps.id)\n\t};\n};\n\nvar mapDispatchToProps = {\n\tsetupContainer: _actions.setupContainer,\n\tcheckVisibility: _actions.checkVisibility\n};\n\nexports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps);\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/hocs/with-connect-to-store.js\n// module id = 18\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/hocs/with-connect-to-store.js?");
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _reactRedux = __webpack_require__(19);\n\nvar _selectors = __webpack_require__(11);\n\nvar _actions = __webpack_require__(13);\n\nvar mapStateToProps = function mapStateToProps(state, ownProps) {\n\treturn {\n\t\tfields: (0, _selectors.getContainerFieldsById)(state, ownProps.id)\n\t};\n};\n\nvar mapDispatchToProps = {\n\tsetupContainer: _actions.setupContainer,\n\tcheckVisibility: _actions.checkVisibility\n};\n\nexports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps);\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/decorators/with-connect-to-store.js\n// module id = 18\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/decorators/with-connect-to-store.js?");
 
 /***/ },
 /* 19 */
@@ -165,7 +165,7 @@ this["carbon.app"] =
 /* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _recompose = __webpack_require__(21);\n\nexports.default = (0, _recompose.lifecycle)({\n\tcomponentWillMount: function componentWillMount() {\n\t\tthis.props.setupContainer(this.props.id, this.props.meta, this.props.ui);\n\t\tthis.props.checkVisibility(this.props.id);\n\t}\n});\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/hocs/with-initial-side-effects.js\n// module id = 20\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/hocs/with-initial-side-effects.js?");
+	eval("'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n\tvalue: true\n});\n\nvar _recompose = __webpack_require__(21);\n\nexports.default = (0, _recompose.lifecycle)({\n\tcomponentWillMount: function componentWillMount() {\n\t\tthis.props.setupContainer(this.props.id, this.props.meta, this.props.ui);\n\t\tthis.props.checkVisibility(this.props.id);\n\t}\n});\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/containers/decorators/with-initial-side-effects.js\n// module id = 20\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/containers/decorators/with-initial-side-effects.js?");
 
 /***/ },
 /* 21 */
