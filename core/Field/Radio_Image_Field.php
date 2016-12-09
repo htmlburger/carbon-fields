@@ -15,7 +15,7 @@ class Radio_Image_Field extends Select_Field {
 			<em><?php esc_html_e( 'no options', 'carbon-fields' ); ?></em>
 		<# } else { #>
 			<div class="carbon-radio-image-list">
-				<# _.each(options, function(option) { console.log(option.value, value);#>
+				<# _.each(options, function(option) { #>
 					<div class="carbon-radio-image-item">
 						<label>
 							<input type="radio" name="{{{ name }}}" value="{{ option.value }}" {{{ option.value == value ? 'checked="checked"' : '' }}} />
