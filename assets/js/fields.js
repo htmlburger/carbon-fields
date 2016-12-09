@@ -1601,6 +1601,24 @@ window.carbon = window.carbon || {};
 	});
 
 	/*--------------------------------------------------------------------------
+	 * RADIO IMAGE
+	 *------------------------------------------------------------------------*/
+
+	// Radio Image MODEL
+	carbon.fields.Model.RadioImage = carbon.fields.Model.Select.extend({});
+
+	// Radio Image VIEW
+	carbon.fields.View.RadioImage = carbon.fields.View.extend({
+
+		sync: function(event) {
+			carbon.fields.View.prototype.sync.call(this, event);
+
+			this.render();
+		}
+
+	});
+
+	/*--------------------------------------------------------------------------
 	 * DATE_TIME
 	 *------------------------------------------------------------------------*/
 
