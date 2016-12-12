@@ -7,5 +7,6 @@ export type ReduxAction = {
 
 export type FieldProps = {
 	field: Object,
+	setValue: Function,
 	children?: React$Element<*>
 }

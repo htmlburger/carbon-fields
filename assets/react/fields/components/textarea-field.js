@@ -14,7 +14,12 @@ const TextareaField = ({ field }: FieldProps): React$Element<*> => {
 	};
 
 	return <Field id={field.uuid} field={field}>
-		<textarea id={field.uuid} name={field.name} defaultValue={field.value} style={style} rows={field.rows ? field.rows : null} />
+		<textarea
+			id={field.uuid}
+			name={field.name}
+			defaultValue={field.value}
+			style={style}
+			rows={field.rows ? field.rows : null} />
 	</Field>;
 };
 

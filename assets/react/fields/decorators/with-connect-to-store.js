@@ -2,6 +2,7 @@
 
 import { connect } from 'react-redux';
 import { getFieldById } from 'fields/selectors';
+import { setValue } from 'fields/actions';
 
 const mapStateToProps: Function = (state: Object, ownProps: Object) => {
 	return {
@@ -9,4 +10,8 @@ const mapStateToProps: Function = (state: Object, ownProps: Object) => {
 	};
 };
 
-export default connect(mapStateToProps);
+const mapDispatchToProps: Object = {
+	setValue,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps);

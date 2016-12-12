@@ -9,7 +9,7 @@ import cx from 'classnames';
  *
  * @abstract
  */
-const Field = ({ field, children }: FieldProps): React$Element<*> => {
+const Field = ({ field, children }: { field: Object, children?: any }): React$Element<*> => {
 	return <div className={cx('carbon-field', `carbon-${field.type}`)}>
 		<label htmlFor={field.id}>
 			{field.label}

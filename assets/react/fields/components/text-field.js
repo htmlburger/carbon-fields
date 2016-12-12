@@ -8,9 +8,15 @@ import withConnectToStore from 'fields/decorators/with-connect-to-store';
  * @param  {Object} props
  * @return {React.Element}
  */
-const TextField = ({ field }: FieldProps): React$Element<*> => {
+const TextField = ({ field, setValue }: FieldProps): React$Element<*> => {
 	return <Field id={field.uuid} field={field}>
-		<input id={field.uuid} type="text" name={field.name} defaultValue={field.value} className="regular-text" />
+		<input
+			type="text"
+			id={field.uuid}
+			name={field.name}
+			defaultValue={field.value}
+			className="regular-text"
+			onChange={(e) => setValue(field.uuid, e.target.value)} />
 	</Field>;
 };
 
