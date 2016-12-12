@@ -4,3 +4,8 @@ export type ReduxAction = {
 	meta?: any,
 	error?: boolean
 };
+
+export type FieldProps = {
+	field: Object,
+	children?: React$Element<*>
+}

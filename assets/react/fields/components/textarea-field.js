@@ -8,13 +8,13 @@ import withConnectToStore from 'fields/decorators/with-connect-to-store';
  * @param  {Object} props
  * @return {React.Element}
  */
-const TextareaField = ({ id, field }: { id: string, field: Object }) => {
+const TextareaField = ({ field }: FieldProps): React$Element<*> => {
 	const style = {
 		height: field.height,
 	};
 
-	return <Field id={id} field={field}>
-		<textarea id={id} name={field.name} defaultValue={field.value} style={style} rows={field.rows ? field.rows : null} />
+	return <Field id={field.uuid} field={field}>
+		<textarea id={field.uuid} name={field.name} defaultValue={field.value} style={style} rows={field.rows ? field.rows : null} />
 	</Field>;
 };
 

@@ -9,13 +9,13 @@ import withConnectToStore from 'fields/decorators/with-connect-to-store';
  * @param  {Object} props
  * @return {React.Element}
  */
-const FileField = ({ id, field }: { id: string, field: Object }) => {
-	return <Field id={id} field={field}>
+const FileField = ({ field }: FieldProps): React$Element<*> => {
+	return <Field id={field.uuid} field={field}>
 		<div className="carbon-attachment">
 			<input
 				type="text"
 				className="regular-text carbon-file-field"
-				id={id}
+				id={field.uuid}
 				name={field.name}
 				defaultValue={field.value}
 				style={field.value_type === 'id' ? { display: 'none' } : {}}

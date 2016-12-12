@@ -8,9 +8,9 @@ import withConnectToStore from 'fields/decorators/with-connect-to-store';
  * @param  {Object} props
  * @return {React.Element}
  */
-const TextField = ({ id, field }: { id: string, field: Object }) => {
-	return <Field id={id} field={field}>
-		<input id={id} type="text" name={field.name} defaultValue={field.value} className="regular-text" />
+const TextField = ({ field }: FieldProps): React$Element<*> => {
+	return <Field id={field.uuid} field={field}>
+		<input id={field.uuid} type="text" name={field.name} defaultValue={field.value} className="regular-text" />
 	</Field>;
 };
 

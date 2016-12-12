@@ -3,18 +3,13 @@
 import React from 'react';
 import cx from 'classnames';
 
-type Props = {
-	field: Object,
-	children?: React$Element<*>
-};
-
 /**
  * The base UI component used for rendering.
  * All fields should use composition to extend this component.
  *
  * @abstract
  */
-const Field = ({ field, children }: Props) => {
+const Field = ({ field, children }: FieldProps): React$Element<*> => {
 	return <div className={cx('carbon-field', `carbon-${field.type}`)}>
 		<label htmlFor={field.id}>
 			{field.label}
