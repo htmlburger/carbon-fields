@@ -23,7 +23,7 @@ const FileField = ({ id, field }: { id: string, field: Object }) => {
 
 			<div className={cx('carbon-description', { 'hidden': !field.value })}>
 				<div className={cx('carbon-attachment-preview', { 'hidden': !field.thumb_url })}>
-					<img src={ field.thumb_url } className="thumbnail-image" />
+					<img src={field.thumb_url} className="thumbnail-image" />
 
 					<div className="carbon-file-remove dashicons-before dashicons-no-alt"></div>
 				</div>
@@ -31,7 +31,7 @@ const FileField = ({ id, field }: { id: string, field: Object }) => {
 				<div className="carbon-attachment-file-name">{field.file_name}</div>
 			</div>
 
-			<span id={`c2_open_media${ id.replace('-', '_')}`} className="button c2_open_media">
+			<span id={`c2_open_media${field.id.replace('-', '_')}`} className="button c2_open_media">
 				{field.button_label}
 			</span>
 		</div>

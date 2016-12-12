@@ -12,7 +12,7 @@ import { makeField } from 'lib/factory';
  */
 const Container = ({ id, fields }: { id: string, fields: Object[] }) => {
 	return <div className={cx('carbon-container', `carbon-container-${id}`)}>
-		{fields.map(({ id, type }) => makeField(type, { id }))}
+		{fields.map(({ uuid, type }) => makeField(type, { uuid }))}
 	</div>;
 };
 

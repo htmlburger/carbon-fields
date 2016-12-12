@@ -71,11 +71,9 @@ const fields: Object = {
 export function makeField(type: string, props: Object): any {
 	const Component = fields[type];
 
-	console.log(type);
-
 	if (!Component) {
 		return null;
 	}
 
-	return <Component key={props.id} {...props} />;
+	return <Component key={props.uuid} {...props} />;
 }
