@@ -8,7 +8,7 @@ import withConnectToStore from 'fields/decorators/with-connect-to-store';
  * @param  {Object} props
  * @return {React.Element}
  */
-const TextareaField = ({ field }: FieldProps): React$Element<*> => {
+const TextareaField = ({ field, setValue }: FieldProps): React$Element<*> => {
 	const style = {
 		height: field.height,
 	};
@@ -19,7 +19,8 @@ const TextareaField = ({ field }: FieldProps): React$Element<*> => {
 			name={field.name}
 			defaultValue={field.value}
 			style={style}
-			rows={field.rows ? field.rows : null} />
+			rows={field.rows ? field.rows : null}
+			onChange={(e) => setValue(field.uuid, e.target.value)} />
 	</Field>;
 };
 
