@@ -75,5 +75,5 @@ export function makeField(type: string, props: Object): any {
 		return null;
 	}
 
-	return <Component key={props.uuid} {...props} />;
+	return <Component key={props.id} type={type} {...props} />;
 }

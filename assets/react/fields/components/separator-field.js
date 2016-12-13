@@ -2,16 +2,18 @@
 
 import React from 'react';
 import Field from 'fields/components/field';
-import withConnectToStore from 'fields/decorators/with-connect-to-store';
+import createConnectStore from 'fields/decorators/connect-to-store';
 
 /**
+ * Create a visual separator between adjacent fields.
+ *
  * @param  {Object} props
  * @return {React.Element}
  */
 const SeparatorField = ({ field }: FieldProps): React$Element<*> => {
-	return <Field id={field.uuid} field={field}>
+	return <Field field={field}>
 		<h3>{field.label}</h3>
 	</Field>;
 };
 
-export default withConnectToStore(SeparatorField);
+export default createConnectStore()(SeparatorField);

@@ -20,7 +20,7 @@ export function normalizePreloadedState(state: Object): Object {
 		return container;
 	});
 
-	let fields: Object = keyBy(fieldsAccumulator, 'uuid');
+	let fields: Object = keyBy(fieldsAccumulator, 'id');
 
 	return { containers, sidebars, fields };
 }
@@ -46,9 +46,9 @@ export function flatField(field: Object, accumulator: Object[]): Object {
 		});
 	}
 
-	field.uuid = uniqueId('carbon-field-');
+	field.id = uniqueId('carbon-field-');
 
 	accumulator.push(field);
 
-	return pick(field, 'id', 'uuid', 'type');
+	return pick(field, 'id', 'type');
 }

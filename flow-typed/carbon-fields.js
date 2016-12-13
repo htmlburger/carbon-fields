@@ -6,7 +6,14 @@ export type ReduxAction = {
 };
 
 export type FieldProps = {
+	id: string,
+	type: string,
 	field: Object,
-	setValue: Function,
-	children?: React$Element<*>
-}
+	children?: React$Element<*>,
+	setValue: Function
+};
+
+export type FileFieldProps = FieldProps & {
+	setupMediaBrowser: Function,
+	openMediaBrowser: Function
+};

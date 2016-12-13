@@ -87,3 +87,38 @@ export function createScrollChannel(selector: string): Object {
 		});
 	});
 }
+
+/**
+ * Create a channel for interaction with the media browser of WordPress.
+ *
+ * @param  {Object} settings
+ * @return {Object}
+ */
+export function createMediaBrowserChannel(settings: Object): Object {
+	return eventChannel((emit) => {
+		// Create a new instance of the media browser.
+		const browser: Object = window.wp.media(settings);
+
+		// Emit the selection through the channel.
+		const handler: Function = () => {
+			emit({
+				selection: browser.state().get('selection').toJSON(),
+			});
+		};
+
+		// Cancel the subscription.
+		const unsubscribe: Function = () => {
+			browser.off('select', handler);
+		};
+
+		// Setup the subscription.
+		browser.on('select', handler);
+
+		// Emit the instance of browser so it can be used by subscribers.
+		emit({
+			browser,
+		});
+
+		return unsubscribe;
+	}, buffers.fixed(1));
+}

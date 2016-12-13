@@ -13,6 +13,8 @@ import termMetaForeman from 'containers/sagas/term-meta';
 import userMetaForeman from 'containers/sagas/user-meta';
 import themeOptionsForeman from 'containers/sagas/theme-options';
 
+import mediaBrowserForeman from 'fields/sagas/media-browser';
+
 const preloadedState = normalizePreloadedState(window.carbon_json);
 const saga = createSagaMiddleware();
 const reducer = combineReducers({ containers, sidebars, fields });
@@ -23,5 +25,6 @@ saga.run(postMetaForeman);
 saga.run(termMetaForeman);
 saga.run(userMetaForeman);
 saga.run(themeOptionsForeman);
+saga.run(mediaBrowserForeman);
 
 export default store;

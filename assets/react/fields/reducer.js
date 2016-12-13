@@ -1,7 +1,7 @@
 /* @flow */
 
 import immutable from 'object-path-immutable';
-import { SET_VALUE } from 'fields/actions';
+import { SET_VALUE, UPDATE_FIELD } from 'fields/actions';
 
 /**
  * The reducer that handles manipulation to field's state.
@@ -13,6 +13,7 @@ import { SET_VALUE } from 'fields/actions';
 export default function(state: Object = {}, action: ReduxAction): Object {
 	switch (action.type) {
 		case SET_VALUE: return setValue(state, action);
+		case UPDATE_FIELD: return updateField(state, action);
 		default: return state;
 	}
 }
@@ -25,7 +26,20 @@ export default function(state: Object = {}, action: ReduxAction): Object {
  * @return {Object}
  */
 function setValue(state: Object, action: ReduxAction): Object {
-	const { fieldUuid, value } = action.payload;
+	const { fieldId, value } = action.payload;
 
-	return immutable.set(state, `${fieldUuid}.value`, value);
+	return immutable.set(state, `${fieldId}.value`, value);
+}
+
+/**
+ * Update the specified field.
+ *
+ * @param  {Object} state
+ * @param  {Object} action
+ * @return {Object}
+ */
+function updateField(state: Object, action: ReduxAction): Object {
+	const { fieldId, values } = action.payload;
+
+	return immutable.assign(state, fieldId, values);
 }

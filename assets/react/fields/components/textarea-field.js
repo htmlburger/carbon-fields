@@ -2,9 +2,11 @@
 
 import React from 'react';
 import Field from 'fields/components/field';
-import withConnectToStore from 'fields/decorators/with-connect-to-store';
+import createConnectStore from 'fields/decorators/connect-to-store';
 
 /**
+ * Render a multiline text input field.
+ *
  * @param  {Object} props
  * @return {React.Element}
  */
@@ -13,15 +15,15 @@ const TextareaField = ({ field, setValue }: FieldProps): React$Element<*> => {
 		height: field.height,
 	};
 
-	return <Field id={field.uuid} field={field}>
+	return <Field field={field}>
 		<textarea
-			id={field.uuid}
+			id={field.id}
 			name={field.name}
 			defaultValue={field.value}
 			style={style}
 			rows={field.rows ? field.rows : null}
-			onChange={(e) => setValue(field.uuid, e.target.value)} />
+			onChange={(e) => setValue(field.id, e.target.value)} />
 	</Field>;
 };
 
-export default withConnectToStore(TextareaField);
+export default createConnectStore()(TextareaField);
