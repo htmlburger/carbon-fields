@@ -10,7 +10,8 @@ export type FieldProps = {
 	type: string,
 	field: Object,
 	children?: React$Element<*>,
-	setValue: Function
+	setValue: Function,
+	updateField: Function
 };
 
 export type FileFieldProps = FieldProps & {

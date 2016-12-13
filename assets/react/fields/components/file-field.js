@@ -15,13 +15,21 @@ import { setupMediaBrowser, openMediaBrowser } from 'fields/actions';
  * @param  {Object} props
  * @return {React.Element}
  */
-const FileField = ({ id, field, openMediaBrowser }: FileFieldProps): React$Element<*> => {
+const FileField = ({ field, updateField, openMediaBrowser }: FileFieldProps): React$Element<*> => {
+	const removeFile = () => {
+		updateField(field.id, {
+			value: '',
+			file_name: '',
+			thumb_url: ''
+		});
+	};
+
 	return <Field field={field}>
 		<div className="carbon-attachment">
 			<input
 				type="text"
 				className="regular-text carbon-file-field"
-				id={id}
+				id={field.id}
 				name={field.name}
 				defaultValue={field.value}
 				style={field.value_type === 'id' ? { display: 'none' } : {}}
@@ -31,13 +39,13 @@ const FileField = ({ id, field, openMediaBrowser }: FileFieldProps): React$Eleme
 				<div className={cx('carbon-attachment-preview', { 'hidden': !field.thumb_url })}>
 					<img src={field.thumb_url} className="thumbnail-image" />
 
-					<div className="carbon-file-remove dashicons-before dashicons-no-alt"></div>
+					<div className="carbon-file-remove dashicons-before dashicons-no-alt" onClick={removeFile}></div>
 				</div>
 
 				<div className="carbon-attachment-file-name">{field.file_name}</div>
 			</div>
 
-			<span className="button c2_open_media" onClick={() => openMediaBrowser(id)}>
+			<span className="button c2_open_media" onClick={() => openMediaBrowser(field.id)}>
 				{field.button_label}
 			</span>
 		</div>
