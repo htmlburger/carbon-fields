@@ -14,6 +14,8 @@ import { setupMediaBrowser, openMediaBrowser } from 'fields/actions';
  *
  * @param  {Object} props
  * @return {React.Element}
+ *
+ * @todo   Replace the inline `style` with a class.
  */
 const FileField = ({ field, updateField, openMediaBrowser }: FileFieldProps): React$Element<*> => {
 	const removeFile = () => {

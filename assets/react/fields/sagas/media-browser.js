@@ -17,6 +17,8 @@ import { SETUP_MEDIA_BROWSER, OPEN_MEDIA_BROWSER } from 'fields/actions';
  * @param  {Object} browser
  * @param  {Object} action
  * @return {void}
+ *
+ * @todo   Handle the rest of selected attachments.
  */
 export function* workerOpenMediaBrowser(channel: Object, field: Object, browser: Object, action: Object): any {
 	// Don't open the browser if the field doesn't have correct id.
@@ -30,8 +32,6 @@ export function* workerOpenMediaBrowser(channel: Object, field: Object, browser:
 		const { selection }: { selection: Object[] } = yield take(channel);
 		const [ attachment, ...attachments ] = selection;
 		const thumbnail = yield call(getAttachmentThumbnail, attachment);
-
-		// TODO: Handle multiple attachments.
 
 		yield put(updateField(field.id, {
 			file_type: attachment.type,
