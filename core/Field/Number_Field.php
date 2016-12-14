@@ -39,6 +39,9 @@ class Number_Field extends Field {
 	function save() {
 		$name = $this->get_name();
 		$value = $this->get_value();
+		$min = $this->min;
+		$max = $this->max;
+		$step = $this->step;
 
 		// Set the value for the field
 		$this->set_name( $name );
@@ -47,9 +50,12 @@ class Number_Field extends Field {
 		if ( isset( $value ) && $value !== '' && is_numeric( $value ) ) {
 			$value = floatval( $value );
 
-			$is_valid_min = $this->min <= $value;
-			$is_valid_max = $value <= $this->max;
-			$is_valid_step = ( $value % $this->step ) === 0;
+			$is_valid_min = $min <= $value;
+			$is_valid_max = $value <= $max;
+
+			// Base Formula "value = min + n * step" where "n" should be integer
+			$test_for_step_validation = ( $value - $min ) / $step;
+			$is_valid_step = $test_for_step_validation === floor( $test_for_step_validation );
 
 			if ( $value !== '' && $is_valid_min && $is_valid_max && $is_valid_step ) {
 				$field_value = $value;
