@@ -830,6 +830,9 @@ class Field {
 				'message_form_validation_failed' => __( 'Please fill out all fields correctly. ', 'carbon-fields' ),
 				'message_required_field' => __( 'This field is required. ', 'carbon-fields' ),
 				'message_choose_option' => __( 'Please choose an option. ', 'carbon-fields' ),
+				'message_validation_failed_field_number_min' => __( 'Value must be greater than or equal to %s.', 'carbon-fields' ),
+				'message_validation_failed_field_number_max' => __( 'Value must be less than or equal to %s.', 'carbon-fields' ),
+				'message_validation_failed_field_number_step' => __( 'Please enter a valid value. The two nearest valid values are %s and %s.', 'carbon-fields' ),
 			)
 		);
 	}
