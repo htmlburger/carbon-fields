@@ -2,8 +2,8 @@
 Contributors: htmlburger, m1r0, kamenarov, stoyanov.gs, pkostadinov, panchev, tyxla, xsisqox, catahac, avakul, dilirity, sstoqnov, kaloyanivanov, brutalenemy666, magadanski_uchen, germozy
 Tags: custom, field, custom field, advanced, repeater, post, type, text, textarea, file, image, rich text, wysiwyg, select, dropdown, checkbox, radio, association, relationship, map, taxonomy, term, user, comment, option, options, widget, simple fields, magic fields, more fields, post meta, term meta, user meta, comment meta, theme options, custom widget, nested fields
 Requires at least: 4.0
-Tested up to: 4.6.1
-Stable tag: 1.4
+Tested up to: 4.7
+Stable tag: 1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,11 @@ A. Sure, go ahead! It is completely open source.
 6. Example that contains most of the available fields, nested fields included.
 
 == Changelog ==
+
+= 1.5 =
+ * Improved GUI! Big thanks to @holmar and @georgknabl for the great contribution! ([preview](https://cloud.githubusercontent.com/assets/7590968/18725040/fdc911f8-803e-11e6-9749-a218b0584e27.png))
+ * Added Brazilian Portuguese (pt_BR) translation (thanks to @elvishp2006).
+ * Many bugfixes and improvements.
 
 = 1.4 =
  * Introduced the Complex Field vertical tabbed layout.
