@@ -1629,15 +1629,21 @@ window.carbon = window.carbon || {};
 			var value = attrs.value;
 
 			var testStepValidation = ( value - min ) / step;
+			var testStepValidationFloor = parseInt( testStepValidation, 10 );
+			var testStepValidationCeil = testStepValidationFloor + 1;
 
 			if ( value === '' ) {
 				hasErrors = crbl10n.message_required_field;
 			} else if ( isNaN(value) ) {
 				hasErrors = crbl10n.message_form_validation_failed;
-			} else if ( min > value || value > max ) {
-				hasErrors = crbl10n.message_form_validation_failed;
-			} else if ( testStepValidation !== parseInt( testStepValidation, 10 ) ) {
-				hasErrors = crbl10n.message_form_validation_failed;
+			} else if ( min > value ) {
+				hasErrors = crbl10n.message_validation_failed_number_min.replace( '%s', min );
+			} else if ( value > max ) {
+				hasErrors = crbl10n.message_validation_failed_number_max.replace( '%s', max );
+			} else if ( testStepValidation !== testStepValidationFloor ) {
+				hasErrors = crbl10n.message_validation_failed_number_step
+					.replace( '%1$s', ( testStepValidationFloor * step ) + min )
+					.replace( '%2$s', ( testStepValidationCeil * step ) + min );
 			}
 
 			return hasErrors;
