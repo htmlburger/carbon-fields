@@ -17,7 +17,9 @@ const Field = ({ field, children }: FieldProps): React$Element<*> => {
 		[`width-${field.width}`]: field.width,
 	});
 
-	return <div className={classes}>
+	const styles = field.width ? { width: `${field.width}%` } : {};
+
+	return <div className={classes} style={styles}>
 		<label htmlFor={field.id}>
 			{field.label}
 			{field.required ? <span className="carbon-required">*</span> : ''}

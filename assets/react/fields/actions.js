@@ -22,6 +22,16 @@ export const SET_VALUE = 'fields/SET_VALUE';
 export const setValue: Function = createAction(SET_VALUE, (fieldId: string, value: any) => ({ fieldId, value }));
 
 /**
+ * Update the object that contains information about field's UI.
+ *
+ * @param  {String} id
+ * @param  {Object} ui
+ * @return {Object}
+ */
+export const SET_UI = 'fields/SET_UI';
+export const setUI: Function = createAction(SET_UI, (id: string, ui: Object) => ({ id, ui }));
+
+/**
  * Update the field.
  *
  * @param  {String} fieldId

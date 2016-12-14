@@ -11,7 +11,8 @@ export type FieldProps = {
 	field: Object,
 	children?: React$Element<*>,
 	setValue: Function,
-	updateField: Function
+	updateField: Function,
+	setUI: Function
 };
 
 export type FileFieldProps = FieldProps & {

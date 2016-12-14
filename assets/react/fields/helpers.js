@@ -1,3 +1,5 @@
+/* @flow */
+
 /**
  * Get the thumbnail of the attachment.
  *

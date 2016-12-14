@@ -18,7 +18,11 @@ import { setupMediaBrowser, openMediaBrowser } from 'fields/actions';
  * @todo   Replace the inline `style` with a class.
  */
 const FileField = ({ field, updateField, openMediaBrowser }: FileFieldProps): React$Element<*> => {
-	const removeFile = () => {
+	const openBrowser = () => {
+		openMediaBrowser(field.id);
+	};
+
+	const clearSelection = () => {
 		updateField(field.id, {
 			value: '',
 			file_name: '',
@@ -41,13 +45,13 @@ const FileField = ({ field, updateField, openMediaBrowser }: FileFieldProps): Re
 				<div className={cx('carbon-attachment-preview', { 'hidden': !field.thumb_url })}>
 					<img src={field.thumb_url} className="thumbnail-image" />
 
-					<div className="carbon-file-remove dashicons-before dashicons-no-alt" onClick={removeFile}></div>
+					<div className="carbon-file-remove dashicons-before dashicons-no-alt" onClick={clearSelection}></div>
 				</div>
 
 				<div className="carbon-attachment-file-name">{field.file_name}</div>
 			</div>
 
-			<span className="button c2_open_media" onClick={() => openMediaBrowser(field.id)}>
+			<span className="button c2_open_media" onClick={openBrowser}>
 				{field.button_label}
 			</span>
 		</div>
@@ -63,6 +67,7 @@ const hooks: Object = {
 	componentDidMount() {
 		this.props.setupField(this.props.id, this.props.type);
 		this.props.setupMediaBrowser(this.props.id);
+		this.props.setUI(this.props.id, this.props.ui);
 	}
 };
 
