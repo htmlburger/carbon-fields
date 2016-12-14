@@ -10,7 +10,6 @@ export type FieldProps = {
 	type: string,
 	field: Object,
 	children?: React$Element<*>,
-	setValue: Function,
 	updateField: Function,
 	setUI: Function
 };

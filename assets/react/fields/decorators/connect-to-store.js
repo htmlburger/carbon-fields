@@ -2,7 +2,7 @@
 
 import { connect } from 'react-redux';
 import { getFieldById } from 'fields/selectors';
-import { setupField, setValue, updateField, setUI } from 'fields/actions';
+import { setupField, updateField, setUI } from 'fields/actions';
 
 /**
  * The default state that will be retrieved from the store.
@@ -20,7 +20,6 @@ const defaultMapStateToProps: Function = (state: Object, ownProps: Object) => ({
  */
 const defaultMapDispatchToProps: Object = {
 	setupField,
-	setValue,
 	updateField,
 	setUI,
 };

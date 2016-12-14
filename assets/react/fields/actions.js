@@ -12,16 +12,6 @@ export const SETUP_FIELD = 'fields/SETUP_FIELD';
 export const setupField: Function = createAction(SETUP_FIELD, (fieldId: string, type: string) => ({ fieldId, type }));
 
 /**
- * Update the value of field.
- *
- * @param  {String} fieldId
- * @param  {mixed}  value
- * @return {Object}
- */
-export const SET_VALUE = 'fields/SET_VALUE';
-export const setValue: Function = createAction(SET_VALUE, (fieldId: string, value: any) => ({ fieldId, value }));
-
-/**
  * Update the object that contains information about field's UI.
  *
  * @param  {String} id
