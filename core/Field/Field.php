@@ -378,7 +378,7 @@ class Field {
 	 * @return mixed
 	 **/
 	public function get_value() {
-		return $this->value;
+		return apply_filters( "carbon_fields_get_{$this->get_base_name()}_value", $this->value, $this );
 	}
 
 	/**
