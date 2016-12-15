@@ -1605,18 +1605,7 @@ window.carbon = window.carbon || {};
 	 *------------------------------------------------------------------------*/
 
 	// Radio Image MODEL
-	carbon.fields.Model.RadioImage = carbon.fields.Model.Select.extend({});
-
-	// Radio Image VIEW
-	carbon.fields.View.RadioImage = carbon.fields.View.extend({
-
-		sync: function(event) {
-			carbon.fields.View.prototype.sync.call(this, event);
-
-			this.render();
-		}
-
-	});
+	carbon.fields.Model.RadioImage = carbon.fields.Model.Select;
 
 	/*--------------------------------------------------------------------------
 	 * DATE_TIME

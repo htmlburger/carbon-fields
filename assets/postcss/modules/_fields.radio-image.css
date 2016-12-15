@@ -1,33 +1,13 @@
 /* ------------------------------------------------------------ *\
 	Field Radio Image
 \* ------------------------------------------------------------ */
-.carbon-radio-image-list {
-	overflow: hidden;
-}
 
-.carbon-radio-image-item {
-	float: left;
-	margin-bottom: 10px;
-}
+.carbon-radio-image-list { font-size: 0; }
 
-.carbon-radio-image-item input {
-	display: none;
-}
+.carbon-radio-image-item { display: inline-block; vertical-align: top; margin-bottom: 10px; }
+.carbon-radio-image-item label { padding: 0; }
+.carbon-radio-image-item input { display: none; }
+.carbon-radio-image-item input:checked + .carbon-radio-image-holder { border-color: $color-blue-font; }
 
-.thumbnail-image-wrap {
-	border: 3px solid transparent;
-	margin: 0 10px 0 0;
-	line-height: 0;
-}
-
-.thumbnail-image-wrap img {
-	height: auto;
-	max-width: 120px;
-	padding: 5px;
-	border: 1px solid #e6e6e6;
-	transition: border-color 0.25s
-}
-
-.thumbnail-image-wrap.active {
-	border-color: #4db2ec;
-}
+.carbon-radio-image-holder { border: 2px solid transparent; margin: 0 10px 0 0; line-height: 0; }
+.carbon-radio-image-holder img { height: auto; max-width: 100%; padding: 5px; border: 1px solid $color-border; transition: border-color .25s }

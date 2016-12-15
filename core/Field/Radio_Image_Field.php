@@ -20,7 +20,7 @@ class Radio_Image_Field extends Select_Field {
 						<label>
 							<input type="radio" name="{{{ name }}}" value="{{ option.value }}" {{{ option.value == value ? 'checked="checked"' : '' }}} />
 
-							<figure class="thumbnail-image-wrap {{{ option.value == value ? 'active' : '' }}}">
+							<figure class="carbon-radio-image-holder">
 								<img src="{{{ option.name }}}" />
 							</figure>
 						</label>
