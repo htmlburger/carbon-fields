@@ -879,6 +879,7 @@ window.carbon = window.carbon || {};
 		},
 
 		hideColorPicker: function() {
+			console.log('calleds');
 			var $field = this.$field;
 
 			setTimeout(function() {

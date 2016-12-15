@@ -9,6 +9,7 @@ module.exports = {
 		'carbon.vendor': [
 			'react',
 			'react-dom',
+			'react-color',
 			'react-redux',
 			'redux',
 			'redux-saga',

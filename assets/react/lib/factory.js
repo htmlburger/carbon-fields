@@ -17,6 +17,7 @@ import TextareaField from 'fields/components/textarea-field';
 import SeparatorField from 'fields/components/separator-field';
 import HeaderScriptsField from 'fields/components/header-scripts-field';
 import FooterScriptsField from 'fields/components/footer-scripts-field';
+import ColorField from 'fields/components/color-field';
 import * as FieldConst from 'fields/constants';
 
 /**
@@ -57,6 +58,7 @@ const fields: Object = {
 	[FieldConst.TYPE_SEPARATOR]: SeparatorField,
 	[FieldConst.TYPE_HEADER_SCRIPTS]: HeaderScriptsField,
 	[FieldConst.TYPE_FOOTER_SCRIPTS]: FooterScriptsField,
+	[FieldConst.TYPE_COLOR]: ColorField,
 };
 
 /**
