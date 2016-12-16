@@ -82,13 +82,14 @@
     "./assets/react/fields/components/header-scripts-field.js": 92,
     "./assets/react/fields/components/footer-scripts-field.js": 93,
     "./assets/react/fields/components/color-field.js": 94,
-    "./assets/react/sidebars/reducer.js": 96,
-    "./assets/react/fields/sagas/media-browser.js": 97,
-    "./assets/react/fields/helpers.js": 98,
-    "./assets/react/store.js": 99,
-    "./assets/react/containers/reducer.js": 101,
-    "./assets/react/fields/reducer.js": 103,
-    "./assets/react/containers/sagas/base.js": 104,
-    "./assets/react/containers/sagas/post-meta.js": 105
+    "./assets/react/fields/components/checkbox-field.js": 96,
+    "./assets/react/sidebars/reducer.js": 97,
+    "./assets/react/fields/sagas/media-browser.js": 98,
+    "./assets/react/fields/helpers.js": 99,
+    "./assets/react/store.js": 100,
+    "./assets/react/containers/reducer.js": 102,
+    "./assets/react/fields/reducer.js": 104,
+    "./assets/react/containers/sagas/base.js": 105,
+    "./assets/react/containers/sagas/post-meta.js": 106
   }
 }
