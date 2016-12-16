@@ -1,5 +1,3 @@
-/* @flow */
-
 import $ from 'jquery';
 import { eventChannel, buffers, END } from 'redux-saga';
 
@@ -13,13 +11,13 @@ import { eventChannel, buffers, END } from 'redux-saga';
  * @param  {String}   [childSelector]
  * @return {Object}
  */
-export function createChannel(selector: string, event: string, handler: Function, childSelector: ?string = null): Object {
+export function createChannel(selector, event, handler, childSelector = null) {
 	return eventChannel((emit) => {
 		// Find the element in DOM.
-		const $element: JQuery = $(selector);
+		const $element = $(selector);
 
 		// Cancel the subscription.
-		const unsubscribe: Function = () => {
+		const unsubscribe = () => {
 			$element.off(event, childSelector, handler);
 		};
 
@@ -47,7 +45,7 @@ export function createChannel(selector: string, event: string, handler: Function
  * @param  {String} selector
  * @return {Object}
  */
-export function createSelectboxChannel(selector: string): Object {
+export function createSelectboxChannel(selector) {
 	return createChannel(selector, 'change', (emit, $element) => {
 		emit({
 			value: $element.val(),
@@ -62,7 +60,7 @@ export function createSelectboxChannel(selector: string): Object {
  * @param  {String} selector
  * @return {Object}
  */
-export function createCheckableChannel(selector: string): Object {
+export function createCheckableChannel(selector) {
 	return createChannel(selector, 'change', (emit, $element) => {
 		const elements: HTMLInputElement[] = $element.find('input:checked').get();
 		const values: string[] = elements.map(element => element.value);
@@ -80,7 +78,7 @@ export function createCheckableChannel(selector: string): Object {
  * @param  {String} selector
  * @return {Object}
  */
-export function createScrollChannel(selector: string): Object {
+export function createScrollChannel(selector) {
 	return createChannel(selector, 'scroll', (emit, $element) => {
 		emit({
 			value: $element.scrollTop()
@@ -94,20 +92,20 @@ export function createScrollChannel(selector: string): Object {
  * @param  {Object} settings
  * @return {Object}
  */
-export function createMediaBrowserChannel(settings: Object): Object {
+export function createMediaBrowserChannel(settings) {
 	return eventChannel((emit) => {
 		// Create a new instance of the media browser.
-		const browser: Object = window.wp.media(settings);
+		const browser = window.wp.media(settings);
 
 		// Emit the selection through the channel.
-		const handler: Function = () => {
+		const handler = () => {
 			emit({
 				selection: browser.state().get('selection').toJSON(),
 			});
 		};
 
 		// Cancel the subscription.
-		const unsubscribe: Function = () => {
+		const unsubscribe = () => {
 			browser.off('select', handler);
 		};
 

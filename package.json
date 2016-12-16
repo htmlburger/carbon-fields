@@ -15,8 +15,7 @@
     "webpack:vendor": "webpack --config webpack.vendor.js",
     "webpack:app": "webpack --config webpack.app.js",
     "webpack:boot": "webpack --config webpack.boot.js",
-    "flowtype": "watch \"flow || exit 0\" assets/react",
-    "react": "npm run webpack:vendor && concurrently --kill-others --prefix \"[{name}]\" --names \"Webpack:App,Webpack:Boot,Flowtype\" -c \"bgBlue.bold,bgYellow.bold,bgGreen.bold\" \"npm run webpack:app -- -w\" \"npm run webpack:boot -- -w\" \"npm run flowtype\""
+    "react": "npm run webpack:vendor && concurrently --kill-others --prefix \"[{name}]\" --names \"Webpack:App,Webpack:Boot\" -c \"bgBlue.bold,bgYellow.bold,bgGreen.bold\" \"npm run webpack:app -- -w\" \"npm run webpack:boot -- -w\""
   },
   "repository": {
     "type": "git",
@@ -44,7 +43,6 @@
     "concurrently": "^3.1.0",
     "cssnano": "^3.8.0",
     "enzyme": "^2.6.0",
-    "flow-bin": "^0.35.0",
     "jest": "^17.0.3",
     "jquery": "1.12",
     "postcss-cli": "^2.6.0",

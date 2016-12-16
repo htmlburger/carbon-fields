@@ -1,5 +1,3 @@
-/* @flow */
-
 import { lifecycle } from 'recompose';
 
 export default lifecycle({

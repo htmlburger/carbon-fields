@@ -1,5 +1,3 @@
-/* @flow */
-
 import { isEmpty } from 'lodash';
 import { takeEvery } from 'redux-saga';
 import { take, call, put, fork, select } from 'redux-saga/effects';
@@ -16,12 +14,12 @@ import { SETUP_CONTAINER, SET_META } from 'containers/actions';
  * @param  {String} containerId
  * @return {void}
  */
-export function* workerSyncRole(containerId: string): any {
+export function* workerSyncRole(containerId) {
 	const channel = yield call(createSelectboxChannel, 'select#role');
 
 	try {
 		while (true) {
-			const { value }: { value: string } = yield take(channel);
+			const { value } = yield take(channel);
 
 			yield put(setMeta({
 				containerId,
@@ -33,7 +31,7 @@ export function* workerSyncRole(containerId: string): any {
 	} finally {
 		// The selectbox is missing on the profile page.
 		// So we need to read the role from the container in DOM.
-		const el: HTMLElement = yield call([document, document.querySelector], `#${containerId}`);
+		const el = yield call([document, document.querySelector], `#${containerId}`);
 
 		if (el.dataset.profileRole) {
 			yield put(setMeta({
@@ -52,8 +50,8 @@ export function* workerSyncRole(containerId: string): any {
  * @param  {Object} action
  * @return {void}
  */
-export function* workerSetupContainer(action: ReduxAction): any {
-	const { containerId }: { containerId: string } = action.payload;
+export function* workerSetupContainer(action) {
+	const { containerId } = action.payload;
 
 	// Don't do anything if the type isn't correct.
 	if (!(yield select(canProcessAction, containerId, TYPE_USER_META))) {
@@ -69,16 +67,16 @@ export function* workerSetupContainer(action: ReduxAction): any {
  * @param  {Object} action
  * @return {void}
  */
-export function* workerCheckVisibility(action: ReduxAction): any {
-	const { containerId }: { containerId: string } = action.payload;
+export function* workerCheckVisibility(action) {
+	const { containerId } = action.payload;
 
 	// Don't do anything if the type isn't correct.
 	if (!(yield select(canProcessAction, containerId, TYPE_USER_META))) {
 		return;
 	}
 
-	const container: Object = yield select(getContainerById, containerId);
-	let isVisible: boolean = true;
+	const container = yield select(getContainerById, containerId);
+	let isVisible = true;
 
 	if (!isEmpty(container.settings.show_on.role) && container.settings.show_on.role.indexOf(container.meta.role) === -1) {
 		isVisible = false;
@@ -97,7 +95,7 @@ export function* workerCheckVisibility(action: ReduxAction): any {
  *
  * @return {void}
  */
-export default function* foreman(): any {
+export default function* foreman() {
 	yield [
 		takeEvery(SETUP_CONTAINER, workerSetupContainer),
 		takeEvery(SET_META, workerCheckVisibility),

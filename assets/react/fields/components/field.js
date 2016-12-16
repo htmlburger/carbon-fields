@@ -1,5 +1,3 @@
-/* @flow */
-
 import React from 'react';
 import cx from 'classnames';
 
@@ -11,7 +9,7 @@ import cx from 'classnames';
  * @return {React.Element}
  * @abstract
  */
-const Field = ({ field, children }: { field: Object, children?: any }): React$Element<*> => {
+const Field = ({ field, children }) => {
 	const classes = cx('carbon-field', `carbon-${field.type}`, {
 		'has-width': field.width,
 		[`width-${field.width}`]: field.width,

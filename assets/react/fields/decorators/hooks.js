@@ -9,7 +9,7 @@ import { lifecycle, defaultProps, compose } from 'recompose';
  *
  * @type {Object}
  */
-const defaultHooks: Object = {
+const defaultHooks = {
 	componentDidMount() {
 		this.props.setupField(this.props.id, this.props.type);
 		this.props.setUI(this.props.id, this.props.ui);
@@ -21,7 +21,7 @@ const defaultHooks: Object = {
  *
  * @type {Object}
  */
-const defaultUI: Object = {
+const defaultUI = {
 	is_visible: true,
 	has_error: false,
 };
@@ -33,7 +33,7 @@ const defaultUI: Object = {
  * @param  {Object} ui
  * @return {Function}
  */
-export default function(hooks: ?Object = {}, ui: ?Object = {}): Function {
+export default function(hooks = {}, ui = {}) {
 	const withLifecycle = lifecycle({
 		...defaultHooks,
 		...hooks,

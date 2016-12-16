@@ -1,5 +1,3 @@
-/* @flow */
-
 import { takeEvery } from 'redux-saga';
 import { take, call, put, fork, select } from 'redux-saga/effects';
 import { reduce, isEmpty, isArray, camelCase } from 'lodash';
@@ -18,11 +16,11 @@ import { SETUP_CONTAINER, SET_META } from 'containers/actions';
  * @param  {String} containerId
  * @return {void}
  */
-export function* workerSyncPageTemplate(containerId: string): any {
+export function* workerSyncPageTemplate(containerId) {
 	const channel = yield call(createSelectboxChannel, 'select#page_template');
 
 	while (true) {
-		const { value }: { value: string } = yield take(channel);
+		const { value } = yield take(channel);
 
 		yield put(setMeta({
 			containerId,
@@ -39,19 +37,19 @@ export function* workerSyncPageTemplate(containerId: string): any {
  * @param  {String} containerId
  * @return {void}
  */
-export function* workerSyncParentId(containerId: string): any {
+export function* workerSyncParentId(containerId) {
 	const channel = yield call(createSelectboxChannel, 'select#parent_id');
 
 	while (true) {
-		let { value, option }: { value: any, option: HTMLElement } = yield take(channel);
+		let { value, option } = yield take(channel);
 
 		value = parseInt(value, 10);
 		value = isNaN(value) ? null : value;
 
-		let level: number = 1;
+		let level = 1;
 
 		if (option.className) {
-			const matches: ?string[] = option.className.match(/^level-(\d+)/);
+			const matches = option.className.match(/^level-(\d+)/);
 
 			if (matches) {
 				level = parseInt(matches[1], 10) + 2;
@@ -74,11 +72,11 @@ export function* workerSyncParentId(containerId: string): any {
  * @param  {String} containerId
  * @return {void}
  */
-export function* workerSyncPostFormat(containerId: string): any {
+export function* workerSyncPostFormat(containerId) {
 	const channel = yield call(createCheckableChannel, '#post-formats-select');
 
 	while (true) {
-		const { values }: { values: string[] } = yield take(channel);
+		const { values } = yield take(channel);
 
 		yield put(setMeta({
 			containerId,
@@ -95,7 +93,7 @@ export function* workerSyncPostFormat(containerId: string): any {
  * @param  {String} containerId
  * @return {void}
  */
-export function* workerSyncTerms(containerId: string): any {
+export function* workerSyncTerms(containerId) {
 	const container = yield select(getContainerById, containerId);
 	const channel = yield call(createCheckableChannel, `#${container.settings.show_on.tax_slug}checklist`);
 
@@ -121,9 +119,9 @@ export function* workerSyncTerms(containerId: string): any {
  * @param  {Object}  meta
  * @return {Boolean}
  */
-function checkTemplateNames(isVisible: boolean, settings: Object, meta: Object): boolean {
-	const { page_template }: { page_template: ?string } = meta;
-	const { typenow }: { typenow: ?string } = window;
+function checkTemplateNames(isVisible, settings, meta) {
+	const { page_template } = meta;
+	const { typenow } = window;
 
 	if (typenow === TYPE_NOW_PAGE && settings.template_names.indexOf(page_template) === -1) {
 		isVisible = false;
@@ -140,9 +138,9 @@ function checkTemplateNames(isVisible: boolean, settings: Object, meta: Object):
  * @param  {Object}  meta
  * @return {Boolean}
  */
-function checkNotInTemplateNames(isVisible: boolean, settings: Object, meta: Object): boolean {
-	const { page_template }: { page_template: ?string } = meta;
-	const { typenow }: { typenow: ?string } = window;
+function checkNotInTemplateNames(isVisible, settings, meta) {
+	const { page_template } = meta;
+	const { typenow } = window;
 
 	if (typenow === TYPE_NOW_PAGE && settings.not_in_template_names.indexOf(page_template) !== -1) {
 		isVisible = false;
@@ -159,8 +157,8 @@ function checkNotInTemplateNames(isVisible: boolean, settings: Object, meta: Obj
  * @param  {Object}  meta
  * @return {Boolean}
  */
-function checkParentPageId(isVisible: boolean, settings: Object, meta: Object): boolean {
-	const { parent_id }: { parent_id: ?number } = meta;
+function checkParentPageId(isVisible, settings, meta) {
+	const { parent_id } = meta;
 
 	if (parent_id != settings.parent_page_id) {
 		isVisible = false;
@@ -177,8 +175,8 @@ function checkParentPageId(isVisible: boolean, settings: Object, meta: Object): 
  * @param  {Object}  meta
  * @return {Boolean}
  */
-function checkLevelLimit(isVisible: boolean, settings: Object, meta: Object): boolean {
-	const { level }: { level: ?number } = meta;
+function checkLevelLimit(isVisible, settings, meta) {
+	const { level } = meta;
 
 	if (level != settings.level_limit) {
 		isVisible = false;
@@ -195,8 +193,8 @@ function checkLevelLimit(isVisible: boolean, settings: Object, meta: Object): bo
  * @param  {Object}  meta
  * @return {Boolean}
  */
-function checkPostFormats(isVisible: boolean, settings: Object, meta: Object): boolean {
-	const { post_format }: { post_format: ?string } = meta;
+function checkPostFormats(isVisible, settings, meta) {
+	const { post_format } = meta;
 
 	if (settings.post_formats.indexOf(post_format) === -1) {
 		isVisible = false;
@@ -213,8 +211,8 @@ function checkPostFormats(isVisible: boolean, settings: Object, meta: Object): b
  * @param  {Object}  meta
  * @return {Boolean}
  */
-function checkTaxSlug(isVisible: boolean, settings: Object, meta: Object): boolean {
-	const { tax_term_id }: { tax_term_id: ?string } = meta;
+function checkTaxSlug(isVisible, settings, meta) {
+	const { tax_term_id } = meta;
 
 	if (meta.terms.indexOf(tax_term_id) === -1) {
 		isVisible = false;
@@ -229,8 +227,8 @@ function checkTaxSlug(isVisible: boolean, settings: Object, meta: Object): boole
  * @param  {Object} action
  * @return {void}
  */
-export function* workerSetupContainer(action: ReduxAction): any {
-	const { containerId }: { containerId: string } = action.payload;
+export function* workerSetupContainer(action) {
+	const { containerId } = action.payload;
 
 	// Don't do anything if the type isn't correct.
 	if (!(yield select(canProcessAction, containerId, TYPE_POST_META))) {
@@ -249,16 +247,16 @@ export function* workerSetupContainer(action: ReduxAction): any {
  * @param  {Object} action
  * @return {void}
  */
-export function* workerCheckVisibility(action: ReduxAction): any {
-	const { containerId }: { containerId: string } = action.payload;
+export function* workerCheckVisibility(action) {
+	const { containerId } = action.payload;
 
 	// Don't do anything if the type isn't correct.
 	if (!(yield select(canProcessAction, containerId, TYPE_POST_META))) {
 		return;
 	}
 
-	const container: Object = yield select(getContainerById, containerId);
-	const checkers: Object = {
+	const container = yield select(getContainerById, containerId);
+	const checkers = {
 		checkTemplateNames,
 		checkNotInTemplateNames,
 		checkParentPageId,
@@ -267,7 +265,7 @@ export function* workerCheckVisibility(action: ReduxAction): any {
 		checkTaxSlug,
 	};
 
-	const isVisible: boolean = reduce(container.settings.show_on, (isVisible: boolean, value: any, key: string) => {
+	const isVisible = reduce(container.settings.show_on, (isVisible, value, key) => {
 		const checker = camelCase(`check_${key}`);
 
 		if (checkers[checker]) {
@@ -294,7 +292,7 @@ export function* workerCheckVisibility(action: ReduxAction): any {
  *
  * @return {void}
  */
-export default function* foreman(): any {
+export default function* foreman() {
 	yield [
 		takeEvery(SETUP_CONTAINER, workerSetupContainer),
 		takeEvery(SET_META, workerCheckVisibility),

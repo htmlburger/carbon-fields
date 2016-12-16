@@ -1,5 +1,3 @@
-/* @flow */
-
 import React from 'react';
 
 import BrokenContainer from 'containers/components/broken-container';
@@ -25,7 +23,7 @@ import * as FieldConst from 'fields/constants';
  *
  * @type {Object}
  */
-const containers: Object = {
+const containers = {
 	[ContainerConst.TYPE_POST_META]: PostMetaContainer,
 	[ContainerConst.TYPE_COMMENT_META]: CommentMetaContainer,
 	[ContainerConst.TYPE_TERM_META]: TermMetaContainer,
@@ -37,10 +35,10 @@ const containers: Object = {
  * Determine which container should be rendered for the specified type.
  *
  * @param  {String} type
- * @param  {Object} props
+ * @param  {Object} [props]
  * @return {React.Element}
  */
-export function makeContainer(type: string, props?: Object = {}): React$Element<*> {
+export function makeContainer(type, props = {}) {
 	const Component = containers[type] || BrokenContainer;
 
 	return <Component {...props} />;
@@ -65,12 +63,10 @@ const fields: Object = {
  * Determine which field should be rendered for the specified type.
  *
  * @param  {String} type
- * @param  {Object} props
+ * @param  {Object} [props]
  * @return {React.Element}
- *
- * @todo The return type should be `React$Element<*>`.
  */
-export function makeField(type: string, props: Object): any {
+export function makeField(type, props = {}) {
 	const Component = fields[type];
 
 	if (!Component) {

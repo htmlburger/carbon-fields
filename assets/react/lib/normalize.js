@@ -1,5 +1,3 @@
-/* @flow */
-
 import { merge, keyBy, mapValues, pick, map, uniqueId } from 'lodash';
 import { TYPE_COMPLEX } from 'fields/constants';
 
@@ -9,18 +7,18 @@ import { TYPE_COMPLEX } from 'fields/constants';
  * @param  {Object} state
  * @return {Object}
  */
-export function normalizePreloadedState(state: Object): Object {
+export function normalizePreloadedState(state) {
 	let { containers, sidebars } = merge({}, state);
-	let fieldsAccumulator: Object[] = [];
+	let fields = [];
 
 	containers = keyBy(containers, 'id');
 	containers = mapValues(containers, (container) => {
-		container.fields = container.fields.map(field => flatField(field, fieldsAccumulator));
+		container.fields = container.fields.map(field => flatField(field, fields));
 
 		return container;
 	});
 
-	let fields: Object = keyBy(fieldsAccumulator, 'id');
+	fields = keyBy(fields, 'id');
 
 	return { containers, sidebars, fields };
 }
@@ -35,7 +33,7 @@ export function normalizePreloadedState(state: Object): Object {
  *
  * @todo Assign an unique ID to avoid conflicts.
  */
-export function flatField(field: Object, accumulator: Object[]): Object {
+export function flatField(field, accumulator) {
 	const { value, type } = field;
 
 	if (type === TYPE_COMPLEX) {

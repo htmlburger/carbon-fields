@@ -1,5 +1,3 @@
-/* @flow */
-
 import React from 'react';
 import cx from 'classnames';
 import { SketchPicker } from 'react-color';
@@ -17,7 +15,7 @@ import withStore from 'fields/decorators/connect-to-store';
  * @todo Fix translation of 'Select a color' label.
  * @todo Replace inline styles with classes.
  */
-const ColorField = ({ field, updateField, setPickerVisibility, pickerVisible }: ColorFieldProps): React$Element<*> => {
+const ColorField = ({ field, updateField, setPickerVisibility, pickerVisible }) => {
 	const cover = {
 		position: 'fixed',
 		top: 0,

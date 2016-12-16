@@ -1,5 +1,3 @@
-/* @flow */
-
 import { createAction } from 'redux-actions';
 
 /**
@@ -10,7 +8,7 @@ import { createAction } from 'redux-actions';
  * @return {Object}
  */
 export const SETUP_CONTAINER = 'containers/SETUP_CONTAINER';
-export const setupContainer: Function = createAction(SETUP_CONTAINER, (containerId: string, meta: Object = {}, ui: Object = {}) => ({ containerId, meta, ui }));
+export const setupContainer = createAction(SETUP_CONTAINER, (containerId, meta = {}, ui = {}) => ({ containerId, meta, ui }));
 
 /**
  * Update the object that holds additional fields for the container.
@@ -21,7 +19,7 @@ export const setupContainer: Function = createAction(SETUP_CONTAINER, (container
  * @return {Object}
  */
 export const SET_META = 'containers/SET_META';
-export const setMeta: Function = createAction(SET_META);
+export const setMeta = createAction(SET_META);
 
 /**
  * Update the object that contains information about container's UI.
@@ -32,7 +30,7 @@ export const setMeta: Function = createAction(SET_META);
  * @return {Object}
  */
 export const SET_UI = 'containers/SET_UI';
-export const setUI: Function = createAction(SET_UI);
+export const setUI = createAction(SET_UI);
 
 /**
  * Initialize a visibility check for the container.
@@ -41,4 +39,4 @@ export const setUI: Function = createAction(SET_UI);
  * @return {Object}
  */
 export const CHECK_VISIBILITY = 'containers/CHECK_VISIBILITY';
-export const checkVisibility: Function = createAction(CHECK_VISIBILITY);
+export const checkVisibility = createAction(CHECK_VISIBILITY);

@@ -1,3 +1,1 @@
-/* @flow */
-
-export const getFieldById = (state: Object, fieldId: string): Object => state.fields[fieldId];
+export const getFieldById = (state, fieldId) => state.fields[fieldId];

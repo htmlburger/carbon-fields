@@ -1,10 +1,8 @@
-/* @flow */
-
 import { createSelector } from 'reselect';
 
-export const getContainers = (state: Object): Array<Object> => state.containers;
-export const getContainerById = (state: Object, containerId: string): Object => state.containers[containerId];
-export const canProcessAction = (state: Object, containerId: string, containerType: string): boolean => getContainerById(state, containerId).type === containerType;
+export const getContainers = (state) => state.containers;
+export const getContainerById = (state, containerId) => state.containers[containerId];
+export const canProcessAction = (state, containerId, containerType) => getContainerById(state, containerId).type === containerType;
 
 export const getContainerFieldsById = createSelector([
 	getContainerById

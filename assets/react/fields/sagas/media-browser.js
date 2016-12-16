@@ -20,7 +20,7 @@ import { SETUP_MEDIA_BROWSER, OPEN_MEDIA_BROWSER } from 'fields/actions';
  *
  * @todo   Handle the rest of selected attachments.
  */
-export function* workerOpenMediaBrowser(channel: Object, field: Object, browser: Object, action: Object): any {
+export function* workerOpenMediaBrowser(channel, field, browser, action) {
 	// Don't open the browser if the field doesn't have correct id.
 	if (action.payload !== field.id) {
 		return;
@@ -29,7 +29,7 @@ export function* workerOpenMediaBrowser(channel: Object, field: Object, browser:
 	yield call([browser, browser.open]);
 
 	while (true) {
-		const { selection }: { selection: Object[] } = yield take(channel);
+		const { selection } = yield take(channel);
 		const [ attachment, ...attachments ] = selection;
 		const thumbnail = yield call(getAttachmentThumbnail, attachment);
 
@@ -48,8 +48,8 @@ export function* workerOpenMediaBrowser(channel: Object, field: Object, browser:
  * @param  {Object} action
  * @return {void}
  */
-export function* workerSetupMediaBrowser(action: ReduxAction): any {
-	const field: Object = yield select(getFieldById, action.payload);
+export function* workerSetupMediaBrowser(action) {
+	const field = yield select(getFieldById, action.payload);
 	const {
 		window_button_label,
 		window_label,
@@ -57,7 +57,7 @@ export function* workerSetupMediaBrowser(action: ReduxAction): any {
 		value_type
 	} = field;
 
-	const channel: Object = yield call(createMediaBrowserChannel, {
+	const channel = yield call(createMediaBrowserChannel, {
 		title: window_label,
 		library: {
 			type: type_filter
@@ -78,7 +78,7 @@ export function* workerSetupMediaBrowser(action: ReduxAction): any {
  *
  * @return {void}
  */
-export default function* foreman(): any {
+export default function* foreman() {
 	yield [
 		takeEvery(SETUP_MEDIA_BROWSER, workerSetupMediaBrowser),
 	];

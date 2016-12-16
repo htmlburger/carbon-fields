@@ -1,5 +1,3 @@
-/* @flow */
-
 import { takeEvery } from 'redux-saga';
 import { take, call, put, fork, select } from 'redux-saga/effects';
 
@@ -15,12 +13,12 @@ import { SETUP_CONTAINER, SET_META } from 'containers/actions';
  * @param  {String} containerId
  * @return {void}
  */
-export function* workerSyncLevel(containerId: string): any {
+export function* workerSyncLevel(containerId) {
 	const channel = yield call(createSelectboxChannel, 'select#parent');
 
 	while (true) {
-		const { option }: { option: HTMLElement } = yield take(channel);
-		let level: number = 1;
+		const { option } = yield take(channel);
+		let level = 1;
 
 		if (option.className) {
 			const matches: ?string[] = option.className.match(/^level-(\d+)/);
@@ -45,8 +43,8 @@ export function* workerSyncLevel(containerId: string): any {
  * @param  {Object} action
  * @return {void}
  */
-export function* workerSetupContainer(action: ReduxAction): any {
-	const { containerId }: { containerId: string } = action.payload;
+export function* workerSetupContainer(action) {
+	const { containerId } = action.payload;
 
 	// Don't do anything if the type isn't correct.
 	if (!(yield select(canProcessAction, containerId, TYPE_TERM_META))) {
@@ -62,16 +60,16 @@ export function* workerSetupContainer(action: ReduxAction): any {
  * @param  {Object} action
  * @return {void}
  */
-export function* workerCheckVisibility(action: ReduxAction): any {
-	const { containerId }: { containerId: string } = action.payload;
+export function* workerCheckVisibility(action) {
+	const { containerId } = action.payload;
 
 	// Don't do anything if the type isn't correct.
 	if (!(yield select(canProcessAction, containerId, TYPE_TERM_META))) {
 		return;
 	}
 
-	const container: Object = yield select(getContainerById, containerId);
-	let isVisible: boolean = true;
+	const container = yield select(getContainerById, containerId);
+	let isVisible = true;
 
 	if (container.settings.show_on_level && container.meta.level != container.settings.show_on_level) {
 		isVisible = false;
@@ -90,7 +88,7 @@ export function* workerCheckVisibility(action: ReduxAction): any {
  *
  * @return {void}
  */
-export default function* foreman(): any {
+export default function* foreman() {
 	yield [
 		takeEvery(SETUP_CONTAINER, workerSetupContainer),
 		takeEvery(SET_META, workerCheckVisibility),

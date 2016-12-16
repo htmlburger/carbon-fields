@@ -1,5 +1,3 @@
-/* @flow */
-
 import React from 'react';
 import Field from 'fields/components/field';
 import createConnectStore from 'fields/decorators/connect-to-store';
@@ -10,7 +8,7 @@ import createConnectStore from 'fields/decorators/connect-to-store';
  * @param  {Object} props
  * @return {React.Element}
  */
-const SeparatorField = ({ field }: FieldProps): React$Element<*> => {
+const SeparatorField = ({ field }) => {
 	return <Field field={field}>
 		<h3>{field.label}</h3>
 	</Field>;

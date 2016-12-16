@@ -1,5 +1,3 @@
-/* @flow */
-
 import React from 'react';
 import cx from 'classnames';
 import { compose } from 'recompose';
@@ -17,7 +15,7 @@ import { setupMediaBrowser, openMediaBrowser } from 'fields/actions';
  *
  * @todo   Replace the inline `style` with a class.
  */
-const FileField = ({ field, updateField, openMediaBrowser }: FileFieldProps): React$Element<*> => {
+const FileField = ({ field, updateField, openMediaBrowser }) => {
 	const openBrowser = () => {
 		openMediaBrowser(field.id);
 	};
@@ -63,7 +61,7 @@ const FileField = ({ field, updateField, openMediaBrowser }: FileFieldProps): Re
  *
  * @type {Object}
  */
-const hooks: Object = {
+const hooks = {
 	componentDidMount() {
 		this.props.setupField(this.props.id, this.props.type);
 		this.props.setupMediaBrowser(this.props.id);
@@ -76,7 +74,7 @@ const hooks: Object = {
  *
  * @type {Object}
  */
-const mapDispatchToProps: Object = {
+const mapDispatchToProps = {
 	setupMediaBrowser,
 	openMediaBrowser,
 };

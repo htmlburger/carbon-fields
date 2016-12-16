@@ -1,5 +1,3 @@
-/* @flow */
-
-export default function(state: Array<Object> = [], action: ReduxAction): Array<Object> {
+export default function(state = [], action = {}) {
 	return state;
 }

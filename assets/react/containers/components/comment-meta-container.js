@@ -1,5 +1,3 @@
-/* @flow */
-
 import { compose, defaultProps } from 'recompose';
 import Container from 'containers/components/container';
 import withConnectToStore from 'containers/decorators/with-connect-to-store';

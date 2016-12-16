@@ -1,5 +1,3 @@
-/* @flow */
-
 import { connect } from 'react-redux';
 import { getFieldById } from 'fields/selectors';
 import { setupField, updateField, setUI } from 'fields/actions';
@@ -9,7 +7,7 @@ import { setupField, updateField, setUI } from 'fields/actions';
  *
  * @type {Function}
  */
-const defaultMapStateToProps: Function = (state: Object, ownProps: Object) => ({
+const defaultMapStateToProps = (state, ownProps) => ({
 	field: getFieldById(state, ownProps.id),
 });
 
@@ -18,7 +16,7 @@ const defaultMapStateToProps: Function = (state: Object, ownProps: Object) => ({
  *
  * @type {Object}
  */
-const defaultMapDispatchToProps: Object = {
+const defaultMapDispatchToProps = {
 	setupField,
 	updateField,
 	setUI,
@@ -31,8 +29,8 @@ const defaultMapDispatchToProps: Object = {
  * @param  {Object}   [mapDispatchToProps]
  * @return {Function}
  */
-export default function(mapStateToProps: Function = () => {}, mapDispatchToProps: ?Object = {}): Function {
-	return connect((state: Object, ownProps: Object) => {
+export default function(mapStateToProps = () => {}, mapDispatchToProps = {}) {
+	return connect((state, ownProps) => {
 		return {
 			...defaultMapStateToProps(state, ownProps),
 			...mapStateToProps(state, ownProps),
