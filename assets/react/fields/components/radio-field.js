@@ -59,17 +59,13 @@ const handleInputChange = ({ field, updateField }) => {
  */
 const isChecked = ({ field }) => option => option.value === field.value;
 
-/**
- * Check whether the field has options and if doesn't show the notice.
- *
- * @param  {Object} props
- * @param  {Object} props.field
- * @return {Boolean}
- */
-const testForNoOptions = ({ field }) => !field.options.length;
-
 export default compose(
 	withStore(),
-	branch(testForNoOptions, renderComponent(NoOptions), c => c),
-	withHandlers({ handleInputChange, isChecked })
+	branch(
+		({ field: { options } }) => !options.length,
+
+		renderComponent(NoOptions),
+
+		withHandlers({ handleInputChange, isChecked })
+	)
 )(RadioField);
