@@ -55,6 +55,9 @@ module.exports = {
 			'./assets/react/fields/components/footer-scripts-field.js',
 			'./assets/react/fields/components/color-field.js',
 			'./assets/react/fields/components/checkbox-field.js',
+			'./assets/react/fields/components/radio-field.js',
+
+			'./assets/react/fields/components/no-options.js',
 
 			// Load the store.
 			'./assets/react/store.js'

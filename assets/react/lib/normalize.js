@@ -25,7 +25,7 @@ export function normalizePreloadedState(state) {
 
 /**
  * Convert the specified field into flat shape.
- * WARNING: This function has a side effects.
+ * WARNING: This function has side effects.
  *
  * @param  {Object}   field
  * @param  {Object[]} accumulator
