@@ -18,6 +18,7 @@ import FooterScriptsField from 'fields/components/footer-scripts-field';
 import ColorField from 'fields/components/color-field';
 import CheckboxField from 'fields/components/checkbox-field';
 import RadioField from 'fields/components/radio-field';
+import SelectField from 'fields/components/select-field';
 import * as FieldConst from 'fields/constants';
 
 /**
@@ -61,6 +62,7 @@ const fields: Object = {
 	[FieldConst.TYPE_COLOR]: ColorField,
 	[FieldConst.TYPE_CHECKBOX]: CheckboxField,
 	[FieldConst.TYPE_RADIO]: RadioField,
+	[FieldConst.TYPE_SELECT]: SelectField,
 };
 
 /**

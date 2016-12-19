@@ -28,7 +28,7 @@ const RadioField = ({ field, handleInputChange, isChecked }) => {
 
 						{option.name}
 					</label>
-				</li>
+				</li>;
 			})}
 		</ul>
 	</Field>;
