@@ -63,7 +63,7 @@
 .group-tabs-nav-holder ~ .carbon-groups-holder > .carbon-row > .carbon-drag-handle { display: none; }
 
 .group-tabs-nav-holder ~ .carbon-groups-holder > .carbon-row { margin-bottom: 0; display: none !important; }
-.group-tabs-nav-holder ~ .carbon-groups-holder > .carbon-row.active { display: block !important; }
+.group-tabs-nav-holder ~ .carbon-groups-holder > .carbon-row.active { display: block !important; display: flex !important; flex-direction: column; }
 
 
 /*  Tabs Nav  */
