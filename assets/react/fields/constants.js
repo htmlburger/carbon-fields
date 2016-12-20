@@ -10,3 +10,4 @@ export const TYPE_SET = 'Set';
 export const TYPE_TEXT = 'Text';
 export const TYPE_TEXTAREA = 'Textarea';
 export const TYPE_RADIO = 'Radio';
+export const TYPE_IMAGE = 'Image';

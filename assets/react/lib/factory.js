@@ -65,6 +65,7 @@ const fields = {
 	[FieldConst.TYPE_RADIO]: RadioField,
 	[FieldConst.TYPE_SELECT]: SelectField,
 	[FieldConst.TYPE_SET]: SetField,
+	[FieldConst.TYPE_IMAGE]: FileField,
 };
 
 /**
