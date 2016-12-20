@@ -19,6 +19,7 @@ import ColorField from 'fields/components/color-field';
 import CheckboxField from 'fields/components/checkbox-field';
 import RadioField from 'fields/components/radio-field';
 import SelectField from 'fields/components/select-field';
+import SetField from 'fields/components/set-field';
 import * as FieldConst from 'fields/constants';
 
 /**
@@ -52,7 +53,7 @@ export function makeContainer(type, props = {}) {
  *
  * @type {Object}
  */
-const fields: Object = {
+const fields = {
 	[FieldConst.TYPE_FILE]: FileField,
 	[FieldConst.TYPE_TEXT]: TextField,
 	[FieldConst.TYPE_TEXTAREA]: TextareaField,
@@ -63,6 +64,7 @@ const fields: Object = {
 	[FieldConst.TYPE_CHECKBOX]: CheckboxField,
 	[FieldConst.TYPE_RADIO]: RadioField,
 	[FieldConst.TYPE_SELECT]: SelectField,
+	[FieldConst.TYPE_SET]: SetField,
 };
 
 /**

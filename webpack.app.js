@@ -57,6 +57,7 @@ module.exports = {
 			'./assets/react/fields/components/checkbox-field.js',
 			'./assets/react/fields/components/radio-field.js',
 			'./assets/react/fields/components/select-field.js',
+			'./assets/react/fields/components/set-field.js',
 
 			'./assets/react/fields/components/no-options.js',
 

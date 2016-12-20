@@ -6,6 +6,7 @@ export const TYPE_FOOTER_SCRIPTS = 'FooterScripts';
 export const TYPE_HEADER_SCRIPTS = 'HeaderScripts';
 export const TYPE_SEPARATOR = 'Separator';
 export const TYPE_SELECT = 'Select';
+export const TYPE_SET = 'Set';
 export const TYPE_TEXT = 'Text';
 export const TYPE_TEXTAREA = 'Textarea';
 export const TYPE_RADIO = 'Radio';
