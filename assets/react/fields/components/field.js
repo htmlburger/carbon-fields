@@ -5,7 +5,9 @@ import cx from 'classnames';
  * The base UI component used for rendering.
  * All fields should use composition to extend this component.
  *
- * @param  {Object} props
+ * @param  {Object}        props
+ * @param  {Object}        props.field
+ * @param  {React.Element} props.children
  * @return {React.Element}
  * @abstract
  */

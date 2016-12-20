@@ -1,8 +1,10 @@
 import React from 'react';
 import { compose, withHandlers, branch, renderComponent } from 'recompose';
+
 import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
-import withStore from 'fields/decorators/connect-to-store';
+import withStore from 'fields/decorators/with-store';
+import withSetup from 'fields/decorators/with-setup';
 
 /**
  * Render a radio input field.
@@ -13,7 +15,7 @@ import withStore from 'fields/decorators/connect-to-store';
  * @param  {Function} props.isChecked
  * @return {React.Element}
  */
-const RadioField = ({ field, handleInputChange, isChecked }) => {
+export const RadioField = ({ field, handleInputChange, isChecked }) => {
 	return <Field field={field}>
 		<ul className="carbon-radio-list">
 			{field.options.map(option => {
@@ -42,12 +44,10 @@ const RadioField = ({ field, handleInputChange, isChecked }) => {
  * @param  {Function} props.updateField
  * @return {Function}
  */
-const handleInputChange = ({ field, updateField }) => {
-	return ({ target }) => {
-		updateField(field.id, {
-			value: target.value
-		});
-	};
+const handleInputChange = ({ field, updateField }) => ({ target }) => {
+	updateField(field.id, {
+		value: target.value
+	});
 };
 
 /**
@@ -66,6 +66,9 @@ export default compose(
 
 		renderComponent(NoOptions),
 
-		withHandlers({ handleInputChange, isChecked })
+		compose(
+			withSetup(),
+			withHandlers({ handleInputChange, isChecked })
+		)
 	)
 )(RadioField);

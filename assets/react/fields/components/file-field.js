@@ -1,33 +1,24 @@
 import React from 'react';
 import cx from 'classnames';
-import { compose } from 'recompose';
+import { compose, withHandlers } from 'recompose';
 
-import Field from 'fields/components/field';
-import createHooks from 'fields/decorators/hooks';
-import createConnectToStore from 'fields/decorators/connect-to-store';
 import { setupMediaBrowser, openMediaBrowser } from 'fields/actions';
+import Field from 'fields/components/field';
+import withStore from 'fields/decorators/with-store';
+import withSetup from 'fields/decorators/with-setup';
 
 /**
  * Render a file upload field with a preview thumbnail of the uploaded file.
  *
- * @param  {Object} props
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.openBrowser
+ * @param  {Function} props.clearSelection
  * @return {React.Element}
  *
  * @todo   Replace the inline `style` with a class.
  */
-const FileField = ({ field, updateField, openMediaBrowser }) => {
-	const openBrowser = () => {
-		openMediaBrowser(field.id);
-	};
-
-	const clearSelection = () => {
-		updateField(field.id, {
-			value: '',
-			file_name: '',
-			thumb_url: ''
-		});
-	};
-
+export const FileField = ({ field, openBrowser, clearSelection }) => {
 	return <Field field={field}>
 		<div className="carbon-attachment">
 			<input
@@ -79,7 +70,34 @@ const mapDispatchToProps = {
 	openMediaBrowser,
 };
 
+/**
+ * Show WordPress's media browser.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.openMediaBrowser
+ * @return {Function}
+ */
+const openBrowser = ({ field, openMediaBrowser }) => () => openMediaBrowser(field.id);
+
+/**
+ * Remove the attachment that is selected.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.updateField
+ * @return {Function}
+ */
+const clearSelection = ({ field, updateField }) => () => {
+	updateField(field.id, {
+		value: '',
+		file_name: '',
+		thumb_url: ''
+	});
+};
+
 export default compose(
-	createConnectToStore(undefined, mapDispatchToProps),
-	createHooks(hooks)
+	withStore(undefined, mapDispatchToProps),
+	withSetup(hooks),
+	withHandlers({ openBrowser, clearSelection })
 )(FileField);

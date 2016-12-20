@@ -1,5 +1,3 @@
-/* @flow */
-
 import { lifecycle, defaultProps, compose } from 'recompose';
 
 /**

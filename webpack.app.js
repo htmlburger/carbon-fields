@@ -41,8 +41,8 @@ module.exports = {
 			// Load the fields.
 			'./assets/react/fields/constants',
 			'./assets/react/fields/selectors',
-			'./assets/react/fields/decorators/hooks.js',
-			'./assets/react/fields/decorators/connect-to-store.js',
+			'./assets/react/fields/decorators/with-store.js',
+			'./assets/react/fields/decorators/with-setup.js',
 
 			'./assets/react/fields/sagas/media-browser.js',
 

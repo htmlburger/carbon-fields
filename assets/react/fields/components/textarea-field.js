@@ -1,14 +1,19 @@
 import React from 'react';
+import { compose } from 'recompose';
+
 import Field from 'fields/components/field';
-import createConnectStore from 'fields/decorators/connect-to-store';
+import withStore from 'fields/decorators/with-store';
+import withSetup from 'fields/decorators/with-setup';
 
 /**
  * Render a multiline text input field.
  *
- * @param  {Object} props
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.updateField
  * @return {React.Element}
  */
-const TextareaField = ({ field, updateField }) => {
+export const TextareaField = ({ field, updateField }) => {
 	const style = {
 		height: field.height,
 	};
@@ -20,8 +25,11 @@ const TextareaField = ({ field, updateField }) => {
 			defaultValue={field.value}
 			style={style}
 			rows={field.rows ? field.rows : null}
-			onChange={(e) => updateField(field.id, { value: e.target.value })} />
+			onChange={({ target }) => updateField(field.id, { value: target.value })} />
 	</Field>;
 };
 
-export default createConnectStore()(TextareaField);
+export default compose(
+	withStore(),
+	withSetup()
+)(TextareaField);

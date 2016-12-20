@@ -1,9 +1,10 @@
 import React from 'react';
 import { compose, withHandlers, branch, renderComponent } from 'recompose';
+
 import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
-import withStore from 'fields/decorators/connect-to-store';
-import withSetup from 'fields/decorators/hooks';
+import withStore from 'fields/decorators/with-store';
+import withSetup from 'fields/decorators/with-setup';
 
 /**
  * Render a select input field.
@@ -13,7 +14,7 @@ import withSetup from 'fields/decorators/hooks';
  * @param  {Function} props.handleInputChange
  * @return {React.Element}
  */
-const SelectField = ({ field, handleInputChange }) => {
+export const SelectField = ({ field, handleInputChange }) => {
 	return <Field field={field}>
 		<select id={field.id} name={field.name} onChange={handleInputChange}>
 			{field.options.map(option => {
@@ -52,12 +53,10 @@ const hooks = {
  * @param  {Function} props.updateField
  * @return {Function}
  */
-const handleInputChange = ({ field, updateField }) => {
-	return ({ target }) => {
-		updateField(field.id, {
-			value: target.value
-		});
-	};
+const handleInputChange = ({ field, updateField }) => ({ target }) => {
+	updateField(field.id, {
+		value: target.value
+	});
 };
 
 export default compose(

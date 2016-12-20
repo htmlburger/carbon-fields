@@ -1,14 +1,19 @@
 import React from 'react';
+import { compose } from 'recompose';
+
 import Field from 'fields/components/field';
-import createConnectStore from 'fields/decorators/connect-to-store';
+import withStore from 'fields/decorators/with-store';
+import withSetup from 'fields/decorators/with-setup';
 
 /**
  * Render a text input field.
  *
- * @param  {Object} props
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.updateField
  * @return {React.Element}
  */
-const TextField = ({ field, updateField }) => {
+export const TextField = ({ field, updateField }) => {
 	return <Field id={field.id} field={field}>
 		<input
 			type="text"
@@ -16,8 +21,11 @@ const TextField = ({ field, updateField }) => {
 			name={field.name}
 			defaultValue={field.value}
 			className="regular-text"
-			onChange={(e) => updateField(field.id, { value: e.target.value })} />
+			onChange={({ target }) => updateField(field.id, { value: target.value })} />
 	</Field>;
 };
 
-export default createConnectStore()(TextField);
+export default compose(
+	withStore(),
+	withSetup()
+)(TextField);

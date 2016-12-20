@@ -1,9 +1,11 @@
 import React from 'react';
 import { compose, withHandlers, withState, branch, renderComponent } from 'recompose';
 import { without } from 'lodash';
+
 import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
-import withStore from 'fields/decorators/connect-to-store';
+import withStore from 'fields/decorators/with-store';
+import withSetup from 'fields/decorators/with-setup';
 
 /**
  * Render a collection of checkbox inputs.
@@ -18,7 +20,7 @@ import withStore from 'fields/decorators/connect-to-store';
  *
  * @todo Fix the translation.
  */
-const SetField = ({ field, handleInputChange, isChecked, isInputHidden, isExpanderHidden, showAllOptions }) => {
+export const SetField = ({ field, handleInputChange, isChecked, isInputHidden, isExpanderHidden, showAllOptions }) => {
 	return <Field field={field}>
 		<div className="carbon-set-list">
 			{field.options.map((option, index) => {
@@ -97,7 +99,7 @@ const isExpanderHidden = ({ field: { limit_options, options }, expanded }) => ()
  * @param  {Function} props.setExpanded
  * @return {Function}
  */
-const showAllOptions = ({ setExpanded }) => (e) => {
+const showAllOptions = ({ setExpanded }) => e => {
 	e.preventDefault();
 	setExpanded(true);
 };
@@ -110,6 +112,7 @@ export default compose(
 		renderComponent(NoOptions),
 
 		compose(
+			withSetup(),
 			withState('expanded', 'setExpanded', false),
 			withHandlers({ handleInputChange, isChecked, isInputHidden, isExpanderHidden, showAllOptions })
 		)

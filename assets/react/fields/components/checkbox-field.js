@@ -1,15 +1,19 @@
 import React from 'react';
 import { compose, withProps, withHandlers } from 'recompose';
+
 import Field from 'fields/components/field';
-import withStore from 'fields/decorators/connect-to-store';
+import withStore from 'fields/decorators/with-store';
+import withSetup from 'fields/decorators/with-setup';
 
 /**
  * Render a checkbox input field.
  *
- * @param  {Object} props
+ * @param  {Object}   props
+ * @param  {Boolean}  props.isChecked
+ * @param  {Function} props.handleInputChange
  * @return {React.Element}
  */
-const CheckboxField = ({ field, handleInputChange, isChecked }) => {
+export const CheckboxField = ({ field, isChecked, handleInputChange }) => {
 	return <Field field={field}>
 		<label>
 			<input
@@ -43,16 +47,15 @@ const props = ({ field }) => ({
  * @param  {Function} props.updateField
  * @return {Function}
  */
-const handleInputChange = ({ field, updateField }) => {
-	return ({ target }) => {
-		updateField(field.id, {
-			value: target.checked ? field.option_value : null,
-		});
-	};
+const handleInputChange = ({ field, updateField }) => ({ target }) => {
+	updateField(field.id, {
+		value: target.checked ? field.option_value : null,
+	});
 };
 
 export default compose(
 	withStore(),
+	withSetup(),
 	withProps(props),
 	withHandlers({ handleInputChange })
 )(CheckboxField);
