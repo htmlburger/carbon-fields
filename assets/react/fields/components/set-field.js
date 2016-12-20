@@ -10,7 +10,6 @@ import withStore from 'fields/decorators/connect-to-store';
  *
  * @param  {Object}   props
  * @param  {Object}   props.field
- * @param  {Boolean}  props.expanded
  * @param  {Function} props.handleInputChange
  * @param  {Function} props.isChecked
  * @param  {Function} props.isExpanderHidden
@@ -19,11 +18,11 @@ import withStore from 'fields/decorators/connect-to-store';
  *
  * @todo Fix the translation.
  */
-const SetField = ({ field, expanded, handleInputChange, isChecked, isInputHidden, isExpanderHidden, showAllOptions }) => {
+const SetField = ({ field, handleInputChange, isChecked, isInputHidden, isExpanderHidden, showAllOptions }) => {
 	return <Field field={field}>
 		<div className="carbon-set-list">
 			{field.options.map((option, index) => {
-				return <p key={`${field.id}-${option.value}`} hidden={isInputHidden(index) && !expanded}>
+				return <p key={`${field.id}-${option.value}`} hidden={isInputHidden(index)}>
 					<label>
 						<input
 							type="checkbox"
@@ -37,7 +36,7 @@ const SetField = ({ field, expanded, handleInputChange, isChecked, isInputHidden
 				</p>;
 			})}
 
-			<p hidden={isExpanderHidden() || expanded}>
+			<p hidden={isExpanderHidden()}>
 				<a href="#" className="carbon-set-showall" onClick={showAllOptions}>
 					Show All Options
 				</a>
@@ -72,11 +71,12 @@ const isChecked = ({ field }) => option => field.value.indexOf(String(option.val
 /**
  * Check whether the input should be hidden.
  *
- * @param  {Object} props
- * @param  {Object} props.field
+ * @param  {Object}  props
+ * @param  {Object}  props.field
+ * @param  {Boolean} props.expanded
  * @return {Function}
  */
-const isInputHidden = ({ field }) => index => index + 1 > field.limit_options && field.limit_options > 0;
+const isInputHidden = ({ field, expanded }) => index => index + 1 > field.limit_options && field.limit_options > 0 && !expanded;
 
 /**
  * Check whether the 'Show All Options' link should be visible.
@@ -85,9 +85,10 @@ const isInputHidden = ({ field }) => index => index + 1 > field.limit_options &&
  * @param  {Object}   props.field
  * @param  {Number}   props.field.limit_options
  * @param  {Object[]} props.field.options
+ * @param  {Boolean}  props.expanded
  * @return {Function}
  */
-const isExpanderHidden = ({ field: { limit_options, options } }) => () => !(limit_options > 0 && options.length > limit_options);
+const isExpanderHidden = ({ field: { limit_options, options }, expanded }) => () => !(limit_options > 0 && options.length > limit_options) || expanded;
 
 /**
  * Show the hidden options.
