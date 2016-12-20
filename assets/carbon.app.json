@@ -87,13 +87,14 @@
     "./assets/react/fields/components/no-options.js": 98,
     "./assets/react/fields/components/select-field.js": 99,
     "./assets/react/fields/components/set-field.js": 100,
-    "./assets/react/sidebars/reducer.js": 101,
-    "./assets/react/fields/sagas/media-browser.js": 102,
-    "./assets/react/fields/helpers.js": 103,
-    "./assets/react/containers/reducer.js": 104,
-    "./assets/react/store.js": 106,
-    "./assets/react/fields/reducer.js": 108,
-    "./assets/react/containers/sagas/base.js": 109,
-    "./assets/react/containers/sagas/post-meta.js": 110
+    "./assets/react/fields/components/html-field.js": 101,
+    "./assets/react/sidebars/reducer.js": 102,
+    "./assets/react/fields/sagas/media-browser.js": 103,
+    "./assets/react/fields/helpers.js": 104,
+    "./assets/react/containers/reducer.js": 105,
+    "./assets/react/store.js": 107,
+    "./assets/react/fields/reducer.js": 109,
+    "./assets/react/containers/sagas/base.js": 110,
+    "./assets/react/containers/sagas/post-meta.js": 111
   }
 }

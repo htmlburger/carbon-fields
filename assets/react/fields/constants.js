@@ -4,6 +4,7 @@ export const TYPE_CHECKBOX = 'Checkbox';
 export const TYPE_FILE = 'File';
 export const TYPE_FOOTER_SCRIPTS = 'FooterScripts';
 export const TYPE_HEADER_SCRIPTS = 'HeaderScripts';
+export const TYPE_HTML = 'Html';
 export const TYPE_SEPARATOR = 'Separator';
 export const TYPE_SELECT = 'Select';
 export const TYPE_SET = 'Set';

@@ -6,20 +6,20 @@ import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 
 /**
- * Create a visual separator between adjacent fields.
+ * Render custom HTML markup.
  *
  * @param  {Object} props
  * @param  {Object} props.field
  * @return {React.Element}
  */
-export const SeparatorField = ({ field }) => {
+export const HtmlField = ({ field }) => {
 	return <Field field={field}>
-		<h3>{field.label}</h3>
+		<div dangerouslySetInnerHTML={{ __html: field.html }}></div>
 	</Field>;
 };
 
 export default compose(
 	withStore(),
 	withSetup()
-)(SeparatorField);
+)(HtmlField);
 
