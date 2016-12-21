@@ -14,7 +14,7 @@
 
 .carbon-color .has-color + input.carbon-color-field { opacity: 1; }
 
-.carbon-color .iris-picker { position: absolute; top: 100%; left: 0; z-index: 10; border: 1px solid #e5e5e5; box-shadow: 0 0 5px rgba(0,0,0,.2); }
+.carbon-color .iris-picker { position: absolute; top: 100%; left: 0; z-index: 15; border: 1px solid #e5e5e5; box-shadow: 0 0 5px rgba(0,0,0,.2); }
 
 /*  Right-to-Left  */
 
