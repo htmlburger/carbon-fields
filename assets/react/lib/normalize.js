@@ -31,20 +31,24 @@ export function normalizePreloadedState(state) {
  * @param  {Object[]} accumulator
  * @return {Object}
  *
- * @todo Assign an unique ID to avoid conflicts.
+ * @todo Abstract the manipulation of group so it can be reused.
  */
 export function flatField(field, accumulator) {
 	const { value, type } = field;
 
+	field.id = uniqueId('carbon-field-');
+
 	if (type === TYPE_COMPLEX) {
-		value.forEach((group) => {
-			group.fields = group.fields.map((field) => {
-				return flatField(field, accumulator);
+		value.forEach((group, index) => {
+			group.id = `${field.id}-${index}`;
+
+			group.fields = group.fields.map((groupField) => {
+				groupField.name = `${field.name}[${index}][${groupField.name}]`;
+
+				return flatField(groupField, accumulator);
 			});
 		});
 	}
-
-	field.id = uniqueId('carbon-field-');
 
 	accumulator.push(field);
 

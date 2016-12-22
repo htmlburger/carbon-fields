@@ -21,6 +21,7 @@ import RadioField from 'fields/components/radio-field';
 import SelectField from 'fields/components/select-field';
 import SetField from 'fields/components/set-field';
 import HtmlField from 'fields/components/html-field';
+import ComplexField from 'fields/components/complex';
 import * as FieldConst from 'fields/constants';
 
 /**
@@ -68,6 +69,7 @@ const fields = {
 	[FieldConst.TYPE_SET]: SetField,
 	[FieldConst.TYPE_IMAGE]: FileField,
 	[FieldConst.TYPE_HTML]: HtmlField,
+	[FieldConst.TYPE_COMPLEX]: ComplexField,
 };
 
 /**
