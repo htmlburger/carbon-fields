@@ -26,7 +26,12 @@ class REST_Controller {
 	public $containers = [];
 
 	public function get_data( $type, $id  = '') {
-		$response = [];
+		$response      = [];
+		$special_types = [
+			'complex',
+			'relationship',
+			'association',
+		];
 		
 		$this->containers = $this->filter_containers( $type, $id );
 		
@@ -40,8 +45,12 @@ class REST_Controller {
 				}
 
 				$field->load();
-
-				$response[ $field->get_name() ] = $field->get_value();
+				
+				$field_type = array_filter( $special_types, function( $special_type ) use ( $field ) {
+					return strtolower( $field->type ) === $special_type ? $special_type : 'generic';
+				} );
+			
+				$response[ $field->get_name() ] = call_user_func( [ $this, "load_{$field_type[0]}_field_value" ], $field );
 			}
 		}
 
@@ -51,7 +60,7 @@ class REST_Controller {
 	public function filter_containers( $type, $id = '' ) {
 		return array_filter( Container::$active_containers, function( $container ) use ( $type, $id ) {
 			return $this->is_valid_container( $container, $type, $id );
-		});
+		} );
 	}
 
 	public function set_version( $version ) {
@@ -116,6 +125,22 @@ class REST_Controller {
 		}
 
 		return true;
+	}
+
+	public function load_generic_field_value( $field ) {
+		return $field->get_value();
+	}
+
+	public function load_complex_field_value( $field ) {
+		return $field->to_json( false )['value'];
+	}
+
+	public function load_relationship_field_value( $field ) {
+		return maybe_unserialize( $field->get_value() );
+	}
+
+	public function load_association_field_value( $field ) {
+		return $this->load_relationship_field_value( $field );
 	}
 
 	public static function get_term_level( $term ) {
