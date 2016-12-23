@@ -12,6 +12,7 @@ import 'fields/components/header-scripts-field';
 import 'fields/components/footer-scripts-field';
 import 'fields/components/color-field';
 import 'fields/components/checkbox-field';
+import 'fields/components/complex';
 import 'fields/components/radio-field';
 import 'fields/components/select-field';
 import 'fields/components/set-field';
