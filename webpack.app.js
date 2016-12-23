@@ -11,6 +11,7 @@ module.exports = {
 			'./assets/react/lib/normalize.js',
 			'./assets/react/lib/factory.js',
 			'./assets/react/lib/events.js',
+			'./assets/react/lib/registry.js',
 
 			// Load the containers.
 			'./assets/react/containers/reducer.js',
@@ -39,7 +40,6 @@ module.exports = {
 			'./assets/react/sidebars/reducer.js',
 
 			// Load the fields.
-			'./assets/react/fields/constants',
 			'./assets/react/fields/selectors',
 			'./assets/react/fields/decorators/with-store.js',
 			'./assets/react/fields/decorators/with-setup.js',
@@ -55,12 +55,14 @@ module.exports = {
 			'./assets/react/fields/components/footer-scripts-field.js',
 			'./assets/react/fields/components/color-field.js',
 			'./assets/react/fields/components/checkbox-field.js',
+			'./assets/react/fields/components/complex.js',
 			'./assets/react/fields/components/radio-field.js',
 			'./assets/react/fields/components/select-field.js',
 			'./assets/react/fields/components/set-field.js',
 			'./assets/react/fields/components/html-field.js',
 
 			'./assets/react/fields/components/no-options.js',
+			'./assets/react/fields/components/complex-group.js',
 
 			// Load the store.
 			'./assets/react/store.js'

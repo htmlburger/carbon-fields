@@ -6,6 +6,7 @@ module.exports = {
 	// This means they will be the "root" imports that are included in JS bundle.
 	entry: [
 		'babel-polyfill',
+		'./assets/react/register.js',
 		'./assets/react/bootstrap.js'
 	],
 

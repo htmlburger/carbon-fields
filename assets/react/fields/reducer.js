@@ -1,14 +1,15 @@
 import immutable from 'object-path-immutable';
+import { decorateFieldReducer } from 'lib/registry';
 import { UPDATE_FIELD, SET_UI } from 'fields/actions';
 
 /**
  * The reducer that handles manipulation to field's state.
  *
- * @param  {Object} state
+ * @param  {Object} [state]
  * @param  {Object} [action]
  * @return {Object}
  */
-export default function(state: Object = {}, { type, payload } = {}): Object {
+function reducer(state = {}, { type, payload } = {}) {
 	switch (type) {
 		case UPDATE_FIELD:
 			return immutable.assign(state, payload.fieldId, payload.values);
@@ -18,3 +19,5 @@ export default function(state: Object = {}, { type, payload } = {}): Object {
 			return state;
 	}
 }
+
+export default decorateFieldReducer(reducer);

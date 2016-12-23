@@ -6,6 +6,7 @@ import { setupMediaBrowser, openMediaBrowser } from 'fields/actions';
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { registerFieldComponent } from 'lib/registry';
 
 /**
  * Render a file upload field with a preview thumbnail of the uploaded file.
@@ -96,8 +97,8 @@ const clearSelection = ({ field, updateField }) => () => {
 	});
 };
 
-export default compose(
+export default registerFieldComponent('File', compose(
 	withStore(undefined, mapDispatchToProps),
 	withSetup(hooks),
 	withHandlers({ openBrowser, clearSelection })
-)(FileField);
+)(FileField));

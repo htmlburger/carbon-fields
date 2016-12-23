@@ -1,5 +1,4 @@
 import { merge, keyBy, mapValues, pick, map, uniqueId } from 'lodash';
-import { TYPE_COMPLEX } from 'fields/constants';
 
 /**
  * Change the shape of preloaded state so it can be used easier through Redux.
@@ -38,7 +37,7 @@ export function flatField(field, accumulator) {
 
 	field.id = uniqueId('carbon-field-');
 
-	if (type === TYPE_COMPLEX) {
+	if (type === 'Complex') {
 		value.forEach((group, index) => {
 			group.id = `${field.id}-${index}`;
 

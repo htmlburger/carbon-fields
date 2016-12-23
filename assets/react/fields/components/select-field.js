@@ -5,6 +5,7 @@ import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { registerFieldComponent } from 'lib/registry';
 
 /**
  * Render a select input field.
@@ -59,7 +60,7 @@ const handleInputChange = ({ field, updateField }) => ({ target }) => {
 	});
 };
 
-export default compose(
+export default registerFieldComponent('Select', compose(
 	withStore(),
 	branch(
 		({ field: { options } }) => !options.length,
@@ -71,4 +72,4 @@ export default compose(
 			withHandlers({ handleInputChange })
 		)
 	)
-)(SelectField);
+)(SelectField));

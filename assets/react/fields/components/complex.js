@@ -6,6 +6,7 @@ import Field from 'fields/components/field';
 import ComplexGroup from 'fields/components/complex-group';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { registerFieldComponent } from 'lib/registry';
 
 /**
  * @param  {Object} props
@@ -25,8 +26,8 @@ export const ComplexField = ({ field }) => {
 	</Field>;
 };
 
-export default compose(
+export default registerFieldComponent('Complex', compose(
 	withStore(),
 	withSetup()
-)(ComplexField);
+)(ComplexField));
 

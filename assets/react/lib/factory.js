@@ -8,21 +8,7 @@ import UserMetaContainer from 'containers/components/user-meta-container';
 import ThemeOptionsContainer from 'containers/components/theme-options-container';
 import * as ContainerConst from 'containers/constants';
 
-import Field from 'fields/components/field';
-import FileField from 'fields/components/file-field';
-import TextField from 'fields/components/text-field';
-import TextareaField from 'fields/components/textarea-field';
-import SeparatorField from 'fields/components/separator-field';
-import HeaderScriptsField from 'fields/components/header-scripts-field';
-import FooterScriptsField from 'fields/components/footer-scripts-field';
-import ColorField from 'fields/components/color-field';
-import CheckboxField from 'fields/components/checkbox-field';
-import RadioField from 'fields/components/radio-field';
-import SelectField from 'fields/components/select-field';
-import SetField from 'fields/components/set-field';
-import HtmlField from 'fields/components/html-field';
-import ComplexField from 'fields/components/complex';
-import * as FieldConst from 'fields/constants';
+import { getFieldComponent } from 'lib/registry';
 
 /**
  * A dictionary of the supported containers.
@@ -51,28 +37,6 @@ export function makeContainer(type, props = {}) {
 }
 
 /**
- * A dictionary of the supported containers.
- *
- * @type {Object}
- */
-const fields = {
-	[FieldConst.TYPE_FILE]: FileField,
-	[FieldConst.TYPE_TEXT]: TextField,
-	[FieldConst.TYPE_TEXTAREA]: TextareaField,
-	[FieldConst.TYPE_SEPARATOR]: SeparatorField,
-	[FieldConst.TYPE_HEADER_SCRIPTS]: HeaderScriptsField,
-	[FieldConst.TYPE_FOOTER_SCRIPTS]: FooterScriptsField,
-	[FieldConst.TYPE_COLOR]: ColorField,
-	[FieldConst.TYPE_CHECKBOX]: CheckboxField,
-	[FieldConst.TYPE_RADIO]: RadioField,
-	[FieldConst.TYPE_SELECT]: SelectField,
-	[FieldConst.TYPE_SET]: SetField,
-	[FieldConst.TYPE_IMAGE]: FileField,
-	[FieldConst.TYPE_HTML]: HtmlField,
-	[FieldConst.TYPE_COMPLEX]: ComplexField,
-};
-
-/**
  * Determine which field should be rendered for the specified type.
  *
  * @param  {String} type
@@ -80,7 +44,7 @@ const fields = {
  * @return {React.Element}
  */
 export function makeField(type, props = {}) {
-	const Component = fields[type];
+	const Component = getFieldComponent(type);
 
 	if (!Component) {
 		return null;

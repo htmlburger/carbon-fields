@@ -6,6 +6,7 @@ import { compose, withHandlers, withState } from 'recompose';
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { registerFieldComponent } from 'lib/registry';
 
 /**
  * Render a color input field.
@@ -87,9 +88,9 @@ const handleInputChange = ({ field, updateField }) => ({ hex }) => {
 const showPicker = ({ setPickerVisibility }) => () => setPickerVisibility(true);
 const hidePicker = ({ setPickerVisibility }) => () => setPickerVisibility(false);
 
-export default compose(
+export default registerFieldComponent('Color', compose(
 	withStore(),
 	withSetup(),
 	withState('pickerVisible', 'setPickerVisibility', false),
 	withHandlers({ handleInputChange, showPicker, hidePicker })
-)(ColorField);
+)(ColorField));

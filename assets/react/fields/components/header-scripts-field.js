@@ -1,3 +1,4 @@
 import TextareaField from 'fields/components/textarea-field';
+import { registerFieldComponent } from 'lib/registry';
 
-export default TextareaField;
+export default registerFieldComponent('HeaderScripts', TextareaField);

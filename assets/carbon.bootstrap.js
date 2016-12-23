@@ -44,7 +44,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("__webpack_require__(1);\nmodule.exports = __webpack_require__(300);\n\n\n//////////////////\n// WEBPACK FOOTER\n// multi main\n// module id = 0\n// module chunks = 0\n//# sourceURL=webpack:///multi_main?");
+	eval("__webpack_require__(1);\n__webpack_require__(300);\nmodule.exports = __webpack_require__(314);\n\n\n//////////////////\n// WEBPACK FOOTER\n// multi main\n// module id = 0\n// module chunks = 0\n//# sourceURL=webpack:///multi_main?");
 
 /***/ },
 /* 1 */
@@ -1844,55 +1844,133 @@
 /* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("'use strict';\n\nvar _lodash = __webpack_require__(301);\n\nvar _lodash2 = _interopRequireDefault(_lodash);\n\nvar _react = __webpack_require__(302);\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _reactDom = __webpack_require__(303);\n\nvar _reactDom2 = _interopRequireDefault(_reactDom);\n\nvar _reactRedux = __webpack_require__(304);\n\nvar _store = __webpack_require__(305);\n\nvar _store2 = _interopRequireDefault(_store);\n\nvar _factory = __webpack_require__(307);\n\nvar _selectors = __webpack_require__(308);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * Put Lodash in noConflict mode to avoid conflicts with Underscore lib\n * loaded by WordPress.\n */\n_lodash2.default.noConflict();\n\n/**\n * Every Carbon container will be treated as separate React application because\n * we don't want to modify the core behaviour/markup of the WordPress's admin area.\n * Although the store will be shared between the applications.\n *\n * Abracadabra! Poof! Containers everywhere ...\n */\n_lodash2.default.forEach((0, _selectors.getContainers)(_store2.default.getState()), function (_ref) {\n  var id = _ref.id,\n      type = _ref.type;\n\n  _reactDom2.default.render(_react2.default.createElement(\n    _reactRedux.Provider,\n    { store: _store2.default },\n    (0, _factory.makeContainer)(type, { id: id })\n  ), document.querySelector('.container-' + id));\n});\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/bootstrap.js\n// module id = 300\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/bootstrap.js?");
+	eval("'use strict';\n\n__webpack_require__(301);\n\n__webpack_require__(303);\n\n__webpack_require__(304);\n\n__webpack_require__(305);\n\n__webpack_require__(306);\n\n__webpack_require__(307);\n\n__webpack_require__(308);\n\n__webpack_require__(309);\n\n__webpack_require__(310);\n\n__webpack_require__(311);\n\n__webpack_require__(312);\n\n__webpack_require__(313);\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/register.js\n// module id = 300\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/register.js?");
 
 /***/ },
 /* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("module.exports = (__webpack_require__(295))(310);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/lodash/lodash.js from dll-reference carbon.vendor\n// module id = 301\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/lodash/lodash.js_from_dll-reference_carbon.vendor?");
+	eval("module.exports = (__webpack_require__(302))(93);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/fields/components/file-field.js from dll-reference carbon.app\n// module id = 301\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/fields/components/file-field.js_from_dll-reference_carbon.app?");
 
 /***/ },
 /* 302 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	eval("module.exports = (__webpack_require__(295))(2);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/react/react.js from dll-reference carbon.vendor\n// module id = 302\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/react/react.js_from_dll-reference_carbon.vendor?");
+	eval("(function() { module.exports = this[\"carbon.app\"]; }());\n\n//////////////////\n// WEBPACK FOOTER\n// external \"carbon.app\"\n// module id = 302\n// module chunks = 0\n//# sourceURL=webpack:///external_%22carbon.app%22?");
 
 /***/ },
 /* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("module.exports = (__webpack_require__(295))(374);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/react-dom/index.js from dll-reference carbon.vendor\n// module id = 303\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/react-dom/index.js_from_dll-reference_carbon.vendor?");
+	eval("module.exports = (__webpack_require__(302))(94);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/fields/components/text-field.js from dll-reference carbon.app\n// module id = 303\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/fields/components/text-field.js_from_dll-reference_carbon.app?");
 
 /***/ },
 /* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("module.exports = (__webpack_require__(295))(453);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/react-redux/lib/index.js from dll-reference carbon.vendor\n// module id = 304\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/react-redux/lib/index.js_from_dll-reference_carbon.vendor?");
+	eval("module.exports = (__webpack_require__(302))(95);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/fields/components/textarea-field.js from dll-reference carbon.app\n// module id = 304\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/fields/components/textarea-field.js_from_dll-reference_carbon.app?");
 
 /***/ },
 /* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("module.exports = (__webpack_require__(306))(107);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/store.js from dll-reference carbon.app\n// module id = 305\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/store.js_from_dll-reference_carbon.app?");
+	eval("module.exports = (__webpack_require__(302))(96);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/fields/components/separator-field.js from dll-reference carbon.app\n// module id = 305\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/fields/components/separator-field.js_from_dll-reference_carbon.app?");
 
 /***/ },
 /* 306 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	eval("(function() { module.exports = this[\"carbon.app\"]; }());\n\n//////////////////\n// WEBPACK FOOTER\n// external \"carbon.app\"\n// module id = 306\n// module chunks = 0\n//# sourceURL=webpack:///external_%22carbon.app%22?");
+	eval("module.exports = (__webpack_require__(302))(97);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/fields/components/header-scripts-field.js from dll-reference carbon.app\n// module id = 306\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/fields/components/header-scripts-field.js_from_dll-reference_carbon.app?");
 
 /***/ },
 /* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("module.exports = (__webpack_require__(306))(76);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/lib/factory.js from dll-reference carbon.app\n// module id = 307\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/lib/factory.js_from_dll-reference_carbon.app?");
+	eval("module.exports = (__webpack_require__(302))(98);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/fields/components/footer-scripts-field.js from dll-reference carbon.app\n// module id = 307\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/fields/components/footer-scripts-field.js_from_dll-reference_carbon.app?");
 
 /***/ },
 /* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
-	eval("module.exports = (__webpack_require__(306))(12);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/containers/selectors.js from dll-reference carbon.app\n// module id = 308\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/containers/selectors.js_from_dll-reference_carbon.app?");
+	eval("module.exports = (__webpack_require__(302))(99);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/fields/components/color-field.js from dll-reference carbon.app\n// module id = 308\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/fields/components/color-field.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 309 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(302))(101);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/fields/components/checkbox-field.js from dll-reference carbon.app\n// module id = 309\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/fields/components/checkbox-field.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 310 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(302))(104);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/fields/components/radio-field.js from dll-reference carbon.app\n// module id = 310\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/fields/components/radio-field.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(302))(106);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/fields/components/select-field.js from dll-reference carbon.app\n// module id = 311\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/fields/components/select-field.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 312 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(302))(107);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/fields/components/set-field.js from dll-reference carbon.app\n// module id = 312\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/fields/components/set-field.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(302))(108);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/fields/components/html-field.js from dll-reference carbon.app\n// module id = 313\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/fields/components/html-field.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 314 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("'use strict';\n\nvar _lodash = __webpack_require__(315);\n\nvar _lodash2 = _interopRequireDefault(_lodash);\n\nvar _react = __webpack_require__(316);\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _reactDom = __webpack_require__(317);\n\nvar _reactDom2 = _interopRequireDefault(_reactDom);\n\nvar _reactRedux = __webpack_require__(318);\n\nvar _store = __webpack_require__(319);\n\nvar _store2 = _interopRequireDefault(_store);\n\nvar _factory = __webpack_require__(320);\n\nvar _selectors = __webpack_require__(321);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n/**\n * Put Lodash in noConflict mode to avoid conflicts with Underscore lib\n * loaded by WordPress.\n */\n_lodash2.default.noConflict();\n\n/**\n * Every Carbon container will be treated as separate React application because\n * we don't want to modify the core behaviour/markup of the WordPress's admin area.\n * Although the store will be shared between the applications.\n *\n * Abracadabra! Poof! Containers everywhere ...\n */\n_lodash2.default.forEach((0, _selectors.getContainers)(_store2.default.getState()), function (_ref) {\n  var id = _ref.id,\n      type = _ref.type;\n\n  _reactDom2.default.render(_react2.default.createElement(\n    _reactRedux.Provider,\n    { store: _store2.default },\n    (0, _factory.makeContainer)(type, { id: id })\n  ), document.querySelector('.container-' + id));\n});\n\n//////////////////\n// WEBPACK FOOTER\n// ./assets/react/bootstrap.js\n// module id = 314\n// module chunks = 0\n//# sourceURL=webpack:///./assets/react/bootstrap.js?");
+
+/***/ },
+/* 315 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(295))(310);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/lodash/lodash.js from dll-reference carbon.vendor\n// module id = 315\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/lodash/lodash.js_from_dll-reference_carbon.vendor?");
+
+/***/ },
+/* 316 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(295))(2);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/react/react.js from dll-reference carbon.vendor\n// module id = 316\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/react/react.js_from_dll-reference_carbon.vendor?");
+
+/***/ },
+/* 317 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(295))(374);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/react-dom/index.js from dll-reference carbon.vendor\n// module id = 317\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/react-dom/index.js_from_dll-reference_carbon.vendor?");
+
+/***/ },
+/* 318 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(295))(453);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./node_modules/react-redux/lib/index.js from dll-reference carbon.vendor\n// module id = 318\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./node_modules/react-redux/lib/index.js_from_dll-reference_carbon.vendor?");
+
+/***/ },
+/* 319 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(302))(109);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/store.js from dll-reference carbon.app\n// module id = 319\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/store.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 320 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(302))(76);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/lib/factory.js from dll-reference carbon.app\n// module id = 320\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/lib/factory.js_from_dll-reference_carbon.app?");
+
+/***/ },
+/* 321 */
+/***/ function(module, exports, __webpack_require__) {
+
+	eval("module.exports = (__webpack_require__(302))(11);\n\n//////////////////\n// WEBPACK FOOTER\n// delegated ./assets/react/containers/selectors.js from dll-reference carbon.app\n// module id = 321\n// module chunks = 0\n//# sourceURL=webpack:///delegated_./assets/react/containers/selectors.js_from_dll-reference_carbon.app?");
 
 /***/ }
 /******/ ]);
