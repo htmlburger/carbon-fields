@@ -5,35 +5,40 @@ namespace Carbon_Fields\REST;
 * Register custom REST routes		
 */
 class Routes extends REST_Controller {
+
+	protected $routes = [
+		'post_meta'     => [
+			'path'     => '/posts/(?P<id>\d+)',
+			'callback' => 'get_post_meta',
+		],
+		'term_meta'     => [
+			'path'     => '/terms/(?P<id>\d+)',
+			'callback' => 'get_term_meta',
+		],
+		'user_meta'     => [
+			'path'     => '/users/(?P<id>\d+)',
+			'callback' => 'get_user_meta',
+		],
+		'theme_options' => [
+			'path'     => '/options/',
+			'callback' => 'get_options',
+		],
+	];
 	
 	function __construct() {
-		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
+		add_action( 'rest_api_init', [ $this, 'register_routes' ], 15 );
 	}
 
 	function register_routes() {
+		foreach ( $this->routes as $route) {
+			$this->create( $route['path'], $route['callback'] );
+		}
+	}
 
-		// Post meta route
-		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), '/posts/(?P<id>\d+)', [
+	function create( $path, $callback ) {
+		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), $path, [
 			'methods'  => 'GET',
-			'callback' => [ $this, 'get_post_meta' ],
-		] );
-
-		// Term meta route
-		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), '/terms/(?P<id>\d+)', [
-			'methods'  => 'GET',
-			'callback' => [ $this, 'get_term_meta' ],
-		] );
-		
-		// User Meta route 
-		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), '/users/(?P<id>\d+)', [
-			'methods'  => 'GET',
-			'callback' => [ $this, 'get_user_meta' ],
-		] );
-		
-		// Theme options route
-		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), '/options/', [
-			'methods'  => 'GET',
-			'callback' => [ $this, 'get_options' ],
+			'callback' => [ $this, $callback ],
 		] );
 	}
 
@@ -55,5 +60,13 @@ class Routes extends REST_Controller {
 	public function get_term_meta( $data ) {
 		$carbon_data = $this->get_data( 'Term_Meta', $data['id'] );
 		return [ 'carbon_fields' => $carbon_data ];	
+	}
+
+	public function get_routes() {
+		return $this->routes;
+	}
+
+	public function set_routes( $routes ) {
+		$this->routes = $routes;
 	}
 }
