@@ -25,13 +25,19 @@ class REST_Controller {
 	 */
 	public $containers = [];
 
+	protected $special_field_types = [
+		'complex',
+		'relationship',
+		'association',
+	]; 
+
+	protected $exclude_field_types = [
+		'html',
+		'separator',
+	];
+
 	public function get_data( $type, $id  = '') {
-		$response      = [];
-		$special_types = [
-			'complex',
-			'relationship',
-			'association',
-		];
+		$response = [];
 		
 		$this->containers = $this->filter_containers( $type, $id );
 		
@@ -46,7 +52,7 @@ class REST_Controller {
 
 				$field->load();
 				
-				$field_type = array_filter( $special_types, function( $special_type ) use ( $field ) {
+				$field_type = array_filter( $this->special_field_types, function( $special_type ) use ( $field ) {
 					return strtolower( $field->type ) === $special_type ? $special_type : 'generic';
 				} );
 			
