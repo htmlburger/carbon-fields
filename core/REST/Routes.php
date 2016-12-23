@@ -7,43 +7,53 @@ namespace Carbon_Fields\REST;
 class Routes extends REST_Controller {
 	
 	function __construct() {
-		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
 	}
 
 	function register_routes() {
 
 		// Post meta route
-		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), '/posts/(?P<id>\d+)', array(
+		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), '/posts/(?P<id>\d+)', [
 			'methods'  => 'GET',
-			'callback' => array( $this, 'get_post_data'),
-		) );
+			'callback' => [ $this, 'get_post_meta' ],
+		] );
 
 		// Term meta route
-		// register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), '/posts/(?P<id>\d+)', array(
-		// 	'methods'  => 'GET',
-		// 	'callback' => array( $this, 'get_post_meta'),
-		// ) );
+		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), '/terms/(?P<id>\d+)', [
+			'methods'  => 'GET',
+			'callback' => [ $this, 'get_term_meta' ],
+		] );
 		
 		// User Meta route 
-		// register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), '/posts/(?P<id>\d+)', array(
-		// 	'methods'  => 'GET',
-		// 	'callback' => array( $this, 'get_post_meta'),
-		// ) );
+		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), '/users/(?P<id>\d+)', [
+			'methods'  => 'GET',
+			'callback' => [ $this, 'get_user_meta' ],
+		] );
 		
 		// Theme options route
-		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), '/options/', array(
+		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), '/options/', [
 			'methods'  => 'GET',
-			'callback' => array( $this, 'get_options'),
-		) );
+			'callback' => [ $this, 'get_options' ],
+		] );
 	}
 
-	public function get_post_data( $data ) {
+	public function get_post_meta( $data ) {
 		$carbon_data = $this->get_data( 'Post_Meta', $data['id'] );
-		return array( 'carbon_fields' => $carbon_data );
+		return [ 'carbon_fields' => $carbon_data ];
 	}
 
 	public function get_options() {
 		$carbon_data = $this->get_data( 'Theme_Options' );
-		return array( 'carbon_fields' => $carbon_data );
+		return [ 'carbon_fields' => $carbon_data ];
+	}
+
+	public function get_user_meta( $data ) {
+		$carbon_data = $this->get_data( 'User_Meta', $data['id'] );
+		return [ 'carbon_fields' => $carbon_data ];
+	}
+
+	public function get_term_meta( $data ) {
+		$carbon_data = $this->get_data( 'Term_Meta', $data['id'] );
+		return [ 'carbon_fields' => $carbon_data ];	
 	}
 }

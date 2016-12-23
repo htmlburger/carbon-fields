@@ -40,6 +40,7 @@ class Term_Meta_Container extends Container {
 		}
 
 		add_action( 'admin_init', array( $this, '_attach' ) );
+		add_action( 'rest_api_init', array( $this, '_attach_when_rest' ) );
 
 		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
 			add_action( 'edited_' . $taxonomy, array( $this, '_save' ), 10, 2 );

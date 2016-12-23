@@ -15,7 +15,7 @@ class REST_Controller {
 	 * Plugin slug
 	 * @var string
 	 */
-	protected $vendor  = 'carbon-fields';
+	protected $vendor = 'carbon-fields';
 
 	/**
 	 * The containers holding the fields
@@ -26,9 +26,9 @@ class REST_Controller {
 	public $containers = [];
 
 	public function get_data( $type, $id  = '') {
-		$response   = [];
+		$response = [];
 		
-		$this->filter_containers( $type, $id );
+		$this->containers = $this->filter_containers( $type, $id );
 		
 		foreach ( $this->containers as $container ) {
 			$fields = $container->get_fields();
@@ -49,26 +49,12 @@ class REST_Controller {
 	}
 
 	public function filter_containers( $type, $id = '' ) {
-		$filtered_containers = [];
-
-		foreach ( Container::$active_containers as $container ) {
-			if ( $container->type !== $type ) {
-				continue;
-			}
-
-			if ( $container->type === 'Post_Meta' ) {
-				if ( ! $container->is_valid_save_conditions( $id ) ) {
-					continue;
-				}
-			}
-
-			$filtered_containers[] = $container;
-		}
-
-		$this->containers = $filtered_containers;
+		return array_filter( Container::$active_containers, function( $container ) use ( $type, $id ) {
+			return $this->is_valid_container( $container, $type, $id );
+		});
 	}
 
- 	public function set_version( $version ) {
+	public function set_version( $version ) {
 		$this->version = $version;
 	}
 
@@ -82,5 +68,63 @@ class REST_Controller {
 
 	public function get_vendor() {
 		return $this->vendor;
+	}
+
+	public function is_valid_container( $container, $type, $id ) {
+		if ( $container->type !== $type ) {
+			return false;
+		}
+
+		$type_to_lower = strtolower( $type );
+
+		return call_user_func( [ $this, "is_valid_{$type_to_lower}_container"], $container, $id );
+	}
+
+	public function is_valid_theme_options_container( $container, $id ) {
+		return true;
+	}
+
+	public function is_valid_post_meta_container( $container, $id ) {
+		return $container->is_valid_save_conditions( $id );
+	}
+
+	public function is_valid_user_meta_container( $container, $id ) {
+		return $this->is_valid_post_meta_container( $container, $id );
+	}
+
+	public function is_valid_term_meta_container( $container, $id ) {
+		$term = get_term( $id );
+
+		if ( empty( $term ) || is_wp_error( $term ) ) { 
+			return false;
+		}
+		
+		$taxonomy = $term->taxonomy;
+
+		if ( ! in_array( $taxonomy, $container->settings['taxonomy'] ) ) {
+			return false;
+		}
+
+		if ( $container->settings['show_on_level'] ) { 
+			
+			$show_level = $container->settings['show_on_level'];
+			$term_level = self::get_term_level( $term );
+
+			if ( $term_level !== $show_level ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public static function get_term_level( $term ) {
+		$ancestors = [];	
+		while ( ! is_wp_error( $term ) && ! empty( $term->parent ) && ! in_array( $term->parent, $ancestors ) ) {
+			$ancestors[] = intval( $term->parent );
+			$term        = get_term( $term->parent );
+		}
+
+		return count( $ancestors ) + 1;
 	}
 }
