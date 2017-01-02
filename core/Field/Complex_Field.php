@@ -484,15 +484,6 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Collapse the complex field entries.
-	 */
-	public function collapse( $state = true ) {
-		$this->collapsed = $state;
-
-		return $this;
-	}
-
-	/**
 	 * The Underscore template for the complex field group.
 	 */
 	public function template_group() {
@@ -637,6 +628,18 @@ class Complex_Field extends Field {
 	 */
 	public function get_max() {
 		return $this->values_max;
+	}
+
+	/**
+	 * Change the groups initial collapse state.
+	 * This state relates to the state of which the groups are rendered.
+	 *
+	 * @param bool $collapsed
+	 */
+	public function set_collapsed( $collapsed = true ) {
+		$this->collapsed = $collapsed;
+
+		return $this;
 	}
 
 	/**
