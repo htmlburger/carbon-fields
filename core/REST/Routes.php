@@ -1,10 +1,12 @@
 <?php 
 namespace Carbon_Fields\REST;
 
+use Carbon_Fields\REST\REST_Controller;
+
 /**
 * Register custom REST routes		
 */
-class Routes extends REST_Controller {
+class Routes {
 
 	protected $routes = [
 		'post_meta'     => [
@@ -24,19 +26,23 @@ class Routes extends REST_Controller {
 			'callback' => 'get_options',
 		],
 	];
+
+	public $controller;
 	
-	function __construct() {
+	public function __construct() {
+		$this->controller = new REST_Controller();
+
 		add_action( 'rest_api_init', [ $this, 'register_routes' ], 15 );
 	}
 
-	function register_routes() {
+	public function register_routes() {
 		foreach ( $this->routes as $route) {
 			$this->create( $route['path'], $route['callback'] );
 		}
 	}
 
-	function create( $path, $callback ) {
-		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), $path, [
+	public function create( $path, $callback ) {
+		register_rest_route( $this->controller->get_vendor() . '/v' . $this->controller->get_version(), $path, [
 			'methods'  => 'GET',
 			'callback' => [ $this, $callback ],
 		] );
@@ -60,6 +66,10 @@ class Routes extends REST_Controller {
 	public function get_term_meta( $data ) {
 		$carbon_data = $this->get_data( 'Term_Meta', $data['id'] );
 		return [ 'carbon_fields' => $carbon_data ];	
+	}
+
+	public function get_data( $container_type, $id = '' ) {
+		return $this->controller->get_data( $container_type, $id );
 	}
 
 	public function get_routes() {
