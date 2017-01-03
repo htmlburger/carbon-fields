@@ -2,11 +2,18 @@
 namespace Carbon_Fields\REST;
 
 /**
-* Class for validating 
-* container types in the current context
+* Wrapper class for container validation.
 */
 class Container_Validator {
 	
+	/**
+	 * Proxy method that calls appropriate method for validation
+	 * 
+	 * @param  object  $container
+	 * @param  string  $type
+	 * @param  string  $id  
+	 * @return boolean
+	 */
 	public function is_valid_container( $container, $type, $id ) {
 		if ( $container->type !== $type ) {
 			return false;
@@ -17,18 +24,46 @@ class Container_Validator {
 		return call_user_func( [ $this, "is_valid_{$type_to_lower}_container"], $container, $id );
 	}
 
+	/**
+	 * Validates Theme Options container
+	 * 
+	 * @param  object  $container
+	 * @param  string  $id       
+	 * @return boolean
+	 */
 	public function is_valid_theme_options_container( $container, $id ) {
 		return true;
 	}
 
+	/**
+	 * Validates Post Meta container
+	 * 
+	 * @param  object  $container
+	 * @param  string  $id       
+	 * @return boolean           
+	 */
 	public function is_valid_post_meta_container( $container, $id ) {
 		return $container->is_valid_save_conditions( $id );
 	}
 
+	/**
+	 * Validates User Meta container
+	 * 
+	 * @param  object  $container 
+	 * @param  string  $id        
+	 * @return boolean            
+	 */
 	public function is_valid_user_meta_container( $container, $id ) {
 		return $this->is_valid_post_meta_container( $container, $id );
 	}
 
+	/**
+	 * Validates Term Meta container
+	 * 
+	 * @param  object  $container
+	 * @param  string  $id
+	 * @return boolean 
+	 */
 	public function is_valid_term_meta_container( $container, $id ) {
 		$term = get_term( $id );
 
@@ -55,6 +90,12 @@ class Container_Validator {
 		return true;
 	}
 
+	/**
+	 * Returns the number of parents of a taxonomy term
+	 * 
+	 * @param  object $term 
+	 * @return int
+	 */
 	public static function get_term_level( $term ) {
 		$ancestors = [];	
 		while ( ! is_wp_error( $term ) && ! empty( $term->parent ) && ! in_array( $term->parent, $ancestors ) ) {
