@@ -1,8 +1,6 @@
 <?php 
 namespace Carbon_Fields\REST;
 
-use Carbon_Fields\REST\REST_Controller;
-
 /**
 * Register custom REST routes		
 */
@@ -27,10 +25,22 @@ class Routes {
 		],
 	];
 
-	public $controller;
+	/**
+	 * Version of the API
+	 * @var string
+	 */
+	protected $version = '1';
+
+	/**
+	 * Plugin slug
+	 * @var string
+	 */
+	protected $vendor = 'carbon-fields';
+
+	public $data_manager;
 	
-	public function __construct() {
-		$this->controller = new REST_Controller();
+	public function __construct( $data_manager ) {
+		$this->data_manager = $data_manager;
 
 		add_action( 'rest_api_init', [ $this, 'register_routes' ], 15 );
 	}
@@ -42,7 +52,7 @@ class Routes {
 	}
 
 	public function create( $path, $callback ) {
-		register_rest_route( $this->controller->get_vendor() . '/v' . $this->controller->get_version(), $path, [
+		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), $path, [
 			'methods'  => 'GET',
 			'callback' => [ $this, $callback ],
 		] );
@@ -69,7 +79,7 @@ class Routes {
 	}
 
 	public function get_data( $container_type, $id = '' ) {
-		return $this->controller->get_data( $container_type, $id );
+		return $this->data_manager->get_data( $container_type, $id );
 	}
 
 	public function get_routes() {
@@ -79,4 +89,20 @@ class Routes {
 	public function set_routes( $routes ) {
 		$this->routes = $routes;
 	}
+
+	public function set_version( $version ) {
+		$this->version = $version;
+	}
+
+	public function get_version() {
+		return $this->version;
+	}
+
+	public function set_vendor( $vendor ) { 
+		$this->vendor = $vendor;
+	}
+
+	public function get_vendor() {
+		return $this->vendor;
+	}	
 }

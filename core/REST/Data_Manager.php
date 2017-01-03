@@ -2,22 +2,9 @@
 namespace Carbon_Fields\REST;
 
 use Carbon_Fields\Container\Container;
-use Carbon_Fields\REST\Container_Validator;
 
-class REST_Controller {
+class Data_Manager {
 	
-	/**
-	 * Version of the API
-	 * @var string
-	 */
-	protected $version = '1';
-
-	/**
-	 * Plugin slug
-	 * @var string
-	 */
-	protected $vendor = 'carbon-fields';
-
 	protected $special_field_types = [
 		'complex',
 		'relationship',
@@ -37,27 +24,11 @@ class REST_Controller {
 	 */
 	public $containers = [];
 
-	public $validator;
+	public $container_validator;
 
-	public function __construct() {
-		$this->validator = new Container_Validator();
+	public function __construct( $validator ) {
+		$this->container_validator = $validator;
 	}
-
-	public function set_version( $version ) {
-		$this->version = $version;
-	}
-
-	public function get_version() {
-		return $this->version;
-	}
-
-	public function set_vendor( $vendor ) { 
-		$this->vendor = $vendor;
-	}
-
-	public function get_vendor() {
-		return $this->vendor;
-	}	
 
 	public function get_data( $type, $id  = '' ) {
 		$response = [];
@@ -88,7 +59,7 @@ class REST_Controller {
 
 	public function filter_containers( $type, $id = '' ) {
 		return array_filter( Container::$active_containers, function( $container ) use ( $type, $id ) {
-			return $this->validator->is_valid_container( $container, $type, $id );
+			return $this->container_validator->is_valid_container( $container, $type, $id );
 		} );
 	}
 
