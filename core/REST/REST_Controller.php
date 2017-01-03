@@ -41,15 +41,31 @@ class REST_Controller {
 
 	public function __construct() {
 		$this->validator = new Container_Validator();
+	}
+
+	public function set_version( $version ) {
+		$this->version = $version;
+	}
+
+	public function get_version() {
+		return $this->version;
+	}
+
+	public function set_vendor( $vendor ) { 
+		$this->vendor = $vendor;
+	}
+
+	public function get_vendor() {
+		return $this->vendor;
 	}	
 
-	public function get_data( $type, $id  = '') {
+	public function get_data( $type, $id  = '' ) {
 		$response = [];
 		
 		$this->containers = $this->filter_containers( $type, $id );
 		
 		foreach ( $this->containers as $container ) {
-			$fields = $container->get_fields();
+			$fields = $this->filter_fields( $container->get_fields() );
 
 			foreach ( $fields as $field ) {
 				
@@ -76,20 +92,10 @@ class REST_Controller {
 		} );
 	}
 
-	public function set_version( $version ) {
-		$this->version = $version;
-	}
-
-	public function get_version() {
-		return $this->version;
-	}
-
-	public function set_vendor( $vendor ) { 
-		$this->vendor = $vendor;
-	}
-
-	public function get_vendor() {
-		return $this->vendor;
+	public function filter_fields( $fields ) {
+		return array_filter( $fields, function( $field ) {
+			return ! in_array( strtolower( $field->type ), $this->exclude_field_types ) ? $field : false;
+		});
 	}
 
 	public function load_generic_field_value( $field ) {
