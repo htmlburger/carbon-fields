@@ -155,6 +155,15 @@ class Field {
 	protected $conditional_logic = array();
 
 	/**
+	 * Whether the field should be included in the response of the requests to the REST API
+	 *
+	 * @see  set_rest_visibility
+	 * @see  get_rest_visibility
+	 * @var boolean
+	 */
+	protected $visible_in_rest = true;
+
+	/**
 	 * Create a new field of type $type and name $name and label $label.
 	 *
 	 * @param string $type
@@ -738,6 +747,36 @@ class Field {
 	 */
 	public function get_conditional_logic() {
 		return $this->conditional_logic;
+	}
+
+	/**
+	 * Configuration function for setting the field visibility in the response of the requests to the REST API
+	 * 
+	 * @param  bool $visible
+	 * @return object $this
+	 */
+	public function show_in_rest( $visible ) {
+		$this->set_rest_visibility( $visible );
+
+		return $this;
+	}
+
+	/**
+	 * Set the REST visibility of the field
+	 * 
+	 * @param bool $visible
+	 */
+	public function set_rest_visibility( $visible ) {
+		$this->visible_in_rest = $visible;
+	}
+
+	/**
+	 * Get the REST visibility of the field
+	 * 
+	 * @return bool True if the field is visible
+	 */
+	public function get_rest_visibility() {
+		return $this->visible_in_rest;
 	}
 
 	/**

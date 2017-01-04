@@ -92,13 +92,21 @@ class Data_Manager {
 	/**
 	 * Checks if fields should be excluded from the response
 	 * 
-	 * @param  arrat $fields 
+	 * @param  array $fields 
 	 * @return array
 	 */
 	public function filter_fields( $fields ) {
-		return array_filter( $fields, function( $field ) {
-			return ! in_array( strtolower( $field->type ), $this->exclude_field_types );
-		});
+		return array_filter( $fields, [$this, 'should_load_field'] );
+	}
+
+	/**
+	 * Checks if a field should be excluded from the response
+	 * 
+	 * @param  object $field
+	 * @return array       
+	 */
+	public function should_load_field( $field ) {
+		return $field->get_rest_visibility() && ! in_array( strtolower( $field->type ), $this->exclude_field_types );
 	}
 
 	/**
