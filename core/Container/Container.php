@@ -124,6 +124,13 @@ abstract class Container {
 	 */
 	protected $store;
 
+	/**
+	 * Whether the container should be included in the response of the requests to the REST API
+	 *
+	 * @see  set_rest_visibility
+	 * @see  get_rest_visibility
+	 * @var boolean
+	 */
 	protected $visible_in_rest = true;
 
 	/**
@@ -507,7 +514,7 @@ abstract class Container {
 	}
 
 	/**
-	 * Configuration function for showing/hiding container in REST
+	 * Configuration function for setting the container visibility in the response of the requests to the REST API
 	 * 
 	 * @param  bool $visible
 	 * @return object $this
