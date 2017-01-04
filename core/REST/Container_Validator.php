@@ -8,6 +8,7 @@ class Container_Validator {
 	
 	/**
 	 * Proxy method that calls appropriate method for validation
+	 * after some preliminary checks
 	 * 
 	 * @param  object  $container
 	 * @param  string  $type
@@ -15,6 +16,10 @@ class Container_Validator {
 	 * @return boolean
 	 */
 	public function is_valid_container( $container, $type, $id ) {
+		if ( ! $container->get_rest_visibility() ) {
+			return false;
+		}
+
 		if ( $container->type !== $type ) {
 			return false;
 		}

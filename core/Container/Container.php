@@ -124,6 +124,8 @@ abstract class Container {
 	 */
 	protected $store;
 
+	protected $visible_in_rest = true;
+
 	/**
 	 * Create a new container of type $type and name $name and label $label.
 	 *
@@ -502,6 +504,36 @@ abstract class Container {
 		$this->create_tab( $tab_name, $fields );
 
 		return $this;
+	}
+
+	/**
+	 * Configuration function for showing/hiding container in REST
+	 * 
+	 * @param  bool $visible
+	 * @return object $this
+	 */
+	public function show_in_rest( $visible ) {
+		$this->set_rest_visibility( $visible );
+
+		return $this;
+	}
+
+	/**
+	 * Set the REST visibility of the container
+	 * 
+	 * @param bool $visible
+	 */
+	public function set_rest_visibility( $visible ) {
+		$this->visible_in_rest = $visible;
+	}
+
+	/**
+	 * Get the REST visibility of the container
+	 * 
+	 * @return bool True if the container is visible
+	 */
+	public function get_rest_visibility() {
+		return $this->visible_in_rest;
 	}
 
 	/**
