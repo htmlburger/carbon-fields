@@ -76,7 +76,7 @@ class Data_Manager {
 	}
 
 	/**
-	 * Filters all available containters 
+	 * Filters all available containers 
 	 * based on $type
 	 * 
 	 * @param  string $type 
