@@ -36,7 +36,7 @@ class Container_Validator {
 	 * @param  string  $id       
 	 * @return boolean
 	 */
-	public function is_valid_theme_options_container( $container, $id ) {
+	public function is_valid_theme_options_container( $container, $id = '' ) {
 		return true;
 	}
 

@@ -14,7 +14,7 @@ class Data_Manager {
 	 * 
 	 * @var array
 	 */
-	protected $special_field_types = [
+	public $special_field_types = [
 		'complex',
 		'relationship',
 		'association',

@@ -7,6 +7,7 @@ use Carbon_Fields\Container\Container;
 use Carbon_Fields\REST\Data_Manager;
 use Carbon_Fields\REST\Container_Validator;
 use Carbon_Fields\REST\Routes;
+use Carbon_Fields\REST\Modifier;
 use Carbon_Fields\Templater\Templater;
 use Carbon_Fields\Manager\Sidebar_Manager;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
@@ -79,6 +80,7 @@ class Helper {
 		$manager   = new Data_Manager( $validator );
 
 		new Routes( $manager );
+		new Modifier( $manager );
 	}
 
 	/**
