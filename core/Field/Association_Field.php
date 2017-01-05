@@ -139,6 +139,7 @@ class Association_Field extends Relationship_Field {
 
 	/**
 	 * Used to get the label of an item.
+	 * The label is shown on the right side of the field.
 	 *
 	 * Can be overriden or extended by the `carbon_relationship_item_label` filter.
 	 *
@@ -152,10 +153,18 @@ class Association_Field extends Relationship_Field {
 
 		if ( $type === 'post' ) {
 			$post_type_object = get_post_type_object( $subtype );
-			$label = $post_type_object->labels->singular_name;
+
+			$label = $subtype;
+			if ( !empty( $post_type_object ) ) {
+				$label = $post_type_object->labels->singular_name;
+			}
 		} elseif ( $type === 'term' ) {
 			$taxonomy_object = get_taxonomy( $subtype );
-			$label = $taxonomy_object->labels->singular_name;
+
+			$label = $subtype;
+			if ( !empty( $taxonomy_object ) ) {
+				$label = $taxonomy_object->labels->singular_name;
+			}
 		}
 
 		/**

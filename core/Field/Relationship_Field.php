@@ -84,6 +84,7 @@ class Relationship_Field extends Field {
 
 	/**
 	 * Used to get the label of an item.
+	 * The label is shown on the right side of the field.
 	 *
 	 * Can be overriden or extended by the `carbon_relationship_item_label` filter.
 	 *
@@ -94,7 +95,11 @@ class Relationship_Field extends Field {
 	 */
 	public function get_item_label( $id, $type, $subtype = '' ) {
 		$object = get_post_type_object( $subtype );
-		$label = $object->labels->singular_name;
+
+		$label = $subtype;
+		if ( !empty( $object ) ) {
+			$label = $object->labels->singular_name;
+		}
 
 		/**
 		 * Filter the label of the relationship item.
