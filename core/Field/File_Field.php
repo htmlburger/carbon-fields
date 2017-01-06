@@ -70,7 +70,7 @@ class File_Field extends Field {
 
 		if ( $value ) {
 			$url = is_numeric( $value ) ? wp_get_attachment_url( $value ) : $value;
-			$file_name = basename($url);
+			$file_name = basename( $url );
 			$filetype = wp_check_filetype( $url );
 
 			$file_ext = $filetype['ext']; // png, mp3, etc..

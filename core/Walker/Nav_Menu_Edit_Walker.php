@@ -41,11 +41,11 @@ class Nav_Menu_Edit_Walker extends \Walker_Nav_Menu_Edit {
 		$regex = sprintf(
 			'~(?<!%s)(%s)~',
 			preg_quote( $flag, '~' ),
-			implode( '|', $markers)
+			implode( '|', $markers )
 		);
 
 		// Injects the HTML
-		$output = preg_replace( $regex, $fields . "$1", $output );
+		$output = preg_replace( $regex, $fields . '$1', $output );
 	}
 
 }
