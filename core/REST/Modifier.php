@@ -4,46 +4,44 @@ namespace Carbon_Fields\REST;
 use Carbon_Fields\Container\Container;
 
 /**
-* 
-*/
+ * This class modifies the default REST routes
+ * using the WordPress' register_rest_field function 
+ */
+
 class Modifier {
 
-	protected $manager;
+	/**
+	 * Instance of the Data_Manager class
+	 * 
+	 * @var object
+	 */
+	public $data_manager;
 
-	private $fields         = [];
-	private $fields_by_type = [];
+	/**
+	 * All fields that need to be registeres
+	 *
+	 * @var array
+	 */
+	private $fields = [];
 
-	protected $types = [
-		'Post_Meta' => 'post',
-		'Term_Meta' => 'term',
-		'User_Meta' => 'user',
-	];
-
-	protected $callbacks = [
-
-	];
-
-	function __construct( $manager ) {
-
-		$this->manager = $manager;
-
-		add_action( 'rest_api_init', [ $this, 'register_fields']);
-		
+	function __construct( $data_manager ) {
+		$this->data_manager = $data_manager;
+		add_action( 'rest_api_init', [ $this, 'register_fields'] );
 	}
 
 	public function register_fields() {
 		$containers = $this->get_containers();
 
+		$this->fields = array_map( [ $this, 'filter_fields' ], $containers );
+		$this->fields = call_user_func_array( 'array_merge', $this->fields );
+
 		foreach ( $containers as $container ) {
-			$type                  = $container->type;
-			$this->fields_by_type[ $this->types[ $type ] ] = $this->manager->filter_fields( $container->get_fields() );
-		}
+			$fields        = $this->filter_fields( $container );
+			$type_to_lower = strtolower( $container->type );
+			$types         = call_user_func( [ __CLASS__, "get_{$type_to_lower}_container_settings"], $container );
 
-		$this->fields = call_user_func_array('array_merge', $this->fields_by_type);
-
-		foreach ( $this->fields_by_type as $type => $fields_of_type ) {
-			foreach ( $fields_of_type as $field ) {
-				register_rest_field( $type,
+			foreach ( $fields as $field ) {
+				register_rest_field( $types,
 					$field->get_name(), [
 						'get_callback'    => [ $this, 'load_field_value' ],
 						'update_callback' => null,
@@ -54,13 +52,17 @@ class Modifier {
 		}
 	}
 
-	function get_containers() {
+	public function get_containers() {
 		return array_filter( Container::$active_containers, function( $container ) {
 			return $container->type !== 'Theme_Options' && $container->get_rest_visibility(); 
 		} );
 	}
 
-	function load_field_value( $object, $field_name, $request ) {
+	public function filter_fields( $container ) {
+		return $this->data_manager->filter_fields( $container->get_fields() );
+	}
+
+	public function load_field_value( $object, $field_name, $request ) {
 
 		$field = array_filter( $this->fields, function( $field ) use ( $field_name ) { 
 			return $field->get_name() === $field_name;
@@ -71,14 +73,29 @@ class Modifier {
 		}   
 
 		$field = array_pop( $field );
-
+		
 		$field->get_datastore()->set_id( $object['id'] );
 		$field->load();
 
-		$field_type = in_array( strtolower( $field->type ), $this->manager->special_field_types ) ? strtolower( $field->type ) : 'generic';
+		$field_type = $this->get_field_type( $field );
 
-		$value = call_user_func( [ $this->manager, "load_{$field_type}_field_value" ], $field );
-		
-		return $value;
+		return call_user_func( [ $this->data_manager, "load_{$field_type}_field_value" ], $field );
+	}
+
+	public static function get_post_meta_container_settings( $container ) {
+		return $container->settings['post_type'];
+	}
+
+	public static function get_term_meta_container_settings( $container ) {
+		return $container->settings['taxonomy'];
+	}
+
+	public static function get_user_meta_container_settings( $container ) {
+		return 'user';
+	}
+
+	public function get_field_type( $field ) {
+		$type_to_lower = strtolower( $field->type );
+		return in_array( $type_to_lower, $this->data_manager->special_field_types ) ? $type_to_lower : 'generic';
 	}
 }
