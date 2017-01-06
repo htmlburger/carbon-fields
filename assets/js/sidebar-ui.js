@@ -7,10 +7,10 @@ window.carbon = window.carbon || {};
 	$(document).ready(function() {
 
 		// Append an add sidebar button
-		$addButton = $('<a class="add-new-h2 carbon-btn-add-sidebar" href="#">' + crbl10n.add_sidebar + '</a>');
+		$addButton = $('<a class="add-new-h2 carbon-btn-add-sidebar" href="#">' + crbSidebarl10n.add_sidebar + '</a>');
 
 		$addButton.on('click', function(event) {
-			var sidebarName = $.trim( window.prompt( crbl10n.enter_name_of_new_sidebar ) );
+			var sidebarName = $.trim( window.prompt( crbSidebarl10n.enter_name_of_new_sidebar ) );
 
 			if (sidebarName) {
 				carbon.sidebarManager(sidebarName, 'add', true);
@@ -27,7 +27,7 @@ window.carbon = window.carbon || {};
 			var $removeButton = $('<a href="#" class="carbon-btn-remove-sidebar" />');
 
 			$removeButton.on('click', function(event) {
-				var confirmation = confirm( crbl10n.remove_sidebar_confirmation );
+				var confirmation = confirm( crbSidebarl10n.remove_sidebar_confirmation );
 
 				if (confirmation) {
 					carbon.sidebarManager(sidebarId, 'remove', true);

@@ -164,5 +164,12 @@ class Sidebar_Manager {
 	 */
 	public function enqueue_scripts() {
 		wp_enqueue_script( 'carbon-sidebar-ui', \Carbon_Fields\URL . '/assets/js/sidebar-ui.js', array( 'carbon-app' ) );
+		wp_localize_script( 'carbon-sidebar-ui', 'crbSidebarl10n',
+			array(
+				'add_sidebar' => __( 'Add Sidebar', 'carbon-fields' ),
+				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', 'carbon-fields' ),
+				'remove_sidebar_confirmation' => __( 'Are you sure you wish to remove this sidebar?', 'carbon-fields' ),
+			)
+		);
 	}
 }
