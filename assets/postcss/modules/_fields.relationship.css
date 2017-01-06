@@ -1,0 +1,91 @@
+/* ------------------------------------------------------------ *\
+	Field - Relationship
+\* ------------------------------------------------------------ */
+
+.carbon-relationship-container { position: relative; clear: both; margin: 3px 0 0; }
+.carbon-relationship-container .carbon-relationship-right label { display: none; }
+
+.carbon-relationship-container:after { content: ''; display: block; clear: both; width: 100%; }
+
+.carbon-relationship-left,
+.carbon-relationship-right { width: 50%; padding: 00; border: 0; margin: 0; }
+
+.carbon-relationship-left { float: left; }
+.carbon-relationship-right { float: right; }
+
+.carbon-relationship-list { position: relative; border: 1px solid $color-border; background: #fff; font-size: 12px; }
+
+.carbon-relationship-list li { position: relative; display: block; padding: 0; margin: 0; background: #fff; }
+
+.carbon-relationship-list li a { position: relative; display: block; padding: 8px 18px 8px 8px; border-bottom: 1px solid $color-border; text-decoration: none; color: $color-label; font-weight: bold; }
+.carbon-relationship-list li a span { position: absolute; top: 7px; right: 8px; color: $color-grey-font; cursor: pointer; }
+
+.carbon-relationship-list li a em { float: right; margin-right: 14px; font-size: 11px; font-style: normal; font-weight: normal; text-transform: uppercase; color: $color-grey-font; }
+.carbon-relationship-list li a em.edit-link { font-size: 0; margin-right: 18px; margin-top: -1px; }
+
+.carbon-relationship-list li a i.trashed { display: inline-block; margin: 0 3px; }
+.carbon-relationship-list li a i.trashed:before { margin-top: -1px; color: $color-grey-font; }
+
+.carbon-relationship-list li a:focus { outline: none; box-shadow: none; }
+.carbon-relationship-list li a:hover { background-color: $color-grey-bg; color: $color-label; }
+.carbon-relationship-list li a span:hover:before { color: $color-border-darkgrey; }
+
+.carbon-relationship-search { position: relative; width: 100%; border: 0;  border-spacing: 0; margin: 0; z-index: 1; }
+.carbon-relationship-search:before { position: absolute; left: 8px; top: 50%; margin-top: -10px; color: $color-grey-font; pointer-events: none; }
+.carbon-relationship-search input { width: 100%; height: 40px; padding: 10px 9px 10px 32px !important; border: 1px solid $color-border; margin: 0; font-size: 13px; line-height: 18px; border-radius: 0; }
+
+.carbon-relationship-container .mobile-handle { display: none; }
+
+.carbon-relationship-container .carbon-relationship-right .mobile-handle:before { margin-top: 7px; }
+.carbon-relationship-container .carbon-relationship-right .mobile-handle { position: absolute; top: 0; left: 0; z-index: 30; display: block; width: 30px; height: 100%; text-align: center; }
+.carbon-relationship-container .carbon-relationship-right a { padding-left: 30px; }
+
+.carbon-relationship-left .carbon-relationship-list { overflow: auto; display: block; height: 162px; border-top: 0 none; margin: 0; -webkit-overflow-scrolling: touch; }
+.carbon-relationship-left .carbon-relationship-list a span:before { visibility: visible; }
+
+.carbon-relationship-right label { display: none; }
+.carbon-relationship-right .carbon-relationship-list { overflow: auto; height: 162px; min-height: 162px; margin: 0; border-left: 0; border-top: 0; -webkit-overflow-scrolling: touch; }
+.carbon-relationship-right .carbon-relationship-list li a { cursor: move; }
+.carbon-relationship-right .carbon-relationship-list li a em { margin-right: 20px; }
+.carbon-relationship-right .carbon-relationship-list li a span:before { content: '\f153'; }
+.carbon-relationship-right .carbon-relationship-list li a span:hover { opacity: .8; }
+.carbon-relationship-right .carbon-relationship-list.ui-sortable { touch-action: auto; }
+
+.carbon-relationship-list li.inactive a { background-color: $color-grey-bg; opacity: .6; cursor: default; }
+.carbon-relationship-list li.inactive a span { display: none; }
+.carbon-relationship-list li.load-more { text-align: center; }
+.carbon-relationship-list li.load-more .spinner { float: none; padding: 3px; margin: 0 auto; background-position: center center; }
+
+.loading .carbon-relationship-list li.load-more .spinner { display: block; }
+
+.carbon-relationship-list em.edit-link { cursor: pointer; }
+.carbon-relationship-list em.edit-link:hover { color: $color-border-darkgrey; }
+
+.carbon-relationship-container .selected-items-container { position: absolute; right: 12px; top: 15px; }
+
+.edit-term-container .carbon-relationship-container .selected-items-container { top: -18px; }
+
+.add-term-container .carbon-relationship-container .selected-items-container,
+.edit-term-container .carbon-row .carbon-relationship-container .selected-items-container,
+.carbon-box .carbon-relationship-container .selected-items-container,
+.carbon-box .carbon-row .carbon-relationship-container .selected-items-container,
+.comment-container-holder .carbon-relationship-container .selected-items-container { top: -26px; }
+
+/*  Right-to-Left  */
+
+.rtl .carbon-relationship-container .selected-items-container { left: 0; right: auto; }
+.rtl .carbon-relationship-list li a em { margin-left: 10px; }
+.rtl .carbon-relationship-list li a em.edit-link { margin-left: 0; }
+
+@media screen and (max-width: $breakpoint-mobile-max) {
+	.carbon-relationship-container ul { font-size: 14px; }
+}
+
+@media screen and (max-width: $breakpoint-mobile-landscape) {
+	.carbon-relationship-container .selected-items-container { position: static; }
+
+	.carbon-relationship-left,
+	.carbon-relationship-right { float: none; display: block; width: auto; padding: 0 0 10px; }
+
+	.carbon-relationship-right .carbon-relationship-list { border: 1px solid $color-border; }
+}

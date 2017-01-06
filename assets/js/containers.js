@@ -122,6 +122,9 @@ window.carbon = window.carbon || {};
 			// Listen for model changes in the fields collection.
 			this.listenToOnce(this.fieldsCollection, 'change:value', this.changeListener);
 
+			// Disable/enable the container's inputs when visibility changes
+			this.listenTo(this.model, 'change:visible', this.disableInputs);
+
 			// Listen for container class updates
 			this.listenTo(this.model, 'change:classes', this.updateClass);
 
@@ -187,11 +190,18 @@ window.carbon = window.carbon || {};
 		},
 
 		addFieldRows: function() {
-			var $fields = this.$(':not(.carbon-fields-row) > .carbon-field.has-width');
+
+			var $fields    = this.$(':not(.carbon-fields-row) > .carbon-field.has-width:not(.carbon-subrow)');
+			var $subfields = this.$(':not(.carbon-fields-row) > .carbon-field.has-width.carbon-subrow:not(.carbon-Complex)');
+			var $complex_groups = this.$(':not(.carbon-fields-row) > .carbon-field.has-width.carbon-subrow.carbon-Complex');
+
+			var fields_groups = new Array($fields, $subfields, $complex_groups);
+
 			var $group = $();
 			var groupWidth = 0;
 
 			var wrapGroup = function() {
+
 				if ($group.length > 0) {
 					$group.wrapAll('<div class="carbon-fields-row"/>');
 					$group = $();
@@ -199,22 +209,38 @@ window.carbon = window.carbon || {};
 				}
 			}
 
-			$fields.each(function() {
-				var matches = this.className.match(/width-(\d+)/);
-				var width = parseInt(matches[1]);
+			for ( i=0; i<fields_groups.length; i++ ) {
 
-				// stupid repetition; fix when brain is working
-				if (groupWidth + width > 100) {
-					wrapGroup();
-				}
+				fields_groups[i].each(function() {
 
-				groupWidth += width;
-				$group = $group.add($(this));
+					var matches = this.className.match(/width-(\d+)/);
+					var width = parseInt(matches[1]);
 
-				if (!$(this).next().hasClass('has-width')) {
-					wrapGroup();
-				}
-			});
+					// stupid repetition; fix when brain is working
+					if (groupWidth + width > 100) {
+						wrapGroup();
+					}
+
+					groupWidth += width;
+					$group = $group.add($(this));
+
+					if (!$(this).next().hasClass('has-width') ) {
+						wrapGroup();
+					}
+
+
+				});
+			}
+
+		},
+
+		disableInputs: function(model) {
+			if ( ! this.$el.is('fieldset') ) {
+				return;
+			}
+
+			var disabled = !model.get('visible');
+			this.$el.attr('disabled', disabled);
 		},
 
 		updateClass: function(model) {

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Container;
 
@@ -7,7 +7,7 @@ use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
- * Base container class. 
+ * Base container class.
  * Defines the key container methods and their default implementations.
  */
 abstract class Container {
@@ -26,21 +26,12 @@ abstract class Container {
 	public static $registered_panel_ids = array();
 
 	/**
-	 * List of registered unique field names
-	 *
-	 * @see verify_unique_field_name()
-	 * @var array
-	 */
-	static protected $registered_field_names = array();
-
-	/**
-	 * List of containers created via factory that 
+	 * List of containers created via factory that
 	 * should be initialized
 	 *
-	 * @see verify_unique_field_name()
 	 * @var array
 	 */
-	static protected $init_containers = array();
+	protected static $init_containers = array();
 
 	/**
 	 * List of containers attached to the current page view
@@ -56,7 +47,15 @@ abstract class Container {
 	 * @see _attach()
 	 * @var array
 	 */
-	static protected $active_fields = array();
+	protected static $active_fields = array();
+
+	/**
+	 * List of registered unique field names for this container instance
+	 *
+	 * @see verify_unique_field_name()
+	 * @var array
+	 */
+	protected $registered_field_names = array();
 
 	/**
 	 * Stores all the container Backbone templates
@@ -149,7 +148,6 @@ abstract class Container {
 
 		$container = new $class( $name );
 		$container->type = $type;
-		$container->add_template( $type, array( $container, 'template' ) );
 
 		self::$init_containers[] = $container;
 
@@ -190,8 +188,10 @@ abstract class Container {
 	/**
 	 * Adds a container to the active containers array and triggers an action
 	 **/
-	public static function add_active_container( $container ) {
+	public static function activate_container( $container ) {
 		self::$active_containers[] = $container;
+
+		$container->boot();
 
 		do_action( 'crb_container_activated', $container );
 	}
@@ -208,16 +208,18 @@ abstract class Container {
 	/**
 	 * Adds a field to the active fields array and triggers an action
 	 **/
-	public static function add_active_field( $field ) {
+	public static function activate_field( $field ) {
 		self::$active_fields[] = $field;
 
 		if ( method_exists( $field, 'get_fields' ) ) {
 			$fields = $field->get_fields();
 
 			foreach ( $fields as $inner_field ) {
-				self::add_active_field( $inner_field );
+				self::activate_field( $inner_field );
 			}
 		}
+
+		$field->boot();
 
 		do_action( 'crb_field_activated', $field );
 	}
@@ -272,16 +274,16 @@ abstract class Container {
 		$this->id = preg_replace( '~\W~u', '', remove_accents( $title ) );
 
 		self::verify_unique_panel_id( $this->id );
-
-		$this->load_scripts_styles();
 	}
 
 	/**
-	 * Load the admin scripts and styles.
+	 * Boot the container once it's attached.
 	 **/
-	public function load_scripts_styles() {
-		add_action( 'admin_print_scripts', array( $this, 'admin_hook_scripts' ) );
-		add_action( 'admin_print_styles', array( $this, 'admin_hook_styles' ) );
+	public function boot() {
+		$this->add_template( $this->type, array( $this, 'template' ) );
+
+		add_action( 'admin_footer', array( get_class(), 'admin_hook_scripts' ), 5 );
+		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
 	}
 
 	/**
@@ -289,6 +291,7 @@ abstract class Container {
 	 *
 	 * @see init()
 	 * @param array $settings
+	 * @return object $this
 	 **/
 	public function setup( $settings = array() ) {
 		if ( $this->setup_ready ) {
@@ -324,7 +327,7 @@ abstract class Container {
 
 	/**
 	 * Called first as part of the container save procedure.
-	 * Responsible for checking the request validity and 
+	 * Responsible for checking the request validity and
 	 * calling the container-specific save() method
 	 *
 	 * @see save()
@@ -342,7 +345,7 @@ abstract class Container {
 	 *
 	 * @see is_valid_save()
 	 **/
-	public function save( $user_data ) {
+	public function save( $data ) {
 		foreach ( $this->fields as $field ) {
 			$field->set_value_from_input();
 			$field->save();
@@ -367,11 +370,11 @@ abstract class Container {
 			$field->load();
 		}
 	}
-	
+
 
 	/**
 	 * Called first as part of the container attachment procedure.
-	 * Responsible for checking it's OK to attach the container 
+	 * Responsible for checking it's OK to attach the container
 	 * and if it is, calling the container-specific attach() method
 	 *
 	 * @see attach()
@@ -383,11 +386,11 @@ abstract class Container {
 			call_user_func_array( array( $this, 'attach' ), $param );
 
 			if ( call_user_func_array( array( $this, 'is_active' ), $param ) ) {
-				self::add_active_container( $this );
+				self::activate_container( $this );
 
-				$fields = $this->get_fields(); 
+				$fields = $this->get_fields();
 				foreach ( $fields as $field ) {
-					self::add_active_field( $field );
+					self::activate_field( $field );
 				}
 			}
 		}
@@ -410,7 +413,7 @@ abstract class Container {
 	}
 
 	/**
-	 * Attach the container rendering and helping methods 
+	 * Attach the container rendering and helping methods
 	 * to concrete WordPress Action hooks
 	 **/
 	public function attach() {}
@@ -449,10 +452,11 @@ abstract class Container {
 	 * Append array of fields to the current fields set. All items of the array
 	 * must be instances of Field and their names should be unique for all
 	 * Carbon containers.
-	 * If a field does not have DataStore already, the container data store is 
+	 * If a field does not have DataStore already, the container data store is
 	 * assigned to them instead.
 	 *
 	 * @param array $fields
+	 * @return object $this
 	 **/
 	public function add_fields( $fields ) {
 		foreach ( $fields as $field ) {
@@ -475,10 +479,14 @@ abstract class Container {
 
 	/**
 	 * Configuration function for adding tab with fields
+	 *
+	 * @param string $tab_name
+	 * @param array $fields
+	 * @return object $this
 	 */
 	public function add_tab( $tab_name, $fields ) {
 		$this->add_template( 'tabs', array( $this, 'template_tabs' ) );
-		
+
 		$this->add_fields( $fields );
 		$this->create_tab( $tab_name, $fields );
 
@@ -487,6 +495,11 @@ abstract class Container {
 
 	/**
 	 * Internal function that creates the tab and associates it with particular field set
+	 *
+	 * @param string $tab_name
+	 * @param array $fields
+	 * @param int $queue_end
+	 * @return object $this
 	 */
 	private function create_tab( $tab_name, $fields, $queue_end = self::TABS_TAIL ) {
 		if ( isset( $this->tabs[ $tab_name ] ) ) {
@@ -512,6 +525,8 @@ abstract class Container {
 
 	/**
 	 * Whether the container is tabbed or not
+	 *
+	 * @return bool
 	 */
 	public function is_tabbed() {
 		return (bool) $this->tabs;
@@ -519,6 +534,8 @@ abstract class Container {
 
 	/**
 	 * Retrieve all fields that are not defined under a specific tab
+	 *
+	 * @return array
 	 */
 	public function get_untabbed_fields() {
 		$tabbed_fields_names = array();
@@ -546,12 +563,14 @@ abstract class Container {
 	/**
 	 * Retrieve all tabs.
 	 * Create a default tab if there are any untabbed fields.
+	 *
+	 * @return array
 	 */
 	public function get_tabs() {
 		$untabbed_fields = $this->get_untabbed_fields();
 
 		if ( ! empty( $untabbed_fields ) ) {
-			$this->create_tab( __( 'General', 'carbon_fields' ), $untabbed_fields, self::TABS_HEAD );
+			$this->create_tab( __( 'General', 'carbon-fields' ), $untabbed_fields, self::TABS_HEAD );
 		}
 
 		return $this->tabs;
@@ -559,9 +578,11 @@ abstract class Container {
 
 	/**
 	 * Build the tabs JSON
+	 *
+	 * @return array
 	 */
 	public function get_tabs_json() {
-		$tabs_json = array();	
+		$tabs_json = array();
 		$tabs = $this->get_tabs();
 
 		foreach ( $tabs as $tab_name => $fields ) {
@@ -597,7 +618,7 @@ abstract class Container {
 	 */
 	public static function verify_unique_panel_id( $id ) {
 		if ( in_array( $id, self::$registered_panel_ids ) ) {
-			Incorrect_Syntax_Exception::raise( 'Panel ID "' . $id .'" already registered' );
+			Incorrect_Syntax_Exception::raise( 'Panel ID "' . $id . '" already registered' );
 		}
 
 		self::$registered_panel_ids[] = $id;
@@ -622,11 +643,11 @@ abstract class Container {
 	 * @param string $name
 	 **/
 	public function verify_unique_field_name( $name ) {
-		if ( in_array( $name, self::$registered_field_names ) ) {
+		if ( in_array( $name, $this->registered_field_names ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
 		}
 
-		self::$registered_field_names[] = $name;
+		$this->registered_field_names[] = $name;
 	}
 
 	/**
@@ -635,9 +656,10 @@ abstract class Container {
 	 * @param string $name
 	 **/
 	public function drop_unique_field_name( $name ) {
-		$index = array_search( $name, self::$registered_field_names );
+		$index = array_search( $name, $this->registered_field_names );
+
 		if ( $index !== false ) {
-			unset( self::$registered_field_names[ $index ] );
+			unset( $this->registered_field_names[ $index ] );
 		}
 	}
 
@@ -645,6 +667,7 @@ abstract class Container {
 	 * Assign DataStore instance for use by the container fields
 	 *
 	 * @param object $store
+	 * @return object $this
 	 **/
 	public function set_datastore( $store ) {
 		$this->store = $store;
@@ -652,6 +675,8 @@ abstract class Container {
 		foreach ( $this->fields as $field ) {
 			$field->set_datastore( $this->store );
 		}
+
+		return $this;
 	}
 
 	/**
@@ -684,7 +709,7 @@ abstract class Container {
 	/**
 	 * Returns an array that holds the container data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -716,7 +741,7 @@ abstract class Container {
 				<# _.each(tabs, function (tab, tabName) { #>
 					<li><a href="#" data-id="{{{ tab.id }}}">{{{ tabName }}}</a></li>
 				<# }); #>
-			</ul> 
+			</ul>
 
 			<div class="carbon-tabs-body">
 				<# _.each(tabs, function (tab) { #>
@@ -732,13 +757,13 @@ abstract class Container {
 	/**
 	 * Enqueue admin scripts
 	 */
-	public function admin_hook_scripts() {
+	public static function admin_hook_scripts() {
 		wp_enqueue_script( 'carbon-containers', \Carbon_Fields\URL . '/assets/js/containers.js', array( 'carbon-app' ) );
 
 		wp_localize_script( 'carbon-containers', 'carbon_containers_l10n',
 			array(
-				'please_fill_the_required_fields' => __( 'Please fill out all required fields highlighted below.', 'carbon_fields' ),
-				'changes_made_save_alert' => __( 'The changes you made will be lost if you navigate away from this page.', 'carbon_fields' ),
+				'please_fill_the_required_fields' => __( 'Please fill out all required fields highlighted below.', 'carbon-fields' ),
+				'changes_made_save_alert' => __( 'The changes you made will be lost if you navigate away from this page.', 'carbon-fields' ),
 			)
 		);
 	}
@@ -746,9 +771,8 @@ abstract class Container {
 	/**
 	 * Enqueue admin styles
 	 */
-	public function admin_hook_styles() {
-		wp_enqueue_style( 'carbon-main', \Carbon_Fields\URL . '/assets/css/main.css' );
+	public static function admin_hook_styles() {
+		wp_enqueue_style( 'carbon-main', \Carbon_Fields\URL . '/assets/bundle.css' );
 	}
-
-} // END Container 
+} // END Container
 

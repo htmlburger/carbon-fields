@@ -8,18 +8,10 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Field container designed to extend WordPress custom fields functionality,
- * providing easier user interface to add, edit and delete text, media files, 
+ * providing easier user interface to add, edit and delete text, media files,
  * location information and more.
  */
 class Post_Meta_Container extends Container {
-	/**
-	 * List of registered unique field names
-	 *
-	 * @see verify_unique_field_name()
-	 * @var array
-	 */
-	protected static $registered_field_names;
-
 	/**
 	 * ID of the post the container is working with
 	 *
@@ -290,10 +282,10 @@ class Post_Meta_Container extends Container {
 	public function attach() {
 		foreach ( $this->settings['post_type'] as $post_type ) {
 			add_meta_box(
-				$this->id, 
-				$this->title, 
-				array( $this, 'render' ), 
-				$post_type, 
+				$this->id,
+				$this->title,
+				array( $this, 'render' ),
+				$post_type,
 				$this->settings['panel_context'],
 				$this->settings['panel_priority']
 			);
@@ -364,7 +356,7 @@ class Post_Meta_Container extends Container {
 
 		return true;
 	}
-	
+
 	/**
 	 * Revert the result of attach()
 	 **/
@@ -398,44 +390,6 @@ class Post_Meta_Container extends Container {
 	}
 
 	/**
-	 * Perform checks whether there is a field registered with the name $name.
-	 * If not, the field name is recorded.
-	 *
-	 * @param string $name
-	 **/
-	public function verify_unique_field_name( $name ) {
-		if ( empty( $this->settings['post_type'] ) ) {
-			Incorrect_Syntax_Exception::raise( 'Panel instance is not setup correctly (missing post type)' );
-		}
-
-		foreach ( $this->settings['post_type'] as $post_type ) {
-			if ( ! isset( self::$registered_field_names[ $post_type ] ) ) {
-				self::$registered_field_names[ $post_type ] = array();
-			}
-
-			if ( in_array( $name, self::$registered_field_names[ $post_type ] ) ) {
-				Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
-			}
-
-			self::$registered_field_names[ $post_type ][] = $name;
-		}
-	}
-
-	/**
-	 * Remove field name $name from the list of unique field names
-	 *
-	 * @param string $name
-	 **/
-	public function drop_unique_field_name( $name ) {
-		foreach ( $this->settings['post_type'] as $post_type ) {
-			$index = array_search( $name, self::$registered_field_names[ $post_type ] );
-			if ( $index !== false ) {
-				unset( self::$registered_field_names[ $post_type ][ $index ] );
-			}
-		}
-	}
-
-	/**
 	 * Show the container only on pages whose parent is referenced by $parent_page_path.
 	 *
 	 * @param string $parent_page_path
@@ -443,6 +397,8 @@ class Post_Meta_Container extends Container {
 	 **/
 	public function show_on_page_children( $parent_page_path ) {
 		$page = get_page_by_path( $parent_page_path );
+
+		$this->show_on_post_type( 'page' );
 
 		if ( $page ) {
 			$this->settings['show_on']['parent_page_id'] = $page->ID;
@@ -452,7 +408,7 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Show the container only on particular page referenced by it's path.
 	 *
@@ -460,11 +416,15 @@ class Post_Meta_Container extends Container {
 	 * @return object $this
 	 **/
 	public function show_on_page( $page ) {
-		if ( is_int( $page ) ) {
-			$page_obj = get_post( $page );
+		$page_id = absint( $page );
+
+		if ( $page_id && $page_id == $page ) {
+			$page_obj = get_post( $page_id );
 		} else {
 			$page_obj = get_page_by_path( $page );
 		}
+
+		$this->show_on_post_type( 'page' );
 
 		if ( $page_obj ) {
 			$this->settings['show_on']['page_id'] = $page_obj->ID;
@@ -474,7 +434,7 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Show the container only on posts from the specified category.
 	 *
@@ -488,7 +448,7 @@ class Post_Meta_Container extends Container {
 
 		return $this->show_on_taxonomy_term( $category_slug, 'category' );
 	}
-	
+
 	/**
 	 * Show the container only on pages whose template has filename $template_path.
 	 *
@@ -500,6 +460,7 @@ class Post_Meta_Container extends Container {
 			foreach ( $template_path as $path ) {
 				$this->show_on_template( $path );
 			}
+
 			return $this;
 		}
 
@@ -507,7 +468,7 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Hide the container from pages whose template has filename $template_path.
 	 *
@@ -526,7 +487,7 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Show the container only on hierarchical posts of level $level.
 	 * Levels start from 1 (top level post)
@@ -543,7 +504,7 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Show the container only on posts which have term $term_slug from the $taxonomy_slug taxonomy.
 	 *
@@ -560,7 +521,7 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Show the container only on posts from the specified format.
 	 * Learn more about {@link http://codex.wordpress.org/Post_Formats Post Formats (Codex)}
@@ -622,5 +583,4 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-
-} // END Post_Meta_Container 
+} // END Post_Meta_Container

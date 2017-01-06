@@ -14,13 +14,14 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 class Helper {
 
 	/**
-	 * Create a new helper. 
+	 * Create a new helper.
 	 * Hook the main Carbon Fields initialization functionality.
 	 */
 	public function __construct() {
-		add_action( 'wp_loaded', array( $this, 'trigger_fields_register' ) );
+		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
 		add_action( 'carbon_after_register_fields', array( $this, 'init_containers' ) );
 		add_action( 'admin_footer', array( $this, 'init_scripts' ), 0 );
+		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data_script' ), 9 );
 		add_action( 'crb_field_activated', array( $this, 'add_templates' ) );
 		add_action( 'crb_container_activated', array( $this, 'add_templates' ) );
 		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
@@ -37,7 +38,7 @@ class Helper {
 	 */
 	public function load_textdomain() {
 		$dir = dirname( dirname( __DIR__ ) ) . '/languages/';
-		$domain = 'carbon_fields';
+		$domain = 'carbon-fields';
 		$locale = get_locale();
 		$path = $dir . $domain . '-' . $locale . '.mo';
 		load_textdomain( $domain, $path );
@@ -49,7 +50,7 @@ class Helper {
 	public function trigger_fields_register() {
 		try {
 			do_action( 'carbon_register_fields' );
-			do_action( 'carbon_after_register_fields' );	
+			do_action( 'carbon_after_register_fields' );
 		} catch ( Incorrect_Syntax_Exception $e ) {
 			$callback = '';
 			foreach ( $e->getTrace() as $trace ) {
@@ -70,28 +71,26 @@ class Helper {
 	 * Initialize main scripts
 	 */
 	public function init_scripts() {
-		wp_enqueue_script( 'carbon-app', \Carbon_Fields\URL . '/assets/js/app.js', array( 'jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable' ) );
-		wp_enqueue_script( 'carbon-ext', \Carbon_Fields\URL . '/assets/js/ext.js', array( 'carbon-app' ) );
+		wp_enqueue_script( 'carbon-ext', \Carbon_Fields\URL . '/assets/js/ext.js', array( 'jquery' ) );
+		wp_enqueue_script( 'carbon-app', \Carbon_Fields\URL . '/assets/js/app.js', array( 'jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable', 'carbon-ext' ) );
+	}
 
-		wp_localize_script( 'carbon-app', 'carbon_json', $this->get_json_data() );
-
-		$active_fields = Container::get_active_fields();
-		$active_field_types = array();
-
-		foreach ( $active_fields as $field ) {
-			if ( in_array( $field->type, $active_field_types ) ) {
-				continue;
-			}
-
-			$active_field_types[] = $field->type;
-
-			$field->admin_enqueue_scripts();
-		}
+	/**
+	 * Print the carbon JSON data script.
+	 */
+	public function print_json_data_script() {
+		?>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
+//--><!]]>
+</script>
+		<?php
 	}
 
 	/**
 	 * Retrieve containers and sidebars for use in the JS.
-	 * 
+	 *
 	 * @return array $carbon_data
 	 */
 	public function get_json_data() {
@@ -127,7 +126,7 @@ class Helper {
 
 	/**
 	 * Retrieve post meta field for a post.
-	 * 
+	 *
 	 * @param  int    $id   Post ID.
 	 * @param  string $name Custom field name.
 	 * @param  string $type Custom field type (optional).
@@ -153,7 +152,7 @@ class Helper {
 
 	/**
 	 * Retrieve theme option field value.
-	 * 
+	 *
 	 * @param  string $name Custom field name.
 	 * @param  string $type Custom field type (optional).
 	 * @return mixed        Option value.
@@ -164,7 +163,7 @@ class Helper {
 
 	/**
 	 * Retrieve term meta field for a term.
-	 * 
+	 *
 	 * @param  int    $id   Term ID.
 	 * @param  string $name Custom field name.
 	 * @param  string $type Custom field type (optional).
@@ -178,7 +177,7 @@ class Helper {
 
 	/**
 	 * Retrieve user meta field for a user.
-	 * 
+	 *
 	 * @param  int    $id   User ID.
 	 * @param  string $name Custom field name.
 	 * @param  string $type Custom field type (optional).
@@ -192,7 +191,7 @@ class Helper {
 
 	/**
 	 * Retrieve comment meta field for a comment.
-	 * 
+	 *
 	 * @param  int    $id   Comment ID.
 	 * @param  string $name Custom field name.
 	 * @param  string $type Custom field type (optional).
@@ -321,20 +320,20 @@ class Helper {
 
 	/**
 	 * Build a string of concatenated pieces for an OR regex.
-	 * 
+	 *
 	 * @param  array  $pieces Pieces
 	 * @param  string $glue   Glue between the pieces
 	 * @return string         Result string
 	 */
 	public static function preg_quote_array( $pieces, $glue = '|' ) {
 		$pieces = array_map( 'preg_quote', $pieces, array( '~' ) );
-		
+
 		return implode( $glue, $pieces );
 	}
 
 	/**
 	 * Build the regex for parsing a certain complex field.
-	 * 
+	 *
 	 * @param  string $field_name  Name of the complex field.
 	 * @param  array  $group_names Array of group names.
 	 * @param  array  $field_names Array of subfield names.
@@ -358,7 +357,7 @@ class Helper {
 
 	/**
 	 * Retrieve the complex field data for a certain field.
-	 * 
+	 *
 	 * @param  string $type Datastore type.
 	 * @param  string $name Name of the field.
 	 * @param  int    $id   ID of the entry (optional).
@@ -366,7 +365,7 @@ class Helper {
 	 */
 	public static function get_complex_fields( $type, $name, $id = null ) {
 		$datastore = Datastore::factory( $type );
-		
+
 		if ( $id !== null ) {
 			$datastore->set_id( $id );
 		}
@@ -378,7 +377,7 @@ class Helper {
 			if ( ! preg_match( self::get_complex_field_regex( $name ), $row['field_key'], $field_name ) ) {
 					continue;
 			}
-			
+
 			$row['field_value'] = maybe_unserialize( $row['field_value'] );
 
 			// backward compatibility for Relationship field
@@ -402,7 +401,7 @@ class Helper {
 
 	/**
 	 * Recursively expand the subfields of a complex field.
-	 * 
+	 *
 	 * @param  array $input_groups Input groups.
 	 * @param  array $row          Data row (key and value).
 	 * @param  array $field_name   Field name pieces.
@@ -429,7 +428,7 @@ class Helper {
 
 	/**
 	 * Parse the raw value of the relationship and association fields.
-	 * 
+	 *
 	 * @param  string $raw_value Raw relationship value.
 	 * @param  string $type      Field type.
 	 * @return array             Array of parsed data.
@@ -471,13 +470,13 @@ class Helper {
 
 	/**
 	 * Detect if using the old way of storing the relationship field values.
-	 * If so, parse them to the new way of storing the data. 
-	 * 
+	 * If so, parse them to the new way of storing the data.
+	 *
 	 * @param  mixed $value Old field value.
 	 * @return mixed        New field value.
 	 */
 	public static function maybe_old_relationship_field( $value ) {
-		if ( is_array( $value ) && ! empty( $value ) ) {
+		if ( is_array( $value ) && ! empty( $value ) && ! empty( $value[0] ) ) {
 			if ( preg_match( '~^\w+:\w+:\d+$~', $value[0] ) ) {
 				$new_value = array();
 				foreach ( $value as $value_entry ) {
@@ -509,5 +508,4 @@ class Helper {
 
 		return true;
 	}
-
 }

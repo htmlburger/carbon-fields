@@ -1,0 +1,336 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Carbon Fields\n"
+"POT-Creation-Date: 2016-01-11 12:56+0200\n"
+"PO-Revision-Date: 2016-10-20 10:33+0200\n"
+"Last-Translator: admin <info@primatek.io>\n"
+"Language-Team: Russian\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.3\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && n"
+"%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
+"Report-Msgid-Bugs-To: \n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: core/Field/Complex_Field.php:505
+msgid ""
+"Complex field layouts are deprecated, please use <code>set_width()</code> "
+"instead."
+msgstr ""
+"Смешанные шаблоны полей больше не поддерживаются, используйте "
+"<code>set_width()</code>."
+
+#: core/Field/Field.php:862
+msgid "Geocode was not successful for the following reason: "
+msgstr "Запрос геокодера завершился ошибкой:"
+
+#: core/Field/Field.php:863
+msgid "Maximum number of items reached (%s items)"
+msgstr "Достигнуто максимальное число элементов (%s элементов)"
+
+#: core/Field/Field.php:864
+msgid "Maximum number of rows reached (%s rows)"
+msgstr "Достигнуто максимальное число рядов (%s рядов)"
+
+#: core/Field/Field.php:865
+msgid "Cannot create more than %s rows"
+msgstr "Невозможно создать более %s рядов"
+
+#: core/Field/Field.php:866
+msgid "Please enter the name of the new sidebar:"
+msgstr "Укажите название сайдбара:"
+
+#: core/Field/Field.php:867
+msgid "Are you sure you wish to remove this sidebar?"
+msgstr "Действительно удалить сайдбар?"
+
+#: core/Field/Field.php:871
+msgid "Minimum number of rows not reached (%d %s)"
+msgstr "Недостаточное количество рядов (%d %s)"
+
+#: core/Field/Footer_Scripts_Field.php:14
+msgid ""
+"If you need to add scripts to your footer (like Google Analytics tracking "
+"code), you should enter them in this box."
+msgstr ""
+"Если в футер необходимо добавить скрипты (код Google Analytics), их нужно "
+"указать здесь."
+
+#: core/Field/Gravity_Form_Field.php:45
+msgid "No form"
+msgstr "Нет формы"
+
+#: core/Field/Gravity_Form_Field.php:80
+msgid "Please install Gravity Forms plugin"
+msgstr "Пожалуйста, установите Gravity Forms"
+
+#: core/Field/Gravity_Form_Field.php:86
+msgid "No Gravity Forms have been found."
+msgstr "Не найден плагин Gravity Forms."
+
+#: core/Field/Header_Scripts_Field.php:14
+msgid "If you need to add scripts to your header, you should enter them here."
+msgstr "Если в заголовок необходимо добавить скрипты, их нужно указать здеcь."
+
+#. translators: %s: title of menu item which is invalid
+#: core/Walker/Nav_Menu_Edit_Walker.php:75
+msgid "%s (Invalid)"
+msgstr "%s (Неправильных)"
+
+#. translators: %s: title of menu item in draft status
+#: core/Walker/Nav_Menu_Edit_Walker.php:79
+msgid "%s (Pending)"
+msgstr "%s (Ожидающих)"
+
+#: core/Container/Container.php:542
+msgid "General"
+msgstr "Основные"
+
+#: core/Container/Container.php:728
+msgid "Please fill out all required fields highlighted below."
+msgstr "Пожалуйста, заполните указанные поля."
+
+#: core/Container/Container.php:729
+msgid "The changes you made will be lost if you navigate away from this page."
+msgstr "При переходе на другую страницу все изменения будут потеряны."
+
+#: core/Container/Theme_Options_Container.php:151
+msgid "Settings saved."
+msgstr "Настройки сохранены"
+
+#: core/Field/Association_Field.php:380 core/Field/Relationship_Field.php:265
+msgid "Edit"
+msgstr "Редактировать"
+
+#: core/Field/Color_Field.php:17
+msgid "Select a Color"
+msgstr "Выбрать цвет"
+
+#: core/Field/Complex_Field.php:37
+msgid "Entry"
+msgstr "Элемент"
+
+#: core/Field/Complex_Field.php:38
+msgid "Entries"
+msgstr "Элементы"
+
+#: core/Field/Complex_Field.php:464
+msgid "Collapse/Expand"
+msgstr "Свернуть/Развернуть"
+
+#: core/Field/Complex_Field.php:465
+msgid "Clone"
+msgstr "Копировать"
+
+#: core/Field/Complex_Field.php:466 core/Walker/Nav_Menu_Edit_Walker.php:217
+msgid "Remove"
+msgstr "Удалить"
+
+#: core/Field/Date_Field.php:39
+msgid "Date"
+msgstr "Дата"
+
+#: core/Field/Field.php:860 core/Field/File_Field.php:25
+msgid "Files"
+msgstr "Файлы"
+
+#: core/Field/Field.php:861
+msgid "The address could not be found. "
+msgstr "Адрес не найден."
+
+#: core/Field/Field.php:868
+msgid "Add Sidebar"
+msgstr "Добавить сайдбар"
+
+#: core/Field/Field.php:872
+msgid "Please fill out all fields correctly. "
+msgstr "Убедитесь, что все поля заполнены верно."
+
+#: core/Field/Field.php:873
+msgid "This field is required. "
+msgstr "Обязательное поле."
+
+#: core/Field/Field.php:874
+msgid "Please choose an option. "
+msgstr "Пожалуйста, выберите вариант."
+
+#: core/Field/File_Field.php:23 core/Field/File_Field.php:24
+msgid "Select File"
+msgstr "Выбрать файл"
+
+#: core/Field/File_Field.php:122
+msgid "View File"
+msgstr "Открыть файл"
+
+#: core/Field/Image_Field.php:20
+msgid "Images"
+msgstr "Изображения"
+
+#: core/Field/Map_Field.php:58
+msgid "Find"
+msgstr "Найти"
+
+#: core/Field/Radio_Field.php:15 core/Field/Select_Field.php:55
+#: core/Field/Set_Field.php:95
+msgid "no options"
+msgstr "нет вариантов"
+
+#: core/Field/Relationship_Field.php:211
+msgid "selected item"
+msgstr "выбрать элемент"
+
+#: core/Field/Relationship_Field.php:211 core/Field/Relationship_Field.php:212
+msgid "selected items"
+msgstr "выбранные элементы"
+
+#: core/Field/Relationship_Field.php:219
+msgid "out of"
+msgstr "из"
+
+#: core/Field/Relationship_Field.php:226
+msgid "Search"
+msgstr "Поиск"
+
+#: core/Field/Relationship_Field.php:239
+msgid "Associated:"
+msgstr "Связанные:"
+
+#: core/Field/Set_Field.php:114
+msgid "Show All Options"
+msgstr "Показать все варианты"
+
+#: core/Field/Sidebar_Field.php:35
+msgctxt "sidebar"
+msgid "Add New"
+msgstr "Добавить новый"
+
+#: core/Manager/Sidebar_Manager.php:104
+msgid "Sidebar with the same ID is already registered."
+msgstr "Сайдбар с этим ID уже зарегистрирован."
+
+#: core/Manager/Sidebar_Manager.php:131
+msgid "Sidebar not found."
+msgstr "Сайдбар не найден."
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:92
+msgid "sub item"
+msgstr "дочерний элемент"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:107
+msgid "Move up"
+msgstr "Вверх"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:120
+msgid "Move down"
+msgstr "Вниз"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:122
+#: core/Walker/Nav_Menu_Edit_Walker.php:124
+msgid "Edit Menu Item"
+msgstr "Редактировать элемент меню"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:133
+msgid "URL"
+msgstr "URL"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:140
+msgid "Navigation Label"
+msgstr "Ярлык навигации"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:146
+msgid "Title Attribute"
+msgstr "Атрибут Title"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:153
+msgid "Open link in a new window/tab"
+msgstr "Открывать ссылку в новом окне/закладке"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:158
+msgid "CSS Classes (optional)"
+msgstr "CSS Классы (необязательно)"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:164
+msgid "Link Relationship (XFN)"
+msgstr "Link Relationship (XFN)"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:170
+msgid "Description"
+msgstr "Описание"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:172
+msgid ""
+"The description will be displayed in the menu if the current theme supports "
+"it."
+msgstr "Описание будет отображаться в меню, если предусмотрено текущей темой."
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:192
+msgid "Move"
+msgstr "Переместить"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:193
+msgid "Up one"
+msgstr "Один пункт вверх"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:194
+msgid "Down one"
+msgstr "Один пункт вниз"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:197
+msgid "To the top"
+msgstr "На верх"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:204
+msgid "Original: %s"
+msgstr "Оригинал: %s"
+
+#: core/Walker/Nav_Menu_Edit_Walker.php:218
+msgid "Cancel"
+msgstr "Отмена"
+
+#: templates/Container/theme_options.php:31
+msgid "Actions"
+msgstr "Действия"
+
+#: templates/Container/theme_options.php:37
+msgid "Save Changes"
+msgstr "Сохранить изменения"
+
+#: templates/Container/widget.php:5
+msgid "No options are available for this widget."
+msgstr "Нет доступных настроек для этого виджета."
+
+#: core/Field/Rich_Text_Field.php:31 core/Field/Rich_Text_Field.php:32
+msgid "Add Media"
+msgstr "Добавить медиафайл"
+
+#: core/Field/Rich_Text_Field.php:43
+msgid "Visual"
+msgstr "Визуально"
+
+#: core/Field/Rich_Text_Field.php:46
+msgid "Text"
+msgstr "Текст"
+
+#: core/Field/Map_Field.php:53
+msgid "Locate Address on the map"
+msgstr "Поиск по адресу"
+
+#: core/Field/Field.php:869
+msgid "There are no %s yet. Click <a href=\"#\">here</a> to add one."
+msgstr "Нажмите <a href=\"#\">здесь</a>, чтобы добавить элемент."
+
+#: core/Field/Field.php:870
+msgid "Add %s"
+msgstr "Добавить %s"
+
+#: core/Field/Image_Field.php:18 core/Field/Image_Field.php:19
+msgid "Select Image"
+msgstr "Выбрать изображение"

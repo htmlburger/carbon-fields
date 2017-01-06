@@ -1,7 +1,7 @@
 {
     "name": "htmlburger/carbon-fields",
     "description": "WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options and more.",
-    "type": "library",
+    "type": "wordpress-plugin",
     "license": "GPL-2.0",
     "homepage": "http://carbonfields.net/",
     "authors": [
@@ -9,6 +9,32 @@
             "name": "htmlBurger",
             "email": "wordpress@htmlburger.com",
             "homepage": "https://htmlburger.com/",
+            "role": "Developer"
+        },
+        {
+            "name": "Miroslav Mitev",
+            "email": "mmitev.2create@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Atanas Angelov",
+            "email": "atanas.angelov.dev@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Georgi Stoyanov",
+            "email": "stoyanov.gs@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Plamen Kostadinov",
+            "email": "pkostadinov.2create@gmail.com",
+            "homepage": "http://plasmen.info/",
+            "role": "Developer"
+        },
+        {
+            "name": "Stanimir Panchev",
+            "email": "Stan4omir@gmail.com",
             "role": "Developer"
         },
         {
@@ -23,24 +49,8 @@
             "role": "Developer"
         },
         {
-            "name": "Georgi Stoyanov",
-            "email": "stoyanov.gs@gmail.com",
-            "role": "Developer"
-        },
-        {
-            "name": "Stanimir Panchev",
-            "email": "Stan4omir@gmail.com",
-            "role": "Developer"
-        },
-        {
             "name": "Peter Petrov",
             "email": "peter.petrov89@gmail.com",
-            "role": "Developer"
-        },
-        {
-            "name": "Plamen Kostadinov",
-            "email": "pkostadinov.2create@gmail.com",
-            "homepage": "http://plasmen.info/",
             "role": "Developer"
         },
         {
@@ -51,7 +61,7 @@
         {
             "name": "Kaloyan Ivanov",
             "email": "kaloyanxivanov@gmail.com",
-            "homepage": "http://codepeace.net/",
+            "homepage": "http://vilepixels.com/",
             "role": "Developer"
         },
         {
@@ -77,7 +87,6 @@
         "issues": "https://github.com/htmlburger/carbon-fields/issues",
         "email": "wordpress@htmlburger.com"
     },
-    "require": {},
     "autoload": {
         "psr-4": {
             "Carbon_Fields\\": "core/"
@@ -86,5 +95,8 @@
             "carbon-fields.php",
             "core/functions.php"
         ]
+    },
+    "require": {
+        "composer/installers": "~1.0"
     }
 }

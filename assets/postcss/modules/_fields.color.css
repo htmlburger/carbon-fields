@@ -1,0 +1,29 @@
+/* ------------------------------------------------------------ *\
+	Field - Color Picker
+\* ------------------------------------------------------------ */
+
+.carbon-color { position: relative; }
+
+.carbon-color .carbon-color-button { display: inline-block; vertical-align: top; padding: 0; }
+.carbon-color .carbon-color-button-text { padding: 0 10px; }
+
+.carbon-color .carbon-color-preview { display: inline-block; vertical-align: top; width: 28px; height: 100%; background: #fff; border-radius: 3px 0 0 3px; border-right: 1px solid $color-border-darker; }
+
+.carbon-color input.carbon-color-field { display: inline-block; vertical-align: top; width: 80px; opacity: 0; transition: background-color .5s ease; }
+.carbon-color input.carbon-color-field.error { background-color: #e74444; }
+
+.carbon-color .has-color + input.carbon-color-field { opacity: 1; }
+
+.carbon-color .iris-picker { position: absolute; top: 100%; left: 0; z-index: 15; border: 1px solid #e5e5e5; box-shadow: 0 0 5px rgba(0,0,0,.2); }
+
+/*  Right-to-Left  */
+
+.rtl .carbon-color .carbon-color-preview { border-radius: 0 3px 3px 0; border-right: 0; border-left: 1px solid $color-border-darker; }
+.rtl .carbon-color .iris-picker { left: auto; right: 0; }
+
+@media (max-width: 782px) {
+	.carbon-color .carbon-color-button { height: 39px; line-height: 37px; }
+	.carbon-container .carbon-field .carbon-color .carbon-color-button .carbon-color-preview { margin: 0 !important; vertical-align: top !important; }
+	.carbon-container .carbon-field .carbon-color .carbon-color-button .carbon-color-button-text { margin: 0 !important; vertical-align: top; }
+}
+

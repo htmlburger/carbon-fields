@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -13,16 +13,20 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Allows nested repeaters with multiple field groups to be created.
  */
 class Complex_Field extends Field {
-	const LAYOUT_TABLE = 'table';
-	const LAYOUT_LIST = 'list';
+	const LAYOUT_GRID = 'grid'; // default
+	const LAYOUT_LIST = 'list'; // deprecated
+	const LAYOUT_TABBED = 'tabbed'; // deprecated
+	const LAYOUT_TABBED_HORIZONTAL = 'tabbed-horizontal';
+	const LAYOUT_TABBED_VERTICAL = 'tabbed-vertical';
 
 	protected $fields = array();
 	protected $values = array();
 	protected $groups = array();
 
-	protected $layout = self::LAYOUT_TABLE;
+	protected $layout = self::LAYOUT_GRID;
 	protected $values_min = -1;
 	protected $values_max = -1;
+	protected $collapsed = false;
 
 	public $labels = array(
 		'singular_name' => 'Entry',
@@ -30,22 +34,25 @@ class Complex_Field extends Field {
 	);
 
 	/**
-	 * Initialization tasks
+	 * Initialization tasks.
 	 */
 	public function init() {
 		$this->labels = array(
-			'singular_name' => __( 'Entry', 'carbon_fields' ),
-			'plural_name' => __( 'Entries', 'carbon_fields' ),
+			'singular_name' => __( 'Entry', 'carbon-fields' ),
+			'plural_name' => __( 'Entries', 'carbon-fields' ),
 		);
 
-		// Include the complex group backbone template
+		// Include the complex group Underscore templates
 		$this->add_template( 'Complex-Group', array( $this, 'template_group' ) );
+		$this->add_template( 'Complex-Group-Tab-Item', array( $this, 'template_group_tab_item' ) );
 
 		parent::init();
 	}
 
 	/**
 	 * Add a set/group of fields.
+	 *
+	 * @return $this
 	 */
 	public function add_fields() {
 		$argv = func_get_args();
@@ -72,21 +79,44 @@ class Complex_Field extends Field {
 
 		if ( array_key_exists( '_' . $name, $this->groups ) ) {
 			Incorrect_Syntax_Exception::raise( 'Group with name "' . $name . '" in Complex Field "' . $this->get_label() . '" already exists.' );
-		} else {
-			$group = new Group_Field();
-			$group->set_name( $name );
-			
-			$group->add_fields( $fields );
-			$group->set_label( $label );
-
-			$this->groups[ $group->get_name() ] = $group;
-			return $this;
 		}
+
+		$group = new Group_Field($name, $label, $fields);
+
+		$this->groups[ $group->get_name() ] = $group;
+
+		return $this;
+	}
+
+	/**
+	 * Set the group label Underscore template.
+	 *
+	 * @param  string|callable $template
+	 * @return $this
+	 */
+	public function set_header_template( $template ) {
+		if ( count($this->groups) === 0 ) {
+			Incorrect_Syntax_Exception::raise( "Can't set group label template. There are no present groups for Complex Field " . $this->get_label() . "." );
+		}
+
+		$template = is_callable( $template ) ? call_user_func( $template ) : $template;
+
+		// Assign the template to the group that was added last
+		$values = array_values( $this->groups );
+		$group = end( $values );
+		$group->set_label_template( $template );
+
+		// Include the group label Underscore template
+		$this->add_template( $group->get_group_id(), array( $group, 'template_label' ) );
+
+		$this->groups[ $group->get_name() ] = $group;
+
+		return $this;
 	}
 
 	/**
 	 * Retrieve all groups of fields.
-	 * 
+	 *
 	 * @return array $fields
 	 */
 	public function get_fields() {
@@ -106,7 +136,7 @@ class Complex_Field extends Field {
 	 * Currently supported values:
 	 *  - singular_name - the singular entry label
 	 *  - plural_name - the plural entries label
-	 * 
+	 *
 	 * @param  array $labels Labels
 	 */
 	public function setup_labels( $labels ) {
@@ -116,7 +146,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Set the datastore of this field.
-	 * 
+	 *
 	 * @param Datastore_Interface $store
 	 */
 	public function set_datastore( Datastore_Interface $store ) {
@@ -128,7 +158,7 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Load the field value from an input array based on it's name
+	 * Load the field value from an input array based on it's name.
 	 *
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
 	 **/
@@ -146,6 +176,7 @@ class Complex_Field extends Field {
 		$input_groups = $input[ $this->get_name() ];
 		$index = 0;
 
+
 		foreach ( $input_groups as $values ) {
 			$value_group = array();
 			if ( ! isset( $values['group'] ) || ! isset( $this->groups[ $values['group'] ] ) ) {
@@ -160,11 +191,6 @@ class Complex_Field extends Field {
 			// trim input values to those used by the field
 			$group_field_names = array_flip( $group->get_field_names() );
 			$values = array_intersect_key( $values, $group_field_names );
-
-			// check if group is empty
-			if ( count( array_filter( $values, array( $this, 'array_filter_remove_empty_values' ) ) ) == 0 && ! in_array( '0', $values ) ) {
-				continue;
-			}
 
 			foreach ( $group_fields as $field ) {
 				// set value from the group
@@ -190,22 +216,6 @@ class Complex_Field extends Field {
 
 			$this->values[] = $value_group;
 			$index++;
-		}
-	}
-
-	/**
-	 * Recursive callback function for array_filter()
-	 * 
-	 * Checks if the given value is an array and calls itself recursively
-	 * Otherwise, works as usual
-	 */
-	public function array_filter_remove_empty_values( $value ) {
-		if ( is_array( $value ) ) {
-			return array_filter( $value, array( $this, 'array_filter_remove_empty_values' ) );
-		}
-
-		if ( ! empty( $value ) ) {
-			return true;
 		}
 	}
 
@@ -238,7 +248,7 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Load and parse the field data
+	 * Load and parse the field data.
 	 */
 	public function load_values() {
 		return $this->load_values_from_db();
@@ -257,7 +267,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Load and parse a raw set of field data.
-	 * 
+	 *
 	 * @param  array $values Raw data entries
 	 * @return array 		 Processed data entries
 	 */
@@ -284,7 +294,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Parse groups of raw field data into the actual field hierarchy.
-	 * 
+	 *
 	 * @param  array $group_rows Group rows
 	 */
 	public function process_loaded_values( $group_rows ) {
@@ -324,7 +334,7 @@ class Complex_Field extends Field {
 
 		// create groups list with loaded fields
 		ksort( $input_groups );
-		
+
 		foreach ( $input_groups as $index => $values ) {
 			$value_group = array( 'type' => $values['type'] );
 			$group_fields = $this->groups[ $values['type'] ]->get_fields();
@@ -348,7 +358,7 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Retrieve the field values
+	 * Retrieve the field values.
 	 * @return array
 	 */
 	public function get_values() {
@@ -370,7 +380,7 @@ class Complex_Field extends Field {
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -391,6 +401,7 @@ class Complex_Field extends Field {
 			$data = array(
 				'name' => $group->get_name(),
 				'label' => $group->get_label(),
+				'group_id' => $group->get_group_id(),
 				'fields' => array(),
 			);
 
@@ -409,29 +420,53 @@ class Complex_Field extends Field {
 			'multiple_groups' => count( $groups_data ) > 1,
 			'groups' => $groups_data,
 			'value' => $values_data,
+			'collapsed' => $this->collapsed,
 		) );
 
 		return $complex_data;
 	}
 
 	/**
-	 * The main Underscore template
+	 * The main Underscore template.
 	 */
 	public function template() {
 		?>
 		<div class="carbon-subcontainer carbon-grid {{ multiple_groups ? 'multiple-groups' : '' }}">
-	
-			<div class="carbon-empty-row">
+			<div class="carbon-empty-row carbon-empty-row-visible">
 				{{{ crbl10n.complex_no_rows.replace('%s', labels.plural_name) }}}
 			</div>
 
-			<div class="carbon-groups-holder layout-{{ layout }}"></div>
+			<div class="groups-wrapper layout-{{ layout }}">
+				<# if (layout === '<?php echo self::LAYOUT_TABBED_HORIZONTAL ?>' || layout === '<?php echo self::LAYOUT_TABBED_VERTICAL ?>' ) { #>
+					<div class="group-tabs-nav-holder">
+						<ul class="group-tabs-nav"></ul>
+
+						<div class="carbon-actions">
+							<div class="carbon-button">
+								<a href="#" class="button" data-group="{{{ multiple_groups ? '' : groups[0].name }}}">
+									+
+								</a>
+
+								<# if (multiple_groups) { #>
+									<ul>
+										<# _.each(groups, function(group) { #>
+											<li><a href="#" data-group="{{{ group.name }}}">{{{ group.label }}}</a></li>
+										<# }); #>
+									</ul>
+								<# } #>
+							</div>
+						</div>
+					</div><!-- /.group-tabs-nav-holder -->
+				<# } #>
+
+				<div class="carbon-groups-holder"></div>
+				<div class="clear"></div>
+			</div>
 
 			<div class="carbon-actions">
 				<div class="carbon-button">
 					<a href="#" class="button" data-group="{{{ multiple_groups ? '' : groups[0].name }}}">
 						{{{ crbl10n.complex_add_button.replace('%s', labels.singular_name) }}}
-						{{{ multiple_groups ? '&#8681;' : '' }}}
 					</a>
 
 					<# if (multiple_groups) { #>
@@ -448,7 +483,7 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * The Underscore template for a complex field group
+	 * The Underscore template for the complex field group.
 	 */
 	public function template_group() {
 		?>
@@ -456,12 +491,21 @@ class Complex_Field extends Field {
 			<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[group]" value="{{ name }}" />
 
 			<div class="carbon-drag-handle">
-				<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label }}}</span>
+				<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label_template || label }}}</span>
 			</div>
-			<div class="carbon-group-actions">
-				<a class="carbon-btn-collapse" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>"><?php _e( 'Collapse/Expand', 'carbon_fields' ); ?></a>
-				<a class="carbon-btn-duplicate" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>"><?php _e( 'Clone', 'carbon_fields' ); ?></a>
-				<a class="carbon-btn-remove" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>"><?php _e( 'Remove', 'carbon_fields' ); ?></a>
+
+			<div class="carbon-group-actions carbon-group-actions-{{ layout }}">
+				<a class="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>">
+					<?php _e( 'Clone', 'carbon_fields' ); ?>
+				</a>
+
+				<a class="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>">
+					<?php _e( 'Remove', 'carbon_fields' ); ?>
+				</a>
+
+				<a class="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>">
+					<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?>
+				</a>
 			</div>
 
 			<div class="fields-container">
@@ -491,19 +535,55 @@ class Complex_Field extends Field {
 		<?php
 	}
 
+	 /**
+	 * The Underscore template for the group item tab.
+	 */
+	public function template_group_tab_item() {
+		?>
+		<li class="group-tab-item" data-group-id="{{ id }}">
+			<a href="#">
+				<span class="group-handle"></span>
+
+				<# if (label_template || label) { #>
+					<span class="group-name">{{{ label_template || label }}}</span>
+				<# } #>
+				<span class="group-number">{{{ order + 1 }}}</span>
+				<span class="dashicons dashicons-warning carbon-complex-group-error-badge" ></span>
+			</a>
+		</li>
+		<?php
+	}
+
 	/**
 	 * Modify the layout of this field.
-	 * Deprecated in favor of set_width().
 	 *
-	 * @deprecated
-	 * 
 	 * @param string $layout
 	 */
 	public function set_layout( $layout ) {
-		_doing_it_wrong( __METHOD__, __( 'Complex field layouts are deprecated, please use <code>set_width()</code> instead.', 'carbon_fields' ), null );
+		$available_layouts = array(
+			self::LAYOUT_GRID,
+			self::LAYOUT_TABBED_HORIZONTAL,
+			self::LAYOUT_TABBED_VERTICAL,
+			self::LAYOUT_LIST,
+		);
 
-		if ( ! in_array( $layout, array( self::LAYOUT_TABLE, self::LAYOUT_LIST ) ) ) {
-			Incorrect_Syntax_Exception::raise( 'Incorrect layout specifier. Available values are "<code>' . self::LAYOUT_TABLE . '</code>" and "<code>' . self::LAYOUT_LIST . '</code>"' );
+		if ( $layout === self::LAYOUT_TABBED ) {
+			// The library used to provide just one kind of tabs -- horizontal ones. Later vertical tabs were added.
+			// So the "tabbed" name was renamed to "tabbed-horizontal" and "tabbed-vertical" layout was introduced.
+			_doing_it_wrong( __METHOD__, sprintf( __( 'Complex field "%1$s" layout is deprecated, please use "%2$s" or "%3$s" instead.', 'carbon_fields' ), self::LAYOUT_TABBED, self::LAYOUT_TABBED_HORIZONTAL, self::LAYOUT_TABBED_VERTICAL ), null );
+
+			$layout = self::LAYOUT_TABBED_HORIZONTAL;
+		}
+
+		if ( ! in_array( $layout,  $available_layouts ) ) {
+			$error_message = 'Incorrect layout ``' . $layout . '" specified. ' .
+				'Available layouts: ' . implode( ', ', $available_layouts );
+
+			Incorrect_Syntax_Exception::raise( $error_message );
+		}
+
+		if ( $layout === self::LAYOUT_LIST ) {
+			_doing_it_wrong( __METHOD__, __( 'Complex field <code>' . self::LAYOUT_LIST . '</code> layout is deprecated, please use <code>set_width()</code> instead.', 'carbon_fields' ), null );
 		}
 
 		$this->layout = $layout;
@@ -513,7 +593,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Set the minimum number of entries.
-	 * 
+	 *
 	 * @param int $min
 	 */
 	public function set_min( $min ) {
@@ -523,7 +603,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Get the minimum number of entries.
-	 * 
+	 *
 	 * @return int $min
 	 */
 	public function get_min() {
@@ -532,7 +612,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Set the maximum number of entries.
-	 * 
+	 *
 	 * @param int $max
 	 */
 	public function set_max( $max ) {
@@ -542,7 +622,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Get the maximum number of entries.
-	 * 
+	 *
 	 * @return int $max
 	 */
 	public function get_max() {
@@ -550,16 +630,29 @@ class Complex_Field extends Field {
 	}
 
 	/**
+	 * Change the groups initial collapse state.
+	 * This state relates to the state of which the groups are rendered.
+	 *
+	 * @param bool $collapsed
+	 */
+	public function set_collapsed( $collapsed = true ) {
+		$this->collapsed = $collapsed;
+
+		return $this;
+	}
+
+	/**
 	 * Retrieve the groups of this field.
-	 * 
-	 * @return array 
+	 *
+	 * @return array
 	 */
 	public function get_group_names() {
 		return array_keys( $this->groups );
 	}
 
 	/**
-	 * Retrieve a group by its name
+	 * Retrieve a group by its name.
+	 *
 	 * @param  string $group_name        Group name
 	 * @return Group_Field $group_object Group object
 	 */

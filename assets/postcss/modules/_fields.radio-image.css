@@ -1,0 +1,13 @@
+/* ------------------------------------------------------------ *\
+	Field Radio Image
+\* ------------------------------------------------------------ */
+
+.carbon-radio-image-list { font-size: 0; }
+
+.carbon-radio-image-item { display: inline-block; vertical-align: top; margin-bottom: 10px; }
+.carbon-radio-image-item label { padding: 0; }
+.carbon-radio-image-item input { display: none; }
+.carbon-radio-image-item input:checked + .carbon-radio-image-holder { border-color: $color-blue-font; }
+
+.carbon-radio-image-holder { border: 2px solid transparent; margin: 0 10px 0 0; line-height: 0; }
+.carbon-radio-image-holder img { height: auto; max-width: 100%; padding: 5px; border: 1px solid $color-border; transition: border-color .25s }

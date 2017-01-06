@@ -1,0 +1,11 @@
+/* ------------------------------------------------------------ *\
+	Field - RichText
+\* ------------------------------------------------------------ */
+
+.carbon-RichText textarea { border-width: 0; }
+
+.carbon-RichText .description { padding-top: 5px; }
+.carbon-RichText .carbon-wysiwyg { margin-top: 5px; }
+
+.carbon-RichText .wp-editor-tools { float: left; }
+.carbon-RichText .wp-editor-tabs { margin-top: 1px;  }

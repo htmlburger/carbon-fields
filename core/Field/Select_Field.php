@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -9,7 +9,7 @@ class Select_Field extends Predefined_Options_Field {
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -30,7 +30,7 @@ class Select_Field extends Predefined_Options_Field {
 	public function template() {
 		?>
 		<# if (_.isEmpty(options)) { #>
-			<em><?php _e( 'no options', 'carbon_fields' ); ?></em>
+			<em><?php _e( 'no options', 'carbon-fields' ); ?></em>
 		<# } else { #>
 			<select id="{{{ id }}}" name="{{{ name }}}">
 				<# _.each(options, function(option) { #>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Container;
 
@@ -6,7 +6,7 @@ use Carbon_Fields\Datastore\Theme_Options_Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
- * Theme options container class. 
+ * Theme options container class.
  */
 class Theme_Options_Container extends Container {
 	static protected $registered_pages = array();
@@ -18,7 +18,7 @@ class Theme_Options_Container extends Container {
 	);
 
 	public $icon = '';
-	
+
 	/**
 	 * Create a new theme options fields container
 	 *
@@ -75,7 +75,7 @@ class Theme_Options_Container extends Container {
 
 	/**
 	 * Perform checks whether the current save() request is valid.
-	 * 
+	 *
 	 * @return bool
 	 **/
 	public function is_valid_save() {
@@ -95,9 +95,9 @@ class Theme_Options_Container extends Container {
 		// Add menu page
 		if ( ! $this->settings['parent'] ) {
 			add_menu_page(
-				$this->title, 
-				$this->title, 
-				$this->settings['permissions'], 
+				$this->title,
+				$this->title,
+				$this->settings['permissions'],
 				$this->settings['file'],
 				array( $this, 'render' ),
 				$this->icon
@@ -106,9 +106,9 @@ class Theme_Options_Container extends Container {
 
 		add_submenu_page(
 			$this->settings['parent'],
-			$this->title, 
-			$this->title, 
-			$this->settings['permissions'], 
+			$this->title,
+			$this->title,
+			$this->settings['permissions'],
 			$this->settings['file'],
 			array( $this, 'render' ),
 			$this->icon
@@ -146,7 +146,7 @@ class Theme_Options_Container extends Container {
 	 **/
 	public function render() {
 		if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == 'true' ) {
-			$this->notifications[] = __( 'Settings saved.', 'carbon_fields' );
+			$this->notifications[] = __( 'Settings saved.', 'carbon-fields' );
 		}
 
 		include \Carbon_Fields\DIR . '/templates/Container/theme_options.php';
@@ -172,7 +172,7 @@ class Theme_Options_Container extends Container {
 		// Register sub-page
 		if ( ! isset( self::$registered_pages[ $parent ] ) ) {
 			self::$registered_pages[ $parent ] = array( $file );
-		}  elseif ( in_array( $file, self::$registered_pages[ $parent ] ) ) {
+		} elseif ( in_array( $file, self::$registered_pages[ $parent ] ) ) {
 			Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a different file name using setup()' );
 		} else {
 			self::$registered_pages[ $parent ][] = $file;
@@ -206,41 +206,10 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
-	 * Make sure a field certain name can't be registered multiple times.
-	 **/
-	public function verify_unique_field_name( $name ) {
-		$page_id = $this->settings['parent'] . '/' . $this->settings['file'];
-
-		if ( ! isset( self::$registered_field_names[ $page_id ] ) ) {
-			self::$registered_field_names[ $page_id ] = array();
-		}
-
-		if ( in_array( $name, self::$registered_field_names[ $page_id ] ) ) {
-			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
-		}
-
-		self::$registered_field_names[ $page_id ][] = $name;
-	}
-
-	/**
-	 * Remove field name $name from the list of unique field names
-	 *
-	 * @param string $name
-	 **/
-	public function drop_unique_field_name( $name ) {
-		$page_id = $this->settings['parent'] . '/' . $this->settings['file'];
-
-		$index = array_search( $name, self::$registered_field_names[ $page_id ] );
-		if ( $index !== false ) {
-			unset( self::$registered_field_names[ $page_id ][ $index ] );
-		}
-	}
-
-	/**
 	 * Append array of fields to the current fields set. All items of the array
 	 * must be instances of Field and their names should be unique for all
 	 * Carbon containers.
-	 * If a field does not have DataStore already, the container data store is 
+	 * If a field does not have DataStore already, the container data store is
 	 * assigned to them instead.
 	 *
 	 * @param array $fields
@@ -262,7 +231,7 @@ class Theme_Options_Container extends Container {
 		if ( is_a( $parent, 'Carbon_Container' ) ) {
 			$parent = $parent->title;
 		}
-		
+
 		$this->settings['parent'] = $parent;
 		return $this;
 	}
@@ -285,7 +254,7 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
-	 * Set the permissions necessary to view 
+	 * Set the permissions necessary to view
 	 * the corresponding theme options page
 	 **/
 	public function set_page_permissions( $permissions ) {
@@ -294,12 +263,11 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
-	 * Sanitize the container title for use in 
+	 * Sanitize the container title for use in
 	 * the theme options file name.
 	 **/
 	protected function clear_string( $string ) {
 		return preg_replace( array( '~ +~', '~[^\w\d-]+~u', '~-+~' ), array( '-', '-', '-' ), strtolower( remove_accents( $string ) ) );
 	}
-
 }
 

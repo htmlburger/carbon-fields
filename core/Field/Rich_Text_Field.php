@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -7,17 +7,12 @@ namespace Carbon_Fields\Field;
  */
 class Rich_Text_Field extends Textarea_Field {
 	protected $lazyload = true;
-	public static $initialized = false;
 
 	/**
 	 * Admin initialization actions.
 	 */
 	public function admin_init() {
-		if ( ! self::$initialized ) {
-			self::$initialized = true;
-
-			add_action( 'admin_footer', array( $this, 'editor_init' ) );
-		}
+		add_action( 'admin_footer', array( get_class( $this ), 'editor_init' ) );
 	}
 
 	/**
@@ -28,8 +23,8 @@ class Rich_Text_Field extends Textarea_Field {
 		<div id="wp-{{{ id }}}-wrap" class="carbon-wysiwyg wp-editor-wrap tmce-active" data-toolbar="full">
 			<div id="wp-{{{ id }}}-editor-tools" class="wp-editor-tools">
 				<div id="wp-{{{ id }}}-media-buttons" class="hide-if-no-js wp-media-buttons">
-					<a href="#" class="button insert-media add_media" data-editor="{{{ id }}}" title="<?php _e( 'Add Media', 'carbon_fields' ); ?>">
-						<span class="wp-media-buttons-icon"></span> <?php _e( 'Add Media', 'carbon_fields' ); ?>
+					<a href="#" class="button insert-media add_media" data-editor="{{{ id }}}" title="<?php _e( 'Add Media', 'carbon-fields' ); ?>">
+						<span class="wp-media-buttons-icon"></span> <?php _e( 'Add Media', 'carbon-fields' ); ?>
 					</a>
 					<?php
 						remove_action( 'media_buttons', 'media_buttons' );
@@ -40,10 +35,10 @@ class Rich_Text_Field extends Textarea_Field {
 			</div>
 			<div class="wp-editor-tabs">
 				<button type="button" id="{{{ id }}}-tmce" class="wp-switch-editor switch-tmce" data-wp-editor-id="{{{ id }}}">
-					<?php _e( 'Visual', 'carbon_fields' ); ?>
+					<?php _e( 'Visual', 'carbon-fields' ); ?>
 				</button>
 				<button type="button" id="{{{ id }}}-html" class="wp-switch-editor switch-html" data-wp-editor-id="{{{ id }}}">
-					<?php _e( 'Text', 'carbon_fields' ); ?>
+					<?php _e( 'Text', 'carbon-fields' ); ?>
 				</button>
 			</div>
 			<div id="wp-{{{ id }}}-editor-container" class="wp-editor-container">
@@ -55,11 +50,11 @@ class Rich_Text_Field extends Textarea_Field {
 
 	/**
 	 * Display the editor.
-	 * 
+	 *
 	 * Instead of enqueueing all required scripts and stylesheets and setting up TinyMCE,
 	 * wp_editor() automatically enqueues and sets up everything.
 	 */
-	public function editor_init() {
+	public static function editor_init() {
 		?>
 		<div style="display:none;">
 			<?php
@@ -67,7 +62,7 @@ class Rich_Text_Field extends Textarea_Field {
 					'tinymce' => array(
 						'resize' => true,
 						'wp_autoresize_on' => true,
-					)
+					),
 				);
 
 				add_filter( 'user_can_richedit', '__return_true' );

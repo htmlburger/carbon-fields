@@ -1,0 +1,303 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Carbon Fields\n"
+"POT-Creation-Date: 2016-12-14 13:40+0000\n"
+"PO-Revision-Date: 2016-12-14 13:40+0000\n"
+"Last-Translator: Pedro Mendonça <ped.gaspar@gmail.com>\n"
+"Language-Team: Pedro Mendonça <ped.gaspar@gmail.com>\n"
+"Language: pt_PT\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;"
+"_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;"
+"esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-WPHeader: carbon-fields-plugin.php\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: core/Container/Container.php:573
+msgid "General"
+msgstr "Geral"
+
+#: core/Container/Container.php:765
+msgid "Please fill out all required fields highlighted below."
+msgstr "Por favor, preencha todos os campos obrigatórios destacados abaixo."
+
+#: core/Container/Container.php:766
+msgid "The changes you made will be lost if you navigate away from this page."
+msgstr ""
+"As alterações que fez serão perdidas se navegar para fora desta página."
+
+#: core/Container/Theme_Options_Container.php:149
+msgid "Settings saved."
+msgstr "Definições guardadas."
+
+#: core/Field/Association_Field.php:372 core/Field/Relationship_Field.php:267
+msgid "Edit"
+msgstr "Editar"
+
+#: core/Field/Broken_Field.php:11
+msgid "This field is misconfigured"
+msgstr "Este campo está configurado incorrectamente"
+
+#: core/Field/Color_Field.php:18
+msgid "Select a Color"
+msgstr "Seleccionar uma cor"
+
+#: core/Field/Complex_Field.php:40
+msgid "Entry"
+msgstr "Entrada"
+
+#: core/Field/Complex_Field.php:41
+msgid "Entries"
+msgstr "Entradas"
+
+#: core/Field/Complex_Field.php:496 core/Field/Complex_Field.php:497
+msgid "Clone"
+msgstr "Clonar"
+
+#: core/Field/Complex_Field.php:500 core/Field/Complex_Field.php:501
+msgid "Remove"
+msgstr "Remover"
+
+#: core/Field/Complex_Field.php:504 core/Field/Complex_Field.php:505
+msgid "Collapse/Expand"
+msgstr "Minimizar/expandir"
+
+#: core/Field/Complex_Field.php:571
+#, php-format
+msgid ""
+"Complex field \"%1$s\" layout is deprecated, please use \"%2$s\" or \"%3$s\" "
+"instead."
+msgstr ""
+"O layout  de campo complexo \"%1$s\" está obsoleto, por favor utilize \"%2$s"
+"\" ou \"%3$s\" em alternativa."
+
+#: core/Field/Complex_Field.php:584
+msgid "Complex field <code>"
+msgstr "Campo complexo <code>"
+
+#: core/Field/Date_Field.php:41
+msgid "Select Date"
+msgstr "Seleccionar data"
+
+#: core/Field/Field.php:818 core/Field/File_Field.php:28
+msgid "Files"
+msgstr "Ficheiros"
+
+#: core/Field/Field.php:819
+msgid "The address could not be found. "
+msgstr "Não foi possível encontrar o endereço."
+
+#: core/Field/Field.php:820
+msgid "Geocode was not successful for the following reason: "
+msgstr "O geocode não foi bem sucedido pela seguinte razão: "
+
+#: core/Field/Field.php:821
+#, php-format
+msgid "Maximum number of items reached (%s items)"
+msgstr "Limite máximo de itens alcançado (%s itens)"
+
+#: core/Field/Field.php:822
+#, php-format
+msgid "Maximum number of rows reached (%s rows)"
+msgstr "Limite máximo de linhas alcançado (%s linhas)"
+
+#: core/Field/Field.php:823
+#, php-format
+msgid "Cannot create more than %s rows"
+msgstr "Não é possível criar mais do que %s linhas"
+
+#: core/Field/Field.php:824
+msgid "Please enter the name of the new sidebar:"
+msgstr "Por favor insira o nome da nova barra lateral:"
+
+#: core/Field/Field.php:825
+msgid "Are you sure you wish to remove this sidebar?"
+msgstr "Tem a certeza de que quer remover esta barra lateral?"
+
+#: core/Field/Field.php:826
+msgid "Add Sidebar"
+msgstr "Adicionar barra lateral"
+
+#: core/Field/Field.php:827
+#, php-format
+msgid "There are no %s yet. Click <a href=\"#\">here</a> to add one."
+msgstr ""
+"Ainda não existe nenhuma %s. Clique <a href=\"#\">aqui</a> para adicionar "
+"uma."
+
+#: core/Field/Field.php:828
+#, php-format
+msgid "Add %s"
+msgstr "Adicionar %s"
+
+#: core/Field/Field.php:829
+#, php-format
+msgid "Minimum number of rows not reached (%d %s)"
+msgstr "Limite mínimo de linhas não alcançado (%d %s)"
+
+#: core/Field/Field.php:830
+msgid "Please fill out all fields correctly. "
+msgstr "Por favor, preencha todos os campos corretamente."
+
+#: core/Field/Field.php:831
+msgid "This field is required. "
+msgstr "Este campo é obrigatório."
+
+#: core/Field/Field.php:832
+msgid "Please choose an option. "
+msgstr "Por favor, escolha uma opção."
+
+#: core/Field/File_Field.php:26 core/Field/File_Field.php:27
+msgid "Select File"
+msgstr "Seleccione ficheiro"
+
+#: core/Field/Footer_Scripts_Field.php:14
+msgid ""
+"If you need to add scripts to your footer (like Google Analytics tracking "
+"code), you should enter them in this box."
+msgstr ""
+"Se precisar de adicionar scripts ao seu rodapé (como o código do Google "
+"Analytics), deve inseri-los aqui."
+
+#: core/Field/Gravity_Form_Field.php:44
+msgid "No form"
+msgstr "Nenhum formulário"
+
+#: core/Field/Gravity_Form_Field.php:79
+msgid "Please install Gravity Forms plugin"
+msgstr "Por favor instale o plugin Gravity Forms"
+
+#: core/Field/Gravity_Form_Field.php:85
+msgid "No Gravity Forms have been found."
+msgstr "Não foi encontrado o Gravity Forms."
+
+#: core/Field/Header_Scripts_Field.php:14
+msgid "If you need to add scripts to your header, you should enter them here."
+msgstr ""
+"Se precisar de adicionar scripts ao seu cabeçalho, deve inseri-los aqui."
+
+#: core/Field/Image_Field.php:18 core/Field/Image_Field.php:19
+msgid "Select Image"
+msgstr "Seleccionar imagem"
+
+#: core/Field/Image_Field.php:20
+msgid "Images"
+msgstr "Imagens"
+
+#: core/Field/Map_Field.php:102
+msgid "Locate Address on the map"
+msgstr "Localizar endereço no mapa"
+
+#: core/Field/Map_Field.php:107
+msgid "Find"
+msgstr "Procurar"
+
+#: core/Field/Radio_Field.php:15 core/Field/Select_Field.php:33
+#: core/Field/Set_Field.php:85
+msgid "no options"
+msgstr "sem opções"
+
+#: core/Field/Relationship_Field.php:211
+msgid "selected item"
+msgstr "item seleccionado"
+
+#: core/Field/Relationship_Field.php:211 core/Field/Relationship_Field.php:212
+msgid "selected items"
+msgstr "itens seleccionados"
+
+#: core/Field/Relationship_Field.php:219
+msgid "out of"
+msgstr "de"
+
+#: core/Field/Relationship_Field.php:225
+msgid "Search..."
+msgstr "Pesquisar..."
+
+#: core/Field/Relationship_Field.php:240
+msgid "Associated:"
+msgstr "Associados:"
+
+#: core/Field/Rich_Text_Field.php:26 core/Field/Rich_Text_Field.php:27
+msgid "Add Media"
+msgstr "Adicionar multimédia"
+
+#: core/Field/Rich_Text_Field.php:38
+msgid "Visual"
+msgstr "Visual"
+
+#: core/Field/Rich_Text_Field.php:41
+msgid "Text"
+msgstr "Texto"
+
+#: core/Field/Set_Field.php:104
+msgid "Show All Options"
+msgstr "Mostrar todas as opções"
+
+#: core/Field/Sidebar_Field.php:35
+msgctxt "sidebar"
+msgid "Add New"
+msgstr "Adicionar nova"
+
+#: core/Field/Time_Field.php:77
+msgid "Select Time"
+msgstr "Seleccionar hora"
+
+#: core/Manager/Sidebar_Manager.php:104
+msgid "Sidebar with the same ID is already registered."
+msgstr "Já está registada uma barra lateral com o mesmo ID."
+
+#: core/Manager/Sidebar_Manager.php:131
+msgid "Sidebar not found."
+msgstr "Barra lateral não encontrada."
+
+#: templates/Container/theme_options.php:31
+msgid "Actions"
+msgstr "Acções"
+
+#: templates/Container/theme_options.php:40
+msgid "Save Changes"
+msgstr "Guardar alterações"
+
+#: templates/Container/widget.php:5
+msgid "No options are available for this widget."
+msgstr "Não estão disponíveis opções para este widget."
+
+#. Plugin Name of the plugin/theme
+msgid "Carbon Fields"
+msgstr "Carbon Fields"
+
+#. Plugin URI of the plugin/theme
+msgid "http://carbonfields.net/"
+msgstr "http://carbonfields.net/"
+
+#. Description of the plugin/theme
+msgid ""
+"WordPress developer-friendly custom fields for post types, taxonomy terms, "
+"users, comments, widgets, options, navigation menus and more."
+msgstr ""
+"Campos personalizados de fácil utilização por programadores de WordPress, "
+"para tipos de conteúdo, termos de taxonomias, utilizadores, comentários, "
+"widgets, opções, menus de navegação, etc."
+
+#. Author of the plugin/theme
+msgid "htmlburger"
+msgstr "htmlburger"
+
+#. Author URI of the plugin/theme
+msgid "https://htmlburger.com/"
+msgstr "https://htmlburger.com/"
+
+#~ msgid "Date"
+#~ msgstr "Data"
+
+#~ msgid "Search"
+#~ msgstr "Procurar"
+
+#~ msgid "Timepicker"
+#~ msgstr "Selecção de hora"

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Field;
 
@@ -26,13 +26,13 @@ class Sidebar_Field extends Select_Field {
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
 	public function to_json( $load ) {
 		if ( $this->enable_add_new ) {
-			$this->options['new'] = _x( 'Add New', 'sidebar', 'carbon_fields' );
+			$this->options['new'] = _x( 'Add New', 'sidebar', 'carbon-fields' );
 		}
 
 		$field_data = parent::to_json( $load );
@@ -43,7 +43,7 @@ class Sidebar_Field extends Select_Field {
 			}
 
 			$field_data = array_merge( $field_data, array(
-				'excluded_sidebars' => $this->excluded_sidebars
+				'excluded_sidebars' => $this->excluded_sidebars,
 			) );
 		}
 

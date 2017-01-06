@@ -7,7 +7,7 @@ use Carbon_Fields\Datastore\Comment_Meta_Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
- * Comment meta container class. 
+ * Comment meta container class.
  */
 class Comment_Meta_Container extends Container {
 	protected $comment_id;
@@ -45,7 +45,7 @@ class Comment_Meta_Container extends Container {
 	public function is_valid_save() {
 		if ( ! isset( $_REQUEST[ $this->get_nonce_name() ] ) || ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) { // Input var okay.
 			return false;
-		} 
+		}
 
 		return true;
 	}
@@ -55,15 +55,15 @@ class Comment_Meta_Container extends Container {
 	 **/
 	public function attach() {
 		add_meta_box(
-			$this->id, 
-			$this->title, 
-			array( $this, 'render' ), 
-			'comment', 
+			$this->id,
+			$this->title,
+			array( $this, 'render' ),
+			'comment',
 			'normal',
 			'high'
 		);
 	}
-	
+
 	/**
 	 * Revert the result of attach()
 	 **/
@@ -114,35 +114,4 @@ class Comment_Meta_Container extends Container {
 			$field->save();
 		}
 	}
-
-	/**
-	 * Perform checks whether there is a field registered with the name $name.
-	 * If not, the field name is recorded.
-	 *
-	 * @param string $name
-	 **/
-	public function verify_unique_field_name( $name ) {
-		if ( ! isset( self::$registered_field_names['comment'] ) ) {
-			self::$registered_field_names['comment'] = array();
-		}
-
-		if ( in_array( $name, self::$registered_field_names['comment'] ) ) {
-			throw new Incorrect_Syntax_Exception( 'Field name "' . $name . '" already registered' );
-		}
-
-		self::$registered_field_names['comment'][] = $name;
-	}
-
-	/**
-	 * Remove field name $name from the list of unique field names
-	 *
-	 * @param string $name
-	 **/
-	public function drop_unique_field_name( $name ) {		
-		$index = array_search( $name, self::$registered_field_names['comment'] );
-		if ( $index !== false ) {
-			unset( self::$registered_field_names['comment'][ $index ] );
-		}
-	}
-
 }

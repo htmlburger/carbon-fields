@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 namespace Carbon_Fields\Container;
 
 /**
- * Widget container class 
+ * Widget container class
  */
 class Widget_Container extends Container {
 
@@ -13,13 +13,7 @@ class Widget_Container extends Container {
 	 * @param string $id Unique ID of the widget
 	 **/
 	public function __construct( $id ) {
-		// Reset the registered fields array, this is required so we can have fields with same names
-		self::$registered_field_names = array();
-
 		$this->id = $id;
-
-		add_action( 'admin_footer', array( $this, 'admin_hook_scripts' ) );
-		add_action( 'admin_footer', array( $this, 'admin_hook_styles' ) );
 	}
 
 	/**
@@ -35,7 +29,7 @@ class Widget_Container extends Container {
 	/**
 	 * Returns an array that holds the container data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
@@ -57,9 +51,9 @@ class Widget_Container extends Container {
 	 **/
 	public function is_valid_attach() {
 		$screen = get_current_screen();
+		$is_widget_save = isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'save-widget';
 
-		return $screen && $screen->id === 'widgets';
+		return $screen && $screen->id === 'widgets' || $is_widget_save;
 	}
-
 }
 
