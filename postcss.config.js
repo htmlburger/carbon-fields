@@ -9,5 +9,8 @@ module.exports = {
 		onImport: function(sources) {
 			global.watchCSS(sources);
 		}
+	},
+	"cssnano": {
+		zindex: false
 	}
 };

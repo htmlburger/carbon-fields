@@ -1308,8 +1308,8 @@ window.carbon = window.carbon || {};
 		events: {
 			'click .carbon-relationship-left .carbon-relationship-list a': 'addItem',
 			'click .carbon-relationship-right .carbon-relationship-list a': 'removeItem',
-			'keypress .carbon-relationship-left .search-field': 'searchFieldKeyPress',
-			'keyup .carbon-relationship-left .search-field': 'searchFilter',
+			'keypress .carbon-relationship-search': 'searchFieldKeyPress',
+			'keyup .carbon-relationship-search': 'searchFilter',
 			'click a .edit-link' : 'editLink'
 		},
 
@@ -1601,6 +1601,13 @@ window.carbon = window.carbon || {};
 	});
 
 	/*--------------------------------------------------------------------------
+	 * RADIO IMAGE
+	 *------------------------------------------------------------------------*/
+
+	// Radio Image MODEL
+	carbon.fields.Model.RadioImage = carbon.fields.Model.Select;
+
+	/*--------------------------------------------------------------------------
 	 * DATE_TIME
 	 *------------------------------------------------------------------------*/
 
@@ -1826,6 +1833,10 @@ window.carbon = window.carbon || {};
 			var groups = this.model.get('value');
 
 			_.each(groups, function(group) {
+				// Set the value defined by the user in PHP land
+				// This code will run only the first time that the groups are created
+				group.collapsed = _this.model.get('collapsed');
+
 				_this.groupsCollection.add(group, {
 					sort: false
 				});
@@ -1975,7 +1986,7 @@ window.carbon = window.carbon || {};
 			var isVertical = layout === 'tabbed-vertical';
 
 			$tabsNav.sortable({
-				axis: isVertical ? 'y' : 'x',
+				axis: isVertical ? 'y' : 'xy',
 				items: '.group-tab-item',
 				placeholder: 'group-tab-item ui-placeholder-highlight',
 				handle: isVertical ? '.group-handle': false,
@@ -2178,8 +2189,13 @@ window.carbon = window.carbon || {};
 		toggleCollapse: function(model) {
 			var collapsed = model.get('collapsed');
 
+			if (this.complexModel.isTabbed()) {
+				return;
+			}
+
 			this.$el.toggleClass('collapsed', collapsed);
 		},
+
 		toggleGroupError: function (model) {
 			var hasClass = this.model.get('error');
 
@@ -2389,6 +2405,9 @@ window.carbon = window.carbon || {};
 
 		afterRenderInit: function() {
 			var _this = this;
+
+			// Update collapse state/visibility
+			this.toggleCollapse(this.model);
 
 			// Trigger the add event on the collection, this should initialize the fields rendering
 			this.fieldsCollection.each(function(model) {

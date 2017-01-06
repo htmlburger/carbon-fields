@@ -26,6 +26,7 @@ class Complex_Field extends Field {
 	protected $layout = self::LAYOUT_GRID;
 	protected $values_min = -1;
 	protected $values_max = -1;
+	protected $collapsed = false;
 
 	public $labels = array(
 		'singular_name' => 'Entry',
@@ -419,6 +420,7 @@ class Complex_Field extends Field {
 			'multiple_groups' => count( $groups_data ) > 1,
 			'groups' => $groups_data,
 			'value' => $values_data,
+			'collapsed' => $this->collapsed,
 		) );
 
 		return $complex_data;
@@ -625,6 +627,18 @@ class Complex_Field extends Field {
 	 */
 	public function get_max() {
 		return $this->values_max;
+	}
+
+	/**
+	 * Change the groups initial collapse state.
+	 * This state relates to the state of which the groups are rendered.
+	 *
+	 * @param bool $collapsed
+	 */
+	public function set_collapsed( $collapsed = true ) {
+		$this->collapsed = $collapsed;
+
+		return $this;
 	}
 
 	/**

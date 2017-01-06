@@ -24,6 +24,7 @@ Thumbs.db
 
 # Composer
 /vendor
+composer.lock
 
 # Vagrant
 .vagrant

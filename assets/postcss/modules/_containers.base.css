@@ -55,6 +55,12 @@
 @media screen and (min-width: $breakpoint-tablet-min) {
 	.carbon-table-row .carbon-container > .carbon-fields-row > .carbon-field > label,
 	.carbon-table-row .carbon-container > .carbon-field > label { position: absolute; left: 0; }
+
+	.carbon-table-row .carbon-container > .carbon-fields-row > .carbon-field.has-width > label,
+	.carbon-table-row .carbon-container > .carbon-field.has-width > label { position: static; }
+
+	.carbon-table-row .carbon-fields-row { display: table; width: 100%; }
+	.carbon-table-row .carbon-field.has-width { display: table-cell; width: 100%; }
 }
 
 @media screen and (max-width: $breakpoint-mobile-max) {

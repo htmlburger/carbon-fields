@@ -23,12 +23,29 @@ class Nav_Menu_Edit_Walker extends \Walker_Nav_Menu_Edit {
 
 		$flag = '<!--CarbonFields-->';
 
+		// Generates the HTML
 		ob_start();
 		do_action( 'crb_print_carbon_container_nav_menu_fields_html', $item, $output, $depth, $args, $id );
 		echo $flag;
 		$fields = ob_get_clean();
 
-		$marker = '<p class="field-move hide-if-no-js description description-wide">';
-		$output = preg_replace( '~(?<!' . preg_quote( $flag, '~' ) . ')' . preg_quote( $marker, '~' ) . '~', $fields . $marker, $output );
+		// List of possible insertion markers, this may vary between WP Core versions
+		$markers = array(
+			# WordPress < 4.7
+			preg_quote( '<p class="field-move hide-if-no-js description description-wide">' ),
+			# WordPress 4.7
+			preg_quote( '<fieldset class="field-move hide-if-no-js description description-wide">' ),
+		);
+
+		// Build the regex
+		$regex = sprintf(
+			'~(?<!%s)(%s)~',
+			preg_quote( $flag, '~' ),
+			implode( '|', $markers)
+		);
+
+		// Injects the HTML
+		$output = preg_replace( $regex, $fields . "$1", $output );
 	}
+
 }
