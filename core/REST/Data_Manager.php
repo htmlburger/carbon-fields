@@ -54,7 +54,7 @@ class Data_Manager {
 	public function get_data( $type, $id  = '' ) {
 		$response   = [];
 		$containers = $this->filter_containers( $type, $id );
-		
+
 		foreach ( $containers as $container ) {
 			$fields = $this->filter_fields( $container->get_fields() );
 

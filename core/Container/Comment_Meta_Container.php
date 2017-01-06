@@ -34,6 +34,7 @@ class Comment_Meta_Container extends Container {
 		}
 
 		add_action( 'admin_init', array( $this, '_attach' ) );
+		add_action( 'rest_api_init', array( $this, '_attach_when_rest' ) );
 		add_action( 'edit_comment', array( $this, '_save' ) );
 	}
 
@@ -71,6 +72,7 @@ class Comment_Meta_Container extends Container {
 		parent::detach();
 
 		remove_action( 'admin_init', array( $this, '_attach' ) );
+		remove_action( 'rest_api_init', array( $this, '_attach_when_rest' ) );
 		remove_action( 'edit_comment', array( $this, '_save' ) );
 
 		// unregister field names

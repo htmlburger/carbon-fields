@@ -90,8 +90,12 @@ class Decorator {
 		return $container->settings['taxonomy'];
 	}
 
-	public static function get_user_meta_container_settings( $container ) {
+	public static function get_user_meta_container_settings( $container = '' ) {
 		return 'user';
+	}
+
+	public static function get_comment_meta_container_settings( $container = '' ) {
+		return 'comment';
 	}
 
 	public function get_field_type( $field ) {

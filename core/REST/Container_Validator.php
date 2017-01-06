@@ -95,6 +95,10 @@ class Container_Validator {
 		return true;
 	}
 
+	public function is_valid_comment_meta_container( $container, $id ) {
+		return true;
+	}
+
 	/**
 	 * Returns the number of parents of a taxonomy term
 	 * 

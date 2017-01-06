@@ -28,6 +28,10 @@ class Routes {
 			'path'     => '/options/',
 			'callback' => 'get_options',
 		],
+		'comment_meta' => [
+			'path'     => '/comments/(?P<id>\d+)',
+			'callback' => 'get_comment_meta',
+		]
 	];
 
 	/**
@@ -126,6 +130,17 @@ class Routes {
 	public function get_term_meta( $data ) {
 		$carbon_data = $this->get_data( 'Term_Meta', $data['id'] );
 		return [ 'carbon_fields' => $carbon_data ];	
+	}
+
+	/**
+	 * Retrieves Carbon comment meta
+	 * 
+	 * @param  array $data
+	 * @return array
+	 */
+	public function get_comment_meta( $data ) {
+		$carbon_data = $this->get_data( 'Comment_Meta', $data['id'] );
+		return [ 'carbon_fields' => $carbon_data ];		
 	}
 
 	/**
