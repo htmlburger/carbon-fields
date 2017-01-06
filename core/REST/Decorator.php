@@ -8,7 +8,7 @@ use Carbon_Fields\Container\Container;
  * using the WordPress' register_rest_field function 
  */
 
-class Modifier {
+class Decorator {
 
 	/**
 	 * Instance of the Data_Manager class
