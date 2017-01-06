@@ -112,6 +112,7 @@ class Term_Meta_Container extends Container {
 		parent::detach();
 
 		remove_action( 'admin_init', array( $this, '_attach' ) );
+		remove_action( 'rest_api_init', array( $this, '_attach_when_rest' ) );
 
 		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
 			remove_action( 'edited_' . $taxonomy, array( $this, '_save' ), 10 );
