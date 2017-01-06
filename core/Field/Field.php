@@ -592,7 +592,7 @@ class Field {
 	 * @param bool $required
 	 * @return object $this
 	 **/
-	public function set_required( $required ) {
+	public function set_required( $required = true ) {
 		$this->required = $required;
 		return $this;
 	}
