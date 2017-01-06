@@ -5,6 +5,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 class ContainerInitializationTest extends WP_UnitTestCase {
 	public function setup() {
 		$this->containerTitle = 'Page Settings';
+		$this->containerId = 'PageSettings';
 	}
 
 	public function tearDown() {
@@ -108,26 +109,22 @@ class ContainerInitializationTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Container\Container::make
 	 * @covers Carbon_Fields\Container\Container::factory
 	 * @covers Carbon_Fields\Container\Container::__construct
-	 *
-	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Panel ID "PageSettings" already registered
 	 */
-	public function testSameContainerNamesAreNotAllowedWithinSameContainerType() {
-		$container1 = Container::make('Post Meta', $this->containerTitle);
+	public function testSameContainerNamesDoNotGenerateIdenticalIds() {
+		$container1 = Container::make('Post_Meta', $this->containerTitle);
 		$container2 = Container::make('Post_Meta', $this->containerTitle);
+		$this->assertNotEquals($container1->id, $container2->id);
 	}
 
 	/**
 	 * @covers Carbon_Fields\Container\Container::make
 	 * @covers Carbon_Fields\Container\Container::factory
 	 * @covers Carbon_Fields\Container\Container::__construct
-	 *
-	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Panel ID "PageSettings" already registered
 	 */
-	public function testSameContainerNamesAreNotAllowedAtAll() {
-		$container1 = Container::make('Theme_Options', $this->containerTitle);
-		$container2 = Container::make('User_Meta', $this->containerTitle);
+	public function testSameContainerNameAddsNumericalSuffix() {
+		$container1 = Container::make('Post_Meta', $this->containerTitle);
+		$container2 = Container::make('Post_Meta', $this->containerTitle);
+		$this->assertEquals($container2->id, $this->containerId . '1');
 	}
 
 	/**
