@@ -1163,8 +1163,6 @@ window.carbon = window.carbon || {};
 					thumbUrl = _this.model.get('default_thumb_url');
 				}
 
-				console.log(mediaAttachment);
-
 				// Update the model
 				this.model.set('file_type', mediaAttachment.type);
 				this.model.set('file_name', mediaAttachment.filename);
