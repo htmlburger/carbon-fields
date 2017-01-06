@@ -826,7 +826,7 @@ class Field {
 				'add_sidebar' => __( 'Add Sidebar', 'carbon-fields' ),
 				'complex_no_rows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),
 				'complex_add_button' => __( 'Add %s', 'carbon-fields' ),
-				'complex_min_num_rows_not_reached' => __( 'Minimum number of rows not reached (%d %s)', 'carbon-fields' ),
+				'complex_min_num_rows_not_reached' => __( 'Minimum number of rows not reached (%1$d %2$s)', 'carbon-fields' ),
 				'message_form_validation_failed' => __( 'Please fill out all fields correctly. ', 'carbon-fields' ),
 				'message_required_field' => __( 'This field is required. ', 'carbon-fields' ),
 				'message_choose_option' => __( 'Please choose an option. ', 'carbon-fields' ),
