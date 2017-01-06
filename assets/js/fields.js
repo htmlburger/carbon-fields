@@ -1615,6 +1615,49 @@ window.carbon = window.carbon || {};
 	carbon.fields.View.DateTime = carbon.fields.View.Time;
 
 	/*--------------------------------------------------------------------------
+	 * NUMBER
+	 *------------------------------------------------------------------------*/
+
+	 // Number Model
+	 carbon.fields.Model.Number = carbon.fields.Model.extend({
+		/*
+		 * The validate method is an internal Backbone method.
+		 * It will check if the field model data is valid.
+		 * Used to check required fields
+		 *
+		 * @see http://backbonejs.org/#Model-validate
+		 */
+		validate: function(attrs, options) {
+			var hasErrors = false;
+			var _this = this;
+			var min = _this.get('min');
+			var max = _this.get('max');
+			var step = _this.get('step');
+			var value = attrs.value;
+
+			var testStepValidation = ( value - min ) / step;
+			var testStepValidationFloor = parseInt( testStepValidation, 10 );
+			var testStepValidationCeil = testStepValidationFloor + 1;
+
+			if ( value === '' ) {
+				hasErrors = crbl10n.message_required_field;
+			} else if ( isNaN(value) ) {
+				hasErrors = crbl10n.message_form_validation_failed;
+			} else if ( min > value ) {
+				hasErrors = crbl10n.message_validation_failed_number_min.replace( '%s', min );
+			} else if ( value > max ) {
+				hasErrors = crbl10n.message_validation_failed_number_max.replace( '%s', max );
+			} else if ( testStepValidation !== testStepValidationFloor ) {
+				hasErrors = crbl10n.message_validation_failed_number_step
+					.replace( '%1$s', ( testStepValidationFloor * step ) + min )
+					.replace( '%2$s', ( testStepValidationCeil * step ) + min );
+			}
+
+			return hasErrors;
+		}
+	});
+
+	/*--------------------------------------------------------------------------
 	 * COMPLEX
 	 *------------------------------------------------------------------------*/
 
