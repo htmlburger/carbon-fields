@@ -95,7 +95,14 @@ class Container_Validator {
 		return true;
 	}
 
-	public function is_valid_comment_meta_container( $container, $id ) {
+	/**
+	 * Validates Comment Meta container
+	 * 
+	 * @param  object  $container
+	 * @param  string  $id
+	 * @return boolean 
+	 */
+	public function is_valid_comment_meta_container( $container, $id = '' ) {
 		return true;
 	}
 

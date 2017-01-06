@@ -5,7 +5,7 @@ use Carbon_Fields\Container\Container;
 
 /**
  * This class modifies the default REST routes
- * using the WordPress' register_rest_field function 
+ * using the WordPress' register_rest_field() function 
  */
 
 class Decorator {
@@ -29,6 +29,10 @@ class Decorator {
 		add_action( 'rest_api_init', [ $this, 'register_fields'] );
 	}
 
+	/**
+	 * Registers Carbon Fields using
+	 * the register_rest_field() function
+	 */
 	public function register_fields() {
 		$containers = $this->get_containers();
 
@@ -52,16 +56,37 @@ class Decorator {
 		}
 	}
 
+	/**
+	 * Return all container that 
+	 * should be visible in the REST API responses
+	 *
+	 * @return array
+	 */
 	public function get_containers() {
 		return array_filter( Container::$active_containers, function( $container ) {
 			return $container->type !== 'Theme_Options' && $container->get_rest_visibility(); 
 		} );
 	}
 
+	/**
+	 * Return all fields attached to a container
+	 * that should be included in the REST API response
+	 * 
+	 * @param object $container
+	 * @return array
+	 */
 	public function filter_fields( $container ) {
 		return $this->data_manager->filter_fields( $container->get_fields() );
 	}
 
+	/**
+	 * Get the value of the "$field_name" field
+	 *
+	 * @param array $object Details of current object.
+ 	 * @param string $field_name Name of field.
+ 	 * @param WP_REST_Request $request Current request
+ 	 * @return mixed
+	 */	
 	public function load_field_value( $object, $field_name, $request ) {
 
 		$field = array_filter( $this->fields, function( $field ) use ( $field_name ) { 
@@ -82,24 +107,51 @@ class Decorator {
 		return call_user_func( [ $this->data_manager, "load_{$field_type}_field_value" ], $field );
 	}
 
-	public static function get_post_meta_container_settings( $container ) {
-		return $container->settings['post_type'];
-	}
-
-	public static function get_term_meta_container_settings( $container ) {
-		return $container->settings['taxonomy'];
-	}
-
-	public static function get_user_meta_container_settings( $container = '' ) {
-		return 'user';
-	}
-
-	public static function get_comment_meta_container_settings( $container = '' ) {
-		return 'comment';
-	}
-
+	/**
+	 * Get the type of a field
+	 * 
+	 * @param object $field
+	 * @return string
+	 */
 	public function get_field_type( $field ) {
 		$type_to_lower = strtolower( $field->type );
 		return in_array( $type_to_lower, $this->data_manager->special_field_types ) ? $type_to_lower : 'generic';
 	}
+
+	/**
+	 * Get Post Meta Container visibility settings
+	 *
+	 * @return array
+	 */	
+	public static function get_post_meta_container_settings( $container ) {
+		return $container->settings['post_type'];
+	}
+
+	/**
+	 * Get Term Meta Container visibility settings
+	 *
+	 * @return array
+	 */	
+	public static function get_term_meta_container_settings( $container ) {
+		return $container->settings['taxonomy'];
+	}
+
+	/**
+	 * Get User Meta Container visibility settings
+	 *
+	 * @return string
+	 */	
+	public static function get_user_meta_container_settings( $container ) {
+		return 'user';
+	}
+
+	/**
+	 * Get Comment Meta Container visibility settings
+	 * 
+	 * @return string
+	 */	
+	public static function get_comment_meta_container_settings( $container ) {
+		return 'comment';
+	}
+
 }
