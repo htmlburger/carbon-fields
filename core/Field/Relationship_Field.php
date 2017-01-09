@@ -94,7 +94,7 @@ class Relationship_Field extends Field {
 	 */
 	public function get_item_label( $id, $type, $subtype = '' ) {
 		$object = get_post_type_object( $subtype );
-		$label = $object->labels->singular_name;
+		$label = $object ? $object->labels->singular_name : null;
 
 		/**
 		 * Filter the label of the relationship item.
