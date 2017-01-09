@@ -494,16 +494,16 @@ class Complex_Field extends Field {
 			</div>
 
 			<div class="carbon-group-actions carbon-group-actions-{{ layout }}">
-				<a class="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>">
-					<?php _e( 'Clone', 'carbon_fields' ); ?>
+				<a class="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="<?php esc_attr_e( 'Clone', 'carbon-fields' ); ?>">
+					<?php _e( 'Clone', 'carbon-fields' ); ?>
 				</a>
 
-				<a class="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>">
-					<?php _e( 'Remove', 'carbon_fields' ); ?>
+				<a class="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="<?php esc_attr_e( 'Remove', 'carbon-fields' ); ?>">
+					<?php _e( 'Remove', 'carbon-fields' ); ?>
 				</a>
 
-				<a class="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>">
-					<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?>
+				<a class="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon-fields' ); ?>">
+					<?php _e( 'Collapse/Expand', 'carbon-fields' ); ?>
 				</a>
 			</div>
 
@@ -569,7 +569,7 @@ class Complex_Field extends Field {
 		if ( $layout === self::LAYOUT_TABBED ) {
 			// The library used to provide just one kind of tabs -- horizontal ones. Later vertical tabs were added.
 			// So the "tabbed" name was renamed to "tabbed-horizontal" and "tabbed-vertical" layout was introduced.
-			_doing_it_wrong( __METHOD__, sprintf( __( 'Complex field "%1$s" layout is deprecated, please use "%2$s" or "%3$s" instead.', 'carbon_fields' ), self::LAYOUT_TABBED, self::LAYOUT_TABBED_HORIZONTAL, self::LAYOUT_TABBED_VERTICAL ), null );
+			_doing_it_wrong( __METHOD__, sprintf( __( 'Complex field "%1$s" layout is deprecated, please use "%2$s" or "%3$s" instead.', 'carbon-fields' ), self::LAYOUT_TABBED, self::LAYOUT_TABBED_HORIZONTAL, self::LAYOUT_TABBED_VERTICAL ), null );
 
 			$layout = self::LAYOUT_TABBED_HORIZONTAL;
 		}
@@ -582,7 +582,7 @@ class Complex_Field extends Field {
 		}
 
 		if ( $layout === self::LAYOUT_LIST ) {
-			_doing_it_wrong( __METHOD__, __( 'Complex field <code>' . self::LAYOUT_LIST . '</code> layout is deprecated, please use <code>set_width()</code> instead.', 'carbon_fields' ), null );
+			_doing_it_wrong( __METHOD__, __( 'Complex field <code>' . self::LAYOUT_LIST . '</code> layout is deprecated, please use <code>set_width()</code> instead.', 'carbon-fields' ), null );
 		}
 
 		$this->layout = $layout;
