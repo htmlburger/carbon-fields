@@ -149,7 +149,7 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 	 * @return mixed        Meta value.
 	 */
 	public static function get_post_meta( $id, $name, $type = null ) {
-		$name = $name[0] == '_' ? $name : '_' . $name;
+		$name = self::prepare_meta_name( $name );
 
 		return self::get_field_value( 'post_meta', $name, $type, $id );
 	}
@@ -186,7 +186,7 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 	 * @return mixed        Meta value.
 	 */
 	public static function get_term_meta( $id, $name, $type = null ) {
-		$name = $name[0] == '_' ? $name: '_' . $name;
+		$name = self::prepare_meta_name( $name );
 
 		return self::get_field_value( 'term_meta', $name, $type, $id );
 	}
@@ -200,7 +200,7 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 	 * @return mixed        Meta value.
 	 */
 	public static function get_user_meta( $id, $name, $type = null ) {
-		$name = $name[0] == '_' ? $name: '_' . $name;
+		$name = self::prepare_meta_name( $name );
 
 		return self::get_field_value( 'user_meta', $name, $type, $id );
 	}
@@ -214,9 +214,19 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 	 * @return mixed        Meta value.
 	 */
 	public static function get_comment_meta( $id, $name, $type = null ) {
-		$name = $name[0] == '_' ? $name: '_' . $name;
+		$name = self::prepare_meta_name( $name );
 
 		return self::get_field_value( 'comment_meta', $name, $type, $id );
+	}
+
+	/**
+	 * Add underscore to the name, if missing
+	 * 
+	 * @param  string $name Field Name
+	 * @return string Field Name
+	 */
+	public static function prepare_meta_name( $name ) {
+		return $name = $name[0] === '_' ? $name : '_' . $name;		
 	}
 
 	/**
