@@ -1,0 +1,7 @@
+/* ------------------------------------------------------------ *\
+	Remove Sidebar Button
+\* ------------------------------------------------------------ */
+
+.carbon-btn-remove-sidebar { position: absolute; top: 10px; right: 33px; padding: 0; margin: 0; font-size: 0; line-height: 0; text-decoration: none; color: #c00; opacity: 0.7; }
+.carbon-btn-remove-sidebar:hover { color: $color-darkred-font; opacity: 1; }
+.carbon-btn-remove-sidebar:before { content: '\f182'; display: block; font-family: 'dashicons'; font-size: 20px; line-height: 1; }

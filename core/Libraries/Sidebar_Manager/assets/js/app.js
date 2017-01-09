@@ -4,6 +4,44 @@ window.carbon = window.carbon || {};
 
 	var carbon = window.carbon;
 
+	/**
+	 * Handles sidebar requests
+	 *
+	 * @param  {string} name
+	 * @param  {string} action
+	 *
+	 * @return {promise}
+	 */
+	carbon.sidebarManager = function(name, action, reload) {
+		var request = $.ajax({
+			url: ajaxurl,
+			method: 'POST',
+			dataType: 'json',
+			data: {
+				action: 'carbon_' + action + '_sidebar',
+				name: name
+			}
+		});
+
+		request.done(function( response ) {
+			if ( !response || !response.success ) {
+				alert( response.error || 'An error occurred while trying to ' + action + ' the sidebar.' );
+			}
+		});
+
+		request.fail(function( jqXHR, textStatus ) {
+			alert( 'Request failed: ' + textStatus );
+		});
+
+		if (reload) {
+			request.always(function() {
+				window.location.reload();
+			});
+		}
+
+		return request;
+	}
+	
 	$(document).ready(function() {
 
 		// Append an add sidebar button
