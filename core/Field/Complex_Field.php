@@ -81,7 +81,7 @@ class Complex_Field extends Field {
 			Incorrect_Syntax_Exception::raise( 'Group with name "' . $name . '" in Complex Field "' . $this->get_label() . '" already exists.' );
 		}
 
-		$group = new Group_Field($name, $label, $fields);
+		$group = new Group_Field( $name, $label, $fields );
 
 		$this->groups[ $group->get_name() ] = $group;
 
@@ -95,8 +95,8 @@ class Complex_Field extends Field {
 	 * @return $this
 	 */
 	public function set_header_template( $template ) {
-		if ( count($this->groups) === 0 ) {
-			Incorrect_Syntax_Exception::raise( "Can't set group label template. There are no present groups for Complex Field " . $this->get_label() . "." );
+		if ( count( $this->groups ) === 0 ) {
+			Incorrect_Syntax_Exception::raise( "Can't set group label template. There are no present groups for Complex Field " . $this->get_label() . '.' );
 		}
 
 		$template = is_callable( $template ) ? call_user_func( $template ) : $template;
@@ -175,7 +175,6 @@ class Complex_Field extends Field {
 
 		$input_groups = $input[ $this->get_name() ];
 		$index = 0;
-
 
 		foreach ( $input_groups as $values ) {
 			$value_group = array();

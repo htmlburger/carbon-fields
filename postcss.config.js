@@ -7,7 +7,7 @@ module.exports = {
 	},
 	"postcss-import": {
 		onImport: function(sources) {
-			global.watchCSS(sources);
+			global.watchCSS( sources );
 		}
 	},
 	"cssnano": {

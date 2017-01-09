@@ -5,7 +5,7 @@ namespace Carbon_Fields\Helper;
 use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Container\Container;
 use Carbon_Fields\Templater\Templater;
-use Carbon_Fields\Manager\Sidebar_Manager;
+use Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -18,6 +18,9 @@ class Helper {
 	 * Hook the main Carbon Fields initialization functionality.
 	 */
 	public function __construct() {
+		# Initialize sidebar manager
+		Sidebar_Manager::instance();
+		
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
 		add_action( 'carbon_after_register_fields', array( $this, 'init_containers' ) );
 		add_action( 'admin_footer', array( $this, 'init_scripts' ), 0 );
@@ -28,9 +31,6 @@ class Helper {
 
 		# Initialize templater
 		new Templater();
-
-		# Initialize sidebar manager
-		Sidebar_Manager::instance();
 	}
 
 	/**

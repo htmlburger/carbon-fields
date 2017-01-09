@@ -72,7 +72,10 @@ window.carbon = window.carbon || {};
 			this.listenTo(this.sidebarsCollection, 'add remove', function(model, collection, event) {
 				var action = event.add ? 'add' : 'remove';
 				var name = model.get('name');
-				carbon.sidebarManager(name, action);
+				
+				if ( typeof carbon.sidebarManager !== 'undefined' ) {
+					carbon.sidebarManager(name, action);
+				}
 			});
 
 			// When a container is sorted (using ui-sortable), send the event to all fields using our custom "propagate" event
@@ -327,44 +330,6 @@ window.carbon = window.carbon || {};
 				return aKeys;
 		}
 	};
-
-	/**
-	 * Handles sidebar requests
-	 *
-	 * @param  {string} name
-	 * @param  {string} action
-	 *
-	 * @return {promise}
-	 */
-	carbon.sidebarManager = function(name, action, reload) {
-		var request = $.ajax({
-			url: ajaxurl,
-			method: 'POST',
-			dataType: 'json',
-			data: {
-				action: 'carbon_' + action + '_sidebar',
-				name: name
-			}
-		});
-
-		request.done(function( response ) {
-			if ( !response || !response.success ) {
-				alert( response.error || 'An error occurred while trying to ' + action + ' the sidebar.' );
-			}
-		});
-
-		request.fail(function( jqXHR, textStatus ) {
-			alert( 'Request failed: ' + textStatus );
-		});
-
-		if (reload) {
-			request.always(function() {
-				window.location.reload();
-			});
-		}
-
-		return request;
-	}
 
 	/**
 	 * Initializes the main view
