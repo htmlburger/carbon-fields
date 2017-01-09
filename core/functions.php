@@ -1,6 +1,7 @@
 <?php
 
 use Carbon_Fields\Helper\Helper;
+use Carbon_Fields\Helper\Updater;
 
 if ( ! function_exists( 'carbon_get_post_meta' ) ) {
 	function carbon_get_post_meta( $id, $name, $type = null ) {
@@ -36,4 +37,24 @@ if ( ! function_exists( 'carbon_get_comment_meta' ) ) {
 	function carbon_get_comment_meta( $id, $name, $type = null ) {
 		return Helper::get_comment_meta( $id, $name, $type );
 	}
+}
+
+function carbon_update_post_meta( $id, $name, $value, $type = null ) {
+	return Updater::update_post_meta( $id, $name, $value, $type );
+}
+
+function carbon_update_term_meta( $id, $name, $value, $type = null ) {
+	return Updater::update_term_meta( $id, $name, $value, $type );
+}
+
+function carbon_update_user_meta( $id, $name, $value, $type = null ) {
+	return Updater::update_user_meta( $id, $name, $value, $type );
+}
+
+function carbon_update_comment_meta( $id, $name, $value, $type = null ) {
+	return Updater::update_comment_meta( $id, $name, $value, $type );
+}
+
+function carbon_update_theme_option( $name, $value, $type = null ) {
+	return Updater::update_theme_option( $name, $value, $type );
 }
