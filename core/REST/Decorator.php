@@ -129,7 +129,7 @@ class Decorator {
 		$type     = strtolower( $field->type );
 		$context  = strtolower( $field->get_context() ); 
 
-		return call_user_func( "Carbon_Fields\Helper\Updater::update_{$context}", $object->ID, $field_name, $value, $type );
+		return call_user_func( "Carbon_Fields\Helper\Updater::update_field", $context, $object->ID, $field_name, $value, $type );
 	}
 
 	/**
