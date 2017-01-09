@@ -821,15 +821,14 @@ class Field {
 				'max_num_items_reached' => __( 'Maximum number of items reached (%s items)', 'carbon-fields' ),
 				'max_num_rows_reached' => __( 'Maximum number of rows reached (%s rows)', 'carbon-fields' ),
 				'cannot_create_more_rows' => __( 'Cannot create more than %s rows', 'carbon-fields' ),
-				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', 'carbon-fields' ),
-				'remove_sidebar_confirmation' => __( 'Are you sure you wish to remove this sidebar?', 'carbon-fields' ),
-				'add_sidebar' => __( 'Add Sidebar', 'carbon-fields' ),
 				'complex_no_rows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),
 				'complex_add_button' => __( 'Add %s', 'carbon-fields' ),
 				'complex_min_num_rows_not_reached' => __( 'Minimum number of rows not reached (%1$d %2$s)', 'carbon-fields' ),
 				'message_form_validation_failed' => __( 'Please fill out all fields correctly. ', 'carbon-fields' ),
 				'message_required_field' => __( 'This field is required. ', 'carbon-fields' ),
 				'message_choose_option' => __( 'Please choose an option. ', 'carbon-fields' ),
+
+				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', 'carbon-fields' ),
 			)
 		);
 	}

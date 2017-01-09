@@ -1,6 +1,6 @@
 <?php
 
-namespace Carbon_Fields\Manager;
+namespace Carbon_Fields\Libraries\Sidebar_Manager;
 
 /**
  * This class is responsible for handling custom sidebars.
@@ -31,7 +31,7 @@ class Sidebar_Manager {
 		add_action( 'widgets_init', array( $this, 'register_sidebars' ), 100 );
 
 		// Enqueue the UI scripts on the widgets page
-		add_action( 'sidebar_admin_setup', array( $this, 'enqueue_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		// Set the default options
 		if ( function_exists( 'crb_get_default_sidebar_options' ) ) {
@@ -163,6 +163,14 @@ class Sidebar_Manager {
 	 * Enqueue the UI scripts.
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'carbon-sidebar-ui', \Carbon_Fields\URL . '/assets/js/sidebar-ui.js', array( 'carbon-app' ) );
+		wp_enqueue_style( 'carbon-sidebar-manager', \Carbon_Fields\URL . '/core/Libraries/Sidebar_Manager/assets/css/app.css' );
+		wp_enqueue_script( 'carbon-sidebar-manager', \Carbon_Fields\URL . '/core/Libraries/Sidebar_Manager/assets/js/app.js' );
+		wp_localize_script( 'carbon-sidebar-manager', 'crbSidebarl10n',
+			array(
+				'add_sidebar' => __( 'Add Sidebar', 'carbon-fields' ),
+				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', 'carbon-fields' ),
+				'remove_sidebar_confirmation' => __( 'Are you sure you wish to remove this sidebar?', 'carbon-fields' ),
+			)
+		);
 	}
 }
