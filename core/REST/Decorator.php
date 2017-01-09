@@ -57,7 +57,7 @@ class Decorator {
 	}
 
 	/**
-	 * Return all container that 
+	 * Return all containers that 
 	 * should be visible in the REST API responses
 	 *
 	 * @return array
