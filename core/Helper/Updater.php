@@ -68,27 +68,81 @@ class Updater {
 		switch ( $type ) {
 			case 'complex':
 				
-			break;
+				break;
 
 			case 'map':
 			case 'map_with_address':
-				$parsed_value[ $name]              = $value['lat'] . ',' . $value['lng'];
-				$parsed_value[ $name . '-lat' ]     = isset( $value['lat'] ) ? strip_tags( $value['lat'] ) : '';
-				$parsed_value[ $name . '-lng' ]     = isset( $value['lng'] ) ? strip_tags( $value['lng'] ) : '';
-				$parsed_value[ $name . '-address' ] = isset( $value['address'] ) ? strip_tags( $value['address'] ) : '';
-				$parsed_value[ $name . '-zoom' ]    = isset( $value['zoom'] ) ? strip_tags( $value['zoom'] ) : '';
-
-			break;
+				$parsed_value = self::parse_map_value( $value, $name );
+				break;
 
 			case 'association':
-			
-			break;
+				$parsed_value[ $name ] = array_map( [ __CLASS__, 'parse_association_value' ], $value );
+				break;
 
 			default:
 				$parsed_value[ $name ] = $value;
 		}
 
 		return $parsed_value;
+	}
+
+	public static function parse_map_value( $data, $name ) {
+		$expected     = ['lat', 'lng', 'address' ];
+		$keys         = array_keys( $data );
+		$diff         = array_diff( $expected, $keys );
+		$parsed_value = [];
+
+		if ( !empty( $diff ) ) {
+			wp_die( __( 'Wrong array struckture', 'crb' ) );
+		}
+
+		$parsed_value[ $name]               = $data['lat'] . ',' . $data['lng'];
+		$parsed_value[ $name . '-lat' ]     = strip_tags( $data['lat'] );
+		$parsed_value[ $name . '-lng' ]     = strip_tags( $data['lng'] );
+		$parsed_value[ $name . '-address' ] = strip_tags( $data['address'] );
+		$parsed_value[ $name . '-zoom' ]    = strip_tags( $data['zoom'] );
+
+		return $parsed_value;
+	}
+
+	public static function parse_association_value( $item ) {
+
+		if ( ! isset( $item['id'] ) ) {
+			// Throw error
+			// exit
+		}
+
+		switch ( $item['type'] ) {
+			case 'user':
+				return 'user:user:' . $item['id'];
+				break;
+
+			case 'comment':
+				return 'comment:comment:' . $item['id'];
+				break;
+
+			case 'post':
+
+				if ( ! isset( $item['post_type'] ) || empty( $item['post_type'] ) ) {
+					// Throw error
+				}
+
+				return 'post:' . $item['post_type'] . ':' . $item['id'];
+				break;
+
+			case 'term':
+
+				if ( ! isset( $item['taxonomy'] ) || empty( $item['taxonomy'] ) ) {
+					// Throw error
+				}
+
+				return 'term:' . $item['taxonomy'] . ':' . $item['id'];
+				break;
+
+			default:
+				// Throw error
+				return [];
+		}
 	}
 
 	public static function maybe_json_decode( $maybe_json ) {
