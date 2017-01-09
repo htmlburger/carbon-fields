@@ -48,7 +48,7 @@ class Decorator {
 				register_rest_field( $types,
 					$field->get_name(), [
 						'get_callback'    => [ $this, 'load_field_value' ],
-						'update_callback' => null,
+						'update_callback' => [ $this, 'update_field_value' ],
 						'schema'          => null,
 					]
 				);
@@ -89,9 +89,7 @@ class Decorator {
 	 */	
 	public function load_field_value( $object, $field_name, $request ) {
 
-		$field = array_filter( $this->fields, function( $field ) use ( $field_name ) { 
-			return $field->get_name() === $field_name;
-		} );
+		$field = $this->get_current_field( $field_name );
 
 		if ( empty( $field ) ) {
 			return '';
@@ -108,6 +106,33 @@ class Decorator {
 	}
 
 	/**
+	 * Handler for updating custom field data.
+	 *
+	 * @param mixed $value The value of the field
+	 * @param object $object The object from the response
+	 * @param string $field_name Name of field
+	 *
+	 * @return bool|int
+	 */
+	public function update_field_value( $value, $object, $field_name ) {
+		if ( ! $value || ! is_string( $value ) ) {
+			return;
+		}
+
+		$field = $this->get_current_field( $field_name );
+
+		if ( empty( $field ) ) {
+			return;
+		}
+		
+		$field    = array_pop( $field );
+		$type     = strtolower( $field->type );
+		$context  = strtolower( $field->get_context() ); 
+
+		return call_user_func( "Carbon_Fields\Helper\Updater::update_{$context}", $object->ID, $field_name, $value, $type );
+	}
+
+	/**
 	 * Get the type of a field
 	 * 
 	 * @param object $field
@@ -116,6 +141,17 @@ class Decorator {
 	public function get_field_type( $field ) {
 		$type_to_lower = strtolower( $field->type );
 		return in_array( $type_to_lower, $this->data_manager->special_field_types ) ? $type_to_lower : 'generic';
+	}
+
+	/**
+	 * Get field based on it's name
+	 * @param  string $field_name 
+	 * @return array
+	 */
+	public function get_current_field( $field_name ) {
+		return array_filter( $this->fields, function( $field ) use ( $field_name ) { 
+			return $field->get_name() === $field_name;
+		} );
 	}
 
 	/**
