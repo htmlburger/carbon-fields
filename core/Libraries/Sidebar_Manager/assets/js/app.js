@@ -57,7 +57,7 @@ window.carbon = window.carbon || {};
 			event.preventDefault();
 		});
 
-		$('#wpbody-content > .wrap > :first:header').append($addButton);
+		$('body.widgets-php #wpbody-content > .wrap > :first:header').append($addButton);
 
 		// Add a remove sidebar button to each carbon-sidebar
 		$('.sidebar-carbon-sidebar').each(function() {
