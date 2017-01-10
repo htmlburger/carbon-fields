@@ -45,7 +45,7 @@ window.carbon = window.carbon || {};
 	$(document).ready(function() {
 
 		// Append an add sidebar button
-		$addButton = $('<a class="add-new-h2 carbon-btn-add-sidebar" href="#">' + crbSidebarl10n.add_sidebar + '</a>');
+		$addButton = $('<a class="add-new-h2 carbon-btn-add-sidebar" href="#"></a>').text( crbSidebarl10n.add_sidebar );
 
 		$addButton.on('click', function(event) {
 			var sidebarName = $.trim( window.prompt( crbSidebarl10n.enter_name_of_new_sidebar ) );
@@ -57,7 +57,7 @@ window.carbon = window.carbon || {};
 			event.preventDefault();
 		});
 
-		$('#wpbody-content > .wrap > :first:header').append($addButton);
+		$('body.widgets-php #wpbody-content > .wrap > :first:header').append($addButton);
 
 		// Add a remove sidebar button to each carbon-sidebar
 		$('.sidebar-carbon-sidebar').each(function() {
