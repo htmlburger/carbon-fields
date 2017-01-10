@@ -170,10 +170,9 @@ window.carbon = window.carbon || {};
 
 			var id = model.get('id');
 			var visible = model.get('visible');
-			var $wrapper = carbon.views.main.$body.find('#' + id + '-wrapper');
+			var $holder = carbon.views.main.$body.find('#' + id);
 
-			$wrapper.toggleClass( 'carbon-hidden', !visible );
-			$wrapper.removeClass( 'carbon-cloaked' );
+			$holder.toggle(visible);
 		},
 
 		eventPropagator: function(collection, event) {
@@ -922,6 +921,16 @@ window.carbon = window.carbon || {};
 			}
 
 			this.model.set('visible', visible);
+		},
+
+		toggleVisibility: function(model) {
+
+			var id = model.get('id');
+			var visible = model.get('visible');
+			var $wrapper = carbon.views.main.$body.find('#' + id + '-wrapper');
+
+			$wrapper.toggleClass( 'carbon-hidden', !visible );
+			$wrapper.removeClass( 'carbon-cloaked' );
 		}
 	});
 
