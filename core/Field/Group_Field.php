@@ -56,7 +56,7 @@ class Group_Field {
 	 * @param string $label
 	 * @param array  $fields
 	 */
-	public function __construct($name, $label, $fields) {
+	public function __construct( $name, $label, $fields ) {
 		$this->set_name( $name );
 		$this->set_label( $label );
 		$this->add_fields( $fields );
@@ -188,7 +188,7 @@ class Group_Field {
 	 *
 	 * @param string $template
 	 */
-	public function set_label_template($template) {
+	public function set_label_template( $template ) {
 		$this->label_template = $template;
 	}
 

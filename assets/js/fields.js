@@ -1163,8 +1163,6 @@ window.carbon = window.carbon || {};
 					thumbUrl = _this.model.get('default_thumb_url');
 				}
 
-				console.log(mediaAttachment);
-
 				// Update the model
 				this.model.set('file_type', mediaAttachment.type);
 				this.model.set('file_name', mediaAttachment.filename);
@@ -1833,6 +1831,10 @@ window.carbon = window.carbon || {};
 			var groups = this.model.get('value');
 
 			_.each(groups, function(group) {
+				// Set the value defined by the user in PHP land
+				// This code will run only the first time that the groups are created
+				group.collapsed = _this.model.get('collapsed');
+
 				_this.groupsCollection.add(group, {
 					sort: false
 				});
@@ -2185,8 +2187,13 @@ window.carbon = window.carbon || {};
 		toggleCollapse: function(model) {
 			var collapsed = model.get('collapsed');
 
+			if (this.complexModel.isTabbed()) {
+				return;
+			}
+
 			this.$el.toggleClass('collapsed', collapsed);
 		},
+
 		toggleGroupError: function (model) {
 			var hasClass = this.model.get('error');
 
@@ -2396,6 +2403,9 @@ window.carbon = window.carbon || {};
 
 		afterRenderInit: function() {
 			var _this = this;
+
+			// Update collapse state/visibility
+			this.toggleCollapse(this.model);
 
 			// Trigger the add event on the collection, this should initialize the fields rendering
 			this.fieldsCollection.each(function(model) {

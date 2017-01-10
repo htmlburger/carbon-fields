@@ -1,0 +1,291 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Carbon Fields\n"
+"POT-Creation-Date: 2017-01-06 11:06+0200\n"
+"PO-Revision-Date: 2017-01-06 11:31+0200\n"
+"Last-Translator: Timi Wahalahti <timi@dude.fi>\n"
+"Language-Team: Timi Wahalahti <timi@dude.fi>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-WPHeader: carbon-fields-plugin.php\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.js\n"
+
+#: core/Container/Container.php:573
+msgid "General"
+msgstr "Yleiset"
+
+#: core/Container/Container.php:765
+msgid "Please fill out all required fields highlighted below."
+msgstr "Täytä kaikki pakolliset kentät jotka on korostettu alla."
+
+#: core/Container/Container.php:766
+msgid "The changes you made will be lost if you navigate away from this page."
+msgstr "Tekemäsi muutokset menetetään jos siirryt pois tältä sivulta."
+
+#: core/Container/Theme_Options_Container.php:149
+msgid "Settings saved."
+msgstr "Asetukset tallennettu."
+
+#: core/Field/Association_Field.php:372 core/Field/Relationship_Field.php:267
+msgid "Edit"
+msgstr "Muokkaa"
+
+#: core/Field/Broken_Field.php:11
+msgid "This field is misconfigured"
+msgstr "Tämä kenttä on määritetty virheellisesti"
+
+#: core/Field/Color_Field.php:18
+msgid "Select a Color"
+msgstr "﻿Valitse väri"
+
+#: core/Field/Complex_Field.php:40
+msgid "Entry"
+msgstr "rivi"
+
+#: core/Field/Complex_Field.php:41
+msgid "Entries"
+msgstr "riviä"
+
+#: core/Field/Complex_Field.php:496 core/Field/Complex_Field.php:497
+msgid "Clone"
+msgstr "Kopioi"
+
+#: core/Field/Complex_Field.php:500 core/Field/Complex_Field.php:501
+msgid "Remove"
+msgstr "Poista"
+
+#: core/Field/Complex_Field.php:504 core/Field/Complex_Field.php:505
+msgid "Collapse/Expand"
+msgstr "Tiivistä/Laajenna"
+
+#: core/Field/Complex_Field.php:571
+#, php-format
+msgid ""
+"Complex field \"%1$s\" layout is deprecated, please use \"%2$s\" or \"%3$s\" "
+"instead."
+msgstr ""
+
+#: core/Field/Complex_Field.php:584
+msgid "Complex field <code>"
+msgstr ""
+
+#: core/Field/Date_Field.php:41
+msgid "Select Date"
+msgstr "Valitse päivämäärä"
+
+#: core/Field/Field.php:818 core/Field/File_Field.php:28
+msgid "Files"
+msgstr "Tiedostot"
+
+#: core/Field/Field.php:819
+msgid "The address could not be found. "
+msgstr "Osoitetta ei löytynyt. "
+
+#: core/Field/Field.php:820
+msgid "Geocode was not successful for the following reason: "
+msgstr "Paikannus ei onnistunut seuraavista syistä: "
+
+#: core/Field/Field.php:821
+#, php-format
+msgid "Maximum number of items reached (%s items)"
+msgstr "Merkintöjen enimmäismäärä saavutettu (%s kohdetta)"
+
+#: core/Field/Field.php:822
+#, php-format
+msgid "Maximum number of rows reached (%s rows)"
+msgstr "Rivien enimmäismäärä saavutettu (%s riviä)"
+
+#: core/Field/Field.php:823
+#, php-format
+msgid "Cannot create more than %s rows"
+msgstr "Ei voida luoda yli %s riviä"
+
+#: core/Field/Field.php:824
+msgid "Please enter the name of the new sidebar:"
+msgstr "Uuden sivupalkin nimi:"
+
+#: core/Field/Field.php:825
+msgid "Are you sure you wish to remove this sidebar?"
+msgstr "Oletko varma, että haluat poistaa tämän sivupalkin?"
+
+#: core/Field/Field.php:826
+msgid "Add Sidebar"
+msgstr "Lisää sivupalkki"
+
+#: core/Field/Field.php:827
+#, php-format
+msgid "There are no %s yet. Click <a href=\"#\">here</a> to add one."
+msgstr ""
+"Et ole lisännyt vielä yhtään %s. Klikkaa <a href=\"#\">tästä</a> lisätäksesi "
+"ensimmäinen."
+
+#: core/Field/Field.php:828
+#, php-format
+msgid "Add %s"
+msgstr "Lisää %s"
+
+#: core/Field/Field.php:829
+#, php-format
+msgid "Minimum number of rows not reached (%d %s)"
+msgstr "Rivien vähimmäismäärää ei saavutettu (%d %s)"
+
+#: core/Field/Field.php:830
+msgid "Please fill out all fields correctly. "
+msgstr "Täytä kaikki kentät oikein. "
+
+#: core/Field/Field.php:831
+msgid "This field is required. "
+msgstr "Tämä kenttä on pakollinen."
+
+#: core/Field/Field.php:832
+msgid "Please choose an option. "
+msgstr "Valitse vaihtoehto. "
+
+#: core/Field/File_Field.php:26 core/Field/File_Field.php:27
+msgid "Select File"
+msgstr "Valitse tiedosto"
+
+#: core/Field/Footer_Scripts_Field.php:14
+msgid ""
+"If you need to add scripts to your footer (like Google Analytics tracking "
+"code), you should enter them in this box."
+msgstr ""
+"Jos haluat lisätä skriptejä alapalkkiin (kuten Google Analytics "
+"seurantakoodin), voit lisätä ne tähän."
+
+#: core/Field/Gravity_Form_Field.php:44
+msgid "No form"
+msgstr "Ei lomaketta"
+
+#: core/Field/Gravity_Form_Field.php:79
+msgid "Please install Gravity Forms plugin"
+msgstr "Asenna Gravity Forms lisäosa"
+
+#: core/Field/Gravity_Form_Field.php:85
+msgid "No Gravity Forms have been found."
+msgstr "Gravity Formseja ei löytynyt."
+
+#: core/Field/Header_Scripts_Field.php:14
+msgid "If you need to add scripts to your header, you should enter them here."
+msgstr "Jos haluat lisätä skriptejä ylätunnisteeseen, voit lisätä ne tähän."
+
+#: core/Field/Image_Field.php:18 core/Field/Image_Field.php:19
+msgid "Select Image"
+msgstr "Valitse kuva"
+
+#: core/Field/Image_Field.php:20
+msgid "Images"
+msgstr "Kuvat"
+
+#: core/Field/Map_Field.php:102
+msgid "Locate Address on the map"
+msgstr "Etsi osoite kartalta"
+
+#: core/Field/Map_Field.php:107
+msgid "Find"
+msgstr "Etsi"
+
+#: core/Field/Radio_Field.php:15 core/Field/Select_Field.php:33
+#: core/Field/Set_Field.php:85
+msgid "no options"
+msgstr "ei vaihtoehtoja"
+
+#: core/Field/Relationship_Field.php:211
+msgid "selected item"
+msgstr "valittu merkintä"
+
+#: core/Field/Relationship_Field.php:211 core/Field/Relationship_Field.php:212
+msgid "selected items"
+msgstr "valittua merkintää"
+
+#: core/Field/Relationship_Field.php:219
+msgid "out of"
+msgstr "/"
+
+#: core/Field/Relationship_Field.php:225
+msgid "Search..."
+msgstr "Hae..."
+
+#: core/Field/Relationship_Field.php:240
+msgid "Associated:"
+msgstr "Liitetty:"
+
+#: core/Field/Rich_Text_Field.php:26 core/Field/Rich_Text_Field.php:27
+msgid "Add Media"
+msgstr "Lisää media"
+
+#: core/Field/Rich_Text_Field.php:38
+msgid "Visual"
+msgstr "Graafinen"
+
+#: core/Field/Rich_Text_Field.php:41
+msgid "Text"
+msgstr "Teksti"
+
+#: core/Field/Set_Field.php:104
+msgid "Show All Options"
+msgstr "Näytä kaikki valinnat"
+
+#: core/Field/Sidebar_Field.php:35
+msgctxt "sidebar"
+msgid "Add New"
+msgstr "Lisää uusi"
+
+#: core/Field/Time_Field.php:77
+msgid "Select Time"
+msgstr "Valitse aika"
+
+#: core/Manager/Sidebar_Manager.php:104
+msgid "Sidebar with the same ID is already registered."
+msgstr "Sivupalkki samalla yksilöllisellä ID:llä on jo rekisteröity."
+
+#: core/Manager/Sidebar_Manager.php:131
+msgid "Sidebar not found."
+msgstr "Sivupalkkeja ei löytynyt."
+
+#: templates/Container/theme_options.php:31
+msgid "Actions"
+msgstr "Toiminnot"
+
+#: templates/Container/theme_options.php:40
+msgid "Save Changes"
+msgstr "Tallenna muutokset"
+
+#: templates/Container/widget.php:5
+msgid "No options are available for this widget."
+msgstr "Tälle vimpaimelle ei ole valintoja."
+
+#. Plugin Name of the plugin/theme
+msgid "Carbon Fields"
+msgstr "Carbon Fields"
+
+#. Plugin URI of the plugin/theme
+msgid "http://carbonfields.net/"
+msgstr "http://carbonfields.net/"
+
+#. Description of the plugin/theme
+msgid ""
+"WordPress developer-friendly custom fields for post types, taxonomy terms, "
+"users, comments, widgets, options, navigation menus and more."
+msgstr ""
+"WordPress -kehittäjäystävällisiä kenttiä sisältötyypeille, taksonomian "
+"termeille, käyttäjille, kommenteille, vimpaimille, asetuksille, valikoille "
+"ja paljon muuta."
+
+#. Author of the plugin/theme
+msgid "htmlburger"
+msgstr "htmlburger"
+
+#. Author URI of the plugin/theme
+msgid "https://htmlburger.com/"
+msgstr "https://htmlburger.com/"

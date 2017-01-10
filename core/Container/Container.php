@@ -20,7 +20,7 @@ abstract class Container {
 	/**
 	 * List of registered unique panel identificators
 	 *
-	 * @see verify_unique_panel_id()
+	 * @see get_unique_panel_id()
 	 * @var array
 	 */
 	public static $registered_panel_ids = array();
@@ -272,8 +272,9 @@ abstract class Container {
 
 		$this->title = $title;
 		$this->id = preg_replace( '~\W~u', '', remove_accents( $title ) );
+		$this->id = self::get_unique_panel_id( $this->id );
 
-		self::verify_unique_panel_id( $this->id );
+		self::$registered_panel_ids[] = $this->id;
 	}
 
 	/**
@@ -616,12 +617,16 @@ abstract class Container {
 	/**
 	 * Perform checks whether there is a container registered with identificator $id
 	 */
-	public static function verify_unique_panel_id( $id ) {
-		if ( in_array( $id, self::$registered_panel_ids ) ) {
-			Incorrect_Syntax_Exception::raise( 'Panel ID "' . $id . '" already registered' );
+	public static function get_unique_panel_id( $id ) {
+		$base = $id;
+		$suffix = 0;
+
+		while ( in_array( $id, self::$registered_panel_ids ) ) {
+			$suffix++;
+			$id = $base . strval( $suffix );
 		}
 
-		self::$registered_panel_ids[] = $id;
+		return $id;
 	}
 
 

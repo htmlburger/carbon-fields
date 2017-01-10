@@ -26,6 +26,7 @@ class Complex_Field extends Field {
 	protected $layout = self::LAYOUT_GRID;
 	protected $values_min = -1;
 	protected $values_max = -1;
+	protected $collapsed = false;
 
 	public $labels = array(
 		'singular_name' => 'Entry',
@@ -80,7 +81,7 @@ class Complex_Field extends Field {
 			Incorrect_Syntax_Exception::raise( 'Group with name "' . $name . '" in Complex Field "' . $this->get_label() . '" already exists.' );
 		}
 
-		$group = new Group_Field($name, $label, $fields);
+		$group = new Group_Field( $name, $label, $fields );
 
 		$this->groups[ $group->get_name() ] = $group;
 
@@ -94,8 +95,8 @@ class Complex_Field extends Field {
 	 * @return $this
 	 */
 	public function set_header_template( $template ) {
-		if ( count($this->groups) === 0 ) {
-			Incorrect_Syntax_Exception::raise( "Can't set group label template. There are no present groups for Complex Field " . $this->get_label() . "." );
+		if ( count( $this->groups ) === 0 ) {
+			Incorrect_Syntax_Exception::raise( "Can't set group label template. There are no present groups for Complex Field " . $this->get_label() . '.' );
 		}
 
 		$template = is_callable( $template ) ? call_user_func( $template ) : $template;
@@ -174,7 +175,6 @@ class Complex_Field extends Field {
 
 		$input_groups = $input[ $this->get_name() ];
 		$index = 0;
-
 
 		foreach ( $input_groups as $values ) {
 			$value_group = array();
@@ -419,6 +419,7 @@ class Complex_Field extends Field {
 			'multiple_groups' => count( $groups_data ) > 1,
 			'groups' => $groups_data,
 			'value' => $values_data,
+			'collapsed' => $this->collapsed,
 		) );
 
 		return $complex_data;
@@ -493,16 +494,16 @@ class Complex_Field extends Field {
 			</div>
 
 			<div class="carbon-group-actions carbon-group-actions-{{ layout }}">
-				<a class="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="<?php esc_attr_e( 'Clone', 'carbon_fields' ); ?>">
-					<?php _e( 'Clone', 'carbon_fields' ); ?>
+				<a class="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="<?php esc_attr_e( 'Clone', 'carbon-fields' ); ?>">
+					<?php _e( 'Clone', 'carbon-fields' ); ?>
 				</a>
 
-				<a class="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="<?php esc_attr_e( 'Remove', 'carbon_fields' ); ?>">
-					<?php _e( 'Remove', 'carbon_fields' ); ?>
+				<a class="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="<?php esc_attr_e( 'Remove', 'carbon-fields' ); ?>">
+					<?php _e( 'Remove', 'carbon-fields' ); ?>
 				</a>
 
-				<a class="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon_fields' ); ?>">
-					<?php _e( 'Collapse/Expand', 'carbon_fields' ); ?>
+				<a class="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon-fields' ); ?>">
+					<?php _e( 'Collapse/Expand', 'carbon-fields' ); ?>
 				</a>
 			</div>
 
@@ -568,7 +569,7 @@ class Complex_Field extends Field {
 		if ( $layout === self::LAYOUT_TABBED ) {
 			// The library used to provide just one kind of tabs -- horizontal ones. Later vertical tabs were added.
 			// So the "tabbed" name was renamed to "tabbed-horizontal" and "tabbed-vertical" layout was introduced.
-			_doing_it_wrong( __METHOD__, sprintf( __( 'Complex field "%1$s" layout is deprecated, please use "%2$s" or "%3$s" instead.', 'carbon_fields' ), self::LAYOUT_TABBED, self::LAYOUT_TABBED_HORIZONTAL, self::LAYOUT_TABBED_VERTICAL ), null );
+			_doing_it_wrong( __METHOD__, sprintf( __( 'Complex field "%1$s" layout is deprecated, please use "%2$s" or "%3$s" instead.', 'carbon-fields' ), self::LAYOUT_TABBED, self::LAYOUT_TABBED_HORIZONTAL, self::LAYOUT_TABBED_VERTICAL ), null );
 
 			$layout = self::LAYOUT_TABBED_HORIZONTAL;
 		}
@@ -581,7 +582,7 @@ class Complex_Field extends Field {
 		}
 
 		if ( $layout === self::LAYOUT_LIST ) {
-			_doing_it_wrong( __METHOD__, __( 'Complex field <code>' . self::LAYOUT_LIST . '</code> layout is deprecated, please use <code>set_width()</code> instead.', 'carbon_fields' ), null );
+			_doing_it_wrong( __METHOD__, __( 'Complex field <code>' . self::LAYOUT_LIST . '</code> layout is deprecated, please use <code>set_width()</code> instead.', 'carbon-fields' ), null );
 		}
 
 		$this->layout = $layout;
@@ -625,6 +626,18 @@ class Complex_Field extends Field {
 	 */
 	public function get_max() {
 		return $this->values_max;
+	}
+
+	/**
+	 * Change the groups initial collapse state.
+	 * This state relates to the state of which the groups are rendered.
+	 *
+	 * @param bool $collapsed
+	 */
+	public function set_collapsed( $collapsed = true ) {
+		$this->collapsed = $collapsed;
+
+		return $this;
 	}
 
 	/**
