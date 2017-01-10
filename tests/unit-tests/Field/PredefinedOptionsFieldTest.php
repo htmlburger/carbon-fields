@@ -102,7 +102,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>set_options()</code> method.
 	 */
 	public function testSetOptionsObject() {
-		$this->field->set_options( $this->createMock('StdClass') );
+		$this->field->set_options( $this->getMock('StdClass') );
 	}
 
 	/**
@@ -212,7 +212,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage Only arrays are allowed in the <code>add_options()</code> method.
 	 */
 	public function testAddOptionsObject() {
-		$this->field->add_options( $this->createMock('StdClass') );
+		$this->field->add_options( $this->getMock('StdClass') );
 	}
 
 }
