@@ -45,7 +45,7 @@ window.carbon = window.carbon || {};
 	$(document).ready(function() {
 
 		// Append an add sidebar button
-		$addButton = $('<a class="add-new-h2 carbon-btn-add-sidebar" href="#">' + crbSidebarl10n.add_sidebar + '</a>');
+		$addButton = $('<a class="add-new-h2 carbon-btn-add-sidebar" href="#"></a>').text( crbSidebarl10n.add_sidebar );
 
 		$addButton.on('click', function(event) {
 			var sidebarName = $.trim( window.prompt( crbSidebarl10n.enter_name_of_new_sidebar ) );
