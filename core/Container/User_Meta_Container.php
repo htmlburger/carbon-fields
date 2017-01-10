@@ -31,8 +31,9 @@ class User_Meta_Container extends Container {
 	 * Bind attach() and save() to the appropriate WordPress actions.
 	 **/
 	public function init() {
-		add_action( 'admin_init', array( $this, '_attach' ) );
-		add_action( 'rest_api_init', array( $this, '_attach_when_rest' ) );
+		add_action( 'carbon_containers_attach', array( $this, '_attach' ) );
+		add_action( 'carbon_containers_attach_all', array( $this, '_attach_all' ) );
+		add_action( 'rest_api_init', array( $this, '_attach_all' ) );
 		add_action( 'profile_update', array( $this, '_save' ), 10, 1 );
 		add_action( 'user_register', array( $this, '_save' ), 10, 1 );
 	}

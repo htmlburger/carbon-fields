@@ -113,8 +113,9 @@ class Post_Meta_Container extends Container {
 			$this->settings['post_type'] = array( $this->settings['post_type'] );
 		}
 
-		add_action( 'admin_init', array( $this, '_attach' ) );
-		add_action( 'rest_api_init', array( $this, '_attach_when_rest' ) );
+		add_action( 'carbon_containers_attach', array( $this, '_attach' ) );
+		add_action( 'carbon_containers_attach_all', array( $this, '_attach_all' ) );
+		add_action( 'rest_api_init', array( $this, '_attach_all' ) );
 		add_action( 'save_post', array( $this, '_save' ) );
 
 		// support for attachments
@@ -366,8 +367,9 @@ class Post_Meta_Container extends Container {
 	public function detach() {
 		parent::detach();
 
-		remove_action( 'admin_init', array( $this, '_attach' ) );
-		remove_action( 'rest_api_init', array( $this, '_attach_when_rest' ) );
+		remove_action( 'carbon_containers_attach', array( $this, '_attach' ) );
+		remove_action( 'carbon_containers_attach_all', array( $this, '_attach_all' ) );
+		remove_action( 'rest_api_init', array( $this, '_attach_all' ) );
 		remove_action( 'save_post', array( $this, '_save' ) );
 
 		// unregister field names

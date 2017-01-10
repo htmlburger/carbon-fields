@@ -39,8 +39,8 @@ class Term_Meta_Container extends Container {
 			$this->settings['taxonomy'] = array( $this->settings['taxonomy'] );
 		}
 
-		add_action( 'admin_init', array( $this, '_attach' ) );
-		add_action( 'rest_api_init', array( $this, '_attach_when_rest' ) );
+		add_action( 'carbon_containers_attach', array( $this, '_attach' ) );
+		add_action( 'rest_api_init', array( $this, '_attach_all' ) );
 
 		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
 			add_action( 'edited_' . $taxonomy, array( $this, '_save' ), 10, 2 );
@@ -111,8 +111,9 @@ class Term_Meta_Container extends Container {
 	public function detach() {
 		parent::detach();
 
-		remove_action( 'admin_init', array( $this, '_attach' ) );
-		remove_action( 'rest_api_init', array( $this, '_attach_when_rest' ) );
+		remove_action( 'carbon_containers_attach', array( $this, '_attach' ) );
+		remove_action( 'carbon_containers_attach_all', array( $this, '_attach_all' ) );
+		remove_action( 'rest_api_init', array( $this, '_attach_all' ) );
 
 		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
 			remove_action( 'edited_' . $taxonomy, array( $this, '_save' ), 10 );

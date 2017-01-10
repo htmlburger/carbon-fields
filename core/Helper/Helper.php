@@ -30,6 +30,8 @@ class Helper {
 		add_action( 'crb_field_activated', array( $this, 'add_templates' ) );
 		add_action( 'crb_container_activated', array( $this, 'add_templates' ) );
 		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
+		add_action( 'admin_init', array( $this, 'trigger_containers_attach' ), 0 );
+		add_action( 'carbon_trigger_containers_attach', array( $this, 'trigger_containers_attach' ), 0 );
 
 		# Initialize templater
 		new Templater();
@@ -62,6 +64,19 @@ class Helper {
 				$callback .= '<br/>' . ( isset( $trace['file'] ) ? $trace['file'] . ':' . $trace['line'] : $trace['function'] . '()' );
 			}
 			wp_die( '<h3>' . $e->getMessage() . '</h3><small>' . $callback . '</small>' );
+		}
+	}
+
+	/**
+	 * Attach appropriate containers
+	 * 
+	 */
+	public function trigger_containers_attach() {
+		if ( is_admin() ) {
+			do_action( 'carbon_containers_attach' );
+		} else {
+			$this->init_containers();
+			do_action( 'carbon_containers_attach_all' );
 		}
 	}
 

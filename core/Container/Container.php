@@ -400,7 +400,11 @@ abstract class Container {
 		}
 	}
 
-	public function _attach_when_rest() {
+	/**
+	 * Attach all containers
+	 * 
+	 */
+	public function _attach_all() {
 		$this->_attach_containers();
 	}
 
@@ -414,8 +418,6 @@ abstract class Container {
 		foreach ( $fields as $field ) {
 			self::activate_field( $field );
 		}
-
-		do_action( 'carbon_containers_attached' );
 	}
 
 	/**

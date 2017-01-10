@@ -29,27 +29,28 @@ class Updater {
 	}
 
 	public static function update_field( $field_type, $object_id, $field_name, $value, $value_type = null ) {
+		if ( empty( Container::$active_containers ) ) {
+			do_action( 'carbon_trigger_containers_attach' );
+		}
 
-		add_action( 'carbon_containers_attached', function() use ( $field_type, $object_id, $field_name, $value, $value_type ) {
-			$field_name = Helper::prepare_meta_name( $field_name );
-			$values     = self::parse_value( $field_name, $value, $value_type );
-			$args       = [ 
-				'id'    => $object_id, 
-				'name'  => '',
-				'value' => '',
-			];
+		$field_name = Helper::prepare_meta_name( $field_name );
+		$values     = self::parse_value( $field_name, $value, $value_type );
+		$args       = [ 
+			'id'    => $object_id, 
+			'name'  => '',
+			'value' => '',
+		];
 
-			if ( empty( $values ) ) {
-				return;
-			}
+		if ( empty( $values ) ) {
+			return;
+		}
 
-			foreach ( $values as $name => $value ) {
-				$args['name']  = $name;
-				$args['value'] = $value;
+		foreach ( $values as $name => $value ) {
+			$args['name']  = $name;
+			$args['value'] = $value;
 
-				call_user_func_array( [ __CLASS__, "update_{$field_type}"], $args );
-			}
-		});
+			call_user_func_array( [ __CLASS__, "update_{$field_type}"], $args );
+		}
 	}
 
 	public static function update_option( $name, $value, $value_type = null, $autoload = null ) {
@@ -154,7 +155,6 @@ class Updater {
 	}
 
 	public static function update_complex_field( $value, $name ) {
-
 		$fields = array_map( function( $container ) {
 			return $container->get_fields();
 		}, Container::$active_containers );
@@ -169,7 +169,6 @@ class Updater {
 
 		$complex_field->set_value_from_input( [ $complex_field->get_name() => $value] );
 		$complex_field->save();
-		
 	}
 
 	public static function maybe_json_decode( $maybe_json ) {

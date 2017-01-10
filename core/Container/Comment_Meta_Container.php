@@ -32,9 +32,10 @@ class Comment_Meta_Container extends Container {
 		if ( isset( $_GET['c'] ) && $comment_id = absint( $_GET['c'] ) ) { // Input var okay.
 			$this->set_comment_id( $comment_id );
 		}
-
-		add_action( 'admin_init', array( $this, '_attach' ) );
-		add_action( 'rest_api_init', array( $this, '_attach_when_rest' ) );
+		
+		add_action( 'carbon_containers_attach', array( $this, '_attach' ) );
+		add_action( 'carbon_containers_attach_all', array( $this, '_attach_all' ) );
+		add_action( 'rest_api_init', array( $this, '_attach_all' ) );
 		add_action( 'edit_comment', array( $this, '_save' ) );
 	}
 
@@ -71,8 +72,9 @@ class Comment_Meta_Container extends Container {
 	public function detach() {
 		parent::detach();
 
-		remove_action( 'admin_init', array( $this, '_attach' ) );
-		remove_action( 'rest_api_init', array( $this, '_attach_when_rest' ) );
+		remove_action( 'carbon_containers_attach', array( $this, '_attach' ) );
+		remove_action( 'carbon_containers_attach_all', array( $this, '_attach_all' ) );
+		remove_action( 'rest_api_init', array( $this, '_attach_all' ) );
 		remove_action( 'edit_comment', array( $this, '_save' ) );
 
 		// unregister field names
