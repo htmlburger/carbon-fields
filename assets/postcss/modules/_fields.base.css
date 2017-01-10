@@ -8,6 +8,9 @@
 .carbon-field label { padding: 0 0 8px; font-weight: 600; }
 .carbon-field input[type="text"],
 .carbon-field input[type="number"],
+.carbon-field input[type="url"],
+.carbon-field input[type="email"],
+.carbon-field input[type="password"],
 .carbon-field textarea { display: block; padding: 4px 5px 3px; width: 100%; resize: vertical; }
 .carbon-field select { width: 100%; }
 
