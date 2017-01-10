@@ -25,14 +25,12 @@ const components = {
  * @param  {String}          domain
  * @param  {String}          type
  * @param  {React.Component} component
- * @return {React.Component}
+ * @return {void}
  *
  * @todo Add some validation
  */
 function registerComponent(domain, type, component) {
 	components[domain][type] = component;
-
-	return component;
 }
 
 export const registerContainerComponent = partial(registerComponent, DOMAIN_CONTAINERS);

@@ -4,7 +4,6 @@ import { compose } from 'recompose';
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { registerFieldComponent } from 'lib/registry';
 
 /**
  * Render custom HTML markup.
@@ -19,8 +18,8 @@ export const HtmlField = ({ field }) => {
 	</Field>;
 };
 
-export default registerFieldComponent('Html', compose(
+export default compose(
 	withStore(),
 	withSetup()
-)(HtmlField));
+)(HtmlField);
 

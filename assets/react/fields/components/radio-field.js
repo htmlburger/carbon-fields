@@ -5,7 +5,6 @@ import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { registerFieldComponent } from 'lib/registry';
 
 /**
  * Render a radio input field.
@@ -60,7 +59,7 @@ const handleInputChange = ({ field, updateField }) => ({ target }) => {
  */
 const isChecked = ({ field }) => option => option.value === field.value;
 
-export default registerFieldComponent('Radio', compose(
+export default compose(
 	withStore(),
 	branch(
 		({ field: { options } }) => !options.length,
@@ -72,4 +71,4 @@ export default registerFieldComponent('Radio', compose(
 			withHandlers({ handleInputChange, isChecked })
 		)
 	)
-)(RadioField));
+)(RadioField);

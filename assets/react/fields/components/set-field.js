@@ -6,7 +6,6 @@ import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { registerFieldComponent } from 'lib/registry';
 
 /**
  * Render a collection of checkbox inputs.
@@ -105,7 +104,7 @@ const showAllOptions = ({ setExpanded }) => e => {
 	setExpanded(true);
 };
 
-export default registerFieldComponent('Set', compose(
+export default compose(
 	withStore(),
 	branch(
 		({ field: { options } }) => !options.length,
@@ -118,4 +117,4 @@ export default registerFieldComponent('Set', compose(
 			withHandlers({ handleInputChange, isChecked, isInputHidden, isExpanderHidden, showAllOptions })
 		)
 	)
-)(SetField));
+)(SetField);

@@ -6,7 +6,7 @@ module.exports = {
 	// This means they will be the "root" imports that are included in JS bundle.
 	entry: [
 		'babel-polyfill',
-		'./assets/react/register.js',
+		'./assets/react/registrar.js',
 		'./assets/react/bootstrap.js'
 	],
 
@@ -46,17 +46,19 @@ module.exports = {
 		}
 	},
 
-	// Faster sourcemaps without column mappings.
-	devtool: 'eval',
+	// Setup the source maps.
+	devtool: 'cheap-module-eval-source-map',
 
 	// Setup the plugins.
 	plugins: [
+		// Use the vendor DLL file.
 		new webpack.DllReferencePlugin({
 			context: __dirname,
 			sourceType: 'this',
 			manifest: require('./assets/carbon.vendor.json'),
 		}),
 
+		// Use the app DLL file.
 		new webpack.DllReferencePlugin({
 			context: __dirname,
 			sourceType: 'this',

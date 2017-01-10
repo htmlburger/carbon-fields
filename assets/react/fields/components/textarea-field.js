@@ -4,7 +4,6 @@ import { compose } from 'recompose';
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { registerFieldComponent } from 'lib/registry';
 
 /**
  * Render a multiline text input field.
@@ -30,7 +29,7 @@ export const TextareaField = ({ field, updateField }) => {
 	</Field>;
 };
 
-export default registerFieldComponent('Textarea', compose(
+export default compose(
 	withStore(),
 	withSetup()
-)(TextareaField));
+)(TextareaField);

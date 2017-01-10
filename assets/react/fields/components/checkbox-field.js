@@ -4,7 +4,6 @@ import { compose, withProps, withHandlers } from 'recompose';
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { registerFieldComponent } from 'lib/registry';
 
 /**
  * Render a checkbox input field.
@@ -54,9 +53,9 @@ const handleInputChange = ({ field, updateField }) => ({ target }) => {
 	});
 };
 
-export default registerFieldComponent('Checkbox', compose(
+export default compose(
 	withStore(),
 	withSetup(),
 	withProps(props),
 	withHandlers({ handleInputChange })
-)(CheckboxField));
+)(CheckboxField);

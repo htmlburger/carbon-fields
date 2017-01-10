@@ -41,6 +41,7 @@ module.exports = {
 
 			// Load the fields.
 			'./assets/react/fields/selectors',
+
 			'./assets/react/fields/decorators/with-store.js',
 			'./assets/react/fields/decorators/with-setup.js',
 
@@ -51,8 +52,6 @@ module.exports = {
 			'./assets/react/fields/components/text-field.js',
 			'./assets/react/fields/components/textarea-field.js',
 			'./assets/react/fields/components/separator-field.js',
-			'./assets/react/fields/components/header-scripts-field.js',
-			'./assets/react/fields/components/footer-scripts-field.js',
 			'./assets/react/fields/components/color-field.js',
 			'./assets/react/fields/components/checkbox-field.js',
 			'./assets/react/fields/components/complex.js',
@@ -117,8 +116,8 @@ module.exports = {
 		'jquery': 'jQuery'
 	},
 
-	// Faster sourcemaps without column mappings.
-	devtool: 'eval',
+	// Setup the source maps.
+	devtool: 'cheap-module-eval-source-map',
 
 	// Setup the plugins.
 	plugins: [
