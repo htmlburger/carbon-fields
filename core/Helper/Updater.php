@@ -1,12 +1,14 @@
 <?php 
 namespace Carbon_Fields\Helper;
 
+use Carbon_Fields\Field\Complex_Field;
+use Carbon_Fields\Container\Container;
 /**
 * 
 */
 class Updater {
 
-	public static function updates_post_meta( $id, $name, $value ) {
+	public static function update_post_meta( $id, $name, $value ) {
 		update_post_meta( $id, $name, $value );
 	}
 
@@ -28,20 +30,26 @@ class Updater {
 
 	public static function update_field( $field_type, $object_id, $field_name, $value, $value_type = null ) {
 
-		$field_name = Helper::prepare_meta_name( $field_name );
-		$values     = self::parse_value( $field_name, $value, $value_type );
-		$args       = [ 
-			'id'    => $object_id, 
-			'name'  => '',
-			'value' => '',
-		];
+		add_action( 'carbon_containers_attached', function() use ( $field_type, $object_id, $field_name, $value, $value_type ) {
+			$field_name = Helper::prepare_meta_name( $field_name );
+			$values     = self::parse_value( $field_name, $value, $value_type );
+			$args       = [ 
+				'id'    => $object_id, 
+				'name'  => '',
+				'value' => '',
+			];
 
-		foreach ( $values as $name => $value ) {
-			$args['name']  = $name;
-			$args['value'] = $value;
+			if ( empty( $values ) ) {
+				return;
+			}
 
-			call_user_func_array( [ __CLASS__, "updates_{$field_type}"], $args );
-		}
+			foreach ( $values as $name => $value ) {
+				$args['name']  = $name;
+				$args['value'] = $value;
+
+				call_user_func_array( [ __CLASS__, "update_{$field_type}"], $args );
+			}
+		});
 	}
 
 	public static function update_option( $name, $value, $value_type = null, $autoload = null ) {
@@ -67,7 +75,7 @@ class Updater {
 
 		switch ( $type ) {
 			case 'complex':
-				
+					self::update_complex_field( $value, $name );
 				break;
 
 			case 'map':
@@ -145,6 +153,25 @@ class Updater {
 		}
 	}
 
+	public static function update_complex_field( $value, $name ) {
+
+		$fields = array_map( function( $container ) {
+			return $container->get_fields();
+		}, Container::$active_containers );
+
+		$fields = call_user_func_array( 'array_merge', $fields );
+
+		$complex_field = array_filter( $fields, function( $field ) use ( $name ) {
+			return $field->get_name() === $name;
+		} ); 
+
+		$complex_field = array_pop($complex_field);
+
+		$complex_field->set_value_from_input( [ $complex_field->get_name() => $value] );
+		$complex_field->save();
+		
+	}
+
 	public static function maybe_json_decode( $maybe_json ) {
 		if ( self::is_json( $maybe_json ) ) {
 			return json_decode( $maybe_json );
@@ -156,4 +183,6 @@ class Updater {
 	public static function is_json( $string ) {
 		return is_string( $string ) && is_array( json_decode( $string, true ) ) && ( json_last_error() === JSON_ERROR_NONE ) ? true : false;
 	}	
+
+
 }
