@@ -414,6 +414,8 @@ abstract class Container {
 		foreach ( $fields as $field ) {
 			self::activate_field( $field );
 		}
+
+		do_action( 'carbon_containers_attached' );
 	}
 
 	/**
