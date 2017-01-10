@@ -170,9 +170,10 @@ window.carbon = window.carbon || {};
 
 			var id = model.get('id');
 			var visible = model.get('visible');
-			var $holder = carbon.views.main.$body.find('#' + id);
+			var $wrapper = carbon.views.main.$body.find('#' + id + '-wrapper');
 
-			$holder.toggle(visible);
+			$wrapper.toggleClass( 'carbon-hidden', !visible );
+			$wrapper.removeClass( 'carbon-cloaked' );
 		},
 
 		eventPropagator: function(collection, event) {
