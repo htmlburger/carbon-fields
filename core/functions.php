@@ -55,6 +55,6 @@ function carbon_update_comment_meta( $id, $name, $value, $type = null ) {
 	return Updater::update_field( 'comment_meta', $id, $name, $value, $type );
 }
 
-function carbon_update_theme_option( $name, $value, $type = null, $autoload = null ) {
-	return Updater::update_option( $name, $value, $type, $autoload );
+function carbon_update_theme_option( $name, $value, $type = null ) {
+	return Updater::update_field( 'theme_option', null, $name, $value, $type );
 }

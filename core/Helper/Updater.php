@@ -12,142 +12,152 @@ class Updater {
 	public static $fields;
 	public static $carbon_field;
 
-	public static function update_field( $field_type, $object_id, $field_name, $value, $value_type = null ) {
-		$field_name = Helper::prepare_meta_name( $field_name );
-		
-		self::load_containers( $field_type, $object_id );
+	public static function update_field( $context, $object_id, $field_name, $data, $value_type = null ) {
+		self::load_containers( $context, $object_id );
 		self::load_fields();
 		
-		self::$carbon_field = self::get_current_field( $field_name );
+		if ( $object_id ) {
+			$field_name = Helper::prepare_meta_name( $field_name );
+		}
+
+		self::$carbon_field = self::get_field_by_name( $field_name );
+
+		if ( empty( self::$carbon_field ) ) {
+			wp_die( sprintf( __( 'There is no <strong>%s</strong> Carbon Field.', 'crb' ), $field_name ) );
+		}
+
 		$carbon_field_type  = strtolower( self::$carbon_field->type );
 
-		if ( $value_type &&  ( $carbon_field_type !== $value_type ) ) {
-			// error
-			return;
+		if ( $value_type && ( $carbon_field_type !== $value_type ) ) {
+			wp_die( sprintf( __( 'The field <strong>%s</strong> is of type <strong>%s</strong>. You are passing <strong>%s</strong> value.', 'crb' ), $field_name, $carbon_field_type, $value_type ) );
 		}
 		
-		self::$carbon_field->get_datastore()->set_id( $object_id );
-		self::update_carbon_field( $value, $value_type );
-	}
-
-	public static function update_option( $name, $value, $value_type = null, $autoload = null ) {
-
-		$values = self::parse_value( $name, $value, $value_type );
-		$args   = [ 
-			'name'     => '',
-			'value'    => '',
-			'autoload' => $autoload,
-		];
-
-		foreach ( $values as $name => $value ) {
-			$args['name']  = $name;
-			$args['value'] = $value;
-
-			call_user_func_array( [ __CLASS__, "update_theme_option"], $args );
+		if ( $object_id ) {
+			self::$carbon_field->get_datastore()->set_id( $object_id );
 		}
+
+		self::update_carbon_field( $data, $value_type );
 	}
 
-	public static function update_carbon_field( $value, $type ) {
-		$value = self::maybe_json_decode( $value );
+	public static function update_carbon_field( $data, $type ) {
+		$data = self::maybe_json_decode( $data );
+		$name = self::$carbon_field->get_name();
 
 		switch ( $type ) {
 			case 'complex':
-				self::update_complex_field( $value );
+				$data = self::parse_complex_value( $data );
 				break;
 
 			case 'map':
 			case 'map_with_address':
-				self::update_map_field( $value );
+				$data = self::parse_map_value( $data );
 				break;
 
 			case 'association':
-				self::update_association_field( $value );
+				$data = self::parse_association_value( $data );
 				break;
 
 			default:
-				self::$carbon_field->set_value( 'test' );
-				self::$carbon_field->save();
 		}
+
+		self::$carbon_field->set_value_from_input( [ $name => $data ] );
+		self::$carbon_field->save();
 	}
 
-	public static function update_map_field( $data ) {
-		$expected     = ['lat', 'lng', 'address' ];
-		$keys         = array_keys( $data );
-		$diff         = array_diff( $expected, $keys );
-		$name = self::$carbon_field->get_name();
+	public static function parse_map_value( $data ) {
+		if ( empty( $data ) ) {
+			return null;
+		}
+
+		$expected = ['lat', 'lng', 'address', 'zoom' ];
+		$keys     = array_keys( $data );
+		$diff     = array_diff( $expected, $keys );
+		$name     = self::$carbon_field->get_name();
 
 		if ( ! empty( $diff ) ) {
-			wp_die( __( 'Wrong array struckture', 'crb' ) );
+			wp_die( __( 'Please make sure that the update array has the proper structure ( <strong>lat</strong>, <strong>lng</strong>, <strong>address</strong>, <strong>zoom</strong>)', 'crb' ) );
 		}
 
-		self::$carbon_field->set_value_from_input( [ $name => $data ] );	
-		self::$carbon_field->save();	
+		return $data;
 	}
 
-	public static function update_association_field( $value ) {
+	public static function parse_association_value( $data ) {
+		if ( empty( $data ) ) {
+			return null;
+		} 
 
-		$parsed_value = [];
+		$parsed_data = array_map( function( $item ) {
+
+			if ( ! self::is_key_present( $item['id'], $item ) ) {
+				wp_die( __( 'Please make sure you have provided ids', 'crb' ) );
+			}
+
+			if ( ! self::is_key_present( $item['type'], $item ) ) {
+				wp_die( __( 'Please make sure you have provided types', 'crb' ) );
+			}
+
+			switch ( $item['type'] ) {
+				case 'user':
+					return 'user:user:' . $item['id'];
+					break;
+
+				case 'comment':
+					return 'comment:comment:' . $item['id'];
+					break;
+
+				case 'post':
+					
+					if ( ! self::is_key_present( 'post_type', $item ) ) {
+						wp_die( __( 'Please provide post_type', 'crb' ) );
+					}
+					
+					return 'post:' . $item['post_type'] . ':' . $item['id'];
+					break;
+
+				case 'term':
+					
+					if ( ! self::is_key_present( 'taxonomy', $item ) ) {
+						wp_die( __( 'Please provide taxonomy', 'crb' ) );
+					}
+
+					return 'term:' . $item['taxonomy'] . ':' . $item['id'];
+					break;
+
+				default:
+					
+					wp_die( __( 'Unknown type used!', 'crb' ) );
+					return false;
+			}
+
+		}, $data );
 		
-		// if ( ! isset( $item['id'] ) ) {
-		// 	// Throw error
-		// 	// exit
-		// }
-
-		// switch ( $item['type'] ) {
-		// 	case 'user':
-		// 		return 'user:user:' . $item['id'];
-		// 		break;
-
-		// 	case 'comment':
-		// 		return 'comment:comment:' . $item['id'];
-		// 		break;
-
-		// 	case 'post':
-
-		// 		if ( ! isset( $item['post_type'] ) || empty( $item['post_type'] ) ) {
-		// 			// Throw error
-		// 		}
-
-		// 		return 'post:' . $item['post_type'] . ':' . $item['id'];
-		// 		break;
-
-		// 	case 'term':
-
-		// 		if ( ! isset( $item['taxonomy'] ) || empty( $item['taxonomy'] ) ) {
-		// 			// Throw error
-		// 		}
-
-		// 		return 'term:' . $item['taxonomy'] . ':' . $item['id'];
-		// 		break;
-
-		// 	default:
-		// 		// Throw error
-		// 		return [];
-		// }
-
-		self::$carbon_field->set_value( $parsed_value );
-		self::$carbon_field->save();
+		return $parsed_data;
 	}
 
-	public static function update_complex_field( $value ) {
-		self::$carbon_field->set_value_from_input( [ self::$carbon_field->get_name() => $value] );
-		self::$carbon_field->save();
-	}
-
-	public static function maybe_json_decode( $maybe_json ) {
-		if ( self::is_json( $maybe_json ) ) {
-			return json_decode( $maybe_json );
+	public static function parse_complex_value( $data ) {
+		if ( empty( $data ) ) {
+			return null;
 		}
 
-		return $maybe_json;
+		$parsed_data = [];
+		
+		foreach ( $data as $index => $group) {
+			foreach ( $group as $key => $value ) {
+				$new_key = $key;
+
+				if ( $key !== 'group' ) {
+					$new_key = Helper::prepare_meta_name( $key );
+				}
+
+				$parsed_data[ $index ][ $new_key ] = $value;
+			}
+		}
+
+		return $parsed_data;
 	}
 
-	public static function is_json( $string ) {
-		return is_string( $string ) && is_array( json_decode( $string, true ) ) && ( json_last_error() === JSON_ERROR_NONE ) ? true : false;
-	}	
-
-	public static function load_containers( $type, $id ) {
-		if ( ! empty( self::$containers ) ) {
+	public static function load_containers( $type, $id = '' ) {
+		if ( ! empty( Container::$active_containers ) ) {
 			return;
 		}
 
@@ -155,6 +165,10 @@ class Updater {
 
 		self::$validator = new Container_Validator();
 		$type            = Helper::prepare_data_type_name( $type );
+
+		if ( $type === 'Theme_Option' ) {
+			$type = 'Theme_Options';
+		}
 
 		self::$containers = array_filter( Container::$active_containers, function( $container ) use ( $type, $id ) {
 			return self::$validator->is_valid_container( $container, $type, $id, false );
@@ -169,7 +183,7 @@ class Updater {
 		self::$fields = call_user_func_array( 'array_merge', $fields );
 	}
 
-	public static function get_current_field( $field_name ) {
+	public static function get_field_by_name( $field_name ) {
 		$field_array = array_filter( self::$fields, function( $field ) use ( $field_name ) { 
 			return $field->get_name() === $field_name;
 		} );
@@ -177,4 +191,19 @@ class Updater {
 		return array_pop( $field_array );
 	}
 
+	public static function maybe_json_decode( $maybe_json ) {
+		if ( self::is_json( $maybe_json ) ) {
+			return json_decode( $maybe_json );
+		}
+
+		return $maybe_json;
+	}
+
+	public static function is_json( $string ) {
+		return is_string( $string ) && is_array( json_decode( $string, true ) ) && ( json_last_error() === JSON_ERROR_NONE ) ? true : false;
+	}
+
+	public static function is_key_present( $key, $array ) {
+		return isset( $array[ $key ] ) && $array[ $key ];
+	}
 }
