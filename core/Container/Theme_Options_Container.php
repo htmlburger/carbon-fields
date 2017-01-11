@@ -72,6 +72,7 @@ class Theme_Options_Container extends Container {
 
 		add_action( 'admin_menu', array( $this, '_attach' ) );
 		add_action( 'rest_api_init', array( $this, '_attach_all' ) );
+		add_action( 'carbon_containers_attach_all', array( $this, '_attach_all' ) );
 	}
 
 	/**
