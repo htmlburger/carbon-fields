@@ -441,7 +441,11 @@ window.carbon = window.carbon || {};
 						$errorHolder.find('strong').text(errorText);
 					} else {
 						$errorHolder = $('<div class="settings-error error hidden below-h2 carbon-error-required"><p><strong>' + errorText + '</strong></p></div>');
-						$errorHolder.insertAfter('#wpbody-content > .wrap > h2').slideDown();
+						var $target = $('#wpbody-content > .wrap > :header:first');
+						while ( $target.next( 'a' ).length > 0 ) {
+							$target = $target.next( 'a' );
+						}
+						$errorHolder.insertAfter( $target ).show();
 					}
 					var $firstErrorField = $('.carbon-highlight :input:first');
 					
