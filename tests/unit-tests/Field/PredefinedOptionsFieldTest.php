@@ -56,11 +56,12 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
 	 */
 	public function testSetOptionsCallable() {
-		$expected = function() {
-			return array(1, 2, 3);
+		$expected = array(1, 2, 3);
+		$callback = function() use ( $expected ) {
+			return $expected;
 		};
 		
-		$this->field->set_options( $expected );
+		$this->field->set_options( $callback );
 
 		$this->assertSame( $expected, $this->field->get_options() );
 	}
@@ -153,13 +154,14 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
 	 */
 	public function testAddOptionsArrayAfterCallable() {
-		$this->field->set_options( function() {
-			return array(1, 2, 3);
+		$base = array( 1, 2, 3 );
+		$added = array( 4, 5, 6 );
+		$expected = array_merge( $base, $added );
+
+		$this->field->set_options( function() use ( $base ) {
+			return $base;
 		} );
-
-		$expected = array( 4, 5, 6 );
-		$this->field->add_options( $expected );
-
+		$this->field->add_options( $added );
 		$this->assertSame( $expected, $this->field->get_options() );
 	}
 
@@ -167,19 +169,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
 	 * 
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Only arrays are allowed in the <code>add_options()</code> method.
-	 */
-	public function testAddOptionsCallable() {
-		$this->field->add_options( function() {
-			return array( 1, 2, 3 );
-		} );
-	}
-
-	/**
-	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
-	 * 
-	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Only arrays are allowed in the <code>add_options()</code> method.
+	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
 	public function testAddOptionsString() {
 		$this->field->add_options( 'foo' );
@@ -189,7 +179,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
 	 * 
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Only arrays are allowed in the <code>add_options()</code> method.
+	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
 	public function testAddOptionsInteger() {
 		$this->field->add_options( 123 );
@@ -199,7 +189,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
 	 * 
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Only arrays are allowed in the <code>add_options()</code> method.
+	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
 	public function testAddOptionsBool() {
 		$this->field->add_options( false );
@@ -209,7 +199,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
 	 * 
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Only arrays are allowed in the <code>add_options()</code> method.
+	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
 	public function testAddOptionsObject() {
 		$this->field->add_options( $this->getMock('StdClass') );

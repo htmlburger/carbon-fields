@@ -61,10 +61,10 @@ class Gravity_Form_Field extends Select_Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
-		$this->set_options( apply_filters( 'crb_gravity_form_options', $this->options ) );
+		$this->set_options( apply_filters( 'crb_gravity_form_options', $this->get_options() ) );
 
 		$field_data = array_merge( $field_data, array(
-			'options' => $this->parse_options( $this->options ),
+			'options' => $this->parse_options( $this->get_options() ),
 		) );
 
 		return $field_data;
@@ -81,7 +81,7 @@ class Gravity_Form_Field extends Select_Field {
 		}
 
 		// No forms have been found
-		if ( empty( $this->options ) ) {
+		if ( empty( $this->get_options() ) ) {
 			?><em><?php _e( 'No Gravity Forms have been found.', 'carbon-fields' ); ?></em><?php
 			return;
 		}

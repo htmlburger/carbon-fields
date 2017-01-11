@@ -41,11 +41,9 @@ class Set_Field extends Predefined_Options_Field {
 			return $this->set_value( $this->default_value );
 		}
 
-		$this->load_options();
-
-		if ( ! is_array( $this->value ) ) {
+		if ( !is_array( $this->value ) ) {
 			$this->value = maybe_unserialize( $this->value );
-			if ( ! is_array( $this->value ) ) {
+			if ( !is_array( $this->value ) ) {
 				if ( is_null( $this->value ) ) {
 					return array();
 				}
@@ -66,11 +64,9 @@ class Set_Field extends Predefined_Options_Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
-		$this->load_options();
-
 		$field_data = array_merge( $field_data, array(
 			'limit_options' => $this->limit_options,
-			'options' => $this->parse_options( $this->options ),
+			'options' => $this->parse_options( $this->get_options() ),
 		) );
 
 		return $field_data;
