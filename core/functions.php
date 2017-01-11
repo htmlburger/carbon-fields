@@ -1,7 +1,7 @@
 <?php
 
 use Carbon_Fields\Helper\Helper;
-use Carbon_Fields\Helper\Updater;
+use Carbon_Fields\Updater\Updater;
 
 if ( ! function_exists( 'carbon_get_post_meta' ) ) {
 	function carbon_get_post_meta( $id, $name, $type = null ) {
