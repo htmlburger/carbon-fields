@@ -157,11 +157,9 @@ class Updater {
 	}
 
 	public static function load_containers( $type, $id = '' ) {
-		if ( ! empty( Container::$active_containers ) ) {
-			return;
+		if ( empty( Container::$active_containers ) ) {
+			do_action( 'carbon_trigger_containers_attach' );
 		}
-
-		do_action( 'carbon_trigger_containers_attach' );
 
 		self::$validator = new Container_Validator();
 		$type            = Helper::prepare_data_type_name( $type );
