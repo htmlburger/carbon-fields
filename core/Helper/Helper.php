@@ -5,7 +5,6 @@ namespace Carbon_Fields\Helper;
 use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Container\Container;
 use Carbon_Fields\REST\Data_Manager;
-use Carbon_Fields\REST\Container_Validator;
 use Carbon_Fields\REST\Routes;
 use Carbon_Fields\REST\Decorator;
 use Carbon_Fields\Templater\Templater;
@@ -245,6 +244,16 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 	}
 
 	/**
+	 * Prepare the data type name
+	 * 
+	 * @param  string $data_type 
+	 * @return string
+	 */
+	public static function prepare_data_type_name( $data_type ) {
+		return str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $data_type ) ) );
+	}
+
+	/**
 	 * Retrieve a certain field value from the database.
 	 * Handles the logic for different field types.
 	 *
@@ -255,7 +264,7 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 	 * @return mixed             Meta value.
 	 */
 	public static function get_field_value( $data_type, $name, $type = null, $id = null ) {
-		$datastore_name = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $data_type ) ) );
+		$datastore_name = self::prepare_data_type_name($data_type  );
 
 		switch ( $type ) {
 			case 'complex':

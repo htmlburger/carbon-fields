@@ -1,5 +1,5 @@
 <?php 
-namespace Carbon_Fields\REST;
+namespace Carbon_Fields\Helper;
 
 /**
 * Wrapper class for container validation.
@@ -15,8 +15,8 @@ class Container_Validator {
 	 * @param  string  $id  
 	 * @return boolean
 	 */
-	public function is_valid_container( $container, $type, $id ) {
-		if ( ! $container->get_rest_visibility() ) {
+	public function is_valid_container( $container, $type, $id, $check_rest_visibilty = true ) {
+		if ( ! $container->get_rest_visibility() && $check_rest_visibilty ) {
 			return false;
 		}
 
