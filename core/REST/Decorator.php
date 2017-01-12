@@ -26,7 +26,7 @@ class Decorator {
 
 	function __construct( $data_manager ) {
 		$this->data_manager = $data_manager;
-		add_action( 'rest_api_init', [ $this, 'register_fields'] );
+		add_action( 'rest_api_init', [ $this, 'register_fields' ] );
 	}
 
 	/**
@@ -42,7 +42,7 @@ class Decorator {
 		foreach ( $containers as $container ) {
 			$fields        = $this->filter_fields( $container );
 			$type_to_lower = strtolower( $container->type );
-			$types         = call_user_func( [ __CLASS__, "get_{$type_to_lower}_container_settings"], $container );
+			$types         = call_user_func( [ __CLASS__, "get_{$type_to_lower}_container_settings" ], $container );
 
 			foreach ( $fields as $field ) {
 				register_rest_field( $types,

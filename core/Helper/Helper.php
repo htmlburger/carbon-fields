@@ -264,7 +264,7 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 	 * @return mixed             Meta value.
 	 */
 	public static function get_field_value( $data_type, $name, $type = null, $id = null ) {
-		$datastore_name = self::prepare_data_type_name($data_type  );
+		$datastore_name = self::prepare_data_type_name( $data_type );
 
 		switch ( $type ) {
 			case 'complex':

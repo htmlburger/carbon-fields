@@ -96,7 +96,7 @@ class Data_Manager {
 	 * @return array
 	 */
 	public function filter_fields( $fields ) {
-		return array_filter( $fields, [$this, 'should_load_field'] );
+		return array_filter( $fields, [ $this, 'should_load_field' ] );
 	}
 
 	/**
