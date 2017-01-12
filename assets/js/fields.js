@@ -1332,7 +1332,7 @@ window.carbon = window.carbon || {};
 
 			// Fetch the selected items and deactivate them
 			// in the left list (if duplicate items are not allowed)
-			this.$rightList.find('input[name="' + name + '[]"]').each(function() {
+			this.$rightList.find('input[name^="' + name + '["]').each(function() {
 				_this.selectedItems.push(this.value);
 				if (!allowDuplicates) {
 					_this.$leftList.find('a[data-value="' + this.value + '"]').parent().addClass(_this.disabledClass);
@@ -1420,6 +1420,7 @@ window.carbon = window.carbon || {};
 				name: this.model.get('name'),
 				item: this.buildItem(id, title, type, subtype, label)
 			});
+			this.model.set( 'nextfieldIndex', this.model.get('nextfieldIndex') + 1 );
 
 			this.$rightList.append(newLi);
 			this.selectedItems.push(value);
@@ -1518,7 +1519,8 @@ window.carbon = window.carbon || {};
 				title: title,
 				type: type,
 				subtype: subtype,
-				label: label
+				label: label,
+				fieldIndex: this.model.get('nextfieldIndex')
 			};
 		},
 
