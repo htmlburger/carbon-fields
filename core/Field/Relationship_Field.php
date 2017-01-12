@@ -184,6 +184,7 @@ class Relationship_Field extends Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
+		$field_data['nextfieldIndex'] = 0;
 		if ( ! empty( $field_data['value'] ) ) {
 			$value = array();
 
