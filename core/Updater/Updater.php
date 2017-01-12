@@ -89,7 +89,7 @@ class Updater {
 		}
 
 		$input = self::maybe_json_decode( $input );
-		$class = __NAMESPACE__ . '\\' . ( array_search( $type, self::$value_types ) ?: 'Value_Parser' );
+		$class = __NAMESPACE__ . '\\' . ( array_search( $value_type, self::$value_types ) ?: 'Value_Parser' );
 		$input = $class::parse( $input );
 
 		self::$carbon_field->set_value_from_input( [ $field_name => $input ] );

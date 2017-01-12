@@ -2,10 +2,16 @@
 namespace Carbon_Fields\Updater;
 
 /**
-* 	
+* Class for parsing association input
 */
 class Association_Value_Parser extends Value_Parser {
 	
+	/**
+	 * Prepare $input for association field
+	 * 
+	 * @param  array $input 
+	 * @return array $parsed_data
+	 */
 	public static function parse( $input ) {
 		if ( empty( $input ) ) {
 			return null;

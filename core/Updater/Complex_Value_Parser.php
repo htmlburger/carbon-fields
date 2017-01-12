@@ -2,11 +2,18 @@
 namespace Carbon_Fields\Updater;
 
 use Carbon_Fields\Helper\Helper;
+
 /**
-* 
+* Class for parsing complex input
 */
 class Complex_Value_Parser extends Value_Parser {
 	
+	/**
+	 * Prepare $input for complex field
+	 * 
+	 * @param  array $input 
+	 * @return array $parsed_data
+	 */
 	public static function parse( $input ) {
 		if ( empty( $input ) ) {
 			return null;
