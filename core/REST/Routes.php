@@ -1,6 +1,8 @@
 <?php 
 namespace Carbon_Fields\REST;
 
+use Carbon_Fields\Updater\Updater;
+
 /**
 * Register custom REST routes		
 */
@@ -12,26 +14,42 @@ class Routes {
 	 * @var array
 	 */
 	protected $routes = [
-		'post_meta'     => [
-			'path'     => '/posts/(?P<id>\d+)',
-			'callback' => 'get_post_meta',
+		'post_meta' => [
+			'path'                => '/posts/(?P<id>\d+)',
+			'callback'            => 'get_post_meta',
+			'permission_callback' => 'allow_access',
+			'methods'             => 'GET',
 		],
-		'term_meta'     => [
-			'path'     => '/terms/(?P<id>\d+)',
-			'callback' => 'get_term_meta',
+		'term_meta' => [
+			'path'                => '/terms/(?P<id>\d+)',
+			'callback'            => 'get_term_meta',
+			'permission_callback' => 'allow_access',
+			'methods'             => 'GET',
 		],
-		'user_meta'     => [
-			'path'     => '/users/(?P<id>\d+)',
-			'callback' => 'get_user_meta',
-		],
-		'theme_options' => [
-			'path'     => '/options/',
-			'callback' => 'get_options',
+		'user_meta' => [
+			'path'                => '/users/(?P<id>\d+)',
+			'callback'            => 'get_user_meta',
+			'permission_callback' => 'allow_access',
+			'methods'             => 'GET',
 		],
 		'comment_meta' => [
-			'path'     => '/comments/(?P<id>\d+)',
-			'callback' => 'get_comment_meta',
-		]
+			'path'                => '/comments/(?P<id>\d+)',
+			'callback'            => 'get_comment_meta',
+			'permission_callback' => 'allow_access',
+			'methods'             => 'GET',
+		],
+		'theme_options' => [
+			'path'                => '/options/',
+			'callback'            => 'get_options',
+			'permission_callback' => 'allow_access',
+			'methods'             => 'GET',
+		],
+		'theme_options' => [
+			'path'                => '/options/set',
+			'callback'            => 'set_options',
+			'permission_callback' => 'can_update_options',
+			'methods'             => 'POST',
+		],
 	];
 
 	/**
@@ -72,20 +90,20 @@ class Routes {
 	 */
 	public function register_routes() {
 		foreach ( $this->routes as $route ) {
-			$this->create( $route['path'], $route['callback'] );
+			$this->create( $route );
 		}
 	}
 
 	/**
 	 * Registers a custom REST route
 	 * 
-	 * @param  string $path
-	 * @param  string $callback
+	 * @param  array $route
 	 */
-	public function create( $path, $callback ) {
-		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), $path, [
-			'methods'  => 'GET',
-			'callback' => [ $this, $callback ],
+	public function create( $route ) {
+		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), $route['path'], [
+			'methods'             => $route['methods'],
+			'permission_callback' => [ $this, $route['permission_callback'] ],
+			'callback'            => [ $this, $route['callback'] ],
 		] );
 	}
 
@@ -97,16 +115,6 @@ class Routes {
 	 */
 	public function get_post_meta( $data ) {
 		$carbon_data = $this->get_data( 'Post_Meta', $data['id'] );
-		return [ 'carbon_fields' => $carbon_data ];
-	}
-
-	/**
-	 * Retrieves Carbon theme options
-	 * 
-	 * @return array
-	 */
-	public function get_options() {
-		$carbon_data = $this->get_data( 'Theme_Options' );
 		return [ 'carbon_fields' => $carbon_data ];
 	}
 
@@ -141,6 +149,36 @@ class Routes {
 	public function get_comment_meta( $data ) {
 		$carbon_data = $this->get_data( 'Comment_Meta', $data['id'] );
 		return [ 'carbon_fields' => $carbon_data ];		
+	}
+
+	/**
+	 * Retrieves Carbon theme options
+	 * 
+	 * @return array
+	 */
+	public function get_options() {
+		$carbon_data = $this->get_data( 'Theme_Options' );
+		return [ 'carbon_fields' => $carbon_data ];
+	}
+
+	/**
+	 * Set Carbon theme options
+	 *
+	 * @param WP_REST_Request $request Full data about the request.
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public function set_options( $request ) {
+		$options = $request->get_params();
+		
+		if ( empty( $options ) ) {
+			return new \WP_Error( 'no-options', __( 'No option names provided', 'crb' ) );
+		}
+		
+		foreach ( $options as $key => $value ) {
+			Updater::update_field( 'theme_option', null, $key, $value );
+		}
+
+		return new \WP_REST_Response( __( 'Theme Options updated.', 'crb' ), 200 );
 	}
 
 	/**
@@ -200,5 +238,23 @@ class Routes {
 	 */
 	public function get_vendor() {
 		return $this->vendor;
+	}
+
+	/**
+	 * Check whether the current user has the needed capabilities
+	 * 
+	 * @return bool
+	 */
+	public function can_update_options() {
+		return current_user_can( 'edit_theme_options' );
+	}
+
+	/**
+	 * Allows access to an endpoint
+	 * 
+	 * @return bool true
+	 */
+	public function allow_access() {
+		return true;
 	}	
 }
