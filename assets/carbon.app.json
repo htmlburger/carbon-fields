@@ -95,6 +95,8 @@
     "./assets/react/store.js": 107,
     "./assets/react/containers/reducer.js": 109,
     "./assets/react/fields/reducer.js": 111,
-    "./assets/react/containers/sagas/base.js": 112
+    "./assets/react/containers/sagas/base.js": 112,
+    "./assets/react/fields/components/complex-actions.js": 113,
+    "./assets/react/fields/sagas/complex.js": 114
   }
 }

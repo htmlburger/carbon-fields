@@ -1,5 +1,3 @@
-/* @flow */
-
 import { takeEvery } from 'redux-saga';
 import { take, call, put, select } from 'redux-saga/effects';
 

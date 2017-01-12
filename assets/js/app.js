@@ -72,7 +72,7 @@ window.carbon = window.carbon || {};
 			this.listenTo(this.sidebarsCollection, 'add remove', function(model, collection, event) {
 				var action = event.add ? 'add' : 'remove';
 				var name = model.get('name');
-				
+
 				if ( typeof carbon.sidebarManager !== 'undefined' ) {
 					carbon.sidebarManager(name, action);
 				}

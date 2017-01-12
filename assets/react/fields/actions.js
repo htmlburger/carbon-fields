@@ -46,3 +46,22 @@ export const setupMediaBrowser = createAction(SETUP_MEDIA_BROWSER);
  */
 export const OPEN_MEDIA_BROWSER = 'fields/OPEN_MEDIA_BROWSER';
 export const openMediaBrowser = createAction(OPEN_MEDIA_BROWSER);
+
+/**
+ * Request adding a new instance of the specified complex group.
+ *
+ * @param  {String} id
+ * @param  {String} group
+ * @return {Object}
+ */
+export const ADD_COMPLEX_GROUP = 'fields/ADD_COMPLEX_GROUP';
+export const addComplexGroup = createAction(ADD_COMPLEX_GROUP, (id, group) => ({ id, group }));
+
+/**
+ * Add field(s) to the store.
+ *
+ * @param  {Object} fields
+ * @return {Object}
+ */
+export const ADD_FIELDS = 'fields/ADD_FIELDS';
+export const addFields = createAction(ADD_FIELDS);
