@@ -2,8 +2,8 @@
 namespace Carbon_Fields\Updater;
 
 use Carbon_Fields\Container\Container;
+use Carbon_Fields\Container\Container_Validator;
 use Carbon_Fields\Helper\Helper;
-use Carbon_Fields\Helper\Container_Validator;
 
 /**
 * Class for updating meta data/theme options

@@ -4,6 +4,7 @@ namespace Carbon_Fields\Helper;
 
 use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Container\Container;
+use Carbon_Fields\Container\Container_Validator;
 use Carbon_Fields\REST\Data_Manager;
 use Carbon_Fields\REST\Routes;
 use Carbon_Fields\REST\Decorator;

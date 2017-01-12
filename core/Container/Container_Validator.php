@@ -1,5 +1,5 @@
 <?php 
-namespace Carbon_Fields\Helper;
+namespace Carbon_Fields\Container;
 
 /**
 * Wrapper class for container validation.
