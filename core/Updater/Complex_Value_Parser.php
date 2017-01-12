@@ -12,11 +12,20 @@ class Complex_Value_Parser extends Value_Parser {
 	 * Prepare $input for complex field
 	 * 
 	 * @param  array $input 
+	 * @param  bool $is_option
 	 * @return array $parsed_data
 	 */
-	public static function parse( $input ) {
-		if ( empty( $input ) ) {
+	public static function parse( $input, $is_option ) {
+		if ( is_null( $input ) ) {
 			return null;
+		}
+
+		if ( ! is_array( $input ) ) {
+			self::throw_exception( __( 'Please provide an array or a json to be used for the update.', 'crb' ) );
+		}
+
+		if ( $is_option ) {
+			return $input;
 		}
 
 		$parsed_data = [];

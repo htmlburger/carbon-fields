@@ -171,11 +171,17 @@ class Routes {
 		$options = $request->get_params();
 		
 		if ( empty( $options ) ) {
-			return new \WP_Error( 'no-options', __( 'No option names provided', 'crb' ) );
+			return new \WP_REST_Response( __( 'No option names provided', 'crb' ) );
 		}
 		
+		Updater::$is_rest_request = true;
+
 		foreach ( $options as $key => $value ) {
-			Updater::update_field( 'theme_option', null, $key, $value );
+			try {
+				Updater::update_field( 'theme_option', null, $key, $value );	
+			} catch ( \Exception $e ) {
+				return new \WP_REST_Response( wp_strip_all_tags( $e->getMessage() ) );
+			}
 		}
 
 		return new \WP_REST_Response( __( 'Theme Options updated.', 'crb' ), 200 );

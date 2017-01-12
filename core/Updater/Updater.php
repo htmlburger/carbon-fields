@@ -33,13 +33,6 @@ class Updater {
 	public static $fields;
 
 	/**
-	 * The Carbon Field that is being updated
-	 * 
-	 * @var object
-	 */
-	public static $carbon_field;
-	
-	/**
 	 * Map for classes parsing
 	 * special input types
 	 * 
@@ -50,6 +43,14 @@ class Updater {
 		'Association_Value_Parser' => 'association',
 		'Map_Value_Parser'         => 'map',
 	];
+
+	/**
+	 * Flag indicating whether the update call
+	 * is initialized by a REST request
+	 * 
+	 * @var boolean
+	 */
+	public static $is_rest_request = false;
 
 	/**
 	 * Load containers and fields, based on params
@@ -72,28 +73,30 @@ class Updater {
 	 * @param  mixed $input       string|array|json
 	 * @param  string $value_type complex|map|association|null
 	 */
-	public static function update_field( $context, $object_id, $field_name, $input, $value_type = null ) {
+	public static function update_field( $context, $object_id = '', $field_name, $input, $value_type = null ) {
 		self::boot( $context, $object_id );
 
-		$field_name = $object_id ? Helper::prepare_meta_name( $field_name ) : $field_name;
-		self::$carbon_field = self::get_field_by_name( $field_name );
-		
+		$is_option    = true;
+		$field_name   = $object_id ? Helper::prepare_meta_name( $field_name ) : $field_name;
+		$carbon_field = self::get_field_by_name( $field_name );
+
 		if ( $object_id ) {
-			self::$carbon_field->get_datastore()->set_id( $object_id );
+			$carbon_field->get_datastore()->set_id( $object_id );
+			$is_option = false;
 		}	
 
-		$carbon_field_type  = strtolower( self::$carbon_field->type );
+		$carbon_field_type  = strtolower( $carbon_field->type );
 
 		if ( $value_type && ( $carbon_field_type !== $value_type ) ) {
-			wp_die( sprintf( __( 'The field <strong>%s</strong> is of type <strong>%s</strong>. You are passing <strong>%s</strong> value.', 'crb' ), $field_name, $carbon_field_type, $value_type ) );
+			throw new \Exception( printf( __( 'The field <strong>%s</strong> is of type <strong>%s</strong>. You are passing <strong>%s</strong> value.', 'crb' ), $field_name, $carbon_field_type, $value_type ) );
 		}
 
 		$input = self::maybe_json_decode( $input );
-		$class = __NAMESPACE__ . '\\' . ( array_search( $value_type, self::$value_types ) ?: 'Value_Parser' );
-		$input = $class::parse( $input );
+		$class = __NAMESPACE__ . '\\' . ( array_search( $carbon_field_type, self::$value_types ) ?: 'Value_Parser' );
+		$input = $class::parse( $input, $is_option );
 
-		self::$carbon_field->set_value_from_input( [ $field_name => $input ] );
-		self::$carbon_field->save();
+		$carbon_field->set_value_from_input( [ $field_name => $input ] );
+		$carbon_field->save();
 	}
 
 	/**
@@ -110,7 +113,7 @@ class Updater {
 		$type = self::normalize_type( $type );
 
 		self::$containers = array_filter( Container::$active_containers, function( $container ) use ( $type, $id ) {
-			return self::$validator->is_valid_container( $container, $type, $id, false );
+			return self::$validator->is_valid_container( $container, $type, $id, self::$is_rest_request );
 		} );
 	}
 
@@ -138,7 +141,7 @@ class Updater {
 		} );
 
 		if ( empty( $field_array ) ) {
-			wp_die( sprintf( __( 'There is no <strong>%s</strong> Carbon Field.', 'crb' ), $field_name ) );
+			throw new \Exception( sprintf( __( 'There is no <strong>%s</strong> Carbon Field.', 'crb' ), $field_name ) );
 		}
 
 		return array_pop( $field_array );

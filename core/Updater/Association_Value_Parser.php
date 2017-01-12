@@ -10,9 +10,10 @@ class Association_Value_Parser extends Value_Parser {
 	 * Prepare $input for association field
 	 * 
 	 * @param  array $input 
+	 * @param  bool $is_option
 	 * @return array $parsed_data
 	 */
-	public static function parse( $input ) {
+	public static function parse( $input, $is_option ) {
 		if ( empty( $input ) ) {
 			return null;
 		} 
@@ -20,11 +21,11 @@ class Association_Value_Parser extends Value_Parser {
 		$parsed_data = array_map( function( $item ) {
 
 			if ( ! self::is_key_present( $item['id'], $item ) ) {
-				wp_die( __( 'Please make sure you have provided ids', 'crb' ) );
+				self::throw_exception( __( 'Please make sure you have provided ids', 'crb' ) );
 			}
 
 			if ( ! self::is_key_present( $item['type'], $item ) ) {
-				wp_die( __( 'Please make sure you have provided types', 'crb' ) );
+				self::throw_exception( __( 'Please make sure you have provided types', 'crb' ) );
 			}
 
 			switch ( $item['type'] ) {
@@ -39,7 +40,7 @@ class Association_Value_Parser extends Value_Parser {
 				case 'post':
 					
 					if ( ! self::is_key_present( 'post_type', $item ) ) {
-						wp_die( __( 'Please provide post_type', 'crb' ) );
+						self::throw_exception( __( 'Please provide post_type', 'crb' ) );
 					}
 					
 					return 'post:' . $item['post_type'] . ':' . $item['id'];
@@ -48,16 +49,14 @@ class Association_Value_Parser extends Value_Parser {
 				case 'term':
 					
 					if ( ! self::is_key_present( 'taxonomy', $item ) ) {
-						wp_die( __( 'Please provide taxonomy', 'crb' ) );
+						self::throw_exception( __( 'Please provide taxonomy', 'crb' ) );
 					}
 
 					return 'term:' . $item['taxonomy'] . ':' . $item['id'];
 					break;
 
 				default:
-					
-					wp_die( __( 'Unknown type used!', 'crb' ) );
-					return false;
+					self::throw_exception( __( 'Unknown type used!', 'crb' ) );
 			}
 
 		}, $input );

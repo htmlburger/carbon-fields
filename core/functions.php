@@ -40,21 +40,41 @@ if ( ! function_exists( 'carbon_get_comment_meta' ) ) {
 }
 
 function carbon_update_post_meta( $id, $name, $value, $type = null ) {
-	return Updater::update_field( 'post_meta', $id, $name, $value, $type );
+	try {
+		Updater::update_field( 'post_meta', $id, $name, $value, $type );	
+	} catch( Exception $e ) {
+		wp_die( $e->getMessage() );
+	}
 }
 
 function carbon_update_term_meta( $id, $name, $value, $type = null ) {
-	return Updater::update_field( 'term_meta', $id, $name, $value, $type );
+	try {
+		Updater::update_field( 'term_meta', $id, $name, $value, $type );
+	} catch( Exception $e ) {
+		wp_die( $e->getMessage() );
+	}
 }
 
 function carbon_update_user_meta( $id, $name, $value, $type = null ) {
-	return Updater::update_field( 'user_meta', $id, $name, $value, $type );
+	try {
+		Updater::update_field( 'user_meta', $id, $name, $value, $type );
+	} catch( Exception $e ) {
+		wp_die( $e->getMessage() );
+	}
 }
 
 function carbon_update_comment_meta( $id, $name, $value, $type = null ) {
-	return Updater::update_field( 'comment_meta', $id, $name, $value, $type );
+	try {
+		Updater::update_field( 'comment_meta', $id, $name, $value, $type );
+	} catch( Exception $e ) {
+		wp_die( $e->getMessage() );
+	}
 }
 
 function carbon_update_theme_option( $name, $value, $type = null ) {
-	return Updater::update_field( 'theme_option', null, $name, $value, $type );
+	try {
+		Updater::update_field( 'theme_option', null, $name, $value, $type );
+	} catch( Exception $e ) {
+		wp_die( $e->getMessage() );
+	}
 }

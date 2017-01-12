@@ -11,9 +11,10 @@ class Value_Parser {
 	 * Prepare $input for carbon field
 	 * 
 	 * @param  array $input 
+	 * @param  bool $is_option
 	 * @return array $parsed_data
 	 */
-	public static function parse( $input ) {
+	public static function parse( $input, $is_option ) {
 		return $input;
 	}
 
@@ -26,5 +27,14 @@ class Value_Parser {
 	 */
 	public static function is_key_present( $key, $array ) {
 		return isset( $array[ $key ] ) && $array[ $key ] ? true : false;
+	}
+
+	/**
+	 * Throw an exception
+	 * 
+	 * @param  string $message 
+	 */
+	public static function throw_exception( $message ) {
+		throw new \Exception( $message );
 	}	
 }
