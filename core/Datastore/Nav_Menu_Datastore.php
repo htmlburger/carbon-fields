@@ -36,8 +36,8 @@ class Nav_Menu_Datastore extends Post_Meta_Datastore {
 	 * Retrieve the initial field name
 	 */
 	public function get_field_name( $field ) {
-		if ( ! empty( $field->initial_name ) ) {
-			$field_name = $field->initial_name;
+		if ( !empty( $field->nav_menu_datastore_field_name ) ) {
+			$field_name = $field->nav_menu_datastore_field_name;
 		} else {
 			$field_name = $field->get_name();
 		}
