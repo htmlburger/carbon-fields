@@ -40,6 +40,7 @@ class Term_Meta_Container extends Container {
 		}
 
 		add_action( 'carbon_containers_attach', array( $this, '_attach' ) );
+		add_action( 'carbon_containers_attach_all', array( $this, '_attach_all' ) );
 		add_action( 'rest_api_init', array( $this, '_attach_all' ) );
 
 		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
