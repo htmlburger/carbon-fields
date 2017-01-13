@@ -30,7 +30,7 @@ export const ComplexGroup = ({ complex, group, index, collapsed, toggle }) => {
 			defaultValue={group.name} />
 
 		<div className="carbon-drag-handle">
-			<span className="group-number">todo</span>
+			<span className="group-number">{index + 1}</span>
 
 			<span className="group-name"></span>
 		</div>
