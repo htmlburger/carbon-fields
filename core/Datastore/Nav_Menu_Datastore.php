@@ -24,15 +24,6 @@ class Nav_Menu_Datastore extends Post_Meta_Datastore {
 	}
 
 	/**
-	 * Load complex field value(s) from the database.
-	 *
-	 * @param mixed $field The field to load values for.
-	 */
-	public function load_values( $field ) {
-		// Not implemented, Complex functionality would need this in order to work
-	}
-
-	/**
 	 * Retrieve the initial field name
 	 */
 	public function get_field_name( $field ) {

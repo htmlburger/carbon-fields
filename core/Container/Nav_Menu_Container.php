@@ -199,4 +199,14 @@ class Nav_Menu_Container extends Container {
 	public static function edit_walker() {
 		return '\Carbon_Fields\Walker\Nav_Menu_Edit_Walker';
 	}
+
+	public function add_fields( $fields ) {
+		foreach ( $fields as $field ) {
+			if ( is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
+				Incorrect_Syntax_Exception::raise( get_class() . ' does not support Complex_Field, yet.' );
+			}
+		}
+
+		return parent::add_fields( $fields );
+	}
 }
