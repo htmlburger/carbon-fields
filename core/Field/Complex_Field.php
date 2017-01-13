@@ -150,11 +150,11 @@ class Complex_Field extends Field {
 	 * @param Datastore_Interface $datastore
 	 */
 	public function set_datastore( Datastore_Interface $datastore ) {
-		$this->datastore = $datastore;
-
+		parent::set_datastore( $datastore );
 		foreach ( $this->groups as $group ) {
-			$group->set_datastore( $this->datastore );
+			$group->set_datastore( $this->get_datastore() );
 		}
+		return $this;
 	}
 
 	/**
@@ -243,7 +243,7 @@ class Complex_Field extends Field {
 	 * Delete the values of all contained fields.
 	 */
 	public function delete() {
-		return $this->datastore->delete_values( $this );
+		return $this->get_datastore()->delete_values( $this );
 	}
 
 	/**
@@ -259,7 +259,7 @@ class Complex_Field extends Field {
 	public function load_values_from_db() {
 		$this->values = array();
 
-		$group_rows = $this->datastore->load_values( $this );
+		$group_rows = $this->get_datastore()->load_values( $this );
 
 		return $this->process_loaded_values( $group_rows );
 	}

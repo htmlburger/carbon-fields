@@ -169,6 +169,6 @@ class User_Meta_Container extends Container {
 	 **/
 	public function set_user_id( $user_id ) {
 		$this->user_id = $user_id;
-		$this->datastore->set_id( $user_id );
+		$this->get_datastore()->set_id( $user_id );
 	}
 }

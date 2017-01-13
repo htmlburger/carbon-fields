@@ -469,7 +469,7 @@ abstract class Container {
 
 			$field->set_context( $this->type );
 			if ( ! $field->get_datastore() ) {
-				$field->set_datastore( $this->datastore );
+				$field->set_datastore( $this->get_datastore() );
 			}
 		}
 
@@ -678,7 +678,7 @@ abstract class Container {
 		$this->datastore = $datastore;
 
 		foreach ( $this->fields as $field ) {
-			$field->set_datastore( $this->datastore );
+			$field->set_datastore( $this->get_datastore() );
 		}
 
 		return $this;

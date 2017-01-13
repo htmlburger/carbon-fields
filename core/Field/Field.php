@@ -266,7 +266,7 @@ class Field {
 	 * Delegate load to the field DataStore instance
 	 **/
 	public function load() {
-		$this->datastore->load( $this );
+		$this->get_datastore()->load( $this );
 
 		if ( $this->get_value() === false ) {
 			$this->set_value( $this->default_value );
@@ -277,14 +277,14 @@ class Field {
 	 * Delegate save to the field DataStore instance
 	 **/
 	public function save() {
-		return $this->datastore->save( $this );
+		return $this->get_datastore()->save( $this );
 	}
 
 	/**
 	 * Delegate delete to the field DataStore instance
 	 **/
 	public function delete() {
-		return $this->datastore->delete( $this );
+		return $this->get_datastore()->delete( $this );
 	}
 
 	/**
