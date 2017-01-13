@@ -33,7 +33,11 @@ class Relationship_Field extends Field {
 		if ( ! isset( $input[ $this->name ] ) ) {
 			$this->set_value( null );
 		} else {
-			$this->set_value( array_values( stripslashes_deep( $input[ $this->name ] ) ) );
+			$value = stripslashes_deep( $input[ $this->name ] );
+			if ( is_array( $value ) ) {
+				$value = array_values( $value );
+			}
+			$this->set_value( $value );
 		}
 	}
 
