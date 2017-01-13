@@ -141,7 +141,7 @@ class Term_Meta_Container extends Container {
 	 **/
 	public function set_term_id( $term_id ) {
 		$this->term_id = $term_id;
-		$this->store->set_id( $term_id );
+		$this->datastore->set_id( $term_id );
 	}
 
 	/**

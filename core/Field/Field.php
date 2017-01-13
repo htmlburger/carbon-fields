@@ -90,7 +90,7 @@ class Field {
 	 * @see get_datastore()
 	 * @var Datastore_Interface
 	 */
-	protected $store;
+	protected $datastore;
 
 	/**
 	 * The type of the container this field is in
@@ -266,7 +266,7 @@ class Field {
 	 * Delegate load to the field DataStore instance
 	 **/
 	public function load() {
-		$this->store->load( $this );
+		$this->datastore->load( $this );
 
 		if ( $this->get_value() === false ) {
 			$this->set_value( $this->default_value );
@@ -277,14 +277,14 @@ class Field {
 	 * Delegate save to the field DataStore instance
 	 **/
 	public function save() {
-		return $this->store->save( $this );
+		return $this->datastore->save( $this );
 	}
 
 	/**
 	 * Delegate delete to the field DataStore instance
 	 **/
 	public function delete() {
-		return $this->store->delete( $this );
+		return $this->datastore->delete( $this );
 	}
 
 	/**
@@ -307,21 +307,21 @@ class Field {
 	/**
 	 * Assign DataStore instance for use during load, save and delete
 	 *
-	 * @param object $store
+	 * @param object $datastore
 	 * @return object $this
 	 **/
-	public function set_datastore( Datastore_Interface $store ) {
-		$this->store = $store;
+	public function set_datastore( Datastore_Interface $datastore ) {
+		$this->datastore = $datastore;
 		return $this;
 	}
 
 	/**
 	 * Return the DataStore instance used by the field
 	 *
-	 * @return object $store
+	 * @return object $datastore
 	 **/
 	public function get_datastore() {
-		return $this->store;
+		return $this->datastore;
 	}
 
 	/**

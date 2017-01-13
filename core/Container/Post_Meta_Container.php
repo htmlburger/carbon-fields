@@ -386,7 +386,7 @@ class Post_Meta_Container extends Container {
 	 **/
 	public function set_post_id( $post_id ) {
 		$this->post_id = $post_id;
-		$this->store->set_id( $post_id );
+		$this->datastore->set_id( $post_id );
 	}
 
 	/**

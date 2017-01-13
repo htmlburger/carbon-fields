@@ -66,7 +66,7 @@ class Nav_Menu_Container extends Container {
 	 **/
 	public function set_menu_id( $menu_id ) {
 		$this->menu_id = $menu_id;
-		$this->store->set_id( $menu_id );
+		$this->datastore->set_id( $menu_id );
 	}
 
 	/**

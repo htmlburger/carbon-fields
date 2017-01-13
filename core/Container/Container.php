@@ -122,7 +122,7 @@ abstract class Container {
 	 * @see get_datastore()
 	 * @var object
 	 */
-	protected $store;
+	protected $datastore;
 
 	/**
 	 * Create a new container of type $type and name $name and label $label.
@@ -453,7 +453,7 @@ abstract class Container {
 	 * Append array of fields to the current fields set. All items of the array
 	 * must be instances of Field and their names should be unique for all
 	 * Carbon containers.
-	 * If a field does not have DataStore already, the container data store is
+	 * If a field does not have DataStore already, the container datastore is
 	 * assigned to them instead.
 	 *
 	 * @param array $fields
@@ -469,7 +469,7 @@ abstract class Container {
 
 			$field->set_context( $this->type );
 			if ( ! $field->get_datastore() ) {
-				$field->set_datastore( $this->store );
+				$field->set_datastore( $this->datastore );
 			}
 		}
 
@@ -671,14 +671,14 @@ abstract class Container {
 	/**
 	 * Assign DataStore instance for use by the container fields
 	 *
-	 * @param object $store
+	 * @param object $datastore
 	 * @return object $this
 	 **/
-	public function set_datastore( $store ) {
-		$this->store = $store;
+	public function set_datastore( $datastore ) {
+		$this->datastore = $datastore;
 
 		foreach ( $this->fields as $field ) {
-			$field->set_datastore( $this->store );
+			$field->set_datastore( $this->datastore );
 		}
 
 		return $this;
@@ -687,10 +687,10 @@ abstract class Container {
 	/**
 	 * Return the DataStore instance used by container fields
 	 *
-	 * @return object $store
+	 * @return object $datastore
 	 **/
 	public function get_datastore() {
-		return $this->store;
+		return $this->datastore;
 	}
 
 	/**
