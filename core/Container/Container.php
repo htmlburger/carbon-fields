@@ -4,13 +4,14 @@ namespace Carbon_Fields\Container;
 
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Datastore\Datastore_Interface;
+use Carbon_Fields\Datastore\Datastore_Holder_Interface;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Base container class.
  * Defines the key container methods and their default implementations.
  */
-abstract class Container {
+abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Where to put a particular tab -- at the head or the tail. Tail by default
 	 */
@@ -116,13 +117,22 @@ abstract class Container {
 	protected $fields = array();
 
 	/**
-	 * Container DataStore. Propagated to all container fields
+	 * Container datastores. Propagated to all container fields
 	 *
 	 * @see set_datastore()
 	 * @see get_datastore()
 	 * @var object
 	 */
 	protected $datastore;
+
+	/**
+	 * Flag whether the datastore is the default one or replaced with a custom one
+	 *
+	 * @see set_datastore()
+	 * @see get_datastore()
+	 * @var object
+	 */
+	protected $has_default_datastore = true;
 
 	/**
 	 * Create a new container of type $type and name $name and label $label.
@@ -469,7 +479,7 @@ abstract class Container {
 
 			$field->set_context( $this->type );
 			if ( ! $field->get_datastore() ) {
-				$field->set_datastore( $this->get_datastore() );
+				$field->set_datastore( $this->get_datastore(), $this->has_default_datastore() );
 			}
 		}
 
@@ -669,25 +679,37 @@ abstract class Container {
 	}
 
 	/**
-	 * Assign DataStore instance for use by the container fields
+	 * Return whether the datastore instance is the default one or has been overriden
 	 *
-	 * @param object $datastore
+	 * @return Datastore_Interface $datastore
+	 **/
+	public function has_default_datastore() {
+		return $this->has_default_datastore;
+	}
+
+	/**
+	 * Assign datastore instance for use by the container fields
+	 *
+	 * @param Datastore_Interface $datastore
 	 * @return object $this
 	 **/
-	public function set_datastore( $datastore ) {
+	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
+		if ( $set_as_default && !$this->has_default_datastore() ) {
+			return $this; // datastore has been overriden with a custom one - abort changing to a default one
+		}
 		$this->datastore = $datastore;
+		$this->has_default_datastore = $set_as_default;
 
 		foreach ( $this->fields as $field ) {
-			$field->set_datastore( $this->get_datastore() );
+			$field->set_datastore( $this->get_datastore(), $this->has_default_datastore() );
 		}
-
 		return $this;
 	}
 
 	/**
 	 * Return the DataStore instance used by container fields
 	 *
-	 * @return object $datastore
+	 * @return Datastore_Interface $datastore
 	 **/
 	public function get_datastore() {
 		return $this->datastore;

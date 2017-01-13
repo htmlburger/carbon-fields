@@ -28,7 +28,7 @@ class Theme_Options_Container extends Container {
 		parent::__construct( $title );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Theme_Options_Datastore() );
+			$this->set_datastore( new Theme_Options_Datastore(), $this->has_default_datastore() );
 		}
 	}
 

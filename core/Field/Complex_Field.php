@@ -149,10 +149,15 @@ class Complex_Field extends Field {
 	 *
 	 * @param Datastore_Interface $datastore
 	 */
-	public function set_datastore( Datastore_Interface $datastore ) {
-		parent::set_datastore( $datastore );
+	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
+		if ( $set_as_default && !$this->has_default_datastore() ) {
+			return $this; // datastore has been overriden with a custom one - abort changing to a default one
+		}
+		$this->datastore = $datastore;
+		$this->has_default_datastore = $set_as_default;
+
 		foreach ( $this->groups as $group ) {
-			$group->set_datastore( $this->get_datastore() );
+			$group->set_datastore( $this->get_datastore(), $this->has_default_datastore() );
 		}
 		return $this;
 	}

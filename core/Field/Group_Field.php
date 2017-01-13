@@ -238,11 +238,9 @@ class Group_Field {
 	 *
 	 * @param object $datastore
 	 */
-	public function set_datastore( Datastore_Interface $datastore ) {
+	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		foreach ( $this->fields as $field ) {
-			if ( ! $field->get_datastore() ) {
-				$field->set_datastore( $datastore );
-			}
+			$field->set_datastore( $datastore, $set_as_default );
 		}
 	}
 

@@ -28,7 +28,7 @@ class Nav_Menu_Container extends Container {
 		parent::__construct( $title );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Nav_Menu_Datastore() );
+			$this->set_datastore( new Nav_Menu_Datastore(), $this->has_default_datastore() );
 		}
 
 		// Register the custom edit walker only once
@@ -178,13 +178,13 @@ class Nav_Menu_Container extends Container {
 				$tmp_field->set_id( $tmp_field->get_id() . $suffix );
 				$tmp_field->set_name( $tmp_field->get_name() . $suffix );
 
-				$tmp_field->set_datastore( $menu_item_datastore );
+				$tmp_field->set_datastore( $menu_item_datastore, $this->has_default_datastore() );
 
 				$custom_fields[] = $tmp_field;
 			}
 
 			$this->menu_item_instances[ $menu_item_id ] = Container::factory( $this->type, $this->id . $suffix )
-				->set_datastore( $menu_item_datastore )
+				->set_datastore( $menu_item_datastore, $this->has_default_datastore() )
 				->add_fields( $custom_fields )
 				->init( $menu_item_id );
 			

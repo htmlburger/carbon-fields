@@ -52,7 +52,7 @@ class Post_Meta_Container extends Container {
 		parent::__construct( $title );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Post_Meta_Datastore() );
+			$this->set_datastore( new Post_Meta_Datastore(), $this->has_default_datastore() );
 		}
 	}
 

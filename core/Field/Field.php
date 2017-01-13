@@ -3,6 +3,7 @@
 namespace Carbon_Fields\Field;
 
 use Carbon_Fields\Datastore\Datastore_Interface;
+use Carbon_Fields\Datastore\Datastore_Holder_Interface;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -10,7 +11,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Defines the key container methods and their default implementations.
  * Implements factory design pattern.
  **/
-class Field {
+class Field implements Datastore_Holder_Interface {
 	/**
 	 * Stores all the field Backbone templates
 	 *
@@ -91,6 +92,15 @@ class Field {
 	 * @var Datastore_Interface
 	 */
 	protected $datastore;
+
+	/**
+	 * Flag whether the datastore is the default one or replaced with a custom one
+	 *
+	 * @see set_datastore()
+	 * @see get_datastore()
+	 * @var object
+	 */
+	protected $has_default_datastore = true;
 
 	/**
 	 * The type of the container this field is in
@@ -305,13 +315,26 @@ class Field {
 	}
 
 	/**
+	 * Return whether the datastore instance is the default one or has been overriden
+	 *
+	 * @return Datastore_Interface $datastore
+	 **/
+	public function has_default_datastore() {
+		return $this->has_default_datastore;
+	}
+
+	/**
 	 * Assign DataStore instance for use during load, save and delete
 	 *
 	 * @param object $datastore
 	 * @return object $this
 	 **/
-	public function set_datastore( Datastore_Interface $datastore ) {
+	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
+		if ( $set_as_default && !$this->has_default_datastore() ) {
+			return $this; // datastore has been overriden with a custom one - abort changing to a default one
+		}
 		$this->datastore = $datastore;
+		$this->has_default_datastore = $set_as_default;
 		return $this;
 	}
 

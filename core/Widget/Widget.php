@@ -159,7 +159,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 			$field->set_prefix( '' );
 
 			if ( ! $field->get_datastore() ) {
-				$field->set_datastore( $this );
+				$field->set_datastore( $this, true );
 			}
 
 			if ( is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
