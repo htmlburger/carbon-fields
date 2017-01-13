@@ -15,6 +15,8 @@ import { compose, branch, renderNothing, renderComponent, withHandlers } from 'r
  * @param  {Boolean}  props.visible
  * @param  {Function} props.handleItemClick
  * @return {React.Element}
+ *
+ * @todo Refactor inline style to a CSS class.
  */
 export const ComplexPopover = ({ groups, visible, handleItemClick }) => {
 	const styles = {
@@ -42,11 +44,8 @@ ComplexPopover.propTypes = {
 		name: PropTypes.string.isRequired,
 		label: PropTypes.string.isRequired,
 	})).isRequired,
-
 	visible: PropTypes.bool,
-
 	onItemClick: PropTypes.func.isRequired,
-
 	onClose: PropTypes.func.isRequired,
 };
 

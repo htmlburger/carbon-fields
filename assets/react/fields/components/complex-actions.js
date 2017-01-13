@@ -33,7 +33,6 @@ export const ComplexActions = ({ handleClick, buttonText, children }) => {
  */
 ComplexActions.propTypes = {
 	buttonText: PropTypes.string.isRequired,
-
 	onButtonClick: PropTypes.func.isRequired,
 };
 

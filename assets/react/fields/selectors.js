@@ -1,1 +1,1 @@
-export const getFieldById = (state, fieldId) => state.fields[fieldId];
+export const getFieldById = (state, id) => state.fields[id];
