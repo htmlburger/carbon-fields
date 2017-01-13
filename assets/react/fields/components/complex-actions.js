@@ -2,6 +2,7 @@
  * The external dependencies.
  */
 import React from 'react';
+import { PropTypes } from 'react';
 import { withHandlers } from 'recompose';
 
 /**
@@ -23,6 +24,17 @@ export const ComplexActions = ({ handleClick, buttonText, children }) => {
 			{children}
 		</div>
 	</div>;
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+ComplexActions.propTypes = {
+	buttonText: PropTypes.string.isRequired,
+
+	onButtonClick: PropTypes.func.isRequired,
 };
 
 /**
