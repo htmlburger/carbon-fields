@@ -2,6 +2,7 @@
 namespace Carbon_Fields\REST;
 
 use Carbon_Fields\Container\Container;
+use Carbon_Fields\Updater\Updater;
 
 /**
  * This class modifies the default REST routes
@@ -129,7 +130,14 @@ class Decorator {
 		$type     = strtolower( $field->type );
 		$context  = strtolower( $field->get_context() ); 
 
-		return call_user_func( "Carbon_Fields\Updater\Updater::update_field", $context, $object->ID, $field_name, $value, $type );
+		Updater::$is_rest_request = true;
+
+		try {
+			call_user_func( "Carbon_Fields\Updater\Updater::update_field", $context, $object->ID, $field_name, $value, $type );	
+		} catch ( \Exception $e ) {
+			echo wp_strip_all_tags( $e->getMessage() );
+			exit;
+		}
 	}
 
 	/**
