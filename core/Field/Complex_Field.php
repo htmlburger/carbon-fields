@@ -182,11 +182,11 @@ class Complex_Field extends Field {
 		$index = 0;
 
 		foreach ( $input_groups as $values ) {
-			$value_group = array();
 			if ( ! isset( $values['group'] ) || ! isset( $this->groups[ $values['group'] ] ) ) {
 				continue;
 			}
 
+			$value_group = array( 'type' => $values['group'] );
 			$group = $this->groups[ $values['group'] ];
 			unset( $values['group'] );
 
@@ -239,6 +239,9 @@ class Complex_Field extends Field {
 
 		foreach ( $this->values as $value ) {
 			foreach ( $value as $field ) {
+				if ( !is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
+					continue;
+				}
 				$field->save();
 			}
 		}
@@ -288,7 +291,7 @@ class Complex_Field extends Field {
 			}
 
 			$group_rows[] = array(
-				'field_key' => preg_replace( '~^(' . preg_quote( $this->name, '~' ) . ')_\d+_~', '$1_', $key ),
+				'field_key' => preg_replace( '~^(' . preg_quote( $this->get_name(), '~' ) . ')_\d+_~', '$1_', $key ),
 				'field_value' => $value,
 			);
 		}
@@ -320,7 +323,7 @@ class Complex_Field extends Field {
 
 		// load and parse values and group type
 		foreach ( $group_rows as $row ) {
-			if ( ! preg_match( Helper::get_complex_field_regex( $this->name, array_keys( $this->groups ), $field_names ), $row['field_key'], $field_name ) ) {
+			if ( ! preg_match( Helper::get_complex_field_regex( $this->get_name(), array_keys( $this->groups ), $field_names ), $row['field_key'], $field_name ) ) {
 				continue;
 			}
 
