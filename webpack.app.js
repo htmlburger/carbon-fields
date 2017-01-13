@@ -46,6 +46,7 @@ module.exports = {
 			'./assets/react/fields/decorators/with-setup.js',
 
 			'./assets/react/fields/sagas/media-browser.js',
+			'./assets/react/fields/sagas/complex.js',
 
 			'./assets/react/fields/components/field.js',
 			'./assets/react/fields/components/file-field.js',
@@ -62,6 +63,8 @@ module.exports = {
 
 			'./assets/react/fields/components/no-options.js',
 			'./assets/react/fields/components/complex-group.js',
+			'./assets/react/fields/components/complex-actions.js',
+			'./assets/react/fields/components/complex-popover.js',
 
 			// Load the store.
 			'./assets/react/store.js'

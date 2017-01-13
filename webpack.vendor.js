@@ -17,7 +17,8 @@ module.exports = {
 			'reselect',
 			'lodash',
 			'object-path-immutable',
-			'classnames'
+			'classnames',
+			'react-onclickoutside'
 		]
 	},
 
