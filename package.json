@@ -59,6 +59,7 @@
     "react": "^15.4.0",
     "react-color": "^2.10.0",
     "react-dom": "^15.4.0",
+    "react-onclickoutside": "^5.8.3",
     "react-redux": "5.0.0-beta.3",
     "recompose": "^0.20.2",
     "redux": "^3.6.0",

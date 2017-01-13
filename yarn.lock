@@ -3846,6 +3846,12 @@ react-dom@^15.4.0:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
 
+react-onclickoutside@^5.8.3:
+  version "5.8.3"
+  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-5.8.3.tgz#488a03f97eb18b191673ba5d5d3317e942982994"
+  dependencies:
+    object-assign "^4.0.1"
+
 react-redux@5.0.0-beta.3:
   version "5.0.0-beta.3"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.0.0-beta.3.tgz#d50bfb00799cf7d2a9fd55fe34d6b3ecc24d3072"
