@@ -11,24 +11,31 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Nav menu item fields container class.
  */
 class Nav_Menu_Container extends Container {
-
-	public static $instances = array();
-	public static $active_containers = array();
-	public static $initialized = false;
+	/**
+	 * Array of container clones for every menu item
+	 *
+	 * @see init()
+	 * @var int
+	 */
+	protected $menu_item_instances = array();
 
 	/**
 	 * Create a new nav menu item fields container
 	 *
 	 * @param string $id ID of the container
 	 **/
-	public function __construct( $id ) {
-		$id = str_replace( ' ', '', ucwords( str_replace( '_', ' ', $id ) ) );
+	public function __construct( $title ) {
+		parent::__construct( $title );
 
-		$this->id = $id;
+		if ( ! $this->get_datastore() ) {
+			$this->set_datastore( new Nav_Menu_Datastore() );
+		}
 
-		$this->store = new Nav_Menu_Datastore();
-
-		self::initialize_filters();
+		// Register the custom edit walker only once
+		$callable = array( get_class(), 'edit_walker' );
+		if ( !has_filter( 'wp_edit_nav_menu_walker', $callable ) ) {
+			add_filter( 'wp_edit_nav_menu_walker', $callable, 10, 2 );
+		}
 	}
 
 	/**
@@ -37,14 +44,16 @@ class Nav_Menu_Container extends Container {
 	 * @param int $menu_id Used to pass the correct menu_item_id to the Container object
 	 * @param bool $render Whether the container will render the fields.
 	 */
-	public function init( $menu_id = 0, $render = true ) {
+	public function init( $menu_id = 0 ) {
 		$this->set_menu_id( $menu_id );
 
 		$this->load();
 		$this->_attach();
 
-		if ( ! empty( $menu_id ) && $render === true ) {
-			$this->render();
+		// Only the base container should register for updating/rendering
+		if ( $menu_id === 0 ) {
+			add_action( 'wp_update_nav_menu_item', array( $this, 'update' ), 10, 3 );
+			add_action( 'crb_print_carbon_container_nav_menu_fields_html', array( $this, 'form' ), 10, 5 );
 		}
 
 		return $this;
@@ -66,20 +75,8 @@ class Nav_Menu_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_save() {
+		// rely on wp_update_nav_menu_item action not being called unless WP's nonce is not valid
 		return true;
-	}
-
-	/**
-	 * Perform save operation after successful is_valid_save() check.
-	 * The call is propagated to all fields in the container.
-	 **/
-	public function save( $user_data = null ) {
-		foreach ( $this->fields as $field ) {
-			$field->set_value_from_input();
-			$field->save();
-		}
-
-		do_action( 'carbon_after_save_nav_menu', $this );
 	}
 
 	/**
@@ -101,6 +98,36 @@ class Nav_Menu_Container extends Container {
 	}
 
 	/**
+	 * Perform checks whether the container should be attached during the current request
+	 *
+	 * @return bool True if the container is allowed to be attached
+	 **/
+	public function is_valid_attach() {
+		global $pagenow;
+
+		if ( $pagenow === 'nav-menus.php' ) {
+			return true;
+		} elseif ( defined( 'DOING_AJAX' ) && DOING_AJAX && $_REQUEST['action'] === 'add-menu-item' ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Perform save operation after successful is_valid_save() check.
+	 * The call is propagated to all fields in the container.
+	 **/
+	public function save( $data = null ) {
+		foreach ( $this->fields as $field ) {
+			$field->set_value_from_input();
+			$field->save();
+		}
+
+		do_action( 'carbon_after_save_nav_menu', $this );
+	}
+
+	/**
 	 * Output the container markup
 	 **/
 	public function render() {
@@ -108,100 +135,78 @@ class Nav_Menu_Container extends Container {
 	}
 
 	/**
-	 * TODO: make sure the containers for nav menus are not printed everywhere
+	 * Trigger Save for all instances
 	 */
-	public function is_valid_attach() {
-		return true;
-	}
-
-	/**
-	 * Initialize filters. This will be executed only once
-	 */
-	public static function initialize_filters() {
-		if ( self::$initialized ) {
+	public function update( $menu_id, $current_menu_item_id ) {
+		if ( !$this->is_valid_attach() ) {
 			return;
 		}
-
-		$self = 'Carbon_Fields\Container\Nav_Menu_Container';
-		add_action( 'crb_print_carbon_container_nav_menu_fields_html', array( $self, 'form' ), 10, 5 );
-		add_filter( 'wp_edit_nav_menu_walker', array( $self, 'edit_walker' ), 10, 2 );
-		add_action( 'wp_update_nav_menu_item', array( $self, 'update' ), 10, 3 );
-	}
-
-	/**
-	 * Get containers only once, and store in instance memory.
-	 */
-	public static function get_containers() {
-		if ( empty( self::$active_containers ) ) {
-			self::$active_containers = Container::get_active_containers();
-		}
-
-		return self::$active_containers;
+		
+		$clone = $this->get_clone_for_menu_item( $current_menu_item_id );
+		$clone->_save();
 	}
 
 	/**
 	 * Render custom fields inside each Nav Menu entry
 	 */
-	public static function form( $item ) {
-		self::set_instance_for_id( $item->ID, true );
+	public function form( $item ) {
+		if ( !$this->is_valid_attach() ) {
+			return;
+		}
+
+		$clone = $this->get_clone_for_menu_item( $item->ID );
+		$clone->render();
+	}
+
+	/**
+	 * Create a clone of this container with it's own datastore for every menu item
+	 */
+	protected function get_clone_for_menu_item( $menu_item_id ) {
+		if ( !isset( $this->menu_item_instances[ $menu_item_id ] ) ) {
+			$suffix = '-menu-item-' . $menu_item_id;
+			$fields = $this->get_fields();
+			$menu_item_datastore = new Nav_Menu_Datastore();
+			$menu_item_datastore->set_id( $menu_item_id );
+			$custom_fields = array();
+
+			foreach ( $fields as $field ) {
+				$tmp_field = clone $field;
+
+				// Hacky: preserve the original field name as we append the menu item id to it to avoid field name collision in requests
+				$tmp_field->nav_menu_datastore_field_name = $tmp_field->get_name();
+
+				$tmp_field->set_id( $tmp_field->get_id() . $suffix );
+				$tmp_field->set_name( $tmp_field->get_name() . $suffix );
+
+				$tmp_field->set_datastore( $menu_item_datastore );
+
+				$custom_fields[] = $tmp_field;
+			}
+
+			$this->menu_item_instances[ $menu_item_id ] = Container::factory( $this->type, $this->id . $suffix )
+				->set_datastore( $menu_item_datastore )
+				->add_fields( $custom_fields )
+				->init( $menu_item_id );
+			
+		}
+
+		return $this->menu_item_instances[ $menu_item_id ];
 	}
 
 	/**
 	 * Setup custom walker for the Nav Menu entries
 	 */
 	public static function edit_walker() {
-		return 'Carbon_Fields\Walker\Nav_Menu_Edit_Walker';
+		return '\Carbon_Fields\Walker\Nav_Menu_Edit_Walker';
 	}
 
-	/**
-	 * Trigger Save for all instances
-	 */
-	public static function update( $menu_id, $current_menu_item_id ) {
-		$instance = self::set_instance_for_id( $current_menu_item_id, false );
-		$instance->_save();
-
-		return $instance;
-	}
-
-	/**
-	 * Render attribute prevents field containers showing on menu save
-	 */
-	public static function set_instance_for_id( $current_menu_item_id, $render = true ) {
-		$active_containers = self::get_containers();
-		$suffix = '-' . $current_menu_item_id;
-
-		foreach ( $active_containers as $container ) {
-			if ( $container->type != 'Nav_Menu' ) {
-				continue;
+	public function add_fields( $fields ) {
+		foreach ( $fields as $field ) {
+			if ( is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
+				Incorrect_Syntax_Exception::raise( get_class() . ' does not support Complex_Field, yet.' );
 			}
-
-			$custom_fields = array();
-			$fields = $container->get_fields();
-
-			foreach ( $fields as $field ) {
-				$tmp_field = clone $field;
-
-				// Setup Public properties
-				$tmp_field->current_menu_item_id = $current_menu_item_id;
-				$tmp_field->initial_name = $tmp_field->get_name();
-
-				// Setup Field ID and Name
-				$tmp_field->set_id( $tmp_field->get_id() . $suffix );
-				$tmp_field->set_name( $tmp_field->get_name() . $suffix );
-
-				// Update Datastore instance
-				$new_datastore = new Nav_Menu_Datastore();
-				$new_datastore->set_id( $current_menu_item_id );
-				$tmp_field->set_datastore( $new_datastore );
-
-				$custom_fields[] = $tmp_field;
-			}
-
-			self::$instances[ $current_menu_item_id ] = Container::factory( 'nav_menu', $container->id . $suffix )
-				->add_fields( $custom_fields )
-				->init( $current_menu_item_id, $render );
 		}
 
-		return self::$instances[ $current_menu_item_id ];
+		return parent::add_fields( $fields );
 	}
 }

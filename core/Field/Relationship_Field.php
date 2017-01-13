@@ -21,6 +21,27 @@ class Relationship_Field extends Field {
 	}
 
 	/**
+	 * Load the field value from an input array based on it's name
+	 *
+	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
+	 **/
+	public function set_value_from_input( $input = null ) {
+		if ( is_null( $input ) ) {
+			$input = $_POST;
+		}
+
+		if ( ! isset( $input[ $this->name ] ) ) {
+			$this->set_value( null );
+		} else {
+			$value = stripslashes_deep( $input[ $this->name ] );
+			if ( is_array( $value ) ) {
+				$value = array_values( $value );
+			}
+			$this->set_value( $value );
+		}
+	}
+
+	/**
 	 * Set the post type of the entries.
 	 *
 	 * @param string|array $post_type Post type
@@ -167,10 +188,12 @@ class Relationship_Field extends Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
+		$field_data['nextfieldIndex'] = 0;
 		if ( ! empty( $field_data['value'] ) ) {
 			$value = array();
 
 			$field_data['value'] = maybe_unserialize( $field_data['value'] );
+			$i = 0;
 			foreach ( $field_data['value'] as $single_value ) {
 				$post_type = get_post_type( $single_value );
 				$value[] = array(
@@ -180,8 +203,11 @@ class Relationship_Field extends Field {
 					'subtype' => $post_type,
 					'label' => $this->get_item_label( $single_value, 'post', $post_type ),
 					'is_trashed' => ( get_post_status( $single_value ) == 'trash' ),
+					'fieldIndex' => $i,
 				);
+				$i++;
 			}
+			$field_data['nextfieldIndex'] = $i;
 			$field_data['value'] = $value;
 		}
 
@@ -272,7 +298,7 @@ class Relationship_Field extends Field {
 				{{{ item.title }}}
 			</a>
 			<?php if ( $display_input ) :  ?>
-				<input type="hidden" name="{{{ name }}}[]" value="{{{ item.id }}}" />
+				<input type="hidden" name="{{{ name }}}[{{{ item.fieldIndex }}}]" value="{{{ item.id }}}" />
 			<?php endif; ?>
 		</li>
 		<?php

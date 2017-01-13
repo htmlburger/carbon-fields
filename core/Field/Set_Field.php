@@ -22,6 +22,27 @@ class Set_Field extends Predefined_Options_Field {
 	protected $default_value = array();
 
 	/**
+	 * Load the field value from an input array based on it's name
+	 *
+	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
+	 **/
+	public function set_value_from_input( $input = null ) {
+		if ( is_null( $input ) ) {
+			$input = $_POST;
+		}
+
+		if ( ! isset( $input[ $this->name ] ) ) {
+			$this->set_value( null );
+		} else {
+			$value = stripslashes_deep( $input[ $this->name ] );
+			if ( is_array( $value ) ) {
+				$value = array_values( $value );
+			}
+			$this->set_value( $value );
+		}
+	}
+
+	/**
 	 * Set the number of the options to be displayed at the initial field display.
 	 *
 	 * @param  int $limit
@@ -91,7 +112,7 @@ class Set_Field extends Predefined_Options_Field {
 
 					<p {{{ exceed ? 'style="display:none"' : '' }}}>
 						<label>
-							<input type="checkbox" name="{{{ name }}}[]" value="{{ option.value }}" {{{ selected ? 'checked="checked"' : '' }}} />
+							<input type="checkbox" name="{{{ name }}}[{{{ i }}}]" value="{{ option.value }}" {{{ selected ? 'checked="checked"' : '' }}} />
 							{{{ option.name }}}
 						</label>
 					</p>
