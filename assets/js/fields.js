@@ -1689,9 +1689,9 @@ window.carbon = window.carbon || {};
 	// Complex VIEW
 	carbon.fields.View.Complex = carbon.fields.View.extend({
 		events: {
-			'click > .carbon-subcontainer > .carbon-actions a': 'buttonAction',
-			'click > .carbon-subcontainer > .groups-wrapper > .group-tabs-nav-holder > .carbon-actions a': 'buttonAction',
-			'click > .carbon-subcontainer > .carbon-empty-row a': 'buttonAction',
+			'click > .carbon-subcontainer > .carbon-actions a': 'addEntry',
+			'click > .carbon-subcontainer > .groups-wrapper > .group-tabs-nav-holder > .carbon-actions a': 'addEntry',
+			'click > .carbon-subcontainer > .carbon-empty-row a': 'addEntry',
 			'click > .carbon-subcontainer > .groups-wrapper > .group-tabs-nav-holder > .group-tabs-nav > li > a': 'showGroupTab'
 		},
 
@@ -1885,7 +1885,7 @@ window.carbon = window.carbon || {};
 			});
 		},
 
-		buttonAction: function(event) {
+		addEntry: function(event) {
 			var $element = $(event.target);
 			var groupName = $element.data('group');
 
@@ -1900,7 +1900,7 @@ window.carbon = window.carbon || {};
 
 				this.$groupsList.toggleClass('right-aligned', 0 > list_position);
 			} else {
-				this.$actions.find('a.button').trigger('click');
+				this.$actions.find('a.button').eq(0).trigger('click');
 			}
 
 			event.preventDefault();
