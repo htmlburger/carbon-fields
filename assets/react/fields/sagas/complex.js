@@ -10,7 +10,7 @@ import { find, merge, keyBy } from 'lodash';
  */
 import { getFieldById } from 'fields/selectors';
 import { addComplexGroupIdentifiers, flattenComplexGroupFields } from 'fields/helpers';
-import { updateField, addFields } from 'fields/actions';
+import { updateField, addFields, setUI } from 'fields/actions';
 import { ADD_COMPLEX_GROUP } from 'fields/actions';
 
 /**
@@ -32,12 +32,18 @@ export function* workerAddComplexGroup({ payload }) {
 	groupFields = keyBy(groupFields, 'id');
 
 	yield put(addFields(groupFields));
-	yield put(updateField(payload.id, {
+	yield put(updateField(field.id, {
 		value: [
 			...field.value,
 			group,
 		]
 	}));
+
+	if (field.ui.is_tabbed) {
+		yield put(setUI(field.id, {
+			current_tab: group.id,
+		}));
+	}
 }
 
 /**
