@@ -50,7 +50,7 @@ class Date_Field extends Field {
 	public static function admin_enqueue_scripts() {
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 
-		wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css' );
+		wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css', array(), \Carbon_Fields\VERSION );
 	}
 
 	/**

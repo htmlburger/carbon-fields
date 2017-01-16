@@ -763,7 +763,7 @@ abstract class Container {
 	 * Enqueue admin scripts
 	 */
 	public static function admin_hook_scripts() {
-		wp_enqueue_script( 'carbon-containers', \Carbon_Fields\URL . '/assets/js/containers.js', array( 'carbon-app' ) );
+		wp_enqueue_script( 'carbon-containers', \Carbon_Fields\URL . '/assets/js/containers.js', array( 'carbon-app' ), \Carbon_Fields\VERSION );
 
 		wp_localize_script( 'carbon-containers', 'carbon_containers_l10n',
 			array(
@@ -777,7 +777,7 @@ abstract class Container {
 	 * Enqueue admin styles
 	 */
 	public static function admin_hook_styles() {
-		wp_enqueue_style( 'carbon-main', \Carbon_Fields\URL . '/assets/bundle.css' );
+		wp_enqueue_style( 'carbon-main', \Carbon_Fields\URL . '/assets/bundle.css', array(), \Carbon_Fields\VERSION );
 	}
 } // END Container
 
