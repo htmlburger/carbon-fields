@@ -39,9 +39,10 @@ class Updater {
 	 * @var array
 	 */
 	public static $value_types = [
-		'Complex_Value_Parser'     => 'complex',
-		'Association_Value_Parser' => 'association',
-		'Map_Value_Parser'         => 'map',
+		'complex'          => 'Complex_Value_Parser',
+		'association'      => 'Association_Value_Parser',
+		'map'              => 'Map_Value_Parser',
+		'map_with_address' => 'Map_Value_Parser',
 	];
 
 	/**
@@ -92,7 +93,7 @@ class Updater {
 		}
 
 		$input = self::maybe_json_decode( $input );
-		$class = __NAMESPACE__ . '\\' . ( array_search( $carbon_field_type, self::$value_types ) ?: 'Value_Parser' );
+		$class = __NAMESPACE__ . '\\' . ( isset( self::$value_types[ $carbon_field_type ] ) ? self::$value_types[ $carbon_field_type ] : 'Value_Parser' );
 		$input = $class::parse( $input, $is_option );
 
 		$carbon_field->set_value_from_input( [ $field_name => $input ] );
