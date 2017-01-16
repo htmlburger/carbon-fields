@@ -17,13 +17,14 @@ import { makeField } from 'lib/factory';
  * @param  {Number}   props.index
  * @param  {Boolean}  props.collapsed
  * @param  {Function} props.toggle
+ * @param  {Function} props.isActive
  * @return {React.Element}
  *
  * @todo Fix the translation.
  * @todo Fix the custom label.
  */
-export const ComplexGroup = ({ complex, group, index, collapsed, toggle }) => {
-	return <div id={`carbon-${complex.name}-complex-container`} className={cx('carbon-row', 'carbon-group-row', { 'collapsed': collapsed })}>
+export const ComplexGroup = ({ complex, group, index, collapsed, toggle, isActive }) => {
+	return <div className={cx('carbon-row', 'carbon-group-row', { 'collapsed': collapsed }, { 'active': isActive() })}>
 		<input
 			type="hidden"
 			name={`${complex.name}[${index}][group]`}
@@ -76,10 +77,19 @@ const toggle = ({ collapsed, setCollapsed }) => {
 	};
 }
 
+/**
+ * Check whether the group is the currently visible tab.
+ *
+ * @param  {Object}  props
+ * @param  {Object}  props.group
+ * @param  {Boolean} props.tabbed
+ * @param  {String}  props.currentTab
+ * @return {Function}
+ */
+const isActive = ({ group, tabbed, currentTab }) => () => tabbed && group.id === currentTab;
+
 export default compose(
 	withState('collapsed', 'setCollapsed', false),
-	withHandlers({
-		toggle
-	})
+	withHandlers({ toggle, isActive })
 )(ComplexGroup);
 

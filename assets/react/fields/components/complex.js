@@ -12,6 +12,7 @@ import Field from 'fields/components/field';
 import ComplexGroup from 'fields/components/complex-group';
 import ComplexActions from 'fields/components/complex-actions';
 import ComplexPopover from 'fields/components/complex-popover';
+import ComplexTabs from 'fields/components/complex-tabs';
 
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
@@ -27,12 +28,35 @@ import { addComplexGroup } from 'fields/actions';
  * @param  {Function} props.handlePopoverClose
  * @return {React.Element}
  */
-export const ComplexField = ({ field, popoverVisible, handleActionsButtonClick, handlePopoverClose }) => {
+export const ComplexField = ({ field, popoverVisible, handleActionsButtonClick, handlePopoverClose, handleTabClick }) => {
 	return <Field field={field}>
-		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups })}>
+		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': field.ui.is_tabbed })}>
 			<div className={cx('groups-wrapper', `layout-${field.layout}`)}>
+				<ComplexTabs groups={field.value} current={field.ui.current_tab} show={field.ui.is_tabbed} onClick={handleTabClick}>
+					<ComplexActions
+						buttonText="+"
+						onButtonClick={handleActionsButtonClick}>
+							<ComplexPopover
+								groups={field.groups}
+								visible={popoverVisible}
+								onItemClick={handleActionsButtonClick}
+								onClose={handlePopoverClose}
+								outsideClickIgnoreClass={'carbon-button'} />
+					</ComplexActions>
+				</ComplexTabs>
+
 				<div className="carbon-groups-holder">
-					{field.value.map((group, index) => <ComplexGroup key={index} complex={field} group={group} index={index} />)}
+					{
+						field.value.map((group, index) => {
+							return <ComplexGroup
+								key={index}
+								index={index}
+								complex={field}
+								group={group}
+								tabbed={field.ui.is_tabbed}
+								currentTab={field.ui.current_tab} />
+						})
+					}
 				</div>
 				<div className="clear"></div>
 			</div>
@@ -61,6 +85,46 @@ const mapDispatchToProps = {
 };
 
 /**
+ * The lifecycle hooks that will be attached to the field.
+ *
+ * @type {Object}
+ */
+const hooks = {
+	componentDidMount() {
+		const {
+			field,
+			setupField,
+			setUI
+		} = this.props;
+
+		let { ui } = this.props;
+
+		// Update the UI if the field's layout is set to 'tabs'.
+		if (field.layout.indexOf('tabbed') > -1) {
+			ui = { ...ui, is_tabbed: true };
+
+			// Show the first group of the complex.
+			if (field.value.length) {
+				ui = { ...ui, current_tab: field.value[0].id };
+			}
+		}
+
+		setupField(field.id, field.type);
+		setUI(field.id, ui);
+	}
+};
+
+/**
+ * The UI fields that will be attached to the field.
+ *
+ * @type {Object}
+ */
+const ui = {
+	is_tabbed: false,
+	current_tab: null,
+};
+
+/**
  * Handle the click on 'Add ..' button.
  *
  * @param  {Object}   props
@@ -77,7 +141,6 @@ const handleActionsButtonClick = ({ field, popoverVisible, addComplexGroup, setP
 	 * @return {void}
 	 */
 	return (group) => {
-
 		if (field.multiple_groups) {
 			setPopoverVisibility(!popoverVisible);
 		} else {
@@ -97,21 +160,33 @@ const handleActionsButtonClick = ({ field, popoverVisible, addComplexGroup, setP
  * @param  {Function} props.setPopoverVisibility
  * @return {Function}
  */
-const handlePopoverClose = ({ setPopoverVisibility }) => {
+const handlePopoverClose = ({ setPopoverVisibility }) => () => setPopoverVisibility(false);
+
+/**
+ * Change the current tab.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.setUI
+ * @return {Function}
+ */
+const handleTabClick = ({ field, setUI }) => {
 	/**
 	 * @inner
-	 * @param  {Event} e
+	 * @param  {String} group
 	 * @return {void}
 	 */
-	return (e) => {
-		setPopoverVisibility(false);
+	return (group) => {
+		setUI(field.id, {
+			current_tab: group
+		});
 	};
 };
 
 export default compose(
 	withStore(undefined, mapDispatchToProps),
-	withSetup(),
+	withSetup(hooks, ui),
 	withState('popoverVisible', 'setPopoverVisibility', false),
-	withHandlers({ handleActionsButtonClick, handlePopoverClose })
+	withHandlers({ handleActionsButtonClick, handlePopoverClose, handleTabClick })
 )(ComplexField);
 

@@ -7,6 +7,7 @@ import { createAction } from 'redux-actions';
  * Perform the initial setup of the container.
  *
  * @param  {String} id
+ * @param  {String} type
  * @return {Object}
  */
 export const SETUP_FIELD = 'fields/SETUP_FIELD';
@@ -51,6 +52,15 @@ export const OPEN_MEDIA_BROWSER = 'fields/OPEN_MEDIA_BROWSER';
 export const openMediaBrowser = createAction(OPEN_MEDIA_BROWSER);
 
 /**
+ * Add field(s) to the store.
+ *
+ * @param  {Object} fields
+ * @return {Object}
+ */
+export const ADD_FIELDS = 'fields/ADD_FIELDS';
+export const addFields = createAction(ADD_FIELDS);
+
+/**
  * Add a new instance of the specified complex group.
  *
  * @param  {String} id
@@ -59,12 +69,3 @@ export const openMediaBrowser = createAction(OPEN_MEDIA_BROWSER);
  */
 export const ADD_COMPLEX_GROUP = 'fields/ADD_COMPLEX_GROUP';
 export const addComplexGroup = createAction(ADD_COMPLEX_GROUP, (id, group) => ({ id, group }));
-
-/**
- * Add field(s) to the store.
- *
- * @param  {Object} fields
- * @return {Object}
- */
-export const ADD_FIELDS = 'fields/ADD_FIELDS';
-export const addFields = createAction(ADD_FIELDS);

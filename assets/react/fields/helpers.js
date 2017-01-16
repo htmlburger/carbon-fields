@@ -29,7 +29,7 @@ export function flattenField(field, accumulator) {
 
 	// Since the fields don't have unique identifiers
 	// we need to replace the id property with something
-	// that we know it's unique.
+	// that we know is unique.
 	field.id = uniqueId('carbon-field-');
 
 	// The complex field represents a nested structure
@@ -40,6 +40,10 @@ export function flattenField(field, accumulator) {
 			flattenComplexGroupFields(group, accumulator);
 		});
 	}
+
+	// Add the placeholders for ui & meta.
+	field.ui = {};
+	field.meta = {};
 
 	// Push the original field to the stack that will
 	// be used to populate the state.

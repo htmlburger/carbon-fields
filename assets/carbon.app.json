@@ -98,6 +98,7 @@
     "./assets/react/store.js": 111,
     "./assets/react/containers/reducer.js": 113,
     "./assets/react/fields/reducer.js": 115,
-    "./assets/react/containers/sagas/base.js": 116
+    "./assets/react/containers/sagas/base.js": 116,
+    "./assets/react/fields/components/complex-tabs.js": 117
   }
 }
