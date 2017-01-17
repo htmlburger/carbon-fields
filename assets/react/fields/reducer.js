@@ -1,6 +1,7 @@
 import immutable from 'object-path-immutable';
+import { omit } from 'lodash';
 import { decorateFieldReducer } from 'lib/registry';
-import { ADD_FIELDS, UPDATE_FIELD, SET_UI } from 'fields/actions';
+import { ADD_FIELDS, REMOVE_FIELDS, UPDATE_FIELD, SET_UI } from 'fields/actions';
 
 /**
  * The reducer that handles manipulation to field's state.
@@ -13,6 +14,8 @@ function reducer(state = {}, { type, payload } = {}) {
 	switch (type) {
 		case ADD_FIELDS:
 			return { ...state, ...payload };
+		case REMOVE_FIELDS:
+			return omit(state, payload);
 		case UPDATE_FIELD:
 			return immutable.assign(state, payload.id, payload.values);
 		case SET_UI:

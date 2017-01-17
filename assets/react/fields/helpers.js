@@ -61,7 +61,7 @@ export function flattenField(field, accumulator) {
  * @return {void}
  */
 export function addComplexGroupIdentifiers(complex, group, index) {
-	group.id = `${complex.id}-${index}`;
+	group.id = uniqueId('carbon-complex-group-');
 
 	group.fields.forEach((field) => {
 		field.name = `${complex.name}[${index}][${field.name}]`;

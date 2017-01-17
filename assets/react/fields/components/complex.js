@@ -16,7 +16,7 @@ import ComplexTabs from 'fields/components/complex-tabs';
 
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { addComplexGroup } from 'fields/actions';
+import { addComplexGroup, removeComplexGroup } from 'fields/actions';
 
 /**
  * Render a group(s) of fields.
@@ -28,7 +28,7 @@ import { addComplexGroup } from 'fields/actions';
  * @param  {Function} props.handlePopoverClose
  * @return {React.Element}
  */
-export const ComplexField = ({ field, popoverVisible, handleActionsButtonClick, handlePopoverClose, handleTabClick }) => {
+export const ComplexField = ({ field, popoverVisible, handleActionsButtonClick, handlePopoverClose, handleTabClick, handleRemoveGroupClick }) => {
 	return <Field field={field}>
 		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': field.ui.is_tabbed })}>
 			<div className={cx('groups-wrapper', `layout-${field.layout}`)}>
@@ -54,7 +54,8 @@ export const ComplexField = ({ field, popoverVisible, handleActionsButtonClick, 
 								complex={field}
 								group={group}
 								tabbed={field.ui.is_tabbed}
-								currentTab={field.ui.current_tab} />
+								currentTab={field.ui.current_tab}
+								onRemove={handleRemoveGroupClick} />
 						})
 					}
 				</div>
@@ -82,6 +83,7 @@ export const ComplexField = ({ field, popoverVisible, handleActionsButtonClick, 
  */
 const mapDispatchToProps = {
 	addComplexGroup,
+	removeComplexGroup,
 };
 
 /**
@@ -183,10 +185,33 @@ const handleTabClick = ({ field, setUI }) => {
 	};
 };
 
+/**
+ * Remove the complex group.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @return {Function}
+ */
+const handleRemoveGroupClick = ({ field, removeComplexGroup }) => {
+	/**
+	 * @inner
+	 * @param  {String} group
+	 * @return {void}
+	 */
+	return (group) => {
+		removeComplexGroup(field.id, group);
+	};
+};
+
 export default compose(
 	withStore(undefined, mapDispatchToProps),
 	withSetup(hooks, ui),
 	withState('popoverVisible', 'setPopoverVisibility', false),
-	withHandlers({ handleActionsButtonClick, handlePopoverClose, handleTabClick })
+	withHandlers({
+		handleActionsButtonClick,
+		handlePopoverClose,
+		handleTabClick,
+		handleRemoveGroupClick
+	})
 )(ComplexField);
 

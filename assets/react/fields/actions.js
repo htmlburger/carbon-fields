@@ -52,13 +52,22 @@ export const OPEN_MEDIA_BROWSER = 'fields/OPEN_MEDIA_BROWSER';
 export const openMediaBrowser = createAction(OPEN_MEDIA_BROWSER);
 
 /**
- * Add field(s) to the store.
+ * Add the field(s) to the store.
  *
  * @param  {Object} fields
  * @return {Object}
  */
 export const ADD_FIELDS = 'fields/ADD_FIELDS';
 export const addFields = createAction(ADD_FIELDS);
+
+/**
+ * Remove the field(s) from the store.
+ *
+ * @param  {String[]} fields
+ * @return {Object}
+ */
+export const REMOVE_FIELDS = 'fields/REMOVE_FIELDS';
+export const removeFields = createAction(REMOVE_FIELDS);
 
 /**
  * Add a new instance of the specified complex group.
@@ -69,3 +78,13 @@ export const addFields = createAction(ADD_FIELDS);
  */
 export const ADD_COMPLEX_GROUP = 'fields/ADD_COMPLEX_GROUP';
 export const addComplexGroup = createAction(ADD_COMPLEX_GROUP, (id, group) => ({ id, group }));
+
+/**
+ * Remove the specified complex group.
+ *
+ * @param  {String} id
+ * @param  {String} group
+ * @return {Object}
+ */
+export const REMOVE_COMPLEX_GROUP = 'fields/REMOVE_COMPLEX_GROUP';
+export const removeComplexGroup = createAction(REMOVE_COMPLEX_GROUP, (id, group) => ({ id, group }));

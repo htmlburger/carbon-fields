@@ -23,7 +23,7 @@ import { makeField } from 'lib/factory';
  * @todo Fix the translation.
  * @todo Fix the custom label.
  */
-export const ComplexGroup = ({ complex, group, index, collapsed, toggle, isActive }) => {
+export const ComplexGroup = ({ complex, group, index, collapsed, toggle, isActive, handleRemoveClick }) => {
 	return <div className={cx('carbon-row', 'carbon-group-row', { 'collapsed': collapsed }, { 'active': isActive() })}>
 		<input
 			type="hidden"
@@ -41,7 +41,7 @@ export const ComplexGroup = ({ complex, group, index, collapsed, toggle, isActiv
 				Clone
 			</a>
 
-			<a className="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="Remove">
+			<a className="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="Remove" onClick={handleRemoveClick}>
 				Remove
 			</a>
 
@@ -88,8 +88,33 @@ const toggle = ({ collapsed, setCollapsed }) => {
  */
 const isActive = ({ group, tabbed, currentTab }) => () => tabbed && group.id === currentTab;
 
+/**
+ * Handle the click on the 'Remove' button.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.group
+ * @param  {Function} props.onRemove
+ * @return {Function}
+ */
+const handleRemoveClick = ({ group, onRemove }) => {
+	/**
+	 * @inner
+	 * @param  {Event} e
+	 * @return {void}
+	 */
+	return (e) => {
+		e.preventDefault();
+
+		onRemove(group.id);
+	};
+};
+
 export default compose(
 	withState('collapsed', 'setCollapsed', false),
-	withHandlers({ toggle, isActive })
+	withHandlers({
+		toggle,
+		isActive,
+		handleRemoveClick,
+	})
 )(ComplexGroup);
 
