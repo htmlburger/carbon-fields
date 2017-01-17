@@ -259,6 +259,15 @@ class Routes {
 	}
 
 	/**
+	 * Allow access to an endpoint
+	 * 
+	 * @return bool true
+	 */
+	public function allow_access() {
+		return true;
+	}
+
+	/**
 	 * Proxy method for handling theme options permissions
 	 * 
 	 * @param  WP_REST_Request $request 
