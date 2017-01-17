@@ -145,13 +145,13 @@ class Nav_Menu_Container extends Container {
 
 				$tmp_field->set_id( $menu_item_field_prefix . $tmp_field->get_id() );
 				$tmp_field->set_name( $menu_item_field_prefix . $tmp_field->get_name() );
-				$tmp_field->set_datastore( $menu_item_datastore, false );
+				$tmp_field->set_datastore( $menu_item_datastore, true );
 
 				$custom_fields[] = $tmp_field;
 			}
-			
+
 			$this->menu_item_instances[ $menu_item_id ] = Container::factory( $this->type, $menu_item_field_prefix . $this->id )
-				->set_datastore( $menu_item_datastore, false )
+				->set_datastore( $menu_item_datastore, true )
 				->add_fields( $custom_fields )
 				->init( $menu_item_id );
 			

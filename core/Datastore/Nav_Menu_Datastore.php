@@ -10,7 +10,7 @@ class Nav_Menu_Datastore extends Post_Meta_Datastore {
 		if ( !$this->get_id() ) {
 			return '';
 		}
-		return '_menu-item-' . $this->get_id();
+		return '_menu-item-' . $this->get_id() . '_';
 	}
 
 	public function get_clean_field_name( $field ) {
@@ -64,6 +64,15 @@ class Nav_Menu_Datastore extends Post_Meta_Datastore {
 	}
 
 	/**
+	 * Delete the field value(s) from the database.
+	 *
+	 * @param Field $field The field to delete.
+	 */
+	public function delete( Field $field ) {
+		delete_metadata( $this->get_meta_type(), $this->get_id(), $this->get_clean_field_name( $field ), $field->get_value() );
+	}
+
+	/**
 	 * Load complex field value(s) from the database.
 	 *
 	 * @param mixed $field The field to load values for.
@@ -88,5 +97,24 @@ class Nav_Menu_Datastore extends Post_Meta_Datastore {
 		}
 
 		return $results;
+	}
+
+	/**
+	 * Delete complex field value(s) from the database.
+	 *
+	 * @param mixed $field The field to delete values for.
+	 */
+	public function delete_values( $field ) {
+		global $wpdb;
+
+		$group_names = $field->get_group_names();
+		$field_name = $this->get_clean_field_name( $field );
+
+		$meta_key_constraint = '`meta_key` LIKE "' . $field_name . implode( '-%" OR `meta_key` LIKE "' . $field_name, $group_names ) . '-%"';
+
+		return $wpdb->query( '
+			DELETE FROM ' . $this->get_table_name() . '
+			WHERE (' . $meta_key_constraint . ') AND `' . $this->get_table_field_name() . '`="' . intval( $this->get_id() ) . '"
+		' );
 	}
 }
