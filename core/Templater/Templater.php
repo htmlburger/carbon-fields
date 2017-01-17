@@ -7,13 +7,30 @@ namespace Carbon_Fields\Templater;
  *
  **/
 class Templater {
-	static protected $templates = array();
+
+	protected static $instance = null;
+
+	protected $templates = array();
+
+	public static function instance() {
+		if ( static::$instance === null ) {
+			static::$instance = new static();
+			static::$instance->setup();
+		}
+		return static::$instance;
+	}
+	
+	/**
+	 * Pretty initialization alias
+	 */
+	public static function boot() {
+		static::instance();
+	}
 
 	/**
-	 * Initialize a new templater.
 	 * Hook all templates to the administration footer.
 	 */
-	public function __construct() {
+	public function setup() {
 		add_action( 'admin_footer', array( $this, 'render_templates' ), 999 );
 	}
 
@@ -23,21 +40,21 @@ class Templater {
 	 * @param string $name Template name
 	 * @param string $html Template content
 	 */
-	public static function add_template( $name, $html ) {
+	public function add_template( $name, $html ) {
 		// Check if the template is already added
-		if ( isset( self::$templates[ $name ] ) ) {
+		if ( isset( $this->templates[ $name ] ) ) {
 			return false;
 		}
 
 		// Add the template to the stack
-		self::$templates[ $name ] = $html;
+		$this->templates[ $name ] = $html;
 	}
 
 	/**
 	 * Render all registered templates.
 	 */
 	public function render_templates() {
-		foreach ( self::$templates as $name => $html ) {
+		foreach ( $this->templates as $name => $html ) {
 			?>
 			<script type="text/html" id="crb-tmpl-<?php echo $name; ?>">
 				<?php echo apply_filters( 'carbon_template', apply_filters( 'carbon_template_' . $name, $html ), $name ); ?>

@@ -1,48 +1,35 @@
 <?php
-namespace Carbon_Fields;
+/**
+ * Plugin Name: Carbon Fields
+ * Description: WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options, navigation menus and more.
+ * Version: 1.5
+ * Author: htmlburger
+ * Author URI: https://htmlburger.com/
+ * Plugin URI: http://carbonfields.net/
+ * License: GPL2
+ * Requires at least: 4.0
+ * Tested up to: 4.7
+ * Text Domain: carbon-fields
+ * Domain Path: /languages
+ */
 
-use Carbon_Fields\Helper\Helper;
+use \Carbon_Fields\Loader\Loader;
 
-# Define version constant
-if ( ! defined( __NAMESPACE__ . '\VERSION' ) ) {
-	$plugin_data = get_file_data( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'carbon-fields-plugin.php', array('Version'=>'Version') );
-	define( __NAMESPACE__ . '\VERSION', $plugin_data['Version'] );
-}
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+	require( __DIR__ . '/vendor/autoload.php' );
+} else {
+	function carbon_fields_spl_autoload_register( $class ) {
+		$prefix = 'Carbon_Fields';
+		if ( stripos( $class, $prefix ) === false ) {
+			return;
+		}
 
-# Define root directory
-if ( ! defined( __NAMESPACE__ . '\DIR' ) ) {
-	define( __NAMESPACE__ . '\DIR', __DIR__ );
-}
-
-# Define root URL
-if ( ! defined( __NAMESPACE__ . '\URL' ) ) {
-	$url = \trailingslashit( DIR );
-	$count = 0;
-
-	# Sanitize directory separator on Windows
-	$url = str_replace( '\\' ,'/', $url );
-
-	# If installed as a plugin
-	$wp_plugin_dir = str_replace( '\\' ,'/', WP_PLUGIN_DIR );
-	$url = str_replace( $wp_plugin_dir, \plugins_url(), $url, $count );
-
-	if ( $count < 1 ) {
-		# If anywhere in wp-content
-		$wp_content_dir = str_replace( '\\' ,'/', WP_CONTENT_DIR );
-		$url = str_replace( $wp_content_dir, \content_url(), $url, $count );
+		$file_path = __DIR__ . '/core/' . str_ireplace( 'Carbon_Fields\\', '', $class ) . '.php';
+		$file_path = str_replace( '\\', DIRECTORY_SEPARATOR, $file_path );
+		include_once( $file_path );
 	}
 
-	if ( $count < 1 ) {
-		# If anywhere else within the WordPress installation
-		$wp_dir = str_replace( '\\' ,'/', ABSPATH );
-		$url = str_replace( $wp_dir, \site_url( '/' ), $url );
-	}
-
-	define( __NAMESPACE__ . '\URL', \untrailingslashit( $url ) );
+	spl_autoload_register( 'carbon_fields_spl_autoload_register' );
 }
 
-# Initialize helper
-global $carbon_fields_helper;
-if ( ! isset( $carbon_fields_helper ) ) {
-	$carbon_fields_helper = new Helper();
-}
+Loader::boot();
