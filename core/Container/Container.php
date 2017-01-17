@@ -701,7 +701,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		$this->has_default_datastore = $set_as_default;
 
 		foreach ( $this->fields as $field ) {
-			$field->set_datastore( $this->get_datastore(), $this->has_default_datastore() );
+			$field->set_datastore( $this->get_datastore(), true );
 		}
 		return $this;
 	}

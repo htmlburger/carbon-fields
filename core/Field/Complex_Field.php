@@ -157,7 +157,7 @@ class Complex_Field extends Field {
 		$this->has_default_datastore = $set_as_default;
 
 		foreach ( $this->groups as $group ) {
-			$group->set_datastore( $this->get_datastore(), $this->has_default_datastore() );
+			$group->set_datastore( $this->get_datastore(), true );
 		}
 		return $this;
 	}
