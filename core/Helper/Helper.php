@@ -20,7 +20,7 @@ class Helper {
 	public function __construct() {
 		# Initialize sidebar manager
 		Sidebar_Manager::instance();
-		
+
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
 		add_action( 'carbon_after_register_fields', array( $this, 'init_containers' ) );
 		add_action( 'admin_footer', array( $this, 'init_scripts' ), 0 );
@@ -73,6 +73,9 @@ class Helper {
 	public function init_scripts() {
 		wp_enqueue_script( 'carbon-ext', \Carbon_Fields\URL . '/assets/js/ext.js', array( 'jquery' ), \Carbon_Fields\VERSION );
 		wp_enqueue_script( 'carbon-app', \Carbon_Fields\URL . '/assets/js/app.js', array( 'jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable', 'carbon-ext' ), \Carbon_Fields\VERSION );
+		wp_enqueue_script( 'carbon-react-vendor', \Carbon_Fields\URL . '/assets/carbon.vendor.js', array( ) );
+		wp_enqueue_script( 'carbon-react-app', \Carbon_Fields\URL . '/assets/carbon.app.js', array( ) );
+		wp_enqueue_script( 'carbon-react-boot', \Carbon_Fields\URL . '/assets/carbon.bootstrap.js', array( ) );
 	}
 
 	/**

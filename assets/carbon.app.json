@@ -90,15 +90,15 @@
     "./assets/react/fields/components/complex-group.js": 102,
     "./assets/react/fields/components/complex-actions.js": 103,
     "./assets/react/fields/components/complex-popover.js": 104,
-    "./assets/react/fields/components/radio-field.js": 106,
-    "./assets/react/fields/components/no-options.js": 107,
-    "./assets/react/fields/components/select-field.js": 108,
-    "./assets/react/fields/components/set-field.js": 109,
-    "./assets/react/fields/components/html-field.js": 110,
-    "./assets/react/store.js": 111,
-    "./assets/react/containers/reducer.js": 113,
-    "./assets/react/fields/reducer.js": 115,
-    "./assets/react/containers/sagas/base.js": 116,
-    "./assets/react/fields/components/complex-tabs.js": 117
+    "./assets/react/fields/components/complex-tabs.js": 106,
+    "./assets/react/fields/components/radio-field.js": 107,
+    "./assets/react/fields/components/no-options.js": 108,
+    "./assets/react/fields/components/select-field.js": 109,
+    "./assets/react/fields/components/set-field.js": 110,
+    "./assets/react/fields/components/html-field.js": 111,
+    "./assets/react/store.js": 112,
+    "./assets/react/containers/reducer.js": 114,
+    "./assets/react/fields/reducer.js": 116,
+    "./assets/react/containers/sagas/base.js": 117
   }
 }
