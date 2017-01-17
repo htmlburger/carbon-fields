@@ -40,15 +40,9 @@ class Routes {
 		],
 		'theme_options' => [
 			'path'                => '/options/',
-			'callback'            => 'get_options',
-			'permission_callback' => 'allow_access',
-			'methods'             => 'GET',
-		],
-		'theme_options' => [
-			'path'                => '/options/set',
-			'callback'            => 'set_options',
-			'permission_callback' => 'can_update_options',
-			'methods'             => 'POST',
+			'callback'            => 'options_accessor',
+			'permission_callback' => 'options_permission',
+			'methods'             => ['GET', 'POST'],
 		],
 	];
 
@@ -247,20 +241,38 @@ class Routes {
 	}
 
 	/**
-	 * Check whether the current user has the needed capabilities
+	 * Proxy method for handling get/set for theme options
 	 * 
-	 * @return bool
+	 * @param  WP_REST_Request $request 
+	 * @return array|WP_REST_Response 
 	 */
-	public function can_update_options() {
-		return current_user_can( 'edit_theme_options' );
+	public function options_accessor( $request ) {
+		$request_type = $request->get_method();
+		
+		if ( $request_type === 'GET' ) {
+			return $this->get_options();
+		}
+
+		if ( $request_type === 'POST' ) {
+			return $this->set_options( $request );
+		}
 	}
 
 	/**
-	 * Allows access to an endpoint
+	 * Proxy method for handling theme options permissions
 	 * 
-	 * @return bool true
+	 * @param  WP_REST_Request $request 
+	 * @return bool
 	 */
-	public function allow_access() {
-		return true;
-	}	
+	public function options_permission( $request ) {
+		$request_type = $request->get_method();
+
+		if ( $request_type === 'GET' ) {
+			return true;
+		}
+
+		if ( $request_type === 'POST' ) {
+			return current_user_can( 'edit_theme_options' );
+		}
+	}
 }
