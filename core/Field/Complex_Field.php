@@ -258,13 +258,13 @@ class Complex_Field extends Field {
 	 * Load and parse the field data.
 	 */
 	public function load_values() {
-		return $this->load_values_from_db();
+		return $this->load_values_from_datastore();
 	}
 
 	/**
 	 * Load and parse the field data from the database.
 	 */
-	public function load_values_from_db() {
+	public function load_values_from_datastore() {
 		$this->values = array();
 
 		$group_rows = $this->get_datastore()->load_values( $this );

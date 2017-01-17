@@ -134,24 +134,23 @@ class Nav_Menu_Container extends Container {
 	 */
 	protected function get_clone_for_menu_item( $menu_item_id ) {
 		if ( !isset( $this->menu_item_instances[ $menu_item_id ] ) ) {
-			$prefix = '_menu-item-' . $menu_item_id;
 			$menu_item_datastore = new Nav_Menu_Datastore();
 			$menu_item_datastore->set_id( $menu_item_id );
-			$menu_item_datastore->set_field_prefix_garbage( $prefix );
+			$menu_item_field_prefix = $menu_item_datastore->get_garbage_prefix();
 
 			$custom_fields = array();
 			$fields = $this->get_fields();
 			foreach ( $fields as $field ) {
 				$tmp_field = clone $field;
 
-				$tmp_field->set_id( $prefix . $tmp_field->get_id() );
-				$tmp_field->set_name( $prefix . $tmp_field->get_name() );
+				$tmp_field->set_id( $menu_item_field_prefix . $tmp_field->get_id() );
+				$tmp_field->set_name( $menu_item_field_prefix . $tmp_field->get_name() );
 				$tmp_field->set_datastore( $menu_item_datastore, false );
 
 				$custom_fields[] = $tmp_field;
 			}
-
-			$this->menu_item_instances[ $menu_item_id ] = Container::factory( $this->type, $prefix . $this->id )
+			
+			$this->menu_item_instances[ $menu_item_id ] = Container::factory( $this->type, $menu_item_field_prefix . $this->id )
 				->set_datastore( $menu_item_datastore, false )
 				->add_fields( $custom_fields )
 				->init( $menu_item_id );
