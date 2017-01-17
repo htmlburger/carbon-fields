@@ -10,20 +10,6 @@ class Textarea_Field extends Field {
 	protected $rows = 0;
 
 	/**
-	 * Set the height of the field.
-	 * Deprecated in favor of set_rows()
-	 *
-	 * @deprecated
-	 *
-	 * @param integer $height Height (in pixels)
-	 */
-	public function set_height( $height = 170 ) {
-		$min_height = 28;
-		$this->height = max( intval( $height ), $min_height );
-		return $this;
-	}
-
-	/**
 	 * Change the number of rows of this field.
 	 *
 	 * @param integer $rows Number of rows

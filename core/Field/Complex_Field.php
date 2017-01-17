@@ -14,8 +14,6 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 class Complex_Field extends Field {
 	const LAYOUT_GRID = 'grid'; // default
-	const LAYOUT_LIST = 'list'; // deprecated
-	const LAYOUT_TABBED = 'tabbed'; // deprecated
 	const LAYOUT_TABBED_HORIZONTAL = 'tabbed-horizontal';
 	const LAYOUT_TABBED_VERTICAL = 'tabbed-vertical';
 
@@ -563,26 +561,13 @@ class Complex_Field extends Field {
 			self::LAYOUT_GRID,
 			self::LAYOUT_TABBED_HORIZONTAL,
 			self::LAYOUT_TABBED_VERTICAL,
-			self::LAYOUT_LIST,
 		);
-
-		if ( $layout === self::LAYOUT_TABBED ) {
-			// The library used to provide just one kind of tabs -- horizontal ones. Later vertical tabs were added.
-			// So the "tabbed" name was renamed to "tabbed-horizontal" and "tabbed-vertical" layout was introduced.
-			_doing_it_wrong( __METHOD__, sprintf( __( 'Complex field "%1$s" layout is deprecated, please use "%2$s" or "%3$s" instead.', 'carbon-fields' ), self::LAYOUT_TABBED, self::LAYOUT_TABBED_HORIZONTAL, self::LAYOUT_TABBED_VERTICAL ), null );
-
-			$layout = self::LAYOUT_TABBED_HORIZONTAL;
-		}
 
 		if ( ! in_array( $layout,  $available_layouts ) ) {
 			$error_message = 'Incorrect layout ``' . $layout . '" specified. ' .
 				'Available layouts: ' . implode( ', ', $available_layouts );
 
 			Incorrect_Syntax_Exception::raise( $error_message );
-		}
-
-		if ( $layout === self::LAYOUT_LIST ) {
-			_doing_it_wrong( __METHOD__, __( 'Complex field <code>' . self::LAYOUT_LIST . '</code> layout is deprecated, please use <code>set_width()</code> instead.', 'carbon-fields' ), null );
 		}
 
 		$this->layout = $layout;

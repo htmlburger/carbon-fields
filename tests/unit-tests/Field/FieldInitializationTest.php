@@ -67,7 +67,7 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 */
 	public function testDashIsNotAllowedInFieldType() {
-		$field = Field::make('choose-sidebar', $this->fieldName);
+		$field = Field::make('gravity-form', $this->fieldName);
 	}
 
 	/**
@@ -86,7 +86,7 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Field::__construct
 	 */
 	public function testSpacesInFieldTypeAreSupported() {
-		$field = Field::make('Choose Sidebar', $this->fieldName);
+		$field = Field::make('Gravity Form', $this->fieldName);
 		$this->assertTrue(true); // no exception ... 
 	}
 

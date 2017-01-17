@@ -107,7 +107,6 @@ class Helper {
 			break;
 
 			case 'map':
-			case 'map_with_address':
 				$value = array(
 					'lat' => (float) self::get_field_value_by_store( $data_type, $name . '-lat', $id ),
 					'lng' => (float) self::get_field_value_by_store( $data_type, $name . '-lng', $id ),

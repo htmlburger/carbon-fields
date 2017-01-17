@@ -54,15 +54,6 @@ class Date_Field extends Field {
 	}
 
 	/**
-	 * This method is deprecated since it conflicts with the options concept in predefined option fields.
-	 *
-	 * @deprecated
-	 */
-	public function set_options( $options ) {
-		return $this->set_datepicker_options( $options );
-	}
-
-	/**
 	 * Set datepicker options
 	 */
 	public function set_datepicker_options( $options ) {

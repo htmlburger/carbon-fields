@@ -32,26 +32,6 @@ class Association_Field extends Relationship_Field {
 	}
 
 	/**
-	 * Deprecated way to set the types.
-	 * Works only for post types.
-	 *
-	 * @deprecated
-	 * @see set_types()
-	 *
-	 * @param string $post_type Post type
-	 */
-	public function set_post_type( $post_type ) {
-		$this->set_types( array(
-			array(
-				'type' => 'post',
-				'post_type' => $post_type,
-			),
-		) );
-
-		return $this;
-	}
-
-	/**
 	 * Converts the database values into a usable associative array.
 	 *
 	 * The relationship data is saved in the database in the following format:

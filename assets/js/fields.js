@@ -1032,47 +1032,6 @@ window.carbon = window.carbon || {};
 
 
 	/*--------------------------------------------------------------------------
-	 * CHOOSE SIDEBAR
-	 *------------------------------------------------------------------------*/
-
-	// Choose Sidebar MODEL
-	carbon.fields.Model.ChooseSidebar = carbon.fields.Model.Sidebar.extend({
-		setSidebarOptions: function() {}
-	});
-
-	// Choose Sidebar VIEW
-	carbon.fields.View.ChooseSidebar = carbon.fields.View.Sidebar.extend({
-		initialize: function() {
-			carbon.fields.View.Sidebar.prototype.initialize.apply(this);
-
-			// Remove the addSidebarOption listener, we are not using the sidebars collection for this field.
-			this.stopListening(carbon.collections.sidebars, 'add', this.addSidebarOption);
-		},
-
-		addNewSidebar: function(event) {
-			var $select = $(event.target);
-
-			if ($select.val() !== 'new') {
-				return true;
-			}
-
-			var sidebarName = $.trim( window.prompt( crbl10n.enter_name_of_new_sidebar ) );
-
-			if (sidebarName) {
-				var $option = $('<option value="' + _.escape(sidebarName) + '">' + sidebarName + '</option>').insertBefore($select.find('option:last'));
-
-				$select.find('option').prop('selected', false);
-				$option.prop('selected', true);
-			} else {
-				$select.find('option:first').prop('selected', true);
-			}
-
-			$select.trigger('change');
-		}
-	});
-
-
-	/*--------------------------------------------------------------------------
 	 * FILE
 	 *------------------------------------------------------------------------*/
 
