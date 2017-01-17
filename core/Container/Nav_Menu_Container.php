@@ -41,7 +41,9 @@ class Nav_Menu_Container extends Container {
 		$this->set_menu_id( $menu_id );
 
 		$this->load();
-		$this->_attach();
+		
+		add_action( 'carbon_containers_attach', array( $this, '_attach' ) );
+		add_action( 'carbon_containers_attach_all', array( $this, '_attach_all' ) );
 
 		if ( ! empty( $menu_id ) && $render === true ) {
 			$this->render();
