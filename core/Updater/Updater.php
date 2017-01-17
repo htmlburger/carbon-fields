@@ -72,7 +72,7 @@ class Updater {
 	 * @param  string $object_id  
 	 * @param  string $field_name 
 	 * @param  mixed $input       string|array|json
-	 * @param  string $value_type complex|map|association|null
+	 * @param  string $value_type complex|map|map_with_address|association|null
 	 */
 	public static function update_field( $context, $object_id = '', $field_name, $input, $value_type = null ) {
 		self::boot( $context, $object_id );
