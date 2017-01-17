@@ -7,26 +7,27 @@ namespace Carbon_Fields\Libraries\Sidebar_Manager;
  */
 class Sidebar_Manager {
 
-	/**
-	 * Singleton implementation.
-	 *
-	 * @return Sidebar_Manager
-	 */
-	public static function instance() {
-		// Store the instance locally to avoid private static replication.
-		static $instance;
+	protected static $instance = null;
 
-		if ( ! is_a( $instance, 'Sidebar_Manager' ) ) {
-			$instance = new Sidebar_Manager;
-			$instance->setup();
+	public static function instance() {
+		if ( static::$instance === null ) {
+			static::$instance = new static();
+			static::$instance->setup();
 		}
-		return $instance;
+		return static::$instance;
+	}
+	
+	/**
+	 * Pretty initialization alias
+	 */
+	public static function boot() {
+		static::instance();
 	}
 
 	/**
 	 * Register actions, filters, etc...
 	 */
-	private function setup() {
+	public function setup() {
 		// Register the custom sidebars
 		add_action( 'widgets_init', array( $this, 'register_sidebars' ), 100 );
 
