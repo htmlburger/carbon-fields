@@ -17,9 +17,9 @@ function reducer(state = {}, { type, payload } = {}) {
 		case REMOVE_FIELDS:
 			return omit(state, payload);
 		case UPDATE_FIELD:
-			return immutable.assign(state, payload.id, payload.values);
+			return immutable.assign(state, payload.fieldId, payload.values);
 		case SET_UI:
-			return immutable.assign(state, `${payload.id}.ui`, payload.ui);
+			return immutable.assign(state, `${payload.fieldId}.ui`, payload.ui);
 		default:
 			return state;
 	}

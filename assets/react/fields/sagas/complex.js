@@ -21,8 +21,8 @@ import { ADD_COMPLEX_GROUP, REMOVE_COMPLEX_GROUP } from 'fields/actions';
  * @return {void}
  */
 export function* workerAddComplexGroup({ payload }) {
-	const field = yield select(getFieldById, payload.id);
-	const blueprint = yield call(find, field.groups, { name: payload.group });
+	const field = yield select(getFieldById, payload.fieldId);
+	const blueprint = yield call(find, field.groups, { name: payload.groupName });
 	const group = yield call(merge, {}, blueprint);
 	let groupFields = [];
 
@@ -78,12 +78,12 @@ function collectFieldIds(roots, all, accumulator) {
  */
 export function* workerRemoveComplexGroup({ payload }) {
 	const all = yield select(getAll);
-	const field = yield select(getFieldById, payload.id);
-	const group = yield call(find, field.value, { id: payload.group });
+	const field = yield select(getFieldById, payload.fieldId);
+	const group = yield call(find, field.value, { id: payload.groupId });
 	const groupFields = yield call(collectFieldIds, group.fields, all, []);
 
 	if (field.ui.is_tabbed) {
-		const groupIndex = yield call(findIndex, field.value, { id: payload.group });
+		const groupIndex = yield call(findIndex, field.value, { id: payload.groupId });
 		let nextTabId = null;
 
 		if (field.value.length > 1) {
