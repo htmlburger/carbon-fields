@@ -12,6 +12,9 @@ class User_Meta_Container extends Container {
 		'show_on' => array(
 			'role' => array(),
 		),
+		'show_for' => array(
+			'capabilities' => array( 'edit_users' ),
+		),
 	);
 
 	/**
@@ -114,6 +117,28 @@ class User_Meta_Container extends Container {
 	}
 
 	/**
+	 * Show the container only for users who have either capabilities or roles setup
+	 *
+	 * @param array $show_for
+	 * @return object $this
+	 **/
+	public function show_for( $show_for ) {
+		// Filter empty values and unexpected attributes
+		$show_for = shortcode_atts( $show_for , array(
+			'capabilities' => array(),
+			'roles' => array(),
+		) );
+
+		if ( empty( $show_for ) ) {
+			return $this;
+		}
+
+		$this->settings['show_for'] = $show_for;
+
+		return $this;
+	}
+
+	/**
 	 * Add the container to the user
 	 **/
 	public function attach() {
@@ -137,7 +162,19 @@ class User_Meta_Container extends Container {
 	 * @return bool True if the container is allowed to be attached
 	 **/
 	public function is_valid_attach() {
-		if ( ! current_user_can( 'edit_users' ) || ! $this->is_profile_page() ) {
+		$user = wp_get_current_user();
+
+		$is_valid_capability = true;
+		if ( !empty( $this->settings['show_for']['capabilities'] ) ) {
+			$is_valid_capability = array_intersect( (array) $this->settings['show_for']['capabilities'], $user->allcaps );
+		}
+
+		$is_valid_role = true;
+		if ( !empty( $this->settings['show_for']['roles'] ) ) {
+			$is_valid_role = array_intersect( (array) $this->settings['show_for']['roles'], $user->roles );
+		}
+
+		if ( ! $this->is_profile_page() || ! $is_valid_capability || ! $is_valid_role ) {
 			return false;
 		}
 
