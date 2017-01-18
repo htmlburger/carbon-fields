@@ -28,7 +28,7 @@ class Complex_Value_Parser extends Value_Parser {
 			return $input;
 		}
 
-		$parsed_data = [];
+		$parsed_data = array();
 		
 		foreach ( $input as $index => $group ) {
 			foreach ( $group as $key => $value ) {

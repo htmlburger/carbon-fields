@@ -94,11 +94,11 @@ class Routes {
 	 * @param  array $route
 	 */
 	public function create( $route ) {
-		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), $route['path'], [
+		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), $route['path'], array(
 			'methods'             => $route['methods'],
 			'permission_callback' => array( $this, $route['permission_callback'] ),
 			'callback'            => array( $this, $route['callback'] ),
-		] );
+		) );
 	}
 
 	/**
