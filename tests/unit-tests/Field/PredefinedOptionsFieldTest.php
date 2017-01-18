@@ -152,13 +152,79 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
 	 */
-	public function testAddOptionsArrayWithIndexedAssociativeArray() {
+	public function testAddOptionsArraysWithNumericAssociativeArrays() {
 		$options_1 = array( 3 => 'Option 1' );
 		$options_2 = array( 9 => 'Option 2' );
 		$expected = array( 3 => 'Option 1', 9 => 'Option 2' );
 		
 		$this->field->add_options( $options_1 );
 		$this->field->add_options( $options_2 );
+
+		$this->assertSame( $expected, $this->field->get_options() );
+	}
+
+	/**
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 */
+	public function testAddOptionsArraysWithMixedAssociativeArrays() {
+		$options_1 = array( 0 => 'Option 1' );
+		$options_2 = array( 'foo' => 'Option 2' );
+		$options_3 = array( 1 => 'Option 3' );
+		$expected = array( 0 => 'Option 1', 'foo' => 'Option 2', 1 => 'Option 3' );
+		
+		$this->field->add_options( $options_1 );
+		$this->field->add_options( $options_2 );
+		$this->field->add_options( $options_3 );
+
+		$this->assertSame( $expected, $this->field->get_options() );
+	}
+
+	/**
+	 * Possibly a duplicate of other tests but kept for it's readability
+	 * 
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 */
+	public function testAddOptionsArraysReindex() {
+		$options_1 = array( 0 => 'Option 1' );
+		$options_2 = array( 0 => 'Option 2' );
+		$expected = array( 0 => 'Option 1', 1 => 'Option 2' );
+		
+		$this->field->add_options( $options_1 );
+		$this->field->add_options( $options_2 );
+
+		$this->assertSame( $expected, $this->field->get_options() );
+	}
+
+	/**
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 */
+	public function testAddOptionsArraysAppend() {
+		$options_1 = array( 0 => 'Option 1', 1 => 'Option 2' );
+		$options_2 = array( 9 => 'Option 3' );
+		$expected = array( 0 => 'Option 1', 1 => 'Option 2', 9 => 'Option 3' );
+		
+		$this->field->add_options( $options_1 );
+		$this->field->add_options( $options_2 );
+
+		$this->assertSame( $expected, $this->field->get_options() );
+	}
+
+	/**
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 */
+	public function testAddOptionsArraysOverwrite() {
+		$options_1 = array( 0 => 'Option 1' );
+		$options_2 = array( 9 => 'Option 2' );
+		$options_3 = array( 0 => 'Option 3' );
+		$expected = array( 0 => 'Option 3', 9 => 'Option 2' );
+		
+		$this->field->add_options( $options_1 );
+		$this->field->add_options( $options_2 );
+		$this->field->add_options( $options_3 );
 
 		$this->assertSame( $expected, $this->field->get_options() );
 	}
