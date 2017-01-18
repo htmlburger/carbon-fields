@@ -22,6 +22,7 @@ registerFieldComponent('Checkbox', CheckboxField);
 registerFieldComponent('Color', ColorField);
 registerFieldComponent('Complex', ComplexField);
 registerFieldComponent('File', FileField);
+registerFieldComponent('Image', FileField);
 registerFieldComponent('FooterScripts', TextareaField);
 registerFieldComponent('HeaderScripts', TextareaField);
 registerFieldComponent('Html', HtmlField);

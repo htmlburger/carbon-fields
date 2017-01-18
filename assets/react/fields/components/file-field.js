@@ -27,6 +27,7 @@ export const FileField = ({ field, openBrowser, clearSelection }) => {
 				id={field.id}
 				name={field.name}
 				defaultValue={field.value}
+				value={field.value}
 				style={field.value_type === 'id' ? { display: 'none' } : {}}
 			/>
 
