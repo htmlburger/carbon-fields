@@ -13,6 +13,7 @@ import ComplexGroup from 'fields/components/complex-group';
 import ComplexActions from 'fields/components/complex-actions';
 import ComplexPopover from 'fields/components/complex-popover';
 import ComplexTabs from 'fields/components/complex-tabs';
+import ComplexEmptyNotice from 'fields/components/complex-empty-notice';
 
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
@@ -31,6 +32,11 @@ import { addComplexGroup, removeComplexGroup } from 'fields/actions';
 export const ComplexField = ({ field, popoverVisible, handleActionsButtonClick, handlePopoverClose, handleTabClick, handleRemoveGroupClick }) => {
 	return <Field field={field}>
 		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': field.ui.is_tabbed })}>
+			<ComplexEmptyNotice
+				label={field.labels.plural_name}
+				visible={!field.value.length}
+				onClick={handleActionsButtonClick} />
+
 			<div className={cx('groups-wrapper', `layout-${field.layout}`)}>
 				<ComplexTabs groups={field.value} current={field.ui.current_tab} show={field.ui.is_tabbed} onClick={handleTabClick}>
 					<ComplexActions

@@ -65,6 +65,7 @@ module.exports = {
 			'./assets/react/fields/components/complex-group.js',
 			'./assets/react/fields/components/complex-actions.js',
 			'./assets/react/fields/components/complex-popover.js',
+			'./assets/react/fields/components/complex-empty-notice.js',
 
 			// Load the store.
 			'./assets/react/store.js'
