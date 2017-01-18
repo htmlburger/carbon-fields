@@ -123,13 +123,13 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
 	 */
 	public function testAddOptionsArrayPreservesOtherOptions() {
-		$options_1 = array('foo', 'bar');
-		$options_2 = array('foobar', 'barfoo');
+		$options_1 = array( 'foo', 'bar' );
+		$options_2 = array( 'foobar', 'barfoo' );
+		$expected = array( 'foo', 'bar', 'foobar', 'barfoo' );
 		
 		$this->field->add_options( $options_1 );
 		$this->field->add_options( $options_2 );
 
-		$expected = array_merge( $options_1, $options_2 );
 		$this->assertSame( $expected, $this->field->get_options() );
 	}
 
@@ -138,13 +138,28 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
 	 */
 	public function testAddOptionsArrayWithAssociativeArray() {
-		$options_1 = array('foo' => 'bar', 'bar' => 'foo');
-		$options_2 = array('foobar' => 'barfoo', 'bar' => 'barbar');
+		$options_1 = array( 'foo' => 'bar', 'bar' => 'foo' );
+		$options_2 = array( 'foobar' => 'barfoo', 'bar' => 'barbar' );
+		$expected = array( 'foo' => 'bar', 'bar' => 'foo', 'foobar' => 'barfoo', 'bar' => 'barbar' );
 		
 		$this->field->add_options( $options_1 );
 		$this->field->add_options( $options_2 );
 
-		$expected = array_merge( $options_1, $options_2 );
+		$this->assertSame( $expected, $this->field->get_options() );
+	}
+
+	/**
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 */
+	public function testAddOptionsArrayWithIndexedAssociativeArray() {
+		$options_1 = array( 3 => 'Option 1' );
+		$options_2 = array( 9 => 'Option 2' );
+		$expected = array( 3 => 'Option 1', 9 => 'Option 2' );
+		
+		$this->field->add_options( $options_1 );
+		$this->field->add_options( $options_2 );
+
 		$this->assertSame( $expected, $this->field->get_options() );
 	}
 
@@ -156,7 +171,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	public function testAddOptionsArrayAfterCallable() {
 		$base = array( 1, 2, 3 );
 		$added = array( 4, 5, 6 );
-		$expected = array_merge( $base, $added );
+		$expected = array( 1, 2, 3, 4, 5, 6 );
 
 		$this->field->set_options( function() use ( $base ) {
 			return $base;
