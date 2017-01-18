@@ -124,10 +124,10 @@ class User_Meta_Container extends Container {
 	 **/
 	public function show_for( $show_for ) {
 		// Filter empty values and unexpected attributes
-		$show_for = shortcode_atts( $show_for , array(
+		$show_for = array_filter( shortcode_atts( array(
 			'capabilities' => array(),
 			'roles' => array(),
-		) );
+		), $show_for ) );
 
 		if ( empty( $show_for ) ) {
 			return $this;
