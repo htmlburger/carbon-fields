@@ -16,6 +16,10 @@ abstract class Predefined_Options_Field extends Field {
 	 **/
 	protected $option_collections = array();
 
+	protected function is_indexed_array( $array ) {
+		return array_keys( $array ) === range( 0, count( $array ) - 1 );
+	}
+
 	/**
 	 * Set the options of this field.
 	 * Accepts either array of data or a callback that returns the data.
@@ -67,7 +71,11 @@ abstract class Predefined_Options_Field extends Field {
 					}
 				}
 			}
-			$options = array_merge( $options, $collection_items );
+			if ( $this->is_indexed_array( $options ) && $this->is_indexed_array( $collection_items ) ) {
+				$options = array_merge( $options, $collection_items );
+			} else {
+				$options = array_replace( $options, $collection_items );
+			}
 		}
 
 		return $options;
