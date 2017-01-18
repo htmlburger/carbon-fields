@@ -126,7 +126,8 @@ class Data_Manager {
 	 * @return array
 	 */
 	public function load_complex_field_value( $field ) {
-		return $field->to_json( false )['value'];
+		$field_json = $field->to_json( false );
+		return $field_json['value'];
 	}
 
 	/**
