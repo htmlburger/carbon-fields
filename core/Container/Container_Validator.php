@@ -26,7 +26,7 @@ class Container_Validator {
 
 		$type_to_lower = strtolower( $type );
 
-		return call_user_func( [ $this, "is_valid_{$type_to_lower}_container"], $container, $id );
+		return call_user_func( array( $this, "is_valid_{$type_to_lower}_container" ), $container, $id );
 	}
 
 	/**
@@ -113,7 +113,7 @@ class Container_Validator {
 	 * @return int
 	 */
 	public static function get_term_level( $term ) {
-		$ancestors = [];	
+		$ancestors = array();	
 		while ( ! is_wp_error( $term ) && ! empty( $term->parent ) && ! in_array( $term->parent, $ancestors ) ) {
 			$ancestors[] = intval( $term->parent );
 			$term        = get_term( $term->parent );

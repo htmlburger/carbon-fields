@@ -14,12 +14,12 @@ class Data_Manager {
 	 * 
 	 * @var array
 	 */
-	public $special_field_types = [
+	public $special_field_types = array(
 		'complex',
 		'relationship',
 		'association',
 		'map'
-	]; 
+	); 
 
 	/**
 	 * Field types that should be excluded
@@ -27,10 +27,10 @@ class Data_Manager {
 	 * 
 	 * @var array
 	 */
-	protected $exclude_field_types = [
+	protected $exclude_field_types = array(
 		'html',
 		'separator',
-	];
+	);
 
 	/**
 	 * Instance of the Container_Validator class
@@ -52,7 +52,7 @@ class Data_Manager {
 	 * @return array
 	 */
 	public function get_data( $type, $id  = '' ) {
-		$response   = [];
+		$response   = array();
 		$containers = $this->filter_containers( $type, $id );
 
 		foreach ( $containers as $container ) {
@@ -68,7 +68,7 @@ class Data_Manager {
 
 				$field_type = in_array( strtolower( $field->type ), $this->special_field_types ) ? strtolower( $field->type ) : 'generic';
 
-				$response[ $field->get_name() ] = call_user_func( [ $this, "load_{$field_type}_field_value" ], $field );
+				$response[ $field->get_name() ] = call_user_func( array( $this, "load_{$field_type}_field_value" ), $field );
 			}
 		}
 
@@ -96,7 +96,7 @@ class Data_Manager {
 	 * @return array
 	 */
 	public function filter_fields( $fields ) {
-		return array_filter( $fields, [ $this, 'should_load_field' ] );
+		return array_filter( $fields, array( $this, 'should_load_field' ) );
 	}
 
 	/**
@@ -138,12 +138,12 @@ class Data_Manager {
 	public function load_map_field_value( $field ) {
 		$map_data = $field->to_json( false );
 
-		return [
+		return array(
 			'lat'     => $map_data['lat'],
 			'lng'     => $map_data['lng'],
 			'zoom'    => $map_data['zoom'],
 			'address' => $map_data['address'],
-		];
+		);
 	}
 
 	/**

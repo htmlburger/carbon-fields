@@ -13,38 +13,38 @@ class Routes {
 	 * 
 	 * @var array
 	 */
-	protected $routes = [
-		'post_meta' => [
+	protected $routes = array(
+		'post_meta' => array(
 			'path'                => '/posts/(?P<id>\d+)',
 			'callback'            => 'get_post_meta',
 			'permission_callback' => 'allow_access',
 			'methods'             => 'GET',
-		],
-		'term_meta' => [
+		),
+		'term_meta' => array(
 			'path'                => '/terms/(?P<id>\d+)',
 			'callback'            => 'get_term_meta',
 			'permission_callback' => 'allow_access',
 			'methods'             => 'GET',
-		],
-		'user_meta' => [
+		),
+		'user_meta' => array(
 			'path'                => '/users/(?P<id>\d+)',
 			'callback'            => 'get_user_meta',
 			'permission_callback' => 'allow_access',
 			'methods'             => 'GET',
-		],
-		'comment_meta' => [
+		),
+		'comment_meta' => array(
 			'path'                => '/comments/(?P<id>\d+)',
 			'callback'            => 'get_comment_meta',
 			'permission_callback' => 'allow_access',
 			'methods'             => 'GET',
-		],
-		'theme_options' => [
+		),
+		'theme_options' => array(
 			'path'                => '/options/',
 			'callback'            => 'options_accessor',
 			'permission_callback' => 'options_permission',
-			'methods'             => ['GET', 'POST'],
-		],
-	];
+			'methods'             => array( 'GET', 'POST' ),
+		),
+	);
 
 	/**
 	 * Version of the API
@@ -74,7 +74,7 @@ class Routes {
 	public function __construct( $data_manager ) {
 		$this->data_manager = $data_manager;
 
-		add_action( 'rest_api_init', [ $this, 'register_routes' ], 15 );
+		add_action( 'rest_api_init', array( $this, 'register_routes' ), 15 );
 	}
 
 	/**
@@ -96,8 +96,8 @@ class Routes {
 	public function create( $route ) {
 		register_rest_route( $this->get_vendor() . '/v' . $this->get_version(), $route['path'], [
 			'methods'             => $route['methods'],
-			'permission_callback' => [ $this, $route['permission_callback'] ],
-			'callback'            => [ $this, $route['callback'] ],
+			'permission_callback' => array( $this, $route['permission_callback'] ),
+			'callback'            => array( $this, $route['callback'] ),
 		] );
 	}
 
@@ -109,7 +109,7 @@ class Routes {
 	 */
 	public function get_post_meta( $data ) {
 		$carbon_data = $this->get_data( 'Post_Meta', $data['id'] );
-		return [ 'carbon_fields' => $carbon_data ];
+		return array( 'carbon_fields' => $carbon_data );
 	}
 
 	/**
@@ -120,7 +120,7 @@ class Routes {
 	 */
 	public function get_user_meta( $data ) {
 		$carbon_data = $this->get_data( 'User_Meta', $data['id'] );
-		return [ 'carbon_fields' => $carbon_data ];
+		return array( 'carbon_fields' => $carbon_data );
 	}
 
 	/**
@@ -131,7 +131,7 @@ class Routes {
 	 */
 	public function get_term_meta( $data ) {
 		$carbon_data = $this->get_data( 'Term_Meta', $data['id'] );
-		return [ 'carbon_fields' => $carbon_data ];	
+		return array( 'carbon_fields' => $carbon_data );
 	}
 
 	/**
@@ -142,7 +142,7 @@ class Routes {
 	 */
 	public function get_comment_meta( $data ) {
 		$carbon_data = $this->get_data( 'Comment_Meta', $data['id'] );
-		return [ 'carbon_fields' => $carbon_data ];		
+		return array( 'carbon_fields' => $carbon_data );
 	}
 
 	/**
@@ -152,7 +152,7 @@ class Routes {
 	 */
 	public function get_options() {
 		$carbon_data = $this->get_data( 'Theme_Options' );
-		return [ 'carbon_fields' => $carbon_data ];
+		return array( 'carbon_fields' => $carbon_data );
 	}
 
 	/**

@@ -38,12 +38,12 @@ class Updater {
 	 * 
 	 * @var array
 	 */
-	public static $value_types = [
+	public static $value_types = array(
 		'complex'          => 'Complex_Value_Parser',
 		'association'      => 'Association_Value_Parser',
 		'map'              => 'Map_Value_Parser',
 		'map_with_address' => 'Map_Value_Parser',
-	];
+	);
 
 	/**
 	 * Flag indicating whether the update call
@@ -96,7 +96,7 @@ class Updater {
 		$class = __NAMESPACE__ . '\\' . ( isset( self::$value_types[ $carbon_field_type ] ) ? self::$value_types[ $carbon_field_type ] : 'Value_Parser' );
 		$input = $class::parse( $input, $is_option );
 
-		$carbon_field->set_value_from_input( [ $field_name => $input ] );
+		$carbon_field->set_value_from_input( array( $field_name => $input ) );
 		$carbon_field->save();
 	}
 

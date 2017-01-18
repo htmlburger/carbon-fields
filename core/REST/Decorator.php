@@ -23,11 +23,11 @@ class Decorator {
 	 *
 	 * @var array
 	 */
-	private $fields = [];
+	private $fields = array();
 
 	function __construct( $data_manager ) {
 		$this->data_manager = $data_manager;
-		add_action( 'rest_api_init', [ $this, 'register_fields' ] );
+		add_action( 'rest_api_init', array( $this, 'register_fields' ) );
 	}
 
 	/**
@@ -37,21 +37,21 @@ class Decorator {
 	public function register_fields() {
 		$containers = $this->get_containers();
 
-		$this->fields = array_map( [ $this, 'filter_fields' ], $containers );
+		$this->fields = array_map( array( $this, 'filter_fields' ), $containers );
 		$this->fields = call_user_func_array( 'array_merge', $this->fields );
 
 		foreach ( $containers as $container ) {
 			$fields  = $this->filter_fields( $container );
 			$context = strtolower( $container->type );
-			$types   = call_user_func( [ __CLASS__, "get_{$context}_container_settings" ], $container );
+			$types   = call_user_func( array( __CLASS__, "get_{$context}_container_settings" ), $container );
 
 			foreach ( $fields as $field ) {
 				register_rest_field( $types,
-					$field->get_name(), [
-						'get_callback'    => [ $this, "load_{$context}_field_value" ],
-						'update_callback' => [ $this, "update_{$context}_field_value" ],
+					$field->get_name(), array(
+						'get_callback'    => array( $this, "load_{$context}_field_value" ),
+						'update_callback' => array( $this, "update_{$context}_field_value" ),
 						'schema'          => null,
-					]
+					)
 				);
 			}
 		}
@@ -159,7 +159,7 @@ class Decorator {
 
 		$field_type = $this->get_field_type( $field );
 
-		return call_user_func( [ $this->data_manager, "load_{$field_type}_field_value" ], $field );
+		return call_user_func( array( $this->data_manager, "load_{$field_type}_field_value" ), $field );
 	}
 
 	/**

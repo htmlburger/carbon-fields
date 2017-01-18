@@ -18,7 +18,7 @@ class Map_Value_Parser extends Value_Parser {
 			return null;
 		}
 
-		$expected = [ 'lat', 'lng', 'address', 'zoom' ];
+		$expected = array( 'lat', 'lng', 'address', 'zoom' );
 		$keys     = array_keys( $input );
 		$diff     = array_diff( $expected, $keys );
 		$name     = self::$carbon_field->get_name();
