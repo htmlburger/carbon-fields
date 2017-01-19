@@ -5,7 +5,7 @@ namespace Carbon_Fields\Datastore;
 use Carbon_Fields\Field\Field;
 
 /**
- * Interface for data store management.
+ * Interface for data storage management.
  */
 interface Datastore_Interface {
 	/**

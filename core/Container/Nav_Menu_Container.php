@@ -28,7 +28,7 @@ class Nav_Menu_Container extends Container {
 		parent::__construct( $title );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Nav_Menu_Datastore() );
+			$this->set_datastore( new Nav_Menu_Datastore(), $this->has_default_datastore() );
 		}
 
 		// Register the custom edit walker only once
@@ -41,32 +41,21 @@ class Nav_Menu_Container extends Container {
 	/**
 	 * Perform instance initialization after calling setup()
 	 *
-	 * @param int $menu_id Used to pass the correct menu_item_id to the Container object
+	 * @param int $menu_item_id Used to pass the correct menu_item_id to the Container object
 	 * @param bool $render Whether the container will render the fields.
 	 */
-	public function init( $menu_id = 0 ) {
-		$this->set_menu_id( $menu_id );
-
+	public function init( $menu_item_id = 0 ) {
+		$this->get_datastore()->set_id( $menu_item_id );
 		$this->load();
 		$this->_attach();
 
 		// Only the base container should register for updating/rendering
-		if ( $menu_id === 0 ) {
+		if ( $menu_item_id === 0 ) {
 			add_action( 'wp_update_nav_menu_item', array( $this, 'update' ), 10, 3 );
 			add_action( 'crb_print_carbon_container_nav_menu_fields_html', array( $this, 'form' ), 10, 5 );
 		}
 
 		return $this;
-	}
-
-	/**
-	 * Set the menu item ID the container will operate with.
-	 *
-	 * @param int $menu_id
-	 **/
-	public function set_menu_id( $menu_id ) {
-		$this->menu_id = $menu_id;
-		$this->store->set_id( $menu_id );
 	}
 
 	/**
@@ -77,24 +66,6 @@ class Nav_Menu_Container extends Container {
 	public function is_valid_save() {
 		// rely on wp_update_nav_menu_item action not being called unless WP's nonce is not valid
 		return true;
-	}
-
-	/**
-	 * Returns an array that holds the container data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
-	 *
-	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
-	 * @return array
-	 */
-	public function to_json( $load ) {
-		$carbon_data = parent::to_json( false );
-
-		// Sends the menu_id to javascript
-		$carbon_data = array_merge( $carbon_data, array(
-			'menu_id' => $this->menu_id,
-		) );
-
-		return $carbon_data;
 	}
 
 	/**
@@ -163,28 +134,24 @@ class Nav_Menu_Container extends Container {
 	 */
 	protected function get_clone_for_menu_item( $menu_item_id ) {
 		if ( !isset( $this->menu_item_instances[ $menu_item_id ] ) ) {
-			$suffix = '-menu-item-' . $menu_item_id;
-			$fields = $this->get_fields();
 			$menu_item_datastore = new Nav_Menu_Datastore();
 			$menu_item_datastore->set_id( $menu_item_id );
-			$custom_fields = array();
+			$menu_item_field_prefix = $menu_item_datastore->get_garbage_prefix();
 
+			$custom_fields = array();
+			$fields = $this->get_fields();
 			foreach ( $fields as $field ) {
 				$tmp_field = clone $field;
 
-				// Hacky: preserve the original field name as we append the menu item id to it to avoid field name collision in requests
-				$tmp_field->nav_menu_datastore_field_name = $tmp_field->get_name();
-
-				$tmp_field->set_id( $tmp_field->get_id() . $suffix );
-				$tmp_field->set_name( $tmp_field->get_name() . $suffix );
-
-				$tmp_field->set_datastore( $menu_item_datastore );
+				$tmp_field->set_id( $menu_item_field_prefix . $tmp_field->get_id() );
+				$tmp_field->set_name( $menu_item_field_prefix . $tmp_field->get_name() );
+				$tmp_field->set_datastore( $menu_item_datastore, true );
 
 				$custom_fields[] = $tmp_field;
 			}
 
-			$this->menu_item_instances[ $menu_item_id ] = Container::factory( $this->type, $this->id . $suffix )
-				->set_datastore( $menu_item_datastore )
+			$this->menu_item_instances[ $menu_item_id ] = Container::factory( $this->type, $menu_item_field_prefix . $this->id )
+				->set_datastore( $menu_item_datastore, true )
 				->add_fields( $custom_fields )
 				->init( $menu_item_id );
 			
@@ -198,15 +165,5 @@ class Nav_Menu_Container extends Container {
 	 */
 	public static function edit_walker() {
 		return '\Carbon_Fields\Walker\Nav_Menu_Edit_Walker';
-	}
-
-	public function add_fields( $fields ) {
-		foreach ( $fields as $field ) {
-			if ( is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
-				Incorrect_Syntax_Exception::raise( get_class() . ' does not support Complex_Field, yet.' );
-			}
-		}
-
-		return parent::add_fields( $fields );
 	}
 }

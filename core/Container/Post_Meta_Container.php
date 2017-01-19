@@ -52,7 +52,7 @@ class Post_Meta_Container extends Container {
 		parent::__construct( $title );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Post_Meta_Datastore() );
+			$this->set_datastore( new Post_Meta_Datastore(), $this->has_default_datastore() );
 		}
 	}
 
@@ -386,7 +386,7 @@ class Post_Meta_Container extends Container {
 	 **/
 	public function set_post_id( $post_id ) {
 		$this->post_id = $post_id;
-		$this->store->set_id( $post_id );
+		$this->get_datastore()->set_id( $post_id );
 	}
 
 	/**

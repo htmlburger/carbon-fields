@@ -147,14 +147,19 @@ class Complex_Field extends Field {
 	/**
 	 * Set the datastore of this field.
 	 *
-	 * @param Datastore_Interface $store
+	 * @param Datastore_Interface $datastore
 	 */
-	public function set_datastore( Datastore_Interface $store ) {
-		$this->store = $store;
+	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
+		if ( $set_as_default && !$this->has_default_datastore() ) {
+			return $this; // datastore has been overriden with a custom one - abort changing to a default one
+		}
+		$this->datastore = $datastore;
+		$this->has_default_datastore = $set_as_default;
 
 		foreach ( $this->groups as $group ) {
-			$group->set_datastore( $this->store );
+			$group->set_datastore( $this->get_datastore(), true );
 		}
+		return $this;
 	}
 
 	/**
@@ -177,11 +182,11 @@ class Complex_Field extends Field {
 		$index = 0;
 
 		foreach ( $input_groups as $values ) {
-			$value_group = array();
 			if ( ! isset( $values['group'] ) || ! isset( $this->groups[ $values['group'] ] ) ) {
 				continue;
 			}
 
+			$value_group = array( 'type' => $values['group'] );
 			$group = $this->groups[ $values['group'] ];
 			unset( $values['group'] );
 
@@ -234,6 +239,9 @@ class Complex_Field extends Field {
 
 		foreach ( $this->values as $value ) {
 			foreach ( $value as $field ) {
+				if ( !is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
+					continue;
+				}
 				$field->save();
 			}
 		}
@@ -243,23 +251,23 @@ class Complex_Field extends Field {
 	 * Delete the values of all contained fields.
 	 */
 	public function delete() {
-		return $this->store->delete_values( $this );
+		return $this->get_datastore()->delete_values( $this );
 	}
 
 	/**
 	 * Load and parse the field data.
 	 */
 	public function load_values() {
-		return $this->load_values_from_db();
+		return $this->load_values_from_datastore();
 	}
 
 	/**
 	 * Load and parse the field data from the database.
 	 */
-	public function load_values_from_db() {
+	public function load_values_from_datastore() {
 		$this->values = array();
 
-		$group_rows = $this->store->load_values( $this );
+		$group_rows = $this->get_datastore()->load_values( $this );
 
 		return $this->process_loaded_values( $group_rows );
 	}
@@ -283,7 +291,7 @@ class Complex_Field extends Field {
 			}
 
 			$group_rows[] = array(
-				'field_key' => preg_replace( '~^(' . preg_quote( $this->name, '~' ) . ')_\d+_~', '$1_', $key ),
+				'field_key' => preg_replace( '~^(' . preg_quote( $this->get_name(), '~' ) . ')_\d+_~', '$1_', $key ),
 				'field_value' => $value,
 			);
 		}
@@ -315,7 +323,7 @@ class Complex_Field extends Field {
 
 		// load and parse values and group type
 		foreach ( $group_rows as $row ) {
-			if ( ! preg_match( Helper::get_complex_field_regex( $this->name, array_keys( $this->groups ), $field_names ), $row['field_key'], $field_name ) ) {
+			if ( ! preg_match( Helper::get_complex_field_regex( $this->get_name(), array_keys( $this->groups ), $field_names ), $row['field_key'], $field_name ) ) {
 				continue;
 			}
 

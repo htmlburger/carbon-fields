@@ -23,7 +23,7 @@ class User_Meta_Container extends Container {
 		parent::__construct( $title );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new User_Meta_Datastore() );
+			$this->set_datastore( new User_Meta_Datastore(), $this->has_default_datastore() );
 		}
 	}
 
@@ -169,6 +169,6 @@ class User_Meta_Container extends Container {
 	 **/
 	public function set_user_id( $user_id ) {
 		$this->user_id = $user_id;
-		$this->store->set_id( $user_id );
+		$this->get_datastore()->set_id( $user_id );
 	}
 }

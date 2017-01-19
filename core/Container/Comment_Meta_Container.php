@@ -21,7 +21,7 @@ class Comment_Meta_Container extends Container {
 		parent::__construct( $title );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Comment_Meta_Datastore() );
+			$this->set_datastore( new Comment_Meta_Datastore(), $this->has_default_datastore() );
 		}
 	}
 
@@ -93,7 +93,7 @@ class Comment_Meta_Container extends Container {
 	 **/
 	public function set_comment_id( $comment_id ) {
 		$this->comment_id = $comment_id;
-		$this->store->set_id( $comment_id );
+		$this->get_datastore()->set_id( $comment_id );
 	}
 
 	/**
