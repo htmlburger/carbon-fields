@@ -4,7 +4,7 @@
 
 .carbon-button { position: relative; float: left; }
 
-.carbon-button ul { display: none; position: absolute; z-index: 9999; left: 100%; top: 50%; min-width: 180px; margin: 0; background: $color-label; border-radius: 3px; transform: translate(10px, -50%); }
+.carbon-button ul { position: absolute; z-index: 9999; left: 100%; top: 50%; min-width: 180px; margin: 0; background: $color-label; border-radius: 3px; transform: translate(10px, -50%); }
 .carbon-button ul:before { content: ''; position: absolute; right: 100%; top: 50%; margin-top: -5px; border-width: 5px 5px 5px 0; border-style: solid; border-color: transparent $color-label; }
 
 .carbon-button li { margin: 0; }

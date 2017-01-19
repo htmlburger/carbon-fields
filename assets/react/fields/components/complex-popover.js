@@ -1,10 +1,14 @@
 /**
  * The external dependencies.
  */
-import React from 'react';
+import React, { PropTypes } from 'react';
 import onClickOutside from 'react-onclickoutside';
-import { PropTypes } from 'react';
 import { compose, branch, renderNothing, renderComponent, withHandlers } from 'recompose';
+
+/**
+ * The internal dependencies.
+ */
+import { preventDefault } from 'lib/helpers';
 
 /**
  * Render a popover with all groups names when the complex field
@@ -12,22 +16,20 @@ import { compose, branch, renderNothing, renderComponent, withHandlers } from 'r
  *
  * @param  {Object}   props
  * @param  {Object[]} props.groups
- * @param  {Boolean}  props.visible
+ * @param  {Boolean}  props.isVisible
  * @param  {Function} props.handleItemClick
  * @return {React.Element}
  *
  * @todo Refactor inline style to a CSS class.
  */
-export const ComplexPopover = ({ groups, visible, handleItemClick }) => {
-	const styles = {
-		display: visible ? 'block' : 'none'
-	};
-
-	return <ul style={styles}>
+export const ComplexPopover = ({ groups, isVisible, handleItemClick }) => {
+	return <ul hidden={!isVisible}>
 		{
 			groups.map((group, index) => (
 				<li key={index}>
-					<a href="#" onClick={e => handleItemClick(e, group.name)}>{group.label}</a>
+					<a href="#" onClick={handleItemClick(group.name)}>
+						{group.label}
+					</a>
 				</li>
 			))
 		}
@@ -44,7 +46,7 @@ ComplexPopover.propTypes = {
 		name: PropTypes.string.isRequired,
 		label: PropTypes.string.isRequired,
 	})).isRequired,
-	visible: PropTypes.bool,
+	isVisible: PropTypes.bool,
 	onItemClick: PropTypes.func.isRequired,
 	onClose: PropTypes.func.isRequired,
 };
@@ -57,44 +59,20 @@ ComplexPopover.propTypes = {
  * @param  {Function} props.onClose
  * @return {Function}
  */
-const handleItemClick = ({ onItemClick, onClose }) => {
-	/**
-	 * @inner
-	 * @param  {Event}  e
-	 * @param  {String} group
-	 * @return {void}
-	 */
-	return (e, group) => {
-		e.preventDefault();
-
-		onItemClick(group);
-		onClose(e);
-	};
-};
+const handleItemClick = ({ onItemClick, onClose }) => groupName => preventDefault(() => {
+	onItemClick(groupName);
+	onClose();
+});
 
 /**
  * Hide the popover if the click is outside the element.
  *
  * @param  {Object}   props
+ * @param  {Boolean}  props.isVisible
  * @param  {Function} props.onClose
- * @param  {Boolean}  props.visible
  * @return {Function}
  */
-const handleClickOutside = ({ onClose, visible }) => {
-	/**
-	 * @inner
-	 * @param  {Event} e
-	 * @return {void}
-	 */
-	return (e) => {
-		// It doesn't make sense to invoke the callback
-		// if the popover isn't visible. Also we don't want
-		// to trigger unnecessary re-renders in the parent.
-		if (visible) {
-			onClose(e);
-		}
-	};
-};
+const handleClickOutside = ({ isVisible, onClose }) => () => isVisible && onClose();
 
 export default branch(
 	({ groups }) => groups.length > 1,

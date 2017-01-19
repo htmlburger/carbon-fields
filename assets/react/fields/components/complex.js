@@ -46,7 +46,7 @@ export const ComplexField = ({ name, field, isTabbed, popoverVisible, isGroupAct
 						onButtonClick={handleActionsButtonClick}>
 							<ComplexPopover
 								groups={field.groups}
-								visible={popoverVisible}
+								isVisible={popoverVisible}
 								onItemClick={handleActionsButtonClick}
 								onClose={handlePopoverClose}
 								outsideClickIgnoreClass={'carbon-button'} />
@@ -76,7 +76,7 @@ export const ComplexField = ({ name, field, isTabbed, popoverVisible, isGroupAct
 				onButtonClick={handleActionsButtonClick}>
 					<ComplexPopover
 						groups={field.groups}
-						visible={popoverVisible}
+						isVisible={popoverVisible}
 						onItemClick={handleActionsButtonClick}
 						onClose={handlePopoverClose}
 						outsideClickIgnoreClass={'carbon-button'} />
