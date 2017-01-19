@@ -36,7 +36,7 @@ export const ComplexField = ({ name, field, isTabbed, popoverVisible, isGroupAct
 		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': isTabbed })}>
 			<ComplexEmptyNotice
 				label={field.labels.plural_name}
-				visible={!field.value.length}
+				isVisible={!field.value.length}
 				onClick={handleActionsButtonClick} />
 
 			<div className={cx('groups-wrapper', `layout-${field.layout}`)}>

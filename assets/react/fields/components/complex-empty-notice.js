@@ -6,17 +6,22 @@ import cx from 'classnames';
 import { withHandlers } from 'recompose';
 
 /**
+ * The internal dependencies.
+ */
+import { preventDefault } from 'lib/helpers';
+
+/**
  * Render a small notice when the complex field doesn't have entries.
  *
  * @param  {Object} 	   props
  * @param  {String} 	   props.label
- * @param  {Boolean} 	   props.visible
+ * @param  {Boolean} 	   props.isVisible
  * @param  {Function} 	   props.handleClick
  * @return {React.Element}
  */
-export const ComplexEmptyNotice = ({ label, visible, handleClick }) => {
+export const ComplexEmptyNotice = ({ label, isVisible, handleClick }) => {
 	return <div
-		className={cx('carbon-empty-row', { 'carbon-empty-row-visible': visible })}
+		className={cx('carbon-empty-row', { 'carbon-empty-row-visible': isVisible })}
 		dangerouslySetInnerHTML={{ __html: crbl10n.complex_no_rows.replace('%s', label) }}
 		onClick={handleClick} />;
 };
@@ -28,7 +33,7 @@ export const ComplexEmptyNotice = ({ label, visible, handleClick }) => {
  */
 ComplexEmptyNotice.propTypes = {
 	label: PropTypes.string.isRequired,
-	visible: PropTypes.bool.isRequired,
+	isVisible: PropTypes.bool.isRequired,
 	onClick: PropTypes.func.isRequired,
 };
 
@@ -39,18 +44,7 @@ ComplexEmptyNotice.propTypes = {
  * @param  {Function} props.onClick
  * @return {Function}
  */
-const handleClick = ({ onClick }) => {
-	/**
-	 * @inner
-	 * @param  {Event} e
-	 * @return {void}
-	 */
-	return (e) => {
-		e.preventDefault();
-
-		onClick();
-	};
-};
+const handleClick = ({ onClick }) => preventDefault(onClick);
 
 export default withHandlers({
 	handleClick,
