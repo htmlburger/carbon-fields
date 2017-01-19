@@ -28,7 +28,7 @@ export function createChannel(selector, event, handler, childSelector = null) {
 		}
 
 		// Setup the subscription.
-		$element.on(event, childSelector, (event?: Event) => {
+		$element.on(event, childSelector, (event) => {
 			handler(emit, $element, event);
 		});
 
@@ -62,8 +62,8 @@ export function createSelectboxChannel(selector) {
  */
 export function createCheckableChannel(selector) {
 	return createChannel(selector, 'change', (emit, $element) => {
-		const elements: HTMLInputElement[] = $element.find('input:checked').get();
-		const values: string[] = elements.map(element => element.value);
+		const elements = $element.find('input:checked').get();
+		const values = elements.map(element => element.value);
 
 		emit({
 			values,
