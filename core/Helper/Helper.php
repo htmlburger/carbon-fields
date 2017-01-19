@@ -5,7 +5,6 @@ namespace Carbon_Fields\Helper;
 use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Container\Container;
 use Carbon_Fields\Templater\Templater;
-use Carbon_Fields\Libraries\Plugin_Update_Warning\Plugin_Update_Warning;
 use Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
@@ -19,11 +18,6 @@ class Helper {
 	 * Hook the main Carbon Fields initialization functionality.
 	 */
 	public function __construct() {
-		if ( is_admin() ) {
-			# Initialize plugin update warning
-			Plugin_Update_Warning::instance();
-		}
-		
 		# Initialize sidebar manager
 		Sidebar_Manager::instance();
 		

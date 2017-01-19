@@ -36,3 +36,8 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 
 include_once( __DIR__ . '/carbon-fields.php' );
 include_once( __DIR__ . '/core/functions.php' );
+
+if ( is_admin() ) {
+	# Initialize plugin update warning
+	\Carbon_Fields\Libraries\Plugin_Update_Warning\Plugin_Update_Warning::instance();
+}
