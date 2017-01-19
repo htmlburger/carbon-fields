@@ -59,7 +59,7 @@ export const ComplexGroup = ({ index, prefix, layout, group, isActive, isCollaps
 		<div className="fields-container">
 			{
 				group.fields.map(({ id, type, name }) => {
-					const name = `${prefix}[${index}][${name}]`;
+					name = `${prefix}[${index}][${name}]`;
 
 					return makeField(type, {
 						id,
