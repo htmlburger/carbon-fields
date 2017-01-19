@@ -31,7 +31,7 @@ import { addComplexGroup, cloneComplexGroup, removeComplexGroup } from 'fields/a
  * @param  {Function} props.handlePopoverClose
  * @return {React.Element}
  */
-export const ComplexField = ({ name, field, isTabbed, popoverVisible, handleActionsButtonClick, handlePopoverClose, handleTabClick, handleCloneGroupClick, handleRemoveGroupClick }) => {
+export const ComplexField = ({ name, field, isTabbed, popoverVisible, isGroupActive, handleActionsButtonClick, handlePopoverClose, handleTabClick, handleCloneGroupClick, handleRemoveGroupClick }) => {
 	return <Field field={field}>
 		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': isTabbed })}>
 			<ComplexEmptyNotice
@@ -60,10 +60,9 @@ export const ComplexField = ({ name, field, isTabbed, popoverVisible, handleActi
 								key={index}
 								index={index}
 								prefix={name}
-								complex={field}
+								layout={field.layout}
 								group={group}
-								tabbed={isTabbed}
-								currentTab={field.ui.current_tab}
+								isActive={isGroupActive(group.id)}
 								onClone={handleCloneGroupClick}
 								onRemove={handleRemoveGroupClick} />
 						})
@@ -235,11 +234,29 @@ const handleRemoveGroupClick = ({ field, removeComplexGroup }) => {
 	};
 };
 
+/**
+ * Check whether the group is the currently visible tab.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Boolean}  props.isTabbed
+ * @return {Function}
+ */
+const isGroupActive = ({ field, isTabbed }) => {
+	/**
+	 * @inner
+	 * @param  {String}  groupId
+	 * @return {Boolean}
+	 */
+	return groupId => isTabbed && field.ui.current_tab === groupId;
+};
+
 export default compose(
 	withStore(mapStateToProps, mapDispatchToProps),
 	withSetup(hooks),
 	withState('popoverVisible', 'setPopoverVisibility', false),
 	withHandlers({
+		isGroupActive,
 		handleActionsButtonClick,
 		handlePopoverClose,
 		handleTabClick,

@@ -1,7 +1,7 @@
 /**
  * The external dependencies.
  */
-import React from 'react';
+import React, { PropTypes } from 'react';
 import cx from 'classnames';
 import { compose, withHandlers, withState } from 'recompose';
 
@@ -11,23 +11,28 @@ import { compose, withHandlers, withState } from 'recompose';
 import { makeField } from 'lib/factory';
 
 /**
+ * Render the holder around the complex's fields.
+ *
  * @param  {Object}   props
- * @param  {Object}   props.complex
- * @param  {Object}   props.group
  * @param  {Number}   props.index
- * @param  {Boolean}  props.collapsed
- * @param  {Function} props.toggle
- * @param  {Function} props.isActive
+ * @param  {String}   props.prefix
+ * @param  {String}   props.layout
+ * @param  {Object}   props.group
+ * @param  {Boolean}  props.isActive
+ * @param  {Boolean}  props.isCollapsed
+ * @param  {Function} props.handleToggleClick
+ * @param  {Function} props.handleCloneClick
+ * @param  {Function} props.handleRemoveClick
  * @return {React.Element}
  *
- * @todo Fix the translation.
- * @todo Fix the custom label.
+ * TODO: Fix the translation of the hints.
+ * TODO: Add support for custom labels.
  */
-export const ComplexGroup = ({ prefix, complex, group, index, collapsed, toggle, isActive, handleCloneClick, handleRemoveClick }) => {
-	return <div className={cx('carbon-row', 'carbon-group-row', { 'collapsed': collapsed }, { 'active': isActive() })}>
+export const ComplexGroup = ({ index, prefix, layout, group, isActive, isCollapsed, handleToggleClick, handleCloneClick, handleRemoveClick }) => {
+	return <div className={cx('carbon-row', 'carbon-group-row', { 'collapsed': isCollapsed }, { 'active': isActive })}>
 		<input
 			type="hidden"
-			name={`${complex.name}[${index}][group]`}
+			name={`${prefix}[${index}][group]`}
 			defaultValue={group.name} />
 
 		<div className="carbon-drag-handle">
@@ -36,7 +41,7 @@ export const ComplexGroup = ({ prefix, complex, group, index, collapsed, toggle,
 			<span className="group-name"></span>
 		</div>
 
-		<div className={`carbon-group-actions carbon-group-actions-${complex.layout}`}>
+		<div className={`carbon-group-actions carbon-group-actions-${layout}`}>
 			<a className="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="Clone" onClick={handleCloneClick}>
 				Clone
 			</a>
@@ -45,26 +50,57 @@ export const ComplexGroup = ({ prefix, complex, group, index, collapsed, toggle,
 				Remove
 			</a>
 
-			<a className="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="Collapse/Expand" onClick={toggle}>
+			<a className="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="Collapse/Expand" onClick={handleToggleClick}>
 				Collapse/Expand
 			</a>
 		</div>
 
 		<div className="fields-container">
-			{group.fields.map(({ id, type, name }) => makeField(type, { id, name: `${prefix}[${index}][${name}]` }))}
+			{
+				group.fields.map(({ id, type, name }) => {
+					const name = `${prefix}[${index}][${name}]`;
+
+					return makeField(type, {
+						id,
+						name,
+					});
+				})
+			}
 		</div>
 	</div>;
 };
 
 /**
- * Expand or collapse the group.
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+ComplexGroup.propTypes = {
+	index: PropTypes.number.isRequired,
+	prefix: PropTypes.string.isRequired,
+	layout: PropTypes.string.isRequired,
+	group: PropTypes.shape({
+		name: PropTypes.string.isRequired,
+		fields: PropTypes.arrayOf(PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			type: PropTypes.string.isRequired,
+			name: PropTypes.string.isRequired,
+		})),
+	}).isRequired,
+	isActive: PropTypes.bool.isRequired,
+	onClone: PropTypes.func.isRequired,
+	onRemove: PropTypes.func.isRequired,
+};
+
+/**
+ * Handle the click on the 'Expand/Collapse' button.
  *
  * @param  {Object}   props
- * @param  {Boolean}  props.collapsed
+ * @param  {Boolean}  props.isCollapsed
  * @param  {Function} props.setCollapsed
  * @return {Function}
  */
-const toggle = ({ collapsed, setCollapsed }) => {
+const handleToggleClick = ({ isCollapsed, setCollapsed }) => {
 	/**
 	 * @inner
 	 * @param  {Event} e
@@ -72,21 +108,9 @@ const toggle = ({ collapsed, setCollapsed }) => {
 	 */
 	return (e) => {
 		e.preventDefault();
-
-		setCollapsed(!collapsed);
+		setCollapsed(!isCollapsed);
 	};
-}
-
-/**
- * Check whether the group is the currently visible tab.
- *
- * @param  {Object}  props
- * @param  {Object}  props.group
- * @param  {Boolean} props.tabbed
- * @param  {String}  props.currentTab
- * @return {Function}
- */
-const isActive = ({ group, tabbed, currentTab }) => () => tabbed && group.id === currentTab;
+};
 
 /**
  * Handle the click on the 'Clone' button.
@@ -99,12 +123,11 @@ const isActive = ({ group, tabbed, currentTab }) => () => tabbed && group.id ===
 const handleCloneClick = ({ group, onClone }) => {
 	/**
 	 * @inner
-	 * @param  {Event} e The DOM event.
+	 * @param  {Event} e
 	 * @return {void}
 	 */
 	return (e) => {
 		e.preventDefault();
-
 		onClone(group.id);
 	}
 };
@@ -125,16 +148,14 @@ const handleRemoveClick = ({ group, onRemove }) => {
 	 */
 	return (e) => {
 		e.preventDefault();
-
 		onRemove(group.id);
 	};
 };
 
 export default compose(
-	withState('collapsed', 'setCollapsed', false),
+	withState('isCollapsed', 'setCollapsed', false),
 	withHandlers({
-		toggle,
-		isActive,
+		handleToggleClick,
 		handleCloneClick,
 		handleRemoveClick,
 	})
