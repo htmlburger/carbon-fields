@@ -13,6 +13,10 @@
  * Domain Path: /languages
  */
 
+define( 'Carbon_Fields\PLUGIN_FILE', __FILE__ );
+
+define( 'Carbon_Fields\RELATIVE_PLUGIN_FILE', basename( dirname( \Carbon_Fields\PLUGIN_FILE ) ) . '/' . basename( \Carbon_Fields\PLUGIN_FILE ) );
+
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require( __DIR__ . '/vendor/autoload.php' );
 } else {
