@@ -2,16 +2,15 @@
  * The external dependencies.
  */
 import { takeEvery } from 'redux-saga';
-import { take, call, put, select } from 'redux-saga/effects';
-import { find, findIndex, merge, keyBy, reject } from 'lodash';
+import { call, put, select } from 'redux-saga/effects';
+import { find, findIndex, merge, keyBy } from 'lodash';
 
 /**
  * The internal dependencies.
  */
 import { getAll, getFieldById } from 'fields/selectors';
 import { addComplexGroupIdentifiers, flattenComplexGroupFields, restoreField } from 'fields/helpers';
-import { updateField, addFields, removeFields, setUI, addComplexGroup, cloneComplexGroup } from 'fields/actions';
-import { REMOVE_COMPLEX_GROUP } from 'fields/actions';
+import { addFields, removeFields, updateField, setUI, addComplexGroup, cloneComplexGroup, removeComplexGroup } from 'fields/actions';
 
 /**
  * Prepare a clone or new instance of the specified group.
@@ -19,24 +18,30 @@ import { REMOVE_COMPLEX_GROUP } from 'fields/actions';
  * @param  {Object} action
  * @param  {String} action.type
  * @param  {Object} action.payload
+ * @param  {String} action.fieldId
+ * @param  {String} [action.groupId]
+ * @param  {String} [action.groupName]
  * @return {void}
  */
-export function* workerAddOrCloneComplexGroup({ type, payload }) {
-	const field = yield select(getFieldById, payload.id || payload.fieldId);
+export function* workerAddOrCloneComplexGroup({ type, payload: { fieldId, groupId, groupName } }) {
+	const field = yield select(getFieldById, fieldId);
+	const isAddAction = type === addComplexGroup.toString();
+	const isCloneAction = type === cloneComplexGroup.toString();
+
 	let blueprint, group, fields;
 
 	// Get the group that will be used as starting point.
-	if (type === addComplexGroup.toString()) {
-		blueprint = yield call(find, field.groups, { name: payload.group });
-	} else if (type === cloneComplexGroup.toString()) {
-		blueprint = yield call(find, field.value, { id: payload.groupId });
+	if (isAddAction) {
+		blueprint = yield call(find, field.groups, { name: groupName });
+	} else if (isCloneAction) {
+		blueprint = yield call(find, field.value, { id: groupId });
 	}
 
 	// Create a safe copy of the group.
 	group = yield call(merge, {}, blueprint);
 
 	// Replace the fields' references in the group.
-	if (type === cloneComplexGroup.toString()) {
+	if (isCloneAction) {
 		const all = yield select(getAll);
 		group.fields = group.fields.map(field => restoreField(field, all));
 	}
@@ -49,7 +54,7 @@ export function* workerAddOrCloneComplexGroup({ type, payload }) {
 	fields = keyBy(fields, 'id');
 
 	yield put(addFields(fields));
-	yield put(updateField(field.id, {
+	yield put(updateField(fieldId, {
 		value: [
 			...field.value,
 			group,
@@ -57,7 +62,7 @@ export function* workerAddOrCloneComplexGroup({ type, payload }) {
 	}));
 
 	if (field.ui.is_tabbed) {
-		yield put(setUI(field.id, {
+		yield put(setUI(fieldId, {
 			current_tab: group.id,
 		}));
 	}
@@ -91,33 +96,35 @@ function collectFieldIds(roots, all, accumulator) {
  *
  * @param  {Object} action
  * @param  {Object} action.payload
+ * @param  {String} action.payload.fieldId
+ * @param  {String} action.payload.groupId
  * @return {void}
  */
-export function* workerRemoveComplexGroup({ payload }) {
+export function* workerRemoveComplexGroup({ payload: { fieldId, groupId } }) {
 	const all = yield select(getAll);
-	const field = yield select(getFieldById, payload.id);
-	const group = yield call(find, field.value, { id: payload.group });
+	const field = yield select(getFieldById, fieldId);
+	const group = yield call(find, field.value, { id: groupId });
 	const groupFields = yield call(collectFieldIds, group.fields, all, []);
 
 	if (field.ui.is_tabbed) {
-		const groupIndex = yield call(findIndex, field.value, { id: payload.group });
-		let nextTabId = null;
+		const groupIndex = yield call(findIndex, field.value, { id: groupId });
+		let nextGroupId = null;
 
 		if (field.value.length > 1) {
 			if (groupIndex > 0) {
-				nextTabId = field.value[groupIndex - 1].id;
+				nextGroupId = field.value[groupIndex - 1].id;
 			} else {
-				nextTabId = field.value[1].id;
+				nextGroupId = field.value[1].id;
 			}
 		}
 
-		yield put(setUI(field.id, {
-			current_tab: nextTabId
+		yield put(setUI(fieldId, {
+			current_tab: nextGroupId
 		}));
 	}
 
-	yield put(updateField(field.id, {
-		value: field.value.filter(({ id }) => id !== group.id),
+	yield put(updateField(fieldId, {
+		value: field.value.filter(({ id }) => id !== groupId),
 	}));
 
 	yield put(removeFields(groupFields));
@@ -132,6 +139,6 @@ export default function* foreman() {
 	yield [
 		takeEvery(addComplexGroup.toString(), workerAddOrCloneComplexGroup),
 		takeEvery(cloneComplexGroup.toString(), workerAddOrCloneComplexGroup),
-		takeEvery(REMOVE_COMPLEX_GROUP, workerRemoveComplexGroup),
+		takeEvery(removeComplexGroup.toString(), workerRemoveComplexGroup),
 	];
 }
