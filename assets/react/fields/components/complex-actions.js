@@ -1,20 +1,24 @@
 /**
  * The external dependencies.
  */
-import React from 'react';
-import { PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 import { withHandlers } from 'recompose';
 
 /**
- * Renders the buttons of complex field.
+ * The internal dependencies.
+ */
+import { preventDefault } from 'lib/helpers';
+
+/**
+ * Render the 'Add Entry' button.
  *
  * @param  {Object}        props
  * @param  {String}        props.buttonText
- * @param  {Function}      props.handleClick
  * @param  {React.Element} props.children
+ * @param  {Function}      props.handleClick
  * @return {React.Element}
  */
-export const ComplexActions = ({ handleClick, buttonText, children }) => {
+export const ComplexActions = ({ buttonText, children, handleClick }) => {
 	return <div className="carbon-actions">
 		<div className="carbon-button">
 			<a href="#" className="button" onClick={handleClick}>
@@ -34,26 +38,18 @@ export const ComplexActions = ({ handleClick, buttonText, children }) => {
 ComplexActions.propTypes = {
 	buttonText: PropTypes.string.isRequired,
 	onButtonClick: PropTypes.func.isRequired,
+	children: PropTypes.element,
 };
 
 /**
+ * Handle the click on the 'Add Entry' button.
+ *
  * @param  {Object}   props
  * @param  {Function} props.onButtonClick
  * @return {Function}
  */
-const handleClick = ({ onButtonClick }) => {
-	/**
-	 * @inner
-	 * @param  {Event} e
-	 * @return {void}
-	 */
-	return (e) => {
-		e.preventDefault();
-
-		onButtonClick();
-	};
-};
+const handleClick = ({ onButtonClick }) => preventDefault(onButtonClick);
 
 export default withHandlers({
-	handleClick
+	handleClick,
 })(ComplexActions);
