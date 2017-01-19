@@ -9,6 +9,7 @@ import { compose, withHandlers, withState } from 'recompose';
  * The internal dependencies.
  */
 import { makeField } from 'lib/factory';
+import { preventDefault } from 'lib/helpers';
 
 /**
  * Render the holder around the complex's fields.
@@ -100,17 +101,7 @@ ComplexGroup.propTypes = {
  * @param  {Function} props.setCollapsed
  * @return {Function}
  */
-const handleToggleClick = ({ isCollapsed, setCollapsed }) => {
-	/**
-	 * @inner
-	 * @param  {Event} e
-	 * @return {void}
-	 */
-	return (e) => {
-		e.preventDefault();
-		setCollapsed(!isCollapsed);
-	};
-};
+const handleToggleClick = ({ isCollapsed, setCollapsed }) => preventDefault(() => setCollapsed(!isCollapsed));
 
 /**
  * Handle the click on the 'Clone' button.
@@ -120,17 +111,7 @@ const handleToggleClick = ({ isCollapsed, setCollapsed }) => {
  * @param  {Function} props.onClone
  * @return {Function}
  */
-const handleCloneClick = ({ group, onClone }) => {
-	/**
-	 * @inner
-	 * @param  {Event} e
-	 * @return {void}
-	 */
-	return (e) => {
-		e.preventDefault();
-		onClone(group.id);
-	}
-};
+const handleCloneClick = ({ group, onClone }) => preventDefault(() => onClone(group.id));
 
 /**
  * Handle the click on the 'Remove' button.
@@ -140,17 +121,7 @@ const handleCloneClick = ({ group, onClone }) => {
  * @param  {Function} props.onRemove
  * @return {Function}
  */
-const handleRemoveClick = ({ group, onRemove }) => {
-	/**
-	 * @inner
-	 * @param  {Event} e
-	 * @return {void}
-	 */
-	return (e) => {
-		e.preventDefault();
-		onRemove(group.id);
-	};
-};
+const handleRemoveClick = ({ group, onRemove }) => preventDefault(() => onRemove(group.id));
 
 export default compose(
 	withState('isCollapsed', 'setCollapsed', false),
