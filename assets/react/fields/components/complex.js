@@ -17,6 +17,7 @@ import ComplexEmptyNotice from 'fields/components/complex-empty-notice';
 
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { isFieldTabbed } from 'fields/selectors';
 import { addComplexGroup, cloneComplexGroup, removeComplexGroup } from 'fields/actions';
 
 /**
@@ -30,16 +31,16 @@ import { addComplexGroup, cloneComplexGroup, removeComplexGroup } from 'fields/a
  * @param  {Function} props.handlePopoverClose
  * @return {React.Element}
  */
-export const ComplexField = ({ name, field, popoverVisible, handleActionsButtonClick, handlePopoverClose, handleTabClick, handleCloneGroupClick, handleRemoveGroupClick }) => {
+export const ComplexField = ({ name, field, isTabbed, popoverVisible, handleActionsButtonClick, handlePopoverClose, handleTabClick, handleCloneGroupClick, handleRemoveGroupClick }) => {
 	return <Field field={field}>
-		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': field.ui.is_tabbed })}>
+		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': isTabbed })}>
 			<ComplexEmptyNotice
 				label={field.labels.plural_name}
 				visible={!field.value.length}
 				onClick={handleActionsButtonClick} />
 
 			<div className={cx('groups-wrapper', `layout-${field.layout}`)}>
-				<ComplexTabs groups={field.value} current={field.ui.current_tab} show={field.ui.is_tabbed} onClick={handleTabClick}>
+				<ComplexTabs groups={field.value} current={field.ui.current_tab} show={isTabbed} onClick={handleTabClick}>
 					<ComplexActions
 						buttonText="+"
 						onButtonClick={handleActionsButtonClick}>
@@ -61,7 +62,7 @@ export const ComplexField = ({ name, field, popoverVisible, handleActionsButtonC
 								prefix={name}
 								complex={field}
 								group={group}
-								tabbed={field.ui.is_tabbed}
+								tabbed={isTabbed}
 								currentTab={field.ui.current_tab}
 								onClone={handleCloneGroupClick}
 								onRemove={handleRemoveGroupClick} />
@@ -86,6 +87,19 @@ export const ComplexField = ({ name, field, popoverVisible, handleActionsButtonC
 };
 
 /**
+ * Pass additional props to the component.
+ *
+ * @param  {Object} state
+ * @param  {Object} props
+ * @return {Object}
+ */
+const mapStateToProps = (state, props) => {
+	return {
+		isTabbed: isFieldTabbed(state, props.id),
+	};
+};
+
+/**
  * The additional actions that will be passed to the component.
  *
  * @type {Object}
@@ -105,35 +119,24 @@ const hooks = {
 	componentDidMount() {
 		const {
 			field,
+			isTabbed,
 			setupField,
 			setUI
 		} = this.props;
 
 		let { ui } = this.props;
 
-		// Update the UI if the field's layout is set to 'tabs'.
-		if (field.layout.indexOf('tabbed') > -1) {
-			ui = { ...ui, is_tabbed: true };
-
-			// Show the first group of the complex.
-			if (field.value.length) {
-				ui = { ...ui, current_tab: field.value[0].id };
-			}
+		// Show the first tab of the complex.
+		if (isTabbed && field.value.length) {
+			ui = {
+				...ui,
+				current_tab: field.value[0].id
+			};
 		}
 
 		setupField(field.id, field.type);
 		setUI(field.id, ui);
 	}
-};
-
-/**
- * The UI fields that will be attached to the field.
- *
- * @type {Object}
- */
-const ui = {
-	is_tabbed: false,
-	current_tab: null,
 };
 
 /**
@@ -233,8 +236,8 @@ const handleRemoveGroupClick = ({ field, removeComplexGroup }) => {
 };
 
 export default compose(
-	withStore(undefined, mapDispatchToProps),
-	withSetup(hooks, ui),
+	withStore(mapStateToProps, mapDispatchToProps),
+	withSetup(hooks),
 	withState('popoverVisible', 'setPopoverVisibility', false),
 	withHandlers({
 		handleActionsButtonClick,

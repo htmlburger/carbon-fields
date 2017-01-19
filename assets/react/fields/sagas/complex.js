@@ -8,12 +8,12 @@ import { find, findIndex, merge, keyBy } from 'lodash';
 /**
  * The internal dependencies.
  */
-import { getAll, getFieldById } from 'fields/selectors';
+import { getAll, getFieldById, isFieldTabbed } from 'fields/selectors';
 import { addComplexGroupIdentifiers, flattenComplexGroupFields, restoreField } from 'fields/helpers';
 import { addFields, removeFields, updateField, setUI, addComplexGroup, cloneComplexGroup, removeComplexGroup } from 'fields/actions';
 
 /**
- * Prepare a clone or new instance of the specified group.
+ * Prepare a clone or a new instance of the specified group.
  *
  * @param  {Object} action
  * @param  {String} action.type
@@ -25,6 +25,7 @@ import { addFields, removeFields, updateField, setUI, addComplexGroup, cloneComp
  */
 export function* workerAddOrCloneComplexGroup({ type, payload: { fieldId, groupId, groupName } }) {
 	const field = yield select(getFieldById, fieldId);
+	const isTabbed = yield select(isFieldTabbed, fieldId);
 	const isAddAction = type === addComplexGroup.toString();
 	const isCloneAction = type === cloneComplexGroup.toString();
 
@@ -61,7 +62,7 @@ export function* workerAddOrCloneComplexGroup({ type, payload: { fieldId, groupI
 		]
 	}));
 
-	if (field.ui.is_tabbed) {
+	if (isTabbed) {
 		yield put(setUI(fieldId, {
 			current_tab: group.id,
 		}));
@@ -105,8 +106,9 @@ export function* workerRemoveComplexGroup({ payload: { fieldId, groupId } }) {
 	const field = yield select(getFieldById, fieldId);
 	const group = yield call(find, field.value, { id: groupId });
 	const groupFields = yield call(collectFieldIds, group.fields, all, []);
+	const isTabbed = yield select(isFieldTabbed, fieldId);
 
-	if (field.ui.is_tabbed) {
+	if (isTabbed) {
 		const groupIndex = yield call(findIndex, field.value, { id: groupId });
 		let nextGroupId = null;
 
