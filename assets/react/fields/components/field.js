@@ -1,38 +1,54 @@
-import React from 'react';
+/**
+ * The external dependencies.
+ */
+import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
 /**
- * The base UI component used for rendering.
- * All fields should use composition to extend this component.
+ * The base component used to render the fields.
+ * Extending of this component is done via composition.
  *
- * @param  {Object}        props
- * @param  {Object}        props.field
- * @param  {React.Element} props.children
- * @return {React.Element}
  * @abstract
+ * @param  {Object} 					   props
+ * @param  {Object} 					   props.field
+ * @param  {React.Element|React.Element[]} props.children
+ * @return {React.Element}
  */
-const Field = ({ field, children }) => {
-	const classes = cx('carbon-field', `carbon-${field.type}`, {
-		'has-width': field.width,
-		[`width-${field.width}`]: field.width,
-	});
+export const Field = ({ field, children }) => {
+	const styles = !!field.width ? { width: `${field.width}%`} : null;
 
-	const styles = field.width ? { width: `${field.width}%` } : {};
-
-	return <div className={classes} style={styles}>
+	return <div className={cx('carbon-field', `carbon-${field.type}`, { 'has-width': !!field.width })} style={styles}>
 		<label htmlFor={field.id}>
 			{field.label}
-			{field.required ? <span className="carbon-required">*</span> : ''}
+
+			{
+				field.required
+				? <span className="carbon-required" />
+				: null
+			}
 		</label>
 
-		<div className={cx('field-holder', field.id)}>
+		<div className="field-holder">
 			{children}
 		</div>
 
-		{field.help_text ? <em className="help-text">{field.help_text}</em> : ''}
+		{
+			!!field.help_text
+			? <em className="help-text">{field.help_text}</em>
+			: null
+		}
 
-		<em className="carbon-error"></em>
+		<em className="carbon-error" />
 	</div>;
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+Field.propTypes = {
+	field: PropTypes.object.isRequired,
 };
 
 export default Field;
