@@ -27,7 +27,11 @@ export const ComplexTabs = ({ groups, isActive, handleClick, children }) => {
 						<a href="#" onClick={handleClick(group.id)}>
 							<span className="group-handle"></span>
 
-							<span className="group-name">{group.label}</span>
+							{
+								group.label
+								? <span className="group-name">{group.label}</span>
+								: null
+							}
 
 							<span className="group-number">{index + 1}</span>
 							<span className="dashicons dashicons-warning carbon-complex-group-error-badge"></span>
