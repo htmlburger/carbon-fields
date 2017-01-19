@@ -26,8 +26,9 @@ class Plugin_Update_Warning {
 	/**
 	 * Register actions, filters, etc...
 	 */
-	private function setup() {
+	protected function setup() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data' ), 9 );
 
 		ob_start();
 		$this->template();
@@ -36,13 +37,35 @@ class Plugin_Update_Warning {
 	}
 
 	/**
+	 * Return the JSON data.
+	 */
+	protected function get_json_data() {
+		return array(
+			'plugin_path' => basename( dirname( \Carbon_Fields\PLUGIN_FILE ) ) . '/' . basename( \Carbon_Fields\PLUGIN_FILE ),
+		);
+	}
+
+	/**
 	 * Create the warning template
 	 */
-	private function template() {
+	protected function template() {
 		?>
-		<div class="update-message notice inline notice-warning notice-alt">
-			<p>There is a new version of Carbon Fields available.</p>
+		<div class="update-message notice inline notice-error notice-alt">
+			<p><?php echo nl2br( sprintf( __( 'The new version of Carbon Fields is a major update. Please make sure you have a full backup before updating and test any add-ons or custom functionality.' . "\n" . 'Developers should review the upgrade guide on %1$s.', 'carbon-fields' ), '<a href="https://carbonfields.net/" target="_blank">carbonfields.net</a>' ) ); ?></p>
 		</div>
+		<?php
+	}
+
+	/**
+	 * Print the JSON data script.
+	 */
+	public function print_json_data() {
+		?>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+var carbonPluginUpdateWarningData = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
+//--><!]]>
+</script>
 		<?php
 	}
 
