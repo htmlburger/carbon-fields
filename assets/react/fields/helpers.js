@@ -49,7 +49,7 @@ export function flattenField(field, accumulator) {
 	// be used to populate the state.
 	accumulator.push(field);
 
-	return pick(field, 'id', 'type');
+	return pick(field, 'id', 'type', 'name');
 }
 
 /**
@@ -62,10 +62,6 @@ export function flattenField(field, accumulator) {
  */
 export function addComplexGroupIdentifiers(complex, group, index) {
 	group.id = uniqueId('carbon-complex-group-');
-
-	group.fields.forEach((field) => {
-		field.name = `${complex.name}[${index}][${field.name}]`;
-	});
 }
 
 /**
@@ -94,9 +90,6 @@ export function restoreField(field, all) {
 	// by the process that flattens the fields.
 	delete field.ui;
 	delete field.meta;
-
-	// Restore the name of the field.
-	field.name = `_${field.base_name}`;
 
 	// The complex field represents a tree struture so we need
 	// to restore all fields recursively.

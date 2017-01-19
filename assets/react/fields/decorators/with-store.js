@@ -5,11 +5,19 @@ import { setupField, updateField, setUI } from 'fields/actions';
 /**
  * The default state that will be retrieved from the store.
  *
- * @type {Function}
+ * @param  {Object} state
+ * @param  {Object} ownProps
+ * @return {Object}
  */
-const defaultMapStateToProps = (state, ownProps) => ({
-	field: getFieldById(state, ownProps.id),
-});
+const defaultMapStateToProps = (state, ownProps) => {
+	const field = getFieldById(state, ownProps.id);
+	const name = ownProps.name || field.name;
+
+	return {
+		name,
+		field,
+	};
+};
 
 /**
  * The default actions that will be provided as props to the component.

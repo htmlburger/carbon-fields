@@ -23,13 +23,14 @@ import { addComplexGroup, cloneComplexGroup, removeComplexGroup } from 'fields/a
  * Render a group(s) of fields.
  *
  * @param  {Object}   props
+ * @param  {String}   props.name
  * @param  {Object}   props.field
  * @param  {Object}   props.popoverVisible
  * @param  {Function} props.handleActionsButtonClick
  * @param  {Function} props.handlePopoverClose
  * @return {React.Element}
  */
-export const ComplexField = ({ field, popoverVisible, handleActionsButtonClick, handlePopoverClose, handleTabClick, handleCloneGroupClick, handleRemoveGroupClick }) => {
+export const ComplexField = ({ name, field, popoverVisible, handleActionsButtonClick, handlePopoverClose, handleTabClick, handleCloneGroupClick, handleRemoveGroupClick }) => {
 	return <Field field={field}>
 		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': field.ui.is_tabbed })}>
 			<ComplexEmptyNotice
@@ -57,6 +58,7 @@ export const ComplexField = ({ field, popoverVisible, handleActionsButtonClick, 
 							return <ComplexGroup
 								key={index}
 								index={index}
+								prefix={name}
 								complex={field}
 								group={group}
 								tabbed={field.ui.is_tabbed}

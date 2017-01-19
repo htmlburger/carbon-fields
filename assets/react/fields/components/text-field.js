@@ -9,16 +9,17 @@ import withSetup from 'fields/decorators/with-setup';
  * Render a text input field.
  *
  * @param  {Object}   props
+ * @param  {String}   props.name
  * @param  {Object}   props.field
  * @param  {Function} props.updateField
  * @return {React.Element}
  */
-export const TextField = ({ field, updateField }) => {
+export const TextField = ({ name, field, updateField }) => {
 	return <Field id={field.id} field={field}>
 		<input
 			type="text"
 			id={field.id}
-			name={field.name}
+			name={name}
 			defaultValue={field.value}
 			className="regular-text"
 			onChange={({ target }) => updateField(field.id, { value: target.value })} />

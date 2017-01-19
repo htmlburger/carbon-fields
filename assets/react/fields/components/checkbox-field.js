@@ -9,16 +9,18 @@ import withSetup from 'fields/decorators/with-setup';
  * Render a checkbox input field.
  *
  * @param  {Object}   props
+ * @param  {String}   props.name
+ * @param  {Object}   props.field
  * @param  {Boolean}  props.isChecked
  * @param  {Function} props.handleInputChange
  * @return {React.Element}
  */
-export const CheckboxField = ({ field, isChecked, handleInputChange }) => {
+export const CheckboxField = ({ name, field, isChecked, handleInputChange }) => {
 	return <Field field={field}>
 		<label>
 			<input
 				type="checkbox"
-				name={field.name}
+				name={name}
 				value={field.option_value}
 				checked={isChecked}
 				onChange={handleInputChange} />

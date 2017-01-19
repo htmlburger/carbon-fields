@@ -11,6 +11,7 @@ import withSetup from 'fields/decorators/with-setup';
  * Render a color input field.
  *
  * @param  {Object}   props
+ * @param  {String}   props.name
  * @param  {Object}   props.field
  * @param  {Boolean}  props.pickerVisible
  * @param  {Function} props.handleInputChange
@@ -21,7 +22,7 @@ import withSetup from 'fields/decorators/with-setup';
  * @todo Fix translation of 'Select a color' label.
  * @todo Replace inline styles with classes.
  */
-export const ColorField = ({ field, pickerVisible, handleInputChange, showPicker, hidePicker }) => {
+export const ColorField = ({ name, field, pickerVisible, handleInputChange, showPicker, hidePicker }) => {
 	const cover = {
 		position: 'fixed',
 		top: 0,
@@ -56,7 +57,7 @@ export const ColorField = ({ field, pickerVisible, handleInputChange, showPicker
 			<input
 				type="hidden"
 				id={field.id}
-				name={field.name}
+				name={name}
 				value={field.value || ''}
 				readOnly />
 		</div>

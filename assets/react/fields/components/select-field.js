@@ -10,13 +10,14 @@ import withSetup from 'fields/decorators/with-setup';
  * Render a select input field.
  *
  * @param  {Object}   props
+ * @param  {Object}   props.name
  * @param  {Object}   props.field
  * @param  {Function} props.handleInputChange
  * @return {React.Element}
  */
-export const SelectField = ({ field, handleInputChange }) => {
+export const SelectField = ({ name, field, handleInputChange }) => {
 	return <Field field={field}>
-		<select id={field.id} name={field.name} onChange={handleInputChange}>
+		<select id={field.id} name={name} onChange={handleInputChange}>
 			{field.options.map(option => {
 				return <option key={`${field.id}-${option.name}`} value={option.value}>
 					{option.name}

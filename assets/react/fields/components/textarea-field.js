@@ -9,11 +9,12 @@ import withSetup from 'fields/decorators/with-setup';
  * Render a multiline text input field.
  *
  * @param  {Object}   props
+ * @param  {String}   props.name
  * @param  {Object}   props.field
  * @param  {Function} props.updateField
  * @return {React.Element}
  */
-export const TextareaField = ({ field, updateField }) => {
+export const TextareaField = ({ name, field, updateField }) => {
 	const style = {
 		height: field.height,
 	};
@@ -21,7 +22,7 @@ export const TextareaField = ({ field, updateField }) => {
 	return <Field field={field}>
 		<textarea
 			id={field.id}
-			name={field.name}
+			name={name}
 			defaultValue={field.value}
 			style={style}
 			rows={field.rows ? field.rows : null}

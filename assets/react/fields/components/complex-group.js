@@ -23,7 +23,7 @@ import { makeField } from 'lib/factory';
  * @todo Fix the translation.
  * @todo Fix the custom label.
  */
-export const ComplexGroup = ({ complex, group, index, collapsed, toggle, isActive, handleCloneClick, handleRemoveClick }) => {
+export const ComplexGroup = ({ prefix, complex, group, index, collapsed, toggle, isActive, handleCloneClick, handleRemoveClick }) => {
 	return <div className={cx('carbon-row', 'carbon-group-row', { 'collapsed': collapsed }, { 'active': isActive() })}>
 		<input
 			type="hidden"
@@ -51,7 +51,7 @@ export const ComplexGroup = ({ complex, group, index, collapsed, toggle, isActiv
 		</div>
 
 		<div className="fields-container">
-			{group.fields.map(({ id, type }) => makeField(type, { id }))}
+			{group.fields.map(({ id, type, name }) => makeField(type, { id, name: `${prefix}[${index}][${name}]` }))}
 		</div>
 	</div>;
 };

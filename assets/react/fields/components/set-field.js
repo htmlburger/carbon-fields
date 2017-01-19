@@ -11,6 +11,7 @@ import withSetup from 'fields/decorators/with-setup';
  * Render a collection of checkbox inputs.
  *
  * @param  {Object}   props
+ * @param  {Object}   props.name
  * @param  {Object}   props.field
  * @param  {Function} props.handleInputChange
  * @param  {Function} props.isChecked
@@ -20,7 +21,7 @@ import withSetup from 'fields/decorators/with-setup';
  *
  * @todo Fix the translation.
  */
-export const SetField = ({ field, handleInputChange, isChecked, isInputHidden, isExpanderHidden, showAllOptions }) => {
+export const SetField = ({ name, field, handleInputChange, isChecked, isInputHidden, isExpanderHidden, showAllOptions }) => {
 	return <Field field={field}>
 		<div className="carbon-set-list">
 			{field.options.map((option, index) => {
@@ -28,7 +29,7 @@ export const SetField = ({ field, handleInputChange, isChecked, isInputHidden, i
 					<label>
 						<input
 							type="checkbox"
-							name={`${field.name}[]`}
+							name={`${name}[]`}
 							value={option.value}
 							checked={isChecked(option)}
 							onChange={handleInputChange} />

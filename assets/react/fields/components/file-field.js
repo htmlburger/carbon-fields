@@ -11,6 +11,7 @@ import withSetup from 'fields/decorators/with-setup';
  * Render a file upload field with a preview thumbnail of the uploaded file.
  *
  * @param  {Object}   props
+ * @param  {String}   props.name
  * @param  {Object}   props.field
  * @param  {Function} props.openBrowser
  * @param  {Function} props.clearSelection
@@ -18,14 +19,14 @@ import withSetup from 'fields/decorators/with-setup';
  *
  * @todo   Replace the inline `style` with a class.
  */
-export const FileField = ({ field, openBrowser, clearSelection }) => {
+export const FileField = ({ name, field, openBrowser, clearSelection }) => {
 	return <Field field={field}>
 		<div className="carbon-attachment">
 			<input
 				type="text"
 				className="regular-text carbon-file-field"
 				id={field.id}
-				name={field.name}
+				name={name}
 				defaultValue={field.value}
 				value={field.value}
 				style={field.value_type === 'id' ? { display: 'none' } : {}}

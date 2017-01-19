@@ -10,12 +10,13 @@ import withSetup from 'fields/decorators/with-setup';
  * Render a radio input field.
  *
  * @param  {Object}   props
+ * @param  {String}   props.name
  * @param  {Object}   props.field
  * @param  {Function} props.handleInputChange
  * @param  {Function} props.isChecked
  * @return {React.Element}
  */
-export const RadioField = ({ field, handleInputChange, isChecked }) => {
+export const RadioField = ({ name, field, handleInputChange, isChecked }) => {
 	return <Field field={field}>
 		<ul className="carbon-radio-list">
 			{field.options.map(option => {

@@ -10,23 +10,24 @@ import withSetup from 'fields/decorators/with-setup';
  * Render a radio input field with an image.
  *
  * @param  {Object}   props
+ * @param  {Object}   props.name
  * @param  {Object}   props.field
  * @param  {Function} props.handleInputChange
  * @param  {Function} props.isChecked
  * @return {React.Element}
  */
-export const RadioImageField = ({ field, handleInputChange, isChecked }) => {
+export const RadioImageField = ({ name, field, handleInputChange, isChecked }) => {
 	return <Field field={field}>
 		<div className="carbon-radio-image-list">
 			{field.options.map((option) => {
-				return <div 
+				return <div
 							key={`${field.id}-${option.name}`}
 							className="carbon-radio-image-item"
 						>
 					<label>
 						<input
 							type="radio"
-							name={field.name}
+							name={name}
 							value={option.value}
 							checked={isChecked(option)}
 							onChange={handleInputChange} />
