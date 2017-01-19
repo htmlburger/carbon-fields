@@ -19,8 +19,10 @@ class Helper {
 	 * Hook the main Carbon Fields initialization functionality.
 	 */
 	public function __construct() {
-		# Initialize plugin update warning
-		Plugin_Update_Warning::instance();
+		if ( is_admin() ) {
+			# Initialize plugin update warning
+			Plugin_Update_Warning::instance();
+		}
 		
 		# Initialize sidebar manager
 		Sidebar_Manager::instance();

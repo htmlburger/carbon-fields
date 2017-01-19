@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Carbon Fields
  * Description: WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options, navigation menus and more.
- * Version: 1.4
+ * Version: 1.5
  * Author: htmlburger
  * Author URI: https://htmlburger.com/
  * Plugin URI: http://carbonfields.net/
@@ -14,6 +14,8 @@
  */
 
 define( 'Carbon_Fields\PLUGIN_FILE', __FILE__ );
+
+define( 'Carbon_Fields\RELATIVE_PLUGIN_FILE', basename( dirname( \Carbon_Fields\PLUGIN_FILE ) ) . '/' . basename( \Carbon_Fields\PLUGIN_FILE ) );
 
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require( __DIR__ . '/vendor/autoload.php' );

@@ -18,7 +18,7 @@ class Plugin_Update_Warning {
 		static $instance;
 		if ( ! is_a( $instance, get_class() ) ) {
 			$instance = new self();
-			$instance->setup();
+			add_action( 'admin_init', array( $instance, 'setup' ) );
 		}
 		return $instance;
 	}
@@ -26,7 +26,17 @@ class Plugin_Update_Warning {
 	/**
 	 * Register actions, filters, etc...
 	 */
-	protected function setup() {
+	public function setup() {
+		global $pagenow;
+
+		if ( !in_array( $pagenow, array( 'plugins.php', 'update-core.php' ) ) ) {
+			return;
+		}
+
+		if ( !$this->has_major_update() ) {
+			return;
+		}
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data' ), 9 );
 
@@ -36,12 +46,25 @@ class Plugin_Update_Warning {
 		Templater::add_template( 'plugin-update-warning', $template );
 	}
 
+	protected function has_major_update() {
+		$all_updates = get_plugin_updates();
+		$carbon_fields_data = isset( $all_updates[\Carbon_Fields\RELATIVE_PLUGIN_FILE] ) ? $all_updates[\Carbon_Fields\RELATIVE_PLUGIN_FILE] : null;
+		if ( !$carbon_fields_data ) {
+			return false;
+		}
+
+		$plugin_data = (object) _get_plugin_data_markup_translate( \Carbon_Fields\RELATIVE_PLUGIN_FILE, (array) $carbon_fields_data, false, true );
+		$current_version = explode( '.', $plugin_data->Version );
+		$update_version = explode( '.', $plugin_data->update->new_version );
+		return ( intval( $current_version[0] ) < intval( $update_version[0] ) ); // compare only MAJOR part of SemVer
+	}
+
 	/**
 	 * Return the JSON data.
 	 */
 	protected function get_json_data() {
 		return array(
-			'plugin_path' => basename( dirname( \Carbon_Fields\PLUGIN_FILE ) ) . '/' . basename( \Carbon_Fields\PLUGIN_FILE ),
+			'plugin_path' => \Carbon_Fields\RELATIVE_PLUGIN_FILE,
 		);
 	}
 
