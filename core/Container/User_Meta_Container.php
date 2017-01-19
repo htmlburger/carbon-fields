@@ -13,7 +13,8 @@ class User_Meta_Container extends Container {
 			'role' => array(),
 		),
 		'show_for' => array(
-			'capabilities' => array( 'edit_users' ),
+			'relation' => 'AND',
+			'edit_users',
 		),
 	);
 
@@ -123,19 +124,52 @@ class User_Meta_Container extends Container {
 	 * @return object $this
 	 **/
 	public function show_for( $show_for ) {
-		// Filter empty values and unexpected attributes
-		$show_for = array_filter( shortcode_atts( array(
-			'capabilities' => array(),
-			'roles' => array(),
-		), $show_for ) );
-
-		if ( empty( $show_for ) ) {
-			return $this;
-		}
-
-		$this->settings['show_for'] = $show_for;
+		$this->settings['show_for'] = $this->parse_show_for( $show_for );
 
 		return $this;
+	}
+
+	/**
+	 * Validate and parse the show_for logic rules.
+	 *
+	 * @param array $rules
+	 * @return array
+	 */
+	protected function parse_show_for( $show_for ) {
+		if ( ! is_array( $show_for ) ) {
+			Incorrect_Syntax_Exception::raise( 'Show for argument should be an array.' );
+		}
+
+		$allowed_relations = array( 'AND', 'OR' );
+
+		$parsed_show_for = array(
+			'relation' => 'AND',
+		);
+
+		foreach ( $show_for as $key => $rule ) {
+			// Check if we have a relation key
+			if ( $key === 'relation' ) {
+				$relation = strtoupper( $rule );
+
+				if ( ! in_array( $relation, $allowed_relations ) ) {
+					Incorrect_Syntax_Exception::raise( 'Invalid relation type ' . $rule . '. ' .
+					'The rule should be one of the following: "' . implode( '", "', $allowed_relations ) . '"' );
+				}
+
+				$parsed_show_for['relation'] = $relation;
+				continue;
+			}
+
+			// Check if the rule is valid
+			if ( ! is_string( $rule ) || empty( $rule ) ) {
+				Incorrect_Syntax_Exception::raise( 'Invalid show_for logic rule format. ' .
+				'The rule should be a string, containing an user capability/role.' );
+			}
+
+			$parsed_show_for[] = $rule;
+		}
+
+		return $parsed_show_for;
 	}
 
 	/**
@@ -162,23 +196,38 @@ class User_Meta_Container extends Container {
 	 * @return bool True if the container is allowed to be attached
 	 **/
 	public function is_valid_attach() {
-		$user = wp_get_current_user();
-
-		$is_valid_capability = true;
-		if ( !empty( $this->settings['show_for']['capabilities'] ) ) {
-			$is_valid_capability = array_intersect( (array) $this->settings['show_for']['capabilities'], $user->allcaps );
-		}
-
-		$is_valid_role = true;
-		if ( !empty( $this->settings['show_for']['roles'] ) ) {
-			$is_valid_role = array_intersect( (array) $this->settings['show_for']['roles'], $user->roles );
-		}
-
-		if ( ! $this->is_profile_page() || ! $is_valid_capability || ! $is_valid_role ) {
+		if ( ! $this->is_profile_page() || ! $this->is_valid_show_for() ) {
 			return false;
 		}
 
 		return true;
+	}
+
+	/**
+	 * Perform checks whether the container should be seen for the currently logged in user
+	 *
+	 * @return bool True if the current user is allowed to see the container
+	 **/
+	public function is_valid_show_for() {
+		$show_for = $this->settings['show_for'];
+
+		$relation = $show_for['relation'];
+		unset( $show_for['relation'] );
+
+		$validated_capabilities_count = 0;
+		foreach ( $show_for as $capability ) {
+			if ( current_user_can( $capability ) ) {
+				$validated_capabilities_count++;
+			}
+		}
+
+		/**
+		 * When the relation is AND all capabilities must be evaluated to true
+		 * When the relation is OR at least 1 must be evaluated to true
+		 */
+		$min_valid_capabilities_count = $relation === 'AND' ? count( $show_for ) : 1;
+
+		return apply_filters( 'carbon_container_user_meta_is_valid_show_for', $validated_capabilities_count >= $min_valid_capabilities_count, $this );
 	}
 
 	/**
