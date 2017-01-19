@@ -80,6 +80,15 @@ export const ADD_COMPLEX_GROUP = 'fields/ADD_COMPLEX_GROUP';
 export const addComplexGroup = createAction(ADD_COMPLEX_GROUP, (fieldId, groupName) => ({ fieldId, groupName }));
 
 /**
+ * Create a clone of the specified complex group.
+ *
+ * @param  {String} fieldId
+ * @param  {String} groupId
+ * @return {Object}
+ */
+export const cloneComplexGroup = createAction('fields/CLONE_COMPLEX_GROUP', (fieldId, groupId) => ({ fieldId, groupId }));
+
+/**
  * Remove the specified complex group.
  *
  * @param  {String} fieldId

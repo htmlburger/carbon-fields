@@ -9,29 +9,46 @@ import { find, findIndex, merge, keyBy, reject } from 'lodash';
  * The internal dependencies.
  */
 import { getAll, getFieldById } from 'fields/selectors';
-import { addComplexGroupIdentifiers, flattenComplexGroupFields } from 'fields/helpers';
-import { updateField, addFields, removeFields, setUI } from 'fields/actions';
-import { ADD_COMPLEX_GROUP, REMOVE_COMPLEX_GROUP } from 'fields/actions';
+import { addComplexGroupIdentifiers, flattenComplexGroupFields, restoreField } from 'fields/helpers';
+import { updateField, addFields, removeFields, setUI, addComplexGroup, cloneComplexGroup } from 'fields/actions';
+import { REMOVE_COMPLEX_GROUP } from 'fields/actions';
 
 /**
- * Prepare the specified complex group for adding.
+ * Prepare a clone or new instance of the specified group.
  *
  * @param  {Object} action
+ * @param  {String} action.type
  * @param  {Object} action.payload
  * @return {void}
  */
-export function* workerAddComplexGroup({ payload }) {
-	const field = yield select(getFieldById, payload.fieldId);
-	const blueprint = yield call(find, field.groups, { name: payload.groupName });
-	const group = yield call(merge, {}, blueprint);
-	let groupFields = [];
+export function* workerAddOrCloneComplexGroup({ type, payload }) {
+	const field = yield select(getFieldById, payload.id || payload.fieldId);
+	let blueprint, group, fields;
+
+	// Get the group that will be used as starting point.
+	if (type === addComplexGroup.toString()) {
+		blueprint = yield call(find, field.groups, { name: payload.group });
+	} else if (type === cloneComplexGroup.toString()) {
+		blueprint = yield call(find, field.value, { id: payload.groupId });
+	}
+
+	// Create a safe copy of the group.
+	group = yield call(merge, {}, blueprint);
+
+	// Replace the fields' references in the group.
+	if (type === cloneComplexGroup.toString()) {
+		const all = yield select(getAll);
+		group.fields = group.fields.map(field => restoreField(field, all));
+	}
+
+	fields = [];
 
 	addComplexGroupIdentifiers(field, group, field.value.length);
-	flattenComplexGroupFields(group, groupFields);
+	flattenComplexGroupFields(group, fields);
 
-	groupFields = keyBy(groupFields, 'id');
+	fields = keyBy(fields, 'id');
 
-	yield put(addFields(groupFields));
+	yield put(addFields(fields));
 	yield put(updateField(field.id, {
 		value: [
 			...field.value,
@@ -78,12 +95,12 @@ function collectFieldIds(roots, all, accumulator) {
  */
 export function* workerRemoveComplexGroup({ payload }) {
 	const all = yield select(getAll);
-	const field = yield select(getFieldById, payload.fieldId);
-	const group = yield call(find, field.value, { id: payload.groupId });
+	const field = yield select(getFieldById, payload.id);
+	const group = yield call(find, field.value, { id: payload.group });
 	const groupFields = yield call(collectFieldIds, group.fields, all, []);
 
 	if (field.ui.is_tabbed) {
-		const groupIndex = yield call(findIndex, field.value, { id: payload.groupId });
+		const groupIndex = yield call(findIndex, field.value, { id: payload.group });
 		let nextTabId = null;
 
 		if (field.value.length > 1) {
@@ -113,7 +130,8 @@ export function* workerRemoveComplexGroup({ payload }) {
  */
 export default function* foreman() {
 	yield [
-		takeEvery(ADD_COMPLEX_GROUP, workerAddComplexGroup),
+		takeEvery(addComplexGroup.toString(), workerAddOrCloneComplexGroup),
+		takeEvery(cloneComplexGroup.toString(), workerAddOrCloneComplexGroup),
 		takeEvery(REMOVE_COMPLEX_GROUP, workerRemoveComplexGroup),
 	];
 }

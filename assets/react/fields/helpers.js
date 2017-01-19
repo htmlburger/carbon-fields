@@ -1,7 +1,7 @@
 /**
  * The external dependencies.
  */
-import { pick, uniqueId } from 'lodash';
+import { pick, merge, uniqueId } from 'lodash';
 
 /**
  * Get the thumbnail of the attachment.
@@ -77,4 +77,36 @@ export function addComplexGroupIdentifiers(complex, group, index) {
  */
 export function flattenComplexGroupFields(group, accumulator) {
 	group.fields = group.fields.map(field => flattenField(field, accumulator));
+}
+
+/**
+ * Restore the original shape of the specified field.
+ *
+ * @param  {Object} field
+ * @param  {Object} all
+ * @return {Object}
+ */
+export function restoreField(field, all) {
+	// Create a safe copy of the field.
+	field = merge({}, all[field.id]);
+
+	// Remove these properties since they're added
+	// by the process that flattens the fields.
+	delete field.ui;
+	delete field.meta;
+
+	// Restore the name of the field.
+	field.name = `_${field.base_name}`;
+
+	// The complex field represents a tree struture so we need
+	// to restore all fields recursively.
+	if (field.type === 'Complex') {
+		field.value = field.value.map((group) => {
+			group.fields = group.fields.map(field => restoreField(field, all));
+
+			return group;
+		});
+	}
+
+	return field;
 }

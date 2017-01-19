@@ -17,7 +17,7 @@ import ComplexEmptyNotice from 'fields/components/complex-empty-notice';
 
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { addComplexGroup, removeComplexGroup } from 'fields/actions';
+import { addComplexGroup, cloneComplexGroup, removeComplexGroup } from 'fields/actions';
 
 /**
  * Render a group(s) of fields.
@@ -29,7 +29,7 @@ import { addComplexGroup, removeComplexGroup } from 'fields/actions';
  * @param  {Function} props.handlePopoverClose
  * @return {React.Element}
  */
-export const ComplexField = ({ field, popoverVisible, handleActionsButtonClick, handlePopoverClose, handleTabClick, handleRemoveGroupClick }) => {
+export const ComplexField = ({ field, popoverVisible, handleActionsButtonClick, handlePopoverClose, handleTabClick, handleCloneGroupClick, handleRemoveGroupClick }) => {
 	return <Field field={field}>
 		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': field.ui.is_tabbed })}>
 			<ComplexEmptyNotice
@@ -61,6 +61,7 @@ export const ComplexField = ({ field, popoverVisible, handleActionsButtonClick, 
 								group={group}
 								tabbed={field.ui.is_tabbed}
 								currentTab={field.ui.current_tab}
+								onClone={handleCloneGroupClick}
 								onRemove={handleRemoveGroupClick} />
 						})
 					}
@@ -89,6 +90,7 @@ export const ComplexField = ({ field, popoverVisible, handleActionsButtonClick, 
  */
 const mapDispatchToProps = {
 	addComplexGroup,
+	cloneComplexGroup,
 	removeComplexGroup,
 };
 
@@ -192,6 +194,25 @@ const handleTabClick = ({ field, setUI }) => {
 };
 
 /**
+ * Clone the complex group.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.cloneComplexGroup
+ * @return {Function}
+ */
+const handleCloneGroupClick = ({ field, cloneComplexGroup }) => {
+	/**
+	 * @inner
+	 * @param  {String} groupId
+	 * @return {void}
+	 */
+	return (groupId) => {
+		cloneComplexGroup(field.id, groupId);
+	};
+};
+
+/**
  * Remove the complex group.
  *
  * @param  {Object}   props
@@ -217,7 +238,8 @@ export default compose(
 		handleActionsButtonClick,
 		handlePopoverClose,
 		handleTabClick,
-		handleRemoveGroupClick
+		handleCloneGroupClick,
+		handleRemoveGroupClick,
 	})
 )(ComplexField);
 

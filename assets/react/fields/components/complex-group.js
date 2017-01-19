@@ -23,7 +23,7 @@ import { makeField } from 'lib/factory';
  * @todo Fix the translation.
  * @todo Fix the custom label.
  */
-export const ComplexGroup = ({ complex, group, index, collapsed, toggle, isActive, handleRemoveClick }) => {
+export const ComplexGroup = ({ complex, group, index, collapsed, toggle, isActive, handleCloneClick, handleRemoveClick }) => {
 	return <div className={cx('carbon-row', 'carbon-group-row', { 'collapsed': collapsed }, { 'active': isActive() })}>
 		<input
 			type="hidden"
@@ -37,7 +37,7 @@ export const ComplexGroup = ({ complex, group, index, collapsed, toggle, isActiv
 		</div>
 
 		<div className={`carbon-group-actions carbon-group-actions-${complex.layout}`}>
-			<a className="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="Clone">
+			<a className="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="Clone" onClick={handleCloneClick}>
 				Clone
 			</a>
 
@@ -89,6 +89,27 @@ const toggle = ({ collapsed, setCollapsed }) => {
 const isActive = ({ group, tabbed, currentTab }) => () => tabbed && group.id === currentTab;
 
 /**
+ * Handle the click on the 'Clone' button.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.group
+ * @param  {Function} props.onClone
+ * @return {Function}
+ */
+const handleCloneClick = ({ group, onClone }) => {
+	/**
+	 * @inner
+	 * @param  {Event} e The DOM event.
+	 * @return {void}
+	 */
+	return (e) => {
+		e.preventDefault();
+
+		onClone(group.id);
+	}
+};
+
+/**
  * Handle the click on the 'Remove' button.
  *
  * @param  {Object}   props
@@ -114,6 +135,7 @@ export default compose(
 	withHandlers({
 		toggle,
 		isActive,
+		handleCloneClick,
 		handleRemoveClick,
 	})
 )(ComplexGroup);
