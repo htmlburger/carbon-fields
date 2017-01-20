@@ -1,7 +1,7 @@
 /**
  * The external dependencies.
  */
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { compose } from 'recompose';
 
 /**
@@ -22,6 +22,17 @@ export const SeparatorField = ({ field }) => {
 	return <Field field={field}>
 		<h3>{field.label}</h3>
 	</Field>;
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+SeparatorField.propTypes = {
+	field: PropTypes.shape({
+		label: PropTypes.string.isRequired,
+	}),
 };
 
 export default compose(
