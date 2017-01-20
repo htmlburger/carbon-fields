@@ -26,4 +26,4 @@ export const getFieldById = (state, id) => state.fields[id];
  * @param  {String}  fieldId
  * @return {Boolean}
  */
-export const isFieldTabbed = createSelector(getFieldById, (field) => field.layout && field.layout.indexOf('tabbed') > -1);
+export const isFieldTabbed = createSelector(getFieldById, field => field.layout && field.layout.indexOf('tabbed') > -1);
