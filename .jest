@@ -6,16 +6,8 @@
 		"assets/tests"
 	],
 
-	"unmockedModulePathPatterns": [
-		"<rootDir>/node_modules/react/",
-		"<rootDir>/node_modules/enzyme/"
-	],
-
 	"modulePaths": [
+		"<rootDir>/assets/",
 		"<rootDir>/assets/react"
-	],
-
-	"moduleNameMapper": {
-		"^tests/helpers$": "<rootDir>/assets/tests/helpers.js"
-	}
+	]
 }
