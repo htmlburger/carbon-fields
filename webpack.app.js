@@ -52,7 +52,7 @@ module.exports = {
 			'./assets/react/fields/components/file-field.js',
 			'./assets/react/fields/components/text-field.js',
 			'./assets/react/fields/components/textarea-field.js',
-			'./assets/react/fields/components/separator-field.js',
+			'./assets/react/fields/components/separator.js',
 			'./assets/react/fields/components/color-field.js',
 			'./assets/react/fields/components/checkbox-field.js',
 			'./assets/react/fields/components/complex.js',

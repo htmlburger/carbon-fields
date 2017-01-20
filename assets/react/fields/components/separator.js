@@ -1,12 +1,18 @@
+/**
+ * The external dependencies.
+ */
 import React from 'react';
 import { compose } from 'recompose';
 
+/**
+ * The internal dependencies.
+ */
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 
 /**
- * Create a visual separator between adjacent fields.
+ * Render a visual separator between adjacent fields.
  *
  * @param  {Object} props
  * @param  {Object} props.field

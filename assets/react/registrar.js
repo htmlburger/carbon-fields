@@ -14,7 +14,7 @@ import HtmlField from 'fields/components/html-field';
 import RadioField from 'fields/components/radio-field';
 import RadioImageField from 'fields/components/radio-image-field';
 import SelectField from 'fields/components/select-field';
-import SeparatorField from 'fields/components/separator-field';
+import SeparatorField from 'fields/components/separator';
 import SetField from 'fields/components/set-field';
 import TextField from 'fields/components/text-field';
 import TextareaField from 'fields/components/textarea-field';
