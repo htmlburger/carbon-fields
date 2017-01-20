@@ -26,30 +26,46 @@ import { addComplexGroup, cloneComplexGroup, removeComplexGroup } from 'fields/a
  * @param  {Object}   props
  * @param  {String}   props.name
  * @param  {Object}   props.field
- * @param  {Object}   props.popoverVisible
- * @param  {Function} props.handleActionsButtonClick
+ * @param  {Boolean}  props.tabbed
+ * @param  {Boolean}  props.popoverVisible
+ * @param  {Function} props.isGroupActive
  * @param  {Function} props.handlePopoverClose
+ * @param  {Function} props.handleTabClick
+ * @param  {Function} props.handleAddGroupClick
+ * @param  {Function} props.handleCloneGroupClick
+ * @param  {Function} props.handleRemoveGroupClick
  * @return {React.Element}
  */
-export const ComplexField = ({ name, field, isTabbed, popoverVisible, isGroupActive, handleActionsButtonClick, handlePopoverClose, handleTabClick, handleCloneGroupClick, handleRemoveGroupClick }) => {
+export const ComplexField = ({
+	name,
+	field,
+	tabbed,
+	popoverVisible,
+	isGroupActive,
+	handlePopoverClose,
+	handleTabClick,
+	handleAddGroupClick,
+	handleCloneGroupClick,
+	handleRemoveGroupClick
+}) => {
 	return <Field field={field}>
-		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': isTabbed })}>
+		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': tabbed })}>
 			<ComplexEmptyNotice
 				label={field.labels.plural_name}
-				isVisible={!field.value.length}
-				onClick={handleActionsButtonClick} />
+				visible={!field.value.length}
+				onClick={handleAddGroupClick} />
 
 			<div className={cx('groups-wrapper', `layout-${field.layout}`)}>
-				<ComplexTabs groups={field.value} current={field.ui.current_tab} show={isTabbed} onClick={handleTabClick}>
+				<ComplexTabs groups={field.value} current={field.ui.current_tab} show={tabbed} onClick={handleTabClick}>
 					<ComplexActions
 						buttonText="+"
-						onButtonClick={handleActionsButtonClick}>
+						onButtonClick={handleAddGroupClick}>
 							<ComplexPopover
 								groups={field.groups}
-								isVisible={popoverVisible}
-								onItemClick={handleActionsButtonClick}
+								visible={popoverVisible}
+								onItemClick={handleAddGroupClick}
 								onClose={handlePopoverClose}
-								outsideClickIgnoreClass={'carbon-button'} />
+								outsideClickIgnoreClass="carbon-button" />
 					</ComplexActions>
 				</ComplexTabs>
 
@@ -62,7 +78,7 @@ export const ComplexField = ({ name, field, isTabbed, popoverVisible, isGroupAct
 								prefix={name}
 								layout={field.layout}
 								group={group}
-								isActive={isGroupActive(group.id)}
+								active={isGroupActive(group.id)}
 								onClone={handleCloneGroupClick}
 								onRemove={handleRemoveGroupClick} />
 						})
@@ -73,13 +89,13 @@ export const ComplexField = ({ name, field, isTabbed, popoverVisible, isGroupAct
 
 			<ComplexActions
 				buttonText={crbl10n.complex_add_button.replace('%s', field.labels.singular_name)}
-				onButtonClick={handleActionsButtonClick}>
+				onButtonClick={handleAddGroupClick}>
 					<ComplexPopover
 						groups={field.groups}
-						isVisible={popoverVisible}
-						onItemClick={handleActionsButtonClick}
+						visible={popoverVisible}
+						onItemClick={handleAddGroupClick}
 						onClose={handlePopoverClose}
-						outsideClickIgnoreClass={'carbon-button'} />
+						outsideClickIgnoreClass="carbon-button" />
 			</ComplexActions>
 		</div>
 	</Field>;
@@ -92,11 +108,9 @@ export const ComplexField = ({ name, field, isTabbed, popoverVisible, isGroupAct
  * @param  {Object} props
  * @return {Object}
  */
-const mapStateToProps = (state, props) => {
-	return {
-		isTabbed: isFieldTabbed(state, props.id),
-	};
-};
+const mapStateToProps = (state, props) => ({
+	tabbed: isFieldTabbed(state, props.id),
+});
 
 /**
  * The additional actions that will be passed to the component.
@@ -118,7 +132,7 @@ const hooks = {
 	componentDidMount() {
 		const {
 			field,
-			isTabbed,
+			tabbed,
 			setupField,
 			setUI
 		} = this.props;
@@ -126,7 +140,7 @@ const hooks = {
 		let { ui } = this.props;
 
 		// Show the first tab of the complex.
-		if (isTabbed && field.value.length) {
+		if (tabbed && field.value.length) {
 			ui = {
 				...ui,
 				current_tab: field.value[0].id
@@ -144,27 +158,20 @@ const hooks = {
  * @param  {Object}   props
  * @param  {Object}   props.field
  * @param  {Boolean}  props.popoverVisible
- * @param  {Function} props.addComplexGroup
  * @param  {Function} props.setPopoverVisibility
+ * @param  {Function} props.addComplexGroup
  * @return {Function}
  */
-const handleActionsButtonClick = ({ field, popoverVisible, addComplexGroup, setPopoverVisibility }) => {
-	/**
-	 * @inner
-	 * @param  {String} [group]
-	 * @return {void}
-	 */
-	return (group) => {
-		if (field.multiple_groups) {
-			setPopoverVisibility(!popoverVisible);
-		} else {
-			group = field.groups[0].name;
-		}
+const handleAddGroupClick = ({ field, popoverVisible, setPopoverVisibility, addComplexGroup }) => groupName => {
+	if (field.multiple_groups) {
+		setPopoverVisibility(!popoverVisible);
+	} else {
+		groupName = field.groups[0].name;
+	}
 
-		if (group) {
-			addComplexGroup(field.id, group);
-		}
-	};
+	if (groupName) {
+		addComplexGroup(field.id, groupName);
+	}
 };
 
 /**
@@ -184,18 +191,7 @@ const handlePopoverClose = ({ setPopoverVisibility }) => () => setPopoverVisibil
  * @param  {Function} props.setUI
  * @return {Function}
  */
-const handleTabClick = ({ field, setUI }) => {
-	/**
-	 * @inner
-	 * @param  {String} group
-	 * @return {void}
-	 */
-	return (group) => {
-		setUI(field.id, {
-			current_tab: group
-		});
-	};
-};
+const handleTabClick = ({ field, setUI }) => groupId => setUI(field.id, { current_tab: groupId });
 
 /**
  * Clone the complex group.
@@ -205,51 +201,27 @@ const handleTabClick = ({ field, setUI }) => {
  * @param  {Function} props.cloneComplexGroup
  * @return {Function}
  */
-const handleCloneGroupClick = ({ field, cloneComplexGroup }) => {
-	/**
-	 * @inner
-	 * @param  {String} groupId
-	 * @return {void}
-	 */
-	return (groupId) => {
-		cloneComplexGroup(field.id, groupId);
-	};
-};
+const handleCloneGroupClick = ({ field, cloneComplexGroup }) => groupId => cloneComplexGroup(field.id, groupId);
 
 /**
  * Remove the complex group.
  *
  * @param  {Object}   props
  * @param  {Object}   props.field
+ * @param  {Function} props.removeComplexGroup
  * @return {Function}
  */
-const handleRemoveGroupClick = ({ field, removeComplexGroup }) => {
-	/**
-	 * @inner
-	 * @param  {String} group
-	 * @return {void}
-	 */
-	return (group) => {
-		removeComplexGroup(field.id, group);
-	};
-};
+const handleRemoveGroupClick = ({ field, removeComplexGroup }) => groupId => removeComplexGroup(field.id, groupId);
 
 /**
  * Check whether the group is the currently visible tab.
  *
  * @param  {Object}   props
  * @param  {Object}   props.field
- * @param  {Boolean}  props.isTabbed
+ * @param  {Boolean}  props.tabbed
  * @return {Function}
  */
-const isGroupActive = ({ field, isTabbed }) => {
-	/**
-	 * @inner
-	 * @param  {String}  groupId
-	 * @return {Boolean}
-	 */
-	return groupId => isTabbed && field.ui.current_tab === groupId;
-};
+const isGroupActive = ({ field, tabbed }) => groupId => tabbed && field.ui.current_tab === groupId;
 
 export default compose(
 	withStore(mapStateToProps, mapDispatchToProps),
@@ -257,9 +229,9 @@ export default compose(
 	withState('popoverVisible', 'setPopoverVisibility', false),
 	withHandlers({
 		isGroupActive,
-		handleActionsButtonClick,
 		handlePopoverClose,
 		handleTabClick,
+		handleAddGroupClick,
 		handleCloneGroupClick,
 		handleRemoveGroupClick,
 	})

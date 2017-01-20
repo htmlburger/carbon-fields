@@ -15,13 +15,13 @@ import { preventDefault } from 'lib/helpers';
  *
  * @param  {Object} 	   props
  * @param  {String} 	   props.label
- * @param  {Boolean} 	   props.isVisible
+ * @param  {Boolean} 	   props.visible
  * @param  {Function} 	   props.handleClick
  * @return {React.Element}
  */
-export const ComplexEmptyNotice = ({ label, isVisible, handleClick }) => {
+export const ComplexEmptyNotice = ({ label, visible, handleClick }) => {
 	return <div
-		className={cx('carbon-empty-row', { 'carbon-empty-row-visible': isVisible })}
+		className={cx('carbon-empty-row', { 'carbon-empty-row-visible': visible })}
 		dangerouslySetInnerHTML={{ __html: crbl10n.complex_no_rows.replace('%s', label) }}
 		onClick={handleClick} />;
 };
@@ -33,7 +33,7 @@ export const ComplexEmptyNotice = ({ label, isVisible, handleClick }) => {
  */
 ComplexEmptyNotice.propTypes = {
 	label: PropTypes.string.isRequired,
-	isVisible: PropTypes.bool.isRequired,
+	visible: PropTypes.bool.isRequired,
 	onClick: PropTypes.func.isRequired,
 };
 

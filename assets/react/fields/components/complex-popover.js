@@ -16,14 +16,14 @@ import { preventDefault } from 'lib/helpers';
  *
  * @param  {Object}   props
  * @param  {Object[]} props.groups
- * @param  {Boolean}  props.isVisible
+ * @param  {Boolean}  props.visible
  * @param  {Function} props.handleItemClick
  * @return {React.Element}
  *
  * @todo Refactor inline style to a CSS class.
  */
-export const ComplexPopover = ({ groups, isVisible, handleItemClick }) => {
-	return <ul hidden={!isVisible}>
+export const ComplexPopover = ({ groups, visible, handleItemClick }) => {
+	return <ul hidden={!visible}>
 		{
 			groups.map((group, index) => (
 				<li key={index}>
@@ -46,7 +46,7 @@ ComplexPopover.propTypes = {
 		name: PropTypes.string.isRequired,
 		label: PropTypes.string.isRequired,
 	})).isRequired,
-	isVisible: PropTypes.bool,
+	visible: PropTypes.bool,
 	onItemClick: PropTypes.func.isRequired,
 	onClose: PropTypes.func.isRequired,
 };
@@ -68,11 +68,11 @@ const handleItemClick = ({ onItemClick, onClose }) => groupName => preventDefaul
  * Hide the popover if the click is outside the element.
  *
  * @param  {Object}   props
- * @param  {Boolean}  props.isVisible
+ * @param  {Boolean}  props.visible
  * @param  {Function} props.onClose
  * @return {Function}
  */
-const handleClickOutside = ({ isVisible, onClose }) => () => isVisible && onClose();
+const handleClickOutside = ({ visible, onClose }) => () => visible && onClose();
 
 export default branch(
 	({ groups }) => groups.length > 1,

@@ -19,8 +19,8 @@ import { preventDefault } from 'lib/helpers';
  * @param  {String}   props.prefix
  * @param  {String}   props.layout
  * @param  {Object}   props.group
- * @param  {Boolean}  props.isActive
- * @param  {Boolean}  props.isCollapsed
+ * @param  {Boolean}  props.active
+ * @param  {Boolean}  props.collapsed
  * @param  {Function} props.handleToggleClick
  * @param  {Function} props.handleCloneClick
  * @param  {Function} props.handleRemoveClick
@@ -29,8 +29,8 @@ import { preventDefault } from 'lib/helpers';
  * TODO: Fix the translation of the hints.
  * TODO: Add support for custom labels.
  */
-export const ComplexGroup = ({ index, prefix, layout, group, isActive, isCollapsed, handleToggleClick, handleCloneClick, handleRemoveClick }) => {
-	return <div className={cx('carbon-row', 'carbon-group-row', { 'collapsed': isCollapsed }, { 'active': isActive })}>
+export const ComplexGroup = ({ index, prefix, layout, group, active, collapsed, handleToggleClick, handleCloneClick, handleRemoveClick }) => {
+	return <div className={cx('carbon-row', 'carbon-group-row', { 'collapsed': collapsed }, { 'active': active })}>
 		<input
 			type="hidden"
 			name={`${prefix}[${index}][group]`}
@@ -88,7 +88,7 @@ ComplexGroup.propTypes = {
 			name: PropTypes.string.isRequired,
 		})),
 	}).isRequired,
-	isActive: PropTypes.bool.isRequired,
+	active: PropTypes.bool.isRequired,
 	onClone: PropTypes.func.isRequired,
 	onRemove: PropTypes.func.isRequired,
 };
@@ -97,11 +97,11 @@ ComplexGroup.propTypes = {
  * Handle the click on the 'Expand/Collapse' button.
  *
  * @param  {Object}   props
- * @param  {Boolean}  props.isCollapsed
+ * @param  {Boolean}  props.collapsed
  * @param  {Function} props.setCollapsed
  * @return {Function}
  */
-const handleToggleClick = ({ isCollapsed, setCollapsed }) => preventDefault(() => setCollapsed(!isCollapsed));
+const handleToggleClick = ({ collapsed, setCollapsed }) => preventDefault(() => setCollapsed(!collapsed));
 
 /**
  * Handle the click on the 'Clone' button.
@@ -124,7 +124,7 @@ const handleCloneClick = ({ group, onClone }) => preventDefault(() => onClone(gr
 const handleRemoveClick = ({ group, onRemove }) => preventDefault(() => onRemove(group.id));
 
 export default compose(
-	withState('isCollapsed', 'setCollapsed', false),
+	withState('collapsed', 'setCollapsed', false),
 	withHandlers({
 		handleToggleClick,
 		handleCloneClick,
