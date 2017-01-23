@@ -10,23 +10,9 @@ use Carbon_Fields\Templater\Templater;
 class Plugin_Update_Warning {
 
 	/**
-	 * Singleton implementation.
-	 *
-	 * @return Plugin_Update_Warning
-	 */
-	public static function instance() {
-		static $instance;
-		if ( ! is_a( $instance, get_class() ) ) {
-			$instance = new self();
-			add_action( 'admin_init', array( $instance, 'setup' ) );
-		}
-		return $instance;
-	}
-
-	/**
 	 * Register actions, filters, etc...
 	 */
-	public function setup() {
+	public function boot() {
 		global $pagenow;
 
 		if ( !in_array( $pagenow, array( 'plugins.php', 'update-core.php' ) ) ) {

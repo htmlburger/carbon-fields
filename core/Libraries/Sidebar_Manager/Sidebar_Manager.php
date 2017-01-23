@@ -7,27 +7,10 @@ namespace Carbon_Fields\Libraries\Sidebar_Manager;
  */
 class Sidebar_Manager {
 
-	protected static $instance = null;
-
-	public static function instance() {
-		if ( static::$instance === null ) {
-			static::$instance = new static();
-			static::$instance->setup();
-		}
-		return static::$instance;
-	}
-	
-	/**
-	 * Pretty initialization alias
-	 */
-	public static function boot() {
-		static::instance();
-	}
-
 	/**
 	 * Register actions, filters, etc...
 	 */
-	public function setup() {
+	public function boot() {
 		// Register the custom sidebars
 		add_action( 'widgets_init', array( $this, 'register_sidebars' ), 100 );
 
