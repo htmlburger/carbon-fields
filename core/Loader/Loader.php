@@ -50,6 +50,11 @@ class Loader {
 
 		# Initialize sidebar manager
 		Sidebar_Manager::boot();
+
+		if ( is_admin() ) {
+			# Initialize plugin update warning
+			\Carbon_Fields\Libraries\Plugin_Update_Warning\Plugin_Update_Warning::instance();
+		}
 	}
 
 	/**
