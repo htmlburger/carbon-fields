@@ -4,7 +4,7 @@ namespace Carbon_Fields\Datastore;
 
 use Carbon_Fields\Field\Field;
 
-class Nav_Menu_Datastore extends Post_Meta_Datastore {
+class Nav_Menu_Item_Datastore extends Post_Meta_Datastore {
 	
 	public function get_garbage_prefix() {
 		if ( !$this->get_id() ) {

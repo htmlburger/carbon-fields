@@ -3,14 +3,13 @@
 namespace Carbon_Fields\Container;
 
 use Carbon_Fields\Datastore\Meta_Datastore;
-use Carbon_Fields\Datastore\Nav_Menu_Datastore;
-use Carbon_Fields\Walker\Nav_Menu_Edit_Walker;
+use Carbon_Fields\Datastore\Nav_Menu_Item_Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Nav menu item fields container class.
  */
-class Nav_Menu_Container extends Container {
+class Nav_Menu_Item_Container extends Container {
 	/**
 	 * Array of container clones for every menu item
 	 *
@@ -28,7 +27,7 @@ class Nav_Menu_Container extends Container {
 		parent::__construct( $title );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Nav_Menu_Datastore(), $this->has_default_datastore() );
+			$this->set_datastore( new Nav_Menu_Item_Datastore(), $this->has_default_datastore() );
 		}
 
 		// Register the custom edit walker only once
@@ -52,7 +51,7 @@ class Nav_Menu_Container extends Container {
 		// Only the base container should register for updating/rendering
 		if ( $menu_item_id === 0 ) {
 			add_action( 'wp_update_nav_menu_item', array( $this, 'update' ), 10, 3 );
-			add_action( 'crb_print_carbon_container_nav_menu_fields_html', array( $this, 'form' ), 10, 5 );
+			add_action( 'crb_print_carbon_container_nav_menu_item_fields_html', array( $this, 'form' ), 10, 5 );
 		}
 
 		return $this;
@@ -134,7 +133,7 @@ class Nav_Menu_Container extends Container {
 	 */
 	protected function get_clone_for_menu_item( $menu_item_id ) {
 		if ( !isset( $this->menu_item_instances[ $menu_item_id ] ) ) {
-			$menu_item_datastore = new Nav_Menu_Datastore();
+			$menu_item_datastore = new Nav_Menu_Item_Datastore();
 			$menu_item_datastore->set_id( $menu_item_id );
 			$menu_item_field_prefix = $menu_item_datastore->get_garbage_prefix();
 
@@ -164,6 +163,6 @@ class Nav_Menu_Container extends Container {
 	 * Setup custom walker for the Nav Menu entries
 	 */
 	public static function edit_walker() {
-		return '\Carbon_Fields\Walker\Nav_Menu_Edit_Walker';
+		return '\Carbon_Fields\Walker\Nav_Menu_Item_Edit_Walker';
 	}
 }
