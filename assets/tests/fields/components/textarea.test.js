@@ -2,7 +2,6 @@
  * The external dependencies.
  */
 import React from 'react';
-import { merge } from 'lodash';
 import { shallow } from 'enzyme';
 
 /**
@@ -53,7 +52,7 @@ describe('TextareaField', () => {
 
 	it('should accept an `onChange` handler', () => {
 		const spy = jest.fn();
-		const wrapper = shallow(<TextareaField field={{ value: 'test' }} handleChange={spy} />);
+		const wrapper = shallow(<TextareaField field={{}} handleChange={spy} />);
 		const node = wrapper.find('textarea');
 
 		node.simulate('change');
