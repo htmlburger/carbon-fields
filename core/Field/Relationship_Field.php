@@ -234,21 +234,21 @@ class Relationship_Field extends Field {
 						selected_items_length = value.length;
 					} #>
 					<span class="selected-counter">{{{ selected_items_length }}}</span>
-					<span class="selected-label" data-single-label="<?php _e( 'selected item', 'carbon-fields' ); ?>" data-plural-label="<?php _e( 'selected items', 'carbon-fields' ); ?>">
-						<?php _e( 'selected items', 'carbon-fields' ); ?>
+					<span class="selected-label" data-single-label="<?php _e( 'selected item', \Carbon_Fields\TEXT_DOMAIN ); ?>" data-plural-label="<?php _e( 'selected items', \Carbon_Fields\TEXT_DOMAIN ); ?>">
+						<?php _e( 'selected items', \Carbon_Fields\TEXT_DOMAIN ); ?>
 					</span>
 
 					<?php
 					/* If set_max() has been set, show the allowed maximum items number */
 					?>
 					<# if ( max !== -1 ) { #>
-						<span class="remaining"><?php _e( 'out of', 'carbon-fields' ); ?> {{{ max }}}</span>
+						<span class="remaining"><?php _e( 'out of', \Carbon_Fields\TEXT_DOMAIN ); ?> {{{ max }}}</span>
 					<# } #>
 				</strong>
 			</div>
 
 			<div class="search-field carbon-relationship-search dashicons-before dashicons-search">
-				<input type="text" class="search-field" placeholder="<?php esc_attr_e( 'Search...', 'carbon-fields' ); ?>" />
+				<input type="text" class="search-field" placeholder="<?php esc_attr_e( 'Search...', \Carbon_Fields\TEXT_DOMAIN ); ?>" />
 			</div>
 
 			<div class="carbon-relationship-body">
@@ -263,7 +263,7 @@ class Relationship_Field extends Field {
 				</div>
 
 				<div class="carbon-relationship-right">
-					<label><?php _e( 'Associated:', 'carbon-fields' ); ?></label>
+					<label><?php _e( 'Associated:', \Carbon_Fields\TEXT_DOMAIN ); ?></label>
 
 					<ul class="carbon-relationship-list">
 						<# if (value) { #>
@@ -290,7 +290,7 @@ class Relationship_Field extends Field {
 			<span class="mobile-handle dashicons-before dashicons-menu"></span>
 			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-item-label="{{{ item.label }}}" data-value="{{{ item.id }}}">
 				<# if ( item.edit_link ) { #>
-					<em class="edit-link dashicons-before dashicons-edit" data-href="{{{ item.edit_link }}}"><?php _e( 'Edit', 'carbon-fields' ); ?></em>
+					<em class="edit-link dashicons-before dashicons-edit" data-href="{{{ item.edit_link }}}"><?php _e( 'Edit', \Carbon_Fields\TEXT_DOMAIN ); ?></em>
 				<# } #>
 				<em>{{{ item.label }}}</em>
 				<span class="dashicons-before dashicons-plus-alt"></span>

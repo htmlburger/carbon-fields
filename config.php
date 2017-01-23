@@ -2,6 +2,11 @@
 
 namespace Carbon_Fields;
 
+$plugin_data = get_file_data( __DIR__ . DIRECTORY_SEPARATOR . 'carbon-fields.php', array(
+	'Version'=>'Version',
+	'Text Domain'=>'Text Domain',
+) );
+
 # Define main plugin file path
 if ( ! defined( __NAMESPACE__ . '\PLUGIN_FILE' ) ) {
 	define( __NAMESPACE__ . '\PLUGIN_FILE', __DIR__ . DIRECTORY_SEPARATOR . 'carbon-fields.php' );
@@ -14,13 +19,17 @@ if ( ! defined( __NAMESPACE__ . '\RELATIVE_PLUGIN_FILE' ) ) {
 
 # Define version constant
 if ( ! defined( __NAMESPACE__ . '\VERSION' ) ) {
-	$plugin_data = get_file_data( __DIR__ . DIRECTORY_SEPARATOR . 'carbon-fields.php', array('Version'=>'Version') );
 	define( __NAMESPACE__ . '\VERSION', $plugin_data['Version'] );
 }
 
 # Define root directory
 if ( ! defined( __NAMESPACE__ . '\DIR' ) ) {
 	define( __NAMESPACE__ . '\DIR', __DIR__ );
+}
+
+# Define version constant
+if ( ! defined( __NAMESPACE__ . '\TEXT_DOMAIN' ) ) {
+	define( __NAMESPACE__ . '\TEXT_DOMAIN', $plugin_data['Text Domain'] );
 }
 
 # Define root URL

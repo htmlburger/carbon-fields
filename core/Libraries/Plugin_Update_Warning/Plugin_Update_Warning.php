@@ -74,7 +74,7 @@ class Plugin_Update_Warning {
 	protected function template() {
 		?>
 		<div class="update-message notice inline notice-error notice-alt">
-			<p><?php echo nl2br( sprintf( __( 'The new version of Carbon Fields is a major update. Please make sure you have a full backup before updating and test any add-ons or custom functionality.' . "\n" . 'Developers should review the upgrade guide on %1$s.', 'carbon-fields' ), '<a href="https://carbonfields.net/" target="_blank">carbonfields.net</a>' ) ); ?></p>
+			<p><?php echo nl2br( sprintf( __( 'The new version of Carbon Fields is a major update. Please make sure you have a full backup before updating and test any add-ons or custom functionality.' . "\n" . 'Developers should review the upgrade guide on %1$s.', \Carbon_Fields\TEXT_DOMAIN ), '<a href="https://carbonfields.net/" target="_blank">carbonfields.net</a>' ) ); ?></p>
 		</div>
 		<?php
 	}

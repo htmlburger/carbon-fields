@@ -102,7 +102,7 @@ class Sidebar_Manager {
 		$id = sanitize_title( $id );
 
 		if ( isset( $registered_sidebars[ $id ] ) ) {
-			return new \WP_Error( 'sidebar-exists', __( 'Sidebar with the same ID is already registered.', 'carbon-fields' ) );
+			return new \WP_Error( 'sidebar-exists', __( 'Sidebar with the same ID is already registered.', \Carbon_Fields\TEXT_DOMAIN ) );
 		}
 
 		$registered_sidebars[ $id ] = array(
@@ -129,7 +129,7 @@ class Sidebar_Manager {
 		if ( isset( $registered_sidebars[ $id ] ) ) {
 			unset( $registered_sidebars[ $id ] );
 		} else {
-			return new \WP_Error( 'sidebar-not-found', __( 'Sidebar not found.', 'carbon-fields' ) );
+			return new \WP_Error( 'sidebar-not-found', __( 'Sidebar not found.', \Carbon_Fields\TEXT_DOMAIN ) );
 		}
 
 		return update_option( 'carbon_custom_sidebars', $registered_sidebars );
@@ -168,9 +168,9 @@ class Sidebar_Manager {
 		wp_enqueue_script( 'carbon-sidebar-manager', \Carbon_Fields\URL . '/core/Libraries/Sidebar_Manager/assets/js/app.js', array(), \Carbon_Fields\VERSION );
 		wp_localize_script( 'carbon-sidebar-manager', 'crbSidebarl10n',
 			array(
-				'add_sidebar' => __( 'Add Sidebar', 'carbon-fields' ),
-				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', 'carbon-fields' ),
-				'remove_sidebar_confirmation' => __( 'Are you sure you wish to remove this sidebar?', 'carbon-fields' ),
+				'add_sidebar' => __( 'Add Sidebar', \Carbon_Fields\TEXT_DOMAIN ),
+				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', \Carbon_Fields\TEXT_DOMAIN ),
+				'remove_sidebar_confirmation' => __( 'Are you sure you wish to remove this sidebar?', \Carbon_Fields\TEXT_DOMAIN ),
 			)
 		);
 	}

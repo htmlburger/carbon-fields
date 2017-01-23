@@ -146,7 +146,7 @@ class Theme_Options_Container extends Container {
 	 **/
 	public function render() {
 		if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == 'true' ) {
-			$this->notifications[] = __( 'Settings saved.', 'carbon-fields' );
+			$this->notifications[] = __( 'Settings saved.', \Carbon_Fields\TEXT_DOMAIN );
 		}
 
 		include \Carbon_Fields\DIR . '/templates/Container/theme_options.php';

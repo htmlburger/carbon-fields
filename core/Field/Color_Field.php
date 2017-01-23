@@ -15,7 +15,7 @@ class Color_Field extends Field {
 			<span class="pickcolor button carbon-color-button hide-if-no-js">
 				<span class="carbon-color-preview"></span>
 
-				<span class="carbon-color-button-text"><?php _e( 'Select a Color', 'carbon-fields' ); ?></span>
+				<span class="carbon-color-button-text"><?php _e( 'Select a Color', \Carbon_Fields\TEXT_DOMAIN ); ?></span>
 			</span>
 
 			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-color-field" />

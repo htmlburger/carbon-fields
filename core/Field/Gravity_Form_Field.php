@@ -41,7 +41,7 @@ class Gravity_Form_Field extends Select_Field {
 		}
 
 		$options = array(
-			'0' => __( 'No form', 'carbon-fields' ),
+			'0' => __( 'No form', \Carbon_Fields\TEXT_DOMAIN ),
 		);
 
 		foreach ( $forms as $form ) {
@@ -76,13 +76,13 @@ class Gravity_Form_Field extends Select_Field {
 	public function template() {
 		// Gravity Forms not installed
 		if ( ! $this->is_plugin_active() ) {
-			?><em><?php _e( 'Please install Gravity Forms plugin', 'carbon-fields' ); ?></em><?php
+			?><em><?php _e( 'Please install Gravity Forms plugin', \Carbon_Fields\TEXT_DOMAIN ); ?></em><?php
 			return;
 		}
 
 		// No forms have been found
 		if ( empty( $this->get_options() ) ) {
-			?><em><?php _e( 'No Gravity Forms have been found.', 'carbon-fields' ); ?></em><?php
+			?><em><?php _e( 'No Gravity Forms have been found.', \Carbon_Fields\TEXT_DOMAIN ); ?></em><?php
 			return;
 		}
 

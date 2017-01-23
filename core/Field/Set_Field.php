@@ -99,7 +99,7 @@ class Set_Field extends Predefined_Options_Field {
 	public function template() {
 		?>
 		<# if (_.isEmpty(options)) { #>
-			<em><?php _e( 'no options', 'carbon-fields' ); ?></em>
+			<em><?php _e( 'no options', \Carbon_Fields\TEXT_DOMAIN ); ?></em>
 		<# } else { #>
 			<div class="carbon-set-list">
 				<# _.each(options, function(option, i) { #>
@@ -118,7 +118,7 @@ class Set_Field extends Predefined_Options_Field {
 					</p>
 
 					<# if (!exceed && !last && counter == limit_options) { #>
-						<p>... <a href="#" class="carbon-set-showall"><?php _e( 'Show All Options', 'carbon-fields' ); ?></a></p>
+						<p>... <a href="#" class="carbon-set-showall"><?php _e( 'Show All Options', \Carbon_Fields\TEXT_DOMAIN ); ?></a></p>
 					<# } #>
 				<# }) #>
 			</div>

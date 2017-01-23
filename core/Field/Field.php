@@ -838,20 +838,20 @@ class Field implements Datastore_Holder_Interface {
 		wp_enqueue_script( 'carbon-fields', \Carbon_Fields\URL . '/assets/js/fields.js', array( 'carbon-app', 'carbon-containers' ), \Carbon_Fields\VERSION );
 		wp_localize_script( 'carbon-fields', 'crbl10n',
 			array(
-				'title' => __( 'Files', 'carbon-fields' ),
-				'geocode_zero_results' => __( 'The address could not be found. ', 'carbon-fields' ),
-				'geocode_not_successful' => __( 'Geocode was not successful for the following reason: ', 'carbon-fields' ),
-				'max_num_items_reached' => __( 'Maximum number of items reached (%s items)', 'carbon-fields' ),
-				'max_num_rows_reached' => __( 'Maximum number of rows reached (%s rows)', 'carbon-fields' ),
-				'cannot_create_more_rows' => __( 'Cannot create more than %s rows', 'carbon-fields' ),
-				'complex_no_rows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),
-				'complex_add_button' => __( 'Add %s', 'carbon-fields' ),
-				'complex_min_num_rows_not_reached' => __( 'Minimum number of rows not reached (%1$d %2$s)', 'carbon-fields' ),
-				'message_form_validation_failed' => __( 'Please fill out all fields correctly. ', 'carbon-fields' ),
-				'message_required_field' => __( 'This field is required. ', 'carbon-fields' ),
-				'message_choose_option' => __( 'Please choose an option. ', 'carbon-fields' ),
+				'title' => __( 'Files', \Carbon_Fields\TEXT_DOMAIN ),
+				'geocode_zero_results' => __( 'The address could not be found. ', \Carbon_Fields\TEXT_DOMAIN ),
+				'geocode_not_successful' => __( 'Geocode was not successful for the following reason: ', \Carbon_Fields\TEXT_DOMAIN ),
+				'max_num_items_reached' => __( 'Maximum number of items reached (%s items)', \Carbon_Fields\TEXT_DOMAIN ),
+				'max_num_rows_reached' => __( 'Maximum number of rows reached (%s rows)', \Carbon_Fields\TEXT_DOMAIN ),
+				'cannot_create_more_rows' => __( 'Cannot create more than %s rows', \Carbon_Fields\TEXT_DOMAIN ),
+				'complex_no_rows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', \Carbon_Fields\TEXT_DOMAIN ),
+				'complex_add_button' => __( 'Add %s', \Carbon_Fields\TEXT_DOMAIN ),
+				'complex_min_num_rows_not_reached' => __( 'Minimum number of rows not reached (%1$d %2$s)', \Carbon_Fields\TEXT_DOMAIN ),
+				'message_form_validation_failed' => __( 'Please fill out all fields correctly. ', \Carbon_Fields\TEXT_DOMAIN ),
+				'message_required_field' => __( 'This field is required. ', \Carbon_Fields\TEXT_DOMAIN ),
+				'message_choose_option' => __( 'Please choose an option. ', \Carbon_Fields\TEXT_DOMAIN ),
 
-				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', 'carbon-fields' ),
+				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', \Carbon_Fields\TEXT_DOMAIN ),
 			)
 		);
 	}

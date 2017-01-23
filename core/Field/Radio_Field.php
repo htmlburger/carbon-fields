@@ -12,7 +12,7 @@ class Radio_Field extends Select_Field {
 	public function template() {
 		?>
 		<# if (_.isEmpty(options)) { #>
-			<em><?php _e( 'no options', 'carbon-fields' ); ?></em>
+			<em><?php _e( 'no options', \Carbon_Fields\TEXT_DOMAIN ); ?></em>
 		<# } else { #>
 			<ul class="carbon-radio-list">
 				<# _.each(options, function(option) { #>

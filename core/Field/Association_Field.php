@@ -356,7 +356,7 @@ class Association_Field extends Relationship_Field {
 			<span class="mobile-handle dashicons-before dashicons-menu"></span>
 			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-item-label="{{{ item.label }}}" data-value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}">
 				<# if ( item.edit_link ) { #>
-					<em class="edit-link dashicons-before dashicons-edit" data-href="{{{ item.edit_link }}}"><?php _e( 'Edit', 'carbon-fields' ); ?></em>
+					<em class="edit-link dashicons-before dashicons-edit" data-href="{{{ item.edit_link }}}"><?php _e( 'Edit', \Carbon_Fields\TEXT_DOMAIN ); ?></em>
 				<# } #>
 				<em>{{{ item.label }}}</em>
 				<span class="dashicons-before dashicons-plus-alt"></span>

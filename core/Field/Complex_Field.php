@@ -36,8 +36,8 @@ class Complex_Field extends Field {
 	 */
 	public function init() {
 		$this->labels = array(
-			'singular_name' => __( 'Entry', 'carbon-fields' ),
-			'plural_name' => __( 'Entries', 'carbon-fields' ),
+			'singular_name' => __( 'Entry', \Carbon_Fields\TEXT_DOMAIN ),
+			'plural_name' => __( 'Entries', \Carbon_Fields\TEXT_DOMAIN ),
 		);
 
 		// Include the complex group Underscore templates
@@ -500,16 +500,16 @@ class Complex_Field extends Field {
 			</div>
 
 			<div class="carbon-group-actions carbon-group-actions-{{ layout }}">
-				<a class="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="<?php esc_attr_e( 'Clone', 'carbon-fields' ); ?>">
-					<?php _e( 'Clone', 'carbon-fields' ); ?>
+				<a class="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="<?php esc_attr_e( 'Clone', \Carbon_Fields\TEXT_DOMAIN ); ?>">
+					<?php _e( 'Clone', \Carbon_Fields\TEXT_DOMAIN ); ?>
 				</a>
 
-				<a class="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="<?php esc_attr_e( 'Remove', 'carbon-fields' ); ?>">
-					<?php _e( 'Remove', 'carbon-fields' ); ?>
+				<a class="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="<?php esc_attr_e( 'Remove', \Carbon_Fields\TEXT_DOMAIN ); ?>">
+					<?php _e( 'Remove', \Carbon_Fields\TEXT_DOMAIN ); ?>
 				</a>
 
-				<a class="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="<?php esc_attr_e( 'Collapse/Expand', 'carbon-fields' ); ?>">
-					<?php _e( 'Collapse/Expand', 'carbon-fields' ); ?>
+				<a class="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="<?php esc_attr_e( 'Collapse/Expand', \Carbon_Fields\TEXT_DOMAIN ); ?>">
+					<?php _e( 'Collapse/Expand', \Carbon_Fields\TEXT_DOMAIN ); ?>
 				</a>
 			</div>
 

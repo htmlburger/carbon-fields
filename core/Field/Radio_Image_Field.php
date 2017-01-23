@@ -12,7 +12,7 @@ class Radio_Image_Field extends Select_Field {
 	public function template() {
 		?>
 		<# if (_.isEmpty(options)) { #>
-			<em><?php esc_html_e( 'no options', 'carbon-fields' ); ?></em>
+			<em><?php esc_html_e( 'no options', \Carbon_Fields\TEXT_DOMAIN ); ?></em>
 		<# } else { #>
 			<div class="carbon-radio-image-list">
 				<# _.each(options, function(option) { #>

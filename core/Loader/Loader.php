@@ -62,7 +62,7 @@ class Loader {
 	 */
 	public function load_textdomain() {
 		$dir = \Carbon_Fields\DIR . '/languages/';
-		$domain = 'carbon-fields';
+		$domain = \Carbon_Fields\TEXT_DOMAIN;
 		$locale = get_locale();
 		$path = $dir . $domain . '-' . $locale . '.mo';
 		load_textdomain( $domain, $path );

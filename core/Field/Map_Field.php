@@ -100,12 +100,12 @@ class Map_Field extends Field {
 	public function template() {
 		?>
 		<div class="carbon-map-search">
-			<p><?php _e( 'Locate Address on the map', 'carbon-fields' ); ?>: </p>
+			<p><?php _e( 'Locate Address on the map', \Carbon_Fields\TEXT_DOMAIN ); ?>: </p>
 
 			<div class="carbon-map-search-row">
 				<input type="text" name="{{{ name }}}[address]" value="{{{ address }}}" class="regular-text address carbon-map-search-address" placeholder="Search..." />
 				<span class="carbon-map-search-button dashicons-before dashicons-search">
-					<?php _e( 'Find', 'carbon-fields' ); ?>
+					<?php _e( 'Find', \Carbon_Fields\TEXT_DOMAIN ); ?>
 				</span>
 			</div>
 
