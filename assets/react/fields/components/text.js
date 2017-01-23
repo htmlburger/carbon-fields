@@ -1,6 +1,12 @@
-import React from 'react';
-import { compose } from 'recompose';
+/**
+ * The external dependencies.
+ */
+import React, { PropTypes } from 'react';
+import { compose, withHandlers } from 'recompose';
 
+/**
+ * The internal dependencies.
+ */
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
@@ -11,22 +17,33 @@ import withSetup from 'fields/decorators/with-setup';
  * @param  {Object}   props
  * @param  {String}   props.name
  * @param  {Object}   props.field
- * @param  {Function} props.updateField
+ * @param  {Function} props.handleChange
  * @return {React.Element}
  */
-export const TextField = ({ name, field, updateField }) => {
-	return <Field id={field.id} field={field}>
+export const TextField = ({ name, field, handleChange }) => {
+	return <Field field={field}>
 		<input
 			type="text"
 			id={field.id}
 			name={name}
-			defaultValue={field.value}
+			value={field.value}
 			className="regular-text"
-			onChange={({ target }) => updateField(field.id, { value: target.value })} />
+			onChange={handleChange} />
 	</Field>;
 };
 
+/**
+ * Sync the input value with the store.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.updateField
+ * @return {Function}
+ */
+const handleChange = ({ field, updateField }) => ({ target: { value } }) => updateField(field.id, { value });
+
 export default compose(
 	withStore(),
-	withSetup()
+	withSetup(),
+	withHandlers({ handleChange })
 )(TextField);
