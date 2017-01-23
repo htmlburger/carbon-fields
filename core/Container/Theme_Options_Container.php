@@ -28,7 +28,7 @@ class Theme_Options_Container extends Container {
 		parent::__construct( $title );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Theme_Options_Datastore() );
+			$this->set_datastore( new Theme_Options_Datastore(), $this->has_default_datastore() );
 		}
 	}
 
@@ -209,7 +209,7 @@ class Theme_Options_Container extends Container {
 	 * Append array of fields to the current fields set. All items of the array
 	 * must be instances of Field and their names should be unique for all
 	 * Carbon containers.
-	 * If a field does not have DataStore already, the container data store is
+	 * If a field does not have DataStore already, the container datastore is
 	 * assigned to them instead.
 	 *
 	 * @param array $fields

@@ -2,6 +2,16 @@
 
 namespace Carbon_Fields;
 
+# Define main plugin file path
+if ( ! defined( __NAMESPACE__ . '\PLUGIN_FILE' ) ) {
+	define( __NAMESPACE__ . '\PLUGIN_FILE', __DIR__ . DIRECTORY_SEPARATOR . 'carbon-fields.php' );
+}
+
+# Define main plugin relative file path e.g. vendor/name
+if ( ! defined( __NAMESPACE__ . '\RELATIVE_PLUGIN_FILE' ) ) {
+	define( __NAMESPACE__ . '\RELATIVE_PLUGIN_FILE', basename( dirname( \Carbon_Fields\PLUGIN_FILE ) ) . '/' . basename( \Carbon_Fields\PLUGIN_FILE ) );
+}
+
 # Define version constant
 if ( ! defined( __NAMESPACE__ . '\VERSION' ) ) {
 	$plugin_data = get_file_data( __DIR__ . DIRECTORY_SEPARATOR . 'carbon-fields.php', array('Version'=>'Version') );
