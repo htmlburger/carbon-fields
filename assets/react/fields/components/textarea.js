@@ -38,14 +38,14 @@ export const TextareaField = ({ name, field, handleChange }) => {
  * @type {Object}
  */
 TextareaField.propTypes = {
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	field: PropTypes.shape({
-		id: PropTypes.string.isRequired,
+		id: PropTypes.string,
 		value: PropTypes.string,
 		rows: PropTypes.number,
-		height: PropTypes.number.isRequired,
+		height: PropTypes.number,
 	}).isRequired,
-	updateField: PropTypes.func.isRequired,
+	handleChange: PropTypes.func,
 };
 
 /**
