@@ -5,6 +5,8 @@ import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import RadioList from 'fields/components/radio-list';
+import RadioImageList from 'fields/components/radio-image-list';
 
 /**
  * Render a radio input field.
@@ -17,25 +19,18 @@ import withSetup from 'fields/decorators/with-setup';
  * @return {React.Element}
  */
 export const RadioField = ({ name, field, handleInputChange, isChecked }) => {
-	return <Field field={field}>
-		<ul className="carbon-radio-list">
-			{field.options.map(option => {
-				return <li key={`${field.id}-${option.name}`}>
-					<label>
-						<input
-							type="radio"
-							name={field.name}
-							value={option.value}
-							checked={isChecked(option)}
-							onChange={handleInputChange} />
+	const List = field.type === 'RadioImage' ? RadioImageList : RadioList;
 
-						{option.name}
-					</label>
-				</li>;
-			})}
-		</ul>
-	</Field>;
-};
+	return <Field field={field}>
+				<List 
+					field={field}
+					name={name}
+					handleInputChange={handleInputChange}
+					isChecked={isChecked}
+				/>
+			</Field>
+}
+
 
 /**
  * Sync the input value with the store.
