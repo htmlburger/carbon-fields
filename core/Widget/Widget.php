@@ -14,10 +14,31 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	public static $registered_widget_ids = array();
 
+	/**
+	 * Determines if widget wrapper html should be printed
+	 *
+	 * @see widget()
+	 * @var bool
+	 */
 	protected $print_wrappers = true;
+
 	protected $store_data;
-	protected $form_options = array( 'width' => 295 );
+
+	/**
+	 * Control options to pass to WordPress Widget constructor
+	 *
+	 * @see setup()
+	 * @var array
+	 */
+	protected $widget_control_options = array( 'width' => 295 );
+
+	/**
+	 * Array of Carbon Fields for the widget
+	 *
+	 * @var array
+	 */
 	protected $custom_fields = array();
+
 	protected $complex_field_names = array();
 
 	/**
@@ -30,29 +51,32 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 * @param  string $classname   String of CSS classes
 	 */
 	public function setup( $title, $description, $fields, $classname = '' ) {
-		// require title
-		if ( ! $title ) {
-			Incorrect_Syntax_Exception::raise( 'Enter widget title' );
+		if ( empty( $title ) ) {
+			Incorrect_Syntax_Exception::raise( 'Empty widget title is not supported' );
 		}
 
-		// add custom fields
 		$this->add_fields( $fields );
 
 		# Generate Widget ID
-		$widget_ID = 'carbon_' . preg_replace( '~\s+~', '_', strtolower( trim( preg_replace( '/[^a-zA-Z0-9]+/u', '', remove_accents( $title ) ) ) ) );
+		$widget_id = 'carbon_widget_' . preg_replace( '~\s+~', '_', strtolower( trim( preg_replace( '/[^a-zA-Z0-9]+/u', '', remove_accents( $title ) ) ) ) );
+
+		$this->verify_unique_widget_id( $widget_id );
 
 		# Generate Classes
 		if ( ! is_array( $classname ) ) {
 			$classname = (array) $classname;
 		}
-		$classname[] = $widget_ID;
+		$classname[] = $widget_id;
+		$classname = array_filter( $classname );
 		$classname = implode( ' ', $classname );
 
-		$widget_options = compact( 'description', 'classname', 'widget_ID' );
+		$widget_options = array(
+			'description'=>$description,
+			'classname'=>$classname,
+			'widget_ID'=>$widget_id,
+		);
 
-		$this->verify_unique_widget_id( $widget_ID );
-
-		parent::__construct( $widget_ID, $title, $widget_options, $this->form_options );
+		parent::__construct( $widget_id, $title, $widget_options, $this->widget_control_options );
 	}
 
 	/**
@@ -119,6 +143,8 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		foreach ( $instance as &$field_value ) {
 			$field_value = Helper::parse_relationship_field( $field_value );
 		}
+
+		print_r( $instance );
 
 		// output
 		if ( $this->print_wrappers ) {
