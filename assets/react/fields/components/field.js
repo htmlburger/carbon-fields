@@ -48,7 +48,18 @@ export const Field = ({ field, children }) => {
  * @type {Object}
  */
 Field.propTypes = {
-	field: PropTypes.object.isRequired,
+	field: PropTypes.shape({
+		id: PropTypes.string.isRequired,
+		type: PropTypes.string.isRequired,
+		label: PropTypes.string,
+		required: PropTypes.bool,
+		help_text: PropTypes.string,
+		width: PropTypes.number,
+	}).isRequired,
+	children: PropTypes.oneOfType([
+		PropTypes.element,
+		PropTypes.arrayOf(PropTypes.element)
+	])
 };
 
 export default Field;
