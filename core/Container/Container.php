@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Container;
 
+use Carbon_Fields\App;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Datastore\Datastore_Holder_Interface;
@@ -19,28 +20,12 @@ abstract class Container implements Datastore_Holder_Interface {
 	const TABS_HEAD = 2;
 
 	/**
-	 * List of registered unique panel identificators
+	 * Stores if the container is active on the current page
 	 *
-	 * @see get_unique_panel_id()
-	 * @var array
+	 * @see activate()
+	 * @var bool
 	 */
-	public static $registered_panel_ids = array();
-
-	/**
-	 * List of containers created via factory that
-	 * should be initialized
-	 *
-	 * @var array
-	 */
-	protected static $init_containers = array();
-
-	/**
-	 * List of containers attached to the current page view
-	 *
-	 * @see _attach()
-	 * @var array
-	 */
-	public static $active_containers = array();
+	protected $active = false;
 
 	/**
 	 * List of fields attached to the current page view
@@ -142,26 +127,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return object $container
 	 **/
 	public static function factory( $type, $name ) {
-		// backward compatibility: post_meta container used to be called custom_fields
-		if ( $type === 'custom_fields' ) {
-			$type = 'post_meta';
-		}
-
-		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
-
-		$class = __NAMESPACE__ . '\\' . $type . '_Container';
-
-		if ( ! class_exists( $class ) ) {
-			Incorrect_Syntax_Exception::raise( 'Unknown container "' . $type . '".' );
-			$class = __NAMESPACE__ . '\\Broken_Container';
-		}
-
-		$container = new $class( $name );
-		$container->type = $type;
-
-		self::$init_containers[] = $container;
-
-		return $container;
+		return App::ioc( 'container_repository' )->factory( $type, $name );
 	}
 
 	/**
@@ -174,36 +140,19 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Initialize containers created via factory
-	 *
-	 * @return object
+	 * Return whether the container is active
 	 **/
-	public static function init_containers() {
-		while ( ( $container = array_shift( self::$init_containers ) ) ) {
-			$container->init();
-		}
-
-		return $container;
+	public function active() {
+		return $this->active;
 	}
 
 	/**
-	 * Returns all the active containers created via factory
-	 *
-	 * @return array
+	 * Activate the container and trigger an action
 	 **/
-	public static function get_active_containers() {
-		return self::$active_containers;
-	}
-
-	/**
-	 * Adds a container to the active containers array and triggers an action
-	 **/
-	public static function activate_container( $container ) {
-		self::$active_containers[] = $container;
-
-		$container->boot();
-
-		do_action( 'crb_container_activated', $container );
+	public function activate() {
+		$this->active = true;
+		$this->boot();
+		do_action( 'crb_container_activated', $this );
 	}
 
 	/**
@@ -232,6 +181,23 @@ abstract class Container implements Datastore_Holder_Interface {
 		$field->boot();
 
 		do_action( 'crb_field_activated', $field );
+	}
+
+	/**
+	 * Create a new container
+	 *
+	 * @param string $unique_id Unique id of the container
+	 * @param string $title title of the container
+	 * @param string $type Type of the container
+	 **/
+	public function __construct( $unique_id, $title, $type ) {
+		if ( empty( $title ) ) {
+			Incorrect_Syntax_Exception::raise( 'Empty container title is not supported' );
+		}
+
+		$this->id = $unique_id;
+		$this->title = $title;
+		$this->type = $type;
 	}
 
 	/**
@@ -268,23 +234,6 @@ abstract class Container implements Datastore_Holder_Interface {
 			<# }); #>
 		</div>
 		<?php
-	}
-
-	/**
-	 * Create a new container
-	 *
-	 * @param string $title Unique title of the container
-	 **/
-	public function __construct( $title ) {
-		if ( empty( $title ) ) {
-			Incorrect_Syntax_Exception::raise( 'Empty container title is not supported' );
-		}
-
-		$this->title = $title;
-		$this->id = preg_replace( '~\W~u', '', remove_accents( $title ) );
-		$this->id = self::get_unique_panel_id( $this->id );
-
-		self::$registered_panel_ids[] = $this->id;
 	}
 
 	/**
@@ -382,7 +331,6 @@ abstract class Container implements Datastore_Holder_Interface {
 		}
 	}
 
-
 	/**
 	 * Called first as part of the container attachment procedure.
 	 * Responsible for checking it's OK to attach the container
@@ -397,7 +345,7 @@ abstract class Container implements Datastore_Holder_Interface {
 			call_user_func_array( array( $this, 'attach' ), $param );
 
 			if ( call_user_func_array( array( $this, 'is_active' ), $param ) ) {
-				self::activate_container( $this );
+				$this->activate();
 
 				$fields = $this->get_fields();
 				foreach ( $fields as $field ) {
@@ -430,15 +378,6 @@ abstract class Container implements Datastore_Holder_Interface {
 	public function attach() {}
 
 	/**
-	 * Perform checks whether the container is active for current request
-	 *
-	 * @return bool True if the container is active
-	 **/
-	public function is_active() {
-		return $this->is_valid_attach();
-	}
-
-	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
@@ -448,15 +387,10 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Revert the result of attach()
+	 * Whether this container is currently viewed.
 	 **/
-	public function detach() {
-		self::drop_unique_panel_id( $this->id );
-
-		// unregister field names
-		foreach ( $this->fields as $field ) {
-			$this->drop_unique_field_name( $field->get_name() );
-		}
+	public function is_active() {
+		return $this->is_valid_attach();
 	}
 
 	/**
@@ -622,33 +556,6 @@ abstract class Container implements Datastore_Holder_Interface {
 	 **/
 	public function has_fields() {
 		return (bool) $this->fields;
-	}
-
-	/**
-	 * Perform checks whether there is a container registered with identificator $id
-	 */
-	public static function get_unique_panel_id( $id ) {
-		$base = $id;
-		$suffix = 0;
-
-		while ( in_array( $id, self::$registered_panel_ids ) ) {
-			$suffix++;
-			$id = $base . strval( $suffix );
-		}
-
-		return $id;
-	}
-
-
-	/**
-	 * Remove container identificator $id from the list of unique container ids
-	 *
-	 * @param string $id
-	 **/
-	public static function drop_unique_panel_id( $id ) {
-		if ( in_array( $id, self::$registered_panel_ids ) ) {
-			unset( self::$registered_panel_ids[ array_search( $id, self::$registered_panel_ids ) ] );
-		}
 	}
 
 	/**

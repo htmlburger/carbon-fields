@@ -2,9 +2,11 @@
 
 namespace Carbon_Fields\Loader;
 
-use \Carbon_Fields\Container\Container;
+use \Carbon_Fields\Pimple\Container as PimpleContainer;
+use \Carbon_Fields\Container\Repository as ContainerRepository;
 use \Carbon_Fields\Templater\Templater;
 use \Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
+use \Carbon_Fields\Libraries\Plugin_Update_Warning\Plugin_Update_Warning;
 use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -12,48 +14,45 @@ use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 class Loader {
 
-	protected static $instance = null;
+	protected $templater;
 
-	public static function instance() {
-		if ( static::$instance === null ) {
-			static::$instance = new static();
-			static::$instance->setup();
-		}
-		return static::$instance;
-	}
-	
-	/**
-	 * Pretty initialization alias
-	 */
-	public static function boot() {
-		static::instance();
+	protected $sidebar_manager;
+
+	protected $plugin_update_warning;
+
+	protected $container_repository;
+
+	public function __construct( Templater $templater, Sidebar_Manager $sidebar_manager, Plugin_Update_Warning $plugin_update_warning, ContainerRepository $container_repository ) {
+		$this->templater = $templater;
+		$this->sidebar_manager = $sidebar_manager;
+		$this->plugin_update_warning = $plugin_update_warning;
+		$this->container_repository = $container_repository;
 	}
 
 	/**
-	 * Create a new helper.
 	 * Hook the main Carbon Fields initialization functionality.
 	 */
-	public function setup() {
+	public function boot() {
 		include_once( dirname( dirname( __DIR__ ) ) . '/config.php' );
 		include_once( \Carbon_Fields\DIR . '/core/functions.php' );
 		
 		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
-		add_action( 'carbon_after_register_fields', array( $this, 'init_containers' ) );
+		add_action( 'carbon_after_register_fields', array( $this, 'initialize_containers' ) );
 		add_action( 'crb_field_activated', array( $this, 'add_templates' ) );
 		add_action( 'crb_container_activated', array( $this, 'add_templates' ) );
 		add_action( 'admin_footer', array( $this, 'enqueue_scripts' ), 0 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data_script' ), 9 );
 
 		# Initialize templater
-		Templater::boot();
+		$this->templater->boot();
 
 		# Initialize sidebar manager
-		Sidebar_Manager::boot();
+		$this->sidebar_manager->boot();
 
 		if ( is_admin() ) {
 			# Initialize plugin update warning
-			\Carbon_Fields\Libraries\Plugin_Update_Warning\Plugin_Update_Warning::instance();
+			$this->plugin_update_warning->boot();
 		}
 	}
 
@@ -87,8 +86,8 @@ class Loader {
 	/**
 	 * Initialize containers.
 	 */
-	public function init_containers() {
-		Container::init_containers();
+	public function initialize_containers() {
+		$this->container_repository->initialize_containers();
 	}
 
 	/**
@@ -111,7 +110,7 @@ class Loader {
 			$html = ob_get_clean();
 
 			// Add the template to the stack
-			Templater::instance()->add_template( $name, $html );
+			$this->templater->add_template( $name, $html );
 		}
 	}
 
@@ -136,7 +135,7 @@ class Loader {
 			'sidebars' => array(),
 		);
 
-		$containers = Container::get_active_containers();
+		$containers = $this->container_repository->get_active_containers();
 
 		foreach ( $containers as $container ) {
 			$container_data = $container->to_json( true );

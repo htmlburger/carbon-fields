@@ -13,7 +13,7 @@
  * Domain Path: /languages
  */
 
-use \Carbon_Fields\Loader\Loader;
+use \Carbon_Fields\App;
 
 if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require( __DIR__ . '/vendor/autoload.php' );
@@ -32,4 +32,4 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	spl_autoload_register( 'carbon_fields_spl_autoload_register' );
 }
 
-Loader::boot();
+App::boot();

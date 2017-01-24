@@ -8,29 +8,12 @@ namespace Carbon_Fields\Templater;
  **/
 class Templater {
 
-	protected static $instance = null;
-
 	protected $templates = array();
-
-	public static function instance() {
-		if ( static::$instance === null ) {
-			static::$instance = new static();
-			static::$instance->setup();
-		}
-		return static::$instance;
-	}
-	
-	/**
-	 * Pretty initialization alias
-	 */
-	public static function boot() {
-		static::instance();
-	}
 
 	/**
 	 * Hook all templates to the administration footer.
 	 */
-	public function setup() {
+	public function boot() {
 		add_action( 'admin_footer', array( $this, 'render_templates' ), 999 );
 	}
 
