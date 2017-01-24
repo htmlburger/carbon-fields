@@ -16,8 +16,15 @@ import withSetup from 'fields/decorators/with-setup';
  * @return {React.Element}
  */
 export const SelectField = ({ name, field, handleInputChange }) => {
+	
 	return <Field field={field}>
-		<select id={field.id} name={name} onChange={handleInputChange}>
+		<select 
+			id={field.id} 
+			name={name} 
+			onChange={handleInputChange} 
+			value={field.value}
+		>
+		
 			{field.options.map(option => {
 				return <option key={`${field.id}-${option.name}`} value={option.value}>
 					{option.name}
