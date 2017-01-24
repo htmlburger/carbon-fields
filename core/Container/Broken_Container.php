@@ -12,5 +12,7 @@ class Broken_Container extends Container {
 	public function add_fields( $fields ) {}
 
 	public function init() {}
+
+	public function is_valid_attach() { return false; }
 }
 

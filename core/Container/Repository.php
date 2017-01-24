@@ -2,6 +2,8 @@
 
 namespace Carbon_Fields\Container;
 
+use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+
 /**
  * Keeps track of all instantiated containers
  */
