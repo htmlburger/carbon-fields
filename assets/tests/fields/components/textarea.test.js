@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { Provider } from 'react-redux';
+import { defaultsDeep } from 'lodash';
 
 import configureMockStore from 'redux-mock-store';
 import { shallow, mount } from 'enzyme';
@@ -17,55 +18,65 @@ import { updateField } from 'fields/actions';
  * The unit tests.
  */
 describe('TextareaField - Unit', () => {
-	it('should render a `textarea` element', () => {
-		const wrapper = shallow(<TextareaField field={{}} />);
-		const actual = wrapper.find('textarea').length;
-		const expected = 1;
+	function setup(props = {}) {
+		props = defaultsDeep(props, {
+			name: 'field',
+			field: {
+				id: 'field-1',
+				value: 'test',
+			},
+			handleChange: jest.fn(),
+		});
 
-		expect(actual).toEqual(expected);
+		const wrapper = shallow(<TextareaField {...props} />);
+
+		return { wrapper, props };
+	}
+
+	it('should render a `textarea` element', () => {
+		const { wrapper } = setup({});
+		const node = wrapper.find('textarea');
+
+		expect(node.length).toEqual(1);
+		expect(node.prop('id')).toEqual('field-1');
+		expect(node.prop('value')).toEqual('test');
 	});
 
 	it('should accept a `name` property', () => {
-		const wrapper = shallow(<TextareaField name="field" field={{}} />);
-		const actual = wrapper.find('textarea').prop('name');
-		const expected = 'field';
+		const { wrapper } = setup({});
 
-		expect(actual).toEqual(expected);
-	});
-
-	it('should accept a `value` property', () => {
-		const wrapper = shallow(<TextareaField field={{ value: 'test' }} />);
-		const actual = wrapper.find('textarea').prop('value');
-		const expected = 'test';
-
-		expect(actual).toEqual(expected);
+		expect(wrapper.find('textarea').prop('name')).toEqual('field');
 	});
 
 	it('should accept a `height` property', () => {
-		const wrapper = shallow(<TextareaField field={{ height: 100 }} />);
-		const actual = wrapper.find('textarea').prop('style');
-		const expected = jasmine.objectContaining({ height: 100 });
+		const { wrapper } = setup({
+			field: {
+				height: 100
+			}
+		});
 
-		expect(actual).toEqual(expected);
+		expect(wrapper.find('textarea').prop('style')).toEqual(jasmine.objectContaining({
+			height: 100
+		}));
 	});
 
 	it('should accept a `rows` property', () => {
-		const wrapper = shallow(<TextareaField field={{ rows: 10 }} />);
-		const actual = wrapper.find('textarea').prop('rows');
-		const expected = 10;
+		const { wrapper } = setup({
+			field: {
+				rows: 10
+			}
+		});
 
-		expect(actual).toEqual(expected);
+		expect(wrapper.find('textarea').prop('rows')).toEqual(10);
 	});
 
 	it('should accept an `onChange` handler', () => {
-		const spy = jest.fn();
-		const wrapper = shallow(<TextareaField field={{}} handleChange={spy} />);
-		const node = wrapper.find('textarea');
+		const { wrapper, props: { handleChange } } = setup();
 
-		node.simulate('change');
+		wrapper.find('textarea').simulate('change');
 
-		expect(spy).toHaveBeenCalled();
-		expect(spy).toHaveBeenCalledTimes(1);
+		expect(handleChange).toHaveBeenCalled();
+		expect(handleChange).toHaveBeenCalledTimes(1);
 	});
 });
 
@@ -78,6 +89,7 @@ describe('TextareaField - Integration', () => {
 			fields: {
 				'field-1': {
 					id: 'field-1',
+					name: 'field-1',
 					value: 'test'
 				}
 			}
@@ -95,9 +107,8 @@ describe('TextareaField - Integration', () => {
 			}
 		});
 
-		const actual = store.getActions();
-		const expected = updateField('field-1', { value: 'changed' });
-
-		expect(actual).toEqual(jasmine.arrayContaining([expected]));
+		expect(store.getActions()).toEqual(jasmine.arrayContaining([
+			updateField('field-1', { value: 'changed' })
+		]));
 	});
 });
