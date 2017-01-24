@@ -76,6 +76,15 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
+	 * Perform checks whether the container should be attached during the current request
+	 *
+	 * @return bool True if the container is allowed to be attached
+	 **/
+	public function is_valid_attach() {
+		return true;
+	}
+
+	/**
 	 * Perform checks whether the current save() request is valid.
 	 *
 	 * @return bool

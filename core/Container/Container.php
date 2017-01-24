@@ -336,9 +336,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	public function is_valid_attach() {
-		return true;
-	}
+	public abstract function is_valid_attach();
 
 	/**
 	 * Whether this container is currently viewed.
