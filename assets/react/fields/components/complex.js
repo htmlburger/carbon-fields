@@ -1,7 +1,7 @@
 /**
  * The external dependencies.
  */
-import React from 'react';
+import React, { PropTypes } from 'react';
 import cx from 'classnames';
 import { compose, withHandlers, withState } from 'recompose';
 
@@ -99,6 +99,45 @@ export const ComplexField = ({
 			</ComplexActions>
 		</div>
 	</Field>;
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+ComplexField.propTypes = {
+	name: PropTypes.string.isRequired,
+	field: PropTypes.shape({
+		id: PropTypes.string.isRequired,
+		value: PropTypes.arrayOf(PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			name: PropTypes.string.isRequired,
+			label: PropTypes.string,
+			fields: PropTypes.arrayOf(PropTypes.shape({
+				id: PropTypes.string.isRequired,
+				name: PropTypes.string.isRequired,
+				type: PropTypes.string.isRequired,
+			})),
+		})),
+		layout: PropTypes.string.isRequired,
+		labels: PropTypes.shape({
+			plural_name: PropTypes.string.isRequired,
+			singular_name: PropTypes.string.isRequired,
+		}).isRequired,
+		ui: PropTypes.shape({
+			current_tab: PropTypes.string
+		}),
+		multiple_groups: PropTypes.bool,
+	}).isRequired,
+	tabbed: PropTypes.bool.isRequired,
+	popoverVisible: PropTypes.bool.isRequired,
+	isGroupActive: PropTypes.func.isRequired,
+	handlePopoverClose: PropTypes.func.isRequired,
+	handleTabClick: PropTypes.func.isRequired,
+	handleAddGroupClick: PropTypes.func.isRequired,
+	handleCloneGroupClick: PropTypes.func.isRequired,
+	handleRemoveGroupClick: PropTypes.func.isRequired,
 };
 
 /**
