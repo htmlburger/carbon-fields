@@ -115,7 +115,7 @@ class Repository {
 	 * @param string $title
 	 */
 	public function get_unique_panel_id( $title ) {
-		$id = preg_replace( '~\W~u', '', remove_accents( $title ) );
+		$id = preg_replace( '~\W\-~u', '', remove_accents( $title ) );
 		$base = $id;
 		$suffix = 0;
 

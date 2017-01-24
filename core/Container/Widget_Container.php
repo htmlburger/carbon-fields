@@ -8,6 +8,17 @@ namespace Carbon_Fields\Container;
 class Widget_Container extends Container {
 
 	/**
+	 * Create a new widget
+	 *
+	 * @param string $id Unique ID of the widget
+	 **/
+	public function __construct( $unique_id, $title, $type ) {
+		$this->id = $unique_id;
+		$this->title = '';
+		$this->type = $type;
+	}
+
+	/**
 	 * Perform instance initialization after calling setup()
 	 **/
 	public function init() {
