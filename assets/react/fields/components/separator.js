@@ -32,7 +32,7 @@ export const SeparatorField = ({ field }) => {
 SeparatorField.propTypes = {
 	field: PropTypes.shape({
 		label: PropTypes.string.isRequired,
-	}),
+	}).isRequired,
 };
 
 export default compose(
