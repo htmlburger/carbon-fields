@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import { Provider } from 'react-redux';
+import { defaultsDeep } from 'lodash';
 
 import configureMockStore from 'redux-mock-store';
 import { shallow, mount } from 'enzyme';
@@ -17,39 +18,43 @@ import { updateField } from 'fields/actions';
  * The unit tests.
  */
 describe('TextField - Unit', () => {
-	it('should render an `input` element', () => {
-		const wrapper = shallow(<TextField field={{}} />);
-		const actual = wrapper.find('input').length;
-		const expected = 1;
+	function setup(props = {}) {
+		props = defaultsDeep(props, {
+			name: 'field',
+			field: {
+				id: 'field-1',
+				value: 'test',
+			},
+			handleChange: jest.fn(),
+		});
 
-		expect(actual).toEqual(expected);
+		const wrapper = shallow(<TextField {...props} />);
+
+		return { wrapper, props };
+	}
+
+	it('should render an `input` element', () => {
+		const { wrapper } = setup({});
+		const node = wrapper.find('input');
+
+		expect(node.length).toEqual(1);
+		expect(node.prop('id')).toEqual('field-1');
+		expect(node.prop('value')).toEqual('test');
 	});
 
 	it('should accept a `name` property', () => {
-		const wrapper = shallow(<TextField name="field" field={{}} />);
-		const actual = wrapper.find('input').prop('name');
-		const expected = 'field';
+		const { wrapper } = setup({});
 
-		expect(actual).toEqual(expected);
-	});
-
-	it('should accept a `value` property', () => {
-		const wrapper = shallow(<TextField field={{ value: 'test' }} />);
-		const actual = wrapper.find('input').prop('value');
-		const expected = 'test';
-
-		expect(actual).toEqual(expected);
+		expect(wrapper.find('input').prop('name')).toEqual('field');
 	});
 
 	it('should accept an `onChange` handler', () => {
-		const spy = jest.fn();
-		const wrapper = shallow(<TextField field={{}} handleChange={spy} />);
-		const node = wrapper.find('input');
+		const { wrapper, props: { handleChange } } = setup();
 
-		node.simulate('change');
+		wrapper.find('input').simulate('change');
 
-		expect(spy).toHaveBeenCalled();
-		expect(spy).toHaveBeenCalledTimes(1);
+		expect(handleChange).toHaveBeenCalled();
+		expect(handleChange).toHaveBeenCalledTimes(1);
 	});
 });
 
@@ -62,6 +67,7 @@ describe('TextField - Integration', () => {
 			fields: {
 				'field-1': {
 					id: 'field-1',
+					name: 'field-1',
 					value: 'test'
 				}
 			}
@@ -79,9 +85,8 @@ describe('TextField - Integration', () => {
 			}
 		});
 
-		const actual = store.getActions();
-		const expected = updateField('field-1', { value: 'changed' });
-
-		expect(actual).toEqual(jasmine.arrayContaining([expected]));
+		expect(store.getActions()).toEqual(jasmine.arrayContaining([
+			updateField('field-1', { value: 'changed' })
+		]));
 	});
 });

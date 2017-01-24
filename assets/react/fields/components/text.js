@@ -33,6 +33,20 @@ export const TextField = ({ name, field, handleChange }) => {
 };
 
 /**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+TextField.propTypes = {
+	name: PropTypes.string.isRequired,
+	field: PropTypes.shape({
+		id: PropTypes.string.isRequired,
+		value: PropTypes.string,
+	}).isRequired,
+	handleChange: PropTypes.func.isRequired,
+};
+
+/**
  * Sync the input value with the store.
  *
  * @param  {Object}   props
