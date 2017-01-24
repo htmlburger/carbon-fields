@@ -123,7 +123,7 @@ class Theme_Options_Container extends Container {
 	/**
 	 * Whether this container is currently viewed.
 	 **/
-	public function is_valid_attach() {
+	public function is_active() {
 		if ( isset( $_GET['page'] ) && $_GET['page'] === $this->settings['file'] ) {
 			return true;
 		}

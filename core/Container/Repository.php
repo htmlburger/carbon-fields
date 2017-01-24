@@ -33,19 +33,28 @@ class Repository {
 	protected $containers = array();
 
 	/**
+	 * Normalizes a container type string to an expected format
+	 *
+	 * @param string $type
+	 * @return string $normalized_type
+	 **/
+	protected function normalize_container_type( $type ) {
+		// backward compatibility: post_meta container used to be called custom_fields
+		if ( $type === 'custom_fields' ) {
+			$type = 'post_meta';
+		}
+
+		$normalized_type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
+		return $normalized_type;
+	}
+
+	/**
 	 * Resolves a string-based type to a fully qualified container class name
 	 *
 	 * @param string $type
 	 * @return string $class_name
 	 **/
 	protected function container_type_to_class( $type ) {
-		// backward compatibility: post_meta container used to be called custom_fields
-		if ( $type === 'custom_fields' ) {
-			$type = 'post_meta';
-		}
-
-		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
-
 		$class = __NAMESPACE__ . '\\' . $type . '_Container';
 		if ( ! class_exists( $class ) ) {
 			Incorrect_Syntax_Exception::raise( 'Unknown container "' . $type . '".' );
@@ -64,8 +73,9 @@ class Repository {
 	public function factory( $type, $name ) {
 		$unique_id = $this->get_unique_panel_id( $name );
 		
-		$class = $this->container_type_to_class( $type );
-		$container = new $class( $unique_id, $name, $type );
+		$normalized_type = $this->normalize_container_type( $type );
+		$class = $this->container_type_to_class( $normalized_type );
+		$container = new $class( $unique_id, $name, $normalized_type );
 
 		$this->containers[] = $container;
 		$this->pending_containers[] = $container;

@@ -150,8 +150,8 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Activate the container and trigger an action
 	 **/
 	public function activate() {
-		$this->boot();
 		$this->active = true;
+		$this->boot();
 		do_action( 'crb_container_activated', $this );
 	}
 
@@ -342,12 +342,15 @@ abstract class Container implements Datastore_Holder_Interface {
 	public function _attach() {
 		$param = func_get_args();
 		if ( call_user_func_array( array( $this, 'is_valid_attach' ), $param ) ) {
-			$this->activate();
 			call_user_func_array( array( $this, 'attach' ), $param );
 
-			$fields = $this->get_fields();
-			foreach ( $fields as $field ) {
-				self::activate_field( $field );
+			if ( call_user_func_array( array( $this, 'is_active' ), $param ) ) {
+				$this->activate();
+
+				$fields = $this->get_fields();
+				foreach ( $fields as $field ) {
+					self::activate_field( $field );
+				}
 			}
 		}
 	}
@@ -381,6 +384,13 @@ abstract class Container implements Datastore_Holder_Interface {
 	 **/
 	public function is_valid_attach() {
 		return true;
+	}
+
+	/**
+	 * Whether this container is currently viewed.
+	 **/
+	public function is_active() {
+		return $this->is_valid_attach();
 	}
 
 	/**
