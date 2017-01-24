@@ -4,6 +4,7 @@ use \Carbon_Fields\Container\Repository;
 use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class RepositoryTest extends WP_UnitTestCase {
+	
 	public function setUp() {
 		$this->containerId = 'PageSettings';
 		$this->containerTitle = 'Page Settings';

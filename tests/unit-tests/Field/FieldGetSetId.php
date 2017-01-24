@@ -5,7 +5,7 @@
 class FieldGetSetId extends WP_UnitTestCase {
 
 	public function setUp() {
-		$this->field = $this->getMockForAbstractClass('Carbon_Fields\Field\Field', array(), '', false);
+		$this->field = $this->getMockForAbstractClass( '\Carbon_Fields\Field\Field', array(), '', false );
 	}
 
 	public function tearDown() {
@@ -13,8 +13,8 @@ class FieldGetSetId extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers Carbon_Fields\Field\Field::get_id
-	 * @covers Carbon_Fields\Field\Field::set_id
+	 * @covers \Carbon_Fields\Field\Field::get_id
+	 * @covers \Carbon_Fields\Field\Field::set_id
 	 */
 	public function testGetSetId() {
 		$expected = mt_rand();

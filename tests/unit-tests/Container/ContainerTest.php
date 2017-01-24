@@ -1,6 +1,7 @@
 <?php
 
 class ContainerTest extends WP_UnitTestCase {
+	
 	public function setUp() {
 		$this->containerId = 'PageSettings';
 		$this->containerTitle = 'Page Settings';
