@@ -59,47 +59,6 @@ class Post_Meta_Container extends Container {
 	}
 
 	/**
-	 * Check if all required container settings have been specified
-	 *
-	 * @param array $settings Container settings
-	 **/
-	public function check_setup_settings( &$settings = array() ) {
-		if ( isset( $settings['show_on'] ) ) {
-			$invalid_settings = array_diff_key( $settings['show_on'], $this->settings['show_on'] );
-			if ( ! empty( $invalid_settings ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid show_on settings supplied to setup(): "' . implode( '", "', array_keys( $invalid_settings ) ) . '"' );
-			}
-		}
-
-		if ( isset( $settings['show_on']['post_formats'] ) ) {
-			$settings['show_on']['post_formats'] = (array) $settings['show_on']['post_formats'];
-		}
-
-		if ( isset( $settings['show_on']['post_path'] ) ) {
-			$page = get_page_by_path( $settings['show_on']['post_path'] );
-
-			if ( $page ) {
-				$settings['show_on']['page_id'] = $page->ID;
-			} else {
-				$settings['show_on']['page_id'] = -1;
-			}
-		}
-
-		// Transform category slug to taxonomy + term slug + term id
-		if ( isset( $settings['show_on']['category'] ) ) {
-			$term = get_term_by( 'slug', $settings['show_on']['category'], 'category' );
-
-			if ( $term ) {
-				$settings['show_on']['tax_slug'] = $term->taxonomy;
-				$settings['show_on']['tax_term'] = $term->slug;
-				$settings['show_on']['tax_term_id'] = $term->term_id;
-			}
-		}
-
-		return parent::check_setup_settings( $settings );
-	}
-
-	/**
 	 * Create DataStore instance, set post ID to operate with (if such exists).
 	 * Bind attach() and save() to the appropriate WordPress actions.
 	 **/

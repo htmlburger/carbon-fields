@@ -28,7 +28,7 @@ class Comment_Meta_Container extends Container {
 	}
 
 	/**
-	 * Perform instance initialization after calling setup()
+	 * Perform instance initialization
 	 **/
 	public function init() {
 		if ( isset( $_GET['c'] ) && $comment_id = absint( $_GET['c'] ) ) { // Input var okay.

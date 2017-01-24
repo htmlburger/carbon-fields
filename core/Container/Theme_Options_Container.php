@@ -163,7 +163,7 @@ class Theme_Options_Container extends Container {
 		if ( ! isset( self::$registered_pages[ $parent ] ) ) {
 			self::$registered_pages[ $parent ] = array( $file );
 		} elseif ( in_array( $file, self::$registered_pages[ $parent ] ) ) {
-			Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a different file name using setup()' );
+			Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a name for the container.' );
 		} else {
 			self::$registered_pages[ $parent ][] = $file;
 		}

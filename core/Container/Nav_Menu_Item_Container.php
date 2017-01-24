@@ -40,7 +40,7 @@ class Nav_Menu_Item_Container extends Container {
 	}
 
 	/**
-	 * Perform instance initialization after calling setup()
+	 * Perform instance initialization
 	 *
 	 * @param int $menu_item_id Used to pass the correct menu_item_id to the Container object
 	 * @param bool $render Whether the container will render the fields.

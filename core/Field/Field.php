@@ -235,7 +235,7 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Perform instance initialization after calling setup()
+	 * Perform instance initialization
 	 **/
 	public function init() {}
 

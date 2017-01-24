@@ -19,7 +19,7 @@ class Widget_Container extends Container {
 	}
 
 	/**
-	 * Perform instance initialization after calling setup()
+	 * Perform instance initialization
 	 **/
 	public function init() {
 		$this->_attach();

@@ -73,13 +73,6 @@ abstract class Container implements Datastore_Holder_Interface {
 	public $title = '';
 
 	/**
-	 * Whether the container was setup
-	 *
-	 * @var bool
-	 */
-	public $setup_ready = false;
-
-	/**
 	 * List of notification messages to be displayed on the front-end
 	 *
 	 * @var array
@@ -201,7 +194,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Perform instance initialization after calling setup()
+	 * Perform instance initialization
 	 **/
 	abstract public function init();
 
@@ -244,45 +237,6 @@ abstract class Container implements Datastore_Holder_Interface {
 
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_scripts' ), 5 );
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
-	}
-
-	/**
-	 * Update container settings and begin initialization
-	 *
-	 * @see init()
-	 * @param array $settings
-	 * @return object $this
-	 **/
-	public function setup( $settings = array() ) {
-		if ( $this->setup_ready ) {
-			Incorrect_Syntax_Exception::raise( 'Panel "' . $this->title . '" already setup' );
-		}
-
-		$this->check_setup_settings( $settings );
-
-		$this->settings = array_merge( $this->settings, $settings );
-
-		foreach ( $this->settings as $key => $value ) {
-			if ( is_null( $value ) ) {
-				unset( $this->settings[ $key ] );
-			}
-		}
-
-		$this->setup_ready = true;
-
-		return $this;
-	}
-
-	/**
-	 * Check if all required container settings have been specified
-	 *
-	 * @param array $settings Container settings
-	 **/
-	public function check_setup_settings( &$settings = array() ) {
-		$invalid_settings = array_diff_key( $settings, $this->settings );
-		if ( ! empty( $invalid_settings ) ) {
-			Incorrect_Syntax_Exception::raise( 'Invalid settings supplied to setup(): "' . implode( '", "', array_keys( $invalid_settings ) ) . '"' );
-		}
 	}
 
 	/**
