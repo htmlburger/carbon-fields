@@ -23,6 +23,7 @@ describe('SelectField - Unit', () => {
 			name: 'field',
 			field: {
 				id: 'field-1',
+				type: 'Select',
 				value: 'option-1',
 				options: [
 					{
@@ -86,6 +87,7 @@ describe('SelectField - Integration', () => {
 			fields: {
 				'field-1': defaults(state, {
 					id: 'field-1',
+					type: 'Select',
 					name: 'field-1',
 					options: [
 						{

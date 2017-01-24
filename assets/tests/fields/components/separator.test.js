@@ -11,7 +11,7 @@ import { SeparatorField } from 'fields/components/separator';
 
 describe('SeparatorField', () => {
 	it('should render a heading', () => {
-		const wrapper = shallow(<SeparatorField field={{ label: 'Some separator' }} />);
+		const wrapper = shallow(<SeparatorField field={{ id: 'field-1', type: 'Separator', label: 'Some separator' }} />);
 		const node = wrapper.find('h3');
 
 		expect(node.length).toEqual(1);

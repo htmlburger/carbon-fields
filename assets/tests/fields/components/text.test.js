@@ -23,6 +23,7 @@ describe('TextField - Unit', () => {
 			name: 'field',
 			field: {
 				id: 'field-1',
+				type: 'Text',
 				value: 'test',
 			},
 			handleChange: jest.fn(),
@@ -67,6 +68,7 @@ describe('TextField - Integration', () => {
 			fields: {
 				'field-1': {
 					id: 'field-1',
+					type: 'Text',
 					name: 'field-1',
 					value: 'test'
 				}

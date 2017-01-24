@@ -23,6 +23,7 @@ describe('TextareaField - Unit', () => {
 			name: 'field',
 			field: {
 				id: 'field-1',
+				type: 'Textarea',
 				value: 'test',
 			},
 			handleChange: jest.fn(),
@@ -89,6 +90,7 @@ describe('TextareaField - Integration', () => {
 			fields: {
 				'field-1': {
 					id: 'field-1',
+					type: 'Textarea',
 					name: 'field-1',
 					value: 'test'
 				}
