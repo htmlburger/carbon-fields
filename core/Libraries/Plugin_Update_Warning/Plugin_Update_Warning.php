@@ -9,6 +9,12 @@ use Carbon_Fields\Templater\Templater;
  */
 class Plugin_Update_Warning {
 
+	protected $templater;
+
+	public function __construct( Templater $templater ) {
+		$this->templater = $templater;
+	}
+
 	/**
 	 * Register actions, filters, etc...
 	 */
@@ -29,7 +35,7 @@ class Plugin_Update_Warning {
 		ob_start();
 		$this->template();
 		$template = ob_get_clean();
-		Templater::add_template( 'plugin-update-warning', $template );
+		$this->templater->add_template( 'plugin-update-warning', $template );
 	}
 
 	protected function has_major_update() {

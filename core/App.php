@@ -30,7 +30,7 @@ class App {
 	}
 
 	public static function boot() {
-		App::ioc( 'loader' )->boot();
+		static::ioc( 'loader' )->boot();
 	}
 
 	public function __construct() {
@@ -49,7 +49,7 @@ class App {
 		};
 
 		$ioc['plugin_update_warning'] = function( $c ) {
-			return new Plugin_Update_Warning();
+			return new Plugin_Update_Warning( $c['templater'] );
 		};
 
 		$ioc['container_repository'] = function( $c ) {
