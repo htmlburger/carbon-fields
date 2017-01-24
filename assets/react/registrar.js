@@ -29,6 +29,7 @@ registerFieldComponent('Html', HtmlField);
 registerFieldComponent('Radio', RadioField);
 registerFieldComponent('RadioImage', RadioField);
 registerFieldComponent('Select', SelectField);
+registerFieldComponent('GravityForm', SelectField);
 registerFieldComponent('Separator', SeparatorField);
 registerFieldComponent('Set', SetField);
 registerFieldComponent('Text', TextField);
