@@ -160,21 +160,21 @@ class Theme_Options_Container extends Container {
 
 		// Register top level page
 		if ( ! $parent ) {
-			if ( isset( self::$registered_pages[ $file ] ) ) {
+			if ( isset( static::$registered_pages[ $file ] ) ) {
 				Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" already registered' );
 			}
 
-			self::$registered_pages[ $file ] = array();
+			static::$registered_pages[ $file ] = array();
 			return;
 		}
 
 		// Register sub-page
-		if ( ! isset( self::$registered_pages[ $parent ] ) ) {
-			self::$registered_pages[ $parent ] = array( $file );
-		} elseif ( in_array( $file, self::$registered_pages[ $parent ] ) ) {
+		if ( ! isset( static::$registered_pages[ $parent ] ) ) {
+			static::$registered_pages[ $parent ] = array( $file );
+		} elseif ( in_array( $file, static::$registered_pages[ $parent ] ) ) {
 			Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a name for the container.' );
 		} else {
-			self::$registered_pages[ $parent ][] = $file;
+			static::$registered_pages[ $parent ][] = $file;
 		}
 	}
 
@@ -187,19 +187,19 @@ class Theme_Options_Container extends Container {
 
 		// Register top level page
 		if ( ! $parent ) {
-			if ( isset( self::$registered_pages[ $file ] ) && empty( self::$registered_pages[ $file ] ) ) {
-				unset( self::$registered_pages[ $file ] );
+			if ( isset( static::$registered_pages[ $file ] ) && empty( static::$registered_pages[ $file ] ) ) {
+				unset( static::$registered_pages[ $file ] );
 			}
 
 			return;
 		}
 
 		// Register sub-page
-		if ( isset( self::$registered_pages[ $parent ] ) && in_array( $file, self::$registered_pages[ $parent ] ) ) {
+		if ( isset( static::$registered_pages[ $parent ] ) && in_array( $file, static::$registered_pages[ $parent ] ) ) {
 
-			$index = array_search( $file, self::$registered_pages[ $parent ] );
+			$index = array_search( $file, static::$registered_pages[ $parent ] );
 			if ( $index !== false ) {
-				unset( self::$registered_pages[ $parent ][ $index ] );
+				unset( static::$registered_pages[ $parent ][ $index ] );
 			}
 		}
 	}

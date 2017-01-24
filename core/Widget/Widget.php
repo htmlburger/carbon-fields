@@ -136,7 +136,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	public function widget( $args, $instance ) {
 		// prepare $instance values for complex fields
 		if ( ! empty( $this->complex_field_names ) ) {
-			$instance = self::unwrap_complex_field_values( $instance, $this->complex_field_names );
+			$instance = static::unwrap_complex_field_values( $instance, $this->complex_field_names );
 		}
 
 		// prepare $instance values for association fields
@@ -217,11 +217,11 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 * @param  string $id Widget ID
 	 */
 	public function verify_unique_widget_id( $id ) {
-		if ( in_array( $id, self::$registered_widget_ids ) ) {
+		if ( in_array( $id, static::$registered_widget_ids ) ) {
 			Incorrect_Syntax_Exception::raise( 'Widget with ID "' . $id . '" already registered. Please change the widget title' );
 		}
 
-		self::$registered_widget_ids[] = $id;
+		static::$registered_widget_ids[] = $id;
 	}
 
 	/**

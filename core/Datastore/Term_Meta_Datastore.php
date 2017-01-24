@@ -28,7 +28,7 @@ class Term_Meta_Datastore extends Meta_Datastore {
 
 		$wpdb->termmeta = $wpdb->prefix . 'termmeta';
 
-		self::create_table();
+		static::create_table();
 
 		// Delete all meta associated with the deleted term
 		add_action( 'delete_term', array( __CLASS__, 'on_delete_term' ), 10, 3 );

@@ -121,7 +121,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @see Container::factory()
 	 **/
 	public static function make( $type, $name ) {
-		return self::factory( $type, $name );
+		return static::factory( $type, $name );
 	}
 
 	/**
@@ -440,9 +440,9 @@ abstract class Container implements Datastore_Holder_Interface {
 			Incorrect_Syntax_Exception::raise( "Tab name duplication for $tab_name" );
 		}
 
-		if ( $queue_end === self::TABS_TAIL ) {
+		if ( $queue_end === static::TABS_TAIL ) {
 			$this->tabs[ $tab_name ] = array();
-		} else if ( $queue_end === self::TABS_HEAD ) {
+		} else if ( $queue_end === static::TABS_HEAD ) {
 			$this->tabs = array_merge(
 				array( $tab_name => array() ),
 				$this->tabs
@@ -504,7 +504,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		$untabbed_fields = $this->get_untabbed_fields();
 
 		if ( ! empty( $untabbed_fields ) ) {
-			$this->create_tab( __( 'General', \Carbon_Fields\TEXT_DOMAIN ), $untabbed_fields, self::TABS_HEAD );
+			$this->create_tab( __( 'General', \Carbon_Fields\TEXT_DOMAIN ), $untabbed_fields, static::TABS_HEAD );
 		}
 
 		return $this->tabs;

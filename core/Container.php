@@ -24,6 +24,6 @@ class Container {
 	 * @see Container::factory()
 	 **/
 	public static function make( $type, $name ) {
-		return self::factory( $type, $name );
+		return static::factory( $type, $name );
 	}
 }

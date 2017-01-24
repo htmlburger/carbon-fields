@@ -199,7 +199,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @see Field::factory()
 	 **/
 	public static function make( $type, $name, $label = null ) {
-		return self::factory( $type, $name, $label );
+		return static::factory( $type, $name, $label );
 	}
 
 	/**

@@ -20,7 +20,7 @@ class Helper {
 	public static function get_post_meta( $id, $name, $type = null ) {
 		$name = $name[0] == '_' ? $name : '_' . $name;
 
-		return self::get_field_value( 'post_meta', $name, $type, $id );
+		return static::get_field_value( 'post_meta', $name, $type, $id );
 	}
 
 	/**
@@ -32,7 +32,7 @@ class Helper {
 	 * @return mixed        Meta value.
 	 */
 	public static function get_the_post_meta( $name, $type = null ) {
-		return self::get_post_meta( get_the_ID(), $name, $type );
+		return static::get_post_meta( get_the_ID(), $name, $type );
 	}
 
 	/**
@@ -43,7 +43,7 @@ class Helper {
 	 * @return mixed        Option value.
 	 */
 	public static function get_theme_option( $name, $type = null ) {
-		return self::get_field_value( 'theme_options', $name, $type );
+		return static::get_field_value( 'theme_options', $name, $type );
 	}
 
 	/**
@@ -57,7 +57,7 @@ class Helper {
 	public static function get_term_meta( $id, $name, $type = null ) {
 		$name = $name[0] == '_' ? $name: '_' . $name;
 
-		return self::get_field_value( 'term_meta', $name, $type, $id );
+		return static::get_field_value( 'term_meta', $name, $type, $id );
 	}
 
 	/**
@@ -71,7 +71,7 @@ class Helper {
 	public static function get_user_meta( $id, $name, $type = null ) {
 		$name = $name[0] == '_' ? $name: '_' . $name;
 
-		return self::get_field_value( 'user_meta', $name, $type, $id );
+		return static::get_field_value( 'user_meta', $name, $type, $id );
 	}
 
 	/**
@@ -85,7 +85,7 @@ class Helper {
 	public static function get_comment_meta( $id, $name, $type = null ) {
 		$name = $name[0] == '_' ? $name: '_' . $name;
 
-		return self::get_field_value( 'comment_meta', $name, $type, $id );
+		return static::get_field_value( 'comment_meta', $name, $type, $id );
 	}
 
 	/**
@@ -103,15 +103,15 @@ class Helper {
 
 		switch ( $type ) {
 			case 'complex':
-				$value = self::get_complex_fields( $datastore_name, $name, $id );
+				$value = static::get_complex_fields( $datastore_name, $name, $id );
 			break;
 
 			case 'map':
 				$value = array(
-					'lat' => (float) self::get_field_value_by_datastore( $data_type, $name . '-lat', $id ),
-					'lng' => (float) self::get_field_value_by_datastore( $data_type, $name . '-lng', $id ),
-					'address' => self::get_field_value_by_datastore( $data_type, $name . '-address', $id ),
-					'zoom' => (int) self::get_field_value_by_datastore( $data_type, $name . '-zoom', $id ),
+					'lat' => (float) static::get_field_value_by_datastore( $data_type, $name . '-lat', $id ),
+					'lng' => (float) static::get_field_value_by_datastore( $data_type, $name . '-lng', $id ),
+					'address' => static::get_field_value_by_datastore( $data_type, $name . '-address', $id ),
+					'zoom' => (int) static::get_field_value_by_datastore( $data_type, $name . '-zoom', $id ),
 				);
 
 				if ( ! array_filter( $value ) ) {
@@ -120,15 +120,15 @@ class Helper {
 			break;
 
 			case 'association':
-				$raw_value = self::get_field_value_by_datastore( $data_type, $name, $id );
-				$value = self::parse_relationship_field( $raw_value, $type );
+				$raw_value = static::get_field_value_by_datastore( $data_type, $name, $id );
+				$value = static::parse_relationship_field( $raw_value, $type );
 			break;
 
 			default:
-				$value = self::get_field_value_by_datastore( $data_type, $name, $id );
+				$value = static::get_field_value_by_datastore( $data_type, $name, $id );
 
 				// backward compatibility for the old Relationship field
-				$value = self::maybe_old_relationship_field( $value );
+				$value = static::maybe_old_relationship_field( $value );
 		}
 
 		return $value;
@@ -201,13 +201,13 @@ class Helper {
 	 */
 	public static function get_complex_field_regex( $field_name, $group_names = array(), $field_names = array() ) {
 		if ( ! empty( $group_names ) ) {
-			$group_regex = self::preg_quote_array( $group_names );
+			$group_regex = static::preg_quote_array( $group_names );
 		} else {
 			$group_regex = '\w*';
 		}
 
 		if ( ! empty( $field_names ) ) {
-			$field_regex = self::preg_quote_array( $field_names );
+			$field_regex = static::preg_quote_array( $field_names );
 		} else {
 			$field_regex = '.*?';
 		}
@@ -234,18 +234,18 @@ class Helper {
 		$input_groups = array();
 
 		foreach ( $group_rows as $row ) {
-			if ( ! preg_match( self::get_complex_field_regex( $name ), $row['field_key'], $field_name ) ) {
+			if ( ! preg_match( static::get_complex_field_regex( $name ), $row['field_key'], $field_name ) ) {
 					continue;
 			}
 
 			$row['field_value'] = maybe_unserialize( $row['field_value'] );
 
 			// backward compatibility for Relationship field
-			$row['field_value'] = self::parse_relationship_field( $row['field_value'] );
+			$row['field_value'] = static::parse_relationship_field( $row['field_value'] );
 
 			$input_groups[ $field_name['index'] ]['_type'] = $field_name['group'];
 			if ( ! empty( $field_name['trailing'] ) ) {
-				$input_groups = self::expand_nested_field( $input_groups, $row, $field_name );
+				$input_groups = static::expand_nested_field( $input_groups, $row, $field_name );
 			} else if ( ! empty( $field_name['sub'] ) ) {
 				$input_groups[ $field_name['index'] ][ $field_name['key'] ][ $field_name['sub'] ] = $row['field_value'];
 			} else {
@@ -254,7 +254,7 @@ class Helper {
 		}
 
 		// create groups list with loaded fields
-		self::ksort_recursive( $input_groups );
+		static::ksort_recursive( $input_groups );
 
 		return $input_groups;
 	}
@@ -269,14 +269,14 @@ class Helper {
 	 */
 	public static function expand_nested_field( $input_groups, $row, $field_name ) {
 		$subfield_key_token = $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'];
-		if ( ! preg_match( self::get_complex_field_regex( $field_name['key'] ), $subfield_key_token, $subfield_name ) ) {
+		if ( ! preg_match( static::get_complex_field_regex( $field_name['key'] ), $subfield_key_token, $subfield_name ) ) {
 			return $input_groups;
 		}
 
 		$input_groups[ $field_name['index'] ][ $field_name['key'] ][ $subfield_name['index'] ]['_type'] = $subfield_name['group'];
 
 		if ( ! empty( $subfield_name['trailing'] ) ) {
-			$input_groups[ $field_name['index'] ][ $field_name['key'] ] = self::expand_nested_field( $input_groups[ $field_name['index'] ][ $field_name['key'] ], $row, $subfield_name );
+			$input_groups[ $field_name['index'] ][ $field_name['key'] ] = static::expand_nested_field( $input_groups[ $field_name['index'] ][ $field_name['key'] ], $row, $subfield_name );
 		} else if ( ! empty( $subfield_name['sub'] ) ) {
 			$input_groups[ $field_name['index'] ][ $field_name['key'] ][ $subfield_name['index'] ][ $subfield_name['key'] ][ $subfield_name['sub'] ] = $row['field_value'];
 		} else {
@@ -363,7 +363,7 @@ class Helper {
 
 		ksort( $array, $sort_flags );
 		foreach ( $array as $key => $value ) {
-			self::ksort_recursive( $array[ $key ], $sort_flags );
+			static::ksort_recursive( $array[ $key ], $sort_flags );
 		}
 
 		return true;

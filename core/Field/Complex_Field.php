@@ -442,7 +442,7 @@ class Complex_Field extends Field {
 			</div>
 
 			<div class="groups-wrapper layout-{{ layout }}">
-				<# if (layout === '<?php echo self::LAYOUT_TABBED_HORIZONTAL ?>' || layout === '<?php echo self::LAYOUT_TABBED_VERTICAL ?>' ) { #>
+				<# if (layout === '<?php echo static::LAYOUT_TABBED_HORIZONTAL ?>' || layout === '<?php echo static::LAYOUT_TABBED_VERTICAL ?>' ) { #>
 					<div class="group-tabs-nav-holder">
 						<ul class="group-tabs-nav"></ul>
 
@@ -566,9 +566,9 @@ class Complex_Field extends Field {
 	 */
 	public function set_layout( $layout ) {
 		$available_layouts = array(
-			self::LAYOUT_GRID,
-			self::LAYOUT_TABBED_HORIZONTAL,
-			self::LAYOUT_TABBED_VERTICAL,
+			static::LAYOUT_GRID,
+			static::LAYOUT_TABBED_HORIZONTAL,
+			static::LAYOUT_TABBED_VERTICAL,
 		);
 
 		if ( ! in_array( $layout,  $available_layouts ) ) {
