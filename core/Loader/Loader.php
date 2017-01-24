@@ -3,7 +3,7 @@
 namespace Carbon_Fields\Loader;
 
 use \Carbon_Fields\Pimple\Container as PimpleContainer;
-use \Carbon_Fields\Container\Container;
+use \Carbon_Fields\Container\Repository as ContainerRepository;
 use \Carbon_Fields\Templater\Templater;
 use \Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 use \Carbon_Fields\Libraries\Plugin_Update_Warning\Plugin_Update_Warning;
@@ -20,10 +20,13 @@ class Loader {
 
 	protected $plugin_update_warning;
 
-	public function __construct( Templater $templater, Sidebar_Manager $sidebar_manager, Plugin_Update_Warning $plugin_update_warning ) {
+	protected $container_repository;
+
+	public function __construct( Templater $templater, Sidebar_Manager $sidebar_manager, Plugin_Update_Warning $plugin_update_warning, ContainerRepository $container_repository ) {
 		$this->templater = $templater;
 		$this->sidebar_manager = $sidebar_manager;
 		$this->plugin_update_warning = $plugin_update_warning;
+		$this->container_repository = $container_repository;
 	}
 
 	/**
@@ -35,7 +38,7 @@ class Loader {
 		
 		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
-		add_action( 'carbon_after_register_fields', array( $this, 'init_containers' ) );
+		add_action( 'carbon_after_register_fields', array( $this, 'initialize_containers' ) );
 		add_action( 'crb_field_activated', array( $this, 'add_templates' ) );
 		add_action( 'crb_container_activated', array( $this, 'add_templates' ) );
 		add_action( 'admin_footer', array( $this, 'enqueue_scripts' ), 0 );
@@ -83,8 +86,8 @@ class Loader {
 	/**
 	 * Initialize containers.
 	 */
-	public function init_containers() {
-		Container::init_containers();
+	public function initialize_containers() {
+		$this->container_repository->initialize_containers();
 	}
 
 	/**
@@ -132,7 +135,7 @@ class Loader {
 			'sidebars' => array(),
 		);
 
-		$containers = Container::get_active_containers();
+		$containers = $this->container_repository->get_active_containers();
 
 		foreach ( $containers as $container ) {
 			$container_data = $container->to_json( true );

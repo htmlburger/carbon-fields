@@ -7,13 +7,14 @@ use \Carbon_Fields\Loader\Loader;
 use \Carbon_Fields\Templater\Templater;
 use \Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 use \Carbon_Fields\Libraries\Plugin_Update_Warning\Plugin_Update_Warning;
+use \Carbon_Fields\Container\Repository as ContainerRepository;
 
 /**
  * Holds a static reference to the ioc container
  */
 class App {
 
-	protected static $ico = null;
+	protected $ioc = null;
 
 	protected static $instance = null;
 
@@ -24,11 +25,19 @@ class App {
 		return static::$instance;
 	}
 
+	public static function ioc( $key ) {
+		return static::instance()->ioc[$key];
+	}
+
+	public static function boot() {
+		App::ioc( 'loader' )->boot();
+	}
+
 	public function __construct() {
 		$ioc = new PimpleContainer();
 
 		$ioc['loader'] = function( $c ) {
-			return new Loader( $c['templater'], $c['sidebar_manager'], $c['plugin_update_warning'] );
+			return new Loader( $c['templater'], $c['sidebar_manager'], $c['plugin_update_warning'], $c['container_repository'] );
 		};
 
 		$ioc['templater'] = function( $c ) {
@@ -43,10 +52,10 @@ class App {
 			return new Plugin_Update_Warning();
 		};
 
-		$this->ioc = $ioc;
-	}
+		$ioc['container_repository'] = function( $c ) {
+			return new ContainerRepository();
+		};
 
-	public static function boot() {
-		App::instance()->ioc['loader']->boot();
+		$this->ioc = $ioc;
 	}
 }

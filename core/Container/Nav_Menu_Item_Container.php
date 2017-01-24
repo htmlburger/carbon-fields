@@ -19,12 +19,14 @@ class Nav_Menu_Item_Container extends Container {
 	protected $menu_item_instances = array();
 
 	/**
-	 * Create a new nav menu item fields container
+	 * Create a new container
 	 *
-	 * @param string $id ID of the container
+	 * @param string $unique_id Unique id of the container
+	 * @param string $title title of the container
+	 * @param string $type Type of the container
 	 **/
-	public function __construct( $title ) {
-		parent::__construct( $title );
+	public function __construct( $unique_id, $title, $type ) {
+		parent::__construct( $unique_id, $title, $type );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( new Nav_Menu_Item_Datastore(), $this->has_default_datastore() );

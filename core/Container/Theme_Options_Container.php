@@ -20,12 +20,14 @@ class Theme_Options_Container extends Container {
 	public $icon = '';
 
 	/**
-	 * Create a new theme options fields container
+	 * Create a new container
 	 *
-	 * @param string $title Unique title of the container
+	 * @param string $unique_id Unique id of the container
+	 * @param string $title title of the container
+	 * @param string $type Type of the container
 	 **/
-	public function __construct( $title ) {
-		parent::__construct( $title );
+	public function __construct( $unique_id, $title, $type ) {
+		parent::__construct( $unique_id, $title, $type );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( new Theme_Options_Datastore(), $this->has_default_datastore() );
@@ -121,24 +123,12 @@ class Theme_Options_Container extends Container {
 	/**
 	 * Whether this container is currently viewed.
 	 **/
-	public function is_active() {
+	public function is_valid_attach() {
 		if ( isset( $_GET['page'] ) && $_GET['page'] === $this->settings['file'] ) {
 			return true;
 		}
 
 		return false;
-	}
-
-	/**
-	 * Revert the result of attach()
-	 **/
-	public function detach() {
-		parent::detach();
-
-		$this->drop_unique_page();
-
-		$page_hook = get_plugin_page_hookname( $this->settings['file'], '' );
-		remove_action( 'load-' . $page_hook, array( $this, '_save' ) );
 	}
 
 	/**

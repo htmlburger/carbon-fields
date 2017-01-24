@@ -13,12 +13,14 @@ class Comment_Meta_Container extends Container {
 	protected $comment_id;
 
 	/**
-	 * Create a new comment meta container
+	 * Create a new container
 	 *
-	 * @param string $title Unique title of the container
+	 * @param string $unique_id Unique id of the container
+	 * @param string $title title of the container
+	 * @param string $type Type of the container
 	 **/
-	public function __construct( $title ) {
-		parent::__construct( $title );
+	public function __construct( $unique_id, $title, $type ) {
+		parent::__construct( $unique_id, $title, $type );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( new Comment_Meta_Datastore(), $this->has_default_datastore() );
@@ -62,21 +64,6 @@ class Comment_Meta_Container extends Container {
 			'normal',
 			'high'
 		);
-	}
-
-	/**
-	 * Revert the result of attach()
-	 **/
-	public function detach() {
-		parent::detach();
-
-		remove_action( 'admin_init', array( $this, '_attach' ) );
-		remove_action( 'edit_comment', array( $this, '_save' ) );
-
-		// unregister field names
-		foreach ( $this->fields as $field ) {
-			$this->drop_unique_field_name( $field->get_name() );
-		}
 	}
 
 	/**
