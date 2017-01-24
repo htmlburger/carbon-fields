@@ -1,6 +1,12 @@
-import React from 'react';
+/**
+ * The external dependencies.
+ */
+import React, { PropTypes } from 'react';
 import { compose, withHandlers, branch, renderComponent } from 'recompose';
 
+/**
+ * The internal dependencies.
+ */
 import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
 import withStore from 'fields/decorators/with-store';
@@ -12,27 +18,46 @@ import withSetup from 'fields/decorators/with-setup';
  * @param  {Object}   props
  * @param  {Object}   props.name
  * @param  {Object}   props.field
- * @param  {Function} props.handleInputChange
+ * @param  {Function} props.handleChange
  * @return {React.Element}
  */
-export const SelectField = ({ name, field, handleInputChange }) => {
-	
+export const SelectField = ({ name, field, handleChange }) => {
 	return <Field field={field}>
-		<select 
-			id={field.id} 
-			name={name} 
-			onChange={handleInputChange} 
-			value={field.value}
-		>
-		
-			{field.options.map(option => {
-				return <option key={`${field.id}-${option.name}`} value={option.value}>
-					{option.name}
-				</option>;
-			})}
+		<select
+			id={field.id}
+			name={name}
+			onChange={handleChange}
+			value={field.value}>
+
+			{
+				field.options.map((option) => {
+					return <option key={`${field.id}-${option.name}`} value={option.value}>
+						{option.name}
+					</option>;
+				})
+			}
 		</select>
 	</Field>;
 };
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+SelectField.propTypes = {
+	name: PropTypes.string.isRequired,
+	field: PropTypes.shape({
+		id: PropTypes.string.isRequired,
+		value: PropTypes.string,
+		options: PropTypes.arrayOf(PropTypes.shape({
+			name: PropTypes.string.isRequired,
+			value: PropTypes.string.isRequired,
+		})).isRequired,
+	}).isRequired,
+	handleChange: PropTypes.func.isRequired,
+};
+
 
 /**
  * The lifecycle hooks that will be attached to the field.
@@ -41,15 +66,21 @@ export const SelectField = ({ name, field, handleInputChange }) => {
  */
 const hooks = {
 	componentDidMount() {
+		const {
+			field,
+			setupField,
+			updateField,
+		} = this.props;
+
+		setupField(field.id, field.type);
+
 		// If the field doesn't have a value,
-		// use the first option as fallback value.
-		if (!this.props.field.value) {
-			this.props.updateField(this.props.id, {
-				value: this.props.field.options[0].value
+		// use the first option as fallback.
+		if (!field.value) {
+			updateField(field.id, {
+				value: field.options[0].value,
 			});
 		}
-
-		this.props.setupField(this.props.id, this.props.type);
 	}
 };
 
@@ -61,11 +92,7 @@ const hooks = {
  * @param  {Function} props.updateField
  * @return {Function}
  */
-const handleInputChange = ({ field, updateField }) => ({ target }) => {
-	updateField(field.id, {
-		value: target.value
-	});
-};
+const handleChange = ({ field, updateField }) => ({ target: { value } }) => updateField(field.id, { value });
 
 export default compose(
 	withStore(),
@@ -76,7 +103,7 @@ export default compose(
 
 		compose(
 			withSetup(hooks),
-			withHandlers({ handleInputChange })
+			withHandlers({ handleChange })
 		)
 	)
 )(SelectField);
