@@ -9,11 +9,14 @@ namespace Carbon_Fields\Field;
  * where the file ID is saved in the database.
  */
 class File_Field extends Field {
+
 	public $button_label = '';
+
 	public $window_button_label = '';
+
 	public $window_label = '';
 
-	// empty for all types. available types: audio, video, image
+	// empty for all types. available types: audio, video, image and all WordPress-recognized mime types
 	public $field_type = '';
 
 	// alt, author, caption, dateFormatted, description, editLink, filename, height, icon, id, link, menuOrder, mime, name, status, subtype, title, type, uploadedTo, url, width

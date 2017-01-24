@@ -268,7 +268,7 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Adds a new Backbone template
 	 **/
-	public function add_template( $name, $callback ) {
+	protected function add_template( $name, $callback ) {
 		$this->templates[ $name ] = $callback;
 	}
 
@@ -862,4 +862,4 @@ class Field implements Datastore_Holder_Interface {
 	public static function admin_hook_styles() {
 		wp_enqueue_style( 'thickbox' );
 	}
-} // END Field
+}
