@@ -1,7 +1,7 @@
 /**
  * The external dependencies.
  */
-import { pick, merge, uniqueId } from 'lodash';
+import { pick, merge, uniqueId, isNull } from 'lodash';
 
 /**
  * Get the thumbnail of the attachment.
@@ -44,6 +44,12 @@ export function flattenField(field, accumulator) {
 	// Add the placeholders for ui & meta.
 	field.ui = {};
 	field.meta = {};
+
+	// Convert the value of the field, because React
+	// doesn't likes inputs with null values.
+	if (isNull(field.value)) {
+		field.value = '';
+	}
 
 	// Push the original field to the stack that will
 	// be used to populate the state.
