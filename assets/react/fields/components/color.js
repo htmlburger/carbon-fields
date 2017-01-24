@@ -1,9 +1,8 @@
 import React from 'react';
-import cx from 'classnames';
-import { SketchPicker } from 'react-color';
 import { compose, withHandlers, withState } from 'recompose';
 
 import Field from 'fields/components/field';
+import Colorpicker from 'fields/components/colorpicker';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 
@@ -23,20 +22,7 @@ import withSetup from 'fields/decorators/with-setup';
  * @todo Replace inline styles with classes.
  */
 export const ColorField = ({ name, field, pickerVisible, handleInputChange, showPicker, hidePicker }) => {
-	const cover = {
-		position: 'fixed',
-		top: 0,
-		right: 0,
-		bottom: 0,
-		left: 0,
-	};
-
-	const popover = {
-		position: 'absolute',
-		zIndex: 9999,
-		display: pickerVisible ? 'block' : 'none',
-	};
-
+	
 	return <Field field={field}>
 		<div className="carbon-color">
 			<span className="pickcolor button carbon-color-button hide-if-no-js">
@@ -45,14 +31,11 @@ export const ColorField = ({ name, field, pickerVisible, handleInputChange, show
 				<span className="carbon-color-button-text" onClick={showPicker}>Select a Color</span>
 			</span>
 
-			<div style={popover}>
-				<div style={cover} onClick={hidePicker} />
-
-				<SketchPicker
-					color={field.value || ''}
-					onChange={handleInputChange}
-					presetColors={[]} />
-			</div>
+			<Colorpicker 
+				visible={pickerVisible} 
+				value={field.value || ''} 
+				onChange={handleInputChange} 
+				onClose={hidePicker} />
 
 			<input
 				type="hidden"
