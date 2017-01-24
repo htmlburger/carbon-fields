@@ -28,14 +28,6 @@ abstract class Container implements Datastore_Holder_Interface {
 	protected $active = false;
 
 	/**
-	 * List of fields attached to the current page view
-	 *
-	 * @see _attach()
-	 * @var array
-	 */
-	protected static $active_fields = array();
-
-	/**
 	 * List of registered unique field names for this container instance
 	 *
 	 * @see verify_unique_field_name()
@@ -149,25 +141,14 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Returns all the active fields created via factory
-	 *
-	 * @return array
+	 * Activates and boots a field recursively
 	 **/
-	public static function get_active_fields() {
-		return self::$active_fields;
-	}
-
-	/**
-	 * Adds a field to the active fields array and triggers an action
-	 **/
-	public static function activate_field( $field ) {
-		self::$active_fields[] = $field;
-
+	public function activate_field( $field ) {
 		if ( method_exists( $field, 'get_fields' ) ) {
 			$fields = $field->get_fields();
 
 			foreach ( $fields as $inner_field ) {
-				self::activate_field( $inner_field );
+				$this->activate_field( $inner_field );
 			}
 		}
 
@@ -303,7 +284,7 @@ abstract class Container implements Datastore_Holder_Interface {
 
 				$fields = $this->get_fields();
 				foreach ( $fields as $field ) {
-					self::activate_field( $field );
+					$this->activate_field( $field );
 				}
 			}
 		}
