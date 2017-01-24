@@ -2,14 +2,21 @@
  * The external dependencies.
  */
 import React from 'react';
-import { shallow } from 'enzyme';
+import { Provider } from 'react-redux';
+
+import configureMockStore from 'redux-mock-store';
+import { shallow, mount } from 'enzyme';
 
 /**
  * The internal dependencies.
  */
-import { TextareaField } from 'fields/components/textarea';
+import ComposedTextareaField, { TextareaField } from 'fields/components/textarea';
+import { updateField } from 'fields/actions';
 
-describe('TextareaField', () => {
+/**
+ * The unit tests.
+ */
+describe('TextareaField - Unit', () => {
 	it('should render a `textarea` element', () => {
 		const wrapper = shallow(<TextareaField field={{}} />);
 		const actual = wrapper.find('textarea').length;
@@ -59,5 +66,38 @@ describe('TextareaField', () => {
 
 		expect(spy).toHaveBeenCalled();
 		expect(spy).toHaveBeenCalledTimes(1);
+	});
+});
+
+/**
+ * The integration tests.
+ */
+describe('TextareaField - Integration', () => {
+	it('should update the store', () => {
+		const store = configureMockStore()({
+			fields: {
+				'field-1': {
+					id: 'field-1',
+					value: 'test'
+				}
+			}
+		});
+
+		const wrapper = mount(
+			<Provider store={store}>
+				<ComposedTextareaField id="field-1" />
+			</Provider>
+		);
+
+		wrapper.find('textarea').simulate('change', {
+			target: {
+				value: 'changed'
+			}
+		});
+
+		const actual = store.getActions();
+		const expected = updateField('field-1', { value: 'changed' });
+
+		expect(actual).toEqual(jasmine.arrayContaining([expected]));
 	});
 });
