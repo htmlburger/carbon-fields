@@ -125,39 +125,6 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return whether the container is active
-	 **/
-	public function active() {
-		return $this->active;
-	}
-
-	/**
-	 * Activate the container and trigger an action
-	 **/
-	public function activate() {
-		$this->active = true;
-		$this->boot();
-		do_action( 'crb_container_activated', $this );
-	}
-
-	/**
-	 * Activates and boots a field recursively
-	 **/
-	public function activate_field( $field ) {
-		if ( method_exists( $field, 'get_fields' ) ) {
-			$fields = $field->get_fields();
-
-			foreach ( $fields as $inner_field ) {
-				$this->activate_field( $inner_field );
-			}
-		}
-
-		$field->boot();
-
-		do_action( 'crb_field_activated', $field );
-	}
-
-	/**
 	 * Create a new container
 	 *
 	 * @param string $unique_id Unique id of the container
@@ -172,6 +139,39 @@ abstract class Container implements Datastore_Holder_Interface {
 		$this->id = $unique_id;
 		$this->title = $title;
 		$this->type = $type;
+	}
+
+	/**
+	 * Return whether the container is active
+	 **/
+	public function active() {
+		return $this->active;
+	}
+
+	/**
+	 * Activate the container and trigger an action
+	 **/
+	protected function activate() {
+		$this->active = true;
+		$this->boot();
+		do_action( 'crb_container_activated', $this );
+	}
+
+	/**
+	 * Activates and boots a field recursively
+	 **/
+	protected function activate_field( $field ) {
+		if ( method_exists( $field, 'get_fields' ) ) {
+			$fields = $field->get_fields();
+
+			foreach ( $fields as $inner_field ) {
+				$this->activate_field( $inner_field );
+			}
+		}
+
+		$field->boot();
+
+		do_action( 'crb_field_activated', $field );
 	}
 
 	/**
@@ -213,7 +213,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Boot the container once it's attached.
 	 **/
-	public function boot() {
+	protected function boot() {
 		$this->add_template( $this->type, array( $this, 'template' ) );
 
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_scripts' ), 5 );
@@ -302,7 +302,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Adds a new Backbone template
 	 **/
-	public function add_template( $name, $callback ) {
+	protected function add_template( $name, $callback ) {
 		$this->templates[ $name ] = $callback;
 	}
 
@@ -327,149 +327,12 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Append array of fields to the current fields set. All items of the array
-	 * must be instances of Field and their names should be unique for all
-	 * Carbon containers.
-	 * If a field does not have DataStore already, the container datastore is
-	 * assigned to them instead.
-	 *
-	 * @param array $fields
-	 * @return object $this
-	 **/
-	public function add_fields( $fields ) {
-		foreach ( $fields as $field ) {
-			if ( ! is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
-				Incorrect_Syntax_Exception::raise( 'Object must be of type Carbon_Fields\\Field\\Field' );
-			}
-
-			$this->verify_unique_field_name( $field->get_name() );
-
-			$field->set_context( $this->type );
-			if ( ! $field->get_datastore() ) {
-				$field->set_datastore( $this->get_datastore(), $this->has_default_datastore() );
-			}
-		}
-
-		$this->fields = array_merge( $this->fields, $fields );
-
-		return $this;
-	}
-
-	/**
-	 * Configuration function for adding tab with fields
-	 *
-	 * @param string $tab_name
-	 * @param array $fields
-	 * @return object $this
-	 */
-	public function add_tab( $tab_name, $fields ) {
-		$this->add_template( 'tabs', array( $this, 'template_tabs' ) );
-
-		$this->add_fields( $fields );
-		$this->create_tab( $tab_name, $fields );
-
-		return $this;
-	}
-
-	/**
-	 * Internal function that creates the tab and associates it with particular field set
-	 *
-	 * @param string $tab_name
-	 * @param array $fields
-	 * @param int $queue_end
-	 * @return object $this
-	 */
-	private function create_tab( $tab_name, $fields, $queue_end = self::TABS_TAIL ) {
-		if ( isset( $this->tabs[ $tab_name ] ) ) {
-			Incorrect_Syntax_Exception::raise( "Tab name duplication for $tab_name" );
-		}
-
-		if ( $queue_end === self::TABS_TAIL ) {
-			$this->tabs[ $tab_name ] = array();
-		} else if ( $queue_end === self::TABS_HEAD ) {
-			$this->tabs = array_merge(
-				array( $tab_name => array() ),
-				$this->tabs
-			);
-		}
-
-		foreach ( $fields as $field ) {
-			$field_name = $field->get_name();
-			$this->tabs[ $tab_name ][ $field_name ] = $field;
-		}
-
-		$this->settings['tabs'] = $this->get_tabs_json();
-	}
-
-	/**
-	 * Whether the container is tabbed or not
+	 * Perform a check whether the current container has fields
 	 *
 	 * @return bool
-	 */
-	public function is_tabbed() {
-		return (bool) $this->tabs;
-	}
-
-	/**
-	 * Retrieve all fields that are not defined under a specific tab
-	 *
-	 * @return array
-	 */
-	public function get_untabbed_fields() {
-		$tabbed_fields_names = array();
-		foreach ( $this->tabs as $tab_fields ) {
-			$tabbed_fields_names = array_merge( $tabbed_fields_names, array_keys( $tab_fields ) );
-		}
-
-		$all_fields_names = array();
-		foreach ( $this->fields as $field ) {
-			$all_fields_names[] = $field->get_name();
-		}
-
-		$fields_not_in_tabs = array_diff( $all_fields_names, $tabbed_fields_names );
-
-		$untabbed_fields = array();
-		foreach ( $this->fields as $field ) {
-			if ( in_array( $field->get_name(), $fields_not_in_tabs ) ) {
-				$untabbed_fields[] = $field;
-			}
-		}
-
-		return $untabbed_fields;
-	}
-
-	/**
-	 * Retrieve all tabs.
-	 * Create a default tab if there are any untabbed fields.
-	 *
-	 * @return array
-	 */
-	public function get_tabs() {
-		$untabbed_fields = $this->get_untabbed_fields();
-
-		if ( ! empty( $untabbed_fields ) ) {
-			$this->create_tab( __( 'General', \Carbon_Fields\TEXT_DOMAIN ), $untabbed_fields, self::TABS_HEAD );
-		}
-
-		return $this->tabs;
-	}
-
-	/**
-	 * Build the tabs JSON
-	 *
-	 * @return array
-	 */
-	public function get_tabs_json() {
-		$tabs_json = array();
-		$tabs = $this->get_tabs();
-
-		foreach ( $tabs as $tab_name => $fields ) {
-			foreach ( $fields as $field_name => $field ) {
-				$tabs_json[ $tab_name ][] = $field_name;
-			}
-		}
-
-		return $tabs_json;
+	 **/
+	public function has_fields() {
+		return (bool) $this->fields;
 	}
 
 	/**
@@ -480,15 +343,6 @@ abstract class Container implements Datastore_Holder_Interface {
 	 **/
 	public function get_fields() {
 		return $this->fields;
-	}
-
-	/**
-	 * Perform a check whether the current container has fields
-	 *
-	 * @return bool
-	 **/
-	public function has_fields() {
-		return (bool) $this->fields;
 	}
 
 	/**
@@ -574,28 +428,104 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Returns an array that holds the container data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
+	 * Internal function that creates the tab and associates it with particular field set
 	 *
-	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
-	 * @return array
+	 * @param string $tab_name
+	 * @param array $fields
+	 * @param int $queue_end
+	 * @return object $this
 	 */
-	public function to_json( $load ) {
-		$container_data = array(
-			'id' => $this->id,
-			'type' => $this->type,
-			'title' => $this->title,
-			'settings' => $this->settings,
-			'fields' => array(),
-		);
-
-		$fields = $this->get_fields();
-		foreach ( $fields as $field ) {
-			$field_data = $field->to_json( $load );
-			$container_data['fields'][] = $field_data;
+	private function create_tab( $tab_name, $fields, $queue_end = self::TABS_TAIL ) {
+		if ( isset( $this->tabs[ $tab_name ] ) ) {
+			Incorrect_Syntax_Exception::raise( "Tab name duplication for $tab_name" );
 		}
 
-		return $container_data;
+		if ( $queue_end === self::TABS_TAIL ) {
+			$this->tabs[ $tab_name ] = array();
+		} else if ( $queue_end === self::TABS_HEAD ) {
+			$this->tabs = array_merge(
+				array( $tab_name => array() ),
+				$this->tabs
+			);
+		}
+
+		foreach ( $fields as $field ) {
+			$field_name = $field->get_name();
+			$this->tabs[ $tab_name ][ $field_name ] = $field;
+		}
+
+		$this->settings['tabs'] = $this->get_tabs_json();
+	}
+
+	/**
+	 * Whether the container is tabbed or not
+	 *
+	 * @return bool
+	 */
+	public function is_tabbed() {
+		return (bool) $this->tabs;
+	}
+
+	/**
+	 * Retrieve all fields that are not defined under a specific tab
+	 *
+	 * @return array
+	 */
+	protected function get_untabbed_fields() {
+		$tabbed_fields_names = array();
+		foreach ( $this->tabs as $tab_fields ) {
+			$tabbed_fields_names = array_merge( $tabbed_fields_names, array_keys( $tab_fields ) );
+		}
+
+		$all_fields_names = array();
+		foreach ( $this->fields as $field ) {
+			$all_fields_names[] = $field->get_name();
+		}
+
+		$fields_not_in_tabs = array_diff( $all_fields_names, $tabbed_fields_names );
+
+		$untabbed_fields = array();
+		foreach ( $this->fields as $field ) {
+			if ( in_array( $field->get_name(), $fields_not_in_tabs ) ) {
+				$untabbed_fields[] = $field;
+			}
+		}
+
+		return $untabbed_fields;
+	}
+
+	/**
+	 * Retrieve all tabs.
+	 * Create a default tab if there are any untabbed fields.
+	 *
+	 * @return array
+	 */
+	protected function get_tabs() {
+		$untabbed_fields = $this->get_untabbed_fields();
+
+		if ( ! empty( $untabbed_fields ) ) {
+			$this->create_tab( __( 'General', \Carbon_Fields\TEXT_DOMAIN ), $untabbed_fields, self::TABS_HEAD );
+		}
+
+		return $this->tabs;
+	}
+
+	/**
+	 * Build the tabs JSON
+	 *
+	 * @return array
+	 */
+	protected function get_tabs_json() {
+		$tabs_json = array();
+		$tabs = $this->get_tabs();
+
+		foreach ( $tabs as $tab_name => $fields ) {
+			foreach ( $fields as $field_name => $field ) {
+				$tabs_json[ $tab_name ][] = $field_name;
+			}
+		}
+
+		return $tabs_json;
 	}
 
 	/**
@@ -622,6 +552,31 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Returns an array that holds the container data, suitable for JSON representation.
+	 * This data will be available in the Underscore template and the Backbone Model.
+	 *
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
+	public function to_json( $load ) {
+		$container_data = array(
+			'id' => $this->id,
+			'type' => $this->type,
+			'title' => $this->title,
+			'settings' => $this->settings,
+			'fields' => array(),
+		);
+
+		$fields = $this->get_fields();
+		foreach ( $fields as $field ) {
+			$field_data = $field->to_json( $load );
+			$container_data['fields'][] = $field_data;
+		}
+
+		return $container_data;
+	}
+
+	/**
 	 * Enqueue admin scripts
 	 */
 	public static function admin_hook_scripts() {
@@ -641,5 +596,53 @@ abstract class Container implements Datastore_Holder_Interface {
 	public static function admin_hook_styles() {
 		wp_enqueue_style( 'carbon-main', \Carbon_Fields\URL . '/assets/bundle.css', array(), \Carbon_Fields\VERSION );
 	}
-} // END Container
 
+	/**
+	 * COMMON USAGE METHODS
+	 */
+
+	/**
+	 * Append array of fields to the current fields set. All items of the array
+	 * must be instances of Field and their names should be unique for all
+	 * Carbon containers.
+	 * If a field does not have DataStore already, the container datastore is
+	 * assigned to them instead.
+	 *
+	 * @param array $fields
+	 * @return object $this
+	 **/
+	public function add_fields( $fields ) {
+		foreach ( $fields as $field ) {
+			if ( ! is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
+				Incorrect_Syntax_Exception::raise( 'Object must be of type Carbon_Fields\\Field\\Field' );
+			}
+
+			$this->verify_unique_field_name( $field->get_name() );
+
+			$field->set_context( $this->type );
+			if ( ! $field->get_datastore() ) {
+				$field->set_datastore( $this->get_datastore(), $this->has_default_datastore() );
+			}
+		}
+
+		$this->fields = array_merge( $this->fields, $fields );
+
+		return $this;
+	}
+
+	/**
+	 * Configuration function for adding tab with fields
+	 *
+	 * @param string $tab_name
+	 * @param array $fields
+	 * @return object $this
+	 */
+	public function add_tab( $tab_name, $fields ) {
+		$this->add_template( 'tabs', array( $this, 'template_tabs' ) );
+
+		$this->add_fields( $fields );
+		$this->create_tab( $tab_name, $fields );
+
+		return $this;
+	}
+}

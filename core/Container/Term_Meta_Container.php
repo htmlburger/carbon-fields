@@ -50,6 +50,22 @@ class Term_Meta_Container extends Container {
 	}
 
 	/**
+	 * Perform checks whether the current save() request is valid.
+	 *
+	 * @param int $term_id ID of the term against which save() is ran
+	 * @return bool
+	 **/
+	public function is_valid_save( $term_id = null ) {
+		if ( ! isset( $_REQUEST[ $this->get_nonce_name() ] ) || ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) { // Input var okay.
+			return false;
+		} else if ( $term_id < 1 ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Perform save operation after successful is_valid_save() check.
 	 * The call is propagated to all fields in the container.
 	 *
@@ -77,22 +93,6 @@ class Term_Meta_Container extends Container {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Perform checks whether the current save() request is valid.
-	 *
-	 * @param int $term_id ID of the term against which save() is ran
-	 * @return bool
-	 **/
-	public function is_valid_save( $term_id = null ) {
-		if ( ! isset( $_REQUEST[ $this->get_nonce_name() ] ) || ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) { // Input var okay.
-			return false;
-		} else if ( $term_id < 1 ) {
-			return false;
-		}
-
-		return true;
 	}
 
 	/**
@@ -125,6 +125,10 @@ class Term_Meta_Container extends Container {
 		$this->term_id = $term_id;
 		$this->get_datastore()->set_id( $term_id );
 	}
+
+	/**
+	 * COMMON USAGE METHODS
+	 */
 
 	/**
 	 * Show the container only on terms from the specified taxonomies.

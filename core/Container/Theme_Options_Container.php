@@ -35,26 +35,6 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
-	 * Perform save operation after successful is_valid_save() check.
-	 * The call is propagated to all fields in the container.
-	 *
-	 * @param mixed $user_data
-	 **/
-	public function save( $user_data = null ) {
-		try {
-			parent::save( $user_data );
-		} catch ( Incorrect_Syntax_Exception $e ) {
-			$this->errors[] = $e->getMessage();
-		}
-
-		do_action( 'carbon_after_save_theme_options', $user_data );
-
-		if ( ! headers_sent() ) {
-			wp_redirect( add_query_arg( array( 'settings-updated' => 'true' ) ) );
-		}
-	}
-
-	/**
 	 * Attach container as a theme options page/subpage.
 	 **/
 	public function init() {
@@ -76,15 +56,6 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
-	 * Perform checks whether the container should be attached during the current request
-	 *
-	 * @return bool True if the container is allowed to be attached
-	 **/
-	public function is_valid_attach() {
-		return true;
-	}
-
-	/**
 	 * Perform checks whether the current save() request is valid.
 	 *
 	 * @return bool
@@ -94,6 +65,35 @@ class Theme_Options_Container extends Container {
 			return false;
 		}
 
+		return true;
+	}
+
+	/**
+	 * Perform save operation after successful is_valid_save() check.
+	 * The call is propagated to all fields in the container.
+	 *
+	 * @param mixed $user_data
+	 **/
+	public function save( $user_data = null ) {
+		try {
+			parent::save( $user_data );
+		} catch ( Incorrect_Syntax_Exception $e ) {
+			$this->errors[] = $e->getMessage();
+		}
+
+		do_action( 'carbon_after_save_theme_options', $user_data );
+
+		if ( ! headers_sent() ) {
+			wp_redirect( add_query_arg( array( 'settings-updated' => 'true' ) ) );
+		}
+	}
+
+	/**
+	 * Perform checks whether the container should be attached during the current request
+	 *
+	 * @return bool True if the container is allowed to be attached
+	 **/
+	public function is_valid_attach() {
 		return true;
 	}
 
@@ -205,6 +205,14 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
+	 * Sanitize the container title for use in
+	 * the theme options file name.
+	 **/
+	protected function clear_string( $string ) {
+		return preg_replace( array( '~ +~', '~[^\w\d-]+~u', '~-+~' ), array( '-', '-', '-' ), strtolower( remove_accents( $string ) ) );
+	}
+
+	/**
 	 * Append array of fields to the current fields set. All items of the array
 	 * must be instances of Field and their names should be unique for all
 	 * Carbon containers.
@@ -222,6 +230,10 @@ class Theme_Options_Container extends Container {
 
 		return $this;
 	}
+
+	/**
+	 * COMMON USAGE METHODS
+	 */
 
 	/**
 	 * Change the parent theme options page of this container
@@ -259,14 +271,6 @@ class Theme_Options_Container extends Container {
 	public function set_page_permissions( $permissions ) {
 		$this->settings['permissions'] = $permissions;
 		return $this;
-	}
-
-	/**
-	 * Sanitize the container title for use in
-	 * the theme options file name.
-	 **/
-	protected function clear_string( $string ) {
-		return preg_replace( array( '~ +~', '~[^\w\d-]+~u', '~-+~' ), array( '-', '-', '-' ), strtolower( remove_accents( $string ) ) );
 	}
 }
 

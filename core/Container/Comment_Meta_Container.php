@@ -40,6 +40,38 @@ class Comment_Meta_Container extends Container {
 	}
 
 	/**
+	 * Checks whether the current request is valid
+	 *
+	 * @return bool
+	 **/
+	public function is_valid_save() {
+		if ( ! isset( $_REQUEST[ $this->get_nonce_name() ] ) || ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) { // Input var okay.
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Perform save operation after successful is_valid_save() check.
+	 * The call is propagated to all fields in the container.
+	 *
+	 * @param int $comment_id ID of the comment against which save() is ran
+	 **/
+	public function save( $comment_id ) {
+
+		// Unhook action to guarantee single save
+		remove_action( 'edit_comment', array( $this, '_save' ) );
+
+		$this->set_comment_id( $comment_id );
+
+		foreach ( $this->fields as $field ) {
+			$field->set_value_from_input();
+			$field->save();
+		}
+	}
+
+	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
@@ -48,19 +80,6 @@ class Comment_Meta_Container extends Container {
 		global $pagenow;
 
 		if ( $pagenow !== 'comment.php' ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
-	 * Checks whether the current request is valid
-	 *
-	 * @return bool
-	 **/
-	public function is_valid_save() {
-		if ( ! isset( $_REQUEST[ $this->get_nonce_name() ] ) || ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) { // Input var okay.
 			return false;
 		}
 
@@ -96,24 +115,5 @@ class Comment_Meta_Container extends Container {
 	public function set_comment_id( $comment_id ) {
 		$this->comment_id = $comment_id;
 		$this->get_datastore()->set_id( $comment_id );
-	}
-
-	/**
-	 * Perform save operation after successful is_valid_save() check.
-	 * The call is propagated to all fields in the container.
-	 *
-	 * @param int $comment_id ID of the comment against which save() is ran
-	 **/
-	public function save( $comment_id ) {
-
-		// Unhook action to guarantee single save
-		remove_action( 'edit_comment', array( $this, '_save' ) );
-
-		$this->set_comment_id( $comment_id );
-
-		foreach ( $this->fields as $field ) {
-			$field->set_value_from_input();
-			$field->save();
-		}
 	}
 }

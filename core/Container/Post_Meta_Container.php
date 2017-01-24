@@ -238,34 +238,6 @@ class Post_Meta_Container extends Container {
 	}
 
 	/**
-	 * Add meta box for each of the container post types
-	 **/
-	public function attach() {
-		foreach ( $this->settings['post_type'] as $post_type ) {
-			add_meta_box(
-				$this->id,
-				$this->title,
-				array( $this, 'render' ),
-				$post_type,
-				$this->settings['panel_context'],
-				$this->settings['panel_priority']
-			);
-		}
-
-		foreach ( $this->settings['post_type'] as $post_type ) {
-			add_filter( "postbox_classes_{$post_type}_{$this->id}", array( $this, 'postbox_classes' ) );
-		}
-	}
-
-	/**
-	 * Classes to add to the post meta box
-	 */
-	public function postbox_classes( $classes ) {
-		$classes[] = 'carbon-box';
-		return $classes;
-	}
-
-	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
@@ -319,6 +291,34 @@ class Post_Meta_Container extends Container {
 	}
 
 	/**
+	 * Add meta box for each of the container post types
+	 **/
+	public function attach() {
+		foreach ( $this->settings['post_type'] as $post_type ) {
+			add_meta_box(
+				$this->id,
+				$this->title,
+				array( $this, 'render' ),
+				$post_type,
+				$this->settings['panel_context'],
+				$this->settings['panel_priority']
+			);
+		}
+
+		foreach ( $this->settings['post_type'] as $post_type ) {
+			add_filter( "postbox_classes_{$post_type}_{$this->id}", array( $this, 'add_postbox_classes' ) );
+		}
+	}
+
+	/**
+	 * Classes to add to the post meta box
+	 */
+	public function add_postbox_classes( $classes ) {
+		$classes[] = 'carbon-box';
+		return $classes;
+	}
+
+	/**
 	 * Output the container markup
 	 **/
 	public function render() {
@@ -336,24 +336,8 @@ class Post_Meta_Container extends Container {
 	}
 
 	/**
-	 * Show the container only on pages whose parent is referenced by $parent_page_path.
-	 *
-	 * @param string $parent_page_path
-	 * @return object $this
-	 **/
-	public function show_on_page_children( $parent_page_path ) {
-		$page = get_page_by_path( $parent_page_path );
-
-		$this->show_on_post_type( 'page' );
-
-		if ( $page ) {
-			$this->settings['show_on']['parent_page_id'] = $page->ID;
-		} else {
-			$this->settings['show_on']['parent_page_id'] = -1;
-		}
-
-		return $this;
-	}
+	 * COMMON USAGE METHODS
+	 */
 
 	/**
 	 * Show the container only on particular page referenced by it's path.
@@ -376,6 +360,26 @@ class Post_Meta_Container extends Container {
 			$this->settings['show_on']['page_id'] = $page_obj->ID;
 		} else {
 			$this->settings['show_on']['page_id'] = -1;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Show the container only on pages whose parent is referenced by $parent_page_path.
+	 *
+	 * @param string $parent_page_path
+	 * @return object $this
+	 **/
+	public function show_on_page_children( $parent_page_path ) {
+		$page = get_page_by_path( $parent_page_path );
+
+		$this->show_on_post_type( 'page' );
+
+		if ( $page ) {
+			$this->settings['show_on']['parent_page_id'] = $page->ID;
+		} else {
+			$this->settings['show_on']['parent_page_id'] = -1;
 		}
 
 		return $this;
@@ -534,4 +538,4 @@ class Post_Meta_Container extends Container {
 
 		return $this;
 	}
-} // END Post_Meta_Container
+}

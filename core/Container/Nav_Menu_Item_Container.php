@@ -70,6 +70,19 @@ class Nav_Menu_Item_Container extends Container {
 	}
 
 	/**
+	 * Perform save operation after successful is_valid_save() check.
+	 * The call is propagated to all fields in the container.
+	 **/
+	public function save( $data = null ) {
+		foreach ( $this->fields as $field ) {
+			$field->set_value_from_input();
+			$field->save();
+		}
+
+		do_action( 'carbon_after_save_nav_menu', $this );
+	}
+
+	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
@@ -84,19 +97,6 @@ class Nav_Menu_Item_Container extends Container {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Perform save operation after successful is_valid_save() check.
-	 * The call is propagated to all fields in the container.
-	 **/
-	public function save( $data = null ) {
-		foreach ( $this->fields as $field ) {
-			$field->set_value_from_input();
-			$field->save();
-		}
-
-		do_action( 'carbon_after_save_nav_menu', $this );
 	}
 
 	/**
