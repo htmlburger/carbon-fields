@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { Provider } from 'react-redux';
-import { assignIn } from 'lodash';
+import { defaults } from 'lodash';
 
 import configureMockStore from 'redux-mock-store';
 import { shallow, mount } from 'enzyme';
@@ -19,7 +19,7 @@ import { updateField } from 'fields/actions';
  */
 describe('SelectField - Unit', () => {
 	function setup(props = {}) {
-		props = assignIn({}, {
+		props = defaults(props, {
 			name: 'field',
 			field: {
 				id: 'field-1',
@@ -36,7 +36,7 @@ describe('SelectField - Unit', () => {
 				]
 			},
 			handleChange: jest.fn(),
-		}, props);
+		});
 
 		const wrapper = shallow(<SelectField {...props} />);
 
@@ -84,8 +84,9 @@ describe('SelectField - Integration', () => {
 	function setup(state = {}) {
 		const store = configureMockStore()({
 			fields: {
-				'field-1': assignIn({}, {
+				'field-1': defaults(state, {
 					id: 'field-1',
+					name: 'field-1',
 					options: [
 						{
 							name: 'Option 1',
@@ -96,7 +97,7 @@ describe('SelectField - Integration', () => {
 							value: 'option-2'
 						}
 					]
-				}, state)
+				})
 			}
 		});
 
