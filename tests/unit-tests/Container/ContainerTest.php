@@ -1,5 +1,6 @@
 <?php
 
+use \Mockery as M;
 use \Carbon_Fields\Pimple\Container as PimpleContainer;
 use \Carbon_Fields\App;
 use \Carbon_Fields\Container\Container;
@@ -25,6 +26,7 @@ class ContainerTest extends WP_UnitTestCase {
 		$this->containerTypeBackwardsCompatible = 'custom_fields';
 		$this->containerTypeInvalid = '__no_such_container_type__';
 		$this->containerTypeClass = '\Carbon_Fields\Container\Post_Meta_Container';
+		$this->containerTypeDatastoreClass = '\Carbon_Fields\Datastore\Post_Meta_Datastore';
 		$this->containerTypeBrokenClass = '\Carbon_Fields\Container\Broken_Container';
 	}
 
@@ -144,4 +146,101 @@ class ContainerTest extends WP_UnitTestCase {
 		$this->assertEquals( 'bulgarian: България', $container->title );
 	}
 
+	/**
+	 * @covers Carbon_Fields\Container\Container::set_datastore
+	 * @covers Carbon_Fields\Container\Container::get_datastore
+	 * @covers Carbon_Fields\Container\Container::has_default_datastore
+	 */
+	public function testSetDatastore_Default_ReturnDefault() {
+		$datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
+		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType );
+
+		$this->assertEquals( true, $container->has_default_datastore() );
+		$this->assertInstanceOf( $this->containerTypeDatastoreClass, $container->get_datastore() );
+
+		$container->set_datastore( $datastore, true );
+		$this->assertEquals( true, $container->has_default_datastore() );
+		$this->assertEquals( $datastore, $container->get_datastore() );
+	}
+
+	/**
+	 * @covers Carbon_Fields\Container\Container::set_datastore
+	 * @covers Carbon_Fields\Container\Container::get_datastore
+	 * @covers Carbon_Fields\Container\Container::has_default_datastore
+	 */
+	public function testSetDatastore_DefaultDefault2_ReturnDefault2() {
+		$datastore1 = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
+		$datastore2 = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
+		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType );
+
+		$container->set_datastore( $datastore1, true );
+		$container->set_datastore( $datastore2, true );
+		$this->assertEquals( $datastore2, $container->get_datastore() );
+	}
+
+	/**
+	 * @covers Carbon_Fields\Container\Container::set_datastore
+	 * @covers Carbon_Fields\Container\Container::get_datastore
+	 * @covers Carbon_Fields\Container\Container::has_default_datastore
+	 */
+	public function testSetDatastore_Override_ReturnOverride() {
+		$datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
+		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType );
+
+		$container->set_datastore( $datastore, false );
+		$this->assertEquals( false, $container->has_default_datastore() );
+		$this->assertEquals( $datastore, $container->get_datastore() );
+	}
+
+	/**
+	 * @covers Carbon_Fields\Container\Container::set_datastore
+	 * @covers Carbon_Fields\Container\Container::get_datastore
+	 * @covers Carbon_Fields\Container\Container::has_default_datastore
+	 */
+	public function testSetDatastore_OverrideOverride2_ReturnOverride2() {
+		$datastore1 = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
+		$datastore2 = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
+		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType );
+
+		$container->set_datastore( $datastore1, false );
+		$container->set_datastore( $datastore2, false );
+		$this->assertEquals( false, $container->has_default_datastore() );
+		$this->assertEquals( $datastore2, $container->get_datastore() );
+	}
+
+	/**
+	 * @covers Carbon_Fields\Container\Container::set_datastore
+	 * @covers Carbon_Fields\Container\Container::get_datastore
+	 * @covers Carbon_Fields\Container\Container::has_default_datastore
+	 */
+	public function testSetDatastore_DefaultOverride_ReturnOverride() {
+		$default_datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
+		$override_datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
+		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType );
+
+		$container->set_datastore( $default_datastore, true );
+		$this->assertEquals( true, $container->has_default_datastore() );
+		$this->assertEquals( $default_datastore, $container->get_datastore() );
+
+		$container->set_datastore( $override_datastore, false );
+		$this->assertEquals( false, $container->has_default_datastore() );
+		$this->assertEquals( $override_datastore, $container->get_datastore() );
+	}
+
+	/**
+	 * @covers Carbon_Fields\Container\Container::set_datastore
+	 * @covers Carbon_Fields\Container\Container::get_datastore
+	 * @covers Carbon_Fields\Container\Container::has_default_datastore
+	 */
+	public function testSetDatastore_DefaultOverrideDefault2_ReturnOverride() {
+		$default_datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
+		$override_datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
+		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType );
+
+		$container->set_datastore( $default_datastore, true );
+		$container->set_datastore( $override_datastore, false );
+		$container->set_datastore( $default_datastore, true );
+		$this->assertEquals( false, $container->has_default_datastore() );
+		$this->assertEquals( $override_datastore, $container->get_datastore() );		
+	}
 }
