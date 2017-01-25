@@ -5,7 +5,8 @@ namespace Carbon_Fields;
 # Define version constant
 if ( ! defined( __NAMESPACE__ . '\VERSION' ) ) {
 	$json = @unserialize( file_get_contents( __DIR__ . DIRECTORY_SEPARATOR . 'package.json' ) );
-	define( __NAMESPACE__ . '\VERSION', $json['version'] );
+	$version = $json ? $json['version'] : '1.0.0';
+	define( __NAMESPACE__ . '\VERSION', $version );
 }
 
 # Define root directory
