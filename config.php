@@ -2,24 +2,10 @@
 
 namespace Carbon_Fields;
 
-$plugin_data = get_file_data( __DIR__ . DIRECTORY_SEPARATOR . 'carbon-fields.php', array(
-	'Version'=>'Version',
-	'Text Domain'=>'Text Domain',
-) );
-
-# Define main plugin file path
-if ( ! defined( __NAMESPACE__ . '\PLUGIN_FILE' ) ) {
-	define( __NAMESPACE__ . '\PLUGIN_FILE', __DIR__ . DIRECTORY_SEPARATOR . 'carbon-fields.php' );
-}
-
-# Define main plugin relative file path e.g. vendor/name
-if ( ! defined( __NAMESPACE__ . '\RELATIVE_PLUGIN_FILE' ) ) {
-	define( __NAMESPACE__ . '\RELATIVE_PLUGIN_FILE', basename( dirname( \Carbon_Fields\PLUGIN_FILE ) ) . '/' . basename( \Carbon_Fields\PLUGIN_FILE ) );
-}
-
 # Define version constant
 if ( ! defined( __NAMESPACE__ . '\VERSION' ) ) {
-	define( __NAMESPACE__ . '\VERSION', $plugin_data['Version'] );
+	$json = @unserialize( file_get_contents( __DIR__ . DIRECTORY_SEPARATOR . 'package.json' ) );
+	define( __NAMESPACE__ . '\VERSION', $json['version'] );
 }
 
 # Define root directory
@@ -29,7 +15,7 @@ if ( ! defined( __NAMESPACE__ . '\DIR' ) ) {
 
 # Define version constant
 if ( ! defined( __NAMESPACE__ . '\TEXT_DOMAIN' ) ) {
-	define( __NAMESPACE__ . '\TEXT_DOMAIN', $plugin_data['Text Domain'] );
+	define( __NAMESPACE__ . '\TEXT_DOMAIN', 'carbon-fields' );
 }
 
 # Define root URL
