@@ -6,7 +6,6 @@ use \Carbon_Fields\Pimple\Container as PimpleContainer;
 use \Carbon_Fields\Container\Repository as ContainerRepository;
 use \Carbon_Fields\Templater\Templater;
 use \Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
-use \Carbon_Fields\Libraries\Plugin_Update_Warning\Plugin_Update_Warning;
 use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -18,14 +17,11 @@ class Loader {
 
 	protected $sidebar_manager;
 
-	protected $plugin_update_warning;
-
 	protected $container_repository;
 
-	public function __construct( Templater $templater, Sidebar_Manager $sidebar_manager, Plugin_Update_Warning $plugin_update_warning, ContainerRepository $container_repository ) {
+	public function __construct( Templater $templater, Sidebar_Manager $sidebar_manager, ContainerRepository $container_repository ) {
 		$this->templater = $templater;
 		$this->sidebar_manager = $sidebar_manager;
-		$this->plugin_update_warning = $plugin_update_warning;
 		$this->container_repository = $container_repository;
 	}
 
@@ -49,11 +45,6 @@ class Loader {
 
 		# Initialize sidebar manager
 		$this->sidebar_manager->boot();
-
-		if ( is_admin() ) {
-			# Initialize plugin update warning
-			$this->plugin_update_warning->boot();
-		}
 	}
 
 	/**
