@@ -19,7 +19,7 @@ export const AssociationListItem = ({ item }) => {
 		<a href="#">
 			{
 				item.edit_link
-				? <em class="edit-link dashicons-before dashicons-edit">Edit</em>
+				? <em className="edit-link dashicons-before dashicons-edit">Edit</em>
 				: null
 			}
 			<em>{item.label}</em>
