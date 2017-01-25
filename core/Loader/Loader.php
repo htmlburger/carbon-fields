@@ -29,6 +29,14 @@ class Loader {
 	 * Hook the main Carbon Fields initialization functionality.
 	 */
 	public function boot() {
+		if ( !defined( 'ABSPATH' ) ) {
+			throw new \Exception( 'Carbon Fields cannot be booted outside of a WordPress environment.' );
+		}
+
+		if ( did_action( 'init' ) ) {
+			throw new \Exception( 'Carbon Fields must be booted before the "init" WordPress action has fired.' );
+		}
+
 		include_once( dirname( dirname( __DIR__ ) ) . '/config.php' );
 		include_once( \Carbon_Fields\DIR . '/core/functions.php' );
 		
