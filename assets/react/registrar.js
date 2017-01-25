@@ -6,6 +6,7 @@ import { registerFieldComponent } from 'lib/registry';
 /**
  * Register the fields.
  */
+import AssociationField from 'fields/components/association';
 import CheckboxField from 'fields/components/checkbox';
 import ColorField from 'fields/components/color';
 import ComplexField from 'fields/components/complex';
@@ -18,6 +19,7 @@ import SetField from 'fields/components/set';
 import TextField from 'fields/components/text';
 import TextareaField from 'fields/components/textarea';
 
+registerFieldComponent('Association', AssociationField);
 registerFieldComponent('Checkbox', CheckboxField);
 registerFieldComponent('Color', ColorField);
 registerFieldComponent('Complex', ComplexField);
