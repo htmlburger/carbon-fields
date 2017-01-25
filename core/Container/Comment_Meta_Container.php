@@ -76,7 +76,7 @@ class Comment_Meta_Container extends Container {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	public function is_valid_attach() {
+	public function _is_valid_attach() {
 		global $pagenow;
 
 		if ( $pagenow !== 'comment.php' ) {

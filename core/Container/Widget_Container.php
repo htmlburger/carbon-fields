@@ -33,7 +33,7 @@ class Widget_Container extends Container {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	public function is_valid_attach() {
+	public function _is_valid_attach() {
 		$screen = get_current_screen();
 		$is_widget_save = isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'save-widget';
 
