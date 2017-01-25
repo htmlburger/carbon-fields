@@ -2,12 +2,13 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose } from 'recompose';
+import { compose, withState } from 'recompose';
 
 /**
  * The internal dependencies.
  */
 import Field from 'fields/components/field';
+import AssociationSearch from 'fields/components/association-search';
 import AssociationList from 'fields/components/association-list';
 
 import withStore from 'fields/decorators/with-store';
@@ -17,16 +18,18 @@ import withSetup from 'fields/decorators/with-setup';
  * Render a field that allows to create links between posts, taxonomy terms,
  * users or comments.
  *
- * @param  {Object} props
- * @param  {String} props.name
- * @param  {Object} props.field
+ * @param  {Object}   props
+ * @param  {String}   props.name
+ * @param  {Object}   props.field
+ * @param  {String}   props.term
+ * @param  {Function} props.setTerm
  * @return {React.Element}
  *
  * TODO: Fix the translation of the labels.
  * TODO: Research more about `react-virtualized`.
  * 		 Probably can improve the performance on very long lists.
  */
-export const AssociationField = ({ name, field }) => {
+export const AssociationField = ({ name, field, term, setTerm }) => {
 	return <Field field={field}>
 		<div className="carbon-relationship-container carbon-Relationship">
 			<div className="selected-items-container">
@@ -49,9 +52,9 @@ export const AssociationField = ({ name, field }) => {
 				</strong>
 			</div>
 
-			<div className="search-field carbon-relationship-search dashicons-before dashicons-search">
-				<input type="text" className="search-field" placeholder="Search..." />
-			</div>
+			<AssociationSearch
+				term={term}
+				onChange={setTerm} />
 
 			<div className="carbon-relationship-body">
 				<div className="carbon-relationship-left">
@@ -70,5 +73,6 @@ export const AssociationField = ({ name, field }) => {
 
 export default compose(
 	withStore(),
-	withSetup()
+	withSetup(),
+	withState('term', 'setTerm', '')
 )(AssociationField);
