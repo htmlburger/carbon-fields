@@ -46,9 +46,9 @@ class Plugin_Update_Warning {
 		}
 
 		$plugin_data = (object) _get_plugin_data_markup_translate( \Carbon_Fields\RELATIVE_PLUGIN_FILE, (array) $carbon_fields_data, false, true );
-		$current_version = implode( '.', array_slice( explode( '.', $plugin_data->Version ), 0, 2 ) );
-		$update_version = implode( '.', array_slice( explode( '.', $plugin_data->update->new_version ), 0, 2 ) );
-		return version_compare( $current_version, $update_version, '<' ); // compare only MAJOR part of double-digit-major SemVer 
+		$current_version = implode( '.', array_slice( explode( '.', $plugin_data->Version ), 0, 1 ) );
+		$update_version = implode( '.', array_slice( explode( '.', $plugin_data->update->new_version ), 0, 1 ) );
+		return version_compare( $current_version, $update_version, '<' ); // compare only MAJOR part of SemVer
 	}
 
 	/**
