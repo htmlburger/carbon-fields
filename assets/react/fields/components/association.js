@@ -8,6 +8,8 @@ import { compose } from 'recompose';
  * The internal dependencies.
  */
 import Field from 'fields/components/field';
+import AssociationList from 'fields/components/association-list';
+
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 
@@ -21,6 +23,8 @@ import withSetup from 'fields/decorators/with-setup';
  * @return {React.Element}
  *
  * TODO: Fix the translation of the labels.
+ * TODO: Research more about `react-virtualized`.
+ * 		 Probably can improve the performance on very long lists.
  */
 export const AssociationField = ({ name, field }) => {
 	return <Field field={field}>
@@ -51,16 +55,13 @@ export const AssociationField = ({ name, field }) => {
 
 			<div className="carbon-relationship-body">
 				<div className="carbon-relationship-left">
-					<ul className="carbon-relationship-list">
-
-					</ul>
+					<AssociationList items={field.options} />
 				</div>
 
 				<div className="carbon-relationship-right">
 					<label>Associated:</label>
 
-					<ul className="carbon-relationship-list">
-					</ul>
+					<AssociationList items={field.value} />
 				</div>
 			</div>
 		</div>
