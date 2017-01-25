@@ -81,7 +81,8 @@ class Gravity_Form_Field extends Select_Field {
 		}
 
 		// No forms have been found
-		if ( empty( $this->get_options() ) ) {
+		$options = $this->get_options();
+		if ( empty( $options ) ) {
 			?><em><?php _e( 'No Gravity Forms have been found.', \Carbon_Fields\TEXT_DOMAIN ); ?></em><?php
 			return;
 		}
