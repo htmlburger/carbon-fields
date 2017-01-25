@@ -1,4 +1,7 @@
-import React from 'react';
+/**
+ * The external dependencies.
+ */
+import React, { PropTypes } from 'react';
 import Field from 'fields/components/field';
 
 /**
@@ -9,12 +12,21 @@ import Field from 'fields/components/field';
  * @param  {Object} props.field
  * @return {React.Element}
  *
- * @todo Fix the translation.
+ * TODO: Fix the translation.
  */
 const NoOptions = ({ field }) => {
 	return <Field field={field}>
 		<em>No options.</em>
 	</Field>
 }
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+NoOptions.propTypes ={
+	field: PropTypes.object.isRequired,
+};
 
 export default NoOptions;
