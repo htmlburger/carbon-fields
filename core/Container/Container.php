@@ -149,7 +149,6 @@ abstract class Container implements Datastore_Holder_Interface {
 		$normalized_type = static::normalize_container_type( $type );
 		$class = static::container_type_to_class( $normalized_type );
 		$container = new $class( $unique_id, $name, $normalized_type );
-
 		$repository->register_container( $container );
 
 		return $container;

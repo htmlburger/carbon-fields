@@ -77,7 +77,7 @@ class Repository {
 	 * @param string $title
 	 */
 	public function get_unique_panel_id( $title ) {
-		$id = preg_replace( '~\W\-~u', '', remove_accents( $title ) );
+		$id = preg_replace( '~[\W\-]*~', '', remove_accents( $title ) );
 		$base = $id;
 		$suffix = 0;
 
@@ -94,7 +94,7 @@ class Repository {
 	 * 
 	 * @param string $title
 	 */
-	public function is_unique_panel_id( $id ) {
+	protected function is_unique_panel_id( $id ) {
 		return !in_array( $id, $this->registered_panel_ids );
 	}
 
@@ -103,7 +103,7 @@ class Repository {
 	 *
 	 * @param string $id
 	 **/
-	public function register_unique_panel_id( $id ) {
+	protected function register_unique_panel_id( $id ) {
 		if ( $this->is_unique_panel_id( $id ) ) {
 			$this->registered_panel_ids[] = $id;
 		}
@@ -114,7 +114,7 @@ class Repository {
 	 *
 	 * @param string $id
 	 **/
-	public function unregister_unique_panel_id( $id ) {
+	protected function unregister_unique_panel_id( $id ) {
 		if ( !$this->is_unique_panel_id( $id ) ) {
 			unset( $this->registered_panel_ids[ array_search( $id, $this->registered_panel_ids ) ] );
 		}

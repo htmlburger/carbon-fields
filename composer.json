@@ -93,6 +93,10 @@
         }
     },
     "require": {
+        "php": ">=5.3",
         "composer/installers": "~1.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "^0.9.7"
     }
 }

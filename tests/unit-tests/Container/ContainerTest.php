@@ -112,7 +112,7 @@ class ContainerTest extends WP_UnitTestCase {
 	public function testSameContainerNameAddsNumericalSuffix() {
 		$container1 = Container::factory( $this->containerType, $this->containerTitle );
 		$container2 = Container::factory( $this->containerType, $this->containerTitle );
-		$this->assertEquals( $container2->id, $container1->id . '1' );
+		$this->assertEquals( $container1->id . '1', $container2->id );
 	}
 
 	/**
