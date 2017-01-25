@@ -12,15 +12,15 @@ class Repository {
 	 * List of registered unique panel identificator ids
 	 *
 	 * @see get_unique_panel_id()
-	 * @see drop_unique_panel_id()
+	 * @see register_unique_panel_id()
+	 * @see unregister_unique_panel_id()
 	 * @var array
 	 */
 	protected $registered_panel_ids = array();
 
 	/**
-	 * List of containers created via factory that should be initialized
+	 * List of registered containers that should be initialized
 	 *
-	 * @see factory()
 	 * @see initialize_containers()
 	 * @var array
 	 */
@@ -35,58 +35,18 @@ class Repository {
 	protected $containers = array();
 
 	/**
-	 * Normalizes a container type string to an expected format
+	 * Register a container with the repository
 	 *
-	 * @param string $type
-	 * @return string $normalized_type
+	 * @return array
 	 **/
-	protected function normalize_container_type( $type ) {
-		// backward compatibility: post_meta container used to be called custom_fields
-		if ( $type === 'custom_fields' ) {
-			$type = 'post_meta';
-		}
-
-		$normalized_type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
-		return $normalized_type;
-	}
-
-	/**
-	 * Resolves a string-based type to a fully qualified container class name
-	 *
-	 * @param string $type
-	 * @return string $class_name
-	 **/
-	protected function container_type_to_class( $type ) {
-		$class = __NAMESPACE__ . '\\' . $type . '_Container';
-		if ( ! class_exists( $class ) ) {
-			Incorrect_Syntax_Exception::raise( 'Unknown container "' . $type . '".' );
-			$class = __NAMESPACE__ . '\\Broken_Container';
-		}
-		return $class;
-	}
-
-	/**
-	 * Create a new container of type $type and name $name.
-	 *
-	 * @param string $type
-	 * @param string $name Human-readable name of the container
-	 * @return object $container
-	 **/
-	public function factory( $type, $name ) {
-		$unique_id = $this->get_unique_panel_id( $name );
-		
-		$normalized_type = $this->normalize_container_type( $type );
-		$class = $this->container_type_to_class( $normalized_type );
-		$container = new $class( $unique_id, $name, $normalized_type );
-
+	public function register_container( Container $container ) {
+		$this->register_unique_panel_id( $container->id );
 		$this->containers[] = $container;
 		$this->pending_containers[] = $container;
-
-		return $container;
 	}
 
 	/**
-	 * Initialize containers created via factory
+	 * Initialize registered containers
 	 *
 	 * @return array
 	 **/
@@ -121,14 +81,32 @@ class Repository {
 		$base = $id;
 		$suffix = 0;
 
-		while ( in_array( $id, $this->registered_panel_ids ) ) {
+		while ( !$this->is_unique_panel_id( $id ) ) {
 			$suffix++;
 			$id = $base . strval( $suffix );
 		}
 
-		$this->registered_panel_ids[] = $id;
-
 		return $id;
+	}
+
+	/**
+	 * Check if container identificator id is unique
+	 * 
+	 * @param string $title
+	 */
+	public function is_unique_panel_id( $id ) {
+		return !in_array( $id, $this->registered_panel_ids );
+	}
+
+	/**
+	 * Add container identificator id to the list of unique container ids
+	 *
+	 * @param string $id
+	 **/
+	public function register_unique_panel_id( $id ) {
+		if ( $this->is_unique_panel_id( $id ) ) {
+			$this->registered_panel_ids[] = $id;
+		}
 	}
 
 	/**
@@ -136,8 +114,8 @@ class Repository {
 	 *
 	 * @param string $id
 	 **/
-	public function drop_unique_panel_id( $id ) {
-		if ( in_array( $id, $this->registered_panel_ids ) ) {
+	public function unregister_unique_panel_id( $id ) {
+		if ( !$this->is_unique_panel_id( $id ) ) {
 			unset( $this->registered_panel_ids[ array_search( $id, $this->registered_panel_ids ) ] );
 		}
 	}

@@ -105,14 +105,54 @@ abstract class Container implements Datastore_Holder_Interface {
 	protected $has_default_datastore = true;
 
 	/**
-	 * Create a new container of type $type and name $name and label $label.
+	 * Normalizes a container type string to an expected format
+	 *
+	 * @param string $type
+	 * @return string $normalized_type
+	 **/
+	protected static function normalize_container_type( $type ) {
+		// backward compatibility: post_meta container used to be called custom_fields
+		if ( $type === 'custom_fields' ) {
+			$type = 'post_meta';
+		}
+
+		$normalized_type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
+		return $normalized_type;
+	}
+
+	/**
+	 * Resolves a string-based type to a fully qualified container class name
+	 *
+	 * @param string $type
+	 * @return string $class_name
+	 **/
+	protected static function container_type_to_class( $type ) {
+		$class = __NAMESPACE__ . '\\' . $type . '_Container';
+		if ( ! class_exists( $class ) ) {
+			Incorrect_Syntax_Exception::raise( 'Unknown container "' . $type . '".' );
+			$class = __NAMESPACE__ . '\\Broken_Container';
+		}
+		return $class;
+	}
+
+	/**
+	 * Create a new container of type $type and name $name.
 	 *
 	 * @param string $type
 	 * @param string $name Human-readable name of the container
 	 * @return object $container
 	 **/
 	public static function factory( $type, $name ) {
-		return App::ioc( 'container_repository' )->factory( $type, $name );
+		$repository = App::ioc( 'container_repository' );
+		$unique_id = $repository->get_unique_panel_id( $name );
+		
+		$normalized_type = static::normalize_container_type( $type );
+		$class = static::container_type_to_class( $normalized_type );
+		$container = new $class( $unique_id, $name, $normalized_type );
+
+		$repository->register_container( $container );
+
+		return $container;
 	}
 
 	/**

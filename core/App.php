@@ -25,15 +25,7 @@ class App {
 		return static::$instance;
 	}
 
-	public static function ioc( $key ) {
-		return static::instance()->ioc[$key];
-	}
-
-	public static function boot() {
-		static::ioc( 'loader' )->boot();
-	}
-
-	public function __construct() {
+	protected static function get_default_ioc() {
 		$ioc = new PimpleContainer();
 
 		$ioc['loader'] = function( $c ) {
@@ -56,6 +48,19 @@ class App {
 			return new ContainerRepository();
 		};
 
+		return $ioc;
+	}
+
+	public static function ioc( $key ) {
+		return static::instance()->ioc[$key];
+	}
+
+	public function install( PimpleContainer $ioc ) {
 		$this->ioc = $ioc;
+	}
+
+	public static function boot() {
+		static::instance()->install( static::get_default_ioc() );
+		static::ioc( 'loader' )->boot();
 	}
 }
