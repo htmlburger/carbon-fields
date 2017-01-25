@@ -1,6 +1,12 @@
-import React from 'react';
+/**
+ * The external dependencies.
+ */
+import React, { PropTypes } from 'react';
 import { compose, withProps, withHandlers } from 'recompose';
 
+/**
+ * The internal dependencies.
+ */
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
@@ -11,23 +17,39 @@ import withSetup from 'fields/decorators/with-setup';
  * @param  {Object}   props
  * @param  {String}   props.name
  * @param  {Object}   props.field
- * @param  {Boolean}  props.isChecked
- * @param  {Function} props.handleInputChange
+ * @param  {Boolean}  props.checked
+ * @param  {Function} props.handleChange
  * @return {React.Element}
  */
-export const CheckboxField = ({ name, field, isChecked, handleInputChange }) => {
+export const CheckboxField = ({ name, field, checked, handleChange }) => {
 	return <Field field={field}>
 		<label>
 			<input
 				type="checkbox"
 				name={name}
 				value={field.option_value}
-				checked={isChecked}
-				onChange={handleInputChange} />
+				checked={checked}
+				onChange={handleChange} />
 
 			{field.option_label}
 		</label>
 	</Field>;
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+CheckboxField.propTypes = {
+	name: PropTypes.string.isRequired,
+	field: PropTypes.shape({
+		id: PropTypes.string.isRequired,
+		value: PropTypes.string,
+		option_value: PropTypes.string.isRequired,
+	}).isRequired,
+	checked: PropTypes.bool.isRequired,
+	handleChange: PropTypes.func.isRequired,
 };
 
 /**
@@ -38,7 +60,7 @@ export const CheckboxField = ({ name, field, isChecked, handleInputChange }) => 
  * @return {Object}
  */
 const props = ({ field }) => ({
-	isChecked: field.value === field.option_value,
+	checked: field.value === field.option_value,
 });
 
 /**
@@ -49,7 +71,7 @@ const props = ({ field }) => ({
  * @param  {Function} props.updateField
  * @return {Function}
  */
-const handleInputChange = ({ field, updateField }) => ({ target }) => {
+const handleChange = ({ field, updateField }) => ({ target }) => {
 	updateField(field.id, {
 		value: target.checked ? field.option_value : null,
 	});
@@ -59,5 +81,5 @@ export default compose(
 	withStore(),
 	withSetup(),
 	withProps(props),
-	withHandlers({ handleInputChange })
+	withHandlers({ handleChange })
 )(CheckboxField);
