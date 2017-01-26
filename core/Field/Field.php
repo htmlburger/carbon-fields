@@ -57,6 +57,18 @@ class Field implements Datastore_Holder_Interface {
 	 **/
 	protected $hierarchy_index = array();
 
+	const VALUE_TYPE_SINGLE_VALUE = 1;
+	const VALUE_TYPE_MULTIPLE_VALUES = 2;
+	const VALUE_TYPE_MULTIPLE_KEYS = 3;
+	const VALUE_TYPE_VALUE_SET = 4;
+
+	/**
+	 * What value type this field is expecting to receive in set_value()
+	 *
+	 * @var string self::VALUE_TYPE_* value expected
+	 */
+	public $expected_value_type = self::VALUE_TYPE_SINGLE_VALUE;
+
 	/**
 	 * Field value
 	 *

@@ -59,11 +59,35 @@ abstract class Datastore implements Datastore_Interface {
 	 * @param Field $field The field to retrieve value for.
 	 */
 	public function get_value_for_field( Field $field ) {
-		$values = $this->get_values_for_field( $field );
-		if ( !empty( $values ) ) {
-			return $values[0];
+		$value_type = $field->expected_value_type;
+		$value_set = $this->get_value_set_for_field( $field );
+		$value = '';
+
+		switch ( $value_type ) {
+			case Field::VALUE_TYPE_MULTIPLE_VALUES:
+				$value = array_map( function( $set ) {
+					return $set['value'];
+				}, $value_set );
+				break;
+			case Field::VALUE_TYPE_MULTIPLE_KEYS:
+				$value = array();
+				if ( !empty( $value_set ) ) {
+					$value = $value_set[0];
+				}
+				break;
+			case Field::VALUE_TYPE_VALUE_SET:
+				$value = $value_set;
+				break;
+
+			case Field::VALUE_TYPE_SINGLE_VALUE:
+			default:
+				if ( !empty( $value_set ) ) {
+					$value = $value_set[0]['value'];
+				}
+				break;
 		}
-		return '';
+
+		return $value;
 	}
 
 	/**
@@ -71,12 +95,8 @@ abstract class Datastore implements Datastore_Interface {
 	 *
 	 * @param Field $field The field to load value(s) in.
 	 */
-	public function load( Field $field, $multiple_values = false ) {
-		if ( $multiple_values ) {
-			$field->set_value( $this->get_values_for_field( $field ) );
-		} else {
-			$field->set_value( $this->get_value_for_field( $field ) );
-		}
+	public function load( Field $field ) {
+		$field->set_value( $this->get_value_for_field( $field ) );
 	}
 
 	protected function get_full_hierarchy_for_field( Field $field ) {
@@ -119,5 +139,22 @@ abstract class Datastore implements Datastore_Interface {
 	protected function get_storage_key_for_field( Field $field, $value_group_index, $value_key ) {
 		$storage_key = $this->get_storage_key_prefix_for_field( $field ) . $value_group_index . '|' . $value_key;
 		return $storage_key;
+	}
+
+	protected function database_results_to_value_set( $results ) {
+		$value_set = array();
+
+		foreach ( $results as $row ) {
+			$pieces = explode( '|', $row->field_key );
+			$value_group = $pieces[ count( $pieces ) - 2 ];
+			$value_key = $pieces[ count( $pieces ) - 1 ];
+
+			if ( !isset( $value_set ) ) {
+				$value_set[$value_group] = array();
+			}
+			$value_set[$value_group][$value_key] = $row->field_value;
+		}
+
+		return $value_set;
 	}
 }

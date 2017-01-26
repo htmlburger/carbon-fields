@@ -21,22 +21,19 @@ class Theme_Options_Datastore extends Datastore {
 	 *
 	 * @param Field $field The field to retrieve value for.
 	 */
-	public function get_values_for_field( Field $field ) {
+	public function get_value_set_for_field( Field $field ) {
 		global $wpdb;
 
 		$storage_key = $this->get_storage_key_prefix_for_field( $field );
 
-		$values = $wpdb->get_results( '
+		$raw = $wpdb->get_results( '
 			SELECT `option_name` AS `field_key`, `option_value` AS `field_value`
 			FROM ' . $wpdb->options . '
 			WHERE `option_name` LIKE "' . esc_sql( $storage_key ) . '%"
 			ORDER BY `option_name` ASC
 		' );
 
-		$values = array_map( function( $value ) {
-			return $value->field_value;
-		}, $values );
-
+		$values = $this->database_results_to_value_set( $raw );
 		return $values;
 	}
 

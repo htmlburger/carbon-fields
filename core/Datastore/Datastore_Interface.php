@@ -9,11 +9,11 @@ use Carbon_Fields\Field\Field;
  */
 interface Datastore_Interface {
 	/**
-	 * Return the field values
+	 * Return the field value set
 	 *
-	 * @param Field $field The field to retrieve value for.
+	 * @param Field $field The field to retrieve value set for.
 	 */
-	public function get_values_for_field( Field $field );
+	public function get_value_set_for_field( Field $field );
 
 	/**
 	 * Return the first field value found
@@ -26,9 +26,8 @@ interface Datastore_Interface {
 	 * Load the field value(s) from the database.
 	 *
 	 * @param Field $field The field to load value(s) in.
-	 * @param bool $multiple_values Whether to load multiple values or only the first one
 	 */
-	public function load( Field $field, $multiple_values = false );
+	public function load( Field $field );
 
 	/**
 	 * Save the field value(s) into the database.

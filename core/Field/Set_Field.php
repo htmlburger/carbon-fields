@@ -22,6 +22,13 @@ class Set_Field extends Predefined_Options_Field {
 	protected $default_value = array();
 
 	/**
+	 * What value type this field is expecting to receive in set_value()
+	 *
+	 * @var string self::VALUE_TYPE_* value expected
+	 */
+	public $expected_value_type = self::VALUE_TYPE_MULTIPLE_VALUES;
+
+	/**
 	 * Set the number of the options to be displayed at the initial field display.
 	 *
 	 * @param  int $limit
@@ -49,17 +56,6 @@ class Set_Field extends Predefined_Options_Field {
 				$value = array_values( $value );
 			}
 			$this->set_value( $value );
-		}
-	}
-
-	/**
-	 * Delegate load to the field DataStore instance
-	 **/
-	public function load() {
-		$this->get_datastore()->load( $this, true );
-
-		if ( $this->get_value() === false ) {
-			$this->set_value( $this->default_value );
 		}
 	}
 

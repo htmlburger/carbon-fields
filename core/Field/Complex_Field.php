@@ -205,7 +205,7 @@ class Complex_Field extends Field {
 				// set value from the group
 				$tmp_field = $this->get_clone_under_field_in_hierarchy( $field, $this, $index );
 
-				if ( is_a( $tmp_field, __NAMESPACE__ . '\\Complex_Field' ) ) {
+				if ( is_a( $tmp_field, get_class() ) ) {
 					if ( ! isset( $values[ $tmp_field->get_name() ] ) ) {
 						continue; // bail if the complex field is empty
 					}
@@ -290,6 +290,15 @@ class Complex_Field extends Field {
 		return false;
 	}
 
+	/**
+	 * Return the raw field value
+	 *
+	 * @return mixed
+	 **/
+	public function get_value() {
+		return (array) $this->value;
+	}
+
 	public function get_value_set() {
 		$value_groups = $this->get_value();
 		$set = array();
@@ -305,10 +314,11 @@ class Complex_Field extends Field {
 	 * Load and parse the field data from the datastore
 	 */
 	protected function get_value_from_datastore() {
-		$entries = $this->get_datastore()->get_values_for_field( $this );
+		$entries = $this->get_datastore()->get_value_set_for_field( $this );
 		$values = array();
 
-		foreach ( $entries as $entry_index => $group_name ) {
+		foreach ( $entries as $entry_index => $entry ) {
+			$group_name = $entry['value'];
 			$values[$entry_index] = array(
 				'type'=>$group_name,
 			);
