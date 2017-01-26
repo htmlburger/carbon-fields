@@ -37,6 +37,27 @@ class Field implements Datastore_Holder_Interface {
 	public $type;
 
 	/**
+	 * Original field name before being modified by hierarchy
+	 *
+	 * @var string
+	 **/
+	protected $hierarchy_name = '';
+
+	/**
+	 * Array of ancestor field names
+	 *
+	 * @var array
+	 **/
+	protected $hierarchy = array();
+
+	/**
+	 * Array of complex entry ids
+	 *
+	 * @var array
+	 **/
+	protected $hierarchy_index = array();
+
+	/**
 	 * Field value
 	 *
 	 * @var mixed
@@ -208,6 +229,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $label Field label
 	 */
 	protected function __construct( $name, $label ) {
+		$this->set_hierarchy_name( $name );
 		$this->set_name( $name );
 		$this->set_label( $label );
 		$this->set_base_name( $name );
@@ -232,6 +254,38 @@ class Field implements Datastore_Holder_Interface {
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
 
 		add_action( 'admin_footer', array( get_class( $this ), 'admin_enqueue_scripts' ), 5 );
+	}
+
+	public function set_hierarchy_name( $hierarchy_name ) {
+		$this->hierarchy_name = $hierarchy_name;
+	}
+
+	public function get_hierarchy_name() {
+		return $this->hierarchy_name;
+	}
+
+	public function set_hierarchy( $hierarchy ) {
+		$this->hierarchy = $hierarchy;
+	}
+
+	public function get_hierarchy() {
+		return $this->hierarchy;
+	}
+
+	public function set_hierarchy_index( $hierarchy_index ) {
+		$this->hierarchy_index = $hierarchy_index;
+	}
+
+	public function get_hierarchy_index() {
+		return $this->hierarchy_index;
+	}
+
+	public function get_clone_under_field_in_hierarchy( $field, $entry_index = 0 ) {
+		$clone = clone $field;
+		// $clone->hierarchy_name = $clone->get_name();
+		$clone->set_hierarchy( array_merge( $field->get_hierarchy(), array( $field->get_hierarchy_name() ) ) );
+		$clone->set_hierarchy_index( array_merge( $field->get_hierarchy_index(), array( $entry_index ) ) );
+		return $clone;
 	}
 
 	/**
@@ -402,6 +456,14 @@ class Field implements Datastore_Holder_Interface {
 	 **/
 	public function get_value() {
 		return $this->value;
+	}
+
+	public function get_value_set() {
+		return array(
+			array(
+				'value' => $this->value,
+			),
+		);
 	}
 
 	/**

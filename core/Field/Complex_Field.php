@@ -13,17 +13,25 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Allows nested repeaters with multiple field groups to be created.
  */
 class Complex_Field extends Field {
+
 	const LAYOUT_GRID = 'grid'; // default
+
 	const LAYOUT_TABBED_HORIZONTAL = 'tabbed-horizontal';
+
 	const LAYOUT_TABBED_VERTICAL = 'tabbed-vertical';
 
+	protected $layout = self::LAYOUT_GRID;
+
+	protected $default_value = array();
+
 	protected $fields = array();
-	protected $values = array();
+
 	protected $groups = array();
 
-	protected $layout = self::LAYOUT_GRID;
 	protected $values_min = -1;
+
 	protected $values_max = -1;
+
 	protected $collapsed = false;
 
 	public $labels = array(
@@ -166,7 +174,7 @@ class Complex_Field extends Field {
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
 	 **/
 	public function set_value_from_input( $input = null ) {
-		$this->values = array();
+		$value = array();
 
 		if ( is_null( $input ) ) {
 			$input = $_POST;
@@ -196,7 +204,8 @@ class Complex_Field extends Field {
 
 			foreach ( $group_fields as $field ) {
 				// set value from the group
-				$tmp_field = clone $field;
+				$tmp_field = $this->get_clone_under_field_in_hierarchy( $field, $index );
+
 				if ( is_a( $tmp_field, __NAMESPACE__ . '\\Complex_Field' ) ) {
 					if ( ! isset( $values[ $tmp_field->get_name() ] ) ) {
 						continue; // bail if the complex field is empty
@@ -216,17 +225,17 @@ class Complex_Field extends Field {
 				$value_group[] = $tmp_field;
 			}
 
-			$this->values[] = $value_group;
+			$value[] = $value_group;
 			$index++;
 		}
+		$this->set_value( $value );
 	}
 
 	/**
 	 * Load all groups of fields and their data.
 	 */
 	public function load() {
-		// load existing groups
-		$this->load_values();
+		$this->set_value( $this->get_value_from_datastore() );
 	}
 
 	/**
@@ -234,6 +243,8 @@ class Complex_Field extends Field {
 	 */
 	public function save() {
 		$this->delete();
+
+		$this->get_datastore()->save( $this );
 
 		foreach ( $this->values as $value ) {
 			foreach ( $value as $field ) {
@@ -253,121 +264,46 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Load and parse the field data.
-	 */
-	public function load_values() {
-		return $this->load_values_from_datastore();
-	}
-
-	/**
 	 * Load and parse the field data from the database.
 	 */
-	public function load_values_from_datastore() {
-		$this->values = array();
+	public function get_value_from_datastore() {
+		$entries = $this->get_datastore()->get_values_for_field( $this );
+		$values = array();
 
-		$group_rows = $this->get_datastore()->load_values( $this );
+		foreach ( $entries as $entry_index => $entry ) {
+			$group_name = $entry->field_value;
 
-		return $this->process_loaded_values( $group_rows );
-	}
-
-	/**
-	 * Load and parse a raw set of field data.
-	 *
-	 * @param  array $values Raw data entries
-	 * @return array 		 Processed data entries
-	 */
-	public function load_values_from_array( $values ) {
-		$this->values = array();
-
-		$group_rows = array();
-
-		$meta_key = $this->get_name();
-
-		foreach ( $values as $key => $value ) {
-			if ( strpos( $key, $meta_key ) !== 0 ) {
-				continue;
-			}
-
-			$group_rows[] = array(
-				'field_key' => preg_replace( '~^(' . preg_quote( $this->get_name(), '~' ) . ')_\d+_~', '$1_', $key ),
-				'field_value' => $value,
+			$values[$entry_index] = array(
+				'type'=>$group_name,
 			);
-		}
+			$group = $this->get_group_by_name( $group_name );
+			$nested_fields = $group->get_fields();
 
-		return $this->process_loaded_values( $group_rows );
-	}
-
-	/**
-	 * Parse groups of raw field data into the actual field hierarchy.
-	 *
-	 * @param  array $group_rows Group rows
-	 */
-	public function process_loaded_values( $group_rows ) {
-		$input_groups = array();
-
-		// Set default values
-		$field_names = array();
-		foreach ( $this->groups as $group ) {
-			$group_fields = $group->get_fields();
-			foreach ( $group_fields as $field ) {
-				$field_names[] = $field->get_name();
-				$field->set_value( $field->get_default_value() );
-			}
-		}
-
-		if ( empty( $group_rows ) ) {
-			return;
-		}
-
-		// load and parse values and group type
-		foreach ( $group_rows as $row ) {
-			if ( ! preg_match( Helper::get_complex_field_regex( $this->get_name(), array_keys( $this->groups ), $field_names ), $row['field_key'], $field_name ) ) {
-				continue;
-			}
-
-			$row['field_value'] = maybe_unserialize( $row['field_value'] );
-			$input_groups[ $field_name['index'] ]['type'] = $field_name['group'];
-
-			if ( ! empty( $field_name['trailing'] ) ) {
-				$input_groups[ $field_name['index'] ][ $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'] ] = $row['field_value'];
-			} else if ( ! empty( $field_name['sub'] ) ) {
-				$input_groups[ $field_name['index'] ][ $field_name['key'] ][ $field_name['sub'] ] = $row['field_value'];
-			} else {
-				$input_groups[ $field_name['index'] ][ $field_name['key'] ] = $row['field_value'];
-			}
-		}
-
-		// create groups list with loaded fields
-		ksort( $input_groups );
-
-		foreach ( $input_groups as $index => $values ) {
-			$value_group = array( 'type' => $values['type'] );
-			$group_fields = $this->groups[ $values['type'] ]->get_fields();
-			unset( $values['type'] );
-
-			foreach ( $group_fields as $field ) {
-				// set value from the group
-				$tmp_field = clone $field;
-
-				if ( is_a( $field, __NAMESPACE__ . '\\Complex_Field' ) ) {
-					$tmp_field->load_values_from_array( $values );
+			foreach ( $nested_fields as $nested_field ) {
+				$clone = $this->get_clone_under_field_in_hierarchy( $nested_field, $entry_index );
+				
+				if ( is_a( $clone, get_class() ) ) {
+					$value = $clone->get_value_from_datastore();
 				} else {
-					$tmp_field->set_value_from_input( $values );
+					$value = $this->get_datastore()->get_value_for_field( $clone );
 				}
 
-				$value_group[] = $tmp_field;
+				$values[$entry_index][$clone->get_hierarchy_name()] = $value;
 			}
-
-			$this->values[] = $value_group;
 		}
+
+		return $values;
 	}
 
-	/**
-	 * Retrieve the field values.
-	 * @return array
-	 */
-	public function get_values() {
-		return $this->values;
+	public function get_value_set() {
+		$value_groups = $this->get_value();
+		$set = array();
+		foreach ( $value_groups as $value_group ) {
+			$set[] = array(
+				'value' => $value_group['type'],
+			);
+		}
+		return $set;
 	}
 
 	/**
@@ -391,17 +327,17 @@ class Complex_Field extends Field {
 	 */
 	public function to_json( $load ) {
 		$complex_data = parent::to_json( $load );
+		$my_value = $this->get_value();
 
 		$groups_data = array();
-		$values_data = array();
-
 		foreach ( $this->groups as $group ) {
 			$groups_data[] = $group->to_json( false );
 		}
 
-		foreach ( $this->values as $fields ) {
-			$group = $this->get_group_by_name( $fields['type'] );
-			unset( $fields['type'] );
+		$value_data = array();
+		foreach ( $my_value as $entry_index => $value_group ) {
+			$group = $this->get_group_by_name( $value_group['type'] );
+			$group_fields = $group->get_fields();
 
 			$data = array(
 				'name' => $group->get_name(),
@@ -409,12 +345,17 @@ class Complex_Field extends Field {
 				'group_id' => $group->get_group_id(),
 				'fields' => array(),
 			);
+			foreach ( $group_fields as $field ) {
+				$value_set = isset( $value_group[ $field->get_name() ] ) ? $value_group[ $field->get_name() ] : '';
+				if ( empty( $value_set ) && is_a( $field, get_class() ) ) {
+					$value_set = array();
+				}
+				$clone = $this->get_clone_under_field_in_hierarchy( $field, $entry_index );
+				$clone->set_value( $value_set );
 
-			foreach ( $fields as $index => $field ) {
-				$data['fields'][] = $field->to_json( false );
+				$data['fields'][] = $clone->to_json( false );
 			}
-
-			$values_data[] = $data;
+			$value_data[] = $data;
 		}
 
 		$complex_data = array_merge( $complex_data, array(
@@ -424,10 +365,9 @@ class Complex_Field extends Field {
 			'max' => $this->get_max(),
 			'multiple_groups' => count( $groups_data ) > 1,
 			'groups' => $groups_data,
-			'value' => $values_data,
+			'value' => $value_data,
 			'collapsed' => $this->collapsed,
 		) );
-
 		return $complex_data;
 	}
 
