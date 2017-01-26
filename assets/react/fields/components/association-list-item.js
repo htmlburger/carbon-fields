@@ -62,6 +62,32 @@ export const AssociationListItem = ({ prefix, index, item, disabled, associated,
 };
 
 /**
+ * Validate the props.
+ *
+ * @type {Object}
+ *
+ * TODO: Fix the type of the `id` attribute to be consistent.
+ */
+AssociationListItem.propTypes = {
+	prefix: PropTypes.string,
+	index: PropTypes.number,
+	item: PropTypes.shape({
+		id: PropTypes.oneOfType([
+			PropTypes.number,
+			PropTypes.string,
+		]).isRequired,
+		label: PropTypes.string.isRequired,
+		title: PropTypes.string.isRequired,
+		type: PropTypes.string.isRequired,
+		subtype: PropTypes.string.isRequired,
+		edit_link: PropTypes.string,
+	}).isRequired,
+	disabled: PropTypes.bool,
+	associated: PropTypes.bool,
+	handleClick: PropTypes.func.isRequired,
+};
+
+/**
  * Handle the click on the different parts of the link.
  *
  * @param  {Object}   props

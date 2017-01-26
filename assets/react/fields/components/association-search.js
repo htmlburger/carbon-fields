@@ -33,6 +33,17 @@ export const AssociationSearch = ({ term, handleChange, handleEnterKey }) => {
 };
 
 /**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+AssociationSearch.propTypes = {
+	term: PropTypes.string.isRequired,
+	handleChange: PropTypes.func.isRequired,
+	handleEnterKey: PropTypes.func.isRequired,
+};
+
+/**
  * Improve the performance by wrapping the `onChange` handler in a debounced function.
  *
  * @param  {Object}   props

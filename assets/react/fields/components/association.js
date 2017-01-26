@@ -81,7 +81,7 @@ export const AssociationField = ({
 					<label>Associated:</label>
 
 					<AssociationList
-						prefix={field.name}
+						prefix={name}
 						items={field.value}
 						associated={true}
 						onItemClick={handleRemoveItem} />
@@ -89,6 +89,24 @@ export const AssociationField = ({
 			</div>
 		</div>
 	</Field>;
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+AssociationField.propTypes = {
+	name: PropTypes.string.isRequired,
+	field: PropTypes.shape({
+		value: PropTypes.arrayOf(PropTypes.object).isRequired,
+		max: PropTypes.number.isRequired,
+	}).isRequired,
+	items: PropTypes.arrayOf(PropTypes.object).isRequired,
+	selected: PropTypes.arrayOf(PropTypes.number).isRequired,
+	term: PropTypes.string.isRequired,
+	handleAddItem: PropTypes.func.isRequired,
+	handleRemoveItem: PropTypes.func.isRequired,
 };
 
 /**

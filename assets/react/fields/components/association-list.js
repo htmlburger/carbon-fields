@@ -37,6 +37,19 @@ export const AssociationList = ({ prefix, items, selected, associated, onItemCli
 };
 
 /**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+AssociationList.propTypes = {
+	prefix: PropTypes.string,
+	items: PropTypes.arrayOf(PropTypes.object).isRequired,
+	selected: PropTypes.arrayOf(PropTypes.number),
+	associated: PropTypes.bool,
+	onItemClick: PropTypes.func.isRequired,
+};
+
+/**
  * The default values.
  *
  * @type {Object}
