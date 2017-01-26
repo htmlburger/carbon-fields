@@ -11,7 +11,7 @@ import { debounce } from 'lodash';
 import { KEY_ENTER } from 'lib/constants';
 
 /**
- * Renders the field used to filter the available options
+ * Render the field used to filter the available options
  * inside the association field.
  *
  * @param  {Object} 	   props
@@ -33,7 +33,7 @@ export const AssociationSearch = ({ term, handleChange, handleEnterKey }) => {
 };
 
 /**
- * Improve the performance by wrapping the `onChange` handler in debounced function.
+ * Improve the performance by wrapping the `onChange` handler in a debounced function.
  *
  * @param  {Object}   props
  * @param  {Function} props.onChange
@@ -42,7 +42,7 @@ export const AssociationSearch = ({ term, handleChange, handleEnterKey }) => {
 const debouncedOnChange = ({ onChange }) => debounce(v => onChange(v), 200);
 
 /**
- * Handles the `change` event of the input.
+ * Handle the `change` event of the input.
  *
  * @param  {Object}   props
  * @param  {Function} props.onChange
@@ -52,6 +52,8 @@ const handleChange = ({ debouncedOnChange, setValue }) => ({ target: { value }})
 
 /**
  * Prevent the submission of the form.
+ *
+ * @return {Function}
  */
 const handleEnterKey = () => e => e.keyCode === KEY_ENTER && e.preventDefault();
 

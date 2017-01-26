@@ -11,7 +11,7 @@ import { withHandlers } from 'recompose';
 import { preventDefault } from 'lib/helpers';
 
 /**
- * Renders an item that can be associated.
+ * Render an item that can be associated.
  *
  * @param  {Object}        props
  * @param  {Object[]}      props.item
@@ -35,7 +35,7 @@ export const AssociationListItem = ({ item, disabled, handleClick }) => {
 
 			<em>{item.label}</em>
 
-			<span className="add-link dashicons-before dashicons-plus-alt"></span>
+			<span className="dashicons-before dashicons-plus-alt"></span>
 
 			{item.title}
 
