@@ -12,25 +12,29 @@ import AssociationListItem from 'fields/components/association-list-item';
  * Render a list of item that can be associated.
  *
  * @param  {Object}        props
+ * @param  {String}        props.prefix
  * @param  {Object[]}      props.items
- * @param  {Number[]}      props.disabled
- * @param  {Function}      props.onAdd
+ * @param  {Number[]}      props.selected
+ * @param  {Number[]}      props.associated
+ * @param  {Function}      props.onItemClick
  * @return {React.Element}
  */
-export const AssociationList = ({ items, disabled, onAdd }) => {
+export const AssociationList = ({ prefix, items, selected, associated, onItemClick }) => {
 	return <ul className="carbon-relationship-list">
 		{
 			items.map((item, index) => (
 				<AssociationListItem
 					key={index}
+					prefix={prefix}
+					index={index}
 					item={item}
-					disabled={disabled.indexOf(item.id) > -1}
-					onAdd={onAdd} />
+					disabled={selected.indexOf(item.id) > -1}
+					associated={associated}
+					onClick={onItemClick} />
 			))
 		}
 	</ul>;
 };
-
 
 /**
  * The default values.
@@ -38,7 +42,9 @@ export const AssociationList = ({ items, disabled, onAdd }) => {
  * @type {Object}
  */
 AssociationList.defaultProps = {
-	disabled: [],
+	prefix: '',
+	selected: [],
+	associated: false,
 };
 
 export default AssociationList;

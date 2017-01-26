@@ -3,7 +3,7 @@
  */
 import React, { PropTypes } from 'react';
 import { compose, withState, withProps, withHandlers } from 'recompose';
-import { find, cloneDeep } from 'lodash';
+import { cloneDeep, without } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -33,7 +33,16 @@ import withSetup from 'fields/decorators/with-setup';
  * TODO: Research more about `react-virtualized`.
  * 		 Probably can improve the performance on very long lists.
  */
-export const AssociationField = ({ name, field, items, selected, term, setTerm, handleAddItem }) => {
+export const AssociationField = ({
+	name,
+	field,
+	items,
+	selected,
+	term,
+	setTerm,
+	handleAddItem,
+	handleRemoveItem
+}) => {
 	return <Field field={field}>
 		<div className="carbon-relationship-container carbon-Relationship">
 			<div className="selected-items-container">
@@ -64,14 +73,18 @@ export const AssociationField = ({ name, field, items, selected, term, setTerm, 
 				<div className="carbon-relationship-left">
 					<AssociationList
 						items={items}
-						disabled={field.allow_duplicates ? [] : selected}
-						onAdd={handleAddItem} />
+						selected={selected}
+						onItemClick={handleAddItem} />
 				</div>
 
 				<div className="carbon-relationship-right">
 					<label>Associated:</label>
 
-					<AssociationList items={field.value} />
+					<AssociationList
+						prefix={field.name}
+						items={field.value}
+						associated={true}
+						onItemClick={handleRemoveItem} />
 				</div>
 			</div>
 		</div>
@@ -88,12 +101,15 @@ export const AssociationField = ({ name, field, items, selected, term, setTerm, 
  */
 const props = ({ field, term }) => {
 	let items = field.options;
+	let selected = [];
 
 	if (term) {
 		items = items.filter(({ title }) => title.toLowerCase().includes(term.toLowerCase()));
 	}
 
-	const selected = field.value.map(({ id }) => parseInt(id, 10));
+	if (!field.allow_duplicates) {
+		selected = field.value.map(({ id }) => parseInt(id, 10));
+	}
 
 	return {
 		items,
@@ -110,34 +126,42 @@ const props = ({ field, term }) => {
  * @param  {Function} props.updateField
  * @return {Function}
  */
-const handleAddItem = ({ field, selected, updateField }) => (itemId) => {
+const handleAddItem = ({ field, selected, updateField }) => (item) => {
 	// Don't do anything if the duplicates aren't allowed and
 	// the item is already selected.
-	if (!field.allow_duplicates && selected.indexOf(itemId) > -1) {
+	if (!field.allow_duplicates && selected.indexOf(item.id) > -1) {
 		return;
 	}
 
 	// Don't do anything, because the maximum is reached.
 	if (field.max > 0 && field.value.length >= field.max) {
-		alert(crbl10n.max_num_items_reached.replace('%s', max));
+		alert(crbl10n.max_num_items_reached.replace('%s', field.max));
 		return;
 	}
 
-	// Create a safe copy of the item that is being added.
-	const item = cloneDeep(find(field.options, { id: itemId }));
-
+	// Create a safe copy and push it to the store.
 	updateField(field.id, {
 		value: [
 			...field.value,
-			item,
+			cloneDeep(item),
 		],
 	});
 };
+
+/**
+ * Remove an item from the list of selected items.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.updateField
+ * @return {Function}
+ */
+const handleRemoveItem = ({ field, updateField }) => item => updateField(field.id, { value: without(field.value, item) });
 
 export default compose(
 	withStore(),
 	withSetup(),
 	withState('term', 'setTerm', ''),
 	withProps(props),
-	withHandlers({ handleAddItem })
+	withHandlers({ handleAddItem, handleRemoveItem })
 )(AssociationField);
