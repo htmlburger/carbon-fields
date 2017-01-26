@@ -22,6 +22,16 @@ class Set_Field extends Predefined_Options_Field {
 	protected $default_value = array();
 
 	/**
+	 * Set the number of the options to be displayed at the initial field display.
+	 *
+	 * @param  int $limit
+	 */
+	public function limit_options( $limit ) {
+		$this->limit_options = $limit;
+		return $this;
+	}
+
+	/**
 	 * Load the field value from an input array based on it's name
 	 *
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
@@ -43,36 +53,26 @@ class Set_Field extends Predefined_Options_Field {
 	}
 
 	/**
-	 * Set the number of the options to be displayed at the initial field display.
-	 *
-	 * @param  int $limit
-	 */
-	public function limit_options( $limit ) {
-		$this->limit_options = $limit;
-		return $this;
+	 * Delegate load to the field DataStore instance
+	 **/
+	public function load() {
+		$this->get_datastore()->load( $this, true );
+
+		if ( $this->get_value() === false ) {
+			$this->set_value( $this->default_value );
+		}
 	}
 
-	/**
-	 * Retrieve the field value(s).
-	 *
-	 * @return array
-	 */
-	public function get_value() {
-		if ( $this->value === false ) {
-			return $this->set_value( $this->default_value );
+	public function get_value_set() {
+		$values = $this->get_value();
+		$values = is_array( $values ) ? $values : array( $values );
+		$set = array();
+		foreach ( $values as $value ) {
+			$set[] = array(
+				'value' => $value,
+			);
 		}
-
-		if ( !is_array( $this->value ) ) {
-			$this->value = maybe_unserialize( $this->value );
-			if ( !is_array( $this->value ) ) {
-				if ( is_null( $this->value ) ) {
-					return array();
-				}
-				return array( $this->value );
-			}
-		}
-
-		return (array) $this->value;
+		return $set;
 	}
 
 	/**

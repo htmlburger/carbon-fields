@@ -280,11 +280,10 @@ class Field implements Datastore_Holder_Interface {
 		return $this->hierarchy_index;
 	}
 
-	public function get_clone_under_field_in_hierarchy( $field, $entry_index = 0 ) {
+	public function get_clone_under_field_in_hierarchy( $field, $parent_field, $entry_index = 0 ) {
 		$clone = clone $field;
-		// $clone->hierarchy_name = $clone->get_name();
-		$clone->set_hierarchy( array_merge( $field->get_hierarchy(), array( $field->get_hierarchy_name() ) ) );
-		$clone->set_hierarchy_index( array_merge( $field->get_hierarchy_index(), array( $entry_index ) ) );
+		$clone->set_hierarchy( array_merge( $parent_field->get_hierarchy(), array( $parent_field->get_hierarchy_name() ) ) );
+		$clone->set_hierarchy_index( array_merge( $parent_field->get_hierarchy_index(), array( $entry_index ) ) );
 		return $clone;
 	}
 
@@ -450,7 +449,7 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return the field value
+	 * Return the raw field value
 	 *
 	 * @return mixed
 	 **/
@@ -458,10 +457,17 @@ class Field implements Datastore_Holder_Interface {
 		return $this->value;
 	}
 
+	/**
+	 * Return a set of field values prepared for storage
+	 *
+	 * @return mixed
+	 **/
 	public function get_value_set() {
 		return array(
+			// add more arrays here for multiple value_group storage (e.g. array of post IDs)
 			array(
-				'value' => $this->value,
+				// add more key=>values here for multiple data storage per value_group (e.g. latitude=>0, longitude=>0, address=>'New York')
+				'value' => $this->get_value(),
 			),
 		);
 	}

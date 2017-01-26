@@ -186,7 +186,6 @@ class Complex_Field extends Field {
 
 		$input_groups = $input[ $this->get_name() ];
 		$index = 0;
-
 		foreach ( $input_groups as $values ) {
 			if ( ! isset( $values['group'] ) || ! isset( $this->groups[ $values['group'] ] ) ) {
 				continue;
@@ -204,7 +203,7 @@ class Complex_Field extends Field {
 
 			foreach ( $group_fields as $field ) {
 				// set value from the group
-				$tmp_field = $this->get_clone_under_field_in_hierarchy( $field, $index );
+				$tmp_field = $this->get_clone_under_field_in_hierarchy( $field, $this, $index );
 
 				if ( is_a( $tmp_field, __NAMESPACE__ . '\\Complex_Field' ) ) {
 					if ( ! isset( $values[ $tmp_field->get_name() ] ) ) {
@@ -220,15 +219,36 @@ class Complex_Field extends Field {
 					$tmp_field->set_value_from_input( $values );
 				}
 
-				// update name to group name
-				$tmp_field->set_name( $this->get_name() . $group->get_name() . '-' . $field->get_name() . '_' . $index );
-				$value_group[] = $tmp_field;
+				$value_group[$tmp_field->get_hierarchy_name()] = $tmp_field->get_value();
 			}
 
 			$value[] = $value_group;
 			$index++;
 		}
 		$this->set_value( $value );
+	}
+
+	protected function get_prefilled_field_groups( $value ) {
+		$fields = array();
+		foreach ( $value as $entry_index => $value_group ) {
+			$group = $this->get_group_by_name( $value_group['type'] );
+			$group_fields = $group->get_fields();
+			$fields[ $entry_index ] = array(
+				'type'=>$group->get_name(),
+			);
+
+			foreach ( $group_fields as $field ) {
+				$value_set = isset( $value_group[ $field->get_name() ] ) ? $value_group[ $field->get_name() ] : '';
+				if ( empty( $value_set ) && is_a( $field, get_class() ) ) {
+					$value_set = array();
+				}
+				$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $entry_index );
+				$clone->set_value( $value_set );
+
+				$fields[ $entry_index ][] = $clone;
+			}
+		}
+		return $fields;
 	}
 
 	/**
@@ -243,12 +263,14 @@ class Complex_Field extends Field {
 	 */
 	public function save() {
 		$this->delete();
-
+		
 		$this->get_datastore()->save( $this );
 
-		foreach ( $this->values as $value ) {
-			foreach ( $value as $field ) {
-				if ( !is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
+		$field_groups = $this->get_prefilled_field_groups( $this->get_value() );
+
+		foreach ( $field_groups as $entry_index => $fields ) {
+			foreach ( $fields as $field ) {
+				if ( !is_a( $field, '\\Carbon_Fields\\Field\\Field' ) ) {
 					continue;
 				}
 				$field->save();
@@ -260,39 +282,12 @@ class Complex_Field extends Field {
 	 * Delete the values of all contained fields.
 	 */
 	public function delete() {
-		return $this->get_datastore()->delete_values( $this );
-	}
-
-	/**
-	 * Load and parse the field data from the database.
-	 */
-	public function get_value_from_datastore() {
-		$entries = $this->get_datastore()->get_values_for_field( $this );
-		$values = array();
-
-		foreach ( $entries as $entry_index => $entry ) {
-			$group_name = $entry->field_value;
-
-			$values[$entry_index] = array(
-				'type'=>$group_name,
-			);
-			$group = $this->get_group_by_name( $group_name );
-			$nested_fields = $group->get_fields();
-
-			foreach ( $nested_fields as $nested_field ) {
-				$clone = $this->get_clone_under_field_in_hierarchy( $nested_field, $entry_index );
-				
-				if ( is_a( $clone, get_class() ) ) {
-					$value = $clone->get_value_from_datastore();
-				} else {
-					$value = $this->get_datastore()->get_value_for_field( $clone );
-				}
-
-				$values[$entry_index][$clone->get_hierarchy_name()] = $value;
-			}
+		// only top complex fields can be deleted as they delete in a cascading manner
+		if ( empty( $this->get_hierarchy() ) ) {
+			$this->get_datastore()->delete_values( $this );
+			return true;
 		}
-
-		return $values;
+		return false;
 	}
 
 	public function get_value_set() {
@@ -307,15 +302,28 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Generate and set the field prefix.
-	 * @param string $prefix
+	 * Load and parse the field data from the datastore
 	 */
-	public function set_prefix( $prefix ) {
-		parent::set_prefix( $prefix );
+	protected function get_value_from_datastore() {
+		$entries = $this->get_datastore()->get_values_for_field( $this );
+		$values = array();
 
-		foreach ( $this->groups as $group ) {
-			$group->set_prefix( $prefix );
+		foreach ( $entries as $entry_index => $group_name ) {
+			$values[$entry_index] = array(
+				'type'=>$group_name,
+			);
+			$group = $this->get_group_by_name( $group_name );
+			$group_fields = $group->get_fields();
+
+			foreach ( $group_fields as $group_field ) {
+				$clone = $this->get_clone_under_field_in_hierarchy( $group_field, $this, $entry_index );
+				$clone->load();
+
+				$values[$entry_index][$clone->get_hierarchy_name()] = $clone->get_value();
+			}
 		}
+
+		return $values;
 	}
 
 	/**
@@ -327,16 +335,16 @@ class Complex_Field extends Field {
 	 */
 	public function to_json( $load ) {
 		$complex_data = parent::to_json( $load );
-		$my_value = $this->get_value();
 
 		$groups_data = array();
 		foreach ( $this->groups as $group ) {
 			$groups_data[] = $group->to_json( false );
 		}
 
+		$field_groups = $this->get_prefilled_field_groups( $this->get_value() );
 		$value_data = array();
-		foreach ( $my_value as $entry_index => $value_group ) {
-			$group = $this->get_group_by_name( $value_group['type'] );
+		foreach ( $field_groups as $entry_index => $fields ) {
+			$group = $this->get_group_by_name( $fields['type'] );
 			$group_fields = $group->get_fields();
 
 			$data = array(
@@ -345,16 +353,14 @@ class Complex_Field extends Field {
 				'group_id' => $group->get_group_id(),
 				'fields' => array(),
 			);
-			foreach ( $group_fields as $field ) {
-				$value_set = isset( $value_group[ $field->get_name() ] ) ? $value_group[ $field->get_name() ] : '';
-				if ( empty( $value_set ) && is_a( $field, get_class() ) ) {
-					$value_set = array();
-				}
-				$clone = $this->get_clone_under_field_in_hierarchy( $field, $entry_index );
-				$clone->set_value( $value_set );
 
-				$data['fields'][] = $clone->to_json( false );
+			foreach ( $fields as $field ) {
+				if ( !is_a( $field, '\\Carbon_Fields\\Field\\Field' ) ) {
+					continue;
+				}
+				$data['fields'][] = $field->to_json( false );
 			}
+
 			$value_data[] = $data;
 		}
 
@@ -497,6 +503,18 @@ class Complex_Field extends Field {
 			</a>
 		</li>
 		<?php
+	}
+
+	/**
+	 * Generate and set the field prefix.
+	 * @param string $prefix
+	 */
+	public function set_prefix( $prefix ) {
+		parent::set_prefix( $prefix );
+
+		foreach ( $this->groups as $group ) {
+			$group->set_prefix( $prefix );
+		}
 	}
 
 	/**
