@@ -13,15 +13,32 @@ import AssociationListItem from 'fields/components/association-list-item';
  *
  * @param  {Object}        props
  * @param  {Object[]}      props.items
+ * @param  {Number[]}      props.disabled
  * @param  {Function}      props.onAdd
  * @return {React.Element}
  */
-export const AssociationList = ({ items, onAdd }) => {
+export const AssociationList = ({ items, disabled, onAdd }) => {
 	return <ul className="carbon-relationship-list">
 		{
-			items.map((item, index) => <AssociationListItem key={index} item={item} onAdd={onAdd} />)
+			items.map((item, index) => (
+				<AssociationListItem
+					key={index}
+					item={item}
+					disabled={disabled.indexOf(item.id) > -1}
+					onAdd={onAdd} />
+			))
 		}
 	</ul>;
+};
+
+
+/**
+ * The default values.
+ *
+ * @type {Object}
+ */
+AssociationList.defaultProps = {
+	disabled: [],
 };
 
 export default AssociationList;

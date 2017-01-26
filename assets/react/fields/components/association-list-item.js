@@ -2,6 +2,7 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
+import cx from 'classnames';
 import { withHandlers } from 'recompose';
 
 /**
@@ -14,14 +15,15 @@ import { preventDefault } from 'lib/helpers';
  *
  * @param  {Object}        props
  * @param  {Object[]}      props.item
+ * @param  {Boolean}       props.disabled
  * @param  {Function}      props.handleClick
  * @return {React.Element}
  *
  * TODO: Fix the translation of the 'Edit' link.
  * TODO: Clean up the mess in `handleClick` introduced by the incorrect HTML in the template.
  */
-export const AssociationListItem = ({ item, handleClick }) => {
-	return <li>
+export const AssociationListItem = ({ item, disabled, handleClick }) => {
+	return <li className={cx({ 'inactive': disabled })}>
 		<span className="mobile-handle dashicons-before dashicons-menu"></span>
 
 		<a href="#" onClick={handleClick}>

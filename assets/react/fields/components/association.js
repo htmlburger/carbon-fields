@@ -24,6 +24,7 @@ import withSetup from 'fields/decorators/with-setup';
  * @param  {Object}   props.field
  * @param  {String}   props.term
  * @param  {Object[]} props.items
+ * @param  {Number[]} props.selected
  * @param  {Function} props.setTerm
  * @param  {Function} props.handleAddItem
  * @return {React.Element}
@@ -32,7 +33,7 @@ import withSetup from 'fields/decorators/with-setup';
  * TODO: Research more about `react-virtualized`.
  * 		 Probably can improve the performance on very long lists.
  */
-export const AssociationField = ({ name, field, term, items, setTerm, handleAddItem }) => {
+export const AssociationField = ({ name, field, items, selected, term, setTerm, handleAddItem }) => {
 	return <Field field={field}>
 		<div className="carbon-relationship-container carbon-Relationship">
 			<div className="selected-items-container">
@@ -63,6 +64,7 @@ export const AssociationField = ({ name, field, term, items, setTerm, handleAddI
 				<div className="carbon-relationship-left">
 					<AssociationList
 						items={items}
+						disabled={field.allow_duplicates ? [] : selected}
 						onAdd={handleAddItem} />
 				</div>
 
@@ -91,7 +93,7 @@ const props = ({ field, term }) => {
 		items = items.filter(({ title }) => title.toLowerCase().includes(term.toLowerCase()));
 	}
 
-	const selected = field.value.map(({ id }) => id);
+	const selected = field.value.map(({ id }) => parseInt(id, 10));
 
 	return {
 		items,
@@ -104,14 +106,14 @@ const props = ({ field, term }) => {
  *
  * @param  {Object}   props
  * @param  {Object}   props.field
- * @param  {String[]} props.selected
+ * @param  {Number[]} props.selected
  * @param  {Function} props.updateField
  * @return {Function}
  */
 const handleAddItem = ({ field, selected, updateField }) => (itemId) => {
 	// Don't do anything if the duplicates aren't allowed and
 	// the item is already selected.
-	if (!field.allow_duplicates && selected.indexOf(String(itemId)) > -1) {
+	if (!field.allow_duplicates && selected.indexOf(itemId) > -1) {
 		return;
 	}
 
