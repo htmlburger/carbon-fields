@@ -6,21 +6,29 @@ import { compose, withState, withHandlers } from 'recompose';
 import { debounce } from 'lodash';
 
 /**
+ * The internal dependencies.
+ */
+import { KEY_ENTER } from 'lib/constants';
+
+/**
  * Renders the field used to filter the available options
  * inside the association field.
  *
  * @param  {Object} 	   props
  * @param  {String} 	   props.term
+ * @param  {Function} 	   props.handleChange
+ * @param  {Function} 	   props.handleEnterKey
  * @return {React.Element}
  */
-export const AssociationSearch = ({ term, handleChange }) => {
+export const AssociationSearch = ({ term, handleChange, handleEnterKey }) => {
 	return <div className="search-field carbon-relationship-search dashicons-before dashicons-search">
 		<input
 			type="text"
 			className="search-field"
 			placeholder="Search..."
 			defaultValue={term}
-			onChange={handleChange} />
+			onChange={handleChange}
+			onKeyDown={handleEnterKey} />
 	</div>;
 };
 
@@ -42,7 +50,12 @@ const debouncedOnChange = ({ onChange }) => debounce(v => onChange(v), 200);
  */
 const handleChange = ({ debouncedOnChange, setValue }) => ({ target: { value }}) => debouncedOnChange(value);
 
+/**
+ * Prevent the submission of the form.
+ */
+const handleEnterKey = () => e => e.keyCode === KEY_ENTER && e.preventDefault();
+
 export default compose(
 	withHandlers({ debouncedOnChange }),
-	withHandlers({ handleChange })
+	withHandlers({ handleChange, handleEnterKey })
 )(AssociationSearch);
