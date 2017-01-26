@@ -13,12 +13,13 @@ import AssociationListItem from 'fields/components/association-list-item';
  *
  * @param  {Object}        props
  * @param  {Object[]}      props.items
+ * @param  {Function}      props.onAdd
  * @return {React.Element}
  */
-export const AssociationList = ({ items }) => {
+export const AssociationList = ({ items, onAdd }) => {
 	return <ul className="carbon-relationship-list">
 		{
-			items.map((item, index) => <AssociationListItem key={index} item={item} />)
+			items.map((item, index) => <AssociationListItem key={index} item={item} onAdd={onAdd} />)
 		}
 	</ul>;
 };

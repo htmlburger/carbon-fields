@@ -12,6 +12,6 @@ export function preventDefault(cb) {
 	 */
 	return function(e) {
 		e.preventDefault();
-		cb();
+		cb(e);
 	}
 }

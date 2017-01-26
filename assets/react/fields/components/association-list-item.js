@@ -2,29 +2,38 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
+import { withHandlers } from 'recompose';
+
+/**
+ * The internal dependencies.
+ */
+import { preventDefault } from 'lib/helpers';
 
 /**
  * Renders an item that can be associated.
  *
  * @param  {Object}        props
  * @param  {Object[]}      props.item
+ * @param  {Function}      props.handleClick
  * @return {React.Element}
  *
  * TODO: Fix the translation of the 'Edit' link.
+ * TODO: Clean up the mess in `handleClick` introduced by the incorrect HTML in the template.
  */
-export const AssociationListItem = ({ item }) => {
+export const AssociationListItem = ({ item, handleClick }) => {
 	return <li>
 		<span className="mobile-handle dashicons-before dashicons-menu"></span>
 
-		<a href="#">
+		<a href="#" onClick={handleClick}>
 			{
 				item.edit_link
 				? <em className="edit-link dashicons-before dashicons-edit">Edit</em>
 				: null
 			}
+
 			<em>{item.label}</em>
 
-			<span className="dashicons-before dashicons-plus-alt"></span>
+			<span className="add-link dashicons-before dashicons-plus-alt"></span>
 
 			{item.title}
 
@@ -37,4 +46,24 @@ export const AssociationListItem = ({ item }) => {
 	</li>;
 };
 
-export default AssociationListItem;
+/**
+ * Handle the click on the different parts of the link.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.item
+ * @return {Function}
+ */
+const handleClick = ({ item, onAdd }) => preventDefault((e) => {
+	const { target } = e;
+
+	if (target.nodeName === 'SPAN') {
+		onAdd(item.id);
+	} else if (target.nodeName === 'EM' && target.classList.contains('edit-link')) {
+		e.stopPropagation();
+		window.open(item.edit_link.replace('&amp;', '&', 'g'), '_blank');
+	} else {
+		onAdd(item.id);
+	}
+});
+
+export default withHandlers({ handleClick })(AssociationListItem);
