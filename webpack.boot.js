@@ -46,6 +46,12 @@ module.exports = {
 		}
 	},
 
+	// Some of our dependencies are already loaded by WordPress.
+	// So let's use them.
+	externals: {
+		'jquery': 'jQuery'
+	},
+
 	// Setup the source maps.
 	devtool: 'cheap-module-eval-source-map',
 
