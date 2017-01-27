@@ -21,20 +21,30 @@ class Theme_Options_Datastore extends Datastore {
 	 *
 	 * @param Field $field The field to retrieve value for.
 	 */
-	public function get_value_set_for_field( Field $field ) {
+	protected function get_raw_value_set_for_field( Field $field ) {
 		global $wpdb;
 
 		$storage_key = $this->get_storage_key_prefix_for_field( $field );
 
-		$raw = $wpdb->get_results( '
-			SELECT `option_name` AS `field_key`, `option_value` AS `field_value`
+		$storage_array = $wpdb->get_results( '
+			SELECT `option_name` AS `key`, `option_value` AS `value`
 			FROM ' . $wpdb->options . '
 			WHERE `option_name` LIKE "' . esc_sql( $storage_key ) . '%"
 			ORDER BY `option_name` ASC
 		' );
 
-		$values = $this->database_results_to_value_set( $raw );
-		return $values;
+		$raw_value_set = $this->storage_array_to_raw_value_set( $storage_array );
+
+		return $raw_value_set;
+	}
+
+	/**
+	 * Load the field value(s) from the database.
+	 *
+	 * @param Field $field The field to load value(s) in.
+	 */
+	public function load( Field $field ) {
+		$field->set_value( $this->get_raw_value_set_for_field( $field ) );
 	}
 
 	/**
@@ -44,20 +54,31 @@ class Theme_Options_Datastore extends Datastore {
 	 */
 	public function save( Field $field ) {
 		$autoload = $field->get_autoload() ? 'yes': 'no';
-		$value_set = $field->get_value_set();
+		$value_set = $field->value()->get_set();
+		if ( $value_set === null ) {
+			return;
+		}
 
 		foreach ( $value_set as $value_group_index => $values ) {
+			if ( empty($values) && $field->value()->keepalive() ) {
+				$storage_key = $this->get_storage_key_for_field( $field, $value_group_index, self::KEEPALIVE_KEY );
+				$this->save_key_value_pair( $storage_key, '', $autoload );
+			}
+
 			foreach ( $values as $value_key => $value ) {
 				$storage_key = $this->get_storage_key_for_field( $field, $value_group_index, $value_key );
-
-				$notoptions = wp_cache_get( 'notoptions', 'options' );
-				$notoptions[ $storage_key ] = '';
-				wp_cache_set( 'notoptions', $notoptions, 'options' );
-
-				if ( ! add_option( $storage_key, $value, null, $autoload ) ) {
-					update_option( $storage_key, $value );
-				}
+				$this->save_key_value_pair( $storage_key, $value, $autoload );
 			}
+		}
+	}
+
+	protected function save_key_value_pair( $key, $value, $autoload ) {
+		$notoptions = wp_cache_get( 'notoptions', 'options' );
+		$notoptions[ $key ] = '';
+		wp_cache_set( 'notoptions', $notoptions, 'options' );
+
+		if ( ! add_option( $key, $value, null, $autoload ) ) {
+			update_option( $key, $value );
 		}
 	}
 

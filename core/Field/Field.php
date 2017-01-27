@@ -4,6 +4,7 @@ namespace Carbon_Fields\Field;
 
 use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Datastore\Datastore_Holder_Interface;
+use Carbon_Fields\Value_Set\Value_Set;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -57,22 +58,10 @@ class Field implements Datastore_Holder_Interface {
 	 **/
 	protected $hierarchy_index = array();
 
-	const VALUE_TYPE_SINGLE_VALUE = 1;
-	const VALUE_TYPE_MULTIPLE_VALUES = 2;
-	const VALUE_TYPE_MULTIPLE_KEYS = 3;
-	const VALUE_TYPE_VALUE_SET = 4;
-
-	/**
-	 * What value type this field is expecting to receive in set_value()
-	 *
-	 * @var string self::VALUE_TYPE_* value expected
-	 */
-	public $expected_value_type = self::VALUE_TYPE_SINGLE_VALUE;
-
 	/**
 	 * Field value
 	 *
-	 * @var mixed
+	 * @var Value_Set
 	 */
 	protected $value;
 
@@ -198,6 +187,15 @@ class Field implements Datastore_Holder_Interface {
 	protected $conditional_logic = array();
 
 	/**
+	 * Clone the Value_Set object as well
+	 *
+	 * @var array
+	 **/
+    public function __clone() {
+        $this->value = clone $this->value;
+    }
+
+	/**
 	 * Create a new field of type $type and name $name and label $label.
 	 *
 	 * @param string $type
@@ -241,6 +239,9 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $label Field label
 	 */
 	protected function __construct( $name, $label ) {
+		if ( $this->value === null ) {
+			$this->value = new Value_Set();
+		}
 		$this->set_hierarchy_name( $name );
 		$this->set_name( $name );
 		$this->set_label( $label );
@@ -343,8 +344,8 @@ class Field implements Datastore_Holder_Interface {
 	public function load() {
 		$this->get_datastore()->load( $this );
 
-		if ( $this->get_value() === false ) {
-			$this->set_value( $this->default_value );
+		if ( $this->value()->empty() ) {
+			$this->set_value( $this->get_default_value() );
 		}
 	}
 
@@ -373,7 +374,7 @@ class Field implements Datastore_Holder_Interface {
 		}
 
 		if ( ! isset( $input[ $this->name ] ) ) {
-			$this->set_value( null );
+			$this->set_value( array() );
 		} else {
 			$this->set_value( stripslashes_deep( $input[ $this->name ] ) );
 		}
@@ -433,12 +434,28 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Directly modify the field value
+	 * Return a reference to the Value_Set
 	 *
-	 * @param mixed $value
+	 * @return Value_Set
+	 **/
+	public function value() {
+		return $this->value;
+	}
+
+	/**
+	 * Alias for $this->value()->get();
+	 *
+	 * @return mixed
+	 **/
+	public function get_value() {
+		return $this->value()->get();
+	}
+
+	/**
+	 * Alias for $this->value()->set( $value );
 	 **/
 	public function set_value( $value ) {
-		$this->value = $value;
+		return $this->value()->set( $value );
 	}
 
 	/**
@@ -458,30 +475,6 @@ class Field implements Datastore_Holder_Interface {
 	 **/
 	public function get_default_value() {
 		return $this->default_value;
-	}
-
-	/**
-	 * Return the raw field value
-	 *
-	 * @return mixed
-	 **/
-	public function get_value() {
-		return $this->value;
-	}
-
-	/**
-	 * Return a set of field values prepared for storage
-	 *
-	 * @return mixed
-	 **/
-	public function get_value_set() {
-		return array(
-			// add more arrays here for multiple value_group storage (e.g. array of post IDs)
-			array(
-				// add more key=>values here for multiple data storage per value_group (e.g. latitude=>0, longitude=>0, address=>'New York')
-				'value' => $this->get_value(),
-			),
-		);
 	}
 
 	/**

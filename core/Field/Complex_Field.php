@@ -6,6 +6,7 @@ use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Field\Group_Field;
+use Carbon_Fields\Value_Set\Value_Set;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -20,9 +21,16 @@ class Complex_Field extends Field {
 
 	const LAYOUT_TABBED_VERTICAL = 'tabbed-vertical';
 
+	/**
+	 * Default field value
+	 *
+	 * @var array
+	 */
+	protected $default_value = array();
+
 	protected $layout = self::LAYOUT_GRID;
 
-	protected $default_value = array();
+	protected $value_tree = array();
 
 	protected $fields = array();
 
@@ -38,6 +46,16 @@ class Complex_Field extends Field {
 		'singular_name' => 'Entry',
 		'plural_name' => 'Entries',
 	);
+
+	/**
+	 * Create a field from a certain type with the specified label.
+	 * @param string $name  Field name
+	 * @param string $label Field label
+	 */
+	protected function __construct( $name, $label ) {
+		$this->value = new Value_Set( Value_Set::TYPE_MULTIPLE_VALUES );
+		parent::__construct( $name, $label );
+	}
 
 	/**
 	 * Initialization tasks.
@@ -174,7 +192,7 @@ class Complex_Field extends Field {
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
 	 **/
 	public function set_value_from_input( $input = null ) {
-		$value = array();
+		$value_tree = array();
 
 		if ( is_null( $input ) ) {
 			$input = $_POST;
@@ -222,10 +240,15 @@ class Complex_Field extends Field {
 				$value_group[$tmp_field->get_hierarchy_name()] = $tmp_field->get_value();
 			}
 
-			$value[] = $value_group;
+			$value_tree[] = $value_group;
 			$index++;
 		}
-		$this->set_value( $value );
+		$this->set_value_tree( $value_tree );
+
+		$value_set = array_map( function( $group ) {
+			return $group['type'];
+		}, $this->get_value_tree() );
+		$this->set_value( $value_set );
 	}
 
 	protected function get_prefilled_field_groups( $value ) {
@@ -255,7 +278,9 @@ class Complex_Field extends Field {
 	 * Load all groups of fields and their data.
 	 */
 	public function load() {
-		$this->set_value( $this->get_value_from_datastore() );
+		parent::load();
+
+		$this->set_value_tree( $this->get_value_tree_from_datastore() );
 	}
 
 	/**
@@ -266,7 +291,7 @@ class Complex_Field extends Field {
 		
 		$this->get_datastore()->save( $this );
 
-		$field_groups = $this->get_prefilled_field_groups( $this->get_value() );
+		$field_groups = $this->get_prefilled_field_groups( $this->get_value_tree() );
 
 		foreach ( $field_groups as $entry_index => $fields ) {
 			foreach ( $fields as $field ) {
@@ -291,34 +316,31 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Return the raw field value
+	 * Return the full value tree of all groups and their fields
 	 *
 	 * @return mixed
 	 **/
-	public function get_value() {
-		return (array) $this->value;
+	public function get_value_tree() {
+		return (array) $this->value_tree;
 	}
 
-	public function get_value_set() {
-		$value_groups = $this->get_value();
-		$set = array();
-		foreach ( $value_groups as $value_group ) {
-			$set[] = array(
-				'value' => $value_group['type'],
-			);
-		}
-		return $set;
+	/**
+	 * Set the full value tree of all groups and their fields
+	 *
+	 * @return mixed
+	 **/
+	public function set_value_tree( $value_tree ) {
+		return $this->value_tree = $value_tree;
 	}
 
 	/**
 	 * Load and parse the field data from the datastore
 	 */
-	protected function get_value_from_datastore() {
-		$entries = $this->get_datastore()->get_value_set_for_field( $this );
+	protected function get_value_tree_from_datastore() {
+		$entries = $this->get_value();
 		$values = array();
 
-		foreach ( $entries as $entry_index => $entry ) {
-			$group_name = $entry['value'];
+		foreach ( $entries as $entry_index => $group_name ) {
 			$values[$entry_index] = array(
 				'type'=>$group_name,
 			);
@@ -351,7 +373,7 @@ class Complex_Field extends Field {
 			$groups_data[] = $group->to_json( false );
 		}
 
-		$field_groups = $this->get_prefilled_field_groups( $this->get_value() );
+		$field_groups = $this->get_prefilled_field_groups( $this->get_value_tree() );
 		$value_data = array();
 		foreach ( $field_groups as $entry_index => $fields ) {
 			$group = $this->get_group_by_name( $fields['type'] );

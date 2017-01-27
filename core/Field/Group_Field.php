@@ -78,11 +78,6 @@ class Group_Field {
 				Incorrect_Syntax_Exception::raise( 'Object must be of type ' . __NAMESPACE__ . '\\Field' );
 			}
 
-			// verify name validity
-			if ( preg_match( '~_\d+~', $field->get_name() ) ) {
-				Incorrect_Syntax_Exception::raise( 'Subfield names cannot contain underscore followed by a digit(s). Replace "' . ltrim( $field->get_name(), '_' ) . '" with "' . ltrim( preg_replace( '~_+(\d+)~', '$1', $field->get_name() ), '_' ) . '"' );
-			}
-
 			$this->verify_unique_field_name( $field->get_name() );
 		}
 

@@ -8,19 +8,6 @@ use Carbon_Fields\Field\Field;
  * Interface for data storage management.
  */
 interface Datastore_Interface {
-	/**
-	 * Return the field value set
-	 *
-	 * @param Field $field The field to retrieve value set for.
-	 */
-	public function get_value_set_for_field( Field $field );
-
-	/**
-	 * Return the first field value found
-	 *
-	 * @param Field $field The field to retrieve value for.
-	 */
-	public function get_value_for_field( Field $field );
 
 	/**
 	 * Load the field value(s) from the database.

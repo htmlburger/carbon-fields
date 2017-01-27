@@ -2,6 +2,8 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Value_Set\Value_Set;
+
 /**
  * Set field class.
  * Allows to create a set of checkboxes where multiple can be selected.
@@ -22,11 +24,14 @@ class Set_Field extends Predefined_Options_Field {
 	protected $default_value = array();
 
 	/**
-	 * What value type this field is expecting to receive in set_value()
-	 *
-	 * @var string self::VALUE_TYPE_* value expected
+	 * Create a field from a certain type with the specified label.
+	 * @param string $name  Field name
+	 * @param string $label Field label
 	 */
-	public $expected_value_type = self::VALUE_TYPE_MULTIPLE_VALUES;
+	protected function __construct( $name, $label ) {
+		$this->value = new Value_Set( Value_Set::TYPE_MULTIPLE_VALUES );
+		parent::__construct( $name, $label );
+	}
 
 	/**
 	 * Set the number of the options to be displayed at the initial field display.
@@ -57,18 +62,6 @@ class Set_Field extends Predefined_Options_Field {
 			}
 			$this->set_value( $value );
 		}
-	}
-
-	public function get_value_set() {
-		$values = $this->get_value();
-		$values = is_array( $values ) ? $values : array( $values );
-		$set = array();
-		foreach ( $values as $value ) {
-			$set[] = array(
-				'value' => $value,
-			);
-		}
-		return $set;
 	}
 
 	/**

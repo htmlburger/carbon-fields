@@ -2,6 +2,8 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Value_Set\Value_Set;
+
 /**
  * Google Maps with Address field class.
  * Allows to manually select a pin, or to position a pin based on a specified address.
@@ -37,39 +39,14 @@ class Map_Field extends Field {
 	protected $default_zoom = 10;
 
 	/**
-	 * Current latitude.
-	 *
-	 * @var float|string
+	 * Create a field from a certain type with the specified label.
+	 * @param string $name  Field name
+	 * @param string $label Field label
 	 */
-	protected $lat = null;
-
-	/**
-	 * Current longitude.
-	 *
-	 * @var float|string
-	 */
-	protected $lng = null;
-
-	/**
-	 * Current zoom.
-	 *
-	 * @var int
-	 */
-	protected $zoom = null;
-
-	/**
-	 * Current address.
-	 *
-	 * @var string
-	 */
-	protected $address = '';
-
-	/**
-	 * What value type this field is expecting to receive in set_value()
-	 *
-	 * @var string self::VALUE_TYPE_* value expected
-	 */
-	public $expected_value_type = self::VALUE_TYPE_MULTIPLE_KEYS;
+	protected function __construct( $name, $label ) {
+		$this->value = new Value_Set( Value_Set::TYPE_MULTIPLE_KEYS, array( 'lat'=>'', 'lng'=>'', 'zoom'=>'', 'address'=>'' ) );
+		parent::__construct( $name, $label );
+	}
 
 	/**
 	 * Enqueue scripts in the administration
@@ -79,6 +56,13 @@ class Map_Field extends Field {
 		$url = apply_filters( 'carbon_map_url', '//maps.googleapis.com/maps/api/js?' . ( $api_key ? 'key=' . $api_key : '' ), $api_key );
 
 		wp_enqueue_script( 'carbon-google-maps', $url, array(), null );
+	}
+
+	/**
+	 * Convert lat and lng to a comma-separated list
+	 */
+	protected function lat_lng_to_latlng( $lat, $lng ) {
+		return ( !empty( $lat ) && !empty( $lng ) ) ? $lat . ',' . $lng : '';
 	}
 
 	/**
@@ -98,48 +82,32 @@ class Map_Field extends Field {
 
 		// $value = stripslashes_deep( $input[ $this->get_name() ] );
 
+		$value_set = array(
+			'lat'=>'',
+			'lng'=>'',
+			'zoom'=>'',
+			'address'=>'',
+		);
+
 		if ( isset( $input[ $this->get_name() ][ 'lat' ] ) ) {
-			$this->lat = (float) $input[ $this->get_name() ]['lat'];
+			$value_set['lat'] = (float) $input[ $this->get_name() ]['lat'];
 		}
 
 		if ( isset( $input[ $this->get_name() ][ 'lng' ] ) ) {
-			$this->lng = (float) $input[ $this->get_name() ]['lng'];
+			$value_set['lng'] = (float) $input[ $this->get_name() ]['lng'];
 		}
 
 		if ( isset( $input[ $this->get_name() ][ 'zoom' ] ) ) {
-			$this->zoom = (int) $input[ $this->get_name() ]['zoom'];
+			$value_set['zoom'] = (int) $input[ $this->get_name() ]['zoom'];
 		}
 
 		if ( isset( $input[ $this->get_name() ][ 'address' ] ) ) {
-			$this->address = $input[ $this->get_name() ]['address'];
+			$value_set['address'] = $input[ $this->get_name() ]['address'];
 		}
 
-		$this->set_value( array(
-			'lat' => $this->lat,
-			'lng' => $this->lng,
-			'zoom' => $this->zoom,
-			'address' => $this->address,
-		) );
-	}
+		$value_set['value'] = $this->lat_lng_to_latlng( $value_set['lat'], $value_set['lng'] );
 
-	public function get_value_set() {
-		$value = $this->get_value();
-
-		$lat = ( !empty( $value['lat'] ) ? $value['lat'] : $this->default_lat );
-		$lng = ( !empty( $value['lng'] ) ? $value['lng'] : $this->default_lng );
-		$zoom = ( !empty( $value['zoom'] ) ? $value['zoom'] : $this->default_zoom );
-		$address = ( !empty( $value['address'] ) ? $value['address'] : '' );
-		$latlng = ( $lat && $lng ) ? $lat . ',' . $lng : '';
-
-		return array(
-			array(
-				'value' => $latlng,
-				'lat' => floatval( $lat ),
-				'lng' => floatval( $lng ),
-				'zoom' => intval( $zoom ),
-				'address' => $address,
-			),
-		);
+		$this->set_value( $value_set );
 	}
 
 	/**
@@ -152,8 +120,23 @@ class Map_Field extends Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
-		$value_set = $this->get_value_set();
-		$field_data = array_merge( $field_data, $value_set[0] );
+		$value_set = $this->get_value();
+		if ( $value_set === null ) {
+			$value_set = array(
+				'lat'=>floatval($this->default_lat),
+				'lng'=>floatval($this->default_lng),
+				'zoom'=>intval($this->default_zoom),
+				'address'=>'',
+			);
+			$value_set['value'] = $this->lat_lng_to_latlng( $value_set['lat'], $value_set['lng'] );
+		}
+		$field_data = array_merge( $field_data, array(
+			'value'=>$value_set['value'],
+			'lat'=>floatval($value_set['lat']),
+			'lng'=>floatval($value_set['lng']),
+			'zoom'=>intval($value_set['zoom']),
+			'address'=>$value_set['address'],
+		) );
 
 		return $field_data;
 	}
