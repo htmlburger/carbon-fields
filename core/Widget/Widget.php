@@ -4,6 +4,7 @@ namespace Carbon_Fields\Widget;
 
 use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Field\Field;
+use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Container\Container;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
@@ -144,8 +145,6 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 			$field_value = Helper::parse_relationship_field( $field_value );
 		}
 
-		print_r( $instance );
-
 		// output
 		if ( $this->print_wrappers ) {
 			echo $args['before_widget'];
@@ -181,8 +180,6 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 			}
 
 			$this->verify_unique_field_name( $field->get_name() );
-
-			$field->set_prefix( '' );
 
 			if ( ! $field->get_datastore() ) {
 				$field->set_datastore( $this, true );
@@ -225,11 +222,46 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	}
 
 	/**
+	 * Return a raw database query results array for a field
+	 *
+	 * @param Field $field The field to retrieve value for.
+	 */
+	protected function get_storage_array_for_field( Field $field ) {
+		global $wpdb;
+
+		$storage_key = Datastore::get_storage_key_prefix_for_field( $field );
+		$storage_key_length = strlen( $storage_key );
+
+		$storage_array = array();
+		foreach ( $this->store_data as $key => $value ) {
+			if ( substr( $key, 0, $storage_key_length ) === $storage_key ) {
+				$storage_array[] = (object) array( 'key'=>$key, 'value'=>$value);
+			}
+		}
+
+		return $storage_array;
+	}
+
+	/**
+	 * Save a single key-value pair to the database
+	 *
+	 * @param string $key
+	 * @param string $value
+	 */
+	protected function save_key_value_pair( $key, $value ) {
+		$this->store_data[ $key ] = $value;
+	}
+
+	/**
 	 * Load the field value(s) from the database.
 	 *
 	 * @param Field $field The field to retrieve value for.
 	 */
 	public function load( Field $field ) {
+		$storage_array = $this->get_storage_array_for_field( $field );
+		$raw_value_set = Datastore::storage_array_to_raw_value_set( $storage_array );
+		$field->set_value( $raw_value_set );
+
 		if ( isset( $this->store_data[ $field->get_name() ] ) ) {
 			$field->set_value( $this->store_data[ $field->get_name() ] );
 		} else {
@@ -243,7 +275,21 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 * @param Field $field The field to save.
 	 */
 	public function save( Field $field ) {
-		$this->store_data[ $field->get_name() ] = $field->get_value();
+		$value_set = $field->value()->get_set();
+		if ( $value_set === null ) {
+			return;
+		}
+
+		if ( empty( $value_set ) && $field->value()->keepalive() ) {
+			$storage_key = Datastore::get_storage_key_for_field( $field, 0, Datastore::KEEPALIVE_KEY );
+			$this->save_key_value_pair( $storage_key, '' );
+		}
+		foreach ( $value_set as $value_group_index => $values ) {
+			foreach ( $values as $value_key => $value ) {
+				$storage_key = Datastore::get_storage_key_for_field( $field, $value_group_index, $value_key );
+				$this->save_key_value_pair( $storage_key, $value );
+			}
+		}
 	}
 
 	/**
@@ -252,30 +298,14 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 * @param Field $field The field to delete.
 	 */
 	public function delete( Field $field ) {
-		if ( isset( $this->store_data[ $field->get_name() ] ) ) {
-			unset( $this->store_data[ $field->get_name() ] );
-		}
-	}
-
-	/**
-	 * Load complex field value(s) from the database.
-	 *
-	 * @param mixed $field The field to load values for.
-	 */
-	public function load_values( $field ) {
-		$field_name = $field->get_name();
-		$result = array();
+		$storage_key = Datastore::get_storage_key_prefix_for_field( $field );
+		$storage_key_length = strlen( $storage_key );
 
 		foreach ( $this->store_data as $key => $value ) {
-			if ( strpos( $key, $field_name ) === 0 ) {
-				$result[] = array(
-					'field_key' => $key,
-					'field_value' => $value,
-				);
+			if ( substr( $key, 0, $storage_key_length ) === $storage_key ) {
+				unset( $storage_array[ $key ] );
 			}
 		}
-
-		return $result;
 	}
 
 	/**
@@ -283,12 +313,13 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 *
 	 * @param mixed $field The field to delete values for.
 	 */
-	public function delete_values( $field ) {
-		$field_name = $field->get_name();
+	public function delete_values( Field $field ) {
+		$storage_key = Datastore::get_storage_key_root( $field );
+		$storage_key_length = strlen( $storage_key );
 
 		foreach ( $this->store_data as $key => $value ) {
-			if ( strpos( $key, $field_name ) === 0 ) {
-				unset( $this->store_data[ $key ] );
+			if ( substr( $key, 0, $storage_key_length ) === $storage_key ) {
+				unset( $storage_array[ $key ] );
 			}
 		}
 	}

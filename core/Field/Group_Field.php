@@ -208,10 +208,8 @@ class Group_Field {
 	 */
 	public function set_name( $name ) {
 		$name = preg_replace( '~\s+~', '_', strtolower( $name ) );
-		if ( substr( $name, 0, 1 ) != '_' ) {
-			// add underscore to custom field name -- this will remove it from
-			// custom fields list in administration
-			$name = '_' . $name;
+		if ( !$name ) {
+			$name = '_';
 		}
 
 		$this->name = $name;
@@ -234,17 +232,6 @@ class Group_Field {
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		foreach ( $this->fields as $field ) {
 			$field->set_datastore( $datastore, $set_as_default );
-		}
-	}
-
-	/**
-	 * Set a prefix for all group fields.
-	 *
-	 * @param string $prefix
-	 */
-	public function set_prefix( $prefix ) {
-		foreach ( $this->fields as $field ) {
-			$field->set_prefix( $prefix );
 		}
 	}
 

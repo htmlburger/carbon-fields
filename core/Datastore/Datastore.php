@@ -11,6 +11,10 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 abstract class Datastore implements Datastore_Interface {
 
+	/**
+	 * Value key to use for fields which need to be kept "alive" when they have no values stored (e.g. Set field with 0 checkboxes checked)
+	 * Required to determine whether a field should use it's default value or stay blank
+	 **/
 	const KEEPALIVE_KEY = '_empty';
 
 	/**
@@ -56,19 +60,30 @@ abstract class Datastore implements Datastore_Interface {
 		return static::factory( $type );
 	}
 
-	protected function get_full_hierarchy_for_field( Field $field ) {
+	/**
+	 * Return array of ancestors (ordered top-bottom) with the field name appended to the end
+	 **/
+	public static function get_full_hierarchy_for_field( Field $field ) {
 		$full_hierarchy = array_merge( $field->get_hierarchy(), array( $field->get_hierarchy_name() ) );
 		return $full_hierarchy;
 	}
 
-	protected function get_full_hierarchy_index_for_field( Field $field ) {
+	/**
+	 * Return array of ancestor entry indexes (ordered top-bottom)
+	 * Indexes show which entry/group this field belongs to in a Complex_Field
+	 **/
+	public static function get_full_hierarchy_index_for_field( Field $field ) {
 		$full_hierarchy_index = !empty( $field->get_hierarchy_index() ) ? $field->get_hierarchy_index() : array( 0 );
 		return $full_hierarchy_index;
 	}
 
-	protected function get_storage_key_root( Field $field ) {
-		$full_hierarchy = $this->get_full_hierarchy_for_field( $field );
-		$full_hierarchy_index = $this->get_full_hierarchy_index_for_field( $field );
+	/**
+	 * Return a storage key depending on which is the root field
+	 * Used to delete entire trees of values (Complex_Field)
+	 **/
+	public static function get_storage_key_root( Field $field ) {
+		$full_hierarchy = static::get_full_hierarchy_for_field( $field );
+		$full_hierarchy_index = static::get_full_hierarchy_index_for_field( $field );
 
 		$parents = $full_hierarchy;
 		$first_parent = array_shift( $parents );
@@ -78,9 +93,13 @@ abstract class Datastore implements Datastore_Interface {
 		return $storage_key;
 	}
 
-	protected function get_storage_key_prefix_for_field( Field $field ) {
-		$full_hierarchy = $this->get_full_hierarchy_for_field( $field );
-		$full_hierarchy_index = $this->get_full_hierarchy_index_for_field( $field );
+	/**
+	 * Return a storage key up to the root and hierarchy segments
+	 * Used to get and delete multiple values for a single field
+	 **/
+	public static function get_storage_key_prefix_for_field( Field $field ) {
+		$full_hierarchy = static::get_full_hierarchy_for_field( $field );
+		$full_hierarchy_index = static::get_full_hierarchy_index_for_field( $field );
 
 		$parents = $full_hierarchy;
 		$first_parent = array_shift( $parents );
@@ -93,17 +112,18 @@ abstract class Datastore implements Datastore_Interface {
 		return $storage_key;
 	}
 
-	protected function get_storage_key_keepalive_for_field( Field $field, $value_group_index ) {
-		$storage_key = $this->get_storage_key_prefix_for_field( $field ) . $value_group_index;
+	/**
+	 * Return a full storage key for a single field value
+	 **/
+	public static function get_storage_key_for_field( Field $field, $value_group_index, $value_key ) {
+		$storage_key = static::get_storage_key_prefix_for_field( $field ) . $value_group_index . '|' . $value_key;
 		return $storage_key;
 	}
 
-	protected function get_storage_key_for_field( Field $field, $value_group_index, $value_key ) {
-		$storage_key = $this->get_storage_key_prefix_for_field( $field ) . $value_group_index . '|' . $value_key;
-		return $storage_key;
-	}
-
-	protected function storage_array_to_raw_value_set( $storage_array ) {
+	/**
+	 * Return a raw value set from an array of {key->..., value->...} objects such as the ones from query results
+	 **/
+	public static function storage_array_to_raw_value_set( $storage_array ) {
 		$keepalive = false;
 		$raw_value_set = array();
 
@@ -111,7 +131,7 @@ abstract class Datastore implements Datastore_Interface {
 			$pieces = explode( '|', $row->key );
 			$value_group = $pieces[ count( $pieces ) - 2 ];
 			$value_key = $pieces[ count( $pieces ) - 1 ];
-			if ( $value_key == self::KEEPALIVE_KEY ) {
+			if ( $value_key == static::KEEPALIVE_KEY ) {
 				$keepalive = true;
 				continue;
 			}

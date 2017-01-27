@@ -173,13 +173,6 @@ class Field implements Datastore_Holder_Interface {
 	protected $required = false;
 
 	/**
-	 * Prefix to be prepended to the field name during load, save, delete and <strong>render</strong>
-	 *
-	 * @var string
-	 **/
-	protected $name_prefix = '_';
-
-	/**
 	 * Stores the field conditional logic rules.
 	 *
 	 * @var array
@@ -490,10 +483,6 @@ class Field implements Datastore_Holder_Interface {
 			Incorrect_Syntax_Exception::raise( 'Field name can\'t be empty' );
 		}
 
-		if ( $this->name_prefix && strpos( $name, $this->name_prefix ) !== 0 ) {
-			$name = $this->name_prefix . $name;
-		}
-
 		$this->name = $name;
 	}
 
@@ -520,22 +509,6 @@ class Field implements Datastore_Holder_Interface {
 	 **/
 	public function get_base_name() {
 		return $this->base_name;
-	}
-
-	/**
-	 * Set field name prefix. Calling this method will update the current field
-	 * name and the conditional logic fields.
-	 *
-	 * @param string $prefix
-	 * @return object $this
-	 **/
-	public function set_prefix( $prefix ) {
-		$escaped_prefix = preg_quote( $this->name_prefix, '~' );
-		$this->name = preg_replace( '~^' . $escaped_prefix . '~', '', $this->name );
-		$this->name_prefix = $prefix;
-		$this->name = $this->name_prefix . $this->name;
-
-		return $this;
 	}
 
 	/**

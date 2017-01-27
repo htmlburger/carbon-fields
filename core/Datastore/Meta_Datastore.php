@@ -14,13 +14,35 @@ abstract class Meta_Datastore extends Datastore {
 	public function init() {}
 
 	/**
-	 * Save the field value(s) into the database.
+	 * Return a raw database query results array for a field
 	 *
-	 * @param Field $field The field to save.
+	 * @param Field $field The field to retrieve value for.
 	 */
-	public function save( Field $field ) {
-		if ( ! update_metadata( $this->get_meta_type(), $this->get_id(), $field->get_name(), $field->get_value() ) ) {
-			add_metadata( $this->get_meta_type(), $this->get_id(), $field->get_name(), $field->get_value(), true );
+	protected function get_storage_array_for_field( Field $field ) {
+		global $wpdb;
+
+		$storage_key = static::get_storage_key_prefix_for_field( $field );
+
+		$storage_array = $wpdb->get_results( '
+			SELECT `meta_key` AS `key`, `meta_value` AS `value`
+			FROM ' . $this->get_table_name() . '
+			WHERE `' . $this->get_table_field_name() . '` = ' . intval( $this->get_id() ) . '
+				AND `meta_key` LIKE "' . esc_sql( $storage_key ) . '%"
+			ORDER BY `meta_key` ASC
+		' );
+
+		return $storage_array;
+	}
+
+	/**
+	 * Save a single key-value pair to the database
+	 *
+	 * @param string $key
+	 * @param string $value
+	 */
+	protected function save_key_value_pair( $key, $value ) {
+		if ( ! update_metadata( $this->get_meta_type(), $this->get_id(), $key, $value ) ) {
+			add_metadata( $this->get_meta_type(), $this->get_id(), $key, $value, true );
 		}
 	}
 
@@ -30,22 +52,32 @@ abstract class Meta_Datastore extends Datastore {
 	 * @param Field $field The field to retrieve value for.
 	 */
 	public function load( Field $field ) {
-		global $wpdb;
+		$storage_array = $this->get_storage_array_for_field( $field );
+		$raw_value_set = static::storage_array_to_raw_value_set( $storage_array );
+		$field->set_value( $raw_value_set );
+	}
 
-		$value = $wpdb->get_col( '
-			SELECT `meta_value`
-			FROM ' . $this->get_table_name() . '
-			WHERE `' . $this->get_table_field_name() . '`=' . intval( $this->get_id() ) . '
-			AND `meta_key`="' . $field->get_name() . '"
-			LIMIT 1
-		' );
-
-		if ( ! is_array( $value ) || count( $value ) < 1 ) {
-			$field->set_value( false );
+	/**
+	 * Save the field value(s) into the database.
+	 *
+	 * @param Field $field The field to save.
+	 */
+	public function save( Field $field ) {
+		$value_set = $field->value()->get_set();
+		if ( $value_set === null ) {
 			return;
 		}
 
-		$field->set_value( $value[0] );
+		if ( empty( $value_set ) && $field->value()->keepalive() ) {
+			$storage_key = static::get_storage_key_for_field( $field, 0, static::KEEPALIVE_KEY );
+			$this->save_key_value_pair( $storage_key, '' );
+		}
+		foreach ( $value_set as $value_group_index => $values ) {
+			foreach ( $values as $value_key => $value ) {
+				$storage_key = static::get_storage_key_for_field( $field, $value_group_index, $value_key );
+				$this->save_key_value_pair( $storage_key, $value );
+			}
+		}
 	}
 
 	/**
@@ -54,27 +86,15 @@ abstract class Meta_Datastore extends Datastore {
 	 * @param Field $field The field to delete.
 	 */
 	public function delete( Field $field ) {
-		delete_metadata( $this->get_meta_type(), $this->get_id(), $field->get_name(), $field->get_value() );
-	}
-
-	/**
-	 * Load complex field value(s) from the database.
-	 *
-	 * @param mixed $field The field to load values for.
-	 */
-	public function load_values( $field ) {
 		global $wpdb;
+		
+		$storage_key = static::get_storage_key_prefix_for_field( $field );
 
-		if ( is_object( $field ) && is_subclass_of( $field, 'Carbon_Fields\\Field\\Field' ) ) {
-			$meta_key = $field->get_name();
-		} else {
-			$meta_key = $field;
-		}
-
-		return $wpdb->get_results( '
-			SELECT meta_key AS field_key, meta_value AS field_value FROM ' . $this->get_table_name() . '
-			WHERE `meta_key` LIKE "' . addslashes( $meta_key ) . '_%" AND `' . $this->get_table_field_name() . '`="' . intval( $this->get_id() ) . '"
-		', ARRAY_A );
+		$wpdb->query( '
+			DELETE FROM ' . $this->get_table_name() . '
+			WHERE `' . $this->get_table_field_name() . '` = ' . intval( $this->get_id() ) . '
+				AND `meta_key` LIKE "' . esc_sql( $storage_key ) . '%"
+		' );
 	}
 
 	/**
@@ -82,17 +102,15 @@ abstract class Meta_Datastore extends Datastore {
 	 *
 	 * @param mixed $field The field to delete values for.
 	 */
-	public function delete_values( $field ) {
+	public function delete_values( Field $field ) {
 		global $wpdb;
 
-		$group_names = $field->get_group_names();
-		$field_name = $field->get_name();
+		$storage_key = static::get_storage_key_root( $field );
 
-		$meta_key_constraint = '`meta_key` LIKE "' . $field_name . implode( '-%" OR `meta_key` LIKE "' . $field_name, $group_names ) . '-%"';
-
-		return $wpdb->query( '
+		$wpdb->query( '
 			DELETE FROM ' . $this->get_table_name() . '
-			WHERE (' . $meta_key_constraint . ') AND `' . $this->get_table_field_name() . '`="' . intval( $this->get_id() ) . '"
+			WHERE `' . $this->get_table_field_name() . '` = ' . intval( $this->get_id() ) . '
+				AND `meta_key` LIKE "' . esc_sql( $storage_key ) . '%"
 		' );
 	}
 

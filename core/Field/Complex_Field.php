@@ -261,10 +261,9 @@ class Complex_Field extends Field {
 			);
 
 			foreach ( $group_fields as $field ) {
-				$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $entry_index );
 				$value_set = isset( $value_group[ $field->get_name() ] ) ? $value_group[ $field->get_name() ] : $field->get_default_value();
+				$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $entry_index );
 				$clone->set_value( $value_set );
-
 				$fields[ $entry_index ][] = $clone;
 			}
 		}
@@ -532,18 +531,6 @@ class Complex_Field extends Field {
 			</a>
 		</li>
 		<?php
-	}
-
-	/**
-	 * Generate and set the field prefix.
-	 * @param string $prefix
-	 */
-	public function set_prefix( $prefix ) {
-		parent::set_prefix( $prefix );
-
-		foreach ( $this->groups as $group ) {
-			$group->set_prefix( $prefix );
-		}
 	}
 
 	/**
