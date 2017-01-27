@@ -40,8 +40,6 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 */
 	protected $custom_fields = array();
 
-	protected $complex_field_names = array();
-
 	/**
 	 * Create the widget.
 	 * A wrapper around the default WP widget constructor.
@@ -97,6 +95,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 			$field->set_value_from_input( $new_instance );
 			$field->save();
 		}
+		exit('asdasdasda');
 
 		return $instance;
 	}
@@ -135,17 +134,6 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 * @param array $instance The settings for the particular instance of the widget.
 	 */
 	public function widget( $args, $instance ) {
-		// prepare $instance values for complex fields
-		if ( ! empty( $this->complex_field_names ) ) {
-			$instance = static::unwrap_complex_field_values( $instance, $this->complex_field_names );
-		}
-
-		// prepare $instance values for association fields
-		foreach ( $instance as &$field_value ) {
-			$field_value = Helper::parse_relationship_field( $field_value );
-		}
-
-		// output
 		if ( $this->print_wrappers ) {
 			echo $args['before_widget'];
 		}
@@ -181,13 +169,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 
 			$this->verify_unique_field_name( $field->get_name() );
 
-			if ( ! $field->get_datastore() ) {
-				$field->set_datastore( $this, true );
-			}
-
-			if ( is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
-				$this->complex_field_names[] = $field->get_name();
-			}
+			$field->set_datastore( $this, true );
 		}
 
 		$this->custom_fields = array_merge( $this->custom_fields, $fields );
@@ -262,10 +244,13 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		$raw_value_set = Datastore::storage_array_to_raw_value_set( $storage_array );
 		$field->set_value( $raw_value_set );
 
-		if ( isset( $this->store_data[ $field->get_name() ] ) ) {
-			$field->set_value( $this->store_data[ $field->get_name() ] );
-		} else {
-			$field->set_value( $field->get_default_value() );
+		if ( $field->get_name() === 'crb_text_level_1' ) {
+			echo '<pre>';
+			var_dump( $field->get_name() );
+			var_dump( $raw_value_set );
+			var_dump( $storage_array );
+			print_r( $this->store_data );
+			echo '</pre>';
 		}
 	}
 
@@ -278,6 +263,19 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		$value_set = $field->value()->get_set();
 		if ( $value_set === null ) {
 			return;
+		}
+		var_dump($field->get_name());
+		if ( is_a($field, '\\Carbon_Fields\\Field\\Complex_Field') ) {
+			echo '<pre>';
+			var_dump( $field->get_name() );
+			var_dump( $value_set );
+			var_dump($field);
+
+			$groups = $field->get_groups();
+			foreach ( $groups as $g ) {
+				print_r( $g->get_fields() );
+			}
+			echo '</pre>';
 		}
 
 		if ( empty( $value_set ) && $field->value()->keepalive() ) {
@@ -303,7 +301,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 
 		foreach ( $this->store_data as $key => $value ) {
 			if ( substr( $key, 0, $storage_key_length ) === $storage_key ) {
-				unset( $storage_array[ $key ] );
+				// unset( $this->store_data[ $key ] );
 			}
 		}
 	}
@@ -319,45 +317,8 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 
 		foreach ( $this->store_data as $key => $value ) {
 			if ( substr( $key, 0, $storage_key_length ) === $storage_key ) {
-				unset( $storage_array[ $key ] );
+				// unset( $this->store_data[ $key ] );
 			}
 		}
-	}
-
-	/**
-	 * Expand complex fields from raw data.
-	 */
-	public static function unwrap_complex_field_values( $instance, $complex_field_names ) {
-		foreach ( $complex_field_names as $name ) {
-			foreach ( $instance as $key => $value ) {
-				if ( ! preg_match( '~^' . preg_quote( $name, '~' ) . '(?P<group>\w*)-_?(?P<key>.*?)_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~', $key, $field_name ) ) {
-					continue;
-				}
-
-				$value = maybe_unserialize( $value );
-
-				$instance[ $name ][ $field_name['index'] ]['_type'] = $field_name['group'];
-				if ( ! empty( $field_name['trailing'] ) ) {
-					if ( ! preg_match( '~^' . preg_quote( $field_name['key'], '~' ) . '(?P<group>\w*)-_?(?P<key>.*)_(?P<index>\d+)_?(?P<sub>\w+)?$~', $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'], $subfield_name ) ) {
-						continue;
-					}
-
-					$instance[ $name ][ $field_name['index'] ][ $field_name['key'] ][ $subfield_name['index'] ]['_type'] = $subfield_name['group'];
-					if ( ! empty( $subfield_name['sub'] ) ) {
-						$instance[ $name ][ $field_name['index'] ][ $field_name['key'] ][ $subfield_name['index'] ][ $subfield_name['key'] ][ $subfield_name['sub'] ] = $value;
-					} else {
-						$instance[ $name ][ $field_name['index'] ][ $field_name['key'] ][ $subfield_name['index'] ][ $subfield_name['key'] ] = $value;
-					}
-				} else if ( ! empty( $field_name['sub'] ) ) {
-					$instance[ $name ][ $field_name['index'] ][ $field_name['key'] ][ $field_name['sub'] ] = $value;
-				} else {
-					$instance[ $name ][ $field_name['index'] ][ $field_name['key'] ] = $value;
-				}
-
-				unset( $instance[ $key ] );
-			}
-		}
-
-		return $instance;
 	}
 }
