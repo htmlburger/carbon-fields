@@ -34,6 +34,14 @@ class Set_Field extends Predefined_Options_Field {
 	}
 
 	/**
+	 * Save value to storage
+	 **/
+	public function save() {
+		$this->delete();
+		parent::save();
+	}
+
+	/**
 	 * Set the number of the options to be displayed at the initial field display.
 	 *
 	 * @param  int $limit

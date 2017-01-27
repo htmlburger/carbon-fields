@@ -251,9 +251,9 @@ class Complex_Field extends Field {
 		$this->set_value( $value_set );
 	}
 
-	protected function get_prefilled_field_groups( $value ) {
+	protected function get_prefilled_field_groups( $value_tree ) {
 		$fields = array();
-		foreach ( $value as $entry_index => $value_group ) {
+		foreach ( $value_tree as $entry_index => $value_group ) {
 			$group = $this->get_group_by_name( $value_group['type'] );
 			$group_fields = $group->get_fields();
 			$fields[ $entry_index ] = array(
@@ -261,11 +261,8 @@ class Complex_Field extends Field {
 			);
 
 			foreach ( $group_fields as $field ) {
-				$value_set = isset( $value_group[ $field->get_name() ] ) ? $value_group[ $field->get_name() ] : '';
-				if ( empty( $value_set ) && is_a( $field, get_class() ) ) {
-					$value_set = array();
-				}
 				$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $entry_index );
+				$value_set = isset( $value_group[ $field->get_name() ] ) ? $value_group[ $field->get_name() ] : $field->get_default_value();
 				$clone->set_value( $value_set );
 
 				$fields[ $entry_index ][] = $clone;

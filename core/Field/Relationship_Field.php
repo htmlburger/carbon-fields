@@ -2,14 +2,35 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Value_Set\Value_Set;
+
 /**
  * Relationship field class.
  * Allows selecting and manually sorting entries from any custom post type.
  */
 class Relationship_Field extends Field {
 	protected $post_type = array( 'post' );
+	
 	protected $max = -1;
+
 	protected $allow_duplicates = false;
+
+	/**
+	 * Default field value
+	 *
+	 * @var array
+	 */
+	protected $default_value = array();
+
+	/**
+	 * Create a field from a certain type with the specified label.
+	 * @param string $name  Field name
+	 * @param string $label Field label
+	 */
+	protected function __construct( $name, $label ) {
+		$this->value = new Value_Set( Value_Set::TYPE_MULTIPLE_VALUES );
+		parent::__construct( $name, $label );
+	}
 
 	/**
 	 * Admin initialization actions
@@ -18,6 +39,14 @@ class Relationship_Field extends Field {
 		$this->add_template( $this->get_type() . '_item', array( $this, 'item_template' ) );
 
 		parent::admin_init();
+	}
+
+	/**
+	 * Save value to storage
+	 **/
+	public function save() {
+		$this->delete();
+		parent::save();
 	}
 
 	/**

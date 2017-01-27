@@ -350,14 +350,14 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Delegate save to the field DataStore instance
+	 * Save value to storage
 	 **/
 	public function save() {
 		return $this->get_datastore()->save( $this );
 	}
 
 	/**
-	 * Delegate delete to the field DataStore instance
+	 * Delete value from storage
 	 **/
 	public function delete() {
 		return $this->get_datastore()->delete( $this );
