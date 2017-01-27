@@ -59,15 +59,14 @@ class Relationship_Field extends Field {
 			$input = $_POST;
 		}
 
-		if ( ! isset( $input[ $this->name ] ) ) {
-			$this->set_value( null );
-		} else {
-			$value = stripslashes_deep( $input[ $this->name ] );
+		$value = array();
+		if ( isset( $input[ $this->get_name() ] ) ) {
+			$value = stripslashes_deep( $input[ $this->get_name() ] );
 			if ( is_array( $value ) ) {
 				$value = array_values( $value );
 			}
-			$this->set_value( $value );
 		}
+		$this->set_value( $value );
 	}
 
 	/**

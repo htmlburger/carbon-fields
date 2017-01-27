@@ -11,7 +11,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 abstract class Datastore implements Datastore_Interface {
 
-	const KEEPALIVE_KEY = '_keepalive';
+	const KEEPALIVE_KEY = '_empty';
 
 	/**
 	 * Initialize the datastore.

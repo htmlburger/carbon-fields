@@ -773,16 +773,6 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Allows the value of a field to be processed after loading.
-	 * Can be implemented by the extending class if necessary.
-	 *
-	 * @return array
-	 */
-	public function process_value() {
-
-	}
-
-	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
@@ -793,8 +783,6 @@ class Field implements Datastore_Holder_Interface {
 		if ( $load ) {
 			$this->load();
 		}
-
-		$this->process_value();
 
 		$field_data = array(
 			'id' => $this->get_id(),

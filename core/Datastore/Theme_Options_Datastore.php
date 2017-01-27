@@ -59,12 +59,11 @@ class Theme_Options_Datastore extends Datastore {
 			return;
 		}
 
+		if ( empty( $value_set ) && $field->value()->keepalive() ) {
+			$storage_key = $this->get_storage_key_for_field( $field, 0, self::KEEPALIVE_KEY );
+			$this->save_key_value_pair( $storage_key, '', $autoload );
+		}
 		foreach ( $value_set as $value_group_index => $values ) {
-			if ( empty($values) && $field->value()->keepalive() ) {
-				$storage_key = $this->get_storage_key_for_field( $field, $value_group_index, self::KEEPALIVE_KEY );
-				$this->save_key_value_pair( $storage_key, '', $autoload );
-			}
-
 			foreach ( $values as $value_key => $value ) {
 				$storage_key = $this->get_storage_key_for_field( $field, $value_group_index, $value_key );
 				$this->save_key_value_pair( $storage_key, $value, $autoload );
