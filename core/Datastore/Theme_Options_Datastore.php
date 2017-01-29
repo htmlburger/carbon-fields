@@ -21,7 +21,7 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 	protected function get_storage_array_for_field( Field $field ) {
 		global $wpdb;
 
-		$storage_key = static::get_storage_key_prefix_for_field( $field );
+		$storage_key = $this->get_storage_key_prefix_for_field( $field );
 
 		$storage_array = $wpdb->get_results( '
 			SELECT `option_name` AS `key`, `option_value` AS `value`
@@ -73,12 +73,12 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 		}
 
 		if ( empty( $value_set ) && $field->value()->keepalive() ) {
-			$storage_key = static::get_storage_key_for_field( $field, 0, static::KEEPALIVE_KEY );
+			$storage_key = $this->get_storage_key_for_field( $field, 0, $this->KEEPALIVE_KEY );
 			$this->save_key_value_pair_with_autoload( $storage_key, '', $autoload );
 		}
 		foreach ( $value_set as $value_group_index => $values ) {
 			foreach ( $values as $value_key => $value ) {
-				$storage_key = static::get_storage_key_for_field( $field, $value_group_index, $value_key );
+				$storage_key = $this->get_storage_key_for_field( $field, $value_group_index, $value_key );
 				$this->save_key_value_pair_with_autoload( $storage_key, $value, $autoload );
 			}
 		}
@@ -92,7 +92,7 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 	public function delete( Field $field ) {
 		global $wpdb;
 		
-		$storage_key = static::get_storage_key_prefix_for_field( $field );
+		$storage_key = $this->get_storage_key_prefix_for_field( $field );
 
 		$wpdb->query( '
 			DELETE FROM ' . $wpdb->options . '
@@ -108,7 +108,7 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 	public function delete_values( Field $field ) {
 		global $wpdb;
 
-		$storage_key = static::get_storage_key_root( $field );
+		$storage_key = $this->get_storage_key_root( $field );
 
 		$wpdb->query( '
 			DELETE FROM ' . $wpdb->options . '
