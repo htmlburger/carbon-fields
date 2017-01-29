@@ -44,7 +44,7 @@ class Value_Set {
 		return ( $this->type !== self::TYPE_SINGLE_VALUE );
 	}
 
-	public function empty() {
+	public function is_empty() {
 		return empty( $this->value_set );
 	}
 

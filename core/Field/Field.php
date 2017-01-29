@@ -337,7 +337,7 @@ class Field implements Datastore_Holder_Interface {
 	public function load() {
 		$this->get_datastore()->load( $this );
 
-		if ( $this->value()->empty() ) {
+		if ( $this->value()->is_empty() ) {
 			$this->set_value( $this->get_default_value() );
 		}
 	}
