@@ -4,16 +4,22 @@ namespace Carbon_Fields\Widget;
 
 use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Field\Field;
-use Carbon_Fields\Datastore\Datastore;
-use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Container\Container;
+use Carbon_Fields\Datastore\Widget_Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
- * Widget datastore and container class.
+ * Widget, datastore and container handler class.
  */
-abstract class Widget extends \WP_Widget implements Datastore_Interface {
+abstract class Widget extends \WP_Widget {
 	public static $registered_widget_ids = array();
+
+	/**
+	 * Widget Datastore
+	 *
+	 * @var Widget_Datastore
+	 */
+	protected $datastore;
 
 	/**
 	 * Determines if widget wrapper html should be printed
@@ -22,8 +28,6 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 * @var bool
 	 */
 	protected $print_wrappers = true;
-
-	protected $store_data;
 
 	/**
 	 * Control options to pass to WordPress Widget constructor
@@ -50,6 +54,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 * @param  string $classname   String of CSS classes
 	 */
 	public function setup( $title, $description, $fields, $classname = '' ) {
+		$this->datastore = new Widget_Datastore();
 		if ( empty( $title ) ) {
 			Incorrect_Syntax_Exception::raise( 'Empty widget title is not supported' );
 		}
@@ -87,17 +92,17 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 * @return array Settings to save or bool false to cancel saving.
 	 */
 	public function update( $new_instance, $old_instance ) {
-		$instance = $old_instance;
-
-		$this->store_data =& $instance;
+		$this->datastore->import_storage( $old_instance );
 
 		foreach ( $this->custom_fields as $field ) {
 			$field->set_value_from_input( $new_instance );
 			$field->save();
 		}
-		exit('asdasdasda');
+		print_r( $new_instance );
+		print_r( $this->datastore->export_storage() );
+		exit('zzz');
 
-		return $instance;
+		return $this->datastore->export_storage();
 	}
 
 	/**
@@ -106,7 +111,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 * @param array $instance Current settings.
 	 */
 	public function form( $instance ) {
-		$this->store_data = $instance;
+		$this->datastore->import_storage( $instance );
 		$custom_fields = array();
 
 		foreach ( $this->custom_fields as $field ) {
@@ -169,7 +174,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 
 			$this->verify_unique_field_name( $field->get_name() );
 
-			$field->set_datastore( $this, true );
+			$field->set_datastore( $this->datastore, true );
 		}
 
 		$this->custom_fields = array_merge( $this->custom_fields, $fields );
@@ -201,124 +206,5 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		}
 
 		static::$registered_widget_ids[] = $id;
-	}
-
-	/**
-	 * Return a raw database query results array for a field
-	 *
-	 * @param Field $field The field to retrieve value for.
-	 */
-	protected function get_storage_array_for_field( Field $field ) {
-		global $wpdb;
-
-		$storage_key = Datastore::get_storage_key_prefix_for_field( $field );
-		$storage_key_length = strlen( $storage_key );
-
-		$storage_array = array();
-		foreach ( $this->store_data as $key => $value ) {
-			if ( substr( $key, 0, $storage_key_length ) === $storage_key ) {
-				$storage_array[] = (object) array( 'key'=>$key, 'value'=>$value);
-			}
-		}
-
-		return $storage_array;
-	}
-
-	/**
-	 * Save a single key-value pair to the database
-	 *
-	 * @param string $key
-	 * @param string $value
-	 */
-	protected function save_key_value_pair( $key, $value ) {
-		$this->store_data[ $key ] = $value;
-	}
-
-	/**
-	 * Load the field value(s) from the database.
-	 *
-	 * @param Field $field The field to retrieve value for.
-	 */
-	public function load( Field $field ) {
-		$storage_array = $this->get_storage_array_for_field( $field );
-		$raw_value_set = Datastore::storage_array_to_raw_value_set( $storage_array );
-		$field->set_value( $raw_value_set );
-
-		if ( $field->get_name() === 'crb_text_level_1' ) {
-			echo '<pre>';
-			var_dump( $field->get_name() );
-			var_dump( $raw_value_set );
-			var_dump( $storage_array );
-			print_r( $this->store_data );
-			echo '</pre>';
-		}
-	}
-
-	/**
-	 * Save the field value(s) into the database.
-	 *
-	 * @param Field $field The field to save.
-	 */
-	public function save( Field $field ) {
-		$value_set = $field->value()->get_set();
-		if ( $value_set === null ) {
-			return;
-		}
-		var_dump($field->get_name());
-		if ( is_a($field, '\\Carbon_Fields\\Field\\Complex_Field') ) {
-			echo '<pre>';
-			var_dump( $field->get_name() );
-			var_dump( $value_set );
-			var_dump($field);
-
-			$groups = $field->get_groups();
-			foreach ( $groups as $g ) {
-				print_r( $g->get_fields() );
-			}
-			echo '</pre>';
-		}
-
-		if ( empty( $value_set ) && $field->value()->keepalive() ) {
-			$storage_key = Datastore::get_storage_key_for_field( $field, 0, Datastore::KEEPALIVE_KEY );
-			$this->save_key_value_pair( $storage_key, '' );
-		}
-		foreach ( $value_set as $value_group_index => $values ) {
-			foreach ( $values as $value_key => $value ) {
-				$storage_key = Datastore::get_storage_key_for_field( $field, $value_group_index, $value_key );
-				$this->save_key_value_pair( $storage_key, $value );
-			}
-		}
-	}
-
-	/**
-	 * Delete the field value(s) from the database.
-	 *
-	 * @param Field $field The field to delete.
-	 */
-	public function delete( Field $field ) {
-		$storage_key = Datastore::get_storage_key_prefix_for_field( $field );
-		$storage_key_length = strlen( $storage_key );
-
-		foreach ( $this->store_data as $key => $value ) {
-			if ( substr( $key, 0, $storage_key_length ) === $storage_key ) {
-				// unset( $this->store_data[ $key ] );
-			}
-		}
-	}
-
-	/**
-	 * Delete complex field value(s) from the database.
-	 *
-	 * @param mixed $field The field to delete values for.
-	 */
-	public function delete_values( Field $field ) {
-		$storage_key = Datastore::get_storage_key_root( $field );
-		$storage_key_length = strlen( $storage_key );
-
-		foreach ( $this->store_data as $key => $value ) {
-			if ( substr( $key, 0, $storage_key_length ) === $storage_key ) {
-				// unset( $this->store_data[ $key ] );
-			}
-		}
 	}
 }

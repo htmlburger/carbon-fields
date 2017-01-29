@@ -243,6 +243,9 @@ class Complex_Field extends Field {
 			$value_tree[] = $value_group;
 			$index++;
 		}
+		var_dump('---');
+		print_r( $value_tree );
+		var_dump('---');
 		$this->set_value_tree( $value_tree );
 
 		$value_set = array_map( function( $group ) {

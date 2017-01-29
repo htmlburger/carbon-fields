@@ -7,7 +7,7 @@ use Carbon_Fields\Field\Field;
 /**
  * Theme options datastore class.
  */
-class Theme_Options_Datastore extends Datastore {
+class Theme_Options_Datastore extends Key_Value_Datastore {
 	/**
 	 * Initialization tasks.
 	 **/
@@ -38,27 +38,26 @@ class Theme_Options_Datastore extends Datastore {
 	 *
 	 * @param string $key
 	 * @param string $value
+	 */
+	protected function save_key_value_pair( $key, $value ) {
+		$this->save_key_value_pair_with_autoload( $key, $value, 'no' );
+	}
+
+	/**
+	 * Save a single key-value pair to the database
+	 *
+	 * @param string $key
+	 * @param string $value
 	 * @param bool $autoload
 	 */
-	protected function save_key_value_pair( $key, $value, $autoload ) {
+	protected function save_key_value_pair_with_autoload( $key, $value, $autoload ) {
 		$notoptions = wp_cache_get( 'notoptions', 'options' );
 		$notoptions[ $key ] = '';
 		wp_cache_set( 'notoptions', $notoptions, 'options' );
 
 		if ( ! add_option( $key, $value, null, $autoload ) ) {
-			update_option( $key, $value );
+			update_option( $key, $value, $autoload );
 		}
-	}
-
-	/**
-	 * Load the field value(s) from the database.
-	 *
-	 * @param Field $field The field to load value(s) in.
-	 */
-	public function load( Field $field ) {
-		$storage_array = $this->get_storage_array_for_field( $field );
-		$raw_value_set = static::storage_array_to_raw_value_set( $storage_array );
-		$field->set_value( $raw_value_set );
 	}
 
 	/**
@@ -75,12 +74,12 @@ class Theme_Options_Datastore extends Datastore {
 
 		if ( empty( $value_set ) && $field->value()->keepalive() ) {
 			$storage_key = static::get_storage_key_for_field( $field, 0, static::KEEPALIVE_KEY );
-			$this->save_key_value_pair( $storage_key, '', $autoload );
+			$this->save_key_value_pair_with_autoload( $storage_key, '', $autoload );
 		}
 		foreach ( $value_set as $value_group_index => $values ) {
 			foreach ( $values as $value_key => $value ) {
 				$storage_key = static::get_storage_key_for_field( $field, $value_group_index, $value_key );
-				$this->save_key_value_pair( $storage_key, $value, $autoload );
+				$this->save_key_value_pair_with_autoload( $storage_key, $value, $autoload );
 			}
 		}
 	}
