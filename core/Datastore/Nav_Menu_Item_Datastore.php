@@ -67,7 +67,7 @@ class Nav_Menu_Item_Datastore extends Post_Meta_Datastore {
 	 *
 	 * @param mixed $field The field to delete values for.
 	 */
-	public function delete_values( $field ) {
+	public function delete_values( Field $field ) {
 		$clone = clone $field;
 		$clone->set_name( $this->get_clean_field_name( $field ) );
 		parent::delete( $clone );
