@@ -98,9 +98,6 @@ abstract class Widget extends \WP_Widget {
 			$field->set_value_from_input( $new_instance );
 			$field->save();
 		}
-		print_r( $new_instance );
-		print_r( $this->datastore->export_storage() );
-		exit('zzz');
 
 		return $this->datastore->export_storage();
 	}
