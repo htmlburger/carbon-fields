@@ -25,6 +25,7 @@ class Helper {
 		add_action( 'carbon_after_register_fields', array( $this, 'init_containers' ) );
 		add_action( 'admin_footer', array( $this, 'init_scripts' ), 0 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data_script' ), 9 );
+		add_action( 'admin_print_footer_scripts', array( $this, 'print_bootstrap_js' ), 100 );
 		add_action( 'crb_field_activated', array( $this, 'add_templates' ) );
 		add_action( 'crb_container_activated', array( $this, 'add_templates' ) );
 		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
@@ -75,7 +76,6 @@ class Helper {
 		wp_enqueue_script( 'carbon-app', \Carbon_Fields\URL . '/assets/js/app.js', array( 'jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable', 'carbon-ext' ), \Carbon_Fields\VERSION );
 		wp_enqueue_script( 'carbon-react-vendor', \Carbon_Fields\URL . '/assets/carbon.vendor.js', array( ) );
 		wp_enqueue_script( 'carbon-react-app', \Carbon_Fields\URL . '/assets/carbon.app.js', array( ) );
-		wp_enqueue_script( 'carbon-react-boot', \Carbon_Fields\URL . '/assets/carbon.bootstrap.js', array( ) );
 	}
 
 	/**
@@ -88,6 +88,15 @@ class Helper {
 var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 //--><!]]>
 </script>
+		<?php
+	}
+
+	/**
+	 * Print the bootstrap code for the fields.
+	 */
+	public function print_bootstrap_js() {
+		?>
+			<script type="text/javascript" src="<?php echo \Carbon_Fields\URL . '/assets/carbon.bootstrap.js'; ?>"></script>
 		<?php
 	}
 

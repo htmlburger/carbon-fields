@@ -12,6 +12,7 @@ import userMetaForeman from 'containers/sagas/user-meta';
 import themeOptionsForeman from 'containers/sagas/theme-options';
 
 import mediaBrowserForeman from 'fields/sagas/media-browser';
+import wysiwygForeman from 'fields/sagas/wysiwyg';
 import complexForeman from 'fields/sagas/complex';
 
 const preloadedState = normalizePreloadedState(window.carbon_json);
@@ -26,5 +27,6 @@ saga.run(userMetaForeman);
 saga.run(themeOptionsForeman);
 saga.run(mediaBrowserForeman);
 saga.run(complexForeman);
+saga.run(wysiwygForeman);
 
 export default store;
