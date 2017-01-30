@@ -211,13 +211,13 @@ class Complex_Field extends Field {
 		$input_groups = $input[ $this->get_name() ];
 		$input_group_index = 0;
 		foreach ( $input_groups as $values ) {
-			if ( ! isset( $values['group'] ) || ! isset( $this->groups[ $values['group'] ] ) ) {
+			if ( ! isset( $values['_type'] ) || ! isset( $this->groups[ $values['_type'] ] ) ) {
 				continue;
 			}
 
-			$group = $this->get_group_by_name( $values['group'] );
-			$value_group = array( 'group' => $values['group'] );
-			unset( $values['group'] );
+			$group = $this->get_group_by_name( $values['_type'] );
+			$value_group = array( '_type' => $values['_type'] );
+			unset( $values['_type'] );
 
 			$group_fields = $group->get_fields();
 
@@ -248,7 +248,7 @@ class Complex_Field extends Field {
 		$this->set_value_tree( $value_tree );
 
 		$value_set = array_map( function( $group ) {
-			return $group['group'];
+			return $group['_type'];
 		}, $this->get_value_tree() );
 		$this->set_value( $value_set );
 	}
@@ -256,10 +256,10 @@ class Complex_Field extends Field {
 	protected function get_prefilled_field_groups( $value_tree ) {
 		$fields = array();
 		foreach ( $value_tree as $entry_index => $values ) {
-			$group = $this->get_group_by_name( $values['group'] );
+			$group = $this->get_group_by_name( $values['_type'] );
 			$group_fields = $group->get_fields();
 			$fields[ $entry_index ] = array(
-				'group'=>$group->get_name(),
+				'_type'=>$group->get_name(),
 			);
 
 			foreach ( $group_fields as $field ) {
@@ -339,7 +339,7 @@ class Complex_Field extends Field {
 		foreach ( $entries as $entry_index => $group_name ) {
 			$group = $this->get_group_by_name( $group_name );
 			$values[$entry_index] = array(
-				'group'=>$group->get_name(),
+				'_type'=>$group->get_name(),
 			);
 			$group_fields = $group->get_fields();
 
@@ -385,7 +385,7 @@ class Complex_Field extends Field {
 		$field_groups = $this->get_prefilled_field_groups( $this->get_value_tree() );
 		$value_data = array();
 		foreach ( $field_groups as $entry_index => $fields ) {
-			$group = $this->get_group_by_name( $fields['group'] );
+			$group = $this->get_group_by_name( $fields['_type'] );
 			$group_fields = $group->get_fields();
 
 			$data = array(
@@ -480,7 +480,7 @@ class Complex_Field extends Field {
 	public function template_group() {
 		?>
 		<div id="carbon-{{{ complex_name }}}-complex-container" class="carbon-row carbon-group-row" data-group-id="{{ id }}">
-			<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[group]" value="{{ name }}" />
+			<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[_type]" value="{{ name }}" />
 
 			<div class="carbon-drag-handle">
 				<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label_template || label }}}</span>
