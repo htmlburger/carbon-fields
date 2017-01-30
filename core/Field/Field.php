@@ -445,6 +445,19 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Return a differently formatted value for end-users
+	 *
+	 * @return mixed
+	 **/
+	public function get_formatted_value() {
+		$value = $this->get_value();
+		if ( $value === null ) {
+			$value = $this->get_default_value();
+		}
+		return $value;
+	}
+
+	/**
 	 * Alias for $this->value()->set( $value );
 	 **/
 	public function set_value( $value ) {

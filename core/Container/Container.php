@@ -4,6 +4,7 @@ namespace Carbon_Fields\Container;
 
 use Carbon_Fields\App;
 use Carbon_Fields\Field\Field;
+use Carbon_Fields\Field\Group_Field;
 use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Datastore\Datastore_Holder_Interface;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
@@ -392,6 +393,52 @@ abstract class Container implements Datastore_Holder_Interface {
 	 **/
 	public function get_fields() {
 		return $this->fields;
+	}
+
+	/**
+	 * Return field from container with specified name
+	 * 
+	 * @example crb_complex/text_field
+	 * @example crb_complex/complex_2
+	 * @example crb_complex/complex_2:text_group/text_field
+	 * 
+	 * @param string $field_name Can specify a field inside a complex with a / (slash) separator
+	 * @return Field
+	 **/
+	public function get_field_by_name( $field_name ) {
+		$hierarchy = array_filter( explode( '/', $field_name ) );
+		$field = null;
+
+		$field_group = $this->get_fields();
+		$hierarchy_left = $hierarchy;
+
+		while ( !empty( $hierarchy_left ) ) {
+			$segment = array_shift( $hierarchy_left );
+			$segment_pieces = explode( ':', $segment, 2 );
+			$field_name = $segment_pieces[0];
+			$group_name = isset( $segment_pieces[1] ) ? $segment_pieces[1] : Group_Field::DEFAULT_GROUP_NAME;
+
+			foreach ( $field_group as $f ) {
+				if ( $f->get_name() === $field_name ) {
+					if ( empty( $hierarchy_left ) ) {
+						$field = $f;
+					} else {
+						if ( is_a( $f, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
+							$group = $f->get_group_by_name( $group_name );
+							if ( !$group ) {
+								Incorrect_Syntax_Exception::raise( 'Unknown group name specified when fetching a value inside a complex field: "' . $group_name . '".' );
+							}
+							$field_group = $group->get_fields();
+						} else {
+							Incorrect_Syntax_Exception::raise( 'Attempted to look for a nested field inside a non-complex field.' );
+						}
+					}
+					break;
+				}
+			}
+		}
+
+		return $field;
 	}
 
 	/**

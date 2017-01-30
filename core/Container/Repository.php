@@ -61,6 +61,15 @@ class Repository {
 	}
 
 	/**
+	 * Return all containers
+	 *
+	 * @return array
+	 **/
+	public function get_containers() {
+		return $this->containers;
+	}
+
+	/**
 	 * Return all currently active containers
 	 *
 	 * @return array

@@ -100,12 +100,18 @@ class Complex_Field extends Field {
 				list( $name, $label, $fields ) = $argv;
 			}
 		}
+		$name = !empty( $name ) ? $name : Group_Field::DEFAULT_GROUP_NAME;
 
-		if ( array_key_exists( '_' . $name, $this->groups ) ) {
+		if ( array_key_exists( $name, $this->groups ) ) {
 			Incorrect_Syntax_Exception::raise( 'Group with name "' . $name . '" in Complex Field "' . $this->get_label() . '" already exists.' );
 		}
 
+		foreach ( $fields as $field ) {
+			$field->set_hierarchy( array_merge( $this->get_hierarchy(), array( $this->get_hierarchy_name() ) ) );
+		}
+
 		$group = new Group_Field( $name, $label, $fields );
+
 
 		$this->groups[ $group->get_name() ] = $group;
 
@@ -350,6 +356,15 @@ class Complex_Field extends Field {
 		}
 
 		return $values;
+	}
+
+	/**
+	 * Return a differently formatted value for end-users
+	 *
+	 * @return mixed
+	 **/
+	public function get_formatted_value() {
+		return $this->get_value_tree();
 	}
 
 	/**

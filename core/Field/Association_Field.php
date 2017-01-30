@@ -316,6 +316,16 @@ class Association_Field extends Relationship_Field {
 	}
 
 	/**
+	 * Return a differently formatted value for end-users
+	 *
+	 * @return mixed
+	 **/
+	public function get_formatted_value() {
+		$value = Field::get_formatted_value();
+		return $this->parse_serialized_value( $value, 'association' );
+	}
+
+	/**
 	 * Convert the field data into JSON representation.
 	 * @param  bool $load Whether to load data from the datastore.
 	 * @return mixed      The JSON field data.
