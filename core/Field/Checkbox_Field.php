@@ -38,6 +38,15 @@ class Checkbox_Field extends Field {
 	}
 
 	/**
+	 * Return a differently formatted value for end-users
+	 *
+	 * @return mixed
+	 **/
+	public function get_formatted_value() {
+		return ( $this->get_value() === $this->option_value );
+	}
+
+	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * In addition to default data, option value and label are added.
 	 * This data will be available in the Underscore template and the Backbone Model.
