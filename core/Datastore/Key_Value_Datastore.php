@@ -72,7 +72,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	/**
 	 * Return a full storage key for a single field value
 	 **/
-	protected function get_storage_key_for_field( Field $field, $value_group_index, $value_key ) {
+	public function get_storage_key_for_field( Field $field, $value_group_index, $value_key ) {
 		$storage_key = $this->get_storage_key_prefix_for_field( $field ) . $value_group_index . '|' . $value_key;
 		return $storage_key;
 	}
