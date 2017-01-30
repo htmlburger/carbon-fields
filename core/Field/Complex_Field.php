@@ -364,7 +364,20 @@ class Complex_Field extends Field {
 	 * @return mixed
 	 **/
 	public function get_formatted_value() {
-		return $this->get_value_tree();
+		$field_groups = $this->get_prefilled_field_groups( $this->get_value_tree() );
+		
+		$value = array();
+		foreach ( $field_groups as $entry_index => $field_group ) {
+			$value[ $entry_index ] = array();
+			foreach ( $field_group as $key => $field ) {
+				if ( is_a( $field, '\\Carbon_Fields\\Field\\Field' ) ) {
+					$value[ $entry_index ][ $field->get_name() ] = $field->get_formatted_value(); 
+				} else {
+					$value[ $entry_index ][ $key ] = $field;
+				}
+			}
+		}
+		return $value;
 	}
 
 	/**
