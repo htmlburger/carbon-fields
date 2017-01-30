@@ -38,13 +38,7 @@ class Helper {
 			return $default_value;
 		}
 
-		$fields = $container->get_fields();
-		foreach ( $fields as $f ) {
-			if ( $f->get_name() === $field_name ) {
-				$field = $f;
-				break;
-			}
-		}
+		$field = $container->get_root_field_by_name( $field_name );
 		if ( !$field ) {
 			return $default_value;
 		}

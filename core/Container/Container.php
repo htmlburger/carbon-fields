@@ -396,6 +396,24 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Return root field from container with specified name
+	 * 
+	 * @example crb_complex
+	 * 
+	 * @param string $field_name
+	 * @return Field
+	 **/
+	public function get_root_field_by_name( $field_name ) {
+		$fields = $this->get_fields();
+		foreach ( $fields as $field ) {
+			if ( $field->get_name() === $field_name ) {
+				return $field;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Return field from container with specified name
 	 * 
 	 * @example crb_complex/text_field
