@@ -73,7 +73,7 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 		}
 
 		if ( empty( $value_set ) && $field->value()->keepalive() ) {
-			$storage_key = $this->get_storage_key_for_field( $field, 0, $this->KEEPALIVE_KEY );
+			$storage_key = $this->get_storage_key_for_field( $field, 0, static::KEEPALIVE_KEY );
 			$this->save_key_value_pair_with_autoload( $storage_key, '', $autoload );
 		}
 		foreach ( $value_set as $value_group_index => $values ) {
