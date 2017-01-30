@@ -63,10 +63,24 @@ class Repository {
 	/**
 	 * Return all containers
 	 *
+	 * @param string $type Container type to filter for
 	 * @return array
 	 **/
-	public function get_containers() {
-		return $this->containers;
+	public function get_containers( $type = null ) {
+		$raw_containers = $this->containers;
+		$containers = array();
+
+		if ( $type === null ) {
+			$containers = $raw_containers;
+		} else {
+			foreach ( $raw_containers as $container ) {
+				if ( $container->type === $type ) {
+					$containers[] = $container;
+				}
+			}
+		}
+
+		return $containers;
 	}
 
 	/**
