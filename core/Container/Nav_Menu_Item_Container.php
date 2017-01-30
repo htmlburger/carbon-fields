@@ -90,6 +90,10 @@ class Nav_Menu_Item_Container extends Container {
 	public function _is_valid_attach() {
 		global $pagenow;
 
+		if ( $this->get_datastore()->get_id() !== 0 ) {
+			return false;
+		}
+
 		if ( $pagenow === 'nav-menus.php' ) {
 			return true;
 		} elseif ( defined( 'DOING_AJAX' ) && DOING_AJAX && $_REQUEST['action'] === 'add-menu-item' ) {
