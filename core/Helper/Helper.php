@@ -13,11 +13,9 @@ class Helper {
 	/**
 	 * Get a value formatted for end-users
 	 *
-	 * @see \Carbon_Fields\Container\Container::get_field_by_name()
-	 * 
 	 * @param int $object_id Object id to get value for (e.g. post_id, term_id etc.)
 	 * @param string $container_type Container type to search in
-	 * @param string $field_name Field name or slash-separated hierarchy of complex fields
+	 * @param string $field_name Field name
 	 * @return mixed
 	 */
 	public static function get_value( $object_id, $container_type, $field_name ) {
