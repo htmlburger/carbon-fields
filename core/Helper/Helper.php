@@ -22,23 +22,18 @@ class Helper {
 	 */
 	public static function get_value( $object_id, $container_type, $field_name ) {
 		$repository = App::ioc( 'container_repository' );
-		$containers = $repository->get_containers();
+		$containers = $repository->get_containers( $container_type );
 		$container = null;
 		$field = null;
 		$default_value = ''; // for consistency - get_post_meta returns an empty string when a meta key does not exist
 
 		foreach ( $containers as $c ) {
-			if ( $c->type === $container_type ) {
-				$container = $c;
+			$field = $c->get_root_field_by_name( $field_name );
+			if ( $field ) {
 				break;
 			}
 		}
 
-		if ( !$container ) {
-			return $default_value;
-		}
-
-		$field = $container->get_root_field_by_name( $field_name );
 		if ( !$field ) {
 			return $default_value;
 		}
