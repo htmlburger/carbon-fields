@@ -36,9 +36,9 @@ class Nav_Menu_Item_Datastore extends Post_Meta_Datastore {
 	}
 
 	/**
-	 * Load the field value(s) from the database.
+	 * Load the field value(s)
 	 *
-	 * @param Field $field The field to retrieve value for.
+	 * @param Field $field The field to load value(s) in.
 	 */
 	public function load( Field $field ) {
 		if ( !$this->get_id() ) {
@@ -51,7 +51,7 @@ class Nav_Menu_Item_Datastore extends Post_Meta_Datastore {
 	}
 
 	/**
-	 * Save the field value(s) into the database.
+	 * Save the field value(s)
 	 *
 	 * @param Field $field The field to save.
 	 */
@@ -65,9 +65,9 @@ class Nav_Menu_Item_Datastore extends Post_Meta_Datastore {
 	}
 
 	/**
-	 * Delete the field value(s) from the database.
+	 * Delete multiple values in a cascading manner (including all nested fields)
 	 *
-	 * @param Field $field The field to delete.
+	 * @param mixed $field The field to delete values for.
 	 */
 	public function delete( Field $field ) {
 		$clone = clone $field;
@@ -76,11 +76,11 @@ class Nav_Menu_Item_Datastore extends Post_Meta_Datastore {
 	}
 
 	/**
-	 * Delete complex field value(s) from the database.
+	 * Delete multiple values in a cascading manner (including all nested fields)
 	 *
 	 * @param mixed $field The field to delete values for.
 	 */
-	public function delete_values( Field $field ) {
+	public function delete_cascading( Field $field ) {
 		$clone = clone $field;
 		$clone->set_name( $this->get_clean_field_name( $field ) );
 		parent::delete( $clone );

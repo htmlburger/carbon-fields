@@ -21,12 +21,13 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 	protected function get_storage_array_for_field( Field $field ) {
 		global $wpdb;
 
-		$storage_key = $this->get_storage_key_prefix_for_field( $field );
+		$storage_key_patterns = $this->get_storage_key_getter_patterns( $field );
+		$storage_key_comparisons = $this->storage_key_patterns_to_sql( '`option_name`', $storage_key_patterns );
 
 		$storage_array = $wpdb->get_results( '
 			SELECT `option_name` AS `key`, `option_value` AS `value`
 			FROM ' . $wpdb->options . '
-			WHERE `option_name` LIKE "' . esc_sql( $storage_key ) . '%"
+			WHERE ' . $storage_key_comparisons . '
 			ORDER BY `option_name` ASC
 		' );
 
@@ -61,7 +62,7 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 	}
 
 	/**
-	 * Save the field value(s) into the database.
+	 * Save the field value(s)
 	 *
 	 * @param Field $field The field to save.
 	 */
@@ -73,46 +74,31 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 		}
 
 		if ( empty( $value_set ) && $field->value()->keepalive() ) {
-			$storage_key = $this->get_storage_key_for_field( $field, 0, static::KEEPALIVE_KEY );
+			$storage_key = $this->get_storage_key( $field, 0, static::KEEPALIVE_KEY );
 			$this->save_key_value_pair_with_autoload( $storage_key, '', $autoload );
 		}
 		foreach ( $value_set as $value_group_index => $values ) {
 			foreach ( $values as $value_key => $value ) {
-				$storage_key = $this->get_storage_key_for_field( $field, $value_group_index, $value_key );
+				$storage_key = $this->get_storage_key( $field, $value_group_index, $value_key );
 				$this->save_key_value_pair_with_autoload( $storage_key, $value, $autoload );
 			}
 		}
 	}
 
 	/**
-	 * Delete the field value(s) from the database.
+	 * Delete the field value(s)
 	 *
 	 * @param Field $field The field to delete.
 	 */
 	public function delete( Field $field ) {
 		global $wpdb;
-		
-		$storage_key = $this->get_storage_key_prefix_for_field( $field );
+
+		$storage_key_patterns = $this->get_storage_key_deleter_patterns( $field );
+		$storage_key_comparisons = $this->storage_key_patterns_to_sql( '`option_name`', $storage_key_patterns );
 
 		$wpdb->query( '
 			DELETE FROM ' . $wpdb->options . '
-			WHERE `option_name` LIKE "' . esc_sql( $storage_key ) . '%"
-		' );
-	}
-
-	/**
-	 * Delete complex field value(s) from the database.
-	 *
-	 * @param mixed $field The field to delete values for.
-	 */
-	public function delete_values( Field $field ) {
-		global $wpdb;
-
-		$storage_key = $this->get_storage_key_root( $field );
-
-		$wpdb->query( '
-			DELETE FROM ' . $wpdb->options . '
-			WHERE `option_name` LIKE "' . esc_sql( $storage_key ) . '%"
+			WHERE ' . $storage_key_comparisons . '
 		' );
 	}
 }

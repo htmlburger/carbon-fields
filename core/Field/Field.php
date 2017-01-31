@@ -351,9 +351,9 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Delete value from storage
-	 **/
+	 */
 	public function delete() {
-		return $this->get_datastore()->delete( $this );
+		$this->get_datastore()->delete( $this );
 	}
 
 	/**

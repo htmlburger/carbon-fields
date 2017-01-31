@@ -3,6 +3,7 @@
 namespace Carbon_Fields\Datastore;
 
 use Carbon_Fields\Field\Field;
+use Carbon_Fields\Value_Set\Value_Set;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -16,6 +17,31 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * Required to determine whether a field should use it's default value or stay blank
 	 **/
 	const KEEPALIVE_KEY = '_empty';
+
+	/**
+	 * Glue characters between segments in keys
+	 **/
+	const SEGMENT_GLUE = '|';
+
+	/**
+	 * Glue characters between segments values in keys
+	 **/
+	const SEGMENT_VALUE_GLUE = ':';
+
+	/**
+	 * Number of segments in a key
+	 **/
+	const TOTAL_SEGMENTS = 5;
+
+	/**
+	 * "Equal" storage key pattern comparison type constant
+	 **/
+	const PATTERN_COMPARISON_EQUAL = '=';
+
+	/**
+	 * "Starts with" storage key pattern comparison type constant
+	 **/
+	const PATTERN_COMPARISON_STARTS_WITH = '^';
 
 	/**
 	 * Return array of ancestors (ordered top-bottom) with the field name appended to the end
@@ -35,6 +61,29 @@ abstract class Key_Value_Datastore extends Datastore {
 	}
 
 	/**
+	 * Return whether the field is a root field and holds a single value
+	 **/
+	protected function is_simple_root_field( Field $field ) {
+		return (
+			empty( $field->get_hierarchy() )
+			&&
+			(
+				$field->value()->get_type() === Value_Set::TYPE_SINGLE_VALUE
+				||
+				$field->value()->get_type() === Value_Set::TYPE_MULTIPLE_KEYS
+			)
+		);
+	}
+
+	/**
+	 * Return a storage key for a simple root field
+	 **/
+	protected function get_storage_key_for_simple_root_field( Field $field ) {
+		$storage_key = '_' . $field->get_name();
+		return $storage_key;
+	}
+
+	/**
 	 * Return a storage key depending on which is the root field
 	 * Used to delete entire trees of values (Complex_Field)
 	 **/
@@ -45,7 +94,7 @@ abstract class Key_Value_Datastore extends Datastore {
 		$parents = $full_hierarchy;
 		$first_parent = array_shift( $parents );
 
-		$storage_key = '_' . $first_parent . '|';
+		$storage_key = '_' . $first_parent . static::SEGMENT_GLUE;
 
 		return $storage_key;
 	}
@@ -54,17 +103,17 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * Return a storage key up to the root and hierarchy segments
 	 * Used to get and delete multiple values for a single field
 	 **/
-	protected function get_storage_key_prefix_for_field( Field $field ) {
+	protected function get_storage_key_prefix( Field $field ) {
 		$full_hierarchy = $this->get_full_hierarchy_for_field( $field );
 		$full_hierarchy_index = $this->get_full_hierarchy_index_for_field( $field );
 
 		$parents = $full_hierarchy;
 		$first_parent = array_shift( $parents );
 
-		$storage_key = '_' . $first_parent . '|' . implode( ':', $parents ) . '|' . implode( ':', $full_hierarchy_index ) . '|';
+		$storage_key = '_' . $first_parent . static::SEGMENT_GLUE . implode( static::SEGMENT_VALUE_GLUE, $parents ) . static::SEGMENT_GLUE . implode( static::SEGMENT_VALUE_GLUE, $full_hierarchy_index ) . static::SEGMENT_GLUE;
 
 		// hash the parents array to avoid hitting key storage limits - downside is you cannot determine what is the field hierarchy from the key itself
-		// $storage_key_hashed = '_' . $first_parent . '|' . md5( implode( ':', $parents ) ) . '|' . implode( ':', $full_hierarchy_index ) . '|';
+		// $storage_key_hashed = '_' . $first_parent . static::SEGMENT_GLUE . md5( implode( static::SEGMENT_VALUE_GLUE, $parents ) ) . static::SEGMENT_GLUE . implode( static::SEGMENT_VALUE_GLUE, $full_hierarchy_index ) . static::SEGMENT_GLUE;
 
 		return $storage_key;
 	}
@@ -72,22 +121,83 @@ abstract class Key_Value_Datastore extends Datastore {
 	/**
 	 * Return a full storage key for a single field value
 	 **/
-	public function get_storage_key_for_field( Field $field, $value_group_index, $value_key ) {
-		$storage_key = $this->get_storage_key_prefix_for_field( $field ) . $value_group_index . '|' . $value_key;
+	public function get_storage_key( Field $field, $value_group_index, $value_key ) {
+		if ( $this->is_simple_root_field( $field ) && $value_key === Value_Set::VALUE_KEY ) {
+			return $this->get_storage_key_for_simple_root_field( $field );
+		}
+		$storage_key = $this->get_storage_key_prefix( $field ) . $value_group_index . static::SEGMENT_GLUE . $value_key;
 		return $storage_key;
+	}
+
+	public function get_storage_key_getter_patterns( Field $field ) {
+		$patterns = array();
+		
+		if ( $this->is_simple_root_field( $field ) ) {
+			$patterns[ $this->get_storage_key_for_simple_root_field( $field ) ] = static::PATTERN_COMPARISON_EQUAL;
+		}
+
+		$patterns[ $this->get_storage_key_prefix( $field ) ] = static::PATTERN_COMPARISON_STARTS_WITH;
+		return $patterns;
+	}
+
+	public function get_storage_key_deleter_patterns( Field $field ) {
+		$patterns = array();
+		
+		if ( $this->is_simple_root_field( $field ) ) {
+			$patterns[ $this->get_storage_key_for_simple_root_field( $field ) ] = static::PATTERN_COMPARISON_EQUAL;
+		}
+		
+		if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
+			$patterns[ $this->get_storage_key_root( $field ) ] = static::PATTERN_COMPARISON_STARTS_WITH;
+		} else {
+			$patterns[ $this->get_storage_key_prefix( $field ) ] = static::PATTERN_COMPARISON_STARTS_WITH;
+		}
+
+		return $patterns;
+	}
+
+	public function storage_key_patterns_to_sql( $column, $patterns ) {
+		$sql = array();
+
+		foreach ( $patterns as $storage_key => $type ) {
+			$comparison = '';
+			switch ( $type ) {
+				case static::PATTERN_COMPARISON_EQUAL:
+					$comparison = $column . ' = "' . esc_sql( $storage_key ) . '" ';
+					break;
+				case static::PATTERN_COMPARISON_STARTS_WITH:
+					$comparison = $column . ' LIKE "' . esc_sql( $storage_key ) . '%" ';
+					break;
+				default:
+					Incorrect_Syntax_Exception::raise( 'Unsupported storage key pattern type used: "' . $type . '"' );
+					break;
+			}
+
+			$sql[] = $comparison;
+		}
+
+		return ' ( ' . implode( ' OR ', $sql ) . ' ) ';
 	}
 
 	/**
 	 * Return a raw value set from an array of {key->..., value->...} objects such as the ones from query results
+	 *
+	 * @return array
 	 **/
 	protected function storage_array_to_raw_value_set( $storage_array ) {
 		$keepalive = false;
 		$raw_value_set = array();
 
 		foreach ( $storage_array as $row ) {
-			$pieces = explode( '|', $row->key );
-			$value_group = $pieces[ count( $pieces ) - 2 ];
-			$value_key = $pieces[ count( $pieces ) - 1 ];
+			$pieces = explode( static::SEGMENT_GLUE, $row->key );
+			$value_group = 0;
+			$value_key = Value_Set::VALUE_KEY;
+
+			if ( count( $pieces ) === static::TOTAL_SEGMENTS ) {
+				$value_group = $pieces[ count( $pieces ) - 2 ];
+				$value_key = $pieces[ count( $pieces ) - 1 ];
+			}
+
 			if ( $value_key == static::KEEPALIVE_KEY ) {
 				$keepalive = true;
 				continue;
@@ -114,9 +224,9 @@ abstract class Key_Value_Datastore extends Datastore {
 	protected abstract function get_storage_array_for_field( Field $field );
 
 	/**
-	 * Load the field value(s) from the database.
+	 * Load the field value(s)
 	 *
-	 * @param Field $field The field to retrieve value for.
+	 * @param Field $field The field to load value(s) in.
 	 */
 	public function load( Field $field ) {
 		$storage_array = $this->get_storage_array_for_field( $field );
@@ -133,7 +243,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	protected abstract function save_key_value_pair( $key, $value );
 
 	/**
-	 * Save the field value(s) into the database.
+	 * Save the field value(s)
 	 *
 	 * @param Field $field The field to save.
 	 */
@@ -144,12 +254,12 @@ abstract class Key_Value_Datastore extends Datastore {
 		}
 
 		if ( empty( $value_set ) && $field->value()->keepalive() ) {
-			$storage_key = $this->get_storage_key_for_field( $field, 0, static::KEEPALIVE_KEY );
+			$storage_key = $this->get_storage_key( $field, 0, static::KEEPALIVE_KEY );
 			$this->save_key_value_pair( $storage_key, '' );
 		}
 		foreach ( $value_set as $value_group_index => $values ) {
 			foreach ( $values as $value_key => $value ) {
-				$storage_key = $this->get_storage_key_for_field( $field, $value_group_index, $value_key );
+				$storage_key = $this->get_storage_key( $field, $value_group_index, $value_key );
 				$this->save_key_value_pair( $storage_key, $value );
 			}
 		}

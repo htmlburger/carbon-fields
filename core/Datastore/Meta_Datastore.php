@@ -21,13 +21,14 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 	protected function get_storage_array_for_field( Field $field ) {
 		global $wpdb;
 
-		$storage_key = $this->get_storage_key_prefix_for_field( $field );
+		$storage_key_patterns = $this->get_storage_key_getter_patterns( $field );
+		$storage_key_comparisons = $this->storage_key_patterns_to_sql( '`meta_key`', $storage_key_patterns );
 
 		$storage_array = $wpdb->get_results( '
 			SELECT `meta_key` AS `key`, `meta_value` AS `value`
 			FROM ' . $this->get_table_name() . '
 			WHERE `' . $this->get_table_field_name() . '` = ' . intval( $this->get_id() ) . '
-				AND `meta_key` LIKE "' . esc_sql( $storage_key ) . '%"
+				AND ' . $storage_key_comparisons . '
 			ORDER BY `meta_key` ASC
 		' );
 
@@ -47,36 +48,20 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 	}
 
 	/**
-	 * Delete the field value(s) from the database.
+	 * Delete the field value(s)
 	 *
 	 * @param Field $field The field to delete.
 	 */
 	public function delete( Field $field ) {
 		global $wpdb;
-		
-		$storage_key = $this->get_storage_key_prefix_for_field( $field );
+
+		$storage_key_patterns = $this->get_storage_key_deleter_patterns( $field );
+		$storage_key_comparisons = $this->storage_key_patterns_to_sql( '`meta_key`', $storage_key_patterns );
 
 		$wpdb->query( '
 			DELETE FROM ' . $this->get_table_name() . '
 			WHERE `' . $this->get_table_field_name() . '` = ' . intval( $this->get_id() ) . '
-				AND `meta_key` LIKE "' . esc_sql( $storage_key ) . '%"
-		' );
-	}
-
-	/**
-	 * Delete complex field value(s) from the database.
-	 *
-	 * @param mixed $field The field to delete values for.
-	 */
-	public function delete_values( Field $field ) {
-		global $wpdb;
-
-		$storage_key = $this->get_storage_key_root( $field );
-
-		$wpdb->query( '
-			DELETE FROM ' . $this->get_table_name() . '
-			WHERE `' . $this->get_table_field_name() . '` = ' . intval( $this->get_id() ) . '
-				AND `meta_key` LIKE "' . esc_sql( $storage_key ) . '%"
+				AND ' . $storage_key_comparisons . '
 		' );
 	}
 

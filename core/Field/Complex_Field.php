@@ -283,7 +283,10 @@ class Complex_Field extends Field {
 	 * Save all contained groups of fields.
 	 */
 	public function save() {
-		$this->delete();
+		// Only delete root field values as nested field values should be deleted in a cascading manner by the datastore
+		if ( empty( $this->get_hierarchy() ) ) {
+			$this->delete();
+		}
 		
 		$this->get_datastore()->save( $this );
 
@@ -297,18 +300,6 @@ class Complex_Field extends Field {
 				$field->save();
 			}
 		}
-	}
-
-	/**
-	 * Delete the values of all contained fields.
-	 */
-	public function delete() {
-		// only top complex fields can be deleted as they delete in a cascading manner
-		if ( empty( $this->get_hierarchy() ) ) {
-			$this->get_datastore()->delete_values( $this );
-			return true;
-		}
-		return false;
 	}
 
 	/**
