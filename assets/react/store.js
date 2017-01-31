@@ -27,6 +27,6 @@ saga.run(userMetaForeman);
 saga.run(themeOptionsForeman);
 saga.run(mediaBrowserForeman);
 saga.run(complexForeman);
-saga.run(wysiwygForeman);
+// saga.run(wysiwygForeman);
 
 export default store;
