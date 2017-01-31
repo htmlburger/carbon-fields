@@ -262,35 +262,75 @@ class Field implements Datastore_Holder_Interface {
 		add_action( 'admin_footer', array( get_class( $this ), 'admin_enqueue_scripts' ), 5 );
 	}
 
+	/**
+	 * Set clean field name suitable for use in hierarchy
+	 *
+	 * @return array
+	 **/
 	public function set_hierarchy_name( $hierarchy_name ) {
 		$this->hierarchy_name = $hierarchy_name;
 	}
 
+	/**
+	 * Get clean field name suitable for use in hierarchy
+	 *
+	 * @return array
+	 **/
 	public function get_hierarchy_name() {
 		return $this->hierarchy_name;
 	}
 
+	/**
+	 * Set array of hierarchy field names
+	 *
+	 * @return array
+	 **/
 	public function set_hierarchy( $hierarchy ) {
 		$this->hierarchy = $hierarchy;
 	}
 
+	/**
+	 * Get array of hierarchy field names
+	 *
+	 * @return array
+	 **/
 	public function get_hierarchy() {
 		return $this->hierarchy;
 	}
 
+	/**
+	 * Set array of hierarchy indexes
+	 *
+	 * @return array
+	 **/
 	public function set_hierarchy_index( $hierarchy_index ) {
 		$this->hierarchy_index = $hierarchy_index;
 	}
 
+	/**
+	 * Get array of hierarchy indexes
+	 *
+	 * @return array
+	 **/
 	public function get_hierarchy_index() {
 		return $this->hierarchy_index;
 	}
 
-	public function get_clone_under_field_in_hierarchy( $field, $parent_field, $entry_index = 0 ) {
-		$clone = clone $field;
-		$clone->set_hierarchy( array_merge( $parent_field->get_hierarchy(), array( $parent_field->get_hierarchy_name() ) ) );
-		$clone->set_hierarchy_index( array_merge( $parent_field->get_hierarchy_index(), array( $entry_index ) ) );
-		return $clone;
+	/**
+	 * Return whether the field is a root field and holds a single value
+	 *
+	 * @return bool
+	 **/
+	public function is_simple_root_field() {
+		return (
+			empty( $this->get_hierarchy() )
+			&&
+			(
+				$this->value()->get_type() === Value_Set::TYPE_SINGLE_VALUE
+				||
+				$this->value()->get_type() === Value_Set::TYPE_MULTIPLE_KEYS
+			)
+		);
 	}
 
 	/**

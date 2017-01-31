@@ -20,17 +20,8 @@ class Helper {
 	 */
 	public static function get_value( $object_id, $container_type, $field_name ) {
 		$repository = App::ioc( 'container_repository' );
-		$containers = $repository->get_containers( $container_type );
-		$container = null;
-		$field = null;
+		$field = $repository->get_field_in_containers( $field_name, $container_type, false );
 		$default_value = ''; // for consistency - get_post_meta returns an empty string when a meta key does not exist
-
-		foreach ( $containers as $c ) {
-			$field = $c->get_root_field_by_name( $field_name );
-			if ( $field ) {
-				break;
-			}
-		}
 
 		if ( !$field ) {
 			return $default_value;
@@ -110,9 +101,7 @@ class Helper {
 	}
 
 	/**************************************************
-	 *                                                *
 	 * LEGACY METHODS                                 *
-	 *                                                *
 	 **************************************************/
 
 	/**

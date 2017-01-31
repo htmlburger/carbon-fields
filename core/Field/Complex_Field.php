@@ -193,6 +193,18 @@ class Complex_Field extends Field {
 	}
 
 	/**
+	 * Return a clone of a field with hierarchy settings applied
+	 *
+	 * @return bool
+	 **/
+	public function get_clone_under_field_in_hierarchy( $field, $parent_field, $entry_index = 0 ) {
+		$clone = clone $field;
+		$clone->set_hierarchy( array_merge( $parent_field->get_hierarchy(), array( $parent_field->get_hierarchy_name() ) ) );
+		$clone->set_hierarchy_index( array_merge( $parent_field->get_hierarchy_index(), array( $entry_index ) ) );
+		return $clone;
+	}
+
+	/**
 	 * Load the field value from an input array based on it's name.
 	 *
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST

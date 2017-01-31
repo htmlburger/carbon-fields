@@ -45,6 +45,8 @@ abstract class Key_Value_Datastore extends Datastore {
 
 	/**
 	 * Return array of ancestors (ordered top-bottom) with the field name appended to the end
+	 *
+	 * @return array
 	 **/
 	protected function get_full_hierarchy_for_field( Field $field ) {
 		$full_hierarchy = array_merge( $field->get_hierarchy(), array( $field->get_hierarchy_name() ) );
@@ -54,6 +56,8 @@ abstract class Key_Value_Datastore extends Datastore {
 	/**
 	 * Return array of ancestor entry indexes (ordered top-bottom)
 	 * Indexes show which entry/group this field belongs to in a Complex_Field
+	 *
+	 * @return array
 	 **/
 	protected function get_full_hierarchy_index_for_field( Field $field ) {
 		$full_hierarchy_index = !empty( $field->get_hierarchy_index() ) ? $field->get_hierarchy_index() : array( 0 );
@@ -61,22 +65,9 @@ abstract class Key_Value_Datastore extends Datastore {
 	}
 
 	/**
-	 * Return whether the field is a root field and holds a single value
-	 **/
-	protected function is_simple_root_field( Field $field ) {
-		return (
-			empty( $field->get_hierarchy() )
-			&&
-			(
-				$field->value()->get_type() === Value_Set::TYPE_SINGLE_VALUE
-				||
-				$field->value()->get_type() === Value_Set::TYPE_MULTIPLE_KEYS
-			)
-		);
-	}
-
-	/**
 	 * Return a storage key for a simple root field
+	 *
+	 * @return string
 	 **/
 	protected function get_storage_key_for_simple_root_field( Field $field ) {
 		$storage_key = '_' . $field->get_name();
@@ -86,6 +77,8 @@ abstract class Key_Value_Datastore extends Datastore {
 	/**
 	 * Return a storage key depending on which is the root field
 	 * Used to delete entire trees of values (Complex_Field)
+	 *
+	 * @return string
 	 **/
 	protected function get_storage_key_root( Field $field ) {
 		$full_hierarchy = $this->get_full_hierarchy_for_field( $field );
@@ -102,6 +95,8 @@ abstract class Key_Value_Datastore extends Datastore {
 	/**
 	 * Return a storage key up to the root and hierarchy segments
 	 * Used to get and delete multiple values for a single field
+	 *
+	 * @return string
 	 **/
 	protected function get_storage_key_prefix( Field $field ) {
 		$full_hierarchy = $this->get_full_hierarchy_for_field( $field );
@@ -110,7 +105,13 @@ abstract class Key_Value_Datastore extends Datastore {
 		$parents = $full_hierarchy;
 		$first_parent = array_shift( $parents );
 
-		$storage_key = '_' . $first_parent . static::SEGMENT_GLUE . implode( static::SEGMENT_VALUE_GLUE, $parents ) . static::SEGMENT_GLUE . implode( static::SEGMENT_VALUE_GLUE, $full_hierarchy_index ) . static::SEGMENT_GLUE;
+		$storage_key = '_' . 
+			$first_parent . 
+			static::SEGMENT_GLUE . 
+			implode( static::SEGMENT_VALUE_GLUE, $parents ) . 
+			static::SEGMENT_GLUE . 
+			implode( static::SEGMENT_VALUE_GLUE, $full_hierarchy_index ) . 
+			static::SEGMENT_GLUE;
 
 		// hash the parents array to avoid hitting key storage limits - downside is you cannot determine what is the field hierarchy from the key itself
 		// $storage_key_hashed = '_' . $first_parent . static::SEGMENT_GLUE . md5( implode( static::SEGMENT_VALUE_GLUE, $parents ) ) . static::SEGMENT_GLUE . implode( static::SEGMENT_VALUE_GLUE, $full_hierarchy_index ) . static::SEGMENT_GLUE;
@@ -120,19 +121,57 @@ abstract class Key_Value_Datastore extends Datastore {
 
 	/**
 	 * Return a full storage key for a single field value
+	 *
+	 * @return string
 	 **/
 	public function get_storage_key( Field $field, $value_group_index, $value_key ) {
-		if ( $this->is_simple_root_field( $field ) && $value_key === Value_Set::VALUE_KEY ) {
+		if ( $field->is_simple_root_field() && $value_key === Value_Set::VALUE_KEY ) {
 			return $this->get_storage_key_for_simple_root_field( $field );
 		}
 		$storage_key = $this->get_storage_key_prefix( $field ) . $value_group_index . static::SEGMENT_GLUE . $value_key;
 		return $storage_key;
 	}
 
+	/**
+	 * Return a full storage key with optional wildcards for entry and value indexes
+	 *
+	 * @return string
+	 **/
+	public function get_storage_key_with_index_wildcards( Field $field, $value_key = Value_Set::VALUE_KEY, $wildcard = '%' ) {
+		if ( $field->is_simple_root_field() && $value_key === Value_Set::VALUE_KEY ) {
+			return $this->get_storage_key_for_simple_root_field( $field );
+		}
+
+		$full_hierarchy = $this->get_full_hierarchy_for_field( $field );
+
+		$parents = $full_hierarchy;
+		$first_parent = array_shift( $parents );
+
+		$hierarchy_index = !empty( $field->get_hierarchy() ) ? $wildcard : '0';
+		$value_group_index = $wildcard;
+
+		$storage_key = '_' . 
+			$first_parent . 
+			static::SEGMENT_GLUE . 
+			implode( static::SEGMENT_VALUE_GLUE, $parents ) . 
+			static::SEGMENT_GLUE . 
+			$hierarchy_index . 
+			static::SEGMENT_GLUE . 
+			$value_group_index . 
+			static::SEGMENT_GLUE . 
+			$value_key;
+		return $storage_key;
+	}
+
+	/**
+	 * Return an array of storage key patterns for use when getting values from storage
+	 *
+	 * @return array
+	 **/
 	public function get_storage_key_getter_patterns( Field $field ) {
 		$patterns = array();
 		
-		if ( $this->is_simple_root_field( $field ) ) {
+		if ( $field->is_simple_root_field() ) {
 			$patterns[ $this->get_storage_key_for_simple_root_field( $field ) ] = static::PATTERN_COMPARISON_EQUAL;
 		}
 
@@ -140,10 +179,15 @@ abstract class Key_Value_Datastore extends Datastore {
 		return $patterns;
 	}
 
+	/**
+	 * Return an array of storage key patterns for use when deleting values from storage
+	 *
+	 * @return array
+	 **/
 	public function get_storage_key_deleter_patterns( Field $field ) {
 		$patterns = array();
 		
-		if ( $this->is_simple_root_field( $field ) ) {
+		if ( $field->is_simple_root_field() ) {
 			$patterns[ $this->get_storage_key_for_simple_root_field( $field ) ] = static::PATTERN_COMPARISON_EQUAL;
 		}
 		
@@ -156,6 +200,11 @@ abstract class Key_Value_Datastore extends Datastore {
 		return $patterns;
 	}
 
+	/**
+	 * Convert an array of storage key patterns to a parentheses-enclosed sql comparison
+	 *
+	 * @return string
+	 **/
 	public function storage_key_patterns_to_sql( $column, $patterns ) {
 		$sql = array();
 

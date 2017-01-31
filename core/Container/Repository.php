@@ -84,6 +84,32 @@ class Repository {
 	}
 
 	/**
+	 * Return field in containers
+	 *
+	 * @param string $field_name
+	 * @param string $container_type Container type to filter for
+	 * @param bool $include_nested_fields Search in nested fields as well
+	 * @return array
+	 **/
+	public function get_field_in_containers( $field_name, $container_type = null, $include_nested_fields = true ) {
+		$containers = $this->get_containers( $container_type );
+		$field = null;
+
+		foreach ( $containers as $c ) {
+			if ( $include_nested_fields ) {
+				$field = $c->get_field_by_name( $field_name );
+			} else {
+				$field = $c->get_root_field_by_name( $field_name );
+			}
+			if ( $field ) {
+				break;
+			}
+		}
+
+		return $field;
+	}
+
+	/**
 	 * Return all currently active containers
 	 *
 	 * @return array
