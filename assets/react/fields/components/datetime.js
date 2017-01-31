@@ -19,24 +19,27 @@ import withSetup from 'fields/decorators/with-setup';
  * @param  {Object}   props
  * @param  {String}   props.name
  * @param  {Object}   props.field
+ * @param  {String}   props.picker
  * @param  {Function} props.handleChange
  * @return {React.Element}
  *
  * TODO: Fix the layout of the button.
  * TODO: Fix the translation of the button's text.
  */
-export const TimeField = ({ name, field, options, handleChange }) => {
-	return <div className="carbon-field-group">
-		<DateTimePicker type={field.timepicker_type} options={options}>
-			<input
-				type="text"
-				id={field.id}
-				name={name}
-				value={field.value}
-				className="regular-text carbon-field-group-input carbon-timepicker"
-				onChange={handleChange} />
-		</DateTimePicker>
-	</div>;
+export const DateTimeField = ({ name, field, picker, options, handleChange }) => {
+	return <Field field={field}>
+		<div className="carbon-field-group">
+			<DateTimePicker type={picker} options={options}>
+				<input
+					type="text"
+					id={field.id}
+					name={name}
+					value={field.value}
+					className="regular-text carbon-field-group-input"
+					onChange={handleChange} />
+			</DateTimePicker>
+		</div>
+	</Field>;
 };
 
 /**
@@ -44,7 +47,7 @@ export const TimeField = ({ name, field, options, handleChange }) => {
  *
  * @type {Object}
  */
-TimeField.propTypes = {
+DateTimeField.propTypes = {
 	name: PropTypes.string.isRequired,
 	field: PropTypes.shape({
 		id: PropTypes.string.isRequired,
@@ -63,19 +66,33 @@ TimeField.propTypes = {
  * @return {Object}
  */
 const props = ({ field, handleChange }) => {
-	return {
-		options: {
-			...{
-				timeFormat: field.time_format,
-				showTime: false,
-			},
+	if (field.timepicker_options) {
+		return {
+			picker: field.timepicker_type,
+			options: {
+				...{
+					timeFormat: field.time_format,
+					showTime: false,
+				},
 
-			...field.interval_step,
-			...field.restraints,
-			...field.timepicker_options,
-			
+				...field.interval_step,
+				...field.restraints,
+				...field.timepicker_options,
+
+				...{
+					buttonText: 'Select Time',
+					onSelect: handleChange,
+				},
+			},
+		};
+	} 
+
+	return {
+		picker: 'datepicker',
+		options: {
+			...field.options,
 			...{
-				buttonText: 'Select Time',
+				buttonText: 'Select Date',
 				onSelect: handleChange,
 			},
 		},
@@ -107,4 +124,4 @@ export default compose(
 	withSetup(),
 	withHandlers({ handleChange }),
 	withProps(props)
-)(TimeField);
+)(DateTimeField);
