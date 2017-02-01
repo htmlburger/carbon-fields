@@ -32,7 +32,7 @@ class Meta_Query_Service {
 	 */
 	public function disable() {
 		remove_filter( 'get_meta_sql', array( $this, 'filter_get_meta_sql' ) );
-		
+
 		remove_action( 'pre_get_posts', array( $this, 'hook_pre_get_posts' ) );
 		remove_action( 'pre_get_terms', array( $this, 'hook_pre_get_terms' ) );
 		remove_action( 'pre_get_users', array( $this, 'hook_pre_get_users' ) );
@@ -43,12 +43,12 @@ class Meta_Query_Service {
 	 *
 	 * @return array
 	 */
-	protected function filter_meta_query_array( $condition ) {
+	protected function filter_meta_query_array( $condition, $container_type ) {
 		if ( is_array( $condition ) ) {
 			if ( isset( $condition['key'] ) ) {
 				$repository = \Carbon_Fields\App::ioc( 'container_repository' );
 				$field_name = (substr( $condition['key'], 0, 1) === '_') ? substr( $condition['key'], 1 ) : $condition['key'];
-				$field = $repository->get_field_in_containers( $field_name, 'Post_Meta' );
+				$field = $repository->get_field_in_containers( $field_name, $container_type );
 
 				if ( $field !== null && !$field->is_simple_root_field() ) {
 					$storage_key = $field->get_datastore()->get_storage_key_with_index_wildcards( $field );
@@ -57,7 +57,7 @@ class Meta_Query_Service {
 			} else {
 				// we are dealing with a nested array - recurse
 				foreach ( $condition as $key => $value ) {
-					$condition[ $key ] = $this->filter_meta_query_array( $value );
+					$condition[ $key ] = $this->filter_meta_query_array( $value, $container_type );
 				}
 			}
 		}
@@ -86,7 +86,7 @@ class Meta_Query_Service {
 	public function hook_pre_get_posts( $query ) {
 		$meta_query = $query->get('meta_query');
 		if ( !empty( $meta_query ) ) {
-			$meta_query = $this->filter_meta_query_array( $meta_query );
+			$meta_query = $this->filter_meta_query_array( $meta_query, 'Post_Meta' );
 			$query->set( 'meta_query', $meta_query );
 		}
 	}
@@ -101,7 +101,7 @@ class Meta_Query_Service {
 	public function hook_pre_get_terms( $query ) {
 		$meta_query = !empty( $query->query_vars['meta_query'] ) ? $query->query_vars['meta_query'] : array();
 		if ( !empty( $meta_query ) ) {
-			$meta_query = $this->filter_meta_query_array( $meta_query );
+			$meta_query = $this->filter_meta_query_array( $meta_query, 'Term_Meta' );
 			$query->query_vars['meta_query'] = $meta_query;
 		}
 	}
@@ -116,7 +116,7 @@ class Meta_Query_Service {
 	public function hook_pre_get_users( $query ) {
 		$meta_query = $query->get('meta_query');
 		if ( !empty( $meta_query ) ) {
-			$meta_query = $this->filter_meta_query_array( $meta_query );
+			$meta_query = $this->filter_meta_query_array( $meta_query, 'User_Meta' );
 			$query->set( 'meta_query', $meta_query );
 		}
 	}
