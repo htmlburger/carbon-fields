@@ -2,12 +2,14 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose } from 'recompose';
+import { compose, withHandlers } from 'recompose';
+import { isString } from 'lodash';
 
 /**
  * The internal dependencies.
  */
 import Field from 'fields/components/field';
+import RichTextEditor from 'fields/components/rich-text-editor';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 
@@ -19,21 +21,55 @@ import withSetup from 'fields/decorators/with-setup';
  * @param  {Object} props.field
  * @return {React.Element}
  */
-export const RichTextField = ({ name, field }) => {
+export const RichTextField = ({ name, field, handleChange }) => {
 	return <Field field={field}>
-		<div id={`wp-${field.id}-wrap`} className="carbon-wysiwyg wp-editor-wrap tmce-active" data-toolbar="full">
-			<div id={`wp-${field.id}-editor-container`} className="wp-editor-container">
-				<textarea
-					id={field.id}
-					className="wp-editor-area"
-					name={name}
-					value={field.value} />
-			</div>
-		</div>
+		<RichTextEditor id={field.id} onChange={handleChange}>
+			<textarea
+				id={field.id}
+				className="wp-editor-area"
+				name={name}
+				defaultValue={field.value}
+				onChange={handleChange} />
+		</RichTextEditor>
 	</Field>;
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+RichTextField.propTypes = {
+	name: PropTypes.string.isRequired,
+	field: PropTypes.shape({
+		id: PropTypes.string.isRequired,
+		value: PropTypes.string.isRequired,
+	}).isRequired,
+	handleChange: PropTypes.func.isRequired,
+};
+
+/**
+ * Sync the input value with the store.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.updateField
+ * @return {Function}
+ */
+const handleChange = ({ field, updateField }) => eventOrValue => {
+	let value;
+
+	if (isString(eventOrValue)) {
+		value = eventOrValue;
+	} else {
+		value = eventOrValue.target.value;
+	}
+
+	updateField(field.id, { value });
 };
 
 export default compose(
 	withStore(),
-	withSetup()
+	withSetup(),
+	withHandlers({ handleChange })
 )(RichTextField);
