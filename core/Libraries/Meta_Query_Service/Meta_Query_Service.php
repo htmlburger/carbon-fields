@@ -16,22 +16,26 @@ class Meta_Query_Service {
 	 * Enable meta query filtering
 	 */
 	public function enable() {
+		$meta_sql_filter = array( $this, 'filter_get_meta_sql' );
+		if ( has_filter( 'get_meta_sql', $meta_sql_filter ) ) {
+			return; // already enabled
+		}
+		add_filter( 'get_meta_sql', $meta_sql_filter, 10, 1 );
+
 		add_action( 'pre_get_posts', array( $this, 'hook_pre_get_posts' ) );
 		add_action( 'pre_get_terms', array( $this, 'hook_pre_get_terms' ) );
 		add_action( 'pre_get_users', array( $this, 'hook_pre_get_users' ) );
-
-		add_filter( 'get_meta_sql', array( $this, 'filter_get_meta_sql' ), 10, 1 );
 	}
 
 	/**
 	 * Disable meta query filtering
 	 */
 	public function disable() {
+		remove_filter( 'get_meta_sql', array( $this, 'filter_get_meta_sql' ) );
+		
 		remove_action( 'pre_get_posts', array( $this, 'hook_pre_get_posts' ) );
 		remove_action( 'pre_get_terms', array( $this, 'hook_pre_get_terms' ) );
 		remove_action( 'pre_get_users', array( $this, 'hook_pre_get_users' ) );
-		
-		remove_filter( 'get_meta_sql', array( $this, 'filter_get_meta_sql' ) );
 	}
 
 	/**
