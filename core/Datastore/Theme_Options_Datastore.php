@@ -3,6 +3,7 @@
 namespace Carbon_Fields\Datastore;
 
 use Carbon_Fields\Field\Field;
+use Carbon_Fields\Libraries\Legacy_Storage_Service\Legacy_Storage_Service;
 
 /**
  * Theme options datastore class.
@@ -30,6 +31,10 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 			WHERE ' . $storage_key_comparisons . '
 			ORDER BY `option_name` ASC
 		' );
+
+		if ( empty( $storage_array ) ) {
+			$storage_array = \Carbon_Fields\App::ioc( 'legacy_storage_service' )->get_storage_array_for_patterns( $this, $storage_key_patterns );
+		}
 
 		return $storage_array;
 	}

@@ -7,7 +7,6 @@ use \Carbon_Fields\Container\Repository as ContainerRepository;
 use \Carbon_Fields\Templater\Templater;
 use \Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 use \Carbon_Fields\Libraries\Meta_Query_Service\Meta_Query_Service;
-use \Carbon_Fields\Libraries\Legacy_Migrator_Service\Legacy_Migrator_Service;
 use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -23,12 +22,11 @@ class Loader {
 	
 	protected $meta_query_service;
 
-	public function __construct( Templater $templater, Sidebar_Manager $sidebar_manager, ContainerRepository $container_repository, Meta_Query_Service $meta_query_service, Legacy_Migrator_Service $legacy_migrator_service ) {
+	public function __construct( Templater $templater, Sidebar_Manager $sidebar_manager, ContainerRepository $container_repository, Meta_Query_Service $meta_query_service ) {
 		$this->templater = $templater;
 		$this->sidebar_manager = $sidebar_manager;
 		$this->container_repository = $container_repository;
 		$this->meta_query_service = $meta_query_service;
-		$this->legacy_migrator_service = $legacy_migrator_service;
 	}
 
 	/**
@@ -62,9 +60,6 @@ class Loader {
 
 		# Enable the meta query service
 		$this->meta_query_service->enable();
-
-		# Initialize the legacy migrator service
-		$this->legacy_migrator_service->boot();
 	}
 
 	/**

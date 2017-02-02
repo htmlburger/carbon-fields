@@ -8,7 +8,7 @@ use \Carbon_Fields\Container\Repository as ContainerRepository;
 use \Carbon_Fields\Templater\Templater;
 use \Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 use \Carbon_Fields\Libraries\Meta_Query_Service\Meta_Query_Service;
-use \Carbon_Fields\Libraries\Legacy_Migrator_Service\Legacy_Migrator_Service;
+use \Carbon_Fields\Libraries\Legacy_Storage_Service\Legacy_Storage_Service;
 
 /**
  * Holds a static reference to the ioc container
@@ -30,7 +30,7 @@ class App {
 		$ioc = new PimpleContainer();
 
 		$ioc['loader'] = function( $c ) {
-			return new Loader( $c['templater'], $c['sidebar_manager'], $c['container_repository'], $c['meta_query_service'], $c['legacy_migrator_service'] );
+			return new Loader( $c['templater'], $c['sidebar_manager'], $c['container_repository'], $c['meta_query_service'] );
 		};
 
 		$ioc['container_repository'] = function( $c ) {
@@ -49,8 +49,8 @@ class App {
 			return new Meta_Query_Service();
 		};
 
-		$ioc['legacy_migrator_service'] = function( $c ) {
-			return new Legacy_Migrator_Service( $c['container_repository'] );
+		$ioc['legacy_storage_service'] = function( $c ) {
+			return new Legacy_Storage_Service( $c['container_repository'] );
 		};
 
 		return $ioc;

@@ -32,6 +32,10 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 			ORDER BY `meta_key` ASC
 		' );
 
+		if ( true || empty( $storage_array ) ) {
+			$storage_array = \Carbon_Fields\App::ioc( 'legacy_storage_service' )->get_storage_array_for_patterns( $this, $storage_key_patterns );
+		}
+
 		return $storage_array;
 	}
 
