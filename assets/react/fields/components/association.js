@@ -9,7 +9,7 @@ import { cloneDeep, without } from 'lodash';
  * The internal dependencies.
  */
 import Field from 'fields/components/field';
-import AssociationSearch from 'fields/components/association-search';
+import SearchInput from 'fields/components/search-input';
 import AssociationList from 'fields/components/association-list';
 
 import withStore from 'fields/decorators/with-store';
@@ -65,7 +65,7 @@ export const AssociationField = ({
 				</strong>
 			</div>
 
-			<AssociationSearch
+			<SearchInput
 				term={term}
 				onChange={setTerm} />
 
