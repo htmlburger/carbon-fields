@@ -26,6 +26,7 @@ export function normalizePreloadedState(state) {
 	});
 
 	fields = keyBy(fields, 'id');
+	sidebars = keyBy(sidebars, 'id');
 
 	return { containers, sidebars, fields };
 }
