@@ -2,15 +2,17 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose, withHandlers } from 'recompose'; 
+import { compose, withHandlers } from 'recompose';
 
 /**
  * The internal dependencies.
  */
 import Field from 'fields/components/field';
+import SearchInput from 'fields/components/search-input';
 import GoogleMap from 'fields/components/google-map';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { geocodeAddress } from 'fields/actions';
 
 /**
  * Render a Google-powered map with an address search field.
@@ -19,21 +21,27 @@ import withSetup from 'fields/decorators/with-setup';
  * @param  {String}   props.name
  * @param  {Object}   props.field
  * @param  {Function} props.handleChange
+ * @param  {Function} props.handleSearchSubmit
  * @return {React.Element}
  *
  * TODO: Fix the translation.
  */
-const MapField = ({ name, field, handleChange }) => {
+const MapField = ({ name, field, handleChange, handleSearchSubmit }) => {
 	return <Field field={field}>
 		<div className="carbon-map-search">
 			<p>Locate address on the map:</p>
+
+			<SearchInput
+				name={`${name}[address]`}
+				term={field.address}
+				onSubmit={handleSearchSubmit} />
 
 			<input type="hidden" name={`${name}[lat]`} value={field.lat} readOnly />
 			<input type="hidden" name={`${name}[lng]`} value={field.lng} readOnly />
 			<input type="hidden" name={`${name}[zoom]`} value={field.zoom} readOnly />
 		</div>
 
-		<GoogleMap 
+		<GoogleMap
 			className="carbon-map-canvas"
 			lat={field.lat}
 			lng={field.lng}
@@ -53,8 +61,18 @@ MapField.propTypes = {
 		lat: PropTypes.number.isRequired,
 		lng: PropTypes.number.isRequired,
 		zoom: PropTypes.number.isRequired,
+		address: PropTypes.string.isRequired,
 	}).isRequired,
 	handleChange: PropTypes.func.isRequired,
+};
+
+/**
+ * The additional actions that will be passed to the component.
+ *
+ * @type {Object}
+ */
+const mapDispatchToProps = {
+	geocodeAddress,
 };
 
 /**
@@ -67,9 +85,18 @@ MapField.propTypes = {
  */
 const handleChange = ({ field, updateField }) => data => updateField(field.id, data);
 
-export default compose(
-	withStore(),
-	withSetup(),
-	withHandlers({ handleChange })
-)(MapField);
+/**
+ * Handle the submission of the search input.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.geocodeAddress
+ * @return {Function}
+ */
+const handleSearchSubmit = ({ field, geocodeAddress }) => address => geocodeAddress(field.id, address);
 
+export default compose(
+	withStore(undefined, mapDispatchToProps),
+	withSetup(),
+	withHandlers({ handleChange, handleSearchSubmit })
+)(MapField);

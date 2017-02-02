@@ -97,3 +97,12 @@ export const cloneComplexGroup = createAction('fields/CLONE_COMPLEX_GROUP', (fie
  */
 export const REMOVE_COMPLEX_GROUP = 'fields/REMOVE_COMPLEX_GROUP';
 export const removeComplexGroup = createAction(REMOVE_COMPLEX_GROUP, (fieldId, groupId) => ({ fieldId, groupId }));
+
+/**
+ * Process the address through Google's geocoding service.
+ * 
+ * @param  {String} fieldId
+ * @param  {String} address
+ * @return {Object}
+ */
+export const geocodeAddress = createAction('fields/GEOCODE_ADDRESS', (fieldId, address) => ({ fieldId, address }));

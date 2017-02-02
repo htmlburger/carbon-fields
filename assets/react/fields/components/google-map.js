@@ -7,7 +7,7 @@ import ReactDOM from 'react-dom';
 class GoogleMap extends React.Component {
 	/**
 	 * Lifecycle hook.
-	 * 
+	 *
 	 * @return {void}
 	 */
 	componentDidMount() {
@@ -18,8 +18,46 @@ class GoogleMap extends React.Component {
 	}
 
 	/**
+	 * Lifecycle hook.
+	 *
+	 * @param  {Object} nextProps
+	 * @return {void}
+	 */
+	componentWillReceiveProps(nextProps) {
+		if (this.marker) {
+			const { lat, lng, zoom } = nextProps;
+			const markerLat = this.marker.getPosition().lat();
+			const markerLng = this.marker.getPosition().lng();
+			const mapZoom = this.map.getZoom();
+
+			if (lat !== markerLat|| lng !== markerLng) {
+				const location = new google.maps.LatLng(lat, lng);
+
+				this.marker.setPosition(location);
+				this.map.setCenter(location);
+			}
+
+			if (zoom !== mapZoom) {
+				this.map.setZoom(zoom);
+			}
+		}
+	}
+
+	/**
+	 * Lifecycle hook.
+	 *
+	 * @return {Boolean}
+	 */
+	shouldComponentUpdate() {
+		// The component is a wrapper around Google Maps instance
+		// and we don't need to re-render it, because the map is updated
+		// manually.
+		return false;
+	}
+
+	/**
 	 * Render the placeholder for the map.
-	 * 
+	 *
 	 * @return {React.Element}
 	 */
 	render() {
@@ -28,7 +66,7 @@ class GoogleMap extends React.Component {
 
 	/**
 	 * Initialize the map into placeholder element.
-	 * 
+	 *
 	 * @return {void}
 	 */
 	initMap() {
@@ -51,7 +89,7 @@ class GoogleMap extends React.Component {
 
 	/**
 	 * Add the listeners for the map's events.
-	 * 
+	 *
 	 * @return {void}
 	 */
 	setupMapEvents() {
