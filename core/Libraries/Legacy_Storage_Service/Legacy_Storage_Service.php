@@ -7,21 +7,42 @@ use \Carbon_Fields\Container\Container;
 use \Carbon_Fields\Container\Repository as ContainerRepository;
 use \Carbon_Fields\Datastore\Datastore;
 use \Carbon_Fields\Datastore\Key_Value_Datastore;
-use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /*
  * Service which provides the ability to do meta queries for multi-value fields and nested fields
  */
 class Legacy_Storage_Service {
 
+	/**
+	 * Contaier repository to fetch fields from
+	 * 
+	 * @var ContainerRepository
+	 */
 	protected $container_repository;
 
+	/**
+	 * List of special key suffixes that the Map field uses so save extra data
+	 * 
+	 * @var array
+	 */
 	protected $map_keys = array( 'lat', 'lng', 'zoom', 'address' );
 
+	/**
+	 * Service constructor
+	 * 
+	 * @param ContainerRepository $container_repository
+	 */
 	public function __construct( ContainerRepository $container_repository ) {
 		$this->container_repository = $container_repository;
 	}
 
+	/**
+	 * Return container instance which uses the passed datastore
+	 * 
+	 * @param  Datastore $datastore
+	 * @return Container
+	 */
 	protected function get_container_for_datastore( Datastore $datastore ) {
 		$containers = $this->container_repository->get_containers();
 		foreach ( $containers as $container ) {
@@ -32,7 +53,49 @@ class Legacy_Storage_Service {
 		return null;
 	}
 
-	protected function get_field_storage_array( Datastore $datastore ) {
+	/**
+	 * Get a nested array of field_group permutations suitable for old key parsing
+	 * 
+	 * @param  array $fields
+	 * @return array
+	 */
+	protected function get_field_group_permutations( $fields ) {
+		$permutations = array();
+
+		foreach ( $fields as $field ) {
+			if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
+
+				$group_names = $field->get_group_names();
+				foreach ( $group_names as $group_name ) {
+					$group = $field->get_group_by_name( $group_name );
+					if ( !$group ) {
+						continue;
+					}
+					$permutations[] = array(
+						'field'=>$field->get_hierarchy_name(),
+						'group'=>$group_name,
+						'children'=>$this->get_field_group_permutations( $group->get_fields() ),
+					);
+				}
+			} else {
+				$permutations[] = array(
+					'field'=>$field->get_hierarchy_name(),
+					'group'=>'',
+					'children'=>array(),
+				);
+			}
+		}
+
+		return $permutations;
+	}
+
+	/**
+	 * Get a key-value array of CF 1.5 values for fields in the container of the passed datastore
+	 * 
+	 * @param  Datastore $datastore
+	 * @return array
+	 */
+	protected function get_legacy_storage_array( Datastore $datastore ) {
 		global $wpdb;
 
 		$prefix = '_';
@@ -103,59 +166,16 @@ class Legacy_Storage_Service {
 		return $results;
 	}
 
-	protected function get_storage_data_for_datastore( Datastore $datastore ) {
-		$storage_array = $this->get_field_storage_array( $datastore );
-		if ( empty( $storage_array ) ) {
-			return array(); // no migration data found
-		}
-
-		$container = $this->get_container_for_datastore( $datastore );
-		$field_group_permutations = $this->get_field_group_permutations( $container->get_fields() );
-
-		$row_descriptors = array();
-		foreach ( $storage_array as $key => $value ) {
-			$row_descriptors = array_merge( $row_descriptors, $this->storage_row_to_value_descriptor( $field_group_permutations, $key, $value, $storage_array ) );
-		}
-
-		$new_storage_data = array();
-		foreach ( $row_descriptors as $row_descriptor ) {
-			$new_storage_data = array_merge( $new_storage_data, $this->row_descriptor_to_new_storage_data( $row_descriptor ) );
-		}
-
-		return $new_storage_data;
-	}
-
-	protected function get_field_group_permutations( $fields ) {
-		$permutations = array();
-
-		foreach ( $fields as $field ) {
-			if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
-
-				$group_names = $field->get_group_names();
-				foreach ( $group_names as $group_name ) {
-					$group = $field->get_group_by_name( $group_name );
-					if ( !$group ) {
-						continue;
-					}
-					$permutations[] = array(
-						'field'=>$field->get_hierarchy_name(),
-						'group'=>$group_name,
-						'children'=>$this->get_field_group_permutations( $group->get_fields() ),
-					);
-				}
-			} else {
-				$permutations[] = array(
-					'field'=>$field->get_hierarchy_name(),
-					'group'=>'',
-					'children'=>array(),
-				);
-			}
-		}
-
-		return $permutations;
-	}
-
-	protected function storage_row_to_value_descriptor( $field_group_permutations, $key, $value, $all_rows ) {
+	/**
+	 * Convert old storage row to value descriptor
+	 * 
+	 * @param  array $field_group_permutations
+	 * @param  string $key
+	 * @param  string $value
+	 * @param  array $all_rows
+	 * @return array
+	 */
+	protected function legacy_storage_row_to_value_descriptor( $field_group_permutations, $key, $value, $all_rows ) {
 		$map_regex = array_map( function( $key ) {
 			return preg_quote( $key, '/' );
 		}, $this->map_keys );
@@ -232,8 +252,14 @@ class Legacy_Storage_Service {
 		);
 	}
 
-	protected function row_descriptor_to_new_storage_data( $row_descriptor ) {
-		$storage_data = array();
+	/**
+	 * Convert row descriptor to array of new storage key-values
+	 * 
+	 * @param  array $row_descriptor
+	 * @return array
+	 */
+	protected function row_descriptor_to_storage_array( $row_descriptor ) {
+		$storage_array = array();
 
 		$hierarchy = array_map( function( $match ) {
 			return $match['field'];
@@ -250,7 +276,7 @@ class Legacy_Storage_Service {
 
 			$key = $this->field_data_to_storage_key( array_slice( $hierarchy, 0, $level + 1 ), $complex_parent_hierarchy_index, $complex_parent_value_index );
 			$group_name = $row_descriptor['key']['fields'][ $level ]['group'];
-			$storage_data[ $key ] = $group_name;
+			$storage_array[ $key ] = $group_name;
 		}
 
 		$value = maybe_unserialize( $row_descriptor['value'] );
@@ -259,13 +285,13 @@ class Legacy_Storage_Service {
 			if ( isset( $value['value'] ) ) {
 				foreach ( $value as $value_key => $value_item ) {
 					$key = $this->field_data_to_storage_key( $hierarchy, $hierarchy_index, 0, $value_key );
-					$storage_data[ $key ] = $value_item;
+					$storage_array[ $key ] = $value_item;
 				}
 			} else {
 				$i = 0;
 				foreach ( $value as $value_item ) {
 					$key = $this->field_data_to_storage_key( $hierarchy, $hierarchy_index, $i );
-					$storage_data[ $key ] = $value_item;
+					$storage_array[ $key ] = $value_item;
 					$i++;
 				}
 			}
@@ -273,17 +299,25 @@ class Legacy_Storage_Service {
 			if ( count( $hierarchy ) === 1 ) {
 				// Add a basic key as well as simple root fields will load that instead
 				$key = '_' . $hierarchy[0];
-				$storage_data[ $key ] = $row_descriptor['value'];
+				$storage_array[ $key ] = $row_descriptor['value'];
 			}
 
 			$key = $this->field_data_to_storage_key( $hierarchy, $hierarchy_index );
-			$storage_data[ $key ] = $row_descriptor['value'];
+			$storage_array[ $key ] = $row_descriptor['value'];
 		}
 
-
-		return $storage_data;
+		return $storage_array;
 	}
 
+	/**
+	 * Convert field data to a new storage key
+	 * 
+	 * @param  array  $hierarchy
+	 * @param  array  $hierarchy_index
+	 * @param  integer $value_index
+	 * @param  string  $value_key
+	 * @return string
+	 */
 	protected function field_data_to_storage_key( $hierarchy, $hierarchy_index, $value_index = 0, $value_key = 'value' ) {
 		$first_parent = $hierarchy[0];
 		$parents = array_slice( $hierarchy, 1 );
@@ -297,6 +331,13 @@ class Legacy_Storage_Service {
 		return $key;
 	}
 
+	/**
+	 * Check if a storage key matches any comparison pattern
+	 * 
+	 * @param  string $storage_key
+	 * @param  array $patterns
+	 * @return boolean
+	 */
 	protected function storage_key_matches_any_pattern( $storage_key, $patterns ) {
 		foreach ( $patterns as $key => $type ) {
 			switch ( $type ) {
@@ -316,15 +357,49 @@ class Legacy_Storage_Service {
 					break;
 			}
 		}
-
 		return false;
 	}
 
+	/**
+	 * Get all data saved for a datastore in the new key-value format
+	 * 
+	 * @param  Datastore $datastore
+	 * @return array
+	 */
+	protected function get_storage_array( Datastore $datastore ) {
+		$storage_array = $this->get_legacy_storage_array( $datastore );
+		if ( empty( $storage_array ) ) {
+			return array(); // no migration data found
+		}
+
+		$container = $this->get_container_for_datastore( $datastore );
+		$field_group_permutations = $this->get_field_group_permutations( $container->get_fields() );
+
+		$row_descriptors = array();
+		foreach ( $storage_array as $key => $value ) {
+			$row_descriptors = array_merge( $row_descriptors, $this->legacy_storage_row_to_value_descriptor( $field_group_permutations, $key, $value, $storage_array ) );
+		}
+
+		$new_storage_array = array();
+		foreach ( $row_descriptors as $row_descriptor ) {
+			$new_storage_array = array_merge( $new_storage_array, $this->row_descriptor_to_storage_array( $row_descriptor ) );
+		}
+
+		return $new_storage_array;
+	}
+
+	/**
+	 * Get array of new storage key-values matching key patterns
+	 * 
+	 * @param  Datastore $datastore
+	 * @param  array $storage_key_patterns
+	 * @return array
+	 */
 	public function get_storage_array_for_patterns( Datastore $datastore, $storage_key_patterns ) {
-		$storage_data = $this->get_storage_data_for_datastore( $datastore );
+		$storage_array = $this->get_storage_array( $datastore );
 
 		$matched_data = array();
-		foreach ( $storage_data as $key => $value ) {
+		foreach ( $storage_array as $key => $value ) {
 			if ( $this->storage_key_matches_any_pattern( $key, $storage_key_patterns ) ) {
 				$matched_data[] = (object) array(
 					'key'=>$key,
