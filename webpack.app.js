@@ -108,25 +108,25 @@ module.exports = {
 
 	// Setup the transformation of the modules.
 	module: {
-		loaders: [
+		rules: [
 			// Process JS with Babel.
 			{
 				test: /\.js$/,
-				loader: 'babel',
-				query: {
+				loader: 'babel-loader',
+				options: {
 					// Enable caching results for faster rebuilds.
 					cacheDirectory: true
-				}
+				},
+				exclude: /node_modules/
 			}
 		]
 	},
 
 	// Add aliases for easier importing of the modules.
 	resolve: {
-		root: __dirname,
-		modulesDirectories: [
-			'node_modules',
-			'assets/react'
+		modules: [
+			path.resolve(__dirname, 'assets/react'),
+			'node_modules'
 		]
 	},
 
@@ -139,8 +139,8 @@ module.exports = {
 		'jquery': 'jQuery'
 	},
 
-	// Setup the source maps.
-	devtool: 'cheap-module-eval-source-map',
+	// Setup the sourcemaps.
+	devtool: 'cheap-module-source-map',
 
 	// Setup the plugins.
 	plugins: [

@@ -5,7 +5,6 @@ module.exports = {
 	// These are the "entry points" to our application.
 	// This means they will be the "root" imports that are included in JS bundle.
 	entry: [
-		'babel-polyfill',
 		'./assets/react/registrar.js',
 		'./assets/react/bootstrap.js'
 	],
@@ -21,39 +20,30 @@ module.exports = {
 
 	// Setup the transformation of the modules.
 	module: {
-		loaders: [
+		rules: [
 			// Process JS with Babel.
 			{
 				test: /\.js$/,
-				loader: 'babel',
-				query: {
+				loader: 'babel-loader',
+				options: {
 					// Enable caching results for faster rebuilds.
 					cacheDirectory: true
-				}
+				},
+				exclude: /node_modules/
 			}
 		]
 	},
 
 	// Add aliases to allow easier importing of the modules.
 	resolve: {
-		root: __dirname,
-		alias: {
-			'lib': 'assets/react/lib',
-			'containers': 'assets/react/containers',
-			'sidebars': 'assets/react/sidebars',
-			'fields': 'assets/react/fields',
-			'store': 'assets/react/store.js'
-		}
-	},
-
-	// Some of our dependencies are already loaded by WordPress.
-	// So let's use them.
-	externals: {
-		'jquery': 'jQuery'
+		modules: [
+			path.resolve(__dirname, 'assets/react'),
+			'node_modules'
+		]
 	},
 
 	// Setup the source maps.
-	devtool: 'cheap-module-eval-source-map',
+	devtool: 'cheap-module-source-map',
 
 	// Setup the plugins.
 	plugins: [

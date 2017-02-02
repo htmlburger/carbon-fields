@@ -7,14 +7,17 @@ module.exports = {
 	// be consumed by third party developers.
 	entry: {
 		'carbon.vendor': [
+			'babel-polyfill',
 			'react',
 			'react-dom',
 			'react-color',
 			'react-redux',
 			'redux',
 			'redux-saga',
+			'redux-saga/effects',
 			'redux-actions',
 			'reselect',
+			'recompose',
 			'lodash',
 			'object-path-immutable',
 			'classnames',
@@ -37,13 +40,14 @@ module.exports = {
 		libraryTarget: 'this'
 	},
 
+	// Setup the sourcemaps.
+	devtool: 'cheap-module-source-map',
+
 	// Setup the plugins.
 	plugins: [
 		new webpack.DllPlugin({
 			path: path.join(__dirname, 'assets', '[name].json'),
 			name: '[name]'
-		}),
-
-		new webpack.optimize.OccurenceOrderPlugin()
+		})
 	]
 };
