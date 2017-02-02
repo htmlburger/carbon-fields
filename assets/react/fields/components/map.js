@@ -83,7 +83,13 @@ const mapDispatchToProps = {
  * @param  {Function} props.updateField
  * @return {Function}
  */
-const handleChange = ({ field, updateField }) => data => updateField(field.id, data);
+const handleChange = ({ field, updateField }) => data => {
+	if (data.lat && data.lng) {
+		data.value = `${data.lat},${data.lng}`;
+	}
+
+	updateField(field.id, data);
+};
 
 /**
  * Handle the submission of the search input.
