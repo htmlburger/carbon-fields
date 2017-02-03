@@ -372,12 +372,17 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Delegate load to the field DataStore instance
+	 * Load value from datastore
 	 **/
 	public function load() {
-		$this->get_datastore()->load( $this );
+		$raw_value_set_tree = $this->get_datastore()->load( $this );
+		$value = null;
+		if ( isset( $raw_value_set_tree[ $this->get_hierarchy_name() ] ) ) {
+			$value = $raw_value_set_tree[ $this->get_hierarchy_name() ]['value_set'];
+		}
+		$this->set_value( $value );
 
-		if ( $this->value()->is_empty() ) {
+		if ( $this->get_value() === null ) {
 			$this->set_value( $this->get_default_value() );
 		}
 	}
@@ -537,9 +542,9 @@ class Field implements Datastore_Holder_Interface {
 			Incorrect_Syntax_Exception::raise( 'Field name can\'t be empty' );
 		}
 
-		$regex = '/\A[^\W\_0-9][\w\-]+\z/';
-		if ( !preg_match( $regex, $name ) ) {
-			Incorrect_Syntax_Exception::raise( 'Field name can only contain alphanumeric characters, dashes and underscores. Also, field name must start with a letter.' );
+		$regex = '/[\|\:]+/';
+		if ( preg_match( $regex, $name ) ) {
+			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" cannot contain "|" or ":" characters.' );
 		}
 
 		$this->name = $name;

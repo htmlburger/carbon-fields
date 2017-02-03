@@ -19,10 +19,9 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 	 *
 	 * @param Field $field The field to retrieve value for.
 	 */
-	protected function get_storage_array_for_field( Field $field ) {
+	protected function get_storage_array_for_field( Field $field, $storage_key_patterns ) {
 		global $wpdb;
 
-		$storage_key_patterns = $this->get_storage_key_getter_patterns( $field );
 		$storage_key_comparisons = $this->storage_key_patterns_to_sql( '`option_name`', $storage_key_patterns );
 
 		$storage_array = $wpdb->get_results( '

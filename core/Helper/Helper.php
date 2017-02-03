@@ -99,4 +99,22 @@ class Helper {
 	public static function get_comment_meta( $id, $name ) {
 		return static::get_value( $id, 'comment_meta', $name );
 	}
+
+	/**
+	 * Recursive sorting function by array key.
+	 * 
+	 * @param  array  &$array     The input array.
+	 * @param  int    $sort_flags Flags for controlling sorting behavior.
+	 * @return array              Sorted array.
+	 */
+	public static function ksort_recursive( &$array, $sort_flags = SORT_REGULAR ) {
+		if ( ! is_array( $array ) ) {
+			return false;
+		}
+		ksort( $array, $sort_flags );
+		foreach ( $array as $key => $value ) {
+			self::ksort_recursive( $array[ $key ], $sort_flags );
+		}
+		return true;
+	}
 }

@@ -23,47 +23,18 @@ class Widget_Datastore extends Key_Value_Datastore {
 	public function init() {}
 
 	/**
-	 * Initialization tasks.
-	 **/
-	protected function storage_key_matches_any_pattern( $storage_key, $patterns ) {
-		foreach ( $patterns as $key => $type ) {
-			switch ( $type ) {
-				case static::PATTERN_COMPARISON_EQUAL:
-					if ( $storage_key === $key ) {
-						return true;
-					}
-					break;
-				case static::PATTERN_COMPARISON_STARTS_WITH:
-					$key_length = strlen( $key );
-					if ( substr( $storage_key, 0, $key_length ) === $key ) {
-						return true;
-					}
-					break;
-				default:
-					Incorrect_Syntax_Exception::raise( 'Unsupported storage key pattern type used: "' . $type . '"' );
-					break;
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	 * Return a raw database query results array for a field
 	 *
 	 * @param Field $field The field to retrieve value for.
 	 * @return array Array of {key, value} objects
 	 */
-	protected function get_storage_array_for_field( Field $field ) {
-		$storage_key_patterns = $this->get_storage_key_getter_patterns( $field );
-
+	protected function get_storage_array_for_field( Field $field, $storage_key_patterns ) {
 		$storage_array = array();
 		foreach ( $this->storage as $storage_key => $value ) {
 			if ( $this->storage_key_matches_any_pattern( $storage_key, $storage_key_patterns ) ) {
 				$storage_array[] = (object) array( 'key'=>$storage_key, 'value'=>$value );
 			}
 		}
-
 		return $storage_array;
 	}
 

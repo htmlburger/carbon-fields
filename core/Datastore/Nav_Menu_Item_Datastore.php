@@ -65,22 +65,11 @@ class Nav_Menu_Item_Datastore extends Post_Meta_Datastore {
 	}
 
 	/**
-	 * Delete multiple values in a cascading manner (including all nested fields)
+	 * Delete the field value(s)
 	 *
-	 * @param mixed $field The field to delete values for.
+	 * @param Field $field The field to delete.
 	 */
 	public function delete( Field $field ) {
-		$clone = clone $field;
-		$clone->set_name( $this->get_clean_field_name( $field ) );
-		parent::delete( $clone );
-	}
-
-	/**
-	 * Delete multiple values in a cascading manner (including all nested fields)
-	 *
-	 * @param mixed $field The field to delete values for.
-	 */
-	public function delete_cascading( Field $field ) {
 		$clone = clone $field;
 		$clone->set_name( $this->get_clean_field_name( $field ) );
 		parent::delete( $clone );

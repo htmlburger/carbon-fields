@@ -2,6 +2,8 @@
 
 namespace Carbon_Fields\Datastore;
 
+use \Carbon_Fields\App;
+use \Carbon_Fields\Helper\Helper;
 use \Carbon_Fields\Field\Field;
 use \Carbon_Fields\Value_Set\Value_Set;
 use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
@@ -171,11 +173,22 @@ abstract class Key_Value_Datastore extends Datastore {
 	public function get_storage_key_getter_patterns( Field $field ) {
 		$patterns = array();
 		
-		if ( $field->is_simple_root_field() ) {
-			$patterns[ $this->get_storage_key_for_simple_root_field( $field ) ] = static::PATTERN_COMPARISON_EQUAL;
+		$full_hierarchy = $this->get_full_hierarchy_for_field( $field );
+
+		$parents = $full_hierarchy;
+		$first_parent = array_shift( $parents );
+
+		$storage_key = '_' . $first_parent . static::SEGMENT_GLUE;
+		if ( empty( $parents ) ) {
+			$patterns[ $storage_key ] = static::PATTERN_COMPARISON_STARTS_WITH;
+		} else {
+			$key = $storage_key . implode( static::SEGMENT_VALUE_GLUE, $parents ) . static::SEGMENT_GLUE;
+			$patterns[ $key ] = static::PATTERN_COMPARISON_STARTS_WITH;
+
+			$key = $storage_key . implode( static::SEGMENT_VALUE_GLUE, $parents ) . static::SEGMENT_VALUE_GLUE;
+			$patterns[ $key ] = static::PATTERN_COMPARISON_STARTS_WITH;
 		}
 
-		$patterns[ $this->get_storage_key_prefix( $field ) ] = static::PATTERN_COMPARISON_STARTS_WITH;
 		return $patterns;
 	}
 
@@ -205,7 +218,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 *
 	 * @return string
 	 **/
-	public function storage_key_patterns_to_sql( $column, $patterns ) {
+	protected function storage_key_patterns_to_sql( $column, $patterns ) {
 		$sql = array();
 
 		foreach ( $patterns as $storage_key => $type ) {
@@ -229,39 +242,99 @@ abstract class Key_Value_Datastore extends Datastore {
 	}
 
 	/**
-	 * Return a raw value set from an array of {key->..., value->...} objects such as the ones from query results
-	 *
-	 * @return array
-	 **/
-	protected function storage_array_to_raw_value_set( $storage_array ) {
-		$keepalive = false;
-		$raw_value_set = array();
+	 * Check if a storage key matches any comparison pattern
+	 * 
+	 * @param  string $storage_key
+	 * @param  array $patterns
+	 * @return boolean
+	 */
+	protected function storage_key_matches_any_pattern( $storage_key, $patterns ) {
+		foreach ( $patterns as $key => $type ) {
+			switch ( $type ) {
+				case Key_Value_Datastore::PATTERN_COMPARISON_EQUAL:
+					if ( $storage_key === $key ) {
+						return true;
+					}
+					break;
+				case Key_Value_Datastore::PATTERN_COMPARISON_STARTS_WITH:
+					$key_length = strlen( $key );
+					if ( substr( $storage_key, 0, $key_length ) === $key ) {
+						return true;
+					}
+					break;
+				default:
+					Incorrect_Syntax_Exception::raise( 'Unsupported storage key pattern type used: "' . $type . '"' );
+					break;
+			}
+		}
+		return false;
+	}
+
+	protected function cascading_storage_array_to_raw_value_set_tree( $storage_array ) {
+		$tree = array();
 
 		foreach ( $storage_array as $row ) {
-			$pieces = explode( static::SEGMENT_GLUE, $row->key );
-			$value_group = 0;
-			$value_key = Value_Set::VALUE_KEY;
+			$key_segments = explode( static::SEGMENT_GLUE, substr( $row->key, 1) ); // drop the first underscore character
+			$root = $key_segments[0];
+			$parents = array();
+			$group_indexes = array( 0 );
+			$value_index = 0;
+			$property = Value_Set::VALUE_KEY;
 
-			if ( count( $pieces ) === static::TOTAL_SEGMENTS ) {
-				$value_group = $pieces[ count( $pieces ) - 2 ];
-				$value_key = $pieces[ count( $pieces ) - 1 ];
+			if ( count( $key_segments ) === static::TOTAL_SEGMENTS ) {
+				if ( !empty( $key_segments[1] ) ) {
+					$parents = explode( static::SEGMENT_VALUE_GLUE, $key_segments[1] );
+				}
+				if ( !empty( $key_segments[2] ) ) {
+					$group_indexes = array_map( 'intval', explode( static::SEGMENT_VALUE_GLUE, $key_segments[2] ) );
+				}
+				$value_index = intval( $key_segments[3] );
+				$property = $key_segments[4];
 			}
 
-			if ( $value_key == static::KEEPALIVE_KEY ) {
-				$keepalive = true;
-				continue;
+			if ( $property === static::KEEPALIVE_KEY ) {
+				continue; // TODO this probably breaks default values
 			}
 
-			if ( !isset( $raw_value_set[ $value_group ] ) ) {
-				$raw_value_set[ $value_group ] = array();
+			$full_hierarchy = array_merge( array( $root ), $parents );
+			$level = &$tree;
+			foreach ( $full_hierarchy as $i => $field_name ) {
+				$index = isset( $group_indexes[ $i ] ) ? $group_indexes[ $i ] : -1;
+
+				if ( !isset( $level[ $field_name ] ) ) {
+					$level[ $field_name ] = array();
+				}
+				$level = &$level[ $field_name ];
+
+				if ( $i < count( $full_hierarchy ) - 1 ) {
+					if ( !isset( $level[ 'groups' ] ) ) {
+						$level[ 'groups' ] = array();
+					}
+					$level = &$level[ 'groups' ];
+
+					if ( !isset( $level[ $index ] ) ) {
+						$level[ $index ] = array();
+					}
+					$level = &$level[ $index ];
+				} else  {
+					if ( !isset( $level[ 'value_set' ] ) ) {
+						$level[ 'value_set' ] = array();
+					}
+					$level = &$level[ 'value_set' ];
+
+					if ( !isset( $level[ $value_index ] ) ) {
+						$level[ $value_index ] = array();
+					}
+					$level = &$level[ $value_index ];
+
+					$level[ $property ] = $row->value;
+				}
 			}
-			$raw_value_set[ $value_group ][ $value_key ] = $row->value;
+			$level = &$tree;
 		}
 
-		if ( empty( $raw_value_set ) && !$keepalive ) {
-			$raw_value_set = null;
-		}
-		return $raw_value_set;
+		Helper::ksort_recursive( $tree );
+		return $tree;
 	}
 
 	/**
@@ -270,17 +343,18 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * @param Field $field The field to retrieve value for.
 	 * @return array Array of {key, value} objects
 	 */
-	protected abstract function get_storage_array_for_field( Field $field );
+	protected abstract function get_storage_array_for_field( Field $field, $storage_key_patterns );
 
 	/**
 	 * Load the field value(s)
 	 *
-	 * @param Field $field The field to load value(s) in.
+	 * @param Field $field The field to get value(s) for
 	 */
 	public function load( Field $field ) {
-		$storage_array = $this->get_storage_array_for_field( $field );
-		$raw_value_set = $this->storage_array_to_raw_value_set( $storage_array );
-		$field->set_value( $raw_value_set );
+		$storage_key_patterns = $this->get_storage_key_getter_patterns( $field );
+		$cascading_storage_array = $this->get_storage_array_for_field( $field, $storage_key_patterns );
+		$raw_value_set_tree = $this->cascading_storage_array_to_raw_value_set_tree( $cascading_storage_array );
+		return $raw_value_set_tree;
 	}
 
 	/**
