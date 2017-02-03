@@ -1,4 +1,12 @@
+/**
+ * The external dependecies.
+ */
 import { connect } from 'react-redux';
+import { isFunction } from 'lodash';
+
+/**
+ * The internal dependencies.
+ */
 import { getFieldById } from 'fields/selectors';
 import { setupField, updateField, setUI } from 'fields/actions';
 
@@ -38,12 +46,33 @@ const defaultMapDispatchToProps = {
  * @return {Function}
  */
 export default function(mapStateToProps = () => {}, mapDispatchToProps = {}) {
-	return connect((state, ownProps) => {
-		return {
-			...defaultMapStateToProps(state, ownProps),
-			...mapStateToProps(state, ownProps),
+	// Per-component memoization is built-in feature of the `connect` method, but
+	// we need to re-implement it, because of this high level wrapper.
+	const makeMapStateToProps = () => {
+		let cachedMapStateToProps;
+
+		return (state, ownProps) => {
+			let props = mapStateToProps(state, ownProps);
+
+			if (!isFunction(cachedMapStateToProps)) {
+				props = mapStateToProps(state, ownProps);
+
+				if (isFunction(props)) {
+					cachedMapStateToProps = props;
+					props = cachedMapStateToProps(state, ownProps);
+				}
+			} else {
+				props = cachedMapStateToProps(state, ownProps);
+			}
+
+			return {
+				...defaultMapStateToProps(state, ownProps),
+				...props,
+			};
 		};
-	}, {
+	};
+
+	return connect(makeMapStateToProps, {
 		...defaultMapDispatchToProps,
 		...mapDispatchToProps,
 	});

@@ -39,6 +39,11 @@ module.exports = {
 
 			// Load the sidebars.
 			'./assets/react/sidebars/reducer.js',
+			'./assets/react/sidebars/actions.js',
+			'./assets/react/sidebars/selectors.js',
+			'./assets/react/sidebars/helpers.js',
+
+			'./assets/react/sidebars/sagas/base.js',
 
 			// Load the fields.
 			'./assets/react/fields/reducer',
@@ -67,6 +72,7 @@ module.exports = {
 			'./assets/react/fields/components/select.js',
 			'./assets/react/fields/components/separator.js',
 			'./assets/react/fields/components/set.js',
+			'./assets/react/fields/components/sidebar.js',
 			'./assets/react/fields/components/text.js',
 			'./assets/react/fields/components/textarea.js',
 

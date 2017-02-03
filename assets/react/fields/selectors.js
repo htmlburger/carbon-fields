@@ -2,6 +2,12 @@
  * The external dependencies.
  */
 import { createSelector } from 'reselect';
+import { get, map, filter } from 'lodash';
+
+/**
+ * The internal dependencies.
+ */
+import { getSidebars } from 'sidebars/selectors';
 
 /**
  * Return the object that contains all fields.
@@ -27,3 +33,26 @@ export const getFieldById = (state, id) => state.fields[id];
  * @return {Boolean}
  */
 export const isFieldTabbed = createSelector(getFieldById, field => field.layout && field.layout.indexOf('tabbed') > -1);
+
+/**
+ * Generate the list of options used by the field.
+ * Use a factory function to achieve correct memoization
+ * of the result.
+ *
+ * @see https://github.com/reactjs/reselect#accessing-react-props-in-selectors
+ * @return {Function}
+ */
+export const makeGetSidebarFieldOptions = () => createSelector([
+	getFieldById,
+	getSidebars,
+], (field, sidebars) => {
+	const excluded = get(field, 'excluded_sidebars', []);
+
+	sidebars = filter(sidebars, ({ id, name }) => excluded.indexOf(id) === -1 && excluded.indexOf(name) === -1);
+	sidebars = map(sidebars, ({ name }) => ({ name: name, value: name }));
+
+	return [
+		...sidebars,
+		...field.options,
+	];
+});

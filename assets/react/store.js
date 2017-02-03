@@ -16,6 +16,8 @@ import wysiwygForeman from 'fields/sagas/wysiwyg';
 import geocoderForeman from 'fields/sagas/geocoder';
 import complexForeman from 'fields/sagas/complex';
 
+import baseSidebarsForeman from 'sidebars/sagas/base';
+
 const preloadedState = normalizePreloadedState(window.carbon_json);
 const saga = createSagaMiddleware();
 const reducer = combineReducers({ containers, sidebars, fields });
@@ -29,6 +31,7 @@ saga.run(themeOptionsForeman);
 saga.run(mediaBrowserForeman);
 saga.run(complexForeman);
 saga.run(geocoderForeman);
+saga.run(baseSidebarsForeman);
 // saga.run(wysiwygForeman);
 
 export default store;
