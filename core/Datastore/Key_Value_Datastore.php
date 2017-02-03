@@ -277,6 +277,23 @@ abstract class Key_Value_Datastore extends Datastore {
 		return false;
 	}
 
+	/**
+	 * Raw Value Set Tree schema:
+	 * array(
+	 *     [field_name] => array(
+	 *         'value_set'=>[raw_value_set],
+	 *         'groups'=>array(
+	 *             array(
+	 *                 [recursion]
+	 *             ),
+	 *             ...
+	 *         ),
+	 *     ),
+	 *     ...
+	 * )
+	 *
+	 * @return array
+	 */
 	protected function cascading_storage_array_to_raw_value_set_tree( $storage_array ) {
 		$tree = array();
 
@@ -300,7 +317,7 @@ abstract class Key_Value_Datastore extends Datastore {
 			}
 
 			if ( $property === static::KEEPALIVE_KEY ) {
-				continue; // TODO this probably breaks default values
+				continue;
 			}
 
 			$full_hierarchy = array_merge( array( $root ), $parents );

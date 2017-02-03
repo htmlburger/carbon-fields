@@ -4,6 +4,19 @@ namespace Carbon_Fields\Value_Set;
 
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
+/**
+ * Class representing a field's value
+ *
+ * (raw) value set schema:
+ * array(
+ *     array(
+ *         'value'=>'',
+ *         [property2]=>'',
+ *         ...
+ *     ),
+ *     ...
+ * )
+ */
 class Value_Set {
 
 	/**
