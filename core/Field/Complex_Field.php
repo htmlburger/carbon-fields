@@ -21,6 +21,8 @@ class Complex_Field extends Field {
 
 	const LAYOUT_TABBED_VERTICAL = 'tabbed-vertical';
 
+	const GROUP_TYPE_KEY = '_type';
+
 	/**
 	 * Default field value
 	 *
@@ -107,6 +109,9 @@ class Complex_Field extends Field {
 		}
 
 		foreach ( $fields as $field ) {
+			if ( $field->get_hierarchy_name() === static::GROUP_TYPE_KEY ) {
+				Incorrect_Syntax_Exception::raise( '"' . static::GROUP_TYPE_KEY . '" is a reserved keyword for Complex fields and cannot be used for a field name.' );
+			}
 			$field->set_hierarchy( array_merge( $this->get_hierarchy(), array( $this->get_hierarchy_name() ) ) );
 		}
 
@@ -223,13 +228,13 @@ class Complex_Field extends Field {
 		$input_groups = $input[ $this->get_name() ];
 		$input_group_index = 0;
 		foreach ( $input_groups as $values ) {
-			if ( ! isset( $values['_type'] ) || ! isset( $this->groups[ $values['_type'] ] ) ) {
+			if ( ! isset( $values[ static::GROUP_TYPE_KEY ] ) || ! isset( $this->groups[ $values[ static::GROUP_TYPE_KEY ] ] ) ) {
 				continue;
 			}
 
-			$group = $this->get_group_by_name( $values['_type'] );
-			$value_group = array( '_type' => $values['_type'] );
-			unset( $values['_type'] );
+			$group = $this->get_group_by_name( $values[ static::GROUP_TYPE_KEY ] );
+			$value_group = array( static::GROUP_TYPE_KEY => $values[ static::GROUP_TYPE_KEY ] );
+			unset( $values[ static::GROUP_TYPE_KEY ] );
 
 			$group_fields = $group->get_fields();
 
@@ -270,7 +275,7 @@ class Complex_Field extends Field {
 				$group = $this->get_group_by_name( $group_name );
 				$group_fields = $group->get_fields();
 				$fields[ $entry_index ] = array(
-					'_type'=>$group->get_name(),
+					static::GROUP_TYPE_KEY=>$group->get_name(),
 				);
 				$group_values = array();
 				if ( isset( $value_tree['groups'][ $entry_index ] ) ) {
@@ -392,7 +397,7 @@ class Complex_Field extends Field {
 		$field_groups = $this->get_prefilled_field_groups( $this->get_value_tree() );
 		$value_data = array();
 		foreach ( $field_groups as $entry_index => $fields ) {
-			$group = $this->get_group_by_name( $fields['_type'] );
+			$group = $this->get_group_by_name( $fields[ static::GROUP_TYPE_KEY ] );
 			$group_fields = $group->get_fields();
 
 			$data = array(
