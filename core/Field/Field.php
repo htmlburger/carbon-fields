@@ -530,10 +530,16 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $name Field name, either sanitized or not
 	 **/
 	public function set_name( $name ) {
-		$name = preg_replace( '~\s+~', '_', mb_strtolower( $name ) );
+		$name = mb_strtolower( $name );
+		$name = preg_replace( '~\s+~', '_', $name );
 
 		if ( empty( $name ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name can\'t be empty' );
+		}
+
+		$regex = '/\A[^\W\_0-9][\w\-]+\z/';
+		if ( !preg_match( $regex, $name ) ) {
+			Incorrect_Syntax_Exception::raise( 'Field name can only contain alphanumeric characters, dashes and underscores. Also, field name must start with a letter.' );
 		}
 
 		$this->name = $name;

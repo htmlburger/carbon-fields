@@ -214,7 +214,6 @@ class Group_Field {
 		if ( !$name ) {
 			$name = static::DEFAULT_GROUP_NAME;
 		}
-
 		$this->name = $name;
 	}
 
