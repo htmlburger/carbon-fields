@@ -61,6 +61,55 @@ class Repository {
 	}
 
 	/**
+	 * Return all containers
+	 *
+	 * @param string $type Container type to filter for
+	 * @return array
+	 **/
+	public function get_containers( $type = null ) {
+		$raw_containers = $this->containers;
+		$containers = array();
+
+		if ( $type === null ) {
+			$containers = $raw_containers;
+		} else {
+			foreach ( $raw_containers as $container ) {
+				if ( $container->type === $type ) {
+					$containers[] = $container;
+				}
+			}
+		}
+
+		return $containers;
+	}
+
+	/**
+	 * Return field in containers
+	 *
+	 * @param string $field_name
+	 * @param string $container_type Container type to filter for
+	 * @param bool $include_nested_fields Search in nested fields as well
+	 * @return array
+	 **/
+	public function get_field_in_containers( $field_name, $container_type = null, $include_nested_fields = true ) {
+		$containers = $this->get_containers( $container_type );
+		$field = null;
+
+		foreach ( $containers as $c ) {
+			if ( $include_nested_fields ) {
+				$field = $c->get_field_by_name( $field_name );
+			} else {
+				$field = $c->get_root_field_by_name( $field_name );
+			}
+			if ( $field ) {
+				break;
+			}
+		}
+
+		return $field;
+	}
+
+	/**
 	 * Return all currently active containers
 	 *
 	 * @return array
@@ -77,7 +126,7 @@ class Repository {
 	 * @param string $title
 	 */
 	public function get_unique_panel_id( $title ) {
-		$id = preg_replace( '~[\W\-]*~', '', remove_accents( $title ) );
+		$id = preg_replace( '~[^\w\-]*~', '', remove_accents( $title ) );
 		$base = $id;
 		$suffix = 0;
 

@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Datastore;
 
+use Carbon_Fields\Field\Field;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -9,6 +10,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Defines the key datastore methods and their default implementations.
  */
 abstract class Datastore implements Datastore_Interface {
+
 	/**
 	 * Initialize the datastore.
 	 **/

@@ -2,6 +2,8 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Value_Set\Value_Set;
+
 /**
  * Set field class.
  * Allows to create a set of checkboxes where multiple can be selected.
@@ -22,6 +24,34 @@ class Set_Field extends Predefined_Options_Field {
 	protected $default_value = array();
 
 	/**
+	 * Create a field from a certain type with the specified label.
+	 * @param string $name  Field name
+	 * @param string $label Field label
+	 */
+	protected function __construct( $name, $label ) {
+		$this->value = new Value_Set( Value_Set::TYPE_MULTIPLE_VALUES );
+		parent::__construct( $name, $label );
+	}
+
+	/**
+	 * Save value to storage
+	 **/
+	public function save() {
+		$this->delete();
+		parent::save();
+	}
+
+	/**
+	 * Set the number of the options to be displayed at the initial field display.
+	 *
+	 * @param  int $limit
+	 */
+	public function limit_options( $limit ) {
+		$this->limit_options = $limit;
+		return $this;
+	}
+
+	/**
 	 * Load the field value from an input array based on it's name
 	 *
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
@@ -40,39 +70,6 @@ class Set_Field extends Predefined_Options_Field {
 			}
 			$this->set_value( $value );
 		}
-	}
-
-	/**
-	 * Set the number of the options to be displayed at the initial field display.
-	 *
-	 * @param  int $limit
-	 */
-	public function limit_options( $limit ) {
-		$this->limit_options = $limit;
-		return $this;
-	}
-
-	/**
-	 * Retrieve the field value(s).
-	 *
-	 * @return array
-	 */
-	public function get_value() {
-		if ( $this->value === false ) {
-			return $this->set_value( $this->default_value );
-		}
-
-		if ( !is_array( $this->value ) ) {
-			$this->value = maybe_unserialize( $this->value );
-			if ( !is_array( $this->value ) ) {
-				if ( is_null( $this->value ) ) {
-					return array();
-				}
-				return array( $this->value );
-			}
-		}
-
-		return (array) $this->value;
 	}
 
 	/**

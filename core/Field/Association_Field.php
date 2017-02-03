@@ -32,7 +32,7 @@ class Association_Field extends Relationship_Field {
 	}
 
 	/**
-	 * Converts the database values into a usable associative array.
+	 * Converts the field values into a usable associative array.
 	 *
 	 * The relationship data is saved in the database in the following format:
 	 * 	array (
@@ -45,12 +45,8 @@ class Association_Field extends Relationship_Field {
 	 * 	- Subtype of data (the particular post type or taxonomy)
 	 * 	- ID of the item (the database ID of the item)
 	 */
-	public function process_value() {
-		$raw_value = maybe_unserialize( $this->get_value() );
-		if ( ! $raw_value ) {
-			$raw_value = array();
-		}
-
+	protected function value_to_json() {
+		$raw_value = $this->get_value();
 		$value = array();
 		foreach ( $raw_value as $raw_value_entry ) {
 			if ( is_string( $raw_value_entry ) ) {
@@ -69,8 +65,7 @@ class Association_Field extends Relationship_Field {
 			);
 			$value[] = $item;
 		}
-
-		$this->set_value( $value );
+		return $value;
 	}
 
 	/**
@@ -321,6 +316,16 @@ class Association_Field extends Relationship_Field {
 	}
 
 	/**
+	 * Return a differently formatted value for end-users
+	 *
+	 * @return mixed
+	 **/
+	public function get_formatted_value() {
+		$value = Field::get_formatted_value();
+		return $this->parse_serialized_value( $value, 'association' );
+	}
+
+	/**
 	 * Convert the field data into JSON representation.
 	 * @param  bool $load Whether to load data from the datastore.
 	 * @return mixed      The JSON field data.
@@ -329,6 +334,7 @@ class Association_Field extends Relationship_Field {
 		$field_data = Field::to_json( $load );
 
 		$field_data = array_merge( $field_data, array(
+			'value' => $this->value_to_json(),
 			'options' => $this->get_options(),
 			'max' => $this->max,
 			'allow_duplicates' => $this->allow_duplicates,

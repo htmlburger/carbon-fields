@@ -32,9 +32,18 @@ class Checkbox_Field extends Field {
 	 **/
 	public function set_value_from_input( $input = null ) {
 		parent::set_value_from_input( $input );
-		if ( $this->get_value() === null ) {
+		if ( $this->get_value() !== $this->option_value ) {
 			$this->set_value( '' );
 		}
+	}
+
+	/**
+	 * Return a differently formatted value for end-users
+	 *
+	 * @return mixed
+	 **/
+	public function get_formatted_value() {
+		return ( $this->get_value() === $this->option_value );
 	}
 
 	/**

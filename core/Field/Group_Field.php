@@ -6,6 +6,9 @@ use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class Group_Field {
+
+	const DEFAULT_GROUP_NAME = '_';
+
 	/**
 	 * Unique group identificator. Generated randomly.
 	 *
@@ -78,11 +81,6 @@ class Group_Field {
 				Incorrect_Syntax_Exception::raise( 'Object must be of type ' . __NAMESPACE__ . '\\Field' );
 			}
 
-			// verify name validity
-			if ( preg_match( '~_\d+~', $field->get_name() ) ) {
-				Incorrect_Syntax_Exception::raise( 'Subfield names cannot contain underscore followed by a digit(s). Replace "' . ltrim( $field->get_name(), '_' ) . '" with "' . ltrim( preg_replace( '~_+(\d+)~', '$1', $field->get_name() ), '_' ) . '"' );
-			}
-
 			$this->verify_unique_field_name( $field->get_name() );
 		}
 
@@ -125,10 +123,8 @@ class Group_Field {
 
 		foreach ( $this->get_fields() as $field ) {
 			// The field default value should be set manually if the field is not loaded
-			if ( ! $load ) {
-				if ( $field->get_value() === null ) {
-					$field->set_value( $field->get_default_value() );
-				}
+			if ( !$load && $field->get_value() === null ) {
+				$field->set_value( $field->get_default_value() );
 			}
 
 			$fields_data[] = $field->to_json( $load );
@@ -215,10 +211,8 @@ class Group_Field {
 	 */
 	public function set_name( $name ) {
 		$name = preg_replace( '~\s+~', '_', strtolower( $name ) );
-		if ( substr( $name, 0, 1 ) != '_' ) {
-			// add underscore to custom field name -- this will remove it from
-			// custom fields list in administration
-			$name = '_' . $name;
+		if ( !$name ) {
+			$name = static::DEFAULT_GROUP_NAME;
 		}
 
 		$this->name = $name;
@@ -241,17 +235,6 @@ class Group_Field {
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		foreach ( $this->fields as $field ) {
 			$field->set_datastore( $datastore, $set_as_default );
-		}
-	}
-
-	/**
-	 * Set a prefix for all group fields.
-	 *
-	 * @param string $prefix
-	 */
-	public function set_prefix( $prefix ) {
-		foreach ( $this->fields as $field ) {
-			$field->set_prefix( $prefix );
 		}
 	}
 

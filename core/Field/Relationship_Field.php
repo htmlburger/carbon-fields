@@ -2,14 +2,35 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Value_Set\Value_Set;
+
 /**
  * Relationship field class.
  * Allows selecting and manually sorting entries from any custom post type.
  */
 class Relationship_Field extends Field {
 	protected $post_type = array( 'post' );
+	
 	protected $max = -1;
+
 	protected $allow_duplicates = false;
+
+	/**
+	 * Default field value
+	 *
+	 * @var array
+	 */
+	protected $default_value = array();
+
+	/**
+	 * Create a field from a certain type with the specified label.
+	 * @param string $name  Field name
+	 * @param string $label Field label
+	 */
+	protected function __construct( $name, $label ) {
+		$this->value = new Value_Set( Value_Set::TYPE_MULTIPLE_VALUES );
+		parent::__construct( $name, $label );
+	}
 
 	/**
 	 * Admin initialization actions
@@ -18,6 +39,14 @@ class Relationship_Field extends Field {
 		$this->add_template( $this->get_type() . '_item', array( $this, 'item_template' ) );
 
 		parent::admin_init();
+	}
+
+	/**
+	 * Save value to storage
+	 **/
+	public function save() {
+		$this->delete();
+		parent::save();
 	}
 
 	/**
@@ -30,15 +59,14 @@ class Relationship_Field extends Field {
 			$input = $_POST;
 		}
 
-		if ( ! isset( $input[ $this->name ] ) ) {
-			$this->set_value( null );
-		} else {
-			$value = stripslashes_deep( $input[ $this->name ] );
+		$value = array();
+		if ( isset( $input[ $this->get_name() ] ) ) {
+			$value = stripslashes_deep( $input[ $this->get_name() ] );
 			if ( is_array( $value ) ) {
 				$value = array_values( $value );
 			}
-			$this->set_value( $value );
 		}
+		$this->set_value( $value );
 	}
 
 	/**
@@ -176,6 +204,57 @@ class Relationship_Field extends Field {
 		$options = apply_filters( 'carbon_relationship_options', $options, $this->get_name() );
 
 		return $options;
+	}
+
+	/**
+	 * Parse the raw value into a value suitable for end-users
+	 *
+	 * @param  string $raw_value Raw relationship value.
+	 * @return array Array of parsed data.
+	 */
+	protected function parse_serialized_value( $raw_value, $type = '' ) {
+		if ( $raw_value && is_array( $raw_value ) ) {
+			$value = array();
+			foreach ( $raw_value as $raw_value_item ) {
+				if ( is_string( $raw_value_item ) && strpos( $raw_value_item, ':' ) !== false ) {
+					$item_data = explode( ':', $raw_value_item );
+					$item = array(
+						'id' => $item_data[2],
+						'type' => $item_data[0],
+					);
+
+					if ( $item_data[0] === 'post' ) {
+						$item['post_type'] = $item_data[1];
+					} elseif ( $item_data[0] === 'term' ) {
+						$item['taxonomy'] = $item_data[1];
+					}
+
+					$value[] = $item;
+				} elseif ( $type === 'association' ) {
+					$value[] = array(
+						'id' => $raw_value_item,
+						'type' => 'post',
+						'post_type' => get_post_type( $raw_value_item ),
+					);
+				} else {
+					$value[] = $raw_value_item;
+				}
+			}
+
+			$raw_value = $value;
+		}
+
+		return $raw_value;
+	}
+
+	/**
+	 * Return a differently formatted value for end-users
+	 *
+	 * @return mixed
+	 **/
+	public function get_formatted_value() {
+		$value = Field::get_formatted_value();
+		return $this->parse_serialized_value( $value );
 	}
 
 	/**

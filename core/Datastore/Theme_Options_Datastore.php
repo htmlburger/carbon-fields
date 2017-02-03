@@ -2,90 +2,108 @@
 
 namespace Carbon_Fields\Datastore;
 
-use Carbon_Fields\Field\Field;
+use \Carbon_Fields\App;
+use \Carbon_Fields\Field\Field;
 
 /**
  * Theme options datastore class.
  */
-class Theme_Options_Datastore extends Datastore {
+class Theme_Options_Datastore extends Key_Value_Datastore {
 	/**
 	 * Initialization tasks.
 	 **/
 	public function init() {}
 
 	/**
-	 * Save the field value(s) into the database.
+	 * Return a raw database query results array for a field
+	 *
+	 * @param Field $field The field to retrieve value for.
+	 */
+	protected function get_storage_array_for_field( Field $field ) {
+		global $wpdb;
+
+		$storage_key_patterns = $this->get_storage_key_getter_patterns( $field );
+		$storage_key_comparisons = $this->storage_key_patterns_to_sql( '`option_name`', $storage_key_patterns );
+
+		$storage_array = $wpdb->get_results( '
+			SELECT `option_name` AS `key`, `option_value` AS `value`
+			FROM ' . $wpdb->options . '
+			WHERE ' . $storage_key_comparisons . '
+			ORDER BY `option_name` ASC
+		' );
+
+		if ( empty( $storage_array ) ) {
+			$storage_array = App::ioc( 'legacy_storage_service' )->get_storage_array_for_patterns( $this, $storage_key_patterns );
+		}
+
+		return $storage_array;
+	}
+
+	/**
+	 * Save a single key-value pair to the database
+	 *
+	 * @param string $key
+	 * @param string $value
+	 */
+	protected function save_key_value_pair( $key, $value ) {
+		$this->save_key_value_pair_with_autoload( $key, $value, 'no' );
+	}
+
+	/**
+	 * Save a single key-value pair to the database
+	 *
+	 * @param string $key
+	 * @param string $value
+	 * @param bool $autoload
+	 */
+	protected function save_key_value_pair_with_autoload( $key, $value, $autoload ) {
+		$notoptions = wp_cache_get( 'notoptions', 'options' );
+		$notoptions[ $key ] = '';
+		wp_cache_set( 'notoptions', $notoptions, 'options' );
+
+		if ( ! add_option( $key, $value, null, $autoload ) ) {
+			update_option( $key, $value, $autoload );
+		}
+	}
+
+	/**
+	 * Save the field value(s)
 	 *
 	 * @param Field $field The field to save.
 	 */
 	public function save( Field $field ) {
-		$name = $field->get_name();
 		$autoload = $field->get_autoload() ? 'yes': 'no';
+		$value_set = $field->value()->get_set();
+		if ( $value_set === null ) {
+			return;
+		}
 
-		// Add value to the cache, so that add_option always works
-		$notoptions = wp_cache_get( 'notoptions', 'options' );
-		$notoptions[ $name ] = '';
-		wp_cache_set( 'notoptions', $notoptions, 'options' );
-
-		if ( ! add_option( $name, $field->get_value(), null, $autoload ) ) {
-			update_option( $name, $field->get_value() );
+		if ( empty( $value_set ) && $field->value()->keepalive() ) {
+			$storage_key = $this->get_storage_key( $field, 0, static::KEEPALIVE_KEY );
+			$this->save_key_value_pair_with_autoload( $storage_key, '', $autoload );
+		}
+		foreach ( $value_set as $value_group_index => $values ) {
+			foreach ( $values as $value_key => $value ) {
+				$storage_key = $this->get_storage_key( $field, $value_group_index, $value_key );
+				$this->save_key_value_pair_with_autoload( $storage_key, $value, $autoload );
+			}
 		}
 	}
 
 	/**
-	 * Load the field value(s) from the database.
-	 *
-	 * @param Field $field The field to retrieve value for.
-	 */
-	public function load( Field $field ) {
-		$field->set_value( get_option( $field->get_name() ) );
-	}
-
-	/**
-	 * Delete the field value(s) from the database.
+	 * Delete the field value(s)
 	 *
 	 * @param Field $field The field to delete.
 	 */
 	public function delete( Field $field ) {
-		delete_option( $field->get_name() );
-	}
-
-	/**
-	 * Load complex field value(s) from the database.
-	 *
-	 * @param mixed $field The field to load values for.
-	 */
-	public function load_values( $field ) {
 		global $wpdb;
 
-		if ( is_object( $field ) && is_subclass_of( $field, 'Carbon_Fields\\Field\\Field' ) ) {
-			$meta_key = $field->get_name();
-		} else {
-			$meta_key = $field;
-		}
+		$storage_key_patterns = $this->get_storage_key_deleter_patterns( $field );
+		$storage_key_comparisons = $this->storage_key_patterns_to_sql( '`option_name`', $storage_key_patterns );
 
-		return $wpdb->get_results( '
-			SELECT option_name AS field_key, option_value AS field_value FROM ' . $wpdb->options . '
-			WHERE `option_name` LIKE "' . addslashes( $meta_key ) . '_%"
-		', ARRAY_A );
-	}
-
-	/**
-	 * Delete complex field value(s) from the database.
-	 *
-	 * @param mixed $field The field to delete values for.
-	 */
-	public function delete_values( $field ) {
-		global $wpdb;
-
-		$group_names = $field->get_group_names();
-		$field_name = $field->get_name();
-
-		$option_name_constraint = '`option_name` LIKE "' . $field_name . implode( '-%" OR `option_name` LIKE "' . $field_name, $group_names ) . '-%"';
-
-		return $wpdb->query( '
+		$wpdb->query( '
 			DELETE FROM ' . $wpdb->options . '
-			WHERE (' . $option_name_constraint . ')
+			WHERE ' . $storage_key_comparisons . '
 		' );
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Helper;
 
+use \Carbon_Fields\App;
 use \Carbon_Fields\Datastore\Datastore;
 
 /**
@@ -10,17 +11,39 @@ use \Carbon_Fields\Datastore\Datastore;
 class Helper {
 
 	/**
+	 * Get a value formatted for end-users
+	 *
+	 * @param int $object_id Object id to get value for (e.g. post_id, term_id etc.)
+	 * @param string $container_type Container type to search in
+	 * @param string $field_name Field name
+	 * @return mixed
+	 */
+	public static function get_value( $object_id, $container_type, $field_name ) {
+		$repository = App::ioc( 'container_repository' );
+		$field = $repository->get_field_in_containers( $field_name, $container_type, false );
+		$default_value = ''; // for consistency - get_post_meta returns an empty string when a meta key does not exist
+
+		if ( !$field ) {
+			return $default_value;
+		}
+
+		$clone = clone $field;
+		if ( $object_id !== null ) {
+			$clone->get_datastore()->set_id( $object_id );
+		}
+		$clone->load();
+		return $clone->get_formatted_value();
+	}
+
+	/**
 	 * Retrieve post meta field for a post.
 	 *
 	 * @param  int    $id   Post ID.
 	 * @param  string $name Custom field name.
-	 * @param  string $type Custom field type (optional).
 	 * @return mixed        Meta value.
 	 */
-	public static function get_post_meta( $id, $name, $type = null ) {
-		$name = $name[0] == '_' ? $name : '_' . $name;
-
-		return static::get_field_value( 'post_meta', $name, $type, $id );
+	public static function get_post_meta( $id, $name ) {
+		return static::get_value( $id, 'Post_Meta', $name );
 	}
 
 	/**
@@ -28,22 +51,20 @@ class Helper {
 	 * Uses the ID of the current post in the loop.
 	 *
 	 * @param  string $name Custom field name.
-	 * @param  string $type Custom field type (optional).
 	 * @return mixed        Meta value.
 	 */
-	public static function get_the_post_meta( $name, $type = null ) {
-		return static::get_post_meta( get_the_ID(), $name, $type );
+	public static function get_the_post_meta( $name ) {
+		return static::get_value( get_the_ID(), 'Post_Meta', $name );
 	}
 
 	/**
 	 * Retrieve theme option field value.
 	 *
 	 * @param  string $name Custom field name.
-	 * @param  string $type Custom field type (optional).
 	 * @return mixed        Option value.
 	 */
-	public static function get_theme_option( $name, $type = null ) {
-		return static::get_field_value( 'theme_options', $name, $type );
+	public static function get_theme_option( $name ) {
+		return static::get_value( null, 'Theme_Options', $name );
 	}
 
 	/**
@@ -51,13 +72,10 @@ class Helper {
 	 *
 	 * @param  int    $id   Term ID.
 	 * @param  string $name Custom field name.
-	 * @param  string $type Custom field type (optional).
 	 * @return mixed        Meta value.
 	 */
-	public static function get_term_meta( $id, $name, $type = null ) {
-		$name = $name[0] == '_' ? $name: '_' . $name;
-
-		return static::get_field_value( 'term_meta', $name, $type, $id );
+	public static function get_term_meta( $id, $name ) {
+		return static::get_value( $id, 'Term_Meta', $name );
 	}
 
 	/**
@@ -65,13 +83,10 @@ class Helper {
 	 *
 	 * @param  int    $id   User ID.
 	 * @param  string $name Custom field name.
-	 * @param  string $type Custom field type (optional).
 	 * @return mixed        Meta value.
 	 */
-	public static function get_user_meta( $id, $name, $type = null ) {
-		$name = $name[0] == '_' ? $name: '_' . $name;
-
-		return static::get_field_value( 'user_meta', $name, $type, $id );
+	public static function get_user_meta( $id, $name ) {
+		return static::get_value( $id, 'user_meta', $name );
 	}
 
 	/**
@@ -79,14 +94,15 @@ class Helper {
 	 *
 	 * @param  int    $id   Comment ID.
 	 * @param  string $name Custom field name.
-	 * @param  string $type Custom field type (optional).
 	 * @return mixed        Meta value.
 	 */
-	public static function get_comment_meta( $id, $name, $type = null ) {
-		$name = $name[0] == '_' ? $name: '_' . $name;
-
-		return static::get_field_value( 'comment_meta', $name, $type, $id );
+	public static function get_comment_meta( $id, $name ) {
+		return static::get_value( $id, 'comment_meta', $name );
 	}
+
+	/**************************************************
+	 * LEGACY METHODS                                 *
+	 **************************************************/
 
 	/**
 	 * Retrieve a certain field value from the database.

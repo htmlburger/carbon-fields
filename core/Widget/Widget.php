@@ -4,15 +4,22 @@ namespace Carbon_Fields\Widget;
 
 use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Field\Field;
-use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Container\Container;
+use Carbon_Fields\Datastore\Widget_Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
- * Widget datastore and container class.
+ * Widget, datastore and container handler class.
  */
-abstract class Widget extends \WP_Widget implements Datastore_Interface {
+abstract class Widget extends \WP_Widget {
 	public static $registered_widget_ids = array();
+
+	/**
+	 * Widget Datastore
+	 *
+	 * @var Widget_Datastore
+	 */
+	protected $datastore;
 
 	/**
 	 * Determines if widget wrapper html should be printed
@@ -21,8 +28,6 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 * @var bool
 	 */
 	protected $print_wrappers = true;
-
-	protected $store_data;
 
 	/**
 	 * Control options to pass to WordPress Widget constructor
@@ -39,8 +44,6 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 */
 	protected $custom_fields = array();
 
-	protected $complex_field_names = array();
-
 	/**
 	 * Create the widget.
 	 * A wrapper around the default WP widget constructor.
@@ -51,6 +54,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 * @param  string $classname   String of CSS classes
 	 */
 	public function setup( $title, $description, $fields, $classname = '' ) {
+		$this->datastore = new Widget_Datastore();
 		if ( empty( $title ) ) {
 			Incorrect_Syntax_Exception::raise( 'Empty widget title is not supported' );
 		}
@@ -88,16 +92,14 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 * @return array Settings to save or bool false to cancel saving.
 	 */
 	public function update( $new_instance, $old_instance ) {
-		$instance = $old_instance;
-
-		$this->store_data =& $instance;
+		$this->datastore->import_storage( $old_instance );
 
 		foreach ( $this->custom_fields as $field ) {
 			$field->set_value_from_input( $new_instance );
 			$field->save();
 		}
 
-		return $instance;
+		return $this->datastore->export_storage();
 	}
 
 	/**
@@ -106,7 +108,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 * @param array $instance Current settings.
 	 */
 	public function form( $instance ) {
-		$this->store_data = $instance;
+		$this->datastore->import_storage( $instance );
 		$custom_fields = array();
 
 		foreach ( $this->custom_fields as $field ) {
@@ -134,19 +136,6 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 	 * @param array $instance The settings for the particular instance of the widget.
 	 */
 	public function widget( $args, $instance ) {
-		// prepare $instance values for complex fields
-		if ( ! empty( $this->complex_field_names ) ) {
-			$instance = static::unwrap_complex_field_values( $instance, $this->complex_field_names );
-		}
-
-		// prepare $instance values for association fields
-		foreach ( $instance as &$field_value ) {
-			$field_value = Helper::parse_relationship_field( $field_value );
-		}
-
-		print_r( $instance );
-
-		// output
 		if ( $this->print_wrappers ) {
 			echo $args['before_widget'];
 		}
@@ -182,15 +171,7 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 
 			$this->verify_unique_field_name( $field->get_name() );
 
-			$field->set_prefix( '' );
-
-			if ( ! $field->get_datastore() ) {
-				$field->set_datastore( $this, true );
-			}
-
-			if ( is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
-				$this->complex_field_names[] = $field->get_name();
-			}
+			$field->set_datastore( $this->datastore, true );
 		}
 
 		$this->custom_fields = array_merge( $this->custom_fields, $fields );
@@ -222,111 +203,5 @@ abstract class Widget extends \WP_Widget implements Datastore_Interface {
 		}
 
 		static::$registered_widget_ids[] = $id;
-	}
-
-	/**
-	 * Load the field value(s) from the database.
-	 *
-	 * @param Field $field The field to retrieve value for.
-	 */
-	public function load( Field $field ) {
-		if ( isset( $this->store_data[ $field->get_name() ] ) ) {
-			$field->set_value( $this->store_data[ $field->get_name() ] );
-		} else {
-			$field->set_value( $field->get_default_value() );
-		}
-	}
-
-	/**
-	 * Save the field value(s) into the database.
-	 *
-	 * @param Field $field The field to save.
-	 */
-	public function save( Field $field ) {
-		$this->store_data[ $field->get_name() ] = $field->get_value();
-	}
-
-	/**
-	 * Delete the field value(s) from the database.
-	 *
-	 * @param Field $field The field to delete.
-	 */
-	public function delete( Field $field ) {
-		if ( isset( $this->store_data[ $field->get_name() ] ) ) {
-			unset( $this->store_data[ $field->get_name() ] );
-		}
-	}
-
-	/**
-	 * Load complex field value(s) from the database.
-	 *
-	 * @param mixed $field The field to load values for.
-	 */
-	public function load_values( $field ) {
-		$field_name = $field->get_name();
-		$result = array();
-
-		foreach ( $this->store_data as $key => $value ) {
-			if ( strpos( $key, $field_name ) === 0 ) {
-				$result[] = array(
-					'field_key' => $key,
-					'field_value' => $value,
-				);
-			}
-		}
-
-		return $result;
-	}
-
-	/**
-	 * Delete complex field value(s) from the database.
-	 *
-	 * @param mixed $field The field to delete values for.
-	 */
-	public function delete_values( $field ) {
-		$field_name = $field->get_name();
-
-		foreach ( $this->store_data as $key => $value ) {
-			if ( strpos( $key, $field_name ) === 0 ) {
-				unset( $this->store_data[ $key ] );
-			}
-		}
-	}
-
-	/**
-	 * Expand complex fields from raw data.
-	 */
-	public static function unwrap_complex_field_values( $instance, $complex_field_names ) {
-		foreach ( $complex_field_names as $name ) {
-			foreach ( $instance as $key => $value ) {
-				if ( ! preg_match( '~^' . preg_quote( $name, '~' ) . '(?P<group>\w*)-_?(?P<key>.*?)_(?P<index>\d+)_?(?P<sub>\w+)?(-(?P<trailing>.*))?$~', $key, $field_name ) ) {
-					continue;
-				}
-
-				$value = maybe_unserialize( $value );
-
-				$instance[ $name ][ $field_name['index'] ]['_type'] = $field_name['group'];
-				if ( ! empty( $field_name['trailing'] ) ) {
-					if ( ! preg_match( '~^' . preg_quote( $field_name['key'], '~' ) . '(?P<group>\w*)-_?(?P<key>.*)_(?P<index>\d+)_?(?P<sub>\w+)?$~', $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'], $subfield_name ) ) {
-						continue;
-					}
-
-					$instance[ $name ][ $field_name['index'] ][ $field_name['key'] ][ $subfield_name['index'] ]['_type'] = $subfield_name['group'];
-					if ( ! empty( $subfield_name['sub'] ) ) {
-						$instance[ $name ][ $field_name['index'] ][ $field_name['key'] ][ $subfield_name['index'] ][ $subfield_name['key'] ][ $subfield_name['sub'] ] = $value;
-					} else {
-						$instance[ $name ][ $field_name['index'] ][ $field_name['key'] ][ $subfield_name['index'] ][ $subfield_name['key'] ] = $value;
-					}
-				} else if ( ! empty( $field_name['sub'] ) ) {
-					$instance[ $name ][ $field_name['index'] ][ $field_name['key'] ][ $field_name['sub'] ] = $value;
-				} else {
-					$instance[ $name ][ $field_name['index'] ][ $field_name['key'] ] = $value;
-				}
-
-				unset( $instance[ $key ] );
-			}
-		}
-
-		return $instance;
 	}
 }

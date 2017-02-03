@@ -4,6 +4,7 @@ namespace Carbon_Fields\Field;
 
 use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Datastore\Datastore_Holder_Interface;
+use Carbon_Fields\Value_Set\Value_Set;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -37,9 +38,30 @@ class Field implements Datastore_Holder_Interface {
 	public $type;
 
 	/**
+	 * Original field name before being modified by hierarchy
+	 *
+	 * @var string
+	 **/
+	protected $hierarchy_name = '';
+
+	/**
+	 * Array of ancestor field names
+	 *
+	 * @var array
+	 **/
+	protected $hierarchy = array();
+
+	/**
+	 * Array of complex entry ids
+	 *
+	 * @var array
+	 **/
+	protected $hierarchy_index = array();
+
+	/**
 	 * Field value
 	 *
-	 * @var mixed
+	 * @var Value_Set
 	 */
 	protected $value;
 
@@ -151,18 +173,20 @@ class Field implements Datastore_Holder_Interface {
 	protected $required = false;
 
 	/**
-	 * Prefix to be prepended to the field name during load, save, delete and <strong>render</strong>
-	 *
-	 * @var string
-	 **/
-	protected $name_prefix = '_';
-
-	/**
 	 * Stores the field conditional logic rules.
 	 *
 	 * @var array
 	 **/
 	protected $conditional_logic = array();
+
+	/**
+	 * Clone the Value_Set object as well
+	 *
+	 * @var array
+	 **/
+    public function __clone() {
+        $this->value = clone $this->value;
+    }
 
 	/**
 	 * Create a new field of type $type and name $name and label $label.
@@ -208,6 +232,10 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $label Field label
 	 */
 	protected function __construct( $name, $label ) {
+		if ( $this->value === null ) {
+			$this->value = new Value_Set();
+		}
+		$this->set_hierarchy_name( $name );
 		$this->set_name( $name );
 		$this->set_label( $label );
 		$this->set_base_name( $name );
@@ -232,6 +260,77 @@ class Field implements Datastore_Holder_Interface {
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
 
 		add_action( 'admin_footer', array( get_class( $this ), 'admin_enqueue_scripts' ), 5 );
+	}
+
+	/**
+	 * Set clean field name suitable for use in hierarchy
+	 *
+	 * @return array
+	 **/
+	public function set_hierarchy_name( $hierarchy_name ) {
+		$this->hierarchy_name = $hierarchy_name;
+	}
+
+	/**
+	 * Get clean field name suitable for use in hierarchy
+	 *
+	 * @return array
+	 **/
+	public function get_hierarchy_name() {
+		return $this->hierarchy_name;
+	}
+
+	/**
+	 * Set array of hierarchy field names
+	 *
+	 * @return array
+	 **/
+	public function set_hierarchy( $hierarchy ) {
+		$this->hierarchy = $hierarchy;
+	}
+
+	/**
+	 * Get array of hierarchy field names
+	 *
+	 * @return array
+	 **/
+	public function get_hierarchy() {
+		return $this->hierarchy;
+	}
+
+	/**
+	 * Set array of hierarchy indexes
+	 *
+	 * @return array
+	 **/
+	public function set_hierarchy_index( $hierarchy_index ) {
+		$this->hierarchy_index = $hierarchy_index;
+	}
+
+	/**
+	 * Get array of hierarchy indexes
+	 *
+	 * @return array
+	 **/
+	public function get_hierarchy_index() {
+		return $this->hierarchy_index;
+	}
+
+	/**
+	 * Return whether the field is a root field and holds a single value
+	 *
+	 * @return bool
+	 **/
+	public function is_simple_root_field() {
+		return (
+			empty( $this->get_hierarchy() )
+			&&
+			(
+				$this->value()->get_type() === Value_Set::TYPE_SINGLE_VALUE
+				||
+				$this->value()->get_type() === Value_Set::TYPE_MULTIPLE_KEYS
+			)
+		);
 	}
 
 	/**
@@ -278,23 +377,23 @@ class Field implements Datastore_Holder_Interface {
 	public function load() {
 		$this->get_datastore()->load( $this );
 
-		if ( $this->get_value() === false ) {
-			$this->set_value( $this->default_value );
+		if ( $this->value()->is_empty() ) {
+			$this->set_value( $this->get_default_value() );
 		}
 	}
 
 	/**
-	 * Delegate save to the field DataStore instance
+	 * Save value to storage
 	 **/
 	public function save() {
 		return $this->get_datastore()->save( $this );
 	}
 
 	/**
-	 * Delegate delete to the field DataStore instance
-	 **/
+	 * Delete value from storage
+	 */
 	public function delete() {
-		return $this->get_datastore()->delete( $this );
+		$this->get_datastore()->delete( $this );
 	}
 
 	/**
@@ -308,7 +407,7 @@ class Field implements Datastore_Holder_Interface {
 		}
 
 		if ( ! isset( $input[ $this->name ] ) ) {
-			$this->set_value( null );
+			$this->set_value( array() );
 		} else {
 			$this->set_value( stripslashes_deep( $input[ $this->name ] ) );
 		}
@@ -368,12 +467,41 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Directly modify the field value
+	 * Return a reference to the Value_Set
 	 *
-	 * @param mixed $value
+	 * @return Value_Set
+	 **/
+	public function value() {
+		return $this->value;
+	}
+
+	/**
+	 * Alias for $this->value()->get();
+	 *
+	 * @return mixed
+	 **/
+	public function get_value() {
+		return $this->value()->get();
+	}
+
+	/**
+	 * Return a differently formatted value for end-users
+	 *
+	 * @return mixed
+	 **/
+	public function get_formatted_value() {
+		$value = $this->get_value();
+		if ( $value === null ) {
+			$value = $this->get_default_value();
+		}
+		return $value;
+	}
+
+	/**
+	 * Alias for $this->value()->set( $value );
 	 **/
 	public function set_value( $value ) {
-		$this->value = $value;
+		return $this->value()->set( $value );
 	}
 
 	/**
@@ -396,15 +524,6 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return the field value
-	 *
-	 * @return mixed
-	 **/
-	public function get_value() {
-		return $this->value;
-	}
-
-	/**
 	 * Set field name.
 	 * Use only if you are completely aware of what you are doing.
 	 *
@@ -415,10 +534,6 @@ class Field implements Datastore_Holder_Interface {
 
 		if ( empty( $name ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name can\'t be empty' );
-		}
-
-		if ( $this->name_prefix && strpos( $name, $this->name_prefix ) !== 0 ) {
-			$name = $this->name_prefix . $name;
 		}
 
 		$this->name = $name;
@@ -447,22 +562,6 @@ class Field implements Datastore_Holder_Interface {
 	 **/
 	public function get_base_name() {
 		return $this->base_name;
-	}
-
-	/**
-	 * Set field name prefix. Calling this method will update the current field
-	 * name and the conditional logic fields.
-	 *
-	 * @param string $prefix
-	 * @return object $this
-	 **/
-	public function set_prefix( $prefix ) {
-		$escaped_prefix = preg_quote( $this->name_prefix, '~' );
-		$this->name = preg_replace( '~^' . $escaped_prefix . '~', '', $this->name );
-		$this->name_prefix = $prefix;
-		$this->name = $this->name_prefix . $this->name;
-
-		return $this;
 	}
 
 	/**
@@ -700,16 +799,6 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Allows the value of a field to be processed after loading.
-	 * Can be implemented by the extending class if necessary.
-	 *
-	 * @return array
-	 */
-	public function process_value() {
-
-	}
-
-	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
@@ -720,8 +809,6 @@ class Field implements Datastore_Holder_Interface {
 		if ( $load ) {
 			$this->load();
 		}
-
-		$this->process_value();
 
 		$field_data = array(
 			'id' => $this->get_id(),

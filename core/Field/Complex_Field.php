@@ -6,6 +6,7 @@ use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Field\Group_Field;
+use Carbon_Fields\Value_Set\Value_Set;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -13,23 +14,48 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Allows nested repeaters with multiple field groups to be created.
  */
 class Complex_Field extends Field {
+
 	const LAYOUT_GRID = 'grid'; // default
+
 	const LAYOUT_TABBED_HORIZONTAL = 'tabbed-horizontal';
+
 	const LAYOUT_TABBED_VERTICAL = 'tabbed-vertical';
 
-	protected $fields = array();
-	protected $values = array();
-	protected $groups = array();
+	/**
+	 * Default field value
+	 *
+	 * @var array
+	 */
+	protected $default_value = array();
 
 	protected $layout = self::LAYOUT_GRID;
+
+	protected $value_tree = array();
+
+	protected $fields = array();
+
+	protected $groups = array();
+
 	protected $values_min = -1;
+
 	protected $values_max = -1;
+
 	protected $collapsed = false;
 
 	public $labels = array(
 		'singular_name' => 'Entry',
 		'plural_name' => 'Entries',
 	);
+
+	/**
+	 * Create a field from a certain type with the specified label.
+	 * @param string $name  Field name
+	 * @param string $label Field label
+	 */
+	protected function __construct( $name, $label ) {
+		$this->value = new Value_Set( Value_Set::TYPE_MULTIPLE_VALUES );
+		parent::__construct( $name, $label );
+	}
 
 	/**
 	 * Initialization tasks.
@@ -74,12 +100,18 @@ class Complex_Field extends Field {
 				list( $name, $label, $fields ) = $argv;
 			}
 		}
+		$name = !empty( $name ) ? $name : Group_Field::DEFAULT_GROUP_NAME;
 
-		if ( array_key_exists( '_' . $name, $this->groups ) ) {
+		if ( array_key_exists( $name, $this->groups ) ) {
 			Incorrect_Syntax_Exception::raise( 'Group with name "' . $name . '" in Complex Field "' . $this->get_label() . '" already exists.' );
 		}
 
+		foreach ( $fields as $field ) {
+			$field->set_hierarchy( array_merge( $this->get_hierarchy(), array( $this->get_hierarchy_name() ) ) );
+		}
+
 		$group = new Group_Field( $name, $label, $fields );
+
 
 		$this->groups[ $group->get_name() ] = $group;
 
@@ -161,12 +193,24 @@ class Complex_Field extends Field {
 	}
 
 	/**
+	 * Return a clone of a field with hierarchy settings applied
+	 *
+	 * @return bool
+	 **/
+	public function get_clone_under_field_in_hierarchy( $field, $parent_field, $entry_index = 0 ) {
+		$clone = clone $field;
+		$clone->set_hierarchy( array_merge( $parent_field->get_hierarchy(), array( $parent_field->get_hierarchy_name() ) ) );
+		$clone->set_hierarchy_index( array_merge( $parent_field->get_hierarchy_index(), array( $entry_index ) ) );
+		return $clone;
+	}
+
+	/**
 	 * Load the field value from an input array based on it's name.
 	 *
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
 	 **/
 	public function set_value_from_input( $input = null ) {
-		$this->values = array();
+		$value_tree = array();
 
 		if ( is_null( $input ) ) {
 			$input = $_POST;
@@ -177,67 +221,92 @@ class Complex_Field extends Field {
 		}
 
 		$input_groups = $input[ $this->get_name() ];
-		$index = 0;
-
+		$input_group_index = 0;
 		foreach ( $input_groups as $values ) {
-			if ( ! isset( $values['group'] ) || ! isset( $this->groups[ $values['group'] ] ) ) {
+			if ( ! isset( $values['_type'] ) || ! isset( $this->groups[ $values['_type'] ] ) ) {
 				continue;
 			}
 
-			$value_group = array( 'type' => $values['group'] );
-			$group = $this->groups[ $values['group'] ];
-			unset( $values['group'] );
+			$group = $this->get_group_by_name( $values['_type'] );
+			$value_group = array( '_type' => $values['_type'] );
+			unset( $values['_type'] );
 
 			$group_fields = $group->get_fields();
 
 			// trim input values to those used by the field
 			$group_field_names = array_flip( $group->get_field_names() );
 			$values = array_intersect_key( $values, $group_field_names );
-
+			
 			foreach ( $group_fields as $field ) {
 				// set value from the group
-				$tmp_field = clone $field;
-				if ( is_a( $tmp_field, __NAMESPACE__ . '\\Complex_Field' ) ) {
-					if ( ! isset( $values[ $tmp_field->get_name() ] ) ) {
-						continue; // bail if the complex field is empty
-					}
+				$tmp_field = $this->get_clone_under_field_in_hierarchy( $field, $this, $input_group_index );
 
-					$new_name = $this->get_name() . $group->get_name() . '-' . $field->get_name() . '_' . $index;
-					$new_values = array( $new_name => $values[ $tmp_field->get_name() ] );
+				if ( is_a( $tmp_field, get_class() ) ) {
+					// $new_name = $this->get_name() . $group->get_name() . '-' . $field->get_name() . '_' . $input_group_index;
+					// $new_values = array( $new_name => $values[ $tmp_field->get_name() ] );
+					// $tmp_field->set_name( $new_name );
 
-					$tmp_field->set_name( $new_name );
-					$tmp_field->set_value_from_input( $new_values );
+					$tmp_field->set_value_from_input( $values );
+					$value_group[$tmp_field->get_hierarchy_name()] = $tmp_field->get_value_tree();
 				} else {
 					$tmp_field->set_value_from_input( $values );
+					$value_group[$tmp_field->get_hierarchy_name()] = $tmp_field->get_value();
 				}
-
-				// update name to group name
-				$tmp_field->set_name( $this->get_name() . $group->get_name() . '-' . $field->get_name() . '_' . $index );
-				$value_group[] = $tmp_field;
 			}
 
-			$this->values[] = $value_group;
-			$index++;
+			$value_tree[] = $value_group;
+			$input_group_index++;
 		}
+		$this->set_value_tree( $value_tree );
+
+		$value_set = array_map( function( $group ) {
+			return $group['_type'];
+		}, $this->get_value_tree() );
+		$this->set_value( $value_set );
+	}
+
+	protected function get_prefilled_field_groups( $value_tree ) {
+		$fields = array();
+		foreach ( $value_tree as $entry_index => $values ) {
+			$group = $this->get_group_by_name( $values['_type'] );
+			$group_fields = $group->get_fields();
+			$fields[ $entry_index ] = array(
+				'_type'=>$group->get_name(),
+			);
+
+			foreach ( $group_fields as $field ) {
+				$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $entry_index );
+				$clone->set_value_from_input( $values );
+				$fields[ $entry_index ][] = $clone;
+			}
+		}
+		return $fields;
 	}
 
 	/**
 	 * Load all groups of fields and their data.
 	 */
 	public function load() {
-		// load existing groups
-		$this->load_values();
+		parent::load();
+		$this->set_value_tree( $this->get_value_tree_from_datastore() );
 	}
 
 	/**
 	 * Save all contained groups of fields.
 	 */
 	public function save() {
-		$this->delete();
+		// Only delete root field values as nested field values should be deleted in a cascading manner by the datastore
+		if ( empty( $this->get_hierarchy() ) ) {
+			$this->delete();
+		}
+		
+		$this->get_datastore()->save( $this );
 
-		foreach ( $this->values as $value ) {
-			foreach ( $value as $field ) {
-				if ( !is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
+		$field_groups = $this->get_prefilled_field_groups( $this->get_value_tree() );
+
+		foreach ( $field_groups as $entry_index => $fields ) {
+			foreach ( $fields as $field ) {
+				if ( !is_a( $field, '\\Carbon_Fields\\Field\\Field' ) ) {
 					continue;
 				}
 				$field->save();
@@ -246,140 +315,72 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Delete the values of all contained fields.
-	 */
-	public function delete() {
-		return $this->get_datastore()->delete_values( $this );
-	}
-
-	/**
-	 * Load and parse the field data.
-	 */
-	public function load_values() {
-		return $this->load_values_from_datastore();
-	}
-
-	/**
-	 * Load and parse the field data from the database.
-	 */
-	public function load_values_from_datastore() {
-		$this->values = array();
-
-		$group_rows = $this->get_datastore()->load_values( $this );
-
-		return $this->process_loaded_values( $group_rows );
-	}
-
-	/**
-	 * Load and parse a raw set of field data.
+	 * Return the full value tree of all groups and their fields
 	 *
-	 * @param  array $values Raw data entries
-	 * @return array 		 Processed data entries
+	 * @return mixed
+	 **/
+	public function get_value_tree() {
+		return (array) $this->value_tree;
+	}
+
+	/**
+	 * Set the full value tree of all groups and their fields
+	 *
+	 * @return mixed
+	 **/
+	public function set_value_tree( $value_tree ) {
+		return $this->value_tree = $value_tree;
+	}
+
+	/**
+	 * Load and parse the field data from the datastore
 	 */
-	public function load_values_from_array( $values ) {
-		$this->values = array();
+	protected function get_value_tree_from_datastore() {
+		$entries = $this->get_value();
+		$values = array();
 
-		$group_rows = array();
-
-		$meta_key = $this->get_name();
-
-		foreach ( $values as $key => $value ) {
-			if ( strpos( $key, $meta_key ) !== 0 ) {
-				continue;
-			}
-
-			$group_rows[] = array(
-				'field_key' => preg_replace( '~^(' . preg_quote( $this->get_name(), '~' ) . ')_\d+_~', '$1_', $key ),
-				'field_value' => $value,
+		foreach ( $entries as $entry_index => $group_name ) {
+			$group = $this->get_group_by_name( $group_name );
+			$values[$entry_index] = array(
+				'_type'=>$group->get_name(),
 			);
-		}
-
-		return $this->process_loaded_values( $group_rows );
-	}
-
-	/**
-	 * Parse groups of raw field data into the actual field hierarchy.
-	 *
-	 * @param  array $group_rows Group rows
-	 */
-	public function process_loaded_values( $group_rows ) {
-		$input_groups = array();
-
-		// Set default values
-		$field_names = array();
-		foreach ( $this->groups as $group ) {
 			$group_fields = $group->get_fields();
-			foreach ( $group_fields as $field ) {
-				$field_names[] = $field->get_name();
-				$field->set_value( $field->get_default_value() );
-			}
-		}
 
-		if ( empty( $group_rows ) ) {
-			return;
-		}
+			foreach ( $group_fields as $group_field ) {
+				$clone = $this->get_clone_under_field_in_hierarchy( $group_field, $this, $entry_index );
+				$clone->load();
 
-		// load and parse values and group type
-		foreach ( $group_rows as $row ) {
-			if ( ! preg_match( Helper::get_complex_field_regex( $this->get_name(), array_keys( $this->groups ), $field_names ), $row['field_key'], $field_name ) ) {
-				continue;
-			}
-
-			$row['field_value'] = maybe_unserialize( $row['field_value'] );
-			$input_groups[ $field_name['index'] ]['type'] = $field_name['group'];
-
-			if ( ! empty( $field_name['trailing'] ) ) {
-				$input_groups[ $field_name['index'] ][ $field_name['key'] . '_' . $field_name['sub'] . '-' . $field_name['trailing'] ] = $row['field_value'];
-			} else if ( ! empty( $field_name['sub'] ) ) {
-				$input_groups[ $field_name['index'] ][ $field_name['key'] ][ $field_name['sub'] ] = $row['field_value'];
-			} else {
-				$input_groups[ $field_name['index'] ][ $field_name['key'] ] = $row['field_value'];
-			}
-		}
-
-		// create groups list with loaded fields
-		ksort( $input_groups );
-
-		foreach ( $input_groups as $index => $values ) {
-			$value_group = array( 'type' => $values['type'] );
-			$group_fields = $this->groups[ $values['type'] ]->get_fields();
-			unset( $values['type'] );
-
-			foreach ( $group_fields as $field ) {
-				// set value from the group
-				$tmp_field = clone $field;
-
-				if ( is_a( $field, __NAMESPACE__ . '\\Complex_Field' ) ) {
-					$tmp_field->load_values_from_array( $values );
+				if ( is_a( $clone, get_class() ) ) {
+					$values[ $entry_index ][ $clone->get_hierarchy_name() ] = $clone->get_value_tree();
 				} else {
-					$tmp_field->set_value_from_input( $values );
+					$values[ $entry_index ][ $clone->get_hierarchy_name() ] = $clone->get_value();
 				}
-
-				$value_group[] = $tmp_field;
 			}
-
-			$this->values[] = $value_group;
 		}
+
+		return $values;
 	}
 
 	/**
-	 * Retrieve the field values.
-	 * @return array
-	 */
-	public function get_values() {
-		return $this->values;
-	}
-
-	/**
-	 * Generate and set the field prefix.
-	 * @param string $prefix
-	 */
-	public function set_prefix( $prefix ) {
-		parent::set_prefix( $prefix );
-
-		foreach ( $this->groups as $group ) {
-			$group->set_prefix( $prefix );
+	 * Return a differently formatted value for end-users
+	 *
+	 * @return mixed
+	 **/
+	public function get_formatted_value() {
+		$field_groups = $this->get_prefilled_field_groups( $this->get_value_tree() );
+		
+		$value = array();
+		foreach ( $field_groups as $entry_index => $field_group ) {
+			$value[ $entry_index ] = array();
+			foreach ( $field_group as $key => $field ) {
+				if ( is_a( $field, '\\Carbon_Fields\\Field\\Field' ) ) {
+					$value[ $entry_index ][ $field->get_name() ] = $field->get_formatted_value(); 
+				} else {
+					$value[ $entry_index ][ $key ] = $field;
+				}
+			}
 		}
+		return $value;
 	}
 
 	/**
@@ -393,15 +394,15 @@ class Complex_Field extends Field {
 		$complex_data = parent::to_json( $load );
 
 		$groups_data = array();
-		$values_data = array();
-
 		foreach ( $this->groups as $group ) {
 			$groups_data[] = $group->to_json( false );
 		}
 
-		foreach ( $this->values as $fields ) {
-			$group = $this->get_group_by_name( $fields['type'] );
-			unset( $fields['type'] );
+		$field_groups = $this->get_prefilled_field_groups( $this->get_value_tree() );
+		$value_data = array();
+		foreach ( $field_groups as $entry_index => $fields ) {
+			$group = $this->get_group_by_name( $fields['_type'] );
+			$group_fields = $group->get_fields();
 
 			$data = array(
 				'name' => $group->get_name(),
@@ -410,11 +411,14 @@ class Complex_Field extends Field {
 				'fields' => array(),
 			);
 
-			foreach ( $fields as $index => $field ) {
+			foreach ( $fields as $field ) {
+				if ( !is_a( $field, '\\Carbon_Fields\\Field\\Field' ) ) {
+					continue;
+				}
 				$data['fields'][] = $field->to_json( false );
 			}
 
-			$values_data[] = $data;
+			$value_data[] = $data;
 		}
 
 		$complex_data = array_merge( $complex_data, array(
@@ -424,10 +428,9 @@ class Complex_Field extends Field {
 			'max' => $this->get_max(),
 			'multiple_groups' => count( $groups_data ) > 1,
 			'groups' => $groups_data,
-			'value' => $values_data,
+			'value' => $value_data,
 			'collapsed' => $this->collapsed,
 		) );
-
 		return $complex_data;
 	}
 
@@ -493,7 +496,7 @@ class Complex_Field extends Field {
 	public function template_group() {
 		?>
 		<div id="carbon-{{{ complex_name }}}-complex-container" class="carbon-row carbon-group-row" data-group-id="{{ id }}">
-			<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[group]" value="{{ name }}" />
+			<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[_type]" value="{{ name }}" />
 
 			<div class="carbon-drag-handle">
 				<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label_template || label }}}</span>

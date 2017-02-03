@@ -213,25 +213,6 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
-	 * Append array of fields to the current fields set. All items of the array
-	 * must be instances of Field and their names should be unique for all
-	 * Carbon containers.
-	 * If a field does not have DataStore already, the container datastore is
-	 * assigned to them instead.
-	 *
-	 * @param array $fields
-	 **/
-	public function add_fields( $fields ) {
-		parent::add_fields( $fields );
-
-		foreach ( $this->fields as $field ) {
-			$field->set_prefix( '' );
-		}
-
-		return $this;
-	}
-
-	/**
 	 * COMMON USAGE METHODS
 	 */
 
