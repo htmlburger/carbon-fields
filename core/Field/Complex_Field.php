@@ -306,7 +306,7 @@ class Complex_Field extends Field {
 
 		foreach ( $field_groups as $entry_index => $fields ) {
 			foreach ( $fields as $field ) {
-				if ( !is_a( $field, '\\Carbon_Fields\\Field\\Field' ) ) {
+				if ( !is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
 					continue;
 				}
 				$field->save();
@@ -373,7 +373,7 @@ class Complex_Field extends Field {
 		foreach ( $field_groups as $entry_index => $field_group ) {
 			$value[ $entry_index ] = array();
 			foreach ( $field_group as $key => $field ) {
-				if ( is_a( $field, '\\Carbon_Fields\\Field\\Field' ) ) {
+				if ( is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
 					$value[ $entry_index ][ $field->get_name() ] = $field->get_formatted_value(); 
 				} else {
 					$value[ $entry_index ][ $key ] = $field;
@@ -412,7 +412,7 @@ class Complex_Field extends Field {
 			);
 
 			foreach ( $fields as $field ) {
-				if ( !is_a( $field, '\\Carbon_Fields\\Field\\Field' ) ) {
+				if ( !is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
 					continue;
 				}
 				$data['fields'][] = $field->to_json( false );
