@@ -11,6 +11,13 @@ use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 /**
  * Key Value Datastore
  * Provides basic functionality to save in a key-value storage
+ *
+ * Key schema:
+ * _[root_field_name]|[parent:field:names:separated:with:colons]|[complex:group:indexes:separated:with:colons]|[value_index]|[value_key/property]
+ *
+ * Example:
+ * _countries|major_cities:name|0:1|0|value
+ * This key is for a field called "name" inside the complex field "major_cities" with group index 1, which is inside the complex field "countries" with group index 0
  */
 abstract class Key_Value_Datastore extends Datastore {
 
