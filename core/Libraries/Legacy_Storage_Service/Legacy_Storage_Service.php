@@ -295,6 +295,9 @@ class Legacy_Storage_Service {
 					$i++;
 				}
 			}
+		} else if ( $value === null ) {
+			$key = $this->field_data_to_storage_key( $hierarchy, $hierarchy_index, 0, '_empty' );
+			$storage_array[ $key ] = '';
 		} else {
 			if ( count( $hierarchy ) === 1 ) {
 				// Add a basic key as well as simple root fields will load that instead
