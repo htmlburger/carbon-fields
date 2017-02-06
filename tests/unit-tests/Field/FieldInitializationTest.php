@@ -17,6 +17,8 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 * @covers \Carbon_Fields\Field\Field::make
 	 * @covers \Carbon_Fields\Field\Field::factory
 	 * @covers \Carbon_Fields\Field\Field::__construct
+	 * @covers \Carbon_Fields\Field\Field::get_name
+	 * @covers \Carbon_Fields\Field\Field::set_name
 	 */
 	public function testMakeTextFields() {
 		$field = Field::make( 'text', $this->fieldName );
@@ -95,6 +97,8 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 * @covers \Carbon_Fields\Field\Field::make
 	 * @covers \Carbon_Fields\Field\Field::factory
 	 * @covers \Carbon_Fields\Field\Field::__construct
+	 * @covers \Carbon_Fields\Field\Field::get_name
+	 * @covers \Carbon_Fields\Field\Field::set_name
 	 */
 	public function testFieldNameIsPrependedWithUnderscoreAutomatically() {
 		$field = Field::make( 'text', 'something' );
@@ -105,6 +109,8 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 * @covers \Carbon_Fields\Field\Field::make
 	 * @covers \Carbon_Fields\Field\Field::factory
 	 * @covers \Carbon_Fields\Field\Field::__construct
+	 * @covers \Carbon_Fields\Field\Field::get_name
+	 * @covers \Carbon_Fields\Field\Field::set_name
 	 */
 	public function testFieldNameAutomaticallyConvertsNonAlphanumericCharactersToUnderscores() {
 		$field = Field::make( 'text', 'This is a strange name' );
@@ -115,6 +121,8 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 * @covers \Carbon_Fields\Field\Field::make
 	 * @covers \Carbon_Fields\Field\Field::factory
 	 * @covers \Carbon_Fields\Field\Field::__construct
+	 * @covers \Carbon_Fields\Field\Field::get_name
+	 * @covers \Carbon_Fields\Field\Field::set_name
 	 */
 	public function testFieldNameRemovesSpaces() {
 		// XXX: Is this really expected? 
@@ -137,6 +145,8 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 * @covers \Carbon_Fields\Field\Field::make
 	 * @covers \Carbon_Fields\Field\Field::factory
 	 * @covers \Carbon_Fields\Field\Field::__construct
+	 * @covers \Carbon_Fields\Field\Field::get_name
+	 * @covers \Carbon_Fields\Field\Field::set_name
 	 */
 	public function testNonAsciiFieldNamesAreHandledProperly() {
 		// This text includes a capital cyrillic letter ... it actually assures that
