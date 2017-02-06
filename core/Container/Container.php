@@ -357,7 +357,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	public final function is_valid_attach() {
+	final public function is_valid_attach() {
 		$is_valid_attach = $this->_is_valid_attach();
 		return apply_filters( 'carbon_container_is_valid_attach', $is_valid_attach, $this );
 	}
@@ -367,7 +367,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	protected abstract function _is_valid_attach();
+	abstract protected function _is_valid_attach();
 
 	/**
 	 * Whether this container is currently viewed.

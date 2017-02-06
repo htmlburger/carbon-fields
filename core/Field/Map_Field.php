@@ -121,18 +121,18 @@ class Map_Field extends Field {
 		$value_set = $this->get_value();
 		if ( $value_set === null ) {
 			$value_set = array(
-				'lat'=>floatval($this->default_lat),
-				'lng'=>floatval($this->default_lng),
-				'zoom'=>intval($this->default_zoom),
+				'lat'=>floatval( $this->default_lat ),
+				'lng'=>floatval( $this->default_lng ),
+				'zoom'=>intval( $this->default_zoom ),
 				'address'=>'',
 			);
 			$value_set['value'] = $this->lat_lng_to_latlng( $value_set['lat'], $value_set['lng'] );
 		}
 		$field_data = array_merge( $field_data, array(
 			'value'=>$value_set['value'],
-			'lat'=>floatval($value_set['lat']),
-			'lng'=>floatval($value_set['lng']),
-			'zoom'=>intval($value_set['zoom']),
+			'lat'=>floatval( $value_set['lat'] ),
+			'lng'=>floatval( $value_set['lng'] ),
+			'zoom'=>intval( $value_set['zoom'] ),
 			'address'=>$value_set['address'],
 		) );
 

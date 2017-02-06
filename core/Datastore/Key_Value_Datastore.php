@@ -301,7 +301,7 @@ abstract class Key_Value_Datastore extends Datastore {
 		$tree = array();
 
 		foreach ( $storage_array as $row ) {
-			$key_segments = explode( static::SEGMENT_GLUE, substr( $row->key, 1) ); // drop the first underscore character
+			$key_segments = explode( static::SEGMENT_GLUE, substr( $row->key, 1 ) ); // drop the first underscore character
 			$root = $key_segments[0];
 			$parents = array();
 			$group_indexes = array( 0 );
@@ -370,7 +370,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * @param Field $field The field to retrieve value for.
 	 * @return array Array of {key, value} objects
 	 */
-	protected abstract function get_storage_array( Field $field, $storage_key_patterns );
+	abstract protected function get_storage_array( Field $field, $storage_key_patterns );
 
 	/**
 	 * Load the field value(s)
@@ -390,7 +390,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * @param string $key
 	 * @param string $value
 	 */
-	protected abstract function save_key_value_pair( $key, $value );
+	abstract protected function save_key_value_pair( $key, $value );
 
 	/**
 	 * Save the field value(s)

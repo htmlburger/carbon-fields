@@ -37,7 +37,7 @@ abstract class Service {
 	/**
 	 * Enable actions for inheriting classes
 	 */
-	protected function enabled() {}
+	abstract protected function enabled();
 
 	/**
 	 * Disable the service
@@ -58,5 +58,5 @@ abstract class Service {
 	/**
 	 * Disable actions for inheriting classes
 	 */
-	protected abstract function disabled();
+	abstract protected function disabled();
 }

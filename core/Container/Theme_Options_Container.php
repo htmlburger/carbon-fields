@@ -9,7 +9,8 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Theme options container class.
  */
 class Theme_Options_Container extends Container {
-	static protected $registered_pages = array();
+	
+	protected static $registered_pages = array();
 
 	public $settings = array(
 		'parent' => 'self',
