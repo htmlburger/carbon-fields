@@ -10,7 +10,9 @@ class Widget_Container extends Container {
 	/**
 	 * Create a new widget
 	 *
-	 * @param string $id Unique ID of the widget
+	 * @param string $unique_id Unique ID of the widget
+	 * @param string $title Ignored
+	 * @param string $type Container type
 	 **/
 	public function __construct( $unique_id, $title, $type ) {
 		$this->id = $unique_id;
