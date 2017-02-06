@@ -67,6 +67,33 @@ const mapDispatchToProps = {
 };
 
 /**
+ * The lifecycle hooks that will be attached to the field.
+ *
+ * @type {Object}
+ */
+const hooks = {
+	componentDidMount() {
+		const {
+			field,
+			options,
+			setupField,
+			updateField,
+		} = this.props;
+
+		setupField(field.id, field.type);
+
+		// If the field doesn't have a value,
+		// use the first option as fallback.
+		if (!field.value) {
+			updateField(field.id, {
+				value: options[0].value,
+			});
+		}
+	}
+};
+
+
+/**
  * Sync the input value with the store.
  *
  * @param  {Object}   props
@@ -98,6 +125,6 @@ const handleChange = ({ field, options, updateField, addSidebar }) => e => {
 
 export default compose(
 	withStore(mapStateToProps, mapDispatchToProps),
-	withSetup(),
+	withSetup(hooks),
 	withHandlers({ handleChange })
 )(SidebarField);
