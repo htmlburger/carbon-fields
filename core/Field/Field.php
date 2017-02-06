@@ -410,7 +410,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @return object $this
 	 **/
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
-		if ( $set_as_default && !$this->has_default_datastore() ) {
+		if ( $set_as_default && ! $this->has_default_datastore() ) {
 			return $this; // datastore has been overriden with a custom one - abort changing to a default one
 		}
 		$this->datastore = $datastore;

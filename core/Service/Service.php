@@ -45,7 +45,7 @@ abstract class Service {
 	 * @return bool
 	 */
 	public function disable() {
-		if ( !$this->is_enabled() ) {
+		if ( ! $this->is_enabled() ) {
 			return false;
 		}
 		$this->enabled = false;

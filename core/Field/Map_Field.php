@@ -62,7 +62,7 @@ class Map_Field extends Field {
 	 * Convert lat and lng to a comma-separated list
 	 */
 	protected function lat_lng_to_latlng( $lat, $lng ) {
-		return ( !empty( $lat ) && !empty( $lng ) ) ? $lat . ',' . $lng : '';
+		return ( ! empty( $lat ) && ! empty( $lng ) ) ? $lat . ',' . $lng : '';
 	}
 
 	/**

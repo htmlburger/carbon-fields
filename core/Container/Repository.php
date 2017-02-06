@@ -130,7 +130,7 @@ class Repository {
 		$base = $id;
 		$suffix = 0;
 
-		while ( !$this->is_unique_panel_id( $id ) ) {
+		while ( ! $this->is_unique_panel_id( $id ) ) {
 			$suffix++;
 			$id = $base . strval( $suffix );
 		}
@@ -144,7 +144,7 @@ class Repository {
 	 * @param string $title
 	 */
 	protected function is_unique_panel_id( $id ) {
-		return !in_array( $id, $this->registered_panel_ids );
+		return ! in_array( $id, $this->registered_panel_ids );
 	}
 
 	/**
@@ -164,7 +164,7 @@ class Repository {
 	 * @param string $id
 	 **/
 	protected function unregister_unique_panel_id( $id ) {
-		if ( !$this->is_unique_panel_id( $id ) ) {
+		if ( ! $this->is_unique_panel_id( $id ) ) {
 			unset( $this->registered_panel_ids[ array_search( $id, $this->registered_panel_ids ) ] );
 		}
 	}

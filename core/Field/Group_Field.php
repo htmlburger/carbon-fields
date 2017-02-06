@@ -123,7 +123,7 @@ class Group_Field {
 
 		foreach ( $this->get_fields() as $field ) {
 			// The field default value should be set manually if the field is not loaded
-			if ( !$load && $field->get_value() === null ) {
+			if ( ! $load && $field->get_value() === null ) {
 				$field->set_value( $field->get_default_value() );
 			}
 
@@ -211,7 +211,7 @@ class Group_Field {
 	 */
 	public function set_name( $name ) {
 		$name = preg_replace( '~\s+~', '_', strtolower( $name ) );
-		if ( !$name ) {
+		if ( ! $name ) {
 			$name = static::DEFAULT_GROUP_NAME;
 		}
 		$this->name = $name;

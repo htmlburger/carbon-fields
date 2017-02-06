@@ -102,7 +102,7 @@ class Complex_Field extends Field {
 				list( $name, $label, $fields ) = $argv;
 			}
 		}
-		$name = !empty( $name ) ? $name : Group_Field::DEFAULT_GROUP_NAME;
+		$name = ! empty( $name ) ? $name : Group_Field::DEFAULT_GROUP_NAME;
 
 		if ( array_key_exists( $name, $this->groups ) ) {
 			Incorrect_Syntax_Exception::raise( 'Group with name "' . $name . '" in Complex Field "' . $this->get_label() . '" already exists.' );
@@ -185,7 +185,7 @@ class Complex_Field extends Field {
 	 * @param Datastore_Interface $datastore
 	 */
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
-		if ( $set_as_default && !$this->has_default_datastore() ) {
+		if ( $set_as_default && ! $this->has_default_datastore() ) {
 			return $this; // datastore has been overriden with a custom one - abort changing to a default one
 		}
 		$this->datastore = $datastore;
@@ -269,7 +269,7 @@ class Complex_Field extends Field {
 	protected function get_prefilled_field_groups( $value_tree ) {
 		$fields = array();
 
-		if ( !empty( $value_tree ) ) {
+		if ( ! empty( $value_tree ) ) {
 			foreach ( $value_tree['value_set'] as $entry_index => $value ) {
 				$group_name = $value[ Value_Set::VALUE_KEY ];
 				$group = $this->get_group_by_name( $group_name );
@@ -335,7 +335,7 @@ class Complex_Field extends Field {
 
 		foreach ( $field_groups as $entry_index => $fields ) {
 			foreach ( $fields as $field ) {
-				if ( !is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
+				if ( ! is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
 					continue;
 				}
 				$field->save();
@@ -412,7 +412,7 @@ class Complex_Field extends Field {
 			);
 
 			foreach ( $fields as $field ) {
-				if ( !is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
+				if ( ! is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
 					continue;
 				}
 				$data['fields'][] = $field->to_json( false );

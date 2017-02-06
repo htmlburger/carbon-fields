@@ -70,7 +70,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 **/
 	protected function get_full_hierarchy_index_for_field( Field $field ) {
 		$hierarchy_index = $field->get_hierarchy_index();
-		$full_hierarchy_index = !empty( $hierarchy_index ) ? $hierarchy_index : array( 0 );
+		$full_hierarchy_index = ! empty( $hierarchy_index ) ? $hierarchy_index : array( 0 );
 		return $full_hierarchy_index;
 	}
 
@@ -155,7 +155,7 @@ abstract class Key_Value_Datastore extends Datastore {
 		$parents = $full_hierarchy;
 		$first_parent = array_shift( $parents );
 
-		$hierarchy_index = !empty( $hierarchy ) ? $wildcard : '0';
+		$hierarchy_index = ! empty( $hierarchy ) ? $wildcard : '0';
 		$value_group_index = $wildcard;
 
 		$storage_key = '_' . 
@@ -310,10 +310,10 @@ abstract class Key_Value_Datastore extends Datastore {
 			$property = Value_Set::VALUE_KEY;
 
 			if ( count( $key_segments ) === static::TOTAL_SEGMENTS ) {
-				if ( !empty( $key_segments[1] ) ) {
+				if ( ! empty( $key_segments[1] ) ) {
 					$parents = explode( static::SEGMENT_VALUE_GLUE, $key_segments[1] );
 				}
-				if ( !empty( $key_segments[2] ) ) {
+				if ( ! empty( $key_segments[2] ) ) {
 					$group_indexes = array_map( 'intval', explode( static::SEGMENT_VALUE_GLUE, $key_segments[2] ) );
 				}
 				$value_index = intval( $key_segments[3] );
@@ -329,28 +329,28 @@ abstract class Key_Value_Datastore extends Datastore {
 			foreach ( $full_hierarchy as $i => $field_name ) {
 				$index = isset( $group_indexes[ $i ] ) ? $group_indexes[ $i ] : -1;
 
-				if ( !isset( $level[ $field_name ] ) ) {
+				if ( ! isset( $level[ $field_name ] ) ) {
 					$level[ $field_name ] = array();
 				}
 				$level = &$level[ $field_name ];
 
 				if ( $i < count( $full_hierarchy ) - 1 ) {
-					if ( !isset( $level[ 'groups' ] ) ) {
+					if ( ! isset( $level[ 'groups' ] ) ) {
 						$level[ 'groups' ] = array();
 					}
 					$level = &$level[ 'groups' ];
 
-					if ( !isset( $level[ $index ] ) ) {
+					if ( ! isset( $level[ $index ] ) ) {
 						$level[ $index ] = array();
 					}
 					$level = &$level[ $index ];
 				} else  {
-					if ( !isset( $level[ 'value_set' ] ) ) {
+					if ( ! isset( $level[ 'value_set' ] ) ) {
 						$level[ 'value_set' ] = array();
 					}
 					$level = &$level[ 'value_set' ];
 
-					if ( !isset( $level[ $value_index ] ) ) {
+					if ( ! isset( $level[ $value_index ] ) ) {
 						$level[ $value_index ] = array();
 					}
 					$level = &$level[ $value_index ];

@@ -430,7 +430,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		$field_group = $this->get_fields();
 		$hierarchy_left = $hierarchy;
 
-		while ( !empty( $hierarchy_left ) ) {
+		while ( ! empty( $hierarchy_left ) ) {
 			$segment = array_shift( $hierarchy_left );
 			$segment_pieces = explode( ':', $segment, 2 );
 			$field_name = $segment_pieces[0];
@@ -443,7 +443,7 @@ abstract class Container implements Datastore_Holder_Interface {
 					} else {
 						if ( is_a( $f, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
 							$group = $f->get_group_by_name( $group_name );
-							if ( !$group ) {
+							if ( ! $group ) {
 								Incorrect_Syntax_Exception::raise( 'Unknown group name specified when fetching a value inside a complex field: "' . $group_name . '".' );
 							}
 							$field_group = $group->get_fields();
@@ -502,7 +502,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return object $this
 	 **/
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
-		if ( $set_as_default && !$this->has_default_datastore() ) {
+		if ( $set_as_default && ! $this->has_default_datastore() ) {
 			return $this; // datastore has been overriden with a custom one - abort changing to a default one
 		}
 		$this->datastore = $datastore;

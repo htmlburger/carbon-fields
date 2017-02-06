@@ -89,7 +89,7 @@ class Legacy_Storage_Service extends Service {
 				$group_names = $field->get_group_names();
 				foreach ( $group_names as $group_name ) {
 					$group = $field->get_group_by_name( $group_name );
-					if ( !$group ) {
+					if ( ! $group ) {
 						continue;
 					}
 					$permutations[] = array(
@@ -120,11 +120,11 @@ class Legacy_Storage_Service extends Service {
 		global $wpdb;
 
 		$container = $this->get_container_for_datastore( $datastore );
-		if ( !$container ) {
+		if ( ! $container ) {
 			return array(); // unhandled datastore type or no registered containers
 		}
 
-		if ( !isset( $this->storage_array_cache[ $container->id ] ) ) {
+		if ( ! isset( $this->storage_array_cache[ $container->id ] ) ) {
 			$prefix = '_';
 			$table_name = '';
 			$table_id_column = '';
@@ -143,7 +143,7 @@ class Legacy_Storage_Service extends Service {
 				$table_value_column = 'meta_value';
 			}
 
-			if ( $table_id_column && !$datastore->get_id() ) {
+			if ( $table_id_column && ! $datastore->get_id() ) {
 				return array(); // we are in a "create" view where we do not have an id (e.g. term meta)
 			}
 
@@ -354,7 +354,7 @@ class Legacy_Storage_Service extends Service {
 	protected function field_data_to_storage_key( $full_hierarchy, $hierarchy_index, $value_index = 0, $value_key = 'value' ) {
 		$parents = $full_hierarchy;
 		$first_parent = array_shift( $parents );
-		$hierarchy_index = !empty( $hierarchy_index ) ? $hierarchy_index : array( 0 );
+		$hierarchy_index = ! empty( $hierarchy_index ) ? $hierarchy_index : array( 0 );
 
 		$key = '_' . $first_parent . KVD::SEGMENT_GLUE;
 		$key .= implode( KVD::SEGMENT_VALUE_GLUE, $parents ) . KVD::SEGMENT_GLUE;
@@ -429,7 +429,7 @@ class Legacy_Storage_Service extends Service {
 	 * @return array
 	 */
 	public function get_storage_array( Datastore $datastore, $storage_key_patterns ) {
-		if ( !$this->is_enabled() ) {
+		if ( ! $this->is_enabled() ) {
 			return array();
 		}
 

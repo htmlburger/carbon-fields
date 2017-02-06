@@ -33,7 +33,7 @@ class Nav_Menu_Item_Container extends Container {
 
 		// Register the custom edit walker only once
 		$callable = array( get_class(), 'edit_walker' );
-		if ( !has_filter( 'wp_edit_nav_menu_walker', $callable ) ) {
+		if ( ! has_filter( 'wp_edit_nav_menu_walker', $callable ) ) {
 			add_filter( 'wp_edit_nav_menu_walker', $callable, 10, 2 );
 		}
 	}
@@ -113,7 +113,7 @@ class Nav_Menu_Item_Container extends Container {
 	 * Trigger Save for all instances
 	 */
 	public function update( $menu_id, $current_menu_item_id ) {
-		if ( !$this->is_valid_attach() ) {
+		if ( ! $this->is_valid_attach() ) {
 			return;
 		}
 		
@@ -125,7 +125,7 @@ class Nav_Menu_Item_Container extends Container {
 	 * Render custom fields inside each Nav Menu entry
 	 */
 	public function form( $item ) {
-		if ( !$this->is_valid_attach() ) {
+		if ( ! $this->is_valid_attach() ) {
 			return;
 		}
 
@@ -137,7 +137,7 @@ class Nav_Menu_Item_Container extends Container {
 	 * Create a clone of this container with it's own datastore for every menu item
 	 */
 	protected function get_clone_for_menu_item( $menu_item_id ) {
-		if ( !isset( $this->menu_item_instances[ $menu_item_id ] ) ) {
+		if ( ! isset( $this->menu_item_instances[ $menu_item_id ] ) ) {
 			$menu_item_datastore = Datastore::make( 'nav_menu_item' );
 			$menu_item_datastore->set_id( $menu_item_id );
 			$menu_item_field_prefix = $menu_item_datastore->get_garbage_prefix();

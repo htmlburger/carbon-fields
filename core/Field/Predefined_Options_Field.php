@@ -27,7 +27,7 @@ abstract class Predefined_Options_Field extends Field {
 	 * @param array|callable $options
 	 */
 	public function set_options( $options ) {
-		if ( !is_callable( $options ) && !is_array( $options ) ) {
+		if ( ! is_callable( $options ) && ! is_array( $options ) ) {
 			Incorrect_Syntax_Exception::raise( 'Only arrays and callbacks are allowed in the <code>set_options()</code> method.' );
 		}
 
@@ -42,7 +42,7 @@ abstract class Predefined_Options_Field extends Field {
 	 * @param array|callable $options
 	 */
 	public function add_options( $options ) {
-		if ( !is_callable( $options ) && !is_array( $options ) ) {
+		if ( ! is_callable( $options ) && ! is_array( $options ) ) {
 			Incorrect_Syntax_Exception::raise( 'Only arrays and callbacks are allowed in the <code>add_options()</code> method.' );
 		}
 
@@ -59,7 +59,7 @@ abstract class Predefined_Options_Field extends Field {
 			$collection_items = array();
 			if ( is_callable( $collection ) ) {
 				$collection_items = call_user_func( $collection );
-				if ( !is_array( $collection_items ) ) {
+				if ( ! is_array( $collection_items ) ) {
 					continue;
 				}
 			} else {

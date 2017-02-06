@@ -68,7 +68,7 @@ class Value_Set {
 	 * Value set constructor
 	 */
 	public function __construct( $type = self::TYPE_SINGLE_VALUE, $additional_properties = array() ) {
-		if ( !in_array( $type, $this->valid_types ) ) {
+		if ( ! in_array( $type, $this->valid_types ) ) {
 			Incorrect_Syntax_Exception::raise( "Invalid type specified for Value_Set: $type" );
 		}
 
@@ -139,7 +139,7 @@ class Value_Set {
 				break;
 			case self::TYPE_MULTIPLE_KEYS:
 				$value = array();
-				if ( !empty( $this->value_set ) ) {
+				if ( ! empty( $this->value_set ) ) {
 					$value = $this->value_set[0];
 				}
 				break;
@@ -149,7 +149,7 @@ class Value_Set {
 
 			case self::TYPE_SINGLE_VALUE:
 			default:
-				if ( !empty( $this->value_set ) ) {
+				if ( ! empty( $this->value_set ) ) {
 					$value = $this->value_set[0][ static::VALUE_KEY ];
 				}
 				break;
@@ -229,7 +229,7 @@ class Value_Set {
 			return;
 		}
 
-		if ( !is_array( $raw_value_set ) ) {
+		if ( ! is_array( $raw_value_set ) ) {
 			$raw_value_set = array( $raw_value_set );
 		}
 

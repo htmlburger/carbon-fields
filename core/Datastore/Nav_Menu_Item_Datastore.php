@@ -7,7 +7,7 @@ use Carbon_Fields\Field\Field;
 class Nav_Menu_Item_Datastore extends Post_Meta_Datastore {
 	
 	public function get_garbage_prefix() {
-		if ( !$this->get_id() ) {
+		if ( ! $this->get_id() ) {
 			return '';
 		}
 		return '_menu-item-' . $this->get_id() . '_';
@@ -41,7 +41,7 @@ class Nav_Menu_Item_Datastore extends Post_Meta_Datastore {
 	 * @param Field $field The field to load value(s) in.
 	 */
 	public function load( Field $field ) {
-		if ( !$this->get_id() ) {
+		if ( ! $this->get_id() ) {
 			return;
 		}
 		$old_name = $field->get_name();
@@ -56,7 +56,7 @@ class Nav_Menu_Item_Datastore extends Post_Meta_Datastore {
 	 * @param Field $field The field to save.
 	 */
 	public function save( Field $field ) {
-		if ( !$this->get_id() ) {
+		if ( ! $this->get_id() ) {
 			return;
 		}
 		$clone = clone $field;

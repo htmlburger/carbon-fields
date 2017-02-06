@@ -23,7 +23,7 @@ class Helper {
 		$field = $repository->get_field_in_containers( $field_name, $container_type, false );
 		$default_value = ''; // for consistency - get_post_meta returns an empty string when a meta key does not exist
 
-		if ( !$field ) {
+		if ( ! $field ) {
 			return $default_value;
 		}
 

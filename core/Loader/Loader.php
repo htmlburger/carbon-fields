@@ -33,7 +33,7 @@ class Loader {
 	 * Hook the main Carbon Fields initialization functionality.
 	 */
 	public function boot() {
-		if ( !defined( 'ABSPATH' ) ) {
+		if ( ! defined( 'ABSPATH' ) ) {
 			throw new \Exception( 'Carbon Fields cannot be booted outside of a WordPress environment.' );
 		}
 
