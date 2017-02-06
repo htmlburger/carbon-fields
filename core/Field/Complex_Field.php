@@ -373,7 +373,7 @@ class Complex_Field extends Field {
 			$value[ $entry_index ] = array();
 			foreach ( $field_group as $key => $field ) {
 				if ( is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
-					$value[ $entry_index ][ $field->get_name() ] = $field->get_formatted_value(); 
+					$value[ $entry_index ][ $field->get_base_name() ] = $field->get_formatted_value(); 
 				} else {
 					$value[ $entry_index ][ $key ] = $field;
 				}

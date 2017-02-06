@@ -79,7 +79,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * @return string
 	 **/
 	protected function get_storage_key_for_simple_root_field( Field $field ) {
-		$storage_key = '_' . $field->get_name();
+		$storage_key = '_' . $field->get_base_name();
 		return $storage_key;
 	}
 

@@ -406,7 +406,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	public function get_root_field_by_name( $field_name ) {
 		$fields = $this->get_fields();
 		foreach ( $fields as $field ) {
-			if ( $field->get_name() === $field_name ) {
+			if ( $field->get_base_name() === $field_name ) {
 				return $field;
 			}
 		}
@@ -437,7 +437,7 @@ abstract class Container implements Datastore_Holder_Interface {
 			$group_name = isset( $segment_pieces[1] ) ? $segment_pieces[1] : Group_Field::DEFAULT_GROUP_NAME;
 
 			foreach ( $field_group as $f ) {
-				if ( $f->get_name() === $field_name ) {
+				if ( $f->get_base_name() === $field_name ) {
 					if ( empty( $hierarchy_left ) ) {
 						$field = $f;
 					} else {
