@@ -2,7 +2,6 @@
 
 namespace Carbon_Fields\Datastore;
 
-use \Carbon_Fields\App;
 use \Carbon_Fields\Field\Field;
 
 /**
@@ -33,7 +32,7 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 		' );
 
 		if ( empty( $storage_array ) ) {
-			$storage_array = App::ioc( 'legacy_storage_service' )->get_storage_array_for_patterns( $this, $storage_key_patterns );
+			$storage_array = $this->legacy_storage_service->get_storage_array( $this, $storage_key_patterns );
 		}
 
 		return $storage_array;

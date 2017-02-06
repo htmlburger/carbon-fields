@@ -2,8 +2,7 @@
 
 namespace Carbon_Fields\Container;
 
-use Carbon_Fields\Datastore\Meta_Datastore;
-use Carbon_Fields\Datastore\Nav_Menu_Item_Datastore;
+use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -29,7 +28,7 @@ class Nav_Menu_Item_Container extends Container {
 		parent::__construct( $unique_id, $title, $type );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Nav_Menu_Item_Datastore(), $this->has_default_datastore() );
+			$this->set_datastore( Datastore::make( 'nav_menu_item' ), $this->has_default_datastore() );
 		}
 
 		// Register the custom edit walker only once
@@ -139,7 +138,7 @@ class Nav_Menu_Item_Container extends Container {
 	 */
 	protected function get_clone_for_menu_item( $menu_item_id ) {
 		if ( !isset( $this->menu_item_instances[ $menu_item_id ] ) ) {
-			$menu_item_datastore = new Nav_Menu_Item_Datastore();
+			$menu_item_datastore = Datastore::make( 'nav_menu_item' );
 			$menu_item_datastore->set_id( $menu_item_id );
 			$menu_item_field_prefix = $menu_item_datastore->get_garbage_prefix();
 

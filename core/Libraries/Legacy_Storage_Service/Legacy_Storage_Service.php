@@ -6,7 +6,7 @@ use \Carbon_Fields\Field\Field;
 use \Carbon_Fields\Container\Container;
 use \Carbon_Fields\Container\Repository as ContainerRepository;
 use \Carbon_Fields\Datastore\Datastore;
-use \Carbon_Fields\Datastore\Key_Value_Datastore;
+use \Carbon_Fields\Datastore\Key_Value_Datastore as KVD;
 use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /*
@@ -333,15 +333,15 @@ class Legacy_Storage_Service {
 	 * @param  string  $value_key
 	 * @return string
 	 */
-	protected function field_data_to_storage_key( $hierarchy, $hierarchy_index, $value_index = 0, $value_key = 'value' ) {
-		$first_parent = $hierarchy[0];
-		$parents = array_slice( $hierarchy, 1 );
+	protected function field_data_to_storage_key( $full_hierarchy, $hierarchy_index, $value_index = 0, $value_key = 'value' ) {
+		$parents = $full_hierarchy;
+		$first_parent = array_shift( $parents );
 		$hierarchy_index = !empty( $hierarchy_index ) ? $hierarchy_index : array( 0 );
 
-		$key = '_' . $first_parent . '|';
-		$key .= implode( ':', $parents ) . '|';
-		$key .= implode( ':', $hierarchy_index ) . '|';
-		$key .= $value_index . '|';
+		$key = '_' . $first_parent . KVD::SEGMENT_GLUE;
+		$key .= implode( KVD::SEGMENT_VALUE_GLUE, $parents ) . KVD::SEGMENT_GLUE;
+		$key .= implode( KVD::SEGMENT_VALUE_GLUE, $hierarchy_index ) . KVD::SEGMENT_GLUE;
+		$key .= $value_index . KVD::SEGMENT_GLUE;
 		$key .= $value_key;
 		return $key;
 	}
@@ -356,12 +356,12 @@ class Legacy_Storage_Service {
 	protected function storage_key_matches_any_pattern( $storage_key, $patterns ) {
 		foreach ( $patterns as $key => $type ) {
 			switch ( $type ) {
-				case Key_Value_Datastore::PATTERN_COMPARISON_EQUAL:
+				case KVD::PATTERN_COMPARISON_EQUAL:
 					if ( $storage_key === $key ) {
 						return true;
 					}
 					break;
-				case Key_Value_Datastore::PATTERN_COMPARISON_STARTS_WITH:
+				case KVD::PATTERN_COMPARISON_STARTS_WITH:
 					$key_length = strlen( $key );
 					if ( substr( $storage_key, 0, $key_length ) === $key ) {
 						return true;
@@ -381,9 +381,9 @@ class Legacy_Storage_Service {
 	 * @param  Datastore $datastore
 	 * @return array
 	 */
-	protected function get_storage_array( Datastore $datastore ) {
-		$storage_array = $this->get_legacy_storage_array( $datastore );
-		if ( empty( $storage_array ) ) {
+	protected function get_storage_array_for_datastore( Datastore $datastore ) {
+		$legacy_storage_array = $this->get_legacy_storage_array( $datastore );
+		if ( empty( $legacy_storage_array ) ) {
 			return array(); // no migration data found
 		}
 
@@ -391,16 +391,16 @@ class Legacy_Storage_Service {
 		$field_group_permutations = $this->get_field_group_permutations( $container->get_fields() );
 
 		$row_descriptors = array();
-		foreach ( $storage_array as $key => $value ) {
-			$row_descriptors = array_merge( $row_descriptors, $this->legacy_storage_row_to_value_descriptor( $field_group_permutations, $key, $value, $storage_array ) );
+		foreach ( $legacy_storage_array as $key => $value ) {
+			$row_descriptors = array_merge( $row_descriptors, $this->legacy_storage_row_to_value_descriptor( $field_group_permutations, $key, $value, $legacy_storage_array ) );
 		}
 
-		$new_storage_array = array();
+		$storage_array = array();
 		foreach ( $row_descriptors as $row_descriptor ) {
-			$new_storage_array = array_merge( $new_storage_array, $this->row_descriptor_to_storage_array( $row_descriptor ) );
+			$storage_array = array_merge( $storage_array, $this->row_descriptor_to_storage_array( $row_descriptor ) );
 		}
 
-		return $new_storage_array;
+		return $storage_array;
 	}
 
 	/**
@@ -410,8 +410,8 @@ class Legacy_Storage_Service {
 	 * @param  array $storage_key_patterns
 	 * @return array
 	 */
-	public function get_storage_array_for_patterns( Datastore $datastore, $storage_key_patterns ) {
-		$storage_array = $this->get_storage_array( $datastore );
+	public function get_storage_array( Datastore $datastore, $storage_key_patterns ) {
+		$storage_array = $this->get_storage_array_for_datastore( $datastore );
 
 		$matched_data = array();
 		foreach ( $storage_array as $key => $value ) {

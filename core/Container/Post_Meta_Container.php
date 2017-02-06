@@ -2,8 +2,7 @@
 
 namespace Carbon_Fields\Container;
 
-use Carbon_Fields\Datastore\Meta_Datastore;
-use Carbon_Fields\Datastore\Post_Meta_Datastore;
+use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -54,7 +53,7 @@ class Post_Meta_Container extends Container {
 		parent::__construct( $unique_id, $title, $type );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Post_Meta_Datastore(), $this->has_default_datastore() );
+			$this->set_datastore( Datastore::make( 'post_meta' ), $this->has_default_datastore() );
 		}
 	}
 

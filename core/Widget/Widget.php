@@ -5,7 +5,7 @@ namespace Carbon_Fields\Widget;
 use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Container\Container;
-use Carbon_Fields\Datastore\Widget_Datastore;
+use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -54,7 +54,7 @@ abstract class Widget extends \WP_Widget {
 	 * @param  string $classname   String of CSS classes
 	 */
 	public function setup( $title, $description, $fields, $classname = '' ) {
-		$this->datastore = new Widget_Datastore();
+		$this->datastore = Datastore::make( 'widget' );
 		if ( empty( $title ) ) {
 			Incorrect_Syntax_Exception::raise( 'Empty widget title is not supported' );
 		}

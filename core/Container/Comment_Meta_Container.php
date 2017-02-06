@@ -3,7 +3,7 @@
 namespace Carbon_Fields\Container;
 
 use Carbon_Fields\Datastore\Meta_Datastore;
-use Carbon_Fields\Datastore\Comment_Meta_Datastore;
+use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -23,7 +23,7 @@ class Comment_Meta_Container extends Container {
 		parent::__construct( $unique_id, $title, $type );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Comment_Meta_Datastore(), $this->has_default_datastore() );
+			$this->set_datastore( Datastore::make( 'comment_meta' ), $this->has_default_datastore() );
 		}
 	}
 

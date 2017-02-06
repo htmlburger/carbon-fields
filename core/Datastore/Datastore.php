@@ -2,8 +2,10 @@
 
 namespace Carbon_Fields\Datastore;
 
-use Carbon_Fields\Field\Field;
-use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+use \Carbon_Fields\App;
+use \Carbon_Fields\Field\Field;
+use \Carbon_Fields\Libraries\Legacy_Storage_Service\Legacy_Storage_Service;
+use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Base datastore.
@@ -12,9 +14,17 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 abstract class Datastore implements Datastore_Interface {
 
 	/**
+	 * Legacy storage service to pull legacy data as a fallback
+	 * 
+	 * @var Legacy_Storage_Service
+	 */
+	protected $legacy_storage_service;
+
+	/**
 	 * Initialize the datastore.
 	 **/
-	public function __construct() {
+	public function __construct( Legacy_Storage_Service $legacy_storage_service ) {
+		$this->legacy_storage_service = $legacy_storage_service;
 		$this->init();
 	}
 
@@ -40,7 +50,7 @@ abstract class Datastore implements Datastore_Interface {
 			Incorrect_Syntax_Exception::raise( 'Unknown datastore type "' . $type . '".' );
 		}
 
-		$field = new $class();
+		$field = new $class( App::ioc( 'legacy_storage_service' ) );
 
 		return $field;
 	}
