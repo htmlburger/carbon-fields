@@ -122,9 +122,6 @@ abstract class Key_Value_Datastore extends Datastore {
 			implode( static::SEGMENT_VALUE_GLUE, $full_hierarchy_index ) . 
 			static::SEGMENT_GLUE;
 
-		// hash the parents array to avoid hitting key storage limits - downside is you cannot determine what is the field hierarchy from the key itself
-		// $storage_key_hashed = '_' . $first_parent . static::SEGMENT_GLUE . md5( implode( static::SEGMENT_VALUE_GLUE, $parents ) ) . static::SEGMENT_GLUE . implode( static::SEGMENT_VALUE_GLUE, $full_hierarchy_index ) . static::SEGMENT_GLUE;
-
 		return $storage_key;
 	}
 
