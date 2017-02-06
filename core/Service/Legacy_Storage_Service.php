@@ -343,10 +343,10 @@ class Legacy_Storage_Service extends Service {
 	/**
 	 * Convert field data to a new storage key
 	 * 
-	 * @param  array  $hierarchy
-	 * @param  array  $hierarchy_index
+	 * @param  array $full_hierarchy
+	 * @param  array $hierarchy_index
 	 * @param  integer $value_index
-	 * @param  string  $value_key
+	 * @param  string $value_key
 	 * @return string
 	 */
 	protected function field_data_to_storage_key( $full_hierarchy, $hierarchy_index, $value_index = 0, $value_key = 'value' ) {
