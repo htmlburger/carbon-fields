@@ -13,6 +13,7 @@ class Container {
 	 * A proxy for the abstract container factory method.
 	 *
 	 * @see Carbon_Fields\Container\Container::factory()
+	 * @return Container
 	 **/
 	public static function factory( $type, $name ) {
 		return Abstract_Container::factory( $type, $name );
@@ -22,6 +23,7 @@ class Container {
 	 * An alias of factory().
 	 *
 	 * @see Container::factory()
+	 * @return Container
 	 **/
 	public static function make( $type, $name ) {
 		return static::factory( $type, $name );

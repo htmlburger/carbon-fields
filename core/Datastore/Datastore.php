@@ -39,7 +39,7 @@ abstract class Datastore implements Datastore_Interface {
 	 * Create a new datastore of type $type.
 	 *
 	 * @param string $type
-	 * @return Datastore $datastore
+	 * @return Datastore
 	 **/
 	public static function factory( $type ) {
 		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
@@ -50,15 +50,16 @@ abstract class Datastore implements Datastore_Interface {
 			Incorrect_Syntax_Exception::raise( 'Unknown datastore type "' . $type . '".' );
 		}
 
-		$field = new $class( App::resolve( 'legacy_storage_service' ) );
+		$datastore = new $class( App::resolve( 'legacy_storage_service' ) );
 
-		return $field;
+		return $datastore;
 	}
 
 	/**
 	 * An alias of factory().
 	 *
 	 * @see Datastore::factory()
+	 * @return Datastore
 	 **/
 	public static function make( $type ) {
 		return static::factory( $type );

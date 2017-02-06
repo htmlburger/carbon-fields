@@ -187,7 +187,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $type
 	 * @param string $name lower case and underscore-delimited
 	 * @param string $label (optional) Automatically generated from $name if not present
-	 * @return object $field
+	 * @return Field
 	 **/
 	public static function factory( $type, $name, $label = null ) {
 		// backward compatibility: `file` type used to be called `attachment`
@@ -214,6 +214,7 @@ class Field implements Datastore_Holder_Interface {
 	 * An alias of factory().
 	 *
 	 * @see Field::factory()
+	 * @return Field
 	 **/
 	public static function make( $type, $name, $label = null ) {
 		return static::factory( $type, $name, $label );
