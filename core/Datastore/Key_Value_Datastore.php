@@ -174,7 +174,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 *
 	 * @return array
 	 **/
-	public function get_storage_key_getter_patterns( Field $field ) {
+	protected function get_storage_key_getter_patterns( Field $field ) {
 		$patterns = array();
 
 		if ( $field->is_simple_root_field() ) {
@@ -206,7 +206,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 *
 	 * @return array
 	 **/
-	public function get_storage_key_deleter_patterns( Field $field ) {
+	protected function get_storage_key_deleter_patterns( Field $field ) {
 		$patterns = array();
 		
 		if ( $field->is_simple_root_field() ) {
