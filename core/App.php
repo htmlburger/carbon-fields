@@ -46,7 +46,7 @@ class App {
 		};
 
 		$ioc['meta_query_service'] = function( $c ) {
-			return new Meta_Query_Service();
+			return new Meta_Query_Service( $c['container_repository'] );
 		};
 
 		$ioc['legacy_storage_service'] = function( $c ) {
