@@ -489,14 +489,14 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Return whether the datastore instance is the default one or has been overriden
 	 *
-	 * @return Datastore_Interface $datastore
+	 * @return boolean
 	 **/
 	public function has_default_datastore() {
 		return $this->has_default_datastore;
 	}
 
 	/**
-	 * Assign datastore instance for use by the container fields
+	 * Set datastore instance
 	 *
 	 * @param Datastore_Interface $datastore
 	 * @return object $this
@@ -515,7 +515,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return the DataStore instance used by container fields
+	 * Get the DataStore instance
 	 *
 	 * @return Datastore_Interface $datastore
 	 **/

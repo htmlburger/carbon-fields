@@ -113,7 +113,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @see set_datastore()
 	 * @see get_datastore()
-	 * @var object
+	 * @var boolean
 	 */
 	protected $has_default_datastore = true;
 
@@ -397,16 +397,16 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Return whether the datastore instance is the default one or has been overriden
 	 *
-	 * @return Datastore_Interface $datastore
+	 * @return boolean
 	 **/
 	public function has_default_datastore() {
 		return $this->has_default_datastore;
 	}
 
 	/**
-	 * Assign DataStore instance for use during load, save and delete
+	 * Set datastore instance
 	 *
-	 * @param object $datastore
+	 * @param Datastore_Interface $datastore
 	 * @return object $this
 	 **/
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
@@ -419,9 +419,9 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return the DataStore instance used by the field
+	 * Get the DataStore instance
 	 *
-	 * @return object $datastore
+	 * @return Datastore_Interface $datastore
 	 **/
 	public function get_datastore() {
 		return $this->datastore;
