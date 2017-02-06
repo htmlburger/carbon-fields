@@ -20,7 +20,7 @@ export function normalizePreloadedState(state) {
 
 	containers = keyBy(containers, 'id');
 	containers = mapValues(containers, (container) => {
-		container.fields = container.fields.map(field => flattenField(field, fields));
+		container.fields = container.fields.map(field => flattenField(field, container.id, fields));
 
 		return container;
 	});

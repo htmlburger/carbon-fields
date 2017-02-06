@@ -21,10 +21,11 @@ export function getAttachmentThumbnail(attachment) {
  * Flattens a field.
  *
  * @param  {Object}   field
+ * @param  {String}   parent
  * @param  {Object[]} accumulator
  * @return {Object}
  */
-export function flattenField(field, accumulator) {
+export function flattenField(field, parent, accumulator) {
 	const { value, type } = field;
 
 	// Since the fields don't have unique identifiers
@@ -44,6 +45,7 @@ export function flattenField(field, accumulator) {
 	// Add the placeholders for ui & meta.
 	field.ui = {};
 	field.meta = {};
+	field.parent = parent;
 
 	// Convert the value of the field, because React
 	// doesn't likes inputs with null values.
@@ -78,7 +80,7 @@ export function addComplexGroupIdentifiers(complex, group, index) {
  * @return {void}
  */
 export function flattenComplexGroupFields(group, accumulator) {
-	group.fields = group.fields.map(field => flattenField(field, accumulator));
+	group.fields = group.fields.map(field => flattenField(field, group.id, accumulator));
 }
 
 /**

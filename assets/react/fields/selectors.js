@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import { createSelector } from 'reselect';
-import { get, map, filter } from 'lodash';
+import { get, map, filter, keyBy, mapValues } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -25,6 +25,14 @@ export const getAll = state => state.fields;
  * @return {Object}
  */
 export const getFieldById = (state, id) => state.fields[id];
+
+/**
+ * Get a map of the fields that are direct children of the specified parent.
+ *
+ * @param  {String} parentId
+ * @return {Function}
+ */
+export const makeGetFieldsByParent = parentId => createSelector(getAll, fields => mapValues(keyBy(filter(fields, ['parent', parentId]), 'name'), 'id'));
 
 /**
  * Check whether the field should be rendered in tabs.

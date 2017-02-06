@@ -14,6 +14,7 @@ import themeOptionsForeman from 'containers/sagas/theme-options';
 import mediaBrowserForeman from 'fields/sagas/media-browser';
 import wysiwygForeman from 'fields/sagas/wysiwyg';
 import geocoderForeman from 'fields/sagas/geocoder';
+import conditionalForeman from 'fields/sagas/conditional-logic';
 import complexForeman from 'fields/sagas/complex';
 
 import baseSidebarsForeman from 'sidebars/sagas/base';
@@ -30,6 +31,7 @@ saga.run(userMetaForeman);
 saga.run(themeOptionsForeman);
 saga.run(mediaBrowserForeman);
 saga.run(complexForeman);
+saga.run(conditionalForeman);
 saga.run(geocoderForeman);
 saga.run(baseSidebarsForeman);
 // saga.run(wysiwygForeman);
