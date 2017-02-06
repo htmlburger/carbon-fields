@@ -29,6 +29,13 @@ class Legacy_Storage_Service {
 	protected $map_keys = array( 'lat', 'lng', 'zoom', 'address' );
 
 	/**
+	 * Cache of converted storage arrays
+	 * 
+	 * @var array
+	 */
+	protected $storage_array_cache = array();
+
+	/**
 	 * Service constructor
 	 * 
 	 * @param ContainerRepository $container_repository
@@ -98,72 +105,77 @@ class Legacy_Storage_Service {
 	protected function get_legacy_storage_array( Datastore $datastore ) {
 		global $wpdb;
 
-		$prefix = '_';
-		$table_name = '';
-		$table_id_column = '';
-		$table_key_column = '';
-		$table_value_column = '';
 		$container = $this->get_container_for_datastore( $datastore );
-
 		if ( !$container ) {
 			return array(); // unhandled datastore type or no registered containers
 		}
 
-		if ( is_a( $datastore, '\\Carbon_Fields\\Datastore\\Theme_Options_Datastore' ) ) {
-			$prefix = '';
-			$table_name = $wpdb->options;
-			$table_key_column = 'option_name';
-			$table_value_column = 'option_value';
-		} else if ( is_a( $datastore, '\\Carbon_Fields\\Datastore\\Meta_Datastore' ) ) {
-			$table_name = $datastore->get_table_name();
-			$table_id_column = $datastore->get_table_field_name();
-			$table_key_column = 'meta_key';
-			$table_value_column = 'meta_value';
-		}
+		if ( !isset( $this->storage_array_cache[ $container->id ] ) ) {
+			$prefix = '_';
+			$table_name = '';
+			$table_id_column = '';
+			$table_key_column = '';
+			$table_value_column = '';
 
-		$comparisons = array();
-		$container_fields = $container->get_fields();
-		foreach ( $container_fields as $field ) {
-			$field_key_pattern = $prefix . $field->get_hierarchy_name();
+			if ( is_a( $datastore, '\\Carbon_Fields\\Datastore\\Theme_Options_Datastore' ) ) {
+				$prefix = '';
+				$table_name = $wpdb->options;
+				$table_key_column = 'option_name';
+				$table_value_column = 'option_value';
+			} else if ( is_a( $datastore, '\\Carbon_Fields\\Datastore\\Meta_Datastore' ) ) {
+				$table_name = $datastore->get_table_name();
+				$table_id_column = $datastore->get_table_field_name();
+				$table_key_column = 'meta_key';
+				$table_value_column = 'meta_value';
+			}
 
-			if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
-				$groups = $field->get_group_names();
-				foreach ( $groups as $group_name ) {
-					$underscored_group_name = ( substr( $group_name, 0, 1 ) === '_' ? $group_name : '_' . $group_name );
-					$comparisons[] = ' `' . $table_key_column . '` LIKE "' . esc_sql( $field_key_pattern . $underscored_group_name . '-' ) . '%" ';
-				}
-			} else {
-				$comparisons[] = ' `' . $table_key_column . '` = "' . esc_sql( $field_key_pattern ) . '" ';
+			$comparisons = array();
+			$container_fields = $container->get_fields();
+			foreach ( $container_fields as $field ) {
+				$field_key_pattern = $prefix . $field->get_hierarchy_name();
 
-				if ( is_a( $field, '\\Carbon_Fields\\Field\\Map_Field' ) ) {
-					foreach ( $this->map_keys as $mk ) {
-						$comparisons[] = ' `' . $table_key_column . '` = "' . esc_sql( $field_key_pattern . '-' . $mk ) . '" ';
+				if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
+					$groups = $field->get_group_names();
+					foreach ( $groups as $group_name ) {
+						$underscored_group_name = ( substr( $group_name, 0, 1 ) === '_' ? $group_name : '_' . $group_name );
+						$comparisons[] = ' `' . $table_key_column . '` LIKE "' . esc_sql( $field_key_pattern . $underscored_group_name . '-' ) . '%" ';
+					}
+				} else {
+					$comparisons[] = ' `' . $table_key_column . '` = "' . esc_sql( $field_key_pattern ) . '" ';
+
+					if ( is_a( $field, '\\Carbon_Fields\\Field\\Map_Field' ) ) {
+						foreach ( $this->map_keys as $mk ) {
+							$comparisons[] = ' `' . $table_key_column . '` = "' . esc_sql( $field_key_pattern . '-' . $mk ) . '" ';
+						}
 					}
 				}
 			}
+
+			if ( empty( $comparisons ) ) {
+				return array(); // no comparisons to fetch with
+			}
+
+			$where_clause = ' ( ' . implode( ' OR ', $comparisons ) . ' ) ';
+			if ( $table_id_column ) {
+				$where_clause = ' `' . $table_id_column . '` = ' . $datastore->get_id() . ' AND ' . $where_clause;
+			}
+			$query = '
+				SELECT `' . $table_key_column . '` AS `key`, `' . $table_value_column . '` AS `value`
+				FROM `' . $table_name . '`
+				WHERE ' . $where_clause . '
+			';
+
+			$raw_results = $wpdb->get_results( $query );
+
+			$results = array();
+			foreach ( $raw_results as $result ) {
+				$results[ $result->key ] = $result->value;
+			}
+
+			$this->storage_array_cache[ $container->id ] = $results;
 		}
 
-		if ( empty( $comparisons ) ) {
-			return array(); // no comparisons to fetch with
-		}
-
-		$where_clause = ' ( ' . implode( ' OR ', $comparisons ) . ' ) ';
-		if ( $table_id_column ) {
-			$where_clause = ' `' . $table_id_column . '` = ' . $datastore->get_id() . ' AND ' . $where_clause;
-		}
-		$query = '
-			SELECT `' . $table_key_column . '` AS `key`, `' . $table_value_column . '` AS `value`
-			FROM `' . $table_name . '`
-			WHERE ' . $where_clause . '
-		';
-
-		$raw_results = $wpdb->get_results( $query );
-
-		$results = array();
-		foreach ( $raw_results as $result ) {
-			$results[ $result->key ] = $result->value;
-		}
-		return $results;
+		return $this->storage_array_cache[ $container->id ];
 	}
 
 	/**

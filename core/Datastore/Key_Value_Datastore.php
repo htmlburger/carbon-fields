@@ -179,6 +179,11 @@ abstract class Key_Value_Datastore extends Datastore {
 	 **/
 	public function get_storage_key_getter_patterns( Field $field ) {
 		$patterns = array();
+
+		if ( $field->is_simple_root_field() ) {
+			$key = $this->get_storage_key_for_simple_root_field( $field );
+			$patterns[ $key ] = static::PATTERN_COMPARISON_EQUAL;
+		}
 		
 		$full_hierarchy = $this->get_full_hierarchy_for_field( $field );
 
@@ -367,7 +372,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * @param Field $field The field to retrieve value for.
 	 * @return array Array of {key, value} objects
 	 */
-	protected abstract function get_storage_array_for_field( Field $field, $storage_key_patterns );
+	protected abstract function get_storage_array( Field $field, $storage_key_patterns );
 
 	/**
 	 * Load the field value(s)
@@ -376,7 +381,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 */
 	public function load( Field $field ) {
 		$storage_key_patterns = $this->get_storage_key_getter_patterns( $field );
-		$cascading_storage_array = $this->get_storage_array_for_field( $field, $storage_key_patterns );
+		$cascading_storage_array = $this->get_storage_array( $field, $storage_key_patterns );
 		$raw_value_set_tree = $this->cascading_storage_array_to_raw_value_set_tree( $cascading_storage_array );
 		return $raw_value_set_tree;
 	}

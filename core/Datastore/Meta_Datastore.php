@@ -19,7 +19,7 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 	 *
 	 * @param Field $field The field to retrieve value for.
 	 */
-	protected function get_storage_array_for_field( Field $field, $storage_key_patterns ) {
+	protected function get_storage_array( Field $field, $storage_key_patterns ) {
 		global $wpdb;
 
 		$storage_key_comparisons = $this->storage_key_patterns_to_sql( '`meta_key`', $storage_key_patterns );

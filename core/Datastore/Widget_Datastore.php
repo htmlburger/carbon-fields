@@ -28,7 +28,7 @@ class Widget_Datastore extends Key_Value_Datastore {
 	 * @param Field $field The field to retrieve value for.
 	 * @return array Array of {key, value} objects
 	 */
-	protected function get_storage_array_for_field( Field $field, $storage_key_patterns ) {
+	protected function get_storage_array( Field $field, $storage_key_patterns ) {
 		$storage_array = array();
 		foreach ( $this->storage as $storage_key => $value ) {
 			if ( $this->storage_key_matches_any_pattern( $storage_key, $storage_key_patterns ) ) {
