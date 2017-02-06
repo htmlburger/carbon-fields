@@ -129,6 +129,10 @@ class Legacy_Storage_Service {
 				$table_value_column = 'meta_value';
 			}
 
+			if ( $table_id_column && !$datastore->get_id() ) {
+				return array(); // we are in a "create" view where we do not have an id (e.g. term meta)
+			}
+
 			$comparisons = array();
 			$container_fields = $container->get_fields();
 			foreach ( $container_fields as $field ) {

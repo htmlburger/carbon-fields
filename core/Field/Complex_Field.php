@@ -285,7 +285,10 @@ class Complex_Field extends Field {
 				foreach ( $group_fields as $field ) {
 					$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $entry_index );
 					if ( isset( $group_values[ $clone->get_base_name() ] ) ) {
-						$clone->set_value( $group_values[ $clone->get_base_name() ]['value_set'] );
+						$value = isset( $group_values[ $clone->get_base_name() ]['value_set'] ) ? $group_values[ $clone->get_base_name() ]['value_set'] : null;
+						if ( $value ) {
+							$clone->set_value( $group_values[ $clone->get_base_name() ]['value_set'] );
+						}
 						if ( is_a( $clone, get_class() ) ) {
 							$clone->set_value_tree( $group_values[ $clone->get_base_name() ] );
 						}
