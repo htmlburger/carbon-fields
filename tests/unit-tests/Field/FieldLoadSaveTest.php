@@ -54,13 +54,13 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	 * @covers \Carbon_Fields\Field\Field::load
 	 * @covers \Carbon_Fields\Field\Field::get_value
 	 */
-	public function testLoadReturnsDefaultValue() {
+	public function testLoadAppliesDefaultValueWhenDatastoreReturnsNoValue() {
 		$expected = 'test default value';
-		$this->datastore->shouldReceive( 'load' )->once();
+		$this->datastore->shouldReceive( 'load' )->andReturn( array() )->once();
 
 		$this->field->set_datastore( $this->datastore );
 		$this->field->set_default_value( $expected );
-		$this->assertNotSame( $expected, $this->field->get_value() );
+		$this->assertSame( null, $this->field->get_value() );
 		$this->field->load();
 		$this->assertSame( $expected, $this->field->get_value() );
 	}
@@ -69,7 +69,7 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	 * @covers \Carbon_Fields\Field\Field::load
 	 * @covers \Carbon_Fields\Field\Field::get_value
 	 */
-	public function testLoadReturnsValueFromDatastore() {
+	public function testLoadAppliesTheSameValueWhenDatastoreReturnsValue() {
 		$expected = 'test value from datastore';
 		$this->datastore->shouldReceive( 'load' )->andReturn( array(
 			$this->field->get_base_name() => array(
@@ -84,5 +84,23 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 		$this->field->set_datastore( $this->datastore );
 		$this->field->load();
 		$this->assertSame( $expected, $this->field->get_value() );
+	}
+
+	/**
+	 * @covers \Carbon_Fields\Field\Field::save
+	 */
+	public function testSavePassesFieldToDatastore() {
+		$this->datastore->shouldReceive( 'save' )->once();
+		$this->field->set_datastore( $this->datastore );
+		$this->field->save();
+	}
+
+	/**
+	 * @covers \Carbon_Fields\Field\Field::delete
+	 */
+	public function testDeletePassesFieldToDatastore() {
+		$this->datastore->shouldReceive( 'delete' )->once();
+		$this->field->set_datastore( $this->datastore );
+		$this->field->delete();
 	}
 }
