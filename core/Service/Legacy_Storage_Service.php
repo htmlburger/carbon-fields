@@ -244,13 +244,13 @@ class Legacy_Storage_Service extends Service {
 					}
 				}
 
-				if ( $match_data ) {
+				if ( ! empty( $match_data ) ) {
 					$field_group_level = $permutation['children'];
 					break;
 				}
 			}
 
-			if ( $match_data ) {
+			if ( ! empty( $match_data ) ) {
 				$previous_match_index = count( $matched_fields ) - 1;
 				if ( isset( $matched_fields[ $previous_match_index ] ) ) {
 					$matched_fields[ $previous_match_index ]['group_index'] = $match_data['group_index']; // indexes are offset in CF 1.5 complex keys
