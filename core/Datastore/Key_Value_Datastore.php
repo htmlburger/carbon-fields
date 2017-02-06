@@ -69,7 +69,8 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * @return array
 	 **/
 	protected function get_full_hierarchy_index_for_field( Field $field ) {
-		$full_hierarchy_index = !empty( $field->get_hierarchy_index() ) ? $field->get_hierarchy_index() : array( 0 );
+		$hierarchy_index = $field->get_hierarchy_index();
+		$full_hierarchy_index = !empty( $hierarchy_index ) ? $hierarchy_index : array( 0 );
 		return $full_hierarchy_index;
 	}
 
@@ -148,12 +149,13 @@ abstract class Key_Value_Datastore extends Datastore {
 			return $this->get_storage_key_for_simple_root_field( $field );
 		}
 
+		$hierarchy = $field->get_hierarchy();
 		$full_hierarchy = $this->get_full_hierarchy_for_field( $field );
 
 		$parents = $full_hierarchy;
 		$first_parent = array_shift( $parents );
 
-		$hierarchy_index = !empty( $field->get_hierarchy() ) ? $wildcard : '0';
+		$hierarchy_index = !empty( $hierarchy ) ? $wildcard : '0';
 		$value_group_index = $wildcard;
 
 		$storage_key = '_' . 

@@ -297,8 +297,9 @@ class Field implements Datastore_Holder_Interface {
 	 * @return bool
 	 **/
 	public function is_simple_root_field() {
+		$hierarchy = $this->get_hierarchy();
 		return (
-			empty( $this->get_hierarchy() )
+			empty( $hierarchy )
 			&&
 			(
 				$this->value()->get_type() === Value_Set::TYPE_SINGLE_VALUE

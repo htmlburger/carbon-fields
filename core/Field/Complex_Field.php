@@ -324,7 +324,8 @@ class Complex_Field extends Field {
 	 */
 	public function save() {
 		// Only delete root field values as nested field values should be deleted in a cascading manner by the datastore
-		if ( empty( $this->get_hierarchy() ) ) {
+		$hierarchy = $this->get_hierarchy();
+		if ( empty( $hierarchy ) ) {
 			$this->delete();
 		}
 		
