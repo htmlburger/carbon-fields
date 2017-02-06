@@ -43,30 +43,30 @@ class App {
 	protected static function get_default_ioc() {
 		$ioc = new PimpleContainer();
 
-		$ioc['loader'] = function( $c ) {
-			return new Loader( $c['templater'], $c['sidebar_manager'], $c['container_repository'], $c['legacy_storage_service'] );
+		$ioc['loader'] = function( $ioc ) {
+			return new Loader( $ioc['templater'], $ioc['sidebar_manager'], $ioc['container_repository'], $ioc['legacy_storage_service'] );
 		};
 
-		$ioc['container_repository'] = function( $c ) {
+		$ioc['container_repository'] = function( $ioc ) {
 			return new ContainerRepository();
 		};
 
-		$ioc['templater'] = function( $c ) {
+		$ioc['templater'] = function( $ioc ) {
 			return new Templater();
 		};
 
-		$ioc['sidebar_manager'] = function( $c ) {
+		$ioc['sidebar_manager'] = function( $ioc ) {
 			return new Sidebar_Manager();
 		};
 
 		/* Services */
 
-		$ioc['meta_query_service'] = function( $c ) {
-			return new Meta_Query_Service( $c['container_repository'] );
+		$ioc['meta_query_service'] = function( $ioc ) {
+			return new Meta_Query_Service( $ioc['container_repository'] );
 		};
 
-		$ioc['legacy_storage_service'] = function( $c ) {
-			return new Legacy_Storage_Service( $c['container_repository'] );
+		$ioc['legacy_storage_service'] = function( $ioc ) {
+			return new Legacy_Storage_Service( $ioc['container_repository'] );
 		};
 
 		return $ioc;
