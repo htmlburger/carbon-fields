@@ -198,7 +198,7 @@ class User_Meta_Container extends Container {
 	/**
 	 * Validate and parse the show_for logic rules.
 	 *
-	 * @param array $rules
+	 * @param array $show_for
 	 * @return array
 	 */
 	protected function parse_show_for( $show_for ) {
