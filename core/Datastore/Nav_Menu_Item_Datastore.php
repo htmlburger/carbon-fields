@@ -46,8 +46,9 @@ class Nav_Menu_Item_Datastore extends Post_Meta_Datastore {
 		}
 		$old_name = $field->get_name();
 		$field->set_name( $this->get_clean_field_name( $field ) );
-		parent::load( $field );
+		$result = parent::load( $field );
 		$field->set_name( $old_name );
+		return $result;
 	}
 
 	/**
