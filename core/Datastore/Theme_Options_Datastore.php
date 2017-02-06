@@ -52,7 +52,7 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 	 *
 	 * @param string $key
 	 * @param string $value
-	 * @param bool $autoload
+	 * @param string $autoload "yes"|"no"
 	 */
 	protected function save_key_value_pair_with_autoload( $key, $value, $autoload ) {
 		$notoptions = wp_cache_get( 'notoptions', 'options' );
