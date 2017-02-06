@@ -101,7 +101,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @see set_datastore()
 	 * @see get_datastore()
-	 * @var object
+	 * @var boolean
 	 */
 	protected $has_default_datastore = true;
 
