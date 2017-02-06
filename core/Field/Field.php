@@ -178,7 +178,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @var array
 	 **/
     public function __clone() {
-        $this->value = clone $this->value;
+        $this->value = clone $this->value();
     }
 
 	/**
