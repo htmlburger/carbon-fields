@@ -257,8 +257,6 @@ class Legacy_Storage_Service extends Service {
 					$match_data['group_index'] = 0;
 				}
 				$matched_fields[] = $match_data;
-			} else {
-				// match failed - unexpected key format or field name has been changed
 			}
 		}
 

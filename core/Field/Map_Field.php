@@ -80,8 +80,6 @@ class Map_Field extends Field {
 			return;
 		}
 
-		// $value = stripslashes_deep( $input[ $this->get_name() ] );
-
 		$value_set = array(
 			'lat'=>'',
 			'lng'=>'',

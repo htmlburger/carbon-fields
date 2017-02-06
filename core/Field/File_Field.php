@@ -63,7 +63,6 @@ class File_Field extends Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
-		$url = '';
 		$thumb_url = '';
 		$default_thumb_url = includes_url( '/images/media/default.png' );
 		$file_ext = '';

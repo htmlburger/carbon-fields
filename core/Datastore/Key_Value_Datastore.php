@@ -92,7 +92,6 @@ abstract class Key_Value_Datastore extends Datastore {
 	 **/
 	protected function get_storage_key_root( Field $field ) {
 		$full_hierarchy = $this->get_full_hierarchy_for_field( $field );
-		$full_hierarchy_index = $this->get_full_hierarchy_index_for_field( $field );
 
 		$parents = $full_hierarchy;
 		$first_parent = array_shift( $parents );

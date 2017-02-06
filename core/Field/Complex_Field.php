@@ -403,7 +403,6 @@ class Complex_Field extends Field {
 		$value_data = array();
 		foreach ( $field_groups as $entry_index => $fields ) {
 			$group = $this->get_group_by_name( $fields[ static::GROUP_TYPE_KEY ] );
-			$group_fields = $group->get_fields();
 
 			$data = array(
 				'name' => $group->get_name(),
