@@ -141,7 +141,7 @@ class Repository {
 	/**
 	 * Check if container identificator id is unique
 	 * 
-	 * @param string $title
+	 * @param string $id
 	 */
 	protected function is_unique_panel_id( $id ) {
 		return ! in_array( $id, $this->registered_panel_ids );
