@@ -13,6 +13,7 @@ interface Datastore_Interface {
 	 * Load the field value(s)
 	 *
 	 * @param Field $field The field to load value(s) in.
+	 * @return array
 	 */
 	public function load( Field $field );
 

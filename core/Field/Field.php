@@ -226,10 +226,6 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $label Field label
 	 */
 	protected function __construct( $name, $label ) {
-		if ( $this->value === null ) {
-			$this->value = new Value_Set();
-		}
-
 		$this->set_base_name( $name );
 		$this->set_name( $name );
 		$this->set_label( $label );
@@ -454,6 +450,9 @@ class Field implements Datastore_Holder_Interface {
 	 * @return Value_Set
 	 **/
 	public function value() {
+		if ( $this->value === null ) {
+			$this->value = new Value_Set();
+		}
 		return $this->value;
 	}
 
