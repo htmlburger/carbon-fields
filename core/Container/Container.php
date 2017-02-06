@@ -144,7 +144,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return object $container
 	 **/
 	public static function factory( $type, $name ) {
-		$repository = App::ioc( 'container_repository' );
+		$repository = App::resolve( 'container_repository' );
 		$unique_id = $repository->get_unique_panel_id( $name );
 		
 		$normalized_type = static::normalize_container_type( $type );

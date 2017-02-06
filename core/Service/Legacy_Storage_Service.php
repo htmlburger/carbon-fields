@@ -1,6 +1,6 @@
 <?php
 
-namespace Carbon_Fields\Libraries\Legacy_Storage_Service;
+namespace Carbon_Fields\Service;
 
 use \Carbon_Fields\Field\Field;
 use \Carbon_Fields\Container\Container;
@@ -12,7 +12,7 @@ use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 /*
  * Service which provides the ability to do meta queries for multi-value fields and nested fields
  */
-class Legacy_Storage_Service {
+class Legacy_Storage_Service extends Service {
 
 	/**
 	 * Contaier repository to fetch fields from
@@ -42,6 +42,20 @@ class Legacy_Storage_Service {
 	 */
 	public function __construct( ContainerRepository $container_repository ) {
 		$this->container_repository = $container_repository;
+	}
+
+	/**
+	 * Enable the service
+	 */
+	protected function enabled() {
+		// not needed
+	}
+
+	/**
+	 * Disable the service
+	 */
+	protected function disabled() {
+		// not needed
 	}
 
 	/**
@@ -415,6 +429,10 @@ class Legacy_Storage_Service {
 	 * @return array
 	 */
 	public function get_storage_array( Datastore $datastore, $storage_key_patterns ) {
+		if ( !$this->is_enabled() ) {
+			return array();
+		}
+
 		$storage_array = $this->get_storage_array_for_datastore( $datastore );
 
 		$matched_data = array();

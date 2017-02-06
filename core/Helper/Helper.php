@@ -19,7 +19,7 @@ class Helper {
 	 * @return mixed
 	 */
 	public static function get_value( $object_id, $container_type, $field_name ) {
-		$repository = App::ioc( 'container_repository' );
+		$repository = App::resolve( 'container_repository' );
 		$field = $repository->get_field_in_containers( $field_name, $container_type, false );
 		$default_value = ''; // for consistency - get_post_meta returns an empty string when a meta key does not exist
 

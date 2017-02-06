@@ -4,7 +4,7 @@ namespace Carbon_Fields\Datastore;
 
 use \Carbon_Fields\App;
 use \Carbon_Fields\Field\Field;
-use \Carbon_Fields\Libraries\Legacy_Storage_Service\Legacy_Storage_Service;
+use \Carbon_Fields\Service\Legacy_Storage_Service;
 use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -50,7 +50,7 @@ abstract class Datastore implements Datastore_Interface {
 			Incorrect_Syntax_Exception::raise( 'Unknown datastore type "' . $type . '".' );
 		}
 
-		$field = new $class( App::ioc( 'legacy_storage_service' ) );
+		$field = new $class( App::resolve( 'legacy_storage_service' ) );
 
 		return $field;
 	}

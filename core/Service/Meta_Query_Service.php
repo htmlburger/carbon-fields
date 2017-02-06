@@ -1,13 +1,13 @@
 <?php
 
-namespace Carbon_Fields\Libraries\Meta_Query_Service;
+namespace Carbon_Fields\Service;
 
 use \Carbon_Fields\Container\Repository as ContainerRepository;
 
 /*
  * Service which provides the ability to do meta queries for multi-value fields and nested fields
  */
-class Meta_Query_Service {
+class Meta_Query_Service extends Service {
 
 	/**
 	 * Prefix to hook for when replacing "meta_key = " with "meta_key LIKE " in post queries
@@ -28,7 +28,7 @@ class Meta_Query_Service {
 	/**
 	 * Enable meta query filtering
 	 */
-	public function enable() {
+	protected function enabled() {
 		$meta_sql_filter = array( $this, 'filter_get_meta_sql' );
 		if ( has_filter( 'get_meta_sql', $meta_sql_filter ) ) {
 			return; // already enabled
@@ -43,7 +43,7 @@ class Meta_Query_Service {
 	/**
 	 * Disable meta query filtering
 	 */
-	public function disable() {
+	protected function disabled() {
 		remove_filter( 'get_meta_sql', array( $this, 'filter_get_meta_sql' ) );
 
 		remove_action( 'pre_get_posts', array( $this, 'hook_pre_get_posts' ) );
