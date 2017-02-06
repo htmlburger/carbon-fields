@@ -334,20 +334,20 @@ abstract class Key_Value_Datastore extends Datastore {
 				$level = &$level[ $field_name ];
 
 				if ( $i < count( $full_hierarchy ) - 1 ) {
-					if ( ! isset( $level[ 'groups' ] ) ) {
-						$level[ 'groups' ] = array();
+					if ( ! isset( $level['groups'] ) ) {
+						$level['groups'] = array();
 					}
-					$level = &$level[ 'groups' ];
+					$level = &$level['groups'];
 
 					if ( ! isset( $level[ $index ] ) ) {
 						$level[ $index ] = array();
 					}
 					$level = &$level[ $index ];
 				} else  {
-					if ( ! isset( $level[ 'value_set' ] ) ) {
-						$level[ 'value_set' ] = array();
+					if ( ! isset( $level['value_set'] ) ) {
+						$level['value_set'] = array();
 					}
-					$level = &$level[ 'value_set' ];
+					$level = &$level['value_set'];
 
 					if ( ! isset( $level[ $value_index ] ) ) {
 						$level[ $value_index ] = array();

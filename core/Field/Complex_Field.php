@@ -248,17 +248,17 @@ class Complex_Field extends Field {
 
 				$tmp_field->set_value_from_input( $values );
 				if ( is_a( $tmp_field, get_class() ) ) {
-					$value_group[$tmp_field->get_base_name()] = $tmp_field->get_value_tree();
+					$value_group[ $tmp_field->get_base_name() ] = $tmp_field->get_value_tree();
 				} else {
-					$value_group[$tmp_field->get_base_name()] = array(
-						'value_set'=>$tmp_field->value()->get_set(),
+					$value_group[ $tmp_field->get_base_name() ] = array(
+						'value_set' => $tmp_field->value()->get_set(),
 					);
 				}
 			}
 
 			$value_tree['groups'][] = $value_group;
 			$value_tree['value_set'][] = array(
-				'value'=>$group->get_name(),
+				'value' => $group->get_name(),
 			);
 			$input_group_index++;
 		}
@@ -276,7 +276,7 @@ class Complex_Field extends Field {
 				$group = $this->get_group_by_name( $group_name );
 				$group_fields = $group->get_fields();
 				$fields[ $entry_index ] = array(
-					static::GROUP_TYPE_KEY=>$group->get_name(),
+					static::GROUP_TYPE_KEY => $group->get_name(),
 				);
 				$group_values = array();
 				if ( isset( $value_tree['groups'][ $entry_index ] ) ) {

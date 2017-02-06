@@ -342,7 +342,7 @@ class Association_Field extends Relationship_Field {
 
 		$i = 0;
 		foreach ( $field_data['value'] as $key => $value ) {
-			$field_data['value'][$key]['fieldIndex'] = $i;
+			$field_data['value'][ $key ]['fieldIndex'] = $i;
 			$i++;
 		}
 		$field_data['nextfieldIndex'] = $i;

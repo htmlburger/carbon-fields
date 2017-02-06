@@ -93,16 +93,16 @@ class Legacy_Storage_Service extends Service {
 						continue;
 					}
 					$permutations[] = array(
-						'field'=>$field->get_base_name(),
-						'group'=>$group_name,
-						'children'=>$this->get_field_group_permutations( $group->get_fields() ),
+						'field' => $field->get_base_name(),
+						'group' => $group_name,
+						'children' => $this->get_field_group_permutations( $group->get_fields() ),
 					);
 				}
 			} else {
 				$permutations[] = array(
-					'field'=>$field->get_base_name(),
-					'group'=>'',
-					'children'=>array(),
+					'field' => $field->get_base_name(),
+					'group' => '',
+					'children' => array(),
 				);
 			}
 		}
@@ -226,9 +226,9 @@ class Legacy_Storage_Service extends Service {
 					$matches = array();
 					if ( preg_match( $regex, $piece, $matches ) ) {
 						$match_data = array(
-							'field'=>$permutation['field'],
-							'group'=>'',
-							'group_index'=>( isset( $matches['group_index'] ) ? intval( $matches['group_index'] ) : -1 ),
+							'field' => $permutation['field'],
+							'group' => '',
+							'group_index' => ( isset( $matches['group_index'] ) ? intval( $matches['group_index'] ) : -1 ),
 						);
 					}
 				} else {
@@ -237,9 +237,9 @@ class Legacy_Storage_Service extends Service {
 					$matches = array();
 					if ( preg_match( $regex, $piece, $matches ) ) {
 						$match_data = array(
-							'field'=>$permutation['field'],
-							'group'=>$permutation['group'],
-							'group_index'=>( isset( $matches['group_index'] ) ? intval( $matches['group_index'] ) : -1 ),
+							'field' => $permutation['field'],
+							'group' => $permutation['group'],
+							'group_index' => ( isset( $matches['group_index'] ) ? intval( $matches['group_index'] ) : -1 ),
 						);
 					}
 				}
@@ -262,7 +262,7 @@ class Legacy_Storage_Service extends Service {
 
 		if ( isset( $all_rows[ $key . '-' . $this->map_keys[0] ] ) ) {
 			$value = array(
-				'value'=>$value,
+				'value' => $value,
 			);
 			foreach ( $this->map_keys as $mk ) {
 				$value[ $mk ] = $all_rows[ $key . '-' . $mk ];
@@ -271,11 +271,11 @@ class Legacy_Storage_Service extends Service {
 
 		return array(
 			array(
-				'key'=>array(
-					'_raw'=>$key,
-					'fields'=>$matched_fields,
+				'key' => array(
+					'_raw' => $key,
+					'fields' => $matched_fields,
 				),
-				'value'=>$value,
+				'value' => $value,
 			),
 		);
 	}
@@ -437,8 +437,8 @@ class Legacy_Storage_Service extends Service {
 		foreach ( $storage_array as $key => $value ) {
 			if ( $this->storage_key_matches_any_pattern( $key, $storage_key_patterns ) ) {
 				$matched_data[] = (object) array(
-					'key'=>$key,
-					'value'=>$value,
+					'key' => $key,
+					'value' => $value,
 				);
 			}
 		}
