@@ -38,13 +38,6 @@ class Field implements Datastore_Holder_Interface {
 	public $type;
 
 	/**
-	 * Original field name before being modified by hierarchy
-	 *
-	 * @var string
-	 **/
-	protected $hierarchy_name = '';
-
-	/**
 	 * Array of ancestor field names
 	 *
 	 * @var array
@@ -235,7 +228,6 @@ class Field implements Datastore_Holder_Interface {
 		if ( $this->value === null ) {
 			$this->value = new Value_Set();
 		}
-		$this->set_hierarchy_name( $name );
 		$this->set_name( $name );
 		$this->set_label( $label );
 		$this->set_base_name( $name );
@@ -260,24 +252,6 @@ class Field implements Datastore_Holder_Interface {
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
 
 		add_action( 'admin_footer', array( get_class( $this ), 'admin_enqueue_scripts' ), 5 );
-	}
-
-	/**
-	 * Set clean field name suitable for use in hierarchy
-	 *
-	 * @return array
-	 **/
-	public function set_hierarchy_name( $hierarchy_name ) {
-		$this->hierarchy_name = $hierarchy_name;
-	}
-
-	/**
-	 * Get clean field name suitable for use in hierarchy
-	 *
-	 * @return array
-	 **/
-	public function get_hierarchy_name() {
-		return $this->hierarchy_name;
 	}
 
 	/**
@@ -377,8 +351,8 @@ class Field implements Datastore_Holder_Interface {
 	public function load() {
 		$raw_value_set_tree = $this->get_datastore()->load( $this );
 		$value = null;
-		if ( isset( $raw_value_set_tree[ $this->get_hierarchy_name() ] ) ) {
-			$value = $raw_value_set_tree[ $this->get_hierarchy_name() ]['value_set'];
+		if ( isset( $raw_value_set_tree[ $this->get_base_name() ] ) ) {
+			$value = $raw_value_set_tree[ $this->get_base_name() ]['value_set'];
 		}
 		$this->set_value( $value );
 

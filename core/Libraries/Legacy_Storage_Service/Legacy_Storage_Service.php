@@ -79,14 +79,14 @@ class Legacy_Storage_Service {
 						continue;
 					}
 					$permutations[] = array(
-						'field'=>$field->get_hierarchy_name(),
+						'field'=>$field->get_base_name(),
 						'group'=>$group_name,
 						'children'=>$this->get_field_group_permutations( $group->get_fields() ),
 					);
 				}
 			} else {
 				$permutations[] = array(
-					'field'=>$field->get_hierarchy_name(),
+					'field'=>$field->get_base_name(),
 					'group'=>'',
 					'children'=>array(),
 				);
@@ -132,7 +132,7 @@ class Legacy_Storage_Service {
 			$comparisons = array();
 			$container_fields = $container->get_fields();
 			foreach ( $container_fields as $field ) {
-				$field_key_pattern = $prefix . $field->get_hierarchy_name();
+				$field_key_pattern = $prefix . $field->get_base_name();
 
 				if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
 					$groups = $field->get_group_names();

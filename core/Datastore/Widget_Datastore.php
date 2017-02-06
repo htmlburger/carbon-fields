@@ -23,6 +23,24 @@ class Widget_Datastore extends Key_Value_Datastore {
 	public function init() {}
 
 	/**
+	 * Override storage array
+	 *
+	 * @param array $storage
+	 */
+	public function import_storage( $storage ) {
+		$this->storage = $storage;
+	}
+
+	/**
+	 * Return storage array
+	 *
+	 * @return array
+	 */
+	public function export_storage() {
+		return $this->storage;
+	}
+
+	/**
 	 * Return a raw database query results array for a field
 	 *
 	 * @param Field $field The field to retrieve value for.
@@ -46,24 +64,6 @@ class Widget_Datastore extends Key_Value_Datastore {
 	 */
 	protected function save_key_value_pair( $key, $value ) {
 		$this->storage[ $key ] = $value;
-	}
-
-	/**
-	 * Override storage array
-	 *
-	 * @param array $storage
-	 */
-	public function import_storage( $storage ) {
-		$this->storage = $storage;
-	}
-
-	/**
-	 * Return storage array
-	 *
-	 * @return array
-	 */
-	public function export_storage() {
-		return $this->storage;
 	}
 
 	/**

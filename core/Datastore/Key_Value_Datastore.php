@@ -58,7 +58,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * @return array
 	 **/
 	protected function get_full_hierarchy_for_field( Field $field ) {
-		$full_hierarchy = array_merge( $field->get_hierarchy(), array( $field->get_hierarchy_name() ) );
+		$full_hierarchy = array_merge( $field->get_hierarchy(), array( $field->get_base_name() ) );
 		return $full_hierarchy;
 	}
 

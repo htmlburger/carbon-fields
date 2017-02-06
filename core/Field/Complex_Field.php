@@ -109,10 +109,10 @@ class Complex_Field extends Field {
 		}
 
 		foreach ( $fields as $field ) {
-			if ( $field->get_hierarchy_name() === static::GROUP_TYPE_KEY ) {
+			if ( $field->get_base_name() === static::GROUP_TYPE_KEY ) {
 				Incorrect_Syntax_Exception::raise( '"' . static::GROUP_TYPE_KEY . '" is a reserved keyword for Complex fields and cannot be used for a field name.' );
 			}
-			$field->set_hierarchy( array_merge( $this->get_hierarchy(), array( $this->get_hierarchy_name() ) ) );
+			$field->set_hierarchy( array_merge( $this->get_hierarchy(), array( $this->get_base_name() ) ) );
 		}
 
 		$group = new Group_Field( $name, $label, $fields );
@@ -204,7 +204,7 @@ class Complex_Field extends Field {
 	 **/
 	public function get_clone_under_field_in_hierarchy( $field, $parent_field, $entry_index = 0 ) {
 		$clone = clone $field;
-		$clone->set_hierarchy( array_merge( $parent_field->get_hierarchy(), array( $parent_field->get_hierarchy_name() ) ) );
+		$clone->set_hierarchy( array_merge( $parent_field->get_hierarchy(), array( $parent_field->get_base_name() ) ) );
 		$clone->set_hierarchy_index( array_merge( $parent_field->get_hierarchy_index(), array( $entry_index ) ) );
 		return $clone;
 	}
@@ -247,9 +247,9 @@ class Complex_Field extends Field {
 
 				$tmp_field->set_value_from_input( $values );
 				if ( is_a( $tmp_field, get_class() ) ) {
-					$value_group[$tmp_field->get_hierarchy_name()] = $tmp_field->get_value_tree();
+					$value_group[$tmp_field->get_base_name()] = $tmp_field->get_value_tree();
 				} else {
-					$value_group[$tmp_field->get_hierarchy_name()] = array(
+					$value_group[$tmp_field->get_base_name()] = array(
 						'value_set'=>$tmp_field->value()->get_set(),
 					);
 				}
@@ -284,10 +284,10 @@ class Complex_Field extends Field {
 
 				foreach ( $group_fields as $field ) {
 					$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $entry_index );
-					if ( isset( $group_values[ $clone->get_hierarchy_name() ] ) ) {
-						$clone->set_value( $group_values[ $clone->get_hierarchy_name() ]['value_set'] );
+					if ( isset( $group_values[ $clone->get_base_name() ] ) ) {
+						$clone->set_value( $group_values[ $clone->get_base_name() ]['value_set'] );
 						if ( is_a( $clone, get_class() ) ) {
-							$clone->set_value_tree( $group_values[ $clone->get_hierarchy_name() ] );
+							$clone->set_value_tree( $group_values[ $clone->get_base_name() ] );
 						}
 					}
 					$fields[ $entry_index ][] = $clone;
@@ -304,15 +304,15 @@ class Complex_Field extends Field {
 	public function load() {
 		$raw_value_set_tree = $this->get_datastore()->load( $this );
 		$value = null;
-		if ( isset( $raw_value_set_tree[ $this->get_hierarchy_name() ] ) ) {
-			$value = $raw_value_set_tree[ $this->get_hierarchy_name() ]['value_set'];
+		if ( isset( $raw_value_set_tree[ $this->get_base_name() ] ) ) {
+			$value = $raw_value_set_tree[ $this->get_base_name() ]['value_set'];
 		}
 		$this->set_value( $value );
 
 		if ( $this->get_value() === null ) {
 			$this->set_value( $this->get_default_value() );
 		} else {
-			$this->set_value_tree( $raw_value_set_tree[ $this->get_hierarchy_name() ] );
+			$this->set_value_tree( $raw_value_set_tree[ $this->get_base_name() ] );
 		}
 	}
 
