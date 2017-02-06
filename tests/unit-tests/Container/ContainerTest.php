@@ -5,6 +5,7 @@ use \Carbon_Fields\Pimple\Container as PimpleContainer;
 use \Carbon_Fields\App;
 use \Carbon_Fields\Container\Container;
 use \Carbon_Fields\Container\Repository as ContainerRepository;
+use \Carbon_Fields\Service\Legacy_Storage_Service;
 use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class ContainerTest extends WP_UnitTestCase {
@@ -16,7 +17,12 @@ class ContainerTest extends WP_UnitTestCase {
 			return new ContainerRepository();
 		};
 
+		$ioc['legacy_storage_service'] = function( $c ) {
+			return new Legacy_Storage_Service( $c['container_repository'] );
+		};
+
 		App::instance()->install( $ioc );
+		App::service( 'legacy_storage' )->disable();
 
 		$this->containerId = 'PageSettings';
 		$this->containerTitle = 'Page Settings';

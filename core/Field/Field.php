@@ -228,9 +228,10 @@ class Field implements Datastore_Holder_Interface {
 		if ( $this->value === null ) {
 			$this->value = new Value_Set();
 		}
+
+		$this->set_base_name( $name );
 		$this->set_name( $name );
 		$this->set_label( $label );
-		$this->set_base_name( $name );
 
 		// Pick random ID
 		$random_string = md5( mt_rand() . $this->get_name() . $this->get_label() );
@@ -520,6 +521,9 @@ class Field implements Datastore_Holder_Interface {
 		if ( preg_match( $regex, $name ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" cannot contain "|" or ":" characters.' );
 		}
+
+		// Prefix with an underscore
+		$name = ( substr( $name, 0, 1 ) !== '_' ? '_' . $name : $name );
 
 		$this->name = $name;
 	}

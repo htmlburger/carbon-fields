@@ -118,8 +118,19 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 */
 	public function testFieldNameRemovesSpaces() {
 		// XXX: Is this really expected? 
-		$field = Field::make( 'text', '## Even a weirder name! :)' );
-		$this->assertEquals( '_##_even_a_weirder_name!_:)', $field->get_name() );
+		$field = Field::make( 'text', '## Even a weirder name! )' );
+		$this->assertEquals( '_##_even_a_weirder_name!_)', $field->get_name() );
+	}
+
+	/**
+	 * @covers \Carbon_Fields\Field\Field::make
+	 * @covers \Carbon_Fields\Field\Field::factory
+	 * @covers \Carbon_Fields\Field\Field::__construct
+	 * 
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 */
+	public function testFieldNameThrowsExceptionOnReservedCharacters() {
+		$field = Field::make( 'text', '## Even a weirder | name! :)' );
 	}
 
 	/**
@@ -130,8 +141,8 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	public function testNonAsciiFieldNamesAreHandledProperly() {
 		// This text includes a capital cyrillic letter ... it actually assures that
 		// field names in non-english are converted to lowercase
-		$field = Field::make( 'text', 'bulgarian: България' );
-		$this->assertEquals( '_bulgarian:_българия', $field->get_name() );
+		$field = Field::make( 'text', 'bulgarian; България' );
+		$this->assertEquals( '_bulgarian;_българия', $field->get_name() );
 	}
 
 	/**
