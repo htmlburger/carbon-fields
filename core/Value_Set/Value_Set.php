@@ -46,26 +46,37 @@ class Value_Set {
 
 	/**
 	 * Value set type
+	 * 
+	 * @var integer static::TYPE_* constant
 	 */
 	protected $type = self::TYPE_SINGLE_VALUE;
 
 	/**
 	 * Array of valid value set types
+	 *
+	 * @var array
 	 */
 	protected $valid_types = array( self::TYPE_SINGLE_VALUE, self::TYPE_MULTIPLE_VALUES, self::TYPE_MULTIPLE_KEYS, self::TYPE_VALUE_SET );
 
 	/**
 	 * Registered value set properties (keys) with their default value (when the property is missing in the passed raw_value_set)
+	 *
+	 * @var array
 	 */
 	protected $properties = array( self::VALUE_KEY=>'' );
 
 	/**
 	 * Data the value set represents
+	 *
+	 * @var array Nullable array
 	 */
 	protected $value_set = null;
 
 	/**
 	 * Value set constructor
+	 *
+	 * @param integer $type static::TYPE_* constant
+	 * @param array $additional_properties
 	 */
 	public function __construct( $type = self::TYPE_SINGLE_VALUE, $additional_properties = array() ) {
 		if ( ! in_array( $type, $this->valid_types ) ) {
@@ -79,6 +90,7 @@ class Value_Set {
 	/**
 	 * Format a raw value set into one which guarantees that only (and all) registered properties are present
 	 *
+	 * @param array $raw_value_set
 	 * @return array
 	 */
 	protected function get_formatted_value_set( $raw_value_set ) {
@@ -170,6 +182,7 @@ class Value_Set {
 	/**
 	 * Check if an array is flat
 	 *
+	 * @param arrat $array
 	 * @return boolean
 	 */
 	protected function is_flat_array( $array ) {
@@ -186,6 +199,7 @@ class Value_Set {
 	/**
 	 * Convert a flat array to a raw value set
 	 *
+	 * @param array $value_array
 	 * @return array
 	 */
 	protected function flat_array_to_raw_value_set( $value_array ) {
