@@ -39,7 +39,7 @@ abstract class Datastore implements Datastore_Interface {
 	 * Create a new datastore of type $type.
 	 *
 	 * @param string $type
-	 * @return Datastore
+	 * @return Datastore_Interface
 	 **/
 	public static function factory( $type ) {
 		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
@@ -59,7 +59,7 @@ abstract class Datastore implements Datastore_Interface {
 	 * An alias of factory().
 	 *
 	 * @see Datastore::factory()
-	 * @return Datastore
+	 * @return Datastore_Interface
 	 **/
 	public static function make( $type ) {
 		return static::factory( $type );
