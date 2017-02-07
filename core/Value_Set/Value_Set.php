@@ -10,8 +10,8 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * (raw) value set schema:
  * array(
  *     array(
- *         'value'=>'',
- *         [property2]=>'',
+ *         'value' => '',
+ *         [property2] => '',
  *         ...
  *     ),
  *     ...
@@ -63,7 +63,7 @@ class Value_Set {
 	 *
 	 * @var array
 	 */
-	protected $properties = array( self::VALUE_PROPERTY=>'' );
+	protected $properties = array( self::VALUE_PROPERTY => '' );
 
 	/**
 	 * Data the value set represents
@@ -223,7 +223,7 @@ class Value_Set {
 					$raw_value_set[] = $value;
 				} else {
 					$raw_value_set[] = array(
-						static::VALUE_PROPERTY=>$value,
+						static::VALUE_PROPERTY => $value,
 					);
 				}
 			}

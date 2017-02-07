@@ -112,6 +112,27 @@ class ValueSetTest extends WP_UnitTestCase {
 	 * @covers ::set
 	 * @covers ::get
 	 */
+	public function testGetReturnsNullForFreshInstances() {
+		$subject = new Value_Set();
+		$expected = null;
+		$this->assertSame( $expected, $subject->get() );
+	}
+
+	/**
+	 * @covers ::set
+	 * @covers ::get
+	 */
+	public function testGetReturnsNullWhenValueIsSetToNull() {
+		$subject = new Value_Set();
+		$expected = null;
+		$subject->set( $expected );
+		$this->assertSame( $expected, $subject->get() );
+	}
+
+	/**
+	 * @covers ::set
+	 * @covers ::get
+	 */
 	public function testGetReturnsStringForSingleValueType() {
 		$subject = new Value_Set();
 		$value = 'expected value';
@@ -273,6 +294,97 @@ class ValueSetTest extends WP_UnitTestCase {
 				'bar'=>'',
 			),
 		) );
+		$this->assertSame( $expected, $subject->get_set() );
+	}
+
+	/**
+	 * @covers ::set
+	 * @covers ::get
+	 */
+	public function testGetSetReturnsFullSetWhenSetIsPassedAString() {
+		$subject = new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'foo' => '', 'bar' => '' ) );
+		$value = 'expected value';
+		$expected = array(
+			array(
+				Value_Set::VALUE_PROPERTY => $value,
+				'foo' => '',
+				'bar' => '',
+			),
+		);
+		$subject->set( $value );
+		$this->assertSame( $expected, $subject->get_set() );
+	}
+
+	/**
+	 * @covers ::set
+	 * @covers ::get
+	 */
+	public function testGetSetReturnsFullSetWhenSetIsPassedAFlatArray() {
+		$subject = new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'foo' => '', 'bar' => '' ) );
+		$value1 = 'value1';
+		$value2 = 'value2';
+		$expected = array(
+			array(
+				Value_Set::VALUE_PROPERTY => $value1,
+				'foo' => '',
+				'bar' => '',
+			),
+			array(
+				Value_Set::VALUE_PROPERTY => $value2,
+				'foo' => '',
+				'bar' => '',
+			),
+		);
+		$subject->set( array(
+			$value1,
+			$value2,
+		) );
+		$this->assertSame( $expected, $subject->get_set() );
+	}
+
+	/**
+	 * @covers ::set
+	 * @covers ::get
+	 */
+	public function testGetSetReturnsFullSetWhenSetIsPassedAnAssociativeArray() {
+		$subject = new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'foo' => '', 'bar' => '' ) );
+		$value = 'expected value';
+		$expected = array(
+			array(
+				Value_Set::VALUE_PROPERTY => $value,
+				'foo' => 'bar',
+				'bar' => 'foo',
+			),
+		);
+		$subject->set( array(
+			Value_Set::VALUE_PROPERTY => $value,
+			'foo' => 'bar',
+			'bar' => 'foo',
+		) );
+		$this->assertSame( $expected, $subject->get_set() );
+	}
+
+	/**
+	 * @covers ::set
+	 * @covers ::get
+	 */
+	public function testGetSetReturnsFullSetWhenSetIsPassedARawValueSet() {
+		$subject = new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'foo' => '', 'bar' => '' ) );
+		$value1 = 'value1';
+		$value2 = 'value2';
+		$expected = array(
+			array(
+				Value_Set::VALUE_PROPERTY => $value1,
+				'foo' => 'bar',
+				'bar' => 'foo',
+			),
+			array(
+				Value_Set::VALUE_PROPERTY => $value2,
+				'foo' => 'bar',
+				'bar' => 'foo',
+			),
+		);
+		$subject->set( $expected );
 		$this->assertSame( $expected, $subject->get_set() );
 	}
 }
