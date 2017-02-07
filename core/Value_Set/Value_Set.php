@@ -183,7 +183,7 @@ class Value_Set {
 	/**
 	 * Check if an array is flat
 	 *
-	 * @param arrat $array
+	 * @param array $array
 	 * @return boolean
 	 */
 	protected function is_flat_array( $array ) {
