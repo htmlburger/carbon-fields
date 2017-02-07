@@ -3,7 +3,7 @@
  */
 import { takeEvery } from 'redux-saga';
 import { put, call, select } from 'redux-saga/effects';
-import { isEmpty, omit, some, every } from 'lodash';
+import { isEmpty, omit, some, every, includes } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -37,10 +37,16 @@ function compare(left, right, operator) {
  *
  * @param  {Object} field
  * @param  {Object} siblings
- * @param  {Object} action
+ * @param  {Object} [action]
+ * @param  {Object} action.payload
+ * @param  {String} action.payload.fieldId
  * @return {void}
  */
-export function* workerValidate(field, siblings, action) {
+export function* workerValidate(field, siblings, { payload: { fieldId } } = { payload: {} }) {
+	if (fieldId && !includes(siblings, fieldId)) {
+		return;
+	}
+
 	const { relation, rules } = field.conditional_logic;
 	const results = [];
 	let valid;
@@ -85,6 +91,7 @@ export function* workerConditionalLogic({ payload: { fieldId } }) {
 	const selector = yield call(makeGetFieldsByParent, field.parent)
 	const siblings = yield call(omit, yield select(selector), field.name);
 
+	yield call(workerValidate, field, siblings);
 	yield takeEvery(updateValue.toString(), workerValidate, field, siblings);
 }
 

@@ -21,7 +21,6 @@ function reducer(state = {}, { type, payload } = {}) {
 		case SET_UI:
 			return immutable.assign(state, `${payload.fieldId}.ui`, payload.ui);
 		case 'fields/UPDATE_VALUE':
-			console.log(payload);
 			return immutable.set(state, `${payload.fieldId}.value`, payload.value);
 		default:
 			return state;
