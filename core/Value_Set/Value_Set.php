@@ -218,7 +218,7 @@ class Value_Set {
 			$raw_value_set[] = $value_array;
 		} else {
 			foreach ( $value_array as $key => $value ) {
-				if ( isset( $value[ static::VALUE_KEY ] ) ) {
+				if ( is_array( $value ) && isset( $value[ static::VALUE_KEY ] ) ) {
 					$raw_value_set[] = $value;
 				} else {
 					$raw_value_set[] = array(
