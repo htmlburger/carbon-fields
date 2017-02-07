@@ -120,7 +120,7 @@ class Value_Set {
 	 * @return boolean
 	 */
 	public function keepalive() {
-		return ( $this->type !== self::TYPE_SINGLE_VALUE );
+		return ( $this->type !== static::TYPE_SINGLE_VALUE );
 	}
 
 	/**
@@ -142,24 +142,25 @@ class Value_Set {
 			return null;
 		}
 		$value = '';
+		$value_property = static::VALUE_PROPERTY;
 
 		switch ( $this->type ) {
-			case self::TYPE_MULTIPLE_VALUES:
-				$value = array_map( function( $set ) {
-					return $set[ static::VALUE_PROPERTY ];
+			case static::TYPE_MULTIPLE_VALUES:
+				$value = array_map( function( $set ) use ( $value_property ) {
+					return $set[ $value_property ];
 				}, $this->value_set );
 				break;
-			case self::TYPE_MULTIPLE_PROPERTIES:
+			case static::TYPE_MULTIPLE_PROPERTIES:
 				$value = array();
 				if ( ! empty( $this->value_set ) ) {
 					$value = $this->value_set[0];
 				}
 				break;
-			case self::TYPE_VALUE_SET:
+			case static::TYPE_VALUE_SET:
 				$value = $this->value_set;
 				break;
 
-			case self::TYPE_SINGLE_VALUE:
+			case static::TYPE_SINGLE_VALUE:
 			default:
 				if ( ! empty( $this->value_set ) ) {
 					$value = $this->value_set[0][ static::VALUE_PROPERTY ];
