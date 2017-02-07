@@ -25,20 +25,19 @@ if ( ! defined( __NAMESPACE__ . '\URL' ) ) {
 	# Sanitize directory separator on Windows
 	$url = str_replace( '\\' ,'/', $url );
 
-	# If installed as a plugin
-	$wp_plugin_dir = str_replace( '\\' ,'/', WP_PLUGIN_DIR );
-	$url = str_replace( $wp_plugin_dir, \plugins_url(), $url, $count );
+	$possible_locations = array(
+		WP_PLUGIN_DIR => \plugins_url(), # If installed as a plugin
+		WP_CONTENT_DIR => \content_url(), # If anywhere in wp-content
+		ABSPATH => \site_url( '/' ), # If anywhere else within the WordPress installation
+	);
 
-	if ( $count < 1 ) {
-		# If anywhere in wp-content
-		$wp_content_dir = str_replace( '\\' ,'/', WP_CONTENT_DIR );
-		$url = str_replace( $wp_content_dir, \content_url(), $url, $count );
-	}
+	foreach ( $possible_locations as $test_dir => $test_url ) {
+		$test_dir_normalized = str_replace( '\\' ,'/', $test_dir );
+		$url = str_replace( $test_dir_normalized, $test_url, $url, $count );
 
-	if ( $count < 1 ) {
-		# If anywhere else within the WordPress installation
-		$wp_dir = str_replace( '\\' ,'/', ABSPATH );
-		$url = str_replace( $wp_dir, \site_url( '/' ), $url );
+		if ( $count > 0 ) {
+			break;
+		}
 	}
 
 	define( __NAMESPACE__ . '\URL', \untrailingslashit( $url ) );
