@@ -272,7 +272,7 @@ class Complex_Field extends Field {
 
 		if ( ! empty( $value_tree ) ) {
 			foreach ( $value_tree['value_set'] as $entry_index => $value ) {
-				$group_name = $value[ Value_Set::VALUE_KEY ];
+				$group_name = $value[ Value_Set::VALUE_PROPERTY ];
 				$group = $this->get_group_by_name( $group_name );
 				$group_fields = $group->get_fields();
 				$fields[ $entry_index ] = array(

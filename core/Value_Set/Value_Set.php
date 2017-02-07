@@ -25,24 +25,24 @@ class Value_Set {
 	const TYPE_SINGLE_VALUE = 1;
 
 	/**
-	 * Value type which saves multiple values with a single key
+	 * Value type which saves multiple values with a single property
 	 */
 	const TYPE_MULTIPLE_VALUES = 2;
 
 	/**
-	 * Value type which saves a single value with multiple keys
+	 * Value type which saves a single value with multiple proerties
 	 */
-	const TYPE_MULTIPLE_KEYS = 3;
+	const TYPE_MULTIPLE_PROPERTIES = 3;
 
 	/**
-	 * Value type which saves multiple values with multiple keys
+	 * Value type which saves multiple values with multiple propertys
 	 */
 	const TYPE_VALUE_SET = 4;
 
 	/**
-	 * Default value key required for every value set
+	 * Default value property required for every value set
 	 */
-	const VALUE_KEY = 'value';
+	const VALUE_PROPERTY = 'value';
 
 	/**
 	 * Value set type
@@ -56,14 +56,14 @@ class Value_Set {
 	 *
 	 * @var array
 	 */
-	protected $valid_types = array( self::TYPE_SINGLE_VALUE, self::TYPE_MULTIPLE_VALUES, self::TYPE_MULTIPLE_KEYS, self::TYPE_VALUE_SET );
+	protected $valid_types = array( self::TYPE_SINGLE_VALUE, self::TYPE_MULTIPLE_VALUES, self::TYPE_MULTIPLE_PROPERTIES, self::TYPE_VALUE_SET );
 
 	/**
-	 * Registered value set properties (keys) with their default value (when the property is missing in the passed raw_value_set)
+	 * Registered value set properties (properties) with their default value (when the property is missing in the passed raw_value_set)
 	 *
 	 * @var array
 	 */
-	protected $properties = array( self::VALUE_KEY=>'' );
+	protected $properties = array( self::VALUE_PROPERTY=>'' );
 
 	/**
 	 * Data the value set represents
@@ -146,10 +146,10 @@ class Value_Set {
 		switch ( $this->type ) {
 			case self::TYPE_MULTIPLE_VALUES:
 				$value = array_map( function( $set ) {
-					return $set[ static::VALUE_KEY ];
+					return $set[ static::VALUE_PROPERTY ];
 				}, $this->value_set );
 				break;
-			case self::TYPE_MULTIPLE_KEYS:
+			case self::TYPE_MULTIPLE_PROPERTIES:
 				$value = array();
 				if ( ! empty( $this->value_set ) ) {
 					$value = $this->value_set[0];
@@ -162,7 +162,7 @@ class Value_Set {
 			case self::TYPE_SINGLE_VALUE:
 			default:
 				if ( ! empty( $this->value_set ) ) {
-					$value = $this->value_set[0][ static::VALUE_KEY ];
+					$value = $this->value_set[0][ static::VALUE_PROPERTY ];
 				}
 				break;
 		}
@@ -218,11 +218,11 @@ class Value_Set {
 			$raw_value_set[] = $value_array;
 		} else {
 			foreach ( $value_array as $key => $value ) {
-				if ( is_array( $value ) && isset( $value[ static::VALUE_KEY ] ) ) {
+				if ( is_array( $value ) && isset( $value[ static::VALUE_PROPERTY ] ) ) {
 					$raw_value_set[] = $value;
 				} else {
 					$raw_value_set[] = array(
-						static::VALUE_KEY=>$value,
+						static::VALUE_PROPERTY=>$value,
 					);
 				}
 			}

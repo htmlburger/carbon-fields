@@ -131,7 +131,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * @return string
 	 **/
 	public function get_storage_key( Field $field, $value_group_index, $value_key ) {
-		if ( $field->is_simple_root_field() && $value_key === Value_Set::VALUE_KEY ) {
+		if ( $field->is_simple_root_field() && $value_key === Value_Set::VALUE_PROPERTY ) {
 			return $this->get_storage_key_for_simple_root_field( $field );
 		}
 		$storage_key = $this->get_storage_key_prefix( $field ) . $value_group_index . static::SEGMENT_GLUE . $value_key;
@@ -143,8 +143,8 @@ abstract class Key_Value_Datastore extends Datastore {
 	 *
 	 * @return string
 	 **/
-	public function get_storage_key_with_index_wildcards( Field $field, $value_key = Value_Set::VALUE_KEY, $wildcard = '%' ) {
-		if ( $field->is_simple_root_field() && $value_key === Value_Set::VALUE_KEY ) {
+	public function get_storage_key_with_index_wildcards( Field $field, $value_key = Value_Set::VALUE_PROPERTY, $wildcard = '%' ) {
+		if ( $field->is_simple_root_field() && $value_key === Value_Set::VALUE_PROPERTY ) {
 			return $this->get_storage_key_for_simple_root_field( $field );
 		}
 
@@ -306,7 +306,7 @@ abstract class Key_Value_Datastore extends Datastore {
 			$parents = array();
 			$group_indexes = array( 0 );
 			$value_index = 0;
-			$property = Value_Set::VALUE_KEY;
+			$property = Value_Set::VALUE_PROPERTY;
 
 			if ( count( $key_segments ) === static::TOTAL_SEGMENTS ) {
 				if ( ! empty( $key_segments[1] ) ) {

@@ -301,7 +301,7 @@ class Field implements Datastore_Holder_Interface {
 			(
 				$this->value()->get_type() === Value_Set::TYPE_SINGLE_VALUE
 				||
-				$this->value()->get_type() === Value_Set::TYPE_MULTIPLE_KEYS
+				$this->value()->get_type() === Value_Set::TYPE_MULTIPLE_PROPERTIES
 			)
 		);
 	}
