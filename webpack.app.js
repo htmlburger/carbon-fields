@@ -58,7 +58,7 @@ module.exports = {
 			'./assets/react/fields/sagas/geocoder.js',
 			'./assets/react/fields/sagas/complex.js',
 
-			'./assets/react/fields/components/field.js',
+			'./assets/react/fields/components/field',
 			'./assets/react/fields/components/association',
 			'./assets/react/fields/components/checkbox',
 			'./assets/react/fields/components/color',
