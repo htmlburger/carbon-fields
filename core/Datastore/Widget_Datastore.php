@@ -32,7 +32,7 @@ class Widget_Datastore extends Key_Value_Datastore {
 	}
 
 	/**
-	 * Return storage array
+	 * Get storage array
 	 *
 	 * @return array
 	 */
@@ -41,15 +41,16 @@ class Widget_Datastore extends Key_Value_Datastore {
 	}
 
 	/**
-	 * Return a raw database query results array for a field
+	 * Get a raw database query results array for a field
 	 *
 	 * @param Field $field The field to retrieve value for.
-	 * @return array Array of {key, value} objects
+	 * @param array $storage_key_patterns
+	 * @return array<stdClass> Array of {key, value} objects
 	 */
 	protected function get_storage_array( Field $field, $storage_key_patterns ) {
 		$storage_array = array();
 		foreach ( $this->storage as $storage_key => $value ) {
-			if ( $this->storage_key_matches_any_pattern( $storage_key, $storage_key_patterns ) ) {
+			if ( $this->key_toolset->storage_key_matches_any_pattern( $storage_key, $storage_key_patterns ) ) {
 				$storage_array[] = (object) array( 'key'=>$storage_key, 'value'=>$value );
 			}
 		}
@@ -72,10 +73,14 @@ class Widget_Datastore extends Key_Value_Datastore {
 	 * @param Field $field The field to delete.
 	 */
 	public function delete( Field $field ) {
-		$storage_key_patterns = $this->get_storage_key_deleter_patterns( $field );
+		$storage_key_patterns = $this->key_toolset->get_storage_key_deleter_patterns(
+			$field->is_simple_root_field(),
+			$this->get_full_hierarchy_for_field( $field ),
+			$this->get_full_hierarchy_index_for_field( $field )
+		);
 
 		foreach ( $this->storage as $storage_key => $value ) {
-			if ( $this->storage_key_matches_any_pattern( $storage_key, $storage_key_patterns ) ) {
+			if ( $this->key_toolset->storage_key_matches_any_pattern( $storage_key, $storage_key_patterns ) ) {
 				unset( $this->storage[ $storage_key ] );
 			}
 		}

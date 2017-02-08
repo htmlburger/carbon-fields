@@ -14,14 +14,16 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 	public function init() {}
 
 	/**
-	 * Return a raw database query results array for a field
+	 * Get a raw database query results array for a field
 	 *
 	 * @param Field $field The field to retrieve value for.
+	 * @param array $storage_key_patterns
+	 * @return array<stdClass> Array of {key, value} objects
 	 */
 	protected function get_storage_array( Field $field, $storage_key_patterns ) {
 		global $wpdb;
 
-		$storage_key_comparisons = $this->storage_key_patterns_to_sql( '`meta_key`', $storage_key_patterns );
+		$storage_key_comparisons = $this->key_toolset->storage_key_patterns_to_sql( '`meta_key`', $storage_key_patterns );
 
 		$storage_array = $wpdb->get_results( '
 			SELECT `meta_key` AS `key`, `meta_value` AS `value`
@@ -58,8 +60,12 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 	public function delete( Field $field ) {
 		global $wpdb;
 
-		$storage_key_patterns = $this->get_storage_key_deleter_patterns( $field );
-		$storage_key_comparisons = $this->storage_key_patterns_to_sql( '`meta_key`', $storage_key_patterns );
+		$storage_key_patterns = $this->key_toolset->get_storage_key_deleter_patterns(
+			$field->is_simple_root_field(),
+			$this->get_full_hierarchy_for_field( $field ),
+			$this->get_full_hierarchy_index_for_field( $field )
+		);
+		$storage_key_comparisons = $this->key_toolset->storage_key_patterns_to_sql( '`meta_key`', $storage_key_patterns );
 
 		$wpdb->query( '
 			DELETE FROM ' . $this->get_table_name() . '
@@ -69,17 +75,17 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 	}
 
 	/**
-	 * Retrieve the type of meta data.
+	 * Get the type of meta data.
 	 */
 	abstract public function get_meta_type();
 
 	/**
-	 * Retrieve the meta table name to query.
+	 * Get the meta table name to query.
 	 */
 	abstract public function get_table_name();
 
 	/**
-	 * Retrieve the meta table field name to query by.
+	 * Get the meta table field name to query by.
 	 */
 	abstract public function get_table_field_name();
 
@@ -89,7 +95,7 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 	abstract public function set_id( $id );
 
 	/**
-	 * Retrieve the ID of the datastore.
+	 * Get the ID of the datastore.
 	 */
 	abstract public function get_id();
 }

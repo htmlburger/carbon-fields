@@ -14,14 +14,16 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 	public function init() {}
 
 	/**
-	 * Return a raw database query results array for a field
+	 * Get a raw database query results array for a field
 	 *
 	 * @param Field $field The field to retrieve value for.
+	 * @param array $storage_key_patterns
+	 * @return array<stdClass> Array of {key, value} objects
 	 */
 	protected function get_storage_array( Field $field, $storage_key_patterns ) {
 		global $wpdb;
 
-		$storage_key_comparisons = $this->storage_key_patterns_to_sql( '`option_name`', $storage_key_patterns );
+		$storage_key_comparisons = $this->key_toolset->storage_key_patterns_to_sql( '`option_name`', $storage_key_patterns );
 
 		$storage_array = $wpdb->get_results( '
 			SELECT `option_name` AS `key`, `option_value` AS `value`
@@ -48,7 +50,7 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 	}
 
 	/**
-	 * Save a single key-value pair to the database
+	 * Save a single key-value pair to the database with autoload
 	 *
 	 * @param string $key
 	 * @param string $value
@@ -77,12 +79,24 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 		}
 
 		if ( empty( $value_set ) && $field->value()->keepalive() ) {
-			$storage_key = $this->get_storage_key( $field, 0, static::KEEPALIVE_KEY );
+			$storage_key = $this->key_toolset->get_storage_key(
+				$field->is_simple_root_field(),
+				$this->get_full_hierarchy_for_field( $field ),
+				$this->get_full_hierarchy_index_for_field( $field ),
+				0,
+				static::KEEPALIVE_KEY
+			);
 			$this->save_key_value_pair_with_autoload( $storage_key, '', $autoload );
 		}
 		foreach ( $value_set as $value_group_index => $values ) {
 			foreach ( $values as $value_key => $value ) {
-				$storage_key = $this->get_storage_key( $field, $value_group_index, $value_key );
+				$storage_key = $this->key_toolset->get_storage_key(
+					$field->is_simple_root_field(),
+					$this->get_full_hierarchy_for_field( $field ),
+					$this->get_full_hierarchy_index_for_field( $field ),
+					$value_group_index,
+					$value_key
+				);
 				$this->save_key_value_pair_with_autoload( $storage_key, $value, $autoload );
 			}
 		}
@@ -96,8 +110,12 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 	public function delete( Field $field ) {
 		global $wpdb;
 
-		$storage_key_patterns = $this->get_storage_key_deleter_patterns( $field );
-		$storage_key_comparisons = $this->storage_key_patterns_to_sql( '`option_name`', $storage_key_patterns );
+		$storage_key_patterns = $this->key_toolset->get_storage_key_deleter_patterns(
+			$field->is_simple_root_field(),
+			$this->get_full_hierarchy_for_field( $field ),
+			$this->get_full_hierarchy_index_for_field( $field )
+		);
+		$storage_key_comparisons = $this->key_toolset->storage_key_patterns_to_sql( '`option_name`', $storage_key_patterns );
 
 		$wpdb->query( '
 			DELETE FROM ' . $wpdb->options . '

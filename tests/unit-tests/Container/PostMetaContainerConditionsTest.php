@@ -4,6 +4,7 @@ use \Carbon_Fields\Pimple\Container as PimpleContainer;
 use \Carbon_Fields\App;
 use \Carbon_Fields\Container\Container;
 use \Carbon_Fields\Container\Repository as ContainerRepository;
+use \Carbon_Fields\Key_Toolset\Key_Toolset;
 use \Carbon_Fields\Service\Legacy_Storage_Service;
 
 class PostMetaContainerConditionsTest extends WP_UnitTestCase {
@@ -13,12 +14,16 @@ class PostMetaContainerConditionsTest extends WP_UnitTestCase {
 
 		$ioc = new PimpleContainer();
 
-		$ioc['container_repository'] = function( $c ) {
+		$ioc['container_repository'] = function( $ioc ) {
 			return new ContainerRepository();
 		};
 
-		$ioc['legacy_storage_service'] = function( $c ) {
-			return new Legacy_Storage_Service( $c['container_repository'] );
+		$ioc['key_toolset'] = function( $ioc ) {
+			return new Key_Toolset();
+		};
+
+		$ioc['legacy_storage_service'] = function( $ioc ) {
+			return new Legacy_Storage_Service( $ioc['container_repository'], $ioc['key_toolset'] );
 		};
 
 		App::instance()->install( $ioc );

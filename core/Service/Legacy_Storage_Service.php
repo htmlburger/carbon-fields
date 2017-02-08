@@ -5,8 +5,9 @@ namespace Carbon_Fields\Service;
 use \Carbon_Fields\Field\Field;
 use \Carbon_Fields\Container\Container;
 use \Carbon_Fields\Container\Repository as ContainerRepository;
-use \Carbon_Fields\Datastore\Datastore;
-use \Carbon_Fields\Datastore\Key_Value_Datastore as KVD;
+use \Carbon_Fields\Value_Set\Value_Set;
+use \Carbon_Fields\Key_Toolset\Key_Toolset;
+use \Carbon_Fields\Datastore\Datastore_Interface;
 use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /*
@@ -20,6 +21,13 @@ class Legacy_Storage_Service extends Service {
 	 * @var ContainerRepository
 	 */
 	protected $container_repository;
+
+	/**
+	 * Key Toolset for key generation and comparison utilities
+	 * 
+	 * @var Key_Toolset
+	 */
+	protected $key_toolset;
 
 	/**
 	 * List of special key suffixes that the Map field uses so save extra data
@@ -40,8 +48,9 @@ class Legacy_Storage_Service extends Service {
 	 * 
 	 * @param ContainerRepository $container_repository
 	 */
-	public function __construct( ContainerRepository $container_repository ) {
+	public function __construct( ContainerRepository $container_repository, Key_Toolset $key_toolset ) {
 		$this->container_repository = $container_repository;
+		$this->key_toolset = $key_toolset;
 	}
 
 	/**
@@ -61,10 +70,10 @@ class Legacy_Storage_Service extends Service {
 	/**
 	 * Return container instance which uses the passed datastore
 	 * 
-	 * @param  Datastore $datastore
+	 * @param  Datastore_Interface $datastore
 	 * @return Container
 	 */
-	protected function get_container_for_datastore( Datastore $datastore ) {
+	protected function get_container_for_datastore( Datastore_Interface $datastore ) {
 		$containers = $this->container_repository->get_containers();
 		foreach ( $containers as $container ) {
 			if ( $container->get_datastore() === $datastore ) {
@@ -113,10 +122,10 @@ class Legacy_Storage_Service extends Service {
 	/**
 	 * Get a key-value array of CF 1.5 values for fields in the container of the passed datastore
 	 * 
-	 * @param  Datastore $datastore
+	 * @param  Datastore_Interface $datastore
 	 * @return array
 	 */
-	protected function get_legacy_storage_array( Datastore $datastore ) {
+	protected function get_legacy_storage_array( Datastore_Interface $datastore ) {
 		global $wpdb;
 
 		$container = $this->get_container_for_datastore( $datastore );
@@ -341,7 +350,7 @@ class Legacy_Storage_Service extends Service {
 	}
 
 	/**
-	 * Convert field data to a new storage key
+	 * Convert field data to a storage key
 	 * 
 	 * @param  array $full_hierarchy
 	 * @param  array $hierarchy_index
@@ -349,55 +358,19 @@ class Legacy_Storage_Service extends Service {
 	 * @param  string $value_key
 	 * @return string
 	 */
-	protected function field_data_to_storage_key( $full_hierarchy, $hierarchy_index, $value_index = 0, $value_key = 'value' ) {
-		$parents = $full_hierarchy;
-		$first_parent = array_shift( $parents );
+	protected function field_data_to_storage_key( $full_hierarchy, $hierarchy_index, $value_index = 0, $value_key = Value_Set::VALUE_PROPERTY ) {
 		$hierarchy_index = ! empty( $hierarchy_index ) ? $hierarchy_index : array( 0 );
-
-		$key = '_' . $first_parent . KVD::SEGMENT_GLUE;
-		$key .= implode( KVD::SEGMENT_VALUE_GLUE, $parents ) . KVD::SEGMENT_GLUE;
-		$key .= implode( KVD::SEGMENT_VALUE_GLUE, $hierarchy_index ) . KVD::SEGMENT_GLUE;
-		$key .= $value_index . KVD::SEGMENT_GLUE;
-		$key .= $value_key;
+		$key = $this->key_toolset->get_storage_key( false, $full_hierarchy, $hierarchy_index, $value_index, $value_key );
 		return $key;
-	}
-
-	/**
-	 * Check if a storage key matches any comparison pattern
-	 * 
-	 * @param  string $storage_key
-	 * @param  array $patterns
-	 * @return boolean
-	 */
-	protected function storage_key_matches_any_pattern( $storage_key, $patterns ) {
-		foreach ( $patterns as $key => $type ) {
-			switch ( $type ) {
-				case KVD::PATTERN_COMPARISON_EQUAL:
-					if ( $storage_key === $key ) {
-						return true;
-					}
-					break;
-				case KVD::PATTERN_COMPARISON_STARTS_WITH:
-					$key_length = strlen( $key );
-					if ( substr( $storage_key, 0, $key_length ) === $key ) {
-						return true;
-					}
-					break;
-				default:
-					Incorrect_Syntax_Exception::raise( 'Unsupported storage key pattern type used: "' . $type . '"' );
-					break;
-			}
-		}
-		return false;
 	}
 
 	/**
 	 * Get all data saved for a datastore in the new key-value format
 	 * 
-	 * @param  Datastore $datastore
+	 * @param  Datastore_Interface $datastore
 	 * @return array
 	 */
-	protected function get_storage_array_for_datastore( Datastore $datastore ) {
+	protected function get_storage_array_for_datastore( Datastore_Interface $datastore ) {
 		$legacy_storage_array = $this->get_legacy_storage_array( $datastore );
 		if ( empty( $legacy_storage_array ) ) {
 			return array(); // no migration data found
@@ -422,20 +395,19 @@ class Legacy_Storage_Service extends Service {
 	/**
 	 * Get array of new storage key-values matching key patterns
 	 * 
-	 * @param  Datastore $datastore
+	 * @param  Datastore_Interface $datastore
 	 * @param  array $storage_key_patterns
 	 * @return array
 	 */
-	public function get_storage_array( Datastore $datastore, $storage_key_patterns ) {
+	public function get_storage_array( Datastore_Interface $datastore, $storage_key_patterns ) {
 		if ( ! $this->is_enabled() ) {
 			return array();
 		}
 
 		$storage_array = $this->get_storage_array_for_datastore( $datastore );
-
 		$matched_data = array();
 		foreach ( $storage_array as $key => $value ) {
-			if ( $this->storage_key_matches_any_pattern( $key, $storage_key_patterns ) ) {
+			if ( $this->key_toolset->storage_key_matches_any_pattern( $key, $storage_key_patterns ) ) {
 				$matched_data[] = (object) array(
 					'key' => $key,
 					'value' => $value,

@@ -3,6 +3,7 @@
 namespace Carbon_Fields\Service;
 
 use \Carbon_Fields\Container\Repository as ContainerRepository;
+use \Carbon_Fields\Key_Toolset\Key_Toolset;
 
 /*
  * Service which provides the ability to do meta queries for multi-value fields and nested fields
@@ -20,9 +21,17 @@ class Meta_Query_Service extends Service {
 	 * @var ContainerRepository
 	 */
 	protected $container_repository;
+
+	/**
+	 * Key Toolset for key generation and comparison utilities
+	 * 
+	 * @var Key_Toolset
+	 */
+	protected $key_toolset;
 	
-	public function __construct( ContainerRepository $container_repository ) {
+	public function __construct( ContainerRepository $container_repository, Key_Toolset $key_toolset ) {
 		$this->container_repository = $container_repository;
+		$this->key_toolset = $key_toolset;
 	}
 
 	/**
@@ -63,7 +72,11 @@ class Meta_Query_Service extends Service {
 				$field = $this->container_repository->get_field_in_containers( $field_name, $container_type );
 
 				if ( $field !== null && ! $field->is_simple_root_field() ) {
-					$storage_key = $field->get_datastore()->get_storage_key_with_index_wildcards( $field );
+					$datastore = $field->get_datastore();
+					$storage_key = $this->key_toolset->get_storage_key_with_index_wildcards(
+						$field->is_simple_root_field(),
+						array_merge( $field->get_hierarchy(), array( $field->get_base_name() ) )
+					);
 					$condition['key'] = static::META_KEY_PREFIX . $storage_key;
 				}
 			} else {

@@ -5,6 +5,7 @@ namespace Carbon_Fields;
 use \Carbon_Fields\Pimple\Container as PimpleContainer;
 use \Carbon_Fields\Loader\Loader;
 use \Carbon_Fields\Container\Repository as ContainerRepository;
+use \Carbon_Fields\Key_Toolset\Key_Toolset;
 use \Carbon_Fields\Templater\Templater;
 use \Carbon_Fields\Service\Meta_Query_Service;
 use \Carbon_Fields\Service\Legacy_Storage_Service;
@@ -51,6 +52,10 @@ class App {
 			return new ContainerRepository();
 		};
 
+		$ioc['key_toolset'] = function( $ioc ) {
+			return new Key_Toolset();
+		};
+
 		$ioc['templater'] = function( $ioc ) {
 			return new Templater();
 		};
@@ -62,11 +67,11 @@ class App {
 		/* Services */
 
 		$ioc['meta_query_service'] = function( $ioc ) {
-			return new Meta_Query_Service( $ioc['container_repository'] );
+			return new Meta_Query_Service( $ioc['container_repository'], $ioc['key_toolset'] );
 		};
 
 		$ioc['legacy_storage_service'] = function( $ioc ) {
-			return new Legacy_Storage_Service( $ioc['container_repository'] );
+			return new Legacy_Storage_Service( $ioc['container_repository'], $ioc['key_toolset'] );
 		};
 
 		return $ioc;
