@@ -169,19 +169,20 @@ class Key_Toolset {
 	/**
 	 * Get an array of storage key patterns for use when deleting values from storage
 	 *
+	 * @param bool $is_complex_field
 	 * @param bool $is_simple_root_field
 	 * @param array<string> $full_hierarchy
 	 * @param array<int> $full_hierarchy_index
 	 * @return array
 	 */
-	public function get_storage_key_deleter_patterns( $is_simple_root_field, $full_hierarchy, $full_hierarchy_index ) {
+	public function get_storage_key_deleter_patterns( $is_complex_field, $is_simple_root_field, $full_hierarchy, $full_hierarchy_index ) {
 		$patterns = array();
 		
 		if ( $is_simple_root_field ) {
 			$patterns[ $this->get_storage_key_for_simple_root_field( $full_hierarchy[ count( $full_hierarchy ) - 1 ] ) ] = static::PATTERN_COMPARISON_EQUAL;
 		}
 		
-		if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
+		if ( $is_complex_field ) {
 			$patterns[ $this->get_storage_key_root( $full_hierarchy ) ] = static::PATTERN_COMPARISON_STARTS_WITH;
 		} else {
 			$patterns[ $this->get_storage_key_prefix( $full_hierarchy, $full_hierarchy_index ) ] = static::PATTERN_COMPARISON_STARTS_WITH;
