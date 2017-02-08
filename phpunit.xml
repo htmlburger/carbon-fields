@@ -3,7 +3,6 @@
 	bootstrap="./tests/bootstrap.php"
 	colors="true"
 	stopOnError="true"
-	checkForUnintentionallyCoveredCode="true"
 	beStrictAboutOutputDuringTests="true"
 	beStrictAboutTestsThatDoNotTestAnything="true"
 	>
