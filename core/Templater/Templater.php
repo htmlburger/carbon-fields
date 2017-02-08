@@ -39,7 +39,7 @@ class Templater {
 	public function render_templates() {
 		foreach ( $this->templates as $name => $html ) {
 			?>
-			<script type="text/html" id="crb-tmpl-<?php echo $name; ?>">
+			<script type="text/html" id="<?php echo esc_attr( 'crb-tmpl-' . $name ); ?>">
 				<?php echo apply_filters( 'carbon_template', apply_filters( 'carbon_template_' . $name, $html ), $name ); ?>
 			</script>
 			<?php
