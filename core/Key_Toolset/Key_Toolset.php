@@ -179,7 +179,8 @@ class Key_Toolset {
 		$patterns = array();
 		
 		if ( $is_simple_root_field ) {
-			$patterns[ $this->get_storage_key_for_simple_root_field( $full_hierarchy[ count( $full_hierarchy ) - 1 ] ) ] = static::PATTERN_COMPARISON_EQUAL;
+			$key = $this->get_storage_key_for_simple_root_field( $full_hierarchy[ count( $full_hierarchy ) - 1 ] );
+			$patterns[ $key ] = static::PATTERN_COMPARISON_EQUAL;
 		}
 		
 		if ( $is_complex_field ) {
