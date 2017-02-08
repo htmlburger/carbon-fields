@@ -84,6 +84,7 @@ class Complex_Field extends Field {
 		$argv = func_get_args();
 		$argc = count( $argv );
 		$fields = array();
+		$name = '';
 		$label = '';
 
 		if ( $argc == 1 ) {
