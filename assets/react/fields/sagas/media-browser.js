@@ -4,8 +4,7 @@ import { take, call, put, select } from 'redux-saga/effects';
 import { createMediaBrowserChannel } from 'lib/events';
 import { getFieldById } from 'fields/selectors';
 import { getAttachmentThumbnail} from 'fields/helpers';
-import { updateField } from 'fields/actions';
-import { SETUP_MEDIA_BROWSER, OPEN_MEDIA_BROWSER } from 'fields/actions';
+import { setupMediaBrowser, openMediaBrowser, updateField } from 'fields/actions';
 
 /**
  * Handle the interaction with media browser of WordPress.
@@ -68,7 +67,7 @@ export function* workerSetupMediaBrowser(action) {
 
 	const { browser } = yield take(channel);
 
-	yield takeEvery(OPEN_MEDIA_BROWSER, workerOpenMediaBrowser, channel, field, browser);
+	yield takeEvery(openMediaBrowser.toString(), workerOpenMediaBrowser, channel, field, browser);
 }
 
 /**
@@ -78,6 +77,6 @@ export function* workerSetupMediaBrowser(action) {
  */
 export default function* foreman() {
 	yield [
-		takeEvery(SETUP_MEDIA_BROWSER, workerSetupMediaBrowser),
+		takeEvery(setupMediaBrowser.toString(), workerSetupMediaBrowser),
 	];
 }

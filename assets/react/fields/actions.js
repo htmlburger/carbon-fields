@@ -10,8 +10,7 @@ import { createAction } from 'redux-actions';
  * @param  {String} type
  * @return {Object}
  */
-export const SETUP_FIELD = 'fields/SETUP_FIELD';
-export const setupField = createAction(SETUP_FIELD, (fieldId, type) => ({ fieldId, type }));
+export const setupField = createAction('fields/SETUP_FIELD', (fieldId, type) => ({ fieldId, type }));
 
 /**
  * Update the object that contains information about field's UI.
@@ -20,8 +19,7 @@ export const setupField = createAction(SETUP_FIELD, (fieldId, type) => ({ fieldI
  * @param  {Object} ui
  * @return {Object}
  */
-export const SET_UI = 'fields/SET_UI';
-export const setUI = createAction(SET_UI, (fieldId, ui) => ({ fieldId, ui }));
+export const setUI = createAction('fields/SET_UI', (fieldId, ui) => ({ fieldId, ui }));
 
 /**
  * Update the field.
@@ -38,8 +36,7 @@ export const updateField = createAction('fields/UPDATE_FIELD', (fieldId, data) =
  * @param  {String} fieldId
  * @return {Object}
  */
-export const SETUP_MEDIA_BROWSER = 'fields/SETUP_MEDIA_BROWSER';
-export const setupMediaBrowser = createAction(SETUP_MEDIA_BROWSER);
+export const setupMediaBrowser = createAction('fields/SETUP_MEDIA_BROWSER');
 
 /**
  * Open the built-in media browser.
@@ -47,8 +44,7 @@ export const setupMediaBrowser = createAction(SETUP_MEDIA_BROWSER);
  * @param  {String} fieldId
  * @return {Object}
  */
-export const OPEN_MEDIA_BROWSER = 'fields/OPEN_MEDIA_BROWSER';
-export const openMediaBrowser = createAction(OPEN_MEDIA_BROWSER);
+export const openMediaBrowser = createAction('fields/OPEN_MEDIA_BROWSER');
 
 /**
  * Add the field(s) to the store.
@@ -56,8 +52,7 @@ export const openMediaBrowser = createAction(OPEN_MEDIA_BROWSER);
  * @param  {Object} fields
  * @return {Object}
  */
-export const ADD_FIELDS = 'fields/ADD_FIELDS';
-export const addFields = createAction(ADD_FIELDS);
+export const addFields = createAction('fields/ADD_FIELDS');
 
 /**
  * Remove the field(s) from the store.
@@ -65,8 +60,7 @@ export const addFields = createAction(ADD_FIELDS);
  * @param  {String[]} fields
  * @return {Object}
  */
-export const REMOVE_FIELDS = 'fields/REMOVE_FIELDS';
-export const removeFields = createAction(REMOVE_FIELDS);
+export const removeFields = createAction('fields/REMOVE_FIELDS');
 
 /**
  * Add a new instance of the specified complex group.
@@ -75,8 +69,7 @@ export const removeFields = createAction(REMOVE_FIELDS);
  * @param  {String} groupName
  * @return {Object}
  */
-export const ADD_COMPLEX_GROUP = 'fields/ADD_COMPLEX_GROUP';
-export const addComplexGroup = createAction(ADD_COMPLEX_GROUP, (fieldId, groupName) => ({ fieldId, groupName }));
+export const addComplexGroup = createAction('fields/ADD_COMPLEX_GROUP', (fieldId, groupName) => ({ fieldId, groupName }));
 
 /**
  * Create a clone of the specified complex group.
@@ -94,8 +87,7 @@ export const cloneComplexGroup = createAction('fields/CLONE_COMPLEX_GROUP', (fie
  * @param  {String} groupId
  * @return {Object}
  */
-export const REMOVE_COMPLEX_GROUP = 'fields/REMOVE_COMPLEX_GROUP';
-export const removeComplexGroup = createAction(REMOVE_COMPLEX_GROUP, (fieldId, groupId) => ({ fieldId, groupId }));
+export const removeComplexGroup = createAction('fields/REMOVE_COMPLEX_GROUP', (fieldId, groupId) => ({ fieldId, groupId }));
 
 /**
  * Process the address through Google's geocoding service.
