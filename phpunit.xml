@@ -5,6 +5,9 @@
 	stopOnError="true"
 	beStrictAboutOutputDuringTests="true"
 	beStrictAboutTestsThatDoNotTestAnything="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
 	>
 	<testsuites>
 		<testsuite name="Carbon Fields Test Suite">
