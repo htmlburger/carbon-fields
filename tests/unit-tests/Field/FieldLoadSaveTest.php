@@ -93,6 +93,7 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 		$this->datastore->shouldReceive( 'save' )->once();
 		$this->field->set_datastore( $this->datastore );
 		$this->field->save();
+		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
 	}
 
 	/**
@@ -102,5 +103,6 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 		$this->datastore->shouldReceive( 'delete' )->once();
 		$this->field->set_datastore( $this->datastore );
 		$this->field->delete();
+		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
 	}
 }

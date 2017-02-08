@@ -45,6 +45,7 @@ class RepositoryTest extends WP_UnitTestCase {
 
 		$this->repository->register_container( $container );
 		$this->repository->initialize_containers();
+		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
 	}
 
 	/**
