@@ -75,9 +75,9 @@ abstract class Widget extends \WP_Widget {
 		$classname = implode( ' ', $classname );
 
 		$widget_options = array(
-			'description'=>$description,
-			'classname'=>$classname,
-			'widget_ID'=>$widget_id,
+			'description' => $description,
+			'classname' => $classname,
+			'widget_ID' => $widget_id,
 		);
 
 		parent::__construct( $widget_id, $title, $widget_options, $this->widget_control_options );

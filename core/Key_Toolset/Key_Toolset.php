@@ -291,11 +291,11 @@ class Key_Toolset {
 	 */
 	public function parse_storage_key( $storage_key ) {
 		$parsed = array(
-			'root'=>'',
-			'hierarchy'=>array(),
-			'hierarchy_index'=>array( 0 ),
-			'value_index'=>0,
-			'property'=>Value_Set::VALUE_PROPERTY,
+			'root' => '',
+			'hierarchy' => array(),
+			'hierarchy_index' => array( 0 ),
+			'value_index' => 0,
+			'property' => Value_Set::VALUE_PROPERTY,
 		);
 
 		$segments = $this->storage_key_to_segments_array( $storage_key );

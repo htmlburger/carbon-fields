@@ -231,8 +231,8 @@ class ValueSetTest extends WP_UnitTestCase {
 		$expected = array(
 			array(
 				Value_Set::VALUE_PROPERTY => $value,
-				'foo'=>'',
-				'bar'=>'',
+				'foo' => '',
+				'bar' => '',
 			),
 		);
 		$subject->set( array(
@@ -253,8 +253,8 @@ class ValueSetTest extends WP_UnitTestCase {
 		$expected = array(
 			array(
 				Value_Set::VALUE_PROPERTY => $value,
-				'foo'=>'bar',
-				'bar'=>'foo',
+				'foo' => 'bar',
+				'bar' => 'foo',
 			),
 		);
 		$subject->set( array(
@@ -275,23 +275,23 @@ class ValueSetTest extends WP_UnitTestCase {
 		$expected = array(
 			array(
 				Value_Set::VALUE_PROPERTY => $value,
-				'foo'=>'',
-				'bar'=>'foo',
+				'foo' => '',
+				'bar' => 'foo',
 			),
 			array(
 				Value_Set::VALUE_PROPERTY => $value,
-				'foo'=>'bar',
-				'bar'=>'',
+				'foo' => 'bar',
+				'bar' => '',
 			),
 		);
 		$subject->set( array(
 			array(
 				Value_Set::VALUE_PROPERTY => $value,
-				'foo'=>'',
+				'foo' => '',
 			),
 			array(
 				Value_Set::VALUE_PROPERTY => $value,
-				'bar'=>'',
+				'bar' => '',
 			),
 		) );
 		$this->assertSame( $expected, $subject->get_set() );

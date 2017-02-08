@@ -73,9 +73,9 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 		$expected = 'test value from datastore';
 		$this->datastore->shouldReceive( 'load' )->andReturn( array(
 			$this->field->get_base_name() => array(
-				'value_set'=>array(
+				'value_set' => array(
 					array(
-						'value'=>$expected,
+						'value' => $expected,
 					),
 				),
 			),

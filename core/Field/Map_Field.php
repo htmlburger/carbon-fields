@@ -44,7 +44,7 @@ class Map_Field extends Field {
 	 * @param string $label Field label
 	 */
 	protected function __construct( $name, $label ) {
-		$this->value = new Value_Set( Value_Set::TYPE_MULTIPLE_PROPERTIES, array( 'lat'=>'', 'lng'=>'', 'zoom'=>'', 'address'=>'' ) );
+		$this->value = new Value_Set( Value_Set::TYPE_MULTIPLE_PROPERTIES, array( 'lat' => '', 'lng' => '', 'zoom' => '', 'address' => '' ) );
 		parent::__construct( $name, $label );
 	}
 
@@ -81,25 +81,25 @@ class Map_Field extends Field {
 		}
 
 		$value_set = array(
-			'lat'=>'',
-			'lng'=>'',
-			'zoom'=>'',
-			'address'=>'',
+			'lat' => '',
+			'lng' => '',
+			'zoom' => '',
+			'address' => '',
 		);
 
-		if ( isset( $input[ $this->get_name() ][ 'lat' ] ) ) {
+		if ( isset( $input[ $this->get_name() ]['lat'] ) ) {
 			$value_set['lat'] = (float) $input[ $this->get_name() ]['lat'];
 		}
 
-		if ( isset( $input[ $this->get_name() ][ 'lng' ] ) ) {
+		if ( isset( $input[ $this->get_name() ]['lng'] ) ) {
 			$value_set['lng'] = (float) $input[ $this->get_name() ]['lng'];
 		}
 
-		if ( isset( $input[ $this->get_name() ][ 'zoom' ] ) ) {
+		if ( isset( $input[ $this->get_name() ]['zoom'] ) ) {
 			$value_set['zoom'] = (int) $input[ $this->get_name() ]['zoom'];
 		}
 
-		if ( isset( $input[ $this->get_name() ][ 'address' ] ) ) {
+		if ( isset( $input[ $this->get_name() ]['address'] ) ) {
 			$value_set['address'] = $input[ $this->get_name() ]['address'];
 		}
 
@@ -121,19 +121,19 @@ class Map_Field extends Field {
 		$value_set = $this->get_value();
 		if ( $value_set === null ) {
 			$value_set = array(
-				'lat'=>floatval( $this->default_lat ),
-				'lng'=>floatval( $this->default_lng ),
-				'zoom'=>intval( $this->default_zoom ),
-				'address'=>'',
+				'lat' => floatval( $this->default_lat ),
+				'lng' => floatval( $this->default_lng ),
+				'zoom' => intval( $this->default_zoom ),
+				'address' => '',
 			);
 			$value_set['value'] = $this->lat_lng_to_latlng( $value_set['lat'], $value_set['lng'] );
 		}
 		$field_data = array_merge( $field_data, array(
-			'value'=>$value_set['value'],
-			'lat'=>floatval( $value_set['lat'] ),
-			'lng'=>floatval( $value_set['lng'] ),
-			'zoom'=>intval( $value_set['zoom'] ),
-			'address'=>$value_set['address'],
+			'value' => $value_set['value'],
+			'lat' => floatval( $value_set['lat'] ),
+			'lng' => floatval( $value_set['lng'] ),
+			'zoom' => intval( $value_set['zoom'] ),
+			'address' => $value_set['address'],
 		) );
 
 		return $field_data;

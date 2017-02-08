@@ -57,8 +57,8 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * Raw Value Set Tree schema:
 	 * array(
 	 *     [field_name] => array(
-	 *         'value_set'=>[raw_value_set],
-	 *         'groups'=>array(
+	 *         'value_set' => [raw_value_set],
+	 *         'groups' => array(
 	 *             array(
 	 *                 [recursion]
 	 *             ),
