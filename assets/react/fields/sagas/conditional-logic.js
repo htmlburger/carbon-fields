@@ -43,8 +43,8 @@ function compare(left, right, operator) {
  * @param  {mixed}  action.payload.value
  * @return {void}
  */
-export function* workerValidate(field, siblings, { payload: { fieldId, values } } = { payload: {} }) {
-	if (fieldId && (isUndefined(values.value) || !includes(siblings, fieldId))) {
+export function* workerValidate(field, siblings, { payload: { fieldId, data } } = { payload: {} }) {
+	if (fieldId && (isUndefined(data.value) || !includes(siblings, fieldId))) {
 		return;
 	}
 

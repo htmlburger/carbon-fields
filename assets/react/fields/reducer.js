@@ -17,6 +17,6 @@ import { addFields, removeFields, updateField, setUI } from 'fields/actions';
 export default decorateFieldReducer(handleActions({
 	[addFields]: (state, { payload }) => ({ ...state, ...payload }),
 	[removeFields]: (state, { payload }) => omit(state, payload),
-	[updateField]: (state, { payload: { fieldId, values }}) => immutable.assign(state, fieldId, values),
+	[updateField]: (state, { payload: { fieldId, data }}) => immutable.assign(state, fieldId, data),
 	[setUI]: (state, { payload: { fieldId, ui }}) => immutable.assign(state, `${fieldId}.ui`, ui),
 }, {}));

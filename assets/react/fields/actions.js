@@ -27,11 +27,10 @@ export const setUI = createAction(SET_UI, (fieldId, ui) => ({ fieldId, ui }));
  * Update the field.
  *
  * @param  {String} fieldId
- * @param  {Object} values
+ * @param  {Object} data
  * @return {Object}
  */
-export const UPDATE_FIELD = 'fields/UPDATE_FIELD';
-export const updateField = createAction(UPDATE_FIELD, (fieldId, values) => ({ fieldId, values }));
+export const updateField = createAction('fields/UPDATE_FIELD', (fieldId, data) => ({ fieldId, data }));
 
 /**
  * Setup the interaction between field and WordPress's media browser.
