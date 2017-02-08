@@ -372,6 +372,9 @@ class Field implements Datastore_Holder_Interface {
 	 * Save value to storage
 	 **/
 	public function save() {
+		if ( !in_array( $this->value()->get_type(), array( Value_Set::TYPE_SINGLE_VALUE, Value_Set::TYPE_MULTIPLE_PROPERTIES ) ) ) {
+			$this->delete();
+		}
 		return $this->get_datastore()->save( $this );
 	}
 

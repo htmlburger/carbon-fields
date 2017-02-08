@@ -42,14 +42,6 @@ class Relationship_Field extends Field {
 	}
 
 	/**
-	 * Save value to storage
-	 **/
-	public function save() {
-		$this->delete();
-		parent::save();
-	}
-
-	/**
 	 * Load the field value from an input array based on it's name
 	 *
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
