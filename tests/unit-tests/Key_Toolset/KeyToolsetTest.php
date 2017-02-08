@@ -10,16 +10,22 @@ use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 class KeyToolsetTest extends WP_UnitTestCase {
 
+	protected $connected_to_db = false;
+
 	public function setUp() {
 		global $wpdb;
-		$wpdb->db_connect();
+
+		if ( !$this->connected_to_db ) {
+			$this->connected_to_db = $wpdb->db_connect();
+		}
 		$this->subject = new Key_Toolset();
 	}
 
 	public function tearDown() {
 		global $wpdb;
+		
 		M::close();
-		if ( is_callable( array( $wpdb, 'close' ) ) ) {
+		if ( $this->connected_to_db && is_callable( array( $wpdb, 'close' ) ) ) {
 			$wpdb->close();
 		}
 	}
