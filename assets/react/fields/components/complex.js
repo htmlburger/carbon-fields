@@ -186,8 +186,7 @@ const hooks = {
 			};
 		}
 
-		setupField(field.id, field.type);
-		setUI(field.id, ui);
+		setupField(field.id, field.type, ui);
 	}
 };
 

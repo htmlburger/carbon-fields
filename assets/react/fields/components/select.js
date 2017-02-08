@@ -71,11 +71,9 @@ const hooks = {
 			ui,
 			setupField,
 			updateField,
-			setUI,
 		} = this.props;
 
-		setupField(field.id, field.type);
-		setUI(field.id, ui);
+		setupField(field.id, field.type, ui);
 
 		// If the field doesn't have a value,
 		// use the first option as fallback.

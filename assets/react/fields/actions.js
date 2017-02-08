@@ -8,9 +8,10 @@ import { createAction } from 'redux-actions';
  *
  * @param  {String} fieldId
  * @param  {String} type
+ * @param  {Object} ui
  * @return {Object}
  */
-export const setupField = createAction('fields/SETUP_FIELD', (fieldId, type) => ({ fieldId, type }));
+export const setupField = createAction('fields/SETUP_FIELD', (fieldId, type, ui) => ({ fieldId, type, ui }));
 
 /**
  * Update the object that contains information about field's UI.

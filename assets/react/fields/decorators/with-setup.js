@@ -1,3 +1,6 @@
+/**
+ * The externala dependencies.
+ */
 import { lifecycle, defaultProps, compose } from 'recompose';
 
 /**
@@ -9,8 +12,13 @@ import { lifecycle, defaultProps, compose } from 'recompose';
  */
 const defaultHooks = {
 	componentDidMount() {
-		this.props.setupField(this.props.id, this.props.type);
-		this.props.setUI(this.props.id, this.props.ui);
+		const {
+			field,
+			ui,
+			setupField,
+		} = this.props;
+
+		setupField(field.id, field.type, ui);
 	}
 };
 

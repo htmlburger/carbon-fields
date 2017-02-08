@@ -75,12 +75,13 @@ const hooks = {
 	componentDidMount() {
 		const {
 			field,
+			ui,
 			options,
 			setupField,
 			updateField,
 		} = this.props;
 
-		setupField(field.id, field.type);
+		setupField(field.id, field.type, ui);
 
 		// If the field doesn't have a value,
 		// use the first option as fallback.
