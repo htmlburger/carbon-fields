@@ -72,7 +72,7 @@ module.exports = {
 			'./assets/react/fields/components/select',
 			'./assets/react/fields/components/separator',
 			'./assets/react/fields/components/set',
-			'./assets/react/fields/components/sidebar.js',
+			'./assets/react/fields/components/sidebar',
 			'./assets/react/fields/components/text.js',
 			'./assets/react/fields/components/textarea.js',
 
