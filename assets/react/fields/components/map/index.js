@@ -9,7 +9,7 @@ import { compose, withHandlers } from 'recompose';
  */
 import Field from 'fields/components/field';
 import SearchInput from 'fields/components/search-input';
-import GoogleMap from 'fields/components/google-map';
+import GoogleMap from 'fields/components/map/google-map';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { geocodeAddress } from 'fields/actions';

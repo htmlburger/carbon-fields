@@ -66,7 +66,7 @@ module.exports = {
 			'./assets/react/fields/components/datetime',
 			'./assets/react/fields/components/file',
 			'./assets/react/fields/components/html',
-			'./assets/react/fields/components/map.js',
+			'./assets/react/fields/components/map',
 			'./assets/react/fields/components/radio.js',
 			'./assets/react/fields/components/rich-text.js',
 			'./assets/react/fields/components/select.js',
@@ -76,7 +76,6 @@ module.exports = {
 			'./assets/react/fields/components/text.js',
 			'./assets/react/fields/components/textarea.js',
 
-			'./assets/react/fields/components/google-map.js',
 			'./assets/react/fields/components/no-options.js',
 			'./assets/react/fields/components/radio-image-list.js',
 			'./assets/react/fields/components/radio-list.js',
