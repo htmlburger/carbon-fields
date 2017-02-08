@@ -135,7 +135,7 @@ class Value_Set {
 	/**
 	 * Return data formatted according to the value set $type
 	 *
-	 * @return mixed
+	 * @return string|array<mixed>|array<array<mixed>>
 	 */
 	public function get() {
 		if ( $this->value_set === null ) {
@@ -174,7 +174,7 @@ class Value_Set {
 	/**
 	 * Return the full value set data regardless of type
 	 * 
-	 * @return array
+	 * @return array<array<mixed>>
 	 */
 	public function get_set() {
 		return $this->value_set;
@@ -201,7 +201,7 @@ class Value_Set {
 	 * Convert a flat array to a raw value set
 	 *
 	 * @param array $value_array
-	 * @return array
+	 * @return array<array<mixed>>
 	 */
 	protected function flat_array_to_raw_value_set( $value_array ) {
 		$raw_value_set = array();
@@ -236,7 +236,7 @@ class Value_Set {
 	 * Set the value set data
 	 * Accepts: single value, array of values, array of key-values, array of arrays of key-values
 	 *
-	 * @param mixed $raw_value_set
+	 * @param string|array<mixed>|array<array<mixed>> $raw_value_set
 	 */
 	public function set( $raw_value_set ) {
 		if ( $raw_value_set === null ) {
