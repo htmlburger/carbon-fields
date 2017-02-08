@@ -61,7 +61,7 @@ module.exports = {
 			'./assets/react/fields/components/field.js',
 			'./assets/react/fields/components/association',
 			'./assets/react/fields/components/checkbox',
-			'./assets/react/fields/components/color.js',
+			'./assets/react/fields/components/color',
 			'./assets/react/fields/components/complex.js',
 			'./assets/react/fields/components/datetime.js',
 			'./assets/react/fields/components/file.js',
@@ -76,7 +76,6 @@ module.exports = {
 			'./assets/react/fields/components/text.js',
 			'./assets/react/fields/components/textarea.js',
 
-			'./assets/react/fields/components/colorpicker.js',
 			'./assets/react/fields/components/complex-actions.js',
 			'./assets/react/fields/components/complex-empty-notice.js',
 			'./assets/react/fields/components/complex-group.js',
