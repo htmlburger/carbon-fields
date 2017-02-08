@@ -65,7 +65,7 @@ module.exports = {
 			'./assets/react/fields/components/complex',
 			'./assets/react/fields/components/datetime',
 			'./assets/react/fields/components/file',
-			'./assets/react/fields/components/html.js',
+			'./assets/react/fields/components/html',
 			'./assets/react/fields/components/map.js',
 			'./assets/react/fields/components/radio.js',
 			'./assets/react/fields/components/rich-text.js',
