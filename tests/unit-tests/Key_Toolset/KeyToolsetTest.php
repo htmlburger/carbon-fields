@@ -15,7 +15,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 	public function setUp() {
 		global $wpdb;
 
-		if ( !$this->connected_to_db ) {
+		if ( ! $this->connected_to_db ) {
 			$this->connected_to_db = $wpdb->db_connect();
 		}
 		$this->subject = new Key_Toolset();
