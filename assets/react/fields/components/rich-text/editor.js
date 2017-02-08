@@ -28,8 +28,8 @@ class RichTextEditor extends React.Component {
 
 	/**
 	 * Open the portal and render the markup for the editor.
-	 * 
-	 * @param  {Object} props 
+	 *
+	 * @param  {Object} props
 	 * @return {void}
 	 */
 	renderEditor(props) {
@@ -61,7 +61,7 @@ class RichTextEditor extends React.Component {
 	/**
 	 * Initialize the WYSIWYG editor.
 	 *
-	 * @param  {Object} props 
+	 * @param  {Object} props
 	 * @return {void}
 	 */
 	initEditor(props) {

@@ -68,7 +68,7 @@ module.exports = {
 			'./assets/react/fields/components/html',
 			'./assets/react/fields/components/map',
 			'./assets/react/fields/components/radio',
-			'./assets/react/fields/components/rich-text.js',
+			'./assets/react/fields/components/rich-text',
 			'./assets/react/fields/components/select.js',
 			'./assets/react/fields/components/separator.js',
 			'./assets/react/fields/components/set.js',
@@ -77,7 +77,6 @@ module.exports = {
 			'./assets/react/fields/components/textarea.js',
 
 			'./assets/react/fields/components/no-options',
-			'./assets/react/fields/components/rich-text-editor.js',
 			'./assets/react/fields/components/search-input.js',
 
 			// Load the store.

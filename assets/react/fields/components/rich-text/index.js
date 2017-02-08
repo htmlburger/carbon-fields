@@ -9,7 +9,7 @@ import { isString } from 'lodash';
  * The internal dependencies.
  */
 import Field from 'fields/components/field';
-import RichTextEditor from 'fields/components/rich-text-editor';
+import RichTextEditor from 'fields/components/rich-text/editor';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 
