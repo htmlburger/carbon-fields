@@ -48,7 +48,7 @@ SearchInput.propTypes = {
 
 /**
  * The default props.
- * 
+ *
  * @type {Object}
  */
 const props = {

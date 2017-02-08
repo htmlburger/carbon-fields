@@ -77,7 +77,7 @@ module.exports = {
 			'./assets/react/fields/components/textarea.js',
 
 			'./assets/react/fields/components/no-options',
-			'./assets/react/fields/components/search-input.js',
+			'./assets/react/fields/components/search-input',
 
 			// Load the store.
 			'./assets/react/store.js'
