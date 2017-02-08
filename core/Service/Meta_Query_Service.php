@@ -72,7 +72,6 @@ class Meta_Query_Service extends Service {
 				$field = $this->container_repository->get_field_in_containers( $field_name, $container_type );
 
 				if ( $field !== null && ! $field->is_simple_root_field() ) {
-					$datastore = $field->get_datastore();
 					$storage_key = $this->key_toolset->get_storage_key_with_index_wildcards(
 						$field->is_simple_root_field(),
 						array_merge( $field->get_hierarchy(), array( $field->get_base_name() ) )
