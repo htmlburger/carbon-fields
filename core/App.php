@@ -84,7 +84,7 @@ class App {
 	 * @return mixed
 	 */
 	public static function resolve( $key ) {
-		return static::instance()->ioc[$key];
+		return static::instance()->ioc[ $key ];
 	}
 
 	/**
