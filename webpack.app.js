@@ -76,7 +76,7 @@ module.exports = {
 			'./assets/react/fields/components/text.js',
 			'./assets/react/fields/components/textarea.js',
 
-			'./assets/react/fields/components/no-options.js',
+			'./assets/react/fields/components/no-options',
 			'./assets/react/fields/components/radio-image-list.js',
 			'./assets/react/fields/components/radio-list.js',
 			'./assets/react/fields/components/rich-text-editor.js',
