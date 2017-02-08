@@ -9,7 +9,7 @@ import { isString } from 'lodash';
  * The internal dependencies.
  */
 import Field from 'fields/components/field';
-import DateTimePicker from 'fields/components/datetimepicker';
+import DateTimePicker from 'fields/components/datetime/picker';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 
@@ -85,7 +85,7 @@ const props = ({ field, handleChange }) => {
 				},
 			},
 		};
-	} 
+	}
 
 	return {
 		picker: 'datepicker',
