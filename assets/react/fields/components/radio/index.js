@@ -5,8 +5,8 @@ import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import RadioList from 'fields/components/radio-list';
-import RadioImageList from 'fields/components/radio-image-list';
+import RadioList from 'fields/components/radio/list';
+import RadioImageList from 'fields/components/radio/image-list';
 
 /**
  * Render a radio input field.
@@ -22,7 +22,7 @@ export const RadioField = ({ name, field, handleInputChange, isChecked }) => {
 	const List = field.type === 'RadioImage' ? RadioImageList : RadioList;
 
 	return <Field field={field}>
-				<List 
+				<List
 					field={field}
 					name={name}
 					handleInputChange={handleInputChange}

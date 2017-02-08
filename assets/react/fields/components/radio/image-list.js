@@ -1,30 +1,35 @@
 import React from 'react';
 
 /**
- * Render a radio input field.
+ * Render a radio input field with an image.
  *
  * @param  {Object}   props
- * @param  {String}   props.name
+ * @param  {Object}   props.name
  * @param  {Object}   props.field
  * @param  {Function} props.handleInputChange
  * @param  {Function} props.isChecked
  * @return {React.Element}
  */
 export default ({ name, field, handleInputChange, isChecked }) => {
-	return <ul className="carbon-radio-list">
-			{field.options.map(option => {
-				return <li key={`${field.id}-${option.name}`}>
+	return <div className="carbon-radio-image-list">
+			{field.options.map((option) => {
+				return <div
+							key={`${field.id}-${option.name}`}
+							className="carbon-radio-image-item"
+						>
 					<label>
 						<input
 							type="radio"
-							name={field.name}
+							name={name}
 							value={option.value}
 							checked={isChecked(option)}
 							onChange={handleInputChange} />
 
-						{option.name}
+						<figure className="carbon-radio-image-holder">
+							<img src={option.name} />
+						</figure>
 					</label>
-				</li>;
+				</div>;
 			})}
-		</ul>
+		</div>
 };
