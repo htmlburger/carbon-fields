@@ -23,7 +23,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 
 	public function tearDown() {
 		global $wpdb;
-		
+
 		M::close();
 		if ( $this->connected_to_db && is_callable( array( $wpdb, 'close' ) ) ) {
 			$wpdb->close();
@@ -402,6 +402,19 @@ class KeyToolsetTest extends WP_UnitTestCase {
 			'_different_field|' => Key_Toolset::PATTERN_COMPARISON_STARTS_WITH,
 		);
 		$this->assertSame( false, $this->subject->storage_key_matches_any_pattern( $storage_key, $patterns ) );
+	}
+
+	/**
+	 * @covers ::storage_key_matches_any_pattern
+	 * 
+	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 */
+	public function testStorageKeyMatchesAnyPatternThrowsExceptionOnInvalidComparison() {
+		$storage_key = '_field';
+		$patterns = array(
+			'_field' => 'non_existant_comparison_type',
+		);
+		$this->subject->storage_key_matches_any_pattern( $storage_key, $patterns );
 	}
 
 	/**
