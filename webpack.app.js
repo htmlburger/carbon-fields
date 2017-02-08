@@ -74,7 +74,7 @@ module.exports = {
 			'./assets/react/fields/components/set',
 			'./assets/react/fields/components/sidebar',
 			'./assets/react/fields/components/text',
-			'./assets/react/fields/components/textarea.js',
+			'./assets/react/fields/components/textarea',
 
 			'./assets/react/fields/components/no-options',
 			'./assets/react/fields/components/search-input',
