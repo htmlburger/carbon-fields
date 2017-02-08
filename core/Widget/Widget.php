@@ -114,6 +114,7 @@ abstract class Widget extends \WP_Widget {
 		foreach ( $this->custom_fields as $field ) {
 			$tmp_field = clone $field;
 			$tmp_field->load();
+			$tmp_field->set_name_prefix( '' );
 
 			$field_name = $this->get_field_name( $tmp_field->get_name() );
 			$tmp_field->set_name( $field_name );

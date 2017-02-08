@@ -75,6 +75,14 @@ class Field implements Datastore_Holder_Interface {
 	protected $name;
 
 	/**
+	 * Field name prefix
+	 *
+	 * @see set_name()
+	 * @var string
+	 */
+	protected $name_prefix = '_';
+
+	/**
 	 * The base field name which is used in the container.
 	 *
 	 * @see set_base_name()
@@ -523,8 +531,8 @@ class Field implements Datastore_Holder_Interface {
 			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" cannot contain "|" or ":" characters.' );
 		}
 
-		// Prefix with an underscore
-		$name = ( substr( $name, 0, 1 ) !== '_' ? '_' . $name : $name );
+		$name_prefix = $this->get_name_prefix();
+		$name = ( substr( $name, 0, strlen( $name_prefix ) ) !== $name_prefix ? $name_prefix . $name : $name );
 
 		$this->name = $name;
 	}
@@ -536,6 +544,28 @@ class Field implements Datastore_Holder_Interface {
 	 **/
 	public function get_name() {
 		return $this->name;
+	}
+
+	/**
+	 * Set field name prefix
+	 * Use only if you are completely aware of what you are doing.
+	 *
+	 * @param string $name_prefix
+	 **/
+	public function set_name_prefix( $name_prefix ) {
+		$old_prefix_length = strlen( $this->name_prefix );
+		$this->set_name( substr( $this->get_name(), $old_prefix_length ) );
+		$this->name_prefix = $name_prefix;
+		$this->set_name( $name_prefix . $this->get_name() );
+	}
+
+	/**
+	 * Return the field name prefix
+	 *
+	 * @return string
+	 **/
+	public function get_name_prefix() {
+		return $this->name_prefix;
 	}
 
 	/**
