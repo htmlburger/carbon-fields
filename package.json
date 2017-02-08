@@ -13,8 +13,8 @@
     "test": "jest --config .jest",
     "postcss": "postcss -c postcss.config.js -w",
     "webpack:vendor": "webpack --config webpack.vendor.js --hide-modules",
-    "webpack:app": "npm run webpack:vendor && webpack --config webpack.app.js --watch --hide-modules",
-    "webpack:boot": "webpack --config webpack.boot.js --watch --hide-modules"
+    "webpack:core": "npm run webpack:vendor && webpack --config webpack.core.js --watch --hide-modules",
+    "webpack:boot": "webpack --config webpack.boot.js --watch--hide-modules"
   },
   "repository": {
     "type": "git",

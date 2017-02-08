@@ -75,7 +75,7 @@ class Helper {
 		wp_enqueue_script( 'carbon-ext', \Carbon_Fields\URL . '/assets/js/ext.js', array( 'jquery' ), \Carbon_Fields\VERSION );
 		wp_enqueue_script( 'carbon-app', \Carbon_Fields\URL . '/assets/js/app.js', array( 'jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable', 'carbon-ext' ), \Carbon_Fields\VERSION );
 		wp_enqueue_script( 'carbon-react-vendor', \Carbon_Fields\URL . '/assets/carbon.vendor.js', array( ) );
-		wp_enqueue_script( 'carbon-react-app', \Carbon_Fields\URL . '/assets/carbon.app.js', array( ) );
+		wp_enqueue_script( 'carbon-react-core', \Carbon_Fields\URL . '/assets/carbon.core.js', array( ) );
 	}
 
 	/**
