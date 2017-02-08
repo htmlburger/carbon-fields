@@ -3,12 +3,12 @@
  */
 import { takeEvery } from 'redux-saga';
 import { put, call, select } from 'redux-saga/effects';
-import { isEmpty, omit, some, every, includes } from 'lodash';
+import { isEmpty, omit, some, every, includes, isUndefined } from 'lodash';
 
 /**
  * The internal dependencies.
  */
-import { setupField, updateValue, setUI } from 'fields/actions';
+import { setupField, updateField, setUI } from 'fields/actions';
 import { getFieldById, makeGetFieldsByParent } from 'fields/selectors';
 
 /**
@@ -40,10 +40,11 @@ function compare(left, right, operator) {
  * @param  {Object} [action]
  * @param  {Object} action.payload
  * @param  {String} action.payload.fieldId
+ * @param  {mixed}  action.payload.value
  * @return {void}
  */
-export function* workerValidate(field, siblings, { payload: { fieldId } } = { payload: {} }) {
-	if (fieldId && !includes(siblings, fieldId)) {
+export function* workerValidate(field, siblings, { payload: { fieldId, values } } = { payload: {} }) {
+	if (fieldId && (isUndefined(values.value) || !includes(siblings, fieldId))) {
 		return;
 	}
 
@@ -92,7 +93,7 @@ export function* workerConditionalLogic({ payload: { fieldId } }) {
 	const siblings = yield call(omit, yield select(selector), field.name);
 
 	yield call(workerValidate, field, siblings);
-	yield takeEvery(updateValue.toString(), workerValidate, field, siblings);
+	yield takeEvery(updateField.toString(), workerValidate, field, siblings);
 }
 
 /**

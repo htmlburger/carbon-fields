@@ -34,15 +34,6 @@ export const UPDATE_FIELD = 'fields/UPDATE_FIELD';
 export const updateField = createAction(UPDATE_FIELD, (fieldId, values) => ({ fieldId, values }));
 
 /**
- * Update the value of the field.
- *
- * @param  {String} fieldId
- * @param  {mixed}  value
- * @return {Object}
- */
-export const updateValue = createAction('fields/UPDATE_VALUE', (fieldId, value) => ({ fieldId, value }));
-
-/**
  * Setup the interaction between field and WordPress's media browser.
  *
  * @param  {String} fieldId

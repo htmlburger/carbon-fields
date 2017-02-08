@@ -70,7 +70,7 @@ const hooks = {
 			field,
 			ui,
 			setupField,
-			updateValue,
+			updateField,
 			setUI,
 		} = this.props;
 
@@ -80,7 +80,9 @@ const hooks = {
 		// If the field doesn't have a value,
 		// use the first option as fallback.
 		if (!field.value) {
-			updateValue(field.id, field.options[0].value);
+			updateField(field.id, {
+				value: field.options[0].value
+			});
 		}
 	}
 };
@@ -90,10 +92,10 @@ const hooks = {
  *
  * @param  {Object}   props
  * @param  {Object}   props.field
- * @param  {Function} props.updateValue
+ * @param  {Function} props.updateField
  * @return {Function}
  */
-const handleChange = ({ field, updateValue }) => ({ target: { value } }) => updateValue(field.id, value);
+const handleChange = ({ field, updateField }) => ({ target: { value } }) => updateField(field.id, { value });
 
 export default compose(
 	withStore(),
