@@ -48,22 +48,24 @@ class Association_Field extends Relationship_Field {
 	protected function value_to_json() {
 		$raw_value = $this->get_value();
 		$value = array();
-		foreach ( $raw_value as $raw_value_entry ) {
-			if ( is_string( $raw_value_entry ) ) {
-				$value_pieces = explode( ':', $raw_value_entry );
-			} else {
-				$value_pieces = array_values( $raw_value_entry );
-			}
+		if ( is_array( $raw_value ) ) {
+			foreach ( $raw_value as $raw_value_entry ) {
+				if ( is_string( $raw_value_entry ) ) {
+					$value_pieces = explode( ':', $raw_value_entry );
+				} else {
+					$value_pieces = array_values( $raw_value_entry );
+				}
 
-			$item = array(
-				'type' => $value_pieces[0],
-				'subtype' => $value_pieces[1],
-				'id' => $value_pieces[2],
-				'title' => $this->get_title_by_type( $value_pieces[2], $value_pieces[0], $value_pieces[1] ),
-				'label' => $this->get_item_label( $value_pieces[2], $value_pieces[0], $value_pieces[1] ),
-				'is_trashed' => ( $value_pieces[0] == 'post' && get_post_status( $value_pieces[2] ) == 'trash' ),
-			);
-			$value[] = $item;
+				$item = array(
+					'type' => $value_pieces[0],
+					'subtype' => $value_pieces[1],
+					'id' => $value_pieces[2],
+					'title' => $this->get_title_by_type( $value_pieces[2], $value_pieces[0], $value_pieces[1] ),
+					'label' => $this->get_item_label( $value_pieces[2], $value_pieces[0], $value_pieces[1] ),
+					'is_trashed' => ( $value_pieces[0] == 'post' && get_post_status( $value_pieces[2] ) == 'trash' ),
+				);
+				$value[] = $item;
+			}
 		}
 		return $value;
 	}
