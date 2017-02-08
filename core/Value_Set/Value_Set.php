@@ -68,7 +68,7 @@ class Value_Set {
 	/**
 	 * Data the value set represents
 	 *
-	 * @var array Nullable array
+	 * @var null|array
 	 */
 	protected $value_set = null;
 
@@ -135,7 +135,7 @@ class Value_Set {
 	/**
 	 * Return data formatted according to the value set $type
 	 *
-	 * @return string|array String, array of key-value pairs or array of arrays of key-value pairs
+	 * @return null|string|array String, array of key-value pairs or array of arrays of key-value pairs
 	 */
 	public function get() {
 		if ( $this->value_set === null ) {
@@ -236,7 +236,7 @@ class Value_Set {
 	 * Set the value set data
 	 * Accepts: single value, array of values, array of key-values, array of arrays of key-values
 	 *
-	 * @param string|array $raw_value_set String, indexed array, array of key-value pairs or array of arrays of key-value pairs
+	 * @param null|string|array $raw_value_set String, indexed array, array of key-value pairs or array of arrays of key-value pairs
 	 */
 	public function set( $raw_value_set ) {
 		if ( $raw_value_set === null ) {
