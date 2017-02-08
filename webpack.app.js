@@ -59,7 +59,7 @@ module.exports = {
 			'./assets/react/fields/sagas/complex.js',
 
 			'./assets/react/fields/components/field.js',
-			'./assets/react/fields/components/association.js',
+			'./assets/react/fields/components/association',
 			'./assets/react/fields/components/checkbox.js',
 			'./assets/react/fields/components/color.js',
 			'./assets/react/fields/components/complex.js',
@@ -76,8 +76,6 @@ module.exports = {
 			'./assets/react/fields/components/text.js',
 			'./assets/react/fields/components/textarea.js',
 
-			'./assets/react/fields/components/association-list-item.js',
-			'./assets/react/fields/components/association-list.js',
 			'./assets/react/fields/components/colorpicker.js',
 			'./assets/react/fields/components/complex-actions.js',
 			'./assets/react/fields/components/complex-empty-notice.js',

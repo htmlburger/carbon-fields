@@ -10,7 +10,7 @@ import { cloneDeep, without } from 'lodash';
  */
 import Field from 'fields/components/field';
 import SearchInput from 'fields/components/search-input';
-import AssociationList from 'fields/components/association-list';
+import AssociationList from 'fields/components/association/list';
 
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';

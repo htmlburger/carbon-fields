@@ -6,7 +6,7 @@ import React, { PropTypes } from 'react';
 /**
  * The internal dependencies.
  */
-import AssociationListItem from 'fields/components/association-list-item';
+import AssociationListItem from 'fields/components/association/list-item';
 
 /**
  * Render a list of item that can be associated.
