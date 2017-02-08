@@ -1,8 +1,14 @@
+/**
+ * The external dependencies.
+ */
 import { takeEvery } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
+
+/**
+ * The internal dependencies.
+ */
 import { getContainerById } from 'containers/selectors';
-import { setMeta, setUI } from 'containers/actions';
-import { SETUP_CONTAINER, SET_UI } from 'containers/actions';
+import { setupContainer, setMeta, setUI } from 'containers/actions';
 
 /**
  * Setup the initial state of the container.
@@ -54,7 +60,7 @@ export function* workerToggleMetaBoxVisibility(action) {
  */
 export default function* foreman() {
 	yield [
-		takeEvery(SETUP_CONTAINER, workerSetupContainer),
-		takeEvery(SET_UI, workerToggleMetaBoxVisibility),
+		takeEvery(setupContainer, workerSetupContainer),
+		takeEvery(setUI, workerToggleMetaBoxVisibility),
 	];
 }

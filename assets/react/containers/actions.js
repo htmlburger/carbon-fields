@@ -1,14 +1,17 @@
+/**
+ * The external dependencies.
+ */
 import { createAction } from 'redux-actions';
 
 /**
  * Perform the initial setup of the container.
  *
  * @param  {String} containerId
+ * @param  {Object} [meta]
  * @param  {Object} [ui]
  * @return {Object}
  */
-export const SETUP_CONTAINER = 'containers/SETUP_CONTAINER';
-export const setupContainer = createAction(SETUP_CONTAINER, (containerId, meta = {}, ui = {}) => ({ containerId, meta, ui }));
+export const setupContainer = createAction('containers/SETUP_CONTAINER', (containerId, meta = {}, ui = {}) => ({ containerId, meta, ui }));
 
 /**
  * Update the object that holds additional fields for the container.
@@ -18,8 +21,7 @@ export const setupContainer = createAction(SETUP_CONTAINER, (containerId, meta =
  * @param  {Object} payload.meta
  * @return {Object}
  */
-export const SET_META = 'containers/SET_META';
-export const setMeta = createAction(SET_META);
+export const setMeta = createAction('containers/SET_META');
 
 /**
  * Update the object that contains information about container's UI.
@@ -29,8 +31,7 @@ export const setMeta = createAction(SET_META);
  * @param  {Object} payload.ui
  * @return {Object}
  */
-export const SET_UI = 'containers/SET_UI';
-export const setUI = createAction(SET_UI);
+export const setUI = createAction('containers/SET_UI');
 
 /**
  * Initialize a visibility check for the container.
@@ -38,5 +39,4 @@ export const setUI = createAction(SET_UI);
  * @param  {String} containerId
  * @return {Object}
  */
-export const CHECK_VISIBILITY = 'containers/CHECK_VISIBILITY';
-export const checkVisibility = createAction(CHECK_VISIBILITY);
+export const checkVisibility = createAction('containers/CHECK_VISIBILITY');

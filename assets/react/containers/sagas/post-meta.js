@@ -1,12 +1,18 @@
+/**
+ * The external dependencies.
+ */
 import { takeEvery } from 'redux-saga';
 import { take, call, put, fork, select } from 'redux-saga/effects';
 import { reduce, isEmpty, isArray, camelCase } from 'lodash';
 
+/**
+ * The internal dependencies.
+ */
 import { createSelectboxChannel, createCheckableChannel } from 'lib/events';
 import { TYPE_NOW_PAGE } from 'lib/constants';
 
 import { getContainerById, canProcessAction } from 'containers/selectors';
-import { setMeta, setUI } from 'containers/actions';
+import { setupContainer, setMeta, setUI } from 'containers/actions';
 import { TYPE_POST_META } from 'containers/constants';
 import { SETUP_CONTAINER, SET_META } from 'containers/actions';
 
@@ -294,7 +300,7 @@ export function* workerCheckVisibility(action) {
  */
 export default function* foreman() {
 	yield [
-		takeEvery(SETUP_CONTAINER, workerSetupContainer),
-		takeEvery(SET_META, workerCheckVisibility),
+		takeEvery(setupContainer, workerSetupContainer),
+		takeEvery(setMeta, workerCheckVisibility),
 	];
 }

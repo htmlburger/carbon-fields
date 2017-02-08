@@ -1,11 +1,18 @@
+/**
+ * The external dependencies.
+ */
 import $ from 'jquery';
 import { takeEvery } from 'redux-saga';
 import { take, call, select } from 'redux-saga/effects';
 
+/**
+ * The internal dependencies.
+ */
 import { createScrollChannel } from 'lib/events';
+
 import { canProcessAction } from 'containers/selectors';
+import { setupContainer } from 'containers/actions';
 import { TYPE_THEME_OPTIONS } from 'containers/constants';
-import { SETUP_CONTAINER } from 'containers/actions';
 
 /**
  * Handle the sticky position of the actions panel.
@@ -48,6 +55,6 @@ export function* workerStickyActionsPanel(action) {
  */
 export default function* foreman() {
 	yield [
-		takeEvery(SETUP_CONTAINER, workerStickyActionsPanel),
+		takeEvery(setupContainer, workerStickyActionsPanel),
 	];
 }
