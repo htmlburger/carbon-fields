@@ -70,7 +70,7 @@ module.exports = {
 			'./assets/react/fields/components/radio',
 			'./assets/react/fields/components/rich-text',
 			'./assets/react/fields/components/select',
-			'./assets/react/fields/components/separator.js',
+			'./assets/react/fields/components/separator',
 			'./assets/react/fields/components/set.js',
 			'./assets/react/fields/components/sidebar.js',
 			'./assets/react/fields/components/text.js',
