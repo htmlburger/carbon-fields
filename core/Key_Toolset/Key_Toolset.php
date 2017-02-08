@@ -3,6 +3,7 @@
 namespace Carbon_Fields\Key_Toolset;
 
 use \Carbon_Fields\Value_Set\Value_Set;
+use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class Key_Toolset {
 
@@ -37,6 +38,22 @@ class Key_Toolset {
 	const PATTERN_COMPARISON_STARTS_WITH = '^';
 
 	/**
+	 * Get sanitized hierarchy index for hierarchy
+	 *
+	 * @param array<string> $full_hierarchy
+	 * @param array<int> $full_hierarchy_index
+	 * @return array<int>
+	 */
+	public function get_sanitized_hierarchy_index( $full_hierarchy, $full_hierarchy_index ) {
+		$full_hierarchy_index = array_slice( $full_hierarchy_index, 0, count( $full_hierarchy ) - 1 );
+		if ( empty( $full_hierarchy_index ) ) {
+			$full_hierarchy_index = array( 0 );
+		}
+		$full_hierarchy_index = array_map( 'intval', $full_hierarchy_index );
+		return $full_hierarchy_index;
+	}
+
+	/**
 	 * Get a storage key for a simple root field
 	 *
 	 * @param string $field_base_name
@@ -69,6 +86,7 @@ class Key_Toolset {
 	 * @return string
 	 */
 	protected function get_storage_key_prefix( $full_hierarchy, $full_hierarchy_index ) {
+		$full_hierarchy_index = $this->get_sanitized_hierarchy_index( $full_hierarchy, $full_hierarchy_index );
 		$parents = $full_hierarchy;
 		$first_parent = array_shift( $parents );
 
@@ -94,8 +112,9 @@ class Key_Toolset {
 	 * @return string
 	 */
 	public function get_storage_key( $is_simple_root_field, $full_hierarchy, $full_hierarchy_index, $value_group_index, $value_key ) {
+		$full_hierarchy_index = $this->get_sanitized_hierarchy_index( $full_hierarchy, $full_hierarchy_index );
 		if ( $is_simple_root_field && $value_key === Value_Set::VALUE_PROPERTY ) {
-			return $this->get_storage_key_for_simple_root_field( array_pop( $full_hierarchy ) );
+			return $this->get_storage_key_for_simple_root_field( array_shift( $full_hierarchy ) );
 		}
 		$storage_key = $this->get_storage_key_prefix( $full_hierarchy, $full_hierarchy_index ) . intval( $value_group_index ) . static::SEGMENT_GLUE . $value_key;
 		return $storage_key;
@@ -112,7 +131,7 @@ class Key_Toolset {
 	 */
 	public function get_storage_key_with_index_wildcards( $is_simple_root_field, $full_hierarchy, $value_key = Value_Set::VALUE_PROPERTY, $wildcard = '%' ) {
 		if ( $is_simple_root_field && $value_key === Value_Set::VALUE_PROPERTY ) {
-			return $this->get_storage_key_for_simple_root_field( array_pop( $full_hierarchy ) );
+			return $this->get_storage_key_for_simple_root_field( array_shift( $full_hierarchy ) );
 		}
 
 		$parents = $full_hierarchy;
@@ -176,6 +195,7 @@ class Key_Toolset {
 	 * @return array
 	 */
 	public function get_storage_key_deleter_patterns( $is_complex_field, $is_simple_root_field, $full_hierarchy, $full_hierarchy_index ) {
+		$full_hierarchy_index = $this->get_sanitized_hierarchy_index( $full_hierarchy, $full_hierarchy_index );
 		$patterns = array();
 		
 		if ( $is_simple_root_field ) {
@@ -206,10 +226,10 @@ class Key_Toolset {
 			$comparison = '';
 			switch ( $type ) {
 				case static::PATTERN_COMPARISON_EQUAL:
-					$comparison = $table_column . ' = "' . esc_sql( $storage_key ) . '" ';
+					$comparison = $table_column . ' = "' . esc_sql( $storage_key ) . '"';
 					break;
 				case static::PATTERN_COMPARISON_STARTS_WITH:
-					$comparison = $table_column . ' LIKE "' . esc_sql( $storage_key ) . '%" ';
+					$comparison = $table_column . ' LIKE "' . esc_sql( $storage_key ) . '%"';
 					break;
 				default:
 					Incorrect_Syntax_Exception::raise( 'Unsupported storage key pattern type used: "' . $type . '"' );
