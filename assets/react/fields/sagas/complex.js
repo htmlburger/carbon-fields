@@ -9,8 +9,21 @@ import { find, findIndex, merge, keyBy } from 'lodash';
  * The internal dependencies.
  */
 import { getAll, getFieldById, isFieldTabbed } from 'fields/selectors';
-import { addComplexGroupIdentifiers, flattenComplexGroupFields, restoreField } from 'fields/helpers';
-import { addFields, removeFields, updateField, setUI, addComplexGroup, cloneComplexGroup, removeComplexGroup } from 'fields/actions';
+
+import {
+	addComplexGroupIdentifiers,
+	flattenComplexGroupFields,
+	restoreField
+} from 'fields/helpers';
+
+import {
+	addFields,
+	removeFields,
+	updateField, setUI,
+	addComplexGroup,
+	cloneComplexGroup,
+	removeComplexGroup
+} from 'fields/actions';
 
 /**
  * Prepare a clone or a new instance of the specified group.
@@ -139,8 +152,8 @@ export function* workerRemoveComplexGroup({ payload: { fieldId, groupId } }) {
  */
 export default function* foreman() {
 	yield [
-		takeEvery(addComplexGroup.toString(), workerAddOrCloneComplexGroup),
-		takeEvery(cloneComplexGroup.toString(), workerAddOrCloneComplexGroup),
-		takeEvery(removeComplexGroup.toString(), workerRemoveComplexGroup),
+		takeEvery(addComplexGroup, workerAddOrCloneComplexGroup),
+		takeEvery(cloneComplexGroup, workerAddOrCloneComplexGroup),
+		takeEvery(removeComplexGroup, workerRemoveComplexGroup),
 	];
 }

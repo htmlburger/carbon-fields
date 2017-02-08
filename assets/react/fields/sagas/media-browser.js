@@ -1,9 +1,15 @@
+/**
+ * The external dependencies.
+ */
 import { takeEvery } from 'redux-saga';
 import { take, call, put, select } from 'redux-saga/effects';
 
+/**
+ * The internal dependencies.
+ */
 import { createMediaBrowserChannel } from 'lib/events';
 import { getFieldById } from 'fields/selectors';
-import { getAttachmentThumbnail} from 'fields/helpers';
+import { getAttachmentThumbnail } from 'fields/helpers';
 import { setupMediaBrowser, openMediaBrowser, updateField } from 'fields/actions';
 
 /**
@@ -67,7 +73,7 @@ export function* workerSetupMediaBrowser(action) {
 
 	const { browser } = yield take(channel);
 
-	yield takeEvery(openMediaBrowser.toString(), workerOpenMediaBrowser, channel, field, browser);
+	yield takeEvery(openMediaBrowser, workerOpenMediaBrowser, channel, field, browser);
 }
 
 /**
@@ -77,6 +83,6 @@ export function* workerSetupMediaBrowser(action) {
  */
 export default function* foreman() {
 	yield [
-		takeEvery(setupMediaBrowser.toString(), workerSetupMediaBrowser),
+		takeEvery(setupMediaBrowser, workerSetupMediaBrowser),
 	];
 }

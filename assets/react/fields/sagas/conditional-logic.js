@@ -93,7 +93,7 @@ export function* workerConditionalLogic({ payload: { fieldId } }) {
 	const siblings = yield call(omit, yield select(selector), field.name);
 
 	yield call(workerValidate, field, siblings);
-	yield takeEvery(updateField.toString(), workerValidate, field, siblings);
+	yield takeEvery(updateField, workerValidate, field, siblings);
 }
 
 /**
@@ -103,6 +103,6 @@ export function* workerConditionalLogic({ payload: { fieldId } }) {
  */
 export default function* foreman() {
 	yield [
-		takeEvery(setupField.toString(), workerConditionalLogic),
+		takeEvery(setupField, workerConditionalLogic),
 	];
 }

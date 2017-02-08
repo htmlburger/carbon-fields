@@ -88,6 +88,6 @@ export function* workerGeocoder({ payload: { fieldId, address } }) {
  */
 export default function* foreman() {
 	yield [
-		takeEvery(geocodeAddress.toString(), workerGeocoder),
+		takeEvery(geocodeAddress, workerGeocoder),
 	];
 }
