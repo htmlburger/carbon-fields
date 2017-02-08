@@ -19,7 +19,9 @@ class KeyToolsetTest extends WP_UnitTestCase {
 	public function tearDown() {
 		global $wpdb;
 		M::close();
-		$wpdb->close();
+		if ( is_callable( array( $wpdb, 'close' ) ) ) {
+			$wpdb->close();
+		}
 	}
 
 	/**
