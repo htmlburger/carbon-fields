@@ -9,11 +9,11 @@ import { compose, withHandlers, withState } from 'recompose';
  * The internal dependencies.
  */
 import Field from 'fields/components/field';
-import ComplexGroup from 'fields/components/complex-group';
-import ComplexActions from 'fields/components/complex-actions';
-import ComplexPopover from 'fields/components/complex-popover';
-import ComplexTabs from 'fields/components/complex-tabs';
-import ComplexEmptyNotice from 'fields/components/complex-empty-notice';
+import ComplexGroup from 'fields/components/complex/group';
+import ComplexActions from 'fields/components/complex/actions';
+import ComplexPopover from 'fields/components/complex/popover';
+import ComplexTabs from 'fields/components/complex/tabs';
+import ComplexEmptyNotice from 'fields/components/complex/empty-notice';
 
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
