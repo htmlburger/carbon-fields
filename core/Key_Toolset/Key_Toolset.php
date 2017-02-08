@@ -253,16 +253,10 @@ class Key_Toolset {
 		foreach ( $patterns as $key => $type ) {
 			switch ( $type ) {
 				case static::PATTERN_COMPARISON_EQUAL:
-					if ( $storage_key === $key ) {
-						return true;
-					}
-					break;
+					return ( $storage_key === $key );
 				case static::PATTERN_COMPARISON_STARTS_WITH:
 					$key_length = strlen( $key );
-					if ( substr( $storage_key, 0, $key_length ) === $key ) {
-						return true;
-					}
-					break;
+					return ( substr( $storage_key, 0, $key_length ) === $key );
 				default:
 					Incorrect_Syntax_Exception::raise( 'Unsupported storage key pattern type used: "' . $type . '"' );
 					break;
