@@ -34,15 +34,44 @@ class Templater {
 	}
 
 	/**
+	 * Get a template by name.
+	 *
+	 * @param string $name Template name
+	 * @return string
+	 */
+	public function get_template( $name ) {
+		if ( ! isset( $this->templates[ $name ] ) ) {
+			return null;
+		}
+		return $this->templates[ $name ];
+	}
+
+	/**
+	 * Get all registered templaes.
+	 *
+	 * @return array
+	 */
+	public function get_templates() {
+		return $this->templates;
+	}
+
+	/**
 	 * Render all registered templates.
 	 */
 	public function render_templates() {
+		$output = array();
 		foreach ( $this->templates as $name => $html ) {
-			?>
-			<script type="text/html" id="<?php echo esc_attr( 'crb-tmpl-' . $name ); ?>">
-				<?php echo apply_filters( 'carbon_template', apply_filters( 'carbon_template_' . $name, $html ), $name ); ?>
-			</script>
-			<?php
+			$id = 'crb-tmpl-' . $name;
+			$html = apply_filters( 'carbon_template_' . $name, $html );
+			$html = apply_filters( 'carbon_template', $html, $name );
+
+			$id_attr = esc_attr( $id );
+			$output[] = <<<EOT
+<script type="text/html" id="$id_attr">
+	$html
+</script>
+EOT;
 		}
+		echo implode( PHP_EOL, $output );
 	}
 }

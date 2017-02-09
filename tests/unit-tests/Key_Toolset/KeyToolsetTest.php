@@ -25,6 +25,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 		global $wpdb;
 
 		M::close();
+		unset( $this->subject );
 		if ( $this->connected_to_db && is_callable( array( $wpdb, 'close' ) ) ) {
 			$wpdb->close();
 		}
