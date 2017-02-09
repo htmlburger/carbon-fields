@@ -89,7 +89,8 @@ class Term_Meta_Container extends Container {
 	 * @return bool True if the container is allowed to be attached
 	 **/
 	public function _is_valid_attach() {
-		if ( isset( $_GET['taxonomy'] ) && in_array( $_GET['taxonomy'], $this->settings['taxonomy'] ) ) {
+		$request_taxonomy = isset( $_GET['taxonomy'] ) ? $_GET['taxonomy'] : '';
+		if ( ! empty( $request_taxonomy ) && in_array( $request_taxonomy, $this->settings['taxonomy'] ) ) {
 			return true;
 		}
 
