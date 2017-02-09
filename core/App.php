@@ -48,19 +48,19 @@ class App {
 			return new Loader( $ioc['templater'], $ioc['sidebar_manager'], $ioc['container_repository'], $ioc['legacy_storage_service'] );
 		};
 
-		$ioc['container_repository'] = function( $ioc ) {
+		$ioc['container_repository'] = function() {
 			return new ContainerRepository();
 		};
 
-		$ioc['key_toolset'] = function( $ioc ) {
+		$ioc['key_toolset'] = function() {
 			return new Key_Toolset();
 		};
 
-		$ioc['templater'] = function( $ioc ) {
+		$ioc['templater'] = function() {
 			return new Templater();
 		};
 
-		$ioc['sidebar_manager'] = function( $ioc ) {
+		$ioc['sidebar_manager'] = function() {
 			return new Sidebar_Manager();
 		};
 
