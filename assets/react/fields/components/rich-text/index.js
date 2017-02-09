@@ -29,7 +29,8 @@ export const RichTextField = ({ name, field, handleChange }) => {
 				className="wp-editor-area"
 				name={name}
 				defaultValue={field.value}
-				onChange={handleChange} />
+				onChange={handleChange}
+				disabled={!field.ui.is_visible} />
 		</RichTextEditor>
 	</Field>;
 };

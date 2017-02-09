@@ -41,6 +41,7 @@ export const SetField = ({ name, field, hasHiddenOptions, isChecked, isHidden, h
 								name={`${name}[]`}
 								value={option.value}
 								checked={isChecked(option)}
+								disabled={!field.ui.is_visible}
 								onChange={handleChange} />
 
 							{option.name}

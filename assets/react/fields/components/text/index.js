@@ -27,6 +27,7 @@ export const TextField = ({ name, field, handleChange }) => {
 			id={field.id}
 			name={name}
 			value={field.value}
+			disabled={!field.ui.is_visible}
 			className="regular-text"
 			onChange={handleChange} />
 	</Field>;

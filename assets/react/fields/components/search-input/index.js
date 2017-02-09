@@ -17,17 +17,19 @@ import { KEY_ENTER } from 'lib/constants';
  * @param  {Object} 	   props
  * @param  {String} 	   [props.name]
  * @param  {String} 	   props.term
+ * @param  {Boolean} 	   props.disabled
  * @param  {Function} 	   props.handleChange
  * @param  {Function} 	   props.handleSubmit
  * @return {React.Element}
  */
-export const SearchInput = ({ name, term, handleChange, handleSubmit }) => {
+export const SearchInput = ({ name, term, disabled, handleChange, handleSubmit }) => {
 	return <div className="search-field carbon-relationship-search dashicons-before dashicons-search">
 		<input
 			type="text"
 			name={name}
 			className="search-field"
 			placeholder="Search..."
+			disabled={disabled}
 			defaultValue={term}
 			onChange={handleChange}
 			onKeyDown={handleSubmit} />
@@ -42,6 +44,7 @@ export const SearchInput = ({ name, term, handleChange, handleSubmit }) => {
 SearchInput.propTypes = {
 	name: PropTypes.string,
 	term: PropTypes.string.isRequired,
+	disabled: PropTypes.bool,
 	handleChange: PropTypes.func,
 	handleSubmit: PropTypes.func,
 };
@@ -52,6 +55,7 @@ SearchInput.propTypes = {
  * @type {Object}
  */
 const props = {
+	disabled: false,
 	onChange: () => {},
 	onSubmit: () => {},
 };

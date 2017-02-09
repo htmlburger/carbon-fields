@@ -34,11 +34,29 @@ const MapField = ({ name, field, handleChange, handleSearchSubmit }) => {
 			<SearchInput
 				name={`${name}[address]`}
 				term={field.address}
+				disabled={field.ui.is_visible}
 				onSubmit={handleSearchSubmit} />
 
-			<input type="hidden" name={`${name}[lat]`} value={field.lat} readOnly />
-			<input type="hidden" name={`${name}[lng]`} value={field.lng} readOnly />
-			<input type="hidden" name={`${name}[zoom]`} value={field.zoom} readOnly />
+			<input
+				type="hidden"
+				name={`${name}[lat]`}
+				value={field.lat}
+				disabled={!field.ui.is_visible}
+				readOnly />
+
+			<input
+				type="hidden"
+				name={`${name}[lng]`}
+				value={field.lng}
+				disabled={!field.ui.is_visible}
+				readOnly />
+
+			<input
+				type="hidden"
+				name={`${name}[zoom]`}
+				value={field.zoom}
+				disabled={!field.ui.is_visible}
+				readOnly />
 		</div>
 
 		<GoogleMap

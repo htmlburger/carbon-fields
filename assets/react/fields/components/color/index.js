@@ -47,6 +47,7 @@ export const ColorField = ({ name, field, pickerVisible, handleChange, showPicke
 				id={field.id}
 				name={name}
 				value={field.value}
+				disabled={!field.ui.is_visible}
 				readOnly />
 		</div>
 	</Field>;

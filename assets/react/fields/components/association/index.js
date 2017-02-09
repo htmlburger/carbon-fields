@@ -84,6 +84,7 @@ export const AssociationField = ({
 						prefix={name}
 						items={field.value}
 						associated={true}
+						visible={field.ui.is_visible}
 						onItemClick={handleRemoveItem} />
 				</div>
 			</div>

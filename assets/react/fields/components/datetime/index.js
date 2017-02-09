@@ -35,6 +35,7 @@ export const DateTimeField = ({ name, field, picker, options, handleChange }) =>
 					id={field.id}
 					name={name}
 					value={field.value}
+					disabled={!field.ui.is_visible}
 					className="regular-text carbon-field-group-input"
 					onChange={handleChange} />
 			</DateTimePicker>

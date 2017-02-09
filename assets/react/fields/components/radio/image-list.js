@@ -23,6 +23,7 @@ export default ({ name, field, handleInputChange, isChecked }) => {
 							name={name}
 							value={option.value}
 							checked={isChecked(option)}
+							disabled={!field.ui.is_visible}
 							onChange={handleInputChange} />
 
 						<figure className="carbon-radio-image-holder">

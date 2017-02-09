@@ -19,7 +19,7 @@ import AssociationListItem from 'fields/components/association/list-item';
  * @param  {Function}      props.onItemClick
  * @return {React.Element}
  */
-export const AssociationList = ({ prefix, items, selected, associated, onItemClick }) => {
+export const AssociationList = ({ prefix, items, selected, associated, visible, onItemClick }) => {
 	return <ul className="carbon-relationship-list">
 		{
 			items.map((item, index) => (
@@ -30,6 +30,7 @@ export const AssociationList = ({ prefix, items, selected, associated, onItemCli
 					item={item}
 					disabled={selected.indexOf(item.id) > -1}
 					associated={associated}
+					visible={visible}
 					onClick={onItemClick} />
 			))
 		}
@@ -46,6 +47,7 @@ AssociationList.propTypes = {
 	items: PropTypes.arrayOf(PropTypes.object).isRequired,
 	selected: PropTypes.arrayOf(PropTypes.number),
 	associated: PropTypes.bool,
+	visible: PropTypes.bool,
 	onItemClick: PropTypes.func.isRequired,
 };
 
@@ -58,6 +60,7 @@ AssociationList.defaultProps = {
 	prefix: '',
 	selected: [],
 	associated: false,
+	visible: true,
 };
 
 export default AssociationList;

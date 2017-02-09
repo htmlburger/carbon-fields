@@ -27,6 +27,7 @@ export const TextareaField = ({ name, field, handleChange }) => {
 			name={name}
 			value={field.value}
 			rows={field.rows}
+			disabled={!field.ui.is_visible}
 			onChange={handleChange} />
 	</Field>;
 };

@@ -29,6 +29,7 @@ export const CheckboxField = ({ name, field, checked, handleChange }) => {
 				name={name}
 				value={field.option_value}
 				checked={checked}
+				disabled={!field.ui.is_visible}
 				onChange={handleChange} />
 
 			{field.option_label}

@@ -27,6 +27,7 @@ export const SelectField = ({ name, field, handleChange }) => {
 			id={field.id}
 			name={name}
 			onChange={handleChange}
+			disabled={!field.ui.is_visible}
 			value={field.value}>
 
 			{

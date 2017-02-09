@@ -36,6 +36,7 @@ export const FileField = ({ name, field, openBrowser, clearSelection }) => {
 				name={name}
 				value={field.value}
 				style={field.value_type === 'id' ? { display: 'none' } : {}}
+				disabled={!field.ui.is_visible}
 				onChange={() => {}} />
 
 			<div className={cx('carbon-description', { 'hidden': !field.value })}>

@@ -20,6 +20,7 @@ export default ({ name, field, handleInputChange, isChecked }) => {
 							name={field.name}
 							value={option.value}
 							checked={isChecked(option)}
+							disabled={!field.ui.is_visible}
 							onChange={handleInputChange} />
 
 						{option.name}

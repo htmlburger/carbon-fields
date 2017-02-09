@@ -31,6 +31,7 @@ export const SidebarField = ({ name, field, options, handleChange }) => {
 			id={field.id}
 			name={name}
 			value={field.value}
+			disabled={!field.ui.is_visible}
 			onChange={handleChange}>
 
 			{

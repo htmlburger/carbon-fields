@@ -19,13 +19,14 @@ import { preventDefault } from 'lib/helpers';
  * @param  {Object[]}      props.item
  * @param  {Boolean}       props.disabled
  * @param  {Boolean}       props.associated
+ * @param  {Boolean}       props.visible
  * @param  {Function}      props.handleClick
  * @return {React.Element}
  *
  * TODO: Fix the translation of the 'Edit' link.
  * TODO: Clean up the mess in `handleClick` introduced by the incorrect HTML in the template.
  */
-export const AssociationListItem = ({ prefix, index, item, disabled, associated, handleClick }) => {
+export const AssociationListItem = ({ prefix, index, item, disabled, associated, visible, handleClick }) => {
 	return <li className={cx({ 'inactive': disabled })}>
 		<span className="mobile-handle dashicons-before dashicons-menu"></span>
 
@@ -55,6 +56,7 @@ export const AssociationListItem = ({ prefix, index, item, disabled, associated,
 				type="hidden"
 				name={`${prefix}[${index}]`}
 				value={`${item.type}:${item.subtype}:${item.id}`}
+				disabled={!visible}
 				readOnly={true} />
 			: null
 		}
@@ -84,6 +86,7 @@ AssociationListItem.propTypes = {
 	}).isRequired,
 	disabled: PropTypes.bool,
 	associated: PropTypes.bool,
+	visible: PropTypes.bool,
 	handleClick: PropTypes.func.isRequired,
 };
 
