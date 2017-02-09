@@ -120,6 +120,11 @@ class App {
 		if ( static::is_booted() ) {
 			return;
 		}
+
+		if ( defined( __NAMESPACE__ . '\VERSION' ) ) {
+			return; // Possibly attempting to load multiple versions of Carbon Fields; bail in favor of already loaded version
+		}
+
 		static::instance()->install( static::get_default_ioc() );
 		static::resolve( 'loader' )->boot();
 		static::instance()->booted = true;
