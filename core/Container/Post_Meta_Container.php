@@ -205,7 +205,7 @@ class Post_Meta_Container extends Container {
 
 				// show_on_template
 				case 'template_names':
-					if ( empty( $value ) || $post->post_type != 'page' ) {
+					if ( empty( $value ) ) {
 						break;
 					}
 					$current_template = get_post_meta( $post_id, '_wp_page_template', 1 );
@@ -219,7 +219,7 @@ class Post_Meta_Container extends Container {
 
 				// hide_on_template
 				case 'not_in_template_names':
-					if ( empty( $value ) || $post->post_type != 'page' ) {
+					if ( empty( $value ) ) {
 						break;
 					}
 					$current_template = get_post_meta( $post_id, '_wp_page_template', 1 );
