@@ -17,6 +17,13 @@ use \Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 class App {
 
 	/**
+	 * Flag if Carbon Fields has been booted
+	 * 
+	 * @var bool
+	 */
+	public $booted = false;
+
+	/**
 	 * Inversion of Control container instance
 	 * 
 	 * @var PimpleContainer
@@ -110,7 +117,27 @@ class App {
 	 * Boot Carbon Fields with default IoC dependencies
 	 */
 	public static function boot() {
+		if ( static::is_booted() ) {
+			return;
+		}
 		static::instance()->install( static::get_default_ioc() );
 		static::resolve( 'loader' )->boot();
+		static::instance()->booted = true;
+	}
+
+	/**
+	 * Check if Carbon Fields has booted
+	 */
+	public static function is_booted() {
+		return static::instance()->booted;
+	}
+
+	/**
+	 * Throw exception if Carbon Fields has not been booted
+	 */
+	public static function verify_boot() {
+		if ( ! static::is_booted() ) {
+			throw new \Exception( 'You must call \Carbon_Fields\App::boot() in a suitable WordPress hook before using Carbon Fields.' );
+		}
 	}
 }

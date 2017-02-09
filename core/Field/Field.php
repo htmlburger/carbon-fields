@@ -234,6 +234,8 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $label Field label
 	 */
 	protected function __construct( $name, $label ) {
+		\Carbon_Fields\App::verify_boot();
+		
 		$this->set_base_name( $name );
 		$this->set_name( $name );
 		$this->set_label( $label );

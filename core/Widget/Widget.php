@@ -54,6 +54,8 @@ abstract class Widget extends \WP_Widget {
 	 * @param  string $classname   String of CSS classes
 	 */
 	public function setup( $title, $description, $fields, $classname = '' ) {
+		\Carbon_Fields\App::verify_boot();
+		
 		$this->datastore = Datastore::make( 'widget' );
 		if ( empty( $title ) ) {
 			Incorrect_Syntax_Exception::raise( 'Empty widget title is not supported' );

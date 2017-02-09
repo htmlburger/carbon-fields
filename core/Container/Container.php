@@ -172,6 +172,8 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @param string $type Type of the container
 	 **/
 	public function __construct( $unique_id, $title, $type ) {
+		\Carbon_Fields\App::verify_boot();
+
 		if ( empty( $title ) ) {
 			Incorrect_Syntax_Exception::raise( 'Empty container title is not supported' );
 		}
