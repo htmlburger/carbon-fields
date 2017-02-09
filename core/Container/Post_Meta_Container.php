@@ -62,8 +62,9 @@ class Post_Meta_Container extends Container {
 	 * Bind attach() and save() to the appropriate WordPress actions.
 	 **/
 	public function init() {
-		if ( isset( $_GET['post'] ) ) {
-			$this->set_post_id( $_GET['post'] );
+		$request_post_id = isset( $_GET['post'] ) ? intval( $_GET['post'] ) : 0;
+		if ( $request_post_id > 0 ) {
+			$this->set_post_id( $request_post_id );
 		}
 
 		// force post_type to be array
@@ -255,11 +256,12 @@ class Post_Meta_Container extends Container {
 		// Post types check
 		if ( ! empty( $this->settings['post_type'] ) ) {
 			$post_type = '';
+			$request_post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
 
 			if ( $this->post_id ) {
 				$post_type = get_post_type( $this->post_id );
-			} elseif ( ! empty( $_GET['post_type'] ) ) {
-				$post_type = $_GET['post_type'];
+			} elseif ( ! empty( $request_post_type ) ) {
+				$post_type = $request_post_type;
 			} elseif ( $pagenow === 'post-new.php' ) {
 				$post_type = 'post';
 			}
