@@ -542,6 +542,17 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Check if the nonce is present in the request and that it is verified
+	 *
+	 * @return bool
+	 **/
+	protected function verified_nonce_in_request() {
+		$nonce_name = $this->get_nonce_name();
+		$nonce_value = isset( $_REQUEST[ $nonce_name ] ) ? $_REQUEST[ $nonce_name ] : '';
+		return wp_verify_nonce( $nonce_value, $nonce_name );
+	}
+
+	/**
 	 * Internal function that creates the tab and associates it with particular field set
 	 *
 	 * @param string $tab_name
