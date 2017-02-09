@@ -26,7 +26,6 @@ export const TextareaField = ({ name, field, handleChange }) => {
 			id={field.id}
 			name={name}
 			value={field.value}
-			style={{ height: field.height }}
 			rows={field.rows}
 			onChange={handleChange} />
 	</Field>;
@@ -43,7 +42,6 @@ TextareaField.propTypes = {
 		id: PropTypes.string.isRequired,
 		value: PropTypes.string,
 		rows: PropTypes.number,
-		height: PropTypes.number,
 	}).isRequired,
 	handleChange: PropTypes.func.isRequired,
 };
