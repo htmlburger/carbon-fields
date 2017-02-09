@@ -15,6 +15,7 @@ import mediaBrowserForeman from 'fields/sagas/media-browser';
 import geocoderForeman from 'fields/sagas/geocoder';
 import conditionalForeman from 'fields/sagas/conditional-logic';
 import complexForeman from 'fields/sagas/complex';
+import baseValidationForeman from 'fields/sagas/validation/base';
 
 import baseSidebarsForeman from 'sidebars/sagas/base';
 
@@ -32,6 +33,7 @@ saga.run(mediaBrowserForeman);
 saga.run(complexForeman);
 saga.run(conditionalForeman);
 saga.run(geocoderForeman);
+saga.run(baseValidationForeman);
 saga.run(baseSidebarsForeman);
 
 export default store;
