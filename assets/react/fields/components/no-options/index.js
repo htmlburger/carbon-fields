@@ -2,7 +2,12 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
+
+/**
+ * The internal dependencies.
+ */
 import Field from 'fields/components/field';
+import withSetup from 'fields/decorators/with-setup';
 
 /**
  * Render a notice to inform the user that the field doesn't have
@@ -14,11 +19,28 @@ import Field from 'fields/components/field';
  *
  * TODO: Fix the translation.
  */
-const NoOptions = ({ field }) => {
+export const NoOptions = ({ field }) => {
 	return <Field field={field}>
 		<em>No options.</em>
 	</Field>
 }
+
+/**
+ * The lifecycle hooks that will be attached to the field.
+ *
+ * @type {Object}
+ */
+const hooks = {
+	componentDidMount() {
+		const {
+			field,
+			ui,
+			setUI,
+		} = this.props;
+
+		setUI(field.id, ui);
+	}
+};
 
 /**
  * Validate the props.
@@ -29,4 +51,4 @@ NoOptions.propTypes ={
 	field: PropTypes.object.isRequired,
 };
 
-export default NoOptions;
+export default withSetup(hooks)(NoOptions);
