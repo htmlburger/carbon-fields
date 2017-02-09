@@ -37,7 +37,8 @@ class Widget_Container extends Container {
 	 **/
 	public function _is_valid_attach() {
 		$screen = get_current_screen();
-		$is_widget_save = isset( $_REQUEST['action'] ) && $_REQUEST['action'] === 'save-widget';
+		$request_action = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
+		$is_widget_save = ( $request_action === 'save-widget' );
 
 		return $screen && $screen->id === 'widgets' || $is_widget_save;
 	}
