@@ -23,7 +23,7 @@ export const Field = ({ field, children }) => {
 
 			{
 				field.required
-				? <span className="carbon-required" />
+				? <span className="carbon-required">*</span>
 				: null
 			}
 		</label>
