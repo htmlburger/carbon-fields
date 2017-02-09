@@ -54,6 +54,8 @@ class Carbon_Fields_Tests_Bootstrap {
 		if ( ! is_array( $wp->query_vars ) ) {
 			$wp->query_vars = array();
 		}
+
+		\Carbon_Fields\App::instance()->booted = true;
 	}
 
 	/**
