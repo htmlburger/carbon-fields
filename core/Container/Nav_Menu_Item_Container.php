@@ -94,7 +94,10 @@ class Nav_Menu_Item_Container extends Container {
 
 		if ( $pagenow === 'nav-menus.php' ) {
 			return true;
-		} elseif ( defined( 'DOING_AJAX' ) && DOING_AJAX && $_REQUEST['action'] === 'add-menu-item' ) {
+		}
+
+		$action = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && $action === 'add-menu-item' ) {
 			return true;
 		}
 
