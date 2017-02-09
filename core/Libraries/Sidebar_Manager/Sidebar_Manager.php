@@ -38,22 +38,26 @@ class Sidebar_Manager {
 			'error' => null,
 		);
 
-		if ( empty( $_POST['action'] ) || empty( $_POST['name'] ) ) {
+		$action = isset( $_POST['action'] ) ? $_POST['action'] : '';
+		$name = isset( $_POST['name'] ) ? $_POST['name'] : '';
+		$result = false;
+
+		if ( empty( $action ) || empty( $name ) ) {
 			return false;
 		}
-
-		$action = $_POST['action'];
-		$name = $_POST['name'];
-		$result = false;
 
 		switch ( $action ) {
 			case 'carbon_add_sidebar':
 				$result = $this->add_sidebar( $name );
-			break;
+				break;
 
 			case 'carbon_remove_sidebar':
 				$result = $this->remove_sidebar( $name );
-			break;
+				break;
+
+			default:
+				$result = new \WP_Error( 'unknown-action', __( 'Unknown action attempted.', \Carbon_Fields\TEXT_DOMAIN ) );
+				break;
 		}
 
 		if ( is_wp_error( $result ) ) {
