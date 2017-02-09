@@ -130,7 +130,8 @@ class Theme_Options_Container extends Container {
 	 * Whether this container is currently viewed.
 	 **/
 	public function is_active() {
-		if ( isset( $_GET['page'] ) && $_GET['page'] === $this->settings['file'] ) {
+		$request_page = isset( $_GET['page'] ) ? $_GET['page'] : '';
+		if ( ! empty( $request_page ) && $request_page === $this->settings['file'] ) {
 			return true;
 		}
 
@@ -141,7 +142,8 @@ class Theme_Options_Container extends Container {
 	 * Output the container markup
 	 **/
 	public function render() {
-		if ( isset( $_GET['settings-updated'] ) && $_GET['settings-updated'] == 'true' ) {
+		$request_settings_updated = isset( $_GET['settings-updated'] ) ? $_GET['settings-updated'] : '';
+		if ( $request_settings_updated === 'true' ) {
 			$this->notifications[] = __( 'Settings saved.', \Carbon_Fields\TEXT_DOMAIN );
 		}
 
