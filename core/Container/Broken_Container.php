@@ -13,6 +13,6 @@ class Broken_Container extends Container {
 
 	public function init() {}
 
-	public function _is_valid_attach() { return false; }
+	public function is_valid_attach_for_request() { return false; }
 }
 

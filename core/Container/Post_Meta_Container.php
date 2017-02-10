@@ -246,7 +246,7 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	public function _is_valid_attach() {
+	public function is_valid_attach_for_request() {
 		global $pagenow;
 
 		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
@@ -293,6 +293,16 @@ class Post_Meta_Container extends Container {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Check container attachment rules against object id
+	 *
+	 * @return bool
+	 **/
+	public function is_valid_attach_for_object( $object_id = null ) {
+		// TODO implement
+		return false;
 	}
 
 	/**

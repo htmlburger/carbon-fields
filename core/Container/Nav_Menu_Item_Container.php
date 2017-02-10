@@ -85,7 +85,7 @@ class Nav_Menu_Item_Container extends Container {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	public function _is_valid_attach() {
+	public function is_valid_attach_for_request() {
 		global $pagenow;
 
 		if ( $this->get_datastore()->get_id() !== 0 ) {
@@ -105,6 +105,15 @@ class Nav_Menu_Item_Container extends Container {
 	}
 
 	/**
+	 * Check container attachment rules against object id
+	 *
+	 * @return bool
+	 **/
+	public function is_valid_attach_for_object( $object_id = null ) {
+		return true;
+	}
+
+	/**
 	 * Output the container markup
 	 **/
 	public function render() {
@@ -115,7 +124,7 @@ class Nav_Menu_Item_Container extends Container {
 	 * Trigger Save for all instances
 	 */
 	public function update( $menu_id, $current_menu_item_id ) {
-		if ( ! $this->is_valid_attach() ) {
+		if ( ! $this->is_valid_attach_for_request() ) {
 			return;
 		}
 		
@@ -127,7 +136,7 @@ class Nav_Menu_Item_Container extends Container {
 	 * Render custom fields inside each Nav Menu entry
 	 */
 	public function form( $item ) {
-		if ( ! $this->is_valid_attach() ) {
+		if ( ! $this->is_valid_attach_for_request() ) {
 			return;
 		}
 

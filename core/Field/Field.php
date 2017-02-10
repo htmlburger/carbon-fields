@@ -181,6 +181,15 @@ class Field implements Datastore_Holder_Interface {
 	protected $conditional_logic = array();
 
 	/**
+	 * Whether the field should be included in the response of the requests to the REST API
+	 *
+	 * @see  set_visible_in_rest_api
+	 * @see  get_visible_in_rest_api
+	 * @var boolean
+	 */
+	protected $visible_in_rest_api = false;
+
+	/**
 	 * Clone the Value_Set object as well
 	 *
 	 * @var array
@@ -941,6 +950,32 @@ class Field implements Datastore_Holder_Interface {
 		return $parsed_rules;
 	}
 
+	/**
+	 * Configuration function for setting the field visibility in the response of the requests to the REST API
+	 * 
+	 * @param bool $visible
+	 * @return Field $this
+	 */
+	public function show_in_rest( $visible = true ) {
+		$this->set_visible_in_rest_api( $visible );
+		return $this;
+	}
+	/**
+	 * Set the REST visibility of the field
+	 * 
+	 * @param bool $visible
+	 */
+	public function set_visible_in_rest_api( $visible ) {
+		$this->visible_in_rest_api = $visible;
+	}
+	/**
+	 * Get the REST visibility of the field
+	 * 
+	 * @return bool
+	 */
+	public function get_visible_in_rest_api() {
+		return $this->visible_in_rest_api;
+	}
 
 	/**
 	 * Hook administration scripts.

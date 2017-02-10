@@ -263,6 +263,16 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Load the value for each field in the container.
+	 * Could be used internally during container rendering
+	 **/
+	public function load() {
+		foreach ( $this->fields as $field ) {
+			$field->load();
+		}
+	}
+
+	/**
 	 * Called first as part of the container save procedure.
 	 * Responsible for checking the request validity and
 	 * calling the container-specific save() method
@@ -299,16 +309,6 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Load the value for each field in the container.
-	 * Could be used internally during container rendering
-	 **/
-	public function load() {
-		foreach ( $this->fields as $field ) {
-			$field->load();
-		}
-	}
-
-	/**
 	 * Called first as part of the container attachment procedure.
 	 * Responsible for checking it's OK to attach the container
 	 * and if it is, calling the container-specific attach() method
@@ -333,6 +333,43 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Attach the container rendering and helping methods
+	 * to concrete WordPress Action hooks
+	 **/
+	public function attach() {}
+
+	/**
+	 * Perform checks whether the container should be attached during the current request
+	 *
+	 * @return bool True if the container is allowed to be attached
+	 **/
+	final public function is_valid_attach() {
+		$is_valid_attach = $this->is_valid_attach_for_request();
+		return apply_filters( 'carbon_fields_container_is_valid_attach', $is_valid_attach, $this );
+	}
+
+	/**
+	 * Check container attachment rules against current page request (in admin)
+	 *
+	 * @return bool
+	 **/
+	abstract protected function is_valid_attach_for_request();
+
+	/**
+	 * Check container attachment rules against object id
+	 *
+	 * @return bool
+	 **/
+	abstract public function is_valid_attach_for_object( $object_id = null );
+
+	/**
+	 * Whether this container is currently viewed.
+	 **/
+	public function is_active() {
+		return $this->is_valid_attach();
+	}
+
+	/**
 	 * Returns all the Backbone templates
 	 *
 	 * @return array
@@ -346,36 +383,6 @@ abstract class Container implements Datastore_Holder_Interface {
 	 **/
 	protected function add_template( $name, $callback ) {
 		$this->templates[ $name ] = $callback;
-	}
-
-	/**
-	 * Attach the container rendering and helping methods
-	 * to concrete WordPress Action hooks
-	 **/
-	public function attach() {}
-
-	/**
-	 * Perform checks whether the container should be attached during the current request
-	 *
-	 * @return bool True if the container is allowed to be attached
-	 **/
-	final public function is_valid_attach() {
-		$is_valid_attach = $this->_is_valid_attach();
-		return apply_filters( 'carbon_container_is_valid_attach', $is_valid_attach, $this );
-	}
-
-	/**
-	 * Require extending containers to define their own attach rules
-	 *
-	 * @return bool True if the container is allowed to be attached
-	 **/
-	abstract protected function _is_valid_attach();
-
-	/**
-	 * Whether this container is currently viewed.
-	 **/
-	public function is_active() {
-		return $this->is_valid_attach();
 	}
 
 	/**

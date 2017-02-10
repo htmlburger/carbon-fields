@@ -52,7 +52,7 @@ class User_Meta_Container extends Container {
 			return false;
 		}
 
-		if ( ! $this->is_valid_attach() ) {
+		if ( ! $this->is_valid_attach_for_request() ) {
 			return false;
 		}
 
@@ -114,12 +114,22 @@ class User_Meta_Container extends Container {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	public function _is_valid_attach() {
+	public function is_valid_attach_for_request() {
 		if ( ! $this->is_profile_page() || ! $this->is_valid_show_for() ) {
 			return false;
 		}
 
 		return true;
+	}
+
+	/**
+	 * Check container attachment rules against object id
+	 *
+	 * @return bool
+	 **/
+	public function is_valid_attach_for_object( $object_id = null ) {
+		// TODO implement
+		return false;
 	}
 
 	/**

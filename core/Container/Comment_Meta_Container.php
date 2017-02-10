@@ -68,17 +68,22 @@ class Comment_Meta_Container extends Container {
 	}
 
 	/**
-	 * Perform checks whether the container should be attached during the current request
+	 * Check container attachment rules against current page request (in admin)
 	 *
-	 * @return bool True if the container is allowed to be attached
+	 * @return bool
 	 **/
-	public function _is_valid_attach() {
+	public function is_valid_attach_for_request() {
 		global $pagenow;
 
-		if ( $pagenow !== 'comment.php' ) {
-			return false;
-		}
+		return ( $pagenow === 'comment.php' );
+	}
 
+	/**
+	 * Check container attachment rules against object id
+	 *
+	 * @return bool
+	 **/
+	public function is_valid_attach_for_object( $object_id = null ) {
 		return true;
 	}
 
