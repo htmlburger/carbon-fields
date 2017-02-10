@@ -44,7 +44,7 @@ class Decorator {
 			$fields = $container->get_fields();
 			$context = strtolower( $container->type );
 			$type_callable = array( __CLASS__, "get_{$context}_container_settings" );
-			if ( !is_callable( $type_callable ) ) {
+			if ( ! is_callable( $type_callable ) ) {
 				continue; // unsupported container type
 			}
 			$types = call_user_func( $type_callable, $container );
@@ -54,7 +54,7 @@ class Decorator {
 					continue;
 				}
 
-				$getter = function( $object, $field_name, $request ) use ( $container ) {
+				$getter = function( $object, $field_name ) use ( $container ) {
 					$object_id = self::get_object_id( $object, $container->type );
 					return Helper::get_value( $object_id, $container->type, $field_name );
 				};
@@ -63,7 +63,7 @@ class Decorator {
 					$object_id = self::get_object_id( $object, $container->type );
 					$success = Helper::set_value( $object_id, $container->type, $field_name, $value );
 					if ( ! $success ) {
-						echo 'Failed to find or update field "' . $key . '".';
+						echo 'Failed to find or update field "' . $field_name . '".';
 						exit;
 					}
 				};
@@ -132,7 +132,7 @@ class Decorator {
 			case 'Term_Meta':
 				return $object->term_id;
 				break;
-			case 'Comment_Meta' : 
+			case 'Comment_Meta': 
 				return $object->comment_ID;
 				break;
 		}

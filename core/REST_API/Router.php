@@ -204,7 +204,7 @@ class Router {
 	 * Wrapper method used for retrieving data from Data_Manager
 	 * 
 	 * @param  string $container_type 
-	 * @param  string $id
+	 * @param  string $object_id
 	 * @return array
 	 */
 	protected function get_all_field_values( $container_type, $object_id = null ) {
