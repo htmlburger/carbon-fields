@@ -23,6 +23,7 @@ import { VALIDATION_BASE, VALIDATION_COMPLEX } from 'fields/constants';
  * @return {String|null}
  */
 export function baseValidation(field, { payload: { data: { value }} }) {
+	console.log(value);
 	if (isEmpty(value)) {
 		return crbl10n.message_required_field;
 	}

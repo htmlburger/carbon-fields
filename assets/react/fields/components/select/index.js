@@ -51,10 +51,16 @@ SelectField.propTypes = {
 	name: PropTypes.string.isRequired,
 	field: PropTypes.shape({
 		id: PropTypes.string.isRequired,
-		value: PropTypes.string,
+		value: PropTypes.oneOfType([
+			PropTypes.string,
+			PropTypes.number,
+		]),
 		options: PropTypes.arrayOf(PropTypes.shape({
 			name: PropTypes.string.isRequired,
-			value: PropTypes.string.isRequired,
+			value: PropTypes.oneOfType([
+				PropTypes.string,
+				PropTypes.number,
+			]).isRequired,
 		})).isRequired,
 	}).isRequired,
 	handleChange: PropTypes.func.isRequired,
@@ -78,16 +84,18 @@ const hooks = {
 
 		setupField(field.id, field.type, ui);
 
-		if (field.required) {
-			setupValidation(field.id, VALIDATION_BASE);
-		}
-
 		// If the field doesn't have a value,
 		// use the first option as fallback.
 		if (!field.value) {
 			updateField(field.id, {
 				value: field.options[0].value
 			});
+		}
+
+		// Supress validation errors when the fallback option has a falsy value.
+		// An example is when the field is used to render 'Gravity Form' selectbox.
+		if (field.required) {
+			setupValidation(field.id, VALIDATION_BASE);
 		}
 	}
 };
