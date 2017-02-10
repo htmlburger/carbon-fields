@@ -106,7 +106,6 @@ class Post_Meta_Container extends Container {
 	 * Possible errors are triggering save() for autosave requests
 	 * or performing post save outside of the post edit page (like Quick Edit)
 	 *
-	 * @see is_valid_save_conditions()
 	 * @param int $post_id ID of the post against which save() is ran
 	 * @return bool
 	 **/
@@ -119,24 +118,76 @@ class Post_Meta_Container extends Container {
 			return false;
 		}
 
-		if ( $post_id < 1 ) {
-			return false;
-		}
-
-		return $this->is_valid_save_conditions( $post_id );
+		return $this->is_valid_attach_for_object( $post_id );
 	}
 
 	/**
-	 * Perform checks whether the current save() request is valid
-	 * Possible errors are triggering save() for autosave requests
-	 * or performing post save outside of the post edit page (like Quick Edit)
+	 * Perform checks whether the container should be attached during the current request
 	 *
-	 * @param int $post_id ID of the post against which save() is ran
+	 * @return bool True if the container is allowed to be attached
+	 **/
+	public function is_valid_attach_for_request() {
+		global $pagenow;
+
+		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
+			return false;
+		}
+
+		// Post types check
+		if ( ! empty( $this->settings['post_type'] ) ) {
+			$post_type = '';
+			$request_post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
+
+			if ( $this->post_id ) {
+				$post_type = get_post_type( $this->post_id );
+			} elseif ( ! empty( $request_post_type ) ) {
+				$post_type = $request_post_type;
+			} elseif ( $pagenow === 'post-new.php' ) {
+				$post_type = 'post';
+			}
+
+			if ( ! $post_type || ! in_array( $post_type, $this->settings['post_type'] ) ) {
+				return false;
+			}
+		}
+
+		// Check show on conditions
+		foreach ( $this->settings['show_on'] as $condition => $value ) {
+			if ( is_null( $value ) ) {
+				continue;
+			}
+
+			switch ( $condition ) {
+				case 'page_id':
+					if ( $value < 1 || $this->post_id != $value ) {
+						return false;
+					}
+					break;
+				case 'parent_page_id':
+					// Check if such page exists
+					if ( $value < 1 ) {
+						return false;
+					}
+					break;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check container attachment rules against object id
+	 *
 	 * @return bool
 	 **/
-	public function is_valid_save_conditions( $post_id ) {
+	public function is_valid_attach_for_object( $object_id = null ) {
 		$valid = true;
+		$post_id = $object_id;
 		$post = get_post( $post_id );
+
+		if ( ! $post ) {
+			return false;
+		}
 
 		// Check post type
 		if ( ! in_array( $post->post_type, $this->settings['post_type'] ) ) {
@@ -239,70 +290,6 @@ class Post_Meta_Container extends Container {
 		}
 
 		return $valid;
-	}
-
-	/**
-	 * Perform checks whether the container should be attached during the current request
-	 *
-	 * @return bool True if the container is allowed to be attached
-	 **/
-	public function is_valid_attach_for_request() {
-		global $pagenow;
-
-		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
-			return false;
-		}
-
-		// Post types check
-		if ( ! empty( $this->settings['post_type'] ) ) {
-			$post_type = '';
-			$request_post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
-
-			if ( $this->post_id ) {
-				$post_type = get_post_type( $this->post_id );
-			} elseif ( ! empty( $request_post_type ) ) {
-				$post_type = $request_post_type;
-			} elseif ( $pagenow === 'post-new.php' ) {
-				$post_type = 'post';
-			}
-
-			if ( ! $post_type || ! in_array( $post_type, $this->settings['post_type'] ) ) {
-				return false;
-			}
-		}
-
-		// Check show on conditions
-		foreach ( $this->settings['show_on'] as $condition => $value ) {
-			if ( is_null( $value ) ) {
-				continue;
-			}
-
-			switch ( $condition ) {
-				case 'page_id':
-					if ( $value < 1 || $this->post_id != $value ) {
-						return false;
-					}
-					break;
-				case 'parent_page_id':
-					// Check if such page exists
-					if ( $value < 1 ) {
-						return false;
-					}
-					break;
-			}
-		}
-
-		return true;
-	}
-
-	/**
-	 * Check container attachment rules against object id
-	 *
-	 * @return bool
-	 **/
-	public function is_valid_attach_for_object( $object_id = null ) {
-		// TODO implement
-		return false;
 	}
 
 	/**

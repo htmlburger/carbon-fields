@@ -59,11 +59,7 @@ class Term_Meta_Container extends Container {
 			return false;
 		}
 
-		if ( $term_id < 1 ) {
-			return false;
-		}
-
-		return true;
+		return $this->is_valid_attach_for_object( $term_id );
 	}
 
 	/**
@@ -103,8 +99,7 @@ class Term_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
-		// TODO implement
-		return false;
+		return ( $object_id > 0 );
 	}
 
 	/**
