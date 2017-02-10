@@ -95,11 +95,11 @@ class Repository {
 		$containers = $this->get_containers( $container_type );
 		$field = null;
 
-		foreach ( $containers as $c ) {
+		foreach ( $containers as $container ) {
 			if ( $include_nested_fields ) {
-				$field = $c->get_field_by_name( $field_name );
+				$field = $container->get_field_by_name( $field_name );
 			} else {
-				$field = $c->get_root_field_by_name( $field_name );
+				$field = $container->get_root_field_by_name( $field_name );
 			}
 			if ( $field ) {
 				break;
