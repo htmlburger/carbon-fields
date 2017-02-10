@@ -10,20 +10,48 @@ import { isUndefined, isEmpty } from 'lodash';
  */
 import { setupValidation, updateField, setUI } from 'fields/actions';
 import { getFieldById } from 'fields/selectors';
-import { VALIDATION_BASE } from 'fields/constants';
+import { VALIDATION_BASE, VALIDATION_COMPLEX } from 'fields/constants';
 
 /**
  * Handle the validation logic for most of the fields.
  *
+ * @param  {Object}      field
  * @param  {Object}      action
  * @param  {Object}      action.payload
  * @param  {Object}      action.payload.data
  * @param  {mixed}       action.payload.data.value
  * @return {String|null}
  */
-export function baseValidation({ payload: { data: { value }} }) {
+export function baseValidation(field, { payload: { data: { value }} }) {
 	if (isEmpty(value)) {
 		return crbl10n.message_required_field;
+	}
+
+	return null;
+}
+
+/**
+ * Handle the validation logic for the complex.
+ *
+ * @param  {Object}      field
+ * @param  {Object}      action
+ * @param  {Object}      action.payload
+ * @param  {Object}      action.payload.data
+ * @param  {mixed}       action.payload.data.value
+ * @return {String|null}
+ */
+export function complexValidation(field, { payload: { data: { value }} }) {
+	if (isEmpty(value)) {
+		return crbl10n.message_required_field;
+	}
+
+	if (field.min > 0 && value.length < field.min) {
+		const { min, labels } = field;
+		const label = min === 1 ? labels.singular_name : labels.plural_name;
+
+		return crbl10n.complex_min_num_rows_not_reached
+			.replace('%1$d', min)
+			.replace('%2$s', label.toLowerCase());
 	}
 
 	return null;
@@ -61,10 +89,12 @@ export function* workerValidate(validator, fieldId, action) {
 
 	// Debounce the validation, because in some situations
 	// will trigger unnecessary re-renders.
-	yield call(delay, 200);
+	if (validator.debounce) {
+		yield call(delay, 200);
+	}
 
 	// Perform the validation.
-	const result = yield call(validator, action);
+	const result = yield call(validator.handler, field, action);
 
 	yield put(setUI(field.id, {
 		valid: isEmpty(result) ? true : false,
@@ -83,7 +113,14 @@ export function* workerValidate(validator, fieldId, action) {
  */
 export function* workerSetup({ payload: { fieldId, validationType }}) {
 	const validators = {
-		[VALIDATION_BASE]: baseValidation,
+		[VALIDATION_BASE]: {
+			handler: baseValidation,
+			debounce: true,
+		},
+		[VALIDATION_COMPLEX]: {
+			handler: complexValidation,
+			debounce: false,
+		},
 	};
 
 	const validator = validators[validationType];

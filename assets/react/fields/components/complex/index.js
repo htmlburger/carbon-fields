@@ -19,6 +19,7 @@ import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { isFieldTabbed } from 'fields/selectors';
 import { addComplexGroup, cloneComplexGroup, removeComplexGroup } from 'fields/actions';
+import { VALIDATION_COMPLEX } from 'fields/constants';
 
 /**
  * Render a group(s) of fields.
@@ -173,6 +174,7 @@ const hooks = {
 			field,
 			tabbed,
 			setupField,
+			setupValidation,
 			setUI
 		} = this.props;
 
@@ -187,6 +189,10 @@ const hooks = {
 		}
 
 		setupField(field.id, field.type, ui);
+
+		if (field.required) {
+			setupValidation(field.id, VALIDATION_COMPLEX);
+		}
 	}
 };
 
