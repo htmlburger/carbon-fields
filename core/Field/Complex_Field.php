@@ -366,7 +366,6 @@ class Complex_Field extends Field {
 	 * ),
 	 * 'groups' => array(
 	 * 		array(
-	 * 			'_type' => '_',
 	 * 			'field1' => array(
 	 * 				'value_set'=>array(
 	 * 					array(

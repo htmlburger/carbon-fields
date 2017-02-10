@@ -55,13 +55,18 @@ class Decorator {
 					continue;
 				}
 
-				$getter = function ( $object, $field_name, $request ) use ( $container ) {
-					return Helper::get_value( self::get_object_id( $object, $container->type ), $container->type, $field_name );
+				$getter = function( $object, $field_name, $request ) use ( $container ) {
+					$object_id = self::get_object_id( $object, $container->type );
+					return Helper::get_value( $object_id, $container->type, $field_name );
 				};
 
-				$setter = function ( $object, $field_name, $request ) use ( $container ) {
-					// TODO fix updating
-					return $this->update_field_value( self::get_object_id( $object, $container->type ), $field_name, $container->type, $request );
+				$setter = function( $value, $object, $field_name ) use ( $container ) {
+					$object_id = self::get_object_id( $object, $container->type );
+					$success = Helper::set_value( $object_id, $container->type, $field_name, $value );
+					if ( ! $success ) {
+						echo 'Failed to find or update field "' . $key . '".';
+						exit;
+					}
 				};
 
 				register_rest_field( $types,

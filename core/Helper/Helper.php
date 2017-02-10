@@ -36,14 +36,37 @@ class Helper {
 	}
 
 	/**
-	 * Retrieve post meta field for a post.
+	 * Set value for a field
 	 *
-	 * @param  int    $id   Post ID.
-	 * @param  string $name Custom field name.
-	 * @return mixed        Meta value.
+	 * @param int $object_id Object id to get value for (e.g. post_id, term_id etc.)
+	 * @param string $container_type Container type to search in
+	 * @param string $field_name Field name
+	 * @param array $value Refer to Complex_Field::set_value_tree() in case you wish to update a complex field
+	 * @return bool
 	 */
-	public static function get_post_meta( $id, $name ) {
-		return static::get_value( $id, 'Post_Meta', $name );
+	public static function set_value( $object_id, $container_type, $field_name, $value ) {
+		$repository = App::resolve( 'container_repository' );
+		$field = $repository->get_field_in_containers( $field_name, $container_type, false );
+
+		if ( ! $field ) {
+			return false;
+		}
+
+		$clone = clone $field;
+		if ( $object_id !== null ) {
+			$clone->get_datastore()->set_id( $object_id );
+		}
+
+		if ( is_a( $clone, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
+			$value = ( ! empty( $value ) ) ? $value : array( 'value_set' => array() );
+			$clone->set_value_tree( $value );
+			$clone->set_value( $value['value_set'] );
+		} else {
+			$clone->set_value( $value );
+		}
+		$clone->save();
+
+		return true;
 	}
 
 	/**
@@ -54,21 +77,55 @@ class Helper {
 	 * @return mixed        Meta value.
 	 */
 	public static function get_the_post_meta( $name ) {
-		return static::get_value( get_the_ID(), 'Post_Meta', $name );
+		return static::get_post_meta( get_the_ID(), $name );
 	}
 
 	/**
-	 * Retrieve theme option field value.
+	 * Get post meta field for a post.
 	 *
-	 * @param  string $name Custom field name.
-	 * @return mixed        Option value.
+	 * @param int    $id   Post ID.
+	 * @param string $name Custom field name.
+	 * @return mixed        Meta value.
+	 */
+	public static function get_post_meta( $id, $name ) {
+		return static::get_value( $id, 'Post_Meta', $name );
+	}
+
+	/**
+	 * Set post meta field for a post.
+	 *
+	 * @param int $id Post ID
+	 * @param string $name Custom field name
+	 * @param array $value
+	 * @return bool Success
+	 */
+	public static function set_post_meta( $id, $name, $value ) {
+		return static::set_value( $id, 'Post_Meta', $name, $value );
+	}
+
+	/**
+	 * Get theme option field value.
+	 *
+	 * @param string $name Custom field name
+	 * @return mixed Option value
 	 */
 	public static function get_theme_option( $name ) {
 		return static::get_value( null, 'Theme_Options', $name );
 	}
 
 	/**
-	 * Retrieve term meta field for a term.
+	 * Set theme option field value.
+	 *
+	 * @param string $name Field name
+	 * @param array $value
+	 * @return bool Success
+	 */
+	public static function set_theme_option( $name, $value ) {
+		return static::set_value( null, 'Theme_Options', $name, $value );
+	}
+
+	/**
+	 * Get term meta field for a term.
 	 *
 	 * @param  int    $id   Term ID.
 	 * @param  string $name Custom field name.
@@ -79,7 +136,19 @@ class Helper {
 	}
 
 	/**
-	 * Retrieve user meta field for a user.
+	 * Set term meta field for a term.
+	 *
+	 * @param int $id Term ID
+	 * @param string $name Field name
+	 * @param array $value
+	 * @return bool Success
+	 */
+	public static function set_term_meta( $id, $name, $value ) {
+		return static::set_value( $id, 'Term_Meta', $name, $value );
+	}
+
+	/**
+	 * Get user meta field for a user.
 	 *
 	 * @param  int    $id   User ID.
 	 * @param  string $name Custom field name.
@@ -90,7 +159,19 @@ class Helper {
 	}
 
 	/**
-	 * Retrieve comment meta field for a comment.
+	 * Set user meta field for a user.
+	 *
+	 * @param int $id User ID
+	 * @param string $name Field name
+	 * @param array $value
+	 * @return bool Success
+	 */
+	public static function set_user_meta( $id, $name, $value ) {
+		return static::set_value( $id, 'user_meta', $name, $value );
+	}
+
+	/**
+	 * Get comment meta field for a comment.
 	 *
 	 * @param  int    $id   Comment ID.
 	 * @param  string $name Custom field name.
@@ -98,6 +179,18 @@ class Helper {
 	 */
 	public static function get_comment_meta( $id, $name ) {
 		return static::get_value( $id, 'comment_meta', $name );
+	}
+
+	/**
+	 * Set comment meta field for a comment.
+	 *
+	 * @param int $id Comment ID
+	 * @param string $name Field name
+	 * @param array $value
+	 * @return bool Success
+	 */
+	public static function set_comment_meta( $id, $name, $value ) {
+		return static::set_value( $id, 'comment_meta', $name, $value );
 	}
 
 	/**

@@ -296,18 +296,9 @@ class Router {
 		
 		foreach ( $options as $key => $value ) {
 			try {
-				$field = $this->container_repository->get_field_in_containers( $key, 'Theme_Options' );
-				if ( ! $field ) {
-					return new \WP_REST_Response( 'Could not not field "' . $key . '".' );
-				}
-				if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
-					$value = ( ! empty( $value ) ) ? $value : array( 'value_set' => array() );
-					$field->set_value_tree( $value );
-					$field->set_value( $value['value_set'] );
-					$field->save();
-				} else {
-					$field->set_value( $value );
-					$field->save();
+				$success = Helper::set_value( null, 'Theme_Options', $key, $value );
+				if ( ! $success ) {
+					return new \WP_REST_Response( 'Failed to find or update field "' . $key . '".' );
 				}
 			} catch ( \Exception $e ) {
 				return new \WP_REST_Response( wp_strip_all_tags( $e->getMessage() ) );
