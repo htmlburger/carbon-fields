@@ -8,7 +8,12 @@ import { isFunction } from 'lodash';
  * The internal dependencies.
  */
 import { getFieldById } from 'fields/selectors';
-import { setupField, updateField, setUI } from 'fields/actions';
+import {
+	setupField,
+	setupValidation,
+	updateField,
+	setUI,
+} from 'fields/actions';
 
 /**
  * The default state that will be retrieved from the store.
@@ -34,6 +39,7 @@ const defaultMapStateToProps = (state, ownProps) => {
  */
 const defaultMapDispatchToProps = {
 	setupField,
+	setupValidation,
 	updateField,
 	setUI,
 };

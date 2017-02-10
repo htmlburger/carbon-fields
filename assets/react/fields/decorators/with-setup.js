@@ -1,7 +1,12 @@
 /**
- * The externala dependencies.
+ * The external dependencies.
  */
 import { lifecycle, defaultProps, compose } from 'recompose';
+
+/**
+ * The internal dependencies.
+ */
+import { VALIDATION_BASE } from 'fields/constants';
 
 /**
  * The default lifecycle hooks that will be attached to each field.
@@ -16,9 +21,11 @@ const defaultHooks = {
 			field,
 			ui,
 			setupField,
+			setupValidation
 		} = this.props;
 
 		setupField(field.id, field.type, ui);
+		setupValidation(field.id, VALIDATION_BASE);
 	}
 };
 
@@ -29,7 +36,8 @@ const defaultHooks = {
  */
 const defaultUI = {
 	is_visible: true,
-	has_error: false,
+	valid: true,
+	error: null,
 };
 
 /**

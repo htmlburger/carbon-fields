@@ -17,7 +17,7 @@ import cx from 'classnames';
 export const Field = ({ field, children }) => {
 	const styles = !!field.width ? { width: `${field.width}%`} : null;
 
-	return <div className={cx('carbon-field', `carbon-${field.type}`, { 'has-width': !!field.width }, { 'carbon-highlight': field.ui.has_error })} style={styles} hidden={!field.ui.is_visible}>
+	return <div className={cx('carbon-field', `carbon-${field.type}`, { 'has-width': !!field.width }, { 'carbon-highlight': !field.ui.valid })} style={styles} hidden={!field.ui.is_visible}>
 		<label htmlFor={field.id}>
 			{field.label}
 
@@ -38,7 +38,11 @@ export const Field = ({ field, children }) => {
 			: null
 		}
 
-		<em className="carbon-error" />
+		{
+			!!field.ui.error
+			? <em className="carbon-error">{field.ui.error}</em>
+			: null
+		}
 	</div>;
 };
 

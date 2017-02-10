@@ -1,0 +1,1 @@
+export const VALIDATION_BASE = 'VALIDATION_BASE';

@@ -4,7 +4,7 @@
 import { createAction } from 'redux-actions';
 
 /**
- * Perform the initial setup of the container.
+ * Perform the initial setup of the field.
  *
  * @param  {String} fieldId
  * @param  {String} type
@@ -12,6 +12,15 @@ import { createAction } from 'redux-actions';
  * @return {Object}
  */
 export const setupField = createAction('fields/SETUP_FIELD', (fieldId, type, ui) => ({ fieldId, type, ui }));
+
+/**
+ * Perform the setup of the validation logic.
+ *
+ * @param  {String} fieldId
+ * @param  {String} validationType
+ * @return {Object}
+ */
+export const setupValidation = createAction('fields/SETUP_VALIDATION', (fieldId, validationType) => ({ fieldId, validationType }));
 
 /**
  * Update the object that contains information about field's UI.
