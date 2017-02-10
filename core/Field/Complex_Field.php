@@ -357,6 +357,29 @@ class Complex_Field extends Field {
 	/**
 	 * Set the full value tree of all groups and their fields
 	 *
+	 * Tree Schema
+	 * 'value_set' => array(
+	 * 		array(
+	 * 			'value' => '_',
+	 * 		),
+	 * 		...
+	 * ),
+	 * 'groups' => array(
+	 * 		array(
+	 * 			'field1' => array(
+	 * 				'value_set'=>array(
+	 * 					array(
+	 * 						'value' => ...,
+	 * 						...
+	 * 					),
+	 * 					...
+	 * 				),
+	 * 			),
+	 * 			...
+	 * 		),
+	 * 		...
+	 * ),
+	 * 
 	 * @return mixed
 	 **/
 	public function set_value_tree( $value_tree ) {

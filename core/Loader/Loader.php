@@ -6,6 +6,7 @@ use \Carbon_Fields\Pimple\Container as PimpleContainer;
 use \Carbon_Fields\Container\Repository as ContainerRepository;
 use \Carbon_Fields\Templater\Templater;
 use \Carbon_Fields\Service\Legacy_Storage_Service;
+use \Carbon_Fields\Service\REST_API_Service;
 use \Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
@@ -22,11 +23,14 @@ class Loader {
 	
 	protected $legacy_storage_service;
 
-	public function __construct( Templater $templater, Sidebar_Manager $sidebar_manager, ContainerRepository $container_repository, Legacy_Storage_Service $legacy_storage_service ) {
+	protected $rest_api_service;
+
+	public function __construct( Templater $templater, Sidebar_Manager $sidebar_manager, ContainerRepository $container_repository, Legacy_Storage_Service $legacy_storage_service, REST_API_Service $rest_api_service ) {
 		$this->templater = $templater;
 		$this->sidebar_manager = $sidebar_manager;
 		$this->container_repository = $container_repository;
 		$this->legacy_storage_service = $legacy_storage_service;
+		$this->rest_api_service = $rest_api_service;
 	}
 
 	/**
@@ -60,6 +64,9 @@ class Loader {
 
 		# Enable the legacy storage service
 		$this->legacy_storage_service->enable();
+
+		# Enable the REST API service
+		$this->rest_api_service->enable();
 	}
 
 	/**

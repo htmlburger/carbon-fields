@@ -35,12 +35,21 @@ class Widget_Container extends Container {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	public function _is_valid_attach() {
+	public function is_valid_attach_for_request() {
 		$screen = get_current_screen();
 		$request_action = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
 		$is_widget_save = ( $request_action === 'save-widget' );
 
 		return $screen && $screen->id === 'widgets' || $is_widget_save;
+	}
+
+	/**
+	 * Check container attachment rules against object id
+	 *
+	 * @return bool
+	 **/
+	public function is_valid_attach_for_object( $object_id = null ) {
+		return true;
 	}
 
 	/**

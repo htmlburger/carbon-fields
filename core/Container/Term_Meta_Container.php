@@ -59,11 +59,7 @@ class Term_Meta_Container extends Container {
 			return false;
 		}
 
-		if ( $term_id < 1 ) {
-			return false;
-		}
-
-		return true;
+		return $this->is_valid_attach_for_object( $term_id );
 	}
 
 	/**
@@ -88,13 +84,22 @@ class Term_Meta_Container extends Container {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	public function _is_valid_attach() {
+	public function is_valid_attach_for_request() {
 		$request_taxonomy = isset( $_GET['taxonomy'] ) ? $_GET['taxonomy'] : '';
 		if ( ! empty( $request_taxonomy ) && in_array( $request_taxonomy, $this->settings['taxonomy'] ) ) {
 			return true;
 		}
 
 		return false;
+	}
+
+	/**
+	 * Check container attachment rules against object id
+	 *
+	 * @return bool
+	 **/
+	public function is_valid_attach_for_object( $object_id = null ) {
+		return ( $object_id > 0 );
 	}
 
 	/**

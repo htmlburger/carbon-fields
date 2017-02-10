@@ -9,7 +9,12 @@ use \Carbon_Fields\Key_Toolset\Key_Toolset;
 use \Carbon_Fields\Templater\Templater;
 use \Carbon_Fields\Service\Meta_Query_Service;
 use \Carbon_Fields\Service\Legacy_Storage_Service;
+use \Carbon_Fields\Service\REST_API_Service;
 use \Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
+
+use \Carbon_Fields\REST_API\Router as REST_API_Router;
+use \Carbon_Fields\REST_API\Decorator as REST_API_Decorator;
+
 
 /**
  * Holds a static reference to the ioc container
@@ -52,7 +57,7 @@ class App {
 		$ioc = new PimpleContainer();
 
 		$ioc['loader'] = function( $ioc ) {
-			return new Loader( $ioc['templater'], $ioc['sidebar_manager'], $ioc['container_repository'], $ioc['legacy_storage_service'] );
+			return new Loader( $ioc['templater'], $ioc['sidebar_manager'], $ioc['container_repository'], $ioc['legacy_storage_service'], $ioc['rest_api_service'] );
 		};
 
 		$ioc['container_repository'] = function() {
@@ -71,6 +76,14 @@ class App {
 			return new Sidebar_Manager();
 		};
 
+		$ioc['rest_api_router'] = function( $ioc ) {
+			return new REST_API_Router( $ioc['container_repository'] );
+		};
+
+		$ioc['rest_api_decorator'] = function( $ioc ) {
+			return new REST_API_Decorator( $ioc['container_repository'] );
+		};
+
 		/* Services */
 
 		$ioc['meta_query_service'] = function( $ioc ) {
@@ -79,6 +92,10 @@ class App {
 
 		$ioc['legacy_storage_service'] = function( $ioc ) {
 			return new Legacy_Storage_Service( $ioc['container_repository'], $ioc['key_toolset'] );
+		};
+
+		$ioc['rest_api_service'] = function( $ioc ) {
+			return new REST_API_Service( $ioc['rest_api_router'], $ioc['rest_api_decorator'] );
 		};
 
 		return $ioc;

@@ -52,41 +52,11 @@ class User_Meta_Container extends Container {
 			return false;
 		}
 
-		if ( ! $this->is_valid_attach() ) {
+		if ( ! $this->is_valid_attach_for_request() ) {
 			return false;
 		}
 
-		return $this->is_valid_save_conditions( $user_id );
-	}
-
-	/**
-	 * Perform checks whether the current save() request is valid
-	 *
-	 * @param int $user_id ID of the user against which save() is ran
-	 * @return bool
-	 **/
-	public function is_valid_save_conditions( $user_id ) {
-		$valid = true;
-		$user = get_userdata( $user_id );
-
-		if ( empty( $user->roles ) ) {
-			return;
-		}
-
-		// Check user role
-		if ( ! empty( $this->settings['show_on']['role'] ) ) {
-			$allowed_roles = (array) $this->settings['show_on']['role'];
-
-			// array_shift removed the returned role from the $user_profile->roles
-			// $roles_to_shift prevents changing of the $user_profile->roles variable
-			$roles_to_shift = $user->roles;
-			$profile_role = array_shift( $roles_to_shift );
-			if ( ! in_array( $profile_role, $allowed_roles ) ) {
-				$valid = false;
-			}
-		}
-
-		return $valid;
+		return $this->is_valid_attach_for_object( $user_id );
 	}
 
 	/**
@@ -114,12 +84,46 @@ class User_Meta_Container extends Container {
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
-	public function _is_valid_attach() {
+	public function is_valid_attach_for_request() {
 		if ( ! $this->is_profile_page() || ! $this->is_valid_show_for() ) {
 			return false;
 		}
 
 		return true;
+	}
+
+	/**
+	 * Check container attachment rules against object id
+	 *
+	 * @return bool
+	 **/
+	public function is_valid_attach_for_object( $object_id = null ) {
+		$valid = true;
+		$user_id = $object_id;
+		$user = get_userdata( $user_id );
+
+		if ( ! $user  ) {
+			return false;
+		}
+
+		if ( empty( $user->roles ) ) {
+			return;
+		}
+
+		// Check user role
+		if ( ! empty( $this->settings['show_on']['role'] ) ) {
+			$allowed_roles = (array) $this->settings['show_on']['role'];
+
+			// array_shift removed the returned role from the $user_profile->roles
+			// $roles_to_shift prevents changing of the $user_profile->roles variable
+			$roles_to_shift = $user->roles;
+			$profile_role = array_shift( $roles_to_shift );
+			if ( ! in_array( $profile_role, $allowed_roles ) ) {
+				$valid = false;
+			}
+		}
+
+		return $valid;
 	}
 
 	/**
