@@ -12,6 +12,7 @@ import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { setupMediaBrowser, openMediaBrowser } from 'fields/actions';
+import { VALIDATION_BASE } from 'fields/constants';
 
 /**
  * Render a file upload field with a preview thumbnail of the uploaded file.
@@ -85,9 +86,21 @@ FileField.propTypes = {
  */
 const hooks = {
 	componentDidMount() {
-		this.props.setupField(this.props.id, this.props.type);
-		this.props.setupMediaBrowser(this.props.id);
-		this.props.setUI(this.props.id, this.props.ui);
+		const {
+			field,
+			ui,
+			setupField,
+			setupValidation,
+			setupMediaBrowser,
+			updateField,
+		} = this.props;
+
+		this.props.setupField(field.id, field.type, ui);
+		this.props.setupMediaBrowser(field.id);
+
+		if (field.required) {
+			setupValidation(field.id, VALIDATION_BASE);
+		}
 	}
 };
 

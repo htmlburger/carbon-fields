@@ -11,6 +11,7 @@ import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { VALIDATION_BASE } from 'fields/constants';
 
 /**
  * Render a select input field.
@@ -71,10 +72,15 @@ const hooks = {
 			field,
 			ui,
 			setupField,
+			setupValidation,
 			updateField,
 		} = this.props;
 
 		setupField(field.id, field.type, ui);
+
+		if (field.required) {
+			setupValidation(field.id, VALIDATION_BASE);
+		}
 
 		// If the field doesn't have a value,
 		// use the first option as fallback.

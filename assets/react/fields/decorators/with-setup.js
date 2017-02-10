@@ -25,7 +25,10 @@ const defaultHooks = {
 		} = this.props;
 
 		setupField(field.id, field.type, ui);
-		setupValidation(field.id, VALIDATION_BASE);
+
+		if (field.required) {
+			setupValidation(field.id, VALIDATION_BASE);
+		}
 	}
 };
 
