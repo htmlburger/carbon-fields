@@ -358,6 +358,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Check container attachment rules against object id
 	 *
+	 * @param int $object_id
 	 * @return bool
 	 **/
 	abstract public function is_valid_attach_for_object( $object_id = null );

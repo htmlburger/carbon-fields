@@ -81,6 +81,7 @@ class Comment_Meta_Container extends Container {
 	/**
 	 * Check container attachment rules against object id
 	 *
+	 * @param int $object_id
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
