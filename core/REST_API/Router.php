@@ -218,8 +218,7 @@ class Router {
 
 		$values = array();
 		foreach ( $fields as $field ) {
-			// TODO remove debug statement
-			if ( false && ! $field->get_visible_in_rest_api() ) {
+			if ( ! $field->get_visible_in_rest_api() ) {
 				continue;
 			}
 			$values[ $field->get_base_name() ] = Helper::get_value( $object_id, $container_type, $field->get_base_name() );

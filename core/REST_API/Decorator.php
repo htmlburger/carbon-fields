@@ -50,8 +50,7 @@ class Decorator {
 			$types = call_user_func( $type_callable, $container );
 
 			foreach ( $fields as $field ) {
-				// TODO remove debug statement
-				if ( false && ! $field->get_visible_in_rest_api() ) {
+				if ( ! $field->get_visible_in_rest_api() ) {
 					continue;
 				}
 
