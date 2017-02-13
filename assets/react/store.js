@@ -10,6 +10,7 @@ import postMetaForeman from 'containers/sagas/post-meta';
 import termMetaForeman from 'containers/sagas/term-meta';
 import userMetaForeman from 'containers/sagas/user-meta';
 import themeOptionsForeman from 'containers/sagas/theme-options';
+import navMenuForeman from 'containers/sagas/nav-menu';
 
 import mediaBrowserForeman from 'fields/sagas/media-browser';
 import geocoderForeman from 'fields/sagas/geocoder';
@@ -29,6 +30,7 @@ saga.run(postMetaForeman);
 saga.run(termMetaForeman);
 saga.run(userMetaForeman);
 saga.run(themeOptionsForeman);
+saga.run(navMenuForeman);
 saga.run(mediaBrowserForeman);
 saga.run(complexForeman);
 saga.run(conditionalForeman);

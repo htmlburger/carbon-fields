@@ -40,3 +40,11 @@ export const setUI = createAction('containers/SET_UI');
  * @return {Object}
  */
 export const checkVisibility = createAction('containers/CHECK_VISIBILITY');
+
+/**
+ * Add a new container to the store.
+ *
+ * @param  {Object} container
+ * @return {Object}
+ */
+export const addContainer = createAction('containers/ADD_CONTAINER');
