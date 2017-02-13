@@ -7,7 +7,7 @@ import { call, put, select } from 'redux-saga/effects';
 /**
  * The internal dependencies.
  */
-import { TYPE_NOW_WIDGETS } from 'lib/constants';
+import { TYPE_NOW_PAGE } from 'lib/constants';
 import { getContainerById } from 'containers/selectors';
 import { setupContainer, setMeta, setUI } from 'containers/actions';
 
@@ -64,8 +64,8 @@ export default function* foreman() {
 		takeEvery(setupContainer, workerSetupContainer),
 	];
 
-	// We don't need this functionality on the "Widgets" page.
-	if (window.pagenow !== TYPE_NOW_WIDGETS) {
+	// We don't need this functionality on "Widgets" or "Menus" pages.
+	if (window.pagenow === TYPE_NOW_PAGE) {
 		sagas.push(takeEvery(setUI, workerToggleMetaBoxVisibility));
 	}
 
