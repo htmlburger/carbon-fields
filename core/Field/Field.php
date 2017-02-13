@@ -364,19 +364,32 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Load value from datastore
+	 * Get value from datastore
+	 *
+	 * @param bool $fallback_to_default
+	 * @return mixed
 	 **/
-	public function load() {
+	protected function get_value_from_datastore( $fallback_to_default = true ) {
 		$raw_value_set_tree = $this->get_datastore()->load( $this );
+		
 		$value = null;
 		if ( isset( $raw_value_set_tree[ $this->get_base_name() ] ) ) {
 			$value = $raw_value_set_tree[ $this->get_base_name() ]['value_set'];
 		}
-		$this->set_value( $value );
 
-		if ( $this->get_value() === null ) {
-			$this->set_value( $this->get_default_value() );
+		if ( $value === null && $fallback_to_default ) {
+			$value = $this->get_default_value();
 		}
+
+		return $value;
+	}
+
+	/**
+	 * Load value from datastore
+	 **/
+	public function load() {
+		$value = $this->get_value_from_datastore();
+		$this->set_value( $value );
 	}
 
 	/**

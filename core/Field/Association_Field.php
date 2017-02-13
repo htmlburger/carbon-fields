@@ -2,6 +2,8 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Value_Set\Value_Set;
+
 /**
  * Association field class.
  * Allows selecting and manually sorting entries from various types:
@@ -32,6 +34,81 @@ class Association_Field extends Relationship_Field {
 	}
 
 	/**
+	 * Create a field from a certain type with the specified label.
+	 * @param string $name  Field name
+	 * @param string $label Field label
+	 */
+	protected function __construct( $name, $label ) {
+		$this->value = new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'type'=>'', 'subtype'=>'', 'object_id'=>0 ) );
+		Field::__construct( $name, $label );
+	}
+
+	/**
+	 * Load value from datastore
+	 **/
+	public function load() {
+		$value = $this->get_value_from_datastore();
+		$value = $this->value_string_array_to_value_set( $value );
+		$this->set_value( $value );
+	}
+
+	/**
+	 * Load the field value from an input array based on it's name
+	 *
+	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
+	 **/
+	public function set_value_from_input( $input = null ) {
+		if ( is_null( $input ) ) {
+			$input = $_POST;
+		}
+
+		$value = array();
+		if ( isset( $input[ $this->get_name() ] ) ) {
+			$value = stripslashes_deep( $input[ $this->get_name() ] );
+			if ( is_array( $value ) ) {
+				$value = array_values( $value );
+				$value = $this->value_string_array_to_value_set( $value );
+			}
+		}
+		$this->set_value( $value );
+	}
+
+	/**
+	 * Convert a colo:separated:string into it's expected components
+	 * Used for backwards compatibility to CF 1.5
+	 * 
+	 * @param string $value_string
+	 * @return array
+	 */
+	protected function value_string_to_property_array( $value_string ) {
+		$value_pieces = explode( ':', $value_string );
+		$property_array = array(
+			Value_Set::VALUE_PROPERTY => $value_string,
+			'type' => $value_pieces[0],
+			'subtype' => $value_pieces[1],
+			'object_id' => $value_pieces[2],
+		);
+		return $property_array;
+	}
+
+	/**
+	 * Convert a colo:separated:string into it's expected components
+	 * Used for backwards compatibility to CF 1.5
+	 * 
+	 * @param string $value_string
+	 * @return array<array>
+	 */
+	protected function value_string_array_to_value_set( $value_string_array ) {
+		$value_set = array();
+		foreach ( $value_string_array as $raw_value_entry ) {
+			$value_string = is_array( $raw_value_entry ) ? $raw_value_entry[ Value_Set::VALUE_PROPERTY ] : $raw_value_entry;
+			$property_array = $this->value_string_to_property_array( $value_string );
+			$value_set[] = $property_array;
+		}
+		return $value_set;
+	}
+
+	/**
 	 * Converts the field values into a usable associative array.
 	 *
 	 * The relationship data is saved in the database in the following format:
@@ -46,26 +123,18 @@ class Association_Field extends Relationship_Field {
 	 * 	- ID of the item (the database ID of the item)
 	 */
 	protected function value_to_json() {
-		$raw_value = $this->get_value();
+		$value_set = $this->get_value();
 		$value = array();
-		if ( is_array( $raw_value ) ) {
-			foreach ( $raw_value as $raw_value_entry ) {
-				if ( is_string( $raw_value_entry ) ) {
-					$value_pieces = explode( ':', $raw_value_entry );
-				} else {
-					$value_pieces = array_values( $raw_value_entry );
-				}
-
-				$item = array(
-					'type' => $value_pieces[0],
-					'subtype' => $value_pieces[1],
-					'id' => $value_pieces[2],
-					'title' => $this->get_title_by_type( $value_pieces[2], $value_pieces[0], $value_pieces[1] ),
-					'label' => $this->get_item_label( $value_pieces[2], $value_pieces[0], $value_pieces[1] ),
-					'is_trashed' => ( $value_pieces[0] == 'post' && get_post_status( $value_pieces[2] ) == 'trash' ),
-				);
-				$value[] = $item;
-			}
+		foreach ( $value_set as $value_set_entry ) {
+			$item = array(
+				'type' => $value_set_entry['type'],
+				'subtype' => $value_set_entry['subtype'],
+				'id' => $value_set_entry['object_id'],
+				'title' => $this->get_title_by_type( $value_set_entry['object_id'], $value_set_entry['type'], $value_set_entry['subtype'] ),
+				'label' => $this->get_item_label( $value_set_entry['object_id'], $value_set_entry['type'], $value_set_entry['subtype'] ),
+				'is_trashed' => ( $value_set_entry['type'] == 'post' && get_post_status( $value_set_entry['object_id'] ) === 'trash' ),
+			);
+			$value[] = $item;
 		}
 		return $value;
 	}
@@ -323,8 +392,7 @@ class Association_Field extends Relationship_Field {
 	 * @return mixed
 	 **/
 	public function get_formatted_value() {
-		$value = Field::get_formatted_value();
-		return $this->parse_serialized_value( $value, 'association' );
+		return Field::get_formatted_value();
 	}
 
 	/**
