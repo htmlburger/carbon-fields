@@ -326,12 +326,12 @@ class Post_Meta_Container extends Container {
 	 * @return bool
 	 */
 	protected function condition_is_post_of_format( $post, $format ) {
-		if ( empty( $value ) || $post->post_type !== 'post' ) {
+		if ( empty( $format ) || $post->post_type !== 'post' ) {
 			return true; // this doesn't make sense - returning true for a post that does not support formats (kept for backwards compatibility)
 		}
 
-		$current_format = get_post_format( $post_id );
-		if ( ! in_array( $current_format, $value ) ) {
+		$current_format = get_post_format( $post->ID );
+		if ( ! in_array( $current_format, $format ) ) {
 			return false;
 		}
 
@@ -348,7 +348,7 @@ class Post_Meta_Container extends Container {
 	protected function condition_is_post_on_level( $post, $level ) {
 		$level = intval( $level );
 		$post_level = count( get_post_ancestors( $post->ID ) ) + 1;
-		return ( $post_level === $value );
+		return ( $post_level === $level );
 	}
 	
 	/**
