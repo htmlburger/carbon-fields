@@ -45,11 +45,12 @@ class Nav_Menu_Item_Container extends Container {
 	 */
 	public function init( $menu_item_id = 0 ) {
 		$this->get_datastore()->set_id( $menu_item_id );
-		$this->load();
 		$this->_attach();
 
 		// Only the base container should register for updating/rendering
-		if ( $menu_item_id === 0 ) {
+		if ( $menu_item_id > 0 ) {
+			$this->load();
+		} else {
 			add_action( 'wp_update_nav_menu_item', array( $this, 'update' ), 10, 3 );
 			add_action( 'crb_print_carbon_container_nav_menu_item_fields_html', array( $this, 'form' ), 10, 5 );
 		}
@@ -111,6 +112,16 @@ class Nav_Menu_Item_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
+		$post = get_post( $object_id );
+		
+		if ( ! $post ) {
+			return false;
+		}
+
+		if ( $post->post_type !== 'nav_menu_item' ) {
+			return false;
+		}
+
 		return true;
 	}
 
