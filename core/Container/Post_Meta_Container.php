@@ -81,6 +81,26 @@ class Post_Meta_Container extends Container {
 	}
 
 	/**
+	 * Perform checks whether the current save() request is valid
+	 * Possible errors are triggering save() for autosave requests
+	 * or performing post save outside of the post edit page (like Quick Edit)
+	 *
+	 * @param int $post_id ID of the post against which save() is ran
+	 * @return bool
+	 **/
+	public function is_valid_save( $post_id = 0 ) {
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return false;
+		}
+
+		if ( ! $this->verified_nonce_in_request() ) {
+			return false;
+		}
+
+		return $this->is_valid_attach_for_object( $post_id );
+	}
+
+	/**
 	 * Perform save operation after successful is_valid_save() check.
 	 * The call is propagated to all fields in the container.
 	 *
@@ -99,26 +119,6 @@ class Post_Meta_Container extends Container {
 
 		do_action( 'carbon_after_save_custom_fields', $post_id );
 		do_action( 'carbon_after_save_post_meta', $post_id );
-	}
-
-	/**
-	 * Perform checks whether the current save() request is valid
-	 * Possible errors are triggering save() for autosave requests
-	 * or performing post save outside of the post edit page (like Quick Edit)
-	 *
-	 * @param int $post_id ID of the post against which save() is ran
-	 * @return bool
-	 **/
-	public function is_valid_save( $post_id = 0 ) {
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return false;
-		}
-
-		if ( ! $this->verified_nonce_in_request() ) {
-			return false;
-		}
-
-		return $this->is_valid_attach_for_object( $post_id );
 	}
 
 	/**
@@ -247,6 +247,14 @@ class Post_Meta_Container extends Container {
 	 * CONDITION TOOLS
 	 */
 	
+	/**
+	 * Check a condition against all supported conditions
+	 * 
+	 * @param string $condition
+	 * @param mixed $value
+	 * @param WP_Post $post
+	 * @return bool
+	 */
 	protected function is_condition_fullfilled( $condition, $value, $post ) {
 		switch ( $condition ) {
 			// show_on_post_format
@@ -310,6 +318,13 @@ class Post_Meta_Container extends Container {
 		return true;
 	}
 	
+	/**
+	 * Check if a post if of a given post format
+	 * 
+	 * @param WP_Post $post
+	 * @param string $format
+	 * @return bool
+	 */
 	protected function condition_is_post_of_format( $post, $format ) {
 		if ( empty( $value ) || $post->post_type !== 'post' ) {
 			return true; // this doesn't make sense - returning true for a post that does not support formats (kept for backwards compatibility)
@@ -323,12 +338,26 @@ class Post_Meta_Container extends Container {
 		return true;
 	}
 	
+	/**
+	 * Check if a post is on a specific level in it's hierarchy
+	 * 
+	 * @param WP_Post $post
+	 * @param int $level
+	 * @return bool
+	 */
 	protected function condition_is_post_on_level( $post, $level ) {
 		$level = intval( $level );
 		$post_level = count( get_post_ancestors( $post->ID ) ) + 1;
 		return ( $post_level === $value );
 	}
 	
+	/**
+	 * Check if a post uses one of the passed templates
+	 * 
+	 * @param WP_Post $post
+	 * @param string|array<string> $templates
+	 * @return bool
+	 */
 	protected function condition_is_post_using_template( $post, $templates ) {
 		$templates = is_array( $templates ) ? $templates : array( $templates );
 		$current_template = get_post_meta( $post->ID, '_wp_page_template', true );
