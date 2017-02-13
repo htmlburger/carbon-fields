@@ -396,6 +396,18 @@ class KeyToolsetTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::storage_key_matches_any_pattern
 	 */
+	public function testStorageKeyMatchesAnyPatternMixedComparisonTrueForSecond() {
+		$storage_key = '_field|child_field';
+		$patterns = array(
+			'_field' => Key_Toolset::PATTERN_COMPARISON_EQUAL,
+			'_field|child_field' => Key_Toolset::PATTERN_COMPARISON_EQUAL,
+		);
+		$this->assertSame( true, $this->subject->storage_key_matches_any_pattern( $storage_key, $patterns ) );
+	}
+
+	/**
+	 * @covers ::storage_key_matches_any_pattern
+	 */
 	public function testStorageKeyMatchesAnyPatternMixedComparisonFalse() {
 		$storage_key = '_field|child_field';
 		$patterns = array(
