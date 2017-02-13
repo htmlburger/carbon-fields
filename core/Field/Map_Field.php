@@ -103,7 +103,7 @@ class Map_Field extends Field {
 			$value_set['address'] = $input[ $this->get_name() ]['address'];
 		}
 
-		$value_set['value'] = $this->lat_lng_to_latlng( $value_set['lat'], $value_set['lng'] );
+		$value_set[ Value_Set::VALUE_PROPERTY ] = $this->lat_lng_to_latlng( $value_set['lat'], $value_set['lng'] );
 
 		$this->set_value( $value_set );
 	}
@@ -126,7 +126,7 @@ class Map_Field extends Field {
 				'zoom' => intval( $this->default_zoom ),
 				'address' => '',
 			);
-			$value_set['value'] = $this->lat_lng_to_latlng( $value_set['lat'], $value_set['lng'] );
+			$value_set[ Value_Set::VALUE_PROPERTY ] = $this->lat_lng_to_latlng( $value_set['lat'], $value_set['lng'] );
 		}
 		$field_data = array_merge( $field_data, array(
 			'value' => $value_set['value'],

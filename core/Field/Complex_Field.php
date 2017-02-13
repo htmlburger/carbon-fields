@@ -259,7 +259,7 @@ class Complex_Field extends Field {
 
 			$value_tree['groups'][] = $value_group;
 			$value_tree['value_set'][] = array(
-				'value' => $group->get_name(),
+				Value_Set::VALUE_PROPERTY => $group->get_name(),
 			);
 			$input_group_index++;
 		}
