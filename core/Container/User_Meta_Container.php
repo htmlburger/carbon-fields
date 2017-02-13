@@ -212,8 +212,6 @@ class User_Meta_Container extends Container {
 			Incorrect_Syntax_Exception::raise( 'The argument passed to show_for() must be an array.' );
 		}
 
-		$allowed_relations = array( 'AND', 'OR' );
-
 		$parsed_show_for = array(
 			'relation' => Helper::get_relation_type_from_array( $show_for ),
 		);

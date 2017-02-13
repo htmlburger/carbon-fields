@@ -910,7 +910,6 @@ class Field implements Datastore_Holder_Interface {
 		}
 
 		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN' );
-		$allowed_relations = array( 'AND', 'OR' );
 
 		$parsed_rules = array(
 			'relation' => Helper::get_relation_type_from_array( $rules ),
