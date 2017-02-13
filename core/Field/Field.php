@@ -2,10 +2,11 @@
 
 namespace Carbon_Fields\Field;
 
-use Carbon_Fields\Datastore\Datastore_Interface;
-use Carbon_Fields\Datastore\Datastore_Holder_Interface;
-use Carbon_Fields\Value_Set\Value_Set;
-use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+use \Carbon_Fields\Datastore\Datastore_Interface;
+use \Carbon_Fields\Datastore\Datastore_Holder_Interface;
+use \Carbon_Fields\Value_Set\Value_Set;
+use \Carbon_Fields\Helper\Helper;
+use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Base field class.
@@ -912,22 +913,13 @@ class Field implements Datastore_Holder_Interface {
 		$allowed_relations = array( 'AND', 'OR' );
 
 		$parsed_rules = array(
-			'relation' => 'AND',
+			'relation' => Helper::get_relation_type_from_array( $rules ),
 			'rules' => array(),
 		);
 
 		foreach ( $rules as $key => $rule ) {
-			// Check if we have a relation key
 			if ( $key === 'relation' ) {
-				$relation = strtoupper( $rule );
-
-				if ( ! in_array( $relation, $allowed_relations ) ) {
-					Incorrect_Syntax_Exception::raise( 'Invalid relation type ' . $rule . '. ' .
-					'The rule should be one of the following: "' . implode( '", "', $allowed_relations ) . '"' );
-				}
-
-				$parsed_rules['relation'] = $relation;
-				continue;
+				continue; // Skip the relation key as it is already handled above
 			}
 
 			// Check if the rule is valid

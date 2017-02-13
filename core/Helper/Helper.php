@@ -4,6 +4,7 @@ namespace Carbon_Fields\Helper;
 
 use \Carbon_Fields\App;
 use \Carbon_Fields\Datastore\Datastore;
+use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Helper functions and main initialization class.
@@ -209,5 +210,30 @@ class Helper {
 			self::ksort_recursive( $array[ $key ], $sort_flags );
 		}
 		return true;
+	}
+
+	/**
+	 * Get the relation type from an array similar to how meta_query works in WP_Query
+	 * 
+	 * @param array $array
+	 * @param array<string> $allowed_relations
+	 * @param string $relation_key
+	 * @return string
+	 */
+	public static function get_relation_type_from_array( $array, $allowed_relations = array( 'AND', 'OR' ), $relation_key = 'relation' ) {
+		$allowed_relations = array_values( $allowed_relations );
+		$allowed_relations = array_map( 'strtoupper', $allowed_relations );
+		$relation = isset( $allowed_relations[0] ) ? $allowed_relations[0] : '';
+
+		if ( isset( $array[ $relation_key ] ) ) {
+			$relation = strtoupper( $array[ $relation_key ] );
+		}
+
+		if ( ! in_array( $relation, $allowed_relations ) ) {
+			Incorrect_Syntax_Exception::raise( 'Invalid relation type ' . $rule . '. ' .
+			'The rule should be one of the following: "' . implode( '", "', $allowed_relations ) . '"' );
+		}
+
+		return $relation;
 	}
 }

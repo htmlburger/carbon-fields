@@ -3,6 +3,7 @@
 namespace Carbon_Fields\Container;
 
 use Carbon_Fields\Datastore\Datastore;
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class User_Meta_Container extends Container {
@@ -208,27 +209,18 @@ class User_Meta_Container extends Container {
 	 */
 	protected function parse_show_for( $show_for ) {
 		if ( ! is_array( $show_for ) ) {
-			Incorrect_Syntax_Exception::raise( 'Show for argument should be an array.' );
+			Incorrect_Syntax_Exception::raise( 'The argument passed to show_for() must be an array.' );
 		}
 
 		$allowed_relations = array( 'AND', 'OR' );
 
 		$parsed_show_for = array(
-			'relation' => 'AND',
+			'relation' => Helper::get_relation_type_from_array( $show_for ),
 		);
 
 		foreach ( $show_for as $key => $rule ) {
-			// Check if we have a relation key
 			if ( $key === 'relation' ) {
-				$relation = strtoupper( $rule );
-
-				if ( ! in_array( $relation, $allowed_relations ) ) {
-					Incorrect_Syntax_Exception::raise( 'Invalid relation type ' . $rule . '. ' .
-					'The rule should be one of the following: "' . implode( '", "', $allowed_relations ) . '"' );
-				}
-
-				$parsed_show_for['relation'] = $relation;
-				continue;
+				continue; // Skip the relation key as it is already handled above
 			}
 
 			// Check if the rule is valid
