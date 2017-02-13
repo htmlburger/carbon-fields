@@ -5,7 +5,7 @@ namespace Carbon_Fields;
 use \Carbon_Fields\Pimple\Container as PimpleContainer;
 use \Carbon_Fields\Loader\Loader;
 use \Carbon_Fields\Container\Repository as ContainerRepository;
-use \Carbon_Fields\Key_Toolset\Key_Toolset;
+use \Carbon_Fields\Toolset\Key_Toolset;
 use \Carbon_Fields\Service\Template_Service;
 use \Carbon_Fields\Service\Meta_Query_Service;
 use \Carbon_Fields\Service\Legacy_Storage_Service;
