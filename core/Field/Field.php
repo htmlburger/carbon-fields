@@ -809,6 +809,7 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Cleans up an object class for usage as HTML class
 	 *
+	 * @param string $type
 	 * @return string
 	 */
 	protected function clean_type( $type ) {
@@ -826,7 +827,7 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Return an array of html classes to be used for the field container
 	 *
-	 * @return array
+	 * @return array<string>
 	 */
 	public function get_html_class() {
 		$html_classes = array();
