@@ -122,7 +122,7 @@ class Legacy_Storage_Service extends Service {
 	/**
 	 * Get a key-value array of CF 1.5 values for fields in the container of the passed datastore
 	 *
-	 * @param Container $contianer
+	 * @param Container $container
 	 * @param Datastore_Interface $datastore
 	 * @return array
 	 */
