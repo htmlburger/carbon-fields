@@ -153,22 +153,13 @@ class Post_Meta_Container extends Container {
 
 		// Check show on conditions
 		foreach ( $this->settings['show_on'] as $condition => $value ) {
-			if ( is_null( $value ) ) {
+			if ( is_null( $value ) || $condition !== 'page_id' ) {
 				continue;
 			}
 
-			switch ( $condition ) {
-				case 'page_id':
-					if ( $value < 1 || $this->post_id != $value ) {
-						return false;
-					}
-					break;
-				case 'parent_page_id':
-					// Check if such page exists
-					if ( $value < 1 ) {
-						return false;
-					}
-					break;
+			$post = get_post( $this->post_id );
+			if ( ! $this->is_condition_fullfilled( $condition, $value, $post ) ) {
+				return false;
 			}
 		}
 
@@ -182,9 +173,7 @@ class Post_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
-		$valid = true;
-		$post_id = $object_id;
-		$post = get_post( $post_id );
+		$post = get_post( intval( $object_id ) );
 
 		if ( ! $post ) {
 			return false;
@@ -201,96 +190,12 @@ class Post_Meta_Container extends Container {
 				continue;
 			}
 
-			switch ( $condition ) {
-				// show_on_post_format
-				case 'post_formats':
-					if ( empty( $value ) || $post->post_type != 'post' ) {
-						break;
-					}
-
-					$current_format = get_post_format( $post_id );
-					if ( ! in_array( $current_format, $value ) ) {
-						$valid = false;
-						break 2;
-					}
-
-					break;
-
-				// show_on_taxonomy_term or show_on_category
-				case 'category':
-					$this->show_on_category( $value );
-
-					/* fall-through intended */
-				case 'tax_term_id':
-					$current_terms = wp_get_object_terms( $post_id, $this->settings['show_on']['tax_slug'], array( 'fields' => 'ids' ) );
-
-					if ( ! is_array( $current_terms ) || ! in_array( $this->settings['show_on']['tax_term_id'], $current_terms ) ) {
-						$valid = false;
-						break 2;
-					}
-
-					break;
-
-				// show_on_level
-				case 'level_limit':
-					$post_level = count( get_post_ancestors( $post_id ) ) + 1;
-
-					if ( $post_level != $value ) {
-						$valid = false;
-						break 2;
-					}
-
-					break;
-
-				// show_on_page
-				case 'page_id':
-					if ( $post_id != $value ) {
-						$valid = false;
-						break 2;
-					}
-
-					break;
-
-				// show_on_page_children
-				case 'parent_page_id':
-					if ( $post->post_parent != $value ) {
-						$valid = false;
-						break 2;
-					}
-
-					break;
-
-				// show_on_template
-				case 'template_names':
-					if ( empty( $value ) ) {
-						break;
-					}
-					$current_template = get_post_meta( $post_id, '_wp_page_template', 1 );
-
-					if ( ! in_array( $current_template, $value ) ) {
-						$valid = false;
-						break 2;
-					}
-
-					break;
-
-				// hide_on_template
-				case 'not_in_template_names':
-					if ( empty( $value ) ) {
-						break;
-					}
-					$current_template = get_post_meta( $post_id, '_wp_page_template', 1 );
-
-					if ( in_array( $current_template, $value ) ) {
-						$valid = false;
-						break 2;
-					}
-
-					break;
+			if ( ! $this->is_condition_fullfilled( $condition, $value, $post ) ) {
+				return false;
 			}
 		}
 
-		return $valid;
+		return true;
 	}
 
 	/**
@@ -336,6 +241,98 @@ class Post_Meta_Container extends Container {
 	public function set_post_id( $post_id ) {
 		$this->post_id = $post_id;
 		$this->get_datastore()->set_id( $post_id );
+	}
+
+	/**
+	 * CONDITION TOOLS
+	 */
+	
+	protected function is_condition_fullfilled( $condition, $value, $post ) {
+		switch ( $condition ) {
+			// show_on_post_format
+			case 'post_formats':
+				if ( ! $this->condition_is_post_of_format( $post, $value ) ) {
+					return false;
+				}
+				break;
+
+			// show_on_taxonomy_term or show_on_category
+			case 'category':
+				$this->show_on_category( $value );
+
+				/* fall-through intended */
+			case 'tax_term_id':
+				$has_term = has_term(
+					intval( $this->settings['show_on']['tax_term_id'] ),
+					$this->settings['show_on']['tax_slug'],
+					$post->ID
+				);
+				if ( ! $has_term ) {
+					return false;
+				}
+				break;
+
+			// show_on_level
+			case 'level_limit':
+				if ( ! $this->condition_is_post_on_level( $post, $value ) ) {
+					return false;
+				}
+				break;
+
+			// show_on_page
+			case 'page_id':
+				if ( $post->ID !== intval( $value ) ) {
+					return false;
+				}
+				break;
+
+			// show_on_page_children
+			case 'parent_page_id':
+				if ( $post->post_parent !== $value ) {
+					return false;
+				}
+				break;
+
+			// show_on_template
+			case 'template_names':
+				if ( ! empty( $value ) && ! $this->condition_is_post_using_template( $post, $value ) ) {
+					return false;
+				}
+				break;
+
+			// hide_on_template
+			case 'not_in_template_names':
+				if ( ! empty( $value ) && $this->condition_is_post_using_template( $post, $value ) ) {
+					return false;
+				}
+				break;
+		}
+		return true;
+	}
+	
+	protected function condition_is_post_of_format( $post, $format ) {
+		if ( empty( $value ) || $post->post_type !== 'post' ) {
+			return true; // this doesn't make sense - returning true for a post that does not support formats (kept for backwards compatibility)
+		}
+
+		$current_format = get_post_format( $post_id );
+		if ( ! in_array( $current_format, $value ) ) {
+			return false;
+		}
+
+		return true;
+	}
+	
+	protected function condition_is_post_on_level( $post, $level ) {
+		$level = intval( $level );
+		$post_level = count( get_post_ancestors( $post->ID ) ) + 1;
+		return ( $post_level === $value );
+	}
+	
+	protected function condition_is_post_using_template( $post, $templates ) {
+		$templates = is_array( $templates ) ? $templates : array( $templates );
+		$current_template = get_post_meta( $post->ID, '_wp_page_template', true );
+		return in_array( $current_template, $templates );
 	}
 
 	/**
