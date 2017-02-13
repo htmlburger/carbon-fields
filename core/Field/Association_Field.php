@@ -70,10 +70,10 @@ class Association_Field extends Relationship_Field {
 	}
 
 	/**
-	 * Convert a colo:separated:string into it's expected components
+	 * Convert a colon:separated:string into it's expected components
 	 * Used for backwards compatibility to CF 1.5
 	 * 
-	 * @param string $value_string_array
+	 * @param array $value_string_array
 	 * @return array<array>
 	 */
 	protected function value_string_array_to_value_set( $value_string_array ) {
