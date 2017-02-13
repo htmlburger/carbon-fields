@@ -48,7 +48,7 @@ ComplexActions.propTypes = {
  * @param  {Function} props.onButtonClick
  * @return {Function}
  */
-const handleClick = ({ onButtonClick }) => preventDefault(onButtonClick);
+const handleClick = ({ onButtonClick }) => preventDefault(() => onButtonClick());
 
 export default withHandlers({
 	handleClick,
