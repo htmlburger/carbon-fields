@@ -23,10 +23,12 @@ _.noConflict();
  * Abracadabra! Poof! Containers everywhere ...
  */
 _.forEach(getContainers(store.getState()), ({ id, type }) => {
-	ReactDOM.render(
-		<Provider store={store}>
-			{makeContainer(type, { id })}
-		</Provider>,
-		document.querySelector(`.container-${id}`)
-	);
+	if (!_.endsWith(id, '__i__')) {
+		ReactDOM.render(
+			<Provider store={store}>
+				{makeContainer(type, { id })}
+			</Provider>,
+			document.querySelector(`.container-${id}`)
+		);
+	}
 });

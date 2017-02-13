@@ -7,6 +7,7 @@ import { call, put, select } from 'redux-saga/effects';
 /**
  * The internal dependencies.
  */
+import { TYPE_NOW_WIDGETS } from 'lib/constants';
 import { getContainerById } from 'containers/selectors';
 import { setupContainer, setMeta, setUI } from 'containers/actions';
 
@@ -59,8 +60,14 @@ export function* workerToggleMetaBoxVisibility(action) {
  * @return {void}
  */
 export default function* foreman() {
-	yield [
+	const sagas = [
 		takeEvery(setupContainer, workerSetupContainer),
-		takeEvery(setUI, workerToggleMetaBoxVisibility),
 	];
+
+	// We don't need this functionality on the "Widgets" page.
+	if (window.pagenow !== TYPE_NOW_WIDGETS) {
+		sagas.push(takeEvery(setUI, workerToggleMetaBoxVisibility));
+	}
+
+	yield sagas;
 }
