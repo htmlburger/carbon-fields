@@ -44,33 +44,11 @@ class Association_Field extends Relationship_Field {
 	}
 
 	/**
-	 * Load value from datastore
+	 * Alias for $this->value()->set( $value );
 	 **/
-	public function load() {
-		$value = $this->get_value_from_datastore();
+	public function set_value( $value ) {
 		$value = $this->value_string_array_to_value_set( $value );
-		$this->set_value( $value );
-	}
-
-	/**
-	 * Load the field value from an input array based on it's name
-	 *
-	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
-	 **/
-	public function set_value_from_input( $input = null ) {
-		if ( is_null( $input ) ) {
-			$input = $_POST;
-		}
-
-		$value = array();
-		if ( isset( $input[ $this->get_name() ] ) ) {
-			$value = stripslashes_deep( $input[ $this->get_name() ] );
-			if ( is_array( $value ) ) {
-				$value = array_values( $value );
-				$value = $this->value_string_array_to_value_set( $value );
-			}
-		}
-		$this->set_value( $value );
+		parent::set_value( $value );
 	}
 
 	/**
@@ -101,6 +79,12 @@ class Association_Field extends Relationship_Field {
 	protected function value_string_array_to_value_set( $value_string_array ) {
 		$value_set = array();
 		foreach ( $value_string_array as $raw_value_entry ) {
+			if ( is_array( $raw_value_entry ) && isset( $raw_value_entry['type'] ) ) {
+				// array is already in suitable format
+				$value_set[] = $raw_value_entry;
+				continue;
+			}
+
 			$value_string = is_array( $raw_value_entry ) ? $raw_value_entry[ Value_Set::VALUE_PROPERTY ] : $raw_value_entry;
 			$property_array = $this->value_string_to_property_array( $value_string );
 			$value_set[] = $property_array;

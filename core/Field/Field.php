@@ -517,7 +517,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Alias for $this->value()->set( $value );
 	 **/
 	public function set_value( $value ) {
-		return $this->value()->set( $value );
+		$this->value()->set( $value );
 	}
 
 	/**
