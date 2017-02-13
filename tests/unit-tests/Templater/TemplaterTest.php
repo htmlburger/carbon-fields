@@ -1,15 +1,15 @@
 <?php
 
 use \Mockery as M;
-use \Carbon_Fields\Templater\Templater;
+use \Carbon_Fields\Service\Template_Service;
 
 /**
- * @coversDefaultClass \Carbon_Fields\Templater\Templater
+ * @coversDefaultClass \Carbon_Fields\Service\Template_Service
  */
-class TemplaterTest extends WP_UnitTestCase {
+class TemplateServiceTest extends WP_UnitTestCase {
 
 	public function setUp() {
-		$this->subject = new Templater();
+		$this->subject = new Template_Service();
 	}
 
 	public function tearDown() {

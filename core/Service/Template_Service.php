@@ -1,20 +1,27 @@
 <?php
 
-namespace Carbon_Fields\Templater;
+namespace Carbon_Fields\Service;
 
 /**
- * Handles the underscore templates rendering
+ * Handles the underscore template rendering
  *
  **/
-class Templater {
+class Template_Service extends Service {
 
 	protected $templates = array();
 
 	/**
-	 * Hook all templates to the administration footer.
+	 * Enable template rendering
 	 */
-	public function boot() {
+	public function enabled() {
 		add_action( 'admin_footer', array( $this, 'render_templates' ), 999 );
+	}
+
+	/**
+	 * Disable template rendering
+	 */
+	public function disabled() {
+		remove_action( 'admin_footer', array( $this, 'render_templates' ), 999 );
 	}
 
 	/**

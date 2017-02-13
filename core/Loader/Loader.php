@@ -4,7 +4,7 @@ namespace Carbon_Fields\Loader;
 
 use \Carbon_Fields\Pimple\Container as PimpleContainer;
 use \Carbon_Fields\Container\Repository as ContainerRepository;
-use \Carbon_Fields\Templater\Templater;
+use \Carbon_Fields\Service\Template_Service;
 use \Carbon_Fields\Service\Legacy_Storage_Service;
 use \Carbon_Fields\Service\REST_API_Service;
 use \Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
@@ -15,7 +15,7 @@ use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 class Loader {
 
-	protected $templater;
+	protected $template_service;
 
 	protected $sidebar_manager;
 
@@ -25,8 +25,8 @@ class Loader {
 
 	protected $rest_api_service;
 
-	public function __construct( Templater $templater, Sidebar_Manager $sidebar_manager, ContainerRepository $container_repository, Legacy_Storage_Service $legacy_storage_service, REST_API_Service $rest_api_service ) {
-		$this->templater = $templater;
+	public function __construct( Template_Service $template_service, Sidebar_Manager $sidebar_manager, ContainerRepository $container_repository, Legacy_Storage_Service $legacy_storage_service, REST_API_Service $rest_api_service ) {
+		$this->template_service = $template_service;
 		$this->sidebar_manager = $sidebar_manager;
 		$this->container_repository = $container_repository;
 		$this->legacy_storage_service = $legacy_storage_service;
@@ -56,17 +56,17 @@ class Loader {
 		add_action( 'admin_footer', array( $this, 'enqueue_scripts' ), 0 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data_script' ), 9 );
 
-		# Initialize templater
-		$this->templater->boot();
-
-		# Initialize sidebar manager
-		$this->sidebar_manager->boot();
+		# Initialize template service
+		$this->template_service->enable();
 
 		# Enable the legacy storage service
 		$this->legacy_storage_service->enable();
 
 		# Enable the REST API service
 		$this->rest_api_service->enable();
+
+		# Initialize sidebar manager
+		$this->sidebar_manager->boot();
 	}
 
 	/**
@@ -123,7 +123,7 @@ class Loader {
 			$html = ob_get_clean();
 
 			// Add the template to the stack
-			$this->templater->add_template( $name, $html );
+			$this->template_service->add_template( $name, $html );
 		}
 	}
 

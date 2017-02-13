@@ -6,7 +6,7 @@ use \Carbon_Fields\Pimple\Container as PimpleContainer;
 use \Carbon_Fields\Loader\Loader;
 use \Carbon_Fields\Container\Repository as ContainerRepository;
 use \Carbon_Fields\Key_Toolset\Key_Toolset;
-use \Carbon_Fields\Templater\Templater;
+use \Carbon_Fields\Service\Template_Service;
 use \Carbon_Fields\Service\Meta_Query_Service;
 use \Carbon_Fields\Service\Legacy_Storage_Service;
 use \Carbon_Fields\Service\REST_API_Service;
@@ -57,7 +57,7 @@ class App {
 		$ioc = new PimpleContainer();
 
 		$ioc['loader'] = function( $ioc ) {
-			return new Loader( $ioc['templater'], $ioc['sidebar_manager'], $ioc['container_repository'], $ioc['legacy_storage_service'], $ioc['rest_api_service'] );
+			return new Loader( $ioc['template_service'], $ioc['sidebar_manager'], $ioc['container_repository'], $ioc['legacy_storage_service'], $ioc['rest_api_service'] );
 		};
 
 		$ioc['container_repository'] = function() {
@@ -68,8 +68,8 @@ class App {
 			return new Key_Toolset();
 		};
 
-		$ioc['templater'] = function() {
-			return new Templater();
+		$ioc['template_service'] = function() {
+			return new Template_Service();
 		};
 
 		$ioc['sidebar_manager'] = function() {
