@@ -39,11 +39,7 @@ class Meta_Query_Service extends Service {
 	 * Enable meta query filtering
 	 */
 	protected function enabled() {
-		$meta_sql_filter = array( $this, 'filter_get_meta_sql' );
-		if ( has_filter( 'get_meta_sql', $meta_sql_filter ) ) {
-			return; // already enabled
-		}
-		add_filter( 'get_meta_sql', $meta_sql_filter, 10, 1 );
+		add_filter( 'get_meta_sql', array( $this, 'filter_get_meta_sql' ), 10, 1 );
 
 		add_action( 'pre_get_posts', array( $this, 'hook_pre_get_posts' ) );
 		add_action( 'pre_get_terms', array( $this, 'hook_pre_get_terms' ) );
