@@ -834,8 +834,6 @@ window.carbon = window.carbon || {};
 			var $field = this.$field = this.$('input.carbon-color-field');
 			var color = this.model.get('value');
 
-			_this.setColor(color);
-
 			$field.iris({
 				palettes: true,
 				change: function(event, ui) {
@@ -846,6 +844,8 @@ window.carbon = window.carbon || {};
 			$field.on('change', function() {
 				_this.setColor( $(this).val() );
 			});
+
+			_this.setColor(color);
 		},
 
 		setColor: function(color) {
