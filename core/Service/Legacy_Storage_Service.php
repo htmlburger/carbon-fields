@@ -121,85 +121,96 @@ class Legacy_Storage_Service extends Service {
 
 	/**
 	 * Get a key-value array of CF 1.5 values for fields in the container of the passed datastore
+	 *
+	 * @param Container $contianer
+	 * @param Datastore_Interface $datastore
+	 * @return array
+	 */
+	protected function get_legacy_storage_array( Container $container, Datastore_Interface $datastore ) {
+		global $wpdb;
+
+		$prefix = '_';
+		$table_name = '';
+		$table_id_column = '';
+		$table_key_column = '';
+		$table_value_column = '';
+
+		if ( is_a( $datastore, '\\Carbon_Fields\\Datastore\\Theme_Options_Datastore' ) ) {
+			$prefix = '';
+			$table_name = $wpdb->options;
+			$table_key_column = 'option_name';
+			$table_value_column = 'option_value';
+		} else if ( is_a( $datastore, '\\Carbon_Fields\\Datastore\\Meta_Datastore' ) ) {
+			$table_name = $datastore->get_table_name();
+			$table_id_column = $datastore->get_table_field_name();
+			$table_key_column = 'meta_key';
+			$table_value_column = 'meta_value';
+		}
+
+		if ( $table_id_column && ! $datastore->get_id() ) {
+			return array(); // we are in a "create" view where we do not have an id (e.g. term meta)
+		}
+
+		$comparisons = array();
+		$container_fields = $container->get_fields();
+		foreach ( $container_fields as $field ) {
+			$field_key_pattern = $prefix . $field->get_base_name();
+
+			if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
+				$groups = $field->get_group_names();
+				foreach ( $groups as $group_name ) {
+					$underscored_group_name = ( substr( $group_name, 0, 1 ) === '_' ? $group_name : '_' . $group_name );
+					$comparisons[] = ' `' . $table_key_column . '` LIKE "' . esc_sql( $field_key_pattern . $underscored_group_name . '-' ) . '%" ';
+				}
+			} else {
+				$comparisons[] = ' `' . $table_key_column . '` = "' . esc_sql( $field_key_pattern ) . '" ';
+
+				if ( is_a( $field, '\\Carbon_Fields\\Field\\Map_Field' ) ) {
+					foreach ( $this->map_keys as $mk ) {
+						$comparisons[] = ' `' . $table_key_column . '` = "' . esc_sql( $field_key_pattern . '-' . $mk ) . '" ';
+					}
+				}
+			}
+		}
+
+		if ( empty( $comparisons ) ) {
+			return array(); // no comparisons to fetch with
+		}
+
+		$where_clause = ' ( ' . implode( ' OR ', $comparisons ) . ' ) ';
+		if ( $table_id_column ) {
+			$where_clause = ' `' . $table_id_column . '` = ' . $datastore->get_id() . ' AND ' . $where_clause;
+		}
+		$query = '
+			SELECT `' . $table_key_column . '` AS `key`, `' . $table_value_column . '` AS `value`
+			FROM `' . $table_name . '`
+			WHERE ' . $where_clause . '
+		';
+
+		$raw_results = $wpdb->get_results( $query );
+
+		$results = array();
+		foreach ( $raw_results as $result ) {
+			$results[ $result->key ] = $result->value;
+		}
+
+		return $results;
+	}
+
+	/**
+	 * Get a key-value array of CF 1.5 values for fields in the container of the passed datastore
 	 * 
 	 * @param  Datastore_Interface $datastore
 	 * @return array
 	 */
-	protected function get_legacy_storage_array( Datastore_Interface $datastore ) {
-		global $wpdb;
-
+	protected function get_legacy_storage_array_from_cache( Datastore_Interface $datastore ) {
 		$container = $this->get_container_for_datastore( $datastore );
 		if ( ! $container ) {
 			return array(); // unhandled datastore type or no registered containers
 		}
 
 		if ( ! isset( $this->storage_array_cache[ $container->id ] ) ) {
-			$prefix = '_';
-			$table_name = '';
-			$table_id_column = '';
-			$table_key_column = '';
-			$table_value_column = '';
-
-			if ( is_a( $datastore, '\\Carbon_Fields\\Datastore\\Theme_Options_Datastore' ) ) {
-				$prefix = '';
-				$table_name = $wpdb->options;
-				$table_key_column = 'option_name';
-				$table_value_column = 'option_value';
-			} else if ( is_a( $datastore, '\\Carbon_Fields\\Datastore\\Meta_Datastore' ) ) {
-				$table_name = $datastore->get_table_name();
-				$table_id_column = $datastore->get_table_field_name();
-				$table_key_column = 'meta_key';
-				$table_value_column = 'meta_value';
-			}
-
-			if ( $table_id_column && ! $datastore->get_id() ) {
-				return array(); // we are in a "create" view where we do not have an id (e.g. term meta)
-			}
-
-			$comparisons = array();
-			$container_fields = $container->get_fields();
-			foreach ( $container_fields as $field ) {
-				$field_key_pattern = $prefix . $field->get_base_name();
-
-				if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
-					$groups = $field->get_group_names();
-					foreach ( $groups as $group_name ) {
-						$underscored_group_name = ( substr( $group_name, 0, 1 ) === '_' ? $group_name : '_' . $group_name );
-						$comparisons[] = ' `' . $table_key_column . '` LIKE "' . esc_sql( $field_key_pattern . $underscored_group_name . '-' ) . '%" ';
-					}
-				} else {
-					$comparisons[] = ' `' . $table_key_column . '` = "' . esc_sql( $field_key_pattern ) . '" ';
-
-					if ( is_a( $field, '\\Carbon_Fields\\Field\\Map_Field' ) ) {
-						foreach ( $this->map_keys as $mk ) {
-							$comparisons[] = ' `' . $table_key_column . '` = "' . esc_sql( $field_key_pattern . '-' . $mk ) . '" ';
-						}
-					}
-				}
-			}
-
-			if ( empty( $comparisons ) ) {
-				return array(); // no comparisons to fetch with
-			}
-
-			$where_clause = ' ( ' . implode( ' OR ', $comparisons ) . ' ) ';
-			if ( $table_id_column ) {
-				$where_clause = ' `' . $table_id_column . '` = ' . $datastore->get_id() . ' AND ' . $where_clause;
-			}
-			$query = '
-				SELECT `' . $table_key_column . '` AS `key`, `' . $table_value_column . '` AS `value`
-				FROM `' . $table_name . '`
-				WHERE ' . $where_clause . '
-			';
-
-			$raw_results = $wpdb->get_results( $query );
-
-			$results = array();
-			foreach ( $raw_results as $result ) {
-				$results[ $result->key ] = $result->value;
-			}
-
-			$this->storage_array_cache[ $container->id ] = $results;
+			$this->storage_array_cache[ $container->id ] = $this->get_legacy_storage_array( $container, $datastore );
 		}
 
 		return $this->storage_array_cache[ $container->id ];
@@ -371,7 +382,7 @@ class Legacy_Storage_Service extends Service {
 	 * @return array
 	 */
 	protected function get_storage_array_for_datastore( Datastore_Interface $datastore ) {
-		$legacy_storage_array = $this->get_legacy_storage_array( $datastore );
+		$legacy_storage_array = $this->get_legacy_storage_array_from_cache( $datastore );
 		if ( empty( $legacy_storage_array ) ) {
 			return array(); // no migration data found
 		}
