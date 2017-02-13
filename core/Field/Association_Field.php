@@ -39,7 +39,7 @@ class Association_Field extends Relationship_Field {
 	 * @param string $label Field label
 	 */
 	protected function __construct( $name, $label ) {
-		$this->value = new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'type'=>'', 'subtype'=>'', 'object_id'=>0 ) );
+		$this->value = new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'type' => '', 'subtype' => '', 'object_id' => 0 ) );
 		Field::__construct( $name, $label );
 	}
 
@@ -73,19 +73,23 @@ class Association_Field extends Relationship_Field {
 	 * Convert a colo:separated:string into it's expected components
 	 * Used for backwards compatibility to CF 1.5
 	 * 
-	 * @param string $value_string
+	 * @param string $value_string_array
 	 * @return array<array>
 	 */
 	protected function value_string_array_to_value_set( $value_string_array ) {
 		$value_set = array();
 		foreach ( $value_string_array as $raw_value_entry ) {
-			if ( is_array( $raw_value_entry ) && isset( $raw_value_entry['type'] ) ) {
-				// array is already in suitable format
-				$value_set[] = $raw_value_entry;
-				continue;
+			$value_string = $raw_value_entry;
+
+			if ( is_array( $raw_value_entry ) ) {
+				if ( isset( $raw_value_entry['type'] ) ) {
+					// array is already in suitable format
+					$value_set[] = $raw_value_entry;
+					continue;
+				}
+				$value_string = $raw_value_entry[ Value_Set::VALUE_PROPERTY ];
 			}
 
-			$value_string = is_array( $raw_value_entry ) ? $raw_value_entry[ Value_Set::VALUE_PROPERTY ] : $raw_value_entry;
 			$property_array = $this->value_string_to_property_array( $value_string );
 			$value_set[] = $property_array;
 		}
