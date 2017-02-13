@@ -40,12 +40,12 @@ class Sidebar_Manager {
 
 		$action = isset( $_POST['action'] ) ? $_POST['action'] : '';
 		$name = isset( $_POST['name'] ) ? $_POST['name'] : '';
-		$result = false;
 
 		if ( empty( $action ) || empty( $name ) ) {
 			return false;
 		}
 
+		$result = false;
 		switch ( $action ) {
 			case 'carbon_add_sidebar':
 				$result = $this->add_sidebar( $name );
