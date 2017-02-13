@@ -230,7 +230,7 @@ class Helper {
 		}
 
 		if ( ! in_array( $relation, $allowed_relations ) ) {
-			Incorrect_Syntax_Exception::raise( 'Invalid relation type ' . $rule . '. ' .
+			Incorrect_Syntax_Exception::raise( 'Invalid relation type ' . $relation . '. ' .
 			'The rule should be one of the following: "' . implode( '", "', $allowed_relations ) . '"' );
 		}
 
