@@ -321,6 +321,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		if ( call_user_func_array( array( $this, 'is_valid_attach' ), $param ) ) {
 			call_user_func_array( array( $this, 'attach' ), $param );
 
+			// Allow containers to activate but not load (useful in cases such as theme options)
 			if ( call_user_func_array( array( $this, 'is_active' ), $param ) ) {
 				$this->activate();
 
