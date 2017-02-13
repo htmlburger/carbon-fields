@@ -7,7 +7,7 @@ import { call, put, select } from 'redux-saga/effects';
 /**
  * The internal dependencies.
  */
-import { TYPE_NOW_PAGE } from 'lib/constants';
+import { TYPE_NOW_WIDGETS, TYPE_NOW_MENUS } from 'lib/constants';
 import { getContainerById } from 'containers/selectors';
 import { setupContainer, setMeta, setUI } from 'containers/actions';
 
@@ -65,7 +65,7 @@ export default function* foreman() {
 	];
 
 	// We don't need this functionality on "Widgets" or "Menus" pages.
-	if (window.pagenow === TYPE_NOW_PAGE) {
+	if (window.pagenow !== TYPE_NOW_WIDGETS && window.pagenow !== TYPE_NOW_MENUS) {
 		sagas.push(takeEvery(setUI, workerToggleMetaBoxVisibility));
 	}
 
