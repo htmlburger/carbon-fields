@@ -30,10 +30,10 @@ import withSetup from 'fields/decorators/with-setup';
 export const ColorField = ({ name, field, pickerVisible, handleChange, showPicker, hidePicker }) => {
 	return <Field field={field}>
 		<div className="carbon-color">
-			<span className="pickcolor button carbon-color-button hide-if-no-js">
+			<span className="pickcolor button carbon-color-button hide-if-no-js" onClick={showPicker}>
 				<span className="carbon-color-preview" style={{ backgroundColor: field.value }}></span>
 
-				<span className="carbon-color-button-text" onClick={showPicker}>Select a Color</span>
+				<span className="carbon-color-button-text">Select a Color</span>
 			</span>
 
 			<Colorpicker
