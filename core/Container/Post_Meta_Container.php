@@ -319,7 +319,7 @@ class Post_Meta_Container extends Container {
 	}
 	
 	/**
-	 * Check if a post if of a given post format
+	 * Check if a post is of a given post format
 	 * 
 	 * @param WP_Post $post
 	 * @param string $format
@@ -352,7 +352,7 @@ class Post_Meta_Container extends Container {
 	}
 	
 	/**
-	 * Check if a post uses one of the passed templates
+	 * Check if a post uses one of a given array of templates
 	 * 
 	 * @param WP_Post $post
 	 * @param string|array<string> $templates
