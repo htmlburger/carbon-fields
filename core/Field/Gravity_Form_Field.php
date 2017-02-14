@@ -87,5 +87,13 @@ class Gravity_Form_Field extends Select_Field {
 		}
 
 		parent::template();
+		
+		?>
+		<# if (value) { #>
+		<p class="helper-link">
+			<a href="admin.php?page=gf_edit_forms&id={{{ value }}}">Edit form</a>
+		</p>
+		<# } #>
+		<?php
 	}
 }
