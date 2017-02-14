@@ -91,7 +91,7 @@ class Gravity_Form_Field extends Select_Field {
 		?>
 		<# if (value) { #>
 		<p class="helper-link">
-			<a href="admin.php?page=gf_edit_forms&id={{{ value }}}">Edit form</a>
+			<a href="admin.php?page=gf_edit_forms&amp;id={{{ value }}}">Edit form</a>
 		</p>
 		<# } #>
 		<?php
