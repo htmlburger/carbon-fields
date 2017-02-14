@@ -929,7 +929,53 @@ window.carbon = window.carbon || {};
 	 *------------------------------------------------------------------------*/
 
 	// Gravity Form MODEL
-	carbon.fields.Model.GravityForm = carbon.fields.Model.Select.extend();
+	carbon.fields.Model.GravityForm = carbon.fields.Model.Select.extend({
+		initialize: function () {
+			carbon.fields.Model.Select.prototype.initialize.apply(this);
+		},
+	});
+	
+	// Gravity Form VIEW
+	carbon.fields.View.GravityForm = carbon.fields.View.extend({
+		events: _.extend({}, carbon.fields.View.prototype.events, {
+			'change select': 'updateEditLink'
+		}),
+
+		initialize: function() {
+			carbon.fields.View.prototype.initialize.apply(this);
+			
+			var label = this.getLabelByValue(this.model.get('value'));
+			
+			this.model.set('valueLabel', label);
+		},
+
+		updateEditLink: function () {
+			var model = this.model;
+			var $select = this.$('select');
+			var label = this.getLabelByValue($select.val());
+			
+			model.set('value', $select.val());
+			model.set('valueLabel', label);
+			
+			this.sync();
+			
+			console.log(model);
+		},
+		
+		getLabelByValue: function (val) {
+			var label = ''; // empty by default
+			
+			var option = _.find(this.model.get('options'), function (opt) {
+				return opt.value == val;
+			});
+			
+			if (typeof(option) !== 'undefined') {
+				label = option.name;
+			}
+			
+			return label;
+		}
+	});
 
 	/*--------------------------------------------------------------------------
 	 * SIDEBAR
