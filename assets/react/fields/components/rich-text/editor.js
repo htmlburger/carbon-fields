@@ -18,6 +18,16 @@ class RichTextEditor extends React.Component {
 	}
 
 	/**
+	 * Lifecycle hook.
+	 *
+	 * @param  {Object} nextProps
+	 * @return {void}
+	 */
+	componentWillReceiveProps(nextProps) {
+		this.renderEditor(nextProps);
+	}
+
+	/**
 	 * Render an empty `div` that will act as a placeholder.
 	 *
 	 * @return {React.Element}
