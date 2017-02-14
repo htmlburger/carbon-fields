@@ -25,6 +25,8 @@ import {
 	removeComplexGroup
 } from 'fields/actions';
 
+import { TYPE_COMPLEX } from 'fields/constants';
+
 /**
  * Prepare a clone or a new instance of the specified group.
  *
@@ -94,8 +96,7 @@ function collectFieldIds(roots, all, accumulator) {
 	roots.forEach((field) => {
 		accumulator.push(field.id);
 
-		// TODO: Use a constant for the type.
-		if (field.type === 'Complex') {
+		if (field.type === TYPE_COMPLEX) {
 			all[field.id].value.forEach((group) => {
 				collectFieldIds(group.fields, all, accumulator);
 			});

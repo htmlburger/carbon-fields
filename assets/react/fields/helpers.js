@@ -4,6 +4,11 @@
 import { pick, merge, uniqueId, isNull } from 'lodash';
 
 /**
+ * The internal dependencies.
+ */
+import { TYPE_COMPLEX } from 'fields/constants';
+
+/**
  * Get the thumbnail of the attachment.
  *
  * @param  {Object} attachment
@@ -35,7 +40,7 @@ export function flattenField(field, parent, accumulator) {
 
 	// The complex field represents a nested structure
 	// of fields. We need to flatten them as well.
-	if (type === 'Complex') {
+	if (type === TYPE_COMPLEX) {
 		value.forEach((group, index) => {
 			addComplexGroupIdentifiers(field, group, index);
 			flattenComplexGroupFields(group, accumulator);
@@ -101,7 +106,7 @@ export function restoreField(field, all) {
 
 	// The complex field represents a tree struture so we need
 	// to restore all fields recursively.
-	if (field.type === 'Complex') {
+	if (field.type === TYPE_COMPLEX) {
 		field.value = field.value.map((group) => {
 			group.fields = group.fields.map(field => restoreField(field, all));
 

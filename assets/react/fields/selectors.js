@@ -8,6 +8,7 @@ import { get, map, filter, keyBy, mapValues } from 'lodash';
  * The internal dependencies.
  */
 import { getSidebars } from 'sidebars/selectors';
+import { TYPE_COMPLEX } from 'fields/constants';
 
 /**
  * Return the object that contains all fields.
@@ -57,7 +58,7 @@ export const getFieldsByRoots = (state, roots) => {
 		roots.forEach(field => {
 			accumulator.push(field.id);
 
-			if (field.type === 'Complex') {
+			if (field.type === TYPE_COMPLEX) {
 				fields[field.id].value.forEach(group => walk(group.fields, accumulator));
 			}
 		});
