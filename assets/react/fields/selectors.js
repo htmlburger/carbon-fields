@@ -43,6 +43,32 @@ export const makeGetFieldsByParent = parentId => createSelector(getAll, fields =
 export const isFieldTabbed = createSelector(getFieldById, field => field.layout && field.layout.indexOf('tabbed') > -1);
 
 /**
+ * Get all fields that are associated with the specified roots.
+ *
+ * @param  {Object}   state
+ * @param  {String[]} roots
+ * @return {String[]}
+ */
+export const getFieldsByRoots = (state, roots) => {
+	const fields = getAll(state);
+	const ids = [];
+
+	const walk = (roots, accumulator) => {
+		roots.forEach(field => {
+			accumulator.push(field.id);
+
+			if (field.type === 'Complex') {
+				fields[field.id].value.forEach(group => walk(group.fields, accumulator));
+			}
+		});
+	};
+
+	walk(roots, ids);
+
+	return ids;
+};
+
+/**
  * Generate the list of options used by the field.
  * Use a factory function to achieve correct memoization
  * of the result.

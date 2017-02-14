@@ -25,7 +25,7 @@ export function createChannel(selector, event, handler, childSelector = null) {
 			$element.off(event, childSelector, handler);
 		};
 
-		// Close the channel since the element doesn't exists.
+		// Close the channel since the element doesn't exist.
 		if (!$element.length) {
 			emit(END);
 			return unsubscribe;
@@ -127,7 +127,7 @@ export function createMediaBrowserChannel(settings) {
 
 /**
  * Create a channel that will intercept all AJAX success events
- * for the specified event.
+ * for the specified action.
  *
  * @param  {String} action
  * @return {Object}
@@ -153,6 +153,68 @@ export function createAjaxSuccessChannel(action) {
 
 		// Setup the subscription.
 		$(document).on('ajaxSuccess', handler);
+
+		return unsubscribe;
+	}, buffers.fixed(1));
+}
+
+/**
+ * Create a channel that will intercept all occurences
+ * of the specified AJAX action.
+ *
+ * @param  {String} event
+ * @param  {String} action
+ * @return {Object}
+ */
+export function createAjaxChannel(event, action) {
+	return eventChannel((emit) => {
+		// Emit the AJAX event through the channel.
+		const handler = (event, xhr, settings, data) => {
+			if (isString(settings.data) && settings.data.indexOf(action) > -1) {
+				emit({
+					event,
+					xhr,
+					settings,
+					data,
+				});
+			}
+		};
+
+		// Cancel the subscription.
+		const unsubscribe = () => {
+			$(document).off(event, handler);
+		};
+
+		// Setup the subscription.
+		$(document).on(event, handler);
+
+		return unsubscribe;
+	}, buffers.fixed(1));
+}
+
+/**
+ * Create a channel that will intercept all `widget-added` & `widget-updated` events
+ * from `Widgets` page.
+ *
+ * @return {Object}
+ */
+export function createWidgetsChannel() {
+	return eventChannel((emit) => {
+		// Emit the event through the channel.
+		const handler = (event, widget) => {
+			emit({
+				event,
+				widget,
+			});
+		};
+
+		// Cancel the subscription.
+		const unsubscribe = () => {
+			$(document).off('widget-added widget-updated', handler);
+		};
+
+		// Setup the subscription.
+		$(document).on('widget-added widget-updated', handler);
 
 		return unsubscribe;
 	}, buffers.fixed(1));

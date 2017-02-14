@@ -48,3 +48,11 @@ export const checkVisibility = createAction('containers/CHECK_VISIBILITY');
  * @return {Object}
  */
 export const addContainer = createAction('containers/ADD_CONTAINER');
+
+/**
+ * Remove the container from the store.
+ *
+ * @param  {Object} containerId
+ * @return {Object}
+ */
+export const removeContainer = createAction('containers/REMOVE_CONTAINER');
