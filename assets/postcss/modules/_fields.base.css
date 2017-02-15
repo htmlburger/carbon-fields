@@ -3,16 +3,13 @@
 \* ------------------------------------------------------------ */
 
 .carbon-field { padding: 10px 12px 16px; margin: 0; }
-.carbon-field .help-text,
-.carbon-field .helper-link { padding-top: 3px; font-style: normal; }
-.carbon-field .help-text { color: #767a7f; font-size: 12px; }
-.carbon-field .helper-link { padding-left: 2px; }
+.carbon-field .help-text { padding-top: 3px; font-style: normal; color: #767a7f; font-size: 12px; }
 
 .carbon-field label { padding: 0 0 8px; font-weight: 600; }
 .carbon-field input[type="text"],
 .carbon-field input[type="number"],
 .carbon-field textarea { display: block; padding: 4px 5px 3px; width: 100%; resize: vertical; }
-.carbon-field select { width: 100%; }
+.carbon-field select { width: 100%; margin: 0 1px;  }
 
 .carbon-field .multiple-groups { margin-top: 6px; }
 .carbon-field .carbon-required { color: $color-state-error; }
@@ -57,6 +54,8 @@
 	.carbon-field input[type="number"],
 	.carbon-field textarea,
 	.carbon-field select { padding: 7px 10px; font-size: 16px; line-height: 1.5; }
+	
+	#wpbody .carbon-field select { height: 40px; }
 
 	.carbon-field .carbon-field-group-button .button { height: 39px; line-height: 27px; }
 
@@ -65,5 +64,6 @@
 }
 
 @media screen and (min-width: $breakpoint-tablet-min) {
-	.carbon-field .carbon-field-group-input { height: 26px; }
+	.carbon-field .carbon-field-group-input,
+	.carbon-field select { height: 26px; }
 }

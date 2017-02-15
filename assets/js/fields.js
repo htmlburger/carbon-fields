@@ -939,34 +939,7 @@ window.carbon = window.carbon || {};
 	carbon.fields.View.GravityForm = carbon.fields.View.extend({
 		initialize: function() {
 			carbon.fields.View.prototype.initialize.apply(this);
-			this.listenTo(this.model, 'change:value', this.updateEditLink);
-			
-			var label = this.getLabelByValue(this.model.get('value'));
-			
-			this.model.set('valueLabel', label);
-		},
-
-		updateEditLink: function () {
-			var model = this.model;
-			var $select = this.$('select');
-			var label = this.getLabelByValue($select.val());
-			
-			model.set('valueLabel', label);
-			this.render();
-		},
-		
-		getLabelByValue: function (val) {
-			var label = ''; // empty by default
-			
-			var option = _.find(this.model.get('options'), function (opt) {
-				return opt.value == val;
-			});
-			
-			if (typeof(option) !== 'undefined') {
-				label = option.name;
-			}
-			
-			return label;
+			this.listenTo(this.model, 'change:value', this.render);
 		}
 	});
 
