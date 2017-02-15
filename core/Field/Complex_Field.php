@@ -200,7 +200,7 @@ class Complex_Field extends Field {
 	 * @param Field $field
 	 * @param Field $parent_field
 	 * @param int $entry_index
-	 * @return bool
+	 * @return Field
 	 **/
 	public function get_clone_under_field_in_hierarchy( $field, $parent_field, $entry_index = 0 ) {
 		$clone = clone $field;
