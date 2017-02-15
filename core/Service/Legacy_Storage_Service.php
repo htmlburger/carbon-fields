@@ -249,11 +249,8 @@ class Legacy_Storage_Service extends Service {
 		$matched_fields = array();
 		foreach ( $key_pieces as $piece ) {
 			foreach ( $field_group_level as $permutation ) {
-				$match_regex = '';
-
-				if ( $permutation['group'] === '' ) {
-					$match_regex = '/\A_?' . preg_quote( $permutation['field'], '/' ) . '(?:_(?P<group_index>\d+))?\z/';
-				} else {
+				$match_regex = '/\A_?' . preg_quote( $permutation['field'], '/' ) . '(?:_(?P<group_index>\d+))?\z/';
+				if ( $permutation['group'] !== '' ) {
 					$legacy_group_name = ( $permutation['group'] === '_' ) ? $permutation['group'] : '_' . $permutation['group'];
 					$match_regex = '/\A_?' . preg_quote( $permutation['field'], '/' ) . '(?:_(?P<group_index>\d+))?' . preg_quote( $legacy_group_name, '/' ) . '\z/';
 				}
