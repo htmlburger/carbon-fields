@@ -87,22 +87,15 @@ class Map_Field extends Field {
 			'address' => '',
 		);
 
-		if ( isset( $input[ $this->get_name() ]['lat'] ) ) {
-			$value_set['lat'] = (float) $input[ $this->get_name() ]['lat'];
+		foreach ( $value_set as $key => $v ) {
+			if ( isset( $input[ $this->get_name() ][ $key ] ) ) {
+				$value_set[ $key ] = $input[ $this->get_name() ][ $key ];
+			}
 		}
 
-		if ( isset( $input[ $this->get_name() ]['lng'] ) ) {
-			$value_set['lng'] = (float) $input[ $this->get_name() ]['lng'];
-		}
-
-		if ( isset( $input[ $this->get_name() ]['zoom'] ) ) {
-			$value_set['zoom'] = (int) $input[ $this->get_name() ]['zoom'];
-		}
-
-		if ( isset( $input[ $this->get_name() ]['address'] ) ) {
-			$value_set['address'] = $input[ $this->get_name() ]['address'];
-		}
-
+		$value_set['lat'] = (float) $value_set['lat'];
+		$value_set['lng'] = (float) $value_set['lng'];
+		$value_set['zoom'] = (int) $value_set['zoom'];
 		$value_set[ Value_Set::VALUE_PROPERTY ] = $this->lat_lng_to_latlng( $value_set['lat'], $value_set['lng'] );
 
 		$this->set_value( $value_set );
