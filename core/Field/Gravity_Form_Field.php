@@ -89,9 +89,9 @@ class Gravity_Form_Field extends Select_Field {
 		parent::template();
 		
 		?>
-		<# if (value) { #>
+		<# if (parseInt(value) !== 0) { #>
 		<p class="helper-link">
-			<a href="admin.php?page=gf_edit_forms&amp;id={{{ value }}}">Edit {{{ valueLabel }}}</a>
+			<a href="admin.php?page=gf_edit_forms&amp;id={{{ value }}}" target="_blank">Edit {{{ valueLabel }}}</a>
 		</p>
 		<# } #>
 		<?php
