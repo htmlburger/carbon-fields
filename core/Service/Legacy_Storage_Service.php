@@ -217,6 +217,20 @@ class Legacy_Storage_Service extends Service {
 	}
 
 	/**
+	 * Check if a key is a legacy map property key
+	 *
+	 * @param string $key
+	 * @return bool
+	 */
+	protected function is_legacy_map_key( $key ) {
+		$map_regex = array_map( function( $map_key ) {
+			return preg_quote( $map_key, '/' );
+		}, $this->map_keys );
+		$map_regex = '/-(' . implode( '|', $map_regex ) . ')$/';
+		return preg_match( $map_regex, $key );
+	}
+
+	/**
 	 * Convert old storage row to value descriptor
 	 * 
 	 * @param  array $field_group_permutations
@@ -226,12 +240,7 @@ class Legacy_Storage_Service extends Service {
 	 * @return array
 	 */
 	protected function legacy_storage_row_to_value_descriptor( $field_group_permutations, $key, $value, $all_rows ) {
-		$map_regex = array_map( function( $key ) {
-			return preg_quote( $key, '/' );
-		}, $this->map_keys );
-		$map_regex = '/-(' . implode( '|', $map_regex ) . ')$/';
-
-		if ( preg_match( $map_regex, $key ) ) {
+		if ( $this->is_legacy_map_key( $key ) ) {
 			return array();
 		}
 
@@ -239,44 +248,33 @@ class Legacy_Storage_Service extends Service {
 		$field_group_level = $field_group_permutations;
 		$matched_fields = array();
 		foreach ( $key_pieces as $piece ) {
-			$match_data = array();
 			foreach ( $field_group_level as $permutation ) {
+				$match_regex = '';
+
 				if ( $permutation['group'] === '' ) {
-					$regex = '/\A_?' . preg_quote( $permutation['field'], '/' ) . '(?:_(?P<group_index>\d+))?\z/';
-					$matches = array();
-					if ( preg_match( $regex, $piece, $matches ) ) {
-						$match_data = array(
-							'field' => $permutation['field'],
-							'group' => '',
-							'group_index' => ( isset( $matches['group_index'] ) ? intval( $matches['group_index'] ) : -1 ),
-						);
-					}
+					$match_regex = '/\A_?' . preg_quote( $permutation['field'], '/' ) . '(?:_(?P<group_index>\d+))?\z/';
 				} else {
 					$legacy_group_name = ( $permutation['group'] === '_' ) ? $permutation['group'] : '_' . $permutation['group'];
-					$regex = '/\A_?' . preg_quote( $permutation['field'], '/' ) . '(?:_(?P<group_index>\d+))?' . preg_quote( $legacy_group_name, '/' ) . '\z/';
-					$matches = array();
-					if ( preg_match( $regex, $piece, $matches ) ) {
-						$match_data = array(
-							'field' => $permutation['field'],
-							'group' => $permutation['group'],
-							'group_index' => ( isset( $matches['group_index'] ) ? intval( $matches['group_index'] ) : -1 ),
-						);
-					}
+					$match_regex = '/\A_?' . preg_quote( $permutation['field'], '/' ) . '(?:_(?P<group_index>\d+))?' . preg_quote( $legacy_group_name, '/' ) . '\z/';
 				}
 
-				if ( ! empty( $match_data ) ) {
+				$matches = array();
+				if ( preg_match( $match_regex, $piece, $matches ) ) {
+					$match_data = array(
+						'field' => $permutation['field'],
+						'group' => $permutation['group'],
+						'group_index' => ( isset( $matches['group_index'] ) ? intval( $matches['group_index'] ) : -1 ),
+					);
 					$field_group_level = $permutation['children'];
+
+					$previous_match_index = count( $matched_fields ) - 1;
+					if ( isset( $matched_fields[ $previous_match_index ] ) ) {
+						$matched_fields[ $previous_match_index ]['group_index'] = $match_data['group_index']; // indexes are offset in CF 1.5 complex keys
+						$match_data['group_index'] = 0;
+					}
+					$matched_fields[] = $match_data;
 					break;
 				}
-			}
-
-			if ( ! empty( $match_data ) ) {
-				$previous_match_index = count( $matched_fields ) - 1;
-				if ( isset( $matched_fields[ $previous_match_index ] ) ) {
-					$matched_fields[ $previous_match_index ]['group_index'] = $match_data['group_index']; // indexes are offset in CF 1.5 complex keys
-					$match_data['group_index'] = 0;
-				}
-				$matched_fields[] = $match_data;
 			}
 		}
 
