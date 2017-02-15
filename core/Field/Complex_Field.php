@@ -88,7 +88,7 @@ class Complex_Field extends Field {
 	public function add_fields() {
 		$argv = func_get_args();
 		$argc = count( $argv );
-		$fields = array();
+		$fields = $argv[ $argc - 1 ];
 		$name = '';
 		$label = null;
 
@@ -100,7 +100,6 @@ class Complex_Field extends Field {
 			$label = $argv[1];
 		}
 
-		$fields = $argv[ $argc - 1 ];
 		$name = ! empty( $name ) ? $name : Group_Field::DEFAULT_GROUP_NAME;
 
 		if ( array_key_exists( $name, $this->groups ) ) {
