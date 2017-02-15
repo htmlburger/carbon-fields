@@ -267,32 +267,36 @@ class Complex_Field extends Field {
 	protected function get_prefilled_field_groups( $value_tree ) {
 		$fields = array();
 
-		if ( ! empty( $value_tree ) ) {
-			foreach ( $value_tree['value_set'] as $entry_index => $value ) {
-				$group_name = $value[ Value_Set::VALUE_PROPERTY ];
-				$group = $this->get_group_by_name( $group_name );
-				$group_fields = $group->get_fields();
-				$fields[ $entry_index ] = array(
-					static::GROUP_TYPE_KEY => $group->get_name(),
-				);
-				$group_values = array();
-				if ( isset( $value_tree['groups'][ $entry_index ] ) ) {
-					$group_values = $value_tree['groups'][ $entry_index ];
-				}
+		if ( empty( $value_tree ) ) {
+			return $fields;
+		}
 
-				foreach ( $group_fields as $field ) {
-					$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $entry_index );
-					if ( isset( $group_values[ $clone->get_base_name() ] ) ) {
-						$value = isset( $group_values[ $clone->get_base_name() ]['value_set'] ) ? $group_values[ $clone->get_base_name() ]['value_set'] : null;
-						if ( $value ) {
-							$clone->set_value( $group_values[ $clone->get_base_name() ]['value_set'] );
-						}
-						if ( is_a( $clone, get_class() ) ) {
-							$clone->set_value_tree( $group_values[ $clone->get_base_name() ] );
-						}
+		foreach ( $value_tree['value_set'] as $entry_index => $value ) {
+			$group_name = $value[ Value_Set::VALUE_PROPERTY ];
+			$group = $this->get_group_by_name( $group_name );
+			$group_fields = $group->get_fields();
+			$fields[ $entry_index ] = array(
+				static::GROUP_TYPE_KEY => $group->get_name(),
+			);
+			$group_values = array();
+			if ( isset( $value_tree['groups'][ $entry_index ] ) ) {
+				$group_values = $value_tree['groups'][ $entry_index ];
+			}
+
+			foreach ( $group_fields as $field ) {
+				$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $entry_index );
+				if ( isset( $group_values[ $clone->get_base_name() ] ) ) {
+					$group_value = $group_values[ $clone->get_base_name() ];
+					
+					if ( isset( $group_value['value_set'] ) ) {
+						$clone->set_value( $group_value['value_set'] );
 					}
-					$fields[ $entry_index ][] = $clone;
+
+					if ( is_a( $clone, get_class() ) ) {
+						$clone->set_value_tree( $group_value );
+					}
 				}
+				$fields[ $entry_index ][] = $clone;
 			}
 		}
 
