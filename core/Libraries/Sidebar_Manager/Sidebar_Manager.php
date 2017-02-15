@@ -29,8 +29,6 @@ class Sidebar_Manager {
 
 	/**
 	 * Handle action requests.
-	 *
-	 * @return array|void Output JSON if DOING_AJAX, otherwise return an array
 	 */
 	public function action_handler() {
 		$response = array(

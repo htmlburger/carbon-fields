@@ -197,6 +197,9 @@ class Complex_Field extends Field {
 	/**
 	 * Return a clone of a field with hierarchy settings applied
 	 *
+	 * @param Field $field
+	 * @param Field $parent_field
+	 * @param int $entry_index
 	 * @return bool
 	 **/
 	public function get_clone_under_field_in_hierarchy( $field, $parent_field, $entry_index = 0 ) {
