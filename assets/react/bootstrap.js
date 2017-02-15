@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import store from 'store';
-import { makeContainer } from 'lib/factory';
+import containerFactory from 'containers/factory';
 import { getContainers } from 'containers/selectors';
 
 /**
@@ -23,14 +23,7 @@ _.noConflict();
  * Abracadabra! Poof! Containers everywhere ...
  */
 _.forEach(getContainers(store.getState()), ({ id, type }) => {
-	const node = document.querySelector(`.container-${id}`);
-
-	if (!_.endsWith(id, '__i__') && node) {
-		ReactDOM.render(
-			<Provider store={store}>
-				{makeContainer(type, { id })}
-			</Provider>,
-			node
-		);
+	if (!_.endsWith(id, '__i__')) {
+		containerFactory(store, type, { id });
 	}
 });

@@ -14,10 +14,10 @@ import { put, call, take, fork, select } from 'redux-saga/effects';
  */
 import store from 'store';
 
-import { makeContainer } from 'lib/factory';
 import { TYPE_NOW_WIDGETS } from 'lib/constants';
 import { createWidgetsChannel, createAjaxChannel } from 'lib/events';
 
+import containerFactory from 'containers/factory';
 import { addContainer, removeContainer } from 'containers/actions';
 import { getContainerById } from 'containers/selectors';
 
@@ -61,12 +61,7 @@ export function* workerUpdate() {
 		const { id, type } = container;
 
 		// TODO: Refactor this, because we shouldn't access the store directly.
-		ReactDOM.render(
-			<Provider store={store}>
-				{makeContainer(type, { id })}
-			</Provider>,
-			document.querySelector(`.container-${id}`)
-		);
+		containerFactory(store, type, { id });
 	}
 }
 

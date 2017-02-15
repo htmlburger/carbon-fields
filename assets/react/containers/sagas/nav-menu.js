@@ -14,10 +14,10 @@ import { put, call, take } from 'redux-saga/effects';
  */
 import store from 'store';
 
-import { makeContainer } from 'lib/factory';
 import { TYPE_NOW_MENUS } from 'lib/constants';
 import { createAjaxSuccessChannel } from 'lib/events';
 
+import containerFactory from 'containers/factory';
 import { addContainer } from 'containers/actions';
 
 import { addFields } from 'fields/actions';
@@ -57,12 +57,7 @@ export default function* foreman() {
 			const { id, type } = container;
 
 			// TODO: Refactor this, because we shouldn't access the store directly.
-			ReactDOM.render(
-				<Provider store={store}>
-					{makeContainer(type, { id })}
-				</Provider>,
-				document.querySelector(`.container-${id}`)
-			);
+			containerFactory(store, type, { id });
 		}
 	} catch (e) {
 		// Close the channel since we don't have any
