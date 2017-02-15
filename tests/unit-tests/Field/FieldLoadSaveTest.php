@@ -1,6 +1,6 @@
 <?php
 
-use \Mockery as M;
+use Mockery as M;
 
 /**
  * @group field

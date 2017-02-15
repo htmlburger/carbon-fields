@@ -2,8 +2,8 @@
 
 namespace Carbon_Fields\Toolset;
 
-use \Carbon_Fields\Value_Set\Value_Set;
-use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+use Carbon_Fields\Value_Set\Value_Set;
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Provides common tools when dealing with storage keys

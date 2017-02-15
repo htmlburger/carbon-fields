@@ -2,9 +2,9 @@
 
 namespace Carbon_Fields\Helper;
 
-use \Carbon_Fields\App;
-use \Carbon_Fields\Datastore\Datastore;
-use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+use Carbon_Fields\App;
+use Carbon_Fields\Datastore\Datastore;
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Helper functions and main initialization class.

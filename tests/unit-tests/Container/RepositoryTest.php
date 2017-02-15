@@ -1,9 +1,9 @@
 <?php
 
-use \Mockery as M;
-use \Carbon_Fields\Container\Repository;
-use \Carbon_Fields\Container\Container;
-use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+use Mockery as M;
+use Carbon_Fields\Container\Repository;
+use Carbon_Fields\Container\Container;
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class RepositoryTest extends WP_UnitTestCase {
 	

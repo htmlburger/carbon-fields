@@ -2,11 +2,11 @@
 
 namespace Carbon_Fields\Datastore;
 
-use \Carbon_Fields\App;
-use \Carbon_Fields\Field\Field;
-use \Carbon_Fields\Toolset\Key_Toolset;
-use \Carbon_Fields\Service\Legacy_Storage_Service;
-use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+use Carbon_Fields\App;
+use Carbon_Fields\Field\Field;
+use Carbon_Fields\Toolset\Key_Toolset;
+use Carbon_Fields\Service\Legacy_Storage_Service;
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Base datastore.

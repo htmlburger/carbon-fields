@@ -1,9 +1,9 @@
 <?php
 
-use \Mockery as M;
-use \Carbon_Fields\Toolset\Key_Toolset;
-use \Carbon_Fields\Value_Set\Value_Set;
-use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+use Mockery as M;
+use Carbon_Fields\Toolset\Key_Toolset;
+use Carbon_Fields\Value_Set\Value_Set;
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * @coversDefaultClass \Carbon_Fields\Toolset\Key_Toolset

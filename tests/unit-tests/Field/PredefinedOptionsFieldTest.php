@@ -1,8 +1,8 @@
 <?php
 
-use \Mockery as M;
-use \Carbon_Fields\Field\Predefined_Options_Field;
-use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+use Mockery as M;
+use Carbon_Fields\Field\Predefined_Options_Field;
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * @group field

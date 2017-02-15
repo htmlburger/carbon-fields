@@ -2,9 +2,9 @@
 
 namespace Carbon_Fields\Service;
 
-use \Carbon_Fields\Container\Repository as ContainerRepository;
-use \Carbon_Fields\Toolset\Key_Toolset;
-use \Carbon_Fields\Value_Set\Value_Set;
+use Carbon_Fields\Container\Repository as ContainerRepository;
+use Carbon_Fields\Toolset\Key_Toolset;
+use Carbon_Fields\Value_Set\Value_Set;
 
 /*
  * Service which provides the ability to do meta queries for multi-value fields and nested fields

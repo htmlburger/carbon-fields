@@ -2,18 +2,18 @@
 
 namespace Carbon_Fields;
 
-use \Carbon_Fields\Pimple\Container as PimpleContainer;
-use \Carbon_Fields\Loader\Loader;
-use \Carbon_Fields\Container\Repository as ContainerRepository;
-use \Carbon_Fields\Toolset\Key_Toolset;
-use \Carbon_Fields\Service\Template_Service;
-use \Carbon_Fields\Service\Meta_Query_Service;
-use \Carbon_Fields\Service\Legacy_Storage_Service;
-use \Carbon_Fields\Service\REST_API_Service;
-use \Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
+use Carbon_Fields\Pimple\Container as PimpleContainer;
+use Carbon_Fields\Loader\Loader;
+use Carbon_Fields\Container\Repository as ContainerRepository;
+use Carbon_Fields\Toolset\Key_Toolset;
+use Carbon_Fields\Service\Template_Service;
+use Carbon_Fields\Service\Meta_Query_Service;
+use Carbon_Fields\Service\Legacy_Storage_Service;
+use Carbon_Fields\Service\REST_API_Service;
+use Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 
-use \Carbon_Fields\REST_API\Router as REST_API_Router;
-use \Carbon_Fields\REST_API\Decorator as REST_API_Decorator;
+use Carbon_Fields\REST_API\Router as REST_API_Router;
+use Carbon_Fields\REST_API\Decorator as REST_API_Decorator;
 
 
 /**

@@ -1,7 +1,7 @@
 <?php
 
-use \Carbon_Fields\Field\Field;
-use \Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+use Carbon_Fields\Field\Field;
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class FieldInitializationTest extends WP_UnitTestCase {
 	public function setup() {

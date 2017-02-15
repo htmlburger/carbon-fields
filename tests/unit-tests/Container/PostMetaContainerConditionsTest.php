@@ -1,11 +1,11 @@
 <?php
 
-use \Carbon_Fields\Pimple\Container as PimpleContainer;
-use \Carbon_Fields\App;
-use \Carbon_Fields\Container\Container;
-use \Carbon_Fields\Container\Repository as ContainerRepository;
-use \Carbon_Fields\Toolset\Key_Toolset;
-use \Carbon_Fields\Service\Legacy_Storage_Service;
+use Carbon_Fields\Pimple\Container as PimpleContainer;
+use Carbon_Fields\App;
+use Carbon_Fields\Container\Container;
+use Carbon_Fields\Container\Repository as ContainerRepository;
+use Carbon_Fields\Toolset\Key_Toolset;
+use Carbon_Fields\Service\Legacy_Storage_Service;
 
 class PostMetaContainerConditionsTest extends WP_UnitTestCase {
 	

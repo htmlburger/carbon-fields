@@ -2,7 +2,7 @@
 
 namespace Carbon_Fields\Datastore;
 
-use \Carbon_Fields\Field\Field;
+use Carbon_Fields\Field\Field;
 
 /**
  * Abstract meta datastore class.

@@ -1,6 +1,6 @@
 <?php
 
-use \Carbon_Fields\Field\Field;
+use Carbon_Fields\Field\Field;
 
 class FieldConditionalLogicTest extends WP_UnitTestCase {
 	private $field;

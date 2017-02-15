@@ -2,8 +2,8 @@
 
 namespace Carbon_Fields\REST_API;
 
-use \Carbon_Fields\Helper\Helper;
-use \Carbon_Fields\Container\Repository as ContainerRepository;
+use Carbon_Fields\Helper\Helper;
+use Carbon_Fields\Container\Repository as ContainerRepository;
 
 /**
 * Register custom routes for REST API
