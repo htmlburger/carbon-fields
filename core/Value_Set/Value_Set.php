@@ -206,27 +206,24 @@ class Value_Set {
 	protected function flat_array_to_raw_value_set( $value_array ) {
 		$raw_value_set = array();
 
-		$keyed = false;
-		$keys = array_keys( $value_array );
-		foreach ( $keys as $key ) {
-			if ( is_string( $key ) ) {
-				$keyed = true;
-				break;
-			}
-		}
+		$string_keys = array_filter( array_keys( $value_array ), function( $key ) {
+			return is_string( $key );
+		} );
 
-		if ( $keyed ) {
-			$raw_value_set[] = $value_array;
-		} else {
+		if ( empty( $string_keys ) ) {
+			// the passed array does not contain string keys so we check each item if it's a value or a key=>value array
 			foreach ( $value_array as $key => $value ) {
-				if ( is_array( $value ) && isset( $value[ static::VALUE_PROPERTY ] ) ) {
-					$raw_value_set[] = $value;
-				} else {
-					$raw_value_set[] = array(
+				if ( ! is_array( $value ) || ! isset( $value[ static::VALUE_PROPERTY ] ) ) {
+					// the passed array is an array of values so we expand it to a key=>value array
+					$value = array(
 						static::VALUE_PROPERTY => $value,
 					);
 				}
+				$raw_value_set[] = $value;
 			}
+		} else {
+			// the passed array contains string keys so we append it to the set
+			$raw_value_set[] = $value_array;
 		}
 
 		return $raw_value_set;
