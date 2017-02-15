@@ -105,7 +105,7 @@ class Relationship_Field extends Field {
 	 * @param string  $subtype The subtype - "page", "post", "category", etc.
 	 * @return string $title The title of the item.
 	 */
-	public function get_title_by_type( $id, $type, $subtype = '' ) {
+	protected function get_title_by_type( $id, $type, $subtype = '' ) {
 		$title = get_the_title( $id );
 		if ( ! $title ) {
 			$title = '(no title) - ID: ' . $id;
@@ -133,7 +133,7 @@ class Relationship_Field extends Field {
 	 * @param string  $subtype Subtype - "page", "post", "category", etc.
 	 * @return string $label The label of the item.
 	 */
-	public function get_item_label( $id, $type, $subtype = '' ) {
+	protected function get_item_label( $id, $type, $subtype = '' ) {
 		$object = get_post_type_object( $subtype );
 		$label = $object ? $object->labels->singular_name : null;
 

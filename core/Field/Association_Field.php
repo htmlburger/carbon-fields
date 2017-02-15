@@ -137,7 +137,7 @@ class Association_Field extends Relationship_Field {
 	 * @param string  $subtype The subtype - "page", "post", "category", etc.
 	 * @return string $title The title of the item.
 	 */
-	public function get_title_by_type( $id, $type, $subtype = '' ) {
+	protected function get_title_by_type( $id, $type, $subtype = '' ) {
 		$title = '';
 
 		if ( $type === 'post' ) {
@@ -181,7 +181,7 @@ class Association_Field extends Relationship_Field {
 	 * @param string  $subtype Subtype - "page", "post", "category", etc.
 	 * @return string $label The label of the item.
 	 */
-	public function get_item_label( $id, $type, $subtype = '' ) {
+	protected function get_item_label( $id, $type, $subtype = '' ) {
 		$label = $subtype ? $subtype : $type;
 
 		if ( $type === 'post' ) {
@@ -370,7 +370,7 @@ class Association_Field extends Relationship_Field {
 	 * @param  int $id      ID of the object.
 	 * @return string       URL of the edit link.
 	 */
-	public function get_object_edit_link( $type, $id ) {
+	protected function get_object_edit_link( $type, $id ) {
 		switch ( $type['type'] ) {
 
 			case 'post':
