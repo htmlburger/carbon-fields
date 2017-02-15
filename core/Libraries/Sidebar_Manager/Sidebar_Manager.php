@@ -38,8 +38,8 @@ class Sidebar_Manager {
 			'error' => null,
 		);
 
-		$action = isset( $_POST['action'] ) ? $_POST['action'] : '';
-		$name = isset( $_POST['name'] ) ? $_POST['name'] : '';
+		$action = isset( $_POST['action'] ) ? stripslashes_deep( $_POST['action'] ) : '';
+		$name = isset( $_POST['name'] ) ? stripslashes_deep( $_POST['name'] ) : '';
 
 		if ( empty( $action ) || empty( $name ) ) {
 			return false;
@@ -66,11 +66,8 @@ class Sidebar_Manager {
 			$response['success'] = (bool) $result;
 		}
 
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			wp_send_json( $response );
-		} else {
-			return $response;
-		}
+		wp_send_json( $response );
+		exit;
 	}
 
 	/**
