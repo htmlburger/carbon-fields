@@ -63,28 +63,31 @@ class Meta_Query_Service extends Service {
 	 * @return array
 	 */
 	protected function filter_meta_query_array( $condition, $container_type ) {
-		if ( is_array( $condition ) ) {
-			if ( isset( $condition['key'] ) ) {
-				$field_name = ( substr( $condition['key'], 0, 1 ) === '_' ) ? substr( $condition['key'], 1 ) : $condition['key'];
-				$field = $this->container_repository->get_field_in_containers( $field_name, $container_type );
-				$property = isset( $condition['carbon_field_property'] ) ? $condition['carbon_field_property'] : Value_Set::VALUE_PROPERTY;
+		if ( ! is_array( $condition ) ) {
+			return $condition;
+		}
 
-				// bail if we cannot find the field
-				// bail if the field is a simple root field ( we don't need to do anything in this case ) UNLESS we are looking for a custom property
-				if ( $field !== null && ( ! $field->is_simple_root_field() || $property !== Value_Set::VALUE_PROPERTY ) ) {
-					$storage_key = $this->key_toolset->get_storage_key_with_index_wildcards(
-						$field->is_simple_root_field(),
-						array_merge( $field->get_hierarchy(), array( $field->get_base_name() ) ),
-						$property
-					);
-					$condition['key'] = static::META_KEY_PREFIX . $storage_key;
-				}
-			} else {
-				// we are dealing with a nested array - recurse
-				foreach ( $condition as $key => $value ) {
-					$condition[ $key ] = $this->filter_meta_query_array( $value, $container_type );
-				}
+		if ( ! isset( $condition['key'] ) ) {
+			// we are dealing with a nested array - recurse
+			foreach ( $condition as $key => $value ) {
+				$condition[ $key ] = $this->filter_meta_query_array( $value, $container_type );
 			}
+			return $condition;
+		}
+
+		$field_name = preg_replace( '/^_/', '', $condition['key'] );
+		$field = $this->container_repository->get_field_in_containers( $field_name, $container_type );
+		$property = isset( $condition['carbon_field_property'] ) ? $condition['carbon_field_property'] : Value_Set::VALUE_PROPERTY;
+
+		// bail if we cannot find the field
+		// bail if the field is a simple root field ( we don't need to do anything in this case ) UNLESS we are looking for a custom property
+		if ( $field !== null && ( ! $field->is_simple_root_field() || $property !== Value_Set::VALUE_PROPERTY ) ) {
+			$storage_key = $this->key_toolset->get_storage_key_with_index_wildcards(
+				$field->is_simple_root_field(),
+				array_merge( $field->get_hierarchy(), array( $field->get_base_name() ) ),
+				$property
+			);
+			$condition['key'] = static::META_KEY_PREFIX . $storage_key;
 		}
 
 		return $condition;
