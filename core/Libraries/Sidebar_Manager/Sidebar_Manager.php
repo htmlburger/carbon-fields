@@ -34,16 +34,40 @@ class Sidebar_Manager {
 		$response = array(
 			'success' => false,
 			'error' => null,
+			'data' => null,
 		);
 
-		$action = isset( $_POST['action'] ) ? stripslashes_deep( $_POST['action'] ) : '';
-		$name = isset( $_POST['name'] ) ? stripslashes_deep( $_POST['name'] ) : '';
+		$input = stripslashes_deep( $_POST );
+		$action = isset( $input['action'] ) ? $input['action'] : '';
+		
+		$result = $this->execute_action( $action, $input );
 
-		if ( empty( $action ) || empty( $name ) ) {
-			return false;
+		if ( is_wp_error( $result ) ) {
+			$response['success'] = false;
+			$response['error'] = $result->get_error_message();
+		} else {
+			$response['success'] = true;
+			$response['data'] = $result;
 		}
 
-		$result = false;
+		wp_send_json( $response );
+		exit;
+	}
+
+	/**
+	 * Execute an action
+	 *
+	 * @param string $action
+	 * @param array $input
+	 * @return mixed
+	 */
+	public function execute_action( $action, $input ) {
+		$name = isset( $input['name'] ) ? $input['name'] : '';
+		if ( empty( $name ) ) {
+			return new \WP_Error( 'name-missing', __( 'Please pass a name for the sidebar.', \Carbon_Fields\TEXT_DOMAIN ) );
+		}
+
+		$result = new \WP_Error( 'unknown-action', __( 'Unknown action attempted.', \Carbon_Fields\TEXT_DOMAIN ) );
 		switch ( $action ) {
 			case 'carbon_add_sidebar':
 				$result = $this->add_sidebar( $name );
@@ -52,20 +76,9 @@ class Sidebar_Manager {
 			case 'carbon_remove_sidebar':
 				$result = $this->remove_sidebar( $name );
 				break;
-
-			default:
-				$result = new \WP_Error( 'unknown-action', __( 'Unknown action attempted.', \Carbon_Fields\TEXT_DOMAIN ) );
-				break;
 		}
 
-		if ( is_wp_error( $result ) ) {
-			$response['error'] = $result->get_error_message();
-		} else {
-			$response['success'] = (bool) $result;
-		}
-
-		wp_send_json( $response );
-		exit;
+		return $result;
 	}
 
 	/**
