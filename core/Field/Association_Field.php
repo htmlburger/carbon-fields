@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\App;
 use Carbon_Fields\Value_Set\Value_Set;
 
 /**
@@ -13,6 +14,13 @@ use Carbon_Fields\Value_Set\Value_Set;
  *  - Comments
  */
 class Association_Field extends Relationship_Field {
+	
+	/**
+	 * WP_Toolset instance
+	 * @var Carbon_Fields\Toolset\WP_Toolset
+	 */
+	protected $wp_toolset;
+
 	/**
 	 * Types of entries to associate with.
 	 * @var array
@@ -25,20 +33,12 @@ class Association_Field extends Relationship_Field {
 	);
 
 	/**
-	 * Modify the types.
-	 * @param array $types New types
-	 */
-	public function set_types( $types ) {
-		$this->types = $types;
-		return $this;
-	}
-
-	/**
 	 * Create a field from a certain type with the specified label.
 	 * @param string $name  Field name
 	 * @param string $label Field label
 	 */
 	protected function __construct( $name, $label ) {
+		$this->wp_toolset = App::resolve( 'wp_toolset' );
 		$this->value = new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'type' => '', 'subtype' => '', 'object_id' => 0 ) );
 		Field::__construct( $name, $label );
 	}
@@ -49,6 +49,15 @@ class Association_Field extends Relationship_Field {
 	public function set_value( $value ) {
 		$value = $this->value_string_array_to_value_set( $value );
 		parent::set_value( $value );
+	}
+
+	/**
+	 * Return a differently formatted value for end-users
+	 *
+	 * @return mixed
+	 **/
+	public function get_formatted_value() {
+		return Field::get_formatted_value();
 	}
 
 	/**
@@ -97,66 +106,29 @@ class Association_Field extends Relationship_Field {
 	}
 
 	/**
-	 * Converts the field values into a usable associative array.
-	 *
-	 * The association data is saved in the database in the following format:
-	 * 	array (
-	 *		0 => 'post:page:4',
-	 *		1 => 'term:category:2',
-	 *		2 => 'user:user:1',
-	 * 	)
-	 * where the value of each array item contains:
-	 * 	- Type of data (post, term, user or comment)
-	 * 	- Subtype of data (the particular post type or taxonomy)
-	 * 	- ID of the item (the database ID of the item)
-	 */
-	protected function value_to_json() {
-		$value_set = $this->get_value();
-		$value = array();
-		foreach ( $value_set as $value_set_entry ) {
-			$item = array(
-				'type' => $value_set_entry['type'],
-				'subtype' => $value_set_entry['subtype'],
-				'id' => $value_set_entry['object_id'],
-				'title' => $this->get_title_by_type( $value_set_entry['object_id'], $value_set_entry['type'], $value_set_entry['subtype'] ),
-				'label' => $this->get_item_label( $value_set_entry['object_id'], $value_set_entry['type'], $value_set_entry['subtype'] ),
-				'is_trashed' => ( $value_set_entry['type'] == 'post' && get_post_status( $value_set_entry['object_id'] ) === 'trash' ),
-			);
-			$value[] = $item;
-		}
-		return $value;
-	}
-
-	/**
 	 * Used to get the title of an item.
 	 *
 	 * Can be overriden or extended by the `carbon_association_title` filter.
 	 *
-	 * @param int     $id      The database ID of the item.
-	 * @param string  $type    Item type (post, term, user, comment, or a custom one).
-	 * @param string  $subtype The subtype - "page", "post", "category", etc.
+	 * @param int $id The database ID of the item.
+	 * @param string $type Item type (post, term, user, comment, or a custom one).
+	 * @param string $subtype The subtype - "page", "post", "category", etc.
 	 * @return string $title The title of the item.
 	 */
 	protected function get_title_by_type( $id, $type, $subtype = '' ) {
 		$title = '';
 
-		if ( $type === 'post' ) {
-			$title = get_the_title( $id );
-		} elseif ( $type === 'term' ) {
-			$term = get_term_by( 'id', $id, $subtype );
-			$title = $term->name;
-		} elseif ( $type === 'user' ) {
-			$title = get_the_author_meta( 'user_login', $id );
-		} elseif ( $type === 'comment' ) {
-			$title = get_comment_text( $id );
+		$method = 'get_' . $type . '_title';
+		$callable = array( $this->wp_toolset, $method );
+		if ( is_callable( $callable ) ) {
+			$title = call_user_func( $callable, $id, $subtype );
+		}
+
+		if ( $type === 'comment' ) {
 			$max = apply_filters( 'carbon_association_comment_length', 30, $this->get_name() );
 			if ( strlen( $title ) > $max ) {
 				$title = substr( $title, 0, $max ) . '...';
 			}
-		}
-
-		if ( ! $title ) {
-			$title = '(no title) - ID: ' . $id;
 		}
 
 		/**
@@ -168,7 +140,13 @@ class Association_Field extends Relationship_Field {
 		 * @param string $type    Item type (post, term, user, comment, or a custom one).
 		 * @param string $subtype Subtype - "page", "post", "category", etc.
 		 */
-		return apply_filters( 'carbon_association_title', $title, $this->get_name(), $id, $type, $subtype );
+		$title = apply_filters( 'carbon_association_title', $title, $this->get_name(), $id, $type, $subtype );
+
+		if ( ! $title ) {
+			$title = '(no title) - ID: ' . $id;
+		}
+
+		return $title;
 	}
 
 	/**
@@ -398,12 +376,43 @@ class Association_Field extends Relationship_Field {
 	}
 
 	/**
-	 * Return a differently formatted value for end-users
+	 * Modify the types.
+	 * @param array $types New types
+	 */
+	public function set_types( $types ) {
+		$this->types = $types;
+		return $this;
+	}
+
+	/**
+	 * Converts the field values into a usable associative array.
 	 *
-	 * @return mixed
-	 **/
-	public function get_formatted_value() {
-		return Field::get_formatted_value();
+	 * The association data is saved in the database in the following format:
+	 * 	array (
+	 *		0 => 'post:page:4',
+	 *		1 => 'term:category:2',
+	 *		2 => 'user:user:1',
+	 * 	)
+	 * where the value of each array item contains:
+	 * 	- Type of data (post, term, user or comment)
+	 * 	- Subtype of data (the particular post type or taxonomy)
+	 * 	- ID of the item (the database ID of the item)
+	 */
+	protected function value_to_json() {
+		$value_set = $this->get_value();
+		$value = array();
+		foreach ( $value_set as $value_set_entry ) {
+			$item = array(
+				'type' => $value_set_entry['type'],
+				'subtype' => $value_set_entry['subtype'],
+				'id' => $value_set_entry['object_id'],
+				'title' => $this->get_title_by_type( $value_set_entry['object_id'], $value_set_entry['type'], $value_set_entry['subtype'] ),
+				'label' => $this->get_item_label( $value_set_entry['object_id'], $value_set_entry['type'], $value_set_entry['subtype'] ),
+				'is_trashed' => ( $value_set_entry['type'] == 'post' && get_post_status( $value_set_entry['object_id'] ) === 'trash' ),
+			);
+			$value[] = $item;
+		}
+		return $value;
 	}
 
 	/**
