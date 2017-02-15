@@ -78,6 +78,11 @@ class Complex_Field extends Field {
 	/**
 	 * Add a set/group of fields.
 	 *
+	 * Accepted param variations:
+	 *   - array<Field> $fields
+	 *   - string $group_name, array<Field> $fields
+	 *   - string $group_name, string $group_label, array<Field> $fields
+	 * 
 	 * @return $this
 	 */
 	public function add_fields() {
@@ -85,26 +90,17 @@ class Complex_Field extends Field {
 		$argc = count( $argv );
 		$fields = array();
 		$name = '';
-		$label = '';
+		$label = null;
 
-		if ( $argc == 1 ) {
-			$fields = $argv[0];
-			$name = '';
-			$label = null;
-		} else if ( $argc == 2 ) {
-			if ( is_array( $argv[0] ) ) {
-				list( $fields, $name ) = $argv;
-			} else {
-				list( $name, $fields ) = $argv;
-			}
-			$label = null;
-		} else if ( $argc == 3 ) {
-			if ( is_array( $argv[0] ) ) {
-				list( $fields, $name, $label ) = $argv;
-			} else {
-				list( $name, $label, $fields ) = $argv;
-			}
+		if ( $argc >= 2 ) {
+			$name = $argv[0];
 		}
+		
+		if ( $argc >= 3 ) {
+			$label = $argv[1];
+		}
+
+		$fields = $argv[ $argc - 1 ];
 		$name = ! empty( $name ) ? $name : Group_Field::DEFAULT_GROUP_NAME;
 
 		if ( array_key_exists( $name, $this->groups ) ) {
