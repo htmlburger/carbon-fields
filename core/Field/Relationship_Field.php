@@ -199,57 +199,6 @@ class Relationship_Field extends Field {
 	}
 
 	/**
-	 * Parse the raw value into a value suitable for end-users
-	 *
-	 * @param  string $raw_value Raw relationship value.
-	 * @return array Array of parsed data.
-	 */
-	protected function parse_serialized_value( $raw_value, $type = '' ) {
-		if ( $raw_value && is_array( $raw_value ) ) {
-			$value = array();
-			foreach ( $raw_value as $raw_value_item ) {
-				if ( is_string( $raw_value_item ) && strpos( $raw_value_item, ':' ) !== false ) {
-					$item_data = explode( ':', $raw_value_item );
-					$item = array(
-						'id' => $item_data[2],
-						'type' => $item_data[0],
-					);
-
-					if ( $item_data[0] === 'post' ) {
-						$item['post_type'] = $item_data[1];
-					} elseif ( $item_data[0] === 'term' ) {
-						$item['taxonomy'] = $item_data[1];
-					}
-
-					$value[] = $item;
-				} elseif ( $type === 'association' ) {
-					$value[] = array(
-						'id' => $raw_value_item,
-						'type' => 'post',
-						'post_type' => get_post_type( $raw_value_item ),
-					);
-				} else {
-					$value[] = $raw_value_item;
-				}
-			}
-
-			$raw_value = $value;
-		}
-
-		return $raw_value;
-	}
-
-	/**
-	 * Return a differently formatted value for end-users
-	 *
-	 * @return mixed
-	 **/
-	public function get_formatted_value() {
-		$value = Field::get_formatted_value();
-		return $this->parse_serialized_value( $value );
-	}
-
-	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
 	 *

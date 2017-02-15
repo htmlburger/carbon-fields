@@ -52,15 +52,6 @@ class Association_Field extends Relationship_Field {
 	}
 
 	/**
-	 * Return a differently formatted value for end-users
-	 *
-	 * @return mixed
-	 **/
-	public function get_formatted_value() {
-		return Field::get_formatted_value();
-	}
-
-	/**
 	 * Convert a colo:separated:string into it's expected components
 	 * Used for backwards compatibility to CF 1.5
 	 * 
