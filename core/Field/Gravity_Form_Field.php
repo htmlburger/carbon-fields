@@ -88,7 +88,7 @@ class Gravity_Form_Field extends Select_Field {
 
 		?>
 		<div class="carbon-field-group">
-			<select id="{{{ id }}}" name="{{{ name }}}">
+			<select id="{{{ id }}}" name="{{{ name }}}" class="carbon-field-group-input">
 				<# _.each(options, function(option) { #>
 					<option value="{{ option.value }}" {{{ option.value == value ? 'selected="selected"' : '' }}}>
 						{{{ option.name }}}

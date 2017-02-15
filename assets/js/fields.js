@@ -934,7 +934,7 @@ window.carbon = window.carbon || {};
 			carbon.fields.Model.Select.prototype.initialize.apply(this);
 		},
 	});
-	
+
 	// Gravity Form VIEW
 	carbon.fields.View.GravityForm = carbon.fields.View.extend({
 		initialize: function() {
