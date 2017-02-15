@@ -937,12 +937,9 @@ window.carbon = window.carbon || {};
 	
 	// Gravity Form VIEW
 	carbon.fields.View.GravityForm = carbon.fields.View.extend({
-		events: _.extend({}, carbon.fields.View.prototype.events, {
-			'change select': 'updateEditLink'
-		}),
-
 		initialize: function() {
 			carbon.fields.View.prototype.initialize.apply(this);
+			this.listenTo(this.model, 'change:value', this.updateEditLink);
 			
 			var label = this.getLabelByValue(this.model.get('value'));
 			
@@ -954,12 +951,8 @@ window.carbon = window.carbon || {};
 			var $select = this.$('select');
 			var label = this.getLabelByValue($select.val());
 			
-			model.set('value', $select.val());
 			model.set('valueLabel', label);
-			
-			this.sync();
-			
-			console.log(model);
+			this.render();
 		},
 		
 		getLabelByValue: function (val) {
