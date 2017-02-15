@@ -1,5 +1,8 @@
-import { partial } from 'lodash';
+/**
+ * The external dependencies.
+ */
 import reduceReducers from 'reduce-reducers';
+import { partial } from 'lodash';
 
 /**
  * The supported domains.
@@ -8,6 +11,7 @@ import reduceReducers from 'reduce-reducers';
  */
 const DOMAIN_CONTAINERS = 'containers';
 const DOMAIN_FIELDS = 'fields';
+const DOMAIN_SIDEBARS = 'sidebars';
 
 /**
  * The map that will be used by the factory functions.
@@ -26,8 +30,6 @@ const components = {
  * @param  {String}          type
  * @param  {React.Component} component
  * @return {void}
- *
- * @todo Add some validation
  */
 function registerComponent(domain, type, component) {
 	components[domain][type] = component;
@@ -41,10 +43,16 @@ export const registerFieldComponent = partial(registerComponent, DOMAIN_FIELDS);
  *
  * @param  {String} domain
  * @param  {String} type
- * @return {React.Component|null}
+ * @return {React.Component}
  */
 function getComponent(domain, type) {
-	return components[domain][type] || null;
+	const component = components[domain][type];
+
+	if (!component) {
+		throw new Error(`Could not find the component for type "${type}".`);
+	}
+
+	return component;
 }
 
 export const getContainerComponent = partial(getComponent, DOMAIN_CONTAINERS);
@@ -59,7 +67,8 @@ export const getFieldComponent = partial(getComponent, DOMAIN_FIELDS);
 const reducers = {
 	[DOMAIN_CONTAINERS]: [],
 	[DOMAIN_FIELDS]: [],
-}
+	[DOMAIN_SIDEBARS]: [],
+};
 
 /**
  * Register a new reducer.
@@ -76,6 +85,7 @@ function registerReducer(domain, fn) {
 
 export const registerContainerReducer = partial(registerReducer, DOMAIN_CONTAINERS);
 export const registerFieldReducer = partial(registerReducer, DOMAIN_FIELDS);
+export const registerSidebarReducer = partial(registerReducer, DOMAIN_SIDEBARS);
 
 /**
  * Apply the 3rd party reducers to the core reducers.
@@ -90,3 +100,30 @@ function decorateReducer(domain, fn) {
 
 export const decorateContainerReducer = partial(decorateReducer, DOMAIN_CONTAINERS);
 export const decorateFieldReducer = partial(decorateReducer, DOMAIN_FIELDS);
+export const decorateSidebarReducer = partial(decorateReducer, DOMAIN_SIDEBARS);
+
+/**
+ * The registered sagas.
+ *
+ * @type {Array}
+ */
+const sagas = [];
+
+/**
+ * Register a new saga.
+ *
+ * @param  {Function} saga
+ * @return {void}
+ */
+export function registerSaga(saga) {
+	sagas.push(saga);
+}
+
+/**
+ * Get all registered sagas.
+ *
+ * @return {Function[]}
+ */
+export function getSagas() {
+	return sagas;
+}

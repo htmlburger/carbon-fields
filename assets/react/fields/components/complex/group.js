@@ -8,7 +8,7 @@ import { compose, withHandlers, withState } from 'recompose';
 /**
  * The internal dependencies.
  */
-import { makeField } from 'lib/factory';
+import fieldFactory from 'fields/factory';
 import { preventDefault } from 'lib/helpers';
 
 /**
@@ -61,10 +61,7 @@ export const ComplexGroup = ({ index, prefix, layout, group, active, collapsed, 
 				group.fields.map(({ id, type, name }) => {
 					name = `${prefix}[${index}][${name}]`;
 
-					return makeField(type, {
-						id,
-						name,
-					});
+					return fieldFactory(type, { id, name });
 				})
 			}
 		</div>

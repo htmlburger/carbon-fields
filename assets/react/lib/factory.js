@@ -35,20 +35,3 @@ export function makeContainer(type, props = {}) {
 
 	return <Component {...props} />;
 }
-
-/**
- * Determine which field should be rendered for the specified type.
- *
- * @param  {String} type
- * @param  {Object} [props]
- * @return {React.Element}
- */
-export function makeField(type, props = {}) {
-	const Component = getFieldComponent(type);
-
-	if (!Component) {
-		return null;
-	}
-
-	return <Component key={props.id} type={type} {...props} />;
-}
