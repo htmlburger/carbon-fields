@@ -929,7 +929,19 @@ window.carbon = window.carbon || {};
 	 *------------------------------------------------------------------------*/
 
 	// Gravity Form MODEL
-	carbon.fields.Model.GravityForm = carbon.fields.Model.Select.extend();
+	carbon.fields.Model.GravityForm = carbon.fields.Model.Select.extend({
+		initialize: function () {
+			carbon.fields.Model.Select.prototype.initialize.apply(this);
+		},
+	});
+
+	// Gravity Form VIEW
+	carbon.fields.View.GravityForm = carbon.fields.View.extend({
+		initialize: function() {
+			carbon.fields.View.prototype.initialize.apply(this);
+			this.listenTo(this.model, 'change:value', this.render);
+		}
+	});
 
 	/*--------------------------------------------------------------------------
 	 * SIDEBAR

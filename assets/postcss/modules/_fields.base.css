@@ -15,9 +15,9 @@
 .carbon-field .carbon-required { color: $color-state-error; }
 
 .carbon-field .carbon-field-group { display: table; width: 100%; }
-.carbon-field .carbon-field-group-input { display: table-cell; width: 100%; vertical-align: top; margin: 0; border-right-style: none; }
+.carbon-field .carbon-field-group-input { display: table-cell; width: 100%; vertical-align: top; }
 .carbon-field .carbon-field-group-button { display: table-cell; width: 1%; vertical-align: top; }
-.carbon-field .carbon-field-group-button .button { height: 25px; font-size: 11px; line-height: 22px; text-align: center; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.carbon-field .carbon-field-group-button .button { height: 27px; line-height: 25px; margin: 1px 0; font-size: 11px; text-align: center; border-top-left-radius: 0; border-bottom-left-radius: 0; }
 
 /* Set and Radio list */
 
@@ -53,14 +53,11 @@
 	.carbon-field input[type="text"],
 	.carbon-field input[type="number"],
 	.carbon-field textarea,
-	.carbon-field select { padding: 7px 10px; font-size: 16px; line-height: 1.5; }
+	.carbon-field select { padding: 6px 10px; font-size: 16px; }
 
-	.carbon-field .carbon-field-group-button .button { height: 39px; line-height: 27px; }
+	.carbon-field .carbon-field-group-button .button { height: 34px; line-height: 22px; }
+	.carbon-field select.carbon-field-group-input + .carbon-field-group-button .button { height: 35px; }
 
 	.carbon-radio-list label,
 	.carbon-set-list label { padding: 6px 0; line-height: 2.3; }
-}
-
-@media screen and (min-width: $breakpoint-tablet-min) {
-	.carbon-field .carbon-field-group-input { height: 26px; }
 }
