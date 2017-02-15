@@ -1,11 +1,15 @@
+/**
+ * The external dependencies.
+ */
 import 'babel-polyfill';
-
 import _ from 'lodash';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
 
-import store from 'store';
+/**
+ * The internal dependencies.
+ */
+import configureStore from 'store';
+import { normalizePreloadedState } from 'store/helpers';
+
 import containerFactory from 'containers/factory';
 import { getContainers } from 'containers/selectors';
 
@@ -16,14 +20,16 @@ import { getContainers } from 'containers/selectors';
 _.noConflict();
 
 /**
+ * Setup the store.
+ */
+const state = normalizePreloadedState(window.carbon_json);
+const store = configureStore(state);
+
+/**
  * Every Carbon container will be treated as separate React application because
  * we don't want to modify the core behaviour/markup of the WordPress's admin area.
  * Although the store will be shared between the applications.
  *
  * Abracadabra! Poof! Containers everywhere ...
  */
-_.forEach(getContainers(store.getState()), ({ id, type }) => {
-	if (!_.endsWith(id, '__i__')) {
-		containerFactory(store, type, { id });
-	}
-});
+_.forEach(getContainers(store.getState()), ({ id, type }) => containerFactory(store, type, { id }));
