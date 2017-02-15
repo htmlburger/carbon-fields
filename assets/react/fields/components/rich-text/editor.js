@@ -11,20 +11,16 @@ class RichTextEditor extends React.Component {
 	 * @return {void}
 	 */
 	componentDidMount() {
-		this.node = ReactDOM.findDOMNode(this);
-
-		this.renderEditor(this.props);
 		this.initEditor(this.props);
 	}
 
 	/**
 	 * Lifecycle hook.
 	 *
-	 * @param  {Object} nextProps
 	 * @return {void}
 	 */
-	componentWillReceiveProps(nextProps) {
-		this.renderEditor(nextProps);
+	componentWillUnmount() {
+		this.destroyEditor();
 	}
 
 	/**
@@ -33,39 +29,29 @@ class RichTextEditor extends React.Component {
 	 * @return {React.Element}
 	 */
 	render() {
-		return <div />;
-	}
+		const { id, children } = this.props;
 
-	/**
-	 * Open the portal and render the markup for the editor.
-	 *
-	 * @param  {Object} props
-	 * @return {void}
-	 */
-	renderEditor(props) {
-		ReactDOM.render(
-			<div id={`wp-${props.id}-wrap`} className="carbon-wysiwyg wp-editor-wrap tmce-active" data-toolbar="full">
-				<div id={`wp-${props.id}-media-buttons`} className="hide-if-no-js wp-media-buttons">
-					<a href="#" className="button insert-media add_media" data-editor={props.id} title="Add Media">
-						<span className="wp-media-buttons-icon"></span> Add Media
-					</a>
-				</div>
-
-				<div className="wp-editor-tabs">
-					<button type="button" id={`${props.id}-tmce`} className="wp-switch-editor switch-tmce" data-wp-editor-id={props.id}>
-						Visual
-					</button>
-
-					<button type="button" id={`${props.id}-html`} className="wp-switch-editor switch-html" data-wp-editor-id={props.id}>
-						Text
-					</button>
-				</div>
-
-				<div id={`wp-${props.id}-editor-container`} className="wp-editor-container">
-					{props.children}
-				</div>
+		return <div id={`wp-${id}-wrap`} className="carbon-wysiwyg wp-editor-wrap tmce-active" data-toolbar="full">
+			<div id={`wp-${id}-media-buttons`} className="hide-if-no-js wp-media-buttons">
+				<a href="#" className="button insert-media add_media" data-editor={id} title="Add Media">
+					<span className="wp-media-buttons-icon"></span> Add Media
+				</a>
 			</div>
-		, this.node);
+
+			<div className="wp-editor-tabs">
+				<button type="button" id={`${id}-tmce`} className="wp-switch-editor switch-tmce" data-wp-editor-id={id}>
+					Visual
+				</button>
+
+				<button type="button" id={`${id}-html`} className="wp-switch-editor switch-html" data-wp-editor-id={id}>
+					Text
+				</button>
+			</div>
+
+			<div id={`wp-${id}-editor-container`} className="wp-editor-container">
+				{children}
+			</div>
+		</div>;
 	}
 
 	/**
@@ -76,6 +62,8 @@ class RichTextEditor extends React.Component {
 	 */
 	initEditor(props) {
 		const editorSetup = (editor) => {
+			this.editor = editor;
+
 			editor.on('blur', () => {
 				props.onChange(editor.getContent());
 			});
@@ -95,6 +83,24 @@ class RichTextEditor extends React.Component {
 		};
 
 		window.quicktags(quickTagsOptions);
+
+		// Force the initialization of the quick tags.
+		window.QTags._buttonsInit();
+	}
+
+	/**
+	 * Destroy the instance of TinyMCE editor.
+	 *
+	 * @return {void}
+	 */
+	destroyEditor() {
+		// Remove the editor.
+		this.editor.remove();
+
+		// Remove the quick tags.
+		delete window.QTags.instances[this.props.id];
+
+		this.editor = null;
 	}
 }
 
