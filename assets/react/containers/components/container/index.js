@@ -13,15 +13,15 @@ import fieldFactory from 'fields/factory';
  * The base component used to render the containers.
  *
  * @abstract
- * @param  {Object}   props
- * @param  {String}   props.id
- * @param  {Object[]} props.fields
+ * @param  {Object}        props
+ * @param  {String}        props.id
+ * @param  {Object}        props.container
  * @return {React.Element}
  */
-const Container = ({ id, fields }) => {
+const Container = ({ id, container }) => {
 	return <div className={cx('carbon-container', `carbon-container-${id}`)}>
 		{
-			fields.map(({ id, type }) => fieldFactory(type, { id }))
+			container.fields.map(({ id, type }) => fieldFactory(type, { id }))
 		}
 	</div>;
 };

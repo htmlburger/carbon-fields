@@ -25,7 +25,7 @@ _.noConflict();
 /**
  * Register the core components.
  */
-autoload(require.context('./containers/components', true, /\.js$/), (path, file) => {
+autoload(require.context('./containers/components', true, /index\.js$/), (path, file) => {
 	const { type } = file.default;
 
 	if (!_.isEmpty(type)) {

@@ -2,39 +2,14 @@
  * The external dependencies.
  */
 import { takeEvery } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
+import { call, select } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
  */
 import { TYPE_NOW_WIDGETS, TYPE_NOW_MENUS } from 'lib/constants';
 import { getContainerById } from 'containers/selectors';
-import { setupContainer, setMeta, setUI } from 'containers/actions';
-
-/**
- * Setup the initial state of the container.
- *
- * @param  {Object} action
- * @return {void}
- */
-export function* workerSetupContainer(action) {
-	const defaults = {
-		has_error: false,
-		is_dirty: false,
-		is_visible: true,
-		classes: [],
-	};
-
-	let { containerId, meta, ui } = action.payload;
-
-	ui = {
-		...defaults,
-		...ui,
-	};
-
-	yield put(setMeta({ containerId, meta }));
-	yield put(setUI({ containerId, ui }));
-}
+import { setupContainer, setUI } from 'containers/actions';
 
 /**
  * Show or hide the container's metabox.
@@ -60,14 +35,15 @@ export function* workerToggleMetaBoxVisibility(action) {
  * @return {void}
  */
 export default function* foreman() {
-	const sagas = [
-		takeEvery(setupContainer, workerSetupContainer),
-	];
+	const { pagenow } = window;
 
 	// We don't need this functionality on "Widgets" or "Menus" pages.
-	if (window.pagenow !== TYPE_NOW_WIDGETS && window.pagenow !== TYPE_NOW_MENUS) {
-		sagas.push(takeEvery(setUI, workerToggleMetaBoxVisibility));
+	if (pagenow === TYPE_NOW_WIDGETS || pagenow === TYPE_NOW_MENUS) {
+		return;
 	}
 
-	yield sagas;
+	yield [
+		takeEvery(setupContainer, workerToggleMetaBoxVisibility),
+		takeEvery(setUI, workerToggleMetaBoxVisibility),
+	];
 }

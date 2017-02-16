@@ -7,11 +7,11 @@ import { createAction } from 'redux-actions';
  * Perform the initial setup of the container.
  *
  * @param  {String} containerId
- * @param  {Object} [meta]
- * @param  {Object} [ui]
+ * @param  {Object} meta
+ * @param  {Object} ui
  * @return {Object}
  */
-export const setupContainer = createAction('containers/SETUP_CONTAINER', (containerId, meta = {}, ui = {}) => ({ containerId, meta, ui }));
+export const setupContainer = createAction('containers/SETUP_CONTAINER', (containerId, meta, ui) => ({ containerId, meta, ui }));
 
 /**
  * Update the object that holds additional fields for the container.
