@@ -7,7 +7,7 @@ import { put, call, take } from 'redux-saga/effects';
 /**
  * The internal dependencies.
  */
-import { TYPE_NOW_MENUS } from 'lib/constants';
+import { PAGE_NOW_MENUS } from 'lib/constants';
 import { createAjaxSuccessChannel } from 'lib/events';
 
 import { receiveContainer } from 'containers/actions';
@@ -20,7 +20,7 @@ import { receiveContainer } from 'containers/actions';
 export default function* foreman() {
 	const { pagenow } = window;
 
-	if (pagenow !== TYPE_NOW_MENUS) {
+	if (pagenow !== PAGE_NOW_MENUS) {
 		return;
 	}
 

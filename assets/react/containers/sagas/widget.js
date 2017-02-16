@@ -9,7 +9,7 @@ import { put, call, take, fork, select } from 'redux-saga/effects';
 /**
  * The internal dependencies.
  */
-import { TYPE_NOW_WIDGETS } from 'lib/constants';
+import { PAGE_NOW_WIDGETS } from 'lib/constants';
 import { createWidgetsChannel, createAjaxChannel } from 'lib/events';
 
 import { removeContainer, receiveContainer } from 'containers/actions';
@@ -88,7 +88,7 @@ export function* workerCleanup() {
 export default function* foreman() {
 	const { pagenow } = window;
 
-	if (pagenow !== TYPE_NOW_WIDGETS) {
+	if (pagenow !== PAGE_NOW_WIDGETS) {
 		return;
 	}
 

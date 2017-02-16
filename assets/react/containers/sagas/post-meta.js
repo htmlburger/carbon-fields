@@ -9,7 +9,7 @@ import { reduce, isEmpty, isArray, camelCase } from 'lodash';
  * The internal dependencies.
  */
 import { createSelectboxChannel, createCheckableChannel } from 'lib/events';
-import { TYPE_NOW_PAGE } from 'lib/constants';
+import { PAGE_NOW_PAGE } from 'lib/constants';
 
 import { getContainerById, canProcessAction } from 'containers/selectors';
 import { setupContainer, setMeta, setUI } from 'containers/actions';
@@ -129,7 +129,7 @@ function checkTemplateNames(isVisible, settings, meta) {
 	const { page_template } = meta;
 	const { typenow } = window;
 
-	if (typenow === TYPE_NOW_PAGE && settings.template_names.indexOf(page_template) === -1) {
+	if (typenow === PAGE_NOW_PAGE && settings.template_names.indexOf(page_template) === -1) {
 		isVisible = false;
 	}
 
@@ -148,7 +148,7 @@ function checkNotInTemplateNames(isVisible, settings, meta) {
 	const { page_template } = meta;
 	const { typenow } = window;
 
-	if (typenow === TYPE_NOW_PAGE && settings.not_in_template_names.indexOf(page_template) !== -1) {
+	if (typenow === PAGE_NOW_PAGE && settings.not_in_template_names.indexOf(page_template) !== -1) {
 		isVisible = false;
 	}
 

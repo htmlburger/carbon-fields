@@ -9,7 +9,7 @@ import { keyBy } from 'lodash';
 /**
  * The internal dependencies.
  */
-import { TYPE_NOW_WIDGETS, TYPE_NOW_MENUS } from 'lib/constants';
+import { PAGE_NOW_WIDGETS, PAGE_NOW_MENUS } from 'lib/constants';
 
 import containerFactory from 'containers/factory';
 import { getContainerById } from 'containers/selectors';
@@ -77,11 +77,11 @@ export default function* foreman(store) {
 	const { pagenow } = window;
 	const workers = [];
 
-	if (pagenow === TYPE_NOW_WIDGETS || pagenow === TYPE_NOW_MENUS) {
+	if (pagenow === PAGE_NOW_WIDGETS || pagenow === PAGE_NOW_MENUS) {
 		workers.push(takeEvery(receiveContainer, workerReceiveContainer, store));
 	}
 
-	if (pagenow !== TYPE_NOW_WIDGETS && pagenow !== TYPE_NOW_MENUS) {
+	if (pagenow !== PAGE_NOW_WIDGETS && pagenow !== PAGE_NOW_MENUS) {
 		workers.push(takeEvery(setupContainer, workerToggleMetaBoxVisibility));
 		workers.push(takeEvery(setUI, workerToggleMetaBoxVisibility));
 	}
