@@ -1,15 +1,27 @@
 /**
  * The external dependencies.
  */
+import urldecode from 'locutus/php/url/urldecode';
 import { takeEvery } from 'redux-saga';
-import { call, select } from 'redux-saga/effects';
+import { call, select, put } from 'redux-saga/effects';
+import { keyBy } from 'lodash';
 
 /**
  * The internal dependencies.
  */
 import { TYPE_NOW_WIDGETS, TYPE_NOW_MENUS } from 'lib/constants';
+
+import containerFactory from 'containers/factory';
 import { getContainerById } from 'containers/selectors';
-import { setupContainer, setUI } from 'containers/actions';
+import {
+	setupContainer,
+	addContainer,
+	receiveContainer,
+	setUI
+} from 'containers/actions';
+
+import { addFields } from 'fields/actions';
+import { flattenField } from 'fields/helpers';
 
 /**
  * Show or hide the container's metabox.
@@ -30,20 +42,49 @@ export function* workerToggleMetaBoxVisibility(action) {
 }
 
 /**
- * Start to work.
+ * Prepare the container for inserting in the store.
  *
+ * @param  {Object} store
+ * @param  {Object} action
+ * @param  {String} action.payload
  * @return {void}
  */
-export default function* foreman() {
-	const { pagenow } = window;
+export function* workerReceiveContainer(store, { payload }) {
+	let container = payload;
+	let fields = [];
 
-	// We don't need this functionality on "Widgets" or "Menus" pages.
+	container = urldecode(container);
+	container = JSON.parse(container);
+	container.fields = container.fields.map(field => flattenField(field, container.id, fields));
+
+	fields = keyBy(fields, 'id');
+
+	yield put(addContainer(container));
+	yield put(addFields(fields));
+
+	const { id, type } = container;
+
+	yield call(containerFactory, store, type, { id });
+}
+
+/**
+ * Start to work.
+ *
+ * @param  {Object} store
+ * @return {void}
+ */
+export default function* foreman(store) {
+	const { pagenow } = window;
+	const workers = [];
+
 	if (pagenow === TYPE_NOW_WIDGETS || pagenow === TYPE_NOW_MENUS) {
-		return;
+		workers.push(takeEvery(receiveContainer, workerReceiveContainer, store));
 	}
 
-	yield [
-		takeEvery(setupContainer, workerToggleMetaBoxVisibility),
-		takeEvery(setUI, workerToggleMetaBoxVisibility),
-	];
+	if (pagenow !== TYPE_NOW_WIDGETS && pagenow !== TYPE_NOW_MENUS) {
+		workers.push(takeEvery(setupContainer, workerToggleMetaBoxVisibility));
+		workers.push(takeEvery(setUI, workerToggleMetaBoxVisibility));
+	}
+
+	yield workers;
 }

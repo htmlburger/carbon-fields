@@ -2,11 +2,8 @@
  * The external dependencies.
  */
 import $ from 'jquery';
-import React from 'react';
 import ReactDOM from 'react-dom';
-import urldecode from 'locutus/php/url/urldecode';
-import { keyBy, startsWith } from 'lodash';
-import { Provider } from 'react-redux';
+import { startsWith } from 'lodash';
 import { put, call, take, fork, select } from 'redux-saga/effects';
 
 /**
@@ -15,26 +12,23 @@ import { put, call, take, fork, select } from 'redux-saga/effects';
 import { TYPE_NOW_WIDGETS } from 'lib/constants';
 import { createWidgetsChannel, createAjaxChannel } from 'lib/events';
 
-import containerFactory from 'containers/factory';
-import { addContainer, removeContainer } from 'containers/actions';
+import { removeContainer, receiveContainer } from 'containers/actions';
 import { getContainerById } from 'containers/selectors';
 
-import { addFields, removeFields } from 'fields/actions';
+import { removeFields } from 'fields/actions';
 import { getFieldsByRoots } from 'fields/selectors';
-import { flattenField } from 'fields/helpers';
 
 /**
  * Re-init the container when the widget is created/saved.
  *
- * @param  {Object} store
  * @return {void}
  */
-export function* workerUpdate(store) {
+export function* workerUpdate() {
 	const channel = yield call(createWidgetsChannel);
 
 	while (true) {
 		const { widget } = yield take(channel);
-		let container = $(widget)
+		const container = $(widget)
 			.find('[data-json]')
 				.data('json');
 
@@ -43,23 +37,7 @@ export function* workerUpdate(store) {
 			continue;
 		}
 
-		// Convert the container to usable data structure.
-		container = urldecode(container);
-		container = JSON.parse(container);
-
-		// Prepare the fields to be inserted in the store.
-		let fields = [];
-
-		container.fields = container.fields.map(field => flattenField(field, container.id, fields));
-		fields = keyBy(fields, 'id');
-
-		yield put(addContainer(container));
-		yield put(addFields(fields));
-
-		// Re-render the container.
-		const { id, type } = container;
-
-		containerFactory(store, type, { id });
+		yield put(receiveContainer(container));
 	}
 }
 
@@ -67,10 +45,9 @@ export function* workerUpdate(store) {
  * We need to remove the container from DOM when the widget
  * is saved because WordPress will throw away everything.
  *
- * @param  {Object} store
  * @return {void}
  */
-export function* workerCleanup(store) {
+export function* workerCleanup() {
 	const channel = yield call(createAjaxChannel, 'ajaxSend', 'save-widget');
 
 	while (true) {
@@ -106,14 +83,15 @@ export function* workerCleanup(store) {
 /**
  * Start to work.
  *
- * @param  {Object} store
  * @return {void}
  */
-export default function* foreman(store) {
-	if (window.pagenow !== TYPE_NOW_WIDGETS) {
+export default function* foreman() {
+	const { pagenow } = window;
+
+	if (pagenow !== TYPE_NOW_WIDGETS) {
 		return;
 	}
 
-	yield fork(workerUpdate, store);
-	yield fork(workerCleanup, store);
+	yield fork(workerUpdate);
+	yield fork(workerCleanup);
 }

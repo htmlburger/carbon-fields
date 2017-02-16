@@ -56,3 +56,11 @@ export const addContainer = createAction('containers/ADD_CONTAINER');
  * @return {Object}
  */
 export const removeContainer = createAction('containers/REMOVE_CONTAINER');
+
+/**
+ * Receive a container as string and convert it to a usable structure.
+ *
+ * @param  {String} container
+ * @return {Object}
+ */
+export const receiveContainer = createAction('container/RECEIVE_CONTAINER');

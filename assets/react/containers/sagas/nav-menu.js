@@ -2,11 +2,6 @@
  * The external dependencies.
  */
 import $ from 'jquery';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import urldecode from 'locutus/php/url/urldecode';
-import { keyBy } from 'lodash';
-import { Provider } from 'react-redux';
 import { put, call, take } from 'redux-saga/effects';
 
 /**
@@ -15,51 +10,35 @@ import { put, call, take } from 'redux-saga/effects';
 import { TYPE_NOW_MENUS } from 'lib/constants';
 import { createAjaxSuccessChannel } from 'lib/events';
 
-import containerFactory from 'containers/factory';
-import { addContainer } from 'containers/actions';
-
-import { addFields } from 'fields/actions';
-import { flattenField } from 'fields/helpers';
+import { receiveContainer } from 'containers/actions';
 
 /**
  * Start to work.
  *
- * @param  {Object} store
  * @return {void}
  */
-export default function* foreman(store) {
-	if (window.pagenow !== TYPE_NOW_MENUS) {
+export default function* foreman() {
+	const { pagenow } = window;
+
+	if (pagenow !== TYPE_NOW_MENUS) {
 		return;
 	}
 
 	const channel = yield call(createAjaxSuccessChannel, 'add-menu-item');
 
-	try {
-		while (true) {
-			const { data } = yield take(channel);
-			let fields = [];
-			let container;
+	while (true) {
+		const { data } = yield take(channel);
+		const container = $(data)
+			.find('[data-json]')
+				.data('json');
 
-			container = $(data)
-				.find('[data-json]')
-					.data('json');
-
-			container = urldecode(container);
-			container = JSON.parse(container);
-			container.fields = container.fields.map(field => flattenField(field, container.id, fields));
-
-			fields = keyBy(fields, 'id');
-
-			yield put(addContainer(container));
-			yield put(addFields(fields));
-
-			const { id, type } = container;
-
-			containerFactory(store, type, { id });
-		}
-	} catch (e) {
 		// Close the channel since we don't have any
 		// registered containers.
-		channel.close();
+		if (!container) {
+			channel.close();
+			break;
+		}
+
+		yield put(receiveContainer(container));
 	}
 }
