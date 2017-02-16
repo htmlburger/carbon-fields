@@ -12,8 +12,6 @@ import { put, call, take, fork, select } from 'redux-saga/effects';
 /**
  * The internal dependencies.
  */
-import store from 'store';
-
 import { TYPE_NOW_WIDGETS } from 'lib/constants';
 import { createWidgetsChannel, createAjaxChannel } from 'lib/events';
 
@@ -28,9 +26,10 @@ import { flattenField } from 'fields/helpers';
 /**
  * Re-init the container when the widget is created/saved.
  *
+ * @param  {Object} store
  * @return {void}
  */
-export function* workerUpdate() {
+export function* workerUpdate(store) {
 	const channel = yield call(createWidgetsChannel);
 
 	while (true) {
@@ -60,7 +59,6 @@ export function* workerUpdate() {
 		// Re-render the container.
 		const { id, type } = container;
 
-		// TODO: Refactor this, because we shouldn't access the store directly.
 		containerFactory(store, type, { id });
 	}
 }
@@ -69,9 +67,10 @@ export function* workerUpdate() {
  * We need to remove the container from DOM when the widget
  * is saved because WordPress will throw away everything.
  *
+ * @param  {Object} store
  * @return {void}
  */
-export function* workerCleanup() {
+export function* workerCleanup(store) {
 	const channel = yield call(createAjaxChannel, 'ajaxSend', 'save-widget');
 
 	while (true) {
@@ -107,13 +106,14 @@ export function* workerCleanup() {
 /**
  * Start to work.
  *
+ * @param  {Object} store
  * @return {void}
  */
-export default function* foreman() {
+export default function* foreman(store) {
 	if (window.pagenow !== TYPE_NOW_WIDGETS) {
 		return;
 	}
 
-	yield fork(workerUpdate);
-	yield fork(workerCleanup);
+	yield fork(workerUpdate, store);
+	yield fork(workerCleanup, store);
 }

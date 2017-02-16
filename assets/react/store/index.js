@@ -15,14 +15,17 @@ import fields from 'fields/reducer';
 /**
  * Create the store instance.
  *
- * @param  {Object} [state]
+ * @param  {Object}     [state]
+ * @param  {Function[]} [sagas]
  * @return {Object}
  */
-export default function(state = {}) {
+export default function(state = {}, sagas = []) {
 	const composeEnhancer = get(window, '__REDUX_DEVTOOLS_EXTENSION_COMPOSE__', compose);
-	const saga = createSagaMiddleware();
+	const sagaMiddleware = createSagaMiddleware();
 	const reducer = combineReducers({ containers, sidebars, fields });
-	const store = createStore(reducer, state, composeEnhancer(applyMiddleware(saga)));
+	const store = createStore(reducer, state, composeEnhancer(applyMiddleware(sagaMiddleware)));
+
+	sagas.forEach(saga => sagaMiddleware.run(saga, store));
 
 	return store;
 }

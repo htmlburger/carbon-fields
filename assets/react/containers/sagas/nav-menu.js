@@ -12,8 +12,6 @@ import { put, call, take } from 'redux-saga/effects';
 /**
  * The internal dependencies.
  */
-import store from 'store';
-
 import { TYPE_NOW_MENUS } from 'lib/constants';
 import { createAjaxSuccessChannel } from 'lib/events';
 
@@ -26,9 +24,10 @@ import { flattenField } from 'fields/helpers';
 /**
  * Start to work.
  *
+ * @param  {Object} store
  * @return {void}
  */
-export default function* foreman() {
+export default function* foreman(store) {
 	if (window.pagenow !== TYPE_NOW_MENUS) {
 		return;
 	}
@@ -56,7 +55,6 @@ export default function* foreman() {
 
 			const { id, type } = container;
 
-			// TODO: Refactor this, because we shouldn't access the store directly.
 			containerFactory(store, type, { id });
 		}
 	} catch (e) {

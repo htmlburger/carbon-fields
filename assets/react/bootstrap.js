@@ -7,7 +7,7 @@ import _ from 'lodash';
 /**
  * The internal dependencies.
  */
-import { registerContainerComponent, registerFieldComponent } from 'lib/registry';
+import { registerContainerComponent, registerFieldComponent, registerSaga, getSagas } from 'lib/registry';
 import { autoload } from 'lib/helpers';
 
 import configureStore from 'store';
@@ -41,11 +41,16 @@ autoload(require.context('./fields/components', true, /index\.js$/), (path, file
 	}
 });
 
+autoload(require.context('./', true, /sagas\/.+\.js$/), (path, file) => {
+	registerSaga(file.default);
+});
+
 /**
  * Setup the store.
  */
 const state = normalizePreloadedState(window.carbon_json);
-const store = configureStore(state);
+const sagas = getSagas();
+const store = configureStore(state, sagas);
 
 /**
  * Every Carbon container will be treated as separate React application because
