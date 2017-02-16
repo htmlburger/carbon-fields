@@ -5,13 +5,16 @@ use Carbon_Fields\Container\Repository;
 use Carbon_Fields\Container\Container;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
+/**
+ * @coversDefaultClass Carbon_Fields\Container\Repository
+ */
 class RepositoryTest extends WP_UnitTestCase {
 	
 	public function setUp() {
 		$this->containerId = 'PageSettings';
 		$this->containerTitle = 'Page Settings';
 		$this->containerType = 'post_meta';
-		$this->containerClass = '\Carbon_Fields\Container\Post_Meta_Container';
+		$this->containerClass = 'Carbon_Fields\Container\Post_Meta_Container';
 		$this->containerDuplicateTitleId = 'PageSettings1';
 		$this->repository = new Repository();
 	}
@@ -35,8 +38,8 @@ class RepositoryTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Repository::register_container
-	 * @covers \Carbon_Fields\Container\Repository::initialize_containers
+	 * @covers ::register_container
+	 * @covers ::initialize_containers
 	 */
 	public function testInitializeContainersCallsInitOnce() {
 		$container = $this->getContainerMock( function( $mock ) {
@@ -49,8 +52,8 @@ class RepositoryTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Repository::register_container
-	 * @covers \Carbon_Fields\Container\Repository::initialize_containers
+	 * @covers ::register_container
+	 * @covers ::initialize_containers
 	 */
 	public function testInitializeContainersReturnsContainers() {
 		$container = $this->getContainerMock();
@@ -63,8 +66,8 @@ class RepositoryTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Repository::register_container
-	 * @covers \Carbon_Fields\Container\Repository::initialize_containers
+	 * @covers ::register_container
+	 * @covers ::initialize_containers
 	 */
 	public function testInitializeContainersReturnsOnlyNewContainers() {
 		$container1 = $this->getContainerMock();
@@ -85,7 +88,7 @@ class RepositoryTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Repository::get_active_containers
+	 * @covers ::get_active_containers
 	 */
 	public function testGetActiveContainers() {
 		$container1 = $this->getContainerMock( function( $mock ) {
@@ -105,7 +108,7 @@ class RepositoryTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Repository::get_unique_panel_id
+	 * @covers ::get_unique_panel_id
 	 */
 	public function testGetUniquePanelId_InvalidCharacters_Stripped() {
 		$expected = $this->containerId;
@@ -114,8 +117,8 @@ class RepositoryTest extends WP_UnitTestCase {
 	}
 	
 	/**
-	 * @covers \Carbon_Fields\Container\Repository::get_unique_panel_id
-	 * @covers \Carbon_Fields\Container\Repository::register_container
+	 * @covers ::get_unique_panel_id
+	 * @covers ::register_container
 	 */
 	public function testGetUniquePanelId_IdenticalTitles_ReturnsDifferentIds() {
 		$container = $this->getContainerMock();
@@ -126,8 +129,8 @@ class RepositoryTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Repository::get_unique_panel_id
-	 * @covers \Carbon_Fields\Container\Repository::register_container
+	 * @covers ::get_unique_panel_id
+	 * @covers ::register_container
 	 */
 	public function testGetUniquePanelId_IdenticalTitles_AddsNumericalSuffix() {
 		$container = $this->getContainerMock();

@@ -93,7 +93,7 @@ class Legacy_Storage_Service extends Service {
 		$permutations = array();
 
 		foreach ( $fields as $field ) {
-			if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
+			if ( is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
 
 				$group_names = $field->get_group_names();
 				foreach ( $group_names as $group_name ) {
@@ -135,12 +135,12 @@ class Legacy_Storage_Service extends Service {
 		$table_key_column = '';
 		$table_value_column = '';
 
-		if ( is_a( $datastore, '\\Carbon_Fields\\Datastore\\Theme_Options_Datastore' ) ) {
+		if ( is_a( $datastore, 'Carbon_Fields\\Datastore\\Theme_Options_Datastore' ) ) {
 			$prefix = '';
 			$table_name = $wpdb->options;
 			$table_key_column = 'option_name';
 			$table_value_column = 'option_value';
-		} else if ( is_a( $datastore, '\\Carbon_Fields\\Datastore\\Meta_Datastore' ) ) {
+		} else if ( is_a( $datastore, 'Carbon_Fields\\Datastore\\Meta_Datastore' ) ) {
 			$table_name = $datastore->get_table_name();
 			$table_id_column = $datastore->get_table_field_name();
 			$table_key_column = 'meta_key';
@@ -156,7 +156,7 @@ class Legacy_Storage_Service extends Service {
 		foreach ( $container_fields as $field ) {
 			$field_key_pattern = $prefix . $field->get_base_name();
 
-			if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
+			if ( is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
 				$groups = $field->get_group_names();
 				foreach ( $groups as $group_name ) {
 					$underscored_group_name = ( substr( $group_name, 0, 1 ) === '_' ? $group_name : '_' . $group_name );
@@ -165,7 +165,7 @@ class Legacy_Storage_Service extends Service {
 			} else {
 				$comparisons[] = ' `' . $table_key_column . '` = "' . esc_sql( $field_key_pattern ) . '" ';
 
-				if ( is_a( $field, '\\Carbon_Fields\\Field\\Map_Field' ) ) {
+				if ( is_a( $field, 'Carbon_Fields\\Field\\Map_Field' ) ) {
 					foreach ( $this->map_keys as $mk ) {
 						$comparisons[] = ' `' . $table_key_column . '` = "' . esc_sql( $field_key_pattern . '-' . $mk ) . '" ';
 					}

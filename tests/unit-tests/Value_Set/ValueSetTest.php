@@ -5,7 +5,7 @@ use Carbon_Fields\Value_Set\Value_Set;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
- * @coversDefaultClass \Carbon_Fields\Value_Set\Value_Set
+ * @coversDefaultClass Carbon_Fields\Value_Set\Value_Set
  */
 class ValueSetTest extends WP_UnitTestCase {
 
@@ -30,7 +30,7 @@ class ValueSetTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::__construct
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 */
 	public function testInvalidTypeRaisesException() {
 		$subject = new Value_Set( 'invalid type' );

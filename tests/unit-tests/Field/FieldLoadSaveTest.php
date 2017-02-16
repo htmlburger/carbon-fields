@@ -10,12 +10,12 @@ use Carbon_Fields\Value_Set\Value_Set as Value_Set;
 class FieldLoadSaveTest extends WP_UnitTestCase {
 
 	public function setUp() {
-		$this->subject = M::mock( '\Carbon_Fields\Field\Field' )->makePartial();
+		$this->subject = M::mock( 'Carbon_Fields\Field\Field' )->makePartial();
 		$this->subject->set_base_name( 'carbon_field' );
 		$this->subject->set_name( 'carbon_field' );
 		$this->subject->set_label( 'Carbon Field' );
 
-		$this->datastore = M::mock( '\Carbon_Fields\Datastore\Datastore_Interface' );
+		$this->datastore = M::mock( 'Carbon_Fields\Datastore\Datastore_Interface' );
 	}
 
 	public function tearDown() {

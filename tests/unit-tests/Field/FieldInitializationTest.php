@@ -203,7 +203,7 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 * @covers ::__construct
 	 * @covers ::set_name
 	 *
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage can't be empty
 	 */
 	public function testFieldNameCantBeEmpty() {

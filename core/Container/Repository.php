@@ -89,7 +89,7 @@ class Repository {
 	 * @param string $field_name
 	 * @param string $container_type Container type to filter for
 	 * @param bool $include_nested_fields Search in nested fields as well
-	 * @return \Carbon_Fields\Field\Field
+	 * @return Carbon_Fields\Field\Field
 	 **/
 	public function get_field_in_containers( $field_name, $container_type = null, $include_nested_fields = true ) {
 		$containers = $this->get_containers( $container_type );

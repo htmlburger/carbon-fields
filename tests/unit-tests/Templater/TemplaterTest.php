@@ -4,7 +4,7 @@ use Mockery as M;
 use Carbon_Fields\Service\Template_Service;
 
 /**
- * @coversDefaultClass \Carbon_Fields\Service\Template_Service
+ * @coversDefaultClass Carbon_Fields\Service\Template_Service
  */
 class TemplateServiceTest extends WP_UnitTestCase {
 

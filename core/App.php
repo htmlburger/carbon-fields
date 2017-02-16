@@ -164,7 +164,7 @@ class App {
 	 */
 	public static function verify_boot() {
 		if ( ! static::is_booted() ) {
-			throw new \Exception( 'You must call \Carbon_Fields\App::boot() in a suitable WordPress hook before using Carbon Fields.' );
+			throw new \Exception( 'You must call Carbon_Fields\App::boot() in a suitable WordPress hook before using Carbon Fields.' );
 		}
 	}
 }

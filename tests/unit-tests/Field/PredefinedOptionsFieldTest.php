@@ -6,11 +6,12 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * @group field
+ * @coversDefaultClass Carbon_Fields\Field\Predefined_Options_Field
  */
 class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 
 	public function setUp() {
-		$this->subject = M::mock( '\Carbon_Fields\Field\Predefined_Options_Field' )->makePartial();
+		$this->subject = M::mock( 'Carbon_Fields\Field\Predefined_Options_Field' )->makePartial();
 	}
 
 	public function tearDown() {
@@ -19,8 +20,8 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::set_options
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 * @covers ::set_options
+	 * @covers ::get_options
 	 */
 	public function testSetAndGetOptions() {
 		$expected = array(1, 2, 3);
@@ -29,8 +30,8 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::set_options
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 * @covers ::set_options
+	 * @covers ::get_options
 	 */
 	public function testSetOptionsResetsPreviousOnes() {
 		$this->subject->set_options( array(1, 2, 3) );
@@ -42,8 +43,8 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::set_options
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 * @covers ::set_options
+	 * @covers ::get_options
 	 */
 	public function testSetEmptyArrayWillDeleteExistingOptions() {
 		$this->subject->set_options( array(1, 2, 3) );
@@ -55,8 +56,8 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::set_options
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 * @covers ::set_options
+	 * @covers ::get_options
 	 */
 	public function testSetOptionsCallable() {
 		$expected = array(1, 2, 3);
@@ -70,9 +71,9 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::set_options
+	 * @covers ::set_options
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>set_options()</code> method.
 	 */
 	public function testSetOptionsString() {
@@ -80,9 +81,9 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::set_options
+	 * @covers ::set_options
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>set_options()</code> method.
 	 */
 	public function testSetOptionsInteger() {
@@ -90,9 +91,9 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::set_options
+	 * @covers ::set_options
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>set_options()</code> method.
 	 */
 	public function testSetOptionsBool() {
@@ -100,9 +101,9 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::set_options
+	 * @covers ::set_options
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>set_options()</code> method.
 	 */
 	public function testSetOptionsObject() {
@@ -110,8 +111,8 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::add_options
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 * @covers ::add_options
+	 * @covers ::get_options
 	 */
 	public function testAddOptionsArray() {
 		$expected = array('foo', 'bar');
@@ -122,8 +123,8 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::add_options
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 * @covers ::add_options
+	 * @covers ::get_options
 	 */
 	public function testAddOptionsArrayPreservesOtherOptions() {
 		$options_1 = array( 'foo', 'bar' );
@@ -137,8 +138,8 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::add_options
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 * @covers ::add_options
+	 * @covers ::get_options
 	 */
 	public function testAddOptionsArrayWithAssociativeArray() {
 		$options_1 = array( 'foo' => 'bar', 'bar' => 'foo' );
@@ -152,8 +153,8 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::add_options
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 * @covers ::add_options
+	 * @covers ::get_options
 	 */
 	public function testAddOptionsArraysWithNumericAssociativeArrays() {
 		$options_1 = array( 3 => 'Option 1' );
@@ -167,8 +168,8 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::add_options
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 * @covers ::add_options
+	 * @covers ::get_options
 	 */
 	public function testAddOptionsArraysWithMixedAssociativeArrays() {
 		$options_1 = array( 0 => 'Option 1' );
@@ -186,8 +187,8 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	/**
 	 * Possibly a duplicate of other tests but kept for it's readability
 	 * 
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::add_options
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 * @covers ::add_options
+	 * @covers ::get_options
 	 */
 	public function testAddOptionsArraysReindex() {
 		$options_1 = array( 0 => 'Option 1' );
@@ -201,8 +202,8 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::add_options
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 * @covers ::add_options
+	 * @covers ::get_options
 	 */
 	public function testAddOptionsArraysAppend() {
 		$options_1 = array( 0 => 'Option 1', 1 => 'Option 2' );
@@ -216,8 +217,8 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::add_options
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 * @covers ::add_options
+	 * @covers ::get_options
 	 */
 	public function testAddOptionsArraysOverwrite() {
 		$options_1 = array( 0 => 'Option 1' );
@@ -233,9 +234,9 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::set_options
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::add_options
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 * @covers ::set_options
+	 * @covers ::add_options
+	 * @covers ::get_options
 	 */
 	public function testAddOptionsArrayAfterCallable() {
 		$base = array( 1, 2, 3 );
@@ -250,9 +251,9 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::add_options
+	 * @covers ::add_options
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
 	public function testAddOptionsString() {
@@ -260,9 +261,9 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::add_options
+	 * @covers ::add_options
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
 	public function testAddOptionsInteger() {
@@ -270,9 +271,9 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::add_options
+	 * @covers ::add_options
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
 	public function testAddOptionsBool() {
@@ -280,9 +281,9 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Predefined_Options_Field::add_options
+	 * @covers ::add_options
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
 	public function testAddOptionsObject() {

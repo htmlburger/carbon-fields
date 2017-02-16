@@ -40,9 +40,9 @@ class ContainerTest extends WP_UnitTestCase {
 		$this->containerTypeSpaced = 'Post Meta';
 		$this->containerTypeBackwardsCompatible = 'custom_fields';
 		$this->containerTypeInvalid = '__no_such_container_type__';
-		$this->containerTypeClass = '\Carbon_Fields\Container\Post_Meta_Container';
-		$this->containerTypeDatastoreClass = '\Carbon_Fields\Datastore\Post_Meta_Datastore';
-		$this->containerTypeBrokenClass = '\Carbon_Fields\Container\Broken_Container';
+		$this->containerTypeClass = 'Carbon_Fields\Container\Post_Meta_Container';
+		$this->containerTypeDatastoreClass = 'Carbon_Fields\Datastore\Post_Meta_Datastore';
+		$this->containerTypeBrokenClass = 'Carbon_Fields\Container\Broken_Container';
 	}
 
 	public function tearDown() {
@@ -62,7 +62,7 @@ class ContainerTest extends WP_UnitTestCase {
 	 * @covers ::make
 	 * @covers ::factory
 	 *
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Unknown container "".
 	 */
 	public function testExceptionIsThrownWhenContainerTypeIsEmpty() {
@@ -73,7 +73,7 @@ class ContainerTest extends WP_UnitTestCase {
 	 * @covers ::make
 	 * @covers ::factory
 	 *
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Unknown container "__No_Such_Container_Type__".
 	 */
 	public function testExceptionIsThrownWhenContainerTypeIsInvalid() {
@@ -144,7 +144,7 @@ class ContainerTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::__construct
 	 *
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Empty container title is not supported
 	 */
 	public function testExceptionIsThrownWhenContainerTitleIsEmpty() {

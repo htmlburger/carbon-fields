@@ -191,6 +191,6 @@ class Nav_Menu_Item_Container extends Container {
 	 * Setup custom walker for the Nav Menu entries
 	 */
 	public static function edit_walker() {
-		return '\Carbon_Fields\Walker\Nav_Menu_Item_Edit_Walker';
+		return 'Carbon_Fields\\Walker\\Nav_Menu_Item_Edit_Walker';
 	}
 }

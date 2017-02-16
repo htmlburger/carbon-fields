@@ -2,6 +2,9 @@
 
 use Carbon_Fields\Field\Field;
 
+/**
+ * @coversDefaultClass Carbon_Fields\Field\Field
+ */
 class FieldConditionalLogicTest extends WP_UnitTestCase {
 	private $field;
 
@@ -14,9 +17,9 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::set_conditional_logic
+	 * @covers ::set_conditional_logic
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage should be an array
 	 */	
 	public function testErrorIsThrownWhenCondLogicIsNotArray() {
@@ -24,9 +27,9 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::set_conditional_logic
+	 * @covers ::set_conditional_logic
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 */	
 	public function testErrorIsThrownWhenFlatArrayIsProvided() {
 		$this->field->set_conditional_logic( array(
@@ -50,8 +53,8 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::set_conditional_logic
-	 * @covers \Carbon_Fields\Field\Field::get_conditional_logic
+	 * @covers ::set_conditional_logic
+	 * @covers ::get_conditional_logic
 	 */
 	public function testBasicCondLogic() {
 		$user_defined_cond_logic = array(
@@ -78,8 +81,8 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::set_conditional_logic
-	 * @covers \Carbon_Fields\Field\Field::get_conditional_logic
+	 * @covers ::set_conditional_logic
+	 * @covers ::get_conditional_logic
 	 */
 	public function testValueDefaultsToEmptyString() {
 		$user_defined_cond_logic = array(
@@ -107,8 +110,8 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::set_conditional_logic
-	 * @covers \Carbon_Fields\Field\Field::get_conditional_logic
+	 * @covers ::set_conditional_logic
+	 * @covers ::get_conditional_logic
 	 */
 	public function testRelationOperatorIsProvidedInLowercase() {
 		$user_defined_cond_logic = array(
@@ -137,9 +140,9 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::set_conditional_logic
+	 * @covers ::set_conditional_logic
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Invalid relation
 	 */
 	public function testBadRelationOperatorThrowsError() {
@@ -153,9 +156,9 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::set_conditional_logic
+	 * @covers ::set_conditional_logic
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage compare operator
 	 */
 	public function testBadCompareOperatorThrowsError() {
@@ -169,9 +172,9 @@ class FieldConditionalLogicTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::set_conditional_logic
+	 * @covers ::set_conditional_logic
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage An array is expected
 	 */
 	public function testInCompareOperatorRequiresArrayAsValue() {

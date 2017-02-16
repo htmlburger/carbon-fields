@@ -58,7 +58,7 @@ class Helper {
 			$clone->get_datastore()->set_id( $object_id );
 		}
 
-		if ( is_a( $clone, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
+		if ( is_a( $clone, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
 			$value = ( ! empty( $value ) ) ? $value : array( 'value_set' => array() );
 			$clone->set_value_tree( $value );
 			$clone->set_value( $value['value_set'] );

@@ -6,7 +6,7 @@ use Carbon_Fields\Value_Set\Value_Set;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
- * @coversDefaultClass \Carbon_Fields\Toolset\Key_Toolset
+ * @coversDefaultClass Carbon_Fields\Toolset\Key_Toolset
  */
 class KeyToolsetTest extends WP_UnitTestCase {
 
@@ -327,7 +327,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::storage_key_patterns_to_sql
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 */
 	public function testStorageKeyPatternsToSqlThrowsExceptionOnInvalidComparison() {
 		$table_column = '`option_name`';
@@ -420,7 +420,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::storage_key_matches_any_pattern
 	 * 
-	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 */
 	public function testStorageKeyMatchesAnyPatternThrowsExceptionOnInvalidComparison() {
 		$storage_key = '_field';

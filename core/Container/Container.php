@@ -172,7 +172,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @param string $type Type of the container
 	 **/
 	public function __construct( $unique_id, $title, $type ) {
-		\Carbon_Fields\App::verify_boot();
+		App::verify_boot();
 
 		if ( empty( $title ) ) {
 			Incorrect_Syntax_Exception::raise( 'Empty container title is not supported' );
@@ -435,7 +435,7 @@ abstract class Container implements Datastore_Holder_Interface {
 					if ( empty( $hierarchy_left ) ) {
 						$field = $f;
 					} else {
-						if ( is_a( $f, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
+						if ( is_a( $f, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
 							$group = $f->get_group_by_name( $group_name );
 							if ( ! $group ) {
 								Incorrect_Syntax_Exception::raise( 'Unknown group name specified when fetching a value inside a complex field: "' . $group_name . '".' );
