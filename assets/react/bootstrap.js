@@ -17,7 +17,7 @@ import containerFactory from 'containers/factory';
 import { getContainers } from 'containers/selectors';
 
 /**
- * Put Lodash in noConflict mode to avoid conflicts with Underscore lib
+ * Put Lodash in `noConflict` mode to avoid conflicts with Underscore lib
  * loaded by WordPress.
  */
 _.noConflict();
@@ -25,6 +25,14 @@ _.noConflict();
 /**
  * Register the core components.
  */
+autoload(require.context('./containers/components', true, /\.js$/), (path, file) => {
+	const { type } = file.default;
+
+	if (!_.isEmpty(type)) {
+		registerContainerComponent(type, file.default);
+	}
+});
+
 autoload(require.context('./fields/components', true, /index\.js$/), (path, file) => {
 	const { type } = file.default;
 
