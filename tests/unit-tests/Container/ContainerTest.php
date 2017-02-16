@@ -9,6 +9,10 @@ use Carbon_Fields\Toolset\Key_Toolset;
 use Carbon_Fields\Service\Legacy_Storage_Service;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
+/**
+ * @group container
+ * @coversDefaultClass Carbon_Fields\Container\Container
+ */
 class ContainerTest extends WP_UnitTestCase {
 	
 	public function setUp() {
@@ -46,8 +50,8 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Container::make
-	 * @covers \Carbon_Fields\Container\Container::factory
+	 * @covers ::make
+	 * @covers ::factory
 	 */
 	public function testMakePostMetaContainer() {
 		$container = Container::factory( $this->containerType, $this->containerTitle );
@@ -55,8 +59,8 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Container::make
-	 * @covers \Carbon_Fields\Container\Container::factory
+	 * @covers ::make
+	 * @covers ::factory
 	 *
 	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Unknown container "".
@@ -66,8 +70,8 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Container::make
-	 * @covers \Carbon_Fields\Container\Container::factory
+	 * @covers ::make
+	 * @covers ::factory
 	 *
 	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Unknown container "__No_Such_Container_Type__".
@@ -77,8 +81,8 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Container::make
-	 * @covers \Carbon_Fields\Container\Container::factory
+	 * @covers ::make
+	 * @covers ::factory
 	 */
 	public function testBrokenContainerIsReturnedWhenDebugIsDisabledAndContainerIsInvalid() {
 		$old_val = Incorrect_Syntax_Exception::$throw_errors;
@@ -91,8 +95,8 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Container::make
-	 * @covers \Carbon_Fields\Container\Container::factory
+	 * @covers ::make
+	 * @covers ::factory
 	 */
 	public function testContainerTypeCaseIsIgnored() {
 		$container = Container::factory( $this->containerTypeUpperCase, $this->containerTitle );
@@ -100,8 +104,8 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Container::make
-	 * @covers \Carbon_Fields\Container\Container::factory
+	 * @covers ::make
+	 * @covers ::factory
 	 */
 	public function testSpacesInContainerTypeAreSupported() {
 		$container = Container::factory( $this->containerTypeSpaced, $this->containerTitle );
@@ -109,8 +113,8 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 	
 	/**
-	 * @covers \Carbon_Fields\Container\Container::make
-	 * @covers \Carbon_Fields\Container\Container::factory
+	 * @covers ::make
+	 * @covers ::factory
 	 */
 	public function testSameContainerNamesDoNotGenerateIdenticalIds() {
 		$container1 = Container::factory( $this->containerType, $this->containerTitle );
@@ -119,8 +123,8 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Container::make
-	 * @covers \Carbon_Fields\Container\Container::factory
+	 * @covers ::make
+	 * @covers ::factory
 	 */
 	public function testSameContainerNameAddsNumericalSuffix() {
 		$container1 = Container::factory( $this->containerType, $this->containerTitle );
@@ -129,8 +133,8 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Container::make
-	 * @covers \Carbon_Fields\Container\Container::factory
+	 * @covers ::make
+	 * @covers ::factory
 	 */
 	public function testContainerTypeCustomFieldsBackwardsCompatibility() {
 		$container = Container::factory( $this->containerTypeBackwardsCompatible, $this->containerTitle );
@@ -138,7 +142,7 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Container\Container::__construct
+	 * @covers ::__construct
 	 *
 	 * @expectedException \Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Empty container title is not supported
@@ -148,7 +152,7 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers Carbon_Fields\Container\Container::__construct
+	 * @covers ::__construct
 	 */
 	public function testNonAsciiContainerTitlesAreHandledProperly() {
 		// This text includes a capital cyrillic letter ... it actually assures that
@@ -158,9 +162,9 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers Carbon_Fields\Container\Container::set_datastore
-	 * @covers Carbon_Fields\Container\Container::get_datastore
-	 * @covers Carbon_Fields\Container\Container::has_default_datastore
+	 * @covers ::set_datastore
+	 * @covers ::get_datastore
+	 * @covers ::has_default_datastore
 	 */
 	public function testSetDatastore_Default_ReturnDefault() {
 		$datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
@@ -175,9 +179,9 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers Carbon_Fields\Container\Container::set_datastore
-	 * @covers Carbon_Fields\Container\Container::get_datastore
-	 * @covers Carbon_Fields\Container\Container::has_default_datastore
+	 * @covers ::set_datastore
+	 * @covers ::get_datastore
+	 * @covers ::has_default_datastore
 	 */
 	public function testSetDatastore_DefaultDefault2_ReturnDefault2() {
 		$datastore1 = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
@@ -190,9 +194,9 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers Carbon_Fields\Container\Container::set_datastore
-	 * @covers Carbon_Fields\Container\Container::get_datastore
-	 * @covers Carbon_Fields\Container\Container::has_default_datastore
+	 * @covers ::set_datastore
+	 * @covers ::get_datastore
+	 * @covers ::has_default_datastore
 	 */
 	public function testSetDatastore_Override_ReturnOverride() {
 		$datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
@@ -204,9 +208,9 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers Carbon_Fields\Container\Container::set_datastore
-	 * @covers Carbon_Fields\Container\Container::get_datastore
-	 * @covers Carbon_Fields\Container\Container::has_default_datastore
+	 * @covers ::set_datastore
+	 * @covers ::get_datastore
+	 * @covers ::has_default_datastore
 	 */
 	public function testSetDatastore_OverrideOverride2_ReturnOverride2() {
 		$datastore1 = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
@@ -220,9 +224,9 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers Carbon_Fields\Container\Container::set_datastore
-	 * @covers Carbon_Fields\Container\Container::get_datastore
-	 * @covers Carbon_Fields\Container\Container::has_default_datastore
+	 * @covers ::set_datastore
+	 * @covers ::get_datastore
+	 * @covers ::has_default_datastore
 	 */
 	public function testSetDatastore_DefaultOverride_ReturnOverride() {
 		$default_datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
@@ -239,9 +243,9 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers Carbon_Fields\Container\Container::set_datastore
-	 * @covers Carbon_Fields\Container\Container::get_datastore
-	 * @covers Carbon_Fields\Container\Container::has_default_datastore
+	 * @covers ::set_datastore
+	 * @covers ::get_datastore
+	 * @covers ::has_default_datastore
 	 */
 	public function testSetDatastore_DefaultOverrideDefault2_ReturnOverride() {
 		$default_datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
