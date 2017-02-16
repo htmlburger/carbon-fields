@@ -116,7 +116,6 @@ abstract class Widget extends \WP_Widget {
 		foreach ( $this->custom_fields as $field ) {
 			$tmp_field = clone $field;
 			$tmp_field->load();
-			$tmp_field->set_name_prefix( '' );
 
 			$field_name = $this->get_field_name( $tmp_field->get_name() );
 			$tmp_field->set_name( $field_name );
@@ -171,12 +170,10 @@ abstract class Widget extends \WP_Widget {
 			if ( ! is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
 				Incorrect_Syntax_Exception::raise( 'Object must be of type Carbon_Fields\\Field\\Field' );
 			}
-
 			$this->verify_unique_field_name( $field->get_name() );
-
+			$field->set_name_prefix( '' );
 			$field->set_datastore( $this->datastore, true );
 		}
-
 		$this->custom_fields = array_merge( $this->custom_fields, $fields );
 	}
 

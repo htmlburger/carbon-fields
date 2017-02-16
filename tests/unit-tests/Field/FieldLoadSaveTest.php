@@ -5,6 +5,7 @@ use Carbon_Fields\Value_Set\Value_Set as Value_Set;
 
 /**
  * @group field
+ * @coversDefaultClass Carbon_Fields\Value_Set\Value_Set
  */
 class FieldLoadSaveTest extends WP_UnitTestCase {
 
@@ -24,8 +25,8 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::set_datastore
-	 * @covers \Carbon_Fields\Field\Field::get_datastore
+	 * @covers ::set_datastore
+	 * @covers ::get_datastore
 	 */
 	public function testGetDatastoreReturnsPreviouslySetDatastore() {
 		$this->subject->set_datastore( $this->datastore );
@@ -33,8 +34,8 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::set_default_value
-	 * @covers \Carbon_Fields\Field\Field::get_default_value
+	 * @covers ::set_default_value
+	 * @covers ::get_default_value
 	 */
 	public function testGetDefaultValueReturnsPreviouslySetDefaultValue() {
 		$expected = 'test default value';
@@ -43,8 +44,8 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::set_value
-	 * @covers \Carbon_Fields\Field\Field::get_value
+	 * @covers ::set_value
+	 * @covers ::get_value
 	 */
 	public function testGetValueReturnsPreviouslySetValue() {
 		$expected = 'test value';
@@ -53,8 +54,8 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::load
-	 * @covers \Carbon_Fields\Field\Field::get_value
+	 * @covers ::load
+	 * @covers ::get_value
 	 */
 	public function testLoadAppliesDefaultValueWhenDatastoreReturnsNoValue() {
 		$expected = 'test default value';
@@ -68,8 +69,8 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::load
-	 * @covers \Carbon_Fields\Field\Field::get_value
+	 * @covers ::load
+	 * @covers ::get_value
 	 */
 	public function testLoadAppliesTheSameValueWhenDatastoreReturnsValue() {
 		$expected = 'test value from datastore';
@@ -89,7 +90,7 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::save
+	 * @covers ::save
 	 */
 	public function testSavePassesFieldToDatastore() {
 		$this->datastore->shouldReceive( 'save' )->once();
@@ -99,7 +100,7 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::save
+	 * @covers ::save
 	 */
 	public function testSaveDoesNotCallDeleteForSingleValueValueField() {
 		$this->datastore->shouldIgnoreMissing();
@@ -111,7 +112,7 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::save
+	 * @covers ::save
 	 */
 	public function testSaveDoesNotCallDeleteForMultiplePropertyValueField() {
 		$this->datastore->shouldIgnoreMissing();
@@ -123,7 +124,7 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::save
+	 * @covers ::save
 	 */
 	public function testSaveCallsDeleteForMultipleValuesValueField() {
 		$this->datastore->shouldIgnoreMissing();
@@ -135,7 +136,7 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::save
+	 * @covers ::save
 	 */
 	public function testSaveCallsDeleteForValueSetValueField() {
 		$this->datastore->shouldIgnoreMissing();
@@ -147,12 +148,50 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers \Carbon_Fields\Field\Field::delete
+	 * @covers ::delete
 	 */
 	public function testDeletePassesFieldToDatastore() {
 		$this->datastore->shouldReceive( 'delete' )->once();
 		$this->subject->set_datastore( $this->datastore );
 		$this->subject->delete();
 		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
+	}
+
+	/**
+	 * @covers ::set_value_from_input
+	 */
+	public function testSetValueFromInputTakesValue() {
+		$expected = 'test value from input';
+		$input = array( '_carbon_field' => $expected );
+		$this->subject->set_value_from_input( $input );
+		$this->assertSame( $expected, $this->subject->get_value() );
+	}
+
+	/**
+	 * @covers ::set_value_from_input
+	 */
+	public function testSetValueFromInputSetsEmptyValueWhenMissingFromInput() {
+		$expected = 'test value from input';
+		$input = array(  );
+		$this->subject->set_value_from_input( $input );
+		$this->assertSame( '', $this->subject->get_value() );
+	}
+
+	/**
+	 * @covers ::get_formatted_value
+	 */
+	public function testGetFormattedValueReturnsValue() {
+		$expected = 'test value from input';
+		$this->subject->set_value( $expected );
+		$this->assertSame( $expected, $this->subject->get_formatted_value() );
+	}
+
+	/**
+	 * @covers ::get_formatted_value
+	 */
+	public function testGetFormattedValueReturnsDefaultValue() {
+		$expected = 'test value from input';
+		$this->subject->set_default_value( $expected );
+		$this->assertSame( $expected, $this->subject->get_formatted_value() );
 	}
 }

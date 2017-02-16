@@ -412,13 +412,13 @@ class Field implements Datastore_Holder_Interface {
 	 **/
 	public function set_value_from_input( $input = null ) {
 		if ( is_null( $input ) ) {
-			$input = $_POST;
+			$input = stripslashes_deep( $_POST );
 		}
 
-		if ( ! isset( $input[ $this->name ] ) ) {
-			$this->set_value( array() );
+		if ( isset( $input[ $this->get_name() ] ) ) {
+			$this->set_value( $input[ $this->get_name() ] );
 		} else {
-			$this->set_value( stripslashes_deep( $input[ $this->name ] ) );
+			$this->set_value( array() );
 		}
 	}
 
@@ -585,10 +585,13 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $name_prefix
 	 **/
 	public function set_name_prefix( $name_prefix ) {
+		$name_prefix = strval( $name_prefix );
 		$old_prefix_length = strlen( $this->name_prefix );
+		$this->name_prefix = '';
 		$this->set_name( substr( $this->get_name(), $old_prefix_length ) );
+
 		$this->name_prefix = $name_prefix;
-		$this->set_name( $name_prefix . $this->get_name() );
+		$this->set_name( $this->name_prefix . $this->get_name() );
 	}
 
 	/**
