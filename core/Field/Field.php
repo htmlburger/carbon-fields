@@ -254,17 +254,17 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Boot the field once the container is attached.
-	 **/
-	public function boot() {
+	 * Activate the field once the container is attached.
+	 */
+	public function activate() {
 		$this->admin_init();
-
 		$this->add_template( $this->get_type(), array( $this, 'template' ) );
 
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_scripts' ), 5 );
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
-
 		add_action( 'admin_footer', array( get_class( $this ), 'admin_enqueue_scripts' ), 5 );
+
+		do_action( 'crb_field_activated', $this );
 	}
 
 	/**

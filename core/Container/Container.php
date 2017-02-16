@@ -197,23 +197,11 @@ abstract class Container implements Datastore_Holder_Interface {
 		$this->active = true;
 		$this->boot();
 		do_action( 'crb_container_activated', $this );
-	}
 
-	/**
-	 * Activates and boots a field recursively
-	 **/
-	protected function activate_field( $field ) {
-		if ( method_exists( $field, 'get_fields' ) ) {
-			$fields = $field->get_fields();
-
-			foreach ( $fields as $inner_field ) {
-				$this->activate_field( $inner_field );
-			}
+		$fields = $this->get_fields();
+		foreach ( $fields as $field ) {
+			$field->activate();
 		}
-
-		$field->boot();
-
-		do_action( 'crb_field_activated', $field );
 	}
 
 	/**
@@ -322,13 +310,8 @@ abstract class Container implements Datastore_Holder_Interface {
 			call_user_func_array( array( $this, 'attach' ), $param );
 
 			// Allow containers to activate but not load (useful in cases such as theme options)
-			if ( call_user_func_array( array( $this, 'is_active' ), $param ) ) {
+			if ( $this->should_activate() ) {
 				$this->activate();
-
-				$fields = $this->get_fields();
-				foreach ( $fields as $field ) {
-					$this->activate_field( $field );
-				}
 			}
 		}
 	}
@@ -367,7 +350,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Whether this container is currently viewed.
 	 **/
-	public function is_active() {
+	public function should_activate() {
 		return $this->is_valid_attach();
 	}
 

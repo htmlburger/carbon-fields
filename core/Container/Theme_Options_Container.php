@@ -139,7 +139,7 @@ class Theme_Options_Container extends Container {
 	/**
 	 * Whether this container is currently viewed.
 	 **/
-	public function is_active() {
+	public function should_activate() {
 		$request_page = isset( $_GET['page'] ) ? $_GET['page'] : '';
 		if ( ! empty( $request_page ) && $request_page === $this->settings['file'] ) {
 			return true;

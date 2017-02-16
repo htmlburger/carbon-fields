@@ -60,6 +60,17 @@ class Complex_Field extends Field {
 	}
 
 	/**
+	 * Activate the field once the container is attached.
+	 */
+	public function activate() {
+		parent::activate();
+		$fields = $this->get_fields();
+		foreach ( $fields as $field ) {
+			$field->activate();
+		}
+	}
+
+	/**
 	 * Initialization tasks.
 	 */
 	public function init() {
