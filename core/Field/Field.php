@@ -195,9 +195,9 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @var array
 	 **/
-    public function __clone() {
-        $this->value = clone $this->value();
-    }
+	public function __clone() {
+		$this->value = clone $this->value();
+	}
 
 	/**
 	 * Create a new field of type $type and name $name and label $label.
@@ -208,11 +208,6 @@ class Field implements Datastore_Holder_Interface {
 	 * @return Field
 	 **/
 	public static function factory( $type, $name, $label = null ) {
-		// backward compatibility: `file` type used to be called `attachment`
-		if ( $type === 'attachment' ) {
-			$type = 'file';
-		}
-
 		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
 
 		$class = __NAMESPACE__ . '\\' . $type . '_Field';
