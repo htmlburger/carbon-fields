@@ -57,7 +57,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @var Value_Set
 	 */
-	protected $value;
+	protected $value_set;
 
 	/**
 	 * Default field value
@@ -196,7 +196,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @var array
 	 **/
 	public function __clone() {
-		$this->value = clone $this->value();
+		$this->set_value_set( clone $this->get_value_set() );
 	}
 
 	/**
@@ -314,9 +314,9 @@ class Field implements Datastore_Holder_Interface {
 			empty( $hierarchy )
 			&&
 			(
-				$this->value()->get_type() === Value_Set::TYPE_SINGLE_VALUE
+				$this->get_value_set()->get_type() === Value_Set::TYPE_SINGLE_VALUE
 				||
-				$this->value()->get_type() === Value_Set::TYPE_MULTIPLE_PROPERTIES
+				$this->get_value_set()->get_type() === Value_Set::TYPE_MULTIPLE_PROPERTIES
 			)
 		);
 	}
@@ -392,7 +392,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Save value to storage
 	 **/
 	public function save() {
-		if ( ! in_array( $this->value()->get_type(), array( Value_Set::TYPE_SINGLE_VALUE, Value_Set::TYPE_MULTIPLE_PROPERTIES ) ) ) {
+		if ( ! in_array( $this->get_value_set()->get_type(), array( Value_Set::TYPE_SINGLE_VALUE, Value_Set::TYPE_MULTIPLE_PROPERTIES ) ) ) {
 			$this->delete();
 		}
 		return $this->get_datastore()->save( $this );
@@ -476,24 +476,33 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return a reference to the Value_Set
+	 * Get the Value_Set object
 	 *
 	 * @return Value_Set
 	 **/
-	public function value() {
-		if ( $this->value === null ) {
-			$this->value = new Value_Set();
+	public function get_value_set() {
+		if ( $this->value_set === null ) {
+			$this->set_value_set( new Value_Set() );
 		}
-		return $this->value;
+		return $this->value_set;
 	}
 
 	/**
-	 * Alias for $this->value()->get();
+	 * Set the Value_Set object
+	 *
+	 * @param Value_Set $value_set
+	 **/
+	public function set_value_set( $value_set ) {
+		$this->value_set = $value_set;
+	}
+
+	/**
+	 * Alias for $this->get_value_set()->get();
 	 *
 	 * @return mixed
 	 **/
 	public function get_value() {
-		return $this->value()->get();
+		return $this->get_value_set()->get();
 	}
 
 	/**
@@ -510,10 +519,10 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Alias for $this->value()->set( $value );
+	 * Alias for $this->get_value_set()->set( $value );
 	 **/
 	public function set_value( $value ) {
-		$this->value()->set( $value );
+		$this->get_value_set()->set( $value );
 	}
 
 	/**

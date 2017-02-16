@@ -44,7 +44,7 @@ class Map_Field extends Field {
 	 * @param string $label Field label
 	 */
 	protected function __construct( $name, $label ) {
-		$this->value = new Value_Set( Value_Set::TYPE_MULTIPLE_PROPERTIES, array( 'lat' => '', 'lng' => '', 'zoom' => '', 'address' => '' ) );
+		$this->set_value_set( new Value_Set( Value_Set::TYPE_MULTIPLE_PROPERTIES, array( 'lat' => '', 'lng' => '', 'zoom' => '', 'address' => '' ) ) );
 		parent::__construct( $name, $label );
 	}
 

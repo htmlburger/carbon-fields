@@ -55,7 +55,7 @@ class Complex_Field extends Field {
 	 * @param string $label Field label
 	 */
 	protected function __construct( $name, $label ) {
-		$this->value = new Value_Set( Value_Set::TYPE_MULTIPLE_VALUES );
+		$this->set_value_set( new Value_Set( Value_Set::TYPE_MULTIPLE_VALUES ) );
 		parent::__construct( $name, $label );
 	}
 
@@ -250,7 +250,7 @@ class Complex_Field extends Field {
 					$value_group[ $tmp_field->get_base_name() ] = $tmp_field->get_value_tree();
 				} else {
 					$value_group[ $tmp_field->get_base_name() ] = array(
-						'value_set' => $tmp_field->value()->get_set(),
+						'value_set' => $tmp_field->get_value_set()->get_set(),
 					);
 				}
 			}

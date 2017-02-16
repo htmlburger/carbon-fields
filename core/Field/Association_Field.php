@@ -39,12 +39,12 @@ class Association_Field extends Relationship_Field {
 	 */
 	protected function __construct( $name, $label ) {
 		$this->wp_toolset = App::resolve( 'wp_toolset' );
-		$this->value = new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'type' => '', 'subtype' => '', 'object_id' => 0 ) );
+		$this->set_value_set( new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'type' => '', 'subtype' => '', 'object_id' => 0 ) ) );
 		Field::__construct( $name, $label );
 	}
 
 	/**
-	 * Alias for $this->value()->set( $value );
+	 * Alias for $this->get_value_set()->set( $value );
 	 **/
 	public function set_value( $value ) {
 		$value = $this->value_string_array_to_value_set( $value );

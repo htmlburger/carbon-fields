@@ -29,7 +29,7 @@ class Set_Field extends Predefined_Options_Field {
 	 * @param string $label Field label
 	 */
 	protected function __construct( $name, $label ) {
-		$this->value = new Value_Set( Value_Set::TYPE_MULTIPLE_VALUES );
+		$this->set_value_set( new Value_Set( Value_Set::TYPE_MULTIPLE_VALUES ) );
 		parent::__construct( $name, $label );
 	}
 

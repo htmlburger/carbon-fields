@@ -1,6 +1,7 @@
 <?php
 
 use Mockery as M;
+use Carbon_Fields\Value_Set\Value_Set as Value_Set;
 
 /**
  * @group field
@@ -8,17 +9,18 @@ use Mockery as M;
 class FieldLoadSaveTest extends WP_UnitTestCase {
 
 	public function setUp() {
-		$this->field = M::mock( '\Carbon_Fields\Field\Field' )->makePartial();
-		$this->field->set_base_name( 'carbon_field' );
-		$this->field->set_name( 'carbon_field' );
-		$this->field->set_label( 'Carbon Field' );
+		$this->subject = M::mock( '\Carbon_Fields\Field\Field' )->makePartial();
+		$this->subject->set_base_name( 'carbon_field' );
+		$this->subject->set_name( 'carbon_field' );
+		$this->subject->set_label( 'Carbon Field' );
 
 		$this->datastore = M::mock( '\Carbon_Fields\Datastore\Datastore_Interface' );
 	}
 
 	public function tearDown() {
 		M::close();
-		unset( $this->field );
+		unset( $this->subject );
+		unset( $this->datastore );
 	}
 
 	/**
@@ -26,8 +28,8 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	 * @covers \Carbon_Fields\Field\Field::get_datastore
 	 */
 	public function testGetDatastoreReturnsPreviouslySetDatastore() {
-		$this->field->set_datastore( $this->datastore );
-		$this->assertSame( $this->datastore, $this->field->get_datastore() );
+		$this->subject->set_datastore( $this->datastore );
+		$this->assertSame( $this->datastore, $this->subject->get_datastore() );
 	}
 
 	/**
@@ -36,8 +38,8 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	 */
 	public function testGetDefaultValueReturnsPreviouslySetDefaultValue() {
 		$expected = 'test default value';
-		$this->field->set_default_value( $expected );
-		$this->assertSame( $expected, $this->field->get_default_value() );
+		$this->subject->set_default_value( $expected );
+		$this->assertSame( $expected, $this->subject->get_default_value() );
 	}
 
 	/**
@@ -46,8 +48,8 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	 */
 	public function testGetValueReturnsPreviouslySetValue() {
 		$expected = 'test value';
-		$this->field->set_value( $expected );
-		$this->assertSame( $expected, $this->field->get_value() );
+		$this->subject->set_value( $expected );
+		$this->assertSame( $expected, $this->subject->get_value() );
 	}
 
 	/**
@@ -58,11 +60,11 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 		$expected = 'test default value';
 		$this->datastore->shouldReceive( 'load' )->andReturn( array() )->once();
 
-		$this->field->set_datastore( $this->datastore );
-		$this->field->set_default_value( $expected );
-		$this->assertSame( null, $this->field->get_value() );
-		$this->field->load();
-		$this->assertSame( $expected, $this->field->get_value() );
+		$this->subject->set_datastore( $this->datastore );
+		$this->subject->set_default_value( $expected );
+		$this->assertSame( null, $this->subject->get_value() );
+		$this->subject->load();
+		$this->assertSame( $expected, $this->subject->get_value() );
 	}
 
 	/**
@@ -72,7 +74,7 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	public function testLoadAppliesTheSameValueWhenDatastoreReturnsValue() {
 		$expected = 'test value from datastore';
 		$this->datastore->shouldReceive( 'load' )->andReturn( array(
-			$this->field->get_base_name() => array(
+			$this->subject->get_base_name() => array(
 				'value_set' => array(
 					array(
 						'value' => $expected,
@@ -81,9 +83,9 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 			),
 		) )->once();
 
-		$this->field->set_datastore( $this->datastore );
-		$this->field->load();
-		$this->assertSame( $expected, $this->field->get_value() );
+		$this->subject->set_datastore( $this->datastore );
+		$this->subject->load();
+		$this->assertSame( $expected, $this->subject->get_value() );
 	}
 
 	/**
@@ -91,8 +93,56 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	 */
 	public function testSavePassesFieldToDatastore() {
 		$this->datastore->shouldReceive( 'save' )->once();
-		$this->field->set_datastore( $this->datastore );
-		$this->field->save();
+		$this->subject->set_datastore( $this->datastore );
+		$this->subject->save();
+		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
+	}
+
+	/**
+	 * @covers \Carbon_Fields\Field\Field::save
+	 */
+	public function testSaveDoesNotCallDeleteForSingleValueValueField() {
+		$this->datastore->shouldIgnoreMissing();
+		$this->subject->shouldNotReceive( 'delete' );
+		$this->subject->set_datastore( $this->datastore );
+		$this->subject->set_value_set( new Value_Set( Value_Set::TYPE_SINGLE_VALUE ) );
+		$this->subject->save();
+		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
+	}
+
+	/**
+	 * @covers \Carbon_Fields\Field\Field::save
+	 */
+	public function testSaveDoesNotCallDeleteForMultiplePropertyValueField() {
+		$this->datastore->shouldIgnoreMissing();
+		$this->subject->shouldNotReceive( 'delete' );
+		$this->subject->set_datastore( $this->datastore );
+		$this->subject->set_value_set( new Value_Set( Value_Set::TYPE_MULTIPLE_PROPERTIES ) );
+		$this->subject->save();
+		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
+	}
+
+	/**
+	 * @covers \Carbon_Fields\Field\Field::save
+	 */
+	public function testSaveCallsDeleteForMultipleValuesValueField() {
+		$this->datastore->shouldIgnoreMissing();
+		$this->subject->shouldReceive( 'delete' )->once();
+		$this->subject->set_datastore( $this->datastore );
+		$this->subject->set_value_set( new Value_Set( Value_Set::TYPE_MULTIPLE_VALUES ) );
+		$this->subject->save();
+		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
+	}
+
+	/**
+	 * @covers \Carbon_Fields\Field\Field::save
+	 */
+	public function testSaveCallsDeleteForValueSetValueField() {
+		$this->datastore->shouldIgnoreMissing();
+		$this->subject->shouldReceive( 'delete' )->once();
+		$this->subject->set_datastore( $this->datastore );
+		$this->subject->set_value_set( new Value_Set( Value_Set::TYPE_VALUE_SET ) );
+		$this->subject->save();
 		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
 	}
 
@@ -101,8 +151,8 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	 */
 	public function testDeletePassesFieldToDatastore() {
 		$this->datastore->shouldReceive( 'delete' )->once();
-		$this->field->set_datastore( $this->datastore );
-		$this->field->delete();
+		$this->subject->set_datastore( $this->datastore );
+		$this->subject->delete();
 		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
 	}
 }
