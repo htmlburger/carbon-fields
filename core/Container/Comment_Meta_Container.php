@@ -62,7 +62,7 @@ class Comment_Meta_Container extends Container {
 		$this->set_comment_id( $comment_id );
 
 		foreach ( $this->fields as $field ) {
-			$field->set_value_from_input();
+			$field->set_value_from_input( stripslashes_deep( $_POST ) );
 			$field->save();
 		}
 	}

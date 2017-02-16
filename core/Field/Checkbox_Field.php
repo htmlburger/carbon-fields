@@ -28,9 +28,9 @@ class Checkbox_Field extends Field {
 	 * Load the field value from an input array based on it's name.
 	 * If not enabled, set to empty string for easier data querying.
 	 *
-	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
+	 * @param array $input Array of field names and values.
 	 **/
-	public function set_value_from_input( $input = null ) {
+	public function set_value_from_input( $input ) {
 		parent::set_value_from_input( $input );
 		if ( $this->get_value() !== $this->option_value ) {
 			$this->set_value( '' );

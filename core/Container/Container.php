@@ -282,7 +282,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 **/
 	public function save( $data ) {
 		foreach ( $this->fields as $field ) {
-			$field->set_value_from_input();
+			$field->set_value_from_input( stripslashes_deep( $_POST ) );
 			$field->save();
 		}
 	}

@@ -68,13 +68,9 @@ class Map_Field extends Field {
 	/**
 	 * Load the field value from an input array based on it's name
 	 *
-	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
+	 * @param array $input Array of field names and values.
 	 **/
-	public function set_value_from_input( $input = null ) {
-		if ( is_null( $input ) ) {
-			$input = stripslashes_deep( $_POST );
-		}
-
+	public function set_value_from_input( $input ) {
 		if ( ! isset( $input[ $this->get_name() ] ) ) {
 			$this->set_value( null );
 			return;

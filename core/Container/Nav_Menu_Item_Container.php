@@ -74,7 +74,7 @@ class Nav_Menu_Item_Container extends Container {
 	 **/
 	public function save( $data = null ) {
 		foreach ( $this->fields as $field ) {
-			$field->set_value_from_input();
+			$field->set_value_from_input( stripslashes_deep( $_POST ) );
 			$field->save();
 		}
 
