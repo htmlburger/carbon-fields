@@ -66,7 +66,7 @@ class User_Meta_Container extends Container {
 	 *
 	 * @param int $user_id ID of the user against which save() is ran
 	 **/
-	public function save( $user_id ) {
+	public function save( $user_id = null ) {
 		// Unhook action to garantee single save
 		remove_action( 'profile_update', array( $this, '_save' ) );
 

@@ -68,7 +68,7 @@ class Term_Meta_Container extends Container {
 	 *
 	 * @param int $term_id ID of the term against which save() is ran
 	 **/
-	public function save( $term_id ) {
+	public function save( $term_id = null ) {
 		$this->set_term_id( $term_id );
 
 		foreach ( $this->fields as $field ) {

@@ -106,7 +106,7 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param int $post_id ID of the post against which save() is ran
 	 **/
-	public function save( $post_id ) {
+	public function save( $post_id = null ) {
 		// Unhook action to garantee single save
 		remove_action( 'save_post', array( $this, '_save' ) );
 
