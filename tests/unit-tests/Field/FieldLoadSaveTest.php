@@ -5,7 +5,7 @@ use Carbon_Fields\Value_Set\Value_Set as Value_Set;
 
 /**
  * @group field
- * @coversDefaultClass Carbon_Fields\Value_Set\Value_Set
+ * @coversDefaultClass Carbon_Fields\Field\Field
  */
 class FieldLoadSaveTest extends WP_UnitTestCase {
 
