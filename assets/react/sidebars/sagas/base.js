@@ -38,6 +38,6 @@ export function* workerAddSidebar({ payload: { sidebarName } }) {
  */
 export default function* foreman() {
 	yield [
-		takeEvery(addSidebar.toString(), workerAddSidebar),
+		takeEvery(addSidebar, workerAddSidebar),
 	];
 }

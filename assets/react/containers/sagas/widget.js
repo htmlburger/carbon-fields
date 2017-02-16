@@ -4,7 +4,7 @@
 import $ from 'jquery';
 import ReactDOM from 'react-dom';
 import { startsWith } from 'lodash';
-import { put, call, take, fork, select } from 'redux-saga/effects';
+import { put, call, take, select } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
@@ -92,6 +92,8 @@ export default function* foreman() {
 		return;
 	}
 
-	yield fork(workerUpdate);
-	yield fork(workerCleanup);
+	yield [
+		workerUpdate,
+		workerCleanup
+	];
 }
