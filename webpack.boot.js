@@ -4,10 +4,7 @@ var webpack = require('webpack');
 module.exports = {
 	// These are the "entry points" to our application.
 	// This means they will be the "root" imports that are included in JS bundle.
-	entry: [
-		'./assets/react/registrar.js',
-		'./assets/react/bootstrap.js'
-	],
+	entry: './assets/react/bootstrap.js',
 
 	// Setup the output.
 	output: {

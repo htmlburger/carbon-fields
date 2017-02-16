@@ -1,9 +1,10 @@
-function importAll(r) {
-	r.keys().forEach(r);
-}
+/**
+ * The internal dependencies.
+ */
+import { autoload } from 'lib/helpers';
 
-importAll(require.context('./lib', true, /\.js$/));
-importAll(require.context('./containers', true, /\.js$/));
-importAll(require.context('./fields', true, /\.js$/));
-importAll(require.context('./sidebars', true, /\.js$/));
-importAll(require.context('./store', true, /\.js$/));
+autoload(require.context('./lib', true, /\.js$/));
+autoload(require.context('./containers', true, /\.js$/));
+autoload(require.context('./fields', true, /\.js$/));
+autoload(require.context('./sidebars', true, /\.js$/));
+autoload(require.context('./store', true, /\.js$/));
