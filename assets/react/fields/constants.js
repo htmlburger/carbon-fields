@@ -1,4 +1,26 @@
+export const TYPE_ASSOCIATION = 'Association';
+export const TYPE_CHECKBOX = 'Checkbox';
+export const TYPE_COLOR = 'Color';
 export const TYPE_COMPLEX = 'Complex';
+export const TYPE_DATE = 'Date';
+export const TYPE_DATETIME = 'DateTime';
+export const TYPE_FILE = 'File';
+export const TYPE_FOOTER_SCRIPTS = 'FooterScripts';
+export const TYPE_GRAVITY_FORM = 'GravityForm';
+export const TYPE_HEADER_SCRIPTS = 'HeaderScripts';
+export const TYPE_HTML = 'Html';
+export const TYPE_IMAGE = 'Image';
+export const TYPE_MAP = 'Map';
+export const TYPE_RADIO = 'Radio';
+export const TYPE_RADIO_IMAGE = 'RadioImage';
+export const TYPE_RICH_TEXT = 'RichText'
+export const TYPE_SELECT = 'Select';
+export const TYPE_SEPARATOR = 'Separator';
+export const TYPE_SET = 'Set';
+export const TYPE_SIDEBAR = 'Sidebar';
+export const TYPE_TEXT = 'Text';
+export const TYPE_TEXTAREA = 'Textarea';
+export const TYPE_TIME = 'Time';
 
 export const VALIDATION_BASE = 'VALIDATION_BASE';
 export const VALIDATION_COMPLEX = 'VALIDATION_COMPLEX';

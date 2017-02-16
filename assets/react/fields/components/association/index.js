@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose, withState, withProps, withHandlers } from 'recompose';
+import { compose, withState, withProps, withHandlers, setStatic } from 'recompose';
 import { cloneDeep, without } from 'lodash';
 
 /**
@@ -11,9 +11,9 @@ import { cloneDeep, without } from 'lodash';
 import Field from 'fields/components/field';
 import SearchInput from 'fields/components/search-input';
 import AssociationList from 'fields/components/association/list';
-
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { TYPE_ASSOCIATION } from 'fields/constants';
 
 /**
  * Render a field that allows to create links between posts, taxonomy terms,
@@ -177,10 +177,12 @@ const handleAddItem = ({ field, selected, updateField }) => (item) => {
  */
 const handleRemoveItem = ({ field, updateField }) => item => updateField(field.id, { value: without(field.value, item) });
 
-export default compose(
-	withStore(),
-	withSetup(),
-	withState('term', 'setTerm', ''),
-	withProps(props),
-	withHandlers({ handleAddItem, handleRemoveItem })
-)(AssociationField);
+export default setStatic('type', [TYPE_ASSOCIATION])(
+	compose(
+		withStore(),
+		withSetup(),
+		withState('term', 'setTerm', ''),
+		withProps(props),
+		withHandlers({ handleAddItem, handleRemoveItem })
+	)(AssociationField)
+);

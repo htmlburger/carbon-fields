@@ -3,7 +3,7 @@
  */
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, withHandlers, withState, setStatic } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -14,12 +14,11 @@ import ComplexActions from 'fields/components/complex/actions';
 import ComplexPopover from 'fields/components/complex/popover';
 import ComplexTabs from 'fields/components/complex/tabs';
 import ComplexEmptyNotice from 'fields/components/complex/empty-notice';
-
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { isFieldTabbed } from 'fields/selectors';
 import { addComplexGroup, cloneComplexGroup, removeComplexGroup } from 'fields/actions';
-import { VALIDATION_COMPLEX } from 'fields/constants';
+import { TYPE_COMPLEX, VALIDATION_COMPLEX } from 'fields/constants';
 
 /**
  * Render a group(s) of fields.
@@ -267,17 +266,19 @@ const handleRemoveGroupClick = ({ field, removeComplexGroup }) => groupId => rem
  */
 const isGroupActive = ({ field, tabbed }) => groupId => tabbed && field.ui.current_tab === groupId;
 
-export default compose(
-	withStore(mapStateToProps, mapDispatchToProps),
-	withSetup(hooks),
-	withState('popoverVisible', 'setPopoverVisibility', false),
-	withHandlers({
-		isGroupActive,
-		handlePopoverClose,
-		handleTabClick,
-		handleAddGroupClick,
-		handleCloneGroupClick,
-		handleRemoveGroupClick,
-	})
-)(ComplexField);
+export default setStatic('type', [TYPE_COMPLEX])(
+	compose(
+		withStore(mapStateToProps, mapDispatchToProps),
+		withSetup(hooks),
+		withState('popoverVisible', 'setPopoverVisibility', false),
+		withHandlers({
+			isGroupActive,
+			handlePopoverClose,
+			handleTabClick,
+			handleAddGroupClick,
+			handleCloneGroupClick,
+			handleRemoveGroupClick,
+		})
+	)(ComplexField)
+);
 

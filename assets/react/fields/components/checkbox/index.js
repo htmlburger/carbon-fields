@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose, withProps, withHandlers } from 'recompose';
+import { compose, withProps, withHandlers, setStatic } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -10,6 +10,7 @@ import { compose, withProps, withHandlers } from 'recompose';
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { TYPE_CHECKBOX } from 'fields/constants';
 
 /**
  * Render a checkbox input field.
@@ -78,9 +79,11 @@ const handleChange = ({ field, updateField }) => ({ target }) => {
 	});
 };
 
-export default compose(
-	withStore(),
-	withSetup(),
-	withProps(props),
-	withHandlers({ handleChange })
-)(CheckboxField);
+export default setStatic('type', [TYPE_CHECKBOX])(
+	compose(
+		withStore(),
+		withSetup(),
+		withProps(props),
+		withHandlers({ handleChange })
+	)(CheckboxField)
+);

@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose, withHandlers, branch, renderComponent } from 'recompose';
+import { compose, withHandlers, branch, renderComponent, setStatic } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -11,7 +11,7 @@ import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { VALIDATION_BASE } from 'fields/constants';
+import { TYPE_SELECT, TYPE_GRAVITY_FORM, VALIDATION_BASE } from 'fields/constants';
 
 /**
  * Render a select input field.
@@ -110,16 +110,21 @@ const hooks = {
  */
 const handleChange = ({ field, updateField }) => ({ target: { value } }) => updateField(field.id, { value });
 
-export default compose(
-	withStore(),
-	branch(
-		({ field: { options } }) => !options.length,
+export default setStatic('type', [
+	TYPE_SELECT,
+	TYPE_GRAVITY_FORM
+])(
+	compose(
+		withStore(),
+		branch(
+			({ field: { options } }) => !options.length,
 
-		renderComponent(NoOptions),
+			renderComponent(NoOptions),
 
-		compose(
-			withSetup(hooks),
-			withHandlers({ handleChange })
+			compose(
+				withSetup(hooks),
+				withHandlers({ handleChange })
+			)
 		)
-	)
-)(SelectField);
+	)(SelectField)
+);

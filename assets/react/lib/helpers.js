@@ -15,3 +15,16 @@ export function preventDefault(cb) {
 		cb(e);
 	}
 }
+
+/**
+ * Autoload the files in the given path.
+ *
+ * @param  {Object}   context
+ * @param  {Function} [cb]
+ * @return {void}
+ */
+export function autoload(context, cb = () => {}) {
+	context.keys().forEach(file => {
+		cb(file, context(file));
+	});
+}

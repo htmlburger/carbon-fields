@@ -2,17 +2,19 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose, withHandlers, withState, branch, renderComponent, withProps } from 'recompose';
+import { compose, withHandlers, withState, branch, renderComponent, withProps, setStatic } from 'recompose';
 import { without } from 'lodash';
 
 /**
  * The internal dependencies.
  */
+import { preventDefault } from 'lib/helpers';
+
 import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { preventDefault } from 'lib/helpers';
+import { TYPE_SET } from 'fields/constants';
 
 /**
  * Render a collection of checkbox inputs.
@@ -137,18 +139,20 @@ const handleChange = ({ field, updateField }) => ({ target }) => {
  */
 const showAllOptions = ({ setExpanded }) => preventDefault(() => setExpanded(true));
 
-export default compose(
-	withStore(),
-	branch(
-		({ field: { options } }) => !options.length,
+export default setStatic('type', [TYPE_SET])(
+	compose(
+		withStore(),
+		branch(
+			({ field: { options } }) => !options.length,
 
-		renderComponent(NoOptions),
+			renderComponent(NoOptions),
 
-		compose(
-			withSetup(),
-			withState('expanded', 'setExpanded', false),
-			withHandlers({ handleChange, isChecked, isHidden, showAllOptions }),
-			withProps(props)
+			compose(
+				withSetup(),
+				withState('expanded', 'setExpanded', false),
+				withHandlers({ handleChange, isChecked, isHidden, showAllOptions }),
+				withProps(props)
+			)
 		)
-	)
-)(SetField);
+	)(SetField)
+);

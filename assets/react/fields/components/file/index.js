@@ -3,7 +3,7 @@
  */
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, setStatic } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -12,7 +12,7 @@ import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { setupMediaBrowser, openMediaBrowser } from 'fields/actions';
-import { VALIDATION_BASE } from 'fields/constants';
+import { TYPE_FILE, TYPE_IMAGE, VALIDATION_BASE } from 'fields/constants';
 
 /**
  * Render a file upload field with a preview thumbnail of the uploaded file.
@@ -140,8 +140,13 @@ const clearSelection = ({ field, updateField }) => () => {
 	});
 };
 
-export default compose(
-	withStore(undefined, mapDispatchToProps),
-	withSetup(hooks),
-	withHandlers({ openBrowser, clearSelection })
-)(FileField);
+export default setStatic('type', [
+	TYPE_FILE,
+	TYPE_IMAGE
+])(
+	compose(
+		withStore(undefined, mapDispatchToProps),
+		withSetup(hooks),
+		withHandlers({ openBrowser, clearSelection })
+	)(FileField)
+);

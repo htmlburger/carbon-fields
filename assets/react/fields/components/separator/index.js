@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose } from 'recompose';
+import { compose, setStatic } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -10,6 +10,7 @@ import { compose } from 'recompose';
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { TYPE_SEPARATOR } from 'fields/constants';
 
 /**
  * Render a visual separator between adjacent fields.
@@ -35,7 +36,9 @@ SeparatorField.propTypes = {
 	}).isRequired,
 };
 
-export default compose(
-	withStore(),
-	withSetup()
-)(SeparatorField);
+export default setStatic('type', [TYPE_SEPARATOR])(
+	compose(
+		withStore(),
+		withSetup()
+	)(SeparatorField)
+);

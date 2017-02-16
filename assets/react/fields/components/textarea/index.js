@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, setStatic } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -10,6 +10,7 @@ import { compose, withHandlers } from 'recompose';
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { TYPE_TEXTAREA, TYPE_HEADER_SCRIPTS, TYPE_FOOTER_SCRIPTS } from 'fields/constants';
 
 /**
  * Render a multiline text input field.
@@ -57,8 +58,14 @@ TextareaField.propTypes = {
  */
 const handleChange = ({ field, updateField }) => ({ target: { value } }) => updateField(field.id, { value });
 
-export default compose(
-	withStore(),
-	withSetup(),
-	withHandlers({ handleChange })
-)(TextareaField);
+export default setStatic('type', [
+	TYPE_TEXTAREA,
+	TYPE_HEADER_SCRIPTS,
+	TYPE_FOOTER_SCRIPTS
+])(
+	compose(
+		withStore(),
+		withSetup(),
+		withHandlers({ handleChange })
+	)(TextareaField)
+);

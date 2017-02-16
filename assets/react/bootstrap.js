@@ -7,6 +7,9 @@ import _ from 'lodash';
 /**
  * The internal dependencies.
  */
+import { registerContainerComponent, registerFieldComponent } from 'lib/registry';
+import { autoload } from 'lib/helpers';
+
 import configureStore from 'store';
 import { normalizePreloadedState } from 'store/helpers';
 
@@ -18,6 +21,17 @@ import { getContainers } from 'containers/selectors';
  * loaded by WordPress.
  */
 _.noConflict();
+
+/**
+ * Register the core components.
+ */
+autoload(require.context('./fields/components', true, /index\.js$/), (path, file) => {
+	const { type } = file.default;
+
+	if (!_.isEmpty(type)) {
+		type.forEach(type => registerFieldComponent(type, file.default));
+	}
+});
 
 /**
  * Setup the store.

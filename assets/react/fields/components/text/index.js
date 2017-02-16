@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, setStatic } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -10,6 +10,7 @@ import { compose, withHandlers } from 'recompose';
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { TYPE_TEXT } from 'fields/constants';
 
 /**
  * Render a text input field.
@@ -57,8 +58,10 @@ TextField.propTypes = {
  */
 const handleChange = ({ field, updateField }) => ({ target: { value } }) => updateField(field.id, { value });
 
-export default compose(
-	withStore(),
-	withSetup(),
-	withHandlers({ handleChange })
-)(TextField);
+export default setStatic('type', [TYPE_TEXT])(
+	compose(
+		withStore(),
+		withSetup(),
+		withHandlers({ handleChange })
+	)(TextField)
+);

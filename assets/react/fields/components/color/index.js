@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, withHandlers, withState, setStatic } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -11,6 +11,7 @@ import Field from 'fields/components/field';
 import Colorpicker from 'fields/components/color/picker';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { TYPE_COLOR } from 'fields/constants';
 
 /**
  * Render a color input field.
@@ -94,9 +95,11 @@ const handleChange = ({ field, updateField }) => ({ hex }) => {
 const showPicker = ({ setPickerVisibility }) => () => setPickerVisibility(true);
 const hidePicker = ({ setPickerVisibility }) => () => setPickerVisibility(false);
 
-export default compose(
-	withStore(),
-	withSetup(),
-	withState('pickerVisible', 'setPickerVisibility', false),
-	withHandlers({ handleChange, showPicker, hidePicker })
-)(ColorField);
+export default setStatic('type', [TYPE_COLOR])(
+	compose(
+		withStore(),
+		withSetup(),
+		withState('pickerVisible', 'setPickerVisibility', false),
+		withHandlers({ handleChange, showPicker, hidePicker })
+	)(ColorField)
+);

@@ -1,12 +1,19 @@
+/**
+ * The external dependencies.
+ */
 import React from 'react';
-import { compose, withHandlers, branch, renderComponent } from 'recompose';
+import { compose, withHandlers, branch, renderComponent, setStatic } from 'recompose';
 
+/**
+ * The internal dependencies.
+ */
 import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
-import withStore from 'fields/decorators/with-store';
-import withSetup from 'fields/decorators/with-setup';
 import RadioList from 'fields/components/radio/list';
 import RadioImageList from 'fields/components/radio/image-list';
+import withStore from 'fields/decorators/with-store';
+import withSetup from 'fields/decorators/with-setup';
+import { TYPE_RADIO, TYPE_RADIO_IMAGE } from 'fields/constants';
 
 /**
  * Render a radio input field.
@@ -55,16 +62,21 @@ const handleInputChange = ({ field, updateField }) => ({ target }) => {
  */
 const isChecked = ({ field }) => option => option.value === field.value;
 
-export default compose(
-	withStore(),
-	branch(
-		({ field: { options } }) => !options.length,
+export default setStatic('type', [
+	TYPE_RADIO,
+	TYPE_RADIO_IMAGE
+])(
+	compose(
+		withStore(),
+		branch(
+			({ field: { options } }) => !options.length,
 
-		renderComponent(NoOptions),
+			renderComponent(NoOptions),
 
-		compose(
-			withSetup(),
-			withHandlers({ handleInputChange, isChecked })
+			compose(
+				withSetup(),
+				withHandlers({ handleInputChange, isChecked })
+			)
 		)
-	)
-)(RadioField);
+	)(RadioField)
+);

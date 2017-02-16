@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, setStatic } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -13,6 +13,7 @@ import GoogleMap from 'fields/components/map/google-map';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { geocodeAddress } from 'fields/actions';
+import { TYPE_MAP } from 'fields/constants';
 
 /**
  * Render a Google-powered map with an address search field.
@@ -119,8 +120,10 @@ const handleChange = ({ field, updateField }) => data => {
  */
 const handleSearchSubmit = ({ field, geocodeAddress }) => address => geocodeAddress(field.id, address);
 
-export default compose(
-	withStore(undefined, mapDispatchToProps),
-	withSetup(),
-	withHandlers({ handleChange, handleSearchSubmit })
-)(MapField);
+export default setStatic('type', [TYPE_MAP])(
+	compose(
+		withStore(undefined, mapDispatchToProps),
+		withSetup(),
+		withHandlers({ handleChange, handleSearchSubmit })
+	)(MapField)
+);

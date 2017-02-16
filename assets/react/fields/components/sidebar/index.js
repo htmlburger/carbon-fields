@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose, withHandlers } from 'recompose';
+import { compose, withHandlers, setStatic } from 'recompose';
 import { trim, find } from 'lodash';
 
 /**
@@ -13,7 +13,7 @@ import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { makeGetSidebarFieldOptions } from 'fields/selectors';
 import { addSidebar } from 'sidebars/actions';
-import { VALIDATION_BASE } from 'fields/constants';
+import { TYPE_SIDEBAR, VALIDATION_BASE } from 'fields/constants';
 
 /**
  * Render a dropdown field that lists existing sidebars and
@@ -131,8 +131,10 @@ const handleChange = ({ field, options, updateField, addSidebar }) => e => {
 	updateField(field.id, { value });
 };
 
-export default compose(
-	withStore(mapStateToProps, mapDispatchToProps),
-	withSetup(hooks),
-	withHandlers({ handleChange })
-)(SidebarField);
+export default setStatic('type', [TYPE_SIDEBAR])(
+	compose(
+		withStore(mapStateToProps, mapDispatchToProps),
+		withSetup(hooks),
+		withHandlers({ handleChange })
+	)(SidebarField)
+);

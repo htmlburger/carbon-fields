@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose } from 'recompose';
+import { compose, setStatic } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -10,6 +10,7 @@ import { compose } from 'recompose';
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { TYPE_HTML } from 'fields/constants';
 
 /**
  * Render custom HTML markup.
@@ -35,8 +36,9 @@ HtmlField.propTypes = {
 	}).isRequired,
 };
 
-export default compose(
-	withStore(),
-	withSetup()
-)(HtmlField);
-
+export default setStatic('type', [TYPE_HTML])(
+	compose(
+		withStore(),
+		withSetup()
+	)(HtmlField)
+);
