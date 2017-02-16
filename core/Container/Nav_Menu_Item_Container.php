@@ -78,7 +78,7 @@ class Nav_Menu_Item_Container extends Container {
 			$field->save();
 		}
 
-		do_action( 'carbon_after_save_nav_menu', $this );
+		do_action( 'carbon_after_save_nav_menu_item', $this );
 	}
 
 	/**
