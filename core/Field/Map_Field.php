@@ -72,7 +72,7 @@ class Map_Field extends Field {
 	 **/
 	public function set_value_from_input( $input = null ) {
 		if ( is_null( $input ) ) {
-			$input = $_POST;
+			$input = stripslashes_deep( $_POST );
 		}
 
 		if ( ! isset( $input[ $this->get_name() ] ) ) {

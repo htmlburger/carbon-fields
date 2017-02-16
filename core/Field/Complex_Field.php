@@ -215,16 +215,15 @@ class Complex_Field extends Field {
 	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
 	 **/
 	public function set_value_from_input( $input = null ) {
-		$value_tree = array();
-
 		if ( is_null( $input ) ) {
-			$input = $_POST;
+			$input = stripslashes_deep( $_POST );
 		}
 
 		if ( ! isset( $input[ $this->get_name() ] ) ) {
 			return;
 		}
 
+		$value_tree = array();
 		$input_groups = $input[ $this->get_name() ];
 		$input_group_index = 0;
 		foreach ( $input_groups as $values ) {

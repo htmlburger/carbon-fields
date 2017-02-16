@@ -50,7 +50,7 @@ class Set_Field extends Predefined_Options_Field {
 	 **/
 	public function set_value_from_input( $input = null ) {
 		if ( is_null( $input ) ) {
-			$input = $_POST;
+			$input = stripslashes_deep( $_POST );
 		}
 
 		if ( ! isset( $input[ $this->name ] ) ) {

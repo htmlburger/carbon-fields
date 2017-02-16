@@ -48,7 +48,7 @@ class Relationship_Field extends Field {
 	 **/
 	public function set_value_from_input( $input = null ) {
 		if ( is_null( $input ) ) {
-			$input = $_POST;
+			$input = stripslashes_deep( $_POST );
 		}
 
 		$value = array();
