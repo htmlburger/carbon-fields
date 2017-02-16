@@ -832,29 +832,6 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return an array of html classes to be used for the field container
-	 *
-	 * @return array<string>
-	 */
-	public function get_html_class() {
-		$html_classes = array();
-
-		$object_class = get_class( $this );
-		$html_classes[] = $this->get_type();
-
-		$parent_class = $object_class;
-		while ( $parent_class = get_parent_class( $parent_class ) ) {
-			$clean_class = $this->clean_type( $parent_class );
-
-			if ( $clean_class ) {
-				$html_classes[] = $clean_class;
-			}
-		}
-
-		return $html_classes;
-	}
-
-	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
