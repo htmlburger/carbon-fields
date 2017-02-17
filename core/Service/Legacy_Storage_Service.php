@@ -78,7 +78,7 @@ class Legacy_Storage_Service extends Service {
 			return preg_quote( $map_key, '/' );
 		}, $this->map_keys );
 		$map_regex = '/-(' . implode( '|', $map_regex ) . ')$/';
-		return preg_match( $map_regex, $key );
+		return (bool) preg_match( $map_regex, $key );
 	}
 
 	/**
