@@ -15,21 +15,13 @@ class LegacyStorageServiceTest extends WP_UnitTestCase {
 
 	public function setUp() {
 		$ioc = new PimpleContainer();
-
 		$ioc['container_repository'] = function( $ioc ) {
 			return new ContainerRepository();
 		};
-
 		$ioc['key_toolset'] = function( $ioc ) {
 			return new Key_Toolset();
 		};
-
-		/*$ioc['legacy_storage_service'] = function( $ioc ) {
-			return new Legacy_Storage_Service( $ioc['container_repository'], $ioc['key_toolset'] );
-		};*/
-
 		App::instance()->install( $ioc );
-		// App::service( 'legacy_storage' )->disable();
 
 		$this->datastore = M::mock( 'Carbon_Fields\\Datastore\\Key_Value_Datastore' )->makePartial();
 		$this->container = M::mock( 'Carbon_Fields\\Container\\Container', array( 'container_id', 'container_title', 'container_type' ) )->makePartial();
