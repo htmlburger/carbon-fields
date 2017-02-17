@@ -133,6 +133,69 @@ class Legacy_Storage_Service extends Service {
 	}
 
 	/**
+	 * Get array of database table details for datastore
+	 * 
+	 * @param Datastore_Interface $datastore
+	 * @return array
+	 */
+	protected function get_table_details_for_datastore( Datastore_Interface $datastore ) {
+		global $wpdb;
+
+		$details = array(
+			'prefix' => '_',
+			'table_name' => '',
+			'table_id_column' => '',
+			'table_key_column' => '',
+			'table_value_column' => '',
+		);
+
+		if ( is_a( $datastore, 'Carbon_Fields\\Datastore\\Theme_Options_Datastore' ) ) {
+			$details['prefix'] = '';
+			$details['table_name'] = $wpdb->options;
+			$details['table_key_column'] = 'option_name';
+			$details['table_value_column'] = 'option_value';
+		} else if ( is_a( $datastore, 'Carbon_Fields\\Datastore\\Meta_Datastore' ) ) {
+			$details['table_name'] = $datastore->get_table_name();
+			$details['table_id_column'] = $datastore->get_table_field_name();
+			$details['table_key_column'] = 'meta_key';
+			$details['table_value_column'] = 'meta_value';
+		}
+
+		return $details;
+	}
+
+	/**
+	 * Get array of sql comparisons for field
+	 * 
+	 * @param  Field  $field
+	 * @param  string $key_prefix
+	 * @param  string $key_column
+	 * @return array<string>
+	 */
+	protected function get_legacy_sql_comparisons_for_field( Field $field, $key_prefix, $key_column ) {
+		$field_key_pattern = $key_prefix . $field->get_base_name();
+		$comparisons = array();
+
+		if ( is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
+			$groups = $field->get_group_names();
+			foreach ( $groups as $group_name ) {
+				$underscored_group_name = preg_replace( '/^_{0,1}/', '_', $group_name ); // ensure first character is underscore
+				$comparisons[] = ' `' . $key_column . '` LIKE "' . esc_sql( $field_key_pattern . $underscored_group_name . '-' ) . '%" ';
+			}
+		} else {
+			$comparisons[] = ' `' . $key_column . '` = "' . esc_sql( $field_key_pattern ) . '" ';
+		}
+
+		if ( is_a( $field, 'Carbon_Fields\\Field\\Map_Field' ) ) {
+			foreach ( $this->map_keys as $map_key ) {
+				$comparisons[] = ' `' . $key_column . '` = "' . esc_sql( $field_key_pattern . '-' . $map_key ) . '" ';
+			}
+		}
+
+		return $comparisons;
+	}
+
+	/**
 	 * Get a key-value array of legacy values for fields in the container of the passed datastore
 	 *
 	 * @param Container $container
@@ -141,49 +204,17 @@ class Legacy_Storage_Service extends Service {
 	protected function get_legacy_storage_array_from_database( Container $container ) {
 		global $wpdb;
 
-		$prefix = '_';
-		$table_name = '';
-		$table_id_column = '';
-		$table_key_column = '';
-		$table_value_column = '';
-
 		$datastore = $container->get_datastore();
-		if ( is_a( $datastore, 'Carbon_Fields\\Datastore\\Theme_Options_Datastore' ) ) {
-			$prefix = '';
-			$table_name = $wpdb->options;
-			$table_key_column = 'option_name';
-			$table_value_column = 'option_value';
-		} else if ( is_a( $datastore, 'Carbon_Fields\\Datastore\\Meta_Datastore' ) ) {
-			$table_name = $datastore->get_table_name();
-			$table_id_column = $datastore->get_table_field_name();
-			$table_key_column = 'meta_key';
-			$table_value_column = 'meta_value';
-		}
+		$table = $this->get_table_details_for_datastore( $datastore );
 
-		if ( $table_id_column && ! $datastore->get_id() ) {
-			return array(); // we are in a "create" view where we do not have an id (e.g. term meta)
+		if ( $table['table_id_column'] && ! $datastore->get_id() ) {
+			return array(); // bail as we have an ID column but no ID to compare with ( e.g. we are in a "create" view )
 		}
 
 		$comparisons = array();
 		$container_fields = $container->get_fields();
 		foreach ( $container_fields as $field ) {
-			$field_key_pattern = $prefix . $field->get_base_name();
-
-			if ( is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
-				$groups = $field->get_group_names();
-				foreach ( $groups as $group_name ) {
-					$underscored_group_name = ( substr( $group_name, 0, 1 ) === '_' ? $group_name : '_' . $group_name );
-					$comparisons[] = ' `' . $table_key_column . '` LIKE "' . esc_sql( $field_key_pattern . $underscored_group_name . '-' ) . '%" ';
-				}
-			} else {
-				$comparisons[] = ' `' . $table_key_column . '` = "' . esc_sql( $field_key_pattern ) . '" ';
-
-				if ( is_a( $field, 'Carbon_Fields\\Field\\Map_Field' ) ) {
-					foreach ( $this->map_keys as $mk ) {
-						$comparisons[] = ' `' . $table_key_column . '` = "' . esc_sql( $field_key_pattern . '-' . $mk ) . '" ';
-					}
-				}
-			}
+			$comparisons = array_merge( $comparisons, $this->get_legacy_sql_comparisons_for_field( $field, $table['prefix'], $table['table_key_column'] ) );
 		}
 
 		if ( empty( $comparisons ) ) {
@@ -191,12 +222,12 @@ class Legacy_Storage_Service extends Service {
 		}
 
 		$where_clause = ' ( ' . implode( ' OR ', $comparisons ) . ' ) ';
-		if ( $table_id_column ) {
-			$where_clause = ' `' . $table_id_column . '` = ' . $datastore->get_id() . ' AND ' . $where_clause;
+		if ( $table['table_id_column'] ) {
+			$where_clause = ' `' . $table['table_id_column'] . '` = ' . $datastore->get_id() . ' AND ' . $where_clause;
 		}
 		$query = '
-			SELECT `' . $table_key_column . '` AS `key`, `' . $table_value_column . '` AS `value`
-			FROM `' . $table_name . '`
+			SELECT `' . $table['table_key_column'] . '` AS `key`, `' . $table['table_value_column'] . '` AS `value`
+			FROM `' . $table['table_name'] . '`
 			WHERE ' . $where_clause . '
 		';
 
@@ -276,6 +307,22 @@ class Legacy_Storage_Service extends Service {
 	}
 
 	/**
+	 * Get key segmentation regex for a field name
+	 * 
+	 * @param  string $field_name
+	 * @param  string $group_name
+	 * @return string
+	 */
+	public function get_key_segmentation_regex_for_field_name( $field_name, $group_name = '' ) {
+		$regex = '/\A_?' . preg_quote( $field_name, '/' ) . '(?:_(?P<group_index>\d+))?\z/';
+		if ( $group_name !== '' ) {
+			$legacy_group_name = ( $group_name === '_' ) ? $group_name : '_' . $group_name;
+			$regex = '/\A_?' . preg_quote( $field_name, '/' ) . '(?:_(?P<group_index>\d+))?' . preg_quote( $legacy_group_name, '/' ) . '\z/';
+		}
+		return $regex;
+	}
+
+	/**
 	 * Convert legacy storage row to row descriptor
 	 * 
 	 * @param  string $key
@@ -287,14 +334,11 @@ class Legacy_Storage_Service extends Service {
 		$key_pieces = explode( '-', $key );
 		$field_group_level = $field_group_permutations;
 		$matched_fields = array();
+
 		foreach ( $key_pieces as $piece ) {
 			foreach ( $field_group_level as $permutation ) {
-				$match_regex = '/\A_?' . preg_quote( $permutation['field'], '/' ) . '(?:_(?P<group_index>\d+))?\z/';
-				if ( $permutation['group'] !== '' ) {
-					$legacy_group_name = ( $permutation['group'] === '_' ) ? $permutation['group'] : '_' . $permutation['group'];
-					$match_regex = '/\A_?' . preg_quote( $permutation['field'], '/' ) . '(?:_(?P<group_index>\d+))?' . preg_quote( $legacy_group_name, '/' ) . '\z/';
-				}
-
+				$match_regex = $this->get_key_segmentation_regex_for_field_name( $permutation['field'], $permutation['group'] );
+				
 				$matches = array();
 				if ( preg_match( $match_regex, $piece, $matches ) ) {
 					$match_data = array(
@@ -302,7 +346,6 @@ class Legacy_Storage_Service extends Service {
 						'group' => $permutation['group'],
 						'group_index' => ( isset( $matches['group_index'] ) ? intval( $matches['group_index'] ) : -1 ),
 					);
-					$field_group_level = $permutation['children'];
 
 					$previous_match_index = count( $matched_fields ) - 1;
 					if ( isset( $matched_fields[ $previous_match_index ] ) ) {
@@ -310,16 +353,15 @@ class Legacy_Storage_Service extends Service {
 						$match_data['group_index'] = 0;
 					}
 					$matched_fields[] = $match_data;
+
+					$field_group_level = $permutation['children'];
 					break; // break so next piece foreaches the new field_group_level
 				}
 			}
 		}
 
 		return array(
-			'key' => array(
-				'_raw' => $key,
-				'fields' => $matched_fields,
-			),
+			'key' => $matched_fields,
 			'value' => $value,
 		);
 	}
@@ -335,11 +377,11 @@ class Legacy_Storage_Service extends Service {
 
 		$hierarchy = array_map( function( $match ) {
 			return $match['field'];
-		}, $row_descriptor['key']['fields'] );
+		}, $row_descriptor['key'] );
 
 		$hierarchy_index = array_map( function( $match ) {
 			return $match['group_index'];
-		}, array_slice( $row_descriptor['key']['fields'], 0, -1 ) ); // last index is not part of the hierarchy index
+		}, array_slice( $row_descriptor['key'], 0, -1 ) ); // last index is not part of the hierarchy index
 
 		$complex_parents = array_slice( $hierarchy, 0, -1 );
 		foreach ( $complex_parents as $level => $complex_parent ) {
@@ -347,7 +389,7 @@ class Legacy_Storage_Service extends Service {
 			$complex_parent_value_index = $hierarchy_index[ $level ];
 
 			$key = $this->key_toolset->get_storage_key( false, array_slice( $hierarchy, 0, $level + 1 ), $complex_parent_hierarchy_index, $complex_parent_value_index, Value_Set::VALUE_PROPERTY );
-			$group_name = $row_descriptor['key']['fields'][ $level ]['group'];
+			$group_name = $row_descriptor['key'][ $level ]['group'];
 			$storage_array[ $key ] = $group_name;
 		}
 
