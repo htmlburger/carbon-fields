@@ -5,7 +5,6 @@ use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\App;
 use Carbon_Fields\Container\Repository as ContainerRepository;
 use Carbon_Fields\Toolset\Key_Toolset;
-use Carbon_Fields\Service\Legacy_Storage_Service;
 use Carbon_Fields\Value_Set\Value_Set;
 
 /**
@@ -21,9 +20,6 @@ class MiscTest extends WP_UnitTestCase {
 		};
 		$ioc['key_toolset'] = function() {
 			return new Key_Toolset();
-		};
-		$ioc['legacy_storage_service'] = function( $ioc ) {
-			return new Legacy_Storage_Service( $ioc['container_repository'], $ioc['key_toolset'] );
 		};
 		App::instance()->install( $ioc );
 
