@@ -41,7 +41,7 @@ class Gravity_Form_Field extends Select_Field {
 		}
 
 		$options = array(
-			'0' => __( 'No form', \Carbon_Fields\TEXT_DOMAIN ),
+			'' => __( 'No form', \Carbon_Fields\TEXT_DOMAIN ),
 		);
 
 		foreach ( $forms as $form ) {
