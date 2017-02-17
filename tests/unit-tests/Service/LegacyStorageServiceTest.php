@@ -24,12 +24,12 @@ class LegacyStorageServiceTest extends WP_UnitTestCase {
 			return new Key_Toolset();
 		};
 
-		$ioc['legacy_storage_service'] = function( $ioc ) {
+		/*$ioc['legacy_storage_service'] = function( $ioc ) {
 			return new Legacy_Storage_Service( $ioc['container_repository'], $ioc['key_toolset'] );
-		};
+		};*/
 
 		App::instance()->install( $ioc );
-		App::service( 'legacy_storage' )->disable();
+		// App::service( 'legacy_storage' )->disable();
 
 		$this->datastore = M::mock( 'Carbon_Fields\\Datastore\\Key_Value_Datastore' )->makePartial();
 		$this->container = M::mock( 'Carbon_Fields\\Container\\Container', array( 'container_id', 'container_title', 'container_type' ) )->makePartial();
@@ -39,7 +39,7 @@ class LegacyStorageServiceTest extends WP_UnitTestCase {
 		) );
 		$ioc['container_repository']->register_container( $this->container );
 
-		$this->subject = M::mock( 'Carbon_Fields\\Service\\Legacy_Storage_Service', array( $ioc['container_repository'], $ioc['key_toolset'] ) )->shouldDeferMissing()->shouldAllowMockingProtectedMethods();
+		$this->subject = M::mock( 'Carbon_Fields\\Service\\Legacy_Storage_Service', array( $ioc['container_repository'], $ioc['key_toolset'] ) )->shouldDeferMissing();
 	}
 
 	public function tearDown() {
@@ -48,7 +48,7 @@ class LegacyStorageServiceTest extends WP_UnitTestCase {
 	}
 
 	public function testGetStorageArrayForDatastore() {
-		$this->subject->shouldReceive( 'get_legacy_storage_array_from_cache' )->andReturn( array(
+		$this->subject->shouldReceive( 'get_legacy_storage_array' )->andReturn( array(
 			'_crb_text' => '1',
 		) );
 		$expected = array(

@@ -68,12 +68,26 @@ class Legacy_Storage_Service extends Service {
 	}
 
 	/**
+	 * Check if a key is a legacy map property key
+	 *
+	 * @param string $key
+	 * @return bool
+	 */
+	public function is_legacy_map_key( $key ) {
+		$map_regex = array_map( function( $map_key ) {
+			return preg_quote( $map_key, '/' );
+		}, $this->map_keys );
+		$map_regex = '/-(' . implode( '|', $map_regex ) . ')$/';
+		return preg_match( $map_regex, $key );
+	}
+
+	/**
 	 * Return container instance which uses the passed datastore
 	 * 
 	 * @param  Datastore_Interface $datastore
 	 * @return Container
 	 */
-	protected function get_container_for_datastore( Datastore_Interface $datastore ) {
+	public function get_container_for_datastore( Datastore_Interface $datastore ) {
 		$containers = $this->container_repository->get_containers();
 		foreach ( $containers as $container ) {
 			if ( $container->get_datastore() === $datastore ) {
@@ -89,12 +103,11 @@ class Legacy_Storage_Service extends Service {
 	 * @param  array $fields
 	 * @return array
 	 */
-	protected function get_field_group_permutations( $fields ) {
+	public function get_field_group_permutations( $fields ) {
 		$permutations = array();
 
 		foreach ( $fields as $field ) {
 			if ( is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
-
 				$group_names = $field->get_group_names();
 				foreach ( $group_names as $group_name ) {
 					$group = $field->get_group_by_name( $group_name );
@@ -120,13 +133,13 @@ class Legacy_Storage_Service extends Service {
 	}
 
 	/**
-	 * Get a key-value array of CF 1.5 values for fields in the container of the passed datastore
+	 * Get a key-value array of legacy values for fields in the container of the passed datastore
 	 *
 	 * @param Container $container
 	 * @param Datastore_Interface $datastore
 	 * @return array
 	 */
-	protected function get_legacy_storage_array( Container $container, Datastore_Interface $datastore ) {
+	protected function get_legacy_storage_array_from_database( Container $container ) {
 		global $wpdb;
 
 		$prefix = '_';
@@ -135,6 +148,7 @@ class Legacy_Storage_Service extends Service {
 		$table_key_column = '';
 		$table_value_column = '';
 
+		$datastore = $container->get_datastore();
 		if ( is_a( $datastore, 'Carbon_Fields\\Datastore\\Theme_Options_Datastore' ) ) {
 			$prefix = '';
 			$table_name = $wpdb->options;
@@ -203,47 +217,74 @@ class Legacy_Storage_Service extends Service {
 	 * @param  Datastore_Interface $datastore
 	 * @return array
 	 */
-	protected function get_legacy_storage_array_from_cache( Datastore_Interface $datastore ) {
+	public function get_legacy_storage_array( Datastore_Interface $datastore ) {
 		$container = $this->get_container_for_datastore( $datastore );
 		if ( ! $container ) {
 			return array(); // unhandled datastore type or no registered containers
 		}
 
 		if ( ! isset( $this->storage_array_cache[ $container->id ] ) ) {
-			$this->storage_array_cache[ $container->id ] = $this->get_legacy_storage_array( $container, $datastore );
+			$this->storage_array_cache[ $container->id ] = $this->get_legacy_storage_array_from_database( $container );
 		}
 
 		return $this->storage_array_cache[ $container->id ];
 	}
 
 	/**
-	 * Check if a key is a legacy map property key
-	 *
-	 * @param string $key
-	 * @return bool
+	 * Get expanded value for key from legacy storage array
+	 * 
+	 * @param string $key Legacy key to fetch additional values for
+	 * @param array $legacy_storage_array key=>value array of legacy data
+	 * @return mixed
 	 */
-	protected function is_legacy_map_key( $key ) {
-		$map_regex = array_map( function( $map_key ) {
-			return preg_quote( $map_key, '/' );
-		}, $this->map_keys );
-		$map_regex = '/-(' . implode( '|', $map_regex ) . ')$/';
-		return preg_match( $map_regex, $key );
+	public function get_value_for_legacy_key( $key, $legacy_storage_array ) {
+		$value = isset( $legacy_storage_array[ $key ] ) ? $legacy_storage_array[ $key ] : '';
+
+		$first_map_key = $this->map_keys[0];
+		if ( isset( $legacy_storage_array[ $key . '-' . $first_map_key ] ) ) {
+			$value = array(
+				Value_Set::VALUE_PROPERTY => $value,
+			);
+		
+			foreach ( $this->map_keys as $map_key ) {
+				$value[ $map_key ] = $legacy_storage_array[ $key . '-' . $map_key ];
+			}
+		}
+
+		return $value;
 	}
 
 	/**
-	 * Convert old storage row to value descriptor
+	 * Convert legacy storage rows to array of row descriptors
 	 * 
-	 * @param  array $field_group_permutations
-	 * @param  string $key
-	 * @param  string $value
-	 * @param  array $all_rows
+	 * @param array $legacy_storage_array
+	 * @param array $field_group_permutations
 	 * @return array
 	 */
-	protected function legacy_storage_row_to_value_descriptor( $field_group_permutations, $key, $value, $all_rows ) {
-		if ( $this->is_legacy_map_key( $key ) ) {
-			return array();
+	public function legacy_storage_rows_to_row_descriptors( $legacy_storage_array, $field_group_permutations ) {
+		$row_descriptors = array();
+
+		foreach ( $legacy_storage_array as $key => $value ) {
+			if ( $this->is_legacy_map_key( $key ) ) {
+				continue; // skip legacy map keys as they are handled separately through values
+			}
+
+			$value = $this->get_value_for_legacy_key( $key, $legacy_storage_array );
+			$row_descriptors[] = $this->legacy_storage_row_to_row_descriptor( $key, $value, $field_group_permutations );
 		}
 
+		return $row_descriptors;
+	}
+
+	/**
+	 * Convert legacy storage row to row descriptor
+	 * 
+	 * @param  string $key
+	 * @param  string $value
+	 * @param  array $field_group_permutations
+	 * @return array
+	 */
+	public function legacy_storage_row_to_row_descriptor( $key, $value, $field_group_permutations ) {
 		$key_pieces = explode( '-', $key );
 		$field_group_level = $field_group_permutations;
 		$matched_fields = array();
@@ -270,28 +311,17 @@ class Legacy_Storage_Service extends Service {
 						$match_data['group_index'] = 0;
 					}
 					$matched_fields[] = $match_data;
-					break;
+					break; // break so next piece foreaches the new field_group_level
 				}
 			}
 		}
 
-		if ( isset( $all_rows[ $key . '-' . $this->map_keys[0] ] ) ) {
-			$value = array(
-				'value' => $value,
-			);
-			foreach ( $this->map_keys as $mk ) {
-				$value[ $mk ] = $all_rows[ $key . '-' . $mk ];
-			}
-		}
-
 		return array(
-			array(
-				'key' => array(
-					'_raw' => $key,
-					'fields' => $matched_fields,
-				),
-				'value' => $value,
+			'key' => array(
+				'_raw' => $key,
+				'fields' => $matched_fields,
 			),
+			'value' => $value,
 		);
 	}
 
@@ -301,7 +331,7 @@ class Legacy_Storage_Service extends Service {
 	 * @param  array $row_descriptor
 	 * @return array
 	 */
-	protected function row_descriptor_to_storage_array( $row_descriptor ) {
+	public function row_descriptor_to_storage_array( $row_descriptor ) {
 		$storage_array = array();
 
 		$hierarchy = array_map( function( $match ) {
@@ -317,29 +347,31 @@ class Legacy_Storage_Service extends Service {
 			$complex_parent_hierarchy_index = array_slice( $hierarchy_index, 0, $level );
 			$complex_parent_value_index = $hierarchy_index[ $level ];
 
-			$key = $this->field_data_to_storage_key( array_slice( $hierarchy, 0, $level + 1 ), $complex_parent_hierarchy_index, $complex_parent_value_index );
+			$key = $this->key_toolset->get_storage_key( false, array_slice( $hierarchy, 0, $level + 1 ), $complex_parent_hierarchy_index, $complex_parent_value_index, Value_Set::VALUE_PROPERTY );
 			$group_name = $row_descriptor['key']['fields'][ $level ]['group'];
 			$storage_array[ $key ] = $group_name;
 		}
 
-		$value = maybe_unserialize( $row_descriptor['value'] );
-
-		if ( is_array( $value ) ) {
-			if ( isset( $value['value'] ) ) {
-				foreach ( $value as $value_key => $value_item ) {
-					$key = $this->field_data_to_storage_key( $hierarchy, $hierarchy_index, 0, $value_key );
+		$unserialized_value = maybe_unserialize( $row_descriptor['value'] );
+		if ( is_array( $unserialized_value ) ) {
+			if ( isset( $unserialized_value['value'] ) ) {
+				// value is a key=>value array - save each property separately
+				foreach ( $unserialized_value as $value_key => $value_item ) {
+					$key = $this->key_toolset->get_storage_key( false, $hierarchy, $hierarchy_index, 0, $value_key );
 					$storage_array[ $key ] = $value_item;
 				}
 			} else {
+				// value is a simple array - save each value separately
 				$i = 0;
-				foreach ( $value as $value_item ) {
-					$key = $this->field_data_to_storage_key( $hierarchy, $hierarchy_index, $i );
+				foreach ( $unserialized_value as $value_item ) {
+					$key = $this->key_toolset->get_storage_key( false, $hierarchy, $hierarchy_index, $i, Value_Set::VALUE_PROPERTY );
 					$storage_array[ $key ] = $value_item;
 					$i++;
 				}
 			}
-		} else if ( $value === null ) {
-			$key = $this->field_data_to_storage_key( $hierarchy, $hierarchy_index, 0, '_empty' );
+		} else if ( $unserialized_value === null ) {
+			// no value found - add a keepalive key
+			$key = $this->key_toolset->get_storage_key( false, $hierarchy, $hierarchy_index, 0, '_empty' );
 			$storage_array[ $key ] = '';
 		} else {
 			if ( count( $hierarchy ) === 1 ) {
@@ -348,26 +380,11 @@ class Legacy_Storage_Service extends Service {
 				$storage_array[ $key ] = $row_descriptor['value'];
 			}
 
-			$key = $this->field_data_to_storage_key( $hierarchy, $hierarchy_index );
+			$key = $this->key_toolset->get_storage_key( false, $hierarchy, $hierarchy_index, 0, Value_Set::VALUE_PROPERTY );
 			$storage_array[ $key ] = $row_descriptor['value'];
 		}
 
 		return $storage_array;
-	}
-
-	/**
-	 * Convert field data to a storage key
-	 * 
-	 * @param  array $full_hierarchy
-	 * @param  array $hierarchy_index
-	 * @param  integer $value_index
-	 * @param  string $value_key
-	 * @return string
-	 */
-	protected function field_data_to_storage_key( $full_hierarchy, $hierarchy_index, $value_index = 0, $value_key = Value_Set::VALUE_PROPERTY ) {
-		$hierarchy_index = ! empty( $hierarchy_index ) ? $hierarchy_index : array( 0 );
-		$key = $this->key_toolset->get_storage_key( false, $full_hierarchy, $hierarchy_index, $value_index, $value_key );
-		return $key;
 	}
 
 	/**
@@ -376,20 +393,16 @@ class Legacy_Storage_Service extends Service {
 	 * @param  Datastore_Interface $datastore
 	 * @return array
 	 */
-	protected function get_storage_array_for_datastore( Datastore_Interface $datastore ) {
-		$legacy_storage_array = $this->get_legacy_storage_array_from_cache( $datastore );
+	public function get_storage_array_for_datastore( Datastore_Interface $datastore ) {
+		$legacy_storage_array = $this->get_legacy_storage_array( $datastore );
 		if ( empty( $legacy_storage_array ) ) {
 			return array(); // no migration data found
 		}
 
 		$container = $this->get_container_for_datastore( $datastore );
 		$field_group_permutations = $this->get_field_group_permutations( $container->get_fields() );
-
-		$row_descriptors = array();
-		foreach ( $legacy_storage_array as $key => $value ) {
-			$row_descriptors = array_merge( $row_descriptors, $this->legacy_storage_row_to_value_descriptor( $field_group_permutations, $key, $value, $legacy_storage_array ) );
-		}
-
+		$row_descriptors = $this->legacy_storage_rows_to_row_descriptors( $legacy_storage_array, $field_group_permutations );
+		
 		$storage_array = array();
 		foreach ( $row_descriptors as $row_descriptor ) {
 			$storage_array = array_merge( $storage_array, $this->row_descriptor_to_storage_array( $row_descriptor ) );
