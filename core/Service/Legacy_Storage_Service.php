@@ -136,7 +136,6 @@ class Legacy_Storage_Service extends Service {
 	 * Get a key-value array of legacy values for fields in the container of the passed datastore
 	 *
 	 * @param Container $container
-	 * @param Datastore_Interface $datastore
 	 * @return array
 	 */
 	protected function get_legacy_storage_array_from_database( Container $container ) {
