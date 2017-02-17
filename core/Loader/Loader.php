@@ -2,10 +2,12 @@
 
 namespace Carbon_Fields\Loader;
 
+use Carbon_Fields\App;
 use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Container\Repository as ContainerRepository;
 use Carbon_Fields\Service\Template_Service;
 use Carbon_Fields\Service\Legacy_Storage_Service_v_1_5;
+use Carbon_Fields\Service\Meta_Query_Service;
 use Carbon_Fields\Service\REST_API_Service;
 use Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
@@ -20,17 +22,11 @@ class Loader {
 	protected $sidebar_manager;
 
 	protected $container_repository;
-	
-	protected $legacy_storage_service;
 
-	protected $rest_api_service;
-
-	public function __construct( Template_Service $template_service, Sidebar_Manager $sidebar_manager, ContainerRepository $container_repository, Legacy_Storage_Service_v_1_5 $legacy_storage_service, REST_API_Service $rest_api_service ) {
+	public function __construct( Template_Service $template_service, Sidebar_Manager $sidebar_manager, ContainerRepository $container_repository ) {
 		$this->template_service = $template_service;
 		$this->sidebar_manager = $sidebar_manager;
 		$this->container_repository = $container_repository;
-		$this->legacy_storage_service = $legacy_storage_service;
-		$this->rest_api_service = $rest_api_service;
 	}
 
 	/**
@@ -60,10 +56,13 @@ class Loader {
 		$this->template_service->enable();
 
 		# Enable the legacy storage service
-		$this->legacy_storage_service->enable();
+		App::service( 'legacy_storage' )->enable();
+
+		# Enable the meta query service
+		App::service( 'meta_query' )->enable();
 
 		# Enable the REST API service
-		$this->rest_api_service->enable();
+		App::service( 'rest_api' )->enable();
 
 		# Initialize sidebar manager
 		$this->sidebar_manager->boot();

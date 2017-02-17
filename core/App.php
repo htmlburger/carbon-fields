@@ -58,7 +58,7 @@ class App {
 		$ioc = new PimpleContainer();
 
 		$ioc['loader'] = function( $ioc ) {
-			return new Loader( $ioc['template_service'], $ioc['sidebar_manager'], $ioc['container_repository'], $ioc['legacy_storage_service'], $ioc['rest_api_service'] );
+			return new Loader( $ioc['template_service'], $ioc['sidebar_manager'], $ioc['container_repository'] );
 		};
 
 		$ioc['container_repository'] = function() {
