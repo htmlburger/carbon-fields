@@ -26,7 +26,7 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 */
 	public function testMakeTextFields() {
 		$field = Field::make( 'text', $this->fieldName );
-		$this->assertEquals( $this->fieldName, $field->get_name() );
+		$this->assertSame( $this->fieldName, $field->get_name() );
 	}
 
 	/**
@@ -106,7 +106,7 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 */
 	public function testFieldNameIsPrependedWithUnderscoreAutomatically() {
 		$field = Field::make( 'text', 'something' );
-		$this->assertEquals( '_something', $field->get_name() );
+		$this->assertSame( '_something', $field->get_name() );
 	}
 
 	/**
@@ -115,23 +115,11 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 * @covers ::__construct
 	 * @covers ::get_name
 	 * @covers ::set_name
+	 * 
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 */
-	public function testFieldNameAutomaticallyConvertsNonAlphanumericCharactersToUnderscores() {
-		$field = Field::make( 'text', 'This is a strange name' );
-		$this->assertEquals( '_this_is_a_strange_name', $field->get_name() );
-	}
-
-	/**
-	 * @covers ::make
-	 * @covers ::factory
-	 * @covers ::__construct
-	 * @covers ::get_name
-	 * @covers ::set_name
-	 */
-	public function testFieldNameRemovesSpaces() {
-		// XXX: Is this really expected? 
-		$field = Field::make( 'text', '## Even a weirder name! )' );
-		$this->assertEquals( '_##_even_a_weirder_name!_)', $field->get_name() );
+	public function testFieldNameThrowsExceptionOnUpperCaseValues() {
+		$field = Field::make( 'text', 'UPPER_CASE_FIELD_NAME' );
 	}
 
 	/**
@@ -142,7 +130,7 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 * 
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 */
-	public function testFieldNameThrowsExceptionOnReservedCharacters() {
+	public function testFieldNameThrowsExceptionOnNonEnglishWordCharacters() {
 		$field = Field::make( 'text', '## Even a weirder | name! :)' );
 	}
 
@@ -152,12 +140,11 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 * @covers ::__construct
 	 * @covers ::get_name
 	 * @covers ::set_name
+	 * 
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 */
-	public function testNonAsciiFieldNamesAreHandledProperly() {
-		// This text includes a capital cyrillic letter ... it actually assures that
-		// field names in non-english are converted to lowercase
+	public function testFieldNameThrowsExceptionOnUnicodeValues() {
 		$field = Field::make( 'text', 'bulgarian; България' );
-		$this->assertEquals( '_bulgarian;_българия', $field->get_name() );
 	}
 
 	/**
@@ -167,15 +154,15 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 */
 	public function testLabelIsSetupProperlyWhenPassedExplicitly() {
 		$field = Field::make( 'text', 'color', "Field Color" );
-		$this->assertEquals( "Field Color", $field->get_label() );
+		$this->assertSame( "Field Color", $field->get_label() );
 
 		// Make sure that non-UTF8 labels are properlly supported
 		$field = Field::make( 'text', 'color', "Цвят" );
-		$this->assertEquals( "Цвят", $field->get_label() );
+		$this->assertSame( "Цвят", $field->get_label() );
 
 		// Derive the label in proper case
-		$field = Field::make( 'text', 'цвят_на_нещо' );
-		$this->assertEquals( "Цвят На Нещо", $field->get_label() );
+		$field = Field::make( 'text', 'color_of_something' );
+		$this->assertSame( "Color Of Something", $field->get_label() );
 	}
 
 	/**
@@ -185,16 +172,16 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 */
 	public function testLabelIsDerivedProperly() {
 		$field = Field::make( 'text', 'field_color' );
-		$this->assertEquals( "Field Color", $field->get_label() );
+		$this->assertSame( "Field Color", $field->get_label() );
 
 		$field = Field::make( 'text', '_field_color' );
-		$this->assertEquals( "Field Color", $field->get_label() );
+		$this->assertSame( "Field Color", $field->get_label() );
 
 		$field = Field::make( 'text', 'crb_field_color' );
-		$this->assertEquals( "Field Color", $field->get_label() );
+		$this->assertSame( "Field Color", $field->get_label() );
 
 		$field = Field::make('text', '_crb_field_color' );
-		$this->assertEquals( "Field Color", $field->get_label() );
+		$this->assertSame( "Field Color", $field->get_label() );
 	}
 
 	/**

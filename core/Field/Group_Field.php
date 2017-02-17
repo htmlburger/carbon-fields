@@ -210,10 +210,15 @@ class Group_Field {
 	 * @param string $name  Group name, either sanitized or not
 	 */
 	public function set_name( $name ) {
-		$name = preg_replace( '~\s+~', '_', strtolower( $name ) );
 		if ( ! $name ) {
 			$name = static::DEFAULT_GROUP_NAME;
 		}
+
+		$regex = '/\A[a-z0-9_]+\z/';
+		if ( ! preg_match( $regex, $name ) ) {
+			Incorrect_Syntax_Exception::raise( 'Group name can only contain lowercase alphanumeric characters and underscores.' );
+		}
+		
 		$this->name = $name;
 	}
 

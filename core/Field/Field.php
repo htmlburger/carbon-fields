@@ -548,16 +548,13 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $name Field name, either sanitized or not
 	 **/
 	public function set_name( $name ) {
-		$name = mb_strtolower( $name );
-		$name = preg_replace( '~\s+~', '_', $name );
-
 		if ( empty( $name ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name can\'t be empty' );
 		}
 
-		$regex = '/[\|\:]+/';
-		if ( preg_match( $regex, $name ) ) {
-			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" cannot contain "|" or ":" characters.' );
+		$regex = '/\A[a-z0-9_\-\[\]]+\z/'; // symbols ]-[ are supported in a hidden way - required for widgets to work (WP imposes dashes and square brackets on field names)
+		if ( ! preg_match( $regex, $name ) ) {
+			Incorrect_Syntax_Exception::raise( 'Field name can only contain lowercase alphanumeric characters and underscores.' );
 		}
 
 		$name_prefix = $this->get_name_prefix();
