@@ -13,7 +13,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 /*
  * Service which provides the ability to do meta queries for multi-value fields and nested fields
  */
-class Legacy_Storage_Service extends Service {
+class Legacy_Storage_Service_v_1_5 extends Service {
 
 	/**
 	 * Contaier repository to fetch fields from

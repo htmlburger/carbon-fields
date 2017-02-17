@@ -9,7 +9,7 @@ use Carbon_Fields\Toolset\Key_Toolset;
 use Carbon_Fields\Toolset\WP_Toolset;
 use Carbon_Fields\Service\Template_Service;
 use Carbon_Fields\Service\Meta_Query_Service;
-use Carbon_Fields\Service\Legacy_Storage_Service;
+use Carbon_Fields\Service\Legacy_Storage_Service_v_1_5;
 use Carbon_Fields\Service\REST_API_Service;
 use Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 
@@ -96,7 +96,7 @@ class App {
 		};
 
 		$ioc['legacy_storage_service'] = function( $ioc ) {
-			return new Legacy_Storage_Service( $ioc['container_repository'], $ioc['key_toolset'] );
+			return new Legacy_Storage_Service_v_1_5( $ioc['container_repository'], $ioc['key_toolset'] );
 		};
 
 		$ioc['rest_api_service'] = function( $ioc ) {

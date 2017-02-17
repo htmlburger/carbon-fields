@@ -5,12 +5,12 @@ use Carbon_Fields\App;
 use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Container\Repository as ContainerRepository;
 use Carbon_Fields\Field\Field;
-use Carbon_Fields\Service\Legacy_Storage_Service;
+use Carbon_Fields\Service\Legacy_Storage_Service_v_1_5;
 use Carbon_Fields\Toolset\Key_Toolset;
 use Carbon_Fields\Toolset\WP_Toolset;
 
 /**
- * @coversDefaultClass Carbon_Fields\Service\Legacy_Storage_Service
+ * @coversDefaultClass Carbon_Fields\Service\Legacy_Storage_Service_v_1_5
  */
 class LegacyStorageServiceTest extends WP_UnitTestCase {
 
@@ -88,7 +88,7 @@ class LegacyStorageServiceTest extends WP_UnitTestCase {
 			'_crb_home_sections_features-_columns_0_col3of4-_rows_0_row-_cols_0_col2of3-_content_1' => '<h3><strong>Regular</strong> Sofas</h3>[button link="#"]More Details[/button]',
 		);
 
-		$this->subject = M::mock( 'Carbon_Fields\\Service\\Legacy_Storage_Service', array( $ioc['container_repository'], $ioc['key_toolset'] ) )->shouldDeferMissing();
+		$this->subject = M::mock( 'Carbon_Fields\\Service\\Legacy_Storage_Service_v_1_5', array( $ioc['container_repository'], $ioc['key_toolset'] ) )->shouldDeferMissing();
 	}
 
 	public function tearDown() {
