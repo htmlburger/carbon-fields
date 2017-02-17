@@ -73,7 +73,7 @@ class Legacy_Storage_Service extends Service {
 	 * @param string $key
 	 * @return bool
 	 */
-	public function is_legacy_map_key( $key ) {
+	protected function is_legacy_map_key( $key ) {
 		$map_regex = array_map( function( $map_key ) {
 			return preg_quote( $map_key, '/' );
 		}, $this->map_keys );
@@ -87,7 +87,7 @@ class Legacy_Storage_Service extends Service {
 	 * @param  Datastore_Interface $datastore
 	 * @return Container
 	 */
-	public function get_container_for_datastore( Datastore_Interface $datastore ) {
+	protected function get_container_for_datastore( Datastore_Interface $datastore ) {
 		$containers = $this->container_repository->get_containers();
 		foreach ( $containers as $container ) {
 			if ( $container->get_datastore() === $datastore ) {
@@ -103,7 +103,7 @@ class Legacy_Storage_Service extends Service {
 	 * @param  array $fields
 	 * @return array
 	 */
-	public function get_field_group_permutations( $fields ) {
+	protected function get_field_group_permutations( $fields ) {
 		$permutations = array();
 
 		foreach ( $fields as $field ) {
@@ -267,7 +267,7 @@ class Legacy_Storage_Service extends Service {
 	 * @param array $legacy_storage_array key=>value array of legacy data
 	 * @return mixed
 	 */
-	public function get_value_for_legacy_key( $key, $legacy_storage_array ) {
+	protected function get_value_for_legacy_key( $key, $legacy_storage_array ) {
 		$value = isset( $legacy_storage_array[ $key ] ) ? $legacy_storage_array[ $key ] : '';
 
 		$first_map_key = $this->map_keys[0];
@@ -291,7 +291,7 @@ class Legacy_Storage_Service extends Service {
 	 * @param array $field_group_permutations
 	 * @return array
 	 */
-	public function legacy_storage_rows_to_row_descriptors( $legacy_storage_array, $field_group_permutations ) {
+	protected function legacy_storage_rows_to_row_descriptors( $legacy_storage_array, $field_group_permutations ) {
 		$row_descriptors = array();
 
 		foreach ( $legacy_storage_array as $key => $value ) {
@@ -313,9 +313,9 @@ class Legacy_Storage_Service extends Service {
 	 * @param  string $group_name
 	 * @return string
 	 */
-	public function get_key_segmentation_regex_for_field_name( $field_name, $group_name = '' ) {
+	protected function get_key_segmentation_regex_for_field_name( $field_name, $group_name = '' ) {
 		$legacy_group_name = ( $group_name === '_' ) ? $group_name : '_' . $group_name;
-		
+
 		$regex = '/\A_?' . preg_quote( $field_name, '/' ) . '(?:_(?P<group_index>\d+))?\z/';
 		if ( $group_name !== '' ) {
 			$regex = '/\A_?' . preg_quote( $field_name, '/' ) . '(?:_(?P<group_index>\d+))?' . preg_quote( $legacy_group_name, '/' ) . '\z/';
@@ -331,7 +331,7 @@ class Legacy_Storage_Service extends Service {
 	 * @param  array $field_group_permutations
 	 * @return array
 	 */
-	public function legacy_storage_row_to_row_descriptor( $key, $value, $field_group_permutations ) {
+	protected function legacy_storage_row_to_row_descriptor( $key, $value, $field_group_permutations ) {
 		$key_pieces = explode( '-', $key );
 		$field_group_level = $field_group_permutations;
 		$matched_fields = array();
@@ -373,7 +373,7 @@ class Legacy_Storage_Service extends Service {
 	 * @param  array $row_descriptor
 	 * @return array
 	 */
-	public function row_descriptor_to_storage_array( $row_descriptor ) {
+	protected function row_descriptor_to_storage_array( $row_descriptor ) {
 		$storage_array = array();
 
 		$hierarchy = array_map( function( $match ) {
@@ -461,10 +461,6 @@ class Legacy_Storage_Service extends Service {
 	 * @return array
 	 */
 	public function get_storage_array( Datastore_Interface $datastore, $storage_key_patterns ) {
-		if ( ! $this->is_enabled() ) {
-			return array();
-		}
-
 		$storage_array = $this->get_storage_array_for_datastore( $datastore );
 		$matched_data = array();
 		foreach ( $storage_array as $key => $value ) {
