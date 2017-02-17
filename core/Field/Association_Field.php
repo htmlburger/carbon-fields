@@ -34,13 +34,15 @@ class Association_Field extends Relationship_Field {
 
 	/**
 	 * Create a field from a certain type with the specified label.
+	 * 
+	 * @param string $type  Field type
 	 * @param string $name  Field name
 	 * @param string $label Field label
 	 */
-	protected function __construct( $name, $label ) {
+	protected function __construct( $type, $name, $label ) {
 		$this->wp_toolset = App::resolve( 'wp_toolset' );
 		$this->set_value_set( new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'type' => '', 'subtype' => '', 'object_id' => 0 ) ) );
-		Field::__construct( $name, $label );
+		Field::__construct( $type, $name, $label );
 	}
 
 	/**

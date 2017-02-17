@@ -218,8 +218,7 @@ class Field implements Datastore_Holder_Interface {
 			$class = __NAMESPACE__ . '\\Broken_Field';
 		}
 
-		$field = new $class( $name, $label );
-		$field->type = $type;
+		$field = new $class( $type, $name, $label );
 
 		return $field;
 	}
@@ -236,12 +235,15 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Create a field from a certain type with the specified label.
+	 * 
+	 * @param string $type  Field type
 	 * @param string $name  Field name
 	 * @param string $label Field label
 	 */
-	protected function __construct( $name, $label ) {
+	protected function __construct( $type, $name, $label ) {
 		App::verify_boot();
 		
+		$this->type = $type;
 		$this->set_base_name( $name );
 		$this->set_name( $name );
 		$this->set_label( $label );
