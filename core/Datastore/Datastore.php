@@ -5,7 +5,6 @@ namespace Carbon_Fields\Datastore;
 use Carbon_Fields\App;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Toolset\Key_Toolset;
-use Carbon_Fields\Service\Legacy_Storage_Service;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -20,20 +19,12 @@ abstract class Datastore implements Datastore_Interface {
 	 * @var Key_Toolset
 	 */
 	protected $key_toolset;
-	
-	/**
-	 * Legacy storage service to pull legacy data as a fallback
-	 * 
-	 * @var Legacy_Storage_Service
-	 */
-	protected $legacy_storage_service;
 
 	/**
 	 * Initialize the datastore.
 	 **/
-	public function __construct( Key_Toolset $key_toolset, Legacy_Storage_Service $legacy_storage_service ) {
+	public function __construct( Key_Toolset $key_toolset ) {
 		$this->key_toolset = $key_toolset;
-		$this->legacy_storage_service = $legacy_storage_service;
 		$this->init();
 	}
 
@@ -59,7 +50,7 @@ abstract class Datastore implements Datastore_Interface {
 			Incorrect_Syntax_Exception::raise( 'Unknown datastore type "' . $type . '".' );
 		}
 
-		$datastore = new $class( App::resolve( 'key_toolset' ), App::resolve( 'legacy_storage_service' ) );
+		$datastore = new $class( App::resolve( 'key_toolset' ) );
 
 		return $datastore;
 	}

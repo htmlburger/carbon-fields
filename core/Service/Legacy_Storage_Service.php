@@ -57,14 +57,14 @@ class Legacy_Storage_Service extends Service {
 	 * Enable the service
 	 */
 	protected function enabled() {
-		// not needed
+		add_filter( 'crb_datastore_storage_array', array( $this, 'filter_storage_array' ), 10, 3 );
 	}
 
 	/**
 	 * Disable the service
 	 */
 	protected function disabled() {
-		// not needed
+		remove_filter( 'crb_datastore_storage_array', array( $this, 'filter_storage_array' ), 10 );
 	}
 
 	/**
@@ -421,5 +421,12 @@ class Legacy_Storage_Service extends Service {
 			}
 		}
 		return $matched_data;
+	}
+
+	public function filter_storage_array( $storage_array, $datastore, $storage_key_patterns ) {
+		if ( empty( $storage_array ) ) {
+			$storage_array = $this->get_storage_array( $datastore, $storage_key_patterns );
+		}
+		return $storage_array;
 	}
 }

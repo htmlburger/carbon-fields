@@ -32,9 +32,7 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 			ORDER BY `option_name` ASC
 		' );
 
-		if ( empty( $storage_array ) ) {
-			$storage_array = $this->legacy_storage_service->get_storage_array( $this, $storage_key_patterns );
-		}
+		$storage_array = apply_filters( 'crb_datastore_storage_array', $storage_array, $this, $storage_key_patterns );
 
 		return $storage_array;
 	}
