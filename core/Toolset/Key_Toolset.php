@@ -9,7 +9,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Provides common tools when dealing with storage keys
  *
  * Key schema:
- * _[root_field_name]|[parent:field:names:separated:with:colons]|[complex:group:indexes:separated:with:colons]|[value_index]|[value_key/property]
+ * _[root_field_name]|[parent:field:names:separated:with:colons]|[complex:group:indexes:separated:with:colons]|[value_index]|[property]
  *
  * Example:
  * _countries|major_cities:name|0:1|0|value
@@ -118,15 +118,15 @@ class Key_Toolset {
 	 * @param array<string> $full_hierarchy
 	 * @param array<int> $full_hierarchy_index
 	 * @param int $value_group_index
-	 * @param string $value_key
+	 * @param string $property
 	 * @return string
 	 */
-	public function get_storage_key( $is_simple_root_field, $full_hierarchy, $full_hierarchy_index, $value_group_index, $value_key ) {
+	public function get_storage_key( $is_simple_root_field, $full_hierarchy, $full_hierarchy_index, $value_group_index, $property ) {
 		$full_hierarchy_index = $this->get_sanitized_hierarchy_index( $full_hierarchy, $full_hierarchy_index );
-		if ( $is_simple_root_field && $value_key === Value_Set::VALUE_PROPERTY ) {
+		if ( $is_simple_root_field && $property === Value_Set::VALUE_PROPERTY ) {
 			return $this->get_storage_key_for_simple_root_field( array_shift( $full_hierarchy ) );
 		}
-		$storage_key = $this->get_storage_key_prefix( $full_hierarchy, $full_hierarchy_index ) . intval( $value_group_index ) . static::SEGMENT_GLUE . $value_key;
+		$storage_key = $this->get_storage_key_prefix( $full_hierarchy, $full_hierarchy_index ) . intval( $value_group_index ) . static::SEGMENT_GLUE . $property;
 		return $storage_key;
 	}
 
@@ -135,12 +135,12 @@ class Key_Toolset {
 	 *
 	 * @param bool $is_simple_root_field
 	 * @param array<string> $full_hierarchy
-	 * @param string $value_key
+	 * @param string $property
 	 * @param string $wildcard
 	 * @return string
 	 */
-	public function get_storage_key_with_index_wildcards( $is_simple_root_field, $full_hierarchy, $value_key = Value_Set::VALUE_PROPERTY, $wildcard = '%' ) {
-		if ( $is_simple_root_field && $value_key === Value_Set::VALUE_PROPERTY ) {
+	public function get_storage_key_with_index_wildcards( $is_simple_root_field, $full_hierarchy, $property = Value_Set::VALUE_PROPERTY, $wildcard = '%' ) {
+		if ( $is_simple_root_field && $property === Value_Set::VALUE_PROPERTY ) {
 			return $this->get_storage_key_for_simple_root_field( array_shift( $full_hierarchy ) );
 		}
 
@@ -159,7 +159,7 @@ class Key_Toolset {
 			static::SEGMENT_GLUE . 
 			$value_group_index . 
 			static::SEGMENT_GLUE . 
-			$value_key;
+			$property;
 		return $storage_key;
 	}
 

@@ -87,13 +87,13 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 			$this->save_key_value_pair_with_autoload( $storage_key, '', $autoload );
 		}
 		foreach ( $value_set as $value_group_index => $values ) {
-			foreach ( $values as $value_key => $value ) {
+			foreach ( $values as $property => $value ) {
 				$storage_key = $this->key_toolset->get_storage_key(
 					$field->is_simple_root_field(),
 					$this->get_full_hierarchy_for_field( $field ),
 					$this->get_full_hierarchy_index_for_field( $field ),
 					$value_group_index,
-					$value_key
+					$property
 				);
 				$this->save_key_value_pair_with_autoload( $storage_key, $value, $autoload );
 			}
