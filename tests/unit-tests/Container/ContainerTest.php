@@ -16,17 +16,13 @@ class ContainerTest extends WP_UnitTestCase {
 	
 	public function setUp() {
 		$ioc = new PimpleContainer();
-
 		$ioc['container_repository'] = function( $ioc ) {
 			return new ContainerRepository();
 		};
-
 		$ioc['key_toolset'] = function( $ioc ) {
 			return new Key_Toolset();
 		};
-
 		App::instance()->install( $ioc );
-		App::service( 'legacy_storage' )->disable();
 
 		$this->containerId = 'PageSettings';
 		$this->containerTitle = 'Page Settings';
