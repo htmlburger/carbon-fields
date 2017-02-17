@@ -21,6 +21,18 @@ abstract class Container implements Datastore_Holder_Interface {
 	const TABS_HEAD = 2;
 
 	/**
+	 * Separator signifying field hierarchy relation
+	 * Used when searching for fields in a specific complex field
+	 */
+	const HIERARCHY_FIELD_SEPARATOR = '/';
+
+	/**
+	 * Separator signifying complex_field->group relation
+	 * Used when searching for fields in a specific complex field group
+	 */
+	const HIERARCHY_GROUP_SEPARATOR = ':';
+
+	/**
 	 * Stores if the container is active on the current page
 	 *
 	 * @see activate()
@@ -418,7 +430,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return Field
 	 **/
 	public function get_field_by_name( $field_name ) {
-		$hierarchy = array_filter( explode( '/', $field_name ) );
+		$hierarchy = array_filter( explode( static::HIERARCHY_FIELD_SEPARATOR, $field_name ) );
 		$field = null;
 
 		$field_group = $this->get_fields();
@@ -426,7 +438,7 @@ abstract class Container implements Datastore_Holder_Interface {
 
 		while ( ! empty( $hierarchy_left ) ) {
 			$segment = array_shift( $hierarchy_left );
-			$segment_pieces = explode( ':', $segment, 2 );
+			$segment_pieces = explode( static::HIERARCHY_GROUP_SEPARATOR, $segment, 2 );
 			$field_name = $segment_pieces[0];
 			$group_name = isset( $segment_pieces[1] ) ? $segment_pieces[1] : Group_Field::DEFAULT_GROUP_NAME;
 
