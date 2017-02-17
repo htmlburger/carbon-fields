@@ -314,9 +314,10 @@ class Legacy_Storage_Service extends Service {
 	 * @return string
 	 */
 	public function get_key_segmentation_regex_for_field_name( $field_name, $group_name = '' ) {
+		$legacy_group_name = ( $group_name === '_' ) ? $group_name : '_' . $group_name;
+		
 		$regex = '/\A_?' . preg_quote( $field_name, '/' ) . '(?:_(?P<group_index>\d+))?\z/';
 		if ( $group_name !== '' ) {
-			$legacy_group_name = ( $group_name === '_' ) ? $group_name : '_' . $group_name;
 			$regex = '/\A_?' . preg_quote( $field_name, '/' ) . '(?:_(?P<group_index>\d+))?' . preg_quote( $legacy_group_name, '/' ) . '\z/';
 		}
 		return $regex;
