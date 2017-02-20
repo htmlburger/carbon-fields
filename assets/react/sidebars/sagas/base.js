@@ -3,7 +3,6 @@
  */
 import { takeEvery } from 'redux-saga';
 import { put, call } from 'redux-saga/effects';
-import { kebabCase } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -21,10 +20,10 @@ import { request } from 'sidebars/helpers';
  */
 export function* workerAddSidebar({ payload: { sidebarName } }) {
 	try {
-		yield call(request, 'add', sidebarName);
+		var response = yield call(request, 'add', sidebarName);
 		yield put(receiveSidebar({
-			id: kebabCase(sidebarName),
-			name: sidebarName,
+			id: response.data.id,
+			name: response.data.name,
 		}));
 	} catch (e) {
 		alert(e);
