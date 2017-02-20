@@ -14,7 +14,6 @@ class Date_Field extends Field {
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
@@ -27,21 +26,6 @@ class Date_Field extends Field {
 		) );
 
 		return $field_data;
-	}
-
-	/**
-	 * The Underscore template of this field
-	 **/
-	public function template() {
-		?>
-		<div class="carbon-field-group">
-			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-field-group-input carbon-datepicker" />
-
-			<div class="carbon-field-group-button">
-				<span class="carbon-datepicker-trigger button hide-if-no-js"><?php _e( 'Select Date', \Carbon_Fields\TEXT_DOMAIN ); ?></span>
-			</div>
-		</div>
-		<?php
 	}
 
 	/**

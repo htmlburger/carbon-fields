@@ -49,15 +49,6 @@ abstract class Container implements Datastore_Holder_Interface {
 	protected $registered_field_names = array();
 
 	/**
-	 * Stores all the container Backbone templates
-	 *
-	 * @see factory()
-	 * @see add_template()
-	 * @var array
-	 */
-	protected $templates = array();
-
-	/**
 	 * Tabs available
 	 */
 	protected $tabs = array();
@@ -222,42 +213,9 @@ abstract class Container implements Datastore_Holder_Interface {
 	abstract public function init();
 
 	/**
-	 * Prints the container Underscore template
-	 **/
-	public function template() {
-		?>
-		<div class="{{{ classes.join(' ') }}}">
-			<# _.each(fields, function(field) { #>
-				<div class="{{{ field.classes.join(' ') }}}">
-					<label for="{{{ field.id }}}">
-						{{ field.label }}
-
-						<# if (field.required) { #>
-							 <span class="carbon-required">*</span>
-						<# } #>
-					</label>
-
-					<div class="field-holder {{{ field.id }}}"></div>
-
-					<# if (field.help_text) { #>
-						<em class="help-text">
-							{{{ field.help_text }}}
-						</em>
-					<# } #>
-
-					<em class="carbon-error"></em>
-				</div>
-			<# }); #>
-		</div>
-		<?php
-	}
-
-	/**
 	 * Boot the container once it's attached.
 	 **/
 	protected function boot() {
-		$this->add_template( $this->type, array( $this, 'template' ) );
-
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_scripts' ), 5 );
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
 	}
@@ -364,22 +322,6 @@ abstract class Container implements Datastore_Holder_Interface {
 	 **/
 	public function should_activate() {
 		return $this->is_valid_attach();
-	}
-
-	/**
-	 * Returns all the Backbone templates
-	 *
-	 * @return array
-	 **/
-	public function get_templates() {
-		return $this->templates;
-	}
-
-	/**
-	 * Adds a new Backbone template
-	 **/
-	protected function add_template( $name, $callback ) {
-		$this->templates[ $name ] = $callback;
 	}
 
 	/**
@@ -660,31 +602,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Underscore template for tabs
-	 */
-	public function template_tabs() {
-		?>
-		<div class="carbon-tabs">
-			<ul class="carbon-tabs-nav">
-				<# _.each(tabs, function (tab, tabName) { #>
-					<li><a href="#" data-id="{{{ tab.id }}}">{{{ tabName }}}</a></li>
-				<# }); #>
-			</ul>
-
-			<div class="carbon-tabs-body">
-				<# _.each(tabs, function (tab) { #>
-					<div class="carbon-fields-collection carbon-tab">
-						{{{ tab.html }}}
-					</div>
-				<# }); #>
-			</div>
-		</div>
-		<?php
-	}
-
-	/**
 	 * Returns an array that holds the container data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
@@ -769,11 +687,8 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return object $this
 	 */
 	public function add_tab( $tab_name, $fields ) {
-		$this->add_template( 'tabs', array( $this, 'template_tabs' ) );
-
 		$this->add_fields( $fields );
 		$this->create_tab( $tab_name, $fields );
-
 		return $this;
 	}
 }

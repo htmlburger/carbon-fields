@@ -7,7 +7,6 @@ use Carbon_Fields\Loader\Loader;
 use Carbon_Fields\Container\Repository as ContainerRepository;
 use Carbon_Fields\Toolset\Key_Toolset;
 use Carbon_Fields\Toolset\WP_Toolset;
-use Carbon_Fields\Service\Template_Service;
 use Carbon_Fields\Service\Meta_Query_Service;
 use Carbon_Fields\Service\Legacy_Storage_Service_v_1_5;
 use Carbon_Fields\Service\REST_API_Service;
@@ -58,7 +57,7 @@ class App {
 		$ioc = new PimpleContainer();
 
 		$ioc['loader'] = function( $ioc ) {
-			return new Loader( $ioc['template_service'], $ioc['sidebar_manager'], $ioc['container_repository'] );
+			return new Loader( $ioc['sidebar_manager'], $ioc['container_repository'] );
 		};
 
 		$ioc['container_repository'] = function() {
@@ -71,10 +70,6 @@ class App {
 
 		$ioc['wp_toolset'] = function() {
 			return new WP_Toolset();
-		};
-
-		$ioc['template_service'] = function() {
-			return new Template_Service();
 		};
 
 		$ioc['sidebar_manager'] = function() {

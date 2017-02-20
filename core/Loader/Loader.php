@@ -5,7 +5,6 @@ namespace Carbon_Fields\Loader;
 use Carbon_Fields\App;
 use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Container\Repository as ContainerRepository;
-use Carbon_Fields\Service\Template_Service;
 use Carbon_Fields\Service\Legacy_Storage_Service_v_1_5;
 use Carbon_Fields\Service\Meta_Query_Service;
 use Carbon_Fields\Service\REST_API_Service;
@@ -17,14 +16,11 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 class Loader {
 
-	protected $template_service;
-
 	protected $sidebar_manager;
 
 	protected $container_repository;
 
-	public function __construct( Template_Service $template_service, Sidebar_Manager $sidebar_manager, ContainerRepository $container_repository ) {
-		$this->template_service = $template_service;
+	public function __construct( Sidebar_Manager $sidebar_manager, ContainerRepository $container_repository ) {
 		$this->sidebar_manager = $sidebar_manager;
 		$this->container_repository = $container_repository;
 	}
@@ -47,14 +43,9 @@ class Loader {
 		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
 		add_action( 'carbon_after_register_fields', array( $this, 'initialize_containers' ) );
-		add_action( 'crb_field_activated', array( $this, 'add_templates' ) );
-		add_action( 'crb_container_activated', array( $this, 'add_templates' ) );
 		add_action( 'admin_footer', array( $this, 'enqueue_scripts' ), 0 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data_script' ), 9 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_bootstrap_js' ), 100 );
-
-		# Initialize template service
-		$this->template_service->enable();
 
 		# Enable the legacy storage service
 		App::service( 'legacy_storage' )->enable();
@@ -101,30 +92,6 @@ class Loader {
 	 */
 	public function initialize_containers() {
 		$this->container_repository->initialize_containers();
-	}
-
-	/**
-	 * Adds the field/container template(s) to the templates stack.
-	 *
-	 * @param object $object field or container object
-	 **/
-	public function add_templates( $object ) {
-		$templates = $object->get_templates();
-
-		if ( ! $templates ) {
-			return false;
-		}
-
-		foreach ( $templates as $name => $callback ) {
-			ob_start();
-
-			call_user_func( $callback );
-
-			$html = ob_get_clean();
-
-			// Add the template to the stack
-			$this->template_service->add_template( $name, $html );
-		}
 	}
 
 	/**

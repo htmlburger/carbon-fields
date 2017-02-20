@@ -49,7 +49,6 @@ class Checkbox_Field extends Field {
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 * In addition to default data, option value and label are added.
-	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
@@ -66,20 +65,8 @@ class Checkbox_Field extends Field {
 	}
 
 	/**
-	 * Underscore template of the field.
-	 */
-	public function template() {
-		?>
-		<label>
-			<input type="checkbox" name="{{{ name }}}" value="{{ option_value }}" {{{ option_value == value ? 'checked="checked"' : '' }}} />
-			{{{ option_label }}}
-		</label>
-		<?php
-	}
-
-	/**
 	 * Get the field label.
-	 * Label here is empty because it is displayed in the Underscore template.
+	 * Label here is empty because it is displayed in the front-end.
 	 *
 	 * @return string Label of the field.
 	 */

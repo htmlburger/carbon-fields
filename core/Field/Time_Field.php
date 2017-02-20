@@ -46,7 +46,6 @@ class Time_Field extends Field {
 
 	/**
 	 * You can use this method to modify the field properties that are added to the JSON object.
-	 * The JSON object is used by the Backbone Model and the Underscore template.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
@@ -63,21 +62,6 @@ class Time_Field extends Field {
 		) );
 
 		return $field_data;
-	}
-
-	/**
-	 * Prints the main Underscore template.
-	 **/
-	public function template() {
-		?>
-		<div class="carbon-field-group">
-			<input id="{{{ id }}}" type="text" name="{{{ name }}}" value="{{ value }}" class="regular-text carbon-field-group-input carbon-timepicker" />
-
-			<div class="carbon-field-group-button">
-				<span class="carbon-timepicker-trigger button hide-if-no-js"><?php _e( 'Select Time', 'crb' ); ?></span>
-			</div>
-		</div>
-		<?php
 	}
 
 	/**
