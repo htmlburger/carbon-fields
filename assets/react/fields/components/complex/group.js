@@ -33,7 +33,7 @@ export const ComplexGroup = ({ index, prefix, layout, group, active, collapsed, 
 	return <div className={cx('carbon-row', 'carbon-group-row', { 'collapsed': collapsed }, { 'active': active })}>
 		<input
 			type="hidden"
-			name={`${prefix}[${index}][group]`}
+			name={`${prefix}[${index}][_type]`}
 			defaultValue={group.name} />
 
 		<div className="carbon-drag-handle">
