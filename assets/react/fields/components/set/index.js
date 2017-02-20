@@ -40,7 +40,7 @@ export const SetField = ({ name, field, hasHiddenOptions, isChecked, isHidden, h
 						<label>
 							<input
 								type="checkbox"
-								name={`${name}[]`}
+								name={`${name}[${index}]`}
 								value={option.value}
 								checked={isChecked(option)}
 								disabled={!field.ui.is_visible}
