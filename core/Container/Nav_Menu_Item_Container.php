@@ -48,9 +48,7 @@ class Nav_Menu_Item_Container extends Container {
 		$this->_attach();
 
 		// Only the base container should register for updating/rendering
-		if ( $menu_item_id > 0 ) {
-			$this->load();
-		} else {
+		if ( $menu_item_id === 0 ) {
 			add_action( 'wp_update_nav_menu_item', array( $this, 'update' ), 10, 3 );
 			add_action( 'crb_print_carbon_container_nav_menu_item_fields_html', array( $this, 'form' ), 10, 5 );
 		}
