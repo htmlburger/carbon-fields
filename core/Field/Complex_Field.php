@@ -343,9 +343,7 @@ class Complex_Field extends Field {
 		}
 		$this->set_value( $value );
 
-		if ( $this->get_value() === null ) {
-			$this->set_value( $this->get_default_value() );
-		} else {
+		if ( $this->get_value() ) {
 			$this->set_value_tree( $raw_value_set_tree[ $this->get_base_name() ] );
 		}
 	}

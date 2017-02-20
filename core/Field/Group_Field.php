@@ -122,11 +122,6 @@ class Group_Field {
 		$fields_data = array();
 
 		foreach ( $this->get_fields() as $field ) {
-			// The field default value should be set manually if the field is not loaded
-			if ( ! $load && $field->get_value() === null ) {
-				$field->set_value( $field->get_default_value() );
-			}
-
 			$fields_data[] = $field->to_json( $load );
 		}
 
