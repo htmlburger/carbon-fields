@@ -28,3 +28,8 @@ composer.lock
 
 # Vagrant
 .vagrant
+
+# Bundled assets
+/assets/carbon.core.js*
+/assets/carbon.vendor.js*
+/assets/carbon.bootstrap.js*
