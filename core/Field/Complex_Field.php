@@ -62,6 +62,25 @@ class Complex_Field extends Field {
 	}
 
 	/**
+	 * Set array of hierarchy field names
+	 **/
+	public function set_hierarchy( $hierarchy ) {
+		parent::set_hierarchy( $hierarchy );
+		$this->update_child_hierarchy();
+	}
+	
+	/**
+	 * Propagate hierarchy to child fields
+	 **/
+	public function update_child_hierarchy() {
+		$hierarchy = array_merge( $this->get_hierarchy(), array( $this->get_base_name() ) );
+		$fields = $this->get_fields();
+		foreach ( $fields as $field ) {
+			$field->set_hierarchy( $hierarchy );
+		}
+	}
+
+	/**
 	 * Activate the field once the container is attached.
 	 */
 	public function activate() {
@@ -123,12 +142,12 @@ class Complex_Field extends Field {
 			if ( $field->get_base_name() === static::GROUP_TYPE_KEY ) {
 				Incorrect_Syntax_Exception::raise( '"' . static::GROUP_TYPE_KEY . '" is a reserved keyword for Complex fields and cannot be used for a field name.' );
 			}
-			$field->set_hierarchy( array_merge( $this->get_hierarchy(), array( $this->get_base_name() ) ) );
 		}
 
 		$group = new Group_Field( $name, $label, $fields );
 
 		$this->groups[ $group->get_name() ] = $group;
+		$this->update_child_hierarchy();
 
 		return $this;
 	}
