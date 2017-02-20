@@ -89,10 +89,6 @@ class Nav_Menu_Item_Container extends Container {
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
-		if ( $this->get_datastore()->get_id() !== 0 ) {
-			return false;
-		}
-
 		if ( $pagenow === 'nav-menus.php' ) {
 			return true;
 		}
