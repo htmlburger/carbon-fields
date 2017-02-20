@@ -21,7 +21,7 @@ import { getContainerComponent } from 'lib/registry';
 export default function(store, type, props = {}) {
 	const { id } = props;
 	const Component = getContainerComponent(type);
-	const node = document.querySelector(`.container-${id}`);
+	const node = document.querySelector(`[class*="${id}"]`);
 
 	if (node) {
 		ReactDOM.render(
