@@ -28,6 +28,7 @@ export const Colorpicker = ({ visible, value, handleChange, handleClickOutside }
 			<SketchPicker
 				color={value}
 				onChange={handleChange}
+				disableAlpha={true}
 				presetColors={[]} />
 		</div>
 };
