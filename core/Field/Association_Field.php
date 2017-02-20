@@ -62,12 +62,18 @@ class Association_Field extends Relationship_Field {
 	 */
 	protected function value_string_to_property_array( $value_string ) {
 		$value_pieces = explode( ':', $value_string );
-		$property_array = array(
-			Value_Set::VALUE_PROPERTY => $value_string,
-			'type' => $value_pieces[0],
-			'subtype' => $value_pieces[1],
-			'object_id' => $value_pieces[2],
-		);
+		$type = isset( $value_pieces[0] ) ? $value_pieces[0] : '';
+		$subtype = isset( $value_pieces[1] ) ? $value_pieces[1] : '';
+		$object_id = isset( $value_pieces[2] ) ? $value_pieces[2] : 0;
+
+		if ( $object_id ) {
+			$property_array = array(
+				Value_Set::VALUE_PROPERTY => $value_string,
+				'type' => $type,
+				'subtype' => $subtype,
+				'object_id' => $object_id,
+			);
+		}
 		return $property_array;
 	}
 
