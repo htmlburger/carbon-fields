@@ -493,12 +493,16 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Alias for $this->get_value_set()->get();
+	 * Alias for $this->get_value_set()->get(); with fallback to default value
 	 *
 	 * @return mixed
 	 **/
 	public function get_value() {
-		return $this->get_value_set()->get();
+		$value = $this->get_value_set()->get();
+		if ( $value === null ) {
+			$value = $this->get_default_value();
+		}
+		return $value;
 	}
 
 	/**
@@ -507,11 +511,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @return mixed
 	 **/
 	public function get_formatted_value() {
-		$value = $this->get_value();
-		if ( $value === null ) {
-			$value = $this->get_default_value();
-		}
-		return $value;
+		return $this->get_value();
 	}
 
 	/**
