@@ -11,7 +11,7 @@ import { Provider } from 'react-redux';
 import { getContainerComponent } from 'lib/registry';
 
 /**
- * Render a new field.
+ * Render a new container.
  *
  * @param  {Object} store
  * @param  {String} type
@@ -21,7 +21,7 @@ import { getContainerComponent } from 'lib/registry';
 export default function(store, type, props = {}) {
 	const { id } = props;
 	const Component = getContainerComponent(type);
-	const node = document.querySelector(`[class*="${id}"]`);
+	const node = document.querySelector(`.container-${id}`);
 
 	if (node) {
 		ReactDOM.render(
