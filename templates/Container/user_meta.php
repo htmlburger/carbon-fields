@@ -1,4 +1,4 @@
-<div id="<?php echo $this->id; ?>-wrapper" class="carbon-cloaked">
+<div id="<?php echo $this->id; ?>-wrapper">
 	<h3><?php echo $this->title; ?></h3>
 	<table class="form-table">
 		<tr class="carbon-table-row">
