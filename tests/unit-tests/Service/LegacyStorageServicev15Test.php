@@ -12,7 +12,7 @@ use Carbon_Fields\Toolset\WP_Toolset;
 /**
  * @coversDefaultClass Carbon_Fields\Service\Legacy_Storage_Service_v_1_5
  */
-class LegacyStorageServiceTest extends WP_UnitTestCase {
+class LegacyStorageServicev15Test extends WP_UnitTestCase {
 
 	public function setUp() {
 		$ioc = new PimpleContainer();

@@ -272,8 +272,6 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Set array of hierarchy field names
-	 *
-	 * @return array
 	 **/
 	public function set_hierarchy( $hierarchy ) {
 		$this->hierarchy = $hierarchy;
@@ -290,10 +288,9 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Set array of hierarchy indexes
-	 *
-	 * @return array
 	 **/
 	public function set_hierarchy_index( $hierarchy_index ) {
+		$hierarchy_index = ( ! empty( $hierarchy_index ) ) ? $hierarchy_index : array( 0 );
 		$this->hierarchy_index = $hierarchy_index;
 	}
 

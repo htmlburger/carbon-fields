@@ -34,6 +34,7 @@ class Sidebar_Manager {
 		$response = array(
 			'success' => false,
 			'error' => null,
+			'errorCode' => null,
 			'data' => null,
 		);
 
@@ -45,6 +46,7 @@ class Sidebar_Manager {
 		if ( is_wp_error( $result ) ) {
 			$response['success'] = false;
 			$response['error'] = $result->get_error_message();
+			$response['errorCode'] = $result->get_error_code();
 		} else {
 			$response['success'] = true;
 			$response['data'] = $result;
@@ -105,7 +107,15 @@ class Sidebar_Manager {
 			'name' => $name,
 		);
 
-		return update_option( 'carbon_custom_sidebars', $registered_sidebars );
+		$success = update_option( 'carbon_custom_sidebars', $registered_sidebars );
+		if ( ! $success ) {
+			return new \WP_Error( 'update-failed', __( 'Failed to update option storing your custom sidebars. Please contact support.', \Carbon_Fields\TEXT_DOMAIN ) );
+		}
+
+		return array(
+			'id' => $id,
+			'name' => $name,
+		);
 	}
 
 	/**
@@ -127,7 +137,12 @@ class Sidebar_Manager {
 			return new \WP_Error( 'sidebar-not-found', __( 'Sidebar not found.', \Carbon_Fields\TEXT_DOMAIN ) );
 		}
 
-		return update_option( 'carbon_custom_sidebars', $registered_sidebars );
+		$success = update_option( 'carbon_custom_sidebars', $registered_sidebars );
+		if ( ! $success ) {
+			return new \WP_Error( 'update-failed', __( 'Failed to update option storing your custom sidebars. Please contact support.', \Carbon_Fields\TEXT_DOMAIN ) );
+		}
+
+		return $success;
 	}
 
 	/**
