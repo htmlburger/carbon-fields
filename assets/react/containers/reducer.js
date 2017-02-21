@@ -8,6 +8,7 @@ import { handleActions } from 'redux-actions';
  * The internal dependencies.
  */
 import { decorateContainerReducer } from 'lib/registry';
+import { resetStore } from 'store/actions';
 import {
 	setupContainer,
 	addContainer,
@@ -30,4 +31,5 @@ export default decorateContainerReducer(handleActions({
 	[removeContainer]: (state, { payload }) => immutable.del(state, payload),
 	[setMeta]: (state, { payload: { containerId, meta }}) => immutable.assign(state, `${containerId}.meta`, meta),
 	[setUI]: (state, { payload: { containerId, ui }}) => immutable.assign(state, `${containerId}.ui`, ui),
+	[resetStore]: (state, { payload: { containers }}) => containers,
 }, {}));

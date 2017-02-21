@@ -14,6 +14,14 @@ import { createAction } from 'redux-actions';
 export const setupContainer = createAction('containers/SETUP_CONTAINER', (containerId, meta, ui) => ({ containerId, meta, ui }));
 
 /**
+ * Prepare the container for removal.
+ *
+ * @param  {String} containerId
+ * @return {Object}
+ */
+export const teardownContainer = createAction('containers/TEARDOWN_CONTAINER', containerId => ({ containerId }));
+
+/**
  * Update the object that holds additional fields for the container.
  *
  * @param  {Object} payload

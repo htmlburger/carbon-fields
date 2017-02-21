@@ -1,17 +1,42 @@
 /**
  * The external dependencies.
  */
+import ReactDOM from 'react-dom';
 import { takeEvery } from 'redux-saga';
-import { take, call, put, fork, select } from 'redux-saga/effects';
+import {
+	take,
+	call,
+	put,
+	fork,
+	select,
+	cancel
+} from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
  */
-import { createSelectboxChannel } from 'lib/events';
+import { resetStore } from 'store/actions';
+import { normalizePreloadedState } from 'store/helpers';
+import {
+	createSelectboxChannel,
+	createAjaxChannel
+} from 'lib/events';
 
-import { getContainerById, canProcessAction } from 'containers/selectors';
-import { setupContainer, setMeta, setUI } from 'containers/actions';
+import containerFactory from 'containers/factory';
+import { stopSaga } from 'containers/helpers';
 import { TYPE_TERM_META } from 'containers/constants';
+
+import {
+	getContainers,
+	getContainerById,
+	canProcessAction
+} from 'containers/selectors';
+
+import {
+	setupContainer,
+	setMeta,
+	setUI
+} from 'containers/actions';
 
 /**
  * Keep in sync the `level` property.
@@ -22,24 +47,28 @@ import { TYPE_TERM_META } from 'containers/constants';
 export function* workerSyncLevel(containerId) {
 	const channel = yield call(createSelectboxChannel, 'select#parent');
 
-	while (true) {
-		const { option } = yield take(channel);
-		let level = 1;
+	try {
+		while (true) {
+			const { option } = yield take(channel);
+			let level = 1;
 
-		if (option.className) {
-			const matches: ?string[] = option.className.match(/^level-(\d+)/);
+			if (option.className) {
+				const matches = option.className.match(/^level-(\d+)/);
 
-			if (matches) {
-				level = parseInt(matches[1], 10) + 2;
+				if (matches) {
+					level = parseInt(matches[1], 10) + 2;
+				}
 			}
+
+			yield put(setMeta({
+				containerId,
+				meta: {
+					level: level,
+				}
+			}));
 		}
-
-		yield put(setMeta({
-			containerId,
-			meta: {
-				level: level,
-			}
-		}));
+	} finally {
+		channel.close();
 	}
 }
 
@@ -57,7 +86,10 @@ export function* workerSetupContainer(action) {
 		return;
 	}
 
-	yield fork(workerSyncLevel, containerId);
+	yield call(stopSaga, containerId, yield [
+		takeEvery(setMeta, workerCheckVisibility),
+		fork(workerSyncLevel, containerId),
+	]);
 }
 
 /**
@@ -90,13 +122,52 @@ export function* workerCheckVisibility(action) {
 }
 
 /**
+ * Reset the containers when the term is saved.
+ *
+ * @return {void}
+ */
+export function* workerReset(store) {
+	const channel = yield call(createAjaxChannel, 'ajaxSuccess', 'add-tag');
+
+	while (true) {
+		const { settings, data } = yield take(channel);
+
+		// Don't reset when there is no registered containers or in case of error.
+		if (!settings.data.includes('carbon_panel') || data.querySelector('wp_error')) {
+			continue;
+		}
+
+		// Remove the current instances from DOM.
+		for (const id in yield select(getContainers)) {
+			yield call(
+				ReactDOM.unmountComponentAtNode,
+				yield call([document, document.querySelector], `.container-${id}`)
+			);
+		}
+
+		// Get the initial state.
+		const state = normalizePreloadedState(window.carbon_json);
+
+		// Replace the store's state.
+		yield put(resetStore(state));
+
+		// Render new containers.
+		const containers = yield select(getContainers);
+
+		for (const id in containers) {
+			yield call(containerFactory, store, containers[id].type, { id });
+		}
+	}
+}
+
+/**
  * Start to work.
  *
  * @return {void}
  */
-export default function* foreman() {
+export default function* foreman(store) {
 	yield [
 		takeEvery(setupContainer, workerSetupContainer),
-		takeEvery(setMeta, workerCheckVisibility),
+		fork(workerReset, store),
 	];
 }

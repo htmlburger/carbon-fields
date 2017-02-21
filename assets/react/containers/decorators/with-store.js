@@ -8,7 +8,7 @@ import { isFunction } from 'lodash';
  * The internal dependencies.
  */
 import { getContainerById } from 'containers/selectors';
-import { setupContainer, checkVisibility } from 'containers/actions';
+import { setupContainer, teardownContainer, checkVisibility } from 'containers/actions';
 
 /**
  * The default state that will be retrieved from the store.
@@ -28,6 +28,7 @@ const mapStateToProps = (state, ownProps) => ({
  */
 const mapDispatchToProps = {
 	setupContainer,
+	teardownContainer,
 	checkVisibility,
 };
 
