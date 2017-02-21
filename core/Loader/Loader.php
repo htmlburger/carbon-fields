@@ -39,7 +39,7 @@ class Loader {
 
 		include_once( dirname( dirname( __DIR__ ) ) . '/config.php' );
 		include_once( \Carbon_Fields\DIR . '/core/functions.php' );
-		
+
 		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
 		add_action( 'carbon_after_register_fields', array( $this, 'initialize_containers' ) );
@@ -100,8 +100,9 @@ class Loader {
 	public function enqueue_scripts() {
 		wp_enqueue_script( 'carbon-ext', \Carbon_Fields\URL . '/assets/js/ext.js', array( 'jquery' ), \Carbon_Fields\VERSION );
 		wp_enqueue_script( 'carbon-app', \Carbon_Fields\URL . '/assets/js/app.js', array( 'jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable', 'carbon-ext' ), \Carbon_Fields\VERSION );
-		wp_enqueue_script( 'carbon-react-vendor', \Carbon_Fields\URL . '/assets/carbon.vendor.js', array( ) );
-		wp_enqueue_script( 'carbon-react-core', \Carbon_Fields\URL . '/assets/carbon.core.js', array( ) );
+		wp_enqueue_script( 'carbon-vendor', \Carbon_Fields\URL . '/assets/carbon.vendor.js', array( ) );
+		wp_enqueue_script( 'carbon-core', \Carbon_Fields\URL . '/assets/carbon.core.js', array( 'carbon-vendor', 'jquery' ) );
+		wp_enqueue_script( 'carbon-bootstrap', \Carbon_Fields\URL . '/assets/carbon.bootstrap.js', array( 'carbon-core' ) );
 	}
 
 	/**
@@ -158,7 +159,11 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 	 */
 	public function print_bootstrap_js() {
 		?>
-		<script type="text/javascript" src="<?php echo \Carbon_Fields\URL . '/assets/carbon.bootstrap.js'; ?>"></script>
+		<script type="text/javascript">
+			if (typeof carbonFieldsBootstrap.default === 'function') {
+				carbonFieldsBootstrap.default();
+			}
+		</script>
 		<?php
 	}
 }

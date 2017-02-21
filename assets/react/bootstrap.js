@@ -46,17 +46,22 @@ autoload(require.context('./', true, /sagas\/.+\.js$/), (path, file) => {
 });
 
 /**
- * Setup the store.
- */
-const state = normalizePreloadedState(window.carbon_json);
-const sagas = getSagas();
-const store = configureStore(state, sagas);
-
-/**
- * Every Carbon container will be treated as separate React application because
- * we don't want to modify the core behaviour/markup of the WordPress's admin area.
- * Although the store will be shared between the applications.
- *
  * Abracadabra! Poof! Containers everywhere ...
+ *
+ * @return {void}
  */
-_.forEach(getContainers(store.getState()), ({ id, type }) => containerFactory(store, type, { id }));
+export default function() {
+	/**
+	 * Setup the store.
+	 */
+	const state = normalizePreloadedState(window.carbon_json);
+	const sagas = getSagas();
+	const store = configureStore(state, sagas);
+
+	/**
+	 * Every Carbon container will be treated as separate React application because
+	 * we don't want to modify the core behaviour/markup of the WordPress's admin area.
+	 * Although the store will be shared between the applications.
+	 */
+	_.forEach(getContainers(store.getState()), ({ id, type }) => containerFactory(store, type, { id }));
+}

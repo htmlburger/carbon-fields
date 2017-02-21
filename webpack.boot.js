@@ -27,6 +27,13 @@ module.exports = {
 					cacheDirectory: true
 				},
 				exclude: /node_modules/
+			},
+
+			// Expose the global variable used to boot the fields.
+			{
+				test: require.resolve('./assets/react/bootstrap.js'),
+				loader: 'expose-loader',
+				query: 'carbonFieldsBootstrap'
 			}
 		]
 	},
