@@ -62,18 +62,16 @@ class Association_Field extends Relationship_Field {
 	 */
 	protected function value_string_to_property_array( $value_string ) {
 		$value_pieces = explode( ':', $value_string );
-		$type = isset( $value_pieces[0] ) ? $value_pieces[0] : '';
-		$subtype = isset( $value_pieces[1] ) ? $value_pieces[1] : '';
+		$type = isset( $value_pieces[0] ) ? $value_pieces[0] : 'post';
+		$subtype = isset( $value_pieces[1] ) ? $value_pieces[1] : 'post';
 		$object_id = isset( $value_pieces[2] ) ? $value_pieces[2] : 0;
 
-		if ( $object_id ) {
-			$property_array = array(
-				Value_Set::VALUE_PROPERTY => $value_string,
-				'type' => $type,
-				'subtype' => $subtype,
-				'object_id' => $object_id,
-			);
-		}
+		$property_array = array(
+			Value_Set::VALUE_PROPERTY => $value_string,
+			'type' => $type,
+			'subtype' => $subtype,
+			'object_id' => intval( $object_id ),
+		);
 		return $property_array;
 	}
 
@@ -96,6 +94,8 @@ class Association_Field extends Relationship_Field {
 					continue;
 				}
 				$value_string = $raw_value_entry[ Value_Set::VALUE_PROPERTY ];
+			} else if ( empty( trim( $value_string ) ) ) {
+				continue;
 			}
 
 			$property_array = $this->value_string_to_property_array( $value_string );
@@ -404,7 +404,7 @@ class Association_Field extends Relationship_Field {
 			$item = array(
 				'type' => $value_set_entry['type'],
 				'subtype' => $value_set_entry['subtype'],
-				'id' => $value_set_entry['object_id'],
+				'id' => intval( $value_set_entry['object_id'] ),
 				'title' => $this->get_title_by_type( $value_set_entry['object_id'], $value_set_entry['type'], $value_set_entry['subtype'] ),
 				'label' => $this->get_item_label( $value_set_entry['object_id'], $value_set_entry['type'], $value_set_entry['subtype'] ),
 				'is_trashed' => ( $value_set_entry['type'] == 'post' && get_post_status( $value_set_entry['object_id'] ) === 'trash' ),
