@@ -53,7 +53,6 @@ class Gravity_Form_Field extends Select_Field {
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
@@ -68,25 +67,5 @@ class Gravity_Form_Field extends Select_Field {
 		) );
 
 		return $field_data;
-	}
-
-	/**
-	 * The main Underscore template of this field.
-	 */
-	public function template() {
-		// Gravity Forms not installed
-		if ( ! $this->is_plugin_active() ) {
-			?><em><?php _e( 'Please install Gravity Forms plugin', \Carbon_Fields\TEXT_DOMAIN ); ?></em><?php
-			return;
-		}
-
-		// No forms have been found
-		$options = $this->get_options();
-		if ( empty( $options ) ) {
-			?><em><?php _e( 'No Gravity Forms have been found.', \Carbon_Fields\TEXT_DOMAIN ); ?></em><?php
-			return;
-		}
-
-		parent::template();
 	}
 }

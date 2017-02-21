@@ -35,15 +35,6 @@ class Relationship_Field extends Field {
 	}
 
 	/**
-	 * Admin initialization actions
-	 */
-	public function admin_init() {
-		$this->add_template( $this->get_type() . '_item', array( $this, 'item_template' ) );
-
-		parent::admin_init();
-	}
-
-	/**
 	 * Load the field value from an input array based on it's name
 	 *
 	 * @param array $input Array of field names and values.
@@ -198,7 +189,6 @@ class Relationship_Field extends Field {
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
@@ -236,89 +226,5 @@ class Relationship_Field extends Field {
 		) );
 
 		return $field_data;
-	}
-
-	/**
-	 * The main Underscore template of this field.
-	 */
-	public function template() {
-		?>
-		<div class="carbon-relationship-container">
-			<div class="selected-items-container">
-				<strong>
-					<#
-					var selected_items_length = 0;
-					if ( value ) {
-						selected_items_length = value.length;
-					} #>
-					<span class="selected-counter">{{{ selected_items_length }}}</span>
-					<span class="selected-label" data-single-label="<?php _e( 'selected item', \Carbon_Fields\TEXT_DOMAIN ); ?>" data-plural-label="<?php _e( 'selected items', \Carbon_Fields\TEXT_DOMAIN ); ?>">
-						<?php _e( 'selected items', \Carbon_Fields\TEXT_DOMAIN ); ?>
-					</span>
-
-					<?php
-					/* If set_max() has been set, show the allowed maximum items number */
-					?>
-					<# if ( max !== -1 ) { #>
-						<span class="remaining"><?php _e( 'out of', \Carbon_Fields\TEXT_DOMAIN ); ?> {{{ max }}}</span>
-					<# } #>
-				</strong>
-			</div>
-
-			<div class="search-field carbon-relationship-search dashicons-before dashicons-search">
-				<input type="text" class="search-field" placeholder="<?php esc_attr_e( 'Search...', \Carbon_Fields\TEXT_DOMAIN ); ?>" />
-			</div>
-
-			<div class="carbon-relationship-body">
-				<div class="carbon-relationship-left">
-					<ul class="carbon-relationship-list">
-						<# if (options) { #>
-							<# _.each(options, function(item) { #>
-								<?php echo $this->item_template( false ); ?>
-							<# }); #>
-						<# } #>
-					</ul>
-				</div>
-
-				<div class="carbon-relationship-right">
-					<label><?php _e( 'Associated:', \Carbon_Fields\TEXT_DOMAIN ); ?></label>
-
-					<ul class="carbon-relationship-list">
-						<# if (value) { #>
-							<# _.each(value, function(item) { #>
-								<?php echo $this->item_template(); ?>
-							<# }); #>
-						<# } #>
-					</ul>
-				</div>
-			</div>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Serves as a Underscore template for the relationship items.
-	 * Used for both the selected and the selectable options.
-	 *
-	 * @param bool $display_input Whether to display the selected item input field.
-	 */
-	public function item_template( $display_input = true ) {
-		?>
-		<li>
-			<span class="mobile-handle dashicons-before dashicons-menu"></span>
-			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-item-label="{{{ item.label }}}" data-value="{{{ item.id }}}">
-				<# if ( item.edit_link ) { #>
-					<em class="edit-link dashicons-before dashicons-edit" data-href="{{{ item.edit_link }}}"><?php _e( 'Edit', \Carbon_Fields\TEXT_DOMAIN ); ?></em>
-				<# } #>
-				<em>{{{ item.label }}}</em>
-				<span class="dashicons-before dashicons-plus-alt"></span>
-
-				{{{ item.title }}}
-			</a>
-			<?php if ( $display_input ) :  ?>
-				<input type="hidden" name="{{{ name }}}[{{{ item.fieldIndex }}}]" value="{{{ item.id }}}" />
-			<?php endif; ?>
-		</li>
-		<?php
 	}
 }

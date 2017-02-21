@@ -64,7 +64,6 @@ class Set_Field extends Predefined_Options_Field {
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
@@ -78,38 +77,5 @@ class Set_Field extends Predefined_Options_Field {
 		) );
 
 		return $field_data;
-	}
-
-	/**
-	 * The Underscore template of this field.
-	 */
-	public function template() {
-		?>
-		<# if (_.isEmpty(options)) { #>
-			<em><?php _e( 'no options', \Carbon_Fields\TEXT_DOMAIN ); ?></em>
-		<# } else { #>
-			<div class="carbon-set-list">
-				<# _.each(options, function(option, i) { #>
-					<# 
-						var selected = jQuery.inArray(String(option.value), value) > -1;
-						var counter = i + 1;
-						var exceed = limit_options > 0 && counter > limit_options;
-						var last = options.length === counter;
-					#>
-
-					<p {{{ exceed ? 'style="display:none"' : '' }}}>
-						<label>
-							<input type="checkbox" name="{{{ name }}}[{{{ i }}}]" value="{{ option.value }}" {{{ selected ? 'checked="checked"' : '' }}} />
-							{{{ option.name }}}
-						</label>
-					</p>
-
-					<# if (!exceed && !last && counter == limit_options) { #>
-						<p>... <a href="#" class="carbon-set-showall"><?php _e( 'Show All Options', \Carbon_Fields\TEXT_DOMAIN ); ?></a></p>
-					<# } #>
-				<# }) #>
-			</div>
-		<# } #>
-		<?php
 	}
 }

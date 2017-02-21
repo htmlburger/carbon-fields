@@ -100,10 +100,6 @@ class Complex_Field extends Field {
 			'plural_name' => __( 'Entries', \Carbon_Fields\TEXT_DOMAIN ),
 		);
 
-		// Include the complex group Underscore templates
-		$this->add_template( 'Complex-Group', array( $this, 'template_group' ) );
-		$this->add_template( 'Complex-Group-Tab-Item', array( $this, 'template_group_tab_item' ) );
-
 		parent::init();
 	}
 
@@ -169,9 +165,6 @@ class Complex_Field extends Field {
 		$values = array_values( $this->groups );
 		$group = end( $values );
 		$group->set_label_template( $template );
-
-		// Include the group label Underscore template
-		$this->add_template( $group->get_group_id(), array( $group, 'template_label' ) );
 
 		$this->groups[ $group->get_name() ] = $group;
 
@@ -437,7 +430,6 @@ class Complex_Field extends Field {
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
@@ -483,134 +475,6 @@ class Complex_Field extends Field {
 			'collapsed' => $this->collapsed,
 		) );
 		return $complex_data;
-	}
-
-	/**
-	 * The main Underscore template.
-	 */
-	public function template() {
-		?>
-		<div class="carbon-subcontainer carbon-grid {{ multiple_groups ? 'multiple-groups' : '' }}">
-			<div class="carbon-empty-row carbon-empty-row-visible">
-				{{{ crbl10n.complex_no_rows.replace('%s', labels.plural_name) }}}
-			</div>
-
-			<div class="groups-wrapper layout-{{ layout }}">
-				<# if (layout === '<?php echo static::LAYOUT_TABBED_HORIZONTAL ?>' || layout === '<?php echo static::LAYOUT_TABBED_VERTICAL ?>' ) { #>
-					<div class="group-tabs-nav-holder">
-						<ul class="group-tabs-nav"></ul>
-
-						<div class="carbon-actions">
-							<div class="carbon-button">
-								<a href="#" class="button" data-group="{{{ multiple_groups ? '' : groups[0].name }}}">
-									+
-								</a>
-
-								<# if (multiple_groups) { #>
-									<ul>
-										<# _.each(groups, function(group) { #>
-											<li><a href="#" data-group="{{{ group.name }}}">{{{ group.label }}}</a></li>
-										<# }); #>
-									</ul>
-								<# } #>
-							</div>
-						</div>
-					</div><!-- /.group-tabs-nav-holder -->
-				<# } #>
-
-				<div class="carbon-groups-holder"></div>
-				<div class="clear"></div>
-			</div>
-
-			<div class="carbon-actions">
-				<div class="carbon-button">
-					<a href="#" class="button" data-group="{{{ multiple_groups ? '' : groups[0].name }}}">
-						{{{ crbl10n.complex_add_button.replace('%s', labels.singular_name) }}}
-					</a>
-
-					<# if (multiple_groups) { #>
-						<ul>
-							<# _.each(groups, function(group) { #>
-								<li><a href="#" data-group="{{{ group.name }}}">{{{ group.label }}}</a></li>
-							<# }); #>
-						</ul>
-					<# } #>
-				</div>
-			</div>
-		</div>
-		<?php
-	}
-
-	/**
-	 * The Underscore template for the complex field group.
-	 */
-	public function template_group() {
-		?>
-		<div id="carbon-{{{ complex_name }}}-complex-container" class="carbon-row carbon-group-row" data-group-id="{{ id }}">
-			<input type="hidden" name="{{{ complex_name + '[' + index + ']' }}}[_type]" value="{{ name }}" />
-
-			<div class="carbon-drag-handle">
-				<span class="group-number">{{{ order + 1 }}}</span><span class="group-name">{{{ label_template || label }}}</span>
-			</div>
-
-			<div class="carbon-group-actions carbon-group-actions-{{ layout }}">
-				<a class="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="<?php esc_attr_e( 'Clone', \Carbon_Fields\TEXT_DOMAIN ); ?>">
-					<?php _e( 'Clone', \Carbon_Fields\TEXT_DOMAIN ); ?>
-				</a>
-
-				<a class="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="<?php esc_attr_e( 'Remove', \Carbon_Fields\TEXT_DOMAIN ); ?>">
-					<?php _e( 'Remove', \Carbon_Fields\TEXT_DOMAIN ); ?>
-				</a>
-
-				<a class="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="<?php esc_attr_e( 'Collapse/Expand', \Carbon_Fields\TEXT_DOMAIN ); ?>">
-					<?php _e( 'Collapse/Expand', \Carbon_Fields\TEXT_DOMAIN ); ?>
-				</a>
-			</div>
-
-			<div class="fields-container">
-				<# _.each(fields, function(field) { #>
-					<div class="carbon-row carbon-subrow subrow-{{{ field.type }}} {{{ field.classes.join(' ') }}}">
-						<label for="{{{ complex_id + '-' + field.id + '-' + index }}}">
-							{{ field.label }}
-
-							<# if (field.required) { #>
-								 <span class="carbon-required">*</span>
-							<# } #>
-						</label>
-
-						<div class="field-holder {{{ complex_id + '-' + field.id + '-' + index }}}"></div>
-
-						<# if (field.help_text) { #>
-							<em class="help-text">
-								{{{ field.help_text }}}
-							</em>
-						<# } #>
-
-						<em class="carbon-error"></em>
-					</div>
-				<# }) #>
-			</div>
-		</div>
-		<?php
-	}
-
-	 /**
-	 * The Underscore template for the group item tab.
-	 */
-	public function template_group_tab_item() {
-		?>
-		<li class="group-tab-item" data-group-id="{{ id }}">
-			<a href="#">
-				<span class="group-handle"></span>
-
-				<# if (label_template || label) { #>
-					<span class="group-name">{{{ label_template || label }}}</span>
-				<# } #>
-				<span class="group-number">{{{ order + 1 }}}</span>
-				<span class="dashicons dashicons-warning carbon-complex-group-error-badge" ></span>
-			</a>
-		</li>
-		<?php
 	}
 
 	/**

@@ -101,7 +101,6 @@ class Map_Field extends Field {
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
@@ -128,29 +127,6 @@ class Map_Field extends Field {
 		) );
 
 		return $field_data;
-	}
-
-	/**
-	 * Underscore template of this field.
-	 */
-	public function template() {
-		?>
-		<div class="carbon-map-search">
-			<p><?php _e( 'Locate Address on the map', \Carbon_Fields\TEXT_DOMAIN ); ?>: </p>
-
-			<div class="carbon-map-search-row">
-				<input type="text" name="{{{ name }}}[address]" value="{{{ address }}}" class="regular-text address carbon-map-search-address" placeholder="Search..." />
-				<span class="carbon-map-search-button dashicons-before dashicons-search">
-					<?php _e( 'Find', \Carbon_Fields\TEXT_DOMAIN ); ?>
-				</span>
-			</div>
-
-			<input type="hidden" name="{{{ name }}}[lat]" value="{{{ lat }}}" />
-			<input type="hidden" name="{{{ name }}}[lng]" value="{{{ lng }}}" />
-			<input type="hidden" name="{{{ name }}}[zoom]" value="{{{ zoom }}}" />
-		</div>
-		<div class="carbon-map-canvas">&nbsp;</div>
-		<?php
 	}
 
 	/**

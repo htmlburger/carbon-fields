@@ -31,7 +31,7 @@ class Group_Field {
 	protected $label;
 
 	/**
-	 * Group label underscore template.
+	 * Group label template.
 	 *
 	 * @var string
 	 */
@@ -113,7 +113,6 @@ class Group_Field {
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
@@ -175,7 +174,7 @@ class Group_Field {
 	}
 
 	/**
-	 * Set the Underscore label template.
+	 * Set the label template.
 	 *
 	 * @param string $template
 	 */
@@ -184,7 +183,7 @@ class Group_Field {
 	}
 
 	/**
-	 * Set the Underscore label template.
+	 * Get the label template.
 	 *
 	 * @return string
 	 */
@@ -193,7 +192,7 @@ class Group_Field {
 	}
 
 	/**
-	 * Print the label Underscore template.
+	 * Print the label template.
 	 */
 	public function template_label() {
 		echo $this->label_template;
