@@ -20,9 +20,8 @@
 
 .carbon-fields-row > .carbon-field { min-width: 100%; }
 
-.carbon-grid .carbon-field + .carbon-field,
-.carbon-grid .carbon-field + .carbon-fields-row,
-.carbon-grid .carbon-fields-row + .carbon-row { border-top: 1px solid $color-border; }
+.carbon-grid .carbon-field { border-width: 1px 1px 0 0; border-style: solid; border-color: $color-border; }
+.carbon-grid .carbon-container { margin: -1px -1px 0 0; }
 
 
 /*  Error State  */
@@ -37,10 +36,8 @@
 
 
 @media screen and (min-width: $breakpoint-desktop-min) {
-	.carbon-grid .carbon-fields-row:first-child { border-top: 0; }
-	.carbon-grid .carbon-fields-row { display: table; width: 100%; border-bottom: 1px solid $color-border; }
-	.carbon-grid .carbon-fields-row > .carbon-field { display: table-cell; min-width: 0; vertical-align: top; border: 0; }
-	.carbon-grid .carbon-fields-row > .carbon-field + .carbon-field { border-left: 1px solid $color-border; }
+	.carbon-grid .carbon-container { display: flex; flex-wrap: wrap; align-items: stretch; }
+	.carbon-grid .carbon-field { flex: 1 1 100%; }
 }
 
 

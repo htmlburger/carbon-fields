@@ -15,7 +15,7 @@ import cx from 'classnames';
  * @return {React.Element}
  */
 export const Field = ({ field, children }) => {
-	const styles = !!field.width ? { width: `${field.width}%`} : null;
+	const styles = !!field.width ? { flexBasis: `${field.width}%`} : null;
 
 	return <div className={cx('carbon-field', `carbon-${field.type}`, { 'has-width': !!field.width }, { 'carbon-highlight': !field.ui.valid })} style={styles} hidden={!field.ui.is_visible}>
 		<label htmlFor={field.id}>

@@ -40,7 +40,6 @@
 .rtl .carbon-field-group .carbon-field-group-input { order: 2; }
 .rtl .carbon-field-group .carbon-field-group-holder .button { order: 1; }
 
-
 @media screen and (max-width: $breakpoint-mobile-max) {
 	.carbon-field .icon-button { min-width: 40px; height: 40px; }
 
@@ -52,7 +51,7 @@
 	.carbon-field textarea,
 	.carbon-field select { padding: 7px 10px; font-size: 16px; line-height: 1.5; }
 
-	.carbon-field .carbon-field-group-button .button { height: 39px; line-height: 27px; }
+	.carbon-field .carbon-field-group-holder .button { height: 39px; line-height: 27px; }
 
 	.carbon-radio-list label,
 	.carbon-set-list label { padding: 6px 0; line-height: 2.3; }
