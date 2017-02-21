@@ -20,6 +20,15 @@ const hooks = {
 
 		setupContainer(container.id, meta, ui);
 		checkVisibility(container.id);
+	},
+
+	componentWillUnmount() {
+		const {
+			container,
+			teardownContainer,
+		} = this.props;
+
+		teardownContainer(container.id);
 	}
 };
 

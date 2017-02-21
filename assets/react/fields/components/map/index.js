@@ -35,7 +35,7 @@ const MapField = ({ name, field, handleChange, handleSearchSubmit }) => {
 			<SearchInput
 				name={`${name}[address]`}
 				term={field.address}
-				disabled={field.ui.is_visible}
+				disabled={!field.ui.is_visible}
 				onSubmit={handleSearchSubmit} />
 
 			<input

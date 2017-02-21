@@ -3,7 +3,7 @@
  */
 import $ from 'jquery';
 import { eventChannel, buffers, END } from 'redux-saga';
-import { isString } from 'lodash';
+import { isString, uniqueId } from 'lodash';
 
 /**
  * Create a Saga Channel that will listen for DOM events.
@@ -22,7 +22,7 @@ export function createChannel(selector, event, handler, childSelector = null) {
 
 		// Cancel the subscription.
 		const unsubscribe = () => {
-			$element.off(event, childSelector, handler);
+			$element.off(event, childSelector);
 		};
 
 		// Close the channel since the element doesn't exist.
@@ -50,7 +50,7 @@ export function createChannel(selector, event, handler, childSelector = null) {
  * @return {Object}
  */
 export function createSelectboxChannel(selector) {
-	return createChannel(selector, 'change', (emit, $element) => {
+	return createChannel(selector, `change.${uniqueId('event-')}`, function(emit, $element) {
 		emit({
 			value: $element.val(),
 			option: $element.find(':selected').first().get(0),
@@ -65,7 +65,7 @@ export function createSelectboxChannel(selector) {
  * @return {Object}
  */
 export function createCheckableChannel(selector) {
-	return createChannel(selector, 'change', (emit, $element) => {
+	return createChannel(selector, `change.${uniqueId('event-')}`, (emit, $element) => {
 		const elements = $element.find('input:checked').get();
 		const values = elements.map(element => element.value);
 
@@ -83,7 +83,7 @@ export function createCheckableChannel(selector) {
  * @return {Object}
  */
 export function createScrollChannel(selector) {
-	return createChannel(selector, 'scroll', (emit, $element) => {
+	return createChannel(selector, `change.${uniqueId('event-')}`, (emit, $element) => {
 		emit({
 			value: $element.scrollTop()
 		});

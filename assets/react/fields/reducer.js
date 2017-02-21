@@ -9,6 +9,7 @@ import { omit } from 'lodash';
  * The internal dependencies.
  */
 import { decorateFieldReducer } from 'lib/registry';
+import { resetStore } from 'store/actions';
 import {
 	setupField,
 	updateField,
@@ -25,4 +26,5 @@ export default decorateFieldReducer(handleActions({
 	[addFields]: (state, { payload }) => ({ ...state, ...payload }),
 	[removeFields]: (state, { payload }) => omit(state, payload),
 	[updateField]: (state, { payload: { fieldId, data }}) => immutable.assign(state, fieldId, data),
+	[resetStore]: (state, { payload: { fields }}) => fields,
 }, {}));
