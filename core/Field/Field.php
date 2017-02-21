@@ -15,15 +15,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Implements factory design pattern.
  **/
 class Field implements Datastore_Holder_Interface {
-	/**
-	 * Stores all the field Backbone templates
-	 *
-	 * @see factory()
-	 * @see add_template()
-	 * @var array
-	 */
-	protected $templates = array();
-
+	
 	/**
 	 * Globally unique field identificator. Generated randomly
 	 *
@@ -261,7 +253,6 @@ class Field implements Datastore_Holder_Interface {
 	 */
 	public function activate() {
 		$this->admin_init();
-		$this->add_template( $this->get_type(), array( $this, 'template' ) );
 
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_scripts' ), 5 );
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
@@ -337,27 +328,6 @@ class Field implements Datastore_Holder_Interface {
 	 * Called once per field type.
 	 **/
 	public static function admin_enqueue_scripts() {}
-
-	/**
-	 * Prints the main Underscore template
-	 **/
-	public function template() { }
-
-	/**
-	 * Returns all the Backbone templates
-	 *
-	 * @return array
-	 **/
-	public function get_templates() {
-		return $this->templates;
-	}
-
-	/**
-	 * Adds a new Backbone template
-	 **/
-	protected function add_template( $name, $callback ) {
-		$this->templates[ $name ] = $callback;
-	}
 
 	/**
 	 * Get value from datastore
@@ -826,7 +796,6 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array

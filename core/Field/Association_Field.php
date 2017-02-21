@@ -206,7 +206,7 @@ class Association_Field extends Relationship_Field {
 		$posts = get_posts( $args );
 		foreach ( $posts as &$p ) {
 			$p = array(
-				'id' => $p,
+				'id' => intval( $p ),
 				'title' => $this->get_title_by_type( $p, $type['type'], $type['post_type'] ),
 				'type' => $type['type'],
 				'subtype' => $type['post_type'],
@@ -239,7 +239,7 @@ class Association_Field extends Relationship_Field {
 		$terms = get_terms( $type['taxonomy'], $args );
 		foreach ( $terms as $term_id => &$term ) {
 			$term = array(
-				'id' => $term_id,
+				'id' => intval( $term_id ),
 				'title' => $term,
 				'type' => $type['type'],
 				'subtype' => $type['taxonomy'],
@@ -271,7 +271,7 @@ class Association_Field extends Relationship_Field {
 		$users = get_users( $args );
 		foreach ( $users as &$u ) {
 			$u = array(
-				'id' => $u,
+				'id' => intval( $u ),
 				'title' => $this->get_title_by_type( $u, $type['type'] ),
 				'type' => $type['type'],
 				'subtype' => 'user',
@@ -303,7 +303,7 @@ class Association_Field extends Relationship_Field {
 		$comments = get_comments( $args );
 		foreach ( $comments as &$c ) {
 			$c = array(
-				'id' => $c,
+				'id' => intval( $c ),
 				'title' => $this->get_title_by_type( $c, $type['type'] ),
 				'type' => $type['type'],
 				'subtype' => 'comment',
@@ -439,33 +439,5 @@ class Association_Field extends Relationship_Field {
 		$field_data['nextfieldIndex'] = $i;
 
 		return $field_data;
-	}
-
-	/**
-	 * Serves as a backbone template for the association items.
-	 * Used for both the selected and the selectable options.
-	 *
-	 * @param bool $display_input Whether to display the selected item input field.
-	 */
-	public function item_template( $display_input = true ) {
-		?>
-		<li>
-			<span class="mobile-handle dashicons-before dashicons-menu"></span>
-			<a href="#" data-item-id="{{{ item.id }}}" data-item-title="{{{ item.title }}}" data-item-type="{{{ item.type }}}" data-item-subtype="{{{ item.subtype }}}" data-item-label="{{{ item.label }}}" data-value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}">
-				<# if ( item.edit_link ) { #>
-					<em class="edit-link dashicons-before dashicons-edit" data-href="{{{ item.edit_link }}}"><?php _e( 'Edit', \Carbon_Fields\TEXT_DOMAIN ); ?></em>
-				<# } #>
-				<em>{{{ item.label }}}</em>
-				<span class="dashicons-before dashicons-plus-alt"></span>
-				{{{ item.title }}}
-				<# if (item.is_trashed) { #>
-					<i class="trashed dashicons-before dashicons-trash"></i>
-				<# } #>
-			</a>
-			<?php if ( $display_input ) :  ?>
-				<input type="hidden" name="{{{ name }}}[{{{ item.fieldIndex }}}]" value="{{{ item.type }}}:{{{ item.subtype }}}:{{{ item.id }}}" />
-			<?php endif; ?>
-		</li>
-		<?php
 	}
 }

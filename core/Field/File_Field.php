@@ -29,8 +29,6 @@ class File_Field extends Field {
 		$this->button_label = __( 'Select File', \Carbon_Fields\TEXT_DOMAIN );
 		$this->window_button_label = __( 'Select File', \Carbon_Fields\TEXT_DOMAIN );
 		$this->window_label = __( 'Files', \Carbon_Fields\TEXT_DOMAIN );
-
-		$this->add_template( $this->get_type() . '-Description', array( $this, 'template_description' ) );
 	}
 
 	/**
@@ -55,7 +53,6 @@ class File_Field extends Field {
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
@@ -104,45 +101,5 @@ class File_Field extends Field {
 		) );
 
 		return $field_data;
-	}
-
-	/**
-	 * The main Underscore template of this field
-	 **/
-	public function template() {
-		?>
-		<div class="carbon-attachment">
-			<input
-				id="{{ id }}"
-				type="text"
-				name="{{ name }}"
-				value="{{ value }}"
-				class="regular-text carbon-file-field"
-				{{{ value_type === 'id' ? 'style="display:none"' : '' }}}
-			/>
-
-			{{{ description }}}
-
-			<span id="c2_open_media{{ id.replace('-', '_') }}" class="button c2_open_media">
-				{{{ button_label }}}
-			</span>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Underscore template of the file description section.
-	 */
-	public function template_description() {
-		?>
-		<div class="carbon-description {{{ value ? '' : 'hidden' }}}">
-			<div class="carbon-attachment-preview {{{ thumb_url ? '' : 'hidden' }}}">
-				<img src="{{ thumb_url }}" class="thumbnail-image" />
-				<div class="carbon-file-remove dashicons-before dashicons-no-alt"></div>
-			</div>
-
-			<div class="carbon-attachment-file-name">{{ file_name }}</div>
-		</div>
-		<?php
 	}
 }
