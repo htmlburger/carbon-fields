@@ -206,7 +206,7 @@ class Association_Field extends Relationship_Field {
 		$posts = get_posts( $args );
 		foreach ( $posts as &$p ) {
 			$p = array(
-				'id' => $p,
+				'id' => intval( $p ),
 				'title' => $this->get_title_by_type( $p, $type['type'], $type['post_type'] ),
 				'type' => $type['type'],
 				'subtype' => $type['post_type'],
@@ -239,7 +239,7 @@ class Association_Field extends Relationship_Field {
 		$terms = get_terms( $type['taxonomy'], $args );
 		foreach ( $terms as $term_id => &$term ) {
 			$term = array(
-				'id' => $term_id,
+				'id' => intval( $term_id ),
 				'title' => $term,
 				'type' => $type['type'],
 				'subtype' => $type['taxonomy'],
@@ -271,7 +271,7 @@ class Association_Field extends Relationship_Field {
 		$users = get_users( $args );
 		foreach ( $users as &$u ) {
 			$u = array(
-				'id' => $u,
+				'id' => intval( $u ),
 				'title' => $this->get_title_by_type( $u, $type['type'] ),
 				'type' => $type['type'],
 				'subtype' => 'user',
@@ -303,7 +303,7 @@ class Association_Field extends Relationship_Field {
 		$comments = get_comments( $args );
 		foreach ( $comments as &$c ) {
 			$c = array(
-				'id' => $c,
+				'id' => intval( $c ),
 				'title' => $this->get_title_by_type( $c, $type['type'] ),
 				'type' => $type['type'],
 				'subtype' => 'comment',
