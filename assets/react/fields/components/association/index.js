@@ -3,7 +3,7 @@
  */
 import React, { PropTypes } from 'react';
 import { compose, withState, withProps, withHandlers, setStatic } from 'recompose';
-import { cloneDeep, without } from 'lodash';
+import { cloneDeep, without, isMatch } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -24,7 +24,6 @@ import { TYPE_ASSOCIATION } from 'fields/constants';
  * @param  {Object}   props.field
  * @param  {String}   props.term
  * @param  {Object[]} props.items
- * @param  {Number[]} props.selected
  * @param  {Function} props.setTerm
  * @param  {Function} props.handleAddItem
  * @return {React.Element}
@@ -37,7 +36,6 @@ export const AssociationField = ({
 	name,
 	field,
 	items,
-	selected,
 	term,
 	setTerm,
 	handleAddItem,
@@ -73,7 +71,6 @@ export const AssociationField = ({
 				<div className="carbon-relationship-left">
 					<AssociationList
 						items={items}
-						selected={selected}
 						onItemClick={handleAddItem} />
 				</div>
 
@@ -104,7 +101,6 @@ AssociationField.propTypes = {
 		max: PropTypes.number.isRequired,
 	}).isRequired,
 	items: PropTypes.arrayOf(PropTypes.object).isRequired,
-	selected: PropTypes.arrayOf(PropTypes.number).isRequired,
 	term: PropTypes.string.isRequired,
 	handleAddItem: PropTypes.func.isRequired,
 	handleRemoveItem: PropTypes.func.isRequired,
@@ -120,19 +116,25 @@ AssociationField.propTypes = {
  */
 const props = ({ field, term }) => {
 	let items = field.options;
-	let selected = [];
 
 	if (term) {
 		items = items.filter(({ title }) => title.toLowerCase().includes(term.toLowerCase()));
 	}
 
 	if (!field.allow_duplicates) {
-		selected = field.value.map(({ id }) => parseInt(id, 10));
+		items = items.map(item => {
+			item.disabled = !!field.value.find(selectedItem => isMatch(selectedItem, {
+				id: item.id,
+				type: item.type,
+				subtype: item.subtype,
+			}));
+
+			return item;
+		});
 	}
 
 	return {
 		items,
-		selected,
 	};
 };
 
@@ -141,14 +143,13 @@ const props = ({ field, term }) => {
  *
  * @param  {Object}   props
  * @param  {Object}   props.field
- * @param  {Number[]} props.selected
  * @param  {Function} props.updateField
  * @return {Function}
  */
-const handleAddItem = ({ field, selected, updateField }) => (item) => {
+const handleAddItem = ({ field, updateField }) => item => {
 	// Don't do anything if the duplicates aren't allowed and
 	// the item is already selected.
-	if (!field.allow_duplicates && selected.indexOf(item.id) > -1) {
+	if (!field.allow_duplicates && item.disabled) {
 		return;
 	}
 

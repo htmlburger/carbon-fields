@@ -17,7 +17,6 @@ import { preventDefault } from 'lib/helpers';
  * @param  {String}        props.prefix
  * @param  {Number}        props.index
  * @param  {Object[]}      props.item
- * @param  {Boolean}       props.disabled
  * @param  {Boolean}       props.associated
  * @param  {Boolean}       props.visible
  * @param  {Function}      props.handleClick
@@ -26,8 +25,8 @@ import { preventDefault } from 'lib/helpers';
  * TODO: Fix the translation of the 'Edit' link.
  * TODO: Clean up the mess in `handleClick` introduced by the incorrect HTML in the template.
  */
-export const AssociationListItem = ({ prefix, index, item, disabled, associated, visible, handleClick }) => {
-	return <li className={cx({ 'inactive': disabled })}>
+export const AssociationListItem = ({ prefix, index, item, associated, visible, handleClick }) => {
+	return <li className={cx({ 'inactive': item.disabled })}>
 		<span className="mobile-handle dashicons-before dashicons-menu"></span>
 
 		<a href="#" onClick={handleClick}>
@@ -84,7 +83,6 @@ AssociationListItem.propTypes = {
 		subtype: PropTypes.string.isRequired,
 		edit_link: PropTypes.string,
 	}).isRequired,
-	disabled: PropTypes.bool,
 	associated: PropTypes.bool,
 	visible: PropTypes.bool,
 	handleClick: PropTypes.func.isRequired,
@@ -95,12 +93,11 @@ AssociationListItem.propTypes = {
  *
  * @param  {Object}   props
  * @param  {Object}   props.item
- * @param  {Boolean}  props.disabled
  * @param  {Boolean}  props.associated
  * @param  {Function} props.onClick
  * @return {Function}
  */
-const handleClick = ({ item, disabled, associated, onClick }) => preventDefault((e) => {
+const handleClick = ({ item, associated, onClick }) => preventDefault((e) => {
 	const { target } = e;
 
 	if (target.nodeName === 'SPAN') {
@@ -109,7 +106,7 @@ const handleClick = ({ item, disabled, associated, onClick }) => preventDefault(
 		e.stopPropagation();
 		window.open(item.edit_link.replace('&amp;', '&', 'g'), '_blank');
 	} else {
-		if (!associated && !disabled) {
+		if (!associated && !item.disabled) {
 			onClick(item);
 		}
 	}
