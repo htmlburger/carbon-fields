@@ -337,7 +337,7 @@ class Complex_Field extends Field {
 	 */
 	public function load() {
 		$raw_value_set_tree = $this->get_datastore()->load( $this );
-		$value = null;
+		$value = array();
 		if ( isset( $raw_value_set_tree[ $this->get_base_name() ] ) ) {
 			$value = $raw_value_set_tree[ $this->get_base_name() ]['value_set'];
 		}

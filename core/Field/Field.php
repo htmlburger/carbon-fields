@@ -65,7 +65,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @var mixed
 	 */
-	protected $default_value;
+	protected $default_value = '';
 
 	/**
 	 * Sanitized field name used as input name attribute during field render
@@ -498,11 +498,10 @@ class Field implements Datastore_Holder_Interface {
 	 * @return mixed
 	 **/
 	public function get_value() {
-		$value = $this->get_value_set()->get();
-		if ( $value === null ) {
-			$value = $this->get_default_value();
+		if ( $this->get_value_set()->get() === null ) {
+			$this->set_value( $this->get_default_value() );
 		}
-		return $value;
+		return $this->get_value_set()->get();
 	}
 
 	/**
