@@ -34,7 +34,7 @@ class DateTimePicker extends React.Component {
 	 * @return {React.Element}
 	 */
 	render() {
-		return <div />;
+		return <div className={this.props.className} />;
 	}
 
 	/**
@@ -57,6 +57,8 @@ class DateTimePicker extends React.Component {
 			...defaults,
 			...this.props.options,
 		});
+
+		$('button', this.node).addClass('button');
 	}
 
 	/**
@@ -82,6 +84,7 @@ DateTimePicker.propTypes = {
 	]).isRequired,
 	options: PropTypes.object.isRequired,
 	children: PropTypes.element.isRequired,
+	className: PropTypes.string,
 };
 
 export default DateTimePicker;

@@ -14,10 +14,9 @@
 .carbon-field .multiple-groups { margin-top: 6px; }
 .carbon-field .carbon-required { color: $color-state-error; }
 
-.carbon-field .carbon-field-group { display: table; width: 100%; }
-.carbon-field .carbon-field-group-input { display: table-cell; width: 100%; vertical-align: top; margin: 0; border-right-style: none; }
-.carbon-field .carbon-field-group-button { display: table-cell; width: 1%; vertical-align: top; }
-.carbon-field .carbon-field-group-button .button { height: 25px; font-size: 11px; line-height: 22px; text-align: center; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.carbon-field .carbon-field-group-holder { display: flex; align-items: stretch; }
+.carbon-field .carbon-field-group-input { flex: 1 1 auto; width: auto; margin-right: -1px; }
+.carbon-field .carbon-field-group-holder .button { flex: 0 0 auto; width: auto; height: 27px; line-height: 25px; margin: 1px 0; font-size: 11px; border-top-left-radius: 0; border-bottom-left-radius: 0; text-align: center; }
 
 /* Set and Radio list */
 
@@ -38,10 +37,8 @@
 .carbon-field .carbon-description:after { content: ''; display: block; clear: both; width: 100%; }
 
 /*  Right-to-Left  */
-
-.rtl .carbon-field-group { display: flex; align-items: stretch; }
-.rtl .carbon-field-group .carbon-field-group-input { flex: 1 1 auto; width: auto; order: 2; }
-.rtl .carbon-field-group .carbon-field-group-button { flex: 0 0 auto; width: auto; order: 1; }
+.rtl .carbon-field-group .carbon-field-group-input { order: 2; }
+.rtl .carbon-field-group .carbon-field-group-holder .button { order: 1; }
 
 
 @media screen and (max-width: $breakpoint-mobile-max) {
@@ -59,8 +56,4 @@
 
 	.carbon-radio-list label,
 	.carbon-set-list label { padding: 6px 0; line-height: 2.3; }
-}
-
-@media screen and (min-width: $breakpoint-tablet-min) {
-	.carbon-field .carbon-field-group-input { height: 26px; }
 }

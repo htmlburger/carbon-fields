@@ -30,7 +30,7 @@ import { TYPE_DATE, TYPE_DATETIME, TYPE_TIME } from 'fields/constants';
 export const DateTimeField = ({ name, field, picker, options, handleChange }) => {
 	return <Field field={field}>
 		<div className="carbon-field-group">
-			<DateTimePicker type={picker} options={options}>
+			<DateTimePicker type={picker} options={options} className="carbon-field-group-holder">
 				<input
 					type="text"
 					id={field.id}

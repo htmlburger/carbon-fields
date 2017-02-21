@@ -18,6 +18,7 @@
 .carbon-relationship-list li { position: relative; display: block; padding: 0; margin: 0; background: #fff; }
 
 .carbon-relationship-list li a { position: relative; display: block; padding: 8px 18px 8px 8px; border-bottom: 1px solid $color-border; text-decoration: none; color: $color-label; font-weight: bold; }
+.carbon-relationship-list li:last-child a { border-bottom: 0; }
 .carbon-relationship-list li a span { position: absolute; top: 7px; right: 8px; color: $color-grey-font; cursor: pointer; }
 
 .carbon-relationship-list li a em { float: right; margin-right: 14px; font-size: 11px; font-style: normal; font-weight: normal; text-transform: uppercase; color: $color-grey-font; }
