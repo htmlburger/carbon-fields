@@ -63,7 +63,7 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 
 		$this->subject->set_datastore( $this->datastore );
 		$this->subject->set_default_value( $expected );
-		$this->assertSame( null, $this->subject->get_value() );
+		$this->assertSame( $expected, $this->subject->get_value() );
 		$this->subject->load();
 		$this->assertSame( $expected, $this->subject->get_value() );
 	}
