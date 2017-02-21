@@ -94,7 +94,9 @@ class Association_Field extends Relationship_Field {
 					continue;
 				}
 				$value_string = $raw_value_entry[ Value_Set::VALUE_PROPERTY ];
-			} else if ( empty( trim( $value_string ) ) ) {
+			}
+			$value_string = trim( $value_string );
+			if ( empty( $value_string ) ) {
 				continue;
 			}
 
