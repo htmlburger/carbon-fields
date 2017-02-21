@@ -134,7 +134,7 @@ class Nav_Menu_Item_Container extends Container {
 			return;
 		}
 		
-		$clone = $this->get_clone_for_menu_item( $current_menu_item_id );
+		$clone = $this->get_clone_for_menu_item( $current_menu_item_id, false );
 		$clone->_save();
 	}
 
@@ -153,7 +153,7 @@ class Nav_Menu_Item_Container extends Container {
 	/**
 	 * Create a clone of this container with it's own datastore for every menu item
 	 */
-	protected function get_clone_for_menu_item( $menu_item_id ) {
+	protected function get_clone_for_menu_item( $menu_item_id, $load = true ) {
 		if ( ! isset( $this->menu_item_instances[ $menu_item_id ] ) ) {
 			$menu_item_datastore = Datastore::make( 'nav_menu_item' );
 			$menu_item_datastore->set_id( $menu_item_id );
@@ -171,11 +171,14 @@ class Nav_Menu_Item_Container extends Container {
 				$custom_fields[] = $tmp_field;
 			}
 
-			$this->menu_item_instances[ $menu_item_id ] = Container::factory( $this->type, $menu_item_field_prefix . $this->id )
+			$container = Container::factory( $this->type, $menu_item_field_prefix . $this->id )
 				->set_datastore( $menu_item_datastore, true )
 				->add_fields( $custom_fields )
 				->init( $menu_item_id );
-			
+			if ( $load ) {
+				$container->load();
+			}
+			$this->menu_item_instances[ $menu_item_id ] = $container;
 		}
 
 		return $this->menu_item_instances[ $menu_item_id ];

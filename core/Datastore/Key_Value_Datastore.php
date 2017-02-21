@@ -150,10 +150,10 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * @param Field $field The field to save.
 	 */
 	public function save( Field $field ) {
-		$value_set = $field->get_value_set()->get_set();
-		if ( $value_set === null ) {
-			return;
+		if ( $field->get_value_set()->get_set() === null ) {
+			$field->set_value( $field->get_default_value() );
 		}
+		$value_set = $field->get_value_set()->get_set();
 
 		if ( empty( $value_set ) && $field->get_value_set()->keepalive() ) {
 			$storage_key = $this->key_toolset->get_storage_key(

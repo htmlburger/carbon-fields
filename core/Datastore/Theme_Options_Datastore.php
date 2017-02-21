@@ -70,12 +70,12 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 	 * @param Field $field The field to save.
 	 */
 	public function save( Field $field ) {
-		$autoload = $field->get_autoload() ? 'yes': 'no';
-		$value_set = $field->get_value_set()->get_set();
-		if ( $value_set === null ) {
-			return;
+		if ( $field->get_value_set()->get_set() === null ) {
+			$field->set_value( $field->get_default_value() );
 		}
+		$value_set = $field->get_value_set()->get_set();
 
+		$autoload = $field->get_autoload() ? 'yes': 'no';
 		if ( empty( $value_set ) && $field->get_value_set()->keepalive() ) {
 			$storage_key = $this->key_toolset->get_storage_key(
 				$field->is_simple_root_field(),
