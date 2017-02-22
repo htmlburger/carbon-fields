@@ -127,3 +127,38 @@ export function registerSaga(saga) {
 export function getSagas() {
 	return sagas;
 }
+
+/**
+ * The map that will be used by the validation service.
+ *
+ * @type {Object}
+ */
+const validators = {
+	[DOMAIN_FIELDS]: {},
+};
+
+/**
+ * Register a new validator.
+ *
+ * @param  {String}   domain
+ * @param  {String}   type
+ * @param  {Function} validator
+ * @return {void}
+ */
+function registerValidator(domain, type, validator) {
+	validators[domain][type] = validator;
+}
+
+export const registerFieldValidator = partial(registerValidator, DOMAIN_FIELDS);
+
+/**
+ * Get the validators for the specified domain.
+ *
+ * @param  {String} domain
+ * @return {Object}
+ */
+function getValidators(domain) {
+	return validators[domain] || {};
+}
+
+export const getFieldValidators = partial(getValidators, DOMAIN_FIELDS);
