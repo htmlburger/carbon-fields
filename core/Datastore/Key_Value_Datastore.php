@@ -115,6 +115,25 @@ abstract class Key_Value_Datastore extends Datastore {
 	}
 
 	/**
+	 * Get a reduced raw value set tree only relevant to the specified field
+	 * 
+	 * @param  array $raw_value_set_tree
+	 * @param  Field $field
+	 * @return array
+	 */
+	protected function reduce_raw_value_set_tree_to_field( $raw_value_set_tree, Field $field ) {
+		$field_raw_value_set_tree = $raw_value_set_tree;
+		$hierarchy = $field->get_hierarchy();
+		$hierarchy_index = $field->get_hierarchy_index();
+
+		foreach ( $hierarchy as $index => $parent_field ) {
+			$field_raw_value_set_tree = $field_raw_value_set_tree[ $parent_field ]['groups'][ $hierarchy_index[ $index ] ];
+		}
+
+		return $field_raw_value_set_tree;
+	}
+
+	/**
 	 * Get a raw database query results array for a field
 	 *
 	 * @param Field $field The field to retrieve value for.
@@ -133,6 +152,7 @@ abstract class Key_Value_Datastore extends Datastore {
 		$storage_key_patterns = $this->key_toolset->get_storage_key_getter_patterns( $field->is_simple_root_field(), $this->get_full_hierarchy_for_field( $field ) );
 		$cascading_storage_array = $this->get_storage_array( $field, $storage_key_patterns );
 		$raw_value_set_tree = $this->cascading_storage_array_to_raw_value_set_tree( $cascading_storage_array );
+		$raw_value_set_tree = $this->reduce_raw_value_set_tree_to_field( $raw_value_set_tree, $field );
 		return $raw_value_set_tree;
 	}
 
