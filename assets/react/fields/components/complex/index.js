@@ -88,7 +88,7 @@ export const ComplexField = ({
 			</div>
 
 			<ComplexActions
-				buttonText={carbonFieldsL10n.complexAddButton.replace('%s', field.labels.singular_name)}
+				buttonText={carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name)}
 				onButtonClick={handleAddGroupClick}>
 					<ComplexPopover
 						groups={field.groups}

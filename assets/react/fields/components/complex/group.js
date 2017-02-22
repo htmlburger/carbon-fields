@@ -43,16 +43,28 @@ export const ComplexGroup = ({ index, prefix, layout, group, active, collapsed, 
 		</div>
 
 		<div className={`carbon-group-actions carbon-group-actions-${layout}`}>
-			<a className="carbon-btn-duplicate dashicons-before dashicons-admin-page" href="#" title="Clone" onClick={handleCloneClick}>
-				Clone
+			<a
+				href="#"
+				className="carbon-btn-duplicate dashicons-before dashicons-admin-page"
+				title={carbonFieldsL10n.field.complexCloneButton}
+				onClick={handleCloneClick} >
+				{carbonFieldsL10n.field.complexCloneButton}
 			</a>
 
-			<a className="carbon-btn-remove dashicons-before dashicons-trash" href="#" title="Remove" onClick={handleRemoveClick}>
-				Remove
+			<a
+				href="#"
+				className="carbon-btn-remove dashicons-before dashicons-trash"
+				title={carbonFieldsL10n.field.complexRemoveButton}
+				onClick={handleRemoveClick} >
+				{carbonFieldsL10n.field.complexRemoveButton}
 			</a>
 
-			<a className="carbon-btn-collapse dashicons-before dashicons-arrow-up" href="#" title="Collapse/Expand" onClick={handleToggleClick}>
-				Collapse/Expand
+			<a
+				href="#"
+				className="carbon-btn-collapse dashicons-before dashicons-arrow-up"
+				title={carbonFieldsL10n.field.complexCollapseExpandButton}
+				onClick={handleToggleClick} >
+				{carbonFieldsL10n.field.complexCollapseExpandButton}
 			</a>
 		</div>
 

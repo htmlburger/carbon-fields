@@ -932,21 +932,6 @@ class Field implements Datastore_Holder_Interface {
 	 */
 	public static function admin_hook_scripts() {
 		wp_enqueue_media();
-		wp_localize_script( 'carbon-fields-core', 'carbonFieldsL10n',
-			array(
-				'geocodeZeroResults' => __( 'The address could not be found. ', \Carbon_Fields\TEXT_DOMAIN ),
-				'geocodeNotSuccessful' => __( 'Geocode was not successful for the following reason: ', \Carbon_Fields\TEXT_DOMAIN ),
-				'maxNumItemsReached' => __( 'Maximum number of items reached (%s items)', \Carbon_Fields\TEXT_DOMAIN ),
-				'complexNoRows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', \Carbon_Fields\TEXT_DOMAIN ),
-				'complexAddButton' => __( 'Add %s', \Carbon_Fields\TEXT_DOMAIN ),
-				'complexMinNumRowsNotReached' => __( 'Minimum number of rows not reached (%1$d %2$s)', \Carbon_Fields\TEXT_DOMAIN ),
-				'messageFormValidationFailed' => __( 'Please fill out all fields correctly. ', \Carbon_Fields\TEXT_DOMAIN ),
-				'messageRequiredField' => __( 'This field is required. ', \Carbon_Fields\TEXT_DOMAIN ),
-				'messageChooseOption' => __( 'Please choose an option. ', \Carbon_Fields\TEXT_DOMAIN ),
-
-				'enterNameOfNewSidebar' => __( 'Please enter the name of the new sidebar:', \Carbon_Fields\TEXT_DOMAIN ),
-			)
-		);
 	}
 
 	/**

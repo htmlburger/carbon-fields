@@ -22,7 +22,7 @@ import { preventDefault } from 'lib/helpers';
 export const ComplexEmptyNotice = ({ label, visible, handleClick }) => {
 	return <div
 		className={cx('carbon-empty-row', { 'carbon-empty-row-visible': visible })}
-		dangerouslySetInnerHTML={{ __html: carbonFieldsL10n.complexNoRows.replace('%s', label) }}
+		dangerouslySetInnerHTML={{ __html: carbonFieldsL10n.field.complexNoRows.replace('%s', label) }}
 		onClick={handleClick} />;
 };
 

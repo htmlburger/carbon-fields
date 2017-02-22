@@ -216,7 +216,6 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Boot the container once it's attached.
 	 **/
 	protected function boot() {
-		add_action( 'admin_footer', array( get_class(), 'admin_hook_scripts' ), 5 );
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
 	}
 
@@ -653,18 +652,6 @@ abstract class Container implements Datastore_Holder_Interface {
 		}
 
 		return $container_data;
-	}
-
-	/**
-	 * Enqueue admin scripts
-	 */
-	public static function admin_hook_scripts() {
-		wp_localize_script( 'carbon-fields-core', 'carbonFieldsContainersL10n',
-			array(
-				'pleaseFillTheRequiredFields' => __( 'Please fill out all required fields highlighted below.', \Carbon_Fields\TEXT_DOMAIN ),
-				'changesMadeSaveAlert' => __( 'The changes you made will be lost if you navigate away from this page.', \Carbon_Fields\TEXT_DOMAIN ),
-			)
-		);
 	}
 
 	/**
