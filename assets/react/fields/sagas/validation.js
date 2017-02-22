@@ -3,103 +3,90 @@
  */
 import { takeEvery, takeLatest, delay } from 'redux-saga';
 import { put, call, select } from 'redux-saga/effects';
-import { isUndefined, isEmpty } from 'lodash';
+import { isUndefined, isNull } from 'lodash';
 
 /**
  * The internal dependencies.
  */
-import { setupValidation, updateField, setUI } from 'fields/actions';
+import { getFieldValidators } from 'lib/registry';
+
+import {
+	setupValidation,
+	updateField,
+	validateFields,
+	markFieldAsValid,
+	markFieldAsInvalid
+} from 'fields/actions';
+
 import { getFieldById } from 'fields/selectors';
-import { VALIDATION_BASE, VALIDATION_COMPLEX } from 'fields/constants';
 
 /**
- * Handle the validation logic for most of the fields.
- *
- * @param  {Object}      field
- * @param  {Object}      action
- * @param  {Object}      action.payload
- * @param  {Object}      action.payload.data
- * @param  {mixed}       action.payload.data.value
- * @return {String|null}
- */
-export function baseValidation(field, { payload: { data: { value }} }) {
-	if (isEmpty(value)) {
-		return carbonFieldsL10n.field.messageRequiredField;
-	}
-
-	return null;
-}
-
-/**
- * Handle the validation logic for the complex.
- *
- * @param  {Object}      field
- * @param  {Object}      action
- * @param  {Object}      action.payload
- * @param  {Object}      action.payload.data
- * @param  {mixed}       action.payload.data.value
- * @return {String|null}
- */
-export function complexValidation(field, { payload: { data: { value }} }) {
-	if (isEmpty(value)) {
-		return carbonFieldsL10n.field.messageRequiredField;
-	}
-
-	if (field.min > 0 && value.length < field.min) {
-		const { min, labels } = field;
-		const label = min === 1 ? labels.singular_name : labels.plural_name;
-
-		return carbonFieldsL10n.field.complexMinNumRowsNotReached
-			.replace('%1$d', min)
-			.replace('%2$s', label.toLowerCase());
-	}
-
-	return null;
-}
-
-/**
- * A proxy handler that will debounce the validation process.
+ * Validate the field.
  *
  * @param  {Function} validator
- * @param  {String}   fieldId
- * @param  {Object}   action
- * @return {void}
+ * @param  {String} fieldId
+ * @return {String}
  */
-export function* workerValidate(validator, fieldId, action) {
-	const { payload } = action;
-
-	if (fieldId !== action.payload.fieldId || isUndefined(payload.data.value)) {
-		return;
-	}
-
+export function* validate(validator, fieldId) {
 	const field = yield select(getFieldById, fieldId);
+	const { is_visible, valid } = field.ui;
 
-	// We don't care about hidden inputs.
-	if (!field.ui.is_visible) {
+	// We don't care about the hidden inputs.
+	if (!is_visible) {
 		// Reset the validation status.
-		if (!field.ui.valid) {
-			yield put(setUI(field.id, {
-				valid: true,
-				error: null,
-			}));
+		if (!valid) {
+			yield put(markFieldAsValid(field.id));
 		}
 
 		return;
 	}
 
-	// Debounce the validation, because in some situations
-	// will trigger unnecessary re-renders.
-	if (validator.debounce) {
-		yield call(delay, 200);
+	// Perform the validation.
+	const error = yield call(validator, field);
+
+	// Update the UI.
+	if (isNull(error)) {
+		yield put(markFieldAsValid(fieldId));
+	} else {
+		yield put(markFieldAsInvalid(fieldId, error));
+	}
+}
+
+/**
+ * Run the validator when the field's value is updated.
+ *
+ * @param  {Object} validator
+ * @param  {String} fieldId
+ * @param  {Object} action
+ * @return {void}
+ */
+export function* workerValidateOnUpdate(validator, fieldId, action) {
+	const { payload } = action;
+
+	// Validate only the field specified by the action.
+	if (payload.fieldId !== fieldId || isUndefined(payload.data.value)) {
+		return;
 	}
 
-	// Perform the validation.
-	const result = yield call(validator.handler, field, action);
+	// Delay the validation, because in some situations
+	// it will trigger unnecessary re-renders.
+	if (validator.debounce) {
+		yield call(delay, 250);
+	}
 
-	yield put(setUI(field.id, {
-		valid: isEmpty(result) ? true : false,
-		error: result,
-	}));
+	// Run the validator.
+	yield call(validate, validator.handler, fieldId);
+}
+
+/**
+ * Run the validator when a mass validation is requested.
+ *
+ * @param  {Object} validator
+ * @param  {String} fieldId
+ * @return {void}
+ */
+export function* workerValidateAll(validator, fieldId) {
+	yield call(validate, validator.handler, fieldId);
 }
 
 /**
@@ -112,24 +99,17 @@ export function* workerValidate(validator, fieldId, action) {
  * @return {void}
  */
 export function* workerSetup({ payload: { fieldId, validationType }}) {
-	const validators = {
-		[VALIDATION_BASE]: {
-			handler: baseValidation,
-			debounce: true,
-		},
-		[VALIDATION_COMPLEX]: {
-			handler: complexValidation,
-			debounce: false,
-		},
-	};
-
+	const validators = yield call(getFieldValidators);
 	const validator = validators[validationType];
 
 	if (!validator) {
 		throw new Error(`Unknown validation type '${validationType}' for field '${fieldId}'.`);
 	}
 
-	yield takeLatest(updateField, workerValidate, validator, fieldId);
+	yield [
+		takeLatest(updateField, workerValidateOnUpdate, validator, fieldId),
+		takeLatest(validateFields, workerValidateAll, validator, fieldId),
+	];
 }
 
 /**

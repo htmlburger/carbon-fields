@@ -15,7 +15,9 @@ import {
 	updateField,
 	addFields,
 	removeFields,
-	setUI
+	setUI,
+	markFieldAsValid,
+	markFieldAsInvalid
 } from 'fields/actions';
 
 /**
@@ -27,4 +29,14 @@ export default decorateFieldReducer(handleActions({
 	[removeFields]: (state, { payload }) => omit(state, payload),
 	[updateField]: (state, { payload: { fieldId, data }}) => immutable.assign(state, fieldId, data),
 	[resetStore]: (state, { payload: { fields }}) => fields,
+
+	[markFieldAsValid]: (state, { payload: { fieldId } }) => immutable.assign(state, `${fieldId}.ui`, {
+		valid: true,
+		error: null,
+	}),
+
+	[markFieldAsInvalid]: (state, { payload: { fieldId, error } }) => immutable.assign(state, `${fieldId}.ui`, {
+		valid: false,
+		error: error,
+	}),
 }, {}));

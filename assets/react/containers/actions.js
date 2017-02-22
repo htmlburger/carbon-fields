@@ -71,4 +71,12 @@ export const removeContainer = createAction('containers/REMOVE_CONTAINER');
  * @param  {String} container
  * @return {Object}
  */
-export const receiveContainer = createAction('container/RECEIVE_CONTAINER');
+export const receiveContainer = createAction('containers/RECEIVE_CONTAINER');
+
+/**
+ * Trigger the validation of all containers.
+ *
+ * @param  {Object} event
+ * @return {Object}
+ */
+export const validateContainers = createAction('containers/VALIDATE_CONTAINERS');

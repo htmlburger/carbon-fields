@@ -107,3 +107,27 @@ export const removeComplexGroup = createAction('fields/REMOVE_COMPLEX_GROUP', (f
  * @return {Object}
  */
 export const geocodeAddress = createAction('fields/GEOCODE_ADDRESS', (fieldId, address) => ({ fieldId, address }));
+
+/**
+ * Update the validation status of the field.
+ *
+ * @param  {String} fieldId
+ * @return {Object}
+ */
+export const markFieldAsValid = createAction('fields/MARK_FIELD_AS_VALID', fieldId => ({ fieldId }));
+
+/**
+ * Update the validation status of the field.
+ *
+ * @param  {String} fieldId
+ * @param  {String} error
+ * @return {Object}
+ */
+export const markFieldAsInvalid = createAction('fields/MARK_FIELD_AS_INVALID', (fieldId, error) => ({ fieldId, error }));
+
+/**
+ * Trigger the validation for all required fields.
+ *
+ * @return {Object}
+ */
+export const validateFields = createAction('fields/VALIDATE_FIELDS');

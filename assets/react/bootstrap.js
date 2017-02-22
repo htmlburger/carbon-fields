@@ -7,7 +7,14 @@ import _ from 'lodash';
 /**
  * The internal dependencies.
  */
-import { registerContainerComponent, registerFieldComponent, registerSaga, getSagas } from 'lib/registry';
+import {
+	registerContainerComponent,
+	registerFieldComponent,
+	registerSaga,
+	getSagas,
+	registerFieldValidator
+} from 'lib/registry';
+
 import { autoload } from 'lib/helpers';
 
 import configureStore from 'store';
@@ -39,6 +46,10 @@ autoload(require.context('./fields/components', true, /index\.js$/), (path, file
 	if (!_.isEmpty(type)) {
 		type.forEach(type => registerFieldComponent(type, file.default));
 	}
+});
+
+autoload(require.context('./fields/validators', true, /\.js$/), (path, file) => {
+	registerFieldValidator(file.type, file);
 });
 
 autoload(require.context('./', true, /sagas\/.+\.js$/), (path, file) => {

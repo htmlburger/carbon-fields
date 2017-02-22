@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import urldecode from 'locutus/php/url/urldecode';
-import { takeEvery } from 'redux-saga';
+import { takeEvery, takeLatest } from 'redux-saga';
 import { call, select, put } from 'redux-saga/effects';
 import { keyBy } from 'lodash';
 
@@ -17,6 +17,7 @@ import {
 	setupContainer,
 	addContainer,
 	receiveContainer,
+	validateContainers,
 	setUI
 } from 'containers/actions';
 
@@ -68,6 +69,16 @@ export function* workerReceiveContainer(store, { payload }) {
 }
 
 /**
+ * Validate all containers.
+ *
+ * @param  {Object} action
+ * @return {void}
+ */
+export function* workerValidate(action) {
+	console.log(action);
+}
+
+/**
  * Start to work.
  *
  * @param  {Object} store
@@ -75,7 +86,9 @@ export function* workerReceiveContainer(store, { payload }) {
  */
 export default function* foreman(store) {
 	const { pagenow } = window;
-	const workers = [];
+	const workers = [
+		takeLatest(validateContainers, workerValidate),
+	];
 
 	if (pagenow === PAGE_NOW_WIDGETS || pagenow === PAGE_NOW_MENUS) {
 		workers.push(takeEvery(receiveContainer, workerReceiveContainer, store));

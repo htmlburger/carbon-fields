@@ -3,15 +3,15 @@
  */
 import $ from 'jquery';
 import { takeEvery } from 'redux-saga';
-import { take, call, select } from 'redux-saga/effects';
+import { take, call, select, fork, put } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
  */
-import { createScrollChannel } from 'lib/events';
+import { createScrollChannel, createSubmitChannel } from 'lib/events';
 
 import { canProcessAction } from 'containers/selectors';
-import { setupContainer } from 'containers/actions';
+import { setupContainer, validateContainers } from 'containers/actions';
 import { TYPE_THEME_OPTIONS } from 'containers/constants';
 
 /**
@@ -49,6 +49,23 @@ export function* workerStickyActionsPanel(action) {
 }
 
 /**
+ * Handle the form submission.
+ *
+ * @return {void}
+ */
+export function* workerFormSubmit() {
+	const channel = yield call(createSubmitChannel, 'form#theme-options-form');
+
+	while (true) {
+		const { event } = yield take(channel);
+
+		event.preventDefault();
+
+		yield put(validateContainers(event));
+	}
+}
+
+/**
  * Start to work.
  *
  * @return {void}
@@ -56,5 +73,6 @@ export function* workerStickyActionsPanel(action) {
 export default function* foreman() {
 	yield [
 		takeEvery(setupContainer, workerStickyActionsPanel),
+		call(workerFormSubmit),
 	];
 }
