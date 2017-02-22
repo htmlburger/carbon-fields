@@ -10,7 +10,16 @@ class Date_Field extends Field {
 	/**
 	 * Datepicker options
 	 */
-	public $datepicker_options = array();
+	public $datepicker_options = array(
+		'dateFormat' => 'yy-mm-dd',
+	);
+
+	/**
+	 * Value storage format
+	 *
+	 * @var string
+	 */
+	protected $storage_format = 'Y-m-d';
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
@@ -22,7 +31,8 @@ class Date_Field extends Field {
 		$field_data = parent::to_json( $load );
 
 		$field_data = array_merge( $field_data, array(
-			'options' => $this->datepicker_options,
+			'storage_format' => $this->storage_format,
+			'datepicker_options' => $this->datepicker_options,
 		) );
 
 		return $field_data;

@@ -14,13 +14,6 @@ class Time_Field extends Field {
 	protected $timepicker_type = 'timepicker';
 
 	/**
-	 * Time format.
-	 *
-	 * @var string
-	 */
-	public $time_format = 'hh:mm tt';
-
-	/**
 	 * Interval step for hours, minutes and seconds.
 	 *
 	 * @var array
@@ -41,8 +34,15 @@ class Time_Field extends Field {
 	 */
 	public $timepicker_options = array(
 		'dateFormat' => 'yy-mm-dd',
-		'timeFormat' => 'HH:mm:ss',
+		'timeFormat' => 'hh:mm tt',
 	);
+
+	/**
+	 * Value storage format
+	 *
+	 * @var string
+	 */
+	protected $storage_format = 'H:i:s';
 
 	/**
 	 * You can use this method to modify the field properties that are added to the JSON object.
@@ -54,8 +54,8 @@ class Time_Field extends Field {
 		$field_data = parent::to_json( $load );
 
 		$field_data = array_merge( $field_data, array(
+			'storage_format' => $this->storage_format,
 			'timepicker_type' => $this->timepicker_type,
-			'time_format' => $this->get_time_format(),
 			'interval_step' => $this->get_interval_step(),
 			'restraints' => $this->get_restraints(),
 			'timepicker_options' => $this->get_timepicker_options(),
@@ -80,8 +80,7 @@ class Time_Field extends Field {
 	 * Sets the time format.
 	 */
 	public function set_time_format( $time_format ) {
-		$this->time_format = $time_format;
-
+		$this->timepicker_options['timeFormat'] = $time_format;
 		return $this;
 	}
 
@@ -89,7 +88,7 @@ class Time_Field extends Field {
 	 * Returns the time format.
 	 */
 	public function get_time_format() {
-		return $this->time_format;
+		return isset( $this->timepicker_options['timeFormat'] ) ? $this->timepicker_options['timeFormat'] : null;
 	}
 
 	/**

@@ -73,12 +73,12 @@ const props = ({ field, handleChange }) => {
 			picker: field.timepicker_type,
 			options: {
 				...{
-					timeFormat: field.time_format,
 					showTime: false,
 				},
 
 				...field.interval_step,
 				...field.restraints,
+				...field.datepicker_options,
 				...field.timepicker_options,
 
 				...{
@@ -92,7 +92,7 @@ const props = ({ field, handleChange }) => {
 	return {
 		picker: 'datepicker',
 		options: {
-			...field.options,
+			...field.datepicker_options,
 			...{
 				buttonText: 'Select Date',
 				onSelect: handleChange,
