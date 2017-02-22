@@ -4,9 +4,9 @@
 
 .carbon-field,
 .carbon-Complex .fields-container,
-.carbon-Relationship .relationship-left,
-.carbon-Relationship .relationship-right,
-.carbon-Relationship .search-field,
+.carbon-Association .association-left,
+.carbon-Association .association-right,
+.carbon-Association .search-field,
 .carbon-File .carbon-attachment-file-name { box-sizing: border-box; }
 
 /* ------------------------------------------------------------ *\

@@ -33,7 +33,6 @@ class LegacyStorageServicev15Test extends WP_UnitTestCase {
 		$this->container->add_fields( array(
 			Field::make( 'text', 'crb_legacy_text' ),
 			Field::make( 'association', 'crb_legacy_association', 'Legacy Association' ),
-			Field::make( 'relationship', 'crb_legacy_relationship', 'Legacy Relationship' ),
 			Field::make( 'set', 'crb_legacy_set', 'Legacy Set' )
 				->add_options( array( 'one'=>'One', 'two'=>'Two', 'three'=>'Three' ) ),
 			Field::make( 'map', 'crb_legacy_map', 'Legacy Map' ),
@@ -69,7 +68,6 @@ class LegacyStorageServicev15Test extends WP_UnitTestCase {
 			'_crb_legacy_map-lng' => '72.87765590000004',
 			'_crb_legacy_map-lat' => '19.0759837',
 			'_crb_legacy_set' => 'a:1:{i:0;s:3:"one";}',
-			'_crb_legacy_relationship' => 'a:2:{i:0;s:2:"49";i:1;s:2:"47";}',
 			'_crb_legacy_association' => 'a:1:{i:0;s:12:"post:post:47";}',
 
 			'_crb_home_sections_features-_columns_0_col3of4-_rows_0_row-_cols_0_col1of3-_map_0-lat' => '40.7127837',
@@ -122,8 +120,6 @@ class LegacyStorageServicev15Test extends WP_UnitTestCase {
 			'_crb_legacy_map||0|0|zoom' => '6',
 			'_crb_legacy_map||0|0|address' => 'Mumbai',
 			'_crb_legacy_set||0|0|value' => 'one',
-			'_crb_legacy_relationship||0|0|value' => '49',
-			'_crb_legacy_relationship||0|1|value' => '47',
 			'_crb_legacy_association||0|0|value' => 'post:post:47',
 
 			'_crb_home_sections||0|0|value' => 'features',

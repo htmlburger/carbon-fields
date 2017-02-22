@@ -42,7 +42,7 @@ export const AssociationField = ({
 	handleRemoveItem
 }) => {
 	return <Field field={field}>
-		<div className="carbon-relationship-container carbon-Relationship">
+		<div className="carbon-association-container carbon-Association">
 			<div className="selected-items-container">
 				<strong>
 					<span className="selected-counter">{field.value.length}</span>
@@ -67,14 +67,14 @@ export const AssociationField = ({
 				term={term}
 				onChange={setTerm} />
 
-			<div className="carbon-relationship-body">
-				<div className="carbon-relationship-left">
+			<div className="carbon-association-body">
+				<div className="carbon-association-left">
 					<AssociationList
 						items={items}
 						onItemClick={handleAddItem} />
 				</div>
 
-				<div className="carbon-relationship-right">
+				<div className="carbon-association-right">
 					<label>Associated:</label>
 
 					<AssociationList
