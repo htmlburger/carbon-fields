@@ -339,8 +339,8 @@ class Field implements Datastore_Holder_Interface {
 		$raw_value_set_tree = $this->get_datastore()->load( $this );
 		
 		$value = null;
-		if ( isset( $raw_value_set_tree[ $this->get_base_name() ] ) ) {
-			$value = $raw_value_set_tree[ $this->get_base_name() ]['value_set'];
+		if ( isset( $raw_value_set_tree['value_set'] ) ) {
+			$value = $raw_value_set_tree['value_set'];
 		}
 
 		if ( $value === null && $fallback_to_default ) {
@@ -472,6 +472,18 @@ class Field implements Datastore_Holder_Interface {
 			$this->set_value( $this->get_default_value() );
 		}
 		return $this->get_value_set()->get();
+	}
+
+	/**
+	 * Alias for $this->get_value_set()->get_set(); with fallback to default value
+	 *
+	 * @return mixed
+	 **/
+	public function get_full_value() {
+		if ( $this->get_value_set()->get_set() === null ) {
+			$this->set_value( $this->get_default_value() );
+		}
+		return $this->get_value_set()->get_set();
 	}
 
 	/**

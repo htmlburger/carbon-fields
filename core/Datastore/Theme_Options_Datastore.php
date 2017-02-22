@@ -44,7 +44,7 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 	 * @param string $value
 	 */
 	protected function save_key_value_pair( $key, $value ) {
-		$this->save_key_value_pair_with_autoload( $key, $value, 'no' );
+		$this->save_key_value_pair_with_autoload( $key, $value, false );
 	}
 
 	/**
@@ -52,9 +52,10 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 	 *
 	 * @param string $key
 	 * @param string $value
-	 * @param string $autoload "yes"|"no"
+	 * @param bool $autoload
 	 */
-	protected function save_key_value_pair_with_autoload( $key, $value, $autoload ) {
+	protected function save_key_value_pair_with_autoload( $key, $value, $autoload = true ) {
+		$autoload = $autoload ? 'yes': 'no';
 		$notoptions = wp_cache_get( 'notoptions', 'options' );
 		$notoptions[ $key ] = '';
 		wp_cache_set( 'notoptions', $notoptions, 'options' );
@@ -70,21 +71,17 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 	 * @param Field $field The field to save.
 	 */
 	public function save( Field $field ) {
-		if ( $field->get_value_set()->get_set() === null ) {
-			$field->set_value( $field->get_default_value() );
-		}
-		$value_set = $field->get_value_set()->get_set();
+		$value_set = $field->get_full_value();
 
-		$autoload = $field->get_autoload() ? 'yes': 'no';
 		if ( empty( $value_set ) && $field->get_value_set()->keepalive() ) {
 			$storage_key = $this->key_toolset->get_storage_key(
 				$field->is_simple_root_field(),
 				$this->get_full_hierarchy_for_field( $field ),
 				$this->get_full_hierarchy_index_for_field( $field ),
 				0,
-				static::KEEPALIVE_KEY
+				$this->key_toolset::KEEPALIVE_PROPERTY
 			);
-			$this->save_key_value_pair_with_autoload( $storage_key, '', $autoload );
+			$this->save_key_value_pair_with_autoload( $storage_key, '', $field->get_autoload() );
 		}
 		foreach ( $value_set as $value_group_index => $values ) {
 			foreach ( $values as $property => $value ) {
@@ -95,7 +92,7 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 					$value_group_index,
 					$property
 				);
-				$this->save_key_value_pair_with_autoload( $storage_key, $value, $autoload );
+				$this->save_key_value_pair_with_autoload( $storage_key, $value, $field->get_autoload() );
 			}
 		}
 	}
