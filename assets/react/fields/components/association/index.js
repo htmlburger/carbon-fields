@@ -42,7 +42,7 @@ export const AssociationField = ({
 	handleRemoveItem
 }) => {
 	return <Field field={field}>
-		<div className="carbon-relationship-container carbon-Relationship">
+		<div className="carbon-association-container carbon-Association">
 			<div className="selected-items-container">
 				<strong>
 					<span className="selected-counter">{field.value.length}</span>
@@ -67,14 +67,14 @@ export const AssociationField = ({
 				term={term}
 				onChange={setTerm} />
 
-			<div className="carbon-relationship-body">
-				<div className="carbon-relationship-left">
+			<div className="carbon-association-body">
+				<div className="carbon-association-left">
 					<AssociationList
 						items={items}
 						onItemClick={handleAddItem} />
 				</div>
 
-				<div className="carbon-relationship-right">
+				<div className="carbon-association-right">
 					<label>Associated:</label>
 
 					<AssociationList
@@ -155,7 +155,7 @@ const handleAddItem = ({ field, updateField }) => item => {
 
 	// Don't do anything, because the maximum is reached.
 	if (field.max > 0 && field.value.length >= field.max) {
-		alert(crbl10n.max_num_items_reached.replace('%s', field.max));
+		alert(carbonFieldsL10n.field.maxNumItemsReached.replace('%s', field.max));
 		return;
 	}
 

@@ -2,9 +2,6 @@
 
 namespace Carbon_Fields\Datastore;
 
-use Carbon_Fields\App;
-use Carbon_Fields\Field\Field;
-use Carbon_Fields\Toolset\Key_Toolset;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -14,17 +11,9 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 abstract class Datastore implements Datastore_Interface {
 
 	/**
-	 * Key Toolset for key generation and comparison utilities
-	 * 
-	 * @var Key_Toolset
-	 */
-	protected $key_toolset;
-
-	/**
 	 * Initialize the datastore.
 	 **/
-	public function __construct( Key_Toolset $key_toolset ) {
-		$this->key_toolset = $key_toolset;
+	public function __construct() {
 		$this->init();
 	}
 
@@ -50,7 +39,7 @@ abstract class Datastore implements Datastore_Interface {
 			Incorrect_Syntax_Exception::raise( 'Unknown datastore type "' . $type . '".' );
 		}
 
-		$datastore = new $class( App::resolve( 'key_toolset' ) );
+		$datastore = new $class();
 
 		return $datastore;
 	}

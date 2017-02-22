@@ -21,17 +21,18 @@ class Helper {
 	 */
 	public static function get_value( $object_id, $container_type, $field_name ) {
 		$repository = App::resolve( 'container_repository' );
-		$field = $repository->get_field_in_containers( $field_name, $container_type, false );
+		$field = $repository->get_field_in_containers( $field_name, $container_type );
 		$default_value = ''; // for consistency - get_post_meta returns an empty string when a meta key does not exist
 
 		if ( ! $field ) {
-			return $default_value;
+			Incorrect_Syntax_Exception::raise( 'Could not find a field which satisfies the supplied pattern: ' . $field_name );
 		}
 
 		$clone = clone $field;
 		if ( $object_id !== null ) {
 			$clone->get_datastore()->set_id( $object_id );
 		}
+
 		$clone->load();
 		return $clone->get_formatted_value();
 	}
@@ -43,16 +44,15 @@ class Helper {
 	 * @param string $container_type Container type to search in
 	 * @param string $field_name Field name
 	 * @param array $value Refer to Complex_Field::set_value_tree() in case you wish to update a complex field
-	 * @return bool
 	 */
 	public static function set_value( $object_id, $container_type, $field_name, $value ) {
 		$repository = App::resolve( 'container_repository' );
-		$field = $repository->get_field_in_containers( $field_name, $container_type, false );
+		$field = $repository->get_field_in_containers( $field_name, $container_type );
 
 		if ( ! $field ) {
-			return false;
+			Incorrect_Syntax_Exception::raise( 'Could not find a field which satisfies the supplied pattern: ' . $field_name );
 		}
-
+		
 		$clone = clone $field;
 		if ( $object_id !== null ) {
 			$clone->get_datastore()->set_id( $object_id );
@@ -66,8 +66,6 @@ class Helper {
 			$clone->set_value( $value );
 		}
 		$clone->save();
-
-		return true;
 	}
 
 	/**

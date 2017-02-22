@@ -19,7 +19,7 @@ import AssociationListItem from 'fields/components/association/list-item';
  * @return {React.Element}
  */
 export const AssociationList = ({ prefix, items, associated, visible, onItemClick }) => {
-	return <ul className="carbon-relationship-list">
+	return <ul className="carbon-association-list">
 		{
 			items.map((item, index) => {
 				return <AssociationListItem

@@ -29,7 +29,7 @@
 @import url(modules/_containers.nav-menu);
 
 @import url(modules/_fields.base);
-@import url(modules/_fields.relationship);
+@import url(modules/_fields.association);
 @import url(modules/_fields.file);
 @import url(modules/_fields.rich);
 @import url(modules/_fields.html);

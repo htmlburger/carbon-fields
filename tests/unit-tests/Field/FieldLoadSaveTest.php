@@ -75,11 +75,9 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	public function testLoadAppliesTheSameValueWhenDatastoreReturnsValue() {
 		$expected = 'test value from datastore';
 		$this->datastore->shouldReceive( 'load' )->andReturn( array(
-			$this->subject->get_base_name() => array(
-				'value_set' => array(
-					array(
-						'value' => $expected,
-					),
+			'value_set' => array(
+				array(
+					'value' => $expected,
 				),
 			),
 		) )->once();

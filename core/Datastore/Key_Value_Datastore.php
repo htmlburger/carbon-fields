@@ -15,19 +15,26 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 abstract class Key_Value_Datastore extends Datastore {
 
 	/**
-	 * Value key to use for fields which need to be kept "alive" when they have no values stored (e.g. Set field with 0 checkboxes checked)
-	 * Required to determine whether a field should use it's default value or stay blank
-	 *
-	 * @var string
-	 **/
-	const KEEPALIVE_KEY = '_empty';
+	 * Key Toolset for key generation and comparison utilities
+	 * 
+	 * @var Key_Toolset
+	 */
+	protected $key_toolset;
+
+	/**
+	 * Initialize the datastore.
+	 */
+	public function __construct() {
+		$this->key_toolset = App::resolve( 'key_toolset' );
+		parent::__construct();
+	}
 
 	/**
 	 * Get array of ancestors (ordered top-bottom) with the field name appended to the end
 	 *
 	 * @param Field $field
 	 * @return array<string>
-	 **/
+	 */
 	protected function get_full_hierarchy_for_field( Field $field ) {
 		$full_hierarchy = array_merge( $field->get_hierarchy(), array( $field->get_base_name() ) );
 		return $full_hierarchy;
@@ -39,7 +46,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 *
 	 * @param Field $field
 	 * @return array<int>
-	 **/
+	 */
 	protected function get_full_hierarchy_index_for_field( Field $field ) {
 		$hierarchy_index = $field->get_hierarchy_index();
 		$full_hierarchy_index = ! empty( $hierarchy_index ) ? $hierarchy_index : array( 0 );
@@ -70,7 +77,7 @@ abstract class Key_Value_Datastore extends Datastore {
 		foreach ( $storage_array as $row ) {
 			$parsed_storage_key = $this->key_toolset->parse_storage_key( $row->key );
 
-			if ( $parsed_storage_key['property'] === static::KEEPALIVE_KEY ) {
+			if ( $parsed_storage_key['property'] === $this->key_toolset::KEEPALIVE_PROPERTY ) {
 				continue;
 			}
 
@@ -115,6 +122,31 @@ abstract class Key_Value_Datastore extends Datastore {
 	}
 
 	/**
+	 * Get a reduced raw value set tree only relevant to the specified field
+	 * 
+	 * @param  array $raw_value_set_tree
+	 * @param  Field $field
+	 * @return array
+	 */
+	protected function reduce_raw_value_set_tree_to_field( $raw_value_set_tree, Field $field ) {
+		$field_raw_value_set_tree = $raw_value_set_tree;
+		$hierarchy = $field->get_hierarchy();
+		$hierarchy_index = $field->get_hierarchy_index();
+
+		foreach ( $hierarchy as $index => $parent_field ) {
+			if ( isset( $field_raw_value_set_tree[ $parent_field ]['groups'][ $hierarchy_index[ $index ] ] ) ) {
+				$field_raw_value_set_tree = $field_raw_value_set_tree[ $parent_field ]['groups'][ $hierarchy_index[ $index ] ];
+			}
+		}
+
+		if ( isset( $field_raw_value_set_tree[ $field->get_base_name() ] ) ) {
+			$field_raw_value_set_tree = $field_raw_value_set_tree[ $field->get_base_name() ];
+		}
+
+		return $field_raw_value_set_tree;
+	}
+
+	/**
 	 * Get a raw database query results array for a field
 	 *
 	 * @param Field $field The field to retrieve value for.
@@ -133,6 +165,7 @@ abstract class Key_Value_Datastore extends Datastore {
 		$storage_key_patterns = $this->key_toolset->get_storage_key_getter_patterns( $field->is_simple_root_field(), $this->get_full_hierarchy_for_field( $field ) );
 		$cascading_storage_array = $this->get_storage_array( $field, $storage_key_patterns );
 		$raw_value_set_tree = $this->cascading_storage_array_to_raw_value_set_tree( $cascading_storage_array );
+		$raw_value_set_tree = $this->reduce_raw_value_set_tree_to_field( $raw_value_set_tree, $field );
 		return $raw_value_set_tree;
 	}
 
@@ -150,10 +183,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * @param Field $field The field to save.
 	 */
 	public function save( Field $field ) {
-		if ( $field->get_value_set()->get_set() === null ) {
-			$field->set_value( $field->get_default_value() );
-		}
-		$value_set = $field->get_value_set()->get_set();
+		$value_set = $field->get_full_value();
 
 		if ( empty( $value_set ) && $field->get_value_set()->keepalive() ) {
 			$storage_key = $this->key_toolset->get_storage_key(
@@ -161,7 +191,7 @@ abstract class Key_Value_Datastore extends Datastore {
 				$this->get_full_hierarchy_for_field( $field ),
 				$this->get_full_hierarchy_index_for_field( $field ),
 				0,
-				static::KEEPALIVE_KEY
+				$this->key_toolset::KEEPALIVE_PROPERTY
 			);
 			$this->save_key_value_pair( $storage_key, '' );
 		}

@@ -21,6 +21,14 @@ class Key_Toolset {
 	 * Prefix appended to all keys
 	 */
 	const KEY_PREFIX = '_';
+	
+	/**
+	 * Value property to use for fields which need to be kept "alive" when they have no values stored (e.g. Set field with 0 checkboxes checked)
+	 * Required to determine whether a field should use it's default value or stay blank
+	 *
+	 * @var string
+	 */
+	const KEEPALIVE_PROPERTY = '_empty';
 
 	/**
 	 * Glue characters between segments in keys

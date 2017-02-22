@@ -216,7 +216,6 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Boot the container once it's attached.
 	 **/
 	protected function boot() {
-		add_action( 'admin_footer', array( get_class(), 'admin_hook_scripts' ), 5 );
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
 	}
 
@@ -362,6 +361,27 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Get a regex to match field name patterns used to fetch specific fields
+	 * 
+	 * @return string
+	 */
+	protected function get_field_pattern_regex() {
+		// matches:
+		// field_name
+		// field_name[0]
+		// field_name[0]:group_name
+		// field_name:group_name
+		$regex = '/
+			\A
+			(?P<field_name>[a-z0-9_]+)
+			(?:\[(?P<entry_index>\d+)\])?
+			(?:' .  preg_quote( static::HIERARCHY_GROUP_SEPARATOR, '/' ). '(?P<group_name>[a-z0-9_]+))?
+			\z
+		/x';
+		return $regex;
+	}
+
+	/**
 	 * Return field from container with specified name
 	 * 
 	 * @example crb_complex/text_field
@@ -377,24 +397,33 @@ abstract class Container implements Datastore_Holder_Interface {
 
 		$field_group = $this->get_fields();
 		$hierarchy_left = $hierarchy;
+		$field_pattern_regex = $this->get_field_pattern_regex();
+		$hierarchy_index = array();
 
 		while ( ! empty( $hierarchy_left ) ) {
 			$segment = array_shift( $hierarchy_left );
-			$segment_pieces = explode( static::HIERARCHY_GROUP_SEPARATOR, $segment, 2 );
-			$field_name = $segment_pieces[0];
-			$group_name = isset( $segment_pieces[1] ) ? $segment_pieces[1] : Group_Field::DEFAULT_GROUP_NAME;
+			$segment_pieces = array();
+			if ( ! preg_match( $field_pattern_regex, $segment, $segment_pieces ) ) {
+				Incorrect_Syntax_Exception::raise( 'Invalid field name pattern used: ' . $field_name );
+			}
+			
+			$segment_field_name = $segment_pieces['field_name'];
+			$segment_entry_index = isset( $segment_pieces['entry_index'] ) ? $segment_pieces['entry_index'] : 0;
+			$segment_group_name = isset( $segment_pieces['group_name'] ) ? $segment_pieces['group_name'] : Group_Field::DEFAULT_GROUP_NAME;
 
 			foreach ( $field_group as $f ) {
-				if ( $f->get_base_name() === $field_name ) {
+				if ( $f->get_base_name() === $segment_field_name ) {
 					if ( empty( $hierarchy_left ) ) {
-						$field = $f;
+						$field = clone $f;
+						$field->set_hierarchy_index( $hierarchy_index );
 					} else {
 						if ( is_a( $f, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
-							$group = $f->get_group_by_name( $group_name );
+							$group = $f->get_group_by_name( $segment_group_name );
 							if ( ! $group ) {
-								Incorrect_Syntax_Exception::raise( 'Unknown group name specified when fetching a value inside a complex field: "' . $group_name . '".' );
+								Incorrect_Syntax_Exception::raise( 'Unknown group name specified when fetching a value inside a complex field: "' . $segment_group_name . '".' );
 							}
 							$field_group = $group->get_fields();
+							$hierarchy_index[] = $segment_entry_index;
 						} else {
 							Incorrect_Syntax_Exception::raise( 'Attempted to look for a nested field inside a non-complex field.' );
 						}
@@ -623,20 +652,6 @@ abstract class Container implements Datastore_Holder_Interface {
 		}
 
 		return $container_data;
-	}
-
-	/**
-	 * Enqueue admin scripts
-	 */
-	public static function admin_hook_scripts() {
-		wp_enqueue_script( 'carbon-containers', \Carbon_Fields\URL . '/assets/js/containers.js', array( 'carbon-app' ), \Carbon_Fields\VERSION );
-
-		wp_localize_script( 'carbon-containers', 'carbon_containers_l10n',
-			array(
-				'please_fill_the_required_fields' => __( 'Please fill out all required fields highlighted below.', \Carbon_Fields\TEXT_DOMAIN ),
-				'changes_made_save_alert' => __( 'The changes you made will be lost if you navigate away from this page.', \Carbon_Fields\TEXT_DOMAIN ),
-			)
-		);
 	}
 
 	/**

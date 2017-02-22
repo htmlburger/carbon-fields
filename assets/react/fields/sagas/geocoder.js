@@ -28,9 +28,9 @@ function geocode(address) {
 					lng: location.lng(),
 				});
 			} else if (status === 'ZERO_RESULTS') {
-				reject(crbl10n.geocode_zero_results);
+				reject(carbonFieldsL10n.field.geocodeZeroResults);
 			} else {
-				reject(`${crbl10n.geocode_not_successful} ${status}`);
+				reject(`${carbonFieldsL10n.field.geocodeNotSuccessful} ${status}`);
 			}
 		});
 	});

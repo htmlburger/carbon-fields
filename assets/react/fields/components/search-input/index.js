@@ -23,7 +23,7 @@ import { KEY_ENTER } from 'lib/constants';
  * @return {React.Element}
  */
 export const SearchInput = ({ name, term, disabled, handleChange, handleSubmit }) => {
-	return <div className="search-field carbon-relationship-search dashicons-before dashicons-search">
+	return <div className="search-field carbon-association-search dashicons-before dashicons-search">
 		<input
 			type="text"
 			name={name}

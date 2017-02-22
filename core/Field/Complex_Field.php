@@ -32,7 +32,10 @@ class Complex_Field extends Field {
 
 	protected $layout = self::LAYOUT_GRID;
 
-	protected $value_tree = array();
+	protected $value_tree = array(
+		'value_set' => array(),
+		'groups' => array(),
+	);
 
 	protected $fields = array();
 
@@ -244,7 +247,10 @@ class Complex_Field extends Field {
 			return;
 		}
 
-		$value_tree = array();
+		$value_tree = array(
+			'value_set' => array(),
+			'groups' => array(),
+		);
 		$input_groups = $input[ $this->get_name() ];
 		$input_group_index = 0;
 		foreach ( $input_groups as $values ) {
@@ -275,10 +281,10 @@ class Complex_Field extends Field {
 				}
 			}
 
-			$value_tree['groups'][] = $value_group;
 			$value_tree['value_set'][] = array(
 				Value_Set::VALUE_PROPERTY => $group->get_name(),
 			);
+			$value_tree['groups'][] = $value_group;
 			$input_group_index++;
 		}
 
@@ -331,13 +337,13 @@ class Complex_Field extends Field {
 	public function load() {
 		$raw_value_set_tree = $this->get_datastore()->load( $this );
 		$value = array();
-		if ( isset( $raw_value_set_tree[ $this->get_base_name() ] ) ) {
-			$value = $raw_value_set_tree[ $this->get_base_name() ]['value_set'];
+		if ( isset( $raw_value_set_tree['value_set'] ) ) {
+			$value = $raw_value_set_tree['value_set'];
 		}
 		$this->set_value( $value );
 
 		if ( $this->get_value() ) {
-			$this->set_value_tree( $raw_value_set_tree[ $this->get_base_name() ] );
+			$this->set_value_tree( $raw_value_set_tree );
 		}
 	}
 

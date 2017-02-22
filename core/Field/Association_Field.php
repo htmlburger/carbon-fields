@@ -13,13 +13,35 @@ use Carbon_Fields\Value_Set\Value_Set;
  *  - Users
  *  - Comments
  */
-class Association_Field extends Relationship_Field {
+class Association_Field extends Field {
 	
 	/**
-	 * WP_Toolset instance
+	 * WP_Toolset instance for WP data loading
+	 * 
 	 * @var Carbon_Fields\Toolset\WP_Toolset
 	 */
 	protected $wp_toolset;
+
+	/**
+	 * Max number of selected items allowed. -1 for no limit
+	 * 
+	 * @var integer
+	 */
+	protected $max = -1;
+
+	/**
+	 * Allow items to be added multiple times
+	 * 
+	 * @var boolean
+	 */
+	protected $allow_duplicates = false;
+
+	/**
+	 * Default field value
+	 *
+	 * @var array
+	 */
+	protected $default_value = array();
 
 	/**
 	 * Types of entries to associate with.
@@ -42,7 +64,23 @@ class Association_Field extends Relationship_Field {
 	protected function __construct( $type, $name, $label ) {
 		$this->wp_toolset = App::resolve( 'wp_toolset' );
 		$this->set_value_set( new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'type' => '', 'subtype' => '', 'object_id' => 0 ) ) );
-		Field::__construct( $type, $name, $label );
+		parent::__construct( $type, $name, $label );
+	}
+
+	/**
+	 * Load the field value from an input array based on it's name
+	 *
+	 * @param array $input Array of field names and values.
+	 **/
+	public function set_value_from_input( $input ) {
+		$value = array();
+		if ( isset( $input[ $this->get_name() ] ) ) {
+			$value = stripslashes_deep( $input[ $this->get_name() ] );
+			if ( is_array( $value ) ) {
+				$value = array_values( $value );
+			}
+		}
+		$this->set_value( $value );
 	}
 
 	/**
@@ -386,6 +424,26 @@ class Association_Field extends Relationship_Field {
 	}
 
 	/**
+	 * Set the maximum allowed number of selected entries.
+	 *
+	 * @param int $max
+	 */
+	public function set_max( $max ) {
+		$this->max = intval( $max );
+		return $this;
+	}
+
+	/**
+	 * Specify whether to allow each entry to be selected multiple times.
+	 *
+	 * @param  boolean $allow
+	 */
+	public function allow_duplicates( $allow = true ) {
+		$this->allow_duplicates = (bool) $allow;
+		return $this;
+	}
+
+	/**
 	 * Converts the field values into a usable associative array.
 	 *
 	 * The association data is saved in the database in the following format:
@@ -422,7 +480,7 @@ class Association_Field extends Relationship_Field {
 	 * @return mixed      The JSON field data.
 	 */
 	public function to_json( $load ) {
-		$field_data = Field::to_json( $load );
+		$field_data = parent::to_json( $load );
 
 		$field_data = array_merge( $field_data, array(
 			'value' => $this->value_to_json(),
