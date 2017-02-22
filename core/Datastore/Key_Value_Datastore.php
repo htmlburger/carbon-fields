@@ -77,7 +77,7 @@ abstract class Key_Value_Datastore extends Datastore {
 		foreach ( $storage_array as $row ) {
 			$parsed_storage_key = $this->key_toolset->parse_storage_key( $row->key );
 
-			if ( $parsed_storage_key['property'] === $this->key_toolset::KEEPALIVE_PROPERTY ) {
+			if ( $parsed_storage_key['property'] === $this->key_toolset->get_keepalive_property() ) {
 				continue;
 			}
 
@@ -191,7 +191,7 @@ abstract class Key_Value_Datastore extends Datastore {
 				$this->get_full_hierarchy_for_field( $field ),
 				$this->get_full_hierarchy_index_for_field( $field ),
 				0,
-				$this->key_toolset::KEEPALIVE_PROPERTY
+				$this->key_toolset->get_keepalive_property()
 			);
 			$this->save_key_value_pair( $storage_key, '' );
 		}
