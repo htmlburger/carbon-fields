@@ -30,7 +30,7 @@ export const debounce = true;
  */
 export function handler(field) {
 	if (isEmpty(field.value)) {
-		return crbl10n.message_required_field;
+		return crbl10n.field.message_required_field;
 	}
 
 	return null;
