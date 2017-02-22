@@ -3,58 +3,78 @@
  */
 import { takeEvery, takeLatest, delay } from 'redux-saga';
 import { put, call, select } from 'redux-saga/effects';
-import { isUndefined, isEmpty } from 'lodash';
+import { isUndefined, isNull } from 'lodash';
 
 /**
  * The internal dependencies.
  */
 import { getFieldValidators } from 'lib/registry';
-import { setupValidation, updateField, setUI } from 'fields/actions';
+
+import {
+	setupValidation,
+	updateField,
+	markFieldAsValid,
+	markFieldAsInvalid
+} from 'fields/actions';
+
 import { getFieldById } from 'fields/selectors';
 
 /**
- * A proxy handler that will debounce the validation process.
+ * Validate the field.
  *
  * @param  {Function} validator
- * @param  {String}   fieldId
- * @param  {Object}   action
- * @return {void}
+ * @param  {String} fieldId
+ * @return {String}
  */
-export function* workerValidate(validator, fieldId, action) {
-	const { payload } = action;
-
-	if (fieldId !== action.payload.fieldId || isUndefined(payload.data.value)) {
-		return;
-	}
-
+export function* validate(validator, fieldId) {
 	const field = yield select(getFieldById, fieldId);
+	const { is_visible, valid } = field.ui;
 
-	// We don't care about hidden inputs.
-	if (!field.ui.is_visible) {
+	// We don't care about the hidden inputs.
+	if (!is_visible) {
 		// Reset the validation status.
-		if (!field.ui.valid) {
-			yield put(setUI(field.id, {
-				valid: true,
-				error: null,
-			}));
+		if (!valid) {
+			yield put(markFieldAsValid(field.id));
 		}
 
 		return;
 	}
 
-	// Debounce the validation, because in some situations
-	// will trigger unnecessary re-renders.
-	if (validator.debounce) {
-		yield call(delay, 200);
+	// Perform the validation.
+	const error = yield call(validator, field);
+
+	// Update the UI.
+	if (isNull(error)) {
+		yield put(markFieldAsValid(fieldId));
+	} else {
+		yield put(markFieldAsInvalid(fieldId, error));
+	}
+}
+
+/**
+ * Run the validator when the field's value is updated.
+ *
+ * @param  {Object} validator
+ * @param  {String} fieldId
+ * @param  {Object} action
+ * @return {void}
+ */
+export function* workerValidateOnUpdate(validator, fieldId, action) {
+	const { payload } = action;
+
+	// Validate only the field specified by the action.
+	if (payload.fieldId !== fieldId || isUndefined(payload.data.value)) {
+		return;
 	}
 
-	// Perform the validation.
-	const result = yield call(validator.handler, field, action);
+	// Delay the validation, because in some situations
+	// it will trigger unnecessary re-renders.
+	if (validator.debounce) {
+		yield call(delay, 250);
+	}
 
-	yield put(setUI(field.id, {
-		valid: isEmpty(result) ? true : false,
-		error: result,
-	}));
+	// Run the validator.
+	yield call(validate, validator.handler, fieldId);
 }
 
 /**
@@ -74,7 +94,7 @@ export function* workerSetup({ payload: { fieldId, validationType }}) {
 		throw new Error(`Unknown validation type '${validationType}' for field '${fieldId}'.`);
 	}
 
-	yield takeLatest(updateField, workerValidate, validator, fieldId);
+	yield takeLatest(updateField, workerValidateOnUpdate, validator, fieldId);
 }
 
 /**

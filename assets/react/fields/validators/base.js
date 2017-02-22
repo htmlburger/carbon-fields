@@ -25,13 +25,13 @@ export const debounce = true;
 /**
  * Handle the validation for most of the fields.
  *
- * @param  {Object} field
- * @return {String}
+ * @param  {Object}      field
+ * @return {String|null}
  */
 export function handler(field) {
 	if (isEmpty(field.value)) {
 		return crbl10n.message_required_field;
 	}
 
-	return '';
+	return null;
 }

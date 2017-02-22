@@ -25,8 +25,8 @@ export const debounce = false;
 /**
  * Handle the validation for the complex fields.
  *
- * @param  {Object} field
- * @return {String}
+ * @param  {Object}      field
+ * @return {String|null}
  */
 export function handler(field) {
 	const {
@@ -47,5 +47,5 @@ export function handler(field) {
 			.replace('%2$s', label.toLowerCase());
 	}
 
-	return '';
+	return null;
 }
