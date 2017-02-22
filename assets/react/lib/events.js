@@ -17,6 +17,8 @@ import { isString, uniqueId } from 'lodash';
  */
 export function createChannel(selector, event, handler, childSelector = null) {
 	return eventChannel((emit) => {
+		event = `${event}.${uniqueId('event-')}`;
+
 		// Find the element in DOM.
 		const $element = $(selector);
 
@@ -50,7 +52,7 @@ export function createChannel(selector, event, handler, childSelector = null) {
  * @return {Object}
  */
 export function createSelectboxChannel(selector) {
-	return createChannel(selector, `change.${uniqueId('event-')}`, function(emit, $element) {
+	return createChannel(selector, 'change', function(emit, $element) {
 		emit({
 			value: $element.val(),
 			option: $element.find(':selected').first().get(0),
@@ -65,7 +67,7 @@ export function createSelectboxChannel(selector) {
  * @return {Object}
  */
 export function createCheckableChannel(selector) {
-	return createChannel(selector, `change.${uniqueId('event-')}`, (emit, $element) => {
+	return createChannel(selector, 'change', (emit, $element) => {
 		const elements = $element.find('input:checked').get();
 		const values = elements.map(element => element.value);
 
@@ -83,10 +85,26 @@ export function createCheckableChannel(selector) {
  * @return {Object}
  */
 export function createScrollChannel(selector) {
-	return createChannel(selector, `change.${uniqueId('event-')}`, (emit, $element) => {
+	return createChannel(selector, 'scroll', (emit, $element) => {
 		emit({
 			value: $element.scrollTop()
 		});
+	});
+}
+
+/**
+ * Create a channel that will listen for `submit` events.
+ *
+ * @param  {String} selector
+ * @return {Object}
+ */
+export function createSubmitChannel(selector) {
+	return createChannel(selector, 'submit', (emit, $element, event) => {
+		if (event) {
+			emit({
+				event,
+			});
+		}
 	});
 }
 

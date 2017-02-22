@@ -13,6 +13,7 @@ import { getFieldValidators } from 'lib/registry';
 import {
 	setupValidation,
 	updateField,
+	validateFields,
 	markFieldAsValid,
 	markFieldAsInvalid
 } from 'fields/actions';
@@ -78,6 +79,17 @@ export function* workerValidateOnUpdate(validator, fieldId, action) {
 }
 
 /**
+ * Run the validator when a mass validation is requested.
+ *
+ * @param  {Object} validator
+ * @param  {String} fieldId
+ * @return {void}
+ */
+export function* workerValidateAll(validator, fieldId) {
+	yield call(validate, validator.handler, fieldId);
+}
+
+/**
  * Handle setup of the validation logic.
  *
  * @param  {Object} action
@@ -94,7 +106,10 @@ export function* workerSetup({ payload: { fieldId, validationType }}) {
 		throw new Error(`Unknown validation type '${validationType}' for field '${fieldId}'.`);
 	}
 
-	yield takeLatest(updateField, workerValidateOnUpdate, validator, fieldId);
+	yield [
+		takeLatest(updateField, workerValidateOnUpdate, validator, fieldId),
+		takeLatest(validateFields, workerValidateAll, validator, fieldId),
+	];
 }
 
 /**

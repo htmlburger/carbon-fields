@@ -124,3 +124,10 @@ export const markFieldAsValid = createAction('fields/MARK_FIELD_AS_VALID', field
  * @return {Object}
  */
 export const markFieldAsInvalid = createAction('fields/MARK_FIELD_AS_INVALID', (fieldId, error) => ({ fieldId, error }));
+
+/**
+ * Trigger the validation for all required fields.
+ *
+ * @return {Object}
+ */
+export const validateFields = createAction('fields/VALIDATE_FIELDS');
