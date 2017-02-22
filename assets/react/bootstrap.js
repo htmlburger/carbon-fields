@@ -49,7 +49,7 @@ autoload(require.context('./fields/components', true, /index\.js$/), (path, file
 });
 
 autoload(require.context('./fields/validators', true, /\.js$/), (path, file) => {
-	registerFieldValidator(file.TYPE, file.default);
+	registerFieldValidator(file.type, file);
 });
 
 autoload(require.context('./', true, /sagas\/.+\.js$/), (path, file) => {

@@ -4,11 +4,23 @@
 import { isEmpty } from 'lodash';
 
 /**
+ * The internal dependencies.
+ */
+import { VALIDATION_COMPLEX } from 'fields/constants';
+
+/**
  * The type of validator.
  *
  * @type {String}
  */
-export const TYPE = 'VALIDATION_COMPLEX';
+export const type = VALIDATION_COMPLEX;
+
+/**
+ * Debounce the validation.
+ *
+ * @type {Boolean}
+ */
+export const debounce = false;
 
 /**
  * Handle the validation for the complex fields.
@@ -16,7 +28,7 @@ export const TYPE = 'VALIDATION_COMPLEX';
  * @param  {Object} field
  * @return {String}
  */
-export default function(field) {
+export function handler(field) {
 	const {
 		min,
 		value,

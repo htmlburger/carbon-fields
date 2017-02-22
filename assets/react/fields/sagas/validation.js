@@ -8,54 +8,9 @@ import { isUndefined, isEmpty } from 'lodash';
 /**
  * The internal dependencies.
  */
+import { getFieldValidators } from 'lib/registry';
 import { setupValidation, updateField, setUI } from 'fields/actions';
 import { getFieldById } from 'fields/selectors';
-import { VALIDATION_BASE, VALIDATION_COMPLEX } from 'fields/constants';
-
-/**
- * Handle the validation logic for most of the fields.
- *
- * @param  {Object}      field
- * @param  {Object}      action
- * @param  {Object}      action.payload
- * @param  {Object}      action.payload.data
- * @param  {mixed}       action.payload.data.value
- * @return {String|null}
- */
-export function baseValidation(field, { payload: { data: { value }} }) {
-	if (isEmpty(value)) {
-		return crbl10n.message_required_field;
-	}
-
-	return null;
-}
-
-/**
- * Handle the validation logic for the complex.
- *
- * @param  {Object}      field
- * @param  {Object}      action
- * @param  {Object}      action.payload
- * @param  {Object}      action.payload.data
- * @param  {mixed}       action.payload.data.value
- * @return {String|null}
- */
-export function complexValidation(field, { payload: { data: { value }} }) {
-	if (isEmpty(value)) {
-		return crbl10n.message_required_field;
-	}
-
-	if (field.min > 0 && value.length < field.min) {
-		const { min, labels } = field;
-		const label = min === 1 ? labels.singular_name : labels.plural_name;
-
-		return crbl10n.complex_min_num_rows_not_reached
-			.replace('%1$d', min)
-			.replace('%2$s', label.toLowerCase());
-	}
-
-	return null;
-}
 
 /**
  * A proxy handler that will debounce the validation process.
@@ -112,17 +67,7 @@ export function* workerValidate(validator, fieldId, action) {
  * @return {void}
  */
 export function* workerSetup({ payload: { fieldId, validationType }}) {
-	const validators = {
-		[VALIDATION_BASE]: {
-			handler: baseValidation,
-			debounce: true,
-		},
-		[VALIDATION_COMPLEX]: {
-			handler: complexValidation,
-			debounce: false,
-		},
-	};
-
+	const validators = yield call(getFieldValidators);
 	const validator = validators[validationType];
 
 	if (!validator) {

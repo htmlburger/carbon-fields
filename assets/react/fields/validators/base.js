@@ -4,11 +4,23 @@
 import { isEmpty } from 'lodash';
 
 /**
+ * The internal dependencies.
+ */
+import { VALIDATION_BASE } from 'fields/constants';
+
+/**
  * The type of validator.
  *
  * @type {String}
  */
-export const TYPE = 'VALIDATION_BASE';
+export const type = VALIDATION_BASE;
+
+/**
+ * Debounce the validation.
+ *
+ * @type {Boolean}
+ */
+export const debounce = true;
 
 /**
  * Handle the validation for most of the fields.
@@ -16,7 +28,7 @@ export const TYPE = 'VALIDATION_BASE';
  * @param  {Object} field
  * @return {String}
  */
-export default function(field) {
+export function handler(field) {
 	if (isEmpty(field.value)) {
 		return crbl10n.message_required_field;
 	}
