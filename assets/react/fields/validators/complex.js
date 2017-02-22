@@ -36,13 +36,13 @@ export function handler(field) {
 	} = field;
 
 	if (isEmpty(value)) {
-		return crbl10n.field.message_required_field;
+		return carbonFieldsL10n.field.messageRequiredField;
 	}
 
 	if (min > 0 && value.length < min) {
 		const label = min === 1 ? labels.singular_name : labels.plural_name;
 
-		return crbl10n.field.complex_min_num_rows_not_reached
+		return carbonFieldsL10n.field.complexMinNumRowsNotReached
 			.replace('%1$d', min)
 			.replace('%2$s', label.toLowerCase());
 	}
