@@ -56,6 +56,16 @@ class Key_Toolset {
 	const PATTERN_COMPARISON_STARTS_WITH = '^';
 
 	/**
+	 * Get the KEEPALIVE_PROPERTY
+	 * Needed since php 5.3 cannot parse $instance->property::constant ( but parses $instance::constant )
+	 *
+	 * @return string
+	 */
+	public function get_keepalive_property() {
+		return static::KEEPALIVE_PROPERTY;
+	}
+
+	/**
 	 * Get sanitized hierarchy index for hierarchy
 	 *
 	 * @param array<string> $full_hierarchy

@@ -79,7 +79,7 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 				$this->get_full_hierarchy_for_field( $field ),
 				$this->get_full_hierarchy_index_for_field( $field ),
 				0,
-				$this->key_toolset::KEEPALIVE_PROPERTY
+				$this->key_toolset->get_keepalive_property()
 			);
 			$this->save_key_value_pair_with_autoload( $storage_key, '', $field->get_autoload() );
 		}
