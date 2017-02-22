@@ -934,12 +934,9 @@ class Field implements Datastore_Holder_Interface {
 		wp_enqueue_media();
 		wp_localize_script( 'carbon-fields-core', 'carbonFieldsL10n',
 			array(
-				'title' => __( 'Files', \Carbon_Fields\TEXT_DOMAIN ),
 				'geocodeZeroResults' => __( 'The address could not be found. ', \Carbon_Fields\TEXT_DOMAIN ),
 				'geocodeNotSuccessful' => __( 'Geocode was not successful for the following reason: ', \Carbon_Fields\TEXT_DOMAIN ),
 				'maxNumItemsReached' => __( 'Maximum number of items reached (%s items)', \Carbon_Fields\TEXT_DOMAIN ),
-				'maxNumRowsReached' => __( 'Maximum number of rows reached (%s rows)', \Carbon_Fields\TEXT_DOMAIN ),
-				'cannotCreateMoreRows' => __( 'Cannot create more than %s rows', \Carbon_Fields\TEXT_DOMAIN ),
 				'complexNoRows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', \Carbon_Fields\TEXT_DOMAIN ),
 				'complexAddButton' => __( 'Add %s', \Carbon_Fields\TEXT_DOMAIN ),
 				'complexMinNumRowsNotReached' => __( 'Minimum number of rows not reached (%1$d %2$s)', \Carbon_Fields\TEXT_DOMAIN ),
