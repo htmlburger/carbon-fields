@@ -155,7 +155,7 @@ const handleAddItem = ({ field, updateField }) => item => {
 
 	// Don't do anything, because the maximum is reached.
 	if (field.max > 0 && field.value.length >= field.max) {
-		alert(crbl10n.max_num_items_reached.replace('%s', field.max));
+		alert(carbonFieldsL10n.maxNumItemsReached.replace('%s', field.max));
 		return;
 	}
 

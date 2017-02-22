@@ -117,7 +117,7 @@ const handleChange = ({ field, options, updateField, addSidebar }) => e => {
 	if (value === 'new') {
 		e.preventDefault();
 
-		value = trim(window.prompt(crbl10n.enter_name_of_new_sidebar));
+		value = trim(window.prompt(carbonFieldsL10n.enterNameOfNewSidebar));
 
 		if (!value) {
 			return;

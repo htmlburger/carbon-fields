@@ -98,11 +98,9 @@ class Loader {
 	 * Initialize main scripts
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'carbon-ext', \Carbon_Fields\URL . '/assets/js/ext.js', array( 'jquery' ), \Carbon_Fields\VERSION );
-		wp_enqueue_script( 'carbon-app', \Carbon_Fields\URL . '/assets/js/app.js', array( 'jquery', 'backbone', 'underscore', 'jquery-touch-punch', 'jquery-ui-sortable', 'carbon-ext' ), \Carbon_Fields\VERSION );
-		wp_enqueue_script( 'carbon-vendor', \Carbon_Fields\URL . '/assets/carbon.vendor.js', array( ) );
-		wp_enqueue_script( 'carbon-core', \Carbon_Fields\URL . '/assets/carbon.core.js', array( 'carbon-vendor', 'jquery' ) );
-		wp_enqueue_script( 'carbon-bootstrap', \Carbon_Fields\URL . '/assets/carbon.bootstrap.js', array( 'carbon-core' ) );
+		wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/assets/carbon.vendor.js', array( ) );
+		wp_enqueue_script( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/carbon.core.js', array( 'carbon-fields-vendor', 'jquery' ) );
+		wp_enqueue_script( 'carbon-fields-bootstrap', \Carbon_Fields\URL . '/assets/carbon.bootstrap.js', array( 'carbon-fields-core' ) );
 	}
 
 	/**

@@ -24,7 +24,7 @@ import { VALIDATION_BASE, VALIDATION_COMPLEX } from 'fields/constants';
  */
 export function baseValidation(field, { payload: { data: { value }} }) {
 	if (isEmpty(value)) {
-		return crbl10n.message_required_field;
+		return carbonFieldsL10n.messageRequiredField;
 	}
 
 	return null;
@@ -42,14 +42,14 @@ export function baseValidation(field, { payload: { data: { value }} }) {
  */
 export function complexValidation(field, { payload: { data: { value }} }) {
 	if (isEmpty(value)) {
-		return crbl10n.message_required_field;
+		return carbonFieldsL10n.messageRequiredField;
 	}
 
 	if (field.min > 0 && value.length < field.min) {
 		const { min, labels } = field;
 		const label = min === 1 ? labels.singular_name : labels.plural_name;
 
-		return crbl10n.complex_min_num_rows_not_reached
+		return carbonFieldsL10n.complexMinNumRowsNotReached
 			.replace('%1$d', min)
 			.replace('%2$s', label.toLowerCase());
 	}

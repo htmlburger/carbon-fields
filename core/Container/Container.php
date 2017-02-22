@@ -659,12 +659,10 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Enqueue admin scripts
 	 */
 	public static function admin_hook_scripts() {
-		wp_enqueue_script( 'carbon-containers', \Carbon_Fields\URL . '/assets/js/containers.js', array( 'carbon-app' ), \Carbon_Fields\VERSION );
-
-		wp_localize_script( 'carbon-containers', 'carbon_containers_l10n',
+		wp_localize_script( 'carbon-fields-core', 'carbonFieldsContainersL10n',
 			array(
-				'please_fill_the_required_fields' => __( 'Please fill out all required fields highlighted below.', \Carbon_Fields\TEXT_DOMAIN ),
-				'changes_made_save_alert' => __( 'The changes you made will be lost if you navigate away from this page.', \Carbon_Fields\TEXT_DOMAIN ),
+				'pleaseFillTheRequiredFields' => __( 'Please fill out all required fields highlighted below.', \Carbon_Fields\TEXT_DOMAIN ),
+				'changesMadeSaveAlert' => __( 'The changes you made will be lost if you navigate away from this page.', \Carbon_Fields\TEXT_DOMAIN ),
 			)
 		);
 	}
