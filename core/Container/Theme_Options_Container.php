@@ -167,8 +167,8 @@ class Theme_Options_Container extends Container {
 		$file = $this->settings['file'];
 		$parent = $this->settings['parent'];
 
-		// Register top level page
 		if ( ! $parent ) {
+			// Register top level page
 			if ( isset( static::$registered_pages[ $file ] ) ) {
 				Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" already registered' );
 			}
@@ -179,12 +179,14 @@ class Theme_Options_Container extends Container {
 
 		// Register sub-page
 		if ( ! isset( static::$registered_pages[ $parent ] ) ) {
-			static::$registered_pages[ $parent ] = array( $file );
-		} elseif ( in_array( $file, static::$registered_pages[ $parent ] ) ) {
-			Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a name for the container.' );
-		} else {
-			static::$registered_pages[ $parent ][] = $file;
+			static::$registered_pages[ $parent ] = array();
 		}
+
+		if ( in_array( $file, static::$registered_pages[ $parent ] ) ) {
+			Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a name for the container.' );
+		}
+
+		static::$registered_pages[ $parent ][] = $file;
 	}
 
 	/**
