@@ -347,15 +347,17 @@ class Key_Toolset {
 		);
 
 		$segments = $this->storage_key_to_segments_array( $storage_key );
+		
 		$parsed['root'] = $segments[0];
 		if ( $this->is_segments_array_full( $segments ) ) {
-			if ( ! empty( $segments[1] ) ) {
-				$parsed['hierarchy'] = explode( static::SEGMENT_VALUE_GLUE, $segments[1] );
-			}
+			$parsed['hierarchy'] = array_filter( explode( static::SEGMENT_VALUE_GLUE, $segments[1] ) );
+
 			if ( ! empty( $segments[2] ) ) {
 				$parsed['hierarchy_index'] = array_map( 'intval', explode( static::SEGMENT_VALUE_GLUE, $segments[2] ) );
 			}
+
 			$parsed['value_index'] = intval( $segments[3] );
+
 			$parsed['property'] = $segments[4];
 		}
 
