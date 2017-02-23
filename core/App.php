@@ -15,6 +15,11 @@ use Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 use Carbon_Fields\REST_API\Router as REST_API_Router;
 use Carbon_Fields\REST_API\Decorator as REST_API_Decorator;
 
+use Carbon_Fields\Container\Condition\Post_Condition;
+
+use Carbon_Fields\Container\Condition\Boolean_Comparer;
+use Carbon_Fields\Container\Condition\Scalar_Comparer;
+
 
 /**
  * Holds a static reference to the ioc container
@@ -85,7 +90,6 @@ class App {
 		};
 
 		/* Services */
-
 		$ioc['meta_query_service'] = function( $ioc ) {
 			return new Meta_Query_Service( $ioc['container_repository'], $ioc['key_toolset'] );
 		};
@@ -97,6 +101,20 @@ class App {
 		$ioc['rest_api_service'] = function( $ioc ) {
 			return new REST_API_Service( $ioc['rest_api_router'], $ioc['rest_api_decorator'] );
 		};
+
+		/* Container Conditions */
+		$ioc['container_condition_type_post'] = $ioc->factory( function ( $ioc ) {
+			return new Post_Condition();
+		} );
+
+		/* Container Condition Comparers */
+		$ioc['container_condition_comparer_type_boolean'] = $ioc->factory( function ( $ioc ) {
+			return new Boolean_Comparer();
+		} );
+
+		$ioc['container_condition_comparer_type_scalar'] = $ioc->factory( function ( $ioc ) {
+			return new Scalar_Comparer();
+		} );
 
 		return $ioc;
 	}
