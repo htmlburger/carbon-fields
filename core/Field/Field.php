@@ -398,11 +398,11 @@ class Field implements Datastore_Holder_Interface {
 	 * @return mixed
 	 **/
 	protected function get_value_from_datastore( $fallback_to_default = true ) {
-		$raw_value_set_tree = $this->get_datastore()->load( $this );
+		$value_tree = $this->get_datastore()->load( $this );
 		
 		$value = null;
-		if ( isset( $raw_value_set_tree['value_set'] ) ) {
-			$value = $raw_value_set_tree['value_set'];
+		if ( isset( $value_tree['value_set'] ) ) {
+			$value = $value_tree['value_set'];
 		}
 
 		if ( $value === null && $fallback_to_default ) {

@@ -433,7 +433,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		$regex = '/
 			\A
 			(?P<field_name>[a-z0-9_]+)
-			(?:\[(?P<entry_index>\d+)\])?
+			(?:\[(?P<group_index>\d+)\])?
 			(?:' .  preg_quote( static::HIERARCHY_GROUP_SEPARATOR, '/' ). '(?P<group_name>[a-z0-9_]+))?
 			\z
 		/x';
@@ -467,7 +467,7 @@ abstract class Container implements Datastore_Holder_Interface {
 			}
 			
 			$segment_field_name = $segment_pieces['field_name'];
-			$segment_entry_index = isset( $segment_pieces['entry_index'] ) ? $segment_pieces['entry_index'] : 0;
+			$segment_group_index = isset( $segment_pieces['group_index'] ) ? $segment_pieces['group_index'] : 0;
 			$segment_group_name = isset( $segment_pieces['group_name'] ) ? $segment_pieces['group_name'] : Group_Field::DEFAULT_GROUP_NAME;
 
 			foreach ( $field_group as $f ) {
@@ -482,7 +482,7 @@ abstract class Container implements Datastore_Holder_Interface {
 								Incorrect_Syntax_Exception::raise( 'Unknown group name specified when fetching a value inside a complex field: "' . $segment_group_name . '".' );
 							}
 							$field_group = $group->get_fields();
-							$hierarchy_index[] = $segment_entry_index;
+							$hierarchy_index[] = $segment_group_index;
 						} else {
 							Incorrect_Syntax_Exception::raise( 'Attempted to look for a nested field inside a non-complex field.' );
 						}

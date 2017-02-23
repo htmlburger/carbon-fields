@@ -301,13 +301,13 @@ class Complex_Field extends Field {
 	 *
 	 * @param Field $field
 	 * @param Field $parent_field
-	 * @param int $entry_index
+	 * @param int $group_index
 	 * @return Field
 	 */
-	public function get_clone_under_field_in_hierarchy( $field, $parent_field, $entry_index = 0 ) {
+	public function get_clone_under_field_in_hierarchy( $field, $parent_field, $group_index = 0 ) {
 		$clone = clone $field;
 		$clone->set_hierarchy( array_merge( $parent_field->get_hierarchy(), array( $parent_field->get_base_name() ) ) );
-		$clone->set_hierarchy_index( array_merge( $parent_field->get_hierarchy_index(), array( $entry_index ) ) );
+		$clone->set_hierarchy_index( array_merge( $parent_field->get_hierarchy_index(), array( $group_index ) ) );
 		return $clone;
 	}
 
@@ -318,20 +318,20 @@ class Complex_Field extends Field {
 			return $fields;
 		}
 
-		foreach ( $value_tree['value_set'] as $entry_index => $value ) {
+		foreach ( $value_tree['value_set'] as $group_index => $value ) {
 			$group_name = $value[ Value_Set::VALUE_PROPERTY ];
 			$group = $this->get_group_by_name( $group_name );
 			$group_fields = $group->get_fields();
-			$fields[ $entry_index ] = array(
+			$fields[ $group_index ] = array(
 				static::GROUP_TYPE_KEY => $group->get_name(),
 			);
 			$group_values = array();
-			if ( isset( $value_tree['groups'][ $entry_index ] ) ) {
-				$group_values = $value_tree['groups'][ $entry_index ];
+			if ( isset( $value_tree['groups'][ $group_index ] ) ) {
+				$group_values = $value_tree['groups'][ $group_index ];
 			}
 
 			foreach ( $group_fields as $field ) {
-				$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $entry_index );
+				$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $group_index );
 				if ( isset( $group_values[ $clone->get_base_name() ] ) ) {
 					$group_value = $group_values[ $clone->get_base_name() ];
 					
@@ -343,7 +343,7 @@ class Complex_Field extends Field {
 						$clone->set_value_tree( $group_value );
 					}
 				}
-				$fields[ $entry_index ][] = $clone;
+				$fields[ $group_index ][] = $clone;
 			}
 		}
 
@@ -409,15 +409,15 @@ class Complex_Field extends Field {
 	 * Load all groups of fields and their data.
 	 */
 	public function load() {
-		$raw_value_set_tree = $this->get_datastore()->load( $this );
+		$value_tree = $this->get_datastore()->load( $this );
 		$value = array();
-		if ( isset( $raw_value_set_tree['value_set'] ) ) {
-			$value = $raw_value_set_tree['value_set'];
+		if ( isset( $value_tree['value_set'] ) ) {
+			$value = $value_tree['value_set'];
 		}
 		$this->set_value( $value );
 
 		if ( $this->get_value() ) {
-			$this->set_value_tree( $raw_value_set_tree );
+			$this->set_value_tree( $value_tree );
 		}
 	}
 
@@ -435,7 +435,7 @@ class Complex_Field extends Field {
 
 		$field_groups = $this->get_prefilled_field_groups( $this->get_value_tree() );
 
-		foreach ( $field_groups as $entry_index => $fields ) {
+		foreach ( $field_groups as $group_index => $fields ) {
 			foreach ( $fields as $field ) {
 				if ( ! is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
 					continue;
@@ -457,28 +457,7 @@ class Complex_Field extends Field {
 	/**
 	 * Set the full value tree of all groups and their fields
 	 *
-	 * Tree Schema
-	 * 'value_set' => array(
-	 * 		array(
-	 * 			'value' => '_',
-	 * 		),
-	 * 		...
-	 * ),
-	 * 'groups' => array(
-	 * 		array(
-	 * 			'field1' => array(
-	 * 				'value_set'=>array(
-	 * 					array(
-	 * 						'value' => ...,
-	 * 						...
-	 * 					),
-	 * 					...
-	 * 				),
-	 * 			),
-	 * 			...
-	 * 		),
-	 * 		...
-	 * ),
+	 * @see  Internal Glossary in DEVELOPMENT.MD
 	 */
 	public function set_value_tree( $value_tree ) {
 		$this->value_tree = $value_tree;
@@ -493,13 +472,13 @@ class Complex_Field extends Field {
 		$field_groups = $this->get_prefilled_field_groups( $this->get_value_tree() );
 		
 		$value = array();
-		foreach ( $field_groups as $entry_index => $field_group ) {
-			$value[ $entry_index ] = array();
+		foreach ( $field_groups as $group_index => $field_group ) {
+			$value[ $group_index ] = array();
 			foreach ( $field_group as $key => $field ) {
 				if ( is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
-					$value[ $entry_index ][ $field->get_base_name() ] = $field->get_formatted_value(); 
+					$value[ $group_index ][ $field->get_base_name() ] = $field->get_formatted_value(); 
 				} else {
-					$value[ $entry_index ][ $key ] = $field;
+					$value[ $group_index ][ $key ] = $field;
 				}
 			}
 		}
@@ -523,7 +502,7 @@ class Complex_Field extends Field {
 
 		$field_groups = $this->get_prefilled_field_groups( $this->get_value_tree() );
 		$value_data = array();
-		foreach ( $field_groups as $entry_index => $fields ) {
+		foreach ( $field_groups as $group_index => $fields ) {
 			$group = $this->get_group_by_name( $fields[ static::GROUP_TYPE_KEY ] );
 
 			$data = array(

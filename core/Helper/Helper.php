@@ -43,7 +43,7 @@ class Helper {
 	 * @param int $object_id Object id to get value for (e.g. post_id, term_id etc.)
 	 * @param string $container_type Container type to search in
 	 * @param string $field_name Field name
-	 * @param array $value Refer to Complex_Field::set_value_tree() in case you wish to update a complex field
+	 * @param array $value Field expects a `value_set`; Complex_Field expects a `value_tree` - refer to DEVELOPMENT.md
 	 */
 	public static function set_value( $object_id, $container_type, $field_name, $value ) {
 		$repository = App::resolve( 'container_repository' );
@@ -59,9 +59,9 @@ class Helper {
 		}
 
 		if ( is_a( $clone, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
-			$value = ( ! empty( $value ) ) ? $value : array( 'value_set' => array() );
-			$clone->set_value_tree( $value );
-			$clone->set_value( $value['value_set'] );
+			$value_tree = ( ! empty( $value ) ) ? $value : array( 'value_set' => array(), 'groups' => array() );
+			$clone->set_value( $value_tree['value_set'] );
+			$clone->set_value_tree( $value_tree );
 		} else {
 			$clone->set_value( $value );
 		}
