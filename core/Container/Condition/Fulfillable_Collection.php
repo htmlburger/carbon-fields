@@ -15,17 +15,76 @@ class Fulfillable_Collection implements Fulfillable {
 	protected $fulfillables = array();
 
 	/**
-	 * Supported fulfillable comparisons
+	 * Array of supported fulfillable comparisons
 	 * 
 	 * @var array<string>
 	 */
 	protected $supported_fulfillable_comparisons = array( 'AND', 'OR' );
+
+	/**
+	 * Array of allowed condition types which propagate to child collections
+	 * 
+	 * @var array<string>
+	 */
+	protected $allowed_condition_types = array();
+
+	/**
+	 * Get condition type identifier for use in the IoC container
+	 * 
+	 * @param  string $condition_type
+	 * @return string
+	 */
+	protected function get_condition_type_identifier( $condition_type ) {
+		$identifier = 'container_condition_type_' . $condition_type;
+		return $identifier;
+	}
+
+	/**
+	 * Get array of allowed condition types
+	 * 
+	 * @return array<string>
+	 */
+	public function get_allowed_condition_types() {
+		return $this->allowed_condition_types;
+	}
+
+	/**
+	 * Set array of allowed condition types
+	 * 
+	 * @param  array<string>          $allowed_condition_types
+	 * @return Fulfillable_Collection $this
+	 */
+	public function set_allowed_condition_types( $allowed_condition_types ) {
+		// Verify all allowed condition types exist
+		foreach ( $allowed_condition_types as $condition_type ) {
+			$identifier = $this->get_condition_type_identifier( $condition_type );
+			if ( ! App::has( $identifier ) ) {
+				Incorrect_Syntax_Exception::raise( 'Unknown container condition type allowed: ' . $condition_type );
+			}
+		}
+		
+		$this->allowed_condition_types = $allowed_condition_types;
+		$this->propagate_allowed_condition_types();
+		return $this;
+	}
+
+	/**
+	 * Propagate allowed condition types to child collections
+	 */
+	public function propagate_allowed_condition_types() {
+		$allowed_condition_types = $this->get_allowed_condition_types();
+		foreach ( $this->fulfillables as $fulfillable ) {
+			if ( is_a( $fulfillable, get_class() ) ) {
+				$fulfillable->set_allowed_condition_types( $allowed_condition_types );
+			}
+		}
+	}
 	
 	/**
 	 * Shorthand for when with AND comparison
 	 * 
 	 * @param  string|Closure         $condition_type
-	 * @param  stirng                 $comparison_sign Can be skipped. Defaults to "="
+	 * @param  string                 $comparison_sign Can be skipped. Defaults to "="
 	 * @param  mixed                  $value
 	 * @return Fulfillable_Collection $this
 	 */
@@ -38,7 +97,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * Shorthand for when with OR comparison
 	 * 
 	 * @param  string|Closure         $condition_type
-	 * @param  stirng                 $comparison_sign Can be skipped. Defaults to "="
+	 * @param  string                 $comparison_sign Can be skipped. Defaults to "="
 	 * @param  mixed                  $value
 	 * @return Fulfillable_Collection $this
 	 */
@@ -52,7 +111,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * This method assumes there is no fulfillable that can be compared with literal NULL
 	 * 
 	 * @param  string|Closure         $condition_type
-	 * @param  stirng                 $comparison_sign Can be skipped. Defaults to "="
+	 * @param  string                 $comparison_sign Can be skipped. Defaults to "="
 	 * @param  mixed                  $value
 	 * @param  string                 $fulfillable_comparison
 	 * @return Fulfillable_Collection $this
@@ -62,21 +121,21 @@ class Fulfillable_Collection implements Fulfillable {
 			return $this->whenCollection( $condition_type, $fulfillable_comparison );
 		}
 
+		if ( ! in_array( $condition_type, $this->allowed_condition_types ) ) {
+			Incorrect_Syntax_Exception::raise( 'Unsupported container condition used: ' . $condition_type );
+		}
+
 		if ( $value === null ) {
 			// We do not have a supplied comparison_sign so we default to "="
 			$value = $comparison_sign;
 			$comparison_sign = '=';
 		}
 
-		try {
-			$ioc_identifier = 'container_condition_type_' . $condition_type;
-			$condition = App::resolve( $ioc_identifier );
-			$condition->set_value( $value );
-			$condition->get_comparer()->set_comparison_sign( $comparison_sign );
-			$this->add_fulfillable( $condition, $fulfillable_comparison );
-		} catch ( \InvalidArgumentException $e ) {
-			Incorrect_Syntax_Exception::raise( 'Unknown container condition used: ' . $condition_type );
-		}
+		$ioc_identifier = $this->get_condition_type_identifier( $condition_type );
+		$condition = App::resolve( $ioc_identifier );
+		$condition->set_value( $value );
+		$condition->get_comparer()->set_comparison_sign( $comparison_sign );
+		$this->add_fulfillable( $condition, $fulfillable_comparison );
 		return $this;
 	}
 
@@ -89,6 +148,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 */
 	protected function whenCollection( \Closure $collection_closure, $fulfillable_comparison) {
 		$collection = new static();
+		$collection->set_allowed_condition_types( $this->get_allowed_condition_types() );
 		$collection_closure( $collection );
 		$this->add_fulfillable( $collection, $fulfillable_comparison );
 		return $this;
