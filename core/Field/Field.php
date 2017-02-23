@@ -257,6 +257,38 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Cleans up an object class for usage as HTML class
+	 *
+	 * @param string $type
+	 * @return string
+	 */
+	protected function clean_type( $type ) {
+		$remove = array(
+			'_',
+			'\\',
+			'CarbonFields',
+			'Field',
+		);
+		$clean_class = str_replace( $remove, '', $type );
+
+		return $clean_class;
+	}
+
+	/**
+	 * Returns the type of the field based on the class.
+	 * The class is stripped by the "CarbonFields" prefix.
+	 * Also the "Field" suffix is removed.
+	 * Then underscores and backslashes are removed.
+	 *
+	 * @return string
+	 */
+	public function get_type() {
+		$class = get_class( $this );
+
+		return $this->clean_type( $class );
+	}
+
+	/**
 	 * Activate the field once the container is attached.
 	 */
 	public function activate() {
@@ -271,13 +303,6 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Set array of hierarchy field names
-	 **/
-	public function set_hierarchy( $hierarchy ) {
-		$this->hierarchy = $hierarchy;
-	}
-
-	/**
 	 * Get array of hierarchy field names
 	 *
 	 * @return array
@@ -287,11 +312,10 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Set array of hierarchy indexes
+	 * Set array of hierarchy field names
 	 **/
-	public function set_hierarchy_index( $hierarchy_index ) {
-		$hierarchy_index = ( ! empty( $hierarchy_index ) ) ? $hierarchy_index : array( 0 );
-		$this->hierarchy_index = $hierarchy_index;
+	public function set_hierarchy( $hierarchy ) {
+		$this->hierarchy = $hierarchy;
 	}
 
 	/**
@@ -301,6 +325,14 @@ class Field implements Datastore_Holder_Interface {
 	 **/
 	public function get_hierarchy_index() {
 		return $this->hierarchy_index;
+	}
+
+	/**
+	 * Set array of hierarchy indexes
+	 **/
+	public function set_hierarchy_index( $hierarchy_index ) {
+		$hierarchy_index = ( ! empty( $hierarchy_index ) ) ? $hierarchy_index : array( 0 );
+		$this->hierarchy_index = $hierarchy_index;
 	}
 
 	/**
@@ -428,6 +460,15 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Get the DataStore instance
+	 *
+	 * @return Datastore_Interface $datastore
+	 **/
+	public function get_datastore() {
+		return $this->datastore;
+	}
+
+	/**
 	 * Set datastore instance
 	 *
 	 * @param Datastore_Interface $datastore
@@ -443,12 +484,12 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Get the DataStore instance
+	 * Return the type of the container this field is in
 	 *
-	 * @return Datastore_Interface $datastore
+	 * @return string
 	 **/
-	public function get_datastore() {
-		return $this->datastore;
+	public function get_context() {
+		return $this->context;
 	}
 
 	/**
@@ -460,15 +501,6 @@ class Field implements Datastore_Holder_Interface {
 	public function set_context( $context ) {
 		$this->context = $context;
 		return $this;
-	}
-
-	/**
-	 * Return the type of the container this field is in
-	 *
-	 * @return string
-	 **/
-	public function get_context() {
-		return $this->context;
 	}
 
 	/**
@@ -533,6 +565,15 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Get default field value
+	 *
+	 * @return mixed
+	 **/
+	public function get_default_value() {
+		return $this->default_value;
+	}
+
+	/**
 	 * Set default field value
 	 *
 	 * @param mixed $default_value
@@ -543,12 +584,28 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Get default field value
+	 * Return the field base name.
 	 *
-	 * @return mixed
+	 * @return string
 	 **/
-	public function get_default_value() {
-		return $this->default_value;
+	public function get_base_name() {
+		return $this->base_name;
+	}
+
+	/**
+	 * Set field base name as defined in the container.
+	 **/
+	public function set_base_name( $name ) {
+		$this->base_name = $name;
+	}
+
+	/**
+	 * Return the field name
+	 *
+	 * @return string
+	 **/
+	public function get_name() {
+		return $this->name;
 	}
 
 	/**
@@ -574,12 +631,12 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return the field name
+	 * Return the field name prefix
 	 *
 	 * @return string
 	 **/
-	public function get_name() {
-		return $this->name;
+	public function get_name_prefix() {
+		return $this->name_prefix;
 	}
 
 	/**
@@ -599,28 +656,12 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return the field name prefix
+	 * Return field label.
 	 *
 	 * @return string
 	 **/
-	public function get_name_prefix() {
-		return $this->name_prefix;
-	}
-
-	/**
-	 * Set field base name as defined in the container.
-	 **/
-	public function set_base_name( $name ) {
-		$this->base_name = $name;
-	}
-
-	/**
-	 * Return the field base name.
-	 *
-	 * @return string
-	 **/
-	public function get_base_name() {
-		return $this->base_name;
+	public function get_label() {
+		return $this->label;
 	}
 
 	/**
@@ -645,12 +686,12 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return field label.
+	 * Return the field help text
 	 *
-	 * @return string
+	 * @return object $this
 	 **/
-	public function get_label() {
-		return $this->label;
+	public function get_help_text() {
+		return $this->help_text;
 	}
 
 	/**
@@ -675,12 +716,12 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return the field help text
+	 * Return whether or not this value should be auto loaded.
 	 *
-	 * @return object $this
+	 * @return bool
 	 **/
-	public function get_help_text() {
-		return $this->help_text;
+	public function get_autoload() {
+		return $this->autoload;
 	}
 
 	/**
@@ -695,12 +736,12 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return whether or not this value should be auto loaded.
+	 * Return whether or not this field should be lazyloaded.
 	 *
 	 * @return bool
 	 **/
-	public function get_autoload() {
-		return $this->autoload;
+	public function get_lazyload() {
+		return $this->lazyload;
 	}
 
 	/**
@@ -715,12 +756,12 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return whether or not this field should be lazyloaded.
+	 * Get the field width.
 	 *
-	 * @return bool
+	 * @return int $width
 	 **/
-	public function get_lazyload() {
-		return $this->lazyload;
+	public function get_width() {
+		return $this->width;
 	}
 
 	/**
@@ -735,12 +776,12 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Get the field width.
+	 * Get the field custom CSS classes.
 	 *
-	 * @return int $width
+	 * @return array
 	 **/
-	public function get_width() {
-		return $this->width;
+	public function get_classes() {
+		return $this->classes;
 	}
 
 	/**
@@ -759,15 +800,6 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Get the field custom CSS classes.
-	 *
-	 * @return array
-	 **/
-	public function get_classes() {
-		return $this->classes;
-	}
-
-	/**
 	 * Whether this field is mandatory for the user
 	 *
 	 * @param bool $required
@@ -776,6 +808,15 @@ class Field implements Datastore_Holder_Interface {
 	public function set_required( $required = true ) {
 		$this->required = $required;
 		return $this;
+	}
+
+	/**
+	 * Return whether this field is mandatory for the user
+	 *
+	 * @return bool
+	 **/
+	public function is_required() {
+		return $this->required;
 	}
 
 	/**
@@ -792,79 +833,6 @@ class Field implements Datastore_Holder_Interface {
 	 */
 	public function set_id( $id ) {
 		$this->id = $id;
-	}
-
-	/**
-	 * Return whether this field is mandatory for the user
-	 *
-	 * @return bool
-	 **/
-	public function is_required() {
-		return $this->required;
-	}
-
-	/**
-	 * Returns the type of the field based on the class.
-	 * The class is stripped by the "CarbonFields" prefix.
-	 * Also the "Field" suffix is removed.
-	 * Then underscores and backslashes are removed.
-	 *
-	 * @return string
-	 */
-	public function get_type() {
-		$class = get_class( $this );
-
-		return $this->clean_type( $class );
-	}
-
-	/**
-	 * Cleans up an object class for usage as HTML class
-	 *
-	 * @param string $type
-	 * @return string
-	 */
-	protected function clean_type( $type ) {
-		$remove = array(
-			'_',
-			'\\',
-			'CarbonFields',
-			'Field',
-		);
-		$clean_class = str_replace( $remove, '', $type );
-
-		return $clean_class;
-	}
-
-	/**
-	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
-	 *
-	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
-	 * @return array
-	 */
-	public function to_json( $load ) {
-		if ( $load ) {
-			$this->load();
-		}
-
-		$field_data = array(
-			'id' => $this->get_id(),
-			'type' => $this->get_type(),
-			'label' => $this->get_label(),
-			'name' => $this->get_name(),
-			'base_name' => $this->get_base_name(),
-			'value' => $this->get_value(),
-			'default_value' => $this->get_default_value(),
-			'help_text' => $this->get_help_text(),
-			'context' => $this->get_context(),
-			'required' => $this->is_required(),
-			'lazyload' => $this->get_lazyload(),
-			'width' => $this->get_width(),
-			'classes' => $this->get_classes(),
-			'conditional_logic' => $this->get_conditional_logic(),
-		);
-
-		return $field_data;
 	}
 
 	/**
@@ -944,6 +912,24 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Set the REST visibility of the field
+	 * 
+	 * @param bool $visible
+	 */
+	public function set_visible_in_rest_api( $visible ) {
+		$this->visible_in_rest_api = $visible;
+	}
+	
+	/**
+	 * Get the REST visibility of the field
+	 * 
+	 * @return bool
+	 */
+	public function get_visible_in_rest_api() {
+		return $this->visible_in_rest_api;
+	}
+
+	/**
 	 * Configuration function for setting the field visibility in the response of the requests to the REST API
 	 * 
 	 * @param bool $visible
@@ -953,21 +939,37 @@ class Field implements Datastore_Holder_Interface {
 		$this->set_visible_in_rest_api( $visible );
 		return $this;
 	}
+
 	/**
-	 * Set the REST visibility of the field
-	 * 
-	 * @param bool $visible
+	 * Returns an array that holds the field data, suitable for JSON representation.
+	 * This data will be available in the Underscore template and the Backbone Model.
+	 *
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
 	 */
-	public function set_visible_in_rest_api( $visible ) {
-		$this->visible_in_rest_api = $visible;
-	}
-	/**
-	 * Get the REST visibility of the field
-	 * 
-	 * @return bool
-	 */
-	public function get_visible_in_rest_api() {
-		return $this->visible_in_rest_api;
+	public function to_json( $load ) {
+		if ( $load ) {
+			$this->load();
+		}
+
+		$field_data = array(
+			'id' => $this->get_id(),
+			'type' => $this->get_type(),
+			'label' => $this->get_label(),
+			'name' => $this->get_name(),
+			'base_name' => $this->get_base_name(),
+			'value' => $this->get_value(),
+			'default_value' => $this->get_default_value(),
+			'help_text' => $this->get_help_text(),
+			'context' => $this->get_context(),
+			'required' => $this->is_required(),
+			'lazyload' => $this->get_lazyload(),
+			'width' => $this->get_width(),
+			'classes' => $this->get_classes(),
+			'conditional_logic' => $this->get_conditional_logic(),
+		);
+
+		return $field_data;
 	}
 
 	/**
