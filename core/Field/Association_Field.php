@@ -47,10 +47,30 @@ class Association_Field extends Relationship_Field {
 
 	/**
 	 * Alias for $this->get_value_set()->set( $value );
-	 **/
+	 */
 	public function set_value( $value ) {
 		$value = $this->value_string_array_to_value_set( $value );
 		parent::set_value( $value );
+	}
+
+	/**
+	 * Get value string for legacy value
+	 *
+	 * @return string
+	 */
+	protected function get_value_string_for_legacy_value( $legacy_value ) {
+		$entry_type = 'post';
+		$entry_subtype = 'post';
+
+		// attempt to find a suitable type that is registered to this field as post type is not stored for legacy data
+		foreach ( $this->types as $type ) {
+			if ( $type['type'] === $entry_type ) {
+				$entry_subtype = $type['post_type'];
+				break;
+			}
+		}
+
+		return $entry_type . ':' . $entry_subtype . ':' . $legacy_value;
 	}
 
 	/**
@@ -61,6 +81,11 @@ class Association_Field extends Relationship_Field {
 	 * @return array
 	 */
 	protected function value_string_to_property_array( $value_string ) {
+		if ( is_numeric( $value_string ) ) {
+			// we are dealing with legacy data that only contains a post ID
+			$value_string = $this->get_value_string_for_legacy_value( $value_string );
+		}
+
 		$value_pieces = explode( ':', $value_string );
 		$type = isset( $value_pieces[0] ) ? $value_pieces[0] : 'post';
 		$subtype = isset( $value_pieces[1] ) ? $value_pieces[1] : 'post';
