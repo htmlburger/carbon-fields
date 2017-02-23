@@ -19,7 +19,9 @@ import { resetStore } from 'store/actions';
 import { normalizePreloadedState } from 'store/helpers';
 import {
 	createSelectboxChannel,
-	createAjaxChannel
+	createAjaxChannel,
+	createSubmitChannel,
+	createClickChannel
 } from 'lib/events';
 
 import containerFactory from 'containers/factory';
@@ -34,6 +36,7 @@ import {
 
 import {
 	setupContainer,
+	validateContainers,
 	setMeta,
 	setUI
 } from 'containers/actions';
@@ -161,6 +164,21 @@ export function* workerReset(store) {
 }
 
 /**
+ * Handle the form submission.
+ *
+ * @return {void}
+ */
+export function* workerFormSubmit(channelCreator, selector) {
+	const channel = yield call(channelCreator, selector);
+
+	while (true) {
+		const { event } = yield take(channel);
+
+		yield put(validateContainers(event));
+	}
+}
+
+/**
  * Start to work.
  *
  * @return {void}
@@ -168,6 +186,8 @@ export function* workerReset(store) {
 export default function* foreman(store) {
 	yield [
 		takeEvery(setupContainer, workerSetupContainer),
-		fork(workerReset, store),
+		call(workerReset, store),
+		call(workerFormSubmit, createClickChannel, 'form#addtag #submit'),
+		call(workerFormSubmit, createSubmitChannel, 'form#edittag'),
 	];
 }

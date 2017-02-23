@@ -42,6 +42,7 @@ module.exports = {
 	resolve: {
 		modules: [
 			path.resolve(__dirname, 'assets/react'),
+			path.resolve(__dirname, 'assets/vendor'),
 			'node_modules'
 		]
 	},

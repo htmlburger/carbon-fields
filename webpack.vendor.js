@@ -21,7 +21,8 @@ module.exports = {
 			'lodash',
 			'object-path-immutable',
 			'classnames',
-			'react-onclickoutside'
+			'react-onclickoutside',
+			'jquery-bind-first'
 		]
 	},
 
@@ -43,9 +44,27 @@ module.exports = {
 	// Setup the sourcemaps.
 	devtool: 'cheap-module-source-map',
 
+	// Some of our dependencies are already loaded by WordPress.
+	externals: {
+		'jquery': 'jQuery'
+	},
+
+	// Add aliases to allow easier importing of the modules.
+	resolve: {
+		modules: [
+			path.resolve(__dirname, 'assets/vendor'),
+			'node_modules'
+		]
+	},
+
 	// Setup the plugins.
 	plugins: [
+		new webpack.ProvidePlugin({
+			'jQuery': 'jquery'
+		}),
+
 		new webpack.DllPlugin({
+			context: __dirname,
 			path: path.join(__dirname, 'assets', '[name].json'),
 			name: '[name]'
 		})

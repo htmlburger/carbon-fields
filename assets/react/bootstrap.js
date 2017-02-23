@@ -2,6 +2,7 @@
  * The external dependencies.
  */
 import 'babel-polyfill';
+import 'jquery-bind-first';
 import _ from 'lodash';
 
 /**

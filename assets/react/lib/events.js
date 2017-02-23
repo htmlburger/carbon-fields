@@ -34,7 +34,7 @@ export function createChannel(selector, event, handler, childSelector = null) {
 		}
 
 		// Setup the subscription.
-		$element.on(event, childSelector, (event) => {
+		$element.onFirst(event, childSelector, (event) => {
 			handler(emit, $element, event);
 		});
 
@@ -100,6 +100,22 @@ export function createScrollChannel(selector) {
  */
 export function createSubmitChannel(selector) {
 	return createChannel(selector, 'submit', (emit, $element, event) => {
+		if (event) {
+			emit({
+				event,
+			});
+		}
+	});
+}
+
+/**
+ * Create a channel that will listen for `click` events.
+ *
+ * @param  {String} selector
+ * @return {Object}
+ */
+export function createClickChannel(selector) {
+	return createChannel(selector, 'click', (emit, $element, event) => {
 		if (event) {
 			emit({
 				event,
