@@ -15,12 +15,18 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 class Complex_Field extends Field {
 
+	/**
+	 * Visual layout type constants
+	 */
 	const LAYOUT_GRID = 'grid'; // default
 
 	const LAYOUT_TABBED_HORIZONTAL = 'tabbed-horizontal';
 
 	const LAYOUT_TABBED_VERTICAL = 'tabbed-vertical';
 
+	/**
+	 * Key which defines what a group's type/name is
+	 */
 	const GROUP_TYPE_KEY = '_type';
 
 	/**
@@ -30,23 +36,57 @@ class Complex_Field extends Field {
 	 */
 	protected $default_value = array();
 
+	/**
+	 * Complex field layout
+	 * 
+	 * @var string static::LAYOUT_* constant
+	 */
 	protected $layout = self::LAYOUT_GRID;
 
+	/**
+	 * Value tree describing the complex values ( ['value_set'] ) and all groups with their child fields ( ['groups'] )
+	 * 
+	 * @var array
+	 */
 	protected $value_tree = array(
 		'value_set' => array(),
 		'groups' => array(),
 	);
 
-	protected $fields = array();
-
+	/**
+	 * Array of groups registered for this complex field
+	 * 
+	 * @var array
+	 */
 	protected $groups = array();
 
+	/**
+	 * Minimum number of entries. -1 for no limit
+	 * 
+	 * @var integer
+	 */
 	protected $values_min = -1;
 
+	/**
+	 * Maximum number of entries. -1 for no limit
+	 * 
+	 * @var integer
+	 */
 	protected $values_max = -1;
 
+	/**
+	 * Default entry state - collapsed or not
+	 * 
+	 * @var boolean
+	 */
 	protected $collapsed = false;
 
+	/**
+	 * Entry labels
+	 * These are translated in init()
+	 * 
+	 * @var array
+	 */
 	public $labels = array(
 		'singular_name' => 'Entry',
 		'plural_name' => 'Entries',
@@ -65,8 +105,24 @@ class Complex_Field extends Field {
 	}
 
 	/**
+	 * Initialization tasks.
+	 */
+	public function init() {
+		$this->labels = array(
+			'singular_name' => __( $this->labels['singular_name'], \Carbon_Fields\TEXT_DOMAIN ),
+			'plural_name' => __( $this->labels['plural_name'], \Carbon_Fields\TEXT_DOMAIN ),
+		);
+
+		// Include the complex group Underscore templates
+		$this->add_template( 'Complex-Group', array( $this, 'template_group' ) );
+		$this->add_template( 'Complex-Group-Tab-Item', array( $this, 'template_group_tab_item' ) );
+
+		parent::init();
+	}
+
+	/**
 	 * Set array of hierarchy field names
-	 **/
+	 */
 	public function set_hierarchy( $hierarchy ) {
 		parent::set_hierarchy( $hierarchy );
 		$this->update_child_hierarchy();
@@ -74,7 +130,7 @@ class Complex_Field extends Field {
 	
 	/**
 	 * Propagate hierarchy to child fields
-	 **/
+	 */
 	public function update_child_hierarchy() {
 		$hierarchy = array_merge( $this->get_hierarchy(), array( $this->get_base_name() ) );
 		$fields = $this->get_fields();
@@ -95,19 +151,38 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Initialization tasks.
+	 * Set the datastore of this field and propagate it to children
+	 *
+	 * @param Datastore_Interface $datastore
 	 */
-	public function init() {
-		$this->labels = array(
-			'singular_name' => __( 'Entry', \Carbon_Fields\TEXT_DOMAIN ),
-			'plural_name' => __( 'Entries', \Carbon_Fields\TEXT_DOMAIN ),
-		);
+	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
+		if ( $set_as_default && ! $this->has_default_datastore() ) {
+			return $this; // datastore has been overriden with a custom one - abort changing to a default one
+		}
+		$this->datastore = $datastore;
+		$this->has_default_datastore = $set_as_default;
 
-		// Include the complex group Underscore templates
-		$this->add_template( 'Complex-Group', array( $this, 'template_group' ) );
-		$this->add_template( 'Complex-Group-Tab-Item', array( $this, 'template_group_tab_item' ) );
+		foreach ( $this->groups as $group ) {
+			$group->set_datastore( $this->get_datastore(), true );
+		}
+		return $this;
+	}
 
-		parent::init();
+	/**
+	 * Retrieve all groups of fields.
+	 *
+	 * @return array $fields
+	 */
+	public function get_fields() {
+		$fields = array();
+
+		foreach ( $this->groups as $group ) {
+			$group_fields = $group->get_fields();
+
+			$fields = array_merge( $fields, $group_fields );
+		}
+
+		return $fields;
 	}
 
 	/**
@@ -156,6 +231,33 @@ class Complex_Field extends Field {
 	}
 
 	/**
+	 * Retrieve the groups of this field.
+	 *
+	 * @return array
+	 */
+	public function get_group_names() {
+		return array_keys( $this->groups );
+	}
+
+	/**
+	 * Retrieve a group by its name.
+	 *
+	 * @param  string $group_name        Group name
+	 * @return Group_Field $group_object Group object
+	 */
+	public function get_group_by_name( $group_name ) {
+		$group_object = null;
+
+		foreach ( $this->groups as $group ) {
+			if ( $group->get_name() == $group_name ) {
+				$group_object = $group;
+			}
+		}
+
+		return $group_object;
+	}
+
+	/**
 	 * Set the group label Underscore template.
 	 *
 	 * @param  string|callable $template
@@ -182,23 +284,6 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Retrieve all groups of fields.
-	 *
-	 * @return array $fields
-	 */
-	public function get_fields() {
-		$fields = array();
-
-		foreach ( $this->groups as $group ) {
-			$group_fields = $group->get_fields();
-
-			$fields = array_merge( $fields, $group_fields );
-		}
-
-		return $fields;
-	}
-
-	/**
 	 * Set the field labels.
 	 * Currently supported values:
 	 *  - singular_name - the singular entry label
@@ -212,31 +297,13 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Set the datastore of this field.
-	 *
-	 * @param Datastore_Interface $datastore
-	 */
-	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
-		if ( $set_as_default && ! $this->has_default_datastore() ) {
-			return $this; // datastore has been overriden with a custom one - abort changing to a default one
-		}
-		$this->datastore = $datastore;
-		$this->has_default_datastore = $set_as_default;
-
-		foreach ( $this->groups as $group ) {
-			$group->set_datastore( $this->get_datastore(), true );
-		}
-		return $this;
-	}
-
-	/**
 	 * Return a clone of a field with hierarchy settings applied
 	 *
 	 * @param Field $field
 	 * @param Field $parent_field
 	 * @param int $entry_index
 	 * @return Field
-	 **/
+	 */
 	public function get_clone_under_field_in_hierarchy( $field, $parent_field, $entry_index = 0 ) {
 		$clone = clone $field;
 		$clone->set_hierarchy( array_merge( $parent_field->get_hierarchy(), array( $parent_field->get_base_name() ) ) );
@@ -244,11 +311,50 @@ class Complex_Field extends Field {
 		return $clone;
 	}
 
+	protected function get_prefilled_field_groups( $value_tree ) {
+		$fields = array();
+
+		if ( empty( $value_tree ) ) {
+			return $fields;
+		}
+
+		foreach ( $value_tree['value_set'] as $entry_index => $value ) {
+			$group_name = $value[ Value_Set::VALUE_PROPERTY ];
+			$group = $this->get_group_by_name( $group_name );
+			$group_fields = $group->get_fields();
+			$fields[ $entry_index ] = array(
+				static::GROUP_TYPE_KEY => $group->get_name(),
+			);
+			$group_values = array();
+			if ( isset( $value_tree['groups'][ $entry_index ] ) ) {
+				$group_values = $value_tree['groups'][ $entry_index ];
+			}
+
+			foreach ( $group_fields as $field ) {
+				$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $entry_index );
+				if ( isset( $group_values[ $clone->get_base_name() ] ) ) {
+					$group_value = $group_values[ $clone->get_base_name() ];
+					
+					if ( isset( $group_value['value_set'] ) ) {
+						$clone->set_value( $group_value['value_set'] );
+					}
+
+					if ( is_a( $clone, get_class() ) ) {
+						$clone->set_value_tree( $group_value );
+					}
+				}
+				$fields[ $entry_index ][] = $clone;
+			}
+		}
+
+		return $fields;
+	}
+
 	/**
 	 * Load the field value from an input array based on it's name.
 	 *
 	 * @param array $input Array of field names and values.
-	 **/
+	 */
 	public function set_value_from_input( $input ) {
 		if ( ! isset( $input[ $this->get_name() ] ) ) {
 			return;
@@ -299,45 +405,6 @@ class Complex_Field extends Field {
 		$this->set_value_tree( $value_tree );
 	}
 
-	protected function get_prefilled_field_groups( $value_tree ) {
-		$fields = array();
-
-		if ( empty( $value_tree ) ) {
-			return $fields;
-		}
-
-		foreach ( $value_tree['value_set'] as $entry_index => $value ) {
-			$group_name = $value[ Value_Set::VALUE_PROPERTY ];
-			$group = $this->get_group_by_name( $group_name );
-			$group_fields = $group->get_fields();
-			$fields[ $entry_index ] = array(
-				static::GROUP_TYPE_KEY => $group->get_name(),
-			);
-			$group_values = array();
-			if ( isset( $value_tree['groups'][ $entry_index ] ) ) {
-				$group_values = $value_tree['groups'][ $entry_index ];
-			}
-
-			foreach ( $group_fields as $field ) {
-				$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $entry_index );
-				if ( isset( $group_values[ $clone->get_base_name() ] ) ) {
-					$group_value = $group_values[ $clone->get_base_name() ];
-					
-					if ( isset( $group_value['value_set'] ) ) {
-						$clone->set_value( $group_value['value_set'] );
-					}
-
-					if ( is_a( $clone, get_class() ) ) {
-						$clone->set_value_tree( $group_value );
-					}
-				}
-				$fields[ $entry_index ][] = $clone;
-			}
-		}
-
-		return $fields;
-	}
-
 	/**
 	 * Load all groups of fields and their data.
 	 */
@@ -382,7 +449,7 @@ class Complex_Field extends Field {
 	 * Return the full value tree of all groups and their fields
 	 *
 	 * @return mixed
-	 **/
+	 */
 	public function get_value_tree() {
 		return (array) $this->value_tree;
 	}
@@ -412,18 +479,16 @@ class Complex_Field extends Field {
 	 * 		),
 	 * 		...
 	 * ),
-	 * 
-	 * @return mixed
-	 **/
+	 */
 	public function set_value_tree( $value_tree ) {
-		return $this->value_tree = $value_tree;
+		$this->value_tree = $value_tree;
 	}
 
 	/**
 	 * Return a differently formatted value for end-users
 	 *
 	 * @return mixed
-	 **/
+	 */
 	public function get_formatted_value() {
 		$field_groups = $this->get_prefilled_field_groups( $this->get_value_tree() );
 		
@@ -486,7 +551,7 @@ class Complex_Field extends Field {
 			'multiple_groups' => count( $groups_data ) > 1,
 			'groups' => $groups_data,
 			'value' => $value_data,
-			'collapsed' => $this->collapsed,
+			'collapsed' => $this->get_collapsed(),
 		) );
 		return $complex_data;
 	}
@@ -644,16 +709,6 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Set the minimum number of entries.
-	 *
-	 * @param int $min
-	 */
-	public function set_min( $min ) {
-		$this->values_min = intval( $min );
-		return $this;
-	}
-
-	/**
 	 * Get the minimum number of entries.
 	 *
 	 * @return int $min
@@ -663,12 +718,12 @@ class Complex_Field extends Field {
 	}
 
 	/**
-	 * Set the maximum number of entries.
+	 * Set the minimum number of entries.
 	 *
-	 * @param int $max
+	 * @param int $min
 	 */
-	public function set_max( $max ) {
-		$this->values_max = intval( $max );
+	public function set_min( $min ) {
+		$this->values_min = intval( $min );
 		return $this;
 	}
 
@@ -682,6 +737,25 @@ class Complex_Field extends Field {
 	}
 
 	/**
+	 * Set the maximum number of entries.
+	 *
+	 * @param int $max
+	 */
+	public function set_max( $max ) {
+		$this->values_max = intval( $max );
+		return $this;
+	}
+
+	/**
+	 * Get collapsed state
+	 *
+	 * @return bool
+	 */
+	public function get_collapsed() {
+		return $this->collapsed;
+	}
+
+	/**
 	 * Change the groups initial collapse state.
 	 * This state relates to the state of which the groups are rendered.
 	 *
@@ -689,34 +763,6 @@ class Complex_Field extends Field {
 	 */
 	public function set_collapsed( $collapsed = true ) {
 		$this->collapsed = $collapsed;
-
 		return $this;
-	}
-
-	/**
-	 * Retrieve the groups of this field.
-	 *
-	 * @return array
-	 */
-	public function get_group_names() {
-		return array_keys( $this->groups );
-	}
-
-	/**
-	 * Retrieve a group by its name.
-	 *
-	 * @param  string $group_name        Group name
-	 * @return Group_Field $group_object Group object
-	 */
-	public function get_group_by_name( $group_name ) {
-		$group_object = null;
-
-		foreach ( $this->groups as $group ) {
-			if ( $group->get_name() == $group_name ) {
-				$group_object = $group;
-			}
-		}
-
-		return $group_object;
 	}
 }
