@@ -24,7 +24,7 @@ abstract class Condition implements Fulfillable {
 	 * @return mixed
 	 */
 	public function get_value() {
-		return $value;
+		return $this->value;
 	}
 	
 	/**

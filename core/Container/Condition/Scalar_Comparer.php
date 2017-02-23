@@ -21,7 +21,7 @@ class Scalar_Comparer extends Comparer {
 	 * @return bool
 	 */
 	public function compare( $a, $b ) {
-		switch ( $comparison_sign ) {
+		switch ( $this->get_comparison_sign() ) {
 			case '>':
 				return $a > $b;
 			case '>=':

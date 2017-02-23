@@ -132,9 +132,10 @@ class Fulfillable_Collection implements Fulfillable {
 	/**
 	 * Check if all fulfillables are fulfilled taking into account their fulfillable comparison
 	 * 
+	 * @param  array $environment
 	 * @return bool
 	 */
-	public function is_fulfilled() {
+	public function is_fulfilled( $environment ) {
 		$fulfilled = true;
 		foreach ( $this->fulfillables as $i => $fulfillable_tuple ) {
 			$fulfillable = $fulfillable_tuple['fulfillable'];
@@ -142,20 +143,20 @@ class Fulfillable_Collection implements Fulfillable {
 
 			if ( $i === 0 ) {
 				// Ignore first comparison as we need a base fulfillment value
-				$fulfilled = $fulfillable->is_fulfilled();
+				$fulfilled = $fulfillable->is_fulfilled( $environment );
 				continue;
 			}
 
 			// minor optimization - avoid unnecessary AND check if $fulfilled is currently false
 			// false && whatever is always false
 			if ( $fulfillable_comparison === 'AND' && $fulfilled ) {
-				$fulfilled = $fulfillable->is_fulfilled();
+				$fulfilled = $fulfillable->is_fulfilled( $environment );
 			}
 
 			// minor optimization - avoid unnecessary OR check if $fulfilled is currently true
 			// true || whatever is always true
 			if ( $fulfillable_comparison === 'OR' && ! $fulfilled ) {
-				$fulfilled = $fulfillable->is_fulfilled();
+				$fulfilled = $fulfillable->is_fulfilled( $environment );
 			}
 		}
 		return $fulfilled;
