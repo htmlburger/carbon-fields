@@ -1,9 +1,10 @@
 /**
  * The external dependencies.
  */
+import $ from 'jquery';
 import urldecode from 'locutus/php/url/urldecode';
 import { takeEvery, takeLatest } from 'redux-saga';
-import { call, select, put } from 'redux-saga/effects';
+import { call, select, put, take } from 'redux-saga/effects';
 import { keyBy } from 'lodash';
 
 /**
@@ -21,7 +22,11 @@ import {
 	setUI
 } from 'containers/actions';
 
-import { addFields } from 'fields/actions';
+import {
+	addFields,
+	validateFields,
+	markFieldAsInvalid
+} from 'fields/actions';
 import { flattenField } from 'fields/helpers';
 
 /**
@@ -75,7 +80,38 @@ export function* workerReceiveContainer(store, { payload }) {
  * @return {void}
  */
 export function* workerValidate(action) {
-	console.log(action);
+	const event = action.payload;
+	const $target = $(event.currentTarget);
+	const $spinner = $('#publishing-action .spinner', $target);
+	const $error = $('.carbon-error-required strong');
+
+	$spinner.addClass('is-active');
+
+	yield put(validateFields());
+
+	// Block and wait for an invalid field. In case we don't receive
+	// such action the worker will be canceled and the process will continue.
+	const invalidAction = yield take(markFieldAsInvalid);
+
+	event.preventDefault();
+
+	$spinner.removeClass('is-active');
+
+	if ($error.length) {
+		$error.text(carbonFieldsL10n.container.pleaseFillTheRequiredFields);
+	} else {
+		const html = `
+			<div class="settings-error error hidden below-h2 carbon-error-required">
+				<p>
+					<strong>${carbonFieldsL10n.container.pleaseFillTheRequiredFields}</strong>
+				</p>
+			</div>
+		`;
+
+		$(html)
+			.insertAfter('#wpbody-content > .wrap > h2')
+			.slideDown();
+	}
 }
 
 /**

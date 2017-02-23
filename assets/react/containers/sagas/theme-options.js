@@ -3,7 +3,7 @@
  */
 import $ from 'jquery';
 import { takeEvery } from 'redux-saga';
-import { take, call, select, fork, put } from 'redux-saga/effects';
+import { take, call, select, put } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
@@ -58,8 +58,6 @@ export function* workerFormSubmit() {
 
 	while (true) {
 		const { event } = yield take(channel);
-
-		event.preventDefault();
 
 		yield put(validateContainers(event));
 	}
