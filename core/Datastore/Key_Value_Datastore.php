@@ -41,7 +41,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	}
 
 	/**
-	 * Get array of ancestor entry indexes (ordered top-bottom)
+	 * Get array of ancestor group indexes (ordered top-bottom)
 	 * Indexes show which entry/group this field belongs to in a Complex_Field
 	 *
 	 * @param Field $field
@@ -54,24 +54,13 @@ abstract class Key_Value_Datastore extends Datastore {
 	}
 
 	/**
-	 * Raw Value Set Tree schema:
-	 * array(
-	 *     [field_name] => array(
-	 *         'value_set' => [raw_value_set],
-	 *         'groups' => array(
-	 *             array(
-	 *                 [recursion]
-	 *             ),
-	 *             ...
-	 *         ),
-	 *     ),
-	 *     ...
-	 * )
-	 *
+	 * Convert a cascading storage array to a value tree array
+	 * 
+	 * @see Internal Glossary in DEVELOPMENT.MD
 	 * @param array<stdClass> $storage_array
 	 * @return array
 	 */
-	protected function cascading_storage_array_to_raw_value_set_tree( $storage_array ) {
+	protected function cascading_storage_array_to_value_tree_array( $storage_array ) {
 		$tree = array();
 
 		foreach ( $storage_array as $row ) {
@@ -122,28 +111,30 @@ abstract class Key_Value_Datastore extends Datastore {
 	}
 
 	/**
-	 * Get a reduced raw value set tree only relevant to the specified field
-	 * 
-	 * @param  array $raw_value_set_tree
+	 * Convert a value set tree to a value tree for the specified field
+	 * (get a single value tree from the collection)
+	 *
+	 * @see Internal Glossary in DEVELOPMENT.MD
+	 * @param  array $value_tree_array
 	 * @param  Field $field
 	 * @return array
 	 */
-	protected function reduce_raw_value_set_tree_to_field( $raw_value_set_tree, Field $field ) {
-		$field_raw_value_set_tree = $raw_value_set_tree;
+	protected function value_tree_array_to_value_tree( $value_tree_array, Field $field ) {
+		$value_tree = $value_tree_array;
 		$hierarchy = $field->get_hierarchy();
 		$hierarchy_index = $field->get_hierarchy_index();
 
 		foreach ( $hierarchy as $index => $parent_field ) {
-			if ( isset( $field_raw_value_set_tree[ $parent_field ]['groups'][ $hierarchy_index[ $index ] ] ) ) {
-				$field_raw_value_set_tree = $field_raw_value_set_tree[ $parent_field ]['groups'][ $hierarchy_index[ $index ] ];
+			if ( isset( $value_tree[ $parent_field ]['groups'][ $hierarchy_index[ $index ] ] ) ) {
+				$value_tree = $value_tree[ $parent_field ]['groups'][ $hierarchy_index[ $index ] ];
 			}
 		}
 
-		if ( isset( $field_raw_value_set_tree[ $field->get_base_name() ] ) ) {
-			$field_raw_value_set_tree = $field_raw_value_set_tree[ $field->get_base_name() ];
+		if ( isset( $value_tree[ $field->get_base_name() ] ) ) {
+			$value_tree = $value_tree[ $field->get_base_name() ];
 		}
 
-		return $field_raw_value_set_tree;
+		return $value_tree;
 	}
 
 	/**
@@ -164,9 +155,9 @@ abstract class Key_Value_Datastore extends Datastore {
 	public function load( Field $field ) {
 		$storage_key_patterns = $this->key_toolset->get_storage_key_getter_patterns( $field->is_simple_root_field(), $this->get_full_hierarchy_for_field( $field ) );
 		$cascading_storage_array = $this->get_storage_array( $field, $storage_key_patterns );
-		$raw_value_set_tree = $this->cascading_storage_array_to_raw_value_set_tree( $cascading_storage_array );
-		$raw_value_set_tree = $this->reduce_raw_value_set_tree_to_field( $raw_value_set_tree, $field );
-		return $raw_value_set_tree;
+		$value_tree_array = $this->cascading_storage_array_to_value_tree_array( $cascading_storage_array );
+		$value_tree = $this->value_tree_array_to_value_tree( $value_tree_array, $field );
+		return $value_tree;
 	}
 
 	/**

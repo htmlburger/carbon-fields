@@ -62,7 +62,8 @@ class Post_Meta_Container extends Container {
 	 * Bind attach() and save() to the appropriate WordPress actions.
 	 **/
 	public function init() {
-		$request_post_id = isset( $_GET['post'] ) ? intval( $_GET['post'] ) : 0;
+		$input = stripslashes_deep( $_GET );
+		$request_post_id = isset( $input['post'] ) ? intval( $input['post'] ) : 0;
 		if ( $request_post_id > 0 ) {
 			$this->set_post_id( $request_post_id );
 		}
@@ -129,6 +130,8 @@ class Post_Meta_Container extends Container {
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
+		$input = stripslashes_deep( $_GET );
+
 		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
 			return false;
 		}
@@ -136,7 +139,7 @@ class Post_Meta_Container extends Container {
 		// Post types check
 		if ( ! empty( $this->settings['post_type'] ) ) {
 			$post_type = '';
-			$request_post_type = isset( $_GET['post_type'] ) ? $_GET['post_type'] : '';
+			$request_post_type = isset( $input['post_type'] ) ? $input['post_type'] : '';
 
 			if ( $this->post_id ) {
 				$post_type = get_post_type( $this->post_id );

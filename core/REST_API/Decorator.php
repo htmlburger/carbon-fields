@@ -35,6 +35,7 @@ class Decorator {
 	 * Register Carbon Fields using the register_rest_field() function
 	 */
 	public function register_fields() {
+
 		$containers = $this->container_repository->get_containers();
 		$containers = array_filter( $containers, function( $container ) {
 			return ( $container->type !== 'Theme_Options' );
@@ -61,11 +62,7 @@ class Decorator {
 
 				$setter = function( $value, $object, $field_name ) use ( $container ) {
 					$object_id = self::get_object_id( $object, $container->type );
-					$success = Helper::set_value( $object_id, $container->type, $field_name, $value );
-					if ( ! $success ) {
-						echo 'Failed to find or update field "' . $field_name . '".';
-						exit;
-					}
+					Helper::set_value( $object_id, $container->type, $field_name, $value );
 				};
 
 				register_rest_field( $types,

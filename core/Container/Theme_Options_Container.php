@@ -13,7 +13,7 @@ class Theme_Options_Container extends Container {
 	protected static $registered_pages = array();
 
 	public $settings = array(
-		'parent' => 'self',
+		'parent' => '',
 		'file' => '',
 		'permissions' => 'manage_options',
 	);
@@ -39,9 +39,7 @@ class Theme_Options_Container extends Container {
 	 * Attach container as a theme options page/subpage.
 	 **/
 	public function init() {
-		if ( ! $this->settings['parent'] || $this->settings['parent'] == 'self' ) {
-			$this->settings['parent'] = '';
-		} else if ( strpos( $this->settings['parent'], '.php' ) === false ) {
+		if ( $this->settings['parent'] !== '' && strpos( $this->settings['parent'], '.php' ) === false ) {
 			$clear_title = $this->clear_string( $this->settings['parent'] );
 			$this->settings['parent'] = 'crbn-' . $clear_title . '.php';
 		}
@@ -167,8 +165,8 @@ class Theme_Options_Container extends Container {
 		$file = $this->settings['file'];
 		$parent = $this->settings['parent'];
 
-		// Register top level page
 		if ( ! $parent ) {
+			// Register top level page
 			if ( isset( static::$registered_pages[ $file ] ) ) {
 				Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" already registered' );
 			}
@@ -179,38 +177,14 @@ class Theme_Options_Container extends Container {
 
 		// Register sub-page
 		if ( ! isset( static::$registered_pages[ $parent ] ) ) {
-			static::$registered_pages[ $parent ] = array( $file );
-		} elseif ( in_array( $file, static::$registered_pages[ $parent ] ) ) {
+			static::$registered_pages[ $parent ] = array();
+		}
+
+		if ( in_array( $file, static::$registered_pages[ $parent ] ) ) {
 			Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a name for the container.' );
-		} else {
-			static::$registered_pages[ $parent ][] = $file;
-		}
-	}
-
-	/**
-	 * Unregister the container parent and child pages.
-	 **/
-	public function drop_unique_page() {
-		$file = $this->settings['file'];
-		$parent = $this->settings['parent'];
-
-		// Register top level page
-		if ( ! $parent ) {
-			if ( isset( static::$registered_pages[ $file ] ) && empty( static::$registered_pages[ $file ] ) ) {
-				unset( static::$registered_pages[ $file ] );
-			}
-
-			return;
 		}
 
-		// Register sub-page
-		if ( isset( static::$registered_pages[ $parent ] ) && in_array( $file, static::$registered_pages[ $parent ] ) ) {
-
-			$index = array_search( $file, static::$registered_pages[ $parent ] );
-			if ( $index !== false ) {
-				unset( static::$registered_pages[ $parent ][ $index ] );
-			}
-		}
+		static::$registered_pages[ $parent ][] = $file;
 	}
 
 	/**

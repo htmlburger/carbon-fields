@@ -295,10 +295,7 @@ class Router {
 		
 		foreach ( $options as $key => $value ) {
 			try {
-				$success = Helper::set_value( null, 'Theme_Options', $key, $value );
-				if ( ! $success ) {
-					return new \WP_REST_Response( 'Failed to find or update field "' . $key . '".' );
-				}
+				Helper::set_value( null, 'Theme_Options', $key, $value );
 			} catch ( \Exception $e ) {
 				return new \WP_REST_Response( wp_strip_all_tags( $e->getMessage() ) );
 			}
