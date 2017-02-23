@@ -112,11 +112,6 @@ class Complex_Field extends Field {
 			'singular_name' => __( $this->labels['singular_name'], \Carbon_Fields\TEXT_DOMAIN ),
 			'plural_name' => __( $this->labels['plural_name'], \Carbon_Fields\TEXT_DOMAIN ),
 		);
-
-		// Include the complex group Underscore templates
-		$this->add_template( 'Complex-Group', array( $this, 'template_group' ) );
-		$this->add_template( 'Complex-Group-Tab-Item', array( $this, 'template_group_tab_item' ) );
-
 		parent::init();
 	}
 
