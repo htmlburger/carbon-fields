@@ -95,6 +95,9 @@ export function* workerValidate(action) {
 
 	event.preventDefault();
 
+	// Prevent execution of WordPress's validation.
+	event.stopImmediatePropagation();
+
 	$spinner.removeClass('is-active');
 
 	if ($error.length) {

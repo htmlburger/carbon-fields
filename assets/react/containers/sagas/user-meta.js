@@ -8,10 +8,10 @@ import { take, call, put, fork, select } from 'redux-saga/effects';
 /**
  * The internal dependencies.
  */
-import { createSelectboxChannel } from 'lib/events';
+import { createSelectboxChannel, createSubmitChannel } from 'lib/events';
 
 import { getContainerById, canProcessAction } from 'containers/selectors';
-import { setupContainer, setMeta, setUI } from 'containers/actions';
+import { setupContainer, validateContainers, setMeta, setUI } from 'containers/actions';
 import { TYPE_USER_META } from 'containers/constants';
 
 /**
@@ -97,6 +97,21 @@ export function* workerCheckVisibility(action) {
 }
 
 /**
+ * Handle the form submission.
+ *
+ * @return {void}
+ */
+export function* workerFormSubmit() {
+	const channel = yield call(createSubmitChannel, 'form#your-profile, form#createuser');
+
+	while (true) {
+		const { event } = yield take(channel);
+
+		yield put(validateContainers(event));
+	}
+}
+
+/**
  * Start to work.
  *
  * @return {void}
@@ -105,5 +120,6 @@ export default function* foreman() {
 	yield [
 		takeEvery(setupContainer, workerSetupContainer),
 		takeEvery(setMeta, workerCheckVisibility),
+		call(workerFormSubmit),
 	];
 }
