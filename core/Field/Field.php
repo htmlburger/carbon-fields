@@ -539,7 +539,7 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Alias for $this->get_value_set()->get_set(); with fallback to default value
 	 *
-	 * @return mixed
+	 * @return array<array>
 	 **/
 	public function get_full_value() {
 		if ( $this->get_value_set()->get_set() === null ) {
