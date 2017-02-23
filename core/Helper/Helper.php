@@ -22,7 +22,6 @@ class Helper {
 	public static function get_value( $object_id, $container_type, $field_name ) {
 		$repository = App::resolve( 'container_repository' );
 		$field = $repository->get_field_in_containers( $field_name, $container_type );
-		$default_value = ''; // for consistency - get_post_meta returns an empty string when a meta key does not exist
 
 		if ( ! $field ) {
 			Incorrect_Syntax_Exception::raise( 'Could not find a field which satisfies the supplied pattern: ' . $field_name );
