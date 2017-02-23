@@ -140,6 +140,16 @@ class App {
 	}
 
 	/**
+	 * Check if a dependency is registered
+	 *
+	 * @param string $key
+	 * @return bool
+	 */
+	public static function has( $key ) {
+		return isset( static::instance()->ioc[ $key ] );
+	}
+
+	/**
 	 * Replace the ioc container for the App
 	 * 
 	 * @param  PimpleContainer $ioc
