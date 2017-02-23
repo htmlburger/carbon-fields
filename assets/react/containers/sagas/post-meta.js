@@ -8,11 +8,23 @@ import { reduce, isEmpty, isArray, camelCase } from 'lodash';
 /**
  * The internal dependencies.
  */
-import { createSelectboxChannel, createCheckableChannel } from 'lib/events';
+import {
+	createSelectboxChannel,
+	createCheckableChannel,
+	createSubmitChannel
+} from 'lib/events';
+
 import { PAGE_NOW_PAGE } from 'lib/constants';
 
 import { getContainerById, canProcessAction } from 'containers/selectors';
-import { setupContainer, setMeta, setUI } from 'containers/actions';
+
+import {
+	setupContainer,
+	validateContainers,
+	setMeta,
+	setUI
+} from 'containers/actions';
+
 import { TYPE_POST_META } from 'containers/constants';
 import { SETUP_CONTAINER, SET_META } from 'containers/actions';
 
@@ -294,6 +306,21 @@ export function* workerCheckVisibility(action) {
 }
 
 /**
+ * Handle the form submission.
+ *
+ * @return {void}
+ */
+export function* workerFormSubmit() {
+	const channel = yield call(createSubmitChannel, ':not(.comment-php) form#post');
+
+	while (true) {
+		const { event } = yield take(channel);
+
+		yield put(validateContainers(event));
+	}
+}
+
+/**
  * Start to work.
  *
  * @return {void}
@@ -302,5 +329,6 @@ export default function* foreman() {
 	yield [
 		takeEvery(setupContainer, workerSetupContainer),
 		takeEvery(setMeta, workerCheckVisibility),
+		call(workerFormSubmit)
 	];
 }
