@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import { takeEvery, takeLatest, delay } from 'redux-saga';
-import { put, call, select } from 'redux-saga/effects';
+import { put, call, select, take } from 'redux-saga/effects';
 import { isUndefined, isNull } from 'lodash';
 
 /**
@@ -15,10 +15,12 @@ import {
 	updateField,
 	validateFields,
 	markFieldAsValid,
-	markFieldAsInvalid
+	markFieldAsInvalid,
+	teardownField
 } from 'fields/actions';
 
 import { getFieldById } from 'fields/selectors';
+import { stopSaga } from 'fields/helpers';
 
 /**
  * Validate the field.
@@ -106,10 +108,10 @@ export function* workerSetup({ payload: { fieldId, validationType }}) {
 		throw new Error(`Unknown validation type '${validationType}' for field '${fieldId}'.`);
 	}
 
-	yield [
+	yield call(stopSaga, fieldId, yield [
 		takeLatest(updateField, workerValidateOnUpdate, validator, fieldId),
 		takeLatest(validateFields, workerValidateAll, validator, fieldId),
-	];
+	]);
 }
 
 /**

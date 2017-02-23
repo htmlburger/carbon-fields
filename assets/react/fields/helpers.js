@@ -1,11 +1,15 @@
 /**
  * The external dependencies.
  */
+import { call } from 'redux-saga/effects';
 import { pick, merge, uniqueId, isNull } from 'lodash';
 
 /**
  * The internal dependencies.
  */
+import { cancelTasks } from 'lib/helpers';
+
+import { teardownField } from 'fields/actions';
 import { TYPE_COMPLEX } from 'fields/constants';
 
 /**
@@ -115,4 +119,15 @@ export function restoreField(field, all) {
 	}
 
 	return field;
+}
+
+/**
+ * Kill the saga.
+ *
+ * @param  {String}   fieldId
+ * @param  {Object[]} tasks
+ * @return {void}
+ */
+export function* stopSaga(fieldId, tasks) {
+	yield call(cancelTasks, teardownField, tasks, ({ payload }) => payload.fieldId === fieldId);
 }

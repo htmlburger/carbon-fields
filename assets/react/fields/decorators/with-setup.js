@@ -29,7 +29,16 @@ const defaultHooks = {
 		if (field.required) {
 			setupValidation(field.id, VALIDATION_BASE);
 		}
-	}
+	},
+
+	componentWillUnmount() {
+		const {
+			field,
+			teardownField
+		} = this.props;
+
+		teardownField(field.id);
+	},
 };
 
 /**

@@ -14,6 +14,14 @@ import { createAction } from 'redux-actions';
 export const setupField = createAction('fields/SETUP_FIELD', (fieldId, type, ui) => ({ fieldId, type, ui }));
 
 /**
+ * Prepare the field for removal.
+ *
+ * @param  {String} fieldId
+ * @return {Object}
+ */
+export const teardownField = createAction('fields/TEARDOWN_FIELD', fieldId => ({ fieldId }));
+
+/**
  * Perform the setup of the validation logic.
  *
  * @param  {String} fieldId

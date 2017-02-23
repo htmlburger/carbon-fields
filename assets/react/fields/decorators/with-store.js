@@ -10,6 +10,7 @@ import { isFunction } from 'lodash';
 import { getFieldById } from 'fields/selectors';
 import {
 	setupField,
+	teardownField,
 	setupValidation,
 	updateField,
 	setUI,
@@ -39,6 +40,7 @@ const defaultMapStateToProps = (state, ownProps) => {
  */
 const defaultMapDispatchToProps = {
 	setupField,
+	teardownField,
 	setupValidation,
 	updateField,
 	setUI,
