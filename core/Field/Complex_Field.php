@@ -376,13 +376,13 @@ class Complex_Field extends Field {
 			}
 
 			$group = $this->get_group_by_name( $values[ static::GROUP_TYPE_KEY ] );
+			$group_fields = $group->get_fields();
+			$group_field_names = array_flip( $group->get_field_names() );
+			
 			$value_group = array( static::GROUP_TYPE_KEY => $values[ static::GROUP_TYPE_KEY ] );
 			unset( $values[ static::GROUP_TYPE_KEY ] );
 
-			$group_fields = $group->get_fields();
-
 			// trim input values to those used by the field
-			$group_field_names = array_flip( $group->get_field_names() );
 			$values = array_intersect_key( $values, $group_field_names );
 			
 			foreach ( $group_fields as $field ) {
@@ -393,7 +393,7 @@ class Complex_Field extends Field {
 					$value_group[ $tmp_field->get_base_name() ] = $tmp_field->get_value_tree();
 				} else {
 					$value_group[ $tmp_field->get_base_name() ] = array(
-						'value_set' => $tmp_field->get_value_set()->get_set(),
+						'value_set' => $tmp_field->get_full_value(),
 					);
 				}
 			}
