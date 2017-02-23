@@ -16,13 +16,10 @@ class Post_Condition extends Condition {
 	/**
 	 * Check if the condition is fulfilled
 	 * 
+	 * @param  array $environment
 	 * @return bool
 	 */
-	public function is_fulfilled() {
-		var_dump($this->get_value());
-		if ( $this->get_value() === 1 ) {
-			return true;
-		}
-		return $this->get_comparer()->compare( what?, $this->get_value() )
+	public function is_fulfilled( $environment ) {
+		return $this->get_comparer()->compare( $environment['post']->ID, $this->get_value() );
 	}
 }

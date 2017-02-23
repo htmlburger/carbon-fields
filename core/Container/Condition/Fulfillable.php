@@ -6,8 +6,9 @@ interface Fulfillable {
 
 	/**
 	 * Check if the condition is fulfilled
-	 * 
+	 *
+	 * @param  array $environment
 	 * @return bool
 	 */
-	public function is_fulfilled();
+	public function is_fulfilled( $environment );
 }
