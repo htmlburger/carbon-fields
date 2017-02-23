@@ -96,32 +96,34 @@ export function createScrollChannel(selector) {
  * Create a channel that will listen for `submit` events.
  *
  * @param  {String} selector
+ * @param  {String} [childSelector]
  * @return {Object}
  */
-export function createSubmitChannel(selector) {
+export function createSubmitChannel(selector, childSelector = null) {
 	return createChannel(selector, 'submit', (emit, $element, event) => {
 		if (event) {
 			emit({
 				event,
 			});
 		}
-	});
+	}, childSelector);
 }
 
 /**
  * Create a channel that will listen for `click` events.
  *
  * @param  {String} selector
+ * @param  {String} [childSelector]
  * @return {Object}
  */
-export function createClickChannel(selector) {
+export function createClickChannel(selector, childSelector = null) {
 	return createChannel(selector, 'click', (emit, $element, event) => {
 		if (event) {
 			emit({
 				event,
 			});
 		}
-	});
+	}, childSelector);
 }
 
 /**

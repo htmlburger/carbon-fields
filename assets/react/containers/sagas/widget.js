@@ -10,9 +10,13 @@ import { put, call, take, select, fork } from 'redux-saga/effects';
  * The internal dependencies.
  */
 import { PAGE_NOW_WIDGETS } from 'lib/constants';
-import { createWidgetsChannel, createAjaxChannel } from 'lib/events';
+import {
+	createWidgetsChannel,
+	createAjaxChannel,
+	createClickChannel
+} from 'lib/events';
 
-import { removeContainer, receiveContainer } from 'containers/actions';
+import { removeContainer, receiveContainer, validateContainers } from 'containers/actions';
 import { getContainerById } from 'containers/selectors';
 
 import { removeFields } from 'fields/actions';
@@ -81,6 +85,21 @@ export function* workerCleanup() {
 }
 
 /**
+ * Handle the form submission.
+ *
+ * @return {void}
+ */
+export function* workerFormSubmit() {
+	const channel = yield call(createClickChannel, '.widgets-php', '[name="savewidget"]');
+
+	while (true) {
+		const { event } = yield take(channel);
+
+		yield put(validateContainers(event));
+	}
+}
+
+/**
  * Start to work.
  *
  * @return {void}
@@ -93,7 +112,8 @@ export default function* foreman() {
 	}
 
 	yield [
-		fork(workerUpdate),
-		fork(workerCleanup),
+		call(workerUpdate),
+		call(workerCleanup),
+		call(workerFormSubmit),
 	];
 }
