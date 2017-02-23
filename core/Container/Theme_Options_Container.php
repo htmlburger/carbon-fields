@@ -188,32 +188,6 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
-	 * Unregister the container parent and child pages.
-	 **/
-	public function drop_unique_page() {
-		$file = $this->settings['file'];
-		$parent = $this->settings['parent'];
-
-		// Register top level page
-		if ( ! $parent ) {
-			if ( isset( static::$registered_pages[ $file ] ) && empty( static::$registered_pages[ $file ] ) ) {
-				unset( static::$registered_pages[ $file ] );
-			}
-
-			return;
-		}
-
-		// Register sub-page
-		if ( isset( static::$registered_pages[ $parent ] ) && in_array( $file, static::$registered_pages[ $parent ] ) ) {
-
-			$index = array_search( $file, static::$registered_pages[ $parent ] );
-			if ( $index !== false ) {
-				unset( static::$registered_pages[ $parent ][ $index ] );
-			}
-		}
-	}
-
-	/**
 	 * Sanitize the container title for use in
 	 * the theme options file name.
 	 **/
