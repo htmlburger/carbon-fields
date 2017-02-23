@@ -13,7 +13,7 @@ class Theme_Options_Container extends Container {
 	protected static $registered_pages = array();
 
 	public $settings = array(
-		'parent' => 'self',
+		'parent' => '',
 		'file' => '',
 		'permissions' => 'manage_options',
 	);
@@ -39,9 +39,7 @@ class Theme_Options_Container extends Container {
 	 * Attach container as a theme options page/subpage.
 	 **/
 	public function init() {
-		if ( ! $this->settings['parent'] || $this->settings['parent'] == 'self' ) {
-			$this->settings['parent'] = '';
-		} else if ( strpos( $this->settings['parent'], '.php' ) === false ) {
+		if ( $this->settings['parent'] !== '' && strpos( $this->settings['parent'], '.php' ) === false ) {
 			$clear_title = $this->clear_string( $this->settings['parent'] );
 			$this->settings['parent'] = 'crbn-' . $clear_title . '.php';
 		}
