@@ -17,7 +17,7 @@ use Carbon_Fields\REST_API\Decorator as REST_API_Decorator;
 
 use Carbon_Fields\Container\Condition\Post_Condition;
 
-use Carbon_Fields\Container\Condition\Boolean_Comparer;
+use Carbon_Fields\Container\Condition\Equality_Comparer;
 use Carbon_Fields\Container\Condition\Scalar_Comparer;
 
 
@@ -108,8 +108,8 @@ class App {
 		} );
 
 		/* Container Condition Comparers */
-		$ioc['container_condition_comparer_type_boolean'] = $ioc->factory( function ( $ioc ) {
-			return new Boolean_Comparer();
+		$ioc['container_condition_comparer_type_equality'] = $ioc->factory( function ( $ioc ) {
+			return new Equality_Comparer();
 		} );
 
 		$ioc['container_condition_comparer_type_scalar'] = $ioc->factory( function ( $ioc ) {

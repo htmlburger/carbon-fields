@@ -4,14 +4,14 @@ namespace Carbon_Fields\Container\Condition;
 
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
-class Scalar_Comparer extends Comparer {
+class Equality_Comparer extends Comparer {
 
 	/**
 	 * Supported comparison signs
 	 *
 	 * @var array<string>
 	 */
-	protected $supported_comparison_operators = array( '>', '>=', '<', '<=' );
+	protected $supported_comparison_operators = array( '=', '!=' );
 
 	/**
 	 * Check if comparison is true for $a and $b
@@ -23,14 +23,10 @@ class Scalar_Comparer extends Comparer {
 	 */
 	public function is_correct( $a, $comparison_operator, $b ) {
 		switch ( $comparison_operator ) {
-			case '>':
-				return $a > $b;
-			case '>=':
-				return $a >= $b;
-			case '<':
-				return $a < $b;
-			case '<=':
-				return $a <= $b;
+			case '=':
+				return $a === $b;
+			case '!=':
+				return $a !== $b;
 		}
 		return false;
 	}
