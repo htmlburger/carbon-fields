@@ -17,6 +17,15 @@ class Post_Condition extends Condition {
 			App::resolve( 'container_condition_comparer_type_custom' ),
 		) );
 	}
+	
+	/**
+	 * Get the condition type
+	 * 
+	 * @return string
+	 */
+	public function get_type() {
+		return 'post';
+	}
 
 	/**
 	 * Check if the condition is fulfilled

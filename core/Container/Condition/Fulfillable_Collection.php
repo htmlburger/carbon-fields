@@ -40,6 +40,15 @@ class Fulfillable_Collection implements Fulfillable {
 	}
 
 	/**
+	 * Get an array of the fulfillables in this collection
+	 * 
+	 * @return array<Fulfillable>
+	 */
+	public function get_fulfillables() {
+		return $this->fulfillables;
+	}
+
+	/**
 	 * Get array of allowed condition types
 	 * 
 	 * @return array<string>
