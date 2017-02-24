@@ -20,6 +20,7 @@ use Carbon_Fields\Container\Condition\Fulfillable_Collection;
 
 use Carbon_Fields\Container\Condition\Post_ID_Condition;
 use Carbon_Fields\Container\Condition\Post_Parent_ID_Condition;
+use Carbon_Fields\Container\Condition\Term_Condition;
 
 use Carbon_Fields\Container\Condition\Comparer\Equality_Comparer;
 use Carbon_Fields\Container\Condition\Comparer\Contain_Comparer;
@@ -125,10 +126,15 @@ class App {
 			return new Post_Parent_ID_Condition();
 		} );
 
+		$ioc['container_condition_type_term'] = $ioc->factory( function() {
+			return new Term_Condition();
+		} );
+
 		$ioc['container_condition_factory'] = function() {
 			$factory = new ConditionFactory();
 			$factory->register( 'post_id', 'Carbon_Fields\\Container\\Condition\\Post_ID_Condition' );
 			$factory->register( 'post_parent_id', 'Carbon_Fields\\Container\\Condition\\Post_Parent_ID_Condition' );
+			$factory->register( 'term', 'Carbon_Fields\\Container\\Condition\\Term_Condition' );
 			return $factory;
 		};
 

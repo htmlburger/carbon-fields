@@ -52,7 +52,7 @@ class Post_Meta_Container extends Container {
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
 		$this->fulfillable_collection->set_condition_type_list( array(
-			'post_id', 'post_parent_id'
+			'post_id', 'post_parent_id', 'term'
 		), true );
 
 		if ( ! $this->get_datastore() ) {
