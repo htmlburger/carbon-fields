@@ -11,8 +11,8 @@ class Post_Condition extends Condition {
 	 */
 	public function __construct() {
 		$this->set_comparers( array( 
-			// App::resolve( 'container_condition_comparer_type_equality' ),
-			App::resolve( 'container_condition_comparer_type_scalar' ),
+			App::resolve( 'container_condition_comparer_type_equality' ),
+			App::resolve( 'container_condition_comparer_type_contain' ),
 		) );
 	}
 
