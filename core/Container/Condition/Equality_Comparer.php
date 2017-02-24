@@ -2,8 +2,6 @@
 
 namespace Carbon_Fields\Container\Condition;
 
-use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
-
 class Equality_Comparer extends Comparer {
 
 	/**
