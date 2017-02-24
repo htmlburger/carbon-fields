@@ -4,7 +4,7 @@ namespace Carbon_Fields\Container\Condition;
 
 use Carbon_Fields\App;
 
-class Post_ID_Condition extends Condition {
+class Post_Parent_ID_Condition extends Condition {
 
 	/**
 	 * Constructor
@@ -27,10 +27,10 @@ class Post_ID_Condition extends Condition {
 	 */
 	public function is_fulfilled( $environment ) {
 		$post = $environment['post'];
-		$post_id = is_object( $post ) ? intval( $post->ID ) : 0;
+		$post_parent_id = is_object( $post ) ? intval( $post->post_parent ) : 0;
 
 		return $this->first_supported_comparer_is_correct(
-			$post_id,
+			$post_parent_id,
 			$this->get_comparison_operator(),
 			$this->get_value()
 		);
