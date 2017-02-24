@@ -39,17 +39,15 @@ class Fulfillable_Collection implements Fulfillable {
 
 	/**
 	 * Array of allowed condition types which propagate to child collections
-	 * WARNING: empty array means all condition types are allowed
 	 * 
 	 * @var array<string>
 	 */
 	protected $condition_type_list = array();
 
 	/**
-	 * Array of allowed condition types which propagate to child collections
-	 * WARNING: empty array means all condition types are allowed
+	 * Whether the condition type list is a whitelist or a blacklist
 	 * 
-	 * @var array<string>
+	 * @var bool
 	 */
 	protected $condition_type_list_whitelist = false;
 
@@ -89,7 +87,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @param  bool                   $whitelist
 	 * @return Fulfillable_Collection $this
 	 */
-	public function set_condition_type_list( $condition_type_list, $whitelist = true ) {
+	public function set_condition_type_list( $condition_type_list, $whitelist ) {
 		// Verify all allowed condition types exist
 		foreach ( $condition_type_list as $condition_type ) {
 			if ( ! $this->condition_factory->has_type( $condition_type ) ) {
@@ -133,7 +131,7 @@ class Fulfillable_Collection implements Fulfillable {
 		$condition_type_list = $this->get_condition_type_list();
 		foreach ( $this->fulfillables as $fulfillable ) {
 			if ( is_a( $fulfillable, get_class() ) ) {
-				$fulfillable->set_condition_type_list( $condition_type_list, $this->condition_type_list_whitelist );
+				$fulfillable->set_condition_type_list( $condition_type_list, $this->is_condition_type_list_whitelist() );
 			}
 		}
 	}
@@ -222,7 +220,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 */
 	protected function whenCollection( $collection_callable, $fulfillable_comparison) {
 		$collection = App::resolve( 'container_condition_fulfillable_collection' );
-		$collection->set_condition_type_list( $this->get_condition_type_list() );
+		$collection->set_condition_type_list( $this->get_condition_type_list(), $this->is_condition_type_list_whitelist() );
 		$collection_callable( $collection );
 		$this->add_fulfillable( $collection, $fulfillable_comparison );
 		return $this;
