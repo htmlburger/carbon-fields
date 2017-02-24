@@ -50,6 +50,7 @@ class Fulfillable_Collection implements Fulfillable {
 
 	/**
 	 * Set array of allowed condition types
+	 * WARNING: this will NOT remove already added conditions which are no longer allowed
 	 * 
 	 * @param  array<string>          $allowed_condition_types
 	 * @return Fulfillable_Collection $this
