@@ -15,6 +15,8 @@ use Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 use Carbon_Fields\REST_API\Router as REST_API_Router;
 use Carbon_Fields\REST_API\Decorator as REST_API_Decorator;
 
+use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
+use Carbon_Fields\Container\Condition\Fulfillable_Collection;
 use Carbon_Fields\Container\Condition\Post_Condition;
 
 use Carbon_Fields\Container\Condition\Comparer\Equality_Comparer;
@@ -22,6 +24,9 @@ use Carbon_Fields\Container\Condition\Comparer\Contain_Comparer;
 use Carbon_Fields\Container\Condition\Comparer\Scalar_Comparer;
 use Carbon_Fields\Container\Condition\Comparer\Regex_Comparer;
 use Carbon_Fields\Container\Condition\Comparer\Custom_Comparer;
+
+use Carbon_Fields\Container\Condition\Translator\Array_Translator;
+
 
 
 /**
@@ -106,30 +111,45 @@ class App {
 		};
 
 		/* Container Conditions */
-		$ioc['container_condition_type_post'] = $ioc->factory( function ( $ioc ) {
+		$ioc['container_condition_fulfillable_collection'] = $ioc->factory( function( $ioc ) {
+			return new Fulfillable_Collection( $ioc['container_condition_factory'], $ioc['container_condition_translator_array'] );
+		} );
+
+		$ioc['container_condition_type_post'] = $ioc->factory( function() {
 			return new Post_Condition();
 		} );
 
+		$ioc['container_condition_factory'] = function() {
+			$factory = new ConditionFactory();
+			$factory->register( 'post', 'Carbon_Fields\\Container\\Condition\\Post_Condition' );
+			return $factory;
+		};
+
 		/* Container Condition Comparers */
-		$ioc['container_condition_comparer_type_equality'] = $ioc->factory( function ( $ioc ) {
+		$ioc['container_condition_comparer_type_equality'] = $ioc->factory( function() {
 			return new Equality_Comparer();
 		} );
 
-		$ioc['container_condition_comparer_type_contain'] = $ioc->factory( function ( $ioc ) {
+		$ioc['container_condition_comparer_type_contain'] = $ioc->factory( function() {
 			return new Contain_Comparer();
 		} );
 
-		$ioc['container_condition_comparer_type_scalar'] = $ioc->factory( function ( $ioc ) {
+		$ioc['container_condition_comparer_type_scalar'] = $ioc->factory( function() {
 			return new Scalar_Comparer();
 		} );
 
-		$ioc['container_condition_comparer_type_regex'] = $ioc->factory( function ( $ioc ) {
+		$ioc['container_condition_comparer_type_regex'] = $ioc->factory( function() {
 			return new Regex_Comparer();
 		} );
 
-		$ioc['container_condition_comparer_type_custom'] = $ioc->factory( function ( $ioc ) {
+		$ioc['container_condition_comparer_type_custom'] = $ioc->factory( function() {
 			return new Custom_Comparer();
 		} );
+
+		/* Container Condition Translators */
+		$ioc['container_condition_translator_array'] = function( $ioc ) {
+			return new Array_Translator( $ioc['container_condition_factory'] );
+		};
 
 		return $ioc;
 	}
