@@ -84,12 +84,12 @@ class Fulfillable_Collection implements Fulfillable {
 	 * Shorthand for when with AND comparison
 	 * 
 	 * @param  string|Closure         $condition_type
-	 * @param  string                 $comparison_sign Can be skipped. Defaults to "="
+	 * @param  string                 $comparison_operator Can be skipped. Defaults to "="
 	 * @param  mixed                  $value
 	 * @return Fulfillable_Collection $this
 	 */
-	public function and_when( $condition_type, $comparison_sign = '=', $value = null ) {
-		$this->when( $condition_type, $comparison_sign, $value, 'AND' );
+	public function and_when( $condition_type, $comparison_operator = '=', $value = null ) {
+		$this->when( $condition_type, $comparison_operator, $value, 'AND' );
 		return $this;
 	}
 	
@@ -97,26 +97,26 @@ class Fulfillable_Collection implements Fulfillable {
 	 * Shorthand for when with OR comparison
 	 * 
 	 * @param  string|Closure         $condition_type
-	 * @param  string                 $comparison_sign Can be skipped. Defaults to "="
+	 * @param  string                 $comparison_operator Can be skipped. Defaults to "="
 	 * @param  mixed                  $value
 	 * @return Fulfillable_Collection $this
 	 */
-	public function or_when( $condition_type, $comparison_sign = '=', $value = null ) {
-		$this->when( $condition_type, $comparison_sign, $value, 'OR' );
+	public function or_when( $condition_type, $comparison_operator = '=', $value = null ) {
+		$this->when( $condition_type, $comparison_operator, $value, 'OR' );
 		return $this;
 	}
 
 	/**
-	 * Add fulfillable with optional comparison_sign
+	 * Add fulfillable with optional comparison_operator
 	 * This method assumes there is no fulfillable that can be compared with literal NULL
 	 * 
 	 * @param  string|Closure         $condition_type
-	 * @param  string                 $comparison_sign Can be skipped. Defaults to "="
+	 * @param  string                 $comparison_operator Can be skipped. Defaults to "="
 	 * @param  mixed                  $value
 	 * @param  string                 $fulfillable_comparison
 	 * @return Fulfillable_Collection $this
 	 */
-	public function when( $condition_type, $comparison_sign = '=', $value = null, $fulfillable_comparison = 'AND' ) {
+	public function when( $condition_type, $comparison_operator = '=', $value = null, $fulfillable_comparison = 'AND' ) {
 		if ( $condition_type instanceof \Closure ) {
 			return $this->whenCollection( $condition_type, $fulfillable_comparison );
 		}
@@ -126,15 +126,15 @@ class Fulfillable_Collection implements Fulfillable {
 		}
 
 		if ( $value === null ) {
-			// We do not have a supplied comparison_sign so we default to "="
-			$value = $comparison_sign;
-			$comparison_sign = '=';
+			// We do not have a supplied comparison_operator so we default to "="
+			$value = $comparison_operator;
+			$comparison_operator = '=';
 		}
 
 		$ioc_identifier = $this->get_condition_type_identifier( $condition_type );
 		$condition = App::resolve( $ioc_identifier );
+		$condition->set_comparison_operator( $comparison_operator );
 		$condition->set_value( $value );
-		$condition->get_comparer()->set_comparison_sign( $comparison_sign );
 		$this->add_fulfillable( $condition, $fulfillable_comparison );
 		return $this;
 	}
@@ -196,7 +196,8 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @return bool
 	 */
 	public function is_fulfilled( $environment ) {
-		$fulfilled = true;
+		$fulfilled = true; // return true for empty collections
+
 		foreach ( $this->fulfillables as $i => $fulfillable_tuple ) {
 			$fulfillable = $fulfillable_tuple['fulfillable'];
 			$fulfillable_comparison = $fulfillable_tuple['fulfillable_comparison'];
@@ -219,6 +220,7 @@ class Fulfillable_Collection implements Fulfillable {
 				$fulfilled = $fulfillable->is_fulfilled( $environment );
 			}
 		}
+
 		return $fulfilled;
 	}
 }

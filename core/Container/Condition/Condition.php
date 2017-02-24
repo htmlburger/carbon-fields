@@ -2,6 +2,8 @@
 
 namespace Carbon_Fields\Container\Condition;
 
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+
 abstract class Condition implements Fulfillable {
 
 	/**
@@ -12,11 +14,18 @@ abstract class Condition implements Fulfillable {
 	protected $value;
 
 	/**
-	 * Comparer to use for condition checking
+	 * Comparers to use for condition checking
 	 * 
-	 * @var Comparer
+	 * @var array<Comparer>
 	 */
-	protected $comparer;
+	protected $comparers = array();
+
+	/**
+	 * Comparison string to use
+	 * 
+	 * @var string
+	 */
+	protected $comparison_operator = '';
 	
 	/**
 	 * Get the condition value
@@ -39,22 +48,70 @@ abstract class Condition implements Fulfillable {
 	}
 	
 	/**
-	 * Get the condition comparer
+	 * Get the condition comparers
 	 * 
-	 * @return Comparer
+	 * @return array<Comparer>
 	 */
-	public function get_comparer() {
-		return $this->comparer;
+	public function get_comparers() {
+		return $this->comparers;
 	}
 	
 	/**
-	 * Set the condition comparer
+	 * Set the condition comparers
 	 *
-	 * @param Comparer $comparer
+	 * @param array<Comparer> $comparers
 	 * @return Condition $this
 	 */
-	public function set_comparer( $comparer ) {
-		$this->comparer = $comparer;
+	public function set_comparers( $comparers ) {
+		$this->comparers = $comparers;
+		return $this;
+	}
+	
+	/**
+	 * Check if any comparer is correct for $a and $b
+	 *
+	 * @param mixed  $a
+	 * @param string $comparison_operator
+	 * @param mixed  $b
+	 * @return bool
+	 */
+	public function any_comparer_is_correct( $a, $comparison_operator, $b ) {
+		$comparers = $this->get_comparers();
+		$comparers_without_support = 0;
+		foreach ( $comparers as $comparer ) {
+			if ( ! $comparer->supports_comparison_operator( $comparison_operator ) ) {
+				$comparers_without_support++;
+				continue;
+			}
+			if ( $comparer->is_correct( $a, $comparison_operator, $b ) ) {
+				return true;
+			}
+		}
+
+		if ( $comparers_without_support === count( $comparers ) ) {
+			Incorrect_Syntax_Exception::raise( 'Unsupported container condition comparison operator used: ' . $comparison_operator );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get comparison sign used
+	 * 
+	 * @return string
+	 */
+	public function get_comparison_operator() {
+		return $this->comparison_operator;
+	}
+
+	/**
+	 * Set comparison sign
+	 * 
+	 * @param string $comparison_operator
+	 * @return Comparer $this
+	 */
+	public function set_comparison_operator( $comparison_operator ) {
+		$this->comparison_operator = $comparison_operator;
 		return $this;
 	}
 }

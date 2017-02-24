@@ -2,8 +2,6 @@
 
 namespace Carbon_Fields\Container\Condition;
 
-use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
-
 abstract class Comparer {
 
 	/**
@@ -11,44 +9,25 @@ abstract class Comparer {
 	 *
 	 * @var array<string>
 	 */
-	protected $supported_comparison_signs = array();
+	protected $supported_comparison_operators = array();
 
 	/**
-	 * Comparison string to use
+	 * Check if comparer supports the specified comparison sign
 	 * 
-	 * @var string
-	 */
-	protected $comparison_sign = '';
-
-	/**
-	 * Get comparison sign used
-	 * 
-	 * @return string
-	 */
-	public function get_comparison_sign() {
-		return $this->comparison_sign;
-	}
-
-	/**
-	 * Set comparison sign
-	 * 
-	 * @param string $comparison_sign
-	 * @return Comparer $this
-	 */
-	public function set_comparison_sign( $comparison_sign ) {
-		if ( ! in_array( $comparison_sign, $this->supported_comparison_signs ) ) {
-			Incorrect_Syntax_Exception::raise( 'Unsupported comparison sign used: ' . $comparison_sign );
-		}
-		$this->comparison_sign = $comparison_sign;
-		return $this;
-	}
-
-	/**
-	 * Check if the condition is fulfilled
-	 *
-	 * @param mixed $a
-	 * @param mixed $b
+	 * @param string $comparison_operator
 	 * @return bool
 	 */
-	abstract public function compare( $a, $b );
+	public function supports_comparison_operator( $comparison_operator ) {
+		return in_array( $comparison_operator, $this->supported_comparison_operators );
+	}
+
+	/**
+	 * Check if comparison is true for $a and $b
+	 *
+	 * @param mixed  $a
+	 * @param string $comparison_operator
+	 * @param mixed  $b
+	 * @return bool
+	 */
+	abstract public function is_correct( $a, $comparison_operator, $b );
 }
