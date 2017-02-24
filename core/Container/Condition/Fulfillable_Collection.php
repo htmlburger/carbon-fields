@@ -43,7 +43,15 @@ class Fulfillable_Collection implements Fulfillable {
 	 * 
 	 * @var array<string>
 	 */
-	protected $allowed_condition_types = array();
+	protected $condition_type_list = array();
+
+	/**
+	 * Array of allowed condition types which propagate to child collections
+	 * WARNING: empty array means all condition types are allowed
+	 * 
+	 * @var array<string>
+	 */
+	protected $condition_type_list_whitelist = false;
 
 	/**
 	 * Constructor
@@ -69,28 +77,39 @@ class Fulfillable_Collection implements Fulfillable {
 	 * 
 	 * @return array<string>
 	 */
-	public function get_allowed_condition_types() {
-		return $this->allowed_condition_types;
+	public function get_condition_type_list() {
+		return $this->condition_type_list;
 	}
 
 	/**
 	 * Set array of allowed condition types
 	 * WARNING: this will NOT remove already added conditions which are no longer allowed
 	 * 
-	 * @param  array<string>          $allowed_condition_types
+	 * @param  array<string>          $condition_type_list
+	 * @param  bool                   $whitelist
 	 * @return Fulfillable_Collection $this
 	 */
-	public function set_allowed_condition_types( $allowed_condition_types ) {
+	public function set_condition_type_list( $condition_type_list, $whitelist = true ) {
 		// Verify all allowed condition types exist
-		foreach ( $allowed_condition_types as $condition_type ) {
+		foreach ( $condition_type_list as $condition_type ) {
 			if ( ! $this->condition_factory->has_type( $condition_type ) ) {
 				Incorrect_Syntax_Exception::raise( 'Unknown container condition type allowed: ' . $condition_type );
 			}
 		}
 		
-		$this->allowed_condition_types = $allowed_condition_types;
-		$this->propagate_allowed_condition_types();
+		$this->condition_type_list_whitelist = $whitelist;
+		$this->condition_type_list = $condition_type_list;
+		$this->propagate_condition_type_list();
 		return $this;
+	}
+
+	/**
+	 * Check if conditions types list is a whitelist
+	 * 
+	 * @return bool
+	 */
+	public function is_condition_type_list_whitelist() {
+		return $this->condition_type_list_whitelist;
 	}
 
 	/**
@@ -100,21 +119,21 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @return bool
 	 */
 	public function is_condition_type_allowed( $condition_type ) {
-		if ( empty( $this->get_allowed_condition_types() ) ) {
-			return true;
+		$in_list = in_array( $condition_type, $this->get_condition_type_list() );
+		if ( $this->is_condition_type_list_whitelist() ) {
+			return $in_list;
 		}
-
-		return in_array( $condition_type, $this->get_allowed_condition_types() );
+		return ! $in_list;
 	}
 
 	/**
 	 * Propagate allowed condition types to child collections
 	 */
-	public function propagate_allowed_condition_types() {
-		$allowed_condition_types = $this->get_allowed_condition_types();
+	public function propagate_condition_type_list() {
+		$condition_type_list = $this->get_condition_type_list();
 		foreach ( $this->fulfillables as $fulfillable ) {
 			if ( is_a( $fulfillable, get_class() ) ) {
-				$fulfillable->set_allowed_condition_types( $allowed_condition_types );
+				$fulfillable->set_condition_type_list( $condition_type_list, $this->condition_type_list_whitelist );
 			}
 		}
 	}
@@ -203,7 +222,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 */
 	protected function whenCollection( $collection_callable, $fulfillable_comparison) {
 		$collection = App::resolve( 'container_condition_fulfillable_collection' );
-		$collection->set_allowed_condition_types( $this->get_allowed_condition_types() );
+		$collection->set_condition_type_list( $this->get_condition_type_list() );
 		$collection_callable( $collection );
 		$this->add_fulfillable( $collection, $fulfillable_comparison );
 		return $this;
