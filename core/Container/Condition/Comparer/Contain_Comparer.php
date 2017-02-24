@@ -1,6 +1,6 @@
 <?php
 
-namespace Carbon_Fields\Container\Condition;
+namespace Carbon_Fields\Container\Condition\Comparer;
 
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 

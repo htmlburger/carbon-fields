@@ -17,9 +17,9 @@ use Carbon_Fields\REST_API\Decorator as REST_API_Decorator;
 
 use Carbon_Fields\Container\Condition\Post_Condition;
 
-use Carbon_Fields\Container\Condition\Equality_Comparer;
-use Carbon_Fields\Container\Condition\Contain_Comparer;
-use Carbon_Fields\Container\Condition\Scalar_Comparer;
+use Carbon_Fields\Container\Condition\Comparer\Equality_Comparer;
+use Carbon_Fields\Container\Condition\Comparer\Contain_Comparer;
+use Carbon_Fields\Container\Condition\Comparer\Scalar_Comparer;
 
 
 /**
