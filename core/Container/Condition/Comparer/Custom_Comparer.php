@@ -27,7 +27,7 @@ class Custom_Comparer extends Comparer {
 		}
 
 		switch ( $comparison_operator ) {
-			case 'Custom':
+			case 'CUSTOM':
 				return (bool) $b( $a );
 		}
 		return false;
