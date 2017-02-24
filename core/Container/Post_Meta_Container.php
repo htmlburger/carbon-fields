@@ -51,6 +51,9 @@ class Post_Meta_Container extends Container {
 	 **/
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
+		$this->fulfillable_collection->set_condition_type_list( array(
+			'post_id'
+		), true );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'post_meta' ), $this->has_default_datastore() );
@@ -152,6 +155,13 @@ class Post_Meta_Container extends Container {
 			if ( ! $post_type || ! in_array( $post_type, $this->settings['post_type'] ) ) {
 				return false;
 			}
+		}
+
+		$environment = array(
+			'post_id' => $this->post_id,
+		);
+		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
+			return false;
 		}
 
 		// Check show on conditions
