@@ -24,6 +24,6 @@ class Post_Condition extends Condition {
 	 * @return bool
 	 */
 	public function is_fulfilled( $environment ) {
-		return $this->any_comparer_is_correct( $environment['post']->ID, $this->get_comparison_operator(), $this->get_value() );
+		return $this->first_supported_comparer_is_correct( $environment['post']->ID, $this->get_comparison_operator(), $this->get_value() );
 	}
 }

@@ -75,23 +75,16 @@ abstract class Condition implements Fulfillable {
 	 * @param mixed  $b
 	 * @return bool
 	 */
-	public function any_comparer_is_correct( $a, $comparison_operator, $b ) {
+	public function first_supported_comparer_is_correct( $a, $comparison_operator, $b ) {
 		$comparers = $this->get_comparers();
-		$comparers_without_support = 0;
 		foreach ( $comparers as $comparer ) {
 			if ( ! $comparer->supports_comparison_operator( $comparison_operator ) ) {
-				$comparers_without_support++;
 				continue;
 			}
-			if ( $comparer->is_correct( $a, $comparison_operator, $b ) ) {
-				return true;
-			}
+			return $comparer->is_correct( $a, $comparison_operator, $b );
 		}
 
-		if ( $comparers_without_support === count( $comparers ) ) {
-			Incorrect_Syntax_Exception::raise( 'Unsupported container condition comparison operator used: ' . $comparison_operator );
-		}
-
+		Incorrect_Syntax_Exception::raise( 'Unsupported container condition comparison operator used: ' . $comparison_operator );
 		return false;
 	}
 
