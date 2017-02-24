@@ -2,7 +2,9 @@
 
 namespace Carbon_Fields\Container\Condition\Comparer;
 
-class Regex_Comparer extends Comparer {
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+
+class Custom_Comparer extends Comparer {
 
 	/**
 	 * Supported comparison signs
@@ -20,9 +22,13 @@ class Regex_Comparer extends Comparer {
 	 * @return bool
 	 */
 	public function is_correct( $a, $comparison_operator, $b ) {
+		if ( ! is_callable( $b ) ) {
+			Incorrect_Syntax_Exception::raise( 'Supplied comparison value is not a callable: ' . print_r( $b, true ) );
+		}
+
 		switch ( $comparison_operator ) {
-			case 'REGEX':
-				return (bool) preg_match( $b, $a );
+			case 'Custom':
+				return (bool) $b( $a );
 		}
 		return false;
 	}
