@@ -83,7 +83,7 @@ class Fulfillable_Collection implements Fulfillable {
 	/**
 	 * Shorthand for when with AND comparison
 	 * 
-	 * @param  string|Closure         $condition_type
+	 * @param  string|callable        $condition_type
 	 * @param  string                 $comparison_operator Can be skipped. Defaults to "="
 	 * @param  mixed                  $value
 	 * @return Fulfillable_Collection $this
@@ -96,7 +96,7 @@ class Fulfillable_Collection implements Fulfillable {
 	/**
 	 * Shorthand for when with OR comparison
 	 * 
-	 * @param  string|Closure         $condition_type
+	 * @param  string|callable        $condition_type
 	 * @param  string                 $comparison_operator Can be skipped. Defaults to "="
 	 * @param  mixed                  $value
 	 * @return Fulfillable_Collection $this
@@ -110,14 +110,14 @@ class Fulfillable_Collection implements Fulfillable {
 	 * Add fulfillable with optional comparison_operator
 	 * This method assumes there is no fulfillable that can be compared with literal NULL
 	 * 
-	 * @param  string|Closure         $condition_type
+	 * @param  string|callable        $condition_type
 	 * @param  string                 $comparison_operator Can be skipped. Defaults to "="
 	 * @param  mixed                  $value
 	 * @param  string                 $fulfillable_comparison
 	 * @return Fulfillable_Collection $this
 	 */
 	public function when( $condition_type, $comparison_operator = '=', $value = null, $fulfillable_comparison = 'AND' ) {
-		if ( $condition_type instanceof \Closure ) {
+		if ( is_callable( $condition_type ) ) {
 			return $this->whenCollection( $condition_type, $fulfillable_comparison );
 		}
 
@@ -142,14 +142,14 @@ class Fulfillable_Collection implements Fulfillable {
 	/**
 	 * Add a Fulfillable_Collection for nested logic
 	 *
-	 * @param  Closure                $collection_closure
+	 * @param  callable               $collection_callable
 	 * @param  string                 $fulfillable_comparison
 	 * @return Fulfillable_Collection $this
 	 */
-	protected function whenCollection( \Closure $collection_closure, $fulfillable_comparison) {
+	protected function whenCollection( $collection_callable, $fulfillable_comparison) {
 		$collection = new static();
 		$collection->set_allowed_condition_types( $this->get_allowed_condition_types() );
-		$collection_closure( $collection );
+		$collection_callable( $collection );
 		$this->add_fulfillable( $collection, $fulfillable_comparison );
 		return $this;
 	}
