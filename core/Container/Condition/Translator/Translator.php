@@ -10,36 +10,44 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 abstract class Translator {
 
 	/**
-	 * Translate a Fulfillable
+	 * Translate a Fulfillable to foreign data
 	 * 
 	 * @param  Fulfillable $fulfillable
 	 * @return mixed
 	 */
-	public function translate( Fulfillable $fulfillable ) {
+	public function fulfillable_to_foreign( Fulfillable $fulfillable ) {
 		if ( is_a( $fulfillable, 'Carbon_Fields\\Container\\Condition\\Condition' ) ) {
-			return $this->translate_condition( $fulfillable );
+			return $this->condition_to_foreign( $fulfillable );
 		}
 
 		if ( is_a( $fulfillable, 'Carbon_Fields\\Container\\Condition\\Fulfillable_Collection' ) ) {
-			return $this->translate_fulfillable_collection( $fulfillable );
+			return $this->fulfillable_collection_to_foreign( $fulfillable );
 		}
 
 		Incorrect_Syntax_Exception::raise( 'Attempted to translate an unsupported object: ' . print_r( $fulfillable, true ) );
 	}
 
 	/**
-	 * Translate a Condition
+	 * Translate a Condition to foreign data
 	 * 
 	 * @param  Condition $condition
 	 * @return mixed
 	 */
-	abstract public function translate_condition( Condition $condition );
+	abstract public function condition_to_foreign( Condition $condition );
 
 	/**
-	 * Translate a Fulfillable_Collection
+	 * Translate a Fulfillable_Collection to foreign data
 	 * 
 	 * @param  Fulfillable_Collection $fulfillable_collection
 	 * @return mixed
 	 */
-	abstract public function translate_fulfillable_collection( Fulfillable_Collection $fulfillable_collection );
+	abstract public function fulfillable_collection_to_foreign( Fulfillable_Collection $fulfillable_collection );
+
+	/**
+	 * Translate foreign data to a Fulfillable
+	 * 
+	 * @param  mixed       $foreign
+	 * @return Fulfillable
+	 */
+	abstract public function foreign_to_fulfillable( $foreign );
 }

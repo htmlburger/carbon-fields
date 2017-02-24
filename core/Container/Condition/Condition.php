@@ -28,13 +28,6 @@ abstract class Condition implements Fulfillable {
 	protected $comparison_operator = '';
 	
 	/**
-	 * Get the condition type
-	 * 
-	 * @return string
-	 */
-	abstract public function get_type();
-	
-	/**
 	 * Get the condition value
 	 * 
 	 * @return mixed
