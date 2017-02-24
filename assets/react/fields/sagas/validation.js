@@ -14,6 +14,7 @@ import {
 	setupValidation,
 	updateField,
 	validateFields,
+	validateField,
 	markFieldAsValid,
 	markFieldAsInvalid,
 	teardownField
@@ -55,6 +56,27 @@ export function* validate(validator, fieldId) {
 }
 
 /**
+ * Determine when the action should be handled by the current handler.
+ *
+ * @param  {Object}  action
+ * @param  {String}  fieldId
+ * @return {Boolean}
+ */
+export function shouldValidate(action, fieldId) {
+	const { payload } = action;
+
+	if (payload.fieldId !== fieldId) {
+		return false;
+	}
+
+	if (!isUndefined(payload.data) && isUndefined(payload.data.value)) {
+		return false;
+	}
+
+	return true;
+}
+
+/**
  * Run the validator when the field's value is updated.
  *
  * @param  {Object} validator
@@ -63,10 +85,7 @@ export function* validate(validator, fieldId) {
  * @return {void}
  */
 export function* workerValidateOnUpdate(validator, fieldId, action) {
-	const { payload } = action;
-
-	// Validate only the field specified by the action.
-	if (payload.fieldId !== fieldId || isUndefined(payload.data.value)) {
+	if (!shouldValidate(action, fieldId)) {
 		return;
 	}
 
@@ -76,7 +95,6 @@ export function* workerValidateOnUpdate(validator, fieldId, action) {
 		yield call(delay, 250);
 	}
 
-	// Run the validator.
 	yield call(validate, validator.handler, fieldId);
 }
 
@@ -88,6 +106,22 @@ export function* workerValidateOnUpdate(validator, fieldId, action) {
  * @return {void}
  */
 export function* workerValidateAll(validator, fieldId) {
+	yield call(validate, validator.handler, fieldId);
+}
+
+/**
+ * Run the validator when a mass validation is requested.
+ *
+ * @param  {Object} validator
+ * @param  {String} fieldId
+ * @param  {Object} action
+ * @return {void}
+ */
+export function* validateOnDemand(validator, fieldId, action) {
+	if (!shouldValidate(action, fieldId)) {
+		return;
+	}
+
 	yield call(validate, validator.handler, fieldId);
 }
 
@@ -111,6 +145,7 @@ export function* workerSetup({ payload: { fieldId, validationType }}) {
 	yield call(stopSaga, fieldId, yield [
 		takeLatest(updateField, workerValidateOnUpdate, validator, fieldId),
 		takeLatest(validateFields, workerValidateAll, validator, fieldId),
+		takeEvery(validateField, workerValidateOnDemand, validator, fieldId),
 	]);
 }
 
