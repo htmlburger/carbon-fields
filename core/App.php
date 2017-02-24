@@ -20,6 +20,7 @@ use Carbon_Fields\Container\Condition\Post_Condition;
 use Carbon_Fields\Container\Condition\Comparer\Equality_Comparer;
 use Carbon_Fields\Container\Condition\Comparer\Contain_Comparer;
 use Carbon_Fields\Container\Condition\Comparer\Scalar_Comparer;
+use Carbon_Fields\Container\Condition\Comparer\Regex_Comparer;
 
 
 /**
@@ -119,6 +120,10 @@ class App {
 
 		$ioc['container_condition_comparer_type_scalar'] = $ioc->factory( function ( $ioc ) {
 			return new Scalar_Comparer();
+		} );
+
+		$ioc['container_condition_comparer_type_regex'] = $ioc->factory( function ( $ioc ) {
+			return new Regex_Comparer();
 		} );
 
 		return $ioc;

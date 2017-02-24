@@ -13,6 +13,7 @@ class Post_Condition extends Condition {
 		$this->set_comparers( array( 
 			App::resolve( 'container_condition_comparer_type_equality' ),
 			App::resolve( 'container_condition_comparer_type_contain' ),
+			App::resolve( 'container_condition_comparer_type_regex' ),
 		) );
 	}
 
