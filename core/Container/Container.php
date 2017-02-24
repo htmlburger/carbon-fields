@@ -5,6 +5,7 @@ namespace Carbon_Fields\Container;
 use Carbon_Fields\App;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Field\Group_Field;
+use Carbon_Fields\Container\Condition\Fulfillable_Collection;
 use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Datastore\Datastore_Holder_Interface;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
@@ -109,6 +110,13 @@ abstract class Container implements Datastore_Holder_Interface {
 	protected $has_default_datastore = true;
 
 	/**
+	 * Fulfillable_Collection to use when checking attachment/saving conditions
+	 *
+	 * @var Fulfillable_Collection
+	 */
+	protected $fulfillable_collection;
+
+	/**
 	 * Normalizes a container type string to an expected format
 	 *
 	 * @param string $type
@@ -184,6 +192,8 @@ abstract class Container implements Datastore_Holder_Interface {
 		$this->id = $unique_id;
 		$this->title = $title;
 		$this->type = $type;
+		$this->fulfillable_collection = App::resolve( 'container_condition_fulfillable_collection' );
+		$this->fulfillable_collection->set_condition_type_list( array(), true ); // set the list to a blacklist so child containers are forced to set their own condition types if they have any
 	}
 
 	/**
@@ -704,6 +714,39 @@ abstract class Container implements Datastore_Holder_Interface {
 	public function add_tab( $tab_name, $fields ) {
 		$this->add_fields( $fields );
 		$this->create_tab( $tab_name, $fields );
+		return $this;
+	}
+
+	/**
+	 * Proxy function to set attachment conditions
+	 * 
+	 * @see    Fulfillable_Collection::when()
+	 * @return Container $this
+	 */
+	public function when() {
+		call_user_func_array( array( $this->fulfillable_collection, 'when' ), func_get_args() );
+		return $this;
+	}
+
+	/**
+	 * Proxy function to set attachment conditions
+	 * 
+	 * @see    Fulfillable_Collection::and_when()
+	 * @return Container $this
+	 */
+	public function and_when() {
+		call_user_func_array( array( $this->fulfillable_collection, 'and_when' ), func_get_args() );
+		return $this;
+	}
+
+	/**
+	 * Proxy function to set attachment conditions
+	 * 
+	 * @see    Fulfillable_Collection::or_when()
+	 * @return Container $this
+	 */
+	public function or_when() {
+		call_user_func_array( array( $this->fulfillable_collection, 'or_when' ), func_get_args() );
 		return $this;
 	}
 }

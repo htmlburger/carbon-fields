@@ -139,7 +139,7 @@ class Fulfillable_Collection implements Fulfillable {
 	/**
 	 * Shorthand for when with AND comparison
 	 * 
-	 * @param  string|callable        $condition_type
+	 * @param  string|array|callable  $condition_type
 	 * @param  string                 $comparison_operator Can be skipped. Defaults to "="
 	 * @param  mixed                  $value
 	 * @return Fulfillable_Collection $this
@@ -152,7 +152,7 @@ class Fulfillable_Collection implements Fulfillable {
 	/**
 	 * Shorthand for when with OR comparison
 	 * 
-	 * @param  string|callable        $condition_type
+	 * @param  string|array|callable  $condition_type
 	 * @param  string                 $comparison_operator Can be skipped. Defaults to "="
 	 * @param  mixed                  $value
 	 * @return Fulfillable_Collection $this
