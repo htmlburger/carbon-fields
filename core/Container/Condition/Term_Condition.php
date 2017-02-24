@@ -13,7 +13,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  *     array(
  *         'value'=>...,
  *         'taxonomy'=>...,
- *         ['field'=>...]
+ *         ['field'=>...] // "slug", "term_id" etc. - see get_term_by()
  *     )
  * 
  * Operators "IN" and "NOT IN":
