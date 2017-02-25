@@ -2,6 +2,8 @@
 
 namespace Carbon_Fields\Toolset;
 
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+
 /**
  * Provides common tools when dealing with WordPress data such as posts, terms etc.
  */
@@ -47,5 +49,28 @@ class WP_Toolset {
 	 */
 	public function get_comment_title( $id ) {
 		return get_comment_text( $id );
+	}
+
+	/**
+	 * Get term object for descriptor array
+	 *
+	 * @param array $term_descriptor
+	 * @return object
+	 */
+	public function get_term_by_descriptor( $term_descriptor ) {
+		if ( ! is_array( $term_descriptor ) || ! isset( $term_descriptor['value'] ) || ! isset( $term_descriptor['taxonomy'] ) ) {
+			Incorrect_Syntax_Exception::raise( 'Term descriptor passed is invalid. Please supply an array with a "value" and a "taxonomy" key: ' . print_r( $term_descriptor, true ) );
+		}
+
+		$value = $term_descriptor['value'];
+		$field = isset( $term_descriptor['field'] ) ? $term_descriptor['field'] : 'term_id';
+		$taxonomy = $term_descriptor['taxonomy'];
+		$term = get_term_by( $field, $value, $taxonomy );
+
+		if ( ! $term ) {
+			Incorrect_Syntax_Exception::raise( 'Failed to load term for descriptor: ' . print_r( $term_descriptor, true ) );
+		}
+
+		return $term;
 	}
 }

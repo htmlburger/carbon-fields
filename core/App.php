@@ -124,8 +124,12 @@ class App {
 			return new \Carbon_Fields\Container\Condition\Post_Template_Condition();
 		} );
 
-		$ioc['container_condition_type_term'] = $ioc->factory( function() {
-			return new \Carbon_Fields\Container\Condition\Post_Term_Condition();
+		$ioc['container_condition_type_post_term'] = $ioc->factory( function( $ioc ) {
+			return new \Carbon_Fields\Container\Condition\Post_Term_Condition( $ioc['wp_toolset'] );
+		} );
+
+		$ioc['container_condition_type_term'] = $ioc->factory( function( $ioc ) {
+			return new \Carbon_Fields\Container\Condition\Term_Condition( $ioc['wp_toolset'] );
 		} );
 
 		$ioc['container_condition_factory'] = function() {
@@ -136,6 +140,8 @@ class App {
 			$factory->register( 'post_level', 'Carbon_Fields\\Container\\Condition\\Post_Level_Condition' );
 			$factory->register( 'post_template', 'Carbon_Fields\\Container\\Condition\\Post_Template_Condition' );
 			$factory->register( 'post_term', 'Carbon_Fields\\Container\\Condition\\Post_Term_Condition' );
+
+			$factory->register( 'term', 'Carbon_Fields\\Container\\Condition\\Term_Condition' );
 			return $factory;
 		};
 
