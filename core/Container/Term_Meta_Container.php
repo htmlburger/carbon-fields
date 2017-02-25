@@ -3,7 +3,6 @@
 namespace Carbon_Fields\Container;
 
 use Carbon_Fields\Datastore\Datastore;
-use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Term meta container class.
@@ -25,6 +24,9 @@ class Term_Meta_Container extends Container {
 	 **/
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
+		$this->fulfillable_collection->set_condition_type_list( array(
+			'term',
+		), true );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'term_meta' ), $this->has_default_datastore() );
@@ -85,12 +87,27 @@ class Term_Meta_Container extends Container {
 	 * @return bool True if the container is allowed to be attached
 	 **/
 	public function is_valid_attach_for_request() {
-		$request_taxonomy = isset( $_GET['taxonomy'] ) ? $_GET['taxonomy'] : '';
-		if ( ! empty( $request_taxonomy ) && in_array( $request_taxonomy, $this->settings['taxonomy'] ) ) {
-			return true;
+		global $pagenow;
+
+		if ( $pagenow !== 'edit-tags.php' && $pagenow !== 'term.php' ) {
+			return false;
 		}
 
-		return false;
+		$input = stripslashes_deep( $_GET );
+		$request_term_id = isset( $input['tag_ID'] ) ? intval( $input['tag_ID'] ) : 0;
+		$request_taxonomy = isset( $input['taxonomy'] ) ? $input['taxonomy'] : '';
+
+		$term = get_term( $request_term_id );
+		$environment = array(
+			'term' => ( $term && ! is_wp_error( $term ) ) ? $term : null,
+		);
+		$environment['term_id'] = $environment['term'] ? $environment['term']->term_id : 0;
+
+		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

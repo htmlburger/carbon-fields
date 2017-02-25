@@ -133,11 +133,11 @@ class Post_Meta_Container extends Container {
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
-		$input = stripslashes_deep( $_GET );
-
 		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
 			return false;
 		}
+		
+		$input = stripslashes_deep( $_GET );
 
 		// Post types check
 		if ( ! empty( $this->settings['post_type'] ) ) {

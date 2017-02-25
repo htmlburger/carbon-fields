@@ -6,7 +6,7 @@ use Carbon_Fields\App;
 use Carbon_Fields\Toolset\WP_Toolset;
 
 /**
- * Tests if a post has a term
+ * Tests for a specific term
  * 
  * Accepts the following values:
  *     Operators "=" and "!=":
@@ -26,9 +26,9 @@ use Carbon_Fields\Toolset\WP_Toolset;
  *             ...
  *         )
  *     
- *     Operator "CUSTOM" is passed the term_id
+ *     Operators "REGEX" and CUSTOM" are passed the term_id
  */
-class Post_Term_Condition extends Condition {
+class Term_Condition extends Condition {
 
 	/**
 	 * WP_Toolset to fetch term data with
@@ -45,7 +45,9 @@ class Post_Term_Condition extends Condition {
 	public function __construct( WP_Toolset $wp_toolset ) {
 		$this->wp_toolset = $wp_toolset;
 		$this->set_comparers( array( 
-			// Only support the custom comparer as this condition has it's own comparison methods
+			App::resolve( 'container_condition_comparer_type_equality' ),
+			App::resolve( 'container_condition_comparer_type_contain' ),
+			App::resolve( 'container_condition_comparer_type_regex' ),
 			App::resolve( 'container_condition_comparer_type_custom' ),
 		) );
 	}
@@ -86,28 +88,13 @@ class Post_Term_Condition extends Condition {
 	 * @return bool
 	 */
 	public function is_fulfilled( $environment ) {
-		$post = $environment['post'];
-		$post_id = is_object( $post ) ? intval( $post->ID ) : 0;
-		
-		switch ( $this->get_comparison_operator() ) {
-			case '=':
-				return $this->post_has_term( $post_id, $this->get_value() );
-				break;
-			case '!=':
-				return ! $this->post_has_term( $post_id, $this->get_value() );
-				break;
-			case 'IN':
-				return $this->post_has_any_term( $post_id, $this->get_value() );
-				break;
-			case 'NOT IN':
-				return ! $this->post_has_any_term( $post_id, $this->get_value() );
-				break;
-		}
+		$term_id = $environment['term_id'];
+		$value = $this->wp_toolset->get_term_by_descriptor( $this->get_value() );
 
 		return $this->first_supported_comparer_is_correct(
-			$post_id,
+			$term_id,
 			$this->get_comparison_operator(),
-			$this->get_value()
+			$value->term_id
 		);
 	}
 }
