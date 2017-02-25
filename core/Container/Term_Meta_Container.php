@@ -25,7 +25,7 @@ class Term_Meta_Container extends Container {
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
 		$this->fulfillable_collection->set_condition_type_list( array(
-			'term', 'term_taxonomy'
+			'term', 'term_taxonomy', 'term_level'
 		), true );
 
 		if ( ! $this->get_datastore() ) {
