@@ -136,6 +136,9 @@ class App {
 		$ioc['container_condition_type_user_id'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\User_ID_Condition();
 		} );
+		$ioc['container_condition_type_user_role'] = $ioc->factory( function() {
+			return new \Carbon_Fields\Container\Condition\User_Role_Condition();
+		} );
 
 		$ioc['container_condition_factory'] = function() {
 			$factory = new ConditionFactory();
@@ -151,6 +154,7 @@ class App {
 			$factory->register( 'term_level', 'Carbon_Fields\\Container\\Condition\\Term_Level_Condition' );
 
 			$factory->register( 'user_id', 'Carbon_Fields\\Container\\Condition\\User_ID_Condition' );
+			$factory->register( 'user_role', 'Carbon_Fields\\Container\\Condition\\User_Role_Condition' );
 			return $factory;
 		};
 
