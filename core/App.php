@@ -132,6 +132,10 @@ class App {
 			return new \Carbon_Fields\Container\Condition\Term_Condition( $ioc['wp_toolset'] );
 		} );
 
+		$ioc['container_condition_type_term_taxonomy'] = $ioc->factory( function() {
+			return new \Carbon_Fields\Container\Condition\Term_Taxonomy_Condition();
+		} );
+
 		$ioc['container_condition_factory'] = function() {
 			$factory = new ConditionFactory();
 			$factory->register( 'post_id', 'Carbon_Fields\\Container\\Condition\\Post_ID_Condition' );
@@ -142,6 +146,7 @@ class App {
 			$factory->register( 'post_term', 'Carbon_Fields\\Container\\Condition\\Post_Term_Condition' );
 
 			$factory->register( 'term', 'Carbon_Fields\\Container\\Condition\\Term_Condition' );
+			$factory->register( 'term_taxonomy', 'Carbon_Fields\\Container\\Condition\\Term_Taxonomy_Condition' );
 			return $factory;
 		};
 
