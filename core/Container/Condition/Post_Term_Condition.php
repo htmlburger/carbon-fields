@@ -28,7 +28,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * 
  * Operator "CUSTOM" is passed the post_id
  */
-class Term_Condition extends Condition {
+class Post_Term_Condition extends Condition {
 
 	/**
 	 * Constructor
@@ -48,7 +48,7 @@ class Term_Condition extends Condition {
 	 */
 	protected function property_array_to_term( $property_array ) {
 		if ( ! is_array( $property_array ) || ! isset( $property_array['value'] ) || ! isset( $property_array['taxonomy'] ) ) {
-			Incorrect_Syntax_Exception::raise( 'Term_Condition value passed is invalid. Please supply an array with a "value" and a "taxonomy" key: ' . print_r( $property_array, true ) );
+			Incorrect_Syntax_Exception::raise( 'Post_Term_Condition value passed is invalid. Please supply an array with a "value" and a "taxonomy" key: ' . print_r( $property_array, true ) );
 		}
 
 		$value = $property_array['value'];
