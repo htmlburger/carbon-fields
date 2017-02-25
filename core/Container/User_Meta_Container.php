@@ -28,6 +28,9 @@ class User_Meta_Container extends Container {
 	 **/
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
+		$this->fulfillable_collection->set_condition_type_list( array(
+			'user_id', // 'user_role'
+		), true );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'user_meta' ), $this->has_default_datastore() );
@@ -86,7 +89,30 @@ class User_Meta_Container extends Container {
 	 * @return bool True if the container is allowed to be attached
 	 **/
 	public function is_valid_attach_for_request() {
+		global $pagenow;
+
 		if ( ! $this->is_profile_page() || ! $this->is_valid_show_for() ) {
+			return false;
+		}
+
+		$input = stripslashes_deep( $_GET );
+
+		$user_id = 0;
+		if ( $pagenow === 'profile.php' ) {
+			$user_id = get_current_user_id();
+		}
+		if ( isset( $input['user_id'] ) ) {
+			$user_id = intval( $input['user_id'] );
+		}
+		$user = get_userdata( $user_id );
+
+		$environment = array(
+			'user_id' => $user ? intval( $user->ID ) : 0,
+			'user' => $user ? $user : null,
+			'role' => '',
+		);
+
+		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}
 
