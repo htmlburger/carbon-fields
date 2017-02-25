@@ -25,7 +25,7 @@ class Term_Meta_Container extends Container {
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
 		$this->fulfillable_collection->set_condition_type_list( array(
-			'term',
+			'term', 'term_taxonomy'
 		), true );
 
 		if ( ! $this->get_datastore() ) {
@@ -100,6 +100,7 @@ class Term_Meta_Container extends Container {
 		$term = get_term( $request_term_id );
 		$environment = array(
 			'term' => ( $term && ! is_wp_error( $term ) ) ? $term : null,
+			'taxonomy' => $request_taxonomy,
 		);
 		$environment['term_id'] = $environment['term'] ? $environment['term']->term_id : 0;
 
