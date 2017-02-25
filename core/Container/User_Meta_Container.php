@@ -29,7 +29,7 @@ class User_Meta_Container extends Container {
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
 		$this->fulfillable_collection->set_condition_type_list( array(
-			'user_id', // 'user_role'
+			'user_id', 'user_role'
 		), true );
 
 		if ( ! $this->get_datastore() ) {
@@ -109,7 +109,7 @@ class User_Meta_Container extends Container {
 		$environment = array(
 			'user_id' => $user ? intval( $user->ID ) : 0,
 			'user' => $user ? $user : null,
-			'role' => '',
+			'roles' => $user ? $user->roles : array(),
 		);
 
 		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
