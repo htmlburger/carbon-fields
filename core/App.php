@@ -116,6 +116,10 @@ class App {
 			return new \Carbon_Fields\Container\Condition\Post_Format_Condition();
 		} );
 
+		$ioc['container_condition_type_post_level'] = $ioc->factory( function() {
+			return new \Carbon_Fields\Container\Condition\Post_Level_Condition();
+		} );
+
 		$ioc['container_condition_type_term'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Term_Condition();
 		} );
@@ -125,6 +129,7 @@ class App {
 			$factory->register( 'post_id', 'Carbon_Fields\\Container\\Condition\\Post_ID_Condition' );
 			$factory->register( 'post_parent_id', 'Carbon_Fields\\Container\\Condition\\Post_Parent_ID_Condition' );
 			$factory->register( 'post_format', 'Carbon_Fields\\Container\\Condition\\Post_Format_Condition' );
+			$factory->register( 'post_level', 'Carbon_Fields\\Container\\Condition\\Post_Level_Condition' );
 			$factory->register( 'term', 'Carbon_Fields\\Container\\Condition\\Term_Condition' );
 			return $factory;
 		};
