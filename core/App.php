@@ -18,20 +18,6 @@ use Carbon_Fields\REST_API\Decorator as REST_API_Decorator;
 use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
 use Carbon_Fields\Container\Condition\Fulfillable_Collection;
 
-use Carbon_Fields\Container\Condition\Post_ID_Condition;
-use Carbon_Fields\Container\Condition\Post_Parent_ID_Condition;
-use Carbon_Fields\Container\Condition\Term_Condition;
-
-use Carbon_Fields\Container\Condition\Comparer\Equality_Comparer;
-use Carbon_Fields\Container\Condition\Comparer\Contain_Comparer;
-use Carbon_Fields\Container\Condition\Comparer\Scalar_Comparer;
-use Carbon_Fields\Container\Condition\Comparer\Regex_Comparer;
-use Carbon_Fields\Container\Condition\Comparer\Custom_Comparer;
-
-use Carbon_Fields\Container\Condition\Translator\Array_Translator;
-
-
-
 /**
  * Holds a static reference to the ioc container
  */
@@ -119,49 +105,54 @@ class App {
 		} );
 
 		$ioc['container_condition_type_post_id'] = $ioc->factory( function() {
-			return new Post_ID_Condition();
+			return new \Carbon_Fields\Container\Condition\Post_ID_Condition();
 		} );
 
 		$ioc['container_condition_type_post_parent_id'] = $ioc->factory( function() {
-			return new Post_Parent_ID_Condition();
+			return new \Carbon_Fields\Container\Condition\Post_Parent_ID_Condition();
+		} );
+
+		$ioc['container_condition_type_post_format'] = $ioc->factory( function() {
+			return new \Carbon_Fields\Container\Condition\Post_Format_Condition();
 		} );
 
 		$ioc['container_condition_type_term'] = $ioc->factory( function() {
-			return new Term_Condition();
+			return new \Carbon_Fields\Container\Condition\Term_Condition();
 		} );
 
 		$ioc['container_condition_factory'] = function() {
 			$factory = new ConditionFactory();
 			$factory->register( 'post_id', 'Carbon_Fields\\Container\\Condition\\Post_ID_Condition' );
 			$factory->register( 'post_parent_id', 'Carbon_Fields\\Container\\Condition\\Post_Parent_ID_Condition' );
+			$factory->register( 'post_format', 'Carbon_Fields\\Container\\Condition\\Post_Format_Condition' );
 			$factory->register( 'term', 'Carbon_Fields\\Container\\Condition\\Term_Condition' );
 			return $factory;
 		};
 
 		/* Container Condition Comparers */
 		$ioc['container_condition_comparer_type_equality'] = $ioc->factory( function() {
-			return new Equality_Comparer();
+			return new \Carbon_Fields\Container\Condition\Comparer\Equality_Comparer();
 		} );
 
 		$ioc['container_condition_comparer_type_contain'] = $ioc->factory( function() {
-			return new Contain_Comparer();
+			return new \Carbon_Fields\Container\Condition\Comparer\Contain_Comparer();
 		} );
 
 		$ioc['container_condition_comparer_type_scalar'] = $ioc->factory( function() {
-			return new Scalar_Comparer();
+			return new \Carbon_Fields\Container\Condition\Comparer\Scalar_Comparer();
 		} );
 
 		$ioc['container_condition_comparer_type_regex'] = $ioc->factory( function() {
-			return new Regex_Comparer();
+			return new \Carbon_Fields\Container\Condition\Comparer\Regex_Comparer();
 		} );
 
 		$ioc['container_condition_comparer_type_custom'] = $ioc->factory( function() {
-			return new Custom_Comparer();
+			return new \Carbon_Fields\Container\Condition\Comparer\Custom_Comparer();
 		} );
 
 		/* Container Condition Translators */
 		$ioc['container_condition_translator_array'] = function( $ioc ) {
-			return new Array_Translator( $ioc['container_condition_factory'] );
+			return new \Carbon_Fields\Container\Condition\Translator\Array_Translator( $ioc['container_condition_factory'] );
 		};
 
 		return $ioc;
