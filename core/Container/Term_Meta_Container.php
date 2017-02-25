@@ -98,11 +98,12 @@ class Term_Meta_Container extends Container {
 		$request_taxonomy = isset( $input['taxonomy'] ) ? $input['taxonomy'] : '';
 
 		$term = get_term( $request_term_id );
+		$term = ( $term && ! is_wp_error( $term ) ) ? $term : null;
 		$environment = array(
-			'term' => ( $term && ! is_wp_error( $term ) ) ? $term : null,
-			'taxonomy' => $request_taxonomy,
+			'term_id' => $term ? intval( $term->term_id ) : 0,
+			'term' => $term,
+			'taxonomy' => $term ? $term->taxonomy : $request_taxonomy,
 		);
-		$environment['term_id'] = $environment['term'] ? $environment['term']->term_id : 0;
 
 		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
 			return false;

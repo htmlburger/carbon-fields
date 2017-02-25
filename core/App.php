@@ -107,23 +107,18 @@ class App {
 		$ioc['container_condition_type_post_id'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Post_ID_Condition();
 		} );
-
 		$ioc['container_condition_type_post_parent_id'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Post_Parent_ID_Condition();
 		} );
-
 		$ioc['container_condition_type_post_format'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Post_Format_Condition();
 		} );
-
 		$ioc['container_condition_type_post_level'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Post_Level_Condition();
 		} );
-
 		$ioc['container_condition_type_post_template'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Post_Template_Condition();
 		} );
-
 		$ioc['container_condition_type_post_term'] = $ioc->factory( function( $ioc ) {
 			return new \Carbon_Fields\Container\Condition\Post_Term_Condition( $ioc['wp_toolset'] );
 		} );
@@ -131,13 +126,15 @@ class App {
 		$ioc['container_condition_type_term'] = $ioc->factory( function( $ioc ) {
 			return new \Carbon_Fields\Container\Condition\Term_Condition( $ioc['wp_toolset'] );
 		} );
-
 		$ioc['container_condition_type_term_taxonomy'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Term_Taxonomy_Condition();
 		} );
-
 		$ioc['container_condition_type_term_level'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Term_Level_Condition();
+		} );
+
+		$ioc['container_condition_type_user_id'] = $ioc->factory( function() {
+			return new \Carbon_Fields\Container\Condition\User_ID_Condition();
 		} );
 
 		$ioc['container_condition_factory'] = function() {
@@ -152,6 +149,8 @@ class App {
 			$factory->register( 'term', 'Carbon_Fields\\Container\\Condition\\Term_Condition' );
 			$factory->register( 'term_taxonomy', 'Carbon_Fields\\Container\\Condition\\Term_Taxonomy_Condition' );
 			$factory->register( 'term_level', 'Carbon_Fields\\Container\\Condition\\Term_Level_Condition' );
+
+			$factory->register( 'user_id', 'Carbon_Fields\\Container\\Condition\\User_ID_Condition' );
 			return $factory;
 		};
 

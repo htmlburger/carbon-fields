@@ -136,7 +136,7 @@ class Post_Meta_Container extends Container {
 		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
 			return false;
 		}
-		
+
 		$input = stripslashes_deep( $_GET );
 
 		// Post types check
@@ -157,9 +157,11 @@ class Post_Meta_Container extends Container {
 			}
 		}
 
-		// TODO handle case: we don't always have a post ID (e.g. when creating posts)
+		$post = get_post( $this->post_id );
+		$post = $post ? $post : null;
 		$environment = array(
-			'post' => get_post( $this->post_id ),
+			'post_id' => $post ? $post->ID : 0,
+			'post' => $post,
 		);
 		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
 			return false;
