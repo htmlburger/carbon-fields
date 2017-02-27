@@ -95,9 +95,9 @@ export function* workerFormSubmit() {
 	while (true) {
 		const { event } = yield take(channel);
 		const containerId = $(event.target)
-								.closest('form')
-								.find('input[name="widget-id"]')
-									.val();
+			.closest('form')
+			.find('input[name="widget-id"]')
+				.val();
 
 		yield put(validateContainer(containerId, event));
 	}

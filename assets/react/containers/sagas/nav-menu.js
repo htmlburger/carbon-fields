@@ -8,22 +8,16 @@ import { put, call, take } from 'redux-saga/effects';
  * The internal dependencies.
  */
 import { PAGE_NOW_MENUS } from 'lib/constants';
-import { createAjaxSuccessChannel } from 'lib/events';
+import { createAjaxSuccessChannel, createSubmitChannel } from 'lib/events';
 
-import { receiveContainer } from 'containers/actions';
+import { receiveContainer, validateAllContainers } from 'containers/actions';
 
 /**
- * Start to work.
+ * Init the container when the menu item is created.
  *
  * @return {void}
  */
-export default function* foreman() {
-	const { pagenow } = window;
-
-	if (pagenow !== PAGE_NOW_MENUS) {
-		return;
-	}
-
+export function* workerInit() {
 	const channel = yield call(createAjaxSuccessChannel, 'add-menu-item');
 
 	while (true) {
@@ -41,4 +35,37 @@ export default function* foreman() {
 
 		yield put(receiveContainer(container));
 	}
+}
+
+/**
+ * Handle the form submission.
+ *
+ * @return {void}
+ */
+export function* workerFormSubmit() {
+	const channel = yield call(createSubmitChannel, 'form#update-nav-menu');
+
+	while (true) {
+		const { event } = yield take(channel);
+
+		yield put(validateAllContainers(event));
+	}
+}
+
+/**
+ * Start to work.
+ *
+ * @return {void}
+ */
+export default function* foreman() {
+	const { pagenow } = window;
+
+	if (pagenow !== PAGE_NOW_MENUS) {
+		return;
+	}
+
+	yield [
+		call(workerInit),
+		call(workerFormSubmit),
+	];
 }
