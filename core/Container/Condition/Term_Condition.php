@@ -53,35 +53,6 @@ class Term_Condition extends Condition {
 	}
 	
 	/**
-	 * Check if a post has a term
-	 *
-	 * @param  integer $post_id
-	 * @param  integer $term_id
-	 * @param  string  $term_taxonomy
-	 * @return boolean
-	 */
-	protected function post_has_term( $post_id, $raw_term ) {
-		$term = $this->wp_toolset->get_term_by_descriptor( $raw_term );
-		return has_term( intval( $term->term_id ), $term->taxonomy, intval( $post_id ) );
-	}
-	
-	/**
-	 * Check if a post has any of the supplied terms
-	 *
-	 * @param  integer       $post_id
-	 * @param  array<object> $term_id
-	 * @return boolean
-	 */
-	protected function post_has_any_term( $post_id, $raw_terms ) {
-		foreach ( $raw_terms as $raw_term ) {
-			if ( $this->post_has_term( $post_id, $raw_term ) ) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	/**
 	 * Check if the condition is fulfilled
 	 * 
 	 * @param  array $environment
