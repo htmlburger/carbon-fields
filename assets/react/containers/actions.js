@@ -79,4 +79,13 @@ export const receiveContainer = createAction('containers/RECEIVE_CONTAINER');
  * @param  {Object} event
  * @return {Object}
  */
-export const validateContainers = createAction('containers/VALIDATE_CONTAINERS');
+export const validateAllContainers = createAction('containers/VALIDATE_ALL_CONTAINERS');
+
+/**
+ * Trigger the validation of the specified container.
+ *
+ * @param  {String} containerId
+ * @param  {Object} event
+ * @return {Object}
+ */
+export const validateContainer = createAction('containers/VALIDATE_CONTAINER', (containerId, event) => ({ containerId, event }));

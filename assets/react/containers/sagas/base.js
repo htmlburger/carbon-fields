@@ -5,7 +5,7 @@ import $ from 'jquery';
 import urldecode from 'locutus/php/url/urldecode';
 import { takeEvery, takeLatest } from 'redux-saga';
 import { call, select, put, take } from 'redux-saga/effects';
-import { keyBy } from 'lodash';
+import { keyBy, keys } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -14,19 +14,23 @@ import { PAGE_NOW_WIDGETS, PAGE_NOW_MENUS } from 'lib/constants';
 
 import containerFactory from 'containers/factory';
 import { getContainerById } from 'containers/selectors';
+
 import {
 	setupContainer,
 	addContainer,
 	receiveContainer,
-	validateContainers,
+	validateAllContainers,
+	validateContainer,
 	setUI
 } from 'containers/actions';
 
 import {
 	addFields,
-	validateFields,
+	validateField,
 	markFieldAsInvalid
 } from 'fields/actions';
+
+import { getAllFields, getFieldsByRoots } from 'fields/selectors';
 import { flattenField } from 'fields/helpers';
 
 /**
@@ -74,20 +78,22 @@ export function* workerReceiveContainer(store, { payload }) {
 }
 
 /**
- * Validate all containers.
+ * Validate the container(s).
  *
- * @param  {Object} action
+ * @param  {String[]} fieldIds
+ * @param  {Object}   event
  * @return {void}
  */
-export function* workerValidate(action) {
-	const event = action.payload;
+export function* workerValidate(fieldIds, event) {
 	const $target = $(event.currentTarget);
 	const $spinner = $('#publishing-action .spinner', $target);
 	const $error = $('.carbon-error-required strong');
 
 	$spinner.addClass('is-active');
 
-	yield put(validateFields());
+	for (const fieldId of fieldIds) {
+		yield put(validateField(fieldId));
+	}
 
 	// Block and wait for an invalid field. In case we don't receive
 	// such action the worker will be canceled and the process will continue.
@@ -118,6 +124,33 @@ export function* workerValidate(action) {
 }
 
 /**
+ * Validate the specified container.
+ *
+ * @param  {Object} action
+ * @return {void}
+ */
+export function* workerValidateContainer(action) {
+	const { containerId, event } = action.payload;
+	const container = yield select(getContainerById, containerId);
+	const fieldIds = yield select(getFieldsByRoots, container.fields);
+
+	yield call(workerValidate, fieldIds, event);
+}
+
+/**
+ * Validate all containers.
+ *
+ * @param  {Object} action
+ * @return {void}
+ */
+export function* workervalidateAllContainers(action) {
+	const fields = yield select(getAllFields);
+	const fieldIds = yield call(keys, fields);
+
+	yield call(workerValidate, fieldIds, action.payload);
+}
+
+/**
  * Start to work.
  *
  * @param  {Object} store
@@ -126,7 +159,8 @@ export function* workerValidate(action) {
 export default function* foreman(store) {
 	const { pagenow } = window;
 	const workers = [
-		takeLatest(validateContainers, workerValidate),
+		takeLatest(validateAllContainers, workervalidateAllContainers),
+		takeEvery(validateContainer, workerValidateContainer),
 	];
 
 	if (pagenow === PAGE_NOW_WIDGETS || pagenow === PAGE_NOW_MENUS) {

@@ -16,7 +16,7 @@ import {
 	createClickChannel
 } from 'lib/events';
 
-import { removeContainer, receiveContainer, validateContainers } from 'containers/actions';
+import { removeContainer, receiveContainer, validateContainer } from 'containers/actions';
 import { getContainerById } from 'containers/selectors';
 
 import { removeFields } from 'fields/actions';
@@ -94,8 +94,12 @@ export function* workerFormSubmit() {
 
 	while (true) {
 		const { event } = yield take(channel);
+		const containerId = $(event.target)
+								.closest('form')
+								.find('input[name="widget-id"]')
+									.val();
 
-		yield put(validateContainers(event));
+		yield put(validateContainer(containerId, event));
 	}
 }
 

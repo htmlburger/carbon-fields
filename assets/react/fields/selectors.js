@@ -16,7 +16,7 @@ import { TYPE_COMPLEX } from 'fields/constants';
  * @param  {Object} state
  * @return {Object}
  */
-export const getAll = state => state.fields;
+export const getAllFields = state => state.fields;
 
 /**
  * Return a field object from the state.
@@ -33,7 +33,7 @@ export const getFieldById = (state, id) => state.fields[id];
  * @param  {String} parentId
  * @return {Function}
  */
-export const makeGetFieldsByParent = parentId => createSelector(getAll, fields => mapValues(keyBy(filter(fields, ['parent', parentId]), 'name'), 'id'));
+export const makeGetFieldsByParent = parentId => createSelector(getAllFields, fields => mapValues(keyBy(filter(fields, ['parent', parentId]), 'name'), 'id'));
 
 /**
  * Check whether the field should be rendered in tabs.
@@ -51,7 +51,7 @@ export const isFieldTabbed = createSelector(getFieldById, field => field.layout 
  * @return {String[]}
  */
 export const getFieldsByRoots = (state, roots) => {
-	const fields = getAll(state);
+	const fields = getAllFields(state);
 	const ids = [];
 
 	const walk = (roots, accumulator) => {

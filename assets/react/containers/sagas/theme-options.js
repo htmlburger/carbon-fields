@@ -11,7 +11,7 @@ import { take, call, select, put } from 'redux-saga/effects';
 import { createScrollChannel, createSubmitChannel } from 'lib/events';
 
 import { canProcessAction } from 'containers/selectors';
-import { setupContainer, validateContainers } from 'containers/actions';
+import { setupContainer, validateAllContainers } from 'containers/actions';
 import { TYPE_THEME_OPTIONS } from 'containers/constants';
 
 /**
@@ -59,7 +59,7 @@ export function* workerFormSubmit() {
 	while (true) {
 		const { event } = yield take(channel);
 
-		yield put(validateContainers(event));
+		yield put(validateAllContainers(event));
 	}
 }
 

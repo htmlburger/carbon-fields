@@ -8,7 +8,7 @@ import { find, findIndex, merge, keyBy } from 'lodash';
 /**
  * The internal dependencies.
  */
-import { getAll, getFieldById, isFieldTabbed } from 'fields/selectors';
+import { getAllFields, getFieldById, isFieldTabbed } from 'fields/selectors';
 
 import {
 	addComplexGroupIdentifiers,
@@ -58,7 +58,7 @@ export function* workerAddOrCloneComplexGroup({ type, payload: { fieldId, groupI
 
 	// Replace the fields' references in the group.
 	if (isCloneAction) {
-		const all = yield select(getAll);
+		const all = yield select(getAllFields);
 		group.fields = group.fields.map(field => restoreField(field, all));
 	}
 
@@ -116,7 +116,7 @@ function collectFieldIds(roots, all, accumulator) {
  * @return {void}
  */
 export function* workerRemoveComplexGroup({ payload: { fieldId, groupId } }) {
-	const all = yield select(getAll);
+	const all = yield select(getAllFields);
 	const field = yield select(getFieldById, fieldId);
 	const group = yield call(find, field.value, { id: groupId });
 	const groupFields = yield call(collectFieldIds, group.fields, all, []);

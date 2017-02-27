@@ -20,7 +20,7 @@ import { getContainerById, canProcessAction } from 'containers/selectors';
 
 import {
 	setupContainer,
-	validateContainers,
+	validateAllContainers,
 	setMeta,
 	setUI
 } from 'containers/actions';
@@ -316,7 +316,7 @@ export function* workerFormSubmit() {
 	while (true) {
 		const { event } = yield take(channel);
 
-		yield put(validateContainers(event));
+		yield put(validateAllContainers(event));
 	}
 }
 

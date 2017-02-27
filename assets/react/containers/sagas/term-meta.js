@@ -36,7 +36,7 @@ import {
 
 import {
 	setupContainer,
-	validateContainers,
+	validateAllContainers,
 	setMeta,
 	setUI
 } from 'containers/actions';
@@ -174,7 +174,7 @@ export function* workerFormSubmit(channelCreator, selector) {
 	while (true) {
 		const { event } = yield take(channel);
 
-		yield put(validateContainers(event));
+		yield put(validateAllContainers(event));
 	}
 }
 

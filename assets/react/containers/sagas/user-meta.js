@@ -11,7 +11,7 @@ import { take, call, put, fork, select } from 'redux-saga/effects';
 import { createSelectboxChannel, createSubmitChannel } from 'lib/events';
 
 import { getContainerById, canProcessAction } from 'containers/selectors';
-import { setupContainer, validateContainers, setMeta, setUI } from 'containers/actions';
+import { setupContainer, validateAllContainers, setMeta, setUI } from 'containers/actions';
 import { TYPE_USER_META } from 'containers/constants';
 
 /**
@@ -107,7 +107,7 @@ export function* workerFormSubmit() {
 	while (true) {
 		const { event } = yield take(channel);
 
-		yield put(validateContainers(event));
+		yield put(validateAllContainers(event));
 	}
 }
 
