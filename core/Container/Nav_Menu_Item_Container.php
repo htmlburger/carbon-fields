@@ -9,6 +9,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Nav menu item fields container class.
  */
 class Nav_Menu_Item_Container extends Container {
+	
 	/**
 	 * Array of container clones for every menu item
 	 *
