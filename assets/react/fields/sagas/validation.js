@@ -13,7 +13,6 @@ import { getFieldValidators } from 'lib/registry';
 import {
 	setupValidation,
 	updateField,
-	validateFields,
 	validateField,
 	markFieldAsValid,
 	markFieldAsInvalid,
@@ -24,13 +23,46 @@ import { getFieldById } from 'fields/selectors';
 import { stopSaga } from 'fields/helpers';
 
 /**
- * Validate the field.
+ * Determine when the action should be handled by the current handler.
+ *
+ * @param  {Object}  action
+ * @param  {String}  fieldId
+ * @return {Boolean}
+ */
+export function shouldValidate(action, fieldId) {
+	const { payload } = action;
+
+	if (payload.fieldId !== fieldId) {
+		return false;
+	}
+
+	if (!isUndefined(payload.data) && isUndefined(payload.data.value)) {
+		return false;
+	}
+
+	return true;
+}
+
+/**
+ * Run the validator.
  *
  * @param  {Function} validator
- * @param  {String} fieldId
- * @return {String}
+ * @param  {String}   fieldId
+ * @param  {Boolean}  debounce
+ * @param  {Object}   action
+ * @return {void}
  */
-export function* validate(validator, fieldId) {
+export function* workerValidate(validator, fieldId, debounce, action) {
+	if (!shouldValidate(action, fieldId)) {
+		return;
+	}
+
+	// Delay the validation, because in some situations
+	// it will trigger unnecessary re-renders.
+	if (debounce) {
+		yield call(delay, 250);
+	}
+
 	const field = yield select(getFieldById, fieldId);
 	const { is_visible, valid } = field.ui;
 
@@ -56,76 +88,6 @@ export function* validate(validator, fieldId) {
 }
 
 /**
- * Determine when the action should be handled by the current handler.
- *
- * @param  {Object}  action
- * @param  {String}  fieldId
- * @return {Boolean}
- */
-export function shouldValidate(action, fieldId) {
-	const { payload } = action;
-
-	if (payload.fieldId !== fieldId) {
-		return false;
-	}
-
-	if (!isUndefined(payload.data) && isUndefined(payload.data.value)) {
-		return false;
-	}
-
-	return true;
-}
-
-/**
- * Run the validator when the field's value is updated.
- *
- * @param  {Object} validator
- * @param  {String} fieldId
- * @param  {Object} action
- * @return {void}
- */
-export function* workerValidateOnUpdate(validator, fieldId, action) {
-	if (!shouldValidate(action, fieldId)) {
-		return;
-	}
-
-	// Delay the validation, because in some situations
-	// it will trigger unnecessary re-renders.
-	if (validator.debounce) {
-		yield call(delay, 250);
-	}
-
-	yield call(validate, validator.handler, fieldId);
-}
-
-/**
- * Run the validator when a mass validation is requested.
- *
- * @param  {Object} validator
- * @param  {String} fieldId
- * @return {void}
- */
-export function* workerValidateAll(validator, fieldId) {
-	yield call(validate, validator.handler, fieldId);
-}
-
-/**
- * Run the validator when a mass validation is requested.
- *
- * @param  {Object} validator
- * @param  {String} fieldId
- * @param  {Object} action
- * @return {void}
- */
-export function* validateOnDemand(validator, fieldId, action) {
-	if (!shouldValidate(action, fieldId)) {
-		return;
-	}
-
-	yield call(validate, validator.handler, fieldId);
-}
-
-/**
  * Handle setup of the validation logic.
  *
  * @param  {Object} action
@@ -143,9 +105,8 @@ export function* workerSetup({ payload: { fieldId, validationType }}) {
 	}
 
 	yield call(stopSaga, fieldId, yield [
-		takeLatest(updateField, workerValidateOnUpdate, validator, fieldId),
-		takeLatest(validateFields, workerValidateAll, validator, fieldId),
-		takeEvery(validateField, workerValidateOnDemand, validator, fieldId),
+		takeLatest(updateField, workerValidate, validator.handler, fieldId, validator.debounce),
+		takeEvery(validateField, workerValidate, validator.handler, fieldId, false),
 	]);
 }
 
