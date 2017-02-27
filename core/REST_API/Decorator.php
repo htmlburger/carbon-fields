@@ -82,7 +82,7 @@ class Decorator {
 	 * @return array
 	 */	
 	public static function get_post_meta_container_settings( $container ) {
-		return $container->settings['post_type'];
+		return $container->get_post_type_visibility();
 	}
 
 	/**
@@ -91,7 +91,7 @@ class Decorator {
 	 * @return array
 	 */	
 	public static function get_term_meta_container_settings( $container ) {
-		return $container->settings['taxonomy'];
+		return $container->get_taxonomy_visibility();
 	}
 
 	/**

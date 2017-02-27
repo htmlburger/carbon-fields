@@ -154,6 +154,27 @@ class Term_Meta_Container extends Container {
 	}
 
 	/**
+	 * Get array of taxonomies this container can appear on conditionally
+	 * 
+	 * @return array<string>
+	 */
+	public function get_taxonomy_visibility() {
+		$all_taxonomies = get_taxonomies();
+		$filtered_collection = $this->fulfillable_collection->filter( array( 'term_taxonomy' ) );
+
+		$shown_on = array();
+		foreach ( $all_taxonomies as $taxonomy ) {
+			$environment = array(
+				'taxonomy' => $taxonomy,
+			);
+			if ( $filtered_collection->is_fulfilled( $environment ) ) {
+				$shown_on[] = $taxonomy;
+			}
+		}
+		return $shown_on;
+	}
+
+	/**
 	 * COMMON USAGE METHODS
 	 */
 
