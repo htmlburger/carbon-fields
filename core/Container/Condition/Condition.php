@@ -55,7 +55,7 @@ abstract class Condition implements Fulfillable {
 	 * 
 	 * @return array<Comparer>
 	 */
-	public function get_comparers() {
+	protected function get_comparers() {
 		return $this->comparers;
 	}
 	
@@ -65,7 +65,7 @@ abstract class Condition implements Fulfillable {
 	 * @param array<Comparer> $comparers
 	 * @return Condition $this
 	 */
-	public function set_comparers( $comparers ) {
+	protected function set_comparers( $comparers ) {
 		$this->comparers = $comparers;
 		return $this;
 	}
@@ -78,7 +78,7 @@ abstract class Condition implements Fulfillable {
 	 * @param mixed  $b
 	 * @return bool
 	 */
-	public function first_supported_comparer_is_correct( $a, $comparison_operator, $b ) {
+	protected function first_supported_comparer_is_correct( $a, $comparison_operator, $b ) {
 		$comparers = $this->get_comparers();
 		foreach ( $comparers as $comparer ) {
 			if ( ! $comparer->supports_comparison_operator( $comparison_operator ) ) {

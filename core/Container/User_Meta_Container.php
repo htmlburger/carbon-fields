@@ -21,7 +21,7 @@ class User_Meta_Container extends Container {
 	 *
 	 * @var array<string>
 	 */
-	protected $static_conditions = array( 'user_id' );
+	protected $static_conditions = array( 'user_id', 'user_capability' );
 
 	/**
 	 * Array of condition types that are checked during edit requests

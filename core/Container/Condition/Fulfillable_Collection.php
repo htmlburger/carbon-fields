@@ -127,7 +127,7 @@ class Fulfillable_Collection implements Fulfillable {
 	/**
 	 * Propagate allowed condition types to child collections
 	 */
-	public function propagate_condition_type_list() {
+	protected function propagate_condition_type_list() {
 		$condition_type_list = $this->get_condition_type_list();
 		foreach ( $this->fulfillables as $fulfillable ) {
 			if ( is_a( $fulfillable, get_class() ) ) {
@@ -249,7 +249,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @param Fulfillable $fulfillable
 	 * @return bool Fulfillable found and removed
 	 */
-	protected function remove_fulfillable( Fulfillable $fulfillable ) {
+	public function remove_fulfillable( Fulfillable $fulfillable ) {
 		foreach ( $this->fulfillables as $index => $fulfillable_tuple ) {
 			if ( $fulfillable_tuple['fulfillable'] === $fulfillable ) {
 				$fulfillables_copy = $this->fulfillables; // introduce a copy array to highlight array_splice mutation
