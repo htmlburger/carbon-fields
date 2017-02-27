@@ -72,12 +72,12 @@ class Array_Translator extends Translator {
 		if ( ! empty( $relations['OR'] ) ) {
 			$collection['relation'] = 'OR';
 		}
-		foreach ( $relations as $relation => $conditions ) {
-			$collection[] = array( 'relation' => $relation ) + $conditions;
+		foreach ( $relations as $relation => $fulfillables ) {
+			$collection[] = array( 'relation' => $relation ) + $fulfillables;
 		}
 
 		if ( count( $relations ) === 1 ) {
-			// we only have one relation group so we simplify the conditions with 1 level
+			// we only have one relation group so we simplify the fulfillables with 1 level
 			$collection = $collection[0];
 		}
 

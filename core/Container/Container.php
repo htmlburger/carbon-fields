@@ -673,11 +673,16 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return array
 	 */
 	public function to_json( $load ) {
+		$array_translator = App::resolve( 'container_condition_translator_array' );
+		$dynamic_conditions = $this->fulfillable_collection->filter( $this->dynamic_conditions );
+		$dynamic_conditions = $array_translator->fulfillable_to_foreign( $dynamic_conditions );
+
 		$container_data = array(
 			'id' => $this->id,
 			'type' => $this->type,
 			'title' => $this->title,
 			'settings' => $this->settings,
+			'dynamic_conditions' => $dynamic_conditions,
 			'fields' => array(),
 		);
 
