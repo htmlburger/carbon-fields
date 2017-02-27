@@ -23,7 +23,7 @@ import { TYPE_COMPLEX } from 'fields/constants';
  * @param  {Object} state
  * @return {Object}
  */
-export const getAllFields = state => state.fields;
+export const getFields = state => state.fields;
 
 /**
  * Return a field object from the state.
@@ -40,7 +40,7 @@ export const getFieldById = (state, id) => state.fields[id];
  * @param  {String} parentId
  * @return {Function}
  */
-export const makeGetFieldsByParent = parentId => createSelector(getAllFields, fields => mapValues(keyBy(filter(fields, ['parent', parentId]), 'name'), 'id'));
+export const makeGetFieldsByParent = parentId => createSelector(getFields, fields => mapValues(keyBy(filter(fields, ['parent', parentId]), 'name'), 'id'));
 
 /**
  * Check whether the field should be rendered in tabs.
@@ -58,7 +58,7 @@ export const isFieldTabbed = createSelector(getFieldById, field => field.layout 
  * @return {String[]}
  */
 export const getFieldsByRoots = (state, roots) => {
-	const fields = getAllFields(state);
+	const fields = getFields(state);
 	const ids = [];
 
 	const walk = (roots, accumulator) => {
@@ -105,4 +105,4 @@ export const makeGetSidebarFieldOptions = () => createSelector([
  * @param  {Object} fields
  * @return {Boolean}
  */
-export const hasInvalidFields = createSelector(getAllFields, fields => some(fields, ['ui.valid', false]));
+export const hasInvalidFields = createSelector(getFields, fields => some(fields, ['ui.valid', false]));

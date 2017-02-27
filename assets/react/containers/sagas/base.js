@@ -31,7 +31,7 @@ import {
 } from 'fields/actions';
 
 import {
-	getAllFields,
+	getFields,
 	getFieldsByRoots,
 	hasInvalidFields
 } from 'fields/selectors';
@@ -151,7 +151,7 @@ export function* workerValidateContainer(action) {
  * @return {void}
  */
 export function* workervalidateAllContainers(action) {
-	const fields = yield select(getAllFields);
+	const fields = yield select(getFields);
 	const fieldIds = yield call(keys, fields);
 
 	yield call(workerValidate, fieldIds, action.payload);
