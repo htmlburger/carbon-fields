@@ -16,6 +16,20 @@ class Term_Meta_Container extends Container {
 	);
 
 	/**
+	 * Array of condition types that are checked during save requests
+	 *
+	 * @var array<string>
+	 */
+	protected $static_conditions = array( 'term', 'term_taxonomy' );
+
+	/**
+	 * Array of condition types that are checked during edit requests
+	 *
+	 * @var array<string>
+	 */
+	protected $dynamic_conditions = array( 'term_level' );
+
+	/**
 	 * Create a new container
 	 *
 	 * @param string $unique_id Unique id of the container
@@ -24,9 +38,6 @@ class Term_Meta_Container extends Container {
 	 **/
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
-		$this->fulfillable_collection->set_condition_type_list( array(
-			'term', 'term_taxonomy', 'term_level'
-		), true );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'term_meta' ), $this->has_default_datastore() );
@@ -104,8 +115,7 @@ class Term_Meta_Container extends Container {
 			'term' => $term,
 			'taxonomy' => $term ? $term->taxonomy : $request_taxonomy,
 		);
-
-		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
+		if ( ! $this->fulfillable_collection->filter( $this->static_conditions )->is_fulfilled( $environment ) ) {
 			return false;
 		}
 
@@ -119,7 +129,23 @@ class Term_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
-		return ( $object_id > 0 );
+		$term = get_term( $object_id );
+		$term = ( $term && ! is_wp_error( $term ) ) ? $term : null;
+
+		if ( ! $term ) {
+			return false;
+		}
+
+		$environment = array(
+			'term_id' => intval( $term->term_id ),
+			'term' => $term,
+			'taxonomy' => $term->taxonomy,
+		);
+		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

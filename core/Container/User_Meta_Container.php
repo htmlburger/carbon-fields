@@ -20,6 +20,20 @@ class User_Meta_Container extends Container {
 	);
 
 	/**
+	 * Array of condition types that are checked during save requests
+	 *
+	 * @var array<string>
+	 */
+	protected $static_conditions = array( 'user_id' );
+
+	/**
+	 * Array of condition types that are checked during edit requests
+	 *
+	 * @var array<string>
+	 */
+	protected $dynamic_conditions = array( 'user_role' );
+
+	/**
 	 * Create a new container
 	 *
 	 * @param string $unique_id Unique id of the container
@@ -28,9 +42,6 @@ class User_Meta_Container extends Container {
 	 **/
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
-		$this->fulfillable_collection->set_condition_type_list( array(
-			'user_id', 'user_role'
-		), true );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'user_meta' ), $this->has_default_datastore() );
@@ -52,11 +63,11 @@ class User_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_save( $user_id = 0 ) {
-		if ( ! $this->verified_nonce_in_request() ) {
+		if ( ! $this->is_profile_page() || ! $this->is_valid_show_for() ) {
 			return false;
 		}
-
-		if ( ! $this->is_valid_attach_for_request() ) {
+		
+		if ( ! $this->verified_nonce_in_request() ) {
 			return false;
 		}
 
@@ -111,8 +122,7 @@ class User_Meta_Container extends Container {
 			'user' => $user ? $user : null,
 			'roles' => $user ? $user->roles : array(),
 		);
-
-		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
+		if ( ! $this->fulfillable_collection->filter( $this->static_conditions )->is_fulfilled( $environment ) ) {
 			return false;
 		}
 
@@ -126,32 +136,22 @@ class User_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
-		$valid = true;
-		$user_id = $object_id;
-		$user = get_userdata( $user_id );
+		$user = get_userdata( $object_id );
 
 		if ( ! $user  ) {
 			return false;
 		}
 
-		if ( empty( $user->roles ) ) {
-			return;
+		$environment = array(
+			'user_id' => intval( $user->ID ),
+			'user' => $user,
+			'roles' => $user->roles,
+		);
+		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
+			return false;
 		}
 
-		// Check user role
-		if ( ! empty( $this->settings['show_on']['role'] ) ) {
-			$allowed_roles = (array) $this->settings['show_on']['role'];
-
-			// array_shift removed the returned role from the $user_profile->roles
-			// $roles_to_shift prevents changing of the $user_profile->roles variable
-			$roles_to_shift = $user->roles;
-			$profile_role = array_shift( $roles_to_shift );
-			if ( ! in_array( $profile_role, $allowed_roles ) ) {
-				$valid = false;
-			}
-		}
-
-		return $valid;
+		return true;
 	}
 
 	/**

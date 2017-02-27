@@ -276,7 +276,11 @@ class Fulfillable_Collection implements Fulfillable {
 			$fulfillable_comparison = $fulfillable_tuple['fulfillable_comparison'];
 
 			if ( is_a( $fulfillable, get_class() ) ) {
-				$collection->add_fulfillable( $fulfillable->filter( $condition_whitelist ), $fulfillable_comparison );
+				$filtered_collection = $fulfillable->filter( $condition_whitelist );
+				if ( empty( $filtered_collection->get_fulfillables() ) ) {
+					continue; // skip empty collections to reduce clutter
+				}
+				$collection->add_fulfillable( $filtered_collection, $fulfillable_comparison );
 			} else {
 				$type = $this->condition_factory->get_type( get_class( $fulfillable ) );
 				if ( ! in_array( $type, $condition_whitelist ) ) {

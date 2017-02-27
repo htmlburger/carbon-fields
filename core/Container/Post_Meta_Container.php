@@ -43,6 +43,20 @@ class Post_Meta_Container extends Container {
 	);
 
 	/**
+	 * Array of condition types that are checked during save requests
+	 *
+	 * @var array<string>
+	 */
+	protected $static_conditions = array( 'post_id', 'post_type' );
+
+	/**
+	 * Array of condition types that are checked during edit requests
+	 *
+	 * @var array<string>
+	 */
+	protected $dynamic_conditions = array( 'post_parent_id', 'post_format', 'post_level', 'post_template', 'post_term' );
+
+	/**
 	 * Create a new container
 	 *
 	 * @param string $unique_id Unique id of the container
@@ -51,9 +65,6 @@ class Post_Meta_Container extends Container {
 	 **/
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
-		$this->fulfillable_collection->set_condition_type_list( array(
-			'post_id', 'post_parent_id', 'post_type', 'post_format', 'post_level', 'post_template', 'post_term'
-		), true );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'post_meta' ), $this->has_default_datastore() );
@@ -138,23 +149,20 @@ class Post_Meta_Container extends Container {
 		}
 
 		$input = stripslashes_deep( $_GET );
+		$request_post_type = isset( $input['post_type'] ) ? $input['post_type'] : '';
 		$post_type = '';
 
-		// Post types check
-		if ( ! empty( $this->settings['post_type'] ) ) {
-			$request_post_type = isset( $input['post_type'] ) ? $input['post_type'] : '';
 
-			if ( $this->post_id ) {
-				$post_type = get_post_type( $this->post_id );
-			} elseif ( ! empty( $request_post_type ) ) {
-				$post_type = $request_post_type;
-			} elseif ( $pagenow === 'post-new.php' ) {
-				$post_type = 'post';
-			}
+		if ( $this->post_id ) {
+			$post_type = get_post_type( $this->post_id );
+		} elseif ( ! empty( $request_post_type ) ) {
+			$post_type = $request_post_type;
+		} elseif ( $pagenow === 'post-new.php' ) {
+			$post_type = 'post';
+		}
 
-			if ( ! $post_type || ! in_array( $post_type, $this->settings['post_type'] ) ) {
-				return false;
-			}
+		if ( ! $post_type ) {
+			return false;
 		}
 
 		$post = get_post( $this->post_id );
@@ -164,20 +172,8 @@ class Post_Meta_Container extends Container {
 			'post' => $post,
 			'post_type' => $post_type,
 		);
-		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
+		if ( ! $this->fulfillable_collection->filter( $this->static_conditions )->is_fulfilled( $environment ) ) {
 			return false;
-		}
-
-		// Check show on conditions
-		foreach ( $this->settings['show_on'] as $condition => $value ) {
-			if ( is_null( $value ) || $condition !== 'page_id' ) {
-				continue;
-			}
-
-			$post = get_post( $this->post_id );
-			if ( ! $this->is_condition_fullfilled( $condition, $value, $post ) ) {
-				return false;
-			}
 		}
 
 		return true;
@@ -196,20 +192,13 @@ class Post_Meta_Container extends Container {
 			return false;
 		}
 
-		// Check post type
-		if ( ! in_array( $post->post_type, $this->settings['post_type'] ) ) {
+		$environment = array(
+			'post_id' => $post->ID,
+			'post' => $post,
+			'post_type' => get_post_type( $post->ID ),
+		);
+		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
 			return false;
-		}
-
-		// Check show on conditions
-		foreach ( $this->settings['show_on'] as $condition => $value ) {
-			if ( is_null( $value ) ) {
-				continue;
-			}
-
-			if ( ! $this->is_condition_fullfilled( $condition, $value, $post ) ) {
-				return false;
-			}
 		}
 
 		return true;
@@ -258,127 +247,6 @@ class Post_Meta_Container extends Container {
 	public function set_post_id( $post_id ) {
 		$this->post_id = $post_id;
 		$this->get_datastore()->set_id( $post_id );
-	}
-
-	/**
-	 * CONDITION TOOLS
-	 */
-	
-	/**
-	 * Check a condition against all supported conditions
-	 * 
-	 * @param string $condition
-	 * @param mixed $value
-	 * @param WP_Post $post
-	 * @return bool
-	 */
-	protected function is_condition_fullfilled( $condition, $value, $post ) {
-		switch ( $condition ) {
-			// show_on_post_format
-			case 'post_formats':
-				if ( ! $this->condition_is_post_of_format( $post, $value ) ) {
-					return false;
-				}
-				break;
-
-			// show_on_taxonomy_term or show_on_category
-			case 'category':
-				$this->show_on_category( $value );
-
-				/* fall-through intended */
-			case 'tax_term_id':
-				$has_term = has_term(
-					intval( $this->settings['show_on']['tax_term_id'] ),
-					$this->settings['show_on']['tax_slug'],
-					$post->ID
-				);
-				if ( ! $has_term ) {
-					return false;
-				}
-				break;
-
-			// show_on_level
-			case 'level_limit':
-				if ( ! $this->condition_is_post_on_level( $post, $value ) ) {
-					return false;
-				}
-				break;
-
-			// show_on_page
-			case 'page_id':
-				if ( $post->ID !== intval( $value ) ) {
-					return false;
-				}
-				break;
-
-			// show_on_page_children
-			case 'parent_page_id':
-				if ( $post->post_parent !== $value ) {
-					return false;
-				}
-				break;
-
-			// show_on_template
-			case 'template_names':
-				if ( ! empty( $value ) && ! $this->condition_is_post_using_template( $post, $value ) ) {
-					return false;
-				}
-				break;
-
-			// hide_on_template
-			case 'not_in_template_names':
-				if ( ! empty( $value ) && $this->condition_is_post_using_template( $post, $value ) ) {
-					return false;
-				}
-				break;
-		}
-		return true;
-	}
-	
-	/**
-	 * Check if a post is of a given post format
-	 * 
-	 * @param WP_Post $post
-	 * @param string $format
-	 * @return bool
-	 */
-	protected function condition_is_post_of_format( $post, $format ) {
-		if ( empty( $format ) || $post->post_type !== 'post' ) {
-			return true; // this doesn't make sense - returning true for a post that does not support formats (kept for backwards compatibility)
-		}
-
-		$current_format = get_post_format( $post->ID );
-		if ( ! in_array( $current_format, $format ) ) {
-			return false;
-		}
-
-		return true;
-	}
-	
-	/**
-	 * Check if a post is on a specific level in it's hierarchy
-	 * 
-	 * @param WP_Post $post
-	 * @param int $level
-	 * @return bool
-	 */
-	protected function condition_is_post_on_level( $post, $level ) {
-		$level = intval( $level );
-		$post_level = count( get_post_ancestors( $post->ID ) ) + 1;
-		return ( $post_level === $level );
-	}
-	
-	/**
-	 * Check if a post uses one of a given array of templates
-	 * 
-	 * @param WP_Post $post
-	 * @param string|array<string> $templates
-	 * @return bool
-	 */
-	protected function condition_is_post_using_template( $post, $templates ) {
-		$templates = is_array( $templates ) ? $templates : array( $templates );
-		$current_template = get_post_meta( $post->ID, '_wp_page_template', true );
-		return in_array( $current_template, $templates );
 	}
 
 	/**
