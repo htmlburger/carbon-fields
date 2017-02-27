@@ -54,8 +54,7 @@ class Post_Term_Condition extends Condition {
 	 * Check if a post has a term
 	 *
 	 * @param  integer $post_id
-	 * @param  integer $term_id
-	 * @param  string  $term_taxonomy
+	 * @param  array   $raw_term
 	 * @return boolean
 	 */
 	protected function post_has_term( $post_id, $raw_term ) {
@@ -66,8 +65,8 @@ class Post_Term_Condition extends Condition {
 	/**
 	 * Check if a post has any of the supplied terms
 	 *
-	 * @param  integer       $post_id
-	 * @param  array<object> $term_id
+	 * @param  integer      $post_id
+	 * @param  array<array> $raw_terms
 	 * @return boolean
 	 */
 	protected function post_has_any_term( $post_id, $raw_terms ) {
