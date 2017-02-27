@@ -159,7 +159,6 @@ class Post_Meta_Container extends Container {
 		$request_post_type = isset( $input['post_type'] ) ? $input['post_type'] : '';
 		$post_type = '';
 
-
 		if ( $this->post_id ) {
 			$post_type = get_post_type( $this->post_id );
 		} elseif ( ! empty( $request_post_type ) ) {

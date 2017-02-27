@@ -176,11 +176,11 @@ class Fulfillable_Collection implements Fulfillable {
 	 */
 	public function when( $condition_type, $comparison_operator = '=', $value = null, $fulfillable_comparison = 'AND' ) {
 		if ( is_array( $condition_type ) ) {
-			return $this->whenArray( $condition_type, $fulfillable_comparison );
+			return $this->when_array( $condition_type, $fulfillable_comparison );
 		}
 
 		if ( is_callable( $condition_type ) ) {
-			return $this->whenCollection( $condition_type, $fulfillable_comparison );
+			return $this->when_collection( $condition_type, $fulfillable_comparison );
 		}
 
 		if ( ! $this->is_condition_type_allowed( $condition_type ) ) {
@@ -207,7 +207,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @param  string                 $fulfillable_comparison
 	 * @return Fulfillable_Collection $this
 	 */
-	protected function whenArray( $fulfillable_as_array, $fulfillable_comparison) {
+	protected function when_array( $fulfillable_as_array, $fulfillable_comparison) {
 		$fulfillable = $this->array_translator->foreign_to_fulfillable( $fulfillable_as_array );
 		$this->add_fulfillable( $fulfillable, $fulfillable_comparison );
 		return $this;
@@ -220,7 +220,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @param  string                 $fulfillable_comparison
 	 * @return Fulfillable_Collection $this
 	 */
-	protected function whenCollection( $collection_callable, $fulfillable_comparison) {
+	protected function when_collection( $collection_callable, $fulfillable_comparison) {
 		$collection = App::resolve( 'container_condition_fulfillable_collection' );
 		$collection->set_condition_type_list( $this->get_condition_type_list(), $this->is_condition_type_list_whitelist() );
 		$collection_callable( $collection );
