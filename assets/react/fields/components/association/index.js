@@ -3,13 +3,14 @@
  */
 import React, { PropTypes } from 'react';
 import { compose, withState, withProps, withHandlers, setStatic } from 'recompose';
-import { cloneDeep, without, isMatch } from 'lodash';
+import { cloneDeep, without, isMatch, sortBy } from 'lodash';
 
 /**
  * The internal dependencies.
  */
 import Field from 'fields/components/field';
 import SearchInput from 'fields/components/search-input';
+import SortableList from 'fields/components/sortable-list';
 import AssociationList from 'fields/components/association/list';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
@@ -23,9 +24,11 @@ import { TYPE_ASSOCIATION } from 'fields/constants';
  * @param  {String}   props.name
  * @param  {Object}   props.field
  * @param  {String}   props.term
+ * @param  {Object}   props.sortableOptions
  * @param  {Object[]} props.items
  * @param  {Function} props.setTerm
  * @param  {Function} props.handleAddItem
+ * @param  {Function} props.handleSortItems
  * @return {React.Element}
  *
  * TODO: Fix the translation of the labels.
@@ -37,9 +40,11 @@ export const AssociationField = ({
 	field,
 	items,
 	term,
+	sortableOptions,
 	setTerm,
 	handleAddItem,
-	handleRemoveItem
+	handleRemoveItem,
+	handleSortItems
 }) => {
 	return <Field field={field}>
 		<div className="carbon-association-container carbon-Association">
@@ -77,12 +82,14 @@ export const AssociationField = ({
 				<div className="carbon-association-right">
 					<label>Associated:</label>
 
-					<AssociationList
-						prefix={name}
-						items={field.value}
-						associated={true}
-						visible={field.ui.is_visible}
-						onItemClick={handleRemoveItem} />
+					<SortableList options={sortableOptions} onSort={handleSortItems}>
+						<AssociationList
+							prefix={name}
+							items={field.value}
+							associated={true}
+							visible={field.ui.is_visible}
+							onItemClick={handleRemoveItem} />
+					</SortableList>
 				</div>
 			</div>
 		</div>
@@ -133,8 +140,18 @@ const props = ({ field, term }) => {
 		});
 	}
 
+	const sortableOptions = {
+		axis: 'y',
+		items: 'li',
+		forceHelperSize: true,
+		forcePlaceholderSize: true,
+		scroll: true,
+		handle: '.mobile-handle',
+	};
+
 	return {
 		items,
+		sortableOptions,
 	};
 };
 
@@ -178,12 +195,29 @@ const handleAddItem = ({ field, updateField }) => item => {
  */
 const handleRemoveItem = ({ field, updateField }) => item => updateField(field.id, { value: without(field.value, item) });
 
+/**
+ * Re-order the items.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.updateField
+ * @return {Function}
+ */
+const handleSortItems = ({ field, updateField }) => newItems => {
+	newItems = newItems.map(id => parseInt(id, 10));
+	newItems = sortBy(field.value, item => newItems.indexOf(item.id));
+
+	updateField(field.id, {
+		value: newItems,
+	});
+};
+
 export default setStatic('type', [TYPE_ASSOCIATION])(
 	compose(
 		withStore(),
 		withSetup(),
 		withState('term', 'setTerm', ''),
 		withProps(props),
-		withHandlers({ handleAddItem, handleRemoveItem })
+		withHandlers({ handleAddItem, handleRemoveItem, handleSortItems })
 	)(AssociationField)
 );

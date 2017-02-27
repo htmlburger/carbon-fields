@@ -26,7 +26,7 @@ import { preventDefault } from 'lib/helpers';
  * TODO: Clean up the mess in `handleClick` introduced by the incorrect HTML in the template.
  */
 export const AssociationListItem = ({ prefix, index, item, associated, visible, handleClick }) => {
-	return <li className={cx({ 'inactive': item.disabled })}>
+	return <li id={item.id} className={cx({ 'inactive': item.disabled })}>
 		<span className="mobile-handle dashicons-before dashicons-menu"></span>
 
 		<a href="#" onClick={handleClick}>
