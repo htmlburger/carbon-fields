@@ -112,6 +112,11 @@ class Post_Meta_Container extends Container {
 			return false;
 		}
 
+		$post_type = get_post_type( $post_id );
+		if ( $post_type === 'revision' ) {
+			return false;
+		}
+
 		return $this->is_valid_attach_for_object( $post_id );
 	}
 
