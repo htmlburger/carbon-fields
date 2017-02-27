@@ -19,7 +19,7 @@ class Fulfillable_Collection implements Fulfillable {
 	/**
 	 * Array translator used to support array representations of fulfillables
 	 * 
-	 * @var Factory
+	 * @var Array_Translator
 	 */
 	protected $array_translator;
 
