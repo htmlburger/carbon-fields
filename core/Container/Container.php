@@ -114,7 +114,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @var Fulfillable_Collection
 	 */
-	protected $fulfillable_collection;
+	protected $conditions_collection;
 
 	/**
 	 * Array of condition types that are checked during save requests
@@ -206,8 +206,8 @@ abstract class Container implements Datastore_Holder_Interface {
 		$this->id = $unique_id;
 		$this->title = $title;
 		$this->type = $type;
-		$this->fulfillable_collection = App::resolve( 'container_condition_fulfillable_collection' );
-		$this->fulfillable_collection->set_condition_type_list(
+		$this->conditions_collection = App::resolve( 'container_condition_fulfillable_collection' );
+		$this->conditions_collection->set_condition_type_list(
 			array_merge( $this->static_conditions, $this->dynamic_conditions ),
 			true
 		);
@@ -674,8 +674,10 @@ abstract class Container implements Datastore_Holder_Interface {
 	 */
 	public function to_json( $load ) {
 		$array_translator = App::resolve( 'container_condition_translator_array' );
-		$dynamic_conditions = $this->fulfillable_collection->filter( $this->dynamic_conditions );
+		$dynamic_conditions = $this->conditions_collection->filter( $this->dynamic_conditions );
 		$dynamic_conditions = $array_translator->fulfillable_to_foreign( $dynamic_conditions );
+		print_r( $dynamic_conditions );
+		exit;
 
 		$container_data = array(
 			'id' => $this->id,
@@ -755,7 +757,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return Container $this
 	 */
 	public function when() {
-		call_user_func_array( array( $this->fulfillable_collection, 'when' ), func_get_args() );
+		call_user_func_array( array( $this->conditions_collection, 'when' ), func_get_args() );
 		return $this;
 	}
 
@@ -766,7 +768,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return Container $this
 	 */
 	public function and_when() {
-		call_user_func_array( array( $this->fulfillable_collection, 'and_when' ), func_get_args() );
+		call_user_func_array( array( $this->conditions_collection, 'and_when' ), func_get_args() );
 		return $this;
 	}
 
@@ -777,7 +779,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return Container $this
 	 */
 	public function or_when() {
-		call_user_func_array( array( $this->fulfillable_collection, 'or_when' ), func_get_args() );
+		call_user_func_array( array( $this->conditions_collection, 'or_when' ), func_get_args() );
 		return $this;
 	}
 }

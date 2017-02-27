@@ -172,7 +172,7 @@ class Post_Meta_Container extends Container {
 			'post' => $post,
 			'post_type' => $post_type,
 		);
-		if ( ! $this->fulfillable_collection->filter( $this->static_conditions )->is_fulfilled( $environment ) ) {
+		if ( ! $this->conditions_collection->filter( $this->static_conditions )->is_fulfilled( $environment ) ) {
 			return false;
 		}
 
@@ -197,7 +197,7 @@ class Post_Meta_Container extends Container {
 			'post' => $post,
 			'post_type' => get_post_type( $post->ID ),
 		);
-		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
+		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}
 
@@ -256,7 +256,7 @@ class Post_Meta_Container extends Container {
 	 */
 	public function get_post_type_visibility() {
 		$all_post_types = get_post_types();
-		$filtered_collection = $this->fulfillable_collection->filter( array( 'post_type' ) );
+		$filtered_collection = $this->conditions_collection->filter( array( 'post_type' ) );
 
 		$shown_on = array();
 		foreach ( $all_post_types as $post_type ) {
