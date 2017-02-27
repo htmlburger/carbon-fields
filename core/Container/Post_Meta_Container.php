@@ -29,6 +29,8 @@ class Post_Meta_Container extends Container {
 		'post_type' => array( 'post' ),
 		'panel_context' => 'normal',
 		'panel_priority' => 'high',
+
+		// TODO remove
 		'show_on' => array(
 			'category' => null,
 			'template_names' => array(),

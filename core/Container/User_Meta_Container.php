@@ -10,6 +10,7 @@ class User_Meta_Container extends Container {
 	protected $user_id;
 
 	public $settings = array(
+		// TODO remove
 		'show_on' => array(
 			'role' => array(),
 		),
