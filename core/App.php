@@ -110,6 +110,9 @@ class App {
 		$ioc['container_condition_type_post_parent_id'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Post_Parent_ID_Condition();
 		} );
+		$ioc['container_condition_type_post_type'] = $ioc->factory( function() {
+			return new \Carbon_Fields\Container\Condition\Post_Type_Condition();
+		} );
 		$ioc['container_condition_type_post_format'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Post_Format_Condition();
 		} );
@@ -144,6 +147,7 @@ class App {
 			$factory = new ConditionFactory();
 			$factory->register( 'post_id', 'Carbon_Fields\\Container\\Condition\\Post_ID_Condition' );
 			$factory->register( 'post_parent_id', 'Carbon_Fields\\Container\\Condition\\Post_Parent_ID_Condition' );
+			$factory->register( 'post_type', 'Carbon_Fields\\Container\\Condition\\Post_Type_Condition' );
 			$factory->register( 'post_format', 'Carbon_Fields\\Container\\Condition\\Post_Format_Condition' );
 			$factory->register( 'post_level', 'Carbon_Fields\\Container\\Condition\\Post_Level_Condition' );
 			$factory->register( 'post_template', 'Carbon_Fields\\Container\\Condition\\Post_Template_Condition' );

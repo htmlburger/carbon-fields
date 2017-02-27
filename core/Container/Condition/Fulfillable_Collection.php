@@ -238,8 +238,8 @@ class Fulfillable_Collection implements Fulfillable {
 		}
 
 		$this->fulfillables[] = array(
-			'fulfillable' => $fulfillable,
 			'fulfillable_comparison' => $fulfillable_comparison,
+			'fulfillable' => $fulfillable,
 		);
 	}
 
@@ -259,6 +259,35 @@ class Fulfillable_Collection implements Fulfillable {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Get a copy of the collection with conditions not in the whitelist filtered out
+	 * 
+	 * @param  array<string>          $condition_whitelist
+	 * @return Fulfillable_Collection
+	 */
+	public function filter( $condition_whitelist ) {
+		$fulfillables = $this->get_fulfillables();
+
+		$collection = App::resolve( 'container_condition_fulfillable_collection' );
+		foreach ( $fulfillables as $fulfillable_tuple ) {
+			$fulfillable = $fulfillable_tuple['fulfillable'];
+			$fulfillable_comparison = $fulfillable_tuple['fulfillable_comparison'];
+
+			if ( is_a( $fulfillable, get_class() ) ) {
+				$collection->add_fulfillable( $fulfillable->filter( $condition_whitelist ), $fulfillable_comparison );
+			} else {
+				$type = $this->condition_factory->get_type( get_class( $fulfillable ) );
+				if ( ! in_array( $type, $condition_whitelist ) ) {
+					continue;
+				}
+
+				$fulfillable_clone = clone $fulfillable;
+				$collection->add_fulfillable( $fulfillable_clone, $fulfillable_comparison );
+			}
+		}
+		return $collection;
 	}
 	
 	/**

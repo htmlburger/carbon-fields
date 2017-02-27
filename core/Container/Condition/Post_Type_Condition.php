@@ -5,11 +5,9 @@ namespace Carbon_Fields\Container\Condition;
 use Carbon_Fields\App;
 
 /**
- * Check is post is of specific format
- * 
- * Pass an empty string as the value for this condition in order to test if the post has no format assigned
+ * Check is post is of specific type
  */
-class Post_Format_Condition extends Condition {
+class Post_Type_Condition extends Condition {
 
 	/**
 	 * Constructor
@@ -30,12 +28,9 @@ class Post_Format_Condition extends Condition {
 	 * @return bool
 	 */
 	public function is_fulfilled( $environment ) {
-		$post_id = $environment['post_id'];
-		$format = get_post_format( $post_id );
-		$format = ( $format ) ? $format : ''; // force an empty string for falsy values to ensure strict comparisons work
-
+		$post_type = $environment['post_type'];
 		return $this->first_supported_comparer_is_correct(
-			$format,
+			$post_type,
 			$this->get_comparison_operator(),
 			$this->get_value()
 		);

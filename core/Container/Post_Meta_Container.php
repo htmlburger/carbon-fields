@@ -52,7 +52,7 @@ class Post_Meta_Container extends Container {
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
 		$this->fulfillable_collection->set_condition_type_list( array(
-			'post_id', 'post_parent_id', 'post_format', 'post_level', 'post_template', 'post_term'
+			'post_id', 'post_parent_id', 'post_type', 'post_format', 'post_level', 'post_template', 'post_term'
 		), true );
 
 		if ( ! $this->get_datastore() ) {
@@ -138,10 +138,10 @@ class Post_Meta_Container extends Container {
 		}
 
 		$input = stripslashes_deep( $_GET );
+		$post_type = '';
 
 		// Post types check
 		if ( ! empty( $this->settings['post_type'] ) ) {
-			$post_type = '';
 			$request_post_type = isset( $input['post_type'] ) ? $input['post_type'] : '';
 
 			if ( $this->post_id ) {
@@ -162,6 +162,7 @@ class Post_Meta_Container extends Container {
 		$environment = array(
 			'post_id' => $post ? $post->ID : 0,
 			'post' => $post,
+			'post_type' => $post_type,
 		);
 		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
 			return false;
@@ -378,6 +379,27 @@ class Post_Meta_Container extends Container {
 		$templates = is_array( $templates ) ? $templates : array( $templates );
 		$current_template = get_post_meta( $post->ID, '_wp_page_template', true );
 		return in_array( $current_template, $templates );
+	}
+
+	/**
+	 * Get array of post types this container can appear on conditionally
+	 * 
+	 * @return array<string>
+	 */
+	public function get_post_type_visibility() {
+		$all_post_types = get_post_types();
+		$filtered_collection = $this->fulfillable_collection->filter( array( 'post_type' ) );
+
+		$shown_on = array();
+		foreach ( $all_post_types as $post_type ) {
+			$environment = array(
+				'post_type' => $post_type,
+			);
+			if ( $filtered_collection->is_fulfilled( $environment ) ) {
+				$shown_on[] = $post_type;
+			}
+		}
+		return $shown_on;
 	}
 
 	/**
