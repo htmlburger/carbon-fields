@@ -207,25 +207,25 @@ class Term_Meta_Container extends Container {
 	/**
 	 * Show the container only on terms from the specified taxonomies.
 	 *
+	 * @deprecated
 	 * @param string|array $taxonomies
 	 * @return object $this
 	 **/
 	public function show_on_taxonomy( $taxonomies ) {
-		$taxonomies = (array) $taxonomies;
-
-		$this->settings['taxonomy'] = $taxonomies;
-
+		$taxonomies = is_array( $taxonomies ) ? $taxonomies : array( $taxonomies );
+		$this->and_when( 'term_taxonomy', 'IN', $taxonomies );
 		return $this;
 	}
 
 	/**
 	 * Show the container only on particular term level.
 	 *
+	 * @deprecated
 	 * @param int $term_level
 	 * @return object $this
 	 */
 	public function show_on_level( $term_level ) {
-		$this->settings['show_on_level'] = $term_level;
+		$this->and_when( 'term_level', '=', intval( $term_level ) );
 		return $this;
 	}
 }

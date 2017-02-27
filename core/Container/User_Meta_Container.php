@@ -203,12 +203,13 @@ class User_Meta_Container extends Container {
 	/**
 	 * Show the container only on users who have the $role role.
 	 *
-	 * @param string $role
+	 * @deprecated
+	 * @param string|array $role
 	 * @return object $this
 	 **/
 	public function show_on_user_role( $role ) {
-		$this->settings['show_on']['role'] = (array) $role;
-
+		$roles = is_array( $role ) ? $role : array( $role );
+		$this->and_when( 'user_role', 'IN', $roles );
 		return $this;
 	}
 }

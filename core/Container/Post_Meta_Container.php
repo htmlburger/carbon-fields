@@ -282,6 +282,7 @@ class Post_Meta_Container extends Container {
 	/**
 	 * Show the container only on particular page referenced by it's path.
 	 *
+	 * @deprecated
 	 * @param int|string $page page ID or page path
 	 * @return object $this
 	 **/
@@ -293,14 +294,9 @@ class Post_Meta_Container extends Container {
 		} else {
 			$page_obj = get_page_by_path( $page );
 		}
+		$page_id = ( $page_obj ) ? $page_obj->ID : -1;
 
-		$this->show_on_post_type( 'page' );
-
-		if ( $page_obj ) {
-			$this->settings['show_on']['page_id'] = $page_obj->ID;
-		} else {
-			$this->settings['show_on']['page_id'] = -1;
-		}
+		$this->and_when( 'post_id', '=', $page_id );
 
 		return $this;
 	}
@@ -308,40 +304,21 @@ class Post_Meta_Container extends Container {
 	/**
 	 * Show the container only on pages whose parent is referenced by $parent_page_path.
 	 *
+	 * @deprecated
 	 * @param string $parent_page_path
 	 * @return object $this
 	 **/
 	public function show_on_page_children( $parent_page_path ) {
 		$page = get_page_by_path( $parent_page_path );
-
-		$this->show_on_post_type( 'page' );
-
-		if ( $page ) {
-			$this->settings['show_on']['parent_page_id'] = $page->ID;
-		} else {
-			$this->settings['show_on']['parent_page_id'] = -1;
-		}
-
+		$page_id = ( $page ) ? $page->ID : -1;
+		$this->and_when( 'post_parent_id', '=', $page_id );
 		return $this;
-	}
-
-	/**
-	 * Show the container only on posts from the specified category.
-	 *
-	 * @see show_on_taxonomy_term()
-	 *
-	 * @param string $category_slug
-	 * @return object $this
-	 **/
-	public function show_on_category( $category_slug ) {
-		$this->settings['show_on']['category'] = $category_slug;
-
-		return $this->show_on_taxonomy_term( $category_slug, 'category' );
 	}
 
 	/**
 	 * Show the container only on pages whose template has filename $template_path.
 	 *
+	 * @deprecated
 	 * @param string|array $template_path
 	 * @return object $this
 	 **/
@@ -351,35 +328,21 @@ class Post_Meta_Container extends Container {
 			$this->show_on_post_type( 'page' );
 		}
 
-		if ( is_array( $template_path ) ) {
-			foreach ( $template_path as $path ) {
-				$this->show_on_template( $path );
-			}
-
-			return $this;
-		}
-
-		$this->settings['show_on']['template_names'][] = $template_path;
-
+		$template_paths = is_array( $template_path ) ? $template_path : array( $template_path );
+		$this->and_when( 'post_template', 'IN', $template_paths );
 		return $this;
 	}
 
 	/**
 	 * Hide the container from pages whose template has filename $template_path.
 	 *
+	 * @deprecated
 	 * @param string|array $template_path
 	 * @return object $this
 	 **/
 	public function hide_on_template( $template_path ) {
-		if ( is_array( $template_path ) ) {
-			foreach ( $template_path as $path ) {
-				$this->hide_on_template( $path );
-			}
-			return $this;
-		}
-
-		$this->settings['show_on']['not_in_template_names'][] = $template_path;
-
+		$template_paths = is_array( $template_path ) ? $template_path : array( $template_path );
+		$this->and_when( 'post_template', 'NOT IN', $template_paths );
 		return $this;
 	}
 
@@ -387,33 +350,12 @@ class Post_Meta_Container extends Container {
 	 * Show the container only on hierarchical posts of level $level.
 	 * Levels start from 1 (top level post)
 	 *
+	 * @deprecated
 	 * @param int $level
 	 * @return object $this
 	 **/
 	public function show_on_level( $level ) {
-		if ( $level < 0 ) {
-			Incorrect_Syntax_Exception::raise( 'Invalid level limitation (' . $level . ')' );
-		}
-
-		$this->settings['show_on']['level_limit'] = $level;
-
-		return $this;
-	}
-
-	/**
-	 * Show the container only on posts which have term $term_slug from the $taxonomy_slug taxonomy.
-	 *
-	 * @param string $taxonomy_slug
-	 * @param string $term_slug
-	 * @return object $this
-	 **/
-	public function show_on_taxonomy_term( $term_slug, $taxonomy_slug ) {
-		$term = get_term_by( 'slug', $term_slug, $taxonomy_slug );
-
-		$this->settings['show_on']['tax_slug'] = $taxonomy_slug;
-		$this->settings['show_on']['tax_term'] = $term_slug;
-		$this->settings['show_on']['tax_term_id'] = $term ? $term->term_id : null;
-
+		$this->and_when( 'post_level', '=', intval( $level ) );
 		return $this;
 	}
 
@@ -421,37 +363,61 @@ class Post_Meta_Container extends Container {
 	 * Show the container only on posts from the specified format.
 	 * Learn more about {@link http://codex.wordpress.org/Post_Formats Post Formats (Codex)}
 	 *
+	 * @deprecated
 	 * @param string|array $post_format Name of the format as listed on Codex
 	 * @return object $this
 	 **/
 	public function show_on_post_format( $post_format ) {
-		if ( is_array( $post_format ) ) {
-			foreach ( $post_format as $format ) {
-				$this->show_on_post_format( $format );
-			}
-			return $this;
-		}
-
-		if ( $post_format === 'standard' ) {
-			$post_format = 0;
-		}
-
-		$this->settings['show_on']['post_formats'][] = strtolower( $post_format );
-
+		$post_formats = is_array( $post_format ) ? $post_format : array( $post_format );
+		$this->and_when( 'post_format', 'IN', $post_formats );
 		return $this;
 	}
 
 	/**
 	 * Show the container only on posts from the specified type(s).
 	 *
+	 * @deprecated
 	 * @param string|array $post_types
 	 * @return object $this
 	 **/
 	public function show_on_post_type( $post_types ) {
-		$post_types = (array) $post_types;
+		$post_types = is_array( $post_types ) ? $post_types : array( $post_types );
+		$this->and_when( 'post_type', 'IN', $post_types );
+		return $this;
+	}
 
-		$this->settings['post_type'] = $post_types;
+	/**
+	 * Show the container only on posts from the specified category.
+	 *
+	 * @see show_on_taxonomy_term()
+	 *
+	 * @deprecated
+	 * @param string $category_slug
+	 * @return object $this
+	 **/
+	public function show_on_category( $category_slug ) {
+		$this->and_when( 'post_term', '=', array(
+			'value' => $category_slug,
+			'field' => 'slug',
+			'taxonomy' => 'category',
+		) );
+		return $this;
+	}
 
+	/**
+	 * Show the container only on posts which have term $term_slug from the $taxonomy_slug taxonomy.
+	 *
+	 * @deprecated
+	 * @param string $taxonomy_slug
+	 * @param string $term_slug
+	 * @return object $this
+	 **/
+	public function show_on_taxonomy_term( $term_slug, $taxonomy_slug ) {
+		$this->and_when( 'post_term', '=', array(
+			'value' => $term_slug,
+			'field' => 'slug',
+			'taxonomy' => $taxonomy_slug,
+		) );
 		return $this;
 	}
 
