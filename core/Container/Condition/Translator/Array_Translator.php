@@ -33,7 +33,7 @@ class Array_Translator extends Translator {
 	 * @param  Condition $condition
 	 * @return mixed
 	 */
-	public function condition_to_foreign( Condition $condition ) {
+	protected function condition_to_foreign( Condition $condition ) {
 		return array(
 			'type' => $this->condition_factory->get_type( get_class( $condition ) ),
 			'compare' => $condition->get_comparison_operator(),
@@ -47,7 +47,7 @@ class Array_Translator extends Translator {
 	 * @param  Fulfillable_Collection $fulfillable_collection
 	 * @return mixed
 	 */
-	public function fulfillable_collection_to_foreign( Fulfillable_Collection $fulfillable_collection ) {
+	protected function fulfillable_collection_to_foreign( Fulfillable_Collection $fulfillable_collection ) {
 		$fulfillables = $fulfillable_collection->get_fulfillables();
 		if ( empty( $fulfillables ) ) {
 			return array();

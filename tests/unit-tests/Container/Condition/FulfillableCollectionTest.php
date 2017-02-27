@@ -8,7 +8,6 @@ use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
- * Base container condition class
  * @coversDefaultClass Carbon_Fields\Container\Condition\Fulfillable_Collection
  */
 class FulfillableCollectionTest extends WP_UnitTestCase {

@@ -33,7 +33,7 @@ abstract class Translator {
 	 * @param  Condition $condition
 	 * @return mixed
 	 */
-	abstract public function condition_to_foreign( Condition $condition );
+	abstract protected function condition_to_foreign( Condition $condition );
 
 	/**
 	 * Translate a Fulfillable_Collection to foreign data
@@ -41,7 +41,7 @@ abstract class Translator {
 	 * @param  Fulfillable_Collection $fulfillable_collection
 	 * @return mixed
 	 */
-	abstract public function fulfillable_collection_to_foreign( Fulfillable_Collection $fulfillable_collection );
+	abstract protected function fulfillable_collection_to_foreign( Fulfillable_Collection $fulfillable_collection );
 
 	/**
 	 * Translate foreign data to a Fulfillable
