@@ -125,9 +125,18 @@ export function* workerValidate(fieldIds, event) {
 		`;
 
 		$(html)
-			.insertAfter('#wpbody-content > .wrap > h2')
+			.insertAfter('#wpbody-content .wrap > :header:first')
 			.slideDown();
 	}
+
+	$('.postbox > .button-link, .widget-title-action, .menu-item-handle .item-edit')
+		.filter((index, element) => {
+			return $(element)
+				.closest('.postbox, .widget, .menu-item')
+				.find('.carbon-highlight:not(:visible)')
+					.length > 0;
+		})
+		.trigger('click');
 }
 
 /**
