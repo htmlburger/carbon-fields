@@ -184,19 +184,15 @@ class App {
 		$ioc['container_condition_comparer_type_equality'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Equality_Comparer();
 		} );
-
 		$ioc['container_condition_comparer_type_contain'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Contain_Comparer();
 		} );
-
 		$ioc['container_condition_comparer_type_scalar'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Scalar_Comparer();
 		} );
-
 		$ioc['container_condition_comparer_type_regex'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Regex_Comparer();
 		} );
-
 		$ioc['container_condition_comparer_type_custom'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Custom_Comparer();
 		} );
