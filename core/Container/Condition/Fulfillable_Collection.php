@@ -55,6 +55,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * Constructor
 	 * 
 	 * @param Factory $condition_factory
+	 * @param Array_Translator $array_translator
 	 */
 	public function __construct( Factory $condition_factory, Array_Translator $array_translator ) {
 		$this->condition_factory = $condition_factory;
@@ -129,8 +130,9 @@ class Fulfillable_Collection implements Fulfillable {
 	 */
 	protected function propagate_condition_type_list() {
 		$condition_type_list = $this->get_condition_type_list();
-		foreach ( $this->fulfillables as $fulfillable ) {
-			if ( is_a( $fulfillable, get_class() ) ) {
+		$fulfillables = $this->get_fulfillables();
+		foreach ( $fulfillables as $fulfillable ) {
+			if ( is_a( $fulfillable['fulfillable'], get_class() ) ) {
 				$fulfillable->set_condition_type_list( $condition_type_list, $this->is_condition_type_list_whitelist() );
 			}
 		}
@@ -250,9 +252,10 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @return bool Fulfillable found and removed
 	 */
 	public function remove_fulfillable( Fulfillable $fulfillable ) {
-		foreach ( $this->fulfillables as $index => $fulfillable_tuple ) {
+		$fulfillables = $this->get_fulfillables();
+		foreach ( $fulfillables as $index => $fulfillable_tuple ) {
 			if ( $fulfillable_tuple['fulfillable'] === $fulfillable ) {
-				$fulfillables_copy = $this->fulfillables; // introduce a copy array to highlight array_splice mutation
+				$fulfillables_copy = $this->get_fulfillables(); // introduce a copy array to highlight array_splice mutation
 				array_splice( $fulfillables_copy, $index, 1 );
 				$this->fulfillables = array_values( $fulfillables_copy ); // make sure our array is indexed cleanly
 				return true;
@@ -303,8 +306,9 @@ class Fulfillable_Collection implements Fulfillable {
 	 */
 	public function is_fulfilled( $environment ) {
 		$fulfilled = true; // return true for empty collections
+		$fulfillables = $this->get_fulfillables();
 
-		foreach ( $this->fulfillables as $i => $fulfillable_tuple ) {
+		foreach ( $fulfillables as $i => $fulfillable_tuple ) {
 			$fulfillable = $fulfillable_tuple['fulfillable'];
 			$fulfillable_comparison = $fulfillable_tuple['fulfillable_comparison'];
 
