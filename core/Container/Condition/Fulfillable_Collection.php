@@ -277,7 +277,8 @@ class Fulfillable_Collection implements Fulfillable {
 
 			if ( is_a( $fulfillable, get_class() ) ) {
 				$filtered_collection = $fulfillable->filter( $condition_whitelist );
-				if ( empty( $filtered_collection->get_fulfillables() ) ) {
+				$filtered_collection_fulfillables = $filtered_collection->get_fulfillables();
+				if ( empty( $filtered_collection_fulfillables ) ) {
 					continue; // skip empty collections to reduce clutter
 				}
 				$collection->add_fulfillable( $filtered_collection, $fulfillable_comparison );
