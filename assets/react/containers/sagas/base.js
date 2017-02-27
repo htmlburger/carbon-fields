@@ -30,7 +30,12 @@ import {
 	markFieldAsInvalid
 } from 'fields/actions';
 
-import { getAllFields, getFieldsByRoots } from 'fields/selectors';
+import {
+	getAllFields,
+	getFieldsByRoots,
+	hasInvalidFields
+} from 'fields/selectors';
+
 import { flattenField } from 'fields/helpers';
 
 /**
@@ -97,7 +102,9 @@ export function* workerValidate(fieldIds, event) {
 
 	// Block and wait for an invalid field. In case we don't receive
 	// such action the worker will be canceled and the process will continue.
-	const invalidAction = yield take(markFieldAsInvalid);
+	if (!(yield select(hasInvalidFields))) {
+		yield take(markFieldAsInvalid);
+	}
 
 	event.preventDefault();
 

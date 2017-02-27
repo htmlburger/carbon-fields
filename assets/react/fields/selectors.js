@@ -2,7 +2,14 @@
  * The external dependencies.
  */
 import { createSelector } from 'reselect';
-import { get, map, filter, keyBy, mapValues } from 'lodash';
+import {
+	get,
+	map,
+	filter,
+	keyBy,
+	mapValues,
+	some
+} from 'lodash';
 
 /**
  * The internal dependencies.
@@ -91,3 +98,11 @@ export const makeGetSidebarFieldOptions = () => createSelector([
 		...field.options,
 	];
 });
+
+/**
+ * Check for invalid field(s).
+ *
+ * @param  {Object} fields
+ * @return {Boolean}
+ */
+export const hasInvalidFields = createSelector(getAllFields, fields => some(fields, ['ui.valid', false]));
