@@ -6,7 +6,7 @@ use Carbon_Fields\App;
 use Carbon_Fields\Toolset\WP_Toolset;
 
 /**
- * Tests for a specific taxonomy
+ * Check if term is of a specific taxonomy
  */
 class Term_Taxonomy_Condition extends Condition {
 

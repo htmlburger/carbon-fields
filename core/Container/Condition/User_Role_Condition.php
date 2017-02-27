@@ -5,7 +5,7 @@ namespace Carbon_Fields\Container\Condition;
 use Carbon_Fields\App;
 
 /**
- * Tests if a user has a role
+ * Check if user has a specific role
  * 
  * Operator "CUSTOM" is passed an array of all user roles
  */

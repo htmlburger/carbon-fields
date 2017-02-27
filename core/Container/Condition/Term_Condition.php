@@ -6,7 +6,7 @@ use Carbon_Fields\App;
 use Carbon_Fields\Toolset\WP_Toolset;
 
 /**
- * Tests for a specific term
+ * Check for a specific term
  * 
  * Accepts the following values:
  *     Operators "=" and "!=":
