@@ -117,6 +117,20 @@ abstract class Container implements Datastore_Holder_Interface {
 	protected $fulfillable_collection;
 
 	/**
+	 * Array of condition types that are checked during save requests
+	 *
+	 * @var array<string>
+	 */
+	protected $static_conditions = array();
+
+	/**
+	 * Array of condition types that are checked during edit requests
+	 *
+	 * @var array<string>
+	 */
+	protected $dynamic_conditions = array();
+
+	/**
 	 * Normalizes a container type string to an expected format
 	 *
 	 * @param string $type
@@ -193,7 +207,10 @@ abstract class Container implements Datastore_Holder_Interface {
 		$this->title = $title;
 		$this->type = $type;
 		$this->fulfillable_collection = App::resolve( 'container_condition_fulfillable_collection' );
-		$this->fulfillable_collection->set_condition_type_list( array(), true ); // set the list to a blacklist so child containers are forced to set their own condition types if they have any
+		$this->fulfillable_collection->set_condition_type_list(
+			array_merge( $this->static_conditions, $this->dynamic_conditions ),
+			true
+		);
 	}
 
 	/**
