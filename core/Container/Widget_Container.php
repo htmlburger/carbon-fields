@@ -2,6 +2,8 @@
 
 namespace Carbon_Fields\Container;
 
+use Carbon_Fields\App;
+
 /**
  * Widget container class
  */
@@ -18,6 +20,12 @@ class Widget_Container extends Container {
 		$this->id = $unique_id;
 		$this->title = '';
 		$this->type = $type;
+
+		$this->conditions_collection = App::resolve( 'container_condition_fulfillable_collection' );
+		$this->conditions_collection->set_condition_type_list(
+			array_merge( $this->get_static_conditions(), $this->get_dynamic_conditions() ),
+			true
+		);
 	}
 
 	/**
