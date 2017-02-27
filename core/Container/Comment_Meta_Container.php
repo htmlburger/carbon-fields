@@ -45,7 +45,11 @@ class Comment_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_save() {
-		return $this->verified_nonce_in_request();
+		if ( ! $this->verified_nonce_in_request() ) {
+			return false;
+		}
+
+		return $this->is_valid_attach_for_object();
 	}
 
 	/**
@@ -75,7 +79,20 @@ class Comment_Meta_Container extends Container {
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
-		return ( $pagenow === 'comment.php' );
+		if ( $pagenow !== 'comment.php' ) {
+			return false;
+		}
+
+		$input = stripslashes_deep( $_GET );
+
+		$environment = array(
+			'comment_id' => isset( $input['c'] ) ? intval( $input['c'] ) : 0,
+		);
+		if ( ! $this->conditions_collection->filter( $this->get_static_conditions() )->is_fulfilled( $environment ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -85,6 +102,12 @@ class Comment_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
+		$environment = array(
+			'comment_id' => intval( $object_id ),
+		);
+		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
+			return false;
+		}
 		return true;
 	}
 

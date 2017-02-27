@@ -13,10 +13,6 @@ class User_Meta_Container extends Container {
 		'show_on' => array(
 			'role' => array(),
 		),
-		'show_for' => array(
-			'relation' => 'AND',
-			'edit_users',
-		),
 	);
 
 	/**
@@ -63,7 +59,7 @@ class User_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_save( $user_id = 0 ) {
-		if ( ! $this->is_profile_page() || ! $this->is_valid_show_for() ) {
+		if ( ! $this->is_profile_page() ) {
 			return false;
 		}
 		
@@ -102,7 +98,7 @@ class User_Meta_Container extends Container {
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
-		if ( ! $this->is_profile_page() || ! $this->is_valid_show_for() ) {
+		if ( ! $this->is_profile_page() ) {
 			return false;
 		}
 
@@ -122,7 +118,7 @@ class User_Meta_Container extends Container {
 			'user' => $user ? $user : null,
 			'roles' => $user ? $user->roles : array(),
 		);
-		if ( ! $this->conditions_collection->filter( $this->static_conditions )->is_fulfilled( $environment ) ) {
+		if ( ! $this->conditions_collection->filter( $this->get_static_conditions() )->is_fulfilled( $environment ) ) {
 			return false;
 		}
 
@@ -173,33 +169,6 @@ class User_Meta_Container extends Container {
 	}
 
 	/**
-	 * Perform checks whether the container should be seen for the currently logged in user
-	 *
-	 * @return bool True if the current user is allowed to see the container
-	 **/
-	public function is_valid_show_for() {
-		$show_for = $this->settings['show_for'];
-
-		$relation = $show_for['relation'];
-		unset( $show_for['relation'] );
-
-		$validated_capabilities_count = 0;
-		foreach ( $show_for as $capability ) {
-			if ( current_user_can( $capability ) ) {
-				$validated_capabilities_count++;
-			}
-		}
-
-		/**
-		 * When the relation is AND all capabilities must be evaluated to true
-		 * When the relation is OR at least 1 must be evaluated to true
-		 */
-		$min_valid_capabilities_count = $relation === 'AND' ? count( $show_for ) : 1;
-
-		return apply_filters( 'carbon_container_user_meta_is_valid_show_for', $validated_capabilities_count >= $min_valid_capabilities_count, $this );
-	}
-
-	/**
 	 * Output the container markup
 	 **/
 	public function render( $user_profile = null ) {
@@ -228,38 +197,6 @@ class User_Meta_Container extends Container {
 	}
 
 	/**
-	 * Validate and parse the show_for logic rules.
-	 *
-	 * @param array $show_for
-	 * @return array
-	 */
-	protected function parse_show_for( $show_for ) {
-		if ( ! is_array( $show_for ) ) {
-			Incorrect_Syntax_Exception::raise( 'The argument passed to show_for() must be an array.' );
-		}
-
-		$parsed_show_for = array(
-			'relation' => Helper::get_relation_type_from_array( $show_for ),
-		);
-
-		foreach ( $show_for as $key => $rule ) {
-			if ( $key === 'relation' ) {
-				continue; // Skip the relation key as it is already handled above
-			}
-
-			// Check if the rule is valid
-			if ( ! is_string( $rule ) || empty( $rule ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid show_for logic rule format. ' .
-				'The rule should be a string, containing an user capability/role.' );
-			}
-
-			$parsed_show_for[] = $rule;
-		}
-
-		return $parsed_show_for;
-	}
-
-	/**
 	 * COMMON USAGE METHODS
 	 */
 
@@ -271,18 +208,6 @@ class User_Meta_Container extends Container {
 	 **/
 	public function show_on_user_role( $role ) {
 		$this->settings['show_on']['role'] = (array) $role;
-
-		return $this;
-	}
-
-	/**
-	 * Show the container only for users who have either capabilities or roles setup
-	 *
-	 * @param array $show_for
-	 * @return object $this
-	 **/
-	public function show_for( $show_for ) {
-		$this->settings['show_for'] = $this->parse_show_for( $show_for );
 
 		return $this;
 	}

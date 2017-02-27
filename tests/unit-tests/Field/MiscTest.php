@@ -21,6 +21,9 @@ class MiscTest extends WP_UnitTestCase {
 		$ioc['key_toolset'] = function() {
 			return new Key_Toolset();
 		};
+		$ioc['container_condition_fulfillable_collection'] = $ioc->factory( function( $ioc ) {
+			return M::mock( 'Carbon_Fields\\Container\\Condition\\Fulfillable_Collection' )->shouldIgnoreMissing();
+		} );
 		App::instance()->install( $ioc );
 
 		$this->text_field = Carbon_Fields\Field::make( 'text', 'text_field' );
