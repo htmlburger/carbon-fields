@@ -11,6 +11,7 @@ class Term_Meta_Container extends Container {
 	protected $term_id;
 
 	public $settings = array(
+		// TODO remove
 		'taxonomy' => array( 'category' ),
 		'show_on_level' => false,
 	);
