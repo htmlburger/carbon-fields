@@ -16,8 +16,15 @@ import cx from 'classnames';
  */
 export const Field = ({ field, children }) => {
 	const styles = !!field.width ? { flexBasis: `${field.width}%`} : null;
+	const classes = [
+		'carbon-field',
+		`carbon-${field.type}`,
+		{ 'has-width': !!field.width },
+		{ 'carbon-highlight': !field.ui.valid },
+		...field.classes,
+	];
 
-	return <div className={cx('carbon-field', `carbon-${field.type}`, { 'has-width': !!field.width }, { 'carbon-highlight': !field.ui.valid })} style={styles} hidden={!field.ui.is_visible}>
+	return <div className={cx(classes)} style={styles} hidden={!field.ui.is_visible}>
 		<label htmlFor={field.id}>
 			{field.label}
 
