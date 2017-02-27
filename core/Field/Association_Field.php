@@ -14,24 +14,24 @@ use Carbon_Fields\Value_Set\Value_Set;
  *  - Comments
  */
 class Association_Field extends Field {
-	
+
 	/**
 	 * WP_Toolset instance for WP data loading
-	 * 
+	 *
 	 * @var Carbon_Fields\Toolset\WP_Toolset
 	 */
 	protected $wp_toolset;
 
 	/**
 	 * Max number of selected items allowed. -1 for no limit
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $max = -1;
 
 	/**
 	 * Allow items to be added multiple times
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $allow_duplicates = false;
@@ -56,7 +56,7 @@ class Association_Field extends Field {
 
 	/**
 	 * Create a field from a certain type with the specified label.
-	 * 
+	 *
 	 * @param string $type  Field type
 	 * @param string $name  Field name
 	 * @param string $label Field label
@@ -114,7 +114,7 @@ class Association_Field extends Field {
 	/**
 	 * Convert a colo:separated:string into it's expected components
 	 * Used for backwards compatibility to CF 1.5
-	 * 
+	 *
 	 * @param string $value_string
 	 * @return array
 	 */
@@ -141,7 +141,7 @@ class Association_Field extends Field {
 	/**
 	 * Convert a colon:separated:string into it's expected components
 	 * Used for backwards compatibility to CF 1.5
-	 * 
+	 *
 	 * @param array $value_string_array
 	 * @return array<array>
 	 */
@@ -513,13 +513,6 @@ class Association_Field extends Field {
 			'max' => $this->max,
 			'allow_duplicates' => $this->allow_duplicates,
 		) );
-
-		$i = 0;
-		foreach ( $field_data['value'] as $key => $value ) {
-			$field_data['value'][ $key ]['fieldIndex'] = $i;
-			$i++;
-		}
-		$field_data['nextfieldIndex'] = $i;
 
 		return $field_data;
 	}
