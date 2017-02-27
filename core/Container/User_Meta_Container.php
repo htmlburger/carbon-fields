@@ -122,7 +122,7 @@ class User_Meta_Container extends Container {
 			'user' => $user ? $user : null,
 			'roles' => $user ? $user->roles : array(),
 		);
-		if ( ! $this->fulfillable_collection->filter( $this->static_conditions )->is_fulfilled( $environment ) ) {
+		if ( ! $this->conditions_collection->filter( $this->static_conditions )->is_fulfilled( $environment ) ) {
 			return false;
 		}
 
@@ -147,7 +147,7 @@ class User_Meta_Container extends Container {
 			'user' => $user,
 			'roles' => $user->roles,
 		);
-		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
+		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}
 

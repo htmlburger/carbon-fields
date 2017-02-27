@@ -115,7 +115,7 @@ class Term_Meta_Container extends Container {
 			'term' => $term,
 			'taxonomy' => $term ? $term->taxonomy : $request_taxonomy,
 		);
-		if ( ! $this->fulfillable_collection->filter( $this->static_conditions )->is_fulfilled( $environment ) ) {
+		if ( ! $this->conditions_collection->filter( $this->static_conditions )->is_fulfilled( $environment ) ) {
 			return false;
 		}
 
@@ -141,7 +141,7 @@ class Term_Meta_Container extends Container {
 			'term' => $term,
 			'taxonomy' => $term->taxonomy,
 		);
-		if ( ! $this->fulfillable_collection->is_fulfilled( $environment ) ) {
+		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}
 
@@ -186,7 +186,7 @@ class Term_Meta_Container extends Container {
 	 */
 	public function get_taxonomy_visibility() {
 		$all_taxonomies = get_taxonomies();
-		$filtered_collection = $this->fulfillable_collection->filter( array( 'term_taxonomy' ) );
+		$filtered_collection = $this->conditions_collection->filter( array( 'term_taxonomy' ) );
 
 		$shown_on = array();
 		foreach ( $all_taxonomies as $taxonomy ) {
