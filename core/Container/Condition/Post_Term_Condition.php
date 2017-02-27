@@ -6,7 +6,7 @@ use Carbon_Fields\App;
 use Carbon_Fields\Toolset\WP_Toolset;
 
 /**
- * Tests if a post has a term
+ * Check if a post has a specific term
  * 
  * Accepts the following values:
  *     Operators "=" and "!=":

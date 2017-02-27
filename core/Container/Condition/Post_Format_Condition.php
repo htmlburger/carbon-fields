@@ -5,6 +5,8 @@ namespace Carbon_Fields\Container\Condition;
 use Carbon_Fields\App;
 
 /**
+ * Check is post is of specific format
+ * 
  * Pass an empty string as the value for this condition in order to test if the post has no format assigned
  */
 class Post_Format_Condition extends Condition {

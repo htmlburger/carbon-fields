@@ -4,6 +4,9 @@ namespace Carbon_Fields\Container\Condition;
 
 use Carbon_Fields\App;
 
+/**
+ * Check for a specific user id
+ */
 class User_ID_Condition extends Condition {
 
 	/**

@@ -5,6 +5,8 @@ namespace Carbon_Fields\Container\Condition;
 use Carbon_Fields\App;
 
 /**
+ * Check if a term is on a specific hierarchy level
+ * 
  * Level 1 is considered the root level. Passed values have a forced minimum value of 1.
  */
 class Term_Level_Condition extends Condition {

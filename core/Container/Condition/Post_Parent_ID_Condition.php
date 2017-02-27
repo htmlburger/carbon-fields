@@ -4,6 +4,9 @@ namespace Carbon_Fields\Container\Condition;
 
 use Carbon_Fields\App;
 
+/**
+ * Check if post has a specific parent
+ */
 class Post_Parent_ID_Condition extends Condition {
 
 	/**
