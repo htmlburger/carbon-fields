@@ -64,7 +64,7 @@ class Nav_Menu_Item_Container extends Container {
 	 **/
 	public function is_valid_save() {
 		// rely on wp_update_nav_menu_item action not being called unless WP's nonce is not valid
-		return true;
+		return $this->is_valid_attach_for_object();
 	}
 
 	/**
@@ -97,6 +97,11 @@ class Nav_Menu_Item_Container extends Container {
 			return true;
 		}
 
+		$environment = array();
+		if ( ! $this->conditions_collection->filter( $this->get_static_conditions() )->is_fulfilled( $environment ) ) {
+			return false;
+		}
+
 		return false;
 	}
 
@@ -114,6 +119,11 @@ class Nav_Menu_Item_Container extends Container {
 		}
 
 		if ( $post->post_type !== 'nav_menu_item' ) {
+			return false;
+		}
+
+		$environment = array();
+		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}
 

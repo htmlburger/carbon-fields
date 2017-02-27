@@ -115,7 +115,7 @@ class Term_Meta_Container extends Container {
 			'term' => $term,
 			'taxonomy' => $term ? $term->taxonomy : $request_taxonomy,
 		);
-		if ( ! $this->conditions_collection->filter( $this->static_conditions )->is_fulfilled( $environment ) ) {
+		if ( ! $this->conditions_collection->filter( $this->get_static_conditions() )->is_fulfilled( $environment ) ) {
 			return false;
 		}
 

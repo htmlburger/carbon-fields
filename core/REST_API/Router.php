@@ -191,13 +191,7 @@ class Router {
 	 * @return bool
 	 */
 	public function options_permission( $request ) {
-		$request_type = $request->get_method();
-
-		if ( $request_type === 'POST' ) {
-			return current_user_can( 'manage_options' );
-		}
-
-		return true;
+		return current_user_can( 'manage_options' );
 	}
 
 	/**

@@ -172,7 +172,7 @@ class Post_Meta_Container extends Container {
 			'post' => $post,
 			'post_type' => $post_type,
 		);
-		if ( ! $this->conditions_collection->filter( $this->static_conditions )->is_fulfilled( $environment ) ) {
+		if ( ! $this->conditions_collection->filter( $this->get_static_conditions() )->is_fulfilled( $environment ) ) {
 			return false;
 		}
 

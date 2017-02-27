@@ -1,5 +1,6 @@
 <?php
 
+use Mockery as M;
 use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\App;
 use Carbon_Fields\Container\Container;
@@ -12,14 +13,15 @@ class PostMetaContainerConditionsTest extends WP_UnitTestCase {
 		parent::setup();
 
 		$ioc = new PimpleContainer();
-
 		$ioc['container_repository'] = function( $ioc ) {
 			return new ContainerRepository();
 		};
-
 		$ioc['key_toolset'] = function( $ioc ) {
 			return new Key_Toolset();
 		};
+		$ioc['container_condition_fulfillable_collection'] = $ioc->factory( function( $ioc ) {
+			return M::mock( 'Carbon_Fields\\Container\\Condition\\Fulfillable_Collection' )->shouldIgnoreMissing();
+		} );
 
 		App::instance()->install( $ioc );
 
@@ -30,6 +32,7 @@ class PostMetaContainerConditionsTest extends WP_UnitTestCase {
 
 	public function tearDown() {
 		parent::tearDown();
+		M::close();
 
 		unset( $this->page );
 		App::instance()->install( new PimpleContainer() );

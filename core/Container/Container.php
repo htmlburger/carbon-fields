@@ -117,6 +117,13 @@ abstract class Container implements Datastore_Holder_Interface {
 	protected $conditions_collection;
 
 	/**
+	 * Array of current user condition types that are checked during all requests
+	 *
+	 * @var array<string>
+	 */
+	protected $current_user_conditions = array( 'current_user_id', 'current_user_role', 'current_user_capability' );
+
+	/**
 	 * Array of condition types that are checked during save requests
 	 *
 	 * @var array<string>
@@ -129,6 +136,24 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @var array<string>
 	 */
 	protected $dynamic_conditions = array();
+
+	/**
+	 * Get array of all static condition types
+	 * 
+	 * @return array<string>
+	 */
+	protected function get_static_conditions() {
+		return array_merge( $this->current_user_conditions, $this->static_conditions );
+	}
+
+	/**
+	 * Get array of all dynamic condition types
+	 * 
+	 * @return array<string>
+	 */
+	protected function get_dynamic_conditions() {
+		return $this->dynamic_conditions;
+	}
 
 	/**
 	 * Normalizes a container type string to an expected format
@@ -208,7 +233,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		$this->type = $type;
 		$this->conditions_collection = App::resolve( 'container_condition_fulfillable_collection' );
 		$this->conditions_collection->set_condition_type_list(
-			array_merge( $this->static_conditions, $this->dynamic_conditions ),
+			array_merge( $this->get_static_conditions(), $this->get_dynamic_conditions() ),
 			true
 		);
 	}
@@ -665,7 +690,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 */
 	public function to_json( $load ) {
 		$array_translator = App::resolve( 'container_condition_translator_array' );
-		$dynamic_conditions = $this->conditions_collection->filter( $this->dynamic_conditions );
+		$dynamic_conditions = $this->conditions_collection->filter( $this->get_dynamic_conditions() );
 		$dynamic_conditions = $array_translator->fulfillable_to_foreign( $dynamic_conditions );
 
 		$container_data = array(
