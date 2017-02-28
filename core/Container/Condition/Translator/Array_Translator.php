@@ -4,8 +4,8 @@ namespace Carbon_Fields\Container\Condition\Translator;
 
 use Carbon_Fields\App;
 use Carbon_Fields\Container\Condition\Factory;
-use Carbon_Fields\Container\Condition\Fulfillable\Fulfillable;
-use Carbon_Fields\Container\Condition\Fulfillable\Fulfillable_Collection;
+use Carbon_Fields\Container\Fulfillable\Fulfillable;
+use Carbon_Fields\Container\Fulfillable\Fulfillable_Collection;
 use Carbon_Fields\Container\Condition\Condition;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 

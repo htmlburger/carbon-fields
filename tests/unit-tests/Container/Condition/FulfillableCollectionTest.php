@@ -3,12 +3,12 @@
 use Mockery as M;
 use Carbon_Fields\App;
 use Carbon_Fields\Pimple\Container as PimpleContainer;
-use Carbon_Fields\Container\Condition\Fulfillable\Fulfillable_Collection;
+use Carbon_Fields\Container\Fulfillable\Fulfillable_Collection;
 use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
- * @coversDefaultClass Carbon_Fields\Container\Condition\Fulfillable\Fulfillable_Collection
+ * @coversDefaultClass Carbon_Fields\Container\Fulfillable\Fulfillable_Collection
  */
 class FulfillableCollectionTest extends WP_UnitTestCase {
 
@@ -182,7 +182,7 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	 * @covers ::get_fulfillables
 	 */
 	public function testAddFulfillableAddsFulfillable() {
-		$fulfillable = M::mock( 'Carbon_Fields\\Container\\Condition\\Fulfillable\\Fulfillable' );
+		$fulfillable = M::mock( 'Carbon_Fields\\Container\\Fulfillable\\Fulfillable' );
 		$fulfillable_comparison = 'AND';
 		
 		$this->assertSame( 0, count( $this->subject->get_fulfillables() ) );
@@ -200,7 +200,7 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 */
 	public function testAddFulfillableThrowsExceptionOnInvalidComparison() {
-		$fulfillable = M::mock( 'Carbon_Fields\\Container\\Condition\\Fulfillable\\Fulfillable' );
+		$fulfillable = M::mock( 'Carbon_Fields\\Container\\Fulfillable\\Fulfillable' );
 		$fulfillable_comparison = 'UNSUPPORTED_COMPARISON_TYPE';
 		$this->subject->add_fulfillable( $fulfillable, $fulfillable_comparison );
 	}
