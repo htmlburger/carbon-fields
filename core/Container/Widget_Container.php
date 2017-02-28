@@ -57,7 +57,17 @@ class Widget_Container extends Container {
 		$request_action = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
 		$is_widget_save = ( $request_action === 'save-widget' );
 
-		return $screen && $screen->id === 'widgets' || $is_widget_save;
+		if ( ( ! $screen || $screen->id !== 'widgets' ) && ! $is_widget_save ) {
+			return false;
+		}
+
+		$environment = $this->get_environment_for_request();
+		$static_conditions_collection = $this->conditions_collection->evaluate( $this->get_dynamic_conditions(), true );
+		if ( ! $static_conditions_collection->is_fulfilled( $environment ) ) {
+			return false;
+		}
+		
+		return true;
 	}
 
 	/**
@@ -76,6 +86,10 @@ class Widget_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
+		$environment = $this->get_environment_for_object( intval( $object_id ) );
+		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
+			return false;
+		}
 		return true;
 	}
 
