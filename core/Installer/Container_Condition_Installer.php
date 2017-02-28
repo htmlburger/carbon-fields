@@ -4,7 +4,7 @@ namespace Carbon_Fields\Installer;
 
 use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
-use Carbon_Fields\Container\Condition\Fulfillable\Fulfillable_Collection;
+use Carbon_Fields\Container\Fulfillable\Fulfillable_Collection;
 
 class Container_Condition_Installer implements Installer {
 
