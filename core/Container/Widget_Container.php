@@ -39,6 +39,15 @@ class Widget_Container extends Container {
 	}
 
 	/**
+	 * Get environment array for page request (in admin)
+	 *
+	 * @return array
+	 **/
+	protected function get_environment_for_request() {
+		return array();
+	}
+
+	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
@@ -49,6 +58,15 @@ class Widget_Container extends Container {
 		$is_widget_save = ( $request_action === 'save-widget' );
 
 		return $screen && $screen->id === 'widgets' || $is_widget_save;
+	}
+
+	/**
+	 * Get environment array for object id
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		return array();
 	}
 
 	/**

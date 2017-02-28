@@ -94,17 +94,11 @@ class Term_Meta_Container extends Container {
 	}
 
 	/**
-	 * Perform checks whether the container should be attached during the current request
+	 * Get environment array for page request (in admin)
 	 *
-	 * @return bool True if the container is allowed to be attached
+	 * @return array
 	 **/
-	public function is_valid_attach_for_request() {
-		global $pagenow;
-
-		if ( $pagenow !== 'edit-tags.php' && $pagenow !== 'term.php' ) {
-			return false;
-		}
-
+	protected function get_environment_for_request() {
 		$input = stripslashes_deep( $_GET );
 		$request_term_id = isset( $input['tag_ID'] ) ? intval( $input['tag_ID'] ) : 0;
 		$request_taxonomy = isset( $input['taxonomy'] ) ? $input['taxonomy'] : '';
@@ -116,11 +110,43 @@ class Term_Meta_Container extends Container {
 			'term' => $term,
 			'taxonomy' => $term ? $term->taxonomy : $request_taxonomy,
 		);
-		if ( ! $this->conditions_collection->filter( $this->get_static_conditions() )->is_fulfilled( $environment ) ) {
+		return $environment;
+	}
+
+	/**
+	 * Perform checks whether the container should be attached during the current request
+	 *
+	 * @return bool True if the container is allowed to be attached
+	 **/
+	public function is_valid_attach_for_request() {
+		global $pagenow;
+
+		if ( $pagenow !== 'edit-tags.php' && $pagenow !== 'term.php' ) {
+			return false;
+		}
+
+		$environment = $this->get_environment_for_request();
+		$static_conditions_collection = $this->conditions_collection->evaluate( $this->get_dynamic_conditions(), true );
+		if ( ! $static_conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get environment array for object id
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		$term = get_term( intval( $object_id ) );
+		$environment = array(
+			'term_id' => intval( $term->term_id ),
+			'term' => $term,
+			'taxonomy' => $term->taxonomy,
+		);
+		return $environment;
 	}
 
 	/**
@@ -137,11 +163,7 @@ class Term_Meta_Container extends Container {
 			return false;
 		}
 
-		$environment = array(
-			'term_id' => intval( $term->term_id ),
-			'term' => $term,
-			'taxonomy' => $term->taxonomy,
-		);
+		$environment = $this->get_environment_for_object( $term->term_id );
 		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}

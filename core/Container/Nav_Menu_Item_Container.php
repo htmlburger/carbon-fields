@@ -81,6 +81,15 @@ class Nav_Menu_Item_Container extends Container {
 	}
 
 	/**
+	 * Get environment array for page request (in admin)
+	 *
+	 * @return array
+	 **/
+	protected function get_environment_for_request() {
+		return array();
+	}
+
+	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
@@ -97,12 +106,22 @@ class Nav_Menu_Item_Container extends Container {
 			return true;
 		}
 
-		$environment = array();
-		if ( ! $this->conditions_collection->filter( $this->get_static_conditions() )->is_fulfilled( $environment ) ) {
+		$environment = $this->get_environment_for_request();
+		$static_conditions_collection = $this->conditions_collection->evaluate( $this->get_dynamic_conditions(), true );
+		if ( ! $static_conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}
 
 		return false;
+	}
+
+	/**
+	 * Get environment array for object id
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		return array();
 	}
 
 	/**
@@ -122,7 +141,7 @@ class Nav_Menu_Item_Container extends Container {
 			return false;
 		}
 
-		$environment = array();
+		$environment = $this->get_environment_for_object( $post->ID );
 		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}

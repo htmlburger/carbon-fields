@@ -72,6 +72,20 @@ class Comment_Meta_Container extends Container {
 	}
 
 	/**
+	 * Get environment array for page request (in admin)
+	 *
+	 * @return array
+	 **/
+	protected function get_environment_for_request() {
+		$input = stripslashes_deep( $_GET );
+
+		$environment = array(
+			'comment_id' => isset( $input['c'] ) ? intval( $input['c'] ) : 0,
+		);
+		return $environment;
+	}
+
+	/**
 	 * Check container attachment rules against current page request (in admin)
 	 *
 	 * @return bool
@@ -83,16 +97,25 @@ class Comment_Meta_Container extends Container {
 			return false;
 		}
 
-		$input = stripslashes_deep( $_GET );
-
-		$environment = array(
-			'comment_id' => isset( $input['c'] ) ? intval( $input['c'] ) : 0,
-		);
-		if ( ! $this->conditions_collection->filter( $this->get_static_conditions() )->is_fulfilled( $environment ) ) {
+		$environment = $this->get_environment_for_request();
+		$static_conditions_collection = $this->conditions_collection->evaluate( $this->get_dynamic_conditions(), true );
+		if ( ! $static_conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get environment array for object id
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		$environment = array(
+			'comment_id' => intval( $object_id ),
+		);
+		return $environment;
 	}
 
 	/**
@@ -102,9 +125,7 @@ class Comment_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
-		$environment = array(
-			'comment_id' => intval( $object_id ),
-		);
+		$environment->get_environment_for_object( intval( $object_id ) );
 		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}

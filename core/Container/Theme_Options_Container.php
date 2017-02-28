@@ -87,16 +87,36 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
+	 * Get environment array for page request (in admin)
+	 *
+	 * @return array
+	 **/
+	protected function get_environment_for_request() {
+		return array();
+	}
+
+	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
 	public function is_valid_attach_for_request() {
-		$environment = array();
-		if ( ! $this->conditions_collection->filter( $this->get_static_conditions() )->is_fulfilled( $environment ) ) {
+		$environment = $this->get_environment_for_request();
+		$static_conditions_collection = $this->conditions_collection->evaluate( $this->get_dynamic_conditions(), true );
+		if ( ! $static_conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}
+		
 		return true;
+	}
+
+	/**
+	 * Get environment array for object id
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		return array();
 	}
 
 	/**
@@ -106,7 +126,7 @@ class Theme_Options_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
-		$environment = array();
+		$environment = $this->get_environment_for_object( intval( $object_id ) );
 		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}

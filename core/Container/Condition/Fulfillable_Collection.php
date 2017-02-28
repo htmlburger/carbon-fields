@@ -297,6 +297,43 @@ class Fulfillable_Collection implements Fulfillable {
 		}
 		return $collection;
 	}
+
+	/**
+	 * Get a copy of the collection with passed conditions evaluated into boolean conditions
+	 * Useful when evaluating only certain condition types but preserving the rest
+	 * or when passing dynamic conditions to the front-end
+	 * 
+	 * @param  array<string>          $condition_types
+	 * @param  array|boolean          $environment Environment array or a boolean value to force on conditions
+	 * @return Fulfillable_Collection
+	 */
+	public function evaluate( $condition_types, $environment ) {
+		$fulfillables = $this->get_fulfillables();
+
+		$collection = App::resolve( 'container_condition_fulfillable_collection' );
+		foreach ( $fulfillables as $fulfillable_tuple ) {
+			$fulfillable = $fulfillable_tuple['fulfillable'];
+			$fulfillable_comparison = $fulfillable_tuple['fulfillable_comparison'];
+
+			if ( is_a( $fulfillable, get_class() ) ) {
+				$evaluated_collection = $fulfillable->evaluate( $condition_types, $environment );
+				$collection->add_fulfillable( $evaluated_collection, $fulfillable_comparison );
+			} else {
+				$type = $this->condition_factory->get_type( get_class( $fulfillable ) );
+				if ( in_array( $type, $condition_types ) ) {
+					$boolean_condition = App::resolve( 'container_condition_type_boolean' );
+					$boolean_condition->set_comparison_operator( '=' );
+
+					$value = is_bool( $environment ) ? $environment : $fulfillable->is_fulfilled( $environment );
+					$boolean_condition->set_value( $value );
+					$collection->add_fulfillable( $boolean_condition, $fulfillable_comparison );
+				} else {
+					$collection->add_fulfillable( clone $fulfillable, $fulfillable_comparison );
+				}
+			}
+		}
+		return $collection;
+	}
 	
 	/**
 	 * Check if all fulfillables are fulfilled taking into account their fulfillable comparison

@@ -144,17 +144,13 @@ class Post_Meta_Container extends Container {
 	}
 
 	/**
-	 * Perform checks whether the container should be attached during the current request
+	 * Get environment array for page request (in admin)
 	 *
-	 * @return bool True if the container is allowed to be attached
+	 * @return array
 	 **/
-	public function is_valid_attach_for_request() {
+	protected function get_environment_for_request() {
 		global $pagenow;
-
-		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
-			return false;
-		}
-
+		
 		$input = stripslashes_deep( $_GET );
 		$request_post_type = isset( $input['post_type'] ) ? $input['post_type'] : '';
 		$post_type = '';
@@ -167,22 +163,55 @@ class Post_Meta_Container extends Container {
 			$post_type = 'post';
 		}
 
-		if ( ! $post_type ) {
-			return false;
-		}
-
 		$post = get_post( $this->post_id );
 		$post = $post ? $post : null;
 		$environment = array(
 			'post_id' => $post ? $post->ID : 0,
+			'post_type' => $post ? $post->post_type : $post_type,
 			'post' => $post,
-			'post_type' => $post_type,
 		);
-		if ( ! $this->conditions_collection->filter( $this->get_static_conditions() )->is_fulfilled( $environment ) ) {
+		return $environment;
+	}
+
+	/**
+	 * Perform checks whether the container should be attached during the current request
+	 *
+	 * @return bool True if the container is allowed to be attached
+	 **/
+	public function is_valid_attach_for_request() {
+		global $pagenow;
+
+		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
+			return false;
+		}
+
+		$environment = $this->get_environment_for_request();
+		if ( ! $environment['post_type'] ) {
+			return false;
+		}
+
+		$static_conditions_collection = $this->conditions_collection->evaluate( $this->get_dynamic_conditions(), true );
+		if ( ! $static_conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get environment array for object id
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		$post = get_post( intval( $object_id ) );
+
+		$environment = array(
+			'post_id' => $post->ID,
+			'post' => $post,
+			'post_type' => get_post_type( $post->ID ),
+		);
+		return $environment;
 	}
 
 	/**
@@ -198,11 +227,7 @@ class Post_Meta_Container extends Container {
 			return false;
 		}
 
-		$environment = array(
-			'post_id' => $post->ID,
-			'post' => $post,
-			'post_type' => get_post_type( $post->ID ),
-		);
+		$environment = $this->get_environment_for_object( $post->ID );
 		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}

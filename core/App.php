@@ -104,6 +104,11 @@ class App {
 			return new Fulfillable_Collection( $ioc['container_condition_factory'], $ioc['container_condition_translator_array'] );
 		} );
 
+		$ioc['container_condition_type_boolean'] = $ioc->factory( function( $ioc ) {
+			return new \Carbon_Fields\Container\Condition\Boolean_Condition( array(
+				$ioc['container_condition_comparer_type_equality'],
+			) );
+		} );
 		$ioc['container_condition_type_post_id'] = $ioc->factory( function( $ioc ) {
 			return new \Carbon_Fields\Container\Condition\Post_ID_Condition( array(
 				$ioc['container_condition_comparer_type_equality'],
@@ -234,6 +239,8 @@ class App {
 
 		$ioc['container_condition_factory'] = function() {
 			$factory = new ConditionFactory();
+			$factory->register( 'boolean', 'Carbon_Fields\\Container\\Condition\\Boolean_Condition' );
+
 			$factory->register( 'post_id', 'Carbon_Fields\\Container\\Condition\\Post_ID_Condition' );
 			$factory->register( 'post_parent_id', 'Carbon_Fields\\Container\\Condition\\Post_Parent_ID_Condition' );
 			$factory->register( 'post_type', 'Carbon_Fields\\Container\\Condition\\Post_Type_Condition' );
