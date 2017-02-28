@@ -117,33 +117,18 @@ abstract class Container implements Datastore_Holder_Interface {
 	protected $conditions_collection;
 
 	/**
-	 * Array of current user condition types that are checked during all requests
-	 *
-	 * @var array<string>
-	 */
-	protected $current_user_conditions = array( 'current_user_id', 'current_user_role', 'current_user_capability' );
-
-	/**
-	 * Array of condition types that are checked during save requests
-	 *
-	 * @var array<string>
-	 */
-	protected $static_conditions = array();
-
-	/**
-	 * Array of condition types that are checked during edit requests
-	 *
-	 * @var array<string>
-	 */
-	protected $dynamic_conditions = array();
-
-	/**
 	 * Get array of all static condition types
 	 * 
 	 * @return array<string>
 	 */
 	protected function get_static_conditions() {
-		return array_merge( $this->current_user_conditions, $this->static_conditions );
+		$condition_types = array();
+
+		$container_type_key = strtolower( $this->type );
+		$condition_types = apply_filters( 'carbon_fields_' . $container_type_key . '_container_static_condition_types', $condition_types, $this );
+		$condition_types = apply_filters( 'carbon_fields_container_static_condition_types', $condition_types, $this );
+
+		return $condition_types;
 	}
 
 	/**
@@ -152,7 +137,13 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return array<string>
 	 */
 	protected function get_dynamic_conditions() {
-		return $this->dynamic_conditions;
+		$condition_types = array();
+
+		$container_type_key = strtolower( $this->type );
+		$condition_types = apply_filters( 'carbon_fields_' . $container_type_key . '_container_dynamic_condition_types', $condition_types, $this );
+		$condition_types = apply_filters( 'carbon_fields_container_dynamic_condition_types', $condition_types, $this );
+
+		return $condition_types;
 	}
 
 	/**
