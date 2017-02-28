@@ -22,7 +22,7 @@ class MiscTest extends WP_UnitTestCase {
 			return new Key_Toolset();
 		};
 		$ioc['container_condition_fulfillable_collection'] = $ioc->factory( function( $ioc ) {
-			return M::mock( 'Carbon_Fields\\Container\\Condition\\Fulfillable_Collection' )->shouldIgnoreMissing();
+			return M::mock( 'Carbon_Fields\\Container\\Condition\\Fulfillable\\Fulfillable_Collection' )->shouldIgnoreMissing();
 		} );
 		App::instance()->install( $ioc );
 

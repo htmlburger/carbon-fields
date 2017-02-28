@@ -1,6 +1,6 @@
 <?php
 
-namespace Carbon_Fields\Container\Condition;
+namespace Carbon_Fields\Container\Condition\Fulfillable;
 
 use Carbon_Fields\App;
 use Carbon_Fields\Container\Condition\Factory;
