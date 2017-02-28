@@ -92,16 +92,12 @@ class User_Meta_Container extends Container {
 	}
 
 	/**
-	 * Perform checks whether the container should be attached during the current request
+	 * Get environment array for page request (in admin)
 	 *
-	 * @return bool True if the container is allowed to be attached
+	 * @return array
 	 **/
-	public function is_valid_attach_for_request() {
+	protected function get_environment_for_request() {
 		global $pagenow;
-
-		if ( ! $this->is_profile_page() ) {
-			return false;
-		}
 
 		$input = stripslashes_deep( $_GET );
 
@@ -119,11 +115,41 @@ class User_Meta_Container extends Container {
 			'user' => $user ? $user : null,
 			'roles' => $user ? $user->roles : array(),
 		);
-		if ( ! $this->conditions_collection->filter( $this->get_static_conditions() )->is_fulfilled( $environment ) ) {
+		return $environment;
+	}
+
+	/**
+	 * Perform checks whether the container should be attached during the current request
+	 *
+	 * @return bool True if the container is allowed to be attached
+	 **/
+	public function is_valid_attach_for_request() {
+		if ( ! $this->is_profile_page() ) {
+			return false;
+		}
+
+		$environment = $this->get_environment_for_request();
+		$static_conditions_collection = $this->conditions_collection->evaluate( $this->get_dynamic_conditions(), true );
+		if ( ! $static_conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get environment array for object id
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		$user = get_userdata( $object_id );
+		$environment = array(
+			'user_id' => intval( $user->ID ),
+			'user' => $user,
+			'roles' => $user->roles,
+		);
+		return $environment;
 	}
 
 	/**
@@ -139,11 +165,7 @@ class User_Meta_Container extends Container {
 			return false;
 		}
 
-		$environment = array(
-			'user_id' => intval( $user->ID ),
-			'user' => $user,
-			'roles' => $user->roles,
-		);
+		$environment = $this->get_environment_for_object( $user->ID );
 		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}

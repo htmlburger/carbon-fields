@@ -160,7 +160,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @param string $type
 	 * @return string $normalized_type
-	 **/
+	 */
 	protected static function normalize_container_type( $type ) {
 		// backward compatibility: post_meta container used to be called custom_fields
 		if ( $type === 'custom_fields' ) {
@@ -176,7 +176,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @param string $type
 	 * @return string $class_name
-	 **/
+	 */
 	protected static function container_type_to_class( $type ) {
 		$class = __NAMESPACE__ . '\\' . $type . '_Container';
 		if ( ! class_exists( $class ) ) {
@@ -192,7 +192,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @param string $type
 	 * @param string $name Human-readable name of the container
 	 * @return object $container
-	 **/
+	 */
 	public static function factory( $type, $name ) {
 		$repository = App::resolve( 'container_repository' );
 		$unique_id = $repository->get_unique_panel_id( $name );
@@ -209,7 +209,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * An alias of factory().
 	 *
 	 * @see Container::factory()
-	 **/
+	 */
 	public static function make( $type, $name ) {
 		return static::factory( $type, $name );
 	}
@@ -220,7 +220,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @param string $unique_id Unique id of the container
 	 * @param string $title title of the container
 	 * @param string $type Type of the container
-	 **/
+	 */
 	public function __construct( $unique_id, $title, $type ) {
 		App::verify_boot();
 
@@ -240,14 +240,14 @@ abstract class Container implements Datastore_Holder_Interface {
 
 	/**
 	 * Return whether the container is active
-	 **/
+	 */
 	public function active() {
 		return $this->active;
 	}
 
 	/**
 	 * Activate the container and trigger an action
-	 **/
+	 */
 	protected function activate() {
 		$this->active = true;
 		$this->boot();
@@ -261,12 +261,12 @@ abstract class Container implements Datastore_Holder_Interface {
 
 	/**
 	 * Perform instance initialization
-	 **/
+	 */
 	abstract public function init();
 
 	/**
 	 * Boot the container once it's attached.
-	 **/
+	 */
 	protected function boot() {
 		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
 	}
@@ -274,7 +274,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Load the value for each field in the container.
 	 * Could be used internally during container rendering
-	 **/
+	 */
 	public function load() {
 		foreach ( $this->fields as $field ) {
 			$field->load();
@@ -288,7 +288,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @see save()
 	 * @see is_valid_save()
-	 **/
+	 */
 	public function _save() {
 		$param = func_get_args();
 		if ( call_user_func_array( array( $this, 'is_valid_save' ), $param ) ) {
@@ -300,7 +300,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Load submitted data and save each field in the container
 	 *
 	 * @see is_valid_save()
-	 **/
+	 */
 	public function save( $data = null ) {
 		foreach ( $this->fields as $field ) {
 			$field->set_value_from_input( stripslashes_deep( $_POST ) );
@@ -312,7 +312,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Checks whether the current request is valid
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_save() {
 		return false;
 	}
@@ -324,7 +324,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @see attach()
 	 * @see is_valid_attach()
-	 **/
+	 */
 	public function _attach() {
 		$param = func_get_args();
 		if ( call_user_func_array( array( $this, 'is_valid_attach' ), $param ) ) {
@@ -340,37 +340,52 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Attach the container rendering and helping methods
 	 * to concrete WordPress Action hooks
-	 **/
+	 */
 	public function attach() {}
 
 	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
-	 **/
+	 */
 	final public function is_valid_attach() {
 		$is_valid_attach = $this->is_valid_attach_for_request();
 		return apply_filters( 'carbon_fields_container_is_valid_attach', $is_valid_attach, $this );
 	}
 
 	/**
+	 * Get environment array for page request (in admin)
+	 *
+	 * @return array
+	 */
+	abstract protected function get_environment_for_request();
+
+	/**
 	 * Check container attachment rules against current page request (in admin)
 	 *
 	 * @return bool
-	 **/
+	 */
 	abstract protected function is_valid_attach_for_request();
+
+	/**
+	 * Get environment array for object id
+	 *
+	 * @param integer $object_id
+	 * @return array
+	 */
+	abstract protected function get_environment_for_object( $object_id );
 
 	/**
 	 * Check container attachment rules against object id
 	 *
 	 * @param int $object_id
 	 * @return bool
-	 **/
-	abstract public function is_valid_attach_for_object( $object_id = null );
+	 */
+	abstract public function is_valid_attach_for_object( $object_id );
 
 	/**
 	 * Whether this container is currently viewed.
-	 **/
+	 */
 	public function should_activate() {
 		return $this->is_valid_attach();
 	}
@@ -379,7 +394,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Perform a check whether the current container has fields
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function has_fields() {
 		return (bool) $this->fields;
 	}
@@ -389,7 +404,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Use only if you are completely aware of what you are doing.
 	 *
 	 * @return array
-	 **/
+	 */
 	public function get_fields() {
 		return $this->fields;
 	}
@@ -401,7 +416,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * 
 	 * @param string $field_name
 	 * @return Field
-	 **/
+	 */
 	public function get_root_field_by_name( $field_name ) {
 		$fields = $this->get_fields();
 		foreach ( $fields as $field ) {
@@ -442,7 +457,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * 
 	 * @param string $field_name Can specify a field inside a complex with a / (slash) separator
 	 * @return Field
-	 **/
+	 */
 	public function get_field_by_name( $field_name ) {
 		$hierarchy = array_filter( explode( static::HIERARCHY_FIELD_SEPARATOR, $field_name ) );
 		$field = null;
@@ -493,7 +508,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * If not, the field name is recorded.
 	 *
 	 * @param string $name
-	 **/
+	 */
 	public function verify_unique_field_name( $name ) {
 		if ( in_array( $name, $this->registered_field_names ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
@@ -506,7 +521,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Remove field name $name from the list of unique field names
 	 *
 	 * @param string $name
-	 **/
+	 */
 	public function drop_unique_field_name( $name ) {
 		$index = array_search( $name, $this->registered_field_names );
 
@@ -519,7 +534,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Return whether the datastore instance is the default one or has been overriden
 	 *
 	 * @return boolean
-	 **/
+	 */
 	public function has_default_datastore() {
 		return $this->has_default_datastore;
 	}
@@ -529,7 +544,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @param Datastore_Interface $datastore
 	 * @return object $this
-	 **/
+	 */
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		if ( $set_as_default && ! $this->has_default_datastore() ) {
 			return $this; // datastore has been overriden with a custom one - abort changing to a default one
@@ -547,7 +562,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Get the DataStore instance
 	 *
 	 * @return Datastore_Interface $datastore
-	 **/
+	 */
 	public function get_datastore() {
 		return $this->datastore;
 	}
@@ -556,7 +571,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Return WordPress nonce name used to identify the current container instance
 	 *
 	 * @return string
-	 **/
+	 */
 	public function get_nonce_name() {
 		return 'carbon_panel_' . $this->id . '_nonce';
 	}
@@ -565,7 +580,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Return WordPress nonce field
 	 *
 	 * @return string
-	 **/
+	 */
 	public function get_nonce_field() {
 		return wp_nonce_field( $this->get_nonce_name(), $this->get_nonce_name(), /*referer?*/ false, /*echo?*/ false );
 	}
@@ -574,7 +589,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Check if the nonce is present in the request and that it is verified
 	 *
 	 * @return bool
-	 **/
+	 */
 	protected function verified_nonce_in_request() {
 		$nonce_name = $this->get_nonce_name();
 		$nonce_value = isset( $_REQUEST[ $nonce_name ] ) ? $_REQUEST[ $nonce_name ] : '';
@@ -690,7 +705,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 */
 	public function to_json( $load ) {
 		$array_translator = App::resolve( 'container_condition_translator_array' );
-		$dynamic_conditions = $this->conditions_collection->filter( $this->get_dynamic_conditions() );
+		$dynamic_conditions = $this->conditions_collection->evaluate( $this->get_static_conditions(), $this->get_environment_for_request() );
 		$dynamic_conditions = $array_translator->fulfillable_to_foreign( $dynamic_conditions );
 
 		$container_data = array(
@@ -731,7 +746,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @param array $fields
 	 * @return object $this
-	 **/
+	 */
 	public function add_fields( $fields ) {
 		foreach ( $fields as $field ) {
 			if ( ! is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
