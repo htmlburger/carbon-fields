@@ -45,20 +45,6 @@ class Post_Meta_Container extends Container {
 	);
 
 	/**
-	 * Array of condition types that are checked during save requests
-	 *
-	 * @var array<string>
-	 */
-	protected $static_conditions = array( 'post_id', 'post_type' );
-
-	/**
-	 * Array of condition types that are checked during edit requests
-	 *
-	 * @var array<string>
-	 */
-	protected $dynamic_conditions = array( 'post_parent_id', 'post_format', 'post_level', 'post_template', 'post_term' );
-
-	/**
 	 * Create a new container
 	 *
 	 * @param string $unique_id Unique id of the container

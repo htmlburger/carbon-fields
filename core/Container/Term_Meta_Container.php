@@ -17,20 +17,6 @@ class Term_Meta_Container extends Container {
 	);
 
 	/**
-	 * Array of condition types that are checked during save requests
-	 *
-	 * @var array<string>
-	 */
-	protected $static_conditions = array( 'term', 'term_taxonomy' );
-
-	/**
-	 * Array of condition types that are checked during edit requests
-	 *
-	 * @var array<string>
-	 */
-	protected $dynamic_conditions = array( 'term_level' );
-
-	/**
 	 * Create a new container
 	 *
 	 * @param string $unique_id Unique id of the container

@@ -21,6 +21,7 @@ class Container_Condition_Installer implements Installer {
 		static::install_conditions( $ioc );
 		static::install_comparers( $ioc );
 		static::install_translators( $ioc );
+		static::install_container_conditions( $ioc );
 	}
 
 	/**
@@ -179,5 +180,121 @@ class Container_Condition_Installer implements Installer {
 		$ioc['container_condition_translator_array'] = function( $ioc ) {
 			return new \Carbon_Fields\Container\Condition\Translator\Array_Translator( $ioc['container_condition_factory'] );
 		};
+	}
+
+	/**
+	 * Install all container coditions
+	 * 
+	 * @param  PimpleContainer $ioc
+	 */
+	protected static function install_container_conditions( $ioc ) {
+		// add current_user_* static condition types to all containers
+		add_filter( 'carbon_fields_container_static_condition_types', function( $condition_types, $container ) {
+			$condition_types = array_merge(
+				$condition_types,
+				array( 'current_user_id', 'current_user_role', 'current_user_capability' )
+			);
+			return $condition_types;
+		}, 10, 2 );
+
+		// add container-specific conditions
+		add_filter( 'carbon_fields_post_meta_container_static_condition_types', array( get_class(), 'filter_post_meta_container_static_condition_types' ), 10, 2 );
+		add_filter( 'carbon_fields_post_meta_container_dynamic_condition_types', array( get_class(), 'filter_post_meta_container_dynamic_condition_types' ), 10, 2 );
+
+		add_filter( 'carbon_fields_term_meta_container_static_condition_types', array( get_class(), 'filter_term_meta_container_static_condition_types' ), 10, 2 );
+		add_filter( 'carbon_fields_term_meta_container_dynamic_condition_types', array( get_class(), 'filter_term_meta_container_dynamic_condition_types' ), 10, 2 );
+
+		add_filter( 'carbon_fields_user_meta_container_static_condition_types', array( get_class(), 'filter_user_meta_container_static_condition_types' ), 10, 2 );
+		add_filter( 'carbon_fields_user_meta_container_dynamic_condition_types', array( get_class(), 'filter_user_meta_container_dynamic_condition_types' ), 10, 2 );
+	}
+
+	/**
+	 * Filter the Post_Meta_Container static condition types
+	 * 
+	 * @param  array<string>                     $condition_types
+	 * @param  Carbon_Fields\Container\Container $container
+	 * @return array<string>
+	 */
+	public static function filter_post_meta_container_static_condition_types( $condition_types, $container ) {
+		$condition_types = array_merge(
+			$condition_types,
+			array( 'post_id', 'post_type' )
+		);
+		return $condition_types;
+	}
+
+	/**
+	 * Filter the Post_Meta_Container dynamic condition types
+	 * 
+	 * @param  array<string>                     $condition_types
+	 * @param  Carbon_Fields\Container\Container $container
+	 * @return array<string>
+	 */
+	public static function filter_post_meta_container_dynamic_condition_types( $condition_types, $container ) {
+		$condition_types = array_merge(
+			$condition_types,
+			array( 'post_parent_id', 'post_format', 'post_level', 'post_template', 'post_term' )
+		);
+		return $condition_types;
+	}
+
+	/**
+	 * Filter the Term_Meta_Container static condition types
+	 * 
+	 * @param  array<string>                     $condition_types
+	 * @param  Carbon_Fields\Container\Container $container
+	 * @return array<string>
+	 */
+	public static function filter_term_meta_container_static_condition_types( $condition_types, $container ) {
+		$condition_types = array_merge(
+			$condition_types,
+			array( 'term', 'term_taxonomy' )
+		);
+		return $condition_types;
+	}
+
+	/**
+	 * Filter the Term_Meta_Container dynamic condition types
+	 * 
+	 * @param  array<string>                     $condition_types
+	 * @param  Carbon_Fields\Container\Container $container
+	 * @return array<string>
+	 */
+	public static function filter_term_meta_container_dynamic_condition_types( $condition_types, $container ) {
+		$condition_types = array_merge(
+			$condition_types,
+			array( 'term_level' )
+		);
+		return $condition_types;
+	}
+
+	/**
+	 * Filter the User_Meta_Container static condition types
+	 * 
+	 * @param  array<string>                     $condition_types
+	 * @param  Carbon_Fields\Container\Container $container
+	 * @return array<string>
+	 */
+	public static function filter_user_meta_container_static_condition_types( $condition_types, $container ) {
+		$condition_types = array_merge(
+			$condition_types,
+			array( 'user_id', 'user_capability' )
+		);
+		return $condition_types;
+	}
+
+	/**
+	 * Filter the User_Meta_Container dynamic condition types
+	 * 
+	 * @param  array<string>                     $condition_types
+	 * @param  Carbon_Fields\Container\Container $container
+	 * @return array<string>
+	 */
+	public static function filter_user_meta_container_dynamic_condition_types( $condition_types, $container ) {
+		$condition_types = array_merge(
+			$condition_types,
+			array( 'user_role' )
+		);
+		return $condition_types;
 	}
 }
