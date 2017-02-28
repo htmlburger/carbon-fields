@@ -255,7 +255,7 @@ class Fulfillable_Collection implements Fulfillable {
 		$fulfillables = $this->get_fulfillables();
 		foreach ( $fulfillables as $index => $fulfillable_tuple ) {
 			if ( $fulfillable_tuple['fulfillable'] === $fulfillable ) {
-				$fulfillables_copy = $this->get_fulfillables(); // introduce a copy array to highlight array_splice mutation
+				$fulfillables_copy = $fulfillables; // introduce a copy array to highlight array_splice mutation
 				array_splice( $fulfillables_copy, $index, 1 );
 				$this->fulfillables = array_values( $fulfillables_copy ); // make sure our array is indexed cleanly
 				return true;
