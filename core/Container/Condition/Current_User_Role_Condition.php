@@ -7,37 +7,17 @@ namespace Carbon_Fields\Container\Condition;
  * 
  * Operator "CUSTOM" is passed an array of all user roles
  */
-class Current_User_Role_Condition extends Condition {
+class Current_User_Role_Condition extends User_Role_Condition {
 	
 	/**
-	 * Check if the condition is fulfilled
+	 * Get roles for a user from the environment
 	 * 
-	 * @param  array $environment
-	 * @return bool
+	 * @param  array         $environment
+	 * @return array<string>
 	 */
-	public function is_fulfilled( $environment ) {
+	protected function get_user_roles( $environment ) {
 		$user = wp_get_current_user();
 		$roles = $user ? $user->roles : array();
-		
-		switch ( $this->get_comparison_operator() ) {
-			case '=':
-				return in_array( $this->get_value(), $roles );
-				break;
-			case '!=':
-				return ! in_array( $this->get_value(), $roles );
-				break;
-			case 'IN':
-				return count( array_intersect( $roles, $this->get_value() ) ) > 0;
-				break;
-			case 'NOT IN':
-				return count( array_intersect( $roles, $this->get_value() ) ) === 0;
-				break;
-		}
-
-		return $this->first_supported_comparer_is_correct(
-			$roles,
-			$this->get_comparison_operator(),
-			$this->get_value()
-		);
+		return $roles;
 	}
 }
