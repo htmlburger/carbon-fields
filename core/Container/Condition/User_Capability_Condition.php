@@ -2,24 +2,12 @@
 
 namespace Carbon_Fields\Container\Condition;
 
-use Carbon_Fields\App;
-
 /**
  * Check if user has a specific capability
  * 
  * Operator "CUSTOM" is passed the user id
  */
 class User_Capability_Condition extends Condition {
-
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		$this->set_comparers( array(
-			// Only support the custom comparer as this condition has it's own comparison methods
-			App::resolve( 'container_condition_comparer_type_custom' ),
-		) );
-	}
 
 	/**
 	 * Check if a user has any of the supplied capabilities

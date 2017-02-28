@@ -2,24 +2,12 @@
 
 namespace Carbon_Fields\Container\Condition;
 
-use Carbon_Fields\App;
-
 /**
  * Check if the currently logged in user has a specific role
  * 
  * Operator "CUSTOM" is passed an array of all user roles
  */
 class Current_User_Role_Condition extends Condition {
-
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		$this->set_comparers( array(
-			// Only support the custom comparer as this condition has it's own comparison methods
-			App::resolve( 'container_condition_comparer_type_custom' ),
-		) );
-	}
 	
 	/**
 	 * Check if the condition is fulfilled
