@@ -10,6 +10,16 @@ namespace Carbon_Fields\Container\Condition;
 class User_Capability_Condition extends Condition {
 
 	/**
+	 * Get user id from environment
+	 * 
+	 * @param  array         $environment
+	 * @return array<string>
+	 */
+	protected function get_user_id( $environment ) {
+		return $environment['user_id'];
+	}
+
+	/**
 	 * Check if a user has any of the supplied capabilities
 	 * 
 	 * @param  array<string> $capabilities
@@ -31,7 +41,7 @@ class User_Capability_Condition extends Condition {
 	 * @return bool
 	 */
 	public function is_fulfilled( $environment ) {
-		$user_id = $environment['user_id'];
+		$user_id = $this->get_user_id( $environment );
 		switch ( $this->get_comparison_operator() ) {
 			case '=':
 				return user_can( $user_id, $this->get_value() );
