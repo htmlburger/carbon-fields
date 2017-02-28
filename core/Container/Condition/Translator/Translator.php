@@ -2,8 +2,8 @@
 
 namespace Carbon_Fields\Container\Condition\Translator;
 
-use Carbon_Fields\Container\Condition\Fulfillable;
-use Carbon_Fields\Container\Condition\Fulfillable_Collection;
+use Carbon_Fields\Container\Condition\Fulfillable\Fulfillable;
+use Carbon_Fields\Container\Condition\Fulfillable\Fulfillable_Collection;
 use Carbon_Fields\Container\Condition\Condition;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
@@ -20,7 +20,7 @@ abstract class Translator {
 			return $this->condition_to_foreign( $fulfillable );
 		}
 
-		if ( is_a( $fulfillable, 'Carbon_Fields\\Container\\Condition\\Fulfillable_Collection' ) ) {
+		if ( is_a( $fulfillable, 'Carbon_Fields\\Container\\Condition\\Fulfillable\\Fulfillable_Collection' ) ) {
 			return $this->fulfillable_collection_to_foreign( $fulfillable );
 		}
 

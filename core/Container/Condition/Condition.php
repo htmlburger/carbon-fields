@@ -7,7 +7,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 /**
  * Base container condition class
  */
-abstract class Condition implements Fulfillable {
+abstract class Condition implements Fulfillable\Fulfillable {
 
 	/**
 	 * Condition value to check

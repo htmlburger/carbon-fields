@@ -5,7 +5,7 @@ namespace Carbon_Fields\Container;
 use Carbon_Fields\App;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Field\Group_Field;
-use Carbon_Fields\Container\Condition\Fulfillable_Collection;
+use Carbon_Fields\Container\Condition\Fulfillable\Fulfillable_Collection;
 use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Datastore\Datastore_Holder_Interface;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
