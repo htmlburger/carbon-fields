@@ -23,6 +23,11 @@ class Container_Condition_Installer implements Installer {
 		static::install_translators( $ioc );
 	}
 
+	/**
+	 * Install all codition types and the condition factory
+	 * 
+	 * @param  PimpleContainer $ioc
+	 */
 	protected static function install_conditions( $ioc ) {
 		$ioc['container_condition_type_boolean'] = $ioc->factory( function( $ioc ) {
 			return new \Carbon_Fields\Container\Condition\Boolean_Condition( array(
@@ -55,10 +60,10 @@ class Container_Condition_Installer implements Installer {
 		} );
 
 		$ioc['container_condition_type_term'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Term_Condition(  $ioc['container_condition_comparers_wo_scalar']  );
+			return new \Carbon_Fields\Container\Condition\Term_Condition( $ioc['container_condition_comparers_wo_scalar'] );
 		} );
 		$ioc['container_condition_type_term_taxonomy'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Term_Taxonomy_Condition(  $ioc['container_condition_comparers_wo_scalar']  );
+			return new \Carbon_Fields\Container\Condition\Term_Taxonomy_Condition( $ioc['container_condition_comparers_wo_scalar'] );
 		} );
 		$ioc['container_condition_type_term_level'] = $ioc->factory( function( $ioc ) {
 			return new \Carbon_Fields\Container\Condition\Term_Level_Condition( $ioc['container_condition_comparers_generic'] );
@@ -123,6 +128,11 @@ class Container_Condition_Installer implements Installer {
 		};
 	}
 
+	/**
+	 * Install all condition comparers
+	 * 
+	 * @param  PimpleContainer $ioc
+	 */
 	protected static function install_comparers( $ioc ) {
 		$ioc['container_condition_comparer_type_equality'] = function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Equality_Comparer();
@@ -160,6 +170,11 @@ class Container_Condition_Installer implements Installer {
 		};
 	}
 
+	/**
+	 * Install all codition translators
+	 * 
+	 * @param  PimpleContainer $ioc
+	 */
 	protected static function install_translators( $ioc ) {
 		$ioc['container_condition_translator_array'] = function( $ioc ) {
 			return new \Carbon_Fields\Container\Condition\Translator\Array_Translator( $ioc['container_condition_factory'] );

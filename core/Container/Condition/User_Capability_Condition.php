@@ -12,8 +12,8 @@ class User_Capability_Condition extends Condition {
 	/**
 	 * Get user id from environment
 	 * 
-	 * @param  array         $environment
-	 * @return array<string>
+	 * @param  array   $environment
+	 * @return integer
 	 */
 	protected function get_user_id( $environment ) {
 		return $environment['user_id'];
