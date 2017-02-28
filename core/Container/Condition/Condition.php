@@ -29,6 +29,15 @@ abstract class Condition implements Fulfillable {
 	 * @var string
 	 */
 	protected $comparison_operator = '';
+
+	/**
+	 * Constructor
+	 *
+	 * @param  array<Carbon_Fields\Container\Condition\Comparer\Comparer> $comparers
+	 */
+	public function __construct( $comparers ) {
+		$this->set_comparers( $comparers );
+	}
 	
 	/**
 	 * Get the condition value

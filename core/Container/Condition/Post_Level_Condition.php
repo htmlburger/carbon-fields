@@ -2,27 +2,12 @@
 
 namespace Carbon_Fields\Container\Condition;
 
-use Carbon_Fields\App;
-
 /**
  * Check if a post is on a specific hierarchy level
  * 
  * Level 1 is considered the root level. Passed values have a forced minimum value of 1.
  */
 class Post_Level_Condition extends Condition {
-
-	/**
-	 * Constructor
-	 */
-	public function __construct() {
-		$this->set_comparers( array( 
-			App::resolve( 'container_condition_comparer_type_equality' ),
-			App::resolve( 'container_condition_comparer_type_contain' ),
-			App::resolve( 'container_condition_comparer_type_scalar' ),
-			App::resolve( 'container_condition_comparer_type_regex' ),
-			App::resolve( 'container_condition_comparer_type_custom' ),
-		) );
-	}
 	
 	/**
 	 * Check if the condition is fulfilled

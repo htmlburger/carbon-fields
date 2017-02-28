@@ -20,11 +20,22 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 			return new Fulfillable_Collection( $ioc['container_condition_factory'], $ioc['container_condition_translator_array'] );
 		} );
 
-		$ioc['container_condition_type_post_id'] = $ioc->factory( function() {
-			return new \Carbon_Fields\Container\Condition\Post_ID_Condition();
+		$ioc['container_condition_type_post_id'] = $ioc->factory( function( $ioc ) {
+			return new \Carbon_Fields\Container\Condition\Post_ID_Condition( array(
+				$ioc['container_condition_comparer_type_equality'],
+				$ioc['container_condition_comparer_type_contain'],
+				$ioc['container_condition_comparer_type_scalar'],
+				$ioc['container_condition_comparer_type_regex'],
+				$ioc['container_condition_comparer_type_custom'],
+			) );
 		} );
-		$ioc['container_condition_type_post_type'] = $ioc->factory( function() {
-			return new \Carbon_Fields\Container\Condition\Post_Type_Condition();
+		$ioc['container_condition_type_post_type'] = $ioc->factory( function( $ioc ) {
+			return new \Carbon_Fields\Container\Condition\Post_Type_Condition( array( 
+				$ioc['container_condition_comparer_type_equality'],
+				$ioc['container_condition_comparer_type_contain'],
+				$ioc['container_condition_comparer_type_regex'],
+				$ioc['container_condition_comparer_type_custom'],
+			) );
 		} );
 
 		$ioc['container_condition_factory'] = function() {

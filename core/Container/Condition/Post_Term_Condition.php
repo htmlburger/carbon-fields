@@ -39,15 +39,12 @@ class Post_Term_Condition extends Condition {
 
 	/**
 	 * Constructor
-	 * 
-	 * @param WP_Toolset $wp_toolset
+	 *
+	 * @param  array<Carbon_Fields\Container\Condition\Comparer\Comparer> $comparers
 	 */
-	public function __construct( WP_Toolset $wp_toolset ) {
-		$this->wp_toolset = $wp_toolset;
-		$this->set_comparers( array( 
-			// Only support the custom comparer as this condition has it's own comparison methods
-			App::resolve( 'container_condition_comparer_type_custom' ),
-		) );
+	public function __construct( $comparers ) {
+		$this->wp_toolset = App::resolve( 'wp_toolset' );
+		parent::__construct( $comparers );
 	}
 	
 	/**

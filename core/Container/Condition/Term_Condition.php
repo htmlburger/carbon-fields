@@ -39,17 +39,12 @@ class Term_Condition extends Condition {
 
 	/**
 	 * Constructor
-	 * 
-	 * @param WP_Toolset $wp_toolset
+	 *
+	 * @param  array<Carbon_Fields\Container\Condition\Comparer\Comparer> $comparers
 	 */
-	public function __construct( WP_Toolset $wp_toolset ) {
-		$this->wp_toolset = $wp_toolset;
-		$this->set_comparers( array( 
-			App::resolve( 'container_condition_comparer_type_equality' ),
-			App::resolve( 'container_condition_comparer_type_contain' ),
-			App::resolve( 'container_condition_comparer_type_regex' ),
-			App::resolve( 'container_condition_comparer_type_custom' ),
-		) );
+	public function __construct( $comparers ) {
+		$this->wp_toolset = App::resolve( 'wp_toolset' );
+		parent::__construct( $comparers );
 	}
 	
 	/**
