@@ -3,12 +3,20 @@
  */
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { compose, withHandlers, withState, setStatic } from 'recompose';
+import { sortBy } from 'lodash';
+import {
+	compose,
+	withHandlers,
+	withState,
+	setStatic,
+	withProps
+} from 'recompose';
 
 /**
  * The internal dependencies.
  */
 import Field from 'fields/components/field';
+import SortableList from 'fields/components/sortable-list';
 import ComplexGroup from 'fields/components/complex/group';
 import ComplexActions from 'fields/components/complex/actions';
 import ComplexPopover from 'fields/components/complex/popover';
@@ -17,8 +25,16 @@ import ComplexEmptyNotice from 'fields/components/complex/empty-notice';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { isFieldTabbed } from 'fields/selectors';
-import { addComplexGroup, cloneComplexGroup, removeComplexGroup } from 'fields/actions';
-import { TYPE_COMPLEX, VALIDATION_COMPLEX } from 'fields/constants';
+import {
+	addComplexGroup,
+	cloneComplexGroup,
+	removeComplexGroup
+} from 'fields/actions';
+import {
+	TYPE_COMPLEX,
+	VALIDATION_COMPLEX,
+	COMPLEX_LAYOUT_TABBED_VERTICAL
+} from 'fields/constants';
 
 /**
  * Render a group(s) of fields.
@@ -28,12 +44,15 @@ import { TYPE_COMPLEX, VALIDATION_COMPLEX } from 'fields/constants';
  * @param  {Object}   props.field
  * @param  {Boolean}  props.tabbed
  * @param  {Boolean}  props.popoverVisible
+ * @param  {Object}   props.sortableTabsOptions
+ * @param  {Object}   props.sortableGroupsOptions
  * @param  {Function} props.isGroupActive
  * @param  {Function} props.handlePopoverClose
  * @param  {Function} props.handleTabClick
  * @param  {Function} props.handleAddGroupClick
  * @param  {Function} props.handleCloneGroupClick
  * @param  {Function} props.handleRemoveGroupClick
+ * @param  {Function} props.handleSort
  * @return {React.Element}
  */
 export const ComplexField = ({
@@ -41,12 +60,15 @@ export const ComplexField = ({
 	field,
 	tabbed,
 	popoverVisible,
+	sortableTabsOptions,
+	sortableGroupsOptions,
 	isGroupActive,
 	handlePopoverClose,
 	handleTabClick,
 	handleAddGroupClick,
 	handleCloneGroupClick,
-	handleRemoveGroupClick
+	handleRemoveGroupClick,
+	handleSort
 }) => {
 	return <Field field={field}>
 		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': tabbed })}>
@@ -56,35 +78,44 @@ export const ComplexField = ({
 				onClick={handleAddGroupClick} />
 
 			<div className={cx('groups-wrapper', `layout-${field.layout}`)}>
-				<ComplexTabs groups={field.value} current={field.ui.current_tab} show={tabbed} onClick={handleTabClick}>
-					<ComplexActions
-						buttonText="+"
-						onButtonClick={handleAddGroupClick}>
-							<ComplexPopover
-								groups={field.groups}
-								visible={popoverVisible}
-								onItemClick={handleAddGroupClick}
-								onClose={handlePopoverClose}
-								outsideClickIgnoreClass="carbon-button" />
-					</ComplexActions>
-				</ComplexTabs>
+				<SortableList options={sortableTabsOptions} onSort={handleSort}>
+					<ComplexTabs
+						show={tabbed}
+						layout={field.layout}
+						groups={field.value}
+						current={field.ui.current_tab}
+						onClick={handleTabClick}
+						onSort={handleSort}>
+							<ComplexActions
+								buttonText="+"
+								onButtonClick={handleAddGroupClick}>
+									<ComplexPopover
+										groups={field.groups}
+										visible={popoverVisible}
+										onItemClick={handleAddGroupClick}
+										onClose={handlePopoverClose}
+										outsideClickIgnoreClass="carbon-button" />
+							</ComplexActions>
+					</ComplexTabs>
+				</SortableList>
 
-				<div className="carbon-groups-holder">
-					{
-						field.value.map((group, index) => {
-							return <ComplexGroup
-								key={index}
-								index={index}
-								prefix={name}
-								layout={field.layout}
-								group={group}
-								active={isGroupActive(group.id)}
-								onClone={handleCloneGroupClick}
-								onRemove={handleRemoveGroupClick} />
-						})
-					}
-				</div>
-				<div className="clear"></div>
+				<SortableList options={sortableGroupsOptions} onSort={handleSort}>
+					<div className="carbon-groups-holder">
+						{
+							field.value.map((group, index) => {
+								return <ComplexGroup
+									key={index}
+									index={index}
+									prefix={name}
+									layout={field.layout}
+									group={group}
+									active={isGroupActive(group.id)}
+									onClone={handleCloneGroupClick}
+									onRemove={handleRemoveGroupClick} />
+							})
+						}
+					</div>
+				</SortableList>
 			</div>
 
 			<ComplexActions
@@ -196,6 +227,47 @@ const hooks = {
 };
 
 /**
+ * The additional props that will be passed to the component.
+ *
+ * @param  {Object} props
+ * @param  {Object} props.field
+ * @return {Object}
+ */
+const props = ({ field }) => {
+	const sortableTabsOptions = {
+		items: '.group-tab-item',
+		placeholder: 'group-tab-item ui-placeholder-highlight',
+		forcePlaceholderSize: true,
+	};
+
+	if (field.layout === COMPLEX_LAYOUT_TABBED_VERTICAL) {
+		sortableTabsOptions.axis = 'y';
+		sortableTabsOptions.handle = '.group-handle';
+	}
+
+	const sortableGroupsOptions = {
+		items : '> .carbon-group-row',
+		handle: '.carbon-drag-handle',
+		placeholder: 'carbon-group-row ui-placeholder-highlight',
+	};
+
+	return {
+		sortableTabsOptions,
+		sortableGroupsOptions,
+	};
+};
+
+/**
+ * Check whether the group is the currently visible tab.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Boolean}  props.tabbed
+ * @return {Function}
+ */
+const isGroupActive = ({ field, tabbed }) => groupId => tabbed && field.ui.current_tab === groupId;
+
+/**
  * Handle the click on 'Add ..' button.
  *
  * @param  {Object}   props
@@ -256,20 +328,19 @@ const handleCloneGroupClick = ({ field, cloneComplexGroup }) => groupId => clone
  */
 const handleRemoveGroupClick = ({ field, removeComplexGroup }) => groupId => removeComplexGroup(field.id, groupId);
 
-/**
- * Check whether the group is the currently visible tab.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Boolean}  props.tabbed
- * @return {Function}
- */
-const isGroupActive = ({ field, tabbed }) => groupId => tabbed && field.ui.current_tab === groupId;
+const handleSort = ({ field, updateField }) => newGroups => {
+	newGroups = sortBy(field.value, group => newGroups.indexOf(group.id));
+
+	updateField(field.id, {
+		value: newGroups,
+	});
+};
 
 export default setStatic('type', [TYPE_COMPLEX])(
 	compose(
 		withStore(mapStateToProps, mapDispatchToProps),
 		withSetup(hooks),
+		withProps(props),
 		withState('popoverVisible', 'setPopoverVisibility', false),
 		withHandlers({
 			isGroupActive,
@@ -278,6 +349,7 @@ export default setStatic('type', [TYPE_COMPLEX])(
 			handleAddGroupClick,
 			handleCloneGroupClick,
 			handleRemoveGroupClick,
+			handleSort,
 		})
 	)(ComplexField)
 );

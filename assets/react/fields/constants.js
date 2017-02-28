@@ -24,3 +24,7 @@ export const TYPE_TIME = 'Time';
 
 export const VALIDATION_BASE = 'VALIDATION_BASE';
 export const VALIDATION_COMPLEX = 'VALIDATION_COMPLEX';
+
+export const COMPLEX_LAYOUT_GRID = 'grid';
+export const COMPLEX_LAYOUT_TABBED_VERTICAL = 'tabbed-vertical';
+export const COMPLEX_LAYOUT_TABBED_HORIZONTAL = 'tabbed-horizontal';

@@ -30,7 +30,7 @@ import { preventDefault } from 'lib/helpers';
  * TODO: Add support for custom labels.
  */
 export const ComplexGroup = ({ index, prefix, layout, group, active, collapsed, handleToggleClick, handleCloneClick, handleRemoveClick }) => {
-	return <div className={cx('carbon-row', 'carbon-group-row', { 'collapsed': collapsed }, { 'active': active })}>
+	return <div id={group.id} className={cx('carbon-row', 'carbon-group-row', { 'collapsed': collapsed }, { 'active': active })}>
 		<input
 			type="hidden"
 			name={`${prefix}[${index}][_type]`}

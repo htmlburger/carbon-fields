@@ -27,7 +27,7 @@ export const ComplexTabs = ({ groups, isTabActive, handleClick, children }) => {
 		<ul className="group-tabs-nav">
 			{
 				groups.map((group, index) => {
-					return <li key={index} className={cx('group-tab-item', { 'active': isTabActive(group.id) })}>
+					return <li key={index} id={group.id} className={cx('group-tab-item', { 'active': isTabActive(group.id) })}>
 						<a href="#" onClick={handleClick(group.id)}>
 							<span className="group-handle"></span>
 
