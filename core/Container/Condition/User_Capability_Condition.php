@@ -21,7 +21,8 @@ class User_Capability_Condition extends Condition {
 
 	/**
 	 * Check if a user has any of the supplied capabilities
-	 * 
+	 *
+	 * @param  integer       $user_id
 	 * @param  array<string> $capabilities
 	 * @return boolean
 	 */
