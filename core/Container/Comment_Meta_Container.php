@@ -125,7 +125,7 @@ class Comment_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
-		$environment->get_environment_for_object( intval( $object_id ) );
+		$environment = $this->get_environment_for_object( intval( $object_id ) );
 		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
 			return false;
 		}
