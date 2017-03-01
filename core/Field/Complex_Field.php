@@ -423,20 +423,23 @@ class Complex_Field extends Field {
 	public function save() {
 		// Only delete root field values as nested field values should be deleted in a cascading manner by the datastore
 		$hierarchy = $this->get_hierarchy();
-		if ( empty( $hierarchy ) ) {
+		$delete_on_save = empty( $hierarchy );
+		$delete_on_save = apply_filters( 'carbon_fields_should_delete_field_value_on_save', $delete_on_save, $this );
+		if ( $delete_on_save ) {
 			$this->delete();
 		}
-		
-		$this->get_datastore()->save( $this );
 
-		$field_groups = $this->get_prefilled_groups( $this->get_value_tree() );
-
-		foreach ( $field_groups as $group_index => $fields ) {
-			foreach ( $fields as $field ) {
-				if ( ! is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
-					continue;
+		$save = apply_filters( 'carbon_fields_should_save_field_value', true, $this->get_value(), $this );
+		if ( $save ) {
+			$this->get_datastore()->save( $this );
+			$field_groups = $this->get_prefilled_groups( $this->get_value_tree() );
+			foreach ( $field_groups as $group_index => $fields ) {
+				foreach ( $fields as $field ) {
+					if ( ! is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
+						continue;
+					}
+					$field->save();
 				}
-				$field->save();
 			}
 		}
 	}

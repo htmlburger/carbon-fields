@@ -55,7 +55,7 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
-	 * Perform checks whether the current save() request is valid.
+	 * Checks whether the current save request is valid
 	 *
 	 * @return bool
 	 **/
