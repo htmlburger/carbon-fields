@@ -1,6 +1,6 @@
 <?php
 
-namespace Carbon_Fields\Container\Condition\Translator;
+namespace Carbon_Fields\Container\Fulfillable\Translator;
 
 use Carbon_Fields\Container\Fulfillable\Fulfillable;
 use Carbon_Fields\Container\Fulfillable\Fulfillable_Collection;

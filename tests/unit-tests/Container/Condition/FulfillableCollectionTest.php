@@ -57,7 +57,7 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 		} );
 
 		$ioc['container_condition_translator_array'] = function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Translator\Array_Translator( $ioc['container_condition_factory'] );
+			return new \Carbon_Fields\Container\Fulfillable\Translator\Array_Translator( $ioc['container_condition_factory'] );
 		};
 		App::instance()->install( $ioc );
 

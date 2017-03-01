@@ -4,7 +4,7 @@ namespace Carbon_Fields\Container\Fulfillable;
 
 use Carbon_Fields\App;
 use Carbon_Fields\Container\Condition\Factory;
-use Carbon_Fields\Container\Condition\Translator\Array_Translator;
+use Carbon_Fields\Container\Fulfillable\Translator\Array_Translator;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class Fulfillable_Collection implements Fulfillable {
