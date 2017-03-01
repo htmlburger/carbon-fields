@@ -39,4 +39,21 @@ class Rich_Text_Field extends Textarea_Field {
 		</div>
 		<?php
 	}
+
+	/**
+	 * Returns an array that holds the field data, suitable for JSON representation.
+	 *
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
+	public function to_json( $load ) {
+		$field_data = parent::to_json( $load );
+
+		$rich_editing = ( get_user_option( 'rich_editing' ) === 'true' );
+		$field_data = array_merge( $field_data, array(
+			'rich_editing' => $rich_editing,
+		) );
+
+		return $field_data;
+	}
 }
