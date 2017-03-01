@@ -239,7 +239,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 **/
 	public function _save() {
 		$param = func_get_args();
-		if ( call_user_func_array( array( $this, 'is_valid_save' ), $param ) ) {
+		if ( call_user_func_array( array( $this, '_is_valid_save' ), $param ) ) {
 			call_user_func_array( array( $this, 'save' ), $param );
 		}
 	}
@@ -257,13 +257,22 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Checks whether the current request is valid
+	 * Checks whether the current save request is valid
 	 *
 	 * @return bool
 	 **/
-	public function is_valid_save() {
-		return false;
+	final protected function _is_valid_save() {
+		$param = func_get_args();
+		$is_valid_save = call_user_func_array( array( $this, 'is_valid_save' ), $param );
+		return apply_filters( 'carbon_fields_container_is_valid_save', $is_valid_save, $this );
 	}
+
+	/**
+	 * Checks whether the current save request is valid
+	 *
+	 * @return bool
+	 **/
+	abstract protected function is_valid_save();
 
 	/**
 	 * Called first as part of the container attachment procedure.
@@ -275,7 +284,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 **/
 	public function _attach() {
 		$param = func_get_args();
-		if ( call_user_func_array( array( $this, 'is_valid_attach' ), $param ) ) {
+		if ( $this->is_valid_attach() ) {
 			call_user_func_array( array( $this, 'attach' ), $param );
 
 			// Allow containers to activate but not load (useful in cases such as theme options)

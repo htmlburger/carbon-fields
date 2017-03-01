@@ -82,7 +82,7 @@ class Post_Meta_Container extends Container {
 	}
 
 	/**
-	 * Perform checks whether the current save() request is valid
+	 * Checks whether the current save request is valid
 	 * Possible errors are triggering save() for autosave requests
 	 * or performing post save outside of the post edit page (like Quick Edit)
 	 *

@@ -394,10 +394,16 @@ class Field implements Datastore_Holder_Interface {
 	 * Save value to storage
 	 **/
 	public function save() {
-		if ( ! in_array( $this->get_value_set()->get_type(), array( Value_Set::TYPE_SINGLE_VALUE, Value_Set::TYPE_MULTIPLE_PROPERTIES ) ) ) {
+		$delete_on_save = ! in_array( $this->get_value_set()->get_type(), array( Value_Set::TYPE_SINGLE_VALUE, Value_Set::TYPE_MULTIPLE_PROPERTIES ) );
+		$delete_on_save = apply_filters( 'carbon_fields_should_delete_field_value_on_save', $delete_on_save, $this );
+		if ( $delete_on_save ) {
 			$this->delete();
 		}
-		return $this->get_datastore()->save( $this );
+
+		$save = apply_filters( 'carbon_fields_should_save_field_value', true, $this->get_value(), $this );
+		if ( $save ) {
+			$this->get_datastore()->save( $this );
+		}
 	}
 
 	/**

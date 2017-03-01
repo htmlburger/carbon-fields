@@ -49,7 +49,7 @@ class Term_Meta_Container extends Container {
 	}
 
 	/**
-	 * Perform checks whether the current save() request is valid.
+	 * Checks whether the current save request is valid
 	 *
 	 * @param int $term_id ID of the term against which save() is ran
 	 * @return bool
