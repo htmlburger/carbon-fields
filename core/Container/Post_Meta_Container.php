@@ -176,12 +176,7 @@ class Post_Meta_Container extends Container {
 			return false;
 		}
 
-		$static_conditions_collection = $this->conditions_collection->evaluate( $this->get_dynamic_conditions(), true );
-		if ( ! $static_conditions_collection->is_fulfilled( $environment ) ) {
-			return false;
-		}
-
-		return true;
+		return $this->static_conditions_pass();
 	}
 
 	/**
@@ -213,12 +208,7 @@ class Post_Meta_Container extends Container {
 			return false;
 		}
 
-		$environment = $this->get_environment_for_object( $post->ID );
-		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
-			return false;
-		}
-
-		return true;
+		return $this->all_conditions_pass( intval( $post->ID ) );
 	}
 
 	/**
@@ -273,7 +263,7 @@ class Post_Meta_Container extends Container {
 	 */
 	public function get_post_type_visibility() {
 		$all_post_types = get_post_types();
-		$filtered_collection = $this->conditions_collection->filter( array( 'post_type' ) );
+		$filtered_collection = $this->condition_collection->filter( array( 'post_type' ) );
 
 		$shown_on = array();
 		foreach ( $all_post_types as $post_type ) {

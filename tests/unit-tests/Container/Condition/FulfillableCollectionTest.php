@@ -37,10 +37,7 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 		} );
 
 		$ioc['container_condition_factory'] = function() {
-			$factory = new ConditionFactory();
-			$factory->register( 'post_id', 'Carbon_Fields\\Container\\Condition\\Post_ID_Condition' );
-			$factory->register( 'post_type', 'Carbon_Fields\\Container\\Condition\\Post_Type_Condition' );
-			return $factory;
+			return new ConditionFactory();
 		};
 
 		$ioc['container_condition_comparer_type_equality'] = $ioc->factory( function() {

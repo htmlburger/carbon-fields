@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Container;
 
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -73,8 +74,9 @@ class Repository {
 		if ( $type === null ) {
 			$containers = $raw_containers;
 		} else {
+			$normalized_type = Helper::normalize_type( $type );
 			foreach ( $raw_containers as $container ) {
-				if ( $container->type === $type ) {
+				if ( $container->type === $normalized_type ) {
 					$containers[] = $container;
 				}
 			}

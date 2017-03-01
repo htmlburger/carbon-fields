@@ -111,13 +111,7 @@ class Term_Meta_Container extends Container {
 			return false;
 		}
 
-		$environment = $this->get_environment_for_request();
-		$static_conditions_collection = $this->conditions_collection->evaluate( $this->get_dynamic_conditions(), true );
-		if ( ! $static_conditions_collection->is_fulfilled( $environment ) ) {
-			return false;
-		}
-
-		return true;
+		return $this->static_conditions_pass();
 	}
 
 	/**
@@ -149,12 +143,7 @@ class Term_Meta_Container extends Container {
 			return false;
 		}
 
-		$environment = $this->get_environment_for_object( $term->term_id );
-		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
-			return false;
-		}
-
-		return true;
+		return $this->all_conditions_pass( intval( $term->term_id ) );
 	}
 
 	/**
@@ -195,7 +184,7 @@ class Term_Meta_Container extends Container {
 	 */
 	public function get_taxonomy_visibility() {
 		$all_taxonomies = get_taxonomies();
-		$filtered_collection = $this->conditions_collection->filter( array( 'term_taxonomy' ) );
+		$filtered_collection = $this->condition_collection->filter( array( 'term_taxonomy' ) );
 
 		$shown_on = array();
 		foreach ( $all_taxonomies as $taxonomy ) {
