@@ -26,6 +26,12 @@ const Container = ({ id, container }) => {
 		...container.classes,
 	];
 	return <div className={cx(classes)}>
+		<input
+			type="hidden"
+			id={container.nonce.name}
+			name={container.nonce.name}
+			value={container.nonce.value} />
+
 		{
 			container.fields.map(({ id, type }) => fieldFactory(type, { id }))
 		}
