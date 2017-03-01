@@ -49,9 +49,8 @@ class Rich_Text_Field extends Textarea_Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
-		$rich_editing = ( get_user_option( 'rich_editing' ) === 'true' );
 		$field_data = array_merge( $field_data, array(
-			'rich_editing' => $rich_editing,
+			'rich_editing' => user_can_richedit(),
 		) );
 
 		return $field_data;
