@@ -35,6 +35,9 @@ class Time_Field extends Field {
 	public $timepicker_options = array(
 		'dateFormat' => 'yy-mm-dd',
 		'timeFormat' => 'hh:mm tt',
+		'altFormat' => 'yy-mm-dd',
+		'altTimeFormat' => 'HH:mm:ss',
+		'altFieldTimeOnly' => false,
 	);
 
 	/**
@@ -43,6 +46,13 @@ class Time_Field extends Field {
 	 * @var string
 	 */
 	protected $storage_format = 'H:i:s';
+
+	/**
+	 * The storage format in variant that can be used by JavaScript.
+	 *
+	 * @var string
+	 */
+	protected $storage_format_js = 'HH:mm:ss';
 
 	/**
 	 * You can use this method to modify the field properties that are added to the JSON object.
@@ -55,6 +65,7 @@ class Time_Field extends Field {
 
 		$field_data = array_merge( $field_data, array(
 			'storage_format' => $this->storage_format,
+			'storage_format_js' => $this->storage_format_js,
 			'timepicker_type' => $this->timepicker_type,
 			'interval_step' => $this->get_interval_step(),
 			'restraints' => $this->get_restraints(),
@@ -71,7 +82,7 @@ class Time_Field extends Field {
 	public static function admin_enqueue_scripts() {
 		# Enqueue CSS
 		wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css', array(), \Carbon_Fields\VERSION );
-		
+
 		# Enqueue JS
 		wp_enqueue_script( 'carbon-jquery-timepicker', \Carbon_Fields\URL . '/assets/js/lib/jquery-ui-timepicker.js', array( 'jquery-ui-datepicker', 'jquery-ui-slider' ), \Carbon_Fields\VERSION );
 	}
