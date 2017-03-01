@@ -14,58 +14,16 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 
 	public function setUp() {
 		$ioc = new PimpleContainer();
-		$ioc['container_condition_fulfillable_collection'] = $ioc->factory( function( $ioc ) {
-			return new Fulfillable_Collection( $ioc['container_condition_factory'], $ioc['container_condition_translator_array'] );
-		} );
-
-		$ioc['container_condition_type_post_id'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Post_ID_Condition( array(
-				$ioc['container_condition_comparer_type_equality'],
-				$ioc['container_condition_comparer_type_contain'],
-				$ioc['container_condition_comparer_type_scalar'],
-				$ioc['container_condition_comparer_type_regex'],
-				$ioc['container_condition_comparer_type_custom'],
-			) );
-		} );
-		$ioc['container_condition_type_post_type'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Post_Type_Condition( array( 
-				$ioc['container_condition_comparer_type_equality'],
-				$ioc['container_condition_comparer_type_contain'],
-				$ioc['container_condition_comparer_type_regex'],
-				$ioc['container_condition_comparer_type_custom'],
-			) );
-		} );
-
-		$ioc['container_condition_factory'] = function() {
-			return new ConditionFactory();
-		};
-
-		$ioc['container_condition_comparer_type_equality'] = $ioc->factory( function() {
-			return new \Carbon_Fields\Container\Condition\Comparer\Equality_Comparer();
-		} );
-		$ioc['container_condition_comparer_type_contain'] = $ioc->factory( function() {
-			return new \Carbon_Fields\Container\Condition\Comparer\Contain_Comparer();
-		} );
-		$ioc['container_condition_comparer_type_scalar'] = $ioc->factory( function() {
-			return new \Carbon_Fields\Container\Condition\Comparer\Scalar_Comparer();
-		} );
-		$ioc['container_condition_comparer_type_regex'] = $ioc->factory( function() {
-			return new \Carbon_Fields\Container\Condition\Comparer\Regex_Comparer();
-		} );
-		$ioc['container_condition_comparer_type_custom'] = $ioc->factory( function() {
-			return new \Carbon_Fields\Container\Condition\Comparer\Custom_Comparer();
-		} );
-
-		$ioc['container_condition_translator_array'] = function( $ioc ) {
-			return new \Carbon_Fields\Container\Fulfillable\Translator\Array_Translator( $ioc['container_condition_factory'] );
-		};
+		\Carbon_Fields\Installer\Container_Condition_Installer::install( $ioc );
 		App::instance()->install( $ioc );
 
 		$this->subject = $ioc['container_condition_fulfillable_collection'];
+		$this->condition_factory = $ioc['container_condition_factory'];
 	}
 
 	public function tearDown() {
 		M::close();
+		$this->condition_factory = null;
 		$this->subject = null;
 	}
 
@@ -229,6 +187,99 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 		$filtered = $this->subject->filter( array( 'post_type' ) );
 		$this->assertTrue( count( $filtered->get_fulfillables() ) === 1, 'Filtered collection should contain 1 fulfillable only' );
 		$this->assertTrue( count( $this->subject->get_fulfillables() ) === 2, 'Subject collection should remain unmodified' );
+	}
+
+	/**
+	 * @covers ::evaluate
+	 */
+	public function testEvaluateReplacesFulfilledConditionsWithBooleanTrue() {
+		$this->subject->when( 'post_id', 1 );
+		$this->subject->when( 'post_template', 'default' );
+
+		$evaluated = $this->subject->evaluate( array( 'post_id' ), array( 'post_id' => 1 ) );
+		$ef = $evaluated->get_fulfillables();
+
+		$expected = array(
+			array(
+				'type' => 'boolean',
+				'value' => true,
+			),
+			array(
+				'type' => 'post_template',
+				'value' => 'default',
+			),
+		);
+		$received = array();
+		foreach ( $ef as $tuple ) {
+			$received[] = array(
+				'type' => $this->condition_factory->get_type( get_class( $tuple['fulfillable'] ) ),
+				'value' => $tuple['fulfillable']->get_value(),
+			);
+		}
+		$this->assertSame( $expected, $received );
+	}
+
+	/**
+	 * @covers ::evaluate
+	 */
+	public function testEvaluateReplacesFailingConditionsWithBooleanFalse() {
+		$this->subject->when( 'post_id', 1 );
+		$this->subject->when( 'post_template', 'default' );
+
+		$evaluated = $this->subject->evaluate( array( 'post_id' ), array( 'post_id' => 2 ) );
+		$ef = $evaluated->get_fulfillables();
+
+		$expected = array(
+			array(
+				'type' => 'boolean',
+				'value' => false,
+			),
+			array(
+				'type' => 'post_template',
+				'value' => 'default',
+			),
+		);
+		$received = array();
+		foreach ( $ef as $tuple ) {
+			$received[] = array(
+				'type' => $this->condition_factory->get_type( get_class( $tuple['fulfillable'] ) ),
+				'value' => $tuple['fulfillable']->get_value(),
+			);
+		}
+		$this->assertSame( $expected, $received );
+	}
+
+	/**
+	 * @covers ::evaluate
+	 */
+	public function testEvaluateReplacesComparisonOperatorForBoolean() {
+		$this->subject->when( 'post_id', '>', 1 );
+		$this->subject->when( 'post_template', 'default' );
+
+		$evaluated = $this->subject->evaluate( array( 'post_id' ), array( 'post_id' => 1 ) );
+		$ef = $evaluated->get_fulfillables();
+
+		$expected = array(
+			array(
+				'type' => 'boolean',
+				'comparison_operator' => '=',
+				'value' => false,
+			),
+			array(
+				'type' => 'post_template',
+				'comparison_operator' => '=',
+				'value' => 'default',
+			),
+		);
+		$received = array();
+		foreach ( $ef as $tuple ) {
+			$received[] = array(
+				'type' => $this->condition_factory->get_type( get_class( $tuple['fulfillable'] ) ),
+				'comparison_operator' => $tuple['fulfillable']->get_comparison_operator(),
+				'value' => $tuple['fulfillable']->get_value(),
+			);
+		}
+		$this->assertSame( $expected, $received );
 	}
 
 	/**
