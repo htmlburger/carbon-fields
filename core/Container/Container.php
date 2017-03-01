@@ -159,7 +159,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	public static function factory( $type, $name ) {
 		$repository = App::resolve( 'container_repository' );
 		$unique_id = $repository->get_unique_panel_id( $name );
-		
+
 		$normalized_type = static::normalize_container_type( $type );
 		$class = static::container_type_to_class( $normalized_type );
 		$container = new $class( $unique_id, $name, $normalized_type );
@@ -363,9 +363,9 @@ abstract class Container implements Datastore_Holder_Interface {
 
 	/**
 	 * Return root field from container with specified name
-	 * 
+	 *
 	 * @example crb_complex
-	 * 
+	 *
 	 * @param string $field_name
 	 * @return Field
 	 **/
@@ -381,7 +381,7 @@ abstract class Container implements Datastore_Holder_Interface {
 
 	/**
 	 * Get a regex to match field name patterns used to fetch specific fields
-	 * 
+	 *
 	 * @return string
 	 */
 	protected function get_field_pattern_regex() {
@@ -402,11 +402,11 @@ abstract class Container implements Datastore_Holder_Interface {
 
 	/**
 	 * Return field from container with specified name
-	 * 
+	 *
 	 * @example crb_complex/text_field
 	 * @example crb_complex/complex_2
 	 * @example crb_complex/complex_2:text_group/text_field
-	 * 
+	 *
 	 * @param string $field_name Can specify a field inside a complex with a / (slash) separator
 	 * @return Field
 	 **/
@@ -425,7 +425,7 @@ abstract class Container implements Datastore_Holder_Interface {
 			if ( ! preg_match( $field_pattern_regex, $segment, $segment_pieces ) ) {
 				Incorrect_Syntax_Exception::raise( 'Invalid field name pattern used: ' . $field_name );
 			}
-			
+
 			$segment_field_name = $segment_pieces['field_name'];
 			$segment_group_index = isset( $segment_pieces['group_index'] ) ? $segment_pieces['group_index'] : 0;
 			$segment_group_name = isset( $segment_pieces['group_name'] ) ? $segment_pieces['group_name'] : Group_Field::DEFAULT_GROUP_NAME;
@@ -529,12 +529,12 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return WordPress nonce field
+	 * Return WordPress nonce name used to identify the current container instance
 	 *
 	 * @return string
-	 **/
-	public function get_nonce_field() {
-		return wp_nonce_field( $this->get_nonce_name(), $this->get_nonce_name(), /*referer?*/ false, /*echo?*/ false );
+	 */
+	public function get_nonce_value() {
+		return wp_create_nonce( $this->get_nonce_name() );
 	}
 
 	/**
@@ -682,8 +682,11 @@ abstract class Container implements Datastore_Holder_Interface {
 			'title' => $this->title,
 			'classes' => $this->get_classes(),
 			'settings' => $this->settings,
-			'nonce_field' => $this->get_nonce_field(),
 			'fields' => array(),
+			'nonce' => array(
+				'name' => $this->get_nonce_name(),
+				'value' => $this->get_nonce_value(),
+			),
 		);
 
 		$fields = $this->get_fields();
