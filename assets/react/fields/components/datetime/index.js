@@ -32,7 +32,7 @@ export const DateTimeField = ({ name, field, picker, options, handleChange }) =>
 			type={picker}
 			options={options}
 			defaultValue={field.value}
-			storageFormat={field.storage_format_js}>
+			storageFormat={field.storage_format}>
 				<div className="carbon-field-group-holder">
 					<input
 						type="text"
@@ -80,14 +80,13 @@ const props = ({ name, field, handleChange }) => {
 		onSelect: handleChange,
 	};
 
-	if (field.timepicker_options) {
+	if (field.picker_options) {
 		return {
-			picker: field.timepicker_type,
+			picker: field.picker_type,
 			options: {
 				...field.interval_step,
 				...field.restraints,
-				...field.datepicker_options,
-				...field.timepicker_options,
+				...field.picker_options,
 				...defaults,
 				showTime: false,
 				buttonText: 'Select Time',
@@ -98,7 +97,7 @@ const props = ({ name, field, handleChange }) => {
 	return {
 		picker: 'datepicker',
 		options: {
-			...field.datepicker_options,
+			...field.picker_options,
 			...defaults,
 			buttonText: 'Select Date',
 		},

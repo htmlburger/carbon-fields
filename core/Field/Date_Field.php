@@ -6,28 +6,31 @@ namespace Carbon_Fields\Field;
  * Date picker field class.
  */
 class Date_Field extends Field {
+	
 	/**
-	 * Datepicker options.
+	 * Picker type.
+	 *
+	 * @var string
 	 */
-	public $datepicker_options = array(
+	protected $picker_type = 'datepicker';
+
+	/**
+	 * Picker options.
+	 *
+	 * @var array
+	 */
+	public $picker_options = array(
 		'dateFormat' => 'yy-mm-dd',
 		'altFormat' => 'yy-mm-dd',
 		'altInput' => true,
 	);
 
 	/**
-	 * Value storage format
-	 *
-	 * @var string
-	 */
-	protected $storage_format = 'Y-m-d';
-
-	/**
 	 * The storage format in variant that can be used by JavaScript.
 	 *
 	 * @var string
 	 */
-	protected $storage_format_js = 'YYYY-MM-DD';
+	protected $storage_format = 'YYYY-MM-DD';
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
@@ -40,8 +43,8 @@ class Date_Field extends Field {
 
 		$field_data = array_merge( $field_data, array(
 			'storage_format' => $this->storage_format,
-			'storage_format_js' => $this->storage_format_js,
-			'datepicker_options' => $this->datepicker_options,
+			'picker_type' => $this->picker_type,
+			'picker_options' => $this->picker_options,
 		) );
 
 		return $field_data;
@@ -59,9 +62,8 @@ class Date_Field extends Field {
 	/**
 	 * Set datepicker options
 	 */
-	public function set_datepicker_options( $options ) {
-		$this->datepicker_options = $options;
-
+	public function set_picker_options( $options ) {
+		$this->picker_options = array_replace( $this->picker_options, $options );
 		return $this;
 	}
 }

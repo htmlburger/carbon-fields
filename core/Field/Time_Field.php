@@ -6,12 +6,26 @@ namespace Carbon_Fields\Field;
  * Time picker field class.
  */
 class Time_Field extends Field {
+	
 	/**
-	 * Timepicker type.
+	 * Picker type.
 	 *
 	 * @var string
 	 */
-	protected $timepicker_type = 'timepicker';
+	protected $picker_type = 'timepicker';
+
+	/**
+	 * Picker options.
+	 *
+	 * @var array
+	 */
+	public $picker_options = array(
+		'dateFormat' => 'yy-mm-dd',
+		'timeFormat' => 'hh:mm tt',
+		'altFormat' => 'yy-mm-dd',
+		'altTimeFormat' => 'HH:mm:ss',
+		'altFieldTimeOnly' => false,
+	);
 
 	/**
 	 * Interval step for hours, minutes and seconds.
@@ -28,31 +42,11 @@ class Time_Field extends Field {
 	public $restraints = array();
 
 	/**
-	 * Timepicker options.
-	 *
-	 * @var array
-	 */
-	public $timepicker_options = array(
-		'dateFormat' => 'yy-mm-dd',
-		'timeFormat' => 'hh:mm tt',
-		'altFormat' => 'yy-mm-dd',
-		'altTimeFormat' => 'HH:mm:ss',
-		'altFieldTimeOnly' => false,
-	);
-
-	/**
-	 * Value storage format
-	 *
-	 * @var string
-	 */
-	protected $storage_format = 'H:i:s';
-
-	/**
 	 * The storage format in variant that can be used by JavaScript.
 	 *
 	 * @var string
 	 */
-	protected $storage_format_js = 'HH:mm:ss';
+	protected $storage_format = 'HH:mm:ss';
 
 	/**
 	 * You can use this method to modify the field properties that are added to the JSON object.
@@ -65,11 +59,10 @@ class Time_Field extends Field {
 
 		$field_data = array_merge( $field_data, array(
 			'storage_format' => $this->storage_format,
-			'storage_format_js' => $this->storage_format_js,
-			'timepicker_type' => $this->timepicker_type,
 			'interval_step' => $this->get_interval_step(),
 			'restraints' => $this->get_restraints(),
-			'timepicker_options' => $this->get_timepicker_options(),
+			'picker_type' => $this->picker_type,
+			'picker_options' => $this->get_picker_options(),
 		) );
 
 		return $field_data;
@@ -91,7 +84,7 @@ class Time_Field extends Field {
 	 * Sets the time format.
 	 */
 	public function set_time_format( $time_format ) {
-		$this->timepicker_options['timeFormat'] = $time_format;
+		$this->picker_options['timeFormat'] = $time_format;
 		return $this;
 	}
 
@@ -99,7 +92,7 @@ class Time_Field extends Field {
 	 * Returns the time format.
 	 */
 	public function get_time_format() {
-		return isset( $this->timepicker_options['timeFormat'] ) ? $this->timepicker_options['timeFormat'] : null;
+		return isset( $this->picker_options['timeFormat'] ) ? $this->picker_options['timeFormat'] : null;
 	}
 
 	/**
@@ -142,18 +135,17 @@ class Time_Field extends Field {
 	}
 
 	/**
-	 * Sets other timepicker options.
+	 * Sets other picker options.
 	 */
-	public function set_timepicker_options( $timepicker_options ) {
-		$this->timepicker_options = $timepicker_options;
-
+	public function set_picker_options( $options ) {
+		$this->picker_options = array_replace( $this->picker_options, $options );
 		return $this;
 	}
 
 	/**
-	 * Returns the timepicker options.
+	 * Returns the picker options.
 	 */
-	public function get_timepicker_options() {
-		return $this->timepicker_options;
+	public function get_picker_options() {
+		return $this->picker_options;
 	}
 }
