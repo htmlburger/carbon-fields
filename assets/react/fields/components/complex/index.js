@@ -242,7 +242,6 @@ const props = ({ field }) => {
 
 	if (field.layout === COMPLEX_LAYOUT_TABBED_VERTICAL) {
 		sortableTabsOptions.axis = 'y';
-		sortableTabsOptions.handle = '.group-handle';
 	}
 
 	const sortableGroupsOptions = {
