@@ -1,9 +1,10 @@
 /**
  * The external dependencies.
  */
+import $ from 'jquery';
+import fecha from 'fecha';
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import $ from 'jquery';
 
 class DateTimePicker extends React.Component {
 	/**
@@ -12,20 +13,43 @@ class DateTimePicker extends React.Component {
 	 * @return {void}
 	 */
 	componentDidMount() {
-		this.node = ReactDOM.findDOMNode(this);
+		const {
+			type,
+			options,
+			defaultValue,
+			storageFormat
+		} = this.props;
 
-		this.renderPicker(this.props);
-		this.initPicker();
+		this.node = ReactDOM.findDOMNode(this);
+		this.$input = $('input[type="text"]', this.node)[type]({
+			changeMonth: true,
+			changeYear: true,
+			showOn: 'both',
+			hideIfNoPrevNext: true,
+			beforeShow() {
+				$('#ui-datepicker-div', this.node).addClass('carbon-jquery-ui');
+			},
+			...options,
+		});
+
+		$('button', this.node).addClass('button');
+
+		// Set the value in correct format.
+		if (defaultValue) {
+			this.$input.datepicker('setDate', fecha.parse(defaultValue, storageFormat));
+		}
 	}
 
 	/**
 	 * Lifecycle hook.
 	 *
-	 * @param  {Object} props
 	 * @return {void}
 	 */
-	componentWillReceiveProps(props) {
-		this.renderPicker(props);
+	componentWillUnmount() {
+		this.$input[this.props.type]('destroy');
+
+		this.node = null;
+		this.$input = null;
 	}
 
 	/**
@@ -34,40 +58,7 @@ class DateTimePicker extends React.Component {
 	 * @return {React.Element}
 	 */
 	render() {
-		return <div className={this.props.className} />;
-	}
-
-	/**
-	 * Initialize jQuery UI datepicker.
-	 *
-	 * @return {void}
-	 */
-	initPicker() {
-		const defaults = {
-			changeMonth: true,
-			changeYear: true,
-			showOn: 'both',
-			hideIfNoPrevNext: true,
-			beforeShow() {
-				$('#ui-datepicker-div', this.node).addClass('carbon-jquery-ui');
-			},
-		};
-
-		$('input', this.node)[this.props.type]({
-			...defaults,
-			...this.props.options,
-		});
-
-		$('button', this.node).addClass('button');
-	}
-
-	/**
-	 * Render jQuery UI datepicker in the placeholder.
-	 *
-	 * @return {void}
-	 */
-	renderPicker(props) {
-		ReactDOM.render(props.children, this.node);
+		return React.Children.only(this.props.children);
 	}
 }
 
@@ -84,7 +75,6 @@ DateTimePicker.propTypes = {
 	]).isRequired,
 	options: PropTypes.object.isRequired,
 	children: PropTypes.element.isRequired,
-	className: PropTypes.string,
 };
 
 export default DateTimePicker;
