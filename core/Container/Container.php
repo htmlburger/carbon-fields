@@ -3,6 +3,7 @@
 namespace Carbon_Fields\Container;
 
 use Carbon_Fields\App;
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Field\Group_Field;
 use Carbon_Fields\Datastore\Datastore_Interface;
@@ -107,6 +108,15 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @var boolean
 	 */
 	protected $has_default_datastore = true;
+
+	/**
+	 * Array of custom CSS classes.
+	 *
+	 * @see add_class()
+	 * @see get_classes()
+	 * @var array<string>
+	 */
+	protected $classes = array();
 
 	/**
 	 * Normalizes a container type string to an expected format
@@ -640,6 +650,26 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Get custom CSS classes.
+	 *
+	 * @return array<string>
+	 */
+	public function get_classes() {
+		return $this->classes;
+	}
+
+	/**
+	 * Set CSS classes that the container should use.
+	 *
+	 * @param string|array $classes
+	 * @return object $this
+	 */
+	public function set_classes( $classes ) {
+		$this->classes = Helper::sanitize_classes( $classes );
+		return $this;
+	}
+
+	/**
 	 * Returns an array that holds the container data, suitable for JSON representation.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
@@ -650,6 +680,7 @@ abstract class Container implements Datastore_Holder_Interface {
 			'id' => $this->id,
 			'type' => $this->type,
 			'title' => $this->title,
+			'classes' => $this->get_classes(),
 			'settings' => $this->settings,
 			'fields' => array(),
 		);
