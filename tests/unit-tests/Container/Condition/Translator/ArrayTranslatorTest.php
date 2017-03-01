@@ -10,7 +10,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 /**
  * WARNING: the array translator produces logically identical results but not 100% identical representations when dealing with nested collections
  * 
- * @coversDefaultClass Carbon_Fields\Container\Condition\Translator\Array_Translator
+ * @coversDefaultClass Carbon_Fields\Container\Fulfillable\Translator\Array_Translator
  */
 class ArrayTranslatorTest extends WP_UnitTestCase {
 
@@ -59,7 +59,7 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 		} );
 
 		$ioc['container_condition_translator_array'] = function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Translator\Array_Translator( $ioc['container_condition_factory'] );
+			return new \Carbon_Fields\Container\Fulfillable\Translator\Array_Translator( $ioc['container_condition_factory'] );
 		};
 		App::instance()->install( $ioc );
 
