@@ -97,13 +97,14 @@ class Nav_Menu_Item_Container extends Container {
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
-		if ( $pagenow === 'nav-menus.php' ) {
-			return true;
+		if ( $pagenow !== 'nav-menus.php' ) {
+			return false;
 		}
 
-		$action = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && $action === 'add-menu-item' ) {
-			return true;
+		$input = stripslashes_deep( $_REQUEST );
+		$action = isset( $input['action'] ) ? $input['action'] : '';
+		if ( defined( 'DOING_AJAX' ) && ( ! DOING_AJAX || $action !== 'add-menu-item' ) ) {
+			return false;
 		}
 
 		return $this->static_conditions_pass();
