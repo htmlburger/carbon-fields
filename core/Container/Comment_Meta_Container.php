@@ -40,7 +40,7 @@ class Comment_Meta_Container extends Container {
 	}
 
 	/**
-	 * Checks whether the current request is valid
+	 * Checks whether the current save request is valid
 	 *
 	 * @return bool
 	 **/

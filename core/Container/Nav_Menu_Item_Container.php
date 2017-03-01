@@ -57,7 +57,7 @@ class Nav_Menu_Item_Container extends Container {
 	}
 
 	/**
-	 * Checks whether the current request is valid
+	 * Checks whether the current save request is valid
 	 *
 	 * @return bool
 	 **/
