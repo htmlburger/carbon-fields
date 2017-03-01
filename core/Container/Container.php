@@ -651,6 +651,7 @@ abstract class Container implements Datastore_Holder_Interface {
 			'type' => $this->type,
 			'title' => $this->title,
 			'settings' => $this->settings,
+			'nonce_field' => $this->get_nonce_field(),
 			'fields' => array(),
 		);
 

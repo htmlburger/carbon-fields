@@ -62,8 +62,7 @@ class Nav_Menu_Item_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_save() {
-		// rely on wp_update_nav_menu_item action not being called unless WP's nonce is not valid
-		return true;
+		return $this->verified_nonce_in_request();
 	}
 
 	/**

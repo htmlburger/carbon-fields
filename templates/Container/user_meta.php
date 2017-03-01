@@ -5,7 +5,6 @@
 			<th></th>
 			<td>
 				<fieldset id="<?php echo $this->id; ?>" class="container-holder carbon-user-container container-<?php echo $this->id; ?> <?php echo $this->is_tabbed() ? '' : 'carbon-fields-collection' ?>" data-profile-role="<?php echo $profile_role ?>"></fieldset>
-				<?php echo $this->get_nonce_field(); ?>
 			</td>
 		</tr>
 	</table>
