@@ -32,7 +32,6 @@ class ContainerTest extends WP_UnitTestCase {
 		$this->containerType = 'post_meta';
 		$this->containerTypeUpperCase = 'Post_Meta';
 		$this->containerTypeSpaced = 'Post Meta';
-		$this->containerTypeBackwardsCompatible = 'custom_fields';
 		$this->containerTypeInvalid = '__no_such_container_type__';
 		$this->containerTypeClass = 'Carbon_Fields\Container\Post_Meta_Container';
 		$this->containerTypeDatastoreClass = 'Carbon_Fields\Datastore\Post_Meta_Datastore';
@@ -68,7 +67,7 @@ class ContainerTest extends WP_UnitTestCase {
 	 * @covers ::factory
 	 *
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Unknown container "__No_Such_Container_Type__".
+	 * @expectedExceptionMessage Unknown container "__no_such_container_type__".
 	 */
 	public function testExceptionIsThrownWhenContainerTypeIsInvalid() {
 		$container = Container::factory( $this->containerTypeInvalid, $this->containerTitle );
@@ -125,16 +124,6 @@ class ContainerTest extends WP_UnitTestCase {
 		$container2 = Container::factory( $this->containerType, $this->containerTitle );
 		$this->assertEquals( $container1->id . '1', $container2->id );
 	}
-
-	/**
-	 * @covers ::make
-	 * @covers ::factory
-	 */
-	public function testContainerTypeCustomFieldsBackwardsCompatibility() {
-		$container = Container::factory( $this->containerTypeBackwardsCompatible, $this->containerTitle );
-		$this->assertInstanceOf( $this->containerTypeClass, $container );
-	}
-
 	/**
 	 * @covers ::__construct
 	 *

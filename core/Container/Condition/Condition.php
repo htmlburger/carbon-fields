@@ -2,12 +2,13 @@
 
 namespace Carbon_Fields\Container\Condition;
 
+use Carbon_Fields\Container\Fulfillable\Fulfillable;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Base container condition class
  */
-abstract class Condition implements Fulfillable\Fulfillable {
+abstract class Condition implements Fulfillable {
 
 	/**
 	 * Condition value to check

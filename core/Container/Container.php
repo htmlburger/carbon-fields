@@ -3,6 +3,7 @@
 namespace Carbon_Fields\Container;
 
 use Carbon_Fields\App;
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Field\Group_Field;
 use Carbon_Fields\Container\Fulfillable\Fulfillable_Collection;
@@ -114,67 +115,23 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @var Fulfillable_Collection
 	 */
-	protected $conditions_collection;
+	protected $condition_collection;
 
 	/**
 	 * Get array of all static condition types
-	 * 
+	 *
+	 * @param  boolean       $static
 	 * @return array<string>
 	 */
-	protected function get_static_conditions() {
+	protected function get_condition_types( $static ) {
+		$group = $static ? 'static' : 'dynamic';
+		$container_type = Helper::class_to_type( get_class( $this ), '_Container' );
+		
 		$condition_types = array();
-
-		$container_type_key = strtolower( $this->type );
-		$condition_types = apply_filters( 'carbon_fields_' . $container_type_key . '_container_static_condition_types', $condition_types, $this );
-		$condition_types = apply_filters( 'carbon_fields_container_static_condition_types', $condition_types, $this );
-
+		$condition_types = apply_filters( 'carbon_fields_' . $container_type . '_container_' . $group . '_condition_types', $condition_types, $container_type, $this );
+		$condition_types = apply_filters( 'carbon_fields_container_' . $group . '_condition_types', $condition_types, $container_type, $this );
+			
 		return $condition_types;
-	}
-
-	/**
-	 * Get array of all dynamic condition types
-	 * 
-	 * @return array<string>
-	 */
-	protected function get_dynamic_conditions() {
-		$condition_types = array();
-
-		$container_type_key = strtolower( $this->type );
-		$condition_types = apply_filters( 'carbon_fields_' . $container_type_key . '_container_dynamic_condition_types', $condition_types, $this );
-		$condition_types = apply_filters( 'carbon_fields_container_dynamic_condition_types', $condition_types, $this );
-
-		return $condition_types;
-	}
-
-	/**
-	 * Normalizes a container type string to an expected format
-	 *
-	 * @param string $type
-	 * @return string $normalized_type
-	 */
-	protected static function normalize_container_type( $type ) {
-		// backward compatibility: post_meta container used to be called custom_fields
-		if ( $type === 'custom_fields' ) {
-			$type = 'post_meta';
-		}
-
-		$normalized_type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
-		return $normalized_type;
-	}
-
-	/**
-	 * Resolves a string-based type to a fully qualified container class name
-	 *
-	 * @param string $type
-	 * @return string $class_name
-	 */
-	protected static function container_type_to_class( $type ) {
-		$class = __NAMESPACE__ . '\\' . $type . '_Container';
-		if ( ! class_exists( $class ) ) {
-			Incorrect_Syntax_Exception::raise( 'Unknown container "' . $type . '".' );
-			$class = __NAMESPACE__ . '\\Broken_Container';
-		}
-		return $class;
 	}
 
 	/**
@@ -185,11 +142,16 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return object $container
 	 */
 	public static function factory( $type, $name ) {
+		$normalized_type = Helper::normalize_type( $type );
+		$class = Helper::type_to_class( $normalized_type, __NAMESPACE__, '_Container' );
+		
+		if ( ! class_exists( $class ) ) {
+			Incorrect_Syntax_Exception::raise( 'Unknown container "' . $type . '".' );
+			$class = __NAMESPACE__ . '\\Broken_Container';
+		}
+		
 		$repository = App::resolve( 'container_repository' );
 		$unique_id = $repository->get_unique_panel_id( $name );
-		
-		$normalized_type = static::normalize_container_type( $type );
-		$class = static::container_type_to_class( $normalized_type );
 		$container = new $class( $unique_id, $name, $normalized_type );
 		$repository->register_container( $container );
 
@@ -222,9 +184,9 @@ abstract class Container implements Datastore_Holder_Interface {
 		$this->id = $unique_id;
 		$this->title = $title;
 		$this->type = $type;
-		$this->conditions_collection = App::resolve( 'container_condition_fulfillable_collection' );
-		$this->conditions_collection->set_condition_type_list(
-			array_merge( $this->get_static_conditions(), $this->get_dynamic_conditions() ),
+		$this->condition_collection = App::resolve( 'container_condition_fulfillable_collection' );
+		$this->condition_collection->set_condition_type_list(
+			array_merge( $this->get_condition_types( true ), $this->get_condition_types( false ) ),
 			true
 		);
 	}
@@ -368,6 +330,20 @@ abstract class Container implements Datastore_Holder_Interface {
 	abstract protected function is_valid_attach_for_request();
 
 	/**
+	 * Check if conditions pass for request
+	 *
+	 * @return bool
+	 */
+	protected function static_conditions_pass() {
+		$environment = $this->get_environment_for_request();
+		$static_condition_collection = $this->condition_collection->evaluate(
+			$this->get_condition_types( false ),
+			true
+		);
+		return $static_condition_collection->is_fulfilled( $environment );
+	}
+
+	/**
 	 * Get environment array for object id
 	 *
 	 * @param integer $object_id
@@ -382,6 +358,16 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return bool
 	 */
 	abstract public function is_valid_attach_for_object( $object_id );
+
+	/**
+	 * Check if all conditions pass for object
+	 *
+	 * @return bool
+	 */
+	protected function all_conditions_pass( $object_id ) {
+		$environment = $this->get_environment_for_object( $object_id );
+		return $this->condition_collection->is_fulfilled( $environment );
+	}
 
 	/**
 	 * Whether this container is currently viewed.
@@ -705,7 +691,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 */
 	public function to_json( $load ) {
 		$array_translator = App::resolve( 'container_condition_translator_array' );
-		$dynamic_conditions = $this->conditions_collection->evaluate( $this->get_static_conditions(), $this->get_environment_for_request() );
+		$dynamic_conditions = $this->condition_collection->evaluate( $this->get_condition_types( true ), $this->get_environment_for_request() );
 		$dynamic_conditions = $array_translator->fulfillable_to_foreign( $dynamic_conditions );
 
 		$container_data = array(
@@ -786,7 +772,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return Container $this
 	 */
 	public function when() {
-		call_user_func_array( array( $this->conditions_collection, 'when' ), func_get_args() );
+		call_user_func_array( array( $this->condition_collection, 'when' ), func_get_args() );
 		return $this;
 	}
 
@@ -797,7 +783,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return Container $this
 	 */
 	public function and_when() {
-		call_user_func_array( array( $this->conditions_collection, 'and_when' ), func_get_args() );
+		call_user_func_array( array( $this->condition_collection, 'and_when' ), func_get_args() );
 		return $this;
 	}
 
@@ -808,7 +794,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return Container $this
 	 */
 	public function or_when() {
-		call_user_func_array( array( $this->conditions_collection, 'or_when' ), func_get_args() );
+		call_user_func_array( array( $this->condition_collection, 'or_when' ), func_get_args() );
 		return $this;
 	}
 }

@@ -97,13 +97,7 @@ class Comment_Meta_Container extends Container {
 			return false;
 		}
 
-		$environment = $this->get_environment_for_request();
-		$static_conditions_collection = $this->conditions_collection->evaluate( $this->get_dynamic_conditions(), true );
-		if ( ! $static_conditions_collection->is_fulfilled( $environment ) ) {
-			return false;
-		}
-
-		return true;
+		return $this->static_conditions_pass();
 	}
 
 	/**
@@ -125,11 +119,7 @@ class Comment_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
-		$environment = $this->get_environment_for_object( intval( $object_id ) );
-		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
-			return false;
-		}
-		return true;
+		return $this->all_conditions_pass( intval( $object_id ) );
 	}
 
 	/**

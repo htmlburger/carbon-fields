@@ -3,93 +3,29 @@
 namespace Carbon_Fields\Container\Condition;
 
 use Carbon_Fields\App;
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class Factory {
 
 	/**
-	 * Key=>Value dictionary of types and their respective class name
-	 * 
-	 * @var array
-	 */
-	protected $dictionary = array();
-
-	/**
-	 * Get the registered types and their respective class name
-	 * 
-	 * @return array
-	 */
-	public function get_dictionary() {
-		return $this->dictionary;
-	}
-
-	/**
-	 * Get the registered class names and their respective type
-	 * 
-	 * @return array
-	 */
-	public function get_flipped_dictionary() {
-		return array_flip( $this->get_dictionary() );
-	}
-
-	/**
-	 * Register a condition to allow instantiation
-	 * 
-	 * @param string $type
-	 * @param string $class
-	 */
-	public function register( $type, $class ) {
-		$this->dictionary[ $type ] = $class;
-	}
-
-	/**
-	 * Check if type is registered
-	 * 
-	 * @param  string  $type
-	 * @return boolean
-	 */
-	public function has_type( $type ) {
-		$dictionary = $this->get_dictionary();
-		return isset( $dictionary[ $type ] );
-	}
-
-	/**
-	 * Check if class is registered
-	 * 
-	 * @param  string  $class
-	 * @return boolean
-	 */
-	public function has_class( $class ) {
-		$flipped_dictionary = $this->get_flipped_dictionary();
-		return isset( $flipped_dictionary[ $class ] );
-	}
-
-	/**
 	 * Get the type for the specified class
 	 * 
-	 * @param  string      $class
-	 * @return string|null
+	 * @param  string $class
+	 * @return string
 	 */
 	public function get_type( $class ) {
-		if ( $this->has_class( $class ) ) {
-			$flipped_dictionary = $this->get_flipped_dictionary();
-			return $flipped_dictionary[ $class ];
-		}
-		return null;
+		return Helper::class_to_type( $class, '_Condition' );
 	}
 
 	/**
 	 * Get the class for the specified type
 	 * 
 	 * @param  string      $type
-	 * @return string|null
+	 * @return string
 	 */
 	public function get_class( $type ) {
-		if ( $this->has_type( $type ) ) {
-			$dictionary = $this->get_dictionary();
-			return $dictionary[ $type ];
-		}
-		return null;
+		return Helper::type_to_class( $type, __NAMESPACE__, '_Condition' );
 	}
 
 	/**
@@ -99,9 +35,17 @@ class Factory {
 	 * @return mixed
 	 */
 	public function make( $type ) {
-		if ( ! $this->has_type( $type ) ) {
-			Incorrect_Syntax_Exception::raise( 'Attempted to make an instance of an unknown type: ' . $type );
+		$normalized_type = Helper::normalize_type( $type );
+		
+		$identifier = 'container_condition_type_' . $normalized_type;
+		if ( App::has( $identifier ) ) {
+			return App::resolve( $identifier );
 		}
-		return App::resolve( 'container_condition_type_' . $type );
+
+		$class = $this->get_class( $normalized_type );
+		if ( ! class_exists( $class ) ) {
+			Incorrect_Syntax_Exception::raise( 'Unknown condition type "' . $type . '".' );
+		}
+		return new $class( array() );
 	}
 }

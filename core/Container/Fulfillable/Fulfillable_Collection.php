@@ -1,6 +1,6 @@
 <?php
 
-namespace Carbon_Fields\Container\Condition\Fulfillable;
+namespace Carbon_Fields\Container\Fulfillable;
 
 use Carbon_Fields\App;
 use Carbon_Fields\Container\Condition\Factory;
@@ -89,13 +89,6 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @return Fulfillable_Collection $this
 	 */
 	public function set_condition_type_list( $condition_type_list, $whitelist ) {
-		// Verify all allowed condition types exist
-		foreach ( $condition_type_list as $condition_type ) {
-			if ( ! $this->condition_factory->has_type( $condition_type ) ) {
-				Incorrect_Syntax_Exception::raise( 'Unknown container condition type allowed: ' . $condition_type );
-			}
-		}
-		
 		$this->condition_type_list_whitelist = $whitelist;
 		$this->condition_type_list = $condition_type_list;
 		$this->propagate_condition_type_list();

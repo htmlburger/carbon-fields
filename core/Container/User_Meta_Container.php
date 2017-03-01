@@ -128,13 +128,7 @@ class User_Meta_Container extends Container {
 			return false;
 		}
 
-		$environment = $this->get_environment_for_request();
-		$static_conditions_collection = $this->conditions_collection->evaluate( $this->get_dynamic_conditions(), true );
-		if ( ! $static_conditions_collection->is_fulfilled( $environment ) ) {
-			return false;
-		}
-
-		return true;
+		return $this->static_conditions_pass();
 	}
 
 	/**
@@ -165,12 +159,7 @@ class User_Meta_Container extends Container {
 			return false;
 		}
 
-		$environment = $this->get_environment_for_object( $user->ID );
-		if ( ! $this->conditions_collection->is_fulfilled( $environment ) ) {
-			return false;
-		}
-
-		return true;
+		return $this->all_conditions_pass( intval( $user->ID ) );
 	}
 
 	/**

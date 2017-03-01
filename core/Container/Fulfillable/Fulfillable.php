@@ -1,6 +1,6 @@
 <?php
 
-namespace Carbon_Fields\Container\Condition\Fulfillable;
+namespace Carbon_Fields\Container\Fulfillable;
 
 interface Fulfillable {
 

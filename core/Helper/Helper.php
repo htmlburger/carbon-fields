@@ -233,4 +233,59 @@ class Helper {
 
 		return $relation;
 	}
+
+	/**
+	 * Normalize a type string representing an object type
+	 * 
+	 * @param  string $type
+	 * @return string
+	 */
+	public static function normalize_type( $type ) {
+		$normalized_type = str_replace( ' ', '_', $type );
+		$normalized_type = preg_replace( '/[_\s]+/', '_', $normalized_type );
+		$normalized_type = preg_replace( '/^_|_$/', '', $normalized_type );
+		$normalized_type = strtolower( $normalized_type );
+		return $normalized_type;
+	}
+
+	/**
+	 * Convert a string representing an object type to a fully qualified class name
+	 * 
+	 * @param  string $type
+	 * @param  string $namespace
+	 * @param  string $class_suffix
+	 * @return string
+	 */
+	public static function type_to_class( $type, $namespace = '', $class_suffix = '' ) {
+		$classlike_type = static::normalize_type( $type );
+		$classlike_type = str_replace( '_', ' ', $classlike_type );
+		$classlike_type = ucwords( $classlike_type );
+		$classlike_type = str_replace( ' ', '_', $classlike_type );
+
+		$class = $classlike_type . $class_suffix;
+		if ( $namespace ) {
+			$class = $namespace . '\\' . $class;
+		}
+
+		return $class;
+	}
+
+	/**
+	 * Convert a string representing an object type to a fully qualified class name
+	 * 
+	 * @param  string $class
+	 * @param  string $class_suffix
+	 * @return string
+	 */
+	public static function class_to_type( $class, $class_suffix = '' ) {
+		$type = (new \ReflectionClass( $class ))->getShortName();
+
+		if ( $class_suffix ) {
+			$type = preg_replace( '/(' . preg_quote( $class_suffix, '/' ) . ')$/i', '', $type );
+		}
+
+		$type = static::normalize_type( $type );
+
+		return $type;
+	}
 }
