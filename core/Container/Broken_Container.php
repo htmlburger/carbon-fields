@@ -13,6 +13,8 @@ class Broken_Container extends Container {
 
 	public function init() {}
 
+	protected function is_valid_save() { return false; }
+
 	public function is_valid_attach_for_request() { return false; }
 
 	public function is_valid_attach_for_object( $object_id = null ) { return false; }
