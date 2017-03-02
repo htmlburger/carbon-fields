@@ -47,7 +47,10 @@ export const ComplexTabs = ({ groups, isTabActive, onClick, children }) => {
 ComplexTabs.propTypes = {
 	groups: PropTypes.arrayOf(PropTypes.shape({
 		id: PropTypes.string.isRequired,
-		label: PropTypes.string.isRequired,
+		fields: PropTypes.arrayOf(PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			name: PropTypes.string.isRequired,
+		})).isRequired,
 	})).isRequired,
 	show: PropTypes.bool.isRequired,
 	current: PropTypes.string,

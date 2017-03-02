@@ -29,8 +29,8 @@ export const ComplexTab = ({
 	label,
 	active,
 	handleClick
-}) => (
-	<li
+}) => {
+	return <li
 		id={group.id}
 		className={cx('group-tab-item', { 'active': active })}>
 			<a href="#" onClick={handleClick}>
@@ -46,7 +46,7 @@ export const ComplexTab = ({
 				<span className="dashicons dashicons-warning carbon-complex-group-error-badge" />
 			</a>
 	</li>
-);
+};
 
 /**
  * Validate the props.

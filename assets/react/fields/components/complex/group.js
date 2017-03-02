@@ -3,7 +3,7 @@
  */
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { compose, withHandlers, withState, getContext, withProps } from 'recompose';
+import { compose, withHandlers, withState } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -11,7 +11,7 @@ import { compose, withHandlers, withState, getContext, withProps } from 'recompo
 import { preventDefault } from 'lib/helpers';
 
 import fieldFactory from 'fields/factory';
-import { getComplexGroupLabel } from 'fields/selectors';
+import withHeaderTemplate from 'fields/decorators/with-header-template';
 
 /**
  * Render the holder around the complex's fields.
@@ -28,8 +28,6 @@ import { getComplexGroupLabel } from 'fields/selectors';
  * @param  {Function} props.handleCloneClick
  * @param  {Function} props.handleRemoveClick
  * @return {React.Element}
- *
- * TODO: Add support for custom labels.
  */
 export const ComplexGroup = ({
 	index,
@@ -121,32 +119,11 @@ ComplexGroup.propTypes = {
 			name: PropTypes.string.isRequired,
 		})),
 	}).isRequired,
+	label: PropTypes.string,
 	active: PropTypes.bool.isRequired,
 	onClone: PropTypes.func.isRequired,
 	onRemove: PropTypes.func.isRequired,
 };
-
-/**
- * The data that should extracted from the context
- * and passed as props.
- *
- * @type {Object}
- */
-const context = {
-	store: PropTypes.object,
-};
-
-/**
- * Pass additional props to the component.
- *
- * @param  {Object} props
- * @param  {Object} props.group
- * @param  {Object} props.store
- * @return {Object}
- */
-const props = ({ group, store }) => ({
-	label: getComplexGroupLabel(store.getState(), group),
-});
 
 /**
  * Handle the click on the 'Expand/Collapse' button.
@@ -179,8 +156,7 @@ const handleCloneClick = ({ group, onClone }) => preventDefault(() => onClone(gr
 const handleRemoveClick = ({ group, onRemove }) => preventDefault(() => onRemove(group.id));
 
 export default compose(
-	getContext(context),
-	withProps(props),
+	withHeaderTemplate,
 	withState('collapsed', 'setCollapsed', false),
 	withHandlers({
 		handleToggleClick,
