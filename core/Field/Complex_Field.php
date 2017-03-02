@@ -38,14 +38,14 @@ class Complex_Field extends Field {
 
 	/**
 	 * Complex field layout
-	 * 
+	 *
 	 * @var string static::LAYOUT_* constant
 	 */
 	protected $layout = self::LAYOUT_GRID;
 
 	/**
 	 * Value tree describing the complex values ( ['value_set'] ) and all groups with their child fields ( ['groups'] )
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $value_tree = array(
@@ -55,28 +55,28 @@ class Complex_Field extends Field {
 
 	/**
 	 * Array of groups registered for this complex field
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $groups = array();
 
 	/**
 	 * Minimum number of entries. -1 for no limit
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $values_min = -1;
 
 	/**
 	 * Maximum number of entries. -1 for no limit
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $values_max = -1;
 
 	/**
 	 * Default entry state - collapsed or not
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $collapsed = false;
@@ -84,7 +84,7 @@ class Complex_Field extends Field {
 	/**
 	 * Entry labels
 	 * These are translated in init()
-	 * 
+	 *
 	 * @var array
 	 */
 	public $labels = array(
@@ -94,7 +94,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Create a field from a certain type with the specified label.
-	 * 
+	 *
 	 * @param string $type  Field type
 	 * @param string $name  Field name
 	 * @param string $label Field label
@@ -122,7 +122,7 @@ class Complex_Field extends Field {
 		parent::set_hierarchy( $hierarchy );
 		$this->update_child_hierarchy();
 	}
-	
+
 	/**
 	 * Propagate hierarchy to child fields
 	 */
@@ -187,7 +187,7 @@ class Complex_Field extends Field {
 	 *   - array<Field> $fields
 	 *   - string $group_name, array<Field> $fields
 	 *   - string $group_name, string $group_label, array<Field> $fields
-	 * 
+	 *
 	 * @return $this
 	 */
 	public function add_fields() {
@@ -200,7 +200,7 @@ class Complex_Field extends Field {
 		if ( $argc >= 2 ) {
 			$name = $argv[0];
 		}
-		
+
 		if ( $argc >= 3 ) {
 			$label = $argv[1];
 		}
@@ -259,18 +259,17 @@ class Complex_Field extends Field {
 	 * @return $this
 	 */
 	public function set_header_template( $template ) {
-		if ( count( $this->groups ) === 0 ) {
-			Incorrect_Syntax_Exception::raise( "Can't set group label template. There are no present groups for Complex Field " . $this->get_label() . '.' );
-		}
-
 		$template = is_callable( $template ) ? call_user_func( $template ) : $template;
 
 		// Assign the template to the group that was added last
 		$values = array_values( $this->groups );
 		$group = end( $values );
-		$group->set_label_template( $template );
 
-		$this->groups[ $group->get_name() ] = $group;
+		if ($group) {
+			$group->set_label_template( $template );
+
+			$this->groups[ $group->get_name() ] = $group;
+		}
 
 		return $this;
 	}
@@ -310,7 +309,7 @@ class Complex_Field extends Field {
 			$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $group_index );
 			if ( isset( $group_values[ $clone->get_base_name() ] ) ) {
 				$group_value = $group_values[ $clone->get_base_name() ];
-				
+
 				if ( isset( $group_value['value_set'] ) ) {
 					$clone->set_value( $group_value['value_set'] );
 				}
@@ -370,13 +369,13 @@ class Complex_Field extends Field {
 			$group = $this->get_group_by_name( $values[ static::GROUP_TYPE_KEY ] );
 			$group_fields = $group->get_fields();
 			$group_field_names = array_flip( $group->get_field_names() );
-			
+
 			$value_group = array( static::GROUP_TYPE_KEY => $values[ static::GROUP_TYPE_KEY ] );
 			unset( $values[ static::GROUP_TYPE_KEY ] );
 
 			// trim input values to those used by the field
 			$values = array_intersect_key( $values, $group_field_names );
-			
+
 			foreach ( $group_fields as $field ) {
 				$tmp_field = $this->get_clone_under_field_in_hierarchy( $field, $this, $input_group_index );
 
@@ -469,13 +468,13 @@ class Complex_Field extends Field {
 	 */
 	public function get_formatted_value() {
 		$field_groups = $this->get_prefilled_groups( $this->get_value_tree() );
-		
+
 		$value = array();
 		foreach ( $field_groups as $group_index => $field_group ) {
 			$value[ $group_index ] = array();
 			foreach ( $field_group as $key => $field ) {
 				if ( is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
-					$value[ $group_index ][ $field->get_base_name() ] = $field->get_formatted_value(); 
+					$value[ $group_index ][ $field->get_base_name() ] = $field->get_formatted_value();
 				} else {
 					$value[ $group_index ][ $key ] = $field;
 				}
