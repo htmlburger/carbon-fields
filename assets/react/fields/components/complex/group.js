@@ -3,13 +3,15 @@
  */
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, withHandlers, withState, getContext, withProps } from 'recompose';
 
 /**
  * The internal dependencies.
  */
-import fieldFactory from 'fields/factory';
 import { preventDefault } from 'lib/helpers';
+
+import fieldFactory from 'fields/factory';
+import { getComplexGroupLabel } from 'fields/selectors';
 
 /**
  * Render the holder around the complex's fields.
@@ -19,6 +21,7 @@ import { preventDefault } from 'lib/helpers';
  * @param  {String}   props.prefix
  * @param  {String}   props.layout
  * @param  {Object}   props.group
+ * @param  {String}   props.label
  * @param  {Boolean}  props.active
  * @param  {Boolean}  props.collapsed
  * @param  {Function} props.handleToggleClick
@@ -26,20 +29,41 @@ import { preventDefault } from 'lib/helpers';
  * @param  {Function} props.handleRemoveClick
  * @return {React.Element}
  *
- * TODO: Fix the translation of the hints.
  * TODO: Add support for custom labels.
  */
-export const ComplexGroup = ({ index, prefix, layout, group, active, collapsed, handleToggleClick, handleCloneClick, handleRemoveClick }) => {
-	return <div id={group.id} className={cx('carbon-row', 'carbon-group-row', { 'collapsed': collapsed }, { 'active': active })}>
+export const ComplexGroup = ({
+	index,
+	prefix,
+	layout,
+	group,
+	label,
+	active,
+	collapsed,
+	handleToggleClick,
+	handleCloneClick,
+	handleRemoveClick
+}) => {
+	const classes = [
+		'carbon-row',
+		'carbon-group-row',
+		{ 'collapsed': collapsed },
+		{ 'active': active },
+	];
+
+	return <div id={group.id} className={cx(classes)}>
 		<input
 			type="hidden"
 			name={`${prefix}[${index}][_type]`}
 			defaultValue={group.name} />
 
 		<div className="carbon-drag-handle">
-			<span className="group-number">{index + 1}</span>
+			<span className="group-number">
+				{index + 1}
+			</span>
 
-			<span className="group-name"></span>
+			<span
+				className="group-name"
+				dangerouslySetInnerHTML={{ __html: label }} />
 		</div>
 
 		<div className={`carbon-group-actions carbon-group-actions-${layout}`}>
@@ -103,6 +127,28 @@ ComplexGroup.propTypes = {
 };
 
 /**
+ * The data that should extracted from the context
+ * and passed as props.
+ *
+ * @type {Object}
+ */
+const context = {
+	store: PropTypes.object,
+};
+
+/**
+ * Pass additional props to the component.
+ *
+ * @param  {Object} props
+ * @param  {Object} props.group
+ * @param  {Object} props.store
+ * @return {Object}
+ */
+const props = ({ group, store }) => ({
+	label: getComplexGroupLabel(store.getState(), group),
+});
+
+/**
  * Handle the click on the 'Expand/Collapse' button.
  *
  * @param  {Object}   props
@@ -133,6 +179,8 @@ const handleCloneClick = ({ group, onClone }) => preventDefault(() => onClone(gr
 const handleRemoveClick = ({ group, onRemove }) => preventDefault(() => onRemove(group.id));
 
 export default compose(
+	getContext(context),
+	withProps(props),
 	withState('collapsed', 'setCollapsed', false),
 	withHandlers({
 		handleToggleClick,

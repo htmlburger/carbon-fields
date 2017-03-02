@@ -7,8 +7,12 @@ import {
 	map,
 	filter,
 	keyBy,
+	mapKeys,
 	mapValues,
-	some
+	some,
+	pick,
+	template,
+	isNull
 } from 'lodash';
 
 /**
@@ -106,3 +110,24 @@ export const makeGetSidebarFieldOptions = () => createSelector([
  * @return {Boolean}
  */
 export const hasInvalidFields = createSelector(getFields, fields => some(fields, ['ui.valid', false]));
+
+/**
+ * Compile the template of the group's label.
+ *
+ * @param  {Object} state
+ * @param  {Object} group
+ * @return {String}
+ */
+export const getComplexGroupLabel = (state, group) => {
+	if (isNull(group.label_template)) {
+		return group.label;
+	}
+
+	const fields = pick(getFields(state), map(group.fields, 'id'));
+	const values = mapValues(mapKeys(fields, 'base_name'), 'value');
+
+	return template(group.label_template)({
+		fields,
+		...values,
+	});
+};
