@@ -44,7 +44,7 @@ ComplexEmptyNotice.propTypes = {
  * @param  {Function} props.onClick
  * @return {Function}
  */
-const handleClick = ({ onClick }) => preventDefault(onClick);
+const handleClick = ({ onClick }) => preventDefault(() => onClick());
 
 export default withHandlers({
 	handleClick,
