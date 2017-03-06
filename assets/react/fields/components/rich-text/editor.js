@@ -3,6 +3,7 @@
  */
 import React, { PropTypes } from 'react';
 import ReactDOM from 'react-dom';
+import cx from 'classnames';
 
 class RichTextEditor extends React.Component {
 	/**
@@ -11,7 +12,7 @@ class RichTextEditor extends React.Component {
 	 * @return {void}
 	 */
 	componentDidMount() {
-		this.initEditor(this.props);
+		this.initEditor();
 	}
 
 	/**
@@ -29,24 +30,34 @@ class RichTextEditor extends React.Component {
 	 * @return {React.Element}
 	 */
 	render() {
-		const { id, children } = this.props;
+		const { id, children, richEditing } = this.props;
+		const classes = [
+			'carbon-wysiwyg',
+			'wp-editor-wrap',
+			{ 'tmce-active': richEditing },
+			{ 'html-active': !richEditing },
+		];
 
-		return <div id={`wp-${id}-wrap`} className="carbon-wysiwyg wp-editor-wrap tmce-active" data-toolbar="full">
+		return <div id={`wp-${id}-wrap`} className={cx(classes)}>
 			<div id={`wp-${id}-media-buttons`} className="hide-if-no-js wp-media-buttons">
 				<a href="#" className="button insert-media add_media" data-editor={id} title="Add Media">
 					<span className="wp-media-buttons-icon"></span> Add Media
 				</a>
 			</div>
 
-			<div className="wp-editor-tabs">
-				<button type="button" id={`${id}-tmce`} className="wp-switch-editor switch-tmce" data-wp-editor-id={id}>
-					Visual
-				</button>
+			{
+				richEditing
+				?	<div className="wp-editor-tabs">
+						<button type="button" id={`${id}-tmce`} className="wp-switch-editor switch-tmce" data-wp-editor-id={id}>
+							Visual
+						</button>
 
-				<button type="button" id={`${id}-html`} className="wp-switch-editor switch-html" data-wp-editor-id={id}>
-					Text
-				</button>
-			</div>
+						<button type="button" id={`${id}-html`} className="wp-switch-editor switch-html" data-wp-editor-id={id}>
+							Text
+						</button>
+					</div>
+				:	null
+			}
 
 			<div id={`wp-${id}-editor-container`} className="wp-editor-container">
 				{children}
@@ -57,29 +68,32 @@ class RichTextEditor extends React.Component {
 	/**
 	 * Initialize the WYSIWYG editor.
 	 *
-	 * @param  {Object} props
 	 * @return {void}
 	 */
-	initEditor(props) {
-		const editorSetup = (editor) => {
-			this.editor = editor;
+	initEditor() {
+		const { id, richEditing, onChange } = this.props;
 
-			editor.on('blur', () => {
-				props.onChange(editor.getContent());
-			});
-		};
+		if (richEditing) {
+			const editorSetup = (editor) => {
+				this.editor = editor;
 
-		const editorOptions = {
-			...window.tinyMCEPreInit.mceInit.carbon_settings,
-			selector: `#${props.id}`,
-			setup: editorSetup,
-		};
+				editor.on('blur', () => {
+					onChange(editor.getContent());
+				});
+			};
 
-		window.tinymce.init(editorOptions);
+			const editorOptions = {
+				...window.tinyMCEPreInit.mceInit.carbon_settings,
+				selector: `#${id}`,
+				setup: editorSetup,
+			};
+
+			window.tinymce.init(editorOptions);
+		}
 
 		const quickTagsOptions = {
 			...window.tinyMCEPreInit,
-			id: props.id,
+			id,
 		};
 
 		window.quicktags(quickTagsOptions);
@@ -89,18 +103,17 @@ class RichTextEditor extends React.Component {
 	}
 
 	/**
-	 * Destroy the instance of TinyMCE editor.
+	 * Destroy the instance of the WYSIWYG editor.
 	 *
 	 * @return {void}
 	 */
 	destroyEditor() {
-		// Remove the editor.
-		this.editor.remove();
+		if (this.editor) {
+			this.editor.remove();
+			this.editor = null;
+		}
 
-		// Remove the quick tags.
-		delete window.QTags.instances[this.props.id];
-
-		this.editor = null;
+		delete window.QTags.instances[this.id];
 	}
 }
 
@@ -111,6 +124,7 @@ class RichTextEditor extends React.Component {
  */
 RichTextEditor.propTypes = {
 	id: PropTypes.string.isRequired,
+	richEditing: PropTypes.bool.isRequired,
 	onChange: PropTypes.func.isRequired,
 };
 
