@@ -3,7 +3,7 @@
  */
 import immutable from 'object-path-immutable';
 import { handleActions, combineActions } from 'redux-actions';
-import { omit } from 'lodash';
+import { omit, findIndex } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -17,7 +17,9 @@ import {
 	removeFields,
 	setUI,
 	markFieldAsValid,
-	markFieldAsInvalid
+	markFieldAsInvalid,
+	expandComplexGroup,
+	collapseComplexGroup
 } from 'fields/actions';
 
 /**
@@ -39,4 +41,10 @@ export default decorateFieldReducer(handleActions({
 		valid: false,
 		error: error,
 	}),
+
+	[combineActions(expandComplexGroup, collapseComplexGroup)]: (state, { payload: { fieldId, groupId, collapsed } }) => {
+		const index = findIndex(state[fieldId].value, { id: groupId });
+
+		return immutable.set(state, `${fieldId}.value.${index}.collapsed`, collapsed);
+	},
 }, {}));

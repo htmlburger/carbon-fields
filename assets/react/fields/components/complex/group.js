@@ -3,13 +3,15 @@
  */
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, withHandlers } from 'recompose';
 
 /**
  * The internal dependencies.
  */
-import fieldFactory from 'fields/factory';
 import { preventDefault } from 'lib/helpers';
+
+import fieldFactory from 'fields/factory';
+import withHeaderTemplate from 'fields/decorators/with-header-template';
 
 /**
  * Render the holder around the complex's fields.
@@ -19,27 +21,45 @@ import { preventDefault } from 'lib/helpers';
  * @param  {String}   props.prefix
  * @param  {String}   props.layout
  * @param  {Object}   props.group
+ * @param  {String}   props.label
  * @param  {Boolean}  props.active
- * @param  {Boolean}  props.collapsed
  * @param  {Function} props.handleToggleClick
  * @param  {Function} props.handleCloneClick
  * @param  {Function} props.handleRemoveClick
  * @return {React.Element}
- *
- * TODO: Fix the translation of the hints.
- * TODO: Add support for custom labels.
  */
-export const ComplexGroup = ({ index, prefix, layout, group, active, collapsed, handleToggleClick, handleCloneClick, handleRemoveClick }) => {
-	return <div id={group.id} className={cx('carbon-row', 'carbon-group-row', { 'collapsed': collapsed }, { 'active': active })}>
+export const ComplexGroup = ({
+	index,
+	prefix,
+	layout,
+	group,
+	label,
+	active,
+	handleToggleClick,
+	handleCloneClick,
+	handleRemoveClick
+}) => {
+	const classes = [
+		'carbon-row',
+		'carbon-group-row',
+		{ 'collapsed': group.collapsed },
+		{ 'active': active },
+	];
+
+	return <div id={group.id} className={cx(classes)}>
 		<input
 			type="hidden"
 			name={`${prefix}[${index}][_type]`}
 			defaultValue={group.name} />
 
 		<div className="carbon-drag-handle">
-			<span className="group-number">{index + 1}</span>
+			<span className="group-number">
+				{index + 1}
+			</span>
 
-			<span className="group-name"></span>
+			<span
+				className="group-name"
+				dangerouslySetInnerHTML={{ __html: label }} />
 		</div>
 
 		<div className={`carbon-group-actions carbon-group-actions-${layout}`}>
@@ -47,7 +67,7 @@ export const ComplexGroup = ({ index, prefix, layout, group, active, collapsed, 
 				href="#"
 				className="carbon-btn-duplicate dashicons-before dashicons-admin-page"
 				title={carbonFieldsL10n.field.complexCloneButton}
-				onClick={handleCloneClick} >
+				onClick={handleCloneClick}>
 				{carbonFieldsL10n.field.complexCloneButton}
 			</a>
 
@@ -55,7 +75,7 @@ export const ComplexGroup = ({ index, prefix, layout, group, active, collapsed, 
 				href="#"
 				className="carbon-btn-remove dashicons-before dashicons-trash"
 				title={carbonFieldsL10n.field.complexRemoveButton}
-				onClick={handleRemoveClick} >
+				onClick={handleRemoveClick}>
 				{carbonFieldsL10n.field.complexRemoveButton}
 			</a>
 
@@ -63,7 +83,7 @@ export const ComplexGroup = ({ index, prefix, layout, group, active, collapsed, 
 				href="#"
 				className="carbon-btn-collapse dashicons-before dashicons-arrow-up"
 				title={carbonFieldsL10n.field.complexCollapseExpandButton}
-				onClick={handleToggleClick} >
+				onClick={handleToggleClick}>
 				{carbonFieldsL10n.field.complexCollapseExpandButton}
 			</a>
 		</div>
@@ -91,12 +111,14 @@ ComplexGroup.propTypes = {
 	layout: PropTypes.string.isRequired,
 	group: PropTypes.shape({
 		name: PropTypes.string.isRequired,
+		collapsed: PropTypes.bool,
 		fields: PropTypes.arrayOf(PropTypes.shape({
 			id: PropTypes.string.isRequired,
 			type: PropTypes.string.isRequired,
 			name: PropTypes.string.isRequired,
 		})),
 	}).isRequired,
+	label: PropTypes.string,
 	active: PropTypes.bool.isRequired,
 	onClone: PropTypes.func.isRequired,
 	onRemove: PropTypes.func.isRequired,
@@ -106,11 +128,12 @@ ComplexGroup.propTypes = {
  * Handle the click on the 'Expand/Collapse' button.
  *
  * @param  {Object}   props
- * @param  {Boolean}  props.collapsed
- * @param  {Function} props.setCollapsed
+ * @param  {Object}   props.group
+ * @param  {Function} props.onExpand
+ * @param  {Function} props.onCollapse
  * @return {Function}
  */
-const handleToggleClick = ({ collapsed, setCollapsed }) => preventDefault(() => setCollapsed(!collapsed));
+const handleToggleClick = ({ group, onExpand, onCollapse }) => preventDefault(() => group.collapsed ? onExpand(group.id) : onCollapse(group.id));
 
 /**
  * Handle the click on the 'Clone' button.
@@ -133,7 +156,7 @@ const handleCloneClick = ({ group, onClone }) => preventDefault(() => onClone(gr
 const handleRemoveClick = ({ group, onRemove }) => preventDefault(() => onRemove(group.id));
 
 export default compose(
-	withState('collapsed', 'setCollapsed', false),
+	withHeaderTemplate,
 	withHandlers({
 		handleToggleClick,
 		handleCloneClick,

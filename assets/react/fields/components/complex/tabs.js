@@ -3,12 +3,12 @@
  */
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { compose, branch, renderNothing, renderComponent, withHandlers } from 'recompose';
+import { branch, renderNothing, withHandlers } from 'recompose';
 
 /**
  * The internal dependencies.
  */
-import { preventDefault } from 'lib/helpers';
+import ComplexTab from 'fields/components/complex/tab';
 
 /**
  * Render the navigation of tabs when the layout of complex field is tabbed.
@@ -19,29 +19,19 @@ import { preventDefault } from 'lib/helpers';
  * @param  {Function}      props.handleClick
  * @param  {React.Element} props.children
  * @return {React.Element}
- *
- * @todo Add support for custom labels with `dangerouslySetInnerHTML`.
  */
-export const ComplexTabs = ({ groups, isTabActive, handleClick, children }) => {
+export const ComplexTabs = ({ groups, isTabActive, onClick, children }) => {
 	return <div className="group-tabs-nav-holder">
 		<ul className="group-tabs-nav">
 			{
-				groups.map((group, index) => {
-					return <li key={index} id={group.id} className={cx('group-tab-item', { 'active': isTabActive(group.id) })}>
-						<a href="#" onClick={handleClick(group.id)}>
-							<span className="group-handle"></span>
-
-							{
-								group.label
-								? <span className="group-name">{group.label}</span>
-								: null
-							}
-
-							<span className="group-number">{index + 1}</span>
-							<span className="dashicons dashicons-warning carbon-complex-group-error-badge"></span>
-						</a>
-					</li>
-				})
+				groups.map((group, index) => (
+					<ComplexTab
+						key={group.id}
+						number={index + 1}
+						group={group}
+						active={isTabActive(group.id)}
+						onClick={onClick} />
+				))
 			}
 		</ul>
 
@@ -57,7 +47,10 @@ export const ComplexTabs = ({ groups, isTabActive, handleClick, children }) => {
 ComplexTabs.propTypes = {
 	groups: PropTypes.arrayOf(PropTypes.shape({
 		id: PropTypes.string.isRequired,
-		label: PropTypes.string.isRequired,
+		fields: PropTypes.arrayOf(PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			name: PropTypes.string.isRequired,
+		})).isRequired,
 	})).isRequired,
 	show: PropTypes.bool.isRequired,
 	current: PropTypes.string,
@@ -74,21 +67,10 @@ ComplexTabs.propTypes = {
  */
 const isTabActive = ({ current }) => groupId => groupId === current;
 
-/**
- * Handle the click on the links in the list.
- *
- * @param  {Object}   props
- * @param  {Function} props.onClick
- * @return {Function}
- */
-const handleClick = ({ onClick }) => groupId => preventDefault(() => onClick(groupId));
-
 export default branch(
 	({ show }) => show,
 
-	renderComponent(compose(
-		withHandlers({ isTabActive, handleClick })
-	)(ComplexTabs)),
+	withHandlers({ isTabActive }),
 
 	renderNothing,
-)();
+)(ComplexTabs);

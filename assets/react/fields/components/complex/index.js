@@ -3,7 +3,7 @@
  */
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { sortBy } from 'lodash';
+import { sortBy, fromPairs } from 'lodash';
 import {
 	compose,
 	withHandlers,
@@ -28,11 +28,14 @@ import { isFieldTabbed } from 'fields/selectors';
 import {
 	addComplexGroup,
 	cloneComplexGroup,
-	removeComplexGroup
+	removeComplexGroup,
+	expandComplexGroup,
+	collapseComplexGroup
 } from 'fields/actions';
 import {
 	TYPE_COMPLEX,
 	VALIDATION_COMPLEX,
+	COMPLEX_LAYOUT_GRID,
 	COMPLEX_LAYOUT_TABBED_VERTICAL
 } from 'fields/constants';
 
@@ -60,14 +63,19 @@ export const ComplexField = ({
 	field,
 	tabbed,
 	popoverVisible,
+	groupToggles,
 	sortableTabsOptions,
 	sortableGroupsOptions,
 	isGroupActive,
+	expandGroup,
+	collapseGroup,
 	handlePopoverClose,
 	handleTabClick,
 	handleAddGroupClick,
 	handleCloneGroupClick,
 	handleRemoveGroupClick,
+	handleGroupExpand,
+	handleGroupCollapse,
 	handleSort
 }) => {
 	return <Field field={field}>
@@ -111,7 +119,9 @@ export const ComplexField = ({
 									group={group}
 									active={isGroupActive(group.id)}
 									onClone={handleCloneGroupClick}
-									onRemove={handleRemoveGroupClick} />
+									onRemove={handleRemoveGroupClick}
+									onExpand={handleGroupExpand}
+									onCollapse={handleGroupCollapse} />
 							})
 						}
 					</div>
@@ -191,6 +201,8 @@ const mapDispatchToProps = {
 	addComplexGroup,
 	cloneComplexGroup,
 	removeComplexGroup,
+	expandComplexGroup,
+	collapseComplexGroup,
 };
 
 /**
@@ -229,11 +241,12 @@ const hooks = {
 /**
  * The additional props that will be passed to the component.
  *
- * @param  {Object} props
- * @param  {Object} props.field
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.collapseComplexGroup
  * @return {Object}
  */
-const props = ({ field }) => {
+const props = ({ field, collapseComplexGroup }) => {
 	const sortableTabsOptions = {
 		items: '.group-tab-item',
 		placeholder: 'group-tab-item ui-placeholder-highlight',
@@ -242,7 +255,6 @@ const props = ({ field }) => {
 
 	if (field.layout === COMPLEX_LAYOUT_TABBED_VERTICAL) {
 		sortableTabsOptions.axis = 'y';
-		sortableTabsOptions.handle = '.group-handle';
 	}
 
 	const sortableGroupsOptions = {
@@ -250,6 +262,10 @@ const props = ({ field }) => {
 		handle: '.carbon-drag-handle',
 		placeholder: 'carbon-group-row ui-placeholder-highlight',
 	};
+
+	if (field.layout === COMPLEX_LAYOUT_GRID) {
+		sortableGroupsOptions.start = (e, ui) => collapseComplexGroup(field.id, ui.item[0].id);
+	}
 
 	return {
 		sortableTabsOptions,
@@ -328,12 +344,45 @@ const handleCloneGroupClick = ({ field, cloneComplexGroup }) => groupId => clone
  */
 const handleRemoveGroupClick = ({ field, removeComplexGroup }) => groupId => removeComplexGroup(field.id, groupId);
 
-const handleSort = ({ field, updateField }) => newGroups => {
-	newGroups = sortBy(field.value, group => newGroups.indexOf(group.id));
+/**
+ * Show the group's contents.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.expandComplexGroup
+ * @return {Function}
+ */
+const handleGroupExpand = ({ field, expandComplexGroup }) => groupId => expandComplexGroup(field.id, groupId);
+
+/**
+ * Hide the group's contents.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.collapseComplexGroup
+ * @return {Function}
+ */
+const handleGroupCollapse = ({ field, collapseComplexGroup }) => groupId => collapseComplexGroup(field.id, groupId);
+
+/**
+ * Handle sorting of the groups.
+ *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {Function} props.updateField
+ * @param  {Function} props.expandComplexGroup
+ * @return {Function}
+ */
+const handleSort = ({ field, updateField, expandComplexGroup }) => (groups, event, ui) => {
+	// Cache the id attribute of the group, because the next line
+	// will re-order DOM and we will lose the correct group's id.
+	const groupId = ui.item[0].id;
 
 	updateField(field.id, {
-		value: newGroups,
+		value: sortBy(field.value, group => groups.indexOf(group.id)),
 	});
+
+	expandComplexGroup(field.id, groupId);
 };
 
 export default setStatic('type', [TYPE_COMPLEX])(
@@ -349,6 +398,8 @@ export default setStatic('type', [TYPE_COMPLEX])(
 			handleAddGroupClick,
 			handleCloneGroupClick,
 			handleRemoveGroupClick,
+			handleGroupExpand,
+			handleGroupCollapse,
 			handleSort,
 		})
 	)(ComplexField)

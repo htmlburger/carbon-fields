@@ -22,7 +22,9 @@ module.exports = {
 			'object-path-immutable',
 			'classnames',
 			'react-onclickoutside',
-			'jquery-bind-first'
+			'jquery-bind-first',
+			'fecha',
+			'locutus/php/url/urldecode'
 		]
 	},
 

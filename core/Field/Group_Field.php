@@ -128,6 +128,7 @@ class Group_Field {
 			'group_id' => $this->get_group_id(),
 			'name' => $this->get_name(),
 			'label' => $this->get_label(),
+			'label_template' => $this->get_label_template(),
 			'fields' => $fields_data,
 		);
 
@@ -212,7 +213,7 @@ class Group_Field {
 		if ( ! preg_match( $regex, $name ) ) {
 			Incorrect_Syntax_Exception::raise( 'Group name can only contain lowercase alphanumeric characters and underscores.' );
 		}
-		
+
 		$this->name = $name;
 	}
 
