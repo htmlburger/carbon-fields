@@ -507,6 +507,7 @@ class Complex_Field extends Field {
 				'label' => $group->get_label(),
 				'label_template' => $group->get_label_template(),
 				'group_id' => $group->get_group_id(),
+				'collapsed' => $this->get_collapsed(),
 				'fields' => array(),
 			);
 

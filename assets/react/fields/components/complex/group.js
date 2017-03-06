@@ -3,7 +3,7 @@
  */
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { compose, withHandlers, withState } from 'recompose';
+import { compose, withHandlers } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -23,7 +23,6 @@ import withHeaderTemplate from 'fields/decorators/with-header-template';
  * @param  {Object}   props.group
  * @param  {String}   props.label
  * @param  {Boolean}  props.active
- * @param  {Boolean}  props.collapsed
  * @param  {Function} props.handleToggleClick
  * @param  {Function} props.handleCloneClick
  * @param  {Function} props.handleRemoveClick
@@ -36,7 +35,6 @@ export const ComplexGroup = ({
 	group,
 	label,
 	active,
-	collapsed,
 	handleToggleClick,
 	handleCloneClick,
 	handleRemoveClick
@@ -44,7 +42,7 @@ export const ComplexGroup = ({
 	const classes = [
 		'carbon-row',
 		'carbon-group-row',
-		{ 'collapsed': collapsed },
+		{ 'collapsed': group.collapsed },
 		{ 'active': active },
 	];
 
@@ -69,7 +67,7 @@ export const ComplexGroup = ({
 				href="#"
 				className="carbon-btn-duplicate dashicons-before dashicons-admin-page"
 				title={carbonFieldsL10n.field.complexCloneButton}
-				onClick={handleCloneClick} >
+				onClick={handleCloneClick}>
 				{carbonFieldsL10n.field.complexCloneButton}
 			</a>
 
@@ -77,7 +75,7 @@ export const ComplexGroup = ({
 				href="#"
 				className="carbon-btn-remove dashicons-before dashicons-trash"
 				title={carbonFieldsL10n.field.complexRemoveButton}
-				onClick={handleRemoveClick} >
+				onClick={handleRemoveClick}>
 				{carbonFieldsL10n.field.complexRemoveButton}
 			</a>
 
@@ -85,7 +83,7 @@ export const ComplexGroup = ({
 				href="#"
 				className="carbon-btn-collapse dashicons-before dashicons-arrow-up"
 				title={carbonFieldsL10n.field.complexCollapseExpandButton}
-				onClick={handleToggleClick} >
+				onClick={handleToggleClick}>
 				{carbonFieldsL10n.field.complexCollapseExpandButton}
 			</a>
 		</div>
@@ -113,6 +111,7 @@ ComplexGroup.propTypes = {
 	layout: PropTypes.string.isRequired,
 	group: PropTypes.shape({
 		name: PropTypes.string.isRequired,
+		collapsed: PropTypes.bool,
 		fields: PropTypes.arrayOf(PropTypes.shape({
 			id: PropTypes.string.isRequired,
 			type: PropTypes.string.isRequired,
@@ -129,11 +128,12 @@ ComplexGroup.propTypes = {
  * Handle the click on the 'Expand/Collapse' button.
  *
  * @param  {Object}   props
- * @param  {Boolean}  props.collapsed
- * @param  {Function} props.setCollapsed
+ * @param  {Object}   props.group
+ * @param  {Function} props.onExpand
+ * @param  {Function} props.onCollapse
  * @return {Function}
  */
-const handleToggleClick = ({ collapsed, setCollapsed }) => preventDefault(() => setCollapsed(!collapsed));
+const handleToggleClick = ({ group, onExpand, onCollapse }) => preventDefault(() => group.collapsed ? onExpand(group.id) : onCollapse(group.id));
 
 /**
  * Handle the click on the 'Clone' button.
@@ -157,7 +157,6 @@ const handleRemoveClick = ({ group, onRemove }) => preventDefault(() => onRemove
 
 export default compose(
 	withHeaderTemplate,
-	withState('collapsed', 'setCollapsed', false),
 	withHandlers({
 		handleToggleClick,
 		handleCloneClick,

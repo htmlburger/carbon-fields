@@ -48,7 +48,7 @@ class SortableList extends React.Component {
 	 */
 	handleSortableUpdate(event, ui) {
 		// Notify the subscribers.
-		this.props.onSort(this.$node.sortable('toArray'));
+		this.props.onSort(this.$node.sortable('toArray'), event, ui);
 
 		// DOM items will be re-ordered by React.
 		this.$node.sortable('cancel');
