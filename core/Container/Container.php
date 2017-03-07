@@ -126,11 +126,11 @@ abstract class Container implements Datastore_Holder_Interface {
 	protected function get_condition_types( $static ) {
 		$group = $static ? 'static' : 'dynamic';
 		$container_type = Helper::class_to_type( get_class( $this ), '_Container' );
-		
+
 		$condition_types = array();
 		$condition_types = apply_filters( 'carbon_fields_' . $container_type . '_container_' . $group . '_condition_types', $condition_types, $container_type, $this );
 		$condition_types = apply_filters( 'carbon_fields_container_' . $group . '_condition_types', $condition_types, $container_type, $this );
-			
+
 		return $condition_types;
 	}
 
@@ -144,12 +144,12 @@ abstract class Container implements Datastore_Holder_Interface {
 	public static function factory( $type, $name ) {
 		$normalized_type = Helper::normalize_type( $type );
 		$class = Helper::type_to_class( $normalized_type, __NAMESPACE__, '_Container' );
-		
+
 		if ( ! class_exists( $class ) ) {
 			Incorrect_Syntax_Exception::raise( 'Unknown container "' . $type . '".' );
 			$class = __NAMESPACE__ . '\\Broken_Container';
 		}
-		
+
 		$repository = App::resolve( 'container_repository' );
 		$unique_id = $repository->get_unique_panel_id( $name );
 		$container = new $class( $unique_id, $name, $normalized_type );
@@ -397,9 +397,9 @@ abstract class Container implements Datastore_Holder_Interface {
 
 	/**
 	 * Return root field from container with specified name
-	 * 
+	 *
 	 * @example crb_complex
-	 * 
+	 *
 	 * @param string $field_name
 	 * @return Field
 	 */
@@ -415,7 +415,7 @@ abstract class Container implements Datastore_Holder_Interface {
 
 	/**
 	 * Get a regex to match field name patterns used to fetch specific fields
-	 * 
+	 *
 	 * @return string
 	 */
 	protected function get_field_pattern_regex() {
@@ -436,11 +436,11 @@ abstract class Container implements Datastore_Holder_Interface {
 
 	/**
 	 * Return field from container with specified name
-	 * 
+	 *
 	 * @example crb_complex/text_field
 	 * @example crb_complex/complex_2
 	 * @example crb_complex/complex_2:text_group/text_field
-	 * 
+	 *
 	 * @param string $field_name Can specify a field inside a complex with a / (slash) separator
 	 * @return Field
 	 */
@@ -459,7 +459,7 @@ abstract class Container implements Datastore_Holder_Interface {
 			if ( ! preg_match( $field_pattern_regex, $segment, $segment_pieces ) ) {
 				Incorrect_Syntax_Exception::raise( 'Invalid field name pattern used: ' . $field_name );
 			}
-			
+
 			$segment_field_name = $segment_pieces['field_name'];
 			$segment_group_index = isset( $segment_pieces['group_index'] ) ? $segment_pieces['group_index'] : 0;
 			$segment_group_name = isset( $segment_pieces['group_name'] ) ? $segment_pieces['group_name'] : Group_Field::DEFAULT_GROUP_NAME;
@@ -691,15 +691,15 @@ abstract class Container implements Datastore_Holder_Interface {
 	 */
 	public function to_json( $load ) {
 		$array_translator = App::resolve( 'container_condition_translator_array' );
-		$dynamic_conditions = $this->condition_collection->evaluate( $this->get_condition_types( true ), $this->get_environment_for_request() );
-		$dynamic_conditions = $array_translator->fulfillable_to_foreign( $dynamic_conditions );
+		$conditions = $this->condition_collection->evaluate( $this->get_condition_types( true ), $this->get_environment_for_request() );
+		$conditions = $array_translator->fulfillable_to_foreign( $conditions );
 
 		$container_data = array(
 			'id' => $this->id,
 			'type' => $this->type,
 			'title' => $this->title,
 			'settings' => $this->settings,
-			'dynamic_conditions' => $dynamic_conditions,
+			'conditions' => $conditions,
 			'fields' => array(),
 		);
 
@@ -767,7 +767,7 @@ abstract class Container implements Datastore_Holder_Interface {
 
 	/**
 	 * Proxy function to set attachment conditions
-	 * 
+	 *
 	 * @see    Fulfillable_Collection::when()
 	 * @return Container $this
 	 */
@@ -778,7 +778,7 @@ abstract class Container implements Datastore_Holder_Interface {
 
 	/**
 	 * Proxy function to set attachment conditions
-	 * 
+	 *
 	 * @see    Fulfillable_Collection::and_when()
 	 * @return Container $this
 	 */
@@ -789,7 +789,7 @@ abstract class Container implements Datastore_Holder_Interface {
 
 	/**
 	 * Proxy function to set attachment conditions
-	 * 
+	 *
 	 * @see    Fulfillable_Collection::or_when()
 	 * @return Container $this
 	 */
