@@ -10,7 +10,7 @@ class Container_Condition_Installer implements Installer {
 
 	/**
 	 * Install dependencies in IoC container
-	 * 
+	 *
 	 * @param  PimpleContainer $ioc
 	 */
 	public static function install( PimpleContainer $ioc ) {
@@ -26,7 +26,7 @@ class Container_Condition_Installer implements Installer {
 
 	/**
 	 * Install all codition types and the condition factory
-	 * 
+	 *
 	 * @param  PimpleContainer $ioc
 	 */
 	protected static function install_conditions( $ioc ) {
@@ -54,7 +54,7 @@ class Container_Condition_Installer implements Installer {
 			return new \Carbon_Fields\Container\Condition\Post_Template_Condition( $ioc['container_condition_comparers_generic_wo_scalar'] );
 		} );
 		$ioc['container_condition_type_post_term'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Post_Term_Condition( array( 
+			return new \Carbon_Fields\Container\Condition\Post_Term_Condition( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
 				$ioc['container_condition_comparer_type_custom'],
 			) );
@@ -109,7 +109,7 @@ class Container_Condition_Installer implements Installer {
 
 	/**
 	 * Install all condition comparers
-	 * 
+	 *
 	 * @param  PimpleContainer $ioc
 	 */
 	protected static function install_comparers( $ioc ) {
@@ -151,18 +151,18 @@ class Container_Condition_Installer implements Installer {
 
 	/**
 	 * Install all codition translators
-	 * 
+	 *
 	 * @param  PimpleContainer $ioc
 	 */
 	protected static function install_translators( $ioc ) {
 		$ioc['container_condition_translator_array'] = function( $ioc ) {
-			return new \Carbon_Fields\Container\Fulfillable\Translator\Array_Translator( $ioc['container_condition_factory'] );
+			return new \Carbon_Fields\Container\Fulfillable\Translator\Json_Array_Translator( $ioc['container_condition_factory'] );
 		};
 	}
 
 	/**
 	 * Install all container coditions
-	 * 
+	 *
 	 * @param  PimpleContainer $ioc
 	 */
 	protected static function install_container_conditions( $ioc ) {
@@ -187,7 +187,7 @@ class Container_Condition_Installer implements Installer {
 
 	/**
 	 * Filter the Post_Meta_Container static condition types
-	 * 
+	 *
 	 * @param  array<string>                     $condition_types
 	 * @param  Carbon_Fields\Container\Container $container
 	 * @return array<string>
@@ -201,7 +201,7 @@ class Container_Condition_Installer implements Installer {
 
 	/**
 	 * Filter the Post_Meta_Container dynamic condition types
-	 * 
+	 *
 	 * @param  array<string>                     $condition_types
 	 * @param  Carbon_Fields\Container\Container $container
 	 * @return array<string>
@@ -215,7 +215,7 @@ class Container_Condition_Installer implements Installer {
 
 	/**
 	 * Filter the Term_Meta_Container static condition types
-	 * 
+	 *
 	 * @param  array<string>                     $condition_types
 	 * @param  Carbon_Fields\Container\Container $container
 	 * @return array<string>
@@ -229,7 +229,7 @@ class Container_Condition_Installer implements Installer {
 
 	/**
 	 * Filter the Term_Meta_Container dynamic condition types
-	 * 
+	 *
 	 * @param  array<string>                     $condition_types
 	 * @param  Carbon_Fields\Container\Container $container
 	 * @return array<string>
@@ -243,7 +243,7 @@ class Container_Condition_Installer implements Installer {
 
 	/**
 	 * Filter the User_Meta_Container static condition types
-	 * 
+	 *
 	 * @param  array<string>                     $condition_types
 	 * @param  Carbon_Fields\Container\Container $container
 	 * @return array<string>
@@ -257,7 +257,7 @@ class Container_Condition_Installer implements Installer {
 
 	/**
 	 * Filter the User_Meta_Container dynamic condition types
-	 * 
+	 *
 	 * @param  array<string>                     $condition_types
 	 * @param  Carbon_Fields\Container\Container $container
 	 * @return array<string>
