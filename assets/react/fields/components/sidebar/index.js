@@ -95,7 +95,7 @@ const hooks = {
 		if (!field.value) {
 			updateField(field.id, {
 				value: options[0].value,
-			});
+			}, false);
 		}
 	}
 };

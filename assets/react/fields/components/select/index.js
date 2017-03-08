@@ -89,7 +89,7 @@ const hooks = {
 		if (!field.value) {
 			updateField(field.id, {
 				value: field.options[0].value
-			});
+			}, false);
 		}
 
 		// Supress validation errors when the fallback option has a falsy value.
