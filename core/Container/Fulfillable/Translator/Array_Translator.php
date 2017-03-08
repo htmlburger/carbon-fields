@@ -13,14 +13,14 @@ class Array_Translator extends Translator {
 
 	/**
 	 * Condition factory used to translated condition types
-	 * 
+	 *
 	 * @var Factory
 	 */
 	protected $condition_factory;
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param Factory $condition_factory
 	 */
 	public function __construct( Factory $condition_factory ) {
@@ -29,7 +29,7 @@ class Array_Translator extends Translator {
 
 	/**
 	 * Translate a Condition
-	 * 
+	 *
 	 * @param  Condition $condition
 	 * @return mixed
 	 */
@@ -43,7 +43,7 @@ class Array_Translator extends Translator {
 
 	/**
 	 * Translate a Fulfillable_Collection
-	 * 
+	 *
 	 * @param  Fulfillable_Collection $fulfillable_collection
 	 * @return mixed
 	 */
@@ -61,7 +61,7 @@ class Array_Translator extends Translator {
 		foreach ( $fulfillables as $fulfillable_tuple ) {
 			$comparison = $fulfillable_tuple['fulfillable_comparison'];
 			$fulfillable = $fulfillable_tuple['fulfillable'];
-			
+
 			if ( ! isset( $relations[ $comparison ] ) ) {
 				$relations[ $comparison ] = array();
 			}
@@ -86,7 +86,7 @@ class Array_Translator extends Translator {
 
 	/**
 	 * Translate foreign data to a Fulfillable
-	 * 
+	 *
 	 * @param  mixed       $foreign
 	 * @return Fulfillable
 	 */
@@ -104,7 +104,7 @@ class Array_Translator extends Translator {
 
 	/**
 	 * Translate a Condition
-	 * 
+	 *
 	 * @param  array     $foreign
 	 * @return Condition
 	 */
@@ -121,7 +121,7 @@ class Array_Translator extends Translator {
 
 	/**
 	 * Translate a Fulfillable_Collection
-	 * 
+	 *
 	 * @param  array                  $foreign
 	 * @return Fulfillable_Collection
 	 */
@@ -135,5 +135,32 @@ class Array_Translator extends Translator {
 			$collection->add_fulfillable( $this->foreign_to_fulfillable( $value ), $fulfillable_comparison );
 		}
 		return $collection;
+	}
+
+	/**
+	 * Make conditions friendly for frontend.
+	 *
+	 * @param  array $foreign
+	 * @return array
+	 */
+	public function foreign_to_json( $foreign ) {
+		$conditions = array();
+
+		foreach ( $foreign as $key => $value ) {
+			if ( $key === 'relation' ) {
+				continue;
+			}
+
+			if ( isset( $value['relation'] ) ) {
+				$conditions[] = $this->foreign_to_json( $value );
+			} else {
+				$conditions[] = $value;
+			}
+		}
+
+		return array(
+			'relation' => $foreign['relation'],
+			'conditions' => $conditions,
+		);
 	}
 }

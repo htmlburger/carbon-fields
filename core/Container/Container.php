@@ -693,6 +693,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		$array_translator = App::resolve( 'container_condition_translator_array' );
 		$conditions = $this->condition_collection->evaluate( $this->get_condition_types( true ), $this->get_environment_for_request() );
 		$conditions = $array_translator->fulfillable_to_foreign( $conditions );
+		$conditions = $array_translator->foreign_to_json( $conditions );
 
 		$container_data = array(
 			'id' => $this->id,

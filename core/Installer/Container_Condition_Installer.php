@@ -156,7 +156,7 @@ class Container_Condition_Installer implements Installer {
 	 */
 	protected static function install_translators( $ioc ) {
 		$ioc['container_condition_translator_array'] = function( $ioc ) {
-			return new \Carbon_Fields\Container\Fulfillable\Translator\Json_Array_Translator( $ioc['container_condition_factory'] );
+			return new \Carbon_Fields\Container\Fulfillable\Translator\Array_Translator( $ioc['container_condition_factory'] );
 		};
 	}
 
