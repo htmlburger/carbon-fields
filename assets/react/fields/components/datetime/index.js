@@ -80,6 +80,8 @@ const props = ({ name, field, handleChange }) => {
 		onSelect: handleChange,
 	};
 
+	const buttonText = field.type === TYPE_TIME ? carbonFieldsL10n.field.selectTime : carbonFieldsL10n.field.selectDate;
+
 	if (field.picker_options) {
 		return {
 			picker: field.picker_type,
@@ -88,8 +90,8 @@ const props = ({ name, field, handleChange }) => {
 				...field.restraints,
 				...field.picker_options,
 				...defaults,
-				showTime: false,
-				buttonText: 'Select Time',
+				buttonText,
+				showTime: false
 			},
 		};
 	}
@@ -99,7 +101,7 @@ const props = ({ name, field, handleChange }) => {
 		options: {
 			...field.picker_options,
 			...defaults,
-			buttonText: 'Select Date',
+			buttonText
 		},
 	};
 };

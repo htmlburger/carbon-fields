@@ -124,6 +124,9 @@ class Loader {
 				'messageChooseOption' => __( 'Please choose an option. ', 'carbon-fields' ),
 
 				'enterNameOfNewSidebar' => __( 'Please enter the name of the new sidebar:', 'carbon-fields' ),
+
+				'selectTime' => __( 'Select Time', 'carbon-fields' ),
+				'selectDate' => __( 'Select Date', 'carbon-fields' ),
 			),
 		) ) );
 	}
