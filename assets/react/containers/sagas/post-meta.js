@@ -22,7 +22,8 @@ import {
 	setupContainer,
 	validateAllContainers,
 	setMeta,
-	setUI
+	setUI,
+	submitForm
 } from 'containers/actions';
 
 import { TYPE_POST_META } from 'containers/constants';
@@ -316,6 +317,7 @@ export function* workerFormSubmit() {
 	while (true) {
 		const { event } = yield take(channel);
 
+		yield put(submitForm(event));
 		yield put(validateAllContainers(event));
 	}
 }

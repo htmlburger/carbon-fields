@@ -89,3 +89,10 @@ export const validateAllContainers = createAction('containers/VALIDATE_ALL_CONTA
  * @return {Object}
  */
 export const validateContainer = createAction('containers/VALIDATE_CONTAINER', (containerId, event) => ({ containerId, event }));
+
+/**
+ * Notify for form submit in a container
+ * 
+ * @param  {Object} event
+ */
+export const submitForm = createAction('containers/SUBMIT_FORM', (event) => ({ event }));

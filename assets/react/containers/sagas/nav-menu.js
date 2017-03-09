@@ -10,7 +10,7 @@ import { put, call, take } from 'redux-saga/effects';
 import { PAGE_NOW_MENUS } from 'lib/constants';
 import { createAjaxSuccessChannel, createSubmitChannel } from 'lib/events';
 
-import { receiveContainer, validateAllContainers } from 'containers/actions';
+import { receiveContainer, validateAllContainers, submitForm } from 'containers/actions';
 
 /**
  * Init the container when the menu item is created.
@@ -48,6 +48,7 @@ export function* workerFormSubmit() {
 	while (true) {
 		const { event } = yield take(channel);
 
+		yield put(submitForm(event));
 		yield put(validateAllContainers(event));
 	}
 }

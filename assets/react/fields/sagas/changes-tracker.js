@@ -1,12 +1,57 @@
 /**
  * The external dependencies.
  */
-import { take, actionChannel } from 'redux-saga/effects';
+import { take, takeLatest, actionChannel } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
  */
-import { updateField } from 'fields/actions';
+import { updateField, markFieldAsInvalid } from 'fields/actions';
+import { submitForm } from 'containers/actions';
+
+/**
+ * [triggerWarning description]
+ * 
+ * @param  {Object} event
+ */
+function triggerWarning(event) {
+	const dialogText = 'Changes that you made may not be saved.';
+		
+	event.returnValue = dialogText;
+	return dialogText;
+}
+
+/**
+ * Proxy for attaching/detaching the warning
+ * 
+ * @param  {Bool} isAttached
+ * @return {void}
+ */
+function shouldAttachWarning(isAttached) {
+	if (isAttached) {
+		detachWarning();		
+	} else {
+		attachWarning();		
+	}
+}
+
+/**
+ * Attach warning
+ *
+ * @return {void}
+ */
+function attachWarning() {
+	window.addEventListener('beforeunload', triggerWarning);
+}
+
+/**
+ * Detach warning
+ *
+ * @return {void}
+ */
+function detachWarning() {
+	window.removeEventListener('beforeunload', triggerWarning);
+}
 
 /**
  * Start to work.
@@ -14,24 +59,38 @@ import { updateField } from 'fields/actions';
  * @return {void}
  */
 export default function* foreman() {
-	const channel = yield actionChannel(updateField);
+	const updateChannel = yield actionChannel(updateField);
+	let isAttached = false; 
+	
 
 	while (true) {
-		const action = yield take(channel);
+		const action = yield take(updateChannel);
 
-		// The action doesn't trigger a change so we can ignore it.
 		if (!action.meta.dirty) {
 			continue;
 		}
 
-		window.addEventListener( 'beforeunload', (event) => {
-			const dialogText = 'Changes that you made may not be saved.';
-		
-			event.returnValue = dialogText;
-			return dialogText;
-		});
+		shouldAttachWarning(isAttached);
+		isAttached = !isAttached;
 
-		// Break the loop and terminate the worker since we detected a change.
 		break;
 	}
+
+	yield takeLatest(markFieldAsInvalid, () => {
+		if (isAttached) {
+			return;
+		}
+
+		shouldAttachWarning(isAttached);
+		isAttached = !isAttached;
+	});
+
+	yield takeLatest(submitForm, () => {
+		if (!isAttached) {
+			return;
+		}
+
+		shouldAttachWarning(isAttached);
+		isAttached = !isAttached;
+	});
 }

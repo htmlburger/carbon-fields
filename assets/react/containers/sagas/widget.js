@@ -16,7 +16,7 @@ import {
 	createClickChannel
 } from 'lib/events';
 
-import { removeContainer, receiveContainer, validateContainer } from 'containers/actions';
+import { removeContainer, receiveContainer, validateContainer, formSubmit } from 'containers/actions';
 import { getContainerById } from 'containers/selectors';
 
 import { removeFields } from 'fields/actions';
@@ -99,6 +99,7 @@ export function* workerFormSubmit() {
 			.find('input[name="widget-id"]')
 				.val();
 
+		yield put(formSubmit(event));
 		yield put(validateContainer(containerId, event));
 	}
 }

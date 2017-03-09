@@ -7,7 +7,7 @@ import { take, call, put } from 'redux-saga/effects';
  * The internal dependencies.
  */
 import { createSubmitChannel } from 'lib/events';
-import { validateAllContainers } from 'containers/actions';
+import { validateAllContainers, submitForm } from 'containers/actions';
 
 /**
  * Start to work.
@@ -20,6 +20,7 @@ export default function* foreman() {
 	while (true) {
 		const { event } = yield take(channel);
 
+		yield put(submitForm(event));
 		yield put(validateAllContainers(event));
 	}
 }
