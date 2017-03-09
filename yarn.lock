@@ -1840,6 +1840,10 @@ fbjs@^0.8.1, fbjs@^0.8.4:
     promise "^7.1.1"
     ua-parser-js "^0.7.9"
 
+fecha@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/fecha/-/fecha-2.3.0.tgz#791efb33d63b89b7aa8eccc28e59593db2ead700"
+
 filename-regex@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/filename-regex/-/filename-regex-2.0.0.tgz#996e3e80479b98b9897f15a8a58b3d084e926775"

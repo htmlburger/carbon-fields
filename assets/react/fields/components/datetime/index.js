@@ -24,23 +24,29 @@ import { TYPE_DATE, TYPE_DATETIME, TYPE_TIME } from 'fields/constants';
  * @param  {Function} props.handleChange
  * @return {React.Element}
  *
- * TODO: Fix the layout of the button.
  * TODO: Fix the translation of the button's text.
  */
 export const DateTimeField = ({ name, field, picker, options, handleChange }) => {
 	return <Field field={field}>
-		<div className="carbon-field-group">
-			<DateTimePicker type={picker} options={options} className="carbon-field-group-holder">
-				<input
-					type="text"
-					id={field.id}
-					name={name}
-					value={field.value}
-					disabled={!field.ui.is_visible}
-					className="regular-text carbon-field-group-input"
-					onChange={handleChange} />
+		<DateTimePicker
+			type={picker}
+			options={options}
+			defaultValue={field.value}
+			storageFormat={field.storage_format}>
+				<div className="carbon-field-group-holder">
+					<input
+						type="text"
+						id={field.id}
+						disabled={!field.ui.is_visible}
+						className="regular-text carbon-field-group-input"
+						onChange={handleChange} />
+
+					<input
+						type="hidden"
+						name={name}
+						disabled={!field.ui.is_visible} />
+				</div>
 			</DateTimePicker>
-		</div>
 	</Field>;
 };
 
@@ -63,28 +69,27 @@ DateTimeField.propTypes = {
  * The additional props that will be passed to the component.
  *
  * @param  {Object}   props
+ * @param  {String}   props.name
  * @param  {Object}   props.field
  * @param  {Function} props.handleChange
  * @return {Object}
  */
-const props = ({ field, handleChange }) => {
-	if (field.timepicker_options) {
-		return {
-			picker: field.timepicker_type,
-			options: {
-				...{
-					showTime: false,
-				},
+const props = ({ name, field, handleChange }) => {
+	const defaults = {
+		altField: `input[name="${name}"]`,
+		onSelect: handleChange,
+	};
 
+	if (field.picker_options) {
+		return {
+			picker: field.picker_type,
+			options: {
 				...field.interval_step,
 				...field.restraints,
-				...field.datepicker_options,
-				...field.timepicker_options,
-
-				...{
-					buttonText: 'Select Time',
-					onSelect: handleChange,
-				},
+				...field.picker_options,
+				...defaults,
+				showTime: false,
+				buttonText: 'Select Time',
 			},
 		};
 	}
@@ -92,11 +97,9 @@ const props = ({ field, handleChange }) => {
 	return {
 		picker: 'datepicker',
 		options: {
-			...field.datepicker_options,
-			...{
-				buttonText: 'Select Date',
-				onSelect: handleChange,
-			},
+			...field.picker_options,
+			...defaults,
+			buttonText: 'Select Date',
 		},
 	};
 };

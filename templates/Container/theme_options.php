@@ -16,8 +16,6 @@
 	<?php endif; ?>
 
 	<form method="post" id="theme-options-form" enctype="multipart/form-data" action="">
-		<?php echo $this->get_nonce_field(); ?>
-
 		<div id="poststuff">
 			<div id="post-body" class="metabox-holder columns-2">
 				<div id="post-body-content">

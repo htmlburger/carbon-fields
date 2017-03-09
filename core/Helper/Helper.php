@@ -288,4 +288,18 @@ class Helper {
 
 		return $type;
 	}
+	
+	/**
+	 * Get an array of sanitized html classes
+	 * 
+	 * @param  string|array<strnig> $classes
+	 * @return array<string>
+	 */
+	public static function sanitize_classes( $classes ) {
+		if ( ! is_array( $classes ) ) {
+			$classes = array_values( array_filter( explode( ' ', $classes ) ) );
+		}
+		$classes = array_map( 'sanitize_html_class', $classes );
+		return $classes;
+	}
 }

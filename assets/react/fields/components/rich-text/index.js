@@ -24,7 +24,7 @@ import { TYPE_RICH_TEXT } from 'fields/constants';
  */
 export const RichTextField = ({ name, field, handleChange }) => {
 	return <Field field={field}>
-		<RichTextEditor id={field.id} onChange={handleChange}>
+		<RichTextEditor id={field.id} richEditing={field.rich_editing} onChange={handleChange}>
 			<textarea
 				id={field.id}
 				className="wp-editor-area"

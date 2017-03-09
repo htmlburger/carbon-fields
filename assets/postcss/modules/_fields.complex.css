@@ -118,12 +118,8 @@
 .layout-tabbed-vertical > .group-tabs-nav-holder { flex: 0 0 20%; padding: 0; margin: 0; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav { border-bottom: 1px solid $color-border; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav li { display: block; width: auto; margin-right: 0; margin-bottom: 0; }
-.layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav a { padding-left: 20px; margin-right: -1px; max-width: none; border-bottom: 0; white-space: normal; }
+.layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav a { margin-right: -1px; max-width: none; border-bottom: 0; white-space: normal; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav .active a { position: relative; z-index: 5; border-right-color: #fff; }
-
-.layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav .group-handle { position: absolute; left: 4px; top: 50%; display: block; width: 6px; padding: 3px 0; margin-top: -5px; border-width: 1px 0; border-style: solid; border-color: $color-border-darker; cursor: move; }
-.layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav .group-handle:before { content: ''; position: absolute; top: -8px; bottom: -8px; left: -2px; right: -2px; }
-.layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav .group-handle:after { content: ''; display: block; height: 1px; background: $color-border-darker; }
 
 .layout-tabbed-vertical > .group-tabs-nav-holder .carbon-actions { position: static; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .carbon-button { float: none; }

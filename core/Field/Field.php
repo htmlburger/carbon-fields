@@ -752,26 +752,22 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Get the field custom CSS classes.
+	 * Get custom CSS classes.
 	 *
-	 * @return array
-	 **/
+	 * @return array<string>
+	 */
 	public function get_classes() {
 		return $this->classes;
 	}
 
 	/**
-	 *  Add custom CSS class to the field html container.
+	 * Set CSS classes that the container should use.
 	 *
 	 * @param string|array $classes
 	 * @return object $this
-	 **/
-	public function add_class( $classes ) {
-		if ( ! is_array( $classes ) ) {
-			$classes = array_values( array_filter( explode( ' ', $classes ) ) );
-		}
-
-		$this->classes = array_map( 'sanitize_html_class', $classes );
+	 */
+	public function set_classes( $classes ) {
+		$this->classes = Helper::sanitize_classes( $classes );
 		return $this;
 	}
 

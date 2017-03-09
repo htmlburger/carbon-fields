@@ -93,6 +93,15 @@ abstract class Container implements Datastore_Holder_Interface {
 	protected $fields = array();
 
 	/**
+	 * Array of custom CSS classes.
+	 *
+	 * @see add_class()
+	 * @see get_classes()
+	 * @var array<string>
+	 */
+	protected $classes = array();
+
+	/**
 	 * Container datastores. Propagated to all container fields
 	 *
 	 * @see set_datastore()
@@ -563,12 +572,12 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return WordPress nonce field
+	 * Return WordPress nonce name used to identify the current container instance
 	 *
 	 * @return string
 	 */
-	public function get_nonce_field() {
-		return wp_nonce_field( $this->get_nonce_name(), $this->get_nonce_name(), /*referer?*/ false, /*echo?*/ false );
+	public function get_nonce_value() {
+		return wp_create_nonce( $this->get_nonce_name() );
 	}
 
 	/**
@@ -684,6 +693,26 @@ abstract class Container implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Get custom CSS classes.
+	 *
+	 * @return array<string>
+	 */
+	public function get_classes() {
+		return $this->classes;
+	}
+
+	/**
+	 * Set CSS classes that the container should use.
+	 *
+	 * @param string|array $classes
+	 * @return object $this
+	 */
+	public function set_classes( $classes ) {
+		$this->classes = Helper::sanitize_classes( $classes );
+		return $this;
+	}
+
+	/**
 	 * Returns an array that holds the container data, suitable for JSON representation.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
@@ -699,9 +728,14 @@ abstract class Container implements Datastore_Holder_Interface {
 			'id' => $this->id,
 			'type' => $this->type,
 			'title' => $this->title,
+			'classes' => $this->get_classes(),
 			'settings' => $this->settings,
 			'conditions' => $conditions,
 			'fields' => array(),
+			'nonce' => array(
+				'name' => $this->get_nonce_name(),
+				'value' => $this->get_nonce_value(),
+			),
 		);
 
 		$fields = $this->get_fields();
