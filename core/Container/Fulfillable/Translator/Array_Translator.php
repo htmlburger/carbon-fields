@@ -144,6 +144,13 @@ class Array_Translator extends Translator {
 	 * @return array
 	 */
 	public function foreign_to_json( $foreign ) {
+		if ( empty( $foreign ) ) {
+			return array(
+				'relation' => 'AND',
+				'conditions' => array(),
+			);
+		}
+
 		$conditions = array();
 
 		foreach ( $foreign as $key => $value ) {
