@@ -11,7 +11,7 @@ class Footer_Scripts_Field extends Scripts_Field {
 	 * Default help text to be displayed for this type of field.
 	 */
 	public function get_default_help_text() {
-		return __( 'If you need to add scripts to your footer (like Google Analytics tracking code), you should enter them in this box.', \Carbon_Fields\TEXT_DOMAIN );
+		return __( 'If you need to add scripts to your footer (like Google Analytics tracking code), you should enter them in this box.', 'carbon-fields' );
 	}
 
 	/**

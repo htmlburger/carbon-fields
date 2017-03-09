@@ -26,9 +26,9 @@ class File_Field extends Field {
 	 * Admin initialization actions
 	 */
 	public function admin_init() {
-		$this->button_label = __( 'Select File', \Carbon_Fields\TEXT_DOMAIN );
-		$this->window_button_label = __( 'Select File', \Carbon_Fields\TEXT_DOMAIN );
-		$this->window_label = __( 'Files', \Carbon_Fields\TEXT_DOMAIN );
+		$this->button_label = __( 'Select File', 'carbon-fields' );
+		$this->window_button_label = __( 'Select File', 'carbon-fields' );
+		$this->window_label = __( 'Files', 'carbon-fields' );
 	}
 
 	/**

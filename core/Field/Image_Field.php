@@ -15,8 +15,8 @@ class Image_Field extends File_Field {
 	 * Administration initialization actions
 	 */
 	public function admin_init() {
-		$this->button_label = __( 'Select Image', \Carbon_Fields\TEXT_DOMAIN );
-		$this->window_button_label = __( 'Select Image', \Carbon_Fields\TEXT_DOMAIN );
-		$this->window_label = __( 'Images', \Carbon_Fields\TEXT_DOMAIN );
+		$this->button_label = __( 'Select Image', 'carbon-fields' );
+		$this->window_button_label = __( 'Select Image', 'carbon-fields' );
+		$this->window_label = __( 'Images', 'carbon-fields' );
 	}
 }

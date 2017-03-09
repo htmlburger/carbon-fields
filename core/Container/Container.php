@@ -625,7 +625,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		$untabbed_fields = $this->get_untabbed_fields();
 
 		if ( ! empty( $untabbed_fields ) ) {
-			$this->create_tab( __( 'General', \Carbon_Fields\TEXT_DOMAIN ), $untabbed_fields, static::TABS_HEAD );
+			$this->create_tab( __( 'General', 'carbon-fields'), $untabbed_fields, static::TABS_HEAD );
 		}
 
 		return $this->tabs;

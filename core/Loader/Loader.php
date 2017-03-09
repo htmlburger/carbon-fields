@@ -65,7 +65,7 @@ class Loader {
 	 */
 	public function load_textdomain() {
 		$dir = \Carbon_Fields\DIR . '/languages/';
-		$domain = \Carbon_Fields\TEXT_DOMAIN;
+		$domain = 'carbon-fields';
 		$locale = get_locale();
 		$path = $dir . $domain . '-' . $locale . '.mo';
 		load_textdomain( $domain, $path );
@@ -104,26 +104,26 @@ class Loader {
 
 		wp_localize_script( 'carbon-fields-core', 'carbonFieldsL10n', apply_filters( 'carbon_fields_l10n', array(
 			'container' => array(
-				'pleaseFillTheRequiredFields' => __( 'Please fill out all required fields highlighted below.', \Carbon_Fields\TEXT_DOMAIN ),
-				'changesMadeSaveAlert' => __( 'The changes you made will be lost if you navigate away from this page.', \Carbon_Fields\TEXT_DOMAIN ),
+				'pleaseFillTheRequiredFields' => __( 'Please fill out all required fields highlighted below.', 'carbon-fields' ),
+				'changesMadeSaveAlert' => __( 'The changes you made will be lost if you navigate away from this page.', 'carbon-fields' ),
 			),
 			'field' => array(
-				'geocodeZeroResults' => __( 'The address could not be found. ', \Carbon_Fields\TEXT_DOMAIN ),
-				'geocodeNotSuccessful' => __( 'Geocode was not successful for the following reason: ', \Carbon_Fields\TEXT_DOMAIN ),
-				'maxNumItemsReached' => __( 'Maximum number of items reached (%s items)', \Carbon_Fields\TEXT_DOMAIN ),
+				'geocodeZeroResults' => __( 'The address could not be found. ', 'carbon-fields' ),
+				'geocodeNotSuccessful' => __( 'Geocode was not successful for the following reason: ', 'carbon-fields' ),
+				'maxNumItemsReached' => __( 'Maximum number of items reached (%s items)', 'carbon-fields' ),
 
-				'complexNoRows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', \Carbon_Fields\TEXT_DOMAIN ),
-				'complexMinNumRowsNotReached' => __( 'Minimum number of rows not reached (%1$d %2$s)', \Carbon_Fields\TEXT_DOMAIN ),
-				'complexAddButton' => __( 'Add %s', \Carbon_Fields\TEXT_DOMAIN ),
-				'complexCloneButton' => __( 'Clone', \Carbon_Fields\TEXT_DOMAIN ),
-				'complexRemoveButton' => __( 'Remove', \Carbon_Fields\TEXT_DOMAIN ),
-				'complexCollapseExpandButton' => __( 'Collapse/Expand', \Carbon_Fields\TEXT_DOMAIN ),
+				'complexNoRows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),
+				'complexMinNumRowsNotReached' => __( 'Minimum number of rows not reached (%1$d %2$s)', 'carbon-fields' ),
+				'complexAddButton' => __( 'Add %s', 'carbon-fields' ),
+				'complexCloneButton' => __( 'Clone', 'carbon-fields' ),
+				'complexRemoveButton' => __( 'Remove', 'carbon-fields' ),
+				'complexCollapseExpandButton' => __( 'Collapse/Expand', 'carbon-fields' ),
 
-				'messageFormValidationFailed' => __( 'Please fill out all fields correctly. ', \Carbon_Fields\TEXT_DOMAIN ),
-				'messageRequiredField' => __( 'This field is required. ', \Carbon_Fields\TEXT_DOMAIN ),
-				'messageChooseOption' => __( 'Please choose an option. ', \Carbon_Fields\TEXT_DOMAIN ),
+				'messageFormValidationFailed' => __( 'Please fill out all fields correctly. ', 'carbon-fields' ),
+				'messageRequiredField' => __( 'This field is required. ', 'carbon-fields' ),
+				'messageChooseOption' => __( 'Please choose an option. ', 'carbon-fields' ),
 
-				'enterNameOfNewSidebar' => __( 'Please enter the name of the new sidebar:', \Carbon_Fields\TEXT_DOMAIN ),
+				'enterNameOfNewSidebar' => __( 'Please enter the name of the new sidebar:', 'carbon-fields' ),
 			),
 		) ) );
 	}

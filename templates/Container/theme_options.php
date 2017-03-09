@@ -26,7 +26,7 @@
 
 				<div id="postbox-container-1" class="postbox-container">
 					<div id="submitdiv" class="postbox">
-						<h3><?php _e( 'Actions', \Carbon_Fields\TEXT_DOMAIN ); ?></h3>
+						<h3><?php _e( 'Actions', 'carbon-fields' ); ?></h3>
 
 						<div id="major-publishing-actions">
 
@@ -35,7 +35,7 @@
 
 								<?php
 									$filter_name  = 'carbon_' . str_replace( '-', '_', sanitize_title( $this->title ) ) . '_button_label';
-									$button_label = apply_filters( $filter_name, __( 'Save Changes', \Carbon_Fields\TEXT_DOMAIN ) );
+									$button_label = apply_filters( $filter_name, __( 'Save Changes', 'carbon-fields' ) );
 								?>
 
 								<input type="submit" value="<?php echo esc_attr( $button_label ); ?>" name="publish" id="publish" class="button button-primary button-large">

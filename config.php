@@ -12,11 +12,6 @@ if ( ! defined( __NAMESPACE__ . '\DIR' ) ) {
 	define( __NAMESPACE__ . '\DIR', __DIR__ );
 }
 
-# Define version constant
-if ( ! defined( __NAMESPACE__ . '\TEXT_DOMAIN' ) ) {
-	define( __NAMESPACE__ . '\TEXT_DOMAIN', 'carbon-fields' );
-}
-
 # Define root URL
 if ( ! defined( __NAMESPACE__ . '\URL' ) ) {
 	$url = \trailingslashit( DIR );
