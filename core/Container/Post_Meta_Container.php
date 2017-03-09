@@ -136,7 +136,7 @@ class Post_Meta_Container extends Container {
 	 **/
 	protected function get_environment_for_request() {
 		global $pagenow;
-		
+
 		$input = stripslashes_deep( $_GET );
 		$request_post_type = isset( $input['post_type'] ) ? $input['post_type'] : '';
 		$post_type = '';
@@ -215,7 +215,9 @@ class Post_Meta_Container extends Container {
 	 * Add meta box for each of the container post types
 	 **/
 	public function attach() {
-		foreach ( $this->settings['post_type'] as $post_type ) {
+		$this->post_types = $this->get_post_type_visibility();
+
+		foreach ( $this->post_types as $post_type ) {
 			add_meta_box(
 				$this->id,
 				$this->title,
@@ -224,9 +226,7 @@ class Post_Meta_Container extends Container {
 				$this->settings['panel_context'],
 				$this->settings['panel_priority']
 			);
-		}
 
-		foreach ( $this->settings['post_type'] as $post_type ) {
 			add_filter( "postbox_classes_{$post_type}_{$this->id}", array( $this, 'add_postbox_classes' ) );
 		}
 	}
@@ -258,7 +258,7 @@ class Post_Meta_Container extends Container {
 
 	/**
 	 * Get array of post types this container can appear on conditionally
-	 * 
+	 *
 	 * @return array<string>
 	 */
 	public function get_post_type_visibility() {
