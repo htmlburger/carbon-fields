@@ -13,6 +13,7 @@ import { createSelectboxChannel, createSubmitChannel } from 'lib/events';
 import { getContainerById, canProcessAction } from 'containers/selectors';
 import { setupContainer, validateAllContainers, setMeta, setUI } from 'containers/actions';
 import { TYPE_USER_META } from 'containers/constants';
+import { walkAndEvaluate } from 'containers/conditions';
 
 /**
  * Keep in sync the `role` property.
@@ -30,7 +31,7 @@ export function* workerSyncRole(containerId) {
 			yield put(setMeta({
 				containerId,
 				meta: {
-					role: value,
+					user_role: value,
 				}
 			}));
 		}
@@ -43,7 +44,7 @@ export function* workerSyncRole(containerId) {
 			yield put(setMeta({
 				containerId,
 				meta: {
-					role: el.dataset.profileRole,
+					user_role: el.dataset.profileRole,
 				}
 			}));
 		}
@@ -82,16 +83,11 @@ export function* workerCheckVisibility(action) {
 	}
 
 	const container = yield select(getContainerById, containerId);
-	let isVisible = true;
-
-	if (!isEmpty(container.settings.show_on.role) && container.settings.show_on.role.indexOf(container.meta.role) === -1) {
-		isVisible = false;
-	}
 
 	yield put(setUI({
 		containerId,
 		ui: {
-			is_visible: isVisible
+			is_visible: walkAndEvaluate(container.conditions, container.meta)
 		}
 	}));
 }
