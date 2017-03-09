@@ -41,6 +41,8 @@ import {
 	setUI
 } from 'containers/actions';
 
+import { walkAndEvaluate } from 'containers/conditions';
+
 /**
  * Keep in sync the `level` property.
  *
@@ -66,7 +68,7 @@ export function* workerSyncLevel(containerId) {
 			yield put(setMeta({
 				containerId,
 				meta: {
-					level: level,
+					term_level: level,
 				}
 			}));
 		}
@@ -110,16 +112,11 @@ export function* workerCheckVisibility(action) {
 	}
 
 	const container = yield select(getContainerById, containerId);
-	let isVisible = true;
-
-	if (container.settings.show_on_level && container.meta.level != container.settings.show_on_level) {
-		isVisible = false;
-	}
 
 	yield put(setUI({
 		containerId,
 		ui: {
-			is_visible: isVisible
+			is_visible: walkAndEvaluate(container.conditions, container.meta)
 		}
 	}));
 }
