@@ -66,12 +66,13 @@ export function* cancelTasks(pattern, tasks, matcher) {
 export function patchTagBoxAPI(tagBox, method) {
 	tagBox[`_${method}`] = tagBox[method];
 	tagBox[method] = function(...args) {
-		const [ element ] = args;
+		const $textarea = $(args[0])
+			.closest('.postbox')
+			.find('.the-tags');
+
 		const result = tagBox[`_${method}`](...args);
 
-		$(element)
-			.find('.the-tags')
-			.trigger('change');
+		$textarea.trigger('change');
 
 		return result;
 	}
