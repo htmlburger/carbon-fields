@@ -8,6 +8,7 @@ import { get } from 'lodash';
  */
 import base from 'containers/conditions/base';
 import boolean from 'containers/conditions/boolean';
+import post_term from 'containers/conditions/post-term';
 
 /**
  * The supported conditions.
@@ -17,6 +18,7 @@ import boolean from 'containers/conditions/boolean';
 const conditions = {
 	base,
 	boolean,
+	post_term,
 };
 
 /**

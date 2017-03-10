@@ -20,6 +20,7 @@ export default setStatic('type', TYPE_POST_META)(
 			parent_id: null,
 			post_format: null,
 			terms: [],
+			post_term: {},
 		})
 	)(Container)
 );
