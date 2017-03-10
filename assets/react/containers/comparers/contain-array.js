@@ -26,9 +26,9 @@ const operators = ['IN', 'NOT IN'];
 const evaluate = (a, operator, b) => {
 	switch (operator) {
 		case 'IN':
-			return !! intersection(a, b).length;
+			return !!intersection(a, b).length;
 		case 'NOT IN':
-			return ! intersection(a, b).length;
+			return !intersection(a, b).length;
 		default:
 			return false;
 	}
