@@ -3,6 +3,7 @@
  */
 import equality from 'containers/comparers/equality';
 import contain from 'containers/comparers/contain';
+import custom from 'containers/comparers/custom';
 
 export default {
 	/**
@@ -13,6 +14,7 @@ export default {
 	comparers: [
 		equality,
 		contain,
+		custom
 	],
 
 	/**
