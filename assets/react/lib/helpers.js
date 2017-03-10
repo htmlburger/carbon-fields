@@ -1,6 +1,7 @@
 /**
  * The external dependencies.
  */
+import $ from 'jquery';
 import { take, cancel } from 'redux-saga/effects';
 
 /**
@@ -51,5 +52,27 @@ export function* cancelTasks(pattern, tasks, matcher) {
 
 			break;
 		}
+	}
+}
+
+/**
+ * Monkey-patch some of the methods of the tags
+ * in order to detect changes.
+ *
+ * @param  {Object} tagBox
+ * @param  {String} method
+ * @return {void}
+ */
+export function patchTagBoxAPI(tagBox, method) {
+	tagBox[`_${method}`] = tagBox[method];
+	tagBox[method] = function(...args) {
+		const [ element ] = args;
+		const result = tagBox[`_${method}`](...args);
+
+		$(element)
+			.find('.the-tags')
+			.trigger('change');
+
+		return result;
 	}
 }

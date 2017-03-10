@@ -16,7 +16,7 @@ import {
 	registerFieldValidator
 } from 'lib/registry';
 
-import { autoload } from 'lib/helpers';
+import { autoload, patchTagBoxAPI } from 'lib/helpers';
 
 import configureStore from 'store';
 import { normalizePreloadedState } from 'store/helpers';
@@ -29,6 +29,14 @@ import { getContainers } from 'containers/selectors';
  * loaded by WordPress.
  */
 _.noConflict();
+
+/**
+ * Patch the API methods.
+ */
+if (!_.isUndefined(window.tagBox)) {
+	patchTagBoxAPI(tagBox, 'flushTags');
+	patchTagBoxAPI(tagBox, 'parseTags');
+}
 
 /**
  * Register the core components.
