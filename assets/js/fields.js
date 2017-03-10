@@ -966,7 +966,7 @@ window.carbon = window.carbon || {};
 				var sidebarId   = model.get('id');
 				var sidebar = {
 					name: sidebarName,
-					value: sidebarName
+					value: sidebarId
 				};
 
 				// If this sidebar is excluded ( by name or by ID), do not add it to the options.
