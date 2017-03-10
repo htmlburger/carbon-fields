@@ -44,6 +44,7 @@ export const DateTimeField = ({ name, field, picker, options, handleChange }) =>
 					<input
 						type="hidden"
 						name={name}
+						defaultValue={field.value}
 						disabled={!field.ui.is_visible} />
 				</div>
 			</DateTimePicker>
@@ -123,7 +124,7 @@ const handleChange = ({ field, updateField }) => eventOrDate => {
 		value = eventOrDate.target.value;
 	}
 
-	updateField(field.id, { value });
+	updateField(field.id, { value: value });
 };
 
 export default setStatic('type', [
