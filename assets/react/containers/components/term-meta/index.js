@@ -15,7 +15,7 @@ export default setStatic('type', TYPE_TERM_META)(
 	compose(
 		withStore(),
 		withSetup({
-			level: 1,
+			term_level: 1,
 		})
 	)(Container)
 );

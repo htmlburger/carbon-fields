@@ -15,11 +15,10 @@ export default setStatic('type', TYPE_POST_META)(
 	compose(
 		withStore(),
 		withSetup({
-			page_template: 'default',
-			level: 1,
-			parent_id: null,
+			post_template: 'default',
+			post_level: 1,
+			post_parent_id: null,
 			post_format: null,
-			terms: [],
 			post_term: {},
 		})
 	)(Container)
