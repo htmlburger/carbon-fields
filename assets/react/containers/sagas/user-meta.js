@@ -69,30 +69,6 @@ export function* workerSetupContainer(action) {
 }
 
 /**
- * Keep in sync the `is_visible` property.
- *
- * @param  {Object} action
- * @return {void}
- */
-export function* workerCheckVisibility(action) {
-	const { containerId } = action.payload;
-
-	// Don't do anything if the type isn't correct.
-	if (!(yield select(canProcessAction, containerId, TYPE_USER_META))) {
-		return;
-	}
-
-	const container = yield select(getContainerById, containerId);
-
-	yield put(setUI({
-		containerId,
-		ui: {
-			is_visible: walkAndEvaluate(container.conditions, container.meta)
-		}
-	}));
-}
-
-/**
  * Handle the form submission.
  *
  * @return {void}
@@ -115,7 +91,6 @@ export function* workerFormSubmit() {
 export default function* foreman() {
 	yield [
 		takeEvery(setupContainer, workerSetupContainer),
-		takeEvery(setMeta, workerCheckVisibility),
 		call(workerFormSubmit),
 	];
 }

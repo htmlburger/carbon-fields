@@ -92,33 +92,8 @@ export function* workerSetupContainer(action) {
 	}
 
 	yield call(stopSaga, containerId, yield [
-		takeEvery(setMeta, workerCheckVisibility),
 		fork(workerSyncLevel, containerId),
 	]);
-}
-
-/**
- * Keep in sync the `is_visible` property.
- *
- * @param  {Object} action
- * @return {void}
- */
-export function* workerCheckVisibility(action) {
-	const { containerId } = action.payload;
-
-	// Don't do anything if the type isn't correct.
-	if (!(yield select(canProcessAction, containerId, TYPE_TERM_META))) {
-		return;
-	}
-
-	const container = yield select(getContainerById, containerId);
-
-	yield put(setUI({
-		containerId,
-		ui: {
-			is_visible: walkAndEvaluate(container.conditions, container.meta)
-		}
-	}));
 }
 
 /**

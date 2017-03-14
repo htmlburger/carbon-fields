@@ -25,24 +25,6 @@ import { addFields } from 'fields/actions';
 import { flattenField } from 'fields/helpers';
 
 /**
- * Show or hide the container's metabox.
- *
- * @param  {Object} action
- * @return {void}
- */
-export function* workerToggleMetaBoxVisibility(action) {
-	const { containerId } = action.payload;
-	const container = yield select(getContainerById, containerId);
-	const el = yield call([document, document.querySelector], `#${containerId}`);
-
-	if (!el) {
-		throw new Error(`Cannot find the metabox for container "${containerId}"`);
-	}
-
-	el.style.display = container.ui.is_visible ? 'block' : 'none';
-}
-
-/**
  * Prepare the container for inserting in the store.
  *
  * @param  {Object} store
@@ -80,11 +62,6 @@ export default function* foreman(store) {
 
 	if (pagenow === PAGE_NOW_WIDGETS || pagenow === PAGE_NOW_MENUS) {
 		workers.push(takeEvery(receiveContainer, workerReceiveContainer, store));
-	}
-
-	if (pagenow !== PAGE_NOW_WIDGETS && pagenow !== PAGE_NOW_MENUS) {
-		workers.push(takeEvery(setupContainer, workerToggleMetaBoxVisibility));
-		workers.push(takeEvery(setUI, workerToggleMetaBoxVisibility));
 	}
 
 	yield workers;
