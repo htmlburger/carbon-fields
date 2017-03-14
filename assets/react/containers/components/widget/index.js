@@ -11,9 +11,8 @@ import withStore from 'containers/decorators/with-store';
 import withSetup from 'containers/decorators/with-setup';
 import { TYPE_WIDGET } from 'containers/constants';
 
-export default setStatic('type', TYPE_WIDGET)(
-	compose(
-		withStore(),
-		withSetup()
-	)(Container)
-);
+export default compose(
+	setStatic('type', TYPE_WIDGET),
+	withStore(),
+	withSetup()
+)(Container);

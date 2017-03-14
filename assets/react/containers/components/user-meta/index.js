@@ -11,11 +11,10 @@ import withStore from 'containers/decorators/with-store';
 import withSetup from 'containers/decorators/with-setup';
 import { TYPE_USER_META } from 'containers/constants';
 
-export default setStatic('type', TYPE_USER_META)(
-	compose(
-		withStore(),
-		withSetup({
-			user_role: null,
-		})
-	)(Container)
-);
+export default compose(
+	setStatic('type', TYPE_USER_META),
+	withStore(),
+	withSetup({
+		user_role: null,
+	})
+)(Container);
