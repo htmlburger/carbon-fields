@@ -84,6 +84,17 @@ class Widget_Container extends Container {
 		return $this->all_conditions_pass( intval( $object_id ) );
 	}
 
+	/* Checks whether the current save request is valid
+	 *
+	 * @return bool
+	 **/
+	public function is_valid_save( $object_id = 0 ) {
+		if ( ! $this->is_valid_attach_for_request() ) {
+			return false;
+		}
+		return $this->is_valid_attach_for_object( $object_id );
+	}
+
 	/**
 	 * Output the container markup
 	 **/
