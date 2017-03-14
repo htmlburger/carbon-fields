@@ -19,6 +19,7 @@ import {
 	submitForm 
 } from 'containers/actions';
 import { TYPE_USER_META } from 'containers/constants';
+import { walkAndEvaluate } from 'containers/conditions';
 
 /**
  * Keep in sync the `role` property.
@@ -36,7 +37,7 @@ export function* workerSyncRole(containerId) {
 			yield put(setMeta({
 				containerId,
 				meta: {
-					role: value,
+					user_role: value,
 				}
 			}));
 		}
@@ -49,7 +50,7 @@ export function* workerSyncRole(containerId) {
 			yield put(setMeta({
 				containerId,
 				meta: {
-					role: el.dataset.profileRole,
+					user_role: el.dataset.profileRole,
 				}
 			}));
 		}
@@ -71,35 +72,6 @@ export function* workerSetupContainer(action) {
 	}
 
 	yield fork(workerSyncRole, containerId);
-}
-
-/**
- * Keep in sync the `is_visible` property.
- *
- * @param  {Object} action
- * @return {void}
- */
-export function* workerCheckVisibility(action) {
-	const { containerId } = action.payload;
-
-	// Don't do anything if the type isn't correct.
-	if (!(yield select(canProcessAction, containerId, TYPE_USER_META))) {
-		return;
-	}
-
-	const container = yield select(getContainerById, containerId);
-	let isVisible = true;
-
-	if (!isEmpty(container.settings.show_on.role) && container.settings.show_on.role.indexOf(container.meta.role) === -1) {
-		isVisible = false;
-	}
-
-	yield put(setUI({
-		containerId,
-		ui: {
-			is_visible: isVisible
-		}
-	}));
 }
 
 /**
@@ -126,7 +98,6 @@ export function* workerFormSubmit() {
 export default function* foreman() {
 	yield [
 		takeEvery(setupContainer, workerSetupContainer),
-		takeEvery(setMeta, workerCheckVisibility),
 		call(workerFormSubmit),
 	];
 }

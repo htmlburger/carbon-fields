@@ -79,6 +79,22 @@ export function createCheckableChannel(selector) {
 }
 
 /**
+ * Create a channel that will listen for `change` events on text fields.
+ *
+ * @param  {String} selector
+ * @return {Object}
+ */
+export function createTextChangeChannel(selector) {
+	return createChannel(selector, 'change', (emit, $element) => {
+		const value = $element.val();
+
+		emit({
+			value,
+		});
+	});
+}
+
+/**
  * Create a channel that will listen for `scroll` events.
  *
  * @param  {String} selector

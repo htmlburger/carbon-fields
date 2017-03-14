@@ -10,14 +10,25 @@ class User_Meta_Container extends Container {
 	protected $user_id;
 
 	public $settings = array(
+		// TODO remove
 		'show_on' => array(
 			'role' => array(),
 		),
-		'show_for' => array(
-			'relation' => 'AND',
-			'edit_users',
-		),
 	);
+
+	/**
+	 * Array of condition types that are checked during save requests
+	 *
+	 * @var array<string>
+	 */
+	protected $static_conditions = array( 'user_id', 'user_capability' );
+
+	/**
+	 * Array of condition types that are checked during edit requests
+	 *
+	 * @var array<string>
+	 */
+	protected $dynamic_conditions = array( 'user_role' );
 
 	/**
 	 * Create a new container
@@ -49,11 +60,11 @@ class User_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_save( $user_id = 0 ) {
-		if ( ! $this->verified_nonce_in_request() ) {
+		if ( ! $this->is_profile_page() ) {
 			return false;
 		}
-
-		if ( ! $this->is_valid_attach_for_request() ) {
+		
+		if ( ! $this->verified_nonce_in_request() ) {
 			return false;
 		}
 
@@ -81,16 +92,58 @@ class User_Meta_Container extends Container {
 	}
 
 	/**
+	 * Get environment array for page request (in admin)
+	 *
+	 * @return array
+	 **/
+	protected function get_environment_for_request() {
+		global $pagenow;
+
+		$input = stripslashes_deep( $_GET );
+
+		$user_id = 0;
+		if ( $pagenow === 'profile.php' ) {
+			$user_id = get_current_user_id();
+		}
+		if ( isset( $input['user_id'] ) ) {
+			$user_id = intval( $input['user_id'] );
+		}
+		$user = get_userdata( $user_id );
+
+		$environment = array(
+			'user_id' => $user ? intval( $user->ID ) : 0,
+			'user' => $user ? $user : null,
+			'roles' => $user ? $user->roles : array(),
+		);
+		return $environment;
+	}
+
+	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
 	public function is_valid_attach_for_request() {
-		if ( ! $this->is_profile_page() || ! $this->is_valid_show_for() ) {
+		if ( ! $this->is_profile_page() ) {
 			return false;
 		}
 
-		return true;
+		return $this->static_conditions_pass();
+	}
+
+	/**
+	 * Get environment array for object id
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		$user = get_userdata( $object_id );
+		$environment = array(
+			'user_id' => intval( $user->ID ),
+			'user' => $user,
+			'roles' => $user->roles,
+		);
+		return $environment;
 	}
 
 	/**
@@ -100,32 +153,13 @@ class User_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
-		$valid = true;
-		$user_id = $object_id;
-		$user = get_userdata( $user_id );
+		$user = get_userdata( $object_id );
 
 		if ( ! $user  ) {
 			return false;
 		}
 
-		if ( empty( $user->roles ) ) {
-			return;
-		}
-
-		// Check user role
-		if ( ! empty( $this->settings['show_on']['role'] ) ) {
-			$allowed_roles = (array) $this->settings['show_on']['role'];
-
-			// array_shift removed the returned role from the $user_profile->roles
-			// $roles_to_shift prevents changing of the $user_profile->roles variable
-			$roles_to_shift = $user->roles;
-			$profile_role = array_shift( $roles_to_shift );
-			if ( ! in_array( $profile_role, $allowed_roles ) ) {
-				$valid = false;
-			}
-		}
-
-		return $valid;
+		return $this->all_conditions_pass( intval( $user->ID ) );
 	}
 
 	/**
@@ -144,33 +178,6 @@ class User_Meta_Container extends Container {
 		global $pagenow;
 
 		return $pagenow === 'profile.php' || $pagenow === 'user-new.php' || $pagenow === 'user-edit.php';
-	}
-
-	/**
-	 * Perform checks whether the container should be seen for the currently logged in user
-	 *
-	 * @return bool True if the current user is allowed to see the container
-	 **/
-	public function is_valid_show_for() {
-		$show_for = $this->settings['show_for'];
-
-		$relation = $show_for['relation'];
-		unset( $show_for['relation'] );
-
-		$validated_capabilities_count = 0;
-		foreach ( $show_for as $capability ) {
-			if ( current_user_can( $capability ) ) {
-				$validated_capabilities_count++;
-			}
-		}
-
-		/**
-		 * When the relation is AND all capabilities must be evaluated to true
-		 * When the relation is OR at least 1 must be evaluated to true
-		 */
-		$min_valid_capabilities_count = $relation === 'AND' ? count( $show_for ) : 1;
-
-		return apply_filters( 'carbon_container_user_meta_is_valid_show_for', $validated_capabilities_count >= $min_valid_capabilities_count, $this );
 	}
 
 	/**
@@ -202,62 +209,19 @@ class User_Meta_Container extends Container {
 	}
 
 	/**
-	 * Validate and parse the show_for logic rules.
-	 *
-	 * @param array $show_for
-	 * @return array
-	 */
-	protected function parse_show_for( $show_for ) {
-		if ( ! is_array( $show_for ) ) {
-			Incorrect_Syntax_Exception::raise( 'The argument passed to show_for() must be an array.' );
-		}
-
-		$parsed_show_for = array(
-			'relation' => Helper::get_relation_type_from_array( $show_for ),
-		);
-
-		foreach ( $show_for as $key => $rule ) {
-			if ( $key === 'relation' ) {
-				continue; // Skip the relation key as it is already handled above
-			}
-
-			// Check if the rule is valid
-			if ( ! is_string( $rule ) || empty( $rule ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid show_for logic rule format. ' .
-				'The rule should be a string, containing an user capability/role.' );
-			}
-
-			$parsed_show_for[] = $rule;
-		}
-
-		return $parsed_show_for;
-	}
-
-	/**
 	 * COMMON USAGE METHODS
 	 */
 
 	/**
 	 * Show the container only on users who have the $role role.
 	 *
-	 * @param string $role
+	 * @deprecated
+	 * @param string|array $role
 	 * @return object $this
 	 **/
 	public function show_on_user_role( $role ) {
-		$this->settings['show_on']['role'] = (array) $role;
-
-		return $this;
-	}
-
-	/**
-	 * Show the container only for users who have either capabilities or roles setup
-	 *
-	 * @param array $show_for
-	 * @return object $this
-	 **/
-	public function show_for( $show_for ) {
-		$this->settings['show_for'] = $this->parse_show_for( $show_for );
-
+		$roles = is_array( $role ) ? $role : array( $role );
+		$this->and_when( 'user_role', 'IN', $roles );
 		return $this;
 	}
 }

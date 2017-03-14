@@ -11,15 +11,14 @@ import withStore from 'containers/decorators/with-store';
 import withSetup from 'containers/decorators/with-setup';
 import { TYPE_POST_META } from 'containers/constants';
 
-export default setStatic('type', TYPE_POST_META)(
-	compose(
-		withStore(),
-		withSetup({
-			page_template: 'default',
-			level: 1,
-			parent_id: null,
-			post_format: null,
-			terms: [],
-		})
-	)(Container)
-);
+export default compose(
+	setStatic('type', TYPE_POST_META),
+	withStore(),
+	withSetup({
+		post_template: 'default',
+		post_level: 1,
+		post_parent_id: null,
+		post_format: null,
+		post_term: {},
+	})
+)(Container);

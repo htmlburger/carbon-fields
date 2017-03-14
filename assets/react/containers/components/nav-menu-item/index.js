@@ -11,9 +11,8 @@ import withStore from 'containers/decorators/with-store';
 import withSetup from 'containers/decorators/with-setup';
 import { TYPE_NAV_MENU_ITEM } from 'containers/constants';
 
-export default setStatic('type', TYPE_NAV_MENU_ITEM)(
-	compose(
-		withStore(),
-		withSetup()
-	)(Container)
-);
+export default compose(
+	setStatic('type', TYPE_NAV_MENU_ITEM),
+	withStore(),
+	withSetup()
+)(Container);

@@ -45,7 +45,11 @@ class Comment_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_save() {
-		return $this->verified_nonce_in_request();
+		if ( ! $this->verified_nonce_in_request() ) {
+			return false;
+		}
+
+		return $this->is_valid_attach_for_object();
 	}
 
 	/**
@@ -68,6 +72,20 @@ class Comment_Meta_Container extends Container {
 	}
 
 	/**
+	 * Get environment array for page request (in admin)
+	 *
+	 * @return array
+	 **/
+	protected function get_environment_for_request() {
+		$input = stripslashes_deep( $_GET );
+
+		$environment = array(
+			'comment_id' => isset( $input['c'] ) ? intval( $input['c'] ) : 0,
+		);
+		return $environment;
+	}
+
+	/**
 	 * Check container attachment rules against current page request (in admin)
 	 *
 	 * @return bool
@@ -75,7 +93,23 @@ class Comment_Meta_Container extends Container {
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
-		return ( $pagenow === 'comment.php' );
+		if ( $pagenow !== 'comment.php' ) {
+			return false;
+		}
+
+		return $this->static_conditions_pass();
+	}
+
+	/**
+	 * Get environment array for object id
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		$environment = array(
+			'comment_id' => intval( $object_id ),
+		);
+		return $environment;
 	}
 
 	/**
@@ -85,7 +119,7 @@ class Comment_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
-		return true;
+		return $this->all_conditions_pass( intval( $object_id ) );
 	}
 
 	/**

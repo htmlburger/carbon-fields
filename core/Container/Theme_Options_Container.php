@@ -15,7 +15,6 @@ class Theme_Options_Container extends Container {
 	public $settings = array(
 		'parent' => '',
 		'file' => '',
-		'permissions' => 'manage_options',
 	);
 
 	public $icon = '';
@@ -60,7 +59,11 @@ class Theme_Options_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_save() {
-		return $this->verified_nonce_in_request();
+		if ( ! $this->verified_nonce_in_request() ) {
+			return false;
+		}
+
+		return $this->is_valid_attach_for_object();
 	}
 
 	/**
@@ -84,12 +87,30 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
+	 * Get environment array for page request (in admin)
+	 *
+	 * @return array
+	 **/
+	protected function get_environment_for_request() {
+		return array();
+	}
+
+	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
 	public function is_valid_attach_for_request() {
-		return true;
+		return $this->static_conditions_pass();
+	}
+
+	/**
+	 * Get environment array for object id
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		return array();
 	}
 
 	/**
@@ -99,7 +120,7 @@ class Theme_Options_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
-		return true;
+		return $this->all_conditions_pass( intval( $object_id ) );
 	}
 
 	/**
@@ -107,13 +128,15 @@ class Theme_Options_Container extends Container {
 	 * Hook the container saving action.
 	 **/
 	public function attach() {
+		// use the "read" capability because conditions will handle actual access and save capability checking
+		// before the attach() method is called
 
 		// Add menu page
 		if ( ! $this->settings['parent'] ) {
 			add_menu_page(
 				$this->title,
 				$this->title,
-				$this->settings['permissions'],
+				'read',
 				$this->settings['file'],
 				array( $this, 'render' ),
 				$this->icon
@@ -124,7 +147,7 @@ class Theme_Options_Container extends Container {
 			$this->settings['parent'],
 			$this->title,
 			$this->title,
-			$this->settings['permissions'],
+			'read',
 			$this->settings['file'],
 			array( $this, 'render' ),
 			$this->icon
@@ -225,15 +248,6 @@ class Theme_Options_Container extends Container {
 	 **/
 	public function set_page_file( $file ) {
 		$this->settings['file'] = $file;
-		return $this;
-	}
-
-	/**
-	 * Set the permissions necessary to view
-	 * the corresponding theme options page
-	 **/
-	public function set_page_permissions( $permissions ) {
-		$this->settings['permissions'] = $permissions;
 		return $this;
 	}
 }

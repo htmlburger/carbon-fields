@@ -42,6 +42,8 @@ import {
 	submitForm
 } from 'containers/actions';
 
+import { walkAndEvaluate } from 'containers/conditions';
+
 /**
  * Keep in sync the `level` property.
  *
@@ -67,7 +69,7 @@ export function* workerSyncLevel(containerId) {
 			yield put(setMeta({
 				containerId,
 				meta: {
-					level: level,
+					term_level: level,
 				}
 			}));
 		}
@@ -91,38 +93,8 @@ export function* workerSetupContainer(action) {
 	}
 
 	yield call(stopSaga, containerId, yield [
-		takeEvery(setMeta, workerCheckVisibility),
 		fork(workerSyncLevel, containerId),
 	]);
-}
-
-/**
- * Keep in sync the `is_visible` property.
- *
- * @param  {Object} action
- * @return {void}
- */
-export function* workerCheckVisibility(action) {
-	const { containerId } = action.payload;
-
-	// Don't do anything if the type isn't correct.
-	if (!(yield select(canProcessAction, containerId, TYPE_TERM_META))) {
-		return;
-	}
-
-	const container = yield select(getContainerById, containerId);
-	let isVisible = true;
-
-	if (container.settings.show_on_level && container.meta.level != container.settings.show_on_level) {
-		isVisible = false;
-	}
-
-	yield put(setUI({
-		containerId,
-		ui: {
-			is_visible: isVisible
-		}
-	}));
 }
 
 /**

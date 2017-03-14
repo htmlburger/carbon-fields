@@ -1,6 +1,7 @@
 /**
  * The external dependencies.
  */
+import $ from 'jquery';
 import { takeEvery } from 'redux-saga';
 import { take, call, put, fork, select } from 'redux-saga/effects';
 import { reduce, isEmpty, isArray, camelCase } from 'lodash';
@@ -11,7 +12,8 @@ import { reduce, isEmpty, isArray, camelCase } from 'lodash';
 import {
 	createSelectboxChannel,
 	createCheckableChannel,
-	createSubmitChannel
+	createSubmitChannel,
+	createTextChangeChannel
 } from 'lib/events';
 
 import { PAGE_NOW_PAGE } from 'lib/constants';
@@ -23,11 +25,13 @@ import {
 	validateAllContainers,
 	setMeta,
 	setUI,
-	submitForm
+	submitForm,
+	setContainerMeta
 } from 'containers/actions';
 
 import { TYPE_POST_META } from 'containers/constants';
 import { SETUP_CONTAINER, SET_META } from 'containers/actions';
+import { walkAndEvaluate } from 'containers/conditions';
 
 /**
  * Keep in sync the `page_template` property.
@@ -44,7 +48,7 @@ export function* workerSyncPageTemplate(containerId) {
 		yield put(setMeta({
 			containerId,
 			meta: {
-				page_template: value,
+				post_template: value,
 			}
 		}));
 	}
@@ -78,8 +82,8 @@ export function* workerSyncParentId(containerId) {
 		yield put(setMeta({
 			containerId,
 			meta: {
-				parent_id: value,
-				level: level,
+				post_parent_id: value,
+				post_level: level,
 			}
 		}));
 	}
@@ -106,138 +110,40 @@ export function* workerSyncPostFormat(containerId) {
 	}
 }
 
-/**
- * Keep in sync the `terms` property.
- *
- * @param  {String} containerId
- * @return {void}
- */
-export function* workerSyncTerms(containerId) {
-	const container = yield select(getContainerById, containerId);
-	const channel = yield call(createCheckableChannel, `#${container.settings.show_on.tax_slug}checklist`);
+export function* setupSyncTerms(containerId, selector, worker) {
+	const elements = document.querySelectorAll(`div[id^="${selector}"]`);
+
+	for (const element of elements) {
+		yield fork(worker, containerId, element.id.replace(selector, ''));
+	}
+}
+
+export function* workerSyncHierarchicalTerms(containerId, taxonomy) {
+	const channel = yield call(createCheckableChannel, `#${taxonomy}checklist`);
 
 	while (true) {
-		let { values } = yield take(channel);
+		const { values } = yield take(channel);
 
-		values = values.map(value => parseInt(value, 10));
-
-		yield put(setMeta({
+		yield put(setContainerMeta(
 			containerId,
-			meta: {
-				terms: values,
-			}
-		}));
+			`post_term.${taxonomy}`,
+			values.map(value => parseInt(value, 10))
+		));
 	}
 }
 
-/**
- * Check whether the container should be visible.
- *
- * @param  {Boolean} isVisible
- * @param  {Object}  settings
- * @param  {Object}  meta
- * @return {Boolean}
- */
-function checkTemplateNames(isVisible, settings, meta) {
-	const { page_template } = meta;
-	const { typenow } = window;
+export function* workerSyncNonHierarchicalTerms(containerId, taxonomy) {
+	const channel = yield call(createTextChangeChannel, `#${taxonomy} .the-tags`);
 
-	if (typenow === PAGE_NOW_PAGE && settings.template_names.indexOf(page_template) === -1) {
-		isVisible = false;
+	while (true) {
+		const { value } = yield take(channel);
+
+		yield put(setContainerMeta(
+			containerId,
+			`post_term.${taxonomy}`,
+			value.split(/,\s*/)
+		));
 	}
-
-	return isVisible;
-}
-
-/**
- * Check whether the container should be visible.
- *
- * @param  {Boolean} isVisible
- * @param  {Object}  settings
- * @param  {Object}  meta
- * @return {Boolean}
- */
-function checkNotInTemplateNames(isVisible, settings, meta) {
-	const { page_template } = meta;
-	const { typenow } = window;
-
-	if (typenow === PAGE_NOW_PAGE && settings.not_in_template_names.indexOf(page_template) !== -1) {
-		isVisible = false;
-	}
-
-	return isVisible;
-}
-
-/**
- * Check whether the container should be visible.
- *
- * @param  {Boolean} isVisible
- * @param  {Object}  settings
- * @param  {Object}  meta
- * @return {Boolean}
- */
-function checkParentPageId(isVisible, settings, meta) {
-	const { parent_id } = meta;
-
-	if (parent_id != settings.parent_page_id) {
-		isVisible = false;
-	}
-
-	return isVisible;
-}
-
-/**
- * Check whether the container should be visible.
- *
- * @param  {Boolean} isVisible
- * @param  {Object}  settings
- * @param  {Object}  meta
- * @return {Boolean}
- */
-function checkLevelLimit(isVisible, settings, meta) {
-	const { level } = meta;
-
-	if (level != settings.level_limit) {
-		isVisible = false;
-	}
-
-	return isVisible;
-}
-
-/**
- * Check whether the container should be visible.
- *
- * @param  {Boolean} isVisible
- * @param  {Object}  settings
- * @param  {Object}  meta
- * @return {Boolean}
- */
-function checkPostFormats(isVisible, settings, meta) {
-	const { post_format } = meta;
-
-	if (settings.post_formats.indexOf(post_format) === -1) {
-		isVisible = false;
-	}
-
-	return isVisible;
-}
-
-/**
- * Check whether the container should be visible.
- *
- * @param  {Boolean} isVisible
- * @param  {Object}  settings
- * @param  {Object}  meta
- * @return {Boolean}
- */
-function checkTaxSlug(isVisible, settings, meta) {
-	const { tax_term_id } = meta;
-
-	if (meta.terms.indexOf(tax_term_id) === -1) {
-		isVisible = false;
-	}
-
-	return isVisible;
 }
 
 /**
@@ -257,53 +163,8 @@ export function* workerSetupContainer(action) {
 	yield fork(workerSyncPageTemplate, containerId);
 	yield fork(workerSyncParentId, containerId);
 	yield fork(workerSyncPostFormat, containerId);
-	yield fork(workerSyncTerms, containerId);
-}
-
-/**
- * Keep in sync the `is_visible` property.
- *
- * @param  {Object} action
- * @return {void}
- */
-export function* workerCheckVisibility(action) {
-	const { containerId } = action.payload;
-
-	// Don't do anything if the type isn't correct.
-	if (!(yield select(canProcessAction, containerId, TYPE_POST_META))) {
-		return;
-	}
-
-	const container = yield select(getContainerById, containerId);
-	const checkers = {
-		checkTemplateNames,
-		checkNotInTemplateNames,
-		checkParentPageId,
-		checkLevelLimit,
-		checkPostFormats,
-		checkTaxSlug,
-	};
-
-	const isVisible = reduce(container.settings.show_on, (isVisible, value, key) => {
-		const checker = camelCase(`check_${key}`);
-
-		if (checkers[checker]) {
-			if (!value || (isArray(value) && isEmpty(value))) {
-				return isVisible;
-			}
-
-			isVisible = checkers[checker](isVisible, container.settings.show_on, container.meta);
-		}
-
-		return isVisible;
-	}, true);
-
-	yield put(setUI({
-		containerId,
-		ui: {
-			is_visible: isVisible
-		}
-	}));
+	yield fork(setupSyncTerms, containerId, 'taxonomy-', workerSyncHierarchicalTerms);
+	yield fork(setupSyncTerms, containerId, 'tagsdiv-', workerSyncNonHierarchicalTerms);
 }
 
 /**
@@ -330,7 +191,6 @@ export function* workerFormSubmit() {
 export default function* foreman() {
 	yield [
 		takeEvery(setupContainer, workerSetupContainer),
-		takeEvery(setMeta, workerCheckVisibility),
 		call(workerFormSubmit)
 	];
 }

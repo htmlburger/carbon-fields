@@ -32,6 +32,16 @@ export const teardownContainer = createAction('containers/TEARDOWN_CONTAINER', c
 export const setMeta = createAction('containers/SET_META');
 
 /**
+ * Update the object that keeps the meta information.
+ *
+ * @param  {String} containerId
+ * @param  {String} key
+ * @param  {mixed}  value
+ * @return {Object}
+ */
+export const setContainerMeta = createAction('containres/SET_META', (containerId, key, value) => ({ containerId, key, value }));
+
+/**
  * Update the object that contains information about container's UI.
  *
  * @param  {Object} payload

@@ -11,9 +11,8 @@ import withStore from 'containers/decorators/with-store';
 import withSetup from 'containers/decorators/with-setup';
 import { TYPE_COMMENT_META } from 'containers/constants';
 
-export default setStatic('type', TYPE_COMMENT_META)(
-	compose(
-		withStore(),
-		withSetup()
-	)(Container)
-);
+export default compose(
+	setStatic('type', TYPE_COMMENT_META),
+	withStore(),
+	withSetup()
+)(Container);

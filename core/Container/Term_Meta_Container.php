@@ -3,7 +3,6 @@
 namespace Carbon_Fields\Container;
 
 use Carbon_Fields\Datastore\Datastore;
-use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Term meta container class.
@@ -12,6 +11,7 @@ class Term_Meta_Container extends Container {
 	protected $term_id;
 
 	public $settings = array(
+		// TODO remove
 		'taxonomy' => array( 'category' ),
 		'show_on_level' => false,
 	);
@@ -80,17 +80,53 @@ class Term_Meta_Container extends Container {
 	}
 
 	/**
+	 * Get environment array for page request (in admin)
+	 *
+	 * @return array
+	 **/
+	protected function get_environment_for_request() {
+		$input = stripslashes_deep( $_GET );
+		$request_term_id = isset( $input['tag_ID'] ) ? intval( $input['tag_ID'] ) : 0;
+		$request_taxonomy = isset( $input['taxonomy'] ) ? $input['taxonomy'] : '';
+
+		$term = get_term( $request_term_id );
+		$term = ( $term && ! is_wp_error( $term ) ) ? $term : null;
+		$environment = array(
+			'term_id' => $term ? intval( $term->term_id ) : 0,
+			'term' => $term,
+			'taxonomy' => $term ? $term->taxonomy : $request_taxonomy,
+		);
+		return $environment;
+	}
+
+	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
 	public function is_valid_attach_for_request() {
-		$request_taxonomy = isset( $_GET['taxonomy'] ) ? $_GET['taxonomy'] : '';
-		if ( ! empty( $request_taxonomy ) && in_array( $request_taxonomy, $this->settings['taxonomy'] ) ) {
-			return true;
+		global $pagenow;
+
+		if ( $pagenow !== 'edit-tags.php' && $pagenow !== 'term.php' ) {
+			return false;
 		}
 
-		return false;
+		return $this->static_conditions_pass();
+	}
+
+	/**
+	 * Get environment array for object id
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		$term = get_term( intval( $object_id ) );
+		$environment = array(
+			'term_id' => intval( $term->term_id ),
+			'term' => $term,
+			'taxonomy' => $term->taxonomy,
+		);
+		return $environment;
 	}
 
 	/**
@@ -100,7 +136,14 @@ class Term_Meta_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
-		return ( $object_id > 0 );
+		$term = get_term( $object_id );
+		$term = ( $term && ! is_wp_error( $term ) ) ? $term : null;
+
+		if ( ! $term ) {
+			return false;
+		}
+
+		return $this->all_conditions_pass( intval( $term->term_id ) );
 	}
 
 	/**
@@ -135,31 +178,52 @@ class Term_Meta_Container extends Container {
 	}
 
 	/**
+	 * Get array of taxonomies this container can appear on conditionally
+	 * 
+	 * @return array<string>
+	 */
+	public function get_taxonomy_visibility() {
+		$all_taxonomies = get_taxonomies();
+		$filtered_collection = $this->condition_collection->filter( array( 'term_taxonomy' ) );
+
+		$shown_on = array();
+		foreach ( $all_taxonomies as $taxonomy ) {
+			$environment = array(
+				'taxonomy' => $taxonomy,
+			);
+			if ( $filtered_collection->is_fulfilled( $environment ) ) {
+				$shown_on[] = $taxonomy;
+			}
+		}
+		return $shown_on;
+	}
+
+	/**
 	 * COMMON USAGE METHODS
 	 */
 
 	/**
 	 * Show the container only on terms from the specified taxonomies.
 	 *
+	 * @deprecated
 	 * @param string|array $taxonomies
 	 * @return object $this
 	 **/
 	public function show_on_taxonomy( $taxonomies ) {
-		$taxonomies = (array) $taxonomies;
-
-		$this->settings['taxonomy'] = $taxonomies;
-
+		$taxonomies = is_array( $taxonomies ) ? $taxonomies : array( $taxonomies );
+		$this->and_when( 'term_taxonomy', 'IN', $taxonomies );
 		return $this;
 	}
 
 	/**
 	 * Show the container only on particular term level.
 	 *
+	 * @deprecated
 	 * @param int $term_level
 	 * @return object $this
 	 */
 	public function show_on_level( $term_level ) {
-		$this->settings['show_on_level'] = $term_level;
+		$this->and_when( 'term_level', '=', intval( $term_level ) );
 		return $this;
 	}
 }

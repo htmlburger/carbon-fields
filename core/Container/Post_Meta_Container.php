@@ -29,6 +29,8 @@ class Post_Meta_Container extends Container {
 		'post_type' => array( 'post' ),
 		'panel_context' => 'normal',
 		'panel_priority' => 'high',
+
+		// TODO remove
 		'show_on' => array(
 			'category' => null,
 			'template_names' => array(),
@@ -98,6 +100,11 @@ class Post_Meta_Container extends Container {
 			return false;
 		}
 
+		$post_type = get_post_type( $post_id );
+		if ( $post_type === 'revision' ) {
+			return false;
+		}
+
 		return $this->is_valid_attach_for_object( $post_id );
 	}
 
@@ -123,6 +130,36 @@ class Post_Meta_Container extends Container {
 	}
 
 	/**
+	 * Get environment array for page request (in admin)
+	 *
+	 * @return array
+	 **/
+	protected function get_environment_for_request() {
+		global $pagenow;
+
+		$input = stripslashes_deep( $_GET );
+		$request_post_type = isset( $input['post_type'] ) ? $input['post_type'] : '';
+		$post_type = '';
+
+		if ( $this->post_id ) {
+			$post_type = get_post_type( $this->post_id );
+		} elseif ( ! empty( $request_post_type ) ) {
+			$post_type = $request_post_type;
+		} elseif ( $pagenow === 'post-new.php' ) {
+			$post_type = 'post';
+		}
+
+		$post = get_post( $this->post_id );
+		$post = $post ? $post : null;
+		$environment = array(
+			'post_id' => $post ? $post->ID : 0,
+			'post_type' => $post ? $post->post_type : $post_type,
+			'post' => $post,
+		);
+		return $environment;
+	}
+
+	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
@@ -130,43 +167,32 @@ class Post_Meta_Container extends Container {
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
-		$input = stripslashes_deep( $_GET );
-
 		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
 			return false;
 		}
 
-		// Post types check
-		if ( ! empty( $this->settings['post_type'] ) ) {
-			$post_type = '';
-			$request_post_type = isset( $input['post_type'] ) ? $input['post_type'] : '';
-
-			if ( $this->post_id ) {
-				$post_type = get_post_type( $this->post_id );
-			} elseif ( ! empty( $request_post_type ) ) {
-				$post_type = $request_post_type;
-			} elseif ( $pagenow === 'post-new.php' ) {
-				$post_type = 'post';
-			}
-
-			if ( ! $post_type || ! in_array( $post_type, $this->settings['post_type'] ) ) {
-				return false;
-			}
+		$environment = $this->get_environment_for_request();
+		if ( ! $environment['post_type'] ) {
+			return false;
 		}
 
-		// Check show on conditions
-		foreach ( $this->settings['show_on'] as $condition => $value ) {
-			if ( is_null( $value ) || $condition !== 'page_id' ) {
-				continue;
-			}
+		return $this->static_conditions_pass();
+	}
 
-			$post = get_post( $this->post_id );
-			if ( ! $this->is_condition_fullfilled( $condition, $value, $post ) ) {
-				return false;
-			}
-		}
+	/**
+	 * Get environment array for object id
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		$post = get_post( intval( $object_id ) );
 
-		return true;
+		$environment = array(
+			'post_id' => $post->ID,
+			'post' => $post,
+			'post_type' => get_post_type( $post->ID ),
+		);
+		return $environment;
 	}
 
 	/**
@@ -182,30 +208,16 @@ class Post_Meta_Container extends Container {
 			return false;
 		}
 
-		// Check post type
-		if ( ! in_array( $post->post_type, $this->settings['post_type'] ) ) {
-			return false;
-		}
-
-		// Check show on conditions
-		foreach ( $this->settings['show_on'] as $condition => $value ) {
-			if ( is_null( $value ) ) {
-				continue;
-			}
-
-			if ( ! $this->is_condition_fullfilled( $condition, $value, $post ) ) {
-				return false;
-			}
-		}
-
-		return true;
+		return $this->all_conditions_pass( intval( $post->ID ) );
 	}
 
 	/**
 	 * Add meta box for each of the container post types
 	 **/
 	public function attach() {
-		foreach ( $this->settings['post_type'] as $post_type ) {
+		$this->post_types = $this->get_post_type_visibility();
+
+		foreach ( $this->post_types as $post_type ) {
 			add_meta_box(
 				$this->id,
 				$this->title,
@@ -214,9 +226,7 @@ class Post_Meta_Container extends Container {
 				$this->settings['panel_context'],
 				$this->settings['panel_priority']
 			);
-		}
 
-		foreach ( $this->settings['post_type'] as $post_type ) {
 			add_filter( "postbox_classes_{$post_type}_{$this->id}", array( $this, 'add_postbox_classes' ) );
 		}
 	}
@@ -247,124 +257,24 @@ class Post_Meta_Container extends Container {
 	}
 
 	/**
-	 * CONDITION TOOLS
+	 * Get array of post types this container can appear on conditionally
+	 *
+	 * @return array<string>
 	 */
-	
-	/**
-	 * Check a condition against all supported conditions
-	 * 
-	 * @param string $condition
-	 * @param mixed $value
-	 * @param WP_Post $post
-	 * @return bool
-	 */
-	protected function is_condition_fullfilled( $condition, $value, $post ) {
-		switch ( $condition ) {
-			// show_on_post_format
-			case 'post_formats':
-				if ( ! $this->condition_is_post_of_format( $post, $value ) ) {
-					return false;
-				}
-				break;
+	public function get_post_type_visibility() {
+		$all_post_types = get_post_types();
+		$filtered_collection = $this->condition_collection->filter( array( 'post_type' ) );
 
-			// show_on_taxonomy_term or show_on_category
-			case 'category':
-				$this->show_on_category( $value );
-
-				/* fall-through intended */
-			case 'tax_term_id':
-				$has_term = has_term(
-					intval( $this->settings['show_on']['tax_term_id'] ),
-					$this->settings['show_on']['tax_slug'],
-					$post->ID
-				);
-				if ( ! $has_term ) {
-					return false;
-				}
-				break;
-
-			// show_on_level
-			case 'level_limit':
-				if ( ! $this->condition_is_post_on_level( $post, $value ) ) {
-					return false;
-				}
-				break;
-
-			// show_on_page
-			case 'page_id':
-				if ( $post->ID !== intval( $value ) ) {
-					return false;
-				}
-				break;
-
-			// show_on_page_children
-			case 'parent_page_id':
-				if ( $post->post_parent !== $value ) {
-					return false;
-				}
-				break;
-
-			// show_on_template
-			case 'template_names':
-				if ( ! empty( $value ) && ! $this->condition_is_post_using_template( $post, $value ) ) {
-					return false;
-				}
-				break;
-
-			// hide_on_template
-			case 'not_in_template_names':
-				if ( ! empty( $value ) && $this->condition_is_post_using_template( $post, $value ) ) {
-					return false;
-				}
-				break;
+		$shown_on = array();
+		foreach ( $all_post_types as $post_type ) {
+			$environment = array(
+				'post_type' => $post_type,
+			);
+			if ( $filtered_collection->is_fulfilled( $environment ) ) {
+				$shown_on[] = $post_type;
+			}
 		}
-		return true;
-	}
-	
-	/**
-	 * Check if a post is of a given post format
-	 * 
-	 * @param WP_Post $post
-	 * @param string $format
-	 * @return bool
-	 */
-	protected function condition_is_post_of_format( $post, $format ) {
-		if ( empty( $format ) || $post->post_type !== 'post' ) {
-			return true; // this doesn't make sense - returning true for a post that does not support formats (kept for backwards compatibility)
-		}
-
-		$current_format = get_post_format( $post->ID );
-		if ( ! in_array( $current_format, $format ) ) {
-			return false;
-		}
-
-		return true;
-	}
-	
-	/**
-	 * Check if a post is on a specific level in it's hierarchy
-	 * 
-	 * @param WP_Post $post
-	 * @param int $level
-	 * @return bool
-	 */
-	protected function condition_is_post_on_level( $post, $level ) {
-		$level = intval( $level );
-		$post_level = count( get_post_ancestors( $post->ID ) ) + 1;
-		return ( $post_level === $level );
-	}
-	
-	/**
-	 * Check if a post uses one of a given array of templates
-	 * 
-	 * @param WP_Post $post
-	 * @param string|array<string> $templates
-	 * @return bool
-	 */
-	protected function condition_is_post_using_template( $post, $templates ) {
-		$templates = is_array( $templates ) ? $templates : array( $templates );
-		$current_template = get_post_meta( $post->ID, '_wp_page_template', true );
-		return in_array( $current_template, $templates );
+		return $shown_on;
 	}
 
 	/**
@@ -374,6 +284,7 @@ class Post_Meta_Container extends Container {
 	/**
 	 * Show the container only on particular page referenced by it's path.
 	 *
+	 * @deprecated
 	 * @param int|string $page page ID or page path
 	 * @return object $this
 	 **/
@@ -385,14 +296,9 @@ class Post_Meta_Container extends Container {
 		} else {
 			$page_obj = get_page_by_path( $page );
 		}
+		$page_id = ( $page_obj ) ? $page_obj->ID : -1;
 
-		$this->show_on_post_type( 'page' );
-
-		if ( $page_obj ) {
-			$this->settings['show_on']['page_id'] = $page_obj->ID;
-		} else {
-			$this->settings['show_on']['page_id'] = -1;
-		}
+		$this->and_when( 'post_id', '=', $page_id );
 
 		return $this;
 	}
@@ -400,40 +306,21 @@ class Post_Meta_Container extends Container {
 	/**
 	 * Show the container only on pages whose parent is referenced by $parent_page_path.
 	 *
+	 * @deprecated
 	 * @param string $parent_page_path
 	 * @return object $this
 	 **/
 	public function show_on_page_children( $parent_page_path ) {
 		$page = get_page_by_path( $parent_page_path );
-
-		$this->show_on_post_type( 'page' );
-
-		if ( $page ) {
-			$this->settings['show_on']['parent_page_id'] = $page->ID;
-		} else {
-			$this->settings['show_on']['parent_page_id'] = -1;
-		}
-
+		$page_id = ( $page ) ? $page->ID : -1;
+		$this->and_when( 'post_parent_id', '=', $page_id );
 		return $this;
-	}
-
-	/**
-	 * Show the container only on posts from the specified category.
-	 *
-	 * @see show_on_taxonomy_term()
-	 *
-	 * @param string $category_slug
-	 * @return object $this
-	 **/
-	public function show_on_category( $category_slug ) {
-		$this->settings['show_on']['category'] = $category_slug;
-
-		return $this->show_on_taxonomy_term( $category_slug, 'category' );
 	}
 
 	/**
 	 * Show the container only on pages whose template has filename $template_path.
 	 *
+	 * @deprecated
 	 * @param string|array $template_path
 	 * @return object $this
 	 **/
@@ -443,35 +330,21 @@ class Post_Meta_Container extends Container {
 			$this->show_on_post_type( 'page' );
 		}
 
-		if ( is_array( $template_path ) ) {
-			foreach ( $template_path as $path ) {
-				$this->show_on_template( $path );
-			}
-
-			return $this;
-		}
-
-		$this->settings['show_on']['template_names'][] = $template_path;
-
+		$template_paths = is_array( $template_path ) ? $template_path : array( $template_path );
+		$this->and_when( 'post_template', 'IN', $template_paths );
 		return $this;
 	}
 
 	/**
 	 * Hide the container from pages whose template has filename $template_path.
 	 *
+	 * @deprecated
 	 * @param string|array $template_path
 	 * @return object $this
 	 **/
 	public function hide_on_template( $template_path ) {
-		if ( is_array( $template_path ) ) {
-			foreach ( $template_path as $path ) {
-				$this->hide_on_template( $path );
-			}
-			return $this;
-		}
-
-		$this->settings['show_on']['not_in_template_names'][] = $template_path;
-
+		$template_paths = is_array( $template_path ) ? $template_path : array( $template_path );
+		$this->and_when( 'post_template', 'NOT IN', $template_paths );
 		return $this;
 	}
 
@@ -479,33 +352,12 @@ class Post_Meta_Container extends Container {
 	 * Show the container only on hierarchical posts of level $level.
 	 * Levels start from 1 (top level post)
 	 *
+	 * @deprecated
 	 * @param int $level
 	 * @return object $this
 	 **/
 	public function show_on_level( $level ) {
-		if ( $level < 0 ) {
-			Incorrect_Syntax_Exception::raise( 'Invalid level limitation (' . $level . ')' );
-		}
-
-		$this->settings['show_on']['level_limit'] = $level;
-
-		return $this;
-	}
-
-	/**
-	 * Show the container only on posts which have term $term_slug from the $taxonomy_slug taxonomy.
-	 *
-	 * @param string $taxonomy_slug
-	 * @param string $term_slug
-	 * @return object $this
-	 **/
-	public function show_on_taxonomy_term( $term_slug, $taxonomy_slug ) {
-		$term = get_term_by( 'slug', $term_slug, $taxonomy_slug );
-
-		$this->settings['show_on']['tax_slug'] = $taxonomy_slug;
-		$this->settings['show_on']['tax_term'] = $term_slug;
-		$this->settings['show_on']['tax_term_id'] = $term ? $term->term_id : null;
-
+		$this->and_when( 'post_level', '=', intval( $level ) );
 		return $this;
 	}
 
@@ -513,37 +365,61 @@ class Post_Meta_Container extends Container {
 	 * Show the container only on posts from the specified format.
 	 * Learn more about {@link http://codex.wordpress.org/Post_Formats Post Formats (Codex)}
 	 *
+	 * @deprecated
 	 * @param string|array $post_format Name of the format as listed on Codex
 	 * @return object $this
 	 **/
 	public function show_on_post_format( $post_format ) {
-		if ( is_array( $post_format ) ) {
-			foreach ( $post_format as $format ) {
-				$this->show_on_post_format( $format );
-			}
-			return $this;
-		}
-
-		if ( $post_format === 'standard' ) {
-			$post_format = 0;
-		}
-
-		$this->settings['show_on']['post_formats'][] = strtolower( $post_format );
-
+		$post_formats = is_array( $post_format ) ? $post_format : array( $post_format );
+		$this->and_when( 'post_format', 'IN', $post_formats );
 		return $this;
 	}
 
 	/**
 	 * Show the container only on posts from the specified type(s).
 	 *
+	 * @deprecated
 	 * @param string|array $post_types
 	 * @return object $this
 	 **/
 	public function show_on_post_type( $post_types ) {
-		$post_types = (array) $post_types;
+		$post_types = is_array( $post_types ) ? $post_types : array( $post_types );
+		$this->and_when( 'post_type', 'IN', $post_types );
+		return $this;
+	}
 
-		$this->settings['post_type'] = $post_types;
+	/**
+	 * Show the container only on posts from the specified category.
+	 *
+	 * @see show_on_taxonomy_term()
+	 *
+	 * @deprecated
+	 * @param string $category_slug
+	 * @return object $this
+	 **/
+	public function show_on_category( $category_slug ) {
+		$this->and_when( 'post_term', '=', array(
+			'value' => $category_slug,
+			'field' => 'slug',
+			'taxonomy' => 'category',
+		) );
+		return $this;
+	}
 
+	/**
+	 * Show the container only on posts which have term $term_slug from the $taxonomy_slug taxonomy.
+	 *
+	 * @deprecated
+	 * @param string $taxonomy_slug
+	 * @param string $term_slug
+	 * @return object $this
+	 **/
+	public function show_on_taxonomy_term( $term_slug, $taxonomy_slug ) {
+		$this->and_when( 'post_term', '=', array(
+			'value' => $term_slug,
+			'field' => 'slug',
+			'taxonomy' => $taxonomy_slug,
+		) );
 		return $this;
 	}
 

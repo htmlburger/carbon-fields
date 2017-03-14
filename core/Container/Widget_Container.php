@@ -2,6 +2,8 @@
 
 namespace Carbon_Fields\Container;
 
+use Carbon_Fields\App;
+
 /**
  * Widget container class
  */
@@ -18,6 +20,12 @@ class Widget_Container extends Container {
 		$this->id = $unique_id;
 		$this->title = '';
 		$this->type = $type;
+
+		$this->condition_collection = App::resolve( 'container_condition_fulfillable_collection' );
+		$this->condition_collection->set_condition_type_list(
+			array_merge( $this->get_condition_types( true ), $this->get_condition_types( false ) ),
+			true
+		);
 	}
 
 	/**
@@ -31,16 +39,39 @@ class Widget_Container extends Container {
 	}
 
 	/**
+	 * Get environment array for page request (in admin)
+	 *
+	 * @return array
+	 **/
+	protected function get_environment_for_request() {
+		return array();
+	}
+
+	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
 	 **/
 	public function is_valid_attach_for_request() {
 		$screen = get_current_screen();
-		$request_action = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
+		$input = stripslashes_deep( $_REQUEST );
+		$request_action = isset( $input['action'] ) ? $input['action'] : '';
 		$is_widget_save = ( $request_action === 'save-widget' );
 
-		return $screen && $screen->id === 'widgets' || $is_widget_save;
+		if ( ( ! $screen || $screen->id !== 'widgets' ) && ! $is_widget_save ) {
+			return false;
+		}
+
+		return $this->static_conditions_pass();
+	}
+
+	/**
+	 * Get environment array for object id
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		return array();
 	}
 
 	/**
@@ -50,7 +81,7 @@ class Widget_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
-		return true;
+		return $this->all_conditions_pass( intval( $object_id ) );
 	}
 
 	/**

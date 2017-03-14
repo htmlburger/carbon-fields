@@ -15,7 +15,6 @@ use Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 use Carbon_Fields\REST_API\Router as REST_API_Router;
 use Carbon_Fields\REST_API\Decorator as REST_API_Decorator;
 
-
 /**
  * Holds a static reference to the ioc container
  */
@@ -85,7 +84,6 @@ class App {
 		};
 
 		/* Services */
-
 		$ioc['meta_query_service'] = function( $ioc ) {
 			return new Meta_Query_Service( $ioc['container_repository'], $ioc['key_toolset'] );
 		};
@@ -97,6 +95,8 @@ class App {
 		$ioc['rest_api_service'] = function( $ioc ) {
 			return new REST_API_Service( $ioc['rest_api_router'], $ioc['rest_api_decorator'] );
 		};
+
+		\Carbon_Fields\Installer\Container_Condition_Installer::install( $ioc );
 
 		return $ioc;
 	}
@@ -119,6 +119,16 @@ class App {
 	 */
 	public static function service( $service_name ) {
 		return static::resolve( $service_name . '_service' );
+	}
+
+	/**
+	 * Check if a dependency is registered
+	 *
+	 * @param string $key
+	 * @return bool
+	 */
+	public static function has( $key ) {
+		return isset( static::instance()->ioc[ $key ] );
 	}
 
 	/**

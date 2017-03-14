@@ -9,6 +9,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Nav menu item fields container class.
  */
 class Nav_Menu_Item_Container extends Container {
+	
 	/**
 	 * Array of container clones for every menu item
 	 *
@@ -62,7 +63,7 @@ class Nav_Menu_Item_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_save() {
-		return $this->verified_nonce_in_request();
+		return $this->verified_nonce_in_request() && $this->is_valid_attach_for_object();
 	}
 
 	/**
@@ -79,6 +80,15 @@ class Nav_Menu_Item_Container extends Container {
 	}
 
 	/**
+	 * Get environment array for page request (in admin)
+	 *
+	 * @return array
+	 **/
+	protected function get_environment_for_request() {
+		return array();
+	}
+
+	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
@@ -86,16 +96,26 @@ class Nav_Menu_Item_Container extends Container {
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
-		if ( $pagenow === 'nav-menus.php' ) {
-			return true;
+		if ( $pagenow !== 'nav-menus.php' ) {
+			return false;
 		}
 
-		$action = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX && $action === 'add-menu-item' ) {
-			return true;
+		$input = stripslashes_deep( $_REQUEST );
+		$action = isset( $input['action'] ) ? $input['action'] : '';
+		if ( defined( 'DOING_AJAX' ) && ( ! DOING_AJAX || $action !== 'add-menu-item' ) ) {
+			return false;
 		}
 
-		return false;
+		return $this->static_conditions_pass();
+	}
+
+	/**
+	 * Get environment array for object id
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		return array();
 	}
 
 	/**
@@ -115,7 +135,7 @@ class Nav_Menu_Item_Container extends Container {
 			return false;
 		}
 
-		return true;
+		return $this->all_conditions_pass( intval( $post->ID ) );
 	}
 
 	/**

@@ -38,12 +38,12 @@ class Decorator {
 
 		$containers = $this->container_repository->get_containers();
 		$containers = array_filter( $containers, function( $container ) {
-			return ( $container->type !== 'Theme_Options' );
+			return ( $container->type !== 'theme_options' );
 		} );
 
 		foreach ( $containers as $container ) {
 			$fields = $container->get_fields();
-			$context = strtolower( $container->type );
+			$context = $container->type;
 			$type_callable = array( __CLASS__, "get_{$context}_container_settings" );
 			if ( ! is_callable( $type_callable ) ) {
 				continue; // unsupported container type
@@ -82,7 +82,7 @@ class Decorator {
 	 * @return array
 	 */	
 	public static function get_post_meta_container_settings( $container ) {
-		return $container->settings['post_type'];
+		return $container->get_post_type_visibility();
 	}
 
 	/**
@@ -91,7 +91,7 @@ class Decorator {
 	 * @return array
 	 */	
 	public static function get_term_meta_container_settings( $container ) {
-		return $container->settings['taxonomy'];
+		return $container->get_taxonomy_visibility();
 	}
 
 	/**

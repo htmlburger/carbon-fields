@@ -14,7 +14,8 @@ import {
 	addContainer,
 	removeContainer,
 	setMeta,
-	setUI
+	setUI,
+	setContainerMeta
 } from 'containers/actions';
 
 /**
@@ -31,5 +32,6 @@ export default decorateContainerReducer(handleActions({
 	[removeContainer]: (state, { payload }) => immutable.del(state, payload),
 	[setMeta]: (state, { payload: { containerId, meta }}) => immutable.assign(state, `${containerId}.meta`, meta),
 	[setUI]: (state, { payload: { containerId, ui }}) => immutable.assign(state, `${containerId}.ui`, ui),
+	[setContainerMeta]: (state, { payload: { containerId, key, value }}) => immutable.set(state, `${containerId}.meta.${key}`, value),
 	[resetStore]: (state, { payload: { containers }}) => containers,
 }, {}));
