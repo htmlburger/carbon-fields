@@ -21,7 +21,7 @@ import { removeContainer, receiveContainer, validateContainer, submitForm } from
 import { getContainerById } from 'containers/selectors';
 
 import { removeFields, redrawMap } from 'fields/actions';
-import { getFieldById } from 'fields/selectors';
+import { getFieldById, getFieldsByRoots } from 'fields/selectors';
 
 /**
  * Re-init the container when the widget is created/saved.
@@ -105,6 +105,11 @@ export function* workerFormSubmit() {
 	}
 }
 
+/**
+ * Handle widget expand
+ * 
+ * @return {void}
+ */
 export function* workerWidgetExpand() {
 	const channel = yield call(createClickChannel, '.widget-top');
 	while (true) {

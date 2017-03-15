@@ -11,7 +11,7 @@ import { redrawMap } from 'fields/actions';
 import { TYPE_MAP, TYPE_COMPLEX } from 'fields/constants';
 import { mapResizeEvent } from 'fields/helpers';
 
-import { TYPE_WIDGET } from 'containers/constants';
+import { TYPE_WIDGET, TYPE_NAV_MENU_ITEM } from 'containers/constants';
 
 /**
  * Trigger resize for each Google map
@@ -39,6 +39,9 @@ function workerDrawer({ payload: { fields, context } }) {
 		
 		if (context === TYPE_COMPLEX) {
 			selector = `#${maps[0].parent} .carbon-map-canvas`;
+		}
+
+		if (context === TYPE_NAV_MENU_ITEM) {
 		}
 
 		const mapContainers = document.querySelectorAll(selector);
