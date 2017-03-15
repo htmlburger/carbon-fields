@@ -165,3 +165,12 @@ export const validateField = createAction('fields/VALIDATE_FIELD', fieldId => ({
  * @return {Object}
  */
 export const validateFields = createAction('fields/VALIDATE_FIELDS');
+
+/**
+ * Trigger Google Map redraw
+ *
+ * @param {Object} fields
+ * @param {String} context
+ * @return {Object}
+ */
+export const redrawMap = createAction('fields/REDRAW_MAP', (fields, context) => ({ fields, context }));

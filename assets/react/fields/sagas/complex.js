@@ -22,7 +22,8 @@ import {
 	updateField, setUI,
 	addComplexGroup,
 	cloneComplexGroup,
-	removeComplexGroup
+	removeComplexGroup,
+	redrawMap
 } from 'fields/actions';
 
 import { TYPE_COMPLEX } from 'fields/constants';
@@ -76,7 +77,8 @@ export function* workerAddOrCloneComplexGroup({ type, payload: { fieldId, groupI
 			group,
 		]
 	}));
-
+	yield put(redrawMap(fields, TYPE_COMPLEX));
+	
 	if (isTabbed) {
 		yield put(setUI(fieldId, {
 			current_tab: group.id,

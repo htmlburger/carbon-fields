@@ -9,6 +9,7 @@ import { keyBy } from 'lodash';
 /**
  * The internal dependencies.
  */
+import { TYPE_WIDGET } from 'containers/constants';
 import { PAGE_NOW_WIDGETS, PAGE_NOW_MENUS } from 'lib/constants';
 
 import containerFactory from 'containers/factory';
@@ -21,7 +22,7 @@ import {
 	setUI
 } from 'containers/actions';
 
-import { addFields } from 'fields/actions';
+import { addFields, redrawMap } from 'fields/actions';
 import { flattenField } from 'fields/helpers';
 
 /**
@@ -44,6 +45,7 @@ export function* workerReceiveContainer(store, { payload }) {
 
 	yield put(addContainer(container));
 	yield put(addFields(fields));
+	yield put(redrawMap(fields, TYPE_WIDGET));
 
 	const { id, type } = container;
 
