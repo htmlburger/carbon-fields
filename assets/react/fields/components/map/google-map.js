@@ -131,7 +131,7 @@ class GoogleMap extends React.Component {
 		google.maps.event.addListener(this.marker, 'dragend', handleDragEnd);
 
 		// Add custom resize event for the cases when the map is rended into a hidden div
-		this.node.addEventListener('carbon_google_map_resize', () => {
+		this.node.addEventListener(mapResizeEvent.type, () => {
 			google.maps.event.trigger(this.map, 'resize');
 			this.map.setCenter(new google.maps.LatLng(this.marker.getPosition().lat(), this.marker.getPosition().lng()));
 		}, false);

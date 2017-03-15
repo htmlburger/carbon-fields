@@ -16,11 +16,12 @@ import {
 	createClickChannel
 } from 'lib/events';
 
+import { TYPE_WIDGET } from 'containers/constants';
 import { removeContainer, receiveContainer, validateContainer, submitForm } from 'containers/actions';
 import { getContainerById } from 'containers/selectors';
 
-import { removeFields } from 'fields/actions';
-import { getFieldsByRoots } from 'fields/selectors';
+import { removeFields, redrawMap } from 'fields/actions';
+import { getFieldById } from 'fields/selectors';
 
 /**
  * Re-init the container when the widget is created/saved.
@@ -104,6 +105,30 @@ export function* workerFormSubmit() {
 	}
 }
 
+export function* workerWidgetExpand() {
+	const channel = yield call(createClickChannel, '.widget-top');
+	while (true) {
+		const { event } = yield take(channel);
+		const containerId = $(event.target)
+			.closest('.widget:not(.open)')
+			.find('input[name="widget-id"]')
+				.val();
+
+		if (!containerId) {
+			continue;
+		}
+
+		const container = yield select(getContainerById, containerId);
+		let fields = [];
+
+		for ( let i = 0; i < container.fields.length; i++ ) {
+			fields.push(yield select(getFieldById, container.fields[i].id));
+		}
+
+		yield put(redrawMap(fields, TYPE_WIDGET));
+	}
+}
+
 /**
  * Start to work.
  *
@@ -119,6 +144,7 @@ export default function* foreman() {
 	yield [
 		call(workerUpdate),
 		call(workerCleanup),
-		call(workerFormSubmit),
+		call(workerWidgetExpand),
+		call(workerFormSubmit)
 	];
 }

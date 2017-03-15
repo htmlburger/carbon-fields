@@ -31,15 +31,18 @@ function workerDrawer({ payload: { fields, context } }) {
 	}
 
 	setTimeout( () => {
+		let selector = '';
+
 		if (context === TYPE_WIDGET) {
-			const mapContainers = document.querySelectorAll(`.carbon-container-${maps[0].parent} .carbon-map-canvas`);
-			mapContainers.forEach( (container) => container.dispatchEvent(mapResizeEvent));
+			selector = `.carbon-container-${maps[0].parent} .carbon-map-canvas`;
 		}
 		
 		if (context === TYPE_COMPLEX) {
-			const mapContainers = document.querySelectorAll(`#${maps[0].parent} .carbon-map-canvas`);
-			mapContainers.forEach( (container) => container.dispatchEvent(mapResizeEvent));
-		}	
+			selector = `#${maps[0].parent} .carbon-map-canvas`;
+		}
+
+		const mapContainers = document.querySelectorAll(selector);
+		mapContainers.forEach( (container) => container.dispatchEvent(mapResizeEvent));
 	}, 10);
 }
 
