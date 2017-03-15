@@ -110,7 +110,9 @@ class Association_Field extends Relationship_Field {
 			$title = get_the_title( $id );
 		} elseif ( $type === 'term' ) {
 			$term = get_term_by( 'id', $id, $subtype );
-			$title = $term->name;
+			if ( $term ) {
+				$title = $term->name;
+			}
 		} elseif ( $type === 'user' ) {
 			$title = get_the_author_meta( 'user_login', $id );
 		} elseif ( $type === 'comment' ) {
