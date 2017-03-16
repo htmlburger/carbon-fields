@@ -16,12 +16,12 @@ import {
 	createClickChannel
 } from 'lib/events';
 
-import { TYPE_WIDGET } from 'containers/constants';
 import { removeContainer, receiveContainer, validateContainer, submitForm } from 'containers/actions';
 import { getContainerById } from 'containers/selectors';
 
 import { removeFields, redrawMap } from 'fields/actions';
 import { getFieldById, getFieldsByRoots } from 'fields/selectors';
+import { TYPE_MAP } from 'fields/constants';
 
 /**
  * Re-init the container when the widget is created/saved.
@@ -107,7 +107,7 @@ export function* workerFormSubmit() {
 
 /**
  * Handle widget expand
- * 
+ *
  * @return {void}
  */
 export function* workerWidgetExpand() {
@@ -124,13 +124,12 @@ export function* workerWidgetExpand() {
 		}
 
 		const container = yield select(getContainerById, containerId);
-		let fields = [];
 
 		for ( let i = 0; i < container.fields.length; i++ ) {
-			fields.push(yield select(getFieldById, container.fields[i].id));
+			if (container.fields[i].type === TYPE_MAP) {
+				yield put(redrawMap(container.fields[i].id));
+			}
 		}
-
-		yield put(redrawMap(fields, TYPE_WIDGET));
 	}
 }
 

@@ -10,12 +10,12 @@ import { put, call, take, select } from 'redux-saga/effects';
 import { PAGE_NOW_MENUS } from 'lib/constants';
 import { createAjaxSuccessChannel, createSubmitChannel, createClickChannel } from 'lib/events';
 
-import { TYPE_NAV_MENU_ITEM } from 'containers/constants';
 import { receiveContainer, validateAllContainers, submitForm } from 'containers/actions';
 import { getContainerById } from 'containers/selectors';
 
 import { redrawMap } from 'fields/actions';
 import { getFieldById } from 'fields/selectors';
+import { TYPE_MAP } from 'fields/constants';
 
 /**
  * Init the container when the menu item is created.
@@ -79,13 +79,12 @@ export function* workerItemExpand() {
 		}
 
 		const container = yield select(getContainerById, containerId);
-		let fields = [];
 
 		for ( let i = 0; i < container.fields.length; i++ ) {
-			fields.push(yield select(getFieldById, container.fields[i].id));
+			if (container.fields[i].type === TYPE_MAP) {
+				yield put(redrawMap(container.fields[i].id));
+			}
 		}
-
-		yield put(redrawMap(fields, TYPE_NAV_MENU_ITEM));
 	}
 }
 

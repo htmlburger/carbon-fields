@@ -65,6 +65,7 @@ const MapField = ({ name, field, handleChange, handleSearchSubmit }) => {
 			lat={field.lat}
 			lng={field.lng}
 			zoom={field.zoom}
+			redraw={field.ui.redraw_map ? field.ui.redraw_map : false }
 			onChange={handleChange} />
 	</Field>;
 };
@@ -123,7 +124,7 @@ const handleSearchSubmit = ({ field, geocodeAddress }) => address => geocodeAddr
 export default setStatic('type', [TYPE_MAP])(
 	compose(
 		withStore(undefined, mapDispatchToProps),
-		withSetup(),
+		withSetup({}, {redraw_map: false}),
 		withHandlers({ handleChange, handleSearchSubmit })
 	)(MapField)
 );

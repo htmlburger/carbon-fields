@@ -131,10 +131,3 @@ export function restoreField(field, all) {
 export function* stopSaga(fieldId, tasks) {
 	yield call(cancelTasks, teardownField, tasks, ({ payload }) => payload.fieldId === fieldId);
 }
-
-/**
- * Create event for Google Map resize
- *  
- * @return {Event}
- */
-export const mapResizeEvent = new Event('carbon_google_map_resize');

@@ -19,7 +19,8 @@ import {
 	markFieldAsValid,
 	markFieldAsInvalid,
 	expandComplexGroup,
-	collapseComplexGroup
+	collapseComplexGroup,
+	redrawMap
 } from 'fields/actions';
 
 /**
@@ -47,4 +48,6 @@ export default decorateFieldReducer(handleActions({
 
 		return immutable.set(state, `${fieldId}.value.${index}.collapsed`, collapsed);
 	},
+
+	[redrawMap]: (state, { payload: { fieldId }}) => immutable.assign(state, `${fieldId}.ui`, {redraw_map: true}),
 }, {}));
