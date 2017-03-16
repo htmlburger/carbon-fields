@@ -2,99 +2,48 @@
  * The external dependencies.
  */
 import ReactDOM from 'react-dom';
-import { takeEvery } from 'redux-saga';
-import {
-	take,
-	call,
-	put,
-	fork,
-	select,
-	cancel
-} from 'redux-saga/effects';
+import { take, call, put, fork, select } from 'redux-saga/effects';
+import { isEmpty, mapValues } from 'lodash';
 
 /**
  * The internal dependencies.
  */
 import { resetStore } from 'store/actions';
 import { normalizePreloadedState } from 'store/helpers';
-import {
-	createSelectboxChannel,
-	createAjaxChannel,
-	createSubmitChannel,
-	createClickChannel
-} from 'lib/events';
+
+import { ready } from 'lib/actions';
+import { createSelectboxChannel, createAjaxChannel, createSubmitChannel, createClickChannel } from 'lib/events';
 
 import containerFactory from 'containers/factory';
-import { stopSaga } from 'containers/helpers';
+import { setContainerMeta, validateAllContainers, submitForm } from 'containers/actions';
+import { getContainers, getContainersByType } from 'containers/selectors';
 import { TYPE_TERM_META } from 'containers/constants';
 
-import {
-	getContainers,
-	getContainerById,
-	canProcessAction
-} from 'containers/selectors';
-
-import {
-	setupContainer,
-	validateAllContainers,
-	setMeta,
-	setUI,
-	submitForm
-} from 'containers/actions';
-
-import { walkAndEvaluate } from 'containers/conditions';
-
 /**
- * Keep in sync the `level` property.
+ * Keep in sync the `term_level` property.
  *
- * @param  {String} containerId
+ * @param  {Object} containers
  * @return {void}
  */
-export function* workerSyncLevel(containerId) {
+export function* workerSyncTermLevel(containers) {
 	const channel = yield call(createSelectboxChannel, 'select#parent');
 
-	try {
-		while (true) {
-			const { option } = yield take(channel);
-			let level = 1;
+	while (true) {
+		const { option } = yield take(channel);
+		let level = 1;
 
-			if (option.className) {
-				const matches = option.className.match(/^level-(\d+)/);
+		if (option.className) {
+			const matches = option.className.match(/^level-(\d+)/);
 
-				if (matches) {
-					level = parseInt(matches[1], 10) + 2;
-				}
+			if (matches) {
+				level = parseInt(matches[1], 10) + 2;
 			}
-
-			yield put(setMeta({
-				containerId,
-				meta: {
-					term_level: level,
-				}
-			}));
 		}
-	} finally {
-		channel.close();
+
+		const payload = mapValues(containers, () => ({ term_level: level }));
+
+		yield put(setContainerMeta(payload));
 	}
-}
-
-/**
- * Setup the initial state of the container.
- *
- * @param  {Object} action
- * @return {void}
- */
-export function* workerSetupContainer(action) {
-	const { containerId } = action.payload;
-
-	// Don't do anything if the type isn't correct.
-	if (!(yield select(canProcessAction, containerId, TYPE_TERM_META))) {
-		return;
-	}
-
-	yield call(stopSaga, containerId, yield [
-		fork(workerSyncLevel, containerId),
-	]);
 }
 
 /**
@@ -155,13 +104,23 @@ export function* workerFormSubmit(channelCreator, selector) {
 /**
  * Start to work.
  *
+ * @param  {Object} store
  * @return {void}
  */
 export default function* foreman(store) {
-	yield [
-		takeEvery(setupContainer, workerSetupContainer),
-		call(workerReset, store),
-		call(workerFormSubmit, createClickChannel, 'form#addtag #submit'),
-		call(workerFormSubmit, createSubmitChannel, 'form#edittag'),
-	];
+	const containers = yield select(getContainersByType, TYPE_TERM_META);
+
+	// Nothing to do.
+	if (isEmpty(containers)) {
+		return;
+	}
+
+	// Block and wait for a `READY` event.
+	yield take(ready);
+
+	// Start the workers.
+	yield fork(workerSyncTermLevel, containers);
+	yield fork(workerFormSubmit, createClickChannel, 'form#addtag #submit');
+	yield fork(workerFormSubmit, createSubmitChannel, 'form#edittag');
+	yield fork(workerReset, store);
 }

@@ -28,10 +28,10 @@ const conditions = {
  * @param  {Object} env
  * @return {Boolean}
  */
-export function walkAndEvaluate(collection, env) {
+export function evaluteConditions(collection, env) {
 	const results = collection.conditions.map(definition => {
 		if (definition.relation) {
-			return walkAndEvaluate(definition, env);
+			return evaluteConditions(definition, env);
 		} else {
 			return get(conditions, definition.type, base)
 				.isFulfiled(definition, env);

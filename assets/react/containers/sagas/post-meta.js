@@ -1,74 +1,60 @@
 /**
  * The external dependencies.
  */
-import $ from 'jquery';
-import { takeEvery } from 'redux-saga';
 import { take, call, put, fork, select } from 'redux-saga/effects';
-import { reduce, isEmpty, isArray, camelCase } from 'lodash';
+import { isEmpty, mapValues, defaultTo } from 'lodash';
 
 /**
  * The internal dependencies.
  */
-import {
-	createSelectboxChannel,
-	createCheckableChannel,
-	createSubmitChannel,
-	createTextChangeChannel
-} from 'lib/events';
+import { ready } from 'lib/actions';
+import { createSelectboxChannel, createCheckableChannel, createSubmitChannel, createTextChangeChannel } from 'lib/events';
 
-import { PAGE_NOW_PAGE } from 'lib/constants';
-
-import { getContainerById, canProcessAction } from 'containers/selectors';
-
-import {
-	setupContainer,
-	validateAllContainers,
-	setMeta,
-	setUI,
-	submitForm,
-	setContainerMeta
-} from 'containers/actions';
-
+import { getContainersByType } from 'containers/selectors';
+import { validateAllContainers, submitForm, setContainerMeta } from 'containers/actions';
 import { TYPE_POST_META } from 'containers/constants';
-import { SETUP_CONTAINER, SET_META } from 'containers/actions';
-import { walkAndEvaluate } from 'containers/conditions';
 
 /**
- * Keep in sync the `page_template` property.
+ * Dispatch the action that will update the store.
  *
- * @param  {String} containerId
+ * @param  {Object} containers
+ * @param  {Object} meta
  * @return {void}
  */
-export function* workerSyncPageTemplate(containerId) {
+function* syncStore(containers, meta) {
+	yield put(setContainerMeta(mapValues(containers, () => meta)));
+}
+
+/**
+ * Keep in sync the `post_template` property.
+ *
+ * @param  {Object} containers
+ * @return {void}
+ */
+export function* workerSyncPostTemplate(containers) {
 	const channel = yield call(createSelectboxChannel, 'select#page_template');
 
 	while (true) {
 		const { value } = yield take(channel);
 
-		yield put(setMeta({
-			containerId,
-			meta: {
-				post_template: value,
-			}
-		}));
+		yield call(syncStore, containers, {
+			post_template: value,
+		});
 	}
 }
 
 /**
- * Keep in sync the `parent_id` property.
+ * Keep in sync the `post_parent_id` & `post_level` properties.
  *
- * @param  {String} containerId
+ * @param  {Object} containers
  * @return {void}
  */
-export function* workerSyncParentId(containerId) {
+export function* workerSyncPostParentId(containers) {
 	const channel = yield call(createSelectboxChannel, 'select#parent_id');
 
 	while (true) {
-		let { value, option } = yield take(channel);
-
-		value = parseInt(value, 10);
-		value = isNaN(value) ? null : value;
-
+		const { value, option } = yield take(channel);
+		const parentId = defaultTo(parseInt(value, 10), null);
 		let level = 1;
 
 		if (option.className) {
@@ -79,92 +65,87 @@ export function* workerSyncParentId(containerId) {
 			}
 		}
 
-		yield put(setMeta({
-			containerId,
-			meta: {
-				post_parent_id: value,
-				post_level: level,
-			}
-		}));
+		yield call(syncStore, containers, {
+			post_parent_id: parentId,
+			post_level: level,
+		});
 	}
 }
 
 /**
  * Keep in sync the `post_format` property.
  *
- * @param  {String} containerId
+ * @param  {Object} containers
  * @return {void}
  */
-export function* workerSyncPostFormat(containerId) {
+export function* workerSyncPostFormat(containers) {
 	const channel = yield call(createCheckableChannel, '#post-formats-select');
 
 	while (true) {
 		const { values } = yield take(channel);
 
-		yield put(setMeta({
-			containerId,
-			meta: {
-				post_format: values[0],
-			}
-		}));
+		yield call(syncStore, containers, {
+			post_format: values[0],
+		});
 	}
 }
 
-export function* setupSyncTerms(containerId, selector, worker) {
+/**
+ * Setup the workers for different terms.
+ *
+ * @param  {Object}   containers
+ * @param  {String}   selector
+ * @param  {Function} worker
+ * @return {void}
+ */
+function* setupSyncTerms(containers, selector, worker) {
 	const elements = document.querySelectorAll(`div[id^="${selector}"]`);
 
 	for (const element of elements) {
-		yield fork(worker, containerId, element.id.replace(selector, ''));
+		yield fork(worker, containers, element.id.replace(selector, ''));
 	}
 }
 
-export function* workerSyncHierarchicalTerms(containerId, taxonomy) {
+/**
+ * Keep in sync the hierarchical terms(e.g categories).
+ *
+ * @param  {Object} containers
+ * @param  {String} taxonomy
+ * @return {void}
+ */
+export function* workerSyncHierarchicalTerms(containers, taxonomy) {
 	const channel = yield call(createCheckableChannel, `#${taxonomy}checklist`);
 
 	while (true) {
 		const { values } = yield take(channel);
 
-		yield put(setContainerMeta(
-			containerId,
-			`post_term.${taxonomy}`,
-			values.map(value => parseInt(value, 10))
-		));
+		yield call(syncStore, containers, {
+			post_term: {
+				[taxonomy]: values.map(value => parseInt(value, 10))
+			},
+		});
 	}
 }
 
-export function* workerSyncNonHierarchicalTerms(containerId, taxonomy) {
+/**
+ * Keep in sync the non-hierarchical terms(e.g tags).
+ *
+ * @param  {Object} containers
+ * @param  {String} taxonomy
+ * @return {void}
+ */
+export function* workerSyncNonHierarchicalTerms(containers, taxonomy) {
 	const channel = yield call(createTextChangeChannel, `#${taxonomy} .the-tags`);
 
 	while (true) {
 		const { value } = yield take(channel);
 
-		yield put(setContainerMeta(
-			containerId,
-			`post_term.${taxonomy}`,
-			value.split(/,\s*/)
-		));
+		yield call(syncStore, containers, {
+			post_term: {
+				[taxonomy]: value ? value.split(/,\s*/) : [],
+			},
+		});
 	}
-}
-
-/**
- * Setup the initial state of the container.
- *
- * @param  {Object} action
- * @return {void}
- */
-export function* workerSetupContainer(action) {
-	const { containerId } = action.payload;
-
-	// Don't do anything if the type isn't correct.
-	if (!(yield select(canProcessAction, containerId, TYPE_POST_META))) {
-		return;
-	}
-
-	yield fork(workerSyncPageTemplate, containerId);
-	yield fork(workerSyncParentId, containerId);
-	yield fork(workerSyncPostFormat, containerId);
-	yield fork(setupSyncTerms, containerId, 'taxonomy-', workerSyncHierarchicalTerms);
-	yield fork(setupSyncTerms, containerId, 'tagsdiv-', workerSyncNonHierarchicalTerms);
 }
 
 /**
@@ -186,11 +167,25 @@ export function* workerFormSubmit() {
 /**
  * Start to work.
  *
+ * @param  {Object} store
  * @return {void}
  */
 export default function* foreman() {
-	yield [
-		takeEvery(setupContainer, workerSetupContainer),
-		call(workerFormSubmit)
-	];
+	const containers = yield select(getContainersByType, TYPE_POST_META);
+
+	// Nothing to do.
+	if (isEmpty(containers)) {
+		return;
+	}
+
+	// Block and wait for a `READY` event.
+	yield take(ready);
+
+	// Start the workers.
+	yield fork(workerSyncPostTemplate, containers);
+	yield fork(workerSyncPostParentId, containers);
+	yield fork(workerSyncPostFormat, containers);
+	yield fork(setupSyncTerms, containers, 'taxonomy-', workerSyncHierarchicalTerms);
+	yield fork(setupSyncTerms, containers, 'tagsdiv-', workerSyncNonHierarchicalTerms);
+	yield fork(workerFormSubmit);
 }
