@@ -2,6 +2,7 @@
  * The external dependencies.
  */
 import { createAction } from 'redux-actions';
+import { isString } from 'lodash';
 
 /**
  * Perform the initial setup of the container.
@@ -34,12 +35,22 @@ export const setMeta = createAction('containers/SET_META');
 /**
  * Update the object that keeps the meta information.
  *
- * @param  {String} containerId
- * @param  {String} key
- * @param  {mixed}  value
+ * @param  {String|Object} containers
+ * @param  {String} [key]
+ * @param  {mixed}  [value]
  * @return {Object}
  */
-export const setContainerMeta = createAction('containres/SET_META', (containerId, key, value) => ({ containerId, key, value }));
+export const setContainerMeta = createAction('containers/SET_META', (containers, key, value) => {
+	if (isString(containers)) {
+		return {
+			[containers]: {
+				[key]: value
+			}
+		};
+	}
+
+	return containers;
+});
 
 /**
  * Update the object that contains information about container's UI.
@@ -50,6 +61,26 @@ export const setContainerMeta = createAction('containres/SET_META', (containerId
  * @return {Object}
  */
 export const setUI = createAction('containers/SET_UI');
+
+/**
+ * Update the object that keeps the information about container's UI.
+ *
+ * @param  {String|Object} containers
+ * @param  {String} [key]
+ * @param  {mixed}  [value]
+ * @return {Object}
+ */
+export const setContainerUI = createAction('containers/SET_UI', (containers, key, value) => {
+	if (isString(containers)) {
+		return {
+			[containers]: {
+				[key]: value
+			}
+		};
+	}
+
+	return containers;
+});
 
 /**
  * Initialize a visibility check for the container.
@@ -102,7 +133,7 @@ export const validateContainer = createAction('containers/VALIDATE_CONTAINER', (
 
 /**
  * Notify for form submit in a container
- * 
+ *
  * @param  {Object} event
  */
 export const submitForm = createAction('containers/SUBMIT_FORM', (event) => ({ event }));

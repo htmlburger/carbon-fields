@@ -9,19 +9,17 @@ import { call, select, put } from 'redux-saga/effects';
  */
 import { PAGE_NOW_WIDGETS, PAGE_NOW_MENUS } from 'lib/constants';
 
-import { setupContainer, setUI, setContainerMeta, setMeta } from 'containers/actions';
-import { getContainerById } from 'containers/selectors';
-import { walkAndEvaluate } from 'containers/conditions';
+import { setupContainer, setContainerMeta, setContainerUI } from 'containers/actions';
+import { getContainers, getContainerById } from 'containers/selectors';
+import { evaluteConditions } from 'containers/conditions';
 
 /**
- * Show/hide the container.
+ * Show or hide the container.
  *
- * @param  {Object} action
- * @param  {Object} action.payload
- * @param  {String} action.payload.containerId
+ * @param  {String} containerId
  * @return {void}
  */
-export function* workerToggleVisibility({ payload: { containerId }}) {
+export function* toggleVisibility(containerId) {
 	const container = yield select(getContainerById, containerId);
 	const el = yield call([document, document.querySelector], `#${containerId}`);
 
@@ -33,22 +31,49 @@ export function* workerToggleVisibility({ payload: { containerId }}) {
 }
 
 /**
- * Check whether the container should be visible or hidden.
+ * Setup the initial visibility of the container.
  *
  * @param  {Object} action
  * @param  {Object} action.payload
  * @param  {String} action.payload.containerId
  * @return {void}
  */
-export function* workerCheckVisibility({ payload: { containerId }}) {
-	const container = yield select(getContainerById, containerId);
+export function* workerSetupVisibility({ payload: { containerId } }) {
+	yield call(toggleVisibility, containerId);
+}
 
-	yield put(setUI({
-		containerId,
-		ui: {
-			is_visible: walkAndEvaluate(container.conditions, container.meta),
-		}
-	}));
+/**
+ * Show/hide the containers.
+ *
+ * @param  {Object} action
+ * @param  {Object} action.payload
+ * @return {void}
+ */
+export function* workerToggleVisibility({ payload }) {
+	for (const id in payload) {
+		yield call(toggleVisibility, id);
+	}
+}
+
+/**
+ * Check whether the container should be visible or hidden.
+ *
+ * @param  {Object} action
+ * @param  {Object} action.payload
+ * @return {void}
+ */
+export function* workerCheckVisibility({ payload }) {
+	const containers = yield select(getContainers);
+
+	for (const id in payload) {
+		const container = containers[id];
+
+		payload[id] = {
+			is_visible: evaluteConditions(container.conditions, container.meta),
+		};
+	}
+
+	yield put(setContainerUI(payload));
 }
 
 /**
@@ -65,9 +90,8 @@ export default function* foreman(store) {
 	}
 
 	yield [
-		takeEvery(setupContainer, workerToggleVisibility),
-		takeEvery(setUI, workerToggleVisibility),
-		takeEvery(setMeta, workerCheckVisibility),
+		takeEvery(setupContainer, workerSetupVisibility),
+		takeEvery(setContainerUI, workerToggleVisibility),
 		takeEvery(setContainerMeta, workerCheckVisibility),
 	];
 }

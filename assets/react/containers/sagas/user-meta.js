@@ -1,77 +1,51 @@
 /**
  * The external dependencies.
  */
-import { isEmpty } from 'lodash';
-import { takeEvery } from 'redux-saga';
+import { isEmpty, mapValues } from 'lodash';
 import { take, call, put, fork, select } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
  */
+import { ready } from 'lib/actions';
 import { createSelectboxChannel, createSubmitChannel } from 'lib/events';
 
-import { getContainerById, canProcessAction } from 'containers/selectors';
-import { 
-	setupContainer,
-	validateAllContainers,
-	setMeta,
-	setUI,
-	submitForm 
-} from 'containers/actions';
+import { validateAllContainers, submitForm, setContainerMeta } from 'containers/actions';
+import { getContainersByType } from 'containers/selectors';
 import { TYPE_USER_META } from 'containers/constants';
-import { walkAndEvaluate } from 'containers/conditions';
 
 /**
- * Keep in sync the `role` property.
+ * Keep in sync the `user_role` property.
  *
- * @param  {String} containerId
+ * @param  {Object} containers
  * @return {void}
  */
-export function* workerSyncRole(containerId) {
+export function* workerSyncUserRole(containers) {
 	const channel = yield call(createSelectboxChannel, 'select#role');
 
 	try {
 		while (true) {
 			const { value } = yield take(channel);
 
-			yield put(setMeta({
-				containerId,
-				meta: {
-					user_role: value,
-				}
-			}));
+			yield put(setContainerMeta(mapValues(containers, () => ({ user_role: value }))));
 		}
 	} finally {
 		// The selectbox is missing on the profile page.
 		// So we need to read the role from the container in DOM.
-		const el = yield call([document, document.querySelector], `#${containerId}`);
+		const el = yield call([document, document.querySelector], `fieldset[data-profile-role]`);
 
 		if (el.dataset.profileRole) {
-			yield put(setMeta({
-				containerId,
-				meta: {
-					user_role: el.dataset.profileRole,
-				}
-			}));
+			// TODO: For some reason we can't use map-like methods because
+			// everything dies silently.
+			for (const id in containers) {
+				containers[id] = {
+					user_role: el.dataset.profileRole
+				};
+			}
+
+			yield put(setContainerMeta(containers));
 		}
 	}
-}
-
-/**
- * Setup the initial state of the container.
- *
- * @param  {Object} action
- * @return {void}
- */
-export function* workerSetupContainer(action) {
-	const { containerId } = action.payload;
-
-	// Don't do anything if the type isn't correct.
-	if (!(yield select(canProcessAction, containerId, TYPE_USER_META))) {
-		return;
-	}
-
-	yield fork(workerSyncRole, containerId);
 }
 
 /**
@@ -93,11 +67,21 @@ export function* workerFormSubmit() {
 /**
  * Start to work.
  *
+ * @param  {Object} store
  * @return {void}
  */
-export default function* foreman() {
-	yield [
-		takeEvery(setupContainer, workerSetupContainer),
-		call(workerFormSubmit),
-	];
+export default function* foreman(store) {
+	const containers = yield select(getContainersByType, TYPE_USER_META);
+
+	// Nothing to do.
+	if (isEmpty(containers)) {
+		return;
+	}
+
+	// Block and wait for a `READY` event.
+	yield take(ready);
+
+	// Start the workers.
+	yield fork(workerSyncUserRole, containers);
+	yield fork(workerFormSubmit);
 }

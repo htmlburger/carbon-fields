@@ -17,6 +17,7 @@ import {
 } from 'lib/registry';
 
 import { autoload, patchTagBoxAPI } from 'lib/helpers';
+import { ready } from 'lib/actions';
 
 import configureStore from 'store';
 import { normalizePreloadedState } from 'store/helpers';
@@ -84,4 +85,9 @@ export default function() {
 	 * Although the store will be shared between the applications.
 	 */
 	_.forEach(getContainers(store.getState()), ({ id, type }) => containerFactory(store, type, { id }));
+
+	/**
+	 * Notify that everything is ready.
+	 */
+	store.dispatch(ready());
 }
