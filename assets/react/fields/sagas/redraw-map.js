@@ -15,7 +15,7 @@ import { TYPE_WIDGET, TYPE_NAV_MENU_ITEM } from 'containers/constants';
 
 /**
  * Trigger resize for each Google map
- * 
+ *
  * @param {Object} action
  * @param {Object} action.fields
  * @param {String} action.context
@@ -36,12 +36,13 @@ function workerDrawer({ payload: { fields, context } }) {
 		if (context === TYPE_WIDGET) {
 			selector = `.carbon-container-${maps[0].parent} .carbon-map-canvas`;
 		}
-		
+
 		if (context === TYPE_COMPLEX) {
 			selector = `#${maps[0].parent} .carbon-map-canvas`;
 		}
 
 		if (context === TYPE_NAV_MENU_ITEM) {
+			selector = `.carbon-container-${maps[0].parent} .carbon-map-canvas`;
 		}
 
 		const mapContainers = document.querySelectorAll(selector);
