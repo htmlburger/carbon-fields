@@ -17,7 +17,8 @@ import {
 	setMeta,
 	setUI,
 	setContainerUI,
-	setContainerMeta
+	setContainerMeta,
+	switchContainerTab
 } from 'containers/actions';
 
 /**
@@ -57,5 +58,6 @@ export default decorateContainerReducer(handleActions({
 	[setUI]: (state, { payload: { containerId, ui }}) => immutable.assign(state, `${containerId}.ui`, ui),
 	[setContainerUI]: (state, action) => setMetaOrUI(state, action, 'ui'),
 	[setContainerMeta]: (state, action) => setMetaOrUI(state, action, 'meta'),
+	[switchContainerTab]: (state, { payload: { containerId, tabId }}) => immutable.set(state, `${containerId}.ui.current_tab`, tabId),
 	[resetStore]: (state, { payload: { containers }}) => containers,
 }, {}));

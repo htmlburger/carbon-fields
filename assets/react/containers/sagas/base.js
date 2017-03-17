@@ -4,7 +4,7 @@
 import urldecode from 'locutus/php/url/urldecode';
 import { takeEvery } from 'redux-saga';
 import { call, select, put, take } from 'redux-saga/effects';
-import { keyBy } from 'lodash';
+import { keyBy, get } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -19,7 +19,8 @@ import {
 	setupContainer,
 	addContainer,
 	receiveContainer,
-	setUI
+	setUI,
+	switchContainerTab
 } from 'containers/actions';
 
 import { addFields, redrawMap } from 'fields/actions';
@@ -53,6 +54,24 @@ export function* workerReceiveContainer(store, { payload }) {
 }
 
 /**
+ * Add the current tab as hash in URL.
+ *
+ * @param  {Object} action
+ * @param  {Object} action.payload
+ * @param  {String} action.payload.containerId
+ * @param  {String} action.payload.tabId
+ * @return {void}
+ */
+export function* workerTabs({ payload: { containerId, tabId }}) {
+	const container = yield select(getContainerById, containerId);
+	const shouldChangeHash = yield call(get, container, 'ui.tabs_in_url', false);
+
+	if (shouldChangeHash) {
+		window.location.hash = `!${tabId}`;
+	}
+}
+
+/**
  * Start to work.
  *
  * @param  {Object} store
@@ -60,11 +79,10 @@ export function* workerReceiveContainer(store, { payload }) {
  */
 export default function* foreman(store) {
 	const { pagenow } = window;
-	const workers = [];
+
+	yield takeEvery(switchContainerTab, workerTabs);
 
 	if (pagenow === PAGE_NOW_WIDGETS || pagenow === PAGE_NOW_MENUS) {
-		workers.push(takeEvery(receiveContainer, workerReceiveContainer, store));
+		yield takeEvery(receiveContainer, workerReceiveContainer, store);
 	}
-
-	yield workers;
 }

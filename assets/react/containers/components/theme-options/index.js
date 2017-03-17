@@ -14,5 +14,7 @@ import { TYPE_THEME_OPTIONS } from 'containers/constants';
 export default compose(
 	setStatic('type', TYPE_THEME_OPTIONS),
 	withStore(),
-	withSetup()
+	withSetup({}, {
+		tabs_in_url: true
+	})
 )(Container);
