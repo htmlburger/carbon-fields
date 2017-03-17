@@ -8,7 +8,7 @@ import { put, call, take } from 'redux-saga/effects';
  * The internal dependencies.
  */
 import { PAGE_NOW_MENUS } from 'lib/constants';
-import { createAjaxSuccessChannel, createSubmitChannel } from 'lib/events';
+import { createAjaxChannel, createSubmitChannel } from 'lib/events';
 
 import { receiveContainer, validateAllContainers, submitForm } from 'containers/actions';
 
@@ -18,7 +18,7 @@ import { receiveContainer, validateAllContainers, submitForm } from 'containers/
  * @return {void}
  */
 export function* workerInit() {
-	const channel = yield call(createAjaxSuccessChannel, 'add-menu-item');
+	const channel = yield call(createAjaxChannel, 'ajaxSuccess', 'add-menu-item');
 
 	while (true) {
 		const { data } = yield take(channel);
