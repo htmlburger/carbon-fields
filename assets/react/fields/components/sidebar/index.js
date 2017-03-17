@@ -3,7 +3,7 @@
  */
 import React, { PropTypes } from 'react';
 import { compose, withHandlers, setStatic } from 'recompose';
-import { trim, find } from 'lodash';
+import { trim, find, kebabCase } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -127,6 +127,8 @@ const handleChange = ({ field, options, updateField, addSidebar }) => e => {
 			addSidebar(value);
 		}
 	}
+
+	value = kebabCase(value);
 
 	updateField(field.id, { value });
 };
