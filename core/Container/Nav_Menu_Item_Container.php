@@ -9,7 +9,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Nav menu item fields container class.
  */
 class Nav_Menu_Item_Container extends Container {
-	
+
 	/**
 	 * Array of container clones for every menu item
 	 *
@@ -34,7 +34,7 @@ class Nav_Menu_Item_Container extends Container {
 
 		// Register the custom edit walker only once
 		$callable = array( get_class(), 'edit_walker' );
-		if ( ! has_filter( 'wp_edit_nav_menu_walker', $callable ) ) {
+	if ( ! has_filter( 'wp_edit_nav_menu_walker', $callable ) ) {
 			add_filter( 'wp_edit_nav_menu_walker', $callable, 10, 2 );
 		}
 	}
@@ -96,13 +96,9 @@ class Nav_Menu_Item_Container extends Container {
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
-		if ( $pagenow !== 'nav-menus.php' ) {
-			return false;
-		}
-
 		$input = stripslashes_deep( $_REQUEST );
 		$action = isset( $input['action'] ) ? $input['action'] : '';
-		if ( defined( 'DOING_AJAX' ) && ( ! DOING_AJAX || $action !== 'add-menu-item' ) ) {
+		if ( $pagenow !== 'nav-menus.php' && ( defined( 'DOING_AJAX' ) && ( ! DOING_AJAX || $action !== 'add-menu-item' ) ) ) {
 			return false;
 		}
 
@@ -126,7 +122,7 @@ class Nav_Menu_Item_Container extends Container {
 	 **/
 	public function is_valid_attach_for_object( $object_id = null ) {
 		$post = get_post( $object_id );
-		
+
 		if ( ! $post ) {
 			return false;
 		}
@@ -152,7 +148,7 @@ class Nav_Menu_Item_Container extends Container {
 		if ( ! $this->is_valid_attach_for_request() ) {
 			return;
 		}
-		
+
 		$clone = $this->get_clone_for_menu_item( $current_menu_item_id, false );
 		$clone->_save();
 	}
