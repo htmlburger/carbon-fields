@@ -22,11 +22,10 @@ import {
 	updateField, setUI,
 	addComplexGroup,
 	cloneComplexGroup,
-	removeComplexGroup,
-	redrawMap
+	removeComplexGroup
 } from 'fields/actions';
 
-import { TYPE_COMPLEX, TYPE_MAP } from 'fields/constants';
+import { TYPE_COMPLEX } from 'fields/constants';
 
 /**
  * Prepare a clone or a new instance of the specified group.
@@ -82,13 +81,6 @@ export function* workerAddOrCloneComplexGroup({ type, payload: { fieldId, groupI
 		yield put(setUI(fieldId, {
 			current_tab: group.id,
 		}));
-	}
-
-	for ( let key in fields ) {
-		if (fields[key].type === TYPE_MAP) {
-			console.log(fields[key].id);
-			yield put(redrawMap(fields[key].id));
-		}
 	}
 }
 

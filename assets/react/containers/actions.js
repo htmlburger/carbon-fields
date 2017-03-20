@@ -23,14 +23,14 @@ export const setupContainer = createAction('containers/SETUP_CONTAINER', (contai
 export const teardownContainer = createAction('containers/TEARDOWN_CONTAINER', containerId => ({ containerId }));
 
 /**
- * Update the object that keeps the meta information.
+ * Prepare the payload of the actions that update the container's meta or UI.
  *
  * @param  {String|Object} containers
- * @param  {String} [key]
- * @param  {mixed}  [value]
+ * @param  {String} 	   [key]
+ * @param  {mixed}  	   [value]
  * @return {Object}
  */
-export const setContainerMeta = createAction('containers/SET_META', (containers, key, value) => {
+function setMetaOrUI(containers, key, value) {
 	if (isString(containers)) {
 		return {
 			[containers]: {
@@ -40,27 +40,10 @@ export const setContainerMeta = createAction('containers/SET_META', (containers,
 	}
 
 	return containers;
-});
+}
 
-/**
- * Update the object that keeps the information about container's UI.
- *
- * @param  {String|Object} containers
- * @param  {String} [key]
- * @param  {mixed}  [value]
- * @return {Object}
- */
-export const setContainerUI = createAction('containers/SET_UI', (containers, key, value) => {
-	if (isString(containers)) {
-		return {
-			[containers]: {
-				[key]: value
-			}
-		};
-	}
-
-	return containers;
-});
+export const setContainerMeta = createAction('containers/SET_META', setMetaOrUI);
+export const setContainerUI = createAction('containers/SET_UI', setMetaOrUI);
 
 /**
  * Add a new container to the store.
