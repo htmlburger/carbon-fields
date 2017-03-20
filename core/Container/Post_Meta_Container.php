@@ -91,7 +91,7 @@ class Post_Meta_Container extends Container {
 	 * @param int $post_id ID of the post against which save() is ran
 	 * @return bool
 	 **/
-	public function is_valid_save( $post_id = 0 ) {
+	public function is_valid_save() {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return false;
 		}
@@ -100,6 +100,8 @@ class Post_Meta_Container extends Container {
 			return false;
 		}
 
+		$params = func_get_args();
+		$post_id = $params[0];
 		$post_type = get_post_type( $post_id );
 		if ( $post_type === 'revision' ) {
 			return false;

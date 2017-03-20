@@ -276,8 +276,8 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return bool
 	 **/
 	final protected function _is_valid_save() {
-		$param = func_get_args();
-		$is_valid_save = call_user_func_array( array( $this, 'is_valid_save' ), $param );
+		$params = func_get_args();
+		$is_valid_save = call_user_func_array( array( $this, 'is_valid_save' ), $params );
 		return apply_filters( 'carbon_fields_container_is_valid_save', $is_valid_save, $this );
 	}
 

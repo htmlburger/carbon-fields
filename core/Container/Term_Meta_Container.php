@@ -51,15 +51,15 @@ class Term_Meta_Container extends Container {
 	/**
 	 * Checks whether the current save request is valid
 	 *
-	 * @param int $term_id ID of the term against which save() is ran
 	 * @return bool
 	 **/
-	public function is_valid_save( $term_id = null ) {
+	public function is_valid_save() {
 		if ( ! $this->verified_nonce_in_request() ) {
 			return false;
 		}
 
-		return $this->is_valid_attach_for_object( $term_id );
+		$params = func_get_args();
+		return $this->is_valid_attach_for_object( $params[0] );
 	}
 
 	/**

@@ -63,7 +63,12 @@ class Nav_Menu_Item_Container extends Container {
 	 * @return bool
 	 **/
 	public function is_valid_save() {
-		return $this->verified_nonce_in_request() && $this->is_valid_attach_for_object();
+		if ( ! $this->verified_nonce_in_request() ) {
+			return false;
+		}
+
+		$params = func_get_args();
+		return $this->is_valid_attach_for_object( $params[0] );
 	}
 
 	/**
@@ -97,8 +102,9 @@ class Nav_Menu_Item_Container extends Container {
 		global $pagenow;
 
 		$input = stripslashes_deep( $_REQUEST );
-		$action = isset( $input['action'] ) ? $input['action'] : '';
-		if ( $pagenow !== 'nav-menus.php' && ( defined( 'DOING_AJAX' ) && ( ! DOING_AJAX || $action !== 'add-menu-item' ) ) ) {
+		$ajax = defined( 'DOING_AJAX' ) ? DOING_AJAX : false;
+		$ajax_action = isset( $input['action'] ) ? $input['action'] : '';
+		if ( $pagenow !== 'nav-menus.php' && ( ! $ajax || $ajax_action !== 'add-menu-item' ) ) {
 			return false;
 		}
 
@@ -150,7 +156,7 @@ class Nav_Menu_Item_Container extends Container {
 		}
 
 		$clone = $this->get_clone_for_menu_item( $current_menu_item_id, false );
-		$clone->_save();
+		$clone->_save( $current_menu_item_id );
 	}
 
 	/**
