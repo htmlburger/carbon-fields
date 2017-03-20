@@ -205,6 +205,7 @@ const mapDispatchToProps = {
 	removeComplexGroup,
 	expandComplexGroup,
 	collapseComplexGroup,
+	redrawMap,
 };
 
 /**
@@ -352,9 +353,10 @@ const handleRemoveGroupClick = ({ field, removeComplexGroup }) => groupId => rem
  * @param  {Object}   props
  * @param  {Object}   props.field
  * @param  {Function} props.expandComplexGroup
+ * @param  {Function} props.redrawMap
  * @return {Function}
  */
-const handleGroupExpand = ({ field, expandComplexGroup }) => groupId => {
+const handleGroupExpand = ({ field, expandComplexGroup, redrawMap }) => groupId => {
 	expandComplexGroup(field.id, groupId);
 	const group = pickBy(field.value, (group) => {
 		return group.id === groupId;
