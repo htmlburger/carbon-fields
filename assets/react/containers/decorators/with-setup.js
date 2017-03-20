@@ -14,18 +14,16 @@ const hooks = {
 			container,
 			meta,
 			ui,
-			setupContainer,
-			checkVisibility,
+			setupContainer
 		} = this.props;
 
 		setupContainer(container.id, meta, ui);
-		checkVisibility(container.id);
 	},
 
 	componentWillUnmount() {
 		const {
 			container,
-			teardownContainer,
+			teardownContainer
 		} = this.props;
 
 		teardownContainer(container.id);

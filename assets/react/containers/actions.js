@@ -83,14 +83,6 @@ export const setContainerUI = createAction('containers/SET_UI', (containers, key
 });
 
 /**
- * Initialize a visibility check for the container.
- *
- * @param  {String} containerId
- * @return {Object}
- */
-export const checkVisibility = createAction('containers/CHECK_VISIBILITY');
-
-/**
  * Add a new container to the store.
  *
  * @param  {Object} container
