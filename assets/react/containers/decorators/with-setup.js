@@ -43,12 +43,9 @@ const defaultMeta = {};
  * @type {Object}
  */
 const defaultUI = {
-	has_error: false,
-	is_dirty: false,
 	is_visible: true,
 	current_tab: null,
 	tabs_in_url: false,
-	classes: [],
 };
 
 /**

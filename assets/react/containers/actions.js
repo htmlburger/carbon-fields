@@ -23,16 +23,6 @@ export const setupContainer = createAction('containers/SETUP_CONTAINER', (contai
 export const teardownContainer = createAction('containers/TEARDOWN_CONTAINER', containerId => ({ containerId }));
 
 /**
- * Update the object that holds additional fields for the container.
- *
- * @param  {Object} payload
- * @param  {String} payload.containerId
- * @param  {Object} payload.meta
- * @return {Object}
- */
-export const setMeta = createAction('containers/SET_META');
-
-/**
  * Update the object that keeps the meta information.
  *
  * @param  {String|Object} containers
@@ -51,16 +41,6 @@ export const setContainerMeta = createAction('containers/SET_META', (containers,
 
 	return containers;
 });
-
-/**
- * Update the object that contains information about container's UI.
- *
- * @param  {Object} payload
- * @param  {String} payload.containerId
- * @param  {Object} payload.ui
- * @return {Object}
- */
-export const setUI = createAction('containers/SET_UI');
 
 /**
  * Update the object that keeps the information about container's UI.

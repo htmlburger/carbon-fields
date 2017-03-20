@@ -3,9 +3,22 @@
  */
 import { pickBy } from 'lodash';
 
+/**
+ * Get all containers.
+ *
+ * @param  {Object} state
+ * @return {Object}
+ */
 export const getContainers = (state) => state.containers;
+
+/**
+ * Get a container by id.
+ *
+ * @param  {Object} state
+ * @param  {String} containerId
+ * @return {Object}
+ */
 export const getContainerById = (state, containerId) => state.containers[containerId];
-export const canProcessAction = (state, containerId, containerType) => getContainerById(state, containerId).type === containerType;
 
 /**
  * Get all containers by type.
