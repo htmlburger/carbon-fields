@@ -25,7 +25,6 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 				$ioc['container_condition_comparer_type_equality'],
 				$ioc['container_condition_comparer_type_contain'],
 				$ioc['container_condition_comparer_type_scalar'],
-				$ioc['container_condition_comparer_type_regex'],
 				$ioc['container_condition_comparer_type_custom'],
 			) );
 		} );
@@ -33,7 +32,6 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 			return new \Carbon_Fields\Container\Condition\Post_Type_Condition( array( 
 				$ioc['container_condition_comparer_type_equality'],
 				$ioc['container_condition_comparer_type_contain'],
-				$ioc['container_condition_comparer_type_regex'],
 				$ioc['container_condition_comparer_type_custom'],
 			) );
 		} );
@@ -50,9 +48,6 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 		} );
 		$ioc['container_condition_comparer_type_scalar'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Scalar_Comparer();
-		} );
-		$ioc['container_condition_comparer_type_regex'] = $ioc->factory( function() {
-			return new \Carbon_Fields\Container\Condition\Comparer\Regex_Comparer();
 		} );
 		$ioc['container_condition_comparer_type_custom'] = $ioc->factory( function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Custom_Comparer();

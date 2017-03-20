@@ -276,8 +276,8 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return bool
 	 **/
 	final protected function _is_valid_save() {
-		$param = func_get_args();
-		$is_valid_save = call_user_func_array( array( $this, 'is_valid_save' ), $param );
+		$params = func_get_args();
+		$is_valid_save = call_user_func_array( array( $this, 'is_valid_save' ), $params );
 		return apply_filters( 'carbon_fields_container_is_valid_save', $is_valid_save, $this );
 	}
 
@@ -720,7 +720,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 */
 	public function to_json( $load ) {
 		$array_translator = App::resolve( 'container_condition_translator_array' );
-		$conditions = $this->condition_collection->evaluate( $this->get_condition_types( true ), $this->get_environment_for_request() );
+		$conditions = $this->condition_collection->evaluate( $this->get_condition_types( true ), $this->get_environment_for_request(), array( 'CUSTOM' ) );
 		$conditions = $array_translator->fulfillable_to_foreign( $conditions );
 		$conditions = $array_translator->foreign_to_json( $conditions );
 

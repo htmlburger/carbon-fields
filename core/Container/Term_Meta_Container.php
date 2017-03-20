@@ -11,9 +11,7 @@ class Term_Meta_Container extends Container {
 	protected $term_id;
 
 	public $settings = array(
-		// TODO remove
-		'taxonomy' => array( 'category' ),
-		'show_on_level' => false,
+		
 	);
 
 	/**
@@ -35,14 +33,11 @@ class Term_Meta_Container extends Container {
 	 * Bind attach() and save() to the appropriate WordPress actions.
 	 **/
 	public function init() {
-		// force taxonomy to be array
-		if ( ! is_array( $this->settings['taxonomy'] ) ) {
-			$this->settings['taxonomy'] = array( $this->settings['taxonomy'] );
-		}
-
 		add_action( 'admin_init', array( $this, '_attach' ) );
 
-		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
+		$taxonomies = $this->get_taxonomy_visibility();
+
+		foreach ( $taxonomies as $taxonomy ) {
 			add_action( 'edited_' . $taxonomy, array( $this, '_save' ), 10, 2 );
 			add_action( 'created_' . $taxonomy, array( $this, '_save' ), 10, 2 );
 		}
@@ -51,15 +46,15 @@ class Term_Meta_Container extends Container {
 	/**
 	 * Checks whether the current save request is valid
 	 *
-	 * @param int $term_id ID of the term against which save() is ran
 	 * @return bool
 	 **/
-	public function is_valid_save( $term_id = null ) {
+	public function is_valid_save() {
 		if ( ! $this->verified_nonce_in_request() ) {
 			return false;
 		}
 
-		return $this->is_valid_attach_for_object( $term_id );
+		$params = func_get_args();
+		return $this->is_valid_attach_for_object( $params[0] );
 	}
 
 	/**
@@ -150,7 +145,9 @@ class Term_Meta_Container extends Container {
 	 * Add term meta for each of the container taxonomies
 	 **/
 	public function attach() {
-		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
+		$taxonomies = $this->get_taxonomy_visibility();
+
+		foreach ( $taxonomies as $taxonomy ) {
 			add_action( $taxonomy . '_edit_form_fields', array( $this, 'render' ), 10, 2 );
 			add_action( $taxonomy . '_add_form_fields', array( $this, 'render' ), 10, 2 );
 		}

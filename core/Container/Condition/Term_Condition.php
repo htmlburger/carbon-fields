@@ -26,7 +26,7 @@ use Carbon_Fields\Toolset\WP_Toolset;
  *             ...
  *         )
  *     
- *     Operators "REGEX" and CUSTOM" are passed the term_id
+ *     Operator "CUSTOM" is passed the term_id
  */
 class Term_Condition extends Condition {
 

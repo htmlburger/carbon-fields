@@ -88,11 +88,12 @@ class Widget_Container extends Container {
 	 *
 	 * @return bool
 	 **/
-	public function is_valid_save( $object_id = 0 ) {
+	public function is_valid_save() {
 		if ( ! $this->is_valid_attach_for_request() ) {
 			return false;
 		}
-		return $this->is_valid_attach_for_object( $object_id );
+		$params = func_get_args();
+		return $this->is_valid_attach_for_object( $params[0] );
 	}
 
 	/**

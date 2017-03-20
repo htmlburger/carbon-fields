@@ -4,7 +4,6 @@
 import equality from 'containers/comparers/equality';
 import contain from 'containers/comparers/contain';
 import scalar from 'containers/comparers/scalar';
-import regex from 'containers/comparers/regex';
 import custom from 'containers/comparers/custom';
 
 export default {
@@ -17,7 +16,6 @@ export default {
 		equality,
 		contain,
 		scalar,
-		regex,
 		custom,
 	],
 

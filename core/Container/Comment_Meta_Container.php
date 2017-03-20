@@ -49,7 +49,8 @@ class Comment_Meta_Container extends Container {
 			return false;
 		}
 
-		return $this->is_valid_attach_for_object();
+		$params = func_get_args();
+		return $this->is_valid_attach_for_object( $params[0] );
 	}
 
 	/**

@@ -1,6 +1,7 @@
 /**
  * The external dependencies.
  */
+import { buffers } from 'redux-saga';
 import { take, takeLatest, actionChannel } from 'redux-saga/effects';
 
 /**
@@ -11,27 +12,27 @@ import { submitForm } from 'containers/actions';
 
 /**
  * [triggerWarning description]
- * 
+ *
  * @param  {Object} event
  */
 function triggerWarning(event) {
 	const dialogText = 'Changes that you made may not be saved.';
-		
+
 	event.returnValue = dialogText;
 	return dialogText;
 }
 
 /**
  * Proxy for attaching/detaching the warning
- * 
+ *
  * @param  {Bool} isAttached
  * @return {void}
  */
 function shouldAttachWarning(isAttached) {
 	if (isAttached) {
-		detachWarning();		
+		detachWarning();
 	} else {
-		attachWarning();		
+		attachWarning();
 	}
 }
 
@@ -59,9 +60,8 @@ function detachWarning() {
  * @return {void}
  */
 export default function* foreman() {
-	const updateChannel = yield actionChannel(updateField);
-	let isAttached = false; 
-	
+	const updateChannel = yield actionChannel(updateField, buffers.none());
+	let isAttached = false;
 
 	while (true) {
 		const action = yield take(updateChannel);

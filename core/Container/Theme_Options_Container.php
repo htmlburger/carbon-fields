@@ -63,7 +63,7 @@ class Theme_Options_Container extends Container {
 			return false;
 		}
 
-		return $this->is_valid_attach_for_object();
+		return $this->is_valid_attach_for_object( null );
 	}
 
 	/**

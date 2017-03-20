@@ -298,9 +298,10 @@ class Fulfillable_Collection implements Fulfillable {
 	 * 
 	 * @param  array<string>          $condition_types
 	 * @param  array|boolean          $environment Environment array or a boolean value to force on conditions
+	 * @param  array                  $comparison_operators Array of comparison operators to evaluate regardless of condition type
 	 * @return Fulfillable_Collection
 	 */
-	public function evaluate( $condition_types, $environment ) {
+	public function evaluate( $condition_types, $environment, $comparison_operators = array() ) {
 		$fulfillables = $this->get_fulfillables();
 
 		$collection = App::resolve( 'container_condition_fulfillable_collection' );
@@ -309,11 +310,12 @@ class Fulfillable_Collection implements Fulfillable {
 			$fulfillable_comparison = $fulfillable_tuple['fulfillable_comparison'];
 
 			if ( is_a( $fulfillable, get_class() ) ) {
-				$evaluated_collection = $fulfillable->evaluate( $condition_types, $environment );
+				$evaluated_collection = $fulfillable->evaluate( $condition_types, $environment, $comparison_operators );
 				$collection->add_fulfillable( $evaluated_collection, $fulfillable_comparison );
 			} else {
 				$type = $this->condition_factory->get_type( get_class( $fulfillable ) );
-				if ( in_array( $type, $condition_types ) ) {
+				$comparison_operator = $fulfillable->get_comparison_operator();
+				if ( in_array( $type, $condition_types ) || in_array( $comparison_operator, $comparison_operators ) ) {
 					$boolean_condition = App::resolve( 'container_condition_type_boolean' );
 					$boolean_condition->set_comparison_operator( '=' );
 
