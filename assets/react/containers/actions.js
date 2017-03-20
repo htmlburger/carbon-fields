@@ -137,3 +137,12 @@ export const validateContainer = createAction('containers/VALIDATE_CONTAINER', (
  * @param  {Object} event
  */
 export const submitForm = createAction('containers/SUBMIT_FORM', (event) => ({ event }));
+
+/**
+ * Show the specified tab.
+ *
+ * @param  {String} containerId
+ * @param  {String} tabId
+ * @return {Object}
+ */
+export const switchContainerTab = createAction('containers/SWITCH_TAB', (containerId, tabId) => ({ containerId, tabId }));

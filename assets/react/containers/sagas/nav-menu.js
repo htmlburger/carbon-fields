@@ -23,7 +23,7 @@ import { TYPE_MAP } from 'fields/constants';
  * @return {void}
  */
 export function* workerInit() {
-	const channel = yield call(createAjaxSuccessChannel, 'add-menu-item');
+	const channel = yield call(createAjaxChannel, 'ajaxSuccess', 'add-menu-item');
 
 	while (true) {
 		const { data } = yield take(channel);

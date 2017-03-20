@@ -178,39 +178,6 @@ export function createMediaBrowserChannel(settings) {
 }
 
 /**
- * Create a channel that will intercept all AJAX success events
- * for the specified action.
- *
- * @param  {String} action
- * @return {Object}
- */
-export function createAjaxSuccessChannel(action) {
-	return eventChannel((emit) => {
-		// Emit the AJAX event through the channel.
-		const handler = (event, xhr, settings, data) => {
-			if (isString(settings.data) && settings.data.indexOf(action) > -1) {
-				emit({
-					event,
-					xhr,
-					settings,
-					data,
-				});
-			}
-		};
-
-		// Cancel the subscription.
-		const unsubscribe = () => {
-			$(document).off('ajaxSuccess', handler);
-		};
-
-		// Setup the subscription.
-		$(document).on('ajaxSuccess', handler);
-
-		return unsubscribe;
-	}, buffers.fixed(1));
-}
-
-/**
  * Create a channel that will intercept all occurences
  * of the specified AJAX action.
  *

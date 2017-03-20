@@ -2,40 +2,17 @@
  * The external dependencies.
  */
 import React from 'react';
-import cx from 'classnames';
+import { branch, renderComponent } from 'recompose';
+import { isObject } from 'lodash';
 
 /**
  * The internal dependencies.
  */
-import fieldFactory from 'fields/factory';
+import ContainerTabbed from 'containers/components/container/tabbed';
+import ContainerPlain from 'containers/components/container/plain';
 
-/**
- * The base component used to render the containers.
- *
- * @abstract
- * @param  {Object}        props
- * @param  {String}        props.id
- * @param  {Object}        props.container
- * @return {React.Element}
- */
-const Container = ({ id, container }) => {
-	const classes = [
-		'carbon-container',
-		`carbon-container-${id}`,
-		`carbon-container-${container.type}`,
-		...container.classes,
-	];
-	return <div className={cx(classes)}>
-		<input
-			type="hidden"
-			id={container.nonce.name}
-			name={container.nonce.name}
-			value={container.nonce.value} />
+export default branch(
+	({ container }) => isObject(container.settings.tabs),
 
-		{
-			container.fields.map(({ id, type }) => fieldFactory(type, { id }))
-		}
-	</div>;
-};
-
-export default Container;
+	renderComponent(ContainerTabbed)
+)(ContainerPlain);
