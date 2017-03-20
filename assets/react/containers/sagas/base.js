@@ -43,12 +43,7 @@ export function* workerReceiveContainer(store, { payload }) {
 	const { id, type } = container;
 
 	yield call(containerFactory, store, type, { id });
-
-	for ( let i = 0; i < container.fields.length; i++ ) {
-		if (container.fields[i].type === TYPE_MAP) {
-			yield put(redrawMap(container.fields[i].id));
-		}
-	}
+	yield redrawMapWorker(container);
 }
 
 /**
@@ -66,6 +61,22 @@ export function* workerTabs({ payload: { containerId, tabId }}) {
 
 	if (shouldChangeHash) {
 		window.location.hash = `!${tabId}`;
+	}
+
+	yield redrawMapWorker(container);
+}
+
+/**
+ * Redraw all map fields in the container.
+ *
+ * @param {Object} container
+ * @return {void}
+ */
+function* redrawMapWorker(container) {
+	for ( let i = 0; i < container.fields.length; i++ ) {
+		if (container.fields[i].type === TYPE_MAP) {
+			yield put(redrawMap(container.fields[i].id));
+		}
 	}
 }
 
