@@ -3,7 +3,7 @@
  */
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { sortBy, fromPairs } from 'lodash';
+import { sortBy, fromPairs, pickBy, values } from 'lodash';
 import {
 	compose,
 	withHandlers,
@@ -30,13 +30,15 @@ import {
 	cloneComplexGroup,
 	removeComplexGroup,
 	expandComplexGroup,
-	collapseComplexGroup
+	collapseComplexGroup,
+	redrawMap
 } from 'fields/actions';
 import {
 	TYPE_COMPLEX,
 	VALIDATION_COMPLEX,
 	COMPLEX_LAYOUT_GRID,
-	COMPLEX_LAYOUT_TABBED_VERTICAL
+	COMPLEX_LAYOUT_TABBED_VERTICAL,
+	TYPE_MAP
 } from 'fields/constants';
 
 /**
@@ -352,7 +354,20 @@ const handleRemoveGroupClick = ({ field, removeComplexGroup }) => groupId => rem
  * @param  {Function} props.expandComplexGroup
  * @return {Function}
  */
-const handleGroupExpand = ({ field, expandComplexGroup }) => groupId => expandComplexGroup(field.id, groupId);
+const handleGroupExpand = ({ field, expandComplexGroup }) => groupId => {
+	expandComplexGroup(field.id, groupId);
+	const group = pickBy(field.value, (group) => {
+		return group.id === groupId;
+	});
+
+	const fields = values(group)[0].fields;
+
+	for ( let i = 0; i < fields.length; i++) {
+		if ( fields[i].type === TYPE_MAP ) {
+			redrawMap(fields[i].id);
+		}
+	}
+};
 
 /**
  * Hide the group's contents.

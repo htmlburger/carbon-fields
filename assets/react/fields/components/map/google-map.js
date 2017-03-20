@@ -24,8 +24,9 @@ class GoogleMap extends React.Component {
 	 * @return {void}
 	 */
 	componentWillReceiveProps(nextProps) {
+		const { lat, lng, zoom, redraw } = nextProps;
+
 		if (this.marker) {
-			const { lat, lng, zoom } = nextProps;
 			const markerLat = this.marker.getPosition().lat();
 			const markerLng = this.marker.getPosition().lng();
 			const mapZoom = this.map.getZoom();
@@ -42,11 +43,12 @@ class GoogleMap extends React.Component {
 			}
 		}
 
-		const { redraw } = nextProps;
-
 		if (redraw) {
+			const location = new google.maps.LatLng(lat, lng);
+
 			setTimeout( () => {
 				google.maps.event.trigger(this.map, 'resize');
+				this.map.setCenter(location);
 			}, 10);
 		}
 	}

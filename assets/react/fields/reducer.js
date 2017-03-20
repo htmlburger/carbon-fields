@@ -49,5 +49,6 @@ export default decorateFieldReducer(handleActions({
 		return immutable.set(state, `${fieldId}.value.${index}.collapsed`, collapsed);
 	},
 
-	[redrawMap]: (state, { payload: { fieldId }}) => immutable.assign(state, `${fieldId}.ui`, {redraw_map: true}),
+	[redrawMap]: (state, { payload: { fieldId }}) => immutable.set(state, `${fieldId}.ui.redraw_map`, true),
+
 }, {}));

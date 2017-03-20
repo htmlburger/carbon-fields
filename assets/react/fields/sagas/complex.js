@@ -86,6 +86,7 @@ export function* workerAddOrCloneComplexGroup({ type, payload: { fieldId, groupI
 
 	for ( let key in fields ) {
 		if (fields[key].type === TYPE_MAP) {
+			console.log(fields[key].id);
 			yield put(redrawMap(fields[key].id));
 		}
 	}

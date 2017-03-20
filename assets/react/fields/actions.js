@@ -172,4 +172,4 @@ export const validateFields = createAction('fields/VALIDATE_FIELDS');
  * @param {Object} fields
  * @return {Object}
  */
-export const redrawMap = createAction('fields/REDRAW_MAP', (fieldId) => ({ fieldId }));
+export const redrawMap = createAction('fields/REDRAW_MAP', fieldId => ({ fieldId }));
