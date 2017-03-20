@@ -122,9 +122,6 @@ class Container_Condition_Installer implements Installer {
 		$ioc['container_condition_comparer_type_scalar'] = function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Scalar_Comparer();
 		};
-		$ioc['container_condition_comparer_type_regex'] = function() {
-			return new \Carbon_Fields\Container\Condition\Comparer\Regex_Comparer();
-		};
 		$ioc['container_condition_comparer_type_custom'] = function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Custom_Comparer();
 		};
@@ -134,7 +131,6 @@ class Container_Condition_Installer implements Installer {
 				$ioc['container_condition_comparer_type_equality'],
 				$ioc['container_condition_comparer_type_contain'],
 				$ioc['container_condition_comparer_type_scalar'],
-				$ioc['container_condition_comparer_type_regex'],
 				$ioc['container_condition_comparer_type_custom'],
 			);
 		};
@@ -143,7 +139,6 @@ class Container_Condition_Installer implements Installer {
 			return array(
 				$ioc['container_condition_comparer_type_equality'],
 				$ioc['container_condition_comparer_type_contain'],
-				$ioc['container_condition_comparer_type_regex'],
 				$ioc['container_condition_comparer_type_custom'],
 			);
 		};
