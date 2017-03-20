@@ -26,22 +26,8 @@ class Post_Meta_Container extends Container {
 	 * @var array
 	 */
 	public $settings = array(
-		'post_type' => array( 'post' ),
 		'panel_context' => 'normal',
 		'panel_priority' => 'high',
-
-		// TODO remove
-		'show_on' => array(
-			'category' => null,
-			'template_names' => array(),
-			'not_in_template_names' => array(),
-			'post_formats' => array(),
-			'level_limit' => null,
-			'tax_term_id' => null,
-			'page_id' => null,
-			'parent_page_id' => null,
-			'post_path' => null,
-		),
 	);
 
 	/**
@@ -68,11 +54,6 @@ class Post_Meta_Container extends Container {
 		$request_post_id = isset( $input['post'] ) ? intval( $input['post'] ) : 0;
 		if ( $request_post_id > 0 ) {
 			$this->set_post_id( $request_post_id );
-		}
-
-		// force post_type to be array
-		if ( ! is_array( $this->settings['post_type'] ) ) {
-			$this->settings['post_type'] = array( $this->settings['post_type'] );
 		}
 
 		add_action( 'admin_init', array( $this, '_attach' ) );
