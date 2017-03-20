@@ -79,15 +79,13 @@ class WP_Toolset {
 	 * 
 	 * @return mixed
 	 */
-	public function wildcard_term_descriptor_to_id_term_descriptor( $descriptor ) {
-		if ( isset( $descriptor['field'] ) && $descriptor['field'] === 'id' ) {
-			return $descriptor; // already an id-based descriptor
-		}
+	public function wildcard_term_descriptor_to_full_term_descriptor( $descriptor ) {
 		$term = $this->get_term_by_descriptor( $descriptor );
 		return array(
 			'value' => $term->term_id,
 			'field' => 'id',
 			'taxonomy' => $term->taxonomy,
+			'term' => $term,
 		);
 	}
 }

@@ -56,9 +56,9 @@ class Term_Condition extends Condition {
 		// normalize the value to id-based term descriptors
 		$value = parent::get_value();
 		if ( isset( $value['value'] ) ) {
-			$value = $this->wp_toolset->wildcard_term_descriptor_to_id_term_descriptor( $value );
+			$value = $this->wp_toolset->wildcard_term_descriptor_to_full_term_descriptor( $value );
 		} else {
-			$value = array_map( array( $this->wp_toolset, 'wildcard_term_descriptor_to_id_term_descriptor' ), $value );
+			$value = array_map( array( $this->wp_toolset, 'wildcard_term_descriptor_to_full_term_descriptor' ), $value );
 		}
 		return $value;
 	}
