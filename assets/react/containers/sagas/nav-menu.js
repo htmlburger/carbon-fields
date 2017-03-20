@@ -8,7 +8,7 @@ import { put, call, take, select } from 'redux-saga/effects';
  * The internal dependencies.
  */
 import { PAGE_NOW_MENUS } from 'lib/constants';
-import { createAjaxSuccessChannel, createSubmitChannel, createClickChannel } from 'lib/events';
+import { createAjaxChannel, createSubmitChannel, createClickChannel } from 'lib/events';
 
 import { receiveContainer, validateAllContainers, submitForm } from 'containers/actions';
 import { getContainerById } from 'containers/selectors';
