@@ -13,14 +13,7 @@ import { PAGE_NOW_WIDGETS, PAGE_NOW_MENUS } from 'lib/constants';
 
 import containerFactory from 'containers/factory';
 import { getContainerById } from 'containers/selectors';
-
-import {
-	setupContainer,
-	addContainer,
-	receiveContainer,
-	setUI,
-	switchContainerTab
-} from 'containers/actions';
+import { addContainer, receiveContainer, switchContainerTab } from 'containers/actions';
 
 import { addFields, redrawMap } from 'fields/actions';
 import { flattenField } from 'fields/helpers';

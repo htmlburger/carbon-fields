@@ -2,34 +2,26 @@
  * The external dependencies.
  */
 import $ from 'jquery';
-import { takeEvery } from 'redux-saga';
-import { take, call, select, put } from 'redux-saga/effects';
+import { isEmpty } from 'lodash';
+import { take, call, select, put, fork } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
  */
 import { createScrollChannel, createSubmitChannel } from 'lib/events';
 
-import { canProcessAction } from 'containers/selectors';
-import { setupContainer, validateAllContainers, submitForm } from 'containers/actions';
+import { getContainersByType } from 'containers/selectors';
+import { validateAllContainers, submitForm } from 'containers/actions';
 import { TYPE_THEME_OPTIONS } from 'containers/constants';
 
 /**
  * Handle the sticky position of the actions panel.
  *
- * @param  {Object} action
  * @return {void}
  */
-export function* workerStickyActionsPanel(action) {
-	const { containerId } = action.payload;
-
-	// Don't do anything if the type isn't correct.
-	if (!(yield select(canProcessAction, containerId, TYPE_THEME_OPTIONS))) {
-		return;
-	}
-
+export function* workerStickyPanel() {
 	const channel = yield call(createScrollChannel, window);
-	const $container = $(`#${containerId}`);
+	const $container = $('.carbon-box:first');
 	const $panel = $('#postbox-container-1');
 	const $bar = $('#wpadminbar');
 
@@ -67,11 +59,18 @@ export function* workerFormSubmit() {
 /**
  * Start to work.
  *
+ * @param  {Object} store
  * @return {void}
  */
-export default function* foreman() {
-	yield [
-		takeEvery(setupContainer, workerStickyActionsPanel),
-		call(workerFormSubmit),
-	];
+export default function* foreman(store) {
+	const containers = yield select(getContainersByType, TYPE_THEME_OPTIONS);
+
+	// Nothing to do.
+	if (isEmpty(containers)) {
+		return;
+	}
+
+	// Start the workers.
+	yield fork(workerStickyPanel);
+	yield fork(workerFormSubmit);
 }

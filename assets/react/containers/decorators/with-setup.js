@@ -14,18 +14,16 @@ const hooks = {
 			container,
 			meta,
 			ui,
-			setupContainer,
-			checkVisibility,
+			setupContainer
 		} = this.props;
 
 		setupContainer(container.id, meta, ui);
-		checkVisibility(container.id);
 	},
 
 	componentWillUnmount() {
 		const {
 			container,
-			teardownContainer,
+			teardownContainer
 		} = this.props;
 
 		teardownContainer(container.id);
@@ -45,12 +43,9 @@ const defaultMeta = {};
  * @type {Object}
  */
 const defaultUI = {
-	has_error: false,
-	is_dirty: false,
 	is_visible: true,
 	current_tab: null,
 	tabs_in_url: false,
-	classes: [],
 };
 
 /**
