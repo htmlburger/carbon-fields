@@ -28,24 +28,7 @@ use Carbon_Fields\Toolset\WP_Toolset;
  *     
  *     Operator "CUSTOM" is passed the term_id
  */
-class Post_Term_Condition extends Condition {
-
-	/**
-	 * WP_Toolset to fetch term data with
-	 * 
-	 * @var WP_Toolset
-	 */
-	protected $wp_toolset;
-
-	/**
-	 * Constructor
-	 *
-	 * @param  array<Carbon_Fields\Container\Condition\Comparer\Comparer> $comparers
-	 */
-	public function __construct( $comparers ) {
-		$this->wp_toolset = App::resolve( 'wp_toolset' );
-		parent::__construct( $comparers );
-	}
+class Post_Term_Condition extends Term_Condition {
 	
 	/**
 	 * Check if a post has a term

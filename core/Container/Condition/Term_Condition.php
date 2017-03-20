@@ -48,6 +48,22 @@ class Term_Condition extends Condition {
 	}
 	
 	/**
+	 * Get the condition value
+	 * 
+	 * @return mixed
+	 */
+	public function get_value() {
+		// normalize the value to id-based term descriptors
+		$value = parent::get_value();
+		if ( isset( $value['value'] ) ) {
+			$value = $this->wp_toolset->wildcard_term_descriptor_to_id_term_descriptor( $value );
+		} else {
+			$value = array_map( array( $this->wp_toolset, 'wildcard_term_descriptor_to_id_term_descriptor' ), $value );
+		}
+		return $value;
+	}
+	
+	/**
 	 * Check if the condition is fulfilled
 	 * 
 	 * @param  array $environment

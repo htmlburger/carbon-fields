@@ -63,7 +63,7 @@ class WP_Toolset {
 		}
 
 		$value = $term_descriptor['value'];
-		$field = isset( $term_descriptor['field'] ) ? $term_descriptor['field'] : 'term_id';
+		$field = isset( $term_descriptor['field'] ) ? $term_descriptor['field'] : 'id';
 		$taxonomy = $term_descriptor['taxonomy'];
 		$term = get_term_by( $field, $value, $taxonomy );
 
@@ -72,5 +72,22 @@ class WP_Toolset {
 		}
 
 		return $term;
+	}
+	
+	/**
+	 * Convert any term descriptor to an id-based term descriptor
+	 * 
+	 * @return mixed
+	 */
+	public function wildcard_term_descriptor_to_id_term_descriptor( $descriptor ) {
+		if ( isset( $descriptor['field'] ) && $descriptor['field'] === 'id' ) {
+			return $descriptor; // already an id-based descriptor
+		}
+		$term = $this->get_term_by_descriptor( $descriptor );
+		return array(
+			'value' => $term->term_id,
+			'field' => 'id',
+			'taxonomy' => $term->taxonomy,
+		);
 	}
 }
