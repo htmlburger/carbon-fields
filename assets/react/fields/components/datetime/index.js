@@ -2,6 +2,8 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
+import fecha from 'fecha';
+import $ from 'jquery';
 import { compose, withHandlers, withState, withProps, setStatic } from 'recompose';
 import { isString } from 'lodash';
 
@@ -122,6 +124,14 @@ const handleChange = ({ field, updateField }) => eventOrDate => {
 		value = eventOrDate;
 	} else {
 		value = eventOrDate.target.value;
+	}
+
+	if (field.type === TYPE_TIME) {
+		const time = $.datepicker.parseTime(field.picker_options.timeFormat, value);
+		value = $.datepicker.formatTime(field.storage_format, time);
+	} else {
+		const date = $.datepicker.parseDate(field.picker_options.dateFormat, value);
+		value = fecha.format( date, field.storage_format );
 	}
 
 	updateField(field.id, { value: value });
