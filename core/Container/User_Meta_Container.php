@@ -9,12 +9,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 class User_Meta_Container extends Container {
 	protected $user_id;
 
-	public $settings = array(
-		// TODO remove
-		'show_on' => array(
-			'role' => array(),
-		),
-	);
+	public $settings = array();
 
 	/**
 	 * Array of condition types that are checked during save requests
