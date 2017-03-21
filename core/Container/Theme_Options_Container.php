@@ -161,7 +161,8 @@ class Theme_Options_Container extends Container {
 	 * Whether this container is currently viewed.
 	 **/
 	public function should_activate() {
-		$request_page = isset( $_GET['page'] ) ? $_GET['page'] : '';
+		$input = stripslashes_deep( $_GET );
+		$request_page = isset( $input['page'] ) ? $input['page'] : '';
 		if ( ! empty( $request_page ) && $request_page === $this->settings['file'] ) {
 			return true;
 		}
@@ -173,7 +174,8 @@ class Theme_Options_Container extends Container {
 	 * Output the container markup
 	 **/
 	public function render() {
-		$request_settings_updated = isset( $_GET['settings-updated'] ) ? $_GET['settings-updated'] : '';
+		$input = stripslashes_deep( $_GET );
+		$request_settings_updated = isset( $input['settings-updated'] ) ? $input['settings-updated'] : '';
 		if ( $request_settings_updated === 'true' ) {
 			$this->notifications[] = __( 'Settings saved.', 'carbon-fields' );
 		}
