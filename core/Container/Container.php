@@ -586,8 +586,9 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return bool
 	 */
 	protected function verified_nonce_in_request() {
+		$input = stripslashes_deep( $_REQUEST );
 		$nonce_name = $this->get_nonce_name();
-		$nonce_value = isset( $_REQUEST[ $nonce_name ] ) ? $_REQUEST[ $nonce_name ] : '';
+		$nonce_value = isset( $input[ $nonce_name ] ) ? $input[ $nonce_name ] : '';
 		return wp_verify_nonce( $nonce_value, $nonce_name );
 	}
 
