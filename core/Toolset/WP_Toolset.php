@@ -80,8 +80,8 @@ class WP_Toolset {
 	 * @return mixed
 	 */
 	public function wildcard_term_descriptor_to_full_term_descriptor( $descriptor ) {
-		if ( ! isset( $descriptor[ 'field' ] ) ) {
-			$descriptor[ 'field' ] = 'id';
+		if ( ! isset( $descriptor['field'] ) ) {
+			$descriptor['field'] = 'id';
 		}
 
 		$term = $this->get_term_by_descriptor( $descriptor );

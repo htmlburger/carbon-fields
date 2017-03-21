@@ -265,7 +265,7 @@ class Complex_Field extends Field {
 		$values = array_values( $this->groups );
 		$group = end( $values );
 
-		if ($group) {
+		if ( $group ) {
 			$group->set_label_template( $template );
 
 			$this->groups[ $group->get_name() ] = $group;
