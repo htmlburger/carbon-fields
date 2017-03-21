@@ -4,7 +4,6 @@
 import equality from 'containers/comparers/equality';
 import contain from 'containers/comparers/contain';
 import scalar from 'containers/comparers/scalar';
-import custom from 'containers/comparers/custom';
 
 export default {
 	/**
@@ -16,7 +15,6 @@ export default {
 		equality,
 		contain,
 		scalar,
-		custom,
 	],
 
 	/**
