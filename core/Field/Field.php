@@ -763,7 +763,7 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Set CSS classes that the container should use.
 	 *
-	 * @param string|array $classes
+	 * @param string|array<string> $classes
 	 * @return object $this
 	 */
 	public function set_classes( $classes ) {
