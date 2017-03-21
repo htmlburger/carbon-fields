@@ -7,7 +7,6 @@ import { get, isArray } from 'lodash';
  * The internal dependencies.
  */
 import equality from 'containers/comparers/equality-array';
-import contain from 'containers/comparers/contain-array';
 import custom from 'containers/comparers/custom';
 import base from 'containers/conditions/base';
 
@@ -21,7 +20,6 @@ export default {
 	 */
 	comparers: [
 		equality,
-		contain,
 		custom,
 	],
 
@@ -33,7 +31,7 @@ export default {
 	 * @return {Boolean}
 	 */
 	isFulfiled(definition, env) {
-		const {
+		let {
 			type,
 			compare,
 			value
@@ -41,18 +39,39 @@ export default {
 
 		// In case of `IN` and `NOT IN` comparers.
 		if (isArray(value)) {
+			let method;
+
+			if (compare === 'IN') {
+				compare = '=';
+				method = 'some';
+			} else if (compare === 'NOT IN') {
+				compare = '!=';
+				method = 'every';
+			}
+
 			const results = value.map(value => this.isFulfiled({
 				...definition,
+				compare,
 				value,
 			}, env));
 
-			return results.some(Boolean);
+			return results[method](Boolean);
 		}
 
+		const {
+			taxonomy,
+			taxonomy_object,
+			term_object,
+		} = value;
+
+		value = taxonomy_object.hierarchical
+			? term_object['term_id']
+			: term_object['name'];
+
 		return this.firstSupportedComparerIsCorrect(
-			get(env, `${type}.${value.taxonomy}`, []),
+			get(env, `${type}.${taxonomy}`, []),
 			compare,
-			value.value
+			value
 		);
 	},
 };

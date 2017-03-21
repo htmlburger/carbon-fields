@@ -13,7 +13,7 @@ const operators = ['=', '!='];
 /**
  * Perform the comparison.
  *
- * @param  {mixed}   a
+ * @param  {Array}   a
  * @param  {String}  operator
  * @param  {mixed}   b
  * @return {Boolean}
