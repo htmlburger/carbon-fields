@@ -2,16 +2,32 @@
  * The external dependencies.
  */
 import { takeEvery, select, call, put } from 'redux-saga/effects';
-import { filter } from 'lodash';
+import { filter, find, kebabCase } from 'lodash';
 
 /**
  * The internal dependencies.
  */
-import { toggleContainerBox } from 'containers/actions';
+import { getContainerById } from 'containers/selectors';
+import { toggleContainerBox, switchContainerTab } from 'containers/actions';
 
 import { getFieldsByParent } from 'fields/selectors';
 import { expandComplexGroup, redrawMap } from 'fields/actions';
 import { TYPE_MAP } from 'fields/constants';
+
+/**
+ * Redraw maps that are in complex groups.
+ *
+ * @param  {Object}  action
+ * @param  {Object}  action.payload
+ * @param  {String}  action.payload.groupId
+ * @param  {Boolean} action.payload.collapsed
+ * @return {void}
+ */
+export function* workerExpandComplexGroup({ payload: { groupId, collapsed } }) {
+	if (!collapsed) {
+		yield call(workerRedraw, yield select(getFieldsByParent, groupId));
+	}
+}
 
 /**
  * Redraw maps when the container is expanded.
@@ -29,18 +45,22 @@ export function* workerToggleContainerBox({ payload: { containerId, visible } })
 }
 
 /**
- * Redraw maps that are in complex groups.
+ * Redraw maps when the container's tab is changed.
  *
- * @param  {Object}  action
- * @param  {Object}  action.payload
- * @param  {String}  action.payload.groupId
- * @param  {Boolean} action.payload.collapsed
+ * @param  {Object} action
+ * @param  {Object} action.payload
+ * @param  {String} action.payload.containerId
+ * @param  {String} action.payload.tabId
  * @return {void}
  */
-export function* workerExpandComplexGroup({ payload: { groupId, collapsed } }) {
-	if (!collapsed) {
-		yield call(workerRedraw, yield select(getFieldsByParent, groupId));
-	}
+export function* workerSwitchContainerTab({ payload: { containerId, tabId } }) {
+	const container = yield select(getContainerById, containerId);
+	const fieldNames = yield call(find, container.settings.tabs, (fields, key) => kebabCase(key) === tabId);
+
+	let fields = yield select(getFieldsByParent, containerId);
+	fields = yield call(filter, fields, ({ name }) => fieldNames.indexOf(name) > -1);
+
+	yield call(workerRedraw, fields);
 }
 
 /**
@@ -67,4 +87,5 @@ export function* workerRedraw(fields) {
 export default function* foreman(store) {
 	yield takeEvery(expandComplexGroup, workerExpandComplexGroup);
 	yield takeEvery(toggleContainerBox, workerToggleContainerBox);
+	yield takeEvery(switchContainerTab, workerSwitchContainerTab);
 }
