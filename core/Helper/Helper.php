@@ -292,7 +292,7 @@ class Helper {
 	/**
 	 * Get an array of sanitized html classes
 	 * 
-	 * @param  string|array<strnig> $classes
+	 * @param  string|array<string> $classes
 	 * @return array<string>
 	 */
 	public static function sanitize_classes( $classes ) {
