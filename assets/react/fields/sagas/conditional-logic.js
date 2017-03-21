@@ -53,7 +53,7 @@ export function* workerValidate(field, siblings, { payload: { fieldId, data } } 
 	let valid;
 
 	for (const rule of rules) {
-		const { value } = yield select(getFieldById, siblings[rule.field]);
+		const { value } = yield select(getFieldById, siblings[`_${rule.field}`]);
 		const result = yield call(compare, value, rule.value, rule.compare);
 
 		results.push(result);
