@@ -494,7 +494,10 @@ class Complex_Field extends Field {
 
 		$groups_data = array();
 		foreach ( $this->groups as $group ) {
-			$groups_data[] = $group->to_json( false );
+			$group_data = $group->to_json( false );
+			$group_data['collapsed'] = $this->get_collapsed();
+
+			$groups_data[] = $group_data;
 		}
 
 		$field_groups = $this->get_prefilled_groups( $this->get_value_tree() );
