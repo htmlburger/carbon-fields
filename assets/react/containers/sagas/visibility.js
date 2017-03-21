@@ -24,12 +24,14 @@ import { evaluteConditions } from 'containers/conditions';
 export function* toggleVisibility(containerId) {
 	const container = yield select(getContainerById, containerId);
 	const el = yield call([document, document.querySelector], `#${containerId}`);
+	const fieldset = yield call([document, document.querySelector], `#${containerId} fieldset`);
 
 	if (!el) {
 		throw new Error(`Could not find the metabox for container "${containerId}".`);
 	}
 
-	el.style.display = container.ui.is_visible ? 'block' : 'none';
+	el.style.display  = container.ui.is_visible ? 'block' : 'none';
+	fieldset.disabled = !container.ui.is_visible;
 }
 
 /**
