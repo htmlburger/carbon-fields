@@ -101,3 +101,12 @@ export const submitForm = createAction('containers/SUBMIT_FORM', (event) => ({ e
  * @return {Object}
  */
 export const switchContainerTab = createAction('containers/SWITCH_TAB', (containerId, tabId) => ({ containerId, tabId }));
+
+/**
+ * Notify when the container is toggled.
+ *
+ * @param  {String}  containerId
+ * @param  {Boolean} visible
+ * @return {Object}
+ */
+export const toggleContainerBox = createAction('containers/TOGGLE_BOX', (containerId, visible) => ({ containerId, visible }));

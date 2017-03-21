@@ -31,7 +31,7 @@ class GoogleMap extends React.Component {
 			const markerLng = this.marker.getPosition().lng();
 			const mapZoom = this.map.getZoom();
 
-			if (lat !== markerLat|| lng !== markerLng) {
+			if (lat !== markerLat || lng !== markerLng) {
 				const location = new google.maps.LatLng(lat, lng);
 
 				this.marker.setPosition(location);

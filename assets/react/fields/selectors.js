@@ -11,6 +11,7 @@ import {
 	mapValues,
 	some,
 	pick,
+	pickBy,
 	template,
 	isNull,
 	isString
@@ -46,6 +47,14 @@ export const getFieldById = (state, id) => state.fields[id];
  * @return {Function}
  */
 export const makeGetFieldsByParent = parentId => createSelector(getFields, fields => mapValues(keyBy(filter(fields, ['parent', parentId]), 'name'), 'id'));
+
+/**
+ * Get the fields that are direct children of the specified parent.
+ *
+ * @param  {String} parentId
+ * @return {Function}
+ */
+export const getFieldsByParent = (state, parentId) => pickBy(getFields(state), ({ parent }) => parent === parentId);
 
 /**
  * Check whether the field should be rendered in tabs.

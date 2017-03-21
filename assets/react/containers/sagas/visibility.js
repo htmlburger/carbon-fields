@@ -1,15 +1,17 @@
 /**
  * The external dependencies.
  */
+import $ from 'jquery';
 import { takeEvery } from 'redux-saga';
-import { call, select, put } from 'redux-saga/effects';
+import { call, select, put, take } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
  */
+import { createClickChannel } from 'lib/events';
 import { PAGE_NOW_WIDGETS, PAGE_NOW_MENUS } from 'lib/constants';
 
-import { setupContainer, setContainerMeta, setContainerUI } from 'containers/actions';
+import { setupContainer, setContainerMeta, setContainerUI, toggleContainerBox } from 'containers/actions';
 import { getContainers, getContainerById } from 'containers/selectors';
 import { evaluteConditions } from 'containers/conditions';
 
@@ -77,6 +79,22 @@ export function* workerCheckVisibility({ payload }) {
 }
 
 /**
+ * Notify everyone that the container is expanded or collapsed.
+ *
+ * @return {void}
+ */
+export function* workerTogglePostBox() {
+	const channel = yield call(createClickChannel, '#normal-sortables', '.carbon-box button.handlediv');
+
+	while (true) {
+		const { event } = yield take(channel);
+		const $container = $(event.target).closest('.carbon-box');
+
+		yield put(toggleContainerBox($container[0].id, !$container.hasClass('closed')));
+	}
+}
+
+/**
  * Start to work.
  *
  * @param  {Object} store
@@ -93,5 +111,6 @@ export default function* foreman(store) {
 		takeEvery(setupContainer, workerSetupVisibility),
 		takeEvery(setContainerUI, workerToggleVisibility),
 		takeEvery(setContainerMeta, workerCheckVisibility),
+		call(workerTogglePostBox),
 	];
 }
