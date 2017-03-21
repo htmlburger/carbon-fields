@@ -278,7 +278,8 @@ class Helper {
 	 * @return string
 	 */
 	public static function class_to_type( $class, $class_suffix = '' ) {
-		$type = (new \ReflectionClass( $class ))->getShortName();
+		$reflection = new \ReflectionClass( $class );
+		$type = $reflection->getShortName();
 
 		if ( $class_suffix ) {
 			$type = preg_replace( '/(' . preg_quote( $class_suffix, '/' ) . ')$/i', '', $type );
