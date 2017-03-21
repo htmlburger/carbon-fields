@@ -4,6 +4,7 @@
 import $ from 'jquery';
 import ReactDOM from 'react-dom';
 import { startsWith } from 'lodash';
+import { delay } from 'redux-saga';
 import { put, call, take, select, fork } from 'redux-saga/effects';
 
 /**
@@ -16,10 +17,10 @@ import {
 	createClickChannel
 } from 'lib/events';
 
-import { removeContainer, receiveContainer, validateContainer, submitForm } from 'containers/actions';
+import { removeContainer, receiveContainer, validateContainer, submitForm, toggleContainerBox } from 'containers/actions';
 import { getContainerById } from 'containers/selectors';
 
-import { removeFields, redrawMap } from 'fields/actions';
+import { removeFields } from 'fields/actions';
 import { getFieldById, getFieldsByRoots } from 'fields/selectors';
 import { TYPE_MAP } from 'fields/constants';
 
@@ -106,30 +107,28 @@ export function* workerFormSubmit() {
 }
 
 /**
- * Handle widget expand
+ * Notify everyone that the widget is expanded or collapsed.
  *
  * @return {void}
  */
-export function* workerWidgetExpand() {
+export function* workerToggleWidget() {
 	const channel = yield call(createClickChannel, '.widget-top');
+
 	while (true) {
 		const { event } = yield take(channel);
-		const containerId = $(event.target)
-			.closest('.widget:not(.open)')
+		const $widget = $(event.target).closest('.widget');
+		const containerId = $widget
 			.find('input[name="widget-id"]')
 				.val();
 
-		if (!containerId) {
+		// Don't care about other widgets.
+		if (!startsWith(containerId, 'carbon')) {
 			continue;
 		}
 
-		const container = yield select(getContainerById, containerId);
-
-		for ( let i = 0; i < container.fields.length; i++ ) {
-			if (container.fields[i].type === TYPE_MAP) {
-				yield put(redrawMap(container.fields[i].id));
-			}
-		}
+		// Wait for the animation.
+		yield call(delay, 100);
+		yield put(toggleContainerBox(containerId, $widget.hasClass('open')));
 	}
 }
 
@@ -148,7 +147,7 @@ export default function* foreman() {
 	yield [
 		call(workerUpdate),
 		call(workerCleanup),
-		call(workerWidgetExpand),
+		call(workerToggleWidget),
 		call(workerFormSubmit)
 	];
 }

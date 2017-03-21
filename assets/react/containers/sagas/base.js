@@ -13,9 +13,9 @@ import { PAGE_NOW_WIDGETS, PAGE_NOW_MENUS } from 'lib/constants';
 
 import containerFactory from 'containers/factory';
 import { getContainerById } from 'containers/selectors';
-import { addContainer, receiveContainer, switchContainerTab } from 'containers/actions';
+import { addContainer, receiveContainer, switchContainerTab, toggleContainerBox } from 'containers/actions';
 
-import { addFields, redrawMap } from 'fields/actions';
+import { addFields } from 'fields/actions';
 import { flattenField } from 'fields/helpers';
 import { TYPE_MAP } from 'fields/constants';
 
@@ -43,7 +43,7 @@ export function* workerReceiveContainer(store, { payload }) {
 	const { id, type } = container;
 
 	yield call(containerFactory, store, type, { id });
-	yield redrawMapWorker(container);
+	yield put(toggleContainerBox(id, true));
 }
 
 /**
