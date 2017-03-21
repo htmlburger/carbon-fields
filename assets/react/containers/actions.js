@@ -64,10 +64,11 @@ export const removeContainer = createAction('containers/REMOVE_CONTAINER');
 /**
  * Receive a container as string and convert it to a usable structure.
  *
- * @param  {String} container
+ * @param  {String}  container
+ * @param  {Boolean} expanded
  * @return {Object}
  */
-export const receiveContainer = createAction('containers/RECEIVE_CONTAINER');
+export const receiveContainer = createAction('containers/RECEIVE_CONTAINER', (container, expanded = false) => ({ container, expanded }));
 
 /**
  * Trigger the validation of all containers.

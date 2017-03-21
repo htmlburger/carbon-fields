@@ -43,7 +43,7 @@ export function* workerUpdate() {
 			continue;
 		}
 
-		yield put(receiveContainer(container));
+		yield put(receiveContainer(container, true));
 	}
 }
 

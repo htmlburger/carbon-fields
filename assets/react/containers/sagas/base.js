@@ -22,13 +22,14 @@ import { TYPE_MAP } from 'fields/constants';
 /**
  * Prepare the container for inserting in the store.
  *
- * @param  {Object} store
- * @param  {Object} action
- * @param  {String} action.payload
+ * @param  {Object}  store
+ * @param  {Object}  action
+ * @param  {Object}  action.payload
+ * @param  {String}  action.payload.container
+ * @param  {Boolean} action.payload.expanded
  * @return {void}
  */
-export function* workerReceiveContainer(store, { payload }) {
-	let container = payload;
+export function* workerReceiveContainer(store, { payload: { container, expanded } }) {
 	let fields = [];
 
 	container = urldecode(container);
@@ -43,7 +44,7 @@ export function* workerReceiveContainer(store, { payload }) {
 	const { id, type } = container;
 
 	yield call(containerFactory, store, type, { id });
-	yield put(toggleContainerBox(id, true));
+	yield put(toggleContainerBox(id, expanded));
 }
 
 /**

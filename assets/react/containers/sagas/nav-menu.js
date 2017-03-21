@@ -2,6 +2,7 @@
  * The external dependencies.
  */
 import $ from 'jquery';
+import { delay } from 'redux-saga';
 import { put, call, take, select } from 'redux-saga/effects';
 
 /**
@@ -10,10 +11,9 @@ import { put, call, take, select } from 'redux-saga/effects';
 import { PAGE_NOW_MENUS } from 'lib/constants';
 import { createAjaxChannel, createSubmitChannel, createClickChannel } from 'lib/events';
 
-import { receiveContainer, validateAllContainers, submitForm } from 'containers/actions';
+import { receiveContainer, validateAllContainers, submitForm, toggleContainerBox } from 'containers/actions';
 import { getContainerById } from 'containers/selectors';
 
-import { redrawMap } from 'fields/actions';
 import { getFieldById } from 'fields/selectors';
 import { TYPE_MAP } from 'fields/constants';
 
@@ -38,7 +38,7 @@ export function* workerInit() {
 			break;
 		}
 
-		yield put(receiveContainer(container));
+		yield put(receiveContainer(container, false));
 	}
 }
 
@@ -59,32 +59,26 @@ export function* workerFormSubmit() {
 }
 
 /**
- * Handle menu item expand
+ * Notify everyone that the item is expanded or collapsed.
  *
  * @return {void}
  */
 export function* workerItemExpand() {
-	const channel = yield call(createClickChannel, '.item-edit');
+	const channel = yield call(createClickChannel, '#menu-to-edit', '.item-edit');
 
 	while (true) {
 		const { event } = yield take(channel);
-		const containerId = $(event.target)
-			.closest('.menu-item')
+		const $item = $(event.target).closest('.menu-item');
+		const containerId = $item
 			.find('.carbon-container')
 				.data('id');
-
 
 		if (!containerId) {
 			continue;
 		}
 
-		const container = yield select(getContainerById, containerId);
-
-		for ( let i = 0; i < container.fields.length; i++ ) {
-			if (container.fields[i].type === TYPE_MAP) {
-				yield put(redrawMap(container.fields[i].id));
-			}
-		}
+		yield call(delay, 100);
+		yield put(toggleContainerBox(containerId, $item.hasClass('menu-item-edit-active')));
 	}
 }
 
