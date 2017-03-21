@@ -10,9 +10,7 @@ use Carbon_Fields\Datastore\Datastore;
 class Term_Meta_Container extends Container {
 	protected $term_id;
 
-	public $settings = array(
-		
-	);
+	public $settings = array();
 
 	/**
 	 * Create a new container

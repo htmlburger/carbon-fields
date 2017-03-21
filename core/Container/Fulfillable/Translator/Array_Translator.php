@@ -95,7 +95,7 @@ class Array_Translator extends Translator {
 			Incorrect_Syntax_Exception::raise( 'Invalid data passed to array condition translator: ' . print_r( $foreign, true ) );
 		}
 
-		if ( isset( $foreign[ 'type' ] ) ) {
+		if ( isset( $foreign['type'] ) ) {
 			return $this->foreign_to_native_condition( $foreign );
 		}
 
