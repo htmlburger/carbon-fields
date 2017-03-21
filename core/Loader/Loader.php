@@ -98,7 +98,7 @@ class Loader {
 	 * Initialize main scripts
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/assets/carbon.vendor.js', array( ) );
+		wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/assets/carbon.vendor.js', array() );
 		wp_enqueue_script( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/carbon.core.js', array( 'carbon-fields-vendor', 'jquery' ) );
 		wp_enqueue_script( 'carbon-fields-bootstrap', \Carbon_Fields\URL . '/assets/carbon.bootstrap.js', array( 'carbon-fields-core' ) );
 
