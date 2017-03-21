@@ -75,17 +75,18 @@ class WP_Toolset {
 	}
 	
 	/**
-	 * Convert any term descriptor to an id-based term descriptor
+	 * Decorate any term descriptor to include the full term and taxonomy objects
 	 * 
 	 * @return mixed
 	 */
 	public function wildcard_term_descriptor_to_full_term_descriptor( $descriptor ) {
+		if ( ! isset( $descriptor[ 'field' ] ) ) {
+			$descriptor[ 'field' ] = 'id';
+		}
+
 		$term = $this->get_term_by_descriptor( $descriptor );
-		return array(
-			'value' => $term->term_id,
-			'field' => 'id',
-			'taxonomy' => $term->taxonomy,
-			'term' => $term,
-		);
+		$descriptor['term_object'] = $term;
+		$descriptor['taxonomy_object'] = get_taxonomy( $term->taxonomy );
+		return $descriptor;
 	}
 }
