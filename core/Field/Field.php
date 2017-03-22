@@ -205,6 +205,15 @@ class Field implements Datastore_Holder_Interface {
 
 		$class = __NAMESPACE__ . '\\' . $type . '_Field';
 
+		if ( ! class_exists( $class ) && class_exists( $type ) ) {
+			$reflection = new \ReflectionClass( $type );
+			if ( $reflection->isSubclassOf( get_class() ) ) {
+				$class = $type;
+			} else {
+				Incorrect_Syntax_Exception::raise( 'Field must be of type Carbon_Fields\\Field\\Field' );
+			}
+		}
+
 		if ( ! class_exists( $class ) ) {
 			Incorrect_Syntax_Exception::raise( 'Unknown field "' . $type . '".' );
 			$class = __NAMESPACE__ . '\\Broken_Field';
@@ -249,24 +258,6 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Cleans up an object class for usage as HTML class
-	 *
-	 * @param string $type
-	 * @return string
-	 */
-	protected function clean_type( $type ) {
-		$remove = array(
-			'_',
-			'\\',
-			'CarbonFields',
-			'Field',
-		);
-		$clean_class = str_replace( $remove, '', $type );
-
-		return $clean_class;
-	}
-
-	/**
 	 * Returns the type of the field based on the class.
 	 * The class is stripped by the "CarbonFields" prefix.
 	 * Also the "Field" suffix is removed.
@@ -276,8 +267,7 @@ class Field implements Datastore_Holder_Interface {
 	 */
 	public function get_type() {
 		$class = get_class( $this );
-
-		return $this->clean_type( $class );
+		return Helper::class_to_type( $class, '_Field' );
 	}
 
 	/**
