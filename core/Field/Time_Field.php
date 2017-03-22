@@ -6,7 +6,7 @@ namespace Carbon_Fields\Field;
  * Time picker field class.
  */
 class Time_Field extends Field {
-	
+
 	/**
 	 * Picker type.
 	 *
@@ -22,9 +22,6 @@ class Time_Field extends Field {
 	public $picker_options = array(
 		'dateFormat' => 'yy-mm-dd',
 		'timeFormat' => 'hh:mm tt',
-		'altFormat' => 'yy-mm-dd',
-		'altTimeFormat' => 'HH:mm:ss',
-		'altFieldTimeOnly' => false,
 	);
 
 	/**

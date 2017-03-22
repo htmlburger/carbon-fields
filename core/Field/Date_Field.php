@@ -6,7 +6,7 @@ namespace Carbon_Fields\Field;
  * Date picker field class.
  */
 class Date_Field extends Field {
-	
+
 	/**
 	 * Picker type.
 	 *
@@ -21,8 +21,6 @@ class Date_Field extends Field {
 	 */
 	public $picker_options = array(
 		'dateFormat' => 'yy-mm-dd',
-		'altFormat' => 'yy-mm-dd',
-		'altInput' => true,
 	);
 
 	/**

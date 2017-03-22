@@ -3,9 +3,7 @@
  */
 import React, { PropTypes } from 'react';
 import fecha from 'fecha';
-import $ from 'jquery';
 import { compose, withHandlers, withState, withProps, setStatic } from 'recompose';
-import { isString } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -33,20 +31,20 @@ export const DateTimeField = ({ name, field, picker, options, handleChange }) =>
 		<DateTimePicker
 			type={picker}
 			options={options}
-			defaultValue={field.value}
-			storageFormat={field.storage_format}>
+			value={field.value}
+			storageFormat={field.storage_format}
+			onChange={handleChange}>
 				<div className="carbon-field-group-holder">
 					<input
 						type="text"
 						id={field.id}
 						disabled={!field.ui.is_visible}
-						className="regular-text carbon-field-group-input"
-						onChange={handleChange} />
+						className="regular-text carbon-field-group-input" />
 
 					<input
 						type="hidden"
 						name={name}
-						defaultValue={field.value}
+						value={field.value}
 						disabled={!field.ui.is_visible} />
 				</div>
 			</DateTimePicker>
@@ -78,11 +76,6 @@ DateTimeField.propTypes = {
  * @return {Object}
  */
 const props = ({ name, field, handleChange }) => {
-	const defaults = {
-		altField: `input[name="${name}"]`,
-		onSelect: handleChange,
-	};
-
 	const buttonText = field.type === TYPE_TIME ? carbonFieldsL10n.field.selectTime : carbonFieldsL10n.field.selectDate;
 
 	if (field.picker_options) {
@@ -92,9 +85,8 @@ const props = ({ name, field, handleChange }) => {
 				...field.interval_step,
 				...field.restraints,
 				...field.picker_options,
-				...defaults,
 				buttonText,
-				showTime: false
+				showTime: false,
 			},
 		};
 	}
@@ -103,8 +95,7 @@ const props = ({ name, field, handleChange }) => {
 		picker: 'datepicker',
 		options: {
 			...field.picker_options,
-			...defaults,
-			buttonText
+			buttonText,
 		},
 	};
 };
@@ -117,24 +108,16 @@ const props = ({ name, field, handleChange }) => {
  * @param  {Function} props.updateField
  * @return {Function}
  */
-const handleChange = ({ field, updateField }) => eventOrDate => {
+const handleChange = ({ field, updateField }) => date => {
 	let value;
 
-	if (isString(eventOrDate)) {
-		value = eventOrDate;
+	if (date) {
+		value = fecha.format(date, field.storage_format);
 	} else {
-		value = eventOrDate.target.value;
+		value = '';
 	}
 
-	if (field.type === TYPE_TIME) {
-		const time = $.datepicker.parseTime(field.picker_options.timeFormat, value);
-		value = $.datepicker.formatTime(field.storage_format, time);
-	} else {
-		const date = $.datepicker.parseDate(field.picker_options.dateFormat, value);
-		value = fecha.format( date, field.storage_format );
-	}
-
-	updateField(field.id, { value: value });
+	updateField(field.id, { value });
 };
 
 export default setStatic('type', [

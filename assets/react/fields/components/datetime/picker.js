@@ -16,27 +16,34 @@ class DateTimePicker extends React.Component {
 		const {
 			type,
 			options,
-			defaultValue,
+			value,
 			storageFormat
 		} = this.props;
 
 		this.node = ReactDOM.findDOMNode(this);
-		this.$input = $('input[type="text"]', this.node)[type]({
-			changeMonth: true,
-			changeYear: true,
-			showOn: 'both',
-			hideIfNoPrevNext: true,
-			beforeShow() {
-				$('#ui-datepicker-div', this.node).addClass('carbon-jquery-ui');
-			},
-			...options,
-		});
+		this.handleInputChange = this.handleInputChange.bind(this);
 
+		// Initialize the plugin and setup the change listener.
+		this.$input = $('input[type="text"]', this.node)
+			[type]({
+				changeMonth: true,
+				changeYear: true,
+				showOn: 'both',
+				hideIfNoPrevNext: true,
+				beforeShow() {
+					$('#ui-datepicker-div', this.node).addClass('carbon-jquery-ui');
+				},
+				onSelect: this.handleInputChange,
+				...options,
+			})
+			.on('change', this.handleInputChange);
+
+		// Add our styles to the button.
 		$('button', this.node).addClass('button');
 
-		// Set the value in correct format.
-		if (defaultValue) {
-			this.$input.datepicker('setDate', fecha.parse(defaultValue, storageFormat));
+		// Convert the initial value to the correct format.
+		if (value) {
+			this.$input[type]('setDate', fecha.parse(value, storageFormat));
 		}
 	}
 
@@ -46,6 +53,7 @@ class DateTimePicker extends React.Component {
 	 * @return {void}
 	 */
 	componentWillUnmount() {
+		this.$input.off('change', this.handleInputChange);
 		this.$input[this.props.type]('destroy');
 
 		this.node = null;
@@ -60,6 +68,18 @@ class DateTimePicker extends React.Component {
 	render() {
 		return React.Children.only(this.props.children);
 	}
+
+	/**
+	 * We use this raw listener to avoid complex date parsing
+	 * in the parent component.
+	 *
+	 * @return {void}
+	 */
+	handleInputChange() {
+		// TODO: Debounce this function because `DateTime` & `Time` fields
+		// will trigger up to 4 `change` events on initial render.
+		this.props.onChange(this.$input.datepicker('getDate'));
+	}
 }
 
 /**
@@ -73,8 +93,10 @@ DateTimePicker.propTypes = {
 		'datetimepicker',
 		'timepicker',
 	]).isRequired,
+	value: PropTypes.string,
 	options: PropTypes.object.isRequired,
 	children: PropTypes.element.isRequired,
+	onChange: PropTypes.func.isRequired,
 };
 
 export default DateTimePicker;
