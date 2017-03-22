@@ -227,7 +227,7 @@ class Router {
 	 * @return array
 	 */
 	public function get_post_meta( $data ) {
-		$carbon_data = $this->get_all_field_values( 'Post_Meta', $data['id'] );
+		$carbon_data = $this->get_all_field_values( 'post_meta', $data['id'] );
 		return array( 'carbon_fields' => $carbon_data );
 	}
 
@@ -238,7 +238,7 @@ class Router {
 	 * @return array
 	 */
 	public function get_user_meta( $data ) {
-		$carbon_data = $this->get_all_field_values( 'User_Meta', $data['id'] );
+		$carbon_data = $this->get_all_field_values( 'user_meta', $data['id'] );
 		return array( 'carbon_fields' => $carbon_data );
 	}
 
@@ -249,7 +249,7 @@ class Router {
 	 * @return array
 	 */
 	public function get_term_meta( $data ) {
-		$carbon_data = $this->get_all_field_values( 'Term_Meta', $data['id'] );
+		$carbon_data = $this->get_all_field_values( 'term_meta', $data['id'] );
 		return array( 'carbon_fields' => $carbon_data );
 	}
 
@@ -260,7 +260,7 @@ class Router {
 	 * @return array
 	 */
 	public function get_comment_meta( $data ) {
-		$carbon_data = $this->get_all_field_values( 'Comment_Meta', $data['id'] );
+		$carbon_data = $this->get_all_field_values( 'comment_meta', $data['id'] );
 		return array( 'carbon_fields' => $carbon_data );
 	}
 
@@ -270,7 +270,7 @@ class Router {
 	 * @return array
 	 */
 	protected function get_options() {
-		$carbon_data = $this->get_all_field_values( 'Theme_Options' );
+		$carbon_data = $this->get_all_field_values( 'theme_options' );
 		return array( 'carbon_fields' => $carbon_data );
 	}
 

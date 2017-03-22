@@ -86,7 +86,7 @@ class Helper {
 	 * @return mixed        Meta value.
 	 */
 	public static function get_post_meta( $id, $name ) {
-		return static::get_value( $id, 'Post_Meta', $name );
+		return static::get_value( $id, 'post_meta', $name );
 	}
 
 	/**
@@ -98,7 +98,7 @@ class Helper {
 	 * @return bool Success
 	 */
 	public static function set_post_meta( $id, $name, $value ) {
-		return static::set_value( $id, 'Post_Meta', $name, $value );
+		return static::set_value( $id, 'post_meta', $name, $value );
 	}
 
 	/**
@@ -108,7 +108,7 @@ class Helper {
 	 * @return mixed Option value
 	 */
 	public static function get_theme_option( $name ) {
-		return static::get_value( null, 'Theme_Options', $name );
+		return static::get_value( null, 'theme_options', $name );
 	}
 
 	/**
@@ -119,7 +119,7 @@ class Helper {
 	 * @return bool Success
 	 */
 	public static function set_theme_option( $name, $value ) {
-		return static::set_value( null, 'Theme_Options', $name, $value );
+		return static::set_value( null, 'theme_options', $name, $value );
 	}
 
 	/**
@@ -130,7 +130,7 @@ class Helper {
 	 * @return mixed        Meta value.
 	 */
 	public static function get_term_meta( $id, $name ) {
-		return static::get_value( $id, 'Term_Meta', $name );
+		return static::get_value( $id, 'term_meta', $name );
 	}
 
 	/**
@@ -142,7 +142,7 @@ class Helper {
 	 * @return bool Success
 	 */
 	public static function set_term_meta( $id, $name, $value ) {
-		return static::set_value( $id, 'Term_Meta', $name, $value );
+		return static::set_value( $id, 'term_meta', $name, $value );
 	}
 
 	/**
