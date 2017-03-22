@@ -26,7 +26,7 @@ export const ComplexTabs = ({ groups, isTabActive, onClick, children }) => {
 			{
 				groups.map((group, index) => (
 					<ComplexTab
-						key={group.id}
+						key={index}
 						number={index + 1}
 						group={group}
 						active={isTabActive(group.id)}
