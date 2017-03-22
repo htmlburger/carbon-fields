@@ -1,7 +1,7 @@
 /**
  * The external dependencies.
  */
-import { takeEvery, select, call, put } from 'redux-saga/effects';
+import { takeEvery, take, select, call, put } from 'redux-saga/effects';
 import { filter, find, kebabCase } from 'lodash';
 
 /**
@@ -11,11 +11,24 @@ import { getContainerById } from 'containers/selectors';
 import { toggleContainerBox, switchContainerTab } from 'containers/actions';
 
 import { getFieldsByParent } from 'fields/selectors';
-import { expandComplexGroup, redrawMap } from 'fields/actions';
+import { receiveComplexGroup, expandComplexGroup, switchComplexTab, redrawMap } from 'fields/actions';
 import { TYPE_MAP } from 'fields/constants';
 
 /**
- * Redraw maps that are in complex groups.
+ * Redraw maps when a complex group is added/cloned.
+ *
+ * @param  {Object}  action
+ * @param  {Object}  action.payload
+ * @param  {String}  action.payload.groupId
+ * @param  {Boolean} action.payload.collapsed
+ * @return {void}
+ */
+export function* workerReceiveComplexGroup({ payload: { group } }) {
+	yield call(workerRedraw, yield select(getFieldsByParent, group.id));
+}
+
+/**
+ * Redraw maps when the complex group is expanded.
  *
  * @param  {Object}  action
  * @param  {Object}  action.payload
@@ -27,6 +40,18 @@ export function* workerExpandComplexGroup({ payload: { groupId, collapsed } }) {
 	if (!collapsed) {
 		yield call(workerRedraw, yield select(getFieldsByParent, groupId));
 	}
+}
+
+/**
+ * Redraw maps when the tab of complex field is changed.
+ *
+ * @param  {Object}  action
+ * @param  {Object}  action.payload
+ * @param  {String}  action.payload.groupId
+ * @return {void}
+ */
+export function* workerSwitchComplexTab({ payload: { groupId } }) {
+	yield call(workerRedraw, yield select(getFieldsByParent, groupId));
 }
 
 /**
@@ -71,7 +96,7 @@ export function* workerSwitchContainerTab({ payload: { containerId, tabId } }) {
  */
 export function* workerRedraw(fields) {
 	fields = filter(fields, ['type', TYPE_MAP]);
-	fields = filter(fields, ['ui.redraw_map', false]);
+	fields = filter(fields, ({ ui: { redraw_map }}) => !redraw_map);
 
 	for (const field of fields) {
 		yield put(redrawMap(field.id));
@@ -85,7 +110,9 @@ export function* workerRedraw(fields) {
  * @return {void}
  */
 export default function* foreman(store) {
+	yield takeEvery(receiveComplexGroup, workerReceiveComplexGroup);
 	yield takeEvery(expandComplexGroup, workerExpandComplexGroup);
+	yield takeEvery(switchComplexTab, workerSwitchComplexTab);
 	yield takeEvery(toggleContainerBox, workerToggleContainerBox);
 	yield takeEvery(switchContainerTab, workerSwitchContainerTab);
 }

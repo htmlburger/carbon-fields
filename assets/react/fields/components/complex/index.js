@@ -30,7 +30,8 @@ import {
 	cloneComplexGroup,
 	removeComplexGroup,
 	expandComplexGroup,
-	collapseComplexGroup
+	collapseComplexGroup,
+	switchComplexTab
 } from 'fields/actions';
 import {
 	TYPE_COMPLEX,
@@ -204,6 +205,7 @@ const mapDispatchToProps = {
 	removeComplexGroup,
 	expandComplexGroup,
 	collapseComplexGroup,
+	switchComplexTab,
 };
 
 /**
@@ -320,10 +322,10 @@ const handlePopoverClose = ({ setPopoverVisibility }) => () => setPopoverVisibil
  *
  * @param  {Object}   props
  * @param  {Object}   props.field
- * @param  {Function} props.setUI
+ * @param  {Function} props.switchComplexTab
  * @return {Function}
  */
-const handleTabClick = ({ field, setUI }) => groupId => setUI(field.id, { current_tab: groupId });
+const handleTabClick = ({ field, switchComplexTab }) => groupId => switchComplexTab(field.id, groupId);
 
 /**
  * Clone the complex group.
