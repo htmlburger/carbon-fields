@@ -181,7 +181,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @see  get_visible_in_rest_api
 	 * @var boolean
 	 */
-	protected $visible_in_rest_api = true;
+	protected $visible_in_rest_api = false;
 
 	/**
 	 * Clone the Value_Set object as well
