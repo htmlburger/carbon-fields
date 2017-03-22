@@ -84,6 +84,11 @@
             "email": "alexander.panayotov@gmail.com",
             "homepage": "http://alexanderpanayotov.com/",
             "role": "Developer"
+        },
+        {
+            "name": "Viktor Vasilev",
+            "email": "liberalcho@gmail.com",
+            "role": "Developer"
         }
     ],
     "support": {
