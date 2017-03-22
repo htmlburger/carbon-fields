@@ -121,15 +121,16 @@ class Decorator {
 	 */
 	public static function get_object_id( $object, $container_type ) {
 		$object = is_array( $object ) ? (object) $object : $object;
+		$container_type = Helper::normalize_type( $container_type );
 		switch ( $container_type ) {
-			case 'Post_Meta': // fallthrough intended
-			case 'User_Meta': 
+			case 'post_meta': // fallthrough intended
+			case 'user_meta': 
 				return isset( $object->ID ) ? $object->ID : $object->id;
 				break;
-			case 'Term_Meta':
+			case 'term_meta':
 				return $object->term_id;
 				break;
-			case 'Comment_Meta': 
+			case 'comment_meta': 
 				return $object->comment_ID;
 				break;
 		}

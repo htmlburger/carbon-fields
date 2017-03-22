@@ -114,7 +114,7 @@ class Meta_Query_Service extends Service {
 	public function hook_pre_get_posts( $query ) {
 		$meta_query = $query->get( 'meta_query' );
 		if ( ! empty( $meta_query ) ) {
-			$meta_query = $this->filter_meta_query_array( $meta_query, 'Post_Meta' );
+			$meta_query = $this->filter_meta_query_array( $meta_query, 'post_meta' );
 			$query->set( 'meta_query', $meta_query );
 		}
 	}
@@ -129,7 +129,7 @@ class Meta_Query_Service extends Service {
 	public function hook_pre_get_terms( $query ) {
 		$meta_query = ! empty( $query->query_vars['meta_query'] ) ? $query->query_vars['meta_query'] : array();
 		if ( ! empty( $meta_query ) ) {
-			$meta_query = $this->filter_meta_query_array( $meta_query, 'Term_Meta' );
+			$meta_query = $this->filter_meta_query_array( $meta_query, 'term_meta' );
 			$query->query_vars['meta_query'] = $meta_query;
 		}
 	}
@@ -144,7 +144,7 @@ class Meta_Query_Service extends Service {
 	public function hook_pre_get_users( $query ) {
 		$meta_query = $query->get( 'meta_query' );
 		if ( ! empty( $meta_query ) ) {
-			$meta_query = $this->filter_meta_query_array( $meta_query, 'User_Meta' );
+			$meta_query = $this->filter_meta_query_array( $meta_query, 'user_meta' );
 			$query->set( 'meta_query', $meta_query );
 		}
 	}
