@@ -18,8 +18,10 @@ import {
 	setUI,
 	markFieldAsValid,
 	markFieldAsInvalid,
+	receiveComplexGroup,
 	expandComplexGroup,
 	collapseComplexGroup,
+	switchComplexTab,
 	redrawMap
 } from 'fields/actions';
 
@@ -43,12 +45,14 @@ export default decorateFieldReducer(handleActions({
 		error: error,
 	}),
 
+	[receiveComplexGroup]: (state, { payload: { fieldId, group } }) => immutable.push(state, `${fieldId}.value`, group),
+
 	[combineActions(expandComplexGroup, collapseComplexGroup)]: (state, { payload: { fieldId, groupId, collapsed } }) => {
 		const index = findIndex(state[fieldId].value, { id: groupId });
 
 		return immutable.set(state, `${fieldId}.value.${index}.collapsed`, collapsed);
 	},
 
+	[switchComplexTab]: (state, { payload: { fieldId, groupId } }) => immutable.set(state, `${fieldId}.ui.current_tab`, groupId),
 	[redrawMap]: (state, { payload: { fieldId }}) => immutable.set(state, `${fieldId}.ui.redraw_map`, true),
-
 }, {}));

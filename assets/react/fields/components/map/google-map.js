@@ -15,6 +15,7 @@ class GoogleMap extends React.Component {
 
 		this.initMap();
 		this.setupMapEvents();
+		this.redrawMap(this.props);
 	}
 
 	/**
@@ -43,14 +44,7 @@ class GoogleMap extends React.Component {
 			}
 		}
 
-		if (redraw) {
-			const location = new google.maps.LatLng(lat, lng);
-
-			setTimeout( () => {
-				google.maps.event.trigger(this.map, 'resize');
-				this.map.setCenter(location);
-			}, 10);
-		}
+		this.redrawMap(nextProps);
 	}
 
 	/**
@@ -134,6 +128,25 @@ class GoogleMap extends React.Component {
 		};
 
 		google.maps.event.addListener(this.marker, 'dragend', handleDragEnd);
+	}
+
+	/**
+	 * Re-center when the map becomes visible.
+	 *
+	 * @param  {Object} props
+	 * @return {void}
+	 */
+	redrawMap(props) {
+		const { redraw, lat, lng } = props;
+
+		if (redraw) {
+			const location = new google.maps.LatLng(lat, lng);
+
+			setTimeout(() => {
+				google.maps.event.trigger(this.map, 'resize');
+				this.map.setCenter(location);
+			}, 10);
+		}
 	}
 }
 

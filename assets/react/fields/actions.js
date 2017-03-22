@@ -108,6 +108,15 @@ export const cloneComplexGroup = createAction('fields/CLONE_COMPLEX_GROUP', (fie
 export const removeComplexGroup = createAction('fields/REMOVE_COMPLEX_GROUP', (fieldId, groupId) => ({ fieldId, groupId }));
 
 /**
+ * Add the complex group to the store.
+ *
+ * @param  {String} fieldId
+ * @param  {Object} group
+ * @return {Object}
+ */
+export const receiveComplexGroup = createAction('fields/RECEIVE_COMPLEX_GROUP', (fieldId, group) => ({ fieldId, group }));
+
+/**
  * Show the contents of the specified group.
  *
  * @param  {String} fieldId
@@ -124,6 +133,15 @@ export const expandComplexGroup = createAction('fields/EXPAND_COMPLEX_GROUP', (f
  * @return {Object}
  */
 export const collapseComplexGroup = createAction('fields/COLLAPSE_COMPLEX_GROUP', (fieldId, groupId) => ({ fieldId, groupId, collapsed: true }));
+
+/**
+ * Change the currently visible tab of the complex field.
+ *
+ * @param  {String} fieldId
+ * @param  {String} groupId
+ * @return {Object}
+ */
+export const switchComplexTab = createAction('fields/SWITCH_COMPLEX_TAB', (fieldId, groupId) => ({ fieldId, groupId }));
 
 /**
  * Process the address through Google's geocoding service.

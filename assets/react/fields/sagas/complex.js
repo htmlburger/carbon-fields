@@ -19,10 +19,12 @@ import {
 import {
 	addFields,
 	removeFields,
-	updateField, setUI,
+	updateField,
 	addComplexGroup,
 	cloneComplexGroup,
-	removeComplexGroup
+	removeComplexGroup,
+	receiveComplexGroup,
+	switchComplexTab
 } from 'fields/actions';
 
 import { TYPE_COMPLEX } from 'fields/constants';
@@ -70,17 +72,10 @@ export function* workerAddOrCloneComplexGroup({ type, payload: { fieldId, groupI
 	fields = keyBy(fields, 'id');
 
 	yield put(addFields(fields));
-	yield put(updateField(fieldId, {
-		value: [
-			...field.value,
-			group,
-		]
-	}));
+	yield put(receiveComplexGroup(fieldId, group));
 
 	if (isTabbed) {
-		yield put(setUI(fieldId, {
-			current_tab: group.id,
-		}));
+		yield put(switchComplexTab(fieldId, group.id));
 	}
 }
 
@@ -134,9 +129,7 @@ export function* workerRemoveComplexGroup({ payload: { fieldId, groupId } }) {
 			}
 		}
 
-		yield put(setUI(fieldId, {
-			current_tab: nextGroupId
-		}));
+		yield put(switchComplexTab(fieldId, nextGroupId));
 	}
 
 	yield put(updateField(fieldId, {
