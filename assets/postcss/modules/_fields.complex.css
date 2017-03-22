@@ -110,6 +110,8 @@
 .carbon-empty-row:not(.carbon-empty-row-visible) ~ .layout-tabbed-horizontal + .carbon-actions,
 .carbon-empty-row:not(.carbon-empty-row-visible) ~ .layout-tabbed-vertical + .carbon-actions { display: none !important; }
 
+.layout-tabbed-horizontal .collapsed > .fields-container,
+.layout-tabbed-vertical .collapsed > .fields-container { display: block; }
 
 /*  Vertical Tabbed Layout  */
 
