@@ -54,10 +54,12 @@ class Term_Condition extends Condition {
 	 */
 	public function get_value() {
 		$value = parent::get_value();
-		if ( isset( $value['value'] ) ) {
-			$value = $this->wp_toolset->wildcard_term_descriptor_to_full_term_descriptor( $value );
-		} else {
-			$value = array_map( array( $this->wp_toolset, 'wildcard_term_descriptor_to_full_term_descriptor' ), $value );
+		if ( is_array( $value ) ) {
+			if ( isset( $value['value'] ) ) {
+				$value = $this->wp_toolset->wildcard_term_descriptor_to_full_term_descriptor( $value );
+			} else {
+				$value = array_map( array( $this->wp_toolset, 'wildcard_term_descriptor_to_full_term_descriptor' ), $value );
+			}
 		}
 		return $value;
 	}
