@@ -422,7 +422,7 @@ class Field implements Datastore_Holder_Interface {
 		if ( isset( $input[ $this->get_name() ] ) ) {
 			$this->set_value( $input[ $this->get_name() ] );
 		} else {
-			$this->set_value( array() );
+			$this->clear_value();
 		}
 	}
 
@@ -538,6 +538,13 @@ class Field implements Datastore_Holder_Interface {
 	 **/
 	public function set_value( $value ) {
 		$this->get_value_set()->set( $value );
+	}
+
+	/**
+	 * Clear the field value to a blank one (but not the default one)
+	 */
+	public function clear_value() {
+		$this->get_value_set()->set( array() );
 	}
 
 	/**
