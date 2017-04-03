@@ -2,7 +2,7 @@
 	"bail": true,
 	"verbose": true,
 
-	"testPathDirs": [
+	"roots": [
 		"assets/tests"
 	],
 

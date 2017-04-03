@@ -41,7 +41,7 @@
     "cssnano": "^3.8.0",
     "enzyme": "^2.7.0",
     "expose-loader": "^0.7.3",
-    "jest": "^18.1.0",
+    "jest": "^19.0.2",
     "jquery": "1.12",
     "postcss-cli": "^2.6.0",
     "postcss-import": "^8.1.3",
