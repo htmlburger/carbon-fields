@@ -4,7 +4,7 @@
 import urldecode from 'locutus/php/url/urldecode';
 import { takeEvery } from 'redux-saga';
 import { call, select, put, take } from 'redux-saga/effects';
-import { keyBy, get } from 'lodash';
+import { keyBy, get, map } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -32,11 +32,11 @@ import { TYPE_MAP } from 'fields/constants';
 export function* workerReceiveContainer(store, { payload: { container, expanded } }) {
 	let fields = [];
 
-	container = urldecode(container);
-	container = JSON.parse(container);
-	container.fields = container.fields.map(field => flattenField(field, container.id, fields));
+	container = yield call(urldecode, container);
+	container = yield call([JSON, JSON.parse], container);
+	container.fields = yield call(map, container.fields, field => flattenField(field, container.id, fields));
 
-	fields = keyBy(fields, 'id');
+	fields = yield call(keyBy, fields, 'id');
 
 	yield put(addContainer(container));
 	yield put(addFields(fields));
