@@ -2,20 +2,21 @@
  * The external dependencies.
  */
 import urldecode from 'locutus/php/url/urldecode';
-import { call, put } from 'redux-saga/effects';
-import { map, keyBy } from 'lodash';
+import { call, put, select } from 'redux-saga/effects';
+import { map, keyBy, get, set } from 'lodash';
 
 /**
  * The internal dependencies.
  */
 import factory from 'containers/factory';
-import * as workers from 'containers/sagas/base';
-import * as containerActions from 'containers/actions';
-import * as fieldActions from 'fields/actions';
+import { workerReceiveContainer, workerSyncHash } from 'containers/sagas/base';
+import { receiveContainer, addContainer, toggleContainerBox, switchContainerTab } from 'containers/actions';
+import { getContainerById } from 'containers/selectors';
+import { addFields } from 'fields/actions';
 
 describe('Containers >> Sagas >> Base', () => {
 	test('Receive Container', () => {
-		const generator = workers.workerReceiveContainer({}, containerActions.receiveContainer('', true));
+		const generator = workerReceiveContainer({}, receiveContainer('', true));
 		let next;
 
 		// Should decode the container string.
@@ -54,13 +55,13 @@ describe('Containers >> Sagas >> Base', () => {
 		// Should add container to the state.
 		next = generator.next({});
 		expect(next.value).toEqual(
-			put(containerActions.addContainer(container))
+			put(addContainer(container))
 		);
 
 		// Should add fields to the state.
 		next = generator.next();
 		expect(next.value).toEqual(
-			put(fieldActions.addFields({}))
+			put(addFields({}))
 		);
 
 		// Should render the container in DOM.
@@ -72,7 +73,37 @@ describe('Containers >> Sagas >> Base', () => {
 		// Should expand/collapse the DOM parent of the container.
 		next = generator.next();
 		expect(next.value).toEqual(
-			put(containerActions.toggleContainerBox('containerId', true))
+			put(toggleContainerBox('containerId', true))
+		);
+	});
+
+	test('Sync Hash', () => {
+		const action = switchContainerTab('containerId', 'tabId');
+		const generator = workerSyncHash(action);
+		let next;
+
+		// Should read the container's state from the store.
+		next = generator.next();
+		expect(next.value).toEqual(
+			select(getContainerById, 'containerId')
+		);
+
+		const container = {
+			ui: {
+				tabs_in_url: true,
+			},
+		};
+
+		// Should read the hash flag from the container's state.
+		next = generator.next(container);
+		expect(next.value).toEqual(
+			call(get, container, 'ui.tabs_in_url', false)
+		);
+
+		// Should update `window.location.hash`.
+		next = generator.next(true);
+		expect(next.value).toEqual(
+			call(set, window, 'location.hash', '!tabId')
 		);
 	});
 });

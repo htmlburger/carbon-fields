@@ -4,7 +4,7 @@
 import urldecode from 'locutus/php/url/urldecode';
 import { takeEvery } from 'redux-saga';
 import { call, select, put, take } from 'redux-saga/effects';
-import { keyBy, get, map } from 'lodash';
+import { keyBy, map, get, set } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -56,12 +56,12 @@ export function* workerReceiveContainer(store, { payload: { container, expanded 
  * @param  {String} action.payload.tabId
  * @return {void}
  */
-export function* workerTabs({ payload: { containerId, tabId }}) {
+export function* workerSyncHash({ payload: { containerId, tabId }}) {
 	const container = yield select(getContainerById, containerId);
 	const shouldChangeHash = yield call(get, container, 'ui.tabs_in_url', false);
 
 	if (shouldChangeHash) {
-		window.location.hash = `!${tabId}`;
+		yield call(set, window, 'location.hash', `!${tabId}`);
 	}
 }
 
@@ -74,7 +74,7 @@ export function* workerTabs({ payload: { containerId, tabId }}) {
 export default function* foreman(store) {
 	const { pagenow } = window;
 
-	yield takeEvery(switchContainerTab, workerTabs);
+	yield takeEvery(switchContainerTab, workerSyncHash);
 
 	if (pagenow === PAGE_NOW_WIDGETS || pagenow === PAGE_NOW_MENUS) {
 		yield takeEvery(receiveContainer, workerReceiveContainer, store);
