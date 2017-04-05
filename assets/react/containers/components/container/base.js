@@ -1,7 +1,7 @@
 /**
  * The external dependencies.
  */
-import React from 'react';
+import React, { PropTypes } from 'react';
 import cx from 'classnames';
 
 /**
@@ -33,6 +33,35 @@ const ContainerBase = ({ container, fields, children }) => {
 			fields.map(({ id, type }) => fieldFactory(type, { id }))
 		}
 	</div>;
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+ContainerBase.propTypes = {
+	container: PropTypes.shape({
+		id: PropTypes.string.isRequired,
+		type: PropTypes.string.isRequired,
+		classes: PropTypes.arrayOf(PropTypes.string).isRequired,
+	}).isRequired,
+
+	fields: PropTypes.arrayOf(PropTypes.shape({
+		id: PropTypes.string.isRequired,
+		type: PropTypes.string.isRequired,
+	})),
+
+	children: React.PropTypes.element,
+};
+
+/**
+ * The default values of the props.
+ *
+ * @type {Object}
+ */
+ContainerBase.defaultProps = {
+	fields: [],
 };
 
 export default ContainerBase;
