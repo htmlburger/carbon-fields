@@ -1,7 +1,7 @@
 /**
  * The external dependencies.
  */
-import React from 'react';
+import React, { PropTypes } from 'react';
 
 /**
  * Render the nonce field of the container
@@ -17,6 +17,20 @@ const ContainerNonce = ({ container: { nonce } }) => {
 		id={nonce.name}
 		name={nonce.name}
 		value={nonce.value} />
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+ContainerNonce.propTypes = {
+	container: PropTypes.shape({
+		nonce: PropTypes.shape({
+			name: PropTypes.string.isRequired,
+			value: PropTypes.string.isRequired,
+		}).isRequired,
+	}).isRequired,
 };
 
 export default ContainerNonce;
