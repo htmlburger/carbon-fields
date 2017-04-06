@@ -3,7 +3,7 @@
  */
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { withHandlers } from 'recompose';
+import { compose, setPropTypes, withHandlers } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -21,7 +21,7 @@ import { preventDefault } from 'lib/helpers';
 const ContainerTabsNav = ({ tabs, handleClick }) => {
 	return <ul className="carbon-tabs-nav">
 		{
-			tabs.map(({ id, name, active}) => (
+			tabs.map(({ id, name, active }) => (
 				<li key={id} className={cx({ active })}>
 					<a href="#" onClick={handleClick(id)}>{name}</a>
 				</li>
@@ -31,7 +31,7 @@ const ContainerTabsNav = ({ tabs, handleClick }) => {
 };
 
 /**
- * Handle the `click` event on the links
+ * Handle the `click` event on the links.
  *
  * @param  {Object}   props
  * @param  {Function} props.onClick
@@ -39,4 +39,17 @@ const ContainerTabsNav = ({ tabs, handleClick }) => {
  */
 const handleClick = ({ onClick }) => tabId => preventDefault(() => onClick(tabId));
 
-export default withHandlers({ handleClick })(ContainerTabsNav);
+export default compose(
+	setPropTypes({
+		tabs: PropTypes.arrayOf(PropTypes.shape({
+			id: PropTypes.string,
+			name: PropTypes.string,
+			active: PropTypes.bool,
+		})),
+		onClick: PropTypes.func,
+	}),
+
+	withHandlers({
+		handleClick,
+	})
+)(ContainerTabsNav);
