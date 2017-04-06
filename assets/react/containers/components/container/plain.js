@@ -17,11 +17,20 @@ import ContainerNonce from 'containers/components/container/nonce';
  * @return {React.Element}
  */
 const ContainerPlain = ({ container }) => {
-	return <ContainerBase
-		container={container}
-		fields={container.fields}>
-			<ContainerNonce container={container} />
-		</ContainerBase>;
+	return <ContainerBase container={container} fields={container.fields}>
+		<ContainerNonce container={container} />
+	</ContainerBase>;
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+ContainerPlain.propTypes = {
+	container: PropTypes.shape({
+		fields: PropTypes.arrayOf(PropTypes.object).isRequired,
+	}).isRequired,
 };
 
 export default ContainerPlain;
