@@ -31,4 +31,18 @@ const ContainerTabs = ({ container, tabs }) => {
 	</div>;
 };
 
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+ContainerTabs.propTypes = {
+	container: PropTypes.object.isRequired,
+	tabs: PropTypes.arrayOf(PropTypes.shape({
+		id: PropTypes.string.isRequired,
+		active: PropTypes.bool.isRequired,
+		fields: PropTypes.arrayOf(PropTypes.object).isRequired,
+	})).isRequired,
+};
+
 export default ContainerTabs;
