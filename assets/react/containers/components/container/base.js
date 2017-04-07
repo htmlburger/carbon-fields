@@ -42,26 +42,17 @@ const ContainerBase = ({ container, fields, children }) => {
  */
 ContainerBase.propTypes = {
 	container: PropTypes.shape({
-		id: PropTypes.string.isRequired,
-		type: PropTypes.string.isRequired,
-		classes: PropTypes.arrayOf(PropTypes.string).isRequired,
-	}).isRequired,
+		id: PropTypes.string,
+		type: PropTypes.string,
+		classes: PropTypes.arrayOf(PropTypes.string),
+	}),
 
 	fields: PropTypes.arrayOf(PropTypes.shape({
-		id: PropTypes.string.isRequired,
-		type: PropTypes.string.isRequired,
+		id: PropTypes.string,
+		type: PropTypes.string,
 	})),
 
 	children: React.PropTypes.element,
-};
-
-/**
- * The default values of the props.
- *
- * @type {Object}
- */
-ContainerBase.defaultProps = {
-	fields: [],
 };
 
 export default ContainerBase;

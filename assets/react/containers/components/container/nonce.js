@@ -27,10 +27,10 @@ const ContainerNonce = ({ container: { nonce } }) => {
 ContainerNonce.propTypes = {
 	container: PropTypes.shape({
 		nonce: PropTypes.shape({
-			name: PropTypes.string.isRequired,
-			value: PropTypes.string.isRequired,
-		}).isRequired,
-	}).isRequired,
+			name: PropTypes.string,
+			value: PropTypes.string,
+		}),
+	}),
 };
 
 export default ContainerNonce;

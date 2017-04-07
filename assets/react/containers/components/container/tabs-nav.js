@@ -3,7 +3,7 @@
  */
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { compose, setPropTypes, withHandlers } from 'recompose';
+import { compose, withHandlers } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -18,7 +18,7 @@ import { preventDefault } from 'lib/helpers';
  * @param  {Function}      prop.handleClick
  * @return {React.Element}
  */
-const ContainerTabsNav = ({ tabs, handleClick }) => {
+export const ContainerTabsNav = ({ tabs, handleClick }) => {
 	return <ul className="carbon-tabs-nav">
 		{
 			tabs.map(({ id, name, active }) => (
@@ -31,25 +31,47 @@ const ContainerTabsNav = ({ tabs, handleClick }) => {
 };
 
 /**
- * Handle the `click` event on the links.
+ * Validate the props.
  *
- * @param  {Object}   props
- * @param  {Function} props.onClick
- * @return {Function}
+ * @type {Object}
  */
-const handleClick = ({ onClick }) => tabId => preventDefault(() => onClick(tabId));
+ContainerTabsNav.propTypes = {
+	tabs: PropTypes.arrayOf(PropTypes.shape({
+		id: PropTypes.string,
+		name: PropTypes.string,
+		active: PropTypes.bool,
+	})),
+	handleClick: PropTypes.func,
+};
 
-export default compose(
-	setPropTypes({
-		tabs: PropTypes.arrayOf(PropTypes.shape({
-			id: PropTypes.string,
-			name: PropTypes.string,
-			active: PropTypes.bool,
-		})),
-		onClick: PropTypes.func,
-	}),
-
+/**
+ * The enhancer.
+ *
+ * @type {Function}
+ */
+export const enhance = compose(
+	/**
+	 * The handlers passed to the component.
+	 */
 	withHandlers({
-		handleClick,
+		handleClick: ({ onClick }) => tabId => preventDefault(() => onClick(tabId)),
 	})
-)(ContainerTabsNav);
+);
+
+/**
+ * Enhance the component.
+ *
+ * @type {React.Component}
+ */
+const EnhancedContainerTabsNav = enhance(ContainerTabsNav);
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+EnhancedContainerTabsNav.propTypes = {
+	onClick: PropTypes.func,
+};
+
+export default EnhancedContainerTabsNav;

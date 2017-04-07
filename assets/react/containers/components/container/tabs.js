@@ -37,12 +37,12 @@ const ContainerTabs = ({ container, tabs }) => {
  * @type {Object}
  */
 ContainerTabs.propTypes = {
-	container: PropTypes.object.isRequired,
+	container: PropTypes.object,
 	tabs: PropTypes.arrayOf(PropTypes.shape({
-		id: PropTypes.string.isRequired,
-		active: PropTypes.bool.isRequired,
-		fields: PropTypes.arrayOf(PropTypes.object).isRequired,
-	})).isRequired,
+		id: PropTypes.string,
+		active: PropTypes.bool,
+		fields: PropTypes.array,
+	})),
 };
 
 export default ContainerTabs;

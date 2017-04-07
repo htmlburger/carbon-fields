@@ -29,8 +29,8 @@ const ContainerPlain = ({ container }) => {
  */
 ContainerPlain.propTypes = {
 	container: PropTypes.shape({
-		fields: PropTypes.arrayOf(PropTypes.object).isRequired,
-	}).isRequired,
+		fields: PropTypes.array,
+	}),
 };
 
 export default ContainerPlain;
