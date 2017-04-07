@@ -13,6 +13,44 @@ import ContainerTabs from 'containers/components/container/tabs';
 import ContainerNonce from 'containers/components/container/nonce';
 
 /**
+ * Render a tabbed version of the container.
+ *
+ * @param  {Object}        props
+ * @param  {Object}        props.container
+ * @param  {Object[]}      props.tabs
+ * @param  {Function}      props.handleTabClick
+ * @return {React.Element}
+ */
+export const ContainerTabbed = ({
+	container,
+	tabs,
+	handleTabClick
+}) => {
+	return <div className="carbon-tabs carbon-tabs-stacked">
+		<ContainerNonce container={container} />
+
+		<ContainerTabsNav
+			tabs={tabs}
+			onClick={handleTabClick} />
+
+		<ContainerTabs
+			container={container}
+			tabs={tabs} />
+	</div>;
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+ContainerTabbed.propTypes = {
+	container: PropTypes.object,
+	tabs: PropTypes.array,
+	handleTabClick: PropTypes.func,
+};
+
+/**
  * The enhancer.
  *
  * @type {Function}
@@ -52,22 +90,24 @@ export const enhance = compose(
 				switchContainerTab
 			} = this.props;
 
-			let tabId;
+			if (tabs.length) {
+				let tabId;
 
-			if (ui.tabs_in_url) {
-				const hash = window.location.hash.replace(/^#!/, '');
-				const tab = find(tabs, ['id', hash]);
+				if (ui.tabs_in_url) {
+					const hash = window.location.hash.replace(/^#!/, '');
+					const tab = find(tabs, ['id', hash]);
 
-				if (tab) {
-					tabId = tab.id;
+					if (tab) {
+						tabId = tab.id;
+					}
 				}
-			}
 
-			if (!tabId) {
-				tabId = tabs[0].id;
-			}
+				if (!tabId) {
+					tabId = tabs[0].id;
+				}
 
-			switchContainerTab(container.id, tabId);
+				switchContainerTab(container.id, tabId);
+			}
 		},
 	}),
 
@@ -80,30 +120,31 @@ export const enhance = compose(
 );
 
 /**
- * Render a tabbed version of the container.
+ * Enhance the component.
  *
- * @param  {Object}        props
- * @param  {Object}        props.container
- * @param  {Object[]}      props.tabs
- * @param  {Function}      props.handleTabClick
- * @return {React.Element}
+ * @type {React.Component}
  */
-export const ContainerTabbed = ({
-	container,
-	tabs,
-	handleTabClick
-}) => {
-	return <div className="carbon-tabs carbon-tabs-stacked">
-		<ContainerNonce container={container} />
+const EnhancedContainerTabbed = enhance(ContainerTabbed);
 
-		<ContainerTabsNav
-			tabs={tabs}
-			onClick={handleTabClick} />
-
-		<ContainerTabs
-			container={container}
-			tabs={tabs} />
-	</div>;
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+EnhancedContainerTabbed.propTypes = {
+	container: PropTypes.shape({
+		id: PropTypes.string,
+		fields: PropTypes.arrayOf(PropTypes.shape({
+			name: PropTypes.string,
+		})),
+		settings: PropTypes.shape({
+			tabs: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.string)),
+		}),
+	}),
+	ui: PropTypes.shape({
+		tabs_in_url: PropTypes.bool,
+	}),
+	switchContainerTab: PropTypes.func,
 };
 
-export default enhance(ContainerTabbed);
+export default EnhancedContainerTabbed;
