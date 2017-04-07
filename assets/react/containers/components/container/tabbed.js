@@ -88,7 +88,7 @@ export const enhance = compose(
  * @param  {Function}      props.handleTabClick
  * @return {React.Element}
  */
-const ContainerTabbed = ({
+export const ContainerTabbed = ({
 	container,
 	tabs,
 	handleTabClick
