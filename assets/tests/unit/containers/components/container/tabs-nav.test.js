@@ -7,15 +7,13 @@ import { shallow } from 'enzyme';
 /**
  * The internal dependencies.
  */
-import ContainerTabsNav from 'containers/components/container/tabs-nav';
+import { ContainerTabsNav } from 'containers/components/container/tabs-nav';
 
 /**
- * Small helper to setup the component under test.
- *
- * @return {Object}
+ * Setup the component under test.
  */
-const setup = () => {
-	const tabs = [
+const props = {
+	tabs: [
 		{
 			id: 'tab1',
 			name: 'Tab 1',
@@ -26,37 +24,23 @@ const setup = () => {
 			name: 'Tab 2',
 			active: false,
 		},
-	];
+	],
 
-	const onClick = jest.fn();
-
-	const wrapper = shallow(
-		<ContainerTabsNav
-			tabs={tabs}
-			onClick={onClick} />
-	);
-
-	const props = { tabs, onClick };
-
-	return { wrapper, props };
+	handleClick: jest.fn(),
 };
+
+const wrapper = shallow(<ContainerTabsNav {...props} />);
 
 describe('Containers >> Components >> Container >> Tabs Navigation', () => {
 	test('should render', () => {
-		const { wrapper } = setup();
-
 		expect(wrapper.is('ul')).toBeTruthy();
 	});
 
 	test('should render passed tabs', () => {
-		const { wrapper } = setup();
-
 		expect(wrapper.children()).toHaveLength(2);
 	});
 
 	test('should add "active" class to the current tab', () => {
-		const { wrapper } = setup();
-
 		expect(
 			wrapper
 				.children()
@@ -65,9 +49,7 @@ describe('Containers >> Components >> Container >> Tabs Navigation', () => {
 		).toBeTruthy();
 	});
 
-	test('should call passed "onClick" callback', () => {
-		const { wrapper, props } = setup();
-
+	test('should call "handleClick" callback', () => {
 		wrapper
 			.find('a')
 			.first()
@@ -75,7 +57,7 @@ describe('Containers >> Components >> Container >> Tabs Navigation', () => {
 				preventDefault() {},
 			});
 
-		expect(props.onClick).toHaveBeenCalled();
-		expect(props.onClick).toHaveBeenCalledWith('tab1');
+		expect(props.handleClick).toHaveBeenCalled();
+		expect(props.handleClick).toHaveBeenCalledWith('tab1');
 	});
 });
