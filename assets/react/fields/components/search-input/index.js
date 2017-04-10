@@ -22,7 +22,13 @@ import { KEY_ENTER } from 'lib/constants';
  * @param  {Function} 	   props.handleSubmit
  * @return {React.Element}
  */
-export const SearchInput = ({ name, term, disabled, handleChange, handleSubmit }) => {
+export const SearchInput = ({
+	name,
+	term,
+	disabled,
+	handleChange,
+	handleSubmit
+}) => {
 	return <div className="search-field carbon-association-search dashicons-before dashicons-search">
 		<input
 			type="text"
@@ -43,58 +49,47 @@ export const SearchInput = ({ name, term, disabled, handleChange, handleSubmit }
  */
 SearchInput.propTypes = {
 	name: PropTypes.string,
-	term: PropTypes.string.isRequired,
+	term: PropTypes.string,
 	disabled: PropTypes.bool,
 	handleChange: PropTypes.func,
 	handleSubmit: PropTypes.func,
 };
 
 /**
- * The default props.
+ * The enhancer.
  *
- * @type {Object}
+ * @type {Function}
  */
-const props = {
-	disabled: false,
-	onChange: () => {},
-	onSubmit: () => {},
-};
+export const enhance = compose(
+	/**
+	 * Setup the default props.
+	 */
+	defaultProps({
+		disabled: false,
+		onChange: () => {},
+		onSubmit: () => {},
+	}),
 
-/**
- * Improve the performance by wrapping the `onChange` handler in a debounced function.
- *
- * @param  {Object}   props
- * @param  {Function} props.onChange
- * @return {Function}
- */
-const debouncedOnChange = ({ onChange }) => debounce(v => onChange(v), 200);
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		debouncedOnChange: ({ onChange }) => debounce(v => onChange(v), 200),
+	}),
 
-/**
- * Handle the `change` event of the input.
- *
- * @param  {Object}   props
- * @param  {Function} props.debouncedOnChange
- * @return {Function}
- */
-const handleChange = ({ debouncedOnChange }) => ({ target: { value }}) => debouncedOnChange(value);
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		handleChange: ({ debouncedOnChange }) => ({ target: { value }}) => debouncedOnChange(value),
+		handleSubmit: ({ onSubmit }) => e => {
+			if (e.keyCode === KEY_ENTER) {
+				e.preventDefault();
 
-/**
- * Prevent the submission of the form.
- *
- * @param  {Object}   props
- * @param  {Function} props.onSubmit
- * @return {Function}
- */
-const handleSubmit = ({ onSubmit }) => e => {
-	if (e.keyCode === KEY_ENTER) {
-		e.preventDefault();
+				onSubmit(e.target.value);
+			}
+		},
+	})
+);
 
-		onSubmit(e.target.value);
-	}
-};
-
-export default compose(
-	defaultProps(props),
-	withHandlers({ debouncedOnChange }),
-	withHandlers({ handleChange, handleSubmit })
-)(SearchInput);
+export default enhance(SearchInput);
