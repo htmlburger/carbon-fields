@@ -31,12 +31,20 @@ import { TYPE_SET } from 'fields/constants';
  *
  * @todo Fix the translation.
  */
-export const SetField = ({ name, field, hasHiddenOptions, isChecked, isHidden, handleChange, showAllOptions }) => {
+export const SetField = ({
+	name,
+	field,
+	hasHiddenOptions,
+	isChecked,
+	isHidden,
+	handleChange,
+	showAllOptions
+}) => {
 	return <Field field={field}>
 		<div className="carbon-set-list">
 			{
 				field.options.map((option, index) => {
-					return <p key={`${field.id}-${option.value}`} hidden={isHidden(index)}>
+					return <p key={index} hidden={isHidden(index)}>
 						<label>
 							<input
 								type="checkbox"
@@ -67,92 +75,87 @@ export const SetField = ({ name, field, hasHiddenOptions, isChecked, isHidden, h
  * @type {Object}
  */
 SetField.propTypes = {
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	field: PropTypes.shape({
-		id: PropTypes.string.isRequired,
+		id: PropTypes.string,
 		value: PropTypes.arrayOf(PropTypes.string),
 		options: PropTypes.arrayOf(PropTypes.shape({
-			name: PropTypes.string.isRequired,
-			value: PropTypes.string.isRequired,
-		})).isRequired,
-	}).isRequired,
+			name: PropTypes.string,
+			value: PropTypes.string,
+		})),
+	}),
 	hasHiddenOptions: PropTypes.bool,
-	isChecked: PropTypes.func.isRequired,
-	isHidden: PropTypes.func.isRequired,
-	handleChange: PropTypes.func.isRequired,
-	showAllOptions: PropTypes.func.isRequired,
+	isChecked: PropTypes.func,
+	isHidden: PropTypes.func,
+	handleChange: PropTypes.func,
+	showAllOptions: PropTypes.func,
 };
 
 /**
- * Additional props that will be passed to the component.
+ * The enhancer.
  *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Number}   props.field.limit_options
- * @param  {Object[]} props.field.options
- * @param  {Boolean}  props.expanded
- * @return {Object}
+ * @type {Function}
  */
-const props = ({ field: { limit_options, options }, expanded }) => ({
-	hasHiddenOptions: !(limit_options > 0 && options.length > limit_options) || expanded,
-});
+export const enhance = compose(
+	/**
+	 * Connect to the Redux store.
+	 */
+	withStore(),
 
-/**
- * Check if the specified option is checked.
- *
- * @param  {Object} props
- * @param  {Object} props.field
- * @return {Function}
- */
-const isChecked = ({ field }) => option => field.value.indexOf(String(option.value)) > -1;
+	/**
+	 * Render "No-Options" component when the field doesn't have options.
+	 */
+	branch(
+		/**
+		 * Test to see if the "No-Options" should be rendered.
+		 */
+		({ field: { options } }) => options && options.length,
 
-/**
- * Check whether the input should be hidden.
- *
- * @param  {Object}  props
- * @param  {Object}  props.field
- * @param  {Boolean} props.expanded
- * @return {Function}
- */
-const isHidden = ({ field, expanded }) => index => index + 1 > field.limit_options && field.limit_options > 0 && !expanded;
+		/**
+		 * Render the actual field.
+		 */
+		compose(
+			/**
+			 * Attach the setup hooks.
+			 */
+			withSetup(),
 
-/**
- * Sync the values with the store.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.updateField
- * @return {Function}
- */
-const handleChange = ({ field, updateField }) => ({ target }) => {
-	updateField(field.id, {
-		value: target.checked ? [...field.value, target.value] : without(field.value, target.value)
-	});
-};
+			/**
+			 * Add a local state that will track the
+			 * "expanded" property.
+			 */
+			withState('expanded', 'setExpanded', false),
 
-/**
- * Show the hidden options.
- *
- * @param  {Object}   props
- * @param  {Function} props.setExpanded
- * @return {Function}
- */
-const showAllOptions = ({ setExpanded }) => preventDefault(() => setExpanded(true));
+			/**
+			 * Pass some handlers to the component.
+			 */
+			withHandlers({
+				handleChange: ({ field, updateField }) => ({ target }) => updateField(field.id, {
+					value: target.checked
+						? [...field.value, target.value]
+						: without(field.value, target.value)
+				}),
 
-export default setStatic('type', [TYPE_SET])(
-	compose(
-		withStore(),
-		branch(
-			({ field: { options } }) => !options.length,
+				isChecked: ({ field }) => option => field.value.indexOf(String(option.value)) > -1,
+				isHidden: ({ field, expanded }) => index => index + 1 > field.limit_options && field.limit_options > 0 && !expanded,
+				showAllOptions: ({ setExpanded }) => preventDefault(() => setExpanded(true)),
+			}),
 
-			renderComponent(NoOptions),
+			/**
+			 * Pass an additional set of props to the component.
+			 */
+			withProps(({ field: { limit_options, options }, expanded }) => ({
+				hasHiddenOptions: !(limit_options > 0 && options.length > limit_options) || expanded,
+			}))
+		),
 
-			compose(
-				withSetup(),
-				withState('expanded', 'setExpanded', false),
-				withHandlers({ handleChange, isChecked, isHidden, showAllOptions }),
-				withProps(props)
-			)
-		)
-	)(SetField)
+		/**
+		 * Render the empty component.
+		 */
+		renderComponent(NoOptions)
+	)
 );
+
+export default setStatic('type', [
+	TYPE_SET,
+])(enhance(SetField));
