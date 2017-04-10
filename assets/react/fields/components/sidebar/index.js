@@ -8,25 +8,31 @@ import { trim, find, kebabCase } from 'lodash';
 /**
  * The internal dependencies.
  */
+import { addSidebar } from 'sidebars/actions';
+
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { makeGetSidebarFieldOptions } from 'fields/selectors';
-import { addSidebar } from 'sidebars/actions';
 import { TYPE_SIDEBAR, VALIDATION_BASE } from 'fields/constants';
 
 /**
  * Render a dropdown field that lists existing sidebars and
  * provides the ability to add new sidebars to the site.
  *
- * @param  {Object}   props
- * @param  {String}   props.name
- * @param  {Object}   props.field
- * @param  {Object[]} props.options
- * @param  {Function} props.handleChange
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {Object[]}      props.options
+ * @param  {Function}      props.handleChange
  * @return {React.Element}
  */
-export const SidebarField = ({ name, field, options, handleChange }) => {
+export const SidebarField = ({
+	name,
+	field,
+	options,
+	handleChange
+}) => {
 	return <Field field={field}>
 		<select
 			id={field.id}
@@ -36,107 +42,123 @@ export const SidebarField = ({ name, field, options, handleChange }) => {
 			onChange={handleChange}>
 
 			{
-				options.map((option) => {
-					return <option key={`${field.id}-${option.name}`} value={option.value}>
-						{option.name}
-					</option>;
-				})
+				options.map(({ name, value }, index) => (
+					<option key={index} value={value}>
+						{name}
+					</option>
+				))
 			}
 		</select>
 	</Field>;
 };
 
 /**
- * Pass additional props to the component.
- *
- * @return {Function}
- */
-const mapStateToProps = () => {
-	const getSidebarFieldOptions = makeGetSidebarFieldOptions();
-
-	return (state, props) => ({
-		options: getSidebarFieldOptions(state, props.id),
-	});
-};
-
-/**
- * The additional actions that will be passed to the component.
+ * Validate the props.
  *
  * @type {Object}
  */
-const mapDispatchToProps = {
-	addSidebar,
+SidebarField.propTypes = {
+	name: PropTypes.string,
+	field: PropTypes.shape({
+		id: PropTypes.string,
+		value: PropTypes.string,
+		ui: PropTypes.shape({
+			is_visible: PropTypes.bool,
+		}),
+	}),
+	options: PropTypes.arrayOf(PropTypes.shape({
+		name: PropTypes.string,
+		value: PropTypes.string,
+	})),
+	handleChange: PropTypes.func,
 };
 
 /**
- * The lifecycle hooks that will be attached to the field.
+ * The enhancer.
  *
- * @type {Object}
+ * @type {Function}
  */
-const hooks = {
-	componentDidMount() {
-		const {
-			field,
-			ui,
-			options,
-			setupField,
-			setupValidation,
-			updateField,
-		} = this.props;
+export const enhance = compose(
+	/**
+	 * Connect to the Redux store.
+	 */
+	withStore(
+		() => {
+			const getSidebarFieldOptions = makeGetSidebarFieldOptions();
 
-		setupField(field.id, field.type, ui);
+			return (state, props) => ({
+				options: getSidebarFieldOptions(state, props.id),
+			});
+		},
 
-		if (field.required) {
-			setupValidation(field.id, VALIDATION_BASE);
+		{
+			addSidebar,
 		}
+	),
 
-		// If the field doesn't have a value,
-		// use the first option as fallback.
-		if (!field.value) {
-			updateField(field.id, {
-				value: options[0].value,
-			}, false);
-		}
-	}
-};
+	/**
+	 * Attach setup hooks.
+	 */
+	withSetup({
+		componentDidMount() {
+			const {
+				field,
+				ui,
+				options,
+				setupField,
+				setupValidation,
+				updateField,
+			} = this.props;
 
+			setupField(field.id, field.type, ui);
 
-/**
- * Sync the input value with the store.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Object}   props.options
- * @param  {Function} props.updateField
- * @param  {Function} props.addSidebar
- * @return {Function}
- */
-const handleChange = ({ field, options, updateField, addSidebar }) => e => {
-	let { value } = e.target;
+			if (field.required) {
+				setupValidation(field.id, VALIDATION_BASE);
+			}
 
-	if (value === 'new') {
-		e.preventDefault();
+			// If the field doesn't have a value,
+			// use the first option as fallback.
+			if (!field.value) {
+				updateField(field.id, {
+					value: options[0].value,
+				}, false);
+			}
+		},
+	}),
 
-		value = trim(window.prompt(carbonFieldsL10n.field.enterNameOfNewSidebar));
+	/**
+	 * The handlers passed to the component.
+	 */
+	withHandlers({
+		handleChange: ({ field, options, updateField, addSidebar }) => ({ target: { value } }) => {
+			if (value === 'new') {
+				e.preventDefault();
 
-		if (!value) {
-			return;
-		}
+				value = trim(window.prompt(carbonFieldsL10n.field.enterNameOfNewSidebar));
 
-		if (!find(options, { name: value })) {
-			addSidebar(value);
-		}
-	}
+				if (!value) {
+					return;
+				}
 
-	value = kebabCase(value);
+				if (!find(options, { name: value })) {
+					addSidebar(value);
+				}
+			}
 
-	updateField(field.id, { value });
-};
+			value = kebabCase(value);
 
-export default setStatic('type', [TYPE_SIDEBAR])(
-	compose(
-		withStore(mapStateToProps, mapDispatchToProps),
-		withSetup(hooks),
-		withHandlers({ handleChange })
-	)(SidebarField)
+			updateField(field.id, { value });
+		},
+	})
 );
+
+/**
+ * Enhance the component.
+ *
+ * @type {React.Component}
+ */
+const EnhancedSidebarField = setStatic('type', [
+	TYPE_SIDEBAR,
+])(enhance(SidebarField));
+
+export default EnhancedSidebarField;
