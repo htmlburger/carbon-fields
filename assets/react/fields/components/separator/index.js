@@ -19,7 +19,9 @@ import { TYPE_SEPARATOR } from 'fields/constants';
  * @param  {Object} props.field
  * @return {React.Element}
  */
-export const SeparatorField = ({ field }) => {
+export const SeparatorField = ({
+	field
+}) => {
 	return <Field field={field}>
 		<h3>{field.label}</h3>
 	</Field>;
@@ -32,13 +34,27 @@ export const SeparatorField = ({ field }) => {
  */
 SeparatorField.propTypes = {
 	field: PropTypes.shape({
-		label: PropTypes.string.isRequired,
-	}).isRequired,
+		label: PropTypes.string,
+	}),
 };
 
-export default setStatic('type', [TYPE_SEPARATOR])(
-	compose(
-		withStore(),
-		withSetup()
-	)(SeparatorField)
+/**
+ * The enhancer.
+ *
+ * @type {Function}
+ */
+export const enhance = compose(
+	/**
+	 * Connect to the Redux store.
+	 */
+	withStore(),
+
+	/**
+	 * Attach the setup hooks.
+	 */
+	withSetup()
 );
+
+export default setStatic('type', [
+	TYPE_SEPARATOR,
+])(enhance(SeparatorField));
