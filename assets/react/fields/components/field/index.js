@@ -60,16 +60,16 @@ export const Field = ({ field, children }) => {
  */
 Field.propTypes = {
 	field: PropTypes.shape({
-		id: PropTypes.string.isRequired,
-		type: PropTypes.string.isRequired,
+		id: PropTypes.string,
+		type: PropTypes.string,
 		label: PropTypes.string,
 		required: PropTypes.bool,
 		help_text: PropTypes.string,
 		width: PropTypes.number,
-	}).isRequired,
+	}),
 	children: PropTypes.oneOfType([
 		PropTypes.element,
-		PropTypes.arrayOf(PropTypes.element)
+		PropTypes.arrayOf(PropTypes.element),
 	])
 };
 
