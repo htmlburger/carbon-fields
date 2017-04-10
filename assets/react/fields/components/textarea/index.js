@@ -39,33 +39,50 @@ export const TextareaField = ({ name, field, handleChange }) => {
  * @type {Object}
  */
 TextareaField.propTypes = {
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	field: PropTypes.shape({
-		id: PropTypes.string.isRequired,
+		id: PropTypes.string,
 		value: PropTypes.string,
 		rows: PropTypes.number,
-	}).isRequired,
-	handleChange: PropTypes.func.isRequired,
+	}),
+	handleChange: PropTypes.func,
 };
 
 /**
- * Sync the input value with the store.
+ * The enhancer.
  *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.updateField
- * @return {Function}
+ * @type {Function}
  */
-const handleChange = ({ field, updateField }) => ({ target: { value } }) => updateField(field.id, { value });
+const enhance = compose(
+	withStore(),
+	withSetup(),
 
-export default setStatic('type', [
+	/**
+	 * The handlers passed to the component.
+	 */
+	withHandlers({
+		handleChange: ({ field, updateField }) => ({ target: { value } }) => updateField(field.id, { value }),
+	})
+);
+
+/**
+ * Enhance the component.
+ *
+ * @type {React.Component}
+ */
+const EnhancedTextareaField = setStatic('type', [
 	TYPE_TEXTAREA,
 	TYPE_HEADER_SCRIPTS,
-	TYPE_FOOTER_SCRIPTS
-])(
-	compose(
-		withStore(),
-		withSetup(),
-		withHandlers({ handleChange })
-	)(TextareaField)
-);
+	TYPE_FOOTER_SCRIPTS,
+])(enhance(TextareaField));
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+EnhancedTextareaField.propTypes = {
+	updateField: PropTypes.func,
+};
+
+export default EnhancedTextareaField;
