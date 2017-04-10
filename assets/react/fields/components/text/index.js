@@ -40,28 +40,47 @@ export const TextField = ({ name, field, handleChange }) => {
  * @type {Object}
  */
 TextField.propTypes = {
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	field: PropTypes.shape({
-		id: PropTypes.string.isRequired,
+		id: PropTypes.string,
 		value: PropTypes.string,
-	}).isRequired,
-	handleChange: PropTypes.func.isRequired,
+	}),
+	handleChange: PropTypes.func,
 };
 
 /**
- * Sync the input value with the store.
+ * The enhancer.
  *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.updateField
- * @return {Function}
+ * @type {Function}
  */
-const handleChange = ({ field, updateField }) => ({ target: { value } }) => updateField(field.id, { value });
+const enhance = compose(
+	withStore(),
+	withSetup(),
 
-export default setStatic('type', [TYPE_TEXT])(
-	compose(
-		withStore(),
-		withSetup(),
-		withHandlers({ handleChange })
-	)(TextField)
+	/**
+	 * The handlers passed to the component.
+	 */
+	withHandlers({
+		handleChange: ({ field, updateField }) => ({ target: { value } }) => updateField(field.id, { value }),
+	})
 );
+
+/**
+ * Enhance the component.
+ *
+ * @type {React.Component}
+ */
+const EnhancedTextField = setStatic('type', [
+	TYPE_TEXT,
+])(enhance(TextField));
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+EnhancedTextField.propTypes = {
+	updateField: PropTypes.func,
+};
+
+export default EnhancedTextField;
