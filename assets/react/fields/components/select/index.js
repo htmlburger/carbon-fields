@@ -22,7 +22,11 @@ import { TYPE_SELECT, TYPE_GRAVITY_FORM, VALIDATION_BASE } from 'fields/constant
  * @param  {Function} props.handleChange
  * @return {React.Element}
  */
-export const SelectField = ({ name, field, handleChange }) => {
+export const SelectField = ({
+	name,
+	field,
+	handleChange
+}) => {
 	return <Field field={field}>
 		<select
 			id={field.id}
@@ -32,9 +36,9 @@ export const SelectField = ({ name, field, handleChange }) => {
 			value={field.value}>
 
 			{
-				field.options.map((option) => {
-					return <option key={`${field.id}-${option.name}`} value={option.value}>
-						{option.name}
+				field.options.map(({ name, value }, index) => {
+					return <option key={index} value={value}>
+						{name}
 					</option>;
 				})
 			}
@@ -48,83 +52,89 @@ export const SelectField = ({ name, field, handleChange }) => {
  * @type {Object}
  */
 SelectField.propTypes = {
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	field: PropTypes.shape({
-		id: PropTypes.string.isRequired,
-		value: PropTypes.oneOfType([
-			PropTypes.string,
-			PropTypes.number,
-		]),
+		id: PropTypes.string,
+		value: PropTypes.any,
 		options: PropTypes.arrayOf(PropTypes.shape({
-			name: PropTypes.string.isRequired,
-			value: PropTypes.oneOfType([
-				PropTypes.string,
-				PropTypes.number,
-			]).isRequired,
-		})).isRequired,
-	}).isRequired,
-	handleChange: PropTypes.func.isRequired,
-};
-
-
-/**
- * The lifecycle hooks that will be attached to the field.
- *
- * @type {Object}
- */
-const hooks = {
-	componentDidMount() {
-		const {
-			field,
-			ui,
-			setupField,
-			setupValidation,
-			updateField,
-		} = this.props;
-
-		setupField(field.id, field.type, ui);
-
-		// If the field doesn't have a value,
-		// use the first option as fallback.
-		if (!field.value) {
-			updateField(field.id, {
-				value: field.options[0].value
-			}, false);
-		}
-
-		// Supress validation errors when the fallback option has a falsy value.
-		// An example is when the field is used to render 'Gravity Form' selectbox.
-		if (field.required) {
-			setupValidation(field.id, VALIDATION_BASE);
-		}
-	}
+			name: PropTypes.string,
+			value: PropTypes.any,
+		})),
+	}),
+	handleChange: PropTypes.func,
 };
 
 /**
- * Sync the input value with the store.
+ * The enhancer.
  *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.updateField
- * @return {Function}
+ * @type {Function}
  */
-const handleChange = ({ field, updateField }) => ({ target: { value } }) => updateField(field.id, { value });
+export const enhance = compose(
+	/**
+	 * Connect to the Redux store.
+	 */
+	withStore(),
+
+	/**
+	 * Render "No-Options" component when the field doesn't have options.
+	 */
+	branch(
+		/**
+		 * Test to see if the "No-Options" should be rendered.
+		 */
+		({ field: { options } }) => options && options.length,
+
+		/**
+		 * Render the actual field.
+		 */
+		compose(
+			/**
+			 * Attach the setup hooks.
+			 */
+			withSetup({
+				componentDidMount() {
+					const {
+						field,
+						ui,
+						setupField,
+						setupValidation,
+						updateField,
+					} = this.props;
+
+					setupField(field.id, field.type, ui);
+
+					// If the field doesn't have a value,
+					// use the first option as fallback.
+					if (!field.value) {
+						updateField(field.id, {
+							value: field.options[0].value,
+						}, false);
+					}
+
+					// Supress validation errors when the fallback option has a falsy value.
+					// An example is when the field is used to render 'Gravity Form' selectbox.
+					if (field.required) {
+						setupValidation(field.id, VALIDATION_BASE);
+					}
+				}
+			}),
+
+			/**
+			 * Pass some handlers to the component.
+			 */
+			withHandlers({
+				handleChange: ({ field, updateField }) => ({ target: { value } }) => updateField(field.id, { value }),
+			})
+		),
+
+		/**
+		 * Render the empty component.
+		 */
+		renderComponent(NoOptions)
+	)
+);
 
 export default setStatic('type', [
 	TYPE_SELECT,
-	TYPE_GRAVITY_FORM
-])(
-	compose(
-		withStore(),
-		branch(
-			({ field: { options } }) => !options.length,
-
-			renderComponent(NoOptions),
-
-			compose(
-				withSetup(hooks),
-				withHandlers({ handleChange })
-			)
-		)
-	)(SelectField)
-);
+	TYPE_GRAVITY_FORM,
+])(enhance(SelectField));
