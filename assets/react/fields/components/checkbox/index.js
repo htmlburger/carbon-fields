@@ -2,7 +2,12 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose, withProps, withHandlers, setStatic } from 'recompose';
+import {
+	compose,
+	withProps,
+	withHandlers,
+	setStatic
+} from 'recompose';
 
 /**
  * The internal dependencies.
@@ -15,14 +20,19 @@ import { TYPE_CHECKBOX } from 'fields/constants';
 /**
  * Render a checkbox input field.
  *
- * @param  {Object}   props
- * @param  {String}   props.name
- * @param  {Object}   props.field
- * @param  {Boolean}  props.checked
- * @param  {Function} props.handleChange
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {Boolean}       props.checked
+ * @param  {Function}      props.handleChange
  * @return {React.Element}
  */
-export const CheckboxField = ({ name, field, checked, handleChange }) => {
+export const CheckboxField = ({
+	name,
+	field,
+	checked,
+	handleChange
+}) => {
 	return <Field field={field}>
 		<label>
 			<input
@@ -44,46 +54,51 @@ export const CheckboxField = ({ name, field, checked, handleChange }) => {
  * @type {Object}
  */
 CheckboxField.propTypes = {
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	field: PropTypes.shape({
-		id: PropTypes.string.isRequired,
+		id: PropTypes.string,
 		value: PropTypes.string,
-		option_value: PropTypes.string.isRequired,
-	}).isRequired,
-	checked: PropTypes.bool.isRequired,
-	handleChange: PropTypes.func.isRequired,
+		option_value: PropTypes.string,
+	}),
+	checked: PropTypes.bool,
+	handleChange: PropTypes.func,
 };
 
 /**
- * Additional props that will be passed to the component.
+ * The enhancer.
  *
- * @param  {Object} props
- * @param  {Object} props.field
- * @return {Object}
+ * @type {Function}
  */
-const props = ({ field }) => ({
-	checked: field.value === field.option_value,
-});
+export const enhance = compose(
+	/**
+	 * Connect to the Redux store.
+	 */
+	withStore(),
 
-/**
- * Sync the input value with the store.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.updateField
- * @return {Function}
- */
-const handleChange = ({ field, updateField }) => ({ target }) => {
-	updateField(field.id, {
-		value: target.checked ? field.option_value : null,
-	});
-};
+	/**
+	 * Attach the setup hooks.
+	 */
+	withSetup(),
 
-export default setStatic('type', [TYPE_CHECKBOX])(
-	compose(
-		withStore(),
-		withSetup(),
-		withProps(props),
-		withHandlers({ handleChange })
-	)(CheckboxField)
+	/**
+	 * Pass some props to the component.
+	 */
+	withProps(({ field }) => ({
+		checked: field.value === field.option_value,
+	})),
+
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		handleChange: ({ field, updateField }) => ({ target }) => {
+			updateField(field.id, {
+				value: target.checked ? field.option_value : null,
+			});
+		},
+	})
 );
+
+export default setStatic('type', [
+	TYPE_CHECKBOX,
+])(enhance(CheckboxField));
