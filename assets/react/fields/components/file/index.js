@@ -17,17 +17,22 @@ import { TYPE_FILE, TYPE_IMAGE, VALIDATION_BASE } from 'fields/constants';
 /**
  * Render a file upload field with a preview thumbnail of the uploaded file.
  *
- * @param  {Object}   props
- * @param  {String}   props.name
- * @param  {Object}   props.field
- * @param  {Function} props.openBrowser
- * @param  {Function} props.clearSelection
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {Function}      props.openBrowser
+ * @param  {Function}      props.clearSelection
  * @return {React.Element}
  *
  * TODO: Replace the inline `style` with a class.
  * TODO: Add support for URL.
  */
-export const FileField = ({ name, field, openBrowser, clearSelection }) => {
+export const FileField = ({
+	name,
+	field,
+	openBrowser,
+	clearSelection
+}) => {
 	return <Field field={field}>
 		<div className="carbon-attachment">
 			<input
@@ -63,90 +68,75 @@ export const FileField = ({ name, field, openBrowser, clearSelection }) => {
  * @type {Object}
  */
 FileField.propTypes = {
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	field: PropTypes.shape({
-		id: PropTypes.string.isRequired,
+		id: PropTypes.string,
 		value: PropTypes.oneOfType([
 			PropTypes.string,
 			PropTypes.number,
 		]),
-		value_type: PropTypes.string.isRequired,
+		value_type: PropTypes.string,
 		thumb_url: PropTypes.string,
 		file_name: PropTypes.string,
-		button_label: PropTypes.string.isRequired,
-	}).isRequired,
-	openBrowser: PropTypes.func.isRequired,
-	clearSelection: PropTypes.func.isRequired,
+		button_label: PropTypes.string,
+	}),
+	openBrowser: PropTypes.func,
+	clearSelection: PropTypes.func,
 };
 
 /**
- * The lifecycle hooks that will be attached to the field.
+ * The enhancer.
  *
- * @type {Object}
+ * @type {Function}
  */
-const hooks = {
-	componentDidMount() {
-		const {
-			field,
-			ui,
-			setupField,
-			setupValidation,
-			setupMediaBrowser,
-			updateField,
-		} = this.props;
+export const enhance = compose(
+	/**
+	 * Connect to the Redux store.
+	 */
+	withStore(undefined, {
+		setupMediaBrowser,
+		openMediaBrowser,
+	}),
 
-		this.props.setupField(field.id, field.type, ui);
-		this.props.setupMediaBrowser(field.id);
+	/**
+	 * Attach the setup hooks.
+	 */
+	withSetup({
+		componentDidMount() {
+			const {
+				field,
+				ui,
+				setupField,
+				setupValidation,
+				setupMediaBrowser,
+				updateField,
+			} = this.props;
 
-		if (field.required) {
-			setupValidation(field.id, VALIDATION_BASE);
+			setupField(field.id, field.type, ui);
+			setupMediaBrowser(field.id);
+
+			if (field.required) {
+				setupValidation(field.id, VALIDATION_BASE);
+			}
 		}
-	}
-};
+	}),
 
-/**
- * The additional actions that will be passed to the component.
- *
- * @type {Object}
- */
-const mapDispatchToProps = {
-	setupMediaBrowser,
-	openMediaBrowser,
-};
-
-/**
- * Show WordPress's media browser.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.openMediaBrowser
- * @return {Function}
- */
-const openBrowser = ({ field, openMediaBrowser }) => () => openMediaBrowser(field.id);
-
-/**
- * Remove the attachment that is selected.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.updateField
- * @return {Function}
- */
-const clearSelection = ({ field, updateField }) => () => {
-	updateField(field.id, {
-		value: '',
-		file_name: '',
-		thumb_url: ''
-	});
-};
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		openBrowser: ({ field, openMediaBrowser }) => () => openMediaBrowser(field.id),
+		clearSelection: ({ field, updateField }) => () => {
+			updateField(field.id, {
+				value: '',
+				file_name: '',
+				thumb_url: ''
+			});
+		},
+	}),
+);
 
 export default setStatic('type', [
 	TYPE_FILE,
-	TYPE_IMAGE
-])(
-	compose(
-		withStore(undefined, mapDispatchToProps),
-		withSetup(hooks),
-		withHandlers({ openBrowser, clearSelection })
-	)(FileField)
-);
+	TYPE_IMAGE,
+])(enhance(FileField));
