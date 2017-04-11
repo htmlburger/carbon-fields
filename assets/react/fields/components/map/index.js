@@ -76,55 +76,49 @@ const MapField = ({ name, field, handleChange, handleSearchSubmit }) => {
  * @type {Object}
  */
 MapField.propTypes = {
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	field: PropTypes.shape({
-		lat: PropTypes.number.isRequired,
-		lng: PropTypes.number.isRequired,
-		zoom: PropTypes.number.isRequired,
-		address: PropTypes.string.isRequired,
-	}).isRequired,
-	handleChange: PropTypes.func.isRequired,
+		lat: PropTypes.number,
+		lng: PropTypes.number,
+		zoom: PropTypes.number,
+		address: PropTypes.string,
+	}),
+	handleChange: PropTypes.func,
 };
 
 /**
- * The additional actions that will be passed to the component.
+ * The enhancer.
  *
- * @type {Object}
+ * @type {Function}
  */
-const mapDispatchToProps = {
-	geocodeAddress,
-};
+export const enhance = compose(
+	/**
+	 * Connect to the Redux store.
+	 */
+	withStore(undefined, {
+		geocodeAddress,
+	}),
 
-/**
- * Sync the values with the store.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.updateField
- * @return {Function}
- */
-const handleChange = ({ field, updateField }) => data => {
-	if (data.lat && data.lng) {
-		data.value = `${data.lat},${data.lng}`;
-	}
+	/**
+	 * Attach the setup hooks.
+	 */
+	withSetup(),
 
-	updateField(field.id, data);
-};
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		handleChange: ({ field, updateField }) => data => {
+			if (data.lat && data.lng) {
+				data.value = `${data.lat},${data.lng}`;
+			}
 
-/**
- * Handle the submission of the search input.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.geocodeAddress
- * @return {Function}
- */
-const handleSearchSubmit = ({ field, geocodeAddress }) => address => geocodeAddress(field.id, address);
-
-export default setStatic('type', [TYPE_MAP])(
-	compose(
-		withStore(undefined, mapDispatchToProps),
-		withSetup({}, {redraw_map: false}),
-		withHandlers({ handleChange, handleSearchSubmit })
-	)(MapField)
+			updateField(field.id, data);
+		},
+		handleSearchSubmit: ({ field, geocodeAddress }) => address => geocodeAddress(field.id, address),
+	}),
 );
+
+export default setStatic('type', [
+	TYPE_MAP,
+])(enhance(MapField));

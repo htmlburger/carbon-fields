@@ -157,11 +157,11 @@ class GoogleMap extends React.Component {
  */
 GoogleMap.propTypes = {
 	className: PropTypes.string,
-	lat: PropTypes.number.isRequired,
-	lng: PropTypes.number.isRequired,
-	zoom: PropTypes.number.isRequired,
-	onChange: PropTypes.func.isRequired,
-	redraw: PropTypes.bool.isRequired,
+	lat: PropTypes.number,
+	lng: PropTypes.number,
+	zoom: PropTypes.number,
+	onChange: PropTypes.func,
+	redraw: PropTypes.bool,
 };
 
 export default GoogleMap;
