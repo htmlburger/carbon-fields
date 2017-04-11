@@ -2,7 +2,12 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose, withHandlers, withState, setStatic } from 'recompose';
+import {
+	compose,
+	withHandlers,
+	withState,
+	setStatic
+} from 'recompose';
 
 /**
  * The internal dependencies.
@@ -16,19 +21,25 @@ import { TYPE_COLOR } from 'fields/constants';
 /**
  * Render a color input field.
  *
- * @param  {Object}   props
- * @param  {String}   props.name
- * @param  {Object}   props.field
- * @param  {Boolean}  props.pickerVisible
- * @param  {Function} props.handleChange
- * @param  {Function} props.showPicker
- * @param  {Function} props.hidePicker
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {Boolean}       props.pickerVisible
+ * @param  {Function}      props.handleChange
+ * @param  {Function}      props.showPicker
+ * @param  {Function}      props.hidePicker
  * @return {React.Element}
  *
  * TODO: Fix translation of 'Select a color' label.
- * TODO: Replace inline styles with classes.
  */
-export const ColorField = ({ name, field, pickerVisible, handleChange, showPicker, hidePicker }) => {
+export const ColorField = ({
+	name,
+	field,
+	pickerVisible,
+	handleChange,
+	showPicker,
+	hidePicker
+}) => {
 	return <Field field={field}>
 		<div className="carbon-color">
 			<span className="pickcolor button carbon-color-button hide-if-no-js" onClick={showPicker}>
@@ -60,46 +71,48 @@ export const ColorField = ({ name, field, pickerVisible, handleChange, showPicke
  * @type {Object}
  */
 ColorField.propTypes = {
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	field: PropTypes.shape({
-		id: PropTypes.string.isRequired,
+		id: PropTypes.string,
 		value: PropTypes.string,
-	}).isRequired,
-	pickerVisible: PropTypes.bool.isRequired,
-	handleChange: PropTypes.func.isRequired,
-	showPicker: PropTypes.func.isRequired,
-	hidePicker: PropTypes.func.isRequired,
+	}),
+	pickerVisible: PropTypes.bool,
+	handleChange: PropTypes.func,
+	showPicker: PropTypes.func,
+	hidePicker: PropTypes.func,
 };
 
 /**
- * Sync the value with the store.
+ * The enhancer.
  *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.updateField
- * @return {Function}
+ * @type {Function}
  */
-const handleChange = ({ field, updateField }) => ({ hex }) => {
-	updateField(field.id, {
-		value: hex
-	});
-};
+export const enhance = compose(
+	/**
+	 * Connect to the Redux store.
+	 */
+	withStore(),
 
-/**
- * Toggle the colorpicker.
- *
- * @param  {Object}   props
- * @param  {Function} props.setPickerVisibility
- * @return {Function}
- */
-const showPicker = ({ setPickerVisibility }) => () => setPickerVisibility(true);
-const hidePicker = ({ setPickerVisibility }) => () => setPickerVisibility(false);
+	/**
+	 * Attach the setup hooks.
+	 */
+	withSetup(),
 
-export default setStatic('type', [TYPE_COLOR])(
-	compose(
-		withStore(),
-		withSetup(),
-		withState('pickerVisible', 'setPickerVisibility', false),
-		withHandlers({ handleChange, showPicker, hidePicker })
-	)(ColorField)
+	/**
+	 * Control the visibility of the colorpicker.
+	 */
+	withState('pickerVisible', 'setPickerVisibility', false),
+
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		handleChange: ({ field, updateField }) => ({ hex }) => updateField(field.id, { value: hex }),
+		showPicker: ({ setPickerVisibility }) => () => setPickerVisibility(true),
+		hidePicker: ({ setPickerVisibility }) => () => setPickerVisibility(false),
+	}),
 );
+
+export default setStatic('type', [
+	TYPE_COLOR,
+])(enhance(ColorField));

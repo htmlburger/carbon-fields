@@ -1,7 +1,7 @@
 /**
  * The external dependencies.
  */
-import React from 'react';
+import React, { PropTypes } from 'react';
 import onClickOutside from 'react-onclickoutside';
 import { SketchPicker } from 'react-color';
 import { compose, withHandlers } from 'recompose';
@@ -9,50 +9,60 @@ import { compose, withHandlers } from 'recompose';
 /**
  * Render a colorpicker popover.
  *
- * @param  {Object}    props
- * @param  {Boolean}   props.visible
- * @param  {String}    props.value
- * @param  {Function}  props.handleChange
- * @param  {Function}  props.handleClickOutside
+ * @param  {Object}        props
+ * @param  {Boolean}       props.visible
+ * @param  {String}        props.value
+ * @param  {Function}      props.handleChange
  * @return {React.Element}
  */
-export const Colorpicker = ({ visible, value, handleChange, handleClickOutside }) => {
-
+export const Colorpicker = ({
+	visible,
+	value,
+	handleChange
+}) => {
 	const popover = {
 		position: 'absolute',
 		zIndex: 9999
 	};
 
 	return 	<div style={popover} hidden={!visible}>
-
-			<SketchPicker
-				color={value}
-				onChange={handleChange}
-				disableAlpha={true}
-				presetColors={[]} />
-		</div>
+		<SketchPicker
+			color={value}
+			onChange={handleChange}
+			disableAlpha={true}
+			presetColors={[]} />
+	</div>;
 };
 
 /**
- * Toggle colopicker visibility
+ * Validate the props.
  *
- * @param  {Object}    props
- * @param  {Boolean}   props.visible
- * @param  {Function}  props.onClose
- * @return {Function}
+ * @type {Object}
  */
-const handleClickOutside = ({ visible, onClose }) => e => visible && onClose();
+Colorpicker.propTypes = {
+	visible: PropTypes.bool,
+	value: PropTypes.string,
+	handleChange: PropTypes.func,
+};
 
 /**
- * Handle color change
+ * The enhancer.
  *
- * @param  {Object}    props
- * @param  {Function}  props.onChange
- * @return {Function}
+ * @type {Function}
  */
-const handleChange = ({ onChange }) => color => onChange(color);
+export const enhance = compose(
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		handleChange: ({ onChange }) => color => onChange(color),
+		handleClickOutside: ({ visible, onClose }) => e => visible && onClose(),
+	}),
 
-export default compose(
-	withHandlers({ handleClickOutside, handleChange }),
+	/**
+	 * Handle clicks outside the components.
+	 */
 	onClickOutside
-)(Colorpicker);
+);
+
+export default enhance(Colorpicker);
