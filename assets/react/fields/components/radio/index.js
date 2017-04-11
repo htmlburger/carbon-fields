@@ -56,7 +56,7 @@ export const RadioField = ({
 			}
 		</ul>
 	</Field>;
-};
+}
 
 /**
  * Validate the props.

@@ -22,24 +22,7 @@ import withSetup from 'fields/decorators/with-setup';
 export const NoOptions = ({ field }) => {
 	return <Field field={field}>
 		<em>No options.</em>
-	</Field>
-}
-
-/**
- * The lifecycle hooks that will be attached to the field.
- *
- * @type {Object}
- */
-const hooks = {
-	componentDidMount() {
-		const {
-			field,
-			ui,
-			setUI,
-		} = this.props;
-
-		setUI(field.id, ui);
-	}
+	</Field>;
 };
 
 /**
@@ -48,7 +31,24 @@ const hooks = {
  * @type {Object}
  */
 NoOptions.propTypes ={
-	field: PropTypes.object.isRequired,
+	field: PropTypes.object,
 };
 
-export default withSetup(hooks)(NoOptions);
+/**
+ * The enhancer.
+ *
+ * @type {Function}
+ */
+const enhance = withSetup({
+	componentDidMount() {
+		const {
+			field,
+			ui,
+			setUI,
+		} = this.props;
+
+		setUI(field.id, ui);
+	},
+});
+
+export default enhance(NoOptions);
