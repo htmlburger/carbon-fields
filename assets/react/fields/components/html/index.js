@@ -15,8 +15,8 @@ import { TYPE_HTML } from 'fields/constants';
 /**
  * Render custom HTML markup.
  *
- * @param  {Object} props
- * @param  {Object} props.field
+ * @param  {Object}        props
+ * @param  {Object}        props.field
  * @return {React.Element}
  */
 export const HtmlField = ({ field }) => {
@@ -32,13 +32,27 @@ export const HtmlField = ({ field }) => {
  */
 HtmlField.propTypes = {
 	field: PropTypes.shape({
-		html: PropTypes.string.isRequired,
-	}).isRequired,
+		html: PropTypes.string,
+	}),
 };
 
-export default setStatic('type', [TYPE_HTML])(
-	compose(
-		withStore(),
-		withSetup()
-	)(HtmlField)
+/**
+ * The enhancer.
+ *
+ * @type {Function}
+ */
+export const enhance = compose(
+	/**
+	 * Connect to the Redux store.
+	 */
+	withStore(),
+
+	/**
+	 * Attach the setup hooks.
+	 */
+	withSetup()
 );
+
+export default setStatic('type', [
+	TYPE_HTML,
+])(enhance(HtmlField));
