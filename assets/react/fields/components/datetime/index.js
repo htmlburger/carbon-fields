@@ -3,7 +3,13 @@
  */
 import React, { PropTypes } from 'react';
 import fecha from 'fecha';
-import { compose, withHandlers, withState, withProps, setStatic } from 'recompose';
+import {
+	compose,
+	withHandlers,
+	withState,
+	withProps,
+	setStatic
+} from 'recompose';
 
 /**
  * The internal dependencies.
@@ -17,16 +23,20 @@ import { TYPE_DATE, TYPE_DATETIME, TYPE_TIME } from 'fields/constants';
 /**
  * Render an input with a datepicker.
  *
- * @param  {Object}   props
- * @param  {String}   props.name
- * @param  {Object}   props.field
- * @param  {String}   props.picker
- * @param  {Function} props.handleChange
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {String}        props.picker
+ * @param  {Function}      props.handleChange
  * @return {React.Element}
- *
- * TODO: Fix the translation of the button's text.
  */
-export const DateTimeField = ({ name, field, picker, options, handleChange }) => {
+export const DateTimeField = ({
+	name,
+	field,
+	picker,
+	options,
+	handleChange
+}) => {
 	return <Field field={field}>
 		<DateTimePicker
 			type={picker}
@@ -57,78 +67,81 @@ export const DateTimeField = ({ name, field, picker, options, handleChange }) =>
  * @type {Object}
  */
 DateTimeField.propTypes = {
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	field: PropTypes.shape({
-		id: PropTypes.string.isRequired,
-		value: PropTypes.string.isRequired,
-	}).isRequired,
-	options: PropTypes.object.isRequired,
-	handleChange: PropTypes.func.isRequired,
+		id: PropTypes.string,
+		value: PropTypes.string,
+	}),
+	options: PropTypes.object,
+	handleChange: PropTypes.func,
 };
 
 /**
- * The additional props that will be passed to the component.
+ * The enhancer.
  *
- * @param  {Object}   props
- * @param  {String}   props.name
- * @param  {Object}   props.field
- * @param  {Function} props.handleChange
- * @return {Object}
+ * @type {Function}
  */
-const props = ({ name, field, handleChange }) => {
-	const buttonText = field.type === TYPE_TIME ? carbonFieldsL10n.field.selectTime : carbonFieldsL10n.field.selectDate;
+export const enhance = compose(
+	/**
+	 * Connect to the Redux store.
+	 */
+	withStore(),
 
-	if (field.picker_options) {
+	/**
+	 * Attach the setup hooks.
+	 */
+	withSetup(),
+
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		handleChange: ({ field, updateField }) => date => {
+			let value;
+
+			if (date) {
+				value = fecha.format(date, field.storage_format);
+			} else {
+				value = '';
+			}
+
+			updateField(field.id, { value });
+		},
+	}),
+
+	/**
+	 * Pass some props to the component.
+	 */
+	withProps(({ name, field, handleChange }) => {
+		const buttonText = field.type === TYPE_TIME
+			? carbonFieldsL10n.field.selectTime
+			: carbonFieldsL10n.field.selectDate;
+
+		if (field.picker_options) {
+			return {
+				picker: field.picker_type,
+				options: {
+					...field.interval_step,
+					...field.restraints,
+					...field.picker_options,
+					buttonText,
+					showTime: false,
+				},
+			};
+		}
+
 		return {
-			picker: field.picker_type,
+			picker: 'datepicker',
 			options: {
-				...field.interval_step,
-				...field.restraints,
 				...field.picker_options,
 				buttonText,
-				showTime: false,
 			},
 		};
-	}
-
-	return {
-		picker: 'datepicker',
-		options: {
-			...field.picker_options,
-			buttonText,
-		},
-	};
-};
-
-/**
- * Sync the input value with the store.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.updateField
- * @return {Function}
- */
-const handleChange = ({ field, updateField }) => date => {
-	let value;
-
-	if (date) {
-		value = fecha.format(date, field.storage_format);
-	} else {
-		value = '';
-	}
-
-	updateField(field.id, { value });
-};
+	}),
+);
 
 export default setStatic('type', [
 	TYPE_DATE,
 	TYPE_DATETIME,
 	TYPE_TIME
-])(
-	compose(
-		withStore(),
-		withSetup(),
-		withHandlers({ handleChange }),
-		withProps(props)
-	)(DateTimeField)
-);
+])(enhance(DateTimeField));

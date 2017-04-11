@@ -92,11 +92,11 @@ DateTimePicker.propTypes = {
 		'datepicker',
 		'datetimepicker',
 		'timepicker',
-	]).isRequired,
+	]),
 	value: PropTypes.string,
-	options: PropTypes.object.isRequired,
-	children: PropTypes.element.isRequired,
-	onChange: PropTypes.func.isRequired,
+	options: PropTypes.object,
+	children: PropTypes.element,
+	onChange: PropTypes.func,
 };
 
 export default DateTimePicker;
