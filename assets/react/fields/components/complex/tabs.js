@@ -20,7 +20,12 @@ import ComplexTab from 'fields/components/complex/tab';
  * @param  {React.Element} props.children
  * @return {React.Element}
  */
-export const ComplexTabs = ({ groups, isTabActive, onClick, children }) => {
+export const ComplexTabs = ({
+	groups,
+	isTabActive,
+	onClick,
+	children
+}) => {
 	return <div className="group-tabs-nav-holder">
 		<ul className="group-tabs-nav">
 			{
@@ -46,31 +51,40 @@ export const ComplexTabs = ({ groups, isTabActive, onClick, children }) => {
  */
 ComplexTabs.propTypes = {
 	groups: PropTypes.arrayOf(PropTypes.shape({
-		id: PropTypes.string.isRequired,
+		id: PropTypes.string,
 		fields: PropTypes.arrayOf(PropTypes.shape({
-			id: PropTypes.string.isRequired,
-			name: PropTypes.string.isRequired,
-		})).isRequired,
-	})).isRequired,
-	show: PropTypes.bool.isRequired,
+			id: PropTypes.string,
+			name: PropTypes.string,
+		})),
+	})),
+	show: PropTypes.bool,
 	current: PropTypes.string,
-	onClick: PropTypes.func.isRequired,
+	onClick: PropTypes.func,
 	children: PropTypes.element,
 };
 
 /**
- * Check whether the tab should have an `active` class.
+ * The enhancer.
  *
- * @param  {Object}   props
- * @param  {String}   props.current
- * @return {Function}
+ * @type {Function}
  */
-const isTabActive = ({ current }) => groupId => groupId === current;
-
-export default branch(
+export const enhance = branch(
+	/**
+	 * Test to see if the tabs should be rendered.
+	 */
 	({ show }) => show,
 
-	withHandlers({ isTabActive }),
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		isTabActive: ({ current }) => groupId => groupId === current,
+	}),
 
-	renderNothing,
-)(ComplexTabs);
+	/**
+	 * Render the empty component.
+	 */
+	renderNothing
+);
+
+export default enhance(ComplexTabs);

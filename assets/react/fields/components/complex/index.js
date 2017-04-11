@@ -3,7 +3,12 @@
  */
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import { sortBy, fromPairs, pickBy, values } from 'lodash';
+import {
+	sortBy,
+	fromPairs,
+	pickBy,
+	values
+} from 'lodash';
 import {
 	compose,
 	withHandlers,
@@ -44,20 +49,20 @@ import {
 /**
  * Render a group(s) of fields.
  *
- * @param  {Object}   props
- * @param  {String}   props.name
- * @param  {Object}   props.field
- * @param  {Boolean}  props.tabbed
- * @param  {Boolean}  props.popoverVisible
- * @param  {Object}   props.sortableTabsOptions
- * @param  {Object}   props.sortableGroupsOptions
- * @param  {Function} props.isGroupActive
- * @param  {Function} props.handlePopoverClose
- * @param  {Function} props.handleTabClick
- * @param  {Function} props.handleAddGroupClick
- * @param  {Function} props.handleCloneGroupClick
- * @param  {Function} props.handleRemoveGroupClick
- * @param  {Function} props.handleSort
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {Boolean}       props.tabbed
+ * @param  {Boolean}       props.popoverVisible
+ * @param  {Object}        props.sortableTabsOptions
+ * @param  {Object}        props.sortableGroupsOptions
+ * @param  {Function}      props.isGroupActive
+ * @param  {Function}      props.handlePopoverClose
+ * @param  {Function}      props.handleTabClick
+ * @param  {Function}      props.handleAddGroupClick
+ * @param  {Function}      props.handleCloneGroupClick
+ * @param  {Function}      props.handleRemoveGroupClick
+ * @param  {Function}      props.handleSort
  * @return {React.Element}
  */
 export const ComplexField = ({
@@ -150,261 +155,168 @@ export const ComplexField = ({
  * @type {Object}
  */
 ComplexField.propTypes = {
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	field: PropTypes.shape({
-		id: PropTypes.string.isRequired,
+		id: PropTypes.string,
 		value: PropTypes.arrayOf(PropTypes.shape({
-			id: PropTypes.string.isRequired,
-			name: PropTypes.string.isRequired,
+			id: PropTypes.string,
+			name: PropTypes.string,
 			label: PropTypes.string,
 			fields: PropTypes.arrayOf(PropTypes.shape({
-				id: PropTypes.string.isRequired,
-				name: PropTypes.string.isRequired,
-				type: PropTypes.string.isRequired,
+				id: PropTypes.string,
+				name: PropTypes.string,
+				type: PropTypes.string,
 			})),
 		})),
-		layout: PropTypes.string.isRequired,
+		layout: PropTypes.string,
 		labels: PropTypes.shape({
-			plural_name: PropTypes.string.isRequired,
-			singular_name: PropTypes.string.isRequired,
-		}).isRequired,
+			plural_name: PropTypes.string,
+			singular_name: PropTypes.string,
+		}),
 		ui: PropTypes.shape({
 			current_tab: PropTypes.string
 		}),
 		multiple_groups: PropTypes.bool,
-	}).isRequired,
-	tabbed: PropTypes.bool.isRequired,
-	popoverVisible: PropTypes.bool.isRequired,
-	isGroupActive: PropTypes.func.isRequired,
-	handlePopoverClose: PropTypes.func.isRequired,
-	handleTabClick: PropTypes.func.isRequired,
-	handleAddGroupClick: PropTypes.func.isRequired,
-	handleCloneGroupClick: PropTypes.func.isRequired,
-	handleRemoveGroupClick: PropTypes.func.isRequired,
+	}),
+	tabbed: PropTypes.bool,
+	popoverVisible: PropTypes.bool,
+	isGroupActive: PropTypes.func,
+	handlePopoverClose: PropTypes.func,
+	handleTabClick: PropTypes.func,
+	handleAddGroupClick: PropTypes.func,
+	handleCloneGroupClick: PropTypes.func,
+	handleRemoveGroupClick: PropTypes.func,
 };
 
 /**
- * Pass additional props to the component.
+ * The enhancer.
  *
- * @param  {Object} state
- * @param  {Object} props
- * @return {Object}
+ * @type {Function}
  */
-const mapStateToProps = (state, props) => ({
-	tabbed: isFieldTabbed(state, props.id),
-});
+export const enhance = compose(
+	/**
+	 * Connect to the Redux store.
+	 */
+	withStore(
+		(state, props) => ({
+			tabbed: isFieldTabbed(state, props.id),
+		}),
 
-/**
- * The additional actions that will be passed to the component.
- *
- * @type {Object}
- */
-const mapDispatchToProps = {
-	addComplexGroup,
-	cloneComplexGroup,
-	removeComplexGroup,
-	expandComplexGroup,
-	collapseComplexGroup,
-	switchComplexTab,
-};
+		{
+			addComplexGroup,
+			cloneComplexGroup,
+			removeComplexGroup,
+			expandComplexGroup,
+			collapseComplexGroup,
+			switchComplexTab,
+		}
+	),
 
-/**
- * The lifecycle hooks that will be attached to the field.
- *
- * @type {Object}
- */
-const hooks = {
-	componentDidMount() {
-		const {
-			field,
-			tabbed,
-			setupField,
-			setupValidation,
-			setUI
-		} = this.props;
+	/**
+	 * Attach the setup hooks.
+	 */
+	withSetup({
+		componentDidMount() {
+			const {
+				field,
+				tabbed,
+				setupField,
+				setupValidation,
+				setUI
+			} = this.props;
 
-		let { ui } = this.props;
+			let { ui } = this.props;
 
-		// Show the first tab of the complex.
-		if (tabbed && field.value.length) {
-			ui = {
-				...ui,
-				current_tab: field.value[0].id
-			};
+			// Show the first tab of the complex.
+			if (tabbed && field.value.length) {
+				ui = {
+					...ui,
+					current_tab: field.value[0].id
+				};
+			}
+
+			setupField(field.id, field.type, ui);
+
+			if (field.required) {
+				setupValidation(field.id, VALIDATION_COMPLEX);
+			}
+		}
+	}),
+
+	/**
+	 * Pass some props to the component.
+	 */
+	withProps(({ field, collapseComplexGroup }) => {
+		const sortableTabsOptions = {
+			items: '.group-tab-item',
+			placeholder: 'group-tab-item ui-placeholder-highlight',
+			forcePlaceholderSize: true,
+		};
+
+		if (field.layout === COMPLEX_LAYOUT_TABBED_VERTICAL) {
+			sortableTabsOptions.axis = 'y';
 		}
 
-		setupField(field.id, field.type, ui);
+		const sortableGroupsOptions = {
+			items : '> .carbon-group-row',
+			handle: '.carbon-drag-handle',
+			placeholder: 'carbon-group-row ui-placeholder-highlight',
+		};
 
-		if (field.required) {
-			setupValidation(field.id, VALIDATION_COMPLEX);
+		if (field.layout === COMPLEX_LAYOUT_GRID) {
+			sortableGroupsOptions.start = (e, ui) => collapseComplexGroup(field.id, ui.item[0].id);
 		}
-	}
-};
 
-/**
- * The additional props that will be passed to the component.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.collapseComplexGroup
- * @return {Object}
- */
-const props = ({ field, collapseComplexGroup }) => {
-	const sortableTabsOptions = {
-		items: '.group-tab-item',
-		placeholder: 'group-tab-item ui-placeholder-highlight',
-		forcePlaceholderSize: true,
-	};
+		return {
+			sortableTabsOptions,
+			sortableGroupsOptions,
+		};
+	}),
 
-	if (field.layout === COMPLEX_LAYOUT_TABBED_VERTICAL) {
-		sortableTabsOptions.axis = 'y';
-	}
+	/**
+	 * Control the visibility of the popover.
+	 */
+	withState('popoverVisible', 'setPopoverVisibility', false),
 
-	const sortableGroupsOptions = {
-		items : '> .carbon-group-row',
-		handle: '.carbon-drag-handle',
-		placeholder: 'carbon-group-row ui-placeholder-highlight',
-	};
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		isGroupActive: ({ field, tabbed }) => groupId => tabbed && field.ui.current_tab === groupId,
+		handlePopoverClose: ({ setPopoverVisibility }) => () => setPopoverVisibility(false),
+		handleTabClick: ({ field, switchComplexTab }) => groupId => switchComplexTab(field.id, groupId),
+		handleCloneGroupClick: ({ field, cloneComplexGroup }) => groupId => cloneComplexGroup(field.id, groupId),
+		handleRemoveGroupClick: ({ field, removeComplexGroup }) => groupId => removeComplexGroup(field.id, groupId),
+		handleGroupExpand: ({ field, expandComplexGroup }) => groupId => expandComplexGroup(field.id, groupId),
+		handleGroupCollapse: ({ field, collapseComplexGroup }) => groupId => collapseComplexGroup(field.id, groupId),
 
-	if (field.layout === COMPLEX_LAYOUT_GRID) {
-		sortableGroupsOptions.start = (e, ui) => collapseComplexGroup(field.id, ui.item[0].id);
-	}
+		handleAddGroupClick: ({ field, popoverVisible, setPopoverVisibility, addComplexGroup }) => groupName => {
+			if (field.multiple_groups) {
+				setPopoverVisibility(!popoverVisible);
+			} else {
+				groupName = field.groups[0].name;
+			}
 
-	return {
-		sortableTabsOptions,
-		sortableGroupsOptions,
-	};
-};
+			if (groupName) {
+				addComplexGroup(field.id, groupName);
+			}
+		},
 
-/**
- * Check whether the group is the currently visible tab.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Boolean}  props.tabbed
- * @return {Function}
- */
-const isGroupActive = ({ field, tabbed }) => groupId => tabbed && field.ui.current_tab === groupId;
+		handleSort: ({ field, updateField, expandComplexGroup }) => (groups, event, ui) => {
+			// Cache the id attribute of the group, because the next line
+			// will re-order DOM and we will lose the correct group's id.
+			const groupId = ui.item[0].id;
 
-/**
- * Handle the click on 'Add ..' button.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Boolean}  props.popoverVisible
- * @param  {Function} props.setPopoverVisibility
- * @param  {Function} props.addComplexGroup
- * @return {Function}
- */
-const handleAddGroupClick = ({ field, popoverVisible, setPopoverVisibility, addComplexGroup }) => groupName => {
-	if (field.multiple_groups) {
-		setPopoverVisibility(!popoverVisible);
-	} else {
-		groupName = field.groups[0].name;
-	}
+			updateField(field.id, {
+				value: sortBy(field.value, group => groups.indexOf(group.id)),
+			});
 
-	if (groupName) {
-		addComplexGroup(field.id, groupName);
-	}
-};
-
-/**
- * Update the visibility of the popover.
- *
- * @param  {Object}   props
- * @param  {Function} props.setPopoverVisibility
- * @return {Function}
- */
-const handlePopoverClose = ({ setPopoverVisibility }) => () => setPopoverVisibility(false);
-
-/**
- * Change the current tab.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.switchComplexTab
- * @return {Function}
- */
-const handleTabClick = ({ field, switchComplexTab }) => groupId => switchComplexTab(field.id, groupId);
-
-/**
- * Clone the complex group.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.cloneComplexGroup
- * @return {Function}
- */
-const handleCloneGroupClick = ({ field, cloneComplexGroup }) => groupId => cloneComplexGroup(field.id, groupId);
-
-/**
- * Remove the complex group.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.removeComplexGroup
- * @return {Function}
- */
-const handleRemoveGroupClick = ({ field, removeComplexGroup }) => groupId => removeComplexGroup(field.id, groupId);
-
-/**
- * Show the group's contents.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.expandComplexGroup
- * @return {Function}
- */
-const handleGroupExpand = ({ field, expandComplexGroup }) => groupId => expandComplexGroup(field.id, groupId);
-
-/**
- * Hide the group's contents.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.collapseComplexGroup
- * @return {Function}
- */
-const handleGroupCollapse = ({ field, collapseComplexGroup }) => groupId => collapseComplexGroup(field.id, groupId);
-
-/**
- * Handle sorting of the groups.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.updateField
- * @param  {Function} props.expandComplexGroup
- * @return {Function}
- */
-const handleSort = ({ field, updateField, expandComplexGroup }) => (groups, event, ui) => {
-	// Cache the id attribute of the group, because the next line
-	// will re-order DOM and we will lose the correct group's id.
-	const groupId = ui.item[0].id;
-
-	updateField(field.id, {
-		value: sortBy(field.value, group => groups.indexOf(group.id)),
-	});
-
-	expandComplexGroup(field.id, groupId);
-};
-
-export default setStatic('type', [TYPE_COMPLEX])(
-	compose(
-		withStore(mapStateToProps, mapDispatchToProps),
-		withSetup(hooks),
-		withProps(props),
-		withState('popoverVisible', 'setPopoverVisibility', false),
-		withHandlers({
-			isGroupActive,
-			handlePopoverClose,
-			handleTabClick,
-			handleAddGroupClick,
-			handleCloneGroupClick,
-			handleRemoveGroupClick,
-			handleGroupExpand,
-			handleGroupCollapse,
-			handleSort,
-		})
-	)(ComplexField)
+			expandComplexGroup(field.id, groupId);
+		},
+	}),
 );
+
+export default setStatic('type', [
+	TYPE_COMPLEX,
+])(enhance(ComplexField));
 

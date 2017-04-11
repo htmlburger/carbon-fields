@@ -19,7 +19,11 @@ import { preventDefault } from 'lib/helpers';
  * @param  {Function} 	   props.handleClick
  * @return {React.Element}
  */
-export const ComplexEmptyNotice = ({ label, visible, handleClick }) => {
+export const ComplexEmptyNotice = ({
+	label,
+	visible,
+	handleClick
+}) => {
 	return <div
 		className={cx('carbon-empty-row', { 'carbon-empty-row-visible': visible })}
 		dangerouslySetInnerHTML={{ __html: carbonFieldsL10n.field.complexNoRows.replace('%s', label) }}
@@ -32,20 +36,18 @@ export const ComplexEmptyNotice = ({ label, visible, handleClick }) => {
  * @type {Object}
  */
 ComplexEmptyNotice.propTypes = {
-	label: PropTypes.string.isRequired,
-	visible: PropTypes.bool.isRequired,
-	onClick: PropTypes.func.isRequired,
+	label: PropTypes.string,
+	visible: PropTypes.bool,
+	onClick: PropTypes.func,
 };
 
 /**
- * Handle the click on the link inside the label.
+ * The enhancer.
  *
- * @param  {Object}   props
- * @param  {Function} props.onClick
- * @return {Function}
+ * @type {Function}
  */
-const handleClick = ({ onClick }) => preventDefault(() => onClick());
+export const enhance = withHandlers({
+	handleClick: ({ onClick }) => preventDefault(() => onClick()),
+});
 
-export default withHandlers({
-	handleClick,
-})(ComplexEmptyNotice);
+export default enhance(ComplexEmptyNotice);

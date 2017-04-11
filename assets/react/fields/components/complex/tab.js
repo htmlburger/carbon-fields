@@ -54,31 +54,37 @@ export const ComplexTab = ({
  * @type {Object}
  */
 ComplexTab.propTypes = {
-	number: PropTypes.number.isRequired,
+	number: PropTypes.number,
 	group: PropTypes.shape({
-		id: PropTypes.string.isRequired,
-		label: PropTypes.string.isRequired,
+		id: PropTypes.string,
+		label: PropTypes.string,
 		fields: PropTypes.arrayOf(PropTypes.shape({
-			id: PropTypes.string.isRequired,
-			name: PropTypes.string.isRequired,
-		})).isRequired,
-	}).isRequired,
+			id: PropTypes.string,
+			name: PropTypes.string,
+		})),
+	}),
 	label: PropTypes.string,
 	active: PropTypes.bool,
-	handleClick: PropTypes.func.isRequired,
+	handleClick: PropTypes.func,
 };
 
 /**
- * Handle the click.
+ * The enhancer.
  *
- * @param  {Object}   props
- * @param  {Object}   props.group
- * @param  {Function} props.onClick
- * @return {Function}
+ * @type {Function}
  */
-const handleClick = ({ group, onClick }) => preventDefault(() => onClick(group.id));
-
-export default compose(
+export const enhance = compose(
+	/**
+	 * Add logic for header templates.
+	 */
 	withHeaderTemplate,
-	withHandlers({ handleClick })
-)(ComplexTab);
+
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		handleClick: ({ group, onClick }) => preventDefault(() => onClick(group.id)),
+	})
+);
+
+export default enhance(ComplexTab);

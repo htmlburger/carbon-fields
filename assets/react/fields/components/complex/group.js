@@ -16,16 +16,16 @@ import withHeaderTemplate from 'fields/decorators/with-header-template';
 /**
  * Render the holder around the complex's fields.
  *
- * @param  {Object}   props
- * @param  {Number}   props.index
- * @param  {String}   props.prefix
- * @param  {String}   props.layout
- * @param  {Object}   props.group
- * @param  {String}   props.label
- * @param  {Boolean}  props.active
- * @param  {Function} props.handleToggleClick
- * @param  {Function} props.handleCloneClick
- * @param  {Function} props.handleRemoveClick
+ * @param  {Object}        props
+ * @param  {Number}        props.index
+ * @param  {String}        props.prefix
+ * @param  {String}        props.layout
+ * @param  {Object}        props.group
+ * @param  {String}        props.label
+ * @param  {Boolean}       props.active
+ * @param  {Function}      props.handleToggleClick
+ * @param  {Function}      props.handleCloneClick
+ * @param  {Function}      props.handleRemoveClick
  * @return {React.Element}
  */
 export const ComplexGroup = ({
@@ -106,61 +106,43 @@ export const ComplexGroup = ({
  * @type {Object}
  */
 ComplexGroup.propTypes = {
-	index: PropTypes.number.isRequired,
-	prefix: PropTypes.string.isRequired,
-	layout: PropTypes.string.isRequired,
+	index: PropTypes.number,
+	prefix: PropTypes.string,
+	layout: PropTypes.string,
 	group: PropTypes.shape({
-		name: PropTypes.string.isRequired,
+		name: PropTypes.string,
 		collapsed: PropTypes.bool,
 		fields: PropTypes.arrayOf(PropTypes.shape({
-			id: PropTypes.string.isRequired,
-			type: PropTypes.string.isRequired,
-			name: PropTypes.string.isRequired,
+			id: PropTypes.string,
+			type: PropTypes.string,
+			name: PropTypes.string,
 		})),
-	}).isRequired,
+	}),
 	label: PropTypes.string,
-	active: PropTypes.bool.isRequired,
-	onClone: PropTypes.func.isRequired,
-	onRemove: PropTypes.func.isRequired,
+	active: PropTypes.bool,
+	onClone: PropTypes.func,
+	onRemove: PropTypes.func,
 };
 
 /**
- * Handle the click on the 'Expand/Collapse' button.
+ * The enhancer.
  *
- * @param  {Object}   props
- * @param  {Object}   props.group
- * @param  {Function} props.onExpand
- * @param  {Function} props.onCollapse
- * @return {Function}
+ * @type {Function}
  */
-const handleToggleClick = ({ group, onExpand, onCollapse }) => preventDefault(() => group.collapsed ? onExpand(group.id) : onCollapse(group.id));
-
-/**
- * Handle the click on the 'Clone' button.
- *
- * @param  {Object}   props
- * @param  {Object}   props.group
- * @param  {Function} props.onClone
- * @return {Function}
- */
-const handleCloneClick = ({ group, onClone }) => preventDefault(() => onClone(group.id));
-
-/**
- * Handle the click on the 'Remove' button.
- *
- * @param  {Object}   props
- * @param  {Object}   props.group
- * @param  {Function} props.onRemove
- * @return {Function}
- */
-const handleRemoveClick = ({ group, onRemove }) => preventDefault(() => onRemove(group.id));
-
-export default compose(
+export const enhance = compose(
+	/**
+	 * Add logic for header templates.
+	 */
 	withHeaderTemplate,
-	withHandlers({
-		handleToggleClick,
-		handleCloneClick,
-		handleRemoveClick,
-	})
-)(ComplexGroup);
 
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		handleToggleClick: ({ group, onExpand, onCollapse }) => preventDefault(() => group.collapsed ? onExpand(group.id) : onCollapse(group.id)),
+		handleCloneClick: ({ group, onClone }) => preventDefault(() => onClone(group.id)),
+		handleRemoveClick: ({ group, onRemove }) => preventDefault(() => onRemove(group.id)),
+	})
+);
+
+export default enhance(ComplexGroup);

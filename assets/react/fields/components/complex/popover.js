@@ -3,7 +3,13 @@
  */
 import React, { PropTypes } from 'react';
 import onClickOutside from 'react-onclickoutside';
-import { compose, branch, renderNothing, renderComponent, withHandlers } from 'recompose';
+import {
+	compose,
+	branch,
+	renderNothing,
+	renderComponent,
+	withHandlers
+} from 'recompose';
 
 /**
  * The internal dependencies.
@@ -14,15 +20,17 @@ import { preventDefault } from 'lib/helpers';
  * Render a popover with all groups names when the complex field
  * has more than one group.
  *
- * @param  {Object}   props
- * @param  {Object[]} props.groups
- * @param  {Boolean}  props.visible
- * @param  {Function} props.handleItemClick
+ * @param  {Object}        props
+ * @param  {Object[]}      props.groups
+ * @param  {Boolean}       props.visible
+ * @param  {Function}      props.handleItemClick
  * @return {React.Element}
- *
- * @todo Refactor inline style to a CSS class.
  */
-export const ComplexPopover = ({ groups, visible, handleItemClick }) => {
+export const ComplexPopover = ({
+	groups,
+	visible,
+	handleItemClick
+}) => {
 	return <ul hidden={!visible}>
 		{
 			groups.map((group, index) => (
@@ -43,46 +51,51 @@ export const ComplexPopover = ({ groups, visible, handleItemClick }) => {
  */
 ComplexPopover.propTypes = {
 	groups: PropTypes.arrayOf(PropTypes.shape({
-		name: PropTypes.string.isRequired,
-		label: PropTypes.string.isRequired,
-	})).isRequired,
+		name: PropTypes.string,
+		label: PropTypes.string,
+	})),
 	visible: PropTypes.bool,
-	onItemClick: PropTypes.func.isRequired,
-	onClose: PropTypes.func.isRequired,
+	onItemClick: PropTypes.func,
+	onClose: PropTypes.func,
 };
 
 /**
- * Handle the click on the items of the list.
+ * The enhancer.
  *
- * @param  {Object}   props
- * @param  {Function} props.onItemClick
- * @param  {Function} props.onClose
- * @return {Function}
+ * @type {Function}
  */
-const handleItemClick = ({ onItemClick, onClose }) => groupName => preventDefault(() => {
-	onItemClick(groupName);
-	onClose();
-});
+export const enhance = branch(
+	/**
+	 * Test to see if the popover should be rendered.
+	 */
+	({ groups }) => groups.length,
 
-/**
- * Hide the popover if the click is outside the element.
- *
- * @param  {Object}   props
- * @param  {Boolean}  props.visible
- * @param  {Function} props.onClose
- * @return {Function}
- */
-const handleClickOutside = ({ visible, onClose }) => () => visible && onClose();
+	/**
+	 * Render the actual component.
+	 */
+	compose(
+		/**
+		 * Pass some handlers to the component.
+		 */
+		withHandlers({
+			handleItemClick: ({ onItemClick, onClose }) => groupName => preventDefault(() => {
+				onItemClick(groupName);
+				onClose();
+			}),
 
-export default branch(
-	({ groups }) => groups.length > 1,
+			handleClickOutside: ({ visible, onClose }) => () => visible && onClose(),
+		}),
 
-	renderComponent(
-		compose(
-			withHandlers({ handleItemClick, handleClickOutside }),
-			onClickOutside
-		)(ComplexPopover)
+		/**
+		 * Handle clicks outside the components.
+		 */
+		onClickOutside
 	),
 
-	renderNothing,
-)();
+	/**
+	 * Render the empty component.
+	 */
+	renderNothing
+);
+
+export default enhance(ComplexPopover);

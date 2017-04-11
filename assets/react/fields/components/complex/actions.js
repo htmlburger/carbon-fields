@@ -18,7 +18,11 @@ import { preventDefault } from 'lib/helpers';
  * @param  {Function}      props.handleClick
  * @return {React.Element}
  */
-export const ComplexActions = ({ buttonText, children, handleClick }) => {
+export const ComplexActions = ({
+	buttonText,
+	children,
+	handleClick
+}) => {
 	return <div className="carbon-actions">
 		<div className="carbon-button">
 			<a href="#" className="button" onClick={handleClick}>
@@ -36,20 +40,18 @@ export const ComplexActions = ({ buttonText, children, handleClick }) => {
  * @type {Object}
  */
 ComplexActions.propTypes = {
-	buttonText: PropTypes.string.isRequired,
-	onButtonClick: PropTypes.func.isRequired,
+	buttonText: PropTypes.string,
+	onButtonClick: PropTypes.func,
 	children: PropTypes.element,
 };
 
 /**
- * Handle the click on the 'Add Entry' button.
+ * The enhancer.
  *
- * @param  {Object}   props
- * @param  {Function} props.onButtonClick
- * @return {Function}
+ * @type {Function}
  */
-const handleClick = ({ onButtonClick }) => preventDefault(() => onButtonClick());
+export const enhance = withHandlers({
+	handleClick: ({ onButtonClick }) => preventDefault(() => onButtonClick()),
+});
 
-export default withHandlers({
-	handleClick,
-})(ComplexActions);
+export default enhance(ComplexActions);
