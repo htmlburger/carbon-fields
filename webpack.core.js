@@ -13,7 +13,7 @@ module.exports = {
 	// Setup the output.
 	output: {
 		// The output directory.
-		path: 'assets/',
+		path: path.resolve(__dirname, 'assets/'),
 
 		// This is the JS bundle containing code from the entry points.
 		filename: '[name].js',
