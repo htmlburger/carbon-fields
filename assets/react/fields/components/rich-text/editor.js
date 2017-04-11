@@ -123,9 +123,9 @@ class RichTextEditor extends React.Component {
  * @type {Object}
  */
 RichTextEditor.propTypes = {
-	id: PropTypes.string.isRequired,
-	richEditing: PropTypes.bool.isRequired,
-	onChange: PropTypes.func.isRequired,
+	id: PropTypes.string,
+	richEditing: PropTypes.bool,
+	onChange: PropTypes.func,
 };
 
 export default RichTextEditor;

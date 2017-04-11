@@ -22,7 +22,11 @@ import { TYPE_RICH_TEXT } from 'fields/constants';
  * @param  {Object} props.field
  * @return {React.Element}
  */
-export const RichTextField = ({ name, field, handleChange }) => {
+export const RichTextField = ({
+	name,
+	field,
+	handleChange
+}) => {
 	return <Field field={field}>
 		<RichTextEditor id={field.id} richEditing={field.rich_editing} onChange={handleChange}>
 			<textarea
@@ -42,38 +46,49 @@ export const RichTextField = ({ name, field, handleChange }) => {
  * @type {Object}
  */
 RichTextField.propTypes = {
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	field: PropTypes.shape({
-		id: PropTypes.string.isRequired,
-		value: PropTypes.string.isRequired,
-	}).isRequired,
-	handleChange: PropTypes.func.isRequired,
+		id: PropTypes.string,
+		value: PropTypes.string,
+		rich_editing: PropTypes.bool,
+	}),
+	handleChange: PropTypes.func,
 };
 
 /**
- * Sync the input value with the store.
+ * The enhancer.
  *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.updateField
- * @return {Function}
+ * @type {Function}
  */
-const handleChange = ({ field, updateField }) => eventOrValue => {
-	let value;
+export const enhance = compose(
+	/**
+	 * Connect to the Redux store.
+	 */
+	withStore(),
 
-	if (isString(eventOrValue)) {
-		value = eventOrValue;
-	} else {
-		value = eventOrValue.target.value;
-	}
+	/**
+	 * Attach the setup hooks.
+	 */
+	withSetup(),
 
-	updateField(field.id, { value });
-};
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		handleChange: ({ field, updateField }) => eventOrValue => {
+			let value;
 
-export default setStatic('type', [TYPE_RICH_TEXT])(
-	compose(
-		withStore(),
-		withSetup(),
-		withHandlers({ handleChange })
-	)(RichTextField)
+			if (isString(eventOrValue)) {
+				value = eventOrValue;
+			} else {
+				value = eventOrValue.target.value;
+			}
+
+			updateField(field.id, { value });
+		},
+	})
 );
+
+export default setStatic('type', [
+	TYPE_RICH_TEXT,
+])(enhance(RichTextField));
