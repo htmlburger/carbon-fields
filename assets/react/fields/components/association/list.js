@@ -18,7 +18,13 @@ import AssociationListItem from 'fields/components/association/list-item';
  * @param  {Function}      props.onItemClick
  * @return {React.Element}
  */
-export const AssociationList = ({ prefix, items, associated, visible, onItemClick }) => {
+export const AssociationList = ({
+	prefix,
+	items,
+	associated,
+	visible,
+	onItemClick
+}) => {
 	return <ul className="carbon-association-list">
 		{
 			items.map((item, index) => {
@@ -42,10 +48,10 @@ export const AssociationList = ({ prefix, items, associated, visible, onItemClic
  */
 AssociationList.propTypes = {
 	prefix: PropTypes.string,
-	items: PropTypes.arrayOf(PropTypes.object).isRequired,
+	items: PropTypes.arrayOf(PropTypes.object),
 	associated: PropTypes.bool,
 	visible: PropTypes.bool,
-	onItemClick: PropTypes.func.isRequired,
+	onItemClick: PropTypes.func,
 };
 
 /**

@@ -25,7 +25,14 @@ import { preventDefault } from 'lib/helpers';
  * TODO: Fix the translation of the 'Edit' link.
  * TODO: Clean up the mess in `handleClick` introduced by the incorrect HTML in the template.
  */
-export const AssociationListItem = ({ prefix, index, item, associated, visible, handleClick }) => {
+export const AssociationListItem = ({
+	prefix,
+	index,
+	item,
+	associated,
+	visible,
+	handleClick
+}) => {
 	return <li id={item.id} className={cx({ 'inactive': item.disabled })}>
 		<span className="mobile-handle dashicons-before dashicons-menu"></span>
 
@@ -76,42 +83,33 @@ AssociationListItem.propTypes = {
 		id: PropTypes.oneOfType([
 			PropTypes.number,
 			PropTypes.string,
-		]).isRequired,
-		label: PropTypes.string.isRequired,
-		title: PropTypes.string.isRequired,
-		type: PropTypes.string.isRequired,
-		subtype: PropTypes.string.isRequired,
+		]),
+		label: PropTypes.string,
+		title: PropTypes.string,
+		type: PropTypes.string,
+		subtype: PropTypes.string,
 		edit_link: PropTypes.string,
-	}).isRequired,
+	}),
 	associated: PropTypes.bool,
 	visible: PropTypes.bool,
-	handleClick: PropTypes.func.isRequired,
+	handleClick: PropTypes.func,
 };
 
-/**
- * Handle the click on the different parts of the link.
- *
- * @param  {Object}   props
- * @param  {Object}   props.item
- * @param  {Boolean}  props.associated
- * @param  {Function} props.onClick
- * @return {Function}
- */
-const handleClick = ({ item, associated, onClick }) => preventDefault((e) => {
-	const { target } = e;
+const enhance = withHandlers({
+	handleClick: ({ item, associated, onClick }) => preventDefault((e) => {
+		const { target } = e;
 
-	if (target.nodeName === 'SPAN') {
-		onClick(item);
-	} if (target.classList.contains('edit-link')) {
-		e.stopPropagation();
-		window.open(item.edit_link.replace('&amp;', '&', 'g'), '_blank');
-	} else {
-		if (!associated && !item.disabled) {
+		if (target.nodeName === 'SPAN') {
 			onClick(item);
+		} if (target.classList.contains('edit-link')) {
+			e.stopPropagation();
+			window.open(item.edit_link.replace('&amp;', '&', 'g'), '_blank');
+		} else {
+			if (!associated && !item.disabled) {
+				onClick(item);
+			}
 		}
-	}
+	}),
 });
 
-export default withHandlers({
-	handleClick,
-})(AssociationListItem);
+export default enhance(AssociationListItem);

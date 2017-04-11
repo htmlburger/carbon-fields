@@ -2,8 +2,19 @@
  * The external dependencies.
  */
 import React, { PropTypes } from 'react';
-import { compose, withState, withProps, withHandlers, setStatic } from 'recompose';
-import { cloneDeep, without, isMatch, sortBy } from 'lodash';
+import {
+	compose,
+	withState,
+	withProps,
+	withHandlers,
+	setStatic
+} from 'recompose';
+import {
+	cloneDeep,
+	without,
+	isMatch,
+	sortBy
+} from 'lodash';
 
 /**
  * The internal dependencies.
@@ -20,15 +31,15 @@ import { TYPE_ASSOCIATION } from 'fields/constants';
  * Render a field that allows to create links between posts, taxonomy terms,
  * users or comments.
  *
- * @param  {Object}   props
- * @param  {String}   props.name
- * @param  {Object}   props.field
- * @param  {String}   props.term
- * @param  {Object}   props.sortableOptions
- * @param  {Object[]} props.items
- * @param  {Function} props.setTerm
- * @param  {Function} props.handleAddItem
- * @param  {Function} props.handleSortItems
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {String}        props.term
+ * @param  {Object}        props.sortableOptions
+ * @param  {Object[]}      props.items
+ * @param  {Function}      props.setTerm
+ * @param  {Function}      props.handleAddItem
+ * @param  {Function}      props.handleSortItems
  * @return {React.Element}
  *
  * TODO: Fix the translation of the labels.
@@ -102,122 +113,114 @@ export const AssociationField = ({
  * @type {Object}
  */
 AssociationField.propTypes = {
-	name: PropTypes.string.isRequired,
+	name: PropTypes.string,
 	field: PropTypes.shape({
-		value: PropTypes.arrayOf(PropTypes.object).isRequired,
-		max: PropTypes.number.isRequired,
-	}).isRequired,
-	items: PropTypes.arrayOf(PropTypes.object).isRequired,
-	term: PropTypes.string.isRequired,
-	handleAddItem: PropTypes.func.isRequired,
-	handleRemoveItem: PropTypes.func.isRequired,
+		value: PropTypes.arrayOf(PropTypes.object),
+		max: PropTypes.number,
+	}),
+	items: PropTypes.arrayOf(PropTypes.object),
+	term: PropTypes.string,
+	handleAddItem: PropTypes.func,
+	handleRemoveItem: PropTypes.func,
 };
 
 /**
- * The additional props that will be passed to the component.
+ * The enhancer.
  *
- * @param  {Object} props
- * @param  {Object} props.field
- * @param  {String} props.term
- * @return {Object}
+ * @type {Function}
  */
-const props = ({ field, term }) => {
-	let items = field.options;
+export const enhance = compose(
+	/**
+	 * Connect to the Redux store.
+	 */
+	withStore(),
 
-	if (term) {
-		items = items.filter(({ title }) => title.toLowerCase().includes(term.toLowerCase()));
-	}
+	/**
+	 * Attach the setup hooks.
+	 */
+	withSetup(),
 
-	if (!field.allow_duplicates) {
-		items = items.map(item => {
-			item.disabled = !!field.value.find(selectedItem => isMatch(selectedItem, {
-				id: item.id,
-				type: item.type,
-				subtype: item.subtype,
-			}));
+	/**
+	 * Track current search term.
+	 */
+	withState('term', 'setTerm', ''),
 
-			return item;
-		});
-	}
+	/**
+	 * Pass some props to the component.
+	 */
+	withProps(({ field, term }) => {
+		let items = field.options;
 
-	const sortableOptions = {
-		axis: 'y',
-		items: 'li',
-		forceHelperSize: true,
-		forcePlaceholderSize: true,
-		scroll: true,
-		handle: '.mobile-handle',
-	};
+		if (term) {
+			items = items.filter(({ title }) => title.toLowerCase().includes(term.toLowerCase()));
+		}
 
-	return {
-		items,
-		sortableOptions,
-	};
-};
+		if (!field.allow_duplicates) {
+			items = items.map(item => {
+				item.disabled = !!field.value.find(selectedItem => isMatch(selectedItem, {
+					id: item.id,
+					type: item.type,
+					subtype: item.subtype,
+				}));
 
-/**
- * Add an item to the list of selected items.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.updateField
- * @return {Function}
- */
-const handleAddItem = ({ field, updateField }) => item => {
-	// Don't do anything if the duplicates aren't allowed and
-	// the item is already selected.
-	if (!field.allow_duplicates && item.disabled) {
-		return;
-	}
+				return item;
+			});
+		}
 
-	// Don't do anything, because the maximum is reached.
-	if (field.max > 0 && field.value.length >= field.max) {
-		alert(carbonFieldsL10n.field.maxNumItemsReached.replace('%s', field.max));
-		return;
-	}
+		const sortableOptions = {
+			axis: 'y',
+			items: 'li',
+			forceHelperSize: true,
+			forcePlaceholderSize: true,
+			scroll: true,
+			handle: '.mobile-handle',
+		};
 
-	// Create a safe copy and push it to the store.
-	updateField(field.id, {
-		value: [
-			...field.value,
-			cloneDeep(item),
-		],
-	});
-};
+		return {
+			items,
+			sortableOptions,
+		};
+	}),
 
-/**
- * Remove an item from the list of selected items.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.updateField
- * @return {Function}
- */
-const handleRemoveItem = ({ field, updateField }) => item => updateField(field.id, { value: without(field.value, item) });
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		handleAddItem: ({ field, updateField }) => item => {
+			// Don't do anything if the duplicates aren't allowed and
+			// the item is already selected.
+			if (!field.allow_duplicates && item.disabled) {
+				return;
+			}
 
-/**
- * Re-order the items.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {Function} props.updateField
- * @return {Function}
- */
-const handleSortItems = ({ field, updateField }) => newItems => {
-	newItems = newItems.map(id => parseInt(id, 10));
-	newItems = sortBy(field.value, item => newItems.indexOf(item.id));
+			// Don't do anything, because the maximum is reached.
+			if (field.max > 0 && field.value.length >= field.max) {
+				alert(carbonFieldsL10n.field.maxNumItemsReached.replace('%s', field.max));
+				return;
+			}
 
-	updateField(field.id, {
-		value: newItems,
-	});
-};
+			// Create a safe copy and push it to the store.
+			updateField(field.id, {
+				value: [
+					...field.value,
+					cloneDeep(item),
+				],
+			});
+		},
 
-export default setStatic('type', [TYPE_ASSOCIATION])(
-	compose(
-		withStore(),
-		withSetup(),
-		withState('term', 'setTerm', ''),
-		withProps(props),
-		withHandlers({ handleAddItem, handleRemoveItem, handleSortItems })
-	)(AssociationField)
+		handleSortItems: ({ field, updateField }) => newItems => {
+			newItems = newItems.map(id => parseInt(id, 10));
+			newItems = sortBy(field.value, item => newItems.indexOf(item.id));
+
+			updateField(field.id, {
+				value: newItems,
+			});
+		},
+
+		handleRemoveItem: ({ field, updateField }) => item => updateField(field.id, { value: without(field.value, item) }),
+	})
 );
+
+export default setStatic('type', [
+	TYPE_ASSOCIATION,
+])(enhance(AssociationField));
