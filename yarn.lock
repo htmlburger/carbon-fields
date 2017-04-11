@@ -1248,7 +1248,7 @@ clap@^1.0.9:
   dependencies:
     chalk "^1.1.3"
 
-classnames@^2.2.0, classnames@^2.2.5:
+classnames@^2.2.5:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
 
@@ -1398,6 +1398,13 @@ create-hmac@^1.1.0, create-hmac@^1.1.2:
   dependencies:
     create-hash "^1.1.0"
     inherits "^2.0.1"
+
+create-react-class@^15.5.1, create-react-class@^15.5.x:
+  version "15.5.2"
+  resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.5.2.tgz#6a8758348df660b88326a0e764d569f274aad681"
+  dependencies:
+    fbjs "^0.8.9"
+    object-assign "^4.1.1"
 
 cryptiles@2.x.x:
   version "2.0.5"
@@ -1845,18 +1852,7 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "^2.0.0"
 
-fbjs@^0.8.1, fbjs@^0.8.4:
-  version "0.8.6"
-  resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.6.tgz#7eb67d6986b2d5007a9b6e92e0e7cb6f75cad290"
-  dependencies:
-    core-js "^1.0.0"
-    isomorphic-fetch "^2.1.1"
-    loose-envify "^1.0.0"
-    object-assign "^4.1.0"
-    promise "^7.1.1"
-    ua-parser-js "^0.7.9"
-
-fbjs@^0.8.9:
+fbjs@^0.8.1, fbjs@^0.8.4, fbjs@^0.8.9:
   version "0.8.12"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.12.tgz#10b5d92f76d45575fd63a217d4ea02bea2f8ed04"
   dependencies:
@@ -3170,7 +3166,7 @@ memory-fs@^0.4.0, memory-fs@~0.4.1:
     errno "^0.1.3"
     readable-stream "^2.0.1"
 
-merge@^1.1.3, merge@^1.2.0:
+merge@^1.1.3:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/merge/-/merge-1.2.0.tgz#7531e39d4949c281a66b8c5a6e0265e8b05894da"
 
@@ -3389,6 +3385,10 @@ oauth-sign@~0.8.1:
 object-assign@^4.0.1, object-assign@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.0.tgz#7a3b3d0e98063d43f4c03f2e8ae6cd51a86883a0"
+
+object-assign@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
 
 object-is@^1.0.1:
   version "1.0.1"
@@ -3900,7 +3900,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.2, prop-types@~15.5.0:
+prop-types@^15.0.0, prop-types@^15.5.2, prop-types@^15.5.6, prop-types@~15.5.0:
   version "15.5.6"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.6.tgz#797a915b1714b645ebb7c5d6cc690346205bd2aa"
   dependencies:
@@ -3998,13 +3998,13 @@ react-addons-test-utils@^15.4.2:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
 
-react-color@^2.11.1:
-  version "2.11.1"
-  resolved "https://registry.yarnpkg.com/react-color/-/react-color-2.11.1.tgz#7a1fabd599a49c21ef2a548de00335a392d5d410"
+react-color@^2.11.4:
+  version "2.11.4"
+  resolved "https://registry.yarnpkg.com/react-color/-/react-color-2.11.4.tgz#43f64630e5d47a243f6bd35300224c9c69c73921"
   dependencies:
     lodash "^4.0.1"
     material-colors "^1.2.1"
-    reactcss "^1.1.1"
+    reactcss "^1.2.0"
     tinycolor2 "^1.1.2"
 
 react-dom@^15.5.3:
@@ -4016,19 +4016,23 @@ react-dom@^15.5.3:
     object-assign "^4.1.0"
     prop-types "~15.5.0"
 
-react-onclickoutside@^5.8.4:
-  version "5.8.4"
-  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-5.8.4.tgz#a2c673a8d1b104a550e565574b95419feb12cc3f"
-
-react-redux@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.0.2.tgz#3d9878f5f71c6fafcd45de1fbb162ea31f389814"
+react-onclickoutside@^5.11.1:
+  version "5.11.1"
+  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-5.11.1.tgz#00314e52567cf55faba94cabbacd119619070623"
   dependencies:
+    create-react-class "^15.5.x"
+
+react-redux@^5.0.4:
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-5.0.4.tgz#1563babadcfb2672f57f9ceaa439fb16bf85d55b"
+  dependencies:
+    create-react-class "^15.5.1"
     hoist-non-react-statics "^1.0.3"
     invariant "^2.0.0"
     lodash "^4.2.0"
     lodash-es "^4.2.0"
     loose-envify "^1.1.0"
+    prop-types "^15.0.0"
 
 react@^15.5.3:
   version "15.5.3"
@@ -4039,14 +4043,11 @@ react@^15.5.3:
     object-assign "^4.1.0"
     prop-types "^15.5.2"
 
-reactcss@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/reactcss/-/reactcss-1.1.1.tgz#9f16fc737fae08daa23bf8a3429bd9f54e162b52"
+reactcss@^1.2.0:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/reactcss/-/reactcss-1.2.2.tgz#41b0ef43e01d54880357c34b11ac1531209350ef"
   dependencies:
-    classnames "^2.2.0"
     lodash "^4.0.1"
-    merge "^1.2.0"
-    object-assign "^4.1.0"
 
 read-cache@^1.0.0:
   version "1.0.0"
@@ -4125,9 +4126,9 @@ rechoir@^0.6.2:
   dependencies:
     resolve "^1.1.6"
 
-recompose@^0.22.0:
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.22.0.tgz#f099d18385882ca41d9eec891718dadddc3204ef"
+recompose@^0.23.1:
+  version "0.23.1"
+  resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.23.1.tgz#577613e24a7ff56f9ca6b899190f8a9c0857fc20"
   dependencies:
     change-emitter "^0.1.2"
     fbjs "^0.8.1"

@@ -3,7 +3,8 @@
  */
 import $ from 'jquery';
 import fecha from 'fecha';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 
 class DateTimePicker extends React.Component {
