@@ -7,12 +7,15 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "jest --config .jest",
     "css": "postcss ./assets/css/main.css -o ./assets/dist/carbon.css",
     "css:dev": "npm run css -- -w",
-    "webpack:vendor": "webpack --config webpack.vendor.js --hide-modules",
-    "webpack:core": "npm run webpack:vendor && webpack --config webpack.core.js --watch --hide-modules",
-    "webpack:boot": "webpack --config webpack.boot.js --watch --hide-modules"
+    "js": "npm run js:vendor && npm run js:core && npm run js:boot",
+    "js:vendor": "webpack --config webpack.vendor.js --hide-modules",
+    "js:core": "webpack --config webpack.core.js --hide-modules",
+    "js:boot": "webpack --config webpack.boot.js --hide-modules",
+    "js:core:dev": "npm run js:vendor && npm run js:core -- -w",
+    "js:boot:dev": "npm run js:boot -- -w",
+    "test": "jest --config .jest"
   },
   "repository": {
     "type": "git",
