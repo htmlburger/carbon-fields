@@ -5,7 +5,7 @@ const base = require('./webpack.base');
 
 module.exports = (env) => merge(base(env), {
 	entry: {
-		'carbon.boot': './assets/react/bootstrap.js'
+		'carbon.boot': './assets/js/bootstrap.js'
 	},
 
 	output: {

@@ -8,6 +8,6 @@
 
 	"modulePaths": [
 		"<rootDir>/assets/",
-		"<rootDir>/assets/react"
+		"<rootDir>/assets/js"
 	]
 }

@@ -24,7 +24,7 @@ module.exports = (env) => {
 
 		resolve: {
 			modules: [
-				path.resolve(__dirname, 'assets/react'),
+				path.resolve(__dirname, 'assets/js'),
 				path.resolve(__dirname, 'assets/vendor'),
 				'node_modules'
 			]

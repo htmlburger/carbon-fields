@@ -24,7 +24,7 @@ module.exports = (env) => merge(base(env), {
 			'jquery-bind-first',
 			'fecha',
 			'locutus/php/url/urldecode',
-			'./assets/react/core.js',
+			'./assets/js/core.js',
 		]
 	},
 
