@@ -100,10 +100,11 @@ class Loader {
 	public function enqueue_scripts() {
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-		wp_enqueue_script( 'carbon-fields-dll', \Carbon_Fields\URL . '/assets/dist/carbon.dll' . $suffix . '.js', array( 'jquery' ) );
-		wp_enqueue_script( 'carbon-fields-bootstrap', \Carbon_Fields\URL . '/assets/dist/carbon.boot' . $suffix . '.js', array( 'carbon-fields-dll' ) );
+		wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/assets/dist/carbon.vendor' . $suffix . '.js', array( 'jquery' ) );
+		wp_enqueue_script( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.core' . $suffix . '.js', array( 'carbon-fields-vendor' ) );
+		wp_enqueue_script( 'carbon-fields-boot', \Carbon_Fields\URL . '/assets/dist/carbon.boot' . $suffix . '.js', array( 'carbon-fields-core' ) );
 
-		wp_localize_script( 'carbon-fields-dll', 'carbonFieldsL10n', apply_filters( 'carbon_fields_l10n', array(
+		wp_localize_script( 'carbon-fields-vendor', 'carbonFieldsL10n', apply_filters( 'carbon_fields_l10n', array(
 			'container' => array(
 				'pleaseFillTheRequiredFields' => __( 'Please fill out all required fields highlighted below.', 'carbon-fields' ),
 				'changesMadeSaveAlert' => __( 'The changes you made will be lost if you navigate away from this page.', 'carbon-fields' ),
@@ -187,8 +188,8 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 	public function print_bootstrap_js() {
 		?>
 		<script type="text/javascript">
-			if (carbonBoot && typeof carbonBoot.default === 'function') {
-				carbonBoot.default();
+			if (window['carbon.boot'] && typeof window['carbon.boot'].default === 'function') {
+				window['carbon.boot'].default();
 			}
 		</script>
 		<?php

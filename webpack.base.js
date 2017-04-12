@@ -6,7 +6,9 @@ module.exports = (env) => {
 	const base = {
 		output: {
 			path: path.resolve(__dirname, 'assets/dist/'),
-			filename: '[name].js'
+			filename: '[name].js',
+			library: '[name]',
+			libraryTarget: 'this'
 		},
 
 		module: {
@@ -61,4 +63,17 @@ module.exports = (env) => {
 	}
 
 	return base;
+};
+
+module.exports.getNameWithSuffix = (file, env) => {
+	const suffix = env === 'production' ? '.min' : '';
+	const dir = path.dirname(file);
+	const ext = path.extname(file);
+	const name = `${path.basename(file, ext)}${suffix}`;
+
+	return path.format({
+		dir,
+		name,
+		ext
+	});
 };

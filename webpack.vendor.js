@@ -5,7 +5,7 @@ const base = require('./webpack.base');
 
 module.exports = (env) => merge(base(env), {
 	entry: {
-		'carbon.dll': [
+		'carbon.vendor': [
 			'babel-polyfill',
 			'react',
 			'react-dom',
@@ -23,21 +23,14 @@ module.exports = (env) => merge(base(env), {
 			'react-onclickoutside',
 			'jquery-bind-first',
 			'fecha',
-			'locutus/php/url/urldecode',
-			'./assets/js/core.js',
+			'locutus/php/url/urldecode'
 		]
-	},
-
-	output: {
-		library: 'carbonDll',
-		libraryTarget: 'var'
 	},
 
 	plugins: [
 		new webpack.DllPlugin({
-			name: 'carbonDll',
-			context: __dirname,
-			path: path.resolve(__dirname, `assets/dist/[name]${env === 'production' ? '.min' : ''}.json`)
+			name: '[name]',
+			path: path.resolve(__dirname, base.getNameWithSuffix('assets/dist/[name].json', env))
 		})
 	]
 });

@@ -5,7 +5,9 @@ const base = require('./webpack.base');
 
 module.exports = (env) => merge(base(env), {
 	entry: {
-		'carbon.boot': './assets/js/bootstrap.js'
+		'carbon.core': [
+			'./assets/js/core.js',
+		]
 	},
 
 	plugins: [
@@ -14,9 +16,9 @@ module.exports = (env) => merge(base(env), {
 			sourceType: 'this'
 		}),
 
-		new webpack.DllReferencePlugin({
-			manifest: require(base.getNameWithSuffix('./assets/dist/carbon.core.json', env)),
-			sourceType: 'this'
+		new webpack.DllPlugin({
+			name: '[name]',
+			path: path.resolve(__dirname, base.getNameWithSuffix('assets/dist/[name].json', env))
 		})
 	]
 });
