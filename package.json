@@ -9,11 +9,10 @@
   "scripts": {
     "css": "postcss ./assets/css/main.css -o ./assets/dist/carbon.css",
     "css:dev": "npm run css -- -w",
-    "js": "npm run js:vendor && npm run js:core && npm run js:boot",
-    "js:vendor": "webpack --config webpack.vendor.js --hide-modules",
-    "js:core": "webpack --config webpack.core.js --hide-modules",
-    "js:boot": "webpack --config webpack.boot.js --hide-modules",
-    "js:core:dev": "npm run js:vendor && npm run js:core -- -w",
+    "js": "npm run js:dll -- --env=production && npm run js:boot -- --env=production",
+    "js:dll": "webpack --config webpack.dll.js --hide-modules --progress",
+    "js:boot": "webpack --config webpack.boot.js --hide-modules --progress",
+    "js:dll:dev": "npm run js:dll -- -w",
     "js:boot:dev": "npm run js:boot -- -w",
     "test": "jest --config .jest"
   },
@@ -41,7 +40,6 @@
     "babel-preset-stage-0": "^6.24.1",
     "cssnano": "^3.10.0",
     "enzyme": "^2.8.0",
-    "expose-loader": "^0.7.3",
     "jest": "^19.0.2",
     "jquery": "1.12",
     "postcss-cli": "^3.1.1",
@@ -50,7 +48,10 @@
     "react-addons-test-utils": "^15.5.1",
     "redux-mock-store": "^1.2.3",
     "redux-saga-test-plan": "^2.3.6",
-    "webpack": "^2.3.3"
+    "uglify-js": "^2.8.22",
+    "uglifyjs-webpack-plugin": "^0.4.1",
+    "webpack": "^2.3.3",
+    "webpack-merge": "^4.1.0"
   },
   "dependencies": {
     "babel-polyfill": "^6.23.0",
