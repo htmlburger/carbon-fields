@@ -11,18 +11,26 @@ import { compose, withHandlers, setStatic } from 'recompose';
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { TYPE_TEXTAREA, TYPE_HEADER_SCRIPTS, TYPE_FOOTER_SCRIPTS } from 'fields/constants';
+import {
+	TYPE_TEXTAREA,
+	TYPE_HEADER_SCRIPTS,
+	TYPE_FOOTER_SCRIPTS
+} from 'fields/constants';
 
 /**
  * Render a multiline text input field.
  *
- * @param  {Object}   props
- * @param  {String}   props.name
- * @param  {Object}   props.field
- * @param  {Function} props.handleChange
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {Function}      props.handleChange
  * @return {React.Element}
  */
-export const TextareaField = ({ name, field, handleChange }) => {
+export const TextareaField = ({
+	name,
+	field,
+	handleChange
+}) => {
 	return <Field field={field}>
 		<textarea
 			id={field.id}
