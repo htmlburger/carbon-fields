@@ -29,8 +29,6 @@ import { TYPE_SET } from 'fields/constants';
  * @param  {Function} props.handleChange
  * @param  {Function} props.showAllOptions
  * @return {React.Element}
- *
- * @todo Fix the translation.
  */
 export const SetField = ({
 	name,
@@ -63,7 +61,7 @@ export const SetField = ({
 
 			<p hidden={hasHiddenOptions}>
 				<a href="#" className="carbon-set-showall" onClick={showAllOptions}>
-					Show All Options
+					{carbonFieldsL10n.field.setShowAll}
 				</a>
 			</p>
 		</div>

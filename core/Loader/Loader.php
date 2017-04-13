@@ -138,6 +138,8 @@ class Loader {
 				'colorSelectColor' => __( 'Select a color', 'carbon-fields' ),
 
 				'noOptions' => __( 'No options.', 'carbon-fields' ),
+
+				'setShowAll' => __( 'Show all options', 'carbon-fields' ),
 			),
 		) ) );
 	}
