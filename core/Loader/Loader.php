@@ -112,6 +112,7 @@ class Loader {
 			'field' => array(
 				'geocodeZeroResults' => __( 'The address could not be found. ', 'carbon-fields' ),
 				'geocodeNotSuccessful' => __( 'Geocode was not successful for the following reason: ', 'carbon-fields' ),
+				'mapLocateAddress' => __( 'Locate address on the map:', 'carbon-fields' ),
 				'maxNumItemsReached' => __( 'Maximum number of items reached (%s items)', 'carbon-fields' ),
 
 				'complexNoRows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),

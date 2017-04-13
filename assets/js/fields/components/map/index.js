@@ -25,13 +25,11 @@ import { TYPE_MAP } from 'fields/constants';
  * @param  {Function} props.handleChange
  * @param  {Function} props.handleSearchSubmit
  * @return {React.Element}
- *
- * TODO: Fix the translation.
  */
 const MapField = ({ name, field, handleChange, handleSearchSubmit }) => {
 	return <Field field={field}>
 		<div className="carbon-map-search">
-			<p>Locate address on the map:</p>
+			<p>{carbonFieldsL10n.field.mapLocateAddress}</p>
 
 			<SearchInput
 				name={`${name}[address]`}
