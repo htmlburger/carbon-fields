@@ -30,8 +30,6 @@ import { TYPE_COLOR } from 'fields/constants';
  * @param  {Function}      props.showPicker
  * @param  {Function}      props.hidePicker
  * @return {React.Element}
- *
- * TODO: Fix translation of 'Select a color' label.
  */
 export const ColorField = ({
 	name,
@@ -46,7 +44,7 @@ export const ColorField = ({
 			<span className="pickcolor button carbon-color-button hide-if-no-js" onClick={showPicker}>
 				<span className="carbon-color-preview" style={{ backgroundColor: field.value }}></span>
 
-				<span className="carbon-color-button-text">Select a Color</span>
+				<span className="carbon-color-button-text">{carbonFieldsL10n.field.colorSelectColor}</span>
 			</span>
 
 			<Colorpicker

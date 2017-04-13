@@ -133,6 +133,8 @@ class Loader {
 				'associationOutOf' => __( 'out of', 'carbon-fields' ),
 				'associationSelectedItem' => __( 'selected item', 'carbon-fields' ),
 				'associationSelectedItems' => __( 'selected items', 'carbon-fields' ),
+
+				'colorSelectColor' => __( 'Select a color', 'carbon-fields' ),
 			),
 		) ) );
 	}
