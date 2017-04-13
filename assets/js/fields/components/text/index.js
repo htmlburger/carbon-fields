@@ -16,13 +16,17 @@ import { TYPE_TEXT } from 'fields/constants';
 /**
  * Render a text input field.
  *
- * @param  {Object}   props
- * @param  {String}   props.name
- * @param  {Object}   props.field
- * @param  {Function} props.handleChange
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {Function}      props.handleChange
  * @return {React.Element}
  */
-export const TextField = ({ name, field, handleChange }) => {
+export const TextField = ({
+	name,
+	field,
+	handleChange
+}) => {
 	return <Field field={field}>
 		<input
 			type="text"
