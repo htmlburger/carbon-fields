@@ -19,14 +19,19 @@ import { TYPE_MAP } from 'fields/constants';
 /**
  * Render a Google-powered map with an address search field.
  *
- * @param  {Object}   props
- * @param  {String}   props.name
- * @param  {Object}   props.field
- * @param  {Function} props.handleChange
- * @param  {Function} props.handleSearchSubmit
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {Function}      props.handleChange
+ * @param  {Function}      props.handleSearchSubmit
  * @return {React.Element}
  */
-const MapField = ({ name, field, handleChange, handleSearchSubmit }) => {
+const MapField = ({
+	name,
+	field,
+	handleChange,
+	handleSearchSubmit
+}) => {
 	return <Field field={field}>
 		<div className="carbon-map-search">
 			<p>{carbonFieldsL10n.field.mapLocateAddress}</p>
