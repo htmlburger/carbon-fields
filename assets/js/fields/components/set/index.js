@@ -3,7 +3,15 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, withHandlers, withState, branch, renderComponent, withProps, setStatic } from 'recompose';
+import {
+	compose,
+	withHandlers,
+	withState,
+	branch,
+	renderComponent,
+	withProps,
+	setStatic
+} from 'recompose';
 import { without } from 'lodash';
 
 /**
@@ -20,14 +28,14 @@ import { TYPE_SET } from 'fields/constants';
 /**
  * Render a collection of checkbox inputs.
  *
- * @param  {Object}   props
- * @param  {Object}   props.name
- * @param  {Object}   props.field
- * @param  {Boolean}  props.hasHiddenOptions
- * @param  {Function} props.isChecked
- * @param  {Function} props.isHidden
- * @param  {Function} props.handleChange
- * @param  {Function} props.showAllOptions
+ * @param  {Object}        props
+ * @param  {Object}        props.name
+ * @param  {Object}        props.field
+ * @param  {Boolean}       props.hasHiddenOptions
+ * @param  {Function}      props.isChecked
+ * @param  {Function}      props.isHidden
+ * @param  {Function}      props.handleChange
+ * @param  {Function}      props.showAllOptions
  * @return {React.Element}
  */
 export const SetField = ({
