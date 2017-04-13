@@ -136,6 +136,8 @@ class Loader {
 				'associationSelectedItems' => __( 'selected items', 'carbon-fields' ),
 
 				'colorSelectColor' => __( 'Select a color', 'carbon-fields' ),
+
+				'noOptions' => __( 'No options.', 'carbon-fields' ),
 			),
 		) ) );
 	}

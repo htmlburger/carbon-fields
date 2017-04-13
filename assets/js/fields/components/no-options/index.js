@@ -14,15 +14,13 @@ import withSetup from 'fields/decorators/with-setup';
  * Render a notice to inform the user that the field doesn't have
  * any options.
  *
- * @param  {Object} props
- * @param  {Object} props.field
+ * @param  {Object}        props
+ * @param  {Object}        props.field
  * @return {React.Element}
- *
- * TODO: Fix the translation.
  */
 export const NoOptions = ({ field }) => {
 	return <Field field={field}>
-		<em>No options.</em>
+		<em>{carbonFieldsL10n.field.noOptions}</em>
 	</Field>;
 };
 
