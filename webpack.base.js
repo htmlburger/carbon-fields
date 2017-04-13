@@ -46,8 +46,12 @@ module.exports = (env) => {
 			})
 		],
 
-		devtool: '#cheap-module-eval-source-map'
+		devtool: 'cheap-source-map'
 	};
+
+	if (!env && env === 'development') {
+		base.cache = true;
+	}
 
 	if (env === 'production') {
 		base.output.filename = '[name].min.js';
