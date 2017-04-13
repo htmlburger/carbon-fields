@@ -23,7 +23,6 @@ import { preventDefault } from 'lib/helpers';
  * @param  {Function}      props.handleClick
  * @return {React.Element}
  *
- * TODO: Fix the translation of the 'Edit' link.
  * TODO: Clean up the mess in `handleClick` introduced by the incorrect HTML in the template.
  */
 export const AssociationListItem = ({
@@ -40,7 +39,7 @@ export const AssociationListItem = ({
 		<a href="#" onClick={handleClick}>
 			{
 				item.edit_link && !associated
-				? <em className="edit-link dashicons-before dashicons-edit">Edit</em>
+				? <em className="edit-link dashicons-before dashicons-edit"></em>
 				: null
 			}
 

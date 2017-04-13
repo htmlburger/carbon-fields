@@ -129,6 +129,10 @@ class Loader {
 
 				'selectTime' => __( 'Select Time', 'carbon-fields' ),
 				'selectDate' => __( 'Select Date', 'carbon-fields' ),
+
+				'associationOutOf' => __( 'out of', 'carbon-fields' ),
+				'associationSelectedItem' => __( 'selected item', 'carbon-fields' ),
+				'associationSelectedItems' => __( 'selected items', 'carbon-fields' ),
 			),
 		) ) );
 	}

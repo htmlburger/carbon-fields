@@ -43,7 +43,6 @@ import { TYPE_ASSOCIATION } from 'fields/constants';
  * @param  {Function}      props.handleSortItems
  * @return {React.Element}
  *
- * TODO: Fix the translation of the labels.
  * TODO: Research more about `react-virtualized`.
  * 		 Probably can improve the performance on very long lists.
  */
@@ -67,14 +66,14 @@ export const AssociationField = ({
 					<span className="selected-label">
 						{
 							field.value.length !== 1
-							? ' selected items'
-							: ' selected item'
+							? ` ${carbonFieldsL10n.field.associationSelectedItems}`
+							: ` ${carbonFieldsL10n.field.associationSelectedItem}`
 						}
 					</span>
 
 					{
 						field.max !== -1
-						? <span className="remaining"> out of {field.max}</span>
+						? <span className="remaining"> {carbonFieldsL10n.field.associationOutOf} {field.max}</span>
 						: null
 					}
 				</strong>
@@ -92,8 +91,6 @@ export const AssociationField = ({
 				</div>
 
 				<div className="carbon-association-right">
-					<label>Associated:</label>
-
 					<SortableList options={sortableOptions} onSort={handleSortItems}>
 						<AssociationList
 							prefix={name}
