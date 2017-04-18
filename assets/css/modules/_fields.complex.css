@@ -38,7 +38,7 @@
 
 .carbon-groups-holder .carbon-group-actions .carbon-btn-remove:hover { color: $color-border-darkgrey; }
 
-.carbon-groups-holder .fields-container { margin-top: -1px; border-width: 0 0 0 1px; border-style: solid; border-color: $color-border; }
+.carbon-groups-holder .fields-container { margin-top: -1px; border-width: 0 0 0 1px; border-style: solid; border-color: $color-border; display: flex; flex-wrap: wrap; align-items: stretch; }
 
 
 /*  Drag Handle  */
