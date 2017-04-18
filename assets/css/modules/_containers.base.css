@@ -77,9 +77,8 @@
 .carbon-tabs .carbon-tab { display: none; }
 
 .carbon-tabs .carbon-tab.active { display: block; }
-.carbon-tabs .carbon-tabs-body { margin-top: 1px }
 
-.carbon-tabs-nav { border-bottom: solid 1px $color-border; padding: 12px 10px 0; margin: 0 0 -1px; background: $color-grey-bg; font-size: 0; }
+.carbon-tabs-nav { border-bottom: solid 1px $color-border; padding: 12px 10px 0; margin: 0 0 -1px; background: $color-grey-bg; font-size: 0; position: relative; }
 
 .carbon-tabs-nav li { display: inline-block; vertical-align: top; margin: 0 6px -1px 0; }
 .carbon-tabs-nav li a { display: block; padding: 8px 12px; border: solid 1px $color-border; background: $color-grey-bg; color: $color-label; font-size: 12px; line-height: 1.5; text-decoration: none; font-weight: 600; }
