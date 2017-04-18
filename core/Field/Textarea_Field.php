@@ -7,7 +7,7 @@ namespace Carbon_Fields\Field;
  */
 class Textarea_Field extends Field {
 	protected $height = 170;
-	protected $rows = 0;
+	protected $rows = 5;
 
 	/**
 	 * Change the number of rows of this field.
