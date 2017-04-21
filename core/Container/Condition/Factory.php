@@ -38,7 +38,7 @@ class Factory {
 			if ( $reflection->isSubclassOf( $condition_type_superclass ) ) {
 				return new $type();
 			} else {
-				Incorrect_Syntax_Exception::raise( 'Field must be of type Carbon_Fields\\Field\\Field' );
+				Incorrect_Syntax_Exception::raise( 'Condition must be of type ' . $condition_type_superclass );
 			}
 		}
 
