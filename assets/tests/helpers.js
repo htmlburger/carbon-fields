@@ -1,34 +1,21 @@
-import { put } from 'redux-saga/effects';
-import { setUI } from 'containers/actions';
+/**
+ * The external dependencies.
+ */
+import { defaultsDeep } from 'lodash';
+
 
 /**
- * Small helper to generate a dummy action that will change the container's visibility.
+ * Prepare a dummy field for testing purposes.
  *
- * @param  {String}  containerId
- * @param  {Boolean} isVisible
+ * @param  {Object} props
  * @return {Object}
  */
-export function stubContainerVisibilityAction(containerId, isVisible) {
-	return put(setUI({
-		containerId: containerId,
-		ui: {
-			is_visible: isVisible
-		}
-	}));
-}
-
-/**
- * Generate a dummy object that represents a container.
- *
- * @param  {String} containerType
- * @param  {String} containerId
- * @param  {Object} state
- * @return {Object}
- */
-export function stubContainerState(containerType, containerId, state) {
-	return {
-		id: containerId,
-		type: containerType,
-		...state
-	};
-}
+export const stubField = (props = {}) => defaultsDeep(props, {
+	id: 'fieldId',
+	type: 'fieldType',
+	name: 'fieldName',
+	value: 'fieldValue',
+	classes: [],
+	meta: {},
+	ui: {},
+});

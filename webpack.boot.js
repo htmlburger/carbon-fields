@@ -1,69 +1,22 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const merge = require('webpack-merge');
+const webpack = require('webpack');
+const base = require('./webpack.base');
 
-module.exports = {
-	// These are the "entry points" to our application.
-	// This means they will be the "root" imports that are included in JS bundle.
-	entry: './assets/react/bootstrap.js',
-
-	// Setup the output.
-	output: {
-		// The output directory.
-		path: 'assets/',
-
-		// This is the JS bundle containing code from the entry points.
-		filename: 'carbon.bootstrap.js',
+module.exports = (env) => merge(base(env), {
+	entry: {
+		'carbon.boot': './assets/js/bootstrap.js'
 	},
 
-	// Setup the transformation of the modules.
-	module: {
-		rules: [
-			// Process JS with Babel.
-			{
-				test: /\.js$/,
-				loader: 'babel-loader',
-				options: {
-					// Enable caching results for faster rebuilds.
-					cacheDirectory: true
-				},
-				exclude: /node_modules/
-			},
-
-			// Expose the global variable used to boot the fields.
-			{
-				test: require.resolve('./assets/react/bootstrap.js'),
-				loader: 'expose-loader',
-				query: 'carbonFieldsBootstrap'
-			}
-		]
-	},
-
-	// Add aliases to allow easier importing of the modules.
-	resolve: {
-		modules: [
-			path.resolve(__dirname, 'assets/react'),
-			path.resolve(__dirname, 'assets/vendor'),
-			'node_modules'
-		]
-	},
-
-	// Setup the source maps.
-	devtool: 'cheap-module-source-map',
-
-	// Setup the plugins.
 	plugins: [
-		// Use the vendor DLL file.
 		new webpack.DllReferencePlugin({
-			context: __dirname,
-			sourceType: 'this',
-			manifest: require('./assets/carbon.vendor.json'),
+			manifest: require(base.getNameWithSuffix('./assets/dist/carbon.vendor.json', env)),
+			sourceType: 'this'
 		}),
 
-		// Use the core DLL file.
 		new webpack.DllReferencePlugin({
-			context: __dirname,
-			sourceType: 'this',
-			manifest: require('./assets/carbon.core.json'),
+			manifest: require(base.getNameWithSuffix('./assets/dist/carbon.core.json', env)),
+			sourceType: 'this'
 		})
-	],
-};
+	]
+});

@@ -1,10 +1,9 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const merge = require('webpack-merge');
+const webpack = require('webpack');
+const base = require('./webpack.base');
 
-module.exports = {
-	// These are our vendor modules.
-	// We make them as DLL to allow faster builds and to export an API that can
-	// be consumed by third party developers.
+module.exports = (env) => merge(base(env), {
 	entry: {
 		'carbon.vendor': [
 			'babel-polyfill',
@@ -28,47 +27,10 @@ module.exports = {
 		]
 	},
 
-	// Setup the output.
-	output: {
-		// The output directory.
-		path: 'assets/',
-
-		// This is the JS bundle containing code from the entry points.
-		filename: '[name].js',
-
-		// The name of exported library.
-		library: '[name]',
-
-		// The output format.
-		libraryTarget: 'this'
-	},
-
-	// Setup the sourcemaps.
-	devtool: 'cheap-module-source-map',
-
-	// Some of our dependencies are already loaded by WordPress.
-	externals: {
-		'jquery': 'jQuery'
-	},
-
-	// Add aliases to allow easier importing of the modules.
-	resolve: {
-		modules: [
-			path.resolve(__dirname, 'assets/vendor'),
-			'node_modules'
-		]
-	},
-
-	// Setup the plugins.
 	plugins: [
-		new webpack.ProvidePlugin({
-			'jQuery': 'jquery'
-		}),
-
 		new webpack.DllPlugin({
-			context: __dirname,
-			path: path.join(__dirname, 'assets', '[name].json'),
-			name: '[name]'
+			name: '[name]',
+			path: path.resolve(__dirname, base.getNameWithSuffix('assets/dist/[name].json', env))
 		})
 	]
-};
+});

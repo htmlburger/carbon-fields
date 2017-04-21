@@ -2,12 +2,12 @@
 	"bail": true,
 	"verbose": true,
 
-	"testPathDirs": [
+	"roots": [
 		"assets/tests"
 	],
 
 	"modulePaths": [
 		"<rootDir>/assets/",
-		"<rootDir>/assets/react"
+		"<rootDir>/assets/js"
 	]
 }

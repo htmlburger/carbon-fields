@@ -98,11 +98,13 @@ class Loader {
 	 * Initialize main scripts
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/assets/carbon.vendor.js', array() );
-		wp_enqueue_script( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/carbon.core.js', array( 'carbon-fields-vendor', 'jquery' ) );
-		wp_enqueue_script( 'carbon-fields-bootstrap', \Carbon_Fields\URL . '/assets/carbon.bootstrap.js', array( 'carbon-fields-core' ) );
+		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-		wp_localize_script( 'carbon-fields-core', 'carbonFieldsL10n', apply_filters( 'carbon_fields_l10n', array(
+		wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/assets/dist/carbon.vendor' . $suffix . '.js', array( 'jquery' ) );
+		wp_enqueue_script( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.core' . $suffix . '.js', array( 'carbon-fields-vendor' ) );
+		wp_enqueue_script( 'carbon-fields-boot', \Carbon_Fields\URL . '/assets/dist/carbon.boot' . $suffix . '.js', array( 'carbon-fields-core' ) );
+
+		wp_localize_script( 'carbon-fields-vendor', 'carbonFieldsL10n', apply_filters( 'carbon_fields_l10n', array(
 			'container' => array(
 				'pleaseFillTheRequiredFields' => __( 'Please fill out all required fields highlighted below.', 'carbon-fields' ),
 				'changesMadeSaveAlert' => __( 'The changes you made will be lost if you navigate away from this page.', 'carbon-fields' ),
@@ -110,6 +112,7 @@ class Loader {
 			'field' => array(
 				'geocodeZeroResults' => __( 'The address could not be found. ', 'carbon-fields' ),
 				'geocodeNotSuccessful' => __( 'Geocode was not successful for the following reason: ', 'carbon-fields' ),
+				'mapLocateAddress' => __( 'Locate address on the map:', 'carbon-fields' ),
 				'maxNumItemsReached' => __( 'Maximum number of items reached (%s items)', 'carbon-fields' ),
 
 				'complexNoRows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),
@@ -127,6 +130,16 @@ class Loader {
 
 				'selectTime' => __( 'Select Time', 'carbon-fields' ),
 				'selectDate' => __( 'Select Date', 'carbon-fields' ),
+
+				'associationOutOf' => __( 'out of', 'carbon-fields' ),
+				'associationSelectedItem' => __( 'selected item', 'carbon-fields' ),
+				'associationSelectedItems' => __( 'selected items', 'carbon-fields' ),
+
+				'colorSelectColor' => __( 'Select a color', 'carbon-fields' ),
+
+				'noOptions' => __( 'No options.', 'carbon-fields' ),
+
+				'setShowAll' => __( 'Show all options', 'carbon-fields' ),
 			),
 		) ) );
 	}
@@ -186,8 +199,8 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 	public function print_bootstrap_js() {
 		?>
 		<script type="text/javascript">
-			if (typeof carbonFieldsBootstrap.default === 'function') {
-				carbonFieldsBootstrap.default();
+			if (window['carbon.boot'] && typeof window['carbon.boot'].default === 'function') {
+				window['carbon.boot'].default();
 			}
 		</script>
 		<?php

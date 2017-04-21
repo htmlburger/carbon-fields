@@ -6,7 +6,7 @@ namespace Carbon_Fields\Field;
  * Time picker field class.
  */
 class Time_Field extends Field {
-	
+
 	/**
 	 * Picker type.
 	 *
@@ -22,9 +22,6 @@ class Time_Field extends Field {
 	public $picker_options = array(
 		'dateFormat' => 'yy-mm-dd',
 		'timeFormat' => 'hh:mm tt',
-		'altFormat' => 'yy-mm-dd',
-		'altTimeFormat' => 'HH:mm:ss',
-		'altFieldTimeOnly' => false,
 	);
 
 	/**
@@ -77,7 +74,7 @@ class Time_Field extends Field {
 		wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css', array(), \Carbon_Fields\VERSION );
 
 		# Enqueue JS
-		wp_enqueue_script( 'carbon-jquery-timepicker', \Carbon_Fields\URL . '/assets/js/lib/jquery-ui-timepicker.js', array( 'jquery-ui-datepicker', 'jquery-ui-slider' ), \Carbon_Fields\VERSION );
+		wp_enqueue_script( 'carbon-jquery-timepicker', \Carbon_Fields\URL . '/assets/vendor/jquery-ui-timepicker/index.js', array( 'jquery-ui-datepicker', 'jquery-ui-slider' ), \Carbon_Fields\VERSION );
 	}
 
 	/**
