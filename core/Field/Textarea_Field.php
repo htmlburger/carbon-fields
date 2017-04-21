@@ -6,7 +6,6 @@ namespace Carbon_Fields\Field;
  * Textarea field class.
  */
 class Textarea_Field extends Field {
-	protected $height = 170;
 	protected $rows = 5;
 
 	/**
@@ -30,7 +29,6 @@ class Textarea_Field extends Field {
 
 		$field_data = array_merge( $field_data, array(
 			'rows' => $this->rows,
-			'height' => $this->height,
 		) );
 
 		return $field_data;
