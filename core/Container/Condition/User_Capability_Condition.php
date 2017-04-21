@@ -58,7 +58,7 @@ class User_Capability_Condition extends Condition {
 				break;
 		}
 
-		return $this->first_supported_comparer_is_correct(
+		return $this->compare(
 			$user_id,
 			$this->get_comparison_operator(),
 			$this->get_value()

@@ -19,22 +19,13 @@ class Factory {
 	}
 
 	/**
-	 * Get the class for the specified type
-	 * 
-	 * @param  string      $type
-	 * @return string
-	 */
-	public function get_class( $type ) {
-		return Helper::type_to_class( $type, __NAMESPACE__, '_Condition' );
-	}
-
-	/**
 	 * Get an instance of the specified type
 	 * 
 	 * @param  string $type
 	 * @return mixed
 	 */
 	public function make( $type ) {
+		$condition_type_superclass = 'Carbon_Fields\\Container\\Condition\\Condition';
 		$normalized_type = Helper::normalize_type( $type );
 		
 		$identifier = 'container_condition_type_' . $normalized_type;
@@ -42,10 +33,16 @@ class Factory {
 			return App::resolve( $identifier );
 		}
 
-		$class = $this->get_class( $normalized_type );
-		if ( ! class_exists( $class ) ) {
-			Incorrect_Syntax_Exception::raise( 'Unknown condition type "' . $type . '".' );
+		if ( class_exists( $type ) ) {
+			$reflection = new \ReflectionClass( $type );
+			if ( $reflection->isSubclassOf( $condition_type_superclass ) ) {
+				return new $type();
+			} else {
+				Incorrect_Syntax_Exception::raise( 'Field must be of type Carbon_Fields\\Field\\Field' );
+			}
 		}
-		return new $class( array() );
+
+		Incorrect_Syntax_Exception::raise( 'Unknown condition type "' . $type . '".' );
+		return null;
 	}
 }

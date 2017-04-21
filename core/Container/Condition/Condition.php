@@ -30,15 +30,6 @@ abstract class Condition implements Fulfillable {
 	 * @var string
 	 */
 	protected $comparison_operator = '';
-
-	/**
-	 * Constructor
-	 *
-	 * @param  array<Carbon_Fields\Container\Condition\Comparer\Comparer> $comparers
-	 */
-	public function __construct( $comparers ) {
-		$this->set_comparers( $comparers );
-	}
 	
 	/**
 	 * Get the condition value
@@ -78,20 +69,20 @@ abstract class Condition implements Fulfillable {
 	 * @param array<Comparer> $comparers
 	 * @return Condition $this
 	 */
-	protected function set_comparers( $comparers ) {
+	public function set_comparers( $comparers ) {
 		$this->comparers = $comparers;
 		return $this;
 	}
 	
 	/**
-	 * Check if any comparer is correct for $a and $b
+	 * Find the first operator which supports $comparison_operator and check if it is correct for $a and $b
 	 *
 	 * @param mixed  $a
 	 * @param string $comparison_operator
 	 * @param mixed  $b
 	 * @return bool
 	 */
-	protected function first_supported_comparer_is_correct( $a, $comparison_operator, $b ) {
+	protected function compare( $a, $comparison_operator, $b ) {
 		$comparers = $this->get_comparers();
 		foreach ( $comparers as $comparer ) {
 			if ( ! $comparer->supports_comparison_operator( $comparison_operator ) ) {

@@ -20,7 +20,7 @@ class Post_Level_Condition extends Condition {
 		$post_level = count( get_post_ancestors( $post_id ) ) + 1;
 		$value = max( 1, intval( $this->get_value() ) );
 
-		return $this->first_supported_comparer_is_correct(
+		return $this->compare(
 			$post_level,
 			$this->get_comparison_operator(),
 			$value

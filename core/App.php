@@ -32,7 +32,7 @@ class App {
 	 * 
 	 * @var array<callable>
 	 */
-	public $on_boot = array();
+	public $boot_actions = array();
 
 	/**
 	 * Inversion of Control container instance
@@ -163,8 +163,8 @@ class App {
 		static::resolve( 'loader' )->boot();
 		static::instance()->booted = true;
 
-		$bootables = static::instance()->on_boot;
-		foreach ( $bootables as $callable ) {
+		$boot_actions = static::instance()->boot_actions;
+		foreach ( $boot_actions as $callable ) {
 			call_user_func( $callable );
 		}
 	}
@@ -194,6 +194,6 @@ class App {
 		if ( ! is_callable( $callable ) ) {
 			throw new \Exception( 'Invalid callable passed to Carbon_Fields\App::on_boot().' );
 		}
-		static::instance()->on_boot[] = $callable;
+		static::instance()->boot_actions[] = $callable;
 	}
 }

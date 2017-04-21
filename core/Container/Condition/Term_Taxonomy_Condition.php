@@ -15,7 +15,7 @@ class Term_Taxonomy_Condition extends Condition {
 	 */
 	public function is_fulfilled( $environment ) {
 		$taxonomy = $environment['taxonomy'];
-		return $this->first_supported_comparer_is_correct(
+		return $this->compare(
 			$taxonomy,
 			$this->get_comparison_operator(),
 			$this->get_value()

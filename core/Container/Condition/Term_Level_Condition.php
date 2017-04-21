@@ -23,7 +23,7 @@ class Term_Level_Condition extends Condition {
 		}
 		$value = max( 1, intval( $this->get_value() ) );
 
-		return $this->first_supported_comparer_is_correct(
+		return $this->compare(
 			$term_level,
 			$this->get_comparison_operator(),
 			$value

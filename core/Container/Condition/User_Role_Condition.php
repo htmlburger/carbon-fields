@@ -43,7 +43,7 @@ class User_Role_Condition extends Condition {
 				break;
 		}
 
-		return $this->first_supported_comparer_is_correct(
+		return $this->compare(
 			$roles,
 			$this->get_comparison_operator(),
 			$this->get_value()

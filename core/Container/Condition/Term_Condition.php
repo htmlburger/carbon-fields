@@ -39,12 +39,9 @@ class Term_Condition extends Condition {
 
 	/**
 	 * Constructor
-	 *
-	 * @param  array<Carbon_Fields\Container\Condition\Comparer\Comparer> $comparers
 	 */
-	public function __construct( $comparers ) {
+	public function __construct() {
 		$this->wp_toolset = App::resolve( 'wp_toolset' );
-		parent::__construct( $comparers );
 	}
 	
 	/**
@@ -74,7 +71,7 @@ class Term_Condition extends Condition {
 		$term_id = $environment['term_id'];
 		$value = $this->wp_toolset->get_term_by_descriptor( $this->get_value() );
 
-		return $this->first_supported_comparer_is_correct(
+		return $this->compare(
 			$term_id,
 			$this->get_comparison_operator(),
 			$value->term_id

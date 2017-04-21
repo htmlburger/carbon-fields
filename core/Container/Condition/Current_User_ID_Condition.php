@@ -15,7 +15,7 @@ class Current_User_ID_Condition extends Condition {
 	 */
 	public function is_fulfilled( $environment ) {
 		$user_id = get_current_user_id();
-		return $this->first_supported_comparer_is_correct(
+		return $this->compare(
 			$user_id,
 			$this->get_comparison_operator(),
 			$this->get_value()

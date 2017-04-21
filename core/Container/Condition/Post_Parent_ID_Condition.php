@@ -17,7 +17,7 @@ class Post_Parent_ID_Condition extends Condition {
 		$post = $environment['post'];
 		$post_parent_id = is_object( $post ) ? intval( $post->post_parent ) : 0;
 
-		return $this->first_supported_comparer_is_correct(
+		return $this->compare(
 			$post_parent_id,
 			$this->get_comparison_operator(),
 			$this->get_value()

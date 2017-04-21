@@ -20,7 +20,7 @@ class Post_Format_Condition extends Condition {
 		$format = get_post_format( $post_id );
 		$format = ( $format ) ? $format : ''; // force an empty string for falsy values to ensure strict comparisons work
 
-		return $this->first_supported_comparer_is_correct(
+		return $this->compare(
 			$format,
 			$this->get_comparison_operator(),
 			$this->get_value()

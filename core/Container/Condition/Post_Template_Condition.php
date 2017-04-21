@@ -20,7 +20,7 @@ class Post_Template_Condition extends Condition {
 		$post_template = get_post_meta( $post_id, '_wp_page_template', true );
 		$post_template = $post_template ? $post_template : 'default';
 
-		return $this->first_supported_comparer_is_correct(
+		return $this->compare(
 			$post_template,
 			$this->get_comparison_operator(),
 			$this->get_value()

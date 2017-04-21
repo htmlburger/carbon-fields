@@ -14,7 +14,7 @@ class Boolean_Condition extends Condition {
 	 * @return bool
 	 */
 	public function is_fulfilled( $environment ) {
-		return $this->first_supported_comparer_is_correct(
+		return $this->compare(
 			true,
 			$this->get_comparison_operator(),
 			$this->get_value()

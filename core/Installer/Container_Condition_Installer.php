@@ -31,75 +31,109 @@ class Container_Condition_Installer implements Installer {
 	 */
 	protected static function install_conditions( $ioc ) {
 		$ioc['container_condition_type_boolean'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Boolean_Condition( array(
+			$condition = new \Carbon_Fields\Container\Condition\Boolean_Condition();
+			$condition->set_comparers( array(
 				$ioc['container_condition_comparer_type_equality'],
 			) );
+			return $condition;
 		} );
 		$ioc['container_condition_type_post_id'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Post_ID_Condition( $ioc['container_condition_comparers_generic'] );
+			$condition = new \Carbon_Fields\Container\Condition\Post_ID_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparers_generic'] );
+			return $condition;
 		} );
 		$ioc['container_condition_type_post_parent_id'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Post_Parent_ID_Condition( $ioc['container_condition_comparers_generic'] );
+			$condition = new \Carbon_Fields\Container\Condition\Post_Parent_ID_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparers_generic'] );
+			return $condition;
 		} );
 		$ioc['container_condition_type_post_type'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Post_Type_Condition( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			$condition = new \Carbon_Fields\Container\Condition\Post_Type_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			return $condition;
 		} );
 		$ioc['container_condition_type_post_format'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Post_Format_Condition( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			$condition = new \Carbon_Fields\Container\Condition\Post_Format_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			return $condition;
 		} );
 		$ioc['container_condition_type_post_level'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Post_Level_Condition( $ioc['container_condition_comparers_generic'] );
+			$condition = new \Carbon_Fields\Container\Condition\Post_Level_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparers_generic'] );
+			return $condition;
 		} );
 		$ioc['container_condition_type_post_template'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Post_Template_Condition( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			$condition = new \Carbon_Fields\Container\Condition\Post_Template_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			return $condition;
 		} );
 		$ioc['container_condition_type_post_term'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Post_Term_Condition( array(
+			$condition = new \Carbon_Fields\Container\Condition\Post_Term_Condition();
+			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
 				$ioc['container_condition_comparer_type_custom'],
 			) );
+			return $condition;
 		} );
 
 		$ioc['container_condition_type_term'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Term_Condition( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			$condition = new \Carbon_Fields\Container\Condition\Term_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			return $condition;
 		} );
 		$ioc['container_condition_type_term_taxonomy'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Term_Taxonomy_Condition( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			$condition = new \Carbon_Fields\Container\Condition\Term_Taxonomy_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			return $condition;
 		} );
 		$ioc['container_condition_type_term_level'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Term_Level_Condition( $ioc['container_condition_comparers_generic'] );
+			$condition = new \Carbon_Fields\Container\Condition\Term_Level_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparers_generic'] );
+			return $condition;
 		} );
 
 		$ioc['container_condition_type_user_id'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\User_ID_Condition( $ioc['container_condition_comparers_generic'] );
+			$condition = new \Carbon_Fields\Container\Condition\User_ID_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparers_generic'] );
+			return $condition;
 		} );
 		$ioc['container_condition_type_user_role'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\User_Role_Condition( array(
+			$condition = new \Carbon_Fields\Container\Condition\User_Role_Condition();
+			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
 				$ioc['container_condition_comparer_type_custom'],
 			) );
+			return $condition;
 		} );
 		$ioc['container_condition_type_user_capabiltiy'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\User_Capability_Condition( array(
+			$condition = new \Carbon_Fields\Container\Condition\User_Capability_Condition();
+			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
 				$ioc['container_condition_comparer_type_custom'],
 			) );
+			return $condition;
 		} );
 
 		$ioc['container_condition_type_current_user_id'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Current_User_ID_Condition( $ioc['container_condition_comparers_generic'] );
+			$condition = new \Carbon_Fields\Container\Condition\Current_User_ID_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparers_generic'] );
+			return $condition;
 		} );
 		$ioc['container_condition_type_current_user_role'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Current_User_Role_Condition( array(
+			$condition = new \Carbon_Fields\Container\Condition\Current_User_Role_Condition();
+			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
 				$ioc['container_condition_comparer_type_custom'],
 			) );
+			return $condition;
 		} );
 		$ioc['container_condition_type_current_user_capability'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Current_User_Capability_Condition( array(
+			$condition = new \Carbon_Fields\Container\Condition\Current_User_Capability_Condition();
+			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
 				$ioc['container_condition_comparer_type_custom'],
 			) );
+			return $condition;
 		} );
 
 		$ioc['container_condition_factory'] = function() {

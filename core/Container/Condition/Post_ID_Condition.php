@@ -15,7 +15,7 @@ class Post_ID_Condition extends Condition {
 	 */
 	public function is_fulfilled( $environment ) {
 		$post_id = $environment['post_id'];
-		return $this->first_supported_comparer_is_correct(
+		return $this->compare(
 			$post_id,
 			$this->get_comparison_operator(),
 			$this->get_value()

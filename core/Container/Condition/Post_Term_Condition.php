@@ -82,7 +82,7 @@ class Post_Term_Condition extends Term_Condition {
 				break;
 		}
 
-		return $this->first_supported_comparer_is_correct(
+		return $this->compare(
 			$post_id,
 			$this->get_comparison_operator(),
 			$this->get_value()
