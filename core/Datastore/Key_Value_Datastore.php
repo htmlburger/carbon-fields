@@ -2,7 +2,6 @@
 
 namespace Carbon_Fields\Datastore;
 
-use Carbon_Fields\App;
 use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Value_Set\Value_Set;
@@ -25,7 +24,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * Initialize the datastore.
 	 */
 	public function __construct() {
-		$this->key_toolset = App::resolve( 'key_toolset' );
+		$this->key_toolset = \Carbon_Fields\Carbon_Fields::resolve( 'key_toolset' );
 		parent::__construct();
 	}
 

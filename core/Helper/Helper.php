@@ -2,7 +2,6 @@
 
 namespace Carbon_Fields\Helper;
 
-use Carbon_Fields\App;
 use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
@@ -20,7 +19,7 @@ class Helper {
 	 * @return mixed
 	 */
 	public static function get_value( $object_id, $container_type, $field_name ) {
-		$repository = App::resolve( 'container_repository' );
+		$repository = \Carbon_Fields\Carbon_Fields::resolve( 'container_repository' );
 		$field = $repository->get_field_in_containers( $field_name, $container_type );
 
 		if ( ! $field ) {
@@ -45,7 +44,7 @@ class Helper {
 	 * @param array $value Field expects a `value_set`; Complex_Field expects a `value_tree` - refer to DEVELOPMENT.md
 	 */
 	public static function set_value( $object_id, $container_type, $field_name, $value ) {
-		$repository = App::resolve( 'container_repository' );
+		$repository = \Carbon_Fields\Carbon_Fields::resolve( 'container_repository' );
 		$field = $repository->get_field_in_containers( $field_name, $container_type );
 
 		if ( ! $field ) {

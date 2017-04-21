@@ -2,7 +2,6 @@
 
 namespace Carbon_Fields\Container;
 
-use Carbon_Fields\App;
 use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Field\Group_Field;
@@ -159,7 +158,7 @@ abstract class Container implements Datastore_Holder_Interface {
 			$class = __NAMESPACE__ . '\\Broken_Container';
 		}
 
-		$repository = App::resolve( 'container_repository' );
+		$repository = \Carbon_Fields\Carbon_Fields::resolve( 'container_repository' );
 		$unique_id = $repository->get_unique_panel_id( $name );
 		$container = new $class( $unique_id, $name, $normalized_type );
 		$repository->register_container( $container );
@@ -184,7 +183,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @param string $type Type of the container
 	 */
 	public function __construct( $unique_id, $title, $type ) {
-		App::verify_boot();
+		\Carbon_Fields\Carbon_Fields::verify_boot();
 
 		if ( empty( $title ) ) {
 			Incorrect_Syntax_Exception::raise( 'Empty container title is not supported' );
@@ -193,7 +192,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		$this->id = $unique_id;
 		$this->title = $title;
 		$this->type = $type;
-		$this->condition_collection = App::resolve( 'container_condition_fulfillable_collection' );
+		$this->condition_collection = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
 		$this->condition_collection->set_condition_type_list(
 			array_merge( $this->get_condition_types( true ), $this->get_condition_types( false ) ),
 			true
@@ -720,7 +719,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return array
 	 */
 	public function to_json( $load ) {
-		$array_translator = App::resolve( 'container_condition_translator_array' );
+		$array_translator = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_translator_array' );
 		$conditions = $this->condition_collection->evaluate( $this->get_condition_types( true ), $this->get_environment_for_request(), array( 'CUSTOM' ) );
 		$conditions = $array_translator->fulfillable_to_foreign( $conditions );
 		$conditions = $array_translator->foreign_to_json( $conditions );

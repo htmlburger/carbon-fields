@@ -18,7 +18,7 @@ use Carbon_Fields\REST_API\Decorator as REST_API_Decorator;
 /**
  * Holds a static reference to the ioc container
  */
-class App {
+class Carbon_Fields {
 
 	/**
 	 * Flag if Carbon Fields has been booted
@@ -44,7 +44,7 @@ class App {
 	/**
 	 * Singleton implementation
 	 *
-	 * @return App
+	 * @return Carbon_Fields\Carbon_Fields
 	 */
 	public static function instance() {
 		static $instance = null;
@@ -139,7 +139,7 @@ class App {
 	}
 
 	/**
-	 * Replace the ioc container for the App
+	 * Replace the ioc container for Carbon_Fields\Carbon_Fields
 	 * 
 	 * @param  PimpleContainer $ioc
 	 */
@@ -181,7 +181,7 @@ class App {
 	 */
 	public static function verify_boot() {
 		if ( ! static::is_booted() ) {
-			throw new \Exception( 'You must call Carbon_Fields\App::boot() in a suitable WordPress hook before using Carbon Fields.' );
+			throw new \Exception( 'You must call Carbon_Fields\Carbon_Fields::boot() in a suitable WordPress hook before using Carbon Fields.' );
 		}
 	}
 
@@ -192,7 +192,7 @@ class App {
 	 */
 	public static function on_boot( $callable ) {
 		if ( ! is_callable( $callable ) ) {
-			throw new \Exception( 'Invalid callable passed to Carbon_Fields\App::on_boot().' );
+			throw new \Exception( 'Invalid callable passed to Carbon_Fields\Carbon_Fields::on_boot().' );
 		}
 		static::instance()->boot_actions[] = $callable;
 	}

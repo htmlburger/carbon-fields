@@ -2,7 +2,6 @@
 
 namespace Carbon_Fields\Field;
 
-use Carbon_Fields\App;
 use Carbon_Fields\Value_Set\Value_Set;
 
 /**
@@ -62,7 +61,7 @@ class Association_Field extends Field {
 	 * @param string $label Field label
 	 */
 	protected function __construct( $type, $name, $label ) {
-		$this->wp_toolset = App::resolve( 'wp_toolset' );
+		$this->wp_toolset = \Carbon_Fields\Carbon_Fields::resolve( 'wp_toolset' );
 		$this->set_value_set( new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'type' => '', 'subtype' => '', 'object_id' => 0 ) ) );
 		parent::__construct( $type, $name, $label );
 	}

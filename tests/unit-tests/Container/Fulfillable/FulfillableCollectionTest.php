@@ -1,7 +1,6 @@
 <?php
 
 use Mockery as M;
-use Carbon_Fields\App;
 use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Container\Fulfillable\Fulfillable_Collection;
 use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
@@ -15,7 +14,7 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	public function setUp() {
 		$ioc = new PimpleContainer();
 		\Carbon_Fields\Installer\Container_Condition_Installer::install( $ioc );
-		App::instance()->install( $ioc );
+		\Carbon_Fields\Carbon_Fields::instance()->install( $ioc );
 
 		$this->subject = $ioc['container_condition_fulfillable_collection'];
 		$this->condition_factory = $ioc['container_condition_factory'];

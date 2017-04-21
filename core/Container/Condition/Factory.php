@@ -2,7 +2,6 @@
 
 namespace Carbon_Fields\Container\Condition;
 
-use Carbon_Fields\App;
 use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
@@ -29,8 +28,8 @@ class Factory {
 		$normalized_type = Helper::normalize_type( $type );
 		
 		$identifier = 'container_condition_type_' . $normalized_type;
-		if ( App::has( $identifier ) ) {
-			return App::resolve( $identifier );
+		if ( \Carbon_Fields\Carbon_Fields::has( $identifier ) ) {
+			return \Carbon_Fields\Carbon_Fields::resolve( $identifier );
 		}
 
 		if ( class_exists( $type ) ) {

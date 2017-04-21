@@ -2,7 +2,6 @@
 
 namespace Carbon_Fields\Loader;
 
-use Carbon_Fields\App;
 use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Container\Repository as ContainerRepository;
 use Carbon_Fields\Service\Legacy_Storage_Service_v_1_5;
@@ -48,13 +47,13 @@ class Loader {
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_bootstrap_js' ), 100 );
 
 		# Enable the legacy storage service
-		App::service( 'legacy_storage' )->enable();
+		\Carbon_Fields\Carbon_Fields::service( 'legacy_storage' )->enable();
 
 		# Enable the meta query service
-		App::service( 'meta_query' )->enable();
+		\Carbon_Fields\Carbon_Fields::service( 'meta_query' )->enable();
 
 		# Enable the REST API service
-		App::service( 'rest_api' )->enable();
+		\Carbon_Fields\Carbon_Fields::service( 'rest_api' )->enable();
 
 		# Initialize sidebar manager
 		$this->sidebar_manager->boot();

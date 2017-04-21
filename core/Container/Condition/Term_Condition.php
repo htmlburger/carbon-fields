@@ -2,7 +2,6 @@
 
 namespace Carbon_Fields\Container\Condition;
 
-use Carbon_Fields\App;
 use Carbon_Fields\Toolset\WP_Toolset;
 
 /**
@@ -41,7 +40,7 @@ class Term_Condition extends Condition {
 	 * Constructor
 	 */
 	public function __construct() {
-		$this->wp_toolset = App::resolve( 'wp_toolset' );
+		$this->wp_toolset = \Carbon_Fields\Carbon_Fields::resolve( 'wp_toolset' );
 	}
 	
 	/**

@@ -2,7 +2,6 @@
 
 use Mockery as M;
 use Carbon_Fields\Pimple\Container as PimpleContainer;
-use Carbon_Fields\App;
 use Carbon_Fields\Container\Repository as ContainerRepository;
 use Carbon_Fields\Toolset\Key_Toolset;
 use Carbon_Fields\Value_Set\Value_Set;
@@ -24,7 +23,7 @@ class MiscTest extends WP_UnitTestCase {
 		$ioc['container_condition_fulfillable_collection'] = $ioc->factory( function( $ioc ) {
 			return M::mock( 'Carbon_Fields\\Container\\Fulfillable\\Fulfillable_Collection' )->shouldIgnoreMissing();
 		} );
-		App::instance()->install( $ioc );
+		\Carbon_Fields\Carbon_Fields::instance()->install( $ioc );
 
 		$this->text_field = Carbon_Fields\Field::make( 'text', 'text_field' );
 		$this->set_field = Carbon_Fields\Field::make( 'set', 'set_field' );

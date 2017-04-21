@@ -2,7 +2,6 @@
 
 namespace Carbon_Fields\Widget;
 
-use Carbon_Fields\App;
 use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Container\Container;
@@ -55,7 +54,7 @@ abstract class Widget extends \WP_Widget {
 	 * @param  string $classname   String of CSS classes
 	 */
 	public function setup( $title, $description, $fields, $classname = '' ) {
-		App::verify_boot();
+		\Carbon_Fields\Carbon_Fields::verify_boot();
 		
 		$this->datastore = Datastore::make( 'widget' );
 		if ( empty( $title ) ) {

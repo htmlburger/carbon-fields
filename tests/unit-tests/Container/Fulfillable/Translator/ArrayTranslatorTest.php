@@ -1,7 +1,6 @@
 <?php
 
 use Mockery as M;
-use Carbon_Fields\App;
 use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Container\Fulfillable\Fulfillable_Collection;
 use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
@@ -56,7 +55,7 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 		$ioc['container_condition_translator_array'] = function( $ioc ) {
 			return new \Carbon_Fields\Container\Fulfillable\Translator\Array_Translator( $ioc['container_condition_factory'] );
 		};
-		App::instance()->install( $ioc );
+		\Carbon_Fields\Carbon_Fields::instance()->install( $ioc );
 
 		$this->subject = $ioc['container_condition_translator_array'];
 	}
@@ -70,7 +69,7 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 	 * @covers ::fulfillable_to_foreign
 	 */
 	public function testFulfillableToForeignWithCondition() {
-		$factory = App::resolve( 'container_condition_factory' );
+		$factory = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_factory' );
 		$condition = $factory->make( 'post_type' );
 		$condition->set_comparison_operator( '!=' );
 		$condition->set_value( 'post' );
@@ -88,7 +87,7 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 	 * @covers ::foreign_to_fulfillable
 	 */
 	public function testForeignToFulfillableWithCondition() {
-		$factory = App::resolve( 'container_condition_factory' );
+		$factory = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_factory' );
 		$condition = $factory->make( 'post_type' );
 		$condition->set_comparison_operator( '!=' );
 		$condition->set_value( 'post' );
@@ -106,7 +105,7 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 	 * @covers ::fulfillable_to_foreign
 	 */
 	public function testFulfillableToForeignWithCollection() {
-		$fulfillable = App::resolve( 'container_condition_fulfillable_collection' );
+		$fulfillable = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
 		$fulfillable->when( 'post_type', '!=', 'post' );
 		$fulfillable->when( 'post_id', '!=', 1 );
 
@@ -131,7 +130,7 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 	 * @covers ::foreign_to_fulfillable
 	 */
 	public function testForeignToFulfillableWithCollection() {
-		$fulfillable = App::resolve( 'container_condition_fulfillable_collection' );
+		$fulfillable = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
 		$fulfillable->when( 'post_type', '!=', 'post' );
 		$fulfillable->when( 'post_id', '!=', 1 );
 
@@ -156,7 +155,7 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 	 * @covers ::fulfillable_to_foreign
 	 */
 	public function testFulfillableToForeignWithNestedCollection() {
-		$fulfillable = App::resolve( 'container_condition_fulfillable_collection' );
+		$fulfillable = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
 		$fulfillable->when( 'post_type', '!=', 'post' );
 		$fulfillable->when( function( $c ) {
 			$c->when( 'post_id', '!=', 1 );
@@ -198,7 +197,7 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 	 * @covers ::foreign_to_fulfillable
 	 */
 	public function testForeignToFulfillableWithNestedCollection() {
-		$fulfillable = App::resolve( 'container_condition_fulfillable_collection' );
+		$fulfillable = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
 		$fulfillable->when( 'post_type', '!=', 'post' );
 		$fulfillable->when( function( $c ) {
 			$c->or_when( 'post_id', '!=', 1 );

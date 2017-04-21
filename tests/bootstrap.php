@@ -1,7 +1,5 @@
 <?php
 
-use Carbon_Fields\App;
-
 class Carbon_Fields_Tests_Bootstrap {
 
 	/** 
@@ -60,7 +58,7 @@ class Carbon_Fields_Tests_Bootstrap {
 			$wp->query_vars = array();
 		}
 
-		App::instance()->booted = true;
+		\Carbon_Fields\Carbon_Fields::instance()->booted = true;
 	}
 
 	/**

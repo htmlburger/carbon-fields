@@ -2,7 +2,6 @@
 
 namespace Carbon_Fields\Container\Fulfillable;
 
-use Carbon_Fields\App;
 use Carbon_Fields\Container\Condition\Factory;
 use Carbon_Fields\Container\Fulfillable\Translator\Array_Translator;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
@@ -214,7 +213,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @return Fulfillable_Collection $this
 	 */
 	protected function when_collection( $collection_callable, $fulfillable_comparison) {
-		$collection = App::resolve( 'container_condition_fulfillable_collection' );
+		$collection = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
 		$collection->set_condition_type_list( $this->get_condition_type_list(), $this->is_condition_type_list_whitelist() );
 		$collection_callable( $collection );
 		$this->add_fulfillable( $collection, $fulfillable_comparison );
@@ -266,7 +265,7 @@ class Fulfillable_Collection implements Fulfillable {
 	public function filter( $condition_whitelist ) {
 		$fulfillables = $this->get_fulfillables();
 
-		$collection = App::resolve( 'container_condition_fulfillable_collection' );
+		$collection = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
 		foreach ( $fulfillables as $fulfillable_tuple ) {
 			$fulfillable = $fulfillable_tuple['fulfillable'];
 			$fulfillable_comparison = $fulfillable_tuple['fulfillable_comparison'];
@@ -304,7 +303,7 @@ class Fulfillable_Collection implements Fulfillable {
 	public function evaluate( $condition_types, $environment, $comparison_operators = array() ) {
 		$fulfillables = $this->get_fulfillables();
 
-		$collection = App::resolve( 'container_condition_fulfillable_collection' );
+		$collection = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
 		foreach ( $fulfillables as $fulfillable_tuple ) {
 			$fulfillable = $fulfillable_tuple['fulfillable'];
 			$fulfillable_comparison = $fulfillable_tuple['fulfillable_comparison'];
@@ -316,7 +315,7 @@ class Fulfillable_Collection implements Fulfillable {
 				$type = $this->condition_factory->get_type( get_class( $fulfillable ) );
 				$comparison_operator = $fulfillable->get_comparison_operator();
 				if ( in_array( $type, $condition_types ) || in_array( $comparison_operator, $comparison_operators ) ) {
-					$boolean_condition = App::resolve( 'container_condition_type_boolean' );
+					$boolean_condition = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_type_boolean' );
 					$boolean_condition->set_comparison_operator( '=' );
 
 					$value = is_bool( $environment ) ? $environment : $fulfillable->is_fulfilled( $environment );

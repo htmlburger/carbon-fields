@@ -1,7 +1,6 @@
 <?php
 
 use Mockery as M;
-use Carbon_Fields\App;
 use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Container\Container;
 use Carbon_Fields\Container\Repository as ContainerRepository;
@@ -25,7 +24,7 @@ class ContainerTest extends WP_UnitTestCase {
 		$ioc['container_condition_fulfillable_collection'] = $ioc->factory( function( $ioc ) {
 			return M::mock( 'Carbon_Fields\\Container\\Fulfillable\\Fulfillable_Collection' )->shouldIgnoreMissing();
 		} );
-		App::instance()->install( $ioc );
+		\Carbon_Fields\Carbon_Fields::instance()->install( $ioc );
 
 		$this->containerId = 'PageSettings';
 		$this->containerTitle = 'Page Settings';
@@ -39,7 +38,7 @@ class ContainerTest extends WP_UnitTestCase {
 	}
 
 	public function tearDown() {
-		App::instance()->install( new PimpleContainer() );
+		\Carbon_Fields\Carbon_Fields::instance()->install( new PimpleContainer() );
 	}
 
 	/**

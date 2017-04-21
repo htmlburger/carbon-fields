@@ -1,7 +1,6 @@
 <?php
 
 use Mockery as M;
-use Carbon_Fields\App;
 use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Container\Repository as ContainerRepository;
 use Carbon_Fields\Field\Field;
@@ -28,7 +27,7 @@ class LegacyStorageServicev15Test extends WP_UnitTestCase {
 		$ioc['container_condition_fulfillable_collection'] = $ioc->factory( function( $ioc ) {
 			return M::mock( 'Carbon_Fields\\Container\\Fulfillable\\Fulfillable_Collection' )->shouldIgnoreMissing();
 		} );
-		App::instance()->install( $ioc );
+		\Carbon_Fields\Carbon_Fields::instance()->install( $ioc );
 
 		$this->datastore = M::mock( 'Carbon_Fields\\Datastore\\Key_Value_Datastore' )->makePartial();
 		$this->container = M::mock( 'Carbon_Fields\\Container\\Container', array( 'container_id', 'container_title', 'container_type' ) )->makePartial();
@@ -175,7 +174,7 @@ class LegacyStorageServicev15Test extends WP_UnitTestCase {
 
 		$container_fields = $this->container->get_fields();
 		$legacy_text_field = $container_fields[0];
-		$patterns = App::resolve( 'key_toolset' )->get_storage_key_getter_patterns(
+		$patterns = \Carbon_Fields\Carbon_Fields::resolve( 'key_toolset' )->get_storage_key_getter_patterns(
 			$legacy_text_field->is_simple_root_field(),
 			array_merge( $legacy_text_field->get_hierarchy(), array( $legacy_text_field->get_base_name() ) )
 		);

@@ -2,7 +2,6 @@
 
 namespace Carbon_Fields\Field;
 
-use Carbon_Fields\App;
 use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Datastore\Datastore_Holder_Interface;
 use Carbon_Fields\Value_Set\Value_Set;
@@ -242,7 +241,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $label Field label
 	 */
 	protected function __construct( $type, $name, $label ) {
-		App::verify_boot();
+		\Carbon_Fields\Carbon_Fields::verify_boot();
 		
 		$this->type = $type;
 		$this->set_base_name( $name );

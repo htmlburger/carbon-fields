@@ -2,7 +2,6 @@
 
 namespace Carbon_Fields\Container\Fulfillable\Translator;
 
-use Carbon_Fields\App;
 use Carbon_Fields\Container\Condition\Factory;
 use Carbon_Fields\Container\Fulfillable\Fulfillable;
 use Carbon_Fields\Container\Fulfillable\Fulfillable_Collection;
@@ -127,7 +126,7 @@ class Array_Translator extends Translator {
 	 */
 	protected function foreign_to_native_fulfillable_collection( $foreign ) {
 		$fulfillable_comparison = isset( $foreign['relation'] ) ? $foreign['relation'] : 'AND';
-		$collection = App::resolve( 'container_condition_fulfillable_collection' );
+		$collection = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
 		foreach ( $foreign as $key => $value ) {
 			if ( $key === 'relation' ) {
 				continue; // ignore the relation key - we are only interested in condition definitions

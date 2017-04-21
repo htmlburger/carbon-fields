@@ -2,7 +2,6 @@
 
 namespace Carbon_Fields\Container\Condition;
 
-use Carbon_Fields\App;
 use Carbon_Fields\Toolset\WP_Toolset;
 
 /**

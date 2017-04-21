@@ -12,7 +12,7 @@ Supports PHP5.3 or higher.
 
 ### Quickstart
 
-Call `Carbon_Fields\App::boot()` in the `after_setup_theme` WordPress action.
+Call `Carbon_Fields\Carbon_Fields::boot()` in the `after_setup_theme` WordPress action.
 
 ### Documentation & Other Resources
 
