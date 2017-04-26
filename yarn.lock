@@ -1760,10 +1760,6 @@ fbjs@^0.8.1, fbjs@^0.8.4, fbjs@^0.8.9:
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.9"
 
-fecha@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/fecha/-/fecha-2.3.0.tgz#791efb33d63b89b7aa8eccc28e59593db2ead700"
-
 filename-regex@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/filename-regex/-/filename-regex-2.0.0.tgz#996e3e80479b98b9897f15a8a58b3d084e926775"
@@ -1805,6 +1801,10 @@ find-up@^2.1.0:
   resolved "https://registry.yarnpkg.com/find-up/-/find-up-2.1.0.tgz#45d1b7e506c717ddd482775a2b77920a3c0c57a7"
   dependencies:
     locate-path "^2.0.0"
+
+flatpickr@^2.3.5:
+  version "2.5.8"
+  resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-2.5.8.tgz#e9a0eb73c6e95573fcdcd378c8487e22902c3eac"
 
 flatten@^1.0.2:
   version "1.0.2"
@@ -3619,7 +3619,13 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.0.0, prop-types@^15.5.2, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@~15.5.0:
+prop-types@^15.0.0, prop-types@^15.5.4, prop-types@^15.5.7:
+  version "15.5.8"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.8.tgz#6b7b2e141083be38c8595aa51fc55775c7199394"
+  dependencies:
+    fbjs "^0.8.9"
+
+prop-types@^15.5.2, prop-types@^15.5.6, prop-types@~15.5.0:
   version "15.5.6"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.6.tgz#797a915b1714b645ebb7c5d6cc690346205bd2aa"
   dependencies:
@@ -3714,6 +3720,13 @@ react-dom@^15.5.3:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
     prop-types "~15.5.0"
+
+react-flatpickr@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-flatpickr/-/react-flatpickr-3.3.0.tgz#d615c1024f0816b51d36a6ac3f5014c176ac8891"
+  dependencies:
+    flatpickr "^2.3.5"
+    prop-types "^15.5.7"
 
 react-onclickoutside@^5.11.1:
   version "5.11.1"

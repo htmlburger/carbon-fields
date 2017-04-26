@@ -59,7 +59,6 @@
   "dependencies": {
     "babel-polyfill": "^6.23.0",
     "classnames": "^2.2.5",
-    "fecha": "^2.3.0",
     "locutus": "^2.0.8",
     "lodash": "^4.17.4",
     "object-path-immutable": "^0.5.1",
@@ -67,6 +66,7 @@
     "react": "^15.5.3",
     "react-color": "^2.11.4",
     "react-dom": "^15.5.3",
+    "react-flatpickr": "^3.3.0",
     "react-onclickoutside": "^5.11.1",
     "react-redux": "^5.0.4",
     "recompose": "^0.23.1",

@@ -8,16 +8,20 @@ namespace Carbon_Fields\Field;
 class Date_Time_Field extends Time_Field {
 
 	/**
-	 * Picker type.
+	 * Picker options.
 	 *
-	 * @var string
+	 * @var array
 	 */
-	protected $picker_type = 'datetimepicker';
+	public $picker_options = array(
+		'allowInput' => true,
+		'enableTime' => true,
+		'dateFormat' => 'Y-m-d h:i K',
+	);
 
 	/**
 	 * The storage format in variant that can be used by JavaScript.
 	 *
 	 * @var string
 	 */
-	protected $storage_format = 'YYYY-MM-DD HH:mm:ss';
+	protected $storage_format = 'Y-m-d H:i:S';
 }

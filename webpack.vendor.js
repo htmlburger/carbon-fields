@@ -21,8 +21,8 @@ module.exports = (env) => merge(base(env), {
 			'object-path-immutable',
 			'classnames',
 			'react-onclickoutside',
+			'react-flatpickr',
 			'jquery-bind-first',
-			'fecha',
 			'locutus/php/url/urldecode'
 		]
 	},

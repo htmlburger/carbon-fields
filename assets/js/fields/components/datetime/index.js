@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import fecha from 'fecha';
+import Flatpickr from 'react-flatpickr';
 import {
 	compose,
 	withHandlers,
@@ -16,7 +16,6 @@ import {
  * The internal dependencies.
  */
 import Field from 'fields/components/field';
-import DateTimePicker from 'fields/components/datetime/picker';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { TYPE_DATE, TYPE_DATETIME, TYPE_TIME } from 'fields/constants';
@@ -27,38 +26,37 @@ import { TYPE_DATE, TYPE_DATETIME, TYPE_TIME } from 'fields/constants';
  * @param  {Object}        props
  * @param  {String}        props.name
  * @param  {Object}        props.field
- * @param  {String}        props.picker
- * @param  {Function}      props.handleChange
+ * @param  {Object}        props.options
+ * @param  {String}        props.buttonText
  * @return {React.Element}
  */
 export const DateTimeField = ({
 	name,
 	field,
-	picker,
 	options,
-	handleChange
+	buttonText
 }) => {
 	return <Field field={field}>
-		<DateTimePicker
-			type={picker}
-			options={options}
-			value={field.value}
-			storageFormat={field.storage_format}
-			onChange={handleChange}>
-				<div className="carbon-field-group-holder">
-					<input
-						type="text"
-						id={field.id}
-						disabled={!field.ui.is_visible}
-						className="regular-text carbon-field-group-input" />
+		<Flatpickr options={options} className="carbon-field-group-holder">
+			<input
+				type="hidden"
+				name={name}
+				value={field.value}
+				disabled={!field.ui.is_visible} />
 
-					<input
-						type="hidden"
-						name={name}
-						value={field.value}
-						disabled={!field.ui.is_visible} />
-				</div>
-			</DateTimePicker>
+			<input
+				type="text"
+				className="regular-text carbon-field-group-input"
+				defaultValue={field.value}
+				data-input />
+
+			<button
+				type="button"
+				className="button"
+				data-toggle>
+					{buttonText}
+			</button>
+		</Flatpickr>
 	</Field>;
 };
 
@@ -74,7 +72,7 @@ DateTimeField.propTypes = {
 		value: PropTypes.string,
 	}),
 	options: PropTypes.object,
-	handleChange: PropTypes.func,
+	buttonText: PropTypes.string,
 };
 
 /**
@@ -97,46 +95,48 @@ export const enhance = compose(
 	 * Pass some handlers to the component.
 	 */
 	withHandlers({
-		handleChange: ({ field, updateField }) => date => {
-			let value;
+		handleChange: ({ field, updateField }) => ([ selectedDate ], selectedDateStr, instance) => {
+			instance._selectedDateStr = selectedDateStr;
 
-			if (date) {
-				value = fecha.format(date, field.storage_format);
-			} else {
-				value = '';
-			}
-
-			updateField(field.id, { value });
+			updateField(field.id, {
+				value: selectedDateStr
+					? instance.formatDate(selectedDate, field.storage_format)
+					: ''
+			});
 		},
+
+		handleClose: () => (selectedDates, selectedDateStr, instance) => {
+			const { config, _selectedDateStr } = instance;
+			const { value } = instance._input;
+
+			if (value) {
+				if (value !== _selectedDateStr) {
+					instance.setDate(value, true);
+				}
+			} else {
+				instance.clear();
+			}
+		}
 	}),
 
 	/**
 	 * Pass some props to the component.
 	 */
-	withProps(({ name, field, handleChange }) => {
+	withProps(({ field, handleChange, handleClose }) => {
 		const buttonText = field.type === TYPE_TIME
 			? carbonFieldsL10n.field.selectTime
 			: carbonFieldsL10n.field.selectDate;
 
-		if (field.picker_options) {
-			return {
-				picker: field.picker_type,
-				options: {
-					...field.interval_step,
-					...field.restraints,
-					...field.picker_options,
-					buttonText,
-					showTime: false,
-				},
-			};
-		}
+		const options = {
+			...field.picker_options,
+			wrap: true,
+			onChange: handleChange,
+			onClose: handleClose
+		};
 
 		return {
-			picker: 'datepicker',
-			options: {
-				...field.picker_options,
-				buttonText,
-			},
+			options,
+			buttonText,
 		};
 	}),
 );

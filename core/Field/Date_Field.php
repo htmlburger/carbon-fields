@@ -8,19 +8,13 @@ namespace Carbon_Fields\Field;
 class Date_Field extends Field {
 
 	/**
-	 * Picker type.
-	 *
-	 * @var string
-	 */
-	protected $picker_type = 'datepicker';
-
-	/**
 	 * Picker options.
 	 *
 	 * @var array
 	 */
 	public $picker_options = array(
-		'dateFormat' => 'yy-mm-dd',
+		'allowInput' => true,
+		'dateFormat' => 'Y-m-d',
 	);
 
 	/**
@@ -28,7 +22,7 @@ class Date_Field extends Field {
 	 *
 	 * @var string
 	 */
-	protected $storage_format = 'YYYY-MM-DD';
+	protected $storage_format = 'Y-m-d';
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
@@ -41,20 +35,10 @@ class Date_Field extends Field {
 
 		$field_data = array_merge( $field_data, array(
 			'storage_format' => $this->storage_format,
-			'picker_type' => $this->picker_type,
 			'picker_options' => $this->picker_options,
 		) );
 
 		return $field_data;
-	}
-
-	/**
-	 * Hook administration scripts and styles.
-	 */
-	public static function admin_enqueue_scripts() {
-		wp_enqueue_script( 'jquery-ui-datepicker' );
-
-		wp_enqueue_style( 'jquery-ui', '//code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.min.css', array(), \Carbon_Fields\VERSION );
 	}
 
 	/**
