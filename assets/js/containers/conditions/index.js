@@ -33,8 +33,14 @@ export function evaluteConditions(collection, env) {
 		if (definition.relation) {
 			return evaluteConditions(definition, env);
 		} else {
-			return get(conditions, definition.type, base)
-				.isFulfiled(definition, env);
+			const condition = get(conditions, definition.type);
+
+			if (condition) {
+				return condition.isFulfiled(definition, env);
+			} else {
+				console.warn(`Unsupported container condition: ${definition.type}`);
+				return true;
+			}
 		}
 	});
 
