@@ -84,6 +84,9 @@ install_test_suite() {
 	cd $WP_TESTS_DIR
 	svn co --quiet http://develop.svn.wordpress.org/${testsurl}/tests/phpunit/includes/
 
+	# Add the missing data/themedir1 directory
+	svn co --quiet http://develop.svn.wordpress.org/${testsurl}/tests/phpunit/data/themedir1/ ./data/themedir1
+
 	# Download base configuration file
 	download http://develop.svn.wordpress.org/${testsurl}/wp-tests-config-sample.php wp-tests-config.php
 
