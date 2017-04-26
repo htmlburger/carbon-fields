@@ -30,6 +30,7 @@ before_install:
 before_script:
   - mysql -e "create database IF NOT EXISTS carbon_fields_tests;" -uroot
   - bash tests/bin/install.sh carbon_fields_tests root '' localhost $WP_VERSION
+  - phpenv config-rm xdebug.ini
 
 script: phpunit --coverage-clover=./tmp/clover.xml
 
