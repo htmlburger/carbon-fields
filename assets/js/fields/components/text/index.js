@@ -35,7 +35,8 @@ export const TextField = ({
 			value={field.value}
 			disabled={!field.ui.is_visible}
 			className="regular-text"
-			onChange={handleChange} />
+			onChange={handleChange}
+			 {...field.attributes}/>
 	</Field>;
 };
 
@@ -49,6 +50,7 @@ TextField.propTypes = {
 	field: PropTypes.shape({
 		id: PropTypes.string,
 		value: PropTypes.string,
+		attributes: PropTypes.object,
 	}),
 	handleChange: PropTypes.func,
 };
