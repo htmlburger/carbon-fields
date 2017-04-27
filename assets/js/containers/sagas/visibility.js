@@ -9,7 +9,7 @@ import { call, select, put, take } from 'redux-saga/effects';
  * The internal dependencies.
  */
 import { createClickChannel } from 'lib/events';
-import { PAGE_NOW_WIDGETS, PAGE_NOW_MENUS } from 'lib/constants';
+import { PAGE_NOW_WIDGETS, PAGE_NOW_CUSTOMIZE, PAGE_NOW_MENUS } from 'lib/constants';
 
 import { setupContainer, setContainerMeta, setContainerUI, toggleContainerBox } from 'containers/actions';
 import { getContainers, getContainerById } from 'containers/selectors';
@@ -103,9 +103,9 @@ export function* workerTogglePostBox() {
  * @return {void}
  */
 export default function* foreman(store) {
-	const { pagenow } = window;
+	const { pagenow } = window.carbon_json;
 
-	if (pagenow === PAGE_NOW_WIDGETS || pagenow === PAGE_NOW_MENUS) {
+	if (pagenow === PAGE_NOW_WIDGETS || pagenow === PAGE_NOW_CUSTOMIZE || pagenow === PAGE_NOW_MENUS) {
 		return;
 	}
 

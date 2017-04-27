@@ -1,0 +1,5 @@
+/* ------------------------------------------------------------ *\
+	Vendor
+\* ------------------------------------------------------------ */
+
+.wp-customizer .wp-full-overlay { z-index: 50000; /* core: 500000 - this is too much and overlays a lot of popups/tinymce etc. */ }

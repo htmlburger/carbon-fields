@@ -275,9 +275,9 @@ class Field implements Datastore_Holder_Interface {
 	public function activate() {
 		$this->admin_init();
 
-		add_action( 'admin_footer', array( get_class(), 'admin_hook_scripts' ), 5 );
-		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
-		add_action( 'admin_footer', array( get_class( $this ), 'admin_enqueue_scripts' ), 5 );
+		add_action( 'admin_print_footer_scripts', array( get_class(), 'admin_hook_scripts' ), 5 );
+		add_action( 'admin_print_footer_scripts', array( get_class(), 'admin_hook_styles' ), 5 );
+		add_action( 'admin_print_footer_scripts', array( get_class( $this ), 'admin_enqueue_scripts' ), 5 );
 
 		do_action( 'crb_field_activated', $this );
 	}
