@@ -122,34 +122,21 @@ export const makeGetSidebarFieldOptions = () => createSelector([
 export const hasInvalidFields = createSelector(getFields, fields => some(fields, ['ui.valid', false]));
 
 /**
- * Get the fields that are direct children of the group.
- *
- * @param  {Object} group
- * @return {Object}
- */
-export const getFieldsByGroupFactory = group => createSelector([
-	getFields,
-], fields => pick(fields, map(group.fields, 'id')));
-
-/**
  * Compile Lodash template of the group's label.
  *
+ * @param  {Object} state
  * @param  {Object} group
  * @return {String}
  */
-export const getComplexGroupLabelFactory = group => {
-	const getFieldsByGroup = getFieldsByGroupFactory(group);
+export const getComplexGroupLabel = (state, group) => {
+	const fields = pick(getFields(state), map(group.fields, 'id'));
 
-	return createSelector([
-		getFieldsByGroup,
-	], fields => {
-		if (isNull(group.label_template)) {
-			return group.label;
-		}
+	if (isNull(group.label_template)) {
+		return group.label;
+	}
 
-		return template(group.label_template)({
-			fields,
-			...mapValues(mapKeys(fields, 'base_name'), 'value'),
-		});
+	return template(group.label_template)({
+		fields,
+		...mapValues(mapKeys(fields, 'base_name'), 'value'),
 	});
 };
