@@ -45,6 +45,7 @@ class Loader {
 		add_action( 'admin_print_footer_scripts', array( $this, 'enqueue_scripts' ), 0 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data_script' ), 9 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_bootstrap_js' ), 100 );
+		add_action( 'edit_form_after_title', array( $this, 'add_carbon_fields_meta_box_contexts' ) );
 
 		# Enable the legacy storage service
 		\Carbon_Fields\Carbon_Fields::service( 'legacy_storage' )->enable();
@@ -141,6 +142,20 @@ class Loader {
 				'setShowAll' => __( 'Show all options', 'carbon-fields' ),
 			),
 		) ) );
+	}
+
+	/**
+	 * Add custom meta box contexts
+	 */
+	public function add_carbon_fields_meta_box_contexts() {
+		global $post, $wp_meta_boxes;
+		
+		$context = 'carbon_fields_after_title';
+		if ( empty( $wp_meta_boxes['page'][ $context ] ) ) {
+			return;
+		}
+		do_meta_boxes( get_current_screen(), $context, $post );
+		unset( $wp_meta_boxes['post'][ $context ] );
 	}
 
 	/**
