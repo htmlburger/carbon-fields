@@ -10,7 +10,7 @@ import { put, call, take, select, fork } from 'redux-saga/effects';
 /**
  * The internal dependencies.
  */
-import { PAGE_NOW_WIDGETS } from 'lib/constants';
+import { PAGE_NOW_WIDGETS, PAGE_NOW_CUSTOMIZE } from 'lib/constants';
 import {
 	createWidgetsChannel,
 	createAjaxChannel,
@@ -140,7 +140,7 @@ export function* workerToggleWidget() {
 export default function* foreman() {
 	const { pagenow } = window;
 
-	if (pagenow !== PAGE_NOW_WIDGETS) {
+	if (pagenow !== PAGE_NOW_WIDGETS && pagenow !== PAGE_NOW_CUSTOMIZE) {
 		return;
 	}
 

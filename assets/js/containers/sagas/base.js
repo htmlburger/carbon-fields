@@ -9,7 +9,7 @@ import { keyBy, map, get, set } from 'lodash';
 /**
  * The internal dependencies.
  */
-import { PAGE_NOW_WIDGETS, PAGE_NOW_MENUS } from 'lib/constants';
+import { PAGE_NOW_WIDGETS, PAGE_NOW_CUSTOMIZE, PAGE_NOW_MENUS } from 'lib/constants';
 
 import containerFactory from 'containers/factory';
 import { getContainerById } from 'containers/selectors';
@@ -72,11 +72,11 @@ export function* workerSyncHash({ payload: { containerId, tabId }}) {
  * @return {void}
  */
 export default function* foreman(store) {
-	const { pagenow } = window;
+	const { pagenow } = window.carbon_json;
 
 	yield takeEvery(switchContainerTab, workerSyncHash);
 
-	if (pagenow === PAGE_NOW_WIDGETS || pagenow === PAGE_NOW_MENUS) {
+	if (pagenow === PAGE_NOW_WIDGETS || pagenow === PAGE_NOW_CUSTOMIZE || pagenow === PAGE_NOW_MENUS) {
 		yield takeEvery(receiveContainer, workerReceiveContainer, store);
 	}
 }

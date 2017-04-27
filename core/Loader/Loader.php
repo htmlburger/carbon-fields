@@ -42,7 +42,7 @@ class Loader {
 		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
 		add_action( 'carbon_after_register_fields', array( $this, 'initialize_containers' ) );
-		add_action( 'admin_footer', array( $this, 'enqueue_scripts' ), 0 );
+		add_action( 'admin_print_footer_scripts', array( $this, 'enqueue_scripts' ), 0 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data_script' ), 9 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_bootstrap_js' ), 100 );
 
@@ -150,10 +150,14 @@ class Loader {
 	 */
 	public function get_json_data() {
 		global $wp_registered_sidebars;
+		global $pagenow;
+		$screen = get_current_screen();
 
 		$carbon_data = array(
 			'containers' => array(),
 			'sidebars' => array(),
+			'pagenow' => $pagenow,
+			'screen' => $screen,
 		);
 
 		$containers = $this->container_repository->get_active_containers();
