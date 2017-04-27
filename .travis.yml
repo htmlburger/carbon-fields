@@ -30,7 +30,7 @@ before_script:
   - mysql -e "create database IF NOT EXISTS carbon_fields_tests;" -uroot
   - bash tests/bin/install.sh carbon_fields_tests root '' localhost $WP_VERSION
 
-script: phpunit --coverage-clover=./tmp/clover.xml
+script: ./vendor/bin/phpunit --coverage-clover=./tmp/clover.xml
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
