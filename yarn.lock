@@ -3703,12 +3703,13 @@ react-addons-test-utils@^15.5.1:
     fbjs "^0.8.4"
     object-assign "^4.1.0"
 
-react-color@^2.11.4:
-  version "2.11.4"
-  resolved "https://registry.yarnpkg.com/react-color/-/react-color-2.11.4.tgz#43f64630e5d47a243f6bd35300224c9c69c73921"
+react-color@^2.11.7:
+  version "2.11.7"
+  resolved "https://registry.yarnpkg.com/react-color/-/react-color-2.11.7.tgz#746465b75feda63c2567607dfbcb276fc954a5b7"
   dependencies:
     lodash "^4.0.1"
     material-colors "^1.2.1"
+    prop-types "^15.5.4"
     reactcss "^1.2.0"
     tinycolor2 "^1.1.2"
 

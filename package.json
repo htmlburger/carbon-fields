@@ -64,7 +64,7 @@
     "object-path-immutable": "^0.5.1",
     "prop-types": "^15.5.6",
     "react": "^15.5.3",
-    "react-color": "^2.11.4",
+    "react-color": "^2.11.7",
     "react-dom": "^15.5.3",
     "react-flatpickr": "^3.3.0",
     "react-onclickoutside": "^5.11.1",
