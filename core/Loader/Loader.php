@@ -151,13 +151,11 @@ class Loader {
 	public function get_json_data() {
 		global $wp_registered_sidebars;
 		global $pagenow;
-		$screen = get_current_screen();
 
 		$carbon_data = array(
 			'containers' => array(),
 			'sidebars' => array(),
 			'pagenow' => $pagenow,
-			'screen' => $screen,
 		);
 
 		$containers = $this->container_repository->get_active_containers();
