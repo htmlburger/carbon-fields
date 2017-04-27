@@ -88,7 +88,7 @@ export function* workerItemExpand() {
  * @return {void}
  */
 export default function* foreman() {
-	const { pagenow } = window;
+	const { pagenow } = window.carbon_json;
 
 	if (pagenow !== PAGE_NOW_MENUS) {
 		return;

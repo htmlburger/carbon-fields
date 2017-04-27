@@ -138,7 +138,7 @@ export function* workerToggleWidget() {
  * @return {void}
  */
 export default function* foreman() {
-	const { pagenow } = window;
+	const { pagenow } = window.carbon_json;
 
 	if (pagenow !== PAGE_NOW_WIDGETS && pagenow !== PAGE_NOW_CUSTOMIZE) {
 		return;

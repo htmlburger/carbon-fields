@@ -103,7 +103,7 @@ export function* workerTogglePostBox() {
  * @return {void}
  */
 export default function* foreman(store) {
-	const { pagenow } = window;
+	const { pagenow } = window.carbon_json;
 
 	if (pagenow === PAGE_NOW_WIDGETS || pagenow === PAGE_NOW_CUSTOMIZE || pagenow === PAGE_NOW_MENUS) {
 		return;
