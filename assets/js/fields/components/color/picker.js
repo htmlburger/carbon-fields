@@ -13,12 +13,14 @@ import { compose, withHandlers } from 'recompose';
  * @param  {Object}        props
  * @param  {Boolean}       props.visible
  * @param  {String}        props.value
+ * @param  {String[]}      props.palette
  * @param  {Function}      props.handleChange
  * @return {React.Element}
  */
 export const Colorpicker = ({
 	visible,
 	value,
+	palette,
 	handleChange
 }) => {
 	const popover = {
@@ -31,7 +33,7 @@ export const Colorpicker = ({
 			color={value}
 			onChange={handleChange}
 			disableAlpha={true}
-			presetColors={[]} />
+			presetColors={palette} />
 	</div>;
 };
 
@@ -43,6 +45,7 @@ export const Colorpicker = ({
 Colorpicker.propTypes = {
 	visible: PropTypes.bool,
 	value: PropTypes.string,
+	palette: PropTypes.arrayOf(PropTypes.string),
 	handleChange: PropTypes.func,
 };
 

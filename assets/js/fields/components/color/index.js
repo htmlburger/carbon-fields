@@ -50,6 +50,7 @@ export const ColorField = ({
 			<Colorpicker
 				visible={pickerVisible}
 				value={field.value}
+				palette={field.palette}
 				onChange={handleChange}
 				onClose={hidePicker} />
 
