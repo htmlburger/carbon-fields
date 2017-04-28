@@ -10,14 +10,24 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 class Theme_Options_Container extends Container {
 	
+	/**
+	 * Array of registered page slugs to verify uniqueness with
+	 * 
+	 * @var array
+	 */
 	protected static $registered_pages = array();
 
+	/**
+	 * Array of container settings
+	 *
+	 * @var array
+	 */
 	public $settings = array(
 		'parent' => '',
 		'file' => '',
+		'icon' => '',
+		'position' => null,
 	);
-
-	public $icon = '';
 
 	/**
 	 * Create a new container
@@ -25,7 +35,7 @@ class Theme_Options_Container extends Container {
 	 * @param string $unique_id Unique id of the container
 	 * @param string $title title of the container
 	 * @param string $type Type of the container
-	 **/
+	 */
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
 
@@ -35,8 +45,19 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
+	 * Sanitize the container title for use in
+	 * the theme options file name.
+	 *
+	 * @param string $string
+	 * @return string
+	 */
+	protected function clear_string( $string ) {
+		return preg_replace( array( '~ +~', '~[^\w\d-]+~u', '~-+~' ), array( '-', '-', '-' ), strtolower( remove_accents( $string ) ) );
+	}
+
+	/**
 	 * Attach container as a theme options page/subpage.
-	 **/
+	 */
 	public function init() {
 		if ( $this->settings['parent'] !== '' && strpos( $this->settings['parent'], '.php' ) === false ) {
 			$clear_title = $this->clear_string( $this->settings['parent'] );
@@ -57,7 +78,7 @@ class Theme_Options_Container extends Container {
 	 * Checks whether the current save request is valid
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_save() {
 		if ( ! $this->verified_nonce_in_request() ) {
 			return false;
@@ -71,7 +92,7 @@ class Theme_Options_Container extends Container {
 	 * The call is propagated to all fields in the container.
 	 *
 	 * @param mixed $user_data
-	 **/
+	 */
 	public function save( $user_data = null ) {
 		try {
 			parent::save( $user_data );
@@ -90,7 +111,7 @@ class Theme_Options_Container extends Container {
 	 * Get environment array for page request (in admin)
 	 *
 	 * @return array
-	 **/
+	 */
 	protected function get_environment_for_request() {
 		return array();
 	}
@@ -99,7 +120,7 @@ class Theme_Options_Container extends Container {
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
-	 **/
+	 */
 	public function is_valid_attach_for_request() {
 		return $this->static_conditions_pass();
 	}
@@ -118,7 +139,7 @@ class Theme_Options_Container extends Container {
 	 *
 	 * @param int $object_id
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_attach_for_object( $object_id = null ) {
 		return $this->all_conditions_pass( intval( $object_id ) );
 	}
@@ -126,7 +147,7 @@ class Theme_Options_Container extends Container {
 	/**
 	 * Add theme options container pages.
 	 * Hook the container saving action.
-	 **/
+	 */
 	public function attach() {
 		// use the "read" capability because conditions will handle actual access and save capability checking
 		// before the attach() method is called
@@ -139,7 +160,8 @@ class Theme_Options_Container extends Container {
 				'read',
 				$this->settings['file'],
 				array( $this, 'render' ),
-				$this->icon
+				$this->settings['icon'],
+				$this->settings['position']
 			);
 		}
 
@@ -149,8 +171,7 @@ class Theme_Options_Container extends Container {
 			$this->title,
 			'read',
 			$this->settings['file'],
-			array( $this, 'render' ),
-			$this->icon
+			array( $this, 'render' )
 		);
 
 		$page_hook = get_plugin_page_hookname( $this->settings['file'], '' );
@@ -159,7 +180,9 @@ class Theme_Options_Container extends Container {
 
 	/**
 	 * Whether this container is currently viewed.
-	 **/
+	 *
+	 * @return boolean
+	 */
 	public function should_activate() {
 		$input = stripslashes_deep( $_GET );
 		$request_page = isset( $input['page'] ) ? $input['page'] : '';
@@ -172,7 +195,7 @@ class Theme_Options_Container extends Container {
 
 	/**
 	 * Output the container markup
-	 **/
+	 */
 	public function render() {
 		$input = stripslashes_deep( $_GET );
 		$request_settings_updated = isset( $input['settings-updated'] ) ? $input['settings-updated'] : '';
@@ -185,7 +208,7 @@ class Theme_Options_Container extends Container {
 
 	/**
 	 * Make sure that there are no duplicate containers with the same name.
-	 **/
+	 */
 	public function verify_unique_page() {
 		$file = $this->settings['file'];
 		$parent = $this->settings['parent'];
@@ -213,20 +236,10 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
-	 * Sanitize the container title for use in
-	 * the theme options file name.
-	 **/
-	protected function clear_string( $string ) {
-		return preg_replace( array( '~ +~', '~[^\w\d-]+~u', '~-+~' ), array( '-', '-', '-' ), strtolower( remove_accents( $string ) ) );
-	}
-
-	/**
-	 * COMMON USAGE METHODS
-	 */
-
-	/**
 	 * Change the parent theme options page of this container
-	 **/
+	 * 
+	 * @return Container $this
+	 */
 	public function set_page_parent( $parent ) {
 		if ( is_a( $parent, 'Carbon_Container' ) ) {
 			$parent = $parent->title;
@@ -239,17 +252,31 @@ class Theme_Options_Container extends Container {
 	/**
 	 * Set the icon of this theme options page.
 	 * Applicable only for parent theme option pages.
-	 **/
+	 * 
+	 * @return Container $this
+	 */
 	public function set_icon( $icon ) {
-		$this->icon = $icon;
+		$this->settings['icon'] = $icon;
 		return $this;
 	}
 
 	/**
 	 * Set the theme options file name of this container.
-	 **/
+	 * 
+	 * @return Container $this
+	 */
 	public function set_page_file( $file ) {
 		$this->settings['file'] = $file;
+		return $this;
+	}
+
+	/**
+	 * Set the page position of this container in the administration menu.
+	 * 
+	 * @return Container $this
+	 */
+	public function set_page_position( $position ) {
+		$this->settings['position'] = $position;
 		return $this;
 	}
 }
