@@ -23,7 +23,7 @@ class Helper {
 		$field = $repository->get_field_in_containers( $field_name, $container_type );
 
 		if ( ! $field ) {
-			Incorrect_Syntax_Exception::raise( 'Could not find a field which satisfies the supplied pattern: ' . $field_name );
+			return '';
 		}
 
 		$clone = clone $field;
@@ -49,6 +49,7 @@ class Helper {
 
 		if ( ! $field ) {
 			Incorrect_Syntax_Exception::raise( 'Could not find a field which satisfies the supplied pattern: ' . $field_name );
+			return;
 		}
 		
 		$clone = clone $field;
