@@ -209,11 +209,13 @@ class Complex_Field extends Field {
 
 		if ( array_key_exists( $name, $this->groups ) ) {
 			Incorrect_Syntax_Exception::raise( 'Group with name "' . $name . '" in Complex Field "' . $this->get_label() . '" already exists.' );
+			return $this;
 		}
 
 		foreach ( $fields as $field ) {
 			if ( $field->get_base_name() === static::GROUP_TYPE_KEY ) {
 				Incorrect_Syntax_Exception::raise( '"' . static::GROUP_TYPE_KEY . '" is a reserved keyword for Complex fields and cannot be used for a field name.' );
+				return $this;
 			}
 		}
 
@@ -554,6 +556,7 @@ class Complex_Field extends Field {
 				'Available layouts: ' . implode( ', ', $available_layouts );
 
 			Incorrect_Syntax_Exception::raise( $error_message );
+			return $this;
 		}
 
 		$this->layout = $layout;

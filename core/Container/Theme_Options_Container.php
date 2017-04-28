@@ -69,9 +69,10 @@ class Theme_Options_Container extends Container {
 			$this->settings['file'] .= 'crbn-' . $clear_title . '.php';
 		}
 
-		$this->verify_unique_page();
-
-		add_action( 'admin_menu', array( $this, '_attach' ) );
+		$registered = $this->register_page();
+		if ( $registered ) {
+			add_action( 'admin_menu', array( $this, '_attach' ) );
+		}
 	}
 
 	/**
@@ -207,9 +208,11 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
-	 * Make sure that there are no duplicate containers with the same name.
+	 * Register the page while making sure it is unique.
+	 *
+	 * @return boolean
 	 */
-	public function verify_unique_page() {
+	public function register_page() {
 		$file = $this->settings['file'];
 		$parent = $this->settings['parent'];
 
@@ -217,10 +220,11 @@ class Theme_Options_Container extends Container {
 			// Register top level page
 			if ( isset( static::$registered_pages[ $file ] ) ) {
 				Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" already registered' );
+				return false;
 			}
 
 			static::$registered_pages[ $file ] = array();
-			return;
+			return true;
 		}
 
 		// Register sub-page
@@ -230,9 +234,11 @@ class Theme_Options_Container extends Container {
 
 		if ( in_array( $file, static::$registered_pages[ $parent ] ) ) {
 			Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a name for the container.' );
+			return false;
 		}
 
 		static::$registered_pages[ $parent ][] = $file;
+		return true;
 	}
 
 	/**

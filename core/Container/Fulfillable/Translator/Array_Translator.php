@@ -92,6 +92,7 @@ class Array_Translator extends Translator {
 	public function foreign_to_fulfillable( $foreign ) {
 		if ( ! is_array( $foreign ) ) {
 			Incorrect_Syntax_Exception::raise( 'Invalid data passed to array condition translator: ' . print_r( $foreign, true ) );
+			return null;
 		}
 
 		if ( isset( $foreign['type'] ) ) {

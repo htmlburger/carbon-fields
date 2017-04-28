@@ -24,6 +24,7 @@ class Contain_Comparer extends Comparer {
 	public function is_correct( $a, $comparison_operator, $b ) {
 		if ( ! is_array( $b ) ) {
 			Incorrect_Syntax_Exception::raise( 'Supplied comparison value is not an array: ' . print_r( $b, true ) );
+			return false;
 		}
 
 		switch ( $comparison_operator ) {

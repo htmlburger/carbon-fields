@@ -29,6 +29,7 @@ abstract class Predefined_Options_Field extends Field {
 	public function set_options( $options ) {
 		if ( ! is_callable( $options ) && ! is_array( $options ) ) {
 			Incorrect_Syntax_Exception::raise( 'Only arrays and callbacks are allowed in the <code>set_options()</code> method.' );
+			return $this;
 		}
 
 		$this->option_collections = array();
@@ -44,6 +45,7 @@ abstract class Predefined_Options_Field extends Field {
 	public function add_options( $options ) {
 		if ( ! is_callable( $options ) && ! is_array( $options ) ) {
 			Incorrect_Syntax_Exception::raise( 'Only arrays and callbacks are allowed in the <code>add_options()</code> method.' );
+			return $this;
 		}
 
 		$this->option_collections[] = $options;

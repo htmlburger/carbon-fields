@@ -37,6 +37,7 @@ abstract class Datastore implements Datastore_Interface {
 
 		if ( ! class_exists( $class ) ) {
 			Incorrect_Syntax_Exception::raise( 'Unknown datastore type "' . $type . '".' );
+			return null;
 		}
 
 		$datastore = new $class();

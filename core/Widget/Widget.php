@@ -66,7 +66,7 @@ abstract class Widget extends \WP_Widget {
 		# Generate Widget ID
 		$widget_id = 'carbon_widget_' . preg_replace( '~\s+~', '_', strtolower( trim( preg_replace( '/[^a-zA-Z0-9]+/u', '', remove_accents( $title ) ) ) ) );
 
-		$this->verify_unique_widget_id( $widget_id );
+		$this->register_widget_id( $widget_id );
 
 		# Generate Classes
 		if ( ! is_array( $classname ) ) {
@@ -169,8 +169,9 @@ abstract class Widget extends \WP_Widget {
 		foreach ( $fields as $field ) {
 			if ( ! is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
 				Incorrect_Syntax_Exception::raise( 'Object must be of type Carbon_Fields\\Field\\Field' );
+				return;
 			}
-			$this->verify_unique_field_name( $field->get_name() );
+			$this->register_field_name( $field->get_name() );
 			$field->set_name_prefix( '' );
 			$field->set_datastore( $this->datastore, true );
 		}
@@ -181,15 +182,18 @@ abstract class Widget extends \WP_Widget {
 	 * Verify widget field names are unique.
 	 *
 	 * @param  string $name Field name
+	 * @return boolean
 	 */
-	public function verify_unique_field_name( $name ) {
+	public function register_field_name( $name ) {
 		static $registered_field_names = array();
 
 		if ( in_array( $name, $registered_field_names ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
+			return false;
 		}
 
 		$registered_field_names[] = $name;
+		return true;
 	}
 
 	/**
@@ -197,9 +201,10 @@ abstract class Widget extends \WP_Widget {
 	 *
 	 * @param  string $id Widget ID
 	 */
-	public function verify_unique_widget_id( $id ) {
+	public function register_widget_id( $id ) {
 		if ( in_array( $id, static::$registered_widget_ids ) ) {
 			Incorrect_Syntax_Exception::raise( 'Widget with ID "' . $id . '" already registered. Please change the widget title' );
+			return;
 		}
 
 		static::$registered_widget_ids[] = $id;

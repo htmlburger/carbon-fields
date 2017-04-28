@@ -177,6 +177,7 @@ class Fulfillable_Collection implements Fulfillable {
 
 		if ( ! $this->is_condition_type_allowed( $condition_type ) ) {
 			Incorrect_Syntax_Exception::raise( 'Unsupported container condition used: ' . $condition_type );
+			return $this;
 		}
 
 		if ( $value === null ) {
@@ -229,6 +230,7 @@ class Fulfillable_Collection implements Fulfillable {
 	public function add_fulfillable( Fulfillable $fulfillable, $fulfillable_comparison ) {
 		if ( ! in_array( $fulfillable_comparison, $this->supported_fulfillable_comparisons ) ) {
 			Incorrect_Syntax_Exception::raise( 'Invalid fulfillable comparison passed: ' . $fulfillable_comparison );
+			return;
 		}
 
 		$this->fulfillables[] = array(

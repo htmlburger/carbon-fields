@@ -25,6 +25,7 @@ abstract class Translator {
 		}
 
 		Incorrect_Syntax_Exception::raise( 'Attempted to translate an unsupported object: ' . print_r( $fulfillable, true ) );
+		return null;
 	}
 
 	/**

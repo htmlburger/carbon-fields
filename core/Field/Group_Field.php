@@ -47,7 +47,7 @@ class Group_Field {
 	/**
 	 * List of registered unique field names
 	 *
-	 * @see verify_unique_field_name()
+	 * @see register_field_name()
 	 * @var array
 	 */
 	protected $registered_field_names = array();
@@ -81,7 +81,7 @@ class Group_Field {
 				Incorrect_Syntax_Exception::raise( 'Object must be of type ' . __NAMESPACE__ . '\\Field' );
 			}
 
-			$this->verify_unique_field_name( $field->get_name() );
+			$this->register_field_name( $field->get_name() );
 		}
 
 		$this->fields = array_merge( $this->fields, $fields );
@@ -243,11 +243,13 @@ class Group_Field {
 	 *
 	 * @param string $name
 	 */
-	public function verify_unique_field_name( $name ) {
+	public function register_field_name( $name ) {
 		if ( in_array( $name, $this->registered_field_names ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
+			return false;
 		}
 
 		$this->registered_field_names[] = $name;
+		return true;
 	}
 }

@@ -38,6 +38,7 @@ class Factory {
 				return new $type();
 			} else {
 				Incorrect_Syntax_Exception::raise( 'Condition must be of type ' . $condition_type_superclass );
+				return null;
 			}
 		}
 

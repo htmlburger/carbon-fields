@@ -210,6 +210,7 @@ class Field implements Datastore_Holder_Interface {
 				$class = $type;
 			} else {
 				Incorrect_Syntax_Exception::raise( 'Field must be of type Carbon_Fields\\Field\\Field' );
+				$class = __NAMESPACE__ . '\\Broken_Field';
 			}
 		}
 
@@ -589,6 +590,7 @@ class Field implements Datastore_Holder_Interface {
 	public function set_name( $name ) {
 		if ( empty( $name ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name can\'t be empty' );
+			return;
 		}
 
 		// symbols ]-[ are supported in a hidden way - required for widgets to work (WP imposes dashes and square brackets on field names)
@@ -833,6 +835,7 @@ class Field implements Datastore_Holder_Interface {
 	protected function parse_conditional_rules( $rules ) {
 		if ( ! is_array( $rules ) ) {
 			Incorrect_Syntax_Exception::raise( 'Conditional logic rules argument should be an array.' );
+			return array();
 		}
 
 		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN' );
@@ -851,6 +854,7 @@ class Field implements Datastore_Holder_Interface {
 			if ( ! is_array( $rule ) || empty( $rule['field'] ) ) {
 				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic rule format. ' .
 				'The rule should be an array with the "field" key set.' );
+				return array();
 			}
 
 			// Check the compare operator
@@ -861,11 +865,13 @@ class Field implements Datastore_Holder_Interface {
 				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare operator: <code>' .
 					$rule['compare'] . '</code><br>Allowed operators are: <code>' .
 				implode( ', ', $allowed_operators ) . '</code>' );
+				return array();
 			}
 			if ( $rule['compare'] === 'IN' || $rule['compare'] === 'NOT IN' ) {
 				if ( ! is_array( $rule['value'] ) ) {
 					Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. ' .
 					'An array is expected, when using the "' . $rule['compare'] . '" operator.' );
+					return array();
 				}
 			}
 
