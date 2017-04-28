@@ -594,7 +594,7 @@ class Field implements Datastore_Holder_Interface {
 		}
 
 		// symbols ]-[ are supported in a hidden way - required for widgets to work (WP imposes dashes and square brackets on field names)
-		$regex = '/\A[a-z0-9_\-\[\]]+\z/i';
+		$regex = '/\A[a-z0-9_\-\[\]]+\z/';
 		if ( ! preg_match( $regex, $name ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name can only contain lowercase alphanumeric characters and underscores ("' . $name . '" passed).' );
 		}
