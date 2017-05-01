@@ -273,7 +273,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Checks whether the current save request is valid
 	 *
 	 * @return bool
-	 **/
+	 */
 	final protected function _is_valid_save() {
 		$params = func_get_args();
 		$is_valid_save = call_user_func_array( array( $this, 'is_valid_save' ), $params );
@@ -284,7 +284,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Checks whether the current save request is valid
 	 *
 	 * @return bool
-	 **/
+	 */
 	abstract protected function is_valid_save();
 
 	/**

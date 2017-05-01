@@ -8,6 +8,7 @@ use Carbon_Fields\Field\Field;
  * Term meta datastore class.
  */
 class Term_Meta_Datastore extends Meta_Datastore {
+	
 	/**
 	 * ID of the term.
 	 *
@@ -17,7 +18,7 @@ class Term_Meta_Datastore extends Meta_Datastore {
 
 	/**
 	 * Initialization tasks.
-	 **/
+	 */
 	public function init() {
 		global $wpdb;
 
@@ -36,7 +37,7 @@ class Term_Meta_Datastore extends Meta_Datastore {
 
 	/**
 	 * Create term meta database table (for WP < 4.4)
-	 **/
+	 */
 	public static function create_table() {
 		global $wpdb;
 

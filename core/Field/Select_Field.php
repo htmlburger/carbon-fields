@@ -6,6 +6,7 @@ namespace Carbon_Fields\Field;
  * Select dropdown field class.
  */
 class Select_Field extends Predefined_Options_Field {
+	
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 *

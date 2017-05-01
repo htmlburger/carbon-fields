@@ -7,15 +7,22 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 /**
  * Base class for fields with predefined options.
  * Mainly used to reduce the bloat on the base Field class.
- **/
+ */
 abstract class Predefined_Options_Field extends Field {
+	
 	/**
 	 * Stores the raw, unprocessed field options
 	 *
 	 * @var array(array|callable)
-	 **/
+	 */
 	protected $option_collections = array();
 
+	/**
+	 * Check if an array is indexed
+	 * 
+	 * @param  array   $array
+	 * @return boolean
+	 */
 	protected function is_indexed_array( $array ) {
 		return array_keys( $array ) === range( 0, count( $array ) - 1 );
 	}
@@ -53,7 +60,9 @@ abstract class Predefined_Options_Field extends Field {
 	}
 
 	/**
-	 * Check if there are callbacks and populate the options
+	 * Get a populated array of options executing any callbacks in the process
+	 *
+	 * @return array
 	 */
 	protected function load_options() {
 		$options = array();
@@ -99,7 +108,7 @@ abstract class Predefined_Options_Field extends Field {
 	 * @param array|callable $options
 	 * @return array
 	 */
-	public function parse_options( $options ) {
+	protected function parse_options( $options ) {
 		$parsed = array();
 
 		if ( is_callable( $options ) ) {
@@ -115,4 +124,4 @@ abstract class Predefined_Options_Field extends Field {
 
 		return $parsed;
 	}
-} // END Field
+}

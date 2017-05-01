@@ -8,9 +8,10 @@ use Carbon_Fields\Field\Field;
  * Abstract meta datastore class.
  */
 abstract class Meta_Datastore extends Key_Value_Datastore {
+	
 	/**
 	 * Initialization tasks.
-	 **/
+	 */
 	public function init() {}
 
 	/**

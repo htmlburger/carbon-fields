@@ -3,11 +3,25 @@
 namespace Carbon_Fields\Field;
 
 class Sidebar_Field extends Select_Field {
-	private $enable_add_new = true; // Whether to allow the user to add new sidebars
-	private $excluded_sidebars = array(); // Exclude these sidebars from the select menu
+
+	/**
+	 * Allow the user to add new sidebars
+	 * 
+	 * @var boolean
+	 */
+	private $enable_add_new = true;
+
+	/**
+	 * Array of sidebars to exclude from the select menu
+	 * 
+	 * @var array
+	 */
+	private $excluded_sidebars = array();
 
 	/**
 	 * Disable adding new sidebars.
+	 *
+	 * @return Field $this
 	 */
 	public function disable_add_new() {
 		$this->enable_add_new = false;
@@ -16,7 +30,9 @@ class Sidebar_Field extends Select_Field {
 
 	/**
 	 * Specify sidebars to be excluded.
+	 * 
 	 * @param  array $sidebars
+	 * @return Field $this
 	 */
 	public function exclude_sidebars( $sidebars ) {
 		$this->excluded_sidebars = $sidebars;

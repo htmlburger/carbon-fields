@@ -24,7 +24,7 @@ class Nav_Menu_Item_Container extends Container {
 	 * @param string $unique_id Unique id of the container
 	 * @param string $title title of the container
 	 * @param string $type Type of the container
-	 **/
+	 */
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
 
@@ -61,7 +61,7 @@ class Nav_Menu_Item_Container extends Container {
 	 * Checks whether the current save request is valid
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_save() {
 		if ( ! $this->verified_nonce_in_request() ) {
 			return false;
@@ -74,7 +74,7 @@ class Nav_Menu_Item_Container extends Container {
 	/**
 	 * Perform save operation after successful is_valid_save() check.
 	 * The call is propagated to all fields in the container.
-	 **/
+	 */
 	public function save( $data = null ) {
 		foreach ( $this->fields as $field ) {
 			$field->set_value_from_input( stripslashes_deep( $_POST ) );
@@ -88,7 +88,7 @@ class Nav_Menu_Item_Container extends Container {
 	 * Get environment array for page request (in admin)
 	 *
 	 * @return array
-	 **/
+	 */
 	protected function get_environment_for_request() {
 		return array();
 	}
@@ -97,7 +97,7 @@ class Nav_Menu_Item_Container extends Container {
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
-	 **/
+	 */
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
@@ -125,7 +125,7 @@ class Nav_Menu_Item_Container extends Container {
 	 *
 	 * @param int $object_id
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_attach_for_object( $object_id = null ) {
 		$post = get_post( $object_id );
 
@@ -142,7 +142,7 @@ class Nav_Menu_Item_Container extends Container {
 
 	/**
 	 * Output the container markup
-	 **/
+	 */
 	public function render() {
 		include \Carbon_Fields\DIR . '/templates/Container/nav_menu_item.php';
 	}

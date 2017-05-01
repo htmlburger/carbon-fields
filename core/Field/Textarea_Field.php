@@ -6,12 +6,19 @@ namespace Carbon_Fields\Field;
  * Textarea field class.
  */
 class Textarea_Field extends Field {
+
+	/**
+	 * Number of rows (affects textarea height)
+	 * 
+	 * @var integer
+	 */
 	protected $rows = 5;
 
 	/**
 	 * Change the number of rows of this field.
 	 *
 	 * @param integer $rows Number of rows
+	 * @return Field $this
 	 */
 	public function set_rows( $rows = 0 ) {
 		$this->rows = absint( $rows );

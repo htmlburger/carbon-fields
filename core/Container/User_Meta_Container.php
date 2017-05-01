@@ -17,7 +17,7 @@ class User_Meta_Container extends Container {
 	 * @param string $unique_id Unique id of the container
 	 * @param string $title title of the container
 	 * @param string $type Type of the container
-	 **/
+	 */
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
 
@@ -28,7 +28,7 @@ class User_Meta_Container extends Container {
 
 	/**
 	 * Bind attach() and save() to the appropriate WordPress actions.
-	 **/
+	 */
 	public function init() {
 		add_action( 'admin_init', array( $this, '_attach' ) );
 		add_action( 'profile_update', array( $this, '_save' ), 10, 1 );
@@ -39,7 +39,7 @@ class User_Meta_Container extends Container {
 	 * Checks whether the current save request is valid
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_save() {
 		if ( ! $this->is_profile_page() ) {
 			return false;
@@ -58,7 +58,7 @@ class User_Meta_Container extends Container {
 	 * The call is propagated to all fields in the container.
 	 *
 	 * @param int $user_id ID of the user against which save() is ran
-	 **/
+	 */
 	public function save( $user_id = null ) {
 		// Unhook action to garantee single save
 		remove_action( 'profile_update', array( $this, '_save' ) );
@@ -77,7 +77,7 @@ class User_Meta_Container extends Container {
 	 * Get environment array for page request (in admin)
 	 *
 	 * @return array
-	 **/
+	 */
 	protected function get_environment_for_request() {
 		global $pagenow;
 
@@ -104,7 +104,7 @@ class User_Meta_Container extends Container {
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
-	 **/
+	 */
 	public function is_valid_attach_for_request() {
 		if ( ! $this->is_profile_page() ) {
 			return false;
@@ -133,7 +133,7 @@ class User_Meta_Container extends Container {
 	 *
 	 * @param int $object_id
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_attach_for_object( $object_id = null ) {
 		$user = get_userdata( $object_id );
 
@@ -146,7 +146,7 @@ class User_Meta_Container extends Container {
 
 	/**
 	 * Add the container to the user
-	 **/
+	 */
 	public function attach() {
 		add_action( 'show_user_profile', array( $this, 'render' ), 10, 1 );
 		add_action( 'edit_user_profile', array( $this, 'render' ), 10, 1 );
@@ -155,7 +155,7 @@ class User_Meta_Container extends Container {
 
 	/**
 	 * Whether we're on the user profile page
-	 **/
+	 */
 	protected function is_profile_page() {
 		global $pagenow;
 
@@ -164,7 +164,7 @@ class User_Meta_Container extends Container {
 
 	/**
 	 * Output the container markup
-	 **/
+	 */
 	public function render( $user_profile = null ) {
 		$profile_role = '';
 
@@ -184,7 +184,7 @@ class User_Meta_Container extends Container {
 	 * Set the user ID the container will operate with.
 	 *
 	 * @param int $user_id
-	 **/
+	 */
 	protected function set_user_id( $user_id ) {
 		$this->user_id = $user_id;
 		$this->get_datastore()->set_id( $user_id );
@@ -196,7 +196,7 @@ class User_Meta_Container extends Container {
 	 * @deprecated
 	 * @param string|array $role
 	 * @return object $this
-	 **/
+	 */
 	public function show_on_user_role( $role ) {
 		$roles = is_array( $role ) ? $role : array( $role );
 		$this->and_when( 'user_role', 'IN', $roles );

@@ -13,7 +13,7 @@ class Widget_Container extends Container {
 	 * @param string $unique_id Unique ID of the widget
 	 * @param string $title Ignored
 	 * @param string $type Container type
-	 **/
+	 */
 	public function __construct( $unique_id, $title, $type ) {
 		$this->id = $unique_id;
 		$this->title = '';
@@ -28,7 +28,7 @@ class Widget_Container extends Container {
 
 	/**
 	 * Perform instance initialization
-	 **/
+	 */
 	public function init() {
 		$this->_attach();
 		$this->render();
@@ -40,7 +40,7 @@ class Widget_Container extends Container {
 	 * Get environment array for page request (in admin)
 	 *
 	 * @return array
-	 **/
+	 */
 	protected function get_environment_for_request() {
 		return array();
 	}
@@ -49,7 +49,7 @@ class Widget_Container extends Container {
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
-	 **/
+	 */
 	public function is_valid_attach_for_request() {
 		$screen = get_current_screen();
 		$input = stripslashes_deep( $_REQUEST );
@@ -77,7 +77,7 @@ class Widget_Container extends Container {
 	 *
 	 * @param int $object_id
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_attach_for_object( $object_id = null ) {
 		return $this->all_conditions_pass( intval( $object_id ) );
 	}
@@ -85,7 +85,7 @@ class Widget_Container extends Container {
 	/* Checks whether the current save request is valid
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_save() {
 		if ( ! $this->is_valid_attach_for_request() ) {
 			return false;
@@ -96,7 +96,7 @@ class Widget_Container extends Container {
 
 	/**
 	 * Output the container markup
-	 **/
+	 */
 	public function render() {
 		include \Carbon_Fields\DIR . '/templates/Container/widget.php';
 	}

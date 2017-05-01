@@ -10,6 +10,7 @@ use Carbon_Fields\Value_Set\Value_Set;
  * Coords (lat, lng), address and zoom are saved in the database.
  */
 class Map_Field extends Field {
+	
 	/**
 	 * Whether to lazy load this field.
 	 *
@@ -71,7 +72,7 @@ class Map_Field extends Field {
 	 * Load the field value from an input array based on it's name
 	 *
 	 * @param array $input Array of field names and values.
-	 **/
+	 */
 	public function set_value_from_input( $input ) {
 		if ( ! isset( $input[ $this->get_name() ] ) ) {
 			$this->set_value( null );

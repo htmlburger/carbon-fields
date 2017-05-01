@@ -12,7 +12,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Base field class.
  * Defines the key container methods and their default implementations.
  * Implements factory design pattern.
- **/
+ */
 class Field implements Datastore_Holder_Interface {
 	
 	/**
@@ -34,14 +34,14 @@ class Field implements Datastore_Holder_Interface {
 	 * Array of ancestor field names
 	 *
 	 * @var array
-	 **/
+	 */
 	protected $hierarchy = array();
 
 	/**
 	 * Array of complex entry ids
 	 *
 	 * @var array
-	 **/
+	 */
 	protected $hierarchy_index = array();
 
 	/**
@@ -131,7 +131,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @see set_autoload()
 	 * @var bool
-	 **/
+	 */
 	protected $autoload = false;
 
 	/**
@@ -139,7 +139,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @see set_lazyload()
 	 * @var bool
-	 **/
+	 */
 	protected $lazyload = false;
 
 	/**
@@ -147,7 +147,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @see set_width()
 	 * @var int
-	 **/
+	 */
 	protected $width = 0;
 
 	/**
@@ -155,7 +155,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @see add_class()
 	 * @var array
-	 **/
+	 */
 	protected $classes = array();
 
 	/**
@@ -163,14 +163,14 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @see set_required()
 	 * @var bool
-	 **/
+	 */
 	protected $required = false;
 
 	/**
 	 * Stores the field conditional logic rules.
 	 *
 	 * @var array
-	 **/
+	 */
 	protected $conditional_logic = array();
 
 	/**
@@ -186,7 +186,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Clone the Value_Set object as well
 	 *
 	 * @var array
-	 **/
+	 */
 	public function __clone() {
 		$this->set_value_set( clone $this->get_value_set() );
 	}
@@ -198,7 +198,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $name lower case and underscore-delimited
 	 * @param string $label (optional) Automatically generated from $name if not present
 	 * @return Field
-	 **/
+	 */
 	public static function factory( $type, $name, $label = null ) {
 		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
 
@@ -229,7 +229,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @see Field::factory()
 	 * @return Field
-	 **/
+	 */
 	public static function make( $type, $name, $label = null ) {
 		return static::factory( $type, $name, $label );
 	}
@@ -287,14 +287,14 @@ class Field implements Datastore_Holder_Interface {
 	 * Get array of hierarchy field names
 	 *
 	 * @return array
-	 **/
+	 */
 	public function get_hierarchy() {
 		return $this->hierarchy;
 	}
 
 	/**
 	 * Set array of hierarchy field names
-	 **/
+	 */
 	public function set_hierarchy( $hierarchy ) {
 		$this->hierarchy = $hierarchy;
 	}
@@ -303,14 +303,14 @@ class Field implements Datastore_Holder_Interface {
 	 * Get array of hierarchy indexes
 	 *
 	 * @return array
-	 **/
+	 */
 	public function get_hierarchy_index() {
 		return $this->hierarchy_index;
 	}
 
 	/**
 	 * Set array of hierarchy indexes
-	 **/
+	 */
 	public function set_hierarchy_index( $hierarchy_index ) {
 		$hierarchy_index = ( ! empty( $hierarchy_index ) ) ? $hierarchy_index : array( 0 );
 		$this->hierarchy_index = $hierarchy_index;
@@ -320,7 +320,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Return whether the field is a root field and holds a single value
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function is_simple_root_field() {
 		$hierarchy = $this->get_hierarchy();
 		return (
@@ -336,19 +336,19 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Perform instance initialization
-	 **/
+	 */
 	public function init() {}
 
 	/**
 	 * Instance initialization when in the admin area.
 	 * Called during field boot.
-	 **/
+	 */
 	public function admin_init() {}
 
 	/**
 	 * Enqueue admin scripts.
 	 * Called once per field type.
-	 **/
+	 */
 	public static function admin_enqueue_scripts() {}
 
 	/**
@@ -356,7 +356,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @param bool $fallback_to_default
 	 * @return mixed
-	 **/
+	 */
 	protected function get_value_from_datastore( $fallback_to_default = true ) {
 		$value_tree = $this->get_datastore()->load( $this );
 		
@@ -374,7 +374,7 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Load value from datastore
-	 **/
+	 */
 	public function load() {
 		$value = $this->get_value_from_datastore();
 		$this->set_value( $value );
@@ -382,7 +382,7 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Save value to storage
-	 **/
+	 */
 	public function save() {
 		$delete_on_save = ! in_array( $this->get_value_set()->get_type(), array( Value_Set::TYPE_SINGLE_VALUE, Value_Set::TYPE_MULTIPLE_PROPERTIES ) );
 		$delete_on_save = apply_filters( 'carbon_fields_should_delete_field_value_on_save', $delete_on_save, $this );
@@ -407,7 +407,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Load the field value from an input array based on it's name
 	 *
 	 * @param array $input Array of field names and values.
-	 **/
+	 */
 	public function set_value_from_input( $input ) {
 		if ( isset( $input[ $this->get_name() ] ) ) {
 			$this->set_value( $input[ $this->get_name() ] );
@@ -420,7 +420,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Return whether the datastore instance is the default one or has been overriden
 	 *
 	 * @return boolean
-	 **/
+	 */
 	public function has_default_datastore() {
 		return $this->has_default_datastore;
 	}
@@ -429,7 +429,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Get the DataStore instance
 	 *
 	 * @return Datastore_Interface $datastore
-	 **/
+	 */
 	public function get_datastore() {
 		return $this->datastore;
 	}
@@ -439,7 +439,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @param Datastore_Interface $datastore
 	 * @return object $this
-	 **/
+	 */
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		if ( $set_as_default && ! $this->has_default_datastore() ) {
 			return $this; // datastore has been overriden with a custom one - abort changing to a default one
@@ -453,7 +453,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Return the type of the container this field is in
 	 *
 	 * @return string
-	 **/
+	 */
 	public function get_context() {
 		return $this->context;
 	}
@@ -463,7 +463,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @param string
 	 * @return object $this
-	 **/
+	 */
 	public function set_context( $context ) {
 		$this->context = $context;
 		return $this;
@@ -473,7 +473,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Get the Value_Set object
 	 *
 	 * @return Value_Set
-	 **/
+	 */
 	public function get_value_set() {
 		if ( $this->value_set === null ) {
 			$this->set_value_set( new Value_Set() );
@@ -485,7 +485,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Set the Value_Set object
 	 *
 	 * @param Value_Set $value_set
-	 **/
+	 */
 	public function set_value_set( $value_set ) {
 		$this->value_set = $value_set;
 	}
@@ -494,7 +494,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Alias for $this->get_value_set()->get(); with fallback to default value
 	 *
 	 * @return mixed
-	 **/
+	 */
 	public function get_value() {
 		if ( $this->get_value_set()->get() === null ) {
 			$this->set_value( $this->get_default_value() );
@@ -506,7 +506,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Alias for $this->get_value_set()->get_set(); with fallback to default value
 	 *
 	 * @return array<array>
-	 **/
+	 */
 	public function get_full_value() {
 		if ( $this->get_value_set()->get_set() === null ) {
 			$this->set_value( $this->get_default_value() );
@@ -518,14 +518,14 @@ class Field implements Datastore_Holder_Interface {
 	 * Return a differently formatted value for end-users
 	 *
 	 * @return mixed
-	 **/
+	 */
 	public function get_formatted_value() {
 		return $this->get_value();
 	}
 
 	/**
 	 * Alias for $this->get_value_set()->set( $value );
-	 **/
+	 */
 	public function set_value( $value ) {
 		$this->get_value_set()->set( $value );
 	}
@@ -541,7 +541,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Get default field value
 	 *
 	 * @return mixed
-	 **/
+	 */
 	public function get_default_value() {
 		return $this->default_value;
 	}
@@ -550,7 +550,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Set default field value
 	 *
 	 * @param mixed $default_value
-	 **/
+	 */
 	public function set_default_value( $default_value ) {
 		$this->default_value = $default_value;
 		return $this;
@@ -560,14 +560,14 @@ class Field implements Datastore_Holder_Interface {
 	 * Return the field base name.
 	 *
 	 * @return string
-	 **/
+	 */
 	public function get_base_name() {
 		return $this->base_name;
 	}
 
 	/**
 	 * Set field base name as defined in the container.
-	 **/
+	 */
 	public function set_base_name( $name ) {
 		$this->base_name = $name;
 	}
@@ -576,7 +576,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Return the field name
 	 *
 	 * @return string
-	 **/
+	 */
 	public function get_name() {
 		return $this->name;
 	}
@@ -586,7 +586,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Use only if you are completely aware of what you are doing.
 	 *
 	 * @param string $name Field name, either sanitized or not
-	 **/
+	 */
 	public function set_name( $name ) {
 		if ( empty( $name ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name can\'t be empty' );
@@ -609,7 +609,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Return the field name prefix
 	 *
 	 * @return string
-	 **/
+	 */
 	public function get_name_prefix() {
 		return $this->name_prefix;
 	}
@@ -619,7 +619,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Use only if you are completely aware of what you are doing.
 	 *
 	 * @param string $name_prefix
-	 **/
+	 */
 	public function set_name_prefix( $name_prefix ) {
 		$name_prefix = strval( $name_prefix );
 		$old_prefix_length = strlen( $this->name_prefix );
@@ -634,7 +634,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Return field label.
 	 *
 	 * @return string
-	 **/
+	 */
 	public function get_label() {
 		return $this->label;
 	}
@@ -643,7 +643,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Set field label.
 	 *
 	 * @param string $label If null, the label will be generated from the field name
-	 **/
+	 */
 	public function set_label( $label ) {
 		// Try to guess field label from it's name
 		if ( is_null( $label ) ) {
@@ -664,7 +664,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Return the field help text
 	 *
 	 * @return object $this
-	 **/
+	 */
 	public function get_help_text() {
 		return $this->help_text;
 	}
@@ -674,7 +674,7 @@ class Field implements Datastore_Holder_Interface {
 	 * containing information and guidance for the user
 	 *
 	 * @return object $this
-	 **/
+	 */
 	public function set_help_text( $help_text ) {
 		$this->help_text = $help_text;
 		return $this;
@@ -685,7 +685,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @see set_help_text()
 	 * @return object $this
-	 **/
+	 */
 	public function help_text( $help_text ) {
 		return $this->set_help_text( $help_text );
 	}
@@ -694,7 +694,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Return whether or not this value should be auto loaded.
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function get_autoload() {
 		return $this->autoload;
 	}
@@ -704,7 +704,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @param bool $autoload
 	 * @return object $this
-	 **/
+	 */
 	public function set_autoload( $autoload ) {
 		$this->autoload = $autoload;
 		return $this;
@@ -714,7 +714,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Return whether or not this field should be lazyloaded.
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function get_lazyload() {
 		return $this->lazyload;
 	}
@@ -724,7 +724,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @param bool $lazyload
 	 * @return object $this
-	 **/
+	 */
 	public function set_lazyload( $lazyload ) {
 		$this->lazyload = $lazyload;
 		return $this;
@@ -734,7 +734,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Get the field width.
 	 *
 	 * @return int $width
-	 **/
+	 */
 	public function get_width() {
 		return $this->width;
 	}
@@ -744,7 +744,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @param int $width
 	 * @return object $this
-	 **/
+	 */
 	public function set_width( $width ) {
 		$this->width = (int) $width;
 		return $this;
@@ -775,7 +775,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @param bool $required
 	 * @return object $this
-	 **/
+	 */
 	public function set_required( $required = true ) {
 		$this->required = $required;
 		return $this;
@@ -785,7 +785,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Return whether this field is mandatory for the user
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function is_required() {
 		return $this->required;
 	}

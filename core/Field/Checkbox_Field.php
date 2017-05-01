@@ -6,6 +6,7 @@ namespace Carbon_Fields\Field;
  * Single checkbox field class.
  */
 class Checkbox_Field extends Field {
+	
 	/**
 	 * The value that is saved in the database when
 	 * this checkbox field is enabled.
@@ -18,6 +19,7 @@ class Checkbox_Field extends Field {
 	 * Modify the option value.
 	 *
 	 * @param string $value New value
+	 * @return Field $this
 	 */
 	public function set_option_value( $value ) {
 		$this->option_value = $value;
@@ -29,7 +31,7 @@ class Checkbox_Field extends Field {
 	 * If not enabled, set to empty string for easier data querying.
 	 *
 	 * @param array $input Array of field names and values.
-	 **/
+	 */
 	public function set_value_from_input( $input ) {
 		parent::set_value_from_input( $input );
 		if ( $this->get_value() !== $this->option_value ) {
@@ -41,7 +43,7 @@ class Checkbox_Field extends Field {
 	 * Return a differently formatted value for end-users
 	 *
 	 * @return mixed
-	 **/
+	 */
 	public function get_formatted_value() {
 		return ( $this->get_value() === $this->option_value );
 	}

@@ -39,7 +39,7 @@ class Repository {
 	 * Register a container with the repository
 	 *
 	 * @return array
-	 **/
+	 */
 	public function register_container( Container $container ) {
 		$this->register_unique_panel_id( $container->id );
 		$this->containers[] = $container;
@@ -50,7 +50,7 @@ class Repository {
 	 * Initialize registered containers
 	 *
 	 * @return array
-	 **/
+	 */
 	public function initialize_containers() {
 		$initialized_containers = array();
 		while ( ( $container = array_shift( $this->pending_containers ) ) ) {
@@ -66,7 +66,7 @@ class Repository {
 	 *
 	 * @param string $type Container type to filter for
 	 * @return array
-	 **/
+	 */
 	public function get_containers( $type = null ) {
 		$raw_containers = $this->containers;
 		$containers = array();
@@ -92,7 +92,7 @@ class Repository {
 	 * @param string $container_type Container type to filter for
 	 * @param bool $include_nested_fields Search in nested fields as well
 	 * @return Carbon_Fields\Field\Field
-	 **/
+	 */
 	public function get_field_in_containers( $field_name, $container_type = null, $include_nested_fields = true ) {
 		$containers = $this->get_containers( $container_type );
 		$field = null;
@@ -115,7 +115,7 @@ class Repository {
 	 * Return all currently active containers
 	 *
 	 * @return array
-	 **/
+	 */
 	public function get_active_containers() {
 		return array_filter( $this->containers, function( $container ) {
 			return $container->active();
@@ -153,7 +153,7 @@ class Repository {
 	 * Add container identificator id to the list of unique container ids
 	 *
 	 * @param string $id
-	 **/
+	 */
 	protected function register_unique_panel_id( $id ) {
 		if ( $this->is_unique_panel_id( $id ) ) {
 			$this->registered_panel_ids[] = $id;
@@ -164,7 +164,7 @@ class Repository {
 	 * Remove container identificator id from the list of unique container ids
 	 *
 	 * @param string $id
-	 **/
+	 */
 	protected function unregister_unique_panel_id( $id ) {
 		if ( ! $this->is_unique_panel_id( $id ) ) {
 			unset( $this->registered_panel_ids[ array_search( $id, $this->registered_panel_ids ) ] );

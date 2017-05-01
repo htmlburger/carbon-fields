@@ -36,7 +36,7 @@ class Post_Meta_Container extends Container {
 	 * @param string $unique_id Unique id of the container
 	 * @param string $title title of the container
 	 * @param string $type Type of the container
-	 **/
+	 */
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
 
@@ -48,7 +48,7 @@ class Post_Meta_Container extends Container {
 	/**
 	 * Create DataStore instance, set post ID to operate with (if such exists).
 	 * Bind attach() and save() to the appropriate WordPress actions.
-	 **/
+	 */
 	public function init() {
 		$input = stripslashes_deep( $_GET );
 		$request_post_id = isset( $input['post'] ) ? intval( $input['post'] ) : 0;
@@ -70,7 +70,7 @@ class Post_Meta_Container extends Container {
 	 * or performing post save outside of the post edit page (like Quick Edit)
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_save() {
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 			return false;
@@ -95,7 +95,7 @@ class Post_Meta_Container extends Container {
 	 * The call is propagated to all fields in the container.
 	 *
 	 * @param int $post_id ID of the post against which save() is ran
-	 **/
+	 */
 	public function save( $post_id = null ) {
 		// Unhook action to garantee single save
 		remove_action( 'save_post', array( $this, '_save' ) );
@@ -115,7 +115,7 @@ class Post_Meta_Container extends Container {
 	 * Get environment array for page request (in admin)
 	 *
 	 * @return array
-	 **/
+	 */
 	protected function get_environment_for_request() {
 		global $pagenow;
 
@@ -145,7 +145,7 @@ class Post_Meta_Container extends Container {
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
-	 **/
+	 */
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
@@ -182,7 +182,7 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param int $object_id
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_attach_for_object( $object_id = null ) {
 		$post = get_post( intval( $object_id ) );
 
@@ -195,7 +195,7 @@ class Post_Meta_Container extends Container {
 
 	/**
 	 * Add meta box for each of the container post types
-	 **/
+	 */
 	public function attach() {
 		$this->post_types = $this->get_post_type_visibility();
 
@@ -223,7 +223,7 @@ class Post_Meta_Container extends Container {
 
 	/**
 	 * Output the container markup
-	 **/
+	 */
 	public function render() {
 		include \Carbon_Fields\DIR . '/templates/Container/post_meta.php';
 	}
@@ -232,7 +232,7 @@ class Post_Meta_Container extends Container {
 	 * Set the post ID the container will operate with.
 	 *
 	 * @param int $post_id
-	 **/
+	 */
 	protected function set_post_id( $post_id ) {
 		$this->post_id = $post_id;
 		$this->get_datastore()->set_id( $post_id );
@@ -269,7 +269,7 @@ class Post_Meta_Container extends Container {
 	 * @deprecated
 	 * @param int|string $page page ID or page path
 	 * @return object $this
-	 **/
+	 */
 	public function show_on_page( $page ) {
 		$page_id = absint( $page );
 
@@ -291,7 +291,7 @@ class Post_Meta_Container extends Container {
 	 * @deprecated
 	 * @param string $parent_page_path
 	 * @return object $this
-	 **/
+	 */
 	public function show_on_page_children( $parent_page_path ) {
 		$page = get_page_by_path( $parent_page_path );
 		$page_id = ( $page ) ? $page->ID : -1;
@@ -305,7 +305,7 @@ class Post_Meta_Container extends Container {
 	 * @deprecated
 	 * @param string|array $template_path
 	 * @return object $this
-	 **/
+	 */
 	public function show_on_template( $template_path ) {
 		// Backwards compatibility where only pages support templates
 		if ( version_compare( get_bloginfo( 'version' ), '4.7', '<' ) ) {
@@ -323,7 +323,7 @@ class Post_Meta_Container extends Container {
 	 * @deprecated
 	 * @param string|array $template_path
 	 * @return object $this
-	 **/
+	 */
 	public function hide_on_template( $template_path ) {
 		$template_paths = is_array( $template_path ) ? $template_path : array( $template_path );
 		$this->and_when( 'post_template', 'NOT IN', $template_paths );
@@ -337,7 +337,7 @@ class Post_Meta_Container extends Container {
 	 * @deprecated
 	 * @param int $level
 	 * @return object $this
-	 **/
+	 */
 	public function show_on_level( $level ) {
 		$this->and_when( 'post_level', '=', intval( $level ) );
 		return $this;
@@ -350,7 +350,7 @@ class Post_Meta_Container extends Container {
 	 * @deprecated
 	 * @param string|array $post_format Name of the format as listed on Codex
 	 * @return object $this
-	 **/
+	 */
 	public function show_on_post_format( $post_format ) {
 		$post_formats = is_array( $post_format ) ? $post_format : array( $post_format );
 		$this->and_when( 'post_format', 'IN', $post_formats );
@@ -363,7 +363,7 @@ class Post_Meta_Container extends Container {
 	 * @deprecated
 	 * @param string|array $post_types
 	 * @return object $this
-	 **/
+	 */
 	public function show_on_post_type( $post_types ) {
 		$post_types = is_array( $post_types ) ? $post_types : array( $post_types );
 		$this->and_when( 'post_type', 'IN', $post_types );
@@ -378,7 +378,7 @@ class Post_Meta_Container extends Container {
 	 * @deprecated
 	 * @param string $category_slug
 	 * @return object $this
-	 **/
+	 */
 	public function show_on_category( $category_slug ) {
 		$this->and_when( 'post_term', '=', array(
 			'value' => $category_slug,
@@ -395,7 +395,7 @@ class Post_Meta_Container extends Container {
 	 * @param string $taxonomy_slug
 	 * @param string $term_slug
 	 * @return object $this
-	 **/
+	 */
 	public function show_on_taxonomy_term( $term_slug, $taxonomy_slug ) {
 		$this->and_when( 'post_term', '=', array(
 			'value' => $term_slug,

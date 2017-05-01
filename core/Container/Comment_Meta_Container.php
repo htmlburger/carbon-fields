@@ -18,7 +18,7 @@ class Comment_Meta_Container extends Container {
 	 * @param string $unique_id Unique id of the container
 	 * @param string $title title of the container
 	 * @param string $type Type of the container
-	 **/
+	 */
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
 
@@ -29,7 +29,7 @@ class Comment_Meta_Container extends Container {
 
 	/**
 	 * Perform instance initialization
-	 **/
+	 */
 	public function init() {
 		if ( isset( $_GET['c'] ) && $comment_id = absint( $_GET['c'] ) ) { // Input var okay.
 			$this->set_comment_id( $comment_id );
@@ -43,7 +43,7 @@ class Comment_Meta_Container extends Container {
 	 * Checks whether the current save request is valid
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_save() {
 		if ( ! $this->verified_nonce_in_request() ) {
 			return false;
@@ -58,7 +58,7 @@ class Comment_Meta_Container extends Container {
 	 * The call is propagated to all fields in the container.
 	 *
 	 * @param int $comment_id ID of the comment against which save() is ran
-	 **/
+	 */
 	public function save( $comment_id = null ) {
 
 		// Unhook action to guarantee single save
@@ -76,7 +76,7 @@ class Comment_Meta_Container extends Container {
 	 * Get environment array for page request (in admin)
 	 *
 	 * @return array
-	 **/
+	 */
 	protected function get_environment_for_request() {
 		$input = stripslashes_deep( $_GET );
 
@@ -90,7 +90,7 @@ class Comment_Meta_Container extends Container {
 	 * Check container attachment rules against current page request (in admin)
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
@@ -118,14 +118,14 @@ class Comment_Meta_Container extends Container {
 	 *
 	 * @param int $object_id
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_attach_for_object( $object_id = null ) {
 		return $this->all_conditions_pass( intval( $object_id ) );
 	}
 
 	/**
 	 * Add meta box to the comment
-	 **/
+	 */
 	public function attach() {
 		add_meta_box(
 			$this->id,
@@ -139,7 +139,7 @@ class Comment_Meta_Container extends Container {
 
 	/**
 	 * Output the container markup
-	 **/
+	 */
 	public function render() {
 		include \Carbon_Fields\DIR . '/templates/Container/comment_meta.php';
 	}
@@ -148,7 +148,7 @@ class Comment_Meta_Container extends Container {
 	 * Set the comment ID the container will operate with.
 	 *
 	 * @param int $comment_id
-	 **/
+	 */
 	protected function set_comment_id( $comment_id ) {
 		$this->comment_id = $comment_id;
 		$this->get_datastore()->set_id( $comment_id );

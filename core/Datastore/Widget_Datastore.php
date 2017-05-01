@@ -19,7 +19,7 @@ class Widget_Datastore extends Key_Value_Datastore {
 
 	/**
 	 * Initialization tasks.
-	 **/
+	 */
 	public function init() {}
 
 	/**

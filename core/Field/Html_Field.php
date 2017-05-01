@@ -7,7 +7,13 @@ namespace Carbon_Fields\Field;
  * Allows to create a field that displays any HTML in a container.
  */
 class Html_Field extends Field {
-	public $field_html;
+
+	/**
+	 * HTML contents to display
+	 * 
+	 * @var string
+	 */
+	public $field_html = '';
 
 	/**
 	 * Set the field HTML or callback that returns the HTML.

@@ -9,6 +9,7 @@ use Carbon_Fields\Value_Set\Value_Set;
  * Allows to create a set of checkboxes where multiple can be selected.
  */
 class Set_Field extends Predefined_Options_Field {
+	
 	/**
 	 * The options limit.
 	 *
@@ -49,7 +50,7 @@ class Set_Field extends Predefined_Options_Field {
 	 * Load the field value from an input array based on it's name
 	 *
 	 * @param array $input Array of field names and values.
-	 **/
+	 */
 	public function set_value_from_input( $input ) {
 		if ( ! isset( $input[ $this->name ] ) ) {
 			$this->set_value( null );

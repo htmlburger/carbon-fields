@@ -164,7 +164,7 @@ abstract class Widget extends \WP_Widget {
 	 * Carbon containers.
 	 *
 	 * @param array $fields
-	 **/
+	 */
 	public function add_fields( $fields ) {
 		foreach ( $fields as $field ) {
 			if ( ! is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {

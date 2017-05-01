@@ -12,7 +12,7 @@ abstract class Datastore implements Datastore_Interface {
 
 	/**
 	 * Initialize the datastore.
-	 **/
+	 */
 	public function __construct() {
 		$this->init();
 	}
@@ -21,7 +21,7 @@ abstract class Datastore implements Datastore_Interface {
 	 * Initialization tasks for concrete datastores.
 	 *
 	 * @abstract
-	 **/
+	 */
 	abstract public function init();
 
 	/**
@@ -29,7 +29,7 @@ abstract class Datastore implements Datastore_Interface {
 	 *
 	 * @param string $type
 	 * @return Datastore_Interface
-	 **/
+	 */
 	public static function factory( $type ) {
 		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
 
@@ -50,7 +50,7 @@ abstract class Datastore implements Datastore_Interface {
 	 *
 	 * @see Datastore::factory()
 	 * @return Datastore_Interface
-	 **/
+	 */
 	public static function make( $type ) {
 		return static::factory( $type );
 	}
