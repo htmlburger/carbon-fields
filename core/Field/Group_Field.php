@@ -7,6 +7,9 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class Group_Field {
 
+	/**
+	 * Default name to use for groups which have no name defined by the user
+	 */
 	const DEFAULT_GROUP_NAME = '_';
 
 	/**
@@ -242,6 +245,7 @@ class Group_Field {
 	 * If not, the field name is recorded.
 	 *
 	 * @param string $name
+	 * @return boolean
 	 */
 	public function register_field_name( $name ) {
 		if ( in_array( $name, $this->registered_field_names ) ) {
