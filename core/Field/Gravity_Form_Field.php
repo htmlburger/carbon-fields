@@ -30,7 +30,7 @@ class Gravity_Form_Field extends Select_Field {
 	/**
 	 * Set the available forms as field options
 	 */
-	protected function setup_gravity_form_options() {
+	protected function get_gravity_form_options() {
 		if ( ! $this->is_plugin_active() ) {
 			return;
 		}
