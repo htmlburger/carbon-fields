@@ -1124,6 +1124,7 @@ window.carbon = window.carbon || {};
 			var windowLabel = this.model.get('window_label');
 			var typeFilter = this.model.get('type_filter');
 			var valueType = this.model.get('value_type');
+			var value = this.model.get('value');
 			var mediaTypes = {};
 
 			var getAttachmentThumb = function(attachment) {
@@ -1148,42 +1149,55 @@ window.carbon = window.carbon || {};
 			var mediaField = mediaTypes[type];
 
 			// Runs when an image is selected.
-			mediaField.on('select', function () {
-				// Grabs the attachment selection and creates a JSON representation of the model.
-				var mediaAttachments = mediaField.state().get('selection').toJSON();
+			mediaField
+				.on('select', function () {
+					// Grabs the attachment selection and creates a JSON representation of the model.
+					var mediaAttachments = mediaField.state().get('selection').toJSON();
 
-				// Get the first attachment and remove it from the array
-				var mediaAttachment = mediaAttachments.shift();
+					// Get the first attachment and remove it from the array
+					var mediaAttachment = mediaAttachments.shift();
 
-				// If multiple attachments, multiply the field
-				_.each(mediaAttachments, function(att) {
-					var thumbUrl = getAttachmentThumb(att);
+					// If multiple attachments, multiply the field
+					_.each(mediaAttachments, function(att) {
+						var thumbUrl = getAttachmentThumb(att);
+						if ( ! thumbUrl ) {
+							thumbUrl = _this.model.get('default_thumb_url')
+						}
+						_this.model.set('multiply', {
+							'value': att[valueType],
+							'file_type': att.type,
+							'file_name': att.filename,
+							'thumb_url': thumbUrl
+						});
+					});
+
+					var mediaValue = mediaAttachment[valueType];
+					var thumbUrl = getAttachmentThumb(mediaAttachment);
 					if ( ! thumbUrl ) {
-						thumbUrl = _this.model.get('default_thumb_url')
+						thumbUrl = _this.model.get('default_thumb_url');
 					}
-					_this.model.set('multiply', {
-						'value': att[valueType],
-						'file_type': att.type,
-						'file_name': att.filename,
-						'thumb_url': thumbUrl
+
+					// Update the model
+					this.model.set('file_type', mediaAttachment.type);
+					this.model.set('file_name', mediaAttachment.filename);
+					this.model.set('value', mediaValue);
+					this.model.set('thumb_url', thumbUrl);
+
+					// Trigger an event that notifies that a media file is selected
+					this.trigger('media:updated', mediaAttachment);
+				}, this)
+				.on('open',function() {
+					var selection = mediaField.state().get('selection');
+
+					// ids = jQuery('#my_field_id').val().split(',');
+					ids = [ value ];
+
+					ids.forEach(function(id) {
+						attachment = wp.media.attachment(id);
+						attachment.fetch();
+						selection.add( attachment ? [ attachment ] : [] );
 					});
 				});
-
-				var mediaValue = mediaAttachment[valueType];
-				var thumbUrl = getAttachmentThumb(mediaAttachment);
-				if ( ! thumbUrl ) {
-					thumbUrl = _this.model.get('default_thumb_url');
-				}
-
-				// Update the model
-				this.model.set('file_type', mediaAttachment.type);
-				this.model.set('file_name', mediaAttachment.filename);
-				this.model.set('value', mediaValue);
-				this.model.set('thumb_url', thumbUrl);
-
-				// Trigger an event that notifies that a media file is selected
-				this.trigger('media:updated', mediaAttachment);
-			}, this);
 
 			// Opens the media library frame
 			mediaField.open();
