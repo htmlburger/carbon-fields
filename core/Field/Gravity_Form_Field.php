@@ -6,11 +6,12 @@ namespace Carbon_Fields\Field;
  * Gravity Form selection field class
  */
 class Gravity_Form_Field extends Select_Field {
+
 	/**
 	 * Admin initialization actions
 	 */
 	public function admin_init() {
-		$this->setup_gravity_form_options();
+		$this->set_options( $this->get_gravity_form_options() );
 	}
 
 	/**
@@ -29,7 +30,7 @@ class Gravity_Form_Field extends Select_Field {
 	/**
 	 * Set the available forms as field options
 	 */
-	public function setup_gravity_form_options() {
+	protected function setup_gravity_form_options() {
 		if ( ! $this->is_plugin_active() ) {
 			return;
 		}
@@ -48,7 +49,7 @@ class Gravity_Form_Field extends Select_Field {
 			$options[ $form->id ] = $form->title;
 		}
 
-		$this->set_options( $options );
+		return $options;
 	}
 
 	/**
