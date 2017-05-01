@@ -212,7 +212,7 @@ class Theme_Options_Container extends Container {
 	 *
 	 * @return boolean
 	 */
-	public function register_page() {
+	protected function register_page() {
 		$file = $this->settings['file'];
 		$parent = $this->settings['parent'];
 
