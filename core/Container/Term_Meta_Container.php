@@ -18,7 +18,7 @@ class Term_Meta_Container extends Container {
 	 * @param string $unique_id Unique id of the container
 	 * @param string $title title of the container
 	 * @param string $type Type of the container
-	 **/
+	 */
 	public function __construct( $unique_id, $title, $type ) {
 		parent::__construct( $unique_id, $title, $type );
 
@@ -29,7 +29,7 @@ class Term_Meta_Container extends Container {
 
 	/**
 	 * Bind attach() and save() to the appropriate WordPress actions.
-	 **/
+	 */
 	public function init() {
 		add_action( 'admin_init', array( $this, '_attach' ) );
 
@@ -45,7 +45,7 @@ class Term_Meta_Container extends Container {
 	 * Checks whether the current save request is valid
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_save() {
 		if ( ! $this->verified_nonce_in_request() ) {
 			return false;
@@ -60,7 +60,7 @@ class Term_Meta_Container extends Container {
 	 * The call is propagated to all fields in the container.
 	 *
 	 * @param int $term_id ID of the term against which save() is ran
-	 **/
+	 */
 	public function save( $term_id = null ) {
 		$this->set_term_id( $term_id );
 
@@ -76,7 +76,7 @@ class Term_Meta_Container extends Container {
 	 * Get environment array for page request (in admin)
 	 *
 	 * @return array
-	 **/
+	 */
 	protected function get_environment_for_request() {
 		$input = stripslashes_deep( $_GET );
 		$request_term_id = isset( $input['tag_ID'] ) ? intval( $input['tag_ID'] ) : 0;
@@ -96,7 +96,7 @@ class Term_Meta_Container extends Container {
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
-	 **/
+	 */
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
@@ -127,7 +127,7 @@ class Term_Meta_Container extends Container {
 	 *
 	 * @param int $object_id
 	 * @return bool
-	 **/
+	 */
 	public function is_valid_attach_for_object( $object_id = null ) {
 		$term = get_term( $object_id );
 		$term = ( $term && ! is_wp_error( $term ) ) ? $term : null;
@@ -141,7 +141,7 @@ class Term_Meta_Container extends Container {
 
 	/**
 	 * Add term meta for each of the container taxonomies
-	 **/
+	 */
 	public function attach() {
 		$taxonomies = $this->get_taxonomy_visibility();
 
@@ -153,7 +153,7 @@ class Term_Meta_Container extends Container {
 
 	/**
 	 * Output the container markup
-	 **/
+	 */
 	public function render( $term = null ) {
 		if ( is_object( $term ) ) {
 			$this->set_term_id( $term->term_id );
@@ -166,8 +166,8 @@ class Term_Meta_Container extends Container {
 	 * Set the term ID the container will operate with.
 	 *
 	 * @param int $term_id
-	 **/
-	public function set_term_id( $term_id ) {
+	 */
+	protected function set_term_id( $term_id ) {
 		$this->term_id = $term_id;
 		$this->get_datastore()->set_id( $term_id );
 	}
@@ -192,18 +192,14 @@ class Term_Meta_Container extends Container {
 		}
 		return $shown_on;
 	}
-
-	/**
-	 * COMMON USAGE METHODS
-	 */
-
+	
 	/**
 	 * Show the container only on terms from the specified taxonomies.
 	 *
 	 * @deprecated
 	 * @param string|array $taxonomies
 	 * @return object $this
-	 **/
+	 */
 	public function show_on_taxonomy( $taxonomies ) {
 		$taxonomies = is_array( $taxonomies ) ? $taxonomies : array( $taxonomies );
 		$this->and_when( 'term_taxonomy', 'IN', $taxonomies );
