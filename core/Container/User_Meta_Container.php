@@ -12,20 +12,6 @@ class User_Meta_Container extends Container {
 	public $settings = array();
 
 	/**
-	 * Array of condition types that are checked during save requests
-	 *
-	 * @var array<string>
-	 */
-	protected $static_conditions = array( 'user_id', 'user_capability' );
-
-	/**
-	 * Array of condition types that are checked during edit requests
-	 *
-	 * @var array<string>
-	 */
-	protected $dynamic_conditions = array( 'user_role' );
-
-	/**
 	 * Create a new container
 	 *
 	 * @param string $unique_id Unique id of the container
@@ -170,7 +156,7 @@ class User_Meta_Container extends Container {
 	/**
 	 * Whether we're on the user profile page
 	 **/
-	public function is_profile_page() {
+	protected function is_profile_page() {
 		global $pagenow;
 
 		return $pagenow === 'profile.php' || $pagenow === 'user-new.php' || $pagenow === 'user-edit.php';
@@ -199,15 +185,11 @@ class User_Meta_Container extends Container {
 	 *
 	 * @param int $user_id
 	 **/
-	public function set_user_id( $user_id ) {
+	protected function set_user_id( $user_id ) {
 		$this->user_id = $user_id;
 		$this->get_datastore()->set_id( $user_id );
 	}
-
-	/**
-	 * COMMON USAGE METHODS
-	 */
-
+	
 	/**
 	 * Show the container only on users who have the $role role.
 	 *
