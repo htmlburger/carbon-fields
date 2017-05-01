@@ -149,7 +149,7 @@ class Comment_Meta_Container extends Container {
 	 *
 	 * @param int $comment_id
 	 **/
-	public function set_comment_id( $comment_id ) {
+	protected function set_comment_id( $comment_id ) {
 		$this->comment_id = $comment_id;
 		$this->get_datastore()->set_id( $comment_id );
 	}
