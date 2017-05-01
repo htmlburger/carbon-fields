@@ -126,23 +126,6 @@ abstract class Container implements Datastore_Holder_Interface {
 	protected $condition_collection;
 
 	/**
-	 * Get array of all static condition types
-	 *
-	 * @param  boolean       $static
-	 * @return array<string>
-	 */
-	protected function get_condition_types( $static ) {
-		$group = $static ? 'static' : 'dynamic';
-		$container_type = Helper::class_to_type( get_class( $this ), '_Container' );
-
-		$condition_types = array();
-		$condition_types = apply_filters( 'carbon_fields_' . $container_type . '_container_' . $group . '_condition_types', $condition_types, $container_type, $this );
-		$condition_types = apply_filters( 'carbon_fields_container_' . $group . '_condition_types', $condition_types, $container_type, $this );
-
-		return $condition_types;
-	}
-
-	/**
 	 * Create a new container of type $type and name $name.
 	 *
 	 * @param string $type
@@ -197,6 +180,23 @@ abstract class Container implements Datastore_Holder_Interface {
 			array_merge( $this->get_condition_types( true ), $this->get_condition_types( false ) ),
 			true
 		);
+	}
+
+	/**
+	 * Get array of all static condition types
+	 *
+	 * @param  boolean       $static
+	 * @return array<string>
+	 */
+	protected function get_condition_types( $static ) {
+		$group = $static ? 'static' : 'dynamic';
+		$container_type = Helper::class_to_type( get_class( $this ), '_Container' );
+
+		$condition_types = array();
+		$condition_types = apply_filters( 'carbon_fields_' . $container_type . '_container_' . $group . '_condition_types', $condition_types, $container_type, $this );
+		$condition_types = apply_filters( 'carbon_fields_container_' . $group . '_condition_types', $condition_types, $container_type, $this );
+
+		return $condition_types;
 	}
 
 	/**
@@ -507,7 +507,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @param string $name
 	 * @return boolean
 	 */
-	public function register_field_name( $name ) {
+	protected function register_field_name( $name ) {
 		if ( in_array( $name, $this->registered_field_names ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
 			return false;
@@ -515,19 +515,6 @@ abstract class Container implements Datastore_Holder_Interface {
 
 		$this->registered_field_names[] = $name;
 		return true;
-	}
-
-	/**
-	 * Remove field name $name from the list of unique field names
-	 *
-	 * @param string $name
-	 */
-	public function drop_unique_field_name( $name ) {
-		$index = array_search( $name, $this->registered_field_names );
-
-		if ( $index !== false ) {
-			unset( $this->registered_field_names[ $index ] );
-		}
 	}
 
 	/**
@@ -572,7 +559,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @return string
 	 */
-	public function get_nonce_name() {
+	protected function get_nonce_name() {
 		return 'carbon_panel_' . $this->id . '_nonce';
 	}
 
@@ -581,7 +568,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @return string
 	 */
-	public function get_nonce_value() {
+	protected function get_nonce_value() {
 		return wp_create_nonce( $this->get_nonce_name() );
 	}
 
