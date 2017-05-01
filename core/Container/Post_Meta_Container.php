@@ -233,7 +233,7 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param int $post_id
 	 **/
-	public function set_post_id( $post_id ) {
+	protected function set_post_id( $post_id ) {
 		$this->post_id = $post_id;
 		$this->get_datastore()->set_id( $post_id );
 	}
@@ -409,11 +409,10 @@ class Post_Meta_Container extends Container {
 	 * Sets the meta box container context
 	 *
 	 * @see https://codex.wordpress.org/Function_Reference/add_meta_box
-	 * @param string $context ('normal', 'advanced' or 'side')
+	 * @param string $context ('normal', 'advanced', 'side' or the custom `carbon_fields_after_title`)
 	 */
 	public function set_context( $context ) {
 		$this->settings['panel_context'] = $context;
-
 		return $this;
 	}
 
@@ -425,7 +424,6 @@ class Post_Meta_Container extends Container {
 	 */
 	public function set_priority( $priority ) {
 		$this->settings['panel_priority'] = $priority;
-
 		return $this;
 	}
 }
