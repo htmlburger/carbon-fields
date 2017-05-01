@@ -34,7 +34,7 @@ class Sidebar_Field extends Select_Field {
 	 * @param  array $sidebars
 	 * @return Field $this
 	 */
-	public function exclude_sidebars( $sidebars ) {
+	public function set_excluded_sidebars( $sidebars ) {
 		$this->excluded_sidebars = $sidebars;
 		return $this;
 	}
