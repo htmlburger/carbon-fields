@@ -70,7 +70,7 @@ class User_Meta_Container extends Container {
 			$field->save();
 		}
 
-		do_action( 'carbon_after_save_user_meta', $user_id );
+		do_action( 'carbon_fields_user_meta_container_saved', $user_id, $this );
 	}
 
 	/**

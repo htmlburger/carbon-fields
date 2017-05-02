@@ -18,7 +18,7 @@ window.carbon = window.carbon || {};
 			method: 'POST',
 			dataType: 'json',
 			data: {
-				action: 'carbon_' + action + '_sidebar',
+				action: 'carbon_fields_' + action + '_sidebar',
 				name: name
 			}
 		});

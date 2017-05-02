@@ -57,14 +57,14 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 	 * Enable the service
 	 */
 	protected function enabled() {
-		add_filter( 'crb_datastore_storage_array', array( $this, 'filter_storage_array' ), 10, 3 );
+		add_filter( 'carbon_fields_datastore_storage_array', array( $this, 'filter_storage_array' ), 10, 3 );
 	}
 
 	/**
 	 * Disable the service
 	 */
 	protected function disabled() {
-		remove_filter( 'crb_datastore_storage_array', array( $this, 'filter_storage_array' ), 10 );
+		remove_filter( 'carbon_fields_datastore_storage_array', array( $this, 'filter_storage_array' ), 10 );
 	}
 
 	/**

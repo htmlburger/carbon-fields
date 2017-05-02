@@ -41,7 +41,7 @@ class Loader {
 
 		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
-		add_action( 'carbon_after_register_fields', array( $this, 'initialize_containers' ) );
+		add_action( 'carbon_fields_fields_registered', array( $this, 'initialize_containers' ) );
 		add_action( 'admin_print_footer_scripts', array( $this, 'enqueue_scripts' ), 0 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data_script' ), 9 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_bootstrap_js' ), 100 );
@@ -76,8 +76,8 @@ class Loader {
 	 */
 	public function trigger_fields_register() {
 		try {
-			do_action( 'carbon_register_fields' );
-			do_action( 'carbon_after_register_fields' );
+			do_action( 'carbon_fields_register_fields' );
+			do_action( 'carbon_fields_fields_registered' );
 		} catch ( Incorrect_Syntax_Exception $e ) {
 			$callback = '';
 			foreach ( $e->getTrace() as $trace ) {

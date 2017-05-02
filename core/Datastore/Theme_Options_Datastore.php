@@ -33,7 +33,7 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 			ORDER BY `option_name` ASC
 		' );
 
-		$storage_array = apply_filters( 'crb_datastore_storage_array', $storage_array, $this, $storage_key_patterns );
+		$storage_array = apply_filters( 'carbon_fields_datastore_storage_array', $storage_array, $this, $storage_key_patterns );
 
 		return $storage_array;
 	}

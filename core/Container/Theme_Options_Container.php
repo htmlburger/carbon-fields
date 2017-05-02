@@ -101,7 +101,7 @@ class Theme_Options_Container extends Container {
 			$this->errors[] = $e->getMessage();
 		}
 
-		do_action( 'carbon_after_save_theme_options', $user_data );
+		do_action( 'carbon_fields_theme_options_container_saved', $user_data, $this );
 
 		if ( ! headers_sent() ) {
 			wp_redirect( add_query_arg( array( 'settings-updated' => 'true' ) ) );

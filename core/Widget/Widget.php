@@ -64,7 +64,7 @@ abstract class Widget extends \WP_Widget {
 		$this->add_fields( $fields );
 
 		# Generate Widget ID
-		$widget_id = 'carbon_widget_' . preg_replace( '~\s+~', '_', strtolower( trim( preg_replace( '/[^a-zA-Z0-9]+/u', '', remove_accents( $title ) ) ) ) );
+		$widget_id = 'carbon_fields_widget_' . preg_replace( '~\s+~', '_', strtolower( trim( preg_replace( '/[^a-zA-Z0-9]+/u', '', remove_accents( $title ) ) ) ) );
 
 		$this->register_widget_id( $widget_id );
 

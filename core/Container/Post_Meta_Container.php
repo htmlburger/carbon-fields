@@ -107,8 +107,7 @@ class Post_Meta_Container extends Container {
 			$field->save();
 		}
 
-		do_action( 'carbon_after_save_custom_fields', $post_id );
-		do_action( 'carbon_after_save_post_meta', $post_id );
+		do_action( 'carbon_fields_post_meta_container_saved', $post_id, $this );
 	}
 
 	/**

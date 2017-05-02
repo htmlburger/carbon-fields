@@ -63,7 +63,7 @@ class Gravity_Form_Field extends Select_Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
-		$this->set_options( apply_filters( 'crb_gravity_form_options', $this->get_options() ) );
+		$this->set_options( apply_filters( 'carbon_fields_gravity_form_options', $this->get_options() ) );
 
 		$field_data = array_merge( $field_data, array(
 			'options' => $this->parse_options( $this->get_options() ),

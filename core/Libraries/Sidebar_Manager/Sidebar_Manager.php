@@ -19,7 +19,7 @@ class Sidebar_Manager {
 
 		// Set the default options
 		if ( function_exists( 'crb_get_default_sidebar_options' ) ) {
-			add_filter( 'carbon_custom_sidebar_default_options', 'crb_get_default_sidebar_options', -1 );
+			add_filter( 'carbon_fields_custom_sidebar_default_options', 'crb_get_default_sidebar_options', -1 );
 		}
 
 		// Ajax listeners
@@ -71,11 +71,11 @@ class Sidebar_Manager {
 
 		$result = new \WP_Error( 'unknown-action', __( 'Unknown action attempted.', 'carbon-fields' ) );
 		switch ( $action ) {
-			case 'carbon_add_sidebar':
+			case 'carbon_fields_add_sidebar':
 				$result = $this->add_sidebar( $name );
 				break;
 
-			case 'carbon_remove_sidebar':
+			case 'carbon_fields_remove_sidebar':
 				$result = $this->remove_sidebar( $name );
 				break;
 		}
@@ -159,12 +159,12 @@ class Sidebar_Manager {
 	 */
 	public function register_sidebars() {
 		$registered_sidebars = $this->get_sidebars();
-		$default_options = apply_filters( 'carbon_custom_sidebar_default_options', array() );
+		$default_options = apply_filters( 'carbon_fields_custom_sidebar_default_options', array() );
 
 		foreach ( $registered_sidebars as $id => $options ) {
 			$options['class'] = 'carbon-sidebar';
 			$options = wp_parse_args( $options, $default_options );
-			$options = apply_filters( 'carbon_custom_sidebar_options', $options, $id );
+			$options = apply_filters( 'carbon_fields_custom_sidebar_options', $options, $id );
 
 			register_sidebar( $options );
 		}

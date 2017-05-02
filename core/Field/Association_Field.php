@@ -188,7 +188,7 @@ class Association_Field extends Field {
 		}
 
 		if ( $type === 'comment' ) {
-			$max = apply_filters( 'carbon_association_comment_length', 30, $this->get_name() );
+			$max = apply_filters( 'carbon_fields_association_field_comment_length', 30, $this->get_name() );
 			if ( strlen( $title ) > $max ) {
 				$title = substr( $title, 0, $max ) . '...';
 			}
@@ -203,7 +203,7 @@ class Association_Field extends Field {
 		 * @param string $type    Item type (post, term, user, comment, or a custom one).
 		 * @param string $subtype Subtype - "page", "post", "category", etc.
 		 */
-		$title = apply_filters( 'carbon_association_title', $title, $this->get_name(), $id, $type, $subtype );
+		$title = apply_filters( 'carbon_fields_association_field_title', $title, $this->get_name(), $id, $type, $subtype );
 
 		if ( ! $title ) {
 			$title = '(no title) - ID: ' . $id;
@@ -242,7 +242,7 @@ class Association_Field extends Field {
 		 * @param string $type    Item type (post, term, user, comment, or a custom one).
 		 * @param string $subtype Subtype - "page", "post", "category", etc.
 		 */
-		return apply_filters( 'carbon_association_item_label', $label, $this->get_name(), $id, $type, $subtype );
+		return apply_filters( 'carbon_fields_association_field_item_label', $label, $this->get_name(), $id, $type, $subtype );
 	}
 
 	/**
@@ -256,7 +256,7 @@ class Association_Field extends Field {
 		 *
 		 * @param array $args The parameters, passed to get_posts().
 		 */
-		$filter_name = 'carbon_association_options_' . $this->get_name() . '_' . $type['type'] . '_' . $type['post_type'];
+		$filter_name = 'carbon_fields_association_field_options_' . $this->get_name() . '_' . $type['type'] . '_' . $type['post_type'];
 		$args = apply_filters( $filter_name, array(
 			'post_type' => $type['post_type'],
 			'posts_per_page' => -1,
@@ -291,7 +291,7 @@ class Association_Field extends Field {
 		 *
 		 * @param array $args The parameters, passed to get_terms().
 		 */
-		$filter_name = 'carbon_association_options_' . $this->get_name() . '_' . $type['type'] . '_' . $type['taxonomy'];
+		$filter_name = 'carbon_fields_association_field_options_' . $this->get_name() . '_' . $type['type'] . '_' . $type['taxonomy'];
 		$args = apply_filters( $filter_name, array(
 			'hide_empty' => 0,
 			'fields' => 'id=>name',
@@ -324,7 +324,7 @@ class Association_Field extends Field {
 		 *
 		 * @param array $args The parameters, passed to get_users().
 		 */
-		$filter_name = 'carbon_association_options_' . $this->get_name() . '_' . $type['type'];
+		$filter_name = 'carbon_fields_association_field_options_' . $this->get_name() . '_' . $type['type'];
 		$args = apply_filters( $filter_name, array(
 			'fields' => 'ID',
 		) );
@@ -356,7 +356,7 @@ class Association_Field extends Field {
 		 *
 		 * @param array $args The parameters, passed to get_comments().
 		 */
-		$filter_name = 'carbon_association_options_' . $this->get_name() . '_' . $type['type'];
+		$filter_name = 'carbon_fields_association_field_options_' . $this->get_name() . '_' . $type['type'];
 		$args = apply_filters( $filter_name, array(
 			'fields' => 'ids',
 		) );
@@ -399,7 +399,7 @@ class Association_Field extends Field {
 		 * @param array $options Unfiltered options items.
 		 * @param string $name Name of the association field.
 		 */
-		$options = apply_filters( 'carbon_association_options', $options, $this->get_name() );
+		$options = apply_filters( 'carbon_fields_association_field_options', $options, $this->get_name() );
 
 		return $options;
 	}

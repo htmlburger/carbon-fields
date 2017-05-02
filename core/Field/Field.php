@@ -280,7 +280,7 @@ class Field implements Datastore_Holder_Interface {
 		add_action( 'admin_print_footer_scripts', array( get_class(), 'admin_hook_styles' ), 5 );
 		add_action( 'admin_print_footer_scripts', array( get_class( $this ), 'admin_enqueue_scripts' ), 5 );
 
-		do_action( 'crb_field_activated', $this );
+		do_action( 'carbon_fields_field_activated', $this );
 	}
 
 	/**

@@ -51,7 +51,7 @@ class Nav_Menu_Item_Container extends Container {
 		// Only the base container should register for updating/rendering
 		if ( $menu_item_id === 0 ) {
 			add_action( 'wp_update_nav_menu_item', array( $this, 'update' ), 10, 3 );
-			add_action( 'crb_print_carbon_container_nav_menu_item_fields_html', array( $this, 'form' ), 10, 5 );
+			add_action( 'carbon_fields_print_nav_menu_item_container_fields', array( $this, 'form' ), 10, 5 );
 		}
 
 		return $this;
@@ -81,7 +81,7 @@ class Nav_Menu_Item_Container extends Container {
 			$field->save();
 		}
 
-		do_action( 'carbon_after_save_nav_menu_item', $this );
+		do_action( 'carbon_fields_nav_menu_item_saved', $this );
 	}
 
 	/**

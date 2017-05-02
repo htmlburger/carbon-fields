@@ -212,7 +212,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	protected function activate() {
 		$this->active = true;
 		$this->boot();
-		do_action( 'crb_container_activated', $this );
+		do_action( 'carbon_fields_container_activated', $this );
 
 		$fields = $this->get_fields();
 		foreach ( $fields as $field ) {
@@ -560,7 +560,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return string
 	 */
 	protected function get_nonce_name() {
-		return 'carbon_panel_' . $this->id . '_nonce';
+		return 'carbon_fields_container_' . $this->id . '_nonce';
 	}
 
 	/**

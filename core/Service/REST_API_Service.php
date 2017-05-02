@@ -37,14 +37,14 @@ class REST_API_Service extends Service {
 	 * Enable REST API integration
 	 */
 	protected function enabled() {
-		add_action( 'carbon_after_register_fields', array( $this, 'boot' ) );
+		add_action( 'carbon_fields_fields_registered', array( $this, 'boot' ) );
 	}
 
 	/**
 	 * Disable REST API integration
 	 */
 	protected function disabled() {
-		remove_action( 'carbon_after_register_fields', array( $this, 'boot' ) );
+		remove_action( 'carbon_fields_fields_registered', array( $this, 'boot' ) );
 	}
 
 	/**
