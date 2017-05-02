@@ -3,6 +3,7 @@
     "description": "WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options and more.",
     "license": "GPL-2.0",
     "homepage": "http://carbonfields.net/",
+    "type": "carbon-field-library",
     "authors": [
         {
             "name": "htmlBurger",
