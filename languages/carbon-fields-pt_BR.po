@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Carbon Fields\n"
-"POT-Creation-Date: 2017-04-21 17:42+0300\n"
-"PO-Revision-Date: 2017-04-21 17:43+0300\n"
+"POT-Creation-Date: 2017-05-02 12:39+0300\n"
+"PO-Revision-Date: 2017-05-02 12:41+0300\n"
 "Last-Translator: Elvis Henrique Pereira <elvishp2006@gmail.com>\n"
 "Language-Team: Elvis Henrique Pereira <elvishp2006@gmail.com>\n"
 "Language: pt_BR\n"
@@ -24,11 +24,11 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-4: tmp\n"
 "X-Poedit-SearchPathExcluded-5: vendor\n"
 
-#: core/Container/Container.php:672
+#: core/Container/Container.php:664
 msgid "General"
 msgstr "Geral"
 
-#: core/Container/Theme_Options_Container.php:180
+#: core/Container/Theme_Options_Container.php:204
 msgid "Settings saved."
 msgstr "Configurações salvas."
 
@@ -40,7 +40,7 @@ msgstr "Selecione o arquivo"
 msgid "Files"
 msgstr "Arquivos"
 
-#: core/Field/Footer_Scripts_Field.php:14
+#: core/Field/Footer_Scripts_Field.php:15
 msgid ""
 "If you need to add scripts to your footer (like Google Analytics tracking "
 "code), you should enter them in this box."
@@ -48,11 +48,11 @@ msgstr ""
 "Se você precisar adicionar scripts ao seu rodapé (como o código de "
 "acompanhamento do Google Analytics), insira-os nesta caixa."
 
-#: core/Field/Gravity_Form_Field.php:44
+#: core/Field/Gravity_Form_Field.php:47
 msgid "No form"
 msgstr "Nenhum formulário"
 
-#: core/Field/Header_Scripts_Field.php:14
+#: core/Field/Header_Scripts_Field.php:15
 msgid "If you need to add scripts to your header, you should enter them here."
 msgstr ""
 "Se você precisar adicionar scripts ao seu cabeçalho, você deve inseri-los "
@@ -66,7 +66,7 @@ msgstr "Selecionar imagem"
 msgid "Images"
 msgstr "Imagens"
 
-#: core/Field/Sidebar_Field.php:34
+#: core/Field/Sidebar_Field.php:50
 msgctxt "sidebar"
 msgid "Add New"
 msgstr "Adicionar nova"

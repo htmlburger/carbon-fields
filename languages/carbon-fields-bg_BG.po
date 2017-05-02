@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Carbon Fields\n"
-"POT-Creation-Date: 2017-04-21 17:42+0300\n"
-"PO-Revision-Date: 2017-04-21 17:43+0300\n"
+"POT-Creation-Date: 2017-05-02 12:39+0300\n"
+"PO-Revision-Date: 2017-05-02 12:40+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: bg\n"
@@ -24,11 +24,11 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-4: tmp\n"
 "X-Poedit-SearchPathExcluded-5: vendor\n"
 
-#: core/Container/Container.php:672
+#: core/Container/Container.php:664
 msgid "General"
 msgstr "Основни"
 
-#: core/Container/Theme_Options_Container.php:180
+#: core/Container/Theme_Options_Container.php:204
 msgid "Settings saved."
 msgstr "Настройките бяха запазени."
 
@@ -40,7 +40,7 @@ msgstr "Избор на файл"
 msgid "Files"
 msgstr "Файлове"
 
-#: core/Field/Footer_Scripts_Field.php:14
+#: core/Field/Footer_Scripts_Field.php:15
 msgid ""
 "If you need to add scripts to your footer (like Google Analytics tracking "
 "code), you should enter them in this box."
@@ -48,11 +48,11 @@ msgstr ""
 "Ако искате да добавите скриптове към долния колонтитул (като Google "
 "Analytics проследяващ код), може да ги въведете в това поле."
 
-#: core/Field/Gravity_Form_Field.php:44
+#: core/Field/Gravity_Form_Field.php:47
 msgid "No form"
 msgstr "Никаква форма"
 
-#: core/Field/Header_Scripts_Field.php:14
+#: core/Field/Header_Scripts_Field.php:15
 msgid "If you need to add scripts to your header, you should enter them here."
 msgstr ""
 "Ако искате да добавите скриптове към горния колонтитул, може да ги въведете "
@@ -66,7 +66,7 @@ msgstr "Избор на картинка"
 msgid "Images"
 msgstr "Картинки"
 
-#: core/Field/Sidebar_Field.php:34
+#: core/Field/Sidebar_Field.php:50
 msgctxt "sidebar"
 msgid "Add New"
 msgstr "Добавяне на нова"
