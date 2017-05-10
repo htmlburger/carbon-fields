@@ -110,7 +110,7 @@ export const enhance = compose(
 			const { value } = instance._input;
 
 			if (value) {
-				if (value !== _selectedDateStr) {
+				if (_selectedDateStr && value !== _selectedDateStr) {
 					instance.setDate(value, true);
 				}
 			} else {
