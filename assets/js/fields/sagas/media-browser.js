@@ -39,8 +39,9 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 		yield put(updateField(field.id, {
 			file_type: attachment.type,
 			file_name: attachment.filename,
+			file_url: attachment.url,
 			thumb_url: thumbnail || field.default_thumb_url,
-			value: attachment[field.value_type],
+			value: attachment.id,
 		}));
 	}
 }

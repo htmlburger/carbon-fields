@@ -61,6 +61,7 @@ class File_Field extends Field {
 		$field_data = parent::to_json( $load );
 
 		$thumb_url = '';
+		$url = '';
 		$default_thumb_url = includes_url( '/images/media/default.png' );
 		$file_ext = '';
 		$file_name = '';
@@ -93,6 +94,7 @@ class File_Field extends Field {
 			'file_ext' => $file_ext,
 			'file_type' => $file_type,
 			'file_name' => $file_name,
+			'file_url' => $url,
 			'button_label' => $this->button_label,
 			'window_button_label' => $this->window_button_label,
 			'window_label' => $this->window_label,

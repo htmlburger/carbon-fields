@@ -24,9 +24,6 @@ import { TYPE_FILE, TYPE_IMAGE, VALIDATION_BASE } from 'fields/constants';
  * @param  {Function}      props.openBrowser
  * @param  {Function}      props.clearSelection
  * @return {React.Element}
- *
- * TODO: Replace the inline `style` with a class.
- * TODO: Add support for URL.
  */
 export const FileField = ({
 	name,
@@ -37,14 +34,12 @@ export const FileField = ({
 	return <Field field={field}>
 		<div className="carbon-attachment">
 			<input
-				type="text"
-				className="regular-text carbon-file-field"
+				type="hidden"
 				id={field.id}
 				name={name}
 				value={field.value}
-				style={field.value_type === 'id' ? { display: 'none' } : {}}
 				disabled={!field.ui.is_visible}
-				onChange={() => {}} />
+				readOnly />
 
 			<div className={cx('carbon-description', { 'hidden': !field.value })}>
 				<div className={cx('carbon-attachment-preview', { 'hidden': !field.thumb_url })}>
@@ -53,7 +48,11 @@ export const FileField = ({
 					<div className="carbon-file-remove dashicons-before dashicons-no-alt" onClick={clearSelection}></div>
 				</div>
 
-				<div className="carbon-attachment-file-name">{field.file_name}</div>
+				<input
+					type="text"
+					className="carbon-attachment-file-name"
+					value={field.file_url}
+					readOnly />
 			</div>
 
 			<span className="button c2_open_media" onClick={openBrowser}>
@@ -131,6 +130,7 @@ export const enhance = compose(
 			updateField(field.id, {
 				value: '',
 				file_name: '',
+				file_url: '',
 				thumb_url: ''
 			});
 		},
