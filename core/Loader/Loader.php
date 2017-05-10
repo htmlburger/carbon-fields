@@ -42,6 +42,7 @@ class Loader {
 		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
 		add_action( 'carbon_fields_fields_registered', array( $this, 'initialize_containers' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_media_browser' ), 0 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'enqueue_scripts' ), 0 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data_script' ), 9 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_bootstrap_js' ), 100 );
@@ -92,6 +93,13 @@ class Loader {
 	 */
 	public function initialize_containers() {
 		$this->container_repository->initialize_containers();
+	}
+
+	/**
+	 * Initialize the media browser.
+	 */
+	public function enqueue_media_browser() {
+		wp_enqueue_media();
 	}
 
 	/**
@@ -149,7 +157,7 @@ class Loader {
 	 */
 	public function add_carbon_fields_meta_box_contexts() {
 		global $post, $wp_meta_boxes;
-		
+
 		$context = 'carbon_fields_after_title';
 		foreach ( $wp_meta_boxes as $post_type => $meta_boxes ) {
 			if ( empty( $meta_boxes[ $context ] ) ) {
