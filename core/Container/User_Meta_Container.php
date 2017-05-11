@@ -199,7 +199,7 @@ class User_Meta_Container extends Container {
 	 */
 	public function show_on_user_role( $role ) {
 		$roles = is_array( $role ) ? $role : array( $role );
-		$this->and_when( 'user_role', 'IN', $roles );
+		$this->when( 'user_role', 'IN', $roles );
 		return $this;
 	}
 }

@@ -131,19 +131,6 @@ class Fulfillable_Collection implements Fulfillable {
 	}
 	
 	/**
-	 * Shorthand for when with AND comparison
-	 * 
-	 * @param  string|array|callable  $condition_type
-	 * @param  string                 $comparison_operator Can be skipped. Defaults to "="
-	 * @param  mixed                  $value
-	 * @return Fulfillable_Collection $this
-	 */
-	public function and_when( $condition_type, $comparison_operator = '=', $value = null ) {
-		$this->when( $condition_type, $comparison_operator, $value, 'AND' );
-		return $this;
-	}
-	
-	/**
 	 * Shorthand for when with OR comparison
 	 * 
 	 * @param  string|array|callable  $condition_type

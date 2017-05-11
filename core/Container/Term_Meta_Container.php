@@ -202,7 +202,7 @@ class Term_Meta_Container extends Container {
 	 */
 	public function show_on_taxonomy( $taxonomies ) {
 		$taxonomies = is_array( $taxonomies ) ? $taxonomies : array( $taxonomies );
-		$this->and_when( 'term_taxonomy', 'IN', $taxonomies );
+		$this->when( 'term_taxonomy', 'IN', $taxonomies );
 		return $this;
 	}
 
@@ -214,7 +214,7 @@ class Term_Meta_Container extends Container {
 	 * @return object $this
 	 */
 	public function show_on_level( $term_level ) {
-		$this->and_when( 'term_level', '=', intval( $term_level ) );
+		$this->when( 'term_level', '=', intval( $term_level ) );
 		return $this;
 	}
 }

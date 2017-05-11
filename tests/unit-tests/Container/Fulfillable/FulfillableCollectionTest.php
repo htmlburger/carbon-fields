@@ -28,7 +28,6 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::when
-	 * @covers ::and_when
 	 * @covers ::or_when
 	 * @covers ::is_fulfilled
 	 */

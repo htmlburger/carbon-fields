@@ -811,17 +811,6 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Proxy function to set attachment conditions
 	 *
-	 * @see    Fulfillable_Collection::and_when()
-	 * @return Container $this
-	 */
-	public function and_when() {
-		call_user_func_array( array( $this->condition_collection, 'and_when' ), func_get_args() );
-		return $this;
-	}
-
-	/**
-	 * Proxy function to set attachment conditions
-	 *
 	 * @see    Fulfillable_Collection::or_when()
 	 * @return Container $this
 	 */
