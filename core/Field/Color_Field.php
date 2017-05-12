@@ -14,13 +14,6 @@ class Color_Field extends Field {
 	protected $palette = array();
 
 	/**
-	 * Hook administration scripts and styles.
-	 */
-	public static function admin_enqueue_scripts() {
-		wp_enqueue_style( 'wp-color-picker' );
-	}
-
-	/**
 	 * Set color presets
 	 *
 	 * @param array<string> $palette
