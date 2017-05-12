@@ -131,15 +131,15 @@ class Fulfillable_Collection implements Fulfillable {
 	}
 	
 	/**
-	 * Shorthand for when with OR comparison
+	 * Shorthand for where with OR comparison
 	 * 
 	 * @param  string|array|callable  $condition_type
 	 * @param  string                 $comparison_operator Can be skipped. Defaults to "="
 	 * @param  mixed                  $value
 	 * @return Fulfillable_Collection $this
 	 */
-	public function or_when( $condition_type, $comparison_operator = '=', $value = null ) {
-		$this->when( $condition_type, $comparison_operator, $value, 'OR' );
+	public function or_where( $condition_type, $comparison_operator = '=', $value = null ) {
+		$this->where( $condition_type, $comparison_operator, $value, 'OR' );
 		return $this;
 	}
 
@@ -153,13 +153,13 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @param  string                 $fulfillable_comparison
 	 * @return Fulfillable_Collection $this
 	 */
-	public function when( $condition_type, $comparison_operator = '=', $value = null, $fulfillable_comparison = 'AND' ) {
+	public function where( $condition_type, $comparison_operator = '=', $value = null, $fulfillable_comparison = 'AND' ) {
 		if ( is_array( $condition_type ) ) {
-			return $this->when_array( $condition_type, $fulfillable_comparison );
+			return $this->where_array( $condition_type, $fulfillable_comparison );
 		}
 
 		if ( is_callable( $condition_type ) ) {
-			return $this->when_collection( $condition_type, $fulfillable_comparison );
+			return $this->where_collection( $condition_type, $fulfillable_comparison );
 		}
 
 		if ( ! $this->is_condition_type_allowed( $condition_type ) ) {
@@ -187,7 +187,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @param  string                 $fulfillable_comparison
 	 * @return Fulfillable_Collection $this
 	 */
-	protected function when_array( $fulfillable_as_array, $fulfillable_comparison) {
+	protected function where_array( $fulfillable_as_array, $fulfillable_comparison) {
 		$fulfillable = $this->array_translator->foreign_to_fulfillable( $fulfillable_as_array );
 		$this->add_fulfillable( $fulfillable, $fulfillable_comparison );
 		return $this;
@@ -200,7 +200,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @param  string                 $fulfillable_comparison
 	 * @return Fulfillable_Collection $this
 	 */
-	protected function when_collection( $collection_callable, $fulfillable_comparison) {
+	protected function where_collection( $collection_callable, $fulfillable_comparison) {
 		$collection = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
 		$collection->set_condition_type_list( $this->get_condition_type_list(), $this->is_condition_type_list_whitelist() );
 		$collection_callable( $collection );

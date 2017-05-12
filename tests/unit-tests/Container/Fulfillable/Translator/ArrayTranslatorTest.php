@@ -106,8 +106,8 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 	 */
 	public function testFulfillableToForeignWithCollection() {
 		$fulfillable = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
-		$fulfillable->when( 'post_type', '!=', 'post' );
-		$fulfillable->when( 'post_id', '!=', 1 );
+		$fulfillable->where( 'post_type', '!=', 'post' );
+		$fulfillable->where( 'post_id', '!=', 1 );
 
 		$expected = array(
 			'relation' => 'AND',
@@ -131,8 +131,8 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 	 */
 	public function testForeignToFulfillableWithCollection() {
 		$fulfillable = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
-		$fulfillable->when( 'post_type', '!=', 'post' );
-		$fulfillable->when( 'post_id', '!=', 1 );
+		$fulfillable->where( 'post_type', '!=', 'post' );
+		$fulfillable->where( 'post_id', '!=', 1 );
 
 		$expected = $fulfillable;
 		$received = $this->subject->foreign_to_fulfillable( array(
@@ -156,10 +156,10 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 	 */
 	public function testFulfillableToForeignWithNestedCollection() {
 		$fulfillable = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
-		$fulfillable->when( 'post_type', '!=', 'post' );
-		$fulfillable->when( function( $c ) {
-			$c->when( 'post_id', '!=', 1 );
-			$c->or_when( 'post_id', '!=', 2 );
+		$fulfillable->where( 'post_type', '!=', 'post' );
+		$fulfillable->where( function( $c ) {
+			$c->where( 'post_id', '!=', 1 );
+			$c->or_where( 'post_id', '!=', 2 );
 		} );
 
 		$expected = array(
@@ -198,10 +198,10 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 	 */
 	public function testForeignToFulfillableWithNestedCollection() {
 		$fulfillable = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
-		$fulfillable->when( 'post_type', '!=', 'post' );
-		$fulfillable->when( function( $c ) {
-			$c->or_when( 'post_id', '!=', 1 );
-			$c->or_when( 'post_id', '!=', 2 );
+		$fulfillable->where( 'post_type', '!=', 'post' );
+		$fulfillable->where( function( $c ) {
+			$c->or_where( 'post_id', '!=', 1 );
+			$c->or_where( 'post_id', '!=', 2 );
 		} );
 
 		$expected = $fulfillable;

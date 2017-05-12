@@ -800,22 +800,22 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Proxy function to set attachment conditions
 	 *
-	 * @see    Fulfillable_Collection::when()
+	 * @see    Fulfillable_Collection::where()
 	 * @return Container $this
 	 */
-	public function when() {
-		call_user_func_array( array( $this->condition_collection, 'when' ), func_get_args() );
+	public function where() {
+		call_user_func_array( array( $this->condition_collection, 'where' ), func_get_args() );
 		return $this;
 	}
 
 	/**
 	 * Proxy function to set attachment conditions
 	 *
-	 * @see    Fulfillable_Collection::or_when()
+	 * @see    Fulfillable_Collection::or_where()
 	 * @return Container $this
 	 */
-	public function or_when() {
-		call_user_func_array( array( $this->condition_collection, 'or_when' ), func_get_args() );
+	public function or_where() {
+		call_user_func_array( array( $this->condition_collection, 'or_where' ), func_get_args() );
 		return $this;
 	}
 }

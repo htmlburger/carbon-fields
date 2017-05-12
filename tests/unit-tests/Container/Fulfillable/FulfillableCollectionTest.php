@@ -27,52 +27,52 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::when
-	 * @covers ::or_when
+	 * @covers ::where
+	 * @covers ::or_where
 	 * @covers ::is_fulfilled
 	 */
-	public function testWhenWithBasicArgumentsIsFulfilled() {
-		$this->subject->when( 'post_type', '=', 'post' );
+	public function testWhereWithBasicArgumentsIsFulfilled() {
+		$this->subject->where( 'post_type', '=', 'post' );
 		$environment = array( 'post_type' => 'post' );
 		$this->assertTrue( $this->subject->is_fulfilled( $environment ) );
 	}
 
 	/**
-	 * @covers ::when
+	 * @covers ::where
 	 * @covers ::is_fulfilled
 	 */
-	public function testWhenWithBasicArgumentsIsNotFulfilled() {
-		$this->subject->when( 'post_type', '=', 'post' );
+	public function testWhereWithBasicArgumentsIsNotFulfilled() {
+		$this->subject->where( 'post_type', '=', 'post' );
 		$environment = array( 'post_type' => 'page' );
 		$this->assertFalse( $this->subject->is_fulfilled( $environment ) );
 	}
 
 	/**
-	 * @covers ::when
+	 * @covers ::where
 	 * @covers ::is_fulfilled
 	 */
-	public function testWhenWithSkippedComparerIsFulfilled() {
-		$this->subject->when( 'post_type', 'post' );
+	public function testWhereWithSkippedComparerIsFulfilled() {
+		$this->subject->where( 'post_type', 'post' );
 		$environment = array( 'post_type' => 'post' );
 		$this->assertTrue( $this->subject->is_fulfilled( $environment ) );
 	}
 
 	/**
-	 * @covers ::when
+	 * @covers ::where
 	 * @covers ::is_fulfilled
 	 */
-	public function testWhenWithSkippedComparerIsNotFulfilled() {
-		$this->subject->when( 'post_type', 'post' );
+	public function testWhereWithSkippedComparerIsNotFulfilled() {
+		$this->subject->where( 'post_type', 'post' );
 		$environment = array( 'post_type' => 'page' );
 		$this->assertFalse( $this->subject->is_fulfilled( $environment ) );
 	}
 
 	/**
-	 * @covers ::when
+	 * @covers ::where
 	 * @covers ::is_fulfilled
 	 */
-	public function testWhenWithArrayArgumentsIsFulfilled() {
-		$this->subject->when( array(
+	public function testWhereWithArrayArgumentsIsFulfilled() {
+		$this->subject->where( array(
 			array(
 				'type' => 'post_type',
 				'value' => 'post',
@@ -83,11 +83,11 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::when
+	 * @covers ::where
 	 * @covers ::is_fulfilled
 	 */
-	public function testWhenWithArrayArgumentsIsNotFulfilled() {
-		$this->subject->when( array(
+	public function testWhereWithArrayArgumentsIsNotFulfilled() {
+		$this->subject->where( array(
 			array(
 				'type' => 'post_type',
 				'value' => 'post',
@@ -98,36 +98,36 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::when
+	 * @covers ::where
 	 * @covers ::is_fulfilled
 	 */
-	public function testWhenWithCallableIsFulfilled() {
-		$this->subject->when( function( $c ) {
-			$c->when( 'post_type', 'post' );
+	public function testWhereWithCallableIsFulfilled() {
+		$this->subject->where( function( $c ) {
+			$c->where( 'post_type', 'post' );
 		} );
 		$environment = array( 'post_type' => 'post' );
 		$this->assertTrue( $this->subject->is_fulfilled( $environment ) );
 	}
 
 	/**
-	 * @covers ::when
+	 * @covers ::where
 	 * @covers ::is_fulfilled
 	 */
-	public function testWhenWithCallableIsNotFulfilled() {
-		$this->subject->when( function( $c ) {
-			$c->when( 'post_type', 'post' );
+	public function testWhereWithCallableIsNotFulfilled() {
+		$this->subject->where( function( $c ) {
+			$c->where( 'post_type', 'post' );
 		} );
 		$environment = array( 'post_type' => 'page' );
 		$this->assertFalse( $this->subject->is_fulfilled( $environment ) );
 	}
 
 	/**
-	 * @covers ::when
+	 * @covers ::where
 	 * @covers ::is_fulfilled
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 */
-	public function testWhenWithUnsupportedConditionTypeThrowsException() {
-		$this->subject->when( 'unsupported_condition_type', 'post' );
+	public function testWhereWithUnsupportedConditionTypeThrowsException() {
+		$this->subject->where( 'unsupported_condition_type', 'post' );
 	}
 
 	/**
@@ -162,8 +162,8 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	 * @covers ::filter
 	 */
 	public function testFilterRemovesUnlistedConditionTypes() {
-		$this->subject->when( 'post_id', 1 );
-		$this->subject->when( 'post_type', 'post' );
+		$this->subject->where( 'post_id', 1 );
+		$this->subject->where( 'post_type', 'post' );
 
 		$filtered = $this->subject->filter( array( 'post_type' ) );
 		$this->assertTrue( count( $filtered->get_fulfillables() ) === 1, 'Filtered collection should contain 1 fulfillable only' );
@@ -174,11 +174,11 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	 * @covers ::filter
 	 */
 	public function testFilterRemovesUnlistedConditionTypesRecursively() {
-		$this->subject->when( 'post_type', 'post' );
-		$this->subject->when( function( $c ) {
-			$c->when( 'post_id', 1 );
-			$c->when( function( $c ) {
-				$c->when( 'post_id', 1 );
+		$this->subject->where( 'post_type', 'post' );
+		$this->subject->where( function( $c ) {
+			$c->where( 'post_id', 1 );
+			$c->where( function( $c ) {
+				$c->where( 'post_id', 1 );
 			} );
 		} );
 
@@ -191,8 +191,8 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	 * @covers ::evaluate
 	 */
 	public function testEvaluateReplacesFulfilledConditionsWithBooleanTrue() {
-		$this->subject->when( 'post_id', 1 );
-		$this->subject->when( 'post_template', 'default' );
+		$this->subject->where( 'post_id', 1 );
+		$this->subject->where( 'post_template', 'default' );
 
 		$evaluated = $this->subject->evaluate( array( 'post_id' ), array( 'post_id' => 1 ) );
 		$ef = $evaluated->get_fulfillables();
@@ -221,8 +221,8 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	 * @covers ::evaluate
 	 */
 	public function testEvaluateReplacesFailingConditionsWithBooleanFalse() {
-		$this->subject->when( 'post_id', 1 );
-		$this->subject->when( 'post_template', 'default' );
+		$this->subject->where( 'post_id', 1 );
+		$this->subject->where( 'post_template', 'default' );
 
 		$evaluated = $this->subject->evaluate( array( 'post_id' ), array( 'post_id' => 2 ) );
 		$ef = $evaluated->get_fulfillables();
@@ -251,8 +251,8 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	 * @covers ::evaluate
 	 */
 	public function testEvaluateReplacesComparisonOperatorForBoolean() {
-		$this->subject->when( 'post_id', '>', 1 );
-		$this->subject->when( 'post_template', 'default' );
+		$this->subject->where( 'post_id', '>', 1 );
+		$this->subject->where( 'post_template', 'default' );
 
 		$evaluated = $this->subject->evaluate( array( 'post_id' ), array( 'post_id' => 1 ) );
 		$ef = $evaluated->get_fulfillables();
@@ -292,7 +292,7 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	 * @covers ::is_fulfilled
 	 */
 	public function testIsFulfilledWithSingleConditionWhenAllConditionsAreFulfilled() {
-		$this->subject->when( 'post_type', 'post' );
+		$this->subject->where( 'post_type', 'post' );
 		$environment = array( 'post_type' => 'post' );
 		$this->assertTrue( $this->subject->is_fulfilled( $environment ) );
 	}
@@ -301,8 +301,8 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	 * @covers ::is_fulfilled
 	 */
 	public function testIsFulfilledWithMultipleConditionsWhenAllConditionsAreFulfilled() {
-		$this->subject->when( 'post_type', 'post' );
-		$this->subject->when( 'post_id', 1 );
+		$this->subject->where( 'post_type', 'post' );
+		$this->subject->where( 'post_id', 1 );
 		$environment = array( 'post_type' => 'post', 'post_id' => 1 );
 		$this->assertTrue( $this->subject->is_fulfilled( $environment ) );
 	}
@@ -311,9 +311,9 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	 * @covers ::is_fulfilled
 	 */
 	public function testIsFulfilledWithNestedConditionsWhenAllConditionsAreFulfilled() {
-		$this->subject->when( 'post_type', 'post' );
-		$this->subject->when( function( $c ) {
-			$c->when( 'post_id', 1 );
+		$this->subject->where( 'post_type', 'post' );
+		$this->subject->where( function( $c ) {
+			$c->where( 'post_id', 1 );
 		} );
 		$environment = array( 'post_type' => 'post', 'post_id' => 1 );
 		$this->assertTrue( $this->subject->is_fulfilled( $environment ) );
@@ -323,8 +323,8 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	 * @covers ::is_fulfilled
 	 */
 	public function testIsFulfilledWhenOneConditionIsFulfilled() {
-		$this->subject->when( 'post_id', 1 );
-		$this->subject->or_when( 'post_type', 'post' );
+		$this->subject->where( 'post_id', 1 );
+		$this->subject->or_where( 'post_type', 'post' );
 		$environment = array( 'post_id' => 1, 'post_type' => 'page' );
 		$this->assertTrue( $this->subject->is_fulfilled( $environment ) );
 	}
@@ -333,8 +333,8 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 	 * @covers ::is_fulfilled
 	 */
 	public function testIsNotFulfilledWhenNoConditionsAreFulfilled() {
-		$this->subject->when( 'post_id', 1 );
-		$this->subject->or_when( 'post_type', 'post' );
+		$this->subject->where( 'post_id', 1 );
+		$this->subject->or_where( 'post_type', 'post' );
 		$environment = array( 'post_id' => 0, 'post_type' => 'page' );
 		$this->assertFalse( $this->subject->is_fulfilled( $environment ) );
 	}

@@ -279,7 +279,7 @@ class Post_Meta_Container extends Container {
 		}
 		$page_id = ( $page_obj ) ? $page_obj->ID : -1;
 
-		$this->when( 'post_id', '=', $page_id );
+		$this->where( 'post_id', '=', $page_id );
 
 		return $this;
 	}
@@ -294,7 +294,7 @@ class Post_Meta_Container extends Container {
 	public function show_on_page_children( $parent_page_path ) {
 		$page = get_page_by_path( $parent_page_path );
 		$page_id = ( $page ) ? $page->ID : -1;
-		$this->when( 'post_parent_id', '=', $page_id );
+		$this->where( 'post_parent_id', '=', $page_id );
 		return $this;
 	}
 
@@ -312,7 +312,7 @@ class Post_Meta_Container extends Container {
 		}
 
 		$template_paths = is_array( $template_path ) ? $template_path : array( $template_path );
-		$this->when( 'post_template', 'IN', $template_paths );
+		$this->where( 'post_template', 'IN', $template_paths );
 		return $this;
 	}
 
@@ -325,7 +325,7 @@ class Post_Meta_Container extends Container {
 	 */
 	public function hide_on_template( $template_path ) {
 		$template_paths = is_array( $template_path ) ? $template_path : array( $template_path );
-		$this->when( 'post_template', 'NOT IN', $template_paths );
+		$this->where( 'post_template', 'NOT IN', $template_paths );
 		return $this;
 	}
 
@@ -338,7 +338,7 @@ class Post_Meta_Container extends Container {
 	 * @return object $this
 	 */
 	public function show_on_level( $level ) {
-		$this->when( 'post_level', '=', intval( $level ) );
+		$this->where( 'post_level', '=', intval( $level ) );
 		return $this;
 	}
 
@@ -352,7 +352,7 @@ class Post_Meta_Container extends Container {
 	 */
 	public function show_on_post_format( $post_format ) {
 		$post_formats = is_array( $post_format ) ? $post_format : array( $post_format );
-		$this->when( 'post_format', 'IN', $post_formats );
+		$this->where( 'post_format', 'IN', $post_formats );
 		return $this;
 	}
 
@@ -365,7 +365,7 @@ class Post_Meta_Container extends Container {
 	 */
 	public function show_on_post_type( $post_types ) {
 		$post_types = is_array( $post_types ) ? $post_types : array( $post_types );
-		$this->when( 'post_type', 'IN', $post_types );
+		$this->where( 'post_type', 'IN', $post_types );
 		return $this;
 	}
 
@@ -379,7 +379,7 @@ class Post_Meta_Container extends Container {
 	 * @return object $this
 	 */
 	public function show_on_category( $category_slug ) {
-		$this->when( 'post_term', '=', array(
+		$this->where( 'post_term', '=', array(
 			'value' => $category_slug,
 			'field' => 'slug',
 			'taxonomy' => 'category',
@@ -396,7 +396,7 @@ class Post_Meta_Container extends Container {
 	 * @return object $this
 	 */
 	public function show_on_taxonomy_term( $term_slug, $taxonomy_slug ) {
-		$this->when( 'post_term', '=', array(
+		$this->where( 'post_term', '=', array(
 			'value' => $term_slug,
 			'field' => 'slug',
 			'taxonomy' => $taxonomy_slug,
