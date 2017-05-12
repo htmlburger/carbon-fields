@@ -151,7 +151,7 @@ class Sidebar_Manager {
 	 * @return array
 	 */
 	public function get_sidebars() {
-		return apply_filters( 'carbon_fields_sidebars_options', get_option( 'carbon_custom_sidebars', array() ) );
+		return apply_filters( 'carbon_fields_sidebars', get_option( 'carbon_custom_sidebars', array() ), $this->get_name() );
 	}
 
 	/**
@@ -164,7 +164,7 @@ class Sidebar_Manager {
 		foreach ( $registered_sidebars as $id => $options ) {
 			$options['class'] = 'carbon-sidebar';
 			$options = wp_parse_args( $options, $default_options );
-			$options = apply_filters( 'carbon_fields_custom_sidebar_options', $options, $id );
+			$options = apply_filters( 'carbon_fields_sidebar_options', $options, $id );
 
 			register_sidebar( $options );
 		}
