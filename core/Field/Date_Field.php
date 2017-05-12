@@ -48,4 +48,11 @@ class Date_Field extends Field {
 		$this->picker_options = array_replace( $this->picker_options, $options );
 		return $this;
 	}
+
+	/**
+	 * Returns the picker options.
+	 */
+	public function get_picker_options() {
+		return $this->picker_options;
+	}
 }
