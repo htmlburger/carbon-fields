@@ -151,7 +151,7 @@ class Sidebar_Manager {
 	 * @return array
 	 */
 	public function get_sidebars() {
-		return apply_filters( 'carbon_fields_sidebars', get_option( 'carbon_custom_sidebars', array() ), $this->get_name() );
+		return apply_filters( 'carbon_fields_sidebars', get_option( 'carbon_custom_sidebars', array() ) );
 	}
 
 	/**
