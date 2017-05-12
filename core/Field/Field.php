@@ -153,7 +153,7 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Custom CSS classes.
 	 *
-	 * @see add_class()
+	 * @see set_classes()
 	 * @var array
 	 */
 	protected $classes = array();

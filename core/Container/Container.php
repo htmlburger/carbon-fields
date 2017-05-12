@@ -94,7 +94,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Array of custom CSS classes.
 	 *
-	 * @see add_class()
+	 * @see set_classes()
 	 * @see get_classes()
 	 * @var array<string>
 	 */
