@@ -25,7 +25,7 @@ use Carbon_Fields\Toolset\WP_Toolset;
  *             ...
  *         )
  *     
- *     Operator "CUSTOM" is passed the term_id
+ *     Operator "CUSTOM" is passed the post id
  */
 class Post_Term_Condition extends Term_Condition {
 	
