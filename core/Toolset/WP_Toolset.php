@@ -70,7 +70,7 @@ class WP_Toolset {
 
 		if ( ! $term ) {
 			Incorrect_Syntax_Exception::raise( 'Failed to load term for descriptor: ' . print_r( $term_descriptor, true ) );
-			return null;
+			return new \WP_Term( new \stdClass() );
 		}
 
 		return $term;
