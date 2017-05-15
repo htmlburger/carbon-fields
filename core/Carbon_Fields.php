@@ -3,6 +3,7 @@
 namespace Carbon_Fields;
 
 use Carbon_Fields\Pimple\Container as PimpleContainer;
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Loader\Loader;
 use Carbon_Fields\Container\Repository as ContainerRepository;
 use Carbon_Fields\Toolset\Key_Toolset;
@@ -117,20 +118,32 @@ class Carbon_Fields {
 	 * Extend Carbon Fields by adding a new entity (container condition etc.)
 	 *
 	 * @param string $type     Type of extension - 'container_condition'
-	 * @param string $key      Extending identifier
+	 * @param string $class    Extension class name
 	 * @param string $extender Extending callable
 	 */
-	public static function extend( $type, $key, $extender ) {
+	public static function extend( $class, $extender ) {
 		$type_dictionary = array(
-			'field' => 'fields',
-			'container_condition' => 'container_conditions',
+			'_Field' => 'fields',
+			'_Condition' => 'container_conditions',
 		);
-		if ( ! isset( $type_dictionary[ $type ] ) ) {
-			Incorrect_Syntax_Exception::raise( 'Unknown "' . $type . '" extension type specified.' );
+		
+		$extension_suffix = '';
+		$extension_subcontainer = '';
+		foreach ( $type_dictionary as $suffix => $subcontainer ) {
+			if ( substr( $class, -strlen( $suffix ) ) === $suffix ) {
+				$extension_suffix = $suffix;
+				$extension_subcontainer = $subcontainer;
+			}
+		}
+
+		if ( empty( $extension_suffix ) ) {
+			Incorrect_Syntax_Exception::raise( 'Could not determine "' . $class . '" extension type. Extension classes must have one of the following suffixes: ' . implode( ', ', array_keys( $type_dictionary ) ) );
 			return;
 		}
-		$ioc = static::instance()->ioc[ $type_dictionary[ $type ] ];
-		$ioc[ $key ] = $ioc->factory( $extender );
+
+		$identifier = Helper::class_to_type( $class, $extension_suffix );
+		$ioc = static::instance()->ioc[ $extension_subcontainer ];
+		$ioc[ $identifier ] = $ioc->factory( $extender );
 	}
 
 	/**

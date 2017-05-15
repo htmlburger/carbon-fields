@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Datastore\Datastore_Holder_Interface;
 use Carbon_Fields\Value_Set\Value_Set;
@@ -206,28 +207,27 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $label (optional) Automatically generated from $name if not present
 	 * @return Field
 	 */
-	public static function factory( $type, $name, $label = null ) {
-		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
+	public static function factory( $raw_type, $name, $label = null ) {
+		$type = Helper::normalize_type( $raw_type );
 
-		$class = __NAMESPACE__ . '\\' . $type . '_Field';
-
-		if ( ! class_exists( $class ) && class_exists( $type ) ) {
-			$reflection = new \ReflectionClass( $type );
-			if ( $reflection->isSubclassOf( get_class() ) ) {
-				$class = $type;
-			} else {
-				Incorrect_Syntax_Exception::raise( 'Field must be of type Carbon_Fields\\Field\\Field' );
-				$class = __NAMESPACE__ . '\\Broken_Field';
-			}
+		if ( \Carbon_Fields\Carbon_Fields::has( $type, 'fields' ) ) {
+			$container = new PimpleContainer();
+			$container['parent_container'] = \Carbon_Fields\Carbon_Fields::instance()->ioc;
+			$container['field'] = $container['parent_container']['fields']->raw( $type );
+			$container['field_type'] = $type;
+			$container['field_name'] = $name;
+			$container['field_label'] = $label;
+			return $container['field'];
 		}
 
+		// Fallback to class name-based resolution
+		$class = Helper::type_to_class( $type, __NAMESPACE__, '_Field' );
 		if ( ! class_exists( $class ) ) {
-			Incorrect_Syntax_Exception::raise( 'Unknown field "' . $type . '".' );
+			Incorrect_Syntax_Exception::raise( 'Unknown field "' . $raw_type . '".' );
 			$class = __NAMESPACE__ . '\\Broken_Field';
 		}
 
 		$field = new $class( $type, $name, $label );
-
 		return $field;
 	}
 
@@ -248,7 +248,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $name  Field name
 	 * @param string $label Field label
 	 */
-	protected function __construct( $type, $name, $label ) {
+	public function __construct( $type, $name, $label ) {
 		\Carbon_Fields\Carbon_Fields::verify_boot();
 		
 		$this->type = $type;

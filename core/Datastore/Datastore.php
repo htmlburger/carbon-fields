@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Datastore;
 
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -30,13 +31,11 @@ abstract class Datastore implements Datastore_Interface {
 	 * @param string $type
 	 * @return Datastore_Interface
 	 */
-	public static function factory( $type ) {
-		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
-
-		$class = __NAMESPACE__ . '\\' . $type . '_Datastore';
-
+	public static function factory( $raw_type ) {
+		$type = Helper::normalize_type( $raw_type );
+		$class = Helper::type_to_class( $type, __NAMESPACE__, '_Datastore' );
 		if ( ! class_exists( $class ) ) {
-			Incorrect_Syntax_Exception::raise( 'Unknown datastore type "' . $type . '".' );
+			Incorrect_Syntax_Exception::raise( 'Unknown datastore type "' . $raw_type . '".' );
 			return null;
 		}
 

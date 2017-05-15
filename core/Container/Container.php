@@ -128,16 +128,16 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Create a new container of type $type and name $name.
 	 *
-	 * @param string $type
+	 * @param string $raw_type
 	 * @param string $name Human-readable name of the container
 	 * @return object $container
 	 */
-	public static function factory( $type, $name ) {
-		$normalized_type = Helper::normalize_type( $type );
+	public static function factory( $raw_type, $name ) {
+		$normalized_type = Helper::normalize_type( $raw_type );
 		$class = Helper::type_to_class( $normalized_type, __NAMESPACE__, '_Container' );
 
 		if ( ! class_exists( $class ) ) {
-			Incorrect_Syntax_Exception::raise( 'Unknown container "' . $type . '".' );
+			Incorrect_Syntax_Exception::raise( 'Unknown container "' . $raw_type . '".' );
 			$class = __NAMESPACE__ . '\\Broken_Container';
 		}
 
