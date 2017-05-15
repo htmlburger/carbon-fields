@@ -15,10 +15,21 @@ use Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 use Carbon_Fields\REST_API\Router as REST_API_Router;
 use Carbon_Fields\REST_API\Decorator as REST_API_Decorator;
 
+use Carbon_Fields\Event\Emitter;
+use Carbon_Fields\Event\PersistentListener;
+use Carbon_Fields\Event\SingleEventListener;
+
 /**
  * Holds a static reference to the ioc container
  */
 class Carbon_Fields {
+
+	/**
+	 * An event emitter to facilitate events before the WordPress environment is guaranteed to be loaded
+	 * 
+	 * @var Emitter
+	 */
+	protected $emitter;
 
 	/**
 	 * Flag if Carbon Fields has been booted
@@ -45,6 +56,13 @@ class Carbon_Fields {
 			$instance = new static();
 		}
 		return $instance;
+	}
+
+	/**
+	 * Constructor
+	 */
+	private function __construct() {
+		$this->install( $this->get_default_ioc() );
 	}
 
 	/**
@@ -94,6 +112,18 @@ class Carbon_Fields {
 
 		$ioc['rest_api_service'] = function( $ioc ) {
 			return new REST_API_Service( $ioc['rest_api_router'], $ioc['rest_api_decorator'] );
+		};
+
+		$ioc['event_emitter'] = function() {
+			return new Emitter();
+		};
+
+		$ioc['event_persistent_listener'] = function() {
+			return new PersistentListener();
+		};
+
+		$ioc['event_single_event_listener'] = function() {
+			return new SingleEventListener();
 		};
 
 		\Carbon_Fields\Installer\Container_Condition_Installer::install( $ioc );
@@ -152,9 +182,9 @@ class Carbon_Fields {
 			return; // Possibly attempting to load multiple versions of Carbon Fields; bail in favor of already loaded version
 		}
 
-		static::instance()->install( static::get_default_ioc() );
 		static::resolve( 'loader' )->boot();
 		static::instance()->booted = true;
+		static::instance()->get_emitter()->emit( 'loaded' );
 		do_action( 'carbon_fields_loaded' );
 	}
 
@@ -172,5 +202,58 @@ class Carbon_Fields {
 		if ( ! static::is_booted() ) {
 			throw new \Exception( 'You must call Carbon_Fields\Carbon_Fields::boot() in a suitable WordPress hook before using Carbon Fields.' );
 		}
+	}
+
+	/**
+	 * Get the event emitter
+	 * 
+	 * @return Emitter
+	 */
+	public function get_emitter() {
+		if ( $this->emitter === null ) {
+			$this->emitter = static::resolve( 'event_emitter' );
+		}
+		return $this->emitter;
+	}
+
+	/**
+	 * Add a listener to an event
+	 * 
+	 * @param string   $event
+	 * @return Listener $listener
+	 */
+	public static function add_listener( $event, $listener ) {
+		return static::instance()->get_emitter()->add_listener( $event, $listener );
+	}
+
+	/**
+	 * Remove a listener from any event
+	 * 
+	 * @param Listener $removed_listener
+	 */
+	public static function remove_listener( $listener ) {
+		static::instance()->get_emitter()->remove_listener( $listener );
+	}
+
+	/**
+	 * Add a persistent listener to an event
+	 * 
+	 * @param  string   $event    The event to listen for
+	 * @param  string   $callable The callable to call when the event is broadcasted
+	 * @return Listener
+	 */
+	public static function on( $event, $callable ) {
+		return static::instance()->get_emitter()->on( $event, $callable );
+	}
+
+	/**
+	 * Add a one-time listener to an event
+	 *
+	 * @param  string   $event    The event to listen for
+	 * @param  string   $callable The callable to call when the event is broadcasted
+	 * @return Listener
+	 */
+	public static function once( $event, $callable ) {
+		return static::instance()->get_emitter()->once( $event, $callable );
 	}
 }
