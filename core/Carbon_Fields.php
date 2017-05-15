@@ -102,16 +102,22 @@ class Carbon_Fields {
 		};
 
 		/* Services */
-		$ioc['meta_query_service'] = function( $ioc ) {
-			return new Meta_Query_Service( $ioc['container_repository'], $ioc['key_toolset'] );
-		};
+		$ioc['services'] = function( $ioc ) {
+			$sioc = new PimpleContainer();
 
-		$ioc['legacy_storage_service'] = function( $ioc ) {
-			return new Legacy_Storage_Service_v_1_5( $ioc['container_repository'], $ioc['key_toolset'] );
-		};
+			$sioc['meta_query'] = function( $sioc ) use ( $ioc ) {
+				return new Meta_Query_Service( $ioc['container_repository'], $ioc['key_toolset'] );
+			};
 
-		$ioc['rest_api_service'] = function( $ioc ) {
-			return new REST_API_Service( $ioc['rest_api_router'], $ioc['rest_api_decorator'] );
+			$sioc['legacy_storage'] = function( $sioc ) use ( $ioc ) {
+				return new Legacy_Storage_Service_v_1_5( $ioc['container_repository'], $ioc['key_toolset'] );
+			};
+
+			$sioc['rest_api'] = function( $sioc ) use ( $ioc ) {
+				return new REST_API_Service( $ioc['rest_api_router'], $ioc['rest_api_decorator'] );
+			};
+
+			return $sioc;
 		};
 
 		$ioc['event_emitter'] = function() {
@@ -148,7 +154,8 @@ class Carbon_Fields {
 	 * @return mixed
 	 */
 	public static function service( $service_name ) {
-		return static::resolve( $service_name . '_service' );
+		$sioc = static::resolve( 'services' );
+		return $sioc[ $service_name ];
 	}
 
 	/**
