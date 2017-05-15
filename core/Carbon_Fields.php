@@ -43,7 +43,7 @@ class Carbon_Fields {
 	 * 
 	 * @var PimpleContainer
 	 */
-	protected $ioc = null;
+	public $ioc = null;
 
 	/**
 	 * Singleton implementation
@@ -66,85 +66,18 @@ class Carbon_Fields {
 	}
 
 	/**
-	 * Get default IoC container dependencies
-	 * 
-	 * @return PimpleContainer
-	 */
-	protected static function get_default_ioc() {
-		$ioc = new PimpleContainer();
-
-		$ioc['loader'] = function( $ioc ) {
-			return new Loader( $ioc['sidebar_manager'], $ioc['container_repository'] );
-		};
-
-		$ioc['container_repository'] = function() {
-			return new ContainerRepository();
-		};
-
-		$ioc['key_toolset'] = function() {
-			return new Key_Toolset();
-		};
-
-		$ioc['wp_toolset'] = function() {
-			return new WP_Toolset();
-		};
-
-		$ioc['sidebar_manager'] = function() {
-			return new Sidebar_Manager();
-		};
-
-		$ioc['rest_api_router'] = function( $ioc ) {
-			return new REST_API_Router( $ioc['container_repository'] );
-		};
-
-		$ioc['rest_api_decorator'] = function( $ioc ) {
-			return new REST_API_Decorator( $ioc['container_repository'] );
-		};
-
-		/* Services */
-		$ioc['services'] = function( $ioc ) {
-			$sioc = new PimpleContainer();
-
-			$sioc['meta_query'] = function( $sioc ) use ( $ioc ) {
-				return new Meta_Query_Service( $ioc['container_repository'], $ioc['key_toolset'] );
-			};
-
-			$sioc['legacy_storage'] = function( $sioc ) use ( $ioc ) {
-				return new Legacy_Storage_Service_v_1_5( $ioc['container_repository'], $ioc['key_toolset'] );
-			};
-
-			$sioc['rest_api'] = function( $sioc ) use ( $ioc ) {
-				return new REST_API_Service( $ioc['rest_api_router'], $ioc['rest_api_decorator'] );
-			};
-
-			return $sioc;
-		};
-
-		$ioc['event_emitter'] = function() {
-			return new Emitter();
-		};
-
-		$ioc['event_persistent_listener'] = function() {
-			return new PersistentListener();
-		};
-
-		$ioc['event_single_event_listener'] = function() {
-			return new SingleEventListener();
-		};
-
-		\Carbon_Fields\Installer\Container_Condition_Installer::install( $ioc );
-
-		return $ioc;
-	}
-
-	/**
 	 * Resolve a dependency through IoC
 	 *
-	 * @param string $key
+	 * @param  string $key
+	 * @param  string $subcontainer Subcontainer to look into
 	 * @return mixed
 	 */
-	public static function resolve( $key ) {
-		return static::instance()->ioc[ $key ];
+	public static function resolve( $key, $subcontainer = null ) {
+		$ioc = static::instance()->ioc;
+		if ( $subcontainer ) {
+			$ioc = $ioc[ $subcontainer ];
+		}
+		return $ioc[ $key ];
 	}
 
 	/**
@@ -154,18 +87,37 @@ class Carbon_Fields {
 	 * @return mixed
 	 */
 	public static function service( $service_name ) {
-		$sioc = static::resolve( 'services' );
-		return $sioc[ $service_name ];
+		return static::resolve( $service_name, 'services' );
 	}
 
 	/**
 	 * Check if a dependency is registered
 	 *
-	 * @param string $key
+	 * @param  string $key
+	 * @param  string $subcontainer Subcontainer to look into
 	 * @return bool
 	 */
-	public static function has( $key ) {
-		return isset( static::instance()->ioc[ $key ] );
+	public static function has( $key, $subcontainer = null ) {
+		$ioc = static::instance()->ioc;
+		if ( $subcontainer ) {
+			$ioc = $ioc[ $subcontainer ];
+		}
+		return isset( $ioc[ $key ] );
+	}
+
+	/**
+	 * Extend Carbon Fields by adding a new entity (container condition etc.)
+	 *
+	 * @param string $type     Type of extension - 'container_condition'
+	 * @param string $key      Extending identifier
+	 * @param string $extender Extending callable
+	 */
+	public static function extend( $type, $key, $extender ) {
+		$type_dictionary = array(
+			'container_condition' => 'container_conditions',
+		);
+		$ioc = static::instance()->ioc[ $type_dictionary[ $type ] ];
+		$ioc[ $key ] = $extender( $ioc );
 	}
 
 	/**
@@ -262,5 +214,76 @@ class Carbon_Fields {
 	 */
 	public static function once( $event, $callable ) {
 		return static::instance()->get_emitter()->once( $event, $callable );
+	}
+
+	/**
+	 * Get default IoC container dependencies
+	 * 
+	 * @return PimpleContainer
+	 */
+	protected static function get_default_ioc() {
+		$ioc = new PimpleContainer();
+
+		$ioc['loader'] = function( $ioc ) {
+			return new Loader( $ioc['sidebar_manager'], $ioc['container_repository'] );
+		};
+
+		$ioc['container_repository'] = function() {
+			return new ContainerRepository();
+		};
+
+		$ioc['key_toolset'] = function() {
+			return new Key_Toolset();
+		};
+
+		$ioc['wp_toolset'] = function() {
+			return new WP_Toolset();
+		};
+
+		$ioc['sidebar_manager'] = function() {
+			return new Sidebar_Manager();
+		};
+
+		$ioc['rest_api_router'] = function( $ioc ) {
+			return new REST_API_Router( $ioc['container_repository'] );
+		};
+
+		$ioc['rest_api_decorator'] = function( $ioc ) {
+			return new REST_API_Decorator( $ioc['container_repository'] );
+		};
+
+		/* Services */
+		$ioc['services'] = function( $ioc ) {
+			return new PimpleContainer();
+		};
+
+		$ioc['services']['meta_query'] = function( $services_ioc ) use ( $ioc ) {
+			return new Meta_Query_Service( $ioc['container_repository'], $ioc['key_toolset'] );
+		};
+
+		$ioc['services']['legacy_storage'] = function( $services_ioc ) use ( $ioc ) {
+			return new Legacy_Storage_Service_v_1_5( $ioc['container_repository'], $ioc['key_toolset'] );
+		};
+
+		$ioc['services']['rest_api'] = function( $services_ioc ) use ( $ioc ) {
+			return new REST_API_Service( $ioc['rest_api_router'], $ioc['rest_api_decorator'] );
+		};
+
+		/* Events */
+		$ioc['event_emitter'] = function() {
+			return new Emitter();
+		};
+
+		$ioc['event_persistent_listener'] = function() {
+			return new PersistentListener();
+		};
+
+		$ioc['event_single_event_listener'] = function() {
+			return new SingleEventListener();
+		};
+
+		\Carbon_Fields\Installer\Container_Condition_Installer::install( $ioc );
+
+		return $ioc;
 	}
 }

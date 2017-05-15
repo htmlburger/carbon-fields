@@ -304,7 +304,7 @@ class Fulfillable_Collection implements Fulfillable {
 				$type = $this->condition_factory->get_type( get_class( $fulfillable ) );
 				$comparison_operator = $fulfillable->get_comparison_operator();
 				if ( in_array( $type, $condition_types ) || in_array( $comparison_operator, $comparison_operators ) ) {
-					$boolean_condition = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_type_boolean' );
+					$boolean_condition = \Carbon_Fields\Carbon_Fields::resolve( 'boolean', 'container_conditions' );
 					$boolean_condition->set_comparison_operator( '=' );
 
 					$value = is_bool( $environment ) ? $environment : $fulfillable->is_fulfilled( $environment );

@@ -14,10 +14,6 @@ class Container_Condition_Installer implements Installer {
 	 * @param  PimpleContainer $ioc
 	 */
 	public static function install( PimpleContainer $ioc ) {
-		$ioc['container_condition_fulfillable_collection'] = $ioc->factory( function( $ioc ) {
-			return new Fulfillable_Collection( $ioc['container_condition_factory'], $ioc['container_condition_translator_array'] );
-		} );
-
 		static::install_conditions( $ioc );
 		static::install_comparers( $ioc );
 		static::install_translators( $ioc );
@@ -30,115 +26,126 @@ class Container_Condition_Installer implements Installer {
 	 * @param  PimpleContainer $ioc
 	 */
 	protected static function install_conditions( $ioc ) {
-		$ioc['container_condition_type_boolean'] = $ioc->factory( function( $ioc ) {
+		$ioc['container_condition_factory'] = function( $ioc ) {
+			return new ConditionFactory( $ioc['container_conditions'] );
+		};
+
+		$ioc['container_condition_fulfillable_collection'] = $ioc->factory( function( $ioc ) {
+			return new Fulfillable_Collection( $ioc['container_condition_factory'], $ioc['container_condition_translator_array'] );
+		} );
+
+		$ioc['container_conditions'] = function( $ioc ) {
+			return new PimpleContainer();
+		};
+
+		$cc_ioc = $ioc['container_conditions'];
+
+		$cc_ioc['boolean'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Boolean_Condition();
 			$condition->set_comparers( array(
-				$ioc['container_condition_comparer_type_equality'],
+				$ioc['container_condition_comparers']['equality'],
 			) );
 			return $condition;
 		} );
-		$ioc['container_condition_type_post_id'] = $ioc->factory( function( $ioc ) {
+
+		$cc_ioc['post_id'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_ID_Condition();
-			$condition->set_comparers( $ioc['container_condition_comparers_generic'] );
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
 			return $condition;
 		} );
-		$ioc['container_condition_type_post_parent_id'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['post_parent_id'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_Parent_ID_Condition();
-			$condition->set_comparers( $ioc['container_condition_comparers_generic'] );
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
 			return $condition;
 		} );
-		$ioc['container_condition_type_post_type'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['post_type'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_Type_Condition();
-			$condition->set_comparers( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['nonscalar'] );
 			return $condition;
 		} );
-		$ioc['container_condition_type_post_format'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['post_format'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_Format_Condition();
-			$condition->set_comparers( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['nonscalar'] );
 			return $condition;
 		} );
-		$ioc['container_condition_type_post_level'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['post_level'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_Level_Condition();
-			$condition->set_comparers( $ioc['container_condition_comparers_generic'] );
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
 			return $condition;
 		} );
-		$ioc['container_condition_type_post_template'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['post_template'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_Template_Condition();
-			$condition->set_comparers( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['nonscalar'] );
 			return $condition;
 		} );
-		$ioc['container_condition_type_post_term'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['post_term'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_Term_Condition();
 			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
-				$ioc['container_condition_comparer_type_custom'],
+				$ioc['container_condition_comparers']['custom'],
 			) );
 			return $condition;
 		} );
 
-		$ioc['container_condition_type_term'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['term'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Term_Condition();
-			$condition->set_comparers( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['nonscalar'] );
 			return $condition;
 		} );
-		$ioc['container_condition_type_term_taxonomy'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['term_taxonomy'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Term_Taxonomy_Condition();
-			$condition->set_comparers( $ioc['container_condition_comparers_generic_wo_scalar'] );
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['nonscalar'] );
 			return $condition;
 		} );
-		$ioc['container_condition_type_term_level'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['term_level'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Term_Level_Condition();
-			$condition->set_comparers( $ioc['container_condition_comparers_generic'] );
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
 			return $condition;
 		} );
 
-		$ioc['container_condition_type_user_id'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['user_id'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\User_ID_Condition();
-			$condition->set_comparers( $ioc['container_condition_comparers_generic'] );
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
 			return $condition;
 		} );
-		$ioc['container_condition_type_user_role'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['user_role'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\User_Role_Condition();
 			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
-				$ioc['container_condition_comparer_type_custom'],
+				$ioc['container_condition_comparers']['custom'],
 			) );
 			return $condition;
 		} );
-		$ioc['container_condition_type_user_capabiltiy'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['user_capabiltiy'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\User_Capability_Condition();
 			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
-				$ioc['container_condition_comparer_type_custom'],
+				$ioc['container_condition_comparers']['custom'],
 			) );
 			return $condition;
 		} );
 
-		$ioc['container_condition_type_current_user_id'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['current_user_id'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Current_User_ID_Condition();
-			$condition->set_comparers( $ioc['container_condition_comparers_generic'] );
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
 			return $condition;
 		} );
-		$ioc['container_condition_type_current_user_role'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['current_user_role'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Current_User_Role_Condition();
 			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
-				$ioc['container_condition_comparer_type_custom'],
+				$ioc['container_condition_comparers']['custom'],
 			) );
 			return $condition;
 		} );
-		$ioc['container_condition_type_current_user_capability'] = $ioc->factory( function( $ioc ) {
+		$cc_ioc['current_user_capability'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Current_User_Capability_Condition();
 			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
-				$ioc['container_condition_comparer_type_custom'],
+				$ioc['container_condition_comparers']['custom'],
 			) );
 			return $condition;
 		} );
-
-		$ioc['container_condition_factory'] = function() {
-			return new ConditionFactory();
-		};
 	}
 
 	/**
@@ -147,33 +154,43 @@ class Container_Condition_Installer implements Installer {
 	 * @param  PimpleContainer $ioc
 	 */
 	protected static function install_comparers( $ioc ) {
-		$ioc['container_condition_comparer_type_equality'] = function() {
+		$ioc['container_condition_comparers'] = function( $ioc ) {
+			return new PimpleContainer();
+		};
+
+		$ioc['container_condition_comparers']['equality'] = function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Equality_Comparer();
 		};
-		$ioc['container_condition_comparer_type_contain'] = function() {
+
+		$ioc['container_condition_comparers']['contain'] = function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Contain_Comparer();
 		};
-		$ioc['container_condition_comparer_type_scalar'] = function() {
+
+		$ioc['container_condition_comparers']['scalar'] = function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Scalar_Comparer();
 		};
-		$ioc['container_condition_comparer_type_custom'] = function() {
+
+		$ioc['container_condition_comparers']['custom'] = function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Custom_Comparer();
 		};
 
-		$ioc['container_condition_comparers_generic'] = function( $ioc ) {
-			return array(
-				$ioc['container_condition_comparer_type_equality'],
-				$ioc['container_condition_comparer_type_contain'],
-				$ioc['container_condition_comparer_type_scalar'],
-				$ioc['container_condition_comparer_type_custom'],
-			);
+		$ioc['container_condition_comparer_collections'] = function( $ioc ) {
+			return new PimpleContainer();
 		};
 
-		$ioc['container_condition_comparers_generic_wo_scalar'] = function( $ioc ) {
+		$ioc['container_condition_comparer_collections']['generic'] = function( $cccc_ioc ) use ( $ioc ) {
 			return array(
-				$ioc['container_condition_comparer_type_equality'],
-				$ioc['container_condition_comparer_type_contain'],
-				$ioc['container_condition_comparer_type_custom'],
+				$ioc['container_condition_comparers']['equality'],
+				$ioc['container_condition_comparers']['contain'],
+				$ioc['container_condition_comparers']['scalar'],
+				$ioc['container_condition_comparers']['custom'],
+			);
+		};
+		$ioc['container_condition_comparer_collections']['nonscalar'] = function( $cccc_ioc ) use ( $ioc ) {
+			return array(
+				$ioc['container_condition_comparers']['equality'],
+				$ioc['container_condition_comparers']['contain'],
+				$ioc['container_condition_comparers']['custom'],
 			);
 		};
 	}

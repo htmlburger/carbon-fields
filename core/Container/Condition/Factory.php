@@ -8,6 +8,18 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 class Factory {
 
 	/**
+	 * Container to resolve conditions from
+	 */
+	protected $ioc;
+
+	/**
+	 * Constructor
+	 */
+	public function __construct( $ioc ) {
+		$this->ioc = $ioc;
+	}
+
+	/**
 	 * Get the type for the specified class
 	 * 
 	 * @param  string $class
@@ -24,22 +36,10 @@ class Factory {
 	 * @return mixed
 	 */
 	public function make( $type ) {
-		$condition_type_superclass = 'Carbon_Fields\\Container\\Condition\\Condition';
 		$normalized_type = Helper::normalize_type( $type );
 		
-		$identifier = 'container_condition_type_' . $normalized_type;
-		if ( \Carbon_Fields\Carbon_Fields::has( $identifier ) ) {
-			return \Carbon_Fields\Carbon_Fields::resolve( $identifier );
-		}
-
-		if ( class_exists( $type ) ) {
-			$reflection = new \ReflectionClass( $type );
-			if ( $reflection->isSubclassOf( $condition_type_superclass ) ) {
-				return new $type();
-			} else {
-				Incorrect_Syntax_Exception::raise( 'Condition must be of type ' . $condition_type_superclass );
-				return null;
-			}
+		if ( isset( $this->ioc[ $normalized_type ] ) ) {
+			return $this->ioc[ $normalized_type ];
 		}
 
 		Incorrect_Syntax_Exception::raise( 'Unknown condition type "' . $type . '".' );

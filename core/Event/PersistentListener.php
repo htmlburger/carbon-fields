@@ -36,6 +36,6 @@ class PersistentListener implements Listener {
      * @inheritdoc
      */
 	public function notify() {
-		return call_user_func_array( $this->callable , func_get_args() );
+		return call_user_func_array( $this->callable, func_get_args() );
 	}
 }

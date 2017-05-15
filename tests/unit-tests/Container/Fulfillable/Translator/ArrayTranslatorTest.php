@@ -15,46 +15,79 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 
 	public function setUp() {
 		$ioc = new PimpleContainer();
+
+		/* Conditions */
+		$ioc['container_condition_factory'] = function( $ioc ) {
+			return new ConditionFactory( $ioc['container_conditions'] );
+		};
+		
 		$ioc['container_condition_fulfillable_collection'] = $ioc->factory( function( $ioc ) {
 			return new Fulfillable_Collection( $ioc['container_condition_factory'], $ioc['container_condition_translator_array'] );
 		} );
 
-		$ioc['container_condition_type_post_id'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Post_ID_Condition( array(
-				$ioc['container_condition_comparer_type_equality'],
-				$ioc['container_condition_comparer_type_contain'],
-				$ioc['container_condition_comparer_type_scalar'],
-				$ioc['container_condition_comparer_type_custom'],
-			) );
-		} );
-		$ioc['container_condition_type_post_type'] = $ioc->factory( function( $ioc ) {
-			return new \Carbon_Fields\Container\Condition\Post_Type_Condition( array( 
-				$ioc['container_condition_comparer_type_equality'],
-				$ioc['container_condition_comparer_type_contain'],
-				$ioc['container_condition_comparer_type_custom'],
-			) );
-		} );
-
-		$ioc['container_condition_factory'] = function() {
-			return new ConditionFactory();
+		$ioc['container_conditions'] = function( $ioc ) {
+			return new PimpleContainer();
 		};
 
-		$ioc['container_condition_comparer_type_equality'] = $ioc->factory( function() {
-			return new \Carbon_Fields\Container\Condition\Comparer\Equality_Comparer();
+		$cc_ioc = $ioc['container_conditions'];
+
+		$cc_ioc['post_id'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+			$condition = new \Carbon_Fields\Container\Condition\Post_ID_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
+			return $condition;
 		} );
-		$ioc['container_condition_comparer_type_contain'] = $ioc->factory( function() {
-			return new \Carbon_Fields\Container\Condition\Comparer\Contain_Comparer();
-		} );
-		$ioc['container_condition_comparer_type_scalar'] = $ioc->factory( function() {
-			return new \Carbon_Fields\Container\Condition\Comparer\Scalar_Comparer();
-		} );
-		$ioc['container_condition_comparer_type_custom'] = $ioc->factory( function() {
-			return new \Carbon_Fields\Container\Condition\Comparer\Custom_Comparer();
+		$cc_ioc['post_type'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+			$condition = new \Carbon_Fields\Container\Condition\Post_Type_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['nonscalar'] );
+			return $condition;
 		} );
 
+		/* Comparers */
+		$ioc['container_condition_comparers'] = function( $ioc ) {
+			return new PimpleContainer();
+		};
+
+		$ioc['container_condition_comparers']['equality'] = function() {
+			return new \Carbon_Fields\Container\Condition\Comparer\Equality_Comparer();
+		};
+
+		$ioc['container_condition_comparers']['contain'] = function() {
+			return new \Carbon_Fields\Container\Condition\Comparer\Contain_Comparer();
+		};
+
+		$ioc['container_condition_comparers']['scalar'] = function() {
+			return new \Carbon_Fields\Container\Condition\Comparer\Scalar_Comparer();
+		};
+
+		$ioc['container_condition_comparers']['custom'] = function() {
+			return new \Carbon_Fields\Container\Condition\Comparer\Custom_Comparer();
+		};
+
+		$ioc['container_condition_comparer_collections'] = function( $ioc ) {
+			return new PimpleContainer();
+		};
+
+		$ioc['container_condition_comparer_collections']['generic'] = function( $cccc_ioc ) use ( $ioc ) {
+			return array(
+				$ioc['container_condition_comparers']['equality'],
+				$ioc['container_condition_comparers']['contain'],
+				$ioc['container_condition_comparers']['scalar'],
+				$ioc['container_condition_comparers']['custom'],
+			);
+		};
+		$ioc['container_condition_comparer_collections']['nonscalar'] = function( $cccc_ioc ) use ( $ioc ) {
+			return array(
+				$ioc['container_condition_comparers']['equality'],
+				$ioc['container_condition_comparers']['contain'],
+				$ioc['container_condition_comparers']['custom'],
+			);
+		};
+
+		/* Translators */
 		$ioc['container_condition_translator_array'] = function( $ioc ) {
 			return new \Carbon_Fields\Container\Fulfillable\Translator\Array_Translator( $ioc['container_condition_factory'] );
 		};
+
 		\Carbon_Fields\Carbon_Fields::instance()->install( $ioc );
 
 		$this->subject = $ioc['container_condition_translator_array'];
