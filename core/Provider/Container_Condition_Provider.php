@@ -1,23 +1,24 @@
 <?php
 
-namespace Carbon_Fields\Installer;
+namespace Carbon_Fields\Provider;
 
 use Carbon_Fields\Pimple\Container as PimpleContainer;
+use Carbon_Fields\Pimple\ServiceProviderInterface;
 use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
 use Carbon_Fields\Container\Fulfillable\Fulfillable_Collection;
 
-class Container_Condition_Installer implements Installer {
+class Container_Condition_Provider implements ServiceProviderInterface {
 
 	/**
 	 * Install dependencies in IoC container
 	 *
 	 * @param  PimpleContainer $ioc
 	 */
-	public static function install( PimpleContainer $ioc ) {
-		static::install_conditions( $ioc );
-		static::install_comparers( $ioc );
-		static::install_translators( $ioc );
-		static::install_container_conditions( $ioc );
+	public function register( PimpleContainer $ioc ) {
+		$this->install_conditions( $ioc );
+		$this->install_comparers( $ioc );
+		$this->install_translators( $ioc );
+		$this->install_container_conditions( $ioc );
 	}
 
 	/**
@@ -25,7 +26,7 @@ class Container_Condition_Installer implements Installer {
 	 *
 	 * @param  PimpleContainer $ioc
 	 */
-	protected static function install_conditions( $ioc ) {
+	protected function install_conditions( $ioc ) {
 		$ioc['container_condition_factory'] = function( $ioc ) {
 			return new ConditionFactory( $ioc['container_conditions'] );
 		};
@@ -153,7 +154,7 @@ class Container_Condition_Installer implements Installer {
 	 *
 	 * @param  PimpleContainer $ioc
 	 */
-	protected static function install_comparers( $ioc ) {
+	protected function install_comparers( $ioc ) {
 		$ioc['container_condition_comparers'] = function( $ioc ) {
 			return new PimpleContainer();
 		};
@@ -211,7 +212,7 @@ class Container_Condition_Installer implements Installer {
 	 *
 	 * @param  PimpleContainer $ioc
 	 */
-	protected static function install_container_conditions( $ioc ) {
+	protected function install_container_conditions( $ioc ) {
 		// add current_user_* static condition types to all containers
 		add_filter( 'carbon_fields_container_static_condition_types', function( $condition_types, $container_type, $container ) {
 			return array_merge(
@@ -221,14 +222,14 @@ class Container_Condition_Installer implements Installer {
 		}, 10, 3 );
 
 		// add container-specific conditions
-		add_filter( 'carbon_fields_post_meta_container_static_condition_types', array( get_class(), 'filter_post_meta_container_static_condition_types' ), 10, 3 );
-		add_filter( 'carbon_fields_post_meta_container_dynamic_condition_types', array( get_class(), 'filter_post_meta_container_dynamic_condition_types' ), 10, 3 );
+		add_filter( 'carbon_fields_post_meta_container_static_condition_types', array( $this, 'filter_post_meta_container_static_condition_types' ), 10, 3 );
+		add_filter( 'carbon_fields_post_meta_container_dynamic_condition_types', array( $this, 'filter_post_meta_container_dynamic_condition_types' ), 10, 3 );
 
-		add_filter( 'carbon_fields_term_meta_container_static_condition_types', array( get_class(), 'filter_term_meta_container_static_condition_types' ), 10, 3 );
-		add_filter( 'carbon_fields_term_meta_container_dynamic_condition_types', array( get_class(), 'filter_term_meta_container_dynamic_condition_types' ), 10, 3 );
+		add_filter( 'carbon_fields_term_meta_container_static_condition_types', array( $this, 'filter_term_meta_container_static_condition_types' ), 10, 3 );
+		add_filter( 'carbon_fields_term_meta_container_dynamic_condition_types', array( $this, 'filter_term_meta_container_dynamic_condition_types' ), 10, 3 );
 
-		add_filter( 'carbon_fields_user_meta_container_static_condition_types', array( get_class(), 'filter_user_meta_container_static_condition_types' ), 10, 3 );
-		add_filter( 'carbon_fields_user_meta_container_dynamic_condition_types', array( get_class(), 'filter_user_meta_container_dynamic_condition_types' ), 10, 3 );
+		add_filter( 'carbon_fields_user_meta_container_static_condition_types', array( $this, 'filter_user_meta_container_static_condition_types' ), 10, 3 );
+		add_filter( 'carbon_fields_user_meta_container_dynamic_condition_types', array( $this, 'filter_user_meta_container_dynamic_condition_types' ), 10, 3 );
 	}
 
 	/**
@@ -238,7 +239,7 @@ class Container_Condition_Installer implements Installer {
 	 * @param  Carbon_Fields\Container\Container $container
 	 * @return array<string>
 	 */
-	public static function filter_post_meta_container_static_condition_types( $condition_types, $container_type, $container ) {
+	public function filter_post_meta_container_static_condition_types( $condition_types, $container_type, $container ) {
 		return array_merge(
 			$condition_types,
 			array( 'post_id', 'post_type' )
@@ -252,7 +253,7 @@ class Container_Condition_Installer implements Installer {
 	 * @param  Carbon_Fields\Container\Container $container
 	 * @return array<string>
 	 */
-	public static function filter_post_meta_container_dynamic_condition_types( $condition_types, $container_type, $container ) {
+	public function filter_post_meta_container_dynamic_condition_types( $condition_types, $container_type, $container ) {
 		return array_merge(
 			$condition_types,
 			array( 'post_parent_id', 'post_format', 'post_level', 'post_template', 'post_term' )
@@ -266,7 +267,7 @@ class Container_Condition_Installer implements Installer {
 	 * @param  Carbon_Fields\Container\Container $container
 	 * @return array<string>
 	 */
-	public static function filter_term_meta_container_static_condition_types( $condition_types, $container_type, $container ) {
+	public function filter_term_meta_container_static_condition_types( $condition_types, $container_type, $container ) {
 		return array_merge(
 			$condition_types,
 			array( 'term', 'term_taxonomy' )
@@ -280,7 +281,7 @@ class Container_Condition_Installer implements Installer {
 	 * @param  Carbon_Fields\Container\Container $container
 	 * @return array<string>
 	 */
-	public static function filter_term_meta_container_dynamic_condition_types( $condition_types, $container_type, $container ) {
+	public function filter_term_meta_container_dynamic_condition_types( $condition_types, $container_type, $container ) {
 		return array_merge(
 			$condition_types,
 			array( 'term_level' )
@@ -294,7 +295,7 @@ class Container_Condition_Installer implements Installer {
 	 * @param  Carbon_Fields\Container\Container $container
 	 * @return array<string>
 	 */
-	public static function filter_user_meta_container_static_condition_types( $condition_types, $container_type, $container ) {
+	public function filter_user_meta_container_static_condition_types( $condition_types, $container_type, $container ) {
 		return array_merge(
 			$condition_types,
 			array( 'user_id', 'user_capability' )
@@ -308,7 +309,7 @@ class Container_Condition_Installer implements Installer {
 	 * @param  Carbon_Fields\Container\Container $container
 	 * @return array<string>
 	 */
-	public static function filter_user_meta_container_dynamic_condition_types( $condition_types, $container_type, $container ) {
+	public function filter_user_meta_container_dynamic_condition_types( $condition_types, $container_type, $container ) {
 		return array_merge(
 			$condition_types,
 			array( 'user_role' )

@@ -19,6 +19,8 @@ use Carbon_Fields\Event\Emitter;
 use Carbon_Fields\Event\PersistentListener;
 use Carbon_Fields\Event\SingleEventListener;
 
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+
 /**
  * Holds a static reference to the ioc container
  */
@@ -75,6 +77,9 @@ class Carbon_Fields {
 	public static function resolve( $key, $subcontainer = null ) {
 		$ioc = static::instance()->ioc;
 		if ( $subcontainer ) {
+			if ( ! isset( $ioc[ $subcontainer ] ) ) {
+				return null;
+			}
 			$ioc = $ioc[ $subcontainer ];
 		}
 		return $ioc[ $key ];
@@ -100,6 +105,9 @@ class Carbon_Fields {
 	public static function has( $key, $subcontainer = null ) {
 		$ioc = static::instance()->ioc;
 		if ( $subcontainer ) {
+			if ( ! isset( $ioc[ $subcontainer ] ) ) {
+				return false;
+			}
 			$ioc = $ioc[ $subcontainer ];
 		}
 		return isset( $ioc[ $key ] );
@@ -114,10 +122,15 @@ class Carbon_Fields {
 	 */
 	public static function extend( $type, $key, $extender ) {
 		$type_dictionary = array(
+			'field' => 'fields',
 			'container_condition' => 'container_conditions',
 		);
+		if ( ! isset( $type_dictionary[ $type ] ) ) {
+			Incorrect_Syntax_Exception::raise( 'Unknown "' . $type . '" extension type specified.' );
+			return;
+		}
 		$ioc = static::instance()->ioc[ $type_dictionary[ $type ] ];
-		$ioc[ $key ] = $extender( $ioc );
+		$ioc[ $key ] = $ioc->factory( $extender );
 	}
 
 	/**
@@ -232,6 +245,10 @@ class Carbon_Fields {
 			return new ContainerRepository();
 		};
 
+		$ioc['fields'] = function() {
+			return new PimpleContainer();
+		};
+
 		$ioc['key_toolset'] = function() {
 			return new Key_Toolset();
 		};
@@ -282,7 +299,7 @@ class Carbon_Fields {
 			return new SingleEventListener();
 		};
 
-		\Carbon_Fields\Installer\Container_Condition_Installer::install( $ioc );
+		$ioc->register( new \Carbon_Fields\Provider\Container_Condition_Provider() );
 
 		return $ioc;
 	}

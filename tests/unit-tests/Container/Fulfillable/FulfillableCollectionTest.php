@@ -13,7 +13,7 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 
 	public function setUp() {
 		$ioc = new PimpleContainer();
-		\Carbon_Fields\Installer\Container_Condition_Installer::install( $ioc );
+		$ioc->register( new \Carbon_Fields\Provider\Container_Condition_Provider() );
 		\Carbon_Fields\Carbon_Fields::instance()->install( $ioc );
 
 		$this->subject = $ioc['container_condition_fulfillable_collection'];
