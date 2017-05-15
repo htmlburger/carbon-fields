@@ -28,13 +28,6 @@ class Carbon_Fields {
 	public $booted = false;
 
 	/**
-	 * Array of callables to call on boot
-	 * 
-	 * @var array<callable>
-	 */
-	public $boot_actions = array();
-
-	/**
 	 * Inversion of Control container instance
 	 * 
 	 * @var PimpleContainer
@@ -162,11 +155,7 @@ class Carbon_Fields {
 		static::instance()->install( static::get_default_ioc() );
 		static::resolve( 'loader' )->boot();
 		static::instance()->booted = true;
-
-		$boot_actions = static::instance()->boot_actions;
-		foreach ( $boot_actions as $callable ) {
-			call_user_func( $callable );
-		}
+		do_action( 'carbon_fields_loaded' );
 	}
 
 	/**
@@ -183,17 +172,5 @@ class Carbon_Fields {
 		if ( ! static::is_booted() ) {
 			throw new \Exception( 'You must call Carbon_Fields\Carbon_Fields::boot() in a suitable WordPress hook before using Carbon Fields.' );
 		}
-	}
-
-	/**
-	 * Add a callable to execute on boot
-	 *
-	 * @param callable $callable
-	 */
-	public static function on_boot( $callable ) {
-		if ( ! is_callable( $callable ) ) {
-			throw new \Exception( 'Invalid callable passed to Carbon_Fields\Carbon_Fields::on_boot().' );
-		}
-		static::instance()->boot_actions[] = $callable;
 	}
 }

@@ -52,7 +52,8 @@ class Map_Field extends Field {
 	}
 
 	/**
-	 * Enqueue scripts in the administration
+	 * Enqueue scripts and styles in admin
+	 * Called once per field type
 	 */
 	public static function admin_enqueue_scripts() {
 		$api_key = apply_filters( 'carbon_fields_map_field_api_key', false );

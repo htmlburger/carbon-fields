@@ -16,6 +16,13 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 class Field implements Datastore_Holder_Interface {
 	
 	/**
+	 * Array of field class names that have had their activation method called
+	 *
+	 * @var array<string>
+	 */
+	protected static $activated_field_types = array();
+
+	/**
 	 * Globally unique field identificator. Generated randomly
 	 *
 	 * @var string
@@ -278,10 +285,31 @@ class Field implements Datastore_Holder_Interface {
 
 		add_action( 'admin_print_footer_scripts', array( get_class(), 'admin_hook_scripts' ), 5 );
 		add_action( 'admin_print_footer_scripts', array( get_class(), 'admin_hook_styles' ), 5 );
-		add_action( 'admin_print_footer_scripts', array( get_class( $this ), 'admin_enqueue_scripts' ), 5 );
+		static::activate_field_type( get_class( $this ) );
 
 		do_action( 'carbon_fields_field_activated', $this );
 	}
+
+	/**
+	 * Activate a field type
+	 * @param string $class_name
+	 */
+	public static function activate_field_type( $class_name ) {
+		if ( in_array( $class_name, static::$activated_field_types ) ) {
+			return;
+		}
+
+		add_action( 'admin_print_footer_scripts', array( $class_name, 'admin_enqueue_scripts' ), 5 );
+		call_user_func( array( $class_name, 'field_type_activated' ) );
+
+		static::$activated_field_types[] = $class_name;
+	}
+
+	/**
+	 * Prepare the field type for use
+	 * Called once per field type when activated
+	 */
+	public static function field_type_activated() {}
 
 	/**
 	 * Get array of hierarchy field names
@@ -340,14 +368,14 @@ class Field implements Datastore_Holder_Interface {
 	public function init() {}
 
 	/**
-	 * Instance initialization when in the admin area.
-	 * Called during field boot.
+	 * Instance initialization when in the admin area
+	 * Called during field boot
 	 */
 	public function admin_init() {}
 
 	/**
-	 * Enqueue admin scripts.
-	 * Called once per field type.
+	 * Enqueue scripts and styles in admin
+	 * Called once per field type
 	 */
 	public static function admin_enqueue_scripts() {}
 
