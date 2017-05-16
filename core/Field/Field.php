@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Carbon_Fields;
 use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Datastore\Datastore_Holder_Interface;
@@ -210,14 +211,12 @@ class Field implements Datastore_Holder_Interface {
 	public static function factory( $raw_type, $name, $label = null ) {
 		$type = Helper::normalize_type( $raw_type );
 
-		if ( \Carbon_Fields\Carbon_Fields::has( $type, 'fields' ) ) {
-			$container = new PimpleContainer();
-			$container['parent_container'] = \Carbon_Fields\Carbon_Fields::instance()->ioc;
-			$container['field'] = $container['parent_container']['fields']->raw( $type );
-			$container['field_type'] = $type;
-			$container['field_name'] = $name;
-			$container['field_label'] = $label;
-			return $container['field'];
+		if ( Carbon_Fields::has( $type, 'fields' ) ) {
+			return Carbon_Fields::resolve_with_arguments( $type, array(
+				'type' => $type,
+				'name' => $name,
+				'label' => $label,
+			), 'fields' );
 		}
 
 		// Fallback to class name-based resolution
@@ -249,7 +248,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $label Field label
 	 */
 	public function __construct( $type, $name, $label ) {
-		\Carbon_Fields\Carbon_Fields::verify_boot();
+		Carbon_Fields::verify_boot();
 		
 		$this->type = $type;
 		$this->set_base_name( $name );

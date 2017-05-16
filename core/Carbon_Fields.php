@@ -87,6 +87,23 @@ class Carbon_Fields {
 	}
 
 	/**
+	 * Resolve a dependency through IoC with arguments
+	 *
+	 * @param  string $identifier   Key to resolve from the container
+	 * @param  array  $arguments    Key-value array of arguments
+	 * @param  string $subcontainer The container to resolve from
+	 * @return mixed
+	 */
+	public static function resolve_with_arguments( $identifier, $arguments, $subcontainer = null ) {
+		$supercontainer = $subcontainer ? static::resolve( $subcontainer ) : static::instance()->ioc;
+		$container = new PimpleContainer();
+		$container['container'] = $supercontainer;
+		$container['arguments'] = $arguments;
+		$container['object'] = $supercontainer->raw( $identifier );
+		return $container['object'];
+	}
+
+	/**
 	 * Resolve a service through IoC
 	 *
 	 * @param string $service_name
@@ -126,7 +143,7 @@ class Carbon_Fields {
 			'_Field' => 'fields',
 			'_Condition' => 'container_conditions',
 		);
-		
+
 		$extension_suffix = '';
 		$extension_subcontainer = '';
 		foreach ( $type_dictionary as $suffix => $subcontainer ) {
