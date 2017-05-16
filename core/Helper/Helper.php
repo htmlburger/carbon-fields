@@ -235,6 +235,25 @@ class Helper {
 	}
 
 	/**
+	 * Normalize a label by updating case, stripping common prefixes etc.
+	 * 
+	 * @param  string $label
+	 * @return string
+	 */
+	public static function normalize_label( $label ) {
+		// remove the leading underscore(if it's there)
+		$label = preg_replace( '~^_~', '', $label );
+
+		// remove the leading "crb_"(if it's there)
+		$label = preg_replace( '~^crb_~', '', $label );
+
+		// split the name into words and make them capitalized
+		$label = mb_convert_case( str_replace( '_', ' ', $label ), MB_CASE_TITLE );
+
+		return $label;
+	}
+
+	/**
 	 * Normalize a type string representing an object type
 	 * 
 	 * @param  string $type

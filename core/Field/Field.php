@@ -272,8 +272,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @return string
 	 */
 	public function get_type() {
-		$class = get_class( $this );
-		return Helper::class_to_type( $class, '_Field' );
+		return Helper::class_to_type( get_class( $this ), '_Field' );
 	}
 
 	/**
@@ -291,6 +290,7 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Activate a field type
+	 * 
 	 * @param string $class_name
 	 */
 	public static function activate_field_type( $class_name ) {
@@ -399,8 +399,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Load value from datastore
 	 */
 	public function load() {
-		$value = $this->get_value_from_datastore();
-		$this->set_value( $value );
+		$this->set_value( $this->get_value_from_datastore() );
 	}
 
 	/**
@@ -669,16 +668,9 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $label If null, the label will be generated from the field name
 	 */
 	public function set_label( $label ) {
-		// Try to guess field label from it's name
 		if ( is_null( $label ) ) {
-			// remove the leading underscore(if it's there)
-			$label = preg_replace( '~^_~', '', $this->name );
-
-			// remove the leading "crb_"(if it's there)
-			$label = preg_replace( '~^crb_~', '', $label );
-
-			// split the name into words and make them capitalized
-			$label = mb_convert_case( str_replace( '_', ' ', $label ), MB_CASE_TITLE );
+			// Try to guess field label from it's name
+			$label = Helper::normalize_label( $this->get_name() );
 		}
 
 		$this->label = $label;
@@ -837,7 +829,6 @@ class Field implements Datastore_Holder_Interface {
 	 */
 	public function set_conditional_logic( $rules ) {
 		$this->conditional_logic = $this->parse_conditional_rules( $rules );
-
 		return $this;
 	}
 

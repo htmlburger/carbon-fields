@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
@@ -153,16 +154,9 @@ class Group_Field {
 	 * @param string $label If null, the label will be generated from the group name
 	 */
 	public function set_label( $label ) {
-		// Try to guess field label from it's name
 		if ( is_null( $label ) ) {
-			// remove the leading underscore(if it's there)
-			$label = preg_replace( '~^_~', '', $this->name );
-
-			// remove the leading "crb_"(if it's there)
-			$label = preg_replace( '~^crb_~', '', $label );
-
-			// split the name into words and make them capitalized
-			$label = ucwords( str_replace( '_', ' ', $label ) );
+			// Try to guess field label from it's name
+			$label = Helper::normalize_label( $this->get_name() );
 		}
 
 		$this->label = $label;
