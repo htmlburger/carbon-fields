@@ -35,6 +35,7 @@ export const RichTextField = ({
 				className="wp-editor-area"
 				name={name}
 				value={field.value}
+				rows={field.rows}
 				onChange={handleChange}
 				disabled={!field.ui.is_visible} />
 		</RichTextEditor>
@@ -51,6 +52,7 @@ RichTextField.propTypes = {
 	field: PropTypes.shape({
 		id: PropTypes.string,
 		value: PropTypes.string,
+		rows: PropTypes.number,
 		rich_editing: PropTypes.bool,
 	}),
 	handleChange: PropTypes.func,
