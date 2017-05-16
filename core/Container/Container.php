@@ -650,19 +650,9 @@ abstract class Container implements Datastore_Holder_Interface {
 			$tabbed_fields_names = array_merge( $tabbed_fields_names, array_keys( $tab_fields ) );
 		}
 
-		$all_fields_names = array();
-		foreach ( $this->fields as $field ) {
-			$all_fields_names[] = $field->get_name();
-		}
-
-		$fields_not_in_tabs = array_diff( $all_fields_names, $tabbed_fields_names );
-
-		$untabbed_fields = array();
-		foreach ( $this->fields as $field ) {
-			if ( in_array( $field->get_name(), $fields_not_in_tabs ) ) {
-				$untabbed_fields[] = $field;
-			}
-		}
+		$untabbed_fields = array_filter( $this->fields, function( $field ) use ( $tabbed_fields_names ) {
+			return ! in_array( $field->get_name(), $tabbed_fields_names );
+		} );
 
 		return $untabbed_fields;
 	}
