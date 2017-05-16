@@ -8,19 +8,16 @@ use Carbon_Fields\Datastore\Datastore;
  * Term meta container class.
  */
 class Term_Meta_Container extends Container {
+	
 	protected $term_id;
 
 	public $settings = array();
 
 	/**
-	 * Create a new container
-	 *
-	 * @param string $unique_id Unique id of the container
-	 * @param string $title title of the container
-	 * @param string $type Type of the container
+	 * @inheritdoc
 	 */
-	public function __construct( $unique_id, $title, $type ) {
-		parent::__construct( $unique_id, $title, $type );
+	public function __construct( $unique_id, $title, $type, $condition_collection, $condition_translator ) {
+		parent::__construct( $unique_id, $title, $type, $condition_collection, $condition_translator );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'term_meta' ), $this->has_default_datastore() );

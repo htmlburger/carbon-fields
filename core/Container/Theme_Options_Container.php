@@ -30,14 +30,10 @@ class Theme_Options_Container extends Container {
 	);
 
 	/**
-	 * Create a new container
-	 *
-	 * @param string $unique_id Unique id of the container
-	 * @param string $title title of the container
-	 * @param string $type Type of the container
+	 * @inheritdoc
 	 */
-	public function __construct( $unique_id, $title, $type ) {
-		parent::__construct( $unique_id, $title, $type );
+	public function __construct( $unique_id, $title, $type, $condition_collection, $condition_translator ) {
+		parent::__construct( $unique_id, $title, $type, $condition_collection, $condition_translator );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'theme_options' ), $this->has_default_datastore() );

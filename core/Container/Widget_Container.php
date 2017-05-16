@@ -8,22 +8,12 @@ namespace Carbon_Fields\Container;
 class Widget_Container extends Container {
 
 	/**
-	 * Create a new widget
-	 *
-	 * @param string $unique_id Unique ID of the widget
-	 * @param string $title Ignored
-	 * @param string $type Container type
+	 * @inheritdoc
 	 */
-	public function __construct( $unique_id, $title, $type ) {
-		$this->id = $unique_id;
-		$this->title = '';
-		$this->type = $type;
+	public function __construct( $unique_id, $title, $type, $condition_collection, $condition_translator ) {
+		parent::__construct( $unique_id, $title, $type, $condition_collection, $condition_translator );
 
-		$this->condition_collection = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
-		$this->condition_collection->set_condition_type_list(
-			array_merge( $this->get_condition_types( true ), $this->get_condition_types( false ) ),
-			true
-		);
+		$this->title = '';
 	}
 
 	/**

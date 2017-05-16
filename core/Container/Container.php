@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Container;
 
+use Carbon_Fields\Carbon_Fields;
 use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Field\Group_Field;
@@ -126,10 +127,17 @@ abstract class Container implements Datastore_Holder_Interface {
 	protected $condition_collection;
 
 	/**
+	 * Translator to use when translating conditions to json
+	 *
+	 * @var Carbon_Fields\Container\Fulfillable\Translator\Translator
+	 */
+	protected $condition_translator;
+
+	/**
 	 * Create a new container of type $type and name $name.
 	 *
-	 * @param string $raw_type
-	 * @param string $name Human-readable name of the container
+	 * @param  string $raw_type
+	 * @param  string $name      Human-readable name of the container
 	 * @return object $container
 	 */
 	public static function factory( $raw_type, $name ) {
@@ -141,9 +149,11 @@ abstract class Container implements Datastore_Holder_Interface {
 			$class = __NAMESPACE__ . '\\Broken_Container';
 		}
 
-		$repository = \Carbon_Fields\Carbon_Fields::resolve( 'container_repository' );
+		$repository = Carbon_Fields::resolve( 'container_repository' );
+		$fulfillable_collection = Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
+		$condition_translator = Carbon_Fields::resolve( 'container_condition_translator_json' );
 		$unique_id = $repository->get_unique_panel_id( $name );
-		$container = new $class( $unique_id, $name, $normalized_type );
+		$container = new $class( $unique_id, $name, $normalized_type, $fulfillable_collection, $condition_translator );
 		$repository->register_container( $container );
 
 		return $container;
@@ -161,12 +171,14 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Create a new container
 	 *
-	 * @param string $unique_id Unique id of the container
-	 * @param string $title title of the container
-	 * @param string $type Type of the container
+	 * @param string                 $unique_id            Unique id of the container
+	 * @param string                 $title                title of the container
+	 * @param string                 $type                 Type of the container
+	 * @param Fulfillable_Collection $condition_collection
+	 * @param Translator             $condition_translator
 	 */
-	public function __construct( $unique_id, $title, $type ) {
-		\Carbon_Fields\Carbon_Fields::verify_boot();
+	public function __construct( $unique_id, $title, $type, $condition_collection, $condition_translator ) {
+		Carbon_Fields::verify_boot();
 
 		if ( empty( $title ) ) {
 			Incorrect_Syntax_Exception::raise( 'Empty container title is not supported' );
@@ -175,11 +187,12 @@ abstract class Container implements Datastore_Holder_Interface {
 		$this->id = $unique_id;
 		$this->title = $title;
 		$this->type = $type;
-		$this->condition_collection = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
+		$this->condition_collection = $condition_collection;
 		$this->condition_collection->set_condition_type_list(
 			array_merge( $this->get_condition_types( true ), $this->get_condition_types( false ) ),
 			true
 		);
+		$this->condition_translator = $condition_translator;
 	}
 
 	/**
@@ -712,10 +725,8 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return array
 	 */
 	public function to_json( $load ) {
-		$array_translator = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_translator_array' );
 		$conditions = $this->condition_collection->evaluate( $this->get_condition_types( true ), $this->get_environment_for_request(), array( 'CUSTOM' ) );
-		$conditions = $array_translator->fulfillable_to_foreign( $conditions );
-		$conditions = $array_translator->foreign_to_json( $conditions );
+		$conditions = $this->condition_translator->fulfillable_to_foreign( $conditions );
 
 		$container_data = array(
 			'id' => $this->id,

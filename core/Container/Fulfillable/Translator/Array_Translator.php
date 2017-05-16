@@ -27,10 +27,7 @@ class Array_Translator extends Translator {
 	}
 
 	/**
-	 * Translate a Condition
-	 *
-	 * @param  Condition $condition
-	 * @return mixed
+	 * @inheritdoc
 	 */
 	protected function condition_to_foreign( Condition $condition ) {
 		return array(
@@ -41,10 +38,7 @@ class Array_Translator extends Translator {
 	}
 
 	/**
-	 * Translate a Fulfillable_Collection
-	 *
-	 * @param  Fulfillable_Collection $fulfillable_collection
-	 * @return mixed
+	 * @inheritdoc
 	 */
 	protected function fulfillable_collection_to_foreign( Fulfillable_Collection $fulfillable_collection ) {
 		$fulfillables = $fulfillable_collection->get_fulfillables();
@@ -84,10 +78,7 @@ class Array_Translator extends Translator {
 	}
 
 	/**
-	 * Translate foreign data to a Fulfillable
-	 *
-	 * @param  mixed       $foreign
-	 * @return Fulfillable
+	 * @inheritdoc
 	 */
 	public function foreign_to_fulfillable( $foreign ) {
 		if ( ! is_array( $foreign ) ) {
@@ -135,39 +126,5 @@ class Array_Translator extends Translator {
 			$collection->add_fulfillable( $this->foreign_to_fulfillable( $value ), $fulfillable_comparison );
 		}
 		return $collection;
-	}
-
-	/**
-	 * Make conditions friendly for frontend.
-	 *
-	 * @param  array $foreign
-	 * @return array
-	 */
-	public function foreign_to_json( $foreign ) {
-		if ( empty( $foreign ) ) {
-			return array(
-				'relation' => 'AND',
-				'conditions' => array(),
-			);
-		}
-
-		$conditions = array();
-
-		foreach ( $foreign as $key => $value ) {
-			if ( $key === 'relation' ) {
-				continue;
-			}
-
-			if ( isset( $value['relation'] ) ) {
-				$conditions[] = $this->foreign_to_json( $value );
-			} else {
-				$conditions[] = $value;
-			}
-		}
-
-		return array(
-			'relation' => $foreign['relation'],
-			'conditions' => $conditions,
-		);
 	}
 }

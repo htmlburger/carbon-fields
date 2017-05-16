@@ -80,7 +80,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 			return $condition;
 		} );
 		$cc_ioc['post_term'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
-			$condition = new \Carbon_Fields\Container\Condition\Post_Term_Condition();
+			$condition = new \Carbon_Fields\Container\Condition\Post_Term_Condition( $ioc['wp_toolset'] );
 			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
 				$ioc['container_condition_comparers']['custom'],
@@ -89,7 +89,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 		} );
 
 		$cc_ioc['term'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
-			$condition = new \Carbon_Fields\Container\Condition\Term_Condition();
+			$condition = new \Carbon_Fields\Container\Condition\Term_Condition( $ioc['wp_toolset'] );
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['nonscalar'] );
 			return $condition;
 		} );
@@ -204,6 +204,10 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 	protected static function install_translators( $ioc ) {
 		$ioc['container_condition_translator_array'] = function( $ioc ) {
 			return new \Carbon_Fields\Container\Fulfillable\Translator\Array_Translator( $ioc['container_condition_factory'] );
+		};
+
+		$ioc['container_condition_translator_json'] = function( $ioc ) {
+			return new \Carbon_Fields\Container\Fulfillable\Translator\Json_Translator( $ioc['container_condition_factory'] );
 		};
 	}
 

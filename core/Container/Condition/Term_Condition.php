@@ -39,8 +39,8 @@ class Term_Condition extends Condition {
 	/**
 	 * Constructor
 	 */
-	public function __construct() {
-		$this->wp_toolset = \Carbon_Fields\Carbon_Fields::resolve( 'wp_toolset' );
+	public function __construct( $wp_toolset ) {
+		$this->wp_toolset = $wp_toolset;
 	}
 	
 	/**
