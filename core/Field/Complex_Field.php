@@ -24,6 +24,7 @@ class Complex_Field extends Field {
 	protected $groups = array();
 
 	protected $layout = self::LAYOUT_GRID;
+	protected $allow_duplicates = true;
 	protected $values_min = -1;
 	protected $values_max = -1;
 	protected $collapsed = false;
@@ -414,6 +415,7 @@ class Complex_Field extends Field {
 		$complex_data = array_merge( $complex_data, array(
 			'layout' => $this->layout,
 			'labels' => $this->labels,
+			'allow_duplicates' => $this->allow_duplicates,
 			'min' => $this->get_min(),
 			'max' => $this->get_max(),
 			'multiple_groups' => count( $groups_data ) > 1,
@@ -665,5 +667,18 @@ class Complex_Field extends Field {
 		}
 
 		return $group_object;
+	}
+
+	/**
+	 * Allow to use duplicated complex fields
+	 *
+	 * @param bool $allow_duplicates
+	 * @return Complex_Field
+	 */
+	public function allow_duplicates($allow_duplicates)
+	{
+		$this->allow_duplicates = (bool) $allow_duplicates;
+
+		return $this;
 	}
 }

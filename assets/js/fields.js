@@ -1731,6 +1731,8 @@ window.carbon = window.carbon || {};
 			this.listenTo(this.groupsCollection, 'sort',       this.reorderGroups);  // Sort event is trigger after the "add" event
 			this.listenTo(this.groupsCollection, 'add',        this.setGroupID);     // Sets an unique ID for each group
 			this.listenTo(this.groupsCollection, 'add',        this.renderGroup);    // Render the added group
+			this.listenTo(this.groupsCollection, 'add',        this.hideActions);    // Hide the duplicated actions
+			this.listenTo(this.groupsCollection, 'remove',     this.showActions);    // Show the duplicated actions
 
 			if (this.isTabbed) {
 				this.listenTo(this.groupsCollection, 'add',    this.renderGroupTab); // Render the group tab
@@ -1939,6 +1941,42 @@ window.carbon = window.carbon || {};
 			this.groupsCollection.add(group, {
 				sort: false
 			});
+		},
+
+		hideActions: function(model) {
+			var allowDuplicates = this.model.get('allow_duplicates'),
+				name = model.get('name');
+
+			if(allowDuplicates == false) {
+				var actions = this.$el.find('.carbon-actions'),
+					action = actions.find('a[data-group="' + name + '"]').parent();
+
+				action.addClass('hidden');
+
+				if(actions.find('li:not(.hidden)').size() == 0) {
+					actions.addClass('hidden');
+				}
+			}
+		},
+
+		showActions: function(model) {
+			var allowDuplicates = this.model.get('allow_duplicates'),
+				name = model.get('name');
+
+			if(allowDuplicates == false) {
+				var groupSize = this.$el.find('.carbon-group-row').children('input[value="' + name + '"]').size(),
+					actions = this.$el.find('.carbon-actions'),
+					action = actions.find('a[data-group="' + name + '"]').parent();
+
+				// Handle the case if duplicated entries already exist
+				if(groupSize == 0) {
+					action.removeClass('hidden');
+
+					if(actions.find('li:not(.hidden)').size() > 0) {
+						actions.removeClass('hidden');
+					}
+				}
+			}
 		},
 
 		setGroupID: function(model) {
