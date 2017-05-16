@@ -353,11 +353,7 @@ class Field implements Datastore_Holder_Interface {
 		return (
 			empty( $hierarchy )
 			&&
-			(
-				$this->get_value_set()->get_type() === Value_Set::TYPE_SINGLE_VALUE
-				||
-				$this->get_value_set()->get_type() === Value_Set::TYPE_MULTIPLE_PROPERTIES
-			)
+			in_array( $this->get_value_set()->get_type(), array( Value_Set::TYPE_SINGLE_VALUE, Value_Set::TYPE_MULTIPLE_PROPERTIES ) )
 		);
 	}
 
@@ -624,6 +620,7 @@ class Field implements Datastore_Holder_Interface {
 		$regex = '/\A[a-z0-9_\-\[\]]+\z/';
 		if ( ! preg_match( $regex, $name ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name can only contain lowercase alphanumeric characters and underscores ("' . $name . '" passed).' );
+			return;
 		}
 
 		$name_prefix = $this->get_name_prefix();
