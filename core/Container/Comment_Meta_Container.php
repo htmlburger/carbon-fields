@@ -56,7 +56,6 @@ class Comment_Meta_Container extends Container {
 	 * @param int $comment_id ID of the comment against which save() is ran
 	 */
 	public function save( $comment_id = null ) {
-
 		// Unhook action to guarantee single save
 		remove_action( 'edit_comment', array( $this, '_save' ) );
 
