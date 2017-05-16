@@ -748,7 +748,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Enqueue admin styles
 	 */
 	public static function admin_hook_styles() {
-		wp_enqueue_style( 'carbon-main', \Carbon_Fields\URL . '/assets/dist/carbon.css', array(), \Carbon_Fields\VERSION );
+		wp_enqueue_style( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.css', array(), \Carbon_Fields\VERSION );
 	}
 
 	/**
