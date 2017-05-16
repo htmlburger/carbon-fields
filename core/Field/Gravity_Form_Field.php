@@ -34,13 +34,13 @@ class Gravity_Form_Field extends Select_Field {
 	 */
 	protected function get_gravity_form_options() {
 		if ( ! $this->is_plugin_active() ) {
-			return;
+			return array();
 		}
 
 		$forms = \RGFormsModel::get_forms( null, 'title' );
 
 		if ( ! is_array( $forms ) || empty( $forms ) ) {
-			return;
+			return array();
 		}
 
 		$options = array(
