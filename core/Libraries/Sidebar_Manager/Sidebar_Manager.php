@@ -19,7 +19,7 @@ class Sidebar_Manager {
 
 		// Set the default options
 		if ( function_exists( 'crb_get_default_sidebar_options' ) ) {
-			add_filter( 'carbon_fields_custom_sidebar_default_options', 'crb_get_default_sidebar_options', -1 );
+			add_filter( 'carbon_fields_sidebar_default_options', 'crb_get_default_sidebar_options', -1 );
 		}
 
 		// Ajax listeners
@@ -159,7 +159,7 @@ class Sidebar_Manager {
 	 */
 	public function register_sidebars() {
 		$registered_sidebars = $this->get_sidebars();
-		$default_options = apply_filters( 'carbon_fields_custom_sidebar_default_options', array() );
+		$default_options = apply_filters( 'carbon_fields_sidebar_default_options', array() );
 
 		foreach ( $registered_sidebars as $id => $options ) {
 			$options['class'] = 'carbon-sidebar';
