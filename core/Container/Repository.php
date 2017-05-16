@@ -118,7 +118,7 @@ class Repository {
 	 */
 	public function get_active_containers() {
 		return array_filter( $this->containers, function( $container ) {
-			return $container->active();
+			return $container->is_active();
 		} );
 	}
 

@@ -215,7 +215,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Return whether the container is active
 	 */
-	public function active() {
+	public function is_active() {
 		return $this->active;
 	}
 

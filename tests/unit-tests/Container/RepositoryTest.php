@@ -92,10 +92,10 @@ class RepositoryTest extends WP_UnitTestCase {
 	 */
 	public function testGetActiveContainers() {
 		$container1 = $this->getContainerMock( function( $mock ) {
-			$mock->shouldReceive( 'active' )->andReturn( true );
+			$mock->shouldReceive( 'is_active' )->andReturn( true );
 		} );
 		$container2 = $this->getContainerMock( function( $mock ) {
-			$mock->shouldReceive( 'active' )->andReturn( false );
+			$mock->shouldReceive( 'is_active' )->andReturn( false );
 		} );
 		$expected = array( $container1 );
 
