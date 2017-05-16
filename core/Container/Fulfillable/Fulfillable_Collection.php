@@ -53,12 +53,21 @@ class Fulfillable_Collection implements Fulfillable {
 	/**
 	 * Constructor
 	 * 
-	 * @param Factory $condition_factory
+	 * @param Factory          $condition_factory
 	 * @param Array_Translator $array_translator
 	 */
 	public function __construct( Factory $condition_factory, Array_Translator $array_translator ) {
 		$this->condition_factory = $condition_factory;
 		$this->array_translator = $array_translator;
+	}
+
+	/**
+	 * Create a new collection
+	 * 
+	 * @return Fulfillable_Collection
+	 */
+	protected function create_collection() {
+		return \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
 	}
 
 	/**
@@ -201,7 +210,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @return Fulfillable_Collection $this
 	 */
 	protected function where_collection( $collection_callable, $fulfillable_comparison) {
-		$collection = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
+		$collection = $this->create_collection();
 		$collection->set_condition_type_list( $this->get_condition_type_list(), $this->is_condition_type_list_whitelist() );
 		$collection_callable( $collection );
 		$this->add_fulfillable( $collection, $fulfillable_comparison );
@@ -254,7 +263,7 @@ class Fulfillable_Collection implements Fulfillable {
 	public function filter( $condition_whitelist ) {
 		$fulfillables = $this->get_fulfillables();
 
-		$collection = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
+		$collection = $this->create_collection();
 		foreach ( $fulfillables as $fulfillable_tuple ) {
 			$fulfillable = $fulfillable_tuple['fulfillable'];
 			$fulfillable_comparison = $fulfillable_tuple['fulfillable_comparison'];
@@ -292,7 +301,7 @@ class Fulfillable_Collection implements Fulfillable {
 	public function evaluate( $condition_types, $environment, $comparison_operators = array() ) {
 		$fulfillables = $this->get_fulfillables();
 
-		$collection = \Carbon_Fields\Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
+		$collection = $this->create_collection();
 		foreach ( $fulfillables as $fulfillable_tuple ) {
 			$fulfillable = $fulfillable_tuple['fulfillable'];
 			$fulfillable_comparison = $fulfillable_tuple['fulfillable_comparison'];
@@ -304,7 +313,7 @@ class Fulfillable_Collection implements Fulfillable {
 				$type = $this->condition_factory->get_type( get_class( $fulfillable ) );
 				$comparison_operator = $fulfillable->get_comparison_operator();
 				if ( in_array( $type, $condition_types ) || in_array( $comparison_operator, $comparison_operators ) ) {
-					$boolean_condition = \Carbon_Fields\Carbon_Fields::resolve( 'boolean', 'container_conditions' );
+					$boolean_condition = $this->condition_factory->make( 'boolean' );
 					$boolean_condition->set_comparison_operator( '=' );
 
 					$value = is_bool( $environment ) ? $environment : $fulfillable->is_fulfilled( $environment );
