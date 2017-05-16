@@ -175,7 +175,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @param string                 $title                title of the container
 	 * @param string                 $type                 Type of the container
 	 * @param Fulfillable_Collection $condition_collection
-	 * @param Translator             $condition_translator
+	 * @param Carbon_Fields\Container\Fulfillable\Translator\Translator $condition_translator
 	 */
 	public function __construct( $unique_id, $title, $type, $condition_collection, $condition_translator ) {
 		Carbon_Fields::verify_boot();

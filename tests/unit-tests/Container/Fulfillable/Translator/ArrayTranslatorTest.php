@@ -25,7 +25,7 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 			return new Fulfillable_Collection( $ioc['container_condition_factory'], $ioc['container_condition_translator_array'] );
 		} );
 
-		$ioc['container_conditions'] = function( $ioc ) {
+		$ioc['container_conditions'] = function() {
 			return new PimpleContainer();
 		};
 

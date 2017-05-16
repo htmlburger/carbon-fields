@@ -201,9 +201,9 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Create a new field of type $type and name $name and label $label.
+	 * Create a new field of type $raw_type and name $name and label $label.
 	 *
-	 * @param string $type
+	 * @param string $raw_type
 	 * @param string $name lower case and underscore-delimited
 	 * @param string $label (optional) Automatically generated from $name if not present
 	 * @return Field

@@ -35,13 +35,13 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 			return new Fulfillable_Collection( $ioc['container_condition_factory'], $ioc['container_condition_translator_array'] );
 		} );
 
-		$ioc['container_conditions'] = function( $ioc ) {
+		$ioc['container_conditions'] = function() {
 			return new PimpleContainer();
 		};
 
 		$cc_ioc = $ioc['container_conditions'];
 
-		$cc_ioc['boolean'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['boolean'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Boolean_Condition();
 			$condition->set_comparers( array(
 				$ioc['container_condition_comparers']['equality'],
@@ -49,37 +49,37 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 			return $condition;
 		} );
 
-		$cc_ioc['post_id'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['post_id'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_ID_Condition();
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
 			return $condition;
 		} );
-		$cc_ioc['post_parent_id'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['post_parent_id'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_Parent_ID_Condition();
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
 			return $condition;
 		} );
-		$cc_ioc['post_type'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['post_type'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_Type_Condition();
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['nonscalar'] );
 			return $condition;
 		} );
-		$cc_ioc['post_format'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['post_format'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_Format_Condition();
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['nonscalar'] );
 			return $condition;
 		} );
-		$cc_ioc['post_level'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['post_level'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_Level_Condition();
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
 			return $condition;
 		} );
-		$cc_ioc['post_template'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['post_template'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_Template_Condition();
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['nonscalar'] );
 			return $condition;
 		} );
-		$cc_ioc['post_term'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['post_term'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_Term_Condition( $ioc['wp_toolset'] );
 			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
@@ -88,28 +88,28 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 			return $condition;
 		} );
 
-		$cc_ioc['term'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['term'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Term_Condition( $ioc['wp_toolset'] );
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['nonscalar'] );
 			return $condition;
 		} );
-		$cc_ioc['term_taxonomy'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['term_taxonomy'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Term_Taxonomy_Condition();
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['nonscalar'] );
 			return $condition;
 		} );
-		$cc_ioc['term_level'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['term_level'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Term_Level_Condition();
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
 			return $condition;
 		} );
 
-		$cc_ioc['user_id'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['user_id'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\User_ID_Condition();
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
 			return $condition;
 		} );
-		$cc_ioc['user_role'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['user_role'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\User_Role_Condition();
 			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
@@ -117,7 +117,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 			) );
 			return $condition;
 		} );
-		$cc_ioc['user_capabiltiy'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['user_capabiltiy'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\User_Capability_Condition();
 			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
@@ -126,12 +126,12 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 			return $condition;
 		} );
 
-		$cc_ioc['current_user_id'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['current_user_id'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Current_User_ID_Condition();
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
 			return $condition;
 		} );
-		$cc_ioc['current_user_role'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['current_user_role'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Current_User_Role_Condition();
 			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
@@ -139,7 +139,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 			) );
 			return $condition;
 		} );
-		$cc_ioc['current_user_capability'] = $cc_ioc->factory( function( $cc_ioc ) use ( $ioc ) {
+		$cc_ioc['current_user_capability'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Current_User_Capability_Condition();
 			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has it's own comparison methods
@@ -155,7 +155,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 	 * @param  PimpleContainer $ioc
 	 */
 	protected function install_comparers( $ioc ) {
-		$ioc['container_condition_comparers'] = function( $ioc ) {
+		$ioc['container_condition_comparers'] = function() {
 			return new PimpleContainer();
 		};
 
@@ -175,11 +175,11 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 			return new \Carbon_Fields\Container\Condition\Comparer\Custom_Comparer();
 		};
 
-		$ioc['container_condition_comparer_collections'] = function( $ioc ) {
+		$ioc['container_condition_comparer_collections'] = function() {
 			return new PimpleContainer();
 		};
 
-		$ioc['container_condition_comparer_collections']['generic'] = function( $cccc_ioc ) use ( $ioc ) {
+		$ioc['container_condition_comparer_collections']['generic'] = function() use ( $ioc ) {
 			return array(
 				$ioc['container_condition_comparers']['equality'],
 				$ioc['container_condition_comparers']['contain'],
@@ -187,7 +187,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 				$ioc['container_condition_comparers']['custom'],
 			);
 		};
-		$ioc['container_condition_comparer_collections']['nonscalar'] = function( $cccc_ioc ) use ( $ioc ) {
+		$ioc['container_condition_comparer_collections']['nonscalar'] = function() use ( $ioc ) {
 			return array(
 				$ioc['container_condition_comparers']['equality'],
 				$ioc['container_condition_comparers']['contain'],

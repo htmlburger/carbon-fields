@@ -26,9 +26,9 @@ abstract class Datastore implements Datastore_Interface {
 	abstract public function init();
 
 	/**
-	 * Create a new datastore of type $type.
+	 * Create a new datastore of type $raw_type.
 	 *
-	 * @param string $type
+	 * @param string $raw_type
 	 * @return Datastore_Interface
 	 */
 	public static function factory( $raw_type ) {

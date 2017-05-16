@@ -40,7 +40,7 @@ class MiscTest extends WP_UnitTestCase {
 			return M::mock( 'Carbon_Fields\\Container\\Fulfillable\\Fulfillable_Collection' )->shouldIgnoreMissing();
 		} );
 
-		$ioc['container_conditions'] = function( $ioc ) {
+		$ioc['container_conditions'] = function() {
 			return new PimpleContainer();
 		};
 
