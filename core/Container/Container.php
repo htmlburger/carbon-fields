@@ -458,11 +458,12 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Return field from container with specified name
 	 *
-	 * @example crb_complex/text_field
-	 * @example crb_complex/complex_2
-	 * @example crb_complex/complex_2:text_group/text_field
+	 * @example $field_name = 'crb_complex/text_field'
+	 * @example $field_name = 'crb_complex/complex_2'
+	 * @example $field_name = 'crb_complex/complex_2:text_group/text_field'
+	 * @example $field_name = 'crb_complex[3]/complex_2[1]:text_group/text_field'
 	 *
-	 * @param string $field_name Can specify a field inside a complex with a / (slash) separator
+	 * @param string $field_name
 	 * @return Field
 	 */
 	public function get_field_by_name( $field_name ) {
@@ -487,26 +488,28 @@ abstract class Container implements Datastore_Holder_Interface {
 			$segment_group_name = isset( $segment_pieces['group_name'] ) ? $segment_pieces['group_name'] : Group_Field::DEFAULT_GROUP_NAME;
 
 			foreach ( $field_group as $f ) {
-				if ( $f->get_base_name() === $segment_field_name ) {
-					if ( empty( $hierarchy_left ) ) {
-						$field = clone $f;
-						$field->set_hierarchy_index( $hierarchy_index );
-					} else {
-						if ( is_a( $f, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
-							$group = $f->get_group_by_name( $segment_group_name );
-							if ( ! $group ) {
-								Incorrect_Syntax_Exception::raise( 'Unknown group name specified when fetching a value inside a complex field: "' . $segment_group_name . '".' );
-								return null;
-							}
-							$field_group = $group->get_fields();
-							$hierarchy_index[] = $segment_group_index;
-						} else {
-							Incorrect_Syntax_Exception::raise( 'Attempted to look for a nested field inside a non-complex field.' );
-							return null;
-						}
-					}
-					break;
+				if ( $f->get_base_name() !== $segment_field_name ) {
+					continue;
 				}
+
+				if ( empty( $hierarchy_left ) ) {
+					$field = clone $f;
+					$field->set_hierarchy_index( $hierarchy_index );
+				} else {
+					if ( ! is_a( $f, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
+						Incorrect_Syntax_Exception::raise( 'Attempted to look for a nested field inside a non-complex field.' );
+						return null;
+					}
+
+					$group = $f->get_group_by_name( $segment_group_name );
+					if ( ! $group ) {
+						Incorrect_Syntax_Exception::raise( 'Unknown group name specified when fetching a value inside a complex field: "' . $segment_group_name . '".' );
+						return null;
+					}
+					$field_group = $group->get_fields();
+					$hierarchy_index[] = $segment_group_index;
+				}
+				break;
 			}
 		}
 
