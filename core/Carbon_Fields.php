@@ -25,7 +25,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 /**
  * Holds a static reference to the ioc container
  */
-class Carbon_Fields {
+final class Carbon_Fields {
 
 	/**
 	 * An event emitter to facilitate events before the WordPress environment is guaranteed to be loaded
@@ -71,13 +71,13 @@ class Carbon_Fields {
 	/**
 	 * Resolve a dependency through IoC
 	 *
-	 * @param  string $key
-	 * @param  string $subcontainer Subcontainer to look into
+	 * @param  string      $key
+	 * @param  string|null $subcontainer Subcontainer to look into
 	 * @return mixed
 	 */
 	public static function resolve( $key, $subcontainer = null ) {
 		$ioc = static::instance()->ioc;
-		if ( $subcontainer ) {
+		if ( $subcontainer !== null ) {
 			if ( ! isset( $ioc[ $subcontainer ] ) ) {
 				return null;
 			}
@@ -116,13 +116,13 @@ class Carbon_Fields {
 	/**
 	 * Check if a dependency is registered
 	 *
-	 * @param  string $key
-	 * @param  string $subcontainer Subcontainer to look into
+	 * @param  string      $key
+	 * @param  string|null $subcontainer Subcontainer to look into
 	 * @return bool
 	 */
 	public static function has( $key, $subcontainer = null ) {
 		$ioc = static::instance()->ioc;
-		if ( $subcontainer ) {
+		if ( $subcontainer !== null ) {
 			if ( ! isset( $ioc[ $subcontainer ] ) ) {
 				return false;
 			}
@@ -134,7 +134,6 @@ class Carbon_Fields {
 	/**
 	 * Extend Carbon Fields by adding a new entity (container condition etc.)
 	 *
-	 * @param string $type     Type of extension - 'container_condition'
 	 * @param string $class    Extension class name
 	 * @param string $extender Extending callable
 	 */
@@ -231,7 +230,7 @@ class Carbon_Fields {
 	/**
 	 * Remove a listener from any event
 	 * 
-	 * @param Listener $removed_listener
+	 * @param Listener $listener
 	 */
 	public static function remove_listener( $listener ) {
 		static::instance()->get_emitter()->remove_listener( $listener );
@@ -300,19 +299,19 @@ class Carbon_Fields {
 		};
 
 		/* Services */
-		$ioc['services'] = function( $ioc ) {
+		$ioc['services'] = function() {
 			return new PimpleContainer();
 		};
 
-		$ioc['services']['meta_query'] = function( $services_ioc ) use ( $ioc ) {
+		$ioc['services']['meta_query'] = function() use ( $ioc ) {
 			return new Meta_Query_Service( $ioc['container_repository'], $ioc['key_toolset'] );
 		};
 
-		$ioc['services']['legacy_storage'] = function( $services_ioc ) use ( $ioc ) {
+		$ioc['services']['legacy_storage'] = function() use ( $ioc ) {
 			return new Legacy_Storage_Service_v_1_5( $ioc['container_repository'], $ioc['key_toolset'] );
 		};
 
-		$ioc['services']['rest_api'] = function( $services_ioc ) use ( $ioc ) {
+		$ioc['services']['rest_api'] = function() use ( $ioc ) {
 			return new REST_API_Service( $ioc['rest_api_router'], $ioc['rest_api_decorator'] );
 		};
 
