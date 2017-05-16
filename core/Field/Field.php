@@ -881,27 +881,23 @@ class Field implements Datastore_Holder_Interface {
 				return array();
 			}
 
-			// Check the compare operator
-			if ( empty( $rule['compare'] ) ) {
-				$rule['compare'] = '=';
-			}
+			// Fill in optional keys with defaults
+			$rule = array_merge( array(
+				'compare' => '=',
+				'value' => '',
+			), $rule );
+
 			if ( ! in_array( $rule['compare'], $allowed_operators ) ) {
 				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare operator: <code>' .
 					$rule['compare'] . '</code><br>Allowed operators are: <code>' .
 				implode( ', ', $allowed_operators ) . '</code>' );
 				return array();
 			}
-			if ( $rule['compare'] === 'IN' || $rule['compare'] === 'NOT IN' ) {
-				if ( ! is_array( $rule['value'] ) ) {
-					Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. ' .
-					'An array is expected, when using the "' . $rule['compare'] . '" operator.' );
-					return array();
-				}
-			}
 
-			// Check the value
-			if ( ! isset( $rule['value'] ) ) {
-				$rule['value'] = '';
+			if ( in_array( $rule['compare'], array( 'IN', 'NOT IN' ) ) && ! is_array( $rule['value'] ) ) {
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. ' .
+					'An array is expected, when using the "' . $rule['compare'] . '" operator.' );
+				return array();
 			}
 
 			$parsed_rules['rules'][] = $rule;
