@@ -876,8 +876,7 @@ class Field implements Datastore_Holder_Interface {
 
 			// Check if the rule is valid
 			if ( ! is_array( $rule ) || empty( $rule['field'] ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic rule format. ' .
-				'The rule should be an array with the "field" key set.' );
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic rule format. The rule should be an array with the "field" key set.' );
 				return array();
 			}
 
@@ -888,15 +887,13 @@ class Field implements Datastore_Holder_Interface {
 			), $rule );
 
 			if ( ! in_array( $rule['compare'], $allowed_operators ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare operator: <code>' .
-					$rule['compare'] . '</code><br>Allowed operators are: <code>' .
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare operator: <code>' . $rule['compare'] . '</code><br>Allowed operators are: <code>' .
 				implode( ', ', $allowed_operators ) . '</code>' );
 				return array();
 			}
 
 			if ( in_array( $rule['compare'], array( 'IN', 'NOT IN' ) ) && ! is_array( $rule['value'] ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. ' .
-					'An array is expected, when using the "' . $rule['compare'] . '" operator.' );
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. An array is expected, when using the "' . $rule['compare'] . '" operator.' );
 				return array();
 			}
 
