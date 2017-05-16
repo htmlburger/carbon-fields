@@ -12,15 +12,15 @@ class SingleEventListener extends PersistentListener {
 	protected $called = false;
 
 	/**
-     * @inheritdoc
-     */
+	 * {@inheritDoc}
+	 */
 	public function is_valid() {
 		return ! $this->called;
 	}
 
 	/**
-     * @inheritdoc
-     */
+	 * {@inheritDoc}
+	 */
 	public function notify() {
 		$this->called = true;
 		return call_user_func_array( array( $this, 'parent::notify' ), func_get_args() );

@@ -7,7 +7,7 @@ use Carbon_Fields\Container\Fulfillable\Fulfillable;
 class Json_Translator extends Array_Translator {
 
 	/**
-	 * @inheritdoc
+	 * {@inheritDoc}
 	 */
 	public function fulfillable_to_foreign( Fulfillable $fulfillable ) {
 		$result = parent::fulfillable_to_foreign( $fulfillable );

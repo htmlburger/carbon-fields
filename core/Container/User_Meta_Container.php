@@ -12,7 +12,7 @@ class User_Meta_Container extends Container {
 	public $settings = array();
 
 	/**
-	 * @inheritdoc
+	 * {@inheritDoc}
 	 */
 	public function __construct( $unique_id, $title, $type, $condition_collection, $condition_translator ) {
 		parent::__construct( $unique_id, $title, $type, $condition_collection, $condition_translator );

@@ -19,7 +19,7 @@ class Nav_Menu_Item_Container extends Container {
 	protected $menu_item_instances = array();
 
 	/**
-	 * @inheritdoc
+	 * {@inheritDoc}
 	 */
 	public function __construct( $unique_id, $title, $type, $condition_collection, $condition_translator ) {
 		parent::__construct( $unique_id, $title, $type, $condition_collection, $condition_translator );

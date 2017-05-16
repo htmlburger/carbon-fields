@@ -27,7 +27,7 @@ class Array_Translator extends Translator {
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritDoc}
 	 */
 	protected function condition_to_foreign( Condition $condition ) {
 		return array(
@@ -38,7 +38,7 @@ class Array_Translator extends Translator {
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritDoc}
 	 */
 	protected function fulfillable_collection_to_foreign( Fulfillable_Collection $fulfillable_collection ) {
 		$fulfillables = $fulfillable_collection->get_fulfillables();
@@ -78,7 +78,7 @@ class Array_Translator extends Translator {
 	}
 
 	/**
-	 * @inheritdoc
+	 * {@inheritDoc}
 	 */
 	public function foreign_to_fulfillable( $foreign ) {
 		if ( ! is_array( $foreign ) ) {

@@ -12,29 +12,29 @@ class PersistentListener implements Listener {
 	protected $callable;
 
 	/**
-     * @inheritdoc
-     */
+	 * {@inheritDoc}
+	 */
 	public function get_callable() {
 		return $this->callable;
 	}
 
 	/**
-     * @inheritdoc
-     */
+	 * {@inheritDoc}
+	 */
 	public function set_callable( $callable ) {
 		$this->callable = $callable;
 	}
 
 	/**
-     * @inheritdoc
-     */
+	 * {@inheritDoc}
+	 */
 	public function is_valid() {
 		return true;
 	}
 
 	/**
-     * @inheritdoc
-     */
+	 * {@inheritDoc}
+	 */
 	public function notify() {
 		return call_user_func_array( $this->callable, func_get_args() );
 	}
