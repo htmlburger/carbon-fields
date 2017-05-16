@@ -7,6 +7,7 @@ use Carbon_Fields\Field\Field;
 use Carbon_Fields\Service\Legacy_Storage_Service_v_1_5;
 use Carbon_Fields\Toolset\Key_Toolset;
 use Carbon_Fields\Toolset\WP_Toolset;
+use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
 
 /**
  * @coversDefaultClass Carbon_Fields\Service\Legacy_Storage_Service_v_1_5
@@ -15,22 +16,43 @@ class LegacyStorageServicev15Test extends WP_UnitTestCase {
 
 	public function setUp() {
 		$ioc = new PimpleContainer();
+		
 		$ioc['container_repository'] = function( $ioc ) {
 			return new ContainerRepository();
 		};
+		
 		$ioc['key_toolset'] = function( $ioc ) {
 			return new Key_Toolset();
 		};
+		
 		$ioc['wp_toolset'] = function( $ioc ) {
 			return new WP_Toolset();
 		};
+
+		$ioc['container_condition_factory'] = function( $ioc ) {
+			return new ConditionFactory( $ioc['container_conditions'] );
+		};
+
+		$ioc['container_condition_translator_array'] = function( $ioc ) {
+			return new \Carbon_Fields\Container\Fulfillable\Translator\Array_Translator( $ioc['container_condition_factory'] );
+		};
+
+		$ioc['container_condition_translator_json'] = function( $ioc ) {
+			return new \Carbon_Fields\Container\Fulfillable\Translator\Json_Translator( $ioc['container_condition_factory'] );
+		};
+
 		$ioc['container_condition_fulfillable_collection'] = $ioc->factory( function( $ioc ) {
 			return M::mock( 'Carbon_Fields\\Container\\Fulfillable\\Fulfillable_Collection' )->shouldIgnoreMissing();
 		} );
+
+		$ioc['container_conditions'] = function( $ioc ) {
+			return new PimpleContainer();
+		};
+
 		\Carbon_Fields\Carbon_Fields::instance()->install( $ioc );
 
 		$this->datastore = M::mock( 'Carbon_Fields\\Datastore\\Key_Value_Datastore' )->makePartial();
-		$this->container = M::mock( 'Carbon_Fields\\Container\\Container', array( 'container_id', 'container_title', 'container_type' ) )->makePartial();
+		$this->container = M::mock( 'Carbon_Fields\\Container\\Container', array( 'container_id', 'container_title', 'container_type', $ioc['container_condition_fulfillable_collection'], $ioc['container_condition_translator_json'] ) )->makePartial();
 		$this->container->set_datastore( $this->datastore );
 		$this->container->add_fields( array(
 			Field::make( 'text', 'crb_legacy_text' ),

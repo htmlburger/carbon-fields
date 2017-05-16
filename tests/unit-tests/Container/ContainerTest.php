@@ -5,6 +5,7 @@ use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Container\Container;
 use Carbon_Fields\Container\Repository as ContainerRepository;
 use Carbon_Fields\Toolset\Key_Toolset;
+use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -12,18 +13,38 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * @coversDefaultClass Carbon_Fields\Container\Container
  */
 class ContainerTest extends WP_UnitTestCase {
-	
+
 	public function setUp() {
 		$ioc = new PimpleContainer();
+		
 		$ioc['container_repository'] = function( $ioc ) {
 			return new ContainerRepository();
 		};
+		
 		$ioc['key_toolset'] = function( $ioc ) {
 			return new Key_Toolset();
 		};
+
+		$ioc['container_condition_factory'] = function( $ioc ) {
+			return new ConditionFactory( $ioc['container_conditions'] );
+		};
+
+		$ioc['container_condition_translator_array'] = function( $ioc ) {
+			return new \Carbon_Fields\Container\Fulfillable\Translator\Array_Translator( $ioc['container_condition_factory'] );
+		};
+
+		$ioc['container_condition_translator_json'] = function( $ioc ) {
+			return new \Carbon_Fields\Container\Fulfillable\Translator\Json_Translator( $ioc['container_condition_factory'] );
+		};
+
 		$ioc['container_condition_fulfillable_collection'] = $ioc->factory( function( $ioc ) {
 			return M::mock( 'Carbon_Fields\\Container\\Fulfillable\\Fulfillable_Collection' )->shouldIgnoreMissing();
 		} );
+
+		$ioc['container_conditions'] = function( $ioc ) {
+			return new PimpleContainer();
+		};
+
 		\Carbon_Fields\Carbon_Fields::instance()->install( $ioc );
 
 		$this->containerId = 'PageSettings';
@@ -35,6 +56,9 @@ class ContainerTest extends WP_UnitTestCase {
 		$this->containerTypeClass = 'Carbon_Fields\Container\Post_Meta_Container';
 		$this->containerTypeDatastoreClass = 'Carbon_Fields\Datastore\Post_Meta_Datastore';
 		$this->containerTypeBrokenClass = 'Carbon_Fields\Container\Broken_Container';
+
+		$this->containerConditionFulfillableCollection = $ioc['container_condition_fulfillable_collection'];
+		$this->containerConditionTranslatorJson = $ioc['container_condition_translator_json'];
 	}
 
 	public function tearDown() {
@@ -130,7 +154,7 @@ class ContainerTest extends WP_UnitTestCase {
 	 * @expectedExceptionMessage Empty container title is not supported
 	 */
 	public function testExceptionIsThrownWhenContainerTitleIsEmpty() {
-		$container = new $this->containerTypeClass( $this->containerId, '', $this->containerType );
+		$container = new $this->containerTypeClass( $this->containerId, '', $this->containerType, $this->containerConditionFulfillableCollection, $this->containerConditionTranslatorJson );
 	}
 
 	/**
@@ -139,7 +163,7 @@ class ContainerTest extends WP_UnitTestCase {
 	public function testNonAsciiContainerTitlesAreHandledProperly() {
 		// This text includes a capital cyrillic letter ... it actually assures that
 		// container titles in non-english are converted to lowercase
-		$container = new $this->containerTypeClass( $this->containerId, 'bulgarian: България', $this->containerType );
+		$container = new $this->containerTypeClass( $this->containerId, 'bulgarian: България', $this->containerType, $this->containerConditionFulfillableCollection, $this->containerConditionTranslatorJson );
 		$this->assertEquals( 'bulgarian: България', $container->title );
 	}
 
@@ -150,7 +174,7 @@ class ContainerTest extends WP_UnitTestCase {
 	 */
 	public function testSetDatastore_Default_ReturnDefault() {
 		$datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
-		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType );
+		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType, $this->containerConditionFulfillableCollection, $this->containerConditionTranslatorJson );
 
 		$this->assertEquals( true, $container->has_default_datastore() );
 		$this->assertInstanceOf( $this->containerTypeDatastoreClass, $container->get_datastore() );
@@ -168,7 +192,7 @@ class ContainerTest extends WP_UnitTestCase {
 	public function testSetDatastore_DefaultDefault2_ReturnDefault2() {
 		$datastore1 = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
 		$datastore2 = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
-		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType );
+		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType, $this->containerConditionFulfillableCollection, $this->containerConditionTranslatorJson );
 
 		$container->set_datastore( $datastore1, true );
 		$container->set_datastore( $datastore2, true );
@@ -182,7 +206,7 @@ class ContainerTest extends WP_UnitTestCase {
 	 */
 	public function testSetDatastore_Override_ReturnOverride() {
 		$datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
-		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType );
+		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType, $this->containerConditionFulfillableCollection, $this->containerConditionTranslatorJson );
 
 		$container->set_datastore( $datastore, false );
 		$this->assertEquals( false, $container->has_default_datastore() );
@@ -197,7 +221,7 @@ class ContainerTest extends WP_UnitTestCase {
 	public function testSetDatastore_OverrideOverride2_ReturnOverride2() {
 		$datastore1 = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
 		$datastore2 = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
-		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType );
+		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType, $this->containerConditionFulfillableCollection, $this->containerConditionTranslatorJson );
 
 		$container->set_datastore( $datastore1, false );
 		$container->set_datastore( $datastore2, false );
@@ -213,7 +237,7 @@ class ContainerTest extends WP_UnitTestCase {
 	public function testSetDatastore_DefaultOverride_ReturnOverride() {
 		$default_datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
 		$override_datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
-		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType );
+		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType, $this->containerConditionFulfillableCollection, $this->containerConditionTranslatorJson );
 
 		$container->set_datastore( $default_datastore, true );
 		$this->assertEquals( true, $container->has_default_datastore() );
@@ -232,7 +256,7 @@ class ContainerTest extends WP_UnitTestCase {
 	public function testSetDatastore_DefaultOverrideDefault2_ReturnOverride() {
 		$default_datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
 		$override_datastore = M::mock( $this->containerTypeDatastoreClass )->shouldIgnoreMissing();
-		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType );
+		$container = new $this->containerTypeClass( $this->containerId, $this->containerTitle, $this->containerType, $this->containerConditionFulfillableCollection, $this->containerConditionTranslatorJson );
 
 		$container->set_datastore( $default_datastore, true );
 		$container->set_datastore( $override_datastore, false );

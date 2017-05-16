@@ -5,6 +5,7 @@ use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Container\Repository as ContainerRepository;
 use Carbon_Fields\Toolset\Key_Toolset;
 use Carbon_Fields\Value_Set\Value_Set;
+use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
 
 /**
  * @group field
@@ -14,15 +15,35 @@ class MiscTest extends WP_UnitTestCase {
 
 	public function setUp() {
 		$ioc = new PimpleContainer();
+
 		$ioc['container_repository'] = function( $ioc ) {
 			return new ContainerRepository();
 		};
+
 		$ioc['key_toolset'] = function() {
 			return new Key_Toolset();
 		};
+
+		$ioc['container_condition_factory'] = function( $ioc ) {
+			return new ConditionFactory( $ioc['container_conditions'] );
+		};
+
+		$ioc['container_condition_translator_array'] = function( $ioc ) {
+			return new \Carbon_Fields\Container\Fulfillable\Translator\Array_Translator( $ioc['container_condition_factory'] );
+		};
+
+		$ioc['container_condition_translator_json'] = function( $ioc ) {
+			return new \Carbon_Fields\Container\Fulfillable\Translator\Json_Translator( $ioc['container_condition_factory'] );
+		};
+
 		$ioc['container_condition_fulfillable_collection'] = $ioc->factory( function( $ioc ) {
 			return M::mock( 'Carbon_Fields\\Container\\Fulfillable\\Fulfillable_Collection' )->shouldIgnoreMissing();
 		} );
+
+		$ioc['container_conditions'] = function( $ioc ) {
+			return new PimpleContainer();
+		};
+
 		\Carbon_Fields\Carbon_Fields::instance()->install( $ioc );
 
 		$this->text_field = Carbon_Fields\Field::make( 'text', 'text_field' );
