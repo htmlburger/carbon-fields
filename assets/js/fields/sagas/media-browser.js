@@ -29,6 +29,15 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 		return;
 	}
 
+	const liveField = yield select(getFieldById, action.payload);
+	browser.once('open', (function(value) {
+		var attachment = value ? window.wp.media.attachment(value) : null;
+		if (attachment) {
+			attachment.fetch();
+		}
+		browser.state().get('selection').set( attachment ? [attachment] : [] );
+	}).bind(null, liveField.value));
+
 	yield call([browser, browser.open]);
 
 	while (true) {
