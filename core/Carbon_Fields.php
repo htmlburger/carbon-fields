@@ -206,6 +206,37 @@ final class Carbon_Fields {
 	}
 
 	/**
+	 * Resolve the public url of a directory inside WordPress
+	 * 
+	 * @param  string $directory
+	 * @return string
+	 */
+	public static function directory_to_url( $directory ) {
+		$url = \trailingslashit( $directory );
+		$count = 0;
+
+		# Sanitize directory separator on Windows
+		$url = str_replace( '\\' ,'/', $url );
+
+		$possible_locations = array(
+			WP_PLUGIN_DIR => \plugins_url(), # If installed as a plugin
+			WP_CONTENT_DIR => \content_url(), # If anywhere in wp-content
+			ABSPATH => \site_url( '/' ), # If anywhere else within the WordPress installation
+		);
+
+		foreach ( $possible_locations as $test_dir => $test_url ) {
+			$test_dir_normalized = str_replace( '\\' ,'/', $test_dir );
+			$url = str_replace( $test_dir_normalized, $test_url, $url, $count );
+
+			if ( $count > 0 ) {
+				break;
+			}
+		}
+
+		return \untrailingslashit( $url );
+	}
+
+	/**
 	 * Get the event emitter
 	 * 
 	 * @return Emitter
