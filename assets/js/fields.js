@@ -1186,17 +1186,12 @@ window.carbon = window.carbon || {};
 					// Trigger an event that notifies that a media file is selected
 					this.trigger('media:updated', mediaAttachment);
 				}, this)
-				.on('open',function() {
+				.on('open', function() {
 					var selection = mediaField.state().get('selection');
 
-					// ids = jQuery('#my_field_id').val().split(',');
-					ids = [ value ];
-
-					ids.forEach(function(id) {
-						attachment = wp.media.attachment(id);
-						attachment.fetch();
-						selection.add( attachment ? [ attachment ] : [] );
-					});
+					attachment = wp.media.attachment(value);
+					attachment.fetch();
+					selection.set( attachment ? [ attachment ] : [] );
 				});
 
 			// Opens the media library frame
