@@ -167,6 +167,13 @@ class Term_Meta_Container extends Container {
 	protected function set_term_id( $term_id ) {
 		$this->term_id = $term_id;
 		$this->get_datastore()->set_object_id( $term_id );
+
+		foreach ( $this->fields as $field ) {
+			$datastore = $field->get_datastore();
+			if ( $datastore->get_object_id() === 0 ) {
+				$datastore->set_object_id( $term_id );
+			}
+		}
 	}
 
 	/**

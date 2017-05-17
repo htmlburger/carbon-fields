@@ -184,6 +184,13 @@ class User_Meta_Container extends Container {
 	protected function set_user_id( $user_id ) {
 		$this->user_id = $user_id;
 		$this->get_datastore()->set_object_id( $user_id );
+
+		foreach ( $this->fields as $field ) {
+			$datastore = $field->get_datastore();
+			if ( $datastore->get_object_id() === 0 ) {
+				$datastore->set_object_id( $user_id );
+			}
+		}
 	}
 	
 	/**

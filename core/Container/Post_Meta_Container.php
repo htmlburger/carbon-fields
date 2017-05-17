@@ -231,6 +231,13 @@ class Post_Meta_Container extends Container {
 	protected function set_post_id( $post_id ) {
 		$this->post_id = $post_id;
 		$this->get_datastore()->set_object_id( $post_id );
+
+		foreach ( $this->fields as $field ) {
+			$datastore = $field->get_datastore();
+			if ( $datastore->get_object_id() === 0 ) {
+				$datastore->set_object_id( $post_id );
+			}
+		}
 	}
 
 	/**

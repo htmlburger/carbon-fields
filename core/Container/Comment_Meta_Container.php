@@ -147,5 +147,12 @@ class Comment_Meta_Container extends Container {
 	protected function set_comment_id( $comment_id ) {
 		$this->comment_id = $comment_id;
 		$this->get_datastore()->set_object_id( $comment_id );
+
+		foreach ( $this->fields as $field ) {
+			$datastore = $field->get_datastore();
+			if ( $datastore->get_object_id() === 0 ) {
+				$datastore->set_object_id( $comment_id );
+			}
+		}
 	}
 }
