@@ -152,6 +152,22 @@ class Field implements Datastore_Holder_Interface {
 	protected $lazyload = false;
 
 	/**
+	 * Key-value array of attribtues and their values
+	 * 
+	 * @var array
+	 */
+	protected $attributes = array(
+		'type' => 'text',
+	);
+
+	/**
+	 * Array of attributes the user is allowed to change
+	 * 
+	 * @var array<string>
+	 */
+	protected $allowed_attributes = array( 'max', 'maxlength', 'min', 'pattern', 'placeholder', 'readonly', 'step', 'type' );
+
+	/**
 	 * The width of the field.
 	 *
 	 * @see set_width()
@@ -677,6 +693,41 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Get a key-value array of attributes
+	 * 
+	 * @return array
+	 */
+	public function get_attributes() {
+		return $this->attributes;
+	}
+
+	/**
+	 * Get an attribute value
+	 * 
+	 * @param  string $name
+	 * @return string
+	 */
+	public function get_attribute( $name ) {
+		return isset( $this->attributes[ $name ] ) ? $this->attributes[ $name ] : '';
+	}
+
+	/**
+	 * Set an attribute and it's value
+	 * 
+	 * @param  string $name
+	 * @param  string $value
+	 * @return Field  $this
+	 */
+	public function set_attribute( $name, $value = '' ) {
+		if ( ! in_array( $name, $this->allowed_attributes ) ) {
+			Incorrect_Syntax_Exception::raise( 'Only the following attributes are allowed: ' . implode( ', ', $this->allowed_attributes ) . '.' );
+			return $this;
+		}
+		$this->attributes[ $name ] = $value;
+		return $this;
+	}
+
+	/**
 	 * Return the field help text
 	 *
 	 * @return object $this
@@ -943,6 +994,7 @@ class Field implements Datastore_Holder_Interface {
 			'base_name' => $this->get_base_name(),
 			'value' => $this->get_value(),
 			'default_value' => $this->get_default_value(),
+			'attributes' => $this->get_attributes(),
 			'help_text' => $this->get_help_text(),
 			'context' => $this->get_context(),
 			'required' => $this->is_required(),

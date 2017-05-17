@@ -40,7 +40,8 @@ export const RadioImageField = ({
 								value={option.value}
 								checked={isChecked(option)}
 								disabled={!field.ui.is_visible}
-								onChange={handleChange} />
+								onChange={handleChange}
+								{...field.attributes} />
 
 							<figure className="carbon-radio-image-holder">
 								<img src={option.name} />
@@ -61,6 +62,7 @@ export const RadioImageField = ({
 RadioImageField.propTypes = {
 	name: PropTypes.string,
 	field: PropTypes.shape({
+		attributes: PropTypes.object,
 		options: PropTypes.arrayOf(PropTypes.shape({
 			name: PropTypes.string,
 			value: PropTypes.string,

@@ -42,7 +42,8 @@ export const CheckboxField = ({
 				value={field.option_value}
 				checked={checked}
 				disabled={!field.ui.is_visible}
-				onChange={handleChange} />
+				onChange={handleChange}
+				{...field.attributes} />
 
 			{field.option_label}
 		</label>
@@ -60,6 +61,7 @@ CheckboxField.propTypes = {
 		id: PropTypes.string,
 		value: PropTypes.string,
 		option_value: PropTypes.string,
+		attributes: PropTypes.object,
 	}),
 	checked: PropTypes.bool,
 	handleChange: PropTypes.func,

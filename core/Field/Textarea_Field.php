@@ -8,6 +8,13 @@ namespace Carbon_Fields\Field;
 class Textarea_Field extends Field {
 
 	/**
+	 * Array of attributes the user is allowed to change
+	 * 
+	 * @var array<string>
+	 */
+	protected $allowed_attributes = array( 'maxLength', 'minLength', 'placeholder', 'readonly' );
+
+	/**
 	 * Number of rows (affects textarea height)
 	 * 
 	 * @var integer

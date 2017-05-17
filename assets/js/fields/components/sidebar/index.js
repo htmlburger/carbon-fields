@@ -40,7 +40,7 @@ export const SidebarField = ({
 			name={name}
 			value={field.value}
 			disabled={!field.ui.is_visible}
-			onChange={handleChange}>
+			onChange={handleChange} >
 
 			{
 				options.map(({ name, value }, index) => (

@@ -48,7 +48,8 @@ export const DateTimeField = ({
 				type="text"
 				className="regular-text carbon-field-group-input"
 				defaultValue={field.value}
-				data-input />
+				data-input
+				{...field.attributes} />
 
 			<button
 				type="button"
@@ -70,6 +71,7 @@ DateTimeField.propTypes = {
 	field: PropTypes.shape({
 		id: PropTypes.string,
 		value: PropTypes.string,
+		attributes: PropTypes.object,
 	}),
 	options: PropTypes.object,
 	buttonText: PropTypes.string,

@@ -34,7 +34,7 @@ export const SelectField = ({
 			name={name}
 			onChange={handleChange}
 			disabled={!field.ui.is_visible}
-			value={field.value}>
+			value={field.value} >
 
 			{
 				field.options.map(({ name, value }, index) => {

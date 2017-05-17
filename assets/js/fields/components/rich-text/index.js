@@ -37,7 +37,8 @@ export const RichTextField = ({
 				value={field.value}
 				rows={field.rows}
 				onChange={handleChange}
-				disabled={!field.ui.is_visible} />
+				disabled={!field.ui.is_visible}
+				{...field.attributes} />
 		</RichTextEditor>
 	</Field>;
 };
@@ -53,6 +54,7 @@ RichTextField.propTypes = {
 		id: PropTypes.string,
 		value: PropTypes.string,
 		rows: PropTypes.number,
+		attributes: PropTypes.object,
 		rich_editing: PropTypes.bool,
 	}),
 	handleChange: PropTypes.func,

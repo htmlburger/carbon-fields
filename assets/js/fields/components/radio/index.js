@@ -48,7 +48,8 @@ export const RadioField = ({
 								value={option.value}
 								checked={isChecked(option)}
 								disabled={!field.ui.is_visible}
-								onChange={handleChange} />
+								onChange={handleChange}
+								{...field.attributes} />
 
 							{option.name}
 						</label>
@@ -67,6 +68,7 @@ export const RadioField = ({
 RadioField.propTypes = {
 	name: PropTypes.string,
 	field: PropTypes.shape({
+		attributes: PropTypes.object,
 		options: PropTypes.arrayOf(PropTypes.shape({
 			name: PropTypes.string,
 			value: PropTypes.string,

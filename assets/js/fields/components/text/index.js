@@ -36,7 +36,7 @@ export const TextField = ({
 			disabled={!field.ui.is_visible}
 			className="regular-text"
 			onChange={handleChange}
-			 {...field.attributes}/>
+			{...field.attributes} />
 	</Field>;
 };
 

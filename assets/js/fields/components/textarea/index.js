@@ -38,7 +38,8 @@ export const TextareaField = ({
 			value={field.value}
 			rows={field.rows}
 			disabled={!field.ui.is_visible}
-			onChange={handleChange} />
+			onChange={handleChange}
+			 {...field.attributes} />
 	</Field>;
 };
 
@@ -53,6 +54,7 @@ TextareaField.propTypes = {
 		id: PropTypes.string,
 		value: PropTypes.string,
 		rows: PropTypes.number,
+		attributes: PropTypes.object,
 	}),
 	handleChange: PropTypes.func,
 };
