@@ -100,11 +100,15 @@ export const enhance = compose(
 		handleChange: ({ field, updateField }) => ([ selectedDate ], selectedDateStr, instance) => {
 			instance._selectedDateStr = selectedDateStr;
 
-			updateField(field.id, {
-				value: selectedDateStr
-					? instance.formatDate(selectedDate, field.storage_format)
-					: ''
-			});
+			const value = selectedDateStr
+				? instance.formatDate(selectedDate, field.storage_format)
+				: '';
+
+			if (value !== field.value) {
+				updateField(field.id, {
+					value
+				});
+			}
 		},
 
 		handleClose: () => (selectedDates, selectedDateStr, instance) => {
