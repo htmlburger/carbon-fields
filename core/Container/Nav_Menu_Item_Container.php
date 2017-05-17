@@ -41,7 +41,7 @@ class Nav_Menu_Item_Container extends Container {
 	 * @param int $menu_item_id Used to pass the correct menu_item_id to the Container object
 	 */
 	public function init( $menu_item_id = 0 ) {
-		$this->get_datastore()->set_id( $menu_item_id );
+		$this->get_datastore()->set_object_id( $menu_item_id );
 		$this->_attach();
 
 		// Only the base container should register for updating/rendering
@@ -173,7 +173,7 @@ class Nav_Menu_Item_Container extends Container {
 	protected function get_clone_for_menu_item( $menu_item_id, $load = true ) {
 		if ( ! isset( $this->menu_item_instances[ $menu_item_id ] ) ) {
 			$menu_item_datastore = Datastore::make( 'nav_menu_item' );
-			$menu_item_datastore->set_id( $menu_item_id );
+			$menu_item_datastore->set_object_id( $menu_item_id );
 			$menu_item_field_prefix = $menu_item_datastore->get_garbage_prefix();
 
 			$custom_fields = array();

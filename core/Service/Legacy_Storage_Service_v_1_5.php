@@ -207,7 +207,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 		$datastore = $container->get_datastore();
 		$table = $this->get_table_details_for_datastore( $datastore );
 
-		if ( $table['table_id_column'] && ! $datastore->get_id() ) {
+		if ( $table['table_id_column'] && ! $datastore->get_object_id() ) {
 			return array(); // bail as we have an ID column but no ID to compare with ( e.g. we are in a "create" view )
 		}
 
@@ -223,7 +223,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 		$where_clause = ' ( ' . implode( ' OR ', $comparisons ) . ' ) ';
 		if ( $table['table_id_column'] ) {
-			$where_clause = ' `' . $table['table_id_column'] . '` = ' . $datastore->get_id() . ' AND ' . $where_clause;
+			$where_clause = ' `' . $table['table_id_column'] . '` = ' . $datastore->get_object_id() . ' AND ' . $where_clause;
 		}
 		$query = '
 			SELECT `' . $table['table_key_column'] . '` AS `key`, `' . $table['table_value_column'] . '` AS `value`

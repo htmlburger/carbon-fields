@@ -10,9 +10,23 @@ use Carbon_Fields\Field\Field;
 interface Datastore_Interface {
 
 	/**
+	 * Get the related object id
+	 *
+	 * @return integer
+	 */
+	public function get_object_id();
+
+	/**
+	 * Set the related object id
+	 *
+	 * @param integer $object_id
+	 */
+	public function set_object_id( $object_id );
+
+	/**
 	 * Load the field value(s)
 	 *
-	 * @param Field $field The field to load value(s) in.
+	 * @param  Field $field The field to load value(s) in.
 	 * @return array
 	 */
 	public function load( Field $field );

@@ -8,13 +8,6 @@ use Carbon_Fields\Field\Field;
  * Term meta datastore class.
  */
 class Term_Meta_Datastore extends Meta_Datastore {
-	
-	/**
-	 * ID of the term.
-	 *
-	 * @var int
-	 */
-	protected $term_id;
 
 	/**
 	 * Initialization tasks.
@@ -109,23 +102,5 @@ class Term_Meta_Datastore extends Meta_Datastore {
 	 */
 	public function get_table_field_name() {
 		return 'term_id';
-	}
-
-	/**
-	 * Set the term ID of the datastore.
-	 *
-	 * @param int $term_id ID of the term.
-	 */
-	public function set_id( $term_id ) {
-		$this->term_id = $term_id;
-	}
-
-	/**
-	 * Retrieve the term ID of the datastore.
-	 *
-	 * @return int ID of the term.
-	 */
-	public function get_id() {
-		return $this->term_id;
 	}
 }

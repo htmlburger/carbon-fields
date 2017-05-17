@@ -29,7 +29,7 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 		$storage_array = $wpdb->get_results( '
 			SELECT `meta_key` AS `key`, `meta_value` AS `value`
 			FROM ' . $this->get_table_name() . '
-			WHERE `' . $this->get_table_field_name() . '` = ' . intval( $this->get_id() ) . '
+			WHERE `' . $this->get_table_field_name() . '` = ' . intval( $this->get_object_id() ) . '
 				AND ' . $storage_key_comparisons . '
 			ORDER BY `meta_key` ASC
 		' );
@@ -46,8 +46,8 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 	 * @param string $value
 	 */
 	protected function save_key_value_pair( $key, $value ) {
-		if ( ! update_metadata( $this->get_meta_type(), $this->get_id(), $key, $value ) ) {
-			add_metadata( $this->get_meta_type(), $this->get_id(), $key, $value, true );
+		if ( ! update_metadata( $this->get_meta_type(), $this->get_object_id(), $key, $value ) ) {
+			add_metadata( $this->get_meta_type(), $this->get_object_id(), $key, $value, true );
 		}
 	}
 
@@ -70,12 +70,12 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 		$meta_keys = $wpdb->get_col( '
 			SELECT `meta_key`
 			FROM `' . $this->get_table_name() . '`
-			WHERE `' . $this->get_table_field_name() . '` = ' . intval( $this->get_id() ) . '
+			WHERE `' . $this->get_table_field_name() . '` = ' . intval( $this->get_object_id() ) . '
 				AND ' . $storage_key_comparisons . '
 		' );
 
 		foreach ( $meta_keys as $meta_key ) {
-			delete_metadata( $this->get_meta_type(), $this->get_id(), $meta_key );
+			delete_metadata( $this->get_meta_type(), $this->get_object_id(), $meta_key );
 		}
 	}
 
@@ -93,14 +93,4 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 	 * Get the meta table field name to query by.
 	 */
 	abstract public function get_table_field_name();
-
-	/**
-	 * Set the ID of the datastore.
-	 */
-	abstract public function set_id( $id );
-
-	/**
-	 * Get the ID of the datastore.
-	 */
-	abstract public function get_id();
 }

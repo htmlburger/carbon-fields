@@ -28,7 +28,7 @@ class Helper {
 
 		$clone = clone $field;
 		if ( $object_id !== null ) {
-			$clone->get_datastore()->set_id( $object_id );
+			$clone->get_datastore()->set_object_id( $object_id );
 		}
 
 		$clone->load();
@@ -54,7 +54,7 @@ class Helper {
 		
 		$clone = clone $field;
 		if ( $object_id !== null ) {
-			$clone->get_datastore()->set_id( $object_id );
+			$clone->get_datastore()->set_object_id( $object_id );
 		}
 
 		if ( is_a( $clone, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
