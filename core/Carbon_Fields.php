@@ -229,11 +229,11 @@ final class Carbon_Fields {
 			$url = str_replace( $test_dir_normalized, $test_url, $url, $count );
 
 			if ( $count > 0 ) {
-				break;
+				return \untrailingslashit( $url );
 			}
 		}
 
-		return \untrailingslashit( $url );
+		return ''; // return empty string to avoid exposing half-parsed paths
 	}
 
 	/**
