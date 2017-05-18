@@ -8,6 +8,7 @@ export const TYPE_FILE = 'file';
 export const TYPE_FOOTER_SCRIPTS = 'footer_scripts';
 export const TYPE_GRAVITY_FORM = 'gravity_form';
 export const TYPE_HEADER_SCRIPTS = 'header_scripts';
+export const TYPE_HIDDEN = 'hidden';
 export const TYPE_HTML = 'html';
 export const TYPE_IMAGE = 'image';
 export const TYPE_MAP = 'map';
