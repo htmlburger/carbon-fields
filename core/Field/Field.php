@@ -904,7 +904,7 @@ class Field implements Datastore_Holder_Interface {
 			return array();
 		}
 
-		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN' );
+		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN', 'INCLUDES', 'EXCLUDES' );
 
 		$parsed_rules = array(
 			'relation' => Helper::get_relation_type_from_array( $rules ),
