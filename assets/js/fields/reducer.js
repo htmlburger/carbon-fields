@@ -8,6 +8,7 @@ import { omit, findIndex } from 'lodash';
 /**
  * The internal dependencies.
  */
+import { TYPE_COMPLEX } from 'fields/constants';
 import { decorateFieldReducer } from 'lib/registry';
 import { resetStore } from 'store/actions';
 import {
@@ -22,7 +23,8 @@ import {
 	expandComplexGroup,
 	collapseComplexGroup,
 	switchComplexTab,
-	redrawMap
+	redrawMap,
+	setFieldValue
 } from 'fields/actions';
 
 /**
@@ -55,4 +57,11 @@ export default decorateFieldReducer(handleActions({
 
 	[switchComplexTab]: (state, { payload: { fieldId, groupId } }) => immutable.set(state, `${fieldId}.ui.current_tab`, groupId),
 	[redrawMap]: (state, { payload: { fieldId }}) => immutable.set(state, `${fieldId}.ui.redraw_map`, true),
+	[setFieldValue]: (state, { payload: { fieldId, value }}) => {
+		if (state[fieldId].type === TYPE_COMPLEX) {
+			console.warn(`Use api.addComplexFieldGroup(fieldName, groupName) and api.removeComplexFieldGroup(fieldName, groupIndex) when dealing with Complex fields.`);
+			return state;
+		}
+		return immutable.set(state, `${fieldId}.value`, value);
+	},
 }, {}));

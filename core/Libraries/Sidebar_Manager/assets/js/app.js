@@ -1,8 +1,8 @@
-window.carbon = window.carbon || {};
+window.carbonFields = window.carbonFields || {};
 
 (function($) {
 
-	var carbon = window.carbon;
+	var carbon = window.carbonFields;
 
 	/**
 	 * Handles sidebar requests

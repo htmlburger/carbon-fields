@@ -24,6 +24,7 @@ import { normalizePreloadedState } from 'store/helpers';
 
 import containerFactory from 'containers/factory';
 import { getContainers } from 'containers/selectors';
+import api from 'lib/api';
 
 /**
  * Put Lodash in `noConflict` mode to avoid conflicts with Underscore lib
@@ -90,4 +91,7 @@ export default function() {
 	 * Notify that everything is ready.
 	 */
 	store.dispatch(ready());
+
+    window.carbonFields = window.carbonFields || {};
+    window.carbonFields.api = new api(store);
 }
