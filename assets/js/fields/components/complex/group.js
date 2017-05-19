@@ -9,6 +9,7 @@ import { compose, withHandlers } from 'recompose';
 /**
  * The internal dependencies.
  */
+import { VALUE_PROPERTY } from 'fields/constants';
 import { preventDefault } from 'lib/helpers';
 
 import fieldFactory from 'fields/factory';
@@ -50,7 +51,7 @@ export const ComplexGroup = ({
 	return <div id={group.id} className={cx(classes)}>
 		<input
 			type="hidden"
-			name={`${prefix}[${index}][_value]`}
+			name={`${prefix}[${index}][${VALUE_PROPERTY}]`}
 			defaultValue={group.name} />
 
 		<div className="carbon-drag-handle">

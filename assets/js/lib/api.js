@@ -6,7 +6,7 @@ import { head, isUndefined } from 'lodash';
 /**
  * The internal dependencies.
  */
-import { TYPE_COMPLEX } from 'fields/constants';
+import { TYPE_COMPLEX, VALUE_PROPERTY } from 'fields/constants';
 import { getFieldById, getFieldByName } from 'fields/selectors';
 import {
 	setFieldValue as setFieldValueAction,
@@ -30,7 +30,7 @@ class Api {
 			let value = [];
 			for (let i = field.value.length - 1; i >= 0; i--) {
 				let group = field.value[i];
-				let fieldValue = {_value: group.name};
+				let fieldValue = {[VALUE_PROPERTY]: group.name};
 
 				for (let j = group.fields.length - 1; j >= 0; j--) {
 					let groupField = group.fields[j];

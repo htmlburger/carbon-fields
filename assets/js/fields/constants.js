@@ -23,6 +23,8 @@ export const TYPE_TEXT = 'text';
 export const TYPE_TEXTAREA = 'textarea';
 export const TYPE_TIME = 'time';
 
+export const VALUE_PROPERTY = '_value';
+
 export const VALIDATION_BASE = 'VALIDATION_BASE';
 export const VALIDATION_COMPLEX = 'VALIDATION_COMPLEX';
 
