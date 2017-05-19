@@ -191,12 +191,3 @@ export const validateFields = createAction('fields/VALIDATE_FIELDS');
  * @return {Object}
  */
 export const redrawMap = createAction('fields/REDRAW_MAP', fieldId => ({ fieldId }));
-
-/**
- * Set a field's value
- *
- * @param  {String} fieldId
- * @param  {Object} value
- * @return {Object}
- */
-export const setFieldValue = createAction('fields/SET_FIELD_VALUE', (fieldId, value) => ({ fieldId, value }));

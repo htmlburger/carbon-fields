@@ -10,7 +10,7 @@ import $ from 'jquery';
 import { TYPE_COMPLEX, VALUE_PROPERTY } from 'fields/constants';
 import { getFieldById, getFieldByName } from 'fields/selectors';
 import {
-	setFieldValue as setFieldValueAction,
+	updateField,
 	addComplexGroup,
 	removeComplexGroup
 } from 'fields/actions';
@@ -51,8 +51,29 @@ class Api {
 		if (field === null) {
 			return;
 		}
-		
-		this.store.dispatch(setFieldValueAction(field.id, value));
+
+		if (field.type === TYPE_COMPLEX) {
+			for (let i = field.value.length - 1; i >= 0; i--) {
+				this.removeComplexFieldGroup(fieldName, 0);
+			}
+
+			for (var i = 0; i < value.length; i++) {
+				let fieldValues = value[i];
+				this.addComplexFieldGroup(fieldName, fieldValues[VALUE_PROPERTY]);
+
+				for (let fieldBaseName in fieldValues) {
+					if (fieldBaseName === VALUE_PROPERTY) {
+						continue;
+					}
+					let fieldValue = fieldValues[fieldBaseName];
+					let nextFieldName = fieldName.replace(/\[\d+\]$/, ''); // remove the trailing index if the user accidentally left it there
+					nextFieldName = nextFieldName + '[' + i + ']/' + fieldBaseName;
+					this.setFieldValue(nextFieldName, fieldValue);
+				}
+			}
+		} else {
+			this.store.dispatch(updateField(field.id, { value }));
+		}
 	}
 
 	addComplexFieldGroup(fieldName, groupName) {
@@ -61,7 +82,7 @@ class Api {
 			return;
 		}
 
-		let group = head(field.value.filter(group => group.name === groupName));
+		let group = head(field.groups.filter(group => group.name === groupName));
 		if (isUndefined(group)) {
 			console.warn(`The specified group does not exist: ${groupName}`);
 			return;
