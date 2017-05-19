@@ -441,7 +441,7 @@ class Complex_Field extends Field {
 					$value[ $group_index ][ $field->get_base_name() ] = $field->get_formatted_value();
 				} else {
 					if ( $key === Value_Set::VALUE_PROPERTY ) {
-						$value[ $group_index ]['value'] = $field;
+						$value[ $group_index ]['_type'] = $field;
 					} else {
 						$value[ $group_index ][ $key ] = $field;
 					}
