@@ -87,8 +87,8 @@ SetField.propTypes = {
 		id: PropTypes.string,
 		value: PropTypes.arrayOf(PropTypes.string),
 		options: PropTypes.arrayOf(PropTypes.shape({
-			name: PropTypes.string,
-			value: PropTypes.string,
+			name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+			value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 		})),
 	}),
 	hasHiddenOptions: PropTypes.bool,
