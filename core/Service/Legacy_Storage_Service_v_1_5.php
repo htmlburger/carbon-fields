@@ -396,7 +396,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 		$unserialized_value = maybe_unserialize( $row_descriptor['value'] );
 		if ( is_array( $unserialized_value ) ) {
-			if ( isset( $unserialized_value['value'] ) ) {
+			if ( isset( $unserialized_value[ Value_Set::VALUE_PROPERTY ] ) ) {
 				// value is a key=>value array - save each property separately
 				foreach ( $unserialized_value as $property => $value_item ) {
 					$key = $this->key_toolset->get_storage_key( false, $hierarchy, $hierarchy_index, 0, $property );

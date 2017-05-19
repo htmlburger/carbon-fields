@@ -50,7 +50,7 @@ export const ComplexGroup = ({
 	return <div id={group.id} className={cx(classes)}>
 		<input
 			type="hidden"
-			name={`${prefix}[${index}][_type]`}
+			name={`${prefix}[${index}][_value]`}
 			defaultValue={group.name} />
 
 		<div className="carbon-drag-handle">

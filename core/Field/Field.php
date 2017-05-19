@@ -397,12 +397,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @return mixed
 	 */
 	protected function get_value_from_datastore( $fallback_to_default = true ) {
-		$value_tree = $this->get_datastore()->load( $this );
-		
-		$value = null;
-		if ( isset( $value_tree['value_set'] ) ) {
-			$value = $value_tree['value_set'];
-		}
+		$value = $this->get_datastore()->load( $this );
 
 		if ( $value === null && $fallback_to_default ) {
 			$value = $this->get_default_value();
@@ -558,7 +553,20 @@ class Field implements Datastore_Holder_Interface {
 	 * @return mixed
 	 */
 	public function get_formatted_value() {
-		return $this->get_value();
+		$value = $this->get_value();
+		if ( is_array( $value ) ) {
+			$formatter = function( $value ) {
+				$value['value'] = $value[ Value_Set::VALUE_PROPERTY ];
+				unset( $value[ Value_Set::VALUE_PROPERTY ] );
+				return $value;
+			};
+			if ( $this->get_value_set()->get_type() === Value_Set::TYPE_MULTIPLE_PROPERTIES ) {
+				$value = $formatter( $value );
+			} else if ( $this->get_value_set()->get_type() === Value_Set::TYPE_VALUE_SET ) {
+				$value = array_map( $formatter, $value );
+			}
+		}
+		return $value;
 	}
 
 	/**

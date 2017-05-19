@@ -30,7 +30,7 @@ class Api {
 			let value = [];
 			for (let i = field.value.length - 1; i >= 0; i--) {
 				let group = field.value[i];
-				let fieldValue = {_type: group.name};
+				let fieldValue = {_value: group.name};
 
 				for (let j = group.fields.length - 1; j >= 0; j--) {
 					let groupField = group.fields[j];

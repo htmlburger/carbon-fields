@@ -16,33 +16,3 @@ _Note: The `Value_Set` class will always return a fully formatted `value_set` wi
 		),
 		...
 	)
-
-#### `value_tree`
-
-Represents a full value tree for a field.
-
-##### Schema
-	
-	array(
-		'value_set' => <value_set>,
-		'groups' => array(
-			array(
-				field_name<string> => array(
-					... <recursion> ...
-				),
-				...
-			),
-			...
-		),
-	)
-
-#### `value_tree_array`
-
-A keyed array of `value_tree`
-
-##### Schema
-	
-	array(
-		field_name<string> => <value_tree>,
-	)
-
