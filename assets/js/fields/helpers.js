@@ -66,7 +66,7 @@ export function flattenField(field, parent, accumulator) {
 	// be used to populate the state.
 	accumulator.push(field);
 
-	return pick(field, 'id', 'type', 'name');
+	return pick(field, 'id', 'type', 'name', 'base_name');
 }
 
 /**

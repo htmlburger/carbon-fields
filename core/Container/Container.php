@@ -499,7 +499,7 @@ abstract class Container implements Datastore_Holder_Interface {
 					$field->set_hierarchy_index( $hierarchy_index );
 				} else {
 					if ( ! is_a( $f, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
-						Incorrect_Syntax_Exception::raise( 'Attempted to look for a nested field inside a non-complex field.' );
+						Incorrect_Syntax_Exception::raise( 'Attempted to look for a nested field inside the non-complex field "' . $f->get_base_name() . '".' );
 						return null;
 					}
 

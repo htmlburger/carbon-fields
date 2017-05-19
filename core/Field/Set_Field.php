@@ -53,7 +53,7 @@ class Set_Field extends Predefined_Options_Field {
 	 */
 	public function set_value_from_input( $input ) {
 		if ( ! isset( $input[ $this->name ] ) ) {
-			$this->set_value( null );
+			$this->set_value( array() );
 		} else {
 			$value = stripslashes_deep( $input[ $this->name ] );
 			if ( is_array( $value ) ) {

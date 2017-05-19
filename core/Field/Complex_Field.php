@@ -25,11 +25,6 @@ class Complex_Field extends Field {
 	const LAYOUT_TABBED_VERTICAL = 'tabbed-vertical';
 
 	/**
-	 * Key which defines what a group's type/name is
-	 */
-	const GROUP_TYPE_KEY = '_type';
-
-	/**
 	 * Default field value
 	 *
 	 * @var array
@@ -44,14 +39,11 @@ class Complex_Field extends Field {
 	protected $layout = self::LAYOUT_GRID;
 
 	/**
-	 * Value tree describing the complex values ( ['value_set'] ) and all groups with their child fields ( ['groups'] )
+	 * Value tree describing the complex values and all groups with their child fields
 	 *
 	 * @var array
 	 */
-	protected $value_tree = array(
-		'value_set' => array(),
-		'groups' => array(),
-	);
+	protected $value_tree = array();
 
 	/**
 	 * Array of groups registered for this complex field
@@ -213,8 +205,8 @@ class Complex_Field extends Field {
 		}
 
 		foreach ( $fields as $field ) {
-			if ( $field->get_base_name() === static::GROUP_TYPE_KEY ) {
-				Incorrect_Syntax_Exception::raise( '"' . static::GROUP_TYPE_KEY . '" is a reserved keyword for Complex fields and cannot be used for a field name.' );
+			if ( $field->get_base_name() === Value_Set::VALUE_PROPERTY ) {
+				Incorrect_Syntax_Exception::raise( '"' . Value_Set::VALUE_PROPERTY . '" is a reserved keyword for Complex fields and cannot be used for a field name.' );
 				return $this;
 			}
 		}
@@ -310,15 +302,7 @@ class Complex_Field extends Field {
 		foreach ( $group_fields as $field ) {
 			$clone = $this->get_clone_under_field_in_hierarchy( $field, $this, $group_index );
 			if ( isset( $group_values[ $clone->get_base_name() ] ) ) {
-				$group_value = $group_values[ $clone->get_base_name() ];
-
-				if ( isset( $group_value['value_set'] ) ) {
-					$clone->set_value( $group_value['value_set'] );
-				}
-
-				if ( is_a( $clone, get_class() ) ) {
-					$clone->set_value_tree( $group_value );
-				}
+				$clone->set_value( $group_values[ $clone->get_base_name() ] );
 			}
 			$fields[] = $clone;
 		}
@@ -329,19 +313,15 @@ class Complex_Field extends Field {
 	protected function get_prefilled_groups( $value_tree ) {
 		$fields = array();
 
-		if ( empty( $value_tree ) ) {
-			return $fields;
-		}
-
-		foreach ( $value_tree['value_set'] as $group_index => $value ) {
+		foreach ( $value_tree as $group_index => $value ) {
 			$group_name = $value[ Value_Set::VALUE_PROPERTY ];
 			$group = $this->get_group_by_name( $group_name );
 			$group_fields = $group->get_fields();
 			$group_values = array();
-			if ( isset( $value_tree['groups'][ $group_index ] ) ) {
-				$group_values = $value_tree['groups'][ $group_index ];
+			if ( isset( $value_tree[ $group_index ] ) ) {
+				$group_values = $value_tree[ $group_index ];
 			}
-			$fields[ $group_index ] = array( static::GROUP_TYPE_KEY => $group->get_name() ) + $this->get_prefilled_group_fields( $group_fields, $group_values, $group_index );
+			$fields[ $group_index ] = array( Value_Set::VALUE_PROPERTY => $group->get_name() ) + $this->get_prefilled_group_fields( $group_fields, $group_values, $group_index );
 		}
 
 		return $fields;
@@ -357,23 +337,20 @@ class Complex_Field extends Field {
 			return;
 		}
 
-		$value_tree = array(
-			'value_set' => array(),
-			'groups' => array(),
-		);
+		$value_tree = array();
 		$input_groups = $input[ $this->get_name() ];
 		$input_group_index = 0;
 		foreach ( $input_groups as $values ) {
-			if ( ! isset( $values[ static::GROUP_TYPE_KEY ] ) || ! isset( $this->groups[ $values[ static::GROUP_TYPE_KEY ] ] ) ) {
+			if ( ! isset( $values[ Value_Set::VALUE_PROPERTY ] ) || ! isset( $this->groups[ $values[ Value_Set::VALUE_PROPERTY ] ] ) ) {
 				continue;
 			}
 
-			$group = $this->get_group_by_name( $values[ static::GROUP_TYPE_KEY ] );
+			$group = $this->get_group_by_name( $values[ Value_Set::VALUE_PROPERTY ] );
 			$group_fields = $group->get_fields();
 			$group_field_names = array_flip( $group->get_field_names() );
 
-			$value_group = array( static::GROUP_TYPE_KEY => $values[ static::GROUP_TYPE_KEY ] );
-			unset( $values[ static::GROUP_TYPE_KEY ] );
+			$value_group = array( Value_Set::VALUE_PROPERTY => $values[ Value_Set::VALUE_PROPERTY ] );
+			unset( $values[ Value_Set::VALUE_PROPERTY ] );
 
 			// trim input values to those used by the field
 			$values = array_intersect_key( $values, $group_field_names );
@@ -385,37 +362,14 @@ class Complex_Field extends Field {
 				if ( is_a( $tmp_field, get_class() ) ) {
 					$value_group[ $tmp_field->get_base_name() ] = $tmp_field->get_value_tree();
 				} else {
-					$value_group[ $tmp_field->get_base_name() ] = array(
-						'value_set' => $tmp_field->get_full_value(),
-					);
+					$value_group[ $tmp_field->get_base_name() ] = $tmp_field->get_full_value();
 				}
 			}
-
-			$value_tree['value_set'][] = array(
-				Value_Set::VALUE_PROPERTY => $group->get_name(),
-			);
-			$value_tree['groups'][] = $value_group;
+			$value_tree[] = $value_group;
 			$input_group_index++;
 		}
 
-		$this->set_value( $value_tree['value_set'] );
-		$this->set_value_tree( $value_tree );
-	}
-
-	/**
-	 * Load all groups of fields and their data.
-	 */
-	public function load() {
-		$value_tree = $this->get_datastore()->load( $this );
-		$value = array();
-		if ( isset( $value_tree['value_set'] ) ) {
-			$value = $value_tree['value_set'];
-		}
-		$this->set_value( $value );
-
-		if ( $this->get_value() ) {
-			$this->set_value_tree( $value_tree );
-		}
+		$this->set_value( $value_tree );
 	}
 
 	/**
@@ -446,11 +400,19 @@ class Complex_Field extends Field {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function set_value( $value ) {
+		parent::set_value( wp_list_pluck( $value, Value_Set::VALUE_PROPERTY ) );
+		$this->set_value_tree( $value );
+	}
+
+	/**
 	 * Return the full value tree of all groups and their fields
 	 *
 	 * @return mixed
 	 */
-	public function get_value_tree() {
+	protected function get_value_tree() {
 		return (array) $this->value_tree;
 	}
 
@@ -459,7 +421,7 @@ class Complex_Field extends Field {
 	 *
 	 * @see  Internal Glossary in DEVELOPMENT.MD
 	 */
-	public function set_value_tree( $value_tree ) {
+	protected function set_value_tree( $value_tree ) {
 		$this->value_tree = $value_tree;
 	}
 
@@ -478,7 +440,11 @@ class Complex_Field extends Field {
 				if ( is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
 					$value[ $group_index ][ $field->get_base_name() ] = $field->get_formatted_value();
 				} else {
-					$value[ $group_index ][ $key ] = $field;
+					if ( $key === Value_Set::VALUE_PROPERTY ) {
+						$value[ $group_index ]['value'] = $field;
+					} else {
+						$value[ $group_index ][ $key ] = $field;
+					}
 				}
 			}
 		}
@@ -505,7 +471,7 @@ class Complex_Field extends Field {
 		$field_groups = $this->get_prefilled_groups( $this->get_value_tree() );
 		$value_data = array();
 		foreach ( $field_groups as $group_index => $fields ) {
-			$group = $this->get_group_by_name( $fields[ static::GROUP_TYPE_KEY ] );
+			$group = $this->get_group_by_name( $fields[ Value_Set::VALUE_PROPERTY ] );
 
 			$data = array(
 				'name' => $group->get_name(),

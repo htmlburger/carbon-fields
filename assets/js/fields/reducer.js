@@ -8,6 +8,7 @@ import { omit, findIndex } from 'lodash';
 /**
  * The internal dependencies.
  */
+import { TYPE_COMPLEX } from 'fields/constants';
 import { decorateFieldReducer } from 'lib/registry';
 import { resetStore } from 'store/actions';
 import {

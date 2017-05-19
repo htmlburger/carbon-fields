@@ -156,9 +156,7 @@ class Field implements Datastore_Holder_Interface {
 	 * 
 	 * @var array
 	 */
-	protected $attributes = array(
-		'type' => 'text',
-	);
+	protected $attributes = array();
 
 	/**
 	 * Array of attributes the user is allowed to change
@@ -397,12 +395,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @return mixed
 	 */
 	protected function get_value_from_datastore( $fallback_to_default = true ) {
-		$value_tree = $this->get_datastore()->load( $this );
-		
-		$value = null;
-		if ( isset( $value_tree['value_set'] ) ) {
-			$value = $value_tree['value_set'];
-		}
+		$value = $this->get_datastore()->load( $this );
 
 		if ( $value === null && $fallback_to_default ) {
 			$value = $this->get_default_value();
@@ -558,7 +551,20 @@ class Field implements Datastore_Holder_Interface {
 	 * @return mixed
 	 */
 	public function get_formatted_value() {
-		return $this->get_value();
+		$value = $this->get_value();
+		if ( is_array( $value ) ) {
+			$formatter = function( $value ) {
+				$value['value'] = $value[ Value_Set::VALUE_PROPERTY ];
+				unset( $value[ Value_Set::VALUE_PROPERTY ] );
+				return $value;
+			};
+			if ( $this->get_value_set()->get_type() === Value_Set::TYPE_MULTIPLE_PROPERTIES ) {
+				$value = $formatter( $value );
+			} else if ( $this->get_value_set()->get_type() === Value_Set::TYPE_VALUE_SET ) {
+				$value = array_map( $formatter, $value );
+			}
+		}
+		return $value;
 	}
 
 	/**
@@ -904,7 +910,7 @@ class Field implements Datastore_Holder_Interface {
 			return array();
 		}
 
-		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN' );
+		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN', 'INCLUDES', 'EXCLUDES' );
 
 		$parsed_rules = array(
 			'relation' => Helper::get_relation_type_from_array( $rules ),
@@ -994,7 +1000,7 @@ class Field implements Datastore_Holder_Interface {
 			'base_name' => $this->get_base_name(),
 			'value' => $this->get_value(),
 			'default_value' => $this->get_default_value(),
-			'attributes' => $this->get_attributes(),
+			'attributes' => (object) $this->get_attributes(),
 			'help_text' => $this->get_help_text(),
 			'context' => $this->get_context(),
 			'required' => $this->is_required(),

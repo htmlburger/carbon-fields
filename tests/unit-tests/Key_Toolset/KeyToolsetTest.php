@@ -81,7 +81,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 			array( 'field' ),
 			array( 0 ),
 			0,
-			'value'
+			Value_Set::VALUE_PROPERTY
 		);
 		$this->assertSame( $expected, $received );
 	}
@@ -96,7 +96,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 			array( 'field', 'foo', 'bar' ),
 			array( 9, 99, 1, 2, 3 ), // added junk
 			999,
-			'value'
+			Value_Set::VALUE_PROPERTY
 		);
 		$this->assertSame( $expected, $received );
 	}
@@ -120,13 +120,13 @@ class KeyToolsetTest extends WP_UnitTestCase {
 	 * @covers ::get_storage_key
 	 */
 	public function testGetStorageKeyReturnsComplexKeyForRootField() {
-		$expected = '_field||0|999|value';
+		$expected = '_field||0|999|' . Value_Set::VALUE_PROPERTY;
 		$received = $this->subject->get_storage_key(
 			false,
 			array( 'field' ),
 			array( 1, 2, 3 ), // added junk
 			999,
-			'value'
+			Value_Set::VALUE_PROPERTY
 		);
 		$this->assertSame( $expected, $received );
 	}
@@ -135,13 +135,13 @@ class KeyToolsetTest extends WP_UnitTestCase {
 	 * @covers ::get_storage_key
 	 */
 	public function testGetStorageKeyReturnsComplexKeyForFieldWithDefaultProperty() {
-		$expected = '_field|foo:bar|9:99|999|value';
+		$expected = '_field|foo:bar|9:99|999|' . Value_Set::VALUE_PROPERTY;
 		$received = $this->subject->get_storage_key(
 			false,
 			array( 'field', 'foo', 'bar' ),
 			array( 9, 99 ),
 			999,
-			'value'
+			Value_Set::VALUE_PROPERTY
 		);
 		$this->assertSame( $expected, $received );
 	}
@@ -177,11 +177,11 @@ class KeyToolsetTest extends WP_UnitTestCase {
 	 * @covers ::get_storage_key_with_index_wildcards
 	 */
 	public function testGetStorageKeyWithIndexWildcardsReturnsComplexKeyForRootField() {
-		$expected = '_field||0|%|value';
+		$expected = '_field||0|%|' . Value_Set::VALUE_PROPERTY;
 		$received = $this->subject->get_storage_key_with_index_wildcards(
 			false,
 			array( 'field' ),
-			'value',
+			Value_Set::VALUE_PROPERTY,
 			'%'
 		);
 		$this->assertSame( $expected, $received );
@@ -191,11 +191,11 @@ class KeyToolsetTest extends WP_UnitTestCase {
 	 * @covers ::get_storage_key_with_index_wildcards
 	 */
 	public function testGetStorageKeyWithIndexWildcardsReturnsComplexKeyForNestedField() {
-		$expected = '_field|foo:bar|%|%|value';
+		$expected = '_field|foo:bar|%|%|' . Value_Set::VALUE_PROPERTY;
 		$received = $this->subject->get_storage_key_with_index_wildcards(
 			false,
 			array( 'field', 'foo', 'bar' ),
-			'value',
+			Value_Set::VALUE_PROPERTY,
 			'%'
 		);
 		$this->assertSame( $expected, $received );
@@ -445,8 +445,8 @@ class KeyToolsetTest extends WP_UnitTestCase {
 	 * @covers ::storage_key_to_segments_array
 	 */
 	public function testStorageKeyToSegmentsArray() {
-		$storage_key = '_field|foo:bar|0|1|value';
-		$expected = array( 'field', 'foo:bar', '0', '1', 'value' );
+		$storage_key = '_field|foo:bar|0|1|' . Value_Set::VALUE_PROPERTY;
+		$expected = array( 'field', 'foo:bar', '0', '1', Value_Set::VALUE_PROPERTY );
 		$this->assertSame( $expected, $this->subject->storage_key_to_segments_array( $storage_key ) );
 	}
 
@@ -469,7 +469,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 			'hierarchy' => array(),
 			'hierarchy_index' => array( 0 ),
 			'value_index' => 0,
-			'property' => 'value',
+			'property' => Value_Set::VALUE_PROPERTY,
 			'full_hierarchy' => array( 'field' ),
 		);
 		$this->assertSame( $expected, $this->subject->parse_storage_key( $storage_key ) );

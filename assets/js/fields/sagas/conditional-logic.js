@@ -29,6 +29,8 @@ function compare(left, right, operator) {
 		case '<=': return left <= right;
 		case 'IN': return some(right, value => value == left);
 		case 'NOT IN': return every(right, value => value != left);
+		case 'INCLUDES': return every([].concat(right), value => left.indexOf(value) !== -1);
+		case 'EXCLUDES': return every([].concat(right), value => left.indexOf(value) === -1);
 	}
 }
 

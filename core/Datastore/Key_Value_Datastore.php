@@ -4,7 +4,6 @@ namespace Carbon_Fields\Datastore;
 
 use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Field\Field;
-use Carbon_Fields\Value_Set\Value_Set;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -68,11 +67,13 @@ abstract class Key_Value_Datastore extends Datastore {
 	 */
 	protected function cascading_storage_array_to_value_tree_array( $storage_array ) {
 		$tree = array();
+		$found_keepalive = false;
 
 		foreach ( $storage_array as $row ) {
 			$parsed_storage_key = $this->key_toolset->parse_storage_key( $row->key );
 
 			if ( $parsed_storage_key['property'] === $this->key_toolset->get_keepalive_property() ) {
+				$found_keepalive = true;
 				continue;
 			}
 
@@ -86,21 +87,11 @@ abstract class Key_Value_Datastore extends Datastore {
 				$level = &$level[ $field_name ];
 
 				if ( $i < count( $parsed_storage_key['full_hierarchy'] ) - 1 ) {
-					if ( ! isset( $level['groups'] ) ) {
-						$level['groups'] = array();
-					}
-					$level = &$level['groups'];
-
 					if ( ! isset( $level[ $index ] ) ) {
 						$level[ $index ] = array();
 					}
 					$level = &$level[ $index ];
 				} else  {
-					if ( ! isset( $level['value_set'] ) ) {
-						$level['value_set'] = array();
-					}
-					$level = &$level['value_set'];
-
 					if ( ! isset( $level[ $parsed_storage_key['value_index'] ] ) ) {
 						$level[ $parsed_storage_key['value_index'] ] = array();
 					}
@@ -111,8 +102,12 @@ abstract class Key_Value_Datastore extends Datastore {
 			}
 			$level = &$tree;
 		}
-
 		Helper::ksort_recursive( $tree );
+
+		if ( empty( $tree ) && ! $found_keepalive ) {
+			return null;
+		}
+
 		return $tree;
 	}
 
@@ -131,8 +126,8 @@ abstract class Key_Value_Datastore extends Datastore {
 		$hierarchy_index = $field->get_hierarchy_index();
 
 		foreach ( $hierarchy as $index => $parent_field ) {
-			if ( isset( $value_tree[ $parent_field ]['groups'][ $hierarchy_index[ $index ] ] ) ) {
-				$value_tree = $value_tree[ $parent_field ]['groups'][ $hierarchy_index[ $index ] ];
+			if ( isset( $value_tree[ $parent_field ][ $hierarchy_index[ $index ] ] ) ) {
+				$value_tree = $value_tree[ $parent_field ][ $hierarchy_index[ $index ] ];
 			}
 		}
 
@@ -174,12 +169,15 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * Get the field value(s)
 	 *
 	 * @param Field $field The field to get value(s) for
-	 * @return array<array>
+	 * @return null|array<array>
 	 */
 	public function load( Field $field ) {
 		$storage_key_patterns = $this->key_toolset->get_storage_key_getter_patterns( $field->is_simple_root_field(), $this->get_full_hierarchy_for_field( $field ) );
 		$cascading_storage_array = $this->get_storage_array( $field, $storage_key_patterns );
 		$value_tree_array = $this->cascading_storage_array_to_value_tree_array( $cascading_storage_array );
+		if ( $value_tree_array === null ) {
+			return $value_tree_array;
+		}
 		$value_tree = $this->value_tree_array_to_value_tree( $value_tree_array, $field );
 		return $value_tree;
 	}

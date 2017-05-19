@@ -1,7 +1,7 @@
 <?php
 
 use Mockery as M;
-use Carbon_Fields\Value_Set\Value_Set as Value_Set;
+use Carbon_Fields\Value_Set\Value_Set;
 
 /**
  * @group field
@@ -57,9 +57,9 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	 * @covers ::load
 	 * @covers ::get_value
 	 */
-	public function testLoadAppliesDefaultValueWhenDatastoreReturnsNoValue() {
+	public function testLoadAppliesDefaultValueWhenDatastoreReturnsNull() {
 		$expected = 'test default value';
-		$this->datastore->shouldReceive( 'load' )->andReturn( array() )->once();
+		$this->datastore->shouldReceive( 'load' )->andReturn( null )->once();
 
 		$this->subject->set_datastore( $this->datastore );
 		$this->subject->set_default_value( $expected );
@@ -75,10 +75,8 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	public function testLoadAppliesTheSameValueWhenDatastoreReturnsValue() {
 		$expected = 'test value from datastore';
 		$this->datastore->shouldReceive( 'load' )->andReturn( array(
-			'value_set' => array(
-				array(
-					'value' => $expected,
-				),
+			array(
+				Value_Set::VALUE_PROPERTY => $expected,
 			),
 		) )->once();
 

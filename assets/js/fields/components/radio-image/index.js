@@ -64,8 +64,8 @@ RadioImageField.propTypes = {
 	field: PropTypes.shape({
 		attributes: PropTypes.object,
 		options: PropTypes.arrayOf(PropTypes.shape({
-			name: PropTypes.string,
-			value: PropTypes.string,
+			name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+			value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 		})),
 	}),
 	handleChange: PropTypes.func,
