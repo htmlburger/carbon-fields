@@ -17,11 +17,22 @@ import {
 
 class Api {
 
+	/**
+	 * Constructor
+	 * 
+	 * @param {Object} store The entire redux store
+	 */
 	constructor(store) {
 		this.store = store;
 		$(document).trigger('carbonFields.apiLoaded');
 	}
 
+	/**
+	 * Get a field's value
+	 * 
+	 * @param  {string} fieldName Field name and hierarchy
+	 * @return {Object}
+	 */
 	getFieldValue(fieldName) {
 		let field = getFieldByName(this.store.getState(), fieldName);
 		if (field === null) {
@@ -46,6 +57,11 @@ class Api {
 		return field.value;
 	}
 
+	/**
+	 * Set a field's value
+	 * 
+	 * @param {string} fieldName Field name and hierarchy
+	 */
 	setFieldValue(fieldName, value) {
 		let field = getFieldByName(this.store.getState(), fieldName);
 		if (field === null) {
@@ -76,6 +92,12 @@ class Api {
 		}
 	}
 
+	/**
+	 * Add a group to a complex field
+	 * 
+	 * @param {string} fieldName Field name and hierarchy
+	 * @param {string} groupName Group name to create. Default is '_'.
+	 */
 	addComplexFieldGroup(fieldName, groupName) {
 		let field = getFieldByName(this.store.getState(), fieldName);
 		if (field === null) {
@@ -91,6 +113,12 @@ class Api {
 		this.store.dispatch(addComplexGroup(field.id, groupName));
 	}
 
+	/**
+	 * Remove a group from a complex field
+	 * 
+	 * @param {string} fieldName Field name and hierarchy
+	 * @param {integer} groupIndex The index of the group to remove
+	 */
 	removeComplexFieldGroup(fieldName, groupIndex) {
 		let field = getFieldByName(this.store.getState(), fieldName);
 		if (field === null) {
