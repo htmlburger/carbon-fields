@@ -21,7 +21,7 @@ import { removeContainer, receiveContainer, validateContainer, submitForm, toggl
 import { getContainerById } from 'containers/selectors';
 
 import { removeFields } from 'fields/actions';
-import { getFieldById, getFieldsByRoots } from 'fields/selectors';
+import { getFieldById, getFieldsByRoots, hasInvalidFields } from 'fields/selectors';
 import { TYPE_MAP } from 'fields/constants';
 
 /**
@@ -29,21 +29,50 @@ import { TYPE_MAP } from 'fields/constants';
  *
  * @return {void}
  */
-export function* workerUpdate() {
+export function* workerAddedOrUpdatedEvent() {
+	const { pagenow } = window.carbon_json;
 	const channel = yield call(createWidgetsChannel);
 
 	while (true) {
-		const { widget } = yield take(channel);
+		const { event, widget } = yield take(channel);
+
 		const container = $(widget)
 			.find('[data-json]')
 				.data('json');
 
-		// Don't care about other widgets.
+		// We don't care about other widgets.
 		if (!container) {
-			continue;
+			return;
 		}
 
 		yield put(receiveContainer(container, true));
+
+		// WARNING: This piece of code manipulates the core behavior of WordPress Widgets.
+		// Some day this code will stop to work and we'll need to find another workaround.
+		//
+		// * Disable the submit handler since it breaks our validation logic.
+		// * Disable live preview mode because we can't detect when the widget is updated/synced.
+		// * Show the "Apply" button because it's hidden by the live mode.
+		if (pagenow === PAGE_NOW_CUSTOMIZE && event.type === 'widget-added') {
+			$(widget)
+				.find('[name="savewidget"]')
+					.off('click')
+					.show()
+				.end()
+				.find('.widget-content:first')
+					.off('keydown', 'input')
+					.off('change input propertychange', ':input');
+
+			const containerId = $(widget)
+				.find('[name="widget-id"]')
+				.val();
+
+			const widgetInstance = yield call(wp.customize.Widgets.getWidgetFormControlForWidget, containerId);
+
+			// Change the flag for 'live mode' so we can receive proper `widget-updated` events.
+			widgetInstance.liveUpdateMode = false;
+		}
+
 	}
 }
 
@@ -51,10 +80,12 @@ export function* workerUpdate() {
  * We need to remove the container from DOM when the widget
  * is saved because WordPress will throw away everything.
  *
+ * @param  {String} ajaxEvent
+ * @param  {String} ajaxAction
  * @return {void}
  */
-export function* workerCleanup() {
-	const channel = yield call(createAjaxChannel, 'ajaxSend', 'save-widget');
+export function* workerDestroyContainer(ajaxEvent, ajaxAction) {
+	const channel = yield call(createAjaxChannel, ajaxEvent, ajaxAction);
 
 	while (true) {
 		const { settings: { data } } = yield take(channel);
@@ -92,17 +123,37 @@ export function* workerCleanup() {
  * @return {void}
  */
 export function* workerFormSubmit() {
-	const channel = yield call(createClickChannel, '.widgets-php', '[name="savewidget"]');
+	const { pagenow } = window.carbon_json;
+	const channel = yield call(createClickChannel, '.widgets-php, .wp-customizer', '[name="savewidget"]');
 
 	while (true) {
 		const { event } = yield take(channel);
 		const containerId = $(event.target)
-			.closest('form')
+			.closest('.widget-inside')
 			.find('input[name="widget-id"]')
 				.val();
 
 		yield put(submitForm(event));
 		yield put(validateContainer(containerId, event));
+
+		// The widgets has slightly different behavior on the 'Customize' page.
+		// So we need to save the widget manually because we remove the default
+		// handler defined here - https://github.com/WordPress/WordPress/blob/master/wp-admin/js/customize-widgets.js#L881-L884.
+		if (pagenow === PAGE_NOW_CUSTOMIZE) {
+			event.preventDefault();
+
+			// This little delay allows us to get correct results in the selector for invalid fields
+			// since we don't know when the validation is completed.
+			yield call(delay, 250);
+
+			// Submit the widget.
+			if (!(yield select(hasInvalidFields))) {
+				const widget = yield call(wp.customize.Widgets.getWidgetFormControlForWidget, containerId);
+
+				// Call the built-in logic of WordPress to update the widget.
+				yield call([widget, widget.updateWidget], { disable_form: true });
+			}
+		}
 	}
 }
 
@@ -144,10 +195,19 @@ export default function* foreman() {
 		return;
 	}
 
-	yield [
-		call(workerUpdate),
-		call(workerCleanup),
+	const workers = [
+		call(workerAddedOrUpdatedEvent),
 		call(workerToggleWidget),
 		call(workerFormSubmit)
 	];
+
+	if (pagenow === PAGE_NOW_WIDGETS) {
+		workers.push(call(workerDestroyContainer, 'ajaxSend', 'save-widget'));
+	}
+
+	if (pagenow === PAGE_NOW_CUSTOMIZE) {
+		workers.push(call(workerDestroyContainer, 'ajaxSend', 'update-widget'));
+	}
+
+	yield workers;
 }

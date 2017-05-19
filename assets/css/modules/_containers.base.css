@@ -13,7 +13,7 @@
 .carbon-container .help-text,
 .carbon-container .description { display: block; padding-top: 3px; padding-bottom: 1px; font-style: italic; }
 
-.carbon-container-Widget .collapsed > .fields-container,
+.carbon-container-widget .collapsed > .fields-container,
 .carbon-fields-collection .collapsed > .fields-container { display: none; }
 
 .carbon-fields-collection  { padding-bottom: 20px; }
@@ -22,6 +22,8 @@
 
 .carbon-grid .carbon-field { border-width: 1px 1px 0 0; border-style: solid; border-color: $color-border; }
 .carbon-grid .carbon-container { margin: -1px -1px 0 0; }
+
+.wp-customizer .carbon-grid .carbon-field { border-width: 0 0 1px; }
 
 
 /*  Error State  */
