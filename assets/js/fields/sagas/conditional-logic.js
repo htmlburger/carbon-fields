@@ -8,8 +8,9 @@ import { isEmpty, omit, some, every, includes, isUndefined } from 'lodash';
 /**
  * The internal dependencies.
  */
+import { TYPE_COMPLEX } from 'fields/constants';
 import { setupField, updateField, setUI } from 'fields/actions';
-import { getFieldById, makeGetFieldsByParent } from 'fields/selectors';
+import { getFieldById, getFieldParentById, makeGetFieldsByParent } from 'fields/selectors';
 
 /**
  * Compare the values.
@@ -91,8 +92,21 @@ export function* workerConditionalLogic({ payload: { fieldId } }) {
 		return;
 	}
 
-	const selector = yield call(makeGetFieldsByParent, field.parent)
+	const selector = yield call(makeGetFieldsByParent, field.parent);
 	const siblings = yield call(omit, yield select(selector), field.base_name);
+	
+	// Expand siblings by adding literal 'parent.' prefixes to keys for every level above the current one
+	let parentPrefix = '';
+	let parentField = yield select(getFieldParentById, field.id);
+	while (!isUndefined(parentField)) {
+		parentPrefix += 'parent.';
+		let parentSelector = yield call(makeGetFieldsByParent, parentField.parent);
+		let parentSiblings = yield call(omit, yield select(parentSelector), parentField.base_name);
+		for (let parentSiblingName in parentSiblings) {
+			siblings[parentPrefix + parentSiblingName] = parentSiblings[parentSiblingName];
+		}
+		parentField = yield select(getFieldParentById, parentField.id);
+	}
 
 	yield call(workerValidate, field, siblings);
 	yield takeEvery(updateField, workerValidate, field, siblings);

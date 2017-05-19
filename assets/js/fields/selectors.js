@@ -43,6 +43,48 @@ export const getFields = state => state.fields;
 export const getFieldById = (state, id) => state.fields[id];
 
 /**
+ * Return a field's parent object from the state.
+ * Warning: skips through groups and returns the parent complex field.
+ *
+ * @param  {Object} state
+ * @param  {String} id
+ * @return {Object}
+ */
+export const getFieldParentById = (state, id) => {
+	let field = getFieldById(state, id);
+	let parent = getFieldById(state, field.parent);
+
+	if (isUndefined(parent)) {
+		// if .type is undefined then we are dealing with a group field
+		parent = getComplexByGroupById(state, field.parent);
+	}
+
+	return parent;
+};
+
+/**
+ * Return a complex group object from the state.
+ *
+ * @param  {Object} state
+ * @param  {String} id
+ * @return {Object}
+ */
+export const getComplexByGroupById = (state, id) => {
+	for (var fieldId in state.fields) {
+		var field = state.fields[fieldId];
+		if (field.type === TYPE_COMPLEX) {
+			for (var i = 0; i < field.value.length; i++) {
+				var group = field.value[i];
+				if (group.id === id) {
+					return field;
+				}
+			}
+		}
+	}
+	return undefined;
+};
+
+/**
  * Return a regex which matches field names patterns
  * This is a direct translation of Container::get_field_pattern_regex from php
  *
