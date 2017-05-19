@@ -156,9 +156,7 @@ class Field implements Datastore_Holder_Interface {
 	 * 
 	 * @var array
 	 */
-	protected $attributes = array(
-		'type' => 'text',
-	);
+	protected $attributes = array();
 
 	/**
 	 * Array of attributes the user is allowed to change
@@ -1002,7 +1000,7 @@ class Field implements Datastore_Holder_Interface {
 			'base_name' => $this->get_base_name(),
 			'value' => $this->get_value(),
 			'default_value' => $this->get_default_value(),
-			'attributes' => $this->get_attributes(),
+			'attributes' => (object) $this->get_attributes(),
 			'help_text' => $this->get_help_text(),
 			'context' => $this->get_context(),
 			'required' => $this->is_required(),
