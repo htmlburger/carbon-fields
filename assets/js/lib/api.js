@@ -2,6 +2,7 @@
  * The external dependencies.
  */
 import { head, isUndefined } from 'lodash';
+import $ from 'jquery';
 
 /**
  * The internal dependencies.
@@ -18,6 +19,7 @@ class Api {
 
 	constructor(store) {
 		this.store = store;
+		$(document).trigger('carbonFields.apiLoaded');
 	}
 
 	getFieldValue(fieldName) {
