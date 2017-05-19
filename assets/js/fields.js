@@ -1189,9 +1189,11 @@ window.carbon = window.carbon || {};
 				.on('open', function() {
 					var selection = mediaField.state().get('selection');
 
-					attachment = wp.media.attachment(value);
-					attachment.fetch();
-					selection.set( attachment ? [ attachment ] : [] );
+					if ( value ) {
+						attachment = wp.media.attachment(value);
+						attachment.fetch();
+						selection.set( attachment ? [ attachment ] : [] );
+					}
 				});
 
 			// Opens the media library frame
