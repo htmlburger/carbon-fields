@@ -116,7 +116,7 @@ export const getFieldByName = (state, name) => {
  * @param  {String} parentId
  * @return {Function}
  */
-export const makeGetFieldsByParent = parentId => createSelector(getFields, fields => mapValues(keyBy(filter(fields, ['parent', parentId]), 'name'), 'id'));
+export const makeGetFieldsByParent = parentId => createSelector(getFields, fields => mapValues(keyBy(filter(fields, ['parent', parentId]), 'base_name'), 'id'));
 
 /**
  * Get the fields that are direct children of the specified parent.

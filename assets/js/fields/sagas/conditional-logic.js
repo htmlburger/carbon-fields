@@ -55,7 +55,7 @@ export function* workerValidate(field, siblings, { payload: { fieldId, data } } 
 	let valid;
 
 	for (const rule of rules) {
-		const { value } = yield select(getFieldById, siblings[`_${rule.field}`]);
+		const { value } = yield select(getFieldById, siblings[rule.field]);
 		const result = yield call(compare, value, rule.value, rule.compare);
 
 		results.push(result);
@@ -92,7 +92,7 @@ export function* workerConditionalLogic({ payload: { fieldId } }) {
 	}
 
 	const selector = yield call(makeGetFieldsByParent, field.parent)
-	const siblings = yield call(omit, yield select(selector), field.name);
+	const siblings = yield call(omit, yield select(selector), field.base_name);
 
 	yield call(workerValidate, field, siblings);
 	yield takeEvery(updateField, workerValidate, field, siblings);
