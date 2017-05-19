@@ -1187,13 +1187,15 @@ window.carbon = window.carbon || {};
 					this.trigger('media:updated', mediaAttachment);
 				}, this)
 				.on('open', function() {
+					if ( ! value ) {
+						return;
+					};
+
+					var attachment = wp.media.attachment(value);
 					var selection = mediaField.state().get('selection');
 
-					if ( value ) {
-						attachment = wp.media.attachment(value);
-						attachment.fetch();
-						selection.set( attachment ? [ attachment ] : [] );
-					}
+					attachment.fetch();
+					selection.set( attachment ? [ attachment ] : [] );
 				});
 
 			// Opens the media library frame
