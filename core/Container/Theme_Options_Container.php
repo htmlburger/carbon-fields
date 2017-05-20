@@ -59,12 +59,12 @@ class Theme_Options_Container extends Container {
 		if ( ! $this->settings['parent'] || $this->settings['parent'] == 'self' ) {
 			$this->settings['parent'] = '';
 		} else if ( strpos( $this->settings['parent'], '.php' ) === false ) {
-			$clear_title = $this->clear_string( apply_filters( 'sanitize_file_name', $this->settings['parent'] ) );
+			$clear_title = $this->clear_string( $this->settings['parent'] );
 			$this->settings['parent'] = 'crbn-' . $clear_title . '.php';
 		}
-		
+
 		if ( ! $this->settings['file'] ) {
-			$clear_title = $this->clear_string( apply_filters( 'sanitize_file_name', $this->title ) );
+			$clear_title = $this->clear_string( $this->title );
 			$this->settings['file'] .= 'crbn-' . $clear_title . '.php';
 		}
 
@@ -267,6 +267,7 @@ class Theme_Options_Container extends Container {
 	 * the theme options file name.
 	 **/
 	protected function clear_string( $string ) {
+		$string = apply_filters( 'sanitize_file_name', $string );
 		return preg_replace( array( '~ +~', '~[^\w\d-]+~u', '~-+~' ), array( '-', '-', '-' ), strtolower( remove_accents( $string ) ) );
 	}
 }
