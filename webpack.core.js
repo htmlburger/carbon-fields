@@ -5,9 +5,8 @@ const execa = require('execa');
 const base = require('./webpack.base');
 const OnBuildPlugin = require('on-build-webpack');
 
-module.exports = (env) => {
-	let bootstraped = false;
-
+module.exports = () => {
+	const env = base.detectEnv();
 	const plugins = [
 		new webpack.DllReferencePlugin({
 			manifest: require(base.getNameWithSuffix('./assets/dist/carbon.vendor.json', env)),
@@ -20,7 +19,9 @@ module.exports = (env) => {
 		})
 	];
 
-	if (!env || env === 'development') {
+	if (env === 'development') {
+		let bootstraped = false;
+
 		plugins.push(new OnBuildPlugin(() => {
 			if (!bootstraped) {
 				bootstraped = true;
