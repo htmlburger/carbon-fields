@@ -56,10 +56,14 @@ export function* workerValidate(field, siblings, { payload: { fieldId, data } } 
 	let valid;
 
 	for (const rule of rules) {
-		const { value } = yield select(getFieldById, siblings[rule.field]);
-		const result = yield call(compare, value, rule.value, rule.compare);
+		const field = yield select(getFieldById, siblings[rule.field]);
 
-		results.push(result);
+		if (!field) {
+			console.warn(`An unknown field is used in condition - ${rule.field}.`);
+			continue;
+		}
+
+		results.push(yield call(compare, field.value, rule.value, rule.compare));
 	}
 
 	switch (relation) {
@@ -94,7 +98,7 @@ export function* workerConditionalLogic({ payload: { fieldId } }) {
 
 	const selector = yield call(makeGetFieldsByParent, field.parent);
 	const siblings = yield call(omit, yield select(selector), field.base_name);
-	
+
 	// Expand siblings by adding literal 'parent.' prefixes to keys for every level above the current one
 	let parentPrefix = '';
 	let parentField = yield select(getFieldParentById, field.id);
