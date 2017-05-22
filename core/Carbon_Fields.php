@@ -95,11 +95,12 @@ final class Carbon_Fields {
 	 * @return mixed
 	 */
 	public static function resolve_with_arguments( $identifier, $arguments, $subcontainer = null ) {
-		$supercontainer = $subcontainer ? static::resolve( $subcontainer ) : static::instance()->ioc;
+		$local_container = $subcontainer ? static::resolve( $subcontainer ) : static::instance()->ioc;
 		$container = new PimpleContainer();
-		$container['container'] = $supercontainer;
+		$container['root_container'] = static::instance()->ioc;
+		$container['local_container'] = $local_container;
 		$container['arguments'] = $arguments;
-		$container['object'] = $supercontainer->raw( $identifier );
+		$container['object'] = $local_container->raw( $identifier );
 		return $container['object'];
 	}
 
@@ -139,6 +140,7 @@ final class Carbon_Fields {
 	 */
 	public static function extend( $class, $extender ) {
 		$type_dictionary = array(
+			'_Container' => 'containers',
 			'_Field' => 'fields',
 			'_Condition' => 'container_conditions',
 		);
@@ -303,6 +305,10 @@ final class Carbon_Fields {
 
 		$ioc['container_repository'] = function() {
 			return new ContainerRepository();
+		};
+
+		$ioc['containers'] = function() {
+			return new PimpleContainer();
 		};
 
 		$ioc['fields'] = function() {

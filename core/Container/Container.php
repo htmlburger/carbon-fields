@@ -141,19 +141,31 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return object $container
 	 */
 	public static function factory( $raw_type, $name ) {
-		$normalized_type = Helper::normalize_type( $raw_type );
-		$class = Helper::type_to_class( $normalized_type, __NAMESPACE__, '_Container' );
+		$type = Helper::normalize_type( $raw_type );
+		$repository = Carbon_Fields::resolve( 'container_repository' );
+		$unique_id = $repository->get_unique_panel_id( $name );
+		$container = null;
 
-		if ( ! class_exists( $class ) ) {
-			Incorrect_Syntax_Exception::raise( 'Unknown container "' . $raw_type . '".' );
-			$class = __NAMESPACE__ . '\\Broken_Container';
+		if ( Carbon_Fields::has( $type, 'containers' ) ) {
+			$container = Carbon_Fields::resolve_with_arguments( $type, array(
+				'unique_id' => $unique_id,
+				'name' => $name,
+				'type' => $type,
+			), 'containers' );
+		} else {
+			// Fallback to class name-based resolution
+			$class = Helper::type_to_class( $type, __NAMESPACE__, '_Container' );
+
+			if ( ! class_exists( $class ) ) {
+				Incorrect_Syntax_Exception::raise( 'Unknown container "' . $raw_type . '".' );
+				$class = __NAMESPACE__ . '\\Broken_Container';
+			}
+
+			$fulfillable_collection = Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
+			$condition_translator = Carbon_Fields::resolve( 'container_condition_translator_json' );
+			$container = new $class( $unique_id, $name, $type, $fulfillable_collection, $condition_translator );
 		}
 
-		$repository = Carbon_Fields::resolve( 'container_repository' );
-		$fulfillable_collection = Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
-		$condition_translator = Carbon_Fields::resolve( 'container_condition_translator_json' );
-		$unique_id = $repository->get_unique_panel_id( $name );
-		$container = new $class( $unique_id, $name, $normalized_type, $fulfillable_collection, $condition_translator );
 		$repository->register_container( $container );
 
 		return $container;
