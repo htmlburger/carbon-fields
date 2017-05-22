@@ -55,6 +55,9 @@
 @media screen and (min-width: $breakpoint-tablet-min) {
 	.carbon-table-row .carbon-container > .carbon-fields-row > .carbon-field > label,
 	.carbon-table-row .carbon-container > .carbon-field > label { position: absolute; left: 0; }
+	.carbon-table-row .carbon-container > .carbon-highlight { position: static; }
+	.carbon-table-row .carbon-container > .carbon-highlight > .carbon-error { position: static; display: inline-block; vertical-align: top; transform: none; margin: 5px 0 0; }
+	.carbon-table-row .carbon-container > .carbon-highlight > .carbon-error:after { content: none; }
 
 	.carbon-table-row .carbon-container > .carbon-fields-row > .carbon-field.has-width > label,
 	.carbon-table-row .carbon-container > .carbon-field.has-width > label { position: static; }

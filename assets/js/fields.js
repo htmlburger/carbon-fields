@@ -929,7 +929,19 @@ window.carbon = window.carbon || {};
 	 *------------------------------------------------------------------------*/
 
 	// Gravity Form MODEL
-	carbon.fields.Model.GravityForm = carbon.fields.Model.Select.extend();
+	carbon.fields.Model.GravityForm = carbon.fields.Model.Select.extend({
+		initialize: function () {
+			carbon.fields.Model.Select.prototype.initialize.apply(this);
+		},
+	});
+
+	// Gravity Form VIEW
+	carbon.fields.View.GravityForm = carbon.fields.View.extend({
+		initialize: function() {
+			carbon.fields.View.prototype.initialize.apply(this);
+			this.listenTo(this.model, 'change:value', this.render);
+		}
+	});
 
 	/*--------------------------------------------------------------------------
 	 * SIDEBAR
@@ -954,7 +966,7 @@ window.carbon = window.carbon || {};
 				var sidebarId   = model.get('id');
 				var sidebar = {
 					name: sidebarName,
-					value: sidebarName
+					value: sidebarId
 				};
 
 				// If this sidebar is excluded ( by name or by ID), do not add it to the options.
@@ -1112,6 +1124,7 @@ window.carbon = window.carbon || {};
 			var windowLabel = this.model.get('window_label');
 			var typeFilter = this.model.get('type_filter');
 			var valueType = this.model.get('value_type');
+			var value = this.model.get('value');
 			var mediaTypes = {};
 
 			var getAttachmentThumb = function(attachment) {
@@ -1136,42 +1149,54 @@ window.carbon = window.carbon || {};
 			var mediaField = mediaTypes[type];
 
 			// Runs when an image is selected.
-			mediaField.on('select', function () {
-				// Grabs the attachment selection and creates a JSON representation of the model.
-				var mediaAttachments = mediaField.state().get('selection').toJSON();
+			mediaField
+				.on('select', function () {
+					// Grabs the attachment selection and creates a JSON representation of the model.
+					var mediaAttachments = mediaField.state().get('selection').toJSON();
 
-				// Get the first attachment and remove it from the array
-				var mediaAttachment = mediaAttachments.shift();
+					// Get the first attachment and remove it from the array
+					var mediaAttachment = mediaAttachments.shift();
 
-				// If multiple attachments, multiply the field
-				_.each(mediaAttachments, function(att) {
-					var thumbUrl = getAttachmentThumb(att);
-					if ( ! thumbUrl ) {
-						thumbUrl = _this.model.get('default_thumb_url')
-					}
-					_this.model.set('multiply', {
-						'value': att[valueType],
-						'file_type': att.type,
-						'file_name': att.filename,
-						'thumb_url': thumbUrl
+					// If multiple attachments, multiply the field
+					_.each(mediaAttachments, function(att) {
+						var thumbUrl = getAttachmentThumb(att);
+						if ( ! thumbUrl ) {
+							thumbUrl = _this.model.get('default_thumb_url')
+						}
+						_this.model.set('multiply', {
+							'value': att[valueType],
+							'file_type': att.type,
+							'file_name': att.filename,
+							'thumb_url': thumbUrl
+						});
 					});
+
+					var mediaValue = mediaAttachment[valueType];
+					var thumbUrl = getAttachmentThumb(mediaAttachment);
+					if ( ! thumbUrl ) {
+						thumbUrl = _this.model.get('default_thumb_url');
+					}
+
+					// Update the model
+					this.model.set('file_type', mediaAttachment.type);
+					this.model.set('file_name', mediaAttachment.filename);
+					this.model.set('value', mediaValue);
+					this.model.set('thumb_url', thumbUrl);
+
+					// Trigger an event that notifies that a media file is selected
+					this.trigger('media:updated', mediaAttachment);
+				}, this)
+				.on('open', function() {
+					if ( ! value ) {
+						return;
+					};
+
+					var attachment = wp.media.attachment(value);
+					var selection = mediaField.state().get('selection');
+
+					attachment.fetch();
+					selection.set( attachment ? [ attachment ] : [] );
 				});
-
-				var mediaValue = mediaAttachment[valueType];
-				var thumbUrl = getAttachmentThumb(mediaAttachment);
-				if ( ! thumbUrl ) {
-					thumbUrl = _this.model.get('default_thumb_url');
-				}
-
-				// Update the model
-				this.model.set('file_type', mediaAttachment.type);
-				this.model.set('file_name', mediaAttachment.filename);
-				this.model.set('value', mediaValue);
-				this.model.set('thumb_url', thumbUrl);
-
-				// Trigger an event that notifies that a media file is selected
-				this.trigger('media:updated', mediaAttachment);
-			}, this);
 
 			// Opens the media library frame
 			mediaField.open();

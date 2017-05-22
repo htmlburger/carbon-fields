@@ -86,6 +86,22 @@ class Gravity_Form_Field extends Select_Field {
 			return;
 		}
 
-		parent::template();
+		?>
+		<div class="carbon-field-group">
+			<select id="{{{ id }}}" name="{{{ name }}}" class="carbon-field-group-input">
+				<# _.each(options, function(option) { #>
+					<option value="{{ option.value }}" {{{ option.value == value ? 'selected="selected"' : '' }}}>
+						{{{ option.name }}}
+					</option>
+				<# }) #>
+			</select>
+
+			<# if (parseInt(value) !== 0) { #>
+				<div class="carbon-field-group-button">
+					<a class="carbon-gravity-form-edit button hide-if-no-js" href="admin.php?page=gf_edit_forms&amp;id={{{ value }}}" target="_blank"><?php _e( 'Edit form', 'carbon-fields' ); ?></a>
+				</div>
+			<# } #>
+		</div>
+		<?php
 	}
 }
