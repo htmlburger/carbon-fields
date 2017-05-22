@@ -25,7 +25,7 @@ import {
  */
 const defaultMapStateToProps = (state, ownProps) => {
 	const field = getFieldById(state, ownProps.id);
-	const name = ownProps.name || field.base_name;
+	const name = ownProps.name || field.name;
 
 	return {
 		name,
