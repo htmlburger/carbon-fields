@@ -41,14 +41,25 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
-	 * Sanitize the container title for use in
-	 * the theme options file name.
+	 * Sanitize a title to a filename
 	 *
-	 * @param string $string
+	 * @param string $title
 	 * @return string
 	 */
-	protected function clear_string( $string ) {
-		return preg_replace( array( '~ +~', '~[^\w\d-]+~u', '~-+~' ), array( '-', '-', '-' ), strtolower( remove_accents( $string ) ) );
+	protected function title_to_filename( $title, $extension ) {
+		$title = sanitize_file_name( $title );
+		$title = strtolower( $title );
+		$title = remove_accents( $title );
+		$title = preg_replace( array(
+			'~\s+~',
+			'~[^\w\d-]+~u',
+			'~-+~'
+		), array(
+			'-',
+			'-',
+			'-'
+		), $title );
+		return $title . $extension;
 	}
 
 	/**
@@ -56,13 +67,11 @@ class Theme_Options_Container extends Container {
 	 */
 	public function init() {
 		if ( $this->settings['parent'] !== '' && strpos( $this->settings['parent'], '.php' ) === false ) {
-			$clear_title = $this->clear_string( $this->settings['parent'] );
-			$this->settings['parent'] = 'crbn-' . $clear_title . '.php';
+			$this->settings['parent'] = $this->title_to_filename( 'crbn-' . $this->settings['parent'], '.php' );
 		}
 
 		if ( ! $this->settings['file'] ) {
-			$clear_title = $this->clear_string( $this->title );
-			$this->settings['file'] .= 'crbn-' . $clear_title . '.php';
+			$this->settings['file'] = $this->title_to_filename( 'crbn-' . $this->title, '.php' );
 		}
 
 		$registered = $this->register_page();
