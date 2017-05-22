@@ -44,16 +44,6 @@ class KeyToolsetTest extends WP_UnitTestCase {
 	/**
 	 * @covers ::get_sanitized_hierarchy_index
 	 */
-	public function testGetSanitizedHierarchyIndexEnsuresAtLeast1Value() {
-		$full_hierarchy = array(  );
-		$full_hierarchy_index = array( 1 );
-		$expected = array( 0 );
-		$this->assertSame( $expected, $this->subject->get_sanitized_hierarchy_index( $full_hierarchy, $full_hierarchy_index ) );
-	}
-
-	/**
-	 * @covers ::get_sanitized_hierarchy_index
-	 */
 	public function testGetSanitizedHierarchyIndexIgnoresTheLastField() {
 		$full_hierarchy = array( 'field', 'field' );
 		$full_hierarchy_index = array( 1, 2 );
@@ -120,7 +110,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 	 * @covers ::get_storage_key
 	 */
 	public function testGetStorageKeyReturnsComplexKeyForRootField() {
-		$expected = '_field||0|999|' . Value_Set::VALUE_PROPERTY;
+		$expected = '_field|||999|' . Value_Set::VALUE_PROPERTY;
 		$received = $this->subject->get_storage_key(
 			false,
 			array( 'field' ),
@@ -251,7 +241,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 	public function testGetStorageKeyDeleterPatternsForSimpleRootField() {
 		$expected = array(
 			'_field' => Key_Toolset::PATTERN_COMPARISON_EQUAL,
-			'_field||0|' => Key_Toolset::PATTERN_COMPARISON_STARTS_WITH,
+			'_field|||' => Key_Toolset::PATTERN_COMPARISON_STARTS_WITH,
 		);
 		$received = $this->subject->get_storage_key_deleter_patterns(
 			false,
@@ -467,7 +457,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 		$expected = array(
 			'root' => 'field',
 			'hierarchy' => array(),
-			'hierarchy_index' => array( 0 ),
+			'hierarchy_index' => array(),
 			'value_index' => 0,
 			'property' => Value_Set::VALUE_PROPERTY,
 			'full_hierarchy' => array( 'field' ),

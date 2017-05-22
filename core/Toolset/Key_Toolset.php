@@ -75,7 +75,7 @@ class Key_Toolset {
 	public function get_sanitized_hierarchy_index( $full_hierarchy, $full_hierarchy_index ) {
 		$full_hierarchy_index = array_slice( $full_hierarchy_index, 0, count( $full_hierarchy ) - 1 );
 		if ( empty( $full_hierarchy_index ) ) {
-			$full_hierarchy_index = array( 0 );
+			$full_hierarchy_index = array();
 		}
 		$full_hierarchy_index = array_map( 'intval', $full_hierarchy_index );
 		return $full_hierarchy_index;
@@ -341,7 +341,7 @@ class Key_Toolset {
 		$parsed = array(
 			'root' => '',
 			'hierarchy' => array(),
-			'hierarchy_index' => array( 0 ),
+			'hierarchy_index' => array(),
 			'value_index' => 0,
 			'property' => Value_Set::VALUE_PROPERTY,
 		);

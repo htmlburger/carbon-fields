@@ -353,7 +353,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Set array of hierarchy indexes
 	 */
 	public function set_hierarchy_index( $hierarchy_index ) {
-		$hierarchy_index = ( ! empty( $hierarchy_index ) ) ? $hierarchy_index : array( 0 );
+		$hierarchy_index = ( ! empty( $hierarchy_index ) ) ? $hierarchy_index : array();
 		$this->hierarchy_index = $hierarchy_index;
 	}
 

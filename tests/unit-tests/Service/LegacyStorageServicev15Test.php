@@ -137,16 +137,16 @@ class LegacyStorageServicev15Test extends WP_UnitTestCase {
 		$this->subject->shouldReceive( 'get_legacy_storage_array' )->andReturn( $this->legacy_storage_array );
 		$expected = array(
 			'_crb_legacy_text' => 'lorem ipsum',
-			'_crb_legacy_text||0|0|_value' => 'lorem ipsum',
-			'_crb_legacy_map||0|0|_value' => '19.0759837,72.87765590000004',
-			'_crb_legacy_map||0|0|lat' => '19.0759837',
-			'_crb_legacy_map||0|0|lng' => '72.87765590000004',
-			'_crb_legacy_map||0|0|zoom' => '6',
-			'_crb_legacy_map||0|0|address' => 'Mumbai',
-			'_crb_legacy_set||0|0|_value' => 'one',
-			'_crb_legacy_association||0|0|_value' => 'post:post:47',
+			'_crb_legacy_text|||0|_value' => 'lorem ipsum',
+			'_crb_legacy_map|||0|_value' => '19.0759837,72.87765590000004',
+			'_crb_legacy_map|||0|lat' => '19.0759837',
+			'_crb_legacy_map|||0|lng' => '72.87765590000004',
+			'_crb_legacy_map|||0|zoom' => '6',
+			'_crb_legacy_map|||0|address' => 'Mumbai',
+			'_crb_legacy_set|||0|_value' => 'one',
+			'_crb_legacy_association|||0|_value' => 'post:post:47',
 
-			'_crb_home_sections||0|0|_value' => 'features',
+			'_crb_home_sections|||0|_value' => 'features',
 			'_crb_home_sections|columns|0|0|_value' => 'col3of4',
 			'_crb_home_sections|columns:rows|0:0|0|_value' => 'row',
 			
@@ -189,7 +189,7 @@ class LegacyStorageServicev15Test extends WP_UnitTestCase {
 				'value' => 'lorem ipsum',
 			),
 			(object) array(
-				'key' => '_crb_legacy_text||0|0|_value',
+				'key' => '_crb_legacy_text|||0|_value',
 				'value' => 'lorem ipsum',
 			),
 		);

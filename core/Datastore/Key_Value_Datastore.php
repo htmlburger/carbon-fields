@@ -47,7 +47,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 */
 	protected function get_full_hierarchy_index_for_field( Field $field ) {
 		$hierarchy_index = $field->get_hierarchy_index();
-		$full_hierarchy_index = ! empty( $hierarchy_index ) ? $hierarchy_index : array( 0 );
+		$full_hierarchy_index = ! empty( $hierarchy_index ) ? $hierarchy_index : array();
 		return $full_hierarchy_index;
 	}
 
@@ -72,7 +72,7 @@ abstract class Key_Value_Datastore extends Datastore {
 
 			$level = &$tree;
 			foreach ( $parsed_storage_key['full_hierarchy'] as $i => $field_name ) {
-				$index = isset( $parsed_storage_key['hierarchy_index'][ $i ] ) ? $parsed_storage_key['hierarchy_index'][ $i ] : -1;
+				$index = isset( $parsed_storage_key['hierarchy_index'][ $i ] ) ? $parsed_storage_key['hierarchy_index'][ $i ] : 0;
 
 				if ( ! isset( $level[ $field_name ] ) ) {
 					$level[ $field_name ] = array();
