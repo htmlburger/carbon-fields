@@ -64,7 +64,7 @@ TextareaField.propTypes = {
  *
  * @type {Function}
  */
-const enhance = compose(
+export const enhance = compose(
 	withStore(),
 	withSetup(),
 
