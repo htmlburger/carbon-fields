@@ -163,7 +163,7 @@ class Complex_Field extends Field {
 	 */
 	protected function update_child_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		foreach ( $this->groups as $group ) {
-			$group->set_datastore( $this->get_datastore(), $set_as_default );
+			$group->set_datastore( $datastore, $set_as_default );
 		}
 	}
 
