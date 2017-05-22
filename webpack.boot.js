@@ -3,20 +3,24 @@ const merge = require('webpack-merge');
 const webpack = require('webpack');
 const base = require('./webpack.base');
 
-module.exports = (env) => merge(base(env), {
-	entry: {
-		'carbon.boot': './assets/js/bootstrap.js'
-	},
+module.exports = () => {
+	const env = base.detectEnv();
 
-	plugins: [
-		new webpack.DllReferencePlugin({
-			manifest: require(base.getNameWithSuffix('./assets/dist/carbon.vendor.json', env)),
-			sourceType: 'this'
-		}),
+	return merge(base(env), {
+		entry: {
+			'carbon.boot': './assets/js/bootstrap.js'
+		},
 
-		new webpack.DllReferencePlugin({
-			manifest: require(base.getNameWithSuffix('./assets/dist/carbon.core.json', env)),
-			sourceType: 'this'
-		})
-	]
-});
+		plugins: [
+			new webpack.DllReferencePlugin({
+				manifest: require(base.getNameWithSuffix('./assets/dist/carbon.vendor.json', env)),
+				sourceType: 'this'
+			}),
+
+			new webpack.DllReferencePlugin({
+				manifest: require(base.getNameWithSuffix('./assets/dist/carbon.core.json', env)),
+				sourceType: 'this'
+			})
+		]
+	});
+};

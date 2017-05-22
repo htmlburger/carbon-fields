@@ -49,7 +49,7 @@ module.exports = (env) => {
 		devtool: 'cheap-source-map'
 	};
 
-	if (!env && env === 'development') {
+	if (env === 'development') {
 		base.cache = true;
 	}
 
@@ -81,3 +81,5 @@ module.exports.getNameWithSuffix = (file, env) => {
 		ext
 	});
 };
+
+module.exports.detectEnv = () => process.env.NODE_ENV || '';

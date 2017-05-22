@@ -5,7 +5,7 @@ import $ from 'jquery';
 import ReactDOM from 'react-dom';
 import { startsWith } from 'lodash';
 import { delay } from 'redux-saga';
-import { put, call, take, select, fork } from 'redux-saga/effects';
+import { put, call, take, select, fork, all } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
@@ -209,5 +209,5 @@ export default function* foreman() {
 		workers.push(call(workerDestroyContainer, 'ajaxSend', 'update-widget'));
 	}
 
-	yield workers;
+	yield all(workers);
 }
