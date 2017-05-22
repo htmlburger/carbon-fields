@@ -2,8 +2,7 @@
  * The external dependencies.
  */
 import urldecode from 'locutus/php/url/urldecode';
-import { takeEvery } from 'redux-saga';
-import { call, select, put, take } from 'redux-saga/effects';
+import { takeEvery, call, select, put, take } from 'redux-saga/effects';
 import { keyBy, map, get, set } from 'lodash';
 
 /**

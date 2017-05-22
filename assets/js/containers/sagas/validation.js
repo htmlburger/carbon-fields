@@ -2,8 +2,7 @@
  * The external dependencies.
  */
 import $ from 'jquery';
-import { takeEvery, takeLatest } from 'redux-saga';
-import { call, select, put, take } from 'redux-saga/effects';
+import { takeEvery, takeLatest, call, select, put, take, all } from 'redux-saga/effects';
 import { keys } from 'lodash';
 
 /**
@@ -106,8 +105,8 @@ export function* workerValidateAll({ payload }) {
  * @return {void}
  */
 export default function* foreman(store) {
-	yield [
+	yield all([
 		takeEvery(validateContainer, workerValidate),
 		takeLatest(validateAllContainers, workerValidateAll),
-	];
+	]);
 }

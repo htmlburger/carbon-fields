@@ -2,8 +2,7 @@
  * The external dependencies.
  */
 import $ from 'jquery';
-import { delay } from 'redux-saga';
-import { put, call, take, select } from 'redux-saga/effects';
+import { delay, put, call, take, select, all } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
@@ -94,9 +93,9 @@ export default function* foreman() {
 		return;
 	}
 
-	yield [
+	yield all([
 		call(workerInit),
 		call(workerItemExpand),
 		call(workerFormSubmit)
-	];
+	]);
 }

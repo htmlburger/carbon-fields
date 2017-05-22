@@ -1,8 +1,7 @@
 /**
  * The external dependencies.
  */
-import { takeEvery, takeLatest, delay } from 'redux-saga';
-import { put, call, select, take } from 'redux-saga/effects';
+import { takeEvery, takeLatest, delay, put, call, select, take, all } from 'redux-saga/effects';
 import { isUndefined, isNull } from 'lodash';
 
 /**
@@ -116,7 +115,7 @@ export function* workerSetup({ payload: { fieldId, validationType }}) {
  * @return {void}
  */
 export default function* foreman() {
-	yield [
+	yield all([
 		takeEvery(setupValidation, workerSetup),
-	];
+	]);
 }

@@ -1,8 +1,7 @@
 /**
  * The external dependencies.
  */
-import { takeEvery } from 'redux-saga';
-import { take, call, put, select } from 'redux-saga/effects';
+import { takeEvery, take, call, put, select, all } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
@@ -92,7 +91,7 @@ export function* workerSetupMediaBrowser(action) {
  * @return {void}
  */
 export default function* foreman() {
-	yield [
+	yield all([
 		takeEvery(setupMediaBrowser, workerSetupMediaBrowser),
-	];
+	]);
 }

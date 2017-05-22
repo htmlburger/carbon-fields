@@ -1,8 +1,7 @@
 /**
  * The external dependencies.
  */
-import { takeEvery } from 'redux-saga';
-import { put, call, select } from 'redux-saga/effects';
+import { takeEvery, put, call, select, all } from 'redux-saga/effects';
 import { isEmpty, omit, some, every, includes, isUndefined } from 'lodash';
 
 /**
@@ -122,7 +121,7 @@ export function* workerConditionalLogic({ payload: { fieldId } }) {
  * @return {void}
  */
 export default function* foreman() {
-	yield [
+	yield all([
 		takeEvery(setupField, workerConditionalLogic),
-	];
+	]);
 }

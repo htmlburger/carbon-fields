@@ -1,8 +1,7 @@
 /**
  * The external dependencies.
  */
-import { takeEvery } from 'redux-saga';
-import { call, put, select } from 'redux-saga/effects';
+import { takeEvery, call, put, select, all } from 'redux-saga/effects';
 import { find, findIndex, merge, keyBy } from 'lodash';
 
 /**
@@ -145,9 +144,9 @@ export function* workerRemoveComplexGroup({ payload: { fieldId, groupId } }) {
  * @return {void}
  */
 export default function* foreman() {
-	yield [
+	yield all([
 		takeEvery(addComplexGroup, workerAddOrCloneComplexGroup),
 		takeEvery(cloneComplexGroup, workerAddOrCloneComplexGroup),
 		takeEvery(removeComplexGroup, workerRemoveComplexGroup),
-	];
+	]);
 }

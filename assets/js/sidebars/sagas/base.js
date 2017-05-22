@@ -1,8 +1,7 @@
 /**
  * The external dependencies.
  */
-import { takeEvery } from 'redux-saga';
-import { put, call } from 'redux-saga/effects';
+import { takeEvery, put, call, all } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
@@ -36,7 +35,7 @@ export function* workerAddSidebar({ payload: { sidebarName } }) {
  * @return {void}
  */
 export default function* foreman() {
-	yield [
+	yield all([
 		takeEvery(addSidebar, workerAddSidebar),
-	];
+	]);
 }

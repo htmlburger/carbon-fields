@@ -2,8 +2,7 @@
  * The external dependencies.
  */
 import $ from 'jquery';
-import { takeEvery } from 'redux-saga';
-import { call, select, put, take } from 'redux-saga/effects';
+import { takeEvery, call, select, put, take, all } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
@@ -109,10 +108,10 @@ export default function* foreman(store) {
 		return;
 	}
 
-	yield [
+	yield all([
 		takeEvery(setupContainer, workerSetupVisibility),
 		takeEvery(setContainerUI, workerToggleVisibility),
 		takeEvery(setContainerMeta, workerCheckVisibility),
 		call(workerTogglePostBox),
-	];
+	]);
 }
