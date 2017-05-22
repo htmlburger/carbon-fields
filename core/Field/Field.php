@@ -468,8 +468,9 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Set datastore instance
 	 *
-	 * @param Datastore_Interface $datastore
-	 * @return object $this
+	 * @param  Datastore_Interface $datastore
+	 * @param  boolean             $set_as_default
+	 * @return object              $this
 	 */
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		if ( $set_as_default && ! $this->has_default_datastore() ) {

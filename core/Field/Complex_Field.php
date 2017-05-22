@@ -140,7 +140,9 @@ class Complex_Field extends Field {
 	/**
 	 * Set the datastore of this field and propagate it to children
 	 *
-	 * @param Datastore_Interface $datastore
+	 * @param  Datastore_Interface $datastore
+	 * @param  boolean             $set_as_default
+	 * @return object              $this
 	 */
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		if ( $set_as_default && ! $this->has_default_datastore() ) {
@@ -149,10 +151,20 @@ class Complex_Field extends Field {
 		$this->datastore = $datastore;
 		$this->has_default_datastore = $set_as_default;
 
-		foreach ( $this->groups as $group ) {
-			$group->set_datastore( $this->get_datastore(), true );
-		}
+		$this->update_child_datastore( $this->get_datastore(), true );
 		return $this;
+	}
+
+	/**
+	 * Propagate the datastore down the hierarchy
+	 *
+	 * @param Datastore_Interface $datastore
+	 * @param boolean             $set_as_default
+	 */
+	protected function update_child_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
+		foreach ( $this->groups as $group ) {
+			$group->set_datastore( $this->get_datastore(), $set_as_default );
+		}
 	}
 
 	/**
@@ -212,9 +224,12 @@ class Complex_Field extends Field {
 		}
 
 		$group = new Group_Field( $name, $label, $fields );
-
 		$this->groups[ $group->get_name() ] = $group;
+
 		$this->update_child_hierarchy();
+		if ( $this->get_datastore() !== null ) {
+			$this->update_child_datastore( $this->get_datastore(), true );
+		}
 
 		return $this;
 	}
@@ -393,7 +408,8 @@ class Complex_Field extends Field {
 					if ( ! is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
 						continue;
 					}
-					$field->save();
+					// $field->save();
+					$this->get_datastore()->save( $field );
 				}
 			}
 		}
@@ -412,7 +428,7 @@ class Complex_Field extends Field {
 	 *
 	 * @return mixed
 	 */
-	protected function get_value_tree() {
+	public function get_value_tree() {
 		return (array) $this->value_tree;
 	}
 
@@ -421,7 +437,7 @@ class Complex_Field extends Field {
 	 *
 	 * @see  Internal Glossary in DEVELOPMENT.MD
 	 */
-	protected function set_value_tree( $value_tree ) {
+	public function set_value_tree( $value_tree ) {
 		$this->value_tree = $value_tree;
 	}
 

@@ -226,7 +226,8 @@ class Group_Field {
 	/**
 	 * Assign a DataStore instance for all group fields.
 	 *
-	 * @param object $datastore
+	 * @param object  $datastore
+	 * @param boolean $set_as_default
 	 */
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		foreach ( $this->fields as $field ) {
