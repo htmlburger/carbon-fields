@@ -53,11 +53,11 @@ class Theme_Options_Container extends Container {
 		$title = preg_replace( array(
 			'~\s+~',
 			'~[^\w\d-]+~u',
-			'~-+~'
+			'~-+~',
 		), array(
 			'-',
 			'-',
-			'-'
+			'-',
 		), $title );
 		return $title . $extension;
 	}
