@@ -141,6 +141,22 @@ class Field {
 	protected $required = false;
 
 	/**
+	 * Mask of this field.
+	 *
+	 * @see set_required()
+	 * @var bool
+	 **/
+	protected $mask = '';
+
+	/**
+	 * jQuery mask options.
+	 *
+	 * @see set_required()
+	 * @var bool
+	 **/
+	protected $mask_options = array();
+
+	/**
 	 * Prefix to be prepended to the field name during load, save, delete and <strong>render</strong>
 	 *
 	 * @var string
@@ -598,6 +614,19 @@ class Field {
 	}
 
 	/**
+	 * Set a mask format on this field
+	 *
+	 * @param string $mask
+	 * @param array $options
+	 * @return object $this
+	 **/
+	public function set_mask( $mask, $options = array() ) {
+		$this->mask = $mask;
+		$this->mask_options = $options;
+		return $this;
+	}
+
+	/**
 	 * HTML id attribute getter.
 	 * @return string
 	 */
@@ -620,6 +649,25 @@ class Field {
 	 **/
 	public function is_required() {
 		return $this->required;
+	}
+
+	/**
+	 * Return mask format on this field
+	 *
+	 * @return string
+	 **/
+	public function get_mask() {
+		return $this->mask;
+	}
+
+	/**
+	 * Return jQuery mask options
+	 *
+	 * @return array
+	 **/
+	public function get_mask_options()
+	{
+		return $this->mask_options;
 	}
 
 	/**
@@ -711,6 +759,8 @@ class Field {
 			'help_text' => $this->get_help_text(),
 			'context' => $this->get_context(),
 			'required' => $this->is_required(),
+			'mask' => $this->get_mask(),
+			'mask_options' => $this->get_mask_options(),
 			'lazyload' => $this->get_lazyload(),
 			'width' => $this->get_width(),
 			'classes' => $this->get_classes(),
@@ -813,6 +863,7 @@ class Field {
 	public static function admin_hook_scripts() {
 		wp_enqueue_media();
 		wp_enqueue_script( 'carbon-fields', \Carbon_Fields\URL . '/assets/js/fields.js', array( 'carbon-app', 'carbon-containers' ) );
+		wp_enqueue_script( 'carbon-jquery-mask', \Carbon_Fields\URL . '/assets/js/lib/jquery.mask.js' );
 		wp_localize_script( 'carbon-fields', 'crbl10n',
 			array(
 				'title' => __( 'Files', 'carbon-fields' ),

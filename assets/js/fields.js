@@ -133,6 +133,9 @@ window.carbon = window.carbon || {};
 			this.on('field:rendered', this.toggleError);
 			this.on('field:rendered', this.toggleVisibility);
 
+			// Set jQuery Mask
+			this.on('field:rendered', this.initMask);
+
 			// Initialize conditional logic
 			this.conditionalLogicInit();
 		},
@@ -175,6 +178,18 @@ window.carbon = window.carbon || {};
 			});
 
 			$holder.toggle(visible);
+		},
+
+		initMask: function() {
+			var $field = this.$('input:text');
+			var options = this.model.get('mask_options') || {};
+			var mask = this.model.get('mask');
+
+			if (!mask || !$field.length) {
+				return;
+			}
+
+			$field.mask(mask, options);
 		},
 
 		render: function() {
