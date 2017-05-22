@@ -19,8 +19,11 @@ abstract class Meta_Datastore extends Datastore {
 	 * @param Field $field The field to save.
 	 */
 	public function save( Field $field ) {
-		if ( ! update_metadata( $this->get_meta_type(), $this->get_id(), $this->get_field_name( $field ), $field->get_value() ) ) {
-			add_metadata( $this->get_meta_type(), $this->get_id(), $this->get_field_name( $field ), $field->get_value(), true );
+		$tag   = "carbon_fields_save_{$this->get_meta_type()}_{$field->get_base_name()}_value";
+		$value = apply_filters( $tag, $field->get_value(), $field, $this->get_id() );
+
+		if ( ! update_metadata( $this->get_meta_type(), $this->get_id(), $this->get_field_name( $field ), $value ) ) {
+			add_metadata( $this->get_meta_type(), $this->get_id(), $this->get_field_name( $field ), $value, true );
 		}
 	}
 

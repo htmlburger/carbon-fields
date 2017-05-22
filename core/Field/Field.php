@@ -706,7 +706,7 @@ class Field {
 			'label' => $this->get_label(),
 			'name' => $this->get_name(),
 			'base_name' => $this->get_base_name(),
-			'value' => $this->get_value(),
+			'value' => apply_filters( "carbon_fields_get_{$this->get_base_name()}_value", $this->get_value(), $this ),
 			'default_value' => $this->get_default_value(),
 			'help_text' => $this->get_help_text(),
 			'context' => $this->get_context(),
