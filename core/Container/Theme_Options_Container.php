@@ -267,6 +267,7 @@ class Theme_Options_Container extends Container {
 	 * the theme options file name.
 	 **/
 	protected function clear_string( $string ) {
+		$string = apply_filters( 'sanitize_file_name', $string );
 		return preg_replace( array( '~ +~', '~[^\w\d-]+~u', '~-+~' ), array( '-', '-', '-' ), strtolower( remove_accents( $string ) ) );
 	}
 }
