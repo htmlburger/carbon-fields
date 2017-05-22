@@ -408,8 +408,7 @@ class Complex_Field extends Field {
 					if ( ! is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
 						continue;
 					}
-					// $field->save();
-					$this->get_datastore()->save( $field );
+					$field->save();
 				}
 			}
 		}
