@@ -13,13 +13,6 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 abstract class Key_Value_Datastore extends Datastore {
 
 	/**
-	 * The related object id
-	 * 
-	 * @var integer
-	 */
-	protected $object_id = 0;
-
-	/**
 	 * Key Toolset for key generation and comparison utilities
 	 * 
 	 * @var Key_Toolset
@@ -146,24 +139,6 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * @return array<stdClass> Array of {key, value} objects
 	 */
 	abstract protected function get_storage_array( Field $field, $storage_key_patterns );
-
-	/**
-	 * Get the related object id
-	 *
-	 * @return integer
-	 */
-	public function get_object_id() {
-		return $this->object_id;
-	}
-
-	/**
-	 * Set the related object id
-	 *
-	 * @param  integer $object_id
-	 */
-	public function set_object_id( $object_id ) {
-		$this->object_id = $object_id;
-	}
 
 	/**
 	 * Get the field value(s)
