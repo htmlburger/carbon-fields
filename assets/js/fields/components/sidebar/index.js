@@ -153,13 +153,6 @@ export const enhance = compose(
 	})
 );
 
-/**
- * Enhance the component.
- *
- * @type {React.Component}
- */
-const EnhancedSidebarField = setStatic('type', [
+export default setStatic('type', [
 	TYPE_SIDEBAR,
 ])(enhance(SidebarField));
-
-export default EnhancedSidebarField;

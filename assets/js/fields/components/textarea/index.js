@@ -76,24 +76,8 @@ export const enhance = compose(
 	})
 );
 
-/**
- * Enhance the component.
- *
- * @type {React.Component}
- */
-const EnhancedTextareaField = setStatic('type', [
+export default setStatic('type', [
 	TYPE_TEXTAREA,
 	TYPE_HEADER_SCRIPTS,
 	TYPE_FOOTER_SCRIPTS,
 ])(enhance(TextareaField));
-
-/**
- * Validate the props.
- *
- * @type {Object}
- */
-EnhancedTextareaField.propTypes = {
-	updateField: PropTypes.func,
-};
-
-export default EnhancedTextareaField;
