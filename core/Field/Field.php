@@ -774,7 +774,7 @@ class Field implements Datastore_Holder_Interface {
 			Incorrect_Syntax_Exception::raise( 'Conditional logic rules argument should be an array.' );
 		}
 
-		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN' );
+		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN', 'INCLUDES', 'EXCLUDES' );
 		$allowed_relations = array( 'AND', 'OR' );
 
 		$parsed_rules = array(

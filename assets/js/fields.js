@@ -373,6 +373,14 @@ window.carbon = window.carbon || {};
 				case '<=' : return value1 <= value2;
 				case 'IN' : return _.some(value2, function(value) { return value == value1; });
 				case 'NOT IN' : return _.every(value2, function(value) { return value != value1; });
+				case 'INCLUDES': return _.every([].concat(value2), function(value) {
+					var val = (value1 === null) ? '' : value1;
+					return val.indexOf(value) !== -1;
+				} );
+				case 'EXCLUDES': return _.every([].concat(value2), function(value) {
+					var val = (value1 === null) ? '' : value1;
+					return val.indexOf(value) === -1;
+				} );
 			}
 		}
 	});
