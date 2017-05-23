@@ -291,4 +291,3 @@ class Theme_Options_Container extends Container {
 		return $this;
 	}
 }
-
