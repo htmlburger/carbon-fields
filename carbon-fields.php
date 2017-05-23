@@ -3,6 +3,12 @@ namespace Carbon_Fields;
 
 use Carbon_Fields\Helper\Helper;
 
+# Define version constant
+if ( ! defined( __NAMESPACE__ . '\VERSION' ) ) {
+	$plugin_data = get_file_data( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'carbon-fields-plugin.php', array('Version'=>'Version') );
+	define( __NAMESPACE__ . '\VERSION', $plugin_data['Version'] );
+}
+
 # Define root directory
 if ( ! defined( __NAMESPACE__ . '\DIR' ) ) {
 	define( __NAMESPACE__ . '\DIR', __DIR__ );

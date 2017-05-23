@@ -56,11 +56,12 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
 	 */
 	public function testSetOptionsCallable() {
-		$expected = function() {
-			return array(1, 2, 3);
+		$expected = array(1, 2, 3);
+		$callback = function() use ( $expected ) {
+			return $expected;
 		};
 		
-		$this->field->set_options( $expected );
+		$this->field->set_options( $callback );
 
 		$this->assertSame( $expected, $this->field->get_options() );
 	}
@@ -122,13 +123,13 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
 	 */
 	public function testAddOptionsArrayPreservesOtherOptions() {
-		$options_1 = array('foo', 'bar');
-		$options_2 = array('foobar', 'barfoo');
+		$options_1 = array( 'foo', 'bar' );
+		$options_2 = array( 'foobar', 'barfoo' );
+		$expected = array( 'foo', 'bar', 'foobar', 'barfoo' );
 		
 		$this->field->add_options( $options_1 );
 		$this->field->add_options( $options_2 );
 
-		$expected = array_merge( $options_1, $options_2 );
 		$this->assertSame( $expected, $this->field->get_options() );
 	}
 
@@ -137,13 +138,94 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
 	 */
 	public function testAddOptionsArrayWithAssociativeArray() {
-		$options_1 = array('foo' => 'bar', 'bar' => 'foo');
-		$options_2 = array('foobar' => 'barfoo', 'bar' => 'barbar');
+		$options_1 = array( 'foo' => 'bar', 'bar' => 'foo' );
+		$options_2 = array( 'foobar' => 'barfoo', 'bar' => 'barbar' );
+		$expected = array( 'foo' => 'bar', 'bar' => 'foo', 'foobar' => 'barfoo', 'bar' => 'barbar' );
 		
 		$this->field->add_options( $options_1 );
 		$this->field->add_options( $options_2 );
 
-		$expected = array_merge( $options_1, $options_2 );
+		$this->assertSame( $expected, $this->field->get_options() );
+	}
+
+	/**
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 */
+	public function testAddOptionsArraysWithNumericAssociativeArrays() {
+		$options_1 = array( 3 => 'Option 1' );
+		$options_2 = array( 9 => 'Option 2' );
+		$expected = array( 3 => 'Option 1', 9 => 'Option 2' );
+		
+		$this->field->add_options( $options_1 );
+		$this->field->add_options( $options_2 );
+
+		$this->assertSame( $expected, $this->field->get_options() );
+	}
+
+	/**
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 */
+	public function testAddOptionsArraysWithMixedAssociativeArrays() {
+		$options_1 = array( 0 => 'Option 1' );
+		$options_2 = array( 'foo' => 'Option 2' );
+		$options_3 = array( 1 => 'Option 3' );
+		$expected = array( 0 => 'Option 1', 'foo' => 'Option 2', 1 => 'Option 3' );
+		
+		$this->field->add_options( $options_1 );
+		$this->field->add_options( $options_2 );
+		$this->field->add_options( $options_3 );
+
+		$this->assertSame( $expected, $this->field->get_options() );
+	}
+
+	/**
+	 * Possibly a duplicate of other tests but kept for it's readability
+	 * 
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 */
+	public function testAddOptionsArraysReindex() {
+		$options_1 = array( 0 => 'Option 1' );
+		$options_2 = array( 0 => 'Option 2' );
+		$expected = array( 0 => 'Option 1', 1 => 'Option 2' );
+		
+		$this->field->add_options( $options_1 );
+		$this->field->add_options( $options_2 );
+
+		$this->assertSame( $expected, $this->field->get_options() );
+	}
+
+	/**
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 */
+	public function testAddOptionsArraysAppend() {
+		$options_1 = array( 0 => 'Option 1', 1 => 'Option 2' );
+		$options_2 = array( 9 => 'Option 3' );
+		$expected = array( 0 => 'Option 1', 1 => 'Option 2', 9 => 'Option 3' );
+		
+		$this->field->add_options( $options_1 );
+		$this->field->add_options( $options_2 );
+
+		$this->assertSame( $expected, $this->field->get_options() );
+	}
+
+	/**
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
+	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
+	 */
+	public function testAddOptionsArraysOverwrite() {
+		$options_1 = array( 0 => 'Option 1' );
+		$options_2 = array( 9 => 'Option 2' );
+		$options_3 = array( 0 => 'Option 3' );
+		$expected = array( 0 => 'Option 3', 9 => 'Option 2' );
+		
+		$this->field->add_options( $options_1 );
+		$this->field->add_options( $options_2 );
+		$this->field->add_options( $options_3 );
+
 		$this->assertSame( $expected, $this->field->get_options() );
 	}
 
@@ -153,13 +235,14 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::get_options
 	 */
 	public function testAddOptionsArrayAfterCallable() {
-		$this->field->set_options( function() {
-			return array(1, 2, 3);
+		$base = array( 1, 2, 3 );
+		$added = array( 4, 5, 6 );
+		$expected = array( 1, 2, 3, 4, 5, 6 );
+
+		$this->field->set_options( function() use ( $base ) {
+			return $base;
 		} );
-
-		$expected = array( 4, 5, 6 );
-		$this->field->add_options( $expected );
-
+		$this->field->add_options( $added );
 		$this->assertSame( $expected, $this->field->get_options() );
 	}
 
@@ -167,19 +250,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
 	 * 
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Only arrays are allowed in the <code>add_options()</code> method.
-	 */
-	public function testAddOptionsCallable() {
-		$this->field->add_options( function() {
-			return array( 1, 2, 3 );
-		} );
-	}
-
-	/**
-	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
-	 * 
-	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Only arrays are allowed in the <code>add_options()</code> method.
+	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
 	public function testAddOptionsString() {
 		$this->field->add_options( 'foo' );
@@ -189,7 +260,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
 	 * 
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Only arrays are allowed in the <code>add_options()</code> method.
+	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
 	public function testAddOptionsInteger() {
 		$this->field->add_options( 123 );
@@ -199,7 +270,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
 	 * 
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Only arrays are allowed in the <code>add_options()</code> method.
+	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
 	public function testAddOptionsBool() {
 		$this->field->add_options( false );
@@ -209,7 +280,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 * @covers Carbon_Fields\Field\Predefined_Options_Field::add_options
 	 * 
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage Only arrays are allowed in the <code>add_options()</code> method.
+	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
 	public function testAddOptionsObject() {
 		$this->field->add_options( $this->getMock('StdClass') );

@@ -10,11 +10,15 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  **/
 abstract class Predefined_Options_Field extends Field {
 	/**
-	 * Stores the field options (if any)
+	 * Stores the raw, unprocessed field options
 	 *
-	 * @var array|callable
+	 * @var array(array|callable)
 	 **/
-	protected $options = array();
+	protected $option_collections = array();
+
+	protected function is_indexed_array( $array ) {
+		return array_keys( $array ) === range( 0, count( $array ) - 1 );
+	}
 
 	/**
 	 * Set the options of this field.
@@ -23,40 +27,26 @@ abstract class Predefined_Options_Field extends Field {
 	 * @param array|callable $options
 	 */
 	public function set_options( $options ) {
-		$this->options = array();
-
-		if ( is_callable( $options ) ) {
-			$this->options = $options;
-		} elseif ( is_array( $options ) ) {
-			$this->add_options( $options );
-		} else {
-			$this->options = array();
+		if ( !is_callable( $options ) && !is_array( $options ) ) {
 			Incorrect_Syntax_Exception::raise( 'Only arrays and callbacks are allowed in the <code>set_options()</code> method.' );
 		}
 
-		return $this;
+		$this->option_collections = array();
+		return $this->add_options( $options );
 	}
 
 	/**
 	 * Add new options to this field.
-	 * Accepts an array of data.
+	 * Accepts either array of data or a callback that returns the data.
 	 *
 	 * @param array|callable $options
 	 */
 	public function add_options( $options ) {
-		if ( is_array( $options ) ) {
-			$old_options = is_callable( $this->options ) ? array() : $this->options;
-
-			if ( ! empty( $old_options ) ) {
-				$this->options = array_merge( $old_options, $options );
-			} else {
-				$this->options = $options;
-			}
-		} else {
-			$this->options = array();
-			Incorrect_Syntax_Exception::raise( 'Only arrays are allowed in the <code>add_options()</code> method.' );
+		if ( !is_callable( $options ) && !is_array( $options ) ) {
+			Incorrect_Syntax_Exception::raise( 'Only arrays and callbacks are allowed in the <code>add_options()</code> method.' );
 		}
 
+		$this->option_collections[] = $options;
 		return $this;
 	}
 
@@ -64,27 +54,40 @@ abstract class Predefined_Options_Field extends Field {
 	 * Check if there are callbacks and populate the options
 	 */
 	protected function load_options() {
-		if ( empty( $this->options ) ) {
-			return false;
-		}
-
-		if ( is_callable( $this->options ) ) {
-			$options = call_user_func( $this->options );
-			if ( ! is_array( $options ) ) {
-				$options = array();
-			}
-		} else {
-			$options = array();
-			foreach ( $this->options as $key => $value ) {
-				if ( is_array( $value ) ) {
-					$options = $options + $value;
-				} else {
-					$options[ $key ] = $value;
+		$options = array();
+		foreach ( $this->option_collections as $collection ) {
+			$collection_items = array();
+			if ( is_callable( $collection ) ) {
+				$collection_items = call_user_func( $collection );
+				if ( !is_array( $collection_items ) ) {
+					continue;
+				}
+			} else {
+				foreach ( $collection as $key => $value ) {
+					if ( is_array( $value ) ) {
+						$collection_items = $collection_items + $value;
+					} else {
+						$collection_items[ $key ] = $value;
+					}
 				}
 			}
+			if ( $this->is_indexed_array( $options ) && $this->is_indexed_array( $collection_items ) ) {
+				$options = array_merge( $options, $collection_items );
+			} else {
+				$options = array_replace( $options, $collection_items );
+			}
 		}
 
-		$this->options = $options;
+		return $options;
+	}
+
+	/**
+	 * Retrieve the current options.
+	 *
+	 * @return array|callable $options
+	 */
+	public function get_options() {
+		return $this->load_options();
 	}
 
 	/**
@@ -109,14 +112,5 @@ abstract class Predefined_Options_Field extends Field {
 		}
 
 		return $parsed;
-	}
-
-	/**
-	 * Retrieve the current options.
-	 *
-	 * @return array|callable $options
-	 */
-	public function get_options() {
-		return $this->options;
 	}
 } // END Field

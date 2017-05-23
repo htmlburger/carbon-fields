@@ -26,7 +26,7 @@ class Term_Meta_Container extends Container {
 		parent::__construct( $title );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Term_Meta_Datastore() );
+			$this->set_datastore( new Term_Meta_Datastore(), $this->has_default_datastore() );
 		}
 	}
 
@@ -141,7 +141,7 @@ class Term_Meta_Container extends Container {
 	 **/
 	public function set_term_id( $term_id ) {
 		$this->term_id = $term_id;
-		$this->store->set_id( $term_id );
+		$this->get_datastore()->set_id( $term_id );
 	}
 
 	/**

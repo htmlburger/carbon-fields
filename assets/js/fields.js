@@ -373,6 +373,14 @@ window.carbon = window.carbon || {};
 				case '<=' : return value1 <= value2;
 				case 'IN' : return _.some(value2, function(value) { return value == value1; });
 				case 'NOT IN' : return _.every(value2, function(value) { return value != value1; });
+				case 'INCLUDES': return _.every([].concat(value2), function(value) {
+					var val = (value1 === null) ? '' : value1;
+					return val.indexOf(value) !== -1;
+				} );
+				case 'EXCLUDES': return _.every([].concat(value2), function(value) {
+					var val = (value1 === null) ? '' : value1;
+					return val.indexOf(value) === -1;
+				} );
 			}
 		}
 	});
@@ -1357,7 +1365,7 @@ window.carbon = window.carbon || {};
 
 			// Fetch the selected items and deactivate them
 			// in the left list (if duplicate items are not allowed)
-			this.$rightList.find('input[name="' + name + '[]"]').each(function() {
+			this.$rightList.find('input[name^="' + name + '["]').each(function() {
 				_this.selectedItems.push(this.value);
 				if (!allowDuplicates) {
 					_this.$leftList.find('a[data-value="' + this.value + '"]').parent().addClass(_this.disabledClass);
@@ -1445,6 +1453,7 @@ window.carbon = window.carbon || {};
 				name: this.model.get('name'),
 				item: this.buildItem(id, title, type, subtype, label)
 			});
+			this.model.set( 'nextfieldIndex', this.model.get('nextfieldIndex') + 1 );
 
 			this.$rightList.append(newLi);
 			this.selectedItems.push(value);
@@ -1543,7 +1552,8 @@ window.carbon = window.carbon || {};
 				title: title,
 				type: type,
 				subtype: subtype,
-				label: label
+				label: label,
+				fieldIndex: this.model.get('nextfieldIndex')
 			};
 		},
 
@@ -1712,9 +1722,9 @@ window.carbon = window.carbon || {};
 	// Complex VIEW
 	carbon.fields.View.Complex = carbon.fields.View.extend({
 		events: {
-			'click > .carbon-subcontainer > .carbon-actions a': 'buttonAction',
-			'click > .carbon-subcontainer > .groups-wrapper > .group-tabs-nav-holder > .carbon-actions a': 'buttonAction',
-			'click > .carbon-subcontainer > .carbon-empty-row a': 'buttonAction',
+			'click > .carbon-subcontainer > .carbon-actions a': 'addEntry',
+			'click > .carbon-subcontainer > .groups-wrapper > .group-tabs-nav-holder > .carbon-actions a': 'addEntry',
+			'click > .carbon-subcontainer > .carbon-empty-row a': 'addEntry',
 			'click > .carbon-subcontainer > .groups-wrapper > .group-tabs-nav-holder > .group-tabs-nav > li > a': 'showGroupTab'
 		},
 
@@ -1908,7 +1918,7 @@ window.carbon = window.carbon || {};
 			});
 		},
 
-		buttonAction: function(event) {
+		addEntry: function(event) {
 			var $element = $(event.target);
 			var groupName = $element.data('group');
 
@@ -1923,7 +1933,7 @@ window.carbon = window.carbon || {};
 
 				this.$groupsList.toggleClass('right-aligned', 0 > list_position);
 			} else {
-				this.$actions.find('a.button').trigger('click');
+				this.$actions.find('a.button').eq(0).trigger('click');
 			}
 
 			event.preventDefault();

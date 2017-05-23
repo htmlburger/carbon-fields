@@ -441,7 +441,11 @@ window.carbon = window.carbon || {};
 						$errorHolder.find('strong').text(errorText);
 					} else {
 						$errorHolder = $('<div class="settings-error error hidden below-h2 carbon-error-required"><p><strong>' + errorText + '</strong></p></div>');
-						$errorHolder.insertAfter('#wpbody-content > .wrap > h2').slideDown();
+						var $target = $('#wpbody-content > .wrap > :header:first');
+						while ( $target.next( 'a' ).length > 0 ) {
+							$target = $target.next( 'a' );
+						}
+						$errorHolder.insertAfter( $target ).show();
 					}
 					var $firstErrorField = $('.carbon-highlight :input:first');
 					
@@ -921,6 +925,16 @@ window.carbon = window.carbon || {};
 			}
 
 			this.model.set('visible', visible);
+		},
+
+		toggleVisibility: function(model) {
+
+			var id = model.get('id');
+			var visible = model.get('visible');
+			var $wrapper = carbon.views.main.$body.find('#' + id + '-wrapper');
+
+			$wrapper.toggleClass( 'carbon-hidden', !visible );
+			$wrapper.removeClass( 'carbon-cloaked' );
 		}
 	});
 

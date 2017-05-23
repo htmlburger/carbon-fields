@@ -28,7 +28,7 @@ class Theme_Options_Container extends Container {
 		parent::__construct( $title );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Theme_Options_Datastore() );
+			$this->set_datastore( new Theme_Options_Datastore(), $this->has_default_datastore() );
 		}
 	}
 
@@ -51,6 +51,29 @@ class Theme_Options_Container extends Container {
 			wp_redirect( add_query_arg( array( 'settings-updated' => 'true' ) ) );
 		}
 	}
+	
+
+	/**
+	 * Sanitize a title to a filename
+	 *
+	 * @param string $title
+	 * @return string
+	 */
+	protected function title_to_filename( $title, $extension ) {
+		$title = sanitize_file_name( $title );
+		$title = strtolower( $title );
+		$title = remove_accents( $title );
+		$title = preg_replace( array(
+			'~\s+~',
+			'~[^\w\d-]+~u',
+			'~-+~'
+		), array(
+			'-',
+			'-',
+			'-'
+		), $title );
+		return $title . $extension;
+	}
 
 	/**
 	 * Attach container as a theme options page/subpage.
@@ -59,13 +82,11 @@ class Theme_Options_Container extends Container {
 		if ( ! $this->settings['parent'] || $this->settings['parent'] == 'self' ) {
 			$this->settings['parent'] = '';
 		} else if ( strpos( $this->settings['parent'], '.php' ) === false ) {
-			$clear_title = $this->clear_string( $this->settings['parent'] );
-			$this->settings['parent'] = 'crbn-' . $clear_title . '.php';
+			$this->settings['parent'] = $this->title_to_filename( 'crbn-' . $this->settings['parent'], '.php' );
 		}
 
 		if ( ! $this->settings['file'] ) {
-			$clear_title = $this->clear_string( $this->title );
-			$this->settings['file'] .= 'crbn-' . $clear_title . '.php';
+			$this->settings['file'] = $this->title_to_filename( 'crbn-' . $this->title, '.php' );
 		}
 
 		$this->verify_unique_page();
@@ -209,7 +230,7 @@ class Theme_Options_Container extends Container {
 	 * Append array of fields to the current fields set. All items of the array
 	 * must be instances of Field and their names should be unique for all
 	 * Carbon containers.
-	 * If a field does not have DataStore already, the container data store is
+	 * If a field does not have DataStore already, the container datastore is
 	 * assigned to them instead.
 	 *
 	 * @param array $fields
@@ -262,13 +283,4 @@ class Theme_Options_Container extends Container {
 		return $this;
 	}
 
-	/**
-	 * Sanitize the container title for use in
-	 * the theme options file name.
-	 **/
-	protected function clear_string( $string ) {
-		$string = apply_filters( 'sanitize_file_name', $string );
-		return preg_replace( array( '~ +~', '~[^\w\d-]+~u', '~-+~' ), array( '-', '-', '-' ), strtolower( remove_accents( $string ) ) );
-	}
 }
-

@@ -3,6 +3,7 @@
 namespace Carbon_Fields\Field;
 
 use Carbon_Fields\Datastore\Datastore_Interface;
+use Carbon_Fields\Datastore\Datastore_Holder_Interface;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -10,7 +11,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Defines the key container methods and their default implementations.
  * Implements factory design pattern.
  **/
-class Field {
+class Field implements Datastore_Holder_Interface {
 	/**
 	 * Stores all the field Backbone templates
 	 *
@@ -90,7 +91,16 @@ class Field {
 	 * @see get_datastore()
 	 * @var Datastore_Interface
 	 */
-	protected $store;
+	protected $datastore;
+
+	/**
+	 * Flag whether the datastore is the default one or replaced with a custom one
+	 *
+	 * @see set_datastore()
+	 * @see get_datastore()
+	 * @var object
+	 */
+	protected $has_default_datastore = true;
 
 	/**
 	 * The type of the container this field is in
@@ -266,7 +276,7 @@ class Field {
 	 * Delegate load to the field DataStore instance
 	 **/
 	public function load() {
-		$this->store->load( $this );
+		$this->get_datastore()->load( $this );
 
 		if ( $this->get_value() === false ) {
 			$this->set_value( $this->default_value );
@@ -277,14 +287,14 @@ class Field {
 	 * Delegate save to the field DataStore instance
 	 **/
 	public function save() {
-		return $this->store->save( $this );
+		return $this->get_datastore()->save( $this );
 	}
 
 	/**
 	 * Delegate delete to the field DataStore instance
 	 **/
 	public function delete() {
-		return $this->store->delete( $this );
+		return $this->get_datastore()->delete( $this );
 	}
 
 	/**
@@ -305,23 +315,36 @@ class Field {
 	}
 
 	/**
+	 * Return whether the datastore instance is the default one or has been overriden
+	 *
+	 * @return Datastore_Interface $datastore
+	 **/
+	public function has_default_datastore() {
+		return $this->has_default_datastore;
+	}
+
+	/**
 	 * Assign DataStore instance for use during load, save and delete
 	 *
-	 * @param object $store
+	 * @param object $datastore
 	 * @return object $this
 	 **/
-	public function set_datastore( Datastore_Interface $store ) {
-		$this->store = $store;
+	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
+		if ( $set_as_default && !$this->has_default_datastore() ) {
+			return $this; // datastore has been overriden with a custom one - abort changing to a default one
+		}
+		$this->datastore = $datastore;
+		$this->has_default_datastore = $set_as_default;
 		return $this;
 	}
 
 	/**
 	 * Return the DataStore instance used by the field
 	 *
-	 * @return object $store
+	 * @return object $datastore
 	 **/
 	public function get_datastore() {
-		return $this->store;
+		return $this->datastore;
 	}
 
 	/**
@@ -751,7 +774,7 @@ class Field {
 			Incorrect_Syntax_Exception::raise( 'Conditional logic rules argument should be an array.' );
 		}
 
-		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN' );
+		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN', 'INCLUDES', 'EXCLUDES' );
 		$allowed_relations = array( 'AND', 'OR' );
 
 		$parsed_rules = array(
@@ -812,7 +835,7 @@ class Field {
 	 */
 	public static function admin_hook_scripts() {
 		wp_enqueue_media();
-		wp_enqueue_script( 'carbon-fields', \Carbon_Fields\URL . '/assets/js/fields.js', array( 'carbon-app', 'carbon-containers' ) );
+		wp_enqueue_script( 'carbon-fields', \Carbon_Fields\URL . '/assets/js/fields.js', array( 'carbon-app', 'carbon-containers' ), \Carbon_Fields\VERSION );
 		wp_localize_script( 'carbon-fields', 'crbl10n',
 			array(
 				'title' => __( 'Files', 'carbon-fields' ),

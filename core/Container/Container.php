@@ -4,13 +4,14 @@ namespace Carbon_Fields\Container;
 
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Datastore\Datastore_Interface;
+use Carbon_Fields\Datastore\Datastore_Holder_Interface;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Base container class.
  * Defines the key container methods and their default implementations.
  */
-abstract class Container {
+abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Where to put a particular tab -- at the head or the tail. Tail by default
 	 */
@@ -116,13 +117,22 @@ abstract class Container {
 	protected $fields = array();
 
 	/**
-	 * Container DataStore. Propagated to all container fields
+	 * Container datastores. Propagated to all container fields
 	 *
 	 * @see set_datastore()
 	 * @see get_datastore()
 	 * @var object
 	 */
-	protected $store;
+	protected $datastore;
+
+	/**
+	 * Flag whether the datastore is the default one or replaced with a custom one
+	 *
+	 * @see set_datastore()
+	 * @see get_datastore()
+	 * @var object
+	 */
+	protected $has_default_datastore = true;
 
 	/**
 	 * Create a new container of type $type and name $name and label $label.
@@ -453,7 +463,7 @@ abstract class Container {
 	 * Append array of fields to the current fields set. All items of the array
 	 * must be instances of Field and their names should be unique for all
 	 * Carbon containers.
-	 * If a field does not have DataStore already, the container data store is
+	 * If a field does not have DataStore already, the container datastore is
 	 * assigned to them instead.
 	 *
 	 * @param array $fields
@@ -469,7 +479,7 @@ abstract class Container {
 
 			$field->set_context( $this->type );
 			if ( ! $field->get_datastore() ) {
-				$field->set_datastore( $this->store );
+				$field->set_datastore( $this->get_datastore(), $this->has_default_datastore() );
 			}
 		}
 
@@ -669,28 +679,40 @@ abstract class Container {
 	}
 
 	/**
-	 * Assign DataStore instance for use by the container fields
+	 * Return whether the datastore instance is the default one or has been overriden
 	 *
-	 * @param object $store
+	 * @return Datastore_Interface $datastore
+	 **/
+	public function has_default_datastore() {
+		return $this->has_default_datastore;
+	}
+
+	/**
+	 * Assign datastore instance for use by the container fields
+	 *
+	 * @param Datastore_Interface $datastore
 	 * @return object $this
 	 **/
-	public function set_datastore( $store ) {
-		$this->store = $store;
+	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
+		if ( $set_as_default && !$this->has_default_datastore() ) {
+			return $this; // datastore has been overriden with a custom one - abort changing to a default one
+		}
+		$this->datastore = $datastore;
+		$this->has_default_datastore = $set_as_default;
 
 		foreach ( $this->fields as $field ) {
-			$field->set_datastore( $this->store );
+			$field->set_datastore( $this->get_datastore(), true );
 		}
-
 		return $this;
 	}
 
 	/**
 	 * Return the DataStore instance used by container fields
 	 *
-	 * @return object $store
+	 * @return Datastore_Interface $datastore
 	 **/
 	public function get_datastore() {
-		return $this->store;
+		return $this->datastore;
 	}
 
 	/**
@@ -763,7 +785,7 @@ abstract class Container {
 	 * Enqueue admin scripts
 	 */
 	public static function admin_hook_scripts() {
-		wp_enqueue_script( 'carbon-containers', \Carbon_Fields\URL . '/assets/js/containers.js', array( 'carbon-app' ) );
+		wp_enqueue_script( 'carbon-containers', \Carbon_Fields\URL . '/assets/js/containers.js', array( 'carbon-app' ), \Carbon_Fields\VERSION );
 
 		wp_localize_script( 'carbon-containers', 'carbon_containers_l10n',
 			array(
@@ -777,7 +799,7 @@ abstract class Container {
 	 * Enqueue admin styles
 	 */
 	public static function admin_hook_styles() {
-		wp_enqueue_style( 'carbon-main', \Carbon_Fields\URL . '/assets/bundle.css' );
+		wp_enqueue_style( 'carbon-main', \Carbon_Fields\URL . '/assets/bundle.css', array(), \Carbon_Fields\VERSION );
 	}
 } // END Container
 

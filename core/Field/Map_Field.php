@@ -69,8 +69,9 @@ class Map_Field extends Field {
 	 */
 	public static function admin_enqueue_scripts() {
 		$api_key = apply_filters( 'carbon_map_api_key', false );
+		$url = apply_filters( 'carbon_map_url', '//maps.googleapis.com/maps/api/js?' . ( $api_key ? 'key=' . $api_key : '' ), $api_key );
 
-		wp_enqueue_script( 'carbon-google-maps', '//maps.googleapis.com/maps/api/js?sensor=false' . ( $api_key ? '&key=' . $api_key : '' ) );
+		wp_enqueue_script( 'carbon-google-maps', $url, array(), null );
 	}
 
 	/**
@@ -135,34 +136,34 @@ class Map_Field extends Field {
 	 * Manually set the map field data fragments.
 	 **/
 	public function load() {
-		$this->store->load( $this );
+		$this->get_datastore()->load( $this );
 
 		$name = $this->get_name();
 
 		// Set the "lat"
 		$this->set_name( $name . '-lat' );
-		$this->store->load( $this );
+		$this->get_datastore()->load( $this );
 		if ( $this->get_value() ) {
 			$this->lat = (float) $this->get_value();
 		}
 
 		// Set the "lng"
 		$this->set_name( $name . '-lng' );
-		$this->store->load( $this );
+		$this->get_datastore()->load( $this );
 		if ( $this->get_value() ) {
 			$this->lng = (float) $this->get_value();
 		}
 
 		// Set the "address"
 		$this->set_name( $name . '-address' );
-		$this->store->load( $this );
+		$this->get_datastore()->load( $this );
 		if ( $this->get_value() ) {
 			$this->address = $this->get_value();
 		}
 
 		// Set the "zoom"
 		$this->set_name( $name . '-zoom' );
-		$this->store->load( $this );
+		$this->get_datastore()->load( $this );
 		if ( $this->get_value() || $this->get_value() === '0' ) {
 			$this->zoom = (int) $this->get_value();
 		}
@@ -184,22 +185,22 @@ class Map_Field extends Field {
 		// Add the "lat" meta in the database
 		$this->set_name( $name . '-lat' );
 		$this->set_value( $value['lat'] );
-		$this->store->save( $this );
+		$this->get_datastore()->save( $this );
 
 		// Add the "lng" meta in the database
 		$this->set_name( $name . '-lng' );
 		$this->set_value( $value['lng'] );
-		$this->store->save( $this );
+		$this->get_datastore()->save( $this );
 
 		// Add the "zoom" meta in the database
 		$this->set_name( $name . '-zoom' );
 		$this->set_value( $value['zoom'] );
-		$this->store->save( $this );
+		$this->get_datastore()->save( $this );
 
 		// Add the "address" meta in the database
 		$this->set_name( $name . '-address' );
 		$this->set_value( $value['address'] );
-		$this->store->save( $this );
+		$this->get_datastore()->save( $this );
 
 		// Set the value for the field
 		$this->set_name( $name );
