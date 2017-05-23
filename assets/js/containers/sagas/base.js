@@ -16,7 +16,7 @@ import { addContainer, receiveContainer, switchContainerTab, toggleContainerBox 
 
 import { addFields } from 'fields/actions';
 import { flattenField } from 'fields/helpers';
-import { TYPE_MAP } from 'fields/constants';
+import { TYPE_MAP, PARENT_TYPE_CONTAINER } from 'fields/constants';
 
 /**
  * Prepare the container for inserting in the store.
@@ -33,7 +33,7 @@ export function* workerReceiveContainer(store, { payload: { container, expanded 
 
 	container = yield call(urldecode, container);
 	container = yield call([JSON, JSON.parse], container);
-	container.fields = yield call(map, container.fields, field => flattenField(field, container.id, fields));
+	container.fields = yield call(map, container.fields, field => flattenField(field, container.id, PARENT_TYPE_CONTAINER, fields));
 
 	fields = yield call(keyBy, fields, 'id');
 

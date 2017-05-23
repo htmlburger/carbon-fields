@@ -24,6 +24,7 @@ export const TYPE_TEXTAREA = 'textarea';
 export const TYPE_TIME = 'time';
 
 export const VALUE_PROPERTY = '_value';
+export const DEFAULT_GROUP_NAME = '_';
 
 export const VALIDATION_BASE = 'VALIDATION_BASE';
 export const VALIDATION_COMPLEX = 'VALIDATION_COMPLEX';
@@ -31,3 +32,10 @@ export const VALIDATION_COMPLEX = 'VALIDATION_COMPLEX';
 export const COMPLEX_LAYOUT_GRID = 'grid';
 export const COMPLEX_LAYOUT_TABBED_VERTICAL = 'tabbed-vertical';
 export const COMPLEX_LAYOUT_TABBED_HORIZONTAL = 'tabbed-horizontal';
+
+export const PARENT_TYPE_GROUP = 'group';
+export const PARENT_TYPE_CONTAINER = 'container';
+
+export const FIELD_HIERARCHY_INDEX_SEPARATOR = '-';
+export const FIELD_HIERARCHY_GROUP_SEPARATOR = '--';
+export const FIELD_HIERARCHY_RELATION_SEPARATOR = '---';

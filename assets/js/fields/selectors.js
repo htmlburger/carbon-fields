@@ -23,7 +23,13 @@ import {
  * The internal dependencies.
  */
 import { getSidebars } from 'sidebars/selectors';
-import { TYPE_COMPLEX } from 'fields/constants';
+import {
+	TYPE_COMPLEX,
+	DEFAULT_GROUP_NAME,
+	FIELD_HIERARCHY_INDEX_SEPARATOR,
+	FIELD_HIERARCHY_GROUP_SEPARATOR,
+	FIELD_HIERARCHY_RELATION_SEPARATOR
+} from 'fields/constants';
 
 /**
  * Return the object that contains all fields.
@@ -86,7 +92,6 @@ export const getComplexByGroupById = (state, id) => {
 
 /**
  * Return a regex which matches field names patterns
- * This is a direct translation of Container::get_field_pattern_regex from php
  *
  * @return {Object}
  */
@@ -96,60 +101,30 @@ export const getFieldPatternRegex = () => {
 
 /**
  * Get a field based on it's name hierarchy
- * This is a direct translation of Container::get_field_by_name from php
  *
  * @return {Object}
  */
 export const getFieldByName = (state, name) => {
 	const regex = getFieldPatternRegex();
-	let hierarchyLeft = name.split(/\//g).filter(segment => segment.trim().length > 0);
-	let allFields = state.fields;
-	let parentId = '';
 
-	while (hierarchyLeft.length > 0) {
-		let segment = hierarchyLeft.shift();
-		let segmentPieces = segment.match(regex);
-
-		if ( segmentPieces === null ) {
-			console.warn(`Invalid field name pattern used: ${name}`);
-			return null;
+	const hierarchy = name.split(/\//g).filter(segment => segment.trim().length > 0);
+	const fieldId = map(hierarchy, segment => {
+		const segmentPieces = segment.match(regex);
+		const field = segmentPieces[1]
+		const index = segmentPieces[3];
+		const group = isUndefined(segmentPieces[5]) ? DEFAULT_GROUP_NAME : segmentPieces[5];
+		let convertedSegment = field;
+		if (!isUndefined(index)) {
+			convertedSegment += `${FIELD_HIERARCHY_INDEX_SEPARATOR}${index}${FIELD_HIERARCHY_GROUP_SEPARATOR}${group}`;
 		}
-
-		let fieldName = segmentPieces[1];
-		let groupIndex = isUndefined(segmentPieces[3]) ? 0 : segmentPieces[3];
-
-		for (let fieldId in allFields) {
-			let field = allFields[fieldId];
-			
-			if (field.base_name !== fieldName) {
-				continue;
-			}
-
-			if ( parentId && field.parent !== parentId ) {
-				continue;
-			}
-
-			if (isEmpty(hierarchyLeft)) {
-				return field;
-			}
-
-			if (field.type !== TYPE_COMPLEX) {
-				console.warn(`Attempted to look for a nested field inside the non-complex field "${field.base_name}".`);
-				return null;
-			}
-
-			if (isUndefined(field.value[groupIndex])) {
-				console.warn(`Non-existant group index specified when fetching a value inside a complex field: ${groupIndex}`);
-				return null;
-			}
-
-			parentId = field.value[groupIndex].id;
-			break;
-		}
+		return convertedSegment;
+	}).join(FIELD_HIERARCHY_RELATION_SEPARATOR);
+	
+	const field = getFieldById(state, fieldId);
+	if (isUndefined(field)) {
+		console.warn(`Could not find the requested field "${name}". Did you forget to specify a complex entry's index or group name?`);
 	}
-
-	console.warn(`Could not find the requested field: ${name}`);
-	return null;
+	return field;
 };
 
 /**

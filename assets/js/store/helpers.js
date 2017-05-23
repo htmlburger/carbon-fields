@@ -7,6 +7,7 @@ import { merge, keyBy, endsWith } from 'lodash';
  * The internal dependencies.
  */
 import { flattenField } from 'fields/helpers';
+import { PARENT_TYPE_CONTAINER } from 'fields/constants';
 
 /**
  * Transform the shape of the given state to be more Redux friendly.
@@ -24,7 +25,7 @@ export function normalizePreloadedState(state) {
 
 	// Extract the container's fields to a flat list.
 	containers = containers.map((container) => {
-		container.fields = container.fields.map(field => flattenField(field, container.id, fields));
+		container.fields = container.fields.map(field => flattenField(field, container.id, PARENT_TYPE_CONTAINER, fields));
 
 		return container;
 	});
