@@ -128,6 +128,23 @@ export const getFieldByName = (state, name) => {
 };
 
 /**
+ * Get a field based on it's name hierarchy
+ *
+ * @return {Object}
+ */
+export const getFieldNameById = (fieldId) => {
+	const fieldName = map(fieldId.split(FIELD_HIERARCHY_RELATION_SEPARATOR), function(segment) {
+		const fieldGroupPair = segment.split(FIELD_HIERARCHY_GROUP_SEPARATOR);
+		const fieldIndexPair = fieldGroupPair[0].split(FIELD_HIERARCHY_INDEX_SEPARATOR);
+		const field = fieldIndexPair[0];
+		const index = fieldIndexPair[1];
+		const group = fieldGroupPair[1];
+		return field + (isUndefined(index) ? '' : `[${index}]`) + (isUndefined(group) ? '' : `:${group}`);
+	}).join('/');
+	return fieldName;
+};
+
+/**
  * Get a map of the fields that are direct children of the specified parent.
  *
  * @param  {String} parentId

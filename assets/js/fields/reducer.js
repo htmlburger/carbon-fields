@@ -3,7 +3,8 @@
  */
 import immutable from 'object-path-immutable';
 import { handleActions, combineActions } from 'redux-actions';
-import { omit, findIndex } from 'lodash';
+import { omit, findIndex, isUndefined } from 'lodash';
+import $ from 'jquery';
 
 /**
  * The internal dependencies.
@@ -25,6 +26,7 @@ import {
 	switchComplexTab,
 	redrawMap
 } from 'fields/actions';
+import { getFieldNameById } from 'fields/selectors';
 
 /**
  * The reducer that handles the `fields` branch.
@@ -33,7 +35,14 @@ export default decorateFieldReducer(handleActions({
 	[combineActions(setupField, setUI)]:  (state, { payload: { fieldId, ui }}) => immutable.assign(state, `${fieldId}.ui`, ui),
 	[addFields]: (state, { payload }) => ({ ...state, ...payload }),
 	[removeFields]: (state, { payload }) => omit(state, payload),
-	[updateField]: (state, { payload: { fieldId, data }}) => immutable.assign(state, fieldId, data),
+	[updateField]: (state, { payload: { fieldId, data }}) => {
+		// TODO fix this hacky solution for onUpdate event for field values
+		const result = immutable.assign(state, fieldId, data);
+		if (!isUndefined(data.value)) {
+			setTimeout(() => $(document).trigger('carbonFields.fieldUpdated', [getFieldNameById(fieldId)]), 1);
+		}
+		return result;
+	},
 	[resetStore]: (state, { payload: { fields }}) => fields,
 
 	[markFieldAsValid]: (state, { payload: { fieldId } }) => immutable.assign(state, `${fieldId}.ui`, {
