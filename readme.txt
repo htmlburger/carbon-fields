@@ -3,7 +3,7 @@ Contributors: htmlburger, m1r0, atanasangelovdev, kamenarov, stoyanov.gs, pkosta
 Tags: custom, field, custom field, advanced, repeater, post, type, text, textarea, file, image, rich text, wysiwyg, select, dropdown, checkbox, radio, association, relationship, map, taxonomy, term, user, comment, option, options, widget, simple fields, magic fields, more fields, post meta, term meta, user meta, comment meta, theme options, custom widget, nested fields
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.5.0
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,24 @@ A. Sure, go ahead! It is completely open source.
 6. Example that contains most of the available fields, nested fields included.
 
 == Changelog ==
+
+= 1.6 =
+Special thanks to all contributors for this release including @pedro-mendonca, @elvishp2006, @timiwahalahti, @campusboy87, @m1r0, @pkostadinov-2create, @georgeHtmlBurger, @yuliyan and others.
+
+ * Added a new field: Radio Image
+ * Added new conditional logic comparison operators: `INCLUDES` and `EXCLUDES` which work for array-based fields (e.g. Set_Field) and string-based fields (e.g. Text_Field)
+ * Added `Complex_Field::set_collapsed()` method which allows you to control if groups should display collapsed on page load
+ * Added partial support for duplicate container names, the only exception being that 2 theme options containers with the same name will still not be allowed
+ * Fixed several Sidebar/Widget related issues
+ * Fixed Relationship/Assosiation field issues with deleted items
+ * Fixed User Meta container title being visible when the container itself is not.
+ * Fixed error messages sometimes not being shown for containers
+ * Updated `->set_options()` and `->add_options()` to both be able to receive callbacks and arrays.
+ * Fixed various Nav_Menu_Container issues
+ * Fixed "Click Here" adding 2 entries to empty complex fields
+ * Added `User_Meta_Container::show_for()` method to allow users other than administrators to interact with user meta containers
+ * The Media popup will now properly mark any previously selected attachment
+ * A number of i18n updates, stability improvements and fixes.
 
 = 1.5 =
  * Improved GUI! Big thanks to @holmar and @georgknabl for the great contribution! ([preview](https://cloud.githubusercontent.com/assets/7590968/18725040/fdc911f8-803e-11e6-9749-a218b0584e27.png))
