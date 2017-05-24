@@ -110,7 +110,7 @@ export const enhance = compose(
 			 * Pass some handlers to the component.
 			 */
 			withHandlers({
-				handleChange: ({ field, updateField }) => ({ target: { value } }) => updateField(field.id, { value }),
+				handleChange: ({ field, setFieldValue }) => ({ target: { value } }) => setFieldValue(field.id, value),
 				isChecked: ({ field }) => option => option.value === field.value,
 			})
 		),
