@@ -109,7 +109,6 @@ export const enhance = compose(
 				setupField,
 				setupValidation,
 				setupMediaBrowser,
-				updateField,
 			} = this.props;
 
 			setupField(field.id, field.type, ui);
@@ -126,13 +125,14 @@ export const enhance = compose(
 	 */
 	withHandlers({
 		openBrowser: ({ field, openMediaBrowser }) => () => openMediaBrowser(field.id),
-		clearSelection: ({ field, updateField }) => () => {
+		clearSelection: ({ field, updateField, setFieldValue }) => () => {
 			updateField(field.id, {
 				value: '',
 				file_name: '',
 				file_url: '',
 				thumb_url: ''
 			});
+			setFieldValue(field.id, '');
 		},
 	}),
 );

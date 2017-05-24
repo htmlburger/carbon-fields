@@ -25,6 +25,9 @@ class Api {
 	constructor(store) {
 		this.store = store;
 		$(document).trigger('carbonFields.apiLoaded');
+		$(document).on('carbonFields.fieldUpdated', function(e, fieldName) {
+			console.log(window.carbonFields.api.getFieldValue(fieldName));
+		});
 	}
 
 	/**

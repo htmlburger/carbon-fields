@@ -9,7 +9,7 @@ import { takeEvery, take, call, put, select, all } from 'redux-saga/effects';
 import { createMediaBrowserChannel } from 'lib/events';
 import { getFieldById } from 'fields/selectors';
 import { getAttachmentThumbnail } from 'fields/helpers';
-import { setupMediaBrowser, openMediaBrowser, updateField } from 'fields/actions';
+import { setupMediaBrowser, openMediaBrowser, updateField, setFieldValue } from 'fields/actions';
 
 /**
  * Handle the interaction with media browser of WordPress.
@@ -49,8 +49,8 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 			file_name: attachment.filename,
 			file_url: attachment.url,
 			thumb_url: thumbnail || field.default_thumb_url,
-			value: attachment.id,
 		}));
+		yield put(setFieldValue(field.id, attachment.id));
 	}
 }
 
