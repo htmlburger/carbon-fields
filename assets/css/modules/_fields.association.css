@@ -46,7 +46,7 @@
 
 .carbon-association-right label { display: none; }
 .carbon-association-right .carbon-association-list { overflow: auto; height: 162px; min-height: 162px; margin: 0; border-left: 0; border-top: 0; -webkit-overflow-scrolling: touch; }
-.carbon-association-right .carbon-association-list li a { cursor: move; }
+.carbon-association-right .carbon-association-list li .ui-sortable-handle { cursor: move; }
 .carbon-association-right .carbon-association-list li a em { margin-right: 20px; }
 .carbon-association-right .carbon-association-list li a span:before { content: '\f153'; }
 .carbon-association-right .carbon-association-list li a span:hover { opacity: .8; }
