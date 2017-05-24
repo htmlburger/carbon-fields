@@ -80,7 +80,7 @@ export const enhance = compose(
 	 * Pass some handlers to the component.
 	 */
 	withHandlers({
-		handleChange: ({ field, updateField }) => eventOrValue => {
+		handleChange: ({ field, setFieldValue }) => eventOrValue => {
 			let value;
 
 			if (isString(eventOrValue)) {
@@ -89,7 +89,7 @@ export const enhance = compose(
 				value = eventOrValue.target.value;
 			}
 
-			updateField(field.id, { value });
+			setFieldValue(field.id, value);
 		},
 	})
 );
