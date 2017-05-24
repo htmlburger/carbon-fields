@@ -6,6 +6,11 @@ namespace Carbon_Fields\Field;
  * Single checkbox field class.
  */
 class Checkbox_Field extends Field {
+
+	/**
+	 * @{inheritDoc}
+	 */
+	protected $default_value = false;
 	
 	/**
 	 * The value that is saved in the database when
@@ -16,7 +21,16 @@ class Checkbox_Field extends Field {
 	protected $option_value = 'yes';
 
 	/**
-	 * Modify the option value.
+	 * Get the option value.
+	 *
+	 * @return string
+	 */
+	public function get_option_value() {
+		return $this->option_value;
+	}
+
+	/**
+	 * Set the option value.
 	 *
 	 * @param string $value New value
 	 * @return Field $this
@@ -34,7 +48,7 @@ class Checkbox_Field extends Field {
 	 */
 	public function set_value_from_input( $input ) {
 		parent::set_value_from_input( $input );
-		if ( $this->get_value() !== $this->option_value ) {
+		if ( $this->get_value() !== $this->get_option_value() ) {
 			$this->set_value( '' );
 		}
 	}
@@ -45,7 +59,7 @@ class Checkbox_Field extends Field {
 	 * @return mixed
 	 */
 	public function get_formatted_value() {
-		return ( $this->get_value() === $this->option_value );
+		return ( $this->get_value() === $this->get_option_value() );
 	}
 
 	/**
@@ -59,7 +73,7 @@ class Checkbox_Field extends Field {
 		$field_data = parent::to_json( $load );
 
 		$field_data = array_merge( $field_data, array(
-			'option_value' => $this->option_value,
+			'option_value' => $this->get_option_value(),
 			'option_label' => parent::get_label(),
 		) );
 

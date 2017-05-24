@@ -999,7 +999,7 @@ class Field implements Datastore_Holder_Interface {
 			'label' => $this->get_label(),
 			'name' => $this->get_name(),
 			'base_name' => $this->get_base_name(),
-			'value' => $this->get_value(),
+			'value' => $this->get_formatted_value(),
 			'default_value' => $this->get_default_value(),
 			'attributes' => (object) $this->get_attributes(),
 			'help_text' => $this->get_help_text(),

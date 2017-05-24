@@ -59,7 +59,7 @@ CheckboxField.propTypes = {
 	name: PropTypes.string,
 	field: PropTypes.shape({
 		id: PropTypes.string,
-		value: PropTypes.string,
+		value: PropTypes.bool,
 		option_value: PropTypes.string,
 		attributes: PropTypes.object,
 	}),
@@ -87,7 +87,7 @@ export const enhance = compose(
 	 * Pass some props to the component.
 	 */
 	withProps(({ field }) => ({
-		checked: field.value === field.option_value,
+		checked: field.value,
 	})),
 
 	/**
@@ -96,7 +96,7 @@ export const enhance = compose(
 	withHandlers({
 		handleChange: ({ field, updateField }) => ({ target }) => {
 			updateField(field.id, {
-				value: target.checked ? field.option_value : null,
+				value: target.checked,
 			});
 		},
 	})
