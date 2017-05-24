@@ -303,14 +303,12 @@ export const enhance = compose(
 			}
 		},
 
-		handleSort: ({ field, updateField, expandComplexGroup }) => (groups, event, ui) => {
+		handleSort: ({ field, setFieldValue, expandComplexGroup }) => (groups, event, ui) => {
 			// Cache the id attribute of the group, because the next line
 			// will re-order DOM and we will lose the correct group's id.
 			const groupId = ui.item[0].id;
 
-			updateField(field.id, {
-				value: sortBy(field.value, group => groups.indexOf(group.id)),
-			});
+			setFieldValue(field.id, sortBy(field.value, group => groups.indexOf(group.id)));
 
 			expandComplexGroup(field.id, groupId);
 		},
