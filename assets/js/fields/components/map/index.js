@@ -38,37 +38,37 @@ const MapField = ({
 
 			<SearchInput
 				name={`${name}[address]`}
-				term={field.address}
+				term={field.value.address}
 				disabled={!field.ui.is_visible}
 				onSubmit={handleSearchSubmit} />
 
 			<input
 				type="hidden"
 				name={`${name}[lat]`}
-				value={field.lat}
+				value={field.value.lat}
 				disabled={!field.ui.is_visible}
 				readOnly />
 
 			<input
 				type="hidden"
 				name={`${name}[lng]`}
-				value={field.lng}
+				value={field.value.lng}
 				disabled={!field.ui.is_visible}
 				readOnly />
 
 			<input
 				type="hidden"
 				name={`${name}[zoom]`}
-				value={field.zoom}
+				value={field.value.zoom}
 				disabled={!field.ui.is_visible}
 				readOnly />
 		</div>
 
 		<GoogleMap
 			className="carbon-map-canvas"
-			lat={field.lat}
-			lng={field.lng}
-			zoom={field.zoom}
+			lat={field.value.lat}
+			lng={field.value.lng}
+			zoom={field.value.zoom}
 			redraw={field.ui.redraw_map ? field.ui.redraw_map : false }
 			onChange={handleChange} />
 	</Field>;
@@ -82,10 +82,13 @@ const MapField = ({
 MapField.propTypes = {
 	name: PropTypes.string,
 	field: PropTypes.shape({
-		lat: PropTypes.number,
-		lng: PropTypes.number,
-		zoom: PropTypes.number,
-		address: PropTypes.string,
+		value: PropTypes.shape({
+			value: PropTypes.string,
+			lat: PropTypes.number,
+			lng: PropTypes.number,
+			zoom: PropTypes.number,
+			address: PropTypes.string,
+		}),
 	}),
 	handleChange: PropTypes.func,
 };
@@ -112,12 +115,11 @@ export const enhance = compose(
 	 * Pass some handlers to the component.
 	 */
 	withHandlers({
-		handleChange: ({ field, updateField }) => data => {
+		handleChange: ({ field, setFieldValue }) => data => {
 			if (data.lat && data.lng) {
 				data.value = `${data.lat},${data.lng}`;
 			}
-
-			updateField(field.id, data);
+			setFieldValue(field.id, data);
 		},
 		handleSearchSubmit: ({ field, geocodeAddress }) => address => geocodeAddress(field.id, address),
 	}),

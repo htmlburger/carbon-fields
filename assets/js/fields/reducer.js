@@ -15,6 +15,7 @@ import { resetStore } from 'store/actions';
 import {
 	setupField,
 	updateField,
+	setFieldValue,
 	addFields,
 	removeFields,
 	setUI,
@@ -36,11 +37,12 @@ export default decorateFieldReducer(handleActions({
 	[addFields]: (state, { payload }) => ({ ...state, ...payload }),
 	[removeFields]: (state, { payload }) => omit(state, payload),
 	[updateField]: (state, { payload: { fieldId, data }}) => {
-		// TODO fix this hacky solution for onUpdate event for field values
-		const result = immutable.assign(state, fieldId, data);
-		if (!isUndefined(data.value)) {
-			setTimeout(() => $(document).trigger('carbonFields.fieldUpdated', [getFieldNameById(fieldId)]), 1);
-		}
+		return immutable.assign(state, fieldId, data);
+	},
+	[setFieldValue]: (state, { payload: { fieldId, value }}) => {
+		const result = immutable.assign(state, `${fieldId}.value`, value);
+		// TODO ask viktor how we can avoid this timeout
+		setTimeout(() => $(document).trigger('carbonFields.fieldUpdated', [getFieldNameById(fieldId)]), 1);
 		return result;
 	},
 	[resetStore]: (state, { payload: { fields }}) => fields,

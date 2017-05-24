@@ -47,6 +47,14 @@ export const setUI = createAction('fields/SET_UI', (fieldId, ui) => ({ fieldId, 
  * @return {Object}
  */
 export const updateField = createAction('fields/UPDATE_FIELD', (fieldId, data) => ({ fieldId, data }), (fieldId, data, dirty = true) => ({ dirty }) );
+/**
+ * Set the field value.
+ *
+ * @param  {String} fieldId
+ * @param  {Object} value
+ * @return {Object}
+ */
+export const setFieldValue = createAction('fields/SET_FIELD_VALUE', (fieldId, value) => ({ fieldId, value }), (fieldId, value, dirty = true) => ({ dirty }) );
 
 /**
  * Setup the interaction between field and WordPress's media browser.

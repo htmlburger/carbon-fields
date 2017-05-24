@@ -10,7 +10,7 @@ import $ from 'jquery';
 import { TYPE_COMPLEX, TYPE_PROPERTY, DEFAULT_GROUP_NAME } from 'fields/constants';
 import { getFieldById, getFieldByName } from 'fields/selectors';
 import {
-	updateField,
+	setFieldValue,
 	addComplexGroup,
 	removeComplexGroup
 } from 'fields/actions';
@@ -89,7 +89,7 @@ class Api {
 				}
 			}
 		} else {
-			this.store.dispatch(updateField(field.id, { value }));
+			this.store.dispatch(setFieldValue(field.id, value));
 		}
 	}
 

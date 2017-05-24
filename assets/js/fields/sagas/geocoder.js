@@ -6,7 +6,7 @@ import { takeEvery, put, call, all } from 'redux-saga/effects';
 /**
  * The internal dependencies.
  */
-import { geocodeAddress, updateField } from 'fields/actions';
+import { geocodeAddress, setFieldValue } from 'fields/actions';
 
 /**
  * Get the location of the specified address.
@@ -45,7 +45,7 @@ function geocode(address) {
  */
 export function* workerGeocoder({ payload: { fieldId, address } }) {
 	if (!address) {
-		yield put(updateField(fieldId, { address }));
+		yield put(setFieldValue(fieldId, { address }));
 		return;
 	}
 
@@ -56,7 +56,7 @@ export function* workerGeocoder({ payload: { fieldId, address } }) {
 		const lng = parseFloat(coords[2]);
 		const value = `${location.lat},${location.lng}`;
 
-		yield put(updateField(fieldId, {
+		yield put(setFieldValue(fieldId, {
 			lat,
 			lng,
 			address,
@@ -70,7 +70,7 @@ export function* workerGeocoder({ payload: { fieldId, address } }) {
 		const location = yield call(geocode, address);
 		const value = `${location.lat},${location.lng}`;
 
-		yield put(updateField(fieldId, {
+		yield put(setFieldValue(fieldId, {
 			...location,
 			address,
 			value,

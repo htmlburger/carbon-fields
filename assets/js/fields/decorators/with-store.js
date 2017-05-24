@@ -13,6 +13,7 @@ import {
 	teardownField,
 	setupValidation,
 	updateField,
+	setFieldValue,
 	setUI,
 } from 'fields/actions';
 
@@ -43,6 +44,7 @@ const defaultMapDispatchToProps = {
 	teardownField,
 	setupValidation,
 	updateField,
+	setFieldValue,
 	setUI,
 };
 
