@@ -38,7 +38,7 @@ class Api {
 	 */
 	getFieldValue(fieldName) {
 		let field = getFieldByName(this.store.getState(), fieldName);
-		if (isUndefined(field)) {
+		if (field === null) {
 			return;
 		}
 
@@ -67,7 +67,7 @@ class Api {
 	 */
 	setFieldValue(fieldName, value) {
 		let field = getFieldByName(this.store.getState(), fieldName);
-		if (isUndefined(field)) {
+		if (field === null) {
 			return;
 		}
 
@@ -104,7 +104,7 @@ class Api {
 	 */
 	addComplexFieldGroup(fieldName, groupName) {
 		let field = getFieldByName(this.store.getState(), fieldName);
-		if (isUndefined(field)) {
+		if (field === null) {
 			return;
 		}
 
@@ -125,7 +125,7 @@ class Api {
 	 */
 	removeComplexFieldGroup(fieldName, groupIndex) {
 		let field = getFieldByName(this.store.getState(), fieldName);
-		if (isUndefined(field)) {
+		if (field === null) {
 			return;
 		}
 

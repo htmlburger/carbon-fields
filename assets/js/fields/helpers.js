@@ -10,13 +10,7 @@ import { pick, merge, uniqueId, isNull } from 'lodash';
 import { cancelTasks } from 'lib/helpers';
 
 import { teardownField } from 'fields/actions';
-import {
-	TYPE_COMPLEX,
-	PARENT_TYPE_GROUP,
-	FIELD_HIERARCHY_INDEX_SEPARATOR,
-	FIELD_HIERARCHY_GROUP_SEPARATOR,
-	FIELD_HIERARCHY_RELATION_SEPARATOR
-} from 'fields/constants';
+import { TYPE_COMPLEX } from 'fields/constants';
 
 /**
  * Get the thumbnail of the attachment.
@@ -40,17 +34,13 @@ export function getAttachmentThumbnail(attachment) {
  * @param  {Object[]} accumulator
  * @return {Object}
  */
-export function flattenField(field, parent, parentType, accumulator) {
+export function flattenField(field, parent, accumulator) {
 	const { value, type } = field;
 
 	// Since the fields don't have unique identifiers
 	// we need to replace the id property with something
 	// that we know is unique.
-	let fieldId = field.base_name;
-	if (parentType === PARENT_TYPE_GROUP) {
-		fieldId = `${parent}${FIELD_HIERARCHY_RELATION_SEPARATOR}${fieldId}`;
-	}
-	field.id = fieldId;
+	field.id = uniqueId('carbon-field-');
 
 	// The complex field represents a nested structure
 	// of fields. We need to flatten them as well.
@@ -88,7 +78,7 @@ export function flattenField(field, parent, parentType, accumulator) {
  * @return {void}
  */
 export function addComplexGroupIdentifiers(complex, group, index) {
-	group.id = `${complex.id}${FIELD_HIERARCHY_INDEX_SEPARATOR}${index}${FIELD_HIERARCHY_GROUP_SEPARATOR}${group.name}`;
+	group.id = uniqueId('carbon-complex-group-');
 }
 
 /**
@@ -99,7 +89,7 @@ export function addComplexGroupIdentifiers(complex, group, index) {
  * @return {void}
  */
 export function flattenComplexGroupFields(group, accumulator) {
-	group.fields = group.fields.map(field => flattenField(field, group.id, PARENT_TYPE_GROUP, accumulator));
+	group.fields = group.fields.map(field => flattenField(field, group.id, accumulator));
 }
 
 /**
