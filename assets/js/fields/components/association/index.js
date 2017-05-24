@@ -184,7 +184,7 @@ export const enhance = compose(
 	 * Pass some handlers to the component.
 	 */
 	withHandlers({
-		handleAddItem: ({ field, updateField }) => item => {
+		handleAddItem: ({ field, setFieldValue }) => item => {
 			// Don't do anything if the duplicates aren't allowed and
 			// the item is already selected.
 			if (!field.allow_duplicates && item.disabled) {
@@ -198,24 +198,20 @@ export const enhance = compose(
 			}
 
 			// Create a safe copy and push it to the store.
-			updateField(field.id, {
-				value: [
-					...field.value,
-					cloneDeep(item),
-				],
-			});
+			setFieldValue(field.id, [
+				...field.value,
+				cloneDeep(item)
+			]);
 		},
 
-		handleSortItems: ({ field, updateField }) => newItems => {
+		handleSortItems: ({ field, setFieldValue }) => newItems => {
 			newItems = newItems.map(id => parseInt(id, 10));
 			newItems = sortBy(field.value, item => newItems.indexOf(item.id));
 
-			updateField(field.id, {
-				value: newItems,
-			});
+			setFieldValue(field.id, newItems);
 		},
 
-		handleRemoveItem: ({ field, updateField }) => item => updateField(field.id, { value: without(field.value, item) }),
+		handleRemoveItem: ({ field, setFieldValue }) => item => setFieldValue(field.id, without(field.value, item)),
 	})
 );
 

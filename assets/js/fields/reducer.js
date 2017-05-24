@@ -36,11 +36,11 @@ export default decorateFieldReducer(handleActions({
 	[combineActions(setupField, setUI)]:  (state, { payload: { fieldId, ui }}) => immutable.assign(state, `${fieldId}.ui`, ui),
 	[addFields]: (state, { payload }) => ({ ...state, ...payload }),
 	[removeFields]: (state, { payload }) => omit(state, payload),
-	[updateField]: (state, { payload: { fieldId, data }}) => {
-		return immutable.assign(state, fieldId, data);
-	},
-	[setFieldValue]: (state, { payload: { fieldId, value }}) => {
-		const result = immutable.assign(state, `${fieldId}.value`, value);
+	[updateField]: (state, { payload: { fieldId, data }}) => immutable.assign(state, fieldId, data),
+	[setFieldValue]: (state, { payload: { fieldId, value, assign }}) => {
+		assign = isUndefined(assign) ? false : assign;
+		const method = assign ? 'assign' : 'set';
+		const result = immutable[method](state, `${fieldId}.value`, value);
 		// TODO ask viktor how we can avoid this timeout
 		setTimeout(() => $(document).trigger('carbonFields.fieldUpdated', [getFieldNameById(fieldId)]), 1);
 		return result;
