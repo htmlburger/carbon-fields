@@ -1,0 +1,10 @@
+/* ------------------------------------------------------------ *\
+	Field - Image
+\* ------------------------------------------------------------ */
+
+.carbon-Image .carbon-attachment .carbon-attachment-file-name { display: block !important; visibility: hidden; opacity: 0; width: 0; height: 0; left: 50%;
+	-webkit-transition: all .2s ease-out;
+		 -o-transition: all .2s ease-out;
+			transition: all .2s ease-out;
+}
+.carbon-Image .carbon-attachment:hover .carbon-attachment-file-name { visibility: visible; opacity: 1; width: 100%; height: 28px; left: 0%; }
