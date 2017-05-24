@@ -23,8 +23,8 @@ class Sidebar_Manager {
 		}
 
 		// Ajax listeners
-		add_action( 'wp_ajax_carbon_add_sidebar', array( $this, 'action_handler' ) );
-		add_action( 'wp_ajax_carbon_remove_sidebar', array( $this, 'action_handler' ) );
+		add_action( 'wp_ajax_carbon_fields_add_sidebar', array( $this, 'action_handler' ) );
+		add_action( 'wp_ajax_carbon_fields_remove_sidebar', array( $this, 'action_handler' ) );
 	}
 
 	/**

@@ -108,7 +108,7 @@ export const enhance = compose(
 				options,
 				setupField,
 				setupValidation,
-				updateField,
+				setFieldValue,
 			} = this.props;
 
 			setupField(field.id, field.type, ui);
@@ -120,9 +120,7 @@ export const enhance = compose(
 			// If the field doesn't have a value,
 			// use the first option as fallback.
 			if (!field.value) {
-				updateField(field.id, {
-					value: options[0].value,
-				}, false);
+				setFieldValue(field.id, options[0].value, false, false);
 			}
 		},
 	}),
@@ -131,10 +129,8 @@ export const enhance = compose(
 	 * The handlers passed to the component.
 	 */
 	withHandlers({
-		handleChange: ({ field, options, updateField, addSidebar }) => ({ target: { value } }) => {
+		handleChange: ({ field, options, setFieldValue, addSidebar }) => ({ target: { value } }) => {
 			if (value === 'new') {
-				e.preventDefault();
-
 				value = trim(window.prompt(carbonFieldsL10n.field.enterNameOfNewSidebar));
 
 				if (!value) {
@@ -148,7 +144,7 @@ export const enhance = compose(
 
 			value = kebabCase(value);
 
-			updateField(field.id, { value });
+			setFieldValue(field.id, value);
 		},
 	})
 );

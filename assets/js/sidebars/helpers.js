@@ -13,7 +13,7 @@ import $ from 'jquery';
 export function request(action, name) {
 	return new Promise((resolve, reject) => {
 		const request = $.post(window.ajaxurl, {
-			action: `carbon_${action}_sidebar`,
+			action: `carbon_fields_${action}_sidebar`,
 			name: name
 		}, null, 'json');
 
