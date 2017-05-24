@@ -200,3 +200,11 @@ export const validateFields = createAction('fields/VALIDATE_FIELDS');
  * @return {Object}
  */
 export const redrawMap = createAction('fields/REDRAW_MAP', fieldId => ({ fieldId }));
+
+/**
+ * Setup the interaction between field and rich text editor.
+ *
+ * @param  {String} fieldId
+ * @return {Object}
+ */
+export const setupRichTextEditor = createAction('fields/SETUP_RICH_TEXT_EDITOR');

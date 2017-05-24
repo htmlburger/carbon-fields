@@ -14,6 +14,7 @@ import RichTextEditor from 'fields/components/rich-text/editor';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { TYPE_RICH_TEXT } from 'fields/constants';
+import { setupRichTextEditor } from 'fields/actions';
 
 /**
  * Render a field that supports the build-in WYSIWYG editor.
@@ -29,7 +30,7 @@ export const RichTextField = ({
 	handleChange
 }) => {
 	return <Field field={field}>
-		<RichTextEditor id={field.id} richEditing={field.rich_editing} onChange={handleChange}>
+		<RichTextEditor id={field.id} richEditing={field.rich_editing} onChange={handleChange} ref={ref => {field.richTextEditor = ref;}}>
 			<textarea
 				id={field.id}
 				className="wp-editor-area"
@@ -69,12 +70,31 @@ export const enhance = compose(
 	/**
 	 * Connect to the Redux store.
 	 */
-	withStore(),
+	withStore(undefined, {
+		setupRichTextEditor,
+	}),
 
 	/**
 	 * Attach the setup hooks.
 	 */
-	withSetup(),
+	withSetup({
+		componentDidMount() {
+			const {
+				field,
+				ui,
+				setupField,
+				setupValidation,
+				setupRichTextEditor,
+			} = this.props;
+
+			setupField(field.id, field.type, ui);
+			setupRichTextEditor(field.id);
+
+			if (field.required) {
+				setupValidation(field.id, VALIDATION_BASE);
+			}
+		}
+	}),
 
 	/**
 	 * Pass some handlers to the component.
