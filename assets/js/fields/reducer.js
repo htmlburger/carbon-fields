@@ -38,7 +38,6 @@ export default decorateFieldReducer(handleActions({
 	[removeFields]: (state, { payload }) => omit(state, payload),
 	[updateField]: (state, { payload: { fieldId, data }}) => immutable.assign(state, fieldId, data),
 	[setFieldValue]: (state, { payload: { fieldId, value, assign }}) => {
-		assign = isUndefined(assign) ? false : assign;
 		const method = assign ? 'assign' : 'set';
 		const result = immutable[method](state, `${fieldId}.value`, value);
 		// TODO ask viktor how we can avoid this timeout

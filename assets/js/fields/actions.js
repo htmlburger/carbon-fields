@@ -55,7 +55,7 @@ export const updateField = createAction('fields/UPDATE_FIELD', (fieldId, data) =
  * @param  {Object} value
  * @return {Object}
  */
-export const setFieldValue = createAction('fields/SET_FIELD_VALUE', (fieldId, value, assign) => ({ fieldId, value, assign }), (fieldId, value, assign, dirty = true) => ({ dirty }) );
+export const setFieldValue = createAction('fields/SET_FIELD_VALUE', (fieldId, value, assign) => ({ fieldId, value, assign }), (fieldId, value, assign = false, dirty = true) => ({ dirty }) );
 
 /**
  * Setup the interaction between field and WordPress's media browser.

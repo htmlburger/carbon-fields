@@ -99,7 +99,7 @@ export const enhance = compose(
 						ui,
 						setupField,
 						setupValidation,
-						updateField,
+						setFieldValue,
 					} = this.props;
 
 					setupField(field.id, field.type, ui);
@@ -107,9 +107,7 @@ export const enhance = compose(
 					// If the field doesn't have a value,
 					// use the first option as fallback.
 					if (!field.value) {
-						updateField(field.id, {
-							value: field.options[0].value,
-						}, false);
+						setFieldValue(field.id, field.options[0].value, false, false);
 					}
 
 					// Supress validation errors when the fallback option has a falsy value.
@@ -124,7 +122,7 @@ export const enhance = compose(
 			 * Pass some handlers to the component.
 			 */
 			withHandlers({
-				handleChange: ({ field, updateField }) => ({ target: { value } }) => updateField(field.id, { value }),
+				handleChange: ({ field, setFieldValue }) => ({ target: { value } }) => setFieldValue(field.id, value),
 			})
 		),
 
