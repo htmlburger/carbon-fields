@@ -76,7 +76,12 @@ FileField.propTypes = {
 			PropTypes.number,
 		]),
 		value_type: PropTypes.string,
+		preview: PropTypes.oneOfType([
+			PropTypes.string,
+			PropTypes.number,
+		]),
 		thumb_url: PropTypes.string,
+		file_url: PropTypes.string,
 		file_name: PropTypes.string,
 		button_label: PropTypes.string,
 	}),
@@ -125,13 +130,7 @@ export const enhance = compose(
 	 */
 	withHandlers({
 		openBrowser: ({ field, openMediaBrowser }) => () => openMediaBrowser(field.id),
-		clearSelection: ({ field, updateField, setFieldValue }) => () => {
-			updateField(field.id, {
-				value: '',
-				file_name: '',
-				file_url: '',
-				thumb_url: ''
-			});
+		clearSelection: ({ field, setFieldValue }) => () => {
 			setFieldValue(field.id, '');
 		},
 	}),
