@@ -7,7 +7,7 @@ import $ from 'jquery';
 /**
  * The internal dependencies.
  */
-import { TYPE_COMPLEX, VALUE_PROPERTY } from 'fields/constants';
+import { TYPE_COMPLEX, TYPE_PROPERTY, DEFAULT_GROUP_NAME } from 'fields/constants';
 import { getFieldById, getFieldByName } from 'fields/selectors';
 import {
 	updateField,
@@ -43,7 +43,7 @@ class Api {
 			let value = [];
 			for (let i = field.value.length - 1; i >= 0; i--) {
 				let group = field.value[i];
-				let fieldValue = {[VALUE_PROPERTY]: group.name};
+				let fieldValue = {[TYPE_PROPERTY]: group.name};
 
 				for (let j = group.fields.length - 1; j >= 0; j--) {
 					let groupField = group.fields[j];
@@ -74,11 +74,12 @@ class Api {
 			}
 
 			for (var i = 0; i < value.length; i++) {
-				let fieldValues = value[i];
-				this.addComplexFieldGroup(fieldName, fieldValues[VALUE_PROPERTY]);
+				const fieldValues = value[i];
+				const groupName = isUndefined(fieldValues[TYPE_PROPERTY]) ? DEFAULT_GROUP_NAME : fieldValues[TYPE_PROPERTY];
+				this.addComplexFieldGroup(fieldName, groupName);
 
 				for (let fieldBaseName in fieldValues) {
-					if (fieldBaseName === VALUE_PROPERTY) {
+					if (fieldBaseName === TYPE_PROPERTY) {
 						continue;
 					}
 					let fieldValue = fieldValues[fieldBaseName];

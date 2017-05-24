@@ -24,6 +24,7 @@ export const TYPE_TEXTAREA = 'textarea';
 export const TYPE_TIME = 'time';
 
 export const VALUE_PROPERTY = '_value';
+export const TYPE_PROPERTY = '_type';
 export const DEFAULT_GROUP_NAME = '_';
 
 export const VALIDATION_BASE = 'VALIDATION_BASE';
