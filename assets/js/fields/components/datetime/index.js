@@ -97,7 +97,7 @@ export const enhance = compose(
 	 * Pass some handlers to the component.
 	 */
 	withHandlers({
-		handleChange: ({ field, updateField }) => ([ selectedDate ], selectedDateStr, instance) => {
+		handleChange: ({ field, setFieldValue }) => ([ selectedDate ], selectedDateStr, instance) => {
 			instance._selectedDateStr = selectedDateStr;
 
 			const value = selectedDateStr
@@ -105,9 +105,7 @@ export const enhance = compose(
 				: '';
 
 			if (value !== field.value) {
-				updateField(field.id, {
-					value
-				});
+				setFieldValue(field.id, value);
 			}
 		},
 
