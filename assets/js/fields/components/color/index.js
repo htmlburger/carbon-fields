@@ -107,7 +107,7 @@ export const enhance = compose(
 	 * Pass some handlers to the component.
 	 */
 	withHandlers({
-		handleChange: ({ field, updateField }) => ({ hex }) => updateField(field.id, { value: hex }),
+		handleChange: ({ field, setFieldValue }) => ({ hex }) => setFieldValue(field.id, hex),
 		showPicker: ({ setPickerVisibility }) => () => setPickerVisibility(true),
 		hidePicker: ({ setPickerVisibility }) => () => setPickerVisibility(false),
 	}),
