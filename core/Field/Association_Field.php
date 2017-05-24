@@ -62,7 +62,7 @@ class Association_Field extends Field {
 	 */
 	public function __construct( $type, $name, $label ) {
 		$this->wp_toolset = \Carbon_Fields\Carbon_Fields::resolve( 'wp_toolset' );
-		$this->set_value_set( new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'type' => '', 'subtype' => '', 'object_id' => 0 ) ) );
+		$this->set_value_set( new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'type' => '', 'subtype' => '', 'id' => 0 ) ) );
 		parent::__construct( $type, $name, $label );
 	}
 
@@ -126,13 +126,13 @@ class Association_Field extends Field {
 		$value_pieces = explode( ':', $value_string );
 		$type = isset( $value_pieces[0] ) ? $value_pieces[0] : 'post';
 		$subtype = isset( $value_pieces[1] ) ? $value_pieces[1] : 'post';
-		$object_id = isset( $value_pieces[2] ) ? $value_pieces[2] : 0;
+		$id = isset( $value_pieces[2] ) ? $value_pieces[2] : 0;
 
 		$property_array = array(
 			Value_Set::VALUE_PROPERTY => $value_string,
 			'type' => $type,
 			'subtype' => $subtype,
-			'object_id' => intval( $object_id ),
+			'id' => intval( $id ),
 		);
 		return $property_array;
 	}
@@ -484,14 +484,14 @@ class Association_Field extends Field {
 	protected function value_to_json() {
 		$value_set = $this->get_value();
 		$value = array();
-		foreach ( $value_set as $value_set_entry ) {
+		foreach ( $value_set as $entry ) {
 			$item = array(
-				'type' => $value_set_entry['type'],
-				'subtype' => $value_set_entry['subtype'],
-				'id' => intval( $value_set_entry['object_id'] ),
-				'title' => $this->get_title_by_type( $value_set_entry['object_id'], $value_set_entry['type'], $value_set_entry['subtype'] ),
-				'label' => $this->get_item_label( $value_set_entry['object_id'], $value_set_entry['type'], $value_set_entry['subtype'] ),
-				'is_trashed' => ( $value_set_entry['type'] == 'post' && get_post_status( $value_set_entry['object_id'] ) === 'trash' ),
+				'type' => $entry['type'],
+				'subtype' => $entry['subtype'],
+				'id' => intval( $entry['id'] ),
+				'title' => $this->get_title_by_type( $entry['id'], $entry['type'], $entry['subtype'] ),
+				'label' => $this->get_item_label( $entry['id'], $entry['type'], $entry['subtype'] ),
+				'is_trashed' => ( $entry['type'] == 'post' && get_post_status( $entry['id'] ) === 'trash' ),
 			);
 			$value[] = $item;
 		}
