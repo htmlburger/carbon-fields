@@ -106,8 +106,11 @@ export const enhance = compose(
 
 					// If the field doesn't have a value,
 					// use the first option as fallback.
-					if (!field.value) {
-						setFieldValue(field.id, field.options[0].value, 'set', false);
+					// in addition, make sure the first
+					// option value is not already the same (i.e. empty)
+					const firstOption = field.options[0].value;
+					if (!field.value && field.value !== firstOption) {
+						setFieldValue(field.id, firstOption, 'set', false);
 					}
 
 					// Supress validation errors when the fallback option has a falsy value.
