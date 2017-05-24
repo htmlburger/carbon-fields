@@ -10,7 +10,7 @@ import { pick, merge, uniqueId, isNull } from 'lodash';
 import { cancelTasks } from 'lib/helpers';
 
 import { teardownField } from 'fields/actions';
-import { TYPE_COMPLEX } from 'fields/constants';
+import { TYPE_COMPLEX, PARENT_TYPE_GROUP } from 'fields/constants';
 
 /**
  * Get the thumbnail of the attachment.
@@ -34,7 +34,7 @@ export function getAttachmentThumbnail(attachment) {
  * @param  {Object[]} accumulator
  * @return {Object}
  */
-export function flattenField(field, parent, accumulator) {
+export function flattenField(field, parent, parentType, accumulator) {
 	const { value, type } = field;
 
 	// Since the fields don't have unique identifiers
@@ -55,6 +55,7 @@ export function flattenField(field, parent, accumulator) {
 	field.ui = {};
 	field.meta = {};
 	field.parent = parent;
+	field.parentType = parentType;
 
 	// Convert the value of the field, because React
 	// doesn't likes inputs with null values.
@@ -89,7 +90,7 @@ export function addComplexGroupIdentifiers(complex, group, index) {
  * @return {void}
  */
 export function flattenComplexGroupFields(group, accumulator) {
-	group.fields = group.fields.map(field => flattenField(field, group.id, accumulator));
+	group.fields = group.fields.map(field => flattenField(field, group.id, PARENT_TYPE_GROUP, accumulator));
 }
 
 /**

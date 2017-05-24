@@ -8,7 +8,7 @@ import $ from 'jquery';
  * The internal dependencies.
  */
 import { TYPE_COMPLEX, TYPE_PROPERTY, DEFAULT_GROUP_NAME } from 'fields/constants';
-import { getFieldById, getFieldByName } from 'fields/selectors';
+import { getFieldById, getFieldByHierarchy } from 'fields/selectors';
 import {
 	setFieldValue,
 	addComplexGroup,
@@ -26,6 +26,7 @@ class Api {
 		this.store = store;
 		$(document).trigger('carbonFields.apiLoaded');
 		$(document).on('carbonFields.fieldUpdated', function(e, fieldName) {
+			console.log(fieldName);
 			console.log(window.carbonFields.api.getFieldValue(fieldName));
 		});
 	}
@@ -37,8 +38,8 @@ class Api {
 	 * @return {Object}
 	 */
 	getFieldValue(fieldName) {
-		let field = getFieldByName(this.store.getState(), fieldName);
-		if (field === null) {
+		let field = getFieldByHierarchy(this.store.getState(), fieldName);
+		if (isUndefined(field)) {
 			return;
 		}
 
@@ -66,8 +67,8 @@ class Api {
 	 * @param {string} fieldName Field name and hierarchy
 	 */
 	setFieldValue(fieldName, value) {
-		let field = getFieldByName(this.store.getState(), fieldName);
-		if (field === null) {
+		let field = getFieldByHierarchy(this.store.getState(), fieldName);
+		if (isUndefined(field)) {
 			return;
 		}
 
@@ -103,8 +104,8 @@ class Api {
 	 * @param {string} groupName Group name to create. Default is '_'.
 	 */
 	addComplexFieldGroup(fieldName, groupName) {
-		let field = getFieldByName(this.store.getState(), fieldName);
-		if (field === null) {
+		let field = getFieldByHierarchy(this.store.getState(), fieldName);
+		if (isUndefined(field)) {
 			return;
 		}
 
@@ -124,8 +125,8 @@ class Api {
 	 * @param {integer} groupIndex The index of the group to remove
 	 */
 	removeComplexFieldGroup(fieldName, groupIndex) {
-		let field = getFieldByName(this.store.getState(), fieldName);
-		if (field === null) {
+		let field = getFieldByHierarchy(this.store.getState(), fieldName);
+		if (isUndefined(field)) {
 			return;
 		}
 

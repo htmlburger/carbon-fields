@@ -45,7 +45,7 @@ function geocode(address) {
  */
 export function* workerGeocoder({ payload: { fieldId, address } }) {
 	if (!address) {
-		yield put(setFieldValue(fieldId, { address }, true));
+		yield put(setFieldValue(fieldId, { address }, 'assign'));
 		return;
 	}
 
@@ -61,7 +61,7 @@ export function* workerGeocoder({ payload: { fieldId, address } }) {
 			lng,
 			address,
 			value,
-		}, true));
+		}, 'assign'));
 
 		return;
 	}
@@ -74,7 +74,7 @@ export function* workerGeocoder({ payload: { fieldId, address } }) {
 			...location,
 			address,
 			value,
-		}, true));
+		}, 'assign'));
 	} catch (e) {
 		alert(e);
 	}

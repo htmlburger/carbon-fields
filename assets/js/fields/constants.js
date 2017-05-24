@@ -27,6 +27,9 @@ export const VALUE_PROPERTY = '_value';
 export const TYPE_PROPERTY = '_type';
 export const DEFAULT_GROUP_NAME = '_';
 
+export const PARENT_TYPE_GROUP = 'group';
+export const PARENT_TYPE_CONTAINER = 'container';
+
 export const VALIDATION_BASE = 'VALIDATION_BASE';
 export const VALIDATION_COMPLEX = 'VALIDATION_COMPLEX';
 

@@ -18,7 +18,7 @@ import {
 import {
 	addFields,
 	removeFields,
-	updateField,
+	setFieldValue,
 	addComplexGroup,
 	cloneComplexGroup,
 	removeComplexGroup,
@@ -71,6 +71,7 @@ export function* workerAddOrCloneComplexGroup({ type, payload: { fieldId, groupI
 	fields = keyBy(fields, 'id');
 
 	yield put(addFields(fields));
+	yield put(setFieldValue(fieldId, group, 'push'));
 	yield put(receiveComplexGroup(fieldId, group));
 
 	if (isTabbed) {
@@ -109,7 +110,7 @@ function collectFieldIds(roots, all, accumulator) {
  * @param  {String} action.payload.groupId
  * @return {void}
  */
-export function* workerRemoveComplexGroup({ payload: { fieldId, groupId } }) {
+export function* workerRemoveComplexGroup({ payload: { fieldId, groupId, method } }) {
 	const all = yield select(getFields);
 	const field = yield select(getFieldById, fieldId);
 	const group = yield call(find, field.value, { id: groupId });
@@ -131,9 +132,7 @@ export function* workerRemoveComplexGroup({ payload: { fieldId, groupId } }) {
 		yield put(switchComplexTab(fieldId, nextGroupId));
 	}
 
-	yield put(updateField(fieldId, {
-		value: field.value.filter(({ id }) => id !== groupId),
-	}));
+	yield put(setFieldValue(fieldId, field.value.filter(({ id }) => id !== groupId)));
 
 	yield put(removeFields(groupFields));
 }

@@ -23,7 +23,7 @@ import {
  * The internal dependencies.
  */
 import { getSidebars } from 'sidebars/selectors';
-import { TYPE_COMPLEX } from 'fields/constants';
+import { TYPE_COMPLEX, PARENT_TYPE_CONTAINER } from 'fields/constants';
 
 /**
  * Return the object that contains all fields.
@@ -50,13 +50,15 @@ export const getFieldById = (state, id) => state.fields[id];
  * @param  {String} id
  * @return {Object}
  */
-export const getFieldParentById = (state, id) => {
-	let field = getFieldById(state, id);
+export const getFieldParentById = (state, fieldId) => {
+	let field = getFieldById(state, fieldId);
 	let parent = getFieldById(state, field.parent);
 
 	if (isUndefined(parent)) {
-		// if .type is undefined then we are dealing with a group field
-		parent = getComplexByGroupById(state, field.parent);
+		parent = getComplexGroupById(state, field.parent);
+		if (!isUndefined(parent)) {
+			parent = parent.field;
+		}
 	}
 
 	return parent;
@@ -69,14 +71,18 @@ export const getFieldParentById = (state, id) => {
  * @param  {String} id
  * @return {Object}
  */
-export const getComplexByGroupById = (state, id) => {
+export const getComplexGroupById = (state, id) => {
 	for (var fieldId in state.fields) {
 		var field = state.fields[fieldId];
 		if (field.type === TYPE_COMPLEX) {
 			for (var i = 0; i < field.value.length; i++) {
 				var group = field.value[i];
 				if (group.id === id) {
-					return field;
+					return {
+						index: i,
+						group: group,
+						field: field,
+					};
 				}
 			}
 		}
@@ -100,9 +106,9 @@ export const getFieldPatternRegex = () => {
  *
  * @return {Object}
  */
-export const getFieldByName = (state, name) => {
+export const getFieldByHierarchy = (state, hierarchy) => {
 	const regex = getFieldPatternRegex();
-	let hierarchyLeft = name.split(/\//g).filter(segment => segment.trim().length > 0);
+	let hierarchyLeft = hierarchy.split(/\//g).filter(segment => segment.trim().length > 0);
 	let allFields = state.fields;
 	let parentId = '';
 
@@ -110,9 +116,9 @@ export const getFieldByName = (state, name) => {
 		let segment = hierarchyLeft.shift();
 		let segmentPieces = segment.match(regex);
 
-		if ( segmentPieces === null ) {
-			console.warn(`Invalid field name pattern used: ${name}`);
-			return null;
+		if ( isNull(segmentPieces) ) {
+			console.warn(`Invalid field name pattern used: ${hierarchy}`);
+			return undefined;
 		}
 
 		let fieldName = segmentPieces[1];
@@ -125,7 +131,11 @@ export const getFieldByName = (state, name) => {
 				continue;
 			}
 
-			if ( parentId && field.parent !== parentId ) {
+			if (!parentId && field.parentType !== PARENT_TYPE_CONTAINER) {
+				continue;
+			}
+
+			if (parentId && field.parent !== parentId) {
 				continue;
 			}
 
@@ -135,12 +145,12 @@ export const getFieldByName = (state, name) => {
 
 			if (field.type !== TYPE_COMPLEX) {
 				console.warn(`Attempted to look for a nested field inside the non-complex field "${field.base_name}".`);
-				return null;
+				return undefined;
 			}
 
 			if (isUndefined(field.value[groupIndex])) {
 				console.warn(`Non-existant group index specified when fetching a value inside a complex field: ${groupIndex}`);
-				return null;
+				return undefined;
 			}
 
 			parentId = field.value[groupIndex].id;
@@ -148,24 +158,26 @@ export const getFieldByName = (state, name) => {
 		}
 	}
 
-	console.warn(`Could not find the requested field: ${name}`);
-	return null;
+	console.warn(`Could not find the requested field: ${hierarchy}`);
+	return undefined;
 };
 
 /**
- * Get a field based on it's name hierarchy
+ * Get a field's hierarchy name based on it's id
  *
  * @return {Object}
  */
-export const getFieldNameById = (fieldId) => {
-	const fieldName = map(fieldId.split(FIELD_HIERARCHY_RELATION_SEPARATOR), function(segment) {
-		const fieldGroupPair = segment.split(FIELD_HIERARCHY_GROUP_SEPARATOR);
-		const fieldIndexPair = fieldGroupPair[0].split(FIELD_HIERARCHY_INDEX_SEPARATOR);
-		const field = fieldIndexPair[0];
-		const index = fieldIndexPair[1];
-		const group = fieldGroupPair[1];
-		return field + (isUndefined(index) ? '' : `[${index}]`) + (isUndefined(group) ? '' : `:${group}`);
-	}).join('/');
+export const getFieldHierarchyById = (state, fieldId) => {
+	const field = getFieldById(state, fieldId);
+	let fieldName = field.base_name;
+
+	const parent = getFieldParentById(state, fieldId);
+	if (!isUndefined(parent)) {
+		const parentGroup = getComplexGroupById(state, field.parent);
+		const index = parentGroup.index;
+		const group = parentGroup.group.name;
+		fieldName = `${getFieldHierarchyById(state, parent.id)}[${index}]:${group}/${fieldName}`;
+	}
 	return fieldName;
 };
 

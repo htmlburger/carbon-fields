@@ -119,7 +119,7 @@ export const enhance = compose(
 			if (data.lat && data.lng) {
 				data.value = `${data.lat},${data.lng}`;
 			}
-			setFieldValue(field.id, data, true);
+			setFieldValue(field.id, data, 'assign');
 		},
 		handleSearchSubmit: ({ field, geocodeAddress }) => address => geocodeAddress(field.id, address),
 	}),
