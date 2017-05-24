@@ -200,6 +200,7 @@ class Complex_Field extends Field {
 				// set value from the group
 				$tmp_field = clone $field;
 				if ( is_a( $tmp_field, __NAMESPACE__ . '\\Complex_Field' ) ) {
+
 					if ( ! isset( $values[ $tmp_field->get_name() ] ) ) {
 						continue; // bail if the complex field is empty
 					}
@@ -210,6 +211,14 @@ class Complex_Field extends Field {
 					$tmp_field->set_name( $new_name );
 					$tmp_field->set_value_from_input( $new_values );
 				} else {
+          if ( ! isset( $values[ $tmp_field->get_name() ] ) ) {
+						continue; // bail if the field is empty
+					}
+
+          if ( $tmp_field->type === 'Rich_Text' && empty( $values[ $tmp_field->get_name() ] ) ) {
+            continue; // bail if the field is empty
+          }
+
 					$tmp_field->set_value_from_input( $values );
 				}
 
