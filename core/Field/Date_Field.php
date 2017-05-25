@@ -35,7 +35,7 @@ class Date_Field extends Field {
 
 		$field_data = array_merge( $field_data, array(
 			'storage_format' => $this->storage_format,
-			'picker_options' => $this->picker_options,
+			'picker_options' => $this->get_picker_options(),
 		) );
 
 		return $field_data;
