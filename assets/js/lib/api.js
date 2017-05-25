@@ -3,6 +3,7 @@
  */
 import { head, isUndefined } from 'lodash';
 import $ from 'jquery';
+import immutable from 'object-path-immutable';
 
 /**
  * The internal dependencies.
@@ -24,6 +25,7 @@ class Api {
 	 */
 	constructor(store) {
 		this.store = store;
+		this.immutable = immutable;
 		$(document).trigger('carbonFields.apiLoaded');
 		$(document).on('carbonFields.fieldUpdated', function(e, fieldName) {
 			console.log(fieldName);
