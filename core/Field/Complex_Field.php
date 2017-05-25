@@ -24,6 +24,8 @@ class Complex_Field extends Field {
 
 	const LAYOUT_TABBED_VERTICAL = 'tabbed-vertical';
 
+	const TYPE_PROPERTY = '_type';
+
 	/**
 	 * Default field value
 	 *
@@ -219,6 +221,10 @@ class Complex_Field extends Field {
 		foreach ( $fields as $field ) {
 			if ( $field->get_base_name() === Value_Set::VALUE_PROPERTY ) {
 				Incorrect_Syntax_Exception::raise( '"' . Value_Set::VALUE_PROPERTY . '" is a reserved keyword for Complex fields and cannot be used for a field name.' );
+				return $this;
+			}
+			if ( $field->get_base_name() === static::TYPE_PROPERTY ) {
+				Incorrect_Syntax_Exception::raise( '"' . static::TYPE_PROPERTY . '" is a reserved keyword for Complex fields and cannot be used for a field name.' );
 				return $this;
 			}
 		}
@@ -421,8 +427,57 @@ class Complex_Field extends Field {
 	/**
 	 * {@inheritDoc}
 	 */
+	public function get_formatted_value() {
+		$field_groups = $this->get_prefilled_groups( $this->get_value_tree() );
+
+		$value = array();
+		foreach ( $field_groups as $group_index => $field_group ) {
+			$value[ $group_index ] = array();
+			foreach ( $field_group as $key => $field ) {
+				if ( is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
+					$value[ $group_index ][ $field->get_base_name() ] = $field->get_formatted_value();
+				} else {
+					if ( $key === Value_Set::VALUE_PROPERTY ) {
+						$value[ $group_index ][ static::TYPE_PROPERTY ] = $field;
+					} else {
+						$value[ $group_index ][ $key ] = $field;
+					}
+				}
+			}
+		}
+		return $value;
+	}
+
+	/**
+	 * Convert an externally-keyed value array ('_type' => ...)
+	 * to an internally-keyed one ('value' => ...)
+	 * 
+	 * @param  mixed $value
+	 * @return mixed
+	 */
+	protected function external_to_internal_value( $value ) {
+		if ( ! is_array($value) ) {
+			return $value;
+		}
+		if ( ! isset( $value[ static::TYPE_PROPERTY ] ) ) {
+			return $value;
+		}
+		$value = array_map( array($this, 'external_to_internal_value'), $value );
+		$value[ Value_Set::VALUE_PROPERTY ] = $value[ static::TYPE_PROPERTY ];
+		unset( $value[ static::TYPE_PROPERTY ] );
+		return $value;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function set_value( $value ) {
-		parent::set_value( wp_list_pluck( $value, Value_Set::VALUE_PROPERTY ) );
+		$value = array_map( array($this, 'external_to_internal_value'), $value );
+		$groups = array();
+		foreach ( $value as $values ) {
+			$groups[] = isset( $values[ Value_Set::VALUE_PROPERTY ] ) ? $values[ Value_Set::VALUE_PROPERTY ] : Group_Field::DEFAULT_GROUP_NAME;
+		}
+		parent::set_value( $groups );
 		$this->set_value_tree( $value );
 	}
 
@@ -442,32 +497,6 @@ class Complex_Field extends Field {
 	 */
 	public function set_value_tree( $value_tree ) {
 		$this->value_tree = $value_tree;
-	}
-
-	/**
-	 * Return a differently formatted value for end-users
-	 *
-	 * @return mixed
-	 */
-	public function get_formatted_value() {
-		$field_groups = $this->get_prefilled_groups( $this->get_value_tree() );
-
-		$value = array();
-		foreach ( $field_groups as $group_index => $field_group ) {
-			$value[ $group_index ] = array();
-			foreach ( $field_group as $key => $field ) {
-				if ( is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
-					$value[ $group_index ][ $field->get_base_name() ] = $field->get_formatted_value();
-				} else {
-					if ( $key === Value_Set::VALUE_PROPERTY ) {
-						$value[ $group_index ]['_type'] = $field;
-					} else {
-						$value[ $group_index ][ $key ] = $field;
-					}
-				}
-			}
-		}
-		return $value;
 	}
 
 	/**

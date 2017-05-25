@@ -552,20 +552,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @return mixed
 	 */
 	public function get_formatted_value() {
-		$value = $this->get_value();
-		if ( is_array( $value ) ) {
-			$formatter = function( $value ) {
-				$value['value'] = $value[ Value_Set::VALUE_PROPERTY ];
-				unset( $value[ Value_Set::VALUE_PROPERTY ] );
-				return $value;
-			};
-			if ( $this->get_value_set()->get_type() === Value_Set::TYPE_MULTIPLE_PROPERTIES ) {
-				$value = $formatter( $value );
-			} else if ( $this->get_value_set()->get_type() === Value_Set::TYPE_VALUE_SET ) {
-				$value = array_map( $formatter, $value );
-			}
-		}
-		return $value;
+		return $this->get_value();
 	}
 
 	/**

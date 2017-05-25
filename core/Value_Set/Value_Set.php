@@ -34,7 +34,7 @@ class Value_Set {
 	/**
 	 * Default value property required for every value set
 	 */
-	const VALUE_PROPERTY = '_value';
+	const VALUE_PROPERTY = 'value';
 
 	/**
 	 * Value set type
