@@ -4,6 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Flatpickr from 'react-flatpickr';
+import { head, isUndefined } from 'lodash';
 import {
 	compose,
 	withHandlers,
@@ -34,7 +35,7 @@ export const DateTimeField = ({
 	name,
 	field,
 	options,
-	buttonText
+	buttonText,
 }) => {
 	return <Field field={field}>
 		<Flatpickr options={options} className="carbon-field-group-holder">
@@ -72,6 +73,8 @@ DateTimeField.propTypes = {
 		id: PropTypes.string,
 		value: PropTypes.string,
 		attributes: PropTypes.object,
+		storage_format: PropTypes.string,
+		picker: PropTypes.object,
 	}),
 	options: PropTypes.object,
 	buttonText: PropTypes.string,
@@ -91,12 +94,32 @@ export const enhance = compose(
 	/**
 	 * Attach the setup hooks.
 	 */
-	withSetup(),
+	withSetup({
+		componentWillReceiveProps(nextProps) {
+			const { field } = nextProps;
+
+			if (!field.picker) {
+				return;
+			}
+
+			const selectedDate = head(field.picker.selectedDates);
+			const selectedDateStr = isUndefined(selectedDate) ? '' : field.picker.formatDate(selectedDate, field.storage_format);
+			if (field.value === selectedDateStr) {
+				return;
+			}
+
+			field.picker.setDate(field.value, false, field.storage_format);
+		},
+	}),
 
 	/**
 	 * Pass some handlers to the component.
 	 */
 	withHandlers({
+		handleReady: ({ field, setFieldValue }) => ([ selectedDate ], selectedDateStr, instance) => {
+			field.picker = instance;
+		},
+
 		handleChange: ({ field, setFieldValue }) => ([ selectedDate ], selectedDateStr, instance) => {
 			instance._selectedDateStr = selectedDateStr;
 
@@ -120,13 +143,13 @@ export const enhance = compose(
 			} else {
 				instance.clear();
 			}
-		}
+		},
 	}),
 
 	/**
 	 * Pass some props to the component.
 	 */
-	withProps(({ field, handleChange, handleClose }) => {
+	withProps(({ field, handleReady, handleChange, handleClose }) => {
 		const buttonText = field.type === TYPE_TIME
 			? carbonFieldsL10n.field.selectTime
 			: carbonFieldsL10n.field.selectDate;
@@ -134,8 +157,9 @@ export const enhance = compose(
 		const options = {
 			...field.picker_options,
 			wrap: true,
+			onReady: handleReady,
 			onChange: handleChange,
-			onClose: handleClose
+			onClose: handleClose,
 		};
 
 		return {
