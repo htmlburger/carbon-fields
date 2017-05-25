@@ -27,10 +27,6 @@ class Api {
 		this.store = store;
 		this.immutable = immutable;
 		$(document).trigger('carbonFields.apiLoaded');
-		$(document).on('carbonFields.fieldUpdated', function(e, fieldName) {
-			console.log(fieldName);
-			console.log(window.carbonFields.api.getFieldValue(fieldName));
-		});
 	}
 
 	/**
