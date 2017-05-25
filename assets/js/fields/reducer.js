@@ -4,7 +4,6 @@
 import immutable from 'object-path-immutable';
 import { handleActions, combineActions } from 'redux-actions';
 import { omit, findIndex, isUndefined } from 'lodash';
-import $ from 'jquery';
 
 /**
  * The internal dependencies.
@@ -36,15 +35,7 @@ export default decorateFieldReducer(handleActions({
 	[addFields]: (state, { payload }) => ({ ...state, ...payload }),
 	[removeFields]: (state, { payload }) => omit(state, payload),
 	[updateField]: (state, { payload: { fieldId, data }}) => immutable.assign(state, fieldId, data),
-	[setFieldValue]: (state, { payload: { fieldId, value, method }}) => {
-		const newState = immutable[method](state, `${fieldId}.value`, value);
-		const notifier = ((state, fieldId) => {
-			$(document).trigger('carbonFields.fieldUpdated', [getFieldHierarchyById(state, fieldId)])
-		}).bind(null, { fields: newState }, fieldId); // TODO fix the fields: newState hack
-		// TODO ask viktor how we can avoid this timeout
-		setTimeout(notifier, 1);
-		return newState;
-	},
+	[setFieldValue]: (state, { payload: { fieldId, value, method }}) => immutable[method](state, `${fieldId}.value`, value),
 	[resetStore]: (state, { payload: { fields }}) => fields,
 
 	[markFieldAsValid]: (state, { payload: { fieldId } }) => immutable.assign(state, `${fieldId}.ui`, {
