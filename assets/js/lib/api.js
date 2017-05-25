@@ -73,9 +73,7 @@ class Api {
 		}
 
 		if (field.type === TYPE_COMPLEX) {
-			for (let i = field.value.length - 1; i >= 0; i--) {
-				this.removeComplexFieldGroup(fieldName, 0);
-			}
+			this.store.dispatch(setFieldValue(field.id, []));
 
 			for (var i = 0; i < value.length; i++) {
 				const fieldValues = value[i];
