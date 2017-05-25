@@ -218,13 +218,10 @@ class Complex_Field extends Field {
 			return $this;
 		}
 
+		$reserved_names = array( Value_Set::VALUE_PROPERTY, static::TYPE_PROPERTY );
 		foreach ( $fields as $field ) {
-			if ( $field->get_base_name() === Value_Set::VALUE_PROPERTY ) {
-				Incorrect_Syntax_Exception::raise( '"' . Value_Set::VALUE_PROPERTY . '" is a reserved keyword for Complex fields and cannot be used for a field name.' );
-				return $this;
-			}
-			if ( $field->get_base_name() === static::TYPE_PROPERTY ) {
-				Incorrect_Syntax_Exception::raise( '"' . static::TYPE_PROPERTY . '" is a reserved keyword for Complex fields and cannot be used for a field name.' );
+			if ( in_array( $field->get_base_name(), $reserved_names ) ) {
+				Incorrect_Syntax_Exception::raise( '"' . $field->get_base_name() . '" is a reserved keyword for Complex fields and cannot be used for a field name.' );
 				return $this;
 			}
 		}
