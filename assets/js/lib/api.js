@@ -26,7 +26,7 @@ class Api {
 	constructor(store) {
 		this.store = store;
 		this.immutable = immutable;
-		$(document).trigger('carbonFields.apiLoaded');
+		$(document).trigger('carbonFields.apiLoaded', this);
 	}
 
 	/**
