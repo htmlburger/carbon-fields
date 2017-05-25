@@ -97,9 +97,9 @@ class Api {
 	 * Add a group to a complex field
 	 * 
 	 * @param {string} fieldName Field name and hierarchy
-	 * @param {string} groupName Group name to create. Default is '_'.
+	 * @param {string} groupName Group name to create.
 	 */
-	addComplexFieldGroup(fieldName, groupName) {
+	addComplexFieldGroup(fieldName, groupName = DEFAULT_GROUP_NAME) {
 		let field = getFieldByHierarchy(this.store.getState(), fieldName);
 		if (isUndefined(field)) {
 			return;
