@@ -453,13 +453,13 @@ class Complex_Field extends Field {
 	 * @return mixed
 	 */
 	protected function external_to_internal_value( $value ) {
-		if ( ! is_array($value) ) {
+		if ( ! is_array( $value ) ) {
 			return $value;
 		}
 		if ( ! isset( $value[ static::TYPE_PROPERTY ] ) ) {
 			return $value;
 		}
-		$value = array_map( array($this, 'external_to_internal_value'), $value );
+		$value = array_map( array( $this, 'external_to_internal_value' ), $value );
 		$value[ Value_Set::VALUE_PROPERTY ] = $value[ static::TYPE_PROPERTY ];
 		unset( $value[ static::TYPE_PROPERTY ] );
 		return $value;
@@ -469,7 +469,7 @@ class Complex_Field extends Field {
 	 * {@inheritDoc}
 	 */
 	public function set_value( $value ) {
-		$value = array_map( array($this, 'external_to_internal_value'), $value );
+		$value = array_map( array( $this, 'external_to_internal_value' ), $value );
 		$groups = array();
 		foreach ( $value as $values ) {
 			$groups[] = isset( $values[ Value_Set::VALUE_PROPERTY ] ) ? $values[ Value_Set::VALUE_PROPERTY ] : Group_Field::DEFAULT_GROUP_NAME;
