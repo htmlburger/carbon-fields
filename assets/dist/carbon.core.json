@@ -1,0 +1,453 @@
+{
+  "name": "carbon.core",
+  "content": {
+    "./assets/js/fields/constants.js": {
+      "id": 4,
+      "meta": {}
+    },
+    "./assets/js/fields/components/field/index.js": {
+      "id": 6,
+      "meta": {}
+    },
+    "./assets/js/fields/actions.js": {
+      "id": 7,
+      "meta": {}
+    },
+    "./assets/js/fields/decorators/with-setup.js": {
+      "id": 8,
+      "meta": {}
+    },
+    "./assets/js/fields/decorators/with-store.js": {
+      "id": 10,
+      "meta": {}
+    },
+    "./assets/js/fields/selectors.js": {
+      "id": 11,
+      "meta": {}
+    },
+    "./assets/js/containers/actions.js": {
+      "id": 12,
+      "meta": {}
+    },
+    "./assets/js/containers/constants.js": {
+      "id": 13,
+      "meta": {}
+    },
+    "./assets/js/containers/selectors.js": {
+      "id": 14,
+      "meta": {}
+    },
+    "./assets/js/lib/helpers.js": {
+      "id": 16,
+      "meta": {}
+    },
+    "./assets/js/lib/events.js": {
+      "id": 18,
+      "meta": {}
+    },
+    "./assets/js/containers/components/container/index.js": {
+      "id": 19,
+      "meta": {}
+    },
+    "./assets/js/containers/decorators/with-setup.js": {
+      "id": 20,
+      "meta": {}
+    },
+    "./assets/js/containers/decorators/with-store.js": {
+      "id": 21,
+      "meta": {}
+    },
+    "./assets/js/lib/registry.js": {
+      "id": 23,
+      "meta": {}
+    },
+    "./assets/js/fields/helpers.js": {
+      "id": 24,
+      "meta": {}
+    },
+    "./assets/js/lib/constants.js": {
+      "id": 25,
+      "meta": {}
+    },
+    "./assets/js/containers/comparers/base.js": {
+      "id": 27,
+      "meta": {}
+    },
+    "./assets/js/containers/conditions/base.js": {
+      "id": 28,
+      "meta": {}
+    },
+    "./assets/js/fields/components/no-options/index.js": {
+      "id": 29,
+      "meta": {}
+    },
+    "./assets/js/lib/actions.js": {
+      "id": 30,
+      "meta": {}
+    },
+    "./assets/js/sidebars/actions.js": {
+      "id": 31,
+      "meta": {}
+    },
+    "./assets/js/store/actions.js": {
+      "id": 32,
+      "meta": {}
+    },
+    "./assets/js/containers/components/container/base.js": {
+      "id": 36,
+      "meta": {}
+    },
+    "./assets/js/containers/components/container/nonce.js": {
+      "id": 37,
+      "meta": {}
+    },
+    "./assets/js/containers/factory.js": {
+      "id": 38,
+      "meta": {}
+    },
+    "./assets/js/fields/components/search-input/index.js": {
+      "id": 39,
+      "meta": {}
+    },
+    "./assets/js/fields/components/sortable-list/index.js": {
+      "id": 40,
+      "meta": {}
+    },
+    "./assets/js/fields/decorators/with-header-template.js": {
+      "id": 41,
+      "meta": {}
+    },
+    "./assets/js/fields/factory.js": {
+      "id": 42,
+      "meta": {}
+    },
+    "./assets/js/containers/comparers/contain.js": {
+      "id": 43,
+      "meta": {}
+    },
+    "./assets/js/containers/comparers/equality-array.js": {
+      "id": 44,
+      "meta": {}
+    },
+    "./assets/js/containers/comparers/equality.js": {
+      "id": 45,
+      "meta": {}
+    },
+    "./assets/js/containers/comparers/scalar.js": {
+      "id": 46,
+      "meta": {}
+    },
+    "./assets/js/containers/components/container/plain.js": {
+      "id": 47,
+      "meta": {}
+    },
+    "./assets/js/containers/components/container/tabbed.js": {
+      "id": 48,
+      "meta": {}
+    },
+    "./assets/js/containers/components/container/tabs-nav.js": {
+      "id": 49,
+      "meta": {}
+    },
+    "./assets/js/containers/components/container/tabs.js": {
+      "id": 50,
+      "meta": {}
+    },
+    "./assets/js/containers/conditions/boolean.js": {
+      "id": 51,
+      "meta": {}
+    },
+    "./assets/js/containers/conditions/index.js": {
+      "id": 52,
+      "meta": {}
+    },
+    "./assets/js/containers/conditions/post-term.js": {
+      "id": 53,
+      "meta": {}
+    },
+    "./assets/js/containers/reducer.js": {
+      "id": 54,
+      "meta": {}
+    },
+    "./assets/js/fields/components/association/list-item.js": {
+      "id": 55,
+      "meta": {}
+    },
+    "./assets/js/fields/components/association/list.js": {
+      "id": 56,
+      "meta": {}
+    },
+    "./assets/js/fields/components/color/picker.js": {
+      "id": 57,
+      "meta": {}
+    },
+    "./assets/js/fields/components/complex/actions.js": {
+      "id": 58,
+      "meta": {}
+    },
+    "./assets/js/fields/components/complex/empty-notice.js": {
+      "id": 59,
+      "meta": {}
+    },
+    "./assets/js/fields/components/complex/group.js": {
+      "id": 60,
+      "meta": {}
+    },
+    "./assets/js/fields/components/complex/popover.js": {
+      "id": 61,
+      "meta": {}
+    },
+    "./assets/js/fields/components/complex/tab.js": {
+      "id": 62,
+      "meta": {}
+    },
+    "./assets/js/fields/components/complex/tabs.js": {
+      "id": 63,
+      "meta": {}
+    },
+    "./assets/js/fields/components/map/google-map.js": {
+      "id": 64,
+      "meta": {}
+    },
+    "./assets/js/fields/components/radio/index.js": {
+      "id": 65,
+      "meta": {}
+    },
+    "./assets/js/fields/components/rich-text/editor.js": {
+      "id": 66,
+      "meta": {}
+    },
+    "./assets/js/fields/components/text/index.js": {
+      "id": 67,
+      "meta": {}
+    },
+    "./assets/js/fields/reducer.js": {
+      "id": 68,
+      "meta": {}
+    },
+    "./assets/js/sidebars/helpers.js": {
+      "id": 69,
+      "meta": {}
+    },
+    "./assets/js/sidebars/reducer.js": {
+      "id": 70,
+      "meta": {}
+    },
+    "./assets/js/sidebars/selectors.js": {
+      "id": 71,
+      "meta": {}
+    },
+    "./assets/js/store/helpers.js": {
+      "id": 72,
+      "meta": {}
+    },
+    "./assets/js/core.js": {
+      "id": 74,
+      "meta": {}
+    },
+    "./assets/js/containers recursive \\.js$": {
+      "id": 75,
+      "meta": {}
+    },
+    "./assets/js/fields recursive \\.js$": {
+      "id": 76,
+      "meta": {}
+    },
+    "./assets/js/lib recursive \\.js$": {
+      "id": 77,
+      "meta": {}
+    },
+    "./assets/js/sidebars recursive \\.js$": {
+      "id": 78,
+      "meta": {}
+    },
+    "./assets/js/store recursive \\.js$": {
+      "id": 79,
+      "meta": {}
+    },
+    "./assets/js/containers/components/comment-meta/index.js": {
+      "id": 80,
+      "meta": {}
+    },
+    "./assets/js/containers/components/nav-menu-item/index.js": {
+      "id": 81,
+      "meta": {}
+    },
+    "./assets/js/containers/components/post-meta/index.js": {
+      "id": 82,
+      "meta": {}
+    },
+    "./assets/js/containers/components/term-meta/index.js": {
+      "id": 83,
+      "meta": {}
+    },
+    "./assets/js/containers/components/theme-options/index.js": {
+      "id": 84,
+      "meta": {}
+    },
+    "./assets/js/containers/components/user-meta/index.js": {
+      "id": 85,
+      "meta": {}
+    },
+    "./assets/js/containers/components/widget/index.js": {
+      "id": 86,
+      "meta": {}
+    },
+    "./assets/js/containers/sagas/base.js": {
+      "id": 87,
+      "meta": {}
+    },
+    "./assets/js/containers/sagas/comment-meta.js": {
+      "id": 88,
+      "meta": {}
+    },
+    "./assets/js/containers/sagas/nav-menu.js": {
+      "id": 89,
+      "meta": {}
+    },
+    "./assets/js/containers/sagas/post-meta.js": {
+      "id": 90,
+      "meta": {}
+    },
+    "./assets/js/containers/sagas/term-meta.js": {
+      "id": 91,
+      "meta": {}
+    },
+    "./assets/js/containers/sagas/theme-options.js": {
+      "id": 92,
+      "meta": {}
+    },
+    "./assets/js/containers/sagas/user-meta.js": {
+      "id": 93,
+      "meta": {}
+    },
+    "./assets/js/containers/sagas/validation.js": {
+      "id": 94,
+      "meta": {}
+    },
+    "./assets/js/containers/sagas/visibility.js": {
+      "id": 95,
+      "meta": {}
+    },
+    "./assets/js/containers/sagas/widget.js": {
+      "id": 96,
+      "meta": {}
+    },
+    "./assets/js/fields/components/association/index.js": {
+      "id": 97,
+      "meta": {}
+    },
+    "./assets/js/fields/components/checkbox/index.js": {
+      "id": 98,
+      "meta": {}
+    },
+    "./assets/js/fields/components/color/index.js": {
+      "id": 99,
+      "meta": {}
+    },
+    "./assets/js/fields/components/complex/index.js": {
+      "id": 100,
+      "meta": {}
+    },
+    "./assets/js/fields/components/datetime/index.js": {
+      "id": 101,
+      "meta": {}
+    },
+    "./assets/js/fields/components/file/index.js": {
+      "id": 102,
+      "meta": {}
+    },
+    "./assets/js/fields/components/hidden/index.js": {
+      "id": 103,
+      "meta": {}
+    },
+    "./assets/js/fields/components/html/index.js": {
+      "id": 104,
+      "meta": {}
+    },
+    "./assets/js/fields/components/map/index.js": {
+      "id": 105,
+      "meta": {}
+    },
+    "./assets/js/fields/components/radio-image/index.js": {
+      "id": 106,
+      "meta": {}
+    },
+    "./assets/js/fields/components/rich-text/index.js": {
+      "id": 107,
+      "meta": {}
+    },
+    "./assets/js/fields/components/select/index.js": {
+      "id": 108,
+      "meta": {}
+    },
+    "./assets/js/fields/components/separator/index.js": {
+      "id": 109,
+      "meta": {}
+    },
+    "./assets/js/fields/components/set/index.js": {
+      "id": 110,
+      "meta": {}
+    },
+    "./assets/js/fields/components/sidebar/index.js": {
+      "id": 111,
+      "meta": {}
+    },
+    "./assets/js/fields/components/textarea/index.js": {
+      "id": 112,
+      "meta": {}
+    },
+    "./assets/js/fields/sagas/api.js": {
+      "id": 113,
+      "meta": {}
+    },
+    "./assets/js/fields/sagas/changes-tracker.js": {
+      "id": 114,
+      "meta": {}
+    },
+    "./assets/js/fields/sagas/complex.js": {
+      "id": 115,
+      "meta": {}
+    },
+    "./assets/js/fields/sagas/conditional-logic.js": {
+      "id": 116,
+      "meta": {}
+    },
+    "./assets/js/fields/sagas/geocoder.js": {
+      "id": 117,
+      "meta": {}
+    },
+    "./assets/js/fields/sagas/media-browser.js": {
+      "id": 118,
+      "meta": {}
+    },
+    "./assets/js/fields/sagas/redraw-google-maps.js": {
+      "id": 119,
+      "meta": {}
+    },
+    "./assets/js/fields/sagas/validation.js": {
+      "id": 120,
+      "meta": {}
+    },
+    "./assets/js/fields/validators/base.js": {
+      "id": 121,
+      "meta": {}
+    },
+    "./assets/js/fields/validators/complex.js": {
+      "id": 122,
+      "meta": {}
+    },
+    "./assets/js/lib/api.js": {
+      "id": 123,
+      "meta": {}
+    },
+    "./assets/js/sidebars/sagas/base.js": {
+      "id": 124,
+      "meta": {}
+    },
+    "./assets/js/store/index.js": {
+      "id": 125,
+      "meta": {}
+    }
+  }
+}
