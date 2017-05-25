@@ -331,6 +331,10 @@ class Complex_Field extends Field {
 		foreach ( $value_tree as $group_index => $value ) {
 			$group_name = $value[ Value_Set::VALUE_PROPERTY ];
 			$group = $this->get_group_by_name( $group_name );
+			if ( ! $group ) {
+				// Failed to find group - sombody has been messing with the database or group definitions
+				continue;
+			}
 			$group_fields = $group->get_fields();
 			$group_values = array();
 			if ( isset( $value_tree[ $group_index ] ) ) {
