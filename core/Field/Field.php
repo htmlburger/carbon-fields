@@ -227,8 +227,7 @@ class Field implements Datastore_Holder_Interface {
 
 		// stop hidden symbol support when the end user is creating fields ]-[
 		// @see Field::set_name()
-		$regex = '/\A[a-z0-9_]+\z/';
-		if ( ! preg_match( $regex, $name ) ) {
+		if ( ! empty( $name ) && ! preg_match( '/\A[a-z0-9_]+\z/', $name ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name can only contain lowercase alphanumeric characters and underscores ("' . $name . '" passed).' );
 			return;
 		}

@@ -196,5 +196,31 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	public function testFieldNameCantBeEmpty() {
 		Field::make( 'text', '' );
 	}
+
+	/**
+	 * @covers ::make
+	 * @covers ::factory
+	 * @covers ::__construct
+	 * @covers ::set_name
+	 *
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedExceptionMessage only contain lowercase alphanumeric
+	 */
+	public function testFieldNameCantContainHiddenlySupportedDashes() {
+		Field::make( 'text', 'test_field-with-dashes' );
+	}
+
+	/**
+	 * @covers ::make
+	 * @covers ::factory
+	 * @covers ::__construct
+	 * @covers ::set_name
+	 *
+	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
+	 * @expectedExceptionMessage only contain lowercase alphanumeric
+	 */
+	public function testFieldNameCantContainHiddenlySupportedBrackets() {
+		Field::make( 'text', 'test_field_with_[brackets]' );
+	}
 	
 }
