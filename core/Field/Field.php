@@ -225,6 +225,14 @@ class Field implements Datastore_Holder_Interface {
 	public static function factory( $raw_type, $name, $label = null ) {
 		$type = Helper::normalize_type( $raw_type );
 
+		// stop hidden symbol support when the end user is creating fields ]-[
+		// @see Field::set_name()
+		$regex = '/\A[a-z0-9_]+\z/';
+		if ( ! preg_match( $regex, $name ) ) {
+			Incorrect_Syntax_Exception::raise( 'Field name can only contain lowercase alphanumeric characters and underscores ("' . $name . '" passed).' );
+			return;
+		}
+
 		if ( Carbon_Fields::has( $type, 'fields' ) ) {
 			return Carbon_Fields::resolve_with_arguments( $type, array(
 				'type' => $type,
