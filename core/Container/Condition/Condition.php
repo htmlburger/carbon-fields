@@ -37,7 +37,7 @@ abstract class Condition implements Fulfillable {
 	 * @return mixed
 	 */
 	public function get_value() {
-		if ( $this->get_comparison_operator() !== 'CUSTOM' && is_callable( $this->value ) ) {
+		if ( $this->get_comparison_operator() !== 'CUSTOM' && $this->value instanceof \Closure ) {
 			return call_user_func( $this->value );
 		}
 		return $this->value;
