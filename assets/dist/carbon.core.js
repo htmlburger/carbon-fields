@@ -5585,6 +5585,10 @@ var _classnames = __webpack_require__(15);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
+var _jquery = __webpack_require__(17);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -5662,6 +5666,7 @@ var RichTextEditor = function (_React$Component) {
 			    richEditing = _props.richEditing;
 
 			var classes = ['carbon-wysiwyg', 'wp-editor-wrap', { 'tmce-active': richEditing }, { 'html-active': !richEditing }];
+			var mediaButtons = (0, _jquery2.default)('#carbon-fields-rich-text-media-buttons').html();
 
 			return _react2.default.createElement(
 				'div',
@@ -5674,7 +5679,8 @@ var RichTextEditor = function (_React$Component) {
 						{ href: '#', className: 'button insert-media add_media', 'data-editor': id, title: 'Add Media' },
 						_react2.default.createElement('span', { className: 'wp-media-buttons-icon' }),
 						' Add Media'
-					)
+					),
+					_react2.default.createElement('span', { dangerouslySetInnerHTML: { __html: mediaButtons } })
 				),
 				richEditing ? _react2.default.createElement(
 					'div',

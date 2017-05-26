@@ -5,6 +5,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import cx from 'classnames';
+import $ from 'jquery';
 
 class RichTextEditor extends React.Component {
 	/**
@@ -52,12 +53,14 @@ class RichTextEditor extends React.Component {
 			{ 'tmce-active': richEditing },
 			{ 'html-active': !richEditing },
 		];
+		const mediaButtons = $('#carbon-fields-rich-text-media-buttons').html();
 
 		return <div id={`wp-${id}-wrap`} className={cx(classes)}>
 			<div id={`wp-${id}-media-buttons`} className="hide-if-no-js wp-media-buttons">
 				<a href="#" className="button insert-media add_media" data-editor={id} title="Add Media">
 					<span className="wp-media-buttons-icon"></span> Add Media
 				</a>
+				<span dangerouslySetInnerHTML={{__html: mediaButtons}}></span>
 			</div>
 
 			{

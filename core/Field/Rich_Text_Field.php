@@ -31,17 +31,24 @@ class Rich_Text_Field extends Textarea_Field {
 		?>
 		<div style="display:none;">
 			<?php
-				$settings = array(
-					'tinymce' => array(
-						'resize' => true,
-						'wp_autoresize_on' => true,
-					),
-				);
+			$settings = array(
+				'tinymce' => array(
+					'resize' => true,
+					'wp_autoresize_on' => true,
+				),
+			);
 
-				add_filter( 'user_can_richedit', '__return_true' );
-				wp_editor( '', 'carbon_settings', $settings );
-				remove_filter( 'user_can_richedit', '__return_true' );
+			add_filter( 'user_can_richedit', '__return_true' );
+			wp_editor( '', 'carbon_settings', $settings );
+			remove_filter( 'user_can_richedit', '__return_true' );
 			?>
+			<div id="carbon-fields-rich-text-media-buttons">
+				<?php
+				remove_action( 'media_buttons', 'media_buttons' );
+				do_action( 'media_buttons' );
+				add_action( 'media_buttons', 'media_buttons' );
+				?>
+			</div>
 		</div>
 		<?php
 	}

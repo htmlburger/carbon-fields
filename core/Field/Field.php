@@ -1012,6 +1012,8 @@ class Field implements Datastore_Holder_Interface {
 	 */
 	public static function admin_hook_scripts() {
 		wp_enqueue_media();
+		wp_enqueue_script( 'thickbox' );
+		wp_enqueue_script( 'media-upload' );
 	}
 
 	/**
