@@ -1,0 +1,11 @@
+/assets/tests export-ignore
+/tests export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+.jest export-ignore
+.scrutinizer.yml export-ignore
+.travis.yml export-ignore
+DEVELOPMENT.md export-ignore  
+phpcs.xml export-ignore
+phpunit.xml export-ignore
+Vagrantfile export-ignore
