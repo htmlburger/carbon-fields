@@ -2,8 +2,6 @@
 	Field - Color Picker
 \* ------------------------------------------------------------ */
 
-.carbon-color { position: relative; }
-
 .carbon-color .carbon-color-button { display: inline-block; vertical-align: top; padding: 0; }
 .carbon-color .carbon-color-button-text { padding: 0 10px; }
 
