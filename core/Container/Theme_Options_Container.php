@@ -38,6 +38,10 @@ class Theme_Options_Container extends Container {
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'theme_options' ), $this->has_default_datastore() );
 		}
+
+		if ( apply_filters( 'carbon_fields_' . $type . '_container_admin_only_access', true, $title ) ) {
+			$this->where( 'current_user_capability', '=', 'manage_options' );
+		}
 	}
 
 	/**
