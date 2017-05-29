@@ -257,7 +257,6 @@ class Association_Field extends Field {
 		 * @param array $args The parameters, passed to get_posts().
 		 */
 		$filter_name = 'carbon_fields_association_field_options_' . $this->get_base_name() . '_' . $type['type'] . '_' . $type['post_type'];
-		var_dump($filter_name);
 		$args = apply_filters( $filter_name, array(
 			'post_type' => $type['post_type'],
 			'posts_per_page' => -1,
