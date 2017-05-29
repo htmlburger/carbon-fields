@@ -254,7 +254,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Boot the container once it's attached.
 	 */
 	protected function boot() {
-		add_action( 'admin_print_footer_scripts', array( get_class(), 'admin_hook_styles' ), 5 );
+		
 	}
 
 	/**
@@ -756,13 +756,6 @@ abstract class Container implements Datastore_Holder_Interface {
 		}
 
 		return $container_data;
-	}
-
-	/**
-	 * Enqueue admin styles
-	 */
-	public static function admin_hook_styles() {
-		wp_enqueue_style( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.css', array(), \Carbon_Fields\VERSION );
 	}
 
 	/**
