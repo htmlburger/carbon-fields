@@ -479,6 +479,19 @@ class Complex_Field extends Field {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function set_default_value( $default_value ) {
+		foreach ( $default_value as $index => $group ) {
+			if ( ! isset( $group[ static::TYPE_PROPERTY ] ) ) {
+				$default_value[ $index ][ static::TYPE_PROPERTY ] = Group_Field::DEFAULT_GROUP_NAME;
+			}
+		}
+		$this->default_value = $default_value;
+		return $this;
+	}
+
+	/**
 	 * Return the full value tree of all groups and their fields
 	 *
 	 * @return mixed
