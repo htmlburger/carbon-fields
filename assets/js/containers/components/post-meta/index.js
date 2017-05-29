@@ -17,8 +17,8 @@ export default compose(
 	withSetup({
 		post_template: 'default',
 		post_level: 1,
-		post_parent_id: null,
-		post_format: null,
+		post_parent_id: 0,
+		post_format: '',
 		post_term: {},
 	})
 )(Container);

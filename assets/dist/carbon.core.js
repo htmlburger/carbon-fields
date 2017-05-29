@@ -3775,6 +3775,22 @@ var _boolean = __webpack_require__(51);
 
 var _boolean2 = _interopRequireDefault(_boolean);
 
+var _postParentId = __webpack_require__(134);
+
+var _postParentId2 = _interopRequireDefault(_postParentId);
+
+var _postFormat = __webpack_require__(135);
+
+var _postFormat2 = _interopRequireDefault(_postFormat);
+
+var _postLevel = __webpack_require__(136);
+
+var _postLevel2 = _interopRequireDefault(_postLevel);
+
+var _postTemplate = __webpack_require__(133);
+
+var _postTemplate2 = _interopRequireDefault(_postTemplate);
+
 var _postTerm = __webpack_require__(53);
 
 var _postTerm2 = _interopRequireDefault(_postTerm);
@@ -3792,6 +3808,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var conditions = {
 	base: _base2.default,
 	boolean: _boolean2.default,
+	post_parent_id: _postParentId2.default,
+	post_format: _postFormat2.default,
+	post_level: _postLevel2.default,
+	post_template: _postTemplate2.default,
 	post_term: _postTerm2.default
 };
 
@@ -6224,6 +6244,10 @@ var map = {
 	"./conditions/base.js": 28,
 	"./conditions/boolean.js": 51,
 	"./conditions/index.js": 52,
+	"./conditions/post-format.js": 135,
+	"./conditions/post-level.js": 136,
+	"./conditions/post-parent-id.js": 134,
+	"./conditions/post-template.js": 133,
 	"./conditions/post-term.js": 53,
 	"./constants.js": 13,
 	"./decorators/with-setup.js": 20,
@@ -6519,8 +6543,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = (0, _recompose.compose)((0, _recompose.setStatic)('type', _constants.TYPE_POST_META), (0, _withStore2.default)(), (0, _withSetup2.default)({
 	post_template: 'default',
 	post_level: 1,
-	post_parent_id: null,
-	post_format: null,
+	post_parent_id: 0,
+	post_format: '',
 	post_term: {}
 }))(_container2.default); /**
                            * The external dependencies.
@@ -7343,7 +7367,7 @@ function workerSyncPostParentId(containers) {
 					_ref2 = _context3.sent;
 					_value = _ref2.value;
 					option = _ref2.option;
-					parentId = (0, _lodash.defaultTo)(parseInt(_value, 10), null);
+					parentId = (0, _lodash.defaultTo)(parseInt(_value, 10), 0);
 					level = 1;
 
 
@@ -7407,7 +7431,7 @@ function workerSyncPostFormat(containers) {
 					values = _ref3.values;
 					_context4.next = 10;
 					return (0, _effects.call)(syncStore, containers, {
-						post_format: values[0]
+						post_format: (0, _lodash.isNull)(values[0]) ? '' : values[0]
 					});
 
 				case 10:
@@ -14692,6 +14716,262 @@ module.exports = (__webpack_require__(9))(842)
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__;
+
+/***/ }),
+/* 133 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
+                                                                                                                                                                                                                                                                   * The external dependecies.
+                                                                                                                                                                                                                                                                   */
+
+
+/**
+ * The internal dependencies.
+ */
+
+
+var _lodash = __webpack_require__(2);
+
+var _equality = __webpack_require__(45);
+
+var _equality2 = _interopRequireDefault(_equality);
+
+var _contain = __webpack_require__(43);
+
+var _contain2 = _interopRequireDefault(_contain);
+
+var _base = __webpack_require__(28);
+
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _extends({}, _base2.default, {
+
+	/**
+  * The supported comparers.
+  *
+  * @type {Function[]}
+  */
+	comparers: [_equality2.default, _contain2.default],
+
+	/**
+  * Check if the condition is fulfiled.
+  *
+  * @param  {Object}  definition
+  * @param  {Object}  env
+  * @return {Boolean}
+  */
+	isFulfiled: function isFulfiled(definition, env) {
+		var compare = definition.compare,
+		    value = definition.value;
+
+
+		return this.firstSupportedComparerIsCorrect(env.post_template, compare, value);
+	}
+});
+
+/***/ }),
+/* 134 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
+                                                                                                                                                                                                                                                                   * The external dependecies.
+                                                                                                                                                                                                                                                                   */
+
+
+/**
+ * The internal dependencies.
+ */
+
+
+var _lodash = __webpack_require__(2);
+
+var _equality = __webpack_require__(45);
+
+var _equality2 = _interopRequireDefault(_equality);
+
+var _contain = __webpack_require__(43);
+
+var _contain2 = _interopRequireDefault(_contain);
+
+var _scalar = __webpack_require__(46);
+
+var _scalar2 = _interopRequireDefault(_scalar);
+
+var _base = __webpack_require__(28);
+
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _extends({}, _base2.default, {
+
+	/**
+  * The supported comparers.
+  *
+  * @type {Function[]}
+  */
+	comparers: [_equality2.default, _contain2.default, _scalar2.default],
+
+	/**
+  * Check if the condition is fulfiled.
+  *
+  * @param  {Object}  definition
+  * @param  {Object}  env
+  * @return {Boolean}
+  */
+	isFulfiled: function isFulfiled(definition, env) {
+		var compare = definition.compare,
+		    value = definition.value;
+
+
+		return this.firstSupportedComparerIsCorrect(env.post_parent_id, compare, value);
+	}
+});
+
+/***/ }),
+/* 135 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
+                                                                                                                                                                                                                                                                   * The external dependecies.
+                                                                                                                                                                                                                                                                   */
+
+
+/**
+ * The internal dependencies.
+ */
+
+
+var _lodash = __webpack_require__(2);
+
+var _equality = __webpack_require__(45);
+
+var _equality2 = _interopRequireDefault(_equality);
+
+var _contain = __webpack_require__(43);
+
+var _contain2 = _interopRequireDefault(_contain);
+
+var _base = __webpack_require__(28);
+
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _extends({}, _base2.default, {
+
+	/**
+  * The supported comparers.
+  *
+  * @type {Function[]}
+  */
+	comparers: [_equality2.default, _contain2.default],
+
+	/**
+  * Check if the condition is fulfiled.
+  *
+  * @param  {Object}  definition
+  * @param  {Object}  env
+  * @return {Boolean}
+  */
+	isFulfiled: function isFulfiled(definition, env) {
+		var compare = definition.compare,
+		    value = definition.value;
+
+
+		return this.firstSupportedComparerIsCorrect(env.post_format, compare, value);
+	}
+});
+
+/***/ }),
+/* 136 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
+                                                                                                                                                                                                                                                                   * The external dependecies.
+                                                                                                                                                                                                                                                                   */
+
+
+/**
+ * The internal dependencies.
+ */
+
+
+var _lodash = __webpack_require__(2);
+
+var _equality = __webpack_require__(45);
+
+var _equality2 = _interopRequireDefault(_equality);
+
+var _contain = __webpack_require__(43);
+
+var _contain2 = _interopRequireDefault(_contain);
+
+var _scalar = __webpack_require__(46);
+
+var _scalar2 = _interopRequireDefault(_scalar);
+
+var _base = __webpack_require__(28);
+
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _extends({}, _base2.default, {
+
+	/**
+  * The supported comparers.
+  *
+  * @type {Function[]}
+  */
+	comparers: [_equality2.default, _contain2.default, _scalar2.default],
+
+	/**
+  * Check if the condition is fulfiled.
+  *
+  * @param  {Object}  definition
+  * @param  {Object}  env
+  * @return {Boolean}
+  */
+	isFulfiled: function isFulfiled(definition, env) {
+		var compare = definition.compare,
+		    value = definition.value;
+
+
+		return this.firstSupportedComparerIsCorrect(env.post_level, compare, value);
+	}
+});
 
 /***/ })
 /******/ ]);

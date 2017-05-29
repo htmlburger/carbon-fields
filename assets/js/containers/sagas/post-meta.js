@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import { take, call, put, fork, select } from 'redux-saga/effects';
-import { isEmpty, mapValues, defaultTo } from 'lodash';
+import { isEmpty, isNull, mapValues, defaultTo } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -54,7 +54,7 @@ export function* workerSyncPostParentId(containers) {
 
 	while (true) {
 		const { value, option } = yield take(channel);
-		const parentId = defaultTo(parseInt(value, 10), null);
+		const parentId = defaultTo(parseInt(value, 10), 0);
 		let level = 1;
 
 		if (option.className) {
@@ -85,7 +85,7 @@ export function* workerSyncPostFormat(containers) {
 		const { values } = yield take(channel);
 
 		yield call(syncStore, containers, {
-			post_format: values[0],
+			post_format: isNull(values[0]) ? '' : values[0],
 		});
 	}
 }
