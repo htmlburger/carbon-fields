@@ -4,7 +4,9 @@
 		<tr class="carbon-table-row">
 			<th></th>
 			<td>
-				<fieldset id="<?php echo $this->id; ?>" class="container-holder carbon-user-container container-<?php echo $this->id; ?> <?php echo $this->is_tabbed() ? '' : 'carbon-fields-collection' ?>" data-profile-role="<?php echo $profile_role ?>"></fieldset>
+				<div id="<?php echo $this->id; ?>">
+					<fieldset class="container-holder carbon-user-container container-<?php echo $this->id; ?> <?php echo $this->is_tabbed() ? '' : 'carbon-fields-collection' ?>" data-profile-role="<?php echo $profile_role ?>"></fieldset>
+				</div>
 			</td>
 		</tr>
 	</table>
