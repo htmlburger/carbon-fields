@@ -3795,6 +3795,10 @@ var _postTerm = __webpack_require__(53);
 
 var _postTerm2 = _interopRequireDefault(_postTerm);
 
+var _termLevel = __webpack_require__(137);
+
+var _termLevel2 = _interopRequireDefault(_termLevel);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -3802,17 +3806,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * @type {Object}
  */
+
+
 /**
- * The external dependencies.
+ * The internal dependencies.
  */
 var conditions = {
 	base: _base2.default,
 	boolean: _boolean2.default,
+
 	post_parent_id: _postParentId2.default,
 	post_format: _postFormat2.default,
 	post_level: _postLevel2.default,
 	post_template: _postTemplate2.default,
-	post_term: _postTerm2.default
+	post_term: _postTerm2.default,
+
+	term_level: _termLevel2.default
 };
 
 /**
@@ -3822,10 +3831,8 @@ var conditions = {
  * @param  {Object} env
  * @return {Boolean}
  */
-
-
 /**
- * The internal dependencies.
+ * The external dependencies.
  */
 function evaluteConditions(collection, env) {
 	var results = collection.conditions.map(function (definition) {
@@ -6249,6 +6256,7 @@ var map = {
 	"./conditions/post-parent-id.js": 134,
 	"./conditions/post-template.js": 133,
 	"./conditions/post-term.js": 53,
+	"./conditions/term-level.js": 137,
 	"./constants.js": 13,
 	"./decorators/with-setup.js": 20,
 	"./decorators/with-store.js": 21,
@@ -14970,6 +14978,72 @@ exports.default = _extends({}, _base2.default, {
 
 
 		return this.firstSupportedComparerIsCorrect(env.post_level, compare, value);
+	}
+});
+
+/***/ }),
+/* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
+                                                                                                                                                                                                                                                                   * The external dependecies.
+                                                                                                                                                                                                                                                                   */
+
+
+/**
+ * The internal dependencies.
+ */
+
+
+var _lodash = __webpack_require__(2);
+
+var _equality = __webpack_require__(45);
+
+var _equality2 = _interopRequireDefault(_equality);
+
+var _contain = __webpack_require__(43);
+
+var _contain2 = _interopRequireDefault(_contain);
+
+var _scalar = __webpack_require__(46);
+
+var _scalar2 = _interopRequireDefault(_scalar);
+
+var _base = __webpack_require__(28);
+
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _extends({}, _base2.default, {
+
+	/**
+  * The supported comparers.
+  *
+  * @type {Function[]}
+  */
+	comparers: [_equality2.default, _contain2.default, _scalar2.default],
+
+	/**
+  * Check if the condition is fulfiled.
+  *
+  * @param  {Object}  definition
+  * @param  {Object}  env
+  * @return {Boolean}
+  */
+	isFulfiled: function isFulfiled(definition, env) {
+		var compare = definition.compare,
+		    value = definition.value;
+
+
+		return this.firstSupportedComparerIsCorrect(env.term_level, compare, value);
 	}
 });
 

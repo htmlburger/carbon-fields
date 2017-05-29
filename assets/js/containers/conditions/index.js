@@ -14,6 +14,8 @@ import post_level from 'containers/conditions/post-level';
 import post_template from 'containers/conditions/post-template';
 import post_term from 'containers/conditions/post-term';
 
+import term_level from 'containers/conditions/term-level';
+
 /**
  * The supported conditions.
  *
@@ -22,11 +24,14 @@ import post_term from 'containers/conditions/post-term';
 const conditions = {
 	base,
 	boolean,
+
 	post_parent_id,
 	post_format,
 	post_level,
 	post_template,
 	post_term,
+	
+	term_level,
 };
 
 /**
