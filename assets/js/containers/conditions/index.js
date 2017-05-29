@@ -16,6 +16,8 @@ import post_term from 'containers/conditions/post-term';
 
 import term_level from 'containers/conditions/term-level';
 
+import user_role from 'containers/conditions/user-role';
+
 /**
  * The supported conditions.
  *
@@ -32,6 +34,8 @@ const conditions = {
 	post_term,
 	
 	term_level,
+
+	user_role,
 };
 
 /**
