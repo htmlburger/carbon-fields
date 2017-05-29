@@ -5585,10 +5585,6 @@ var _classnames = __webpack_require__(15);
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
-var _jquery = __webpack_require__(17);
-
-var _jquery2 = _interopRequireDefault(_jquery);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -5663,10 +5659,10 @@ var RichTextEditor = function (_React$Component) {
 			var _props = this.props,
 			    id = _props.id,
 			    children = _props.children,
-			    richEditing = _props.richEditing;
+			    richEditing = _props.richEditing,
+			    mediaButtons = _props.mediaButtons;
 
 			var classes = ['carbon-wysiwyg', 'wp-editor-wrap', { 'tmce-active': richEditing }, { 'html-active': !richEditing }];
-			var mediaButtons = (0, _jquery2.default)('#carbon-fields-rich-text-media-buttons').html();
 
 			return _react2.default.createElement(
 				'div',
@@ -11394,7 +11390,7 @@ var RichTextField = exports.RichTextField = function RichTextField(_ref) {
 		{ field: field },
 		_react2.default.createElement(
 			_editor2.default,
-			{ id: field.id, richEditing: field.rich_editing, content: field.value, onChange: handleChange },
+			{ id: field.id, richEditing: field.rich_editing, mediaButtons: field.media_buttons, content: field.value, onChange: handleChange },
 			_react2.default.createElement('textarea', _extends({
 				id: field.id,
 				className: 'wp-editor-area',
@@ -11420,7 +11416,8 @@ RichTextField.propTypes = {
 		value: _propTypes2.default.string,
 		rows: _propTypes2.default.number,
 		attributes: _propTypes2.default.object,
-		rich_editing: _propTypes2.default.bool
+		rich_editing: _propTypes2.default.bool,
+		media_buttons: _propTypes2.default.string
 	}),
 	handleChange: _propTypes2.default.func
 };

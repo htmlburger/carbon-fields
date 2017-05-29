@@ -29,7 +29,7 @@ export const RichTextField = ({
 	handleChange
 }) => {
 	return <Field field={field}>
-		<RichTextEditor id={field.id} richEditing={field.rich_editing} content={field.value} onChange={handleChange}>
+		<RichTextEditor id={field.id} richEditing={field.rich_editing} mediaButtons={field.media_buttons} content={field.value} onChange={handleChange}>
 			<textarea
 				id={field.id}
 				className="wp-editor-area"
@@ -56,6 +56,7 @@ RichTextField.propTypes = {
 		rows: PropTypes.number,
 		attributes: PropTypes.object,
 		rich_editing: PropTypes.bool,
+		media_buttons: PropTypes.string,
 	}),
 	handleChange: PropTypes.func,
 };

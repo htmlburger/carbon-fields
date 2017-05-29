@@ -5,7 +5,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import cx from 'classnames';
-import $ from 'jquery';
 
 class RichTextEditor extends React.Component {
 	/**
@@ -46,14 +45,13 @@ class RichTextEditor extends React.Component {
 	 * @return {React.Element}
 	 */
 	render() {
-		const { id, children, richEditing } = this.props;
+		const { id, children, richEditing, mediaButtons } = this.props;
 		const classes = [
 			'carbon-wysiwyg',
 			'wp-editor-wrap',
 			{ 'tmce-active': richEditing },
 			{ 'html-active': !richEditing },
 		];
-		const mediaButtons = $('#carbon-fields-rich-text-media-buttons').html();
 
 		return <div id={`wp-${id}-wrap`} className={cx(classes)}>
 			<div id={`wp-${id}-media-buttons`} className="hide-if-no-js wp-media-buttons">

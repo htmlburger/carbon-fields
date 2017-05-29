@@ -42,13 +42,6 @@ class Rich_Text_Field extends Textarea_Field {
 			wp_editor( '', 'carbon_settings', $settings );
 			remove_filter( 'user_can_richedit', '__return_true' );
 			?>
-			<div id="carbon-fields-rich-text-media-buttons">
-				<?php
-				remove_action( 'media_buttons', 'media_buttons' );
-				do_action( 'media_buttons' );
-				add_action( 'media_buttons', 'media_buttons' );
-				?>
-			</div>
 		</div>
 		<?php
 	}
@@ -62,8 +55,15 @@ class Rich_Text_Field extends Textarea_Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
+		ob_start();
+		remove_action( 'media_buttons', 'media_buttons' );
+		do_action( 'media_buttons' );
+		add_action( 'media_buttons', 'media_buttons' );
+		$media_buttons = ob_get_clean();
+
 		$field_data = array_merge( $field_data, array(
 			'rich_editing' => user_can_richedit(),
+			'media_buttons' => $media_buttons,
 		) );
 
 		return $field_data;
