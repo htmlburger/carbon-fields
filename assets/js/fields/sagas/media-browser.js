@@ -2,24 +2,66 @@
  * The external dependencies.
  */
 import { takeEvery, take, call, put, select, all } from 'redux-saga/effects';
-import { isNull } from 'lodash';
+import { isEmpty, isNull, isUndefined, first, filter, last } from 'lodash';
 
 /**
  * The internal dependencies.
  */
 import { createMediaBrowserChannel } from 'lib/events';
-import { getFieldById } from 'fields/selectors';
+import { getFieldById, getComplexGroupById, getFieldParentById } from 'fields/selectors';
 import { getAttachmentThumbnail } from 'fields/helpers';
-import { setupMediaBrowser, openMediaBrowser, updateField, setFieldValue } from 'fields/actions';
+import {
+	setupMediaBrowser,
+	openMediaBrowser,
+	updateField,
+	setFieldValue,
+	addComplexGroup,
+	receiveComplexGroup,
+	addMultipleFiles,
+} from 'fields/actions';
+
+/**
+ * Add complex groups for every additional attachment selected in the media browser
+ *
+ * @param  {Object} action
+ * @return {void}
+ */
+export function* workerAddMultipleFiles(action) {
+	const { fieldId, attachments } = action.payload;
+	const field = yield select(getFieldById, fieldId);
+	const parent = yield select(getComplexGroupById, field.parent);
+	if (isUndefined(parent)) {
+		return;
+	}
+
+	for (let i = 0; i < attachments.length; i++) {
+		const attachment = attachments[i];
+		// add a new group to hold the attachment
+		yield put(addComplexGroup(parent.field.id, parent.group.name));
+
+		// pause until the complex is updated
+		yield take(receiveComplexGroup);
+		
+		// resolve the new field from the new group and assign it's new value
+		const parentField = yield select(getFieldById, parent.field.id);
+		const freshGroup = last(parentField.value);
+		const freshFieldId = first(filter(freshGroup.fields, f => f.base_name === field.base_name)).id;
+		const freshField = yield select(getFieldById, freshFieldId);
+
+		yield redrawAttachmentPreview(freshField.id, attachment, freshField.default_thumb_url);
+		yield put(setFieldValue(freshField.id, attachment.id));
+	}
+}
 
 /**
  * Trigger a preview redraw action based on an attachment
  *
- * @param  {Object} field
- * @param  {Object} action
+ * @param  {Object} fieldId
+ * @param  {Object} attachment
+ * @param  {String} default_thumb_url
  * @return {void}
  */
-function* redrawAttachmentPreview(fieldId, attachment, default_thumb_url) {
+export function* redrawAttachmentPreview(fieldId, attachment, default_thumb_url) {
 	if (!isNull(attachment)) {
 		const thumbnail = yield call(getAttachmentThumbnail, attachment);
 		yield put(updateField(fieldId, {
@@ -74,8 +116,6 @@ export function* workerRedrawAttachmentPreview(field, action) {
  * @param  {Object} browser
  * @param  {Object} action
  * @return {void}
- *
- * @todo   Handle the rest of selected attachments.
  */
 export function* workerOpenMediaBrowser(channel, field, browser, action) {
 	// Don't open the browser if the field doesn't have correct id.
@@ -97,6 +137,10 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 		
 		yield redrawAttachmentPreview(field.id, attachment, field.default_thumb_url);
 		yield put(setFieldValue(field.id, attachment.id));
+
+		if (!isEmpty(attachments)) {
+			yield put(addMultipleFiles(field.id, attachments));
+		}
 	}
 }
 
@@ -140,5 +184,6 @@ export function* workerSetupMediaBrowser(action) {
 export default function* foreman() {
 	yield all([
 		takeEvery(setupMediaBrowser, workerSetupMediaBrowser),
+		takeEvery(addMultipleFiles, workerAddMultipleFiles),
 	]);
 }

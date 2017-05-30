@@ -254,7 +254,7 @@ exports.default = Field;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.redrawMap = exports.validateFields = exports.validateField = exports.markFieldAsInvalid = exports.markFieldAsValid = exports.geocodeAddress = exports.switchComplexTab = exports.collapseComplexGroup = exports.expandComplexGroup = exports.receiveComplexGroup = exports.removeComplexGroup = exports.cloneComplexGroup = exports.addComplexGroup = exports.removeFields = exports.addFields = exports.openMediaBrowser = exports.setupMediaBrowser = exports.setFieldValue = exports.updateField = exports.setUI = exports.setupValidation = exports.teardownField = exports.setupField = undefined;
+exports.redrawMap = exports.validateFields = exports.validateField = exports.markFieldAsInvalid = exports.markFieldAsValid = exports.geocodeAddress = exports.addMultipleFiles = exports.switchComplexTab = exports.collapseComplexGroup = exports.expandComplexGroup = exports.receiveComplexGroup = exports.removeComplexGroup = exports.cloneComplexGroup = exports.addComplexGroup = exports.removeFields = exports.addFields = exports.openMediaBrowser = exports.setupMediaBrowser = exports.setFieldValue = exports.updateField = exports.setUI = exports.setupValidation = exports.teardownField = exports.setupField = undefined;
 
 var _reduxActions = __webpack_require__(25);
 
@@ -441,6 +441,16 @@ var collapseComplexGroup = exports.collapseComplexGroup = (0, _reduxActions.crea
  */
 var switchComplexTab = exports.switchComplexTab = (0, _reduxActions.createAction)('fields/SWITCH_COMPLEX_TAB', function (fieldId, groupId) {
   return { fieldId: fieldId, groupId: groupId };
+});
+/**
+ * Add multiple selected attachments for file fields inside complex fields
+ *
+ * @param  {String} fieldId
+ * @param  {Object} attachments
+ * @return {Object}
+ */
+var addMultipleFiles = exports.addMultipleFiles = (0, _reduxActions.createAction)('fields/ADD_MULTIPLE_FILES', function (fieldId, attachments) {
+  return { fieldId: fieldId, attachments: attachments };
 });
 
 /**
@@ -13752,6 +13762,8 @@ function foreman() {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+exports.workerAddMultipleFiles = workerAddMultipleFiles;
+exports.redrawAttachmentPreview = redrawAttachmentPreview;
 exports.workerRedrawAttachmentPreview = workerRedrawAttachmentPreview;
 exports.workerOpenMediaBrowser = workerOpenMediaBrowser;
 exports.workerSetupMediaBrowser = workerSetupMediaBrowser;
@@ -13771,9 +13783,9 @@ var _actions = __webpack_require__(7);
 
 function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
 
-var _marked = [redrawAttachmentPreview, workerRedrawAttachmentPreview, workerOpenMediaBrowser, workerSetupMediaBrowser, foreman].map(regeneratorRuntime.mark); /**
-                                                                                                                                                                * The external dependencies.
-                                                                                                                                                                */
+var _marked = [workerAddMultipleFiles, redrawAttachmentPreview, workerRedrawAttachmentPreview, workerOpenMediaBrowser, workerSetupMediaBrowser, foreman].map(regeneratorRuntime.mark); /**
+                                                                                                                                                                                        * The external dependencies.
+                                                                                                                                                                                        */
 
 
 /**
@@ -13782,29 +13794,116 @@ var _marked = [redrawAttachmentPreview, workerRedrawAttachmentPreview, workerOpe
 
 
 /**
+ * Add complex groups for every additional attachment selected in the media browser
+ *
+ * @param  {Object} action
+ * @return {void}
+ */
+function workerAddMultipleFiles(action) {
+	var _action$payload, fieldId, attachments, field, parent, i, attachment, parentField, freshGroup, freshFieldId, freshField;
+
+	return regeneratorRuntime.wrap(function workerAddMultipleFiles$(_context) {
+		while (1) {
+			switch (_context.prev = _context.next) {
+				case 0:
+					_action$payload = action.payload, fieldId = _action$payload.fieldId, attachments = _action$payload.attachments;
+					_context.next = 3;
+					return (0, _effects.select)(_selectors.getFieldById, fieldId);
+
+				case 3:
+					field = _context.sent;
+					_context.next = 6;
+					return (0, _effects.select)(_selectors.getComplexGroupById, field.parent);
+
+				case 6:
+					parent = _context.sent;
+
+					if (!(0, _lodash.isUndefined)(parent)) {
+						_context.next = 9;
+						break;
+					}
+
+					return _context.abrupt('return');
+
+				case 9:
+					i = 0;
+
+				case 10:
+					if (!(i < attachments.length)) {
+						_context.next = 31;
+						break;
+					}
+
+					attachment = attachments[i];
+					// add a new group to hold the attachment
+
+					_context.next = 14;
+					return (0, _effects.put)((0, _actions.addComplexGroup)(parent.field.id, parent.group.name));
+
+				case 14:
+					_context.next = 16;
+					return (0, _effects.take)(_actions.receiveComplexGroup);
+
+				case 16:
+					_context.next = 18;
+					return (0, _effects.select)(_selectors.getFieldById, parent.field.id);
+
+				case 18:
+					parentField = _context.sent;
+					freshGroup = (0, _lodash.last)(parentField.value);
+					freshFieldId = (0, _lodash.first)((0, _lodash.filter)(freshGroup.fields, function (f) {
+						return f.base_name === field.base_name;
+					})).id;
+					_context.next = 23;
+					return (0, _effects.select)(_selectors.getFieldById, freshFieldId);
+
+				case 23:
+					freshField = _context.sent;
+					_context.next = 26;
+					return redrawAttachmentPreview(freshField.id, attachment, freshField.default_thumb_url);
+
+				case 26:
+					_context.next = 28;
+					return (0, _effects.put)((0, _actions.setFieldValue)(freshField.id, attachment.id));
+
+				case 28:
+					i++;
+					_context.next = 10;
+					break;
+
+				case 31:
+				case 'end':
+					return _context.stop();
+			}
+		}
+	}, _marked[0], this);
+}
+
+/**
  * Trigger a preview redraw action based on an attachment
  *
- * @param  {Object} field
- * @param  {Object} action
+ * @param  {Object} fieldId
+ * @param  {Object} attachment
+ * @param  {String} default_thumb_url
  * @return {void}
  */
 function redrawAttachmentPreview(fieldId, attachment, default_thumb_url) {
 	var thumbnail;
-	return regeneratorRuntime.wrap(function redrawAttachmentPreview$(_context) {
+	return regeneratorRuntime.wrap(function redrawAttachmentPreview$(_context2) {
 		while (1) {
-			switch (_context.prev = _context.next) {
+			switch (_context2.prev = _context2.next) {
 				case 0:
 					if ((0, _lodash.isNull)(attachment)) {
-						_context.next = 8;
+						_context2.next = 8;
 						break;
 					}
 
-					_context.next = 3;
+					_context2.next = 3;
 					return (0, _effects.call)(_helpers.getAttachmentThumbnail, attachment);
 
 				case 3:
-					thumbnail = _context.sent;
-					_context.next = 6;
+					thumbnail = _context2.sent;
+					_context2.next = 6;
 					return (0, _effects.put)((0, _actions.updateField)(fieldId, {
 						file_name: attachment.filename,
 						file_url: attachment.url,
@@ -13813,11 +13912,11 @@ function redrawAttachmentPreview(fieldId, attachment, default_thumb_url) {
 					}));
 
 				case 6:
-					_context.next = 10;
+					_context2.next = 10;
 					break;
 
 				case 8:
-					_context.next = 10;
+					_context2.next = 10;
 					return (0, _effects.put)((0, _actions.updateField)(fieldId, {
 						file_name: '',
 						file_url: '',
@@ -13827,10 +13926,10 @@ function redrawAttachmentPreview(fieldId, attachment, default_thumb_url) {
 
 				case 10:
 				case 'end':
-					return _context.stop();
+					return _context2.stop();
 			}
 		}
-	}, _marked[0], this);
+	}, _marked[1], this);
 }
 
 /**
@@ -13841,61 +13940,61 @@ function redrawAttachmentPreview(fieldId, attachment, default_thumb_url) {
  * @return {void}
  */
 function workerRedrawAttachmentPreview(field, action) {
-	var _action$payload, fieldId, value, freshField, attachment;
+	var _action$payload2, fieldId, value, freshField, attachment;
 
-	return regeneratorRuntime.wrap(function workerRedrawAttachmentPreview$(_context2) {
+	return regeneratorRuntime.wrap(function workerRedrawAttachmentPreview$(_context3) {
 		while (1) {
-			switch (_context2.prev = _context2.next) {
+			switch (_context3.prev = _context3.next) {
 				case 0:
-					_action$payload = action.payload, fieldId = _action$payload.fieldId, value = _action$payload.value;
+					_action$payload2 = action.payload, fieldId = _action$payload2.fieldId, value = _action$payload2.value;
 
 					// Don't update the preview if the field doesn't have correct id.
 
 					if (!(fieldId !== field.id)) {
-						_context2.next = 3;
+						_context3.next = 3;
 						break;
 					}
 
-					return _context2.abrupt('return');
+					return _context3.abrupt('return');
 
 				case 3:
-					_context2.next = 5;
+					_context3.next = 5;
 					return (0, _effects.select)(_selectors.getFieldById, field.id);
 
 				case 5:
-					freshField = _context2.sent;
+					freshField = _context3.sent;
 
 					if (!(freshField.preview === value)) {
-						_context2.next = 8;
+						_context3.next = 8;
 						break;
 					}
 
-					return _context2.abrupt('return');
+					return _context3.abrupt('return');
 
 				case 8:
 					attachment = null;
 
 					if (!value) {
-						_context2.next = 13;
+						_context3.next = 13;
 						break;
 					}
 
-					_context2.next = 12;
+					_context3.next = 12;
 					return window.wp.media.attachment(value).fetch();
 
 				case 12:
-					attachment = _context2.sent;
+					attachment = _context3.sent;
 
 				case 13:
-					_context2.next = 15;
+					_context3.next = 15;
 					return redrawAttachmentPreview(fieldId, attachment, field.default_thumb_url);
 
 				case 15:
 				case 'end':
-					return _context2.stop();
+					return _context3.stop();
 			}
 		}
-	}, _marked[1], this);
+	}, _marked[2], this);
 }
 
 /**
@@ -13906,68 +14005,75 @@ function workerRedrawAttachmentPreview(field, action) {
  * @param  {Object} browser
  * @param  {Object} action
  * @return {void}
- *
- * @todo   Handle the rest of selected attachments.
  */
 function workerOpenMediaBrowser(channel, field, browser, action) {
 	var liveField, _ref, selection, _selection, attachment, attachments;
 
-	return regeneratorRuntime.wrap(function workerOpenMediaBrowser$(_context3) {
+	return regeneratorRuntime.wrap(function workerOpenMediaBrowser$(_context4) {
 		while (1) {
-			switch (_context3.prev = _context3.next) {
+			switch (_context4.prev = _context4.next) {
 				case 0:
 					if (!(action.payload !== field.id)) {
-						_context3.next = 2;
+						_context4.next = 2;
 						break;
 					}
 
-					return _context3.abrupt('return');
+					return _context4.abrupt('return');
 
 				case 2:
-					_context3.next = 4;
+					_context4.next = 4;
 					return (0, _effects.select)(_selectors.getFieldById, action.payload);
 
 				case 4:
-					liveField = _context3.sent;
+					liveField = _context4.sent;
 
 					browser.once('open', function (value) {
 						var attachment = value ? window.wp.media.attachment(value) : null;
 						browser.state().get('selection').set(attachment ? [attachment] : []);
 					}.bind(null, liveField.value));
 
-					_context3.next = 8;
+					_context4.next = 8;
 					return (0, _effects.call)([browser, browser.open]);
 
 				case 8:
 					if (false) {
-						_context3.next = 20;
+						_context4.next = 23;
 						break;
 					}
 
-					_context3.next = 11;
+					_context4.next = 11;
 					return (0, _effects.take)(channel);
 
 				case 11:
-					_ref = _context3.sent;
+					_ref = _context4.sent;
 					selection = _ref.selection;
 					_selection = _toArray(selection), attachment = _selection[0], attachments = _selection.slice(1);
-					_context3.next = 16;
+					_context4.next = 16;
 					return redrawAttachmentPreview(field.id, attachment, field.default_thumb_url);
 
 				case 16:
-					_context3.next = 18;
+					_context4.next = 18;
 					return (0, _effects.put)((0, _actions.setFieldValue)(field.id, attachment.id));
 
 				case 18:
-					_context3.next = 8;
+					if ((0, _lodash.isEmpty)(attachments)) {
+						_context4.next = 21;
+						break;
+					}
+
+					_context4.next = 21;
+					return (0, _effects.put)((0, _actions.addMultipleFiles)(field.id, attachments));
+
+				case 21:
+					_context4.next = 8;
 					break;
 
-				case 20:
+				case 23:
 				case 'end':
-					return _context3.stop();
+					return _context4.stop();
 			}
 		}
-	}, _marked[2], this);
+	}, _marked[3], this);
 }
 
 /**
@@ -13979,17 +14085,17 @@ function workerOpenMediaBrowser(channel, field, browser, action) {
 function workerSetupMediaBrowser(action) {
 	var field, window_button_label, window_label, type_filter, value_type, channel, _ref2, browser;
 
-	return regeneratorRuntime.wrap(function workerSetupMediaBrowser$(_context4) {
+	return regeneratorRuntime.wrap(function workerSetupMediaBrowser$(_context5) {
 		while (1) {
-			switch (_context4.prev = _context4.next) {
+			switch (_context5.prev = _context5.next) {
 				case 0:
-					_context4.next = 2;
+					_context5.next = 2;
 					return (0, _effects.select)(_selectors.getFieldById, action.payload);
 
 				case 2:
-					field = _context4.sent;
+					field = _context5.sent;
 					window_button_label = field.window_button_label, window_label = field.window_label, type_filter = field.type_filter, value_type = field.value_type;
-					_context4.next = 6;
+					_context5.next = 6;
 					return (0, _effects.call)(_events.createMediaBrowserChannel, {
 						title: window_label,
 						library: {
@@ -14002,26 +14108,26 @@ function workerSetupMediaBrowser(action) {
 					});
 
 				case 6:
-					channel = _context4.sent;
-					_context4.next = 9;
+					channel = _context5.sent;
+					_context5.next = 9;
 					return (0, _effects.take)(channel);
 
 				case 9:
-					_ref2 = _context4.sent;
+					_ref2 = _context5.sent;
 					browser = _ref2.browser;
-					_context4.next = 13;
+					_context5.next = 13;
 					return (0, _effects.takeEvery)(_actions.openMediaBrowser, workerOpenMediaBrowser, channel, field, browser);
 
 				case 13:
-					_context4.next = 15;
+					_context5.next = 15;
 					return (0, _effects.takeEvery)(_actions.setFieldValue, workerRedrawAttachmentPreview, field);
 
 				case 15:
 				case 'end':
-					return _context4.stop();
+					return _context5.stop();
 			}
 		}
-	}, _marked[3], this);
+	}, _marked[4], this);
 }
 
 /**
@@ -14030,19 +14136,19 @@ function workerSetupMediaBrowser(action) {
  * @return {void}
  */
 function foreman() {
-	return regeneratorRuntime.wrap(function foreman$(_context5) {
+	return regeneratorRuntime.wrap(function foreman$(_context6) {
 		while (1) {
-			switch (_context5.prev = _context5.next) {
+			switch (_context6.prev = _context6.next) {
 				case 0:
-					_context5.next = 2;
-					return (0, _effects.all)([(0, _effects.takeEvery)(_actions.setupMediaBrowser, workerSetupMediaBrowser)]);
+					_context6.next = 2;
+					return (0, _effects.all)([(0, _effects.takeEvery)(_actions.setupMediaBrowser, workerSetupMediaBrowser), (0, _effects.takeEvery)(_actions.addMultipleFiles, workerAddMultipleFiles)]);
 
 				case 2:
 				case 'end':
-					return _context5.stop();
+					return _context6.stop();
 			}
 		}
-	}, _marked[4], this);
+	}, _marked[5], this);
 }
 
 /***/ }),

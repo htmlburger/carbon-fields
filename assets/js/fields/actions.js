@@ -151,6 +151,14 @@ export const collapseComplexGroup = createAction('fields/COLLAPSE_COMPLEX_GROUP'
  * @return {Object}
  */
 export const switchComplexTab = createAction('fields/SWITCH_COMPLEX_TAB', (fieldId, groupId) => ({ fieldId, groupId }));
+/**
+ * Add multiple selected attachments for file fields inside complex fields
+ *
+ * @param  {String} fieldId
+ * @param  {Object} attachments
+ * @return {Object}
+ */
+export const addMultipleFiles = createAction('fields/ADD_MULTIPLE_FILES', (fieldId, attachments) => ({ fieldId, attachments }));
 
 /**
  * Process the address through Google's geocoding service.
