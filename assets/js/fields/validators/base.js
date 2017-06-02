@@ -1,7 +1,7 @@
 /**
  * The external dependencies.
  */
-import { isEmpty } from 'lodash';
+import { isEmpty, isObject } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -29,7 +29,8 @@ export const debounce = true;
  * @return {String|null}
  */
 export function handler(field) {
-	if (isEmpty(field.value)) {
+	const hasValue = isObject(field.value) ? !isEmpty(field.value) : !!field.value;
+	if (!hasValue) {
 		return carbonFieldsL10n.field.messageRequiredField;
 	}
 

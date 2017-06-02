@@ -42,6 +42,7 @@ export function* validate(fieldIds, event) {
 	// Cancel the action and prevent execution of WordPress's validation.
 	event.preventDefault();
 	event.stopImmediatePropagation();
+	$spinner.removeClass('is-active');
 
 	// Show the errors.
 	if ($error.length) {

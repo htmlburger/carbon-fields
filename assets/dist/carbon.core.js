@@ -9038,6 +9038,7 @@ function validate(fieldIds, event) {
 					// Cancel the action and prevent execution of WordPress's validation.
 					event.preventDefault();
 					event.stopImmediatePropagation();
+					$spinner.removeClass('is-active');
 
 					// Show the errors.
 					if ($error.length) {
@@ -9054,7 +9055,7 @@ function validate(fieldIds, event) {
 						return (0, _jquery2.default)(element).closest('.postbox, .widget, .menu-item').find('.carbon-highlight:not(:visible)').length > 0;
 					}).trigger('click');
 
-				case 39:
+				case 40:
 				case 'end':
 					return _context.stop();
 			}
@@ -14779,7 +14780,8 @@ var debounce = exports.debounce = true;
  * @return {String|null}
  */
 function handler(field) {
-  if ((0, _lodash.isEmpty)(field.value)) {
+  var hasValue = (0, _lodash.isObject)(field.value) ? !(0, _lodash.isEmpty)(field.value) : !!field.value;
+  if (!hasValue) {
     return carbonFieldsL10n.field.messageRequiredField;
   }
 
