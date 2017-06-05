@@ -12,7 +12,7 @@ abstract class Scripts_Field extends Textarea_Field {
 	 * Initialization actions
 	 */
 	public function init() {
-		$this->help_text( $this->get_default_help_text() );
+		$this->set_help_text( $this->get_default_help_text() );
 
 		add_action( $this->get_hook_name(), array( $this, 'print_scripts' ) );
 
