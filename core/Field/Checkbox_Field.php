@@ -89,14 +89,4 @@ class Checkbox_Field extends Field {
 	public function get_label() {
 		return '';
 	}
-
-	/**
-	 * Whether this field is required.
-	 * A single checkbox field is non-required by design.
-	 *
-	 * @return boolean false
-	 */
-	public function is_required() {
-		return false;
-	}
 }

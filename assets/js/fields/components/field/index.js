@@ -15,7 +15,7 @@ import cx from 'classnames';
  * @param  {React.Element|React.Element[]} props.children
  * @return {React.Element}
  */
-export const Field = ({ field, children }) => {
+export const Field = ({ field, children, hide_required_label }) => {
 	const styles = !!field.width ? { flexBasis: `${field.width}%`} : null;
 	const classes = [
 		'carbon-field',
@@ -30,7 +30,7 @@ export const Field = ({ field, children }) => {
 			{field.label}
 
 			{
-				field.required
+				(field.required && !hide_required_label)
 				? <span className="carbon-required">*</span>
 				: null
 			}
@@ -72,6 +72,7 @@ Field.propTypes = {
 		PropTypes.element,
 		PropTypes.arrayOf(PropTypes.element),
 	]),
+	hide_required_label: PropTypes.bool,
 };
 
 export default Field;

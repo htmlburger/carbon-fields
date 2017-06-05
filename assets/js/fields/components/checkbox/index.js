@@ -34,7 +34,7 @@ export const CheckboxField = ({
 	checked,
 	handleChange
 }) => {
-	return <Field field={field}>
+	return <Field field={field} hide_required_label={true}>
 		<label>
 			<input
 				type="checkbox"
@@ -46,6 +46,11 @@ export const CheckboxField = ({
 				{...field.attributes} />
 
 			{field.option_label}
+			{
+				field.required
+				? <span className="carbon-required">*</span>
+				: null
+			}
 		</label>
 	</Field>;
 };
