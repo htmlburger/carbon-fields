@@ -243,7 +243,7 @@ class Field implements Datastore_Holder_Interface {
 		// Fallback to class name-based resolution
 		$class = Helper::type_to_class( $type, __NAMESPACE__, '_Field' );
 		if ( ! class_exists( $class ) ) {
-			Incorrect_Syntax_Exception::raise( 'Unknown field "' . $raw_type . '".' );
+			Incorrect_Syntax_Exception::raise( 'Unknown field type "' . $raw_type . '".' );
 			$class = __NAMESPACE__ . '\\Broken_Field';
 		}
 
