@@ -8,7 +8,7 @@ import { isEmpty, omit, some, every, includes, isUndefined } from 'lodash';
  * The internal dependencies.
  */
 import { TYPE_COMPLEX } from 'fields/constants';
-import { setupField, updateField, setUI } from 'fields/actions';
+import { setupField, setFieldValue, updateField, setUI } from 'fields/actions';
 import { getFieldById, getFieldParentById, makeGetFieldsByParent } from 'fields/selectors';
 
 /**
@@ -46,7 +46,7 @@ function compare(left, right, operator) {
  * @return {void}
  */
 export function* workerValidate(field, siblings, { payload: { fieldId, data } } = { payload: {} }) {
-	if (fieldId && (isUndefined(data.value) || !includes(siblings, fieldId))) {
+	if (fieldId && !includes(siblings, fieldId)) {
 		return;
 	}
 
@@ -113,6 +113,7 @@ export function* workerConditionalLogic({ payload: { fieldId } }) {
 
 	yield call(workerValidate, field, siblings);
 	yield takeEvery(updateField, workerValidate, field, siblings);
+	yield takeEvery(setFieldValue, workerValidate, field, siblings);
 }
 
 /**

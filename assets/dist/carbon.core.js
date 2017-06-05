@@ -189,7 +189,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
  */
 var Field = exports.Field = function Field(_ref) {
 	var field = _ref.field,
-	    children = _ref.children;
+	    children = _ref.children,
+	    hide_required_label = _ref.hide_required_label;
 
 	var styles = !!field.width ? { flexBasis: field.width + '%' } : null;
 	var classes = ['carbon-field', 'carbon-' + field.type, { 'has-width': !!field.width }, { 'carbon-highlight': !field.ui.valid }].concat(_toConsumableArray(field.classes));
@@ -201,7 +202,7 @@ var Field = exports.Field = function Field(_ref) {
 			'label',
 			{ htmlFor: field.id },
 			field.label,
-			field.required ? _react2.default.createElement(
+			field.required && !hide_required_label ? _react2.default.createElement(
 				'span',
 				{ className: 'carbon-required' },
 				'*'
@@ -239,7 +240,8 @@ Field.propTypes = {
 		help_text: _propTypes2.default.string,
 		width: _propTypes2.default.number
 	}),
-	children: _propTypes2.default.oneOfType([_propTypes2.default.element, _propTypes2.default.arrayOf(_propTypes2.default.element)])
+	children: _propTypes2.default.oneOfType([_propTypes2.default.element, _propTypes2.default.arrayOf(_propTypes2.default.element)]),
+	hide_required_label: _propTypes2.default.bool
 };
 
 exports.default = Field;
@@ -10199,7 +10201,7 @@ var CheckboxField = exports.CheckboxField = function CheckboxField(_ref) {
 
 	return _react2.default.createElement(
 		_field2.default,
-		{ field: field },
+		{ field: field, hide_required_label: true },
 		_react2.default.createElement(
 			'label',
 			null,
@@ -10211,7 +10213,12 @@ var CheckboxField = exports.CheckboxField = function CheckboxField(_ref) {
 				disabled: !field.ui.is_visible,
 				onChange: handleChange
 			}, field.attributes)),
-			field.option_label
+			field.option_label,
+			field.required ? _react2.default.createElement(
+				'span',
+				{ className: 'carbon-required' },
+				'*'
+			) : null
 		)
 	);
 };
@@ -13345,7 +13352,7 @@ function workerValidate(field, siblings) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
-					if (!(fieldId && ((0, _lodash.isUndefined)(data.value) || !(0, _lodash.includes)(siblings, fieldId)))) {
+					if (!(fieldId && !(0, _lodash.includes)(siblings, fieldId))) {
 						_context.next = 2;
 						break;
 					}
@@ -13562,6 +13569,10 @@ function workerConditionalLogic(_ref2) {
 					return (0, _effects.takeEvery)(_actions.updateField, workerValidate, field, siblings);
 
 				case 45:
+					_context2.next = 47;
+					return (0, _effects.takeEvery)(_actions.setFieldValue, workerValidate, field, siblings);
+
+				case 47:
 				case 'end':
 					return _context2.stop();
 			}
