@@ -951,8 +951,9 @@ class Field implements Datastore_Holder_Interface {
 	 * 
 	 * @param bool $visible
 	 */
-	public function set_visible_in_rest_api( $visible ) {
+	public function set_visible_in_rest_api( $visible = true ) {
 		$this->visible_in_rest_api = $visible;
+		return $this;
 	}
 	
 	/**
@@ -962,17 +963,6 @@ class Field implements Datastore_Holder_Interface {
 	 */
 	public function get_visible_in_rest_api() {
 		return $this->visible_in_rest_api;
-	}
-
-	/**
-	 * Configuration function for setting the field visibility in the response of the requests to the REST API
-	 * 
-	 * @param bool $visible
-	 * @return Field $this
-	 */
-	public function show_in_rest( $visible = true ) {
-		$this->set_visible_in_rest_api( $visible );
-		return $this;
 	}
 
 	/**
