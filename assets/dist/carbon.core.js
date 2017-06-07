@@ -10098,7 +10098,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		});
 	}
 
-	if (!field.allow_duplicates) {
+	if (!field.duplicates_allowed) {
 		items = items.map(function (item) {
 			item.disabled = !!field.value.find(function (selectedItem) {
 				return (0, _lodash.isMatch)(selectedItem, {
@@ -10137,7 +10137,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		return function (item) {
 			// Don't do anything if the duplicates aren't allowed and
 			// the item is already selected.
-			if (!field.allow_duplicates && item.disabled) {
+			if (!field.duplicates_allowed && item.disabled) {
 				return;
 			}
 

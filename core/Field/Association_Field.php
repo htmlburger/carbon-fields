@@ -33,7 +33,7 @@ class Association_Field extends Field {
 	 *
 	 * @var boolean
 	 */
-	protected $allow_duplicates = false;
+	protected $duplicates_allowed = false;
 
 	/**
 	 * Default field value
@@ -458,13 +458,32 @@ class Association_Field extends Field {
 	}
 
 	/**
+	 * Get whether entry duplicates are allowed.
+	 *
+	 * @return boolean
+	 */
+	public function get_duplicates_allowed() {
+		return $this->duplicates_allowed;
+	}
+
+	/**
+	 * Set whether entry duplicates are allowed.
+	 *
+	 * @param boolean $allowed
+	 */
+	public function set_duplicates_allowed( $allowed ) {
+		$this->duplicates_allowed = $allowed;
+		return $this;
+	}
+
+	/**
 	 * Specify whether to allow each entry to be selected multiple times.
+	 * Backwards-compatibility alias.
 	 *
 	 * @param  boolean $allow
 	 */
 	public function allow_duplicates( $allow = true ) {
-		$this->allow_duplicates = (bool) $allow;
-		return $this;
+		return $this->set_duplicates_allowed( $allow );
 	}
 
 	/**
@@ -510,7 +529,7 @@ class Association_Field extends Field {
 			'value' => $this->value_to_json(),
 			'options' => $this->get_options(),
 			'max' => $this->max,
-			'allow_duplicates' => $this->allow_duplicates,
+			'duplicates_allowed' => $this->duplicates_allowed,
 		) );
 
 		return $field_data;

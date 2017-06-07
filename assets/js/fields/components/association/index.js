@@ -153,7 +153,7 @@ export const enhance = compose(
 			items = items.filter(({ title }) => title.toLowerCase().includes(term.toLowerCase()));
 		}
 
-		if (!field.allow_duplicates) {
+		if (!field.duplicates_allowed) {
 			items = items.map(item => {
 				item.disabled = !!field.value.find(selectedItem => isMatch(selectedItem, {
 					id: item.id,
@@ -187,7 +187,7 @@ export const enhance = compose(
 		handleAddItem: ({ field, setFieldValue }) => item => {
 			// Don't do anything if the duplicates aren't allowed and
 			// the item is already selected.
-			if (!field.allow_duplicates && item.disabled) {
+			if (!field.duplicates_allowed && item.disabled) {
 				return;
 			}
 
