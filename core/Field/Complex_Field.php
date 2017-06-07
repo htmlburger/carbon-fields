@@ -76,6 +76,13 @@ class Complex_Field extends Field {
 	protected $collapsed = false;
 
 	/**
+	 * Defines whether duplicate groups are allowed or not
+	 *
+	 * @var boolean
+	 */
+	protected $duplicate_groups_allowed = true;
+
+	/**
 	 * Entry labels
 	 * These are translated in init()
 	 *
@@ -550,7 +557,17 @@ class Complex_Field extends Field {
 			$value_data[] = $data;
 		}
 
+		$group_types = array();
+		foreach ( $this->groups as $group ) {
+			$group_types[] = array(
+				'name' => $group->get_name(),
+				'label' => $group->get_label(),
+			);
+		}
+
 		$complex_data = array_merge( $complex_data, array(
+			'duplicate_groups_allowed' => $this->get_duplicate_groups_allowed(),
+			'group_types' => $group_types,
 			'layout' => $this->layout,
 			'labels' => $this->labels,
 			'min' => $this->get_min(),
@@ -643,6 +660,25 @@ class Complex_Field extends Field {
 	 */
 	public function set_collapsed( $collapsed = true ) {
 		$this->collapsed = $collapsed;
+		return $this;
+	}
+
+	/**
+	 * Get whether duplicate groups are allowed.
+	 *
+	 * @return bool
+	 */
+	public function get_duplicate_groups_allowed() {
+		return $this->duplicate_groups_allowed;
+	}
+
+	/**
+	 * Set whether duplicate groups are allowed.
+	 *
+	 * @param bool $allowed
+	 */
+	public function set_duplicate_groups_allowed( $allowed ) {
+		$this->duplicate_groups_allowed = $allowed;
 		return $this;
 	}
 }

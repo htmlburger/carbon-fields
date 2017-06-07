@@ -256,7 +256,7 @@ exports.default = Field;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.redrawMap = exports.validateFields = exports.validateField = exports.markFieldAsInvalid = exports.markFieldAsValid = exports.geocodeAddress = exports.addMultipleFiles = exports.switchComplexTab = exports.collapseComplexGroup = exports.expandComplexGroup = exports.receiveComplexGroup = exports.removeComplexGroup = exports.cloneComplexGroup = exports.addComplexGroup = exports.removeFields = exports.addFields = exports.openMediaBrowser = exports.setupMediaBrowser = exports.setFieldValue = exports.updateField = exports.setUI = exports.setupValidation = exports.teardownField = exports.setupField = undefined;
+exports.redrawMap = exports.validateFields = exports.validateField = exports.markFieldAsInvalid = exports.markFieldAsValid = exports.geocodeAddress = exports.addMultipleFiles = exports.switchComplexTab = exports.collapseComplexGroup = exports.expandComplexGroup = exports.disableComplexGroupType = exports.enableComplexGroupType = exports.receiveComplexGroup = exports.removeComplexGroup = exports.cloneComplexGroup = exports.addComplexGroup = exports.removeFields = exports.addFields = exports.openMediaBrowser = exports.setupMediaBrowser = exports.setFieldValue = exports.updateField = exports.setUI = exports.setupValidation = exports.teardownField = exports.setupField = undefined;
 
 var _reduxActions = __webpack_require__(25);
 
@@ -410,6 +410,28 @@ var removeComplexGroup = exports.removeComplexGroup = (0, _reduxActions.createAc
  */
 var receiveComplexGroup = exports.receiveComplexGroup = (0, _reduxActions.createAction)('fields/RECEIVE_COMPLEX_GROUP', function (fieldId, group) {
   return { fieldId: fieldId, group: group };
+});
+
+/**
+ * Enable a complex group type.
+ *
+ * @param  {String} fieldId
+ * @param  {String} groupName
+ * @return {Object}
+ */
+var enableComplexGroupType = exports.enableComplexGroupType = (0, _reduxActions.createAction)('fields/ENABLE_COMPLEX_GROUP_TYPE', function (fieldId, groupName) {
+  return { fieldId: fieldId, groupName: groupName };
+});
+
+/**
+ * Disable a complex group type.
+ *
+ * @param  {String} fieldId
+ * @param  {String} groupName
+ * @return {Object}
+ */
+var disableComplexGroupType = exports.disableComplexGroupType = (0, _reduxActions.createAction)('fields/DISABLE_COMPLEX_GROUP_TYPE', function (fieldId, groupName) {
+  return { fieldId: fieldId, groupName: groupName };
 });
 
 /**
@@ -5033,11 +5055,21 @@ var ComplexGroup = exports.ComplexGroup = function ComplexGroup(_ref) {
 	    group = _ref.group,
 	    label = _ref.label,
 	    active = _ref.active,
+	    cloneEnabled = _ref.cloneEnabled,
 	    handleToggleClick = _ref.handleToggleClick,
 	    handleCloneClick = _ref.handleCloneClick,
 	    handleRemoveClick = _ref.handleRemoveClick;
 
 	var classes = ['carbon-row', 'carbon-group-row', { 'collapsed': group.collapsed }, { 'active': active }];
+	var cloneButton = cloneEnabled ? _react2.default.createElement(
+		'a',
+		{
+			href: '#',
+			className: 'carbon-btn-duplicate dashicons-before dashicons-admin-page',
+			title: carbonFieldsL10n.field.complexCloneButton,
+			onClick: handleCloneClick },
+		carbonFieldsL10n.field.complexCloneButton
+	) : '';
 
 	return _react2.default.createElement(
 		'div',
@@ -5061,15 +5093,7 @@ var ComplexGroup = exports.ComplexGroup = function ComplexGroup(_ref) {
 		_react2.default.createElement(
 			'div',
 			{ className: 'carbon-group-actions carbon-group-actions-' + layout },
-			_react2.default.createElement(
-				'a',
-				{
-					href: '#',
-					className: 'carbon-btn-duplicate dashicons-before dashicons-admin-page',
-					title: carbonFieldsL10n.field.complexCloneButton,
-					onClick: handleCloneClick },
-				carbonFieldsL10n.field.complexCloneButton
-			),
+			cloneButton,
 			_react2.default.createElement(
 				'a',
 				{
@@ -5125,6 +5149,7 @@ ComplexGroup.propTypes = {
 	}),
 	label: _propTypes2.default.string,
 	active: _propTypes2.default.bool,
+	cloneEnabled: _propTypes2.default.bool,
 	onClone: _propTypes2.default.func,
 	onRemove: _propTypes2.default.func
 };
@@ -6411,22 +6436,40 @@ exports.default = (0, _registry.decorateFieldReducer)((0, _reduxActions.handleAc
 		valid: false,
 		error: error
 	});
-}), _defineProperty(_handleActions, (0, _reduxActions.combineActions)(_actions2.expandComplexGroup, _actions2.collapseComplexGroup), function (state, _ref9) {
+}), _defineProperty(_handleActions, _actions2.enableComplexGroupType, function (state, _ref9) {
 	var _ref9$payload = _ref9.payload,
 	    fieldId = _ref9$payload.fieldId,
-	    groupId = _ref9$payload.groupId,
-	    collapsed = _ref9$payload.collapsed;
+	    groupName = _ref9$payload.groupName;
+
+	var index = (0, _lodash.findIndex)(state[fieldId].enabledGroupTypes, groupName);
+
+	return _objectPathImmutable2.default.push(state, fieldId + '.enabledGroupTypes', groupName);
+}), _defineProperty(_handleActions, _actions2.disableComplexGroupType, function (state, _ref10) {
+	var _ref10$payload = _ref10.payload,
+	    fieldId = _ref10$payload.fieldId,
+	    groupName = _ref10$payload.groupName;
+
+	var index = (0, _lodash.findIndex)(state[fieldId].enabledGroupTypes, function (g) {
+		return groupName === g;
+	});
+
+	return _objectPathImmutable2.default.del(state, fieldId + '.enabledGroupTypes.' + index);
+}), _defineProperty(_handleActions, (0, _reduxActions.combineActions)(_actions2.expandComplexGroup, _actions2.collapseComplexGroup), function (state, _ref11) {
+	var _ref11$payload = _ref11.payload,
+	    fieldId = _ref11$payload.fieldId,
+	    groupId = _ref11$payload.groupId,
+	    collapsed = _ref11$payload.collapsed;
 
 	var index = (0, _lodash.findIndex)(state[fieldId].value, { id: groupId });
 
 	return _objectPathImmutable2.default.set(state, fieldId + '.value.' + index + '.collapsed', collapsed);
-}), _defineProperty(_handleActions, _actions2.switchComplexTab, function (state, _ref10) {
-	var _ref10$payload = _ref10.payload,
-	    fieldId = _ref10$payload.fieldId,
-	    groupId = _ref10$payload.groupId;
+}), _defineProperty(_handleActions, _actions2.switchComplexTab, function (state, _ref12) {
+	var _ref12$payload = _ref12.payload,
+	    fieldId = _ref12$payload.fieldId,
+	    groupId = _ref12$payload.groupId;
 	return _objectPathImmutable2.default.set(state, fieldId + '.ui.current_tab', groupId);
-}), _defineProperty(_handleActions, _actions2.redrawMap, function (state, _ref11) {
-	var fieldId = _ref11.payload.fieldId;
+}), _defineProperty(_handleActions, _actions2.redrawMap, function (state, _ref13) {
+	var fieldId = _ref13.payload.fieldId;
 	return _objectPathImmutable2.default.set(state, fieldId + '.ui.redraw_map', true);
 }), _handleActions), {}));
 
@@ -10556,6 +10599,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 	var name = _ref.name,
 	    field = _ref.field,
+	    enabledGroupTypes = _ref.enabledGroupTypes,
 	    tabbed = _ref.tabbed,
 	    popoverVisible = _ref.popoverVisible,
 	    groupToggles = _ref.groupToggles,
@@ -10572,6 +10616,34 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 	    handleGroupExpand = _ref.handleGroupExpand,
 	    handleGroupCollapse = _ref.handleGroupCollapse,
 	    handleSort = _ref.handleSort;
+
+	var availableGroups = (0, _lodash.filter)(field.group_types, function (groupType) {
+		return (0, _lodash.includes)(enabledGroupTypes, groupType.name);
+	});
+	var complexTabActions = (0, _lodash.isEmpty)(availableGroups) ? null : _react2.default.createElement(
+		_actions2.default,
+		{
+			buttonText: '+',
+			onButtonClick: handleAddGroupClick },
+		_react2.default.createElement(_popover2.default, {
+			groups: availableGroups,
+			visible: popoverVisible,
+			onItemClick: handleAddGroupClick,
+			onClose: handlePopoverClose,
+			outsideClickIgnoreClass: 'carbon-button' })
+	);
+	var complexButtonActions = (0, _lodash.isEmpty)(availableGroups) ? null : _react2.default.createElement(
+		_actions2.default,
+		{
+			buttonText: carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name),
+			onButtonClick: handleAddGroupClick },
+		_react2.default.createElement(_popover2.default, {
+			groups: availableGroups,
+			visible: popoverVisible,
+			onItemClick: handleAddGroupClick,
+			onClose: handlePopoverClose,
+			outsideClickIgnoreClass: 'carbon-button' })
+	);
 
 	return _react2.default.createElement(
 		_field2.default,
@@ -10598,18 +10670,7 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 							current: field.ui.current_tab,
 							onClick: handleTabClick,
 							onSort: handleSort },
-						_react2.default.createElement(
-							_actions2.default,
-							{
-								buttonText: '+',
-								onButtonClick: handleAddGroupClick },
-							_react2.default.createElement(_popover2.default, {
-								groups: field.groups,
-								visible: popoverVisible,
-								onItemClick: handleAddGroupClick,
-								onClose: handlePopoverClose,
-								outsideClickIgnoreClass: 'carbon-button' })
-						)
+						complexTabActions
 					)
 				),
 				_react2.default.createElement(
@@ -10626,6 +10687,7 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 								layout: field.layout,
 								group: group,
 								active: isGroupActive(group.id),
+								cloneEnabled: field.duplicate_groups_allowed,
 								onClone: handleCloneGroupClick,
 								onRemove: handleRemoveGroupClick,
 								onExpand: handleGroupExpand,
@@ -10634,18 +10696,7 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 					)
 				)
 			),
-			_react2.default.createElement(
-				_actions2.default,
-				{
-					buttonText: carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name),
-					onButtonClick: handleAddGroupClick },
-				_react2.default.createElement(_popover2.default, {
-					groups: field.groups,
-					visible: popoverVisible,
-					onItemClick: handleAddGroupClick,
-					onClose: handlePopoverClose,
-					outsideClickIgnoreClass: 'carbon-button' })
-			)
+			complexButtonActions
 		)
 	);
 };
@@ -10668,6 +10719,12 @@ ComplexField.propTypes = {
 				name: _propTypes2.default.string,
 				type: _propTypes2.default.string
 			}))
+		})),
+		duplicate_groups_allowed: _propTypes2.default.bool,
+		enabledGroupTypes: _propTypes2.default.arrayOf(_propTypes2.default.string),
+		group_types: _propTypes2.default.arrayOf(_propTypes2.default.shape({
+			name: _propTypes2.default.string,
+			label: _propTypes2.default.string
 		})),
 		layout: _propTypes2.default.string,
 		labels: _propTypes2.default.shape({
@@ -10769,9 +10826,17 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		};
 	}
 
+	var enabledGroupTypes = (0, _lodash.map)(field.group_types, 'name');
+	if (!field.duplicate_groups_allowed) {
+		enabledGroupTypes = (0, _lodash.filter)(enabledGroupTypes, function (groupType) {
+			return (0, _lodash.findIndex)(field.value, { name: groupType }) === -1;
+		});
+	}
+
 	return {
 		sortableTabsOptions: sortableTabsOptions,
-		sortableGroupsOptions: sortableGroupsOptions
+		sortableGroupsOptions: sortableGroupsOptions,
+		enabledGroupTypes: enabledGroupTypes
 	};
 }),
 
@@ -10842,7 +10907,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 			if (field.multiple_groups) {
 				setPopoverVisibility(!popoverVisible);
 			} else {
-				groupName = field.groups[0].name;
+				groupName = field.group_types[0].name;
 			}
 
 			if (groupName) {
@@ -12975,6 +13040,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.workerAddOrCloneComplexGroup = workerAddOrCloneComplexGroup;
 exports.workerRemoveComplexGroup = workerRemoveComplexGroup;
+exports.workerDuplicateComplexGroups = workerDuplicateComplexGroups;
 exports.default = foreman;
 
 var _effects = __webpack_require__(5);
@@ -12989,9 +13055,9 @@ var _actions = __webpack_require__(7);
 
 var _constants = __webpack_require__(4);
 
-var _marked = [workerAddOrCloneComplexGroup, workerRemoveComplexGroup, foreman].map(regeneratorRuntime.mark); /**
-                                                                                                               * The external dependencies.
-                                                                                                               */
+var _marked = [workerAddOrCloneComplexGroup, workerRemoveComplexGroup, workerDuplicateComplexGroups, foreman].map(regeneratorRuntime.mark); /**
+                                                                                                                                             * The external dependencies.
+                                                                                                                                             */
 
 
 /**
@@ -13234,24 +13300,102 @@ function workerRemoveComplexGroup(_ref2) {
 }
 
 /**
- * Start to work.
+ * Update available list of groups if needed
  *
+ * @param  {Object} action
+ * @param  {Object} action.payload
+ * @param  {String} action.payload.fieldId
+ * @param  {String} action.payload.groupId
  * @return {void}
  */
-function foreman() {
-	return regeneratorRuntime.wrap(function foreman$(_context3) {
+function workerDuplicateComplexGroups(_ref4) {
+	var type = _ref4.type,
+	    _ref4$payload = _ref4.payload,
+	    fieldId = _ref4$payload.fieldId,
+	    groupId = _ref4$payload.groupId,
+	    groupName = _ref4$payload.groupName,
+	    method = _ref4$payload.method;
+	var field, groupCloned, groupRemoved;
+	return regeneratorRuntime.wrap(function workerDuplicateComplexGroups$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
 					_context3.next = 2;
-					return (0, _effects.all)([(0, _effects.takeEvery)(_actions.addComplexGroup, workerAddOrCloneComplexGroup), (0, _effects.takeEvery)(_actions.cloneComplexGroup, workerAddOrCloneComplexGroup), (0, _effects.takeEvery)(_actions.removeComplexGroup, workerRemoveComplexGroup)]);
+					return (0, _effects.select)(_selectors.getFieldById, fieldId);
 
 				case 2:
+					field = _context3.sent;
+
+					if (!field.duplicate_groups_allowed) {
+						_context3.next = 5;
+						break;
+					}
+
+					return _context3.abrupt('return');
+
+				case 5:
+					_context3.t0 = type;
+					_context3.next = _context3.t0 === _actions.addComplexGroup.toString() ? 8 : _context3.t0 === _actions.cloneComplexGroup.toString() ? 11 : _context3.t0 === _actions.removeComplexGroup.toString() ? 17 : 23;
+					break;
+
+				case 8:
+					_context3.next = 10;
+					return (0, _effects.put)((0, _actions.disableComplexGroupType)(fieldId, groupName));
+
+				case 10:
+					return _context3.abrupt('break', 23);
+
+				case 11:
+					_context3.next = 13;
+					return (0, _effects.call)(_lodash.find, field.value, { id: groupId });
+
+				case 13:
+					groupCloned = _context3.sent;
+					_context3.next = 16;
+					return (0, _effects.put)((0, _actions.disableComplexGroupType)(fieldId, groupCloned.name));
+
+				case 16:
+					return _context3.abrupt('break', 23);
+
+				case 17:
+					_context3.next = 19;
+					return (0, _effects.call)(_lodash.find, field.value, { id: groupId });
+
+				case 19:
+					groupRemoved = _context3.sent;
+					_context3.next = 22;
+					return (0, _effects.put)((0, _actions.enableComplexGroupType)(fieldId, groupRemoved.name));
+
+				case 22:
+					return _context3.abrupt('break', 23);
+
+				case 23:
 				case 'end':
 					return _context3.stop();
 			}
 		}
 	}, _marked[2], this);
+}
+
+/**
+ * Start to work.
+ *
+ * @return {void}
+ */
+function foreman() {
+	return regeneratorRuntime.wrap(function foreman$(_context4) {
+		while (1) {
+			switch (_context4.prev = _context4.next) {
+				case 0:
+					_context4.next = 2;
+					return (0, _effects.all)([(0, _effects.takeEvery)(_actions.addComplexGroup, workerDuplicateComplexGroups), (0, _effects.takeEvery)(_actions.cloneComplexGroup, workerDuplicateComplexGroups), (0, _effects.takeEvery)(_actions.removeComplexGroup, workerDuplicateComplexGroups), (0, _effects.takeEvery)(_actions.addComplexGroup, workerAddOrCloneComplexGroup), (0, _effects.takeEvery)(_actions.cloneComplexGroup, workerAddOrCloneComplexGroup), (0, _effects.takeEvery)(_actions.removeComplexGroup, workerRemoveComplexGroup)]);
+
+				case 2:
+				case 'end':
+					return _context4.stop();
+			}
+		}
+	}, _marked[3], this);
 }
 
 /***/ }),

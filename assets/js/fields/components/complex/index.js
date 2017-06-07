@@ -5,9 +5,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
 import {
-	sortBy,
+	isEmpty,
+	includes,
+	filter,
+	findIndex,
 	fromPairs,
+	map,
 	pickBy,
+	sortBy,
 	values
 } from 'lodash';
 import {
@@ -69,6 +74,7 @@ import {
 export const ComplexField = ({
 	name,
 	field,
+	enabledGroupTypes,
 	tabbed,
 	popoverVisible,
 	groupToggles,
@@ -86,6 +92,32 @@ export const ComplexField = ({
 	handleGroupCollapse,
 	handleSort
 }) => {
+	const availableGroups = filter(field.group_types, groupType => includes(enabledGroupTypes, groupType.name));
+	const complexTabActions = isEmpty(availableGroups) ? null : (
+		<ComplexActions
+			buttonText="+"
+			onButtonClick={handleAddGroupClick}>
+				<ComplexPopover
+					groups={availableGroups}
+					visible={popoverVisible}
+					onItemClick={handleAddGroupClick}
+					onClose={handlePopoverClose}
+					outsideClickIgnoreClass="carbon-button" />
+		</ComplexActions>
+	);
+	const complexButtonActions = isEmpty(availableGroups) ? null : (
+		<ComplexActions
+			buttonText={carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name)}
+			onButtonClick={handleAddGroupClick}>
+				<ComplexPopover
+					groups={availableGroups}
+					visible={popoverVisible}
+					onItemClick={handleAddGroupClick}
+					onClose={handlePopoverClose}
+					outsideClickIgnoreClass="carbon-button" />
+		</ComplexActions>
+	);
+
 	return <Field field={field}>
 		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': tabbed })}>
 			<ComplexEmptyNotice
@@ -102,16 +134,7 @@ export const ComplexField = ({
 						current={field.ui.current_tab}
 						onClick={handleTabClick}
 						onSort={handleSort}>
-							<ComplexActions
-								buttonText="+"
-								onButtonClick={handleAddGroupClick}>
-									<ComplexPopover
-										groups={field.groups}
-										visible={popoverVisible}
-										onItemClick={handleAddGroupClick}
-										onClose={handlePopoverClose}
-										outsideClickIgnoreClass="carbon-button" />
-							</ComplexActions>
+							{complexTabActions}
 					</ComplexTabs>
 				</SortableList>
 
@@ -126,6 +149,7 @@ export const ComplexField = ({
 									layout={field.layout}
 									group={group}
 									active={isGroupActive(group.id)}
+									cloneEnabled={field.duplicate_groups_allowed}
 									onClone={handleCloneGroupClick}
 									onRemove={handleRemoveGroupClick}
 									onExpand={handleGroupExpand}
@@ -136,16 +160,7 @@ export const ComplexField = ({
 				</SortableList>
 			</div>
 
-			<ComplexActions
-				buttonText={carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name)}
-				onButtonClick={handleAddGroupClick}>
-					<ComplexPopover
-						groups={field.groups}
-						visible={popoverVisible}
-						onItemClick={handleAddGroupClick}
-						onClose={handlePopoverClose}
-						outsideClickIgnoreClass="carbon-button" />
-			</ComplexActions>
+			{complexButtonActions}
 		</div>
 	</Field>;
 };
@@ -168,6 +183,12 @@ ComplexField.propTypes = {
 				name: PropTypes.string,
 				type: PropTypes.string,
 			})),
+		})),
+		duplicate_groups_allowed: PropTypes.bool,
+		enabledGroupTypes: PropTypes.arrayOf(PropTypes.string),
+		group_types: PropTypes.arrayOf(PropTypes.shape({
+			name: PropTypes.string,
+			label: PropTypes.string,
 		})),
 		layout: PropTypes.string,
 		labels: PropTypes.shape({
@@ -268,9 +289,15 @@ export const enhance = compose(
 			sortableGroupsOptions.start = (e, ui) => collapseComplexGroup(field.id, ui.item[0].id);
 		}
 
+		let enabledGroupTypes = map(field.group_types, 'name');
+		if (!field.duplicate_groups_allowed) {
+			enabledGroupTypes = filter(enabledGroupTypes, groupType => findIndex(field.value, {name: groupType}) === -1);
+		}
+
 		return {
 			sortableTabsOptions,
 			sortableGroupsOptions,
+			enabledGroupTypes
 		};
 	}),
 
@@ -295,7 +322,7 @@ export const enhance = compose(
 			if (field.multiple_groups) {
 				setPopoverVisibility(!popoverVisible);
 			} else {
-				groupName = field.groups[0].name;
+				groupName = field.group_types[0].name;
 			}
 
 			if (groupName) {

@@ -23,7 +23,9 @@ import {
 	cloneComplexGroup,
 	removeComplexGroup,
 	receiveComplexGroup,
-	switchComplexTab
+	switchComplexTab,
+	enableComplexGroupType,
+	disableComplexGroupType,
 } from 'fields/actions';
 
 import { TYPE_COMPLEX } from 'fields/constants';
@@ -138,12 +140,47 @@ export function* workerRemoveComplexGroup({ payload: { fieldId, groupId, method 
 }
 
 /**
+ * Update available list of groups if needed
+ *
+ * @param  {Object} action
+ * @param  {Object} action.payload
+ * @param  {String} action.payload.fieldId
+ * @param  {String} action.payload.groupId
+ * @return {void}
+ */
+export function* workerDuplicateComplexGroups({ type, payload: { fieldId, groupId, groupName, method } }) {
+	const field = yield select(getFieldById, fieldId);
+	if (field.duplicate_groups_allowed) {
+		return;
+	}
+	switch (type) {
+		case addComplexGroup.toString():
+			yield put(disableComplexGroupType(fieldId, groupName));
+			break;
+
+		case cloneComplexGroup.toString():
+			const groupCloned = yield call(find, field.value, { id: groupId });
+			yield put(disableComplexGroupType(fieldId, groupCloned.name));
+			break;
+
+		case removeComplexGroup.toString():
+			const groupRemoved = yield call(find, field.value, { id: groupId });
+			yield put(enableComplexGroupType(fieldId, groupRemoved.name));
+			break;
+	}
+}
+
+/**
  * Start to work.
  *
  * @return {void}
  */
 export default function* foreman() {
 	yield all([
+		takeEvery(addComplexGroup, workerDuplicateComplexGroups),
+		takeEvery(cloneComplexGroup, workerDuplicateComplexGroups),
+		takeEvery(removeComplexGroup, workerDuplicateComplexGroups),
+
 		takeEvery(addComplexGroup, workerAddOrCloneComplexGroup),
 		takeEvery(cloneComplexGroup, workerAddOrCloneComplexGroup),
 		takeEvery(removeComplexGroup, workerRemoveComplexGroup),

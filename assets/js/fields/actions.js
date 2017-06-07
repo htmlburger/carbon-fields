@@ -126,6 +126,24 @@ export const removeComplexGroup = createAction('fields/REMOVE_COMPLEX_GROUP', (f
 export const receiveComplexGroup = createAction('fields/RECEIVE_COMPLEX_GROUP', (fieldId, group) => ({ fieldId, group }));
 
 /**
+ * Enable a complex group type.
+ *
+ * @param  {String} fieldId
+ * @param  {String} groupName
+ * @return {Object}
+ */
+export const enableComplexGroupType = createAction('fields/ENABLE_COMPLEX_GROUP_TYPE', (fieldId, groupName) => ({ fieldId, groupName }));
+
+/**
+ * Disable a complex group type.
+ *
+ * @param  {String} fieldId
+ * @param  {String} groupName
+ * @return {Object}
+ */
+export const disableComplexGroupType = createAction('fields/DISABLE_COMPLEX_GROUP_TYPE', (fieldId, groupName) => ({ fieldId, groupName }));
+
+/**
  * Show the contents of the specified group.
  *
  * @param  {String} fieldId

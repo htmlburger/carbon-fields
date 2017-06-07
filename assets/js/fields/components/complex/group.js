@@ -37,6 +37,7 @@ export const ComplexGroup = ({
 	group,
 	label,
 	active,
+	cloneEnabled,
 	handleToggleClick,
 	handleCloneClick,
 	handleRemoveClick
@@ -47,6 +48,15 @@ export const ComplexGroup = ({
 		{ 'collapsed': group.collapsed },
 		{ 'active': active },
 	];
+	const cloneButton = cloneEnabled ? (
+		<a
+			href="#"
+			className="carbon-btn-duplicate dashicons-before dashicons-admin-page"
+			title={carbonFieldsL10n.field.complexCloneButton}
+			onClick={handleCloneClick}>
+			{carbonFieldsL10n.field.complexCloneButton}
+		</a>
+	) : '';
 
 	return <div id={group.id} className={cx(classes)}>
 		<input
@@ -65,13 +75,7 @@ export const ComplexGroup = ({
 		</div>
 
 		<div className={`carbon-group-actions carbon-group-actions-${layout}`}>
-			<a
-				href="#"
-				className="carbon-btn-duplicate dashicons-before dashicons-admin-page"
-				title={carbonFieldsL10n.field.complexCloneButton}
-				onClick={handleCloneClick}>
-				{carbonFieldsL10n.field.complexCloneButton}
-			</a>
+			{cloneButton}
 
 			<a
 				href="#"
@@ -122,6 +126,7 @@ ComplexGroup.propTypes = {
 	}),
 	label: PropTypes.string,
 	active: PropTypes.bool,
+	cloneEnabled: PropTypes.bool,
 	onClone: PropTypes.func,
 	onRemove: PropTypes.func,
 };

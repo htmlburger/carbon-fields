@@ -20,6 +20,8 @@ import {
 	setUI,
 	markFieldAsValid,
 	markFieldAsInvalid,
+	enableComplexGroupType,
+	disableComplexGroupType,
 	expandComplexGroup,
 	collapseComplexGroup,
 	switchComplexTab,
@@ -32,10 +34,15 @@ import { getFieldHierarchyById } from 'fields/selectors';
  */
 export default decorateFieldReducer(handleActions({
 	[combineActions(setupField, setUI)]:  (state, { payload: { fieldId, ui }}) => immutable.assign(state, `${fieldId}.ui`, ui),
+	
 	[addFields]: (state, { payload }) => ({ ...state, ...payload }),
+	
 	[removeFields]: (state, { payload }) => omit(state, payload),
+	
 	[updateField]: (state, { payload: { fieldId, data }}) => immutable.assign(state, fieldId, data),
+	
 	[setFieldValue]: (state, { payload: { fieldId, value, method }}) => immutable[method](state, `${fieldId}.value`, value),
+	
 	[resetStore]: (state, { payload: { fields }}) => fields,
 
 	[markFieldAsValid]: (state, { payload: { fieldId } }) => immutable.assign(state, `${fieldId}.ui`, {
@@ -47,6 +54,18 @@ export default decorateFieldReducer(handleActions({
 		valid: false,
 		error: error,
 	}),
+
+	[enableComplexGroupType]: (state, { payload: { fieldId, groupName } }) => {
+		const index = findIndex(state[fieldId].enabledGroupTypes, groupName);
+
+		return immutable.push(state, `${fieldId}.enabledGroupTypes`, groupName);
+	},
+
+	[disableComplexGroupType]: (state, { payload: { fieldId, groupName } }) => {
+		const index = findIndex(state[fieldId].enabledGroupTypes, g => groupName === g);
+
+		return immutable.del(state, `${fieldId}.enabledGroupTypes.${index}`);
+	},
 
 	[combineActions(expandComplexGroup, collapseComplexGroup)]: (state, { payload: { fieldId, groupId, collapsed } }) => {
 		const index = findIndex(state[fieldId].value, { id: groupId });
