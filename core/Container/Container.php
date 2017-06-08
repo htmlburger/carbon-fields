@@ -493,7 +493,6 @@ abstract class Container implements Datastore_Holder_Interface {
 			$segment = array_shift( $hierarchy_left );
 			$segment_pieces = array();
 			if ( ! preg_match( $field_pattern_regex, $segment, $segment_pieces ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid field name pattern used: ' . $field_name );
 				return null;
 			}
 
@@ -511,13 +510,11 @@ abstract class Container implements Datastore_Holder_Interface {
 					$field->set_hierarchy_index( $hierarchy_index );
 				} else {
 					if ( ! is_a( $f, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
-						Incorrect_Syntax_Exception::raise( 'Attempted to look for a nested field inside the non-complex field "' . $f->get_base_name() . '".' );
 						return null;
 					}
 
 					$group = $f->get_group_by_name( $segment_group_name );
 					if ( ! $group ) {
-						Incorrect_Syntax_Exception::raise( 'Unknown group name specified when fetching a value inside a complex field: "' . $segment_group_name . '".' );
 						return null;
 					}
 					$field_group = $group->get_fields();
