@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import { takeEvery, take, call, put, select, all } from 'redux-saga/effects';
-import { isEmpty, isNull, isUndefined, first, filter, last } from 'lodash';
+import { isEmpty, isNull, isNumber, isString, isUndefined, first, filter, last } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -19,6 +19,19 @@ import {
 	receiveComplexGroup,
 	addMultipleFiles,
 } from 'fields/actions';
+
+/**
+ * Set a field's value depending on it's value_type property
+ *
+ * @param  {String} fieldId
+ * @param  {Object} attachment
+ * @return {void}
+ */
+export function* prepareValueForFileField(fieldId, attachment) {
+	const field = yield select(getFieldById, fieldId);
+	const value = isUndefined(attachment[field.value_type]) ? attachment.id : attachment[field.value_type];
+	return value;
+}
 
 /**
  * Add complex groups for every additional attachment selected in the media browser
@@ -47,9 +60,12 @@ export function* workerAddMultipleFiles(action) {
 		const freshGroup = last(parentField.value);
 		const freshFieldId = first(filter(freshGroup.fields, f => f.base_name === field.base_name)).id;
 		const freshField = yield select(getFieldById, freshFieldId);
+		const value = yield prepareValueForFileField(freshField.id, attachment);
 
-		yield redrawAttachmentPreview(freshField.id, attachment, freshField.default_thumb_url);
-		yield put(setFieldValue(freshField.id, attachment.id));
+		// optional - this ensures an instant preview update
+		yield redrawAttachmentPreview(freshField.id, value, attachment, freshField.default_thumb_url);
+
+		yield put(setFieldValue(fieldId, value));
 	}
 }
 
@@ -57,19 +73,30 @@ export function* workerAddMultipleFiles(action) {
  * Trigger a preview redraw action based on an attachment
  *
  * @param  {Object} fieldId
+ * @param  {Object} attachmentIdentifier
  * @param  {Object} attachment
  * @param  {String} default_thumb_url
  * @return {void}
  */
-export function* redrawAttachmentPreview(fieldId, attachment, default_thumb_url) {
+export function* redrawAttachmentPreview(fieldId, attachmentIdentifier, attachment, default_thumb_url) {
 	if (!isNull(attachment)) {
-		const thumbnail = yield call(getAttachmentThumbnail, attachment);
-		yield put(updateField(fieldId, {
-			file_name: attachment.filename,
-			file_url: attachment.url,
-			thumb_url: thumbnail || default_thumb_url,
-			preview: attachment.id,
-		}));
+		if (isString(attachment)) {
+			// TODO fix this hack
+			yield put(updateField(fieldId, {
+				file_name: attachment,
+				file_url: attachment,
+				thumb_url: attachment,
+				preview: attachmentIdentifier,
+			}));
+		} else {
+			const thumbnail = yield call(getAttachmentThumbnail, attachment);
+			yield put(updateField(fieldId, {
+				file_name: attachment.filename,
+				file_url: attachment.url,
+				thumb_url: thumbnail || default_thumb_url,
+				preview: attachmentIdentifier,
+			}));
+		}
 	} else {
 		yield put(updateField(fieldId, {
 			file_name: '',
@@ -103,9 +130,13 @@ export function* workerRedrawAttachmentPreview(field, action) {
 
 	let attachment = null;
 	if (value) {
-		attachment = yield window.wp.media.attachment(value).fetch();
+		if (isNumber(value)) {
+			attachment = yield window.wp.media.attachment(value).fetch();
+		} else {
+			attachment = value; // TODO fix this hack
+		}
 	}
-	yield redrawAttachmentPreview(fieldId, attachment, field.default_thumb_url);
+	yield redrawAttachmentPreview(fieldId, value, attachment, field.default_thumb_url);
 }
 
 /**
@@ -134,9 +165,12 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 	while (true) {
 		const { selection } = yield take(channel);
 		const [ attachment, ...attachments ] = selection;
+		const value = yield prepareValueForFileField(field.id, attachment);
 		
-		yield redrawAttachmentPreview(field.id, attachment, field.default_thumb_url);
-		yield put(setFieldValue(field.id, attachment.id));
+		// optional - this ensures an instant preview update
+		yield redrawAttachmentPreview(field.id, value, attachment, field.default_thumb_url);
+
+		yield put(setFieldValue(field.id, value));
 
 		if (!isEmpty(attachments)) {
 			yield put(addMultipleFiles(field.id, attachments));
