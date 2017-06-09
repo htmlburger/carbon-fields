@@ -213,11 +213,7 @@ var Field = exports.Field = function Field(_ref) {
 			{ className: 'field-holder' },
 			children
 		),
-		!!field.help_text ? _react2.default.createElement(
-			'em',
-			{ className: 'help-text' },
-			field.help_text
-		) : null,
+		!!field.help_text ? _react2.default.createElement('em', { className: 'help-text', dangerouslySetInnerHTML: { __html: field.help_text } }) : null,
 		!!field.ui.error ? _react2.default.createElement(
 			'em',
 			{ className: 'carbon-error' },

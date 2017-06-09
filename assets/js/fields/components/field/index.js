@@ -42,7 +42,7 @@ export const Field = ({ field, children, hide_required_label }) => {
 
 		{
 			!!field.help_text
-			? <em className="help-text">{field.help_text}</em>
+			? <em className="help-text" dangerouslySetInnerHTML={{__html: field.help_text}}></em>
 			: null
 		}
 
