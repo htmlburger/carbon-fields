@@ -3,7 +3,7 @@ Contributors: htmlburger, m1r0, atanasangelovdev, kamenarov, stoyanov.gs, pkosta
 Tags: custom, field, custom field, advanced, repeater, post, type, text, textarea, file, image, rich text, wysiwyg, select, dropdown, checkbox, radio, association, relationship, map, taxonomy, term, user, comment, option, options, widget, simple fields, magic fields, more fields, post meta, term meta, user meta, comment meta, theme options, custom widget, nested fields
 Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.6.0
+Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,10 @@ A. Sure, go ahead! It is completely open source.
 6. Example that contains most of the available fields, nested fields included.
 
 == Changelog ==
+
+= 2.0.0 =
+Version 2.0.0 includes major rewrite of both the back-end and front-end of Carbon Fields and thus includes a number of breaking changes.
+Please refer to the upgrade guide over at http://carbonfields.net/.
 
 = 1.6 =
 Special thanks to all contributors for this release including @pedro-mendonca, @elvishp2006, @timiwahalahti, @campusboy87, @m1r0, @pkostadinov-2create, @georgeHtmlBurger, @yuliyan and others.
