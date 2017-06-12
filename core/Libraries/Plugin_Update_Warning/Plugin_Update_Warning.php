@@ -46,8 +46,8 @@ class Plugin_Update_Warning {
 
 	protected function has_major_update() {
 		$all_updates = get_plugin_updates();
-		$carbon_fields_data = isset( $all_updates[\Carbon_Fields\RELATIVE_PLUGIN_FILE] ) ? $all_updates[\Carbon_Fields\RELATIVE_PLUGIN_FILE] : null;
-		if ( !$carbon_fields_data ) {
+		$carbon_fields_data = isset( $all_updates[ \Carbon_Fields\RELATIVE_PLUGIN_FILE ] ) ? $all_updates[\Carbon_Fields\RELATIVE_PLUGIN_FILE] : null;
+		if ( ! $carbon_fields_data ) {
 			return false;
 		}
 

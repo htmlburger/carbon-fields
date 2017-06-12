@@ -1,8 +1,6 @@
-window.carbon = window.carbon || {};
+window.carbonFields = window.carbonFields || {};
 
 (function($) {
-
-	var carbon = window.carbon;
 
 	/*
 	|--------------------------------------------------------------------------
@@ -12,16 +10,16 @@ window.carbon = window.carbon || {};
 	| Responsible for showing a big warning near upgrade notices for the plugin
 	*/
 
-	carbon.pluginUpdateWarning = {
+	carbonFields.pluginUpdateWarning = {
 		views: {},
 		models: {},
 	};
 
-	carbon.pluginUpdateWarning.models.Model = Backbone.Model.extend({
+	carbonFields.pluginUpdateWarning.models.Model = Backbone.Model.extend({
 		
 	});
 
-	carbon.pluginUpdateWarning.views.View = Backbone.View.extend({
+	carbonFields.pluginUpdateWarning.views.View = Backbone.View.extend({
 		el: '#carbon-fields-update td:first',
 
 		render: function() {
@@ -41,9 +39,9 @@ window.carbon = window.carbon || {};
 	});
 
 	$(document).ready(function() {
-		var pluginUpdateWarningModel = new carbon.pluginUpdateWarning.models.Model( carbonFieldsPluginUpdateWarning );
-		carbon.views.pluginUpdateWarning = new carbon.pluginUpdateWarning.views.View( { model: pluginUpdateWarningModel } );
-		carbon.views.pluginUpdateWarning.render();
+		var pluginUpdateWarningModel = new carbonFields.pluginUpdateWarning.models.Model( carbonFieldsPluginUpdateWarning );
+		carbonFields.pluginUpdateWarning = new carbonFields.pluginUpdateWarning.views.View( { model: pluginUpdateWarningModel } );
+		carbonFields.pluginUpdateWarning.render();
 	});
 
 }(jQuery));
