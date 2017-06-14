@@ -48,12 +48,13 @@ abstract class Widget extends \WP_Widget {
 	 * Create the widget.
 	 * A wrapper around the default WP widget constructor.
 	 *
-	 * @param  string $title       Widget name
-	 * @param  string $description Widget description
-	 * @param  array $fields       Array of fields
-	 * @param  string $classname   String of CSS classes
+	 * @param string $id          Widget id
+	 * @param string $title       Widget name
+	 * @param string $description Widget description
+	 * @param array  $fields      Array of fields
+	 * @param string $classname   String of CSS classes
 	 */
-	public function setup( $title, $description, $fields, $classname = '' ) {
+	public function setup( $widget_id, $title, $description, $fields, $classname = '' ) {
 		\Carbon_Fields\Carbon_Fields::verify_boot();
 		
 		$this->datastore = Datastore::make( 'widget' );
@@ -62,9 +63,6 @@ abstract class Widget extends \WP_Widget {
 		}
 
 		$this->add_fields( $fields );
-
-		# Generate Widget ID
-		$widget_id = 'carbon_fields_widget_' . preg_replace( '~\s+~', '_', strtolower( trim( preg_replace( '/[^a-zA-Z0-9]+/u', '', remove_accents( $title ) ) ) ) );
 
 		$this->register_widget_id( $widget_id );
 
