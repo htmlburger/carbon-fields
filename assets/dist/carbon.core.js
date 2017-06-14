@@ -10731,7 +10731,8 @@ ComplexField.propTypes = {
 			current_tab: _propTypes2.default.string
 		}),
 		multiple_groups: _propTypes2.default.bool,
-		min: _propTypes2.default.number
+		min: _propTypes2.default.number,
+		max: _propTypes2.default.number
 	}),
 	tabbed: _propTypes2.default.bool,
 	popoverVisible: _propTypes2.default.bool,
@@ -15015,7 +15016,7 @@ function handler(field) {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
 exports.debounce = exports.type = undefined;
 exports.handler = handler;
@@ -15053,23 +15054,30 @@ var debounce = exports.debounce = false;
  * @return {String|null}
  */
 function handler(field) {
-  var min = field.min,
-      value = field.value,
-      labels = field.labels,
-      required = field.required;
+	var min = field.min,
+	    max = field.max,
+	    value = field.value,
+	    labels = field.labels,
+	    required = field.required;
 
 
-  if (required && (0, _lodash.isEmpty)(value)) {
-    return carbonFieldsL10n.field.messageRequiredField;
-  }
+	if (required && (0, _lodash.isEmpty)(value)) {
+		return carbonFieldsL10n.field.messageRequiredField;
+	}
 
-  if (min > 0 && value.length < min) {
-    var label = min === 1 ? labels.singular_name : labels.plural_name;
+	if (min > 0 && value.length < min) {
+		var label = min === 1 ? labels.singular_name : labels.plural_name;
 
-    return carbonFieldsL10n.field.complexMinNumRowsNotReached.replace('%1$d', min).replace('%2$s', label.toLowerCase());
-  }
+		return carbonFieldsL10n.field.complexMinNumRowsNotReached.replace('%1$d', min).replace('%2$s', label.toLowerCase());
+	}
 
-  return null;
+	if (max > 0 && value.length > max) {
+		var _label = max === 1 ? labels.singular_name : labels.plural_name;
+
+		return carbonFieldsL10n.field.complexMaxNumRowsExceeded.replace('%1$d', max).replace('%2$s', _label.toLowerCase());
+	}
+
+	return null;
 }
 
 /***/ }),

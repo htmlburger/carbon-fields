@@ -200,6 +200,7 @@ ComplexField.propTypes = {
 		}),
 		multiple_groups: PropTypes.bool,
 		min: PropTypes.number,
+		max: PropTypes.number,
 	}),
 	tabbed: PropTypes.bool,
 	popoverVisible: PropTypes.bool,

@@ -31,6 +31,7 @@ export const debounce = false;
 export function handler(field) {
 	const {
 		min,
+		max,
 		value,
 		labels,
 		required
@@ -45,6 +46,14 @@ export function handler(field) {
 
 		return carbonFieldsL10n.field.complexMinNumRowsNotReached
 			.replace('%1$d', min)
+			.replace('%2$s', label.toLowerCase());
+	}
+
+	if (max > 0 && value.length > max) {
+		const label = max === 1 ? labels.singular_name : labels.plural_name;
+
+		return carbonFieldsL10n.field.complexMaxNumRowsExceeded
+			.replace('%1$d', max)
 			.replace('%2$s', label.toLowerCase());
 	}
 

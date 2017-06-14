@@ -127,6 +127,7 @@ class Loader {
 
 				'complexNoRows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),
 				'complexMinNumRowsNotReached' => __( 'Minimum number of rows not reached (%1$d %2$s)', 'carbon-fields' ),
+				'complexMaxNumRowsExceeded' => __( 'Maximum number of rows exceeded (%1$d %2$s)', 'carbon-fields' ),
 				'complexAddButton' => __( 'Add %s', 'carbon-fields' ),
 				'complexCloneButton' => __( 'Clone', 'carbon-fields' ),
 				'complexRemoveButton' => __( 'Remove', 'carbon-fields' ),
