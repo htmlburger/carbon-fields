@@ -32,10 +32,11 @@ export function handler(field) {
 	const {
 		min,
 		value,
-		labels
+		labels,
+		required
 	} = field;
 
-	if (isEmpty(value)) {
+	if (required && isEmpty(value)) {
 		return carbonFieldsL10n.field.messageRequiredField;
 	}
 

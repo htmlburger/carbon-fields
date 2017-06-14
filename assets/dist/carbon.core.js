@@ -10730,7 +10730,8 @@ ComplexField.propTypes = {
 		ui: _propTypes2.default.shape({
 			current_tab: _propTypes2.default.string
 		}),
-		multiple_groups: _propTypes2.default.bool
+		multiple_groups: _propTypes2.default.bool,
+		min: _propTypes2.default.number
 	}),
 	tabbed: _propTypes2.default.bool,
 	popoverVisible: _propTypes2.default.bool,
@@ -10787,9 +10788,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 
 		setupField(field.id, field.type, ui);
 
-		if (field.required) {
-			setupValidation(field.id, _constants.VALIDATION_COMPLEX);
-		}
+		setupValidation(field.id, _constants.VALIDATION_COMPLEX);
 	}
 }),
 
@@ -15056,10 +15055,11 @@ var debounce = exports.debounce = false;
 function handler(field) {
   var min = field.min,
       value = field.value,
-      labels = field.labels;
+      labels = field.labels,
+      required = field.required;
 
 
-  if ((0, _lodash.isEmpty)(value)) {
+  if (required && (0, _lodash.isEmpty)(value)) {
     return carbonFieldsL10n.field.messageRequiredField;
   }
 

@@ -199,6 +199,7 @@ ComplexField.propTypes = {
 			current_tab: PropTypes.string
 		}),
 		multiple_groups: PropTypes.bool,
+		min: PropTypes.number,
 	}),
 	tabbed: PropTypes.bool,
 	popoverVisible: PropTypes.bool,
@@ -259,9 +260,7 @@ export const enhance = compose(
 
 			setupField(field.id, field.type, ui);
 
-			if (field.required) {
-				setupValidation(field.id, VALIDATION_COMPLEX);
-			}
+			setupValidation(field.id, VALIDATION_COMPLEX);
 		}
 	}),
 
