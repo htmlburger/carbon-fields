@@ -56,6 +56,7 @@ abstract class Widget extends \WP_Widget {
 	 */
 	public function setup( $widget_id, $title, $description, $fields, $classname = '' ) {
 		\Carbon_Fields\Carbon_Fields::verify_boot();
+		$widget_id = 'carbon_fields_' . $widget_id;
 		
 		$this->datastore = Datastore::make( 'widget' );
 		if ( empty( $title ) ) {

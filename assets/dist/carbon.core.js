@@ -9647,7 +9647,7 @@ function workerDestroyContainer(ajaxEvent, ajaxAction) {
 
 					// Don't care about other widgets.
 
-					if ((0, _lodash.startsWith)(containerId, 'carbon')) {
+					if ((0, _lodash.startsWith)(containerId, 'carbon_fields_')) {
 						_context2.next = 11;
 						break;
 					}
@@ -9815,7 +9815,7 @@ function workerToggleWidget() {
 
 					// Don't care about other widgets.
 
-					if ((0, _lodash.startsWith)(containerId, 'carbon')) {
+					if ((0, _lodash.startsWith)(containerId, 'carbon_fields_')) {
 						_context4.next = 12;
 						break;
 					}

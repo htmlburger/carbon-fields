@@ -92,7 +92,7 @@ export function* workerDestroyContainer(ajaxEvent, ajaxAction) {
 		const containerId = data.match(/widget-id=(.+?)\&/)[1];
 
 		// Don't care about other widgets.
-		if (!startsWith(containerId, 'carbon')) {
+		if (!startsWith(containerId, 'carbon_fields_')) {
 			continue;
 		}
 
@@ -173,7 +173,7 @@ export function* workerToggleWidget() {
 				.val();
 
 		// Don't care about other widgets.
-		if (!startsWith(containerId, 'carbon')) {
+		if (!startsWith(containerId, 'carbon_fields_')) {
 			continue;
 		}
 
