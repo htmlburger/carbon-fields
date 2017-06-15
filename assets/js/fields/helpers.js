@@ -19,7 +19,7 @@ import { TYPE_COMPLEX, PARENT_TYPE_GROUP } from 'fields/constants';
  * @return {String}
  */
 export function getAttachmentThumbnail(attachment) {
-	if (attachment.type === 'image' && attachment.sizes) {
+	if (attachment.sizes) {
 		return (attachment.sizes.thumbnail || attachment.sizes.full).url;
 	}
 

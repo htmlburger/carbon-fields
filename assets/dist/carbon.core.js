@@ -2261,7 +2261,7 @@ var _marked = [stopSaga].map(regeneratorRuntime.mark); /**
  * @return {String}
  */
 function getAttachmentThumbnail(attachment) {
-	if (attachment.type === 'image' && attachment.sizes) {
+	if (attachment.sizes) {
 		return (attachment.sizes.thumbnail || attachment.sizes.full).url;
 	}
 
