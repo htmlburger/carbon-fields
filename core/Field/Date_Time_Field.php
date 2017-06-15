@@ -12,7 +12,7 @@ class Date_Time_Field extends Time_Field {
 	 *
 	 * @var array
 	 */
-	public $picker_options = array(
+	protected $picker_options = array(
 		'allowInput' => true,
 		'enableTime' => true,
 		'dateFormat' => 'Y-m-d h:i K',
