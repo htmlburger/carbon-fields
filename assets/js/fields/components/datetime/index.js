@@ -40,15 +40,12 @@ export const DateTimeField = ({
 	return <Field field={field}>
 		<Flatpickr options={options} className="carbon-field-group-holder">
 			<input
-				type="hidden"
+				type="text"
 				name={name}
 				value={field.value}
-				disabled={!field.ui.is_visible} />
-
-			<input
-				type="text"
+				disabled={!field.ui.is_visible}
+				
 				className="regular-text carbon-field-group-input"
-				defaultValue={field.value}
 				data-input
 				{...field.attributes} />
 
@@ -73,7 +70,7 @@ DateTimeField.propTypes = {
 		id: PropTypes.string,
 		value: PropTypes.string,
 		attributes: PropTypes.object,
-		storage_format: PropTypes.string,
+		picker_options: PropTypes.object,
 		picker: PropTypes.object,
 	}),
 	options: PropTypes.object,
@@ -102,13 +99,7 @@ export const enhance = compose(
 				return;
 			}
 
-			const selectedDate = head(field.picker.selectedDates);
-			const selectedDateStr = isUndefined(selectedDate) ? '' : field.picker.formatDate(selectedDate, field.storage_format);
-			if (field.value === selectedDateStr) {
-				return;
-			}
-
-			field.picker.setDate(field.value, false, field.storage_format);
+			field.picker.setDate(field.value, false);
 		},
 	}),
 
@@ -124,7 +115,7 @@ export const enhance = compose(
 			instance._selectedDateStr = selectedDateStr;
 
 			const value = selectedDateStr
-				? instance.formatDate(selectedDate, field.storage_format)
+				? selectedDateStr
 				: '';
 
 			if (value !== field.value) {

@@ -11010,15 +11010,13 @@ var DateTimeField = exports.DateTimeField = function DateTimeField(_ref) {
 		_react2.default.createElement(
 			_reactFlatpickr2.default,
 			{ options: options, className: 'carbon-field-group-holder' },
-			_react2.default.createElement('input', {
-				type: 'hidden',
-				name: name,
-				value: field.value,
-				disabled: !field.ui.is_visible }),
 			_react2.default.createElement('input', _extends({
 				type: 'text',
+				name: name,
+				value: field.value,
+				disabled: !field.ui.is_visible,
+
 				className: 'regular-text carbon-field-group-input',
-				defaultValue: field.value,
 				'data-input': true
 			}, field.attributes)),
 			_react2.default.createElement(
@@ -11044,7 +11042,7 @@ DateTimeField.propTypes = {
 		id: _propTypes2.default.string,
 		value: _propTypes2.default.string,
 		attributes: _propTypes2.default.object,
-		storage_format: _propTypes2.default.string,
+		picker_options: _propTypes2.default.object,
 		picker: _propTypes2.default.object
 	}),
 	options: _propTypes2.default.object,
@@ -11074,13 +11072,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 			return;
 		}
 
-		var selectedDate = (0, _lodash.head)(field.picker.selectedDates);
-		var selectedDateStr = (0, _lodash.isUndefined)(selectedDate) ? '' : field.picker.formatDate(selectedDate, field.storage_format);
-		if (field.value === selectedDateStr) {
-			return;
-		}
-
-		field.picker.setDate(field.value, false, field.storage_format);
+		field.picker.setDate(field.value, false);
 	}
 }),
 
@@ -11108,7 +11100,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 
 			instance._selectedDateStr = selectedDateStr;
 
-			var value = selectedDateStr ? instance.formatDate(selectedDate, field.storage_format) : '';
+			var value = selectedDateStr ? selectedDateStr : '';
 
 			if (value !== field.value) {
 				setFieldValue(field.id, value);

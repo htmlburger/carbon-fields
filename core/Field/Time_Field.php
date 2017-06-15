@@ -8,21 +8,26 @@ namespace Carbon_Fields\Field;
 class Time_Field extends Date_Field {
 
 	/**
-	 * Picker options.
-	 *
-	 * @var array
+	 * {@inheritDoc}
 	 */
 	protected $picker_options = array(
 		'allowInput' => true,
 		'enableTime' => true,
 		'noCalendar' => true,
-		'dateFormat' => 'h:i K',
 	);
 
 	/**
-	 * The storage format in variant that can be used by JavaScript.
-	 *
-	 * @var string
+	 * {@inheritDoc}
 	 */
-	protected $storage_format = 'H:i:S';
+	protected $storage_format = 'H:i:s';
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected $input_format_php = 'h:i A';
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected $input_format_js = 'h:i K';
 }

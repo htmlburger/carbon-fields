@@ -8,34 +8,59 @@ namespace Carbon_Fields\Field;
 class Date_Field extends Field {
 
 	/**
-	 * Picker options.
-	 *
-	 * @var array
-	 */
-	protected $picker_options = array(
-		'allowInput' => true,
-		'dateFormat' => 'Y-m-d',
-	);
-
-	/**
-	 * The storage format in variant that can be used by JavaScript.
+	 * The storage format for use in PHP
 	 *
 	 * @var string
 	 */
 	protected $storage_format = 'Y-m-d';
 
 	/**
-	 * Returns an array that holds the field data, suitable for JSON representation.
+	 * The expected input format for use in PHP
 	 *
-	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
-	 * @return array
+	 * @var string
+	 */
+	protected $input_format_php = 'Y-m-d';
+
+	/**
+	 * The expected input format for use in Flatpickr JS
+	 *
+	 * @var string
+	 */
+	protected $input_format_js = 'Y-m-d';
+
+	/**
+	 * Picker options.
+	 *
+	 * @var array
+	 */
+	protected $picker_options = array(
+		'allowInput' => true,
+	);
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function set_value_from_input( $input ) {
+		if ( isset( $input[ $this->get_name() ] ) ) {
+			$date = DateTime::createFromFormat( $this->input_format_php, $input[ $this->get_name() ] );
+			$value = ( $date !== false ) ? $date->format( $this->storage_format ) : '';
+			$this->set_value( $value );
+		} else {
+			$this->clear_value();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
 	 */
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
 		$field_data = array_merge( $field_data, array(
 			'storage_format' => $this->get_storage_format(),
-			'picker_options' => $this->get_picker_options(),
+			'picker_options' => array_merge( $this->get_picker_options(), array(
+				'dateFormat' => $this->input_format_js,
+			) ),
 		) );
 
 		return $field_data;
@@ -58,6 +83,31 @@ class Date_Field extends Field {
 	 */
 	public function set_storage_format( $storage_format ) {
 		$this->storage_format = $storage_format;
+		return $this;
+	}
+
+	/**
+	 * Get the expected input format in php and js variants
+	 * 
+	 * @return array
+	 */
+	public function get_input_format( $php_format, $js_format ) {
+		$this->input_format_php = $php_format;
+		$this->input_format_js = $js_format;
+		return $this;
+	}
+
+	/**
+	 * Set a format for use on the front-end in both PHP and Flatpickr formats
+	 * The formats should produce identical results (i.e. they are translations of each other)
+	 * 
+	 * @param  string $php_format
+	 * @param  string $js_format
+	 * @return Field  $this
+	 */
+	public function set_input_format( $php_format, $js_format ) {
+		$this->input_format_php = $php_format;
+		$this->input_format_js = $js_format;
 		return $this;
 	}
 

@@ -2150,7 +2150,7 @@ function log(level, message) {
 
 function deprecate(fn, deprecationWarning) {
   return function () {
-    if (false) log('warn', deprecationWarning);
+    if (true) log('warn', deprecationWarning);
     return fn.apply(undefined, arguments);
   };
 }
@@ -12050,7 +12050,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 */
 function isCrushed() {}
 
-if ("" !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+if ("development" !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
   __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__utils_warning__["default"])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
 }
 
@@ -15069,7 +15069,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
             'Use `PropTypes.checkPropTypes()` to call them. ' +
             'Read more at http://fb.me/use-check-prop-types'
           );
-        } else if ("" !== 'production' && typeof console !== 'undefined') {
+        } else if ("development" !== 'production' && typeof console !== 'undefined') {
           // Old behavior for people using React.PropTypes
           var cacheKey = componentName + ':' + propName;
           if (
@@ -19101,7 +19101,7 @@ function proc(iterator) {
     iterator._isRunning = false;
     stdChannel.close();
     if (!isErr) {
-      if (false) {
+      if ("development" === 'development' && result === TASK_CANCEL) {
         log('info', name + ' has been cancelled', '');
       }
       iterator._result = result;
@@ -19542,8 +19542,8 @@ function runSaga(storeInterface, saga) {
   var iterator = void 0;
 
   if (__WEBPACK_IMPORTED_MODULE_0__utils__["is"].iterator(storeInterface)) {
-    if (false) {
-      log('warn', 'runSaga(iterator, storeInterface) has been deprecated in favor of ' + RUN_SAGA_SIGNATURE);
+    if (true) {
+      __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__utils__["log"])('warn', 'runSaga(iterator, storeInterface) has been deprecated in favor of ' + RUN_SAGA_SIGNATURE);
     }
     iterator = storeInterface;
     storeInterface = saga;
@@ -38569,7 +38569,7 @@ var createHelper = function createHelper(func, helperName) {
   var setDisplayName = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
   var noArgs = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
-  if ("" !== 'production' && setDisplayName) {
+  if ("development" !== 'production' && setDisplayName) {
     if (noArgs) {
       return function (BaseComponent) {
         var Component$$1 = func(BaseComponent);
@@ -38694,7 +38694,7 @@ var isClassComponent = function isClassComponent(Component$$1) {
 };
 
 var isReferentiallyTransparentFunctionComponent = function isReferentiallyTransparentFunctionComponent(Component$$1) {
-  return Boolean(typeof Component$$1 === 'function' && !isClassComponent(Component$$1) && !Component$$1.defaultProps && !Component$$1.contextTypes && ("" === 'production' || !Component$$1.propTypes));
+  return Boolean(typeof Component$$1 === 'function' && !isClassComponent(Component$$1) && !Component$$1.defaultProps && !Component$$1.contextTypes && ("development" === 'production' || !Component$$1.propTypes));
 };
 
 var createFactory = function createFactory(type) {
@@ -38828,7 +38828,7 @@ var withHandlers = function withHandlers(handlers) {
           var handler = createHandler(_this2.props);
           _this2.cachedHandlers[handlerName] = handler;
 
-          if ("" !== 'production' && typeof handler !== 'function') {
+          if ("development" !== 'production' && typeof handler !== 'function') {
             console.error( // eslint-disable-line no-console
             'withHandlers(): Expected a map of higher-order functions. ' + 'Refer to the docs for more info.');
           }
@@ -39172,7 +39172,7 @@ var lifecycle = function lifecycle(spec) {
   return function (BaseComponent) {
     var factory = createFactory(BaseComponent);
 
-    if ("" !== 'production' && spec.hasOwnProperty('render')) {
+    if ("development" !== 'production' && spec.hasOwnProperty('render')) {
       console.error('lifecycle() does not support the render method; its behavior is to ' + 'pass all props and state to the base component.');
     }
 
@@ -61287,7 +61287,7 @@ var warning = __webpack_require__(4);
 
 var ReactComponentTreeHook;
 
-if (typeof process !== 'undefined' && process.env && "" === 'test') {
+if (typeof process !== 'undefined' && process.env && "development" === 'test') {
   // Temporary hack.
   // Inline requires don't work well with Jest:
   // https://github.com/facebook/react/issues/7240
@@ -68374,7 +68374,7 @@ var warning = __webpack_require__(4);
 
 var ReactComponentTreeHook;
 
-if (typeof process !== 'undefined' && process.env && "" === 'test') {
+if (typeof process !== 'undefined' && process.env && "development" === 'test') {
   // Temporary hack.
   // Inline requires don't work well with Jest:
   // https://github.com/facebook/react/issues/7240
@@ -68613,7 +68613,7 @@ var warning = __webpack_require__(4);
 
 var ReactComponentTreeHook;
 
-if (typeof process !== 'undefined' && process.env && "" === 'test') {
+if (typeof process !== 'undefined' && process.env && "development" === 'test') {
   // Temporary hack.
   // Inline requires don't work well with Jest:
   // https://github.com/facebook/react/issues/7240
@@ -71065,7 +71065,7 @@ var warning = __webpack_require__(4);
 
 var ReactComponentTreeHook;
 
-if (typeof process !== 'undefined' && process.env && "" === 'test') {
+if (typeof process !== 'undefined' && process.env && "development" === 'test') {
   // Temporary hack.
   // Inline requires don't work well with Jest:
   // https://github.com/facebook/react/issues/7240
@@ -72067,7 +72067,7 @@ function sagaMiddlewareFactory() {
     throw new Error('`options.logger` passed to the Saga middleware is not a function!');
   }
 
-  if (false) {
+  if ("development" === 'development' && options.onerror) {
     throw new Error('`options.onerror` was removed. Use `options.onError` instead.');
   }
 
