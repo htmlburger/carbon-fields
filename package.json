@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "bundler": "webpack --hide-modules",
+    "bundler": "webpack --hide-modules --progress",
     "js:vendor": "npm run bundler -- --config webpack.vendor.js",
     "js:core": "npm run bundler -- --config webpack.core.js",
     "js:boot": "npm run bundler -- --config webpack.boot.js",
