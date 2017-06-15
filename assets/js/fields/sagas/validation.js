@@ -103,10 +103,10 @@ export function* workerSetup({ payload: { fieldId, validationType }}) {
 		throw new Error(`Unknown validation type '${validationType}' for field '${fieldId}'.`);
 	}
 
-	yield call(stopSaga, fieldId, yield [
+	yield call(stopSaga, fieldId, yield all([
 		takeLatest(updateField, workerValidate, validator.handler, fieldId, validator.debounce),
 		takeEvery(validateField, workerValidate, validator.handler, fieldId, false),
-	]);
+	]));
 }
 
 /**
