@@ -137,11 +137,19 @@ abstract class Widget extends \WP_Widget {
 	 * @param array $instance The settings for the particular instance of the widget.
 	 */
 	public function widget( $args, $instance ) {
+		$this->datastore->import_storage( $instance );
+		
 		if ( $this->print_wrappers ) {
 			echo $args['before_widget'];
 		}
 
-		$this->front_end( $args, $instance );
+		$instance_values = array();
+		foreach ( $this->custom_fields as $field ) {
+			$clone = clone $field;
+			$clone->load();
+			$instance_values[ $clone->get_base_name() ] = $clone->get_formatted_value();
+		}
+		$this->front_end( $args, $instance_values );
 
 		if ( $this->print_wrappers ) {
 			echo $args['after_widget'];
