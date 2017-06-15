@@ -24,7 +24,7 @@ class Time_Field extends Date_Field {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $input_format_php = 'h:i A';
+	protected $input_format_php = 'g:i A';
 
 	/**
 	 * {@inheritDoc}
