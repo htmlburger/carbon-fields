@@ -49,6 +49,18 @@ class Value_Set {
 	 * @var array
 	 */
 	protected $valid_types = array( self::TYPE_SINGLE_VALUE, self::TYPE_MULTIPLE_VALUES, self::TYPE_MULTIPLE_PROPERTIES, self::TYPE_VALUE_SET );
+	
+	/**
+	 * Array of empty values for every type
+	 *
+	 * @var array
+	 */
+	protected $empty_values = array(
+		self::TYPE_SINGLE_VALUE => '',
+		self::TYPE_MULTIPLE_VALUES => array(),
+		self::TYPE_MULTIPLE_PROPERTIES => array(),
+		self::TYPE_VALUE_SET => array(),
+	);
 
 	/**
 	 * Registered value set properties (properties) with their default value (when the property is missing in the passed raw_value_set)
@@ -242,5 +254,12 @@ class Value_Set {
 		}
 
 		$this->value_set = $this->get_formatted_value_set( $raw_value_set );
+	}
+
+	/**
+	 * Clear the value with an appropriate "empty" one
+	 */
+	public function clear() {
+		$this->set( $this->empty_values[ $this->get_type() ] );
 	}
 }

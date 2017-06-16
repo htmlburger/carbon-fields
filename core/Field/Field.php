@@ -422,8 +422,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Save value to storage
 	 */
 	public function save() {
-		$delete_on_save = ! in_array( $this->get_value_set()->get_type(), array( Value_Set::TYPE_SINGLE_VALUE, Value_Set::TYPE_MULTIPLE_PROPERTIES ) );
-		$delete_on_save = apply_filters( 'carbon_fields_should_delete_field_value_on_save', $delete_on_save, $this );
+		$delete_on_save = apply_filters( 'carbon_fields_should_delete_field_value_on_save', true, $this );
 		if ( $delete_on_save ) {
 			$this->delete();
 		}
@@ -573,7 +572,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Clear the field value to a blank one (but not the default one)
 	 */
 	public function clear_value() {
-		$this->get_value_set()->set( array() );
+		$this->get_value_set()->clear();
 	}
 
 	/**
