@@ -215,7 +215,7 @@ class Router {
 			if ( ! $field->get_visible_in_rest_api() ) {
 				continue;
 			}
-			$values[ $field->get_base_name() ] = Helper::get_value( $object_id, $container_type, $field->get_base_name() );
+			$values[ $field->get_base_name() ] = Helper::get_value( $object_id, $container_type, '', $field->get_base_name() );
 		}
 		return $values;
 	}
@@ -289,7 +289,7 @@ class Router {
 		
 		foreach ( $options as $key => $value ) {
 			try {
-				Helper::set_value( null, 'Theme_Options', $key, $value );
+				Helper::set_value( null, 'Theme_Options', '', $key, $value );
 			} catch ( \Exception $e ) {
 				return new \WP_REST_Response( wp_strip_all_tags( $e->getMessage() ) );
 			}

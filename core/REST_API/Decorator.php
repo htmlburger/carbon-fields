@@ -57,12 +57,12 @@ class Decorator {
 
 				$getter = function( $object, $field_name ) use ( $container ) {
 					$object_id = self::get_object_id( $object, $container->type );
-					return Helper::get_value( $object_id, $container->type, $field_name );
+					return Helper::get_value( $object_id, $container->type, '', $field_name );
 				};
 
 				$setter = function( $value, $object, $field_name ) use ( $container ) {
 					$object_id = self::get_object_id( $object, $container->type );
-					Helper::set_value( $object_id, $container->type, $field_name, $value );
+					Helper::set_value( $object_id, $container->type, '', $field_name, $value );
 				};
 
 				register_rest_field( $types,
