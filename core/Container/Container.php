@@ -426,7 +426,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Check if all conditions pass for object
 	 *
-	 * @param  $object_id
+	 * @param  integer $object_id
 	 * @return bool
 	 */
 	protected function all_conditions_pass( $object_id ) {
@@ -587,7 +587,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Set datastore instance
 	 *
 	 * @param Datastore_Interface $datastore
-	 * @return object $this
+	 * @return Container $this
 	 */
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		if ( $set_as_default && ! $this->has_default_datastore() ) {
@@ -745,7 +745,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Set CSS classes that the container should use.
 	 *
 	 * @param string|array<string> $classes
-	 * @return object $this
+	 * @return Container $this
 	 */
 	public function set_classes( $classes ) {
 		$this->classes = Helper::sanitize_classes( $classes );
@@ -797,7 +797,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * assigned to them instead.
 	 *
 	 * @param array $fields
-	 * @return object $this
+	 * @return Container $this
 	 */
 	public function add_fields( $fields ) {
 		foreach ( $fields as $field ) {
@@ -827,7 +827,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @param string $tab_name
 	 * @param array $fields
-	 * @return object $this
+	 * @return Container $this
 	 */
 	public function add_tab( $tab_name, $fields ) {
 		$this->add_fields( $fields );

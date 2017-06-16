@@ -15,6 +15,7 @@ class Helper {
 	 *
 	 * @param  int    $object_id      Object id to get value for (e.g. post_id, term_id etc.)
 	 * @param  string $container_type Container type to search in
+	 * @param  string $container_id
 	 * @param  string $field_name     Field name
 	 * @return mixed
 	 */
@@ -212,9 +213,9 @@ class Helper {
 	/**
 	 * Recursive sorting function by array key.
 	 * 
-	 * @param  array  &$array     The input array.
-	 * @param  int    $sort_flags Flags for controlling sorting behavior.
-	 * @return array  Sorted array.
+	 * @param  array   &$array     The input array.
+	 * @param  int     $sort_flags Flags for controlling sorting behavior.
+	 * @return boolean
 	 */
 	public static function ksort_recursive( &$array, $sort_flags = SORT_REGULAR ) {
 		if ( ! is_array( $array ) ) {
