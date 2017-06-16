@@ -84,8 +84,8 @@ class Helper {
 	 * @param  string $name Custom field name.
 	 * @return mixed        Meta value.
 	 */
-	public static function get_the_post_meta( $name ) {
-		return static::get_post_meta( get_the_ID(), $name );
+	public static function get_the_post_meta( $name, $container_id = '' ) {
+		return static::get_post_meta( get_the_ID(), $name, $container_id );
 	}
 
 	/**
