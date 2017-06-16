@@ -71,11 +71,11 @@ class Theme_Options_Container extends Container {
 	 */
 	public function init() {
 		if ( $this->settings['parent'] !== '' && strpos( $this->settings['parent'], '.php' ) === false ) {
-			$this->settings['parent'] = $this->title_to_filename( 'crbn-' . $this->settings['parent'], '.php' );
+			$this->settings['parent'] = $this->title_to_filename( 'crbn_' . $this->settings['parent'], '.php' );
 		}
 
 		if ( ! $this->settings['file'] ) {
-			$this->settings['file'] = $this->title_to_filename( 'crbn-' . $this->title, '.php' );
+			$this->settings['file'] = $this->title_to_filename( 'crbn_' . $this->get_id(), '.php' );
 		}
 
 		$registered = $this->register_page();
@@ -256,10 +256,6 @@ class Theme_Options_Container extends Container {
 	 * @return Container $this
 	 */
 	public function set_page_parent( $parent ) {
-		if ( is_a( $parent, 'Carbon_Container' ) ) {
-			$parent = $parent->title;
-		}
-
 		$this->settings['parent'] = $parent;
 		return $this;
 	}
