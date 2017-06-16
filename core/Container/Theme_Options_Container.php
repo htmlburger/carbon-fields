@@ -70,12 +70,8 @@ class Theme_Options_Container extends Container {
 	 * Attach container as a theme options page/subpage.
 	 */
 	public function init() {
-		if ( $this->settings['parent'] !== '' && strpos( $this->settings['parent'], '.php' ) === false ) {
-			$this->settings['parent'] = $this->title_to_filename( 'crbn_' . $this->settings['parent'], '.php' );
-		}
-
 		if ( ! $this->settings['file'] ) {
-			$this->settings['file'] = $this->title_to_filename( 'crbn_' . $this->get_id(), '.php' );
+			$this->settings['file'] = $this->title_to_filename( 'crb_' . $this->get_id(), '.php' );
 		}
 
 		$registered = $this->register_page();
@@ -256,18 +252,12 @@ class Theme_Options_Container extends Container {
 	 * @return Container $this
 	 */
 	public function set_page_parent( $parent ) {
-		$this->settings['parent'] = $parent;
-		return $this;
-	}
+		if ( is_a( $parent, get_class() ) ) {
+			$this->settings['parent'] = $this->title_to_filename( 'crb_' . $parent->get_id(), '.php' );
+			return $this;
+		}
 
-	/**
-	 * Set the icon of this theme options page.
-	 * Applicable only for parent theme option pages.
-	 * 
-	 * @return Container $this
-	 */
-	public function set_icon( $icon ) {
-		$this->settings['icon'] = $icon;
+		$this->settings['parent'] = $parent;
 		return $this;
 	}
 
@@ -288,6 +278,17 @@ class Theme_Options_Container extends Container {
 	 */
 	public function set_page_position( $position ) {
 		$this->settings['position'] = $position;
+		return $this;
+	}
+
+	/**
+	 * Set the icon of this theme options page.
+	 * Applicable only for parent theme option pages.
+	 * 
+	 * @return Container $this
+	 */
+	public function set_icon( $icon ) {
+		$this->settings['icon'] = $icon;
 		return $this;
 	}
 }
