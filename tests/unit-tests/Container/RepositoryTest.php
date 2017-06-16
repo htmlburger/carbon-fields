@@ -11,11 +11,11 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 class RepositoryTest extends WP_UnitTestCase {
 	
 	public function setUp() {
-		$this->containerId = 'PageSettings';
+		$this->containerId = 'page_settings';
 		$this->containerTitle = 'Page Settings';
 		$this->containerType = 'post_meta';
 		$this->containerClass = 'Carbon_Fields\Container\Post_Meta_Container';
-		$this->containerDuplicateTitleId = 'PageSettings1';
+		$this->containerDuplicateTitleId = 'page_settings1';
 		$this->repository = new Repository();
 	}
 
@@ -108,34 +108,34 @@ class RepositoryTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @covers ::get_unique_panel_id
+	 * @covers ::get_unique_container_id
 	 */
-	public function testGetUniquePanelId_InvalidCharacters_Stripped() {
+	public function testGetUniqueContainerId_InvalidCharacters_Stripped() {
 		$expected = $this->containerId;
-		$received = $this->repository->get_unique_panel_id( $this->containerTitle );
+		$received = $this->repository->get_unique_container_id( $this->containerTitle );
 		$this->assertEquals( $expected, $received );
 	}
 	
 	/**
-	 * @covers ::get_unique_panel_id
+	 * @covers ::get_unique_container_id
 	 * @covers ::register_container
 	 */
-	public function testGetUniquePanelId_IdenticalTitles_ReturnsDifferentIds() {
+	public function testGetUniqueContainerId_IdenticalTitles_ReturnsDifferentIds() {
 		$container = $this->getContainerMock();
 		$this->repository->register_container( $container );
-		$received = $this->repository->get_unique_panel_id( $container->title );
+		$received = $this->repository->get_unique_container_id( $container->title );
 
 		$this->assertNotEquals( $container->id, $received );
 	}
 
 	/**
-	 * @covers ::get_unique_panel_id
+	 * @covers ::get_unique_container_id
 	 * @covers ::register_container
 	 */
-	public function testGetUniquePanelId_IdenticalTitles_AddsNumericalSuffix() {
+	public function testGetUniqueContainerId_IdenticalTitles_AddsNumericalSuffix() {
 		$container = $this->getContainerMock();
 		$this->repository->register_container( $container );
-		$received = $this->repository->get_unique_panel_id( $container->title );
+		$received = $this->repository->get_unique_container_id( $container->title );
 
 		$this->assertEquals( $container->id . '1', $received );
 	}

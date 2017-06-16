@@ -18,21 +18,43 @@ class Helper {
 	 * @param string $field_name Field name
 	 * @return mixed
 	 */
-	public static function get_value( $object_id, $container_type, $field_name ) {
+	public static function get_field_clone( $object_id, $container_type, $container_id, $field_name ) {
 		$repository = \Carbon_Fields\Carbon_Fields::resolve( 'container_repository' );
-		$field = $repository->get_field_in_containers( $field_name, $container_type );
+		$field = null;
+		if ( $container_id ) {
+			$field = $repository->get_field_in_container( $field_name, $container_id );
+		} else {
+			$field = $repository->get_field_in_containers( $field_name, $container_type );
+		}
 
 		if ( ! $field ) {
-			return '';
+			return null;
 		}
 
 		$clone = clone $field;
 		if ( $object_id !== null ) {
 			$clone->get_datastore()->set_object_id( $object_id );
 		}
+		return $clone;
+	}
 
-		$clone->load();
-		return $clone->get_formatted_value();
+	/**
+	 * Get a value formatted for end-users
+	 *
+	 * @param int $object_id Object id to get value for (e.g. post_id, term_id etc.)
+	 * @param string $container_type Container type to search in
+	 * @param string $field_name Field name
+	 * @return mixed
+	 */
+	public static function get_value( $object_id, $container_type, $container_id, $field_name ) {
+		$field = static::get_field_clone( $object_id, $container_type, $container_id, $field_name );
+
+		if ( ! $field ) {
+			return '';
+		}
+
+		$field->load();
+		return $field->get_formatted_value();
 	}
 
 	/**
@@ -43,22 +65,16 @@ class Helper {
 	 * @param string $field_name Field name
 	 * @param array $value Field expects a `value_set`; Complex_Field expects a `value_tree` - refer to DEVELOPMENT.md
 	 */
-	public static function set_value( $object_id, $container_type, $field_name, $value ) {
-		$repository = \Carbon_Fields\Carbon_Fields::resolve( 'container_repository' );
-		$field = $repository->get_field_in_containers( $field_name, $container_type );
+	public static function set_value( $object_id, $container_type, $container_id, $field_name, $value ) {
+		$field = static::get_field_clone( $object_id, $container_type, $container_id, $field_name );
 
 		if ( ! $field ) {
 			Incorrect_Syntax_Exception::raise( 'Could not find a field which satisfies the supplied pattern: ' . $field_name );
 			return;
 		}
-		
-		$clone = clone $field;
-		if ( $object_id !== null ) {
-			$clone->get_datastore()->set_object_id( $object_id );
-		}
 
-		$clone->set_value( $value );
-		$clone->save();
+		$field->set_value( $value );
+		$field->save();
 	}
 
 	/**
@@ -79,8 +95,8 @@ class Helper {
 	 * @param string $name Custom field name.
 	 * @return mixed        Meta value.
 	 */
-	public static function get_post_meta( $id, $name ) {
-		return static::get_value( $id, 'post_meta', $name );
+	public static function get_post_meta( $id, $name, $container_id = '' ) {
+		return static::get_value( $id, 'post_meta', $container_id, $name );
 	}
 
 	/**
@@ -91,8 +107,8 @@ class Helper {
 	 * @param array $value
 	 * @return bool Success
 	 */
-	public static function set_post_meta( $id, $name, $value ) {
-		return static::set_value( $id, 'post_meta', $name, $value );
+	public static function set_post_meta( $id, $name, $value, $container_id = '' ) {
+		return static::set_value( $id, 'post_meta', $container_id, $name, $value );
 	}
 
 	/**
@@ -101,8 +117,8 @@ class Helper {
 	 * @param string $name Custom field name
 	 * @return mixed Option value
 	 */
-	public static function get_theme_option( $name ) {
-		return static::get_value( null, 'theme_options', $name );
+	public static function get_theme_option( $name, $container_id = '' ) {
+		return static::get_value( null, 'theme_options', $container_id, $name );
 	}
 
 	/**
@@ -112,8 +128,8 @@ class Helper {
 	 * @param array $value
 	 * @return bool Success
 	 */
-	public static function set_theme_option( $name, $value ) {
-		return static::set_value( null, 'theme_options', $name, $value );
+	public static function set_theme_option( $name, $value, $container_id = '' ) {
+		return static::set_value( null, 'theme_options', $container_id, $name, $value );
 	}
 
 	/**
@@ -123,8 +139,8 @@ class Helper {
 	 * @param  string $name Custom field name.
 	 * @return mixed        Meta value.
 	 */
-	public static function get_term_meta( $id, $name ) {
-		return static::get_value( $id, 'term_meta', $name );
+	public static function get_term_meta( $id, $name, $container_id = '' ) {
+		return static::get_value( $id, 'term_meta', $container_id, $name );
 	}
 
 	/**
@@ -135,8 +151,8 @@ class Helper {
 	 * @param array $value
 	 * @return bool Success
 	 */
-	public static function set_term_meta( $id, $name, $value ) {
-		return static::set_value( $id, 'term_meta', $name, $value );
+	public static function set_term_meta( $id, $name, $value, $container_id = '' ) {
+		return static::set_value( $id, 'term_meta', $container_id, $name, $value );
 	}
 
 	/**
@@ -146,8 +162,8 @@ class Helper {
 	 * @param  string $name Custom field name.
 	 * @return mixed        Meta value.
 	 */
-	public static function get_user_meta( $id, $name ) {
-		return static::get_value( $id, 'user_meta', $name );
+	public static function get_user_meta( $id, $name, $container_id = '' ) {
+		return static::get_value( $id, 'user_meta', $container_id, $name );
 	}
 
 	/**
@@ -158,8 +174,8 @@ class Helper {
 	 * @param array $value
 	 * @return bool Success
 	 */
-	public static function set_user_meta( $id, $name, $value ) {
-		return static::set_value( $id, 'user_meta', $name, $value );
+	public static function set_user_meta( $id, $name, $value, $container_id = '' ) {
+		return static::set_value( $id, 'user_meta', $container_id, $name, $value );
 	}
 
 	/**
@@ -169,8 +185,8 @@ class Helper {
 	 * @param  string $name Custom field name.
 	 * @return mixed        Meta value.
 	 */
-	public static function get_comment_meta( $id, $name ) {
-		return static::get_value( $id, 'comment_meta', $name );
+	public static function get_comment_meta( $id, $name, $container_id = '' ) {
+		return static::get_value( $id, 'comment_meta', $container_id, $name );
 	}
 
 	/**
@@ -181,8 +197,8 @@ class Helper {
 	 * @param array $value
 	 * @return bool Success
 	 */
-	public static function set_comment_meta( $id, $name, $value ) {
-		return static::set_value( $id, 'comment_meta', $name, $value );
+	public static function set_comment_meta( $id, $name, $value, $container_id = '' ) {
+		return static::set_value( $id, 'comment_meta', $container_id, $name, $value );
 	}
 
 	/**

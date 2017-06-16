@@ -32,8 +32,8 @@ class Theme_Options_Container extends Container {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function __construct( $unique_id, $title, $type, $condition_collection, $condition_translator ) {
-		parent::__construct( $unique_id, $title, $type, $condition_collection, $condition_translator );
+	public function __construct( $id, $title, $type, $condition_collection, $condition_translator ) {
+		parent::__construct( $id, $title, $type, $condition_collection, $condition_translator );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'theme_options' ), $this->has_default_datastore() );

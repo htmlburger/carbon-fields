@@ -137,18 +137,38 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Create a new container of type $type and name $name.
 	 *
 	 * @param  string $raw_type
+	 * @param  string $id        Unique id for the container. Optional
 	 * @param  string $name      Human-readable name of the container
 	 * @return object $container
 	 */
-	public static function factory( $raw_type, $name ) {
+	public static function factory( $raw_type, $id, $name = '' ) {
+		// no name provided - switch input around as the id is optionally generated based on the name
+		if ( $name === '' ) {
+			$name = $id;
+			$id = '';
+		}
+
 		$type = Helper::normalize_type( $raw_type );
 		$repository = Carbon_Fields::resolve( 'container_repository' );
-		$unique_id = $repository->get_unique_panel_id( $name );
 		$container = null;
+
+		if ( $id === '' ) {
+			$id = $repository->get_unique_container_id( $name );
+		}
+
+		if ( ! preg_match( '/\A[a-z0-9_]+\z/', $id ) ) {
+			Incorrect_Syntax_Exception::raise( 'Container IDs can only contain lowercase alphanumeric characters and underscores ("' . $id . '" passed).' );
+			return null;
+		}
+
+		if ( ! $repository->is_unique_container_id( $id ) ) {
+			Incorrect_Syntax_Exception::raise( 'The passed container id is already taken ("' . $id . '" passed).' );
+			return null;
+		}
 
 		if ( Carbon_Fields::has( $type, 'containers' ) ) {
 			$container = Carbon_Fields::resolve_with_arguments( $type, array(
-				'unique_id' => $unique_id,
+				'id' => $id,
 				'name' => $name,
 				'type' => $type,
 			), 'containers' );
@@ -163,7 +183,7 @@ abstract class Container implements Datastore_Holder_Interface {
 
 			$fulfillable_collection = Carbon_Fields::resolve( 'container_condition_fulfillable_collection' );
 			$condition_translator = Carbon_Fields::resolve( 'container_condition_translator_json' );
-			$container = new $class( $unique_id, $name, $type, $fulfillable_collection, $condition_translator );
+			$container = new $class( $id, $name, $type, $fulfillable_collection, $condition_translator );
 		}
 
 		$repository->register_container( $container );
@@ -183,20 +203,20 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Create a new container
 	 *
-	 * @param string                 $unique_id            Unique id of the container
-	 * @param string                 $title                title of the container
+	 * @param string                 $id                   Unique id of the container
+	 * @param string                 $title                Title of the container
 	 * @param string                 $type                 Type of the container
 	 * @param Fulfillable_Collection $condition_collection
 	 * @param Carbon_Fields\Container\Fulfillable\Translator\Translator $condition_translator
 	 */
-	public function __construct( $unique_id, $title, $type, $condition_collection, $condition_translator ) {
+	public function __construct( $id, $title, $type, $condition_collection, $condition_translator ) {
 		Carbon_Fields::verify_boot();
 
 		if ( empty( $title ) ) {
 			Incorrect_Syntax_Exception::raise( 'Empty container title is not supported' );
 		}
 
-		$this->id = $unique_id;
+		$this->id = $id;
 		$this->title = $title;
 		$this->type = $type;
 		$this->condition_collection = $condition_collection;
@@ -205,6 +225,15 @@ abstract class Container implements Datastore_Holder_Interface {
 			true
 		);
 		$this->condition_translator = $condition_translator;
+	}
+
+	/**
+	 * Return the container id
+	 *
+	 * @return string
+	 */
+	public function get_id() {
+		return $this->id;
 	}
 
 	/**

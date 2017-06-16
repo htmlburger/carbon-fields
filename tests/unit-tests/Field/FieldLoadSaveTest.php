@@ -90,55 +90,8 @@ class FieldLoadSaveTest extends WP_UnitTestCase {
 	 */
 	public function testSavePassesFieldToDatastore() {
 		$this->datastore->shouldReceive( 'save' )->once();
-		$this->subject->set_datastore( $this->datastore );
-		$this->subject->save();
-		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
-	}
-
-	/**
-	 * @covers ::save
-	 */
-	public function testSaveDoesNotCallDeleteForSingleValueValueField() {
-		$this->datastore->shouldIgnoreMissing();
-		$this->subject->shouldNotReceive( 'delete' );
-		$this->subject->set_datastore( $this->datastore );
-		$this->subject->set_value_set( new Value_Set( Value_Set::TYPE_SINGLE_VALUE ) );
-		$this->subject->save();
-		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
-	}
-
-	/**
-	 * @covers ::save
-	 */
-	public function testSaveDoesNotCallDeleteForMultiplePropertyValueField() {
-		$this->datastore->shouldIgnoreMissing();
-		$this->subject->shouldNotReceive( 'delete' );
-		$this->subject->set_datastore( $this->datastore );
-		$this->subject->set_value_set( new Value_Set( Value_Set::TYPE_MULTIPLE_PROPERTIES ) );
-		$this->subject->save();
-		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
-	}
-
-	/**
-	 * @covers ::save
-	 */
-	public function testSaveCallsDeleteForMultipleValuesValueField() {
-		$this->datastore->shouldIgnoreMissing();
 		$this->subject->shouldReceive( 'delete' )->once();
 		$this->subject->set_datastore( $this->datastore );
-		$this->subject->set_value_set( new Value_Set( Value_Set::TYPE_MULTIPLE_VALUES ) );
-		$this->subject->save();
-		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
-	}
-
-	/**
-	 * @covers ::save
-	 */
-	public function testSaveCallsDeleteForValueSetValueField() {
-		$this->datastore->shouldIgnoreMissing();
-		$this->subject->shouldReceive( 'delete' )->once();
-		$this->subject->set_datastore( $this->datastore );
-		$this->subject->set_value_set( new Value_Set( Value_Set::TYPE_VALUE_SET ) );
 		$this->subject->save();
 		$this->assertTrue( true ); // rely on Mockery expectations to fail the test
 	}

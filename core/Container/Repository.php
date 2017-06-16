@@ -10,14 +10,14 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 class Repository {
 	/**
-	 * List of registered unique panel identificator ids
+	 * List of registered unique container ids
 	 *
-	 * @see get_unique_panel_id()
-	 * @see register_unique_panel_id()
-	 * @see unregister_unique_panel_id()
+	 * @see get_unique_container_id()
+	 * @see register_unique_container_id()
+	 * @see unregister_unique_container_id()
 	 * @var array
 	 */
-	protected $registered_panel_ids = array();
+	protected $registered_container_ids = array();
 
 	/**
 	 * List of registered containers that should be initialized
@@ -41,7 +41,7 @@ class Repository {
 	 * @return array
 	 */
 	public function register_container( Container $container ) {
-		$this->register_unique_panel_id( $container->id );
+		$this->register_unique_container_id( $container->id );
 		$this->containers[] = $container;
 		$this->pending_containers[] = $container;
 	}
@@ -86,11 +86,39 @@ class Repository {
 	}
 
 	/**
+	 * Return field in a container with supplied id
+	 *
+	 * @param  string                    $field_name
+	 * @param  string                    $container_id
+	 * @param  bool                      $include_nested_fields
+	 * @return Carbon_Fields\Field\Field
+	 */
+	public function get_field_in_container( $field_name, $container_id, $include_nested_fields = true ) {
+		$containers = $this->get_containers();
+		$field = null;
+
+		foreach ( $containers as $container ) {
+			if ( $container->get_id() !== $container_id ) {
+				continue;
+			}
+
+			if ( $include_nested_fields ) {
+				$field = $container->get_field_by_name( $field_name );
+			} else {
+				$field = $container->get_root_field_by_name( $field_name );
+			}
+			break;
+		}
+
+		return $field;
+	}
+
+	/**
 	 * Return field in containers
 	 *
-	 * @param string $field_name
-	 * @param string $container_type Container type to filter for
-	 * @param bool $include_nested_fields Search in nested fields as well
+	 * @param  string                    $field_name
+	 * @param  string                    $container_type
+	 * @param  bool                      $include_nested_fields
 	 * @return Carbon_Fields\Field\Field
 	 */
 	public function get_field_in_containers( $field_name, $container_type = null, $include_nested_fields = true ) {
@@ -123,16 +151,29 @@ class Repository {
 	}
 
 	/**
+	 * Check if container identificator id is unique
+	 * 
+	 * @param string $id
+	 */
+	public function is_unique_container_id( $id ) {
+		return ! in_array( $id, $this->registered_container_ids );
+	}
+
+	/**
 	 * Generate a unique container identificator id based on container title
 	 * 
 	 * @param string $title
 	 */
-	public function get_unique_panel_id( $title ) {
-		$id = preg_replace( '~[^\w\-]*~', '', remove_accents( $title ) );
+	public function get_unique_container_id( $title ) {
+		$id = remove_accents( $title );
+		$id = strtolower( $id );
+		$id = preg_replace( '~[\-\s]+~', '_', $id );
+		$id = preg_replace( '~[^\w\_]+~', '', $id );
+		$id = preg_replace( '~_{2,}~', '_', $id );
 		$base = $id;
 		$suffix = 0;
 
-		while ( ! $this->is_unique_panel_id( $id ) ) {
+		while ( ! $this->is_unique_container_id( $id ) ) {
 			$suffix++;
 			$id = $base . strval( $suffix );
 		}
@@ -141,22 +182,13 @@ class Repository {
 	}
 
 	/**
-	 * Check if container identificator id is unique
-	 * 
-	 * @param string $id
-	 */
-	protected function is_unique_panel_id( $id ) {
-		return ! in_array( $id, $this->registered_panel_ids );
-	}
-
-	/**
 	 * Add container identificator id to the list of unique container ids
 	 *
 	 * @param string $id
 	 */
-	protected function register_unique_panel_id( $id ) {
-		if ( $this->is_unique_panel_id( $id ) ) {
-			$this->registered_panel_ids[] = $id;
+	protected function register_unique_container_id( $id ) {
+		if ( $this->is_unique_container_id( $id ) ) {
+			$this->registered_container_ids[] = $id;
 		}
 	}
 
@@ -165,9 +197,9 @@ class Repository {
 	 *
 	 * @param string $id
 	 */
-	protected function unregister_unique_panel_id( $id ) {
-		if ( ! $this->is_unique_panel_id( $id ) ) {
-			unset( $this->registered_panel_ids[ array_search( $id, $this->registered_panel_ids ) ] );
+	protected function unregister_unique_container_id( $id ) {
+		if ( ! $this->is_unique_container_id( $id ) ) {
+			unset( $this->registered_container_ids[ array_search( $id, $this->registered_container_ids ) ] );
 		}
 	}
 }

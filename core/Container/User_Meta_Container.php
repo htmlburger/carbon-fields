@@ -14,8 +14,8 @@ class User_Meta_Container extends Container {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function __construct( $unique_id, $title, $type, $condition_collection, $condition_translator ) {
-		parent::__construct( $unique_id, $title, $type, $condition_collection, $condition_translator );
+	public function __construct( $id, $title, $type, $condition_collection, $condition_translator ) {
+		parent::__construct( $id, $title, $type, $condition_collection, $condition_translator );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'user_meta' ), $this->has_default_datastore() );

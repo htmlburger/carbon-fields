@@ -26,15 +26,15 @@ class Post_Meta_Container extends Container {
 	 * @var array
 	 */
 	public $settings = array(
-		'panel_context' => 'normal',
-		'panel_priority' => 'high',
+		'meta_box_context' => 'normal',
+		'meta_box_priority' => 'high',
 	);
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function __construct( $unique_id, $title, $type, $condition_collection, $condition_translator ) {
-		parent::__construct( $unique_id, $title, $type, $condition_collection, $condition_translator );
+	public function __construct( $id, $title, $type, $condition_collection, $condition_translator ) {
+		parent::__construct( $id, $title, $type, $condition_collection, $condition_translator );
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'post_meta' ), $this->has_default_datastore() );
@@ -200,8 +200,8 @@ class Post_Meta_Container extends Container {
 				$this->title,
 				array( $this, 'render' ),
 				$post_type,
-				$this->settings['panel_context'],
-				$this->settings['panel_priority']
+				$this->settings['meta_box_context'],
+				$this->settings['meta_box_priority']
 			);
 
 			add_filter( "postbox_classes_{$post_type}_{$this->id}", array( $this, 'add_postbox_classes' ) );
@@ -414,7 +414,7 @@ class Post_Meta_Container extends Container {
 	 * @param string $context ('normal', 'advanced', 'side' or the custom `carbon_fields_after_title`)
 	 */
 	public function set_context( $context ) {
-		$this->settings['panel_context'] = $context;
+		$this->settings['meta_box_context'] = $context;
 		return $this;
 	}
 
@@ -425,7 +425,7 @@ class Post_Meta_Container extends Container {
 	 * @param string $priority ('high', 'core', 'default' or 'low')
 	 */
 	public function set_priority( $priority ) {
-		$this->settings['panel_priority'] = $priority;
+		$this->settings['meta_box_priority'] = $priority;
 		return $this;
 	}
 }

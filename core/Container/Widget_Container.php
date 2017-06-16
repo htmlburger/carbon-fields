@@ -10,8 +10,8 @@ class Widget_Container extends Container {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function __construct( $unique_id, $title, $type, $condition_collection, $condition_translator ) {
-		parent::__construct( $unique_id, $title, $type, $condition_collection, $condition_translator );
+	public function __construct( $id, $title, $type, $condition_collection, $condition_translator ) {
+		parent::__construct( $id, $title, $type, $condition_collection, $condition_translator );
 
 		$this->title = '';
 	}
