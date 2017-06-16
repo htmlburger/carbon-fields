@@ -453,24 +453,28 @@
       "id": 126,
       "meta": {}
     },
-    "./assets/js/fields/validators/base.js": {
+    "./assets/js/fields/validators/association.js": {
       "id": 127,
       "meta": {}
     },
-    "./assets/js/fields/validators/complex.js": {
+    "./assets/js/fields/validators/base.js": {
       "id": 128,
       "meta": {}
     },
-    "./assets/js/lib/api.js": {
+    "./assets/js/fields/validators/complex.js": {
       "id": 129,
       "meta": {}
     },
-    "./assets/js/sidebars/sagas/base.js": {
+    "./assets/js/lib/api.js": {
       "id": 130,
       "meta": {}
     },
-    "./assets/js/store/index.js": {
+    "./assets/js/sidebars/sagas/base.js": {
       "id": 131,
+      "meta": {}
+    },
+    "./assets/js/store/index.js": {
+      "id": 132,
       "meta": {}
     }
   }

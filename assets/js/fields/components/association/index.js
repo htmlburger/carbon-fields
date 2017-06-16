@@ -26,7 +26,7 @@ import SortableList from 'fields/components/sortable-list';
 import AssociationList from 'fields/components/association/list';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { TYPE_ASSOCIATION } from 'fields/constants';
+import { TYPE_ASSOCIATION, VALIDATION_ASSOCIATION } from 'fields/constants';
 
 /**
  * Render a field that allows to create links between posts, taxonomy terms,
@@ -136,7 +136,19 @@ export const enhance = compose(
 	/**
 	 * Attach the setup hooks.
 	 */
-	withSetup(),
+	withSetup({
+		componentDidMount() {
+			const {
+				field,
+				ui,
+				setupField,
+				setupValidation
+			} = this.props;
+
+			setupField(field.id, field.type, ui);
+			setupValidation(field.id, VALIDATION_ASSOCIATION);
+		},
+	}),
 
 	/**
 	 * Track current search term.

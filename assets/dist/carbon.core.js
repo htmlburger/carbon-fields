@@ -64,7 +64,7 @@ this["carbon.core"] =
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 138);
+/******/ 	return __webpack_require__(__webpack_require__.s = 139);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -134,6 +134,7 @@ var PARENT_TYPE_GROUP = exports.PARENT_TYPE_GROUP = 'group';
 var PARENT_TYPE_CONTAINER = exports.PARENT_TYPE_CONTAINER = 'container';
 
 var VALIDATION_BASE = exports.VALIDATION_BASE = 'VALIDATION_BASE';
+var VALIDATION_ASSOCIATION = exports.VALIDATION_ASSOCIATION = 'VALIDATION_ASSOCIATION';
 var VALIDATION_COMPLEX = exports.VALIDATION_COMPLEX = 'VALIDATION_COMPLEX';
 
 var COMPLEX_LAYOUT_GRID = exports.COMPLEX_LAYOUT_GRID = 'grid';
@@ -739,7 +740,7 @@ exports.getComplexGroupLabel = exports.hasInvalidFields = exports.makeGetSidebar
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _reselect = __webpack_require__(136);
+var _reselect = __webpack_require__(137);
 
 var _lodash = __webpack_require__(0);
 
@@ -2050,7 +2051,7 @@ var _components, _reducers;
 exports.registerSaga = registerSaga;
 exports.getSagas = getSagas;
 
-var _reduceReducers = __webpack_require__(137);
+var _reduceReducers = __webpack_require__(138);
 
 var _reduceReducers2 = _interopRequireDefault(_reduceReducers);
 
@@ -4720,7 +4721,7 @@ var _reactOnclickoutside = __webpack_require__(79);
 
 var _reactOnclickoutside2 = _interopRequireDefault(_reactOnclickoutside);
 
-var _reactColor = __webpack_require__(134);
+var _reactColor = __webpack_require__(135);
 
 var _recompose = __webpack_require__(2);
 
@@ -6787,8 +6788,9 @@ var map = {
 	"./sagas/redraw-google-maps.js": 125,
 	"./sagas/validation.js": 126,
 	"./selectors.js": 11,
-	"./validators/base.js": 127,
-	"./validators/complex.js": 128
+	"./validators/association.js": 127,
+	"./validators/base.js": 128,
+	"./validators/complex.js": 129
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -6812,7 +6814,7 @@ webpackContext.id = 82;
 
 var map = {
 	"./actions.js": 33,
-	"./api.js": 129,
+	"./api.js": 130,
 	"./constants.js": 28,
 	"./events.js": 19,
 	"./helpers.js": 16,
@@ -6842,7 +6844,7 @@ var map = {
 	"./actions.js": 34,
 	"./helpers.js": 75,
 	"./reducer.js": 76,
-	"./sagas/base.js": 130,
+	"./sagas/base.js": 131,
 	"./selectors.js": 77
 };
 function webpackContext(req) {
@@ -6868,7 +6870,7 @@ webpackContext.id = 84;
 var map = {
 	"./actions.js": 35,
 	"./helpers.js": 78,
-	"./index.js": 131
+	"./index.js": 132
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -7164,7 +7166,7 @@ exports.workerReceiveContainer = workerReceiveContainer;
 exports.workerSyncHash = workerSyncHash;
 exports.default = foreman;
 
-var _urldecode = __webpack_require__(133);
+var _urldecode = __webpack_require__(134);
 
 var _urldecode2 = _interopRequireDefault(_urldecode);
 
@@ -10071,7 +10073,19 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 /**
  * Attach the setup hooks.
  */
-(0, _withSetup2.default)(),
+(0, _withSetup2.default)({
+	componentDidMount: function componentDidMount() {
+		var _props = this.props,
+		    field = _props.field,
+		    ui = _props.ui,
+		    setupField = _props.setupField,
+		    setupValidation = _props.setupValidation;
+
+
+		setupField(field.id, field.type, ui);
+		setupValidation(field.id, _constants.VALIDATION_ASSOCIATION);
+	}
+}),
 
 /**
  * Track current search term.
@@ -10964,7 +10978,7 @@ var _propTypes = __webpack_require__(3);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _reactFlatpickr = __webpack_require__(135);
+var _reactFlatpickr = __webpack_require__(136);
 
 var _reactFlatpickr2 = _interopRequireDefault(_reactFlatpickr);
 
@@ -14971,6 +14985,68 @@ var _constants = __webpack_require__(4);
 /**
  * The external dependencies.
  */
+var type = exports.type = _constants.VALIDATION_ASSOCIATION;
+
+/**
+ * Debounce the validation.
+ *
+ * @type {Boolean}
+ */
+
+
+/**
+ * The internal dependencies.
+ */
+var debounce = exports.debounce = false;
+
+/**
+ * Handle the validation for the association fields.
+ *
+ * @param  {Object}      field
+ * @return {String|null}
+ */
+function handler(field) {
+  var min = field.min,
+      value = field.value,
+      required = field.required;
+
+
+  if (required && (0, _lodash.isEmpty)(value)) {
+    return carbonFieldsL10n.field.messageRequiredField;
+  }
+
+  if (min > 0 && value.length < min) {
+    return carbonFieldsL10n.field.minNumItemsNotReached.replace('%s', field.min);
+  }
+
+  return null;
+}
+
+/***/ }),
+/* 128 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.debounce = exports.type = undefined;
+exports.handler = handler;
+
+var _lodash = __webpack_require__(0);
+
+var _constants = __webpack_require__(4);
+
+/**
+ * The type of validator.
+ *
+ * @type {String}
+ */
+/**
+ * The external dependencies.
+ */
 var type = exports.type = _constants.VALIDATION_BASE;
 
 /**
@@ -15001,7 +15077,7 @@ function handler(field) {
 }
 
 /***/ }),
-/* 128 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15073,7 +15149,7 @@ function handler(field) {
 }
 
 /***/ }),
-/* 129 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15259,7 +15335,7 @@ var Api = function () {
 exports.default = Api;
 
 /***/ }),
-/* 130 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15354,7 +15430,7 @@ function foreman() {
 }
 
 /***/ }),
-/* 131 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -15384,7 +15460,7 @@ var _reduxSaga = __webpack_require__(38);
 
 var _reduxSaga2 = _interopRequireDefault(_reduxSaga);
 
-var _redux = __webpack_require__(132);
+var _redux = __webpack_require__(133);
 
 var _lodash = __webpack_require__(0);
 
@@ -15403,43 +15479,43 @@ var _reducer6 = _interopRequireDefault(_reducer5);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
-/* 132 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__(9))(196)
 
 /***/ }),
-/* 133 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__(9))(331)
 
 /***/ }),
-/* 134 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__(9))(334)
 
 /***/ }),
-/* 135 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__(9))(335)
 
 /***/ }),
-/* 136 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__(9))(341)
 
 /***/ }),
-/* 137 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__(9))(842)
 
 /***/ }),
-/* 138 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__;

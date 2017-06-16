@@ -31,6 +31,7 @@ export const PARENT_TYPE_GROUP = 'group';
 export const PARENT_TYPE_CONTAINER = 'container';
 
 export const VALIDATION_BASE = 'VALIDATION_BASE';
+export const VALIDATION_ASSOCIATION = 'VALIDATION_ASSOCIATION';
 export const VALIDATION_COMPLEX = 'VALIDATION_COMPLEX';
 
 export const COMPLEX_LAYOUT_GRID = 'grid';

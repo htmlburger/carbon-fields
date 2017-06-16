@@ -22,6 +22,13 @@ class Association_Field extends Field {
 	protected $wp_toolset;
 
 	/**
+	 * Min number of selected items allowed. -1 for no limit
+	 *
+	 * @var integer
+	 */
+	protected $min = -1;
+
+	/**
 	 * Max number of selected items allowed. -1 for no limit
 	 *
 	 * @var integer
@@ -448,6 +455,34 @@ class Association_Field extends Field {
 	}
 
 	/**
+	 * Get the minimum allowed number of selected entries.
+	 *
+	 * @return int
+	 */
+	public function get_min() {
+		return $this->min;
+	}
+
+	/**
+	 * Set the minimum allowed number of selected entries.
+	 *
+	 * @param int $min
+	 */
+	public function set_min( $min ) {
+		$this->min = intval( $min );
+		return $this;
+	}
+
+	/**
+	 * Get the maximum allowed number of selected entries.
+	 *
+	 * @return int
+	 */
+	public function get_max() {
+		return $this->max;
+	}
+
+	/**
 	 * Set the maximum allowed number of selected entries.
 	 *
 	 * @param int $max
@@ -528,7 +563,8 @@ class Association_Field extends Field {
 		$field_data = array_merge( $field_data, array(
 			'value' => $this->value_to_json(),
 			'options' => $this->get_options(),
-			'max' => $this->max,
+			'min' => $this->get_min(),
+			'max' => $this->get_max(),
 			'duplicates_allowed' => $this->duplicates_allowed,
 		) );
 
