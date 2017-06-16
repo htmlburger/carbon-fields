@@ -13,9 +13,9 @@ class Helper {
 	/**
 	 * Get a value formatted for end-users
 	 *
-	 * @param int $object_id Object id to get value for (e.g. post_id, term_id etc.)
-	 * @param string $container_type Container type to search in
-	 * @param string $field_name Field name
+	 * @param  int    $object_id      Object id to get value for (e.g. post_id, term_id etc.)
+	 * @param  string $container_type Container type to search in
+	 * @param  string $field_name     Field name
 	 * @return mixed
 	 */
 	public static function get_field_clone( $object_id, $container_type, $container_id, $field_name ) {
@@ -41,9 +41,10 @@ class Helper {
 	/**
 	 * Get a value formatted for end-users
 	 *
-	 * @param int $object_id Object id to get value for (e.g. post_id, term_id etc.)
-	 * @param string $container_type Container type to search in
-	 * @param string $field_name Field name
+	 * @param  int    $object_id      Object id to get value for (e.g. post_id, term_id etc.)
+	 * @param  string $container_type Container type to search in
+	 * @param  string $container_id
+	 * @param  string $field_name     Field name
 	 * @return mixed
 	 */
 	public static function get_value( $object_id, $container_type, $container_id, $field_name ) {
@@ -60,9 +61,10 @@ class Helper {
 	/**
 	 * Set value for a field
 	 *
-	 * @param int $object_id Object id to get value for (e.g. post_id, term_id etc.)
+	 * @param int    $object_id      Object id to get value for (e.g. post_id, term_id etc.)
 	 * @param string $container_type Container type to search in
-	 * @param string $field_name Field name
+	 * @param string $container_id
+	 * @param string $field_name     Field name
 	 * @param array $value Field expects a `value_set`; Complex_Field expects a `value_tree` - refer to DEVELOPMENT.md
 	 */
 	public static function set_value( $object_id, $container_type, $container_id, $field_name, $value ) {
@@ -81,8 +83,9 @@ class Helper {
 	 * Shorthand for get_post_meta().
 	 * Uses the ID of the current post in the loop.
 	 *
-	 * @param  string $name Custom field name.
-	 * @return mixed        Meta value.
+	 * @param  string $name         Custom field name.
+	 * @param  string $container_id
+	 * @return mixed  Meta value.
 	 */
 	public static function get_the_post_meta( $name, $container_id = '' ) {
 		return static::get_post_meta( get_the_ID(), $name, $container_id );
@@ -91,9 +94,10 @@ class Helper {
 	/**
 	 * Get post meta field for a post.
 	 *
-	 * @param int    $id   Post ID.
-	 * @param string $name Custom field name.
-	 * @return mixed        Meta value.
+	 * @param  int    $id           Post ID.
+	 * @param  string $name         Custom field name.
+	 * @param  string $container_id
+	 * @return mixed  Meta value.
 	 */
 	public static function get_post_meta( $id, $name, $container_id = '' ) {
 		return static::get_value( $id, 'post_meta', $container_id, $name );
@@ -102,10 +106,10 @@ class Helper {
 	/**
 	 * Set post meta field for a post.
 	 *
-	 * @param int $id Post ID
-	 * @param string $name Custom field name
-	 * @param array $value
-	 * @return bool Success
+	 * @param  int    $id           Post ID
+	 * @param  string $name         Custom field name
+	 * @param  array  $value
+	 * @param  string $container_id
 	 */
 	public static function set_post_meta( $id, $name, $value, $container_id = '' ) {
 		return static::set_value( $id, 'post_meta', $container_id, $name, $value );
@@ -114,8 +118,9 @@ class Helper {
 	/**
 	 * Get theme option field value.
 	 *
-	 * @param string $name Custom field name
-	 * @return mixed Option value
+	 * @param  string $name         Custom field name
+	 * @param  string $container_id
+	 * @return mixed  Option        value
 	 */
 	public static function get_theme_option( $name, $container_id = '' ) {
 		return static::get_value( null, 'theme_options', $container_id, $name );
@@ -124,9 +129,9 @@ class Helper {
 	/**
 	 * Set theme option field value.
 	 *
-	 * @param string $name Field name
-	 * @param array $value
-	 * @return bool Success
+	 * @param  string $name         Field name
+	 * @param  array  $value
+	 * @param  string $container_id
 	 */
 	public static function set_theme_option( $name, $value, $container_id = '' ) {
 		return static::set_value( null, 'theme_options', $container_id, $name, $value );
@@ -135,9 +140,10 @@ class Helper {
 	/**
 	 * Get term meta field for a term.
 	 *
-	 * @param  int    $id   Term ID.
-	 * @param  string $name Custom field name.
-	 * @return mixed        Meta value.
+	 * @param  int    $id           Term ID.
+	 * @param  string $name         Custom field name.
+	 * @param  string $container_id
+	 * @return mixed  Meta value.
 	 */
 	public static function get_term_meta( $id, $name, $container_id = '' ) {
 		return static::get_value( $id, 'term_meta', $container_id, $name );
@@ -146,10 +152,10 @@ class Helper {
 	/**
 	 * Set term meta field for a term.
 	 *
-	 * @param int $id Term ID
-	 * @param string $name Field name
-	 * @param array $value
-	 * @return bool Success
+	 * @param  int    $id           Term ID
+	 * @param  string $name         Field name
+	 * @param  array  $value
+	 * @param  string $container_id
 	 */
 	public static function set_term_meta( $id, $name, $value, $container_id = '' ) {
 		return static::set_value( $id, 'term_meta', $container_id, $name, $value );
@@ -158,9 +164,10 @@ class Helper {
 	/**
 	 * Get user meta field for a user.
 	 *
-	 * @param  int    $id   User ID.
-	 * @param  string $name Custom field name.
-	 * @return mixed        Meta value.
+	 * @param  int    $id           User ID.
+	 * @param  string $name         Custom field name.
+	 * @param  string $container_id
+	 * @return mixed  Meta value.
 	 */
 	public static function get_user_meta( $id, $name, $container_id = '' ) {
 		return static::get_value( $id, 'user_meta', $container_id, $name );
@@ -169,10 +176,10 @@ class Helper {
 	/**
 	 * Set user meta field for a user.
 	 *
-	 * @param int $id User ID
-	 * @param string $name Field name
-	 * @param array $value
-	 * @return bool Success
+	 * @param  int    $id           User ID
+	 * @param  string $name         Field name
+	 * @param  array  $value
+	 * @param  string $container_id
 	 */
 	public static function set_user_meta( $id, $name, $value, $container_id = '' ) {
 		return static::set_value( $id, 'user_meta', $container_id, $name, $value );
@@ -181,9 +188,10 @@ class Helper {
 	/**
 	 * Get comment meta field for a comment.
 	 *
-	 * @param  int    $id   Comment ID.
-	 * @param  string $name Custom field name.
-	 * @return mixed        Meta value.
+	 * @param  int    $id           Comment ID.
+	 * @param  string $name         Custom field name.
+	 * @param  string $container_id
+	 * @return mixed  Meta value.
 	 */
 	public static function get_comment_meta( $id, $name, $container_id = '' ) {
 		return static::get_value( $id, 'comment_meta', $container_id, $name );
@@ -192,10 +200,10 @@ class Helper {
 	/**
 	 * Set comment meta field for a comment.
 	 *
-	 * @param int $id Comment ID
-	 * @param string $name Field name
-	 * @param array $value
-	 * @return bool Success
+	 * @param  int    $id           Comment ID
+	 * @param  string $name         Field name
+	 * @param  array  $value
+	 * @param  string $container_id
 	 */
 	public static function set_comment_meta( $id, $name, $value, $container_id = '' ) {
 		return static::set_value( $id, 'comment_meta', $container_id, $name, $value );
@@ -206,7 +214,7 @@ class Helper {
 	 * 
 	 * @param  array  &$array     The input array.
 	 * @param  int    $sort_flags Flags for controlling sorting behavior.
-	 * @return array              Sorted array.
+	 * @return array  Sorted array.
 	 */
 	public static function ksort_recursive( &$array, $sort_flags = SORT_REGULAR ) {
 		if ( ! is_array( $array ) ) {
@@ -222,9 +230,9 @@ class Helper {
 	/**
 	 * Get the relation type from an array similar to how meta_query works in WP_Query
 	 * 
-	 * @param array $array
-	 * @param array<string> $allowed_relations
-	 * @param string $relation_key
+	 * @param  array         $array
+	 * @param  array<string> $allowed_relations
+	 * @param  string        $relation_key
 	 * @return string
 	 */
 	public static function get_relation_type_from_array( $array, $allowed_relations = array( 'AND', 'OR' ), $relation_key = 'relation' ) {

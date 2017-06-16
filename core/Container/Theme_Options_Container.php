@@ -47,7 +47,8 @@ class Theme_Options_Container extends Container {
 	/**
 	 * Sanitize a title to a filename
 	 *
-	 * @param string $title
+	 * @param  string $title
+	 * @param  string $extension
 	 * @return string
 	 */
 	protected function title_to_filename( $title, $extension ) {

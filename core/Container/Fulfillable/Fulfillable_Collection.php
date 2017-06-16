@@ -296,7 +296,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * 
 	 * @param  array<string>          $condition_types
 	 * @param  array|boolean          $environment Environment array or a boolean value to force on conditions
-	 * @param  array                  $comparison_operators Array of comparison operators to evaluate regardless of condition type
+	 * @param  array<string>          $comparison_operators Array of comparison operators to evaluate regardless of condition type
 	 * @return Fulfillable_Collection
 	 */
 	public function evaluate( $condition_types, $environment, $comparison_operators = array() ) {

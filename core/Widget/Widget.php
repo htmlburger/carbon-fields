@@ -48,7 +48,7 @@ abstract class Widget extends \WP_Widget {
 	 * Create the widget.
 	 * A wrapper around the default WP widget constructor.
 	 *
-	 * @param string $id          Widget id
+	 * @param string $widget_id   Widget id
 	 * @param string $title       Widget name
 	 * @param string $description Widget description
 	 * @param array  $fields      Array of fields

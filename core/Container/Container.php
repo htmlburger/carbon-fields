@@ -426,6 +426,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Check if all conditions pass for object
 	 *
+	 * @param  $object_id
 	 * @return bool
 	 */
 	protected function all_conditions_pass( $object_id ) {
