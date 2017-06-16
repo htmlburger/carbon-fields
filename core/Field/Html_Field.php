@@ -56,16 +56,6 @@ class Html_Field extends Field {
 	}
 
 	/**
-	 * Retrieve field label.
-	 * The label for the HTML field is hidden by design.
-	 *
-	 * @return string
-	 */
-	public function get_label() {
-		return '';
-	}
-
-	/**
 	 * Load the field value.
 	 * Skipped, no value to be loaded.
 	 */
