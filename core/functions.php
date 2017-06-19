@@ -67,3 +67,15 @@ if ( ! function_exists( 'carbon_set_comment_meta' ) ) {
 		return Helper::set_comment_meta( $id, $name, $value, $container_id );
 	}
 }
+
+if ( ! function_exists( 'carbon_get_nav_menu_item_meta' ) ) {
+	function carbon_get_nav_menu_item_meta( $id, $name, $container_id = '' ) {
+		return Helper::get_nav_menu_item_meta( $id, $name, $container_id );
+	}
+}
+
+if ( ! function_exists( 'carbon_set_nav_menu_item_meta' ) ) {
+	function carbon_set_nav_menu_item_meta( $id, $name, $value, $container_id = '' ) {
+		return Helper::set_nav_menu_item_meta( $id, $name, $value, $container_id );
+	}
+}

@@ -211,6 +211,30 @@ class Helper {
 	}
 
 	/**
+	 * Get nav menu item meta field for a nav menu item.
+	 *
+	 * @param  int    $id           Nav menu item ID.
+	 * @param  string $name         Custom field name.
+	 * @param  string $container_id
+	 * @return mixed  Meta value.
+	 */
+	public static function get_nav_menu_item_meta( $id, $name, $container_id = '' ) {
+		return static::get_value( $id, 'nav_menu_item', $container_id, $name );
+	}
+
+	/**
+	 * Set nav menu item meta field for a nav menu item.
+	 *
+	 * @param  int    $id           Nav menu item ID
+	 * @param  string $name         Field name
+	 * @param  array  $value
+	 * @param  string $container_id
+	 */
+	public static function set_nav_menu_item_meta( $id, $name, $value, $container_id = '' ) {
+		return static::set_value( $id, 'nav_menu_item', $container_id, $name, $value );
+	}
+
+	/**
 	 * Recursive sorting function by array key.
 	 * 
 	 * @param  array   &$array     The input array.
