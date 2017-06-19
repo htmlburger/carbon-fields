@@ -75,7 +75,7 @@
 .group-tabs-nav-holder .group-tabs-nav .carbon-complex-group-error-badge { position: absolute; right: 0; top: 50%; margin-top: -6px; color: $color-state-error; font-size: 12px; line-height: 1; visibility: hidden; }
 .group-tabs-nav-holder .group-tabs-nav .ui-placeholder-highlight { height: 33px; margin-bottom: 0; border: 1px dashed $color-border-darker; }
 
-.group-tabs-nav-holder .group-tabs-nav .active a { background: #fff; border-bottom-color: #fff; }
+.group-tabs-nav-holder .group-tabs-nav .active a { background: #fff; border-bottom-color: #fff; z-index: 5; }
 
 .group-tabs-nav-holder .group-tabs-nav .carbon-complex-group-has-error a { padding-right: 20px; color: $color-state-error; }
 .group-tabs-nav-holder .group-tabs-nav .carbon-complex-group-has-error .carbon-complex-group-error-badge { visibility: visible; }
@@ -121,7 +121,7 @@
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav { border-bottom: 1px solid $color-border; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav li { display: block; width: auto; margin-right: 0; margin-bottom: 0; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav a { margin-right: -1px; max-width: none; border-bottom: 0; white-space: normal; }
-.layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav .active a { position: relative; z-index: 5; border-right-color: #fff; }
+.layout-tabbed-vertical > .group-tabs-nav-holder .group-tabs-nav .active a { position: relative; border-right-color: #fff; }
 
 .layout-tabbed-vertical > .group-tabs-nav-holder .carbon-actions { position: static; }
 .layout-tabbed-vertical > .group-tabs-nav-holder .carbon-button { float: none; }
