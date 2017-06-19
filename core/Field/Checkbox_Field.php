@@ -32,8 +32,8 @@ class Checkbox_Field extends Field {
 	/**
 	 * Set the option value.
 	 *
-	 * @param string $value New value
-	 * @return Field $this
+	 * @param  string $value New value
+	 * @return Field  $this
 	 */
 	public function set_option_value( $value ) {
 		$this->option_value = $value;
@@ -41,16 +41,14 @@ class Checkbox_Field extends Field {
 	}
 
 	/**
-	 * Load the field value from an input array based on it's name.
-	 * If not enabled, set to empty string for easier data querying.
-	 *
-	 * @param array $input Array of field names and values.
+	 * {@inheritDoc}
 	 */
 	public function set_value_from_input( $input ) {
 		parent::set_value_from_input( $input );
 		if ( $this->get_value() !== $this->get_option_value() ) {
 			$this->set_value( '' );
 		}
+		return $this;
 	}
 
 	/**

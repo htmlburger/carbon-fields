@@ -48,6 +48,7 @@ class Date_Field extends Field {
 		} else {
 			$this->clear_value();
 		}
+		return $this;
 	}
 
 	/**

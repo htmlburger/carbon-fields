@@ -151,15 +151,16 @@ class Group_Field {
 	/**
 	 * Set the group label.
 	 *
-	 * @param string $label If null, the label will be generated from the group name
+	 * @param  string      $label If null, the label will be generated from the group name
+	 * @return Group_Field $this
 	 */
 	public function set_label( $label ) {
 		if ( is_null( $label ) ) {
 			// Try to guess field label from it's name
 			$label = Helper::normalize_label( $this->get_name() );
 		}
-
 		$this->label = $label;
+		return $this;
 	}
 
 	/**
@@ -174,10 +175,12 @@ class Group_Field {
 	/**
 	 * Set the label template.
 	 *
-	 * @param string $template
+	 * @param  string      $template
+	 * @return Group_Field $this
 	 */
 	public function set_label_template( $template ) {
 		$this->label_template = $template;
+		return $this;
 	}
 
 	/**
@@ -199,7 +202,8 @@ class Group_Field {
 	/**
 	 * Set the group name.
 	 *
-	 * @param string $name  Group name, either sanitized or not
+	 * @param  string      $name Group name, either sanitized or not
+	 * @return Group_Field $this
 	 */
 	public function set_name( $name ) {
 		if ( ! $name ) {
@@ -212,6 +216,7 @@ class Group_Field {
 		}
 
 		$this->name = $name;
+		return $this;
 	}
 
 	/**
@@ -226,13 +231,15 @@ class Group_Field {
 	/**
 	 * Assign a DataStore instance for all group fields.
 	 *
-	 * @param object  $datastore
-	 * @param boolean $set_as_default
+	 * @param  object      $datastore
+	 * @param  boolean     $set_as_default
+	 * @return Group_Field $this
 	 */
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		foreach ( $this->fields as $field ) {
 			$field->set_datastore( $datastore, $set_as_default );
 		}
+		return $this;
 	}
 
 	/**

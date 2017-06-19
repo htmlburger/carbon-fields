@@ -74,9 +74,7 @@ class Association_Field extends Field {
 	}
 
 	/**
-	 * Load the field value from an input array based on it's name
-	 *
-	 * @param array $input Array of field names and values.
+	 * {@inheritDoc}
 	 */
 	public function set_value_from_input( $input ) {
 		$value = array();
@@ -87,14 +85,15 @@ class Association_Field extends Field {
 			}
 		}
 		$this->set_value( $value );
+		return $this;
 	}
 
 	/**
-	 * Alias for $this->get_value_set()->set( $value );
+	 * {@inheritDoc}
 	 */
 	public function set_value( $value ) {
 		$value = $this->value_string_array_to_value_set( $value );
-		parent::set_value( $value );
+		return parent::set_value( $value );
 	}
 
 	/**
@@ -447,7 +446,9 @@ class Association_Field extends Field {
 
 	/**
 	 * Modify the types.
-	 * @param array $types New types
+	 * 
+	 * @param  array $types New types
+	 * @return Field $this
 	 */
 	public function set_types( $types ) {
 		$this->types = $types;
@@ -466,7 +467,8 @@ class Association_Field extends Field {
 	/**
 	 * Set the minimum allowed number of selected entries.
 	 *
-	 * @param int $min
+	 * @param  int   $min
+	 * @return Field $this
 	 */
 	public function set_min( $min ) {
 		$this->min = intval( $min );
@@ -485,7 +487,8 @@ class Association_Field extends Field {
 	/**
 	 * Set the maximum allowed number of selected entries.
 	 *
-	 * @param int $max
+	 * @param  int   $max
+	 * @return Field $this
 	 */
 	public function set_max( $max ) {
 		$this->max = intval( $max );
@@ -504,7 +507,8 @@ class Association_Field extends Field {
 	/**
 	 * Set whether entry duplicates are allowed.
 	 *
-	 * @param boolean $allowed
+	 * @param  boolean $allowed
+	 * @return Field   $this
 	 */
 	public function set_duplicates_allowed( $allowed ) {
 		$this->duplicates_allowed = $allowed;
@@ -516,6 +520,7 @@ class Association_Field extends Field {
 	 * Backwards-compatibility alias.
 	 *
 	 * @param  boolean $allow
+	 * @return Field   $this
 	 */
 	public function allow_duplicates( $allow = true ) {
 		return $this->set_duplicates_allowed( $allow );

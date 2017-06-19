@@ -342,9 +342,12 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Set array of hierarchy field names
+	 * 
+	 * @return Field $this
 	 */
 	public function set_hierarchy( $hierarchy ) {
 		$this->hierarchy = $hierarchy;
+		return $this;
 	}
 
 	/**
@@ -358,10 +361,13 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Set array of hierarchy indexes
+	 * 
+	 * @return Field $this
 	 */
 	public function set_hierarchy_index( $hierarchy_index ) {
 		$hierarchy_index = ( ! empty( $hierarchy_index ) ) ? $hierarchy_index : array();
 		$this->hierarchy_index = $hierarchy_index;
+		return $this;
 	}
 
 	/**
@@ -443,7 +449,8 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Load the field value from an input array based on it's name
 	 *
-	 * @param array $input Array of field names and values.
+	 * @param  array $input Array of field names and values.
+	 * @return Field $this
 	 */
 	public function set_value_from_input( $input ) {
 		if ( isset( $input[ $this->get_name() ] ) ) {
@@ -451,6 +458,7 @@ class Field implements Datastore_Holder_Interface {
 		} else {
 			$this->clear_value();
 		}
+		return $this;
 	}
 
 	/**
@@ -476,7 +484,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @param  Datastore_Interface $datastore
 	 * @param  boolean             $set_as_default
-	 * @return object              $this
+	 * @return Field               $this
 	 */
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		if ( $set_as_default && ! $this->has_default_datastore() ) {
@@ -499,8 +507,8 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Assign the type of the container this field is in
 	 *
-	 * @param string
-	 * @return object $this
+	 * @param  string $context
+	 * @return Field  $this
 	 */
 	public function set_context( $context ) {
 		$this->context = $context;
@@ -522,10 +530,12 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Set the Value_Set object
 	 *
-	 * @param Value_Set $value_set
+	 * @param  Value_Set $value_set
+	 * @return Field     $this
 	 */
 	public function set_value_set( $value_set ) {
 		$this->value_set = $value_set;
+		return $this;
 	}
 
 	/**
@@ -566,6 +576,7 @@ class Field implements Datastore_Holder_Interface {
 	 */
 	public function set_value( $value ) {
 		$this->get_value_set()->set( $value );
+		return $this;
 	}
 
 	/**
@@ -587,7 +598,8 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Set default field value
 	 *
-	 * @param mixed $default_value
+	 * @param  mixed $default_value
+	 * @return Field $this
 	 */
 	public function set_default_value( $default_value ) {
 		$this->default_value = $default_value;
@@ -605,9 +617,12 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Set field base name as defined in the container.
+	 * 
+	 * @return Field $this
 	 */
 	public function set_base_name( $name ) {
 		$this->base_name = $name;
+		return $this;
 	}
 
 	/**
@@ -623,25 +638,27 @@ class Field implements Datastore_Holder_Interface {
 	 * Set field name.
 	 * Use only if you are completely aware of what you are doing.
 	 *
-	 * @param string $name Field name, either sanitized or not
+	 * @param  string $name Field name, either sanitized or not
+	 * @return Field  $this
 	 */
 	public function set_name( $name ) {
 		if ( empty( $name ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name can\'t be empty' );
-			return;
+			return $this;
 		}
 
 		// symbols ]-[ are supported in a hidden way - required for widgets to work (WP imposes dashes and square brackets on field names)
 		$regex = '/\A[a-z0-9_\-\[\]]+\z/';
 		if ( ! preg_match( $regex, $name ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name can only contain lowercase alphanumeric characters and underscores ("' . $name . '" passed).' );
-			return;
+			return $this;
 		}
 
 		$name_prefix = $this->get_name_prefix();
 		$name = ( substr( $name, 0, strlen( $name_prefix ) ) !== $name_prefix ? $name_prefix . $name : $name );
 
 		$this->name = $name;
+		return $this;
 	}
 
 	/**
@@ -657,7 +674,8 @@ class Field implements Datastore_Holder_Interface {
 	 * Set field name prefix
 	 * Use only if you are completely aware of what you are doing.
 	 *
-	 * @param string $name_prefix
+	 * @param  string $name_prefix
+	 * @return Field  $this
 	 */
 	public function set_name_prefix( $name_prefix ) {
 		$name_prefix = strval( $name_prefix );
@@ -667,6 +685,7 @@ class Field implements Datastore_Holder_Interface {
 
 		$this->name_prefix = $name_prefix;
 		$this->set_name( $this->name_prefix . $this->get_name() );
+		return $this;
 	}
 
 	/**
@@ -681,7 +700,8 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Set field label.
 	 *
-	 * @param string $label If null, the label will be generated from the field name
+	 * @param  string $label If null, the label will be generated from the field name
+	 * @return Field  $this
 	 */
 	public function set_label( $label ) {
 		if ( is_null( $label ) ) {
@@ -690,6 +710,7 @@ class Field implements Datastore_Holder_Interface {
 		}
 
 		$this->label = $label;
+		return $this;
 	}
 
 	/**
@@ -740,7 +761,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Set additional text to be displayed during field render,
 	 * containing information and guidance for the user
 	 *
-	 * @return object $this
+	 * @return Field $this
 	 */
 	public function set_help_text( $help_text ) {
 		$this->help_text = $help_text;
@@ -769,8 +790,8 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Whether or not this value should be auto loaded. Applicable to theme options only.
 	 *
-	 * @param bool $autoload
-	 * @return object $this
+	 * @param  bool  $autoload
+	 * @return Field $this
 	 */
 	public function set_autoload( $autoload ) {
 		$this->autoload = $autoload;
@@ -789,8 +810,8 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Whether or not this field will be initialized when the field is in the viewport (visible).
 	 *
-	 * @param bool $lazyload
-	 * @return object $this
+	 * @param  bool  $lazyload
+	 * @return Field $this
 	 */
 	public function set_lazyload( $lazyload ) {
 		$this->lazyload = $lazyload;
@@ -809,8 +830,8 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Set the field width.
 	 *
-	 * @param int $width
-	 * @return object $this
+	 * @param  int   $width
+	 * @return Field $this
 	 */
 	public function set_width( $width ) {
 		$this->width = (int) $width;
@@ -829,8 +850,8 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Set CSS classes that the container should use.
 	 *
-	 * @param string|array<string> $classes
-	 * @return object $this
+	 * @param  string|array<string> $classes
+	 * @return Field                $this
 	 */
 	public function set_classes( $classes ) {
 		$this->classes = Helper::sanitize_classes( $classes );
@@ -840,8 +861,8 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Whether this field is mandatory for the user
 	 *
-	 * @param bool $required
-	 * @return object $this
+	 * @param  bool  $required
+	 * @return Field $this
 	 */
 	public function set_required( $required = true ) {
 		$this->required = $required;
@@ -867,16 +888,20 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * HTML id attribute setter
-	 * @param string $id
+	 * 
+	 * @param  string $id
+	 * @return Field  $this
 	 */
 	public function set_id( $id ) {
 		$this->id = $id;
+		return $this;
 	}
 
 	/**
 	 * Set the field visibility conditional logic.
 	 *
-	 * @param array
+	 * @param  array
+	 * @return Field $this
 	 */
 	public function set_conditional_logic( $rules ) {
 		$this->conditional_logic = $this->parse_conditional_rules( $rules );
@@ -948,7 +973,8 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Set the REST visibility of the field
 	 * 
-	 * @param bool $visible
+	 * @param  bool  $visible
+	 * @return Field $this
 	 */
 	public function set_visible_in_rest_api( $visible = true ) {
 		$this->visible_in_rest_api = $visible;

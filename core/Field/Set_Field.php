@@ -49,7 +49,8 @@ class Set_Field extends Predefined_Options_Field {
 	/**
 	 * Load the field value from an input array based on it's name
 	 *
-	 * @param array $input Array of field names and values.
+	 * @param  array $input Array of field names and values.
+	 * @return Field $this
 	 */
 	public function set_value_from_input( $input ) {
 		if ( ! isset( $input[ $this->name ] ) ) {
@@ -61,6 +62,7 @@ class Set_Field extends Predefined_Options_Field {
 			}
 			$this->set_value( $value );
 		}
+		return $this;
 	}
 
 	/**

@@ -72,12 +72,13 @@ class Map_Field extends Field {
 	/**
 	 * Load the field value from an input array based on it's name
 	 *
-	 * @param array $input Array of field names and values.
+	 * @param  array $input Array of field names and values.
+	 * @return Field $this
 	 */
 	public function set_value_from_input( $input ) {
 		if ( ! isset( $input[ $this->get_name() ] ) ) {
 			$this->set_value( null );
-			return;
+			return $this;
 		}
 
 		$value_set = array(
@@ -99,6 +100,7 @@ class Map_Field extends Field {
 		$value_set[ Value_Set::VALUE_PROPERTY ] = $this->lat_lng_to_latlng( $value_set['lat'], $value_set['lng'] );
 
 		$this->set_value( $value_set );
+		return $this;
 	}
 
 	/**
@@ -135,9 +137,11 @@ class Map_Field extends Field {
 
 	/**
 	 * Set the coords and zoom of this field.
-	 * @param string $lat  Latitude
-	 * @param string $lng  Longitude
-	 * @param int $zoom Zoom level
+	 * 
+	 * @param  string $lat  Latitude
+	 * @param  string $lng  Longitude
+	 * @param  int    $zoom Zoom level
+	 * @return Field  $this
 	 */
 	public function set_position( $lat, $lng, $zoom ) {
 		$this->default_lat = floatval( $lat );

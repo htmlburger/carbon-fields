@@ -31,7 +31,8 @@ abstract class Predefined_Options_Field extends Field {
 	 * Set the options of this field.
 	 * Accepts either array of data or a callback that returns the data.
 	 *
-	 * @param array|callable $options
+	 * @param  array|callable $options
+	 * @return Field          $this
 	 */
 	public function set_options( $options ) {
 		if ( ! is_callable( $options ) && ! is_array( $options ) ) {
@@ -47,7 +48,8 @@ abstract class Predefined_Options_Field extends Field {
 	 * Add new options to this field.
 	 * Accepts either array of data or a callback that returns the data.
 	 *
-	 * @param array|callable $options
+	 * @param  array|callable $options
+	 * @return Field          $this
 	 */
 	public function add_options( $options ) {
 		if ( ! is_callable( $options ) && ! is_array( $options ) ) {
