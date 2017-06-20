@@ -34,7 +34,7 @@ export const CheckboxField = ({
 	checked,
 	handleChange
 }) => {
-	return <Field field={field} hide_required_label={true}>
+	return <Field field={field} showRequiredLabel={false}>
 		<label>
 			<input
 				type="checkbox"

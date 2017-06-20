@@ -23,7 +23,7 @@ import { TYPE_SEPARATOR } from 'fields/constants';
 export const SeparatorField = ({
 	field
 }) => {
-	return <Field field={field}>
+	return <Field field={field} showLabel={false}>
 		<h3>{field.label}</h3>
 	</Field>;
 };

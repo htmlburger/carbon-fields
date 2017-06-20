@@ -191,24 +191,29 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 var Field = exports.Field = function Field(_ref) {
 	var field = _ref.field,
 	    children = _ref.children,
-	    hide_required_label = _ref.hide_required_label;
+	    showLabel = _ref.showLabel,
+	    showRequiredLabel = _ref.showRequiredLabel;
 
 	var styles = !!field.width ? { flexBasis: field.width + '%' } : null;
 	var classes = ['carbon-field', 'carbon-' + field.type, { 'has-width': !!field.width }, { 'carbon-highlight': !field.ui.valid }].concat(_toConsumableArray(field.classes));
 
+	var requiredLabel = field.required && showRequiredLabel ? _react2.default.createElement(
+		'span',
+		{ className: 'carbon-required' },
+		'*'
+	) : null;
+
+	var label = showLabel ? _react2.default.createElement(
+		'label',
+		{ htmlFor: field.id },
+		field.label,
+		requiredLabel
+	) : null;
+
 	return _react2.default.createElement(
 		'div',
 		{ className: (0, _classnames2.default)(classes), style: styles, hidden: !field.ui.is_visible },
-		_react2.default.createElement(
-			'label',
-			{ htmlFor: field.id },
-			field.label,
-			field.required && !hide_required_label ? _react2.default.createElement(
-				'span',
-				{ className: 'carbon-required' },
-				'*'
-			) : null
-		),
+		label,
 		_react2.default.createElement(
 			'div',
 			{ className: 'field-holder' },
@@ -238,7 +243,18 @@ Field.propTypes = {
 		width: _propTypes2.default.number
 	}),
 	children: _propTypes2.default.oneOfType([_propTypes2.default.element, _propTypes2.default.arrayOf(_propTypes2.default.element)]),
-	hide_required_label: _propTypes2.default.bool
+	showLabel: _propTypes2.default.bool,
+	showRequiredLabel: _propTypes2.default.bool
+};
+
+/**
+ * Define some default props.
+ *
+ * @type {Object}
+ */
+Field.defaultProps = {
+	showLabel: true,
+	showRequiredLabel: true
 };
 
 exports.default = Field;
@@ -10254,7 +10270,7 @@ var CheckboxField = exports.CheckboxField = function CheckboxField(_ref) {
 
 	return _react2.default.createElement(
 		_field2.default,
-		{ field: field, hide_required_label: true },
+		{ field: field, showRequiredLabel: false },
 		_react2.default.createElement(
 			'label',
 			null,
@@ -12211,7 +12227,7 @@ var SeparatorField = exports.SeparatorField = function SeparatorField(_ref) {
 
   return _react2.default.createElement(
     _field2.default,
-    { field: field },
+    { field: field, showLabel: false },
     _react2.default.createElement(
       'h3',
       null,

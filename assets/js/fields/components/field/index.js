@@ -15,7 +15,7 @@ import cx from 'classnames';
  * @param  {React.Element|React.Element[]} props.children
  * @return {React.Element}
  */
-export const Field = ({ field, children, hide_required_label }) => {
+export const Field = ({ field, children, showLabel, showRequiredLabel }) => {
 	const styles = !!field.width ? { flexBasis: `${field.width}%`} : null;
 	const classes = [
 		'carbon-field',
@@ -25,16 +25,20 @@ export const Field = ({ field, children, hide_required_label }) => {
 		...field.classes,
 	];
 
-	return <div className={cx(classes)} style={styles} hidden={!field.ui.is_visible}>
+	const requiredLabel = (field.required && showRequiredLabel)
+		? <span className="carbon-required">*</span>
+		: null;
+
+	const label = showLabel ? (
 		<label htmlFor={field.id}>
 			{field.label}
 
-			{
-				(field.required && !hide_required_label)
-				? <span className="carbon-required">*</span>
-				: null
-			}
+			{requiredLabel}
 		</label>
+	) : null;
+
+	return <div className={cx(classes)} style={styles} hidden={!field.ui.is_visible}>
+		{label}
 
 		<div className="field-holder">
 			{children}
@@ -72,7 +76,18 @@ Field.propTypes = {
 		PropTypes.element,
 		PropTypes.arrayOf(PropTypes.element),
 	]),
-	hide_required_label: PropTypes.bool,
+	showLabel: PropTypes.bool,
+	showRequiredLabel: PropTypes.bool,
+};
+
+/**
+ * Define some default props.
+ *
+ * @type {Object}
+ */
+Field.defaultProps = {
+	showLabel: true,
+	showRequiredLabel: true,
 };
 
 export default Field;
