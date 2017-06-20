@@ -338,11 +338,11 @@ class Complex_Field extends Field {
 		return $fields;
 	}
 
-	protected function get_prefilled_groups( $value_tree ) {
+	protected function get_prefilled_groups( $groups, $value_tree ) {
 		$fields = array();
 
 		foreach ( $value_tree as $group_index => $value ) {
-			$group_name = $value[ Value_Set::VALUE_PROPERTY ];
+			$group_name = $groups[ $group_index ];
 			$group = $this->get_group_by_name( $group_name );
 			if ( ! $group ) {
 				// Failed to find group - sombody has been messing with the database or group definitions
@@ -421,7 +421,7 @@ class Complex_Field extends Field {
 		$save = apply_filters( 'carbon_fields_should_save_field_value', true, $this->get_value(), $this );
 		if ( $save ) {
 			$this->get_datastore()->save( $this );
-			$field_groups = $this->get_prefilled_groups( $this->get_value_tree() );
+			$field_groups = $this->get_prefilled_groups( $this->get_value(), $this->get_value_tree() );
 			foreach ( $field_groups as $group_index => $fields ) {
 				foreach ( $fields as $field ) {
 					if ( ! is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
@@ -437,7 +437,7 @@ class Complex_Field extends Field {
 	 * {@inheritDoc}
 	 */
 	public function get_formatted_value() {
-		$field_groups = $this->get_prefilled_groups( $this->get_value_tree() );
+		$field_groups = $this->get_prefilled_groups( $this->get_value(), $this->get_value_tree() );
 
 		$value = array();
 		foreach ( $field_groups as $group_index => $field_group ) {
@@ -541,7 +541,7 @@ class Complex_Field extends Field {
 			$groups_data[] = $group_data;
 		}
 
-		$field_groups = $this->get_prefilled_groups( $this->get_value_tree() );
+		$field_groups = $this->get_prefilled_groups( $this->get_value(), $this->get_value_tree() );
 		$value_data = array();
 		foreach ( $field_groups as $group_index => $fields ) {
 			$group = $this->get_group_by_name( $fields[ Value_Set::VALUE_PROPERTY ] );
