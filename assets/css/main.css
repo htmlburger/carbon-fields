@@ -29,13 +29,14 @@
 
 @import url(modules/_fields.base);
 @import url(modules/_fields.association);
-@import url(modules/_fields.file);
-@import url(modules/_fields.rich);
-@import url(modules/_fields.html);
+@import url(modules/_fields.checkbox);
 @import url(modules/_fields.color);
-@import url(modules/_fields.map);
-@import url(modules/_fields.separator);
 @import url(modules/_fields.complex);
+@import url(modules/_fields.file);
+@import url(modules/_fields.html);
+@import url(modules/_fields.map);
 @import url(modules/_fields.radio-image);
+@import url(modules/_fields.rich);
+@import url(modules/_fields.separator);
 
 @import url(modules/_overrides);

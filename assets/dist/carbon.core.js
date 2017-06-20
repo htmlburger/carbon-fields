@@ -10270,7 +10270,7 @@ var CheckboxField = exports.CheckboxField = function CheckboxField(_ref) {
 
 	return _react2.default.createElement(
 		_field2.default,
-		{ field: field, showRequiredLabel: false },
+		{ field: field, showLabel: false, showRequiredLabel: false },
 		_react2.default.createElement(
 			'label',
 			null,
