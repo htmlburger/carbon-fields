@@ -119,7 +119,7 @@ export const ComplexField = ({
 	);
 
 	return <Field field={field}>
-		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': tabbed })}>
+		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-complex-tabbed': tabbed })}>
 			<ComplexEmptyNotice
 				label={field.labels.plural_name}
 				visible={!field.value.length}

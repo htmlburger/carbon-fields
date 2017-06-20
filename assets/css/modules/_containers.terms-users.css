@@ -27,9 +27,9 @@
 @media screen and (max-width: $breakpoint-mobile-max) {
 	.edit-term-container { width: auto; }
 
-	.add-term-container .carbon-Association .association-container { margin: 3px 0 0; }
-	.add-term-container .carbon-Association .association-left,
-	.add-term-container .carbon-Association .association-right { float: none; display: block; width: auto; padding: 0 0 5px; }
+	.add-term-container .carbon-association .association-container { margin: 3px 0 0; }
+	.add-term-container .carbon-association .association-left,
+	.add-term-container .carbon-association .association-right { float: none; display: block; width: auto; padding: 0 0 5px; }
 
 	.carbon-user-container label { width: auto; }
 }

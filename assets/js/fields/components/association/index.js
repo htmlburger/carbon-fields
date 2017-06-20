@@ -58,7 +58,7 @@ export const AssociationField = ({
 	handleSortItems
 }) => {
 	return <Field field={field}>
-		<div className="carbon-association-container carbon-Association">
+		<div className="carbon-association-container carbon-association">
 			<div className="selected-items-container">
 				<strong>
 					<span className="selected-counter">{field.value.length}</span>

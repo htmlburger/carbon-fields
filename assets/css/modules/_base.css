@@ -3,11 +3,11 @@
 \* ------------------------------------------------------------ */
 
 .carbon-field,
-.carbon-Complex .fields-container,
-.carbon-Association .association-left,
-.carbon-Association .association-right,
-.carbon-Association .search-field,
-.carbon-File .carbon-attachment-file-name { box-sizing: border-box; }
+.carbon-complex .fields-container,
+.carbon-association .association-left,
+.carbon-association .association-right,
+.carbon-association .search-field,
+.carbon-file .carbon-attachment-file-name { box-sizing: border-box; }
 
 /* ------------------------------------------------------------ *\
 	Term Page Overrides

@@ -9999,7 +9999,7 @@ var AssociationField = exports.AssociationField = function AssociationField(_ref
 		{ field: field },
 		_react2.default.createElement(
 			'div',
-			{ className: 'carbon-association-container carbon-Association' },
+			{ className: 'carbon-association-container carbon-association' },
 			_react2.default.createElement(
 				'div',
 				{ className: 'selected-items-container' },
@@ -10676,7 +10676,7 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 		{ field: field },
 		_react2.default.createElement(
 			'div',
-			{ className: (0, _classnames2.default)('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-Complex-tabbed': tabbed }) },
+			{ className: (0, _classnames2.default)('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-complex-tabbed': tabbed }) },
 			_react2.default.createElement(_emptyNotice2.default, {
 				label: field.labels.plural_name,
 				visible: !field.value.length,
