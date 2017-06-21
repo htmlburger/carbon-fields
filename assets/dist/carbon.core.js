@@ -850,7 +850,7 @@ var getComplexGroupById = exports.getComplexGroupById = function getComplexGroup
  * @return {Object}
  */
 var getFieldPatternRegex = exports.getFieldPatternRegex = function getFieldPatternRegex() {
-	return (/^([a-z0-9_]+)(\[(\d+)\])?(:([a-z0-9_]+))?$/
+	return (/^([a-z0-9_\-]+)(\[(\d+)\])?(:([a-z0-9_\-]+))?$/
 	);
 };
 
@@ -1045,15 +1045,23 @@ var hasInvalidFields = exports.hasInvalidFields = (0, _reselect.createSelector)(
  * @return {String}
  */
 var getComplexGroupLabel = exports.getComplexGroupLabel = function getComplexGroupLabel(state, group) {
-	var fields = (0, _lodash.pick)(getFields(state), (0, _lodash.map)(group.fields, 'id'));
-
 	if ((0, _lodash.isNull)(group.label_template)) {
 		return group.label;
 	}
 
-	return (0, _lodash.template)(group.label_template)(_extends({
-		fields: fields
-	}, (0, _lodash.mapValues)((0, _lodash.mapKeys)(fields, 'base_name'), 'value')));
+	var fields = (0, _lodash.pick)(getFields(state), (0, _lodash.map)(group.fields, 'id'));
+	var fieldValues = (0, _lodash.mapValues)((0, _lodash.mapKeys)(fields, function (v, k) {
+		return v.base_name.replace(/\-/g, '_');
+	}), 'value');
+
+	try {
+		return (0, _lodash.template)(group.label_template)(_extends({
+			fields: fields
+		}, fieldValues));
+	} catch (e) {
+		console.error(e);
+	}
+	return 'N/A';
 };
 
 /***/ }),

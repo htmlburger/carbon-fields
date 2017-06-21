@@ -97,7 +97,7 @@ export const getComplexGroupById = (state, id) => {
  * @return {Object}
  */
 export const getFieldPatternRegex = () => {
-	return /^([a-z0-9_]+)(\[(\d+)\])?(:([a-z0-9_]+))?$/;
+	return /^([a-z0-9_\-]+)(\[(\d+)\])?(:([a-z0-9_\-]+))?$/;
 };
 
 /**
@@ -270,14 +270,20 @@ export const hasInvalidFields = createSelector(getFields, fields => some(fields,
  * @return {String}
  */
 export const getComplexGroupLabel = (state, group) => {
-	const fields = pick(getFields(state), map(group.fields, 'id'));
-
 	if (isNull(group.label_template)) {
 		return group.label;
 	}
 
-	return template(group.label_template)({
-		fields,
-		...mapValues(mapKeys(fields, 'base_name'), 'value'),
-	});
+	const fields = pick(getFields(state), map(group.fields, 'id'));
+	const fieldValues = mapValues(mapKeys(fields, (v, k) => { return v.base_name.replace(/\-/g, '_') } ), 'value');
+
+	try {
+		return template(group.label_template)({
+			fields,
+			...fieldValues,
+		});
+	} catch (e) {
+		console.error(e);
+	}
+	return 'N/A';
 };
