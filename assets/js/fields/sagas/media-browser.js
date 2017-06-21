@@ -65,7 +65,7 @@ export function* workerAddMultipleFiles(action) {
 		// optional - this ensures an instant preview update
 		yield redrawAttachmentPreview(freshField.id, value, attachment, freshField.default_thumb_url);
 
-		yield put(setFieldValue(fieldId, value));
+		yield put(setFieldValue(freshField.id, value));
 	}
 }
 

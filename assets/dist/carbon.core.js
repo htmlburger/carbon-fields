@@ -14073,7 +14073,7 @@ function workerAddMultipleFiles(action) {
 
 				case 29:
 					_context2.next = 31;
-					return (0, _effects.put)((0, _actions.setFieldValue)(fieldId, value));
+					return (0, _effects.put)((0, _actions.setFieldValue)(freshField.id, value));
 
 				case 31:
 					i++;
