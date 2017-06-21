@@ -12,7 +12,7 @@ class Textarea_Field extends Field {
 	 * 
 	 * @var array<string>
 	 */
-	protected $allowed_attributes = array( 'maxLength', 'minLength', 'placeholder', 'readonly' );
+	protected $allowed_attributes = array( 'maxLength', 'minLength', 'placeholder', 'readOnly' );
 
 	/**
 	 * Number of rows (affects textarea height)
