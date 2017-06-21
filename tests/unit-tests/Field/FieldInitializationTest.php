@@ -191,7 +191,7 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 * @covers ::set_name
 	 *
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage can't be empty
+	 * @expectedExceptionMessage can only contain lowercase alphanumeric characters
 	 */
 	public function testFieldNameCantBeEmpty() {
 		Field::make( 'text', '' );
@@ -204,20 +204,7 @@ class FieldInitializationTest extends WP_UnitTestCase {
 	 * @covers ::set_name
 	 *
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage only contain lowercase alphanumeric
-	 */
-	public function testFieldNameCantContainHiddenlySupportedDashes() {
-		Field::make( 'text', 'test_field-with-dashes' );
-	}
-
-	/**
-	 * @covers ::make
-	 * @covers ::factory
-	 * @covers ::__construct
-	 * @covers ::set_name
-	 *
-	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
-	 * @expectedExceptionMessage only contain lowercase alphanumeric
+	 * @expectedExceptionMessage can only contain lowercase alphanumeric characters
 	 */
 	public function testFieldNameCantContainHiddenlySupportedBrackets() {
 		Field::make( 'text', 'test_field_with_[brackets]' );

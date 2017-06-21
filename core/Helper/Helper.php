@@ -365,4 +365,14 @@ class Helper {
 		$classes = array_map( 'sanitize_html_class', $classes );
 		return $classes;
 	}
+	
+	/**
+	 * Check if an id or name for containers and fields is valid
+	 *
+	 * @param  string  $id
+	 * @return boolean
+	 */
+	public static function is_valid_entity_id( $id ) {
+		return ! empty( $id ) && preg_match( '/\A[a-z0-9_\-]+\z/', $id );
+	}
 }

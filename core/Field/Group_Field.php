@@ -210,9 +210,9 @@ class Group_Field {
 			$name = static::DEFAULT_GROUP_NAME;
 		}
 
-		$regex = '/\A[a-z0-9_]+\z/';
-		if ( ! preg_match( $regex, $name ) ) {
-			Incorrect_Syntax_Exception::raise( 'Group name can only contain lowercase alphanumeric characters and underscores.' );
+		if ( ! Helper::is_valid_entity_id( $name ) ) {
+			Incorrect_Syntax_Exception::raise( 'Group names can only contain lowercase alphanumeric characters, dashes and underscores ("' . $name . '" passed).' );
+			return $this;
 		}
 
 		$this->name = $name;

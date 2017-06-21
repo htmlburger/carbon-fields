@@ -156,8 +156,8 @@ abstract class Container implements Datastore_Holder_Interface {
 			$id = $repository->get_unique_container_id( $name );
 		}
 
-		if ( ! preg_match( '/\A[a-z0-9_\-]+\z/', $id ) ) { // hidden dash support for widgets
-			Incorrect_Syntax_Exception::raise( 'Container IDs can only contain lowercase alphanumeric characters and underscores ("' . $id . '" passed).' );
+		if ( ! Helper::is_valid_entity_id( $id ) ) {
+			Incorrect_Syntax_Exception::raise( 'Container IDs can only contain lowercase alphanumeric characters, dashes and underscores ("' . $id . '" passed).' );
 			return null;
 		}
 
