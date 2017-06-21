@@ -42,7 +42,7 @@ export function* workerAddedOrUpdatedEvent() {
 
 		// We don't care about other widgets.
 		if (!container) {
-			return;
+			continue;
 		}
 
 		yield put(receiveContainer(container, true));

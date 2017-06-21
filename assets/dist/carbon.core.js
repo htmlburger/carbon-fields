@@ -7,9 +7,9 @@ this["carbon.core"] =
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
+/******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-/******/ 		}
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -71,25 +71,25 @@ this["carbon.core"] =
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(332)
+module.exports = (__webpack_require__(9))(312);
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(1)
+module.exports = (__webpack_require__(9))(1);
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(338)
+module.exports = (__webpack_require__(9))(318);
 
 /***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(81)
+module.exports = (__webpack_require__(9))(170);
 
 /***/ }),
 /* 4 */
@@ -145,7 +145,7 @@ var COMPLEX_LAYOUT_TABBED_HORIZONTAL = exports.COMPLEX_LAYOUT_TABBED_HORIZONTAL 
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(195)
+module.exports = (__webpack_require__(9))(191);
 
 /***/ }),
 /* 6 */
@@ -1278,7 +1278,7 @@ var getContainersByType = exports.getContainersByType = function getContainersBy
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(330)
+module.exports = (__webpack_require__(9))(310);
 
 /***/ }),
 /* 16 */
@@ -2056,7 +2056,7 @@ var mapDispatchToProps = {
 /* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(339)
+module.exports = (__webpack_require__(9))(319);
 
 /***/ }),
 /* 26 */
@@ -2441,7 +2441,7 @@ var KEY_ENTER = exports.KEY_ENTER = 13;
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(194)
+module.exports = (__webpack_require__(9))(190);
 
 /***/ }),
 /* 30 */
@@ -2694,19 +2694,19 @@ var resetStore = exports.resetStore = (0, _reduxActions.createAction)('RESET_STO
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(333)
+module.exports = (__webpack_require__(9))(313);
 
 /***/ }),
 /* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(337)
+module.exports = (__webpack_require__(9))(317);
 
 /***/ }),
 /* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(340)
+module.exports = (__webpack_require__(9))(320);
 
 /***/ }),
 /* 39 */
@@ -6669,7 +6669,7 @@ function normalizePreloadedState(state) {
 /* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(336)
+module.exports = (__webpack_require__(9))(316);
 
 /***/ }),
 /* 80 */
@@ -9599,7 +9599,7 @@ function workerAddedOrUpdatedEvent() {
 						break;
 					}
 
-					return _context.abrupt('return');
+					return _context.abrupt('continue', 4);
 
 				case 13:
 					_context.next = 15;
@@ -15506,37 +15506,37 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(196)
+module.exports = (__webpack_require__(9))(192);
 
 /***/ }),
 /* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(331)
+module.exports = (__webpack_require__(9))(311);
 
 /***/ }),
 /* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(334)
+module.exports = (__webpack_require__(9))(314);
 
 /***/ }),
 /* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(335)
+module.exports = (__webpack_require__(9))(315);
 
 /***/ }),
 /* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(341)
+module.exports = (__webpack_require__(9))(321);
 
 /***/ }),
 /* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(842)
+module.exports = (__webpack_require__(9))(802);
 
 /***/ }),
 /* 139 */
