@@ -29,7 +29,13 @@ class Term_Meta_Container extends Container {
 	 */
 	public function init() {
 		add_action( 'admin_init', array( $this, '_attach' ) );
+		add_action( 'init', array( $this, 'hook_to_taxonomies' ), 999999 );
+	}
 
+	/**
+	 * Hook to relevant taxonomies
+	 */
+	public function hook_to_taxonomies() {
 		$taxonomies = $this->get_taxonomy_visibility();
 
 		foreach ( $taxonomies as $taxonomy ) {
