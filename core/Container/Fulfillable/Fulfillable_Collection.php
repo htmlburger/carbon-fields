@@ -168,7 +168,7 @@ class Fulfillable_Collection implements Fulfillable {
 			return $this->where_array( $condition_type, $fulfillable_comparison );
 		}
 
-		if ( is_callable( $condition_type ) && count( $args ) === 1 ) {
+		if ( $condition_type instanceof \Closure ) {
 			return $this->where_collection( $condition_type, $fulfillable_comparison );
 		}
 
