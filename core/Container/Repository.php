@@ -170,6 +170,7 @@ class Repository {
 		$id = preg_replace( '~[\-\s]+~', '_', $id );
 		$id = preg_replace( '~[^\w\_]+~', '', $id );
 		$id = preg_replace( '~_{2,}~', '_', $id );
+		$id = 'carbon_fields_container_' . $id;
 		$base = $id;
 		$suffix = 0;
 

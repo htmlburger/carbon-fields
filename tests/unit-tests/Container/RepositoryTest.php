@@ -11,11 +11,11 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 class RepositoryTest extends WP_UnitTestCase {
 	
 	public function setUp() {
-		$this->containerId = 'page_settings';
+		$this->containerId = 'carbon_fields_container_page_settings';
 		$this->containerTitle = 'Page Settings';
 		$this->containerType = 'post_meta';
 		$this->containerClass = 'Carbon_Fields\Container\Post_Meta_Container';
-		$this->containerDuplicateTitleId = 'page_settings1';
+		$this->containerDuplicateTitleId = 'carbon_fields_container_page_settings1';
 		$this->repository = new Repository();
 	}
 
@@ -137,6 +137,6 @@ class RepositoryTest extends WP_UnitTestCase {
 		$this->repository->register_container( $container );
 		$received = $this->repository->get_unique_container_id( $container->title );
 
-		$this->assertEquals( $container->id . '1', $received );
+		$this->assertEquals( $this->containerDuplicateTitleId, $received );
 	}
 }
