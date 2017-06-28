@@ -23,6 +23,7 @@ import {
  * The internal dependencies.
  */
 import { getSidebars } from 'sidebars/selectors';
+import { getContainers } from 'containers/selectors';
 import { TYPE_COMPLEX, PARENT_TYPE_CONTAINER } from 'fields/constants';
 
 /**
@@ -126,7 +127,7 @@ export const getFieldByHierarchy = (state, hierarchy) => {
 
 		for (let fieldId in allFields) {
 			let field = allFields[fieldId];
-			
+
 			if (field.base_name !== fieldName) {
 				continue;
 			}
@@ -287,3 +288,13 @@ export const getComplexGroupLabel = (state, group) => {
 	}
 	return 'N/A';
 };
+
+/**
+ * Get all fields that are rendered in a visible container.
+ *
+ * @return {Object[]}
+ */
+export const getFieldsWithinVisibleContainer = createSelector([
+	getContainers,
+	getFields
+], (containers, fields) => filter(fields, field => get(containers, `${field.container_id}.ui.is_visible`, false)));

@@ -3,7 +3,7 @@
  */
 import $ from 'jquery';
 import { takeEvery, takeLatest, call, select, put, take, all } from 'redux-saga/effects';
-import { keys } from 'lodash';
+import { map } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -12,7 +12,7 @@ import { validateContainer, validateAllContainers } from 'containers/actions';
 import { getContainerById } from 'containers/selectors';
 
 import { validateField, markFieldAsInvalid } from 'fields/actions';
-import { getFields, getFieldsByRoots, hasInvalidFields } from 'fields/selectors';
+import { getFieldsByRoots, hasInvalidFields, getFieldsWithinVisibleContainer } from 'fields/selectors';
 
 /**
  * Validate the fields.
@@ -80,6 +80,12 @@ export function* validate(fieldIds, event) {
  */
 export function* workerValidate({ payload: { containerId, event } }) {
 	const container = yield select(getContainerById, containerId);
+
+	// Don't validate the hidden containers.
+	if (!container.ui.is_visible) {
+		return;
+	}
+
 	const ids = yield select(getFieldsByRoots, container.fields);
 
 	yield call(validate, ids, event);
@@ -93,8 +99,8 @@ export function* workerValidate({ payload: { containerId, event } }) {
  * @return {void}
  */
 export function* workerValidateAll({ payload }) {
-	const fields = yield select(getFields);
-	const ids = yield call(keys, fields);
+	const fields = yield select(getFieldsWithinVisibleContainer);
+	const ids = yield call(map, fields, 'id');
 
 	yield call(validate, ids, payload);
 }
