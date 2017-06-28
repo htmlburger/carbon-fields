@@ -90,19 +90,19 @@
       "meta": {}
     },
     "./assets/js/fields/components/no-options/index.js": {
-      "id": 32,
-      "meta": {}
-    },
-    "./assets/js/lib/actions.js": {
       "id": 33,
       "meta": {}
     },
-    "./assets/js/sidebars/actions.js": {
+    "./assets/js/lib/actions.js": {
       "id": 34,
       "meta": {}
     },
-    "./assets/js/store/actions.js": {
+    "./assets/js/sidebars/actions.js": {
       "id": 35,
+      "meta": {}
+    },
+    "./assets/js/store/actions.js": {
+      "id": 36,
       "meta": {}
     },
     "./assets/js/containers/components/container/base.js": {

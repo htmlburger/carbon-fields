@@ -695,7 +695,7 @@ exports.default = function () {
 	return (0, _reactRedux.connect)(makeMapStateToProps, _extends({}, defaultMapDispatchToProps, mapDispatchToProps));
 };
 
-var _reactRedux = __webpack_require__(37);
+var _reactRedux = __webpack_require__(38);
 
 var _lodash = __webpack_require__(0);
 
@@ -1529,7 +1529,7 @@ var _jquery = __webpack_require__(17);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _reduxSaga = __webpack_require__(38);
+var _reduxSaga = __webpack_require__(32);
 
 var _lodash = __webpack_require__(0);
 
@@ -2019,7 +2019,7 @@ exports.default = function () {
   return (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps);
 };
 
-var _reactRedux = __webpack_require__(37);
+var _reactRedux = __webpack_require__(38);
 
 var _lodash = __webpack_require__(0);
 
@@ -2543,6 +2543,12 @@ exports.default = _extends({}, (0, _base2.default)(operators), {
 /* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
+module.exports = (__webpack_require__(9))(320);
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
 "use strict";
 
 
@@ -2628,7 +2634,7 @@ var enhance = (0, _withSetup2.default)({
 exports.default = enhance(NoOptions);
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2651,7 +2657,7 @@ var ready = exports.ready = (0, _reduxActions.createAction)('lib/READY'); /**
                                                                            */
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2688,7 +2694,7 @@ var addSidebar = exports.addSidebar = (0, _reduxActions.createAction)('sidebars/
 var receiveSidebar = exports.receiveSidebar = (0, _reduxActions.createAction)('sidebars/RECEIVE_SIDEBAR');
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2712,22 +2718,16 @@ var resetStore = exports.resetStore = (0, _reduxActions.createAction)('RESET_STO
                                                                                        */
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__(9))(313);
 
 /***/ }),
-/* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = (__webpack_require__(9))(317);
-
-/***/ }),
 /* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(320);
+module.exports = (__webpack_require__(9))(317);
 
 /***/ }),
 /* 39 */
@@ -2931,7 +2931,7 @@ var _reactDom = __webpack_require__(29);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _reactRedux = __webpack_require__(37);
+var _reactRedux = __webpack_require__(38);
 
 var _registry = __webpack_require__(26);
 
@@ -3195,7 +3195,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _reactRedux = __webpack_require__(37);
+var _reactRedux = __webpack_require__(38);
 
 var _selectors = __webpack_require__(11);
 
@@ -4431,7 +4431,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _handleActions;
 
-var _objectPathImmutable = __webpack_require__(36);
+var _objectPathImmutable = __webpack_require__(37);
 
 var _objectPathImmutable2 = _interopRequireDefault(_objectPathImmutable);
 
@@ -4441,7 +4441,7 @@ var _lodash = __webpack_require__(0);
 
 var _registry = __webpack_require__(26);
 
-var _actions = __webpack_require__(35);
+var _actions = __webpack_require__(36);
 
 var _actions2 = __webpack_require__(12);
 
@@ -5913,7 +5913,7 @@ var _field = __webpack_require__(6);
 
 var _field2 = _interopRequireDefault(_field);
 
-var _noOptions = __webpack_require__(32);
+var _noOptions = __webpack_require__(33);
 
 var _noOptions2 = _interopRequireDefault(_noOptions);
 
@@ -6414,7 +6414,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
  */
 
 
-var _objectPathImmutable = __webpack_require__(36);
+var _objectPathImmutable = __webpack_require__(37);
 
 var _objectPathImmutable2 = _interopRequireDefault(_objectPathImmutable);
 
@@ -6426,7 +6426,7 @@ var _constants = __webpack_require__(4);
 
 var _registry = __webpack_require__(26);
 
-var _actions = __webpack_require__(35);
+var _actions = __webpack_require__(36);
 
 var _actions2 = __webpack_require__(7);
 
@@ -6574,7 +6574,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _objectPathImmutable = __webpack_require__(36);
+var _objectPathImmutable = __webpack_require__(37);
 
 var _objectPathImmutable2 = _interopRequireDefault(_objectPathImmutable);
 
@@ -6582,7 +6582,7 @@ var _reduxActions = __webpack_require__(25);
 
 var _registry = __webpack_require__(26);
 
-var _actions = __webpack_require__(34);
+var _actions = __webpack_require__(35);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6804,7 +6804,7 @@ var map = {
 	"./components/html/index.js": 110,
 	"./components/map/google-map.js": 70,
 	"./components/map/index.js": 111,
-	"./components/no-options/index.js": 32,
+	"./components/no-options/index.js": 33,
 	"./components/radio-image/index.js": 112,
 	"./components/radio/index.js": 71,
 	"./components/rich-text/editor.js": 72,
@@ -6858,7 +6858,7 @@ webpackContext.id = 82;
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./actions.js": 33,
+	"./actions.js": 34,
 	"./api.js": 130,
 	"./constants.js": 28,
 	"./events.js": 19,
@@ -6886,7 +6886,7 @@ webpackContext.id = 83;
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./actions.js": 34,
+	"./actions.js": 35,
 	"./helpers.js": 75,
 	"./reducer.js": 76,
 	"./sagas/base.js": 131,
@@ -6913,7 +6913,7 @@ webpackContext.id = 84;
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
-	"./actions.js": 35,
+	"./actions.js": 36,
 	"./helpers.js": 78,
 	"./index.js": 132
 };
@@ -7737,7 +7737,7 @@ var _effects = __webpack_require__(5);
 
 var _lodash = __webpack_require__(0);
 
-var _actions = __webpack_require__(33);
+var _actions = __webpack_require__(34);
 
 var _events = __webpack_require__(19);
 
@@ -8255,11 +8255,11 @@ var _effects = __webpack_require__(5);
 
 var _lodash = __webpack_require__(0);
 
-var _actions = __webpack_require__(35);
+var _actions = __webpack_require__(36);
 
 var _helpers = __webpack_require__(78);
 
-var _actions2 = __webpack_require__(33);
+var _actions2 = __webpack_require__(34);
 
 var _events = __webpack_require__(19);
 
@@ -8780,7 +8780,7 @@ var _lodash = __webpack_require__(0);
 
 var _effects = __webpack_require__(5);
 
-var _actions = __webpack_require__(33);
+var _actions = __webpack_require__(34);
 
 var _events = __webpack_require__(19);
 
@@ -9110,18 +9110,9 @@ function validate(fieldIds, event) {
 
 				case 30:
 					_context.next = 32;
-					return (0, _effects.select)(_selectors2.hasInvalidFields);
-
-				case 32:
-					if (_context.sent) {
-						_context.next = 35;
-						break;
-					}
-
-					_context.next = 35;
 					return (0, _effects.take)(_actions2.markFieldAsInvalid);
 
-				case 35:
+				case 32:
 
 					// Cancel the action and prevent execution of WordPress's validation.
 					event.preventDefault();
@@ -9143,7 +9134,7 @@ function validate(fieldIds, event) {
 						return (0, _jquery2.default)(element).closest('.postbox, .widget, .menu-item').find('.carbon-highlight:not(:visible)').length > 0;
 					}).trigger('click');
 
-				case 40:
+				case 37:
 				case 'end':
 					return _context.stop();
 			}
@@ -9558,7 +9549,7 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 
 var _lodash = __webpack_require__(0);
 
-var _reduxSaga = __webpack_require__(38);
+var _reduxSaga = __webpack_require__(32);
 
 var _effects = __webpack_require__(5);
 
@@ -12049,7 +12040,7 @@ var _field = __webpack_require__(6);
 
 var _field2 = _interopRequireDefault(_field);
 
-var _noOptions = __webpack_require__(32);
+var _noOptions = __webpack_require__(33);
 
 var _noOptions2 = _interopRequireDefault(_noOptions);
 
@@ -12336,7 +12327,7 @@ var _field = __webpack_require__(6);
 
 var _field2 = _interopRequireDefault(_field);
 
-var _noOptions = __webpack_require__(32);
+var _noOptions = __webpack_require__(33);
 
 var _noOptions2 = _interopRequireDefault(_noOptions);
 
@@ -12559,7 +12550,7 @@ var _recompose = __webpack_require__(2);
 
 var _lodash = __webpack_require__(0);
 
-var _actions = __webpack_require__(34);
+var _actions = __webpack_require__(35);
 
 var _field = __webpack_require__(6);
 
@@ -12948,7 +12939,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = foreman;
 
-var _reduxSaga = __webpack_require__(38);
+var _reduxSaga = __webpack_require__(32);
 
 var _effects = __webpack_require__(5);
 
@@ -13022,7 +13013,7 @@ function foreman() {
 			switch (_context.prev = _context.next) {
 				case 0:
 					_context.next = 2;
-					return (0, _effects.actionChannel)(_actions.updateField, _reduxSaga.buffers.none());
+					return (0, _effects.actionChannel)(_actions.setFieldValue, _reduxSaga.buffers.none());
 
 				case 2:
 					updateChannel = _context.sent;
@@ -14808,6 +14799,8 @@ exports.workerValidate = workerValidate;
 exports.workerSetup = workerSetup;
 exports.default = foreman;
 
+var _reduxSaga = __webpack_require__(32);
+
 var _effects = __webpack_require__(5);
 
 var _lodash = __webpack_require__(0);
@@ -14845,10 +14838,6 @@ function shouldValidate(action, fieldId) {
 		return false;
 	}
 
-	if (!(0, _lodash.isUndefined)(payload.data) && (0, _lodash.isUndefined)(payload.data.value)) {
-		return false;
-	}
-
 	return true;
 }
 
@@ -14882,7 +14871,7 @@ function workerValidate(validator, fieldId, debounce, action) {
 					}
 
 					_context.next = 5;
-					return (0, _effects.call)(_effects.delay, 250);
+					return (0, _effects.call)(_reduxSaga.delay, 250);
 
 				case 5:
 					_context.next = 7;
@@ -14978,7 +14967,7 @@ function workerSetup(_ref) {
 					_context2.t1 = _helpers.stopSaga;
 					_context2.t2 = fieldId;
 					_context2.next = 11;
-					return (0, _effects.all)([(0, _effects.takeLatest)(_actions.updateField, workerValidate, validator.handler, fieldId, validator.debounce), (0, _effects.takeEvery)(_actions.validateField, workerValidate, validator.handler, fieldId, false)]);
+					return (0, _effects.all)([(0, _effects.takeLatest)(_actions.setFieldValue, workerValidate, validator.handler, fieldId, validator.debounce), (0, _effects.takeEvery)(_actions.validateField, workerValidate, validator.handler, fieldId, false)]);
 
 				case 11:
 					_context2.t3 = _context2.sent;
@@ -15229,7 +15218,7 @@ var _jquery = __webpack_require__(17);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
-var _objectPathImmutable = __webpack_require__(36);
+var _objectPathImmutable = __webpack_require__(37);
 
 var _objectPathImmutable2 = _interopRequireDefault(_objectPathImmutable);
 
@@ -15403,7 +15392,7 @@ exports.default = foreman;
 
 var _effects = __webpack_require__(5);
 
-var _actions = __webpack_require__(34);
+var _actions = __webpack_require__(35);
 
 var _helpers = __webpack_require__(75);
 
@@ -15510,7 +15499,7 @@ exports.default = function () {
   return store;
 };
 
-var _reduxSaga = __webpack_require__(38);
+var _reduxSaga = __webpack_require__(32);
 
 var _reduxSaga2 = _interopRequireDefault(_reduxSaga);
 
