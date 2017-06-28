@@ -10,7 +10,7 @@ import { pick, merge, uniqueId, isNull } from 'lodash';
 import { cancelTasks } from 'lib/helpers';
 
 import { teardownField } from 'fields/actions';
-import { TYPE_COMPLEX, PARENT_TYPE_GROUP } from 'fields/constants';
+import { TYPE_COMPLEX, PARENT_TYPE_GROUP, PARENT_TYPE_CONTAINER } from 'fields/constants';
 
 /**
  * Get the thumbnail of the attachment.
@@ -30,7 +30,7 @@ export function getAttachmentThumbnail(attachment) {
  * Flattens a field.
  *
  * @param  {Object}   field
- * @param  {String}   parent
+ * @param  {Object}   parent
  * @param  {Object[]} accumulator
  * @return {Object}
  */
@@ -54,8 +54,15 @@ export function flattenField(field, parent, parentType, accumulator) {
 	// Add the placeholders for ui & meta.
 	field.ui = {};
 	field.meta = {};
-	field.parent = parent;
+	field.parent = parent.id;
 	field.parentType = parentType;
+
+	// Add a pointer to the container to which belongs the field.
+	if (parentType === PARENT_TYPE_CONTAINER) {
+		field.container_id = parent.id;
+	} else {
+		field.container_id = parent.container_id;
+	}
 
 	// Convert the value of the field, because React
 	// doesn't likes inputs with null values.
@@ -80,6 +87,7 @@ export function flattenField(field, parent, parentType, accumulator) {
  */
 export function addComplexGroupIdentifiers(complex, group, index) {
 	group.id = uniqueId('carbon-complex-group-');
+	group.container_id = complex.container_id;
 }
 
 /**
@@ -90,7 +98,7 @@ export function addComplexGroupIdentifiers(complex, group, index) {
  * @return {void}
  */
 export function flattenComplexGroupFields(group, accumulator) {
-	group.fields = group.fields.map(field => flattenField(field, group.id, PARENT_TYPE_GROUP, accumulator));
+	group.fields = group.fields.map(field => flattenField(field, group, PARENT_TYPE_GROUP, accumulator));
 }
 
 /**

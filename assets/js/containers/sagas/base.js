@@ -33,7 +33,7 @@ export function* workerReceiveContainer(store, { payload: { container, expanded 
 
 	container = yield call(urldecode, container);
 	container = yield call([JSON, JSON.parse], container);
-	container.fields = yield call(map, container.fields, field => flattenField(field, container.id, PARENT_TYPE_CONTAINER, fields));
+	container.fields = yield call(map, container.fields, field => flattenField(field, container, PARENT_TYPE_CONTAINER, fields));
 
 	fields = yield call(keyBy, fields, 'id');
 

@@ -25,7 +25,7 @@ export function normalizePreloadedState(state) {
 
 	// Extract the container's fields to a flat list.
 	containers = containers.map((container) => {
-		container.fields = container.fields.map(field => flattenField(field, container.id, PARENT_TYPE_CONTAINER, fields));
+		container.fields = container.fields.map(field => flattenField(field, container, PARENT_TYPE_CONTAINER, fields));
 
 		return container;
 	});
