@@ -27,7 +27,7 @@ class Json_Translator extends Array_Translator {
 				'conditions' => array(),
 			);
 		}
-		
+
 		if ( ! isset( $foreign['relation'] ) ) {
 			return $foreign;
 		}
@@ -42,7 +42,11 @@ class Json_Translator extends Array_Translator {
 			if ( isset( $value['relation'] ) ) {
 				$conditions[] = $this->foreign_to_json( $value );
 			} else {
-				$conditions[] = $value;
+				if ( isset( $value['type'] ) ) {
+					$conditions[] = $value;
+				} else {
+					$conditions = array_merge( $conditions, $value );
+				}
 			}
 		}
 
