@@ -7,9 +7,9 @@ this["carbon.core"] =
 /******/ 	function __webpack_require__(moduleId) {
 /******/
 /******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
+/******/ 		if(installedModules[moduleId])
 /******/ 			return installedModules[moduleId].exports;
-/******/ 		}
+/******/
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = installedModules[moduleId] = {
 /******/ 			i: moduleId,
@@ -71,25 +71,25 @@ this["carbon.core"] =
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(332)
+module.exports = (__webpack_require__(9))(312);
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(1)
+module.exports = (__webpack_require__(9))(1);
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(338)
+module.exports = (__webpack_require__(9))(318);
 
 /***/ }),
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(81)
+module.exports = (__webpack_require__(9))(170);
 
 /***/ }),
 /* 4 */
@@ -145,7 +145,7 @@ var COMPLEX_LAYOUT_TABBED_HORIZONTAL = exports.COMPLEX_LAYOUT_TABBED_HORIZONTAL 
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(195)
+module.exports = (__webpack_require__(9))(191);
 
 /***/ }),
 /* 6 */
@@ -752,7 +752,7 @@ var defaultMapDispatchToProps = {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.getComplexGroupLabel = exports.hasInvalidFields = exports.makeGetSidebarFieldOptions = exports.getFieldsByRoots = exports.isFieldTabbed = exports.getFieldsByParent = exports.makeGetFieldsByParent = exports.getFieldHierarchyById = exports.getFieldByHierarchy = exports.getFieldPatternRegex = exports.getComplexGroupById = exports.getFieldParentById = exports.getFieldById = exports.getFields = undefined;
+exports.getFieldsWithinVisibleContainer = exports.getComplexGroupLabel = exports.hasInvalidFields = exports.makeGetSidebarFieldOptions = exports.getFieldsByRoots = exports.isFieldTabbed = exports.getFieldsByParent = exports.makeGetFieldsByParent = exports.getFieldHierarchyById = exports.getFieldByHierarchy = exports.getFieldPatternRegex = exports.getComplexGroupById = exports.getFieldParentById = exports.getFieldById = exports.getFields = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -761,6 +761,8 @@ var _reselect = __webpack_require__(137);
 var _lodash = __webpack_require__(0);
 
 var _selectors = __webpack_require__(77);
+
+var _selectors2 = __webpack_require__(13);
 
 var _constants = __webpack_require__(4);
 
@@ -1064,6 +1066,17 @@ var getComplexGroupLabel = exports.getComplexGroupLabel = function getComplexGro
 	return 'N/A';
 };
 
+/**
+ * Get all fields that are rendered in a visible container.
+ *
+ * @return {Object[]}
+ */
+var getFieldsWithinVisibleContainer = exports.getFieldsWithinVisibleContainer = (0, _reselect.createSelector)([_selectors2.getContainers, getFields], function (containers, fields) {
+	return (0, _lodash.filter)(fields, function (field) {
+		return (0, _lodash.get)(containers, field.container_id + '.ui.is_visible', false);
+	});
+});
+
 /***/ }),
 /* 12 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -1214,24 +1227,6 @@ var toggleContainerBox = exports.toggleContainerBox = (0, _reduxActions.createAc
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var TYPE_COMMENT_META = exports.TYPE_COMMENT_META = 'comment_meta';
-var TYPE_NAV_MENU_ITEM = exports.TYPE_NAV_MENU_ITEM = 'nav_menu_item';
-var TYPE_POST_META = exports.TYPE_POST_META = 'post_meta';
-var TYPE_TERM_META = exports.TYPE_TERM_META = 'term_meta';
-var TYPE_THEME_OPTIONS = exports.TYPE_THEME_OPTIONS = 'theme_options';
-var TYPE_USER_META = exports.TYPE_USER_META = 'user_meta';
-var TYPE_WIDGET = exports.TYPE_WIDGET = 'widget';
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 exports.getContainersByType = exports.getContainerById = exports.getContainers = undefined;
 
 var _lodash = __webpack_require__(0);
@@ -1275,10 +1270,28 @@ var getContainersByType = exports.getContainersByType = function getContainersBy
 };
 
 /***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var TYPE_COMMENT_META = exports.TYPE_COMMENT_META = 'comment_meta';
+var TYPE_NAV_MENU_ITEM = exports.TYPE_NAV_MENU_ITEM = 'nav_menu_item';
+var TYPE_POST_META = exports.TYPE_POST_META = 'post_meta';
+var TYPE_TERM_META = exports.TYPE_TERM_META = 'term_meta';
+var TYPE_THEME_OPTIONS = exports.TYPE_THEME_OPTIONS = 'theme_options';
+var TYPE_USER_META = exports.TYPE_USER_META = 'user_meta';
+var TYPE_WIDGET = exports.TYPE_WIDGET = 'widget';
+
+/***/ }),
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(330)
+module.exports = (__webpack_require__(9))(310);
 
 /***/ }),
 /* 16 */
@@ -2010,7 +2023,7 @@ var _reactRedux = __webpack_require__(37);
 
 var _lodash = __webpack_require__(0);
 
-var _selectors = __webpack_require__(14);
+var _selectors = __webpack_require__(13);
 
 var _actions = __webpack_require__(12);
 
@@ -2056,7 +2069,7 @@ var mapDispatchToProps = {
 /* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(339)
+module.exports = (__webpack_require__(9))(319);
 
 /***/ }),
 /* 26 */
@@ -2297,7 +2310,7 @@ function getAttachmentThumbnail(attachment) {
  * Flattens a field.
  *
  * @param  {Object}   field
- * @param  {String}   parent
+ * @param  {Object}   parent
  * @param  {Object[]} accumulator
  * @return {Object}
  */
@@ -2323,8 +2336,15 @@ function flattenField(field, parent, parentType, accumulator) {
 	// Add the placeholders for ui & meta.
 	field.ui = {};
 	field.meta = {};
-	field.parent = parent;
+	field.parent = parent.id;
 	field.parentType = parentType;
+
+	// Add a pointer to the container to which belongs the field.
+	if (parentType === _constants.PARENT_TYPE_CONTAINER) {
+		field.container_id = parent.id;
+	} else {
+		field.container_id = parent.container_id;
+	}
 
 	// Convert the value of the field, because React
 	// doesn't likes inputs with null values.
@@ -2349,6 +2369,7 @@ function flattenField(field, parent, parentType, accumulator) {
  */
 function addComplexGroupIdentifiers(complex, group, index) {
 	group.id = (0, _lodash.uniqueId)('carbon-complex-group-');
+	group.container_id = complex.container_id;
 }
 
 /**
@@ -2360,7 +2381,7 @@ function addComplexGroupIdentifiers(complex, group, index) {
  */
 function flattenComplexGroupFields(group, accumulator) {
 	group.fields = group.fields.map(function (field) {
-		return flattenField(field, group.id, _constants.PARENT_TYPE_GROUP, accumulator);
+		return flattenField(field, group, _constants.PARENT_TYPE_GROUP, accumulator);
 	});
 }
 
@@ -2441,7 +2462,7 @@ var KEY_ENTER = exports.KEY_ENTER = 13;
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(194)
+module.exports = (__webpack_require__(9))(190);
 
 /***/ }),
 /* 30 */
@@ -2694,19 +2715,19 @@ var resetStore = exports.resetStore = (0, _reduxActions.createAction)('RESET_STO
 /* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(333)
+module.exports = (__webpack_require__(9))(313);
 
 /***/ }),
 /* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(337)
+module.exports = (__webpack_require__(9))(317);
 
 /***/ }),
 /* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(340)
+module.exports = (__webpack_require__(9))(320);
 
 /***/ }),
 /* 39 */
@@ -6649,7 +6670,7 @@ function normalizePreloadedState(state) {
 	// Extract the container's fields to a flat list.
 	containers = containers.map(function (container) {
 		container.fields = container.fields.map(function (field) {
-			return (0, _helpers.flattenField)(field, container.id, _constants.PARENT_TYPE_CONTAINER, fields);
+			return (0, _helpers.flattenField)(field, container, _constants.PARENT_TYPE_CONTAINER, fields);
 		});
 
 		return container;
@@ -6669,7 +6690,7 @@ function normalizePreloadedState(state) {
 /* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(336)
+module.exports = (__webpack_require__(9))(316);
 
 /***/ }),
 /* 80 */
@@ -6724,7 +6745,7 @@ var map = {
 	"./conditions/post-term.js": 57,
 	"./conditions/term-level.js": 58,
 	"./conditions/user-role.js": 59,
-	"./constants.js": 13,
+	"./constants.js": 14,
 	"./decorators/with-setup.js": 23,
 	"./decorators/with-store.js": 24,
 	"./factory.js": 41,
@@ -6739,7 +6760,7 @@ var map = {
 	"./sagas/validation.js": 100,
 	"./sagas/visibility.js": 101,
 	"./sagas/widget.js": 102,
-	"./selectors.js": 14
+	"./selectors.js": 13
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -6937,7 +6958,7 @@ var _withSetup = __webpack_require__(23);
 
 var _withSetup2 = _interopRequireDefault(_withSetup);
 
-var _constants = __webpack_require__(13);
+var _constants = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6973,7 +6994,7 @@ var _withSetup = __webpack_require__(23);
 
 var _withSetup2 = _interopRequireDefault(_withSetup);
 
-var _constants = __webpack_require__(13);
+var _constants = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7009,7 +7030,7 @@ var _withSetup = __webpack_require__(23);
 
 var _withSetup2 = _interopRequireDefault(_withSetup);
 
-var _constants = __webpack_require__(13);
+var _constants = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7051,7 +7072,7 @@ var _withSetup = __webpack_require__(23);
 
 var _withSetup2 = _interopRequireDefault(_withSetup);
 
-var _constants = __webpack_require__(13);
+var _constants = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7089,7 +7110,7 @@ var _withSetup = __webpack_require__(23);
 
 var _withSetup2 = _interopRequireDefault(_withSetup);
 
-var _constants = __webpack_require__(13);
+var _constants = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7127,7 +7148,7 @@ var _withSetup = __webpack_require__(23);
 
 var _withSetup2 = _interopRequireDefault(_withSetup);
 
-var _constants = __webpack_require__(13);
+var _constants = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7165,7 +7186,7 @@ var _withSetup = __webpack_require__(23);
 
 var _withSetup2 = _interopRequireDefault(_withSetup);
 
-var _constants = __webpack_require__(13);
+var _constants = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7204,7 +7225,7 @@ var _factory = __webpack_require__(41);
 
 var _factory2 = _interopRequireDefault(_factory);
 
-var _selectors = __webpack_require__(14);
+var _selectors = __webpack_require__(13);
 
 var _actions = __webpack_require__(12);
 
@@ -7260,7 +7281,7 @@ function workerReceiveContainer(store, _ref) {
           container = _context.sent;
           _context.next = 9;
           return (0, _effects.call)(_lodash.map, container.fields, function (field) {
-            return (0, _helpers.flattenField)(field, container.id, _constants2.PARENT_TYPE_CONTAINER, fields);
+            return (0, _helpers.flattenField)(field, container, _constants2.PARENT_TYPE_CONTAINER, fields);
           });
 
         case 9:
@@ -7476,7 +7497,7 @@ var _events = __webpack_require__(19);
 
 var _actions = __webpack_require__(12);
 
-var _selectors = __webpack_require__(14);
+var _selectors = __webpack_require__(13);
 
 var _selectors2 = __webpack_require__(11);
 
@@ -7720,11 +7741,11 @@ var _actions = __webpack_require__(33);
 
 var _events = __webpack_require__(19);
 
-var _selectors = __webpack_require__(14);
+var _selectors = __webpack_require__(13);
 
 var _actions2 = __webpack_require__(12);
 
-var _constants = __webpack_require__(13);
+var _constants = __webpack_require__(14);
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -8248,9 +8269,9 @@ var _factory2 = _interopRequireDefault(_factory);
 
 var _actions3 = __webpack_require__(12);
 
-var _selectors = __webpack_require__(14);
+var _selectors = __webpack_require__(13);
 
-var _constants = __webpack_require__(13);
+var _constants = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -8580,11 +8601,11 @@ var _effects = __webpack_require__(5);
 
 var _events = __webpack_require__(19);
 
-var _selectors = __webpack_require__(14);
+var _selectors = __webpack_require__(13);
 
 var _actions = __webpack_require__(12);
 
-var _constants = __webpack_require__(13);
+var _constants = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -8765,9 +8786,9 @@ var _events = __webpack_require__(19);
 
 var _actions2 = __webpack_require__(12);
 
-var _selectors = __webpack_require__(14);
+var _selectors = __webpack_require__(13);
 
-var _constants = __webpack_require__(13);
+var _constants = __webpack_require__(14);
 
 var _marked = [workerSyncUserRole, workerFormSubmit, foreman].map(regeneratorRuntime.mark); /**
                                                                                              * The external dependencies.
@@ -8992,7 +9013,7 @@ var _lodash = __webpack_require__(0);
 
 var _actions = __webpack_require__(12);
 
-var _selectors = __webpack_require__(14);
+var _selectors = __webpack_require__(13);
 
 var _actions2 = __webpack_require__(7);
 
@@ -9153,15 +9174,24 @@ function workerValidate(_ref) {
 
 				case 2:
 					container = _context2.sent;
-					_context2.next = 5;
-					return (0, _effects.select)(_selectors2.getFieldsByRoots, container.fields);
+
+					if (container.ui.is_visible) {
+						_context2.next = 5;
+						break;
+					}
+
+					return _context2.abrupt('return');
 
 				case 5:
+					_context2.next = 7;
+					return (0, _effects.select)(_selectors2.getFieldsByRoots, container.fields);
+
+				case 7:
 					ids = _context2.sent;
-					_context2.next = 8;
+					_context2.next = 10;
 					return (0, _effects.call)(validate, ids, event);
 
-				case 8:
+				case 10:
 				case 'end':
 					return _context2.stop();
 			}
@@ -9184,12 +9214,12 @@ function workerValidateAll(_ref2) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
 					_context3.next = 2;
-					return (0, _effects.select)(_selectors2.getFields);
+					return (0, _effects.select)(_selectors2.getFieldsWithinVisibleContainer);
 
 				case 2:
 					fields = _context3.sent;
 					_context3.next = 5;
-					return (0, _effects.call)(_lodash.keys, fields);
+					return (0, _effects.call)(_lodash.map, fields, 'id');
 
 				case 5:
 					ids = _context3.sent;
@@ -9255,7 +9285,7 @@ var _constants = __webpack_require__(28);
 
 var _actions = __webpack_require__(12);
 
-var _selectors = __webpack_require__(14);
+var _selectors = __webpack_require__(13);
 
 var _conditions = __webpack_require__(52);
 
@@ -9538,7 +9568,7 @@ var _events = __webpack_require__(19);
 
 var _actions = __webpack_require__(12);
 
-var _selectors = __webpack_require__(14);
+var _selectors = __webpack_require__(13);
 
 var _actions2 = __webpack_require__(7);
 
@@ -14424,7 +14454,7 @@ var _effects = __webpack_require__(5);
 
 var _lodash = __webpack_require__(0);
 
-var _selectors = __webpack_require__(14);
+var _selectors = __webpack_require__(13);
 
 var _actions = __webpack_require__(12);
 
@@ -15506,37 +15536,37 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(196)
+module.exports = (__webpack_require__(9))(192);
 
 /***/ }),
 /* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(331)
+module.exports = (__webpack_require__(9))(311);
 
 /***/ }),
 /* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(334)
+module.exports = (__webpack_require__(9))(314);
 
 /***/ }),
 /* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(335)
+module.exports = (__webpack_require__(9))(315);
 
 /***/ }),
 /* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(341)
+module.exports = (__webpack_require__(9))(321);
 
 /***/ }),
 /* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = (__webpack_require__(9))(842)
+module.exports = (__webpack_require__(9))(802);
 
 /***/ }),
 /* 139 */

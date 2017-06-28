@@ -29,11 +29,11 @@
       "id": 12,
       "meta": {}
     },
-    "./assets/js/containers/constants.js": {
+    "./assets/js/containers/selectors.js": {
       "id": 13,
       "meta": {}
     },
-    "./assets/js/containers/selectors.js": {
+    "./assets/js/containers/constants.js": {
       "id": 14,
       "meta": {}
     },
