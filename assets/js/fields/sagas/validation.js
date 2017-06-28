@@ -1,7 +1,8 @@
 /**
  * The external dependencies.
  */
-import { takeEvery, takeLatest, delay, put, call, select, take, all } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
+import { takeEvery, takeLatest, put, call, select, take, all } from 'redux-saga/effects';
 import { isUndefined, isNull } from 'lodash';
 
 /**
@@ -11,7 +12,7 @@ import { getFieldValidators } from 'lib/registry';
 
 import {
 	setupValidation,
-	updateField,
+	setFieldValue,
 	validateField,
 	markFieldAsValid,
 	markFieldAsInvalid,
@@ -32,10 +33,6 @@ export function shouldValidate(action, fieldId) {
 	const { payload } = action;
 
 	if (payload.fieldId !== fieldId) {
-		return false;
-	}
-
-	if (!isUndefined(payload.data) && isUndefined(payload.data.value)) {
 		return false;
 	}
 
@@ -104,7 +101,7 @@ export function* workerSetup({ payload: { fieldId, validationType }}) {
 	}
 
 	yield call(stopSaga, fieldId, yield all([
-		takeLatest(updateField, workerValidate, validator.handler, fieldId, validator.debounce),
+		takeLatest(setFieldValue, workerValidate, validator.handler, fieldId, validator.debounce),
 		takeEvery(validateField, workerValidate, validator.handler, fieldId, false),
 	]));
 }
