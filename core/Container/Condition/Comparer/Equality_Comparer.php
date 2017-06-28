@@ -22,9 +22,9 @@ class Equality_Comparer extends Comparer {
 	public function is_correct( $a, $comparison_operator, $b ) {
 		switch ( $comparison_operator ) {
 			case '=':
-				return $a === $b;
+				return $a == $b;
 			case '!=':
-				return $a !== $b;
+				return $a != $b;
 		}
 		return false;
 	}

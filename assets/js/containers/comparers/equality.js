@@ -21,9 +21,9 @@ const operators = ['=', '!='];
 const evaluate = (a, operator, b) => {
 	switch (operator) {
 		case '=':
-			return a === b;
+			return a == b;
 		case '!=':
-			return a !== b;
+			return a != b;
 		default:
 			return false;
 	}
