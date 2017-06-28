@@ -12,7 +12,7 @@ import { validateContainer, validateAllContainers } from 'containers/actions';
 import { getContainerById } from 'containers/selectors';
 
 import { validateField, markFieldAsInvalid } from 'fields/actions';
-import { getFieldsByRoots, hasInvalidFields, getFieldsWithinVisibleContainer } from 'fields/selectors';
+import { getFieldsByRoots, getFieldsWithinVisibleContainer } from 'fields/selectors';
 
 /**
  * Validate the fields.
@@ -35,9 +35,7 @@ export function* validate(fieldIds, event) {
 
 	// Block and wait for an invalid field. In case we don't receive
 	// such action the worker will be canceled and the process will continue.
-	if (!(yield select(hasInvalidFields))) {
-		yield take(markFieldAsInvalid);
-	}
+	yield take(markFieldAsInvalid);
 
 	// Cancel the action and prevent execution of WordPress's validation.
 	event.preventDefault();
