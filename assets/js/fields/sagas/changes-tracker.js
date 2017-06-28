@@ -7,7 +7,7 @@ import { take, takeLatest, actionChannel } from 'redux-saga/effects';
 /**
  * The internal dependencies.
  */
-import { updateField, markFieldAsInvalid } from 'fields/actions';
+import { setFieldValue, markFieldAsInvalid } from 'fields/actions';
 import { submitForm } from 'containers/actions';
 
 /**
@@ -60,7 +60,7 @@ function detachWarning() {
  * @return {void}
  */
 export default function* foreman() {
-	const updateChannel = yield actionChannel(updateField, buffers.none());
+	const updateChannel = yield actionChannel(setFieldValue, buffers.none());
 	let isAttached = false;
 
 	while (true) {
