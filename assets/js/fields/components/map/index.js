@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, withHandlers, setStatic } from 'recompose';
+import { compose, withHandlers, setStatic, withProps } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -32,6 +32,7 @@ const MapField = ({
 	handleChange,
 	handleSearchSubmit
 }) => {
+	// console.log(field);
 	return <Field field={field}>
 		<div className="carbon-map-search">
 			<p>{carbonFieldsL10n.field.mapLocateAddress}</p>
@@ -69,7 +70,6 @@ const MapField = ({
 			lat={field.value.lat}
 			lng={field.value.lng}
 			zoom={field.value.zoom}
-			redraw={field.ui.redraw_map ? field.ui.redraw_map : false }
 			onChange={handleChange} />
 	</Field>;
 };

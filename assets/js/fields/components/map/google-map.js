@@ -4,6 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
+import observeResize from 'observe-resize';
 
 class GoogleMap extends React.Component {
 	/**
@@ -17,6 +18,10 @@ class GoogleMap extends React.Component {
 		this.initMap();
 		this.setupMapEvents();
 		this.redrawMap(this.props);
+
+		this.cancelResizeObserver = observeResize(this.node, () => {
+			this.redrawMap(this.props);
+		});
 	}
 
 	/**
@@ -26,7 +31,7 @@ class GoogleMap extends React.Component {
 	 * @return {void}
 	 */
 	componentWillReceiveProps(nextProps) {
-		const { lat, lng, zoom, redraw } = nextProps;
+		const { lat, lng, zoom } = nextProps;
 
 		if (this.marker) {
 			const markerLat = this.marker.getPosition().lat();
@@ -138,16 +143,13 @@ class GoogleMap extends React.Component {
 	 * @return {void}
 	 */
 	redrawMap(props) {
-		const { redraw, lat, lng } = props;
+		const { lat, lng } = props;
+		const location = new google.maps.LatLng(lat, lng);
 
-		if (redraw) {
-			const location = new google.maps.LatLng(lat, lng);
-
-			setTimeout(() => {
-				google.maps.event.trigger(this.map, 'resize');
-				this.map.setCenter(location);
-			}, 10);
-		}
+		setTimeout(() => {
+			google.maps.event.trigger(this.map, 'resize');
+			this.map.setCenter(location);
+		}, 10);
 	}
 }
 

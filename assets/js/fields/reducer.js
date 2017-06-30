@@ -24,8 +24,7 @@ import {
 	disableComplexGroupType,
 	expandComplexGroup,
 	collapseComplexGroup,
-	switchComplexTab,
-	redrawMap
+	switchComplexTab
 } from 'fields/actions';
 import { getFieldHierarchyById } from 'fields/selectors';
 
@@ -34,15 +33,15 @@ import { getFieldHierarchyById } from 'fields/selectors';
  */
 export default decorateFieldReducer(handleActions({
 	[combineActions(setupField, setUI)]:  (state, { payload: { fieldId, ui }}) => immutable.assign(state, `${fieldId}.ui`, ui),
-	
+
 	[addFields]: (state, { payload }) => ({ ...state, ...payload }),
-	
+
 	[removeFields]: (state, { payload }) => omit(state, payload),
-	
+
 	[updateField]: (state, { payload: { fieldId, data }}) => immutable.assign(state, fieldId, data),
-	
+
 	[setFieldValue]: (state, { payload: { fieldId, value, method }}) => immutable[method](state, `${fieldId}.value`, value),
-	
+
 	[resetStore]: (state, { payload: { fields }}) => fields,
 
 	[markFieldAsValid]: (state, { payload: { fieldId } }) => immutable.assign(state, `${fieldId}.ui`, {
@@ -74,5 +73,4 @@ export default decorateFieldReducer(handleActions({
 	},
 
 	[switchComplexTab]: (state, { payload: { fieldId, groupId } }) => immutable.set(state, `${fieldId}.ui.current_tab`, groupId),
-	[redrawMap]: (state, { payload: { fieldId }}) => immutable.set(state, `${fieldId}.ui.redraw_map`, true),
 }, {}));
