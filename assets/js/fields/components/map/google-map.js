@@ -163,8 +163,7 @@ GoogleMap.propTypes = {
 	lat: PropTypes.number,
 	lng: PropTypes.number,
 	zoom: PropTypes.number,
-	onChange: PropTypes.func,
-	redraw: PropTypes.bool,
+	onChange: PropTypes.func
 };
 
 export default GoogleMap;
