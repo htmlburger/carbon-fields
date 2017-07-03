@@ -12,7 +12,7 @@ class Router {
 
 	/**
 	 * Carbon Fields routes
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $routes = array(
@@ -50,7 +50,7 @@ class Router {
 
 	/**
 	 * Version of the API
-	 * 
+	 *
 	 * @see set_version()
 	 * @see get_version()
 	 * @var string
@@ -59,7 +59,7 @@ class Router {
 
 	/**
 	 * Vendor slug for the API
-	 * 
+	 *
 	 * @see set_vendor()
 	 * @see get_vendor()
 	 * @var string
@@ -68,11 +68,11 @@ class Router {
 
 	/**
 	 * ContainerRepository instance
-	 * 
+	 *
 	 * @var ContainerRepository
 	 */
 	protected $container_repository;
-	
+
 	/**
 	 * @param ContainerRepository $container_repository
 	 */
@@ -96,7 +96,7 @@ class Router {
 
 	/**
 	 * Return routes
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_routes() {
@@ -112,7 +112,7 @@ class Router {
 
 	/**
 	 * Return version
-	 * 
+	 *
 	 * @return string
 	 */
 	public function get_version() {
@@ -122,13 +122,13 @@ class Router {
 	/**
 	 * Set vendor
 	 */
-	public function set_vendor( $vendor ) { 
+	public function set_vendor( $vendor ) {
 		$this->vendor = $vendor;
 	}
 
 	/**
 	 * Return vendor
-	 * 
+	 *
 	 * @return string
 	 */
 	public function get_vendor() {
@@ -137,7 +137,7 @@ class Router {
 
 	/**
 	 * Allow access to an endpoint
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function allow_access() {
@@ -146,7 +146,7 @@ class Router {
 
 	/**
 	 * Register custom routes
-	 * 
+	 *
 	 * @see  register_route()
 	 */
 	public function register_routes() {
@@ -157,7 +157,7 @@ class Router {
 
 	/**
 	 * Register a custom REST route
-	 * 
+	 *
 	 * @param  array $route
 	 */
 	protected function register_route( $route ) {
@@ -170,13 +170,13 @@ class Router {
 
 	/**
 	 * Proxy method for handling get/set for theme options
-	 * 
-	 * @param  WP_REST_Request $request 
-	 * @return array|WP_REST_Response 
+	 *
+	 * @param  WP_REST_Request $request
+	 * @return array|WP_REST_Response
 	 */
 	public function options_accessor( $request ) {
 		$request_type = $request->get_method();
-		
+
 		if ( $request_type === 'POST' ) {
 			return $this->set_options( $request );
 		}
@@ -186,8 +186,8 @@ class Router {
 
 	/**
 	 * Proxy method for handling theme options permissions
-	 * 
-	 * @param  WP_REST_Request $request 
+	 *
+	 * @param  WP_REST_Request $request
 	 * @return bool
 	 */
 	public function options_permission( $request ) {
@@ -196,8 +196,8 @@ class Router {
 
 	/**
 	 * Wrapper method used for retrieving data from Data_Manager
-	 * 
-	 * @param  string $container_type 
+	 *
+	 * @param  string $container_type
 	 * @param  string $object_id
 	 * @return array
 	 */
@@ -222,7 +222,7 @@ class Router {
 
 	/**
 	 * Get Carbon Fields post meta values
-	 * 
+	 *
 	 * @param  array $data
 	 * @return array
 	 */
@@ -233,7 +233,7 @@ class Router {
 
 	/**
 	 * Get Carbon Fields user meta values
-	 * 
+	 *
 	 * @param  array $data
 	 * @return array
 	 */
@@ -244,7 +244,7 @@ class Router {
 
 	/**
 	 * Get Carbon Fields term meta values
-	 * 
+	 *
 	 * @param  array $data
 	 * @return array
 	 */
@@ -255,7 +255,7 @@ class Router {
 
 	/**
 	 * Get Carbon Fields comment meta values
-	 * 
+	 *
 	 * @param  array $data
 	 * @return array
 	 */
@@ -266,7 +266,7 @@ class Router {
 
 	/**
 	 * Retrieve Carbon theme options
-	 * 
+	 *
 	 * @return array
 	 */
 	protected function get_options() {
@@ -282,11 +282,11 @@ class Router {
 	 */
 	protected function set_options( $request ) {
 		$options = $request->get_params();
-		
+
 		if ( empty( $options ) ) {
-			return new \WP_REST_Response( __( 'No option names provided', 'crb' ) );
+			return new \WP_REST_Response( __( 'No option names provided', 'carbon-fields' ) );
 		}
-		
+
 		foreach ( $options as $key => $value ) {
 			try {
 				Helper::set_value( null, 'Theme_Options', '', $key, $value );
@@ -295,6 +295,6 @@ class Router {
 			}
 		}
 
-		return new \WP_REST_Response( __( 'Theme Options updated.', 'crb' ), 200 );
+		return new \WP_REST_Response( __( 'Theme Options updated.', 'carbon-fields' ), 200 );
 	}
 }
