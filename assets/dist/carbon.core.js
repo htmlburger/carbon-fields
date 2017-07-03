@@ -2981,7 +2981,7 @@ var SearchInput = exports.SearchInput = function SearchInput(_ref) {
 			type: 'text',
 			name: name,
 			className: 'search-field',
-			placeholder: 'Search...',
+			placeholder: carbonFieldsL10n.field.searchPlaceholder,
 			disabled: disabled,
 			defaultValue: term,
 			onChange: handleChange,
@@ -11573,8 +11573,8 @@ var DateTimeField = exports.DateTimeField = function DateTimeField(_ref) {
 				name: name,
 				value: field.value,
 				disabled: !field.ui.is_visible,
-
-				className: 'regular-text carbon-field-group-input',
+				onChange: function onChange() {} /* Use a noop as Flatpickr events are handled instead */
+				, className: 'regular-text carbon-field-group-input',
 				'data-input': true
 			}, field.attributes)),
 			_react2.default.createElement(
