@@ -44,7 +44,7 @@ export const DateTimeField = ({
 				name={name}
 				value={field.value}
 				disabled={!field.ui.is_visible}
-				
+				onChange={()=>{}} /* Use a noop as Flatpickr events are handled instead */
 				className="regular-text carbon-field-group-input"
 				data-input
 				{...field.attributes} />
