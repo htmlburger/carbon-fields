@@ -152,6 +152,8 @@ class Loader {
 				'noOptions' => __( 'No options.', 'carbon-fields' ),
 
 				'setShowAll' => __( 'Show all options', 'carbon-fields' ),
+
+				'searchPlaceholder' => __( 'Search...', 'carbon-fields' ),
 			),
 		) ) );
 	}
