@@ -28,4 +28,4 @@ composer.lock
 .vagrant
 
 # Bundled assets
-/assets/dist/*.map
+/assets/dist/

@@ -34,7 +34,9 @@ module.exports = () => {
 			new webpack.DllPlugin({
 				name: '[name]',
 				path: path.resolve(__dirname, base.getNameWithSuffix('assets/dist/[name].json', env))
-			})
+			}),
+
+			new webpack.HashedModuleIdsPlugin()
 		]
 	});
 }
