@@ -165,7 +165,7 @@ class Key_Toolset {
 		$parents = $full_hierarchy;
 		$first_parent = array_shift( $parents );
 		$hierarchy = array_slice( $full_hierarchy, 0, -1 );
-		$hierarchy_index = ! empty( $hierarchy ) ? $wildcard : '0';
+		$hierarchy_index = ! empty( $hierarchy ) ? $wildcard : '';
 		$value_group_index = $wildcard;
 
 		$storage_key = static::KEY_PREFIX . 
