@@ -6,7 +6,7 @@ abstract class Service {
 
 	/**
 	 * Service enabled state
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $enabled = false;

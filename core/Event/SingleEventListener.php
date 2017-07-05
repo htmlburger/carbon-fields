@@ -6,7 +6,7 @@ class SingleEventListener extends PersistentListener {
 
 	/**
 	 * Flag if the event has been called
-	 * 
+	 *
 	 * @var boolean
 	 */
 	protected $called = false;

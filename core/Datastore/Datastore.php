@@ -13,7 +13,7 @@ abstract class Datastore implements Datastore_Interface {
 
 	/**
 	 * The related object id
-	 * 
+	 *
 	 * @var integer
 	 */
 	protected $object_id = 0;
@@ -31,7 +31,7 @@ abstract class Datastore implements Datastore_Interface {
 	 * @abstract
 	 */
 	abstract public function init();
-	
+
 	/**
 	 * Get the related object id
 	 *

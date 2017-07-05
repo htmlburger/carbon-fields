@@ -44,7 +44,7 @@ class User_Meta_Container extends Container {
 		if ( ! $this->is_profile_page() ) {
 			return false;
 		}
-		
+
 		if ( ! $this->verified_nonce_in_request() ) {
 			return false;
 		}
@@ -196,7 +196,7 @@ class User_Meta_Container extends Container {
 			}
 		}
 	}
-	
+
 	/**
 	 * Show the container only on users who have the $role role.
 	 *

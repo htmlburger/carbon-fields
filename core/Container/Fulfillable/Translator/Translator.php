@@ -11,7 +11,7 @@ abstract class Translator {
 
 	/**
 	 * Translate a Fulfillable to foreign data
-	 * 
+	 *
 	 * @param  Fulfillable $fulfillable
 	 * @return mixed
 	 */
@@ -30,7 +30,7 @@ abstract class Translator {
 
 	/**
 	 * Translate a Condition to foreign data
-	 * 
+	 *
 	 * @param  Condition $condition
 	 * @return mixed
 	 */
@@ -38,7 +38,7 @@ abstract class Translator {
 
 	/**
 	 * Translate a Fulfillable_Collection to foreign data
-	 * 
+	 *
 	 * @param  Fulfillable_Collection $fulfillable_collection
 	 * @return mixed
 	 */
@@ -46,7 +46,7 @@ abstract class Translator {
 
 	/**
 	 * Translate foreign data to a Fulfillable
-	 * 
+	 *
 	 * @param  mixed       $foreign
 	 * @return Fulfillable
 	 */

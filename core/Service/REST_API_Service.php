@@ -12,18 +12,18 @@ class REST_API_Service extends Service {
 
 	/**
 	 * Router instance
-	 * 
+	 *
 	 * @var Router
 	 */
 	protected $router;
 
 	/**
 	 * Decorator instance
-	 * 
+	 *
 	 * @var Decorator
 	 */
 	protected $decorator;
-	
+
 	/**
 	 * @param Router    $router
 	 * @param Decorator $decorator

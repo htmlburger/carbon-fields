@@ -5,7 +5,7 @@ namespace Carbon_Fields\Datastore;
 use Carbon_Fields\Field\Field;
 
 class Nav_Menu_Item_Datastore extends Post_Meta_Datastore {
-	
+
 	public function get_garbage_prefix() {
 		if ( ! $this->get_object_id() ) {
 			return '';
@@ -17,7 +17,7 @@ class Nav_Menu_Item_Datastore extends Post_Meta_Datastore {
 		$name = ( is_object( $field ) && is_subclass_of( $field, 'Carbon_Fields\\Field\\Field' ) ) ? $field->get_name() : $field;
 		$garbage_prefix = $this->get_garbage_prefix();
 		$garbage_prefix_length = strlen( $garbage_prefix );
-		
+
 		if ( substr( $name, 0, $garbage_prefix_length ) === $garbage_prefix ) {
 			$name = substr( $name, $garbage_prefix_length );
 		}
@@ -28,7 +28,7 @@ class Nav_Menu_Item_Datastore extends Post_Meta_Datastore {
 		$name = ( is_object( $field ) && is_subclass_of( $field, 'Carbon_Fields\\Field\\Field' ) ) ? $field->get_name() : $field;
 		$garbage_prefix = $this->get_garbage_prefix();
 		$garbage_prefix_length = strlen( $garbage_prefix );
-		
+
 		if ( substr( $name, 0, $garbage_prefix_length ) !== $garbage_prefix ) {
 			$name = $garbage_prefix . $name;
 		}

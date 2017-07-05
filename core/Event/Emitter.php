@@ -8,7 +8,7 @@ class Emitter {
 
 	/**
 	 * Broadcast an event
-	 * 
+	 *
 	 * @return mixed
 	 */
 	public function emit() {
@@ -28,7 +28,7 @@ class Emitter {
 
 	/**
 	 * Get array of events with registered listeners
-	 * 
+	 *
 	 * @return array<string>
 	 */
 	protected function get_events() {
@@ -39,7 +39,7 @@ class Emitter {
 
 	/**
 	 * Get array of listenrs for a specific event
-	 * 
+	 *
 	 * @param  string          $event Event to get listeners for
 	 * @return array<Listener>
 	 */
@@ -50,7 +50,7 @@ class Emitter {
 
 	/**
 	 * Remove invalid listeners from an event
-	 * 
+	 *
 	 * @param string $event
 	 */
 	protected function remove_invalid_listeners( $event ) {
@@ -66,7 +66,7 @@ class Emitter {
 
 	/**
 	 * Add a listener to an event
-	 * 
+	 *
 	 * @param string   $event
 	 * @return Listener $listener
 	 */
@@ -80,7 +80,7 @@ class Emitter {
 
 	/**
 	 * Remove a listener from any event
-	 * 
+	 *
 	 * @param Listener $removed_listener
 	 */
 	public function remove_listener( $removed_listener ) {
@@ -96,7 +96,7 @@ class Emitter {
 
 	/**
 	 * Add a persistent listener to an event
-	 * 
+	 *
 	 * @param  string   $event    The event to listen for
 	 * @param  string   $callable The callable to call when the event is broadcasted
 	 * @return Listener

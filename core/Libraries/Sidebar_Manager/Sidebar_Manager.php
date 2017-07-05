@@ -40,7 +40,7 @@ class Sidebar_Manager {
 
 		$input = stripslashes_deep( $_POST );
 		$action = isset( $input['action'] ) ? $input['action'] : '';
-		
+
 		$result = $this->execute_action( $action, $input );
 
 		if ( is_wp_error( $result ) ) {

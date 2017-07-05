@@ -9,7 +9,7 @@ use Carbon_Fields\Value_Set\Value_Set;
  * Allows to create a set of checkboxes where multiple can be selected.
  */
 class Set_Field extends Predefined_Options_Field {
-	
+
 	/**
 	 * The options limit.
 	 *
@@ -26,7 +26,7 @@ class Set_Field extends Predefined_Options_Field {
 
 	/**
 	 * Create a field from a certain type with the specified label.
-	 * 
+	 *
 	 * @param string $type  Field type
 	 * @param string $name  Field name
 	 * @param string $label Field label

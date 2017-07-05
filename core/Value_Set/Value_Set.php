@@ -38,7 +38,7 @@ class Value_Set {
 
 	/**
 	 * Value set type
-	 * 
+	 *
 	 * @var integer static::TYPE_* constant
 	 */
 	protected $type = self::TYPE_SINGLE_VALUE;
@@ -49,7 +49,7 @@ class Value_Set {
 	 * @var array
 	 */
 	protected $valid_types = array( self::TYPE_SINGLE_VALUE, self::TYPE_MULTIPLE_VALUES, self::TYPE_MULTIPLE_PROPERTIES, self::TYPE_VALUE_SET );
-	
+
 	/**
 	 * Array of empty values for every type
 	 *
@@ -177,7 +177,7 @@ class Value_Set {
 
 	/**
 	 * Return the full value set data regardless of type
-	 * 
+	 *
 	 * @return array<array>
 	 */
 	public function get_set() {

@@ -6,10 +6,10 @@ namespace Carbon_Fields\Container\Condition;
  * Check is post is of specific type
  */
 class Post_Type_Condition extends Condition {
-	
+
 	/**
 	 * Check if the condition is fulfilled
-	 * 
+	 *
 	 * @param  array $environment
 	 * @return bool
 	 */

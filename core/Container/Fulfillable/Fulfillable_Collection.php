@@ -10,49 +10,49 @@ class Fulfillable_Collection implements Fulfillable {
 
 	/**
 	 * Condition factory used to translated condition types
-	 * 
+	 *
 	 * @var Factory
 	 */
 	protected $condition_factory;
 
 	/**
 	 * Array translator used to support array representations of fulfillables
-	 * 
+	 *
 	 * @var Array_Translator
 	 */
 	protected $array_translator;
 
 	/**
 	 * Array of fulfillables in this collection
-	 * 
+	 *
 	 * @var array<array>
 	 */
 	protected $fulfillables = array();
 
 	/**
 	 * Array of supported fulfillable comparisons
-	 * 
+	 *
 	 * @var array<string>
 	 */
 	protected $supported_fulfillable_comparisons = array( 'AND', 'OR' );
 
 	/**
 	 * Array of allowed condition types which propagate to child collections
-	 * 
+	 *
 	 * @var array<string>
 	 */
 	protected $condition_type_list = array();
 
 	/**
 	 * Whether the condition type list is a whitelist or a blacklist
-	 * 
+	 *
 	 * @var bool
 	 */
 	protected $condition_type_list_whitelist = false;
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param Factory          $condition_factory
 	 * @param Array_Translator $array_translator
 	 */
@@ -63,7 +63,7 @@ class Fulfillable_Collection implements Fulfillable {
 
 	/**
 	 * Create a new collection
-	 * 
+	 *
 	 * @return Fulfillable_Collection
 	 */
 	protected function create_collection() {
@@ -72,7 +72,7 @@ class Fulfillable_Collection implements Fulfillable {
 
 	/**
 	 * Get an array of the fulfillables in this collection
-	 * 
+	 *
 	 * @return array<Fulfillable>
 	 */
 	public function get_fulfillables() {
@@ -81,7 +81,7 @@ class Fulfillable_Collection implements Fulfillable {
 
 	/**
 	 * Get array of allowed condition types
-	 * 
+	 *
 	 * @return array<string>
 	 */
 	public function get_condition_type_list() {
@@ -91,7 +91,7 @@ class Fulfillable_Collection implements Fulfillable {
 	/**
 	 * Set array of allowed condition types
 	 * WARNING: this will NOT remove already added conditions which are no longer allowed
-	 * 
+	 *
 	 * @param  array<string>          $condition_type_list
 	 * @param  bool                   $whitelist
 	 * @return Fulfillable_Collection $this
@@ -105,7 +105,7 @@ class Fulfillable_Collection implements Fulfillable {
 
 	/**
 	 * Check if conditions types list is a whitelist
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function is_condition_type_list_whitelist() {
@@ -138,10 +138,10 @@ class Fulfillable_Collection implements Fulfillable {
 			}
 		}
 	}
-	
+
 	/**
 	 * Shorthand for where with OR comparison
-	 * 
+	 *
 	 * @param  string|array|callable  $condition_type
 	 * @param  string                 $comparison_operator Can be skipped. Defaults to "="
 	 * @param  mixed                  $value
@@ -155,7 +155,7 @@ class Fulfillable_Collection implements Fulfillable {
 	/**
 	 * Add fulfillable with optional comparison_operator
 	 * This method assumes there is no fulfillable that can be compared with literal NULL
-	 * 
+	 *
 	 * @param  string|array|callable  $condition_type
 	 * @param  string                 $comparison_operator Can be skipped. Defaults to "="
 	 * @param  mixed                  $value
@@ -220,7 +220,7 @@ class Fulfillable_Collection implements Fulfillable {
 
 	/**
 	 * Add fulfillable to collection
-	 * 
+	 *
 	 * @param Fulfillable $fulfillable
 	 * @param string      $fulfillable_comparison See static::$supported_fulfillable_comparisons
 	 */
@@ -238,7 +238,7 @@ class Fulfillable_Collection implements Fulfillable {
 
 	/**
 	 * Remove fulfillable from collection
-	 * 
+	 *
 	 * @param Fulfillable $fulfillable
 	 * @return bool Fulfillable found and removed
 	 */
@@ -257,7 +257,7 @@ class Fulfillable_Collection implements Fulfillable {
 
 	/**
 	 * Get a copy of the collection with conditions not in the whitelist filtered out
-	 * 
+	 *
 	 * @param  array<string>          $condition_whitelist
 	 * @return Fulfillable_Collection
 	 */
@@ -293,7 +293,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * Get a copy of the collection with passed conditions evaluated into boolean conditions
 	 * Useful when evaluating only certain condition types but preserving the rest
 	 * or when passing dynamic conditions to the front-end
-	 * 
+	 *
 	 * @param  array<string>          $condition_types
 	 * @param  array|boolean          $environment Environment array or a boolean value to force on conditions
 	 * @param  array<string>          $comparison_operators Array of comparison operators to evaluate regardless of condition type
@@ -327,10 +327,10 @@ class Fulfillable_Collection implements Fulfillable {
 		}
 		return $collection;
 	}
-	
+
 	/**
 	 * Check if all fulfillables are fulfilled taking into account their fulfillable comparison
-	 * 
+	 *
 	 * @param  array $environment
 	 * @return bool
 	 */

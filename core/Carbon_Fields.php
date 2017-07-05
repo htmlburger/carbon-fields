@@ -29,21 +29,21 @@ final class Carbon_Fields {
 
 	/**
 	 * An event emitter to facilitate events before the WordPress environment is guaranteed to be loaded
-	 * 
+	 *
 	 * @var Emitter
 	 */
 	protected $emitter;
 
 	/**
 	 * Flag if Carbon Fields has been booted
-	 * 
+	 *
 	 * @var bool
 	 */
 	public $booted = false;
 
 	/**
 	 * Inversion of Control container instance
-	 * 
+	 *
 	 * @var PimpleContainer
 	 */
 	public $ioc = null;
@@ -166,7 +166,7 @@ final class Carbon_Fields {
 
 	/**
 	 * Replace the ioc container for Carbon_Fields\Carbon_Fields
-	 * 
+	 *
 	 * @param  PimpleContainer $ioc
 	 */
 	public function install( PimpleContainer $ioc ) {
@@ -209,7 +209,7 @@ final class Carbon_Fields {
 
 	/**
 	 * Resolve the public url of a directory inside WordPress
-	 * 
+	 *
 	 * @param  string $directory
 	 * @return string
 	 */
@@ -240,7 +240,7 @@ final class Carbon_Fields {
 
 	/**
 	 * Get the event emitter
-	 * 
+	 *
 	 * @return Emitter
 	 */
 	public function get_emitter() {
@@ -252,7 +252,7 @@ final class Carbon_Fields {
 
 	/**
 	 * Add a listener to an event
-	 * 
+	 *
 	 * @param string   $event
 	 * @return Listener $listener
 	 */
@@ -262,7 +262,7 @@ final class Carbon_Fields {
 
 	/**
 	 * Remove a listener from any event
-	 * 
+	 *
 	 * @param Listener $listener
 	 */
 	public static function remove_listener( $listener ) {
@@ -271,7 +271,7 @@ final class Carbon_Fields {
 
 	/**
 	 * Add a persistent listener to an event
-	 * 
+	 *
 	 * @param  string   $event    The event to listen for
 	 * @param  string   $callable The callable to call when the event is broadcasted
 	 * @return Listener
@@ -293,7 +293,7 @@ final class Carbon_Fields {
 
 	/**
 	 * Get default IoC container dependencies
-	 * 
+	 *
 	 * @return PimpleContainer
 	 */
 	protected static function get_default_ioc() {

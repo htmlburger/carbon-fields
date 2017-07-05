@@ -14,7 +14,7 @@ abstract class Key_Value_Datastore extends Datastore {
 
 	/**
 	 * Key Toolset for key generation and comparison utilities
-	 * 
+	 *
 	 * @var Key_Toolset
 	 */
 	protected $key_toolset;
@@ -53,7 +53,7 @@ abstract class Key_Value_Datastore extends Datastore {
 
 	/**
 	 * Convert a cascading storage array to a value tree array
-	 * 
+	 *
 	 * @see Internal Glossary in DEVELOPMENT.MD
 	 * @param array<stdClass> $storage_array
 	 * @return array
