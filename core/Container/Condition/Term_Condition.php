@@ -6,7 +6,7 @@ use Carbon_Fields\Toolset\WP_Toolset;
 
 /**
  * Check for a specific term
- * 
+ *
  * Accepts the following values:
  *     Operators "=" and "!=":
  *         array(
@@ -14,7 +14,7 @@ use Carbon_Fields\Toolset\WP_Toolset;
  *             'taxonomy'=>...,
  *             ['field'=>...] // "slug", "term_id" etc. - see get_term_by()
  *         )
- *     
+ *
  *     Operators "IN" and "NOT IN":
  *         array(
  *             array(
@@ -24,14 +24,14 @@ use Carbon_Fields\Toolset\WP_Toolset;
  *             ),
  *             ...
  *         )
- *     
+ *
  *     Operator "CUSTOM" is passed the term_id
  */
 class Term_Condition extends Condition {
 
 	/**
 	 * WP_Toolset to fetch term data with
-	 * 
+	 *
 	 * @var WP_Toolset
 	 */
 	protected $wp_toolset;
@@ -42,10 +42,10 @@ class Term_Condition extends Condition {
 	public function __construct( $wp_toolset ) {
 		$this->wp_toolset = $wp_toolset;
 	}
-	
+
 	/**
 	 * Get the condition value
-	 * 
+	 *
 	 * @return mixed
 	 */
 	public function get_value() {
@@ -59,10 +59,10 @@ class Term_Condition extends Condition {
 		}
 		return $value;
 	}
-	
+
 	/**
 	 * Check if the condition is fulfilled
-	 * 
+	 *
 	 * @param  array $environment
 	 * @return bool
 	 */

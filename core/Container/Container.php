@@ -283,7 +283,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Boot the container once it's attached.
 	 */
 	protected function boot() {
-		
+
 	}
 
 	/**
@@ -353,7 +353,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		if ( ! $this->is_valid_attach() ) {
 			return;
 		}
-		
+
 		$param = func_get_args();
 		call_user_func_array( array( $this, 'attach' ), $param );
 

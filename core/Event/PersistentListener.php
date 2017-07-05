@@ -6,7 +6,7 @@ class PersistentListener implements Listener {
 
 	/**
 	 * Callable to call when the event is broadcasted
-	 * 
+	 *
 	 * @var callable
 	 */
 	protected $callable;

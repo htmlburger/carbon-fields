@@ -16,7 +16,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Implements factory design pattern.
  */
 class Field implements Datastore_Holder_Interface {
-	
+
 	/**
 	 * Array of field class names that have had their activation method called
 	 *
@@ -153,14 +153,14 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Key-value array of attribtues and their values
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $attributes = array();
 
 	/**
 	 * Array of attributes the user is allowed to change
-	 * 
+	 *
 	 * @var array<string>
 	 */
 	protected $allowed_attributes = array( 'max', 'maxLength', 'min', 'pattern', 'placeholder', 'readOnly', 'step', 'type' );
@@ -263,14 +263,14 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Create a field from a certain type with the specified label.
-	 * 
+	 *
 	 * @param string $type  Field type
 	 * @param string $name  Field name
 	 * @param string $label Field label
 	 */
 	public function __construct( $type, $name, $label ) {
 		Carbon_Fields::verify_boot();
-		
+
 		$this->type = $type;
 		$this->set_base_name( $name );
 		$this->set_name( $name );
@@ -311,7 +311,7 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Activate a field type
-	 * 
+	 *
 	 * @param string $class_name
 	 */
 	public static function activate_field_type( $class_name ) {
@@ -342,7 +342,7 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Set array of hierarchy field names
-	 * 
+	 *
 	 * @return Field $this
 	 */
 	public function set_hierarchy( $hierarchy ) {
@@ -361,7 +361,7 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Set array of hierarchy indexes
-	 * 
+	 *
 	 * @return Field $this
 	 */
 	public function set_hierarchy_index( $hierarchy_index ) {
@@ -617,7 +617,7 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Set field base name as defined in the container.
-	 * 
+	 *
 	 * @return Field $this
 	 */
 	public function set_base_name( $name ) {
@@ -715,7 +715,7 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Get a key-value array of attributes
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_attributes() {
@@ -724,7 +724,7 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Get an attribute value
-	 * 
+	 *
 	 * @param  string $name
 	 * @return string
 	 */
@@ -734,7 +734,7 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Set an attribute and it's value
-	 * 
+	 *
 	 * @param  string $name
 	 * @param  string $value
 	 * @return Field  $this
@@ -888,7 +888,7 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * HTML id attribute setter
-	 * 
+	 *
 	 * @param  string $id
 	 * @return Field  $this
 	 */
@@ -972,7 +972,7 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Set the REST visibility of the field
-	 * 
+	 *
 	 * @param  bool  $visible
 	 * @return Field $this
 	 */
@@ -980,10 +980,10 @@ class Field implements Datastore_Holder_Interface {
 		$this->visible_in_rest_api = $visible;
 		return $this;
 	}
-	
+
 	/**
 	 * Get the REST visibility of the field
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function get_visible_in_rest_api() {

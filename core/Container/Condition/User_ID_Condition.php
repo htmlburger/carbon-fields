@@ -6,10 +6,10 @@ namespace Carbon_Fields\Container\Condition;
  * Check for a specific user id
  */
 class User_ID_Condition extends Condition {
-	
+
 	/**
 	 * Check if the condition is fulfilled
-	 * 
+	 *
 	 * @param  array $environment
 	 * @return bool
 	 */

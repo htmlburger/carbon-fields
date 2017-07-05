@@ -26,7 +26,7 @@ class Color_Field extends Field {
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * 
+	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */

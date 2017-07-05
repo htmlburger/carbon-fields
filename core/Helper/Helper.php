@@ -236,7 +236,7 @@ class Helper {
 
 	/**
 	 * Recursive sorting function by array key.
-	 * 
+	 *
 	 * @param  array   &$array     The input array.
 	 * @param  int     $sort_flags Flags for controlling sorting behavior.
 	 * @return boolean
@@ -254,7 +254,7 @@ class Helper {
 
 	/**
 	 * Get the relation type from an array similar to how meta_query works in WP_Query
-	 * 
+	 *
 	 * @param  array         $array
 	 * @param  array<string> $allowed_relations
 	 * @param  string        $relation_key
@@ -279,7 +279,7 @@ class Helper {
 
 	/**
 	 * Normalize a label by updating case, stripping common prefixes etc.
-	 * 
+	 *
 	 * @param  string $label
 	 * @return string
 	 */
@@ -298,7 +298,7 @@ class Helper {
 
 	/**
 	 * Normalize a type string representing an object type
-	 * 
+	 *
 	 * @param  string $type
 	 * @return string
 	 */
@@ -312,7 +312,7 @@ class Helper {
 
 	/**
 	 * Convert a string representing an object type to a fully qualified class name
-	 * 
+	 *
 	 * @param  string $type
 	 * @param  string $namespace
 	 * @param  string $class_suffix
@@ -334,7 +334,7 @@ class Helper {
 
 	/**
 	 * Convert a string representing an object type to a fully qualified class name
-	 * 
+	 *
 	 * @param  string $class
 	 * @param  string $class_suffix
 	 * @return string
@@ -351,10 +351,10 @@ class Helper {
 
 		return $type;
 	}
-	
+
 	/**
 	 * Get an array of sanitized html classes
-	 * 
+	 *
 	 * @param  string|array<string> $classes
 	 * @return array<string>
 	 */
@@ -365,7 +365,7 @@ class Helper {
 		$classes = array_map( 'sanitize_html_class', $classes );
 		return $classes;
 	}
-	
+
 	/**
 	 * Check if an id or name for containers and fields is valid
 	 *

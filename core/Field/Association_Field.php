@@ -446,7 +446,7 @@ class Association_Field extends Field {
 
 	/**
 	 * Modify the types.
-	 * 
+	 *
 	 * @param  array $types New types
 	 * @return Field $this
 	 */

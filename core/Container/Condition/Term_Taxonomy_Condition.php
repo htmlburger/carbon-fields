@@ -6,10 +6,10 @@ namespace Carbon_Fields\Container\Condition;
  * Check if term is of a specific taxonomy
  */
 class Term_Taxonomy_Condition extends Condition {
-	
+
 	/**
 	 * Check if the condition is fulfilled
-	 * 
+	 *
 	 * @param  array $environment
 	 * @return bool
 	 */

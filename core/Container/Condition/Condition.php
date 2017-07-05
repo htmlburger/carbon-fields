@@ -12,28 +12,28 @@ abstract class Condition implements Fulfillable {
 
 	/**
 	 * Condition value to check
-	 * 
+	 *
 	 * @var mixed
 	 */
 	protected $value;
 
 	/**
 	 * Comparers to use for condition checking
-	 * 
+	 *
 	 * @var array<Comparer>
 	 */
 	protected $comparers = array();
 
 	/**
 	 * Comparison string to use
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $comparison_operator = '';
-	
+
 	/**
 	 * Get the condition value
-	 * 
+	 *
 	 * @return mixed
 	 */
 	public function get_value() {
@@ -42,7 +42,7 @@ abstract class Condition implements Fulfillable {
 		}
 		return $this->value;
 	}
-	
+
 	/**
 	 * Set the condition value
 	 *
@@ -53,16 +53,16 @@ abstract class Condition implements Fulfillable {
 		$this->value = $value;
 		return $this;
 	}
-	
+
 	/**
 	 * Get the condition comparers
-	 * 
+	 *
 	 * @return array<Comparer>
 	 */
 	protected function get_comparers() {
 		return $this->comparers;
 	}
-	
+
 	/**
 	 * Set the condition comparers
 	 *
@@ -73,7 +73,7 @@ abstract class Condition implements Fulfillable {
 		$this->comparers = $comparers;
 		return $this;
 	}
-	
+
 	/**
 	 * Find the first operator which supports $comparison_operator and check if it is correct for $a and $b
 	 *
@@ -97,7 +97,7 @@ abstract class Condition implements Fulfillable {
 
 	/**
 	 * Get comparison sign used
-	 * 
+	 *
 	 * @return string
 	 */
 	public function get_comparison_operator() {
@@ -106,7 +106,7 @@ abstract class Condition implements Fulfillable {
 
 	/**
 	 * Set comparison sign
-	 * 
+	 *
 	 * @param string $comparison_operator
 	 * @return Comparer $this
 	 */

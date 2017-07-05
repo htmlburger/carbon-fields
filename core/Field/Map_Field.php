@@ -10,7 +10,7 @@ use Carbon_Fields\Value_Set\Value_Set;
  * Coords (lat, lng), address and zoom are saved in the database.
  */
 class Map_Field extends Field {
-	
+
 	/**
 	 * Whether to lazy load this field.
 	 *
@@ -41,7 +41,7 @@ class Map_Field extends Field {
 
 	/**
 	 * Create a field from a certain type with the specified label.
-	 * 
+	 *
 	 * @param string $type  Field type
 	 * @param string $name  Field name
 	 * @param string $label Field label
@@ -137,7 +137,7 @@ class Map_Field extends Field {
 
 	/**
 	 * Set the coords and zoom of this field.
-	 * 
+	 *
 	 * @param  string $lat  Latitude
 	 * @param  string $lng  Longitude
 	 * @param  int    $zoom Zoom level

@@ -4,14 +4,14 @@ namespace Carbon_Fields\Container\Condition;
 
 /**
  * Check if post has a specific template
- * 
+ *
  * Pass "default" as the value for the default post template
  */
 class Post_Template_Condition extends Condition {
-	
+
 	/**
 	 * Check if the condition is fulfilled
-	 * 
+	 *
 	 * @param  array $environment
 	 * @return bool
 	 */

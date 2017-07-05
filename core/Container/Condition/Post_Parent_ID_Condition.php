@@ -6,10 +6,10 @@ namespace Carbon_Fields\Container\Condition;
  * Check if post has a specific parent
  */
 class Post_Parent_ID_Condition extends Condition {
-	
+
 	/**
 	 * Check if the condition is fulfilled
-	 * 
+	 *
 	 * @param  array $environment
 	 * @return bool
 	 */

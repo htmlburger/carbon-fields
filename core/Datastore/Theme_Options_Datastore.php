@@ -8,7 +8,7 @@ use Carbon_Fields\Field\Field;
  * Theme options datastore class.
  */
 class Theme_Options_Datastore extends Key_Value_Datastore {
-	
+
 	/**
 	 * Initialization tasks.
 	 */

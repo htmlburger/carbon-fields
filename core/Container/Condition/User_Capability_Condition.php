@@ -4,14 +4,14 @@ namespace Carbon_Fields\Container\Condition;
 
 /**
  * Check if user has a specific capability
- * 
+ *
  * Operator "CUSTOM" is passed the user id
  */
 class User_Capability_Condition extends Condition {
 
 	/**
 	 * Get user id from environment
-	 * 
+	 *
 	 * @param  array   $environment
 	 * @return integer
 	 */
@@ -34,10 +34,10 @@ class User_Capability_Condition extends Condition {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Check if the condition is fulfilled
-	 * 
+	 *
 	 * @param  array $environment
 	 * @return bool
 	 */

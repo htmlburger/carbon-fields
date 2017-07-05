@@ -152,7 +152,7 @@ class Repository {
 
 	/**
 	 * Check if container identificator id is unique
-	 * 
+	 *
 	 * @param string $id
 	 */
 	public function is_unique_container_id( $id ) {
@@ -161,7 +161,7 @@ class Repository {
 
 	/**
 	 * Generate a unique container identificator id based on container title
-	 * 
+	 *
 	 * @param string $title
 	 */
 	public function get_unique_container_id( $title ) {

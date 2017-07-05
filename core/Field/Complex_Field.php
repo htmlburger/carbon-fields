@@ -118,7 +118,7 @@ class Complex_Field extends Field {
 
 	/**
 	 * Set array of hierarchy field names
-	 * 
+	 *
 	 * @return Field $this
 	 */
 	public function set_hierarchy( $hierarchy ) {
@@ -460,7 +460,7 @@ class Complex_Field extends Field {
 	/**
 	 * Convert an externally-keyed value array ('_type' => ...)
 	 * to an internally-keyed one ('value' => ...)
-	 * 
+	 *
 	 * @param  mixed $value
 	 * @return mixed
 	 */

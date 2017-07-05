@@ -167,7 +167,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 	 * @covers ::get_storage_key_with_index_wildcards
 	 */
 	public function testGetStorageKeyWithIndexWildcardsReturnsComplexKeyForRootField() {
-		$expected = '_field||0|%|' . Value_Set::VALUE_PROPERTY;
+		$expected = '_field|||%|' . Value_Set::VALUE_PROPERTY;
 		$received = $this->subject->get_storage_key_with_index_wildcards(
 			false,
 			array( 'field' ),
