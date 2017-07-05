@@ -2,12 +2,15 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Value_Set\Value_Set;
+
 /**
  * Google Maps with Address field class.
  * Allows to manually select a pin, or to position a pin based on a specified address.
  * Coords (lat, lng), address and zoom are saved in the database.
  */
 class Map_Field extends Field {
+	
 	/**
 	 * Whether to lazy load this field.
 	 *
@@ -37,46 +40,71 @@ class Map_Field extends Field {
 	protected $default_zoom = 10;
 
 	/**
-	 * Current latitude.
-	 *
-	 * @var float|string
+	 * Create a field from a certain type with the specified label.
+	 * 
+	 * @param string $type  Field type
+	 * @param string $name  Field name
+	 * @param string $label Field label
 	 */
-	protected $lat = null;
+	public function __construct( $type, $name, $label ) {
+		$this->set_value_set( new Value_Set( Value_Set::TYPE_MULTIPLE_PROPERTIES, array( 'lat' => '', 'lng' => '', 'zoom' => '', 'address' => '' ) ) );
+		parent::__construct( $type, $name, $label );
+	}
 
 	/**
-	 * Current longitude.
-	 *
-	 * @var float|string
-	 */
-	protected $lng = null;
-
-	/**
-	 * Current zoom.
-	 *
-	 * @var int
-	 */
-	protected $zoom = null;
-
-	/**
-	 * Current address.
-	 *
-	 * @var string
-	 */
-	protected $address = '';
-
-	/**
-	 * Enqueue scripts in the administration
+	 * Enqueue scripts and styles in admin
+	 * Called once per field type
 	 */
 	public static function admin_enqueue_scripts() {
-		$api_key = apply_filters( 'carbon_map_api_key', false );
-		$url = apply_filters( 'carbon_map_url', '//maps.googleapis.com/maps/api/js?' . ( $api_key ? 'key=' . $api_key : '' ), $api_key );
+		$api_key = apply_filters( 'carbon_fields_map_field_api_key', false );
+		$url = apply_filters( 'carbon_fields_map_field_api_url', '//maps.googleapis.com/maps/api/js?' . ( $api_key ? 'key=' . $api_key : '' ), $api_key );
 
 		wp_enqueue_script( 'carbon-google-maps', $url, array(), null );
 	}
 
 	/**
+	 * Convert lat and lng to a comma-separated list
+	 */
+	protected function lat_lng_to_latlng( $lat, $lng ) {
+		return ( ! empty( $lat ) && ! empty( $lng ) ) ? $lat . ',' . $lng : '';
+	}
+
+	/**
+	 * Load the field value from an input array based on it's name
+	 *
+	 * @param  array $input Array of field names and values.
+	 * @return Field $this
+	 */
+	public function set_value_from_input( $input ) {
+		if ( ! isset( $input[ $this->get_name() ] ) ) {
+			$this->set_value( null );
+			return $this;
+		}
+
+		$value_set = array(
+			'lat' => '',
+			'lng' => '',
+			'zoom' => '',
+			'address' => '',
+		);
+
+		foreach ( $value_set as $key => $v ) {
+			if ( isset( $input[ $this->get_name() ][ $key ] ) ) {
+				$value_set[ $key ] = $input[ $this->get_name() ][ $key ];
+			}
+		}
+
+		$value_set['lat'] = (float) $value_set['lat'];
+		$value_set['lng'] = (float) $value_set['lng'];
+		$value_set['zoom'] = (int) $value_set['zoom'];
+		$value_set[ Value_Set::VALUE_PROPERTY ] = $this->lat_lng_to_latlng( $value_set['lat'], $value_set['lng'] );
+
+		$this->set_value( $value_set );
+		return $this;
+	}
+
+	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
@@ -84,44 +112,36 @@ class Map_Field extends Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
+		$value_set = $this->get_value();
+		if ( $value_set === null ) {
+			$value_set = array(
+				'lat' => floatval( $this->default_lat ),
+				'lng' => floatval( $this->default_lng ),
+				'zoom' => intval( $this->default_zoom ),
+				'address' => '',
+			);
+			$value_set[ Value_Set::VALUE_PROPERTY ] = $this->lat_lng_to_latlng( $value_set['lat'], $value_set['lng'] );
+		}
 		$field_data = array_merge( $field_data, array(
-			'lat' => is_float( $this->lat ) ? $this->lat : $this->default_lat,
-			'lng' => is_float( $this->lng ) ? $this->lng : $this->default_lng,
-			'zoom' => is_int( $this->zoom ) ? $this->zoom : $this->default_zoom,
-			'address' => $this->address,
+			'value' => array(
+				'lat' => floatval( $value_set['lat'] ),
+				'lng' => floatval( $value_set['lng'] ),
+				'zoom' => intval( $value_set['zoom'] ),
+				'address' => $value_set['address'],
+				'value' => $value_set[ Value_Set::VALUE_PROPERTY ],
+			),
 		) );
 
 		return $field_data;
 	}
 
 	/**
-	 * Underscore template of this field.
-	 */
-	public function template() {
-		?>
-		<div class="carbon-map-search">
-			<p><?php _e( 'Locate Address on the map', 'carbon-fields' ); ?>: </p>
-
-			<div class="carbon-map-search-row">
-				<input type="text" name="{{{ name }}}[address]" value="{{{ address }}}" class="regular-text address carbon-map-search-address" placeholder="Search..." />
-				<span class="carbon-map-search-button dashicons-before dashicons-search">
-					<?php _e( 'Find', 'carbon-fields' ); ?>
-				</span>
-			</div>
-
-			<input type="hidden" name="{{{ name }}}[lat]" value="{{{ lat }}}" />
-			<input type="hidden" name="{{{ name }}}[lng]" value="{{{ lng }}}" />
-			<input type="hidden" name="{{{ name }}}[zoom]" value="{{{ zoom }}}" />
-		</div>
-		<div class="carbon-map-canvas">&nbsp;</div>
-		<?php
-	}
-
-	/**
 	 * Set the coords and zoom of this field.
-	 * @param string $lat  Latitude
-	 * @param string $lng  Longitude
-	 * @param int $zoom Zoom level
+	 * 
+	 * @param  string $lat  Latitude
+	 * @param  string $lng  Longitude
+	 * @param  int    $zoom Zoom level
+	 * @return Field  $this
 	 */
 	public function set_position( $lat, $lng, $zoom ) {
 		$this->default_lat = floatval( $lat );
@@ -129,119 +149,5 @@ class Map_Field extends Field {
 		$this->default_zoom = $zoom;
 
 		return $this;
-	}
-
-	/**
-	 * Load data from the datastore.
-	 * Manually set the map field data fragments.
-	 **/
-	public function load() {
-		$this->get_datastore()->load( $this );
-
-		$name = $this->get_name();
-
-		// Set the "lat"
-		$this->set_name( $name . '-lat' );
-		$this->get_datastore()->load( $this );
-		if ( $this->get_value() ) {
-			$this->lat = (float) $this->get_value();
-		}
-
-		// Set the "lng"
-		$this->set_name( $name . '-lng' );
-		$this->get_datastore()->load( $this );
-		if ( $this->get_value() ) {
-			$this->lng = (float) $this->get_value();
-		}
-
-		// Set the "address"
-		$this->set_name( $name . '-address' );
-		$this->get_datastore()->load( $this );
-		if ( $this->get_value() ) {
-			$this->address = $this->get_value();
-		}
-
-		// Set the "zoom"
-		$this->set_name( $name . '-zoom' );
-		$this->get_datastore()->load( $this );
-		if ( $this->get_value() || $this->get_value() === '0' ) {
-			$this->zoom = (int) $this->get_value();
-		}
-
-		// Set the field value
-		$this->set_name( $name );
-		$value = $this->lat && $this->lng ? $this->lat . ',' . $this->lng : '';
-		$this->set_value( $value );
-	}
-
-	/**
-	 * Save data to the datastore.
-	 * Manually save the map field data fragments.
-	 **/
-	public function save() {
-		$name = $this->get_name();
-		$value = $this->get_value();
-
-		// Add the "lat" meta in the database
-		$this->set_name( $name . '-lat' );
-		$this->set_value( $value['lat'] );
-		$this->get_datastore()->save( $this );
-
-		// Add the "lng" meta in the database
-		$this->set_name( $name . '-lng' );
-		$this->set_value( $value['lng'] );
-		$this->get_datastore()->save( $this );
-
-		// Add the "zoom" meta in the database
-		$this->set_name( $name . '-zoom' );
-		$this->set_value( $value['zoom'] );
-		$this->get_datastore()->save( $this );
-
-		// Add the "address" meta in the database
-		$this->set_name( $name . '-address' );
-		$this->set_value( $value['address'] );
-		$this->get_datastore()->save( $this );
-
-		// Set the value for the field
-		$this->set_name( $name );
-		$field_value = ! empty( $value['lat'] ) && ! empty( $value['lng'] ) ? $value['lat'] . ',' . $value['lng'] : '';
-		$this->set_value( $field_value );
-
-		parent::save();
-	}
-
-	/**
-	 * Load the field value from an input array based on it's name
-	 *
-	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
-	 **/
-	public function set_value_from_input( $input = null ) {
-		if ( is_null( $input ) ) {
-			$input = $_POST;
-		}
-
-		if ( ! isset( $input[ $this->name ] ) ) {
-			$this->set_value( null );
-		} else {
-			$value = stripslashes_deep( $input[ $this->name ] );
-
-			if ( isset( $input[ $this->name . '_-lat' ] ) ) {
-				$this->lat = (float) $input[ $this->name . '_-lat' ];
-			}
-
-			if ( isset( $input[ $this->name . '_-lng' ] ) ) {
-				$this->lng = (float) $input[ $this->name . '_-lng' ];
-			}
-
-			if ( isset( $input[ $this->name . '_-zoom' ] ) ) {
-				$this->zoom = (int) $input[ $this->name . '_-zoom' ];
-			}
-
-			if ( isset( $input[ $this->name . '_-address' ] ) ) {
-				$this->address = $input[ $this->name . '_-address' ];
-			}
-
-			$this->set_value( $value );
-		}
 	}
 }

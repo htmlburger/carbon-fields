@@ -1,0 +1,24 @@
+/* ------------------------------------------------------------ *\
+	Field - File
+\* ------------------------------------------------------------ */
+
+.carbon-attachment { position: relative; width: 128px; height: 128px; line-height: 128px; border: 1px dashed $color-border-darker; text-align: center; }
+
+.carbon-attachment .carbon-description { position: absolute; left: -1px; top: -1px; right: -1px; bottom: -1px; }
+
+.carbon-attachment .carbon-attachment-preview { position: relative; z-index: 5; padding: 0; margin: 0; list-style: none outside none; text-align: center; box-shadow: inset 0 0 15px rgba(0,0,0,.1 ), inset 0 0 0 1px rgba(0,0,0,.05 ); background: #eee; overflow: hidden; }
+.carbon-attachment .carbon-attachment-preview:before { content: ''; display: block; padding-top: 100%; }
+.carbon-attachment .carbon-attachment-preview:after { content: ''; display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; box-shadow: inset 0 0 0 1px rgba(0,0,0,.1 ); overflow: hidden; }
+
+.carbon-attachment .carbon-attachment-preview img { position: absolute; left: 50%; top: 50%; margin-top: -14px; max-width: 100%; height: auto; transform: translate(-50%, -50%); }
+
+.carbon-attachment .carbon-file-remove { position: absolute; z-index: 15; top: 5px; right: 5px; cursor: pointer; font-size: 20px; line-height: 1; transition: opacity .2s ease-out; }
+.carbon-attachment .carbon-file-remove:hover { opacity: .8; }
+.carbon-attachment .carbon-file-remove:before { background: $color-label; color: #fff; border-radius: 50%;  }
+
+.carbon-attachment .button { position: relative; z-index: 10; display: inline-block; vertical-align: middle; max-width: 100%; height: auto; padding-top: 3px; padding-bottom: 3px; margin: 0; visibility: hidden; opacity: 0; white-space: normal; white-space: normal; line-height: 1.5; transition: visibility .2s ease-out, opacity .2s ease-out; }
+
+.carbon-attachment:hover .button,
+.carbon-attachment .carbon-description.hidden + .button { visibility: visible; opacity: 1; }
+
+.carbon-attachment input.carbon-attachment-file-name { position: absolute; z-index: 10; left: 0; bottom: 0; padding: 5px; background: $color-grey-bg; border: 1px solid $color-border-darker; color: $color-label; font-size: 13px; box-shadow: none; margin: 0; }

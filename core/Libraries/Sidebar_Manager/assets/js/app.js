@@ -1,8 +1,8 @@
-window.carbon = window.carbon || {};
+window.carbonFields = window.carbonFields || {};
 
 (function($) {
 
-	var carbon = window.carbon;
+	var carbon = window.carbonFields;
 
 	/**
 	 * Handles sidebar requests
@@ -18,7 +18,7 @@ window.carbon = window.carbon || {};
 			method: 'POST',
 			dataType: 'json',
 			data: {
-				action: 'carbon_' + action + '_sidebar',
+				action: 'carbon_fields_' + action + '_sidebar',
 				name: name
 			}
 		});

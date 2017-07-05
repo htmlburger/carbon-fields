@@ -1,0 +1,10 @@
+/* ------------------------------------------------------------ *\
+	Field - Color Picker
+\* ------------------------------------------------------------ */
+
+.carbon-field.carbon-checkbox { padding: 12px 16px; }
+.carbon-field.carbon-checkbox label { padding: 0; }
+
+@media (max-width: 782px) {
+	.carbon-field.carbon-checkbox label { line-height: 25px; }
+}

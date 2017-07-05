@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit bootstrap="./tests/bootstrap.php" colors="true" stopOnError="true">
+<phpunit
+	bootstrap="./tests/bootstrap.php"
+	colors="true"
+	stopOnError="true"
+	beStrictAboutOutputDuringTests="true"
+	beStrictAboutTestsThatDoNotTestAnything="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="true"
+	convertWarningsToExceptions="true"
+	backupGlobals="false"
+	>
 	<testsuites>
 		<testsuite name="Carbon Fields Test Suite">
 			<directory suffix=".php">./tests/unit-tests/</directory>

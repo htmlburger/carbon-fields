@@ -7,117 +7,90 @@ use Carbon_Fields\Field\Field;
 /**
  * Abstract meta datastore class.
  */
-abstract class Meta_Datastore extends Datastore {
+abstract class Meta_Datastore extends Key_Value_Datastore {
+	
 	/**
 	 * Initialization tasks.
-	 **/
+	 */
 	public function init() {}
 
 	/**
-	 * Save the field value(s) into the database.
-	 *
-	 * @param Field $field The field to save.
-	 */
-	public function save( Field $field ) {
-		if ( ! update_metadata( $this->get_meta_type(), $this->get_id(), $field->get_name(), $field->get_value() ) ) {
-			add_metadata( $this->get_meta_type(), $this->get_id(), $field->get_name(), $field->get_value(), true );
-		}
-	}
-
-	/**
-	 * Load the field value(s) from the database.
+	 * Get a raw database query results array for a field
 	 *
 	 * @param Field $field The field to retrieve value for.
+	 * @param array $storage_key_patterns
+	 * @return array<stdClass> Array of {key, value} objects
 	 */
-	public function load( Field $field ) {
+	protected function get_storage_array( Field $field, $storage_key_patterns ) {
 		global $wpdb;
 
-		$value = $wpdb->get_col( '
-			SELECT `meta_value`
+		$storage_key_comparisons = $this->key_toolset->storage_key_patterns_to_sql( '`meta_key`', $storage_key_patterns );
+
+		$storage_array = $wpdb->get_results( '
+			SELECT `meta_key` AS `key`, `meta_value` AS `value`
 			FROM ' . $this->get_table_name() . '
-			WHERE `' . $this->get_table_field_name() . '`=' . intval( $this->get_id() ) . '
-			AND `meta_key`="' . $field->get_name() . '"
-			LIMIT 1
+			WHERE `' . $this->get_table_field_name() . '` = ' . intval( $this->get_object_id() ) . '
+				AND ' . $storage_key_comparisons . '
+			ORDER BY `meta_key` ASC
 		' );
 
-		if ( ! is_array( $value ) || count( $value ) < 1 ) {
-			$field->set_value( false );
-			return;
-		}
+		$storage_array = apply_filters( 'carbon_fields_datastore_storage_array', $storage_array, $this, $storage_key_patterns );
 
-		$field->set_value( $value[0] );
+		return $storage_array;
 	}
 
 	/**
-	 * Delete the field value(s) from the database.
+	 * Save a single key-value pair to the database
+	 *
+	 * @param string $key
+	 * @param string $value
+	 */
+	protected function save_key_value_pair( $key, $value ) {
+		if ( ! update_metadata( $this->get_meta_type(), $this->get_object_id(), $key, $value ) ) {
+			add_metadata( $this->get_meta_type(), $this->get_object_id(), $key, $value, true );
+		}
+	}
+
+	/**
+	 * Delete the field value(s)
 	 *
 	 * @param Field $field The field to delete.
 	 */
 	public function delete( Field $field ) {
-		delete_metadata( $this->get_meta_type(), $this->get_id(), $field->get_name(), $field->get_value() );
-	}
-
-	/**
-	 * Load complex field value(s) from the database.
-	 *
-	 * @param mixed $field The field to load values for.
-	 */
-	public function load_values( $field ) {
 		global $wpdb;
 
-		if ( is_object( $field ) && is_subclass_of( $field, 'Carbon_Fields\\Field\\Field' ) ) {
-			$meta_key = $field->get_name();
-		} else {
-			$meta_key = $field;
-		}
+		$storage_key_patterns = $this->key_toolset->get_storage_key_deleter_patterns(
+			is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ),
+			$field->is_simple_root_field(),
+			$this->get_full_hierarchy_for_field( $field ),
+			$this->get_full_hierarchy_index_for_field( $field )
+		);
+		$storage_key_comparisons = $this->key_toolset->storage_key_patterns_to_sql( '`meta_key`', $storage_key_patterns );
 
-		return $wpdb->get_results( '
-			SELECT meta_key AS field_key, meta_value AS field_value FROM ' . $this->get_table_name() . '
-			WHERE `meta_key` LIKE "' . addslashes( $meta_key ) . '_%" AND `' . $this->get_table_field_name() . '`="' . intval( $this->get_id() ) . '"
-		', ARRAY_A );
-	}
-
-	/**
-	 * Delete complex field value(s) from the database.
-	 *
-	 * @param mixed $field The field to delete values for.
-	 */
-	public function delete_values( $field ) {
-		global $wpdb;
-
-		$group_names = $field->get_group_names();
-		$field_name = $field->get_name();
-
-		$meta_key_constraint = '`meta_key` LIKE "' . $field_name . implode( '-%" OR `meta_key` LIKE "' . $field_name, $group_names ) . '-%"';
-
-		return $wpdb->query( '
-			DELETE FROM ' . $this->get_table_name() . '
-			WHERE (' . $meta_key_constraint . ') AND `' . $this->get_table_field_name() . '`="' . intval( $this->get_id() ) . '"
+		$meta_keys = $wpdb->get_col( '
+			SELECT `meta_key`
+			FROM `' . $this->get_table_name() . '`
+			WHERE `' . $this->get_table_field_name() . '` = ' . intval( $this->get_object_id() ) . '
+				AND ' . $storage_key_comparisons . '
 		' );
+
+		foreach ( $meta_keys as $meta_key ) {
+			delete_metadata( $this->get_meta_type(), $this->get_object_id(), $meta_key );
+		}
 	}
 
 	/**
-	 * Retrieve the type of meta data.
+	 * Get the type of meta data.
 	 */
 	abstract public function get_meta_type();
 
 	/**
-	 * Retrieve the meta table name to query.
+	 * Get the meta table name to query.
 	 */
 	abstract public function get_table_name();
 
 	/**
-	 * Retrieve the meta table field name to query by.
+	 * Get the meta table field name to query by.
 	 */
 	abstract public function get_table_field_name();
-
-	/**
-	 * Set the ID of the datastore.
-	 */
-	abstract public function set_id( $id );
-
-	/**
-	 * Retrieve the ID of the datastore.
-	 */
-	abstract public function get_id();
 }

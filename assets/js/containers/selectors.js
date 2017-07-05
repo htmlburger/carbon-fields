@@ -1,0 +1,30 @@
+/**
+ * The external dependencies.
+ */
+import { pickBy } from 'lodash';
+
+/**
+ * Get all containers.
+ *
+ * @param  {Object} state
+ * @return {Object}
+ */
+export const getContainers = (state) => state.containers;
+
+/**
+ * Get a container by id.
+ *
+ * @param  {Object} state
+ * @param  {String} containerId
+ * @return {Object}
+ */
+export const getContainerById = (state, containerId) => state.containers[containerId];
+
+/**
+ * Get all containers by type.
+ *
+ * @param  {Object} state
+ * @param  {String} containerType
+ * @return {Object}
+ */
+export const getContainersByType = (state, containerType) => pickBy(getContainers(state), ({ type }) => type === containerType);

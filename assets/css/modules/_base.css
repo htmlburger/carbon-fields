@@ -1,0 +1,19 @@
+/* ------------------------------------------------------------ *\
+	Base
+\* ------------------------------------------------------------ */
+
+.carbon-field,
+.carbon-complex .fields-container,
+.carbon-association .association-left,
+.carbon-association .association-right,
+.carbon-association .search-field,
+.carbon-file .carbon-attachment-file-name { box-sizing: border-box; }
+
+/* ------------------------------------------------------------ *\
+	Term Page Overrides
+\* ------------------------------------------------------------ */
+
+.carbon-fields.edit-tags-php #col-container,
+.carbon-fields.edit-tags-php #col-left { overflow: visible; }
+
+.carbon-fields.edit-tags-php #col-left:after { content: ''; display: block; clear: both; width: 100%; }

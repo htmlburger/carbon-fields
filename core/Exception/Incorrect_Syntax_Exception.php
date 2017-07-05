@@ -11,16 +11,16 @@ class Incorrect_Syntax_Exception extends \Exception {
 	 * Throw an exception when WP_DEBUG is enabled, and show a friendly admin notice otherwise
 	 */
 	public static function raise( $message, $code = null ) {
-		if ( empty( self::$errors ) ) {
+		if ( empty( static::$errors ) ) {
 			add_action( 'admin_notices', array( __NAMESPACE__ . '\\Incorrect_Syntax_Exception', 'print_errors' ) );
 		}
 
 		$exception = new self( $message, $code );
 
-		if ( self::$throw_errors ) {
+		if ( static::$throw_errors ) {
 			throw $exception;
 		} else {
-			self::$errors[] = $exception;
+			static::$errors[] = $exception;
 		}
 	}
 
@@ -32,7 +32,7 @@ class Incorrect_Syntax_Exception extends \Exception {
 			return;
 		}
 
-		$errors = self::$errors;
+		$errors = static::$errors;
 		$plural = count( $errors ) === 1 ? '' : 's';
 
 		include \Carbon_Fields\DIR . '/templates/Exception/incorrect-syntax.php';
