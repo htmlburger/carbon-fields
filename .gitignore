@@ -8,19 +8,17 @@ project.properties
 sftp-config.json
 .idea
 
-# Grunt
-/node_modules/
-/deploy/
-
 # OS X metadata
 .DS_Store
 
 # Windows thumbnail cache
 Thumbs.db
 
+# Node
+/node_modules/
+
 # Unit tests
 /tmp
-/tests/bin/tmp
 
 # Composer
 /vendor
@@ -28,3 +26,6 @@ composer.lock
 
 # Vagrant
 .vagrant
+
+# Bundled assets
+/assets/dist/

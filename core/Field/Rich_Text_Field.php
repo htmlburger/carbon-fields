@@ -6,46 +6,19 @@ namespace Carbon_Fields\Field;
  * WYSIWYG rich text area field class.
  */
 class Rich_Text_Field extends Textarea_Field {
+
+	/**
+	 * Defines if the rich text field should be loaded only when scrolled into view
+	 *
+	 * @var boolean
+	 */
 	protected $lazyload = true;
 
 	/**
-	 * Admin initialization actions.
+	 * {@inheritDoc}
 	 */
-	public function admin_init() {
-		add_action( 'admin_footer', array( get_class( $this ), 'editor_init' ) );
-	}
-
-	/**
-	 * The main Underscore template of this field.
-	 */
-	public function template() {
-		?>
-		<div id="wp-{{{ id }}}-wrap" class="carbon-wysiwyg wp-editor-wrap tmce-active" data-toolbar="full">
-			<div id="wp-{{{ id }}}-editor-tools" class="wp-editor-tools">
-				<div id="wp-{{{ id }}}-media-buttons" class="hide-if-no-js wp-media-buttons">
-					<a href="#" class="button insert-media add_media" data-editor="{{{ id }}}" title="<?php _e( 'Add Media', 'carbon-fields' ); ?>">
-						<span class="wp-media-buttons-icon"></span> <?php _e( 'Add Media', 'carbon-fields' ); ?>
-					</a>
-					<?php
-						remove_action( 'media_buttons', 'media_buttons' );
-						do_action( 'media_buttons' );
-						add_action( 'media_buttons', 'media_buttons' );
-					?>
-				</div>
-			</div>
-			<div class="wp-editor-tabs">
-				<button type="button" id="{{{ id }}}-tmce" class="wp-switch-editor switch-tmce" data-wp-editor-id="{{{ id }}}">
-					<?php _e( 'Visual', 'carbon-fields' ); ?>
-				</button>
-				<button type="button" id="{{{ id }}}-html" class="wp-switch-editor switch-html" data-wp-editor-id="{{{ id }}}">
-					<?php _e( 'Text', 'carbon-fields' ); ?>
-				</button>
-			</div>
-			<div id="wp-{{{ id }}}-editor-container" class="wp-editor-container">
-				<textarea id="{{{ id }}}" name="{{{ name }}}" {{{ rows ? 'rows="' + rows + '"' : 'style="height: ' + height + 'px;"' }}} class="wp-editor-area">{{ value }}</textarea>
-			</div>
-		</div>
-		<?php
+	public static function field_type_activated() {
+		add_action( 'admin_print_footer_scripts', array( get_class(), 'editor_init' ) );
 	}
 
 	/**
@@ -58,18 +31,41 @@ class Rich_Text_Field extends Textarea_Field {
 		?>
 		<div style="display:none;">
 			<?php
-				$settings = array(
-					'tinymce' => array(
-						'resize' => true,
-						'wp_autoresize_on' => true,
-					),
-				);
+			$settings = array(
+				'tinymce' => array(
+					'resize' => true,
+					'wp_autoresize_on' => true,
+				),
+			);
 
-				add_filter( 'user_can_richedit', '__return_true' );
-				wp_editor( '', 'carbon_settings', $settings );
-				remove_filter( 'user_can_richedit', '__return_true' );
+			add_filter( 'user_can_richedit', '__return_true' );
+			wp_editor( '', 'carbon_settings', $settings );
+			remove_filter( 'user_can_richedit', '__return_true' );
 			?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Returns an array that holds the field data, suitable for JSON representation.
+	 *
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
+	public function to_json( $load ) {
+		$field_data = parent::to_json( $load );
+
+		ob_start();
+		remove_action( 'media_buttons', 'media_buttons' );
+		do_action( 'media_buttons' );
+		add_action( 'media_buttons', 'media_buttons' );
+		$media_buttons = ob_get_clean();
+
+		$field_data = array_merge( $field_data, array(
+			'rich_editing' => user_can_richedit(),
+			'media_buttons' => $media_buttons,
+		) );
+
+		return $field_data;
 	}
 }

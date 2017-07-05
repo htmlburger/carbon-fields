@@ -2,24 +2,27 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Carbon_Fields;
+use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Datastore\Datastore_Holder_Interface;
+use Carbon_Fields\Value_Set\Value_Set;
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Base field class.
  * Defines the key container methods and their default implementations.
  * Implements factory design pattern.
- **/
+ */
 class Field implements Datastore_Holder_Interface {
+
 	/**
-	 * Stores all the field Backbone templates
+	 * Array of field class names that have had their activation method called
 	 *
-	 * @see factory()
-	 * @see add_template()
-	 * @var array
+	 * @var array<string>
 	 */
-	protected $templates = array();
+	protected static $activated_field_types = array();
 
 	/**
 	 * Globally unique field identificator. Generated randomly
@@ -37,18 +40,32 @@ class Field implements Datastore_Holder_Interface {
 	public $type;
 
 	/**
+	 * Array of ancestor field names
+	 *
+	 * @var array
+	 */
+	protected $hierarchy = array();
+
+	/**
+	 * Array of complex entry ids
+	 *
+	 * @var array
+	 */
+	protected $hierarchy_index = array();
+
+	/**
 	 * Field value
 	 *
-	 * @var mixed
+	 * @var Value_Set
 	 */
-	protected $value;
+	protected $value_set;
 
 	/**
 	 * Default field value
 	 *
 	 * @var mixed
 	 */
-	protected $default_value;
+	protected $default_value = '';
 
 	/**
 	 * Sanitized field name used as input name attribute during field render
@@ -58,6 +75,14 @@ class Field implements Datastore_Holder_Interface {
 	 * @var string
 	 */
 	protected $name;
+
+	/**
+	 * Field name prefix
+	 *
+	 * @see set_name()
+	 * @var string
+	 */
+	protected $name_prefix = '_';
 
 	/**
 	 * The base field name which is used in the container.
@@ -98,7 +123,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @see set_datastore()
 	 * @see get_datastore()
-	 * @var object
+	 * @var boolean
 	 */
 	protected $has_default_datastore = true;
 
@@ -115,7 +140,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @see set_autoload()
 	 * @var bool
-	 **/
+	 */
 	protected $autoload = false;
 
 	/**
@@ -123,23 +148,37 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @see set_lazyload()
 	 * @var bool
-	 **/
+	 */
 	protected $lazyload = false;
+
+	/**
+	 * Key-value array of attribtues and their values
+	 *
+	 * @var array
+	 */
+	protected $attributes = array();
+
+	/**
+	 * Array of attributes the user is allowed to change
+	 *
+	 * @var array<string>
+	 */
+	protected $allowed_attributes = array( 'max', 'maxLength', 'min', 'pattern', 'placeholder', 'readOnly', 'step', 'type' );
 
 	/**
 	 * The width of the field.
 	 *
 	 * @see set_width()
 	 * @var int
-	 **/
+	 */
 	protected $width = 0;
 
 	/**
 	 * Custom CSS classes.
 	 *
-	 * @see add_class()
+	 * @see set_classes()
 	 * @var array
-	 **/
+	 */
 	protected $classes = array();
 
 	/**
@@ -147,49 +186,68 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @see set_required()
 	 * @var bool
-	 **/
+	 */
 	protected $required = false;
-
-	/**
-	 * Prefix to be prepended to the field name during load, save, delete and <strong>render</strong>
-	 *
-	 * @var string
-	 **/
-	protected $name_prefix = '_';
 
 	/**
 	 * Stores the field conditional logic rules.
 	 *
 	 * @var array
-	 **/
+	 */
 	protected $conditional_logic = array();
 
 	/**
-	 * Create a new field of type $type and name $name and label $label.
+	 * Whether the field should be included in the response of the requests to the REST API
 	 *
-	 * @param string $type
+	 * @see  set_visible_in_rest_api
+	 * @see  get_visible_in_rest_api
+	 * @var boolean
+	 */
+	protected $visible_in_rest_api = false;
+
+	/**
+	 * Clone the Value_Set object as well
+	 *
+	 * @var array
+	 */
+	public function __clone() {
+		$this->set_value_set( clone $this->get_value_set() );
+	}
+
+	/**
+	 * Create a new field of type $raw_type and name $name and label $label.
+	 *
+	 * @param string $raw_type
 	 * @param string $name lower case and underscore-delimited
 	 * @param string $label (optional) Automatically generated from $name if not present
-	 * @return object $field
-	 **/
-	public static function factory( $type, $name, $label = null ) {
-		// backward compatibility: `file` type used to be called `attachment`
-		if ( $type === 'attachment' ) {
-			$type = 'file';
+	 * @return Field
+	 */
+	public static function factory( $raw_type, $name, $label = null ) {
+		$type = Helper::normalize_type( $raw_type );
+
+		// stop hidden symbol support when the end user is creating fields ][
+		// @see Field::set_name()
+		if ( ! Helper::is_valid_entity_id( $name ) ) {
+			Incorrect_Syntax_Exception::raise( 'Field names can only contain lowercase alphanumeric characters, dashes and underscores ("' . $name . '" passed).' );
+			return null;
 		}
 
-		$type = str_replace( ' ', '_', ucwords( str_replace( '_', ' ', $type ) ) );
+		if ( Carbon_Fields::has( $type, 'fields' ) ) {
+			return Carbon_Fields::resolve_with_arguments( $type, array(
+				'type' => $type,
+				'name' => $name,
+				'label' => $label,
+			), 'fields' );
+		}
 
-		$class = __NAMESPACE__ . '\\' . $type . '_Field';
-
+		// Fallback to class name-based resolution
+		$class = Helper::type_to_class( $type, __NAMESPACE__, '_Field' );
 		if ( ! class_exists( $class ) ) {
-			Incorrect_Syntax_Exception::raise( 'Unknown field "' . $type . '".' );
+			Incorrect_Syntax_Exception::raise( 'Unknown field type "' . $raw_type . '".' );
 			$class = __NAMESPACE__ . '\\Broken_Field';
 		}
 
-		$field = new $class( $name, $label );
-		$field->type = $type;
-
+		$field = new $class( $type, $name, $label );
 		return $field;
 	}
 
@@ -197,20 +255,26 @@ class Field implements Datastore_Holder_Interface {
 	 * An alias of factory().
 	 *
 	 * @see Field::factory()
-	 **/
+	 * @return Field
+	 */
 	public static function make( $type, $name, $label = null ) {
-		return self::factory( $type, $name, $label );
+		return static::factory( $type, $name, $label );
 	}
 
 	/**
 	 * Create a field from a certain type with the specified label.
+	 *
+	 * @param string $type  Field type
 	 * @param string $name  Field name
 	 * @param string $label Field label
 	 */
-	protected function __construct( $name, $label ) {
+	public function __construct( $type, $name, $label ) {
+		Carbon_Fields::verify_boot();
+
+		$this->type = $type;
+		$this->set_base_name( $name );
 		$this->set_name( $name );
 		$this->set_label( $label );
-		$this->set_base_name( $name );
 
 		// Pick random ID
 		$random_string = md5( mt_rand() . $this->get_name() . $this->get_label() );
@@ -221,116 +285,209 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Boot the field once the container is attached.
-	 **/
-	public function boot() {
-		$this->admin_init();
-
-		$this->add_template( $this->get_type(), array( $this, 'template' ) );
-
-		add_action( 'admin_footer', array( get_class(), 'admin_hook_scripts' ), 5 );
-		add_action( 'admin_footer', array( get_class(), 'admin_hook_styles' ), 5 );
-
-		add_action( 'admin_footer', array( get_class( $this ), 'admin_enqueue_scripts' ), 5 );
+	 * Returns the type of the field based on the class.
+	 * The class is stripped by the "CarbonFields" prefix.
+	 * Also the "Field" suffix is removed.
+	 * Then underscores and backslashes are removed.
+	 *
+	 * @return string
+	 */
+	public function get_type() {
+		return Helper::class_to_type( get_class( $this ), '_Field' );
 	}
 
 	/**
-	 * Perform instance initialization after calling setup()
-	 **/
+	 * Activate the field once the container is attached.
+	 */
+	public function activate() {
+		$this->admin_init();
+
+		add_action( 'admin_print_footer_scripts', array( get_class(), 'admin_hook_scripts' ), 5 );
+		add_action( 'admin_print_footer_scripts', array( get_class(), 'admin_hook_styles' ), 5 );
+		static::activate_field_type( get_class( $this ) );
+
+		do_action( 'carbon_fields_field_activated', $this );
+	}
+
+	/**
+	 * Activate a field type
+	 *
+	 * @param string $class_name
+	 */
+	public static function activate_field_type( $class_name ) {
+		if ( in_array( $class_name, static::$activated_field_types ) ) {
+			return;
+		}
+
+		add_action( 'admin_print_footer_scripts', array( $class_name, 'admin_enqueue_scripts' ), 5 );
+		call_user_func( array( $class_name, 'field_type_activated' ) );
+
+		static::$activated_field_types[] = $class_name;
+	}
+
+	/**
+	 * Prepare the field type for use
+	 * Called once per field type when activated
+	 */
+	public static function field_type_activated() {}
+
+	/**
+	 * Get array of hierarchy field names
+	 *
+	 * @return array
+	 */
+	public function get_hierarchy() {
+		return $this->hierarchy;
+	}
+
+	/**
+	 * Set array of hierarchy field names
+	 *
+	 * @return Field $this
+	 */
+	public function set_hierarchy( $hierarchy ) {
+		$this->hierarchy = $hierarchy;
+		return $this;
+	}
+
+	/**
+	 * Get array of hierarchy indexes
+	 *
+	 * @return array
+	 */
+	public function get_hierarchy_index() {
+		return $this->hierarchy_index;
+	}
+
+	/**
+	 * Set array of hierarchy indexes
+	 *
+	 * @return Field $this
+	 */
+	public function set_hierarchy_index( $hierarchy_index ) {
+		$hierarchy_index = ( ! empty( $hierarchy_index ) ) ? $hierarchy_index : array();
+		$this->hierarchy_index = $hierarchy_index;
+		return $this;
+	}
+
+	/**
+	 * Return whether the field is a root field and holds a single value
+	 *
+	 * @return bool
+	 */
+	public function is_simple_root_field() {
+		$hierarchy = $this->get_hierarchy();
+		return (
+			empty( $hierarchy )
+			&&
+			in_array( $this->get_value_set()->get_type(), array( Value_Set::TYPE_SINGLE_VALUE, Value_Set::TYPE_MULTIPLE_PROPERTIES ) )
+		);
+	}
+
+	/**
+	 * Perform instance initialization
+	 */
 	public function init() {}
 
 	/**
-	 * Instance initialization when in the admin area.
-	 * Called during field boot.
-	 **/
+	 * Instance initialization when in the admin area
+	 * Called during field boot
+	 */
 	public function admin_init() {}
 
 	/**
-	 * Enqueue admin scripts.
-	 * Called once per field type.
-	 **/
+	 * Enqueue scripts and styles in admin
+	 * Called once per field type
+	 */
 	public static function admin_enqueue_scripts() {}
 
 	/**
-	 * Prints the main Underscore template
-	 **/
-	public function template() { }
-
-	/**
-	 * Returns all the Backbone templates
+	 * Get value from datastore
 	 *
-	 * @return array
-	 **/
-	public function get_templates() {
-		return $this->templates;
+	 * @param bool $fallback_to_default
+	 * @return mixed
+	 */
+	protected function get_value_from_datastore( $fallback_to_default = true ) {
+		$value = $this->get_datastore()->load( $this );
+
+		if ( $value === null && $fallback_to_default ) {
+			$value = $this->get_default_value();
+		}
+
+		return $value;
 	}
 
 	/**
-	 * Adds a new Backbone template
-	 **/
-	public function add_template( $name, $callback ) {
-		$this->templates[ $name ] = $callback;
-	}
-
-	/**
-	 * Delegate load to the field DataStore instance
-	 **/
+	 * Load value from datastore
+	 */
 	public function load() {
-		$this->get_datastore()->load( $this );
+		$this->set_value( $this->get_value_from_datastore() );
+	}
 
-		if ( $this->get_value() === false ) {
-			$this->set_value( $this->default_value );
+	/**
+	 * Save value to storage
+	 */
+	public function save() {
+		$delete_on_save = apply_filters( 'carbon_fields_should_delete_field_value_on_save', true, $this );
+		if ( $delete_on_save ) {
+			$this->delete();
+		}
+
+		$save = apply_filters( 'carbon_fields_should_save_field_value', true, $this->get_value(), $this );
+		if ( $save ) {
+			$this->get_datastore()->save( $this );
 		}
 	}
 
 	/**
-	 * Delegate save to the field DataStore instance
-	 **/
-	public function save() {
-		return $this->get_datastore()->save( $this );
-	}
-
-	/**
-	 * Delegate delete to the field DataStore instance
-	 **/
+	 * Delete value from storage
+	 */
 	public function delete() {
-		return $this->get_datastore()->delete( $this );
+		$this->get_datastore()->delete( $this );
 	}
 
 	/**
 	 * Load the field value from an input array based on it's name
 	 *
-	 * @param array $input (optional) Array of field names and values. Defaults to $_POST
-	 **/
-	public function set_value_from_input( $input = null ) {
-		if ( is_null( $input ) ) {
-			$input = $_POST;
-		}
-
-		if ( ! isset( $input[ $this->name ] ) ) {
-			$this->set_value( null );
+	 * @param  array $input Array of field names and values.
+	 * @return Field $this
+	 */
+	public function set_value_from_input( $input ) {
+		if ( isset( $input[ $this->get_name() ] ) ) {
+			$this->set_value( $input[ $this->get_name() ] );
 		} else {
-			$this->set_value( stripslashes_deep( $input[ $this->name ] ) );
+			$this->clear_value();
 		}
+		return $this;
 	}
 
 	/**
 	 * Return whether the datastore instance is the default one or has been overriden
 	 *
-	 * @return Datastore_Interface $datastore
-	 **/
+	 * @return boolean
+	 */
 	public function has_default_datastore() {
 		return $this->has_default_datastore;
 	}
 
 	/**
-	 * Assign DataStore instance for use during load, save and delete
+	 * Get the DataStore instance
 	 *
-	 * @param object $datastore
-	 * @return object $this
-	 **/
+	 * @return Datastore_Interface $datastore
+	 */
+	public function get_datastore() {
+		return $this->datastore;
+	}
+
+	/**
+	 * Set datastore instance
+	 *
+	 * @param  Datastore_Interface $datastore
+	 * @param  boolean             $set_as_default
+	 * @return Field               $this
+	 */
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
-		if ( $set_as_default && !$this->has_default_datastore() ) {
+		if ( $set_as_default && ! $this->has_default_datastore() ) {
 			return $this; // datastore has been overriden with a custom one - abort changing to a default one
 		}
 		$this->datastore = $datastore;
@@ -339,168 +496,273 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return the DataStore instance used by the field
+	 * Return the type of the container this field is in
 	 *
-	 * @return object $datastore
-	 **/
-	public function get_datastore() {
-		return $this->datastore;
+	 * @return string
+	 */
+	public function get_context() {
+		return $this->context;
 	}
 
 	/**
 	 * Assign the type of the container this field is in
 	 *
-	 * @param string
-	 * @return object $this
-	 **/
+	 * @param  string $context
+	 * @return Field  $this
+	 */
 	public function set_context( $context ) {
 		$this->context = $context;
 		return $this;
 	}
 
 	/**
-	 * Return the type of the container this field is in
+	 * Get the Value_Set object
 	 *
-	 * @return string
-	 **/
-	public function get_context() {
-		return $this->context;
+	 * @return Value_Set
+	 */
+	public function get_value_set() {
+		if ( $this->value_set === null ) {
+			$this->set_value_set( new Value_Set() );
+		}
+		return $this->value_set;
 	}
 
 	/**
-	 * Directly modify the field value
+	 * Set the Value_Set object
 	 *
-	 * @param mixed $value
-	 **/
-	public function set_value( $value ) {
-		$this->value = $value;
-	}
-
-	/**
-	 * Set default field value
-	 *
-	 * @param mixed $default_value
-	 **/
-	public function set_default_value( $default_value ) {
-		$this->default_value = $default_value;
+	 * @param  Value_Set $value_set
+	 * @return Field     $this
+	 */
+	public function set_value_set( $value_set ) {
+		$this->value_set = $value_set;
 		return $this;
+	}
+
+	/**
+	 * Alias for $this->get_value_set()->get(); with fallback to default value
+	 *
+	 * @return mixed
+	 */
+	public function get_value() {
+		if ( $this->get_value_set()->get() === null ) {
+			$this->set_value( $this->get_default_value() );
+		}
+		return $this->get_value_set()->get();
+	}
+
+	/**
+	 * Alias for $this->get_value_set()->get_set(); with fallback to default value
+	 *
+	 * @return array<array>
+	 */
+	public function get_full_value() {
+		if ( $this->get_value_set()->get_set() === null ) {
+			$this->set_value( $this->get_default_value() );
+		}
+		return $this->get_value_set()->get_set();
+	}
+
+	/**
+	 * Return a differently formatted value for end-users
+	 *
+	 * @return mixed
+	 */
+	public function get_formatted_value() {
+		return $this->get_value();
+	}
+
+	/**
+	 * Alias for $this->get_value_set()->set( $value );
+	 */
+	public function set_value( $value ) {
+		$this->get_value_set()->set( $value );
+		return $this;
+	}
+
+	/**
+	 * Clear the field value to a blank one (but not the default one)
+	 */
+	public function clear_value() {
+		$this->get_value_set()->clear();
 	}
 
 	/**
 	 * Get default field value
 	 *
 	 * @return mixed
-	 **/
+	 */
 	public function get_default_value() {
 		return $this->default_value;
 	}
 
 	/**
-	 * Return the field value
+	 * Set default field value
 	 *
-	 * @return mixed
-	 **/
-	public function get_value() {
-		return $this->value;
-	}
-
-	/**
-	 * Set field name.
-	 * Use only if you are completely aware of what you are doing.
-	 *
-	 * @param string $name Field name, either sanitized or not
-	 **/
-	public function set_name( $name ) {
-		$name = preg_replace( '~\s+~', '_', mb_strtolower( $name ) );
-
-		if ( empty( $name ) ) {
-			Incorrect_Syntax_Exception::raise( 'Field name can\'t be empty' );
-		}
-
-		if ( $this->name_prefix && strpos( $name, $this->name_prefix ) !== 0 ) {
-			$name = $this->name_prefix . $name;
-		}
-
-		$this->name = $name;
-	}
-
-	/**
-	 * Return the field name
-	 *
-	 * @return string
-	 **/
-	public function get_name() {
-		return $this->name;
-	}
-
-	/**
-	 * Set field base name as defined in the container.
-	 **/
-	public function set_base_name( $name ) {
-		$this->base_name = $name;
+	 * @param  mixed $default_value
+	 * @return Field $this
+	 */
+	public function set_default_value( $default_value ) {
+		$this->default_value = $default_value;
+		return $this;
 	}
 
 	/**
 	 * Return the field base name.
 	 *
 	 * @return string
-	 **/
+	 */
 	public function get_base_name() {
 		return $this->base_name;
 	}
 
 	/**
-	 * Set field name prefix. Calling this method will update the current field
-	 * name and the conditional logic fields.
+	 * Set field base name as defined in the container.
 	 *
-	 * @param string $prefix
-	 * @return object $this
-	 **/
-	public function set_prefix( $prefix ) {
-		$escaped_prefix = preg_quote( $this->name_prefix, '~' );
-		$this->name = preg_replace( '~^' . $escaped_prefix . '~', '', $this->name );
-		$this->name_prefix = $prefix;
-		$this->name = $this->name_prefix . $this->name;
-
+	 * @return Field $this
+	 */
+	public function set_base_name( $name ) {
+		$this->base_name = $name;
 		return $this;
 	}
 
 	/**
-	 * Set field label.
+	 * Return the field name
 	 *
-	 * @param string $label If null, the label will be generated from the field name
-	 **/
-	public function set_label( $label ) {
-		// Try to guess field label from it's name
-		if ( is_null( $label ) ) {
-			// remove the leading underscore(if it's there)
-			$label = preg_replace( '~^_~', '', $this->name );
+	 * @return string
+	 */
+	public function get_name() {
+		return $this->name;
+	}
 
-			// remove the leading "crb_"(if it's there)
-			$label = preg_replace( '~^crb_~', '', $label );
-
-			// split the name into words and make them capitalized
-			$label = mb_convert_case( str_replace( '_', ' ', $label ), MB_CASE_TITLE );
+	/**
+	 * Set field name.
+	 * Use only if you are completely aware of what you are doing.
+	 *
+	 * @param  string $name Field name, either sanitized or not
+	 * @return Field  $this
+	 */
+	public function set_name( $name ) {
+		if ( empty( $name ) ) {
+			Incorrect_Syntax_Exception::raise( 'Field name can\'t be empty' );
+			return $this;
 		}
 
-		$this->label = $label;
+		// symbols ][ are supported in a hidden way - required for widgets to work (WP imposes dashes and square brackets on field names)
+		$regex = '/\A[a-z0-9_\-\[\]]+\z/';
+		if ( ! preg_match( $regex, $name ) ) {
+			Incorrect_Syntax_Exception::raise( 'Field names  can only contain lowercase alphanumeric characters, dashes and underscores ("' . $name . '" passed).' );
+			return $this;
+		}
+
+		$name_prefix = $this->get_name_prefix();
+		$name = ( substr( $name, 0, strlen( $name_prefix ) ) !== $name_prefix ? $name_prefix . $name : $name );
+
+		$this->name = $name;
+		return $this;
+	}
+
+	/**
+	 * Return the field name prefix
+	 *
+	 * @return string
+	 */
+	public function get_name_prefix() {
+		return $this->name_prefix;
+	}
+
+	/**
+	 * Set field name prefix
+	 * Use only if you are completely aware of what you are doing.
+	 *
+	 * @param  string $name_prefix
+	 * @return Field  $this
+	 */
+	public function set_name_prefix( $name_prefix ) {
+		$name_prefix = strval( $name_prefix );
+		$old_prefix_length = strlen( $this->name_prefix );
+		$this->name_prefix = '';
+		$this->set_name( substr( $this->get_name(), $old_prefix_length ) );
+
+		$this->name_prefix = $name_prefix;
+		$this->set_name( $this->name_prefix . $this->get_name() );
+		return $this;
 	}
 
 	/**
 	 * Return field label.
 	 *
 	 * @return string
-	 **/
+	 */
 	public function get_label() {
 		return $this->label;
+	}
+
+	/**
+	 * Set field label.
+	 *
+	 * @param  string $label If null, the label will be generated from the field name
+	 * @return Field  $this
+	 */
+	public function set_label( $label ) {
+		if ( is_null( $label ) ) {
+			// Try to guess field label from it's name
+			$label = Helper::normalize_label( $this->get_name() );
+		}
+
+		$this->label = $label;
+		return $this;
+	}
+
+	/**
+	 * Get a key-value array of attributes
+	 *
+	 * @return array
+	 */
+	public function get_attributes() {
+		return $this->attributes;
+	}
+
+	/**
+	 * Get an attribute value
+	 *
+	 * @param  string $name
+	 * @return string
+	 */
+	public function get_attribute( $name ) {
+		return isset( $this->attributes[ $name ] ) ? $this->attributes[ $name ] : '';
+	}
+
+	/**
+	 * Set an attribute and it's value
+	 *
+	 * @param  string $name
+	 * @param  string $value
+	 * @return Field  $this
+	 */
+	public function set_attribute( $name, $value = '' ) {
+		if ( ! in_array( $name, $this->allowed_attributes ) ) {
+			Incorrect_Syntax_Exception::raise( 'Only the following attributes are allowed: ' . implode( ', ', $this->allowed_attributes ) . '.' );
+			return $this;
+		}
+		$this->attributes[ $name ] = $value;
+		return $this;
+	}
+
+	/**
+	 * Return the field help text
+	 *
+	 * @return object $this
+	 */
+	public function get_help_text() {
+		return $this->help_text;
 	}
 
 	/**
 	 * Set additional text to be displayed during field render,
 	 * containing information and guidance for the user
 	 *
-	 * @return object $this
-	 **/
+	 * @return Field $this
+	 */
 	public function set_help_text( $help_text ) {
 		$this->help_text = $help_text;
 		return $this;
@@ -511,48 +773,28 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @see set_help_text()
 	 * @return object $this
-	 **/
+	 */
 	public function help_text( $help_text ) {
 		return $this->set_help_text( $help_text );
-	}
-
-	/**
-	 * Return the field help text
-	 *
-	 * @return object $this
-	 **/
-	public function get_help_text() {
-		return $this->help_text;
-	}
-
-	/**
-	 * Whether or not this value should be auto loaded. Applicable to theme options only.
-	 *
-	 * @param bool $autoload
-	 * @return object $this
-	 **/
-	public function set_autoload( $autoload ) {
-		$this->autoload = $autoload;
-		return $this;
 	}
 
 	/**
 	 * Return whether or not this value should be auto loaded.
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function get_autoload() {
 		return $this->autoload;
 	}
 
 	/**
-	 * Whether or not this field will be initialized when the field is in the viewport (visible).
+	 * Whether or not this value should be auto loaded. Applicable to theme options only.
 	 *
-	 * @param bool $lazyload
-	 * @return object $this
-	 **/
-	public function set_lazyload( $lazyload ) {
-		$this->lazyload = $lazyload;
+	 * @param  bool  $autoload
+	 * @return Field $this
+	 */
+	public function set_autoload( $autoload ) {
+		$this->autoload = $autoload;
 		return $this;
 	}
 
@@ -560,19 +802,19 @@ class Field implements Datastore_Holder_Interface {
 	 * Return whether or not this field should be lazyloaded.
 	 *
 	 * @return bool
-	 **/
+	 */
 	public function get_lazyload() {
 		return $this->lazyload;
 	}
 
 	/**
-	 * Set the field width.
+	 * Whether or not this field will be initialized when the field is in the viewport (visible).
 	 *
-	 * @param int $width
-	 * @return object $this
-	 **/
-	public function set_width( $width ) {
-		$this->width = (int) $width;
+	 * @param  bool  $lazyload
+	 * @return Field $this
+	 */
+	public function set_lazyload( $lazyload ) {
+		$this->lazyload = $lazyload;
 		return $this;
 	}
 
@@ -580,44 +822,60 @@ class Field implements Datastore_Holder_Interface {
 	 * Get the field width.
 	 *
 	 * @return int $width
-	 **/
+	 */
 	public function get_width() {
 		return $this->width;
 	}
 
 	/**
-	 *  Add custom CSS class to the field html container.
+	 * Set the field width.
 	 *
-	 * @param string|array $classes
-	 * @return object $this
-	 **/
-	public function add_class( $classes ) {
-		if ( ! is_array( $classes ) ) {
-			$classes = array_values( array_filter( explode( ' ', $classes ) ) );
-		}
-
-		$this->classes = array_map( 'sanitize_html_class', $classes );
+	 * @param  int   $width
+	 * @return Field $this
+	 */
+	public function set_width( $width ) {
+		$this->width = (int) $width;
 		return $this;
 	}
 
 	/**
-	 * Get the field custom CSS classes.
+	 * Get custom CSS classes.
 	 *
-	 * @return array
-	 **/
+	 * @return array<string>
+	 */
 	public function get_classes() {
 		return $this->classes;
 	}
 
 	/**
+	 * Set CSS classes that the container should use.
+	 *
+	 * @param  string|array<string> $classes
+	 * @return Field                $this
+	 */
+	public function set_classes( $classes ) {
+		$this->classes = Helper::sanitize_classes( $classes );
+		return $this;
+	}
+
+	/**
 	 * Whether this field is mandatory for the user
 	 *
-	 * @param bool $required
-	 * @return object $this
-	 **/
+	 * @param  bool  $required
+	 * @return Field $this
+	 */
 	public function set_required( $required = true ) {
 		$this->required = $required;
 		return $this;
+	}
+
+	/**
+	 * Return whether this field is mandatory for the user
+	 *
+	 * @return bool
+	 */
+	public function is_required() {
+		return $this->required;
 	}
 
 	/**
@@ -630,127 +888,23 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * HTML id attribute setter
-	 * @param string $id
+	 *
+	 * @param  string $id
+	 * @return Field  $this
 	 */
 	public function set_id( $id ) {
 		$this->id = $id;
-	}
-
-	/**
-	 * Return whether this field is mandatory for the user
-	 *
-	 * @return bool
-	 **/
-	public function is_required() {
-		return $this->required;
-	}
-
-	/**
-	 * Returns the type of the field based on the class.
-	 * The class is stripped by the "CarbonFields" prefix.
-	 * Also the "Field" suffix is removed.
-	 * Then underscores and backslashes are removed.
-	 *
-	 * @return string
-	 */
-	public function get_type() {
-		$class = get_class( $this );
-
-		return $this->clean_type( $class );
-	}
-
-	/**
-	 * Cleans up an object class for usage as HTML class
-	 *
-	 * @return string
-	 */
-	protected function clean_type( $type ) {
-		$remove = array(
-			'_',
-			'\\',
-			'CarbonFields',
-			'Field',
-		);
-		$clean_class = str_replace( $remove, '', $type );
-
-		return $clean_class;
-	}
-
-	/**
-	 * Return an array of html classes to be used for the field container
-	 *
-	 * @return array
-	 */
-	public function get_html_class() {
-		$html_classes = array();
-
-		$object_class = get_class( $this );
-		$html_classes[] = $this->get_type();
-
-		$parent_class = $object_class;
-		while ( $parent_class = get_parent_class( $parent_class ) ) {
-			$clean_class = $this->clean_type( $parent_class );
-
-			if ( $clean_class ) {
-				$html_classes[] = $clean_class;
-			}
-		}
-
-		return $html_classes;
-	}
-
-	/**
-	 * Allows the value of a field to be processed after loading.
-	 * Can be implemented by the extending class if necessary.
-	 *
-	 * @return array
-	 */
-	public function process_value() {
-
-	}
-
-	/**
-	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
-	 *
-	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
-	 * @return array
-	 */
-	public function to_json( $load ) {
-		if ( $load ) {
-			$this->load();
-		}
-
-		$this->process_value();
-
-		$field_data = array(
-			'id' => $this->get_id(),
-			'type' => $this->get_type(),
-			'label' => $this->get_label(),
-			'name' => $this->get_name(),
-			'base_name' => $this->get_base_name(),
-			'value' => $this->get_value(),
-			'default_value' => $this->get_default_value(),
-			'help_text' => $this->get_help_text(),
-			'context' => $this->get_context(),
-			'required' => $this->is_required(),
-			'lazyload' => $this->get_lazyload(),
-			'width' => $this->get_width(),
-			'classes' => $this->get_classes(),
-			'conditional_logic' => $this->get_conditional_logic(),
-		);
-
-		return $field_data;
+		return $this;
 	}
 
 	/**
 	 * Set the field visibility conditional logic.
 	 *
-	 * @param array
+	 * @param  array
+	 * @return Field $this
 	 */
 	public function set_conditional_logic( $rules ) {
 		$this->conditional_logic = $this->parse_conditional_rules( $rules );
-
 		return $this;
 	}
 
@@ -772,55 +926,42 @@ class Field implements Datastore_Holder_Interface {
 	protected function parse_conditional_rules( $rules ) {
 		if ( ! is_array( $rules ) ) {
 			Incorrect_Syntax_Exception::raise( 'Conditional logic rules argument should be an array.' );
+			return array();
 		}
 
 		$allowed_operators = array( '=', '!=', '>', '>=', '<', '<=', 'IN', 'NOT IN', 'INCLUDES', 'EXCLUDES' );
-		$allowed_relations = array( 'AND', 'OR' );
 
 		$parsed_rules = array(
-			'relation' => 'AND',
+			'relation' => Helper::get_relation_type_from_array( $rules ),
 			'rules' => array(),
 		);
 
 		foreach ( $rules as $key => $rule ) {
-			// Check if we have a relation key
 			if ( $key === 'relation' ) {
-				$relation = strtoupper( $rule );
-
-				if ( ! in_array( $relation, $allowed_relations ) ) {
-					Incorrect_Syntax_Exception::raise( 'Invalid relation type ' . $rule . '. ' .
-					'The rule should be one of the following: "' . implode( '", "', $allowed_relations ) . '"' );
-				}
-
-				$parsed_rules['relation'] = $relation;
-				continue;
+				continue; // Skip the relation key as it is already handled above
 			}
 
 			// Check if the rule is valid
 			if ( ! is_array( $rule ) || empty( $rule['field'] ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic rule format. ' .
-				'The rule should be an array with the "field" key set.' );
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic rule format. The rule should be an array with the "field" key set.' );
+				return array();
 			}
 
-			// Check the compare operator
-			if ( empty( $rule['compare'] ) ) {
-				$rule['compare'] = '=';
-			}
+			// Fill in optional keys with defaults
+			$rule = array_merge( array(
+				'compare' => '=',
+				'value' => '',
+			), $rule );
+
 			if ( ! in_array( $rule['compare'], $allowed_operators ) ) {
-				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare operator: <code>' .
-					$rule['compare'] . '</code><br>Allowed operators are: <code>' .
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare operator: <code>' . $rule['compare'] . '</code><br>Allowed operators are: <code>' .
 				implode( ', ', $allowed_operators ) . '</code>' );
-			}
-			if ( $rule['compare'] === 'IN' || $rule['compare'] === 'NOT IN' ) {
-				if ( ! is_array( $rule['value'] ) ) {
-					Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. ' .
-					'An array is expected, when using the "' . $rule['compare'] . '" operator.' );
-				}
+				return array();
 			}
 
-			// Check the value
-			if ( ! isset( $rule['value'] ) ) {
-				$rule['value'] = '';
+			if ( in_array( $rule['compare'], array( 'IN', 'NOT IN' ) ) && ! is_array( $rule['value'] ) ) {
+				Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. An array is expected, when using the "' . $rule['compare'] . '" operator.' );
+				return array();
 			}
 
 			$parsed_rules['rules'][] = $rule;
@@ -829,31 +970,65 @@ class Field implements Datastore_Holder_Interface {
 		return $parsed_rules;
 	}
 
+	/**
+	 * Set the REST visibility of the field
+	 *
+	 * @param  bool  $visible
+	 * @return Field $this
+	 */
+	public function set_visible_in_rest_api( $visible = true ) {
+		$this->visible_in_rest_api = $visible;
+		return $this;
+	}
+
+	/**
+	 * Get the REST visibility of the field
+	 *
+	 * @return bool
+	 */
+	public function get_visible_in_rest_api() {
+		return $this->visible_in_rest_api;
+	}
+
+	/**
+	 * Returns an array that holds the field data, suitable for JSON representation.
+	 *
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
+	public function to_json( $load ) {
+		if ( $load ) {
+			$this->load();
+		}
+
+		$field_data = array(
+			'id' => $this->get_id(),
+			'type' => $this->get_type(),
+			'label' => $this->get_label(),
+			'name' => $this->get_name(),
+			'base_name' => $this->get_base_name(),
+			'value' => $this->get_formatted_value(),
+			'default_value' => $this->get_default_value(),
+			'attributes' => (object) $this->get_attributes(),
+			'help_text' => $this->get_help_text(),
+			'context' => $this->get_context(),
+			'required' => $this->is_required(),
+			'lazyload' => $this->get_lazyload(),
+			'width' => $this->get_width(),
+			'classes' => $this->get_classes(),
+			'conditional_logic' => $this->get_conditional_logic(),
+		);
+
+		return $field_data;
+	}
 
 	/**
 	 * Hook administration scripts.
 	 */
 	public static function admin_hook_scripts() {
 		wp_enqueue_media();
-		wp_enqueue_script( 'carbon-fields', \Carbon_Fields\URL . '/assets/js/fields.js', array( 'carbon-app', 'carbon-containers' ), \Carbon_Fields\VERSION );
-		wp_localize_script( 'carbon-fields', 'crbl10n',
-			array(
-				'title' => __( 'Files', 'carbon-fields' ),
-				'geocode_zero_results' => __( 'The address could not be found. ', 'carbon-fields' ),
-				'geocode_not_successful' => __( 'Geocode was not successful for the following reason: ', 'carbon-fields' ),
-				'max_num_items_reached' => __( 'Maximum number of items reached (%s items)', 'carbon-fields' ),
-				'max_num_rows_reached' => __( 'Maximum number of rows reached (%s rows)', 'carbon-fields' ),
-				'cannot_create_more_rows' => __( 'Cannot create more than %s rows', 'carbon-fields' ),
-				'complex_no_rows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),
-				'complex_add_button' => __( 'Add %s', 'carbon-fields' ),
-				'complex_min_num_rows_not_reached' => __( 'Minimum number of rows not reached (%1$d %2$s)', 'carbon-fields' ),
-				'message_form_validation_failed' => __( 'Please fill out all fields correctly. ', 'carbon-fields' ),
-				'message_required_field' => __( 'This field is required. ', 'carbon-fields' ),
-				'message_choose_option' => __( 'Please choose an option. ', 'carbon-fields' ),
-
-				'enter_name_of_new_sidebar' => __( 'Please enter the name of the new sidebar:', 'carbon-fields' ),
-			)
-		);
+		wp_enqueue_script( 'thickbox' );
+		wp_enqueue_script( 'media-upload' );
 	}
 
 	/**
@@ -862,4 +1037,4 @@ class Field implements Datastore_Holder_Interface {
 	public static function admin_hook_styles() {
 		wp_enqueue_style( 'thickbox' );
 	}
-} // END Field
+}

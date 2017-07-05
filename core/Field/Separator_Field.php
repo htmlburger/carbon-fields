@@ -7,14 +7,6 @@ namespace Carbon_Fields\Field;
  * Used for presentation purposes to create sections between fields.
  */
 class Separator_Field extends Field {
-	/**
-	 * Underscore template of this field.
-	 */
-	public function template() {
-		?>
-		<h3>{{{ label }}}</h3>
-		<?php
-	}
 
 	/**
 	 * Load the field value.

@@ -7,11 +7,19 @@ namespace Carbon_Fields\Field;
  * Allows to create a field that displays any HTML in a container.
  */
 class Html_Field extends Field {
-	public $field_html;
+
+	/**
+	 * HTML contents to display
+	 *
+	 * @var string
+	 */
+	public $field_html = '';
 
 	/**
 	 * Set the field HTML or callback that returns the HTML.
-	 * @param string|callable $callback_or_html HTML or callable that returns the HTML.
+	 *
+	 * @param  string|callable $callback_or_html HTML or callable that returns the HTML.
+	 * @return Field           $this
 	 */
 	public function set_html( $callback_or_html ) {
 		if ( is_callable( $callback_or_html ) ) {
@@ -25,7 +33,6 @@ class Html_Field extends Field {
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
@@ -41,15 +48,6 @@ class Html_Field extends Field {
 	}
 
 	/**
-	 * Underscore template of this field
-	 */
-	public function template() {
-		?>
-		{{{ html }}}
-		<?php
-	}
-
-	/**
 	 * Whether this field is required.
 	 * The HTML field is non-required by design.
 	 *
@@ -57,16 +55,6 @@ class Html_Field extends Field {
 	 */
 	public function is_required() {
 		return false;
-	}
-
-	/**
-	 * Retrieve field label.
-	 * The label for the HTML field is hidden by design.
-	 *
-	 * @return string
-	 */
-	public function get_label() {
-		return '';
 	}
 
 	/**

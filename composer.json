@@ -79,6 +79,17 @@
             "email": "brutalenemy666@gmail.com",
             "homepage": "http://errorfactory.com/",
             "role": "Developer"
+        },
+        {
+            "name": "Alexander Panayotov",
+            "email": "alexander.panayotov@gmail.com",
+            "homepage": "http://alexanderpanayotov.com/",
+            "role": "Developer"
+        },
+        {
+            "name": "Viktor Vasilev",
+            "email": "liberalcho@gmail.com",
+            "role": "Developer"
         }
     ],
     "support": {
@@ -90,13 +101,14 @@
     "autoload": {
         "psr-4": {
             "Carbon_Fields\\": "core/"
-        },
-        "files": [
-            "carbon-fields.php",
-            "core/functions.php"
-        ]
+        }
     },
     "require": {
+        "php": ">=5.3",
         "composer/installers": "~1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4.8",
+        "mockery/mockery": "^0.9.7"
     }
 }

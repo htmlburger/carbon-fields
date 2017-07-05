@@ -2,49 +2,60 @@
 
 namespace Carbon_Fields\Container;
 
-use Carbon_Fields\Datastore\Meta_Datastore;
-use Carbon_Fields\Datastore\Term_Meta_Datastore;
-use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+use Carbon_Fields\Datastore\Datastore;
 
 /**
  * Term meta container class.
  */
 class Term_Meta_Container extends Container {
+
 	protected $term_id;
 
-	public $settings = array(
-		'taxonomy' => array( 'category' ),
-		'show_on_level' => false,
-	);
+	public $settings = array();
 
 	/**
-	 * Create a new term meta fields container
-	 *
-	 * @param string $title Unique title of the container
-	 **/
-	public function __construct( $title ) {
-		parent::__construct( $title );
+	 * {@inheritDoc}
+	 */
+	public function __construct( $id, $title, $type, $condition_collection, $condition_translator ) {
+		parent::__construct( $id, $title, $type, $condition_collection, $condition_translator );
 
 		if ( ! $this->get_datastore() ) {
-			$this->set_datastore( new Term_Meta_Datastore(), $this->has_default_datastore() );
+			$this->set_datastore( Datastore::make( 'term_meta' ), $this->has_default_datastore() );
 		}
 	}
 
 	/**
 	 * Bind attach() and save() to the appropriate WordPress actions.
-	 **/
+	 */
 	public function init() {
-		// force taxonomy to be array
-		if ( ! is_array( $this->settings['taxonomy'] ) ) {
-			$this->settings['taxonomy'] = array( $this->settings['taxonomy'] );
-		}
-
 		add_action( 'admin_init', array( $this, '_attach' ) );
+		add_action( 'init', array( $this, 'hook_to_taxonomies' ), 999999 );
+	}
 
-		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
+	/**
+	 * Hook to relevant taxonomies
+	 */
+	public function hook_to_taxonomies() {
+		$taxonomies = $this->get_taxonomy_visibility();
+
+		foreach ( $taxonomies as $taxonomy ) {
 			add_action( 'edited_' . $taxonomy, array( $this, '_save' ), 10, 2 );
 			add_action( 'created_' . $taxonomy, array( $this, '_save' ), 10, 2 );
 		}
+	}
+
+	/**
+	 * Checks whether the current save request is valid
+	 *
+	 * @return bool
+	 */
+	public function is_valid_save() {
+		if ( ! $this->verified_nonce_in_request() ) {
+			return false;
+		}
+
+		$params = func_get_args();
+		return $this->is_valid_attach_for_object( $params[0] );
 	}
 
 	/**
@@ -52,80 +63,100 @@ class Term_Meta_Container extends Container {
 	 * The call is propagated to all fields in the container.
 	 *
 	 * @param int $term_id ID of the term against which save() is ran
-	 **/
-	public function save( $term_id ) {
+	 */
+	public function save( $term_id = null ) {
 		$this->set_term_id( $term_id );
 
 		foreach ( $this->fields as $field ) {
-			$field->set_value_from_input();
+			$field->set_value_from_input( stripslashes_deep( $_POST ) );
 			$field->save();
 		}
 
-		do_action( 'carbon_after_save_term_meta', $term_id );
+		do_action( 'carbon_fields_term_meta_container_saved', $term_id, $this );
+	}
+
+	/**
+	 * Get environment array for page request (in admin)
+	 *
+	 * @return array
+	 */
+	protected function get_environment_for_request() {
+		$input = stripslashes_deep( $_GET );
+		$request_term_id = isset( $input['tag_ID'] ) ? intval( $input['tag_ID'] ) : 0;
+		$request_taxonomy = isset( $input['taxonomy'] ) ? $input['taxonomy'] : '';
+
+		$term = get_term( $request_term_id );
+		$term = ( $term && ! is_wp_error( $term ) ) ? $term : null;
+		$environment = array(
+			'term_id' => $term ? intval( $term->term_id ) : 0,
+			'term' => $term,
+			'taxonomy' => $term ? $term->taxonomy : $request_taxonomy,
+		);
+		return $environment;
 	}
 
 	/**
 	 * Perform checks whether the container should be attached during the current request
 	 *
 	 * @return bool True if the container is allowed to be attached
-	 **/
-	public function is_valid_attach() {
-		if ( isset( $_GET['taxonomy'] ) && in_array( $_GET['taxonomy'], $this->settings['taxonomy'] ) ) {
-			return true;
+	 */
+	public function is_valid_attach_for_request() {
+		global $pagenow;
+
+		if ( $pagenow !== 'edit-tags.php' && $pagenow !== 'term.php' ) {
+			return false;
 		}
 
-		return false;
+		return $this->static_conditions_pass();
 	}
 
 	/**
-	 * Perform checks whether the current save() request is valid.
+	 * Get environment array for object id
 	 *
-	 * @param int $term_id ID of the term against which save() is ran
+	 * @return array
+	 */
+	protected function get_environment_for_object( $object_id ) {
+		$term = get_term( intval( $object_id ) );
+		$environment = array(
+			'term_id' => intval( $term->term_id ),
+			'term' => $term,
+			'taxonomy' => $term->taxonomy,
+		);
+		return $environment;
+	}
+
+	/**
+	 * Check container attachment rules against object id
+	 *
+	 * @param int $object_id
 	 * @return bool
-	 **/
-	public function is_valid_save( $term_id = null ) {
-		if ( ! isset( $_REQUEST[ $this->get_nonce_name() ] ) || ! wp_verify_nonce( $_REQUEST[ $this->get_nonce_name() ], $this->get_nonce_name() ) ) { // Input var okay.
-			return false;
-		} else if ( $term_id < 1 ) {
+	 */
+	public function is_valid_attach_for_object( $object_id = null ) {
+		$term = get_term( $object_id );
+		$term = ( $term && ! is_wp_error( $term ) ) ? $term : null;
+
+		if ( ! $term ) {
 			return false;
 		}
 
-		return true;
+		return $this->all_conditions_pass( intval( $term->term_id ) );
 	}
 
 	/**
 	 * Add term meta for each of the container taxonomies
-	 **/
+	 */
 	public function attach() {
-		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
+		$taxonomies = $this->get_taxonomy_visibility();
+
+		foreach ( $taxonomies as $taxonomy ) {
 			add_action( $taxonomy . '_edit_form_fields', array( $this, 'render' ), 10, 2 );
 			add_action( $taxonomy . '_add_form_fields', array( $this, 'render' ), 10, 2 );
 		}
 	}
 
 	/**
-	 * Revert the result of attach()
-	 *
-	 **/
-	public function detach() {
-		parent::detach();
-
-		remove_action( 'admin_init', array( $this, '_attach' ) );
-
-		foreach ( $this->settings['taxonomy'] as $taxonomy ) {
-			remove_action( 'edited_' . $taxonomy, array( $this, '_save' ), 10 );
-			remove_action( 'created_' . $taxonomy, array( $this, '_save' ), 10 );
-		}
-
-		// unregister field names
-		foreach ( $this->fields as $field ) {
-			$this->drop_unique_field_name( $field->get_name() );
-		}
-	}
-
-	/**
 	 * Output the container markup
-	 **/
+	 */
 	public function render( $term = null ) {
 		if ( is_object( $term ) ) {
 			$this->set_term_id( $term->term_id );
@@ -138,34 +169,62 @@ class Term_Meta_Container extends Container {
 	 * Set the term ID the container will operate with.
 	 *
 	 * @param int $term_id
-	 **/
-	public function set_term_id( $term_id ) {
+	 */
+	protected function set_term_id( $term_id ) {
 		$this->term_id = $term_id;
-		$this->get_datastore()->set_id( $term_id );
+		$this->get_datastore()->set_object_id( $term_id );
+
+		foreach ( $this->fields as $field ) {
+			$datastore = $field->get_datastore();
+			if ( $datastore->get_object_id() === 0 ) {
+				$datastore->set_object_id( $term_id );
+			}
+		}
+	}
+
+	/**
+	 * Get array of taxonomies this container can appear on conditionally
+	 *
+	 * @return array<string>
+	 */
+	public function get_taxonomy_visibility() {
+		$all_taxonomies = get_taxonomies();
+		$filtered_collection = $this->condition_collection->filter( array( 'term_taxonomy' ) );
+
+		$shown_on = array();
+		foreach ( $all_taxonomies as $taxonomy ) {
+			$environment = array(
+				'taxonomy' => $taxonomy,
+			);
+			if ( $filtered_collection->is_fulfilled( $environment ) ) {
+				$shown_on[] = $taxonomy;
+			}
+		}
+		return $shown_on;
 	}
 
 	/**
 	 * Show the container only on terms from the specified taxonomies.
 	 *
+	 * @deprecated
 	 * @param string|array $taxonomies
 	 * @return object $this
-	 **/
+	 */
 	public function show_on_taxonomy( $taxonomies ) {
-		$taxonomies = (array) $taxonomies;
-
-		$this->settings['taxonomy'] = $taxonomies;
-
+		$taxonomies = is_array( $taxonomies ) ? $taxonomies : array( $taxonomies );
+		$this->where( 'term_taxonomy', 'IN', $taxonomies );
 		return $this;
 	}
 
 	/**
 	 * Show the container only on particular term level.
 	 *
+	 * @deprecated
 	 * @param int $term_level
 	 * @return object $this
 	 */
 	public function show_on_level( $term_level ) {
-		$this->settings['show_on_level'] = $term_level;
+		$this->where( 'term_level', '=', intval( $term_level ) );
 		return $this;
 	}
 }

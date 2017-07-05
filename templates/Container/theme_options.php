@@ -16,8 +16,6 @@
 	<?php endif; ?>
 
 	<form method="post" id="theme-options-form" enctype="multipart/form-data" action="">
-		<?php echo $this->get_nonce_field(); ?>
-
 		<div id="poststuff">
 			<div id="post-body" class="metabox-holder columns-2">
 				<div id="post-body-content">
@@ -36,7 +34,7 @@
 								<span class="spinner"></span>
 
 								<?php
-									$filter_name  = 'carbon_' . str_replace( '-', '_', sanitize_title( $this->title ) ) . '_button_label';
+									$filter_name  = 'carbon_fields_' . str_replace( '-', '_', sanitize_title( $this->title ) ) . '_button_label';
 									$button_label = apply_filters( $filter_name, __( 'Save Changes', 'carbon-fields' ) );
 								?>
 

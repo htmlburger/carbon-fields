@@ -1,0 +1,7 @@
+/* ------------------------------------------------------------ *\
+	Container - Widgets
+\* ------------------------------------------------------------ */
+
+.carbon-container.carbon-container-widget { margin: -2px -16px 15px -15px; width: auto; border-bottom: 1px solid $color-border; }
+
+.wp-customizer .carbon-container.carbon-container-widget { margin: 0 0 10px; border-width: 0; }

@@ -7,6 +7,7 @@ namespace Carbon_Fields\Field;
  * Intended only for use in theme options container.
  */
 class Header_Scripts_Field extends Scripts_Field {
+
 	/**
 	 * Default help text to be displayed for this type of field.
 	 */

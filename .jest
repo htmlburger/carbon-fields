@@ -1,0 +1,13 @@
+{
+	"bail": true,
+	"verbose": true,
+
+	"roots": [
+		"assets/tests"
+	],
+
+	"modulePaths": [
+		"<rootDir>/assets/",
+		"<rootDir>/assets/js"
+	]
+}

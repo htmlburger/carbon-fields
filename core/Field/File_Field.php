@@ -9,11 +9,14 @@ namespace Carbon_Fields\Field;
  * where the file ID is saved in the database.
  */
 class File_Field extends Field {
+
 	public $button_label = '';
+
 	public $window_button_label = '';
+
 	public $window_label = '';
 
-	// empty for all types. available types: audio, video, image
+	// empty for all types. available types: audio, video, image and all WordPress-recognized mime types
 	public $field_type = '';
 
 	// alt, author, caption, dateFormatted, description, editLink, filename, height, icon, id, link, menuOrder, mime, name, status, subtype, title, type, uploadedTo, url, width
@@ -26,8 +29,6 @@ class File_Field extends Field {
 		$this->button_label = __( 'Select File', 'carbon-fields' );
 		$this->window_button_label = __( 'Select File', 'carbon-fields' );
 		$this->window_label = __( 'Files', 'carbon-fields' );
-
-		$this->add_template( $this->get_type() . '-Description', array( $this, 'template_description' ) );
 	}
 
 	/**
@@ -52,7 +53,6 @@ class File_Field extends Field {
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
-	 * This data will be available in the Underscore template and the Backbone Model.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
@@ -60,8 +60,8 @@ class File_Field extends Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
-		$url = '';
 		$thumb_url = '';
+		$url = '';
 		$default_thumb_url = includes_url( '/images/media/default.png' );
 		$file_ext = '';
 		$file_name = '';
@@ -94,6 +94,7 @@ class File_Field extends Field {
 			'file_ext' => $file_ext,
 			'file_type' => $file_type,
 			'file_name' => $file_name,
+			'file_url' => $url,
 			'button_label' => $this->button_label,
 			'window_button_label' => $this->window_button_label,
 			'window_label' => $this->window_label,
@@ -102,45 +103,5 @@ class File_Field extends Field {
 		) );
 
 		return $field_data;
-	}
-
-	/**
-	 * The main Underscore template of this field
-	 **/
-	public function template() {
-		?>
-		<div class="carbon-attachment">
-			<input
-				id="{{ id }}"
-				type="text"
-				name="{{ name }}"
-				value="{{ value }}"
-				class="regular-text carbon-file-field"
-				{{{ value_type === 'id' ? 'style="display:none"' : '' }}}
-			/>
-
-			{{{ description }}}
-
-			<span id="c2_open_media{{ id.replace('-', '_') }}" class="button c2_open_media">
-				{{{ button_label }}}
-			</span>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Underscore template of the file description section.
-	 */
-	public function template_description() {
-		?>
-		<div class="carbon-description {{{ value ? '' : 'hidden' }}}">
-			<div class="carbon-attachment-preview {{{ thumb_url ? '' : 'hidden' }}}">
-				<img src="{{ thumb_url }}" class="thumbnail-image" />
-				<div class="carbon-file-remove dashicons-before dashicons-no-alt"></div>
-			</div>
-
-			<div class="carbon-attachment-file-name">{{ file_name }}</div>
-		</div>
-		<?php
 	}
 }

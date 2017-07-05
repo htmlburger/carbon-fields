@@ -1,8 +1,6 @@
-window.carbon = window.carbon || {};
+window.carbonFields = window.carbonFields || {};
 
 (function($) {
-
-	var carbon = window.carbon;
 
 	/*
 	|--------------------------------------------------------------------------
@@ -12,27 +10,21 @@ window.carbon = window.carbon || {};
 	| Responsible for showing a big warning near upgrade notices for the plugin
 	*/
 
-	carbon.pluginUpdateWarning = {
+	carbonFields.pluginUpdateWarning = {
 		views: {},
 		models: {},
 	};
 
-	carbon.pluginUpdateWarning.models.Model = Backbone.Model.extend({
+	carbonFields.pluginUpdateWarning.models.Model = Backbone.Model.extend({
 		
 	});
 
-	carbon.pluginUpdateWarning.views.View = Backbone.View.extend({
+	carbonFields.pluginUpdateWarning.views.View = Backbone.View.extend({
 		el: '#carbon-fields-update td:first',
-
-		initialize: function() {
-			var _this = this;
-
-			// this.listenTo(this.containersCollection, 'add', this.renderContainer);
-		},
 
 		render: function() {
 			var template = _.template( $( '#crb-tmpl-plugin-update-warning' ).html() );
-			var templateHtml = template( {} ); // this.model.attributes
+			var templateHtml = template( {} );
 			this.$el.append( templateHtml );
 
 			var pluginPath = this.model.get( 'plugin_path' )
@@ -47,10 +39,9 @@ window.carbon = window.carbon || {};
 	});
 
 	$(document).ready(function() {
-		// Init the plugin notice view
-		var pluginUpdateWarningModel = new carbon.pluginUpdateWarning.models.Model( carbonPluginUpdateWarningData );
-		carbon.views.pluginUpdateWarning = new carbon.pluginUpdateWarning.views.View( { model: pluginUpdateWarningModel } );
-		carbon.views.pluginUpdateWarning.render();
+		var pluginUpdateWarningModel = new carbonFields.pluginUpdateWarning.models.Model( carbonFieldsPluginUpdateWarning );
+		carbonFields.pluginUpdateWarning = new carbonFields.pluginUpdateWarning.views.View( { model: pluginUpdateWarningModel } );
+		carbonFields.pluginUpdateWarning.render();
 	});
 
 }(jQuery));

@@ -1,4 +1,5 @@
 <?php
+
 class Carbon_Fields_Tests_Bootstrap {
 
 	/** 
@@ -51,9 +52,11 @@ class Carbon_Fields_Tests_Bootstrap {
 
 		// make sure query vars are prepared
 		global $wp;
-		if ( !is_array( $wp->query_vars ) ) {
+		if ( ! is_array( $wp->query_vars ) ) {
 			$wp->query_vars = array();
 		}
+
+		\Carbon_Fields\Carbon_Fields::instance()->booted = true;
 	}
 
 	/**
@@ -69,11 +72,11 @@ class Carbon_Fields_Tests_Bootstrap {
 	 * @return Carbon_Fields_Tests_Bootstrap
 	 */
 	public static function instance() {
-		if ( is_null( self::$instance ) ) {
-			self::$instance = new self();
+		if ( is_null( static::$instance ) ) {
+			static::$instance = new self();
 		}
 
-		return self::$instance;
+		return static::$instance;
 	}
 
 }

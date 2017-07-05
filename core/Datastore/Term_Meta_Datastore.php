@@ -8,16 +8,10 @@ use Carbon_Fields\Field\Field;
  * Term meta datastore class.
  */
 class Term_Meta_Datastore extends Meta_Datastore {
-	/**
-	 * ID of the term.
-	 *
-	 * @var int
-	 */
-	protected $term_id;
 
 	/**
 	 * Initialization tasks.
-	 **/
+	 */
 	public function init() {
 		global $wpdb;
 
@@ -28,7 +22,7 @@ class Term_Meta_Datastore extends Meta_Datastore {
 
 		$wpdb->termmeta = $wpdb->prefix . 'termmeta';
 
-		self::create_table();
+		static::create_table();
 
 		// Delete all meta associated with the deleted term
 		add_action( 'delete_term', array( __CLASS__, 'on_delete_term' ), 10, 3 );
@@ -36,7 +30,7 @@ class Term_Meta_Datastore extends Meta_Datastore {
 
 	/**
 	 * Create term meta database table (for WP < 4.4)
-	 **/
+	 */
 	public static function create_table() {
 		global $wpdb;
 
@@ -108,23 +102,5 @@ class Term_Meta_Datastore extends Meta_Datastore {
 	 */
 	public function get_table_field_name() {
 		return 'term_id';
-	}
-
-	/**
-	 * Set the term ID of the datastore.
-	 *
-	 * @param int $term_id ID of the term.
-	 */
-	public function set_id( $term_id ) {
-		$this->term_id = $term_id;
-	}
-
-	/**
-	 * Retrieve the term ID of the datastore.
-	 *
-	 * @return int ID of the term.
-	 */
-	public function get_id() {
-		return $this->term_id;
 	}
 }

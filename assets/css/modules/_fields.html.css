@@ -1,0 +1,23 @@
+/* ------------------------------------------------------------ *\
+	Field - HTML
+\* ------------------------------------------------------------ */
+
+.carbon-html h1,
+.carbon-html h2,
+.carbon-html h3,
+.carbon-html h4,
+.carbon-html h5,
+.carbon-html h6 { margin-bottom: 0.8em; }
+
+.carbon-html blockquote { font-family: Georgia, serif; border-left: 2px solid #000; padding-left: 15px; }
+
+.carbon-html ul,
+.carbon-html ol { margin-left: 20px; margin-bottom: 18px; }
+
+.carbon-html li { margin-bottom: 2px; }
+
+.carbon-html > label { display: none; }
+
+.carbon-html .description { padding-bottom: 4px; }
+
+.carbon-html:last-child { margin-bottom: 0; }
