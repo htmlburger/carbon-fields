@@ -23,7 +23,7 @@ function carbon_fields_boot_plugin() {
 		require( __DIR__ . '/vendor/autoload.php' );
 	}
 	\Carbon_Fields\Carbon_Fields::boot();
-	
+
 	if ( is_admin() ) {
 		\Carbon_Fields\Libraries\Plugin_Update_Warning\Plugin_Update_Warning::boot();
 	}

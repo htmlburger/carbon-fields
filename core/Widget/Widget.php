@@ -138,7 +138,7 @@ abstract class Widget extends \WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		$this->datastore->import_storage( $instance );
-		
+
 		if ( $this->print_wrappers ) {
 			echo $args['before_widget'];
 		}

@@ -17,35 +17,35 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 	/**
 	 * Contaier repository to fetch fields from
-	 * 
+	 *
 	 * @var ContainerRepository
 	 */
 	protected $container_repository;
 
 	/**
 	 * Key Toolset for key generation and comparison utilities
-	 * 
+	 *
 	 * @var Key_Toolset
 	 */
 	protected $key_toolset;
 
 	/**
 	 * List of special key suffixes that the Map field uses so save extra data
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $map_keys = array( 'lat', 'lng', 'zoom', 'address' );
 
 	/**
 	 * Cache of converted storage arrays
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $storage_array_cache = array();
 
 	/**
 	 * Service constructor
-	 * 
+	 *
 	 * @param ContainerRepository $container_repository
 	 */
 	public function __construct( ContainerRepository $container_repository, Key_Toolset $key_toolset ) {
@@ -83,7 +83,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 	/**
 	 * Return container instance which uses the passed datastore
-	 * 
+	 *
 	 * @param  Datastore_Interface $datastore
 	 * @return Container
 	 */
@@ -99,7 +99,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 	/**
 	 * Get a nested array of field_group permutations suitable for old key parsing
-	 * 
+	 *
 	 * @param  array $fields
 	 * @return array
 	 */
@@ -134,7 +134,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 	/**
 	 * Get array of database table details for datastore
-	 * 
+	 *
 	 * @param Datastore_Interface $datastore
 	 * @return array
 	 */
@@ -166,7 +166,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 	/**
 	 * Get array of sql comparisons for field
-	 * 
+	 *
 	 * @param  Field  $field
 	 * @param  string $key_prefix
 	 * @param  string $key_column
@@ -243,7 +243,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 	/**
 	 * Get a key-value array of CF 1.5 values for fields in the container of the passed datastore
-	 * 
+	 *
 	 * @param  Datastore_Interface $datastore
 	 * @return array
 	 */
@@ -262,7 +262,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 	/**
 	 * Get expanded value for key from legacy storage array
-	 * 
+	 *
 	 * @param string $key Legacy key to fetch additional values for
 	 * @param array $legacy_storage_array key=>value array of legacy data
 	 * @return mixed
@@ -275,7 +275,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 			$value = array(
 				Value_Set::VALUE_PROPERTY => $value,
 			);
-		
+
 			foreach ( $this->map_keys as $map_key ) {
 				$value[ $map_key ] = $legacy_storage_array[ $key . '-' . $map_key ];
 			}
@@ -286,7 +286,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 	/**
 	 * Convert legacy storage rows to array of row descriptors
-	 * 
+	 *
 	 * @param array $legacy_storage_array
 	 * @param array $field_group_permutations
 	 * @return array
@@ -308,7 +308,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 	/**
 	 * Get key segmentation regex for a field name
-	 * 
+	 *
 	 * @param  string $field_name
 	 * @param  string $group_name
 	 * @return string
@@ -325,7 +325,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 	/**
 	 * Convert legacy storage row to row descriptor
-	 * 
+	 *
 	 * @param  string $key
 	 * @param  string $value
 	 * @param  array $field_group_permutations
@@ -339,7 +339,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 		foreach ( $key_pieces as $piece ) {
 			foreach ( $field_group_level as $permutation ) {
 				$match_regex = $this->get_key_segmentation_regex_for_field_name( $permutation['field'], $permutation['group'] );
-				
+
 				$matches = array();
 				if ( preg_match( $match_regex, $piece, $matches ) ) {
 					$match_data = array(
@@ -369,7 +369,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 	/**
 	 * Convert row descriptor to array of new storage key-values
-	 * 
+	 *
 	 * @param  array $row_descriptor
 	 * @return array
 	 */
@@ -431,7 +431,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 	/**
 	 * Get all data saved for a datastore in the new key-value format
-	 * 
+	 *
 	 * @param  Datastore_Interface $datastore
 	 * @return array
 	 */
@@ -444,7 +444,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 		$container = $this->get_container_for_datastore( $datastore );
 		$field_group_permutations = $this->get_field_group_permutations( $container->get_fields() );
 		$row_descriptors = $this->legacy_storage_rows_to_row_descriptors( $legacy_storage_array, $field_group_permutations );
-		
+
 		$storage_array = array();
 		foreach ( $row_descriptors as $row_descriptor ) {
 			$storage_array = array_merge( $storage_array, $this->row_descriptor_to_storage_array( $row_descriptor ) );
@@ -455,7 +455,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 
 	/**
 	 * Get array of new storage key-values matching key patterns
-	 * 
+	 *
 	 * @param  Datastore_Interface $datastore
 	 * @param  array $storage_key_patterns
 	 * @return array

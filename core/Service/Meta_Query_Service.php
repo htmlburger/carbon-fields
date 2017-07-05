@@ -15,21 +15,21 @@ class Meta_Query_Service extends Service {
 	 * Prefix to hook for when replacing "meta_key = " with "meta_key LIKE " in post queries
 	 */
 	const META_KEY_PREFIX = 'carbon_fields:';
-	
+
 	/**
 	 * Container repository to get field references from
-	 * 
+	 *
 	 * @var ContainerRepository
 	 */
 	protected $container_repository;
 
 	/**
 	 * Key Toolset for key generation and comparison utilities
-	 * 
+	 *
 	 * @var Key_Toolset
 	 */
 	protected $key_toolset;
-	
+
 	public function __construct( ContainerRepository $container_repository, Key_Toolset $key_toolset ) {
 		$this->container_repository = $container_repository;
 		$this->key_toolset = $key_toolset;

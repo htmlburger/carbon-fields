@@ -96,7 +96,7 @@ class Date_Field extends Field {
 
 	/**
 	 * Get the expected input format in php and js variants
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_input_format( $php_format, $js_format ) {
@@ -108,7 +108,7 @@ class Date_Field extends Field {
 	/**
 	 * Set a format for use on the front-end in both PHP and Flatpickr formats
 	 * The formats should produce identical results (i.e. they are translations of each other)
-	 * 
+	 *
 	 * @param  string $php_format
 	 * @param  string $js_format
 	 * @return Field  $this
@@ -121,7 +121,7 @@ class Date_Field extends Field {
 
 	/**
 	 * Returns the picker options.
-	 * 
+	 *
 	 * @return array
 	 */
 	public function get_picker_options() {
@@ -130,7 +130,7 @@ class Date_Field extends Field {
 
 	/**
 	 * Set datepicker options
-	 * 
+	 *
 	 * @param  array $options
 	 * @return Field $this
 	 */

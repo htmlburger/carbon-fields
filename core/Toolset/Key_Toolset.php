@@ -21,7 +21,7 @@ class Key_Toolset {
 	 * Prefix appended to all keys
 	 */
 	const KEY_PREFIX = '_';
-	
+
 	/**
 	 * Value property to use for fields which need to be kept "alive" when they have no values stored (e.g. Set field with 0 checkboxes checked)
 	 * Required to determine whether a field should use it's default value or stay blank
@@ -118,12 +118,12 @@ class Key_Toolset {
 		$parents = $full_hierarchy;
 		$first_parent = array_shift( $parents );
 
-		$storage_key = static::KEY_PREFIX . 
-			$first_parent . 
-			static::SEGMENT_GLUE . 
-			implode( static::SEGMENT_VALUE_GLUE, $parents ) . 
-			static::SEGMENT_GLUE . 
-			implode( static::SEGMENT_VALUE_GLUE, $full_hierarchy_index ) . 
+		$storage_key = static::KEY_PREFIX .
+			$first_parent .
+			static::SEGMENT_GLUE .
+			implode( static::SEGMENT_VALUE_GLUE, $parents ) .
+			static::SEGMENT_GLUE .
+			implode( static::SEGMENT_VALUE_GLUE, $full_hierarchy_index ) .
 			static::SEGMENT_GLUE;
 
 		return $storage_key;
@@ -168,15 +168,15 @@ class Key_Toolset {
 		$hierarchy_index = ! empty( $hierarchy ) ? $wildcard : '';
 		$value_group_index = $wildcard;
 
-		$storage_key = static::KEY_PREFIX . 
-			$first_parent . 
-			static::SEGMENT_GLUE . 
-			implode( static::SEGMENT_VALUE_GLUE, $parents ) . 
-			static::SEGMENT_GLUE . 
-			$hierarchy_index . 
-			static::SEGMENT_GLUE . 
-			$value_group_index . 
-			static::SEGMENT_GLUE . 
+		$storage_key = static::KEY_PREFIX .
+			$first_parent .
+			static::SEGMENT_GLUE .
+			implode( static::SEGMENT_VALUE_GLUE, $parents ) .
+			static::SEGMENT_GLUE .
+			$hierarchy_index .
+			static::SEGMENT_GLUE .
+			$value_group_index .
+			static::SEGMENT_GLUE .
 			$property;
 		return $storage_key;
 	}
@@ -195,7 +195,7 @@ class Key_Toolset {
 			$key = $this->get_storage_key_for_simple_root_field( $full_hierarchy[ count( $full_hierarchy ) - 1 ] );
 			$patterns[ $key ] = static::PATTERN_COMPARISON_EQUAL;
 		}
-		
+
 		$parents = $full_hierarchy;
 		$first_parent = array_shift( $parents );
 
@@ -225,12 +225,12 @@ class Key_Toolset {
 	public function get_storage_key_deleter_patterns( $is_complex_field, $is_simple_root_field, $full_hierarchy, $full_hierarchy_index ) {
 		$full_hierarchy_index = $this->get_sanitized_hierarchy_index( $full_hierarchy, $full_hierarchy_index );
 		$patterns = array();
-		
+
 		if ( $is_simple_root_field ) {
 			$key = $this->get_storage_key_for_simple_root_field( $full_hierarchy[ count( $full_hierarchy ) - 1 ] );
 			$patterns[ $key ] = static::PATTERN_COMPARISON_EQUAL;
 		}
-		
+
 		if ( $is_complex_field ) {
 			$patterns[ $this->get_storage_key_root( $full_hierarchy ) ] = static::PATTERN_COMPARISON_STARTS_WITH;
 		} else {
@@ -272,7 +272,7 @@ class Key_Toolset {
 
 	/**
 	 * Check if a storage key matches any pattern
-	 * 
+	 *
 	 * @param string $storage_key
 	 * @param array $patterns
 	 * @return bool
@@ -301,7 +301,7 @@ class Key_Toolset {
 
 	/**
 	 * Check if an array of segments has all of it's segments
-	 * 
+	 *
 	 * @param array<string> $segments_array
 	 * @return bool
 	 */
@@ -311,7 +311,7 @@ class Key_Toolset {
 
 	/**
 	 * Convert a storage key to an array of it's segments
-	 * 
+	 *
 	 * @param string $storage_key
 	 * @return array<string>
 	 */
@@ -323,7 +323,7 @@ class Key_Toolset {
 
 	/**
 	 * Convert a segment to an array of it's values
-	 * 
+	 *
 	 * @param string $segment
 	 * @return array<mixed>
 	 */
@@ -333,7 +333,7 @@ class Key_Toolset {
 
 	/**
 	 * Get a parsed array of storage key segments and values
-	 * 
+	 *
 	 * @param string $storage_key
 	 * @return array
 	 */
@@ -347,7 +347,7 @@ class Key_Toolset {
 		);
 
 		$segments = $this->storage_key_to_segments_array( $storage_key );
-		
+
 		$parsed['root'] = $segments[0];
 		if ( $this->is_segments_array_full( $segments ) ) {
 			$parsed['hierarchy'] = array_filter( explode( static::SEGMENT_VALUE_GLUE, $segments[1] ) );

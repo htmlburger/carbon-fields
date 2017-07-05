@@ -9,10 +9,10 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Theme options container class.
  */
 class Theme_Options_Container extends Container {
-	
+
 	/**
 	 * Array of registered page slugs to verify uniqueness with
-	 * 
+	 *
 	 * @var array
 	 */
 	protected static $registered_pages = array();
@@ -249,7 +249,7 @@ class Theme_Options_Container extends Container {
 
 	/**
 	 * Change the parent theme options page of this container
-	 * 
+	 *
 	 * @return Container $this
 	 */
 	public function set_page_parent( $parent ) {
@@ -264,7 +264,7 @@ class Theme_Options_Container extends Container {
 
 	/**
 	 * Set the theme options file name of this container.
-	 * 
+	 *
 	 * @return Container $this
 	 */
 	public function set_page_file( $file ) {
@@ -274,7 +274,7 @@ class Theme_Options_Container extends Container {
 
 	/**
 	 * Set the page position of this container in the administration menu.
-	 * 
+	 *
 	 * @return Container $this
 	 */
 	public function set_page_position( $position ) {
@@ -285,7 +285,7 @@ class Theme_Options_Container extends Container {
 	/**
 	 * Set the icon of this theme options page.
 	 * Applicable only for parent theme option pages.
-	 * 
+	 *
 	 * @return Container $this
 	 */
 	public function set_icon( $icon ) {

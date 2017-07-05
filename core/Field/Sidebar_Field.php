@@ -6,14 +6,14 @@ class Sidebar_Field extends Select_Field {
 
 	/**
 	 * Allow the user to add new sidebars
-	 * 
+	 *
 	 * @var boolean
 	 */
 	private $enable_add_new = true;
 
 	/**
 	 * Array of sidebars to exclude from the select menu
-	 * 
+	 *
 	 * @var array
 	 */
 	private $excluded_sidebars = array();
@@ -30,7 +30,7 @@ class Sidebar_Field extends Select_Field {
 
 	/**
 	 * Specify sidebars to be excluded.
-	 * 
+	 *
 	 * @param  array $sidebars
 	 * @return Field $this
 	 */

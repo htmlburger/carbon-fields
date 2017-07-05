@@ -4,14 +4,14 @@ namespace Carbon_Fields\Container\Condition;
 
 /**
  * Check if a term is on a specific hierarchy level
- * 
+ *
  * Level 1 is considered the root level. Passed values have a forced minimum value of 1.
  */
 class Term_Level_Condition extends Condition {
-	
+
 	/**
 	 * Check if the condition is fulfilled
-	 * 
+	 *
 	 * @param  array $environment
 	 * @return bool
 	 */

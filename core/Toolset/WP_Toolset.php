@@ -75,10 +75,10 @@ class WP_Toolset {
 
 		return $term;
 	}
-	
+
 	/**
 	 * Decorate any term descriptor to include the full term and taxonomy objects
-	 * 
+	 *
 	 * @return mixed
 	 */
 	public function wildcard_term_descriptor_to_full_term_descriptor( $descriptor ) {

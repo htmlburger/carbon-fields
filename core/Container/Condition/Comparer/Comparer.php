@@ -13,7 +13,7 @@ abstract class Comparer {
 
 	/**
 	 * Check if comparer supports the specified comparison sign
-	 * 
+	 *
 	 * @param string $comparison_operator
 	 * @return bool
 	 */

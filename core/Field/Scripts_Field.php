@@ -7,7 +7,7 @@ namespace Carbon_Fields\Field;
  * Intended only for use in theme options container.
  */
 abstract class Scripts_Field extends Textarea_Field {
-	
+
 	/**
 	 * Initialization actions
 	 */

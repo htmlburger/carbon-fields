@@ -8,7 +8,7 @@ use Carbon_Fields\Datastore\Datastore;
  * Term meta container class.
  */
 class Term_Meta_Container extends Container {
-	
+
 	protected $term_id;
 
 	public $settings = array();
@@ -184,7 +184,7 @@ class Term_Meta_Container extends Container {
 
 	/**
 	 * Get array of taxonomies this container can appear on conditionally
-	 * 
+	 *
 	 * @return array<string>
 	 */
 	public function get_taxonomy_visibility() {
@@ -202,7 +202,7 @@ class Term_Meta_Container extends Container {
 		}
 		return $shown_on;
 	}
-	
+
 	/**
 	 * Show the container only on terms from the specified taxonomies.
 	 *

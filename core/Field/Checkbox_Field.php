@@ -11,7 +11,7 @@ class Checkbox_Field extends Field {
 	 * @{inheritDoc}
 	 */
 	protected $default_value = false;
-	
+
 	/**
 	 * The value that is saved in the database when
 	 * this checkbox field is enabled.

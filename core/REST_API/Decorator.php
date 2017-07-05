@@ -12,11 +12,11 @@ class Decorator {
 
 	/**
 	 * ContainerRepository instance
-	 * 
+	 *
 	 * @var ContainerRepository
 	 */
 	protected $container_repository;
-	
+
 	/**
 	 * @param ContainerRepository $container_repository
 	 */
@@ -80,7 +80,7 @@ class Decorator {
 	 * Get Post Meta Container visibility settings
 	 *
 	 * @return array
-	 */	
+	 */
 	public static function get_post_meta_container_settings( $container ) {
 		return $container->get_post_type_visibility();
 	}
@@ -89,7 +89,7 @@ class Decorator {
 	 * Get Term Meta Container visibility settings
 	 *
 	 * @return array
-	 */	
+	 */
 	public static function get_term_meta_container_settings( $container ) {
 		return $container->get_taxonomy_visibility();
 	}
@@ -98,23 +98,23 @@ class Decorator {
 	 * Get User Meta Container visibility settings
 	 *
 	 * @return string
-	 */	
+	 */
 	public static function get_user_meta_container_settings( $container ) {
 		return 'user';
 	}
 
 	/**
 	 * Get Comment Meta Container visibility settings
-	 * 
+	 *
 	 * @return string
-	 */	
+	 */
 	public static function get_comment_meta_container_settings( $container ) {
 		return 'comment';
 	}
 
 	/**
 	 * Retrieve ID from object based on $context
-	 * 
+	 *
 	 * @param object $object
 	 * @param string $container_type
 	 * @return null|int
@@ -124,13 +124,13 @@ class Decorator {
 		$container_type = Helper::normalize_type( $container_type );
 		switch ( $container_type ) {
 			case 'post_meta': // fallthrough intended
-			case 'user_meta': 
+			case 'user_meta':
 				return isset( $object->ID ) ? $object->ID : $object->id;
 				break;
 			case 'term_meta':
 				return $object->term_id;
 				break;
-			case 'comment_meta': 
+			case 'comment_meta':
 				return $object->comment_ID;
 				break;
 		}

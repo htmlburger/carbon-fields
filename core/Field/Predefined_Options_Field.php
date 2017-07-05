@@ -9,7 +9,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Mainly used to reduce the bloat on the base Field class.
  */
 abstract class Predefined_Options_Field extends Field {
-	
+
 	/**
 	 * Stores the raw, unprocessed field options
 	 *
@@ -19,7 +19,7 @@ abstract class Predefined_Options_Field extends Field {
 
 	/**
 	 * Check if an array is indexed
-	 * 
+	 *
 	 * @param  array   $array
 	 * @return boolean
 	 */

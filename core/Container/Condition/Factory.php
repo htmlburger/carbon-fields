@@ -21,7 +21,7 @@ class Factory {
 
 	/**
 	 * Get the type for the specified class
-	 * 
+	 *
 	 * @param  string $class
 	 * @return string
 	 */
@@ -31,13 +31,13 @@ class Factory {
 
 	/**
 	 * Get an instance of the specified type
-	 * 
+	 *
 	 * @param  string $type
 	 * @return mixed
 	 */
 	public function make( $type ) {
 		$normalized_type = Helper::normalize_type( $type );
-		
+
 		if ( isset( $this->ioc[ $normalized_type ] ) ) {
 			return $this->ioc[ $normalized_type ];
 		}

@@ -6,10 +6,10 @@ namespace Carbon_Fields\Container\Condition;
  * Internal boolean (always true) condition
  */
 class Boolean_Condition extends Condition {
-	
+
 	/**
 	 * Check if the condition is fulfilled
-	 * 
+	 *
 	 * @param  array $environment
 	 * @return bool
 	 */
