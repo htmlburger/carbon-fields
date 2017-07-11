@@ -9,7 +9,6 @@ module.exports = () => {
 	return merge(base(env), {
 		entry: {
 			'carbon.vendor': [
-				'babel-polyfill',
 				'react',
 				'react-dom',
 				'react-color',

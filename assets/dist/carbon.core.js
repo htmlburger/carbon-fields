@@ -86,6 +86,20 @@ var KEY_ENTER = exports.KEY_ENTER = 13;
 
 /***/ }),
 
+/***/ "+E39":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("+E39");
+
+/***/ }),
+
+/***/ "+ZMJ":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("+ZMJ");
+
+/***/ }),
+
 /***/ "+mkE":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -97,15 +111,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.HiddenField = undefined;
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _react = __webpack_require__("U7vG");
 
@@ -136,6 +144,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param  {Function}      props.handleChange
  * @return {React.Element}
  */
+/**
+ * The external dependencies.
+ */
 var HiddenField = exports.HiddenField = function HiddenField(_ref) {
 	var name = _ref.name,
 	    field = _ref.field,
@@ -144,7 +155,7 @@ var HiddenField = exports.HiddenField = function HiddenField(_ref) {
 	return _react2.default.createElement(
 		_field2.default,
 		{ field: field, className: 'hidden' },
-		_react2.default.createElement('input', _extends({
+		_react2.default.createElement('input', (0, _extends3.default)({
 			type: 'hidden',
 			id: field.id,
 			name: name,
@@ -160,6 +171,11 @@ var HiddenField = exports.HiddenField = function HiddenField(_ref) {
  * Validate the props.
  *
  * @type {Object}
+ */
+
+
+/**
+ * The internal dependencies.
  */
 HiddenField.propTypes = {
 	name: _propTypes2.default.string,
@@ -182,6 +198,20 @@ exports.default = EnhancedHiddenField;
 
 /***/ }),
 
+/***/ "+tPU":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("+tPU");
+
+/***/ }),
+
+/***/ "//Fk":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__("U5ju"), __esModule: true };
+
+/***/ }),
+
 /***/ "/Nb7":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -191,6 +221,11 @@ exports.default = EnhancedHiddenField;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.toggleVisibility = toggleVisibility;
 exports.workerSetupVisibility = workerSetupVisibility;
 exports.workerToggleVisibility = workerToggleVisibility;
@@ -216,9 +251,9 @@ var _conditions = __webpack_require__("f5wq");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [toggleVisibility, workerSetupVisibility, workerToggleVisibility, workerCheckVisibility, workerTogglePostBox, foreman].map(regeneratorRuntime.mark); /**
-                                                                                                                                                                    * The external dependencies.
-                                                                                                                                                                    */
+var _marked = [toggleVisibility, workerSetupVisibility, workerToggleVisibility, workerCheckVisibility, workerTogglePostBox, foreman].map(_regenerator2.default.mark); /**
+                                                                                                                                                                       * The external dependencies.
+                                                                                                                                                                       */
 
 
 /**
@@ -234,7 +269,7 @@ var _marked = [toggleVisibility, workerSetupVisibility, workerToggleVisibility, 
  */
 function toggleVisibility(containerId) {
   var container, el, fieldset;
-  return regeneratorRuntime.wrap(function toggleVisibility$(_context) {
+  return _regenerator2.default.wrap(function toggleVisibility$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
@@ -284,7 +319,7 @@ function toggleVisibility(containerId) {
  */
 function workerSetupVisibility(_ref) {
   var containerId = _ref.payload.containerId;
-  return regeneratorRuntime.wrap(function workerSetupVisibility$(_context2) {
+  return _regenerator2.default.wrap(function workerSetupVisibility$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
@@ -309,11 +344,11 @@ function workerSetupVisibility(_ref) {
 function workerToggleVisibility(_ref2) {
   var payload = _ref2.payload;
   var id;
-  return regeneratorRuntime.wrap(function workerToggleVisibility$(_context3) {
+  return _regenerator2.default.wrap(function workerToggleVisibility$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
-          _context3.t0 = regeneratorRuntime.keys(payload);
+          _context3.t0 = _regenerator2.default.keys(payload);
 
         case 1:
           if ((_context3.t1 = _context3.t0()).done) {
@@ -347,7 +382,7 @@ function workerToggleVisibility(_ref2) {
 function workerCheckVisibility(_ref3) {
   var payload = _ref3.payload;
   var containers, id, container;
-  return regeneratorRuntime.wrap(function workerCheckVisibility$(_context4) {
+  return _regenerator2.default.wrap(function workerCheckVisibility$(_context4) {
     while (1) {
       switch (_context4.prev = _context4.next) {
         case 0:
@@ -386,7 +421,7 @@ function workerCheckVisibility(_ref3) {
 function workerTogglePostBox() {
   var channel, _ref4, event, $container;
 
-  return regeneratorRuntime.wrap(function workerTogglePostBox$(_context5) {
+  return _regenerator2.default.wrap(function workerTogglePostBox$(_context5) {
     while (1) {
       switch (_context5.prev = _context5.next) {
         case 0:
@@ -432,7 +467,7 @@ function workerTogglePostBox() {
  */
 function foreman(store) {
   var pagenow;
-  return regeneratorRuntime.wrap(function foreman$(_context6) {
+  return _regenerator2.default.wrap(function foreman$(_context6) {
     while (1) {
       switch (_context6.prev = _context6.next) {
         case 0:
@@ -459,6 +494,13 @@ function foreman(store) {
 
 /***/ }),
 
+/***/ "/bQp":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("/bQp");
+
+/***/ }),
+
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -476,7 +518,25 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _getPrototypeOf = __webpack_require__("Zx67");
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__("Zrlr");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__("wxAW");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__("zwoO");
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__("Pf15");
+
+var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _react = __webpack_require__("U7vG");
 
@@ -496,25 +556,18 @@ var _observeResize2 = _interopRequireDefault(_observeResize);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * The external dependencies.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-
-
+/**
+ * The external dependencies.
+ */
 var GoogleMap = function (_React$Component) {
-	_inherits(GoogleMap, _React$Component);
+	(0, _inherits3.default)(GoogleMap, _React$Component);
 
 	function GoogleMap() {
-		_classCallCheck(this, GoogleMap);
-
-		return _possibleConstructorReturn(this, (GoogleMap.__proto__ || Object.getPrototypeOf(GoogleMap)).apply(this, arguments));
+		(0, _classCallCheck3.default)(this, GoogleMap);
+		return (0, _possibleConstructorReturn3.default)(this, (GoogleMap.__proto__ || (0, _getPrototypeOf2.default)(GoogleMap)).apply(this, arguments));
 	}
 
-	_createClass(GoogleMap, [{
+	(0, _createClass3.default)(GoogleMap, [{
 		key: 'componentDidMount',
 
 		/**
@@ -695,7 +748,6 @@ var GoogleMap = function (_React$Component) {
 			}, 10);
 		}
 	}]);
-
 	return GoogleMap;
 }(_react2.default.Component);
 
@@ -952,15 +1004,9 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependecies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 exports.default = function () {
 	var mapStateToProps = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
@@ -985,11 +1031,11 @@ exports.default = function () {
 				props = cachedMapStateToProps(state, ownProps);
 			}
 
-			return _extends({}, defaultMapStateToProps(state, ownProps), props);
+			return (0, _extends3.default)({}, defaultMapStateToProps(state, ownProps), props);
 		};
 	};
 
-	return (0, _reactRedux.connect)(makeMapStateToProps, _extends({}, defaultMapDispatchToProps, mapDispatchToProps));
+	return (0, _reactRedux.connect)(makeMapStateToProps, (0, _extends3.default)({}, defaultMapDispatchToProps, mapDispatchToProps));
 };
 
 var _reactRedux = __webpack_require__("RH2O");
@@ -1000,12 +1046,22 @@ var _selectors = __webpack_require__("ZMHW");
 
 var _actions = __webpack_require__("HRbf");
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * The default state that will be retrieved from the store.
  *
  * @param  {Object} state
  * @param  {Object} ownProps
  * @return {Object}
+ */
+
+
+/**
+ * The internal dependencies.
+ */
+/**
+ * The external dependecies.
  */
 var defaultMapStateToProps = function defaultMapStateToProps(state, ownProps) {
 	var field = (0, _selectors.getFieldById)(state, ownProps.id);
@@ -1041,6 +1097,13 @@ var defaultMapDispatchToProps = {
 
 /***/ }),
 
+/***/ "1kS7":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("1kS7");
+
+/***/ }),
+
 /***/ "1qlA":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1051,10 +1114,9 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The internal dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _base = __webpack_require__("W0zY");
 
@@ -1077,6 +1139,9 @@ var operators = ['>', '>=', '<', '<='];
  * @param  {mixed}   b
  * @return {Boolean}
  */
+/**
+ * The internal dependencies.
+ */
 var evaluate = function evaluate(a, operator, b) {
 	switch (operator) {
 		case '>':
@@ -1092,7 +1157,7 @@ var evaluate = function evaluate(a, operator, b) {
 	}
 };
 
-exports.default = _extends({}, (0, _base2.default)(operators), {
+exports.default = (0, _extends3.default)({}, (0, _base2.default)(operators), {
 	evaluate: evaluate
 });
 
@@ -1240,6 +1305,17 @@ module.exports = (__webpack_require__("B3Oe"))("2KeS");
 
 /***/ }),
 
+/***/ "2KxR":
+/***/ (function(module, exports) {
+
+module.exports = function(it, Constructor, name, forbiddenField){
+  if(!(it instanceof Constructor) || (forbiddenField !== undefined && forbiddenField in it)){
+    throw TypeError(name + ': incorrect invocation!');
+  } return it;
+};
+
+/***/ }),
+
 /***/ "33bN":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1300,6 +1376,20 @@ function normalizePreloadedState(state) {
 } /**
    * The external dependencies.
    */
+
+/***/ }),
+
+/***/ "3fs2":
+/***/ (function(module, exports, __webpack_require__) {
+
+var classof   = __webpack_require__("RY/4")
+  , ITERATOR  = __webpack_require__("dSzd")('iterator')
+  , Iterators = __webpack_require__("/bQp");
+module.exports = __webpack_require__("FeBl").getIteratorMethod = function(it){
+  if(it != undefined)return it[ITERATOR]
+    || it['@@iterator']
+    || Iterators[classof(it)];
+};
 
 /***/ }),
 
@@ -1382,6 +1472,21 @@ var TYPE_TERM_META = exports.TYPE_TERM_META = 'term_meta';
 var TYPE_THEME_OPTIONS = exports.TYPE_THEME_OPTIONS = 'theme_options';
 var TYPE_USER_META = exports.TYPE_USER_META = 'user_meta';
 var TYPE_WIDGET = exports.TYPE_WIDGET = 'widget';
+
+/***/ }),
+
+/***/ "5PlU":
+/***/ (function(module, exports, __webpack_require__) {
+
+var classof   = __webpack_require__("RY/4")
+  , ITERATOR  = __webpack_require__("dSzd")('iterator')
+  , Iterators = __webpack_require__("/bQp");
+module.exports = __webpack_require__("FeBl").isIterable = function(it){
+  var O = Object(it);
+  return O[ITERATOR] !== undefined
+    || '@@iterator' in O
+    || Iterators.hasOwnProperty(classof(O));
+};
 
 /***/ }),
 
@@ -1490,10 +1595,9 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The internal dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _base = __webpack_require__("94C5");
 
@@ -1501,7 +1605,7 @@ var _base2 = _interopRequireDefault(_base);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _extends({}, _base2.default, {
+exports.default = (0, _extends3.default)({}, _base2.default, {
 
 	/**
   * Check if the condition is fulfiled.
@@ -1518,7 +1622,18 @@ exports.default = _extends({}, _base2.default, {
 
 		return this.firstSupportedComparerIsCorrect(true, compare, value);
 	}
-});
+}); /**
+     * The internal dependencies.
+     */
+
+/***/ }),
+
+/***/ "5zde":
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__("zQR9");
+__webpack_require__("qyJz");
+module.exports = __webpack_require__("FeBl").Array.from;
 
 /***/ }),
 
@@ -1561,6 +1676,40 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps);
 
 /***/ }),
 
+/***/ "77Pl":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("77Pl");
+
+/***/ }),
+
+/***/ "7KvD":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("7KvD");
+
+/***/ }),
+
+/***/ "7nRM":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _from = __webpack_require__("c/Tr");
+
+var _from2 = _interopRequireDefault(_from);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (arr) {
+  return Array.isArray(arr) ? arr : (0, _from2.default)(arr);
+};
+
+/***/ }),
+
 /***/ "7wqa":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1587,6 +1736,80 @@ webpackContext.keys = function webpackContextKeys() {
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
 webpackContext.id = "7wqa";
+
+/***/ }),
+
+/***/ "82Mu":
+/***/ (function(module, exports, __webpack_require__) {
+
+var global    = __webpack_require__("7KvD")
+  , macrotask = __webpack_require__("L42u").set
+  , Observer  = global.MutationObserver || global.WebKitMutationObserver
+  , process   = global.process
+  , Promise   = global.Promise
+  , isNode    = __webpack_require__("R9M2")(process) == 'process';
+
+module.exports = function(){
+  var head, last, notify;
+
+  var flush = function(){
+    var parent, fn;
+    if(isNode && (parent = process.domain))parent.exit();
+    while(head){
+      fn   = head.fn;
+      head = head.next;
+      try {
+        fn();
+      } catch(e){
+        if(head)notify();
+        else last = undefined;
+        throw e;
+      }
+    } last = undefined;
+    if(parent)parent.enter();
+  };
+
+  // Node.js
+  if(isNode){
+    notify = function(){
+      process.nextTick(flush);
+    };
+  // browsers with MutationObserver
+  } else if(Observer){
+    var toggle = true
+      , node   = document.createTextNode('');
+    new Observer(flush).observe(node, {characterData: true}); // eslint-disable-line no-new
+    notify = function(){
+      node.data = toggle = !toggle;
+    };
+  // environments with maybe non-completely correct, but existent Promise
+  } else if(Promise && Promise.resolve){
+    var promise = Promise.resolve();
+    notify = function(){
+      promise.then(flush);
+    };
+  // for other environments - macrotask based on:
+  // - setImmediate
+  // - MessageChannel
+  // - window.postMessag
+  // - onreadystatechange
+  // - setTimeout
+  } else {
+    notify = function(){
+      // strange IE + webpack dev server bug - use .call(global)
+      macrotask.call(global, flush);
+    };
+  }
+
+  return function(fn){
+    var task = {fn: fn, next: undefined};
+    if(last)last.next = task;
+    if(!head){
+      head = task;
+      notify();
+    } last = task;
+  };
+};
 
 /***/ }),
 
@@ -1651,24 +1874,18 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 exports.default = function () {
 	var hooks = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	var ui = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-	var withLifecycle = (0, _recompose.lifecycle)(_extends({}, defaultHooks, hooks));
+	var withLifecycle = (0, _recompose.lifecycle)((0, _extends3.default)({}, defaultHooks, hooks));
 
 	var withDefaultProps = (0, _recompose.defaultProps)({
-		ui: _extends({}, defaultUI, ui)
+		ui: (0, _extends3.default)({}, defaultUI, ui)
 	});
 
 	return (0, _recompose.compose)(withDefaultProps, withLifecycle);
@@ -1678,12 +1895,17 @@ var _recompose = __webpack_require__("zpMW");
 
 var _constants = __webpack_require__("8Hlw");
 
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * The default lifecycle hooks that will be attached to each field.
  * Since we use composition instead of inheritance the developer should provide a full
  * implementation for the hook that is being overwritten.
  *
  * @type {Object}
+ */
+/**
+ * The external dependencies.
  */
 var defaultHooks = {
 	componentDidMount: function componentDidMount() {
@@ -1714,6 +1936,11 @@ var defaultHooks = {
  * The default values for UI of the field.
  *
  * @type {Object}
+ */
+
+
+/**
+ * The internal dependencies.
  */
 var defaultUI = {
 	is_visible: true,
@@ -1984,6 +2211,11 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.workerInit = workerInit;
 exports.workerFormSubmit = workerFormSubmit;
 exports.workerItemExpand = workerItemExpand;
@@ -2009,9 +2241,9 @@ var _constants2 = __webpack_require__("8Hlw");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [workerInit, workerFormSubmit, workerItemExpand, foreman].map(regeneratorRuntime.mark); /**
-                                                                                                       * The external dependencies.
-                                                                                                       */
+var _marked = [workerInit, workerFormSubmit, workerItemExpand, foreman].map(_regenerator2.default.mark); /**
+                                                                                                          * The external dependencies.
+                                                                                                          */
 
 
 /**
@@ -2027,7 +2259,7 @@ var _marked = [workerInit, workerFormSubmit, workerItemExpand, foreman].map(rege
 function workerInit() {
 	var channel, _ref, data, container;
 
-	return regeneratorRuntime.wrap(function workerInit$(_context) {
+	return _regenerator2.default.wrap(function workerInit$(_context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
@@ -2086,7 +2318,7 @@ function workerInit() {
 function workerFormSubmit() {
 	var channel, _ref2, event;
 
-	return regeneratorRuntime.wrap(function workerFormSubmit$(_context2) {
+	return _regenerator2.default.wrap(function workerFormSubmit$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
@@ -2135,7 +2367,7 @@ function workerFormSubmit() {
 function workerItemExpand() {
 	var channel, _ref3, _event, $item, containerId;
 
-	return regeneratorRuntime.wrap(function workerItemExpand$(_context3) {
+	return _regenerator2.default.wrap(function workerItemExpand$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
@@ -2194,7 +2426,7 @@ function workerItemExpand() {
  */
 function foreman() {
 	var pagenow;
-	return regeneratorRuntime.wrap(function foreman$(_context4) {
+	return _regenerator2.default.wrap(function foreman$(_context4) {
 		while (1) {
 			switch (_context4.prev = _context4.next) {
 				case 0:
@@ -2221,6 +2453,17 @@ function foreman() {
 
 /***/ }),
 
+/***/ "9bBU":
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__("mClu");
+var $Object = __webpack_require__("FeBl").Object;
+module.exports = function defineProperty(it, key, desc){
+  return $Object.defineProperty(it, key, desc);
+};
+
+/***/ }),
+
 /***/ "9w8d":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2232,15 +2475,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.enhance = exports.TextareaField = undefined;
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _react = __webpack_require__("U7vG");
 
@@ -2277,6 +2514,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param  {Function}      props.handleChange
  * @return {React.Element}
  */
+
+
+/**
+ * The internal dependencies.
+ */
 var TextareaField = exports.TextareaField = function TextareaField(_ref) {
 	var name = _ref.name,
 	    field = _ref.field,
@@ -2285,7 +2527,7 @@ var TextareaField = exports.TextareaField = function TextareaField(_ref) {
 	return _react2.default.createElement(
 		_field2.default,
 		{ field: field },
-		_react2.default.createElement('textarea', _extends({
+		_react2.default.createElement('textarea', (0, _extends3.default)({
 			id: field.id,
 			name: name,
 			value: field.value,
@@ -2300,6 +2542,9 @@ var TextareaField = exports.TextareaField = function TextareaField(_ref) {
  * Validate the props.
  *
  * @type {Object}
+ */
+/**
+ * The external dependencies.
  */
 TextareaField.propTypes = {
 	name: _propTypes2.default.string,
@@ -2346,6 +2591,15 @@ exports.default = (0, _recompose.setStatic)('type', [_constants.TYPE_TEXTAREA, _
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _getIterator2 = __webpack_require__("BO1k");
+
+var _getIterator3 = _interopRequireDefault(_getIterator2);
+
 exports.validate = validate;
 exports.workerValidate = workerValidate;
 exports.workerValidateAll = workerValidateAll;
@@ -2369,9 +2623,9 @@ var _selectors2 = __webpack_require__("ZMHW");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [validate, workerValidate, workerValidateAll, foreman].map(regeneratorRuntime.mark); /**
-                                                                                                    * The external dependencies.
-                                                                                                    */
+var _marked = [validate, workerValidate, workerValidateAll, foreman].map(_regenerator2.default.mark); /**
+                                                                                                       * The external dependencies.
+                                                                                                       */
 
 
 /**
@@ -2389,7 +2643,7 @@ var _marked = [validate, workerValidate, workerValidateAll, foreman].map(regener
 function validate(fieldIds, event) {
 	var $target, $spinner, $error, validationFailedChannel, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, fieldId, html;
 
-	return regeneratorRuntime.wrap(function validate$(_context) {
+	return _regenerator2.default.wrap(function validate$(_context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
@@ -2410,7 +2664,7 @@ function validate(fieldIds, event) {
 					_didIteratorError = false;
 					_iteratorError = undefined;
 					_context.prev = 10;
-					_iterator = fieldIds[Symbol.iterator]();
+					_iterator = (0, _getIterator3.default)(fieldIds);
 
 				case 12:
 					if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
@@ -2509,7 +2763,7 @@ function workerValidate(_ref) {
 	    containerId = _ref$payload.containerId,
 	    event = _ref$payload.event;
 	var container, ids;
-	return regeneratorRuntime.wrap(function workerValidate$(_context2) {
+	return _regenerator2.default.wrap(function workerValidate$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
@@ -2553,7 +2807,7 @@ function workerValidate(_ref) {
 function workerValidateAll(_ref2) {
 	var payload = _ref2.payload;
 	var fields, ids;
-	return regeneratorRuntime.wrap(function workerValidateAll$(_context3) {
+	return _regenerator2.default.wrap(function workerValidateAll$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
@@ -2585,7 +2839,7 @@ function workerValidateAll(_ref2) {
  * @return {void}
  */
 function foreman(store) {
-	return regeneratorRuntime.wrap(function foreman$(_context4) {
+	return _regenerator2.default.wrap(function foreman$(_context4) {
 		while (1) {
 			switch (_context4.prev = _context4.next) {
 				case 0:
@@ -2609,6 +2863,13 @@ function foreman(store) {
 
 /***/ }),
 
+/***/ "BO1k":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__("fxRn"), __esModule: true };
+
+/***/ }),
+
 /***/ "Bt+Z":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2618,6 +2879,10 @@ function foreman(store) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _defineProperty2 = __webpack_require__("bOdI");
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
 var _objectPathImmutable = __webpack_require__("VXi7");
 
@@ -2631,23 +2896,28 @@ var _actions = __webpack_require__("d6Yu");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; } /**
-                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                   */
+/**
+ * The reducer that handles the `sidebars` branch.
+ */
 
 
 /**
  * The internal dependencies.
  */
-
-
 /**
- * The reducer that handles the `sidebars` branch.
+ * The external dependencies.
  */
-exports.default = (0, _registry.decorateSidebarReducer)((0, _reduxActions.handleActions)(_defineProperty({}, _actions.receiveSidebar, function (state, _ref) {
+exports.default = (0, _registry.decorateSidebarReducer)((0, _reduxActions.handleActions)((0, _defineProperty3.default)({}, _actions.receiveSidebar, function (state, _ref) {
   var payload = _ref.payload;
   return _objectPathImmutable2.default.set(state, payload.id, payload);
 }), {}));
+
+/***/ }),
+
+/***/ "C4MV":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__("9bBU"), __esModule: true };
 
 /***/ }),
 
@@ -2665,6 +2935,342 @@ function isNode (val) {
         (typeof val.nodeName === 'string')
 }
 
+
+/***/ }),
+
+/***/ "CXw9":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var LIBRARY            = __webpack_require__("O4g8")
+  , global             = __webpack_require__("7KvD")
+  , ctx                = __webpack_require__("+ZMJ")
+  , classof            = __webpack_require__("RY/4")
+  , $export            = __webpack_require__("kM2E")
+  , isObject           = __webpack_require__("EqjI")
+  , aFunction          = __webpack_require__("lOnJ")
+  , anInstance         = __webpack_require__("2KxR")
+  , forOf              = __webpack_require__("NWt+")
+  , speciesConstructor = __webpack_require__("t8x9")
+  , task               = __webpack_require__("L42u").set
+  , microtask          = __webpack_require__("82Mu")()
+  , PROMISE            = 'Promise'
+  , TypeError          = global.TypeError
+  , process            = global.process
+  , $Promise           = global[PROMISE]
+  , process            = global.process
+  , isNode             = classof(process) == 'process'
+  , empty              = function(){ /* empty */ }
+  , Internal, GenericPromiseCapability, Wrapper;
+
+var USE_NATIVE = !!function(){
+  try {
+    // correct subclassing with @@species support
+    var promise     = $Promise.resolve(1)
+      , FakePromise = (promise.constructor = {})[__webpack_require__("dSzd")('species')] = function(exec){ exec(empty, empty); };
+    // unhandled rejections tracking support, NodeJS Promise without it fails @@species test
+    return (isNode || typeof PromiseRejectionEvent == 'function') && promise.then(empty) instanceof FakePromise;
+  } catch(e){ /* empty */ }
+}();
+
+// helpers
+var sameConstructor = function(a, b){
+  // with library wrapper special case
+  return a === b || a === $Promise && b === Wrapper;
+};
+var isThenable = function(it){
+  var then;
+  return isObject(it) && typeof (then = it.then) == 'function' ? then : false;
+};
+var newPromiseCapability = function(C){
+  return sameConstructor($Promise, C)
+    ? new PromiseCapability(C)
+    : new GenericPromiseCapability(C);
+};
+var PromiseCapability = GenericPromiseCapability = function(C){
+  var resolve, reject;
+  this.promise = new C(function($$resolve, $$reject){
+    if(resolve !== undefined || reject !== undefined)throw TypeError('Bad Promise constructor');
+    resolve = $$resolve;
+    reject  = $$reject;
+  });
+  this.resolve = aFunction(resolve);
+  this.reject  = aFunction(reject);
+};
+var perform = function(exec){
+  try {
+    exec();
+  } catch(e){
+    return {error: e};
+  }
+};
+var notify = function(promise, isReject){
+  if(promise._n)return;
+  promise._n = true;
+  var chain = promise._c;
+  microtask(function(){
+    var value = promise._v
+      , ok    = promise._s == 1
+      , i     = 0;
+    var run = function(reaction){
+      var handler = ok ? reaction.ok : reaction.fail
+        , resolve = reaction.resolve
+        , reject  = reaction.reject
+        , domain  = reaction.domain
+        , result, then;
+      try {
+        if(handler){
+          if(!ok){
+            if(promise._h == 2)onHandleUnhandled(promise);
+            promise._h = 1;
+          }
+          if(handler === true)result = value;
+          else {
+            if(domain)domain.enter();
+            result = handler(value);
+            if(domain)domain.exit();
+          }
+          if(result === reaction.promise){
+            reject(TypeError('Promise-chain cycle'));
+          } else if(then = isThenable(result)){
+            then.call(result, resolve, reject);
+          } else resolve(result);
+        } else reject(value);
+      } catch(e){
+        reject(e);
+      }
+    };
+    while(chain.length > i)run(chain[i++]); // variable length - can't use forEach
+    promise._c = [];
+    promise._n = false;
+    if(isReject && !promise._h)onUnhandled(promise);
+  });
+};
+var onUnhandled = function(promise){
+  task.call(global, function(){
+    var value = promise._v
+      , abrupt, handler, console;
+    if(isUnhandled(promise)){
+      abrupt = perform(function(){
+        if(isNode){
+          process.emit('unhandledRejection', value, promise);
+        } else if(handler = global.onunhandledrejection){
+          handler({promise: promise, reason: value});
+        } else if((console = global.console) && console.error){
+          console.error('Unhandled promise rejection', value);
+        }
+      });
+      // Browsers should not trigger `rejectionHandled` event if it was handled here, NodeJS - should
+      promise._h = isNode || isUnhandled(promise) ? 2 : 1;
+    } promise._a = undefined;
+    if(abrupt)throw abrupt.error;
+  });
+};
+var isUnhandled = function(promise){
+  if(promise._h == 1)return false;
+  var chain = promise._a || promise._c
+    , i     = 0
+    , reaction;
+  while(chain.length > i){
+    reaction = chain[i++];
+    if(reaction.fail || !isUnhandled(reaction.promise))return false;
+  } return true;
+};
+var onHandleUnhandled = function(promise){
+  task.call(global, function(){
+    var handler;
+    if(isNode){
+      process.emit('rejectionHandled', promise);
+    } else if(handler = global.onrejectionhandled){
+      handler({promise: promise, reason: promise._v});
+    }
+  });
+};
+var $reject = function(value){
+  var promise = this;
+  if(promise._d)return;
+  promise._d = true;
+  promise = promise._w || promise; // unwrap
+  promise._v = value;
+  promise._s = 2;
+  if(!promise._a)promise._a = promise._c.slice();
+  notify(promise, true);
+};
+var $resolve = function(value){
+  var promise = this
+    , then;
+  if(promise._d)return;
+  promise._d = true;
+  promise = promise._w || promise; // unwrap
+  try {
+    if(promise === value)throw TypeError("Promise can't be resolved itself");
+    if(then = isThenable(value)){
+      microtask(function(){
+        var wrapper = {_w: promise, _d: false}; // wrap
+        try {
+          then.call(value, ctx($resolve, wrapper, 1), ctx($reject, wrapper, 1));
+        } catch(e){
+          $reject.call(wrapper, e);
+        }
+      });
+    } else {
+      promise._v = value;
+      promise._s = 1;
+      notify(promise, false);
+    }
+  } catch(e){
+    $reject.call({_w: promise, _d: false}, e); // wrap
+  }
+};
+
+// constructor polyfill
+if(!USE_NATIVE){
+  // 25.4.3.1 Promise(executor)
+  $Promise = function Promise(executor){
+    anInstance(this, $Promise, PROMISE, '_h');
+    aFunction(executor);
+    Internal.call(this);
+    try {
+      executor(ctx($resolve, this, 1), ctx($reject, this, 1));
+    } catch(err){
+      $reject.call(this, err);
+    }
+  };
+  Internal = function Promise(executor){
+    this._c = [];             // <- awaiting reactions
+    this._a = undefined;      // <- checked in isUnhandled reactions
+    this._s = 0;              // <- state
+    this._d = false;          // <- done
+    this._v = undefined;      // <- value
+    this._h = 0;              // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
+    this._n = false;          // <- notify
+  };
+  Internal.prototype = __webpack_require__("xH/j")($Promise.prototype, {
+    // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
+    then: function then(onFulfilled, onRejected){
+      var reaction    = newPromiseCapability(speciesConstructor(this, $Promise));
+      reaction.ok     = typeof onFulfilled == 'function' ? onFulfilled : true;
+      reaction.fail   = typeof onRejected == 'function' && onRejected;
+      reaction.domain = isNode ? process.domain : undefined;
+      this._c.push(reaction);
+      if(this._a)this._a.push(reaction);
+      if(this._s)notify(this, false);
+      return reaction.promise;
+    },
+    // 25.4.5.1 Promise.prototype.catch(onRejected)
+    'catch': function(onRejected){
+      return this.then(undefined, onRejected);
+    }
+  });
+  PromiseCapability = function(){
+    var promise  = new Internal;
+    this.promise = promise;
+    this.resolve = ctx($resolve, promise, 1);
+    this.reject  = ctx($reject, promise, 1);
+  };
+}
+
+$export($export.G + $export.W + $export.F * !USE_NATIVE, {Promise: $Promise});
+__webpack_require__("e6n0")($Promise, PROMISE);
+__webpack_require__("bRrM")(PROMISE);
+Wrapper = __webpack_require__("FeBl")[PROMISE];
+
+// statics
+$export($export.S + $export.F * !USE_NATIVE, PROMISE, {
+  // 25.4.4.5 Promise.reject(r)
+  reject: function reject(r){
+    var capability = newPromiseCapability(this)
+      , $$reject   = capability.reject;
+    $$reject(r);
+    return capability.promise;
+  }
+});
+$export($export.S + $export.F * (LIBRARY || !USE_NATIVE), PROMISE, {
+  // 25.4.4.6 Promise.resolve(x)
+  resolve: function resolve(x){
+    // instanceof instead of internal slot check because we should fix it without replacement native Promise core
+    if(x instanceof $Promise && sameConstructor(x.constructor, this))return x;
+    var capability = newPromiseCapability(this)
+      , $$resolve  = capability.resolve;
+    $$resolve(x);
+    return capability.promise;
+  }
+});
+$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__("dY0y")(function(iter){
+  $Promise.all(iter)['catch'](empty);
+})), PROMISE, {
+  // 25.4.4.1 Promise.all(iterable)
+  all: function all(iterable){
+    var C          = this
+      , capability = newPromiseCapability(C)
+      , resolve    = capability.resolve
+      , reject     = capability.reject;
+    var abrupt = perform(function(){
+      var values    = []
+        , index     = 0
+        , remaining = 1;
+      forOf(iterable, false, function(promise){
+        var $index        = index++
+          , alreadyCalled = false;
+        values.push(undefined);
+        remaining++;
+        C.resolve(promise).then(function(value){
+          if(alreadyCalled)return;
+          alreadyCalled  = true;
+          values[$index] = value;
+          --remaining || resolve(values);
+        }, reject);
+      });
+      --remaining || resolve(values);
+    });
+    if(abrupt)reject(abrupt.error);
+    return capability.promise;
+  },
+  // 25.4.4.4 Promise.race(iterable)
+  race: function race(iterable){
+    var C          = this
+      , capability = newPromiseCapability(C)
+      , reject     = capability.reject;
+    var abrupt = perform(function(){
+      forOf(iterable, false, function(promise){
+        C.resolve(promise).then(capability.resolve, reject);
+      });
+    });
+    if(abrupt)reject(abrupt.error);
+    return capability.promise;
+  }
+});
+
+/***/ }),
+
+/***/ "Dd8w":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _assign = __webpack_require__("woOf");
+
+var _assign2 = _interopRequireDefault(_assign);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _assign2.default || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
 
 /***/ }),
 
@@ -2748,6 +3354,13 @@ exports.default = ContainerNonce;
 
 /***/ }),
 
+/***/ "EqjI":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("EqjI");
+
+/***/ }),
+
 /***/ "Eql7":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2758,10 +3371,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The internal dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _base = __webpack_require__("W0zY");
 
@@ -2784,6 +3396,9 @@ var operators = ['=', '!='];
  * @param  {mixed}   b
  * @return {Boolean}
  */
+/**
+ * The internal dependencies.
+ */
 var evaluate = function evaluate(a, operator, b) {
   switch (operator) {
     case '=':
@@ -2795,9 +3410,16 @@ var evaluate = function evaluate(a, operator, b) {
   }
 };
 
-exports.default = _extends({}, (0, _base2.default)(operators), {
+exports.default = (0, _extends3.default)({}, (0, _base2.default)(operators), {
   evaluate: evaluate
 });
+
+/***/ }),
+
+/***/ "FeBl":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("FeBl");
 
 /***/ }),
 
@@ -2811,15 +3433,9 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependecies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _lodash = __webpack_require__("M4fF");
 
@@ -2841,7 +3457,10 @@ var _base2 = _interopRequireDefault(_base);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _extends({}, _base2.default, {
+/**
+ * The internal dependencies.
+ */
+exports.default = (0, _extends3.default)({}, _base2.default, {
 
 	/**
   * The supported comparers.
@@ -2864,7 +3483,9 @@ exports.default = _extends({}, _base2.default, {
 
 		return this.firstSupportedComparerIsCorrect(env.term_level, compare, value);
 	}
-});
+}); /**
+     * The external dependecies.
+     */
 
 /***/ }),
 
@@ -2877,6 +3498,11 @@ exports.default = _extends({}, _base2.default, {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.workerRaiseFieldUpdatedApiEvent = workerRaiseFieldUpdatedApiEvent;
 exports.default = foreman;
 
@@ -2892,9 +3518,9 @@ var _selectors = __webpack_require__("ZMHW");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [workerRaiseFieldUpdatedApiEvent, foreman].map(regeneratorRuntime.mark); /**
-                                                                                        * The external dependencies.
-                                                                                        */
+var _marked = [workerRaiseFieldUpdatedApiEvent, foreman].map(_regenerator2.default.mark); /**
+                                                                                           * The external dependencies.
+                                                                                           */
 
 
 /**
@@ -2916,7 +3542,7 @@ function workerRaiseFieldUpdatedApiEvent(_ref) {
       fieldId = _ref$payload.fieldId,
       value = _ref$payload.value;
   var fieldHierarchy;
-  return regeneratorRuntime.wrap(function workerRaiseFieldUpdatedApiEvent$(_context) {
+  return _regenerator2.default.wrap(function workerRaiseFieldUpdatedApiEvent$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
@@ -2942,7 +3568,7 @@ function workerRaiseFieldUpdatedApiEvent(_ref) {
  * @return {void}
  */
 function foreman() {
-  return regeneratorRuntime.wrap(function foreman$(_context2) {
+  return _regenerator2.default.wrap(function foreman$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
@@ -2959,6 +3585,34 @@ function foreman() {
 
 /***/ }),
 
+/***/ "Gu7T":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _from = __webpack_require__("c/Tr");
+
+var _from2 = _interopRequireDefault(_from);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+      arr2[i] = arr[i];
+    }
+
+    return arr2;
+  } else {
+    return (0, _from2.default)(arr);
+  }
+};
+
+/***/ }),
+
 /***/ "H1PS":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2969,10 +3623,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The internal dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _base = __webpack_require__("W0zY");
 
@@ -2995,6 +3648,9 @@ var operators = ['=', '!='];
  * @param  {mixed}   b
  * @return {Boolean}
  */
+/**
+ * The internal dependencies.
+ */
 var evaluate = function evaluate(a, operator, b) {
   switch (operator) {
     case '=':
@@ -3006,7 +3662,7 @@ var evaluate = function evaluate(a, operator, b) {
   }
 };
 
-exports.default = _extends({}, (0, _base2.default)(operators), {
+exports.default = (0, _extends3.default)({}, (0, _base2.default)(operators), {
   evaluate: evaluate
 });
 
@@ -3402,15 +4058,17 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _regenerator = __webpack_require__("Xxa5");
 
+var _regenerator2 = _interopRequireDefault(_regenerator);
 
-/**
- * The internal dependencies.
- */
+var _extends2 = __webpack_require__("Dd8w");
 
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _promise = __webpack_require__("//Fk");
+
+var _promise2 = _interopRequireDefault(_promise);
 
 exports.workerGeocoder = workerGeocoder;
 exports.default = foreman;
@@ -3419,7 +4077,17 @@ var _effects = __webpack_require__("egdi");
 
 var _actions = __webpack_require__("HRbf");
 
-var _marked = [workerGeocoder, foreman].map(regeneratorRuntime.mark);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _marked = [workerGeocoder, foreman].map(_regenerator2.default.mark); /**
+                                                                          * The external dependencies.
+                                                                          */
+
+
+/**
+ * The internal dependencies.
+ */
+
 
 /**
  * Get the location of the specified address.
@@ -3428,7 +4096,7 @@ var _marked = [workerGeocoder, foreman].map(regeneratorRuntime.mark);
  * @return {Promise<Object, String>}
  */
 function geocode(address) {
-	return new Promise(function (resolve, reject) {
+	return new _promise2.default(function (resolve, reject) {
 		var geocoder = new google.maps.Geocoder();
 
 		geocoder.geocode({ address: address }, function (results, status) {
@@ -3464,7 +4132,7 @@ function workerGeocoder(_ref) {
 
 	var coords, lat, lng, value, _location2, _value;
 
-	return regeneratorRuntime.wrap(function workerGeocoder$(_context) {
+	return _regenerator2.default.wrap(function workerGeocoder$(_context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
@@ -3510,7 +4178,7 @@ function workerGeocoder(_ref) {
 					_location2 = _context.sent;
 					_value = _location2.lat + ',' + _location2.lng;
 					_context.next = 19;
-					return (0, _effects.put)((0, _actions.setFieldValue)(fieldId, _extends({}, _location2, {
+					return (0, _effects.put)((0, _actions.setFieldValue)(fieldId, (0, _extends3.default)({}, _location2, {
 						address: address,
 						value: _value
 					}), 'assign'));
@@ -3539,7 +4207,7 @@ function workerGeocoder(_ref) {
  * @return {void}
  */
 function foreman() {
-	return regeneratorRuntime.wrap(function foreman$(_context2) {
+	return _regenerator2.default.wrap(function foreman$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
@@ -3563,6 +4231,109 @@ module.exports = (__webpack_require__("B3Oe"))("KSGD");
 
 /***/ }),
 
+/***/ "Kh5d":
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.2.9 Object.getPrototypeOf(O)
+var toObject        = __webpack_require__("sB3e")
+  , $getPrototypeOf = __webpack_require__("PzxK");
+
+__webpack_require__("uqUo")('getPrototypeOf', function(){
+  return function getPrototypeOf(it){
+    return $getPrototypeOf(toObject(it));
+  };
+});
+
+/***/ }),
+
+/***/ "L42u":
+/***/ (function(module, exports, __webpack_require__) {
+
+var ctx                = __webpack_require__("+ZMJ")
+  , invoke             = __webpack_require__("knuC")
+  , html               = __webpack_require__("RPLV")
+  , cel                = __webpack_require__("ON07")
+  , global             = __webpack_require__("7KvD")
+  , process            = global.process
+  , setTask            = global.setImmediate
+  , clearTask          = global.clearImmediate
+  , MessageChannel     = global.MessageChannel
+  , counter            = 0
+  , queue              = {}
+  , ONREADYSTATECHANGE = 'onreadystatechange'
+  , defer, channel, port;
+var run = function(){
+  var id = +this;
+  if(queue.hasOwnProperty(id)){
+    var fn = queue[id];
+    delete queue[id];
+    fn();
+  }
+};
+var listener = function(event){
+  run.call(event.data);
+};
+// Node.js 0.9+ & IE10+ has setImmediate, otherwise:
+if(!setTask || !clearTask){
+  setTask = function setImmediate(fn){
+    var args = [], i = 1;
+    while(arguments.length > i)args.push(arguments[i++]);
+    queue[++counter] = function(){
+      invoke(typeof fn == 'function' ? fn : Function(fn), args);
+    };
+    defer(counter);
+    return counter;
+  };
+  clearTask = function clearImmediate(id){
+    delete queue[id];
+  };
+  // Node.js 0.8-
+  if(__webpack_require__("R9M2")(process) == 'process'){
+    defer = function(id){
+      process.nextTick(ctx(run, id, 1));
+    };
+  // Browsers with MessageChannel, includes WebWorkers
+  } else if(MessageChannel){
+    channel = new MessageChannel;
+    port    = channel.port2;
+    channel.port1.onmessage = listener;
+    defer = ctx(port.postMessage, port, 1);
+  // Browsers with postMessage, skip WebWorkers
+  // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
+  } else if(global.addEventListener && typeof postMessage == 'function' && !global.importScripts){
+    defer = function(id){
+      global.postMessage(id + '', '*');
+    };
+    global.addEventListener('message', listener, false);
+  // IE8-
+  } else if(ONREADYSTATECHANGE in cel('script')){
+    defer = function(id){
+      html.appendChild(cel('script'))[ONREADYSTATECHANGE] = function(){
+        html.removeChild(this);
+        run.call(id);
+      };
+    };
+  // Rest old browsers
+  } else {
+    defer = function(id){
+      setTimeout(ctx(run, id, 1), 0);
+    };
+  }
+}
+module.exports = {
+  set:   setTask,
+  clear: clearTask
+};
+
+/***/ }),
+
+/***/ "LKZe":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("LKZe");
+
+/***/ }),
+
 /***/ "M4fF":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3581,6 +4352,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Field = undefined;
 
+var _toConsumableArray2 = __webpack_require__("Gu7T");
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
 var _react = __webpack_require__("U7vG");
 
 var _react2 = _interopRequireDefault(_react);
@@ -3594,11 +4369,6 @@ var _classnames = __webpack_require__("HW6M");
 var _classnames2 = _interopRequireDefault(_classnames);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } /**
-                                                                                                                                                                                                     * The external dependencies.
-                                                                                                                                                                                                     */
-
 
 /**
  * The base component used to render the fields.
@@ -3617,7 +4387,7 @@ var Field = exports.Field = function Field(_ref) {
 	    showRequiredLabel = _ref.showRequiredLabel;
 
 	var styles = !!field.width ? { flexBasis: field.width + '%' } : null;
-	var classes = ['carbon-field', 'carbon-' + field.type, { 'has-width': !!field.width }, { 'carbon-highlight': !field.ui.valid }].concat(_toConsumableArray(field.classes));
+	var classes = ['carbon-field', 'carbon-' + field.type, { 'has-width': !!field.width }, { 'carbon-highlight': !field.ui.valid }].concat((0, _toConsumableArray3.default)(field.classes));
 
 	var requiredLabel = field.required && showRequiredLabel ? _react2.default.createElement(
 		'span',
@@ -3655,6 +4425,9 @@ var Field = exports.Field = function Field(_ref) {
  *
  * @type {Object}
  */
+/**
+ * The external dependencies.
+ */
 Field.propTypes = {
 	field: _propTypes2.default.shape({
 		id: _propTypes2.default.string,
@@ -3680,6 +4453,34 @@ Field.defaultProps = {
 };
 
 exports.default = Field;
+
+/***/ }),
+
+/***/ "M6a0":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("M6a0");
+
+/***/ }),
+
+/***/ "MU5D":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("MU5D");
+
+/***/ }),
+
+/***/ "Mhyx":
+/***/ (function(module, exports, __webpack_require__) {
+
+// check on default Array iterator
+var Iterators  = __webpack_require__("/bQp")
+  , ITERATOR   = __webpack_require__("dSzd")('iterator')
+  , ArrayProto = Array.prototype;
+
+module.exports = function(it){
+  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
+};
 
 /***/ }),
 
@@ -3734,6 +4535,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.enhance = exports.AssociationField = undefined;
 
+var _toConsumableArray2 = __webpack_require__("Gu7T");
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
 var _react = __webpack_require__("U7vG");
 
 var _react2 = _interopRequireDefault(_react);
@@ -3773,16 +4578,6 @@ var _withSetup2 = _interopRequireDefault(_withSetup);
 var _constants = __webpack_require__("8Hlw");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } /**
-                                                                                                                                                                                                     * The external dependencies.
-                                                                                                                                                                                                     */
-
-
-/**
- * The internal dependencies.
- */
-
 
 /**
  * Render a field that allows to create links between posts, taxonomy terms,
@@ -3881,6 +4676,14 @@ var AssociationField = exports.AssociationField = function AssociationField(_ref
  * Validate the props.
  *
  * @type {Object}
+ */
+
+
+/**
+ * The internal dependencies.
+ */
+/**
+ * The external dependencies.
  */
 AssociationField.propTypes = {
 	name: _propTypes2.default.string,
@@ -3993,7 +4796,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 			}
 
 			// Create a safe copy and push it to the store.
-			setFieldValue(field.id, [].concat(_toConsumableArray(field.value), [(0, _lodash.cloneDeep)(item)]));
+			setFieldValue(field.id, [].concat((0, _toConsumableArray3.default)(field.value), [(0, _lodash.cloneDeep)(item)]));
 		};
 	},
 
@@ -4795,10 +5598,55 @@ exports.default = (0, _recompose.setStatic)('type', [_constants.TYPE_FILE, _cons
 
 /***/ }),
 
+/***/ "NWt+":
+/***/ (function(module, exports, __webpack_require__) {
+
+var ctx         = __webpack_require__("+ZMJ")
+  , call        = __webpack_require__("msXi")
+  , isArrayIter = __webpack_require__("Mhyx")
+  , anObject    = __webpack_require__("77Pl")
+  , toLength    = __webpack_require__("QRG4")
+  , getIterFn   = __webpack_require__("3fs2")
+  , BREAK       = {}
+  , RETURN      = {};
+var exports = module.exports = function(iterable, entries, fn, that, ITERATOR){
+  var iterFn = ITERATOR ? function(){ return iterable; } : getIterFn(iterable)
+    , f      = ctx(fn, that, entries ? 2 : 1)
+    , index  = 0
+    , length, step, iterator, result;
+  if(typeof iterFn != 'function')throw TypeError(iterable + ' is not iterable!');
+  // fast case for arrays with default iterator
+  if(isArrayIter(iterFn))for(length = toLength(iterable.length); length > index; index++){
+    result = entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
+    if(result === BREAK || result === RETURN)return result;
+  } else for(iterator = iterFn.call(iterable); !(step = iterator.next()).done; ){
+    result = call(iterator, f, step.value, entries);
+    if(result === BREAK || result === RETURN)return result;
+  }
+};
+exports.BREAK  = BREAK;
+exports.RETURN = RETURN;
+
+/***/ }),
+
+/***/ "NpIQ":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("NpIQ");
+
+/***/ }),
+
 /***/ "O27J":
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__("B3Oe"))("O27J");
+
+/***/ }),
+
+/***/ "O4g8":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("O4g8");
 
 /***/ }),
 
@@ -5396,6 +6244,13 @@ function hasOwnProperty(obj, prop) {
 
 /***/ }),
 
+/***/ "ON07":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("ON07");
+
+/***/ }),
+
 /***/ "ONRY":
 /***/ (function(module, exports) {
 
@@ -5426,6 +6281,13 @@ if (typeof Object.create === 'function') {
 
 /***/ }),
 
+/***/ "OvRC":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__("oM7Q"), __esModule: true };
+
+/***/ }),
+
 /***/ "OxI6":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5435,6 +6297,11 @@ if (typeof Object.create === 'function') {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _promise = __webpack_require__("//Fk");
+
+var _promise2 = _interopRequireDefault(_promise);
+
 exports.request = request;
 
 var _jquery = __webpack_require__("0iPh");
@@ -5451,7 +6318,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @return {Promise<Object, String>}
  */
 function request(action, name) {
-	return new Promise(function (resolve, reject) {
+	return new _promise2.default(function (resolve, reject) {
 		var request = _jquery2.default.post(window.ajaxurl, {
 			action: 'carbon_fields_' + action + '_sidebar',
 			name: name
@@ -5496,6 +6363,53 @@ var getSidebars = exports.getSidebars = function getSidebars(state) {
 
 /***/ }),
 
+/***/ "Pf15":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _setPrototypeOf = __webpack_require__("kiBT");
+
+var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
+
+var _create = __webpack_require__("OvRC");
+
+var _create2 = _interopRequireDefault(_create);
+
+var _typeof2 = __webpack_require__("pFYg");
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : (0, _typeof3.default)(superClass)));
+  }
+
+  subClass.prototype = (0, _create2.default)(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      enumerable: false,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf2.default ? (0, _setPrototypeOf2.default)(subClass, superClass) : subClass.__proto__ = superClass;
+};
+
+/***/ }),
+
+/***/ "PzxK":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("PzxK");
+
+/***/ }),
+
 /***/ "QBaa":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5506,15 +6420,17 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * The external dependencies.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+var _defineProperty2 = __webpack_require__("bOdI");
 
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
-/**
- * The internal dependencies.
- */
+var _classCallCheck2 = __webpack_require__("Zrlr");
 
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__("wxAW");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
 
 var _lodash = __webpack_require__("M4fF");
 
@@ -5534,10 +6450,9 @@ var _actions = __webpack_require__("HRbf");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
+/**
+ * The external dependencies.
+ */
 var Api = function () {
 
 	/**
@@ -5546,7 +6461,7 @@ var Api = function () {
   * @param {Object} store The entire redux store
   */
 	function Api(store) {
-		_classCallCheck(this, Api);
+		(0, _classCallCheck3.default)(this, Api);
 
 		this.store = store;
 		this.immutable = _objectPathImmutable2.default;
@@ -5561,7 +6476,7 @@ var Api = function () {
   */
 
 
-	_createClass(Api, [{
+	(0, _createClass3.default)(Api, [{
 		key: 'getFieldValue',
 		value: function getFieldValue(fieldName) {
 			var field = (0, _selectors.getFieldByHierarchy)(this.store.getState(), fieldName);
@@ -5573,7 +6488,7 @@ var Api = function () {
 				var value = [];
 				for (var i = field.value.length - 1; i >= 0; i--) {
 					var group = field.value[i];
-					var fieldValue = _defineProperty({}, _constants.TYPE_PROPERTY, group.name);
+					var fieldValue = (0, _defineProperty3.default)({}, _constants.TYPE_PROPERTY, group.name);
 
 					for (var j = group.fields.length - 1; j >= 0; j--) {
 						var groupField = group.fields[j];
@@ -5675,11 +6590,22 @@ var Api = function () {
 			this.store.dispatch((0, _actions.removeComplexGroup)(field.id, field.value[groupIndex].id));
 		}
 	}]);
-
 	return Api;
 }();
 
+/**
+ * The internal dependencies.
+ */
+
+
 exports.default = Api;
+
+/***/ }),
+
+/***/ "QRG4":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("QRG4");
 
 /***/ }),
 
@@ -5692,6 +6618,11 @@ exports.default = Api;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.workerAddSidebar = workerAddSidebar;
 exports.default = foreman;
 
@@ -5701,9 +6632,11 @@ var _actions = __webpack_require__("d6Yu");
 
 var _helpers = __webpack_require__("OxI6");
 
-var _marked = [workerAddSidebar, foreman].map(regeneratorRuntime.mark); /**
-                                                                         * The external dependencies.
-                                                                         */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _marked = [workerAddSidebar, foreman].map(_regenerator2.default.mark); /**
+                                                                            * The external dependencies.
+                                                                            */
 
 
 /**
@@ -5722,7 +6655,7 @@ var _marked = [workerAddSidebar, foreman].map(regeneratorRuntime.mark); /**
 function workerAddSidebar(_ref) {
   var sidebarName = _ref.payload.sidebarName;
   var response;
-  return regeneratorRuntime.wrap(function workerAddSidebar$(_context) {
+  return _regenerator2.default.wrap(function workerAddSidebar$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
@@ -5762,7 +6695,7 @@ function workerAddSidebar(_ref) {
  * @return {void}
  */
 function foreman() {
-  return regeneratorRuntime.wrap(function foreman$(_context2) {
+  return _regenerator2.default.wrap(function foreman$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
@@ -5776,6 +6709,16 @@ function foreman() {
     }
   }, _marked[1], this);
 }
+
+/***/ }),
+
+/***/ "R4wc":
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.3.1 Object.assign(target, source)
+var $export = __webpack_require__("kM2E");
+
+$export($export.S + $export.F, 'Object', {assign: __webpack_require__("To3L")});
 
 /***/ }),
 
@@ -5805,10 +6748,24 @@ webpackContext.id = "R67r";
 
 /***/ }),
 
+/***/ "R9M2":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("R9M2");
+
+/***/ }),
+
 /***/ "RH2O":
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__("B3Oe"))("RH2O");
+
+/***/ }),
+
+/***/ "RPLV":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("RPLV");
 
 /***/ }),
 
@@ -5823,15 +6780,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.enhance = exports.RadioField = undefined;
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _react = __webpack_require__("U7vG");
 
@@ -5873,6 +6824,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param  {Function}      props.isChecked
  * @return {React.Element}
  */
+/**
+ * The external dependencies.
+ */
 var RadioField = exports.RadioField = function RadioField(_ref) {
 	var name = _ref.name,
 	    field = _ref.field,
@@ -5892,7 +6846,7 @@ var RadioField = exports.RadioField = function RadioField(_ref) {
 					_react2.default.createElement(
 						'label',
 						null,
-						_react2.default.createElement('input', _extends({
+						_react2.default.createElement('input', (0, _extends3.default)({
 							type: 'radio',
 							name: name,
 							value: option.value,
@@ -5912,6 +6866,11 @@ var RadioField = exports.RadioField = function RadioField(_ref) {
  * Validate the props.
  *
  * @type {Object}
+ */
+
+
+/**
+ * The internal dependencies.
  */
 RadioField.propTypes = {
 	name: _propTypes2.default.string,
@@ -5983,6 +6942,35 @@ function (_ref2) {
 (0, _recompose.renderComponent)(_noOptions2.default)));
 
 exports.default = (0, _recompose.setStatic)('type', [_constants.TYPE_RADIO])(enhance(RadioField));
+
+/***/ }),
+
+/***/ "RY/4":
+/***/ (function(module, exports, __webpack_require__) {
+
+// getting tag from 19.1.3.6 Object.prototype.toString()
+var cof = __webpack_require__("R9M2")
+  , TAG = __webpack_require__("dSzd")('toStringTag')
+  // ES3 wrong here
+  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
+
+// fallback for IE11 Script Access Denied error
+var tryGet = function(it, key){
+  try {
+    return it[key];
+  } catch(e){ /* empty */ }
+};
+
+module.exports = function(it){
+  var O, T, B;
+  return it === undefined ? 'Undefined' : it === null ? 'Null'
+    // @@toStringTag case
+    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
+    // builtinTag case
+    : ARG ? cof(O)
+    // ES3 arguments fallback
+    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+};
 
 /***/ }),
 
@@ -6083,6 +7071,13 @@ exports.default = (0, _recompose.setStatic)('type', [_constants.TYPE_SEPARATOR])
 
 /***/ }),
 
+/***/ "S82l":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("S82l");
+
+/***/ }),
+
 /***/ "SRHB":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6094,17 +7089,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.enhance = exports.DateTimeField = undefined;
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+var _slicedToArray2 = __webpack_require__("d7EF");
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
 
+var _extends2 = __webpack_require__("Dd8w");
 
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _react = __webpack_require__("U7vG");
 
@@ -6148,6 +7139,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param  {String}        props.buttonText
  * @return {React.Element}
  */
+
+
+/**
+ * The internal dependencies.
+ */
 var DateTimeField = exports.DateTimeField = function DateTimeField(_ref) {
 	var name = _ref.name,
 	    field = _ref.field,
@@ -6160,7 +7156,7 @@ var DateTimeField = exports.DateTimeField = function DateTimeField(_ref) {
 		_react2.default.createElement(
 			_reactFlatpickr2.default,
 			{ options: options, className: 'carbon-field-group-holder' },
-			_react2.default.createElement('input', _extends({
+			_react2.default.createElement('input', (0, _extends3.default)({
 				type: 'text',
 				name: name,
 				value: field.value,
@@ -6185,6 +7181,9 @@ var DateTimeField = exports.DateTimeField = function DateTimeField(_ref) {
  * Validate the props.
  *
  * @type {Object}
+ */
+/**
+ * The external dependencies.
  */
 DateTimeField.propTypes = {
 	name: _propTypes2.default.string,
@@ -6234,7 +7233,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		var field = _ref2.field,
 		    setFieldValue = _ref2.setFieldValue;
 		return function (_ref3, selectedDateStr, instance) {
-			var _ref4 = _slicedToArray(_ref3, 1),
+			var _ref4 = (0, _slicedToArray3.default)(_ref3, 1),
 			    selectedDate = _ref4[0];
 
 			field.picker = instance;
@@ -6245,7 +7244,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		var field = _ref5.field,
 		    setFieldValue = _ref5.setFieldValue;
 		return function (_ref6, selectedDateStr, instance) {
-			var _ref7 = _slicedToArray(_ref6, 1),
+			var _ref7 = (0, _slicedToArray3.default)(_ref6, 1),
 			    selectedDate = _ref7[0];
 
 			instance._selectedDateStr = selectedDateStr;
@@ -6287,7 +7286,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 
 	var buttonText = field.type === _constants.TYPE_TIME ? carbonFieldsL10n.field.selectTime : carbonFieldsL10n.field.selectDate;
 
-	var options = _extends({}, field.picker_options, {
+	var options = (0, _extends3.default)({}, field.picker_options, {
 		wrap: true,
 		onReady: handleReady,
 		onChange: handleChange,
@@ -6427,6 +7426,750 @@ exports.default = EnhancedContainerTabsNav;
 
 /***/ }),
 
+/***/ "SldL":
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {/**
+ * Copyright (c) 2014, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * https://raw.github.com/facebook/regenerator/master/LICENSE file. An
+ * additional grant of patent rights can be found in the PATENTS file in
+ * the same directory.
+ */
+
+!(function(global) {
+  "use strict";
+
+  var Op = Object.prototype;
+  var hasOwn = Op.hasOwnProperty;
+  var undefined; // More compressible than void 0.
+  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
+  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  var inModule = typeof module === "object";
+  var runtime = global.regeneratorRuntime;
+  if (runtime) {
+    if (inModule) {
+      // If regeneratorRuntime is defined globally and we're in a module,
+      // make the exports object identical to regeneratorRuntime.
+      module.exports = runtime;
+    }
+    // Don't bother evaluating the rest of this file if the runtime was
+    // already defined globally.
+    return;
+  }
+
+  // Define the runtime globally (as expected by generated code) as either
+  // module.exports (if we're in a module) or a new, empty object.
+  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
+
+  function wrap(innerFn, outerFn, self, tryLocsList) {
+    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
+    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
+    var generator = Object.create(protoGenerator.prototype);
+    var context = new Context(tryLocsList || []);
+
+    // The ._invoke method unifies the implementations of the .next,
+    // .throw, and .return methods.
+    generator._invoke = makeInvokeMethod(innerFn, self, context);
+
+    return generator;
+  }
+  runtime.wrap = wrap;
+
+  // Try/catch helper to minimize deoptimizations. Returns a completion
+  // record like context.tryEntries[i].completion. This interface could
+  // have been (and was previously) designed to take a closure to be
+  // invoked without arguments, but in all the cases we care about we
+  // already have an existing method we want to call, so there's no need
+  // to create a new function object. We can even get away with assuming
+  // the method takes exactly one argument, since that happens to be true
+  // in every case, so we don't have to touch the arguments object. The
+  // only additional allocation required is the completion record, which
+  // has a stable shape and so hopefully should be cheap to allocate.
+  function tryCatch(fn, obj, arg) {
+    try {
+      return { type: "normal", arg: fn.call(obj, arg) };
+    } catch (err) {
+      return { type: "throw", arg: err };
+    }
+  }
+
+  var GenStateSuspendedStart = "suspendedStart";
+  var GenStateSuspendedYield = "suspendedYield";
+  var GenStateExecuting = "executing";
+  var GenStateCompleted = "completed";
+
+  // Returning this object from the innerFn has the same effect as
+  // breaking out of the dispatch switch statement.
+  var ContinueSentinel = {};
+
+  // Dummy constructor functions that we use as the .constructor and
+  // .constructor.prototype properties for functions that return Generator
+  // objects. For full spec compliance, you may wish to configure your
+  // minifier not to mangle the names of these two functions.
+  function Generator() {}
+  function GeneratorFunction() {}
+  function GeneratorFunctionPrototype() {}
+
+  // This is a polyfill for %IteratorPrototype% for environments that
+  // don't natively support it.
+  var IteratorPrototype = {};
+  IteratorPrototype[iteratorSymbol] = function () {
+    return this;
+  };
+
+  var getProto = Object.getPrototypeOf;
+  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+  if (NativeIteratorPrototype &&
+      NativeIteratorPrototype !== Op &&
+      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
+    // This environment has a native %IteratorPrototype%; use it instead
+    // of the polyfill.
+    IteratorPrototype = NativeIteratorPrototype;
+  }
+
+  var Gp = GeneratorFunctionPrototype.prototype =
+    Generator.prototype = Object.create(IteratorPrototype);
+  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+  GeneratorFunctionPrototype[toStringTagSymbol] =
+    GeneratorFunction.displayName = "GeneratorFunction";
+
+  // Helper for defining the .next, .throw, and .return methods of the
+  // Iterator interface in terms of a single ._invoke method.
+  function defineIteratorMethods(prototype) {
+    ["next", "throw", "return"].forEach(function(method) {
+      prototype[method] = function(arg) {
+        return this._invoke(method, arg);
+      };
+    });
+  }
+
+  runtime.isGeneratorFunction = function(genFun) {
+    var ctor = typeof genFun === "function" && genFun.constructor;
+    return ctor
+      ? ctor === GeneratorFunction ||
+        // For the native GeneratorFunction constructor, the best we can
+        // do is to check its .name property.
+        (ctor.displayName || ctor.name) === "GeneratorFunction"
+      : false;
+  };
+
+  runtime.mark = function(genFun) {
+    if (Object.setPrototypeOf) {
+      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+    } else {
+      genFun.__proto__ = GeneratorFunctionPrototype;
+      if (!(toStringTagSymbol in genFun)) {
+        genFun[toStringTagSymbol] = "GeneratorFunction";
+      }
+    }
+    genFun.prototype = Object.create(Gp);
+    return genFun;
+  };
+
+  // Within the body of any async function, `await x` is transformed to
+  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+  // `hasOwn.call(value, "__await")` to determine if the yielded value is
+  // meant to be awaited.
+  runtime.awrap = function(arg) {
+    return { __await: arg };
+  };
+
+  function AsyncIterator(generator) {
+    function invoke(method, arg, resolve, reject) {
+      var record = tryCatch(generator[method], generator, arg);
+      if (record.type === "throw") {
+        reject(record.arg);
+      } else {
+        var result = record.arg;
+        var value = result.value;
+        if (value &&
+            typeof value === "object" &&
+            hasOwn.call(value, "__await")) {
+          return Promise.resolve(value.__await).then(function(value) {
+            invoke("next", value, resolve, reject);
+          }, function(err) {
+            invoke("throw", err, resolve, reject);
+          });
+        }
+
+        return Promise.resolve(value).then(function(unwrapped) {
+          // When a yielded Promise is resolved, its final value becomes
+          // the .value of the Promise<{value,done}> result for the
+          // current iteration. If the Promise is rejected, however, the
+          // result for this iteration will be rejected with the same
+          // reason. Note that rejections of yielded Promises are not
+          // thrown back into the generator function, as is the case
+          // when an awaited Promise is rejected. This difference in
+          // behavior between yield and await is important, because it
+          // allows the consumer to decide what to do with the yielded
+          // rejection (swallow it and continue, manually .throw it back
+          // into the generator, abandon iteration, whatever). With
+          // await, by contrast, there is no opportunity to examine the
+          // rejection reason outside the generator function, so the
+          // only option is to throw it from the await expression, and
+          // let the generator function handle the exception.
+          result.value = unwrapped;
+          resolve(result);
+        }, reject);
+      }
+    }
+
+    if (typeof global.process === "object" && global.process.domain) {
+      invoke = global.process.domain.bind(invoke);
+    }
+
+    var previousPromise;
+
+    function enqueue(method, arg) {
+      function callInvokeWithMethodAndArg() {
+        return new Promise(function(resolve, reject) {
+          invoke(method, arg, resolve, reject);
+        });
+      }
+
+      return previousPromise =
+        // If enqueue has been called before, then we want to wait until
+        // all previous Promises have been resolved before calling invoke,
+        // so that results are always delivered in the correct order. If
+        // enqueue has not been called before, then it is important to
+        // call invoke immediately, without waiting on a callback to fire,
+        // so that the async generator function has the opportunity to do
+        // any necessary setup in a predictable way. This predictability
+        // is why the Promise constructor synchronously invokes its
+        // executor callback, and why async functions synchronously
+        // execute code before the first await. Since we implement simple
+        // async functions in terms of async generators, it is especially
+        // important to get this right, even though it requires care.
+        previousPromise ? previousPromise.then(
+          callInvokeWithMethodAndArg,
+          // Avoid propagating failures to Promises returned by later
+          // invocations of the iterator.
+          callInvokeWithMethodAndArg
+        ) : callInvokeWithMethodAndArg();
+    }
+
+    // Define the unified helper method that is used to implement .next,
+    // .throw, and .return (see defineIteratorMethods).
+    this._invoke = enqueue;
+  }
+
+  defineIteratorMethods(AsyncIterator.prototype);
+  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
+    return this;
+  };
+  runtime.AsyncIterator = AsyncIterator;
+
+  // Note that simple async functions are implemented on top of
+  // AsyncIterator objects; they just return a Promise for the value of
+  // the final result produced by the iterator.
+  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
+    var iter = new AsyncIterator(
+      wrap(innerFn, outerFn, self, tryLocsList)
+    );
+
+    return runtime.isGeneratorFunction(outerFn)
+      ? iter // If outerFn is a generator, return the full iterator.
+      : iter.next().then(function(result) {
+          return result.done ? result.value : iter.next();
+        });
+  };
+
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = GenStateSuspendedStart;
+
+    return function invoke(method, arg) {
+      if (state === GenStateExecuting) {
+        throw new Error("Generator is already running");
+      }
+
+      if (state === GenStateCompleted) {
+        if (method === "throw") {
+          throw arg;
+        }
+
+        // Be forgiving, per 25.3.3.3.3 of the spec:
+        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+        return doneResult();
+      }
+
+      context.method = method;
+      context.arg = arg;
+
+      while (true) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+
+        if (context.method === "next") {
+          // Setting context._sent for legacy support of Babel's
+          // function.sent implementation.
+          context.sent = context._sent = context.arg;
+
+        } else if (context.method === "throw") {
+          if (state === GenStateSuspendedStart) {
+            state = GenStateCompleted;
+            throw context.arg;
+          }
+
+          context.dispatchException(context.arg);
+
+        } else if (context.method === "return") {
+          context.abrupt("return", context.arg);
+        }
+
+        state = GenStateExecuting;
+
+        var record = tryCatch(innerFn, self, context);
+        if (record.type === "normal") {
+          // If an exception is thrown from innerFn, we leave state ===
+          // GenStateExecuting and loop back for another invocation.
+          state = context.done
+            ? GenStateCompleted
+            : GenStateSuspendedYield;
+
+          if (record.arg === ContinueSentinel) {
+            continue;
+          }
+
+          return {
+            value: record.arg,
+            done: context.done
+          };
+
+        } else if (record.type === "throw") {
+          state = GenStateCompleted;
+          // Dispatch the exception by looping back around to the
+          // context.dispatchException(context.arg) call above.
+          context.method = "throw";
+          context.arg = record.arg;
+        }
+      }
+    };
+  }
+
+  // Call delegate.iterator[context.method](context.arg) and handle the
+  // result, either by returning a { value, done } result from the
+  // delegate iterator, or by modifying context.method and context.arg,
+  // setting context.delegate to null, and returning the ContinueSentinel.
+  function maybeInvokeDelegate(delegate, context) {
+    var method = delegate.iterator[context.method];
+    if (method === undefined) {
+      // A .throw or .return when the delegate iterator has no .throw
+      // method always terminates the yield* loop.
+      context.delegate = null;
+
+      if (context.method === "throw") {
+        if (delegate.iterator.return) {
+          // If the delegate iterator has a return method, give it a
+          // chance to clean up.
+          context.method = "return";
+          context.arg = undefined;
+          maybeInvokeDelegate(delegate, context);
+
+          if (context.method === "throw") {
+            // If maybeInvokeDelegate(context) changed context.method from
+            // "return" to "throw", let that override the TypeError below.
+            return ContinueSentinel;
+          }
+        }
+
+        context.method = "throw";
+        context.arg = new TypeError(
+          "The iterator does not provide a 'throw' method");
+      }
+
+      return ContinueSentinel;
+    }
+
+    var record = tryCatch(method, delegate.iterator, context.arg);
+
+    if (record.type === "throw") {
+      context.method = "throw";
+      context.arg = record.arg;
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    var info = record.arg;
+
+    if (! info) {
+      context.method = "throw";
+      context.arg = new TypeError("iterator result is not an object");
+      context.delegate = null;
+      return ContinueSentinel;
+    }
+
+    if (info.done) {
+      // Assign the result of the finished delegate to the temporary
+      // variable specified by delegate.resultName (see delegateYield).
+      context[delegate.resultName] = info.value;
+
+      // Resume execution at the desired location (see delegateYield).
+      context.next = delegate.nextLoc;
+
+      // If context.method was "throw" but the delegate handled the
+      // exception, let the outer generator proceed normally. If
+      // context.method was "next", forget context.arg since it has been
+      // "consumed" by the delegate iterator. If context.method was
+      // "return", allow the original .return call to continue in the
+      // outer generator.
+      if (context.method !== "return") {
+        context.method = "next";
+        context.arg = undefined;
+      }
+
+    } else {
+      // Re-yield the result returned by the delegate method.
+      return info;
+    }
+
+    // The delegate iterator is finished, so forget it and continue with
+    // the outer generator.
+    context.delegate = null;
+    return ContinueSentinel;
+  }
+
+  // Define Generator.prototype.{next,throw,return} in terms of the
+  // unified ._invoke helper method.
+  defineIteratorMethods(Gp);
+
+  Gp[toStringTagSymbol] = "Generator";
+
+  // A Generator should always return itself as the iterator object when the
+  // @@iterator function is called on it. Some browsers' implementations of the
+  // iterator prototype chain incorrectly implement this, causing the Generator
+  // object to not be returned from this call. This ensures that doesn't happen.
+  // See https://github.com/facebook/regenerator/issues/274 for more details.
+  Gp[iteratorSymbol] = function() {
+    return this;
+  };
+
+  Gp.toString = function() {
+    return "[object Generator]";
+  };
+
+  function pushTryEntry(locs) {
+    var entry = { tryLoc: locs[0] };
+
+    if (1 in locs) {
+      entry.catchLoc = locs[1];
+    }
+
+    if (2 in locs) {
+      entry.finallyLoc = locs[2];
+      entry.afterLoc = locs[3];
+    }
+
+    this.tryEntries.push(entry);
+  }
+
+  function resetTryEntry(entry) {
+    var record = entry.completion || {};
+    record.type = "normal";
+    delete record.arg;
+    entry.completion = record;
+  }
+
+  function Context(tryLocsList) {
+    // The root entry object (effectively a try statement without a catch
+    // or a finally block) gives us a place to store values thrown from
+    // locations where there is no enclosing try statement.
+    this.tryEntries = [{ tryLoc: "root" }];
+    tryLocsList.forEach(pushTryEntry, this);
+    this.reset(true);
+  }
+
+  runtime.keys = function(object) {
+    var keys = [];
+    for (var key in object) {
+      keys.push(key);
+    }
+    keys.reverse();
+
+    // Rather than returning an object with a next method, we keep
+    // things simple and return the next function itself.
+    return function next() {
+      while (keys.length) {
+        var key = keys.pop();
+        if (key in object) {
+          next.value = key;
+          next.done = false;
+          return next;
+        }
+      }
+
+      // To avoid creating an additional object, we just hang the .value
+      // and .done properties off the next function object itself. This
+      // also ensures that the minifier will not anonymize the function.
+      next.done = true;
+      return next;
+    };
+  };
+
+  function values(iterable) {
+    if (iterable) {
+      var iteratorMethod = iterable[iteratorSymbol];
+      if (iteratorMethod) {
+        return iteratorMethod.call(iterable);
+      }
+
+      if (typeof iterable.next === "function") {
+        return iterable;
+      }
+
+      if (!isNaN(iterable.length)) {
+        var i = -1, next = function next() {
+          while (++i < iterable.length) {
+            if (hasOwn.call(iterable, i)) {
+              next.value = iterable[i];
+              next.done = false;
+              return next;
+            }
+          }
+
+          next.value = undefined;
+          next.done = true;
+
+          return next;
+        };
+
+        return next.next = next;
+      }
+    }
+
+    // Return an iterator with no values.
+    return { next: doneResult };
+  }
+  runtime.values = values;
+
+  function doneResult() {
+    return { value: undefined, done: true };
+  }
+
+  Context.prototype = {
+    constructor: Context,
+
+    reset: function(skipTempReset) {
+      this.prev = 0;
+      this.next = 0;
+      // Resetting context._sent for legacy support of Babel's
+      // function.sent implementation.
+      this.sent = this._sent = undefined;
+      this.done = false;
+      this.delegate = null;
+
+      this.method = "next";
+      this.arg = undefined;
+
+      this.tryEntries.forEach(resetTryEntry);
+
+      if (!skipTempReset) {
+        for (var name in this) {
+          // Not sure about the optimal order of these conditions:
+          if (name.charAt(0) === "t" &&
+              hasOwn.call(this, name) &&
+              !isNaN(+name.slice(1))) {
+            this[name] = undefined;
+          }
+        }
+      }
+    },
+
+    stop: function() {
+      this.done = true;
+
+      var rootEntry = this.tryEntries[0];
+      var rootRecord = rootEntry.completion;
+      if (rootRecord.type === "throw") {
+        throw rootRecord.arg;
+      }
+
+      return this.rval;
+    },
+
+    dispatchException: function(exception) {
+      if (this.done) {
+        throw exception;
+      }
+
+      var context = this;
+      function handle(loc, caught) {
+        record.type = "throw";
+        record.arg = exception;
+        context.next = loc;
+
+        if (caught) {
+          // If the dispatched exception was caught by a catch block,
+          // then let that catch block handle the exception normally.
+          context.method = "next";
+          context.arg = undefined;
+        }
+
+        return !! caught;
+      }
+
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        var record = entry.completion;
+
+        if (entry.tryLoc === "root") {
+          // Exception thrown outside of any try block that could handle
+          // it, so set the completion value of the entire function to
+          // throw the exception.
+          return handle("end");
+        }
+
+        if (entry.tryLoc <= this.prev) {
+          var hasCatch = hasOwn.call(entry, "catchLoc");
+          var hasFinally = hasOwn.call(entry, "finallyLoc");
+
+          if (hasCatch && hasFinally) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            } else if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else if (hasCatch) {
+            if (this.prev < entry.catchLoc) {
+              return handle(entry.catchLoc, true);
+            }
+
+          } else if (hasFinally) {
+            if (this.prev < entry.finallyLoc) {
+              return handle(entry.finallyLoc);
+            }
+
+          } else {
+            throw new Error("try statement without catch or finally");
+          }
+        }
+      }
+    },
+
+    abrupt: function(type, arg) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc <= this.prev &&
+            hasOwn.call(entry, "finallyLoc") &&
+            this.prev < entry.finallyLoc) {
+          var finallyEntry = entry;
+          break;
+        }
+      }
+
+      if (finallyEntry &&
+          (type === "break" ||
+           type === "continue") &&
+          finallyEntry.tryLoc <= arg &&
+          arg <= finallyEntry.finallyLoc) {
+        // Ignore the finally entry if control is not jumping to a
+        // location outside the try/catch block.
+        finallyEntry = null;
+      }
+
+      var record = finallyEntry ? finallyEntry.completion : {};
+      record.type = type;
+      record.arg = arg;
+
+      if (finallyEntry) {
+        this.method = "next";
+        this.next = finallyEntry.finallyLoc;
+        return ContinueSentinel;
+      }
+
+      return this.complete(record);
+    },
+
+    complete: function(record, afterLoc) {
+      if (record.type === "throw") {
+        throw record.arg;
+      }
+
+      if (record.type === "break" ||
+          record.type === "continue") {
+        this.next = record.arg;
+      } else if (record.type === "return") {
+        this.rval = this.arg = record.arg;
+        this.method = "return";
+        this.next = "end";
+      } else if (record.type === "normal" && afterLoc) {
+        this.next = afterLoc;
+      }
+
+      return ContinueSentinel;
+    },
+
+    finish: function(finallyLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.finallyLoc === finallyLoc) {
+          this.complete(entry.completion, entry.afterLoc);
+          resetTryEntry(entry);
+          return ContinueSentinel;
+        }
+      }
+    },
+
+    "catch": function(tryLoc) {
+      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+        var entry = this.tryEntries[i];
+        if (entry.tryLoc === tryLoc) {
+          var record = entry.completion;
+          if (record.type === "throw") {
+            var thrown = record.arg;
+            resetTryEntry(entry);
+          }
+          return thrown;
+        }
+      }
+
+      // The context.catch method must only be called with a location
+      // argument that corresponds to a known catch block.
+      throw new Error("illegal catch attempt");
+    },
+
+    delegateYield: function(iterable, resultName, nextLoc) {
+      this.delegate = {
+        iterator: values(iterable),
+        resultName: resultName,
+        nextLoc: nextLoc
+      };
+
+      if (this.method === "next") {
+        // Deliberately forget the last sent value so that we don't
+        // accidentally pass it on to the delegate.
+        this.arg = undefined;
+      }
+
+      return ContinueSentinel;
+    }
+  };
+})(
+  // Among the various tricks for obtaining a reference to the global
+  // object, this seems to be the most reliable technique that does not
+  // use indirect eval (which violates Content Security Policy).
+  typeof global === "object" ? global :
+  typeof window === "object" ? window :
+  typeof self === "object" ? self : this
+);
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("DuR2")))
+
+/***/ }),
+
 /***/ "TNQM":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6438,15 +8181,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.enhance = exports.ComplexField = undefined;
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _react = __webpack_require__("U7vG");
 
@@ -6526,6 +8263,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param  {Function}      props.handleRemoveGroupClick
  * @param  {Function}      props.handleSort
  * @return {React.Element}
+ */
+
+
+/**
+ * The internal dependencies.
  */
 var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 	var name = _ref.name,
@@ -6637,6 +8379,9 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
  *
  * @type {Object}
  */
+/**
+ * The external dependencies.
+ */
 ComplexField.propTypes = {
 	name: _propTypes2.default.string,
 	field: _propTypes2.default.shape({
@@ -6717,7 +8462,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		// Show the first tab of the complex.
 
 		if (tabbed && field.value.length) {
-			ui = _extends({}, ui, {
+			ui = (0, _extends3.default)({}, ui, {
 				current_tab: field.value[0].id
 			});
 		}
@@ -6879,15 +8624,9 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependecies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _lodash = __webpack_require__("M4fF");
 
@@ -6909,7 +8648,10 @@ var _base2 = _interopRequireDefault(_base);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _extends({}, _base2.default, {
+/**
+ * The internal dependencies.
+ */
+exports.default = (0, _extends3.default)({}, _base2.default, {
 
 	/**
   * The supported comparers.
@@ -6932,7 +8674,60 @@ exports.default = _extends({}, _base2.default, {
 
 		return this.firstSupportedComparerIsCorrect(env.post_level, compare, value);
 	}
-});
+}); /**
+     * The external dependecies.
+     */
+
+/***/ }),
+
+/***/ "To3L":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+// 19.1.2.1 Object.assign(target, source, ...)
+var getKeys  = __webpack_require__("lktj")
+  , gOPS     = __webpack_require__("1kS7")
+  , pIE      = __webpack_require__("NpIQ")
+  , toObject = __webpack_require__("sB3e")
+  , IObject  = __webpack_require__("MU5D")
+  , $assign  = Object.assign;
+
+// should work with symbols and should have deterministic property order (V8 bug)
+module.exports = !$assign || __webpack_require__("S82l")(function(){
+  var A = {}
+    , B = {}
+    , S = Symbol()
+    , K = 'abcdefghijklmnopqrst';
+  A[S] = 7;
+  K.split('').forEach(function(k){ B[k] = k; });
+  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+}) ? function assign(target, source){ // eslint-disable-line no-unused-vars
+  var T     = toObject(target)
+    , aLen  = arguments.length
+    , index = 1
+    , getSymbols = gOPS.f
+    , isEnum     = pIE.f;
+  while(aLen > index){
+    var S      = IObject(arguments[index++])
+      , keys   = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S)
+      , length = keys.length
+      , j      = 0
+      , key;
+    while(length > j)if(isEnum.call(S, key = keys[j++]))T[key] = S[key];
+  } return T;
+} : $assign;
+
+/***/ }),
+
+/***/ "U5ju":
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__("M6a0");
+__webpack_require__("zQR9");
+__webpack_require__("+tPU");
+__webpack_require__("CXw9");
+module.exports = __webpack_require__("FeBl").Promise;
 
 /***/ }),
 
@@ -6953,15 +8748,9 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependecies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _lodash = __webpack_require__("M4fF");
 
@@ -6983,7 +8772,10 @@ var _base2 = _interopRequireDefault(_base);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _extends({}, _base2.default, {
+/**
+ * The internal dependencies.
+ */
+exports.default = (0, _extends3.default)({}, _base2.default, {
 
 	/**
   * The supported comparers.
@@ -7006,7 +8798,9 @@ exports.default = _extends({}, _base2.default, {
 
 		return this.firstSupportedComparerIsCorrect(env.post_parent_id, compare, value);
 	}
-});
+}); /**
+     * The external dependecies.
+     */
 
 /***/ }),
 
@@ -7019,6 +8813,11 @@ exports.default = _extends({}, _base2.default, {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.default = foreman;
 
 var _effects = __webpack_require__("egdi");
@@ -7027,9 +8826,11 @@ var _events = __webpack_require__("x1uS");
 
 var _actions = __webpack_require__("vVye");
 
-var _marked = [foreman].map(regeneratorRuntime.mark); /**
-                                                       * The external dependencies.
-                                                       */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _marked = [foreman].map(_regenerator2.default.mark); /**
+                                                          * The external dependencies.
+                                                          */
 
 
 /**
@@ -7045,7 +8846,7 @@ var _marked = [foreman].map(regeneratorRuntime.mark); /**
 function foreman() {
   var channel, _ref, event;
 
-  return regeneratorRuntime.wrap(function foreman$(_context) {
+  return _regenerator2.default.wrap(function foreman$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
@@ -7104,6 +8905,14 @@ var _helpers = __webpack_require__("hKI6");
 (0, _helpers.autoload)(__webpack_require__("jcf5"));
 (0, _helpers.autoload)(__webpack_require__("g1oQ"));
 (0, _helpers.autoload)(__webpack_require__("R67r"));
+
+/***/ }),
+
+/***/ "V3tA":
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__("R4wc");
+module.exports = __webpack_require__("FeBl").Object.assign;
 
 /***/ }),
 
@@ -7327,6 +9136,13 @@ var ready = exports.ready = (0, _reduxActions.createAction)('lib/READY'); /**
 
 /***/ }),
 
+/***/ "X8DO":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("X8DO");
+
+/***/ }),
+
 /***/ "XXDi":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7336,6 +9152,11 @@ var ready = exports.ready = (0, _reduxActions.createAction)('lib/READY'); /**
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.shouldValidate = shouldValidate;
 exports.workerValidate = workerValidate;
 exports.workerSetup = workerSetup;
@@ -7355,9 +9176,11 @@ var _selectors = __webpack_require__("ZMHW");
 
 var _helpers = __webpack_require__("pP85");
 
-var _marked = [workerValidate, workerSetup, foreman].map(regeneratorRuntime.mark); /**
-                                                                                    * The external dependencies.
-                                                                                    */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _marked = [workerValidate, workerSetup, foreman].map(_regenerator2.default.mark); /**
+                                                                                       * The external dependencies.
+                                                                                       */
 
 
 /**
@@ -7395,7 +9218,7 @@ function shouldValidate(action, fieldId) {
 function workerValidate(validator, fieldId, debounce, action) {
 	var field, _field$ui, is_visible, valid, error;
 
-	return regeneratorRuntime.wrap(function workerValidate$(_context) {
+	return _regenerator2.default.wrap(function workerValidate$(_context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
@@ -7486,7 +9309,7 @@ function workerSetup(_ref) {
 	    fieldId = _ref$payload.fieldId,
 	    validationType = _ref$payload.validationType;
 	var validators, validator;
-	return regeneratorRuntime.wrap(function workerSetup$(_context2) {
+	return _regenerator2.default.wrap(function workerSetup$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
@@ -7530,7 +9353,7 @@ function workerSetup(_ref) {
  * @return {void}
  */
 function foreman() {
-	return regeneratorRuntime.wrap(function foreman$(_context3) {
+	return _regenerator2.default.wrap(function foreman$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
@@ -7544,6 +9367,23 @@ function foreman() {
 		}
 	}, _marked[2], this);
 }
+
+/***/ }),
+
+/***/ "Xd32":
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__("+tPU");
+__webpack_require__("zQR9");
+module.exports = __webpack_require__("5PlU");
+
+/***/ }),
+
+/***/ "Xxa5":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__("jyFz");
+
 
 /***/ }),
 
@@ -7593,6 +9433,11 @@ exports.default = (0, _recompose.compose)((0, _recompose.setStatic)('type', _con
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.default = foreman;
 
 var _reduxSaga = __webpack_require__("igqX");
@@ -7603,9 +9448,11 @@ var _actions = __webpack_require__("HRbf");
 
 var _actions2 = __webpack_require__("vVye");
 
-var _marked = [foreman].map(regeneratorRuntime.mark); /**
-                                                       * The external dependencies.
-                                                       */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _marked = [foreman].map(_regenerator2.default.mark); /**
+                                                          * The external dependencies.
+                                                          */
 
 
 /**
@@ -7664,7 +9511,7 @@ function detachWarning() {
  */
 function foreman() {
 	var updateChannel, isAttached, action;
-	return regeneratorRuntime.wrap(function foreman$(_context) {
+	return _regenerator2.default.wrap(function foreman$(_context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
@@ -7730,6 +9577,13 @@ function foreman() {
 		}
 	}, _marked[0], this);
 }
+
+/***/ }),
+
+/***/ "Yobk":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("Yobk");
 
 /***/ }),
 
@@ -7924,7 +9778,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getFieldsWithinVisibleContainer = exports.getComplexGroupLabel = exports.hasInvalidFields = exports.makeGetSidebarFieldOptions = exports.getFieldsByRoots = exports.isFieldTabbed = exports.getFieldsByParent = exports.makeGetFieldsByParent = exports.getFieldHierarchyById = exports.getFieldByHierarchy = exports.getFieldPatternRegex = exports.getComplexGroupById = exports.getFieldParentById = exports.getFieldById = exports.getFields = undefined;
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends2 = __webpack_require__("Dd8w");
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _toConsumableArray2 = __webpack_require__("Gu7T");
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
 var _reselect = __webpack_require__("bndy");
 
@@ -7936,15 +9796,7 @@ var _selectors2 = __webpack_require__("pL4W");
 
 var _constants = __webpack_require__("8Hlw");
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } /**
-                                                                                                                                                                                                     * The external dependencies.
-                                                                                                                                                                                                     */
-
-
-/**
- * The internal dependencies.
- */
-
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Return the object that contains all fields.
@@ -7962,6 +9814,14 @@ var getFields = exports.getFields = function getFields(state) {
  * @param  {Object} state
  * @param  {String} id
  * @return {Object}
+ */
+
+
+/**
+ * The internal dependencies.
+ */
+/**
+ * The external dependencies.
  */
 var getFieldById = exports.getFieldById = function getFieldById(state, id) {
 	return state.fields[id];
@@ -8195,7 +10055,7 @@ var makeGetSidebarFieldOptions = exports.makeGetSidebarFieldOptions = function m
 			return { name: name, value: id };
 		});
 
-		return [].concat(_toConsumableArray(sidebars), _toConsumableArray(field.options));
+		return [].concat((0, _toConsumableArray3.default)(sidebars), (0, _toConsumableArray3.default)(field.options));
 	});
 };
 
@@ -8227,7 +10087,7 @@ var getComplexGroupLabel = exports.getComplexGroupLabel = function getComplexGro
 	}), 'value');
 
 	try {
-		return (0, _lodash.template)(group.label_template)(_extends({
+		return (0, _lodash.template)(group.label_template)((0, _extends3.default)({
 			fields: fields
 		}, fieldValues));
 	} catch (e) {
@@ -8249,6 +10109,37 @@ var getFieldsWithinVisibleContainer = exports.getFieldsWithinVisibleContainer = 
 
 /***/ }),
 
+/***/ "ZaQb":
+/***/ (function(module, exports, __webpack_require__) {
+
+// Works with __proto__ only. Old v8 can't work with null proto objects.
+/* eslint-disable no-proto */
+var isObject = __webpack_require__("EqjI")
+  , anObject = __webpack_require__("77Pl");
+var check = function(O, proto){
+  anObject(O);
+  if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
+};
+module.exports = {
+  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
+    function(test, buggy, set){
+      try {
+        set = __webpack_require__("+ZMJ")(Function.call, __webpack_require__("LKZe").f(Object.prototype, '__proto__').set, 2);
+        set(test, []);
+        buggy = !(test instanceof Array);
+      } catch(e){ buggy = true; }
+      return function setPrototypeOf(O, proto){
+        check(O, proto);
+        if(buggy)O.__proto__ = proto;
+        else set(O, proto);
+        return O;
+      };
+    }({}, false) : undefined),
+  check: check
+};
+
+/***/ }),
+
 /***/ "Zn/G":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8259,23 +10150,24 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
+var _extends3 = _interopRequireDefault(_extends2);
 
 exports.default = function () {
 	var meta = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 	var ui = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-	meta = _extends({}, defaultMeta, meta);
+	meta = (0, _extends3.default)({}, defaultMeta, meta);
 
-	ui = _extends({}, defaultUI, ui);
+	ui = (0, _extends3.default)({}, defaultUI, ui);
 
 	return (0, _recompose.compose)((0, _recompose.withProps)({ meta: meta, ui: ui }), (0, _recompose.lifecycle)(hooks));
 };
 
 var _recompose = __webpack_require__("zpMW");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * The default lifecycle hooks that will be attached to each container.
@@ -8308,6 +10200,9 @@ var hooks = {
  *
  * @type {Object}
  */
+/**
+ * The external dependencies.
+ */
 var defaultMeta = {};
 
 /**
@@ -8328,6 +10223,29 @@ var defaultUI = {
  * @param  {Object}   [ui]
  * @return {Function}
  */
+
+/***/ }),
+
+/***/ "Zrlr":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+exports.default = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
+
+/***/ }),
+
+/***/ "Zx67":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__("fS6E"), __esModule: true };
 
 /***/ }),
 
@@ -8484,25 +10402,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
-
-/**
- * Render a new container.
- *
- * @param  {Object} store
- * @param  {String} type
- * @param  {Object} props
- * @return {void}
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 exports.default = function (store, type) {
   var props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
@@ -8515,7 +10417,7 @@ exports.default = function (store, type) {
     _reactDom2.default.render(_react2.default.createElement(
       _reactRedux.Provider,
       { store: store },
-      _react2.default.createElement(Component, _extends({ key: id, type: type }, props))
+      _react2.default.createElement(Component, (0, _extends3.default)({ key: id, type: type }, props))
     ), node);
   }
 };
@@ -8674,7 +10576,19 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _handleActions;
+var _defineProperty2 = __webpack_require__("bOdI");
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _handleActions; /**
+                     * The external dependencies.
+                     */
+
+
+/**
+ * The internal dependencies.
+ */
+
 
 var _objectPathImmutable = __webpack_require__("VXi7");
 
@@ -8691,16 +10605,6 @@ var _actions = __webpack_require__("rmae");
 var _actions2 = __webpack_require__("vVye");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; } /**
-                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                   */
-
-
-/**
- * The internal dependencies.
- */
-
 
 /**
  * Update the state for `meta` or `ui` keys.
@@ -8732,29 +10636,29 @@ function setMetaOrUI(state, _ref, key) {
 /**
  * The reducer that handles the `containers` branch.
  */
-exports.default = (0, _registry.decorateContainerReducer)((0, _reduxActions.handleActions)((_handleActions = {}, _defineProperty(_handleActions, _actions2.setupContainer, function (state, _ref2) {
+exports.default = (0, _registry.decorateContainerReducer)((0, _reduxActions.handleActions)((_handleActions = {}, (0, _defineProperty3.default)(_handleActions, _actions2.setupContainer, function (state, _ref2) {
 	var _ref2$payload = _ref2.payload,
 	    containerId = _ref2$payload.containerId,
 	    meta = _ref2$payload.meta,
 	    ui = _ref2$payload.ui;
 
 	return (0, _objectPathImmutable2.default)(state).set(containerId + '.meta', meta).set(containerId + '.ui', ui).value();
-}), _defineProperty(_handleActions, _actions2.addContainer, function (state, _ref3) {
+}), (0, _defineProperty3.default)(_handleActions, _actions2.addContainer, function (state, _ref3) {
 	var payload = _ref3.payload;
 	return _objectPathImmutable2.default.set(state, payload.id, payload);
-}), _defineProperty(_handleActions, _actions2.removeContainer, function (state, _ref4) {
+}), (0, _defineProperty3.default)(_handleActions, _actions2.removeContainer, function (state, _ref4) {
 	var payload = _ref4.payload;
 	return _objectPathImmutable2.default.del(state, payload);
-}), _defineProperty(_handleActions, _actions2.setContainerUI, function (state, action) {
+}), (0, _defineProperty3.default)(_handleActions, _actions2.setContainerUI, function (state, action) {
 	return setMetaOrUI(state, action, 'ui');
-}), _defineProperty(_handleActions, _actions2.setContainerMeta, function (state, action) {
+}), (0, _defineProperty3.default)(_handleActions, _actions2.setContainerMeta, function (state, action) {
 	return setMetaOrUI(state, action, 'meta');
-}), _defineProperty(_handleActions, _actions2.switchContainerTab, function (state, _ref5) {
+}), (0, _defineProperty3.default)(_handleActions, _actions2.switchContainerTab, function (state, _ref5) {
 	var _ref5$payload = _ref5.payload,
 	    containerId = _ref5$payload.containerId,
 	    tabId = _ref5$payload.tabId;
 	return _objectPathImmutable2.default.set(state, containerId + '.ui.current_tab', tabId);
-}), _defineProperty(_handleActions, _actions.resetStore, function (state, _ref6) {
+}), (0, _defineProperty3.default)(_handleActions, _actions.resetStore, function (state, _ref6) {
 	var containers = _ref6.payload.containers;
 	return containers;
 }), _handleActions), {}));
@@ -8834,6 +10738,58 @@ function handler(field) {
 
 /***/ }),
 
+/***/ "bOdI":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _defineProperty = __webpack_require__("C4MV");
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (obj, key, value) {
+  if (key in obj) {
+    (0, _defineProperty2.default)(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+};
+
+/***/ }),
+
+/***/ "bRrM":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var global      = __webpack_require__("7KvD")
+  , core        = __webpack_require__("FeBl")
+  , dP          = __webpack_require__("evD5")
+  , DESCRIPTORS = __webpack_require__("+E39")
+  , SPECIES     = __webpack_require__("dSzd")('species');
+
+module.exports = function(KEY){
+  var C = typeof core[KEY] == 'function' ? core[KEY] : global[KEY];
+  if(DESCRIPTORS && C && !C[SPECIES])dP.f(C, SPECIES, {
+    configurable: true,
+    get: function(){ return this; }
+  });
+};
+
+/***/ }),
+
 /***/ "bndy":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8851,15 +10807,9 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependecies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _lodash = __webpack_require__("M4fF");
 
@@ -8877,7 +10827,10 @@ var _base2 = _interopRequireDefault(_base);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _extends({}, _base2.default, {
+/**
+ * The external dependecies.
+ */
+exports.default = (0, _extends3.default)({}, _base2.default, {
 
 	/**
   * The supported comparers.
@@ -8901,6 +10854,17 @@ exports.default = _extends({}, _base2.default, {
 		return this.firstSupportedComparerIsCorrect(env.post_format, compare, value);
 	}
 });
+
+/**
+ * The internal dependencies.
+ */
+
+/***/ }),
+
+/***/ "c/Tr":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__("5zde"), __esModule: true };
 
 /***/ }),
 
@@ -8969,11 +10933,17 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _handleActions;
+var _defineProperty2 = __webpack_require__("bOdI");
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _extends2 = __webpack_require__("Dd8w");
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _handleActions; /**
+                     * The external dependencies.
+                     */
 
 
 /**
@@ -9001,43 +10971,41 @@ var _selectors = __webpack_require__("ZMHW");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 /**
  * The reducer that handles the `fields` branch.
  */
-exports.default = (0, _registry.decorateFieldReducer)((0, _reduxActions.handleActions)((_handleActions = {}, _defineProperty(_handleActions, (0, _reduxActions.combineActions)(_actions2.setupField, _actions2.setUI), function (state, _ref) {
+exports.default = (0, _registry.decorateFieldReducer)((0, _reduxActions.handleActions)((_handleActions = {}, (0, _defineProperty3.default)(_handleActions, (0, _reduxActions.combineActions)(_actions2.setupField, _actions2.setUI), function (state, _ref) {
 	var _ref$payload = _ref.payload,
 	    fieldId = _ref$payload.fieldId,
 	    ui = _ref$payload.ui;
 	return _objectPathImmutable2.default.assign(state, fieldId + '.ui', ui);
-}), _defineProperty(_handleActions, _actions2.addFields, function (state, _ref2) {
+}), (0, _defineProperty3.default)(_handleActions, _actions2.addFields, function (state, _ref2) {
 	var payload = _ref2.payload;
-	return _extends({}, state, payload);
-}), _defineProperty(_handleActions, _actions2.removeFields, function (state, _ref3) {
+	return (0, _extends3.default)({}, state, payload);
+}), (0, _defineProperty3.default)(_handleActions, _actions2.removeFields, function (state, _ref3) {
 	var payload = _ref3.payload;
 	return (0, _lodash.omit)(state, payload);
-}), _defineProperty(_handleActions, _actions2.updateField, function (state, _ref4) {
+}), (0, _defineProperty3.default)(_handleActions, _actions2.updateField, function (state, _ref4) {
 	var _ref4$payload = _ref4.payload,
 	    fieldId = _ref4$payload.fieldId,
 	    data = _ref4$payload.data;
 	return _objectPathImmutable2.default.assign(state, fieldId, data);
-}), _defineProperty(_handleActions, _actions2.setFieldValue, function (state, _ref5) {
+}), (0, _defineProperty3.default)(_handleActions, _actions2.setFieldValue, function (state, _ref5) {
 	var _ref5$payload = _ref5.payload,
 	    fieldId = _ref5$payload.fieldId,
 	    value = _ref5$payload.value,
 	    method = _ref5$payload.method;
 	return _objectPathImmutable2.default[method](state, fieldId + '.value', value);
-}), _defineProperty(_handleActions, _actions.resetStore, function (state, _ref6) {
+}), (0, _defineProperty3.default)(_handleActions, _actions.resetStore, function (state, _ref6) {
 	var fields = _ref6.payload.fields;
 	return fields;
-}), _defineProperty(_handleActions, _actions2.markFieldAsValid, function (state, _ref7) {
+}), (0, _defineProperty3.default)(_handleActions, _actions2.markFieldAsValid, function (state, _ref7) {
 	var fieldId = _ref7.payload.fieldId;
 	return _objectPathImmutable2.default.assign(state, fieldId + '.ui', {
 		valid: true,
 		error: null
 	});
-}), _defineProperty(_handleActions, _actions2.markFieldAsInvalid, function (state, _ref8) {
+}), (0, _defineProperty3.default)(_handleActions, _actions2.markFieldAsInvalid, function (state, _ref8) {
 	var _ref8$payload = _ref8.payload,
 	    fieldId = _ref8$payload.fieldId,
 	    error = _ref8$payload.error;
@@ -9045,7 +11013,7 @@ exports.default = (0, _registry.decorateFieldReducer)((0, _reduxActions.handleAc
 		valid: false,
 		error: error
 	});
-}), _defineProperty(_handleActions, _actions2.enableComplexGroupType, function (state, _ref9) {
+}), (0, _defineProperty3.default)(_handleActions, _actions2.enableComplexGroupType, function (state, _ref9) {
 	var _ref9$payload = _ref9.payload,
 	    fieldId = _ref9$payload.fieldId,
 	    groupName = _ref9$payload.groupName;
@@ -9053,7 +11021,7 @@ exports.default = (0, _registry.decorateFieldReducer)((0, _reduxActions.handleAc
 	var index = (0, _lodash.findIndex)(state[fieldId].enabledGroupTypes, groupName);
 
 	return _objectPathImmutable2.default.push(state, fieldId + '.enabledGroupTypes', groupName);
-}), _defineProperty(_handleActions, _actions2.disableComplexGroupType, function (state, _ref10) {
+}), (0, _defineProperty3.default)(_handleActions, _actions2.disableComplexGroupType, function (state, _ref10) {
 	var _ref10$payload = _ref10.payload,
 	    fieldId = _ref10$payload.fieldId,
 	    groupName = _ref10$payload.groupName;
@@ -9063,7 +11031,7 @@ exports.default = (0, _registry.decorateFieldReducer)((0, _reduxActions.handleAc
 	});
 
 	return _objectPathImmutable2.default.del(state, fieldId + '.enabledGroupTypes.' + index);
-}), _defineProperty(_handleActions, (0, _reduxActions.combineActions)(_actions2.expandComplexGroup, _actions2.collapseComplexGroup), function (state, _ref11) {
+}), (0, _defineProperty3.default)(_handleActions, (0, _reduxActions.combineActions)(_actions2.expandComplexGroup, _actions2.collapseComplexGroup), function (state, _ref11) {
 	var _ref11$payload = _ref11.payload,
 	    fieldId = _ref11$payload.fieldId,
 	    groupId = _ref11$payload.groupId,
@@ -9072,7 +11040,7 @@ exports.default = (0, _registry.decorateFieldReducer)((0, _reduxActions.handleAc
 	var index = (0, _lodash.findIndex)(state[fieldId].value, { id: groupId });
 
 	return _objectPathImmutable2.default.set(state, fieldId + '.value.' + index + '.collapsed', collapsed);
-}), _defineProperty(_handleActions, _actions2.switchComplexTab, function (state, _ref12) {
+}), (0, _defineProperty3.default)(_handleActions, _actions2.switchComplexTab, function (state, _ref12) {
 	var _ref12$payload = _ref12.payload,
 	    fieldId = _ref12$payload.fieldId,
 	    groupId = _ref12$payload.groupId;
@@ -9119,6 +11087,64 @@ var receiveSidebar = exports.receiveSidebar = (0, _reduxActions.createAction)('s
 
 /***/ }),
 
+/***/ "d7EF":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _isIterable2 = __webpack_require__("us/S");
+
+var _isIterable3 = _interopRequireDefault(_isIterable2);
+
+var _getIterator2 = __webpack_require__("BO1k");
+
+var _getIterator3 = _interopRequireDefault(_getIterator2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  function sliceIterator(arr, i) {
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+
+    try {
+      for (var _i = (0, _getIterator3.default)(arr), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"]) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+
+    return _arr;
+  }
+
+  return function (arr, i) {
+    if (Array.isArray(arr)) {
+      return arr;
+    } else if ((0, _isIterable3.default)(Object(arr))) {
+      return sliceIterator(arr, i);
+    } else {
+      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+    }
+  };
+}();
+
+/***/ }),
+
 /***/ "d7ja":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9129,6 +11155,10 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 exports.enhance = exports.SetField = undefined;
+
+var _toConsumableArray2 = __webpack_require__("Gu7T");
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
 var _react = __webpack_require__("U7vG");
 
@@ -9164,16 +11194,6 @@ var _constants = __webpack_require__("8Hlw");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } /**
-                                                                                                                                                                                                     * The external dependencies.
-                                                                                                                                                                                                     */
-
-
-/**
- * The internal dependencies.
- */
-
-
 /**
  * Render a collection of checkbox inputs.
  *
@@ -9186,6 +11206,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
  * @param  {Function}      props.handleChange
  * @param  {Function}      props.showAllOptions
  * @return {React.Element}
+ */
+
+
+/**
+ * The internal dependencies.
+ */
+/**
+ * The external dependencies.
  */
 var SetField = exports.SetField = function SetField(_ref) {
 	var name = _ref.name,
@@ -9302,7 +11330,7 @@ function (_ref2) {
 		    setFieldValue = _ref3.setFieldValue;
 		return function (_ref4) {
 			var target = _ref4.target;
-			return setFieldValue(field.id, target.checked ? [].concat(_toConsumableArray(field.value), [target.value]) : (0, _lodash.without)(field.value, target.value));
+			return setFieldValue(field.id, target.checked ? [].concat((0, _toConsumableArray3.default)(field.value), [target.value]) : (0, _lodash.without)(field.value, target.value));
 		};
 	},
 
@@ -9358,6 +11386,11 @@ exports.default = (0, _recompose.setStatic)('type', [_constants.TYPE_SET])(enhan
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.workerSyncTermLevel = workerSyncTermLevel;
 exports.workerReset = workerReset;
 exports.workerFormSubmit = workerFormSubmit;
@@ -9391,9 +11424,9 @@ var _constants = __webpack_require__("5B/B");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [workerSyncTermLevel, workerReset, workerFormSubmit, foreman].map(regeneratorRuntime.mark); /**
-                                                                                                           * The external dependencies.
-                                                                                                           */
+var _marked = [workerSyncTermLevel, workerReset, workerFormSubmit, foreman].map(_regenerator2.default.mark); /**
+                                                                                                              * The external dependencies.
+                                                                                                              */
 
 
 /**
@@ -9412,7 +11445,7 @@ function workerSyncTermLevel(containers) {
 
 	var channel, _loop;
 
-	return regeneratorRuntime.wrap(function workerSyncTermLevel$(_context2) {
+	return _regenerator2.default.wrap(function workerSyncTermLevel$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
@@ -9421,10 +11454,10 @@ function workerSyncTermLevel(containers) {
 
 				case 2:
 					channel = _context2.sent;
-					_loop = regeneratorRuntime.mark(function _loop() {
+					_loop = _regenerator2.default.mark(function _loop() {
 						var _ref, option, level, matches, payload;
 
-						return regeneratorRuntime.wrap(function _loop$(_context) {
+						return _regenerator2.default.wrap(function _loop$(_context) {
 							while (1) {
 								switch (_context.prev = _context.next) {
 									case 0:
@@ -9488,7 +11521,7 @@ function workerSyncTermLevel(containers) {
 function workerReset(store) {
 	var channel, _ref2, settings, data, id, state, containers, _id;
 
-	return regeneratorRuntime.wrap(function workerReset$(_context3) {
+	return _regenerator2.default.wrap(function workerReset$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
@@ -9524,7 +11557,7 @@ function workerReset(store) {
 					return (0, _effects.select)(_selectors.getContainers);
 
 				case 13:
-					_context3.t0 = regeneratorRuntime.keys(_context3.sent);
+					_context3.t0 = _regenerator2.default.keys(_context3.sent);
 
 				case 14:
 					if ((_context3.t1 = _context3.t0()).done) {
@@ -9563,7 +11596,7 @@ function workerReset(store) {
 
 				case 30:
 					containers = _context3.sent;
-					_context3.t5 = regeneratorRuntime.keys(containers);
+					_context3.t5 = _regenerator2.default.keys(containers);
 
 				case 32:
 					if ((_context3.t6 = _context3.t5()).done) {
@@ -9599,7 +11632,7 @@ function workerReset(store) {
 function workerFormSubmit(channelCreator, selector) {
 	var channel, _ref3, event;
 
-	return regeneratorRuntime.wrap(function workerFormSubmit$(_context4) {
+	return _regenerator2.default.wrap(function workerFormSubmit$(_context4) {
 		while (1) {
 			switch (_context4.prev = _context4.next) {
 				case 0:
@@ -9648,7 +11681,7 @@ function workerFormSubmit(channelCreator, selector) {
  */
 function foreman(store) {
 	var containers;
-	return regeneratorRuntime.wrap(function foreman$(_context5) {
+	return _regenerator2.default.wrap(function foreman$(_context5) {
 		while (1) {
 			switch (_context5.prev = _context5.next) {
 				case 0:
@@ -9695,6 +11728,40 @@ function foreman(store) {
 
 /***/ }),
 
+/***/ "dSzd":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("dSzd");
+
+/***/ }),
+
+/***/ "dY0y":
+/***/ (function(module, exports, __webpack_require__) {
+
+var ITERATOR     = __webpack_require__("dSzd")('iterator')
+  , SAFE_CLOSING = false;
+
+try {
+  var riter = [7][ITERATOR]();
+  riter['return'] = function(){ SAFE_CLOSING = true; };
+  Array.from(riter, function(){ throw 2; });
+} catch(e){ /* empty */ }
+
+module.exports = function(exec, skipClosing){
+  if(!skipClosing && !SAFE_CLOSING)return false;
+  var safe = false;
+  try {
+    var arr  = [7]
+      , iter = arr[ITERATOR]();
+    iter.next = function(){ return {done: safe = true}; };
+    arr[ITERATOR] = function(){ return iter; };
+    exec(arr);
+  } catch(e){ /* empty */ }
+  return safe;
+};
+
+/***/ }),
+
 /***/ "e/TA":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9705,15 +11772,9 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependecies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _lodash = __webpack_require__("M4fF");
 
@@ -9727,7 +11788,10 @@ var _base2 = _interopRequireDefault(_base);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _extends({}, _base2.default, {
+/**
+ * The internal dependencies.
+ */
+exports.default = (0, _extends3.default)({}, _base2.default, {
 
 	/**
   * The supported comparers.
@@ -9764,7 +11828,7 @@ exports.default = _extends({}, _base2.default, {
 			}
 
 			var results = value.map(function (value) {
-				return _this.isFulfiled(_extends({}, definition, {
+				return _this.isFulfiled((0, _extends3.default)({}, definition, {
 					compare: compare,
 					value: value
 				}), env);
@@ -9783,7 +11847,16 @@ exports.default = _extends({}, _base2.default, {
 
 		return this.firstSupportedComparerIsCorrect((0, _lodash.get)(env, type + '.' + taxonomy, []), compare, value);
 	}
-});
+}); /**
+     * The external dependecies.
+     */
+
+/***/ }),
+
+/***/ "e6n0":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("e6n0");
 
 /***/ }),
 
@@ -9803,6 +11876,11 @@ module.exports = (__webpack_require__("B3Oe"))("egdi");
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.workerAddedOrUpdatedEvent = workerAddedOrUpdatedEvent;
 exports.workerDestroyContainer = workerDestroyContainer;
 exports.workerFormSubmit = workerFormSubmit;
@@ -9839,9 +11917,9 @@ var _constants2 = __webpack_require__("8Hlw");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [workerAddedOrUpdatedEvent, workerDestroyContainer, workerFormSubmit, workerToggleWidget, foreman].map(regeneratorRuntime.mark); /**
-                                                                                                                                                * The external dependencies.
-                                                                                                                                                */
+var _marked = [workerAddedOrUpdatedEvent, workerDestroyContainer, workerFormSubmit, workerToggleWidget, foreman].map(_regenerator2.default.mark); /**
+                                                                                                                                                   * The external dependencies.
+                                                                                                                                                   */
 
 
 /**
@@ -9857,7 +11935,7 @@ var _marked = [workerAddedOrUpdatedEvent, workerDestroyContainer, workerFormSubm
 function workerAddedOrUpdatedEvent() {
 	var pagenow, channel, _ref, event, widget, container, containerId, widgetInstance;
 
-	return regeneratorRuntime.wrap(function workerAddedOrUpdatedEvent$(_context) {
+	return _regenerator2.default.wrap(function workerAddedOrUpdatedEvent$(_context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
@@ -9938,7 +12016,7 @@ function workerAddedOrUpdatedEvent() {
 function workerDestroyContainer(ajaxEvent, ajaxAction) {
 	var channel, _ref2, data, containerId, container, fieldsIds;
 
-	return regeneratorRuntime.wrap(function workerDestroyContainer$(_context2) {
+	return _regenerator2.default.wrap(function workerDestroyContainer$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
@@ -10023,7 +12101,7 @@ function workerDestroyContainer(ajaxEvent, ajaxAction) {
 function workerFormSubmit() {
 	var pagenow, channel, _ref3, _event, containerId, _widget;
 
-	return regeneratorRuntime.wrap(function workerFormSubmit$(_context3) {
+	return _regenerator2.default.wrap(function workerFormSubmit$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
@@ -10105,7 +12183,7 @@ function workerFormSubmit() {
 function workerToggleWidget() {
 	var channel, _ref4, _event2, $widget, containerId;
 
-	return regeneratorRuntime.wrap(function workerToggleWidget$(_context4) {
+	return _regenerator2.default.wrap(function workerToggleWidget$(_context4) {
 		while (1) {
 			switch (_context4.prev = _context4.next) {
 				case 0:
@@ -10166,7 +12244,7 @@ function workerToggleWidget() {
  */
 function foreman() {
 	var pagenow, workers;
-	return regeneratorRuntime.wrap(function foreman$(_context5) {
+	return _regenerator2.default.wrap(function foreman$(_context5) {
 		while (1) {
 			switch (_context5.prev = _context5.next) {
 				case 0:
@@ -10201,6 +12279,22 @@ function foreman() {
 		}
 	}, _marked[4], this);
 }
+
+/***/ }),
+
+/***/ "evD5":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("evD5");
+
+/***/ }),
+
+/***/ "exh5":
+/***/ (function(module, exports, __webpack_require__) {
+
+// 19.1.3.19 Object.setPrototypeOf(O, proto)
+var $export = __webpack_require__("kM2E");
+$export($export.S, 'Object', {setPrototypeOf: __webpack_require__("ZaQb").set});
 
 /***/ }),
 
@@ -10319,6 +12413,21 @@ exports.default = conditions;
 
 /***/ }),
 
+/***/ "fBQ2":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var $defineProperty = __webpack_require__("evD5")
+  , createDesc      = __webpack_require__("X8DO");
+
+module.exports = function(object, index, value){
+  if(index in object)$defineProperty.f(object, index, createDesc(0, value));
+  else object[index] = value;
+};
+
+/***/ }),
+
 /***/ "fC4T":
 /***/ (function(module, exports) {
 
@@ -10328,6 +12437,14 @@ module.exports = function isBuffer(arg) {
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
+
+/***/ }),
+
+/***/ "fS6E":
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__("Kh5d");
+module.exports = __webpack_require__("FeBl").Object.getPrototypeOf;
 
 /***/ }),
 
@@ -10341,15 +12458,9 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependecies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _lodash = __webpack_require__("M4fF");
 
@@ -10367,7 +12478,10 @@ var _base2 = _interopRequireDefault(_base);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _extends({}, _base2.default, {
+/**
+ * The external dependecies.
+ */
+exports.default = (0, _extends3.default)({}, _base2.default, {
 
 	/**
   * The supported comparers.
@@ -10392,6 +12506,19 @@ exports.default = _extends({}, _base2.default, {
 	}
 });
 
+/**
+ * The internal dependencies.
+ */
+
+/***/ }),
+
+/***/ "fxRn":
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__("+tPU");
+__webpack_require__("zQR9");
+module.exports = __webpack_require__("g8Ux");
+
 /***/ }),
 
 /***/ "fzf9":
@@ -10404,9 +12531,29 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends2 = __webpack_require__("Dd8w");
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _getPrototypeOf = __webpack_require__("Zx67");
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__("Zrlr");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__("wxAW");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__("zwoO");
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__("Pf15");
+
+var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _react = __webpack_require__("U7vG");
 
@@ -10426,25 +12573,18 @@ var _classnames2 = _interopRequireDefault(_classnames);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * The external dependencies.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-
-
+/**
+ * The external dependencies.
+ */
 var RichTextEditor = function (_React$Component) {
-	_inherits(RichTextEditor, _React$Component);
+	(0, _inherits3.default)(RichTextEditor, _React$Component);
 
 	function RichTextEditor() {
-		_classCallCheck(this, RichTextEditor);
-
-		return _possibleConstructorReturn(this, (RichTextEditor.__proto__ || Object.getPrototypeOf(RichTextEditor)).apply(this, arguments));
+		(0, _classCallCheck3.default)(this, RichTextEditor);
+		return (0, _possibleConstructorReturn3.default)(this, (RichTextEditor.__proto__ || (0, _getPrototypeOf2.default)(RichTextEditor)).apply(this, arguments));
 	}
 
-	_createClass(RichTextEditor, [{
+	(0, _createClass3.default)(RichTextEditor, [{
 		key: 'componentDidMount',
 
 		/**
@@ -10565,7 +12705,7 @@ var RichTextEditor = function (_React$Component) {
 					});
 				};
 
-				var editorOptions = _extends({}, window.tinyMCEPreInit.mceInit.carbon_settings, {
+				var editorOptions = (0, _extends3.default)({}, window.tinyMCEPreInit.mceInit.carbon_settings, {
 					selector: '#' + id,
 					setup: editorSetup
 				});
@@ -10573,7 +12713,7 @@ var RichTextEditor = function (_React$Component) {
 				window.tinymce.init(editorOptions);
 			}
 
-			var quickTagsOptions = _extends({}, window.tinyMCEPreInit, {
+			var quickTagsOptions = (0, _extends3.default)({}, window.tinyMCEPreInit, {
 				id: id
 			});
 
@@ -10600,7 +12740,6 @@ var RichTextEditor = function (_React$Component) {
 			delete window.QTags.instances[this.id];
 		}
 	}]);
-
 	return RichTextEditor;
 }(_react2.default.Component);
 
@@ -10646,6 +12785,19 @@ webpackContext.keys = function webpackContextKeys() {
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
 webpackContext.id = "g1oQ";
+
+/***/ }),
+
+/***/ "g8Ux":
+/***/ (function(module, exports, __webpack_require__) {
+
+var anObject = __webpack_require__("77Pl")
+  , get      = __webpack_require__("3fs2");
+module.exports = __webpack_require__("FeBl").getIterator = function(it){
+  var iterFn = get(it);
+  if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
+  return anObject(iterFn.call(it));
+};
 
 /***/ }),
 
@@ -10962,6 +13114,13 @@ exports.default = enhance(ComplexPopover);
 
 /***/ }),
 
+/***/ "hJx8":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("hJx8");
+
+/***/ }),
+
 /***/ "hKI6":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10971,6 +13130,11 @@ exports.default = enhance(ComplexPopover);
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.preventDefault = preventDefault;
 exports.autoload = autoload;
 exports.cancelTasks = cancelTasks;
@@ -10984,9 +13148,9 @@ var _effects = __webpack_require__("egdi");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [cancelTasks].map(regeneratorRuntime.mark); /**
-                                                           * The external dependencies.
-                                                           */
+var _marked = [cancelTasks].map(_regenerator2.default.mark); /**
+                                                              * The external dependencies.
+                                                              */
 
 
 /**
@@ -11032,7 +13196,7 @@ function autoload(context) {
  */
 function cancelTasks(pattern, tasks, matcher) {
 	var action;
-	return regeneratorRuntime.wrap(function cancelTasks$(_context) {
+	return _regenerator2.default.wrap(function cancelTasks$(_context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
@@ -11095,6 +13259,14 @@ function patchTagBoxAPI(tagBox, method) {
 
 /***/ }),
 
+/***/ "i/C/":
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__("exh5");
+module.exports = __webpack_require__("FeBl").Object.setPrototypeOf;
+
+/***/ }),
+
 /***/ "iBkS":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11104,6 +13276,11 @@ function patchTagBoxAPI(tagBox, method) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.workerReceiveContainer = workerReceiveContainer;
 exports.workerSyncHash = workerSyncHash;
 exports.default = foreman;
@@ -11134,9 +13311,9 @@ var _constants2 = __webpack_require__("8Hlw");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [workerReceiveContainer, workerSyncHash, foreman].map(regeneratorRuntime.mark); /**
-                                                                                               * The external dependencies.
-                                                                                               */
+var _marked = [workerReceiveContainer, workerSyncHash, foreman].map(_regenerator2.default.mark); /**
+                                                                                                  * The external dependencies.
+                                                                                                  */
 
 
 /**
@@ -11161,7 +13338,7 @@ function workerReceiveContainer(store, _ref) {
 
   var fields, _container, id, type;
 
-  return regeneratorRuntime.wrap(function workerReceiveContainer$(_context) {
+  return _regenerator2.default.wrap(function workerReceiveContainer$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
@@ -11226,7 +13403,7 @@ function workerSyncHash(_ref2) {
       containerId = _ref2$payload.containerId,
       tabId = _ref2$payload.tabId;
   var container, shouldChangeHash;
-  return regeneratorRuntime.wrap(function workerSyncHash$(_context2) {
+  return _regenerator2.default.wrap(function workerSyncHash$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
@@ -11265,7 +13442,7 @@ function workerSyncHash(_ref2) {
  */
 function foreman(store) {
   var pagenow;
-  return regeneratorRuntime.wrap(function foreman$(_context3) {
+  return _regenerator2.default.wrap(function foreman$(_context3) {
     while (1) {
       switch (_context3.prev = _context3.next) {
         case 0:
@@ -11350,15 +13527,9 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependecies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _lodash = __webpack_require__("M4fF");
 
@@ -11376,7 +13547,10 @@ var _base2 = _interopRequireDefault(_base);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = _extends({}, _base2.default, {
+/**
+ * The external dependecies.
+ */
+exports.default = (0, _extends3.default)({}, _base2.default, {
 
 	/**
   * The supported comparers.
@@ -11401,6 +13575,10 @@ exports.default = _extends({}, _base2.default, {
 	}
 });
 
+/**
+ * The internal dependencies.
+ */
+
 /***/ }),
 
 /***/ "jSEj":
@@ -11412,6 +13590,15 @@ exports.default = _extends({}, _base2.default, {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _toArray2 = __webpack_require__("7nRM");
+
+var _toArray3 = _interopRequireDefault(_toArray2);
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.prepareValueForFileField = prepareValueForFileField;
 exports.workerAddMultipleFiles = workerAddMultipleFiles;
 exports.redrawAttachmentPreview = redrawAttachmentPreview;
@@ -11432,11 +13619,11 @@ var _helpers = __webpack_require__("pP85");
 
 var _actions = __webpack_require__("HRbf");
 
-function _toArray(arr) { return Array.isArray(arr) ? arr : Array.from(arr); }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [prepareValueForFileField, workerAddMultipleFiles, redrawAttachmentPreview, workerRedrawAttachmentPreview, workerOpenMediaBrowser, workerSetupMediaBrowser, foreman].map(regeneratorRuntime.mark); /**
-                                                                                                                                                                                                                  * The external dependencies.
-                                                                                                                                                                                                                  */
+var _marked = [prepareValueForFileField, workerAddMultipleFiles, redrawAttachmentPreview, workerRedrawAttachmentPreview, workerOpenMediaBrowser, workerSetupMediaBrowser, foreman].map(_regenerator2.default.mark); /**
+                                                                                                                                                                                                                     * The external dependencies.
+                                                                                                                                                                                                                     */
 
 
 /**
@@ -11453,7 +13640,7 @@ var _marked = [prepareValueForFileField, workerAddMultipleFiles, redrawAttachmen
  */
 function prepareValueForFileField(fieldId, attachment) {
 	var field, value;
-	return regeneratorRuntime.wrap(function prepareValueForFileField$(_context) {
+	return _regenerator2.default.wrap(function prepareValueForFileField$(_context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
@@ -11482,7 +13669,7 @@ function prepareValueForFileField(fieldId, attachment) {
 function workerAddMultipleFiles(action) {
 	var _action$payload, fieldId, attachments, field, parent, i, attachment, parentField, freshGroup, freshFieldId, freshField, value;
 
-	return regeneratorRuntime.wrap(function workerAddMultipleFiles$(_context2) {
+	return _regenerator2.default.wrap(function workerAddMultipleFiles$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
@@ -11575,7 +13762,7 @@ function workerAddMultipleFiles(action) {
  */
 function redrawAttachmentPreview(fieldId, attachmentIdentifier, attachment, default_thumb_url) {
 	var thumbnail;
-	return regeneratorRuntime.wrap(function redrawAttachmentPreview$(_context3) {
+	return _regenerator2.default.wrap(function redrawAttachmentPreview$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
@@ -11646,7 +13833,7 @@ function redrawAttachmentPreview(fieldId, attachmentIdentifier, attachment, defa
 function workerRedrawAttachmentPreview(field, action) {
 	var _action$payload2, fieldId, value, freshField, attachment;
 
-	return regeneratorRuntime.wrap(function workerRedrawAttachmentPreview$(_context4) {
+	return _regenerator2.default.wrap(function workerRedrawAttachmentPreview$(_context4) {
 		while (1) {
 			switch (_context4.prev = _context4.next) {
 				case 0:
@@ -11723,7 +13910,7 @@ function workerRedrawAttachmentPreview(field, action) {
 function workerOpenMediaBrowser(channel, field, browser, action) {
 	var liveField, _ref, selection, _selection, attachment, attachments, value;
 
-	return regeneratorRuntime.wrap(function workerOpenMediaBrowser$(_context5) {
+	return _regenerator2.default.wrap(function workerOpenMediaBrowser$(_context5) {
 		while (1) {
 			switch (_context5.prev = _context5.next) {
 				case 0:
@@ -11761,7 +13948,7 @@ function workerOpenMediaBrowser(channel, field, browser, action) {
 				case 11:
 					_ref = _context5.sent;
 					selection = _ref.selection;
-					_selection = _toArray(selection), attachment = _selection[0], attachments = _selection.slice(1);
+					_selection = (0, _toArray3.default)(selection), attachment = _selection[0], attachments = _selection.slice(1);
 					_context5.next = 16;
 					return prepareValueForFileField(field.id, attachment);
 
@@ -11804,7 +13991,7 @@ function workerOpenMediaBrowser(channel, field, browser, action) {
 function workerSetupMediaBrowser(action) {
 	var field, window_button_label, window_label, type_filter, value_type, channel, _ref2, browser;
 
-	return regeneratorRuntime.wrap(function workerSetupMediaBrowser$(_context6) {
+	return _regenerator2.default.wrap(function workerSetupMediaBrowser$(_context6) {
 		while (1) {
 			switch (_context6.prev = _context6.next) {
 				case 0:
@@ -11855,7 +14042,7 @@ function workerSetupMediaBrowser(action) {
  * @return {void}
  */
 function foreman() {
-	return regeneratorRuntime.wrap(function foreman$(_context7) {
+	return _regenerator2.default.wrap(function foreman$(_context7) {
 		while (1) {
 			switch (_context7.prev = _context7.next) {
 				case 0:
@@ -11947,6 +14134,88 @@ webpackContext.id = "jcf5";
 
 /***/ }),
 
+/***/ "jyFz":
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {// This method of obtaining a reference to the global object needs to be
+// kept identical to the way it is obtained in runtime.js
+var g =
+  typeof global === "object" ? global :
+  typeof window === "object" ? window :
+  typeof self === "object" ? self : this;
+
+// Use `getOwnPropertyNames` because not all browsers support calling
+// `hasOwnProperty` on the global `self` object in a worker. See #183.
+var hadRuntime = g.regeneratorRuntime &&
+  Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") >= 0;
+
+// Save the old regeneratorRuntime in case it needs to be restored later.
+var oldRuntime = hadRuntime && g.regeneratorRuntime;
+
+// Force reevalutation of runtime.js.
+g.regeneratorRuntime = undefined;
+
+module.exports = __webpack_require__("SldL");
+
+if (hadRuntime) {
+  // Restore the original runtime.
+  g.regeneratorRuntime = oldRuntime;
+} else {
+  // Remove the global property added by runtime.js.
+  try {
+    delete g.regeneratorRuntime;
+  } catch(e) {
+    g.regeneratorRuntime = undefined;
+  }
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("DuR2")))
+
+/***/ }),
+
+/***/ "kM2E":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("kM2E");
+
+/***/ }),
+
+/***/ "kiBT":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__("i/C/"), __esModule: true };
+
+/***/ }),
+
+/***/ "knuC":
+/***/ (function(module, exports) {
+
+// fast apply, http://jsperf.lnkit.com/fast-apply/5
+module.exports = function(fn, args, that){
+  var un = that === undefined;
+  switch(args.length){
+    case 0: return un ? fn()
+                      : fn.call(that);
+    case 1: return un ? fn(args[0])
+                      : fn.call(that, args[0]);
+    case 2: return un ? fn(args[0], args[1])
+                      : fn.call(that, args[0], args[1]);
+    case 3: return un ? fn(args[0], args[1], args[2])
+                      : fn.call(that, args[0], args[1], args[2]);
+    case 4: return un ? fn(args[0], args[1], args[2], args[3])
+                      : fn.call(that, args[0], args[1], args[2], args[3]);
+  } return              fn.apply(that, args);
+};
+
+/***/ }),
+
+/***/ "lOnJ":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("lOnJ");
+
+/***/ }),
+
 /***/ "lVTZ":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11956,6 +14225,11 @@ webpackContext.id = "jcf5";
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.workerStickyPanel = workerStickyPanel;
 exports.workerFormSubmit = workerFormSubmit;
 exports.default = foreman;
@@ -11978,9 +14252,9 @@ var _constants = __webpack_require__("5B/B");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [workerStickyPanel, workerFormSubmit, foreman].map(regeneratorRuntime.mark); /**
-                                                                                            * The external dependencies.
-                                                                                            */
+var _marked = [workerStickyPanel, workerFormSubmit, foreman].map(_regenerator2.default.mark); /**
+                                                                                               * The external dependencies.
+                                                                                               */
 
 
 /**
@@ -11996,7 +14270,7 @@ var _marked = [workerStickyPanel, workerFormSubmit, foreman].map(regeneratorRunt
 function workerStickyPanel() {
 	var channel, $container, $panel, $bar, _ref, value, offset, threshold;
 
-	return regeneratorRuntime.wrap(function workerStickyPanel$(_context) {
+	return _regenerator2.default.wrap(function workerStickyPanel$(_context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
@@ -12049,7 +14323,7 @@ function workerStickyPanel() {
 function workerFormSubmit() {
 	var channel, _ref2, event;
 
-	return regeneratorRuntime.wrap(function workerFormSubmit$(_context2) {
+	return _regenerator2.default.wrap(function workerFormSubmit$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
@@ -12098,7 +14372,7 @@ function workerFormSubmit() {
  */
 function foreman(store) {
 	var containers;
-	return regeneratorRuntime.wrap(function foreman$(_context3) {
+	return _regenerator2.default.wrap(function foreman$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
@@ -12144,15 +14418,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.RadioImageField = undefined;
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _react = __webpack_require__("U7vG");
 
@@ -12184,6 +14452,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param  {Function}      props.isChecked
  * @return {React.Element}
  */
+/**
+ * The external dependencies.
+ */
 var RadioImageField = exports.RadioImageField = function RadioImageField(_ref) {
 	var name = _ref.name,
 	    field = _ref.field,
@@ -12203,7 +14474,7 @@ var RadioImageField = exports.RadioImageField = function RadioImageField(_ref) {
 					_react2.default.createElement(
 						'label',
 						null,
-						_react2.default.createElement('input', _extends({
+						_react2.default.createElement('input', (0, _extends3.default)({
 							type: 'radio',
 							name: name,
 							value: option.value,
@@ -12228,6 +14499,11 @@ var RadioImageField = exports.RadioImageField = function RadioImageField(_ref) {
  *
  * @type {Object}
  */
+
+
+/**
+ * The internal dependencies.
+ */
 RadioImageField.propTypes = {
 	name: _propTypes2.default.string,
 	field: _propTypes2.default.shape({
@@ -12241,6 +14517,22 @@ RadioImageField.propTypes = {
 };
 
 exports.default = (0, _recompose.setStatic)('type', [_constants.TYPE_RADIO_IMAGE])((0, _radio.enhance)(RadioImageField));
+
+/***/ }),
+
+/***/ "lktj":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("lktj");
+
+/***/ }),
+
+/***/ "mClu":
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__("kM2E");
+// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+$export($export.S + $export.F * !__webpack_require__("+E39"), 'Object', {defineProperty: __webpack_require__("evD5").f});
 
 /***/ }),
 
@@ -12416,6 +14708,24 @@ var mapDispatchToProps = {
 
 /***/ }),
 
+/***/ "msXi":
+/***/ (function(module, exports, __webpack_require__) {
+
+// call something on iterator step with safe closing on error
+var anObject = __webpack_require__("77Pl");
+module.exports = function(iterator, fn, value, entries){
+  try {
+    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
+  // 7.4.6 IteratorClose(iterator, completion)
+  } catch(e){
+    var ret = iterator['return'];
+    if(ret !== undefined)anObject(ret.call(iterator));
+    throw e;
+  }
+};
+
+/***/ }),
+
 /***/ "mwxg":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -12425,6 +14735,15 @@ var mapDispatchToProps = {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _getIterator2 = __webpack_require__("BO1k");
+
+var _getIterator3 = _interopRequireDefault(_getIterator2);
+
 exports.workerValidate = workerValidate;
 exports.workerConditionalLogic = workerConditionalLogic;
 exports.default = foreman;
@@ -12439,9 +14758,11 @@ var _actions = __webpack_require__("HRbf");
 
 var _selectors = __webpack_require__("ZMHW");
 
-var _marked = [workerValidate, workerConditionalLogic, foreman].map(regeneratorRuntime.mark); /**
-                                                                                               * The external dependencies.
-                                                                                               */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _marked = [workerValidate, workerConditionalLogic, foreman].map(_regenerator2.default.mark); /**
+                                                                                                  * The external dependencies.
+                                                                                                  */
 
 
 /**
@@ -12509,7 +14830,7 @@ function workerValidate(field, siblings) {
 
 	var _field$conditional_lo, relation, rules, results, valid, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, rule, _field;
 
-	return regeneratorRuntime.wrap(function workerValidate$(_context) {
+	return _regenerator2.default.wrap(function workerValidate$(_context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
@@ -12528,7 +14849,7 @@ function workerValidate(field, siblings) {
 					_didIteratorError = false;
 					_iteratorError = undefined;
 					_context.prev = 8;
-					_iterator = rules[Symbol.iterator]();
+					_iterator = (0, _getIterator3.default)(rules);
 
 				case 10:
 					if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
@@ -12638,7 +14959,7 @@ function workerValidate(field, siblings) {
 function workerConditionalLogic(_ref2) {
 	var fieldId = _ref2.payload.fieldId;
 	var field, selector, siblings, parentPrefix, parentField, parentSelector, parentSiblings, parentSiblingName;
-	return regeneratorRuntime.wrap(function workerConditionalLogic$(_context2) {
+	return _regenerator2.default.wrap(function workerConditionalLogic$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
@@ -12747,7 +15068,7 @@ function workerConditionalLogic(_ref2) {
  * @return {void}
  */
 function foreman() {
-	return regeneratorRuntime.wrap(function foreman$(_context3) {
+	return _regenerator2.default.wrap(function foreman$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
@@ -12761,6 +15082,17 @@ function foreman() {
 		}
 	}, _marked[2], this);
 }
+
+/***/ }),
+
+/***/ "oM7Q":
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__("sF+V");
+var $Object = __webpack_require__("FeBl").Object;
+module.exports = function create(P, D){
+  return $Object.create(P, D);
+};
 
 /***/ }),
 
@@ -12965,6 +15297,13 @@ exports.default = EnhancedContainerTabbed;
 
 /***/ }),
 
+/***/ "pFYg":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("pFYg");
+
+/***/ }),
+
 /***/ "pL4W":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13027,6 +15366,11 @@ var getContainersByType = exports.getContainersByType = function getContainersBy
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.getAttachmentThumbnail = getAttachmentThumbnail;
 exports.flattenField = flattenField;
 exports.addComplexGroupIdentifiers = addComplexGroupIdentifiers;
@@ -13044,9 +15388,11 @@ var _actions = __webpack_require__("HRbf");
 
 var _constants = __webpack_require__("8Hlw");
 
-var _marked = [stopSaga].map(regeneratorRuntime.mark); /**
-                                                        * The external dependencies.
-                                                        */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _marked = [stopSaga].map(_regenerator2.default.mark); /**
+                                                           * The external dependencies.
+                                                           */
 
 
 /**
@@ -13186,7 +15532,7 @@ function restoreField(field, all) {
  * @return {void}
  */
 function stopSaga(fieldId, tasks) {
-	return regeneratorRuntime.wrap(function stopSaga$(_context) {
+	return _regenerator2.default.wrap(function stopSaga$(_context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
@@ -13256,15 +15602,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.enhance = exports.CheckboxField = undefined;
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _react = __webpack_require__("U7vG");
 
@@ -13302,6 +15642,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param  {Function}      props.handleChange
  * @return {React.Element}
  */
+
+
+/**
+ * The internal dependencies.
+ */
 var CheckboxField = exports.CheckboxField = function CheckboxField(_ref) {
 	var name = _ref.name,
 	    field = _ref.field,
@@ -13314,7 +15659,7 @@ var CheckboxField = exports.CheckboxField = function CheckboxField(_ref) {
 		_react2.default.createElement(
 			'label',
 			null,
-			_react2.default.createElement('input', _extends({
+			_react2.default.createElement('input', (0, _extends3.default)({
 				type: 'checkbox',
 				name: name,
 				value: field.option_value,
@@ -13336,6 +15681,9 @@ var CheckboxField = exports.CheckboxField = function CheckboxField(_ref) {
  * Validate the props.
  *
  * @type {Object}
+ */
+/**
+ * The external dependencies.
  */
 CheckboxField.propTypes = {
 	name: _propTypes2.default.string,
@@ -13394,6 +15742,51 @@ exports.default = (0, _recompose.setStatic)('type', [_constants.TYPE_CHECKBOX])(
 
 /***/ }),
 
+/***/ "qyJz":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var ctx            = __webpack_require__("+ZMJ")
+  , $export        = __webpack_require__("kM2E")
+  , toObject       = __webpack_require__("sB3e")
+  , call           = __webpack_require__("msXi")
+  , isArrayIter    = __webpack_require__("Mhyx")
+  , toLength       = __webpack_require__("QRG4")
+  , createProperty = __webpack_require__("fBQ2")
+  , getIterFn      = __webpack_require__("3fs2");
+
+$export($export.S + $export.F * !__webpack_require__("dY0y")(function(iter){ Array.from(iter); }), 'Array', {
+  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
+  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
+    var O       = toObject(arrayLike)
+      , C       = typeof this == 'function' ? this : Array
+      , aLen    = arguments.length
+      , mapfn   = aLen > 1 ? arguments[1] : undefined
+      , mapping = mapfn !== undefined
+      , index   = 0
+      , iterFn  = getIterFn(O)
+      , length, result, step, iterator;
+    if(mapping)mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
+    // if object isn't iterable or it's array with default iterator - use simple case
+    if(iterFn != undefined && !(C == Array && isArrayIter(iterFn))){
+      for(iterator = iterFn.call(O), result = new C; !(step = iterator.next()).done; index++){
+        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
+      }
+    } else {
+      length = toLength(O.length);
+      for(result = new C(length); length > index; index++){
+        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
+      }
+    }
+    result.length = index;
+    return result;
+  }
+});
+
+
+/***/ }),
+
 /***/ "r/IV":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13404,10 +15797,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The internal dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _base = __webpack_require__("W0zY");
 
@@ -13430,6 +15822,9 @@ var operators = ['IN', 'NOT IN'];
  * @param  {mixed}   b
  * @return {Boolean}
  */
+/**
+ * The internal dependencies.
+ */
 var evaluate = function evaluate(a, operator, b) {
   switch (operator) {
     case 'IN':
@@ -13441,7 +15836,7 @@ var evaluate = function evaluate(a, operator, b) {
   }
 };
 
-exports.default = _extends({}, (0, _base2.default)(operators), {
+exports.default = (0, _extends3.default)({}, (0, _base2.default)(operators), {
   evaluate: evaluate
 });
 
@@ -13472,6 +15867,22 @@ var resetStore = exports.resetStore = (0, _reduxActions.createAction)('RESET_STO
 
 /***/ }),
 
+/***/ "sB3e":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("sB3e");
+
+/***/ }),
+
+/***/ "sF+V":
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__("kM2E")
+// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+$export($export.S, 'Object', {create: __webpack_require__("Yobk")});
+
+/***/ }),
+
 /***/ "sTbe":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13489,9 +15900,29 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+var _extends2 = __webpack_require__("Dd8w");
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _getPrototypeOf = __webpack_require__("Zx67");
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__("Zrlr");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__("wxAW");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__("zwoO");
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__("Pf15");
+
+var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _jquery = __webpack_require__("0iPh");
 
@@ -13507,25 +15938,15 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * The external dependencies.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
-
-
 var SortableList = function (_React$Component) {
-	_inherits(SortableList, _React$Component);
+	(0, _inherits3.default)(SortableList, _React$Component);
 
 	function SortableList() {
-		_classCallCheck(this, SortableList);
-
-		return _possibleConstructorReturn(this, (SortableList.__proto__ || Object.getPrototypeOf(SortableList)).apply(this, arguments));
+		(0, _classCallCheck3.default)(this, SortableList);
+		return (0, _possibleConstructorReturn3.default)(this, (SortableList.__proto__ || (0, _getPrototypeOf2.default)(SortableList)).apply(this, arguments));
 	}
 
-	_createClass(SortableList, [{
+	(0, _createClass3.default)(SortableList, [{
 		key: 'componentDidMount',
 
 		/**
@@ -13536,7 +15957,7 @@ var SortableList = function (_React$Component) {
 		value: function componentDidMount() {
 			this.handleSortableUpdate = this.handleSortableUpdate.bind(this);
 
-			this.$node = (0, _jquery2.default)(_reactDom2.default.findDOMNode(this)).sortable(_extends({}, this.props.options, {
+			this.$node = (0, _jquery2.default)(_reactDom2.default.findDOMNode(this)).sortable((0, _extends3.default)({}, this.props.options, {
 				update: this.handleSortableUpdate
 			}));
 		}
@@ -13584,11 +16005,27 @@ var SortableList = function (_React$Component) {
 			this.$node.sortable('cancel');
 		}
 	}]);
-
 	return SortableList;
-}(_react2.default.Component);
+}(_react2.default.Component); /**
+                               * The external dependencies.
+                               */
+
 
 exports.default = SortableList;
+
+/***/ }),
+
+/***/ "t8x9":
+/***/ (function(module, exports, __webpack_require__) {
+
+// 7.3.20 SpeciesConstructor(O, defaultConstructor)
+var anObject  = __webpack_require__("77Pl")
+  , aFunction = __webpack_require__("lOnJ")
+  , SPECIES   = __webpack_require__("dSzd")('species');
+module.exports = function(O, D){
+  var C = anObject(O).constructor, S;
+  return C === undefined || (S = anObject(C)[SPECIES]) == undefined ? D : aFunction(S);
+};
 
 /***/ }),
 
@@ -13710,15 +16147,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.enhance = exports.RichTextField = undefined;
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _react = __webpack_require__("U7vG");
 
@@ -13771,7 +16202,7 @@ var RichTextField = exports.RichTextField = function RichTextField(_ref) {
 		_react2.default.createElement(
 			_editor2.default,
 			{ id: field.id, richEditing: field.rich_editing, mediaButtons: field.media_buttons, content: field.value, onChange: handleChange },
-			_react2.default.createElement('textarea', _extends({
+			_react2.default.createElement('textarea', (0, _extends3.default)({
 				id: field.id,
 				className: 'wp-editor-area',
 				name: name,
@@ -13788,6 +16219,14 @@ var RichTextField = exports.RichTextField = function RichTextField(_ref) {
  * Validate the props.
  *
  * @type {Object}
+ */
+
+
+/**
+ * The internal dependencies.
+ */
+/**
+ * The external dependencies.
  */
 RichTextField.propTypes = {
 	name: _propTypes2.default.string,
@@ -13861,7 +16300,18 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getFieldValidators = exports.registerFieldValidator = exports.decorateSidebarReducer = exports.decorateFieldReducer = exports.decorateContainerReducer = exports.registerSidebarReducer = exports.registerFieldReducer = exports.registerContainerReducer = exports.getFieldComponent = exports.getContainerComponent = exports.registerFieldComponent = exports.registerContainerComponent = undefined;
 
-var _components, _reducers;
+var _toConsumableArray2 = __webpack_require__("Gu7T");
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
+var _defineProperty2 = __webpack_require__("bOdI");
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _components, _reducers; /**
+                             * The external dependencies.
+                             */
+
 
 exports.registerSaga = registerSaga;
 exports.getSagas = getSagas;
@@ -13873,13 +16323,6 @@ var _reduceReducers2 = _interopRequireDefault(_reduceReducers);
 var _lodash = __webpack_require__("M4fF");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; } /**
-                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                   */
-
 
 /**
  * The supported domains.
@@ -13895,7 +16338,7 @@ var DOMAIN_SIDEBARS = 'sidebars';
  *
  * @type {Object}
  */
-var components = (_components = {}, _defineProperty(_components, DOMAIN_CONTAINERS, {}), _defineProperty(_components, DOMAIN_FIELDS, {}), _components);
+var components = (_components = {}, (0, _defineProperty3.default)(_components, DOMAIN_CONTAINERS, {}), (0, _defineProperty3.default)(_components, DOMAIN_FIELDS, {}), _components);
 
 /**
  * Register a new component that can be rendered by the factory function.
@@ -13938,7 +16381,7 @@ var getFieldComponent = exports.getFieldComponent = (0, _lodash.partial)(getComp
  *
  * @type {Object}
  */
-var reducers = (_reducers = {}, _defineProperty(_reducers, DOMAIN_CONTAINERS, []), _defineProperty(_reducers, DOMAIN_FIELDS, []), _defineProperty(_reducers, DOMAIN_SIDEBARS, []), _reducers);
+var reducers = (_reducers = {}, (0, _defineProperty3.default)(_reducers, DOMAIN_CONTAINERS, []), (0, _defineProperty3.default)(_reducers, DOMAIN_FIELDS, []), (0, _defineProperty3.default)(_reducers, DOMAIN_SIDEBARS, []), _reducers);
 
 /**
  * Register a new reducer.
@@ -13966,7 +16409,7 @@ var registerSidebarReducer = exports.registerSidebarReducer = (0, _lodash.partia
  */
 function decorateReducer(domain, fn) {
   return function (state, action) {
-    return _reduceReducers2.default.apply(undefined, [fn].concat(_toConsumableArray(reducers[domain])))(state, action);
+    return _reduceReducers2.default.apply(undefined, [fn].concat((0, _toConsumableArray3.default)(reducers[domain])))(state, action);
   };
 }
 
@@ -14005,7 +16448,7 @@ function getSagas() {
  *
  * @type {Object}
  */
-var validators = _defineProperty({}, DOMAIN_FIELDS, {});
+var validators = (0, _defineProperty3.default)({}, DOMAIN_FIELDS, {});
 
 /**
  * Register a new validator.
@@ -14035,6 +16478,29 @@ var getFieldValidators = exports.getFieldValidators = (0, _lodash.partial)(getVa
 
 /***/ }),
 
+/***/ "uqUo":
+/***/ (function(module, exports, __webpack_require__) {
+
+// most Object methods by ES6 should accept primitives
+var $export = __webpack_require__("kM2E")
+  , core    = __webpack_require__("FeBl")
+  , fails   = __webpack_require__("S82l");
+module.exports = function(KEY, exec){
+  var fn  = (core.Object || {})[KEY] || Object[KEY]
+    , exp = {};
+  exp[KEY] = exec(fn);
+  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
+};
+
+/***/ }),
+
+/***/ "us/S":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__("Xd32"), __esModule: true };
+
+/***/ }),
+
 /***/ "vVye":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -14046,14 +16512,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.toggleContainerBox = exports.switchContainerTab = exports.submitForm = exports.validateContainer = exports.validateAllContainers = exports.receiveContainer = exports.removeContainer = exports.addContainer = exports.setContainerUI = exports.setContainerMeta = exports.teardownContainer = exports.setupContainer = undefined;
 
+var _defineProperty2 = __webpack_require__("bOdI");
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
 var _reduxActions = __webpack_require__("sTbe");
 
 var _lodash = __webpack_require__("M4fF");
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; } /**
-                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                   */
-
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Perform the initial setup of the container.
@@ -14062,6 +16529,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
  * @param  {Object} meta
  * @param  {Object} ui
  * @return {Object}
+ */
+/**
+ * The external dependencies.
  */
 var setupContainer = exports.setupContainer = (0, _reduxActions.createAction)('containers/SETUP_CONTAINER', function (containerId, meta, ui) {
   return { containerId: containerId, meta: meta, ui: ui };
@@ -14087,7 +16557,7 @@ var teardownContainer = exports.teardownContainer = (0, _reduxActions.createActi
  */
 function setMetaOrUI(containers, key, value) {
   if ((0, _lodash.isString)(containers)) {
-    return _defineProperty({}, containers, _defineProperty({}, key, value));
+    return (0, _defineProperty3.default)({}, containers, (0, _defineProperty3.default)({}, key, value));
   }
 
   return containers;
@@ -14185,6 +16655,19 @@ var toggleContainerBox = exports.toggleContainerBox = (0, _reduxActions.createAc
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _defineProperty2 = __webpack_require__("bOdI");
+
+var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+
+var _getIterator2 = __webpack_require__("BO1k");
+
+var _getIterator3 = _interopRequireDefault(_getIterator2);
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.workerSyncPostTemplate = workerSyncPostTemplate;
 exports.workerSyncPostParentId = workerSyncPostParentId;
 exports.workerSyncPostFormat = workerSyncPostFormat;
@@ -14207,11 +16690,11 @@ var _actions2 = __webpack_require__("vVye");
 
 var _constants = __webpack_require__("5B/B");
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [syncStore, workerSyncPostTemplate, workerSyncPostParentId, workerSyncPostFormat, setupSyncTerms, workerSyncHierarchicalTerms, workerSyncNonHierarchicalTerms, workerFormSubmit, foreman].map(regeneratorRuntime.mark); /**
-                                                                                                                                                                                                                                       * The external dependencies.
-                                                                                                                                                                                                                                       */
+var _marked = [syncStore, workerSyncPostTemplate, workerSyncPostParentId, workerSyncPostFormat, setupSyncTerms, workerSyncHierarchicalTerms, workerSyncNonHierarchicalTerms, workerFormSubmit, foreman].map(_regenerator2.default.mark); /**
+                                                                                                                                                                                                                                          * The external dependencies.
+                                                                                                                                                                                                                                          */
 
 
 /**
@@ -14227,7 +16710,7 @@ var _marked = [syncStore, workerSyncPostTemplate, workerSyncPostParentId, worker
  * @return {void}
  */
 function syncStore(containers, meta) {
-	return regeneratorRuntime.wrap(function syncStore$(_context) {
+	return _regenerator2.default.wrap(function syncStore$(_context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
@@ -14253,7 +16736,7 @@ function syncStore(containers, meta) {
 function workerSyncPostTemplate(containers) {
 	var channel, _ref, value;
 
-	return regeneratorRuntime.wrap(function workerSyncPostTemplate$(_context2) {
+	return _regenerator2.default.wrap(function workerSyncPostTemplate$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
@@ -14301,7 +16784,7 @@ function workerSyncPostTemplate(containers) {
 function workerSyncPostParentId(containers) {
 	var channel, _ref2, _value, option, parentId, level, matches;
 
-	return regeneratorRuntime.wrap(function workerSyncPostParentId$(_context3) {
+	return _regenerator2.default.wrap(function workerSyncPostParentId$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
@@ -14364,7 +16847,7 @@ function workerSyncPostParentId(containers) {
 function workerSyncPostFormat(containers) {
 	var channel, _ref3, values;
 
-	return regeneratorRuntime.wrap(function workerSyncPostFormat$(_context4) {
+	return _regenerator2.default.wrap(function workerSyncPostFormat$(_context4) {
 		while (1) {
 			switch (_context4.prev = _context4.next) {
 				case 0:
@@ -14414,7 +16897,7 @@ function workerSyncPostFormat(containers) {
 function setupSyncTerms(containers, selector, worker) {
 	var elements, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, element;
 
-	return regeneratorRuntime.wrap(function setupSyncTerms$(_context5) {
+	return _regenerator2.default.wrap(function setupSyncTerms$(_context5) {
 		while (1) {
 			switch (_context5.prev = _context5.next) {
 				case 0:
@@ -14423,7 +16906,7 @@ function setupSyncTerms(containers, selector, worker) {
 					_didIteratorError = false;
 					_iteratorError = undefined;
 					_context5.prev = 4;
-					_iterator = elements[Symbol.iterator]();
+					_iterator = (0, _getIterator3.default)(elements);
 
 				case 6:
 					if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
@@ -14492,7 +16975,7 @@ function setupSyncTerms(containers, selector, worker) {
 function workerSyncHierarchicalTerms(containers, taxonomy) {
 	var channel, _ref4, _values;
 
-	return regeneratorRuntime.wrap(function workerSyncHierarchicalTerms$(_context6) {
+	return _regenerator2.default.wrap(function workerSyncHierarchicalTerms$(_context6) {
 		while (1) {
 			switch (_context6.prev = _context6.next) {
 				case 0:
@@ -14516,7 +16999,7 @@ function workerSyncHierarchicalTerms(containers, taxonomy) {
 					_values = _ref4.values;
 					_context6.next = 10;
 					return (0, _effects.call)(syncStore, containers, {
-						post_term: _defineProperty({}, taxonomy, _values.map(function (value) {
+						post_term: (0, _defineProperty3.default)({}, taxonomy, _values.map(function (value) {
 							return parseInt(value, 10);
 						}))
 					});
@@ -14543,7 +17026,7 @@ function workerSyncHierarchicalTerms(containers, taxonomy) {
 function workerSyncNonHierarchicalTerms(containers, taxonomy) {
 	var channel, _ref5, _value2;
 
-	return regeneratorRuntime.wrap(function workerSyncNonHierarchicalTerms$(_context7) {
+	return _regenerator2.default.wrap(function workerSyncNonHierarchicalTerms$(_context7) {
 		while (1) {
 			switch (_context7.prev = _context7.next) {
 				case 0:
@@ -14567,7 +17050,7 @@ function workerSyncNonHierarchicalTerms(containers, taxonomy) {
 					_value2 = _ref5.value;
 					_context7.next = 10;
 					return (0, _effects.call)(syncStore, containers, {
-						post_term: _defineProperty({}, taxonomy, _value2 ? _value2.split(/,\s*/) : [])
+						post_term: (0, _defineProperty3.default)({}, taxonomy, _value2 ? _value2.split(/,\s*/) : [])
 					});
 
 				case 10:
@@ -14590,7 +17073,7 @@ function workerSyncNonHierarchicalTerms(containers, taxonomy) {
 function workerFormSubmit() {
 	var channel, _ref6, event;
 
-	return regeneratorRuntime.wrap(function workerFormSubmit$(_context8) {
+	return _regenerator2.default.wrap(function workerFormSubmit$(_context8) {
 		while (1) {
 			switch (_context8.prev = _context8.next) {
 				case 0:
@@ -14639,7 +17122,7 @@ function workerFormSubmit() {
  */
 function foreman() {
 	var containers;
-	return regeneratorRuntime.wrap(function foreman$(_context9) {
+	return _regenerator2.default.wrap(function foreman$(_context9) {
 		while (1) {
 			switch (_context9.prev = _context9.next) {
 				case 0:
@@ -14703,6 +17186,11 @@ function foreman() {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.workerSyncUserRole = workerSyncUserRole;
 exports.workerFormSubmit = workerFormSubmit;
 exports.default = foreman;
@@ -14721,9 +17209,11 @@ var _selectors = __webpack_require__("pL4W");
 
 var _constants = __webpack_require__("5B/B");
 
-var _marked = [workerSyncUserRole, workerFormSubmit, foreman].map(regeneratorRuntime.mark); /**
-                                                                                             * The external dependencies.
-                                                                                             */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _marked = [workerSyncUserRole, workerFormSubmit, foreman].map(_regenerator2.default.mark); /**
+                                                                                                * The external dependencies.
+                                                                                                */
 
 
 /**
@@ -14742,7 +17232,7 @@ function workerSyncUserRole(containers) {
 
 	var channel, _loop, el, id;
 
-	return regeneratorRuntime.wrap(function workerSyncUserRole$(_context2) {
+	return _regenerator2.default.wrap(function workerSyncUserRole$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
@@ -14752,10 +17242,10 @@ function workerSyncUserRole(containers) {
 				case 2:
 					channel = _context2.sent;
 					_context2.prev = 3;
-					_loop = regeneratorRuntime.mark(function _loop() {
+					_loop = _regenerator2.default.mark(function _loop() {
 						var _ref, value;
 
-						return regeneratorRuntime.wrap(function _loop$(_context) {
+						return _regenerator2.default.wrap(function _loop$(_context) {
 							while (1) {
 								switch (_context.prev = _context.next) {
 									case 0:
@@ -14833,7 +17323,7 @@ function workerSyncUserRole(containers) {
 function workerFormSubmit() {
 	var channel, _ref2, event;
 
-	return regeneratorRuntime.wrap(function workerFormSubmit$(_context3) {
+	return _regenerator2.default.wrap(function workerFormSubmit$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
@@ -14882,7 +17372,7 @@ function workerFormSubmit() {
  */
 function foreman(store) {
 	var containers;
-	return regeneratorRuntime.wrap(function foreman$(_context4) {
+	return _regenerator2.default.wrap(function foreman$(_context4) {
 		while (1) {
 			switch (_context4.prev = _context4.next) {
 				case 0:
@@ -14931,31 +17421,16 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
-
-/**
- * Render a new field.
- *
- * @param  {String}        type
- * @param  {Object}        props
- * @return {React.Element}
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 exports.default = function (type) {
   var props = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
   var Component = (0, _registry.getFieldComponent)(type);
 
-  return _react2.default.createElement(Component, _extends({
+  return _react2.default.createElement(Component, (0, _extends3.default)({
     key: props.id,
     type: type
   }, props));
@@ -15179,6 +17654,47 @@ _withHeaderTemplate2.default,
 }));
 
 exports.default = enhance(ComplexGroup);
+
+/***/ }),
+
+/***/ "woOf":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__("V3tA"), __esModule: true };
+
+/***/ }),
+
+/***/ "wxAW":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _defineProperty = __webpack_require__("C4MV");
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      (0, _defineProperty2.default)(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
 
 /***/ }),
 
@@ -15459,6 +17975,19 @@ function createWidgetsChannel() {
 
 /***/ }),
 
+/***/ "xH/j":
+/***/ (function(module, exports, __webpack_require__) {
+
+var hide = __webpack_require__("hJx8");
+module.exports = function(target, src, safe){
+  for(var key in src){
+    if(safe && target[key])target[key] = src[key];
+    else hide(target, key, src[key]);
+  } return target;
+};
+
+/***/ }),
+
 /***/ "xh4g":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -15468,6 +17997,11 @@ function createWidgetsChannel() {
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _regenerator = __webpack_require__("Xxa5");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
 exports.workerAddOrCloneComplexGroup = workerAddOrCloneComplexGroup;
 exports.workerRemoveComplexGroup = workerRemoveComplexGroup;
 exports.workerDuplicateComplexGroups = workerDuplicateComplexGroups;
@@ -15485,9 +18019,11 @@ var _actions = __webpack_require__("HRbf");
 
 var _constants = __webpack_require__("8Hlw");
 
-var _marked = [workerAddOrCloneComplexGroup, workerRemoveComplexGroup, workerDuplicateComplexGroups, foreman].map(regeneratorRuntime.mark); /**
-                                                                                                                                             * The external dependencies.
-                                                                                                                                             */
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _marked = [workerAddOrCloneComplexGroup, workerRemoveComplexGroup, workerDuplicateComplexGroups, foreman].map(_regenerator2.default.mark); /**
+                                                                                                                                                * The external dependencies.
+                                                                                                                                                */
 
 
 /**
@@ -15515,7 +18051,7 @@ function workerAddOrCloneComplexGroup(_ref) {
 
 	var field, isTabbed, isAddAction, isCloneAction, blueprint, group, fields, _all;
 
-	return regeneratorRuntime.wrap(function workerAddOrCloneComplexGroup$(_context) {
+	return _regenerator2.default.wrap(function workerAddOrCloneComplexGroup$(_context) {
 		while (1) {
 			switch (_context.prev = _context.next) {
 				case 0:
@@ -15656,7 +18192,7 @@ function workerRemoveComplexGroup(_ref2) {
 	    groupId = _ref2$payload.groupId,
 	    method = _ref2$payload.method;
 	var all, field, group, groupFields, isTabbed, groupIndex, nextGroupId;
-	return regeneratorRuntime.wrap(function workerRemoveComplexGroup$(_context2) {
+	return _regenerator2.default.wrap(function workerRemoveComplexGroup$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
@@ -15746,7 +18282,7 @@ function workerDuplicateComplexGroups(_ref4) {
 	    groupName = _ref4$payload.groupName,
 	    method = _ref4$payload.method;
 	var field, groupCloned, groupRemoved;
-	return regeneratorRuntime.wrap(function workerDuplicateComplexGroups$(_context3) {
+	return _regenerator2.default.wrap(function workerDuplicateComplexGroups$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
@@ -15813,7 +18349,7 @@ function workerDuplicateComplexGroups(_ref4) {
  * @return {void}
  */
 function foreman() {
-	return regeneratorRuntime.wrap(function foreman$(_context4) {
+	return _regenerator2.default.wrap(function foreman$(_context4) {
 		while (1) {
 			switch (_context4.prev = _context4.next) {
 				case 0:
@@ -16268,6 +18804,10 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _toConsumableArray2 = __webpack_require__("Gu7T");
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
 var _react = __webpack_require__("U7vG");
 
 var _react2 = _interopRequireDefault(_react);
@@ -16286,16 +18826,6 @@ var _factory2 = _interopRequireDefault(_factory);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } } /**
-                                                                                                                                                                                                     * The external dependencies.
-                                                                                                                                                                                                     */
-
-
-/**
- * The internal dependencies.
- */
-
-
 /**
  * The base component used to render the containers.
  *
@@ -16305,12 +18835,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
  * @param  {React.Element} props.children
  * @return {React.Element}
  */
+/**
+ * The external dependencies.
+ */
 var ContainerBase = function ContainerBase(_ref) {
 	var container = _ref.container,
 	    fields = _ref.fields,
 	    children = _ref.children;
 
-	var classes = ['carbon-container', 'carbon-container-' + container.id, 'carbon-container-' + container.type].concat(_toConsumableArray(container.classes));
+	var classes = ['carbon-container', 'carbon-container-' + container.id, 'carbon-container-' + container.type].concat((0, _toConsumableArray3.default)(container.classes));
 
 	return _react2.default.createElement(
 		'div',
@@ -16328,6 +18861,11 @@ var ContainerBase = function ContainerBase(_ref) {
  * Validate the props.
  *
  * @type {Object}
+ */
+
+
+/**
+ * The internal dependencies.
  */
 ContainerBase.propTypes = {
 	container: _propTypes2.default.shape({
@@ -16396,15 +18934,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.enhance = exports.TextField = undefined;
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
-                                                                                                                                                                                                                                                                   * The external dependencies.
-                                                                                                                                                                                                                                                                   */
+var _extends2 = __webpack_require__("Dd8w");
 
-
-/**
- * The internal dependencies.
- */
-
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _react = __webpack_require__("U7vG");
 
@@ -16441,6 +18973,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param  {Function}      props.handleChange
  * @return {React.Element}
  */
+
+
+/**
+ * The internal dependencies.
+ */
 var TextField = exports.TextField = function TextField(_ref) {
 	var name = _ref.name,
 	    field = _ref.field,
@@ -16449,7 +18986,7 @@ var TextField = exports.TextField = function TextField(_ref) {
 	return _react2.default.createElement(
 		_field2.default,
 		{ field: field },
-		_react2.default.createElement('input', _extends({
+		_react2.default.createElement('input', (0, _extends3.default)({
 			type: 'text',
 			id: field.id,
 			name: name,
@@ -16465,6 +19002,9 @@ var TextField = exports.TextField = function TextField(_ref) {
  * Validate the props.
  *
  * @type {Object}
+ */
+/**
+ * The external dependencies.
  */
 TextField.propTypes = {
 	name: _propTypes2.default.string,
@@ -16545,10 +19085,41 @@ function observeResize (el, cb) {
 
 /***/ }),
 
+/***/ "zQR9":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("zQR9");
+
+/***/ }),
+
 /***/ "zpMW":
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__("B3Oe"))("zpMW");
+
+/***/ }),
+
+/***/ "zwoO":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _typeof2 = __webpack_require__("pFYg");
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (self, call) {
+  if (!self) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return call && ((typeof call === "undefined" ? "undefined" : (0, _typeof3.default)(call)) === "object" || typeof call === "function") ? call : self;
+};
 
 /***/ }),
 
