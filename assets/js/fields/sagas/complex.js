@@ -26,6 +26,7 @@ import {
 	switchComplexTab,
 	enableComplexGroupType,
 	disableComplexGroupType,
+	expandComplexGroup,
 } from 'fields/actions';
 
 import { TYPE_COMPLEX } from 'fields/constants';
@@ -78,6 +79,8 @@ export function* workerAddOrCloneComplexGroup({ type, payload: { fieldId, groupI
 
 	if (isTabbed) {
 		yield put(switchComplexTab(fieldId, group.id));
+	} else {
+		yield put(expandComplexGroup(fieldId, group.id));
 	}
 }
 
