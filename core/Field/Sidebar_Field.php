@@ -52,6 +52,12 @@ class Sidebar_Field extends Select_Field {
 
 		$field_data = parent::to_json( $load );
 
+		// override default value assigning behavior since sidebars are
+		// loaded separately and not as a part of the field options
+		$field_data = array_merge( $field_data, array(
+			'value' => $this->get_formatted_value(),
+		) );
+
 		if ( ! empty( $this->excluded_sidebars ) ) {
 			if ( ! is_array( $this->excluded_sidebars ) ) {
 				$this->excluded_sidebars = array( $this->excluded_sidebars );
