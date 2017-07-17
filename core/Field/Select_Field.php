@@ -20,7 +20,7 @@ class Select_Field extends Predefined_Options_Field {
 		$values = wp_list_pluck( $options, 'value' );
 		$value = $this->get_formatted_value();
 		if ( ! in_array( $value, $values ) ) {
-			$value = $options[0];
+			$value = $values[0];
 		}
 
 		$field_data = array_merge( $field_data, array(
