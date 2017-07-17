@@ -2609,6 +2609,8 @@ var _jquery = __webpack_require__("0iPh");
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
+var _reduxSaga = __webpack_require__("igqX");
+
 var _effects = __webpack_require__("egdi");
 
 var _lodash = __webpack_require__("M4fF");
@@ -2651,7 +2653,7 @@ function validate(fieldIds, event) {
 					$spinner = (0, _jquery2.default)('#publishing-action .spinner', $target);
 					$error = (0, _jquery2.default)('.carbon-error-required strong');
 					_context.next = 5;
-					return (0, _effects.actionChannel)(_actions2.markFieldAsInvalid);
+					return (0, _effects.actionChannel)(_actions2.markFieldAsInvalid, _reduxSaga.buffers.sliding(1));
 
 				case 5:
 					validationFailedChannel = _context.sent;
@@ -2720,6 +2722,7 @@ function validate(fieldIds, event) {
 					return (0, _effects.take)(validationFailedChannel);
 
 				case 35:
+					validationFailedChannel.close();
 
 					// Cancel the action and prevent execution of WordPress's validation.
 					event.preventDefault();
@@ -2741,7 +2744,7 @@ function validate(fieldIds, event) {
 						return (0, _jquery2.default)(element).closest('.postbox, .widget, .menu-item').find('.carbon-highlight:not(:visible)').length > 0;
 					}).trigger('click');
 
-				case 40:
+				case 41:
 				case 'end':
 					return _context.stop();
 			}
@@ -3499,11 +3502,16 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
+var _promise = __webpack_require__("//Fk");
+
+var _promise2 = _interopRequireDefault(_promise);
+
 var _regenerator = __webpack_require__("Xxa5");
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
 exports.workerRaiseFieldUpdatedApiEvent = workerRaiseFieldUpdatedApiEvent;
+exports.userValidateField = userValidateField;
 exports.default = foreman;
 
 var _effects = __webpack_require__("egdi");
@@ -3518,9 +3526,9 @@ var _selectors = __webpack_require__("ZMHW");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [workerRaiseFieldUpdatedApiEvent, foreman].map(_regenerator2.default.mark); /**
-                                                                                           * The external dependencies.
-                                                                                           */
+var _marked = [workerRaiseFieldUpdatedApiEvent, userValidateField, foreman].map(_regenerator2.default.mark); /**
+                                                                                                              * The external dependencies.
+                                                                                                              */
 
 
 /**
@@ -3563,24 +3571,61 @@ function workerRaiseFieldUpdatedApiEvent(_ref) {
 }
 
 /**
- * Start to work.
+ * Raise field validation event.
  *
- * @return {void}
+ * @param  {Object} field
+ * @param  {String} error
+ * @return {String}
  */
-function foreman() {
-  return _regenerator2.default.wrap(function foreman$(_context2) {
+function userValidateField(fieldId, error) {
+  var fieldHierarchy;
+  return _regenerator2.default.wrap(function userValidateField$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
         case 0:
           _context2.next = 2;
-          return (0, _effects.all)([(0, _effects.takeEvery)(_actions.setFieldValue, workerRaiseFieldUpdatedApiEvent)]);
+          return (0, _effects.select)(_selectors.getFieldHierarchyById, fieldId);
 
         case 2:
+          fieldHierarchy = _context2.sent;
+          _context2.next = 5;
+          return new _promise2.default(function (resolve, reject) {
+            (0, _jquery2.default)(document).one('carbonFields.validateField', function (e) {
+              resolve(e.result);
+            });
+            var result = (0, _jquery2.default)(document).trigger('carbonFields.validateField', [fieldHierarchy, error]);
+          });
+
+        case 5:
+          return _context2.abrupt('return', _context2.sent);
+
+        case 6:
         case 'end':
           return _context2.stop();
       }
     }
   }, _marked[1], this);
+}
+
+/**
+ * Start to work.
+ *
+ * @return {void}
+ */
+function foreman() {
+  return _regenerator2.default.wrap(function foreman$(_context3) {
+    while (1) {
+      switch (_context3.prev = _context3.next) {
+        case 0:
+          _context3.next = 2;
+          return (0, _effects.all)([(0, _effects.takeEvery)(_actions.setFieldValue, workerRaiseFieldUpdatedApiEvent)]);
+
+        case 2:
+        case 'end':
+          return _context3.stop();
+      }
+    }
+  }, _marked[2], this);
 }
 
 /***/ }),
@@ -6457,7 +6502,7 @@ var Api = function () {
 
 	/**
   * Constructor
-  * 
+  *
   * @param {Object} store The entire redux store
   */
 	function Api(store) {
@@ -6470,7 +6515,7 @@ var Api = function () {
 
 	/**
   * Get a field's value
-  * 
+  *
   * @param  {string} fieldName Field name and hierarchy
   * @return {Object}
   */
@@ -6504,7 +6549,7 @@ var Api = function () {
 
 		/**
    * Set a field's value
-   * 
+   *
    * @param {string} fieldName Field name and hierarchy
    */
 
@@ -6541,7 +6586,7 @@ var Api = function () {
 
 		/**
    * Add a group to a complex field
-   * 
+   *
    * @param {string} fieldName Field name and hierarchy
    * @param {string} groupName Group name to create.
    */
@@ -6569,7 +6614,7 @@ var Api = function () {
 
 		/**
    * Remove a group from a complex field
-   * 
+   *
    * @param {string} fieldName Field name and hierarchy
    * @param {integer} groupIndex The index of the group to remove
    */
@@ -9176,6 +9221,8 @@ var _selectors = __webpack_require__("ZMHW");
 
 var _helpers = __webpack_require__("pP85");
 
+var _api = __webpack_require__("GfEj");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _marked = [workerValidate, workerSetup, foreman].map(_regenerator2.default.mark); /**
@@ -9270,24 +9317,29 @@ function workerValidate(validator, fieldId, debounce, action) {
 
 				case 16:
 					error = _context.sent;
+					_context.next = 19;
+					return (0, _effects.call)(_api.userValidateField, fieldId, error);
+
+				case 19:
+					error = _context.sent;
 
 					if (!(0, _lodash.isNull)(error)) {
-						_context.next = 22;
+						_context.next = 25;
 						break;
 					}
 
-					_context.next = 20;
+					_context.next = 23;
 					return (0, _effects.put)((0, _actions.markFieldAsValid)(fieldId));
 
-				case 20:
-					_context.next = 24;
+				case 23:
+					_context.next = 27;
 					break;
 
-				case 22:
-					_context.next = 24;
+				case 25:
+					_context.next = 27;
 					return (0, _effects.put)((0, _actions.markFieldAsInvalid)(fieldId, error));
 
-				case 24:
+				case 27:
 				case 'end':
 					return _context.stop();
 			}
@@ -18140,7 +18192,7 @@ function workerAddOrCloneComplexGroup(_ref) {
 
 				case 37:
 					if (!isTabbed) {
-						_context.next = 40;
+						_context.next = 42;
 						break;
 					}
 
@@ -18148,6 +18200,14 @@ function workerAddOrCloneComplexGroup(_ref) {
 					return (0, _effects.put)((0, _actions.switchComplexTab)(fieldId, group.id));
 
 				case 40:
+					_context.next = 44;
+					break;
+
+				case 42:
+					_context.next = 44;
+					return (0, _effects.put)((0, _actions.expandComplexGroup)(fieldId, group.id));
+
+				case 44:
 				case 'end':
 					return _context.stop();
 			}
@@ -18513,15 +18573,6 @@ function (_ref3) {
 
 
 		setupField(field.id, field.type, ui);
-
-		// If the field doesn't have a value,
-		// use the first option as fallback.
-		// in addition, make sure the first
-		// option value is not already the same (i.e. empty)
-		var firstOption = field.options[0].value;
-		if (!field.value && field.value !== firstOption) {
-			setFieldValue(field.id, firstOption, 'set', false);
-		}
 
 		// Supress validation errors when the fallback option has a falsy value.
 		// An example is when the field is used to render 'Gravity Form' selectbox.
