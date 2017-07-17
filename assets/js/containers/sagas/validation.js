@@ -2,6 +2,7 @@
  * The external dependencies.
  */
 import $ from 'jquery';
+import { buffers } from 'redux-saga';
 import { takeEvery, takeLatest, call, select, put, take, all, actionChannel } from 'redux-saga/effects';
 import { map } from 'lodash';
 
@@ -25,7 +26,7 @@ export function* validate(fieldIds, event) {
 	const $target = $(event.currentTarget);
 	const $spinner = $('#publishing-action .spinner', $target);
 	const $error = $('.carbon-error-required strong');
-	const validationFailedChannel = yield actionChannel(markFieldAsInvalid);
+	const validationFailedChannel = yield actionChannel(markFieldAsInvalid, buffers.sliding(1));
 
 	$spinner.addClass('is-active');
 
@@ -37,6 +38,7 @@ export function* validate(fieldIds, event) {
 	// Block and wait for an invalid field. In case we don't receive
 	// such action the worker will be canceled and the process will continue.
 	yield take(validationFailedChannel);
+	validationFailedChannel.close();
 
 	// Cancel the action and prevent execution of WordPress's validation.
 	event.preventDefault();

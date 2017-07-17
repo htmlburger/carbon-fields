@@ -20,7 +20,7 @@ class Api {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param {Object} store The entire redux store
 	 */
 	constructor(store) {
@@ -31,7 +31,7 @@ class Api {
 
 	/**
 	 * Get a field's value
-	 * 
+	 *
 	 * @param  {string} fieldName Field name and hierarchy
 	 * @return {Object}
 	 */
@@ -61,7 +61,7 @@ class Api {
 
 	/**
 	 * Set a field's value
-	 * 
+	 *
 	 * @param {string} fieldName Field name and hierarchy
 	 */
 	setFieldValue(fieldName, value) {
@@ -95,7 +95,7 @@ class Api {
 
 	/**
 	 * Add a group to a complex field
-	 * 
+	 *
 	 * @param {string} fieldName Field name and hierarchy
 	 * @param {string} groupName Group name to create.
 	 */
@@ -110,13 +110,13 @@ class Api {
 			console.warn(`The specified group does not exist: ${groupName}`);
 			return;
 		}
-		
+
 		this.store.dispatch(addComplexGroup(field.id, groupName));
 	}
 
 	/**
 	 * Remove a group from a complex field
-	 * 
+	 *
 	 * @param {string} fieldName Field name and hierarchy
 	 * @param {integer} groupIndex The index of the group to remove
 	 */
@@ -130,7 +130,7 @@ class Api {
 			console.warn(`The specified complex field does not have an entry with index of ${groupIndex}.`);
 			return;
 		}
-		
+
 		this.store.dispatch(removeComplexGroup(field.id, field.value[groupIndex].id));
 	}
 }
