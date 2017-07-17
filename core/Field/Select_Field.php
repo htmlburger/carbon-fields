@@ -16,8 +16,16 @@ class Select_Field extends Predefined_Options_Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
+		$options = $this->parse_options( $this->get_options() );
+		$values = wp_list_pluck( $options, 'value' );
+		$value = $this->get_formatted_value();
+		if ( ! in_array( $value, $values ) ) {
+			$value = $options[0];
+		}
+
 		$field_data = array_merge( $field_data, array(
-			'options' => $this->parse_options( $this->get_options() ),
+			'value' => $value,
+			'options' => $options,
 		) );
 
 		return $field_data;

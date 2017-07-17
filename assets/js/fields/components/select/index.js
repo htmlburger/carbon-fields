@@ -104,15 +104,6 @@ export const enhance = compose(
 
 					setupField(field.id, field.type, ui);
 
-					// If the field doesn't have a value,
-					// use the first option as fallback.
-					// in addition, make sure the first
-					// option value is not already the same (i.e. empty)
-					const firstOption = field.options[0].value;
-					if (!field.value && field.value !== firstOption) {
-						setFieldValue(field.id, firstOption, 'set', false);
-					}
-
 					// Supress validation errors when the fallback option has a falsy value.
 					// An example is when the field is used to render 'Gravity Form' selectbox.
 					if (field.required) {
