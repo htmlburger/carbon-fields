@@ -111,7 +111,7 @@
 .carbon-empty-row:not(.carbon-empty-row-visible) ~ .layout-tabbed-vertical + .carbon-actions { display: none !important; }
 
 .layout-tabbed-horizontal .collapsed > .fields-container,
-.layout-tabbed-vertical .collapsed > .fields-container { display: block; }
+.layout-tabbed-vertical .collapsed > .fields-container { display: flex; }
 
 /*  Vertical Tabbed Layout  */
 

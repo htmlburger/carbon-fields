@@ -25,12 +25,29 @@ export function* workerRaiseFieldUpdatedApiEvent({ payload: { fieldId, value }})
 }
 
 /**
+ * Raise field validation event.
+ *
+ * @param  {Object} field
+ * @param  {String} error
+ * @return {String}
+ */
+export function* userValidateField(fieldId, error) {
+	const fieldHierarchy = yield select(getFieldHierarchyById, fieldId);
+	return yield new Promise((resolve, reject) => {
+		$(document).one('carbonFields.validateField', e => {
+			resolve(e.result);
+		});
+		const result = $(document).trigger('carbonFields.validateField', [fieldHierarchy, error]);
+	});
+}
+
+/**
  * Start to work.
  *
  * @return {void}
  */
 export default function* foreman() {
 	yield all([
-		takeEvery(setFieldValue, workerRaiseFieldUpdatedApiEvent)
+		takeEvery(setFieldValue, workerRaiseFieldUpdatedApiEvent),
 	]);
 }

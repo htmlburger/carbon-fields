@@ -26,7 +26,8 @@ class Theme_Options_Container extends Container {
 		'parent' => '',
 		'file' => '',
 		'icon' => '',
-		'position' => null,
+		'menu_position' => null,
+		'menu_title' => null,
 	);
 
 	/**
@@ -163,19 +164,19 @@ class Theme_Options_Container extends Container {
 		if ( ! $this->settings['parent'] ) {
 			add_menu_page(
 				$this->title,
-				$this->title,
+				$this->settings['menu_title'] ? $this->settings['menu_title'] : $this->title,
 				'read',
 				$this->settings['file'],
 				array( $this, 'render' ),
 				$this->settings['icon'],
-				$this->settings['position']
+				$this->settings['menu_position']
 			);
 		}
 
 		add_submenu_page(
 			$this->settings['parent'],
 			$this->title,
-			$this->title,
+			$this->settings['menu_title'] ? $this->settings['menu_title'] : $this->title,
 			'read',
 			$this->settings['file'],
 			array( $this, 'render' )
@@ -250,7 +251,8 @@ class Theme_Options_Container extends Container {
 	/**
 	 * Change the parent theme options page of this container
 	 *
-	 * @return Container $this
+	 * @param  string|Theme_Options_Container $parent
+	 * @return Container                      $this
 	 */
 	public function set_page_parent( $parent ) {
 		if ( is_a( $parent, get_class() ) ) {
@@ -265,6 +267,7 @@ class Theme_Options_Container extends Container {
 	/**
 	 * Set the theme options file name of this container.
 	 *
+	 * @param  string    $file
 	 * @return Container $this
 	 */
 	public function set_page_file( $file ) {
@@ -273,12 +276,34 @@ class Theme_Options_Container extends Container {
 	}
 
 	/**
-	 * Set the page position of this container in the administration menu.
+	 * Set the title of this container in the administration menu.
 	 *
+	 * @param  string    $title
+	 * @return Container $this
+	 */
+	public function set_page_menu_title( $title ) {
+		$this->settings['menu_title'] = $title;
+		return $this;
+	}
+
+	/**
+	 * Alias of the set_page_menu_position() method for backwards compatibility
+	 *
+	 * @param  integer   $position
 	 * @return Container $this
 	 */
 	public function set_page_position( $position ) {
-		$this->settings['position'] = $position;
+		return $this->set_page_menu_position( $position );
+	}
+
+	/**
+	 * Set the page position of this container in the administration menu.
+	 *
+	 * @param  integer   $position
+	 * @return Container $this
+	 */
+	public function set_page_menu_position( $position ) {
+		$this->settings['menu_position'] = $position;
 		return $this;
 	}
 
@@ -286,6 +311,7 @@ class Theme_Options_Container extends Container {
 	 * Set the icon of this theme options page.
 	 * Applicable only for parent theme option pages.
 	 *
+	 * @param  string    $icon
 	 * @return Container $this
 	 */
 	public function set_icon( $icon ) {

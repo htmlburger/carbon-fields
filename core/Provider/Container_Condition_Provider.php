@@ -126,6 +126,12 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 			return $condition;
 		} );
 
+		$cc_ioc['blog_id'] = $cc_ioc->factory( function() use ( $ioc ) {
+			$condition = new \Carbon_Fields\Container\Condition\Blog_ID_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
+			return $condition;
+		} );
+
 		$cc_ioc['current_user_id'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Current_User_ID_Condition();
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
@@ -234,6 +240,8 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 
 		add_filter( 'carbon_fields_user_meta_container_static_condition_types', array( $this, 'filter_user_meta_container_static_condition_types' ), 10, 3 );
 		add_filter( 'carbon_fields_user_meta_container_dynamic_condition_types', array( $this, 'filter_user_meta_container_dynamic_condition_types' ), 10, 3 );
+
+		add_filter( 'carbon_fields_theme_options_container_static_condition_types', array( $this, 'filter_theme_options_container_static_condition_types' ), 10, 3 );
 	}
 
 	/**
@@ -317,6 +325,20 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 		return array_merge(
 			$condition_types,
 			array( 'user_role' )
+		);
+	}
+
+	/**
+	 * Filter the Theme_Options_Container static condition types
+	 *
+	 * @param  array<string>                     $condition_types
+	 * @param  Carbon_Fields\Container\Container $container
+	 * @return array<string>
+	 */
+	public function filter_theme_options_container_static_condition_types( $condition_types, $container_type, $container ) {
+		return array_merge(
+			$condition_types,
+			array( 'blog_id' )
 		);
 	}
 }
