@@ -33,12 +33,12 @@ export function* workerRaiseFieldUpdatedApiEvent({ payload: { fieldId, value }})
  */
 export function* userValidateField(fieldId, error) {
 	const fieldHierarchy = yield select(getFieldHierarchyById, fieldId);
-	return yield new Promise((resolve, reject) => {
-		$(document).one('carbonFields.validateField', e => {
-			resolve(e.result);
-		});
-		const result = $(document).trigger('carbonFields.validateField', [fieldHierarchy, error]);
+	let eventResult = error;
+	$(document).one('carbonFields.validateField', e => {
+		eventResult = e.result;
 	});
+	const result = $(document).trigger('carbonFields.validateField', [fieldHierarchy, error]);
+	return eventResult;
 }
 
 /**
