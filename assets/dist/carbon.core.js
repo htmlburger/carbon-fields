@@ -9263,7 +9263,7 @@ function shouldValidate(action, fieldId) {
  * @return {void}
  */
 function workerValidate(validator, fieldId, debounce, action) {
-	var field, _field$ui, is_visible, valid, error;
+	var field, _field$ui, is_visible, valid, error, userError;
 
 	return _regenerator2.default.wrap(function workerValidate$(_context) {
 		while (1) {
@@ -9321,25 +9321,31 @@ function workerValidate(validator, fieldId, debounce, action) {
 					return (0, _effects.call)(_api.userValidateField, fieldId, error);
 
 				case 19:
-					error = _context.sent;
+					userError = _context.sent;
+
+					if (!(0, _lodash.isUndefined)(userError)) {
+						error = userError;
+					}
+
+					// Update the UI.
 
 					if (!(0, _lodash.isNull)(error)) {
-						_context.next = 25;
+						_context.next = 26;
 						break;
 					}
 
-					_context.next = 23;
+					_context.next = 24;
 					return (0, _effects.put)((0, _actions.markFieldAsValid)(fieldId));
 
-				case 23:
-					_context.next = 27;
+				case 24:
+					_context.next = 28;
 					break;
 
-				case 25:
-					_context.next = 27;
+				case 26:
+					_context.next = 28;
 					return (0, _effects.put)((0, _actions.markFieldAsInvalid)(fieldId, error));
 
-				case 27:
+				case 28:
 				case 'end':
 					return _context.stop();
 			}
