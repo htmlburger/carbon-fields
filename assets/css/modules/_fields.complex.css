@@ -34,7 +34,7 @@
 .carbon-groups-holder .carbon-group-actions a:focus { box-shadow: none; outline: none; }
 .carbon-groups-holder .carbon-group-actions a:before { display: block; text-indent: 0; }
 
-.carbon-groups-holder .collapsed .carbon-btn-collapse:before { content: '\f140'; }
+.carbon-groups-holder > .collapsed > .carbon-group-actions > .carbon-btn-collapse:before { content: '\f140'; }
 
 .carbon-groups-holder .carbon-group-actions .carbon-btn-remove:hover { color: $color-border-darkgrey; }
 
@@ -110,8 +110,8 @@
 .carbon-empty-row:not(.carbon-empty-row-visible) ~ .layout-tabbed-horizontal + .carbon-actions,
 .carbon-empty-row:not(.carbon-empty-row-visible) ~ .layout-tabbed-vertical + .carbon-actions { display: none !important; }
 
-.layout-tabbed-horizontal .collapsed > .fields-container,
-.layout-tabbed-vertical .collapsed > .fields-container { display: flex; }
+.layout-tabbed-horizontal > .carbon-groups-holder > .collapsed > .fields-container,
+.layout-tabbed-vertical > .carbon-groups-holder > .collapsed > .fields-container { display: flex; }
 
 /*  Vertical Tabbed Layout  */
 

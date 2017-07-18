@@ -75,7 +75,10 @@ export function* workerValidate(validator, fieldId, debounce, action) {
 
 	// Perform the validation.
 	let error = yield call(validator, field);
-	error = yield call(userValidateField, fieldId, error);
+	const userError = yield call(userValidateField, fieldId, error);
+	if ( ! isUndefined(userError) ) {
+		error = userError;
+	}
 
 	// Update the UI.
 	if (isNull(error)) {
