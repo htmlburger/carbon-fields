@@ -41,7 +41,7 @@ class Theme_Options_Container extends Container {
 		}
 
 		if ( apply_filters( 'carbon_fields_' . $type . '_container_admin_only_access', true, $title ) ) {
-			$this->where( 'current_user_capability', '=', 'manage_options' );
+			$this->where( 'current_user_capability', '=', apply_filters( 'carbon_fields_' . $type . '_container_access_capability', 'manage_options', $title ) );
 		}
 	}
 
