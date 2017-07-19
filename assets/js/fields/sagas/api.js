@@ -1,7 +1,8 @@
 /**
  * The external dependencies.
  */
-import { takeEvery, takeLatest, delay, put, call, select, take, all } from 'redux-saga/effects';
+import { takeEvery, select, all } from 'redux-saga/effects';
+import { isUndefined } from 'lodash';
 import $ from 'jquery';
 
 /**
@@ -37,7 +38,11 @@ export function* userValidateField(fieldId, error) {
 	$(document).one('carbonFields.validateField', e => {
 		eventResult = e.result;
 	});
-	const result = $(document).trigger('carbonFields.validateField', [fieldHierarchy, error]);
+	$(document).trigger('carbonFields.validateField', [fieldHierarchy, error]);
+
+	if ( isUndefined( eventResult ) ) {
+		return error;
+	}
 	return eventResult;
 }
 

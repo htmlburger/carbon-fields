@@ -288,13 +288,3 @@ export const getComplexGroupLabel = (state, group) => {
 	}
 	return 'N/A';
 };
-
-/**
- * Get all fields that are rendered in a visible container.
- *
- * @return {Object[]}
- */
-export const getFieldsWithinVisibleContainer = createSelector([
-	getContainers,
-	getFields
-], (containers, fields) => filter(fields, field => get(containers, `${field.container_id}.ui.is_visible`, false)));
