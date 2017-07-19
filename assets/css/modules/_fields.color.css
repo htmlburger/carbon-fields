@@ -3,6 +3,8 @@
 \* ------------------------------------------------------------ */
 
 .carbon-color .carbon-color-button { display: inline-block; vertical-align: top; padding: 0; }
+.carbon-color .carbon-color-clear-button { margin-left: 5px; padding: 0 5px; }
+.carbon-color .carbon-color-clear-button span { line-height: 26px; }
 .carbon-color .carbon-color-button-text { padding: 0 10px; }
 
 .carbon-color .carbon-color-preview { display: inline-block; vertical-align: top; width: 28px; height: 100%; background: #fff; border-radius: 3px 0 0 3px; border-right: 1px solid $color-border-darker; }
@@ -17,8 +19,11 @@
 .rtl .carbon-color .carbon-color-preview { border-radius: 0 3px 3px 0; border-right: 0; border-left: 1px solid $color-border-darker; }
 
 @media (max-width: 782px) {
-	.carbon-color .carbon-color-button { height: 39px; line-height: 37px; }
-	.carbon-container .carbon-field .carbon-color .carbon-color-button .carbon-color-preview { margin: 0 !important; vertical-align: top !important; }
-	.carbon-container .carbon-field .carbon-color .carbon-color-button .carbon-color-button-text { margin: 0 !important; vertical-align: top; }
+	.carbon-color .carbon-color-button,
+	.carbon-color .carbon-color-button span { height: 39px; line-height: 37px; }
+	.carbon-container .carbon-field .carbon-color .carbon-color-button .carbon-color-preview { height: 37px; margin: 0 !important; vertical-align: top !important; }
+	.carbon-container .carbon-field .carbon-color .carbon-color-button .carbon-color-button-text,
+	.carbon-container .carbon-field .carbon-color .carbon-color-clear-button span { margin: 0 !important; vertical-align: top; }
+	.carbon-container .carbon-field .carbon-color .carbon-color-clear-button { padding: 0 10px; }
 }
 

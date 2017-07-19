@@ -37,7 +37,8 @@ export const ColorField = ({
 	pickerVisible,
 	handleChange,
 	showPicker,
-	hidePicker
+	hidePicker,
+	clearValue
 }) => {
 	return <Field field={field}>
 		<div className="carbon-color">
@@ -53,6 +54,11 @@ export const ColorField = ({
 				palette={field.palette}
 				onChange={handleChange}
 				onClose={hidePicker} />
+
+			<span className="button carbon-color-button carbon-color-clear-button" onClick={clearValue}>
+				{/*<span className="dashicons dashicons-dismiss"></span>*/}
+				<span className="dashicons dashicons-no"></span>
+			</span>
 
 			<input
 				type="hidden"
@@ -110,6 +116,7 @@ export const enhance = compose(
 		handleChange: ({ field, setFieldValue }) => ({ hex }) => setFieldValue(field.id, hex),
 		showPicker: ({ setPickerVisibility }) => () => setPickerVisibility(true),
 		hidePicker: ({ setPickerVisibility }) => () => setPickerVisibility(false),
+		clearValue: ({ field, setFieldValue }) => () => setFieldValue(field.id, ''),
 	}),
 );
 
