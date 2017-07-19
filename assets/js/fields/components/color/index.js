@@ -40,10 +40,19 @@ export const ColorField = ({
 	hidePicker,
 	clearValue
 }) => {
+	const preview = field.value.length > 0 ? (
+		<span className="carbon-color-preview" style={{ backgroundColor: field.value }}></span>
+	) : (
+		<span className="carbon-color-preview carbon-color-preview-empty">
+			<span className="carbon-color-preview-block carbon-color-preview-empty-tl"></span>
+			<span className="carbon-color-preview-block carbon-color-preview-empty-br"></span>
+		</span>
+	);
+
 	return <Field field={field}>
 		<div className="carbon-color">
 			<span className="pickcolor button carbon-color-button hide-if-no-js" onClick={showPicker}>
-				<span className="carbon-color-preview" style={{ backgroundColor: field.value }}></span>
+				{preview}
 
 				<span className="carbon-color-button-text">{carbonFieldsL10n.field.colorSelectColor}</span>
 			</span>
@@ -56,7 +65,6 @@ export const ColorField = ({
 				onClose={hidePicker} />
 
 			<span className="button carbon-color-button carbon-color-clear-button" onClick={clearValue}>
-				{/*<span className="dashicons dashicons-dismiss"></span>*/}
 				<span className="dashicons dashicons-no"></span>
 			</span>
 
