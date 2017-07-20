@@ -9,16 +9,14 @@ namespace Carbon_Fields\Field;
 class Footer_Scripts_Field extends Scripts_Field {
 
 	/**
-	 * Default help text to be displayed for this type of field.
+	 * {@inheritDoc}
 	 */
-	public function get_default_help_text() {
-		return __( 'If you need to add scripts to your footer (like Google Analytics tracking code), you should enter them in this box.', 'carbon-fields' );
-	}
+	protected $hook_name = 'wp_footer';
 
 	/**
-	 * Action name to be hooked on.
+	 * {@inheritDoc}
 	 */
-	public function get_hook_name() {
-		return 'wp_footer';
+	protected function get_default_help_text() {
+		return __( 'If you need to add scripts to your footer (like Google Analytics tracking code), you should enter them in this box.', 'carbon-fields' );
 	}
 }
