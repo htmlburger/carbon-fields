@@ -40,7 +40,7 @@ class Theme_Options_Container extends Container {
 			$this->set_datastore( Datastore::make( 'theme_options' ), $this->has_default_datastore() );
 		}
 
-		if ( apply_filters( 'carbon_fields_' . $type . '_container_admin_only_access', true, $title ) ) {
+		if ( apply_filters( 'carbon_fields_' . $type . '_container_admin_only_access', true, $title, $this ) ) {
 			$this->where( 'current_user_capability', '=', 'manage_options' );
 		}
 	}
