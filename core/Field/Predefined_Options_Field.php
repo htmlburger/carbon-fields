@@ -76,13 +76,7 @@ abstract class Predefined_Options_Field extends Field {
 					continue;
 				}
 			} else {
-				foreach ( $collection as $key => $value ) {
-					if ( is_array( $value ) ) {
-						$collection_items = $collection_items + $value;
-					} else {
-						$collection_items[ $key ] = $value;
-					}
-				}
+				$collection_items = $collection;
 			}
 			if ( $this->is_indexed_array( $options ) && $this->is_indexed_array( $collection_items ) ) {
 				$options = array_merge( $options, $collection_items );
