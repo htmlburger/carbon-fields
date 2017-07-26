@@ -1,6 +1,6 @@
 {
   "name": "carbon-fields",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options, navigation menus and more.",
   "main": "index.js",
   "directories": {
