@@ -11,7 +11,7 @@
 1. You should now have changes ONLY in the /assets/dist/ directory - any changes outside this directory mean that you have a dirty working copy. Never commit anything else into `release` except /assets/dist/ changes.
 1. Commit the /assets/dist/ changes to `release`
 1. `git push --all`
-1. Create a new release in [Github](https://github.com/htmlburger/carbon-fields-plugin/releases/new) from the `release` branch
+1. Create a new release in [Github](https://github.com/htmlburger/carbon-fields/releases/new) from the `release` branch
 1. Enter the new version you set in `config.php` for `Tag version` and `Title`
 1. Add a changelog for `Description`
 1. Click `Publish release`
