@@ -2,7 +2,8 @@
  * The external dependencies.
  */
 import $ from 'jquery';
-import { delay, put, call, take, select, all } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
+import { put, call, take, select, all } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.

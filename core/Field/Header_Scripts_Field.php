@@ -9,16 +9,14 @@ namespace Carbon_Fields\Field;
 class Header_Scripts_Field extends Scripts_Field {
 
 	/**
-	 * Default help text to be displayed for this type of field.
+	 * {@inheritDoc}
 	 */
-	public function get_default_help_text() {
-		return __( 'If you need to add scripts to your header, you should enter them here.', 'carbon-fields' );
-	}
+	protected $hook_name = 'wp_head';
 
 	/**
-	 * Action name to be hooked on.
+	 * {@inheritDoc}
 	 */
-	public function get_hook_name() {
-		return 'wp_head';
+	protected function get_default_help_text() {
+		return __( 'If you need to add scripts to your header, you should enter them here.', 'carbon-fields' );
 	}
 }

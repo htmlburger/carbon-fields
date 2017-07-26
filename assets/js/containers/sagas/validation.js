@@ -10,10 +10,10 @@ import { map } from 'lodash';
  * The internal dependencies.
  */
 import { validateContainer, validateAllContainers } from 'containers/actions';
-import { getContainerById } from 'containers/selectors';
+import { getContainerById, getVisibleContainers } from 'containers/selectors';
 
 import { validateField, markFieldAsInvalid } from 'fields/actions';
-import { getFieldsByRoots, getFieldsWithinVisibleContainer } from 'fields/selectors';
+import { getFieldsByRoots } from 'fields/selectors';
 
 /**
  * Validate the fields.
@@ -100,8 +100,14 @@ export function* workerValidate({ payload: { containerId, event } }) {
  * @return {void}
  */
 export function* workerValidateAll({ payload }) {
-	const fields = yield select(getFieldsWithinVisibleContainer);
-	const ids = yield call(map, fields, 'id');
+	const containers = yield select(getVisibleContainers);
+	let ids = [];
+
+	for (let i = 0; i < containers.length; i++) {
+		let container = containers[i];
+		let fields = yield select(getFieldsByRoots, container.fields);
+		ids = ids.concat( fields );
+	}
 
 	yield call(validate, ids, payload);
 }

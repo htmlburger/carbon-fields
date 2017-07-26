@@ -32,7 +32,6 @@ const MapField = ({
 	handleChange,
 	handleSearchSubmit
 }) => {
-	// console.log(field);
 	return <Field field={field}>
 		<div className="carbon-map-search">
 			<p>{carbonFieldsL10n.field.mapLocateAddress}</p>

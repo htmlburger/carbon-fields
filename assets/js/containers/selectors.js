@@ -1,7 +1,7 @@
 /**
  * The external dependencies.
  */
-import { pickBy } from 'lodash';
+import { filter, pickBy } from 'lodash';
 
 /**
  * Get all containers.
@@ -28,3 +28,11 @@ export const getContainerById = (state, containerId) => state.containers[contain
  * @return {Object}
  */
 export const getContainersByType = (state, containerType) => pickBy(getContainers(state), ({ type }) => type === containerType);
+
+/**
+ * Get all visible containers.
+ *
+ * @param  {Object} state
+ * @return {Object}
+ */
+export const getVisibleContainers = state => filter(getContainers(state), container => container.ui.is_visible);

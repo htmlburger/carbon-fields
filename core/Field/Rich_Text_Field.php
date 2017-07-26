@@ -18,7 +18,7 @@ class Rich_Text_Field extends Textarea_Field {
 	 * {@inheritDoc}
 	 */
 	public static function field_type_activated() {
-		add_action( 'admin_print_footer_scripts', array( get_class(), 'editor_init' ) );
+		add_action( 'in_admin_header', array( get_class(), 'editor_init' ) );
 	}
 
 	/**

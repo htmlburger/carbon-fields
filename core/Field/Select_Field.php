@@ -19,7 +19,7 @@ class Select_Field extends Predefined_Options_Field {
 		$options = $this->parse_options( $this->get_options() );
 		$values = wp_list_pluck( $options, 'value' );
 		$value = $this->get_formatted_value();
-		if ( ! in_array( $value, $values ) ) {
+		if ( ! in_array( $value, $values ) && ! empty( $values ) ) {
 			$value = $values[0];
 		}
 

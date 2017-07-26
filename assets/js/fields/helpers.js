@@ -19,11 +19,16 @@ import { TYPE_COMPLEX, PARENT_TYPE_GROUP, PARENT_TYPE_CONTAINER } from 'fields/c
  * @return {String}
  */
 export function getAttachmentThumbnail(attachment) {
+	let thumbnailUrl = '';
+
 	if (attachment.sizes) {
-		return (attachment.sizes.thumbnail || attachment.sizes.full).url;
+		const size = attachment.sizes.thumbnail || attachment.sizes.full;
+		if (typeof size !== 'undefined') {
+			thumbnailUrl = size.url;
+		}
 	}
 
-	return '';
+	return thumbnailUrl;
 }
 
 /**

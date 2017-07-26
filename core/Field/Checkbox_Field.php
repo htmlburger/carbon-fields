@@ -52,6 +52,16 @@ class Checkbox_Field extends Field {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function set_value( $value ) {
+		if ( is_bool( $value ) ) {
+			$value = $value ? $this->get_option_value() : '';
+		}
+		return parent::set_value( $value );
+	}
+
+	/**
 	 * Return a differently formatted value for end-users
 	 *
 	 * @return mixed
