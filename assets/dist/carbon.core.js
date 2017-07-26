@@ -2020,7 +2020,15 @@ var ColorField = exports.ColorField = function ColorField(_ref) {
 	    pickerVisible = _ref.pickerVisible,
 	    handleChange = _ref.handleChange,
 	    showPicker = _ref.showPicker,
-	    hidePicker = _ref.hidePicker;
+	    hidePicker = _ref.hidePicker,
+	    clearValue = _ref.clearValue;
+
+	var preview = field.value.length > 0 ? _react2.default.createElement('span', { className: 'carbon-color-preview', style: { backgroundColor: field.value } }) : _react2.default.createElement(
+		'span',
+		{ className: 'carbon-color-preview carbon-color-preview-empty' },
+		_react2.default.createElement('span', { className: 'carbon-color-preview-block carbon-color-preview-empty-tl' }),
+		_react2.default.createElement('span', { className: 'carbon-color-preview-block carbon-color-preview-empty-br' })
+	);
 
 	return _react2.default.createElement(
 		_field2.default,
@@ -2031,7 +2039,7 @@ var ColorField = exports.ColorField = function ColorField(_ref) {
 			_react2.default.createElement(
 				'span',
 				{ className: 'pickcolor button carbon-color-button hide-if-no-js', onClick: showPicker },
-				_react2.default.createElement('span', { className: 'carbon-color-preview', style: { backgroundColor: field.value } }),
+				preview,
 				_react2.default.createElement(
 					'span',
 					{ className: 'carbon-color-button-text' },
@@ -2044,6 +2052,11 @@ var ColorField = exports.ColorField = function ColorField(_ref) {
 				palette: field.palette,
 				onChange: handleChange,
 				onClose: hidePicker }),
+			_react2.default.createElement(
+				'span',
+				{ className: 'button carbon-color-button carbon-color-clear-button', onClick: clearValue },
+				_react2.default.createElement('span', { className: 'dashicons dashicons-no' })
+			),
 			_react2.default.createElement('input', {
 				type: 'hidden',
 				id: field.id,
@@ -2120,6 +2133,13 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		var setPickerVisibility = _ref5.setPickerVisibility;
 		return function () {
 			return setPickerVisibility(false);
+		};
+	},
+	clearValue: function clearValue(_ref6) {
+		var field = _ref6.field,
+		    setFieldValue = _ref6.setFieldValue;
+		return function () {
+			return setFieldValue(field.id, '');
 		};
 	}
 }));
@@ -2224,6 +2244,8 @@ exports.default = foreman;
 var _jquery = __webpack_require__("0iPh");
 
 var _jquery2 = _interopRequireDefault(_jquery);
+
+var _reduxSaga = __webpack_require__("igqX");
 
 var _effects = __webpack_require__("egdi");
 
@@ -2401,7 +2423,7 @@ function workerItemExpand() {
 
 				case 12:
 					_context3.next = 14;
-					return (0, _effects.call)(_effects.delay, 100);
+					return (0, _effects.call)(_reduxSaga.delay, 100);
 
 				case 14:
 					_context3.next = 16;
@@ -2809,25 +2831,44 @@ function workerValidate(_ref) {
  */
 function workerValidateAll(_ref2) {
 	var payload = _ref2.payload;
-	var fields, ids;
+	var containers, ids, i, container, fields;
 	return _regenerator2.default.wrap(function workerValidateAll$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
 					_context3.next = 2;
-					return (0, _effects.select)(_selectors2.getFieldsWithinVisibleContainer);
+					return (0, _effects.select)(_selectors.getVisibleContainers);
 
 				case 2:
-					fields = _context3.sent;
-					_context3.next = 5;
-					return (0, _effects.call)(_lodash.map, fields, 'id');
+					containers = _context3.sent;
+					ids = [];
+					i = 0;
 
 				case 5:
-					ids = _context3.sent;
-					_context3.next = 8;
+					if (!(i < containers.length)) {
+						_context3.next = 14;
+						break;
+					}
+
+					container = containers[i];
+					_context3.next = 9;
+					return (0, _effects.select)(_selectors2.getFieldsByRoots, container.fields);
+
+				case 9:
+					fields = _context3.sent;
+
+					ids = ids.concat(fields);
+
+				case 11:
+					i++;
+					_context3.next = 5;
+					break;
+
+				case 14:
+					_context3.next = 16;
 					return (0, _effects.call)(validate, ids, payload);
 
-				case 8:
+				case 16:
 				case 'end':
 					return _context3.stop();
 			}
@@ -3502,10 +3543,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _promise = __webpack_require__("//Fk");
-
-var _promise2 = _interopRequireDefault(_promise);
-
 var _regenerator = __webpack_require__("Xxa5");
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
@@ -3515,6 +3552,8 @@ exports.userValidateField = userValidateField;
 exports.default = foreman;
 
 var _effects = __webpack_require__("egdi");
+
+var _lodash = __webpack_require__("M4fF");
 
 var _jquery = __webpack_require__("0iPh");
 
@@ -3578,7 +3617,7 @@ function workerRaiseFieldUpdatedApiEvent(_ref) {
  * @return {String}
  */
 function userValidateField(fieldId, error) {
-  var fieldHierarchy;
+  var fieldHierarchy, eventResult;
   return _regenerator2.default.wrap(function userValidateField$(_context2) {
     while (1) {
       switch (_context2.prev = _context2.next) {
@@ -3588,18 +3627,24 @@ function userValidateField(fieldId, error) {
 
         case 2:
           fieldHierarchy = _context2.sent;
-          _context2.next = 5;
-          return new _promise2.default(function (resolve, reject) {
-            (0, _jquery2.default)(document).one('carbonFields.validateField', function (e) {
-              resolve(e.result);
-            });
-            var result = (0, _jquery2.default)(document).trigger('carbonFields.validateField', [fieldHierarchy, error]);
+          eventResult = error;
+
+          (0, _jquery2.default)(document).one('carbonFields.validateField', function (e) {
+            eventResult = e.result;
           });
+          (0, _jquery2.default)(document).trigger('carbonFields.validateField', [fieldHierarchy, error]);
 
-        case 5:
-          return _context2.abrupt('return', _context2.sent);
+          if (!(0, _lodash.isUndefined)(eventResult)) {
+            _context2.next = 8;
+            break;
+          }
 
-        case 6:
+          return _context2.abrupt('return', error);
+
+        case 8:
+          return _context2.abrupt('return', eventResult);
+
+        case 9:
         case 'end':
           return _context2.stop();
       }
@@ -9263,7 +9308,7 @@ function shouldValidate(action, fieldId) {
  * @return {void}
  */
 function workerValidate(validator, fieldId, debounce, action) {
-	var field, _field$ui, is_visible, valid, error, userError;
+	var field, _field$ui, is_visible, valid, error;
 
 	return _regenerator2.default.wrap(function workerValidate$(_context) {
 		while (1) {
@@ -9321,31 +9366,25 @@ function workerValidate(validator, fieldId, debounce, action) {
 					return (0, _effects.call)(_api.userValidateField, fieldId, error);
 
 				case 19:
-					userError = _context.sent;
-
-					if (!(0, _lodash.isUndefined)(userError)) {
-						error = userError;
-					}
-
-					// Update the UI.
+					error = _context.sent;
 
 					if (!(0, _lodash.isNull)(error)) {
-						_context.next = 26;
+						_context.next = 25;
 						break;
 					}
 
-					_context.next = 24;
+					_context.next = 23;
 					return (0, _effects.put)((0, _actions.markFieldAsValid)(fieldId));
 
-				case 24:
-					_context.next = 28;
+				case 23:
+					_context.next = 27;
 					break;
 
-				case 26:
-					_context.next = 28;
+				case 25:
+					_context.next = 27;
 					return (0, _effects.put)((0, _actions.markFieldAsInvalid)(fieldId, error));
 
-				case 28:
+				case 27:
 				case 'end':
 					return _context.stop();
 			}
@@ -9711,7 +9750,6 @@ var MapField = function MapField(_ref) {
 	    handleChange = _ref.handleChange,
 	    handleSearchSubmit = _ref.handleSearchSubmit;
 
-	// console.log(field);
 	return _react2.default.createElement(
 		_field2.default,
 		{ field: field },
@@ -9834,7 +9872,7 @@ exports.default = (0, _recompose.setStatic)('type', [_constants.TYPE_MAP])(enhan
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.getFieldsWithinVisibleContainer = exports.getComplexGroupLabel = exports.hasInvalidFields = exports.makeGetSidebarFieldOptions = exports.getFieldsByRoots = exports.isFieldTabbed = exports.getFieldsByParent = exports.makeGetFieldsByParent = exports.getFieldHierarchyById = exports.getFieldByHierarchy = exports.getFieldPatternRegex = exports.getComplexGroupById = exports.getFieldParentById = exports.getFieldById = exports.getFields = undefined;
+exports.getComplexGroupLabel = exports.hasInvalidFields = exports.makeGetSidebarFieldOptions = exports.getFieldsByRoots = exports.isFieldTabbed = exports.getFieldsByParent = exports.makeGetFieldsByParent = exports.getFieldHierarchyById = exports.getFieldByHierarchy = exports.getFieldPatternRegex = exports.getComplexGroupById = exports.getFieldParentById = exports.getFieldById = exports.getFields = undefined;
 
 var _extends2 = __webpack_require__("Dd8w");
 
@@ -10153,17 +10191,6 @@ var getComplexGroupLabel = exports.getComplexGroupLabel = function getComplexGro
 	}
 	return 'N/A';
 };
-
-/**
- * Get all fields that are rendered in a visible container.
- *
- * @return {Object[]}
- */
-var getFieldsWithinVisibleContainer = exports.getFieldsWithinVisibleContainer = (0, _reselect.createSelector)([_selectors2.getContainers, getFields], function (containers, fields) {
-	return (0, _lodash.filter)(fields, function (field) {
-		return (0, _lodash.get)(containers, field.container_id + '.ui.is_visible', false);
-	});
-});
 
 /***/ }),
 
@@ -15371,7 +15398,7 @@ module.exports = (__webpack_require__("B3Oe"))("pFYg");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getContainersByType = exports.getContainerById = exports.getContainers = undefined;
+exports.getVisibleContainers = exports.getContainersByType = exports.getContainerById = exports.getContainers = undefined;
 
 var _lodash = __webpack_require__("M4fF");
 
@@ -15410,6 +15437,18 @@ var getContainersByType = exports.getContainersByType = function getContainersBy
   return (0, _lodash.pickBy)(getContainers(state), function (_ref) {
     var type = _ref.type;
     return type === containerType;
+  });
+};
+
+/**
+ * Get all visible containers.
+ *
+ * @param  {Object} state
+ * @return {Object}
+ */
+var getVisibleContainers = exports.getVisibleContainers = function getVisibleContainers(state) {
+  return (0, _lodash.filter)(getContainers(state), function (container) {
+    return container.ui.is_visible;
   });
 };
 
@@ -15465,11 +15504,16 @@ var _marked = [stopSaga].map(_regenerator2.default.mark); /**
  * @return {String}
  */
 function getAttachmentThumbnail(attachment) {
+	var thumbnailUrl = '';
+
 	if (attachment.sizes) {
-		return (attachment.sizes.thumbnail || attachment.sizes.full).url;
+		var size = attachment.sizes.thumbnail || attachment.sizes.full;
+		if (typeof size !== 'undefined') {
+			thumbnailUrl = size.url;
+		}
 	}
 
-	return '';
+	return thumbnailUrl;
 }
 
 /**
