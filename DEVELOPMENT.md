@@ -18,7 +18,7 @@
 
 ## `htmlburger/carbon-fields-plugin`
 
-1. Update the version in `carbon-fields-plugin.php` and `composer.json` for `htmlburger/carbon-fields` to match the newly released version
+1. Update the version in `carbon-fields-plugin.php`, `readme.txt` and `composer.json` for `htmlburger/carbon-fields` to match the newly released version
 1. Commit to `master`
 1. Create a new release in [Github](https://github.com/htmlburger/carbon-fields-plugin/releases/new) from the `master` branch
 1. Enter the new version for `Tag version` and `Title` (you can skip the changelog)
