@@ -41,7 +41,7 @@ class Repository {
 	 * @return array
 	 */
 	public function register_container( Container $container ) {
-		$this->register_unique_container_id( $container->id );
+		$this->register_unique_container_id( $container->get_id() );
 		$this->containers[] = $container;
 		$this->pending_containers[] = $container;
 	}

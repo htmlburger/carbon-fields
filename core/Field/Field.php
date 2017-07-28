@@ -254,11 +254,11 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * An alias of factory().
 	 *
-	 * @see Field::factory()
+	 * @see    Field::factory()
 	 * @return Field
 	 */
-	public static function make( $type, $name, $label = null ) {
-		return static::factory( $type, $name, $label );
+	public static function make() {
+		return call_user_func_array( array( get_class(), 'factory' ), func_get_args() );
 	}
 
 	/**

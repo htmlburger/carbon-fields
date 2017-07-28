@@ -19,8 +19,8 @@
 		<div id="poststuff">
 			<div id="post-body" class="metabox-holder columns-2">
 				<div id="post-body-content">
-					<div class="postbox carbon-box" id="<?php echo $this->id; ?>">
-						<fieldset class="inside container-holder carbon-grid theme-options-container container-<?php echo $this->id; ?> <?php echo $this->is_tabbed() ? '' : 'carbon-fields-collection' ?>"></fieldset>
+					<div class="postbox carbon-box" id="<?php echo $this->get_id(); ?>">
+						<fieldset class="inside container-holder carbon-grid theme-options-container container-<?php echo $this->get_id(); ?> <?php echo $this->is_tabbed() ? '' : 'carbon-fields-collection' ?>"></fieldset>
 					</div>
 				</div>
 

@@ -136,10 +136,10 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Create a new container of type $type and name $name.
 	 *
-	 * @param  string $raw_type
-	 * @param  string $id        Unique id for the container. Optional
-	 * @param  string $name      Human-readable name of the container
-	 * @return object $container
+	 * @param  string    $raw_type
+	 * @param  string    $id        Unique id for the container. Optional
+	 * @param  string    $name      Human-readable name of the container
+	 * @return Container $container
 	 */
 	public static function factory( $raw_type, $id, $name = '' ) {
 		// no name provided - switch input around as the id is optionally generated based on the name
@@ -151,10 +151,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		$type = Helper::normalize_type( $raw_type );
 		$repository = Carbon_Fields::resolve( 'container_repository' );
 		$container = null;
-
-		if ( $id === '' ) {
-			$id = $repository->get_unique_container_id( $name );
-		}
+		$id = $repository->get_unique_container_id( ( $id !== '' ) ? $id : $name );
 
 		if ( ! Helper::is_valid_entity_id( $id ) ) {
 			Incorrect_Syntax_Exception::raise( 'Container IDs can only contain lowercase alphanumeric characters, dashes and underscores ("' . $id . '" passed).' );
@@ -194,7 +191,8 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * An alias of factory().
 	 *
-	 * @see Container::factory()
+	 * @see    Container::factory()
+	 * @return Container
 	 */
 	public static function make() {
 		return call_user_func_array( array( get_class(), 'factory' ), func_get_args() );
@@ -617,7 +615,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return string
 	 */
 	protected function get_nonce_name() {
-		return 'carbon_fields_container_' . $this->id . '_nonce';
+		return $this->get_id() . '_nonce';
 	}
 
 	/**
@@ -763,7 +761,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		$conditions = $this->condition_translator->fulfillable_to_foreign( $conditions );
 
 		$container_data = array(
-			'id' => $this->id,
+			'id' => $this->get_id(),
 			'type' => $this->type,
 			'title' => $this->title,
 			'classes' => $this->get_classes(),
