@@ -1,0 +1,10 @@
+/* ------------------------------------------------------------ *\
+	Media Gallery
+\* ------------------------------------------------------------ */
+
+.carbon-media-gallery { display: flex; flex-direction: row; flex-wrap: wrap; margin: -10px; justify-content: flex-start; }
+.carbon-media-gallery .carbon-attachment { margin: 10px; }
+
+.carbon-media-gallery .carbon-attachment-new .button { visibility: visible; opacity: 1; }
+
+.carbon-media-gallery .ui-placeholder-highlight { border: 1px dashed #ccc; height: auto; }

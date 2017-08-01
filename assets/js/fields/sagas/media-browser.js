@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import { takeEvery, take, call, put, select, all } from 'redux-saga/effects';
-import { isEmpty, isNull, isNumber, isString, isUndefined, first, filter, last } from 'lodash';
+import { isEmpty, isNull, isNumber, isString, isUndefined, first, filter, last, findIndex } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -19,6 +19,24 @@ import {
 	receiveComplexGroup,
 	addMultipleFiles,
 } from 'fields/actions';
+import { TYPE_FILE, TYPE_IMAGE, TYPE_MEDIA_GALLERY } from 'fields/constants';
+
+/**
+ * Prepares a field's value depending on its type.
+ *
+ * @param  {String} fieldId
+ * @param  {Object} attachment
+ * @return {void}
+ */
+export function* prepareValueForField(fieldId, attachment) {
+	const field = yield select(getFieldById, fieldId);
+
+	if (field.type === TYPE_FILE || field.type === TYPE_IMAGE) {
+		return yield prepareValueForFileField(fieldId, attachment);
+	} else if (field.type === TYPE_MEDIA_GALLERY) {
+		return yield prepareValueForMediaGalleryField(fieldId, attachment);
+	}
+}
 
 /**
  * Set a field's value depending on it's value_type property
@@ -34,6 +52,45 @@ export function* prepareValueForFileField(fieldId, attachment) {
 }
 
 /**
+ * Prepares a Media Gallery field value.
+ *
+ * @param  {String} fieldId
+ * @param  {Object} attachment
+ * @return {void}
+ */
+export function* prepareValueForMediaGalleryField(fieldId, attachment) {
+	const field = yield select(getFieldById, fieldId);
+
+	const newAttachmentValue = {
+		id: Number(attachment.id),
+		file_ext: attachment.file_type,
+		file_type: attachment.type,
+		file_name: attachment.filename,
+		file_url: attachment.url,
+	};
+
+	if (attachment.type === 'image') {
+		newAttachmentValue.thumb_url = attachment.sizes.thumbnail.url;
+	} else {
+		newAttachmentValue.thumb_url = attachment.icon;
+	}
+
+	let value;
+
+	if ( 'selected' in field ) {
+		const index = findIndex(field.value, { id: field.selected });
+		value = field.value;
+		value.splice(index, 1, newAttachmentValue);
+	} else {
+		value = [...field.value, newAttachmentValue];
+	}
+
+	delete field.selected;
+
+	return value;
+}
+
+/**
  * Add complex groups for every additional attachment selected in the media browser
  *
  * @param  {Object} action
@@ -42,30 +99,43 @@ export function* prepareValueForFileField(fieldId, attachment) {
 export function* workerAddMultipleFiles(action) {
 	const { fieldId, attachments } = action.payload;
 	const field = yield select(getFieldById, fieldId);
-	const parent = yield select(getComplexGroupById, field.parent);
-	if (isUndefined(parent)) {
-		return;
+
+	if (field.type === TYPE_IMAGE || field.type === TYPE_FILE) {
+		const parent = yield select(getComplexGroupById, field.parent);
+		if (isUndefined(parent)) {
+			return;
+		}
 	}
 
 	for (let i = 0; i < attachments.length; i++) {
 		const attachment = attachments[i];
-		// add a new group to hold the attachment
-		yield put(addComplexGroup(parent.field.id, parent.group.name));
 
-		// pause until the complex is updated
-		yield take(receiveComplexGroup);
+		if (field.type === TYPE_IMAGE || field.type === TYPE_FILE) {
+			// add a new group to hold the attachment
+			yield put(addComplexGroup(parent.field.id, parent.group.name));
+
+			// pause until the complex is updated
+			yield take(receiveComplexGroup);
+			
+			// resolve the new field from the new group and assign it's new value
+			const parentField = yield select(getFieldById, parent.field.id);
+			const freshGroup = last(parentField.value);
+			const freshFieldId = first(filter(freshGroup.fields, f => f.base_name === field.base_name)).id;
+			const freshField = yield select(getFieldById, freshFieldId);
+			const value = yield prepareValueForField(freshField.id, attachment);
+
+			// optional - this ensures an instant preview update
+			yield redrawAttachmentPreview(freshField.id, value, attachment, freshField.default_thumb_url);
+
+			yield put(setFieldValue(freshField.id, value));
+		} else {
+			const value = yield prepareValueForField(field.id, attachment);
 		
-		// resolve the new field from the new group and assign it's new value
-		const parentField = yield select(getFieldById, parent.field.id);
-		const freshGroup = last(parentField.value);
-		const freshFieldId = first(filter(freshGroup.fields, f => f.base_name === field.base_name)).id;
-		const freshField = yield select(getFieldById, freshFieldId);
-		const value = yield prepareValueForFileField(freshField.id, attachment);
+			// optional - this ensures an instant preview update
+			yield redrawAttachmentPreview(field.id, value, attachment, field.default_thumb_url);
 
-		// optional - this ensures an instant preview update
-		yield redrawAttachmentPreview(freshField.id, value, attachment, freshField.default_thumb_url);
-
-		yield put(setFieldValue(freshField.id, value));
+			yield put(setFieldValue(field.id, value));
+		}
 	}
 }
 
@@ -165,8 +235,8 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 	while (true) {
 		const { selection } = yield take(channel);
 		const [ attachment, ...attachments ] = selection;
-		const value = yield prepareValueForFileField(field.id, attachment);
-		
+		const value = yield prepareValueForField(field.id, attachment);
+	
 		// optional - this ensures an instant preview update
 		yield redrawAttachmentPreview(field.id, value, attachment, field.default_thumb_url);
 
