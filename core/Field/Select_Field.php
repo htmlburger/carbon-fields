@@ -19,8 +19,15 @@ class Select_Field extends Predefined_Options_Field {
 		$options = $this->parse_options( $this->get_options() );
 		$values = wp_list_pluck( $options, 'value' );
 		$value = $this->get_formatted_value();
-		if ( ! in_array( $value, $values ) && ! empty( $values ) ) {
-			$value = $values[0];
+		if ( ! empty( $values ) ) {
+			// this roundabout way is required in order to keep proper value types
+			// as values taken from the database are always strings
+			$value_index = array_search( $value, $values );
+			if ( $value_index !== false ) {
+				$value = $values[ $value_index ];
+			} else {
+				$value = $values[0];
+			}
 		}
 
 		$field_data = array_merge( $field_data, array(
