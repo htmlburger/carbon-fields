@@ -74,6 +74,7 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 	protected function value_to_json() {
 		$value_set = $this->get_value();
 		$value = array();
+		$value_meta = array();
 
 		foreach ( $value_set as $attachment_id ) {
 			$url       = is_numeric( $attachment_id ) ? wp_get_attachment_url( $attachment_id ) : $attachment_id;
@@ -92,8 +93,9 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 				$thumb_url = $default_thumb_url;
 			}
 
-			$value[] = [
-				'id'                => absint( $attachment_id ),
+			$value[] = absint( $attachment_id );
+
+			$value_meta[ absint( $attachment_id ) ] = [
 				'thumb_url'         => $thumb_url,
 				'default_thumb_url' => $default_thumb_url,
 				'file_ext'          => $file_ext,
@@ -103,7 +105,10 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 			];
 		}
 
-		return $value;
+		return array(
+			'value'      => $value,
+			'value_meta' => $value_meta,
+		);
 	}
 
 	/**
@@ -115,8 +120,7 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
-		$field_data = array_merge( $field_data, array(
-			'value'               => $this->value_to_json(),
+		$field_data = array_merge( $field_data, $this->value_to_json(), array(
 			'options'             => $this->parse_options( $this->get_options() ),
 			'value_type'          => $this->value_type,
 			'button_label'        => $this->button_label,

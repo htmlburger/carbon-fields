@@ -22,6 +22,7 @@ import MediaGalleryListItem from 'fields/components/media-gallery/list-item';
 export const MediaGalleryList = ({
 	prefix,
 	items,
+	itemsMeta,
 	buttonLabel,
 	handleRemoveItem,
 	handleOpenBrowser,
@@ -34,6 +35,7 @@ export const MediaGalleryList = ({
 					key={index}
 					index={index}
 					item={item}
+					meta={itemsMeta[ item ]}
 					name={name}
 					onRemoveClick={handleRemoveItem}
 					onOpenBrowserClick={handleOpenBrowser}

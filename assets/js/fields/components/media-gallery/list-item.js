@@ -25,20 +25,21 @@ export const MediaGalleryListItem = ({
 	item,
 	prefix,
 	index,
+	meta,
 	handleOpenBrowser,
 	handleRemoveItem
 }) => {
-	return <div className="carbon-attachment" key={index} id={item.id}>
+	return <div className="carbon-attachment" key={index} id={index}>
 		<input
 			type="hidden"
-			id={item.id}
+			id={item}
 			name={`${prefix}[${index}]`}
-			value={item.id}
+			value={item}
 			readOnly />
 
-		<div className={cx('carbon-description', { 'hidden': !item.id })}>
-			<div className={cx('carbon-attachment-preview', { 'hidden': !item.thumb_url })}>
-				<img src={item.thumb_url} className="thumbnail-image" />
+		<div className={cx('carbon-description', { 'hidden': !item })}>
+			<div className={cx('carbon-attachment-preview', { 'hidden': !meta.thumb_url })}>
+				<img src={meta.thumb_url} className="thumbnail-image" />
 
 				<div className="carbon-file-remove dashicons-before dashicons-no-alt" onClick={handleRemoveItem}></div>
 			</div>
@@ -46,7 +47,7 @@ export const MediaGalleryListItem = ({
 			<input
 				type="text"
 				className="carbon-attachment-file-name"
-				value={item.file_url}
+				value={meta.file_url}
 				readOnly />
 		</div>
 
@@ -63,11 +64,11 @@ export const MediaGalleryListItem = ({
  */
 MediaGalleryListItem.propTypes = {
 	name: PropTypes.string,
-	item: PropTypes.shape({
-		id: PropTypes.oneOfType([
-			PropTypes.number,
-			PropTypes.string,
-		]),
+	item: PropTypes.oneOfType([
+		PropTypes.number,
+		PropTypes.string,
+	]),
+	meta: PropTypes.shape({
 		thumb_url: PropTypes.string,
 		default_thumb_url: PropTypes.string,
 		file_ext: PropTypes.string,

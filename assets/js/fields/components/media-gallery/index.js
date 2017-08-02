@@ -49,6 +49,7 @@ export const MediaGalleryField = ({
 			<MediaGalleryList
 				prefix={name}
 				items={field.value}
+				itemsMeta={field.value_meta}
 				buttonLabel={field.button_label}
 				handleOpenBrowser={openBrowser}
 				handleRemoveItem={handleRemoveItem}
@@ -65,7 +66,8 @@ export const MediaGalleryField = ({
 MediaGalleryField.propTypes = {
 	name: PropTypes.string,
 	field: PropTypes.shape({
-		value: PropTypes.arrayOf(PropTypes.object),
+		value: PropTypes.array,
+		value_meta: PropTypes.object,
 		value_type: PropTypes.string,
 		button_label: PropTypes.string,
 	}),
@@ -123,10 +125,16 @@ export const enhance = compose(
 		},
 
 		handleSortItems: ({ field, setFieldValue }) => newItems => {
-			newItems = newItems.map(id => parseInt(id, 10));
-			newItems = sortBy(field.value, item => newItems.indexOf(item.id));
+			newItems = newItems.map(item => parseInt(item, 10));
 
-			setFieldValue(field.id, newItems);
+			let index = -1;
+			let newValue = sortBy(field.value, (item) => {
+				index++;
+
+				return newItems.indexOf(index);
+			});
+
+			setFieldValue(field.id, newValue);
 		},
 
 		handleRemoveItem: ({ field, setFieldValue }) => (item) => {
