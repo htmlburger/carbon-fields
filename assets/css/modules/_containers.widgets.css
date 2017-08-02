@@ -5,3 +5,6 @@
 .carbon-container.carbon-container-widget { margin: -2px -16px 15px -15px; width: auto; border-bottom: 1px solid $color-border; }
 
 .wp-customizer .carbon-container.carbon-container-widget { margin: 0 0 10px; border-width: 0; }
+
+.carbon-container.carbon-container-widget .carbon-media-gallery { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; margin: 0 -5px; }
+.carbon-container.carbon-container-widget .carbon-media-gallery .carbon-attachment { margin: 0 5px 10px; width: 125px; height: 125px; }

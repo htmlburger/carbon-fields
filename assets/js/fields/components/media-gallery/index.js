@@ -122,7 +122,6 @@ export const enhance = compose(
 	withHandlers({
 		openBrowser: ({ field, openMediaBrowser }) => (index) => {
 			if (isNumber(index)) {
-				console.log( index );
 				field.selected = index;
 			}
 

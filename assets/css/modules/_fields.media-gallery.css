@@ -2,9 +2,18 @@
 	Media Gallery
 \* ------------------------------------------------------------ */
 
-.carbon-media-gallery { display: flex; flex-direction: row; flex-wrap: wrap; margin: -10px; justify-content: flex-start; }
-.carbon-media-gallery .carbon-attachment { margin: 10px; }
+.carbon-media-gallery { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; margin: 0 -10px; }
+.carbon-media-gallery .carbon-attachment { margin: 0 10px 20px; }
 
 .carbon-media-gallery .carbon-attachment-new .button { visibility: visible; opacity: 1; }
 
 .carbon-media-gallery .ui-placeholder-highlight { border: 1px dashed #ccc; height: auto; }
+
+
+@media screen and (max-width: $breakpoint-desktop-min) {
+	.carbon-media-gallery .carbon-attachment { width: 125px; height: 125px; }
+}
+
+@media screen and (max-width: $breakpoint-mobile-max) {
+	.carbon-media-gallery .carbon-attachment { width: 110px; height: 110px; }
+}
