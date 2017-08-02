@@ -375,4 +375,49 @@ class Helper {
 	public static function is_valid_entity_id( $id ) {
 		return ! empty( $id ) && preg_match( '/\A[a-z0-9_\-]+\z/', $id );
 	}
+
+	/**
+	 * Returns attachment metadata from an ID.
+	 *
+	 * @param  string  $id
+	 * @param  string  $type Value Type. Can be either id or url
+	 * @return boolean
+	 */
+	public static function get_attachment_metadata( $id, $type ) {
+		$attachment_meta = array(
+			'thumb_url'         => '',
+			'default_thumb_url' => '',
+			'file_ext'          => '',
+			'file_type'         => '',
+			'file_name'         => '',
+			'file_url'          => '',
+		);
+
+		if ( empty( $id ) ) {
+			return $attachment_meta;
+		}
+
+		$attachment_meta['file_url']  = is_numeric( $id ) ? wp_get_attachment_url( $id ) : $id;
+		$attachment_meta['file_name'] = basename( $attachment_meta['file_url'] );
+		$attachment_meta['filetype']  = wp_check_filetype( $attachment_meta['file_url'] );
+
+		$attachment_meta['file_ext']  = $attachment_meta['filetype']['ext']; // png, mp3, etc..
+		$attachment_meta['file_type'] = preg_replace( '~\/.+$~', '', $attachment_meta['filetype']['type'] ); // image, video, etc..
+
+		$attachment_meta['default_thumb_url'] = wp_mime_type_icon( $id );
+
+		if ( $attachment_meta['file_type'] == 'image' ) {
+			$attachment_meta['thumb_url'] = $attachment_meta['file_url'];
+
+			if ( $type == 'id' ) {
+				$thumb_src = wp_get_attachment_image_src( $id, 'thumbnail' );
+				$attachment_meta['thumb_url'] = $thumb_src[0];
+			}
+		} else {
+			$attachment_meta['thumb_url'] = $attachment_meta['default_thumb_url'];
+		}
+
+		return $attachment_meta;
+	}
+
 }

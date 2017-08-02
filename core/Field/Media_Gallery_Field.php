@@ -3,6 +3,7 @@
 namespace Carbon_Fields\Field;
 
 use Carbon_Fields\Value_Set\Value_Set;
+use Carbon_Fields\Helper\Helper;
 
 /**
  * Set field class.
@@ -72,37 +73,16 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 	 * @return array
 	 */
 	protected function value_to_json() {
-		$value_set = $this->get_value();
-		$value = array();
+		$value_set  = $this->get_value();
+		$value      = array();
 		$value_meta = array();
 
 		foreach ( $value_set as $attachment_id ) {
-			$url       = is_numeric( $attachment_id ) ? wp_get_attachment_url( $attachment_id ) : $attachment_id;
-			$file_name = basename( $url );
-			$filetype  = wp_check_filetype( $url );
+			$attachment_id     = absint( $attachment_id );
+			$attachment_metata = Helper::get_attachment_metadata( $attachment_id, $this->value_type );
 
-			$file_ext  = $filetype['ext']; // png, mp3, etc..
-			$file_type = preg_replace( '~\/.+$~', '', $filetype['type'] ); // image, video, etc..
-
-			$default_thumb_url = wp_mime_type_icon( $attachment_id );
-
-			if ( $file_type == 'image' ) {
-				$thumb_src = wp_get_attachment_image_src( $attachment_id, 'thumbnail' );
-				$thumb_url = $thumb_src[0];
-			} else {
-				$thumb_url = $default_thumb_url;
-			}
-
-			$value[] = absint( $attachment_id );
-
-			$value_meta[ absint( $attachment_id ) ] = [
-				'thumb_url'         => $thumb_url,
-				'default_thumb_url' => $default_thumb_url,
-				'file_ext'          => $file_ext,
-				'file_type'         => $file_type,
-				'file_name'         => $file_name,
-				'file_url'          => $url,
-			];
+			$value[] = $attachment_id;
+			$value_meta[ $attachment_id ] = $attachment_metata;
 		}
 
 		return array(

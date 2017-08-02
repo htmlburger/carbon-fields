@@ -2,6 +2,9 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Helper\Helper;
+
+
 /**
  * File upload field class.
  *
@@ -60,46 +63,15 @@ class File_Field extends Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
-		$thumb_url = '';
-		$url = '';
-		$default_thumb_url = includes_url( '/images/media/default.png' );
-		$file_ext = '';
-		$file_name = '';
-		$file_type = '';
 		$value = $this->get_value();
+		$attachment_metadata = Helper::get_attachment_metadata( $value, $this->value_type );
 
-		if ( $value ) {
-			$url = is_numeric( $value ) ? wp_get_attachment_url( $value ) : $value;
-			$file_name = basename( $url );
-			$filetype = wp_check_filetype( $url );
-
-			$file_ext = $filetype['ext']; // png, mp3, etc..
-			$file_type = preg_replace( '~\/.+$~', '', $filetype['type'] ); // image, video, etc..
-
-			if ( $file_type == 'image' ) {
-				$thumb_url = $url;
-
-				if ( $this->value_type == 'id' ) {
-					$thumb_src = wp_get_attachment_image_src( $value, 'thumbnail' );
-					$thumb_url = $thumb_src[0];
-				}
-			} else {
-				$thumb_url = $default_thumb_url;
-			}
-		}
-
-		$field_data = array_merge( $field_data, array(
-			'thumb_url' => $thumb_url,
-			'default_thumb_url' => $default_thumb_url,
-			'file_ext' => $file_ext,
-			'file_type' => $file_type,
-			'file_name' => $file_name,
-			'file_url' => $url,
-			'button_label' => $this->button_label,
+		$field_data = array_merge( $field_data, $attachment_metadata, array(
+			'button_label'        => $this->button_label,
 			'window_button_label' => $this->window_button_label,
-			'window_label' => $this->window_label,
-			'type_filter' => $this->field_type,
-			'value_type' => $this->value_type,
+			'window_label'        => $this->window_label,
+			'type_filter'         => $this->field_type,
+			'value_type'          => $this->value_type,
 		) );
 
 		return $field_data;
