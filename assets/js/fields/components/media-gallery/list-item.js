@@ -26,6 +26,7 @@ export const MediaGalleryListItem = ({
 	prefix,
 	index,
 	meta,
+	buttonLabel,
 	handleOpenBrowser,
 	handleRemoveItem
 }) => {
@@ -52,7 +53,7 @@ export const MediaGalleryListItem = ({
 		</div>
 
 		<span className="button c2_open_media" onClick={handleOpenBrowser}>
-			Select File
+			{buttonLabel}
 		</span>
 	</div>;
 };

@@ -37,6 +37,7 @@ export const MediaGalleryList = ({
 					item={item}
 					meta={itemsMeta[ item ]}
 					name={name}
+					buttonLabel={buttonLabel}
 					onRemoveClick={handleRemoveItem}
 					onOpenBrowserClick={handleOpenBrowser}
 				/>
