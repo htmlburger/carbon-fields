@@ -61,6 +61,20 @@ export function* prepareValueForFileField(fieldId, attachment) {
 export function* prepareValueForMediaGalleryField(fieldId, attachment) {
 	const field = yield select(getFieldById, fieldId);
 
+	let value;
+	const attachmentId = Number(attachment.id);
+
+	if ( 'selected' in field ) {
+		const index = field.selected;
+
+		value = field.value;
+		value.splice(index, 1, attachmentId);
+	} else {
+		value = [...field.value, attachmentId];
+	}
+
+	return value;
+
 	const newAttachmentValue = {
 		id: Number(attachment.id),
 		file_ext: attachment.file_type,
@@ -73,16 +87,6 @@ export function* prepareValueForMediaGalleryField(fieldId, attachment) {
 		newAttachmentValue.thumb_url = attachment.sizes.thumbnail.url;
 	} else {
 		newAttachmentValue.thumb_url = attachment.icon;
-	}
-
-	let value;
-
-	if ( 'selected' in field ) {
-		const index = findIndex(field.value, { id: field.selected });
-		value = field.value;
-		value.splice(index, 1, newAttachmentValue);
-	} else {
-		value = [...field.value, newAttachmentValue];
 	}
 
 	delete field.selected;
@@ -149,30 +153,40 @@ export function* workerAddMultipleFiles(action) {
  * @return {void}
  */
 export function* redrawAttachmentPreview(fieldId, attachmentIdentifier, attachment, default_thumb_url) {
+	const field = yield select(getFieldById, fieldId);
+
+	let attachmentMeta = {
+		file_name: '',
+		file_url: '',
+		thumb_url: '',
+		preview: '',
+	};
+
 	if (!isNull(attachment)) {
 		if (isString(attachment)) {
-			// TODO fix this hack
-			yield put(updateField(fieldId, {
-				file_name: attachment,
-				file_url: attachment,
-				thumb_url: attachment,
-				preview: attachmentIdentifier,
-			}));
+			attachmentMeta.file_name = attachment;
+			attachmentMeta.file_url  = attachment;
+			attachmentMeta.thumb_url = attachment;
+			attachmentMeta.preview   = attachmentIdentifier;
 		} else {
 			const thumbnail = yield call(getAttachmentThumbnail, attachment);
-			yield put(updateField(fieldId, {
-				file_name: attachment.filename,
-				file_url: attachment.url,
-				thumb_url: thumbnail || default_thumb_url,
-				preview: attachmentIdentifier,
-			}));
+
+			attachmentMeta.file_name = attachment.filename;
+			attachmentMeta.file_url  = attachment.url;
+			attachmentMeta.thumb_url = thumbnail || default_thumb_url;
+			attachmentMeta.preview   = attachment.id;
 		}
-	} else {
+	}
+
+	if (field.type === TYPE_IMAGE || field.type === TYPE_FILE) {
+		yield put(updateField(fieldId, attachmentMeta));
+	} else if (field.type === TYPE_MEDIA_GALLERY) {
+		let currentValueMeta = field.value_meta;
+
+		currentValueMeta[ attachment.id ] = attachmentMeta;
+
 		yield put(updateField(fieldId, {
-			file_name: '',
-			file_url: '',
-			thumb_url: '',
-			preview: '',
+			value_meta: currentValueMeta
 		}));
 	}
 }
@@ -236,7 +250,7 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 		const { selection } = yield take(channel);
 		const [ attachment, ...attachments ] = selection;
 		const value = yield prepareValueForField(field.id, attachment);
-	
+
 		// optional - this ensures an instant preview update
 		yield redrawAttachmentPreview(field.id, value, attachment, field.default_thumb_url);
 

@@ -82,12 +82,12 @@ MediaGalleryListItem.propTypes = {
 };
 
 const enhance = withHandlers({
-	handleRemoveItem: ({ item, onRemoveClick }) => preventDefault((e) => {
-		onRemoveClick(item);
+	handleRemoveItem: ({ index, onRemoveClick }) => preventDefault((e) => {
+		onRemoveClick(index);
 	}),
 
-	handleOpenBrowser: ({ item, onOpenBrowserClick }) => preventDefault((e) => {
-		onOpenBrowserClick(item);
+	handleOpenBrowser: ({ index, onOpenBrowserClick }) => preventDefault((e) => {
+		onOpenBrowserClick(index);
 	})
 });
 

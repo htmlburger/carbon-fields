@@ -26,6 +26,8 @@ export function getAttachmentThumbnail(attachment) {
 		if (typeof size !== 'undefined') {
 			thumbnailUrl = size.url;
 		}
+	} else {
+		thumbnailUrl = attachment.icon;
 	}
 
 	return thumbnailUrl;

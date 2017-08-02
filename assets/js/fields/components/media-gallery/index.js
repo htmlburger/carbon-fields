@@ -12,7 +12,8 @@ import {
 } from 'recompose';
 import {
 	without,
-	sortBy
+	sortBy,
+	isNumber
 } from 'lodash';
 
 /**
@@ -70,6 +71,10 @@ MediaGalleryField.propTypes = {
 		value_meta: PropTypes.object,
 		value_type: PropTypes.string,
 		button_label: PropTypes.string,
+		selected: PropTypes.oneOfType([
+			PropTypes.string,
+			PropTypes.number,
+		]),
 	}),
 	openBrowser: PropTypes.func,
 	handleRemoveItem: PropTypes.func,
@@ -115,10 +120,10 @@ export const enhance = compose(
 	 * Pass some handlers to the component.
 	 */
 	withHandlers({
-		openBrowser: ({ field, openMediaBrowser }) => (item) => {
-			// hack -- todo: think of a better way to achieve that
-			if ('id' in item) {
-				field.selected = item.id;
+		openBrowser: ({ field, openMediaBrowser }) => (index) => {
+			if (isNumber(index)) {
+				console.log( index );
+				field.selected = index;
 			}
 
 			openMediaBrowser(field.id);
@@ -137,8 +142,10 @@ export const enhance = compose(
 			setFieldValue(field.id, newValue);
 		},
 
-		handleRemoveItem: ({ field, setFieldValue }) => (item) => {
-			setFieldValue(field.id, without(field.value, item));
+		handleRemoveItem: ({ field, setFieldValue }) => (index) => {
+			field.value.splice(index, 1);
+
+			setFieldValue(field.id, field.value);
 		},
 	}),
 
