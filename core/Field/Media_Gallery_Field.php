@@ -17,6 +17,9 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 
 	public $window_label = '';
 
+	// empty for all types. available types: audio, video, image and all WordPress-recognized mime types
+	public $field_type = '';
+
 	public $value_type = 'id';
 
 	/**
@@ -45,6 +48,16 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 		$this->button_label = __( 'Add File', 'carbon-fields' );
 		$this->window_button_label = __( 'Select File', 'carbon-fields' );
 		$this->window_label = __( 'Files', 'carbon-fields' );
+	}
+
+	/**
+	 * Change the type of the field
+	 *
+	 * @param string $type
+	 */
+	public function set_type( $type ) {
+		$this->field_type = $type;
+		return $this;
 	}
 
 	/**
@@ -106,6 +119,7 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 			'button_label'        => $this->button_label,
 			'window_label'        => $this->window_label,
 			'window_button_label' => $this->window_button_label,
+			'type_filter'         => $this->field_type,
 		) );
 
 		return $field_data;
