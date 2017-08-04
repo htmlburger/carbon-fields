@@ -482,6 +482,8 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return string
 	 */
 	protected function get_field_pattern_regex() {
+		$field_name_characters = Helper::get_field_name_characters_pattern();
+
 		// matches:
 		// field_name
 		// field_name[0]
@@ -489,9 +491,9 @@ abstract class Container implements Datastore_Holder_Interface {
 		// field_name:group_name
 		$regex = '/
 			\A
-			(?P<field_name>[a-z0-9_]+)
+			(?P<field_name>[' . $field_name_characters . ']+)
 			(?:\[(?P<group_index>\d+)\])?
-			(?:' .  preg_quote( static::HIERARCHY_GROUP_SEPARATOR, '/' ). '(?P<group_name>[a-z0-9_]+))?
+			(?:' .  preg_quote( static::HIERARCHY_GROUP_SEPARATOR, '/' ). '(?P<group_name>[' . $field_name_characters . ']+))?
 			\z
 		/x';
 		return $regex;
