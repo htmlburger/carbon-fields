@@ -30,6 +30,13 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 	protected $default_value = array();
 
 	/**
+	 * Allow items to be added multiple times
+	 *
+	 * @var boolean
+	 */
+	protected $duplicates_allowed = true;
+
+	/**
 	 * Create a field from a certain type with the specified label.
 	 *
 	 * @param string $type  Field type
@@ -58,6 +65,37 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 	public function set_type( $type ) {
 		$this->field_type = $type;
 		return $this;
+	}
+
+	/**
+	 * Get whether entry duplicates are allowed.
+	 *
+	 * @return boolean
+	 */
+	public function get_duplicates_allowed() {
+		return $this->duplicates_allowed;
+	}
+
+	/**
+	 * Set whether entry duplicates are allowed.
+	 *
+	 * @param  boolean $allowed
+	 * @return Field   $this
+	 */
+	public function set_duplicates_allowed( $allowed ) {
+		$this->duplicates_allowed = $allowed;
+		return $this;
+	}
+
+	/**
+	 * Specify whether to allow each entry to be selected multiple times.
+	 * Backwards-compatibility alias.
+	 *
+	 * @param  boolean $allow
+	 * @return Field   $this
+	 */
+	public function allow_duplicates( $allow = true ) {
+		return $this->set_duplicates_allowed( $allow );
 	}
 
 	/**
@@ -120,6 +158,7 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 			'window_label'        => $this->window_label,
 			'window_button_label' => $this->window_button_label,
 			'type_filter'         => $this->field_type,
+			'duplicates_allowed'  => $this->get_duplicates_allowed(),
 		) );
 
 		return $field_data;

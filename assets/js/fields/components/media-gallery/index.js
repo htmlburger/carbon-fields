@@ -68,13 +68,17 @@ MediaGalleryField.propTypes = {
 	name: PropTypes.string,
 	field: PropTypes.shape({
 		value: PropTypes.array,
-		value_meta: PropTypes.object,
+		value_meta: PropTypes.oneOfType([
+			PropTypes.array,
+			PropTypes.object,
+		]),
 		value_type: PropTypes.string,
 		button_label: PropTypes.string,
 		selected: PropTypes.oneOfType([
 			PropTypes.string,
 			PropTypes.number,
 		]),
+		duplicates_allowed: PropTypes.boolean,
 	}),
 	openBrowser: PropTypes.func,
 	handleRemoveItem: PropTypes.func,

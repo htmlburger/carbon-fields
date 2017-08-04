@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import { takeEvery, take, call, put, select, all } from 'redux-saga/effects';
-import { isEmpty, isNull, isNumber, isString, isUndefined, first, filter, last, findIndex } from 'lodash';
+import { isEmpty, isNull, isNumber, isString, isUndefined, first, filter, last, findIndex, isArray } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -61,35 +61,24 @@ export function* prepareValueForFileField(fieldId, attachment) {
 export function* prepareValueForMediaGalleryField(fieldId, attachment) {
 	const field = yield select(getFieldById, fieldId);
 
-	let value;
+	let {
+		value,
+		duplicates_allowed,
+	} = field;
+
 	const attachmentId = Number(attachment.id);
 
 	if ( 'selected' in field ) {
 		const index = field.selected;
 
-		value = field.value;
 		value.splice(index, 1, attachmentId);
+
+		delete field.selected;
 	} else {
-		value = [...field.value, attachmentId];
+		if (duplicates_allowed || field.value.indexOf(attachmentId) === -1) {
+			value = [...value, attachmentId];
+		}
 	}
-
-	return value;
-
-	const newAttachmentValue = {
-		id: Number(attachment.id),
-		file_ext: attachment.file_type,
-		file_type: attachment.type,
-		file_name: attachment.filename,
-		file_url: attachment.url,
-	};
-
-	if (attachment.type === 'image') {
-		newAttachmentValue.thumb_url = attachment.sizes.thumbnail.url;
-	} else {
-		newAttachmentValue.thumb_url = attachment.icon;
-	}
-
-	delete field.selected;
 
 	return value;
 }
@@ -101,7 +90,7 @@ export function* prepareValueForMediaGalleryField(fieldId, attachment) {
  * @return {void}
  */
 export function* workerAddMultipleFiles(action) {
-	const { fieldId, attachments } = action.payload;
+	const { fieldId, attachments, browser } = action.payload;
 	const field = yield select(getFieldById, fieldId);
 
 	if (field.type === TYPE_IMAGE || field.type === TYPE_FILE) {
@@ -134,6 +123,10 @@ export function* workerAddMultipleFiles(action) {
 			yield put(setFieldValue(freshField.id, value));
 		} else {
 			const value = yield prepareValueForField(field.id, attachment);
+
+			if (field.duplicates_allowed === false) {
+				browser.state().frame.options.selected = value;
+			}
 		
 			// optional - this ensures an instant preview update
 			yield redrawAttachmentPreview(field.id, value, attachment, field.default_thumb_url);
@@ -240,9 +233,38 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 
 	const liveField = yield select(getFieldById, action.payload);
 	browser.once('open', (function(value) {
-		var attachment = value ? window.wp.media.attachment(value) : null;
-		browser.state().get('selection').set( attachment ? [attachment] : [] );
-	}).bind(null, liveField.value));
+		let {
+			type,
+			duplicates_allowed
+		} = liveField;
+
+		// For File field, the media should display
+		// the currently selected element
+		if (type === TYPE_IMAGE || type === TYPE_FILE) {
+			var attachment = value ? window.wp.media.attachment(value) : null;
+			browser.state().get('selection').set( attachment ? [attachment] : [] );
+		}
+
+		if ((type === TYPE_MEDIA_GALLERY) && ! duplicates_allowed) {
+			(function (value) {
+				browser.state().get('selection').off('carbon-selection:single');
+				browser.state().get('selection').on('selection:single', function (single, selection) {
+					browser.state().get('selection').trigger('carbon-selection:single', single, selection);
+				});
+
+				browser.state().get('selection').on('carbon-selection:single', function (single, selection) {
+					if (value.indexOf(single.get('id')) !== -1) {
+						selection.remove(single);
+					}
+				});
+			}).bind(null, value)();
+		}
+
+		let models = browser.state().get('library').models;
+		models.forEach((model) => {
+			model.trigger('change', model);
+		});
+	}).bind(null, liveField.value, liveField.selected));
 
 	yield call([browser, browser.open]);
 
@@ -251,13 +273,17 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 		const [ attachment, ...attachments ] = selection;
 		const value = yield prepareValueForField(field.id, attachment);
 
+		if (field.type === TYPE_MEDIA_GALLERY && field.duplicates_allowed === false) {
+			browser.state().frame.options.selected = value;
+		}
+
 		// optional - this ensures an instant preview update
 		yield redrawAttachmentPreview(field.id, value, attachment, field.default_thumb_url);
 
 		yield put(setFieldValue(field.id, value));
 
 		if (!isEmpty(attachments)) {
-			yield put(addMultipleFiles(field.id, attachments));
+			yield put(addMultipleFiles(field.id, attachments, browser));
 		}
 	}
 }
@@ -274,13 +300,14 @@ export function* workerSetupMediaBrowser(action) {
 		window_button_label,
 		window_label,
 		type_filter,
-		value_type
+		value_type,
 	} = field;
 
 	const channel = yield call(createMediaBrowserChannel, {
+		selected: ! isUndefined(field.duplicates_allowed) && ! field.duplicates_allowed ? field.value : [],
 		title: window_label,
 		library: {
-			type: type_filter
+			type: type_filter,
 		},
 		button: {
 			text: window_button_label

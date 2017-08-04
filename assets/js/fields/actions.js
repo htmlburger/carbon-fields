@@ -176,7 +176,7 @@ export const switchComplexTab = createAction('fields/SWITCH_COMPLEX_TAB', (field
  * @param  {Object} attachments
  * @return {Object}
  */
-export const addMultipleFiles = createAction('fields/ADD_MULTIPLE_FILES', (fieldId, attachments) => ({ fieldId, attachments }));
+export const addMultipleFiles = createAction('fields/ADD_MULTIPLE_FILES', (fieldId, attachments, browser) => ({ fieldId, attachments, browser }));
 
 /**
  * Process the address through Google's geocoding service.
