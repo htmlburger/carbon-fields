@@ -27,35 +27,36 @@ export const MediaGalleryListItem = ({
 	index,
 	meta,
 	buttonLabel,
-	handleOpenBrowser,
-	handleRemoveItem
+	handleRemoveItem,
+	handleEditItem,
+	isSelected,
 }) => {
-	return <div className="carbon-attachment" key={index} id={index}>
-		<input
-			type="hidden"
-			id={item}
-			name={`${prefix}[${index}]`}
-			value={item}
-			readOnly />
+	return <li className="carbon-media-gallery-list-item">
+		<div className={cx('carbon-attachment', { 'carbon-selected': isSelected })} key={index} id={index}>
+			<input
+				type="hidden"
+				id={item}
+				name={`${prefix}[${index}]`}
+				value={item}
+				readOnly />
 
-		<div className={cx('carbon-description', { 'hidden': !item })}>
-			<div className={cx('carbon-attachment-preview', { 'hidden': !meta.thumb_url })}>
-				<img src={meta.thumb_url} className="thumbnail-image" />
+			<div className={cx('carbon-description', { 'hidden': !item })}>
+				<div className={cx('carbon-attachment-preview', { 'hidden': !meta.thumb_url })}>
+					<img src={meta.thumb_url} className="thumbnail-image" />
 
-				<div className="carbon-file-remove dashicons-before dashicons-no-alt" onClick={handleRemoveItem}></div>
+					<div className="carbon-file-remove dashicons-before dashicons-no-alt" onClick={handleRemoveItem}></div>
+				</div>
+
+				<input
+					type="text"
+					className="carbon-attachment-file-name"
+					value={meta.file_url}
+					readOnly />
 			</div>
 
-			<input
-				type="text"
-				className="carbon-attachment-file-name"
-				value={meta.file_url}
-				readOnly />
+			<span className="carbon-edit-attachment-button dashicons-before dashicons-edit" onClick={handleEditItem}></span>
 		</div>
-
-		<span className="button c2_open_media" onClick={handleOpenBrowser}>
-			{buttonLabel}
-		</span>
-	</div>;
+	</li>;
 };
 
 /**
@@ -78,7 +79,7 @@ MediaGalleryListItem.propTypes = {
 		file_url: PropTypes.string,
 	}),
 	handleRemoveItem: PropTypes.func,
-	handleOpenBrowser: PropTypes.func,
+	handleEditItem: PropTypes.func,
 };
 
 const enhance = withHandlers({
@@ -86,9 +87,9 @@ const enhance = withHandlers({
 		onRemoveClick(index);
 	}),
 
-	handleOpenBrowser: ({ index, onOpenBrowserClick }) => preventDefault((e) => {
-		onOpenBrowserClick(index);
-	})
+	handleEditItem: ({ item, onEditClick }) => preventDefault((e) => {
+		onEditClick(item);
+	}),
 });
 
 export default enhance(MediaGalleryListItem);

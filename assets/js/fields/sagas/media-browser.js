@@ -153,6 +153,11 @@ export function* redrawAttachmentPreview(fieldId, attachmentIdentifier, attachme
 		file_url: '',
 		thumb_url: '',
 		preview: '',
+		edit_nonce: '',
+		title: '',
+		alt: '',
+		caption: '',
+		description: '',
 	};
 
 	if (!isNull(attachment)) {
@@ -164,10 +169,19 @@ export function* redrawAttachmentPreview(fieldId, attachmentIdentifier, attachme
 		} else {
 			const thumbnail = yield call(getAttachmentThumbnail, attachment);
 
-			attachmentMeta.file_name = attachment.filename;
-			attachmentMeta.file_url  = attachment.url;
-			attachmentMeta.thumb_url = thumbnail || default_thumb_url;
-			attachmentMeta.preview   = attachment.id;
+			attachmentMeta.file_name   = attachment.filename;
+			attachmentMeta.file_url    = attachment.url;
+			attachmentMeta.thumb_url   = thumbnail || default_thumb_url;
+			attachmentMeta.preview     = attachment.id;
+			attachmentMeta.edit_nonce  = attachment.nonces ? attachment.nonces.update : '';
+			attachmentMeta.title       = attachment.title;
+			attachmentMeta.alt         = attachment.aly;
+			attachmentMeta.caption     = attachment.caption;
+			attachmentMeta.description = attachment.description;
+			attachmentMeta.filesize    = attachment.filesizeHumanReadable;
+			attachmentMeta.date        = attachment.dateFormatted;
+			attachmentMeta.width       = attachment.width;
+			attachmentMeta.height       = attachment.height;
 		}
 	}
 

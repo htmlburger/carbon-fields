@@ -22,6 +22,7 @@ import {
 import Field from 'fields/components/field';
 import SortableList from 'fields/components/sortable-list';
 import MediaGalleryList from 'fields/components/media-gallery/list';
+import EditAttachment from 'fields/components/media-gallery/edit-attachment';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { setupMediaBrowser, openMediaBrowser } from 'fields/actions';
@@ -43,19 +44,39 @@ export const MediaGalleryField = ({
 	openBrowser,
 	sortableOptions,
 	handleSortItems,
-	handleRemoveItem
+	handleRemoveItem,
+	openEditAttachment,
+	closeEditAttachment,
+	updateField,
 }) => {
 	return <Field field={field}>
-		<SortableList options={sortableOptions} onSort={handleSortItems}>
-			<MediaGalleryList
-				prefix={name}
-				items={field.value}
-				itemsMeta={field.value_meta}
-				buttonLabel={field.button_label}
-				handleOpenBrowser={openBrowser}
-				handleRemoveItem={handleRemoveItem}
-			/>
-		</SortableList>
+		<div className="carbon-media-gallery">
+			<SortableList options={sortableOptions} onSort={handleSortItems}>
+				<MediaGalleryList
+					prefix={name}
+					items={field.value}
+					itemsMeta={field.value_meta}
+					buttonLabel={field.button_label}
+					handleOpenBrowser={openBrowser}
+					handleEditItem={openEditAttachment}
+					handleRemoveItem={handleRemoveItem}
+					openBrowser={openBrowser}
+					buttonLabel={field.button_label}
+					field={field}
+				/>
+			</SortableList>
+
+			{
+				field.selected ?
+				<EditAttachment
+					field={field}
+					attachment={field.selected}
+					attachmentMeta={field.value_meta[ field.selected ]}
+					updateField={updateField}
+					onCancel={closeEditAttachment}
+				/> : ''
+			}
+		</div>
 	</Field>;
 };
 
@@ -74,11 +95,18 @@ MediaGalleryField.propTypes = {
 		]),
 		value_type: PropTypes.string,
 		button_label: PropTypes.string,
+		duplicates_allowed: PropTypes.boolean,
 		selected: PropTypes.oneOfType([
 			PropTypes.string,
 			PropTypes.number,
 		]),
-		duplicates_allowed: PropTypes.boolean,
+		edit: PropTypes.shape({
+			id: PropTypes.number,
+			title: PropTypes.string,
+			caption: PropTypes.string,
+			alt: PropTypes.string,
+			description: PropTypes.string,
+		}),
 	}),
 	openBrowser: PropTypes.func,
 	handleRemoveItem: PropTypes.func,
@@ -117,7 +145,7 @@ export const enhance = compose(
 			if (field.required) {
 				setupValidation(field.id, VALIDATION_BASE);
 			}
-		}
+		},
 	}),
 
 	/**
@@ -145,11 +173,50 @@ export const enhance = compose(
 			setFieldValue(field.id, newValue);
 		},
 
-		handleRemoveItem: ({ field, setFieldValue }) => (index) => {
+		handleRemoveItem: ({ field, setFieldValue, updateField, resetEditAttachment }) => (index) => {
 			field.value.splice(index, 1);
 
 			setFieldValue(field.id, field.value);
+
+			updateField(field.id, {
+				selected: null,
+				edit: {
+					id: '',
+					title: '',
+					alt: '',
+					caption: '',
+					description: '',
+				}
+			})
 		},
+
+		openEditAttachment: ({ field, updateField }) => (item) => {
+			const attachmentMeta = field.value_meta[ item ];
+
+			updateField(field.id, {
+				selected: item,
+				edit: {
+					id: parseInt(item, 10),
+					title: attachmentMeta.title,
+					alt: attachmentMeta.alt,
+					caption: attachmentMeta.caption,
+					description: attachmentMeta.description,
+				}
+			});
+		},
+
+		closeEditAttachment: ({ field, updateField }) => {
+			updateField(field.id, {
+				selected: null,
+				edit: {
+					id: '',
+					title: '',
+					alt: '',
+					caption: '',
+					description: '',
+				}
+			})
+		}
 	}),
 
 	/**
@@ -157,10 +224,9 @@ export const enhance = compose(
 	 */
 	withProps(({ field, collapseComplexGroup }) => {
 		const sortableOptions = {
-			items: '.carbon-attachment',
-			placeholder: 'carbon-attachment ui-placeholder-highlight',
+			items: '.carbon-media-gallery-list-item',
+			placeholder: 'carbon-media-gallery-list-item ui-placeholder-highlight',
 			forcePlaceholderSize: true,
-			cancel: '.carbon-attachment-new',
 		};
 
 		return {

@@ -20,34 +20,39 @@ import MediaGalleryListItem from 'fields/components/media-gallery/list-item';
  * @return {React.Element}
  */
 export const MediaGalleryList = ({
+	field,
 	prefix,
 	items,
 	itemsMeta,
 	buttonLabel,
 	handleRemoveItem,
-	handleOpenBrowser,
+	handleEditItem,
+	openBrowser,
 }) => {
-	return <div className="carbon-media-gallery">
-		{
-			items.map((item, index) => {
-				return <MediaGalleryListItem
-					prefix={prefix}
-					key={index}
-					index={index}
-					item={item}
-					meta={itemsMeta[ item ]}
-					name={name}
-					buttonLabel={buttonLabel}
-					onRemoveClick={handleRemoveItem}
-					onOpenBrowserClick={handleOpenBrowser}
-				/>
-			})
-		}
+	return <div className="carbon-media-gallery-list">
+		<ul className="carbon-media-gallery-list-items">
+			{
+				items.map((item, index) => {
+					return <MediaGalleryListItem
+						prefix={prefix}
+						key={index}
+						index={index}
+						item={item}
+						meta={itemsMeta[ item ]}
+						name={name}
+						buttonLabel={buttonLabel}
+						onRemoveClick={handleRemoveItem}
+						onEditClick={handleEditItem}
+						isSelected={field.selected == item}
+					/>
+				})
+			}
+		</ul>
 
-		<div className="carbon-attachment carbon-attachment-new">
-			<span className="button c2_open_media" onClick={handleOpenBrowser}>
+		<div className="carbon-media-gallery-actions">
+			<button type="button" className="button button-secondary" onClick={openBrowser}>
 				{buttonLabel}
-			</span>
+			</button>
 		</div>
 	</div>;
 };
