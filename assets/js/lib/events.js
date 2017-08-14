@@ -179,19 +179,28 @@ export function createMediaBrowserChannel(settings) {
 		});
 
 		// Emit the selection through the channel.
-		const handler = () => {
+		const onSelect = () => {
 			emit({
 				selection: browser.state().get('selection').toJSON(),
 			});
 		};
 
+		// Emit the closing modal through the channel.
+		const onClose = () => {
+			emit({
+				closed: true
+			});
+		};
+
 		// Cancel the subscription.
 		const unsubscribe = () => {
-			browser.off('select', handler);
+			browser.off('select', onSelect);
+			browser.off('close', onClose);
 		};
 
 		// Setup the subscription.
-		browser.on('select', handler);
+		browser.on('select', onSelect);
+		browser.on('close', onClose);
 
 		// Emit the instance of browser so it can be used by subscribers.
 		emit({

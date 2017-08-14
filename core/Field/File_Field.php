@@ -64,7 +64,11 @@ class File_Field extends Field {
 		$field_data = parent::to_json( $load );
 
 		$value = $this->get_value();
-		$attachment_metadata = Helper::get_attachment_metadata( $value, $this->value_type );
+
+		$attachment_metadata = array();
+		if ( $value ) {
+			$attachment_metadata = Helper::get_attachment_metadata( $value, $this->value_type );
+		}
 
 		$field_data = array_merge( $field_data, $attachment_metadata, array(
 			'button_label'        => $this->button_label,

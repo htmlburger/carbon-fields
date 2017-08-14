@@ -384,8 +384,9 @@ class Helper {
 	 * @return boolean
 	 */
 	public static function get_attachment_metadata( $id, $type ) {
-		$attachment             = get_post( $id );
-		$attached_file          = get_attached_file( $attachment->ID );
+		$attachment                   = get_post( $id );
+		$attached_file                = get_attached_file( $attachment->ID );
+		$meta                         = wp_get_attachment_metadata( $attachment->ID );
 		list( $src, $width, $height ) = wp_get_attachment_image_src( $attachment->ID, 'full' );
 
 		$attachment_meta = array(
@@ -416,6 +417,12 @@ class Helper {
 
 		$attachment_meta['file_ext']  = $attachment_meta['filetype']['ext']; // png, mp3, etc..
 		$attachment_meta['file_type'] = preg_replace( '~\/.+$~', '', $attachment_meta['filetype']['type'] ); // image, video, etc..
+
+		if ( $attachment_meta['file_type'] === 'audio' ) {
+			$attachment_meta['artist'] = $meta['artist'];
+			$attachment_meta['album']  = $meta['album'];
+			$attachment_meta['length'] = $meta['length_formatted'];
+		}
 
 		$attachment_meta['default_thumb_url'] = wp_mime_type_icon( $id );
 

@@ -68,12 +68,14 @@ export function* prepareValueForMediaGalleryField(fieldId, attachment) {
 
 	const attachmentId = Number(attachment.id);
 
-	if ( 'selected' in field ) {
-		const index = field.selected;
+	if ( ('selected' in field) && isNumber(field.selected) ) {
+		const index = value.indexOf(field.selected);
 
 		value.splice(index, 1, attachmentId);
 
-		delete field.selected;
+		yield(put(updateField(field.id, {
+			selected: '',
+		})));
 	} else {
 		if (duplicates_allowed || field.value.indexOf(attachmentId) === -1) {
 			value = [...value, attachmentId];
@@ -151,11 +153,11 @@ export function* redrawAttachmentPreview(fieldId, attachmentIdentifier, attachme
 	let attachmentMeta = {
 		file_name: '',
 		file_url: '',
+		file_type: '',
 		thumb_url: '',
 		preview: '',
 		edit_nonce: '',
 		title: '',
-		alt: '',
 		caption: '',
 		description: '',
 	};
@@ -171,17 +173,25 @@ export function* redrawAttachmentPreview(fieldId, attachmentIdentifier, attachme
 
 			attachmentMeta.file_name   = attachment.filename;
 			attachmentMeta.file_url    = attachment.url;
+			attachmentMeta.file_type   = attachment.type;
 			attachmentMeta.thumb_url   = thumbnail || default_thumb_url;
 			attachmentMeta.preview     = attachment.id;
 			attachmentMeta.edit_nonce  = attachment.nonces ? attachment.nonces.update : '';
 			attachmentMeta.title       = attachment.title;
-			attachmentMeta.alt         = attachment.aly;
 			attachmentMeta.caption     = attachment.caption;
 			attachmentMeta.description = attachment.description;
 			attachmentMeta.filesize    = attachment.filesizeHumanReadable;
 			attachmentMeta.date        = attachment.dateFormatted;
-			attachmentMeta.width       = attachment.width;
-			attachmentMeta.height       = attachment.height;
+
+			if (attachment.type === 'image') {
+				attachmentMeta.alt    = attachment.alt;
+				attachmentMeta.width  = attachment.width;
+				attachmentMeta.height = attachment.height;
+			} else if (attachment.type === 'audio') {
+				attachmentMeta.artist = attachment.meta.artist;
+				attachmentMeta.album  = attachment.meta.album;
+				attachmentMeta.length = attachment.fileLength;
+			}
 		}
 	}
 
@@ -246,7 +256,8 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 	}
 
 	const liveField = yield select(getFieldById, action.payload);
-	browser.once('open', (function(value) {
+
+	browser.once('open', (function (value, selected) {
 		let {
 			type,
 			duplicates_allowed
@@ -259,19 +270,28 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 			browser.state().get('selection').set( attachment ? [attachment] : [] );
 		}
 
-		if ((type === TYPE_MEDIA_GALLERY) && ! duplicates_allowed) {
-			(function (value) {
-				browser.state().get('selection').off('carbon-selection:single');
-				browser.state().get('selection').on('selection:single', function (single, selection) {
-					browser.state().get('selection').trigger('carbon-selection:single', single, selection);
-				});
+		if (type === TYPE_MEDIA_GALLERY) {
+			if (selected) {
+				selected = window.wp.media.attachment(selected);
+				browser.state().get('selection').set( selected ? [selected] : [] );
+			} else {
+				browser.state().get('selection').set( [] );
+			}
 
-				browser.state().get('selection').on('carbon-selection:single', function (single, selection) {
-					if (value.indexOf(single.get('id')) !== -1) {
-						selection.remove(single);
-					}
-				});
-			}).bind(null, value)();
+			if (! duplicates_allowed) {
+				(function (value) {
+					browser.state().get('selection').off('carbon-selection:single');
+					browser.state().get('selection').on('selection:single', function (single, selection) {
+						browser.state().get('selection').trigger('carbon-selection:single', single, selection);
+					});
+
+					browser.state().get('selection').on('carbon-selection:single', function (single, selection) {
+						if (value.indexOf(single.get('id')) !== -1) {
+							selection.remove(single);
+						}
+					});
+				}).bind(null, value)();
+			}
 		}
 
 		let models = browser.state().get('library').models;
@@ -283,21 +303,34 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 	yield call([browser, browser.open]);
 
 	while (true) {
-		const { selection } = yield take(channel);
-		const [ attachment, ...attachments ] = selection;
-		const value = yield prepareValueForField(field.id, attachment);
+		const {
+			closed = false,
+			selection = undefined
+		} = yield take(channel);
 
-		if (field.type === TYPE_MEDIA_GALLERY && field.duplicates_allowed === false) {
-			browser.state().frame.options.selected = value;
+		// When the browser is closed, remove the selected flag on the field.
+		if (closed) {
+			yield put(updateField(field.id, {
+				selected: '',
+			}));
 		}
 
-		// optional - this ensures an instant preview update
-		yield redrawAttachmentPreview(field.id, value, attachment, field.default_thumb_url);
+		if (selection) {
+			const [ attachment, ...attachments ] = selection;
+			const value = yield prepareValueForField(field.id, attachment);
 
-		yield put(setFieldValue(field.id, value));
+			if (field.type === TYPE_MEDIA_GALLERY && field.duplicates_allowed === false) {
+				browser.state().frame.options.selected = value;
+			}
 
-		if (!isEmpty(attachments)) {
-			yield put(addMultipleFiles(field.id, attachments, browser));
+			// optional - this ensures an instant preview update
+			yield redrawAttachmentPreview(field.id, value, attachment, field.default_thumb_url);
+
+			yield put(setFieldValue(field.id, value));
+
+			if (!isEmpty(attachments)) {
+				yield put(addMultipleFiles(field.id, attachments, browser));
+			}
 		}
 	}
 }

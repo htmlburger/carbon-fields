@@ -6,5 +6,8 @@
 
 .wp-customizer .carbon-container.carbon-container-widget { margin: 0 0 10px; border-width: 0; }
 
-.carbon-container.carbon-container-widget .carbon-media-gallery { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; margin: 0 -5px; }
-.carbon-container.carbon-container-widget .carbon-media-gallery .carbon-attachment { margin: 0 5px 10px; width: 125px; height: 125px; }
+
+/* Media Gallery Field */
+.carbon-container-widget .carbon-media-gallery-list-items .carbon-media-gallery-list-item { padding: 5px; flex: 0 0 33%; min-width: 0; }
+
+.carbon-container-widget .carbon-media-gallery-list-items .carbon-edit-attachment-button { padding: 3px; }

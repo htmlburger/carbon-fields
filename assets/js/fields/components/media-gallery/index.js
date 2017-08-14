@@ -1,6 +1,7 @@
 /**
  * The external dependencies.
  */
+import $ from 'jquery';
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
@@ -20,7 +21,6 @@ import {
  * The internal dependencies.
  */
 import Field from 'fields/components/field';
-import SortableList from 'fields/components/sortable-list';
 import MediaGalleryList from 'fields/components/media-gallery/list';
 import EditAttachment from 'fields/components/media-gallery/edit-attachment';
 import withStore from 'fields/decorators/with-store';
@@ -51,29 +51,29 @@ export const MediaGalleryField = ({
 }) => {
 	return <Field field={field}>
 		<div className="carbon-media-gallery">
-			<SortableList options={sortableOptions} onSort={handleSortItems}>
-				<MediaGalleryList
-					prefix={name}
-					items={field.value}
-					itemsMeta={field.value_meta}
-					buttonLabel={field.button_label}
-					handleOpenBrowser={openBrowser}
-					handleEditItem={openEditAttachment}
-					handleRemoveItem={handleRemoveItem}
-					openBrowser={openBrowser}
-					buttonLabel={field.button_label}
-					field={field}
-				/>
-			</SortableList>
+			<MediaGalleryList
+				prefix={name}
+				items={field.value}
+				itemsMeta={field.value_meta}
+				buttonLabel={field.button_label}
+				handleOpenBrowser={openBrowser}
+				handleEditItem={openEditAttachment}
+				handleRemoveItem={handleRemoveItem}
+				openBrowser={openBrowser}
+				buttonLabel={field.button_label}
+				field={field}
+				sortableOptions={sortableOptions}
+				onSort={handleSortItems}
+			/>
 
 			{
-				field.selected ?
+				(field.editMode === 'inline' && field.selected) ?
 				<EditAttachment
 					field={field}
 					attachment={field.selected}
 					attachmentMeta={field.value_meta[ field.selected ]}
 					updateField={updateField}
-					onCancel={closeEditAttachment}
+					handleCancelEdit={closeEditAttachment}
 				/> : ''
 			}
 		</div>
@@ -100,12 +100,18 @@ MediaGalleryField.propTypes = {
 			PropTypes.string,
 			PropTypes.number,
 		]),
+		editMode: PropTypes.string,
 		edit: PropTypes.shape({
-			id: PropTypes.number,
+			id: PropTypes.oneOfType([
+				PropTypes.string,
+				PropTypes.number,
+			]),
 			title: PropTypes.string,
 			caption: PropTypes.string,
 			alt: PropTypes.string,
 			description: PropTypes.string,
+			artist: PropTypes.string,
+			album: PropTypes.string,
 		}),
 	}),
 	openBrowser: PropTypes.func,
@@ -186,23 +192,42 @@ export const enhance = compose(
 					alt: '',
 					caption: '',
 					description: '',
+					artist: '',
+					album: '',
 				}
 			})
 		},
 
-		openEditAttachment: ({ field, updateField }) => (item) => {
-			const attachmentMeta = field.value_meta[ item ];
+		openEditAttachment: ({ field, updateField, openMediaBrowser }) => (item) => {
+			const $container = $(`#${field.parent}`);
 
-			updateField(field.id, {
-				selected: item,
-				edit: {
-					id: parseInt(item, 10),
-					title: attachmentMeta.title,
-					alt: attachmentMeta.alt,
-					caption: attachmentMeta.caption,
-					description: attachmentMeta.description,
-				}
-			});
+			// For big containers and non-mobile devices, use the inline edit
+			// Otherwise, fallback to Media Browser
+
+			if ( $container.outerWidth() > 767 ) {
+				const attachmentMeta = field.value_meta[ item ];
+
+				updateField(field.id, {
+					selected: item,
+					editMode: 'inline',
+					edit: {
+						id: parseInt(item, 10),
+						title: attachmentMeta.title,
+						alt: attachmentMeta.alt,
+						caption: attachmentMeta.caption,
+						description: attachmentMeta.description,
+						artist: attachmentMeta.artist || '',
+						album: attachmentMeta.album || '',
+					}
+				});
+			} else {
+				updateField(field.id, {
+					selected: item,
+					editMode: 'modal',
+				});
+
+				openMediaBrowser(field.id);
+			}
 		},
 
 		closeEditAttachment: ({ field, updateField }) => {
@@ -214,6 +239,8 @@ export const enhance = compose(
 					alt: '',
 					caption: '',
 					description: '',
+					artist: '',
+					album: '',
 				}
 			})
 		}
@@ -224,6 +251,7 @@ export const enhance = compose(
 	 */
 	withProps(({ field, collapseComplexGroup }) => {
 		const sortableOptions = {
+			handle: '.carbon-description',
 			items: '.carbon-media-gallery-list-item',
 			placeholder: 'carbon-media-gallery-list-item ui-placeholder-highlight',
 			forcePlaceholderSize: true,

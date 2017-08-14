@@ -31,8 +31,8 @@ export const MediaGalleryListItem = ({
 	handleEditItem,
 	isSelected,
 }) => {
-	return <li className="carbon-media-gallery-list-item">
-		<div className={cx('carbon-attachment', { 'carbon-selected': isSelected })} key={index} id={index}>
+	return <li className={cx('carbon-media-gallery-list-item', { 'carbon-selected': isSelected })} key={index} id={index}>
+		<div className="carbon-attachment">
 			<input
 				type="hidden"
 				id={item}
@@ -43,8 +43,6 @@ export const MediaGalleryListItem = ({
 			<div className={cx('carbon-description', { 'hidden': !item })}>
 				<div className={cx('carbon-attachment-preview', { 'hidden': !meta.thumb_url })}>
 					<img src={meta.thumb_url} className="thumbnail-image" />
-
-					<div className="carbon-file-remove dashicons-before dashicons-no-alt" onClick={handleRemoveItem}></div>
 				</div>
 
 				<input
@@ -54,6 +52,7 @@ export const MediaGalleryListItem = ({
 					readOnly />
 			</div>
 
+			<span className="carbon-file-remove dashicons-before dashicons-no-alt" onClick={handleRemoveItem}></span>
 			<span className="carbon-edit-attachment-button dashicons-before dashicons-edit" onClick={handleEditItem}></span>
 		</div>
 	</li>;

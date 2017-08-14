@@ -4,26 +4,12 @@
 import $ from 'jquery';
 import React from 'react';
 import PropTypes from 'prop-types';
-import cx from 'classnames';
-import {
-	compose,
-	withHandlers,
-	setStatic,
-	withProps
-} from 'recompose';
-import {
-	without,
-	sortBy,
-	isNumber
-} from 'lodash';
+import { withHandlers } from 'recompose';
 
 /**
  * The internal dependencies.
  */
 import Field from 'fields/components/field';
-import withStore from 'fields/decorators/with-store';
-import withSetup from 'fields/decorators/with-setup';
-import { TYPE_MEDIA_GALLERY, VALIDATION_BASE } from 'fields/constants';
 import { preventDefault } from 'lib/helpers';
 
 /**
@@ -41,7 +27,8 @@ export const EditAttachment = ({
 	attachmentMeta,
 	saveAttachment,
 	updateEditField,
-	onCancel,
+	handleCancelEdit,
+	handleSelect,
 }) => {
 	return <div className="carbon-edit-attachment">
 		<div className="carbon-edit-attachment-inner">
@@ -55,17 +42,56 @@ export const EditAttachment = ({
 
 					<p>{ attachmentMeta.date }</p>
 
-					<p>{ attachmentMeta.width } x { attachmentMeta.height } ({ attachmentMeta.filesize })</p>
+					{
+						(() => {
+							if ( attachmentMeta.file_type === 'image' ) {
+								return <p>{ attachmentMeta.width } x { attachmentMeta.height } ({ attachmentMeta.filesize })</p>;
+							} else if ( attachmentMeta.file_type === 'audio' ) {
+								return <p>Length: { attachmentMeta.length }</p>;
+							}
+						})()
+					}
+
 				</div>
 			</div>
 
 			<div className="carbon-edit-attachment-body">
 				<fieldset disabled={field.status === 'loading'}>
 					<p>
+						<label htmlFor="attachment-url">URL</label>
+
+						<input type="text" id="attachment-url" name="url" value={attachmentMeta.file_url} readOnly onFocus={ handleSelect } />
+					</p>
+
+					<p>
 						<label htmlFor="attachment-title">Title</label>
 
 						<input type="text" id="attachment-title" name="title" onChange={ updateEditField } value={ field.edit.title } />
 					</p>
+
+					{
+						(() => {
+							if ( attachmentMeta.file_type === 'audio' ) {
+								return <p>
+									<label htmlFor="attachment-artist">Artist</label>
+
+									<input type="text" id="attachment-artist" name="artist" onChange={ updateEditField } value={ field.edit.artist } />
+								</p>;
+							}
+						})()
+					}
+
+					{
+						(() => {
+							if ( attachmentMeta.file_type === 'audio' ) {
+								return <p>
+									<label htmlFor="attachment-album">Album</label>
+
+									<input type="text" id="attachment-album" name="album" onChange={ updateEditField } value={ field.edit.album } />
+								</p>;
+							}
+						})()
+					}
 
 					<p>
 						<label htmlFor="attachment-caption">Caption</label>
@@ -73,11 +99,17 @@ export const EditAttachment = ({
 						<textarea id="attachment-caption" name="caption" onChange={ updateEditField } value={ field.edit.caption }></textarea>
 					</p>
 
-					<p>
-						<label htmlFor="attachment-alt-text">Alt Text</label>
+					{
+						(() => {
+							if ( attachmentMeta.file_type === 'image' ) {
+								return <p>
+									<label htmlFor="attachment-alt-text">Alt Text</label>
 
-						<input type="text" id="attachment-alt-text" name="alt" onChange={ updateEditField } value={ field.edit.alt } />
-					</p>
+									<input type="text" id="attachment-alt-text" name="alt" onChange={ updateEditField } value={ field.edit.alt } />
+								</p>
+							}
+						})()				 
+					}
 
 					<p>
 						<label htmlFor="attachment-description">Description</label>
@@ -89,7 +121,7 @@ export const EditAttachment = ({
 		</div>
 
 		<div className="carbon-edit-attachment-footer">
-			<button type="button" className="button button-secondary button-medium" onClick={ onCancel }>Cancel</button>
+			<button type="button" className="button button-secondary button-medium" onClick={ handleCancelEdit }>Cancel</button>
 
 			<span className="carbon-edit-attachment-save">
 				{
@@ -118,79 +150,100 @@ EditAttachment.propTypes = {
  *
  * @type {Function}
  */
-export const enhance = compose(
-	/**
-	 * Pass some handlers to the component.
-	 */
-	withHandlers({
-		updateEditField: ({ field, updateField }) => (({ target }) => {
-			const {
-				name,
-				value,
-			} = target;
+const enhance = withHandlers({
+	handleSelect: () => (({ target }) => {
+		target.select();
+	}),
 
-			const {
-				edit,
+	updateEditField: ({ field, updateField }) => (({ target }) => {
+		const {
+			name,
+			value,
+		} = target;
+
+		const {
+			edit,
+		} = field;
+
+		edit[ name ] = value;
+
+		updateField(field.id, {
+			edit: edit
+		});
+	}),
+
+	saveAttachment: ({ field, attachment, attachmentMeta, updateField }) => preventDefault((e) => {
+		const {
+			edit
+		} = field;
+
+		const {
+			file_type
+		} = attachmentMeta;
+
+		edit.status = 'loading';
+		updateField(field.id, { edit });
+
+		let postData = {
+			action: 'save-attachment',
+			id: attachment,
+			nonce: attachmentMeta.edit_nonce,
+			changes: {
+				title: edit.title,
+				caption: edit.caption,
+				description: edit.description,
+			}
+		};
+
+		if (file_type === 'image') {
+			postData.changes.alt = edit.alt;
+		}
+
+		if (file_type === 'audio') {
+			postData.changes.artist = edit.artist;
+			postData.changes.album  = edit.album;
+		}
+
+		let request = $.post(window.ajaxurl, postData);
+
+		request.done(({ success }) => {
+			if (! success) {
+				alert( 'An error occured. Please try again later..' );
+				return;
+			}
+
+			let {
+				value_meta
 			} = field;
 
-			edit[ name ] = value;
+			value_meta[ attachment ].title       = edit.title;
+			value_meta[ attachment ].caption     = edit.caption;
+			value_meta[ attachment ].description = edit.description;
+
+			if (file_type === 'image') {
+				value_meta[ attachment ].alt = edit.alt;
+			}
+
+			if (file_type === 'audio') {
+				value_meta[ attachment ].artist = edit.artist;
+				value_meta[ attachment ].album  = edit.album;
+			}
 
 			updateField(field.id, {
-				edit: edit
+				value_meta,
 			});
-		}),
+		});
 
-		saveAttachment: ({ field, attachment, attachmentMeta, updateField }) => preventDefault((e) => {
-			const {
-				edit
-			} = field;
+		request.fail(() => {
+			alert( 'An error occured. Please try again later..' );
+		});
 
-			edit.status = 'loading';
+		request.always(() => {
+			edit.status = '';
+
 			updateField(field.id, { edit });
-
-			let request = $.post(window.ajaxurl, {
-				action: 'save-attachment',
-				id: attachment,
-				nonce: attachmentMeta.edit_nonce,
-				changes: {
-					title: edit.title,
-					alt: edit.alt,
-					caption: edit.caption,
-					description: edit.description,
-				}
-			});
-
-			request.done(({ success }) => {
-				if (! success) {
-					alert( 'An error occured. Please try again later..' );
-					return;
-				}
-
-				let {
-					value_meta
-				} = field;
-
-				value_meta[ attachment ].title       = edit.title;
-				value_meta[ attachment ].alt         = edit.alt;
-				value_meta[ attachment ].caption     = edit.caption;
-				value_meta[ attachment ].description = edit.description;
-
-				updateField(field.id, {
-					value_meta,
-				});
-			});
-
-			request.fail(() => {
-				alert( 'An error occured. Please try again later..' );
-			});
-
-			request.always(() => {
-				edit.status = '';
-
-				updateField(field.id, { edit });
-			});
-		}),
+		});
 	}),
-);
+});
 
 export default enhance(EditAttachment);
