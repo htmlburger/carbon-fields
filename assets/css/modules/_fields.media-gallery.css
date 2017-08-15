@@ -2,7 +2,7 @@
 	Media Gallery
 \* ------------------------------------------------------------ */
 
-.carbon-media-gallery { border: 1px solid #eee; display: -webkit-flex; display: flex; flex-direction: row; }
+.carbon-media-gallery { border: 1px solid #eee; display: -webkit-flex; display: flex; flex-direction: row; background: #fff; }
 .carbon-media-gallery .carbon-attachment { width: auto; height: auto; line-height: 1; }
 .carbon-media-gallery .carbon-media-gallery-actions { padding: 10px; border-top: 1px solid #eee; }
 
