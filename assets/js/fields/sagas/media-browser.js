@@ -272,25 +272,10 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 
 		if (type === TYPE_MEDIA_GALLERY) {
 			if (selected) {
-				selected = window.wp.media.attachment(selected);
-				browser.state().get('selection').set( selected ? [selected] : [] );
+				let attachment = window.wp.media.attachment(selected);
+				browser.state().get('selection').set( attachment ? [attachment] : [] );
 			} else {
 				browser.state().get('selection').set( [] );
-			}
-
-			if (! duplicates_allowed) {
-				(function (value) {
-					browser.state().get('selection').off('carbon-selection:single');
-					browser.state().get('selection').on('selection:single', function (single, selection) {
-						browser.state().get('selection').trigger('carbon-selection:single', single, selection);
-					});
-
-					browser.state().get('selection').on('carbon-selection:single', function (single, selection) {
-						if (value.indexOf(single.get('id')) !== -1) {
-							selection.remove(single);
-						}
-					});
-				}).bind(null, value)();
 			}
 		}
 

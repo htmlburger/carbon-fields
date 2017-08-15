@@ -27,7 +27,7 @@ export const EditAttachment = ({
 	attachmentMeta,
 	saveAttachment,
 	updateEditField,
-	handleCancelEdit,
+	onCancelClick,
 	handleSelect,
 }) => {
 	return <div className="carbon-edit-attachment">
@@ -58,13 +58,13 @@ export const EditAttachment = ({
 			<div className="carbon-edit-attachment-body">
 				<fieldset disabled={field.status === 'loading'}>
 					<p>
-						<label htmlFor="attachment-url">URL</label>
+						<label htmlFor="attachment-url">{ carbonFieldsL10n.field.editAttachmentUrl }</label>
 
 						<input type="text" id="attachment-url" name="url" value={attachmentMeta.file_url} readOnly onFocus={ handleSelect } />
 					</p>
 
 					<p>
-						<label htmlFor="attachment-title">Title</label>
+						<label htmlFor="attachment-title">{ carbonFieldsL10n.field.editAttachmentTitle }</label>
 
 						<input type="text" id="attachment-title" name="title" onChange={ updateEditField } value={ field.edit.title } />
 					</p>
@@ -73,7 +73,7 @@ export const EditAttachment = ({
 						(() => {
 							if ( attachmentMeta.file_type === 'audio' ) {
 								return <p>
-									<label htmlFor="attachment-artist">Artist</label>
+									<label htmlFor="attachment-artist">{ carbonFieldsL10n.field.editAttachmentArtist }</label>
 
 									<input type="text" id="attachment-artist" name="artist" onChange={ updateEditField } value={ field.edit.artist } />
 								</p>;
@@ -85,7 +85,7 @@ export const EditAttachment = ({
 						(() => {
 							if ( attachmentMeta.file_type === 'audio' ) {
 								return <p>
-									<label htmlFor="attachment-album">Album</label>
+									<label htmlFor="attachment-album">{ carbonFieldsL10n.field.editAttachmentAlbum }</label>
 
 									<input type="text" id="attachment-album" name="album" onChange={ updateEditField } value={ field.edit.album } />
 								</p>;
@@ -94,7 +94,7 @@ export const EditAttachment = ({
 					}
 
 					<p>
-						<label htmlFor="attachment-caption">Caption</label>
+						<label htmlFor="attachment-caption">{ carbonFieldsL10n.field.editAttachmentCaption }</label>
 
 						<textarea id="attachment-caption" name="caption" onChange={ updateEditField } value={ field.edit.caption }></textarea>
 					</p>
@@ -103,7 +103,7 @@ export const EditAttachment = ({
 						(() => {
 							if ( attachmentMeta.file_type === 'image' ) {
 								return <p>
-									<label htmlFor="attachment-alt-text">Alt Text</label>
+									<label htmlFor="attachment-alt-text">{ carbonFieldsL10n.field.editAttachmentAlt }</label>
 
 									<input type="text" id="attachment-alt-text" name="alt" onChange={ updateEditField } value={ field.edit.alt } />
 								</p>
@@ -112,7 +112,7 @@ export const EditAttachment = ({
 					}
 
 					<p>
-						<label htmlFor="attachment-description">Description</label>
+						<label htmlFor="attachment-description">{ carbonFieldsL10n.field.editAttachmentDescription }</label>
 
 						<textarea id="attachment-description" name="description" onChange={ updateEditField } value={ field.edit.description }></textarea>
 					</p>
@@ -121,7 +121,7 @@ export const EditAttachment = ({
 		</div>
 
 		<div className="carbon-edit-attachment-footer">
-			<button type="button" className="button button-secondary button-medium" onClick={ handleCancelEdit }>Cancel</button>
+			<button type="button" className="button button-secondary button-medium" onClick={ onCancelClick }>{ carbonFieldsL10n.field.editAttachmentCancel }</button>
 
 			<span className="carbon-edit-attachment-save">
 				{
@@ -130,19 +130,10 @@ export const EditAttachment = ({
 					: ''
 				}
 
-				<input type="submit" className="button button-primary button-medium" value="Save" onClick={ saveAttachment } />
+				<input type="submit" className="button button-primary button-medium" value={carbonFieldsL10n.field.editAttachmentSave} onClick={ saveAttachment } />
 			</span>
 		</div>
 	</div>
-};
-
-/**
- * Validate the props.
- *
- * @type {Object}
- */
-EditAttachment.propTypes = {
-	
 };
 
 /**
@@ -151,6 +142,10 @@ EditAttachment.propTypes = {
  * @type {Function}
  */
 const enhance = withHandlers({
+	onCancelClick: ({ handleCancelEdit }) => preventDefault((e) => {
+		handleCancelEdit();
+	}),
+
 	handleSelect: () => (({ target }) => {
 		target.select();
 	}),
