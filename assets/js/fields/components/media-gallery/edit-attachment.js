@@ -121,7 +121,7 @@ export const EditAttachment = ({
 		</div>
 
 		<div className="carbon-edit-attachment-footer">
-			<button type="button" className="button button-secondary button-medium" onClick={ onCancelClick }>{ carbonFieldsL10n.field.editAttachmentCancel }</button>
+			<button type="button" className="button button-secondary button-medium" onClick={ onCancelClick }>{ carbonFieldsL10n.field.editAttachmentClose }</button>
 
 			<span className="carbon-edit-attachment-save">
 				{

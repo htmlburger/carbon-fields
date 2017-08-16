@@ -162,7 +162,7 @@ class Loader {
 				'editAttachmentCaption' => __( 'Caption', 'carbon-fields' ),
 				'editAttachmentAlt' => __( 'Alt Text', 'carbon-fields' ),
 				'editAttachmentDescription' => __( 'Description', 'carbon-fields' ),
-				'editAttachmentCancel' => __( 'Cancel', 'carbon-fields' ),
+				'editAttachmentClose' => __( 'Close', 'carbon-fields' ),
 				'editAttachmentSave' => __( 'Save', 'carbon-fields' ),
 			),
 		) ) );

@@ -8,7 +8,7 @@
 
 .carbon-media-gallery-list { flex: 1 1 auto; }
 
-.carbon-media-gallery-list-items { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; padding: 0; flex: 1 1 auto; list-style: none; height: 350px; overflow: auto; overflow-x: hidden; align-content: start; }
+.carbon-media-gallery-list-items { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; padding: 0; flex: 1 1 auto; list-style: none; height: 400px; overflow: auto; overflow-x: hidden; align-content: start; }
 .carbon-media-gallery-list-items .carbon-media-gallery-list-item { padding: 10px; flex: 0 0 12.5%; box-sizing: border-box; align-self: flex-start; }
 
 .carbon-media-gallery-list-items .carbon-attachment { width: 100%; border: none; position: relative; border-bottom: 0; }
@@ -31,7 +31,7 @@
 .carbon-edit-attachment { flex: 0 0 55%; -webkit-flex: 0 0 55%; max-width: 400px; border-left: 1px solid #e5e5e5; }
 .carbon-edit-attachment textarea { resize: none; }
 
-.carbon-edit-attachment-inner { height: 350px; background: #f5f5f5; box-sizing: border-box; }
+.carbon-edit-attachment-inner { height: 400px; background: #f5f5f5; box-sizing: border-box; }
 
 .carbon-edit-attachment-head { display: flex; flex-direction: row; border-bottom: 1px solid #eee; padding: 10px; background: #fcfcfc; }
 
@@ -40,7 +40,7 @@
 
 .carbon-edit-attachment-meta { display: flex; flex-direction: column; flex-wrap: wrap; justify-content: space-around; }
 
-.carbon-edit-attachment-body { padding: 10px; max-height: 230px; overflow: hidden; overflow-y: scroll; box-sizing: border-box; }
+.carbon-edit-attachment-body { padding: 10px; max-height: 280px; overflow: hidden; overflow-y: auto; box-sizing: border-box; }
 .carbon-edit-attachment-body p { display: flex; margin-bottom: 15px; }
 .carbon-edit-attachment-body p:last-of-type { margin-bottom: 0; }
 .carbon-edit-attachment-body label { flex: 0 0 30%; margin-top: 3px; padding-bottom: 0; }
