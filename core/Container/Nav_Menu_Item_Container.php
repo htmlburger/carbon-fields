@@ -188,7 +188,7 @@ class Nav_Menu_Item_Container extends Container {
 				$custom_fields[] = $tmp_field;
 			}
 
-			$container = Container::factory( $this->type, $menu_item_field_prefix . $this->id )
+			$container = Container::factory( $this->type, $menu_item_field_prefix . $this->get_id() )
 				->set_datastore( $menu_item_datastore, true )
 				->add_fields( $custom_fields )
 				->init( $menu_item_id );

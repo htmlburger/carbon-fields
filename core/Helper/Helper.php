@@ -375,4 +375,13 @@ class Helper {
 	public static function is_valid_entity_id( $id ) {
 		return ! empty( $id ) && preg_match( '/\A[a-z0-9_\-]+\z/', $id );
 	}
+
+	/**
+	 * Return a partial regex pettern matching allowed field name characters
+	 *
+	 * @return string
+	 */
+	public static function get_field_name_characters_pattern() {
+		return 'a-z0-9_\-';
+	}
 }

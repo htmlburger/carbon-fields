@@ -135,7 +135,7 @@ class ContainerTest extends WP_UnitTestCase {
 	public function testSameContainerNamesDoNotGenerateIdenticalIds() {
 		$container1 = Container::factory( $this->containerType, $this->containerTitle );
 		$container2 = Container::factory( $this->containerType, $this->containerTitle );
-		$this->assertNotEquals( $container1->id, $container2->id );
+		$this->assertNotEquals( $container1->get_id(), $container2->get_id() );
 	}
 
 	/**
@@ -145,7 +145,7 @@ class ContainerTest extends WP_UnitTestCase {
 	public function testSameContainerNameAddsNumericalSuffix() {
 		$container1 = Container::factory( $this->containerType, $this->containerTitle );
 		$container2 = Container::factory( $this->containerType, $this->containerTitle );
-		$this->assertEquals( $container1->id . '1', $container2->id );
+		$this->assertEquals( $container1->get_id() . '1', $container2->get_id() );
 	}
 	/**
 	 * @covers ::__construct

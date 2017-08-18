@@ -72,10 +72,10 @@ abstract class Datastore implements Datastore_Interface {
 	/**
 	 * An alias of factory().
 	 *
-	 * @see Datastore::factory()
+	 * @see    Datastore::factory()
 	 * @return Datastore_Interface
 	 */
-	public static function make( $type ) {
-		return static::factory( $type );
+	public static function make() {
+		return call_user_func_array( array( get_class(), 'factory' ), func_get_args() );
 	}
 }

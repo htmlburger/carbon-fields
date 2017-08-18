@@ -119,8 +119,9 @@ abstract class Key_Value_Datastore extends Datastore {
 		$hierarchy_index = $field->get_hierarchy_index();
 
 		foreach ( $hierarchy as $index => $parent_field ) {
-			if ( isset( $value_tree[ $parent_field ][ $hierarchy_index[ $index ] ] ) ) {
-				$value_tree = $value_tree[ $parent_field ][ $hierarchy_index[ $index ] ];
+			$hierarchy_index_value = isset( $hierarchy_index[ $index ] ) ? $hierarchy_index[ $index ] : 0;
+			if ( isset( $value_tree[ $parent_field ][ $hierarchy_index_value ] ) ) {
+				$value_tree = $value_tree[ $parent_field ][ $hierarchy_index_value ];
 			}
 		}
 
