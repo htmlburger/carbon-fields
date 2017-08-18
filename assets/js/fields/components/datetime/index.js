@@ -36,6 +36,8 @@ export const DateTimeField = ({
 	field,
 	options,
 	buttonText,
+	handleManualInput,
+	formatManualInput,
 }) => {
 	return <Field field={field}>
 		<Flatpickr options={options} className="carbon-field-group-holder">
@@ -44,7 +46,8 @@ export const DateTimeField = ({
 				name={name}
 				value={field.value}
 				disabled={!field.ui.is_visible}
-				onChange={()=>{}} /* Use a noop as Flatpickr events are handled instead */
+				onChange={handleManualInput}
+				onBlur={formatManualInput}
 				className="regular-text carbon-field-group-input"
 				data-input
 				{...field.attributes} />
@@ -111,6 +114,18 @@ export const enhance = compose(
 			field.picker = instance;
 		},
 
+		handleManualInput: ({ field, setFieldValue }) => e => {
+			let value = e.target.value;
+			if (value !== field.value) {
+				setFieldValue(field.id, value);
+			}
+		},
+
+		formatManualInput: ({ field, setFieldValue }) => e => {
+			let value = e.target.value;
+			field.picker.setDate(value, true);
+		},
+
 		handleChange: ({ field, setFieldValue }) => ([ selectedDate ], selectedDateStr, instance) => {
 			instance._selectedDateStr = selectedDateStr;
 
@@ -128,9 +143,7 @@ export const enhance = compose(
 			const { value } = instance._input;
 
 			if (value) {
-				if (_selectedDateStr && value !== _selectedDateStr) {
-					instance.setDate(value, true);
-				}
+				instance.setDate(value, true);
 			} else {
 				instance.clear();
 			}
@@ -140,7 +153,7 @@ export const enhance = compose(
 	/**
 	 * Pass some props to the component.
 	 */
-	withProps(({ field, handleReady, handleChange, handleClose }) => {
+	withProps(({ field, handleReady, handleManualInput, formatManualInput, handleChange, handleClose }) => {
 		const buttonText = field.type === TYPE_TIME
 			? carbonFieldsL10n.field.selectTime
 			: carbonFieldsL10n.field.selectDate;
@@ -156,6 +169,8 @@ export const enhance = compose(
 		return {
 			options,
 			buttonText,
+			handleManualInput,
+			formatManualInput,
 		};
 	}),
 );
