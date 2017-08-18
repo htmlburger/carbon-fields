@@ -6942,7 +6942,7 @@ var RadioField = exports.RadioField = function RadioField(_ref) {
 							value: option.value,
 							checked: isChecked(option),
 							disabled: !field.ui.is_visible,
-							onChange: handleChange
+							onChange: handleChange(option)
 						}, field.attributes)),
 						option.name
 					)
@@ -7014,8 +7014,10 @@ function (_ref2) {
 		var field = _ref3.field,
 		    setFieldValue = _ref3.setFieldValue;
 		return function (_ref4) {
-			var value = _ref4.target.value;
-			return setFieldValue(field.id, value);
+			var value = _ref4.value;
+			return function () {
+				return setFieldValue(field.id, value);
+			};
 		};
 	},
 	isChecked: function isChecked(_ref5) {
@@ -7238,7 +7240,9 @@ var DateTimeField = exports.DateTimeField = function DateTimeField(_ref) {
 	var name = _ref.name,
 	    field = _ref.field,
 	    options = _ref.options,
-	    buttonText = _ref.buttonText;
+	    buttonText = _ref.buttonText,
+	    handleManualInput = _ref.handleManualInput,
+	    formatManualInput = _ref.formatManualInput;
 
 	return _react2.default.createElement(
 		_field2.default,
@@ -7251,8 +7255,9 @@ var DateTimeField = exports.DateTimeField = function DateTimeField(_ref) {
 				name: name,
 				value: field.value,
 				disabled: !field.ui.is_visible,
-				onChange: function onChange() {} /* Use a noop as Flatpickr events are handled instead */
-				, className: 'regular-text carbon-field-group-input',
+				onChange: handleManualInput,
+				onBlur: formatManualInput,
+				className: 'regular-text carbon-field-group-input',
 				'data-input': true
 			}, field.attributes)),
 			_react2.default.createElement(
@@ -7330,12 +7335,32 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		};
 	},
 
-	handleChange: function handleChange(_ref5) {
+	handleManualInput: function handleManualInput(_ref5) {
 		var field = _ref5.field,
 		    setFieldValue = _ref5.setFieldValue;
-		return function (_ref6, selectedDateStr, instance) {
-			var _ref7 = (0, _slicedToArray3.default)(_ref6, 1),
-			    selectedDate = _ref7[0];
+		return function (e) {
+			var value = e.target.value;
+			if (value !== field.value) {
+				setFieldValue(field.id, value);
+			}
+		};
+	},
+
+	formatManualInput: function formatManualInput(_ref6) {
+		var field = _ref6.field,
+		    setFieldValue = _ref6.setFieldValue;
+		return function (e) {
+			var value = e.target.value;
+			field.picker.setDate(value, true);
+		};
+	},
+
+	handleChange: function handleChange(_ref7) {
+		var field = _ref7.field,
+		    setFieldValue = _ref7.setFieldValue;
+		return function (_ref8, selectedDateStr, instance) {
+			var _ref9 = (0, _slicedToArray3.default)(_ref8, 1),
+			    selectedDate = _ref9[0];
 
 			instance._selectedDateStr = selectedDateStr;
 
@@ -7355,9 +7380,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 
 
 			if (value) {
-				if (_selectedDateStr && value !== _selectedDateStr) {
-					instance.setDate(value, true);
-				}
+				instance.setDate(value, true);
 			} else {
 				instance.clear();
 			}
@@ -7368,11 +7391,13 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 /**
  * Pass some props to the component.
  */
-(0, _recompose.withProps)(function (_ref8) {
-	var field = _ref8.field,
-	    handleReady = _ref8.handleReady,
-	    handleChange = _ref8.handleChange,
-	    handleClose = _ref8.handleClose;
+(0, _recompose.withProps)(function (_ref10) {
+	var field = _ref10.field,
+	    handleReady = _ref10.handleReady,
+	    handleManualInput = _ref10.handleManualInput,
+	    formatManualInput = _ref10.formatManualInput,
+	    handleChange = _ref10.handleChange,
+	    handleClose = _ref10.handleClose;
 
 	var buttonText = field.type === _constants.TYPE_TIME ? carbonFieldsL10n.field.selectTime : carbonFieldsL10n.field.selectDate;
 
@@ -7385,7 +7410,9 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 
 	return {
 		options: options,
-		buttonText: buttonText
+		buttonText: buttonText,
+		handleManualInput: handleManualInput,
+		formatManualInput: formatManualInput
 	};
 }));
 
