@@ -123,7 +123,7 @@ class Comment_Meta_Container extends Container {
 	 */
 	public function attach() {
 		add_meta_box(
-			$this->id,
+			$this->get_id(),
 			$this->title,
 			array( $this, 'render' ),
 			'comment',

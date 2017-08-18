@@ -254,11 +254,11 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * An alias of factory().
 	 *
-	 * @see Field::factory()
+	 * @see    Field::factory()
 	 * @return Field
 	 */
-	public static function make( $type, $name, $label = null ) {
-		return static::factory( $type, $name, $label );
+	public static function make() {
+		return call_user_func_array( array( get_class(), 'factory' ), func_get_args() );
 	}
 
 	/**
@@ -648,7 +648,8 @@ class Field implements Datastore_Holder_Interface {
 		}
 
 		// symbols ][ are supported in a hidden way - required for widgets to work (WP imposes dashes and square brackets on field names)
-		$regex = '/\A[a-z0-9_\-\[\]]+\z/';
+		$field_name_characters = Helper::get_field_name_characters_pattern();
+		$regex = '/\A[' . $field_name_characters . '\[\]]+\z/';
 		if ( ! preg_match( $regex, $name ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field names  can only contain lowercase alphanumeric characters, dashes and underscores ("' . $name . '" passed).' );
 			return $this;

@@ -2,28 +2,29 @@
 
 namespace Carbon_Fields;
 
-use Carbon_Fields\Field\Field as Abstract_Field;
-
 /**
  * Field proxy factory class.
  * Used for shorter namespace access when creating a field.
  */
 class Field {
+
 	/**
 	 * A proxy for the abstract field factory method.
 	 *
-	 * @see Carbon_Fields\Field\Field::factory()
+	 * @see    Carbon_Fields\Field\Field::factory()
+	 * @return Carbon_Fields\Field\Field
 	 */
-	public static function factory( $type, $name, $label = null ) {
-		return Abstract_Field::factory( $type, $name, $label );
+	public static function factory() {
+		return call_user_func_array( array( '\Carbon_Fields\Field\Field', 'factory' ), func_get_args() );
 	}
 
 	/**
 	 * An alias of factory().
 	 *
-	 * @see Field::factory()
+	 * @see    Field::factory()
+	 * @return Carbon_Fields\Field\Field
 	 */
-	public static function make( $type, $name, $label = null ) {
-		return static::factory( $type, $name, $label );
+	public static function make() {
+		return call_user_func_array( array( get_class(), 'factory' ), func_get_args() );
 	}
 }

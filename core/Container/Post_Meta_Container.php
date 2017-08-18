@@ -196,7 +196,7 @@ class Post_Meta_Container extends Container {
 
 		foreach ( $this->post_types as $post_type ) {
 			add_meta_box(
-				$this->id,
+				$this->get_id(),
 				$this->title,
 				array( $this, 'render' ),
 				$post_type,
@@ -204,7 +204,8 @@ class Post_Meta_Container extends Container {
 				$this->settings['meta_box_priority']
 			);
 
-			add_filter( "postbox_classes_{$post_type}_{$this->id}", array( $this, 'add_postbox_classes' ) );
+			$container_id = $this->get_id();
+			add_filter( "postbox_classes_{$post_type}_{$container_id}", array( $this, 'add_postbox_classes' ) );
 		}
 	}
 

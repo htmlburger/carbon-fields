@@ -136,10 +136,10 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Create a new container of type $type and name $name.
 	 *
-	 * @param  string $raw_type
-	 * @param  string $id        Unique id for the container. Optional
-	 * @param  string $name      Human-readable name of the container
-	 * @return object $container
+	 * @param  string    $raw_type
+	 * @param  string    $id        Unique id for the container. Optional
+	 * @param  string    $name      Human-readable name of the container
+	 * @return Container $container
 	 */
 	public static function factory( $raw_type, $id, $name = '' ) {
 		// no name provided - switch input around as the id is optionally generated based on the name
@@ -151,10 +151,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		$type = Helper::normalize_type( $raw_type );
 		$repository = Carbon_Fields::resolve( 'container_repository' );
 		$container = null;
-
-		if ( $id === '' ) {
-			$id = $repository->get_unique_container_id( $name );
-		}
+		$id = $repository->get_unique_container_id( ( $id !== '' ) ? $id : $name );
 
 		if ( ! Helper::is_valid_entity_id( $id ) ) {
 			Incorrect_Syntax_Exception::raise( 'Container IDs can only contain lowercase alphanumeric characters, dashes and underscores ("' . $id . '" passed).' );
@@ -194,10 +191,11 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * An alias of factory().
 	 *
-	 * @see Container::factory()
+	 * @see    Container::factory()
+	 * @return Container
 	 */
-	public static function make( $type, $name ) {
-		return static::factory( $type, $name );
+	public static function make() {
+		return call_user_func_array( array( get_class(), 'factory' ), func_get_args() );
 	}
 
 	/**
@@ -484,6 +482,8 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return string
 	 */
 	protected function get_field_pattern_regex() {
+		$field_name_characters = Helper::get_field_name_characters_pattern();
+
 		// matches:
 		// field_name
 		// field_name[0]
@@ -491,9 +491,9 @@ abstract class Container implements Datastore_Holder_Interface {
 		// field_name:group_name
 		$regex = '/
 			\A
-			(?P<field_name>[a-z0-9_]+)
+			(?P<field_name>[' . $field_name_characters . ']+)
 			(?:\[(?P<group_index>\d+)\])?
-			(?:' .  preg_quote( static::HIERARCHY_GROUP_SEPARATOR, '/' ). '(?P<group_name>[a-z0-9_]+))?
+			(?:' .  preg_quote( static::HIERARCHY_GROUP_SEPARATOR, '/' ). '(?P<group_name>[' . $field_name_characters . ']+))?
 			\z
 		/x';
 		return $regex;
@@ -617,7 +617,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return string
 	 */
 	protected function get_nonce_name() {
-		return 'carbon_fields_container_' . $this->id . '_nonce';
+		return $this->get_id() . '_nonce';
 	}
 
 	/**
@@ -763,7 +763,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		$conditions = $this->condition_translator->fulfillable_to_foreign( $conditions );
 
 		$container_data = array(
-			'id' => $this->id,
+			'id' => $this->get_id(),
 			'type' => $this->type,
 			'title' => $this->title,
 			'classes' => $this->get_classes(),

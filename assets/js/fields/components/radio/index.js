@@ -48,7 +48,7 @@ export const RadioField = ({
 								value={option.value}
 								checked={isChecked(option)}
 								disabled={!field.ui.is_visible}
-								onChange={handleChange}
+								onChange={handleChange(option)}
 								{...field.attributes} />
 
 							{option.name}
@@ -110,7 +110,7 @@ export const enhance = compose(
 			 * Pass some handlers to the component.
 			 */
 			withHandlers({
-				handleChange: ({ field, setFieldValue }) => ({ target: { value } }) => setFieldValue(field.id, value),
+				handleChange: ({ field, setFieldValue }) => ({ value }) => () => setFieldValue(field.id, value),
 				isChecked: ({ field }) => option => option.value === field.value,
 			})
 		),

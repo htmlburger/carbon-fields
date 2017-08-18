@@ -9,7 +9,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * @coversDefaultClass Carbon_Fields\Container\Repository
  */
 class RepositoryTest extends WP_UnitTestCase {
-	
+
 	public function setUp() {
 		$this->containerId = 'carbon_fields_container_page_settings';
 		$this->containerTitle = 'Page Settings';
@@ -103,7 +103,7 @@ class RepositoryTest extends WP_UnitTestCase {
 		$this->repository->register_container( $container2 );
 
 		$received = $this->repository->get_active_containers();
-		
+
 		$this->assertEquals( $expected, $received );
 	}
 
@@ -115,7 +115,7 @@ class RepositoryTest extends WP_UnitTestCase {
 		$received = $this->repository->get_unique_container_id( $this->containerTitle );
 		$this->assertEquals( $expected, $received );
 	}
-	
+
 	/**
 	 * @covers ::get_unique_container_id
 	 * @covers ::register_container
@@ -125,7 +125,7 @@ class RepositoryTest extends WP_UnitTestCase {
 		$this->repository->register_container( $container );
 		$received = $this->repository->get_unique_container_id( $container->title );
 
-		$this->assertNotEquals( $container->id, $received );
+		$this->assertNotEquals( $container->get_id(), $received );
 	}
 
 	/**
@@ -134,6 +134,7 @@ class RepositoryTest extends WP_UnitTestCase {
 	 */
 	public function testGetUniqueContainerId_IdenticalTitles_AddsNumericalSuffix() {
 		$container = $this->getContainerMock();
+		$container->shouldReceive( 'get_id' )->andReturn( $this->containerId );
 		$this->repository->register_container( $container );
 		$received = $this->repository->get_unique_container_id( $container->title );
 
