@@ -102,7 +102,6 @@ class OEmbedPreview extends React.Component {
 			<iframe
 				ref={ (node) => this.iframe = node }
 				scrolling="no"
-				sandbox="allow-scripts allow-same-origin allow-presentation"
 				onLoad={ this.renderIframe }
 				width={ Math.ceil( this.state.width ) }
 				height={ Math.ceil( this.state.height ) }
@@ -120,9 +119,7 @@ class OEmbedPreview extends React.Component {
 			return;
 		}
 
-		// sandboxing video content needs to explicitly set the height of the sandbox
-		// based on a 16:9 ratio for the content to be responsive
-		const heightCalculation = 'clientBoundingRect.height';
+		const heightCalculation = 'video' === this.props.type ? 'clientBoundingRect.width / 16 * 9' : 'clientBoundingRect.height';
 
 		const observeAndResizeJS = `
 			( function() {
@@ -132,12 +129,14 @@ class OEmbedPreview extends React.Component {
 				}
 				function sendResize() {
 					var clientBoundingRect = document.body.getBoundingClientRect();
+
 					window.parent.postMessage( {
 						action: 'resize',
 						width: clientBoundingRect.width,
 						height: ${ heightCalculation }
 					}, '*' );
 				}
+
 				observer = new MutationObserver( sendResize );
 				observer.observe( document.body, {
 					attributes: true,
@@ -162,7 +161,6 @@ class OEmbedPreview extends React.Component {
 				Array.prototype.forEach.call( document.styleSheets, function( stylesheet ) {
 					Array.prototype.forEach.call( stylesheet.cssRules || stylesheet.rules, removeViewportStyles );
 				} );
-				document.body.style.position = 'absolute';
 				document.body.setAttribute( 'data-resizable-iframe-connected', '' );
 				sendResize();
 		} )();`;
@@ -170,22 +168,25 @@ class OEmbedPreview extends React.Component {
 		const style = `
 			body { margin: 0; }
 
-			body.video,
-			body.video > div,
-			body.video > div > iframe { width: 100%; height: 100%; }
+			body > div { max-width: 600px; }
 
-			body > div > * { margin-bottom: 0 !important; margin-top: 0 !important;	/* has to have !important to override inline styles */ }
+			body.Kickstarter > div,
+			body.video > div { position: relative; height: 0; padding-bottom: 56.25%; }
+			body.Kickstarter > div > iframe,
+			body.video > div > iframe { position: absolute; width: 100%; height: 100%; top: 0; left: 0; }
+
+			body > div > * { margin: 0 !important;/* has to have !important to override inline styles */ max-width: 100%; }
+
+			body.Flickr > div > a { display: block; }
+			body.Flickr > div > a > img { width: 100%; height: auto; }
 		`;
 
-		// put the html snippet into a html document, and then write it to the iframe's document
-		// we can use this in the future to inject custom styles or scripts
 		const htmlDoc = (
 			<html lang={ document.documentElement.lang }>
 				<head>
-					<title>{ this.props.title }</title>
 					<style dangerouslySetInnerHTML={ { __html: style } } />
 				</head>
-				<body data-resizable-iframe-connected="data-resizable-iframe-connected" className={ this.props.type }>
+				<body data-resizable-iframe-connected="data-resizable-iframe-connected" className={ this.props.type + ' ' + this.props.provider }>
 					<div dangerouslySetInnerHTML={ { __html: this.props.html } } />
 					<script type="text/javascript" dangerouslySetInnerHTML={ { __html: observeAndResizeJS } } />
 				</body>
@@ -205,6 +206,8 @@ class OEmbedPreview extends React.Component {
  */
 OEmbedPreview.propTypes = {
 	html: PropTypes.string,
+	type: PropTypes.string,
+	provider: PropTypes.string,
 };
 
 export default OEmbedPreview;

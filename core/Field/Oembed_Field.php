@@ -25,8 +25,7 @@ class OEmbed_Field extends Field {
 		$field_data = parent::to_json( $load );
 
 		$field_data = array_merge( $field_data, array(
-			'value' => 'https://www.instagram.com/p/BXyYnZDFFP8/?taken-by=therock',
-			'embedCode' => null,
+			'value' => $this->get_value(),
 		) );
 
 		return $field_data;

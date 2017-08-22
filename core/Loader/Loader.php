@@ -154,6 +154,8 @@ class Loader {
 				'setShowAll' => __( 'Show all options', 'carbon-fields' ),
 
 				'searchPlaceholder' => __( 'Search...', 'carbon-fields' ),
+
+				'oembedNotFound' => __( 'Not Found', 'carbon-fields' ),
 			),
 		) ) );
 	}

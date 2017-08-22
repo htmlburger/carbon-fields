@@ -3,9 +3,10 @@
  */
 import $ from 'jquery';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import { forEach } from 'lodash';
-import { compose, withHandlers, setStatic, withProps, withState } from 'recompose';
+import { isEmpty, debounce } from 'lodash';
+import { compose, withHandlers, setStatic, withState } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -31,29 +32,28 @@ const OembedField = ({
 	name,
 	field,
 	embedCode,
+	embedType,
 	isLoading,
 	error,
+	provider,
 	handleSearchSubmit,
 }) => {
 	return <Field field={field}>
+		<input
+			type="hidden"
+			id={field.id}
+			name={name}
+			value={field.value}
+			readOnly />
+
 		<SearchInput
-			name={`${name}[address]`}
 			term={field.value}
-			disabled={!field.ui.is_visible}
 			onSubmit={handleSearchSubmit} />
 
 		{
-			isLoading
+			isLoading || error
 			? <div className="carbon-oembed-loader">
-				<span className="spinner is-active" />
-			</div>
-			: null
-		}
-
-		{
-			error
-			? <div className="carbon-oembed-loader">
-				<p>{error}</p>
+				{ isLoading ? <span className="spinner is-active" /> : <p>{error}</p> }
 			</div>
 			: null
 		}
@@ -62,6 +62,8 @@ const OembedField = ({
 			embedCode
 			? <OembedPreview
 				html={embedCode}
+				type={embedType}
+				provider={provider}
 			/> : null
 		}
 	</Field>;
@@ -94,8 +96,51 @@ export const enhance = compose(
 	 * Control the visibility of the colorpicker.
 	 */
 	withState('embedCode', 'setEmbedCode', null),
+	withState('embedType', 'setEmbedType', null),
+	withState('provider', 'setProvider', null),
 	withState('isLoading', 'setIsLoading', false),
 	withState('error', 'setError', null),
+
+	/**
+	 * Pass some handlers to the component.
+	 */
+	withHandlers({
+		handleSearchSubmit: ({ field, setEmbedCode, setEmbedType, setIsLoading, setError, setFieldValue, isLoading, setProvider }) => value => {
+			if (isLoading) {
+				return;
+			}
+
+			if (field.value !== value) {
+				setFieldValue(field.id, value);
+			}
+
+			setEmbedCode(null);
+			setError(null);
+
+			if (isEmpty(value)) {
+				return;
+			}
+
+			setIsLoading(true);
+
+			let request = $.get(wpApiSettings.root + 'oembed/1.0/proxy', {
+				url: value,
+				_wpnonce: wpApiSettings.nonce,
+			});
+
+			request.done(({ html, type, provider_name }) => {
+				setEmbedType(type);
+				setProvider(provider_name);
+				setEmbedCode(html);
+				setIsLoading(false);
+			});
+
+			request.fail(() => {
+				setError(carbonFieldsL10n.field.oembedNotFound);
+				setIsLoading(false);
+			});
+		},
+	}),
 
 	/**
 	 * Attach the setup hooks.
@@ -106,41 +151,20 @@ export const enhance = compose(
 				field,
 				ui,
 				setupField,
+				handleSearchSubmit,
 			} = this.props;
 
 			setupField(field.id, field.type, ui);
-		},
-	}),
 
-	/**
-	 * Pass some handlers to the component.
-	 */
-	withHandlers({
-		handleSearchSubmit: ({ field, setEmbedCode, setIsLoading, setError }) => value => {
-			let { embedCode } = field;
+			const domNode = ReactDOM.findDOMNode(this);
 
-			setEmbedCode(null);
-			setIsLoading(true);
-
-			let postData = {
-				url: value,
-				_wpnonce: wpApiSettings.nonce,
-			};
-
-			let request = $.get(wpApiSettings.root + 'oembed/1.0/proxy', postData);
-
-			request.done(({ html, type }) => {
-				setEmbedCode(html);
-			});
-
-			request.fail(() => {
-				setError('An error occured. Please try again later..')
-			});
-
-			request.always(() => {
-				setIsLoading(false);
-			});
-		},
+			const i = setInterval(() => {
+				if (domNode.getBoundingClientRect().width > 0) {
+					clearInterval(i);
+					handleSearchSubmit(field.value);
+				}
+			}, 100);
+		}
 	}),
 );
 
