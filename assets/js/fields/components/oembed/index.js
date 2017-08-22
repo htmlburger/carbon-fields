@@ -12,8 +12,8 @@ import { compose, withHandlers, setStatic, withState } from 'recompose';
  * The internal dependencies.
  */
 import Field from 'fields/components/field';
-import SearchInput from 'fields/components/search-input';
 import OembedPreview from 'fields/components/oembed/preview';
+import SearchInput from 'fields/components/oembed/search-input';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { TYPE_OEMBED } from 'fields/constants';
