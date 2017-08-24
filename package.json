@@ -59,7 +59,7 @@
     "redux-saga-test-plan": "^2.3.6",
     "uglify-js": "^2.8.22",
     "uglifyjs-webpack-plugin": "^0.4.1",
-    "webpack": "github:matthewmeyer/webpack#hashDependantModuleIds",
+    "webpack": "^3.5.5",
     "webpack-merge": "^4.1.0"
   },
   "dependencies": {
