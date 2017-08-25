@@ -25,6 +25,19 @@ class RichTextEditor extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		const { content } = nextProps;
 
+		// Destroy the editor because TinyMCE doesn't like to be
+		// moved around DOM.
+		if (!this.props.isDragging && nextProps.isDragging) {
+			this.destroyEditor();
+			return;
+		}
+
+		// Re-init the editor manually because the complex group wasn't sorted
+		// and the component uses the same React instance.
+		if (!this.editor && this.props.isDragging && !nextProps.isDragging) {
+			this.initEditor();
+		}
+
 		if (this.editor && this.editor.getContent() !== content) {
 			this.editor.setContent(content);
 		}
@@ -87,35 +100,37 @@ class RichTextEditor extends React.Component {
 	 * @return {void}
 	 */
 	initEditor() {
-		const { id, richEditing, onChange } = this.props;
+		window.requestAnimationFrame(() => {
+			const { id, richEditing, onChange } = this.props;
 
-		if (richEditing) {
-			const editorSetup = (editor) => {
-				this.editor = editor;
+			if (richEditing) {
+				const editorSetup = (editor) => {
+					this.editor = editor;
 
-				editor.on('blur', () => {
-					onChange(editor.getContent());
-				});
+					editor.on('blur', () => {
+						onChange(editor.getContent());
+					});
+				};
+
+				const editorOptions = {
+					...window.tinyMCEPreInit.mceInit.carbon_settings,
+					selector: `#${id}`,
+					setup: editorSetup,
+				};
+
+				window.tinymce.init(editorOptions);
+			}
+
+			const quickTagsOptions = {
+				...window.tinyMCEPreInit,
+				id,
 			};
 
-			const editorOptions = {
-				...window.tinyMCEPreInit.mceInit.carbon_settings,
-				selector: `#${id}`,
-				setup: editorSetup,
-			};
+			window.quicktags(quickTagsOptions);
 
-			window.tinymce.init(editorOptions);
-		}
-
-		const quickTagsOptions = {
-			...window.tinyMCEPreInit,
-			id,
-		};
-
-		window.quicktags(quickTagsOptions);
-
-		// Force the initialization of the quick tags.
-		window.QTags._buttonsInit();
+			// Force the initialization of the quick tags.
+			window.QTags._buttonsInit();
+		});
 	}
 
 	/**
@@ -141,6 +156,7 @@ class RichTextEditor extends React.Component {
 RichTextEditor.propTypes = {
 	id: PropTypes.string,
 	richEditing: PropTypes.bool,
+	isDragging: PropTypes.bool,
 	onChange: PropTypes.func,
 };
 

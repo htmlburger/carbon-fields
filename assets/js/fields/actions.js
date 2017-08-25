@@ -162,6 +162,24 @@ export const expandComplexGroup = createAction('fields/EXPAND_COMPLEX_GROUP', (f
 export const collapseComplexGroup = createAction('fields/COLLAPSE_COMPLEX_GROUP', (fieldId, groupId) => ({ fieldId, groupId, collapsed: true }));
 
 /**
+ * Indicate when a complex group is dragged.
+ *
+ * @param  {String} fieldId
+ * @param  {String} groupId
+ * @return {Object}
+ */
+export const startComplexGroupDrag = createAction('fields/START_COMPLEX_GROUP_DRAG', (fieldId, groupId) => ({ fieldId, groupId }));
+
+/**
+ * Indicate when a complex group isn't dragged.
+ *
+ * @param  {String} fieldId
+ * @param  {String} groupId
+ * @return {Object}
+ */
+export const stopComplexGroupDrag = createAction('fields/STOP_COMPLEX_GROUP_DRAG', (fieldId, groupId) => ({ fieldId, groupId }));
+
+/**
  * Change the currently visible tab of the complex field.
  *
  * @param  {String} fieldId
