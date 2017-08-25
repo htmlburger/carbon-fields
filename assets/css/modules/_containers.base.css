@@ -10,7 +10,7 @@
 
 .carbon-container .carbon-button { margin-top: 15px; }
 
-.carbon-container .help-text,
+.carbon-container .carbon-help-text,
 .carbon-container .description { display: block; padding-top: 3px; padding-bottom: 1px; font-style: italic; }
 
 .carbon-container-widget .collapsed > .fields-container,

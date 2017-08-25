@@ -11,7 +11,7 @@
 .add-term-container .carbon-container { margin-left: -10px; margin-right: -10px; }
 
 .add-term-container .carbon-field > label { font-weight: normal; }
-.add-term-container .carbon-field .help-text { font-size: 13px; color: #666; }
+.add-term-container .carbon-field .carbon-help-text { font-size: 13px; color: #666; }
 
 .add-term-container > .carbon-tabs > .carbon-tabs-nav { background: transparent; }
 
