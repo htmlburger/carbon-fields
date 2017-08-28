@@ -164,6 +164,7 @@ class Loader {
 				'editAttachmentDescription' => __( 'Description', 'carbon-fields' ),
 				'editAttachmentClose' => __( 'Close', 'carbon-fields' ),
 				'editAttachmentSave' => __( 'Save', 'carbon-fields' ),
+				'oembedNotFound' => __( 'Not Found', 'carbon-fields' ),
 			),
 		) ) );
 	}

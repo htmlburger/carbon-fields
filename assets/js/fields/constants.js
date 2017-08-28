@@ -13,6 +13,7 @@ export const TYPE_HTML = 'html';
 export const TYPE_IMAGE = 'image';
 export const TYPE_MEDIA_GALLERY = 'media_gallery';
 export const TYPE_MAP = 'map';
+export const TYPE_OEMBED = 'oembed';
 export const TYPE_RADIO = 'radio';
 export const TYPE_RADIO_IMAGE = 'radio_image';
 export const TYPE_RICH_TEXT = 'rich_text'
