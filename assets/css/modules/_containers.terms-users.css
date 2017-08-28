@@ -5,6 +5,8 @@
 .carbon-term-container { width: 95%; }
 .carbon-term-container .carbon-field > label { color: #23282d; }
 
+.carbon-term-container .carbon-media-gallery-list-items .carbon-media-gallery-list-item { flex: 0 0 33%; }
+
 
 /*  Add Term  */
 
@@ -20,6 +22,7 @@
 
 .carbon-user-container { max-width: 800px; }
 .carbon-user-container label { width: 200px; }
+.carbon-user-container .carbon-media-gallery-list-items .carbon-media-gallery-list-item { flex: 0 0 20%; }
 
 #profile-page .carbon-user-container textarea { width: 100%; max-width: none; }
 

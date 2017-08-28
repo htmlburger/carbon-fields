@@ -13,6 +13,33 @@ import { teardownField } from 'fields/actions';
 import { TYPE_COMPLEX, PARENT_TYPE_GROUP, PARENT_TYPE_CONTAINER } from 'fields/constants';
 
 /**
+ * Fetches the Attachment Data from the Server.
+ *
+ * @param  {Number} attachmentId
+ * @return {Promise}
+ */
+export function fetchAttachment(attachmentId) {
+	return new Promise((resolve, reject) => {
+		const request = $.get(window.ajaxurl, {
+			action: 'get-attachment',
+			id: attachmentId 
+		}, null, 'json');
+
+		request.done((response) => {
+			if (!response || !response.success) {
+				reject(response.error || 'An error occurred while trying to fetch attachment.');
+			} else {
+				resolve(response);
+			}
+		});
+
+		request.fail((xhr, status) => {
+			reject(`Request failed: ${status}`);
+		});
+	});
+}
+
+/**
  * Get the thumbnail of the attachment.
  *
  * @param  {Object} attachment
@@ -26,6 +53,8 @@ export function getAttachmentThumbnail(attachment) {
 		if (typeof size !== 'undefined') {
 			thumbnailUrl = size.url;
 		}
+	} else {
+		thumbnailUrl = attachment.icon;
 	}
 
 	return thumbnailUrl;

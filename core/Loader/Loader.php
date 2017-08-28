@@ -154,6 +154,16 @@ class Loader {
 				'setShowAll' => __( 'Show all options', 'carbon-fields' ),
 
 				'searchPlaceholder' => __( 'Search...', 'carbon-fields' ),
+
+				'editAttachmentUrl' => __( 'URL', 'carbon-fields' ),
+				'editAttachmentTitle' => __( 'Title', 'carbon-fields' ),
+				'editAttachmentArtist' => __( 'Artist', 'carbon-fields' ),
+				'editAttachmentAlbum' => __( 'Album', 'carbon-fields' ),
+				'editAttachmentCaption' => __( 'Caption', 'carbon-fields' ),
+				'editAttachmentAlt' => __( 'Alt Text', 'carbon-fields' ),
+				'editAttachmentDescription' => __( 'Description', 'carbon-fields' ),
+				'editAttachmentClose' => __( 'Close', 'carbon-fields' ),
+				'editAttachmentSave' => __( 'Save', 'carbon-fields' ),
 			),
 		) ) );
 	}
