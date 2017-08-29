@@ -750,7 +750,7 @@ class Field implements Datastore_Holder_Interface {
 		}
 
 		if ( ! $is_data_attribute && ! in_array( $name, $this->allowed_attributes ) ) {
-			Incorrect_Syntax_Exception::raise( 'Only the following attributes are allowed: ' . implode( ', ', $this->allowed_attributes ) . ' and data-*.' );
+			Incorrect_Syntax_Exception::raise( 'Only the following attributes are allowed: ' . implode( ', ', array_merge( $this->allowed_attributes, array( 'data-*' ) ) ) );
 			return $this;
 		}
 

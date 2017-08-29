@@ -32,9 +32,10 @@ export const SelectField = ({
 		<select
 			id={field.id}
 			name={name}
-			onChange={handleChange}
+			value={field.value}
 			disabled={!field.ui.is_visible}
-			value={field.value} >
+			onChange={handleChange}
+			{...field.attributes} >
 
 			{
 				field.options.map(({ name, value }, index) => {
