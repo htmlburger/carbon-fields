@@ -163,7 +163,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @var array<string>
 	 */
-	protected $allowed_attributes = array( 'max', 'maxLength', 'min', 'pattern', 'placeholder', 'readOnly', 'step', 'type' );
+	protected $allowed_attributes = array();
 
 	/**
 	 * The width of the field.

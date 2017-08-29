@@ -9,4 +9,8 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 class Text_Field extends Field {
 
+	/**
+	 * {@inheritDoc}
+	 */
+	protected $allowed_attributes = array( 'max', 'maxLength', 'min', 'pattern', 'placeholder', 'readOnly', 'step', 'type' );
 }
