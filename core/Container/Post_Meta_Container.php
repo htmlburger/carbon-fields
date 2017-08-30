@@ -248,14 +248,14 @@ class Post_Meta_Container extends Container {
 	 */
 	public function get_post_type_visibility() {
 		$all_post_types = get_post_types();
-		$filtered_collection = $this->condition_collection->filter( array( 'post_type' ) );
+		$evaluated_collection = $this->condition_collection->evaluate( array( 'post_type' ), true, array(), true );
 
 		$shown_on = array();
 		foreach ( $all_post_types as $post_type ) {
 			$environment = array(
 				'post_type' => $post_type,
 			);
-			if ( $filtered_collection->is_fulfilled( $environment ) ) {
+			if ( $evaluated_collection->is_fulfilled( $environment ) ) {
 				$shown_on[] = $post_type;
 			}
 		}

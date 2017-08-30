@@ -297,9 +297,11 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @param  array<string>          $condition_types
 	 * @param  array|boolean          $environment Environment array or a boolean value to force on conditions
 	 * @param  array<string>          $comparison_operators Array of comparison operators to evaluate regardless of condition type
+	 * @param  boolean                $condition_types_blacklist Whether the condition list should act as a blacklist
+	 * @param  boolean                $comparison_operators_blacklist Whether the comparison operators list should act as a blacklist
 	 * @return Fulfillable_Collection
 	 */
-	public function evaluate( $condition_types, $environment, $comparison_operators = array() ) {
+	public function evaluate( $condition_types, $environment, $comparison_operators = array(), $condition_types_blacklist = false, $comparison_operators_blacklist = false ) {
 		$fulfillables = $this->get_fulfillables();
 
 		$collection = $this->create_collection();
@@ -308,12 +310,23 @@ class Fulfillable_Collection implements Fulfillable {
 			$fulfillable_comparison = $fulfillable_tuple['fulfillable_comparison'];
 
 			if ( is_a( $fulfillable, get_class() ) ) {
-				$evaluated_collection = $fulfillable->evaluate( $condition_types, $environment, $comparison_operators );
+				$evaluated_collection = $fulfillable->evaluate( $condition_types, $environment, $comparison_operators, $condition_types_blacklist, $comparison_operators_blacklist );
 				$collection->add_fulfillable( $evaluated_collection, $fulfillable_comparison );
 			} else {
 				$type = $this->condition_factory->get_type( get_class( $fulfillable ) );
 				$comparison_operator = $fulfillable->get_comparison_operator();
-				if ( in_array( $type, $condition_types ) || in_array( $comparison_operator, $comparison_operators ) ) {
+
+				$condition_type_match = in_array( $type, $condition_types );
+				if ( $condition_types_blacklist ) {
+					$condition_type_match = ! $condition_type_match;
+				}
+
+				$comparison_operator_match = in_array( $comparison_operator, $comparison_operators );
+				if ( $comparison_operators_blacklist ) {
+					$comparison_operator_match = ! $comparison_operator_match;
+				}
+
+				if ( $condition_type_match || $comparison_operator_match ) {
 					$boolean_condition = $this->condition_factory->make( 'boolean' );
 					$boolean_condition->set_comparison_operator( '=' );
 
