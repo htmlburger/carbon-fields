@@ -4,7 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { compose, withHandlers, setStatic } from 'recompose';
+import { compose, withHandlers, setStatic, pure } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -12,7 +12,7 @@ import { compose, withHandlers, setStatic } from 'recompose';
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { setupMediaBrowser, openMediaBrowser } from 'fields/actions';
+import { setupMediaBrowser, openMediaBrowser, destroyMediaBrowser } from 'fields/actions';
 import { TYPE_FILE, TYPE_IMAGE, VALIDATION_BASE } from 'fields/constants';
 
 /**
@@ -101,6 +101,7 @@ export const enhance = compose(
 	withStore(undefined, {
 		setupMediaBrowser,
 		openMediaBrowser,
+		destroyMediaBrowser
 	}),
 
 	/**
@@ -122,6 +123,10 @@ export const enhance = compose(
 			if (field.required) {
 				setupValidation(field.id, VALIDATION_BASE);
 			}
+		},
+
+		componentWillUnmount() {
+			this.props.destroyMediaBrowser(this.props.field.id);
 		}
 	}),
 

@@ -74,6 +74,14 @@ export const setupMediaBrowser = createAction('fields/SETUP_MEDIA_BROWSER');
 export const openMediaBrowser = createAction('fields/OPEN_MEDIA_BROWSER');
 
 /**
+ * Destroy the media browser associated with the field.
+ *
+ * @param  {String} fieldId
+ * @return {Object}
+ */
+export const destroyMediaBrowser = createAction('fields/DESTROY_MEDIA_BROWSER');
+
+/**
  * Add the field(s) to the store.
  *
  * @param  {Object} fields

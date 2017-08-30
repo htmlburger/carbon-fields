@@ -1,7 +1,7 @@
 /**
  * The external dependencies.
  */
-import { takeEvery, take, call, put, select, all } from 'redux-saga/effects';
+import { takeEvery, take, call, put, select, all, cancel } from 'redux-saga/effects';
 import { isEmpty, isNull, isNumber, isString, isUndefined, first, filter, last, findIndex, isArray } from 'lodash';
 
 /**
@@ -13,6 +13,7 @@ import { getAttachmentThumbnail } from 'fields/helpers';
 import {
 	setupMediaBrowser,
 	openMediaBrowser,
+	destroyMediaBrowser,
 	updateField,
 	setFieldValue,
 	addComplexGroup,
@@ -111,7 +112,7 @@ export function* workerAddMultipleFiles(action) {
 
 			// pause until the complex is updated
 			yield take(receiveComplexGroup);
-			
+
 			// resolve the new field from the new group and assign it's new value
 			const parentField = yield select(getFieldById, parent.field.id);
 			const freshGroup = last(parentField.value);
@@ -129,7 +130,7 @@ export function* workerAddMultipleFiles(action) {
 			if (field.duplicates_allowed === false) {
 				browser.state().frame.options.selected = value;
 			}
-		
+
 			// optional - this ensures an instant preview update
 			yield redrawAttachmentPreview(field.id, value, attachment, field.default_thumb_url);
 
@@ -351,6 +352,16 @@ export function* workerSetupMediaBrowser(action) {
 
 	yield takeEvery(openMediaBrowser, workerOpenMediaBrowser, channel, field, browser);
 	yield takeEvery(setFieldValue, workerRedrawAttachmentPreview, field);
+
+	while (true) {
+		const { payload: fieldId } = yield take(destroyMediaBrowser);
+
+		if (field.id === fieldId) {
+			yield call([channel, 'close']);
+			yield cancel();
+			break;
+		}
+	}
 }
 
 /**

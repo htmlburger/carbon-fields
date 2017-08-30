@@ -196,6 +196,7 @@ export function createMediaBrowserChannel(settings) {
 		const unsubscribe = () => {
 			browser.off('select', onSelect);
 			browser.off('close', onClose);
+			browser.remove();
 		};
 
 		// Setup the subscription.
