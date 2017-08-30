@@ -55,7 +55,7 @@ export const FileField = ({
 					readOnly />
 			</div>
 
-			<span className="button c2_open_media" onClick={openBrowser}>
+			<span className="button" onClick={openBrowser}>
 				{field.button_label}
 			</span>
 		</div>
