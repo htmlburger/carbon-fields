@@ -66,7 +66,7 @@ class Sidebar_Manager {
 	public function execute_action( $action, $input ) {
 		$name = isset( $input['name'] ) ? $input['name'] : '';
 		if ( empty( $name ) ) {
-			return new \WP_Error( 'name-missing', __( 'Please pass a name for the sidebar.', 'carbon-fields' ) );
+			return new \WP_Error( 'name-missing', __( 'Please enter a name for the sidebar.', 'carbon-fields' ) );
 		}
 
 		$result = new \WP_Error( 'unknown-action', __( 'Unknown action attempted.', 'carbon-fields' ) );

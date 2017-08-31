@@ -129,10 +129,10 @@ class Loader {
 				'complexNoRows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),
 				'complexMinNumRowsNotReached' => __( 'Minimum number of rows not reached (%1$d %2$s)', 'carbon-fields' ),
 				'complexMaxNumRowsExceeded' => __( 'Maximum number of rows exceeded (%1$d %2$s)', 'carbon-fields' ),
-				'complexAddButton' => __( 'Add %s', 'carbon-fields' ),
-				'complexCloneButton' => __( 'Clone', 'carbon-fields' ),
-				'complexRemoveButton' => __( 'Remove', 'carbon-fields' ),
-				'complexCollapseExpandButton' => __( 'Collapse/Expand', 'carbon-fields' ),
+				'complexAddButton' => _x( 'Add %s', 'Complex field', 'carbon-fields' ),
+				'complexCloneButton' => _x( 'Clone', 'Complex field', 'carbon-fields' ),
+				'complexRemoveButton' => _x( 'Remove', 'Complex field', 'carbon-fields' ),
+				'complexCollapseExpandButton' => _x( 'Collapse/Expand', 'Complex field', 'carbon-fields' ),
 
 				'messageFormValidationFailed' => __( 'Please fill out all fields correctly. ', 'carbon-fields' ),
 				'messageRequiredField' => __( 'This field is required. ', 'carbon-fields' ),
@@ -166,7 +166,7 @@ class Loader {
 				'editAttachmentClose' => _x( 'Close', 'WordPress media attachment', 'carbon-fields' ),
 				'editAttachmentSave' => _x( 'Save', 'WordPress media attachment', 'carbon-fields' ),
 
-				'oembedNotFound' => __( 'Not Found', 'carbon-fields' ),
+				'oembedNotFound' => _x( 'Not Found', 'oEmbed field', 'carbon-fields' ),
 			),
 		) ) );
 	}
