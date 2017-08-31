@@ -167,6 +167,18 @@ class Loader {
 				'editAttachmentSave' => _x( 'Save', 'WordPress media attachment', 'carbon-fields' ),
 
 				'oembedNotFound' => _x( 'Not Found', 'oEmbed field', 'carbon-fields' ),
+
+				'mediaGalleryButtonLabel' => __( 'Add File', 'carbon-fields' ),
+				'mediaGalleryBrowserTitle' => _x( 'Files', 'WordPress Media Browser', 'carbon-fields' ),
+				'mediaGalleryBrowserButtonLabel' => _x( 'Select File', 'WordPress Media Browser', 'carbon-fields' ),
+
+				'fileButtonLabel' => __( 'Select File', 'carbon-fields' ),
+				'fileBrowserTitle' => _x( 'Files', 'WordPress Media Browser', 'carbon-fields' ),
+				'fileBrowserButtonLabel' => _x( 'Select File', 'WordPress Media Browser', 'carbon-fields' ),
+
+				'imageButtonLabel' => __( 'Select Image', 'carbon-fields' ),
+				'imageBrowserTitle' => _x( 'Images', 'WordPress Media Browser', 'carbon-fields' ),
+				'imageBrowserButtonLabel' => _x( 'Select Image', 'WordPress Media Browser', 'carbon-fields' ),
 			),
 		) ) );
 	}

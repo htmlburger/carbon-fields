@@ -13,26 +13,11 @@ use Carbon_Fields\Helper\Helper;
  */
 class File_Field extends Field {
 
-	public $button_label = '';
-
-	public $window_button_label = '';
-
-	public $window_label = '';
-
 	// empty for all types. available types: audio, video, image and all WordPress-recognized mime types
 	public $field_type = '';
 
 	// alt, author, caption, dateFormatted, description, editLink, filename, height, icon, id, link, menuOrder, mime, name, status, subtype, title, type, uploadedTo, url, width
 	public $value_type = 'id';
-
-	/**
-	 * Admin initialization actions
-	 */
-	public function admin_init() {
-		$this->button_label = __( 'Select File', 'carbon-fields' );
-		$this->window_button_label = __( 'Select File', 'carbon-fields' );
-		$this->window_label = __( 'Files', 'carbon-fields' );
-	}
 
 	/**
 	 * Change the type of the field
@@ -71,11 +56,8 @@ class File_Field extends Field {
 		}
 
 		$field_data = array_merge( $field_data, $attachment_metadata, array(
-			'button_label'        => $this->button_label,
-			'window_button_label' => $this->window_button_label,
-			'window_label'        => $this->window_label,
-			'type_filter'         => $this->field_type,
-			'value_type'          => $this->value_type,
+			'type_filter' => $this->field_type,
+			'value_type'  => $this->value_type,
 		) );
 
 		return $field_data;

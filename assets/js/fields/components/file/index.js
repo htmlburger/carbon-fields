@@ -31,6 +31,12 @@ export const FileField = ({
 	openBrowser,
 	clearSelection
 }) => {
+	let buttonLabel = carbonFieldsL10n.field.fileButtonLabel;
+
+	if (field.type === 'image') {
+		buttonLabel = carbonFieldsL10n.field.imageButtonLabel;
+	}
+
 	return <Field field={field}>
 		<div className="carbon-attachment">
 			<input
@@ -56,7 +62,7 @@ export const FileField = ({
 			</div>
 
 			<span className="button" onClick={openBrowser}>
-				{field.button_label}
+				{buttonLabel}
 			</span>
 		</div>
 	</Field>;
@@ -83,7 +89,6 @@ FileField.propTypes = {
 		thumb_url: PropTypes.string,
 		file_url: PropTypes.string,
 		file_name: PropTypes.string,
-		button_label: PropTypes.string,
 	}),
 	openBrowser: PropTypes.func,
 	clearSelection: PropTypes.func,

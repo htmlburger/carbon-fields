@@ -12,27 +12,6 @@ use Carbon_Fields\Helper\Helper;
 class Media_Gallery_Field extends Field {
 
 	/**
-	 * Add file button label
-	 *
-	 * @var string
-	 */
-	protected $button_label = '';
-
-	/**
-	 * Select file button label
-	 *
-	 * @var string
-	 */
-	protected $window_button_label = '';
-
-	/**
-	 * Window title label
-	 *
-	 * @var string
-	 */
-	protected $window_label = '';
-
-	/**
 	 * File type filter. Leave a blank string for any file type.
 	 * Available types: audio, video, image and all WordPress-recognized mime types
 	 *
@@ -71,15 +50,6 @@ class Media_Gallery_Field extends Field {
 	public function __construct( $type, $name, $label ) {
 		$this->set_value_set( new Value_Set( Value_Set::TYPE_MULTIPLE_VALUES ) );
 		parent::__construct( $type, $name, $label );
-	}
-
-	/**
-	 * Admin initialization actions
-	 */
-	public function admin_init() {
-		$this->button_label = __( 'Add File', 'carbon-fields' );
-		$this->window_button_label = __( 'Select File', 'carbon-fields' );
-		$this->window_label = __( 'Files', 'carbon-fields' );
 	}
 
 	/**
@@ -165,9 +135,6 @@ class Media_Gallery_Field extends Field {
 
 		$field_data = array_merge( $field_data, $this->value_to_json(), array(
 			'value_type'          => $this->value_type,
-			'button_label'        => $this->button_label,
-			'window_label'        => $this->window_label,
-			'window_button_label' => $this->window_button_label,
 			'type_filter'         => $this->file_type,
 			'duplicates_allowed'  => $this->get_duplicates_allowed(),
 		) );

@@ -330,20 +330,33 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 export function* workerSetupMediaBrowser(action) {
 	const field = yield select(getFieldById, action.payload);
 	const {
-		window_button_label,
-		window_label,
+		type,
 		type_filter,
 		value_type,
 	} = field;
 
+	let mediaBrowserTitle       = '';
+	let mediaBrowserButtonLabel = '';
+
+	if (type === 'image') {
+		mediaBrowserTitle       = carbonFieldsL10n.field.imageBrowserTitle;
+		mediaBrowserButtonLabel = carbonFieldsL10n.field.imageBrowserButtonLabel;
+	} else if (type === 'file') {
+		mediaBrowserTitle       = carbonFieldsL10n.field.fileBrowserTitle;
+		mediaBrowserButtonLabel = carbonFieldsL10n.field.fileBrowserButtonLabel;
+	} else if (type === 'media_gallery') {
+		mediaBrowserTitle       = carbonFieldsL10n.field.mediaGalleryBrowserTitle;
+		mediaBrowserButtonLabel = carbonFieldsL10n.field.mediaGalleryBrowserButtonLabel;
+	}
+
 	const channel = yield call(createMediaBrowserChannel, {
 		selected: ! isUndefined(field.duplicates_allowed) && ! field.duplicates_allowed ? field.value : [],
-		title: window_label,
+		title: mediaBrowserTitle,
 		library: {
 			type: type_filter,
 		},
 		button: {
-			text: window_button_label
+			text: mediaBrowserButtonLabel,
 		},
 		multiple: true
 	});

@@ -25,7 +25,6 @@ export const MediaGalleryList = ({
 	prefix,
 	items,
 	itemsMeta,
-	buttonLabel,
 	handleRemoveItem,
 	handleEditItem,
 	openBrowser,
@@ -44,7 +43,6 @@ export const MediaGalleryList = ({
 							item={item}
 							meta={itemsMeta[ item ]}
 							name={name}
-							buttonLabel={buttonLabel}
 							onRemoveClick={handleRemoveItem}
 							onEditClick={handleEditItem}
 							isSelected={field.selected == item}
@@ -56,7 +54,7 @@ export const MediaGalleryList = ({
 
 		<div className="carbon-media-gallery-actions">
 			<button type="button" className="button button-secondary" onClick={openBrowser}>
-				{buttonLabel}
+				{carbonFieldsL10n.field.mediaGalleryButtonLabel}
 			</button>
 		</div>
 	</div>;
