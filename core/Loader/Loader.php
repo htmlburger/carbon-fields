@@ -156,15 +156,16 @@ class Loader {
 
 				'searchPlaceholder' => __( 'Search...', 'carbon-fields' ),
 
-				'editAttachmentUrl' => __( 'URL', 'carbon-fields' ),
-				'editAttachmentTitle' => __( 'Title', 'carbon-fields' ),
-				'editAttachmentArtist' => __( 'Artist', 'carbon-fields' ),
-				'editAttachmentAlbum' => __( 'Album', 'carbon-fields' ),
-				'editAttachmentCaption' => __( 'Caption', 'carbon-fields' ),
-				'editAttachmentAlt' => __( 'Alt Text', 'carbon-fields' ),
-				'editAttachmentDescription' => __( 'Description', 'carbon-fields' ),
-				'editAttachmentClose' => __( 'Close', 'carbon-fields' ),
-				'editAttachmentSave' => __( 'Save', 'carbon-fields' ),
+				'editAttachmentUrl' => _x( 'URL', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentTitle' => _x( 'Title', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentArtist' => _x( 'Artist', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentAlbum' => _x( 'Album', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentCaption' => _x( 'Caption', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentAlt' => _x( 'Alt Text', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentDescription' => _x( 'Description', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentClose' => _x( 'Close', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentSave' => _x( 'Save', 'WordPress media attachment', 'carbon-fields' ),
+
 				'oembedNotFound' => __( 'Not Found', 'carbon-fields' ),
 			),
 		) ) );
