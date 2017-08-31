@@ -143,9 +143,10 @@ class Loader {
 				'selectTime' => __( 'Select Time', 'carbon-fields' ),
 				'selectDate' => __( 'Select Date', 'carbon-fields' ),
 
-				'associationOutOf' => __( 'out of', 'carbon-fields' ),
-				'associationSelectedItem' => __( 'selected item', 'carbon-fields' ),
-				'associationSelectedItems' => __( 'selected items', 'carbon-fields' ),
+				'associationSelectedItem' => __( '%1$d selected item', 'carbon-fields' ),
+				'associationSelectedItems' => __( '%1$d selected items', 'carbon-fields' ),
+				'associationSelectedItemOutOf' => __( '%1$d selected item out of %2$d', 'carbon-fields' ),
+				'associationSelectedItemsOutOf' => __( '%1$d selected items out of %2$d', 'carbon-fields' ),
 
 				'colorSelectColor' => __( 'Select a color', 'carbon-fields' ),
 
