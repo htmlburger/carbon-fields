@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Carbon Fields\n"
-"POT-Creation-Date: 2017-08-31 10:32+0300\n"
+"POT-Creation-Date: 2017-08-31 11:14+0300\n"
 "PO-Revision-Date: 2016-01-11 12:57+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -281,6 +281,7 @@ msgid "Save"
 msgstr ""
 
 #: core/Loader/Loader.php:169
+msgctxt "oEmbed field"
 msgid "Not Found"
 msgstr ""
 
