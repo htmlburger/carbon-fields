@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Carbon Fields\n"
 "POT-Creation-Date: 2017-05-02 12:39+0300\n"
-"PO-Revision-Date: 2017-05-02 12:41+0300\n"
+"PO-Revision-Date: 2017-08-22 10:36+0300\n"
 "Last-Translator: Timi Wahalahti <timi@dude.fi>\n"
 "Language-Team: Timi Wahalahti <timi@dude.fi>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.3\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
@@ -71,11 +71,11 @@ msgstr "Lisää uusi"
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:69
 msgid "Please pass a name for the sidebar."
-msgstr ""
+msgstr "Anna nimi sivupalkille."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:72
 msgid "Unknown action attempted."
-msgstr ""
+msgstr "Yritetty tuntematonta toimintoa."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:102
 msgid "Sidebar with the same ID is already registered."
@@ -86,6 +86,8 @@ msgstr "Sivupalkki samalla yksilöllisellä ID:llä on jo rekisteröity."
 msgid ""
 "Failed to update option storing your custom sidebars. Please contact support."
 msgstr ""
+"Kustamoidun sivupalkin asetusten tallentaminen ei onnistunut. Ota yhteyttä "
+"tukeen."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:137
 msgid "Sidebar not found."
@@ -120,9 +122,9 @@ msgstr "Osoitetta ei löytynyt. "
 msgid "Geocode was not successful for the following reason: "
 msgstr "Paikannus ei onnistunut seuraavista syistä: "
 
-#: core/Loader/Loader.php:115
+#: core/Loader/Loader.php:125
 msgid "Locate address on the map:"
-msgstr ""
+msgstr "Paikanna osoite kartalla:"
 
 #: core/Loader/Loader.php:116
 #, php-format
@@ -139,7 +141,7 @@ msgstr ""
 #: core/Loader/Loader.php:119
 #, php-format
 msgid "Minimum number of rows not reached (%1$d %2$s)"
-msgstr ""
+msgstr "Rivien vähimmäismäärää ei saavutettu (%1$d %2$s)"
 
 #: core/Loader/Loader.php:120
 #, php-format
@@ -164,7 +166,7 @@ msgstr "Täytä kaikki kentät oikein. "
 
 #: core/Loader/Loader.php:126
 msgid "This field is required. "
-msgstr "Tämä kenttä on pakollinen."
+msgstr "Tämä kenttä on pakollinen. "
 
 #: core/Loader/Loader.php:127
 msgid "Please choose an option. "
@@ -192,23 +194,23 @@ msgstr "valittua merkintää"
 
 #: core/Loader/Loader.php:138
 msgid "Select a color"
-msgstr ""
+msgstr "Valitse väri"
 
 #: core/Loader/Loader.php:140
 msgid "No options."
-msgstr ""
+msgstr "Ei vaihtoehtoja."
 
 #: core/Loader/Loader.php:142
 msgid "Show all options"
-msgstr ""
+msgstr "Näytä kaikki vaihtoehdot"
 
 #: core/REST_API/Router.php:287
 msgid "No option names provided"
-msgstr ""
+msgstr "Vaihtoehtoja ei ole määritetty"
 
 #: core/REST_API/Router.php:298
 msgid "Theme Options updated."
-msgstr ""
+msgstr "Teeman asetukset päivitetty."
 
 #: templates/Container/theme_options.php:29
 msgid "Actions"
@@ -222,79 +224,80 @@ msgstr "Tallenna muutokset"
 msgid "No options are available for this widget."
 msgstr "Tälle vimpaimelle ei ole valintoja."
 
-#~ msgid "Edit"
-#~ msgstr "Muokkaa"
+msgid "Edit"
+msgstr "Muokkaa"
 
-#~ msgid "This field is misconfigured"
-#~ msgstr "Tämä kenttä on määritetty virheellisesti"
+msgid "This field is misconfigured"
+msgstr "Tämä kenttä on määritetty virheellisesti"
 
-#~ msgid "Select a Color"
-#~ msgstr "﻿Valitse väri"
+msgid "Select a Color"
+msgstr "﻿Valitse väri"
 
-#~ msgid "Entry"
-#~ msgstr "rivi"
+#: core/Field/Complex_Field.php:113
+msgid "Entry"
+msgstr "rivi"
 
-#~ msgid "Entries"
-#~ msgstr "riviä"
+msgid "Entries"
+msgstr "riviä"
 
-#~ msgid "Maximum number of rows reached (%s rows)"
-#~ msgstr "Rivien enimmäismäärä saavutettu (%s riviä)"
+msgid "Maximum number of rows reached (%s rows)"
+msgstr "Rivien enimmäismäärä saavutettu (%s riviä)"
 
-#~ msgid "Cannot create more than %s rows"
-#~ msgstr "Ei voida luoda yli %s riviä"
+msgid "Cannot create more than %s rows"
+msgstr "Ei voida luoda yli %s riviä"
 
-#~ msgid "Minimum number of rows not reached (%d %s)"
-#~ msgstr "Rivien vähimmäismäärää ei saavutettu (%d %s)"
+msgid "Minimum number of rows not reached (%d %s)"
+msgstr "Rivien vähimmäismäärää ei saavutettu (%d %s)"
 
-#~ msgid "Please install Gravity Forms plugin"
-#~ msgstr "Asenna Gravity Forms lisäosa"
+msgid "Please install Gravity Forms plugin"
+msgstr "Asenna Gravity Forms lisäosa"
 
-#~ msgid "No Gravity Forms have been found."
-#~ msgstr "Gravity Formseja ei löytynyt."
+msgid "No Gravity Forms have been found."
+msgstr "Gravity Formseja ei löytynyt."
 
-#~ msgid "Locate Address on the map"
-#~ msgstr "Etsi osoite kartalta"
+msgid "Locate Address on the map"
+msgstr "Etsi osoite kartalta"
 
-#~ msgid "Find"
-#~ msgstr "Etsi"
+msgid "Find"
+msgstr "Etsi"
 
-#~ msgid "no options"
-#~ msgstr "ei vaihtoehtoja"
+msgid "no options"
+msgstr "ei vaihtoehtoja"
 
-#~ msgid "Search..."
-#~ msgstr "Hae..."
+msgid "Search..."
+msgstr "Hae..."
 
-#~ msgid "Associated:"
-#~ msgstr "Liitetty:"
+msgid "Associated:"
+msgstr "Liitetty:"
 
-#~ msgid "Add Media"
-#~ msgstr "Lisää media"
+msgid "Add Media"
+msgstr "Lisää media"
 
-#~ msgid "Visual"
-#~ msgstr "Graafinen"
+msgid "Visual"
+msgstr "Graafinen"
 
-#~ msgid "Text"
-#~ msgstr "Teksti"
+msgid "Text"
+msgstr "Teksti"
 
-#~ msgid "Show All Options"
-#~ msgstr "Näytä kaikki valinnat"
+msgid "Show All Options"
+msgstr "Näytä kaikki valinnat"
 
-#~ msgid "Carbon Fields"
-#~ msgstr "Carbon Fields"
+msgid "Carbon Fields"
+msgstr "Carbon Fields"
 
-#~ msgid "http://carbonfields.net/"
-#~ msgstr "http://carbonfields.net/"
+msgid "http://carbonfields.net/"
+msgstr "http://carbonfields.net/"
 
-#~ msgid ""
-#~ "WordPress developer-friendly custom fields for post types, taxonomy "
-#~ "terms, users, comments, widgets, options, navigation menus and more."
-#~ msgstr ""
-#~ "WordPress -kehittäjäystävällisiä kenttiä sisältötyypeille, taksonomian "
-#~ "termeille, käyttäjille, kommenteille, vimpaimille, asetuksille, "
-#~ "valikoille ja paljon muuta."
+msgid ""
+"WordPress developer-friendly custom fields for post types, taxonomy terms, "
+"users, comments, widgets, options, navigation menus and more."
+msgstr ""
+"WordPress -kehittäjäystävällisiä kenttiä sisältötyypeille, taksonomian "
+"termeille, käyttäjille, kommenteille, vimpaimille, asetuksille, valikoille "
+"ja paljon muuta."
 
-#~ msgid "htmlburger"
-#~ msgstr "htmlburger"
+msgid "htmlburger"
+msgstr "htmlburger"
 
-#~ msgid "https://htmlburger.com/"
-#~ msgstr "https://htmlburger.com/"
+msgid "https://htmlburger.com/"
+msgstr "https://htmlburger.com/"
