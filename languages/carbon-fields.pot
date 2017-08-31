@@ -219,3 +219,78 @@ msgstr ""
 #: templates/Container/widget.php:5
 msgid "No options are available for this widget."
 msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "This field is misconfigured"
+msgstr ""
+
+msgid "Select a Color"
+msgstr "﻿"
+
+#: core/Field/Complex_Field.php:113
+msgid "Entry"
+msgstr ""
+
+msgid "Entries"
+msgstr ""
+
+msgid "Maximum number of rows reached (%s rows)"
+msgstr ""
+
+msgid "Cannot create more than %s rows"
+msgstr ""
+
+msgid "Minimum number of rows not reached (%d %s)"
+msgstr ""
+
+msgid "Please install Gravity Forms plugin"
+msgstr ""
+
+msgid "No Gravity Forms have been found."
+msgstr ""
+
+msgid "Locate Address on the map"
+msgstr ""
+
+msgid "Find"
+msgstr ""
+
+msgid "no options"
+msgstr ""
+
+msgid "Search..."
+msgstr ""
+
+msgid "Associated:"
+msgstr ""
+
+msgid "Add Media"
+msgstr ""
+
+msgid "Visual"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
+msgid "Show All Options"
+msgstr ""
+
+msgid "Carbon Fields"
+msgstr ""
+
+msgid "http://carbonfields.net/"
+msgstr ""
+
+msgid ""
+"WordPress developer-friendly custom fields for post types, taxonomy terms, "
+"users, comments, widgets, options, navigation menus and more."
+msgstr ""
+
+msgid "htmlburger"
+msgstr ""
+
+msgid "https://htmlburger.com/"
+msgstr ""
