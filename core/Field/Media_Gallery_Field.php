@@ -9,7 +9,7 @@ use Carbon_Fields\Helper\Helper;
  * Set field class.
  * Allows to create a set of checkboxes where multiple can be selected.
  */
-class Media_Gallery_Field extends Predefined_Options_Field {
+class Media_Gallery_Field extends Field {
 
 	/**
 	 * Add file button label
@@ -166,7 +166,6 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 		$field_data = parent::to_json( $load );
 
 		$field_data = array_merge( $field_data, $this->value_to_json(), array(
-			'options'             => $this->parse_options( $this->get_options() ),
 			'value_type'          => $this->value_type,
 			'button_label'        => $this->button_label,
 			'window_label'        => $this->window_label,
