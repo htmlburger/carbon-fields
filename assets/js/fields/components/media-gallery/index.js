@@ -227,7 +227,7 @@ export const enhance = compose(
 			}
 		},
 
-		closeEditAttachment: ({ field, updateField }) => {
+		closeEditAttachment: ({ field, updateField }) => () => {
 			updateField(field.id, {
 				selected: null,
 				edit: {
