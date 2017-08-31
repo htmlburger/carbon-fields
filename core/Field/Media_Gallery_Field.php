@@ -139,19 +139,17 @@ class Media_Gallery_Field extends Field {
 	 */
 	protected function value_to_json() {
 		$value_set  = $this->get_value();
-		$value      = array();
 		$value_meta = array();
 
 		foreach ( $value_set as $attachment_id ) {
 			$attachment_id     = absint( $attachment_id );
 			$attachment_metata = Helper::get_attachment_metadata( $attachment_id, $this->value_type );
 
-			$value[] = $attachment_id;
 			$value_meta[ $attachment_id ] = $attachment_metata;
 		}
 
 		return array(
-			'value'      => $value,
+			'value'      => $value_set,
 			'value_meta' => $value_meta,
 		);
 	}
