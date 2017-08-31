@@ -38,7 +38,7 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 	 *
 	 * @var string|array
 	 */
-	public $field_type = '';
+	public $file_type = '';
 
 	/**
 	 * What value to store
@@ -88,7 +88,7 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 	 * @param string $type
 	 */
 	public function set_type( $type ) {
-		$this->field_type = $type;
+		$this->file_type = $type;
 		return $this;
 	}
 
@@ -171,7 +171,7 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 			'button_label'        => $this->button_label,
 			'window_label'        => $this->window_label,
 			'window_button_label' => $this->window_button_label,
-			'type_filter'         => $this->field_type,
+			'type_filter'         => $this->file_type,
 			'duplicates_allowed'  => $this->get_duplicates_allowed(),
 		) );
 
