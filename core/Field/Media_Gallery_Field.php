@@ -11,15 +11,40 @@ use Carbon_Fields\Helper\Helper;
  */
 class Media_Gallery_Field extends Predefined_Options_Field {
 
+	/**
+	 * Add file button label
+	 *
+	 * @var string
+	 */
 	public $button_label = '';
 
+	/**
+	 * Select file button label
+	 *
+	 * @var string
+	 */
 	public $window_button_label = '';
 
+	/**
+	 * Window title label
+	 *
+	 * @var string
+	 */
 	public $window_label = '';
 
-	// empty for all types. available types: audio, video, image and all WordPress-recognized mime types
+	/**
+	 * File type filter. Leave a blank string for any file type.
+	 * Available types: audio, video, image and all WordPress-recognized mime types
+	 *
+	 * @var string|array
+	 */
 	public $field_type = '';
 
+	/**
+	 * What value to store
+	 *
+	 * @var string
+	 */
 	public $value_type = 'id';
 
 	/**
