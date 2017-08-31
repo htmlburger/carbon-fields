@@ -16,21 +16,21 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 	 *
 	 * @var string
 	 */
-	public $button_label = '';
+	protected $button_label = '';
 
 	/**
 	 * Select file button label
 	 *
 	 * @var string
 	 */
-	public $window_button_label = '';
+	protected $window_button_label = '';
 
 	/**
 	 * Window title label
 	 *
 	 * @var string
 	 */
-	public $window_label = '';
+	protected $window_label = '';
 
 	/**
 	 * File type filter. Leave a blank string for any file type.
@@ -38,14 +38,14 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 	 *
 	 * @var string|array
 	 */
-	public $file_type = '';
+	protected $file_type = '';
 
 	/**
 	 * What value to store
 	 *
 	 * @var string
 	 */
-	public $value_type = 'id';
+	protected $value_type = 'id';
 
 	/**
 	 * Default field value
