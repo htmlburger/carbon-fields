@@ -113,17 +113,6 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 	}
 
 	/**
-	 * Specify whether to allow each entry to be selected multiple times.
-	 * Backwards-compatibility alias.
-	 *
-	 * @param  boolean $allow
-	 * @return Field   $this
-	 */
-	public function allow_duplicates( $allow = true ) {
-		return $this->set_duplicates_allowed( $allow );
-	}
-
-	/**
 	 * Load the field value from an input array based on it's name
 	 *
 	 * @param  array $input Array of field names and values.
