@@ -168,6 +168,7 @@ class Loader {
 
 				'oembedNotFound' => _x( 'Not Found', 'oEmbed field', 'carbon-fields' ),
 
+				'mediaGalleryNoFiles' => __( 'No files selected.', 'carbon-fields' ),
 				'mediaGalleryButtonLabel' => __( 'Add File', 'carbon-fields' ),
 				'mediaGalleryBrowserTitle' => _x( 'Files', 'WordPress Media Browser', 'carbon-fields' ),
 				'mediaGalleryBrowserButtonLabel' => _x( 'Select File', 'WordPress Media Browser', 'carbon-fields' ),

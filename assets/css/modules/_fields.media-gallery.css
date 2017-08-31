@@ -6,9 +6,12 @@
 .carbon-media-gallery .carbon-attachment { width: auto; height: auto; line-height: 1; }
 .carbon-media-gallery .carbon-media-gallery-actions { padding: 10px; border-top: 1px solid #eee; }
 
+.carbon-media-gallery-no-files { text-align: center; padding: 10px; }
+
 .carbon-media-gallery-list { flex: 1 1 auto; }
 
 .carbon-media-gallery-list-items { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-start; padding: 0; flex: 1 1 auto; list-style: none; height: 400px; overflow: auto; overflow-x: hidden; align-content: start; }
+.carbon-media-gallery-list-items:empty { height: 50px; }
 .carbon-media-gallery-list-items .carbon-media-gallery-list-item { padding: 10px; flex: 0 0 12.5%; box-sizing: border-box; align-self: flex-start; }
 
 .carbon-media-gallery-list-items .carbon-attachment { width: 100%; border: none; position: relative; border-bottom: 0; }

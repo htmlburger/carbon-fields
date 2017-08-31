@@ -33,23 +33,29 @@ export const MediaGalleryList = ({
 }) => {
 	return <div className="carbon-media-gallery-list">
 		<SortableList options={sortableOptions} onSort={onSort}>
-			<ul className="carbon-media-gallery-list-items">
-				{
-					items.map((item, index) => {
-						return <MediaGalleryListItem
-							prefix={prefix}
-							key={index}
-							index={index}
-							item={item}
-							meta={itemsMeta[ item ]}
-							name={name}
-							onRemoveClick={handleRemoveItem}
-							onEditClick={handleEditItem}
-							isSelected={field.selected == item}
-						/>
-					})
-				}
-			</ul>
+			{
+				items.length > 0 ?
+				<ul className="carbon-media-gallery-list-items">
+					{
+						items.map((item, index) => {
+							return <MediaGalleryListItem
+								prefix={prefix}
+								key={index}
+								index={index}
+								item={item}
+								meta={itemsMeta[ item ]}
+								name={name}
+								onRemoveClick={handleRemoveItem}
+								onEditClick={handleEditItem}
+								isSelected={field.selected == item}
+							/>
+						})
+					}
+				</ul> :
+				<div className="carbon-media-gallery-no-files">
+					<p>{carbonFieldsL10n.field.mediaGalleryNoFiles}</p>
+				</div>
+			}
 		</SortableList>
 
 		<div className="carbon-media-gallery-actions">
