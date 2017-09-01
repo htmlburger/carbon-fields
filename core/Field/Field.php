@@ -734,27 +734,39 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Set an attribute and it's value
+	 * Set an attribute and its value or an array of attributes with values
 	 *
-	 * @param  string $name
-	 * @param  string $value
-	 * @return Field  $this
+	 * @param  string|array $name
+	 * @param  string       $value
+	 * @return Field        $this
 	 */
 	public function set_attribute( $name, $value = '' ) {
-		$is_data_attribute = substr( strtolower( $name ), 0, 5 ) === 'data-';
-		if ( $is_data_attribute ) {
-			$name = strtolower( $name );
-			$name = preg_replace( '/[^a-z\-]/', '-', $name );
-			$name = preg_replace( '/\-{2,}/', '-', $name );
-			$name = preg_replace( '/^\-+|\-+$/', '', $name );
+		$names = [];
+		
+		if ( is_array( $name ) ) {
+			$names = $name;
+		} else {
+			$names[ $name ] = $value;
 		}
-
-		if ( ! $is_data_attribute && ! in_array( $name, $this->allowed_attributes ) ) {
-			Incorrect_Syntax_Exception::raise( 'Only the following attributes are allowed: ' . implode( ', ', $this->allowed_attributes ) . ' and data-*.' );
-			return $this;
+		
+		foreach ( $names as $name => $value ) {
+			$is_data_attribute = substr( strtolower( $name ), 0, 5 ) === 'data-';
+			if ( $is_data_attribute ) {
+				$name = strtolower( $name );
+				$name = preg_replace( '/[^a-z\-]/', '-', $name );
+				$name = preg_replace( '/\-{2,}/', '-', $name );
+				$name = preg_replace( '/^\-+|\-+$/', '', $name );
+			}
+			
+			if ( ! $is_data_attribute && ! in_array( $name, $this->allowed_attributes ) ) {
+				Incorrect_Syntax_Exception::raise( 'Only the following attributes are allowed: ' . implode( ', ', $this->allowed_attributes ) . ' and data-*.' );
+				
+				return $this;
+			}
+			
+			$this->attributes[ $name ] = $value;
 		}
-
-		$this->attributes[ $name ] = $value;
+		
 		return $this;
 	}
 
