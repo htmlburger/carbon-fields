@@ -741,7 +741,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @return Field        $this
 	 */
 	public function set_attribute( $name, $value = '' ) {
-		$names = [];
+		$names = array();
 		
 		if ( is_array( $name ) ) {
 			$names = $name;
