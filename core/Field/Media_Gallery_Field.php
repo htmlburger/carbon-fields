@@ -119,7 +119,7 @@ class Media_Gallery_Field extends Field {
 		}
 
 		return array(
-			'value'      => $value_set,
+			'value'      => array_map( 'absint', $value_set ),
 			'value_meta' => $value_meta,
 		);
 	}
