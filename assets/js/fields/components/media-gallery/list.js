@@ -1,12 +1,21 @@
 /**
  * The external dependencies.
  */
+import $ from 'jquery';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import {
+	compose,
+	withState,
+	withHandlers,
+} from 'recompose';
+import { isUndefined } from 'lodash';
 
 /**
  * The internal dependencies.
  */
+import withSetup from 'fields/decorators/with-setup';
 import SortableList from 'fields/components/sortable-list';
 import MediaGalleryListItem from 'fields/components/media-gallery/list-item';
 
@@ -77,4 +86,63 @@ MediaGalleryList.propTypes = {
 	handleRemoveItem: PropTypes.func,
 };
 
-export default MediaGalleryList;
+/**
+ * The enhancer.
+ *
+ * @type {Function}
+ */
+export const enhance = compose(
+	/**
+	 * Track current search term.
+	 */
+	withState('node', 'setNode', null),
+
+	withHandlers({
+		handleComponentResize: ({ field, node }) => () => {
+			const nodeWidth = node.offsetWidth;
+
+			if (nodeWidth < 200) {
+				node.dataset.itemsPerRow = 1;
+			} else if (nodeWidth < 300) {
+				node.dataset.itemsPerRow = 2;
+			} else if (nodeWidth < 500) {
+				node.dataset.itemsPerRow = 3;
+			} else if (nodeWidth < 600) {
+				node.dataset.itemsPerRow = 4;
+			} else if (nodeWidth < 700) {
+				node.dataset.itemsPerRow = 5;
+			} else if (nodeWidth < 800) {
+				node.dataset.itemsPerRow = 6;
+			} else if (nodeWidth < 900) {
+				node.dataset.itemsPerRow = 7;
+			} else if (nodeWidth < 1000) {
+				node.dataset.itemsPerRow = 8;
+			} else if (nodeWidth < 1200) {
+				node.dataset.itemsPerRow = 9;
+			} else if (nodeWidth < 1900) {
+				node.dataset.itemsPerRow = 10;
+			}
+		}
+	}),
+
+	/**
+	 * Attach the setup hooks.
+	 */
+	withSetup({
+		componentDidMount() {
+			const {
+				setNode,
+				handleComponentResize,
+			} = this.props;
+
+			setNode( ReactDOM.findDOMNode(this) );
+			$(window).on('resize', handleComponentResize)
+		},
+
+		componentDidUpdate({ handleComponentResize }) {
+			handleComponentResize();
+		}
+	}),
+);
+
+export default enhance(MediaGalleryList);
