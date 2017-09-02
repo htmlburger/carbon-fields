@@ -87,7 +87,7 @@ msgstr "Сайдбар с этим ID уже зарегистрирован."
 msgid ""
 "Failed to update option storing your custom sidebars. Please contact support."
 msgstr ""
-"Не удалось обновить параметры вашего сайбара. Обратитесь в службу поддержки."
+"Не удалось обновить параметры вашего сайдбара. Обратитесь в службу поддержки."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:137
 msgid "Sidebar not found."
