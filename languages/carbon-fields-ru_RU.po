@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Carbon Fields\n"
-"POT-Creation-Date: 2017-09-02 20:02+0300\n"
-"PO-Revision-Date: 2017-09-02 20:03+0300\n"
+"POT-Creation-Date: 2017-09-02 21:31+0300\n"
+"PO-Revision-Date: 2017-09-02 21:31+0300\n"
 "Last-Translator: DieGOs <9585999@gmail.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
@@ -87,7 +87,7 @@ msgstr "Сайдбар с этим ID уже зарегистрирован."
 msgid ""
 "Failed to update option storing your custom sidebars. Please contact support."
 msgstr ""
-"Не удалось обновить параметры вашего сайдбара. Обратитесь в службу поддержки."
+"Не удалось обновить параметры вашего сайбара. Обратитесь в службу поддержки."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:137
 msgid "Sidebar not found."
@@ -140,7 +140,7 @@ msgstr "Достигнуто максимальное число элемент�
 #, python-format
 msgid "There are no %s yet. Click <a href=\"#\">here</a> to add one."
 msgstr ""
-Нажмите <a href=\"#\">здесь</a>, чтобы добавить "
+"%s пока еще не добавлено. Нажмите <a href=«#»>здесь</a>, чтобы добавить "
 "элемент."
 
 #: core/Loader/Loader.php:130
