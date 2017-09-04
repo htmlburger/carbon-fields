@@ -27,18 +27,19 @@ export function* workerInit() {
 
 	while (true) {
 		const { data } = yield take(channel);
-		const container = $(data)
-			.find('[data-json]')
-				.data('json');
+		const $containers = $(data).find('[data-json]');
 
 		// Close the channel since we don't have any
 		// registered containers.
-		if (!container) {
+		if ($containers.length < 1) {
 			channel.close();
 			break;
 		}
 
-		yield put(receiveContainer(container, false));
+		for (let i = 0; i < $containers.length; i++) {
+			let $container = $($containers[i]);
+			yield put(receiveContainer($container.data('json'), false));
+		}
 	}
 }
 
