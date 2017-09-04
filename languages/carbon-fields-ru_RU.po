@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Carbon Fields\n"
-"POT-Creation-Date: 2017-09-02 21:31+0300\n"
-"PO-Revision-Date: 2017-09-02 21:31+0300\n"
+"POT-Creation-Date: 2017-09-04 14:27+0300\n"
+"PO-Revision-Date: 2017-09-04 14:43+0300\n"
 "Last-Translator: DieGOs <9585999@gmail.com>\n"
 "Language-Team: Russian\n"
 "Language: ru_RU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.0.1\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
@@ -33,15 +33,6 @@ msgstr "Основные"
 msgid "Settings saved."
 msgstr "Настройки сохранены"
 
-#: core/Field/File_Field.php:32 core/Field/File_Field.php:33
-#: core/Field/Media_Gallery_Field.php:56
-msgid "Select File"
-msgstr "Выбрать файл"
-
-#: core/Field/File_Field.php:34 core/Field/Media_Gallery_Field.php:57
-msgid "Files"
-msgstr "Файлы"
-
 #: core/Field/Footer_Scripts_Field.php:20
 msgid ""
 "If you need to add scripts to your footer (like Google Analytics tracking "
@@ -58,21 +49,6 @@ msgstr "Нет формы"
 msgid "If you need to add scripts to your header, you should enter them here."
 msgstr "Если в заголовок необходимо добавить скрипты, их нужно указать здеcь."
 
-#: core/Field/Image_Field.php:18 core/Field/Image_Field.php:19
-msgid "Select Image"
-msgstr "Выбрать изображение"
-
-#: core/Field/Image_Field.php:20
-msgid "Images"
-msgstr "Изображения"
-
-#: core/Field/Media_Gallery_Field.php:55
-#, fuzzy
-#| msgctxt "sidebar"
-#| msgid "Add New"
-msgid "Add File"
-msgstr "Добавить новый"
-
 #: core/Field/Sidebar_Field.php:50
 msgctxt "sidebar"
 msgid "Add New"
@@ -83,8 +59,6 @@ msgid "F j, Y"
 msgstr ""
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:69
-#, fuzzy
-#| msgid "Please enter the name of the new sidebar:"
 msgid "Please enter a name for the sidebar."
 msgstr "Пожалуйста, введите название для сайдбара."
 
@@ -114,7 +88,7 @@ msgstr "Добавить сайдбар"
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:182
 #: core/Loader/Loader.php:141
 msgid "Please enter the name of the new sidebar:"
-msgstr "Укажите название сайдбара:"
+msgstr "Пожалуйста, введите название для сайдбара."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:183
 msgid "Are you sure you wish to remove this sidebar?"
@@ -141,7 +115,7 @@ msgid "Locate address on the map:"
 msgstr "Найти адрес на карте"
 
 #: core/Loader/Loader.php:126
-#, python-format
+#, php-format
 msgid "Minimum number of items not reached (%s items)"
 msgstr "Минимальное количество элементов не достигнуто (%s)"
 
@@ -163,12 +137,12 @@ msgid "Minimum number of rows not reached (%1$d %2$s)"
 msgstr "Минимальное количество строк не достигнуто (%1$d %2$s)"
 
 #: core/Loader/Loader.php:131
+#, php-format
 msgid "Maximum number of rows exceeded (%1$d %2$s)"
-msgstr "Достигнуто максимальное число рядов (%s рядов)"
+msgstr "Достигнуто максимальное число рядов (%1$d %2$s)"
 
 #: core/Loader/Loader.php:132
-#, fuzzy, php-format
-#| msgid "Add %s"
+#, php-format
 msgctxt "Complex field"
 msgid "Add %s"
 msgstr "Добавить %s"
@@ -209,20 +183,24 @@ msgid "Select Date"
 msgstr "Выберите дату"
 
 #: core/Loader/Loader.php:146
+#, php-format
 msgid "%1$d selected item"
-msgstr "выбрать элемент"
+msgstr "%1$d выбрать элемент"
 
 #: core/Loader/Loader.php:147
+#, php-format
 msgid "%1$d selected items"
-msgstr "выбранные элементы"
+msgstr "%1$d выбранные элементы"
 
 #: core/Loader/Loader.php:148
+#, fuzzy, php-format
 msgid "%1$d selected item out of %2$d"
-msgstr "выбрать элемент"
+msgstr "%1$d выбрать элемент"
 
 #: core/Loader/Loader.php:149
+#, fuzzy, php-format
 msgid "%1$d selected items out of %2$d"
-msgstr "выбранные элементы"
+msgstr "%1$d выбранные элементы"
 
 #: core/Loader/Loader.php:151
 msgid "Select a color"
@@ -236,22 +214,14 @@ msgstr "Нет опций."
 msgid "Show all options"
 msgstr "Показать все опции"
 
-#: core/Loader/Loader.php:156
-msgid "Search..."
-msgstr "Поиск.."
-
 #: core/Loader/Loader.php:157
-#, fuzzy
-#| msgid "Search"
 msgid "Search..."
-msgstr "Поиск"
+msgstr "Поиск..."
 
 #: core/Loader/Loader.php:159
-#, fuzzy
-#| msgid "URL"
 msgctxt "WordPress media attachment"
 msgid "URL"
-msgstr "URL"
+msgstr ""
 
 #: core/Loader/Loader.php:160
 msgctxt "WordPress media attachment"
@@ -274,15 +244,11 @@ msgid "Caption"
 msgstr ""
 
 #: core/Loader/Loader.php:164
-#, fuzzy
-#| msgid "Text"
 msgctxt "WordPress media attachment"
 msgid "Alt Text"
 msgstr "Текст"
 
 #: core/Loader/Loader.php:165
-#, fuzzy
-#| msgid "Description"
 msgctxt "WordPress media attachment"
 msgid "Description"
 msgstr "Описание"
@@ -301,6 +267,42 @@ msgstr ""
 msgctxt "oEmbed field"
 msgid "Not Found"
 msgstr ""
+
+#: core/Loader/Loader.php:171
+msgid "No files selected."
+msgstr ""
+
+#: core/Loader/Loader.php:172
+msgid "Add File"
+msgstr "Добавить новый"
+
+#: core/Loader/Loader.php:173 core/Loader/Loader.php:177
+msgctxt "WordPress Media Browser"
+msgid "Files"
+msgstr "Файлы"
+
+#: core/Loader/Loader.php:174 core/Loader/Loader.php:178
+msgctxt "WordPress Media Browser"
+msgid "Select File"
+msgstr "Выбрать файл"
+
+#: core/Loader/Loader.php:176
+msgid "Select File"
+msgstr "Выбрать файл"
+
+#: core/Loader/Loader.php:180
+msgid "Select Image"
+msgstr "Выбрать изображение"
+
+#: core/Loader/Loader.php:181
+msgctxt "WordPress Media Browser"
+msgid "Images"
+msgstr "Изображения"
+
+#: core/Loader/Loader.php:182
+msgctxt "WordPress Media Browser"
+msgid "Select Image"
+msgstr "Выбрать изображение"
 
 #: core/REST_API/Router.php:287
 msgid "No option names provided"
@@ -321,121 +323,3 @@ msgstr "Сохранить изменения"
 #: templates/Container/widget.php:5
 msgid "No options are available for this widget."
 msgstr "Нет доступных настроек для этого виджета."
-
-#~ msgid "out of"
-#~ msgstr "из"
-
-#~ msgid ""
-#~ "Complex field layouts are deprecated, please use <code>set_width()</code> "
-#~ "instead."
-#~ msgstr ""
-#~ "Смешанные шаблоны полей больше не поддерживаются, используйте "
-#~ "<code>set_width()</code>."
-
-#~ msgid "Cannot create more than %s rows"
-#~ msgstr "Невозможно создать более %s рядов"
-
-#~ msgid "Minimum number of rows not reached (%d %s)"
-#~ msgstr "Недостаточное количество рядов (%d %s)"
-
-#~ msgid "Please install Gravity Forms plugin"
-#~ msgstr "Пожалуйста, установите Gravity Forms"
-
-#~ msgid "No Gravity Forms have been found."
-#~ msgstr "Не найден плагин Gravity Forms."
-
-#~ msgid "%s (Invalid)"
-#~ msgstr "%s (Неправильных)"
-
-#~ msgid "%s (Pending)"
-#~ msgstr "%s (Ожидающих)"
-
-#~ msgid "Edit"
-#~ msgstr "Редактировать"
-
-#~ msgid "Select a Color"
-#~ msgstr "Выбрать цвет"
-
-#~ msgid "Entry"
-#~ msgstr "Элемент"
-
-#~ msgid "Entries"
-#~ msgstr "Элементы"
-
-#~ msgid "Date"
-#~ msgstr "Дата"
-
-#~ msgid "View File"
-#~ msgstr "Открыть файл"
-
-#~ msgid "Find"
-#~ msgstr "Найти"
-
-#~ msgid "no options"
-#~ msgstr "нет вариантов"
-
-#~ msgid "Associated:"
-#~ msgstr "Связанные:"
-
-#~ msgid "Show All Options"
-#~ msgstr "Показать все варианты"
-
-#~ msgid "sub item"
-#~ msgstr "дочерний элемент"
-
-#~ msgid "Move up"
-#~ msgstr "Вверх"
-
-#~ msgid "Move down"
-#~ msgstr "Вниз"
-
-#~ msgid "Edit Menu Item"
-#~ msgstr "Редактировать элемент меню"
-
-#~ msgid "Navigation Label"
-#~ msgstr "Ярлык навигации"
-
-#~ msgid "Title Attribute"
-#~ msgstr "Атрибут Title"
-
-#~ msgid "Open link in a new window/tab"
-#~ msgstr "Открывать ссылку в новом окне/закладке"
-
-#~ msgid "CSS Classes (optional)"
-#~ msgstr "CSS Классы (необязательно)"
-
-#~ msgid "Link Relationship (XFN)"
-#~ msgstr "Link Relationship (XFN)"
-
-#~ msgid ""
-#~ "The description will be displayed in the menu if the current theme "
-#~ "supports it."
-#~ msgstr ""
-#~ "Описание будет отображаться в меню, если предусмотрено текущей темой."
-
-#~ msgid "Move"
-#~ msgstr "Переместить"
-
-#~ msgid "Up one"
-#~ msgstr "Один пункт вверх"
-
-#~ msgid "Down one"
-#~ msgstr "Один пункт вниз"
-
-#~ msgid "To the top"
-#~ msgstr "На верх"
-
-#~ msgid "Original: %s"
-#~ msgstr "Оригинал: %s"
-
-#~ msgid "Cancel"
-#~ msgstr "Отмена"
-
-#~ msgid "Add Media"
-#~ msgstr "Добавить медиафайл"
-
-#~ msgid "Visual"
-#~ msgstr "Визуально"
-
-#~ msgid "Locate Address on the map"
-#~ msgstr "Поиск по адресу"
