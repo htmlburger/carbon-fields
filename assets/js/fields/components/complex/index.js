@@ -42,7 +42,9 @@ import {
 	removeComplexGroup,
 	expandComplexGroup,
 	collapseComplexGroup,
-	switchComplexTab
+	switchComplexTab,
+	startComplexGroupDrag,
+	stopComplexGroupDrag
 } from 'fields/actions';
 import {
 	TYPE_COMPLEX,
@@ -233,6 +235,8 @@ export const enhance = compose(
 			expandComplexGroup,
 			collapseComplexGroup,
 			switchComplexTab,
+			startComplexGroupDrag,
+			stopComplexGroupDrag
 		}
 	),
 
@@ -268,7 +272,12 @@ export const enhance = compose(
 	/**
 	 * Pass some props to the component.
 	 */
-	withProps(({ field, collapseComplexGroup }) => {
+	withProps(({
+		field,
+		collapseComplexGroup,
+		startComplexGroupDrag,
+		stopComplexGroupDrag
+	}) => {
 		const sortableTabsOptions = {
 			items: '.group-tab-item',
 			placeholder: 'group-tab-item ui-placeholder-highlight',
@@ -286,7 +295,17 @@ export const enhance = compose(
 		};
 
 		if (field.layout === COMPLEX_LAYOUT_GRID) {
-			sortableGroupsOptions.start = (e, ui) => collapseComplexGroup(field.id, ui.item[0].id);
+			sortableGroupsOptions.start = (e, ui) => {
+				const { id: fieldId } = field;
+				const { id: groupId } = ui.item[0];
+
+				collapseComplexGroup(fieldId, groupId);
+				startComplexGroupDrag(fieldId, groupId);
+			};
+
+			sortableGroupsOptions.stop = (e, ui) => {
+				stopComplexGroupDrag(field.id, ui.item[0].id);
+			};
 		}
 
 		let enabledGroupTypes = map(field.group_types, 'name');
@@ -336,7 +355,6 @@ export const enhance = compose(
 			const groupId = ui.item[0].id;
 
 			setFieldValue(field.id, sortBy(field.value, group => groups.indexOf(group.id)));
-
 			expandComplexGroup(field.id, groupId);
 		},
 	}),
@@ -345,4 +363,3 @@ export const enhance = compose(
 export default setStatic('type', [
 	TYPE_COMPLEX,
 ])(enhance(ComplexField));
-

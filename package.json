@@ -1,6 +1,6 @@
 {
   "name": "carbon-fields",
-  "version": "2.0.5-beta.1",
+  "version": "2.0.5-beta.2",
   "description": "WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options, navigation menus and more.",
   "main": "index.js",
   "directories": {
@@ -59,7 +59,7 @@
     "redux-saga-test-plan": "^2.3.6",
     "uglify-js": "^2.8.22",
     "uglifyjs-webpack-plugin": "^0.4.1",
-    "webpack": "github:matthewmeyer/webpack#hashDependantModuleIds",
+    "webpack": "^3.5.5",
     "webpack-merge": "^4.1.0"
   },
   "dependencies": {
@@ -80,6 +80,7 @@
     "redux": "^3.6.0",
     "redux-actions": "^2.0.1",
     "redux-saga": "^0.15.3",
-    "reselect": "^3.0.0"
+    "reselect": "^3.0.0",
+    "sprintf-js": "^1.1.1"
   }
 }

@@ -4,7 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
-import { compose, withHandlers, setStatic } from 'recompose';
+import { compose, withHandlers, setStatic, pure } from 'recompose';
 
 /**
  * The internal dependencies.
@@ -12,7 +12,7 @@ import { compose, withHandlers, setStatic } from 'recompose';
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { setupMediaBrowser, openMediaBrowser } from 'fields/actions';
+import { setupMediaBrowser, openMediaBrowser, destroyMediaBrowser } from 'fields/actions';
 import { TYPE_FILE, TYPE_IMAGE, VALIDATION_BASE } from 'fields/constants';
 
 /**
@@ -31,6 +31,12 @@ export const FileField = ({
 	openBrowser,
 	clearSelection
 }) => {
+	let buttonLabel = carbonFieldsL10n.field.fileButtonLabel;
+
+	if (field.type === 'image') {
+		buttonLabel = carbonFieldsL10n.field.imageButtonLabel;
+	}
+
 	return <Field field={field}>
 		<div className="carbon-attachment">
 			<input
@@ -51,12 +57,12 @@ export const FileField = ({
 				<input
 					type="text"
 					className="carbon-attachment-file-name"
-					value={field.file_url}
+					value={field.file_url ? field.file_url : ''}
 					readOnly />
 			</div>
 
-			<span className="button c2_open_media" onClick={openBrowser}>
-				{field.button_label}
+			<span className="button" onClick={openBrowser}>
+				{buttonLabel}
 			</span>
 		</div>
 	</Field>;
@@ -83,7 +89,6 @@ FileField.propTypes = {
 		thumb_url: PropTypes.string,
 		file_url: PropTypes.string,
 		file_name: PropTypes.string,
-		button_label: PropTypes.string,
 	}),
 	openBrowser: PropTypes.func,
 	clearSelection: PropTypes.func,
@@ -101,6 +106,7 @@ export const enhance = compose(
 	withStore(undefined, {
 		setupMediaBrowser,
 		openMediaBrowser,
+		destroyMediaBrowser
 	}),
 
 	/**
@@ -122,6 +128,10 @@ export const enhance = compose(
 			if (field.required) {
 				setupValidation(field.id, VALIDATION_BASE);
 			}
+		},
+
+		componentWillUnmount() {
+			this.props.destroyMediaBrowser(this.props.field.id);
 		}
 	}),
 

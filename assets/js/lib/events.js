@@ -3,7 +3,7 @@
  */
 import $ from 'jquery';
 import { eventChannel, buffers, END } from 'redux-saga';
-import { isString, uniqueId } from 'lodash';
+import { isString, uniqueId, isArray } from 'lodash';
 
 /**
  * Create a Saga Channel that will listen for DOM events.
@@ -153,20 +153,55 @@ export function createMediaBrowserChannel(settings) {
 		// Create a new instance of the media browser.
 		const browser = window.wp.media(settings);
 
+		let AttachmentLibrary = wp.media.view.Attachment.Library;
+
+		window.wp.media.view.Attachment.Library = AttachmentLibrary.extend({
+			render: function () {
+				let {
+					controller: { options: { selected } }
+				} = this;
+
+				selected = isArray(selected) ? selected : [ selected ];
+				selected = selected.map(id => parseInt(id, 10));
+
+				const {
+					id
+				} = this.model;
+
+				if (selected && selected.indexOf(id) !== -1) {
+					this.$el.addClass('carbon-selected');
+				} else {
+					this.$el.removeClass('carbon-selected');
+				}
+
+				return AttachmentLibrary.prototype.render.apply( this, arguments );
+			},
+		});
+
 		// Emit the selection through the channel.
-		const handler = () => {
+		const onSelect = () => {
 			emit({
 				selection: browser.state().get('selection').toJSON(),
 			});
 		};
 
+		// Emit the closing modal through the channel.
+		const onClose = () => {
+			emit({
+				closed: true
+			});
+		};
+
 		// Cancel the subscription.
 		const unsubscribe = () => {
-			browser.off('select', handler);
+			browser.off('select', onSelect);
+			browser.off('close', onClose);
+			browser.remove();
 		};
 
 		// Setup the subscription.
-		browser.on('select', handler);
+		browser.on('select', onSelect);
+		browser.on('close', onClose);
 
 		// Emit the instance of browser so it can be used by subscribers.
 		emit({

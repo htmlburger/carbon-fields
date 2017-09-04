@@ -189,14 +189,14 @@ class Term_Meta_Container extends Container {
 	 */
 	public function get_taxonomy_visibility() {
 		$all_taxonomies = get_taxonomies();
-		$filtered_collection = $this->condition_collection->filter( array( 'term_taxonomy' ) );
+		$evaluated_collection = $this->condition_collection->evaluate( array( 'term_taxonomy' ), true, array(), true );
 
 		$shown_on = array();
 		foreach ( $all_taxonomies as $taxonomy ) {
 			$environment = array(
 				'taxonomy' => $taxonomy,
 			);
-			if ( $filtered_collection->is_fulfilled( $environment ) ) {
+			if ( $evaluated_collection->is_fulfilled( $environment ) ) {
 				$shown_on[] = $taxonomy;
 			}
 		}

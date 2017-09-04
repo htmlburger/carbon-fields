@@ -124,7 +124,7 @@ describe('Fields >> Components >> Field', () => {
 			},
 		});
 
-		const node = wrapper.find('.help-text');
+		const node = wrapper.find('.carbon-help-text');
 
 		expect(node).toHaveLength(1);
 		expect(node.text()).toEqual('Some help text');

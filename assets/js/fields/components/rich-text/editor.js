@@ -5,6 +5,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import cx from 'classnames';
+import observeResize from 'observe-resize';
+import { debounce } from 'lodash';
 
 class RichTextEditor extends React.Component {
 	/**
@@ -13,6 +15,7 @@ class RichTextEditor extends React.Component {
 	 * @return {void}
 	 */
 	componentDidMount() {
+		this.node = null;
 		this.initEditor();
 	}
 
@@ -24,6 +27,19 @@ class RichTextEditor extends React.Component {
 	 */
 	componentWillReceiveProps(nextProps) {
 		const { content } = nextProps;
+
+		// Destroy the editor because TinyMCE doesn't like to be
+		// moved around DOM.
+		if (!this.props.isDragging && nextProps.isDragging) {
+			this.destroyEditor();
+			return;
+		}
+
+		// Re-init the editor manually because the complex group wasn't sorted
+		// and the component uses the same React instance.
+		if (!this.editor && this.props.isDragging && !nextProps.isDragging) {
+			this.initEditor();
+		}
 
 		if (this.editor && this.editor.getContent() !== content) {
 			this.editor.setContent(content);
@@ -53,7 +69,7 @@ class RichTextEditor extends React.Component {
 			{ 'html-active': !richEditing },
 		];
 
-		return <div id={`wp-${id}-wrap`} className={cx(classes)}>
+		return <div id={`wp-${id}-wrap`} className={cx(classes)} ref={node => this.node = node}>
 			<div id={`wp-${id}-media-buttons`} className="hide-if-no-js wp-media-buttons">
 				<a href="#" className="button insert-media add_media" data-editor={id} title="Add Media">
 					<span className="wp-media-buttons-icon"></span> Add Media
@@ -87,35 +103,41 @@ class RichTextEditor extends React.Component {
 	 * @return {void}
 	 */
 	initEditor() {
-		const { id, richEditing, onChange } = this.props;
+		window.requestAnimationFrame(() => {
+			const { id, richEditing, onChange } = this.props;
 
-		if (richEditing) {
-			const editorSetup = (editor) => {
-				this.editor = editor;
+			if (richEditing) {
+				const editorSetup = (editor) => {
+					this.editor = editor;
 
-				editor.on('blur', () => {
-					onChange(editor.getContent());
-				});
+					editor.on('blur', () => {
+						onChange(editor.getContent());
+					});
+
+					this.cancelResizeObserver = observeResize(this.node, debounce(() => {
+						this.editor.execCommand('mceAutoResize');
+					}, 100));
+				};
+
+				const editorOptions = {
+					...window.tinyMCEPreInit.mceInit.carbon_settings,
+					selector: `#${id}`,
+					setup: editorSetup,
+				};
+
+				window.tinymce.init(editorOptions);
+			}
+
+			const quickTagsOptions = {
+				...window.tinyMCEPreInit,
+				id,
 			};
 
-			const editorOptions = {
-				...window.tinyMCEPreInit.mceInit.carbon_settings,
-				selector: `#${id}`,
-				setup: editorSetup,
-			};
+			window.quicktags(quickTagsOptions);
 
-			window.tinymce.init(editorOptions);
-		}
-
-		const quickTagsOptions = {
-			...window.tinyMCEPreInit,
-			id,
-		};
-
-		window.quicktags(quickTagsOptions);
-
-		// Force the initialization of the quick tags.
-		window.QTags._buttonsInit();
+			// Force the initialization of the quick tags.
+			window.QTags._buttonsInit();
+		});
 	}
 
 	/**
@@ -125,7 +147,10 @@ class RichTextEditor extends React.Component {
 	 */
 	destroyEditor() {
 		if (this.editor) {
+			this.cancelResizeObserver();
 			this.editor.remove();
+
+			this.node = null;
 			this.editor = null;
 		}
 
@@ -141,6 +166,7 @@ class RichTextEditor extends React.Component {
 RichTextEditor.propTypes = {
 	id: PropTypes.string,
 	richEditing: PropTypes.bool,
+	isDragging: PropTypes.bool,
 	onChange: PropTypes.func,
 };
 

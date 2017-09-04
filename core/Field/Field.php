@@ -163,7 +163,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @var array<string>
 	 */
-	protected $allowed_attributes = array( 'max', 'maxLength', 'min', 'pattern', 'placeholder', 'readOnly', 'step', 'type' );
+	protected $allowed_attributes = array();
 
 	/**
 	 * The width of the field.
@@ -602,7 +602,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @return Field $this
 	 */
 	public function set_default_value( $default_value ) {
-		$this->default_value = $default_value;
+		$this->default_value = strval($default_value);
 		return $this;
 	}
 
@@ -750,7 +750,7 @@ class Field implements Datastore_Holder_Interface {
 		}
 
 		if ( ! $is_data_attribute && ! in_array( $name, $this->allowed_attributes ) ) {
-			Incorrect_Syntax_Exception::raise( 'Only the following attributes are allowed: ' . implode( ', ', $this->allowed_attributes ) . ' and data-*.' );
+			Incorrect_Syntax_Exception::raise( 'Only the following attributes are allowed: ' . implode( ', ', array_merge( $this->allowed_attributes, array( 'data-*' ) ) ) );
 			return $this;
 		}
 

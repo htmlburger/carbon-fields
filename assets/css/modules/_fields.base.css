@@ -3,7 +3,7 @@
 \* ------------------------------------------------------------ */
 
 .carbon-field { padding: 10px 12px 16px; margin: 0; }
-.carbon-field .help-text { padding-top: 3px; font-style: normal; font-size: 12px; color: #767a7f; }
+.carbon-field .carbon-help-text { padding-top: 3px; font-style: normal; font-size: 12px; color: #767a7f; }
 
 .carbon-field label { padding: 0 0 8px; font-weight: 600; }
 .carbon-field input[type="color"],

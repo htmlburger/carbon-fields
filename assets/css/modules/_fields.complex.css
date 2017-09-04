@@ -4,7 +4,7 @@
 
 /*  Base  */
 
-.carbon-complex > .help-text { margin-top: 5px; }
+.carbon-complex > .carbon-help-text { margin-top: 5px; }
 
 /*  Sub Container  */
 
@@ -102,7 +102,7 @@
 .carbon-groups-holder .carbon-group-actions-tabbed-vertical .carbon-btn-collapse { display: none; }
 
 .carbon-groups-holder .carbon-group-actions-tabbed-horizontal .carbon-btn-remove,
-.carbon-groups-holder .carbon-group-actions-tabbed-vertical .carbon-btn-remove { color: $color-darkred-font; }
+.carbon-groups-holder .carbon-group-actions-tabbed-vertical .carbon-btn-remove { color: $color-darkred-font; float: right; }
 
 .layout-tabbed-horizontal > .carbon-groups-holder > .carbon-row > .fields-container,
 .layout-tabbed-vertical > .carbon-groups-holder > .carbon-row > .fields-container { margin-top: 0; }
@@ -191,7 +191,7 @@
 	.carbon-groups-holder .carbon-group-actions-tabbed-vertical .carbon-btn-collapse { display: inline-block; }
 
 	.carbon-groups-holder .carbon-group-actions-tabbed-horizontal .carbon-btn-remove,
-	.carbon-groups-holder .carbon-group-actions-tabbed-vertical .carbon-btn-remove { color: $color-grey-font; }
+	.carbon-groups-holder .carbon-group-actions-tabbed-vertical .carbon-btn-remove { color: $color-grey-font; float: none; }
 
 	.carbon-groups-holder .carbon-group-actions-tabbed-horizontal .carbon-btn-remove:hover,
 	.carbon-groups-holder .carbon-group-actions-tabbed-vertical .carbon-btn-remove:hover { color: $color-darkred-font; }

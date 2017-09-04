@@ -1,7 +1,7 @@
 /**
  * The external dependencies.
  */
-import { takeEvery, call, put, select, all } from 'redux-saga/effects';
+import { take, takeEvery, takeLatest, call, put, select, all } from 'redux-saga/effects';
 import { find, findIndex, merge, keyBy } from 'lodash';
 
 /**
@@ -27,6 +27,9 @@ import {
 	enableComplexGroupType,
 	disableComplexGroupType,
 	expandComplexGroup,
+	startComplexGroupDrag,
+	stopComplexGroupDrag,
+	setUI
 } from 'fields/actions';
 
 import { TYPE_COMPLEX } from 'fields/constants';
@@ -174,6 +177,42 @@ export function* workerDuplicateComplexGroups({ type, payload: { fieldId, groupI
 }
 
 /**
+ * Change the `dragged` flag of rich text fields.
+ *
+ * @param  {NodeList} elements
+ * @param  {Boolean}  dragged
+ * @return {void}
+ */
+function* markRichTextFieldsAsDragged(elements, dragged) {
+	for (const element of elements) {
+		yield put(setUI(element.id, { dragged }));
+	}
+}
+
+/**
+ * Destroy and re-init the editors inside the complex group.
+ *
+ * @param  {Object}    action
+ * @param  {Object}    action.payload
+ * @param  {String}    action.payload.groupId
+ * @return {void}
+ */
+export function* workerToggleRichTextEditors({ payload: { groupId } }) {
+	// Get all rich text fields by DOM query because it's
+	// much easier than using a selector function.
+	const elements = yield call([document, 'querySelectorAll'], `#${groupId} .carbon-rich_text textarea`);
+
+	// Destroy all TinyMCE instances inside this group.
+	yield call(markRichTextFieldsAsDragged, elements, true);
+
+	// Block and wait until the sorting is done.
+	yield take(stopComplexGroupDrag);
+
+	// Re-initialize the TinyMCE instances.
+	yield call(markRichTextFieldsAsDragged, elements, false);
+}
+
+/**
  * Start to work.
  *
  * @return {void}
@@ -187,5 +226,7 @@ export default function* foreman() {
 		takeEvery(addComplexGroup, workerAddOrCloneComplexGroup),
 		takeEvery(cloneComplexGroup, workerAddOrCloneComplexGroup),
 		takeEvery(removeComplexGroup, workerRemoveComplexGroup),
+
+		takeLatest(startComplexGroupDrag, workerToggleRichTextEditors),
 	]);
 }

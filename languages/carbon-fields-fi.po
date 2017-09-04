@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Carbon Fields\n"
-"POT-Creation-Date: 2017-05-02 12:39+0300\n"
-"PO-Revision-Date: 2017-05-02 12:41+0300\n"
+"POT-Creation-Date: 2017-09-04 14:45+0300\n"
+"PO-Revision-Date: 2017-09-04 14:45+0300\n"
 "Last-Translator: Timi Wahalahti <timi@dude.fi>\n"
 "Language-Team: Timi Wahalahti <timi@dude.fi>\n"
 "Language: fi\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.0.1\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
@@ -24,23 +24,15 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-4: tmp\n"
 "X-Poedit-SearchPathExcluded-5: vendor\n"
 
-#: core/Container/Container.php:664
+#: core/Container/Container.php:711
 msgid "General"
 msgstr "Yleiset"
 
-#: core/Container/Theme_Options_Container.php:204
+#: core/Container/Theme_Options_Container.php:211
 msgid "Settings saved."
 msgstr "Asetukset tallennettu."
 
-#: core/Field/File_Field.php:29 core/Field/File_Field.php:30
-msgid "Select File"
-msgstr "Valitse tiedosto"
-
-#: core/Field/File_Field.php:31
-msgid "Files"
-msgstr "Tiedostot"
-
-#: core/Field/Footer_Scripts_Field.php:15
+#: core/Field/Footer_Scripts_Field.php:20
 msgid ""
 "If you need to add scripts to your footer (like Google Analytics tracking "
 "code), you should enter them in this box."
@@ -52,30 +44,28 @@ msgstr ""
 msgid "No form"
 msgstr "Ei lomaketta"
 
-#: core/Field/Header_Scripts_Field.php:15
+#: core/Field/Header_Scripts_Field.php:20
 msgid "If you need to add scripts to your header, you should enter them here."
 msgstr "Jos haluat lisätä skriptejä ylätunnisteeseen, voit lisätä ne tähän."
-
-#: core/Field/Image_Field.php:18 core/Field/Image_Field.php:19
-msgid "Select Image"
-msgstr "Valitse kuva"
-
-#: core/Field/Image_Field.php:20
-msgid "Images"
-msgstr "Kuvat"
 
 #: core/Field/Sidebar_Field.php:50
 msgctxt "sidebar"
 msgid "Add New"
 msgstr "Lisää uusi"
 
-#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:69
-msgid "Please pass a name for the sidebar."
+#: core/Helper/Helper.php:413
+msgid "F j, Y"
 msgstr ""
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:69
+#, fuzzy
+#| msgid "Please pass a name for the sidebar."
+msgid "Please enter a name for the sidebar."
+msgstr "Anna nimi sivupalkille."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:72
 msgid "Unknown action attempted."
-msgstr ""
+msgstr "Yritetty tuntematonta toimintoa."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:102
 msgid "Sidebar with the same ID is already registered."
@@ -86,6 +76,8 @@ msgstr "Sivupalkki samalla yksilöllisellä ID:llä on jo rekisteröity."
 msgid ""
 "Failed to update option storing your custom sidebars. Please contact support."
 msgstr ""
+"Kustamoidun sivupalkin asetusten tallentaminen ei onnistunut. Ota yhteyttä "
+"tukeen."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:137
 msgid "Sidebar not found."
@@ -96,7 +88,7 @@ msgid "Add Sidebar"
 msgstr "Lisää sivupalkki"
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:182
-#: core/Loader/Loader.php:129
+#: core/Loader/Loader.php:141
 msgid "Please enter the name of the new sidebar:"
 msgstr "Uuden sivupalkin nimi:"
 
@@ -104,111 +96,249 @@ msgstr "Uuden sivupalkin nimi:"
 msgid "Are you sure you wish to remove this sidebar?"
 msgstr "Oletko varma, että haluat poistaa tämän sivupalkin?"
 
-#: core/Loader/Loader.php:109
+#: core/Loader/Loader.php:119
 msgid "Please fill out all required fields highlighted below."
 msgstr "Täytä kaikki pakolliset kentät jotka on korostettu alla."
 
-#: core/Loader/Loader.php:110
+#: core/Loader/Loader.php:120
 msgid "The changes you made will be lost if you navigate away from this page."
 msgstr "Tekemäsi muutokset menetetään jos siirryt pois tältä sivulta."
 
-#: core/Loader/Loader.php:113
+#: core/Loader/Loader.php:123
 msgid "The address could not be found. "
 msgstr "Osoitetta ei löytynyt. "
 
-#: core/Loader/Loader.php:114
+#: core/Loader/Loader.php:124
 msgid "Geocode was not successful for the following reason: "
 msgstr "Paikannus ei onnistunut seuraavista syistä: "
 
-#: core/Loader/Loader.php:115
+#: core/Loader/Loader.php:125
 msgid "Locate address on the map:"
-msgstr ""
+msgstr "Paikanna osoite kartalla:"
 
-#: core/Loader/Loader.php:116
+#: core/Loader/Loader.php:126
+#, fuzzy, php-format
+#| msgid "Maximum number of items reached (%s items)"
+msgid "Minimum number of items not reached (%s items)"
+msgstr "Merkintöjen enimmäismäärä saavutettu (%s kohdetta)"
+
+#: core/Loader/Loader.php:127
 #, php-format
 msgid "Maximum number of items reached (%s items)"
 msgstr "Merkintöjen enimmäismäärä saavutettu (%s kohdetta)"
 
-#: core/Loader/Loader.php:118
+#: core/Loader/Loader.php:129
 #, php-format
 msgid "There are no %s yet. Click <a href=\"#\">here</a> to add one."
 msgstr ""
 "Et ole lisännyt vielä yhtään %s. Klikkaa <a href=\"#\">tästä</a> lisätäksesi "
 "ensimmäinen."
 
-#: core/Loader/Loader.php:119
+#: core/Loader/Loader.php:130
 #, php-format
 msgid "Minimum number of rows not reached (%1$d %2$s)"
-msgstr ""
+msgstr "Rivien vähimmäismäärää ei saavutettu (%1$d %2$s)"
 
-#: core/Loader/Loader.php:120
-#, php-format
+#: core/Loader/Loader.php:131
+#, fuzzy, php-format
+#| msgid "Minimum number of rows not reached (%1$d %2$s)"
+msgid "Maximum number of rows exceeded (%1$d %2$s)"
+msgstr "Rivien vähimmäismäärää ei saavutettu (%1$d %2$s)"
+
+#: core/Loader/Loader.php:132
+#, fuzzy, php-format
+#| msgid "Add %s"
+msgctxt "Complex field"
 msgid "Add %s"
 msgstr "Lisää %s"
 
-#: core/Loader/Loader.php:121
+#: core/Loader/Loader.php:133
+#, fuzzy
+#| msgid "Clone"
+msgctxt "Complex field"
 msgid "Clone"
 msgstr "Kopioi"
 
-#: core/Loader/Loader.php:122
+#: core/Loader/Loader.php:134
+#, fuzzy
+#| msgid "Remove"
+msgctxt "Complex field"
 msgid "Remove"
 msgstr "Poista"
 
-#: core/Loader/Loader.php:123
+#: core/Loader/Loader.php:135
+#, fuzzy
+#| msgid "Collapse/Expand"
+msgctxt "Complex field"
 msgid "Collapse/Expand"
 msgstr "Tiivistä/Laajenna"
 
-#: core/Loader/Loader.php:125
+#: core/Loader/Loader.php:137
 msgid "Please fill out all fields correctly. "
 msgstr "Täytä kaikki kentät oikein. "
 
-#: core/Loader/Loader.php:126
+#: core/Loader/Loader.php:138
 msgid "This field is required. "
-msgstr "Tämä kenttä on pakollinen."
+msgstr "Tämä kenttä on pakollinen. "
 
-#: core/Loader/Loader.php:127
+#: core/Loader/Loader.php:139
 msgid "Please choose an option. "
 msgstr "Valitse vaihtoehto. "
 
-#: core/Loader/Loader.php:131
+#: core/Loader/Loader.php:143
 msgid "Select Time"
 msgstr "Valitse aika"
 
-#: core/Loader/Loader.php:132
+#: core/Loader/Loader.php:144
 msgid "Select Date"
 msgstr "Valitse päivämäärä"
 
-#: core/Loader/Loader.php:134
-msgid "out of"
-msgstr "/"
-
-#: core/Loader/Loader.php:135
-msgid "selected item"
+#: core/Loader/Loader.php:146
+#, fuzzy, php-format
+#| msgid "selected item"
+msgid "%1$d selected item"
 msgstr "valittu merkintä"
 
-#: core/Loader/Loader.php:136
-msgid "selected items"
+#: core/Loader/Loader.php:147
+#, fuzzy, php-format
+#| msgid "selected items"
+msgid "%1$d selected items"
 msgstr "valittua merkintää"
 
-#: core/Loader/Loader.php:138
+#: core/Loader/Loader.php:148
+#, fuzzy, php-format
+#| msgid "selected item"
+msgid "%1$d selected item out of %2$d"
+msgstr "valittu merkintä"
+
+#: core/Loader/Loader.php:149
+#, fuzzy, php-format
+#| msgid "selected items"
+msgid "%1$d selected items out of %2$d"
+msgstr "valittua merkintää"
+
+#: core/Loader/Loader.php:151
 msgid "Select a color"
-msgstr ""
+msgstr "Valitse väri"
 
-#: core/Loader/Loader.php:140
+#: core/Loader/Loader.php:153
 msgid "No options."
+msgstr "Ei vaihtoehtoja."
+
+#: core/Loader/Loader.php:155
+msgid "Show all options"
+msgstr "Näytä kaikki vaihtoehdot"
+
+#: core/Loader/Loader.php:157
+msgid "Search..."
+msgstr "Hae..."
+
+#: core/Loader/Loader.php:159
+msgctxt "WordPress media attachment"
+msgid "URL"
 msgstr ""
 
-#: core/Loader/Loader.php:142
-msgid "Show all options"
+#: core/Loader/Loader.php:160
+msgctxt "WordPress media attachment"
+msgid "Title"
 msgstr ""
+
+#: core/Loader/Loader.php:161
+msgctxt "WordPress media attachment"
+msgid "Artist"
+msgstr ""
+
+#: core/Loader/Loader.php:162
+msgctxt "WordPress media attachment"
+msgid "Album"
+msgstr ""
+
+#: core/Loader/Loader.php:163
+msgctxt "WordPress media attachment"
+msgid "Caption"
+msgstr ""
+
+#: core/Loader/Loader.php:164
+#, fuzzy
+#| msgid "Text"
+msgctxt "WordPress media attachment"
+msgid "Alt Text"
+msgstr "Teksti"
+
+#: core/Loader/Loader.php:165
+msgctxt "WordPress media attachment"
+msgid "Description"
+msgstr ""
+
+#: core/Loader/Loader.php:166
+msgctxt "WordPress media attachment"
+msgid "Close"
+msgstr ""
+
+#: core/Loader/Loader.php:167
+msgctxt "WordPress media attachment"
+msgid "Save"
+msgstr ""
+
+#: core/Loader/Loader.php:169
+msgctxt "oEmbed field"
+msgid "Not Found"
+msgstr ""
+
+#: core/Loader/Loader.php:171
+msgid "No files selected."
+msgstr ""
+
+#: core/Loader/Loader.php:172
+#, fuzzy
+#| msgctxt "sidebar"
+#| msgid "Add New"
+msgid "Add File"
+msgstr "Lisää uusi"
+
+#: core/Loader/Loader.php:173 core/Loader/Loader.php:177
+#, fuzzy
+#| msgid "Files"
+msgctxt "WordPress Media Browser"
+msgid "Files"
+msgstr "Tiedostot"
+
+#: core/Loader/Loader.php:174 core/Loader/Loader.php:178
+#, fuzzy
+#| msgid "Select File"
+msgctxt "WordPress Media Browser"
+msgid "Select File"
+msgstr "Valitse tiedosto"
+
+#: core/Loader/Loader.php:176
+msgid "Select File"
+msgstr "Valitse tiedosto"
+
+#: core/Loader/Loader.php:180
+msgid "Select Image"
+msgstr "Valitse kuva"
+
+#: core/Loader/Loader.php:181
+#, fuzzy
+#| msgid "Images"
+msgctxt "WordPress Media Browser"
+msgid "Images"
+msgstr "Kuvat"
+
+#: core/Loader/Loader.php:182
+#, fuzzy
+#| msgid "Select Image"
+msgctxt "WordPress Media Browser"
+msgid "Select Image"
+msgstr "Valitse kuva"
 
 #: core/REST_API/Router.php:287
 msgid "No option names provided"
-msgstr ""
+msgstr "Vaihtoehtoja ei ole määritetty"
 
 #: core/REST_API/Router.php:298
 msgid "Theme Options updated."
-msgstr ""
+msgstr "Teeman asetukset päivitetty."
 
 #: templates/Container/theme_options.php:29
 msgid "Actions"
@@ -221,6 +351,9 @@ msgstr "Tallenna muutokset"
 #: templates/Container/widget.php:5
 msgid "No options are available for this widget."
 msgstr "Tälle vimpaimelle ei ole valintoja."
+
+#~ msgid "out of"
+#~ msgstr "/"
 
 #~ msgid "Edit"
 #~ msgstr "Muokkaa"
@@ -261,9 +394,6 @@ msgstr "Tälle vimpaimelle ei ole valintoja."
 #~ msgid "no options"
 #~ msgstr "ei vaihtoehtoja"
 
-#~ msgid "Search..."
-#~ msgstr "Hae..."
-
 #~ msgid "Associated:"
 #~ msgstr "Liitetty:"
 
@@ -272,9 +402,6 @@ msgstr "Tälle vimpaimelle ei ole valintoja."
 
 #~ msgid "Visual"
 #~ msgstr "Graafinen"
-
-#~ msgid "Text"
-#~ msgstr "Teksti"
 
 #~ msgid "Show All Options"
 #~ msgstr "Näytä kaikki valinnat"

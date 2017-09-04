@@ -29,16 +29,22 @@ export const RichTextField = ({
 	handleChange
 }) => {
 	return <Field field={field}>
-		<RichTextEditor id={field.id} richEditing={field.rich_editing} mediaButtons={field.media_buttons} content={field.value} onChange={handleChange}>
-			<textarea
-				id={field.id}
-				className="wp-editor-area"
-				name={name}
-				value={field.value}
-				rows={field.rows}
-				onChange={handleChange}
-				disabled={!field.ui.is_visible}
-				{...field.attributes} />
+		<RichTextEditor
+			id={field.id}
+			richEditing={field.rich_editing}
+			mediaButtons={field.media_buttons}
+			content={field.value}
+			isDragging={field.ui.dragged}
+			onChange={handleChange}>
+				<textarea
+					id={field.id}
+					className="wp-editor-area"
+					name={name}
+					value={field.value}
+					rows={field.rows}
+					onChange={handleChange}
+					disabled={!field.ui.is_visible}
+					{...field.attributes} />
 		</RichTextEditor>
 	</Field>;
 };
@@ -75,7 +81,9 @@ export const enhance = compose(
 	/**
 	 * Attach the setup hooks.
 	 */
-	withSetup(),
+	withSetup({}, {
+		dragged: false
+	}),
 
 	/**
 	 * Pass some handlers to the component.

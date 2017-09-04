@@ -129,10 +129,10 @@ class Loader {
 				'complexNoRows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),
 				'complexMinNumRowsNotReached' => __( 'Minimum number of rows not reached (%1$d %2$s)', 'carbon-fields' ),
 				'complexMaxNumRowsExceeded' => __( 'Maximum number of rows exceeded (%1$d %2$s)', 'carbon-fields' ),
-				'complexAddButton' => __( 'Add %s', 'carbon-fields' ),
-				'complexCloneButton' => __( 'Clone', 'carbon-fields' ),
-				'complexRemoveButton' => __( 'Remove', 'carbon-fields' ),
-				'complexCollapseExpandButton' => __( 'Collapse/Expand', 'carbon-fields' ),
+				'complexAddButton' => _x( 'Add %s', 'Complex field', 'carbon-fields' ),
+				'complexCloneButton' => _x( 'Clone', 'Complex field', 'carbon-fields' ),
+				'complexRemoveButton' => _x( 'Remove', 'Complex field', 'carbon-fields' ),
+				'complexCollapseExpandButton' => _x( 'Collapse/Expand', 'Complex field', 'carbon-fields' ),
 
 				'messageFormValidationFailed' => __( 'Please fill out all fields correctly. ', 'carbon-fields' ),
 				'messageRequiredField' => __( 'This field is required. ', 'carbon-fields' ),
@@ -143,9 +143,10 @@ class Loader {
 				'selectTime' => __( 'Select Time', 'carbon-fields' ),
 				'selectDate' => __( 'Select Date', 'carbon-fields' ),
 
-				'associationOutOf' => __( 'out of', 'carbon-fields' ),
-				'associationSelectedItem' => __( 'selected item', 'carbon-fields' ),
-				'associationSelectedItems' => __( 'selected items', 'carbon-fields' ),
+				'associationSelectedItem' => __( '%1$d selected item', 'carbon-fields' ),
+				'associationSelectedItems' => __( '%1$d selected items', 'carbon-fields' ),
+				'associationSelectedItemOutOf' => __( '%1$d selected item out of %2$d', 'carbon-fields' ),
+				'associationSelectedItemsOutOf' => __( '%1$d selected items out of %2$d', 'carbon-fields' ),
 
 				'colorSelectColor' => __( 'Select a color', 'carbon-fields' ),
 
@@ -154,6 +155,31 @@ class Loader {
 				'setShowAll' => __( 'Show all options', 'carbon-fields' ),
 
 				'searchPlaceholder' => __( 'Search...', 'carbon-fields' ),
+
+				'editAttachmentUrl' => _x( 'URL', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentTitle' => _x( 'Title', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentArtist' => _x( 'Artist', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentAlbum' => _x( 'Album', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentCaption' => _x( 'Caption', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentAlt' => _x( 'Alt Text', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentDescription' => _x( 'Description', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentClose' => _x( 'Close', 'WordPress media attachment', 'carbon-fields' ),
+				'editAttachmentSave' => _x( 'Save', 'WordPress media attachment', 'carbon-fields' ),
+
+				'oembedNotFound' => _x( 'Not Found', 'oEmbed field', 'carbon-fields' ),
+
+				'mediaGalleryNoFiles' => __( 'No files selected.', 'carbon-fields' ),
+				'mediaGalleryButtonLabel' => __( 'Add File', 'carbon-fields' ),
+				'mediaGalleryBrowserTitle' => _x( 'Files', 'WordPress Media Browser', 'carbon-fields' ),
+				'mediaGalleryBrowserButtonLabel' => _x( 'Select File', 'WordPress Media Browser', 'carbon-fields' ),
+
+				'fileButtonLabel' => __( 'Select File', 'carbon-fields' ),
+				'fileBrowserTitle' => _x( 'Files', 'WordPress Media Browser', 'carbon-fields' ),
+				'fileBrowserButtonLabel' => _x( 'Select File', 'WordPress Media Browser', 'carbon-fields' ),
+
+				'imageButtonLabel' => __( 'Select Image', 'carbon-fields' ),
+				'imageBrowserTitle' => _x( 'Images', 'WordPress Media Browser', 'carbon-fields' ),
+				'imageBrowserButtonLabel' => _x( 'Select Image', 'WordPress Media Browser', 'carbon-fields' ),
 			),
 		) ) );
 	}

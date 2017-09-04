@@ -74,6 +74,14 @@ export const setupMediaBrowser = createAction('fields/SETUP_MEDIA_BROWSER');
 export const openMediaBrowser = createAction('fields/OPEN_MEDIA_BROWSER');
 
 /**
+ * Destroy the media browser associated with the field.
+ *
+ * @param  {String} fieldId
+ * @return {Object}
+ */
+export const destroyMediaBrowser = createAction('fields/DESTROY_MEDIA_BROWSER');
+
+/**
  * Add the field(s) to the store.
  *
  * @param  {Object} fields
@@ -162,6 +170,24 @@ export const expandComplexGroup = createAction('fields/EXPAND_COMPLEX_GROUP', (f
 export const collapseComplexGroup = createAction('fields/COLLAPSE_COMPLEX_GROUP', (fieldId, groupId) => ({ fieldId, groupId, collapsed: true }));
 
 /**
+ * Indicate when a complex group is dragged.
+ *
+ * @param  {String} fieldId
+ * @param  {String} groupId
+ * @return {Object}
+ */
+export const startComplexGroupDrag = createAction('fields/START_COMPLEX_GROUP_DRAG', (fieldId, groupId) => ({ fieldId, groupId }));
+
+/**
+ * Indicate when a complex group isn't dragged.
+ *
+ * @param  {String} fieldId
+ * @param  {String} groupId
+ * @return {Object}
+ */
+export const stopComplexGroupDrag = createAction('fields/STOP_COMPLEX_GROUP_DRAG', (fieldId, groupId) => ({ fieldId, groupId }));
+
+/**
  * Change the currently visible tab of the complex field.
  *
  * @param  {String} fieldId
@@ -176,7 +202,7 @@ export const switchComplexTab = createAction('fields/SWITCH_COMPLEX_TAB', (field
  * @param  {Object} attachments
  * @return {Object}
  */
-export const addMultipleFiles = createAction('fields/ADD_MULTIPLE_FILES', (fieldId, attachments) => ({ fieldId, attachments }));
+export const addMultipleFiles = createAction('fields/ADD_MULTIPLE_FILES', (fieldId, attachments, browser) => ({ fieldId, attachments, browser }));
 
 /**
  * Process the address through Google's geocoding service.

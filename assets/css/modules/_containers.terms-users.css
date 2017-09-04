@@ -5,13 +5,15 @@
 .carbon-term-container { width: 95%; }
 .carbon-term-container .carbon-field > label { color: #23282d; }
 
+.carbon-term-container .carbon-media-gallery-list-items .carbon-media-gallery-list-item { flex: 0 0 33%; }
+
 
 /*  Add Term  */
 
 .add-term-container .carbon-container { margin-left: -10px; margin-right: -10px; }
 
 .add-term-container .carbon-field > label { font-weight: normal; }
-.add-term-container .carbon-field .help-text { font-size: 13px; color: #666; }
+.add-term-container .carbon-field .carbon-help-text { font-size: 13px; color: #666; }
 
 .add-term-container > .carbon-tabs > .carbon-tabs-nav { background: transparent; }
 
@@ -20,6 +22,7 @@
 
 .carbon-user-container { max-width: 800px; }
 .carbon-user-container label { width: 200px; }
+.carbon-user-container .carbon-media-gallery-list-items .carbon-media-gallery-list-item { flex: 0 0 20%; }
 
 #profile-page .carbon-user-container textarea { width: 100%; max-width: none; }
 

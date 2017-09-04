@@ -1,6 +1,7 @@
 /**
  * The external dependencies.
  */
+import $ from 'jquery';
 import { take, call, put, fork, select } from 'redux-saga/effects';
 import { isEmpty, isNull, mapValues, defaultTo } from 'lodash';
 
@@ -32,7 +33,14 @@ function* syncStore(containers, meta) {
  * @return {void}
  */
 export function* workerSyncPostTemplate(containers) {
-	const channel = yield call(createSelectboxChannel, 'select#page_template');
+	const selector = 'select#page_template';
+	if ($(selector).length === 0) {
+		yield call(syncStore, containers, {
+			post_template: 'default',
+		});
+	}
+
+	const channel = yield call(createSelectboxChannel, selector);
 
 	while (true) {
 		const { value } = yield take(channel);

@@ -35,6 +35,8 @@
 @import url(modules/_fields.file);
 @import url(modules/_fields.html);
 @import url(modules/_fields.map);
+@import url(modules/_fields.media-gallery);
+@import url(modules/_fields.oembed);
 @import url(modules/_fields.radio-image);
 @import url(modules/_fields.rich);
 @import url(modules/_fields.separator);

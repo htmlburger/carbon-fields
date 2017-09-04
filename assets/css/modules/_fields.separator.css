@@ -4,7 +4,7 @@
 
 .carbon-separator { position: relative; padding: 14px 12px 15px; background: #fff; }
 
-.carbon-separator .help-text { padding-top: 5px; }
+.carbon-separator .carbon-help-text { padding-top: 5px; }
 
 .carbon-separator label { display: none; }
 
