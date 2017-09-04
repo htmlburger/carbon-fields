@@ -26,7 +26,6 @@ export const MediaGalleryListItem = ({
 	prefix,
 	index,
 	meta,
-	buttonLabel,
 	handleRemoveItem,
 	handleEditItem,
 	isSelected,

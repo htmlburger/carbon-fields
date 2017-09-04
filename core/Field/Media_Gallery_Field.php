@@ -9,18 +9,22 @@ use Carbon_Fields\Helper\Helper;
  * Set field class.
  * Allows to create a set of checkboxes where multiple can be selected.
  */
-class Media_Gallery_Field extends Predefined_Options_Field {
+class Media_Gallery_Field extends Field {
 
-	public $button_label = '';
+	/**
+	 * File type filter. Leave a blank string for any file type.
+	 * Available types: audio, video, image and all WordPress-recognized mime types
+	 *
+	 * @var string|array
+	 */
+	protected $file_type = '';
 
-	public $window_button_label = '';
-
-	public $window_label = '';
-
-	// empty for all types. available types: audio, video, image and all WordPress-recognized mime types
-	public $field_type = '';
-
-	public $value_type = 'id';
+	/**
+	 * What value to store
+	 *
+	 * @var string
+	 */
+	protected $value_type = 'id';
 
 	/**
 	 * Default field value
@@ -49,21 +53,12 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 	}
 
 	/**
-	 * Admin initialization actions
-	 */
-	public function admin_init() {
-		$this->button_label = __( 'Add File', 'carbon-fields' );
-		$this->window_button_label = __( 'Select File', 'carbon-fields' );
-		$this->window_label = __( 'Files', 'carbon-fields' );
-	}
-
-	/**
 	 * Change the type of the field
 	 *
 	 * @param string $type
 	 */
 	public function set_type( $type ) {
-		$this->field_type = $type;
+		$this->file_type = $type;
 		return $this;
 	}
 
@@ -85,17 +80,6 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 	public function set_duplicates_allowed( $allowed ) {
 		$this->duplicates_allowed = $allowed;
 		return $this;
-	}
-
-	/**
-	 * Specify whether to allow each entry to be selected multiple times.
-	 * Backwards-compatibility alias.
-	 *
-	 * @param  boolean $allow
-	 * @return Field   $this
-	 */
-	public function allow_duplicates( $allow = true ) {
-		return $this->set_duplicates_allowed( $allow );
 	}
 
 	/**
@@ -125,19 +109,17 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 	 */
 	protected function value_to_json() {
 		$value_set  = $this->get_value();
-		$value      = array();
 		$value_meta = array();
 
 		foreach ( $value_set as $attachment_id ) {
 			$attachment_id     = absint( $attachment_id );
 			$attachment_metata = Helper::get_attachment_metadata( $attachment_id, $this->value_type );
 
-			$value[] = $attachment_id;
 			$value_meta[ $attachment_id ] = $attachment_metata;
 		}
 
 		return array(
-			'value'      => $value,
+			'value'      => array_map( 'absint', $value_set ),
 			'value_meta' => $value_meta,
 		);
 	}
@@ -152,12 +134,8 @@ class Media_Gallery_Field extends Predefined_Options_Field {
 		$field_data = parent::to_json( $load );
 
 		$field_data = array_merge( $field_data, $this->value_to_json(), array(
-			'options'             => $this->parse_options( $this->get_options() ),
 			'value_type'          => $this->value_type,
-			'button_label'        => $this->button_label,
-			'window_label'        => $this->window_label,
-			'window_button_label' => $this->window_button_label,
-			'type_filter'         => $this->field_type,
+			'type_filter'         => $this->file_type,
 			'duplicates_allowed'  => $this->get_duplicates_allowed(),
 		) );
 

@@ -55,12 +55,10 @@ export const MediaGalleryField = ({
 				prefix={name}
 				items={field.value}
 				itemsMeta={field.value_meta}
-				buttonLabel={field.button_label}
 				handleOpenBrowser={openBrowser}
 				handleEditItem={openEditAttachment}
 				handleRemoveItem={handleRemoveItem}
 				openBrowser={openBrowser}
-				buttonLabel={field.button_label}
 				field={field}
 				sortableOptions={sortableOptions}
 				onSort={handleSortItems}
@@ -94,7 +92,6 @@ MediaGalleryField.propTypes = {
 			PropTypes.object,
 		]),
 		value_type: PropTypes.string,
-		button_label: PropTypes.string,
 		duplicates_allowed: PropTypes.boolean,
 		selected: PropTypes.oneOfType([
 			PropTypes.string,
@@ -230,7 +227,7 @@ export const enhance = compose(
 			}
 		},
 
-		closeEditAttachment: ({ field, updateField }) => {
+		closeEditAttachment: ({ field, updateField }) => () => {
 			updateField(field.id, {
 				selected: null,
 				edit: {

@@ -16,6 +16,7 @@ import {
 	isMatch,
 	sortBy
 } from 'lodash';
+import { vsprintf } from 'sprintf-js';
 
 /**
  * The internal dependencies.
@@ -57,25 +58,22 @@ export const AssociationField = ({
 	handleRemoveItem,
 	handleSortItems
 }) => {
+	let counterLabels = [carbonFieldsL10n.field.associationSelectedItem, carbonFieldsL10n.field.associationSelectedItems];
+	let counterLabelArgs = [field.value.length];
+	if (field.max !== -1) {
+		counterLabels = [carbonFieldsL10n.field.associationSelectedItemOutOf, carbonFieldsL10n.field.associationSelectedItemsOutOf];
+		counterLabelArgs.push(field.max);
+	}
+
+	const counterLabel = field.value.length === 1
+		? vsprintf(counterLabels[0], counterLabelArgs)
+		: vsprintf(counterLabels[1], counterLabelArgs);
+
 	return <Field field={field}>
 		<div className="carbon-association-container carbon-association">
 			<div className="selected-items-container">
 				<strong>
-					<span className="selected-counter">{field.value.length}</span>
-
-					<span className="selected-label">
-						{
-							field.value.length !== 1
-							? ` ${carbonFieldsL10n.field.associationSelectedItems}`
-							: ` ${carbonFieldsL10n.field.associationSelectedItem}`
-						}
-					</span>
-
-					{
-						field.max !== -1
-						? <span className="remaining"> {carbonFieldsL10n.field.associationOutOf} {field.max}</span>
-						: null
-					}
+					<span className="selected-counter">{counterLabel}</span>
 				</strong>
 			</div>
 
