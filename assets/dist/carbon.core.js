@@ -34,9 +34,6 @@ this["carbon.core"] =
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = installedModules;
 /******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
 /******/ 	// define getter function for harmony exports
 /******/ 	__webpack_require__.d = function(exports, name, getter) {
 /******/ 		if(!__webpack_require__.o(exports, name)) {
@@ -859,6 +856,232 @@ exports.default = enhance(NoOptions);
 
 /***/ }),
 
+/***/ "0XFg":
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
+
+!function() {
+    'use strict'
+
+    var re = {
+        not_string: /[^s]/,
+        not_bool: /[^t]/,
+        not_type: /[^T]/,
+        not_primitive: /[^v]/,
+        number: /[diefg]/,
+        numeric_arg: /[bcdiefguxX]/,
+        json: /[j]/,
+        not_json: /[^j]/,
+        text: /^[^\x25]+/,
+        modulo: /^\x25{2}/,
+        placeholder: /^\x25(?:([1-9]\d*)\$|\(([^\)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-gijostTuvxX])/,
+        key: /^([a-z_][a-z_\d]*)/i,
+        key_access: /^\.([a-z_][a-z_\d]*)/i,
+        index_access: /^\[(\d+)\]/,
+        sign: /^[\+\-]/
+    }
+
+    function sprintf(key) {
+        // `arguments` is not an array, but should be fine for this call
+        return sprintf_format(sprintf_parse(key), arguments)
+    }
+
+    function vsprintf(fmt, argv) {
+        return sprintf.apply(null, [fmt].concat(argv || []))
+    }
+
+    function sprintf_format(parse_tree, argv) {
+        var cursor = 1, tree_length = parse_tree.length, arg, output = '', i, k, match, pad, pad_character, pad_length, is_positive, sign
+        for (i = 0; i < tree_length; i++) {
+            if (typeof parse_tree[i] === 'string') {
+                output += parse_tree[i]
+            }
+            else if (Array.isArray(parse_tree[i])) {
+                match = parse_tree[i] // convenience purposes only
+                if (match[2]) { // keyword argument
+                    arg = argv[cursor]
+                    for (k = 0; k < match[2].length; k++) {
+                        if (!arg.hasOwnProperty(match[2][k])) {
+                            throw new Error(sprintf('[sprintf] property "%s" does not exist', match[2][k]))
+                        }
+                        arg = arg[match[2][k]]
+                    }
+                }
+                else if (match[1]) { // positional argument (explicit)
+                    arg = argv[match[1]]
+                }
+                else { // positional argument (implicit)
+                    arg = argv[cursor++]
+                }
+
+                if (re.not_type.test(match[8]) && re.not_primitive.test(match[8]) && arg instanceof Function) {
+                    arg = arg()
+                }
+
+                if (re.numeric_arg.test(match[8]) && (typeof arg !== 'number' && isNaN(arg))) {
+                    throw new TypeError(sprintf('[sprintf] expecting number but found %T', arg))
+                }
+
+                if (re.number.test(match[8])) {
+                    is_positive = arg >= 0
+                }
+
+                switch (match[8]) {
+                    case 'b':
+                        arg = parseInt(arg, 10).toString(2)
+                        break
+                    case 'c':
+                        arg = String.fromCharCode(parseInt(arg, 10))
+                        break
+                    case 'd':
+                    case 'i':
+                        arg = parseInt(arg, 10)
+                        break
+                    case 'j':
+                        arg = JSON.stringify(arg, null, match[6] ? parseInt(match[6]) : 0)
+                        break
+                    case 'e':
+                        arg = match[7] ? parseFloat(arg).toExponential(match[7]) : parseFloat(arg).toExponential()
+                        break
+                    case 'f':
+                        arg = match[7] ? parseFloat(arg).toFixed(match[7]) : parseFloat(arg)
+                        break
+                    case 'g':
+                        arg = match[7] ? String(Number(arg.toPrecision(match[7]))) : parseFloat(arg)
+                        break
+                    case 'o':
+                        arg = (parseInt(arg, 10) >>> 0).toString(8)
+                        break
+                    case 's':
+                        arg = String(arg)
+                        arg = (match[7] ? arg.substring(0, match[7]) : arg)
+                        break
+                    case 't':
+                        arg = String(!!arg)
+                        arg = (match[7] ? arg.substring(0, match[7]) : arg)
+                        break
+                    case 'T':
+                        arg = Object.prototype.toString.call(arg).slice(8, -1).toLowerCase()
+                        arg = (match[7] ? arg.substring(0, match[7]) : arg)
+                        break
+                    case 'u':
+                        arg = parseInt(arg, 10) >>> 0
+                        break
+                    case 'v':
+                        arg = arg.valueOf()
+                        arg = (match[7] ? arg.substring(0, match[7]) : arg)
+                        break
+                    case 'x':
+                        arg = (parseInt(arg, 10) >>> 0).toString(16)
+                        break
+                    case 'X':
+                        arg = (parseInt(arg, 10) >>> 0).toString(16).toUpperCase()
+                        break
+                }
+                if (re.json.test(match[8])) {
+                    output += arg
+                }
+                else {
+                    if (re.number.test(match[8]) && (!is_positive || match[3])) {
+                        sign = is_positive ? '+' : '-'
+                        arg = arg.toString().replace(re.sign, '')
+                    }
+                    else {
+                        sign = ''
+                    }
+                    pad_character = match[4] ? match[4] === '0' ? '0' : match[4].charAt(1) : ' '
+                    pad_length = match[6] - (sign + arg).length
+                    pad = match[6] ? (pad_length > 0 ? pad_character.repeat(pad_length) : '') : ''
+                    output += match[5] ? sign + arg + pad : (pad_character === '0' ? sign + pad + arg : pad + sign + arg)
+                }
+            }
+        }
+        return output
+    }
+
+    var sprintf_cache = Object.create(null)
+
+    function sprintf_parse(fmt) {
+        if (sprintf_cache[fmt]) {
+            return sprintf_cache[fmt]
+        }
+
+        var _fmt = fmt, match, parse_tree = [], arg_names = 0
+        while (_fmt) {
+            if ((match = re.text.exec(_fmt)) !== null) {
+                parse_tree.push(match[0])
+            }
+            else if ((match = re.modulo.exec(_fmt)) !== null) {
+                parse_tree.push('%')
+            }
+            else if ((match = re.placeholder.exec(_fmt)) !== null) {
+                if (match[2]) {
+                    arg_names |= 1
+                    var field_list = [], replacement_field = match[2], field_match = []
+                    if ((field_match = re.key.exec(replacement_field)) !== null) {
+                        field_list.push(field_match[1])
+                        while ((replacement_field = replacement_field.substring(field_match[0].length)) !== '') {
+                            if ((field_match = re.key_access.exec(replacement_field)) !== null) {
+                                field_list.push(field_match[1])
+                            }
+                            else if ((field_match = re.index_access.exec(replacement_field)) !== null) {
+                                field_list.push(field_match[1])
+                            }
+                            else {
+                                throw new SyntaxError('[sprintf] failed to parse named argument key')
+                            }
+                        }
+                    }
+                    else {
+                        throw new SyntaxError('[sprintf] failed to parse named argument key')
+                    }
+                    match[2] = field_list
+                }
+                else {
+                    arg_names |= 2
+                }
+                if (arg_names === 3) {
+                    throw new Error('[sprintf] mixing positional and named placeholders is not (yet) supported')
+                }
+                parse_tree.push(match)
+            }
+            else {
+                throw new SyntaxError('[sprintf] unexpected placeholder')
+            }
+            _fmt = _fmt.substring(match[0].length)
+        }
+        return sprintf_cache[fmt] = parse_tree
+    }
+
+    /**
+     * export to either browser or node.js
+     */
+    /* eslint-disable quote-props */
+    if (true) {
+        exports['sprintf'] = sprintf
+        exports['vsprintf'] = vsprintf
+    }
+    if (typeof window !== 'undefined') {
+        window['sprintf'] = sprintf
+        window['vsprintf'] = vsprintf
+
+        if (true) {
+            !(__WEBPACK_AMD_DEFINE_RESULT__ = function() {
+                return {
+                    'sprintf': sprintf,
+                    'vsprintf': vsprintf
+                }
+            }.call(exports, __webpack_require__, exports, module),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))
+        }
+    }
+    /* eslint-enable quote-props */
+}()
+
+
+/***/ }),
+
 /***/ "0Ypz":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1585,6 +1808,13 @@ exports.default = AssociationList;
 
 /***/ }),
 
+/***/ "5nY2":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("5nY2");
+
+/***/ }),
+
 /***/ "5v7t":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1687,6 +1917,136 @@ module.exports = (__webpack_require__("B3Oe"))("77Pl");
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__("B3Oe"))("7KvD");
+
+/***/ }),
+
+/***/ "7Ot0":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.MediaGalleryListItem = undefined;
+
+var _react = __webpack_require__("U7vG");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__("HW6M");
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _recompose = __webpack_require__("zpMW");
+
+var _helpers = __webpack_require__("hKI6");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Render a file upload field with a preview thumbnail of the uploaded file.
+ *
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {Function}      props.handleOpenBrowser
+ * @param  {Function}      props.handleRemoveItem
+ * @return {React.Element}
+ */
+var MediaGalleryListItem = exports.MediaGalleryListItem = function MediaGalleryListItem(_ref) {
+	var item = _ref.item,
+	    prefix = _ref.prefix,
+	    index = _ref.index,
+	    meta = _ref.meta,
+	    handleRemoveItem = _ref.handleRemoveItem,
+	    handleEditItem = _ref.handleEditItem,
+	    isSelected = _ref.isSelected;
+
+	return _react2.default.createElement(
+		'li',
+		{ className: (0, _classnames2.default)('carbon-media-gallery-list-item', { 'carbon-selected': isSelected }), key: index, id: index },
+		_react2.default.createElement(
+			'div',
+			{ className: 'carbon-attachment' },
+			_react2.default.createElement('input', {
+				type: 'hidden',
+				id: item,
+				name: prefix + '[' + index + ']',
+				value: item,
+				readOnly: true }),
+			_react2.default.createElement(
+				'div',
+				{ className: (0, _classnames2.default)('carbon-description', { 'hidden': !item }) },
+				_react2.default.createElement(
+					'div',
+					{ className: (0, _classnames2.default)('carbon-attachment-preview', { 'hidden': !meta.thumb_url }) },
+					_react2.default.createElement('img', { src: meta.thumb_url, className: 'thumbnail-image' })
+				),
+				_react2.default.createElement('input', {
+					type: 'text',
+					className: 'carbon-attachment-file-name',
+					value: meta.file_url,
+					readOnly: true })
+			),
+			_react2.default.createElement('span', { className: 'carbon-file-remove dashicons-before dashicons-no-alt', onClick: handleRemoveItem }),
+			_react2.default.createElement('span', { className: 'carbon-edit-attachment-button dashicons-before dashicons-edit', onClick: handleEditItem })
+		)
+	);
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+
+
+/**
+ * The internal dependencies.
+ */
+/**
+ * The external dependencies.
+ */
+MediaGalleryListItem.propTypes = {
+	name: _propTypes2.default.string,
+	item: _propTypes2.default.oneOfType([_propTypes2.default.number, _propTypes2.default.string]),
+	meta: _propTypes2.default.shape({
+		thumb_url: _propTypes2.default.string,
+		default_thumb_url: _propTypes2.default.string,
+		file_ext: _propTypes2.default.string,
+		file_type: _propTypes2.default.string,
+		file_name: _propTypes2.default.string,
+		file_url: _propTypes2.default.string
+	}),
+	handleRemoveItem: _propTypes2.default.func,
+	handleEditItem: _propTypes2.default.func
+};
+
+var enhance = (0, _recompose.withHandlers)({
+	handleRemoveItem: function handleRemoveItem(_ref2) {
+		var index = _ref2.index,
+		    onRemoveClick = _ref2.onRemoveClick;
+		return (0, _helpers.preventDefault)(function (e) {
+			onRemoveClick(index);
+		});
+	},
+
+	handleEditItem: function handleEditItem(_ref3) {
+		var item = _ref3.item,
+		    onEditClick = _ref3.onEditClick;
+		return (0, _helpers.preventDefault)(function (e) {
+			onEditClick(item);
+		});
+	}
+});
+
+exports.default = enhance(MediaGalleryListItem);
 
 /***/ }),
 
@@ -1835,7 +2195,9 @@ var TYPE_HEADER_SCRIPTS = exports.TYPE_HEADER_SCRIPTS = 'header_scripts';
 var TYPE_HIDDEN = exports.TYPE_HIDDEN = 'hidden';
 var TYPE_HTML = exports.TYPE_HTML = 'html';
 var TYPE_IMAGE = exports.TYPE_IMAGE = 'image';
+var TYPE_MEDIA_GALLERY = exports.TYPE_MEDIA_GALLERY = 'media_gallery';
 var TYPE_MAP = exports.TYPE_MAP = 'map';
+var TYPE_OEMBED = exports.TYPE_OEMBED = 'oembed';
 var TYPE_RADIO = exports.TYPE_RADIO = 'radio';
 var TYPE_RADIO_IMAGE = exports.TYPE_RADIO_IMAGE = 'radio_image';
 var TYPE_RICH_TEXT = exports.TYPE_RICH_TEXT = 'rich_text';
@@ -2148,6 +2510,325 @@ exports.default = (0, _recompose.setStatic)('type', [_constants.TYPE_COLOR])(enh
 
 /***/ }),
 
+/***/ "8yf1":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.enhance = exports.MediaGalleryField = undefined;
+
+var _jquery = __webpack_require__("0iPh");
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _react = __webpack_require__("U7vG");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _classnames = __webpack_require__("HW6M");
+
+var _classnames2 = _interopRequireDefault(_classnames);
+
+var _recompose = __webpack_require__("zpMW");
+
+var _lodash = __webpack_require__("M4fF");
+
+var _field = __webpack_require__("M6Uh");
+
+var _field2 = _interopRequireDefault(_field);
+
+var _list = __webpack_require__("y0rb");
+
+var _list2 = _interopRequireDefault(_list);
+
+var _editAttachment = __webpack_require__("ET0f");
+
+var _editAttachment2 = _interopRequireDefault(_editAttachment);
+
+var _withStore = __webpack_require__("0yqe");
+
+var _withStore2 = _interopRequireDefault(_withStore);
+
+var _withSetup = __webpack_require__("8ctJ");
+
+var _withSetup2 = _interopRequireDefault(_withSetup);
+
+var _actions = __webpack_require__("HRbf");
+
+var _constants = __webpack_require__("8Hlw");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Render a file upload field with a preview thumbnail of the uploaded file.
+ *
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {Function}      props.openBrowser
+ * @param  {Function}      props.handleRemoveItem
+ * @return {React.Element}
+ */
+var MediaGalleryField = exports.MediaGalleryField = function MediaGalleryField(_ref) {
+	var name = _ref.name,
+	    field = _ref.field,
+	    openBrowser = _ref.openBrowser,
+	    sortableOptions = _ref.sortableOptions,
+	    handleSortItems = _ref.handleSortItems,
+	    handleRemoveItem = _ref.handleRemoveItem,
+	    openEditAttachment = _ref.openEditAttachment,
+	    closeEditAttachment = _ref.closeEditAttachment,
+	    updateField = _ref.updateField;
+
+	return _react2.default.createElement(
+		_field2.default,
+		{ field: field },
+		_react2.default.createElement(
+			'div',
+			{ className: 'carbon-media-gallery' },
+			_react2.default.createElement(_list2.default, {
+				prefix: name,
+				items: field.value,
+				itemsMeta: field.value_meta,
+				handleOpenBrowser: openBrowser,
+				handleEditItem: openEditAttachment,
+				handleRemoveItem: handleRemoveItem,
+				openBrowser: openBrowser,
+				field: field,
+				sortableOptions: sortableOptions,
+				onSort: handleSortItems
+			}),
+			field.editMode === 'inline' && field.selected ? _react2.default.createElement(_editAttachment2.default, {
+				field: field,
+				attachment: field.selected,
+				attachmentMeta: field.value_meta[field.selected],
+				updateField: updateField,
+				handleCancelEdit: closeEditAttachment
+			}) : ''
+		)
+	);
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+
+
+/**
+ * The internal dependencies.
+ */
+/**
+ * The external dependencies.
+ */
+MediaGalleryField.propTypes = {
+	name: _propTypes2.default.string,
+	field: _propTypes2.default.shape({
+		value: _propTypes2.default.array,
+		value_meta: _propTypes2.default.oneOfType([_propTypes2.default.array, _propTypes2.default.object]),
+		value_type: _propTypes2.default.string,
+		duplicates_allowed: _propTypes2.default.boolean,
+		selected: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]),
+		editMode: _propTypes2.default.string,
+		edit: _propTypes2.default.shape({
+			id: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]),
+			title: _propTypes2.default.string,
+			caption: _propTypes2.default.string,
+			alt: _propTypes2.default.string,
+			description: _propTypes2.default.string,
+			artist: _propTypes2.default.string,
+			album: _propTypes2.default.string
+		})
+	}),
+	openBrowser: _propTypes2.default.func,
+	handleRemoveItem: _propTypes2.default.func
+};
+
+/**
+ * The enhancer.
+ *
+ * @type {Function}
+ */
+var enhance = exports.enhance = (0, _recompose.compose)(
+/**
+ * Connect to the Redux store.
+ */
+(0, _withStore2.default)(undefined, {
+	setupMediaBrowser: _actions.setupMediaBrowser,
+	openMediaBrowser: _actions.openMediaBrowser
+}),
+
+/**
+ * Attach the setup hooks.
+ */
+(0, _withSetup2.default)({
+	componentDidMount: function componentDidMount() {
+		var _props = this.props,
+		    field = _props.field,
+		    ui = _props.ui,
+		    setupField = _props.setupField,
+		    setupValidation = _props.setupValidation,
+		    setupMediaBrowser = _props.setupMediaBrowser;
+
+
+		setupField(field.id, field.type, ui);
+		setupMediaBrowser(field.id);
+
+		if (field.required) {
+			setupValidation(field.id, _constants.VALIDATION_BASE);
+		}
+	}
+}),
+
+/**
+ * Pass some handlers to the component.
+ */
+(0, _recompose.withHandlers)({
+	openBrowser: function openBrowser(_ref2) {
+		var field = _ref2.field,
+		    openMediaBrowser = _ref2.openMediaBrowser;
+		return function (index) {
+			if ((0, _lodash.isNumber)(index)) {
+				field.selected = index;
+			}
+
+			openMediaBrowser(field.id);
+		};
+	},
+
+	handleSortItems: function handleSortItems(_ref3) {
+		var field = _ref3.field,
+		    setFieldValue = _ref3.setFieldValue;
+		return function (newItems) {
+			newItems = newItems.map(function (item) {
+				return parseInt(item, 10);
+			});
+
+			var index = -1;
+			var newValue = (0, _lodash.sortBy)(field.value, function (item) {
+				index++;
+
+				return newItems.indexOf(index);
+			});
+
+			setFieldValue(field.id, newValue);
+		};
+	},
+
+	handleRemoveItem: function handleRemoveItem(_ref4) {
+		var field = _ref4.field,
+		    setFieldValue = _ref4.setFieldValue,
+		    updateField = _ref4.updateField,
+		    resetEditAttachment = _ref4.resetEditAttachment;
+		return function (index) {
+			field.value.splice(index, 1);
+
+			setFieldValue(field.id, field.value);
+
+			updateField(field.id, {
+				selected: null,
+				edit: {
+					id: '',
+					title: '',
+					alt: '',
+					caption: '',
+					description: '',
+					artist: '',
+					album: ''
+				}
+			});
+		};
+	},
+
+	openEditAttachment: function openEditAttachment(_ref5) {
+		var field = _ref5.field,
+		    updateField = _ref5.updateField,
+		    openMediaBrowser = _ref5.openMediaBrowser;
+		return function (item) {
+			var $container = (0, _jquery2.default)('#' + field.parent);
+
+			// For big containers and non-mobile devices, use the inline edit
+			// Otherwise, fallback to Media Browser
+
+			if ($container.outerWidth() > 767) {
+				var attachmentMeta = field.value_meta[item];
+
+				updateField(field.id, {
+					selected: item,
+					editMode: 'inline',
+					edit: {
+						id: parseInt(item, 10),
+						title: attachmentMeta.title,
+						alt: attachmentMeta.alt,
+						caption: attachmentMeta.caption,
+						description: attachmentMeta.description,
+						artist: attachmentMeta.artist || '',
+						album: attachmentMeta.album || ''
+					}
+				});
+			} else {
+				updateField(field.id, {
+					selected: item,
+					editMode: 'modal'
+				});
+
+				openMediaBrowser(field.id);
+			}
+		};
+	},
+
+	closeEditAttachment: function closeEditAttachment(_ref6) {
+		var field = _ref6.field,
+		    updateField = _ref6.updateField;
+		return function () {
+			updateField(field.id, {
+				selected: null,
+				edit: {
+					id: '',
+					title: '',
+					alt: '',
+					caption: '',
+					description: '',
+					artist: '',
+					album: ''
+				}
+			});
+		};
+	}
+}),
+
+/**
+ * Pass some props to the component.
+ */
+(0, _recompose.withProps)(function (_ref7) {
+	var field = _ref7.field,
+	    collapseComplexGroup = _ref7.collapseComplexGroup;
+
+	var sortableOptions = {
+		handle: '.carbon-description',
+		items: '.carbon-media-gallery-list-item',
+		placeholder: 'carbon-media-gallery-list-item ui-placeholder-highlight',
+		forcePlaceholderSize: true
+	};
+
+	return {
+		sortableOptions: sortableOptions
+	};
+}));
+
+exports.default = (0, _recompose.setStatic)('type', [_constants.TYPE_MEDIA_GALLERY])(enhance(MediaGalleryField));
+
+/***/ }),
+
 /***/ "94C5":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2279,7 +2960,7 @@ var _marked = [workerInit, workerFormSubmit, workerItemExpand, foreman].map(_reg
  * @return {void}
  */
 function workerInit() {
-	var channel, _ref, data, container;
+	var channel, _ref, data, $containers, i, $container;
 
 	return _regenerator2.default.wrap(function workerInit$(_context) {
 		while (1) {
@@ -2293,7 +2974,7 @@ function workerInit() {
 
 				case 3:
 					if (false) {
-						_context.next = 16;
+						_context.next = 22;
 						break;
 					}
 
@@ -2303,28 +2984,42 @@ function workerInit() {
 				case 6:
 					_ref = _context.sent;
 					data = _ref.data;
-					container = (0, _jquery2.default)(data).find('[data-json]').data('json');
+					$containers = (0, _jquery2.default)(data).find('[data-json]');
 
 					// Close the channel since we don't have any
 					// registered containers.
 
-					if (container) {
+					if (!($containers.length < 1)) {
 						_context.next = 12;
 						break;
 					}
 
 					channel.close();
-					return _context.abrupt('break', 16);
+					return _context.abrupt('break', 22);
 
 				case 12:
-					_context.next = 14;
-					return (0, _effects.put)((0, _actions.receiveContainer)(container, false));
+					i = 0;
 
-				case 14:
+				case 13:
+					if (!(i < $containers.length)) {
+						_context.next = 20;
+						break;
+					}
+
+					$container = (0, _jquery2.default)($containers[i]);
+					_context.next = 17;
+					return (0, _effects.put)((0, _actions.receiveContainer)($container.data('json'), false));
+
+				case 17:
+					i++;
+					_context.next = 13;
+					break;
+
+				case 20:
 					_context.next = 3;
 					break;
 
-				case 16:
+				case 22:
 				case 'end':
 					return _context.stop();
 			}
@@ -2900,6 +3595,13 @@ function foreman(store) {
 
 /***/ }),
 
+/***/ "Ars9":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("Ars9");
+
+/***/ }),
+
 /***/ "B3Oe":
 /***/ (function(module, exports) {
 
@@ -3398,6 +4100,348 @@ exports.default = ContainerNonce;
 
 /***/ }),
 
+/***/ "ET0f":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.EditAttachment = undefined;
+
+var _jquery = __webpack_require__("0iPh");
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _react = __webpack_require__("U7vG");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _recompose = __webpack_require__("zpMW");
+
+var _field = __webpack_require__("M6Uh");
+
+var _field2 = _interopRequireDefault(_field);
+
+var _helpers = __webpack_require__("hKI6");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Render a file upload field with a preview thumbnail of the uploaded file.
+ *
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {Function}      props.handleRemoveItem
+ * @return {React.Element}
+ */
+
+
+/**
+ * The internal dependencies.
+ */
+/**
+ * The external dependencies.
+ */
+var EditAttachment = exports.EditAttachment = function EditAttachment(_ref) {
+	var field = _ref.field,
+	    attachment = _ref.attachment,
+	    attachmentMeta = _ref.attachmentMeta,
+	    saveAttachment = _ref.saveAttachment,
+	    updateEditField = _ref.updateEditField,
+	    onCancelClick = _ref.onCancelClick,
+	    handleSelect = _ref.handleSelect;
+
+	return _react2.default.createElement(
+		'div',
+		{ className: 'carbon-edit-attachment' },
+		_react2.default.createElement(
+			'div',
+			{ className: 'carbon-edit-attachment-inner' },
+			_react2.default.createElement(
+				'div',
+				{ className: 'carbon-edit-attachment-head' },
+				_react2.default.createElement(
+					'div',
+					{ className: 'carbon-edit-attachment-thumbnail' },
+					_react2.default.createElement('img', { src: attachmentMeta.thumb_url })
+				),
+				_react2.default.createElement(
+					'div',
+					{ className: 'carbon-edit-attachment-meta' },
+					_react2.default.createElement(
+						'p',
+						null,
+						_react2.default.createElement(
+							'strong',
+							null,
+							attachmentMeta.file_name
+						)
+					),
+					_react2.default.createElement(
+						'p',
+						null,
+						attachmentMeta.date
+					),
+					function () {
+						if (attachmentMeta.file_type === 'image') {
+							return _react2.default.createElement(
+								'p',
+								null,
+								attachmentMeta.width,
+								' x ',
+								attachmentMeta.height,
+								' (',
+								attachmentMeta.filesize,
+								')'
+							);
+						} else if (attachmentMeta.file_type === 'audio') {
+							return _react2.default.createElement(
+								'p',
+								null,
+								'Length: ',
+								attachmentMeta.length
+							);
+						}
+					}()
+				)
+			),
+			_react2.default.createElement(
+				'div',
+				{ className: 'carbon-edit-attachment-body' },
+				_react2.default.createElement(
+					'fieldset',
+					{ disabled: field.status === 'loading' },
+					_react2.default.createElement(
+						'p',
+						null,
+						_react2.default.createElement(
+							'label',
+							{ htmlFor: 'attachment-url' },
+							carbonFieldsL10n.field.editAttachmentUrl
+						),
+						_react2.default.createElement('input', { type: 'text', id: 'attachment-url', name: 'url', value: attachmentMeta.file_url, readOnly: true, onFocus: handleSelect })
+					),
+					_react2.default.createElement(
+						'p',
+						null,
+						_react2.default.createElement(
+							'label',
+							{ htmlFor: 'attachment-title' },
+							carbonFieldsL10n.field.editAttachmentTitle
+						),
+						_react2.default.createElement('input', { type: 'text', id: 'attachment-title', name: 'title', onChange: updateEditField, value: field.edit.title })
+					),
+					function () {
+						if (attachmentMeta.file_type === 'audio') {
+							return _react2.default.createElement(
+								'p',
+								null,
+								_react2.default.createElement(
+									'label',
+									{ htmlFor: 'attachment-artist' },
+									carbonFieldsL10n.field.editAttachmentArtist
+								),
+								_react2.default.createElement('input', { type: 'text', id: 'attachment-artist', name: 'artist', onChange: updateEditField, value: field.edit.artist })
+							);
+						}
+					}(),
+					function () {
+						if (attachmentMeta.file_type === 'audio') {
+							return _react2.default.createElement(
+								'p',
+								null,
+								_react2.default.createElement(
+									'label',
+									{ htmlFor: 'attachment-album' },
+									carbonFieldsL10n.field.editAttachmentAlbum
+								),
+								_react2.default.createElement('input', { type: 'text', id: 'attachment-album', name: 'album', onChange: updateEditField, value: field.edit.album })
+							);
+						}
+					}(),
+					_react2.default.createElement(
+						'p',
+						null,
+						_react2.default.createElement(
+							'label',
+							{ htmlFor: 'attachment-caption' },
+							carbonFieldsL10n.field.editAttachmentCaption
+						),
+						_react2.default.createElement('textarea', { id: 'attachment-caption', name: 'caption', onChange: updateEditField, value: field.edit.caption })
+					),
+					function () {
+						if (attachmentMeta.file_type === 'image') {
+							return _react2.default.createElement(
+								'p',
+								null,
+								_react2.default.createElement(
+									'label',
+									{ htmlFor: 'attachment-alt-text' },
+									carbonFieldsL10n.field.editAttachmentAlt
+								),
+								_react2.default.createElement('input', { type: 'text', id: 'attachment-alt-text', name: 'alt', onChange: updateEditField, value: field.edit.alt })
+							);
+						}
+					}(),
+					_react2.default.createElement(
+						'p',
+						null,
+						_react2.default.createElement(
+							'label',
+							{ htmlFor: 'attachment-description' },
+							carbonFieldsL10n.field.editAttachmentDescription
+						),
+						_react2.default.createElement('textarea', { id: 'attachment-description', name: 'description', onChange: updateEditField, value: field.edit.description })
+					)
+				)
+			)
+		),
+		_react2.default.createElement(
+			'div',
+			{ className: 'carbon-edit-attachment-footer' },
+			_react2.default.createElement(
+				'button',
+				{ type: 'button', className: 'button button-secondary button-medium', onClick: onCancelClick },
+				carbonFieldsL10n.field.editAttachmentClose
+			),
+			_react2.default.createElement(
+				'span',
+				{ className: 'carbon-edit-attachment-save' },
+				field.edit.status === 'loading' ? _react2.default.createElement('span', { className: 'spinner is-active' }) : '',
+				_react2.default.createElement('input', { type: 'submit', className: 'button button-primary button-medium', value: carbonFieldsL10n.field.editAttachmentSave, onClick: saveAttachment })
+			)
+		)
+	);
+};
+
+/**
+ * The enhancer.
+ *
+ * @type {Function}
+ */
+var enhance = (0, _recompose.withHandlers)({
+	onCancelClick: function onCancelClick(_ref2) {
+		var handleCancelEdit = _ref2.handleCancelEdit;
+		return (0, _helpers.preventDefault)(function (e) {
+			handleCancelEdit();
+		});
+	},
+
+	handleSelect: function handleSelect() {
+		return function (_ref3) {
+			var target = _ref3.target;
+
+			target.select();
+		};
+	},
+
+	updateEditField: function updateEditField(_ref4) {
+		var field = _ref4.field,
+		    updateField = _ref4.updateField;
+		return function (_ref5) {
+			var target = _ref5.target;
+			var name = target.name,
+			    value = target.value;
+			var edit = field.edit;
+
+
+			edit[name] = value;
+
+			updateField(field.id, {
+				edit: edit
+			});
+		};
+	},
+
+	saveAttachment: function saveAttachment(_ref6) {
+		var field = _ref6.field,
+		    attachment = _ref6.attachment,
+		    attachmentMeta = _ref6.attachmentMeta,
+		    updateField = _ref6.updateField;
+		return (0, _helpers.preventDefault)(function (e) {
+			var edit = field.edit;
+			var file_type = attachmentMeta.file_type;
+
+
+			edit.status = 'loading';
+			updateField(field.id, { edit: edit });
+
+			var postData = {
+				action: 'save-attachment',
+				id: attachment,
+				nonce: attachmentMeta.edit_nonce,
+				changes: {
+					title: edit.title,
+					caption: edit.caption,
+					description: edit.description
+				}
+			};
+
+			if (file_type === 'image') {
+				postData.changes.alt = edit.alt;
+			}
+
+			if (file_type === 'audio') {
+				postData.changes.artist = edit.artist;
+				postData.changes.album = edit.album;
+			}
+
+			var request = _jquery2.default.post(window.ajaxurl, postData);
+
+			request.done(function (_ref7) {
+				var success = _ref7.success;
+
+				if (!success) {
+					alert('An error occured. Please try again later..');
+					return;
+				}
+
+				var value_meta = field.value_meta;
+
+
+				value_meta[attachment].title = edit.title;
+				value_meta[attachment].caption = edit.caption;
+				value_meta[attachment].description = edit.description;
+
+				if (file_type === 'image') {
+					value_meta[attachment].alt = edit.alt;
+				}
+
+				if (file_type === 'audio') {
+					value_meta[attachment].artist = edit.artist;
+					value_meta[attachment].album = edit.album;
+				}
+
+				updateField(field.id, {
+					value_meta: value_meta
+				});
+			});
+
+			request.fail(function () {
+				alert('An error occured. Please try again later..');
+			});
+
+			request.always(function () {
+				edit.status = '';
+
+				updateField(field.id, { edit: edit });
+			});
+		});
+	}
+});
+
+exports.default = enhance(EditAttachment);
+
+/***/ }),
+
 /***/ "EqjI":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3460,10 +4504,45 @@ exports.default = (0, _extends3.default)({}, (0, _base2.default)(operators), {
 
 /***/ }),
 
+/***/ "F19T":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright 2014-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
+
+
+var ReactServerBatchingStrategy = {
+  isBatchingUpdates: false,
+  batchedUpdates: function (callback) {
+    // Don't do anything here. During the server rendering we don't want to
+    // schedule any updates. We will simply ignore them.
+  }
+};
+
+module.exports = ReactServerBatchingStrategy;
+
+/***/ }),
+
 /***/ "FeBl":
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__("B3Oe"))("FeBl");
+
+/***/ }),
+
+/***/ "G1ow":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("G1ow");
 
 /***/ }),
 
@@ -3703,6 +4782,102 @@ exports.default = function (arr) {
 
 /***/ }),
 
+/***/ "GzQT":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
+
+var _prodInvariant = __webpack_require__("gIDI");
+
+var React = __webpack_require__("G1ow");
+var ReactDOMContainerInfo = __webpack_require__("H24R");
+var ReactDefaultBatchingStrategy = __webpack_require__("vdcO");
+var ReactInstrumentation = __webpack_require__("Veu9");
+var ReactMarkupChecksum = __webpack_require__("SzO/");
+var ReactReconciler = __webpack_require__("xWyi");
+var ReactServerBatchingStrategy = __webpack_require__("F19T");
+var ReactServerRenderingTransaction = __webpack_require__("P4HO");
+var ReactUpdates = __webpack_require__("vg0m");
+
+var emptyObject = __webpack_require__("TJez");
+var instantiateReactComponent = __webpack_require__("5nY2");
+var invariant = __webpack_require__("cxPT");
+
+var pendingTransactions = 0;
+
+/**
+ * @param {ReactElement} element
+ * @return {string} the HTML markup
+ */
+function renderToStringImpl(element, makeStaticMarkup) {
+  var transaction;
+  try {
+    ReactUpdates.injection.injectBatchingStrategy(ReactServerBatchingStrategy);
+
+    transaction = ReactServerRenderingTransaction.getPooled(makeStaticMarkup);
+
+    pendingTransactions++;
+
+    return transaction.perform(function () {
+      var componentInstance = instantiateReactComponent(element, true);
+      var markup = ReactReconciler.mountComponent(componentInstance, transaction, null, ReactDOMContainerInfo(), emptyObject, 0 /* parentDebugID */
+      );
+      if (true) {
+        ReactInstrumentation.debugTool.onUnmountComponent(componentInstance._debugID);
+      }
+      if (!makeStaticMarkup) {
+        markup = ReactMarkupChecksum.addChecksumToMarkup(markup);
+      }
+      return markup;
+    }, null);
+  } finally {
+    pendingTransactions--;
+    ReactServerRenderingTransaction.release(transaction);
+    // Revert to the DOM batching strategy since these two renderers
+    // currently share these stateful modules.
+    if (!pendingTransactions) {
+      ReactUpdates.injection.injectBatchingStrategy(ReactDefaultBatchingStrategy);
+    }
+  }
+}
+
+/**
+ * Render a ReactElement to its initial HTML. This should only be used on the
+ * server.
+ * See https://facebook.github.io/react/docs/top-level-api.html#reactdomserver.rendertostring
+ */
+function renderToString(element) {
+  !React.isValidElement(element) ?  true ? invariant(false, 'renderToString(): You must pass a valid ReactElement.') : _prodInvariant('46') : void 0;
+  return renderToStringImpl(element, false);
+}
+
+/**
+ * Similar to renderToString, except this doesn't create extra DOM attributes
+ * such as data-react-id that React uses internally.
+ * See https://facebook.github.io/react/docs/top-level-api.html#reactdomserver.rendertostaticmarkup
+ */
+function renderToStaticMarkup(element) {
+  !React.isValidElement(element) ?  true ? invariant(false, 'renderToStaticMarkup(): You must pass a valid ReactElement.') : _prodInvariant('47') : void 0;
+  return renderToStringImpl(element, true);
+}
+
+module.exports = {
+  renderToString: renderToString,
+  renderToStaticMarkup: renderToStaticMarkup
+};
+
+/***/ }),
+
 /***/ "H1PS":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3755,6 +4930,13 @@ var evaluate = function evaluate(a, operator, b) {
 exports.default = (0, _extends3.default)({}, (0, _base2.default)(operators), {
   evaluate: evaluate
 });
+
+/***/ }),
+
+/***/ "H24R":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("H24R");
 
 /***/ }),
 
@@ -3859,7 +5041,7 @@ exports.default = enhance(ComplexActions);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.validateFields = exports.validateField = exports.markFieldAsInvalid = exports.markFieldAsValid = exports.geocodeAddress = exports.addMultipleFiles = exports.switchComplexTab = exports.collapseComplexGroup = exports.expandComplexGroup = exports.disableComplexGroupType = exports.enableComplexGroupType = exports.receiveComplexGroup = exports.removeComplexGroup = exports.cloneComplexGroup = exports.addComplexGroup = exports.removeFields = exports.addFields = exports.openMediaBrowser = exports.setupMediaBrowser = exports.setFieldValue = exports.updateField = exports.setUI = exports.setupValidation = exports.teardownField = exports.setupField = undefined;
+exports.validateFields = exports.validateField = exports.markFieldAsInvalid = exports.markFieldAsValid = exports.geocodeAddress = exports.addMultipleFiles = exports.switchComplexTab = exports.stopComplexGroupDrag = exports.startComplexGroupDrag = exports.collapseComplexGroup = exports.expandComplexGroup = exports.disableComplexGroupType = exports.enableComplexGroupType = exports.receiveComplexGroup = exports.removeComplexGroup = exports.cloneComplexGroup = exports.addComplexGroup = exports.removeFields = exports.addFields = exports.destroyMediaBrowser = exports.openMediaBrowser = exports.setupMediaBrowser = exports.setFieldValue = exports.updateField = exports.setUI = exports.setupValidation = exports.teardownField = exports.setupField = undefined;
 
 var _reduxActions = __webpack_require__("sTbe");
 
@@ -3954,6 +5136,14 @@ var setupMediaBrowser = exports.setupMediaBrowser = (0, _reduxActions.createActi
  * @return {Object}
  */
 var openMediaBrowser = exports.openMediaBrowser = (0, _reduxActions.createAction)('fields/OPEN_MEDIA_BROWSER');
+
+/**
+ * Destroy the media browser associated with the field.
+ *
+ * @param  {String} fieldId
+ * @return {Object}
+ */
+var destroyMediaBrowser = exports.destroyMediaBrowser = (0, _reduxActions.createAction)('fields/DESTROY_MEDIA_BROWSER');
 
 /**
  * Add the field(s) to the store.
@@ -4060,6 +5250,28 @@ var collapseComplexGroup = exports.collapseComplexGroup = (0, _reduxActions.crea
 });
 
 /**
+ * Indicate when a complex group is dragged.
+ *
+ * @param  {String} fieldId
+ * @param  {String} groupId
+ * @return {Object}
+ */
+var startComplexGroupDrag = exports.startComplexGroupDrag = (0, _reduxActions.createAction)('fields/START_COMPLEX_GROUP_DRAG', function (fieldId, groupId) {
+  return { fieldId: fieldId, groupId: groupId };
+});
+
+/**
+ * Indicate when a complex group isn't dragged.
+ *
+ * @param  {String} fieldId
+ * @param  {String} groupId
+ * @return {Object}
+ */
+var stopComplexGroupDrag = exports.stopComplexGroupDrag = (0, _reduxActions.createAction)('fields/STOP_COMPLEX_GROUP_DRAG', function (fieldId, groupId) {
+  return { fieldId: fieldId, groupId: groupId };
+});
+
+/**
  * Change the currently visible tab of the complex field.
  *
  * @param  {String} fieldId
@@ -4076,8 +5288,8 @@ var switchComplexTab = exports.switchComplexTab = (0, _reduxActions.createAction
  * @param  {Object} attachments
  * @return {Object}
  */
-var addMultipleFiles = exports.addMultipleFiles = (0, _reduxActions.createAction)('fields/ADD_MULTIPLE_FILES', function (fieldId, attachments) {
-  return { fieldId: fieldId, attachments: attachments };
+var addMultipleFiles = exports.addMultipleFiles = (0, _reduxActions.createAction)('fields/ADD_MULTIPLE_FILES', function (fieldId, attachments, browser) {
+  return { fieldId: fieldId, attachments: attachments, browser: browser };
 });
 
 /**
@@ -4314,6 +5526,263 @@ function foreman() {
 
 /***/ }),
 
+/***/ "JG3Y":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _getPrototypeOf = __webpack_require__("Zx67");
+
+var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+
+var _classCallCheck2 = __webpack_require__("Zrlr");
+
+var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+
+var _createClass2 = __webpack_require__("wxAW");
+
+var _createClass3 = _interopRequireDefault(_createClass2);
+
+var _possibleConstructorReturn2 = __webpack_require__("zwoO");
+
+var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+
+var _inherits2 = __webpack_require__("Pf15");
+
+var _inherits3 = _interopRequireDefault(_inherits2);
+
+var _jquery = __webpack_require__("0iPh");
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _react = __webpack_require__("U7vG");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _server = __webpack_require__("pqdH");
+
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _lodash = __webpack_require__("M4fF");
+
+var _recompose = __webpack_require__("zpMW");
+
+var _field = __webpack_require__("M6Uh");
+
+var _field2 = _interopRequireDefault(_field);
+
+var _searchInput = __webpack_require__("adK+");
+
+var _searchInput2 = _interopRequireDefault(_searchInput);
+
+var _withStore = __webpack_require__("0yqe");
+
+var _withStore2 = _interopRequireDefault(_withStore);
+
+var _withSetup = __webpack_require__("8ctJ");
+
+var _withSetup2 = _interopRequireDefault(_withSetup);
+
+var _constants = __webpack_require__("8Hlw");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var OEmbedPreview = function (_React$Component) {
+	(0, _inherits3.default)(OEmbedPreview, _React$Component);
+
+	function OEmbedPreview() {
+		(0, _classCallCheck3.default)(this, OEmbedPreview);
+
+		var _this = (0, _possibleConstructorReturn3.default)(this, (OEmbedPreview.__proto__ || (0, _getPrototypeOf2.default)(OEmbedPreview)).apply(this, arguments));
+
+		_this.state = {
+			width: 0,
+			height: 0
+		};
+
+		_this.renderIframe = _this.renderIframe.bind(_this);
+		_this.checkMessageForResize = _this.checkMessageForResize.bind(_this);
+		return _this;
+	}
+
+	(0, _createClass3.default)(OEmbedPreview, [{
+		key: 'isFrameAccessible',
+		value: function isFrameAccessible() {
+			try {
+				return !!this.iframe.contentDocument.body;
+			} catch (e) {
+				return false;
+			}
+		}
+
+		/**
+   * Lifecycle hook.
+   *
+   * @return {void}
+   */
+
+	}, {
+		key: 'componentDidMount',
+		value: function componentDidMount() {
+			window.addEventListener('message', this.checkMessageForResize, false);
+
+			this.renderIframe();
+		}
+
+		/**
+   * Lifecycle Hook.
+   * 
+   * @return {void}
+   */
+
+	}, {
+		key: 'componentDidUpdate',
+		value: function componentDidUpdate() {
+			this.renderIframe();
+		}
+
+		/**
+   * Lifecycle Hooks.
+   * 
+   * @return {void}
+   */
+
+	}, {
+		key: 'componentWillReceiveProps',
+		value: function componentWillReceiveProps() {
+			this.renderIframe();
+		}
+	}, {
+		key: 'checkMessageForResize',
+		value: function checkMessageForResize() {
+			var iframe = this.iframe;
+
+			// Attempt to parse the message data as JSON if passed as string
+			var data = event.data || {};
+			if ('string' === typeof data) {
+				try {
+					data = JSON.parse(data);
+				} catch (e) {} // eslint-disable-line no-empty
+			}
+
+			// Verify that the mounted element is the source of the message
+			if (!iframe || iframe.contentWindow !== event.source) {
+				return;
+			}
+
+			// Update the state only if the message is formatted as we expect, i.e.
+			// as an object with a 'resize' action, width, and height
+			var _data = data,
+			    action = _data.action,
+			    width = _data.width,
+			    height = _data.height;
+			var _state = this.state,
+			    oldWidth = _state.width,
+			    oldHeight = _state.height;
+
+
+			if ('resize' === action && (oldWidth !== width || oldHeight !== height)) {
+				this.setState({ width: width, height: height });
+			}
+		}
+
+		/**
+   * Render Method.
+   */
+
+	}, {
+		key: 'render',
+		value: function render() {
+			var _this2 = this;
+
+			return _react2.default.createElement(
+				'div',
+				{ className: 'carbon-oembed-preview' },
+				_react2.default.createElement('iframe', {
+					ref: function ref(node) {
+						return _this2.iframe = node;
+					},
+					scrolling: 'no',
+					onLoad: this.renderIframe,
+					width: Math.ceil(this.state.width),
+					height: Math.ceil(this.state.height)
+				})
+			);
+		}
+	}, {
+		key: 'renderIframe',
+		value: function renderIframe() {
+			if (!this.isFrameAccessible()) {
+				return;
+			}
+
+			var body = this.iframe.contentDocument.body;
+			if (null !== body.getAttribute('data-resizable-iframe-connected')) {
+				return;
+			}
+
+			var heightCalculation = 'video' === this.props.type ? 'clientBoundingRect.width / 16 * 9' : 'clientBoundingRect.height';
+
+			var observeAndResizeJS = '\n\t\t\t( function() {\n\t\t\t\tvar observer;\n\t\t\t\tif ( ! window.MutationObserver || ! document.body || ! window.parent ) {\n\t\t\t\t\treturn;\n\t\t\t\t}\n\t\t\t\tfunction sendResize() {\n\t\t\t\t\tvar clientBoundingRect = document.body.getBoundingClientRect();\n\n\t\t\t\t\twindow.parent.postMessage( {\n\t\t\t\t\t\taction: \'resize\',\n\t\t\t\t\t\twidth: clientBoundingRect.width,\n\t\t\t\t\t\theight: ' + heightCalculation + '\n\t\t\t\t\t}, \'*\' );\n\t\t\t\t}\n\n\t\t\t\tobserver = new MutationObserver( sendResize );\n\t\t\t\tobserver.observe( document.body, {\n\t\t\t\t\tattributes: true,\n\t\t\t\t\tattributeOldValue: false,\n\t\t\t\t\tcharacterData: true,\n\t\t\t\t\tcharacterDataOldValue: false,\n\t\t\t\t\tchildList: true,\n\t\t\t\t\tsubtree: true\n\t\t\t\t} );\n\t\t\t\twindow.addEventListener( \'load\', sendResize, true );\n\t\t\t\t// Hack: Remove viewport unit styles, as these are relative\n\t\t\t\t// the iframe root and interfere with our mechanism for\n\t\t\t\t// determining the unconstrained page bounds.\n\t\t\t\tfunction removeViewportStyles( ruleOrNode ) {\n\t\t\t\t\t[ \'width\', \'height\', \'minHeight\', \'maxHeight\' ].forEach( function( style ) {\n\t\t\t\t\t\tif ( /^\\d+(vmin|vmax|vh|vw)$/.test( ruleOrNode.style[ style ] ) ) {\n\t\t\t\t\t\t\truleOrNode.style[ style ] = \'\';\n\t\t\t\t\t\t}\n\t\t\t\t\t} );\n\t\t\t\t}\n\t\t\t\tArray.prototype.forEach.call( document.querySelectorAll( \'[style]\' ), removeViewportStyles );\n\t\t\t\tArray.prototype.forEach.call( document.styleSheets, function( stylesheet ) {\n\t\t\t\t\tArray.prototype.forEach.call( stylesheet.cssRules || stylesheet.rules, removeViewportStyles );\n\t\t\t\t} );\n\t\t\t\tdocument.body.setAttribute( \'data-resizable-iframe-connected\', \'\' );\n\t\t\t\tsendResize();\n\t\t} )();';
+
+			var style = '\n\t\t\tbody { margin: 0; }\n\n\t\t\tbody > div { max-width: 600px; }\n\n\t\t\tbody.Kickstarter > div,\n\t\t\tbody.video > div { position: relative; height: 0; padding-bottom: 56.25%; }\n\t\t\tbody.Kickstarter > div > iframe,\n\t\t\tbody.video > div > iframe { position: absolute; width: 100%; height: 100%; top: 0; left: 0; }\n\n\t\t\tbody > div > * { margin: 0 !important;/* has to have !important to override inline styles */ max-width: 100%; }\n\n\t\t\tbody.Flickr > div > a { display: block; }\n\t\t\tbody.Flickr > div > a > img { width: 100%; height: auto; }\n\t\t';
+
+			var htmlDoc = _react2.default.createElement(
+				'html',
+				{ lang: document.documentElement.lang },
+				_react2.default.createElement(
+					'head',
+					null,
+					_react2.default.createElement('style', { dangerouslySetInnerHTML: { __html: style } })
+				),
+				_react2.default.createElement(
+					'body',
+					{ 'data-resizable-iframe-connected': 'data-resizable-iframe-connected', className: this.props.type + ' ' + this.props.provider },
+					_react2.default.createElement('div', { dangerouslySetInnerHTML: { __html: this.props.html } }),
+					_react2.default.createElement('script', { type: 'text/javascript', dangerouslySetInnerHTML: { __html: observeAndResizeJS } })
+				)
+			);
+
+			this.iframe.contentWindow.document.open();
+			this.iframe.contentWindow.document.write('<!DOCTYPE html>' + (0, _server.renderToStaticMarkup)(htmlDoc));
+			this.iframe.contentWindow.document.close();
+		}
+	}]);
+	return OEmbedPreview;
+}(_react2.default.Component);
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+
+
+/**
+ * The internal dependencies.
+ */
+/**
+ * The external dependencies.
+ */
+
+
+OEmbedPreview.propTypes = {
+	html: _propTypes2.default.string,
+	type: _propTypes2.default.string,
+	provider: _propTypes2.default.string
+};
+
+exports.default = OEmbedPreview;
+
+/***/ }),
+
 /***/ "KSGD":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4501,7 +5970,7 @@ var Field = exports.Field = function Field(_ref) {
 			{ className: 'field-holder' },
 			children
 		),
-		!!field.help_text ? _react2.default.createElement('em', { className: 'help-text', dangerouslySetInnerHTML: { __html: field.help_text } }) : null,
+		!!field.help_text ? _react2.default.createElement('em', { className: 'carbon-help-text', dangerouslySetInnerHTML: { __html: field.help_text } }) : null,
 		!!field.ui.error ? _react2.default.createElement(
 			'em',
 			{ className: 'carbon-error' },
@@ -4641,6 +6110,8 @@ var _recompose = __webpack_require__("zpMW");
 
 var _lodash = __webpack_require__("M4fF");
 
+var _sprintfJs = __webpack_require__("0XFg");
+
 var _field = __webpack_require__("M6Uh");
 
 var _field2 = _interopRequireDefault(_field);
@@ -4687,6 +6158,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * TODO: Research more about `react-virtualized`.
  * 		 Probably can improve the performance on very long lists.
  */
+/**
+ * The external dependencies.
+ */
 var AssociationField = exports.AssociationField = function AssociationField(_ref) {
 	var name = _ref.name,
 	    field = _ref.field,
@@ -4697,6 +6171,15 @@ var AssociationField = exports.AssociationField = function AssociationField(_ref
 	    handleAddItem = _ref.handleAddItem,
 	    handleRemoveItem = _ref.handleRemoveItem,
 	    handleSortItems = _ref.handleSortItems;
+
+	var counterLabels = [carbonFieldsL10n.field.associationSelectedItem, carbonFieldsL10n.field.associationSelectedItems];
+	var counterLabelArgs = [field.value.length];
+	if (field.max !== -1) {
+		counterLabels = [carbonFieldsL10n.field.associationSelectedItemOutOf, carbonFieldsL10n.field.associationSelectedItemsOutOf];
+		counterLabelArgs.push(field.max);
+	}
+
+	var counterLabel = field.value.length === 1 ? (0, _sprintfJs.vsprintf)(counterLabels[0], counterLabelArgs) : (0, _sprintfJs.vsprintf)(counterLabels[1], counterLabelArgs);
 
 	return _react2.default.createElement(
 		_field2.default,
@@ -4713,21 +6196,8 @@ var AssociationField = exports.AssociationField = function AssociationField(_ref
 					_react2.default.createElement(
 						'span',
 						{ className: 'selected-counter' },
-						field.value.length
-					),
-					_react2.default.createElement(
-						'span',
-						{ className: 'selected-label' },
-						field.value.length !== 1 ? ' ' + carbonFieldsL10n.field.associationSelectedItems : ' ' + carbonFieldsL10n.field.associationSelectedItem
-					),
-					field.max !== -1 ? _react2.default.createElement(
-						'span',
-						{ className: 'remaining' },
-						' ',
-						carbonFieldsL10n.field.associationOutOf,
-						' ',
-						field.max
-					) : null
+						counterLabel
+					)
 				)
 			),
 			_react2.default.createElement(_searchInput2.default, {
@@ -4771,9 +6241,6 @@ var AssociationField = exports.AssociationField = function AssociationField(_ref
 
 /**
  * The internal dependencies.
- */
-/**
- * The external dependencies.
  */
 AssociationField.propTypes = {
 	name: _propTypes2.default.string,
@@ -5562,6 +7029,12 @@ var FileField = exports.FileField = function FileField(_ref) {
 	    openBrowser = _ref.openBrowser,
 	    clearSelection = _ref.clearSelection;
 
+	var buttonLabel = carbonFieldsL10n.field.fileButtonLabel;
+
+	if (field.type === 'image') {
+		buttonLabel = carbonFieldsL10n.field.imageButtonLabel;
+	}
+
 	return _react2.default.createElement(
 		_field2.default,
 		{ field: field },
@@ -5587,13 +7060,13 @@ var FileField = exports.FileField = function FileField(_ref) {
 				_react2.default.createElement('input', {
 					type: 'text',
 					className: 'carbon-attachment-file-name',
-					value: field.file_url,
+					value: field.file_url ? field.file_url : '',
 					readOnly: true })
 			),
 			_react2.default.createElement(
 				'span',
-				{ className: 'button c2_open_media', onClick: openBrowser },
-				field.button_label
+				{ className: 'button', onClick: openBrowser },
+				buttonLabel
 			)
 		)
 	);
@@ -5621,8 +7094,7 @@ FileField.propTypes = {
 		preview: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]),
 		thumb_url: _propTypes2.default.string,
 		file_url: _propTypes2.default.string,
-		file_name: _propTypes2.default.string,
-		button_label: _propTypes2.default.string
+		file_name: _propTypes2.default.string
 	}),
 	openBrowser: _propTypes2.default.func,
 	clearSelection: _propTypes2.default.func
@@ -5639,7 +7111,8 @@ var enhance = exports.enhance = (0, _recompose.compose)(
  */
 (0, _withStore2.default)(undefined, {
 	setupMediaBrowser: _actions.setupMediaBrowser,
-	openMediaBrowser: _actions.openMediaBrowser
+	openMediaBrowser: _actions.openMediaBrowser,
+	destroyMediaBrowser: _actions.destroyMediaBrowser
 }),
 
 /**
@@ -5661,6 +7134,9 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		if (field.required) {
 			setupValidation(field.id, _constants.VALIDATION_BASE);
 		}
+	},
+	componentWillUnmount: function componentWillUnmount() {
+		this.props.destroyMediaBrowser(this.props.field.id);
 	}
 }),
 
@@ -6429,6 +7905,13 @@ function request(action, name) {
 } /**
    * The external dependencies.
    */
+
+/***/ }),
+
+/***/ "P4HO":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("P4HO");
 
 /***/ }),
 
@@ -8287,6 +9770,20 @@ exports.default = EnhancedContainerTabsNav;
 
 /***/ }),
 
+/***/ "SzO/":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("SzO/");
+
+/***/ }),
+
+/***/ "TJez":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("TJez");
+
+/***/ }),
+
 /***/ "TNQM":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8560,7 +10057,9 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 	removeComplexGroup: _actions3.removeComplexGroup,
 	expandComplexGroup: _actions3.expandComplexGroup,
 	collapseComplexGroup: _actions3.collapseComplexGroup,
-	switchComplexTab: _actions3.switchComplexTab
+	switchComplexTab: _actions3.switchComplexTab,
+	startComplexGroupDrag: _actions3.startComplexGroupDrag,
+	stopComplexGroupDrag: _actions3.stopComplexGroupDrag
 }),
 
 /**
@@ -8595,7 +10094,9 @@ var enhance = exports.enhance = (0, _recompose.compose)(
  */
 (0, _recompose.withProps)(function (_ref2) {
 	var field = _ref2.field,
-	    collapseComplexGroup = _ref2.collapseComplexGroup;
+	    collapseComplexGroup = _ref2.collapseComplexGroup,
+	    startComplexGroupDrag = _ref2.startComplexGroupDrag,
+	    stopComplexGroupDrag = _ref2.stopComplexGroupDrag;
 
 	var sortableTabsOptions = {
 		items: '.group-tab-item',
@@ -8615,7 +10116,16 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 
 	if (field.layout === _constants.COMPLEX_LAYOUT_GRID) {
 		sortableGroupsOptions.start = function (e, ui) {
-			return collapseComplexGroup(field.id, ui.item[0].id);
+			var fieldId = field.id;
+			var groupId = ui.item[0].id;
+
+
+			collapseComplexGroup(fieldId, groupId);
+			startComplexGroupDrag(fieldId, groupId);
+		};
+
+		sortableGroupsOptions.stop = function (e, ui) {
+			stopComplexGroupDrag(field.id, ui.item[0].id);
 		};
 	}
 
@@ -8721,7 +10231,6 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 			setFieldValue(field.id, (0, _lodash.sortBy)(field.value, function (group) {
 				return groups.indexOf(group.id);
 			}));
-
 			expandComplexGroup(field.id, groupId);
 		};
 	}
@@ -8794,6 +10303,141 @@ exports.default = (0, _extends3.default)({}, _base2.default, {
 }); /**
      * The external dependecies.
      */
+
+/***/ }),
+
+/***/ "Ta9K":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.enhance = exports.SearchInput = undefined;
+
+var _react = __webpack_require__("U7vG");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _recompose = __webpack_require__("zpMW");
+
+var _lodash = __webpack_require__("M4fF");
+
+var _constants = __webpack_require__("+5vj");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Render the field used to filter the available options
+ * inside the oembed field.
+ *
+ * @param  {Object} 	   props
+ * @param  {String} 	   [props.name]
+ * @param  {String} 	   props.term
+ * @param  {Function} 	   props.handleKeyDown
+ * @param  {Function} 	   props.handleChange
+ * @return {React.Element}
+ */
+var SearchInput = exports.SearchInput = function SearchInput(_ref) {
+	var name = _ref.name,
+	    term = _ref.term,
+	    handleKeyDown = _ref.handleKeyDown,
+	    handleChange = _ref.handleChange;
+
+	return _react2.default.createElement(
+		'div',
+		{ className: 'search-field carbon-association-search dashicons-before dashicons-search' },
+		_react2.default.createElement('input', {
+			type: 'text',
+			defaultValue: term,
+			name: name,
+			className: 'search-field',
+			placeholder: carbonFieldsL10n.field.searchPlaceholder,
+			onKeyDown: handleKeyDown,
+			onChange: handleChange })
+	);
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+
+
+/**
+ * The internal dependencies.
+ */
+/**
+ * The external dependencies.
+ */
+SearchInput.propTypes = {
+	name: _propTypes2.default.string,
+	term: _propTypes2.default.string,
+	handleSubmit: _propTypes2.default.func
+};
+
+/**
+ * The enhancer.
+ *
+ * @type {Function}
+ */
+var enhance = exports.enhance = (0, _recompose.compose)(
+/**
+ * Setup the default props.
+ */
+(0, _recompose.defaultProps)({
+	onSubmit: function onSubmit() {}
+}),
+
+/**
+ * Pass some handlers to the component.
+ */
+(0, _recompose.withHandlers)({
+	debouncedOnChange: function debouncedOnChange(_ref2) {
+		var onSubmit = _ref2.onSubmit;
+		return (0, _lodash.debounce)(function (v) {
+			return onSubmit(v);
+		}, 200);
+	},
+	handleSubmit: function handleSubmit(_ref3) {
+		var onSubmit = _ref3.onSubmit;
+		return function (e) {
+			onSubmit(e.target.value);
+		};
+	}
+}),
+
+/**
+ * Pass some handlers to the component.
+ */
+(0, _recompose.withHandlers)({
+	handleChange: function handleChange(_ref4) {
+		var debouncedOnChange = _ref4.debouncedOnChange;
+		return function (_ref5) {
+			var value = _ref5.target.value;
+			return debouncedOnChange(value);
+		};
+	},
+	handleKeyDown: function handleKeyDown(_ref6) {
+		var handleSubmit = _ref6.handleSubmit;
+		return function (e) {
+			if (e.keyCode === _constants.KEY_ENTER) {
+				e.preventDefault();
+
+				handleSubmit(e);
+			}
+		};
+	}
+}));
+
+exports.default = enhance(SearchInput);
 
 /***/ }),
 
@@ -9106,6 +10750,13 @@ webpackContext.keys = function webpackContextKeys() {
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
 webpackContext.id = "VZc3";
+
+/***/ }),
+
+/***/ "Veu9":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("Veu9");
 
 /***/ }),
 
@@ -10504,6 +12155,13 @@ exports.default = enhance(SearchInput);
 
 /***/ }),
 
+/***/ "ag9w":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("ag9w");
+
+/***/ }),
+
 /***/ "arVC":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -11158,6 +12816,13 @@ exports.default = (0, _registry.decorateFieldReducer)((0, _reduxActions.handleAc
 	    groupId = _ref12$payload.groupId;
 	return _objectPathImmutable2.default.set(state, fieldId + '.ui.current_tab', groupId);
 }), _handleActions), {}));
+
+/***/ }),
+
+/***/ "cxPT":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("cxPT");
 
 /***/ }),
 
@@ -12683,6 +14348,12 @@ var _classnames = __webpack_require__("HW6M");
 
 var _classnames2 = _interopRequireDefault(_classnames);
 
+var _observeResize = __webpack_require__("zMaW");
+
+var _observeResize2 = _interopRequireDefault(_observeResize);
+
+var _lodash = __webpack_require__("M4fF");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
@@ -12705,6 +14376,7 @@ var RichTextEditor = function (_React$Component) {
    * @return {void}
    */
 		value: function componentDidMount() {
+			this.node = null;
 			this.initEditor();
 		}
 
@@ -12720,6 +14392,19 @@ var RichTextEditor = function (_React$Component) {
 		value: function componentWillReceiveProps(nextProps) {
 			var content = nextProps.content;
 
+			// Destroy the editor because TinyMCE doesn't like to be
+			// moved around DOM.
+
+			if (!this.props.isDragging && nextProps.isDragging) {
+				this.destroyEditor();
+				return;
+			}
+
+			// Re-init the editor manually because the complex group wasn't sorted
+			// and the component uses the same React instance.
+			if (!this.editor && this.props.isDragging && !nextProps.isDragging) {
+				this.initEditor();
+			}
 
 			if (this.editor && this.editor.getContent() !== content) {
 				this.editor.setContent(content);
@@ -12747,6 +14432,8 @@ var RichTextEditor = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
+			var _this2 = this;
+
 			var _props = this.props,
 			    id = _props.id,
 			    children = _props.children,
@@ -12757,7 +14444,9 @@ var RichTextEditor = function (_React$Component) {
 
 			return _react2.default.createElement(
 				'div',
-				{ id: 'wp-' + id + '-wrap', className: (0, _classnames2.default)(classes) },
+				{ id: 'wp-' + id + '-wrap', className: (0, _classnames2.default)(classes), ref: function ref(node) {
+						return _this2.node = node;
+					} },
 				_react2.default.createElement(
 					'div',
 					{ id: 'wp-' + id + '-media-buttons', className: 'hide-if-no-js wp-media-buttons' },
@@ -12800,39 +14489,45 @@ var RichTextEditor = function (_React$Component) {
 	}, {
 		key: 'initEditor',
 		value: function initEditor() {
-			var _this2 = this;
+			var _this3 = this;
 
-			var _props2 = this.props,
-			    id = _props2.id,
-			    richEditing = _props2.richEditing,
-			    onChange = _props2.onChange;
+			window.requestAnimationFrame(function () {
+				var _props2 = _this3.props,
+				    id = _props2.id,
+				    richEditing = _props2.richEditing,
+				    onChange = _props2.onChange;
 
 
-			if (richEditing) {
-				var editorSetup = function editorSetup(editor) {
-					_this2.editor = editor;
+				if (richEditing) {
+					var editorSetup = function editorSetup(editor) {
+						_this3.editor = editor;
 
-					editor.on('blur', function () {
-						onChange(editor.getContent());
+						editor.on('blur', function () {
+							onChange(editor.getContent());
+						});
+
+						_this3.cancelResizeObserver = (0, _observeResize2.default)(_this3.node, (0, _lodash.debounce)(function () {
+							_this3.editor.execCommand('mceAutoResize');
+						}, 100));
+					};
+
+					var editorOptions = (0, _extends3.default)({}, window.tinyMCEPreInit.mceInit.carbon_settings, {
+						selector: '#' + id,
+						setup: editorSetup
 					});
-				};
 
-				var editorOptions = (0, _extends3.default)({}, window.tinyMCEPreInit.mceInit.carbon_settings, {
-					selector: '#' + id,
-					setup: editorSetup
+					window.tinymce.init(editorOptions);
+				}
+
+				var quickTagsOptions = (0, _extends3.default)({}, window.tinyMCEPreInit, {
+					id: id
 				});
 
-				window.tinymce.init(editorOptions);
-			}
+				window.quicktags(quickTagsOptions);
 
-			var quickTagsOptions = (0, _extends3.default)({}, window.tinyMCEPreInit, {
-				id: id
+				// Force the initialization of the quick tags.
+				window.QTags._buttonsInit();
 			});
-
-			window.quicktags(quickTagsOptions);
-
-			// Force the initialization of the quick tags.
-			window.QTags._buttonsInit();
 		}
 
 		/**
@@ -12845,7 +14540,10 @@ var RichTextEditor = function (_React$Component) {
 		key: 'destroyEditor',
 		value: function destroyEditor() {
 			if (this.editor) {
+				this.cancelResizeObserver();
 				this.editor.remove();
+
+				this.node = null;
 				this.editor = null;
 			}
 
@@ -12865,6 +14563,7 @@ var RichTextEditor = function (_React$Component) {
 RichTextEditor.propTypes = {
 	id: _propTypes2.default.string,
 	richEditing: _propTypes2.default.bool,
+	isDragging: _propTypes2.default.bool,
 	onChange: _propTypes2.default.func
 };
 
@@ -12910,6 +14609,13 @@ module.exports = __webpack_require__("FeBl").getIterator = function(it){
   if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
   return anObject(iterFn.call(it));
 };
+
+/***/ }),
+
+/***/ "gIDI":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("gIDI");
 
 /***/ }),
 
@@ -13707,11 +15413,17 @@ var _toArray2 = __webpack_require__("7nRM");
 
 var _toArray3 = _interopRequireDefault(_toArray2);
 
+var _toConsumableArray2 = __webpack_require__("Gu7T");
+
+var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+
 var _regenerator = __webpack_require__("Xxa5");
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
+exports.prepareValueForField = prepareValueForField;
 exports.prepareValueForFileField = prepareValueForFileField;
+exports.prepareValueForMediaGalleryField = prepareValueForMediaGalleryField;
 exports.workerAddMultipleFiles = workerAddMultipleFiles;
 exports.redrawAttachmentPreview = redrawAttachmentPreview;
 exports.workerRedrawAttachmentPreview = workerRedrawAttachmentPreview;
@@ -13731,17 +15443,69 @@ var _helpers = __webpack_require__("pP85");
 
 var _actions = __webpack_require__("HRbf");
 
+var _constants = __webpack_require__("8Hlw");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [prepareValueForFileField, workerAddMultipleFiles, redrawAttachmentPreview, workerRedrawAttachmentPreview, workerOpenMediaBrowser, workerSetupMediaBrowser, foreman].map(_regenerator2.default.mark); /**
-                                                                                                                                                                                                                     * The external dependencies.
-                                                                                                                                                                                                                     */
+var _marked = [prepareValueForField, prepareValueForFileField, prepareValueForMediaGalleryField, workerAddMultipleFiles, redrawAttachmentPreview, workerRedrawAttachmentPreview, workerOpenMediaBrowser, workerSetupMediaBrowser, foreman].map(_regenerator2.default.mark); /**
+                                                                                                                                                                                                                                                                             * The external dependencies.
+                                                                                                                                                                                                                                                                             */
 
 
 /**
  * The internal dependencies.
  */
 
+
+/**
+ * Prepares a field's value depending on its type.
+ *
+ * @param  {String} fieldId
+ * @param  {Object} attachment
+ * @return {void}
+ */
+function prepareValueForField(fieldId, attachment) {
+	var field;
+	return _regenerator2.default.wrap(function prepareValueForField$(_context) {
+		while (1) {
+			switch (_context.prev = _context.next) {
+				case 0:
+					_context.next = 2;
+					return (0, _effects.select)(_selectors.getFieldById, fieldId);
+
+				case 2:
+					field = _context.sent;
+
+					if (!(field.type === _constants.TYPE_FILE || field.type === _constants.TYPE_IMAGE)) {
+						_context.next = 9;
+						break;
+					}
+
+					_context.next = 6;
+					return prepareValueForFileField(fieldId, attachment);
+
+				case 6:
+					return _context.abrupt('return', _context.sent);
+
+				case 9:
+					if (!(field.type === _constants.TYPE_MEDIA_GALLERY)) {
+						_context.next = 13;
+						break;
+					}
+
+					_context.next = 12;
+					return prepareValueForMediaGalleryField(fieldId, attachment);
+
+				case 12:
+					return _context.abrupt('return', _context.sent);
+
+				case 13:
+				case 'end':
+					return _context.stop();
+			}
+		}
+	}, _marked[0], this);
+}
 
 /**
  * Set a field's value depending on it's value_type property
@@ -13752,24 +15516,80 @@ var _marked = [prepareValueForFileField, workerAddMultipleFiles, redrawAttachmen
  */
 function prepareValueForFileField(fieldId, attachment) {
 	var field, value;
-	return _regenerator2.default.wrap(function prepareValueForFileField$(_context) {
+	return _regenerator2.default.wrap(function prepareValueForFileField$(_context2) {
 		while (1) {
-			switch (_context.prev = _context.next) {
+			switch (_context2.prev = _context2.next) {
 				case 0:
-					_context.next = 2;
+					_context2.next = 2;
 					return (0, _effects.select)(_selectors.getFieldById, fieldId);
 
 				case 2:
-					field = _context.sent;
+					field = _context2.sent;
 					value = (0, _lodash.isUndefined)(attachment[field.value_type]) ? attachment.id : attachment[field.value_type];
-					return _context.abrupt('return', value);
+					return _context2.abrupt('return', value);
 
 				case 5:
 				case 'end':
-					return _context.stop();
+					return _context2.stop();
 			}
 		}
-	}, _marked[0], this);
+	}, _marked[1], this);
+}
+
+/**
+ * Prepares a Media Gallery field value.
+ *
+ * @param  {String} fieldId
+ * @param  {Object} attachment
+ * @return {void}
+ */
+function prepareValueForMediaGalleryField(fieldId, attachment) {
+	var field, value, duplicates_allowed, attachmentId, index;
+	return _regenerator2.default.wrap(function prepareValueForMediaGalleryField$(_context3) {
+		while (1) {
+			switch (_context3.prev = _context3.next) {
+				case 0:
+					_context3.next = 2;
+					return (0, _effects.select)(_selectors.getFieldById, fieldId);
+
+				case 2:
+					field = _context3.sent;
+					value = field.value, duplicates_allowed = field.duplicates_allowed;
+					attachmentId = Number(attachment.id);
+
+					if (!('selected' in field && (0, _lodash.isNumber)(field.selected))) {
+						_context3.next = 12;
+						break;
+					}
+
+					index = value.indexOf(field.selected);
+
+
+					value.splice(index, 1, attachmentId);
+
+					_context3.next = 10;
+					return (0, _effects.put)((0, _actions.updateField)(field.id, {
+						selected: ''
+					}));
+
+				case 10:
+					_context3.next = 13;
+					break;
+
+				case 12:
+					if (duplicates_allowed || field.value.indexOf(attachmentId) === -1) {
+						value = [].concat((0, _toConsumableArray3.default)(value), [attachmentId]);
+					}
+
+				case 13:
+					return _context3.abrupt('return', value);
+
+				case 14:
+				case 'end':
+					return _context3.stop();
+			}
+		}
+	}, _marked[2], this);
 }
 
 /**
@@ -13779,88 +15599,122 @@ function prepareValueForFileField(fieldId, attachment) {
  * @return {void}
  */
 function workerAddMultipleFiles(action) {
-	var _action$payload, fieldId, attachments, field, parent, i, attachment, parentField, freshGroup, freshFieldId, freshField, value;
+	var _action$payload, fieldId, attachments, browser, field, _parent, i, attachment, parentField, freshGroup, freshFieldId, freshField, value, _value;
 
-	return _regenerator2.default.wrap(function workerAddMultipleFiles$(_context2) {
+	return _regenerator2.default.wrap(function workerAddMultipleFiles$(_context4) {
 		while (1) {
-			switch (_context2.prev = _context2.next) {
+			switch (_context4.prev = _context4.next) {
 				case 0:
-					_action$payload = action.payload, fieldId = _action$payload.fieldId, attachments = _action$payload.attachments;
-					_context2.next = 3;
+					_action$payload = action.payload, fieldId = _action$payload.fieldId, attachments = _action$payload.attachments, browser = _action$payload.browser;
+					_context4.next = 3;
 					return (0, _effects.select)(_selectors.getFieldById, fieldId);
 
 				case 3:
-					field = _context2.sent;
-					_context2.next = 6;
-					return (0, _effects.select)(_selectors.getComplexGroupById, field.parent);
+					field = _context4.sent;
 
-				case 6:
-					parent = _context2.sent;
-
-					if (!(0, _lodash.isUndefined)(parent)) {
-						_context2.next = 9;
+					if (!(field.type === _constants.TYPE_IMAGE || field.type === _constants.TYPE_FILE)) {
+						_context4.next = 10;
 						break;
 					}
 
-					return _context2.abrupt('return');
+					_context4.next = 7;
+					return (0, _effects.select)(_selectors.getComplexGroupById, field.parent);
 
-				case 9:
-					i = 0;
+				case 7:
+					_parent = _context4.sent;
+
+					if (!(0, _lodash.isUndefined)(_parent)) {
+						_context4.next = 10;
+						break;
+					}
+
+					return _context4.abrupt('return');
 
 				case 10:
+					i = 0;
+
+				case 11:
 					if (!(i < attachments.length)) {
-						_context2.next = 34;
+						_context4.next = 46;
 						break;
 					}
 
 					attachment = attachments[i];
-					// add a new group to hold the attachment
 
-					_context2.next = 14;
+					if (!(field.type === _constants.TYPE_IMAGE || field.type === _constants.TYPE_FILE)) {
+						_context4.next = 35;
+						break;
+					}
+
+					_context4.next = 16;
 					return (0, _effects.put)((0, _actions.addComplexGroup)(parent.field.id, parent.group.name));
 
-				case 14:
-					_context2.next = 16;
+				case 16:
+					_context4.next = 18;
 					return (0, _effects.take)(_actions.receiveComplexGroup);
 
-				case 16:
-					_context2.next = 18;
+				case 18:
+					_context4.next = 20;
 					return (0, _effects.select)(_selectors.getFieldById, parent.field.id);
 
-				case 18:
-					parentField = _context2.sent;
+				case 20:
+					parentField = _context4.sent;
 					freshGroup = (0, _lodash.last)(parentField.value);
 					freshFieldId = (0, _lodash.first)((0, _lodash.filter)(freshGroup.fields, function (f) {
 						return f.base_name === field.base_name;
 					})).id;
-					_context2.next = 23;
+					_context4.next = 25;
 					return (0, _effects.select)(_selectors.getFieldById, freshFieldId);
 
-				case 23:
-					freshField = _context2.sent;
-					_context2.next = 26;
-					return prepareValueForFileField(freshField.id, attachment);
+				case 25:
+					freshField = _context4.sent;
+					_context4.next = 28;
+					return prepareValueForField(freshField.id, attachment);
 
-				case 26:
-					value = _context2.sent;
-					_context2.next = 29;
+				case 28:
+					value = _context4.sent;
+					_context4.next = 31;
 					return redrawAttachmentPreview(freshField.id, value, attachment, freshField.default_thumb_url);
 
-				case 29:
-					_context2.next = 31;
+				case 31:
+					_context4.next = 33;
 					return (0, _effects.put)((0, _actions.setFieldValue)(freshField.id, value));
 
-				case 31:
-					i++;
-					_context2.next = 10;
+				case 33:
+					_context4.next = 43;
 					break;
 
-				case 34:
+				case 35:
+					_context4.next = 37;
+					return prepareValueForField(field.id, attachment);
+
+				case 37:
+					_value = _context4.sent;
+
+
+					if (field.duplicates_allowed === false) {
+						browser.state().frame.options.selected = _value;
+					}
+
+					// optional - this ensures an instant preview update
+					_context4.next = 41;
+					return redrawAttachmentPreview(field.id, _value, attachment, field.default_thumb_url);
+
+				case 41:
+					_context4.next = 43;
+					return (0, _effects.put)((0, _actions.setFieldValue)(field.id, _value));
+
+				case 43:
+					i++;
+					_context4.next = 11;
+					break;
+
+				case 46:
 				case 'end':
-					return _context2.stop();
+					return _context4.stop();
 			}
 		}
-	}, _marked[1], this);
+	}, _marked[3], this);
 }
 
 /**
@@ -13873,66 +15727,110 @@ function workerAddMultipleFiles(action) {
  * @return {void}
  */
 function redrawAttachmentPreview(fieldId, attachmentIdentifier, attachment, default_thumb_url) {
-	var thumbnail;
-	return _regenerator2.default.wrap(function redrawAttachmentPreview$(_context3) {
+	var field, attachmentMeta, thumbnail, currentValueMeta;
+	return _regenerator2.default.wrap(function redrawAttachmentPreview$(_context5) {
 		while (1) {
-			switch (_context3.prev = _context3.next) {
+			switch (_context5.prev = _context5.next) {
 				case 0:
+					_context5.next = 2;
+					return (0, _effects.select)(_selectors.getFieldById, fieldId);
+
+				case 2:
+					field = _context5.sent;
+					attachmentMeta = {
+						file_name: '',
+						file_url: '',
+						file_type: '',
+						thumb_url: '',
+						preview: '',
+						edit_nonce: '',
+						title: '',
+						caption: '',
+						description: ''
+					};
+
 					if ((0, _lodash.isNull)(attachment)) {
-						_context3.next = 13;
+						_context5.next = 27;
 						break;
 					}
 
 					if (!(0, _lodash.isString)(attachment)) {
-						_context3.next = 6;
+						_context5.next = 12;
 						break;
 					}
 
-					_context3.next = 4;
-					return (0, _effects.put)((0, _actions.updateField)(fieldId, {
-						file_name: attachment,
-						file_url: attachment,
-						thumb_url: attachment,
-						preview: attachmentIdentifier
-					}));
-
-				case 4:
-					_context3.next = 11;
+					attachmentMeta.file_name = attachment;
+					attachmentMeta.file_url = attachment;
+					attachmentMeta.thumb_url = attachment;
+					attachmentMeta.preview = attachmentIdentifier;
+					_context5.next = 27;
 					break;
 
-				case 6:
-					_context3.next = 8;
+				case 12:
+					_context5.next = 14;
 					return (0, _effects.call)(_helpers.getAttachmentThumbnail, attachment);
 
-				case 8:
-					thumbnail = _context3.sent;
-					_context3.next = 11;
-					return (0, _effects.put)((0, _actions.updateField)(fieldId, {
-						file_name: attachment.filename,
-						file_url: attachment.url,
-						thumb_url: thumbnail || default_thumb_url,
-						preview: attachmentIdentifier
-					}));
+				case 14:
+					thumbnail = _context5.sent;
 
-				case 11:
-					_context3.next = 15;
+
+					attachmentMeta.file_name = attachment.filename;
+					attachmentMeta.file_url = attachment.url;
+					attachmentMeta.file_type = attachment.type;
+					attachmentMeta.thumb_url = thumbnail || default_thumb_url;
+					attachmentMeta.preview = attachment.id;
+					attachmentMeta.edit_nonce = attachment.nonces ? attachment.nonces.update : '';
+					attachmentMeta.title = attachment.title;
+					attachmentMeta.caption = attachment.caption;
+					attachmentMeta.description = attachment.description;
+					attachmentMeta.filesize = attachment.filesizeHumanReadable;
+					attachmentMeta.date = attachment.dateFormatted;
+
+					if (attachment.type === 'image') {
+						attachmentMeta.alt = attachment.alt;
+						attachmentMeta.width = attachment.width;
+						attachmentMeta.height = attachment.height;
+					} else if (attachment.type === 'audio') {
+						attachmentMeta.artist = attachment.meta.artist;
+						attachmentMeta.album = attachment.meta.album;
+						attachmentMeta.length = attachment.fileLength;
+					}
+
+				case 27:
+					if (!(field.type === _constants.TYPE_IMAGE || field.type === _constants.TYPE_FILE)) {
+						_context5.next = 32;
+						break;
+					}
+
+					_context5.next = 30;
+					return (0, _effects.put)((0, _actions.updateField)(fieldId, attachmentMeta));
+
+				case 30:
+					_context5.next = 37;
 					break;
 
-				case 13:
-					_context3.next = 15;
+				case 32:
+					if (!(field.type === _constants.TYPE_MEDIA_GALLERY)) {
+						_context5.next = 37;
+						break;
+					}
+
+					currentValueMeta = field.value_meta;
+
+
+					currentValueMeta[attachment.id] = attachmentMeta;
+
+					_context5.next = 37;
 					return (0, _effects.put)((0, _actions.updateField)(fieldId, {
-						file_name: '',
-						file_url: '',
-						thumb_url: '',
-						preview: ''
+						value_meta: currentValueMeta
 					}));
 
-				case 15:
+				case 37:
 				case 'end':
-					return _context3.stop();
+					return _context5.stop();
 			}
 		}
-	}, _marked[2], this);
+	}, _marked[4], this);
 }
 
 /**
@@ -13945,69 +15843,69 @@ function redrawAttachmentPreview(fieldId, attachmentIdentifier, attachment, defa
 function workerRedrawAttachmentPreview(field, action) {
 	var _action$payload2, fieldId, value, freshField, attachment;
 
-	return _regenerator2.default.wrap(function workerRedrawAttachmentPreview$(_context4) {
+	return _regenerator2.default.wrap(function workerRedrawAttachmentPreview$(_context6) {
 		while (1) {
-			switch (_context4.prev = _context4.next) {
+			switch (_context6.prev = _context6.next) {
 				case 0:
 					_action$payload2 = action.payload, fieldId = _action$payload2.fieldId, value = _action$payload2.value;
 
 					// Don't update the preview if the field doesn't have correct id.
 
 					if (!(fieldId !== field.id)) {
-						_context4.next = 3;
+						_context6.next = 3;
 						break;
 					}
 
-					return _context4.abrupt('return');
+					return _context6.abrupt('return');
 
 				case 3:
-					_context4.next = 5;
+					_context6.next = 5;
 					return (0, _effects.select)(_selectors.getFieldById, field.id);
 
 				case 5:
-					freshField = _context4.sent;
+					freshField = _context6.sent;
 
 					if (!(freshField.preview === value)) {
-						_context4.next = 8;
+						_context6.next = 8;
 						break;
 					}
 
-					return _context4.abrupt('return');
+					return _context6.abrupt('return');
 
 				case 8:
 					attachment = null;
 
 					if (!value) {
-						_context4.next = 17;
+						_context6.next = 17;
 						break;
 					}
 
 					if (!(0, _lodash.isNumber)(value)) {
-						_context4.next = 16;
+						_context6.next = 16;
 						break;
 					}
 
-					_context4.next = 13;
+					_context6.next = 13;
 					return window.wp.media.attachment(value).fetch();
 
 				case 13:
-					attachment = _context4.sent;
-					_context4.next = 17;
+					attachment = _context6.sent;
+					_context6.next = 17;
 					break;
 
 				case 16:
 					attachment = value; // TODO fix this hack
 
 				case 17:
-					_context4.next = 19;
+					_context6.next = 19;
 					return redrawAttachmentPreview(fieldId, value, attachment, field.default_thumb_url);
 
 				case 19:
 				case 'end':
-					return _context4.stop();
+					return _context6.stop();
 			}
 		}
-	}, _marked[3], this);
+	}, _marked[5], this);
 }
 
 /**
@@ -14020,78 +15918,128 @@ function workerRedrawAttachmentPreview(field, action) {
  * @return {void}
  */
 function workerOpenMediaBrowser(channel, field, browser, action) {
-	var liveField, _ref, selection, _selection, attachment, attachments, value;
+	var liveField, _ref, _ref$closed, closed, _ref$selection, selection, _selection, attachment, attachments, value;
 
-	return _regenerator2.default.wrap(function workerOpenMediaBrowser$(_context5) {
+	return _regenerator2.default.wrap(function workerOpenMediaBrowser$(_context7) {
 		while (1) {
-			switch (_context5.prev = _context5.next) {
+			switch (_context7.prev = _context7.next) {
 				case 0:
 					if (!(action.payload !== field.id)) {
-						_context5.next = 2;
+						_context7.next = 2;
 						break;
 					}
 
-					return _context5.abrupt('return');
+					return _context7.abrupt('return');
 
 				case 2:
-					_context5.next = 4;
+					_context7.next = 4;
 					return (0, _effects.select)(_selectors.getFieldById, action.payload);
 
 				case 4:
-					liveField = _context5.sent;
+					liveField = _context7.sent;
 
-					browser.once('open', function (value) {
-						var attachment = value ? window.wp.media.attachment(value) : null;
-						browser.state().get('selection').set(attachment ? [attachment] : []);
-					}.bind(null, liveField.value));
 
-					_context5.next = 8;
+					browser.once('open', function (value, selected) {
+						var type = liveField.type,
+						    duplicates_allowed = liveField.duplicates_allowed;
+
+						// For File field, the media should display
+						// the currently selected element
+
+						if (type === _constants.TYPE_IMAGE || type === _constants.TYPE_FILE) {
+							var attachment = value ? window.wp.media.attachment(value) : null;
+							browser.state().get('selection').set(attachment ? [attachment] : []);
+						}
+
+						if (type === _constants.TYPE_MEDIA_GALLERY) {
+							if (selected) {
+								var _attachment = window.wp.media.attachment(selected);
+								browser.state().get('selection').set(_attachment ? [_attachment] : []);
+							} else {
+								browser.state().get('selection').set([]);
+							}
+						}
+
+						var models = browser.state().get('library').models;
+						models.forEach(function (model) {
+							model.trigger('change', model);
+						});
+					}.bind(null, liveField.value, liveField.selected));
+
+					_context7.next = 8;
 					return (0, _effects.call)([browser, browser.open]);
 
 				case 8:
 					if (false) {
-						_context5.next = 26;
+						_context7.next = 34;
 						break;
 					}
 
-					_context5.next = 11;
+					_context7.next = 11;
 					return (0, _effects.take)(channel);
 
 				case 11:
-					_ref = _context5.sent;
-					selection = _ref.selection;
-					_selection = (0, _toArray3.default)(selection), attachment = _selection[0], attachments = _selection.slice(1);
-					_context5.next = 16;
-					return prepareValueForFileField(field.id, attachment);
+					_ref = _context7.sent;
+					_ref$closed = _ref.closed;
+					closed = _ref$closed === undefined ? false : _ref$closed;
+					_ref$selection = _ref.selection;
+					selection = _ref$selection === undefined ? undefined : _ref$selection;
 
-				case 16:
-					value = _context5.sent;
-					_context5.next = 19;
-					return redrawAttachmentPreview(field.id, value, attachment, field.default_thumb_url);
-
-				case 19:
-					_context5.next = 21;
-					return (0, _effects.put)((0, _actions.setFieldValue)(field.id, value));
-
-				case 21:
-					if ((0, _lodash.isEmpty)(attachments)) {
-						_context5.next = 24;
+					if (!closed) {
+						_context7.next = 19;
 						break;
 					}
 
-					_context5.next = 24;
-					return (0, _effects.put)((0, _actions.addMultipleFiles)(field.id, attachments));
+					_context7.next = 19;
+					return (0, _effects.put)((0, _actions.updateField)(field.id, {
+						selected: ''
+					}));
 
-				case 24:
-					_context5.next = 8;
+				case 19:
+					if (!selection) {
+						_context7.next = 32;
+						break;
+					}
+
+					_selection = (0, _toArray3.default)(selection), attachment = _selection[0], attachments = _selection.slice(1);
+					_context7.next = 23;
+					return prepareValueForField(field.id, attachment);
+
+				case 23:
+					value = _context7.sent;
+
+
+					if (field.type === _constants.TYPE_MEDIA_GALLERY && field.duplicates_allowed === false) {
+						browser.state().frame.options.selected = value;
+					}
+
+					// optional - this ensures an instant preview update
+					_context7.next = 27;
+					return redrawAttachmentPreview(field.id, value, attachment, field.default_thumb_url);
+
+				case 27:
+					_context7.next = 29;
+					return (0, _effects.put)((0, _actions.setFieldValue)(field.id, value));
+
+				case 29:
+					if ((0, _lodash.isEmpty)(attachments)) {
+						_context7.next = 32;
+						break;
+					}
+
+					_context7.next = 32;
+					return (0, _effects.put)((0, _actions.addMultipleFiles)(field.id, attachments, browser));
+
+				case 32:
+					_context7.next = 8;
 					break;
 
-				case 26:
+				case 34:
 				case 'end':
-					return _context5.stop();
+					return _context7.stop();
 			}
 		}
-	}, _marked[4], this);
+	}, _marked[6], this);
 }
 
 /**
@@ -14101,51 +16049,99 @@ function workerOpenMediaBrowser(channel, field, browser, action) {
  * @return {void}
  */
 function workerSetupMediaBrowser(action) {
-	var field, window_button_label, window_label, type_filter, value_type, channel, _ref2, browser;
+	var field, type, type_filter, value_type, mediaBrowserTitle, mediaBrowserButtonLabel, channel, _ref2, browser, _ref3, fieldId;
 
-	return _regenerator2.default.wrap(function workerSetupMediaBrowser$(_context6) {
+	return _regenerator2.default.wrap(function workerSetupMediaBrowser$(_context8) {
 		while (1) {
-			switch (_context6.prev = _context6.next) {
+			switch (_context8.prev = _context8.next) {
 				case 0:
-					_context6.next = 2;
+					_context8.next = 2;
 					return (0, _effects.select)(_selectors.getFieldById, action.payload);
 
 				case 2:
-					field = _context6.sent;
-					window_button_label = field.window_button_label, window_label = field.window_label, type_filter = field.type_filter, value_type = field.value_type;
-					_context6.next = 6;
+					field = _context8.sent;
+					type = field.type, type_filter = field.type_filter, value_type = field.value_type;
+					mediaBrowserTitle = '';
+					mediaBrowserButtonLabel = '';
+
+
+					if (type === 'image') {
+						mediaBrowserTitle = carbonFieldsL10n.field.imageBrowserTitle;
+						mediaBrowserButtonLabel = carbonFieldsL10n.field.imageBrowserButtonLabel;
+					} else if (type === 'file') {
+						mediaBrowserTitle = carbonFieldsL10n.field.fileBrowserTitle;
+						mediaBrowserButtonLabel = carbonFieldsL10n.field.fileBrowserButtonLabel;
+					} else if (type === 'media_gallery') {
+						mediaBrowserTitle = carbonFieldsL10n.field.mediaGalleryBrowserTitle;
+						mediaBrowserButtonLabel = carbonFieldsL10n.field.mediaGalleryBrowserButtonLabel;
+					}
+
+					_context8.next = 9;
 					return (0, _effects.call)(_events.createMediaBrowserChannel, {
-						title: window_label,
+						selected: !(0, _lodash.isUndefined)(field.duplicates_allowed) && !field.duplicates_allowed ? field.value : [],
+						title: mediaBrowserTitle,
 						library: {
 							type: type_filter
 						},
 						button: {
-							text: window_button_label
+							text: mediaBrowserButtonLabel
 						},
 						multiple: true
 					});
 
-				case 6:
-					channel = _context6.sent;
-					_context6.next = 9;
+				case 9:
+					channel = _context8.sent;
+					_context8.next = 12;
 					return (0, _effects.take)(channel);
 
-				case 9:
-					_ref2 = _context6.sent;
+				case 12:
+					_ref2 = _context8.sent;
 					browser = _ref2.browser;
-					_context6.next = 13;
+					_context8.next = 16;
 					return (0, _effects.takeEvery)(_actions.openMediaBrowser, workerOpenMediaBrowser, channel, field, browser);
 
-				case 13:
-					_context6.next = 15;
+				case 16:
+					_context8.next = 18;
 					return (0, _effects.takeEvery)(_actions.setFieldValue, workerRedrawAttachmentPreview, field);
 
-				case 15:
+				case 18:
+					if (false) {
+						_context8.next = 31;
+						break;
+					}
+
+					_context8.next = 21;
+					return (0, _effects.take)(_actions.destroyMediaBrowser);
+
+				case 21:
+					_ref3 = _context8.sent;
+					fieldId = _ref3.payload;
+
+					if (!(field.id === fieldId)) {
+						_context8.next = 29;
+						break;
+					}
+
+					_context8.next = 26;
+					return (0, _effects.call)([channel, 'close']);
+
+				case 26:
+					_context8.next = 28;
+					return (0, _effects.cancel)();
+
+				case 28:
+					return _context8.abrupt('break', 31);
+
+				case 29:
+					_context8.next = 18;
+					break;
+
+				case 31:
 				case 'end':
-					return _context6.stop();
+					return _context8.stop();
 			}
 		}
-	}, _marked[5], this);
+	}, _marked[7], this);
 }
 
 /**
@@ -14154,19 +16150,19 @@ function workerSetupMediaBrowser(action) {
  * @return {void}
  */
 function foreman() {
-	return _regenerator2.default.wrap(function foreman$(_context7) {
+	return _regenerator2.default.wrap(function foreman$(_context9) {
 		while (1) {
-			switch (_context7.prev = _context7.next) {
+			switch (_context9.prev = _context9.next) {
 				case 0:
-					_context7.next = 2;
+					_context9.next = 2;
 					return (0, _effects.all)([(0, _effects.takeEvery)(_actions.setupMediaBrowser, workerSetupMediaBrowser), (0, _effects.takeEvery)(_actions.addMultipleFiles, workerAddMultipleFiles)]);
 
 				case 2:
 				case 'end':
-					return _context7.stop();
+					return _context9.stop();
 			}
 		}
-	}, _marked[6], this);
+	}, _marked[8], this);
 }
 
 /***/ }),
@@ -14196,7 +16192,14 @@ var map = {
 	"./components/html/index.js": "WkB4",
 	"./components/map/google-map.js": "00U9",
 	"./components/map/index.js": "Z+Wa",
+	"./components/media-gallery/edit-attachment.js": "ET0f",
+	"./components/media-gallery/index.js": "8yf1",
+	"./components/media-gallery/list-item.js": "7Ot0",
+	"./components/media-gallery/list.js": "y0rb",
 	"./components/no-options/index.js": "0RBh",
+	"./components/oembed/index.js": "sjDA",
+	"./components/oembed/preview.js": "JG3Y",
+	"./components/oembed/search-input.js": "Ta9K",
 	"./components/radio-image/index.js": "lWSv",
 	"./components/radio/index.js": "RUrd",
 	"./components/rich-text/editor.js": "fzf9",
@@ -15495,6 +17498,11 @@ var _regenerator = __webpack_require__("Xxa5");
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
+var _promise = __webpack_require__("//Fk");
+
+var _promise2 = _interopRequireDefault(_promise);
+
+exports.fetchAttachment = fetchAttachment;
 exports.getAttachmentThumbnail = getAttachmentThumbnail;
 exports.flattenField = flattenField;
 exports.addComplexGroupIdentifiers = addComplexGroupIdentifiers;
@@ -15525,6 +17533,33 @@ var _marked = [stopSaga].map(_regenerator2.default.mark); /**
 
 
 /**
+ * Fetches the Attachment Data from the Server.
+ *
+ * @param  {Number} attachmentId
+ * @return {Promise}
+ */
+function fetchAttachment(attachmentId) {
+	return new _promise2.default(function (resolve, reject) {
+		var request = $.get(window.ajaxurl, {
+			action: 'get-attachment',
+			id: attachmentId
+		}, null, 'json');
+
+		request.done(function (response) {
+			if (!response || !response.success) {
+				reject(response.error || 'An error occurred while trying to fetch attachment.');
+			} else {
+				resolve(response);
+			}
+		});
+
+		request.fail(function (xhr, status) {
+			reject('Request failed: ' + status);
+		});
+	});
+}
+
+/**
  * Get the thumbnail of the attachment.
  *
  * @param  {Object} attachment
@@ -15538,6 +17573,8 @@ function getAttachmentThumbnail(attachment) {
 		if (typeof size !== 'undefined') {
 			thumbnailUrl = size.url;
 		}
+	} else {
+		thumbnailUrl = attachment.icon;
 	}
 
 	return thumbnailUrl;
@@ -15717,6 +17754,17 @@ exports.default = (0, _recompose.compose)((0, _recompose.setStatic)('type', _con
 }))(_container2.default); /**
                            * The external dependencies.
                            */
+
+/***/ }),
+
+/***/ "pqdH":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+module.exports = __webpack_require__("xzsA");
+
 
 /***/ }),
 
@@ -16144,6 +18192,230 @@ exports.default = SortableList;
 
 /***/ }),
 
+/***/ "sjDA":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.enhance = undefined;
+
+var _jquery = __webpack_require__("0iPh");
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _react = __webpack_require__("U7vG");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__("O27J");
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _lodash = __webpack_require__("M4fF");
+
+var _recompose = __webpack_require__("zpMW");
+
+var _field = __webpack_require__("M6Uh");
+
+var _field2 = _interopRequireDefault(_field);
+
+var _preview = __webpack_require__("JG3Y");
+
+var _preview2 = _interopRequireDefault(_preview);
+
+var _searchInput = __webpack_require__("Ta9K");
+
+var _searchInput2 = _interopRequireDefault(_searchInput);
+
+var _withStore = __webpack_require__("0yqe");
+
+var _withStore2 = _interopRequireDefault(_withStore);
+
+var _withSetup = __webpack_require__("8ctJ");
+
+var _withSetup2 = _interopRequireDefault(_withSetup);
+
+var _constants = __webpack_require__("8Hlw");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Render a Google-powered map with an address search field.
+ *
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {Function}      props.handleChange
+ * @param  {Function}      props.handleSearchSubmit
+ * @return {React.Element}
+ */
+
+
+/**
+ * The internal dependencies.
+ */
+/**
+ * The external dependencies.
+ */
+var OembedField = function OembedField(_ref) {
+	var name = _ref.name,
+	    field = _ref.field,
+	    embedCode = _ref.embedCode,
+	    embedType = _ref.embedType,
+	    isLoading = _ref.isLoading,
+	    error = _ref.error,
+	    provider = _ref.provider,
+	    handleSearchSubmit = _ref.handleSearchSubmit;
+
+	return _react2.default.createElement(
+		_field2.default,
+		{ field: field },
+		_react2.default.createElement('input', {
+			type: 'hidden',
+			id: field.id,
+			name: name,
+			value: field.value,
+			readOnly: true }),
+		_react2.default.createElement(_searchInput2.default, {
+			term: field.value,
+			onSubmit: handleSearchSubmit }),
+		isLoading || error ? _react2.default.createElement(
+			'div',
+			{ className: 'carbon-oembed-loader' },
+			isLoading ? _react2.default.createElement('span', { className: 'spinner is-active' }) : _react2.default.createElement(
+				'p',
+				null,
+				error
+			)
+		) : null,
+		embedCode ? _react2.default.createElement(_preview2.default, {
+			html: embedCode,
+			type: embedType,
+			provider: provider
+		}) : null
+	);
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+OembedField.propTypes = {
+	name: _propTypes2.default.string,
+	field: _propTypes2.default.shape({
+		value: _propTypes2.default.string
+	})
+};
+
+/**
+ * The enhancer.
+ *
+ * @type {Function}
+ */
+var enhance = exports.enhance = (0, _recompose.compose)(
+/**
+ * Connect to the Redux store.
+ */
+(0, _withStore2.default)(),
+
+/**
+ * Control the visibility of the colorpicker.
+ */
+(0, _recompose.withState)('embedCode', 'setEmbedCode', null), (0, _recompose.withState)('embedType', 'setEmbedType', null), (0, _recompose.withState)('provider', 'setProvider', null), (0, _recompose.withState)('isLoading', 'setIsLoading', false), (0, _recompose.withState)('error', 'setError', null),
+
+/**
+ * Pass some handlers to the component.
+ */
+(0, _recompose.withHandlers)({
+	handleSearchSubmit: function handleSearchSubmit(_ref2) {
+		var field = _ref2.field,
+		    setEmbedCode = _ref2.setEmbedCode,
+		    setEmbedType = _ref2.setEmbedType,
+		    setIsLoading = _ref2.setIsLoading,
+		    setError = _ref2.setError,
+		    setFieldValue = _ref2.setFieldValue,
+		    isLoading = _ref2.isLoading,
+		    setProvider = _ref2.setProvider;
+		return function (value) {
+			if (isLoading) {
+				return;
+			}
+
+			if (field.value !== value) {
+				setFieldValue(field.id, value);
+			}
+
+			setEmbedCode(null);
+			setError(null);
+
+			if ((0, _lodash.isEmpty)(value)) {
+				return;
+			}
+
+			setIsLoading(true);
+
+			var request = _jquery2.default.get(wpApiSettings.root + 'oembed/1.0/proxy', {
+				url: value,
+				_wpnonce: wpApiSettings.nonce
+			});
+
+			request.done(function (_ref3) {
+				var html = _ref3.html,
+				    type = _ref3.type,
+				    provider_name = _ref3.provider_name;
+
+				setEmbedType(type);
+				setProvider(provider_name);
+				setEmbedCode(html);
+				setIsLoading(false);
+			});
+
+			request.fail(function () {
+				setError(carbonFieldsL10n.field.oembedNotFound);
+				setIsLoading(false);
+			});
+		};
+	}
+}),
+
+/**
+ * Attach the setup hooks.
+ */
+(0, _withSetup2.default)({
+	componentDidMount: function componentDidMount() {
+		var _props = this.props,
+		    field = _props.field,
+		    ui = _props.ui,
+		    setupField = _props.setupField,
+		    handleSearchSubmit = _props.handleSearchSubmit;
+
+
+		setupField(field.id, field.type, ui);
+
+		var domNode = _reactDom2.default.findDOMNode(this);
+
+		var i = setInterval(function () {
+			if (domNode.getBoundingClientRect().width > 0) {
+				clearInterval(i);
+				handleSearchSubmit(field.value);
+			}
+		}, 100);
+	}
+}));
+
+exports.default = (0, _recompose.setStatic)('type', [_constants.TYPE_OEMBED])(enhance(OembedField));
+
+/***/ }),
+
 /***/ "t8x9":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -16330,7 +18602,13 @@ var RichTextField = exports.RichTextField = function RichTextField(_ref) {
 		{ field: field },
 		_react2.default.createElement(
 			_editor2.default,
-			{ id: field.id, richEditing: field.rich_editing, mediaButtons: field.media_buttons, content: field.value, onChange: handleChange },
+			{
+				id: field.id,
+				richEditing: field.rich_editing,
+				mediaButtons: field.media_buttons,
+				content: field.value,
+				isDragging: field.ui.dragged,
+				onChange: handleChange },
 			_react2.default.createElement('textarea', (0, _extends3.default)({
 				id: field.id,
 				className: 'wp-editor-area',
@@ -16384,7 +18662,9 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 /**
  * Attach the setup hooks.
  */
-(0, _withSetup2.default)(),
+(0, _withSetup2.default)({}, {
+	dragged: false
+}),
 
 /**
  * Pass some handlers to the component.
@@ -16805,6 +19085,10 @@ exports.workerSyncNonHierarchicalTerms = workerSyncNonHierarchicalTerms;
 exports.workerFormSubmit = workerFormSubmit;
 exports.default = foreman;
 
+var _jquery = __webpack_require__("0iPh");
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
 var _effects = __webpack_require__("egdi");
 
 var _lodash = __webpack_require__("M4fF");
@@ -16863,40 +19147,53 @@ function syncStore(containers, meta) {
  * @return {void}
  */
 function workerSyncPostTemplate(containers) {
-	var channel, _ref, value;
+	var selector, channel, _ref, value;
 
 	return _regenerator2.default.wrap(function workerSyncPostTemplate$(_context2) {
 		while (1) {
 			switch (_context2.prev = _context2.next) {
 				case 0:
-					_context2.next = 2;
-					return (0, _effects.call)(_events.createSelectboxChannel, 'select#page_template');
+					selector = 'select#page_template';
 
-				case 2:
-					channel = _context2.sent;
-
-				case 3:
-					if (false) {
-						_context2.next = 12;
+					if (!((0, _jquery2.default)(selector).length === 0)) {
+						_context2.next = 4;
 						break;
 					}
 
+					_context2.next = 4;
+					return (0, _effects.call)(syncStore, containers, {
+						post_template: 'default'
+					});
+
+				case 4:
 					_context2.next = 6;
-					return (0, _effects.take)(channel);
+					return (0, _effects.call)(_events.createSelectboxChannel, selector);
 
 				case 6:
+					channel = _context2.sent;
+
+				case 7:
+					if (false) {
+						_context2.next = 16;
+						break;
+					}
+
+					_context2.next = 10;
+					return (0, _effects.take)(channel);
+
+				case 10:
 					_ref = _context2.sent;
 					value = _ref.value;
-					_context2.next = 10;
+					_context2.next = 14;
 					return (0, _effects.call)(syncStore, containers, {
 						post_template: value
 					});
 
-				case 10:
-					_context2.next = 3;
+				case 14:
+					_context2.next = 7;
 					break;
 
-				case 12:
+				case 16:
 				case 'end':
 					return _context2.stop();
 			}
@@ -17303,6 +19600,20 @@ function foreman() {
 		}
 	}, _marked[8], this);
 }
+
+/***/ }),
+
+/***/ "vdcO":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("vdcO");
+
+/***/ }),
+
+/***/ "vg0m":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("vg0m");
 
 /***/ }),
 
@@ -18016,20 +20327,55 @@ function createMediaBrowserChannel(settings) {
 		// Create a new instance of the media browser.
 		var browser = window.wp.media(settings);
 
+		var AttachmentLibrary = wp.media.view.Attachment.Library;
+
+		window.wp.media.view.Attachment.Library = AttachmentLibrary.extend({
+			render: function render() {
+				var selected = this.controller.options.selected;
+
+
+				selected = (0, _lodash.isArray)(selected) ? selected : [selected];
+				selected = selected.map(function (id) {
+					return parseInt(id, 10);
+				});
+
+				var id = this.model.id;
+
+
+				if (selected && selected.indexOf(id) !== -1) {
+					this.$el.addClass('carbon-selected');
+				} else {
+					this.$el.removeClass('carbon-selected');
+				}
+
+				return AttachmentLibrary.prototype.render.apply(this, arguments);
+			}
+		});
+
 		// Emit the selection through the channel.
-		var handler = function handler() {
+		var onSelect = function onSelect() {
 			emit({
 				selection: browser.state().get('selection').toJSON()
 			});
 		};
 
+		// Emit the closing modal through the channel.
+		var onClose = function onClose() {
+			emit({
+				closed: true
+			});
+		};
+
 		// Cancel the subscription.
 		var unsubscribe = function unsubscribe() {
-			browser.off('select', handler);
+			browser.off('select', onSelect);
+			browser.off('close', onClose);
+			browser.remove();
 		};
 
 		// Setup the subscription.
-		browser.on('select', handler);
+		browser.on('select', onSelect);
+		browser.on('close', onClose);
 
 		// Emit the instance of browser so it can be used by subscribers.
 		emit({
@@ -18117,6 +20463,13 @@ module.exports = function(target, src, safe){
 
 /***/ }),
 
+/***/ "xWyi":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = (__webpack_require__("B3Oe"))("xWyi");
+
+/***/ }),
+
 /***/ "xh4g":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18127,6 +20480,10 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _getIterator2 = __webpack_require__("BO1k");
+
+var _getIterator3 = _interopRequireDefault(_getIterator2);
+
 var _regenerator = __webpack_require__("Xxa5");
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
@@ -18134,6 +20491,7 @@ var _regenerator2 = _interopRequireDefault(_regenerator);
 exports.workerAddOrCloneComplexGroup = workerAddOrCloneComplexGroup;
 exports.workerRemoveComplexGroup = workerRemoveComplexGroup;
 exports.workerDuplicateComplexGroups = workerDuplicateComplexGroups;
+exports.workerToggleRichTextEditors = workerToggleRichTextEditors;
 exports.default = foreman;
 
 var _effects = __webpack_require__("egdi");
@@ -18150,9 +20508,9 @@ var _constants = __webpack_require__("8Hlw");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [workerAddOrCloneComplexGroup, workerRemoveComplexGroup, workerDuplicateComplexGroups, foreman].map(_regenerator2.default.mark); /**
-                                                                                                                                                * The external dependencies.
-                                                                                                                                                */
+var _marked = [workerAddOrCloneComplexGroup, workerRemoveComplexGroup, workerDuplicateComplexGroups, markRichTextFieldsAsDragged, workerToggleRichTextEditors, foreman].map(_regenerator2.default.mark); /**
+                                                                                                                                                                                                          * The external dependencies.
+                                                                                                                                                                                                          */
 
 
 /**
@@ -18481,24 +20839,140 @@ function workerDuplicateComplexGroups(_ref4) {
 }
 
 /**
+ * Change the `dragged` flag of rich text fields.
+ *
+ * @param  {NodeList} elements
+ * @param  {Boolean}  dragged
+ * @return {void}
+ */
+function markRichTextFieldsAsDragged(elements, dragged) {
+	var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, element;
+
+	return _regenerator2.default.wrap(function markRichTextFieldsAsDragged$(_context4) {
+		while (1) {
+			switch (_context4.prev = _context4.next) {
+				case 0:
+					_iteratorNormalCompletion = true;
+					_didIteratorError = false;
+					_iteratorError = undefined;
+					_context4.prev = 3;
+					_iterator = (0, _getIterator3.default)(elements);
+
+				case 5:
+					if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+						_context4.next = 12;
+						break;
+					}
+
+					element = _step.value;
+					_context4.next = 9;
+					return (0, _effects.put)((0, _actions.setUI)(element.id, { dragged: dragged }));
+
+				case 9:
+					_iteratorNormalCompletion = true;
+					_context4.next = 5;
+					break;
+
+				case 12:
+					_context4.next = 18;
+					break;
+
+				case 14:
+					_context4.prev = 14;
+					_context4.t0 = _context4['catch'](3);
+					_didIteratorError = true;
+					_iteratorError = _context4.t0;
+
+				case 18:
+					_context4.prev = 18;
+					_context4.prev = 19;
+
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
+					}
+
+				case 21:
+					_context4.prev = 21;
+
+					if (!_didIteratorError) {
+						_context4.next = 24;
+						break;
+					}
+
+					throw _iteratorError;
+
+				case 24:
+					return _context4.finish(21);
+
+				case 25:
+					return _context4.finish(18);
+
+				case 26:
+				case 'end':
+					return _context4.stop();
+			}
+		}
+	}, _marked[3], this, [[3, 14, 18, 26], [19,, 21, 25]]);
+}
+
+/**
+ * Destroy and re-init the editors inside the complex group.
+ *
+ * @param  {Object}    action
+ * @param  {Object}    action.payload
+ * @param  {String}    action.payload.groupId
+ * @return {void}
+ */
+function workerToggleRichTextEditors(_ref5) {
+	var groupId = _ref5.payload.groupId;
+	var elements;
+	return _regenerator2.default.wrap(function workerToggleRichTextEditors$(_context5) {
+		while (1) {
+			switch (_context5.prev = _context5.next) {
+				case 0:
+					_context5.next = 2;
+					return (0, _effects.call)([document, 'querySelectorAll'], '#' + groupId + ' .carbon-rich_text textarea');
+
+				case 2:
+					elements = _context5.sent;
+					_context5.next = 5;
+					return (0, _effects.call)(markRichTextFieldsAsDragged, elements, true);
+
+				case 5:
+					_context5.next = 7;
+					return (0, _effects.take)(_actions.stopComplexGroupDrag);
+
+				case 7:
+					_context5.next = 9;
+					return (0, _effects.call)(markRichTextFieldsAsDragged, elements, false);
+
+				case 9:
+				case 'end':
+					return _context5.stop();
+			}
+		}
+	}, _marked[4], this);
+}
+
+/**
  * Start to work.
  *
  * @return {void}
  */
 function foreman() {
-	return _regenerator2.default.wrap(function foreman$(_context4) {
+	return _regenerator2.default.wrap(function foreman$(_context6) {
 		while (1) {
-			switch (_context4.prev = _context4.next) {
+			switch (_context6.prev = _context6.next) {
 				case 0:
-					_context4.next = 2;
-					return (0, _effects.all)([(0, _effects.takeEvery)(_actions.addComplexGroup, workerDuplicateComplexGroups), (0, _effects.takeEvery)(_actions.cloneComplexGroup, workerDuplicateComplexGroups), (0, _effects.takeEvery)(_actions.removeComplexGroup, workerDuplicateComplexGroups), (0, _effects.takeEvery)(_actions.addComplexGroup, workerAddOrCloneComplexGroup), (0, _effects.takeEvery)(_actions.cloneComplexGroup, workerAddOrCloneComplexGroup), (0, _effects.takeEvery)(_actions.removeComplexGroup, workerRemoveComplexGroup)]);
+					_context6.next = 2;
+					return (0, _effects.all)([(0, _effects.takeEvery)(_actions.addComplexGroup, workerDuplicateComplexGroups), (0, _effects.takeEvery)(_actions.cloneComplexGroup, workerDuplicateComplexGroups), (0, _effects.takeEvery)(_actions.removeComplexGroup, workerDuplicateComplexGroups), (0, _effects.takeEvery)(_actions.addComplexGroup, workerAddOrCloneComplexGroup), (0, _effects.takeEvery)(_actions.cloneComplexGroup, workerAddOrCloneComplexGroup), (0, _effects.takeEvery)(_actions.removeComplexGroup, workerRemoveComplexGroup), (0, _effects.takeLatest)(_actions.startComplexGroupDrag, workerToggleRichTextEditors)]);
 
 				case 2:
 				case 'end':
-					return _context4.stop();
+					return _context6.stop();
 			}
 		}
-	}, _marked[3], this);
+	}, _marked[5], this);
 }
 
 /***/ }),
@@ -18513,6 +20987,10 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 exports.enhance = exports.SelectField = undefined;
+
+var _extends2 = __webpack_require__("Dd8w");
+
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _react = __webpack_require__("U7vG");
 
@@ -18566,12 +21044,13 @@ var SelectField = exports.SelectField = function SelectField(_ref) {
 		{ field: field },
 		_react2.default.createElement(
 			'select',
-			{
+			(0, _extends3.default)({
 				id: field.id,
 				name: name,
-				onChange: handleChange,
+				value: field.value,
 				disabled: !field.ui.is_visible,
-				value: field.value },
+				onChange: handleChange
+			}, field.attributes),
 			field.options.map(function (_ref2, index) {
 				var name = _ref2.name,
 				    value = _ref2.value;
@@ -18919,6 +21398,232 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 }));
 
 exports.default = (0, _recompose.setStatic)('type', [_constants.TYPE_SIDEBAR])(enhance(SidebarField));
+
+/***/ }),
+
+/***/ "xzsA":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ *
+ */
+
+
+
+var ReactDefaultInjection = __webpack_require__("ag9w");
+var ReactServerRendering = __webpack_require__("GzQT");
+var ReactVersion = __webpack_require__("Ars9");
+
+ReactDefaultInjection.inject();
+
+var ReactDOMServer = {
+  renderToString: ReactServerRendering.renderToString,
+  renderToStaticMarkup: ReactServerRendering.renderToStaticMarkup,
+  version: ReactVersion
+};
+
+module.exports = ReactDOMServer;
+
+/***/ }),
+
+/***/ "y0rb":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.enhance = exports.MediaGalleryList = undefined;
+
+var _jquery = __webpack_require__("0iPh");
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+var _react = __webpack_require__("U7vG");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__("O27J");
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _recompose = __webpack_require__("zpMW");
+
+var _lodash = __webpack_require__("M4fF");
+
+var _withSetup = __webpack_require__("8ctJ");
+
+var _withSetup2 = _interopRequireDefault(_withSetup);
+
+var _sortableList = __webpack_require__("sefJ");
+
+var _sortableList2 = _interopRequireDefault(_sortableList);
+
+var _listItem = __webpack_require__("7Ot0");
+
+var _listItem2 = _interopRequireDefault(_listItem);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Render a file upload field with a preview thumbnail of the uploaded file.
+ *
+ * @param  {Object}        props
+ * @param  {String}        props.name
+ * @param  {Object}        props.field
+ * @param  {Function}      props.openBrowser
+ * @param  {Function}      props.handleRemoveItem
+ * @return {React.Element}
+ */
+var MediaGalleryList = exports.MediaGalleryList = function MediaGalleryList(_ref) {
+	var field = _ref.field,
+	    prefix = _ref.prefix,
+	    items = _ref.items,
+	    itemsMeta = _ref.itemsMeta,
+	    handleRemoveItem = _ref.handleRemoveItem,
+	    handleEditItem = _ref.handleEditItem,
+	    openBrowser = _ref.openBrowser,
+	    sortableOptions = _ref.sortableOptions,
+	    onSort = _ref.onSort;
+
+	return _react2.default.createElement(
+		'div',
+		{ className: 'carbon-media-gallery-list' },
+		_react2.default.createElement(
+			_sortableList2.default,
+			{ options: sortableOptions, onSort: onSort },
+			items.length > 0 ? _react2.default.createElement(
+				'ul',
+				{ className: 'carbon-media-gallery-list-items' },
+				items.map(function (item, index) {
+					return _react2.default.createElement(_listItem2.default, {
+						prefix: prefix,
+						key: index,
+						index: index,
+						item: item,
+						meta: itemsMeta[item],
+						name: name,
+						onRemoveClick: handleRemoveItem,
+						onEditClick: handleEditItem,
+						isSelected: field.selected == item
+					});
+				})
+			) : _react2.default.createElement(
+				'div',
+				{ className: 'carbon-media-gallery-no-files' },
+				_react2.default.createElement(
+					'p',
+					null,
+					carbonFieldsL10n.field.mediaGalleryNoFiles
+				)
+			)
+		),
+		_react2.default.createElement(
+			'div',
+			{ className: 'carbon-media-gallery-actions' },
+			_react2.default.createElement(
+				'button',
+				{ type: 'button', className: 'button button-secondary', onClick: openBrowser },
+				carbonFieldsL10n.field.mediaGalleryButtonLabel
+			)
+		)
+	);
+};
+
+/**
+ * Validate the props.
+ *
+ * @type {Object}
+ */
+
+
+/**
+ * The internal dependencies.
+ */
+/**
+ * The external dependencies.
+ */
+MediaGalleryList.propTypes = {
+	name: _propTypes2.default.string,
+	items: _propTypes2.default.array,
+	handleRemoveItem: _propTypes2.default.func
+};
+
+/**
+ * The enhancer.
+ *
+ * @type {Function}
+ */
+var enhance = exports.enhance = (0, _recompose.compose)(
+/**
+ * Track current search term.
+ */
+(0, _recompose.withState)('node', 'setNode', null), (0, _recompose.withHandlers)({
+	handleComponentResize: function handleComponentResize(_ref2) {
+		var field = _ref2.field,
+		    node = _ref2.node;
+		return function () {
+			var nodeWidth = node.offsetWidth;
+
+			if (nodeWidth < 200) {
+				node.dataset.itemsPerRow = 1;
+			} else if (nodeWidth < 300) {
+				node.dataset.itemsPerRow = 2;
+			} else if (nodeWidth < 500) {
+				node.dataset.itemsPerRow = 3;
+			} else if (nodeWidth < 600) {
+				node.dataset.itemsPerRow = 4;
+			} else if (nodeWidth < 700) {
+				node.dataset.itemsPerRow = 5;
+			} else if (nodeWidth < 800) {
+				node.dataset.itemsPerRow = 6;
+			} else if (nodeWidth < 900) {
+				node.dataset.itemsPerRow = 7;
+			} else if (nodeWidth < 1000) {
+				node.dataset.itemsPerRow = 8;
+			} else if (nodeWidth < 1200) {
+				node.dataset.itemsPerRow = 9;
+			} else if (nodeWidth < 1900) {
+				node.dataset.itemsPerRow = 10;
+			}
+		};
+	}
+}),
+
+/**
+ * Attach the setup hooks.
+ */
+(0, _withSetup2.default)({
+	componentDidMount: function componentDidMount() {
+		var _props = this.props,
+		    setNode = _props.setNode,
+		    handleComponentResize = _props.handleComponentResize;
+
+
+		setNode(_reactDom2.default.findDOMNode(this));
+		(0, _jquery2.default)(window).on('resize', handleComponentResize);
+	},
+	componentDidUpdate: function componentDidUpdate(_ref3) {
+		var handleComponentResize = _ref3.handleComponentResize;
+
+		handleComponentResize();
+	}
+}));
+
+exports.default = enhance(MediaGalleryList);
 
 /***/ }),
 
