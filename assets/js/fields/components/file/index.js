@@ -57,7 +57,7 @@ export const FileField = ({
 				<input
 					type="text"
 					className="carbon-attachment-file-name"
-					value={field.file_url}
+					value={field.file_url ? field.file_url : ''}
 					readOnly />
 			</div>
 
