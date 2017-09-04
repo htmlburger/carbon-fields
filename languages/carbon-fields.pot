@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Carbon Fields\n"
-"POT-Creation-Date: 2017-08-31 11:14+0300\n"
+"POT-Creation-Date: 2017-09-04 14:45+0300\n"
 "PO-Revision-Date: 2016-01-11 12:57+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -33,15 +33,6 @@ msgstr ""
 msgid "Settings saved."
 msgstr ""
 
-#: core/Field/File_Field.php:32 core/Field/File_Field.php:33
-#: core/Field/Media_Gallery_Field.php:56
-msgid "Select File"
-msgstr ""
-
-#: core/Field/File_Field.php:34 core/Field/Media_Gallery_Field.php:57
-msgid "Files"
-msgstr ""
-
 #: core/Field/Footer_Scripts_Field.php:20
 msgid ""
 "If you need to add scripts to your footer (like Google Analytics tracking "
@@ -54,18 +45,6 @@ msgstr ""
 
 #: core/Field/Header_Scripts_Field.php:20
 msgid "If you need to add scripts to your header, you should enter them here."
-msgstr ""
-
-#: core/Field/Image_Field.php:18 core/Field/Image_Field.php:19
-msgid "Select Image"
-msgstr ""
-
-#: core/Field/Image_Field.php:20
-msgid "Images"
-msgstr ""
-
-#: core/Field/Media_Gallery_Field.php:55
-msgid "Add File"
 msgstr ""
 
 #: core/Field/Sidebar_Field.php:50
@@ -283,6 +262,42 @@ msgstr ""
 #: core/Loader/Loader.php:169
 msgctxt "oEmbed field"
 msgid "Not Found"
+msgstr ""
+
+#: core/Loader/Loader.php:171
+msgid "No files selected."
+msgstr ""
+
+#: core/Loader/Loader.php:172
+msgid "Add File"
+msgstr ""
+
+#: core/Loader/Loader.php:173 core/Loader/Loader.php:177
+msgctxt "WordPress Media Browser"
+msgid "Files"
+msgstr ""
+
+#: core/Loader/Loader.php:174 core/Loader/Loader.php:178
+msgctxt "WordPress Media Browser"
+msgid "Select File"
+msgstr ""
+
+#: core/Loader/Loader.php:176
+msgid "Select File"
+msgstr ""
+
+#: core/Loader/Loader.php:180
+msgid "Select Image"
+msgstr ""
+
+#: core/Loader/Loader.php:181
+msgctxt "WordPress Media Browser"
+msgid "Images"
+msgstr ""
+
+#: core/Loader/Loader.php:182
+msgctxt "WordPress Media Browser"
+msgid "Select Image"
 msgstr ""
 
 #: core/REST_API/Router.php:287

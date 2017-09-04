@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Carbon Fields\n"
-"POT-Creation-Date: 2017-08-31 10:32+0300\n"
-"PO-Revision-Date: 2017-08-31 10:32+0300\n"
+"POT-Creation-Date: 2017-09-04 14:45+0300\n"
+"PO-Revision-Date: 2017-09-04 14:45+0300\n"
 "Last-Translator: Timi Wahalahti <timi@dude.fi>\n"
 "Language-Team: Timi Wahalahti <timi@dude.fi>\n"
 "Language: fi\n"
@@ -32,15 +32,6 @@ msgstr "Yleiset"
 msgid "Settings saved."
 msgstr "Asetukset tallennettu."
 
-#: core/Field/File_Field.php:32 core/Field/File_Field.php:33
-#: core/Field/Media_Gallery_Field.php:56
-msgid "Select File"
-msgstr "Valitse tiedosto"
-
-#: core/Field/File_Field.php:34 core/Field/Media_Gallery_Field.php:57
-msgid "Files"
-msgstr "Tiedostot"
-
 #: core/Field/Footer_Scripts_Field.php:20
 msgid ""
 "If you need to add scripts to your footer (like Google Analytics tracking "
@@ -56,21 +47,6 @@ msgstr "Ei lomaketta"
 #: core/Field/Header_Scripts_Field.php:20
 msgid "If you need to add scripts to your header, you should enter them here."
 msgstr "Jos haluat lisätä skriptejä ylätunnisteeseen, voit lisätä ne tähän."
-
-#: core/Field/Image_Field.php:18 core/Field/Image_Field.php:19
-msgid "Select Image"
-msgstr "Valitse kuva"
-
-#: core/Field/Image_Field.php:20
-msgid "Images"
-msgstr "Kuvat"
-
-#: core/Field/Media_Gallery_Field.php:55
-#, fuzzy
-#| msgctxt "sidebar"
-#| msgid "Add New"
-msgid "Add File"
-msgstr "Lisää uusi"
 
 #: core/Field/Sidebar_Field.php:50
 msgctxt "sidebar"
@@ -308,6 +284,53 @@ msgstr ""
 msgctxt "oEmbed field"
 msgid "Not Found"
 msgstr ""
+
+#: core/Loader/Loader.php:171
+msgid "No files selected."
+msgstr ""
+
+#: core/Loader/Loader.php:172
+#, fuzzy
+#| msgctxt "sidebar"
+#| msgid "Add New"
+msgid "Add File"
+msgstr "Lisää uusi"
+
+#: core/Loader/Loader.php:173 core/Loader/Loader.php:177
+#, fuzzy
+#| msgid "Files"
+msgctxt "WordPress Media Browser"
+msgid "Files"
+msgstr "Tiedostot"
+
+#: core/Loader/Loader.php:174 core/Loader/Loader.php:178
+#, fuzzy
+#| msgid "Select File"
+msgctxt "WordPress Media Browser"
+msgid "Select File"
+msgstr "Valitse tiedosto"
+
+#: core/Loader/Loader.php:176
+msgid "Select File"
+msgstr "Valitse tiedosto"
+
+#: core/Loader/Loader.php:180
+msgid "Select Image"
+msgstr "Valitse kuva"
+
+#: core/Loader/Loader.php:181
+#, fuzzy
+#| msgid "Images"
+msgctxt "WordPress Media Browser"
+msgid "Images"
+msgstr "Kuvat"
+
+#: core/Loader/Loader.php:182
+#, fuzzy
+#| msgid "Select Image"
+msgctxt "WordPress Media Browser"
+msgid "Select Image"
+msgstr "Valitse kuva"
 
 #: core/REST_API/Router.php:287
 msgid "No option names provided"
