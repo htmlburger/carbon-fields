@@ -734,37 +734,45 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Set an attribute and its value or an array of attributes with values
+	 * Set an attribute and it's value
 	 *
-	 * @param  string|array $name
-	 * @param  string       $value
-	 * @return Field        $this
+	 * @param  string $name
+	 * @param  string $value
+	 * @return Field  $this
 	 */
 	public function set_attribute( $name, $value = '' ) {
-		$names = array();
+		$is_data_attribute = substr( strtolower( $name ), 0, 5 ) === 'data-';
+		if ( $is_data_attribute ) {
+			$name = strtolower( $name );
+			$name = preg_replace( '/[^a-z\-]/', '-', $name );
+			$name = preg_replace( '/\-{2,}/', '-', $name );
+			$name = preg_replace( '/^\-+|\-+$/', '', $name );
+		}
+
+		if ( ! $is_data_attribute && ! in_array( $name, $this->allowed_attributes ) ) {
+			Incorrect_Syntax_Exception::raise( 'Only the following attributes are allowed: ' . implode( ', ', $this->allowed_attributes ) . ' and data-*.' );
+			return $this;
+		}
+
+		$this->attributes[ $name ] = $value;
+		return $this;
+	}
+	
+	/**
+	 * Set an attributes
+	 *
+	 * @param  array $attributes
+	 * @return Field|array
+	 */
+	public function set_attributes( $attributes ) {
 		
-		if ( is_array( $name ) ) {
-			$names = $name;
-		} else {
-			$names[ $name ] = $value;
+		if ( ! is_array( $attributes ) ) {
+			Incorrect_Syntax_Exception::raise( 'Attributes argument should be an array.' );
+			return array();
 		}
 		
-		foreach ( $names as $name => $value ) {
-			$is_data_attribute = substr( strtolower( $name ), 0, 5 ) === 'data-';
-			if ( $is_data_attribute ) {
-				$name = strtolower( $name );
-				$name = preg_replace( '/[^a-z\-]/', '-', $name );
-				$name = preg_replace( '/\-{2,}/', '-', $name );
-				$name = preg_replace( '/^\-+|\-+$/', '', $name );
-			}
-			
-			if ( ! $is_data_attribute && ! in_array( $name, $this->allowed_attributes ) ) {
-				Incorrect_Syntax_Exception::raise( 'Only the following attributes are allowed: ' . implode( ', ', $this->allowed_attributes ) . ' and data-*.' );
-				
-				return $this;
-			}
-			
-			$this->attributes[ $name ] = $value;
+		foreach ( $attributes as $name => $value ) {
+			$this->set_attribute( $name, $value );
 		}
 		
 		return $this;
