@@ -74,8 +74,8 @@ class Term_Condition extends Condition {
 	/**
 	 * Check if term is present in array of full term descriptors
 	 *
-	 * @param  object  $term
-	 * @param  array[] $full_term_descriptors
+	 * @param  object       $term
+	 * @param  array<array> $full_term_descriptors
 	 * @return boolean
 	 */
 	protected function term_in_full_term_descriptors( $term, $full_term_descriptors ) {

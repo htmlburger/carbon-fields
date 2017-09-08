@@ -33,11 +33,11 @@ class Post_Term_Condition extends Term_Condition {
 	 * Check if a post has a term
 	 *
 	 * @param  integer $post_id
-	 * @param  array   $raw_term
+	 * @param  array   $full_term_desriptor
 	 * @return boolean
 	 */
-	protected function post_has_term( $post_id, $raw_term ) {
-		$term = $this->wp_toolset->get_term_by_descriptor( $raw_term );
+	protected function post_has_term( $post_id, $full_term_desriptor ) {
+		$term = $full_term_desriptor['term_object'];
 		return has_term( intval( $term->term_id ), $term->taxonomy, intval( $post_id ) );
 	}
 
@@ -45,12 +45,12 @@ class Post_Term_Condition extends Term_Condition {
 	 * Check if a post has any of the supplied terms
 	 *
 	 * @param  integer      $post_id
-	 * @param  array<array> $raw_terms
+	 * @param  array<array> $full_term_desriptors
 	 * @return boolean
 	 */
-	protected function post_has_any_term( $post_id, $raw_terms ) {
-		foreach ( $raw_terms as $raw_term ) {
-			if ( $this->post_has_term( $post_id, $raw_term ) ) {
+	protected function post_has_any_term( $post_id, $full_term_desriptors ) {
+		foreach ( $full_term_desriptors as $full_term_desriptor ) {
+			if ( $this->post_has_term( $post_id, $full_term_desriptor ) ) {
 				return true;
 			}
 		}
