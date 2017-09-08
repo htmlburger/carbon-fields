@@ -1,6 +1,7 @@
 /**
  * The external dependencies.
  */
+import $ from 'jquery';
 import ReactDOM from 'react-dom';
 import { take, call, put, fork, select } from 'redux-saga/effects';
 import { isEmpty, mapValues } from 'lodash';
@@ -20,6 +21,53 @@ import { getContainers, getContainersByType } from 'containers/selectors';
 import { TYPE_TERM_META } from 'containers/constants';
 
 /**
+ * Get select option's level based on it's className
+ *
+ * @param  {Object} option
+ * @return {Number}
+ */
+function getOptionLevel(option) {
+	let level = 1;
+
+	if (option.className) {
+		const matches = option.className.match(/^level-(\d+)/);
+
+		if (matches) {
+			level = parseInt(matches[1], 10) + 1;
+		}
+	}
+
+	return level;
+}
+
+/**
+ * Get a select option's ancestor options in according to term hierarchy
+ *
+ * @param  {Object} option
+ * @return {Object}
+ */
+const getOptionAncestors = function( option ) {
+	const ancestors = [];
+
+	let $prev = $(option);
+	let level = getOptionLevel($prev.get(0));
+	while (level > 0 && $prev.length > 0) {
+		if (getOptionLevel($prev.get(0)) !== level) {
+			continue; // skip since this is a sibling/cousin, not an ancestor
+		}
+
+		let termId = parseInt($prev.val(), 10);
+		if (termId > 0) {
+			ancestors.unshift(termId);
+		}
+
+		$prev = $prev.prev();
+		level--;
+	}
+	return ancestors;
+};
+
+/**
  * Keep in sync the `term_level` property.
  *
  * @param  {Object} containers
@@ -30,18 +78,25 @@ export function* workerSyncTermLevel(containers) {
 
 	while (true) {
 		const { option } = yield take(channel);
-		let level = 1;
-
-		if (option.className) {
-			const matches = option.className.match(/^level-(\d+)/);
-
-			if (matches) {
-				level = parseInt(matches[1], 10) + 2;
-			}
-		}
-
+		const level = getOptionLevel(option) + 1; // +1 since the option is for the parent, not the current term
 		const payload = mapValues(containers, () => ({ term_level: level }));
+		yield put(setContainerMeta(payload));
+	}
+}
 
+/**
+ * Keep in sync the `term_ancestors` property.
+ *
+ * @param  {Object} containers
+ * @return {void}
+ */
+export function* workerSyncTermAncestors(containers) {
+	const channel = yield call(createSelectboxChannel, 'select#parent');
+
+	while (true) {
+		const { option } = yield take(channel);
+		let ancestors = getOptionAncestors(option);
+		const payload = mapValues(containers, () => ({ term_ancestors: ancestors }));
 		yield put(setContainerMeta(payload));
 	}
 }
@@ -120,6 +175,7 @@ export default function* foreman(store) {
 
 	// Start the workers.
 	yield fork(workerSyncTermLevel, containers);
+	yield fork(workerSyncTermAncestors, containers);
 	yield fork(workerFormSubmit, createClickChannel, 'form#addtag #submit');
 	yield fork(workerFormSubmit, createSubmitChannel, 'form#edittag');
 	yield fork(workerReset, store);

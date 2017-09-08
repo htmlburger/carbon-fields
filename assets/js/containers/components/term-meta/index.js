@@ -16,6 +16,7 @@ export default setStatic('type', TYPE_TERM_META)(
 		withStore(),
 		withSetup({
 			term_level: 1,
+			term_ancestors: [],
 		})
 	)(Container)
 );

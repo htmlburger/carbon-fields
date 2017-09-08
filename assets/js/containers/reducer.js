@@ -3,7 +3,7 @@
  */
 import immutable from 'object-path-immutable';
 import { handleActions } from 'redux-actions';
-import { get, forEach, isObject } from 'lodash';
+import { get, forEach, isArray, isObject } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -33,7 +33,7 @@ function setMetaOrUI(state, { payload }, key) {
 
 	forEach(payload, (values, containerId) => {
 		forEach(values, (valueData, valueKey) => {
-			if (isObject(valueData)) {
+			if (isObject(valueData) && !isArray(valueData)) {
 				state = state.assign(`${containerId}.${key}.${valueKey}`, valueData);
 			} else {
 				state = state.set(`${containerId}.${key}.${valueKey}`, valueData);

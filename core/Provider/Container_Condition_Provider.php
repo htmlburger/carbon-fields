@@ -90,7 +90,10 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 
 		$cc_ioc['term'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Term_Condition( $ioc['wp_toolset'] );
-			$condition->set_comparers( $ioc['container_condition_comparer_collections']['nonscalar'] );
+			$condition->set_comparers( array(
+				// Only support the custom comparer as this condition has it's own comparison methods
+				$ioc['container_condition_comparers']['custom'],
+			) );
 			return $condition;
 		} );
 		$cc_ioc['term_taxonomy'] = $cc_ioc->factory( function() use ( $ioc ) {
@@ -101,6 +104,14 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 		$cc_ioc['term_level'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Term_Level_Condition();
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
+			return $condition;
+		} );
+		$cc_ioc['term_ancestor'] = $cc_ioc->factory( function() use ( $ioc ) {
+			$condition = new \Carbon_Fields\Container\Condition\Term_Ancestor_Condition( $ioc['wp_toolset'] );
+			$condition->set_comparers( array(
+				// Only support the custom comparer as this condition has it's own comparison methods
+				$ioc['container_condition_comparers']['custom'],
+			) );
 			return $condition;
 		} );
 
@@ -296,7 +307,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 	public function filter_term_meta_container_dynamic_condition_types( $condition_types, $container_type, $container ) {
 		return array_merge(
 			$condition_types,
-			array( 'term_level' )
+			array( 'term_level', 'term_ancestor' )
 		);
 	}
 

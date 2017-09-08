@@ -61,30 +61,23 @@ class Term_Condition extends Condition {
 	}
 
 	/**
-	 * Compare term with full term descriptor
+	 * Pluck term id from a full term descriptor
 	 *
-	 * @param  object  $term
 	 * @param  array   $full_term_descriptor
-	 * @return boolean
+	 * @return integer
 	 */
-	protected function term_matches_full_term_descriptor( $term, $full_term_descriptor ) {
-		return $term->term_id == $full_term_descriptor['term_object']->term_id;
+	protected function get_term_id_from_full_term_descriptor( $full_term_descriptor ) {
+		return intval( $full_term_descriptor['term_object']->term_id );
 	}
 
 	/**
-	 * Check if term is present in array of full term descriptors
+	 * Pluck term ids from array of full term descriptors
 	 *
-	 * @param  object       $term
-	 * @param  array<array> $full_term_descriptors
-	 * @return boolean
+	 * @param  array          $full_term_descriptors
+	 * @return array<integer>
 	 */
-	protected function term_in_full_term_descriptors( $term, $full_term_descriptors ) {
-		foreach ( $full_term_descriptors as $full_term_descriptor ) {
-			if ( $this->term_matches_full_term_descriptor( $term, $full_term_descriptor ) ) {
-				return true;
-			}
-		}
-		return false;
+	protected function get_term_ids_from_full_term_descriptors( $full_term_descriptors ) {
+		return array_map( array( $this, 'get_term_id_from_full_term_descriptor'), $full_term_descriptors );
 	}
 
 	/**
@@ -95,20 +88,23 @@ class Term_Condition extends Condition {
 	 */
 	public function is_fulfilled( $environment ) {
 		$term_id = $environment['term_id'];
-		$term = $environment['term'];
 
 		switch ( $this->get_comparison_operator() ) {
 			case '=':
-				return $this->term_matches_full_term_descriptor( $term, $this->get_value() );
+				$value_term_id = $this->get_term_id_from_full_term_descriptor( $this->get_value() );
+				return $term_id == $value_term_id;
 				break;
 			case '!=':
-				return ! $this->term_matches_full_term_descriptor( $term, $this->get_value() );
+				$value_term_id = $this->get_term_id_from_full_term_descriptor( $this->get_value() );
+				return $term_id != $value_term_id;
 				break;
 			case 'IN':
-				return $this->term_in_full_term_descriptors( $term, $this->get_value() );
+				$value_term_ids = $this->get_term_ids_from_full_term_descriptors( $this->get_value() );
+				return in_array( $term_id, $value_term_ids );
 				break;
 			case 'NOT IN':
-				return ! $this->term_in_full_term_descriptors( $term, $this->get_value() );
+				$value_term_ids = $this->get_term_ids_from_full_term_descriptors( $this->get_value() );
+				return ! in_array( $term_id, $value_term_ids );
 				break;
 		}
 
