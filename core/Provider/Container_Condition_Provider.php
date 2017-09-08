@@ -154,10 +154,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 		} );
 		$cc_ioc['current_user_role'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Current_User_Role_Condition();
-			$condition->set_comparers( array(
-				// Only support the custom comparer as this condition has it's own comparison methods
-				$ioc['container_condition_comparers']['custom'],
-			) );
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['array'] );
 			return $condition;
 		} );
 		$cc_ioc['current_user_capability'] = $cc_ioc->factory( function() use ( $ioc ) {
