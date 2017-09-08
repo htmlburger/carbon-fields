@@ -36,11 +36,16 @@ class Term_Ancestor_Condition extends Term_Condition {
 			$ancestors = array_map( 'intval', get_ancestors( $term_id, $term->taxonomy ) );
 		}
 
-		$value = $term_id;
+		$value = $this->get_value();
 		switch ( $this->get_comparison_operator() ) {
+			case '=': // fallthrough intended
+			case '!=':
+				$value = $this->get_term_id_from_full_term_descriptor( $value );
+				break;
+
 			case 'IN': // fallthrough intended
 			case 'NOT IN':
-				$value = $this->get_term_ids_from_full_term_descriptors( $this->get_value() );
+				$value = $this->get_term_ids_from_full_term_descriptors( $value );
 				break;
 		}
 

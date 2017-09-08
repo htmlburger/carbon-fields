@@ -22,9 +22,9 @@ class Any_Equality_Comparer extends Comparer {
 	public function is_correct( $a, $comparison_operator, $b ) {
 		switch ( $comparison_operator ) {
 			case '=':
-				return in_array( $a, $b );
+				return in_array( $b, $a );
 			case '!=':
-				return ! in_array( $a, $b );
+				return ! in_array( $b, $a );
 		}
 		return false;
 	}
