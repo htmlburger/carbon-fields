@@ -4,7 +4,7 @@
 import $ from 'jquery';
 import ReactDOM from 'react-dom';
 import { take, call, put, fork, select } from 'redux-saga/effects';
-import { isEmpty, mapValues } from 'lodash';
+import { isEmpty, mapValues, last } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -95,8 +95,13 @@ export function* workerSyncTermAncestors(containers) {
 
 	while (true) {
 		const { option } = yield take(channel);
-		let ancestors = getOptionAncestors(option);
-		const payload = mapValues(containers, () => ({ term_ancestors: ancestors }));
+		const ancestors = getOptionAncestors(option);
+		const parent = isEmpty(ancestors) ? 0 : last(ancestors);
+
+		const payload = mapValues(containers, () => ({
+			term_parent: parent,
+			term_ancestors: ancestors,
+		}));
 		yield put(setContainerMeta(payload));
 	}
 }

@@ -15,6 +15,7 @@ import post_template from 'containers/conditions/post-template';
 import post_term from 'containers/conditions/post-term';
 
 import term_level from 'containers/conditions/term-level';
+import term_parent from 'containers/conditions/term-parent';
 import term_ancestor from 'containers/conditions/term-ancestor';
 
 import user_role from 'containers/conditions/user-role';
@@ -35,6 +36,7 @@ const conditions = {
 	post_term,
 
 	term_level,
+	term_parent,
 	term_ancestor,
 
 	user_role,
