@@ -6,9 +6,8 @@ import { map, intersection, isArray } from 'lodash';
 /**
  * The internal dependencies.
  */
-import equality from 'containers/comparers/equality';
-import contain from 'containers/comparers/contain';
-import scalar from 'containers/comparers/scalar';
+import equality from 'containers/comparers/any-equality';
+import contain from 'containers/comparers/any-contain';
 import base from 'containers/conditions/base';
 
 export default {
@@ -37,20 +36,7 @@ export default {
 			value
 		} = definition;
 
-		value = isArray(value) ? value : [value];
-		value = map(value, val => val.term_object.term_id);
-
-		switch (compare) {
-			case '=': // fallthrough intended
-			case 'IN':
-				return intersection(env.term_ancestors, value).length > 0;
-				break;
-
-			case '!=': // fallthrough intended
-			case 'NOT IN':
-				return intersection(env.term_ancestors, value).length === 0;
-				break;
-		}
+		value = isArray(value) ? map(value, val => val.term_object.term_id) : value.term_object.term_id;
 
 		return this.firstSupportedComparerIsCorrect(
 			env.term_ancestors,

@@ -16,8 +16,9 @@ export default compose(
 	withStore(),
 	withSetup({
 		post_template: 'default',
-		post_level: 1,
+		post_ancestors: [],
 		post_parent_id: 0,
+		post_level: 1,
 		post_format: '',
 		post_term: {},
 	})

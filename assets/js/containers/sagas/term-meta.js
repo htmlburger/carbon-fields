@@ -1,7 +1,6 @@
 /**
  * The external dependencies.
  */
-import $ from 'jquery';
 import ReactDOM from 'react-dom';
 import { take, call, put, fork, select } from 'redux-saga/effects';
 import { isEmpty, mapValues, last } from 'lodash';
@@ -11,6 +10,7 @@ import { isEmpty, mapValues, last } from 'lodash';
  */
 import { resetStore } from 'store/actions';
 import { normalizePreloadedState } from 'store/helpers';
+import { getSelectOptionLevel, getSelectOptionAncestors } from 'lib/helpers';
 
 import { ready } from 'lib/actions';
 import { createSelectboxChannel, createAjaxChannel, createSubmitChannel, createClickChannel } from 'lib/events';
@@ -19,53 +19,6 @@ import containerFactory from 'containers/factory';
 import { setContainerMeta, validateAllContainers, submitForm } from 'containers/actions';
 import { getContainers, getContainersByType } from 'containers/selectors';
 import { TYPE_TERM_META } from 'containers/constants';
-
-/**
- * Get select option's level based on it's className
- *
- * @param  {Object} option
- * @return {Number}
- */
-function getOptionLevel(option) {
-	let level = 1;
-
-	if (option.className) {
-		const matches = option.className.match(/^level-(\d+)/);
-
-		if (matches) {
-			level = parseInt(matches[1], 10) + 1;
-		}
-	}
-
-	return level;
-}
-
-/**
- * Get a select option's ancestor options in according to term hierarchy
- *
- * @param  {Object} option
- * @return {Object}
- */
-const getOptionAncestors = function( option ) {
-	const ancestors = [];
-
-	let $prev = $(option);
-	let level = getOptionLevel($prev.get(0));
-	while (level > 0 && $prev.length > 0) {
-		if (getOptionLevel($prev.get(0)) !== level) {
-			continue; // skip since this is a sibling/cousin, not an ancestor
-		}
-
-		let termId = parseInt($prev.val(), 10);
-		if (termId > 0) {
-			ancestors.unshift(termId);
-		}
-
-		$prev = $prev.prev();
-		level--;
-	}
-	return ancestors;
-};
 
 /**
  * Keep in sync the `term_level` property.
@@ -78,14 +31,14 @@ export function* workerSyncTermLevel(containers) {
 
 	while (true) {
 		const { option } = yield take(channel);
-		const level = getOptionLevel(option) + 1; // +1 since the option is for the parent, not the current term
+		const level = getSelectOptionLevel(option) + 1; // +1 since the option is for the parent, not the current term
 		const payload = mapValues(containers, () => ({ term_level: level }));
 		yield put(setContainerMeta(payload));
 	}
 }
 
 /**
- * Keep in sync the `term_ancestors` property.
+ * Keep in sync the `term_parent_id` and `term_ancestors` properties.
  *
  * @param  {Object} containers
  * @return {void}
@@ -95,12 +48,12 @@ export function* workerSyncTermAncestors(containers) {
 
 	while (true) {
 		const { option } = yield take(channel);
-		const ancestors = getOptionAncestors(option);
-		const parent = isEmpty(ancestors) ? 0 : last(ancestors);
+		const ancestors = getSelectOptionAncestors(option);
+		const parentId = isEmpty(ancestors) ? 0 : last(ancestors);
 
 		const payload = mapValues(containers, () => ({
-			term_parent: parent,
 			term_ancestors: ancestors,
+			term_parent_id: parentId,
 		}));
 		yield put(setContainerMeta(payload));
 	}

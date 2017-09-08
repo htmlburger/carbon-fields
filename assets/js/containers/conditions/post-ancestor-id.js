@@ -1,14 +1,13 @@
 /**
  * The external dependecies.
  */
-import { isArray, map } from 'lodash';
+import { map, intersection, isArray } from 'lodash';
 
 /**
  * The internal dependencies.
  */
-import equality from 'containers/comparers/equality';
-import contain from 'containers/comparers/contain';
-import scalar from 'containers/comparers/scalar';
+import equality from 'containers/comparers/any-equality';
+import contain from 'containers/comparers/any-contain';
 import base from 'containers/conditions/base';
 
 export default {
@@ -22,7 +21,6 @@ export default {
 	comparers: [
 		equality,
 		contain,
-		scalar,
 	],
 
 	/**
@@ -38,14 +36,8 @@ export default {
 			value
 		} = definition;
 
-		if (isArray(value)) {
-			value = map(value, val => val.term_object.term_id);
-		} else {
-			value = value.term_object.term_id;
-		}
-
 		return this.firstSupportedComparerIsCorrect(
-			env.term_parent_id,
+			env.post_ancestors,
 			compare,
 			value
 		);

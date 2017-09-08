@@ -23,7 +23,7 @@ namespace Carbon_Fields\Container\Condition;
  *             ...
  *         )
  *
- *     Operator "CUSTOM" is passed the term_id
+ *     Operator "CUSTOM" is passed an array of ancestor term ids
  */
 class Term_Ancestor_Condition extends Term_Condition {
 
@@ -36,27 +36,18 @@ class Term_Ancestor_Condition extends Term_Condition {
 			$ancestors = array_map( 'intval', get_ancestors( $term_id, $term->taxonomy ) );
 		}
 
+		$value = $term_id;
 		switch ( $this->get_comparison_operator() ) {
-			case '=':
-				return in_array( $term_id, $ancestors );
-				break;
-			case '!=':
-				return ! in_array( $term_id, $ancestors );
-				break;
-			case 'IN':
-				$possible_ancestors = $this->get_term_ids_from_full_term_descriptors( $this->get_value() );
-				return ! empty( array_intersect( $possible_ancestors, $ancestors ) );
-				break;
+			case 'IN': // fallthrough intended
 			case 'NOT IN':
-				$possible_ancestors = $this->get_term_ids_from_full_term_descriptors( $this->get_value() );
-				return empty( array_intersect( $possible_ancestors, $ancestors ) );
+				$value = $this->get_term_ids_from_full_term_descriptors( $this->get_value() );
 				break;
 		}
 
 		return $this->compare(
-			$term_id,
+			$ancestors,
 			$this->get_comparison_operator(),
-			$this->get_value()
+			$value
 		);
 	}
 }

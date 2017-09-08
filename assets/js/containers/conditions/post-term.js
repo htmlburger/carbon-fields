@@ -6,7 +6,7 @@ import { get, isArray } from 'lodash';
 /**
  * The internal dependencies.
  */
-import equality from 'containers/comparers/equality-array';
+import equality from 'containers/comparers/any-equality';
 import base from 'containers/conditions/base';
 
 export default {

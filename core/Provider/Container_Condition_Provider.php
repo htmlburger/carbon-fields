@@ -59,6 +59,11 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['generic'] );
 			return $condition;
 		} );
+		$cc_ioc['post_ancestor_id'] = $cc_ioc->factory( function() use ( $ioc ) {
+			$condition = new \Carbon_Fields\Container\Condition\Post_Ancestor_ID_Condition();
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['array'] );
+			return $condition;
+		} );
 		$cc_ioc['post_type'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_Type_Condition();
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['nonscalar'] );
@@ -113,10 +118,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 		} );
 		$cc_ioc['term_ancestor'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Term_Ancestor_Condition( $ioc['wp_toolset'] );
-			$condition->set_comparers( array(
-				// Only support the custom comparer as this condition has it's own comparison methods
-				$ioc['container_condition_comparers']['custom'],
-			) );
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['array'] );
 			return $condition;
 		} );
 
@@ -127,10 +129,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 		} );
 		$cc_ioc['user_role'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\User_Role_Condition();
-			$condition->set_comparers( array(
-				// Only support the custom comparer as this condition has it's own comparison methods
-				$ioc['container_condition_comparers']['custom'],
-			) );
+			$condition->set_comparers( $ioc['container_condition_comparer_collections']['array'] );
 			return $condition;
 		} );
 		$cc_ioc['user_capabiltiy'] = $cc_ioc->factory( function() use ( $ioc ) {
@@ -185,8 +184,16 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 			return new \Carbon_Fields\Container\Condition\Comparer\Equality_Comparer();
 		};
 
+		$ioc['container_condition_comparers']['any_equality'] = function() {
+			return new \Carbon_Fields\Container\Condition\Comparer\Any_Equality_Comparer();
+		};
+
 		$ioc['container_condition_comparers']['contain'] = function() {
 			return new \Carbon_Fields\Container\Condition\Comparer\Contain_Comparer();
+		};
+
+		$ioc['container_condition_comparers']['any_contain'] = function() {
+			return new \Carbon_Fields\Container\Condition\Comparer\Any_Contain_Comparer();
 		};
 
 		$ioc['container_condition_comparers']['scalar'] = function() {
@@ -213,6 +220,13 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 			return array(
 				$ioc['container_condition_comparers']['equality'],
 				$ioc['container_condition_comparers']['contain'],
+				$ioc['container_condition_comparers']['custom'],
+			);
+		};
+		$ioc['container_condition_comparer_collections']['array'] = function() use ( $ioc ) {
+			return array(
+				$ioc['container_condition_comparers']['any_equality'],
+				$ioc['container_condition_comparers']['any_contain'],
 				$ioc['container_condition_comparers']['custom'],
 			);
 		};
@@ -284,7 +298,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 	public function filter_post_meta_container_dynamic_condition_types( $condition_types, $container_type, $container ) {
 		return array_merge(
 			$condition_types,
-			array( 'post_parent_id', 'post_format', 'post_level', 'post_template', 'post_term' )
+			array( 'post_parent_id', 'post_ancestor_id', 'post_format', 'post_level', 'post_template', 'post_term' )
 		);
 	}
 

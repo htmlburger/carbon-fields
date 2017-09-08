@@ -28,21 +28,6 @@ class User_Role_Condition extends Condition {
 	public function is_fulfilled( $environment ) {
 		$roles = $this->get_user_roles( $environment );
 
-		switch ( $this->get_comparison_operator() ) {
-			case '=':
-				return in_array( $this->get_value(), $roles );
-				break;
-			case '!=':
-				return ! in_array( $this->get_value(), $roles );
-				break;
-			case 'IN':
-				return count( array_intersect( $roles, $this->get_value() ) ) > 0;
-				break;
-			case 'NOT IN':
-				return count( array_intersect( $roles, $this->get_value() ) ) === 0;
-				break;
-		}
-
 		return $this->compare(
 			$roles,
 			$this->get_comparison_operator(),
