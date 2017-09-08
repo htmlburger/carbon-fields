@@ -61,6 +61,33 @@ class Term_Condition extends Condition {
 	}
 
 	/**
+	 * Compare term with full term descriptor
+	 *
+	 * @param  object  $term
+	 * @param  array   $full_term_descriptor
+	 * @return boolean
+	 */
+	protected function term_matches_full_term_descriptor( $term, $full_term_descriptor ) {
+		return $term->term_id == $full_term_descriptor['term_object']->term_id;
+	}
+
+	/**
+	 * Check if term is present in array of full term descriptors
+	 *
+	 * @param  object  $term
+	 * @param  array[] $full_term_descriptors
+	 * @return boolean
+	 */
+	protected function term_in_full_term_descriptors( $term, $full_term_descriptors ) {
+		foreach ( $full_term_descriptors as $full_term_descriptor ) {
+			if ( $this->term_matches_full_term_descriptor( $term, $full_term_descriptor ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Check if the condition is fulfilled
 	 *
 	 * @param  array $environment
@@ -68,12 +95,27 @@ class Term_Condition extends Condition {
 	 */
 	public function is_fulfilled( $environment ) {
 		$term_id = $environment['term_id'];
-		$value = $this->wp_toolset->get_term_by_descriptor( $this->get_value() );
+		$term = $environment['term'];
+
+		switch ( $this->get_comparison_operator() ) {
+			case '=':
+				return $this->term_matches_full_term_descriptor( $term, $this->get_value() );
+				break;
+			case '!=':
+				return ! $this->term_matches_full_term_descriptor( $term, $this->get_value() );
+				break;
+			case 'IN':
+				return $this->term_in_full_term_descriptors( $term, $this->get_value() );
+				break;
+			case 'NOT IN':
+				return ! $this->term_in_full_term_descriptors( $term, $this->get_value() );
+				break;
+		}
 
 		return $this->compare(
 			$term_id,
 			$this->get_comparison_operator(),
-			$value->term_id
+			$this->get_value()
 		);
 	}
 }
