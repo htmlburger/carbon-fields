@@ -4,6 +4,8 @@ namespace Carbon_Fields\Container\Condition;
 
 /**
  * Check if post has a specific ancestor
+ *
+ * Operator "CUSTOM" is passed an array of ancestor post ids
  */
 class Post_Ancestor_ID_Condition extends Condition {
 
