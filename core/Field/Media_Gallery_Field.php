@@ -7,7 +7,9 @@ use Carbon_Fields\Helper\Helper;
 
 /**
  * Set field class.
- * Allows to create a set of checkboxes where multiple can be selected.
+ *
+ * Allows selecting multiple attachments and stores
+ * their IDs in the Database.
  */
 class Media_Gallery_Field extends Field {
 
