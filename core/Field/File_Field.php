@@ -47,17 +47,12 @@ class File_Field extends Field {
 	 */
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
+		$value      = $this->get_value();
 
-		$value = $this->get_value();
-
-		$attachment_metadata = array();
-		if ( $value ) {
-			$attachment_metadata = Helper::get_attachment_metadata( $value, $this->value_type );
-		}
-
-		$field_data = array_merge( $field_data, $attachment_metadata, array(
+		$field_data = array_merge( $field_data, array(
 			'type_filter' => $this->field_type,
 			'value_type'  => $this->value_type,
+			'value_meta'  => Helper::get_attachment_metadata( $value, $this->value_type ),
 		) );
 
 		return $field_data;

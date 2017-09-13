@@ -207,7 +207,9 @@ export function* redrawAttachmentPreview(fieldId, attachmentIdentifier, attachme
 	}
 
 	if (field.type === TYPE_IMAGE || field.type === TYPE_FILE) {
-		yield put(updateField(fieldId, attachmentMeta));
+		yield put(updateField(fieldId, {
+			value_meta: attachmentMeta
+		}));
 	} else if (field.type === TYPE_MEDIA_GALLERY) {
 		let currentValueMeta = field.value_meta;
 

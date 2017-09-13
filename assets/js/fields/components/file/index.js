@@ -48,8 +48,8 @@ export const FileField = ({
 				readOnly />
 
 			<div className={cx('carbon-description', { 'hidden': !field.value })}>
-				<div className={cx('carbon-attachment-preview', { 'hidden': !field.thumb_url })}>
-					<img src={field.thumb_url} className="thumbnail-image" />
+				<div className={cx('carbon-attachment-preview', { 'hidden': !field.value_meta.thumb_url })}>
+					<img src={field.value_meta.thumb_url} className="thumbnail-image" />
 
 					<div className="carbon-file-remove dashicons-before dashicons-no-alt" onClick={clearSelection}></div>
 				</div>
@@ -57,7 +57,7 @@ export const FileField = ({
 				<input
 					type="text"
 					className="carbon-attachment-file-name"
-					value={field.file_url ? field.file_url : ''}
+					value={field.value_meta.file_url ? field.value_meta.file_url : ''}
 					readOnly />
 			</div>
 
@@ -81,14 +81,16 @@ FileField.propTypes = {
 			PropTypes.string,
 			PropTypes.number,
 		]),
+		value_meta: PropTypes.shape({
+			thumb_url: PropTypes.string,
+			file_url: PropTypes.string,
+			file_name: PropTypes.string,
+		}),
 		value_type: PropTypes.string,
 		preview: PropTypes.oneOfType([
 			PropTypes.string,
 			PropTypes.number,
 		]),
-		thumb_url: PropTypes.string,
-		file_url: PropTypes.string,
-		file_name: PropTypes.string,
 	}),
 	openBrowser: PropTypes.func,
 	clearSelection: PropTypes.func,

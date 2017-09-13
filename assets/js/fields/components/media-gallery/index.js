@@ -152,6 +152,26 @@ export const enhance = compose(
 	}),
 
 	/**
+	 * Component Handlers.
+	 */
+	withHandlers({
+		resetCurrentlyEditedAttachment: ({ field, updateField }) => () => {
+			updateField(field.id, {
+				selected: null,
+				edit: {
+					id: '',
+					title: '',
+					alt: '',
+					caption: '',
+					description: '',
+					artist: '',
+					album: '',
+				}
+			})
+		},
+	}),
+
+	/**
 	 * Pass some handlers to the component.
 	 */
 	withHandlers({
@@ -176,23 +196,12 @@ export const enhance = compose(
 			setFieldValue(field.id, newValue);
 		},
 
-		handleRemoveItem: ({ field, setFieldValue, updateField, resetEditAttachment }) => (index) => {
+		handleRemoveItem: ({ field, setFieldValue, resetCurrentlyEditedAttachment }) => (index) => {
 			field.value.splice(index, 1);
 
 			setFieldValue(field.id, field.value);
 
-			updateField(field.id, {
-				selected: null,
-				edit: {
-					id: '',
-					title: '',
-					alt: '',
-					caption: '',
-					description: '',
-					artist: '',
-					album: '',
-				}
-			})
+			resetCurrentlyEditedAttachment();
 		},
 
 		openEditAttachment: ({ field, updateField, openMediaBrowser }) => (item) => {
@@ -227,19 +236,8 @@ export const enhance = compose(
 			}
 		},
 
-		closeEditAttachment: ({ field, updateField }) => () => {
-			updateField(field.id, {
-				selected: null,
-				edit: {
-					id: '',
-					title: '',
-					alt: '',
-					caption: '',
-					description: '',
-					artist: '',
-					album: '',
-				}
-			})
+		closeEditAttachment: ({ resetCurrentlyEditedAttachment }) => () => {
+			resetCurrentlyEditedAttachment();
 		}
 	}),
 
