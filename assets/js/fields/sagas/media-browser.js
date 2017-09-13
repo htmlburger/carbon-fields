@@ -93,38 +93,30 @@ export function* prepareValueForMediaGalleryField(fieldId, attachment) {
  * @return {void}
  */
 export function* workerAddMultipleFiles(action) {
-	const { fieldId, attachments, browser } = action.payload;
-	const field = yield select(getFieldById, fieldId);
+	const {
+		fieldId,
+		attachments,
+		browser
+	} = action.payload;
 
+	const field               = yield select(getFieldById, fieldId);
+	const isMediaGalleryField = field.type === TYPE_MEDIA_GALLERY;
+	let parent;
+
+	// If multiple attachments are selected and the field is Image or File, the extra 
+	// ones will be distributed among the closest complex field groups.
 	if (field.type === TYPE_IMAGE || field.type === TYPE_FILE) {
-		const parent = yield select(getComplexGroupById, field.parent);
+		parent = yield select(getComplexGroupById, field.parent);
+
 		if (isUndefined(parent)) {
 			return;
 		}
 	}
 
-	for (let i = 0; i < attachments.length; i++) {
-		const attachment = attachments[i];
+	for (let index = 0; index < attachments.length; index++) {
+		const attachment = attachments[index];
 
-		if (field.type === TYPE_IMAGE || field.type === TYPE_FILE) {
-			// add a new group to hold the attachment
-			yield put(addComplexGroup(parent.field.id, parent.group.name));
-
-			// pause until the complex is updated
-			yield take(receiveComplexGroup);
-
-			// resolve the new field from the new group and assign it's new value
-			const parentField = yield select(getFieldById, parent.field.id);
-			const freshGroup = last(parentField.value);
-			const freshFieldId = first(filter(freshGroup.fields, f => f.base_name === field.base_name)).id;
-			const freshField = yield select(getFieldById, freshFieldId);
-			const value = yield prepareValueForField(freshField.id, attachment);
-
-			// optional - this ensures an instant preview update
-			yield redrawAttachmentPreview(freshField.id, value, attachment, freshField.default_thumb_url);
-
-			yield put(setFieldValue(freshField.id, value));
-		} else {
+		if (isMediaGalleryField) {
 			const value = yield prepareValueForField(field.id, attachment);
 
 			if (field.duplicates_allowed === false) {
@@ -135,6 +127,24 @@ export function* workerAddMultipleFiles(action) {
 			yield redrawAttachmentPreview(field.id, value, attachment, field.default_thumb_url);
 
 			yield put(setFieldValue(field.id, value));
+		} else {
+			// add a new group to hold the attachment
+			yield put(addComplexGroup(parent.field.id, parent.group.name));
+
+			// pause until the complex is updated
+			yield take(receiveComplexGroup);
+
+			// resolve the new field from the new group and assign it's new value
+			const parentField  = yield select(getFieldById, parent.field.id);
+			const freshGroup   = last(parentField.value);
+			const freshFieldId = first(filter(freshGroup.fields, f => f.base_name === field.base_name)).id;
+			const freshField   = yield select(getFieldById, freshFieldId);
+			const value        = yield prepareValueForField(freshField.id, attachment);
+
+			// optional - this ensures an instant preview update
+			yield redrawAttachmentPreview(freshField.id, value, attachment, freshField.default_thumb_url);
+
+			yield put(setFieldValue(freshField.id, value));
 		}
 	}
 }
