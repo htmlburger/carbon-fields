@@ -45,6 +45,13 @@ abstract class Widget extends \WP_Widget {
 	protected $custom_fields = array();
 
 	/**
+	 * String prefix for widget ids
+	 * 
+	 * @var string
+	 */
+	protected $widget_id_prefix = 'carbon_fields_';
+
+	/**
 	 * Create the widget.
 	 * A wrapper around the default WP widget constructor.
 	 *
@@ -56,7 +63,7 @@ abstract class Widget extends \WP_Widget {
 	 */
 	public function setup( $widget_id, $title, $description, $fields, $classname = '' ) {
 		\Carbon_Fields\Carbon_Fields::verify_boot();
-		$widget_id = 'carbon_fields_' . $widget_id;
+		$widget_id = $this->widget_id_prefix . $widget_id;
 
 		$this->datastore = Datastore::make( 'widget' );
 		if ( empty( $title ) ) {
