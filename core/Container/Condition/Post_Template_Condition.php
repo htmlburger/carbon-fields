@@ -17,8 +17,12 @@ class Post_Template_Condition extends Condition {
 	 */
 	public function is_fulfilled( $environment ) {
 		$post_id = $environment['post_id'];
+		$is_page_for_posts = intval( $post_id ) === intval( get_option( 'page_for_posts' ) );
+
 		$post_template = get_post_meta( $post_id, '_wp_page_template', true );
-		$post_template = $post_template ? $post_template : 'default';
+		if ( ! $post_template || $is_page_for_posts ) {
+			$post_template = 'default';
+		}
 
 		return $this->compare(
 			$post_template,
