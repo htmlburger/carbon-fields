@@ -2690,12 +2690,36 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 }),
 
 /**
+ * Component Handlers.
+ */
+(0, _recompose.withHandlers)({
+	resetCurrentlyEditedAttachment: function resetCurrentlyEditedAttachment(_ref2) {
+		var field = _ref2.field,
+		    updateField = _ref2.updateField;
+		return function () {
+			updateField(field.id, {
+				selected: null,
+				edit: {
+					id: '',
+					title: '',
+					alt: '',
+					caption: '',
+					description: '',
+					artist: '',
+					album: ''
+				}
+			});
+		};
+	}
+}),
+
+/**
  * Pass some handlers to the component.
  */
 (0, _recompose.withHandlers)({
-	openBrowser: function openBrowser(_ref2) {
-		var field = _ref2.field,
-		    openMediaBrowser = _ref2.openMediaBrowser;
+	openBrowser: function openBrowser(_ref3) {
+		var field = _ref3.field,
+		    openMediaBrowser = _ref3.openMediaBrowser;
 		return function (index) {
 			if ((0, _lodash.isNumber)(index)) {
 				field.selected = index;
@@ -2705,9 +2729,9 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		};
 	},
 
-	handleSortItems: function handleSortItems(_ref3) {
-		var field = _ref3.field,
-		    setFieldValue = _ref3.setFieldValue;
+	handleSortItems: function handleSortItems(_ref4) {
+		var field = _ref4.field,
+		    setFieldValue = _ref4.setFieldValue;
 		return function (newItems) {
 			newItems = newItems.map(function (item) {
 				return parseInt(item, 10);
@@ -2724,35 +2748,23 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		};
 	},
 
-	handleRemoveItem: function handleRemoveItem(_ref4) {
-		var field = _ref4.field,
-		    setFieldValue = _ref4.setFieldValue,
-		    updateField = _ref4.updateField,
-		    resetEditAttachment = _ref4.resetEditAttachment;
+	handleRemoveItem: function handleRemoveItem(_ref5) {
+		var field = _ref5.field,
+		    setFieldValue = _ref5.setFieldValue,
+		    resetCurrentlyEditedAttachment = _ref5.resetCurrentlyEditedAttachment;
 		return function (index) {
 			field.value.splice(index, 1);
 
 			setFieldValue(field.id, field.value);
 
-			updateField(field.id, {
-				selected: null,
-				edit: {
-					id: '',
-					title: '',
-					alt: '',
-					caption: '',
-					description: '',
-					artist: '',
-					album: ''
-				}
-			});
+			resetCurrentlyEditedAttachment();
 		};
 	},
 
-	openEditAttachment: function openEditAttachment(_ref5) {
-		var field = _ref5.field,
-		    updateField = _ref5.updateField,
-		    openMediaBrowser = _ref5.openMediaBrowser;
+	openEditAttachment: function openEditAttachment(_ref6) {
+		var field = _ref6.field,
+		    updateField = _ref6.updateField,
+		    openMediaBrowser = _ref6.openMediaBrowser;
 		return function (item) {
 			var $container = (0, _jquery2.default)('#' + field.parent);
 
@@ -2786,22 +2798,10 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		};
 	},
 
-	closeEditAttachment: function closeEditAttachment(_ref6) {
-		var field = _ref6.field,
-		    updateField = _ref6.updateField;
+	closeEditAttachment: function closeEditAttachment(_ref7) {
+		var resetCurrentlyEditedAttachment = _ref7.resetCurrentlyEditedAttachment;
 		return function () {
-			updateField(field.id, {
-				selected: null,
-				edit: {
-					id: '',
-					title: '',
-					alt: '',
-					caption: '',
-					description: '',
-					artist: '',
-					album: ''
-				}
-			});
+			resetCurrentlyEditedAttachment();
 		};
 	}
 }),
@@ -2809,9 +2809,9 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 /**
  * Pass some props to the component.
  */
-(0, _recompose.withProps)(function (_ref7) {
-	var field = _ref7.field,
-	    collapseComplexGroup = _ref7.collapseComplexGroup;
+(0, _recompose.withProps)(function (_ref8) {
+	var field = _ref8.field,
+	    collapseComplexGroup = _ref8.collapseComplexGroup;
 
 	var sortableOptions = {
 		handle: '.carbon-description',
@@ -4875,61 +4875,6 @@ module.exports = {
   renderToString: renderToString,
   renderToStaticMarkup: renderToStaticMarkup
 };
-
-/***/ }),
-
-/***/ "H1PS":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends2 = __webpack_require__("Dd8w");
-
-var _extends3 = _interopRequireDefault(_extends2);
-
-var _base = __webpack_require__("W0zY");
-
-var _base2 = _interopRequireDefault(_base);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * The supported operators by this comparer.
- *
- * @type {Array}
- */
-var operators = ['=', '!='];
-
-/**
- * Perform the comparison.
- *
- * @param  {Array}   a
- * @param  {String}  operator
- * @param  {mixed}   b
- * @return {Boolean}
- */
-/**
- * The internal dependencies.
- */
-var evaluate = function evaluate(a, operator, b) {
-  switch (operator) {
-    case '=':
-      return a.includes(b);
-    case '!=':
-      return !a.includes(b);
-    default:
-      return false;
-  }
-};
-
-exports.default = (0, _extends3.default)({}, (0, _base2.default)(operators), {
-  evaluate: evaluate
-});
 
 /***/ }),
 
@@ -7053,14 +6998,14 @@ var FileField = exports.FileField = function FileField(_ref) {
 				{ className: (0, _classnames2.default)('carbon-description', { 'hidden': !field.value }) },
 				_react2.default.createElement(
 					'div',
-					{ className: (0, _classnames2.default)('carbon-attachment-preview', { 'hidden': !field.thumb_url }) },
-					_react2.default.createElement('img', { src: field.thumb_url, className: 'thumbnail-image' }),
+					{ className: (0, _classnames2.default)('carbon-attachment-preview', { 'hidden': !field.value_meta.thumb_url }) },
+					_react2.default.createElement('img', { src: field.value_meta.thumb_url, className: 'thumbnail-image' }),
 					_react2.default.createElement('div', { className: 'carbon-file-remove dashicons-before dashicons-no-alt', onClick: clearSelection })
 				),
 				_react2.default.createElement('input', {
 					type: 'text',
 					className: 'carbon-attachment-file-name',
-					value: field.file_url ? field.file_url : '',
+					value: field.value_meta.file_url ? field.value_meta.file_url : '',
 					readOnly: true })
 			),
 			_react2.default.createElement(
@@ -7090,11 +7035,13 @@ FileField.propTypes = {
 	field: _propTypes2.default.shape({
 		id: _propTypes2.default.string,
 		value: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]),
+		value_meta: _propTypes2.default.shape({
+			thumb_url: _propTypes2.default.string,
+			file_url: _propTypes2.default.string,
+			file_name: _propTypes2.default.string
+		}),
 		value_type: _propTypes2.default.string,
-		preview: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]),
-		thumb_url: _propTypes2.default.string,
-		file_url: _propTypes2.default.string,
-		file_name: _propTypes2.default.string
+		preview: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number])
 	}),
 	openBrowser: _propTypes2.default.func,
 	clearSelection: _propTypes2.default.func
@@ -7206,6 +7153,61 @@ module.exports = (__webpack_require__("B3Oe"))("NpIQ");
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__("B3Oe"))("O27J");
+
+/***/ }),
+
+/***/ "O2K7":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends2 = __webpack_require__("Dd8w");
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _base = __webpack_require__("W0zY");
+
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * The supported operators by this comparer.
+ *
+ * @type {Array}
+ */
+var operators = ['=', '!='];
+
+/**
+ * Perform the comparison.
+ *
+ * @param  {Array}   a
+ * @param  {String}  operator
+ * @param  {mixed}   b
+ * @return {Boolean}
+ */
+/**
+ * The internal dependencies.
+ */
+var evaluate = function evaluate(a, operator, b) {
+  switch (operator) {
+    case '=':
+      return a.includes(b);
+    case '!=':
+      return !a.includes(b);
+    default:
+      return false;
+  }
+};
+
+exports.default = (0, _extends3.default)({}, (0, _base2.default)(operators), {
+  evaluate: evaluate
+});
 
 /***/ }),
 
@@ -8292,6 +8294,70 @@ function foreman() {
 var $export = __webpack_require__("kM2E");
 
 $export($export.S + $export.F, 'Object', {assign: __webpack_require__("To3L")});
+
+/***/ }),
+
+/***/ "R5uo":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _extends2 = __webpack_require__("Dd8w");
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _lodash = __webpack_require__("M4fF");
+
+var _anyEquality = __webpack_require__("O2K7");
+
+var _anyEquality2 = _interopRequireDefault(_anyEquality);
+
+var _anyContain = __webpack_require__("eA7W");
+
+var _anyContain2 = _interopRequireDefault(_anyContain);
+
+var _base = __webpack_require__("94C5");
+
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * The external dependecies.
+ */
+exports.default = (0, _extends3.default)({}, _base2.default, {
+
+	/**
+  * The supported comparers.
+  *
+  * @type {Function[]}
+  */
+	comparers: [_anyEquality2.default, _anyContain2.default],
+
+	/**
+  * Check if the condition is fulfiled.
+  *
+  * @param  {Object}  definition
+  * @param  {Object}  env
+  * @return {Boolean}
+  */
+	isFulfiled: function isFulfiled(definition, env) {
+		var compare = definition.compare,
+		    value = definition.value;
+
+
+		return this.firstSupportedComparerIsCorrect(env.post_ancestors, compare, value);
+	}
+});
+
+/**
+ * The internal dependencies.
+ */
 
 /***/ }),
 
@@ -10689,9 +10755,10 @@ module.exports = (__webpack_require__("B3Oe"))("VXi7");
 
 var map = {
 	"./actions.js": "vVye",
+	"./comparers/any-contain.js": "eA7W",
+	"./comparers/any-equality.js": "O2K7",
 	"./comparers/base.js": "W0zY",
 	"./comparers/contain.js": "r/IV",
-	"./comparers/equality-array.js": "H1PS",
 	"./comparers/equality.js": "Eql7",
 	"./comparers/scalar.js": "1qlA",
 	"./components/comment-meta/index.js": "zxBS",
@@ -10711,12 +10778,15 @@ var map = {
 	"./conditions/base.js": "94C5",
 	"./conditions/boolean.js": "5v7t",
 	"./conditions/index.js": "f5wq",
+	"./conditions/post-ancestor-id.js": "R5uo",
 	"./conditions/post-format.js": "bpo7",
 	"./conditions/post-level.js": "TRFV",
 	"./conditions/post-parent-id.js": "ULb7",
 	"./conditions/post-template.js": "fl3K",
 	"./conditions/post-term.js": "e/TA",
+	"./conditions/term-ancestor.js": "fKV9",
 	"./conditions/term-level.js": "GVVa",
+	"./conditions/term-parent.js": "bNNj",
 	"./conditions/user-role.js": "iqss",
 	"./constants.js": "5B/B",
 	"./decorators/with-setup.js": "Zn/G",
@@ -12392,7 +12462,7 @@ function setMetaOrUI(state, _ref, key) {
 
 	(0, _lodash.forEach)(payload, function (values, containerId) {
 		(0, _lodash.forEach)(values, function (valueData, valueKey) {
-			if ((0, _lodash.isObject)(valueData)) {
+			if ((0, _lodash.isObject)(valueData) && !(0, _lodash.isArray)(valueData)) {
 				state = state.assign(containerId + '.' + key + '.' + valueKey, valueData);
 			} else {
 				state = state.set(containerId + '.' + key + '.' + valueKey, valueData);
@@ -12505,6 +12575,80 @@ function handler(field) {
 
 	return null;
 }
+
+/***/ }),
+
+/***/ "bNNj":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _extends2 = __webpack_require__("Dd8w");
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _lodash = __webpack_require__("M4fF");
+
+var _equality = __webpack_require__("Eql7");
+
+var _equality2 = _interopRequireDefault(_equality);
+
+var _contain = __webpack_require__("r/IV");
+
+var _contain2 = _interopRequireDefault(_contain);
+
+var _scalar = __webpack_require__("1qlA");
+
+var _scalar2 = _interopRequireDefault(_scalar);
+
+var _base = __webpack_require__("94C5");
+
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * The internal dependencies.
+ */
+exports.default = (0, _extends3.default)({}, _base2.default, {
+
+	/**
+  * The supported comparers.
+  *
+  * @type {Function[]}
+  */
+	comparers: [_equality2.default, _contain2.default, _scalar2.default],
+
+	/**
+  * Check if the condition is fulfiled.
+  *
+  * @param  {Object}  definition
+  * @param  {Object}  env
+  * @return {Boolean}
+  */
+	isFulfiled: function isFulfiled(definition, env) {
+		var compare = definition.compare,
+		    value = definition.value;
+
+
+		if ((0, _lodash.isArray)(value)) {
+			value = (0, _lodash.map)(value, function (val) {
+				return val.term_object.term_id;
+			});
+		} else {
+			value = value.term_object.term_id;
+		}
+
+		return this.firstSupportedComparerIsCorrect(env.term_parent_id, compare, value);
+	}
+}); /**
+     * The external dependecies.
+     */
 
 /***/ }),
 
@@ -13169,6 +13313,7 @@ var _regenerator = __webpack_require__("Xxa5");
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
 exports.workerSyncTermLevel = workerSyncTermLevel;
+exports.workerSyncTermAncestors = workerSyncTermAncestors;
 exports.workerReset = workerReset;
 exports.workerFormSubmit = workerFormSubmit;
 exports.default = foreman;
@@ -13184,6 +13329,8 @@ var _lodash = __webpack_require__("M4fF");
 var _actions = __webpack_require__("rmae");
 
 var _helpers = __webpack_require__("33bN");
+
+var _helpers2 = __webpack_require__("hKI6");
 
 var _actions2 = __webpack_require__("Wtfs");
 
@@ -13201,9 +13348,9 @@ var _constants = __webpack_require__("5B/B");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [workerSyncTermLevel, workerReset, workerFormSubmit, foreman].map(_regenerator2.default.mark); /**
-                                                                                                              * The external dependencies.
-                                                                                                              */
+var _marked = [workerSyncTermLevel, workerSyncTermAncestors, workerReset, workerFormSubmit, foreman].map(_regenerator2.default.mark); /**
+                                                                                                                                       * The external dependencies.
+                                                                                                                                       */
 
 
 /**
@@ -13232,7 +13379,7 @@ function workerSyncTermLevel(containers) {
 				case 2:
 					channel = _context2.sent;
 					_loop = _regenerator2.default.mark(function _loop() {
-						var _ref, option, level, matches, payload;
+						var _ref, option, level, payload;
 
 						return _regenerator2.default.wrap(function _loop$(_context) {
 							while (1) {
@@ -13244,25 +13391,15 @@ function workerSyncTermLevel(containers) {
 									case 2:
 										_ref = _context.sent;
 										option = _ref.option;
-										level = 1;
-
-
-										if (option.className) {
-											matches = option.className.match(/^level-(\d+)/);
-
-
-											if (matches) {
-												level = parseInt(matches[1], 10) + 2;
-											}
-										}
+										level = (0, _helpers2.getSelectOptionLevel)(option) + 1; // +1 since the option is for the parent, not the current term
 
 										payload = (0, _lodash.mapValues)(containers, function () {
 											return { term_level: level };
 										});
-										_context.next = 9;
+										_context.next = 8;
 										return (0, _effects.put)((0, _actions3.setContainerMeta)(payload));
 
-									case 9:
+									case 8:
 									case 'end':
 										return _context.stop();
 								}
@@ -13291,70 +13428,142 @@ function workerSyncTermLevel(containers) {
 }
 
 /**
+ * Keep in sync the `term_parent_id` and `term_ancestors` properties.
+ *
+ * @param  {Object} containers
+ * @return {void}
+ */
+function workerSyncTermAncestors(containers) {
+	var _this2 = this;
+
+	var channel, _loop2;
+
+	return _regenerator2.default.wrap(function workerSyncTermAncestors$(_context4) {
+		while (1) {
+			switch (_context4.prev = _context4.next) {
+				case 0:
+					_context4.next = 2;
+					return (0, _effects.call)(_events.createSelectboxChannel, 'select#parent');
+
+				case 2:
+					channel = _context4.sent;
+					_loop2 = _regenerator2.default.mark(function _loop2() {
+						var _ref2, option, ancestors, parentId, payload;
+
+						return _regenerator2.default.wrap(function _loop2$(_context3) {
+							while (1) {
+								switch (_context3.prev = _context3.next) {
+									case 0:
+										_context3.next = 2;
+										return (0, _effects.take)(channel);
+
+									case 2:
+										_ref2 = _context3.sent;
+										option = _ref2.option;
+										ancestors = (0, _helpers2.getSelectOptionAncestors)(option);
+										parentId = (0, _lodash.isEmpty)(ancestors) ? 0 : (0, _lodash.last)(ancestors);
+										payload = (0, _lodash.mapValues)(containers, function () {
+											return {
+												term_ancestors: ancestors,
+												term_parent_id: parentId
+											};
+										});
+										_context3.next = 9;
+										return (0, _effects.put)((0, _actions3.setContainerMeta)(payload));
+
+									case 9:
+									case 'end':
+										return _context3.stop();
+								}
+							}
+						}, _loop2, _this2);
+					});
+
+				case 4:
+					if (false) {
+						_context4.next = 8;
+						break;
+					}
+
+					return _context4.delegateYield(_loop2(), 't0', 6);
+
+				case 6:
+					_context4.next = 4;
+					break;
+
+				case 8:
+				case 'end':
+					return _context4.stop();
+			}
+		}
+	}, _marked[1], this);
+}
+
+/**
  * Reset the containers when the term is saved.
  *
  * @return {void}
  */
 function workerReset(store) {
-	var channel, _ref2, settings, data, id, state, containers, _id;
+	var channel, _ref3, settings, data, id, state, containers, _id;
 
-	return _regenerator2.default.wrap(function workerReset$(_context3) {
+	return _regenerator2.default.wrap(function workerReset$(_context5) {
 		while (1) {
-			switch (_context3.prev = _context3.next) {
+			switch (_context5.prev = _context5.next) {
 				case 0:
-					_context3.next = 2;
+					_context5.next = 2;
 					return (0, _effects.call)(_events.createAjaxChannel, 'ajaxSuccess', 'add-tag');
 
 				case 2:
-					channel = _context3.sent;
+					channel = _context5.sent;
 
 				case 3:
 					if (false) {
-						_context3.next = 40;
+						_context5.next = 40;
 						break;
 					}
 
-					_context3.next = 6;
+					_context5.next = 6;
 					return (0, _effects.take)(channel);
 
 				case 6:
-					_ref2 = _context3.sent;
-					settings = _ref2.settings;
-					data = _ref2.data;
+					_ref3 = _context5.sent;
+					settings = _ref3.settings;
+					data = _ref3.data;
 
 					if (!(!settings.data.includes('carbon_panel') || data.querySelector('wp_error'))) {
-						_context3.next = 11;
+						_context5.next = 11;
 						break;
 					}
 
-					return _context3.abrupt('continue', 3);
+					return _context5.abrupt('continue', 3);
 
 				case 11:
-					_context3.next = 13;
+					_context5.next = 13;
 					return (0, _effects.select)(_selectors.getContainers);
 
 				case 13:
-					_context3.t0 = _regenerator2.default.keys(_context3.sent);
+					_context5.t0 = _regenerator2.default.keys(_context5.sent);
 
 				case 14:
-					if ((_context3.t1 = _context3.t0()).done) {
-						_context3.next = 25;
+					if ((_context5.t1 = _context5.t0()).done) {
+						_context5.next = 25;
 						break;
 					}
 
-					id = _context3.t1.value;
-					_context3.t2 = _effects.call;
-					_context3.t3 = _reactDom2.default.unmountComponentAtNode;
-					_context3.next = 20;
+					id = _context5.t1.value;
+					_context5.t2 = _effects.call;
+					_context5.t3 = _reactDom2.default.unmountComponentAtNode;
+					_context5.next = 20;
 					return (0, _effects.call)([document, document.querySelector], '.container-' + id);
 
 				case 20:
-					_context3.t4 = _context3.sent;
-					_context3.next = 23;
-					return (0, _context3.t2)(_context3.t3, _context3.t4);
+					_context5.t4 = _context5.sent;
+					_context5.next = 23;
+					return (0, _context5.t2)(_context5.t3, _context5.t4);
 
 				case 23:
-					_context3.next = 14;
+					_context5.next = 14;
 					break;
 
 				case 25:
@@ -13364,41 +13573,41 @@ function workerReset(store) {
 
 					// Replace the store's state.
 
-					_context3.next = 28;
+					_context5.next = 28;
 					return (0, _effects.put)((0, _actions.resetStore)(state));
 
 				case 28:
-					_context3.next = 30;
+					_context5.next = 30;
 					return (0, _effects.select)(_selectors.getContainers);
 
 				case 30:
-					containers = _context3.sent;
-					_context3.t5 = _regenerator2.default.keys(containers);
+					containers = _context5.sent;
+					_context5.t5 = _regenerator2.default.keys(containers);
 
 				case 32:
-					if ((_context3.t6 = _context3.t5()).done) {
-						_context3.next = 38;
+					if ((_context5.t6 = _context5.t5()).done) {
+						_context5.next = 38;
 						break;
 					}
 
-					_id = _context3.t6.value;
-					_context3.next = 36;
+					_id = _context5.t6.value;
+					_context5.next = 36;
 					return (0, _effects.call)(_factory2.default, store, containers[_id].type, { id: _id });
 
 				case 36:
-					_context3.next = 32;
+					_context5.next = 32;
 					break;
 
 				case 38:
-					_context3.next = 3;
+					_context5.next = 3;
 					break;
 
 				case 40:
 				case 'end':
-					return _context3.stop();
+					return _context5.stop();
 			}
 		}
-	}, _marked[1], this);
+	}, _marked[2], this);
 }
 
 /**
@@ -13407,47 +13616,47 @@ function workerReset(store) {
  * @return {void}
  */
 function workerFormSubmit(channelCreator, selector) {
-	var channel, _ref3, event;
+	var channel, _ref4, event;
 
-	return _regenerator2.default.wrap(function workerFormSubmit$(_context4) {
+	return _regenerator2.default.wrap(function workerFormSubmit$(_context6) {
 		while (1) {
-			switch (_context4.prev = _context4.next) {
+			switch (_context6.prev = _context6.next) {
 				case 0:
-					_context4.next = 2;
+					_context6.next = 2;
 					return (0, _effects.call)(channelCreator, selector);
 
 				case 2:
-					channel = _context4.sent;
+					channel = _context6.sent;
 
 				case 3:
 					if (false) {
-						_context4.next = 14;
+						_context6.next = 14;
 						break;
 					}
 
-					_context4.next = 6;
+					_context6.next = 6;
 					return (0, _effects.take)(channel);
 
 				case 6:
-					_ref3 = _context4.sent;
-					event = _ref3.event;
-					_context4.next = 10;
+					_ref4 = _context6.sent;
+					event = _ref4.event;
+					_context6.next = 10;
 					return (0, _effects.put)((0, _actions3.submitForm)(event));
 
 				case 10:
-					_context4.next = 12;
+					_context6.next = 12;
 					return (0, _effects.put)((0, _actions3.validateAllContainers)(event));
 
 				case 12:
-					_context4.next = 3;
+					_context6.next = 3;
 					break;
 
 				case 14:
 				case 'end':
-					return _context4.stop();
+					return _context6.stop();
 			}
 		}
-	}, _marked[2], this);
+	}, _marked[3], this);
 }
 
 /**
@@ -13458,49 +13667,53 @@ function workerFormSubmit(channelCreator, selector) {
  */
 function foreman(store) {
 	var containers;
-	return _regenerator2.default.wrap(function foreman$(_context5) {
+	return _regenerator2.default.wrap(function foreman$(_context7) {
 		while (1) {
-			switch (_context5.prev = _context5.next) {
+			switch (_context7.prev = _context7.next) {
 				case 0:
-					_context5.next = 2;
+					_context7.next = 2;
 					return (0, _effects.select)(_selectors.getContainersByType, _constants.TYPE_TERM_META);
 
 				case 2:
-					containers = _context5.sent;
+					containers = _context7.sent;
 
 					if (!(0, _lodash.isEmpty)(containers)) {
-						_context5.next = 5;
+						_context7.next = 5;
 						break;
 					}
 
-					return _context5.abrupt('return');
+					return _context7.abrupt('return');
 
 				case 5:
-					_context5.next = 7;
+					_context7.next = 7;
 					return (0, _effects.take)(_actions2.ready);
 
 				case 7:
-					_context5.next = 9;
+					_context7.next = 9;
 					return (0, _effects.fork)(workerSyncTermLevel, containers);
 
 				case 9:
-					_context5.next = 11;
-					return (0, _effects.fork)(workerFormSubmit, _events.createClickChannel, 'form#addtag #submit');
+					_context7.next = 11;
+					return (0, _effects.fork)(workerSyncTermAncestors, containers);
 
 				case 11:
-					_context5.next = 13;
-					return (0, _effects.fork)(workerFormSubmit, _events.createSubmitChannel, 'form#edittag');
+					_context7.next = 13;
+					return (0, _effects.fork)(workerFormSubmit, _events.createClickChannel, 'form#addtag #submit');
 
 				case 13:
-					_context5.next = 15;
-					return (0, _effects.fork)(workerReset, store);
+					_context7.next = 15;
+					return (0, _effects.fork)(workerFormSubmit, _events.createSubmitChannel, 'form#edittag');
 
 				case 15:
+					_context7.next = 17;
+					return (0, _effects.fork)(workerReset, store);
+
+				case 17:
 				case 'end':
-					return _context5.stop();
+					return _context7.stop();
 			}
 		}
-	}, _marked[3], this);
+	}, _marked[4], this);
 }
 
 /***/ }),
@@ -13555,9 +13768,9 @@ var _extends3 = _interopRequireDefault(_extends2);
 
 var _lodash = __webpack_require__("M4fF");
 
-var _equalityArray = __webpack_require__("H1PS");
+var _anyEquality = __webpack_require__("O2K7");
 
-var _equalityArray2 = _interopRequireDefault(_equalityArray);
+var _anyEquality2 = _interopRequireDefault(_anyEquality);
 
 var _base = __webpack_require__("94C5");
 
@@ -13575,7 +13788,7 @@ exports.default = (0, _extends3.default)({}, _base2.default, {
   *
   * @type {Function[]}
   */
-	comparers: [_equalityArray2.default],
+	comparers: [_anyEquality2.default],
 
 	/**
   * Check if the condition is fulfiled.
@@ -13634,6 +13847,68 @@ exports.default = (0, _extends3.default)({}, _base2.default, {
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = (__webpack_require__("B3Oe"))("e6n0");
+
+/***/ }),
+
+/***/ "eA7W":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends2 = __webpack_require__("Dd8w");
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _lodash = __webpack_require__("M4fF");
+
+var _base = __webpack_require__("W0zY");
+
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * The supported operators by this comparer.
+ *
+ * @type {Array}
+ */
+/**
+ * The exterma; dependencies.
+ */
+var operators = ['IN', 'NOT IN'];
+
+/**
+ * Perform the comparison.
+ *
+ * @param  {mixed}   a
+ * @param  {String}  operator
+ * @param  {mixed}   b
+ * @return {Boolean}
+ */
+
+
+/**
+ * The internal dependencies.
+ */
+var evaluate = function evaluate(a, operator, b) {
+  switch (operator) {
+    case 'IN':
+      return (0, _lodash.intersection)(a, b).length > 0;
+    case 'NOT IN':
+      return (0, _lodash.intersection)(a, b).length === 0;
+    default:
+      return false;
+  }
+};
+
+exports.default = (0, _extends3.default)({}, (0, _base2.default)(operators), {
+  evaluate: evaluate
+});
 
 /***/ }),
 
@@ -13704,13 +13979,25 @@ var _marked = [workerAddedOrUpdatedEvent, workerDestroyContainer, workerFormSubm
  */
 
 
+var carbonWidgetIdPrefix = 'carbon_fields_';
+var carbonWidgetContainerIdPrefix = 'carbon_fields_container_';
+
+function widgetIdToContainerId(widgetId) {
+	return carbonWidgetContainerIdPrefix + widgetId;
+}
+
+function getWidgetId(widget) {
+	var widgetId = (0, _jquery2.default)(widget).find('[name="widget-id"]').val();
+	return widgetId;
+}
+
 /**
  * Re-init the container when the widget is created/saved.
  *
  * @return {void}
  */
 function workerAddedOrUpdatedEvent() {
-	var pagenow, channel, _ref, event, widget, container, containerId, widgetInstance;
+	var pagenow, channel, _ref, event, widget, container, widgetId, containerId, widgetInstance;
 
 	return _regenerator2.default.wrap(function workerAddedOrUpdatedEvent$(_context) {
 		while (1) {
@@ -13725,7 +14012,7 @@ function workerAddedOrUpdatedEvent() {
 
 				case 4:
 					if (false) {
-						_context.next = 24;
+						_context.next = 25;
 						break;
 					}
 
@@ -13753,28 +14040,29 @@ function workerAddedOrUpdatedEvent() {
 
 				case 15:
 					if (!(pagenow === _constants.PAGE_NOW_CUSTOMIZE && event.type === 'widget-added')) {
-						_context.next = 22;
+						_context.next = 23;
 						break;
 					}
 
 					(0, _jquery2.default)(widget).find('[name="savewidget"]').off('click').show().end().find('.widget-content:first').off('keydown', 'input').off('change input propertychange', ':input');
 
-					containerId = (0, _jquery2.default)(widget).find('[name="widget-id"]').val();
-					_context.next = 20;
+					widgetId = getWidgetId(widget);
+					containerId = widgetIdToContainerId(widgetId);
+					_context.next = 21;
 					return (0, _effects.call)(wp.customize.Widgets.getWidgetFormControlForWidget, containerId);
 
-				case 20:
+				case 21:
 					widgetInstance = _context.sent;
 
 
 					// Change the flag for 'live mode' so we can receive proper `widget-updated` events.
 					widgetInstance.liveUpdateMode = false;
 
-				case 22:
+				case 23:
 					_context.next = 4;
 					break;
 
-				case 24:
+				case 25:
 				case 'end':
 					return _context.stop();
 			}
@@ -13791,7 +14079,7 @@ function workerAddedOrUpdatedEvent() {
  * @return {void}
  */
 function workerDestroyContainer(ajaxEvent, ajaxAction) {
-	var channel, _ref2, data, containerId, container, fieldsIds;
+	var channel, _ref2, data, widgetId, containerId, container, fieldsIds;
 
 	return _regenerator2.default.wrap(function workerDestroyContainer$(_context2) {
 		while (1) {
@@ -13805,7 +14093,7 @@ function workerDestroyContainer(ajaxEvent, ajaxAction) {
 
 				case 3:
 					if (false) {
-						_context2.next = 26;
+						_context2.next = 27;
 						break;
 					}
 
@@ -13815,54 +14103,55 @@ function workerDestroyContainer(ajaxEvent, ajaxAction) {
 				case 6:
 					_ref2 = _context2.sent;
 					data = _ref2.settings.data;
-					containerId = data.match(/widget-id=(.+?)\&/)[1];
+					widgetId = data.match(/widget-id=(.+?)\&/)[1];
+					containerId = widgetIdToContainerId(widgetId);
 
 					// Don't care about other widgets.
 
-					if ((0, _lodash.startsWith)(containerId, 'carbon_fields_')) {
-						_context2.next = 11;
+					if ((0, _lodash.startsWith)(widgetId, carbonWidgetIdPrefix)) {
+						_context2.next = 12;
 						break;
 					}
 
 					return _context2.abrupt('continue', 3);
 
-				case 11:
+				case 12:
 
 					// Remove the current instance from DOM.
-					_reactDom2.default.unmountComponentAtNode(document.querySelector('[class*="' + containerId + '"]'));
+					_reactDom2.default.unmountComponentAtNode(document.querySelector('.container-' + containerId));
 
 					// Get the container from the store.
-					_context2.next = 14;
+					_context2.next = 15;
 					return (0, _effects.select)(_selectors.getContainerById, containerId);
 
-				case 14:
+				case 15:
 					container = _context2.sent;
 
 					if (container) {
-						_context2.next = 17;
+						_context2.next = 18;
 						break;
 					}
 
 					return _context2.abrupt('continue', 3);
 
-				case 17:
-					_context2.next = 19;
+				case 18:
+					_context2.next = 20;
 					return (0, _effects.select)(_selectors2.getFieldsByRoots, container.fields);
 
-				case 19:
+				case 20:
 					fieldsIds = _context2.sent;
-					_context2.next = 22;
+					_context2.next = 23;
 					return (0, _effects.put)((0, _actions.removeContainer)(containerId));
 
-				case 22:
-					_context2.next = 24;
+				case 23:
+					_context2.next = 25;
 					return (0, _effects.put)((0, _actions2.removeFields)(fieldsIds));
 
-				case 24:
+				case 25:
 					_context2.next = 3;
 					break;
 
-				case 26:
+				case 27:
 				case 'end':
 					return _context2.stop();
 			}
@@ -13876,7 +14165,7 @@ function workerDestroyContainer(ajaxEvent, ajaxAction) {
  * @return {void}
  */
 function workerFormSubmit() {
-	var pagenow, channel, _ref3, _event, containerId, _widget;
+	var pagenow, channel, _ref3, _event, widgetId, containerId, _widget;
 
 	return _regenerator2.default.wrap(function workerFormSubmit$(_context3) {
 		while (1) {
@@ -13891,7 +14180,7 @@ function workerFormSubmit() {
 
 				case 4:
 					if (false) {
-						_context3.next = 28;
+						_context3.next = 29;
 						break;
 					}
 
@@ -13901,17 +14190,18 @@ function workerFormSubmit() {
 				case 7:
 					_ref3 = _context3.sent;
 					_event = _ref3.event;
-					containerId = (0, _jquery2.default)(_event.target).closest('.widget-inside').find('input[name="widget-id"]').val();
-					_context3.next = 12;
+					widgetId = getWidgetId((0, _jquery2.default)(_event.target).closest('.widget-inside').get(0));
+					containerId = widgetIdToContainerId(widgetId);
+					_context3.next = 13;
 					return (0, _effects.put)((0, _actions.submitForm)(_event));
 
-				case 12:
-					_context3.next = 14;
+				case 13:
+					_context3.next = 15;
 					return (0, _effects.put)((0, _actions.validateContainer)(containerId, _event));
 
-				case 14:
+				case 15:
 					if (!(pagenow === _constants.PAGE_NOW_CUSTOMIZE)) {
-						_context3.next = 26;
+						_context3.next = 27;
 						break;
 					}
 
@@ -13919,32 +14209,32 @@ function workerFormSubmit() {
 
 					// This little delay allows us to get correct results in the selector for invalid fields
 					// since we don't know when the validation is completed.
-					_context3.next = 18;
+					_context3.next = 19;
 					return (0, _effects.call)(_reduxSaga.delay, 250);
 
-				case 18:
-					_context3.next = 20;
+				case 19:
+					_context3.next = 21;
 					return (0, _effects.select)(_selectors2.hasInvalidFields);
 
-				case 20:
+				case 21:
 					if (_context3.sent) {
-						_context3.next = 26;
+						_context3.next = 27;
 						break;
 					}
 
-					_context3.next = 23;
+					_context3.next = 24;
 					return (0, _effects.call)(wp.customize.Widgets.getWidgetFormControlForWidget, containerId);
 
-				case 23:
+				case 24:
 					_widget = _context3.sent;
-					_context3.next = 26;
+					_context3.next = 27;
 					return (0, _effects.call)([_widget, _widget.updateWidget], { disable_form: true });
 
-				case 26:
+				case 27:
 					_context3.next = 4;
 					break;
 
-				case 28:
+				case 29:
 				case 'end':
 					return _context3.stop();
 			}
@@ -13958,7 +14248,7 @@ function workerFormSubmit() {
  * @return {void}
  */
 function workerToggleWidget() {
-	var channel, _ref4, _event2, $widget, containerId;
+	var channel, _ref4, _event2, $widget, widgetId, containerId;
 
 	return _regenerator2.default.wrap(function workerToggleWidget$(_context4) {
 		while (1) {
@@ -13972,7 +14262,7 @@ function workerToggleWidget() {
 
 				case 3:
 					if (false) {
-						_context4.next = 18;
+						_context4.next = 19;
 						break;
 					}
 
@@ -13983,30 +14273,31 @@ function workerToggleWidget() {
 					_ref4 = _context4.sent;
 					_event2 = _ref4.event;
 					$widget = (0, _jquery2.default)(_event2.target).closest('.widget');
-					containerId = $widget.find('input[name="widget-id"]').val();
+					widgetId = getWidgetId($widget.get(0));
+					containerId = widgetIdToContainerId(widgetId);
 
 					// Don't care about other widgets.
 
-					if ((0, _lodash.startsWith)(containerId, 'carbon_fields_')) {
-						_context4.next = 12;
+					if ((0, _lodash.startsWith)(widgetId, carbonWidgetIdPrefix)) {
+						_context4.next = 13;
 						break;
 					}
 
 					return _context4.abrupt('continue', 3);
 
-				case 12:
-					_context4.next = 14;
+				case 13:
+					_context4.next = 15;
 					return (0, _effects.call)(_reduxSaga.delay, 100);
 
-				case 14:
-					_context4.next = 16;
+				case 15:
+					_context4.next = 17;
 					return (0, _effects.put)((0, _actions.toggleContainerBox)(containerId, $widget.hasClass('open')));
 
-				case 16:
+				case 17:
 					_context4.next = 3;
 					break;
 
-				case 18:
+				case 19:
 				case 'end':
 					return _context4.stop();
 			}
@@ -14100,6 +14391,10 @@ var _postParentId = __webpack_require__("ULb7");
 
 var _postParentId2 = _interopRequireDefault(_postParentId);
 
+var _postAncestorId = __webpack_require__("R5uo");
+
+var _postAncestorId2 = _interopRequireDefault(_postAncestorId);
+
 var _postFormat = __webpack_require__("bpo7");
 
 var _postFormat2 = _interopRequireDefault(_postFormat);
@@ -14120,6 +14415,14 @@ var _termLevel = __webpack_require__("GVVa");
 
 var _termLevel2 = _interopRequireDefault(_termLevel);
 
+var _termParent = __webpack_require__("bNNj");
+
+var _termParent2 = _interopRequireDefault(_termParent);
+
+var _termAncestor = __webpack_require__("fKV9");
+
+var _termAncestor2 = _interopRequireDefault(_termAncestor);
+
 var _userRole = __webpack_require__("iqss");
 
 var _userRole2 = _interopRequireDefault(_userRole);
@@ -14131,20 +14434,25 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * @type {Object}
  */
+
+
 /**
- * The external dependencies.
+ * The internal dependencies.
  */
 var conditions = {
 	base: _base2.default,
 	boolean: _boolean2.default,
 
 	post_parent_id: _postParentId2.default,
+	post_ancestor_id: _postAncestorId2.default,
 	post_format: _postFormat2.default,
 	post_level: _postLevel2.default,
 	post_template: _postTemplate2.default,
 	post_term: _postTerm2.default,
 
 	term_level: _termLevel2.default,
+	term_parent: _termParent2.default,
+	term_ancestor: _termAncestor2.default,
 
 	user_role: _userRole2.default
 };
@@ -14156,10 +14464,8 @@ var conditions = {
  * @param  {Object} env
  * @return {Boolean}
  */
-
-
 /**
- * The internal dependencies.
+ * The external dependencies.
  */
 function evaluteConditions(collection, env) {
 	var results = collection.conditions.map(function (definition) {
@@ -14214,6 +14520,74 @@ module.exports = function isBuffer(arg) {
     && typeof arg.fill === 'function'
     && typeof arg.readUInt8 === 'function';
 }
+
+/***/ }),
+
+/***/ "fKV9":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _extends2 = __webpack_require__("Dd8w");
+
+var _extends3 = _interopRequireDefault(_extends2);
+
+var _lodash = __webpack_require__("M4fF");
+
+var _anyEquality = __webpack_require__("O2K7");
+
+var _anyEquality2 = _interopRequireDefault(_anyEquality);
+
+var _anyContain = __webpack_require__("eA7W");
+
+var _anyContain2 = _interopRequireDefault(_anyContain);
+
+var _base = __webpack_require__("94C5");
+
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * The external dependecies.
+ */
+exports.default = (0, _extends3.default)({}, _base2.default, {
+
+	/**
+  * The supported comparers.
+  *
+  * @type {Function[]}
+  */
+	comparers: [_anyEquality2.default, _anyContain2.default],
+
+	/**
+  * Check if the condition is fulfiled.
+  *
+  * @param  {Object}  definition
+  * @param  {Object}  env
+  * @return {Boolean}
+  */
+	isFulfiled: function isFulfiled(definition, env) {
+		var compare = definition.compare,
+		    value = definition.value;
+
+
+		value = (0, _lodash.isArray)(value) ? (0, _lodash.map)(value, function (val) {
+			return val.term_object.term_id;
+		}) : value.term_object.term_id;
+
+		return this.firstSupportedComparerIsCorrect(env.term_ancestors, compare, value);
+	}
+});
+
+/**
+ * The internal dependencies.
+ */
 
 /***/ }),
 
@@ -14651,6 +15025,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * The internal dependencies.
  */
 exports.default = (0, _recompose.setStatic)('type', _constants.TYPE_TERM_META)((0, _recompose.compose)((0, _withStore2.default)(), (0, _withSetup2.default)({
+	term_ancestors: [],
+	term_parent_id: 0,
 	term_level: 1
 }))(_container2.default)); /**
                             * The external dependencies.
@@ -14957,6 +15333,8 @@ exports.preventDefault = preventDefault;
 exports.autoload = autoload;
 exports.cancelTasks = cancelTasks;
 exports.patchTagBoxAPI = patchTagBoxAPI;
+exports.getSelectOptionLevel = getSelectOptionLevel;
+exports.getSelectOptionAncestors = getSelectOptionAncestors;
 
 var _jquery = __webpack_require__("0iPh");
 
@@ -15074,6 +15452,53 @@ function patchTagBoxAPI(tagBox, method) {
 		return result;
 	};
 }
+
+/**
+ * Get select option's level based on it's className
+ *
+ * @param  {Object} option
+ * @return {Number}
+ */
+function getSelectOptionLevel(option) {
+	var level = 1;
+
+	if (option.className) {
+		var matches = option.className.match(/^level-(\d+)/);
+
+		if (matches) {
+			level = parseInt(matches[1], 10) + 1;
+		}
+	}
+
+	return level;
+}
+
+/**
+ * Get a select option's ancestor options in according to hierarchy
+ *
+ * @param  {Object} option
+ * @return {Object}
+ */
+function getSelectOptionAncestors(option) {
+	var ancestors = [];
+
+	var $prev = (0, _jquery2.default)(option);
+	var level = getSelectOptionLevel($prev.get(0));
+	while (level > 0 && $prev.length > 0) {
+		if (getSelectOptionLevel($prev.get(0)) !== level) {
+			continue; // skip since this is a sibling/cousin, not an ancestor
+		}
+
+		var id = parseInt($prev.val(), 10);
+		if (id > 0) {
+			ancestors.unshift(id);
+		}
+
+		$prev = $prev.prev();
+		level--;
+	}
+	return ancestors;
+};
 
 /***/ }),
 
@@ -15599,7 +16024,7 @@ function prepareValueForMediaGalleryField(fieldId, attachment) {
  * @return {void}
  */
 function workerAddMultipleFiles(action) {
-	var _action$payload, fieldId, attachments, browser, field, _parent, i, attachment, parentField, freshGroup, freshFieldId, freshField, value, _value;
+	var _action$payload, fieldId, attachments, browser, field, isMediaGalleryField, parent, index, attachment, value, parentField, freshGroup, freshFieldId, freshField, _value;
 
 	return _regenerator2.default.wrap(function workerAddMultipleFiles$(_context4) {
 		while (1) {
@@ -15611,105 +16036,110 @@ function workerAddMultipleFiles(action) {
 
 				case 3:
 					field = _context4.sent;
+					isMediaGalleryField = field.type === _constants.TYPE_MEDIA_GALLERY;
+					parent = void 0;
+
+					// If multiple attachments are selected and the field is Image or File, the extra 
+					// ones will be distributed among the closest complex field groups.
 
 					if (!(field.type === _constants.TYPE_IMAGE || field.type === _constants.TYPE_FILE)) {
-						_context4.next = 10;
+						_context4.next = 12;
 						break;
 					}
 
-					_context4.next = 7;
+					_context4.next = 9;
 					return (0, _effects.select)(_selectors.getComplexGroupById, field.parent);
 
-				case 7:
-					_parent = _context4.sent;
+				case 9:
+					parent = _context4.sent;
 
-					if (!(0, _lodash.isUndefined)(_parent)) {
-						_context4.next = 10;
+					if (!(0, _lodash.isUndefined)(parent)) {
+						_context4.next = 12;
 						break;
 					}
 
 					return _context4.abrupt('return');
 
-				case 10:
-					i = 0;
+				case 12:
+					index = 0;
 
-				case 11:
-					if (!(i < attachments.length)) {
-						_context4.next = 46;
+				case 13:
+					if (!(index < attachments.length)) {
+						_context4.next = 48;
 						break;
 					}
 
-					attachment = attachments[i];
+					attachment = attachments[index];
 
-					if (!(field.type === _constants.TYPE_IMAGE || field.type === _constants.TYPE_FILE)) {
-						_context4.next = 35;
+					if (!isMediaGalleryField) {
+						_context4.next = 26;
 						break;
 					}
 
-					_context4.next = 16;
-					return (0, _effects.put)((0, _actions.addComplexGroup)(parent.field.id, parent.group.name));
-
-				case 16:
 					_context4.next = 18;
-					return (0, _effects.take)(_actions.receiveComplexGroup);
+					return prepareValueForField(field.id, attachment);
 
 				case 18:
-					_context4.next = 20;
+					value = _context4.sent;
+
+
+					if (field.duplicates_allowed === false) {
+						browser.state().frame.options.selected = value;
+					}
+
+					// optional - this ensures an instant preview update
+					_context4.next = 22;
+					return redrawAttachmentPreview(field.id, value, attachment, field.default_thumb_url);
+
+				case 22:
+					_context4.next = 24;
+					return (0, _effects.put)((0, _actions.setFieldValue)(field.id, value));
+
+				case 24:
+					_context4.next = 45;
+					break;
+
+				case 26:
+					_context4.next = 28;
+					return (0, _effects.put)((0, _actions.addComplexGroup)(parent.field.id, parent.group.name));
+
+				case 28:
+					_context4.next = 30;
+					return (0, _effects.take)(_actions.receiveComplexGroup);
+
+				case 30:
+					_context4.next = 32;
 					return (0, _effects.select)(_selectors.getFieldById, parent.field.id);
 
-				case 20:
+				case 32:
 					parentField = _context4.sent;
 					freshGroup = (0, _lodash.last)(parentField.value);
 					freshFieldId = (0, _lodash.first)((0, _lodash.filter)(freshGroup.fields, function (f) {
 						return f.base_name === field.base_name;
 					})).id;
-					_context4.next = 25;
+					_context4.next = 37;
 					return (0, _effects.select)(_selectors.getFieldById, freshFieldId);
 
-				case 25:
+				case 37:
 					freshField = _context4.sent;
-					_context4.next = 28;
+					_context4.next = 40;
 					return prepareValueForField(freshField.id, attachment);
 
-				case 28:
-					value = _context4.sent;
-					_context4.next = 31;
-					return redrawAttachmentPreview(freshField.id, value, attachment, freshField.default_thumb_url);
-
-				case 31:
-					_context4.next = 33;
-					return (0, _effects.put)((0, _actions.setFieldValue)(freshField.id, value));
-
-				case 33:
-					_context4.next = 43;
-					break;
-
-				case 35:
-					_context4.next = 37;
-					return prepareValueForField(field.id, attachment);
-
-				case 37:
+				case 40:
 					_value = _context4.sent;
-
-
-					if (field.duplicates_allowed === false) {
-						browser.state().frame.options.selected = _value;
-					}
-
-					// optional - this ensures an instant preview update
-					_context4.next = 41;
-					return redrawAttachmentPreview(field.id, _value, attachment, field.default_thumb_url);
-
-				case 41:
 					_context4.next = 43;
-					return (0, _effects.put)((0, _actions.setFieldValue)(field.id, _value));
+					return redrawAttachmentPreview(freshField.id, _value, attachment, freshField.default_thumb_url);
 
 				case 43:
-					i++;
-					_context4.next = 11;
+					_context4.next = 45;
+					return (0, _effects.put)((0, _actions.setFieldValue)(freshField.id, _value));
+
+				case 45:
+					index++;
+					_context4.next = 13;
 					break;
 
-				case 46:
+				case 48:
 				case 'end':
 					return _context4.stop();
 			}
@@ -15803,7 +16233,9 @@ function redrawAttachmentPreview(fieldId, attachmentIdentifier, attachment, defa
 					}
 
 					_context5.next = 30;
-					return (0, _effects.put)((0, _actions.updateField)(fieldId, attachmentMeta));
+					return (0, _effects.put)((0, _actions.updateField)(fieldId, {
+						value_meta: attachmentMeta
+					}));
 
 				case 30:
 					_context5.next = 37;
@@ -16595,7 +17027,7 @@ var RadioImageField = exports.RadioImageField = function RadioImageField(_ref) {
 							value: option.value,
 							checked: isChecked(option),
 							disabled: !field.ui.is_visible,
-							onChange: handleChange
+							onChange: handleChange(option)
 						}, field.attributes)),
 						_react2.default.createElement(
 							'figure',
@@ -19078,7 +19510,7 @@ var _regenerator = __webpack_require__("Xxa5");
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
 exports.workerSyncPostTemplate = workerSyncPostTemplate;
-exports.workerSyncPostParentId = workerSyncPostParentId;
+exports.workerSyncPostAncestors = workerSyncPostAncestors;
 exports.workerSyncPostFormat = workerSyncPostFormat;
 exports.workerSyncHierarchicalTerms = workerSyncHierarchicalTerms;
 exports.workerSyncNonHierarchicalTerms = workerSyncNonHierarchicalTerms;
@@ -19095,6 +19527,8 @@ var _lodash = __webpack_require__("M4fF");
 
 var _actions = __webpack_require__("Wtfs");
 
+var _helpers = __webpack_require__("hKI6");
+
 var _events = __webpack_require__("x1uS");
 
 var _selectors = __webpack_require__("pL4W");
@@ -19105,9 +19539,9 @@ var _constants = __webpack_require__("5B/B");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [syncStore, workerSyncPostTemplate, workerSyncPostParentId, workerSyncPostFormat, setupSyncTerms, workerSyncHierarchicalTerms, workerSyncNonHierarchicalTerms, workerFormSubmit, foreman].map(_regenerator2.default.mark); /**
-                                                                                                                                                                                                                                          * The external dependencies.
-                                                                                                                                                                                                                                          */
+var _marked = [syncStore, workerSyncPostTemplate, workerSyncPostAncestors, workerSyncPostFormat, setupSyncTerms, workerSyncHierarchicalTerms, workerSyncNonHierarchicalTerms, workerFormSubmit, foreman].map(_regenerator2.default.mark); /**
+                                                                                                                                                                                                                                           * The external dependencies.
+                                                                                                                                                                                                                                           */
 
 
 /**
@@ -19202,15 +19636,15 @@ function workerSyncPostTemplate(containers) {
 }
 
 /**
- * Keep in sync the `post_parent_id` & `post_level` properties.
+ * Keep in sync the `post_parent_id`, `post_ancestors` & `post_level` properties.
  *
  * @param  {Object} containers
  * @return {void}
  */
-function workerSyncPostParentId(containers) {
-	var channel, _ref2, _value, option, parentId, level, matches;
+function workerSyncPostAncestors(containers) {
+	var channel, _ref2, option, ancestors, parentId, level;
 
-	return _regenerator2.default.wrap(function workerSyncPostParentId$(_context3) {
+	return _regenerator2.default.wrap(function workerSyncPostAncestors$(_context3) {
 		while (1) {
 			switch (_context3.prev = _context3.next) {
 				case 0:
@@ -19222,7 +19656,7 @@ function workerSyncPostParentId(containers) {
 
 				case 3:
 					if (false) {
-						_context3.next = 16;
+						_context3.next = 15;
 						break;
 					}
 
@@ -19231,32 +19665,23 @@ function workerSyncPostParentId(containers) {
 
 				case 6:
 					_ref2 = _context3.sent;
-					_value = _ref2.value;
 					option = _ref2.option;
-					parentId = (0, _lodash.defaultTo)(parseInt(_value, 10), 0);
-					level = 1;
+					ancestors = (0, _helpers.getSelectOptionAncestors)(option);
+					parentId = (0, _lodash.isEmpty)(ancestors) ? 0 : (0, _lodash.last)(ancestors);
+					level = (0, _helpers.getSelectOptionLevel)(option) + 1; // +1 since the option is for the parent, not the current post
 
-
-					if (option.className) {
-						matches = option.className.match(/^level-(\d+)/);
-
-
-						if (matches) {
-							level = parseInt(matches[1], 10) + 2;
-						}
-					}
-
-					_context3.next = 14;
+					_context3.next = 13;
 					return (0, _effects.call)(syncStore, containers, {
+						post_ancestors: ancestors,
 						post_parent_id: parentId,
 						post_level: level
 					});
 
-				case 14:
+				case 13:
 					_context3.next = 3;
 					break;
 
-				case 16:
+				case 15:
 				case 'end':
 					return _context3.stop();
 			}
@@ -19450,7 +19875,7 @@ function workerSyncHierarchicalTerms(containers, taxonomy) {
  * @return {void}
  */
 function workerSyncNonHierarchicalTerms(containers, taxonomy) {
-	var channel, _ref5, _value2;
+	var channel, _ref5, _value;
 
 	return _regenerator2.default.wrap(function workerSyncNonHierarchicalTerms$(_context7) {
 		while (1) {
@@ -19473,10 +19898,10 @@ function workerSyncNonHierarchicalTerms(containers, taxonomy) {
 
 				case 6:
 					_ref5 = _context7.sent;
-					_value2 = _ref5.value;
+					_value = _ref5.value;
 					_context7.next = 10;
 					return (0, _effects.call)(syncStore, containers, {
-						post_term: (0, _defineProperty3.default)({}, taxonomy, _value2 ? _value2.split(/,\s*/) : [])
+						post_term: (0, _defineProperty3.default)({}, taxonomy, _value ? _value.split(/,\s*/) : [])
 					});
 
 				case 10:
@@ -19575,7 +20000,7 @@ function foreman() {
 
 				case 9:
 					_context9.next = 11;
-					return (0, _effects.fork)(workerSyncPostParentId, containers);
+					return (0, _effects.fork)(workerSyncPostAncestors, containers);
 
 				case 11:
 					_context9.next = 13;
@@ -21194,8 +21619,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 exports.default = (0, _recompose.compose)((0, _recompose.setStatic)('type', _constants.TYPE_POST_META), (0, _withStore2.default)(), (0, _withSetup2.default)({
 	post_template: 'default',
-	post_level: 1,
+	post_ancestors: [],
 	post_parent_id: 0,
+	post_level: 1,
 	post_format: '',
 	post_term: {}
 }))(_container2.default); /**
