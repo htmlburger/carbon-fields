@@ -24,6 +24,20 @@ import { removeFields } from 'fields/actions';
 import { getFieldById, getFieldsByRoots, hasInvalidFields } from 'fields/selectors';
 import { TYPE_MAP } from 'fields/constants';
 
+const carbonWidgetIdPrefix = 'carbon_fields_';
+const carbonWidgetContainerIdPrefix = 'carbon_fields_container_';
+
+function widgetIdToContainerId(widgetId) {
+	return carbonWidgetContainerIdPrefix + widgetId;
+}
+
+function getWidgetId(widget) {
+	const widgetId = $(widget)
+		.find('[name="widget-id"]')
+		.val();
+	return widgetId;
+}
+
 /**
  * Re-init the container when the widget is created/saved.
  *
@@ -63,9 +77,8 @@ export function* workerAddedOrUpdatedEvent() {
 					.off('keydown', 'input')
 					.off('change input propertychange', ':input');
 
-			const containerId = $(widget)
-				.find('[name="widget-id"]')
-				.val();
+			const widgetId = getWidgetId(widget);
+			const containerId = widgetIdToContainerId(widgetId);
 
 			const widgetInstance = yield call(wp.customize.Widgets.getWidgetFormControlForWidget, containerId);
 
@@ -89,15 +102,16 @@ export function* workerDestroyContainer(ajaxEvent, ajaxAction) {
 
 	while (true) {
 		const { settings: { data } } = yield take(channel);
-		const containerId = data.match(/widget-id=(.+?)\&/)[1];
+		const widgetId = data.match(/widget-id=(.+?)\&/)[1];
+		const containerId = widgetIdToContainerId(widgetId);
 
 		// Don't care about other widgets.
-		if (!startsWith(containerId, 'carbon_fields_')) {
+		if (!startsWith(widgetId, carbonWidgetIdPrefix)) {
 			continue;
 		}
 
 		// Remove the current instance from DOM.
-		ReactDOM.unmountComponentAtNode(document.querySelector(`[class*="${containerId}"]`));
+		ReactDOM.unmountComponentAtNode(document.querySelector(`.container-${containerId}`));
 
 		// Get the container from the store.
 		const container = yield select(getContainerById, containerId);
@@ -128,10 +142,8 @@ export function* workerFormSubmit() {
 
 	while (true) {
 		const { event } = yield take(channel);
-		const containerId = $(event.target)
-			.closest('.widget-inside')
-			.find('input[name="widget-id"]')
-				.val();
+		const widgetId = getWidgetId($(event.target).closest('.widget-inside').get(0));
+		const containerId = widgetIdToContainerId(widgetId);
 
 		yield put(submitForm(event));
 		yield put(validateContainer(containerId, event));
@@ -168,12 +180,11 @@ export function* workerToggleWidget() {
 	while (true) {
 		const { event } = yield take(channel);
 		const $widget = $(event.target).closest('.widget');
-		const containerId = $widget
-			.find('input[name="widget-id"]')
-				.val();
+		const widgetId = getWidgetId($widget.get(0));
+		const containerId = widgetIdToContainerId(widgetId);
 
 		// Don't care about other widgets.
-		if (!startsWith(containerId, 'carbon_fields_')) {
+		if (!startsWith(widgetId, carbonWidgetIdPrefix)) {
 			continue;
 		}
 

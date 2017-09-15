@@ -19,6 +19,13 @@ class Nav_Menu_Item_Container extends Container {
 	protected $menu_item_instances = array();
 
 	/**
+	 * The menu item id this container is for
+	 *
+	 * @var int
+	 */
+	protected $menu_item_id = 0;
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function __construct( $id, $title, $type, $condition_collection, $condition_translator ) {
@@ -41,11 +48,12 @@ class Nav_Menu_Item_Container extends Container {
 	 * @param int $menu_item_id Used to pass the correct menu_item_id to the Container object
 	 */
 	public function init( $menu_item_id = 0 ) {
-		$this->get_datastore()->set_object_id( $menu_item_id );
+		$this->menu_item_id = $menu_item_id;
+		$this->get_datastore()->set_object_id( $this->menu_item_id );
 		$this->_attach();
 
 		// Only the base container should register for updating/rendering
-		if ( $menu_item_id === 0 ) {
+		if ( $this->menu_item_id === 0 ) {
 			add_action( 'wp_update_nav_menu_item', array( $this, 'update' ), 10, 3 );
 			add_action( 'carbon_fields_print_nav_menu_item_container_fields', array( $this, 'form' ), 10, 5 );
 		}
@@ -81,6 +89,13 @@ class Nav_Menu_Item_Container extends Container {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function is_active() {
+		return ( $this->active && $this->menu_item_id !== 0 );
+	}
+
+	/**
 	 * Get environment array for page request (in admin)
 	 *
 	 * @return array
@@ -100,7 +115,10 @@ class Nav_Menu_Item_Container extends Container {
 		$input = stripslashes_deep( $_REQUEST );
 		$ajax = defined( 'DOING_AJAX' ) ? DOING_AJAX : false;
 		$ajax_action = isset( $input['action'] ) ? $input['action'] : '';
-		if ( $pagenow !== 'nav-menus.php' && ( ! $ajax || $ajax_action !== 'add-menu-item' ) ) {
+		
+		$is_on_menu_page = ( $pagenow === 'nav-menus.php' );
+		$is_menu_ajax_request = ( $ajax && $ajax_action === 'add-menu-item' );
+		if ( ! $is_on_menu_page && ! $is_menu_ajax_request ) {
 			return false;
 		}
 

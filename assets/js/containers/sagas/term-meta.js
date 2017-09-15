@@ -3,13 +3,14 @@
  */
 import ReactDOM from 'react-dom';
 import { take, call, put, fork, select } from 'redux-saga/effects';
-import { isEmpty, mapValues } from 'lodash';
+import { isEmpty, mapValues, last } from 'lodash';
 
 /**
  * The internal dependencies.
  */
 import { resetStore } from 'store/actions';
 import { normalizePreloadedState } from 'store/helpers';
+import { getSelectOptionLevel, getSelectOptionAncestors } from 'lib/helpers';
 
 import { ready } from 'lib/actions';
 import { createSelectboxChannel, createAjaxChannel, createSubmitChannel, createClickChannel } from 'lib/events';
@@ -30,18 +31,30 @@ export function* workerSyncTermLevel(containers) {
 
 	while (true) {
 		const { option } = yield take(channel);
-		let level = 1;
-
-		if (option.className) {
-			const matches = option.className.match(/^level-(\d+)/);
-
-			if (matches) {
-				level = parseInt(matches[1], 10) + 2;
-			}
-		}
-
+		const level = getSelectOptionLevel(option) + 1; // +1 since the option is for the parent, not the current term
 		const payload = mapValues(containers, () => ({ term_level: level }));
+		yield put(setContainerMeta(payload));
+	}
+}
 
+/**
+ * Keep in sync the `term_parent_id` and `term_ancestors` properties.
+ *
+ * @param  {Object} containers
+ * @return {void}
+ */
+export function* workerSyncTermAncestors(containers) {
+	const channel = yield call(createSelectboxChannel, 'select#parent');
+
+	while (true) {
+		const { option } = yield take(channel);
+		const ancestors = getSelectOptionAncestors(option);
+		const parentId = isEmpty(ancestors) ? 0 : last(ancestors);
+
+		const payload = mapValues(containers, () => ({
+			term_ancestors: ancestors,
+			term_parent_id: parentId,
+		}));
 		yield put(setContainerMeta(payload));
 	}
 }
@@ -120,6 +133,7 @@ export default function* foreman(store) {
 
 	// Start the workers.
 	yield fork(workerSyncTermLevel, containers);
+	yield fork(workerSyncTermAncestors, containers);
 	yield fork(workerFormSubmit, createClickChannel, 'form#addtag #submit');
 	yield fork(workerFormSubmit, createSubmitChannel, 'form#edittag');
 	yield fork(workerReset, store);

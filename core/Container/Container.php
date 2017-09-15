@@ -355,7 +355,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		$param = func_get_args();
 		call_user_func_array( array( $this, 'attach' ), $param );
 
-		// Allow containers to activate but not load (useful in cases such as theme options)
+		// Allow containers to initialize but not activate (useful in cases such as theme options)
 		if ( $this->should_activate() ) {
 			$this->activate();
 		}
@@ -436,7 +436,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Whether this container is currently viewed.
 	 */
 	public function should_activate() {
-		return $this->is_valid_attach();
+		return true;
 	}
 
 	/**

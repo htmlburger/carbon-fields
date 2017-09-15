@@ -393,11 +393,6 @@ class Helper {
 	 * @return boolean
 	 */
 	public static function get_attachment_metadata( $id, $type ) {
-		$attachment                   = get_post( $id );
-		$attached_file                = get_attached_file( $attachment->ID );
-		$meta                         = wp_get_attachment_metadata( $attachment->ID );
-		list( $src, $width, $height ) = wp_get_attachment_image_src( $attachment->ID, 'full' );
-
 		$attachment_meta = array(
 			'thumb_url'         => '',
 			'default_thumb_url' => '',
@@ -405,20 +400,35 @@ class Helper {
 			'file_type'         => '',
 			'file_name'         => '',
 			'file_url'          => '',
-			'edit_nonce'        => wp_create_nonce( 'update-post_' . $id ),
-			'title'             => get_the_title( $id ),
-			'caption'           => get_post_field( 'post_excerpt', $id ),
-			'description'       => get_post_field( 'post_content', $id ),
-			'alt'               => get_post_meta( $id, '_wp_attachment_image_alt', true ),
-			'date'              => mysql2date( __( 'F j, Y' ), $attachment->post_date ),
-			'filesize'          => size_format( filesize( $attached_file ) ),
-			'width'             => $width,
-			'height'            => $height,
+			'edit_nonce'        => '',
+			'title'             => '',
+			'caption'           => '',
+			'description'       => '',
+			'alt'               => '',
+			'date'              => '',
+			'filesize'          => '',
+			'width'             => '',
+			'height'            => '',
 		);
 
 		if ( empty( $id ) ) {
 			return $attachment_meta;
 		}
+
+		$attachment                   = get_post( $id );
+		$attached_file                = get_attached_file( $attachment->ID );
+		$meta                         = wp_get_attachment_metadata( $attachment->ID );
+		list( $src, $width, $height ) = wp_get_attachment_image_src( $attachment->ID, 'full' );
+
+		$attachment_meta['edit_nonce']  = wp_create_nonce( 'update-post_' . $id );
+		$attachment_meta['title']       = get_the_title( $id );
+		$attachment_meta['caption']     = get_post_field( 'post_excerpt', $id );
+		$attachment_meta['description'] = get_post_field( 'post_content', $id );
+		$attachment_meta['alt']         = get_post_meta( $id, '_wp_attachment_image_alt', true );
+		$attachment_meta['date']        = mysql2date( __( 'F j, Y' ), $attachment->post_date );
+		$attachment_meta['filesize']    = size_format( filesize( $attached_file ) );
+		$attachment_meta['width']       = $width;
+		$attachment_meta['height']      = $height;
 
 		$attachment_meta['file_url']  = is_numeric( $id ) ? wp_get_attachment_url( $id ) : $id;
 		$attachment_meta['file_name'] = basename( $attachment_meta['file_url'] );

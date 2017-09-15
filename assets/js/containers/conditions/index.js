@@ -9,12 +9,15 @@ import { get } from 'lodash';
 import base from 'containers/conditions/base';
 import boolean from 'containers/conditions/boolean';
 import post_parent_id from 'containers/conditions/post-parent-id';
+import post_ancestor_id from 'containers/conditions/post-ancestor-id';
 import post_format from 'containers/conditions/post-format';
 import post_level from 'containers/conditions/post-level';
 import post_template from 'containers/conditions/post-template';
 import post_term from 'containers/conditions/post-term';
 
 import term_level from 'containers/conditions/term-level';
+import term_parent from 'containers/conditions/term-parent';
+import term_ancestor from 'containers/conditions/term-ancestor';
 
 import user_role from 'containers/conditions/user-role';
 
@@ -28,12 +31,15 @@ const conditions = {
 	boolean,
 
 	post_parent_id,
+	post_ancestor_id,
 	post_format,
 	post_level,
 	post_template,
 	post_term,
-	
+
 	term_level,
+	term_parent,
+	term_ancestor,
 
 	user_role,
 };

@@ -40,7 +40,7 @@ export const RadioImageField = ({
 								value={option.value}
 								checked={isChecked(option)}
 								disabled={!field.ui.is_visible}
-								onChange={handleChange}
+								onChange={handleChange(option)}
 								{...field.attributes} />
 
 							<figure className="carbon-radio-image-holder">

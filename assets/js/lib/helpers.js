@@ -77,3 +77,50 @@ export function patchTagBoxAPI(tagBox, method) {
 		return result;
 	}
 }
+
+/**
+ * Get select option's level based on it's className
+ *
+ * @param  {Object} option
+ * @return {Number}
+ */
+export function getSelectOptionLevel(option) {
+	let level = 1;
+
+	if (option.className) {
+		const matches = option.className.match(/^level-(\d+)/);
+
+		if (matches) {
+			level = parseInt(matches[1], 10) + 1;
+		}
+	}
+
+	return level;
+}
+
+/**
+ * Get a select option's ancestor options in according to hierarchy
+ *
+ * @param  {Object} option
+ * @return {Object}
+ */
+export function getSelectOptionAncestors( option ) {
+	const ancestors = [];
+
+	let $prev = $(option);
+	let level = getSelectOptionLevel($prev.get(0));
+	while (level > 0 && $prev.length > 0) {
+		if (getSelectOptionLevel($prev.get(0)) !== level) {
+			continue; // skip since this is a sibling/cousin, not an ancestor
+		}
+
+		let id = parseInt($prev.val(), 10);
+		if (id > 0) {
+			ancestors.unshift(id);
+		}
+
+		$prev = $prev.prev();
+		level--;
+	}
+	return ancestors;
+};

@@ -61,6 +61,26 @@ class Term_Condition extends Condition {
 	}
 
 	/**
+	 * Pluck term id from a full term descriptor
+	 *
+	 * @param  array   $full_term_descriptor
+	 * @return integer
+	 */
+	protected function get_term_id_from_full_term_descriptor( $full_term_descriptor ) {
+		return intval( $full_term_descriptor['term_object']->term_id );
+	}
+
+	/**
+	 * Pluck term ids from array of full term descriptors
+	 *
+	 * @param  array          $full_term_descriptors
+	 * @return array<integer>
+	 */
+	protected function get_term_ids_from_full_term_descriptors( $full_term_descriptors ) {
+		return array_map( array( $this, 'get_term_id_from_full_term_descriptor'), $full_term_descriptors );
+	}
+
+	/**
 	 * Check if the condition is fulfilled
 	 *
 	 * @param  array $environment
@@ -68,12 +88,30 @@ class Term_Condition extends Condition {
 	 */
 	public function is_fulfilled( $environment ) {
 		$term_id = $environment['term_id'];
-		$value = $this->wp_toolset->get_term_by_descriptor( $this->get_value() );
+
+		switch ( $this->get_comparison_operator() ) {
+			case '=':
+				$value_term_id = $this->get_term_id_from_full_term_descriptor( $this->get_value() );
+				return $term_id == $value_term_id;
+				break;
+			case '!=':
+				$value_term_id = $this->get_term_id_from_full_term_descriptor( $this->get_value() );
+				return $term_id != $value_term_id;
+				break;
+			case 'IN':
+				$value_term_ids = $this->get_term_ids_from_full_term_descriptors( $this->get_value() );
+				return in_array( $term_id, $value_term_ids );
+				break;
+			case 'NOT IN':
+				$value_term_ids = $this->get_term_ids_from_full_term_descriptors( $this->get_value() );
+				return ! in_array( $term_id, $value_term_ids );
+				break;
+		}
 
 		return $this->compare(
 			$term_id,
 			$this->get_comparison_operator(),
-			$value->term_id
+			$this->get_value()
 		);
 	}
 }
