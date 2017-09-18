@@ -759,6 +759,25 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
+	 * Set a key=>value array of attributes
+	 *
+	 * @param  array $attributes
+	 * @return Field $this
+	 */
+	public function set_attributes( $attributes ) {
+		if ( ! is_array( $attributes ) ) {
+			Incorrect_Syntax_Exception::raise( 'An array must be passed for the $attributes parameter of Field::set_attributes().' );
+			return $this;
+		}
+
+		foreach ( $attributes as $name => $value ) {
+			$this->set_attribute( $name, $value );
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Return the field help text
 	 *
 	 * @return object $this
