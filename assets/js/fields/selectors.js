@@ -102,7 +102,7 @@ export const getFieldPatternRegex = () => {
 };
 
 /**
- * Get a field based on it's name hierarchy
+ * Get a field based on its name hierarchy
  * This is a direct translation of Container::get_field_by_name from php
  *
  * @return {Object}
@@ -164,7 +164,7 @@ export const getFieldByHierarchy = (state, hierarchy) => {
 };
 
 /**
- * Get a field's hierarchy name based on it's id
+ * Get a field's hierarchy name based on its id
  *
  * @return {Object}
  */

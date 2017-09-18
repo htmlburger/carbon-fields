@@ -64,7 +64,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 		$callback = function() use ( $expected ) {
 			return $expected;
 		};
-		
+
 		$this->subject->set_options( $callback );
 
 		$this->assertSame( $expected, $this->subject->get_options() );
@@ -72,7 +72,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::set_options
-	 * 
+	 *
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>set_options()</code> method.
 	 */
@@ -82,7 +82,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::set_options
-	 * 
+	 *
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>set_options()</code> method.
 	 */
@@ -92,7 +92,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::set_options
-	 * 
+	 *
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>set_options()</code> method.
 	 */
@@ -102,7 +102,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::set_options
-	 * 
+	 *
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>set_options()</code> method.
 	 */
@@ -116,7 +116,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	 */
 	public function testAddOptionsArray() {
 		$expected = array('foo', 'bar');
-		
+
 		$this->subject->add_options( $expected );
 
 		$this->assertSame( $expected, $this->subject->get_options() );
@@ -130,7 +130,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 		$options_1 = array( 'foo', 'bar' );
 		$options_2 = array( 'foobar', 'barfoo' );
 		$expected = array( 'foo', 'bar', 'foobar', 'barfoo' );
-		
+
 		$this->subject->add_options( $options_1 );
 		$this->subject->add_options( $options_2 );
 
@@ -145,7 +145,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 		$options_1 = array( 'foo' => 'bar', 'bar' => 'foo' );
 		$options_2 = array( 'foobar' => 'barfoo', 'bar' => 'barbar' );
 		$expected = array( 'foo' => 'bar', 'bar' => 'foo', 'foobar' => 'barfoo', 'bar' => 'barbar' );
-		
+
 		$this->subject->add_options( $options_1 );
 		$this->subject->add_options( $options_2 );
 
@@ -160,7 +160,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 		$options_1 = array( 3 => 'Option 1' );
 		$options_2 = array( 9 => 'Option 2' );
 		$expected = array( 3 => 'Option 1', 9 => 'Option 2' );
-		
+
 		$this->subject->add_options( $options_1 );
 		$this->subject->add_options( $options_2 );
 
@@ -176,7 +176,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 		$options_2 = array( 'foo' => 'Option 2' );
 		$options_3 = array( 1 => 'Option 3' );
 		$expected = array( 0 => 'Option 1', 'foo' => 'Option 2', 1 => 'Option 3' );
-		
+
 		$this->subject->add_options( $options_1 );
 		$this->subject->add_options( $options_2 );
 		$this->subject->add_options( $options_3 );
@@ -185,8 +185,8 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Possibly a duplicate of other tests but kept for it's readability
-	 * 
+	 * Possibly a duplicate of other tests but kept for its readability
+	 *
 	 * @covers ::add_options
 	 * @covers ::get_options
 	 */
@@ -194,7 +194,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 		$options_1 = array( 0 => 'Option 1' );
 		$options_2 = array( 0 => 'Option 2' );
 		$expected = array( 0 => 'Option 1', 1 => 'Option 2' );
-		
+
 		$this->subject->add_options( $options_1 );
 		$this->subject->add_options( $options_2 );
 
@@ -209,7 +209,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 		$options_1 = array( 0 => 'Option 1', 1 => 'Option 2' );
 		$options_2 = array( 9 => 'Option 3' );
 		$expected = array( 0 => 'Option 1', 1 => 'Option 2', 9 => 'Option 3' );
-		
+
 		$this->subject->add_options( $options_1 );
 		$this->subject->add_options( $options_2 );
 
@@ -225,7 +225,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 		$options_2 = array( 9 => 'Option 2' );
 		$options_3 = array( 0 => 'Option 3' );
 		$expected = array( 0 => 'Option 3', 9 => 'Option 2' );
-		
+
 		$this->subject->add_options( $options_1 );
 		$this->subject->add_options( $options_2 );
 		$this->subject->add_options( $options_3 );
@@ -252,7 +252,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::add_options
-	 * 
+	 *
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
@@ -262,7 +262,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::add_options
-	 * 
+	 *
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
@@ -272,7 +272,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::add_options
-	 * 
+	 *
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */
@@ -282,7 +282,7 @@ class PredefinedOptionsFieldTest extends WP_UnitTestCase {
 
 	/**
 	 * @covers ::add_options
-	 * 
+	 *
 	 * @expectedException Carbon_Fields\Exception\Incorrect_Syntax_Exception
 	 * @expectedExceptionMessage Only arrays and callbacks are allowed in the <code>add_options()</code> method.
 	 */

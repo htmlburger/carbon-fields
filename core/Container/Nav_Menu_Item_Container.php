@@ -186,7 +186,7 @@ class Nav_Menu_Item_Container extends Container {
 	}
 
 	/**
-	 * Create a clone of this container with it's own datastore for every menu item
+	 * Create a clone of this container with its own datastore for every menu item
 	 */
 	protected function get_clone_for_menu_item( $menu_item_id, $load = true ) {
 		if ( ! isset( $this->menu_item_instances[ $menu_item_id ] ) ) {

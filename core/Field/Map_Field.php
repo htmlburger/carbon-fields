@@ -70,7 +70,7 @@ class Map_Field extends Field {
 	}
 
 	/**
-	 * Load the field value from an input array based on it's name
+	 * Load the field value from an input array based on its name
 	 *
 	 * @param  array $input Array of field names and values.
 	 * @return Field $this

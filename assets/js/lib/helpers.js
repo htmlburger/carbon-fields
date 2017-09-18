@@ -79,7 +79,7 @@ export function patchTagBoxAPI(tagBox, method) {
 }
 
 /**
- * Get select option's level based on it's className
+ * Get select option's level based on its className
  *
  * @param  {Object} option
  * @return {Number}

@@ -447,7 +447,7 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Load the field value from an input array based on it's name
+	 * Load the field value from an input array based on its name
 	 *
 	 * @param  array $input Array of field names and values.
 	 * @return Field $this
@@ -706,7 +706,7 @@ class Field implements Datastore_Holder_Interface {
 	 */
 	public function set_label( $label ) {
 		if ( is_null( $label ) ) {
-			// Try to guess field label from it's name
+			// Try to guess field label from its name
 			$label = Helper::normalize_label( $this->get_name() );
 		}
 
@@ -734,7 +734,7 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Set an attribute and it's value
+	 * Set an attribute and its value
 	 *
 	 * @param  string $name
 	 * @param  string $value
