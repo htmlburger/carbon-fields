@@ -11,22 +11,32 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 class Helper {
 
 	/**
-	 * Get a value formatted for end-users
+	 * Get a field from a specific container type or id
+	 *
+	 * @param  string  $container_type Container type to search in. Optional if $container_id is supplied
+	 * @param  string  $container_id   Container id to search in. Optional if $container_type is supplied
+	 * @param  string  $field_name     Field name to search for
+	 * @return boolean
+	 */
+	public static function get_field( $container_type, $container_id, $field_name ) {
+		$repository = \Carbon_Fields\Carbon_Fields::resolve( 'container_repository' );
+		if ( $container_id ) {
+			return $repository->get_field_in_container( $field_name, $container_id );
+		}
+		return $repository->get_field_in_containers( $field_name, $container_type );
+	}
+
+	/**
+	 * Get a clone of a field with a value loaded
 	 *
 	 * @param  int    $object_id      Object id to get value for (e.g. post_id, term_id etc.)
-	 * @param  string $container_type Container type to search in
-	 * @param  string $container_id
-	 * @param  string $field_name     Field name
+	 * @param  string $container_type Container type to search in. Optional if $container_id is supplied
+	 * @param  string $container_id   Container id to search in. Optional if $container_type is supplied
+	 * @param  string $field_name     Field name to search for
 	 * @return mixed
 	 */
 	public static function get_field_clone( $object_id, $container_type, $container_id, $field_name ) {
-		$repository = \Carbon_Fields\Carbon_Fields::resolve( 'container_repository' );
-		$field = null;
-		if ( $container_id ) {
-			$field = $repository->get_field_in_container( $field_name, $container_id );
-		} else {
-			$field = $repository->get_field_in_containers( $field_name, $container_type );
-		}
+		$field = static::get_field( $container_type, $container_id, $field_name );
 
 		if ( ! $field ) {
 			return null;
