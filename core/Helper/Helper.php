@@ -4,6 +4,7 @@ namespace Carbon_Fields\Helper;
 
 use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+use WP_Query;
 
 /**
  * Helper functions and main initialization class.
@@ -396,6 +397,50 @@ class Helper {
 	}
 
 	/**
+	 * Get an attachment ID given a file URL
+	 * Modified version of https://wpscholar.com/blog/get-attachment-id-from-wp-image-url/
+	 *
+	 * @param  string  $url
+	 * @return integet
+	 */
+	function get_attachment_id( $url ) {
+		$dir = wp_upload_dir();
+		$filename = basename( $url );
+
+		if ( strpos( $url, $dir['baseurl'] . '/' ) === false ) {
+			return 0;
+		}
+
+		$query_args = array(
+			'post_type'   => 'attachment',
+			'post_status' => 'inherit',
+			'fields'      => 'ids',
+			'meta_query'  => array(
+				array(
+					'value'   => $filename,
+					'compare' => 'LIKE',
+					'key'     => '_wp_attachment_metadata',
+				),
+			)
+		);
+		$query = new WP_Query( $query_args );
+
+		if ( $query->have_posts() ) {
+			foreach ( $query->posts as $post_id ) {
+				$meta = wp_get_attachment_metadata( $post_id );
+				$original_file = basename( $meta['file'] );
+				$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
+
+				if ( $original_file === $filename || in_array( $filename, $cropped_image_files ) ) {
+					return intval( $post_id );
+				}
+			}
+		}
+
+		return 0;
+	}
+
+	/**
 	 * Returns attachment metadata from an ID.
 	 *
 	 * @param  string  $id
@@ -423,6 +468,20 @@ class Helper {
 
 		if ( empty( $id ) ) {
 			return $attachment_meta;
+		}
+
+		// when value_type is set to "url" the $id will hold the url, not the id
+		if ( is_string( $id ) ) {
+			$attachment_id = static::get_attachment_id( $id );
+
+			if ( $attachment_id === 0 ) {
+				$attachment_meta['thumb_url'] = $id;
+				$attachment_meta['default_thumb_url'] = $id;
+				$attachment_meta['file_url'] = $id;
+				return $attachment_meta;
+			}
+
+			$id = $attachment_id;
 		}
 
 		$attachment                   = get_post( $id );
