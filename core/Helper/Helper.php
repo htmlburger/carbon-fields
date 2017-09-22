@@ -466,12 +466,8 @@ class Helper {
 			'height'            => '',
 		);
 
-		if ( empty( $id ) ) {
-			return $attachment_meta;
-		}
-
 		// when value_type is set to "url" the $id will hold the url, not the id
-		if ( is_string( $id ) ) {
+		if ( $type === 'url' ) {
 			$attachment_id = static::get_attachment_id( $id );
 
 			if ( $attachment_id === 0 ) {
@@ -484,7 +480,12 @@ class Helper {
 			$id = $attachment_id;
 		}
 
-		$attachment                   = get_post( $id );
+		$attachment = get_post( $id );
+
+		if ( ! $attachment ) {
+			return $attachment_meta;
+		}
+
 		$attached_file                = get_attached_file( $attachment->ID );
 		$meta                         = wp_get_attachment_metadata( $attachment->ID );
 		list( $src, $width, $height ) = wp_get_attachment_image_src( $attachment->ID, 'full' );
