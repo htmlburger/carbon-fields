@@ -11731,7 +11731,7 @@ var getFieldPatternRegex = exports.getFieldPatternRegex = function getFieldPatte
 };
 
 /**
- * Get a field based on it's name hierarchy
+ * Get a field based on its name hierarchy
  * This is a direct translation of Container::get_field_by_name from php
  *
  * @return {Object}
@@ -11795,7 +11795,7 @@ var getFieldByHierarchy = exports.getFieldByHierarchy = function getFieldByHiera
 };
 
 /**
- * Get a field's hierarchy name based on it's id
+ * Get a field's hierarchy name based on its id
  *
  * @return {Object}
  */
@@ -14180,7 +14180,7 @@ function workerFormSubmit() {
 
 				case 4:
 					if (false) {
-						_context3.next = 29;
+						_context3.next = 31;
 						break;
 					}
 
@@ -14192,16 +14192,27 @@ function workerFormSubmit() {
 					_event = _ref3.event;
 					widgetId = getWidgetId((0, _jquery2.default)(_event.target).closest('.widget-inside').get(0));
 					containerId = widgetIdToContainerId(widgetId);
-					_context3.next = 13;
-					return (0, _effects.put)((0, _actions.submitForm)(_event));
+
+					// Don't care about other widgets.
+
+					if ((0, _lodash.startsWith)(widgetId, carbonWidgetIdPrefix)) {
+						_context3.next = 13;
+						break;
+					}
+
+					return _context3.abrupt('continue', 4);
 
 				case 13:
 					_context3.next = 15;
-					return (0, _effects.put)((0, _actions.validateContainer)(containerId, _event));
+					return (0, _effects.put)((0, _actions.submitForm)(_event));
 
 				case 15:
+					_context3.next = 17;
+					return (0, _effects.put)((0, _actions.validateContainer)(containerId, _event));
+
+				case 17:
 					if (!(pagenow === _constants.PAGE_NOW_CUSTOMIZE)) {
-						_context3.next = 27;
+						_context3.next = 29;
 						break;
 					}
 
@@ -14209,32 +14220,32 @@ function workerFormSubmit() {
 
 					// This little delay allows us to get correct results in the selector for invalid fields
 					// since we don't know when the validation is completed.
-					_context3.next = 19;
+					_context3.next = 21;
 					return (0, _effects.call)(_reduxSaga.delay, 250);
 
-				case 19:
-					_context3.next = 21;
+				case 21:
+					_context3.next = 23;
 					return (0, _effects.select)(_selectors2.hasInvalidFields);
 
-				case 21:
+				case 23:
 					if (_context3.sent) {
-						_context3.next = 27;
+						_context3.next = 29;
 						break;
 					}
 
-					_context3.next = 24;
+					_context3.next = 26;
 					return (0, _effects.call)(wp.customize.Widgets.getWidgetFormControlForWidget, containerId);
 
-				case 24:
+				case 26:
 					_widget = _context3.sent;
-					_context3.next = 27;
+					_context3.next = 29;
 					return (0, _effects.call)([_widget, _widget.updateWidget], { disable_form: true });
 
-				case 27:
+				case 29:
 					_context3.next = 4;
 					break;
 
-				case 29:
+				case 31:
 				case 'end':
 					return _context3.stop();
 			}
@@ -15454,7 +15465,7 @@ function patchTagBoxAPI(tagBox, method) {
 }
 
 /**
- * Get select option's level based on it's className
+ * Get select option's level based on its className
  *
  * @param  {Object} option
  * @return {Number}
@@ -15933,7 +15944,7 @@ function prepareValueForField(fieldId, attachment) {
 }
 
 /**
- * Set a field's value depending on it's value_type property
+ * Set a field's value depending on its value_type property
  *
  * @param  {String} fieldId
  * @param  {Object} attachment
