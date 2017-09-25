@@ -117,7 +117,7 @@ class Association_Field extends Field {
 	}
 
 	/**
-	 * Convert a colo:separated:string into it's expected components
+	 * Convert a colon:separated:string into its expected components
 	 * Used for backwards compatibility to CF 1.5
 	 *
 	 * @param string $value_string
@@ -144,7 +144,7 @@ class Association_Field extends Field {
 	}
 
 	/**
-	 * Convert a colon:separated:string into it's expected components
+	 * Convert a colon:separated:string into its expected components
 	 * Used for backwards compatibility to CF 1.5
 	 *
 	 * @param array $value_string_array

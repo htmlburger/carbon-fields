@@ -87,7 +87,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 		$cc_ioc['post_term'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Post_Term_Condition( $ioc['wp_toolset'] );
 			$condition->set_comparers( array(
-				// Only support the custom comparer as this condition has it's own comparison methods
+				// Only support the custom comparer as this condition has its own comparison methods
 				$ioc['container_condition_comparers']['custom'],
 			) );
 			return $condition;
@@ -96,7 +96,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 		$cc_ioc['term'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Term_Condition( $ioc['wp_toolset'] );
 			$condition->set_comparers( array(
-				// Only support the custom comparer as this condition has it's own comparison methods
+				// Only support the custom comparer as this condition has its own comparison methods
 				$ioc['container_condition_comparers']['custom'],
 			) );
 			return $condition;
@@ -135,7 +135,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 		$cc_ioc['user_capabiltiy'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\User_Capability_Condition();
 			$condition->set_comparers( array(
-				// Only support the custom comparer as this condition has it's own comparison methods
+				// Only support the custom comparer as this condition has its own comparison methods
 				$ioc['container_condition_comparers']['custom'],
 			) );
 			return $condition;
@@ -160,7 +160,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 		$cc_ioc['current_user_capability'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\Current_User_Capability_Condition();
 			$condition->set_comparers( array(
-				// Only support the custom comparer as this condition has it's own comparison methods
+				// Only support the custom comparer as this condition has its own comparison methods
 				$ioc['container_condition_comparers']['custom'],
 			) );
 			return $condition;

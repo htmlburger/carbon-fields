@@ -40,7 +40,7 @@ export function* prepareValueForField(fieldId, attachment) {
 }
 
 /**
- * Set a field's value depending on it's value_type property
+ * Set a field's value depending on its value_type property
  *
  * @param  {String} fieldId
  * @param  {Object} attachment
@@ -134,7 +134,7 @@ export function* workerAddMultipleFiles(action) {
 			// pause until the complex is updated
 			yield take(receiveComplexGroup);
 
-			// resolve the new field from the new group and assign it's new value
+			// resolve the new field from the new group and assign its new value
 			const parentField  = yield select(getFieldById, parent.field.id);
 			const freshGroup   = last(parentField.value);
 			const freshFieldId = first(filter(freshGroup.fields, f => f.base_name === field.base_name)).id;

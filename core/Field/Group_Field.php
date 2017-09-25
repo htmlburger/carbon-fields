@@ -156,7 +156,7 @@ class Group_Field {
 	 */
 	public function set_label( $label ) {
 		if ( is_null( $label ) ) {
-			// Try to guess field label from it's name
+			// Try to guess field label from its name
 			$label = Helper::normalize_label( $this->get_name() );
 		}
 		$this->label = $label;

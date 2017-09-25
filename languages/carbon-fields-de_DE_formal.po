@@ -30,15 +30,15 @@ msgstr "Allgemein"
 
 #: core/Container/Theme_Options_Container.php:211
 msgid "Settings saved."
-msgstr "Deine Einstellungen wurden gespeichert."
+msgstr "Ihre Einstellungen wurden gespeichert."
 
 #: core/Field/Footer_Scripts_Field.php:20
 msgid ""
 "If you need to add scripts to your footer (like Google Analytics tracking "
 "code), you should enter them in this box."
 msgstr ""
-"Wenn du Skripte in deinen Footer hinzufügen möchtest (z.B. Google Analytics "
-"Tracking Code), solltest du sie in diese Box einfügen."
+"Wenn Sie Skripte in ihre Fußzeile hinzufügen möchten (z.B. Google Analytics "
+"Tracking Code), sollten Sie sie in diese Box einfügen."
 
 #: core/Field/Gravity_Form_Field.php:47
 msgid "No form"
@@ -47,7 +47,7 @@ msgstr "Kein Formular"
 #: core/Field/Header_Scripts_Field.php:20
 msgid "If you need to add scripts to your header, you should enter them here."
 msgstr ""
-"Wenn du Skripte in deinen Header hinzufügen möchtest, solltest du sie hier "
+"Wenn Sie Skripte in den Kopfbereich hinzufügen möchten, sollten Sie sie hier "
 "einfügen."
 
 #: core/Field/Sidebar_Field.php:50
@@ -61,7 +61,7 @@ msgstr "j. F Y"
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:69
 msgid "Please enter a name for the sidebar."
-msgstr "Bitte gib einen Namen für die neue Seitenleiste an:"
+msgstr "Bitte geben Sie einen Namen für die neue Seitenleiste an:"
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:72
 msgid "Unknown action attempted."
@@ -76,8 +76,8 @@ msgstr "Eine Seitenleiste mit der selben ID ist bereits registriert."
 msgid ""
 "Failed to update option storing your custom sidebars. Please contact support."
 msgstr ""
-"Fehler beim Aktualisieren Ihrer benutzerdefinierten Sidebars. Kontaktiere "
-"bitte den Support."
+"Fehler beim Aktualisieren Ihrer benutzerdefinierten Sidebars. Kontaktieren "
+"Sie bitte den Support."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:137
 msgid "Sidebar not found."
@@ -90,20 +90,20 @@ msgstr "Seitenleiste hinzufügen"
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:182
 #: core/Loader/Loader.php:141
 msgid "Please enter the name of the new sidebar:"
-msgstr "Bitte benenne die neue Seitenleiste:"
+msgstr "Name der neue Seitenleiste:"
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:183
 msgid "Are you sure you wish to remove this sidebar?"
-msgstr "Möchest du diese Seitenleiste wirklich entfernen?"
+msgstr "Möchen Sie diese Seitenleiste wirklich entfernen?"
 
 #: core/Loader/Loader.php:119
 msgid "Please fill out all required fields highlighted below."
-msgstr "Bitte fülle alle markierten Pflichtfelder unten aus."
+msgstr "Bitte füllen Sie alle markierten Pflichtfelder unten aus."
 
 #: core/Loader/Loader.php:120
 msgid "The changes you made will be lost if you navigate away from this page."
 msgstr ""
-"Deine getätigten Änderungen gehen verloren, wenn du diese Seite verlässt."
+"Ihre getätigten Änderungen gehen verloren, wenn Sie diese Seite verlassen."
 
 #: core/Loader/Loader.php:123
 msgid "The address could not be found. "
@@ -131,7 +131,7 @@ msgstr "Maximale Anzahl von Einträgen wurde erreicht. (%s Einträge)"
 #, php-format
 msgid "There are no %s yet. Click <a href=\"#\">here</a> to add one."
 msgstr ""
-"Es gibt noch keine %s bis jetzt. Klicke <a href=\"#\">hier</a> zum "
+"Es gibt noch keine %s bis jetzt. Klicken Sie <a href=\"#\">hier</a> zum "
 "Hinzufügen."
 
 #: core/Loader/Loader.php:130
@@ -167,15 +167,15 @@ msgstr "Ein/Ausklappen"
 
 #: core/Loader/Loader.php:137
 msgid "Please fill out all fields correctly. "
-msgstr "Bitte fülle alle Felder korrekt aus."
+msgstr "Bitte füllen Sie alle Felder korrekt aus."
 
 #: core/Loader/Loader.php:138
 msgid "This field is required. "
-msgstr "Dieses Feld erforderlich."
+msgstr "Dieses Feld ist erforderlich."
 
 #: core/Loader/Loader.php:139
 msgid "Please choose an option. "
-msgstr "Bitte wähle eine Option."
+msgstr "Bitte wählen Sie eine Option."
 
 #: core/Loader/Loader.php:143
 msgid "Select Time"

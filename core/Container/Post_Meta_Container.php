@@ -267,7 +267,7 @@ class Post_Meta_Container extends Container {
 	 */
 
 	/**
-	 * Show the container only on particular page referenced by it's path.
+	 * Show the container only on particular page referenced by its path.
 	 *
 	 * @deprecated
 	 * @param int|string $page page ID or page path

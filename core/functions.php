@@ -2,6 +2,12 @@
 
 use Carbon_Fields\Helper\Helper;
 
+if ( ! function_exists( 'carbon_field_exists' ) ) {
+	function carbon_field_exists( $name, $container_type, $container_id = '' ) {
+		return Helper::get_field( $container_type, $container_id, $name ) !== null;
+	}
+}
+
 if ( ! function_exists( 'carbon_get_the_post_meta' ) ) {
 	function carbon_get_the_post_meta( $name, $container_id = '' ) {
 		return Helper::get_the_post_meta( $name, $container_id );

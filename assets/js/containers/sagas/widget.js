@@ -145,6 +145,11 @@ export function* workerFormSubmit() {
 		const widgetId = getWidgetId($(event.target).closest('.widget-inside').get(0));
 		const containerId = widgetIdToContainerId(widgetId);
 
+		// Don't care about other widgets.
+		if (!startsWith(widgetId, carbonWidgetIdPrefix)) {
+			continue;
+		}
+
 		yield put(submitForm(event));
 		yield put(validateContainer(containerId, event));
 

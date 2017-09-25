@@ -24,7 +24,7 @@ class Key_Toolset {
 
 	/**
 	 * Value property to use for fields which need to be kept "alive" when they have no values stored (e.g. Set field with 0 checkboxes checked)
-	 * Required to determine whether a field should use it's default value or stay blank
+	 * Required to determine whether a field should use its default value or stay blank
 	 *
 	 * @var string
 	 */
@@ -300,7 +300,7 @@ class Key_Toolset {
 	}
 
 	/**
-	 * Check if an array of segments has all of it's segments
+	 * Check if an array of segments has all of its segments
 	 *
 	 * @param array<string> $segments_array
 	 * @return bool
@@ -310,7 +310,7 @@ class Key_Toolset {
 	}
 
 	/**
-	 * Convert a storage key to an array of it's segments
+	 * Convert a storage key to an array of its segments
 	 *
 	 * @param string $storage_key
 	 * @return array<string>
@@ -322,7 +322,7 @@ class Key_Toolset {
 	}
 
 	/**
-	 * Convert a segment to an array of it's values
+	 * Convert a segment to an array of its values
 	 *
 	 * @param string $segment
 	 * @return array<mixed>

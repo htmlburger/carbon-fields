@@ -47,7 +47,7 @@ class Set_Field extends Predefined_Options_Field {
 	}
 
 	/**
-	 * Load the field value from an input array based on it's name
+	 * Load the field value from an input array based on its name
 	 *
 	 * @param  array $input Array of field names and values.
 	 * @return Field $this
