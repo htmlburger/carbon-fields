@@ -486,9 +486,8 @@ class Helper {
 			return $attachment_meta;
 		}
 
-		$attached_file                = get_attached_file( $attachment->ID );
-		$meta                         = wp_get_attachment_metadata( $attachment->ID );
-		list( $src, $width, $height ) = wp_get_attachment_image_src( $attachment->ID, 'full' );
+		$meta                           = wp_get_attachment_metadata( $attachment->ID );
+		list( $src, $width, $height )   = wp_get_attachment_image_src( $attachment->ID, 'full' );
 
 		$attachment_meta['edit_nonce']  = wp_create_nonce( 'update-post_' . $id );
 		$attachment_meta['title']       = get_the_title( $id );
@@ -496,20 +495,16 @@ class Helper {
 		$attachment_meta['description'] = get_post_field( 'post_content', $id );
 		$attachment_meta['alt']         = get_post_meta( $id, '_wp_attachment_image_alt', true );
 		$attachment_meta['date']        = mysql2date( __( 'F j, Y' ), $attachment->post_date );
-		$attachment_meta['filesize']    = size_format( filesize( $attached_file ) );
 		$attachment_meta['width']       = $width;
 		$attachment_meta['height']      = $height;
-
-		$attachment_meta['file_url']  = is_numeric( $id ) ? wp_get_attachment_url( $id ) : $id;
-		$attachment_meta['file_name'] = basename( $attachment_meta['file_url'] );
-		$attachment_meta['filetype']  = wp_check_filetype( $attachment_meta['file_url'] );
-
-		$attachment_meta['file_ext']  = $attachment_meta['filetype']['ext']; // png, mp3, etc..
-		$attachment_meta['file_type'] = preg_replace( '~\/.+$~', '', $attachment_meta['filetype']['type'] ); // image, video, etc..
+		$attachment_meta['file_url']    = is_numeric( $id ) ? wp_get_attachment_url( $id ) : $id;
+		$attachment_meta['file_name']   = basename( $attachment_meta['file_url'] );
+		$attachment_meta['filetype']    = wp_check_filetype( $attachment_meta['file_url'] );
+		$attachment_meta['file_ext']    = $attachment_meta['filetype']['ext']; // png, mp3, etc..
 
 		if ( $attachment_meta['file_type'] === 'audio' ) {
 			$attachment_meta['artist'] = $meta['artist'];
-			$attachment_meta['album']  = $meta['album'];
+			$attachment_meta['album'] = $meta['album'];
 			$attachment_meta['length'] = $meta['length_formatted'];
 		}
 
@@ -524,6 +519,11 @@ class Helper {
 			}
 		} else {
 			$attachment_meta['thumb_url'] = $attachment_meta['default_thumb_url'];
+		}
+
+		$attached_file = get_attached_file( $attachment->ID );
+		if ( file_exists( $attached_file ) ) {
+			$attachment_meta['filesize'] = size_format( filesize( $attached_file ) );
 		}
 
 		return $attachment_meta;
