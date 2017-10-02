@@ -72,10 +72,6 @@ class Theme_Options_Container extends Container {
 	 * Attach container as a theme options page/subpage.
 	 */
 	public function init() {
-		if ( ! $this->settings['file'] ) {
-			$this->settings['file'] = $this->title_to_filename( 'crb_' . $this->get_id(), '.php' );
-		}
-
 		$registered = $this->register_page();
 		if ( $registered ) {
 			add_action( 'admin_menu', array( $this, '_attach' ) );
@@ -166,7 +162,7 @@ class Theme_Options_Container extends Container {
 				$this->title,
 				$this->settings['menu_title'] ? $this->settings['menu_title'] : $this->title,
 				'read',
-				$this->settings['file'],
+				$this->get_page_file(),
 				array( $this, 'render' ),
 				$this->settings['icon'],
 				$this->settings['menu_position']
@@ -178,11 +174,11 @@ class Theme_Options_Container extends Container {
 			$this->title,
 			$this->settings['menu_title'] ? $this->settings['menu_title'] : $this->title,
 			'read',
-			$this->settings['file'],
+			$this->get_page_file(),
 			array( $this, 'render' )
 		);
 
-		$page_hook = get_plugin_page_hookname( $this->settings['file'], '' );
+		$page_hook = get_plugin_page_hookname( $this->get_page_file(), '' );
 		add_action( 'load-' . $page_hook, array( $this, '_save' ) );
 	}
 
@@ -194,7 +190,7 @@ class Theme_Options_Container extends Container {
 	public function should_activate() {
 		$input = stripslashes_deep( $_GET );
 		$request_page = isset( $input['page'] ) ? $input['page'] : '';
-		if ( ! empty( $request_page ) && $request_page === $this->settings['file'] ) {
+		if ( ! empty( $request_page ) && $request_page === $this->get_page_file() ) {
 			return true;
 		}
 
@@ -220,7 +216,7 @@ class Theme_Options_Container extends Container {
 	 * @return boolean
 	 */
 	protected function register_page() {
-		$file = $this->settings['file'];
+		$file = $this->get_page_file();
 		$parent = $this->settings['parent'];
 
 		if ( ! $parent ) {
@@ -256,12 +252,24 @@ class Theme_Options_Container extends Container {
 	 */
 	public function set_page_parent( $parent ) {
 		if ( is_a( $parent, get_class() ) ) {
-			$this->settings['parent'] = $this->title_to_filename( 'crb_' . $parent->get_id(), '.php' );
+			$this->settings['parent'] = $parent->get_page_file();
 			return $this;
 		}
 
 		$this->settings['parent'] = $parent;
 		return $this;
+	}
+
+	/**
+	 * Get the theme options file name of this container.
+	 *
+	 * @return string
+	 */
+	public function get_page_file() {
+		if ( ! empty( $this->settings['file'] ) ) {
+			return $this->settings['file'];
+		}
+		return $this->title_to_filename( 'crb_' . $this->get_id(), '.php' );
 	}
 
 	/**
