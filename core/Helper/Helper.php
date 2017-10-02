@@ -403,7 +403,7 @@ class Helper {
 	 * @param  string  $url
 	 * @return integet
 	 */
-	function get_attachment_id( $url ) {
+	public static function get_attachment_id( $url ) {
 		$dir = wp_upload_dir();
 		$filename = basename( $url );
 
