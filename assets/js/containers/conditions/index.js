@@ -67,9 +67,9 @@ export function evaluteConditions(collection, env) {
 		}
 	});
 
-	if (collection.relation === 'AND') {
+	if (collection.relation == 'AND') {
 		return results.every(Boolean);
-	} else if (collection.relation === 'OR') {
+	} else if (collection.relation == 'OR') {
 		return results.some(Boolean);
 	}
 
