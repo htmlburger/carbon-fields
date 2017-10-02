@@ -117,7 +117,7 @@ class RichTextEditor extends React.Component {
 					});
 
 					this.cancelResizeObserver = observeResize(this.node, debounce(() => {
-						this.editor.execCommand('mceAutoResize');
+						this.editor.execCommand('mceAutoResize', null, null, {skip_focus: true});
 					}, 100));
 				};
 
