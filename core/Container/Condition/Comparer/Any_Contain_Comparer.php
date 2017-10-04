@@ -27,12 +27,15 @@ class Any_Contain_Comparer extends Comparer {
 			return false;
 		}
 
+		$intersection = array_intersect( $a, $b );
+
 		switch ( $comparison_operator ) {
 			case 'IN':
-				return ! empty( array_intersect( $a, $b ) );
+				return ! empty( $intersection );
 			case 'NOT IN':
-				return empty( array_intersect( $a, $b ) );
+				return empty( $intersection );
 		}
+
 		return false;
 	}
 }
