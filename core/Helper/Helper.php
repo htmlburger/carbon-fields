@@ -501,6 +501,7 @@ class Helper {
 		$attachment_meta['file_name']   = basename( $attachment_meta['file_url'] );
 		$attachment_meta['filetype']    = wp_check_filetype( $attachment_meta['file_url'] );
 		$attachment_meta['file_ext']    = $attachment_meta['filetype']['ext']; // png, mp3, etc..
+		$attachment_meta['file_type']   = preg_replace( '~\/.+$~', '', $attachment_meta['filetype']['type'] ); // image, video, etc..
 
 		if ( $attachment_meta['file_type'] === 'audio' ) {
 			$attachment_meta['artist'] = $meta['artist'];
