@@ -14,7 +14,9 @@ import {
 	cloneDeep,
 	without,
 	isMatch,
-	sortBy
+	sortBy,
+	includes,
+	find
 } from 'lodash';
 import { vsprintf } from 'sprintf-js';
 
@@ -160,12 +162,12 @@ export const enhance = compose(
 		let items = field.options;
 
 		if (term) {
-			items = items.filter(({ title }) => title.toLowerCase().includes(term.toLowerCase()));
+			items = items.filter(({ title }) => includes(title.toLowerCase(), term.toLowerCase()));
 		}
 
 		if (!field.duplicates_allowed) {
 			items = items.map(item => {
-				item.disabled = !!field.value.find(selectedItem => isMatch(selectedItem, {
+				item.disabled = !!find(field.value, selectedItem => isMatch(selectedItem, {
 					id: item.id,
 					type: item.type,
 					subtype: item.subtype,

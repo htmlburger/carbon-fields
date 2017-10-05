@@ -41,7 +41,7 @@ window.carbonFields = window.carbonFields || {};
 
 		return request;
 	}
-	
+
 	$(document).ready(function() {
 
 		// Append an add sidebar button
