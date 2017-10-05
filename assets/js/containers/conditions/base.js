@@ -1,4 +1,9 @@
 /**
+ * The external dependencies.
+ */
+import { find } from 'lodash';
+
+/**
  * The internal dependencies.
  */
 import equality from 'containers/comparers/equality';
@@ -43,7 +48,7 @@ export default {
 	 * @return {Boolean}
 	 */
 	firstSupportedComparerIsCorrect(a, operator, b) {
-		const comparer = this.comparers.find(comparer => comparer.supportsOperator(operator));
+		const comparer = find(this.comparers, comparer => comparer.supportsOperator(operator));
 
 		if (!comparer) {
 			throw new Error(`Unsupported container condition comparison operator used: ${operator}`);

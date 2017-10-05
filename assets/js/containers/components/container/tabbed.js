@@ -63,7 +63,7 @@ export const enhance = compose(
 	withProps(({ container }) => {
 		const tabs = map(container.settings.tabs, (tab, name) => {
 			const id = kebabCase(name);
-			const fields = filter(container.fields, ({ name }) => tab.includes(name));
+			const fields = filter(container.fields, ({ name }) => includes(tab, name));
 			const active = get(container, 'ui.current_tab', null) === id;
 
 			return {

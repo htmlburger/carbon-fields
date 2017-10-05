@@ -39,10 +39,10 @@ export default {
 		if (isArray(value)) {
 			let method;
 
-			if (compare === 'IN') {
+			if (compare == 'IN') {
 				compare = '=';
 				method = 'some';
-			} else if (compare === 'NOT IN') {
+			} else if (compare == 'NOT IN') {
 				compare = '!=';
 				method = 'every';
 			}

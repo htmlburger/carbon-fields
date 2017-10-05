@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import $ from 'jquery';
-import { take, cancel } from 'redux-saga/effects';
+import { take, cancel, all } from 'redux-saga/effects';
 
 /**
  * Small helper to reduce code repetetion of `e.preventDefault`.
@@ -48,7 +48,7 @@ export function* cancelTasks(pattern, tasks, matcher) {
 		const action = yield take(pattern);
 
 		if (matcher(action)) {
-			yield tasks.map(task => cancel(task));
+			yield all(tasks.map(task => cancel(task)));
 
 			break;
 		}

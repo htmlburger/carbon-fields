@@ -3,7 +3,7 @@
  */
 import ReactDOM from 'react-dom';
 import { take, call, put, fork, select } from 'redux-saga/effects';
-import { isEmpty, mapValues, last } from 'lodash';
+import { isEmpty, mapValues, last, includes } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -71,7 +71,7 @@ export function* workerReset(store) {
 		const { settings, data } = yield take(channel);
 
 		// Don't reset when there is no registered containers or in case of error.
-		if (!settings.data.includes('carbon_panel') || data.querySelector('wp_error')) {
+		if (!includes(settings.data, 'carbon_panel') || data.querySelector('wp_error')) {
 			continue;
 		}
 

@@ -28,6 +28,9 @@ class WP_Toolset {
 	 */
 	public function get_term_title( $id, $subtype = '' ) {
 		$term = get_term_by( 'id', $id, $subtype );
+		if ( ! $term ) {
+			return 'N/A';
+		}
 		return $term->name;
 	}
 

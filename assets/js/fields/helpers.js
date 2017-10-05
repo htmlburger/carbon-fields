@@ -10,7 +10,12 @@ import { pick, merge, uniqueId, isNull } from 'lodash';
 import { cancelTasks } from 'lib/helpers';
 
 import { teardownField } from 'fields/actions';
-import { TYPE_COMPLEX, PARENT_TYPE_GROUP, PARENT_TYPE_CONTAINER } from 'fields/constants';
+import {
+	TYPE_COMPLEX,
+	TYPE_RICH_TEXT,
+	PARENT_TYPE_GROUP,
+	PARENT_TYPE_CONTAINER
+} from 'fields/constants';
 
 /**
  * Fetches the Attachment Data from the Server.
@@ -102,6 +107,12 @@ export function flattenField(field, parent, parentType, accumulator) {
 	// doesn't likes inputs with null values.
 	if (isNull(field.value)) {
 		field.value = '';
+	}
+
+	// Restore the content of the field.
+	// Borrowed from https://github.com/WordPress/WordPress/blob/master/wp-includes/js/autosave.js#L534
+	if (field.type === TYPE_RICH_TEXT) {
+		field.value = window.switchEditors.wpautop(field.value);
 	}
 
 	// Push the original field to the stack that will

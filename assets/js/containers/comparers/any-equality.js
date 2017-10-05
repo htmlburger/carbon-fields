@@ -2,6 +2,7 @@
  * The internal dependencies.
  */
 import base from 'containers/comparers/base';
+import { includes } from 'lodash';
 
 /**
  * The supported operators by this comparer.
@@ -21,9 +22,9 @@ const operators = ['=', '!='];
 const evaluate = (a, operator, b) => {
 	switch (operator) {
 		case '=':
-			return a.includes(b);
+			return includes(a, b);
 		case '!=':
-			return !a.includes(b);
+			return !includes(a, b);
 		default:
 			return false;
 	}
