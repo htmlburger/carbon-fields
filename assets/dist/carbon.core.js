@@ -2839,6 +2839,8 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _lodash = __webpack_require__("M4fF");
+
 var _equality = __webpack_require__("Eql7");
 
 var _equality2 = _interopRequireDefault(_equality);
@@ -2853,6 +2855,9 @@ var _scalar2 = _interopRequireDefault(_scalar);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * The external dependencies.
+ */
 exports.default = {
 	/**
   * The supported comparers.
@@ -2887,7 +2892,7 @@ exports.default = {
   * @return {Boolean}
   */
 	firstSupportedComparerIsCorrect: function firstSupportedComparerIsCorrect(a, operator, b) {
-		var comparer = this.comparers.find(function (comparer) {
+		var comparer = (0, _lodash.find)(this.comparers, function (comparer) {
 			return comparer.supportsOperator(operator);
 		});
 
@@ -2897,9 +2902,11 @@ exports.default = {
 
 		return comparer.evaluate(a, operator, b);
 	}
-}; /**
-    * The internal dependencies.
-    */
+};
+
+/**
+ * The internal dependencies.
+ */
 
 /***/ }),
 
@@ -6244,13 +6251,13 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 	if (term) {
 		items = items.filter(function (_ref3) {
 			var title = _ref3.title;
-			return title.toLowerCase().includes(term.toLowerCase());
+			return (0, _lodash.includes)(title.toLowerCase(), term.toLowerCase());
 		});
 	}
 
 	if (!field.duplicates_allowed) {
 		items = items.map(function (item) {
-			item.disabled = !!field.value.find(function (selectedItem) {
+			item.disabled = !!(0, _lodash.find)(field.value, function (selectedItem) {
 				return (0, _lodash.isMatch)(selectedItem, {
 					id: item.id,
 					type: item.type,
@@ -7174,12 +7181,17 @@ var _base = __webpack_require__("W0zY");
 
 var _base2 = _interopRequireDefault(_base);
 
+var _lodash = __webpack_require__("M4fF");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * The supported operators by this comparer.
  *
  * @type {Array}
+ */
+/**
+ * The internal dependencies.
  */
 var operators = ['=', '!='];
 
@@ -7191,15 +7203,12 @@ var operators = ['=', '!='];
  * @param  {mixed}   b
  * @return {Boolean}
  */
-/**
- * The internal dependencies.
- */
 var evaluate = function evaluate(a, operator, b) {
   switch (operator) {
     case '=':
-      return a.includes(b);
+      return (0, _lodash.includes)(a, b);
     case '!=':
-      return !a.includes(b);
+      return !(0, _lodash.includes)(a, b);
     default:
       return false;
   }
@@ -13531,7 +13540,7 @@ function workerReset(store) {
 					settings = _ref3.settings;
 					data = _ref3.data;
 
-					if (!(!settings.data.includes('carbon_panel') || data.querySelector('wp_error'))) {
+					if (!(!(0, _lodash.includes)(settings.data, 'carbon_panel') || data.querySelector('wp_error'))) {
 						_context5.next = 11;
 						break;
 					}
@@ -13809,10 +13818,10 @@ exports.default = (0, _extends3.default)({}, _base2.default, {
 		if ((0, _lodash.isArray)(value)) {
 			var method = void 0;
 
-			if (compare === 'IN') {
+			if (compare == 'IN') {
 				compare = '=';
 				method = 'some';
-			} else if (compare === 'NOT IN') {
+			} else if (compare == 'NOT IN') {
 				compare = '!=';
 				method = 'every';
 			}
@@ -14494,9 +14503,9 @@ function evaluteConditions(collection, env) {
 		}
 	});
 
-	if (collection.relation === 'AND') {
+	if (collection.relation == 'AND') {
 		return results.every(Boolean);
-	} else if (collection.relation === 'OR') {
+	} else if (collection.relation == 'OR') {
 		return results.some(Boolean);
 	}
 
@@ -14888,11 +14897,13 @@ var RichTextEditor = function (_React$Component) {
 						_this3.editor = editor;
 
 						editor.on('blur', function () {
-							onChange(editor.getContent());
+							if (editor.isDirty()) {
+								onChange(editor.getContent());
+							}
 						});
 
 						_this3.cancelResizeObserver = (0, _observeResize2.default)(_this3.node, (0, _lodash.debounce)(function () {
-							_this3.editor.execCommand('mceAutoResize');
+							_this3.editor.execCommand('mceAutoResize', null, null, { skip_focus: true });
 						}, 100));
 					};
 
@@ -15424,9 +15435,9 @@ function cancelTasks(pattern, tasks, matcher) {
 					}
 
 					_context.next = 7;
-					return tasks.map(function (task) {
+					return (0, _effects.all)(tasks.map(function (task) {
 						return (0, _effects.cancel)(task);
-					});
+					}));
 
 				case 7:
 					return _context.abrupt('break', 10);
@@ -17760,7 +17771,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		var id = (0, _lodash.kebabCase)(name);
 		var fields = (0, _lodash.filter)(container.fields, function (_ref3) {
 			var name = _ref3.name;
-			return tab.includes(name);
+			return (0, _lodash.includes)(tab, name);
 		});
 		var active = (0, _lodash.get)(container, 'ui.current_tab', null) === id;
 
@@ -18067,6 +18078,12 @@ function flattenField(field, parent, parentType, accumulator) {
 	// doesn't likes inputs with null values.
 	if ((0, _lodash.isNull)(field.value)) {
 		field.value = '';
+	}
+
+	// Restore the content of the field.
+	// Borrowed from https://github.com/WordPress/WordPress/blob/master/wp-includes/js/autosave.js#L534
+	if (field.type === _constants.TYPE_RICH_TEXT) {
+		field.value = window.switchEditors.wpautop(field.value);
 	}
 
 	// Push the original field to the stack that will
