@@ -20,6 +20,8 @@ class Helper {
 	 * @return boolean
 	 */
 	public static function get_field( $container_type, $container_id, $field_name ) {
+		\Carbon_Fields\Carbon_Fields::verify_fields_registered();
+
 		$repository = \Carbon_Fields\Carbon_Fields::resolve( 'container_repository' );
 		if ( $container_id ) {
 			return $repository->get_field_in_container( $field_name, $container_id );
