@@ -16,8 +16,8 @@ import { getComplexGroupLabel } from 'fields/selectors';
  * @param  {Object} props.group
  * @return {Object}
  */
-const mapStateToProps = (state, { group }) => ({
-	label: getComplexGroupLabel(state, group),
+const mapStateToProps = (state, { group, index }) => ({
+	label: getComplexGroupLabel(state, group, index),
 });
 
 export default connect(mapStateToProps);

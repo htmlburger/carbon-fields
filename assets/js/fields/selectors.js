@@ -270,19 +270,21 @@ export const hasInvalidFields = createSelector(getFields, fields => some(fields,
  * @param  {Object} group
  * @return {String}
  */
-export const getComplexGroupLabel = (state, group) => {
+export const getComplexGroupLabel = (state, group, index) => {
 	if (isNull(group.label_template)) {
 		return group.label;
 	}
 
 	const fields = pick(getFields(state), map(group.fields, 'id'));
-	const fieldValues = mapValues(mapKeys(fields, (v, k) => { return v.base_name.replace(/\-/g, '_') } ), 'value');
+	const fieldValues = mapValues(mapKeys(fields, (f, k) => { return f.base_name.replace(/\-/g, '_') } ), 'value');
 
 	try {
-		return template(group.label_template)({
+		const args = {
 			fields,
+			$_index: index,
 			...fieldValues,
-		});
+		};
+		return template(group.label_template)(args);
 	} catch (e) {
 		console.error(e);
 	}

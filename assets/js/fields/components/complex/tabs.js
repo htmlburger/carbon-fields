@@ -33,7 +33,7 @@ export const ComplexTabs = ({
 				groups.map((group, index) => (
 					<ComplexTab
 						key={index}
-						number={index + 1}
+						index={index}
 						group={group}
 						active={isTabActive(group.id)}
 						onClick={onClick} />
