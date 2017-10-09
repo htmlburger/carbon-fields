@@ -85,7 +85,7 @@ export function patchTagBoxAPI(tagBox, method) {
  * @return {Number}
  */
 export function getSelectOptionLevel(option) {
-	let level = 1;
+	let level = 0;
 
 	if (option.className) {
 		const matches = option.className.match(/^level-(\d+)/);
