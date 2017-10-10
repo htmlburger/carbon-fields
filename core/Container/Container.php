@@ -150,7 +150,6 @@ abstract class Container implements Datastore_Holder_Interface {
 
 		$type = Helper::normalize_type( $raw_type );
 		$repository = Carbon_Fields::resolve( 'container_repository' );
-		$container = null;
 		$id = $repository->get_unique_container_id( ( $id !== '' ) ? $id : $name );
 
 		if ( ! Helper::is_valid_entity_id( $id ) ) {
@@ -163,6 +162,7 @@ abstract class Container implements Datastore_Holder_Interface {
 			return null;
 		}
 
+		$container = null;
 		if ( Carbon_Fields::has( $type, 'containers' ) ) {
 			$container = Carbon_Fields::resolve_with_arguments( $type, array(
 				'id' => $id,
