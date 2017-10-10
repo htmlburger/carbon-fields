@@ -999,9 +999,8 @@ class Field implements Datastore_Holder_Interface {
 			'rules' => array(),
 		);
 
-		$rules_only = array_filter( $rules, function( $rule, $key ) {
-			return $key !== 'relation'; // Skip the relation key as it is already handled above
-		}, ARRAY_FILTER_USE_BOTH );
+		$rules_only = $rules;
+		unset( $rules_only['relation'] ); // Skip the relation key as it is already handled above
 
 		foreach ( $rules_only as $key => $rule ) {
 			$rule = $this->parse_conditional_rule( $rule );
