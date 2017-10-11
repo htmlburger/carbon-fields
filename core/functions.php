@@ -8,6 +8,18 @@ if ( ! function_exists( 'carbon_field_exists' ) ) {
 	}
 }
 
+if ( ! function_exists( 'carbon_get' ) ) {
+	function carbon_get( $object_id, $name, $container_type, $container_id = '' ) {
+		return Helper::get_value( $object_id, $container_type, $container_id, $name );
+	}
+}
+
+if ( ! function_exists( 'carbon_set' ) ) {
+	function carbon_set( $object_id, $name, $value, $container_type, $container_id = '' ) {
+		return Helper::set_value( $object_id, $container_type, $container_id, $name, $value );
+	}
+}
+
 if ( ! function_exists( 'carbon_get_the_post_meta' ) ) {
 	function carbon_get_the_post_meta( $name, $container_id = '' ) {
 		return Helper::get_the_post_meta( $name, $container_id );

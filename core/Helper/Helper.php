@@ -20,6 +20,8 @@ class Helper {
 	 * @return boolean
 	 */
 	public static function get_field( $container_type, $container_id, $field_name ) {
+		\Carbon_Fields\Carbon_Fields::verify_fields_registered();
+
 		$repository = \Carbon_Fields\Carbon_Fields::resolve( 'container_repository' );
 		if ( $container_id ) {
 			return $repository->get_field_in_container( $field_name, $container_id );
@@ -83,7 +85,8 @@ class Helper {
 		$field = static::get_field_clone( $object_id, $container_type, $container_id, $field_name );
 
 		if ( ! $field ) {
-			Incorrect_Syntax_Exception::raise( 'Could not find a field which satisfies the supplied pattern: ' . $field_name );
+			$container_message = $container_id ? 'in container with id "' . $container_id . '"' : 'in containers of type "' . $container_type . '"';
+			Incorrect_Syntax_Exception::raise( 'Could not find a field which satisfies the supplied pattern ' . $container_message . ': ' . $field_name );
 			return;
 		}
 

@@ -103,7 +103,7 @@ export function* workerAddMultipleFiles(action) {
 	const isMediaGalleryField = field.type === TYPE_MEDIA_GALLERY;
 	let parent;
 
-	// If multiple attachments are selected and the field is Image or File, the extra 
+	// If multiple attachments are selected and the field is Image or File, the extra
 	// ones will be distributed among the closest complex field groups.
 	if (field.type === TYPE_IMAGE || field.type === TYPE_FILE) {
 		parent = yield select(getComplexGroupById, field.parent);
@@ -254,6 +254,57 @@ export function* workerRedrawAttachmentPreview(field, action) {
 }
 
 /**
+ * This hack prevents the user from adding multiple files to
+ * a file field inside a complex field unintentionally
+ *
+ * Steps to reproduce:
+ * 1. The user opens the media browser
+ * 2. The field already has a selected attachment or the user selects one
+ * 3. The user clicks the "Uploads" tab and uploads a new file
+ * 4. The user is now shown the media gallery view with the new file APPENDED to the selection
+ *
+ * This function now always clears your OLD selection when you upload files so
+ * the final selection includes only the newly uploaded file(s).
+ *
+ * @param  {Object} browser wp.media browser frame
+ * @return {void}
+ */
+function preventAccidentalMultipleFiles(browser) {
+	const selection = browser.state().get('selection');
+	let selectedAttachments = [];
+	let removeHooks;
+
+	const clearSelectedAttachments = () => {
+		for (let i = 0; i < selectedAttachments.length; i++) {
+			let attachment = selectedAttachments[i];
+			if (selection.findWhere({id: attachment.id})) {
+				selection.remove(attachment);
+			}
+		}
+	};
+
+	const syncSelectedAttachments = () => {
+		// delay sync so wp.Uploader.queue event fires first
+		setTimeout(() => {
+			selectedAttachments = [];
+			selection.each(attachment => selectedAttachments.push(attachment));
+		}, 1);
+	};
+
+	removeHooks = () => {
+		wp.Uploader.queue.off('add', clearSelectedAttachments);
+		selection.off('add change remove selection:single', syncSelectedAttachments);
+		browser.off('close', removeHooks);
+	}
+
+	syncSelectedAttachments();
+
+	wp.Uploader.queue.on('add', clearSelectedAttachments);
+	selection.on('add change remove selection:single', syncSelectedAttachments);
+	browser.on('close', removeHooks);
+}
+
+/**
  * Handle the interaction with media browser of WordPress.
  *
  * @param  {Object} channel
@@ -275,20 +326,22 @@ export function* workerOpenMediaBrowser(channel, field, browser, action) {
 			type,
 			duplicates_allowed
 		} = liveField;
+		const selection = browser.state().get('selection');
 
 		// For File field, the media should display
 		// the currently selected element
 		if (type === TYPE_IMAGE || type === TYPE_FILE) {
-			var attachment = value ? window.wp.media.attachment(value) : null;
-			browser.state().get('selection').set( attachment ? [attachment] : [] );
+			let attachment = value ? window.wp.media.attachment(value) : null;
+			selection.set( attachment ? [attachment] : [] );
+			preventAccidentalMultipleFiles(browser);
 		}
 
 		if (type === TYPE_MEDIA_GALLERY) {
 			if (selected) {
 				let attachment = window.wp.media.attachment(selected);
-				browser.state().get('selection').set( attachment ? [attachment] : [] );
+				selection.set( attachment ? [attachment] : [] );
 			} else {
-				browser.state().get('selection').set( [] );
+				selection.set( [] );
 			}
 		}
 

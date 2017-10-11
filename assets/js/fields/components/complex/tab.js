@@ -17,7 +17,7 @@ import withHeaderTemplate from 'fields/decorators/with-header-template';
  * Render a tab in complex field.
  *
  * @param  {Object}        props
- * @param  {Number}        props.number
+ * @param  {Number}        props.index
  * @param  {Object}        props.group
  * @param  {String}        props.label
  * @param  {Boolean}       props.active
@@ -25,7 +25,7 @@ import withHeaderTemplate from 'fields/decorators/with-header-template';
  * @return {React.Element}
  */
 export const ComplexTab = ({
-	number,
+	index,
 	group,
 	label,
 	active,
@@ -43,7 +43,7 @@ export const ComplexTab = ({
 					: null
 				}
 
-				<span className="group-number">{number}</span>
+				<span className="group-number">{index + 1}</span>
 				<span className="dashicons dashicons-warning carbon-complex-group-error-badge" />
 			</a>
 	</li>
@@ -55,7 +55,7 @@ export const ComplexTab = ({
  * @type {Object}
  */
 ComplexTab.propTypes = {
-	number: PropTypes.number,
+	index: PropTypes.number,
 	group: PropTypes.shape({
 		id: PropTypes.string,
 		label: PropTypes.string,

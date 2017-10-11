@@ -77,7 +77,7 @@ class Term_Condition extends Condition {
 	 * @return array<integer>
 	 */
 	protected function get_term_ids_from_full_term_descriptors( $full_term_descriptors ) {
-		return array_map( array( $this, 'get_term_id_from_full_term_descriptor'), $full_term_descriptors );
+		return array_map( array( $this, 'get_term_id_from_full_term_descriptor' ), $full_term_descriptors );
 	}
 
 	/**
