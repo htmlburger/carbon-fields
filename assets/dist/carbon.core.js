@@ -1119,7 +1119,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Render a tab in complex field.
  *
  * @param  {Object}        props
- * @param  {Number}        props.number
+ * @param  {Number}        props.index
  * @param  {Object}        props.group
  * @param  {String}        props.label
  * @param  {Boolean}       props.active
@@ -1135,7 +1135,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * The external dependencies.
  */
 var ComplexTab = exports.ComplexTab = function ComplexTab(_ref) {
-	var number = _ref.number,
+	var index = _ref.index,
 	    group = _ref.group,
 	    label = _ref.label,
 	    active = _ref.active,
@@ -1155,7 +1155,7 @@ var ComplexTab = exports.ComplexTab = function ComplexTab(_ref) {
 			_react2.default.createElement(
 				'span',
 				{ className: 'group-number' },
-				number
+				index + 1
 			),
 			_react2.default.createElement('span', { className: 'dashicons dashicons-warning carbon-complex-group-error-badge' })
 		)
@@ -1168,7 +1168,7 @@ var ComplexTab = exports.ComplexTab = function ComplexTab(_ref) {
  * @type {Object}
  */
 ComplexTab.propTypes = {
-	number: _propTypes2.default.number,
+	index: _propTypes2.default.number,
 	group: _propTypes2.default.shape({
 		id: _propTypes2.default.string,
 		label: _propTypes2.default.string,
@@ -1893,9 +1893,10 @@ var _selectors = __webpack_require__("ZMHW");
  * The external dependencies.
  */
 var mapStateToProps = function mapStateToProps(state, _ref) {
-  var group = _ref.group;
+  var group = _ref.group,
+      index = _ref.index;
   return {
-    label: (0, _selectors.getComplexGroupLabel)(state, group)
+    label: (0, _selectors.getComplexGroupLabel)(state, group, index)
   };
 };
 
@@ -11929,20 +11930,22 @@ var hasInvalidFields = exports.hasInvalidFields = (0, _reselect.createSelector)(
  * @param  {Object} group
  * @return {String}
  */
-var getComplexGroupLabel = exports.getComplexGroupLabel = function getComplexGroupLabel(state, group) {
+var getComplexGroupLabel = exports.getComplexGroupLabel = function getComplexGroupLabel(state, group, index) {
 	if ((0, _lodash.isNull)(group.label_template)) {
 		return group.label;
 	}
 
 	var fields = (0, _lodash.pick)(getFields(state), (0, _lodash.map)(group.fields, 'id'));
-	var fieldValues = (0, _lodash.mapValues)((0, _lodash.mapKeys)(fields, function (v, k) {
-		return v.base_name.replace(/\-/g, '_');
+	var fieldValues = (0, _lodash.mapValues)((0, _lodash.mapKeys)(fields, function (f, k) {
+		return f.base_name.replace(/\-/g, '_');
 	}), 'value');
 
 	try {
-		return (0, _lodash.template)(group.label_template)((0, _extends3.default)({
-			fields: fields
-		}, fieldValues));
+		var args = (0, _extends3.default)({
+			fields: fields,
+			$_index: index
+		}, fieldValues);
+		return (0, _lodash.template)(group.label_template)(args);
 	} catch (e) {
 		console.error(e);
 	}
@@ -12343,7 +12346,7 @@ var ComplexTabs = exports.ComplexTabs = function ComplexTabs(_ref) {
 			groups.map(function (group, index) {
 				return _react2.default.createElement(_tab2.default, {
 					key: index,
-					number: index + 1,
+					index: index,
 					group: group,
 					active: isTabActive(group.id),
 					onClick: onClick });
@@ -15482,7 +15485,7 @@ function patchTagBoxAPI(tagBox, method) {
  * @return {Number}
  */
 function getSelectOptionLevel(option) {
-	var level = 1;
+	var level = 0;
 
 	if (option.className) {
 		var matches = option.className.match(/^level-(\d+)/);
@@ -16061,7 +16064,7 @@ function workerAddMultipleFiles(action) {
 					isMediaGalleryField = field.type === _constants.TYPE_MEDIA_GALLERY;
 					parent = void 0;
 
-					// If multiple attachments are selected and the field is Image or File, the extra 
+					// If multiple attachments are selected and the field is Image or File, the extra
 					// ones will be distributed among the closest complex field groups.
 
 					if (!(field.type === _constants.TYPE_IMAGE || field.type === _constants.TYPE_FILE)) {
@@ -16363,6 +16366,59 @@ function workerRedrawAttachmentPreview(field, action) {
 }
 
 /**
+ * This hack prevents the user from adding multiple files to
+ * a file field inside a complex field unintentionally
+ *
+ * Steps to reproduce:
+ * 1. The user opens the media browser
+ * 2. The field already has a selected attachment or the user selects one
+ * 3. The user clicks the "Uploads" tab and uploads a new file
+ * 4. The user is now shown the media gallery view with the new file APPENDED to the selection
+ *
+ * This function now always clears your OLD selection when you upload files so
+ * the final selection includes only the newly uploaded file(s).
+ *
+ * @param  {Object} browser wp.media browser frame
+ * @return {void}
+ */
+function preventAccidentalMultipleFiles(browser) {
+	var selection = browser.state().get('selection');
+	var selectedAttachments = [];
+	var _removeHooks = void 0;
+
+	var clearSelectedAttachments = function clearSelectedAttachments() {
+		for (var i = 0; i < selectedAttachments.length; i++) {
+			var attachment = selectedAttachments[i];
+			if (selection.findWhere({ id: attachment.id })) {
+				selection.remove(attachment);
+			}
+		}
+	};
+
+	var syncSelectedAttachments = function syncSelectedAttachments() {
+		// delay sync so wp.Uploader.queue event fires first
+		setTimeout(function () {
+			selectedAttachments = [];
+			selection.each(function (attachment) {
+				return selectedAttachments.push(attachment);
+			});
+		}, 1);
+	};
+
+	_removeHooks = function removeHooks() {
+		wp.Uploader.queue.off('add', clearSelectedAttachments);
+		selection.off('add change remove selection:single', syncSelectedAttachments);
+		browser.off('close', _removeHooks);
+	};
+
+	syncSelectedAttachments();
+
+	wp.Uploader.queue.on('add', clearSelectedAttachments);
+	selection.on('add change remove selection:single', syncSelectedAttachments);
+	browser.on('close', _removeHooks);
+}
+
+/**
  * Handle the interaction with media browser of WordPress.
  *
  * @param  {Object} channel
@@ -16397,20 +16453,22 @@ function workerOpenMediaBrowser(channel, field, browser, action) {
 						var type = liveField.type,
 						    duplicates_allowed = liveField.duplicates_allowed;
 
+						var selection = browser.state().get('selection');
+
 						// For File field, the media should display
 						// the currently selected element
-
 						if (type === _constants.TYPE_IMAGE || type === _constants.TYPE_FILE) {
 							var attachment = value ? window.wp.media.attachment(value) : null;
-							browser.state().get('selection').set(attachment ? [attachment] : []);
+							selection.set(attachment ? [attachment] : []);
+							preventAccidentalMultipleFiles(browser);
 						}
 
 						if (type === _constants.TYPE_MEDIA_GALLERY) {
 							if (selected) {
 								var _attachment = window.wp.media.attachment(selected);
-								browser.state().get('selection').set(_attachment ? [_attachment] : []);
+								selection.set(_attachment ? [_attachment] : []);
 							} else {
-								browser.state().get('selection').set([]);
+								selection.set([]);
 							}
 						}
 
