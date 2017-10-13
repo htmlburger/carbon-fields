@@ -10,6 +10,7 @@ import { isEmpty, omit, some, every, includes, isUndefined } from 'lodash';
 import { TYPE_COMPLEX } from 'fields/constants';
 import { setupField, setFieldValue, updateField, setUI } from 'fields/actions';
 import { getFieldById, getFieldParentById, makeGetFieldsByParent } from 'fields/selectors';
+import { getTypeDefaultValue } from 'lib/helpers';
 
 /**
  * Compare the values.
@@ -62,7 +63,8 @@ export function* workerValidate(field, siblings, { payload: { fieldId, data } } 
 			continue;
 		}
 
-		results.push(yield call(compare, field.value, rule.value, rule.compare));
+		let fieldValue = field.ui.is_visible ? field.value : getTypeDefaultValue(field.value);
+		results.push(yield call(compare, fieldValue, rule.value, rule.compare));
 	}
 
 	switch (relation) {
