@@ -23,12 +23,12 @@ import { getContainerById } from 'containers/selectors';
 import { removeFields } from 'fields/actions';
 import { getFieldById, getFieldsByRoots, hasInvalidFields } from 'fields/selectors';
 import { TYPE_MAP } from 'fields/constants';
+import { ID_PREFIX } from 'containers/constants';
 
 const carbonWidgetIdPrefix = 'carbon_fields_';
-const carbonWidgetContainerIdPrefix = 'carbon_fields_container_';
 
 function widgetIdToContainerId(widgetId) {
-	return carbonWidgetContainerIdPrefix + widgetId;
+	return ID_PREFIX + widgetId;
 }
 
 function getWidgetId(widget) {
