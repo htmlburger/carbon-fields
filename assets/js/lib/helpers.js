@@ -111,6 +111,7 @@ export function getSelectOptionAncestors( option ) {
 	let level = getSelectOptionLevel($prev.get(0));
 	while (level > 0 && $prev.length > 0) {
 		if (getSelectOptionLevel($prev.get(0)) !== level) {
+			$prev = $prev.prev();
 			continue; // skip since this is a sibling/cousin, not an ancestor
 		}
 
