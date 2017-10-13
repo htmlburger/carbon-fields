@@ -108,7 +108,7 @@ export const EditAttachment = ({
 									<input type="text" id="attachment-alt-text" name="alt" onChange={ updateEditField } value={ field.edit.alt } />
 								</p>
 							}
-						})()				 
+						})()
 					}
 
 					<p>
