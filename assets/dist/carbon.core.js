@@ -1696,6 +1696,8 @@ var TYPE_THEME_OPTIONS = exports.TYPE_THEME_OPTIONS = 'theme_options';
 var TYPE_USER_META = exports.TYPE_USER_META = 'user_meta';
 var TYPE_WIDGET = exports.TYPE_WIDGET = 'widget';
 
+var ID_PREFIX = exports.ID_PREFIX = 'carbon_fields_container_';
+
 /***/ }),
 
 /***/ "5PlU":
@@ -4900,7 +4902,7 @@ module.exports = (__webpack_require__("B3Oe"))("H24R");
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
 exports.enhance = exports.ComplexActions = undefined;
 
@@ -4922,33 +4924,46 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Render the 'Add Entry' button.
  *
  * @param  {Object}        props
- * @param  {String}        props.buttonText
+ * @param  {String}        props.addButtonText
+ * @param  {String}        props.collapseAllButtonText
  * @param  {React.Element} props.children
- * @param  {Function}      props.handleClick
+ * @param  {Function}      props.addGroup
+ * @param  {Function}      props.toggleAll
  * @return {React.Element}
  */
 /**
  * The external dependencies.
  */
 var ComplexActions = exports.ComplexActions = function ComplexActions(_ref) {
-  var buttonText = _ref.buttonText,
-      children = _ref.children,
-      handleClick = _ref.handleClick;
+	var addButtonText = _ref.addButtonText,
+	    collapseAllButtonText = _ref.collapseAllButtonText,
+	    children = _ref.children,
+	    addGroup = _ref.addGroup,
+	    toggleAll = _ref.toggleAll;
 
-  return _react2.default.createElement(
-    'div',
-    { className: 'carbon-actions' },
-    _react2.default.createElement(
-      'div',
-      { className: 'carbon-button' },
-      _react2.default.createElement(
-        'a',
-        { href: '#', className: 'button', onClick: handleClick },
-        buttonText
-      ),
-      children
-    )
-  );
+	return _react2.default.createElement(
+		'div',
+		{ className: 'carbon-actions' },
+		_react2.default.createElement(
+			'div',
+			{ className: 'carbon-button' },
+			_react2.default.createElement(
+				'a',
+				{ href: '#', className: 'button', onClick: addGroup },
+				addButtonText
+			),
+			children
+		),
+		_react2.default.createElement(
+			'div',
+			{ className: 'carbon-button carbon-button-collapse-all' },
+			_react2.default.createElement(
+				'a',
+				{ href: '#', className: 'button', onClick: toggleAll },
+				collapseAllButtonText
+			)
+		)
+	);
 };
 
 /**
@@ -4962,9 +4977,11 @@ var ComplexActions = exports.ComplexActions = function ComplexActions(_ref) {
  * The internal dependencies.
  */
 ComplexActions.propTypes = {
-  buttonText: _propTypes2.default.string,
-  onButtonClick: _propTypes2.default.func,
-  children: _propTypes2.default.element
+	addButtonText: _propTypes2.default.string,
+	collapseAllButtonText: _propTypes2.default.string,
+	onAddClick: _propTypes2.default.func,
+	onToggleAllClick: _propTypes2.default.func,
+	children: _propTypes2.default.element
 };
 
 /**
@@ -4973,12 +4990,18 @@ ComplexActions.propTypes = {
  * @type {Function}
  */
 var enhance = exports.enhance = (0, _recompose.withHandlers)({
-  handleClick: function handleClick(_ref2) {
-    var onButtonClick = _ref2.onButtonClick;
-    return (0, _helpers.preventDefault)(function () {
-      return onButtonClick();
-    });
-  }
+	addGroup: function addGroup(_ref2) {
+		var onAddClick = _ref2.onAddClick;
+		return (0, _helpers.preventDefault)(function () {
+			return onAddClick();
+		});
+	},
+	toggleAll: function toggleAll(_ref3) {
+		var onToggleAllClick = _ref3.onToggleAllClick;
+		return (0, _helpers.preventDefault)(function () {
+			return onToggleAllClick();
+		});
+	}
 });
 
 exports.default = enhance(ComplexActions);
@@ -6984,7 +7007,7 @@ var FileField = exports.FileField = function FileField(_ref) {
 
 	var buttonLabel = carbonFieldsL10n.field.fileButtonLabel;
 
-	if (field.type === 'image') {
+	if (field.type === _constants.TYPE_IMAGE) {
 		buttonLabel = carbonFieldsL10n.field.imageButtonLabel;
 	}
 
@@ -9949,6 +9972,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * @param  {Function}      props.handlePopoverClose
  * @param  {Function}      props.handleTabClick
  * @param  {Function}      props.handleAddGroupClick
+ * @param  {Function}      props.handleToggleAllGroupsClick
  * @param  {Function}      props.handleCloneGroupClick
  * @param  {Function}      props.handleRemoveGroupClick
  * @param  {Function}      props.handleSort
@@ -9971,9 +9995,11 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 	    isGroupActive = _ref.isGroupActive,
 	    expandGroup = _ref.expandGroup,
 	    collapseGroup = _ref.collapseGroup,
+	    allGroupsCollapsed = _ref.allGroupsCollapsed,
 	    handlePopoverClose = _ref.handlePopoverClose,
 	    handleTabClick = _ref.handleTabClick,
 	    handleAddGroupClick = _ref.handleAddGroupClick,
+	    handleToggleAllGroupsClick = _ref.handleToggleAllGroupsClick,
 	    handleCloneGroupClick = _ref.handleCloneGroupClick,
 	    handleRemoveGroupClick = _ref.handleRemoveGroupClick,
 	    handleGroupExpand = _ref.handleGroupExpand,
@@ -9986,8 +10012,11 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 	var complexTabActions = (0, _lodash.isEmpty)(availableGroups) ? null : _react2.default.createElement(
 		_actions2.default,
 		{
-			buttonText: '+',
-			onButtonClick: handleAddGroupClick },
+			addButtonText: '+',
+			collapseAllButtonText: '',
+			expandAllButtonText: '',
+			onAddClick: handleAddGroupClick,
+			onToggleAllClick: handleToggleAllGroupsClick },
 		_react2.default.createElement(_popover2.default, {
 			groups: availableGroups,
 			visible: popoverVisible,
@@ -9998,8 +10027,10 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 	var complexButtonActions = (0, _lodash.isEmpty)(availableGroups) ? null : _react2.default.createElement(
 		_actions2.default,
 		{
-			buttonText: carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name),
-			onButtonClick: handleAddGroupClick },
+			addButtonText: carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name),
+			collapseAllButtonText: allGroupsCollapsed ? carbonFieldsL10n.field.complexExpandAllButton : carbonFieldsL10n.field.complexCollapseAllButton,
+			onAddClick: handleAddGroupClick,
+			onToggleAllClick: handleToggleAllGroupsClick },
 		_react2.default.createElement(_popover2.default, {
 			groups: availableGroups,
 			visible: popoverVisible,
@@ -10110,6 +10141,7 @@ ComplexField.propTypes = {
 	handlePopoverClose: _propTypes2.default.func,
 	handleTabClick: _propTypes2.default.func,
 	handleAddGroupClick: _propTypes2.default.func,
+	handleToggleAllGroupsClick: _propTypes2.default.func,
 	handleCloneGroupClick: _propTypes2.default.func,
 	handleRemoveGroupClick: _propTypes2.default.func
 };
@@ -10212,10 +10244,15 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		});
 	}
 
+	var allGroupsCollapsed = (0, _lodash.every)(field.value, function (group) {
+		return group.collapsed;
+	});
+
 	return {
 		sortableTabsOptions: sortableTabsOptions,
 		sortableGroupsOptions: sortableGroupsOptions,
-		enabledGroupTypes: enabledGroupTypes
+		enabledGroupTypes: enabledGroupTypes,
+		allGroupsCollapsed: allGroupsCollapsed
 	};
 }),
 
@@ -10295,10 +10332,29 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		};
 	},
 
-	handleSort: function handleSort(_ref11) {
+	handleToggleAllGroupsClick: function handleToggleAllGroupsClick(_ref11) {
 		var field = _ref11.field,
-		    setFieldValue = _ref11.setFieldValue,
-		    expandComplexGroup = _ref11.expandComplexGroup;
+		    allGroupsCollapsed = _ref11.allGroupsCollapsed,
+		    expandComplexGroup = _ref11.expandComplexGroup,
+		    collapseComplexGroup = _ref11.collapseComplexGroup;
+		return function () {
+			for (var i = 0; i < field.value.length; i++) {
+				var group = field.value[i];
+				if (group.collapsed === allGroupsCollapsed) {
+					if (allGroupsCollapsed) {
+						expandComplexGroup(field.id, group.id);
+					} else {
+						collapseComplexGroup(field.id, group.id);
+					}
+				}
+			}
+		};
+	},
+
+	handleSort: function handleSort(_ref12) {
+		var field = _ref12.field,
+		    setFieldValue = _ref12.setFieldValue,
+		    expandComplexGroup = _ref12.expandComplexGroup;
 		return function (groups, event, ui) {
 			// Cache the id attribute of the group, because the next line
 			// will re-order DOM and we will lose the correct group's id.
@@ -13543,7 +13599,7 @@ function workerReset(store) {
 					settings = _ref3.settings;
 					data = _ref3.data;
 
-					if (!(!(0, _lodash.includes)(settings.data, 'carbon_panel') || data.querySelector('wp_error'))) {
+					if (!(!(0, _lodash.includes)(settings.data, _constants.ID_PREFIX) || data.querySelector('wp_error'))) {
 						_context5.next = 11;
 						break;
 					}
@@ -13979,6 +14035,8 @@ var _selectors2 = __webpack_require__("ZMHW");
 
 var _constants2 = __webpack_require__("8Hlw");
 
+var _constants3 = __webpack_require__("5B/B");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _marked = [workerAddedOrUpdatedEvent, workerDestroyContainer, workerFormSubmit, workerToggleWidget, foreman].map(_regenerator2.default.mark); /**
@@ -13992,10 +14050,9 @@ var _marked = [workerAddedOrUpdatedEvent, workerDestroyContainer, workerFormSubm
 
 
 var carbonWidgetIdPrefix = 'carbon_fields_';
-var carbonWidgetContainerIdPrefix = 'carbon_fields_container_';
 
 function widgetIdToContainerId(widgetId) {
-	return carbonWidgetContainerIdPrefix + widgetId;
+	return _constants3.ID_PREFIX + widgetId;
 }
 
 function getWidgetId(widget) {
@@ -15354,6 +15411,11 @@ var _regenerator = __webpack_require__("Xxa5");
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
+var _typeof2 = __webpack_require__("pFYg");
+
+var _typeof3 = _interopRequireDefault(_typeof2);
+
+exports.getTypeDefaultValue = getTypeDefaultValue;
 exports.preventDefault = preventDefault;
 exports.autoload = autoload;
 exports.cancelTasks = cancelTasks;
@@ -15367,12 +15429,40 @@ var _jquery2 = _interopRequireDefault(_jquery);
 
 var _effects = __webpack_require__("egdi");
 
+var _lodash = __webpack_require__("M4fF");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _marked = [cancelTasks].map(_regenerator2.default.mark); /**
                                                               * The external dependencies.
                                                               */
 
+
+/**
+ * Return a default value for the type of which the passed entity is.
+ * Returns the passed entity if it cannot be handled.
+ *
+ * @param  {Function} cb
+ * @return {Function}
+ */
+function getTypeDefaultValue(entity) {
+	var dictionary = {
+		'null': null,
+		'undefined': undefined,
+		'boolean': false,
+		'number': 0,
+		'string': '',
+		'array': [],
+		'object': {},
+		'function': function _function() {}
+	};
+
+	var type = (0, _lodash.isArray)(entity) ? 'array' : typeof entity === 'undefined' ? 'undefined' : (0, _typeof3.default)(entity);
+
+	var typeDefault = !(0, _lodash.isUndefined)(dictionary[type]) ? dictionary[type] : entity;
+
+	return typeDefault;
+}
 
 /**
  * Small helper to reduce code repetetion of `e.preventDefault`.
@@ -15511,6 +15601,7 @@ function getSelectOptionAncestors(option) {
 	var level = getSelectOptionLevel($prev.get(0));
 	while (level > 0 && $prev.length > 0) {
 		if (getSelectOptionLevel($prev.get(0)) !== level) {
+			$prev = $prev.prev();
 			continue; // skip since this is a sibling/cousin, not an ancestor
 		}
 
@@ -16577,13 +16668,13 @@ function workerSetupMediaBrowser(action) {
 					mediaBrowserButtonLabel = '';
 
 
-					if (type === 'image') {
+					if (type === _constants.TYPE_IMAGE) {
 						mediaBrowserTitle = carbonFieldsL10n.field.imageBrowserTitle;
 						mediaBrowserButtonLabel = carbonFieldsL10n.field.imageBrowserButtonLabel;
-					} else if (type === 'file') {
+					} else if (type === _constants.TYPE_FILE) {
 						mediaBrowserTitle = carbonFieldsL10n.field.fileBrowserTitle;
 						mediaBrowserButtonLabel = carbonFieldsL10n.field.fileBrowserButtonLabel;
-					} else if (type === 'media_gallery') {
+					} else if (type === _constants.TYPE_MEDIA_GALLERY) {
 						mediaBrowserTitle = carbonFieldsL10n.field.mediaGalleryBrowserTitle;
 						mediaBrowserButtonLabel = carbonFieldsL10n.field.mediaGalleryBrowserButtonLabel;
 					}
@@ -17385,6 +17476,8 @@ var _actions = __webpack_require__("HRbf");
 
 var _selectors = __webpack_require__("ZMHW");
 
+var _helpers = __webpack_require__("hKI6");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var _marked = [workerValidate, workerConditionalLogic, foreman].map(_regenerator2.default.mark); /**
@@ -17455,7 +17548,7 @@ function workerValidate(field, siblings) {
 	    fieldId = _ref$payload.fieldId,
 	    data = _ref$payload.data;
 
-	var _field$conditional_lo, relation, rules, results, valid, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, rule, _field;
+	var _field$conditional_lo, relation, rules, results, valid, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, rule, _field, fieldValue;
 
 	return _regenerator2.default.wrap(function workerValidate$(_context) {
 		while (1) {
@@ -17480,7 +17573,7 @@ function workerValidate(field, siblings) {
 
 				case 10:
 					if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
-						_context.next = 26;
+						_context.next = 27;
 						break;
 					}
 
@@ -17497,82 +17590,83 @@ function workerValidate(field, siblings) {
 					}
 
 					console.warn('An unknown field is used in condition - ' + rule.field + '.');
-					return _context.abrupt('continue', 23);
+					return _context.abrupt('continue', 24);
 
 				case 18:
+					fieldValue = _field.ui.is_visible ? _field.value : (0, _helpers.getTypeDefaultValue)(_field.value);
 					_context.t0 = results;
-					_context.next = 21;
-					return (0, _effects.call)(compare, _field.value, rule.value, rule.compare);
+					_context.next = 22;
+					return (0, _effects.call)(compare, fieldValue, rule.value, rule.compare);
 
-				case 21:
+				case 22:
 					_context.t1 = _context.sent;
 
 					_context.t0.push.call(_context.t0, _context.t1);
 
-				case 23:
+				case 24:
 					_iteratorNormalCompletion = true;
 					_context.next = 10;
 					break;
 
-				case 26:
-					_context.next = 32;
+				case 27:
+					_context.next = 33;
 					break;
 
-				case 28:
-					_context.prev = 28;
+				case 29:
+					_context.prev = 29;
 					_context.t2 = _context['catch'](8);
 					_didIteratorError = true;
 					_iteratorError = _context.t2;
 
-				case 32:
-					_context.prev = 32;
+				case 33:
 					_context.prev = 33;
+					_context.prev = 34;
 
 					if (!_iteratorNormalCompletion && _iterator.return) {
 						_iterator.return();
 					}
 
-				case 35:
-					_context.prev = 35;
+				case 36:
+					_context.prev = 36;
 
 					if (!_didIteratorError) {
-						_context.next = 38;
+						_context.next = 39;
 						break;
 					}
 
 					throw _iteratorError;
 
-				case 38:
-					return _context.finish(35);
-
 				case 39:
-					return _context.finish(32);
+					return _context.finish(36);
 
 				case 40:
+					return _context.finish(33);
+
+				case 41:
 					_context.t3 = relation;
-					_context.next = _context.t3 === 'AND' ? 43 : _context.t3 === 'OR' ? 45 : 47;
+					_context.next = _context.t3 === 'AND' ? 44 : _context.t3 === 'OR' ? 46 : 48;
 					break;
 
-				case 43:
+				case 44:
 					valid = (0, _lodash.every)(results);
-					return _context.abrupt('break', 47);
+					return _context.abrupt('break', 48);
 
-				case 45:
+				case 46:
 					valid = (0, _lodash.some)(results);
-					return _context.abrupt('break', 47);
+					return _context.abrupt('break', 48);
 
-				case 47:
-					_context.next = 49;
+				case 48:
+					_context.next = 50;
 					return (0, _effects.put)((0, _actions.setUI)(field.id, {
 						is_visible: valid
 					}));
 
-				case 49:
+				case 50:
 				case 'end':
 					return _context.stop();
 			}
 		}
-	}, _marked[0], this, [[8, 28, 32, 40], [33,, 35, 39]]);
+	}, _marked[0], this, [[8, 29, 33, 41], [34,, 36, 40]]);
 }
 
 /**
