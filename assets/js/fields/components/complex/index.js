@@ -102,8 +102,8 @@ export const ComplexField = ({
 	const complexTabActions = isEmpty(availableGroups) ? null : (
 		<ComplexActions
 			addButtonText="+"
+			showCollapseAll={false}
 			collapseAllButtonText=""
-			expandAllButtonText=""
 			onAddClick={handleAddGroupClick}
 			onToggleAllClick={handleToggleAllGroupsClick}>
 				<ComplexPopover
@@ -117,6 +117,7 @@ export const ComplexField = ({
 	const complexButtonActions = isEmpty(availableGroups) ? null : (
 		<ComplexActions
 			addButtonText={carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name)}
+			showCollapseAll={field.value.length > 0}
 			collapseAllButtonText={allGroupsCollapsed ? carbonFieldsL10n.field.complexExpandAllButton : carbonFieldsL10n.field.complexCollapseAllButton}
 			onAddClick={handleAddGroupClick}
 			onToggleAllClick={handleToggleAllGroupsClick}>
