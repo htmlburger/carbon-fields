@@ -100,6 +100,9 @@ class Post_Meta_Container extends Container {
 
 		foreach ( $this->fields as $field ) {
 			$field->set_value_from_input( stripslashes_deep( $_POST ) );
+
+			do_action( 'carbon_fields_post_meta_field_pre_saved', $post_id, $field, $this );
+
 			$field->save();
 		}
 
