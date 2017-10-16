@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Container;
 
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Datastore\Datastore;
 
 /**
@@ -68,7 +69,7 @@ class Term_Meta_Container extends Container {
 		$this->set_term_id( $term_id );
 
 		foreach ( $this->fields as $field ) {
-			$field->set_value_from_input( stripslashes_deep( $_POST ) );
+			$field->set_value_from_input( Helper::input() );
 			$field->save();
 		}
 

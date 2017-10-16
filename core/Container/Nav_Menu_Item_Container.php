@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Container;
 
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
@@ -81,7 +82,7 @@ class Nav_Menu_Item_Container extends Container {
 	 */
 	public function save( $data = null ) {
 		foreach ( $this->fields as $field ) {
-			$field->set_value_from_input( stripslashes_deep( $_POST ) );
+			$field->set_value_from_input( Helper::input() );
 			$field->save();
 		}
 
@@ -112,10 +113,10 @@ class Nav_Menu_Item_Container extends Container {
 	public function is_valid_attach_for_request() {
 		global $pagenow;
 
-		$input = stripslashes_deep( $_REQUEST );
+		$input = Helper::input();
 		$ajax = defined( 'DOING_AJAX' ) ? DOING_AJAX : false;
 		$ajax_action = isset( $input['action'] ) ? $input['action'] : '';
-		
+
 		$is_on_menu_page = ( $pagenow === 'nav-menus.php' );
 		$is_menu_ajax_request = ( $ajax && $ajax_action === 'add-menu-item' );
 		if ( ! $is_on_menu_page && ! $is_menu_ajax_request ) {

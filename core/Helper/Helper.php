@@ -532,4 +532,15 @@ class Helper {
 
 		return $attachment_meta;
 	}
+
+	/**
+	 * Get the current $_POST or $_GET input values, merging in compacted values
+	 *
+	 * @return array
+	 */
+	public static function input() {
+		$input = $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : $_GET;
+		$input = stripslashes_deep( $input );
+		return $input;
+	}
 }
