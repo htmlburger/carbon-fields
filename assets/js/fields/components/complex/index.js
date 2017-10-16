@@ -13,7 +13,8 @@ import {
 	map,
 	pickBy,
 	sortBy,
-	values
+	values,
+	every
 } from 'lodash';
 import {
 	compose,
@@ -68,6 +69,7 @@ import {
  * @param  {Function}      props.handlePopoverClose
  * @param  {Function}      props.handleTabClick
  * @param  {Function}      props.handleAddGroupClick
+ * @param  {Function}      props.handleToggleAllGroupsClick
  * @param  {Function}      props.handleCloneGroupClick
  * @param  {Function}      props.handleRemoveGroupClick
  * @param  {Function}      props.handleSort
@@ -85,9 +87,11 @@ export const ComplexField = ({
 	isGroupActive,
 	expandGroup,
 	collapseGroup,
+	allGroupsCollapsed,
 	handlePopoverClose,
 	handleTabClick,
 	handleAddGroupClick,
+	handleToggleAllGroupsClick,
 	handleCloneGroupClick,
 	handleRemoveGroupClick,
 	handleGroupExpand,
@@ -97,8 +101,11 @@ export const ComplexField = ({
 	const availableGroups = filter(field.group_types, groupType => includes(enabledGroupTypes, groupType.name));
 	const complexTabActions = isEmpty(availableGroups) ? null : (
 		<ComplexActions
-			buttonText="+"
-			onButtonClick={handleAddGroupClick}>
+			addButtonText="+"
+			collapseAllButtonText=""
+			expandAllButtonText=""
+			onAddClick={handleAddGroupClick}
+			onToggleAllClick={handleToggleAllGroupsClick}>
 				<ComplexPopover
 					groups={availableGroups}
 					visible={popoverVisible}
@@ -109,8 +116,10 @@ export const ComplexField = ({
 	);
 	const complexButtonActions = isEmpty(availableGroups) ? null : (
 		<ComplexActions
-			buttonText={carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name)}
-			onButtonClick={handleAddGroupClick}>
+			addButtonText={carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name)}
+			collapseAllButtonText={allGroupsCollapsed ? carbonFieldsL10n.field.complexExpandAllButton : carbonFieldsL10n.field.complexCollapseAllButton}
+			onAddClick={handleAddGroupClick}
+			onToggleAllClick={handleToggleAllGroupsClick}>
 				<ComplexPopover
 					groups={availableGroups}
 					visible={popoverVisible}
@@ -210,6 +219,7 @@ ComplexField.propTypes = {
 	handlePopoverClose: PropTypes.func,
 	handleTabClick: PropTypes.func,
 	handleAddGroupClick: PropTypes.func,
+	handleToggleAllGroupsClick: PropTypes.func,
 	handleCloneGroupClick: PropTypes.func,
 	handleRemoveGroupClick: PropTypes.func,
 };
@@ -313,10 +323,13 @@ export const enhance = compose(
 			enabledGroupTypes = filter(enabledGroupTypes, groupType => findIndex(field.value, {name: groupType}) === -1);
 		}
 
+		let allGroupsCollapsed = every(field.value, group => group.collapsed);
+
 		return {
 			sortableTabsOptions,
 			sortableGroupsOptions,
-			enabledGroupTypes
+			enabledGroupTypes,
+			allGroupsCollapsed
 		};
 	}),
 
@@ -346,6 +359,19 @@ export const enhance = compose(
 
 			if (groupName) {
 				addComplexGroup(field.id, groupName);
+			}
+		},
+
+		handleToggleAllGroupsClick: ({ field, allGroupsCollapsed, expandComplexGroup, collapseComplexGroup }) => () => {
+			for (let i = 0; i < field.value.length; i++) {
+				let group = field.value[i];
+				if (group.collapsed === allGroupsCollapsed) {
+					if (allGroupsCollapsed) {
+						expandComplexGroup(field.id, group.id);
+					} else {
+						collapseComplexGroup(field.id, group.id);
+					}
+				}
 			}
 		},
 

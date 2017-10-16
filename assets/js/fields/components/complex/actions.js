@@ -14,23 +14,32 @@ import { preventDefault } from 'lib/helpers';
  * Render the 'Add Entry' button.
  *
  * @param  {Object}        props
- * @param  {String}        props.buttonText
+ * @param  {String}        props.addButtonText
+ * @param  {String}        props.collapseAllButtonText
  * @param  {React.Element} props.children
- * @param  {Function}      props.handleClick
+ * @param  {Function}      props.addGroup
+ * @param  {Function}      props.toggleAll
  * @return {React.Element}
  */
 export const ComplexActions = ({
-	buttonText,
+	addButtonText,
+	collapseAllButtonText,
 	children,
-	handleClick
+	addGroup,
+	toggleAll
 }) => {
 	return <div className="carbon-actions">
 		<div className="carbon-button">
-			<a href="#" className="button" onClick={handleClick}>
-				{buttonText}
+			<a href="#" className="button" onClick={addGroup}>
+				{addButtonText}
 			</a>
 
 			{children}
+		</div>
+		<div className="carbon-button carbon-button-collapse-all">
+			<a href="#" className="button" onClick={toggleAll}>
+				{collapseAllButtonText}
+			</a>
 		</div>
 	</div>;
 };
@@ -41,8 +50,10 @@ export const ComplexActions = ({
  * @type {Object}
  */
 ComplexActions.propTypes = {
-	buttonText: PropTypes.string,
-	onButtonClick: PropTypes.func,
+	addButtonText: PropTypes.string,
+	collapseAllButtonText: PropTypes.string,
+	onAddClick: PropTypes.func,
+	onToggleAllClick: PropTypes.func,
 	children: PropTypes.element,
 };
 
@@ -52,7 +63,8 @@ ComplexActions.propTypes = {
  * @type {Function}
  */
 export const enhance = withHandlers({
-	handleClick: ({ onButtonClick }) => preventDefault(() => onButtonClick()),
+	addGroup: ({ onAddClick }) => preventDefault(() => onAddClick()),
+	toggleAll: ({ onToggleAllClick }) => preventDefault(() => onToggleAllClick()),
 });
 
 export default enhance(ComplexActions);
