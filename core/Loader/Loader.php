@@ -133,6 +133,8 @@ class Loader {
 				'complexCloneButton' => _x( 'Clone', 'Complex field', 'carbon-fields' ),
 				'complexRemoveButton' => _x( 'Remove', 'Complex field', 'carbon-fields' ),
 				'complexCollapseExpandButton' => _x( 'Collapse/Expand', 'Complex field', 'carbon-fields' ),
+				'complexCollapseAllButton' => _x( 'Collapse All', 'Complex field groups', 'carbon-fields' ),
+				'complexExpandAllButton' => _x( 'Expand All', 'Complex field groups', 'carbon-fields' ),
 
 				'messageFormValidationFailed' => __( 'Please fill out all fields correctly. ', 'carbon-fields' ),
 				'messageRequiredField' => __( 'This field is required. ', 'carbon-fields' ),

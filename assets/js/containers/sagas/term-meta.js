@@ -18,7 +18,7 @@ import { createSelectboxChannel, createAjaxChannel, createSubmitChannel, createC
 import containerFactory from 'containers/factory';
 import { setContainerMeta, validateAllContainers, submitForm } from 'containers/actions';
 import { getContainers, getContainersByType } from 'containers/selectors';
-import { TYPE_TERM_META } from 'containers/constants';
+import { TYPE_TERM_META, ID_PREFIX } from 'containers/constants';
 
 /**
  * Keep in sync the `term_level` property.
@@ -71,7 +71,7 @@ export function* workerReset(store) {
 		const { settings, data } = yield take(channel);
 
 		// Don't reset when there is no registered containers or in case of error.
-		if (!includes(settings.data, 'carbon_panel') || data.querySelector('wp_error')) {
+		if (!includes(settings.data, ID_PREFIX) || data.querySelector('wp_error')) {
 			continue;
 		}
 

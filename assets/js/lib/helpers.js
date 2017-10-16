@@ -3,6 +3,33 @@
  */
 import $ from 'jquery';
 import { take, cancel, all } from 'redux-saga/effects';
+import { isArray, isUndefined } from 'lodash';
+
+/**
+ * Return a default value for the type of which the passed entity is.
+ * Returns the passed entity if it cannot be handled.
+ *
+ * @param  {Function} cb
+ * @return {Function}
+ */
+export function getTypeDefaultValue(entity) {
+	const dictionary = {
+		'null': null,
+		'undefined': undefined,
+		'boolean': false,
+		'number': 0,
+		'string': '',
+		'array': [],
+		'object': {},
+		'function': function() {},
+	};
+
+	let type = isArray(entity) ? 'array' : typeof entity;
+
+	let typeDefault = ! isUndefined( dictionary[ type ] ) ? dictionary[ type ] : entity;
+
+	return typeDefault;
+}
 
 /**
  * Small helper to reduce code repetetion of `e.preventDefault`.
@@ -111,6 +138,7 @@ export function getSelectOptionAncestors( option ) {
 	let level = getSelectOptionLevel($prev.get(0));
 	while (level > 0 && $prev.length > 0) {
 		if (getSelectOptionLevel($prev.get(0)) !== level) {
+			$prev = $prev.prev();
 			continue; // skip since this is a sibling/cousin, not an ancestor
 		}
 

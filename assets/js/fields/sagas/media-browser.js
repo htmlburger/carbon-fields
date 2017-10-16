@@ -403,13 +403,13 @@ export function* workerSetupMediaBrowser(action) {
 	let mediaBrowserTitle       = '';
 	let mediaBrowserButtonLabel = '';
 
-	if (type === 'image') {
+	if (type === TYPE_IMAGE) {
 		mediaBrowserTitle       = carbonFieldsL10n.field.imageBrowserTitle;
 		mediaBrowserButtonLabel = carbonFieldsL10n.field.imageBrowserButtonLabel;
-	} else if (type === 'file') {
+	} else if (type === TYPE_FILE) {
 		mediaBrowserTitle       = carbonFieldsL10n.field.fileBrowserTitle;
 		mediaBrowserButtonLabel = carbonFieldsL10n.field.fileBrowserButtonLabel;
-	} else if (type === 'media_gallery') {
+	} else if (type === TYPE_MEDIA_GALLERY) {
 		mediaBrowserTitle       = carbonFieldsL10n.field.mediaGalleryBrowserTitle;
 		mediaBrowserButtonLabel = carbonFieldsL10n.field.mediaGalleryBrowserButtonLabel;
 	}

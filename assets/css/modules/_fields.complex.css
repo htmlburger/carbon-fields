@@ -8,14 +8,17 @@
 
 /*  Sub Container  */
 
-.carbon-subcontainer > .carbon-actions { position: relative; display: inline-block; vertical-align: top; }
+.carbon-subcontainer > .carbon-actions { position: relative; vertical-align: top; }
 .carbon-subcontainer > .carbon-actions .carbon-button { display: inline-block; vertical-align: top; float: none; }
+.carbon-subcontainer > .carbon-actions .carbon-button-collapse-all { float: right; }
 
 .carbon-subcontainer > .carbon-empty-row { display: none; }
 .carbon-subcontainer > .carbon-empty-row-visible { display: block; }
 .carbon-subcontainer > .carbon-empty-row-visible ~ .carbon-actions { display: block; }
 .carbon-subcontainer > .carbon-empty-row-visible ~ .groups-wrapper { display: none; }
 
+
+.carbon-user-container .carbon-group-row { background: #FFFFFF; }
 
 /*  Main Components  */
 
@@ -98,6 +101,8 @@
 .carbon-groups-holder .carbon-group-actions-tabbed-horizontal a:hover,
 .carbon-groups-holder .carbon-group-actions-tabbed-vertical a:hover { color: $color-label; }
 
+.carbon-subcontainer .layout-tabbed-horizontal .carbon-actions .carbon-button-collapse-all,
+.carbon-subcontainer .layout-tabbed-vertical .carbon-actions .carbon-button-collapse-all,
 .carbon-groups-holder .carbon-group-actions-tabbed-horizontal .carbon-btn-collapse,
 .carbon-groups-holder .carbon-group-actions-tabbed-vertical .carbon-btn-collapse { display: none; }
 

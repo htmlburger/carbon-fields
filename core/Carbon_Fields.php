@@ -211,9 +211,10 @@ final class Carbon_Fields {
 	 * Throw exception if fields have not been registered yet
 	 */
 	public static function verify_fields_registered() {
-		$action = 'carbon_fields_fields_registered';
-		if ( did_action( $action ) === 0 && ! doing_action( $action ) ) {
-			Incorrect_Syntax_Exception::raise( 'Attempted to access a field before the ' . $action . ' action has fired yet.' );
+		$register_action = 'carbon_fields_register_fields';
+		$registered_action = 'carbon_fields_fields_registered';
+		if ( ! doing_action( $register_action ) && ! doing_action( $registered_action ) && did_action( $registered_action ) === 0 ) {
+			Incorrect_Syntax_Exception::raise( 'Attempted to access a field before the ' . $register_action . ' and ' . $registered_action . ' actions have fired yet.' );
 		}
 	}
 

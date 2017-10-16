@@ -33,7 +33,7 @@ export const FileField = ({
 }) => {
 	let buttonLabel = carbonFieldsL10n.field.fileButtonLabel;
 
-	if (field.type === 'image') {
+	if (field.type === TYPE_IMAGE) {
 		buttonLabel = carbonFieldsL10n.field.imageButtonLabel;
 	}
 
