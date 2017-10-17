@@ -534,13 +534,32 @@ class Helper {
 	}
 
 	/**
-	 * Get the current $_POST or $_GET input values, merging in compacted values
+	 * Get the current $_POST or $_GET input array with compacted input values merged in
 	 *
 	 * @return array
 	 */
 	public static function input() {
 		$input = $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : $_GET;
 		$input = stripslashes_deep( $input );
+
+		if ( \Carbon_Fields\COMPACT_INPUT ) {
+			$input = static::expand_compacted_input( $input );
+		}
+
+		return $input;
+	}
+
+	/**
+	 * Get a copy of the passed array with compacted input values merged in
+	 *
+	 * @param  array $input
+	 * @return array
+	 */
+	public static function expand_compacted_input( $input ) {
+		if ( isset( $input[ \Carbon_Fields\COMPACT_INPUT_KEY ] ) ) {
+			$json = json_decode( $input[ \Carbon_Fields\COMPACT_INPUT_KEY ], true );
+			$input = array_merge( $input, $json );
+		}
 		return $input;
 	}
 }

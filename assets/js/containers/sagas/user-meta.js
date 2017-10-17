@@ -8,6 +8,7 @@ import { take, call, put, fork, select } from 'redux-saga/effects';
  * The internal dependencies.
  */
 import { ready } from 'lib/actions';
+import { compactInput } from 'lib/helpers';
 import { createSelectboxChannel, createSubmitChannel } from 'lib/events';
 
 import { validateAllContainers, submitForm, setContainerMeta } from 'containers/actions';
@@ -61,6 +62,9 @@ export function* workerFormSubmit() {
 
 		yield put(submitForm(event));
 		yield put(validateAllContainers(event));
+		if (carbonFieldsConfig.compactInput) {
+			yield compactInput(event.target);
+		}
 	}
 }
 
