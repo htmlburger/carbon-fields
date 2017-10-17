@@ -4000,6 +4000,406 @@ $export($export.S + $export.F * !(USE_NATIVE && __webpack_require__("dY0y")(func
 
 /***/ }),
 
+/***/ "CwSZ":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__("p8xL");
+var formats = __webpack_require__("XgCd");
+
+var arrayPrefixGenerators = {
+    brackets: function brackets(prefix) { // eslint-disable-line func-name-matching
+        return prefix + '[]';
+    },
+    indices: function indices(prefix, key) { // eslint-disable-line func-name-matching
+        return prefix + '[' + key + ']';
+    },
+    repeat: function repeat(prefix) { // eslint-disable-line func-name-matching
+        return prefix;
+    }
+};
+
+var toISO = Date.prototype.toISOString;
+
+var defaults = {
+    delimiter: '&',
+    encode: true,
+    encoder: utils.encode,
+    encodeValuesOnly: false,
+    serializeDate: function serializeDate(date) { // eslint-disable-line func-name-matching
+        return toISO.call(date);
+    },
+    skipNulls: false,
+    strictNullHandling: false
+};
+
+var stringify = function stringify( // eslint-disable-line func-name-matching
+    object,
+    prefix,
+    generateArrayPrefix,
+    strictNullHandling,
+    skipNulls,
+    encoder,
+    filter,
+    sort,
+    allowDots,
+    serializeDate,
+    formatter,
+    encodeValuesOnly
+) {
+    var obj = object;
+    if (typeof filter === 'function') {
+        obj = filter(prefix, obj);
+    } else if (obj instanceof Date) {
+        obj = serializeDate(obj);
+    } else if (obj === null) {
+        if (strictNullHandling) {
+            return encoder && !encodeValuesOnly ? encoder(prefix, defaults.encoder) : prefix;
+        }
+
+        obj = '';
+    }
+
+    if (typeof obj === 'string' || typeof obj === 'number' || typeof obj === 'boolean' || utils.isBuffer(obj)) {
+        if (encoder) {
+            var keyValue = encodeValuesOnly ? prefix : encoder(prefix, defaults.encoder);
+            return [formatter(keyValue) + '=' + formatter(encoder(obj, defaults.encoder))];
+        }
+        return [formatter(prefix) + '=' + formatter(String(obj))];
+    }
+
+    var values = [];
+
+    if (typeof obj === 'undefined') {
+        return values;
+    }
+
+    var objKeys;
+    if (Array.isArray(filter)) {
+        objKeys = filter;
+    } else {
+        var keys = Object.keys(obj);
+        objKeys = sort ? keys.sort(sort) : keys;
+    }
+
+    for (var i = 0; i < objKeys.length; ++i) {
+        var key = objKeys[i];
+
+        if (skipNulls && obj[key] === null) {
+            continue;
+        }
+
+        if (Array.isArray(obj)) {
+            values = values.concat(stringify(
+                obj[key],
+                generateArrayPrefix(prefix, key),
+                generateArrayPrefix,
+                strictNullHandling,
+                skipNulls,
+                encoder,
+                filter,
+                sort,
+                allowDots,
+                serializeDate,
+                formatter,
+                encodeValuesOnly
+            ));
+        } else {
+            values = values.concat(stringify(
+                obj[key],
+                prefix + (allowDots ? '.' + key : '[' + key + ']'),
+                generateArrayPrefix,
+                strictNullHandling,
+                skipNulls,
+                encoder,
+                filter,
+                sort,
+                allowDots,
+                serializeDate,
+                formatter,
+                encodeValuesOnly
+            ));
+        }
+    }
+
+    return values;
+};
+
+module.exports = function (object, opts) {
+    var obj = object;
+    var options = opts ? utils.assign({}, opts) : {};
+
+    if (options.encoder !== null && options.encoder !== undefined && typeof options.encoder !== 'function') {
+        throw new TypeError('Encoder has to be a function.');
+    }
+
+    var delimiter = typeof options.delimiter === 'undefined' ? defaults.delimiter : options.delimiter;
+    var strictNullHandling = typeof options.strictNullHandling === 'boolean' ? options.strictNullHandling : defaults.strictNullHandling;
+    var skipNulls = typeof options.skipNulls === 'boolean' ? options.skipNulls : defaults.skipNulls;
+    var encode = typeof options.encode === 'boolean' ? options.encode : defaults.encode;
+    var encoder = typeof options.encoder === 'function' ? options.encoder : defaults.encoder;
+    var sort = typeof options.sort === 'function' ? options.sort : null;
+    var allowDots = typeof options.allowDots === 'undefined' ? false : options.allowDots;
+    var serializeDate = typeof options.serializeDate === 'function' ? options.serializeDate : defaults.serializeDate;
+    var encodeValuesOnly = typeof options.encodeValuesOnly === 'boolean' ? options.encodeValuesOnly : defaults.encodeValuesOnly;
+    if (typeof options.format === 'undefined') {
+        options.format = formats['default'];
+    } else if (!Object.prototype.hasOwnProperty.call(formats.formatters, options.format)) {
+        throw new TypeError('Unknown format option provided.');
+    }
+    var formatter = formats.formatters[options.format];
+    var objKeys;
+    var filter;
+
+    if (typeof options.filter === 'function') {
+        filter = options.filter;
+        obj = filter('', obj);
+    } else if (Array.isArray(options.filter)) {
+        filter = options.filter;
+        objKeys = filter;
+    }
+
+    var keys = [];
+
+    if (typeof obj !== 'object' || obj === null) {
+        return '';
+    }
+
+    var arrayFormat;
+    if (options.arrayFormat in arrayPrefixGenerators) {
+        arrayFormat = options.arrayFormat;
+    } else if ('indices' in options) {
+        arrayFormat = options.indices ? 'indices' : 'repeat';
+    } else {
+        arrayFormat = 'indices';
+    }
+
+    var generateArrayPrefix = arrayPrefixGenerators[arrayFormat];
+
+    if (!objKeys) {
+        objKeys = Object.keys(obj);
+    }
+
+    if (sort) {
+        objKeys.sort(sort);
+    }
+
+    for (var i = 0; i < objKeys.length; ++i) {
+        var key = objKeys[i];
+
+        if (skipNulls && obj[key] === null) {
+            continue;
+        }
+
+        keys = keys.concat(stringify(
+            obj[key],
+            key,
+            generateArrayPrefix,
+            strictNullHandling,
+            skipNulls,
+            encode ? encoder : null,
+            filter,
+            sort,
+            allowDots,
+            serializeDate,
+            formatter,
+            encodeValuesOnly
+        ));
+    }
+
+    var joined = keys.join(delimiter);
+    var prefix = options.addQueryPrefix === true ? '?' : '';
+
+    return joined.length > 0 ? prefix + joined : '';
+};
+
+
+/***/ }),
+
+/***/ "DDCP":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var utils = __webpack_require__("p8xL");
+
+var has = Object.prototype.hasOwnProperty;
+
+var defaults = {
+    allowDots: false,
+    allowPrototypes: false,
+    arrayLimit: 20,
+    decoder: utils.decode,
+    delimiter: '&',
+    depth: 5,
+    parameterLimit: 1000,
+    plainObjects: false,
+    strictNullHandling: false
+};
+
+var parseValues = function parseQueryStringValues(str, options) {
+    var obj = {};
+    var cleanStr = options.ignoreQueryPrefix ? str.replace(/^\?/, '') : str;
+    var limit = options.parameterLimit === Infinity ? undefined : options.parameterLimit;
+    var parts = cleanStr.split(options.delimiter, limit);
+
+    for (var i = 0; i < parts.length; ++i) {
+        var part = parts[i];
+
+        var bracketEqualsPos = part.indexOf(']=');
+        var pos = bracketEqualsPos === -1 ? part.indexOf('=') : bracketEqualsPos + 1;
+
+        var key, val;
+        if (pos === -1) {
+            key = options.decoder(part, defaults.decoder);
+            val = options.strictNullHandling ? null : '';
+        } else {
+            key = options.decoder(part.slice(0, pos), defaults.decoder);
+            val = options.decoder(part.slice(pos + 1), defaults.decoder);
+        }
+        if (has.call(obj, key)) {
+            obj[key] = [].concat(obj[key]).concat(val);
+        } else {
+            obj[key] = val;
+        }
+    }
+
+    return obj;
+};
+
+var parseObject = function (chain, val, options) {
+    var leaf = val;
+
+    for (var i = chain.length - 1; i >= 0; --i) {
+        var obj;
+        var root = chain[i];
+
+        if (root === '[]') {
+            obj = [];
+            obj = obj.concat(leaf);
+        } else {
+            obj = options.plainObjects ? Object.create(null) : {};
+            var cleanRoot = root.charAt(0) === '[' && root.charAt(root.length - 1) === ']' ? root.slice(1, -1) : root;
+            var index = parseInt(cleanRoot, 10);
+            if (
+                !isNaN(index)
+                && root !== cleanRoot
+                && String(index) === cleanRoot
+                && index >= 0
+                && (options.parseArrays && index <= options.arrayLimit)
+            ) {
+                obj = [];
+                obj[index] = leaf;
+            } else {
+                obj[cleanRoot] = leaf;
+            }
+        }
+
+        leaf = obj;
+    }
+
+    return leaf;
+};
+
+var parseKeys = function parseQueryStringKeys(givenKey, val, options) {
+    if (!givenKey) {
+        return;
+    }
+
+    // Transform dot notation to bracket notation
+    var key = options.allowDots ? givenKey.replace(/\.([^.[]+)/g, '[$1]') : givenKey;
+
+    // The regex chunks
+
+    var brackets = /(\[[^[\]]*])/;
+    var child = /(\[[^[\]]*])/g;
+
+    // Get the parent
+
+    var segment = brackets.exec(key);
+    var parent = segment ? key.slice(0, segment.index) : key;
+
+    // Stash the parent if it exists
+
+    var keys = [];
+    if (parent) {
+        // If we aren't using plain objects, optionally prefix keys
+        // that would overwrite object prototype properties
+        if (!options.plainObjects && has.call(Object.prototype, parent)) {
+            if (!options.allowPrototypes) {
+                return;
+            }
+        }
+
+        keys.push(parent);
+    }
+
+    // Loop through children appending to the array until we hit depth
+
+    var i = 0;
+    while ((segment = child.exec(key)) !== null && i < options.depth) {
+        i += 1;
+        if (!options.plainObjects && has.call(Object.prototype, segment[1].slice(1, -1))) {
+            if (!options.allowPrototypes) {
+                return;
+            }
+        }
+        keys.push(segment[1]);
+    }
+
+    // If there's a remainder, just add whatever is left
+
+    if (segment) {
+        keys.push('[' + key.slice(segment.index) + ']');
+    }
+
+    return parseObject(keys, val, options);
+};
+
+module.exports = function (str, opts) {
+    var options = opts ? utils.assign({}, opts) : {};
+
+    if (options.decoder !== null && options.decoder !== undefined && typeof options.decoder !== 'function') {
+        throw new TypeError('Decoder has to be a function.');
+    }
+
+    options.ignoreQueryPrefix = options.ignoreQueryPrefix === true;
+    options.delimiter = typeof options.delimiter === 'string' || utils.isRegExp(options.delimiter) ? options.delimiter : defaults.delimiter;
+    options.depth = typeof options.depth === 'number' ? options.depth : defaults.depth;
+    options.arrayLimit = typeof options.arrayLimit === 'number' ? options.arrayLimit : defaults.arrayLimit;
+    options.parseArrays = options.parseArrays !== false;
+    options.decoder = typeof options.decoder === 'function' ? options.decoder : defaults.decoder;
+    options.allowDots = typeof options.allowDots === 'boolean' ? options.allowDots : defaults.allowDots;
+    options.plainObjects = typeof options.plainObjects === 'boolean' ? options.plainObjects : defaults.plainObjects;
+    options.allowPrototypes = typeof options.allowPrototypes === 'boolean' ? options.allowPrototypes : defaults.allowPrototypes;
+    options.parameterLimit = typeof options.parameterLimit === 'number' ? options.parameterLimit : defaults.parameterLimit;
+    options.strictNullHandling = typeof options.strictNullHandling === 'boolean' ? options.strictNullHandling : defaults.strictNullHandling;
+
+    if (str === '' || str === null || typeof str === 'undefined') {
+        return options.plainObjects ? Object.create(null) : {};
+    }
+
+    var tempObj = typeof str === 'string' ? parseValues(str, options) : str;
+    var obj = options.plainObjects ? Object.create(null) : {};
+
+    // Iterate over the keys and setup the new object
+
+    var keys = Object.keys(tempObj);
+    for (var i = 0; i < keys.length; ++i) {
+        var key = keys[i];
+        var newObj = parseKeys(key, tempObj[key], options);
+        obj = utils.merge(obj, newObj, options);
+    }
+
+    return utils.compact(obj);
+};
+
+
+/***/ }),
+
 /***/ "Dd8w":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4936,6 +5336,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 var ComplexActions = exports.ComplexActions = function ComplexActions(_ref) {
 	var addButtonText = _ref.addButtonText,
+	    showCollapseAll = _ref.showCollapseAll,
 	    collapseAllButtonText = _ref.collapseAllButtonText,
 	    children = _ref.children,
 	    addGroup = _ref.addGroup,
@@ -4954,7 +5355,7 @@ var ComplexActions = exports.ComplexActions = function ComplexActions(_ref) {
 			),
 			children
 		),
-		_react2.default.createElement(
+		showCollapseAll && _react2.default.createElement(
 			'div',
 			{ className: 'carbon-button carbon-button-collapse-all' },
 			_react2.default.createElement(
@@ -4978,6 +5379,7 @@ var ComplexActions = exports.ComplexActions = function ComplexActions(_ref) {
  */
 ComplexActions.propTypes = {
 	addButtonText: _propTypes2.default.string,
+	showCollapseAll: _propTypes2.default.bool,
 	collapseAllButtonText: _propTypes2.default.string,
 	onAddClick: _propTypes2.default.func,
 	onToggleAllClick: _propTypes2.default.func,
@@ -10013,8 +10415,8 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 		_actions2.default,
 		{
 			addButtonText: '+',
+			showCollapseAll: false,
 			collapseAllButtonText: '',
-			expandAllButtonText: '',
 			onAddClick: handleAddGroupClick,
 			onToggleAllClick: handleToggleAllGroupsClick },
 		_react2.default.createElement(_popover2.default, {
@@ -10028,6 +10430,7 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 		_actions2.default,
 		{
 			addButtonText: carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name),
+			showCollapseAll: field.value.length > 0,
 			collapseAllButtonText: allGroupsCollapsed ? carbonFieldsL10n.field.complexExpandAllButton : carbonFieldsL10n.field.complexCollapseAllButton,
 			onAddClick: handleAddGroupClick,
 			onToggleAllClick: handleToggleAllGroupsClick },
@@ -10704,7 +11107,7 @@ exports.default = (0, _extends3.default)({}, _base2.default, {
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
 
 var _regenerator = __webpack_require__("Xxa5");
@@ -10716,6 +11119,8 @@ exports.default = foreman;
 var _effects = __webpack_require__("egdi");
 
 var _events = __webpack_require__("x1uS");
+
+var _helpers = __webpack_require__("hKI6");
 
 var _actions = __webpack_require__("vVye");
 
@@ -10737,47 +11142,56 @@ var _marked = [foreman].map(_regenerator2.default.mark); /**
  * @return {void}
  */
 function foreman() {
-  var channel, _ref, event;
+	var channel, _ref, event;
 
-  return _regenerator2.default.wrap(function foreman$(_context) {
-    while (1) {
-      switch (_context.prev = _context.next) {
-        case 0:
-          _context.next = 2;
-          return (0, _effects.call)(_events.createSubmitChannel, '.comment-php form#post');
+	return _regenerator2.default.wrap(function foreman$(_context) {
+		while (1) {
+			switch (_context.prev = _context.next) {
+				case 0:
+					_context.next = 2;
+					return (0, _effects.call)(_events.createSubmitChannel, '.comment-php form#post');
 
-        case 2:
-          channel = _context.sent;
+				case 2:
+					channel = _context.sent;
 
-        case 3:
-          if (false) {
-            _context.next = 14;
-            break;
-          }
+				case 3:
+					if (false) {
+						_context.next = 17;
+						break;
+					}
 
-          _context.next = 6;
-          return (0, _effects.take)(channel);
+					_context.next = 6;
+					return (0, _effects.take)(channel);
 
-        case 6:
-          _ref = _context.sent;
-          event = _ref.event;
-          _context.next = 10;
-          return (0, _effects.put)((0, _actions.submitForm)(event));
+				case 6:
+					_ref = _context.sent;
+					event = _ref.event;
+					_context.next = 10;
+					return (0, _effects.put)((0, _actions.submitForm)(event));
 
-        case 10:
-          _context.next = 12;
-          return (0, _effects.put)((0, _actions.validateAllContainers)(event));
+				case 10:
+					_context.next = 12;
+					return (0, _effects.put)((0, _actions.validateAllContainers)(event));
 
-        case 12:
-          _context.next = 3;
-          break;
+				case 12:
+					if (!carbonFieldsConfig.compactInput) {
+						_context.next = 15;
+						break;
+					}
 
-        case 14:
-        case 'end':
-          return _context.stop();
-      }
-    }
-  }, _marked[0], this);
+					_context.next = 15;
+					return (0, _helpers.compactInput)(event.target);
+
+				case 15:
+					_context.next = 3;
+					break;
+
+				case 17:
+				case 'end':
+					return _context.stop();
+			}
+		}
+	}, _marked[0], this);
 }
 
 /***/ }),
@@ -11287,6 +11701,32 @@ function foreman() {
 __webpack_require__("+tPU");
 __webpack_require__("zQR9");
 module.exports = __webpack_require__("5PlU");
+
+/***/ }),
+
+/***/ "XgCd":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var replace = String.prototype.replace;
+var percentTwenties = /%20/g;
+
+module.exports = {
+    'default': 'RFC3986',
+    formatters: {
+        RFC1738: function (value) {
+            return replace.call(value, percentTwenties, '+');
+        },
+        RFC3986: function (value) {
+            return value;
+        }
+    },
+    RFC1738: 'RFC1738',
+    RFC3986: 'RFC3986'
+};
+
 
 /***/ }),
 
@@ -13698,7 +14138,7 @@ function workerFormSubmit(channelCreator, selector) {
 
 				case 3:
 					if (false) {
-						_context6.next = 14;
+						_context6.next = 17;
 						break;
 					}
 
@@ -13716,10 +14156,19 @@ function workerFormSubmit(channelCreator, selector) {
 					return (0, _effects.put)((0, _actions3.validateAllContainers)(event));
 
 				case 12:
+					if (!carbonFieldsConfig.compactInput) {
+						_context6.next = 15;
+						break;
+					}
+
+					_context6.next = 15;
+					return (0, _helpers2.compactInput)(event.target);
+
+				case 15:
 					_context6.next = 3;
 					break;
 
-				case 14:
+				case 17:
 				case 'end':
 					return _context6.stop();
 			}
@@ -14025,6 +14474,8 @@ var _constants = __webpack_require__("+5vj");
 
 var _events = __webpack_require__("x1uS");
 
+var _helpers = __webpack_require__("hKI6");
+
 var _actions = __webpack_require__("vVye");
 
 var _selectors = __webpack_require__("pL4W");
@@ -14234,7 +14685,7 @@ function workerDestroyContainer(ajaxEvent, ajaxAction) {
  * @return {void}
  */
 function workerFormSubmit() {
-	var pagenow, channel, _ref3, _event, widgetId, containerId, _widget;
+	var pagenow, channel, _ref3, _event, widgetId, containerId, container, $form, fieldNamePrefix, fieldName, _widget;
 
 	return _regenerator2.default.wrap(function workerFormSubmit$(_context3) {
 		while (1) {
@@ -14249,7 +14700,7 @@ function workerFormSubmit() {
 
 				case 4:
 					if (false) {
-						_context3.next = 31;
+						_context3.next = 40;
 						break;
 					}
 
@@ -14280,8 +14731,25 @@ function workerFormSubmit() {
 					return (0, _effects.put)((0, _actions.validateContainer)(containerId, _event));
 
 				case 17:
+					if (!carbonFieldsConfig.compactInput) {
+						_context3.next = 26;
+						break;
+					}
+
+					_context3.next = 20;
+					return (0, _effects.select)(_selectors.getContainerById, containerId);
+
+				case 20:
+					container = _context3.sent;
+					$form = (0, _jquery2.default)(_event.target).closest('form');
+					fieldNamePrefix = 'widget-' + widgetId.replace(/(.*?)\-(\d+)$/, '$1[$2]');
+					fieldName = fieldNamePrefix + '[' + carbonFieldsConfig.compactInputKey + ']';
+					_context3.next = 26;
+					return (0, _helpers.compactInput)($form.get(0), container, fieldName);
+
+				case 26:
 					if (!(pagenow === _constants.PAGE_NOW_CUSTOMIZE)) {
-						_context3.next = 29;
+						_context3.next = 38;
 						break;
 					}
 
@@ -14289,32 +14757,32 @@ function workerFormSubmit() {
 
 					// This little delay allows us to get correct results in the selector for invalid fields
 					// since we don't know when the validation is completed.
-					_context3.next = 21;
+					_context3.next = 30;
 					return (0, _effects.call)(_reduxSaga.delay, 250);
 
-				case 21:
-					_context3.next = 23;
+				case 30:
+					_context3.next = 32;
 					return (0, _effects.select)(_selectors2.hasInvalidFields);
 
-				case 23:
+				case 32:
 					if (_context3.sent) {
-						_context3.next = 29;
+						_context3.next = 38;
 						break;
 					}
 
-					_context3.next = 26;
+					_context3.next = 35;
 					return (0, _effects.call)(wp.customize.Widgets.getWidgetFormControlForWidget, containerId);
 
-				case 26:
+				case 35:
 					_widget = _context3.sent;
-					_context3.next = 29;
+					_context3.next = 38;
 					return (0, _effects.call)([_widget, _widget.updateWidget], { disable_form: true });
 
-				case 29:
+				case 38:
 					_context3.next = 4;
 					break;
 
-				case 31:
+				case 40:
 				case 'end':
 					return _context3.stop();
 			}
@@ -15407,6 +15875,10 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _stringify = __webpack_require__("mvHQ");
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
 var _regenerator = __webpack_require__("Xxa5");
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
@@ -15422,20 +15894,32 @@ exports.cancelTasks = cancelTasks;
 exports.patchTagBoxAPI = patchTagBoxAPI;
 exports.getSelectOptionLevel = getSelectOptionLevel;
 exports.getSelectOptionAncestors = getSelectOptionAncestors;
+exports.compactInput = compactInput;
 
 var _jquery = __webpack_require__("0iPh");
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
+var _qs = __webpack_require__("mw3O");
+
+var _qs2 = _interopRequireDefault(_qs);
+
 var _effects = __webpack_require__("egdi");
 
 var _lodash = __webpack_require__("M4fF");
 
+var _selectors = __webpack_require__("pL4W");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [cancelTasks].map(_regenerator2.default.mark); /**
-                                                              * The external dependencies.
-                                                              */
+var _marked = [cancelTasks, compactInput].map(_regenerator2.default.mark); /**
+                                                                            * The external dependencies.
+                                                                            */
+
+
+/**
+ * The internal dependencies.
+ */
 
 
 /**
@@ -15615,6 +16099,69 @@ function getSelectOptionAncestors(option) {
 	}
 	return ancestors;
 };
+
+function compactInput(form, container, fieldName) {
+	var containers, $containerFieldsets, i, $containerFieldset, $input;
+	return _regenerator2.default.wrap(function compactInput$(_context2) {
+		while (1) {
+			switch (_context2.prev = _context2.next) {
+				case 0:
+					if (!(0, _lodash.isUndefined)(container)) {
+						_context2.next = 6;
+						break;
+					}
+
+					_context2.next = 3;
+					return (0, _effects.select)(_selectors.getVisibleContainers);
+
+				case 3:
+					_context2.t0 = _context2.sent;
+					_context2.next = 7;
+					break;
+
+				case 6:
+					_context2.t0 = [container];
+
+				case 7:
+					containers = _context2.t0;
+
+					fieldName = (0, _lodash.isUndefined)(fieldName) ? carbonFieldsConfig.compactInputKey : fieldName;
+
+					$containerFieldsets = (0, _jquery2.default)();
+
+					for (i = 0; i < containers.length; i++) {
+						$containerFieldset = (0, _jquery2.default)(form).find('fieldset.container-' + containers[i].id + ':first');
+
+						$containerFieldsets = $containerFieldsets.add($containerFieldset);
+					}
+
+					// Append a hidden field containing the compacted input as JSON
+					$input = (0, _jquery2.default)(form).find('input[name="' + fieldName + '"]');
+
+					if ($input.length === 0) {
+						$input = (0, _jquery2.default)('<input type="hidden" name="' + fieldName + '" value="" />');
+					}
+					$input.val((0, _stringify2.default)(_qs2.default.parse($containerFieldsets.serialize())));
+					(0, _jquery2.default)(form).append($input);
+
+					// Remove all name attributes to not clog up the request with duplicate input vars
+					$containerFieldsets.find('input, select, textarea, button').each(function () {
+						(0, _jquery2.default)(this).data('carbonFieldsName', (0, _jquery2.default)(this).attr('name'));
+						(0, _jquery2.default)(this).removeAttr('name');
+					});
+					setTimeout(function () {
+						$containerFieldsets.find('input, select, textarea, button').each(function () {
+							(0, _jquery2.default)(this).attr('name', (0, _jquery2.default)(this).data('carbonFieldsName'));
+						});
+					}, 1);
+
+				case 17:
+				case 'end':
+					return _context2.stop();
+			}
+		}
+	}, _marked[1], this);
+}
 
 /***/ }),
 
@@ -16962,6 +17509,8 @@ var _effects = __webpack_require__("egdi");
 
 var _events = __webpack_require__("x1uS");
 
+var _helpers = __webpack_require__("hKI6");
+
 var _selectors = __webpack_require__("pL4W");
 
 var _actions = __webpack_require__("vVye");
@@ -17053,7 +17602,7 @@ function workerFormSubmit() {
 
 				case 3:
 					if (false) {
-						_context2.next = 14;
+						_context2.next = 17;
 						break;
 					}
 
@@ -17071,10 +17620,19 @@ function workerFormSubmit() {
 					return (0, _effects.put)((0, _actions.validateAllContainers)(event));
 
 				case 12:
+					if (!carbonFieldsConfig.compactInput) {
+						_context2.next = 15;
+						break;
+					}
+
+					_context2.next = 15;
+					return (0, _helpers.compactInput)(event.target);
+
+				case 15:
 					_context2.next = 3;
 					break;
 
-				case 14:
+				case 17:
 				case 'end':
 					return _context2.stop();
 			}
@@ -17441,6 +17999,32 @@ module.exports = function(iterator, fn, value, entries){
     throw e;
   }
 };
+
+/***/ }),
+
+/***/ "mvHQ":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__("qkKv"), __esModule: true };
+
+/***/ }),
+
+/***/ "mw3O":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var stringify = __webpack_require__("CwSZ");
+var parse = __webpack_require__("DDCP");
+var formats = __webpack_require__("XgCd");
+
+module.exports = {
+    formats: formats,
+    parse: parse,
+    stringify: stringify
+};
+
 
 /***/ }),
 
@@ -18018,6 +18602,216 @@ exports.default = EnhancedContainerTabbed;
 
 /***/ }),
 
+/***/ "p8xL":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var has = Object.prototype.hasOwnProperty;
+
+var hexTable = (function () {
+    var array = [];
+    for (var i = 0; i < 256; ++i) {
+        array.push('%' + ((i < 16 ? '0' : '') + i.toString(16)).toUpperCase());
+    }
+
+    return array;
+}());
+
+var compactQueue = function compactQueue(queue) {
+    var obj;
+
+    while (queue.length) {
+        var item = queue.pop();
+        obj = item.obj[item.prop];
+
+        if (Array.isArray(obj)) {
+            var compacted = [];
+
+            for (var j = 0; j < obj.length; ++j) {
+                if (typeof obj[j] !== 'undefined') {
+                    compacted.push(obj[j]);
+                }
+            }
+
+            item.obj[item.prop] = compacted;
+        }
+    }
+
+    return obj;
+};
+
+exports.arrayToObject = function arrayToObject(source, options) {
+    var obj = options && options.plainObjects ? Object.create(null) : {};
+    for (var i = 0; i < source.length; ++i) {
+        if (typeof source[i] !== 'undefined') {
+            obj[i] = source[i];
+        }
+    }
+
+    return obj;
+};
+
+exports.merge = function merge(target, source, options) {
+    if (!source) {
+        return target;
+    }
+
+    if (typeof source !== 'object') {
+        if (Array.isArray(target)) {
+            target.push(source);
+        } else if (typeof target === 'object') {
+            if (options.plainObjects || options.allowPrototypes || !has.call(Object.prototype, source)) {
+                target[source] = true;
+            }
+        } else {
+            return [target, source];
+        }
+
+        return target;
+    }
+
+    if (typeof target !== 'object') {
+        return [target].concat(source);
+    }
+
+    var mergeTarget = target;
+    if (Array.isArray(target) && !Array.isArray(source)) {
+        mergeTarget = exports.arrayToObject(target, options);
+    }
+
+    if (Array.isArray(target) && Array.isArray(source)) {
+        source.forEach(function (item, i) {
+            if (has.call(target, i)) {
+                if (target[i] && typeof target[i] === 'object') {
+                    target[i] = exports.merge(target[i], item, options);
+                } else {
+                    target.push(item);
+                }
+            } else {
+                target[i] = item;
+            }
+        });
+        return target;
+    }
+
+    return Object.keys(source).reduce(function (acc, key) {
+        var value = source[key];
+
+        if (has.call(acc, key)) {
+            acc[key] = exports.merge(acc[key], value, options);
+        } else {
+            acc[key] = value;
+        }
+        return acc;
+    }, mergeTarget);
+};
+
+exports.assign = function assignSingleSource(target, source) {
+    return Object.keys(source).reduce(function (acc, key) {
+        acc[key] = source[key];
+        return acc;
+    }, target);
+};
+
+exports.decode = function (str) {
+    try {
+        return decodeURIComponent(str.replace(/\+/g, ' '));
+    } catch (e) {
+        return str;
+    }
+};
+
+exports.encode = function encode(str) {
+    // This code was originally written by Brian White (mscdex) for the io.js core querystring library.
+    // It has been adapted here for stricter adherence to RFC 3986
+    if (str.length === 0) {
+        return str;
+    }
+
+    var string = typeof str === 'string' ? str : String(str);
+
+    var out = '';
+    for (var i = 0; i < string.length; ++i) {
+        var c = string.charCodeAt(i);
+
+        if (
+            c === 0x2D // -
+            || c === 0x2E // .
+            || c === 0x5F // _
+            || c === 0x7E // ~
+            || (c >= 0x30 && c <= 0x39) // 0-9
+            || (c >= 0x41 && c <= 0x5A) // a-z
+            || (c >= 0x61 && c <= 0x7A) // A-Z
+        ) {
+            out += string.charAt(i);
+            continue;
+        }
+
+        if (c < 0x80) {
+            out = out + hexTable[c];
+            continue;
+        }
+
+        if (c < 0x800) {
+            out = out + (hexTable[0xC0 | (c >> 6)] + hexTable[0x80 | (c & 0x3F)]);
+            continue;
+        }
+
+        if (c < 0xD800 || c >= 0xE000) {
+            out = out + (hexTable[0xE0 | (c >> 12)] + hexTable[0x80 | ((c >> 6) & 0x3F)] + hexTable[0x80 | (c & 0x3F)]);
+            continue;
+        }
+
+        i += 1;
+        c = 0x10000 + (((c & 0x3FF) << 10) | (string.charCodeAt(i) & 0x3FF));
+        out += hexTable[0xF0 | (c >> 18)]
+            + hexTable[0x80 | ((c >> 12) & 0x3F)]
+            + hexTable[0x80 | ((c >> 6) & 0x3F)]
+            + hexTable[0x80 | (c & 0x3F)];
+    }
+
+    return out;
+};
+
+exports.compact = function compact(value) {
+    var queue = [{ obj: { o: value }, prop: 'o' }];
+    var refs = [];
+
+    for (var i = 0; i < queue.length; ++i) {
+        var item = queue[i];
+        var obj = item.obj[item.prop];
+
+        var keys = Object.keys(obj);
+        for (var j = 0; j < keys.length; ++j) {
+            var key = keys[j];
+            var val = obj[key];
+            if (typeof val === 'object' && val !== null && refs.indexOf(val) === -1) {
+                queue.push({ obj: obj, prop: key });
+                refs.push(val);
+            }
+        }
+    }
+
+    return compactQueue(queue);
+};
+
+exports.isRegExp = function isRegExp(obj) {
+    return Object.prototype.toString.call(obj) === '[object RegExp]';
+};
+
+exports.isBuffer = function isBuffer(obj) {
+    if (obj === null || typeof obj === 'undefined') {
+        return false;
+    }
+
+    return !!(obj.constructor && obj.constructor.isBuffer && obj.constructor.isBuffer(obj));
+};
+
+
+/***/ }),
+
 /***/ "pFYg":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18528,6 +19322,17 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 }));
 
 exports.default = (0, _recompose.setStatic)('type', [_constants.TYPE_CHECKBOX])(enhance(CheckboxField));
+
+/***/ }),
+
+/***/ "qkKv":
+/***/ (function(module, exports, __webpack_require__) {
+
+var core  = __webpack_require__("FeBl")
+  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
+module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
+  return $JSON.stringify.apply($JSON, arguments);
+};
 
 /***/ }),
 
@@ -20116,7 +20921,7 @@ function workerFormSubmit() {
 
 				case 3:
 					if (false) {
-						_context8.next = 14;
+						_context8.next = 17;
 						break;
 					}
 
@@ -20134,10 +20939,19 @@ function workerFormSubmit() {
 					return (0, _effects.put)((0, _actions2.validateAllContainers)(event));
 
 				case 12:
+					if (!carbonFieldsConfig.compactInput) {
+						_context8.next = 15;
+						break;
+					}
+
+					_context8.next = 15;
+					return (0, _helpers.compactInput)(event.target);
+
+				case 15:
 					_context8.next = 3;
 					break;
 
-				case 14:
+				case 17:
 				case 'end':
 					return _context8.stop();
 			}
@@ -20245,6 +21059,8 @@ var _lodash = __webpack_require__("M4fF");
 var _effects = __webpack_require__("egdi");
 
 var _actions = __webpack_require__("Wtfs");
+
+var _helpers = __webpack_require__("hKI6");
 
 var _events = __webpack_require__("x1uS");
 
@@ -20380,7 +21196,7 @@ function workerFormSubmit() {
 
 				case 3:
 					if (false) {
-						_context3.next = 14;
+						_context3.next = 17;
 						break;
 					}
 
@@ -20398,10 +21214,19 @@ function workerFormSubmit() {
 					return (0, _effects.put)((0, _actions2.validateAllContainers)(event));
 
 				case 12:
+					if (!carbonFieldsConfig.compactInput) {
+						_context3.next = 15;
+						break;
+					}
+
+					_context3.next = 15;
+					return (0, _helpers.compactInput)(event.target);
+
+				case 15:
 					_context3.next = 3;
 					break;
 
-				case 14:
+				case 17:
 				case 'end':
 					return _context3.stop();
 			}
