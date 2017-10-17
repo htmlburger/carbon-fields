@@ -46,7 +46,7 @@ abstract class Widget extends \WP_Widget {
 
 	/**
 	 * String prefix for widget ids
-	 * 
+	 *
 	 * @var string
 	 */
 	protected $widget_id_prefix = 'carbon_fields_';
@@ -100,6 +100,15 @@ abstract class Widget extends \WP_Widget {
 	 * @return array Settings to save or bool false to cancel saving.
 	 */
 	public function update( $new_instance, $old_instance ) {
+		// Support compacted input
+		$new_instance = Helper::expand_compacted_input( $new_instance );
+		$compact_key = 'widget-' . $this->id_base;
+		if ( ! empty( $new_instance[ $compact_key ][0] ) ) {
+			$new_instance = array_merge( $new_instance, $new_instance[ $compact_key ][0] );
+			unset( $new_instance[ $compact_key ] );
+		}
+
+		// Handle update
 		$this->datastore->import_storage( $old_instance );
 
 		foreach ( $this->custom_fields as $field ) {

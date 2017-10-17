@@ -9,7 +9,8 @@ import { isEmpty, isNull, mapValues, defaultTo, last } from 'lodash';
  * The internal dependencies.
  */
 import { ready } from 'lib/actions';
-import { getSelectOptionLevel, getSelectOptionAncestors } from 'lib/helpers';
+import { getSelectOptionLevel, getSelectOptionAncestors, compactInput } from 'lib/helpers';
+
 import { createSelectboxChannel, createCheckableChannel, createSubmitChannel, createTextChangeChannel } from 'lib/events';
 
 import { getContainersByType } from 'containers/selectors';
@@ -164,6 +165,9 @@ export function* workerFormSubmit() {
 
 		yield put(submitForm(event));
 		yield put(validateAllContainers(event));
+		if (carbonFieldsConfig.compactInput) {
+			yield compactInput(event.target);
+		}
 	}
 }
 

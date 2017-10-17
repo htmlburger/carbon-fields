@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Container;
 
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
@@ -99,7 +100,7 @@ class Post_Meta_Container extends Container {
 		$this->set_post_id( $post_id );
 
 		foreach ( $this->fields as $field ) {
-			$field->set_value_from_input( stripslashes_deep( $_POST ) );
+			$field->set_value_from_input( Helper::input() );
 			$field->save();
 		}
 

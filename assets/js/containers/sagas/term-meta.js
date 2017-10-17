@@ -10,7 +10,7 @@ import { isEmpty, mapValues, last, includes } from 'lodash';
  */
 import { resetStore } from 'store/actions';
 import { normalizePreloadedState } from 'store/helpers';
-import { getSelectOptionLevel, getSelectOptionAncestors } from 'lib/helpers';
+import { getSelectOptionLevel, getSelectOptionAncestors, compactInput } from 'lib/helpers';
 
 import { ready } from 'lib/actions';
 import { createSelectboxChannel, createAjaxChannel, createSubmitChannel, createClickChannel } from 'lib/events';
@@ -111,6 +111,9 @@ export function* workerFormSubmit(channelCreator, selector) {
 
 		yield put(submitForm(event));
 		yield put(validateAllContainers(event));
+		if (carbonFieldsConfig.compactInput) {
+			yield compactInput(event.target);
+		}
 	}
 }
 

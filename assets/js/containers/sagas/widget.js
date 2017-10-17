@@ -16,6 +16,7 @@ import {
 	createAjaxChannel,
 	createClickChannel
 } from 'lib/events';
+import { compactInput } from 'lib/helpers';
 
 import { removeContainer, receiveContainer, validateContainer, submitForm, toggleContainerBox } from 'containers/actions';
 import { getContainerById } from 'containers/selectors';
@@ -152,6 +153,13 @@ export function* workerFormSubmit() {
 
 		yield put(submitForm(event));
 		yield put(validateContainer(containerId, event));
+		if (carbonFieldsConfig.compactInput) {
+			const container = yield select(getContainerById, containerId);
+			const $form = $(event.target).closest('form');
+			const fieldNamePrefix = 'widget-' + widgetId.replace(/(.*?)\-(\d+)$/, '$1[$2]');
+			const fieldName = fieldNamePrefix + '[' + carbonFieldsConfig.compactInputKey + ']';
+			yield compactInput($form.get(0), container, fieldName);
+		}
 
 		// The widgets has slightly different behavior on the 'Customize' page.
 		// So we need to save the widget manually because we remove the default

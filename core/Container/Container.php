@@ -316,7 +316,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 */
 	public function save( $data = null ) {
 		foreach ( $this->fields as $field ) {
-			$field->set_value_from_input( stripslashes_deep( $_POST ) );
+			$field->set_value_from_input( Helper::input() );
 			$field->save();
 		}
 	}
@@ -635,7 +635,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return bool
 	 */
 	protected function verified_nonce_in_request() {
-		$input = stripslashes_deep( $_REQUEST );
+		$input = Helper::input();
 		$nonce_name = $this->get_nonce_name();
 		$nonce_value = isset( $input[ $nonce_name ] ) ? $input[ $nonce_name ] : '';
 		return wp_verify_nonce( $nonce_value, $nonce_name );

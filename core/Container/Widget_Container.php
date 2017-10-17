@@ -2,6 +2,8 @@
 
 namespace Carbon_Fields\Container;
 
+use Carbon_Fields\Helper\Helper;
+
 /**
  * Widget container class
  */
@@ -42,7 +44,7 @@ class Widget_Container extends Container {
 	 */
 	public function is_valid_attach_for_request() {
 		$screen = get_current_screen();
-		$input = stripslashes_deep( $_REQUEST );
+		$input = Helper::input();
 		$request_action = isset( $input['action'] ) ? $input['action'] : '';
 		$is_widget_save = ( $request_action === 'save-widget' );
 

@@ -2,8 +2,8 @@
 
 namespace Carbon_Fields\Container;
 
-use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Helper\Helper;
+use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class User_Meta_Container extends Container {
@@ -66,7 +66,7 @@ class User_Meta_Container extends Container {
 		$this->set_user_id( $user_id );
 
 		foreach ( $this->fields as $field ) {
-			$field->set_value_from_input( stripslashes_deep( $_POST ) );
+			$field->set_value_from_input( Helper::input() );
 			$field->save();
 		}
 

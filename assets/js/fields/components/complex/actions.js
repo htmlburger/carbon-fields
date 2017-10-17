@@ -23,6 +23,7 @@ import { preventDefault } from 'lib/helpers';
  */
 export const ComplexActions = ({
 	addButtonText,
+	showCollapseAll,
 	collapseAllButtonText,
 	children,
 	addGroup,
@@ -36,11 +37,13 @@ export const ComplexActions = ({
 
 			{children}
 		</div>
-		<div className="carbon-button carbon-button-collapse-all">
-			<a href="#" className="button" onClick={toggleAll}>
-				{collapseAllButtonText}
-			</a>
-		</div>
+		{showCollapseAll &&
+			<div className="carbon-button carbon-button-collapse-all">
+				<a href="#" className="button" onClick={toggleAll}>
+					{collapseAllButtonText}
+				</a>
+			</div>
+		}
 	</div>;
 };
 
@@ -51,6 +54,7 @@ export const ComplexActions = ({
  */
 ComplexActions.propTypes = {
 	addButtonText: PropTypes.string,
+	showCollapseAll: PropTypes.bool,
 	collapseAllButtonText: PropTypes.string,
 	onAddClick: PropTypes.func,
 	onToggleAllClick: PropTypes.func,

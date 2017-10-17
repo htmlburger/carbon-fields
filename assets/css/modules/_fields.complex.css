@@ -18,7 +18,8 @@
 .carbon-subcontainer > .carbon-empty-row-visible ~ .groups-wrapper { display: none; }
 
 
-.carbon-user-container .carbon-group-row { background: #FFFFFF; }
+.carbon-user-container .carbon-group-row,
+.carbon-term-container .carbon-group-row { background: #FFFFFF; }
 
 /*  Main Components  */
 

@@ -56,6 +56,7 @@ export function* workerFormSubmit() {
 
 		yield put(submitForm(event));
 		yield put(validateAllContainers(event));
+		// no need to compact as WordPress already compacts this
 	}
 }
 

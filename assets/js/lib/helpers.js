@@ -2,8 +2,14 @@
  * The external dependencies.
  */
 import $ from 'jquery';
-import { take, cancel, all } from 'redux-saga/effects';
+import qs from 'qs';
+import { take, cancel, all, select } from 'redux-saga/effects';
 import { isArray, isUndefined } from 'lodash';
+
+/**
+ * The internal dependencies.
+ */
+import { getVisibleContainers } from 'containers/selectors';
 
 /**
  * Return a default value for the type of which the passed entity is.
@@ -152,3 +158,33 @@ export function getSelectOptionAncestors( option ) {
 	}
 	return ancestors;
 };
+
+export function* compactInput(form, container, fieldName) {
+	const containers = isUndefined( container ) ? yield select(getVisibleContainers) : [container];
+	fieldName = isUndefined( fieldName ) ? carbonFieldsConfig.compactInputKey : fieldName;
+
+	let $containerFieldsets = $();
+	for (let i = 0; i < containers.length; i++) {
+		let $containerFieldset = $(form).find(`fieldset.container-${containers[i].id}:first`);
+		$containerFieldsets = $containerFieldsets.add($containerFieldset);
+	}
+
+	// Append a hidden field containing the compacted input as JSON
+	let $input = $(form).find(`input[name="${fieldName}"]`);
+	if ($input.length === 0) {
+		$input = $(`<input type="hidden" name="${fieldName}" value="" />`);
+	}
+	$input.val(JSON.stringify(qs.parse($containerFieldsets.serialize())));
+	$(form).append($input);
+
+	// Remove all name attributes to not clog up the request with duplicate input vars
+	$containerFieldsets.find('input, select, textarea, button').each(function() {
+		$(this).data('carbonFieldsName', $(this).attr('name'));
+		$(this).removeAttr('name');
+	});
+	setTimeout(() => {
+		$containerFieldsets.find('input, select, textarea, button').each(function() {
+			$(this).attr('name', $(this).data('carbonFieldsName'));
+		});
+	}, 1);
+}

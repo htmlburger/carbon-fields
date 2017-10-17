@@ -7,6 +7,7 @@ import { take, call, put } from 'redux-saga/effects';
  * The internal dependencies.
  */
 import { createSubmitChannel } from 'lib/events';
+import { compactInput } from 'lib/helpers';
 import { validateAllContainers, submitForm } from 'containers/actions';
 
 /**
@@ -22,5 +23,8 @@ export default function* foreman() {
 
 		yield put(submitForm(event));
 		yield put(validateAllContainers(event));
+		if (carbonFieldsConfig.compactInput) {
+			yield compactInput(event.target);
+		}
 	}
 }
