@@ -42,6 +42,7 @@ export const MultiselectField = ({
 }) => {
 	return <Field field={field}>
 		<Select
+			name={field.name + '[]'}
 			multi
 			value={field.value}
 			options={field.options}
@@ -101,7 +102,7 @@ export const enhance = compose(
 			 * Pass some handlers to the component.
 			 */
 			withHandlers({
-				handleChange: ({ field, setFieldValue }) => value => setFieldValue(field.id, value.map(item => item.value)),
+				handleChange: ({ field, setFieldValue }) => value => setFieldValue(field.id, value.map(item => item.value))
 			}),
 		),
 
