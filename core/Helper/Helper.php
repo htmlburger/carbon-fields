@@ -562,4 +562,28 @@ class Helper {
 		}
 		return $input;
 	}
+
+	/**
+	 * Get network option field value from main site.
+	 *
+	 * @param  string $name         Custom field name
+	 * @param  string $container_id
+	 * @return mixed  Option        value
+	 */
+	public static function get_the_network_option( $name, $container_id = '' ) {
+		$site_id = defined( 'SITE_ID_CURRENT_SITE' ) ? SITE_ID_CURRENT_SITE : 1;
+		return static::get_value( $site_id, 'network', $container_id, $name );
+	}
+
+	/**
+	 * Get network option field value from specific site.
+	 *
+	 * @param  string $site_id      Site ID
+	 * @param  string $name         Custom field name
+	 * @param  string $container_id
+	 * @return mixed  Option        value
+	 */
+	public static function get_network_option( $site_id = 0, $name, $container_id = '' ) {
+		return static::get_value( $site_id, 'network', $container_id, $name );
+	}
 }

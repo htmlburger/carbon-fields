@@ -97,3 +97,15 @@ if ( ! function_exists( 'carbon_set_nav_menu_item_meta' ) ) {
 		return Helper::set_nav_menu_item_meta( $id, $name, $value, $container_id );
 	}
 }
+
+if ( ! function_exists( 'carbon_get_the_network_option' ) ) {
+	function carbon_get_the_network_option( $name ) {
+		return Helper::get_the_network_option( $name );
+	}
+}
+
+if ( ! function_exists( 'carbon_get_network_option' ) ) {
+	function carbon_get_network_option( $side_id, $name ) {
+		return Helper::get_network_option( $side_id, $name );
+	}
+}
