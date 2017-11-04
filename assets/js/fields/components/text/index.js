@@ -12,6 +12,7 @@ import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { TYPE_TEXT } from 'fields/constants';
+import MaskedInput from 'react-maskedinput';
 
 /**
  * Render a text input field.
@@ -27,16 +28,20 @@ export const TextField = ({
 	field,
 	handleChange
 }) => {
+	const atts = {
+		type: "text",
+		id: field.id,
+		name,
+		mask: field.mask,
+		value: field.value,
+		disabled: !field.ui.is_visible,
+		className: "regular-text",
+		onChange: handleChange,
+		...field.attributes,
+	};
+
 	return <Field field={field}>
-		<input
-			type="text"
-			id={field.id}
-			name={name}
-			value={field.value}
-			disabled={!field.ui.is_visible}
-			className="regular-text"
-			onChange={handleChange}
-			{...field.attributes} />
+		{ field.mask ? ( <MaskedInput {...atts} /> ) : ( <input {...atts} /> ) }
 	</Field>;
 };
 
