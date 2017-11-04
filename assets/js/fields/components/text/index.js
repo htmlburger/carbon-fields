@@ -28,20 +28,20 @@ export const TextField = ({
 	field,
 	handleChange
 }) => {
-	const atts = {
-		type: "text",
-		id: field.id,
-		name,
-		mask: field.mask,
-		value: field.value,
-		disabled: !field.ui.is_visible,
-		className: "regular-text",
-		onChange: handleChange,
-		...field.attributes,
-	};
+	const InputComponent = field.mask ? MaskedInput : 'input';
 
 	return <Field field={field}>
-		{ field.mask ? ( <MaskedInput {...atts} /> ) : ( <input {...atts} /> ) }
+		<InputComponent 
+			type="text"
+			id={field.id}
+			name={name}
+			mask={field.mask}
+			value={field.value}
+			disabled={!field.ui.is_visible}
+			className="regular-text"
+			onChange={handleChange}
+			{...field.attributes}
+		/>
 	</Field>;
 };
 
@@ -56,6 +56,7 @@ TextField.propTypes = {
 		id: PropTypes.string,
 		value: PropTypes.string,
 		attributes: PropTypes.object,
+		mask: PropTypes.string,
 	}),
 	handleChange: PropTypes.func,
 };
