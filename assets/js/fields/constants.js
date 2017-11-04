@@ -20,6 +20,7 @@ export const TYPE_RICH_TEXT = 'rich_text'
 export const TYPE_SELECT = 'select';
 export const TYPE_SEPARATOR = 'separator';
 export const TYPE_SET = 'set';
+export const TYPE_MULTISELECT = 'multiselect';
 export const TYPE_SIDEBAR = 'sidebar';
 export const TYPE_TEXT = 'text';
 export const TYPE_TEXTAREA = 'textarea';

@@ -77,11 +77,14 @@
     "react-flatpickr": "^3.3.0",
     "react-onclickoutside": "^5.11.1",
     "react-redux": "^5.0.4",
+    "react-select": "^1.0.0-rc.10",
+    "react-select2-wrapper": "^1.0.4-beta5",
     "recompose": "^0.23.1",
     "redux": "^3.6.0",
     "redux-actions": "^2.0.1",
     "redux-saga": "^0.15.3",
     "reselect": "^3.0.0",
+    "select2-component": "^3.1.10",
     "sprintf-js": "^1.1.1"
   }
 }
