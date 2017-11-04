@@ -130,6 +130,8 @@ class Loader {
 				'minNumItemsNotReached' => __( 'Minimum number of items not reached (%s items)', 'carbon-fields' ),
 				'maxNumItemsReached' => __( 'Maximum number of items reached (%s items)', 'carbon-fields' ),
 
+				'wrongMask' => __( 'Please provide a value in correct format (e.g. %s)', 'carbon-fields' ),
+
 				'complexNoRows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),
 				'complexMinNumRowsNotReached' => __( 'Minimum number of rows not reached (%1$d %2$s)', 'carbon-fields' ),
 				'complexMaxNumRowsExceeded' => __( 'Maximum number of rows exceeded (%1$d %2$s)', 'carbon-fields' ),

@@ -4,6 +4,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, withHandlers, setStatic } from 'recompose';
+import MaskedInput from 'react-maskedinput';
+
 
 /**
  * The internal dependencies.
@@ -11,7 +13,7 @@ import { compose, withHandlers, setStatic } from 'recompose';
 import Field from 'fields/components/field';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { TYPE_TEXT } from 'fields/constants';
+import { VALIDATION_MASKED } from 'fields/constants';
 
 /**
  * Render a text input field.
@@ -22,16 +24,17 @@ import { TYPE_TEXT } from 'fields/constants';
  * @param  {Function}      props.handleChange
  * @return {React.Element}
  */
-export const TextField = ({
+export const MaskedTextField = ({
 	name,
 	field,
 	handleChange
 }) => {
 	return <Field field={field}>
-		<input
+		<MaskedInput
 			type="text"
 			id={field.id}
 			name={name}
+			mask={field.mask}
 			value={field.value}
 			disabled={!field.ui.is_visible}
 			className="regular-text"
@@ -46,7 +49,7 @@ export const TextField = ({
  *
  * @type {Object}
  */
-TextField.propTypes = {
+MaskedTextField.propTypes = {
 	name: PropTypes.string,
 	field: PropTypes.shape({
 		id: PropTypes.string,
@@ -63,7 +66,23 @@ TextField.propTypes = {
  */
 export const enhance = compose(
 	withStore(),
-	withSetup(),
+	withSetup({
+		componentDidMount() {
+			const {
+				field,
+				ui,
+				setupField,
+				setupValidation
+			} = this.props;
+
+			setupField(field.id, field.type, ui);
+
+			// Don't validate unless the field setup explicitly required valid format
+			if (field.validateMaskFormat) {
+				setupValidation(field.id, VALIDATION_MASKED);
+			}
+		},
+	}),
 
 	/**
 	 * The handlers passed to the component.
@@ -74,5 +93,5 @@ export const enhance = compose(
 );
 
 export default setStatic('type', [
-	TYPE_TEXT,
-])(enhance(TextField));
+	'masked_text',
+])(enhance(MaskedTextField));
