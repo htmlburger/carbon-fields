@@ -13,7 +13,7 @@ class Masked_Text_Field extends Text_Field {
 	 * @see https://github.com/insin/inputmask-core
 	 * @var string 
 	 */
-	protected $mask = '';
+	protected $mask = [];
 
 	/**
 	 * Whether to force the user to comply with the provided mask
@@ -22,7 +22,22 @@ class Masked_Text_Field extends Text_Field {
 	protected $validate_mask_format = false;
 
 	public function set_mask($mask) {
-		$this->mask = $mask;
+		if (is_string($mask)) {
+			$array_mask = [];
+			foreach (str_split($mask) as $char) {
+				switch ($char) {
+					case '1': $piece = '/\d/';      break;
+					case 'a': $piece = '/[a-z]/';   break;
+					case '*': $piece = '/[\da-z]/'; break;
+					default:  $piece = $char;       break;
+				}
+				$array_mask[] = $piece;
+			}
+			$this->mask = $array_mask;
+		} else {
+			$this->mask = $mask;
+		}
+
 		return $this;
 	}
 

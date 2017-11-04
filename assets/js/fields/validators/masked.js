@@ -32,11 +32,11 @@ export const debounce = true;
 export function handler(field) {
 	const { mask, value } = field;
 	
-	const inputMask = new InputMask({pattern: mask, value});
+	// const inputMask = new InputMask({pattern: mask, value});
 
-	if ( inputMask.value.indexOf(inputMask.placeholderChar) > -1 ) {
-		return carbonFieldsL10n.field.wrongMask.replace('%s', mask);
-	}
+	// if ( inputMask.value.indexOf(inputMask.placeholderChar) > -1 ) {
+	// 	return carbonFieldsL10n.field.wrongMask.replace('%s', mask);
+	// }
 
 	return null;
 }

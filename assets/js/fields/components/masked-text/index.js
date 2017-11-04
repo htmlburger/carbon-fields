@@ -4,7 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, withHandlers, setStatic } from 'recompose';
-import MaskedInput from 'react-maskedinput';
+import MaskedInput from 'react-text-mask';
 
 
 /**
@@ -29,6 +29,8 @@ export const MaskedTextField = ({
 	field,
 	handleChange
 }) => {
+	field.mask = field.mask.map( piece => piece[0] === '/' && piece[piece.length - 1] === '/' ? new RegExp(piece.slice(1, -1)) : piece );
+	console.log( field.mask );
 	return <Field field={field}>
 		<MaskedInput
 			type="text"
@@ -55,6 +57,7 @@ MaskedTextField.propTypes = {
 		id: PropTypes.string,
 		value: PropTypes.string,
 		attributes: PropTypes.object,
+		mask: PropTypes.array,
 	}),
 	handleChange: PropTypes.func,
 };
@@ -66,7 +69,7 @@ MaskedTextField.propTypes = {
  */
 export const enhance = compose(
 	withStore(),
-	withSetup({
+	withSetup(/*{
 		componentDidMount() {
 			const {
 				field,
@@ -82,7 +85,7 @@ export const enhance = compose(
 				setupValidation(field.id, VALIDATION_MASKED);
 			}
 		},
-	}),
+	}*/),
 
 	/**
 	 * The handlers passed to the component.
