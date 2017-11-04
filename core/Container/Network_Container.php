@@ -15,4 +15,14 @@ class Network_Container extends Theme_Options_Container {
 			add_action( 'network_admin_menu', array( $this, '_attach' ) );
 		}
 	}
+
+	public function render() {
+		$input = stripslashes_deep( $_GET );
+		$request_settings_updated = isset( $input['settings-updated'] ) ? $input['settings-updated'] : '';
+		if ( $request_settings_updated === 'true' ) {
+			$this->notifications[] = __( 'Settings saved.', 'carbon-fields' );
+		}
+
+		include \Carbon_Fields\DIR . '/templates/Container/network.php';
+	}
 }
