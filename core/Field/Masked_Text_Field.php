@@ -24,16 +24,36 @@ class Masked_Text_Field extends Text_Field {
 	protected $validate_mask_format = false;
 
 	public function set_mask($mask) {
+		$mask_special_chars = [
+		];
 		if (is_string($mask)) {
-			$array_mask = [];
+			$mask_tokens = [
+				'1' => '/\d/',
+				'a' => '/[a-zA-Z]/',
+				'*' => '/[\da-zA-Z]/',
+			];
+
+			$escape_next = false;
+
 			foreach (str_split($mask) as $char) {
-				switch ($char) {
-					case '1': $piece = '/\d/';      break;
-					case 'a': $piece = '/[a-z]/';   break;
-					case '*': $piece = '/[\da-z]/'; break;
-					default:  $piece = $char;       break;
+				if ($char === '\\' && !$escape_next) {
+					$escape_next = true;
+					continue;
 				}
+
+				if ($escape_next) {
+					// previous character was backslash -- pass in whatever is the current char "as-is"
+					$piece = $char;
+				} elseif (isset($mask_tokens[$char])) {
+
+					$piece = $mask_tokens[$char];
+				} else {
+					$piece = $char;
+				}
+
 				$array_mask[] = $piece;
+
+				$escape_next = false;
 			}
 			$this->mask = $array_mask;
 		} else {
