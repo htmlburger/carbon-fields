@@ -15,6 +15,8 @@ class Masked_Text_Field extends Text_Field {
 	 */
 	protected $mask = [];
 
+	protected $mask_placeholder = '_';
+
 	/**
 	 * Whether to force the user to comply with the provided mask
 	 * @var boolean
@@ -46,10 +48,19 @@ class Masked_Text_Field extends Text_Field {
 		return $this->set_mask($mask);
 	}
 
+	public function set_mask_placeholder($mask_placeholder) {
+		if (strlen($mask_placeholder) !== 1) {
+			throw new \Incorrect_Syntax_Exception('Masked Input placeholder should be a single character. ');
+		}
+		$this->mask_placeholder = $mask_placeholder;
+		return $this;
+	}
+
 	function to_json($load) {
 		return array_merge( parent::to_json( $load ), array(
 			'mask' => $this->mask,
 			'validateMaskFormat' => $this->validate_mask_format,
+			'maskPlaceholder' => $this->mask_placeholder,
 		) );
 	}
 }

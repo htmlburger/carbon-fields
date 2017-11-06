@@ -29,14 +29,20 @@ export const MaskedTextField = ({
 	field,
 	handleChange
 }) => {
-	field.mask = field.mask.map( piece => piece[0] === '/' && piece[piece.length - 1] === '/' ? new RegExp(piece.slice(1, -1)) : piece );
-	console.log( field.mask );
+
+	field.mask = field.mask.map( piece => {
+		return piece[0] === '/' && piece[piece.length - 1] === '/' ?
+			new RegExp(piece.slice(1, -1)) :
+			piece;
+	});
+
 	return <Field field={field}>
 		<MaskedInput
 			type="text"
 			id={field.id}
 			name={name}
 			mask={field.mask}
+			placeholderChar={field.maskPlaceholder}
 			value={field.value}
 			disabled={!field.ui.is_visible}
 			className="regular-text"
@@ -69,7 +75,7 @@ MaskedTextField.propTypes = {
  */
 export const enhance = compose(
 	withStore(),
-	withSetup(/*{
+	withSetup({
 		componentDidMount() {
 			const {
 				field,
@@ -85,7 +91,7 @@ export const enhance = compose(
 				setupValidation(field.id, VALIDATION_MASKED);
 			}
 		},
-	}*/),
+	}),
 
 	/**
 	 * The handlers passed to the component.

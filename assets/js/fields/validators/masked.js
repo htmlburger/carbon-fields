@@ -1,13 +1,15 @@
 /**
  * The external dependencies.
  */
-import InputMask from 'inputmask-core'
+// import InputMask from 'react-text-mask'
 
 
 /**
  * The internal dependencies.
  */
 import { VALIDATION_MASKED } from 'fields/constants';
+
+import { conformToMask } from 'react-text-mask';
 
 /**
  * The type of validator.
@@ -30,13 +32,11 @@ export const debounce = true;
  * @return {String|null}
  */
 export function handler(field) {
-	const { mask, value } = field;
-	
-	// const inputMask = new InputMask({pattern: mask, value});
-
-	// if ( inputMask.value.indexOf(inputMask.placeholderChar) > -1 ) {
-	// 	return carbonFieldsL10n.field.wrongMask.replace('%s', mask);
-	// }
+	const { mask, value, maskPlaceholder } = field;
+	const result = conformToMask(value, mask, { placeholderChar: maskPlaceholder });
+	if ( result.conformedValue.indexOf(maskPlaceholder) > -1 ) {
+		return carbonFieldsL10n.field.wrongMask;
+	}
 
 	return null;
 }
