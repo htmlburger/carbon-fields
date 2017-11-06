@@ -31,7 +31,7 @@ export const MaskedTextField = ({
 }) => {
 
 	field.mask = field.mask.map( piece => {
-		return piece[0] === '/' && piece[piece.length - 1] === '/' ?
+		return piece.length > 1 && piece[0] === '/' && piece[piece.length - 1] === '/' ?
 			new RegExp(piece.slice(1, -1)) :
 			piece;
 	});
