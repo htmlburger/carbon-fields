@@ -46,6 +46,7 @@ export const MultiselectField = ({
 			multi
 			value={field.value}
 			options={field.options}
+			disabled={!field.ui.is_visible}
 			onChange={handleChange}
 		/>
 	</Field>;
