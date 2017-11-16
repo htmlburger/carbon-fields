@@ -5,17 +5,18 @@ import $ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import observeResize from 'observe-resize';
 import {
 	compose,
 	withState,
 	withHandlers,
+	lifecycle,
 } from 'recompose';
 import { isUndefined } from 'lodash';
 
 /**
  * The internal dependencies.
  */
-import withSetup from 'fields/decorators/with-setup';
 import SortableList from 'fields/components/sortable-list';
 import MediaGalleryListItem from 'fields/components/media-gallery/list-item';
 
@@ -98,10 +99,12 @@ export const enhance = compose(
 	withState('node', 'setNode', null),
 
 	withHandlers({
-		handleComponentResize: ({ field, node }) => () => {
+		handleComponentResize: () => (node) => {
 			const nodeWidth = node.offsetWidth;
 
-			if (nodeWidth < 200) {
+			if (nodeWidth === 0) {
+				return;
+			} else if (nodeWidth < 200) {
 				node.dataset.itemsPerRow = 1;
 			} else if (nodeWidth < 300) {
 				node.dataset.itemsPerRow = 2;
@@ -128,19 +131,29 @@ export const enhance = compose(
 	/**
 	 * Attach the setup hooks.
 	 */
-	withSetup({
+	lifecycle({
 		componentDidMount() {
 			const {
 				setNode,
-				handleComponentResize,
+				handleComponentResize
 			} = this.props;
 
-			setNode( ReactDOM.findDOMNode(this) );
-			$(window).on('resize', handleComponentResize)
+			const node = ReactDOM.findDOMNode(this);
+
+			setNode(node);
+
+			observeResize(node, () => {
+				handleComponentResize(node);
+			});
 		},
 
-		componentDidUpdate({ handleComponentResize }) {
-			handleComponentResize();
+		componentDidUpdate() {
+			const {
+				node,
+				handleComponentResize
+			} = this.props;
+
+			handleComponentResize(node);
 		}
 	}),
 );

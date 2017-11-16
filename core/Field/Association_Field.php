@@ -448,7 +448,7 @@ class Association_Field extends Field {
 	 * Modify the types.
 	 *
 	 * @param  array $types New types
-	 * @return Field $this
+	 * @return self  $this
 	 */
 	public function set_types( $types ) {
 		$this->types = $types;
@@ -468,7 +468,7 @@ class Association_Field extends Field {
 	 * Set the minimum allowed number of selected entries.
 	 *
 	 * @param  int   $min
-	 * @return Field $this
+	 * @return self  $this
 	 */
 	public function set_min( $min ) {
 		$this->min = intval( $min );
@@ -488,7 +488,7 @@ class Association_Field extends Field {
 	 * Set the maximum allowed number of selected entries.
 	 *
 	 * @param  int   $max
-	 * @return Field $this
+	 * @return self  $this
 	 */
 	public function set_max( $max ) {
 		$this->max = intval( $max );
@@ -508,7 +508,7 @@ class Association_Field extends Field {
 	 * Set whether entry duplicates are allowed.
 	 *
 	 * @param  boolean $allowed
-	 * @return Field   $this
+	 * @return self    $this
 	 */
 	public function set_duplicates_allowed( $allowed ) {
 		$this->duplicates_allowed = $allowed;
@@ -520,7 +520,7 @@ class Association_Field extends Field {
 	 * Backwards-compatibility alias.
 	 *
 	 * @param  boolean $allow
-	 * @return Field   $this
+	 * @return self    $this
 	 */
 	public function allow_duplicates( $allow = true ) {
 		return $this->set_duplicates_allowed( $allow );

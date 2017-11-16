@@ -18,7 +18,10 @@ class Post_Level_Condition extends Condition {
 	public function is_fulfilled( $environment ) {
 		$post_id = $environment['post_id'];
 		$post_level = count( get_post_ancestors( $post_id ) ) + 1;
-		$value = max( 1, intval( $this->get_value() ) );
+		$value = $this->get_value();
+		if ( is_numeric( $value ) ) {
+			$value = max( 1, intval( $this->get_value() ) );
+		}
 
 		return $this->compare(
 			$post_level,

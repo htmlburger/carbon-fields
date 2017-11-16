@@ -125,13 +125,13 @@ class Decorator {
 		switch ( $container_type ) {
 			case 'post_meta': // fallthrough intended
 			case 'user_meta':
-				return isset( $object->ID ) ? $object->ID : $object->id;
+				return isset( $object->id ) ? $object->id : $object->ID;
 				break;
 			case 'term_meta':
-				return $object->term_id;
+				return isset( $object->id ) ? $object->id : $object->term_id;
 				break;
 			case 'comment_meta':
-				return $object->comment_ID;
+				return isset( $object->id ) ? $object->id : $object->comment_ID;
 				break;
 		}
 		return null;

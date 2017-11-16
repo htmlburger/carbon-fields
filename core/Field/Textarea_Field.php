@@ -22,8 +22,8 @@ class Textarea_Field extends Field {
 	/**
 	 * Change the number of rows of this field.
 	 *
-	 * @param integer $rows Number of rows
-	 * @return Field $this
+	 * @param  integer $rows Number of rows
+	 * @return self    $this
 	 */
 	public function set_rows( $rows = 0 ) {
 		$this->rows = absint( $rows );
@@ -33,7 +33,7 @@ class Textarea_Field extends Field {
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 *
-	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @param  bool  $load Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
 	public function to_json( $load ) {

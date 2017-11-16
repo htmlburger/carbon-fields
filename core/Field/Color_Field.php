@@ -16,8 +16,8 @@ class Color_Field extends Field {
 	/**
 	 * Set color presets
 	 *
-	 * @param array<string> $palette
-	 * @return Field $this
+	 * @param  array<string> $palette
+	 * @return self          $this
 	 */
 	public function set_palette( $palette ) {
 		$this->palette = $palette;

@@ -19,7 +19,7 @@ class Html_Field extends Field {
 	 * Set the field HTML or callback that returns the HTML.
 	 *
 	 * @param  string|callable $callback_or_html HTML or callable that returns the HTML.
-	 * @return Field           $this
+	 * @return self            $this
 	 */
 	public function set_html( $callback_or_html ) {
 		if ( is_callable( $callback_or_html ) ) {

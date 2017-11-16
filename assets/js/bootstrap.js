@@ -1,6 +1,8 @@
 /**
  * The external dependencies.
  */
+import 'core-js/es6/symbol';
+import 'core-js/es6/weak-map';
 import 'jquery-bind-first';
 import _ from 'lodash';
 
