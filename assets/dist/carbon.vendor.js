@@ -99,9 +99,10 @@ module.exports = objectToString;
 /***/ (function(module, exports, __webpack_require__) {
 
 // Thank's IE8 for his funny defineProperty
-module.exports = !__webpack_require__("S82l")(function(){
-  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+module.exports = !__webpack_require__("S82l")(function () {
+  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
 });
+
 
 /***/ }),
 
@@ -110,12 +111,10 @@ module.exports = !__webpack_require__("S82l")(function(){
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -217,12 +216,10 @@ module.exports = getVendorPrefixedEventName;
 
 "use strict";
 /**
- * Copyright 2014-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -357,24 +354,25 @@ module.exports = throttle;
 
 // optional / simple context binding
 var aFunction = __webpack_require__("lOnJ");
-module.exports = function(fn, that, length){
+module.exports = function (fn, that, length) {
   aFunction(fn);
-  if(that === undefined)return fn;
-  switch(length){
-    case 1: return function(a){
+  if (that === undefined) return fn;
+  switch (length) {
+    case 1: return function (a) {
       return fn.call(that, a);
     };
-    case 2: return function(a, b){
+    case 2: return function (a, b) {
       return fn.call(that, a, b);
     };
-    case 3: return function(a, b, c){
+    case 3: return function (a, b, c) {
       return fn.call(that, a, b, c);
     };
   }
-  return function(/* ...args */){
+  return function (/* ...args */) {
     return fn.apply(that, arguments);
   };
 };
+
 
 /***/ }),
 
@@ -383,12 +381,10 @@ module.exports = function(fn, that, length){
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -452,12 +448,10 @@ module.exports = coreJsData;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -476,6 +470,7 @@ var isUnitlessNumber = {
   boxFlexGroup: true,
   boxOrdinalGroup: true,
   columnCount: true,
+  columns: true,
   flex: true,
   flexGrow: true,
   flexPositive: true,
@@ -611,18 +606,25 @@ module.exports = CSSProperty;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__("xGkn");
-var global        = __webpack_require__("7KvD")
-  , hide          = __webpack_require__("hJx8")
-  , Iterators     = __webpack_require__("/bQp")
-  , TO_STRING_TAG = __webpack_require__("dSzd")('toStringTag');
+var global = __webpack_require__("7KvD");
+var hide = __webpack_require__("hJx8");
+var Iterators = __webpack_require__("/bQp");
+var TO_STRING_TAG = __webpack_require__("dSzd")('toStringTag');
 
-for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
-  var NAME       = collections[i]
-    , Collection = global[NAME]
-    , proto      = Collection && Collection.prototype;
-  if(proto && !proto[TO_STRING_TAG])hide(proto, TO_STRING_TAG, NAME);
+var DOMIterables = ('CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,' +
+  'DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,' +
+  'MediaList,MimeTypeArray,NamedNodeMap,NodeList,PaintRequestList,Plugin,PluginArray,SVGLengthList,SVGNumberList,' +
+  'SVGPathSegList,SVGPointList,SVGStringList,SVGTransformList,SourceBufferList,StyleSheetList,TextTrackCueList,' +
+  'TextTrackList,TouchList').split(',');
+
+for (var i = 0; i < DOMIterables.length; i++) {
+  var NAME = DOMIterables[i];
+  var Collection = global[NAME];
+  var proto = Collection && Collection.prototype;
+  if (proto && !proto[TO_STRING_TAG]) hide(proto, TO_STRING_TAG, NAME);
   Iterators[NAME] = Iterators.Array;
 }
+
 
 /***/ }),
 
@@ -631,12 +633,10 @@ for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList'
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -781,6 +781,10 @@ var _react = __webpack_require__("U7vG");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactcss = __webpack_require__("TmTn");
 
 var _reactcss2 = _interopRequireDefault(_reactcss);
@@ -792,8 +796,6 @@ var _map2 = _interopRequireDefault(_map);
 var _color = __webpack_require__("nzRJ");
 
 var _color2 = _interopRequireDefault(_color);
-
-var _reactMaterialDesign = __webpack_require__("DdXV");
 
 var _common = __webpack_require__("SZC+");
 
@@ -812,7 +814,9 @@ var Compact = exports.Compact = function Compact(_ref) {
       onSwatchHover = _ref.onSwatchHover,
       colors = _ref.colors,
       hex = _ref.hex,
-      rgb = _ref.rgb;
+      rgb = _ref.rgb,
+      _ref$className = _ref.className,
+      className = _ref$className === undefined ? '' : _ref$className;
 
   var styles = (0, _reactcss2.default)({
     'default': {
@@ -844,11 +848,11 @@ var Compact = exports.Compact = function Compact(_ref) {
   };
 
   return _react2.default.createElement(
-    _reactMaterialDesign.Raised,
+    _common.Raised,
     { style: styles.Compact },
     _react2.default.createElement(
       'div',
-      { style: styles.compact, className: 'compact-picker' },
+      { style: styles.compact, className: 'compact-picker ' + className },
       _react2.default.createElement(
         'div',
         null,
@@ -868,6 +872,10 @@ var Compact = exports.Compact = function Compact(_ref) {
   );
 };
 
+Compact.propTypes = {
+  colors: _propTypes2.default.arrayOf(_propTypes2.default.string)
+};
+
 Compact.defaultProps = {
   colors: ['#4D4D4D', '#999999', '#FFFFFF', '#F44E3B', '#FE9200', '#FCDC00', '#DBDF00', '#A4DD00', '#68CCCA', '#73D8FF', '#AEA1FF', '#FDA1FF', '#333333', '#808080', '#cccccc', '#D33115', '#E27300', '#FCC400', '#B0BC00', '#68BC00', '#16A5A5', '#009CE0', '#7B64FF', '#FA28FF', '#000000', '#666666', '#B3B3B3', '#9F0500', '#C45100', '#FB9E00', '#808900', '#194D33', '#0C797D', '#0062B1', '#653294', '#AB149E']
 };
@@ -881,12 +889,10 @@ exports.default = (0, _common.ColorWrap)(Compact);
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -1009,12 +1015,10 @@ function baseTimes(n, iteratee) {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -1067,6 +1071,7 @@ module.exports = setTextContent;
 
 module.exports = {};
 
+
 /***/ }),
 
 /***/ "/lfX":
@@ -1075,11 +1080,9 @@ module.exports = {};
 "use strict";
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
  */
@@ -1121,6 +1124,7 @@ module.exports = camelizeStyleName;
 __webpack_require__("zQR9");
 __webpack_require__("+tPU");
 module.exports = __webpack_require__("Kh4W").f('iterator');
+
 
 /***/ }),
 
@@ -1181,59 +1185,60 @@ var isArguments = Object(__WEBPACK_IMPORTED_MODULE_0__baseIsArguments_js__["defa
 /***/ "06OY":
 /***/ (function(module, exports, __webpack_require__) {
 
-var META     = __webpack_require__("3Eo+")('meta')
-  , isObject = __webpack_require__("EqjI")
-  , has      = __webpack_require__("D2L2")
-  , setDesc  = __webpack_require__("evD5").f
-  , id       = 0;
-var isExtensible = Object.isExtensible || function(){
+var META = __webpack_require__("3Eo+")('meta');
+var isObject = __webpack_require__("EqjI");
+var has = __webpack_require__("D2L2");
+var setDesc = __webpack_require__("evD5").f;
+var id = 0;
+var isExtensible = Object.isExtensible || function () {
   return true;
 };
-var FREEZE = !__webpack_require__("S82l")(function(){
+var FREEZE = !__webpack_require__("S82l")(function () {
   return isExtensible(Object.preventExtensions({}));
 });
-var setMeta = function(it){
-  setDesc(it, META, {value: {
+var setMeta = function (it) {
+  setDesc(it, META, { value: {
     i: 'O' + ++id, // object ID
     w: {}          // weak collections IDs
-  }});
+  } });
 };
-var fastKey = function(it, create){
+var fastKey = function (it, create) {
   // return primitive with prefix
-  if(!isObject(it))return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
-  if(!has(it, META)){
+  if (!isObject(it)) return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+  if (!has(it, META)) {
     // can't set metadata to uncaught frozen object
-    if(!isExtensible(it))return 'F';
+    if (!isExtensible(it)) return 'F';
     // not necessary to add metadata
-    if(!create)return 'E';
+    if (!create) return 'E';
     // add missing metadata
     setMeta(it);
   // return object ID
   } return it[META].i;
 };
-var getWeak = function(it, create){
-  if(!has(it, META)){
+var getWeak = function (it, create) {
+  if (!has(it, META)) {
     // can't set metadata to uncaught frozen object
-    if(!isExtensible(it))return true;
+    if (!isExtensible(it)) return true;
     // not necessary to add metadata
-    if(!create)return false;
+    if (!create) return false;
     // add missing metadata
     setMeta(it);
   // return hash weak collections IDs
   } return it[META].w;
 };
 // add metadata on freeze-family methods calling
-var onFreeze = function(it){
-  if(FREEZE && meta.NEED && isExtensible(it) && !has(it, META))setMeta(it);
+var onFreeze = function (it) {
+  if (FREEZE && meta.NEED && isExtensible(it) && !has(it, META)) setMeta(it);
   return it;
 };
 var meta = module.exports = {
-  KEY:      META,
-  NEED:     false,
-  fastKey:  fastKey,
-  getWeak:  getWeak,
+  KEY: META,
+  NEED: false,
+  fastKey: fastKey,
+  getWeak: getWeak,
   onFreeze: onFreeze
 };
+
 
 /***/ }),
 
@@ -1274,12 +1279,10 @@ module.exports = getSymbolsIn;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -1609,12 +1612,10 @@ module.exports = copySymbolsIn;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -1945,12 +1946,10 @@ module.exports = isArguments;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -2010,6 +2009,7 @@ function whenMapStateToPropsIsMissing(mapStateToProps) {
 /***/ (function(module, exports) {
 
 exports.f = Object.getOwnPropertySymbols;
+
 
 /***/ }),
 
@@ -2149,11 +2149,9 @@ function overArg(func, transform) {
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -2265,12 +2263,10 @@ function flush() {
 
 "use strict";
 /**
- * Copyright 2016-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2016-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * Based on the escape-html library, which is used under the MIT License below:
  *
@@ -2565,6 +2561,10 @@ var _react = __webpack_require__("U7vG");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactcss = __webpack_require__("TmTn");
 
 var _reactcss2 = _interopRequireDefault(_reactcss);
@@ -2587,7 +2587,9 @@ var Block = exports.Block = function Block(_ref) {
       hex = _ref.hex,
       colors = _ref.colors,
       width = _ref.width,
-      triangle = _ref.triangle;
+      triangle = _ref.triangle,
+      _ref$className = _ref.className,
+      className = _ref$className === undefined ? '' : _ref$className;
 
   var transparent = hex === 'transparent';
   var handleChange = function handleChange(hexCode, e) {
@@ -2656,7 +2658,7 @@ var Block = exports.Block = function Block(_ref) {
 
   return _react2.default.createElement(
     'div',
-    { style: styles.card, className: 'block-picker' },
+    { style: styles.card, className: 'block-picker ' + className },
     _react2.default.createElement('div', { style: styles.triangle }),
     _react2.default.createElement(
       'div',
@@ -2681,8 +2683,14 @@ var Block = exports.Block = function Block(_ref) {
   );
 };
 
+Block.propTypes = {
+  width: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]),
+  colors: _propTypes2.default.arrayOf(_propTypes2.default.string),
+  triangle: _propTypes2.default.oneOf(['top', 'hide'])
+};
+
 Block.defaultProps = {
-  width: '170px',
+  width: 170,
   colors: ['#D9E3F0', '#F47373', '#697689', '#37D67A', '#2CCCE4', '#555555', '#dce775', '#ff8a65', '#ba68c8'],
   triangle: 'top'
 };
@@ -2814,11 +2822,12 @@ exports.default = AlphaPointer;
 /***/ "3Eo+":
 /***/ (function(module, exports) {
 
-var id = 0
-  , px = Math.random();
-module.exports = function(key){
+var id = 0;
+var px = Math.random();
+module.exports = function (key) {
   return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
 };
+
 
 /***/ }),
 
@@ -2889,12 +2898,10 @@ function baseFindIndex(array, predicate, fromIndex, fromRight) {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -2915,286 +2922,15 @@ module.exports = ReactPropTypeLocationNames;
 
 /***/ }),
 
-/***/ "3lCJ":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("U7vG");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactcss = __webpack_require__("TmTn");
-
-var _reactcss2 = _interopRequireDefault(_reactcss);
-
-var _isString = __webpack_require__("JDN0");
-
-var _isString2 = _interopRequireDefault(_isString);
-
-var _Tab = __webpack_require__("JuCk");
-
-var _Tab2 = _interopRequireDefault(_Tab);
-
-var _Link = __webpack_require__("JnCq");
-
-var _Link2 = _interopRequireDefault(_Link);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-// var Ink = require('./Ink');
-
-// var context = {
-//   primaryColor: '#2196F3',
-//   accentColor: '#E91E63',
-//   theme: 'light'
-// }
-
-var Tabs = function (_React$Component) {
-  _inherits(Tabs, _React$Component);
-
-  function Tabs(props) {
-    _classCallCheck(this, Tabs);
-
-    var _this = _possibleConstructorReturn(this, (Tabs.__proto__ || Object.getPrototypeOf(Tabs)).call(this));
-
-    var selectedTab;
-    if (props.selectedTab < (props.tabs && props.tabs.length)) {
-      selectedTab = props.selectedTab;
-    } else {
-      selectedTab = 0;
-    }
-
-    _this.state = {
-      selectedTab: selectedTab
-    };
-
-    _this.handleClick = _this.handleClick.bind(_this);
-    _this.slide = _this.slide.bind(_this);
-    return _this;
-  }
-
-  _createClass(Tabs, [{
-    key: 'handleClick',
-    value: function handleClick(tab) {
-      if (this.props.onChange) {
-        this.props.onChange(tab);
-      }
-
-      this.setState({
-        selectedTab: tab
-      });
-    }
-  }, {
-    key: 'slide',
-    value: function slide() {
-      if (this.props.tabs.length) {
-        var containerNode = this.refs.tabs.getDOMNode();
-        var containerLeft = containerNode.scrollLeft;
-        var containerRight = containerNode.offsetWidth + containerNode.scrollLeft;
-
-        var selectedNode = this.refs['tab-' + this.state.selectedTab] && this.refs['tab-' + this.state.selectedTab].getDOMNode();
-        var selectedLeft = selectedNode && selectedNode.getBoundingClientRect().left - containerNode.getBoundingClientRect().left + containerNode.scrollLeft;
-        var selectedRight = selectedNode && selectedLeft + selectedNode.offsetWidth;
-
-        // scroll right if tab is off screen
-        if (selectedRight > containerRight) {
-          containerNode.scrollLeft += selectedRight - containerRight;
-        }
-
-        // scroll left if tab is off screen
-        if (selectedLeft < containerLeft) {
-          containerNode.scrollLeft -= containerLeft - selectedLeft;
-        }
-
-        // slide the indicator
-        var indicator = this.refs.indicator;
-        indicator.style.left = selectedLeft + 'px';
-        indicator.style.width = selectedNode.offsetWidth + 'px';
-        indicator.style.height = '2px';
-      }
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this.slide();
-    }
-  }, {
-    key: 'componentWillReceiveProps',
-    value: function componentWillReceiveProps(nextProps) {
-      if (nextProps.selectedTab !== this.state.selectedTab) {
-        this.setState({ selectedTab: nextProps.selectedTab });
-      }
-    }
-  }, {
-    key: 'componentWillUpdate',
-    value: function componentWillUpdate(nextProps, nextState) {
-      if (nextState.selectedTab >= (nextProps.tabs && nextProps.tabs.length)) {
-        nextState.selectedTab = nextProps.tabs.length - 1;
-      }
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      this.slide();
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-
-      var styles = (0, _reactcss2.default)({
-        'default': {
-          tabs: {
-            position: 'relative',
-            background: this.props.background
-          },
-          tabWrap: {
-            display: 'flex'
-          },
-          tab: {
-            justifyContent: 'flex-start',
-            minWidth: '68px',
-            maxWidth: '240px'
-          },
-          Tab: {
-            color: this.props.color,
-            inactive: this.props.inactive,
-            capitalize: this.props.capitalize
-          },
-          indicator: {
-            height: '0',
-            position: 'absolute',
-            bottom: '0',
-            left: '0',
-            background: this.props.color,
-            transition: 'all 200ms linear'
-          }
-        },
-        'scrollable': {
-          tabs: {
-            overflowX: 'scroll'
-          },
-          tabWrap: {
-            paddingLeft: '60px',
-            justifyContent: 'flex-start',
-            width: '400%'
-          },
-          tab: {
-            width: 'auto'
-          }
-        },
-        'align-justify': {
-          tabWrap: {
-            justifyContent: 'space-between'
-          },
-          tab: {
-            width: 100 / this.props.tabs.length + '%'
-          }
-        },
-        'align-left': {
-          tabWrap: {
-            paddingLeft: '60px',
-            justifyContent: 'flex-start'
-          },
-          tab: {
-            width: 'auto'
-          }
-        },
-        'align-center': {
-          tabWrap: {
-            justifyContent: 'center'
-          },
-          tab: {
-            width: 'auto'
-          }
-        }
-      }, {
-        'scrollable': this.props.width / this.props.tabs.length < 72
-      }, this.props, this.state);
-
-      var tabs = [];
-      for (var i = 0; i < this.props.tabs.length; i++) {
-        var tab = this.props.tabs[i];
-
-        var label;
-        var callback;
-        var callbackValue;
-        var newTab;
-        if ((0, _isString2.default)(tab)) {
-          label = tab;
-          callback = null;
-        } else {
-          label = tab.label;
-          callback = tab.onClick;
-          callbackValue = tab.callbackValue;
-          newTab = tab.newTab;
-        }
-
-        tabs.push(_react2.default.createElement(
-          'div',
-          { style: styles.tab, ref: 'tab-' + i, key: i },
-          _react2.default.createElement(
-            _Link2.default,
-            { onClick: callback, callbackValue: callbackValue, newTab: newTab },
-            _react2.default.createElement(
-              _Tab2.default,
-              { style: styles.Tab, tab: i, selected: this.state.selectedTab === i, selectable: tab.selectable, onClick: this.handleClick },
-              label
-            )
-          )
-        ));
-      }
-
-      return _react2.default.createElement(
-        'div',
-        { style: styles.tabs, ref: 'tabs' },
-        _react2.default.createElement(
-          'div',
-          { style: styles.tabWrap, className: 'flexbox-fix' },
-          tabs
-        ),
-        _react2.default.createElement('div', { style: styles.indicator, ref: 'indicator' })
-      );
-    }
-  }]);
-
-  return Tabs;
-}(_react2.default.Component);
-
-Tabs.defaultProps = {
-  selectedTab: 0,
-  background: 'transparent',
-  color: '#fff'
-};
-
-exports.default = Tabs;
-
-/***/ }),
-
 /***/ "3oi4":
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -3362,12 +3098,10 @@ function getValue(object, key) {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -3438,6 +3172,10 @@ var _react = __webpack_require__("U7vG");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactcss = __webpack_require__("TmTn");
 
 var _reactcss2 = _interopRequireDefault(_reactcss);
@@ -3467,7 +3205,9 @@ var Circle = exports.Circle = function Circle(_ref) {
       colors = _ref.colors,
       hex = _ref.hex,
       circleSize = _ref.circleSize,
-      circleSpacing = _ref.circleSpacing;
+      circleSpacing = _ref.circleSpacing,
+      _ref$className = _ref.className,
+      className = _ref$className === undefined ? '' : _ref$className;
 
   var styles = (0, _reactcss2.default)({
     'default': {
@@ -3487,7 +3227,7 @@ var Circle = exports.Circle = function Circle(_ref) {
 
   return _react2.default.createElement(
     'div',
-    { style: styles.card, className: 'circle-picker' },
+    { style: styles.card, className: 'circle-picker ' + className },
     (0, _map2.default)(colors, function (c) {
       return _react2.default.createElement(_CircleSwatch2.default, {
         key: c,
@@ -3502,8 +3242,14 @@ var Circle = exports.Circle = function Circle(_ref) {
   );
 };
 
+Circle.propTypes = {
+  width: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]),
+  circleSize: _propTypes2.default.number,
+  circleSpacing: _propTypes2.default.number
+};
+
 Circle.defaultProps = {
-  width: '252px',
+  width: 252,
   circleSize: 28,
   circleSpacing: 14,
   colors: [material.red['500'], material.pink['500'], material.purple['500'], material.deepPurple['500'], material.indigo['500'], material.blue['500'], material.lightBlue['500'], material.cyan['500'], material.teal['500'], material.green['500'], material.lightGreen['500'], material.lime['500'], material.yellow['500'], material.amber['500'], material.orange['500'], material.deepOrange['500'], material.brown['500'], material.blueGrey['500']]
@@ -3518,12 +3264,10 @@ exports.default = (0, _common.ColorWrap)(Circle);
 
 "use strict";
 /**
- * Copyright 2014-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -3592,12 +3336,10 @@ module.exports = ReactHostComponent;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -4044,12 +3786,10 @@ module.exports = ReactMultiChild;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -4083,7 +3823,8 @@ module.exports = getEventTarget;
 /***/ "4mcu":
 /***/ (function(module, exports) {
 
-module.exports = function(){ /* empty */ };
+module.exports = function () { /* empty */ };
+
 
 /***/ }),
 
@@ -4179,12 +3920,10 @@ module.exports = initCloneByTag;
 
 "use strict";
 /**
- * Copyright 2015-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2015-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -4202,141 +3941,11 @@ module.exports = ReactDOMComponentFlags;
 /***/ (function(module, exports) {
 
 // 7.2.1 RequireObjectCoercible(argument)
-module.exports = function(it){
-  if(it == undefined)throw TypeError("Can't call method on  " + it);
+module.exports = function (it) {
+  if (it == undefined) throw TypeError("Can't call method on  " + it);
   return it;
 };
 
-/***/ }),
-
-/***/ "5DAv":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* jshint node: true, esnext: true */
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("U7vG");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactcss = __webpack_require__("TmTn");
-
-var _reactcss2 = _interopRequireDefault(_reactcss);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Tile = function (_React$Component) {
-  _inherits(Tile, _React$Component);
-
-  function Tile() {
-    _classCallCheck(this, Tile);
-
-    return _possibleConstructorReturn(this, (Tile.__proto__ || Object.getPrototypeOf(Tile)).apply(this, arguments));
-  }
-
-  _createClass(Tile, [{
-    key: 'render',
-    value: function render() {
-
-      var styles = (0, _reactcss2.default)({
-        'default': {
-          tile: {
-            fontSize: '16px',
-            padding: '16px',
-            display: 'flex',
-            justifyContent: 'space-between',
-            color: this.props.color
-          },
-          primary: {
-            display: 'flex',
-            width: '100%'
-          },
-          sidebar: {
-            minWidth: '56px',
-            maxWidth: '56px',
-            flexBasis: '56px' },
-          content: {
-            background: 'none',
-            flex: '1',
-            overflow: 'auto'
-          },
-          secondary: {
-            flexBasis: '42',
-            textAlign: 'center'
-          },
-          sidebarIcon: {
-            marginTop: '-12px',
-            marginLeft: '-12px',
-            marginBottom: '-12px'
-          }
-        },
-        'divider': {
-          tile: {
-            boxShadow: 'inset 0 -1px 0 rgba(0,0,0,.12)'
-          }
-        },
-        'condensed': {
-          tile: {
-            paddingBottom: '0px',
-            paddingTop: '0px',
-            paddingRight: '0px'
-          },
-          sidebar: {
-            minWidth: '28px',
-            maxWidth: '28px',
-            flexBasis: '28px'
-          }
-        }
-      }, {
-        'clickable': this.props.onClick
-      }, this.props);
-
-      var _props$children = _slicedToArray(this.props.children, 2),
-          sidebar = _props$children[0],
-          content = _props$children[1];
-
-      return _react2.default.createElement(
-        'div',
-        { style: styles.tile, className: 'flexbox-fix' },
-        _react2.default.createElement(
-          'div',
-          { style: styles.primary, className: 'flexbox-fix' },
-          _react2.default.createElement(
-            'div',
-            { style: styles.sidebar, key: "sidebar-#{ sidebar }" },
-            sidebar
-          ),
-          _react2.default.createElement(
-            'div',
-            { style: styles.content, key: "content-#{ content }" },
-            content
-          )
-        )
-      );
-    }
-  }]);
-
-  return Tile;
-}(_react2.default.Component);
-
-;
-
-exports.default = Tile;
 
 /***/ }),
 
@@ -4345,12 +3954,10 @@ exports.default = Tile;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -4506,12 +4113,10 @@ module.exports = ReactEventListener;
 
 "use strict";
 /**
- * Copyright 2016-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2016-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -4900,142 +4505,6 @@ module.exports = Set;
 
 /***/ }),
 
-/***/ "5QDM":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* jshint node: true, esnext: true */
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("U7vG");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__("KSGD");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _reactcss = __webpack_require__("TmTn");
-
-var _reactcss2 = _interopRequireDefault(_reactcss);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Raised = function (_React$Component) {
-  _inherits(Raised, _React$Component);
-
-  function Raised() {
-    _classCallCheck(this, Raised);
-
-    return _possibleConstructorReturn(this, (Raised.__proto__ || Object.getPrototypeOf(Raised)).apply(this, arguments));
-  }
-
-  _createClass(Raised, [{
-    key: 'render',
-    value: function render() {
-
-      var styles = (0, _reactcss2.default)({
-        'default': {
-          wrap: {
-            position: 'relative'
-          },
-          content: {
-            position: 'relative'
-          },
-          bg: {
-            absolute: '0px 0px 0px 0px',
-            boxShadow: '0 ${ this.props.zDepth }px ${ this.props.zDepth * 4 }px rgba(0,0,0,.24)',
-            borderRadius: this.props.radius,
-            background: this.props.background
-          }
-        },
-        'zDepth-0': {
-          bg: {
-            boxShadow: 'none'
-          }
-        },
-
-        'zDepth-1': {
-          bg: {
-            boxShadow: '0 2px 10px rgba(0,0,0,.12), 0 2px 5px rgba(0,0,0,.16)'
-          }
-        },
-        'zDepth-2': {
-          bg: {
-            boxShadow: '0 6px 20px rgba(0,0,0,.19), 0 8px 17px rgba(0,0,0,.2)'
-          }
-        },
-        'zDepth-3': {
-          bg: {
-            boxShadow: '0 17px 50px rgba(0,0,0,.19), 0 12px 15px rgba(0,0,0,.24)'
-          }
-        },
-        'zDepth-4': {
-          bg: {
-            boxShadow: '0 25px 55px rgba(0,0,0,.21), 0 16px 28px rgba(0,0,0,.22)'
-          }
-        },
-        'zDepth-5': {
-          bg: {
-            boxShadow: '0 40px 77px rgba(0,0,0,.22), 0 27px 24px rgba(0,0,0,.2)'
-          }
-        },
-        'square': {
-          bg: {
-            borderRadius: '0'
-          }
-        },
-        'circle': {
-          bg: {
-            borderRadius: '50%'
-          }
-        }
-      }, this.props);
-
-      return _react2.default.createElement(
-        'div',
-        { style: styles.wrap },
-        _react2.default.createElement('div', { style: styles.bg }),
-        _react2.default.createElement(
-          'div',
-          { style: styles.content },
-          this.props.children
-        )
-      );
-    }
-  }]);
-
-  return Raised;
-}(_react2.default.Component);
-
-Raised.propTypes = {
-  background: _propTypes2.default.string,
-  zDepth: _propTypes2.default.oneOf(['0', '1', '2', '3', '4', '5', 0, 1, 2, 3, 4, 5]),
-  radius: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number])
-};
-
-Raised.defaultProps = {
-  background: '#fff',
-  zDepth: '1',
-  radius: '2px'
-};
-
-exports.default = Raised;
-
-/***/ }),
-
 /***/ "5QVw":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5048,12 +4517,10 @@ module.exports = { "default": __webpack_require__("BwfY"), __esModule: true };
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -5092,12 +4559,10 @@ module.exports = onlyChild;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -5172,12 +4637,10 @@ module.exports = ARIADOMPropertyConfig;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -5310,11 +4773,9 @@ module.exports = instantiateReactComponent;
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
  */
@@ -5512,30 +4973,15 @@ function unflattenActionCreators(flatActionCreators) {
 
 /***/ }),
 
-/***/ "6vZM":
-/***/ (function(module, exports, __webpack_require__) {
-
-var getKeys   = __webpack_require__("lktj")
-  , toIObject = __webpack_require__("TcQ7");
-module.exports = function(object, el){
-  var O      = toIObject(object)
-    , keys   = getKeys(O)
-    , length = keys.length
-    , index  = 0
-    , key;
-  while(length > index)if(O[key = keys[index++]] === el)return key;
-};
-
-/***/ }),
-
 /***/ "77Pl":
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__("EqjI");
-module.exports = function(it){
-  if(!isObject(it))throw TypeError(it + ' is not an object!');
+module.exports = function (it) {
+  if (!isObject(it)) throw TypeError(it + ' is not an object!');
   return it;
 };
+
 
 /***/ }),
 
@@ -5679,7 +5125,7 @@ var Saturation = exports.Saturation = function (_ref) {
     var _this = _possibleConstructorReturn(this, (Saturation.__proto__ || Object.getPrototypeOf(Saturation)).call(this, props));
 
     _this.handleChange = function (e, skip) {
-      _this.props.onChange && _this.throttle(_this.props.onChange, saturation.calculateChange(e, skip, _this.props, _this.refs.container), e);
+      _this.props.onChange && _this.throttle(_this.props.onChange, saturation.calculateChange(e, skip, _this.props, _this.container), e);
     };
 
     _this.handleMouseDown = function (e) {
@@ -5712,6 +5158,8 @@ var Saturation = exports.Saturation = function (_ref) {
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var _ref2 = this.props.style || {},
           color = _ref2.color,
           white = _ref2.white,
@@ -5728,12 +5176,12 @@ var Saturation = exports.Saturation = function (_ref) {
           },
           white: {
             absolute: '0px 0px 0px 0px',
-            background: 'linear-gradient(to right, #fff, rgba(255,255,255,0))'
+            borderRadius: this.props.radius
           },
           black: {
             absolute: '0px 0px 0px 0px',
-            background: 'linear-gradient(to top, #000, rgba(0,0,0,0))',
-            boxShadow: this.props.shadow
+            boxShadow: this.props.shadow,
+            borderRadius: this.props.radius
           },
           pointer: {
             position: 'absolute',
@@ -5763,15 +5211,22 @@ var Saturation = exports.Saturation = function (_ref) {
         'div',
         {
           style: styles.color,
-          ref: 'container',
+          ref: function ref(container) {
+            return _this2.container = container;
+          },
           onMouseDown: this.handleMouseDown,
           onTouchMove: this.handleChange,
           onTouchStart: this.handleChange
         },
         _react2.default.createElement(
+          'style',
+          null,
+          '\n          .saturation-white {\n            background: -webkit-linear-gradient(to right, #fff, rgba(255,255,255,0));\n            background: linear-gradient(to right, #fff, rgba(255,255,255,0));\n          }\n          .saturation-black {\n            background: -webkit-linear-gradient(to top, #000, rgba(0,0,0,0));\n            background: linear-gradient(to top, #000, rgba(0,0,0,0));\n          }\n        '
+        ),
+        _react2.default.createElement(
           'div',
-          { style: styles.white },
-          _react2.default.createElement('div', { style: styles.black }),
+          { style: styles.white, className: 'saturation-white' },
+          _react2.default.createElement('div', { style: styles.black, className: 'saturation-black' }),
           _react2.default.createElement(
             'div',
             { style: styles.pointer },
@@ -5794,8 +5249,11 @@ exports.default = Saturation;
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 var global = module.exports = typeof window != 'undefined' && window.Math == Math
-  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
-if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+  ? window : typeof self != 'undefined' && self.Math == Math ? self
+  // eslint-disable-next-line no-new-func
+  : Function('return this')();
+if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
+
 
 /***/ }),
 
@@ -5804,9 +5262,10 @@ if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
 
 // 7.2.2 IsArray(argument)
 var cof = __webpack_require__("R9M2");
-module.exports = Array.isArray || function isArray(arg){
+module.exports = Array.isArray || function isArray(arg) {
   return cof(arg) == 'Array';
 };
+
 
 /***/ }),
 
@@ -5944,6 +5403,10 @@ var _react = __webpack_require__("U7vG");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactcss = __webpack_require__("TmTn");
 
 var _reactcss2 = _interopRequireDefault(_reactcss);
@@ -5965,7 +5428,9 @@ var Github = exports.Github = function Github(_ref) {
       colors = _ref.colors,
       onChange = _ref.onChange,
       onSwatchHover = _ref.onSwatchHover,
-      triangle = _ref.triangle;
+      triangle = _ref.triangle,
+      _ref$className = _ref.className,
+      className = _ref$className === undefined ? '' : _ref$className;
 
   var styles = (0, _reactcss2.default)({
     'default': {
@@ -6044,17 +5509,28 @@ var Github = exports.Github = function Github(_ref) {
 
   return _react2.default.createElement(
     'div',
-    { style: styles.card, className: 'github-picker' },
+    { style: styles.card, className: 'github-picker ' + className },
     _react2.default.createElement('div', { style: styles.triangleShadow }),
     _react2.default.createElement('div', { style: styles.triangle }),
     (0, _map2.default)(colors, function (c) {
-      return _react2.default.createElement(_GithubSwatch2.default, { color: c, key: c, onClick: handleChange, onSwatchHover: onSwatchHover });
+      return _react2.default.createElement(_GithubSwatch2.default, {
+        color: c,
+        key: c,
+        onClick: handleChange,
+        onSwatchHover: onSwatchHover
+      });
     })
   );
 };
 
+Github.propTypes = {
+  width: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]),
+  colors: _propTypes2.default.arrayOf(_propTypes2.default.string),
+  triangle: _propTypes2.default.oneOf(['hide', 'top-left', 'top-right'])
+};
+
 Github.defaultProps = {
-  width: '200px',
+  width: 200,
   colors: ['#B80000', '#DB3E00', '#FCCB00', '#008B02', '#006B76', '#1273DE', '#004DCF', '#5300EB', '#EB9694', '#FAD0C3', '#FEF3BD', '#C1E1C5', '#BEDADC', '#C4DEF6', '#BED3F3', '#D4C4FB'],
   triangle: 'top-left'
 };
@@ -6067,6 +5543,7 @@ exports.default = (0, _common.ColorWrap)(Github);
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__("hJx8");
+
 
 /***/ }),
 
@@ -6093,12 +5570,10 @@ var WeakMap = Object(__WEBPACK_IMPORTED_MODULE_0__getNative_js__["default"])(__W
 
 "use strict";
 /**
- * Copyright 2014-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -6146,12 +5621,10 @@ module.exports = nativeKeysIn;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -6405,13 +5878,13 @@ function proc(iterator) {
 
   var log = logger || __WEBPACK_IMPORTED_MODULE_0__utils__["log"];
   var stdChannel = Object(__WEBPACK_IMPORTED_MODULE_3__channel__["stdChannel"])(subscribe);
-  var taskContext = Object.create(parentContext
+  var taskContext = Object.create(parentContext);
   /**
     Tracks the current effect cancellation
     Each time the generator progresses. calling runEffect will set a new value
     on it. It allows propagating cancellation to child effects
   **/
-  );next.cancel = __WEBPACK_IMPORTED_MODULE_0__utils__["noop"];
+  next.cancel = __WEBPACK_IMPORTED_MODULE_0__utils__["noop"];
 
   /**
     Creates a new task descriptor for this generator, We'll also create a main task
@@ -6419,12 +5892,12 @@ function proc(iterator) {
   **/
   var task = newTask(parentEffectId, name, iterator, cont);
   var mainTask = { name: name, cancel: cancelMain, isRunning: true };
-  var taskQueue = forkQueue(name, mainTask, end
+  var taskQueue = forkQueue(name, mainTask, end);
 
   /**
     cancellation of the main task. We'll simply resume the Generator with a Cancel
   **/
-  );function cancelMain() {
+  function cancelMain() {
     if (mainTask.isRunning && !mainTask.isCancelled) {
       mainTask.isCancelled = true;
       next(TASK_CANCEL);
@@ -6445,11 +5918,11 @@ function proc(iterator) {
     **/
     if (iterator._isRunning && !iterator._isCancelled) {
       iterator._isCancelled = true;
-      taskQueue.cancelAll
+      taskQueue.cancelAll();
       /**
         Ending with a Never result will propagate the Cancellation to all joiners
       **/
-      ();end(TASK_CANCEL);
+      end(TASK_CANCEL);
     }
   }
   /**
@@ -6462,10 +5935,10 @@ function proc(iterator) {
   iterator._isRunning = true;
 
   // kicks up the generator
-  next
+  next();
 
   // then return the task descriptor to the caller
-  ();return task;
+  return task;
 
   /**
     This is the generator driver
@@ -6493,12 +5966,12 @@ function proc(iterator) {
         /**
           Cancels the current effect; this will propagate the cancellation down to any called tasks
         **/
-        next.cancel
+        next.cancel();
         /**
           If this Generator has a `return` method then invokes it
           This will jump to the finally block
         **/
-        ();result = __WEBPACK_IMPORTED_MODULE_0__utils__["is"].func(iterator.return) ? iterator.return(TASK_CANCEL) : { done: true, value: TASK_CANCEL };
+        result = __WEBPACK_IMPORTED_MODULE_0__utils__["is"].func(iterator.return) ? iterator.return(TASK_CANCEL) : { done: true, value: TASK_CANCEL };
       } else if (arg === CHANNEL_END) {
         // We get CHANNEL_END by taking from a channel that ended using `take` (and not `takem` used to trap End of channels)
         result = __WEBPACK_IMPORTED_MODULE_0__utils__["is"].func(iterator.return) ? iterator.return() : { done: true };
@@ -6559,14 +6032,14 @@ function proc(iterator) {
     var cb = arguments[3];
 
     var effectId = Object(__WEBPACK_IMPORTED_MODULE_0__utils__["uid"])();
-    sagaMonitor && sagaMonitor.effectTriggered({ effectId: effectId, parentEffectId: parentEffectId, label: label, effect: effect }
+    sagaMonitor && sagaMonitor.effectTriggered({ effectId: effectId, parentEffectId: parentEffectId, label: label, effect: effect });
 
     /**
       completion callback and cancel callback are mutually exclusive
       We can't cancel an already completed effect
       And We can't complete an already cancelled effectId
     **/
-    );var effectSettled = void 0;
+    var effectSettled = void 0;
 
     // Completion callback passed to the appropriate effect runner
     function currCb(res, isErr) {
@@ -6623,10 +6096,10 @@ function proc(iterator) {
     // prettier-ignore
     return (
       // Non declarative effect
-      __WEBPACK_IMPORTED_MODULE_0__utils__["is"].promise(effect) ? resolvePromise(effect, currCb) : __WEBPACK_IMPORTED_MODULE_0__utils__["is"].helper(effect) ? runForkEffect(wrapHelper(effect), effectId, currCb) : __WEBPACK_IMPORTED_MODULE_0__utils__["is"].iterator(effect) ? resolveIterator(effect, effectId, name, currCb
+      __WEBPACK_IMPORTED_MODULE_0__utils__["is"].promise(effect) ? resolvePromise(effect, currCb) : __WEBPACK_IMPORTED_MODULE_0__utils__["is"].helper(effect) ? runForkEffect(wrapHelper(effect), effectId, currCb) : __WEBPACK_IMPORTED_MODULE_0__utils__["is"].iterator(effect) ? resolveIterator(effect, effectId, name, currCb)
 
       // declarative effects
-      ) : __WEBPACK_IMPORTED_MODULE_0__utils__["is"].array(effect) ? runParallelEffect(effect, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].take(effect)) ? runTakeEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].put(effect)) ? runPutEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].all(effect)) ? runAllEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].race(effect)) ? runRaceEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].call(effect)) ? runCallEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].cps(effect)) ? runCPSEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].fork(effect)) ? runForkEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].join(effect)) ? runJoinEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].cancel(effect)) ? runCancelEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].select(effect)) ? runSelectEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].actionChannel(effect)) ? runChannelEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].flush(effect)) ? runFlushEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].cancelled(effect)) ? runCancelledEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].getContext(effect)) ? runGetContextEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].setContext(effect)) ? runSetContextEffect(data, currCb) : /* anything else returned as is */currCb(effect)
+      : __WEBPACK_IMPORTED_MODULE_0__utils__["is"].array(effect) ? runParallelEffect(effect, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].take(effect)) ? runTakeEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].put(effect)) ? runPutEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].all(effect)) ? runAllEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].race(effect)) ? runRaceEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].call(effect)) ? runCallEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].cps(effect)) ? runCPSEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].fork(effect)) ? runForkEffect(data, effectId, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].join(effect)) ? runJoinEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].cancel(effect)) ? runCancelEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].select(effect)) ? runSelectEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].actionChannel(effect)) ? runChannelEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].flush(effect)) ? runFlushEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].cancelled(effect)) ? runCancelledEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].getContext(effect)) ? runGetContextEffect(data, currCb) : (data = __WEBPACK_IMPORTED_MODULE_2__io__["asEffect"].setContext(effect)) ? runSetContextEffect(data, currCb) : /* anything else returned as is */currCb(effect)
     );
   }
 
@@ -6636,11 +6109,10 @@ function proc(iterator) {
       cb.cancel = cancelPromise;
     } else if (__WEBPACK_IMPORTED_MODULE_0__utils__["is"].func(promise.abort)) {
       cb.cancel = function () {
-        return promise.abort
-        // TODO: add support for the fetch API, whenever they get around to
-        // adding cancel support
-        ();
+        return promise.abort();
       };
+      // TODO: add support for the fetch API, whenever they get around to
+      // adding cancel support
     }
     promise.then(cb, function (error) {
       return cb(error, true);
@@ -6693,9 +6165,8 @@ function proc(iterator) {
       } else {
         return cb(result);
       }
-    }
+    });
     // Put effects are non cancellables
-    );
   }
 
   function runCallEffect(_ref4, effectId, cb) {
@@ -6786,9 +6257,8 @@ function proc(iterator) {
     if (taskToCancel.isRunning()) {
       taskToCancel.cancel();
     }
-    cb
+    cb();
     // cancel effects are non cancellables
-    ();
   }
 
   function runAllEffect(effects, effectId, cb) {
@@ -6963,18 +6433,19 @@ function proc(iterator) {
 
 "use strict";
 
-var create         = __webpack_require__("Yobk")
-  , descriptor     = __webpack_require__("X8DO")
-  , setToStringTag = __webpack_require__("e6n0")
-  , IteratorPrototype = {};
+var create = __webpack_require__("Yobk");
+var descriptor = __webpack_require__("X8DO");
+var setToStringTag = __webpack_require__("e6n0");
+var IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-__webpack_require__("hJx8")(IteratorPrototype, __webpack_require__("dSzd")('iterator'), function(){ return this; });
+__webpack_require__("hJx8")(IteratorPrototype, __webpack_require__("dSzd")('iterator'), function () { return this; });
 
-module.exports = function(Constructor, NAME, next){
-  Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
+module.exports = function (Constructor, NAME, next) {
+  Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
   setToStringTag(Constructor, NAME + ' Iterator');
 };
+
 
 /***/ }),
 
@@ -7005,12 +6476,10 @@ module.exports = hashClear;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -7126,11 +6595,9 @@ module.exports = PooledClass;
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
  */
@@ -7237,12 +6704,10 @@ module.exports = isPlainObject;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -7303,12 +6768,10 @@ module.exports = findDOMNode;
 
 "use strict";
 /**
- * Copyright 2014-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -7588,12 +7051,10 @@ var nativeKeys = Object(__WEBPACK_IMPORTED_MODULE_0__overArg_js__["default"])(Ob
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -7616,7 +7077,7 @@ function attachTracker(inst, tracker) {
 }
 
 function detachTracker(inst) {
-  delete inst._wrapperState.valueTracker;
+  inst._wrapperState.valueTracker = null;
 }
 
 function getValueFromNode(node) {
@@ -7745,11 +7206,9 @@ module.exports = mapCacheDelete;
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
  */
@@ -7781,12 +7240,10 @@ module.exports = hyphenate;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -8187,18 +7644,16 @@ module.exports = toSource;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
 
 
-module.exports = '15.6.1';
+module.exports = '15.6.2';
 
 /***/ }),
 
@@ -8365,6 +7820,10 @@ var _react = __webpack_require__("U7vG");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactcss = __webpack_require__("TmTn");
 
 var _reactcss2 = _interopRequireDefault(_reactcss);
@@ -8392,7 +7851,9 @@ var Chrome = exports.Chrome = function Chrome(_ref) {
       hsl = _ref.hsl,
       hsv = _ref.hsv,
       hex = _ref.hex,
-      renderers = _ref.renderers;
+      renderers = _ref.renderers,
+      _ref$className = _ref.className,
+      className = _ref$className === undefined ? '' : _ref$className;
 
   var styles = (0, _reactcss2.default)({
     'default': {
@@ -8477,7 +7938,7 @@ var Chrome = exports.Chrome = function Chrome(_ref) {
 
   return _react2.default.createElement(
     'div',
-    { style: styles.picker, className: 'chrome-picker' },
+    { style: styles.picker, className: 'chrome-picker ' + className },
     _react2.default.createElement(
       'div',
       { style: styles.saturation },
@@ -8543,6 +8004,14 @@ var Chrome = exports.Chrome = function Chrome(_ref) {
   );
 };
 
+Chrome.propTypes = {
+  disableAlpha: _propTypes2.default.bool
+};
+
+Chrome.defaultProps = {
+  disableAlpha: false
+};
+
 exports.default = (0, _common.ColorWrap)(Chrome);
 
 /***/ }),
@@ -8552,12 +8021,10 @@ exports.default = (0, _common.ColorWrap)(Chrome);
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -8826,7 +8293,7 @@ var ReactCompositeComponent = {
   },
 
   _constructComponent: function (doConstruct, publicProps, publicContext, updateQueue) {
-    if (true) {
+    if ("" !== 'production' && !doConstruct) {
       ReactCurrentOwner.current = this;
       try {
         return this._constructComponentWithoutOwner(doConstruct, publicProps, publicContext, updateQueue);
@@ -9536,6 +9003,7 @@ __webpack_require__("OYls");
 __webpack_require__("QWe/");
 module.exports = __webpack_require__("FeBl").Symbol;
 
+
 /***/ }),
 
 /***/ "ByiR":
@@ -9613,12 +9081,10 @@ module.exports = stubArray;
 
 "use strict";
 /**
- * Copyright 2015-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2015-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -9742,12 +9208,10 @@ module.exports = mapCacheClear;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -9857,11 +9321,9 @@ module.exports = castFunction;
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
  */
@@ -9891,9 +9353,10 @@ module.exports = camelize;
 /***/ (function(module, exports) {
 
 var hasOwnProperty = {}.hasOwnProperty;
-module.exports = function(it, key){
+module.exports = function (it, key) {
   return hasOwnProperty.call(it, key);
 };
+
 
 /***/ }),
 
@@ -9932,12 +9395,10 @@ function warning(message) {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -10517,12 +9978,10 @@ exports.default = ChromePointerCircle;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -10580,37 +10039,6 @@ module.exports = nodeUtil;
 
 /***/ }),
 
-/***/ "DdXV":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, '__esModule', {
-  value: true,
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-var _libComponentsRaised = __webpack_require__("5QDM");
-
-var _libComponentsRaised2 = _interopRequireDefault(_libComponentsRaised);
-
-var _libComponentsTile = __webpack_require__("5DAv");
-
-var _libComponentsTile2 = _interopRequireDefault(_libComponentsTile);
-
-var _libComponentsTabs = __webpack_require__("3lCJ");
-
-var _libComponentsTabs2 = _interopRequireDefault(_libComponentsTabs);
-
-exports.Raised = _libComponentsRaised2['default'];
-exports.Tile = _libComponentsTile2['default'];
-exports.Tabs = _libComponentsTabs2['default'];
-
-
-/***/ }),
-
 /***/ "Dg8Q":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10663,10 +10091,7 @@ var DateTimePicker = function (_Component) {
     value: function componentWillReceiveProps(props) {
       var options = props.options;
 
-
-      if (props.hasOwnProperty('value')) {
-        this.flatpickr.setDate(props.value, false);
-      }
+      var prevOptions = this.props.options;
 
       // Add prop hooks to options
       var _iteratorNormalCompletion = true;
@@ -10677,8 +10102,12 @@ var DateTimePicker = function (_Component) {
         for (var _iterator = hooks[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
           var hook = _step.value;
 
-          if (props[hook]) {
+          if (props.hasOwnProperty(hook)) {
             options[hook] = props[hook];
+          }
+          // Add prev ones too so we can compare against them later
+          if (this.props.hasOwnProperty(hook)) {
+            prevOptions[hook] = this.props[hook];
           }
         }
       } catch (err) {
@@ -10696,18 +10125,24 @@ var DateTimePicker = function (_Component) {
         }
       }
 
-      var optionsKeys = Object.getOwnPropertyNames(props.options);
+      var optionsKeys = Object.getOwnPropertyNames(options);
 
       for (var index = optionsKeys.length - 1; index >= 0; index--) {
         var key = optionsKeys[index];
-        var value = props.options[key];
+        var value = options[key];
 
-        // Hook handlers must be set as an array
-        if (hooks.indexOf(key) !== -1 && !Array.isArray(value)) {
-          value = [value];
+        if (value !== prevOptions[key]) {
+          // Hook handlers must be set as an array
+          if (hooks.indexOf(key) !== -1 && !Array.isArray(value)) {
+            value = [value];
+          }
+
+          this.flatpickr.set(key, value);
         }
+      }
 
-        this.flatpickr.set(key, value);
+      if (props.hasOwnProperty('value') && props.value !== this.props.value) {
+        this.flatpickr.setDate(props.value, false);
       }
     }
   }, {
@@ -11260,11 +10695,9 @@ module.exports = stackGet;
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
  */
@@ -11521,9 +10954,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /***/ "EGZi":
 /***/ (function(module, exports) {
 
-module.exports = function(done, value){
-  return {value: value, done: !!done};
+module.exports = function (done, value) {
+  return { value: value, done: !!done };
 };
+
 
 /***/ }),
 
@@ -11532,12 +10966,10 @@ module.exports = function(done, value){
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -11685,12 +11117,10 @@ module.exports = equalByTag;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -12074,9 +11504,10 @@ function includes(collection, value, fromIndex, guard) {
 /***/ "EqjI":
 /***/ (function(module, exports) {
 
-module.exports = function(it){
+module.exports = function (it) {
   return typeof it === 'object' ? it !== null : typeof it === 'function';
 };
+
 
 /***/ }),
 
@@ -12460,7 +11891,8 @@ var GithubSwatch = exports.GithubSwatch = function GithubSwatch(_ref) {
     'default': {
       swatch: {
         width: '25px',
-        height: '25px'
+        height: '25px',
+        fontSize: '0'
       }
     },
     'hover': {
@@ -12471,7 +11903,12 @@ var GithubSwatch = exports.GithubSwatch = function GithubSwatch(_ref) {
   return _react2.default.createElement(
     'div',
     { style: styles.swatch },
-    _react2.default.createElement(_common.Swatch, { color: color, onClick: onClick, onHover: onSwatchHover, focusStyle: hoverSwatch })
+    _react2.default.createElement(_common.Swatch, {
+      color: color,
+      onClick: onClick,
+      onHover: onSwatchHover,
+      focusStyle: hoverSwatch
+    })
   );
 };
 
@@ -12511,12 +11948,10 @@ module.exports = baseGetAllKeys;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -12649,6 +12084,10 @@ var _react = __webpack_require__("U7vG");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactcss = __webpack_require__("TmTn");
 
 var _reactcss2 = _interopRequireDefault(_reactcss);
@@ -12671,7 +12110,9 @@ var Twitter = exports.Twitter = function Twitter(_ref) {
       hex = _ref.hex,
       colors = _ref.colors,
       width = _ref.width,
-      triangle = _ref.triangle;
+      triangle = _ref.triangle,
+      _ref$className = _ref.className,
+      className = _ref$className === undefined ? '' : _ref$className;
 
   var styles = (0, _reactcss2.default)({
     'default': {
@@ -12725,6 +12166,7 @@ var Twitter = exports.Twitter = function Twitter(_ref) {
         outline: 'none',
         height: '28px',
         boxShadow: 'inset 0 0 0 1px #F0F0F0',
+        boxSizing: 'content-box',
         borderRadius: '0 4px 4px 0',
         float: 'left',
         paddingLeft: '8px'
@@ -12783,7 +12225,7 @@ var Twitter = exports.Twitter = function Twitter(_ref) {
 
   return _react2.default.createElement(
     'div',
-    { style: styles.card, className: 'twitter-picker' },
+    { style: styles.card, className: 'twitter-picker ' + className },
     _react2.default.createElement('div', { style: styles.triangleShadow }),
     _react2.default.createElement('div', { style: styles.triangle }),
     _react2.default.createElement(
@@ -12817,8 +12259,14 @@ var Twitter = exports.Twitter = function Twitter(_ref) {
   );
 };
 
+Twitter.propTypes = {
+  width: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]),
+  triangle: _propTypes2.default.oneOf(['hide', 'top-left', 'top-right']),
+  colors: _propTypes2.default.arrayOf(_propTypes2.default.string)
+};
+
 Twitter.defaultProps = {
-  width: '276px',
+  width: 276,
   colors: ['#FF6900', '#FCB900', '#7BDCB5', '#00D084', '#8ED1FC', '#0693E3', '#ABB8C3', '#EB144C', '#F78DA7', '#9900EF'],
   triangle: 'top-left'
 };
@@ -12832,12 +12280,10 @@ exports.default = (0, _common.ColorWrap)(Twitter);
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -12962,7 +12408,7 @@ if (ExecutionEnvironment.canUseDOM) {
   // IE9 claims to support the input event but fails to trigger it when
   // deleting text, so we ignore its input events.
 
-  isInputEventSupported = isEventSupported('input') && (!('documentMode' in document) || document.documentMode > 9);
+  isInputEventSupported = isEventSupported('input') && (!document.documentMode || document.documentMode > 9);
 }
 
 /**
@@ -13150,12 +12596,10 @@ module.exports = ChangeEventPlugin;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -13197,8 +12641,9 @@ module.exports = getEventModifierState;
 /***/ "FeBl":
 /***/ (function(module, exports) {
 
-var core = module.exports = {version: '2.4.0'};
-if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+var core = module.exports = { version: '2.5.1' };
+if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+
 
 /***/ }),
 
@@ -13656,12 +13101,10 @@ module.exports = baseKeysIn;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -13679,12 +13122,10 @@ module.exports = ReactPropTypesSecret;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -13838,12 +13279,10 @@ module.exports = stackHas;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -13870,2325 +13309,2159 @@ module.exports = quoteAttributeValueForBrowser;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
 
 
-module.exports = '15.6.1';
+module.exports = '15.6.2';
 
 /***/ }),
 
 /***/ "GxBP":
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(jQuery) {var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/*! flatpickr v2.6.3, @license MIT */
-function Flatpickr(element, config) {
-	var self = this;
-
-	self._ = {};
-	self._.afterDayAnim = afterDayAnim;
-	self.changeMonth = changeMonth;
-	self.changeYear = changeYear;
-	self.clear = clear;
-	self.close = close;
-	self._createElement = createElement;
-	self.destroy = destroy;
-	self.isEnabled = isEnabled;
-	self.jumpToDate = jumpToDate;
-	self.open = open;
-	self.redraw = redraw;
-	self.set = set;
-	self.setDate = setDate;
-	self.toggle = toggle;
-
-	function init() {
-		self.element = self.input = element;
-		self.instanceConfig = config || {};
-		self.parseDate = Flatpickr.prototype.parseDate.bind(self);
-		self.formatDate = Flatpickr.prototype.formatDate.bind(self);
-
-		setupFormats();
-		parseConfig();
-		setupLocale();
-		setupInputs();
-		setupDates();
-		setupHelperFunctions();
-
-		self.isOpen = false;
-
-		self.isMobile = !self.config.disableMobile && !self.config.inline && self.config.mode === "single" && !self.config.disable.length && !self.config.enable.length && !self.config.weekNumbers && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-		if (!self.isMobile) build();
-
-		bindEvents();
-
-		if (self.selectedDates.length || self.config.noCalendar) {
-			if (self.config.enableTime) {
-				setHoursFromDate(self.config.noCalendar ? self.latestSelectedDateObj || self.config.minDate : null);
-			}
-			updateValue();
-		}
-
-		if (self.config.weekNumbers) {
-			self.calendarContainer.style.width = self.daysContainer.offsetWidth + self.weekWrapper.offsetWidth + "px";
-		}
-
-		self.showTimeInput = self.selectedDates.length > 0 || self.config.noCalendar;
-
-		if (!self.isMobile) positionCalendar();
-
-		triggerEvent("Ready");
-	}
-
-	/**
-  * Binds a function to the current flatpickr instance
-  * @param {Function} fn the function
-  * @return {Function} the function bound to the instance
-  */
-	function bindToInstance(fn) {
-		return fn.bind(self);
-	}
-
-	/**
-  * The handler for all events targeting the time inputs
-  * @param {Event} e the event - "input", "wheel", "increment", etc
-  */
-	function updateTime(e) {
-		if (self.config.noCalendar && !self.selectedDates.length)
-			// picking time only
-			self.selectedDates = [self.now];
-
-		timeWrapper(e);
-
-		if (!self.selectedDates.length) return;
-
-		if (!self.minDateHasTime || e.type !== "input" || e.target.value.length >= 2) {
-			setHoursFromInputs();
-			updateValue();
-		} else {
-			setTimeout(function () {
-				setHoursFromInputs();
-				updateValue();
-			}, 1000);
-		}
-	}
-
-	/**
-  * Syncs the selected date object time with user's time input
-  */
-	function setHoursFromInputs() {
-		if (!self.config.enableTime) return;
-
-		var hours = (parseInt(self.hourElement.value, 10) || 0) % (self.amPM ? 12 : 24),
-		    minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60,
-		    seconds = self.config.enableSeconds ? (parseInt(self.secondElement.value, 10) || 0) % 60 : 0;
-
-		if (self.amPM !== undefined) hours = hours % 12 + 12 * (self.amPM.textContent === "PM");
-
-		if (self.minDateHasTime && compareDates(self.latestSelectedDateObj, self.config.minDate) === 0) {
-
-			hours = Math.max(hours, self.config.minDate.getHours());
-			if (hours === self.config.minDate.getHours()) minutes = Math.max(minutes, self.config.minDate.getMinutes());
-		}
-
-		if (self.maxDateHasTime && compareDates(self.latestSelectedDateObj, self.config.maxDate) === 0) {
-			hours = Math.min(hours, self.config.maxDate.getHours());
-			if (hours === self.config.maxDate.getHours()) minutes = Math.min(minutes, self.config.maxDate.getMinutes());
-		}
-
-		setHours(hours, minutes, seconds);
-	}
-
-	/**
-  * Syncs time input values with a date
-  * @param {Date} dateObj the date to sync with
-  */
-	function setHoursFromDate(dateObj) {
-		var date = dateObj || self.latestSelectedDateObj;
-
-		if (date) setHours(date.getHours(), date.getMinutes(), date.getSeconds());
-	}
-
-	/**
-  * Sets the hours, minutes, and optionally seconds
-  * of the latest selected date object and the
-  * corresponding time inputs
-  * @param {Number} hours the hour. whether its military
-  *                 or am-pm gets inferred from config
-  * @param {Number} minutes the minutes
-  * @param {Number} seconds the seconds (optional)
-  */
-	function setHours(hours, minutes, seconds) {
-		if (self.selectedDates.length) {
-			self.latestSelectedDateObj.setHours(hours % 24, minutes, seconds || 0, 0);
-		}
-
-		if (!self.config.enableTime || self.isMobile) return;
-
-		self.hourElement.value = self.pad(!self.config.time_24hr ? (12 + hours) % 12 + 12 * (hours % 12 === 0) : hours);
-
-		self.minuteElement.value = self.pad(minutes);
-
-		if (!self.config.time_24hr) self.amPM.textContent = hours >= 12 ? "PM" : "AM";
-
-		if (self.config.enableSeconds === true) self.secondElement.value = self.pad(seconds);
-	}
-
-	/**
-  * Handles the year input and incrementing events
-  * @param {Event} event the keyup or increment event
-  */
-	function onYearInput(event) {
-		var year = event.target.value;
-		if (event.delta) year = (parseInt(year) + event.delta).toString();
-
-		if (year.length === 4 || event.key === "Enter") {
-			self.currentYearElement.blur();
-			if (!/[^\d]/.test(year)) changeYear(year);
-		}
-	}
-
-	/**
-  * Essentially addEventListener + tracking
-  * @param {Element} element the element to addEventListener to
-  * @param {String} event the event name
-  * @param {Function} handler the event handler
-  */
-	function bind(element, event, handler) {
-		if (event instanceof Array) return event.forEach(function (ev) {
-			return bind(element, ev, handler);
-		});
-
-		if (element instanceof Array) return element.forEach(function (el) {
-			return bind(el, event, handler);
-		});
-
-		element.addEventListener(event, handler);
-		self._handlers.push({ element: element, event: event, handler: handler });
-	}
-
-	/**
-  * A mousedown handler which mimics click.
-  * Minimizes latency, since we don't need to wait for mouseup in most cases.
-  * Also, avoids handling right clicks.
-  *
-  * @param {Function} handler the event handler
-  */
-	function onClick(handler) {
-		return function (evt) {
-			return evt.which === 1 && handler(evt);
-		};
-	}
-
-	/**
-  * Adds all the necessary event listeners
-  */
-	function bindEvents() {
-		self._handlers = [];
-		self._animationLoop = [];
-		if (self.config.wrap) {
-			["open", "close", "toggle", "clear"].forEach(function (evt) {
-				Array.prototype.forEach.call(self.element.querySelectorAll("[data-" + evt + "]"), function (el) {
-					return bind(el, "mousedown", onClick(self[evt]));
-				});
-			});
-		}
-
-		if (self.isMobile) return setupMobile();
-
-		self.debouncedResize = debounce(onResize, 50);
-		self.triggerChange = function () {
-			triggerEvent("Change");
-		};
-		self.debouncedChange = debounce(self.triggerChange, 300);
-
-		if (self.config.mode === "range" && self.daysContainer) bind(self.daysContainer, "mouseover", function (e) {
-			return onMouseOver(e.target);
-		});
-
-		bind(window.document.body, "keydown", onKeyDown);
-
-		if (!self.config.static) bind(self._input, "keydown", onKeyDown);
-
-		if (!self.config.inline && !self.config.static) bind(window, "resize", self.debouncedResize);
-
-		if (window.ontouchstart !== undefined) bind(window.document, "touchstart", documentClick);
-
-		bind(window.document, "mousedown", onClick(documentClick));
-		bind(self._input, "blur", documentClick);
-
-		if (self.config.clickOpens === true) bind(self._input, "focus", self.open);
-
-		if (!self.config.noCalendar) {
-			self.monthNav.addEventListener("wheel", function (e) {
-				return e.preventDefault();
-			});
-			bind(self.monthNav, "wheel", debounce(onMonthNavScroll, 10));
-			bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
-
-			bind(self.monthNav, ["keyup", "increment"], onYearInput);
-			bind(self.daysContainer, "mousedown", onClick(selectDate));
-
-			if (self.config.animate) {
-				bind(self.daysContainer, ["webkitAnimationEnd", "animationend"], animateDays);
-				bind(self.monthNav, ["webkitAnimationEnd", "animationend"], animateMonths);
-			}
-		}
-
-		if (self.config.enableTime) {
-			var selText = function selText(e) {
-				return e.target.select();
-			};
-			bind(self.timeContainer, ["wheel", "input", "increment"], updateTime);
-			bind(self.timeContainer, "mousedown", onClick(timeIncrement));
-
-			bind(self.timeContainer, ["wheel", "increment"], self.debouncedChange);
-			bind(self.timeContainer, "input", self.triggerChange);
-
-			bind([self.hourElement, self.minuteElement], "focus", selText);
-
-			if (self.secondElement !== undefined) bind(self.secondElement, "focus", function () {
-				return self.secondElement.select();
-			});
-
-			if (self.amPM !== undefined) {
-				bind(self.amPM, "mousedown", onClick(function (e) {
-					updateTime(e);
-					self.triggerChange(e);
-				}));
-			}
-		}
-	}
-
-	function processPostDayAnimation() {
-		for (var i = self._animationLoop.length; i--;) {
-			self._animationLoop[i]();
-			self._animationLoop.splice(i, 1);
-		}
-	}
-
-	/**
-  * Removes the day container that slided out of view
-  * @param {Event} e the animation event
-  */
-	function animateDays(e) {
-		if (self.daysContainer.childNodes.length > 1) {
-			switch (e.animationName) {
-				case "fpSlideLeft":
-					self.daysContainer.lastChild.classList.remove("slideLeftNew");
-					self.daysContainer.removeChild(self.daysContainer.firstChild);
-					self.days = self.daysContainer.firstChild;
-					processPostDayAnimation();
-
-					break;
-
-				case "fpSlideRight":
-					self.daysContainer.firstChild.classList.remove("slideRightNew");
-					self.daysContainer.removeChild(self.daysContainer.lastChild);
-					self.days = self.daysContainer.firstChild;
-					processPostDayAnimation();
-
-					break;
-
-				default:
-					break;
-			}
-		}
-	}
-
-	/**
-  * Removes the month element that animated out of view
-  * @param {Event} e the animation event
-  */
-	function animateMonths(e) {
-		switch (e.animationName) {
-			case "fpSlideLeftNew":
-			case "fpSlideRightNew":
-				self.navigationCurrentMonth.classList.remove("slideLeftNew");
-				self.navigationCurrentMonth.classList.remove("slideRightNew");
-				var nav = self.navigationCurrentMonth;
-
-				while (nav.nextSibling && /curr/.test(nav.nextSibling.className)) {
-					self.monthNav.removeChild(nav.nextSibling);
-				}while (nav.previousSibling && /curr/.test(nav.previousSibling.className)) {
-					self.monthNav.removeChild(nav.previousSibling);
-				}self.oldCurMonth = null;
-				break;
-		}
-	}
-
-	/**
-  * Set the calendar view to a particular date.
-  * @param {Date} jumpDate the date to set the view to
-  */
-	function jumpToDate(jumpDate) {
-		jumpDate = jumpDate ? self.parseDate(jumpDate) : self.latestSelectedDateObj || (self.config.minDate > self.now ? self.config.minDate : self.config.maxDate && self.config.maxDate < self.now ? self.config.maxDate : self.now);
-
-		try {
-			self.currentYear = jumpDate.getFullYear();
-			self.currentMonth = jumpDate.getMonth();
-		} catch (e) {
-			/* istanbul ignore next */
-			console.error(e.stack);
-			/* istanbul ignore next */
-			console.warn("Invalid date supplied: " + jumpDate);
-		}
-
-		self.redraw();
-	}
-
-	/**
-  * The up/down arrow handler for time inputs
-  * @param {Event} e the click event
-  */
-	function timeIncrement(e) {
-		if (~e.target.className.indexOf("arrow")) incrementNumInput(e, e.target.classList.contains("arrowUp") ? 1 : -1);
-	}
-
-	/**
-  * Increments/decrements the value of input associ-
-  * ated with the up/down arrow by dispatching an
-  * "increment" event on the input.
-  *
-  * @param {Event} e the click event
-  * @param {Number} delta the diff (usually 1 or -1)
-  * @param {Element} inputElem the input element
-  */
-	function incrementNumInput(e, delta, inputElem) {
-		var input = inputElem || e.target.parentNode.childNodes[0];
-		var event = createEvent("increment");
-		event.delta = delta;
-		input.dispatchEvent(event);
-	}
-
-	function createNumberInput(inputClassName) {
-		var wrapper = createElement("div", "numInputWrapper"),
-		    numInput = createElement("input", "numInput " + inputClassName),
-		    arrowUp = createElement("span", "arrowUp"),
-		    arrowDown = createElement("span", "arrowDown");
-
-		numInput.type = "text";
-		numInput.pattern = "\\d*";
-
-		wrapper.appendChild(numInput);
-		wrapper.appendChild(arrowUp);
-		wrapper.appendChild(arrowDown);
-
-		return wrapper;
-	}
-
-	function build() {
-		var fragment = window.document.createDocumentFragment();
-		self.calendarContainer = createElement("div", "flatpickr-calendar");
-		self.calendarContainer.tabIndex = -1;
-
-		if (!self.config.noCalendar) {
-			fragment.appendChild(buildMonthNav());
-			self.innerContainer = createElement("div", "flatpickr-innerContainer");
-
-			if (self.config.weekNumbers) self.innerContainer.appendChild(buildWeeks());
-
-			self.rContainer = createElement("div", "flatpickr-rContainer");
-			self.rContainer.appendChild(buildWeekdays());
-
-			if (!self.daysContainer) {
-				self.daysContainer = createElement("div", "flatpickr-days");
-				self.daysContainer.tabIndex = -1;
-			}
-
-			buildDays();
-			self.rContainer.appendChild(self.daysContainer);
-
-			self.innerContainer.appendChild(self.rContainer);
-			fragment.appendChild(self.innerContainer);
-		}
-
-		if (self.config.enableTime) fragment.appendChild(buildTime());
-
-		toggleClass(self.calendarContainer, "rangeMode", self.config.mode === "range");
-		toggleClass(self.calendarContainer, "animate", self.config.animate);
-
-		self.calendarContainer.appendChild(fragment);
-
-		var customAppend = self.config.appendTo && self.config.appendTo.nodeType;
-
-		if (self.config.inline || self.config.static) {
-			self.calendarContainer.classList.add(self.config.inline ? "inline" : "static");
-
-			if (self.config.inline && !customAppend) {
-				return self.element.parentNode.insertBefore(self.calendarContainer, self._input.nextSibling);
-			}
-
-			if (self.config.static) {
-				var wrapper = createElement("div", "flatpickr-wrapper");
-				self.element.parentNode.insertBefore(wrapper, self.element);
-				wrapper.appendChild(self.element);
-
-				if (self.altInput) wrapper.appendChild(self.altInput);
-
-				wrapper.appendChild(self.calendarContainer);
-				return;
-			}
-		}
-
-		(customAppend ? self.config.appendTo : window.document.body).appendChild(self.calendarContainer);
-	}
-
-	function createDay(className, date, dayNumber, i) {
-		var dateIsEnabled = isEnabled(date, true),
-		    dayElement = createElement("span", "flatpickr-day " + className, date.getDate());
-
-		dayElement.dateObj = date;
-		dayElement.$i = i;
-		dayElement.setAttribute("aria-label", self.formatDate(date, self.config.ariaDateFormat));
-
-		if (compareDates(date, self.now) === 0) {
-			self.todayDateElem = dayElement;
-			dayElement.classList.add("today");
-		}
-
-		if (dateIsEnabled) {
-			dayElement.tabIndex = -1;
-			if (isDateSelected(date)) {
-				dayElement.classList.add("selected");
-				self.selectedDateElem = dayElement;
-				if (self.config.mode === "range") {
-					toggleClass(dayElement, "startRange", compareDates(date, self.selectedDates[0]) === 0);
-
-					toggleClass(dayElement, "endRange", compareDates(date, self.selectedDates[1]) === 0);
-				}
-			}
-		} else {
-			dayElement.classList.add("disabled");
-			if (self.selectedDates[0] && date > self.minRangeDate && date < self.selectedDates[0]) self.minRangeDate = date;else if (self.selectedDates[0] && date < self.maxRangeDate && date > self.selectedDates[0]) self.maxRangeDate = date;
-		}
-
-		if (self.config.mode === "range") {
-			if (isDateInRange(date) && !isDateSelected(date)) dayElement.classList.add("inRange");
-
-			if (self.selectedDates.length === 1 && (date < self.minRangeDate || date > self.maxRangeDate)) dayElement.classList.add("notAllowed");
-		}
-
-		if (self.config.weekNumbers && className !== "prevMonthDay" && dayNumber % 7 === 1) {
-			self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" + self.config.getWeek(date) + "</span>");
-		}
-
-		triggerEvent("DayCreate", dayElement);
-
-		return dayElement;
-	}
-
-	function focusOnDay(currentIndex, offset) {
-		var newIndex = currentIndex + offset || 0,
-		    targetNode = currentIndex !== undefined ? self.days.childNodes[newIndex] : self.selectedDateElem || self.todayDateElem || self.days.childNodes[0],
-		    focus = function focus() {
-			targetNode = targetNode || self.days.childNodes[newIndex];
-			targetNode.focus();
-
-			if (self.config.mode === "range") onMouseOver(targetNode);
-		};
-
-		if (targetNode === undefined && offset !== 0) {
-			if (offset > 0) {
-				self.changeMonth(1);
-				newIndex = newIndex % 42;
-			} else if (offset < 0) {
-				self.changeMonth(-1);
-				newIndex += 42;
-			}
-
-			return afterDayAnim(focus);
-		}
-
-		focus();
-	}
-
-	function afterDayAnim(fn) {
-		if (self.config.animate === true) return self._animationLoop.push(fn);
-		fn();
-	}
-
-	function buildDays(delta) {
-		var firstOfMonth = (new Date(self.currentYear, self.currentMonth, 1).getDay() - self.l10n.firstDayOfWeek + 7) % 7,
-		    isRangeMode = self.config.mode === "range";
-
-		self.prevMonthDays = self.utils.getDaysinMonth((self.currentMonth - 1 + 12) % 12);
-		self.selectedDateElem = undefined;
-		self.todayDateElem = undefined;
-
-		var daysInMonth = self.utils.getDaysinMonth(),
-		    days = window.document.createDocumentFragment();
-
-		var dayNumber = self.prevMonthDays + 1 - firstOfMonth,
-		    dayIndex = 0;
-
-		if (self.config.weekNumbers && self.weekNumbers.firstChild) self.weekNumbers.textContent = "";
-
-		if (isRangeMode) {
-			// const dateLimits = self.config.enable.length || self.config.disable.length || self.config.mixDate || self.config.maxDate;
-			self.minRangeDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber);
-			self.maxRangeDate = new Date(self.currentYear, self.currentMonth + 1, (42 - firstOfMonth) % daysInMonth);
-		}
-
-		// prepend days from the ending of previous month
-		for (; dayNumber <= self.prevMonthDays; dayNumber++, dayIndex++) {
-			days.appendChild(createDay("prevMonthDay", new Date(self.currentYear, self.currentMonth - 1, dayNumber), dayNumber, dayIndex));
-		}
-
-		// Start at 1 since there is no 0th day
-		for (dayNumber = 1; dayNumber <= daysInMonth; dayNumber++, dayIndex++) {
-			days.appendChild(createDay("", new Date(self.currentYear, self.currentMonth, dayNumber), dayNumber, dayIndex));
-		}
-
-		// append days from the next month
-		for (var dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth; dayNum++, dayIndex++) {
-			days.appendChild(createDay("nextMonthDay", new Date(self.currentYear, self.currentMonth + 1, dayNum % daysInMonth), dayNum, dayIndex));
-		}
-
-		if (isRangeMode && self.selectedDates.length === 1 && days.childNodes[0]) {
-			self._hidePrevMonthArrow = self._hidePrevMonthArrow || self.minRangeDate > days.childNodes[0].dateObj;
-
-			self._hideNextMonthArrow = self._hideNextMonthArrow || self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1);
-		} else updateNavigationCurrentMonth();
-
-		var dayContainer = createElement("div", "dayContainer");
-		dayContainer.appendChild(days);
-
-		if (!self.config.animate || delta === undefined) clearNode(self.daysContainer);else {
-			while (self.daysContainer.childNodes.length > 1) {
-				self.daysContainer.removeChild(self.daysContainer.firstChild);
-			}
-		}
-
-		if (delta >= 0) self.daysContainer.appendChild(dayContainer);else self.daysContainer.insertBefore(dayContainer, self.daysContainer.firstChild);
-
-		self.days = self.daysContainer.firstChild;
-		return self.daysContainer;
-	}
-
-	function clearNode(node) {
-		while (node.firstChild) {
-			node.removeChild(node.firstChild);
-		}
-	}
-
-	function buildMonthNav() {
-		var monthNavFragment = window.document.createDocumentFragment();
-		self.monthNav = createElement("div", "flatpickr-month");
-
-		self.prevMonthNav = createElement("span", "flatpickr-prev-month");
-		self.prevMonthNav.innerHTML = self.config.prevArrow;
-
-		self.currentMonthElement = createElement("span", "cur-month");
-		self.currentMonthElement.title = self.l10n.scrollTitle;
-
-		var yearInput = createNumberInput("cur-year");
-		self.currentYearElement = yearInput.childNodes[0];
-		self.currentYearElement.title = self.l10n.scrollTitle;
-
-		if (self.config.minDate) self.currentYearElement.min = self.config.minDate.getFullYear();
-
-		if (self.config.maxDate) {
-			self.currentYearElement.max = self.config.maxDate.getFullYear();
-
-			self.currentYearElement.disabled = self.config.minDate && self.config.minDate.getFullYear() === self.config.maxDate.getFullYear();
-		}
-
-		self.nextMonthNav = createElement("span", "flatpickr-next-month");
-		self.nextMonthNav.innerHTML = self.config.nextArrow;
-
-		self.navigationCurrentMonth = createElement("span", "flatpickr-current-month");
-		self.navigationCurrentMonth.appendChild(self.currentMonthElement);
-		self.navigationCurrentMonth.appendChild(yearInput);
-
-		monthNavFragment.appendChild(self.prevMonthNav);
-		monthNavFragment.appendChild(self.navigationCurrentMonth);
-		monthNavFragment.appendChild(self.nextMonthNav);
-		self.monthNav.appendChild(monthNavFragment);
-
-		Object.defineProperty(self, "_hidePrevMonthArrow", {
-			get: function get() {
-				return this.__hidePrevMonthArrow;
-			},
-			set: function set(bool) {
-				if (this.__hidePrevMonthArrow !== bool) self.prevMonthNav.style.display = bool ? "none" : "block";
-				this.__hidePrevMonthArrow = bool;
-			}
-		});
-
-		Object.defineProperty(self, "_hideNextMonthArrow", {
-			get: function get() {
-				return this.__hideNextMonthArrow;
-			},
-			set: function set(bool) {
-				if (this.__hideNextMonthArrow !== bool) self.nextMonthNav.style.display = bool ? "none" : "block";
-				this.__hideNextMonthArrow = bool;
-			}
-		});
-
-		updateNavigationCurrentMonth();
-
-		return self.monthNav;
-	}
-
-	function buildTime() {
-		self.calendarContainer.classList.add("hasTime");
-		if (self.config.noCalendar) self.calendarContainer.classList.add("noCalendar");
-		self.timeContainer = createElement("div", "flatpickr-time");
-		self.timeContainer.tabIndex = -1;
-		var separator = createElement("span", "flatpickr-time-separator", ":");
-
-		var hourInput = createNumberInput("flatpickr-hour");
-		self.hourElement = hourInput.childNodes[0];
-
-		var minuteInput = createNumberInput("flatpickr-minute");
-		self.minuteElement = minuteInput.childNodes[0];
-
-		self.hourElement.tabIndex = self.minuteElement.tabIndex = -1;
-
-		self.hourElement.value = self.pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getHours() : self.config.defaultHour);
-
-		self.minuteElement.value = self.pad(self.latestSelectedDateObj ? self.latestSelectedDateObj.getMinutes() : self.config.defaultMinute);
-
-		self.hourElement.step = self.config.hourIncrement;
-		self.minuteElement.step = self.config.minuteIncrement;
-
-		self.hourElement.min = self.config.time_24hr ? 0 : 1;
-		self.hourElement.max = self.config.time_24hr ? 23 : 12;
-
-		self.minuteElement.min = 0;
-		self.minuteElement.max = 59;
-
-		self.hourElement.title = self.minuteElement.title = self.l10n.scrollTitle;
-
-		self.timeContainer.appendChild(hourInput);
-		self.timeContainer.appendChild(separator);
-		self.timeContainer.appendChild(minuteInput);
-
-		if (self.config.time_24hr) self.timeContainer.classList.add("time24hr");
-
-		if (self.config.enableSeconds) {
-			self.timeContainer.classList.add("hasSeconds");
-
-			var secondInput = createNumberInput("flatpickr-second");
-			self.secondElement = secondInput.childNodes[0];
-
-			self.secondElement.value = self.latestSelectedDateObj ? self.pad(self.latestSelectedDateObj.getSeconds()) : "00";
-
-			self.secondElement.step = self.minuteElement.step;
-			self.secondElement.min = self.minuteElement.min;
-			self.secondElement.max = self.minuteElement.max;
-
-			self.timeContainer.appendChild(createElement("span", "flatpickr-time-separator", ":"));
-			self.timeContainer.appendChild(secondInput);
-		}
-
-		if (!self.config.time_24hr) {
-			// add self.amPM if appropriate
-			self.amPM = createElement("span", "flatpickr-am-pm", ["AM", "PM"][self.hourElement.value > 11 | 0]);
-			self.amPM.title = self.l10n.toggleTitle;
-			self.amPM.tabIndex = -1;
-			self.timeContainer.appendChild(self.amPM);
-		}
-
-		return self.timeContainer;
-	}
-
-	function buildWeekdays() {
-		if (!self.weekdayContainer) self.weekdayContainer = createElement("div", "flatpickr-weekdays");
-
-		var firstDayOfWeek = self.l10n.firstDayOfWeek;
-		var weekdays = self.l10n.weekdays.shorthand.slice();
-
-		if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
-			weekdays = [].concat(weekdays.splice(firstDayOfWeek, weekdays.length), weekdays.splice(0, firstDayOfWeek));
-		}
-
-		self.weekdayContainer.innerHTML = "\n\t\t<span class=flatpickr-weekday>\n\t\t\t" + weekdays.join("</span><span class=flatpickr-weekday>") + "\n\t\t</span>\n\t\t";
-
-		return self.weekdayContainer;
-	}
-
-	/* istanbul ignore next */
-	function buildWeeks() {
-		self.calendarContainer.classList.add("hasWeeks");
-		self.weekWrapper = createElement("div", "flatpickr-weekwrapper");
-		self.weekWrapper.appendChild(createElement("span", "flatpickr-weekday", self.l10n.weekAbbreviation));
-		self.weekNumbers = createElement("div", "flatpickr-weeks");
-		self.weekWrapper.appendChild(self.weekNumbers);
-
-		return self.weekWrapper;
-	}
-
-	function changeMonth(value, is_offset, animate) {
-		is_offset = is_offset === undefined || is_offset;
-		var delta = is_offset ? value : value - self.currentMonth;
-		var skipAnimations = !self.config.animate || animate === false;
-
-		if (delta < 0 && self._hidePrevMonthArrow || delta > 0 && self._hideNextMonthArrow) return;
-
-		self.currentMonth += delta;
-
-		if (self.currentMonth < 0 || self.currentMonth > 11) {
-			self.currentYear += self.currentMonth > 11 ? 1 : -1;
-			self.currentMonth = (self.currentMonth + 12) % 12;
-
-			triggerEvent("YearChange");
-		}
-
-		buildDays(!skipAnimations ? delta : undefined);
-
-		if (skipAnimations) {
-			triggerEvent("MonthChange");
-			return updateNavigationCurrentMonth();
-		}
-
-		// remove possible remnants from clicking too fast
-		var nav = self.navigationCurrentMonth;
-		if (delta < 0) {
-			while (nav.nextSibling && /curr/.test(nav.nextSibling.className)) {
-				self.monthNav.removeChild(nav.nextSibling);
-			}
-		} else if (delta > 0) {
-			while (nav.previousSibling && /curr/.test(nav.previousSibling.className)) {
-				self.monthNav.removeChild(nav.previousSibling);
-			}
-		}
-
-		self.oldCurMonth = self.navigationCurrentMonth;
-
-		self.navigationCurrentMonth = self.monthNav.insertBefore(self.oldCurMonth.cloneNode(true), delta > 0 ? self.oldCurMonth.nextSibling : self.oldCurMonth);
-
-		if (delta > 0) {
-			self.daysContainer.firstChild.classList.add("slideLeft");
-			self.daysContainer.lastChild.classList.add("slideLeftNew");
-
-			self.oldCurMonth.classList.add("slideLeft");
-			self.navigationCurrentMonth.classList.add("slideLeftNew");
-		} else if (delta < 0) {
-			self.daysContainer.firstChild.classList.add("slideRightNew");
-			self.daysContainer.lastChild.classList.add("slideRight");
-
-			self.oldCurMonth.classList.add("slideRight");
-			self.navigationCurrentMonth.classList.add("slideRightNew");
-		}
-
-		self.currentMonthElement = self.navigationCurrentMonth.firstChild;
-		self.currentYearElement = self.navigationCurrentMonth.lastChild.childNodes[0];
-
-		updateNavigationCurrentMonth();
-		self.oldCurMonth.firstChild.textContent = self.utils.monthToStr(self.currentMonth - delta);
-
-		triggerEvent("MonthChange");
-
-		if (document.activeElement && document.activeElement.$i) {
-			var index = document.activeElement.$i;
-			afterDayAnim(function () {
-				focusOnDay(index, 0);
-			});
-		}
-	}
-
-	function clear(triggerChangeEvent) {
-		self.input.value = "";
-
-		if (self.altInput) self.altInput.value = "";
-
-		if (self.mobileInput) self.mobileInput.value = "";
-
-		self.selectedDates = [];
-		self.latestSelectedDateObj = undefined;
-		self.showTimeInput = false;
-
-		self.redraw();
-
-		if (triggerChangeEvent !== false)
-			// triggerChangeEvent is true (default) or an Event
-			triggerEvent("Change");
-	}
-
-	function close() {
-		self.isOpen = false;
-
-		if (!self.isMobile) {
-			self.calendarContainer.classList.remove("open");
-			self._input.classList.remove("active");
-		}
-
-		triggerEvent("Close");
-	}
-
-	function destroy() {
-		for (var i = self._handlers.length; i--;) {
-			var h = self._handlers[i];
-			h.element.removeEventListener(h.event, h.handler);
-		}
-
-		self._handlers = [];
-
-		if (self.mobileInput) {
-			if (self.mobileInput.parentNode) self.mobileInput.parentNode.removeChild(self.mobileInput);
-			self.mobileInput = null;
-		} else if (self.calendarContainer && self.calendarContainer.parentNode) self.calendarContainer.parentNode.removeChild(self.calendarContainer);
-
-		if (self.altInput) {
-			self.input.type = "text";
-			if (self.altInput.parentNode) self.altInput.parentNode.removeChild(self.altInput);
-			delete self.altInput;
-		}
-
-		if (self.input) {
-			self.input.type = self.input._type;
-			self.input.classList.remove("flatpickr-input");
-			self.input.removeAttribute("readonly");
-			self.input.value = "";
-		}
-
-		["_showTimeInput", "latestSelectedDateObj", "_hideNextMonthArrow", "_hidePrevMonthArrow", "__hideNextMonthArrow", "__hidePrevMonthArrow", "isMobile", "isOpen", "selectedDateElem", "minDateHasTime", "maxDateHasTime", "days", "daysContainer", "_input", "_positionElement", "innerContainer", "rContainer", "monthNav", "todayDateElem", "calendarContainer", "weekdayContainer", "prevMonthNav", "nextMonthNav", "currentMonthElement", "currentYearElement", "navigationCurrentMonth", "selectedDateElem", "config"].forEach(function (k) {
-			return delete self[k];
-		});
-	}
-
-	function isCalendarElem(elem) {
-		if (self.config.appendTo && self.config.appendTo.contains(elem)) return true;
-
-		return self.calendarContainer.contains(elem);
-	}
-
-	function documentClick(e) {
-		if (self.isOpen && !self.config.inline) {
-			var isCalendarElement = isCalendarElem(e.target);
-			var isInput = e.target === self.input || e.target === self.altInput || self.element.contains(e.target) ||
-			// web components
-			e.path && e.path.indexOf && (~e.path.indexOf(self.input) || ~e.path.indexOf(self.altInput));
-
-			var lostFocus = e.type === "blur" ? isInput && e.relatedTarget && !isCalendarElem(e.relatedTarget) : !isInput && !isCalendarElement;
-
-			if (lostFocus) {
-				e.preventDefault();
-				self.close();
-
-				if (self.config.mode === "range" && self.selectedDates.length === 1) {
-					self.clear(false);
-					self.redraw();
-				}
-			}
-		}
-	}
-
-	function changeYear(newYear) {
-		if (!newYear || self.currentYearElement.min && newYear < self.currentYearElement.min || self.currentYearElement.max && newYear > self.currentYearElement.max) return;
-
-		var newYearNum = parseInt(newYear, 10),
-		    isNewYear = self.currentYear !== newYearNum;
-
-		self.currentYear = newYearNum || self.currentYear;
-
-		if (self.config.maxDate && self.currentYear === self.config.maxDate.getFullYear()) {
-			self.currentMonth = Math.min(self.config.maxDate.getMonth(), self.currentMonth);
-		} else if (self.config.minDate && self.currentYear === self.config.minDate.getFullYear()) {
-			self.currentMonth = Math.max(self.config.minDate.getMonth(), self.currentMonth);
-		}
-
-		if (isNewYear) {
-			self.redraw();
-			triggerEvent("YearChange");
-		}
-	}
-
-	function isEnabled(date, timeless) {
-		if (self.config.minDate && compareDates(date, self.config.minDate, timeless !== undefined ? timeless : !self.minDateHasTime) < 0 || self.config.maxDate && compareDates(date, self.config.maxDate, timeless !== undefined ? timeless : !self.maxDateHasTime) > 0) return false;
-
-		if (!self.config.enable.length && !self.config.disable.length) return true;
-
-		var dateToCheck = self.parseDate(date, null, true); // timeless
-
-		var bool = self.config.enable.length > 0,
-		    array = bool ? self.config.enable : self.config.disable;
-
-		for (var i = 0, d; i < array.length; i++) {
-			d = array[i];
-
-			if (d instanceof Function && d(dateToCheck)) // disabled by function
-				return bool;else if (d instanceof Date && d.getTime() === dateToCheck.getTime())
-				// disabled by date
-				return bool;else if (typeof d === "string" && self.parseDate(d, null, true).getTime() === dateToCheck.getTime())
-				// disabled by date string
-				return bool;else if ( // disabled by range
-			(typeof d === "undefined" ? "undefined" : _typeof(d)) === "object" && d.from && d.to && dateToCheck >= d.from && dateToCheck <= d.to) return bool;
-		}
-
-		return !bool;
-	}
-
-	function onKeyDown(e) {
-		var isInput = e.target === self._input;
-		var calendarElem = isCalendarElem(e.target);
-		var allowInput = self.config.allowInput;
-		var allowKeydown = self.isOpen && (!allowInput || !isInput);
-		var allowInlineKeydown = self.config.inline && isInput && !allowInput;
-
-		if (e.key === "Enter" && allowInput && isInput) {
-			self.setDate(self._input.value, true, e.target === self.altInput ? self.config.altFormat : self.config.dateFormat);
-			return e.target.blur();
-		} else if (calendarElem || allowKeydown || allowInlineKeydown) {
-			var isTimeObj = self.timeContainer && self.timeContainer.contains(e.target);
-			switch (e.key) {
-				case "Enter":
-					if (isTimeObj) updateValue();else selectDate(e);
-
-					break;
-
-				case "Escape":
-					// escape
-					e.preventDefault();
-					self.close();
-					break;
-
-				case "ArrowLeft":
-				case "ArrowRight":
-					if (!isTimeObj) {
-						e.preventDefault();
-
-						if (self.daysContainer) {
-							var _delta = e.key === "ArrowRight" ? 1 : -1;
-
-							if (!e.ctrlKey) focusOnDay(e.target.$i, _delta);else changeMonth(_delta, true);
-						} else if (self.config.enableTime && !isTimeObj) self.hourElement.focus();
-					}
-
-					break;
-
-				case "ArrowUp":
-				case "ArrowDown":
-					e.preventDefault();
-					var delta = e.key === "ArrowDown" ? 1 : -1;
-
-					if (self.daysContainer) {
-						if (e.ctrlKey) {
-							changeYear(self.currentYear - delta);
-							focusOnDay(e.target.$i, 0);
-						} else if (!isTimeObj) focusOnDay(e.target.$i, delta * 7);
-					} else if (self.config.enableTime) {
-						if (!isTimeObj) self.hourElement.focus();
-						updateTime(e);
-					}
-
-					break;
-
-				case "Tab":
-					if (e.target === self.hourElement) {
-						e.preventDefault();
-						self.minuteElement.select();
-					} else if (e.target === self.minuteElement && (self.secondElement || self.amPM)) {
-						e.preventDefault();
-						(self.secondElement || self.amPM).focus();
-					} else if (e.target === self.secondElement) {
-						e.preventDefault();
-						self.amPM.focus();
-					}
-
-					break;
-
-				case "a":
-					if (e.target === self.amPM) {
-						self.amPM.textContent = "AM";
-						setHoursFromInputs();
-						updateValue();
-					}
-					break;
-
-				case "p":
-					if (e.target === self.amPM) {
-						self.amPM.textContent = "PM";
-						setHoursFromInputs();
-						updateValue();
-					}
-					break;
-
-				default:
-					break;
-
-			}
-
-			triggerEvent("KeyDown", e);
-		}
-	}
-
-	function onMouseOver(elem) {
-		if (self.selectedDates.length !== 1 || !elem.classList.contains("flatpickr-day")) return;
-
-		var hoverDate = elem.dateObj,
-		    initialDate = self.parseDate(self.selectedDates[0], null, true),
-		    rangeStartDate = Math.min(hoverDate.getTime(), self.selectedDates[0].getTime()),
-		    rangeEndDate = Math.max(hoverDate.getTime(), self.selectedDates[0].getTime()),
-		    containsDisabled = false;
-
-		for (var t = rangeStartDate; t < rangeEndDate; t += self.utils.duration.DAY) {
-			if (!isEnabled(new Date(t))) {
-				containsDisabled = true;
-				break;
-			}
-		}
-
-		var _loop = function _loop(timestamp, i) {
-			var outOfRange = timestamp < self.minRangeDate.getTime() || timestamp > self.maxRangeDate.getTime(),
-			    dayElem = self.days.childNodes[i];
-
-			if (outOfRange) {
-				self.days.childNodes[i].classList.add("notAllowed");
-				["inRange", "startRange", "endRange"].forEach(function (c) {
-					dayElem.classList.remove(c);
-				});
-				return "continue";
-			} else if (containsDisabled && !outOfRange) return "continue";
-
-			["startRange", "inRange", "endRange", "notAllowed"].forEach(function (c) {
-				dayElem.classList.remove(c);
-			});
-
-			var minRangeDate = Math.max(self.minRangeDate.getTime(), rangeStartDate),
-			    maxRangeDate = Math.min(self.maxRangeDate.getTime(), rangeEndDate);
-
-			elem.classList.add(hoverDate < self.selectedDates[0] ? "startRange" : "endRange");
-
-			if (initialDate < hoverDate && timestamp === initialDate.getTime()) dayElem.classList.add("startRange");else if (initialDate > hoverDate && timestamp === initialDate.getTime()) dayElem.classList.add("endRange");
-
-			if (timestamp >= minRangeDate && timestamp <= maxRangeDate) dayElem.classList.add("inRange");
-		};
-
-		for (var timestamp = self.days.childNodes[0].dateObj.getTime(), i = 0; i < 42; i++, timestamp += self.utils.duration.DAY) {
-			var _ret = _loop(timestamp, i);
-
-			if (_ret === "continue") continue;
-		}
-	}
-
-	function onResize() {
-		if (self.isOpen && !self.config.static && !self.config.inline) positionCalendar();
-	}
-
-	function open(e) {
-		if (self.isMobile) {
-			if (e) {
-				e.preventDefault();
-				e.target.blur();
-			}
-
-			setTimeout(function () {
-				self.mobileInput.click();
-			}, 0);
-
-			triggerEvent("Open");
-			return;
-		}
-
-		if (self.isOpen || self._input.disabled || self.config.inline) return;
-
-		self.isOpen = true;
-		self.calendarContainer.classList.add("open");
-		positionCalendar();
-		self._input.classList.add("active");
-
-		triggerEvent("Open");
-	}
-
-	function minMaxDateSetter(type) {
-		return function (date) {
-			var dateObj = self.config["_" + type + "Date"] = self.parseDate(date);
-
-			var inverseDateObj = self.config["_" + (type === "min" ? "max" : "min") + "Date"];
-			var isValidDate = date && dateObj instanceof Date;
-
-			if (isValidDate) {
-				self[type + "DateHasTime"] = dateObj.getHours() || dateObj.getMinutes() || dateObj.getSeconds();
-			}
-
-			if (self.selectedDates) {
-				self.selectedDates = self.selectedDates.filter(function (d) {
-					return isEnabled(d);
-				});
-				if (!self.selectedDates.length && type === "min") setHoursFromDate(dateObj);
-				updateValue();
-			}
-
-			if (self.daysContainer) {
-				redraw();
-
-				if (isValidDate) self.currentYearElement[type] = dateObj.getFullYear();else self.currentYearElement.removeAttribute(type);
-
-				self.currentYearElement.disabled = inverseDateObj && dateObj && inverseDateObj.getFullYear() === dateObj.getFullYear();
-			}
-		};
-	}
-
-	function parseConfig() {
-		var boolOpts = ["utc", "wrap", "weekNumbers", "allowInput", "clickOpens", "time_24hr", "enableTime", "noCalendar", "altInput", "shorthandCurrentMonth", "inline", "static", "enableSeconds", "disableMobile"];
-
-		var hooks = ["onChange", "onClose", "onDayCreate", "onKeyDown", "onMonthChange", "onOpen", "onParseConfig", "onReady", "onValueUpdate", "onYearChange"];
-
-		self.config = Object.create(Flatpickr.defaultConfig);
-
-		var userConfig = _extends({}, self.instanceConfig, JSON.parse(JSON.stringify(self.element.dataset || {})));
-
-		self.config.parseDate = userConfig.parseDate;
-		self.config.formatDate = userConfig.formatDate;
-
-		_extends(self.config, userConfig);
-
-		if (!userConfig.dateFormat && userConfig.enableTime) {
-			self.config.dateFormat = self.config.noCalendar ? "H:i" + (self.config.enableSeconds ? ":S" : "") : Flatpickr.defaultConfig.dateFormat + " H:i" + (self.config.enableSeconds ? ":S" : "");
-		}
-
-		if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
-			self.config.altFormat = self.config.noCalendar ? "h:i" + (self.config.enableSeconds ? ":S K" : " K") : Flatpickr.defaultConfig.altFormat + (" h:i" + (self.config.enableSeconds ? ":S" : "") + " K");
-		}
-
-		Object.defineProperty(self.config, "minDate", {
-			get: function get() {
-				return this._minDate;
-			},
-			set: minMaxDateSetter("min")
-		});
-
-		Object.defineProperty(self.config, "maxDate", {
-			get: function get() {
-				return this._maxDate;
-			},
-			set: minMaxDateSetter("max")
-		});
-
-		self.config.minDate = userConfig.minDate;
-		self.config.maxDate = userConfig.maxDate;
-
-		for (var i = 0; i < boolOpts.length; i++) {
-			self.config[boolOpts[i]] = self.config[boolOpts[i]] === true || self.config[boolOpts[i]] === "true";
-		}for (var _i = hooks.length; _i--;) {
-			if (self.config[hooks[_i]] !== undefined) {
-				self.config[hooks[_i]] = arrayify(self.config[hooks[_i]] || []).map(bindToInstance);
-			}
-		}
-
-		for (var _i2 = 0; _i2 < self.config.plugins.length; _i2++) {
-			var pluginConf = self.config.plugins[_i2](self) || {};
-			for (var key in pluginConf) {
-
-				if (self.config[key] instanceof Array || ~hooks.indexOf(key)) {
-					self.config[key] = arrayify(pluginConf[key]).map(bindToInstance).concat(self.config[key]);
-				} else if (typeof userConfig[key] === "undefined") self.config[key] = pluginConf[key];
-			}
-		}
-
-		triggerEvent("ParseConfig");
-	}
-
-	function setupLocale() {
-		if (_typeof(self.config.locale) !== "object" && typeof Flatpickr.l10ns[self.config.locale] === "undefined") console.warn("flatpickr: invalid locale " + self.config.locale);
-
-		self.l10n = _extends(Object.create(Flatpickr.l10ns.default), _typeof(self.config.locale) === "object" ? self.config.locale : self.config.locale !== "default" ? Flatpickr.l10ns[self.config.locale] || {} : {});
-	}
-
-	function positionCalendar() {
-		if (self.calendarContainer === undefined) return;
-
-		var calendarHeight = self.calendarContainer.offsetHeight,
-		    calendarWidth = self.calendarContainer.offsetWidth,
-		    configPos = self.config.position,
-		    inputBounds = self._positionElement.getBoundingClientRect(),
-		    distanceFromBottom = window.innerHeight - inputBounds.bottom,
-		    showOnTop = configPos === "above" || configPos !== "below" && distanceFromBottom < calendarHeight && inputBounds.top > calendarHeight;
-
-		var top = window.pageYOffset + inputBounds.top + (!showOnTop ? self._positionElement.offsetHeight + 2 : -calendarHeight - 2);
-
-		toggleClass(self.calendarContainer, "arrowTop", !showOnTop);
-		toggleClass(self.calendarContainer, "arrowBottom", showOnTop);
-
-		if (self.config.inline) return;
-
-		var left = window.pageXOffset + inputBounds.left;
-		var right = window.document.body.offsetWidth - inputBounds.right;
-		var rightMost = left + calendarWidth > window.document.body.offsetWidth;
-
-		toggleClass(self.calendarContainer, "rightMost", rightMost);
-
-		if (self.config.static) return;
-
-		self.calendarContainer.style.top = top + "px";
-
-		if (!rightMost) {
-			self.calendarContainer.style.left = left + "px";
-			self.calendarContainer.style.right = "auto";
-		} else {
-			self.calendarContainer.style.left = "auto";
-			self.calendarContainer.style.right = right + "px";
-		}
-	}
-
-	function redraw() {
-		if (self.config.noCalendar || self.isMobile) return;
-
-		buildWeekdays();
-		updateNavigationCurrentMonth();
-		buildDays();
-	}
-
-	function selectDate(e) {
-		e.preventDefault();
-		e.stopPropagation();
-
-		if (!e.target.classList.contains("flatpickr-day") || e.target.classList.contains("disabled") || e.target.classList.contains("notAllowed")) return;
-
-		var selectedDate = self.latestSelectedDateObj = new Date(e.target.dateObj.getTime());
-
-		var shouldChangeMonth = selectedDate.getMonth() !== self.currentMonth && self.config.mode !== "range";
-
-		self.selectedDateElem = e.target;
-
-		if (self.config.mode === "single") self.selectedDates = [selectedDate];else if (self.config.mode === "multiple") {
-			var selectedIndex = isDateSelected(selectedDate);
-			if (selectedIndex) self.selectedDates.splice(selectedIndex, 1);else self.selectedDates.push(selectedDate);
-		} else if (self.config.mode === "range") {
-			if (self.selectedDates.length === 2) self.clear();
-
-			self.selectedDates.push(selectedDate);
-
-			// unless selecting same date twice, sort ascendingly
-			if (compareDates(selectedDate, self.selectedDates[0], true) !== 0) self.selectedDates.sort(function (a, b) {
-				return a.getTime() - b.getTime();
-			});
-		}
-
-		setHoursFromInputs();
-
-		if (shouldChangeMonth) {
-			var isNewYear = self.currentYear !== selectedDate.getFullYear();
-			self.currentYear = selectedDate.getFullYear();
-			self.currentMonth = selectedDate.getMonth();
-
-			if (isNewYear) triggerEvent("YearChange");
-
-			triggerEvent("MonthChange");
-		}
-
-		buildDays();
-
-		if (self.minDateHasTime && self.config.enableTime && compareDates(selectedDate, self.config.minDate) === 0) setHoursFromDate(self.config.minDate);
-
-		updateValue();
-
-		if (self.config.enableTime) setTimeout(function () {
-			return self.showTimeInput = true;
-		}, 50);
-
-		if (self.config.mode === "range") {
-			if (self.selectedDates.length === 1) {
-				onMouseOver(e.target);
-
-				self._hidePrevMonthArrow = self._hidePrevMonthArrow || self.minRangeDate > self.days.childNodes[0].dateObj;
-
-				self._hideNextMonthArrow = self._hideNextMonthArrow || self.maxRangeDate < new Date(self.currentYear, self.currentMonth + 1, 1);
-			} else updateNavigationCurrentMonth();
-		}
-
-		triggerEvent("Change");
-
-		// maintain focus
-		if (!shouldChangeMonth) focusOnDay(e.target.$i, 0);else afterDayAnim(function () {
-			return self.selectedDateElem.focus();
-		});
-
-		if (self.config.enableTime) setTimeout(function () {
-			return self.hourElement.select();
-		}, 451);
-
-		if (self.config.closeOnSelect) {
-			var single = self.config.mode === "single" && !self.config.enableTime;
-			var range = self.config.mode === "range" && self.selectedDates.length === 2 && !self.config.enableTime;
-
-			if (single || range) self.close();
-		}
-	}
-
-	function set(option, value) {
-		self.config[option] = value;
-		self.redraw();
-		jumpToDate();
-	}
-
-	function setSelectedDate(inputDate, format) {
-		if (inputDate instanceof Array) self.selectedDates = inputDate.map(function (d) {
-			return self.parseDate(d, format);
-		});else if (inputDate instanceof Date || !isNaN(inputDate)) self.selectedDates = [self.parseDate(inputDate, format)];else if (inputDate && inputDate.substring) {
-			switch (self.config.mode) {
-				case "single":
-					self.selectedDates = [self.parseDate(inputDate, format)];
-					break;
-
-				case "multiple":
-					self.selectedDates = inputDate.split("; ").map(function (date) {
-						return self.parseDate(date, format);
-					});
-					break;
-
-				case "range":
-					self.selectedDates = inputDate.split(self.l10n.rangeSeparator).map(function (date) {
-						return self.parseDate(date, format);
-					});
-
-					break;
-
-				default:
-					break;
-			}
-		}
-
-		self.selectedDates = self.selectedDates.filter(function (d) {
-			return d instanceof Date && isEnabled(d, false);
-		});
-
-		self.selectedDates.sort(function (a, b) {
-			return a.getTime() - b.getTime();
-		});
-	}
-
-	function setDate(date, triggerChange, format) {
-		if (!date) return self.clear(triggerChange);
-
-		setSelectedDate(date, format);
-
-		self.showTimeInput = self.selectedDates.length > 0;
-		self.latestSelectedDateObj = self.selectedDates[0];
-
-		self.redraw();
-		jumpToDate();
-
-		setHoursFromDate();
-		updateValue(triggerChange);
-
-		if (triggerChange) triggerEvent("Change");
-	}
-
-	function setupDates() {
-		function parseDateRules(arr) {
-			for (var i = arr.length; i--;) {
-				if (typeof arr[i] === "string" || +arr[i]) arr[i] = self.parseDate(arr[i], null, true);else if (arr[i] && arr[i].from && arr[i].to) {
-					arr[i].from = self.parseDate(arr[i].from);
-					arr[i].to = self.parseDate(arr[i].to);
-				}
-			}
-
-			return arr.filter(function (x) {
-				return x;
-			}); // remove falsy values
-		}
-
-		self.selectedDates = [];
-		self.now = new Date();
-
-		if (self.config.disable.length) self.config.disable = parseDateRules(self.config.disable);
-
-		if (self.config.enable.length) self.config.enable = parseDateRules(self.config.enable);
-
-		var preloadedDate = self.config.defaultDate || self.input.value;
-		if (preloadedDate) setSelectedDate(preloadedDate, self.config.dateFormat);
-
-		var initialDate = self.selectedDates.length ? self.selectedDates[0] : self.config.minDate && self.config.minDate.getTime() > self.now ? self.config.minDate : self.config.maxDate && self.config.maxDate.getTime() < self.now ? self.config.maxDate : self.now;
-
-		self.currentYear = initialDate.getFullYear();
-		self.currentMonth = initialDate.getMonth();
-
-		if (self.selectedDates.length) self.latestSelectedDateObj = self.selectedDates[0];
-
-		self.minDateHasTime = self.config.minDate && (self.config.minDate.getHours() || self.config.minDate.getMinutes() || self.config.minDate.getSeconds());
-
-		self.maxDateHasTime = self.config.maxDate && (self.config.maxDate.getHours() || self.config.maxDate.getMinutes() || self.config.maxDate.getSeconds());
-
-		Object.defineProperty(self, "latestSelectedDateObj", {
-			get: function get() {
-				return self._selectedDateObj || self.selectedDates[self.selectedDates.length - 1];
-			},
-			set: function set(date) {
-				self._selectedDateObj = date;
-			}
-		});
-
-		if (!self.isMobile) {
-			Object.defineProperty(self, "showTimeInput", {
-				get: function get() {
-					return self._showTimeInput;
-				},
-				set: function set(bool) {
-					self._showTimeInput = bool;
-					if (self.calendarContainer) toggleClass(self.calendarContainer, "showTimeInput", bool);
-					positionCalendar();
-				}
-			});
-		}
-	}
-
-	function setupHelperFunctions() {
-		self.utils = {
-			duration: {
-				DAY: 86400000
-			},
-			getDaysinMonth: function getDaysinMonth(month, yr) {
-				month = typeof month === "undefined" ? self.currentMonth : month;
-
-				yr = typeof yr === "undefined" ? self.currentYear : yr;
-
-				if (month === 1 && (yr % 4 === 0 && yr % 100 !== 0 || yr % 400 === 0)) return 29;
-
-				return self.l10n.daysInMonth[month];
-			},
-			monthToStr: function monthToStr(monthNumber, shorthand) {
-				shorthand = typeof shorthand === "undefined" ? self.config.shorthandCurrentMonth : shorthand;
-
-				return self.l10n.months[(shorthand ? "short" : "long") + "hand"][monthNumber];
-			}
-		};
-	}
-
-	/* istanbul ignore next */
-	function setupFormats() {
-		["D", "F", "J", "M", "W", "l"].forEach(function (f) {
-			self.formats[f] = Flatpickr.prototype.formats[f].bind(self);
-		});
-
-		self.revFormat.F = Flatpickr.prototype.revFormat.F.bind(self);
-		self.revFormat.M = Flatpickr.prototype.revFormat.M.bind(self);
-	}
-
-	function setupInputs() {
-		self.input = self.config.wrap ? self.element.querySelector("[data-input]") : self.element;
-
-		/* istanbul ignore next */
-		if (!self.input) return console.warn("Error: invalid input element specified", self.input);
-
-		self.input._type = self.input.type;
-		self.input.type = "text";
-
-		self.input.classList.add("flatpickr-input");
-		self._input = self.input;
-
-		if (self.config.altInput) {
-			// replicate self.element
-			self.altInput = createElement(self.input.nodeName, self.input.className + " " + self.config.altInputClass);
-			self._input = self.altInput;
-			self.altInput.placeholder = self.input.placeholder;
-			self.altInput.disabled = self.input.disabled;
-			self.altInput.type = "text";
-			self.input.type = "hidden";
-
-			if (!self.config.static && self.input.parentNode) self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
-		}
-
-		if (!self.config.allowInput) self._input.setAttribute("readonly", "readonly");
-
-		self._positionElement = self.config.positionElement || self._input;
-	}
-
-	function setupMobile() {
-		var inputType = self.config.enableTime ? self.config.noCalendar ? "time" : "datetime-local" : "date";
-
-		self.mobileInput = createElement("input", self.input.className + " flatpickr-mobile");
-		self.mobileInput.step = "any";
-		self.mobileInput.tabIndex = 1;
-		self.mobileInput.type = inputType;
-		self.mobileInput.disabled = self.input.disabled;
-		self.mobileInput.placeholder = self.input.placeholder;
-
-		self.mobileFormatStr = inputType === "datetime-local" ? "Y-m-d\\TH:i:S" : inputType === "date" ? "Y-m-d" : "H:i:S";
-
-		if (self.selectedDates.length) {
-			self.mobileInput.defaultValue = self.mobileInput.value = self.formatDate(self.selectedDates[0], self.mobileFormatStr);
-		}
-
-		if (self.config.minDate) self.mobileInput.min = self.formatDate(self.config.minDate, "Y-m-d");
-
-		if (self.config.maxDate) self.mobileInput.max = self.formatDate(self.config.maxDate, "Y-m-d");
-
-		self.input.type = "hidden";
-		if (self.config.altInput) self.altInput.type = "hidden";
-
-		try {
-			self.input.parentNode.insertBefore(self.mobileInput, self.input.nextSibling);
-		} catch (e) {
-			//
-		}
-
-		self.mobileInput.addEventListener("change", function (e) {
-			self.setDate(e.target.value, false, self.mobileFormatStr);
-			triggerEvent("Change");
-			triggerEvent("Close");
-		});
-	}
-
-	function toggle() {
-		if (self.isOpen) return self.close();
-		self.open();
-	}
-
-	function triggerEvent(event, data) {
-		var hooks = self.config["on" + event];
-
-		if (hooks !== undefined && hooks.length > 0) {
-			for (var i = 0; hooks[i] && i < hooks.length; i++) {
-				hooks[i](self.selectedDates, self.input.value, self, data);
-			}
-		}
-
-		if (event === "Change") {
-			self.input.dispatchEvent(createEvent("change"));
-
-			// many front-end frameworks bind to the input event
-			self.input.dispatchEvent(createEvent("input"));
-		}
-	}
-
-	/**
-  * Creates an Event, normalized across browsers
-  * @param {String} name the event name, e.g. "click"
-  * @return {Event} the created event
-  */
-	function createEvent(name) {
-		if (self._supportsEvents) return new Event(name, { bubbles: true });
-
-		self._[name + "Event"] = document.createEvent("Event");
-		self._[name + "Event"].initEvent(name, true, true);
-		return self._[name + "Event"];
-	}
-
-	function isDateSelected(date) {
-		for (var i = 0; i < self.selectedDates.length; i++) {
-			if (compareDates(self.selectedDates[i], date) === 0) return "" + i;
-		}
-
-		return false;
-	}
-
-	function isDateInRange(date) {
-		if (self.config.mode !== "range" || self.selectedDates.length < 2) return false;
-		return compareDates(date, self.selectedDates[0]) >= 0 && compareDates(date, self.selectedDates[1]) <= 0;
-	}
-
-	function updateNavigationCurrentMonth() {
-		if (self.config.noCalendar || self.isMobile || !self.monthNav) return;
-
-		self.currentMonthElement.textContent = self.utils.monthToStr(self.currentMonth) + " ";
-		self.currentYearElement.value = self.currentYear;
-
-		self._hidePrevMonthArrow = self.config.minDate && (self.currentYear === self.config.minDate.getFullYear() ? self.currentMonth <= self.config.minDate.getMonth() : self.currentYear < self.config.minDate.getFullYear());
-
-		self._hideNextMonthArrow = self.config.maxDate && (self.currentYear === self.config.maxDate.getFullYear() ? self.currentMonth + 1 > self.config.maxDate.getMonth() : self.currentYear > self.config.maxDate.getFullYear());
-	}
-
-	/**
-  * Updates the values of inputs associated with the calendar
-  * @return {void}
-  */
-	function updateValue(triggerChange) {
-		if (!self.selectedDates.length) return self.clear(triggerChange);
-
-		if (self.isMobile) {
-			self.mobileInput.value = self.selectedDates.length ? self.formatDate(self.latestSelectedDateObj, self.mobileFormatStr) : "";
-		}
-
-		var joinChar = self.config.mode !== "range" ? "; " : self.l10n.rangeSeparator;
-
-		self.input.value = self.selectedDates.map(function (dObj) {
-			return self.formatDate(dObj, self.config.dateFormat);
-		}).join(joinChar);
-
-		if (self.config.altInput) {
-			self.altInput.value = self.selectedDates.map(function (dObj) {
-				return self.formatDate(dObj, self.config.altFormat);
-			}).join(joinChar);
-		}
-		triggerEvent("ValueUpdate");
-	}
-
-	function mouseDelta(e) {
-		return Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY));
-	}
-
-	function onMonthNavScroll(e) {
-		e.preventDefault();
-		var isYear = self.currentYearElement.parentNode.contains(e.target);
-
-		if (e.target === self.currentMonthElement || isYear) {
-
-			var delta = mouseDelta(e);
-
-			if (isYear) {
-				changeYear(self.currentYear + delta);
-				e.target.value = self.currentYear;
-			} else self.changeMonth(delta, true, false);
-		}
-	}
-
-	function onMonthNavClick(e) {
-		var isPrevMonth = self.prevMonthNav.contains(e.target);
-		var isNextMonth = self.nextMonthNav.contains(e.target);
-
-		if (isPrevMonth || isNextMonth) changeMonth(isPrevMonth ? -1 : 1);else if (e.target === self.currentYearElement) {
-			e.preventDefault();
-			self.currentYearElement.select();
-		} else if (e.target.className === "arrowUp") self.changeYear(self.currentYear + 1);else if (e.target.className === "arrowDown") self.changeYear(self.currentYear - 1);
-	}
-
-	/**
-  * Creates an HTMLElement with given tag, class, and textual content
-  * @param {String} tag the HTML tag
-  * @param {String} className the new element's class name
-  * @param {String} content The new element's text content
-  * @return {HTMLElement} the created HTML element
-  */
-	function createElement(tag, className, content) {
-		var e = window.document.createElement(tag);
-		className = className || "";
-		content = content || "";
-
-		e.className = className;
-
-		if (content !== undefined) e.textContent = content;
-
-		return e;
-	}
-
-	function arrayify(obj) {
-		if (obj instanceof Array) return obj;
-		return [obj];
-	}
-
-	function toggleClass(elem, className, bool) {
-		if (bool) return elem.classList.add(className);
-		elem.classList.remove(className);
-	}
-
-	/* istanbul ignore next */
-	function debounce(func, wait, immediate) {
-		var timeout = void 0;
-		return function () {
-			var context = this,
-			    args = arguments;
-			clearTimeout(timeout);
-			timeout = setTimeout(function () {
-				timeout = null;
-				if (!immediate) func.apply(context, args);
-			}, wait);
-			if (immediate && !timeout) func.apply(context, args);
-		};
-	}
-
-	/**
-  * Compute the difference in dates, measured in ms
-  * @param {Date} date1
-  * @param {Date} date2
-  * @param {Boolean} timeless whether to reset times of both dates to 00:00
-  * @return {Number} the difference in ms
-  */
-	function compareDates(date1, date2, timeless) {
-		if (!(date1 instanceof Date) || !(date2 instanceof Date)) return false;
-
-		if (timeless !== false) {
-			return new Date(date1.getTime()).setHours(0, 0, 0, 0) - new Date(date2.getTime()).setHours(0, 0, 0, 0);
-		}
-
-		return date1.getTime() - date2.getTime();
-	}
-
-	function timeWrapper(e) {
-		e.preventDefault();
-
-		var isKeyDown = e.type === "keydown",
-		    isWheel = e.type === "wheel",
-		    isIncrement = e.type === "increment",
-		    input = e.target;
-
-		if (self.amPM && e.target === self.amPM) return e.target.textContent = ["AM", "PM"][e.target.textContent === "AM" | 0];
-
-		var min = Number(input.min),
-		    max = Number(input.max),
-		    step = Number(input.step),
-		    curValue = parseInt(input.value, 10),
-		    delta = e.delta || (!isKeyDown ? Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY)) || 0 : e.which === 38 ? 1 : -1);
-
-		var newValue = curValue + step * delta;
-
-		if (typeof input.value !== "undefined" && input.value.length === 2) {
-			var isHourElem = input === self.hourElement,
-			    isMinuteElem = input === self.minuteElement;
-
-			if (newValue < min) {
-				newValue = max + newValue + !isHourElem + (isHourElem && !self.amPM);
-
-				if (isMinuteElem) incrementNumInput(null, -1, self.hourElement);
-			} else if (newValue > max) {
-				newValue = input === self.hourElement ? newValue - max - !self.amPM : min;
-
-				if (isMinuteElem) incrementNumInput(null, 1, self.hourElement);
-			}
-
-			if (self.amPM && isHourElem && (step === 1 ? newValue + curValue === 23 : Math.abs(newValue - curValue) > step)) self.amPM.textContent = self.amPM.textContent === "PM" ? "AM" : "PM";
-
-			input.value = self.pad(newValue);
-		}
-	}
-
-	init();
-	return self;
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* flatpickr v4.1.2, @license MIT */
+(function (global, factory) {
+	 true ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global.flatpickr = factory());
+}(this, (function () { 'use strict';
+
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+/* global Reflect, Promise */
+
+
+
+var __assign = Object.assign || function __assign(t) {
+    for (var s, i = 1, n = arguments.length; i < n; i++) {
+        s = arguments[i];
+        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
+    }
+    return t;
+};
+
+function compareDates(date1, date2, timeless) {
+    if (timeless !== false) {
+        return (new Date(date1.getTime()).setHours(0, 0, 0, 0) -
+            new Date(date2.getTime()).setHours(0, 0, 0, 0));
+    }
+    return date1.getTime() - date2.getTime();
+}
+var monthToStr = function (monthNumber, shorthand, locale) { return locale.months[shorthand ? "shorthand" : "longhand"][monthNumber]; };
+var getWeek = function (givenDate) {
+    var onejan = new Date(givenDate.getFullYear(), 0, 1);
+    return Math.ceil(((givenDate.getTime() - onejan.getTime()) / 86400000 +
+        onejan.getDay() +
+        1) /
+        7);
+};
+var duration = {
+    DAY: 86400000,
+};
+
+var defaults = {
+    _disable: [],
+    _enable: [],
+    allowInput: false,
+    altFormat: "F j, Y",
+    altInput: false,
+    altInputClass: "form-control input",
+    animate: typeof window === "object" &&
+        window.navigator.userAgent.indexOf("MSIE") === -1,
+    ariaDateFormat: "F j, Y",
+    clickOpens: true,
+    closeOnSelect: true,
+    conjunction: ", ",
+    dateFormat: "Y-m-d",
+    defaultHour: 12,
+    defaultMinute: 0,
+    defaultSeconds: 0,
+    disable: [],
+    disableMobile: false,
+    enable: [],
+    enableSeconds: false,
+    enableTime: false,
+    errorHandler: console.warn,
+    getWeek: getWeek,
+    hourIncrement: 1,
+    ignoredFocusElements: [],
+    inline: false,
+    locale: "default",
+    minuteIncrement: 5,
+    mode: "single",
+    nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
+    noCalendar: false,
+    onChange: [],
+    onClose: [],
+    onDayCreate: [],
+    onDestroy: [],
+    onKeyDown: [],
+    onMonthChange: [],
+    onOpen: [],
+    onParseConfig: [],
+    onReady: [],
+    onValueUpdate: [],
+    onYearChange: [],
+    plugins: [],
+    position: "auto",
+    positionElement: undefined,
+    prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
+    shorthandCurrentMonth: false,
+    static: false,
+    time_24hr: false,
+    weekNumbers: false,
+    wrap: false,
+};
+
+var english = {
+    weekdays: {
+        shorthand: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+        longhand: [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+        ],
+    },
+    months: {
+        shorthand: [
+            "Jan",
+            "Feb",
+            "Mar",
+            "Apr",
+            "May",
+            "Jun",
+            "Jul",
+            "Aug",
+            "Sep",
+            "Oct",
+            "Nov",
+            "Dec",
+        ],
+        longhand: [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+        ],
+    },
+    daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+    firstDayOfWeek: 0,
+    ordinal: function (nth) {
+        var s = nth % 100;
+        if (s > 3 && s < 21)
+            return "th";
+        switch (s % 10) {
+            case 1:
+                return "st";
+            case 2:
+                return "nd";
+            case 3:
+                return "rd";
+            default:
+                return "th";
+        }
+    },
+    rangeSeparator: " to ",
+    weekAbbreviation: "Wk",
+    scrollTitle: "Scroll to increment",
+    toggleTitle: "Click to toggle",
+    amPM: ["AM", "PM"],
+};
+
+var pad = function (number) { return ("0" + number).slice(-2); };
+var int = function (bool) { return (bool === true ? 1 : 0); };
+function debounce(func, wait, immediate) {
+    if (immediate === void 0) { immediate = false; }
+    var timeout;
+    return function () {
+        var context = this, args = arguments;
+        timeout !== null && clearTimeout(timeout);
+        timeout = window.setTimeout(function () {
+            timeout = null;
+            if (!immediate)
+                func.apply(context, args);
+        }, wait);
+        if (immediate && !timeout)
+            func.apply(context, args);
+    };
+}
+var arrayify = function (obj) {
+    return obj instanceof Array ? obj : [obj];
+};
+function mouseDelta(e) {
+    var delta = e.wheelDelta || -e.deltaY;
+    return delta >= 0 ? 1 : -1;
 }
 
-/* istanbul ignore next */
-Flatpickr.defaultConfig = {
-	mode: "single",
+function toggleClass(elem, className, bool) {
+    if (bool === true)
+        return elem.classList.add(className);
+    elem.classList.remove(className);
+}
+function createElement(tag, className, content) {
+    var e = window.document.createElement(tag);
+    className = className || "";
+    content = content || "";
+    e.className = className;
+    if (content !== undefined)
+        e.textContent = content;
+    return e;
+}
+function clearNode(node) {
+    while (node.firstChild)
+        node.removeChild(node.firstChild);
+}
+function findParent(node, condition) {
+    if (condition(node))
+        return node;
+    else if (node.parentNode)
+        return findParent(node.parentNode, condition);
+    return undefined;
+}
+function createNumberInput(inputClassName) {
+    var wrapper = createElement("div", "numInputWrapper"), numInput = createElement("input", "numInput " + inputClassName), arrowUp = createElement("span", "arrowUp"), arrowDown = createElement("span", "arrowDown");
+    numInput.type = "text";
+    numInput.pattern = "\\d*";
+    wrapper.appendChild(numInput);
+    wrapper.appendChild(arrowUp);
+    wrapper.appendChild(arrowDown);
+    return wrapper;
+}
 
-	position: "auto",
-
-	animate: window.navigator.userAgent.indexOf("MSIE") === -1,
-
-	/* if true, dates will be parsed, formatted, and displayed in UTC.
- preloading date strings w/ timezones is recommended but not necessary */
-	utc: false,
-
-	// wrap: see https://chmln.github.io/flatpickr/examples/#flatpickr-external-elements
-	wrap: false,
-
-	// enables week numbers
-	weekNumbers: false,
-
-	// allow manual datetime input
-	allowInput: false,
-
-	/*
- 	clicking on input opens the date(time)picker.
- 	disable if you wish to open the calendar manually with .open()
- */
-	clickOpens: true,
-
-	/*
- 	closes calendar after date selection,
- 	unless 'mode' is 'multiple' or enableTime is true
- */
-	closeOnSelect: true,
-
-	// display time picker in 24 hour mode
-	time_24hr: false,
-
-	// enables the time picker functionality
-	enableTime: false,
-
-	// noCalendar: true will hide the calendar. use for a time picker along w/ enableTime
-	noCalendar: false,
-
-	// more date format chars at https://chmln.github.io/flatpickr/#dateformat
-	dateFormat: "Y-m-d",
-
-	// date format used in aria-label for days
-	ariaDateFormat: "F j, Y",
-
-	// altInput - see https://chmln.github.io/flatpickr/#altinput
-	altInput: false,
-
-	// the created altInput element will have this class.
-	altInputClass: "form-control input",
-
-	// same as dateFormat, but for altInput
-	altFormat: "F j, Y", // defaults to e.g. June 10, 2016
-
-	// defaultDate - either a datestring or a date object. used for datetimepicker"s initial value
-	defaultDate: null,
-
-	// the minimum date that user can pick (inclusive)
-	minDate: null,
-
-	// the maximum date that user can pick (inclusive)
-	maxDate: null,
-
-	// dateparser that transforms a given string to a date object
-	parseDate: null,
-
-	// dateformatter that transforms a given date object to a string, according to passed format
-	formatDate: null,
-
-	getWeek: function getWeek(givenDate) {
-		var date = new Date(givenDate.getTime());
-		var onejan = new Date(date.getFullYear(), 0, 1);
-		return Math.ceil(((date - onejan) / 86400000 + onejan.getDay() + 1) / 7);
-	},
-
-
-	// see https://chmln.github.io/flatpickr/#disable
-	enable: [],
-
-	// see https://chmln.github.io/flatpickr/#disable
-	disable: [],
-
-	// display the short version of month names - e.g. Sep instead of September
-	shorthandCurrentMonth: false,
-
-	// displays calendar inline. see https://chmln.github.io/flatpickr/#inline-calendar
-	inline: false,
-
-	// position calendar inside wrapper and next to the input element
-	// leave at false unless you know what you"re doing
-	"static": false,
-
-	// DOM node to append the calendar to in *static* mode
-	appendTo: null,
-
-	// code for previous/next icons. this is where you put your custom icon code e.g. fontawesome
-	prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
-	nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>",
-
-	// enables seconds in the time picker
-	enableSeconds: false,
-
-	// step size used when scrolling/incrementing the hour element
-	hourIncrement: 1,
-
-	// step size used when scrolling/incrementing the minute element
-	minuteIncrement: 5,
-
-	// initial value in the hour element
-	defaultHour: 12,
-
-	// initial value in the minute element
-	defaultMinute: 0,
-
-	// disable native mobile datetime input support
-	disableMobile: false,
-
-	// default locale
-	locale: "default",
-
-	plugins: [],
-
-	// called every time calendar is closed
-	onClose: undefined, // function (dateObj, dateStr) {}
-
-	// onChange callback when user selects a date or time
-	onChange: undefined, // function (dateObj, dateStr) {}
-
-	// called for every day element
-	onDayCreate: undefined,
-
-	// called every time the month is changed
-	onMonthChange: undefined,
-
-	// called every time calendar is opened
-	onOpen: undefined, // function (dateObj, dateStr) {}
-
-	// called after the configuration has been parsed
-	onParseConfig: undefined,
-
-	// called after calendar is ready
-	onReady: undefined, // function (dateObj, dateStr) {}
-
-	// called after input value updated
-	onValueUpdate: undefined,
-
-	// called every time the year is changed
-	onYearChange: undefined,
-
-	onKeyDown: undefined
+var do_nothing = function () { return undefined; };
+var revFormat = {
+    D: do_nothing,
+    F: function (dateObj, monthName, locale) {
+        dateObj.setMonth(locale.months.longhand.indexOf(monthName));
+    },
+    G: function (dateObj, hour) {
+        dateObj.setHours(parseFloat(hour));
+    },
+    H: function (dateObj, hour) {
+        dateObj.setHours(parseFloat(hour));
+    },
+    J: function (dateObj, day) {
+        dateObj.setDate(parseFloat(day));
+    },
+    K: function (dateObj, amPM) {
+        dateObj.setHours(dateObj.getHours() % 12 + 12 * int(/pm/i.test(amPM)));
+    },
+    M: function (dateObj, shortMonth, locale) {
+        dateObj.setMonth(locale.months.shorthand.indexOf(shortMonth));
+    },
+    S: function (dateObj, seconds) {
+        dateObj.setSeconds(parseFloat(seconds));
+    },
+    U: function (_, unixSeconds) { return new Date(parseFloat(unixSeconds) * 1000); },
+    W: function (dateObj, weekNum) {
+        var weekNumber = parseInt(weekNum);
+        return new Date(dateObj.getFullYear(), 0, 2 + (weekNumber - 1) * 7, 0, 0, 0, 0);
+    },
+    Y: function (dateObj, year) {
+        dateObj.setFullYear(parseFloat(year));
+    },
+    Z: function (_, ISODate) { return new Date(ISODate); },
+    d: function (dateObj, day) {
+        dateObj.setDate(parseFloat(day));
+    },
+    h: function (dateObj, hour) {
+        dateObj.setHours(parseFloat(hour));
+    },
+    i: function (dateObj, minutes) {
+        dateObj.setMinutes(parseFloat(minutes));
+    },
+    j: function (dateObj, day) {
+        dateObj.setDate(parseFloat(day));
+    },
+    l: do_nothing,
+    m: function (dateObj, month) {
+        dateObj.setMonth(parseFloat(month) - 1);
+    },
+    n: function (dateObj, month) {
+        dateObj.setMonth(parseFloat(month) - 1);
+    },
+    s: function (dateObj, seconds) {
+        dateObj.setSeconds(parseFloat(seconds));
+    },
+    w: do_nothing,
+    y: function (dateObj, year) {
+        dateObj.setFullYear(2000 + parseFloat(year));
+    },
+};
+var tokenRegex = {
+    D: "(\\w+)",
+    F: "(\\w+)",
+    G: "(\\d\\d|\\d)",
+    H: "(\\d\\d|\\d)",
+    J: "(\\d\\d|\\d)\\w+",
+    K: "(am|AM|Am|aM|pm|PM|Pm|pM)",
+    M: "(\\w+)",
+    S: "(\\d\\d|\\d)",
+    U: "(.+)",
+    W: "(\\d\\d|\\d)",
+    Y: "(\\d{4})",
+    Z: "(.+)",
+    d: "(\\d\\d|\\d)",
+    h: "(\\d\\d|\\d)",
+    i: "(\\d\\d|\\d)",
+    j: "(\\d\\d|\\d)",
+    l: "(\\w+)",
+    m: "(\\d\\d|\\d)",
+    n: "(\\d\\d|\\d)",
+    s: "(\\d\\d|\\d)",
+    w: "(\\d\\d|\\d)",
+    y: "(\\d{2})",
+};
+var formats = {
+    Z: function (date) { return date.toISOString(); },
+    D: function (date, locale, options) {
+        return locale.weekdays.shorthand[formats.w(date, locale, options)];
+    },
+    F: function (date, locale, options) {
+        return monthToStr(formats.n(date, locale, options) - 1, false, locale);
+    },
+    G: function (date, locale, options) {
+        return pad(formats.h(date, locale, options));
+    },
+    H: function (date) { return pad(date.getHours()); },
+    J: function (date, locale) {
+        return locale.ordinal !== undefined
+            ? date.getDate() + locale.ordinal(date.getDate())
+            : date.getDate();
+    },
+    K: function (date) { return (date.getHours() > 11 ? "PM" : "AM"); },
+    M: function (date, locale) {
+        return monthToStr(date.getMonth(), true, locale);
+    },
+    S: function (date) { return pad(date.getSeconds()); },
+    U: function (date) { return date.getTime() / 1000; },
+    W: function (date, _, options) {
+        return options.getWeek(date);
+    },
+    Y: function (date) { return date.getFullYear(); },
+    d: function (date) { return pad(date.getDate()); },
+    h: function (date) { return (date.getHours() % 12 ? date.getHours() % 12 : 12); },
+    i: function (date) { return pad(date.getMinutes()); },
+    j: function (date) { return date.getDate(); },
+    l: function (date, locale) {
+        return locale.weekdays.longhand[date.getDay()];
+    },
+    m: function (date) { return pad(date.getMonth() + 1); },
+    n: function (date) { return date.getMonth() + 1; },
+    s: function (date) { return date.getSeconds(); },
+    w: function (date) { return date.getDay(); },
+    y: function (date) { return String(date.getFullYear()).substring(2); },
 };
 
-/* istanbul ignore next */
-Flatpickr.l10ns = {
-	en: {
-		weekdays: {
-			shorthand: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-			longhand: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-		},
-		months: {
-			shorthand: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-			longhand: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-		},
-		daysInMonth: [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-		firstDayOfWeek: 0,
-		ordinal: function ordinal(nth) {
-			var s = nth % 100;
-			if (s > 3 && s < 21) return "th";
-			switch (s % 10) {
-				case 1:
-					return "st";
-				case 2:
-					return "nd";
-				case 3:
-					return "rd";
-				default:
-					return "th";
-			}
-		},
-		rangeSeparator: " to ",
-		weekAbbreviation: "Wk",
-		scrollTitle: "Scroll to increment",
-		toggleTitle: "Click to toggle"
-	}
-};
+if (typeof Object.assign !== "function") {
+    Object.assign = function (target) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+        if (!target) {
+            throw TypeError("Cannot convert undefined or null to object");
+        }
+        var _loop_1 = function (source) {
+            if (source) {
+                Object.keys(source).forEach(function (key) { return (target[key] = source[key]); });
+            }
+        };
+        for (var _a = 0, args_1 = args; _a < args_1.length; _a++) {
+            var source = args_1[_a];
+            _loop_1(source);
+        }
+        return target;
+    };
+}
 
-Flatpickr.l10ns.default = Object.create(Flatpickr.l10ns.en);
-Flatpickr.localize = function (l10n) {
-	return _extends(Flatpickr.l10ns.default, l10n || {});
-};
-Flatpickr.setDefaults = function (config) {
-	return _extends(Flatpickr.defaultConfig, config || {});
-};
-
-Flatpickr.prototype = {
-	formats: {
-		// get the date in UTC
-		Z: function Z(date) {
-			return date.toISOString();
-		},
-
-		// weekday name, short, e.g. Thu
-		D: function D(date) {
-			return this.l10n.weekdays.shorthand[this.formats.w(date)];
-		},
-
-		// full month name e.g. January
-		F: function F(date) {
-			return this.utils.monthToStr(this.formats.n(date) - 1, false);
-		},
-
-		// padded hour 1-12
-		G: function G(date) {
-			return Flatpickr.prototype.pad(Flatpickr.prototype.formats.h(date));
-		},
-
-		// hours with leading zero e.g. 03
-		H: function H(date) {
-			return Flatpickr.prototype.pad(date.getHours());
-		},
-
-		// day (1-30) with ordinal suffix e.g. 1st, 2nd
-		J: function J(date) {
-			return date.getDate() + this.l10n.ordinal(date.getDate());
-		},
-
-		// AM/PM
-		K: function K(date) {
-			return date.getHours() > 11 ? "PM" : "AM";
-		},
-
-		// shorthand month e.g. Jan, Sep, Oct, etc
-		M: function M(date) {
-			return this.utils.monthToStr(date.getMonth(), true);
-		},
-
-		// seconds 00-59
-		S: function S(date) {
-			return Flatpickr.prototype.pad(date.getSeconds());
-		},
-
-		// unix timestamp
-		U: function U(date) {
-			return date.getTime() / 1000;
-		},
-
-		W: function W(date) {
-			return this.config.getWeek(date);
-		},
-
-		// full year e.g. 2016
-		Y: function Y(date) {
-			return date.getFullYear();
-		},
-
-		// day in month, padded (01-30)
-		d: function d(date) {
-			return Flatpickr.prototype.pad(date.getDate());
-		},
-
-		// hour from 1-12 (am/pm)
-		h: function h(date) {
-			return date.getHours() % 12 ? date.getHours() % 12 : 12;
-		},
-
-		// minutes, padded with leading zero e.g. 09
-		i: function i(date) {
-			return Flatpickr.prototype.pad(date.getMinutes());
-		},
-
-		// day in month (1-30)
-		j: function j(date) {
-			return date.getDate();
-		},
-
-		// weekday name, full, e.g. Thursday
-		l: function l(date) {
-			return this.l10n.weekdays.longhand[date.getDay()];
-		},
-
-		// padded month number (01-12)
-		m: function m(date) {
-			return Flatpickr.prototype.pad(date.getMonth() + 1);
-		},
-
-		// the month number (1-12)
-		n: function n(date) {
-			return date.getMonth() + 1;
-		},
-
-		// seconds 0-59
-		s: function s(date) {
-			return date.getSeconds();
-		},
-
-		// number of the day of the week
-		w: function w(date) {
-			return date.getDay();
-		},
-
-		// last two digits of year e.g. 16 for 2016
-		y: function y(date) {
-			return String(date.getFullYear()).substring(2);
-		}
-	},
-
-	/**
-  * Formats a given Date object into a string based on supplied format
-  * @param {Date} dateObj the date object
-  * @param {String} frmt a string composed of formatting tokens e.g. "Y-m-d"
-  * @return {String} The textual representation of the date e.g. 2017-02-03
-  */
-	formatDate: function formatDate(dateObj, frmt) {
-		var _this = this;
-
-		if (this.config !== undefined && this.config.formatDate !== undefined) return this.config.formatDate(dateObj, frmt);
-
-		return frmt.split("").map(function (c, i, arr) {
-			return _this.formats[c] && arr[i - 1] !== "\\" ? _this.formats[c](dateObj) : c !== "\\" ? c : "";
-		}).join("");
-	},
-
-
-	revFormat: {
-		D: function D() {},
-		F: function F(dateObj, monthName) {
-			dateObj.setMonth(this.l10n.months.longhand.indexOf(monthName));
-		},
-		G: function G(dateObj, hour) {
-			dateObj.setHours(parseFloat(hour));
-		},
-		H: function H(dateObj, hour) {
-			dateObj.setHours(parseFloat(hour));
-		},
-		J: function J(dateObj, day) {
-			dateObj.setDate(parseFloat(day));
-		},
-		K: function K(dateObj, amPM) {
-			var hours = dateObj.getHours();
-
-			if (hours !== 12) dateObj.setHours(hours % 12 + 12 * /pm/i.test(amPM));
-		},
-		M: function M(dateObj, shortMonth) {
-			dateObj.setMonth(this.l10n.months.shorthand.indexOf(shortMonth));
-		},
-		S: function S(dateObj, seconds) {
-			dateObj.setSeconds(seconds);
-		},
-		U: function U(dateObj, unixSeconds) {
-			return new Date(parseFloat(unixSeconds) * 1000);
-		},
-
-		W: function W(dateObj, weekNumber) {
-			weekNumber = parseInt(weekNumber);
-			return new Date(dateObj.getFullYear(), 0, 2 + (weekNumber - 1) * 7, 0, 0, 0, 0, 0);
-		},
-		Y: function Y(dateObj, year) {
-			dateObj.setFullYear(year);
-		},
-		Z: function Z(dateObj, ISODate) {
-			return new Date(ISODate);
-		},
-
-		d: function d(dateObj, day) {
-			dateObj.setDate(parseFloat(day));
-		},
-		h: function h(dateObj, hour) {
-			dateObj.setHours(parseFloat(hour));
-		},
-		i: function i(dateObj, minutes) {
-			dateObj.setMinutes(parseFloat(minutes));
-		},
-		j: function j(dateObj, day) {
-			dateObj.setDate(parseFloat(day));
-		},
-		l: function l() {},
-		m: function m(dateObj, month) {
-			dateObj.setMonth(parseFloat(month) - 1);
-		},
-		n: function n(dateObj, month) {
-			dateObj.setMonth(parseFloat(month) - 1);
-		},
-		s: function s(dateObj, seconds) {
-			dateObj.setSeconds(parseFloat(seconds));
-		},
-		w: function w() {},
-		y: function y(dateObj, year) {
-			dateObj.setFullYear(2000 + parseFloat(year));
-		}
-	},
-
-	tokenRegex: {
-		D: "(\\w+)",
-		F: "(\\w+)",
-		G: "(\\d\\d|\\d)",
-		H: "(\\d\\d|\\d)",
-		J: "(\\d\\d|\\d)\\w+",
-		K: "(\\w+)",
-		M: "(\\w+)",
-		S: "(\\d\\d|\\d)",
-		U: "(.+)",
-		W: "(\\d\\d|\\d)",
-		Y: "(\\d{4})",
-		Z: "(.+)",
-		d: "(\\d\\d|\\d)",
-		h: "(\\d\\d|\\d)",
-		i: "(\\d\\d|\\d)",
-		j: "(\\d\\d|\\d)",
-		l: "(\\w+)",
-		m: "(\\d\\d|\\d)",
-		n: "(\\d\\d|\\d)",
-		s: "(\\d\\d|\\d)",
-		w: "(\\d\\d|\\d)",
-		y: "(\\d{2})"
-	},
-
-	pad: function pad(number) {
-		return ("0" + number).slice(-2);
-	},
-
-	/**
-  * Parses a date(+time) string into a Date object
-  * @param {String} date the date string, e.g. 2017-02-03 14:45
-  * @param {String} givenFormat the date format, e.g. Y-m-d H:i
-  * @param {Boolean} timeless whether to reset the time of Date object
-  * @return {Date} the parsed Date object
-  */
-	parseDate: function parseDate(date, givenFormat, timeless) {
-		if (!date) return null;
-
-		var date_orig = date;
-
-		if (date instanceof Date) {
-			date = new Date(date.getTime()); // create a copy
-			date.fp_isUTC = date_orig.fp_isUTC;
-		} else if (date.toFixed !== undefined) // timestamp
-			date = new Date(date);else {
-			// date string
-			var format = givenFormat || (this.config || Flatpickr.defaultConfig).dateFormat;
-			date = String(date).trim();
-
-			if (date === "today") {
-				date = new Date();
-				timeless = true;
-			} else if (/Z$/.test(date) || /GMT$/.test(date)) // datestrings w/ timezone
-				date = new Date(date);else if (this.config && this.config.parseDate) date = this.config.parseDate(date, format);else {
-				var parsedDate = !this.config || !this.config.noCalendar ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0) : new Date(new Date().setHours(0, 0, 0, 0));
-
-				var matched = void 0;
-
-				for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
-					var token = format[i];
-					var isBackSlash = token === "\\";
-					var escaped = format[i - 1] === "\\" || isBackSlash;
-
-					if (this.tokenRegex[token] && !escaped) {
-						regexStr += this.tokenRegex[token];
-						var match = new RegExp(regexStr).exec(date);
-						if (match && (matched = true)) {
-							parsedDate = this.revFormat[token](parsedDate, match[++matchIndex]) || parsedDate;
-						}
-					} else if (!isBackSlash) regexStr += "."; // don't really care
-				}
-
-				date = matched ? parsedDate : null;
-			}
-		}
-
-		/* istanbul ignore next */
-		if (!(date instanceof Date)) {
-			console.warn("flatpickr: invalid date " + date_orig);
-			console.info(this.element);
-			return null;
-		}
-
-		if (this.config && this.config.utc && !date.fp_isUTC) date = date.fp_toUTC();
-
-		if (timeless === true) date.setHours(0, 0, 0, 0);
-
-		return date;
-	}
-};
-
-/* istanbul ignore next */
+function FlatpickrInstance(element, instanceConfig) {
+    var self = {};
+    self.parseDate = parseDate;
+    self.formatDate = formatDate;
+    self._animationLoop = [];
+    self._handlers = [];
+    self._bind = bind;
+    self._setHoursFromDate = setHoursFromDate;
+    self.changeMonth = changeMonth;
+    self.changeYear = changeYear;
+    self.clear = clear;
+    self.close = close;
+    self._createElement = createElement;
+    self.destroy = destroy;
+    self.isEnabled = isEnabled;
+    self.jumpToDate = jumpToDate;
+    self.open = open;
+    self.redraw = redraw;
+    self.set = set;
+    self.setDate = setDate;
+    self.toggle = toggle;
+    function setupHelperFunctions() {
+        self.utils = {
+            getDaysInMonth: function (month, yr) {
+                if (month === void 0) { month = self.currentMonth; }
+                if (yr === void 0) { yr = self.currentYear; }
+                if (month === 1 && ((yr % 4 === 0 && yr % 100 !== 0) || yr % 400 === 0))
+                    return 29;
+                return self.l10n.daysInMonth[month];
+            },
+        };
+    }
+    function init() {
+        self.element = self.input = element;
+        self.isOpen = false;
+        parseConfig();
+        setupLocale();
+        setupInputs();
+        setupDates();
+        setupHelperFunctions();
+        if (!self.isMobile)
+            build();
+        bindEvents();
+        if (self.selectedDates.length || self.config.noCalendar) {
+            if (self.config.enableTime) {
+                setHoursFromDate(self.config.noCalendar
+                    ? self.latestSelectedDateObj || self.config.minDate
+                    : undefined);
+            }
+            updateValue(false);
+        }
+        self.showTimeInput =
+            self.selectedDates.length > 0 || self.config.noCalendar;
+        if (self.weekWrapper !== undefined && self.daysContainer !== undefined) {
+            self.calendarContainer.style.width =
+                self.daysContainer.offsetWidth + self.weekWrapper.offsetWidth + "px";
+        }
+        if (!self.isMobile)
+            positionCalendar();
+        triggerEvent("onReady");
+    }
+    function bindToInstance(fn) {
+        return fn.bind(self);
+    }
+    function updateTime(e) {
+        if (self.config.noCalendar && self.selectedDates.length === 0) {
+            var minDate = self.config.minDate;
+            self.setDate(new Date().setHours(!minDate ? self.config.defaultHour : minDate.getHours(), !minDate ? self.config.defaultMinute : minDate.getMinutes(), !minDate || !self.config.enableSeconds
+                ? self.config.defaultSeconds
+                : minDate.getSeconds()), false);
+            setHoursFromInputs();
+            updateValue();
+        }
+        timeWrapper(e);
+        if (self.selectedDates.length === 0)
+            return;
+        if (!self.minDateHasTime ||
+            e.type !== "input" ||
+            e.target.value.length >= 2) {
+            setHoursFromInputs();
+            updateValue();
+        }
+        else {
+            setTimeout(function () {
+                setHoursFromInputs();
+                updateValue();
+            }, 1000);
+        }
+    }
+    function ampm2military(hour, amPM) {
+        return hour % 12 + 12 * int(amPM === "PM");
+    }
+    function military2ampm(hour) {
+        switch (hour % 24) {
+            case 0:
+            case 12:
+                return 12;
+            default:
+                return hour % 12;
+        }
+    }
+    function setHoursFromInputs() {
+        if (self.hourElement === undefined || self.minuteElement === undefined)
+            return;
+        var hours = (parseInt(self.hourElement.value.slice(-2), 10) || 0) % 24, minutes = (parseInt(self.minuteElement.value, 10) || 0) % 60, seconds = self.secondElement !== undefined
+            ? (parseInt(self.secondElement.value, 10) || 0) % 60
+            : 0;
+        if (self.amPM !== undefined)
+            hours = ampm2military(hours, self.amPM.textContent);
+        if (self.config.minDate &&
+            self.minDateHasTime &&
+            self.latestSelectedDateObj &&
+            compareDates(self.latestSelectedDateObj, self.config.minDate) === 0) {
+            hours = Math.max(hours, self.config.minDate.getHours());
+            if (hours === self.config.minDate.getHours())
+                minutes = Math.max(minutes, self.config.minDate.getMinutes());
+        }
+        if (self.config.maxDate &&
+            self.maxDateHasTime &&
+            self.latestSelectedDateObj &&
+            compareDates(self.latestSelectedDateObj, self.config.maxDate) === 0) {
+            hours = Math.min(hours, self.config.maxDate.getHours());
+            if (hours === self.config.maxDate.getHours())
+                minutes = Math.min(minutes, self.config.maxDate.getMinutes());
+        }
+        setHours(hours, minutes, seconds);
+    }
+    function setHoursFromDate(dateObj) {
+        var date = dateObj || self.latestSelectedDateObj;
+        if (date)
+            setHours(date.getHours(), date.getMinutes(), date.getSeconds());
+    }
+    function setHours(hours, minutes, seconds) {
+        if (self.latestSelectedDateObj !== undefined) {
+            self.latestSelectedDateObj.setHours(hours % 24, minutes, seconds || 0, 0);
+        }
+        if (!self.hourElement || !self.minuteElement || self.isMobile)
+            return;
+        self.hourElement.value = pad(!self.config.time_24hr
+            ? (12 + hours) % 12 + 12 * int(hours % 12 === 0)
+            : hours);
+        self.minuteElement.value = pad(minutes);
+        if (self.amPM !== undefined)
+            self.amPM.textContent = hours >= 12 ? "PM" : "AM";
+        if (self.secondElement !== undefined)
+            self.secondElement.value = pad(seconds);
+    }
+    function onYearInput(event) {
+        var year = parseInt(event.target.value) + (event.delta || 0);
+        if (year.toString().length === 4 || event.key === "Enter") {
+            self.currentYearElement.blur();
+            if (!/[^\d]/.test(year.toString()))
+                changeYear(year);
+        }
+    }
+    function bind(element, event, handler) {
+        if (event instanceof Array)
+            return event.forEach(function (ev) { return bind(element, ev, handler); });
+        if (element instanceof Array)
+            return element.forEach(function (el) { return bind(el, event, handler); });
+        element.addEventListener(event, handler);
+        self._handlers.push({ element: element, event: event, handler: handler });
+    }
+    function onClick(handler) {
+        return function (evt) {
+            evt.which === 1 && handler(evt);
+        };
+    }
+    function triggerChange() {
+        triggerEvent("onChange");
+    }
+    function bindEvents() {
+        if (self.config.wrap) {
+            ["open", "close", "toggle", "clear"].forEach(function (evt) {
+                Array.prototype.forEach.call(self.element.querySelectorAll("[data-" + evt + "]"), function (el) {
+                    return bind(el, "click", self[evt]);
+                });
+            });
+        }
+        if (self.isMobile) {
+            setupMobile();
+            return;
+        }
+        var debouncedResize = debounce(onResize, 50);
+        self._debouncedChange = debounce(triggerChange, 300);
+        if (self.config.mode === "range" && self.daysContainer)
+            bind(self.daysContainer, "mouseover", function (e) {
+                return onMouseOver(e.target);
+            });
+        bind(window.document.body, "keydown", onKeyDown);
+        if (!self.config.static)
+            bind(self._input, "keydown", onKeyDown);
+        if (!self.config.inline && !self.config.static)
+            bind(window, "resize", debouncedResize);
+        if (window.ontouchstart !== undefined)
+            bind(window.document.body, "touchstart", documentClick);
+        bind(window.document.body, "mousedown", onClick(documentClick));
+        bind(self._input, "blur", documentClick);
+        if (self.config.clickOpens === true) {
+            bind(self._input, "focus", self.open);
+            bind(self._input, "mousedown", onClick(self.open));
+        }
+        if (self.daysContainer !== undefined) {
+            self.monthNav.addEventListener("wheel", function (e) { return e.preventDefault(); });
+            bind(self.monthNav, "wheel", debounce(onMonthNavScroll, 10));
+            bind(self.monthNav, "mousedown", onClick(onMonthNavClick));
+            bind(self.monthNav, ["keyup", "increment"], onYearInput);
+            bind(self.daysContainer, "mousedown", onClick(selectDate));
+            if (self.config.animate) {
+                bind(self.daysContainer, ["webkitAnimationEnd", "animationend"], animateDays);
+                bind(self.monthNav, ["webkitAnimationEnd", "animationend"], animateMonths);
+            }
+        }
+        if (self.timeContainer !== undefined &&
+            self.minuteElement !== undefined &&
+            self.hourElement !== undefined) {
+            var selText = function (e) {
+                return e.target.select();
+            };
+            bind(self.timeContainer, ["wheel", "input", "increment"], updateTime);
+            bind(self.timeContainer, "mousedown", onClick(timeIncrement));
+            bind(self.timeContainer, ["wheel", "increment"], self._debouncedChange);
+            bind(self.timeContainer, "input", triggerChange);
+            bind([self.hourElement, self.minuteElement], ["focus", "click"], selText);
+            if (self.secondElement !== undefined)
+                bind(self.secondElement, "focus", function () { return self.secondElement && self.secondElement.select(); });
+            if (self.amPM !== undefined) {
+                bind(self.amPM, "mousedown", onClick(function (e) {
+                    updateTime(e);
+                    triggerChange();
+                }));
+            }
+        }
+    }
+    function processPostDayAnimation() {
+        self._animationLoop.forEach(function (f) { return f(); });
+        self._animationLoop = [];
+    }
+    function animateDays(e) {
+        if (self.daysContainer && self.daysContainer.childNodes.length > 1) {
+            switch (e.animationName) {
+                case "fpSlideLeft":
+                    self.daysContainer.lastChild &&
+                        self.daysContainer.lastChild.classList.remove("slideLeftNew");
+                    self.daysContainer.removeChild(self.daysContainer
+                        .firstChild);
+                    self.days = self.daysContainer.firstChild;
+                    processPostDayAnimation();
+                    break;
+                case "fpSlideRight":
+                    self.daysContainer.firstChild &&
+                        self.daysContainer.firstChild.classList.remove("slideRightNew");
+                    self.daysContainer.removeChild(self.daysContainer
+                        .lastChild);
+                    self.days = self.daysContainer.firstChild;
+                    processPostDayAnimation();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    function animateMonths(e) {
+        switch (e.animationName) {
+            case "fpSlideLeftNew":
+            case "fpSlideRightNew":
+                self.navigationCurrentMonth.classList.remove("slideLeftNew");
+                self.navigationCurrentMonth.classList.remove("slideRightNew");
+                var nav = self.navigationCurrentMonth;
+                while (nav.nextSibling &&
+                    /curr/.test(nav.nextSibling.className))
+                    self.monthNav.removeChild(nav.nextSibling);
+                while (nav.previousSibling &&
+                    /curr/.test(nav.previousSibling.className))
+                    self.monthNav.removeChild(nav.previousSibling);
+                self.oldCurMonth = undefined;
+                break;
+        }
+    }
+    function jumpToDate(jumpDate) {
+        var jumpTo = jumpDate !== undefined
+            ? parseDate(jumpDate)
+            : self.latestSelectedDateObj ||
+                (self.config.minDate && self.config.minDate > self.now
+                    ? self.config.minDate
+                    : self.config.maxDate && self.config.maxDate < self.now
+                        ? self.config.maxDate
+                        : self.now);
+        try {
+            if (jumpTo !== undefined) {
+                self.currentYear = jumpTo.getFullYear();
+                self.currentMonth = jumpTo.getMonth();
+            }
+        }
+        catch (e) {
+            e.message = "Invalid date supplied: " + jumpTo;
+            self.config.errorHandler(e);
+        }
+        self.redraw();
+    }
+    function timeIncrement(e) {
+        if (~e.target.className.indexOf("arrow"))
+            incrementNumInput(e, e.target.classList.contains("arrowUp") ? 1 : -1);
+    }
+    function incrementNumInput(e, delta, inputElem) {
+        var target = e && e.target;
+        var input = inputElem ||
+            (target && target.parentNode && target.parentNode.firstChild);
+        var event = createEvent("increment");
+        event.delta = delta;
+        input && input.dispatchEvent(event);
+    }
+    function build() {
+        var fragment = window.document.createDocumentFragment();
+        self.calendarContainer = createElement("div", "flatpickr-calendar");
+        self.calendarContainer.tabIndex = -1;
+        if (!self.config.noCalendar) {
+            fragment.appendChild(buildMonthNav());
+            self.innerContainer = createElement("div", "flatpickr-innerContainer");
+            if (self.config.weekNumbers) {
+                var _a = buildWeeks(), weekWrapper = _a.weekWrapper, weekNumbers = _a.weekNumbers;
+                self.innerContainer.appendChild(weekWrapper);
+                self.weekNumbers = weekNumbers;
+                self.weekWrapper = weekWrapper;
+            }
+            self.rContainer = createElement("div", "flatpickr-rContainer");
+            self.rContainer.appendChild(buildWeekdays());
+            if (!self.daysContainer) {
+                self.daysContainer = createElement("div", "flatpickr-days");
+                self.daysContainer.tabIndex = -1;
+            }
+            buildDays();
+            self.rContainer.appendChild(self.daysContainer);
+            self.innerContainer.appendChild(self.rContainer);
+            fragment.appendChild(self.innerContainer);
+        }
+        if (self.config.enableTime) {
+            fragment.appendChild(buildTime());
+        }
+        toggleClass(self.calendarContainer, "rangeMode", self.config.mode === "range");
+        toggleClass(self.calendarContainer, "animate", self.config.animate);
+        self.calendarContainer.appendChild(fragment);
+        var customAppend = self.config.appendTo !== undefined && self.config.appendTo.nodeType;
+        if (self.config.inline || self.config.static) {
+            self.calendarContainer.classList.add(self.config.inline ? "inline" : "static");
+            if (self.config.inline) {
+                if (!customAppend && self.element.parentNode)
+                    self.element.parentNode.insertBefore(self.calendarContainer, self._input.nextSibling);
+                else if (self.config.appendTo !== undefined)
+                    self.config.appendTo.appendChild(self.calendarContainer);
+            }
+            if (self.config.static) {
+                var wrapper = createElement("div", "flatpickr-wrapper");
+                if (self.element.parentNode)
+                    self.element.parentNode.insertBefore(wrapper, self.element);
+                wrapper.appendChild(self.element);
+                if (self.altInput)
+                    wrapper.appendChild(self.altInput);
+                wrapper.appendChild(self.calendarContainer);
+            }
+        }
+        if (!self.config.static && !self.config.inline)
+            (self.config.appendTo !== undefined
+                ? self.config.appendTo
+                : window.document.body).appendChild(self.calendarContainer);
+    }
+    function createDay(className, date, dayNumber, i) {
+        var dateIsEnabled = isEnabled(date, true), dayElement = createElement("span", "flatpickr-day " + className, date.getDate().toString());
+        dayElement.dateObj = date;
+        dayElement.$i = i;
+        dayElement.setAttribute("aria-label", self.formatDate(date, self.config.ariaDateFormat));
+        if (compareDates(date, self.now) === 0) {
+            self.todayDateElem = dayElement;
+            dayElement.classList.add("today");
+        }
+        if (dateIsEnabled) {
+            dayElement.tabIndex = -1;
+            if (isDateSelected(date)) {
+                dayElement.classList.add("selected");
+                self.selectedDateElem = dayElement;
+                if (self.config.mode === "range") {
+                    toggleClass(dayElement, "startRange", self.selectedDates[0] &&
+                        compareDates(date, self.selectedDates[0]) === 0);
+                    toggleClass(dayElement, "endRange", self.selectedDates[1] &&
+                        compareDates(date, self.selectedDates[1]) === 0);
+                }
+            }
+        }
+        else {
+            dayElement.classList.add("disabled");
+            if (self.selectedDates[0] &&
+                self.minRangeDate &&
+                date > self.minRangeDate &&
+                date < self.selectedDates[0])
+                self.minRangeDate = date;
+            else if (self.selectedDates[0] &&
+                self.maxRangeDate &&
+                date < self.maxRangeDate &&
+                date > self.selectedDates[0])
+                self.maxRangeDate = date;
+        }
+        if (self.config.mode === "range") {
+            if (isDateInRange(date) && !isDateSelected(date))
+                dayElement.classList.add("inRange");
+            if (self.selectedDates.length === 1 &&
+                self.minRangeDate !== undefined &&
+                self.maxRangeDate !== undefined &&
+                (date < self.minRangeDate || date > self.maxRangeDate))
+                dayElement.classList.add("notAllowed");
+        }
+        if (self.weekNumbers &&
+            className !== "prevMonthDay" &&
+            dayNumber % 7 === 1) {
+            self.weekNumbers.insertAdjacentHTML("beforeend", "<span class='disabled flatpickr-day'>" +
+                self.config.getWeek(date) +
+                "</span>");
+        }
+        triggerEvent("onDayCreate", dayElement);
+        return dayElement;
+    }
+    function focusOnDay(currentIndex, offset) {
+        var newIndex = currentIndex + offset || 0, targetNode = (currentIndex !== undefined
+            ? self.days.childNodes[newIndex]
+            : self.selectedDateElem ||
+                self.todayDateElem ||
+                self.days.childNodes[0]);
+        var focus = function () {
+            targetNode = targetNode || self.days.childNodes[newIndex];
+            targetNode.focus();
+            if (self.config.mode === "range")
+                onMouseOver(targetNode);
+        };
+        if (targetNode === undefined && offset !== 0) {
+            if (offset > 0) {
+                self.changeMonth(1, true, undefined, true);
+                newIndex = newIndex % 42;
+            }
+            else if (offset < 0) {
+                self.changeMonth(-1, true, undefined, true);
+                newIndex += 42;
+            }
+            return afterDayAnim(focus);
+        }
+        focus();
+    }
+    function afterDayAnim(fn) {
+        self.config.animate === true ? self._animationLoop.push(fn) : fn();
+    }
+    function buildDays(delta) {
+        if (self.daysContainer === undefined) {
+            return;
+        }
+        var firstOfMonth = (new Date(self.currentYear, self.currentMonth, 1).getDay() -
+            self.l10n.firstDayOfWeek +
+            7) %
+            7, isRangeMode = self.config.mode === "range";
+        var prevMonthDays = self.utils.getDaysInMonth((self.currentMonth - 1 + 12) % 12);
+        var daysInMonth = self.utils.getDaysInMonth(), days = window.document.createDocumentFragment();
+        var dayNumber = prevMonthDays + 1 - firstOfMonth, dayIndex = 0;
+        if (self.weekNumbers && self.weekNumbers.firstChild)
+            self.weekNumbers.textContent = "";
+        if (isRangeMode) {
+            self.minRangeDate = new Date(self.currentYear, self.currentMonth - 1, dayNumber);
+            self.maxRangeDate = new Date(self.currentYear, self.currentMonth + 1, (42 - firstOfMonth) % daysInMonth);
+        }
+        for (; dayNumber <= prevMonthDays; dayNumber++, dayIndex++) {
+            days.appendChild(createDay("prevMonthDay", new Date(self.currentYear, self.currentMonth - 1, dayNumber), dayNumber, dayIndex));
+        }
+        for (dayNumber = 1; dayNumber <= daysInMonth; dayNumber++, dayIndex++) {
+            days.appendChild(createDay("", new Date(self.currentYear, self.currentMonth, dayNumber), dayNumber, dayIndex));
+        }
+        for (var dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth; dayNum++, dayIndex++) {
+            days.appendChild(createDay("nextMonthDay", new Date(self.currentYear, self.currentMonth + 1, dayNum % daysInMonth), dayNum, dayIndex));
+        }
+        if (isRangeMode && self.selectedDates.length === 1 && days.childNodes[0]) {
+            self._hidePrevMonthArrow =
+                self._hidePrevMonthArrow ||
+                    (!!self.minRangeDate &&
+                        self.minRangeDate > days.childNodes[0].dateObj);
+            self._hideNextMonthArrow =
+                self._hideNextMonthArrow ||
+                    (!!self.maxRangeDate &&
+                        self.maxRangeDate <
+                            new Date(self.currentYear, self.currentMonth + 1, 1));
+        }
+        else
+            updateNavigationCurrentMonth();
+        var dayContainer = createElement("div", "dayContainer");
+        dayContainer.appendChild(days);
+        if (!self.config.animate || delta === undefined)
+            clearNode(self.daysContainer);
+        else {
+            while (self.daysContainer.childNodes.length > 1)
+                self.daysContainer.removeChild(self.daysContainer.firstChild);
+        }
+        if (delta && delta >= 0)
+            self.daysContainer.appendChild(dayContainer);
+        else
+            self.daysContainer.insertBefore(dayContainer, self.daysContainer.firstChild);
+        self.days = self.daysContainer.childNodes[0];
+    }
+    function buildMonthNav() {
+        var monthNavFragment = window.document.createDocumentFragment();
+        self.monthNav = createElement("div", "flatpickr-month");
+        self.prevMonthNav = createElement("span", "flatpickr-prev-month");
+        self.prevMonthNav.innerHTML = self.config.prevArrow;
+        self.currentMonthElement = createElement("span", "cur-month");
+        self.currentMonthElement.title = self.l10n.scrollTitle;
+        var yearInput = createNumberInput("cur-year");
+        self.currentYearElement = yearInput.childNodes[0];
+        self.currentYearElement.title = self.l10n.scrollTitle;
+        if (self.config.minDate)
+            self.currentYearElement.min = self.config.minDate
+                .getFullYear()
+                .toString();
+        if (self.config.maxDate) {
+            self.currentYearElement.max = self.config.maxDate
+                .getFullYear()
+                .toString();
+            self.currentYearElement.disabled =
+                !!self.config.minDate &&
+                    self.config.minDate.getFullYear() === self.config.maxDate.getFullYear();
+        }
+        self.nextMonthNav = createElement("span", "flatpickr-next-month");
+        self.nextMonthNav.innerHTML = self.config.nextArrow;
+        self.navigationCurrentMonth = createElement("div", "flatpickr-current-month");
+        self.navigationCurrentMonth.appendChild(self.currentMonthElement);
+        self.navigationCurrentMonth.appendChild(yearInput);
+        monthNavFragment.appendChild(self.prevMonthNav);
+        monthNavFragment.appendChild(self.navigationCurrentMonth);
+        monthNavFragment.appendChild(self.nextMonthNav);
+        self.monthNav.appendChild(monthNavFragment);
+        Object.defineProperty(self, "_hidePrevMonthArrow", {
+            get: function () { return self.__hidePrevMonthArrow; },
+            set: function (bool) {
+                if (self.__hidePrevMonthArrow !== bool)
+                    self.prevMonthNav.style.display = bool ? "none" : "block";
+                self.__hidePrevMonthArrow = bool;
+            },
+        });
+        Object.defineProperty(self, "_hideNextMonthArrow", {
+            get: function () { return self.__hideNextMonthArrow; },
+            set: function (bool) {
+                if (self.__hideNextMonthArrow !== bool)
+                    self.nextMonthNav.style.display = bool ? "none" : "block";
+                self.__hideNextMonthArrow = bool;
+            },
+        });
+        updateNavigationCurrentMonth();
+        return self.monthNav;
+    }
+    function buildTime() {
+        self.calendarContainer.classList.add("hasTime");
+        if (self.config.noCalendar)
+            self.calendarContainer.classList.add("noCalendar");
+        self.timeContainer = createElement("div", "flatpickr-time");
+        self.timeContainer.tabIndex = -1;
+        var separator = createElement("span", "flatpickr-time-separator", ":");
+        var hourInput = createNumberInput("flatpickr-hour");
+        self.hourElement = hourInput.childNodes[0];
+        var minuteInput = createNumberInput("flatpickr-minute");
+        self.minuteElement = minuteInput.childNodes[0];
+        self.hourElement.tabIndex = self.minuteElement.tabIndex = -1;
+        self.hourElement.value = pad(self.latestSelectedDateObj
+            ? self.latestSelectedDateObj.getHours()
+            : self.config.time_24hr
+                ? self.config.defaultHour
+                : military2ampm(self.config.defaultHour));
+        self.minuteElement.value = pad(self.latestSelectedDateObj
+            ? self.latestSelectedDateObj.getMinutes()
+            : self.config.defaultMinute);
+        self.hourElement.step = self.config.hourIncrement.toString();
+        self.minuteElement.step = self.config.minuteIncrement.toString();
+        self.hourElement.min = self.config.time_24hr ? "0" : "1";
+        self.hourElement.max = self.config.time_24hr ? "23" : "12";
+        self.minuteElement.min = "0";
+        self.minuteElement.max = "59";
+        self.hourElement.title = self.minuteElement.title = self.l10n.scrollTitle;
+        self.timeContainer.appendChild(hourInput);
+        self.timeContainer.appendChild(separator);
+        self.timeContainer.appendChild(minuteInput);
+        if (self.config.time_24hr)
+            self.timeContainer.classList.add("time24hr");
+        if (self.config.enableSeconds) {
+            self.timeContainer.classList.add("hasSeconds");
+            var secondInput = createNumberInput("flatpickr-second");
+            self.secondElement = secondInput.childNodes[0];
+            self.secondElement.value = pad(self.latestSelectedDateObj
+                ? self.latestSelectedDateObj.getSeconds()
+                : self.config.defaultSeconds);
+            self.secondElement.step = self.minuteElement.step;
+            self.secondElement.min = self.minuteElement.min;
+            self.secondElement.max = self.minuteElement.max;
+            self.timeContainer.appendChild(createElement("span", "flatpickr-time-separator", ":"));
+            self.timeContainer.appendChild(secondInput);
+        }
+        if (!self.config.time_24hr) {
+            self.amPM = createElement("span", "flatpickr-am-pm", self.l10n.amPM[int((self.latestSelectedDateObj
+                ? self.hourElement.value
+                : self.config.defaultHour) > 11)]);
+            self.amPM.title = self.l10n.toggleTitle;
+            self.amPM.tabIndex = -1;
+            self.timeContainer.appendChild(self.amPM);
+        }
+        return self.timeContainer;
+    }
+    function buildWeekdays() {
+        if (!self.weekdayContainer)
+            self.weekdayContainer = createElement("div", "flatpickr-weekdays");
+        var firstDayOfWeek = self.l10n.firstDayOfWeek;
+        var weekdays = self.l10n.weekdays.shorthand.slice();
+        if (firstDayOfWeek > 0 && firstDayOfWeek < weekdays.length) {
+            weekdays = weekdays.splice(firstDayOfWeek, weekdays.length).concat(weekdays.splice(0, firstDayOfWeek));
+        }
+        self.weekdayContainer.innerHTML = "\n    <span class=flatpickr-weekday>\n      " + weekdays.join("</span><span class=flatpickr-weekday>") + "\n    </span>\n    ";
+        return self.weekdayContainer;
+    }
+    function buildWeeks() {
+        self.calendarContainer.classList.add("hasWeeks");
+        var weekWrapper = createElement("div", "flatpickr-weekwrapper");
+        weekWrapper.appendChild(createElement("span", "flatpickr-weekday", self.l10n.weekAbbreviation));
+        var weekNumbers = createElement("div", "flatpickr-weeks");
+        weekWrapper.appendChild(weekNumbers);
+        return {
+            weekWrapper: weekWrapper,
+            weekNumbers: weekNumbers,
+        };
+    }
+    function changeMonth(value, is_offset, animate, from_keyboard) {
+        if (is_offset === void 0) { is_offset = true; }
+        if (animate === void 0) { animate = self.config.animate; }
+        if (from_keyboard === void 0) { from_keyboard = false; }
+        var delta = is_offset ? value : value - self.currentMonth;
+        if ((delta < 0 && self._hidePrevMonthArrow) ||
+            (delta > 0 && self._hideNextMonthArrow))
+            return;
+        self.currentMonth += delta;
+        if (self.currentMonth < 0 || self.currentMonth > 11) {
+            self.currentYear += self.currentMonth > 11 ? 1 : -1;
+            self.currentMonth = (self.currentMonth + 12) % 12;
+            triggerEvent("onYearChange");
+        }
+        buildDays(animate ? delta : undefined);
+        if (!animate) {
+            triggerEvent("onMonthChange");
+            return updateNavigationCurrentMonth();
+        }
+        var nav = self.navigationCurrentMonth;
+        if (delta < 0) {
+            while (nav.nextSibling &&
+                /curr/.test(nav.nextSibling.className))
+                self.monthNav.removeChild(nav.nextSibling);
+        }
+        else if (delta > 0) {
+            while (nav.previousSibling &&
+                /curr/.test(nav.previousSibling.className))
+                self.monthNav.removeChild(nav.previousSibling);
+        }
+        self.oldCurMonth = self.navigationCurrentMonth;
+        self.navigationCurrentMonth = self.monthNav.insertBefore(self.oldCurMonth.cloneNode(true), delta > 0 ? self.oldCurMonth.nextSibling : self.oldCurMonth);
+        var daysContainer = self.daysContainer;
+        if (daysContainer.firstChild && daysContainer.lastChild) {
+            if (delta > 0) {
+                daysContainer.firstChild.classList.add("slideLeft");
+                daysContainer.lastChild.classList.add("slideLeftNew");
+                self.oldCurMonth.classList.add("slideLeft");
+                self.navigationCurrentMonth.classList.add("slideLeftNew");
+            }
+            else if (delta < 0) {
+                daysContainer.firstChild.classList.add("slideRightNew");
+                daysContainer.lastChild.classList.add("slideRight");
+                self.oldCurMonth.classList.add("slideRight");
+                self.navigationCurrentMonth.classList.add("slideRightNew");
+            }
+        }
+        self.currentMonthElement = self.navigationCurrentMonth
+            .firstChild;
+        self.currentYearElement = self.navigationCurrentMonth.lastChild
+            .childNodes[0];
+        updateNavigationCurrentMonth();
+        if (self.oldCurMonth.firstChild)
+            self.oldCurMonth.firstChild.textContent = monthToStr(self.currentMonth - delta, self.config.shorthandCurrentMonth, self.l10n);
+        afterDayAnim(function () { return triggerEvent("onMonthChange"); });
+        if (from_keyboard &&
+            document.activeElement &&
+            document.activeElement.$i) {
+            var index_1 = document.activeElement.$i;
+            afterDayAnim(function () {
+                focusOnDay(index_1, 0);
+            });
+        }
+    }
+    function clear(triggerChangeEvent) {
+        if (triggerChangeEvent === void 0) { triggerChangeEvent = true; }
+        self.input.value = "";
+        if (self.altInput)
+            self.altInput.value = "";
+        if (self.mobileInput)
+            self.mobileInput.value = "";
+        self.selectedDates = [];
+        self.latestSelectedDateObj = undefined;
+        self.showTimeInput = false;
+        self.redraw();
+        if (triggerChangeEvent)
+            triggerEvent("onChange");
+    }
+    function close() {
+        self.isOpen = false;
+        if (!self.isMobile) {
+            self.calendarContainer.classList.remove("open");
+            self._input.classList.remove("active");
+        }
+        triggerEvent("onClose");
+    }
+    function destroy() {
+        if (self.config !== undefined)
+            triggerEvent("onDestroy");
+        for (var i = self._handlers.length; i--;) {
+            var h = self._handlers[i];
+            h.element.removeEventListener(h.event, h.handler);
+        }
+        self._handlers = [];
+        if (self.mobileInput) {
+            if (self.mobileInput.parentNode)
+                self.mobileInput.parentNode.removeChild(self.mobileInput);
+            self.mobileInput = undefined;
+        }
+        else if (self.calendarContainer && self.calendarContainer.parentNode)
+            self.calendarContainer.parentNode.removeChild(self.calendarContainer);
+        if (self.altInput) {
+            self.input.type = "text";
+            if (self.altInput.parentNode)
+                self.altInput.parentNode.removeChild(self.altInput);
+            delete self.altInput;
+        }
+        if (self.input) {
+            self.input.type = self.input._type;
+            self.input.classList.remove("flatpickr-input");
+            self.input.removeAttribute("readonly");
+            self.input.value = "";
+        }
+        [
+            "_showTimeInput",
+            "latestSelectedDateObj",
+            "_hideNextMonthArrow",
+            "_hidePrevMonthArrow",
+            "__hideNextMonthArrow",
+            "__hidePrevMonthArrow",
+            "isMobile",
+            "isOpen",
+            "selectedDateElem",
+            "minDateHasTime",
+            "maxDateHasTime",
+            "days",
+            "daysContainer",
+            "_input",
+            "_positionElement",
+            "innerContainer",
+            "rContainer",
+            "monthNav",
+            "todayDateElem",
+            "calendarContainer",
+            "weekdayContainer",
+            "prevMonthNav",
+            "nextMonthNav",
+            "currentMonthElement",
+            "currentYearElement",
+            "navigationCurrentMonth",
+            "selectedDateElem",
+            "config",
+        ].forEach(function (k) {
+            try {
+                delete self[k];
+            }
+            catch (_) { }
+        });
+    }
+    function isCalendarElem(elem) {
+        if (self.config.appendTo && self.config.appendTo.contains(elem))
+            return true;
+        return self.calendarContainer.contains(elem);
+    }
+    function documentClick(e) {
+        if (self.isOpen && !self.config.inline) {
+            var isCalendarElement = isCalendarElem(e.target);
+            var isInput = e.target === self.input ||
+                e.target === self.altInput ||
+                self.element.contains(e.target) ||
+                (e.path &&
+                    e.path.indexOf &&
+                    (~e.path.indexOf(self.input) ||
+                        ~e.path.indexOf(self.altInput)));
+            var lostFocus = e.type === "blur"
+                ? isInput &&
+                    e.relatedTarget &&
+                    !isCalendarElem(e.relatedTarget)
+                : !isInput && !isCalendarElement;
+            if (lostFocus &&
+                self.config.ignoredFocusElements.indexOf(e.target) === -1) {
+                self.close();
+                if (self.config.mode === "range" && self.selectedDates.length === 1) {
+                    self.clear(false);
+                    self.redraw();
+                }
+            }
+        }
+    }
+    function changeYear(newYear) {
+        if (!newYear ||
+            (self.currentYearElement.min &&
+                newYear < parseInt(self.currentYearElement.min)) ||
+            (self.currentYearElement.max &&
+                newYear > parseInt(self.currentYearElement.max)))
+            return;
+        var newYearNum = newYear, isNewYear = self.currentYear !== newYearNum;
+        self.currentYear = newYearNum || self.currentYear;
+        if (self.config.maxDate &&
+            self.currentYear === self.config.maxDate.getFullYear()) {
+            self.currentMonth = Math.min(self.config.maxDate.getMonth(), self.currentMonth);
+        }
+        else if (self.config.minDate &&
+            self.currentYear === self.config.minDate.getFullYear()) {
+            self.currentMonth = Math.max(self.config.minDate.getMonth(), self.currentMonth);
+        }
+        if (isNewYear) {
+            self.redraw();
+            triggerEvent("onYearChange");
+        }
+    }
+    function isEnabled(date, timeless) {
+        if (timeless === void 0) { timeless = true; }
+        var dateToCheck = self.parseDate(date, undefined, timeless);
+        if ((self.config.minDate &&
+            dateToCheck &&
+            compareDates(dateToCheck, self.config.minDate, timeless !== undefined ? timeless : !self.minDateHasTime) < 0) ||
+            (self.config.maxDate &&
+                dateToCheck &&
+                compareDates(dateToCheck, self.config.maxDate, timeless !== undefined ? timeless : !self.maxDateHasTime) > 0))
+            return false;
+        if (!self.config.enable.length && !self.config.disable.length)
+            return true;
+        if (dateToCheck === undefined)
+            return false;
+        var bool = self.config.enable.length > 0, array = bool ? self.config.enable : self.config.disable;
+        for (var i = 0, d = void 0; i < array.length; i++) {
+            d = array[i];
+            if (typeof d === "function" &&
+                d(dateToCheck))
+                return bool;
+            else if (d instanceof Date &&
+                dateToCheck !== undefined &&
+                d.getTime() === dateToCheck.getTime())
+                return bool;
+            else if (typeof d === "string" && dateToCheck !== undefined) {
+                var parsed = self.parseDate(d, undefined, true);
+                return parsed && parsed.getTime() === dateToCheck.getTime()
+                    ? bool
+                    : !bool;
+            }
+            else if (typeof d === "object" &&
+                dateToCheck !== undefined &&
+                d.from &&
+                d.to &&
+                dateToCheck.getTime() >= d.from.getTime() &&
+                dateToCheck.getTime() <= d.to.getTime())
+                return bool;
+        }
+        return !bool;
+    }
+    function onKeyDown(e) {
+        var isInput = e.target === self._input;
+        var calendarElem = isCalendarElem(e.target);
+        var allowInput = self.config.allowInput;
+        var allowKeydown = self.isOpen && (!allowInput || !isInput);
+        var allowInlineKeydown = self.config.inline && isInput && !allowInput;
+        if (e.key === "Enter" && isInput) {
+            if (allowInput) {
+                self.setDate(self._input.value, true, e.target === self.altInput
+                    ? self.config.altFormat
+                    : self.config.dateFormat);
+                return e.target.blur();
+            }
+            else
+                self.open();
+        }
+        else if (calendarElem || allowKeydown || allowInlineKeydown) {
+            var isTimeObj = !!self.timeContainer &&
+                self.timeContainer.contains(e.target);
+            switch (e.key) {
+                case "Enter":
+                    if (isTimeObj)
+                        updateValue();
+                    else
+                        selectDate(e);
+                    break;
+                case "Escape":
+                    e.preventDefault();
+                    self.close();
+                    break;
+                case "Backspace":
+                case "Delete":
+                    if (isInput && !self.config.allowInput)
+                        self.clear();
+                    break;
+                case "ArrowLeft":
+                case "ArrowRight":
+                    if (!isTimeObj) {
+                        e.preventDefault();
+                        if (self.daysContainer) {
+                            var delta_1 = e.key === "ArrowRight" ? 1 : -1;
+                            if (!e.ctrlKey)
+                                focusOnDay(e.target.$i, delta_1);
+                            else
+                                changeMonth(delta_1, true, undefined, true);
+                        }
+                    }
+                    else if (self.hourElement)
+                        self.hourElement.focus();
+                    break;
+                case "ArrowUp":
+                case "ArrowDown":
+                    e.preventDefault();
+                    var delta = e.key === "ArrowDown" ? 1 : -1;
+                    if (self.daysContainer && e.target.$i !== undefined) {
+                        if (e.ctrlKey) {
+                            changeYear(self.currentYear - delta);
+                            focusOnDay(e.target.$i, 0);
+                        }
+                        else if (!isTimeObj)
+                            focusOnDay(e.target.$i, delta * 7);
+                    }
+                    else if (self.config.enableTime) {
+                        if (!isTimeObj && self.hourElement)
+                            self.hourElement.focus();
+                        updateTime(e);
+                        self._debouncedChange();
+                    }
+                    break;
+                case "Tab":
+                    if (e.target === self.hourElement) {
+                        e.preventDefault();
+                        self.minuteElement.select();
+                    }
+                    else if (e.target === self.minuteElement &&
+                        (self.secondElement || self.amPM)) {
+                        e.preventDefault();
+                        if (self.secondElement !== undefined)
+                            self.secondElement.focus();
+                        else if (self.amPM !== undefined)
+                            self.amPM.focus();
+                    }
+                    else if (e.target === self.secondElement && self.amPM) {
+                        e.preventDefault();
+                        self.amPM.focus();
+                    }
+                    break;
+                case "a":
+                    if (self.amPM !== undefined && e.target === self.amPM) {
+                        self.amPM.textContent = "AM";
+                        setHoursFromInputs();
+                        updateValue();
+                    }
+                    break;
+                case "p":
+                    if (self.amPM !== undefined && e.target === self.amPM) {
+                        self.amPM.textContent = "PM";
+                        setHoursFromInputs();
+                        updateValue();
+                    }
+                    break;
+                default:
+                    break;
+            }
+            triggerEvent("onKeyDown", e);
+        }
+    }
+    function onMouseOver(elem) {
+        if (self.selectedDates.length !== 1 ||
+            !elem.classList.contains("flatpickr-day") ||
+            self.minRangeDate === undefined ||
+            self.maxRangeDate === undefined)
+            return;
+        var hoverDate = elem.dateObj, initialDate = self.parseDate(self.selectedDates[0], undefined, true), rangeStartDate = Math.min(hoverDate.getTime(), self.selectedDates[0].getTime()), rangeEndDate = Math.max(hoverDate.getTime(), self.selectedDates[0].getTime()), containsDisabled = false;
+        for (var t = rangeStartDate; t < rangeEndDate; t += duration.DAY) {
+            if (!isEnabled(new Date(t))) {
+                containsDisabled = true;
+                break;
+            }
+        }
+        var _loop_1 = function (i, date) {
+            var timestamp = date.getTime();
+            var outOfRange = timestamp < self.minRangeDate.getTime() ||
+                timestamp > self.maxRangeDate.getTime(), dayElem = self.days.childNodes[i];
+            if (outOfRange) {
+                dayElem.classList.add("notAllowed");
+                ["inRange", "startRange", "endRange"].forEach(function (c) {
+                    dayElem.classList.remove(c);
+                });
+                return "continue";
+            }
+            else if (containsDisabled && !outOfRange)
+                return "continue";
+            ["startRange", "inRange", "endRange", "notAllowed"].forEach(function (c) {
+                dayElem.classList.remove(c);
+            });
+            var minRangeDate = Math.max(self.minRangeDate.getTime(), rangeStartDate), maxRangeDate = Math.min(self.maxRangeDate.getTime(), rangeEndDate);
+            elem.classList.add(hoverDate < self.selectedDates[0] ? "startRange" : "endRange");
+            if (initialDate < hoverDate && timestamp === initialDate.getTime())
+                dayElem.classList.add("startRange");
+            else if (initialDate > hoverDate && timestamp === initialDate.getTime())
+                dayElem.classList.add("endRange");
+            if (timestamp >= minRangeDate && timestamp <= maxRangeDate)
+                dayElem.classList.add("inRange");
+        };
+        for (var i = 0, date = self.days.childNodes[i].dateObj; i < 42; i++, date =
+                self.days.childNodes[i] &&
+                    self.days.childNodes[i].dateObj) {
+            _loop_1(i, date);
+        }
+    }
+    function onResize() {
+        if (self.isOpen && !self.config.static && !self.config.inline)
+            positionCalendar();
+    }
+    function open(e, positionElement) {
+        if (positionElement === void 0) { positionElement = self._input; }
+        if (self.isMobile) {
+            if (e) {
+                e.preventDefault();
+                e.target && e.target.blur();
+            }
+            setTimeout(function () {
+                self.mobileInput !== undefined && self.mobileInput.click();
+            }, 0);
+            triggerEvent("onOpen");
+            return;
+        }
+        if (self._input.disabled || self.config.inline)
+            return;
+        var wasOpen = self.isOpen;
+        self.isOpen = true;
+        positionCalendar(positionElement);
+        self.calendarContainer.classList.add("open");
+        self._input.classList.add("active");
+        !wasOpen && triggerEvent("onOpen");
+    }
+    function minMaxDateSetter(type) {
+        return function (date) {
+            var dateObj = (self.config["_" + type + "Date"] = self.parseDate(date));
+            var inverseDateObj = self.config["_" + (type === "min" ? "max" : "min") + "Date"];
+            if (dateObj !== undefined) {
+                self[type === "min" ? "minDateHasTime" : "maxDateHasTime"] =
+                    dateObj.getHours() > 0 ||
+                        dateObj.getMinutes() > 0 ||
+                        dateObj.getSeconds() > 0;
+            }
+            if (self.selectedDates) {
+                self.selectedDates = self.selectedDates.filter(function (d) { return isEnabled(d); });
+                if (!self.selectedDates.length && type === "min")
+                    setHoursFromDate(dateObj);
+                updateValue();
+            }
+            if (self.daysContainer) {
+                redraw();
+                if (dateObj !== undefined)
+                    self.currentYearElement[type] = dateObj.getFullYear().toString();
+                else
+                    self.currentYearElement.removeAttribute(type);
+                self.currentYearElement.disabled =
+                    !!inverseDateObj &&
+                        dateObj !== undefined &&
+                        inverseDateObj.getFullYear() === dateObj.getFullYear();
+            }
+        };
+    }
+    function parseConfig() {
+        var boolOpts = [
+            "wrap",
+            "weekNumbers",
+            "allowInput",
+            "clickOpens",
+            "time_24hr",
+            "enableTime",
+            "noCalendar",
+            "altInput",
+            "shorthandCurrentMonth",
+            "inline",
+            "static",
+            "enableSeconds",
+            "disableMobile",
+        ];
+        var hooks = [
+            "onChange",
+            "onClose",
+            "onDayCreate",
+            "onDestroy",
+            "onKeyDown",
+            "onMonthChange",
+            "onOpen",
+            "onParseConfig",
+            "onReady",
+            "onValueUpdate",
+            "onYearChange",
+        ];
+        self.config = __assign({}, flatpickr.defaultConfig);
+        var userConfig = __assign({}, instanceConfig, JSON.parse(JSON.stringify(element.dataset || {})));
+        var formats$$1 = {};
+        Object.defineProperty(self.config, "enable", {
+            get: function () { return self.config._enable || []; },
+            set: function (dates) {
+                self.config._enable = parseDateRules(dates);
+            },
+        });
+        Object.defineProperty(self.config, "disable", {
+            get: function () { return self.config._disable || []; },
+            set: function (dates) {
+                self.config._disable = parseDateRules(dates);
+            },
+        });
+        if (!userConfig.dateFormat && userConfig.enableTime) {
+            formats$$1.dateFormat = userConfig.noCalendar
+                ? "H:i" + (userConfig.enableSeconds ? ":S" : "")
+                : flatpickr.defaultConfig.dateFormat +
+                    " H:i" +
+                    (userConfig.enableSeconds ? ":S" : "");
+        }
+        if (userConfig.altInput && userConfig.enableTime && !userConfig.altFormat) {
+            formats$$1.altFormat = userConfig.noCalendar
+                ? "h:i" + (userConfig.enableSeconds ? ":S K" : " K")
+                : flatpickr.defaultConfig.altFormat +
+                    (" h:i" + (userConfig.enableSeconds ? ":S" : "") + " K");
+        }
+        Object.defineProperty(self.config, "minDate", {
+            get: function () { return self.config._minDate; },
+            set: minMaxDateSetter("min"),
+        });
+        Object.defineProperty(self.config, "maxDate", {
+            get: function () { return self.config._maxDate; },
+            set: minMaxDateSetter("max"),
+        });
+        Object.assign(self.config, formats$$1, userConfig);
+        for (var i = 0; i < boolOpts.length; i++)
+            self.config[boolOpts[i]] =
+                self.config[boolOpts[i]] === true ||
+                    self.config[boolOpts[i]] === "true";
+        for (var i = hooks.length; i--;) {
+            if (self.config[hooks[i]] !== undefined) {
+                self.config[hooks[i]] = arrayify(self.config[hooks[i]] || []).map(bindToInstance);
+            }
+        }
+        for (var i = 0; i < self.config.plugins.length; i++) {
+            var pluginConf = self.config.plugins[i](self) || {};
+            for (var key in pluginConf) {
+                if (~hooks.indexOf(key)) {
+                    self.config[key] = arrayify(pluginConf[key])
+                        .map(bindToInstance)
+                        .concat(self.config[key]);
+                }
+                else if (typeof userConfig[key] === "undefined")
+                    self.config[key] = pluginConf[key];
+            }
+        }
+        self.isMobile =
+            !self.config.disableMobile &&
+                !self.config.inline &&
+                self.config.mode === "single" &&
+                !self.config.disable.length &&
+                !self.config.enable.length &&
+                !self.config.weekNumbers &&
+                /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        triggerEvent("onParseConfig");
+    }
+    function setupLocale() {
+        if (typeof self.config.locale !== "object" &&
+            typeof flatpickr.l10ns[self.config.locale] === "undefined")
+            self.config.errorHandler(new Error("flatpickr: invalid locale " + self.config.locale));
+        self.l10n = __assign({}, flatpickr.l10ns.default, typeof self.config.locale === "object"
+            ? self.config.locale
+            : self.config.locale !== "default"
+                ? flatpickr.l10ns[self.config.locale]
+                : undefined);
+    }
+    function positionCalendar(positionElement) {
+        if (positionElement === void 0) { positionElement = self._positionElement; }
+        if (self.calendarContainer === undefined)
+            return;
+        var calendarHeight = self.calendarContainer.offsetHeight, calendarWidth = self.calendarContainer.offsetWidth, configPos = self.config.position, inputBounds = positionElement.getBoundingClientRect(), distanceFromBottom = window.innerHeight - inputBounds.bottom, showOnTop = configPos === "above" ||
+            (configPos !== "below" &&
+                distanceFromBottom < calendarHeight &&
+                inputBounds.top > calendarHeight);
+        var top = window.pageYOffset +
+            inputBounds.top +
+            (!showOnTop ? positionElement.offsetHeight + 2 : -calendarHeight - 2);
+        toggleClass(self.calendarContainer, "arrowTop", !showOnTop);
+        toggleClass(self.calendarContainer, "arrowBottom", showOnTop);
+        if (self.config.inline)
+            return;
+        var left = window.pageXOffset + inputBounds.left;
+        var right = window.document.body.offsetWidth - inputBounds.right;
+        var rightMost = left + calendarWidth > window.document.body.offsetWidth;
+        toggleClass(self.calendarContainer, "rightMost", rightMost);
+        if (self.config.static)
+            return;
+        self.calendarContainer.style.top = top + "px";
+        if (!rightMost) {
+            self.calendarContainer.style.left = left + "px";
+            self.calendarContainer.style.right = "auto";
+        }
+        else {
+            self.calendarContainer.style.left = "auto";
+            self.calendarContainer.style.right = right + "px";
+        }
+    }
+    function redraw() {
+        if (self.config.noCalendar || self.isMobile)
+            return;
+        buildWeekdays();
+        updateNavigationCurrentMonth();
+        buildDays();
+    }
+    function selectDate(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var isSelectable = function (day) {
+            return day.classList &&
+                day.classList.contains("flatpickr-day") &&
+                !day.classList.contains("disabled") &&
+                !day.classList.contains("notAllowed");
+        };
+        var t = findParent(e.target, isSelectable);
+        if (t === undefined)
+            return;
+        var target = t;
+        var selectedDate = (self.latestSelectedDateObj = new Date(target.dateObj.getTime()));
+        var shouldChangeMonth = selectedDate.getMonth() !== self.currentMonth &&
+            self.config.mode !== "range";
+        self.selectedDateElem = target;
+        if (self.config.mode === "single")
+            self.selectedDates = [selectedDate];
+        else if (self.config.mode === "multiple") {
+            var selectedIndex = isDateSelected(selectedDate);
+            if (selectedIndex)
+                self.selectedDates.splice(parseInt(selectedIndex), 1);
+            else
+                self.selectedDates.push(selectedDate);
+        }
+        else if (self.config.mode === "range") {
+            if (self.selectedDates.length === 2)
+                self.clear();
+            self.selectedDates.push(selectedDate);
+            if (compareDates(selectedDate, self.selectedDates[0], true) !== 0)
+                self.selectedDates.sort(function (a, b) { return a.getTime() - b.getTime(); });
+        }
+        setHoursFromInputs();
+        if (shouldChangeMonth) {
+            var isNewYear = self.currentYear !== selectedDate.getFullYear();
+            self.currentYear = selectedDate.getFullYear();
+            self.currentMonth = selectedDate.getMonth();
+            if (isNewYear)
+                triggerEvent("onYearChange");
+            triggerEvent("onMonthChange");
+        }
+        buildDays();
+        if (self.config.minDate &&
+            self.minDateHasTime &&
+            self.config.enableTime &&
+            compareDates(selectedDate, self.config.minDate) === 0)
+            setHoursFromDate(self.config.minDate);
+        updateValue();
+        if (self.config.enableTime)
+            setTimeout(function () { return (self.showTimeInput = true); }, 50);
+        if (self.config.mode === "range") {
+            if (self.selectedDates.length === 1) {
+                onMouseOver(target);
+                self._hidePrevMonthArrow =
+                    self._hidePrevMonthArrow ||
+                        (self.minRangeDate !== undefined &&
+                            self.minRangeDate >
+                                self.days.childNodes[0].dateObj);
+                self._hideNextMonthArrow =
+                    self._hideNextMonthArrow ||
+                        (self.maxRangeDate !== undefined &&
+                            self.maxRangeDate <
+                                new Date(self.currentYear, self.currentMonth + 1, 1));
+            }
+            else
+                updateNavigationCurrentMonth();
+        }
+        triggerEvent("onChange");
+        if (!shouldChangeMonth)
+            focusOnDay(target.$i, 0);
+        else
+            afterDayAnim(function () { return self.selectedDateElem && self.selectedDateElem.focus(); });
+        if (self.hourElement !== undefined)
+            setTimeout(function () { return self.hourElement !== undefined && self.hourElement.select(); }, 451);
+        if (self.config.closeOnSelect) {
+            var single = self.config.mode === "single" && !self.config.enableTime;
+            var range = self.config.mode === "range" &&
+                self.selectedDates.length === 2 &&
+                !self.config.enableTime;
+            if (single || range)
+                self.close();
+        }
+    }
+    function set(option, value) {
+        if (option !== null && typeof option === "object")
+            Object.assign(self.config, option);
+        else
+            self.config[option] = value;
+        self.redraw();
+        jumpToDate();
+    }
+    function setSelectedDate(inputDate, format) {
+        var dates = [];
+        if (inputDate instanceof Array)
+            dates = inputDate.map(function (d) { return self.parseDate(d, format); });
+        else if (inputDate instanceof Date || typeof inputDate === "number")
+            dates = [self.parseDate(inputDate, format)];
+        else if (typeof inputDate === "string") {
+            switch (self.config.mode) {
+                case "single":
+                    dates = [self.parseDate(inputDate, format)];
+                    break;
+                case "multiple":
+                    dates = inputDate
+                        .split(self.config.conjunction)
+                        .map(function (date) { return self.parseDate(date, format); });
+                    break;
+                case "range":
+                    dates = inputDate
+                        .split(self.l10n.rangeSeparator)
+                        .map(function (date) { return self.parseDate(date, format); });
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+            self.config.errorHandler(new Error("Invalid date supplied: " + JSON.stringify(inputDate)));
+        self.selectedDates = dates.filter(function (d) { return d instanceof Date && isEnabled(d, false); });
+        self.selectedDates.sort(function (a, b) { return a.getTime() - b.getTime(); });
+    }
+    function setDate(date, triggerChange, format) {
+        if (triggerChange === void 0) { triggerChange = false; }
+        if (date !== 0 && !date)
+            return self.clear(triggerChange);
+        setSelectedDate(date, format);
+        self.showTimeInput = self.selectedDates.length > 0;
+        self.latestSelectedDateObj = self.selectedDates[0];
+        self.redraw();
+        jumpToDate();
+        setHoursFromDate();
+        updateValue(triggerChange);
+        if (triggerChange)
+            triggerEvent("onChange");
+    }
+    function parseDateRules(arr) {
+        return arr
+            .map(function (rule) {
+            if (typeof rule === "string" ||
+                typeof rule === "number" ||
+                rule instanceof Date) {
+                return self.parseDate(rule, undefined, true);
+            }
+            else if (rule &&
+                typeof rule === "object" &&
+                rule.from &&
+                rule.to)
+                return {
+                    from: self.parseDate(rule.from, undefined),
+                    to: self.parseDate(rule.to, undefined),
+                };
+            return rule;
+        })
+            .filter(function (x) { return x; });
+    }
+    function setupDates() {
+        self.selectedDates = [];
+        self.now = new Date();
+        var preloadedDate = self.config.defaultDate || self.input.value;
+        if (preloadedDate)
+            setSelectedDate(preloadedDate, self.config.dateFormat);
+        var initialDate = self.selectedDates.length
+            ? self.selectedDates[0]
+            : self.config.minDate &&
+                self.config.minDate.getTime() > self.now.getTime()
+                ? self.config.minDate
+                : self.config.maxDate &&
+                    self.config.maxDate.getTime() < self.now.getTime()
+                    ? self.config.maxDate
+                    : self.now;
+        self.currentYear = initialDate.getFullYear();
+        self.currentMonth = initialDate.getMonth();
+        if (self.selectedDates.length)
+            self.latestSelectedDateObj = self.selectedDates[0];
+        self.minDateHasTime =
+            !!self.config.minDate &&
+                (self.config.minDate.getHours() > 0 ||
+                    self.config.minDate.getMinutes() > 0 ||
+                    self.config.minDate.getSeconds() > 0);
+        self.maxDateHasTime =
+            !!self.config.maxDate &&
+                (self.config.maxDate.getHours() > 0 ||
+                    self.config.maxDate.getMinutes() > 0 ||
+                    self.config.maxDate.getSeconds() > 0);
+        Object.defineProperty(self, "showTimeInput", {
+            get: function () { return self._showTimeInput; },
+            set: function (bool) {
+                self._showTimeInput = bool;
+                if (self.calendarContainer)
+                    toggleClass(self.calendarContainer, "showTimeInput", bool);
+                positionCalendar();
+            },
+        });
+    }
+    function formatDate(dateObj, frmt) {
+        if (self.config !== undefined && self.config.formatDate !== undefined)
+            return self.config.formatDate(dateObj, frmt);
+        return frmt
+            .split("")
+            .map(function (c, i, arr) {
+            return formats[c] && arr[i - 1] !== "\\"
+                ? formats[c](dateObj, self.l10n, self.config)
+                : c !== "\\" ? c : "";
+        })
+            .join("");
+    }
+    function parseDate(date, givenFormat, timeless) {
+        if (date !== 0 && !date)
+            return undefined;
+        var parsedDate;
+        var date_orig = date;
+        if (date instanceof Date)
+            parsedDate = new Date(date.getTime());
+        else if (typeof date !== "string" &&
+            date.toFixed !== undefined)
+            parsedDate = new Date(date);
+        else if (typeof date === "string") {
+            var format = givenFormat || (self.config || flatpickr.defaultConfig).dateFormat;
+            var datestr = String(date).trim();
+            if (datestr === "today") {
+                parsedDate = new Date();
+                timeless = true;
+            }
+            else if (/Z$/.test(datestr) ||
+                /GMT$/.test(datestr))
+                parsedDate = new Date(date);
+            else if (self.config && self.config.parseDate)
+                parsedDate = self.config.parseDate(date, format);
+            else {
+                parsedDate =
+                    !self.config || !self.config.noCalendar
+                        ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
+                        : new Date(new Date().setHours(0, 0, 0, 0));
+                var matched = void 0, ops = [];
+                for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
+                    var token = format[i];
+                    var isBackSlash = token === "\\";
+                    var escaped = format[i - 1] === "\\" || isBackSlash;
+                    if (tokenRegex[token] && !escaped) {
+                        regexStr += tokenRegex[token];
+                        var match = new RegExp(regexStr).exec(date);
+                        if (match && (matched = true)) {
+                            ops[token !== "Y" ? "push" : "unshift"]({
+                                fn: revFormat[token],
+                                val: match[++matchIndex],
+                            });
+                        }
+                    }
+                    else if (!isBackSlash)
+                        regexStr += ".";
+                    ops.forEach(function (_a) {
+                        var fn = _a.fn, val = _a.val;
+                        return (parsedDate =
+                            fn(parsedDate, val, self.l10n) || parsedDate);
+                    });
+                }
+                parsedDate = matched ? parsedDate : undefined;
+            }
+        }
+        if (!(parsedDate instanceof Date)) {
+            self.config.errorHandler(new Error("Invalid date provided: " + date_orig));
+            return undefined;
+        }
+        if (timeless === true)
+            parsedDate.setHours(0, 0, 0, 0);
+        return parsedDate;
+    }
+    function setupInputs() {
+        self.input = self.config.wrap
+            ? element.querySelector("[data-input]")
+            : element;
+        if (!self.input) {
+            self.config.errorHandler(new Error("Invalid input element specified"));
+            return;
+        }
+        self.input._type = self.input.type;
+        self.input.type = "text";
+        self.input.classList.add("flatpickr-input");
+        self._input = self.input;
+        if (self.config.altInput) {
+            self.altInput = createElement(self.input.nodeName, self.input.className + " " + self.config.altInputClass);
+            self._input = self.altInput;
+            self.altInput.placeholder = self.input.placeholder;
+            self.altInput.disabled = self.input.disabled;
+            self.altInput.required = self.input.required;
+            self.altInput.type = "text";
+            self.input.type = "hidden";
+            if (!self.config.static && self.input.parentNode)
+                self.input.parentNode.insertBefore(self.altInput, self.input.nextSibling);
+        }
+        if (!self.config.allowInput)
+            self._input.setAttribute("readonly", "readonly");
+        self._positionElement = self.config.positionElement || self._input;
+    }
+    function setupMobile() {
+        var inputType = self.config.enableTime
+            ? self.config.noCalendar ? "time" : "datetime-local"
+            : "date";
+        self.mobileInput = createElement("input", self.input.className + " flatpickr-mobile");
+        self.mobileInput.step = self.input.getAttribute("step") || "any";
+        self.mobileInput.tabIndex = 1;
+        self.mobileInput.type = inputType;
+        self.mobileInput.disabled = self.input.disabled;
+        self.mobileInput.placeholder = self.input.placeholder;
+        self.mobileFormatStr =
+            inputType === "datetime-local"
+                ? "Y-m-d\\TH:i:S"
+                : inputType === "date" ? "Y-m-d" : "H:i:S";
+        if (self.selectedDates.length) {
+            self.mobileInput.defaultValue = self.mobileInput.value = self.formatDate(self.selectedDates[0], self.mobileFormatStr);
+        }
+        if (self.config.minDate)
+            self.mobileInput.min = self.formatDate(self.config.minDate, "Y-m-d");
+        if (self.config.maxDate)
+            self.mobileInput.max = self.formatDate(self.config.maxDate, "Y-m-d");
+        self.input.type = "hidden";
+        if (self.altInput !== undefined)
+            self.altInput.type = "hidden";
+        try {
+            if (self.input.parentNode)
+                self.input.parentNode.insertBefore(self.mobileInput, self.input.nextSibling);
+        }
+        catch (_a) { }
+        bind(self.mobileInput, "change", function (e) {
+            self.setDate(e.target.value, false, self.mobileFormatStr);
+            triggerEvent("onChange");
+            triggerEvent("onClose");
+        });
+    }
+    function toggle() {
+        if (self.isOpen)
+            return self.close();
+        self.open();
+    }
+    function triggerEvent(event, data) {
+        var hooks = self.config[event];
+        if (hooks !== undefined && hooks.length > 0) {
+            for (var i = 0; hooks[i] && i < hooks.length; i++)
+                hooks[i](self.selectedDates, self.input.value, self, data);
+        }
+        if (event === "onChange") {
+            self.input.dispatchEvent(createEvent("change"));
+            self.input.dispatchEvent(createEvent("input"));
+        }
+    }
+    function createEvent(name) {
+        var e = document.createEvent("Event");
+        e.initEvent(name, true, true);
+        return e;
+    }
+    function isDateSelected(date) {
+        for (var i = 0; i < self.selectedDates.length; i++) {
+            if (compareDates(self.selectedDates[i], date) === 0)
+                return "" + i;
+        }
+        return false;
+    }
+    function isDateInRange(date) {
+        if (self.config.mode !== "range" || self.selectedDates.length < 2)
+            return false;
+        return (compareDates(date, self.selectedDates[0]) >= 0 &&
+            compareDates(date, self.selectedDates[1]) <= 0);
+    }
+    function updateNavigationCurrentMonth() {
+        if (self.config.noCalendar || self.isMobile || !self.monthNav)
+            return;
+        self.currentMonthElement.textContent =
+            monthToStr(self.currentMonth, self.config.shorthandCurrentMonth, self.l10n) + " ";
+        self.currentYearElement.value = self.currentYear.toString();
+        self._hidePrevMonthArrow =
+            self.config.minDate !== undefined &&
+                (self.currentYear === self.config.minDate.getFullYear()
+                    ? self.currentMonth <= self.config.minDate.getMonth()
+                    : self.currentYear < self.config.minDate.getFullYear());
+        self._hideNextMonthArrow =
+            self.config.maxDate !== undefined &&
+                (self.currentYear === self.config.maxDate.getFullYear()
+                    ? self.currentMonth + 1 > self.config.maxDate.getMonth()
+                    : self.currentYear > self.config.maxDate.getFullYear());
+    }
+    function updateValue(triggerChange) {
+        if (triggerChange === void 0) { triggerChange = true; }
+        if (!self.selectedDates.length)
+            return self.clear(triggerChange);
+        if (self.mobileInput !== undefined && self.mobileFormatStr) {
+            self.mobileInput.value =
+                self.latestSelectedDateObj !== undefined
+                    ? self.formatDate(self.latestSelectedDateObj, self.mobileFormatStr)
+                    : "";
+        }
+        var joinChar = self.config.mode !== "range"
+            ? self.config.conjunction
+            : self.l10n.rangeSeparator;
+        self.input.value = self.selectedDates
+            .map(function (dObj) { return self.formatDate(dObj, self.config.dateFormat); })
+            .join(joinChar);
+        if (self.altInput !== undefined) {
+            self.altInput.value = self.selectedDates
+                .map(function (dObj) { return self.formatDate(dObj, self.config.altFormat); })
+                .join(joinChar);
+        }
+        if (triggerChange !== false)
+            triggerEvent("onValueUpdate");
+    }
+    function onMonthNavScroll(e) {
+        e.preventDefault();
+        var isYear = self.currentYearElement.parentNode &&
+            self.currentYearElement.parentNode.contains(e.target);
+        if (e.target === self.currentMonthElement || isYear) {
+            var delta = mouseDelta(e);
+            if (isYear) {
+                changeYear(self.currentYear + delta);
+                e.target.value = self.currentYear.toString();
+            }
+            else
+                self.changeMonth(delta, true, false);
+        }
+    }
+    function onMonthNavClick(e) {
+        var isPrevMonth = self.prevMonthNav.contains(e.target);
+        var isNextMonth = self.nextMonthNav.contains(e.target);
+        if (isPrevMonth || isNextMonth)
+            changeMonth(isPrevMonth ? -1 : 1);
+        else if (e.target === self.currentYearElement) {
+            e.preventDefault();
+            self.currentYearElement.select();
+        }
+        else if (e.target.className === "arrowUp")
+            self.changeYear(self.currentYear + 1);
+        else if (e.target.className === "arrowDown")
+            self.changeYear(self.currentYear - 1);
+    }
+    function timeWrapper(e) {
+        e.preventDefault();
+        var isKeyDown = e.type === "keydown", input = e.target;
+        if (self.amPM !== undefined && e.target === self.amPM)
+            self.amPM.textContent =
+                self.l10n.amPM[self.amPM.textContent === "AM" ? 1 : 0];
+        var min = Number(input.min), max = Number(input.max), step = Number(input.step), curValue = parseInt(input.value, 10), delta = e.delta ||
+            (isKeyDown
+                ? e.which === 38 ? 1 : -1
+                : Math.max(-1, Math.min(1, e.wheelDelta || -e.deltaY)) || 0);
+        var newValue = curValue + step * delta;
+        if (typeof input.value !== "undefined" && input.value.length === 2) {
+            var isHourElem = input === self.hourElement, isMinuteElem = input === self.minuteElement;
+            if (newValue < min) {
+                newValue =
+                    max +
+                        newValue +
+                        int(!isHourElem) +
+                        (int(isHourElem) && int(!self.amPM));
+                if (isMinuteElem)
+                    incrementNumInput(undefined, -1, self.hourElement);
+            }
+            else if (newValue > max) {
+                newValue =
+                    input === self.hourElement ? newValue - max - int(!self.amPM) : min;
+                if (isMinuteElem)
+                    incrementNumInput(undefined, 1, self.hourElement);
+            }
+            if (self.amPM &&
+                isHourElem &&
+                (step === 1
+                    ? newValue + curValue === 23
+                    : Math.abs(newValue - curValue) > step))
+                self.amPM.textContent = self.amPM.textContent === "PM" ? "AM" : "PM";
+            input.value = pad(newValue);
+        }
+    }
+    init();
+    return self;
+}
 function _flatpickr(nodeList, config) {
-	var nodes = Array.prototype.slice.call(nodeList); // static list
-	var instances = [];
-	for (var i = 0; i < nodes.length; i++) {
-		try {
-			nodes[i]._flatpickr = new Flatpickr(nodes[i], config || {});
-			instances.push(nodes[i]._flatpickr);
-		} catch (e) {
-			console.warn(e, e.stack);
-		}
-	}
-
-	return instances.length === 1 ? instances[0] : instances;
+    var nodes = Array.prototype.slice.call(nodeList);
+    var instances = [];
+    for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        try {
+            if (node.getAttribute("data-fp-omit") !== null)
+                continue;
+            if (node._flatpickr !== undefined) {
+                node._flatpickr.destroy();
+                node._flatpickr = undefined;
+            }
+            node._flatpickr = FlatpickrInstance(node, config || {});
+            instances.push(node._flatpickr);
+        }
+        catch (e) {
+            console.error(e);
+        }
+    }
+    return instances.length === 1 ? instances[0] : instances;
 }
-
-/* istanbul ignore next */
 if (typeof HTMLElement !== "undefined") {
-	// browser env
-	HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config) {
-		return _flatpickr(this, config);
-	};
-
-	HTMLElement.prototype.flatpickr = function (config) {
-		return _flatpickr([this], config);
-	};
+    HTMLCollection.prototype.flatpickr = NodeList.prototype.flatpickr = function (config) {
+        return _flatpickr(this, config);
+    };
+    HTMLElement.prototype.flatpickr = function (config) {
+        return _flatpickr([this], config);
+    };
 }
-
-/* istanbul ignore next */
-function flatpickr(selector, config) {
-	return _flatpickr(window.document.querySelectorAll(selector), config);
-}
-
-/* istanbul ignore next */
+var flatpickr;
+flatpickr = function (selector, config) {
+    if (selector instanceof NodeList)
+        return _flatpickr(selector, config);
+    else if (typeof selector === "string")
+        return _flatpickr(window.document.querySelectorAll(selector), config);
+    return _flatpickr([selector], config);
+};
+if (typeof window === "object")
+    window.flatpickr = flatpickr;
+flatpickr.defaultConfig = defaults;
+flatpickr.l10ns = {
+    en: __assign({}, english),
+    default: __assign({}, english),
+};
+flatpickr.localize = function (l10n) {
+    flatpickr.l10ns.default = __assign({}, flatpickr.l10ns.default, l10n);
+};
+flatpickr.setDefaults = function (config) {
+    flatpickr.defaultConfig = __assign({}, flatpickr.defaultConfig, config);
+};
 if (typeof jQuery !== "undefined") {
-	jQuery.fn.flatpickr = function (config) {
-		return _flatpickr(this, config);
-	};
+    jQuery.fn.flatpickr = function (config) {
+        return _flatpickr(this, config);
+    };
 }
-
 Date.prototype.fp_incr = function (days) {
-	return new Date(this.getFullYear(), this.getMonth(), this.getDate() + parseInt(days, 10));
+    return new Date(this.getFullYear(), this.getMonth(), this.getDate() + (typeof days === "string" ? parseInt(days, 10) : days));
 };
+var flatpickr$1 = flatpickr;
 
-Date.prototype.fp_isUTC = false;
-Date.prototype.fp_toUTC = function () {
-	var newDate = new Date(this.getUTCFullYear(), this.getUTCMonth(), this.getUTCDate(), this.getUTCHours(), this.getUTCMinutes(), this.getUTCSeconds());
+return flatpickr$1;
 
-	newDate.fp_isUTC = true;
-	return newDate;
-};
+})));
 
-if (true) module.exports = Flatpickr;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__("0iPh")))
 
 /***/ }),
@@ -16198,12 +15471,10 @@ if (true) module.exports = Flatpickr;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -16237,12 +15508,10 @@ module.exports = ReactDOMContainerInfo;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -16475,12 +15744,10 @@ module.exports = hasPath;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -16614,23 +15881,24 @@ function isLength(value) {
 /***/ "Ibhu":
 /***/ (function(module, exports, __webpack_require__) {
 
-var has          = __webpack_require__("D2L2")
-  , toIObject    = __webpack_require__("TcQ7")
-  , arrayIndexOf = __webpack_require__("vFc/")(false)
-  , IE_PROTO     = __webpack_require__("ax3d")('IE_PROTO');
+var has = __webpack_require__("D2L2");
+var toIObject = __webpack_require__("TcQ7");
+var arrayIndexOf = __webpack_require__("vFc/")(false);
+var IE_PROTO = __webpack_require__("ax3d")('IE_PROTO');
 
-module.exports = function(object, names){
-  var O      = toIObject(object)
-    , i      = 0
-    , result = []
-    , key;
-  for(key in O)if(key != IE_PROTO)has(O, key) && result.push(key);
+module.exports = function (object, names) {
+  var O = toIObject(object);
+  var i = 0;
+  var result = [];
+  var key;
+  for (key in O) if (key != IE_PROTO) has(O, key) && result.push(key);
   // Don't enum bug & hidden keys
-  while(names.length > i)if(has(O, key = names[i++])){
+  while (names.length > i) if (has(O, key = names[i++])) {
     ~arrayIndexOf(result, key) || result.push(key);
   }
   return result;
 };
+
 
 /***/ }),
 
@@ -16639,12 +15907,10 @@ module.exports = function(object, names){
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
 
@@ -16678,7 +15944,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
         try {
           // This is intentionally an invariant that gets caught. It's the same
           // behavior as without this statement except with a better message.
-          invariant(typeof typeSpecs[typeSpecName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'React.PropTypes.', componentName || 'React class', location, typeSpecName);
+          invariant(typeof typeSpecs[typeSpecName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'the `prop-types` package, but received `%s`.', componentName || 'React class', location, typeSpecName, typeof typeSpecs[typeSpecName]);
           error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
         } catch (ex) {
           error = ex;
@@ -16738,12 +16004,10 @@ function identity(value) {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -17276,11 +16540,9 @@ var asEffect = {
 "use strict";
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -17308,12 +16570,10 @@ module.exports = focusNode;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -17337,12 +16597,10 @@ module.exports = factory(Component, isValidElement, ReactNoopUpdateQueue);
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -17369,12 +16627,10 @@ module.exports = DefaultEventPluginOrder;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -17471,11 +16727,9 @@ module.exports = FallbackCompositionState;
 "use strict";
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  * @typechecks static-only
@@ -17498,93 +16752,6 @@ function memoizeStringOnly(callback) {
 }
 
 module.exports = memoizeStringOnly;
-
-/***/ }),
-
-/***/ "JnCq":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("U7vG");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _isString = __webpack_require__("JDN0");
-
-var _isString2 = _interopRequireDefault(_isString);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Link = function (_React$Component) {
-  _inherits(Link, _React$Component);
-
-  function Link() {
-    _classCallCheck(this, Link);
-
-    var _this = _possibleConstructorReturn(this, (Link.__proto__ || Object.getPrototypeOf(Link)).call(this));
-
-    _this.handleClick = _this.handleClick.bind(_this);
-    return _this;
-  }
-
-  _createClass(Link, [{
-    key: 'handleClick',
-    value: function handleClick(e) {
-      if (this.props.onClick) {
-        this.props.onClick(e, this.props.callbackValue);
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-
-      var a;
-      if ((0, _isString2.default)(this.props.onClick)) {
-        a = _react2.default.createElement(
-          'a',
-          { style: { textDecoration: 'none' }, href: this.props.onClick, target: this.props.newTab && '_blank' },
-          this.props.children
-        );
-      } else {
-        a = _react2.default.createElement(
-          'a',
-          { style: { textDecoration: 'none' }, onClick: this.handleClick },
-          this.props.children
-        );
-      }
-
-      return a;
-    }
-  }]);
-
-  return Link;
-}(_react2.default.Component);
-
-// Link.propTypes =
-//   onClick: PropTypes.oneOfType(
-//     PropTypes.string,
-//     PropTypes.func
-//   );
-
-Link.defaultProps = {
-  newTab: false
-};
-
-exports.default = Link;
 
 /***/ }),
 
@@ -17622,12 +16789,10 @@ module.exports = cloneMap;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
 
@@ -17635,6 +16800,7 @@ module.exports = cloneMap;
 var emptyFunction = __webpack_require__("e6+Q");
 var invariant = __webpack_require__("cxPT");
 var warning = __webpack_require__("YyeZ");
+var assign = __webpack_require__("BEQ0");
 
 var ReactPropTypesSecret = __webpack_require__("gt/O");
 var checkPropTypes = __webpack_require__("Ie6m");
@@ -17733,7 +16899,8 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
     objectOf: createObjectOfTypeChecker,
     oneOf: createEnumTypeChecker,
     oneOfType: createUnionTypeChecker,
-    shape: createShapeTypeChecker
+    shape: createShapeTypeChecker,
+    exact: createStrictShapeTypeChecker,
   };
 
   /**
@@ -17948,7 +17115,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
       if (typeof checker !== 'function') {
         warning(
           false,
-          'Invalid argument supplid to oneOfType. Expected an array of check functions, but ' +
+          'Invalid argument supplied to oneOfType. Expected an array of check functions, but ' +
           'received %s at index %s.',
           getPostfixForTypeWarning(checker),
           i
@@ -17999,6 +17166,36 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
       }
       return null;
     }
+    return createChainableTypeChecker(validate);
+  }
+
+  function createStrictShapeTypeChecker(shapeTypes) {
+    function validate(props, propName, componentName, location, propFullName) {
+      var propValue = props[propName];
+      var propType = getPropType(propValue);
+      if (propType !== 'object') {
+        return new PropTypeError('Invalid ' + location + ' `' + propFullName + '` of type `' + propType + '` ' + ('supplied to `' + componentName + '`, expected `object`.'));
+      }
+      // We need to check all keys in case some are required but missing from
+      // props.
+      var allKeys = assign({}, props[propName], shapeTypes);
+      for (var key in allKeys) {
+        var checker = shapeTypes[key];
+        if (!checker) {
+          return new PropTypeError(
+            'Invalid ' + location + ' `' + propFullName + '` key `' + key + '` supplied to `' + componentName + '`.' +
+            '\nBad object: ' + JSON.stringify(props[propName], null, '  ') +
+            '\nValid keys: ' +  JSON.stringify(Object.keys(shapeTypes), null, '  ')
+          );
+        }
+        var error = checker(propValue, key, componentName, location, propFullName + '.' + key, ReactPropTypesSecret);
+        if (error) {
+          return error;
+        }
+      }
+      return null;
+    }
+
     return createChainableTypeChecker(validate);
   }
 
@@ -18137,111 +17334,6 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 
 /***/ }),
 
-/***/ "JuCk":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__("U7vG");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__("KSGD");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _reactcss = __webpack_require__("TmTn");
-
-var _reactcss2 = _interopRequireDefault(_reactcss);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Tab = function (_React$Component) {
-  _inherits(Tab, _React$Component);
-
-  function Tab() {
-    _classCallCheck(this, Tab);
-
-    var _this = _possibleConstructorReturn(this, (Tab.__proto__ || Object.getPrototypeOf(Tab)).call(this));
-
-    _this.handleClick = _this.handleClick.bind(_this);
-    return _this;
-  }
-
-  _createClass(Tab, [{
-    key: 'handleClick',
-    value: function handleClick() {
-      if (this.props.selectable !== false) {
-        this.props.onClick(this.props.tab);
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-
-      var styles = (0, _reactcss2.default)({
-        'default': {
-          tab: {
-            color: this.props.inactive || this.props.color,
-            cursor: 'pointer',
-            paddingLeft: '12px',
-            paddingRight: '12px',
-            height: '48px',
-            lineHeight: '48px',
-            textAlign: 'center',
-            fontSize: '14px',
-            textTransform: this.props.capitalize === false ? '' : 'uppercase',
-            fontWeight: '500',
-            whiteSpace: 'nowrap',
-            opacity: '.47',
-            transition: 'opacity 100ms linear'
-          }
-        },
-        'selected': {
-          tab: {
-            color: this.props.color,
-            opacity: '.87'
-          }
-        }
-      }, this.props);
-
-      return _react2.default.createElement(
-        'div',
-        { style: styles.tab, onClick: this.handleClick },
-        this.props.children
-      );
-    }
-  }]);
-
-  return Tab;
-}(_react2.default.Component);
-
-Tab.propTypes = {
-  selected: _propTypes2.default.bool
-};
-
-Tab.defaultProps = {
-  selected: false,
-  color: '#fff'
-};
-
-exports.default = Tab;
-
-/***/ }),
-
 /***/ "JyYQ":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -18285,12 +17377,10 @@ module.exports = baseIteratee;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -18322,12 +17412,10 @@ module.exports = forEachAccumulated;
 
 "use strict";
 /**
- * Copyright 2014-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -18347,12 +17435,10 @@ module.exports = REACT_ELEMENT_TYPE;
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
 if (true) {
@@ -18385,6 +17471,7 @@ if (true) {
 
 exports.f = __webpack_require__("dSzd");
 
+
 /***/ }),
 
 /***/ "KmWZ":
@@ -18414,12 +17501,10 @@ module.exports = stackClear;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -18555,11 +17640,9 @@ module.exports = EventPropagators;
 "use strict";
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
  */
@@ -18687,22 +17770,23 @@ function isPrototype(value) {
 /***/ "LKZe":
 /***/ (function(module, exports, __webpack_require__) {
 
-var pIE            = __webpack_require__("NpIQ")
-  , createDesc     = __webpack_require__("X8DO")
-  , toIObject      = __webpack_require__("TcQ7")
-  , toPrimitive    = __webpack_require__("MmMw")
-  , has            = __webpack_require__("D2L2")
-  , IE8_DOM_DEFINE = __webpack_require__("SfB7")
-  , gOPD           = Object.getOwnPropertyDescriptor;
+var pIE = __webpack_require__("NpIQ");
+var createDesc = __webpack_require__("X8DO");
+var toIObject = __webpack_require__("TcQ7");
+var toPrimitive = __webpack_require__("MmMw");
+var has = __webpack_require__("D2L2");
+var IE8_DOM_DEFINE = __webpack_require__("SfB7");
+var gOPD = Object.getOwnPropertyDescriptor;
 
-exports.f = __webpack_require__("+E39") ? gOPD : function getOwnPropertyDescriptor(O, P){
+exports.f = __webpack_require__("+E39") ? gOPD : function getOwnPropertyDescriptor(O, P) {
   O = toIObject(O);
   P = toPrimitive(P, true);
-  if(IE8_DOM_DEFINE)try {
+  if (IE8_DOM_DEFINE) try {
     return gOPD(O, P);
-  } catch(e){ /* empty */ }
-  if(has(O, P))return createDesc(!pIE.f.call(O, P), O[P]);
+  } catch (e) { /* empty */ }
+  if (has(O, P)) return createDesc(!pIE.f.call(O, P), O[P]);
 };
+
 
 /***/ }),
 
@@ -18711,12 +17795,10 @@ exports.f = __webpack_require__("+E39") ? gOPD : function getOwnPropertyDescript
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -18750,12 +17832,10 @@ module.exports = ReactDOMIDOperations;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -18918,12 +17998,10 @@ module.exports = ReactDOMTextComponent;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -19115,12 +18193,10 @@ module.exports = ReactChildren;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -19299,12 +18375,10 @@ module.exports = ReactReconcileTransaction;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -19428,1180 +18502,6 @@ function isNil(value) {
 }
 
 /* harmony default export */ __webpack_exports__["default"] = (isNil);
-
-
-/***/ }),
-
-/***/ "Lza1":
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_RESULT__;// jscs: disable
-
-// TinyColor v1.1.2
-// https://github.com/bgrins/TinyColor
-// Brian Grinstead, MIT License
-
-(function() {
-
-var trimLeft = /^[\s,#]+/;
-var trimRight = /\s+$/;
-var tinyCounter = 0;
-var math = Math;
-var mathRound = math.round;
-var mathMin = math.min;
-var mathMax = math.max;
-var mathRandom = math.random;
-
-function tinycolor(color, opts) {
-
-		color = (color) ? color : '';
-		opts = opts || { };
-
-		// If input is already a tinycolor, return itself
-		if (color instanceof tinycolor) {
-			 return color;
-		}
-		// If we are called as a function, call using new instead
-		if (!(this instanceof tinycolor)) {
-				return new tinycolor(color, opts);
-		}
-
-		var rgb = inputToRGB(color);
-		this._originalInput = color,
-		this._r = rgb.r,
-		this._g = rgb.g,
-		this._b = rgb.b,
-		this._a = rgb.a,
-		this._roundA = mathRound(100*this._a) / 100,
-		this._format = opts.format || rgb.format;
-		this._gradientType = opts.gradientType;
-
-		// Don't let the range of [0,255] come back in [0,1].
-		// Potentially lose a little bit of precision here, but will fix issues where
-		// .5 gets interpreted as half of the total, instead of half of 1
-		// If it was supposed to be 128, this was already taken care of by `inputToRgb`
-		if (this._r < 1) { this._r = mathRound(this._r); }
-		if (this._g < 1) { this._g = mathRound(this._g); }
-		if (this._b < 1) { this._b = mathRound(this._b); }
-
-		this._ok = rgb.ok;
-		this._tc_id = tinyCounter++;
-}
-
-tinycolor.prototype = {
-		isDark: function() {
-				return this.getBrightness() < 128;
-		},
-		isLight: function() {
-				return !this.isDark();
-		},
-		isValid: function() {
-				return this._ok;
-		},
-		getOriginalInput: function() {
-			return this._originalInput;
-		},
-		getFormat: function() {
-				return this._format;
-		},
-		getAlpha: function() {
-				return this._a;
-		},
-		getBrightness: function() {
-				//http://www.w3.org/TR/AERT#color-contrast
-				var rgb = this.toRgb();
-				return (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
-		},
-		getLuminance: function() {
-				//http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
-				var rgb = this.toRgb();
-				var RsRGB, GsRGB, BsRGB, R, G, B;
-				RsRGB = rgb.r/255;
-				GsRGB = rgb.g/255;
-				BsRGB = rgb.b/255;
-
-				if (RsRGB <= 0.03928) {R = RsRGB / 12.92;} else {R = Math.pow(((RsRGB + 0.055) / 1.055), 2.4);}
-				if (GsRGB <= 0.03928) {G = GsRGB / 12.92;} else {G = Math.pow(((GsRGB + 0.055) / 1.055), 2.4);}
-				if (BsRGB <= 0.03928) {B = BsRGB / 12.92;} else {B = Math.pow(((BsRGB + 0.055) / 1.055), 2.4);}
-				return (0.2126 * R) + (0.7152 * G) + (0.0722 * B);
-		},
-		setAlpha: function(value) {
-				this._a = boundAlpha(value);
-				this._roundA = mathRound(100*this._a) / 100;
-				return this;
-		},
-		toHsv: function() {
-				var hsv = rgbToHsv(this._r, this._g, this._b);
-				return { h: hsv.h * 360, s: hsv.s, v: hsv.v, a: this._a };
-		},
-		toHsvString: function() {
-				var hsv = rgbToHsv(this._r, this._g, this._b);
-				var h = mathRound(hsv.h * 360), s = mathRound(hsv.s * 100), v = mathRound(hsv.v * 100);
-				return (this._a == 1) ?
-					"hsv("	+ h + ", " + s + "%, " + v + "%)" :
-					"hsva(" + h + ", " + s + "%, " + v + "%, "+ this._roundA + ")";
-		},
-		toHsl: function() {
-				var hsl = rgbToHsl(this._r, this._g, this._b);
-				return { h: hsl.h * 360, s: hsl.s, l: hsl.l, a: this._a };
-		},
-		toHslString: function() {
-				var hsl = rgbToHsl(this._r, this._g, this._b);
-				var h = mathRound(hsl.h * 360), s = mathRound(hsl.s * 100), l = mathRound(hsl.l * 100);
-				return (this._a == 1) ?
-					"hsl("	+ h + ", " + s + "%, " + l + "%)" :
-					"hsla(" + h + ", " + s + "%, " + l + "%, "+ this._roundA + ")";
-		},
-		toHex: function(allow3Char) {
-				return rgbToHex(this._r, this._g, this._b, allow3Char);
-		},
-		toHexString: function(allow3Char) {
-				return '#' + this.toHex(allow3Char);
-		},
-		toHex8: function() {
-				return rgbaToHex(this._r, this._g, this._b, this._a);
-		},
-		toHex8String: function() {
-				return '#' + this.toHex8();
-		},
-		toRgb: function() {
-				return { r: mathRound(this._r), g: mathRound(this._g), b: mathRound(this._b), a: this._a };
-		},
-		toRgbString: function() {
-				return (this._a == 1) ?
-					"rgb("	+ mathRound(this._r) + ", " + mathRound(this._g) + ", " + mathRound(this._b) + ")" :
-					"rgba(" + mathRound(this._r) + ", " + mathRound(this._g) + ", " + mathRound(this._b) + ", " + this._roundA + ")";
-		},
-		toPercentageRgb: function() {
-				return { r: mathRound(bound01(this._r, 255) * 100) + "%", g: mathRound(bound01(this._g, 255) * 100) + "%", b: mathRound(bound01(this._b, 255) * 100) + "%", a: this._a };
-		},
-		toPercentageRgbString: function() {
-				return (this._a == 1) ?
-					"rgb("	+ mathRound(bound01(this._r, 255) * 100) + "%, " + mathRound(bound01(this._g, 255) * 100) + "%, " + mathRound(bound01(this._b, 255) * 100) + "%)" :
-					"rgba(" + mathRound(bound01(this._r, 255) * 100) + "%, " + mathRound(bound01(this._g, 255) * 100) + "%, " + mathRound(bound01(this._b, 255) * 100) + "%, " + this._roundA + ")";
-		},
-		toName: function() {
-				if (this._a === 0) {
-						return "transparent";
-				}
-
-				if (this._a < 1) {
-						return false;
-				}
-
-				return hexNames[rgbToHex(this._r, this._g, this._b, true)] || false;
-		},
-		toFilter: function(secondColor) {
-				var hex8String = '#' + rgbaToHex(this._r, this._g, this._b, this._a);
-				var secondHex8String = hex8String;
-				var gradientType = this._gradientType ? "GradientType = 1, " : "";
-
-				if (secondColor) {
-						var s = tinycolor(secondColor);
-						secondHex8String = s.toHex8String();
-				}
-
-				return "progid:DXImageTransform.Microsoft.gradient("+gradientType+"startColorstr="+hex8String+",endColorstr="+secondHex8String+")";
-		},
-		toString: function(format) {
-				var formatSet = !!format;
-				format = format || this._format;
-
-				var formattedString = false;
-				var hasAlpha = this._a < 1 && this._a >= 0;
-				var needsAlphaFormat = !formatSet && hasAlpha && (format === "hex" || format === "hex6" || format === "hex3" || format === "name");
-
-				if (needsAlphaFormat) {
-						// Special case for "transparent", all other non-alpha formats
-						// will return rgba when there is transparency.
-						if (format === "name" && this._a === 0) {
-								return this.toName();
-						}
-						return this.toRgbString();
-				}
-				if (format === "rgb") {
-						formattedString = this.toRgbString();
-				}
-				if (format === "prgb") {
-						formattedString = this.toPercentageRgbString();
-				}
-				if (format === "hex" || format === "hex6") {
-						formattedString = this.toHexString();
-				}
-				if (format === "hex3") {
-						formattedString = this.toHexString(true);
-				}
-				if (format === "hex8") {
-						formattedString = this.toHex8String();
-				}
-				if (format === "name") {
-						formattedString = this.toName();
-				}
-				if (format === "hsl") {
-						formattedString = this.toHslString();
-				}
-				if (format === "hsv") {
-						formattedString = this.toHsvString();
-				}
-
-				return formattedString || this.toHexString();
-		},
-
-		_applyModification: function(fn, args) {
-				var color = fn.apply(null, [this].concat([].slice.call(args)));
-				this._r = color._r;
-				this._g = color._g;
-				this._b = color._b;
-				this.setAlpha(color._a);
-				return this;
-		},
-		lighten: function() {
-				return this._applyModification(lighten, arguments);
-		},
-		brighten: function() {
-				return this._applyModification(brighten, arguments);
-		},
-		darken: function() {
-				return this._applyModification(darken, arguments);
-		},
-		desaturate: function() {
-				return this._applyModification(desaturate, arguments);
-		},
-		saturate: function() {
-				return this._applyModification(saturate, arguments);
-		},
-		greyscale: function() {
-				return this._applyModification(greyscale, arguments);
-		},
-		spin: function() {
-				return this._applyModification(spin, arguments);
-		},
-
-		_applyCombination: function(fn, args) {
-				return fn.apply(null, [this].concat([].slice.call(args)));
-		},
-		analogous: function() {
-				return this._applyCombination(analogous, arguments);
-		},
-		complement: function() {
-				return this._applyCombination(complement, arguments);
-		},
-		monochromatic: function() {
-				return this._applyCombination(monochromatic, arguments);
-		},
-		splitcomplement: function() {
-				return this._applyCombination(splitcomplement, arguments);
-		},
-		triad: function() {
-				return this._applyCombination(triad, arguments);
-		},
-		tetrad: function() {
-				return this._applyCombination(tetrad, arguments);
-		}
-};
-
-// If input is an object, force 1 into "1.0" to handle ratios properly
-// String input requires "1.0" as input, so 1 will be treated as 1
-tinycolor.fromRatio = function(color, opts) {
-		if (typeof color == "object") {
-				var newColor = {};
-				for (var i in color) {
-						if (color.hasOwnProperty(i)) {
-								if (i === "a") {
-										newColor[i] = color[i];
-								}
-								else {
-										newColor[i] = convertToPercentage(color[i]);
-								}
-						}
-				}
-				color = newColor;
-		}
-
-		return tinycolor(color, opts);
-};
-
-// Given a string or object, convert that input to RGB
-// Possible string inputs:
-//
-//		 "red"
-//		 "#f00" or "f00"
-//		 "#ff0000" or "ff0000"
-//		 "#ff000000" or "ff000000"
-//		 "rgb 255 0 0" or "rgb (255, 0, 0)"
-//		 "rgb 1.0 0 0" or "rgb (1, 0, 0)"
-//		 "rgba (255, 0, 0, 1)" or "rgba 255, 0, 0, 1"
-//		 "rgba (1.0, 0, 0, 1)" or "rgba 1.0, 0, 0, 1"
-//		 "hsl(0, 100%, 50%)" or "hsl 0 100% 50%"
-//		 "hsla(0, 100%, 50%, 1)" or "hsla 0 100% 50%, 1"
-//		 "hsv(0, 100%, 100%)" or "hsv 0 100% 100%"
-//
-function inputToRGB(color) {
-
-		var rgb = { r: 0, g: 0, b: 0 };
-		var a = 1;
-		var ok = false;
-		var format = false;
-
-		if (typeof color == "string") {
-				color = stringInputToObject(color);
-		}
-
-		if (typeof color == "object") {
-				if (color.hasOwnProperty("r") && color.hasOwnProperty("g") && color.hasOwnProperty("b")) {
-						rgb = rgbToRgb(color.r, color.g, color.b);
-						ok = true;
-						format = String(color.r).substr(-1) === "%" ? "prgb" : "rgb";
-				}
-				else if (color.hasOwnProperty("h") && color.hasOwnProperty("s") && color.hasOwnProperty("v")) {
-						color.s = convertToPercentage(color.s, 1);
-						color.v = convertToPercentage(color.v, 1);
-						rgb = hsvToRgb(color.h, color.s, color.v);
-						ok = true;
-						format = "hsv";
-				}
-				else if (color.hasOwnProperty("h") && color.hasOwnProperty("s") && color.hasOwnProperty("l")) {
-						color.s = convertToPercentage(color.s);
-						color.l = convertToPercentage(color.l);
-						rgb = hslToRgb(color.h, color.s, color.l);
-						ok = true;
-						format = "hsl";
-				}
-
-				if (color.hasOwnProperty("a")) {
-						a = color.a;
-				}
-		}
-
-		a = boundAlpha(a);
-
-		return {
-				ok: ok,
-				format: color.format || format,
-				r: mathMin(255, mathMax(rgb.r, 0)),
-				g: mathMin(255, mathMax(rgb.g, 0)),
-				b: mathMin(255, mathMax(rgb.b, 0)),
-				a: a
-		};
-}
-
-
-// Conversion Functions
-// --------------------
-
-// `rgbToHsl`, `rgbToHsv`, `hslToRgb`, `hsvToRgb` modified from:
-// <http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript>
-
-// `rgbToRgb`
-// Handle bounds / percentage checking to conform to CSS color spec
-// <http://www.w3.org/TR/css3-color/>
-// *Assumes:* r, g, b in [0, 255] or [0, 1]
-// *Returns:* { r, g, b } in [0, 255]
-function rgbToRgb(r, g, b){
-		return {
-				r: bound01(r, 255) * 255,
-				g: bound01(g, 255) * 255,
-				b: bound01(b, 255) * 255
-		};
-}
-
-// `rgbToHsl`
-// Converts an RGB color value to HSL.
-// *Assumes:* r, g, and b are contained in [0, 255] or [0, 1]
-// *Returns:* { h, s, l } in [0,1]
-function rgbToHsl(r, g, b) {
-
-		r = bound01(r, 255);
-		g = bound01(g, 255);
-		b = bound01(b, 255);
-
-		var max = mathMax(r, g, b), min = mathMin(r, g, b);
-		var h, s, l = (max + min) / 2;
-
-		if(max == min) {
-				h = s = 0; // achromatic
-		}
-		else {
-				var d = max - min;
-				s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-				switch(max) {
-						case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-						case g: h = (b - r) / d + 2; break;
-						case b: h = (r - g) / d + 4; break;
-				}
-
-				h /= 6;
-		}
-
-		return { h: h, s: s, l: l };
-}
-
-// `hslToRgb`
-// Converts an HSL color value to RGB.
-// *Assumes:* h is contained in [0, 1] or [0, 360] and s and l are contained [0, 1] or [0, 100]
-// *Returns:* { r, g, b } in the set [0, 255]
-function hslToRgb(h, s, l) {
-		var r, g, b;
-
-		h = bound01(h, 360);
-		s = bound01(s, 100);
-		l = bound01(l, 100);
-
-		function hue2rgb(p, q, t) {
-				if(t < 0) t += 1;
-				if(t > 1) t -= 1;
-				if(t < 1/6) return p + (q - p) * 6 * t;
-				if(t < 1/2) return q;
-				if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-				return p;
-		}
-
-		if(s === 0) {
-				r = g = b = l; // achromatic
-		}
-		else {
-				var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-				var p = 2 * l - q;
-				r = hue2rgb(p, q, h + 1/3);
-				g = hue2rgb(p, q, h);
-				b = hue2rgb(p, q, h - 1/3);
-		}
-
-		return { r: r * 255, g: g * 255, b: b * 255 };
-}
-
-// `rgbToHsv`
-// Converts an RGB color value to HSV
-// *Assumes:* r, g, and b are contained in the set [0, 255] or [0, 1]
-// *Returns:* { h, s, v } in [0,1]
-function rgbToHsv(r, g, b) {
-
-		r = bound01(r, 255);
-		g = bound01(g, 255);
-		b = bound01(b, 255);
-
-		var max = mathMax(r, g, b), min = mathMin(r, g, b);
-		var h, s, v = max;
-
-		var d = max - min;
-		s = max === 0 ? 0 : d / max;
-
-		if(max == min) {
-				h = 0; // achromatic
-		}
-		else {
-				switch(max) {
-						case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-						case g: h = (b - r) / d + 2; break;
-						case b: h = (r - g) / d + 4; break;
-				}
-				h /= 6;
-		}
-		return { h: h, s: s, v: v };
-}
-
-// `hsvToRgb`
-// Converts an HSV color value to RGB.
-// *Assumes:* h is contained in [0, 1] or [0, 360] and s and v are contained in [0, 1] or [0, 100]
-// *Returns:* { r, g, b } in the set [0, 255]
- function hsvToRgb(h, s, v) {
-
-		h = bound01(h, 360) * 6;
-		s = bound01(s, 100);
-		v = bound01(v, 100);
-
-		var i = math.floor(h),
-				f = h - i,
-				p = v * (1 - s),
-				q = v * (1 - f * s),
-				t = v * (1 - (1 - f) * s),
-				mod = i % 6,
-				r = [v, q, p, p, t, v][mod],
-				g = [t, v, v, q, p, p][mod],
-				b = [p, p, t, v, v, q][mod];
-
-		return { r: r * 255, g: g * 255, b: b * 255 };
-}
-
-// `rgbToHex`
-// Converts an RGB color to hex
-// Assumes r, g, and b are contained in the set [0, 255]
-// Returns a 3 or 6 character hex
-function rgbToHex(r, g, b, allow3Char) {
-
-		var hex = [
-				pad2(mathRound(r).toString(16)),
-				pad2(mathRound(g).toString(16)),
-				pad2(mathRound(b).toString(16))
-		];
-
-		// Return a 3 character hex if possible
-		if (allow3Char && hex[0].charAt(0) == hex[0].charAt(1) && hex[1].charAt(0) == hex[1].charAt(1) && hex[2].charAt(0) == hex[2].charAt(1)) {
-				return hex[0].charAt(0) + hex[1].charAt(0) + hex[2].charAt(0);
-		}
-
-		return hex.join("");
-}
-		// `rgbaToHex`
-		// Converts an RGBA color plus alpha transparency to hex
-		// Assumes r, g, b and a are contained in the set [0, 255]
-		// Returns an 8 character hex
-		function rgbaToHex(r, g, b, a) {
-
-				var hex = [
-						pad2(convertDecimalToHex(a)),
-						pad2(mathRound(r).toString(16)),
-						pad2(mathRound(g).toString(16)),
-						pad2(mathRound(b).toString(16))
-				];
-
-				return hex.join("");
-		}
-
-// `equals`
-// Can be called with any tinycolor input
-tinycolor.equals = function (color1, color2) {
-		if (!color1 || !color2) { return false; }
-		return tinycolor(color1).toRgbString() == tinycolor(color2).toRgbString();
-};
-tinycolor.random = function() {
-		return tinycolor.fromRatio({
-				r: mathRandom(),
-				g: mathRandom(),
-				b: mathRandom()
-		});
-};
-
-
-// Modification Functions
-// ----------------------
-// Thanks to less.js for some of the basics here
-// <https://github.com/cloudhead/less.js/blob/master/lib/less/functions.js>
-
-function desaturate(color, amount) {
-		amount = (amount === 0) ? 0 : (amount || 10);
-		var hsl = tinycolor(color).toHsl();
-		hsl.s -= amount / 100;
-		hsl.s = clamp01(hsl.s);
-		return tinycolor(hsl);
-}
-
-function saturate(color, amount) {
-		amount = (amount === 0) ? 0 : (amount || 10);
-		var hsl = tinycolor(color).toHsl();
-		hsl.s += amount / 100;
-		hsl.s = clamp01(hsl.s);
-		return tinycolor(hsl);
-}
-
-function greyscale(color) {
-		return tinycolor(color).desaturate(100);
-}
-
-function lighten (color, amount) {
-		amount = (amount === 0) ? 0 : (amount || 10);
-		var hsl = tinycolor(color).toHsl();
-		hsl.l += amount / 100;
-		hsl.l = clamp01(hsl.l);
-		return tinycolor(hsl);
-}
-
-function brighten(color, amount) {
-		amount = (amount === 0) ? 0 : (amount || 10);
-		var rgb = tinycolor(color).toRgb();
-		rgb.r = mathMax(0, mathMin(255, rgb.r - mathRound(255 * - (amount / 100))));
-		rgb.g = mathMax(0, mathMin(255, rgb.g - mathRound(255 * - (amount / 100))));
-		rgb.b = mathMax(0, mathMin(255, rgb.b - mathRound(255 * - (amount / 100))));
-		return tinycolor(rgb);
-}
-
-function darken (color, amount) {
-		amount = (amount === 0) ? 0 : (amount || 10);
-		var hsl = tinycolor(color).toHsl();
-		hsl.l -= amount / 100;
-		hsl.l = clamp01(hsl.l);
-		return tinycolor(hsl);
-}
-
-// Spin takes a positive or negative amount within [-360, 360] indicating the change of hue.
-// Values outside of this range will be wrapped into this range.
-function spin(color, amount) {
-		var hsl = tinycolor(color).toHsl();
-		var hue = (mathRound(hsl.h) + amount) % 360;
-		hsl.h = hue < 0 ? 360 + hue : hue;
-		return tinycolor(hsl);
-}
-
-// Combination Functions
-// ---------------------
-// Thanks to jQuery xColor for some of the ideas behind these
-// <https://github.com/infusion/jQuery-xcolor/blob/master/jquery.xcolor.js>
-
-function complement(color) {
-		var hsl = tinycolor(color).toHsl();
-		hsl.h = (hsl.h + 180) % 360;
-		return tinycolor(hsl);
-}
-
-function triad(color) {
-		var hsl = tinycolor(color).toHsl();
-		var h = hsl.h;
-		return [
-				tinycolor(color),
-				tinycolor({ h: (h + 120) % 360, s: hsl.s, l: hsl.l }),
-				tinycolor({ h: (h + 240) % 360, s: hsl.s, l: hsl.l })
-		];
-}
-
-function tetrad(color) {
-		var hsl = tinycolor(color).toHsl();
-		var h = hsl.h;
-		return [
-				tinycolor(color),
-				tinycolor({ h: (h + 90) % 360, s: hsl.s, l: hsl.l }),
-				tinycolor({ h: (h + 180) % 360, s: hsl.s, l: hsl.l }),
-				tinycolor({ h: (h + 270) % 360, s: hsl.s, l: hsl.l })
-		];
-}
-
-function splitcomplement(color) {
-		var hsl = tinycolor(color).toHsl();
-		var h = hsl.h;
-		return [
-				tinycolor(color),
-				tinycolor({ h: (h + 72) % 360, s: hsl.s, l: hsl.l}),
-				tinycolor({ h: (h + 216) % 360, s: hsl.s, l: hsl.l})
-		];
-}
-
-function analogous(color, results, slices) {
-		results = results || 6;
-		slices = slices || 30;
-
-		var hsl = tinycolor(color).toHsl();
-		var part = 360 / slices;
-		var ret = [tinycolor(color)];
-
-		for (hsl.h = ((hsl.h - (part * results >> 1)) + 720) % 360; --results; ) {
-				hsl.h = (hsl.h + part) % 360;
-				ret.push(tinycolor(hsl));
-		}
-		return ret;
-}
-
-function monochromatic(color, results) {
-		results = results || 6;
-		var hsv = tinycolor(color).toHsv();
-		var h = hsv.h, s = hsv.s, v = hsv.v;
-		var ret = [];
-		var modification = 1 / results;
-
-		while (results--) {
-				ret.push(tinycolor({ h: h, s: s, v: v}));
-				v = (v + modification) % 1;
-		}
-
-		return ret;
-}
-
-// Utility Functions
-// ---------------------
-
-tinycolor.mix = function(color1, color2, amount) {
-		amount = (amount === 0) ? 0 : (amount || 50);
-
-		var rgb1 = tinycolor(color1).toRgb();
-		var rgb2 = tinycolor(color2).toRgb();
-
-		var p = amount / 100;
-		var w = p * 2 - 1;
-		var a = rgb2.a - rgb1.a;
-
-		var w1;
-
-		if (w * a == -1) {
-				w1 = w;
-		} else {
-				w1 = (w + a) / (1 + w * a);
-		}
-
-		w1 = (w1 + 1) / 2;
-
-		var w2 = 1 - w1;
-
-		var rgba = {
-				r: rgb2.r * w1 + rgb1.r * w2,
-				g: rgb2.g * w1 + rgb1.g * w2,
-				b: rgb2.b * w1 + rgb1.b * w2,
-				a: rgb2.a * p	+ rgb1.a * (1 - p)
-		};
-
-		return tinycolor(rgba);
-};
-
-
-// Readability Functions
-// ---------------------
-// <http://www.w3.org/TR/2008/REC-WCAG20-20081211/#contrast-ratiodef (WCAG Version 2)
-
-// `contrast`
-// Analyze the 2 colors and returns the color contrast defined by (WCAG Version 2)
-tinycolor.readability = function(color1, color2) {
-		var c1 = tinycolor(color1);
-		var c2 = tinycolor(color2);
-		return (Math.max(c1.getLuminance(),c2.getLuminance())+0.05) / (Math.min(c1.getLuminance(),c2.getLuminance())+0.05);
-};
-
-// `isReadable`
-// Ensure that foreground and background color combinations meet WCAG2 guidelines.
-// The third argument is an optional Object.
-//			the 'level' property states 'AA' or 'AAA' - if missing or invalid, it defaults to 'AA';
-//			the 'size' property states 'large' or 'small' - if missing or invalid, it defaults to 'small'.
-// If the entire object is absent, isReadable defaults to {level:"AA",size:"small"}.
-
-// *Example*
-//		tinycolor.isReadable("#000", "#111") => false
-//		tinycolor.isReadable("#000", "#111",{level:"AA",size:"large"}) => false
-
-tinycolor.isReadable = function(color1, color2, wcag2) {
-		var readability = tinycolor.readability(color1, color2);
-		var wcag2Parms, out;
-
-		out = false;
-
-		wcag2Parms = validateWCAG2Parms(wcag2);
-		switch (wcag2Parms.level + wcag2Parms.size) {
-				case "AAsmall":
-				case "AAAlarge":
-						out = readability >= 4.5;
-						break;
-				case "AAlarge":
-						out = readability >= 3;
-						break;
-				case "AAAsmall":
-						out = readability >= 7;
-						break;
-		}
-		return out;
-
-};
-
-// `mostReadable`
-// Given a base color and a list of possible foreground or background
-// colors for that base, returns the most readable color.
-// Optionally returns Black or White if the most readable color is unreadable.
-// *Example*
-//		tinycolor.mostReadable(tinycolor.mostReadable("#123", ["#124", "#125"],{includeFallbackColors:false}).toHexString(); // "#112255"
-//		tinycolor.mostReadable(tinycolor.mostReadable("#123", ["#124", "#125"],{includeFallbackColors:true}).toHexString();	// "#ffffff"
-//		tinycolor.mostReadable("#a8015a", ["#faf3f3"],{includeFallbackColors:true,level:"AAA",size:"large"}).toHexString(); // "#faf3f3"
-//		tinycolor.mostReadable("#a8015a", ["#faf3f3"],{includeFallbackColors:true,level:"AAA",size:"small"}).toHexString(); // "#ffffff"
-
-
-tinycolor.mostReadable = function(baseColor, colorList, args) {
-		var bestColor = null;
-		var bestScore = 0;
-		var readability;
-		var includeFallbackColors, level, size ;
-		args = args || {};
-		includeFallbackColors = args.includeFallbackColors ;
-		level = args.level;
-		size = args.size;
-
-		for (var i= 0; i < colorList.length ; i++) {
-				readability = tinycolor.readability(baseColor, colorList[i]);
-				if (readability > bestScore) {
-						bestScore = readability;
-						bestColor = tinycolor(colorList[i]);
-				}
-		}
-
-		if (tinycolor.isReadable(baseColor, bestColor, {"level":level,"size":size}) || !includeFallbackColors) {
-				return bestColor;
-		}
-		else {
-				args.includeFallbackColors=false;
-				return tinycolor.mostReadable(baseColor,["#fff", "#000"],args);
-		}
-};
-
-
-// Big List of Colors
-// ------------------
-// <http://www.w3.org/TR/css3-color/#svg-color>
-var names = tinycolor.names = {
-		aliceblue: "f0f8ff",
-		antiquewhite: "faebd7",
-		aqua: "0ff",
-		aquamarine: "7fffd4",
-		azure: "f0ffff",
-		beige: "f5f5dc",
-		bisque: "ffe4c4",
-		black: "000",
-		blanchedalmond: "ffebcd",
-		blue: "00f",
-		blueviolet: "8a2be2",
-		brown: "a52a2a",
-		burlywood: "deb887",
-		burntsienna: "ea7e5d",
-		cadetblue: "5f9ea0",
-		chartreuse: "7fff00",
-		chocolate: "d2691e",
-		coral: "ff7f50",
-		cornflowerblue: "6495ed",
-		cornsilk: "fff8dc",
-		crimson: "dc143c",
-		cyan: "0ff",
-		darkblue: "00008b",
-		darkcyan: "008b8b",
-		darkgoldenrod: "b8860b",
-		darkgray: "a9a9a9",
-		darkgreen: "006400",
-		darkgrey: "a9a9a9",
-		darkkhaki: "bdb76b",
-		darkmagenta: "8b008b",
-		darkolivegreen: "556b2f",
-		darkorange: "ff8c00",
-		darkorchid: "9932cc",
-		darkred: "8b0000",
-		darksalmon: "e9967a",
-		darkseagreen: "8fbc8f",
-		darkslateblue: "483d8b",
-		darkslategray: "2f4f4f",
-		darkslategrey: "2f4f4f",
-		darkturquoise: "00ced1",
-		darkviolet: "9400d3",
-		deeppink: "ff1493",
-		deepskyblue: "00bfff",
-		dimgray: "696969",
-		dimgrey: "696969",
-		dodgerblue: "1e90ff",
-		firebrick: "b22222",
-		floralwhite: "fffaf0",
-		forestgreen: "228b22",
-		fuchsia: "f0f",
-		gainsboro: "dcdcdc",
-		ghostwhite: "f8f8ff",
-		gold: "ffd700",
-		goldenrod: "daa520",
-		gray: "808080",
-		green: "008000",
-		greenyellow: "adff2f",
-		grey: "808080",
-		honeydew: "f0fff0",
-		hotpink: "ff69b4",
-		indianred: "cd5c5c",
-		indigo: "4b0082",
-		ivory: "fffff0",
-		khaki: "f0e68c",
-		lavender: "e6e6fa",
-		lavenderblush: "fff0f5",
-		lawngreen: "7cfc00",
-		lemonchiffon: "fffacd",
-		lightblue: "add8e6",
-		lightcoral: "f08080",
-		lightcyan: "e0ffff",
-		lightgoldenrodyellow: "fafad2",
-		lightgray: "d3d3d3",
-		lightgreen: "90ee90",
-		lightgrey: "d3d3d3",
-		lightpink: "ffb6c1",
-		lightsalmon: "ffa07a",
-		lightseagreen: "20b2aa",
-		lightskyblue: "87cefa",
-		lightslategray: "789",
-		lightslategrey: "789",
-		lightsteelblue: "b0c4de",
-		lightyellow: "ffffe0",
-		lime: "0f0",
-		limegreen: "32cd32",
-		linen: "faf0e6",
-		magenta: "f0f",
-		maroon: "800000",
-		mediumaquamarine: "66cdaa",
-		mediumblue: "0000cd",
-		mediumorchid: "ba55d3",
-		mediumpurple: "9370db",
-		mediumseagreen: "3cb371",
-		mediumslateblue: "7b68ee",
-		mediumspringgreen: "00fa9a",
-		mediumturquoise: "48d1cc",
-		mediumvioletred: "c71585",
-		midnightblue: "191970",
-		mintcream: "f5fffa",
-		mistyrose: "ffe4e1",
-		moccasin: "ffe4b5",
-		navajowhite: "ffdead",
-		navy: "000080",
-		oldlace: "fdf5e6",
-		olive: "808000",
-		olivedrab: "6b8e23",
-		orange: "ffa500",
-		orangered: "ff4500",
-		orchid: "da70d6",
-		palegoldenrod: "eee8aa",
-		palegreen: "98fb98",
-		paleturquoise: "afeeee",
-		palevioletred: "db7093",
-		papayawhip: "ffefd5",
-		peachpuff: "ffdab9",
-		peru: "cd853f",
-		pink: "ffc0cb",
-		plum: "dda0dd",
-		powderblue: "b0e0e6",
-		purple: "800080",
-		rebeccapurple: "663399",
-		red: "f00",
-		rosybrown: "bc8f8f",
-		royalblue: "4169e1",
-		saddlebrown: "8b4513",
-		salmon: "fa8072",
-		sandybrown: "f4a460",
-		seagreen: "2e8b57",
-		seashell: "fff5ee",
-		sienna: "a0522d",
-		silver: "c0c0c0",
-		skyblue: "87ceeb",
-		slateblue: "6a5acd",
-		slategray: "708090",
-		slategrey: "708090",
-		snow: "fffafa",
-		springgreen: "00ff7f",
-		steelblue: "4682b4",
-		tan: "d2b48c",
-		teal: "008080",
-		thistle: "d8bfd8",
-		tomato: "ff6347",
-		turquoise: "40e0d0",
-		violet: "ee82ee",
-		wheat: "f5deb3",
-		white: "fff",
-		whitesmoke: "f5f5f5",
-		yellow: "ff0",
-		yellowgreen: "9acd32"
-};
-
-// Make it easy to access colors via `hexNames[hex]`
-var hexNames = tinycolor.hexNames = flip(names);
-
-
-// Utilities
-// ---------
-
-// `{ 'name1': 'val1' }` becomes `{ 'val1': 'name1' }`
-function flip(o) {
-		var flipped = { };
-		for (var i in o) {
-				if (o.hasOwnProperty(i)) {
-						flipped[o[i]] = i;
-				}
-		}
-		return flipped;
-}
-
-// Return a valid alpha value [0,1] with all invalid values being set to 1
-function boundAlpha(a) {
-		a = parseFloat(a);
-
-		if (isNaN(a) || a < 0 || a > 1) {
-				a = 1;
-		}
-
-		return a;
-}
-
-// Take input from [0, n] and return it as [0, 1]
-function bound01(n, max) {
-		if (isOnePointZero(n)) { n = "100%"; }
-
-		var processPercent = isPercentage(n);
-		n = mathMin(max, mathMax(0, parseFloat(n)));
-
-		// Automatically convert percentage into number
-		if (processPercent) {
-				n = parseInt(n * max, 10) / 100;
-		}
-
-		// Handle floating point rounding errors
-		if ((math.abs(n - max) < 0.000001)) {
-				return 1;
-		}
-
-		// Convert into [0, 1] range if it isn't already
-		return (n % max) / parseFloat(max);
-}
-
-// Force a number between 0 and 1
-function clamp01(val) {
-		return mathMin(1, mathMax(0, val));
-}
-
-// Parse a base-16 hex value into a base-10 integer
-function parseIntFromHex(val) {
-		return parseInt(val, 16);
-}
-
-// Need to handle 1.0 as 100%, since once it is a number, there is no difference between it and 1
-// <http://stackoverflow.com/questions/7422072/javascript-how-to-detect-number-as-a-decimal-including-1-0>
-function isOnePointZero(n) {
-		return typeof n == "string" && n.indexOf('.') != -1 && parseFloat(n) === 1;
-}
-
-// Check to see if string passed in is a percentage
-function isPercentage(n) {
-		return typeof n === "string" && n.indexOf('%') != -1;
-}
-
-// Force a hex value to have 2 characters
-function pad2(c) {
-		return c.length == 1 ? '0' + c : '' + c;
-}
-
-// Replace a decimal with it's percentage value
-function convertToPercentage(n, multiplier) {
-		multiplier = multiplier || 100;
-		if (n <= 1) {
-				n = (n * multiplier) + "%";
-		}
-
-		return n;
-}
-
-// Converts a decimal to a hex value
-function convertDecimalToHex(d) {
-		return Math.round(parseFloat(d) * 255).toString(16);
-}
-// Converts a hex value to a decimal
-function convertHexToDecimal(h) {
-		return (parseIntFromHex(h) / 255);
-}
-
-var matchers = (function() {
-
-		// <http://www.w3.org/TR/css3-values/#integers>
-		var CSS_INTEGER = "[-\\+]?\\d+%?";
-
-		// <http://www.w3.org/TR/css3-values/#number-value>
-		var CSS_NUMBER = "[-\\+]?\\d*\\.\\d+%?";
-
-		// Allow positive/negative integer/number.	Don't capture the either/or, just the entire outcome.
-		var CSS_UNIT = "(?:" + CSS_NUMBER + ")|(?:" + CSS_INTEGER + ")";
-
-		// Actual matching.
-		// Parentheses and commas are optional, but not required.
-		// Whitespace can take the place of commas or opening paren
-		var PERMISSIVE_MATCH3 = "[\\s|\\(]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")\\s*\\)?";
-		var PERMISSIVE_MATCH4 = "[\\s|\\(]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")\\s*\\)?";
-
-		return {
-				rgb: new RegExp("rgb" + PERMISSIVE_MATCH3),
-				rgba: new RegExp("rgba" + PERMISSIVE_MATCH4),
-				hsl: new RegExp("hsl" + PERMISSIVE_MATCH3),
-				hsla: new RegExp("hsla" + PERMISSIVE_MATCH4),
-				hsv: new RegExp("hsv" + PERMISSIVE_MATCH3),
-				hsva: new RegExp("hsva" + PERMISSIVE_MATCH4),
-				hex3: /^([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
-				hex6: /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
-				hex8: /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/
-		};
-})();
-
-// `stringInputToObject`
-// Permissive string parsing.	Take in a number of formats, and output an object
-// based on detected format.	Returns `{ r, g, b }` or `{ h, s, l }` or `{ h, s, v}`
-function stringInputToObject(color) {
-
-		color = color.replace(trimLeft,'').replace(trimRight, '').toLowerCase();
-		var named = false;
-		if (names[color]) {
-				color = names[color];
-				named = true;
-		}
-		else if (color == 'transparent') {
-				return { r: 0, g: 0, b: 0, a: 0, format: "name" };
-		}
-
-		// Try to match string input using regular expressions.
-		// Keep most of the number bounding out of this function - don't worry about [0,1] or [0,100] or [0,360]
-		// Just return an object and let the conversion functions handle that.
-		// This way the result will be the same whether the tinycolor is initialized with string or object.
-		var match;
-		if ((match = matchers.rgb.exec(color))) {
-				return { r: match[1], g: match[2], b: match[3] };
-		}
-		if ((match = matchers.rgba.exec(color))) {
-				return { r: match[1], g: match[2], b: match[3], a: match[4] };
-		}
-		if ((match = matchers.hsl.exec(color))) {
-				return { h: match[1], s: match[2], l: match[3] };
-		}
-		if ((match = matchers.hsla.exec(color))) {
-				return { h: match[1], s: match[2], l: match[3], a: match[4] };
-		}
-		if ((match = matchers.hsv.exec(color))) {
-				return { h: match[1], s: match[2], v: match[3] };
-		}
-		if ((match = matchers.hsva.exec(color))) {
-				return { h: match[1], s: match[2], v: match[3], a: match[4] };
-		}
-		if ((match = matchers.hex8.exec(color))) {
-				return {
-						a: convertHexToDecimal(match[1]),
-						r: parseIntFromHex(match[2]),
-						g: parseIntFromHex(match[3]),
-						b: parseIntFromHex(match[4]),
-						format: named ? "name" : "hex8"
-				};
-		}
-		if ((match = matchers.hex6.exec(color))) {
-				return {
-						r: parseIntFromHex(match[1]),
-						g: parseIntFromHex(match[2]),
-						b: parseIntFromHex(match[3]),
-						format: named ? "name" : "hex"
-				};
-		}
-		if ((match = matchers.hex3.exec(color))) {
-				return {
-						r: parseIntFromHex(match[1] + '' + match[1]),
-						g: parseIntFromHex(match[2] + '' + match[2]),
-						b: parseIntFromHex(match[3] + '' + match[3]),
-						format: named ? "name" : "hex"
-				};
-		}
-
-		return false;
-}
-
-function validateWCAG2Parms(parms) {
-		// return valid WCAG2 parms for isReadable.
-		// If input parms are invalid, return {"level":"AA", "size":"small"}
-		var level, size;
-		parms = parms || {"level":"AA", "size":"small"};
-		level = (parms.level || "AA").toUpperCase();
-		size = (parms.size || "small").toLowerCase();
-		if (level !== "AA" && level !== "AAA") {
-				level = "AA";
-		}
-		if (size !== "small" && size !== "large") {
-				size = "small";
-		}
-		return {"level":level, "size":size};
-}
-// Node: Export function
-if (typeof module !== "undefined" && module.exports) {
-		module.exports = tinycolor;
-}
-// AMD/requirejs: Define the module
-else if (true) {
-		!(__WEBPACK_AMD_DEFINE_RESULT__ = function () {return tinycolor;}.call(exports, __webpack_require__, exports, module),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-}
-// Browser: Expose to window
-else {
-		window.tinycolor = tinycolor;
-}
-
-})();
 
 
 /***/ }),
@@ -37763,6 +35663,9 @@ function createListenerCollection() {
         listeners[i]();
       }
     },
+    get: function get() {
+      return next;
+    },
     subscribe: function subscribe(listener) {
       var isSubscribed = true;
       if (next === current) next = current.slice();
@@ -37832,12 +35735,10 @@ var Subscription = function () {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -38006,9 +35907,11 @@ exports.default = autoprefix;
 
 // fallback for non-array-like ES3 and non-enumerable old V8 strings
 var cof = __webpack_require__("R9M2");
-module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
+// eslint-disable-next-line no-prototype-builtins
+module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
   return cof(it) == 'String' ? it.split('') : Object(it);
 };
+
 
 /***/ }),
 
@@ -38017,12 +35920,10 @@ module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -38067,14 +35968,15 @@ module.exports = shouldUpdateReactComponent;
 var isObject = __webpack_require__("EqjI");
 // instead of the ES6 spec version, we didn't implement @@toPrimitive case
 // and the second argument - flag - preferred type is a string
-module.exports = function(it, S){
-  if(!isObject(it))return it;
+module.exports = function (it, S) {
+  if (!isObject(it)) return it;
   var fn, val;
-  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
-  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
-  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+  if (S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
+  if (typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it))) return val;
+  if (!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
   throw TypeError("Can't convert object to primitive value");
 };
+
 
 /***/ }),
 
@@ -38106,12 +36008,10 @@ module.exports = getAllKeys;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -38336,12 +36236,10 @@ exports.default = mergeClasses;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -38548,11 +36446,12 @@ var SketchPresetColors = exports.SketchPresetColors = function SketchPresetColor
     })
   );
 };
+
 SketchPresetColors.propTypes = {
   colors: _propTypes2.default.arrayOf(_propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.shape({
     color: _propTypes2.default.string,
     title: _propTypes2.default.string
-  })]))
+  })])).isRequired
 };
 
 exports.default = SketchPresetColors;
@@ -38728,12 +36627,10 @@ exports.default = PhotoshopPointerCircle;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -38976,12 +36873,10 @@ var coreJsData = __WEBPACK_IMPORTED_MODULE_0__root_js__["default"]['__core-js_sh
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -39092,6 +36987,7 @@ module.exports = copySymbols;
 
 exports.f = {}.propertyIsEnumerable;
 
+
 /***/ }),
 
 /***/ "NqZt":
@@ -39124,12 +37020,10 @@ module.exports = stackDelete;
 
 "use strict";
 /**
- * Copyright 2015-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2015-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -39475,6 +37369,7 @@ module.exports = debounce;
 
 module.exports = true;
 
+
 /***/ }),
 
 /***/ "O6dE":
@@ -39482,12 +37377,10 @@ module.exports = true;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -39626,16 +37519,75 @@ module.exports = {
 
 /***/ }),
 
+/***/ "OCGy":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/**
+ * Copyright 2015, Yahoo! Inc.
+ * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+ */
+
+
+var REACT_STATICS = {
+    childContextTypes: true,
+    contextTypes: true,
+    defaultProps: true,
+    displayName: true,
+    getDefaultProps: true,
+    mixins: true,
+    propTypes: true,
+    type: true
+};
+
+var KNOWN_STATICS = {
+    name: true,
+    length: true,
+    prototype: true,
+    caller: true,
+    arguments: true,
+    arity: true
+};
+
+var isGetOwnPropertySymbolsAvailable = typeof Object.getOwnPropertySymbols === 'function';
+
+module.exports = function hoistNonReactStatics(targetComponent, sourceComponent, customStatics) {
+    if (typeof sourceComponent !== 'string') { // don't hoist over string (html) components
+        var keys = Object.getOwnPropertyNames(sourceComponent);
+
+        /* istanbul ignore else */
+        if (isGetOwnPropertySymbolsAvailable) {
+            keys = keys.concat(Object.getOwnPropertySymbols(sourceComponent));
+        }
+
+        for (var i = 0; i < keys.length; ++i) {
+            if (!REACT_STATICS[keys[i]] && !KNOWN_STATICS[keys[i]] && (!customStatics || !customStatics[keys[i]])) {
+                try {
+                    targetComponent[keys[i]] = sourceComponent[keys[i]];
+                } catch (error) {
+
+                }
+            }
+        }
+    }
+
+    return targetComponent;
+};
+
+
+/***/ }),
+
 /***/ "ON07":
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__("EqjI")
-  , document = __webpack_require__("7KvD").document
-  // in old IE typeof document.createElement is 'object'
-  , is = isObject(document) && isObject(document.createElement);
-module.exports = function(it){
+var isObject = __webpack_require__("EqjI");
+var document = __webpack_require__("7KvD").document;
+// typeof document.createElement is 'object' in old IE
+var is = isObject(document) && isObject(document.createElement);
+module.exports = function (it) {
   return is ? document.createElement(it) : {};
 };
+
 
 /***/ }),
 
@@ -39643,6 +37595,7 @@ module.exports = function(it){
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__("crlp")('asyncIterator');
+
 
 /***/ }),
 
@@ -39686,6 +37639,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__("U7vG");
 
 var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactcss = __webpack_require__("TmTn");
 
@@ -39738,6 +37695,9 @@ var Photoshop = exports.Photoshop = function (_React$Component) {
   _createClass(Photoshop, [{
     key: 'render',
     value: function render() {
+      var _props$className = this.props.className,
+          className = _props$className === undefined ? '' : _props$className;
+
       var styles = (0, _reactcss2.default)({
         'default': {
           picker: {
@@ -39797,7 +37757,7 @@ var Photoshop = exports.Photoshop = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { style: styles.picker, className: 'photoshop-picker' },
+        { style: styles.picker, className: 'photoshop-picker ' + className },
         _react2.default.createElement(
           'div',
           { style: styles.head },
@@ -39862,6 +37822,10 @@ var Photoshop = exports.Photoshop = function (_React$Component) {
   return Photoshop;
 }(_react2.default.Component);
 
+Photoshop.propTypes = {
+  header: _propTypes2.default.string
+};
+
 Photoshop.defaultProps = {
   header: 'Color Picker'
 };
@@ -39875,12 +37839,10 @@ exports.default = (0, _common.ColorWrap)(Photoshop);
 
 "use strict";
 /**
- * Copyright 2014-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -39971,12 +37933,10 @@ module.exports = ReactServerRenderingTransaction;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -39997,12 +37957,10 @@ module.exports = DOMNamespaces;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -40351,7 +38309,6 @@ function createProvider() {
     children: __WEBPACK_IMPORTED_MODULE_1_prop_types___default.a.element.isRequired
   };
   Provider.childContextTypes = (_Provider$childContex = {}, _Provider$childContex[storeKey] = __WEBPACK_IMPORTED_MODULE_2__utils_PropTypes__["storeShape"].isRequired, _Provider$childContex[subscriptionKey] = __WEBPACK_IMPORTED_MODULE_2__utils_PropTypes__["subscriptionShape"], _Provider$childContex);
-  Provider.displayName = 'Provider';
 
   return Provider;
 }
@@ -40397,12 +38354,10 @@ var Map = Object(__WEBPACK_IMPORTED_MODULE_0__getNative_js__["default"])(__WEBPA
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -40487,9 +38442,8 @@ module.exports = arrayEach;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.calculateChange = calculateChange;
-function calculateChange(e, skip, props, container) {
-  !skip && e.preventDefault();
+var calculateChange = exports.calculateChange = function calculateChange(e, skip, props, container) {
+  e.preventDefault();
   var containerWidth = container.clientWidth;
   var containerHeight = container.clientHeight;
   var x = typeof e.pageX === 'number' ? e.pageX : e.touches[0].pageX;
@@ -40537,7 +38491,7 @@ function calculateChange(e, skip, props, container) {
     }
   }
   return null;
-}
+};
 
 /***/ }),
 
@@ -40545,18 +38499,19 @@ function calculateChange(e, skip, props, container) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-var has         = __webpack_require__("D2L2")
-  , toObject    = __webpack_require__("sB3e")
-  , IE_PROTO    = __webpack_require__("ax3d")('IE_PROTO')
-  , ObjectProto = Object.prototype;
+var has = __webpack_require__("D2L2");
+var toObject = __webpack_require__("sB3e");
+var IE_PROTO = __webpack_require__("ax3d")('IE_PROTO');
+var ObjectProto = Object.prototype;
 
-module.exports = Object.getPrototypeOf || function(O){
+module.exports = Object.getPrototypeOf || function (O) {
   O = toObject(O);
-  if(has(O, IE_PROTO))return O[IE_PROTO];
-  if(typeof O.constructor == 'function' && O instanceof O.constructor){
+  if (has(O, IE_PROTO)) return O[IE_PROTO];
+  if (typeof O.constructor == 'function' && O instanceof O.constructor) {
     return O.constructor.prototype;
   } return O instanceof Object ? ObjectProto : null;
 };
+
 
 /***/ }),
 
@@ -40565,12 +38520,10 @@ module.exports = Object.getPrototypeOf || function(O){
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -40788,7 +38741,9 @@ var HuePicker = exports.HuePicker = function HuePicker(_ref) {
       onChange = _ref.onChange,
       hsl = _ref.hsl,
       direction = _ref.direction,
-      pointer = _ref.pointer;
+      pointer = _ref.pointer,
+      _ref$className = _ref.className,
+      className = _ref$className === undefined ? '' : _ref$className;
 
   var styles = (0, _reactcss2.default)({
     'default': {
@@ -40810,7 +38765,7 @@ var HuePicker = exports.HuePicker = function HuePicker(_ref) {
 
   return _react2.default.createElement(
     'div',
-    { style: styles.picker, className: 'hue-picker' },
+    { style: styles.picker, className: 'hue-picker ' + className },
     _react2.default.createElement(_common.Hue, _extends({}, styles.hue, {
       hsl: hsl,
       pointer: pointer,
@@ -40854,11 +38809,12 @@ function hasGeneratorInterface(handler) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.15 ToLength
-var toInteger = __webpack_require__("UuGF")
-  , min       = Math.min;
-module.exports = function(it){
+var toInteger = __webpack_require__("UuGF");
+var min = Math.min;
+module.exports = function (it) {
   return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
 };
+
 
 /***/ }),
 
@@ -40867,12 +38823,10 @@ module.exports = function(it){
 
 "use strict";
 /**
- * Copyright 2014-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -40917,18 +38871,6 @@ module.exports = ReactComponentEnvironment;
 
 __webpack_require__("crlp")('observable');
 
-/***/ }),
-
-/***/ "QyNh":
-/***/ (function(module, exports, __webpack_require__) {
-
-var toInteger = __webpack_require__("UuGF")
-  , max       = Math.max
-  , min       = Math.min;
-module.exports = function(index, length){
-  index = toInteger(index);
-  return index < 0 ? max(index + length, 0) : min(index, length);
-};
 
 /***/ }),
 
@@ -40937,9 +38879,10 @@ module.exports = function(index, length){
 
 var toString = {}.toString;
 
-module.exports = function(it){
+module.exports = function (it) {
   return toString.call(it).slice(8, -1);
 };
+
 
 /***/ }),
 
@@ -40948,12 +38891,10 @@ module.exports = function(it){
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -41028,7 +38969,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ "RPLV":
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__("7KvD").document && document.documentElement;
+var document = __webpack_require__("7KvD").document;
+module.exports = document && document.documentElement;
+
 
 /***/ }),
 
@@ -41067,12 +39010,10 @@ module.exports = now;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -41370,22 +39311,22 @@ module.exports = isLength;
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-var toIObject = __webpack_require__("TcQ7")
-  , gOPN      = __webpack_require__("n0T6").f
-  , toString  = {}.toString;
+var toIObject = __webpack_require__("TcQ7");
+var gOPN = __webpack_require__("n0T6").f;
+var toString = {}.toString;
 
 var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
   ? Object.getOwnPropertyNames(window) : [];
 
-var getWindowNames = function(it){
+var getWindowNames = function (it) {
   try {
     return gOPN(it);
-  } catch(e){
+  } catch (e) {
     return windowNames.slice();
   }
 };
 
-module.exports.f = function getOwnPropertyNames(it){
+module.exports.f = function getOwnPropertyNames(it) {
   return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
 };
 
@@ -41397,12 +39338,10 @@ module.exports.f = function getOwnPropertyNames(it){
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -41422,12 +39361,10 @@ module.exports = factory(isValidElement);
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -41540,13 +39477,14 @@ module.exports = baseUnary;
 /***/ "S82l":
 /***/ (function(module, exports) {
 
-module.exports = function(exec){
+module.exports = function (exec) {
   try {
     return !!exec();
-  } catch(e){
+  } catch (e) {
     return true;
   }
 };
+
 
 /***/ }),
 
@@ -41775,7 +39713,7 @@ selectorFactory) {
       Connect.prototype.notifyNestedSubsOnComponentDidUpdate = function notifyNestedSubsOnComponentDidUpdate() {
         // `componentDidUpdate` is conditionally implemented when `onStateChange` determines it
         // needs to notify nested subs. Once called, it unimplements itself until further state
-        // changes occur. Doing it this way vs having a permanent `componentDidMount` that does
+        // changes occur. Doing it this way vs having a permanent `componentDidUpdate` that does
         // a boolean check every time avoids an extra method call most of the time, resulting
         // in some perf boost.
         this.componentDidUpdate = undefined;
@@ -41821,14 +39759,31 @@ selectorFactory) {
 
     if (true) {
       Connect.prototype.componentWillUpdate = function componentWillUpdate() {
+        var _this2 = this;
+
         // We are hot reloading!
         if (this.version !== version) {
           this.version = version;
           this.initSelector();
 
-          if (this.subscription) this.subscription.tryUnsubscribe();
+          // If any connected descendants don't hot reload (and resubscribe in the process), their
+          // listeners will be lost when we unsubscribe. Unfortunately, by copying over all
+          // listeners, this does mean that the old versions of connected descendants will still be
+          // notified of state changes; however, their onStateChange function is a no-op so this
+          // isn't a huge deal.
+          var oldListeners = [];
+
+          if (this.subscription) {
+            oldListeners = this.subscription.listeners.get();
+            this.subscription.tryUnsubscribe();
+          }
           this.initSubscription();
-          if (shouldHandleStateChanges) this.subscription.trySubscribe();
+          if (shouldHandleStateChanges) {
+            this.subscription.trySubscribe();
+            oldListeners.forEach(function (listener) {
+              return _this2.subscription.listeners.subscribe(listener);
+            });
+          }
         }
       };
     }
@@ -41844,12 +39799,10 @@ selectorFactory) {
 
 "use strict";
 /**
- * Copyright 2015-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2015-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -42445,6 +40398,15 @@ Object.defineProperty(exports, 'Hue', {
   }
 });
 
+var _Raised = __webpack_require__("tRvz");
+
+Object.defineProperty(exports, 'Raised', {
+  enumerable: true,
+  get: function get() {
+    return _interopRequireDefault(_Raised).default;
+  }
+});
+
 var _Saturation = __webpack_require__("7Fn9");
 
 Object.defineProperty(exports, 'Saturation', {
@@ -42481,12 +40443,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -42517,9 +40477,10 @@ module.exports = createMicrosoftUnsafeLocalFunction;
 /***/ "SfB7":
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = !__webpack_require__("+E39") && !__webpack_require__("S82l")(function(){
-  return Object.defineProperty(__webpack_require__("ON07")('div'), 'a', {get: function(){ return 7; }}).a != 7;
+module.exports = !__webpack_require__("+E39") && !__webpack_require__("S82l")(function () {
+  return Object.defineProperty(__webpack_require__("ON07")('div'), 'a', { get: function () { return 7; } }).a != 7;
 });
+
 
 /***/ }),
 
@@ -42570,12 +40531,10 @@ function isString(value) {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -42776,12 +40735,10 @@ module.exports = ReactDOMSelect;
 
 "use strict";
 /**
- * Copyright 2016-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2016-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -42840,12 +40797,10 @@ function baseIsNaN(value) {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -42979,11 +40934,9 @@ function handleActions(handlers, defaultState) {
 "use strict";
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -43020,12 +40973,10 @@ module.exports = root;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -43047,11 +40998,12 @@ module.exports = ReactFeatureFlags;
 /***/ (function(module, exports, __webpack_require__) {
 
 // to indexed object, toObject with fallback for non-array-like ES3 strings
-var IObject = __webpack_require__("MU5D")
-  , defined = __webpack_require__("52gC");
-module.exports = function(it){
+var IObject = __webpack_require__("MU5D");
+var defined = __webpack_require__("52gC");
+module.exports = function (it) {
   return IObject(defined(it));
 };
+
 
 /***/ }),
 
@@ -43194,12 +41146,10 @@ function wrapMapToPropsFunc(mapToProps, methodName) {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -43321,7 +41271,7 @@ module.exports = __webpack_require__("G1ow");
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ShetchFields = undefined;
+exports.SketchFields = undefined;
 
 var _react = __webpack_require__("U7vG");
 
@@ -43341,7 +41291,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /* eslint-disable no-param-reassign */
 
-var ShetchFields = exports.ShetchFields = function ShetchFields(_ref) {
+var SketchFields = exports.SketchFields = function SketchFields(_ref) {
   var onChange = _ref.onChange,
       rgb = _ref.rgb,
       hsl = _ref.hsl,
@@ -43410,7 +41360,7 @@ var ShetchFields = exports.ShetchFields = function ShetchFields(_ref) {
         data.a = 100;
       }
 
-      data.a = data.a / 100;
+      data.a /= 100;
       onChange({
         h: hsl.h,
         s: hsl.s,
@@ -43485,7 +41435,7 @@ var ShetchFields = exports.ShetchFields = function ShetchFields(_ref) {
   );
 };
 
-exports.default = ShetchFields;
+exports.default = SketchFields;
 
 /***/ }),
 
@@ -43625,11 +41575,12 @@ module.exports = stringToPath;
 /***/ (function(module, exports) {
 
 // 7.1.4 ToInteger
-var ceil  = Math.ceil
-  , floor = Math.floor;
-module.exports = function(it){
+var ceil = Math.ceil;
+var floor = Math.floor;
+module.exports = function (it) {
   return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
 };
+
 
 /***/ }),
 
@@ -44029,6 +41980,13 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
     })
   }
 
+  api.update = function update (dest, src, path, updater) {
+    return changeImmutable(dest, src, path, function (clonedObj, finalPath) {
+      clonedObj[finalPath] = updater(clonedObj[finalPath])
+      return clonedObj
+    })
+  }
+
   api.push = function push (dest, src, path /*, values */) {
     var values = Array.prototype.slice.call(arguments, 3)
     return changeImmutable(dest, src, path, function (clonedObj, finalPath) {
@@ -44105,12 +42063,10 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 "use strict";
 /**
- * Copyright 2016-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2016-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -44135,12 +42091,10 @@ module.exports = { debugTool: debugTool };
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -44689,12 +42643,10 @@ var cloneableGenerator = function cloneableGenerator(generatorFunc) {
 
 "use strict";
 /**
- * Copyright 2014-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -45240,12 +43192,10 @@ module.exports = nativeKeys;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -45435,14 +43385,15 @@ function objectToString(value) {
 /***/ "X8DO":
 /***/ (function(module, exports) {
 
-module.exports = function(bitmap, value){
+module.exports = function (bitmap, value) {
   return {
-    enumerable  : !(bitmap & 1),
+    enumerable: !(bitmap & 1),
     configurable: !(bitmap & 2),
-    writable    : !(bitmap & 4),
-    value       : value
+    writable: !(bitmap & 4),
+    value: value
   };
 };
+
 
 /***/ }),
 
@@ -45450,20 +43401,21 @@ module.exports = function(bitmap, value){
 /***/ (function(module, exports, __webpack_require__) {
 
 // all enumerable object keys, includes symbols
-var getKeys = __webpack_require__("lktj")
-  , gOPS    = __webpack_require__("1kS7")
-  , pIE     = __webpack_require__("NpIQ");
-module.exports = function(it){
-  var result     = getKeys(it)
-    , getSymbols = gOPS.f;
-  if(getSymbols){
-    var symbols = getSymbols(it)
-      , isEnum  = pIE.f
-      , i       = 0
-      , key;
-    while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))result.push(key);
+var getKeys = __webpack_require__("lktj");
+var gOPS = __webpack_require__("1kS7");
+var pIE = __webpack_require__("NpIQ");
+module.exports = function (it) {
+  var result = getKeys(it);
+  var getSymbols = gOPS.f;
+  if (getSymbols) {
+    var symbols = getSymbols(it);
+    var isEnum = pIE.f;
+    var i = 0;
+    var key;
+    while (symbols.length > i) if (isEnum.call(it, key = symbols[i++])) result.push(key);
   } return result;
 };
+
 
 /***/ }),
 
@@ -45517,7 +43469,7 @@ var Hue = exports.Hue = function (_ref) {
     }
 
     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref2 = Hue.__proto__ || Object.getPrototypeOf(Hue)).call.apply(_ref2, [this].concat(args))), _this), _this.handleChange = function (e, skip) {
-      var change = hue.calculateChange(e, skip, _this.props, _this.refs.container);
+      var change = hue.calculateChange(e, skip, _this.props, _this.container);
       change && _this.props.onChange && _this.props.onChange(change, e);
     }, _this.handleMouseDown = function (e) {
       _this.handleChange(e, true);
@@ -45542,16 +43494,21 @@ var Hue = exports.Hue = function (_ref) {
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
+      var _props$direction = this.props.direction,
+          direction = _props$direction === undefined ? 'horizontal' : _props$direction;
+
+
       var styles = (0, _reactcss2.default)({
         'default': {
           hue: {
             absolute: '0px 0px 0px 0px',
-            background: 'linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%,\n            #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)',
             borderRadius: this.props.radius,
             boxShadow: this.props.shadow
           },
           container: {
-            margin: '0 2px',
+            padding: '0 2px',
             position: 'relative',
             height: '100%'
           },
@@ -45570,15 +43527,12 @@ var Hue = exports.Hue = function (_ref) {
           }
         },
         'vertical': {
-          hue: {
-            background: 'linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%,\n            #0ff 50%, #00f 67%, #f0f 83%, #f00 100%)'
-          },
           pointer: {
             left: '0px',
             top: -(this.props.hsl.h * 100 / 360) + 100 + '%'
           }
         }
-      }, { vertical: this.props.direction === 'vertical' });
+      }, { vertical: direction === 'vertical' });
 
       return _react2.default.createElement(
         'div',
@@ -45586,12 +43540,20 @@ var Hue = exports.Hue = function (_ref) {
         _react2.default.createElement(
           'div',
           {
+            className: 'hue-' + direction,
             style: styles.container,
-            ref: 'container',
+            ref: function ref(container) {
+              return _this2.container = container;
+            },
             onMouseDown: this.handleMouseDown,
             onTouchMove: this.handleChange,
             onTouchStart: this.handleChange
           },
+          _react2.default.createElement(
+            'style',
+            null,
+            '\n            .hue-horizontal {\n              background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0\n                33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);\n              background: -webkit-linear-gradient(to right, #f00 0%, #ff0\n                17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);\n            }\n\n            .hue-vertical {\n              background: linear-gradient(to top, #f00 0%, #ff0 17%, #0f0 33%,\n                #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);\n              background: -webkit-linear-gradient(to top, #f00 0%, #ff0 17%,\n                #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);\n            }\n          '
+          ),
           _react2.default.createElement(
             'div',
             { style: styles.pointer },
@@ -45614,12 +43576,10 @@ exports.default = Hue;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -45869,12 +43829,10 @@ module.exports = baseIsEqual;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -46141,21 +44099,21 @@ function isObject(value) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject    = __webpack_require__("77Pl")
-  , dPs         = __webpack_require__("qio6")
-  , enumBugKeys = __webpack_require__("xnc9")
-  , IE_PROTO    = __webpack_require__("ax3d")('IE_PROTO')
-  , Empty       = function(){ /* empty */ }
-  , PROTOTYPE   = 'prototype';
+var anObject = __webpack_require__("77Pl");
+var dPs = __webpack_require__("qio6");
+var enumBugKeys = __webpack_require__("xnc9");
+var IE_PROTO = __webpack_require__("ax3d")('IE_PROTO');
+var Empty = function () { /* empty */ };
+var PROTOTYPE = 'prototype';
 
 // Create object with fake `null` prototype: use iframe Object with cleared prototype
-var createDict = function(){
+var createDict = function () {
   // Thrash, waste and sodomy: IE GC bug
-  var iframe = __webpack_require__("ON07")('iframe')
-    , i      = enumBugKeys.length
-    , lt     = '<'
-    , gt     = '>'
-    , iframeDocument;
+  var iframe = __webpack_require__("ON07")('iframe');
+  var i = enumBugKeys.length;
+  var lt = '<';
+  var gt = '>';
+  var iframeDocument;
   iframe.style.display = 'none';
   __webpack_require__("RPLV").appendChild(iframe);
   iframe.src = 'javascript:'; // eslint-disable-line no-script-url
@@ -46166,21 +44124,1224 @@ var createDict = function(){
   iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
   iframeDocument.close();
   createDict = iframeDocument.F;
-  while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
+  while (i--) delete createDict[PROTOTYPE][enumBugKeys[i]];
   return createDict();
 };
 
-module.exports = Object.create || function create(O, Properties){
+module.exports = Object.create || function create(O, Properties) {
   var result;
-  if(O !== null){
+  if (O !== null) {
     Empty[PROTOTYPE] = anObject(O);
-    result = new Empty;
+    result = new Empty();
     Empty[PROTOTYPE] = null;
     // add "__proto__" for Object.getPrototypeOf polyfill
     result[IE_PROTO] = O;
   } else result = createDict();
   return Properties === undefined ? result : dPs(result, Properties);
 };
+
+
+/***/ }),
+
+/***/ "YrBu":
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_RESULT__;// TinyColor v1.4.1
+// https://github.com/bgrins/TinyColor
+// Brian Grinstead, MIT License
+
+(function(Math) {
+
+var trimLeft = /^\s+/,
+    trimRight = /\s+$/,
+    tinyCounter = 0,
+    mathRound = Math.round,
+    mathMin = Math.min,
+    mathMax = Math.max,
+    mathRandom = Math.random;
+
+function tinycolor (color, opts) {
+
+    color = (color) ? color : '';
+    opts = opts || { };
+
+    // If input is already a tinycolor, return itself
+    if (color instanceof tinycolor) {
+       return color;
+    }
+    // If we are called as a function, call using new instead
+    if (!(this instanceof tinycolor)) {
+        return new tinycolor(color, opts);
+    }
+
+    var rgb = inputToRGB(color);
+    this._originalInput = color,
+    this._r = rgb.r,
+    this._g = rgb.g,
+    this._b = rgb.b,
+    this._a = rgb.a,
+    this._roundA = mathRound(100*this._a) / 100,
+    this._format = opts.format || rgb.format;
+    this._gradientType = opts.gradientType;
+
+    // Don't let the range of [0,255] come back in [0,1].
+    // Potentially lose a little bit of precision here, but will fix issues where
+    // .5 gets interpreted as half of the total, instead of half of 1
+    // If it was supposed to be 128, this was already taken care of by `inputToRgb`
+    if (this._r < 1) { this._r = mathRound(this._r); }
+    if (this._g < 1) { this._g = mathRound(this._g); }
+    if (this._b < 1) { this._b = mathRound(this._b); }
+
+    this._ok = rgb.ok;
+    this._tc_id = tinyCounter++;
+}
+
+tinycolor.prototype = {
+    isDark: function() {
+        return this.getBrightness() < 128;
+    },
+    isLight: function() {
+        return !this.isDark();
+    },
+    isValid: function() {
+        return this._ok;
+    },
+    getOriginalInput: function() {
+      return this._originalInput;
+    },
+    getFormat: function() {
+        return this._format;
+    },
+    getAlpha: function() {
+        return this._a;
+    },
+    getBrightness: function() {
+        //http://www.w3.org/TR/AERT#color-contrast
+        var rgb = this.toRgb();
+        return (rgb.r * 299 + rgb.g * 587 + rgb.b * 114) / 1000;
+    },
+    getLuminance: function() {
+        //http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
+        var rgb = this.toRgb();
+        var RsRGB, GsRGB, BsRGB, R, G, B;
+        RsRGB = rgb.r/255;
+        GsRGB = rgb.g/255;
+        BsRGB = rgb.b/255;
+
+        if (RsRGB <= 0.03928) {R = RsRGB / 12.92;} else {R = Math.pow(((RsRGB + 0.055) / 1.055), 2.4);}
+        if (GsRGB <= 0.03928) {G = GsRGB / 12.92;} else {G = Math.pow(((GsRGB + 0.055) / 1.055), 2.4);}
+        if (BsRGB <= 0.03928) {B = BsRGB / 12.92;} else {B = Math.pow(((BsRGB + 0.055) / 1.055), 2.4);}
+        return (0.2126 * R) + (0.7152 * G) + (0.0722 * B);
+    },
+    setAlpha: function(value) {
+        this._a = boundAlpha(value);
+        this._roundA = mathRound(100*this._a) / 100;
+        return this;
+    },
+    toHsv: function() {
+        var hsv = rgbToHsv(this._r, this._g, this._b);
+        return { h: hsv.h * 360, s: hsv.s, v: hsv.v, a: this._a };
+    },
+    toHsvString: function() {
+        var hsv = rgbToHsv(this._r, this._g, this._b);
+        var h = mathRound(hsv.h * 360), s = mathRound(hsv.s * 100), v = mathRound(hsv.v * 100);
+        return (this._a == 1) ?
+          "hsv("  + h + ", " + s + "%, " + v + "%)" :
+          "hsva(" + h + ", " + s + "%, " + v + "%, "+ this._roundA + ")";
+    },
+    toHsl: function() {
+        var hsl = rgbToHsl(this._r, this._g, this._b);
+        return { h: hsl.h * 360, s: hsl.s, l: hsl.l, a: this._a };
+    },
+    toHslString: function() {
+        var hsl = rgbToHsl(this._r, this._g, this._b);
+        var h = mathRound(hsl.h * 360), s = mathRound(hsl.s * 100), l = mathRound(hsl.l * 100);
+        return (this._a == 1) ?
+          "hsl("  + h + ", " + s + "%, " + l + "%)" :
+          "hsla(" + h + ", " + s + "%, " + l + "%, "+ this._roundA + ")";
+    },
+    toHex: function(allow3Char) {
+        return rgbToHex(this._r, this._g, this._b, allow3Char);
+    },
+    toHexString: function(allow3Char) {
+        return '#' + this.toHex(allow3Char);
+    },
+    toHex8: function(allow4Char) {
+        return rgbaToHex(this._r, this._g, this._b, this._a, allow4Char);
+    },
+    toHex8String: function(allow4Char) {
+        return '#' + this.toHex8(allow4Char);
+    },
+    toRgb: function() {
+        return { r: mathRound(this._r), g: mathRound(this._g), b: mathRound(this._b), a: this._a };
+    },
+    toRgbString: function() {
+        return (this._a == 1) ?
+          "rgb("  + mathRound(this._r) + ", " + mathRound(this._g) + ", " + mathRound(this._b) + ")" :
+          "rgba(" + mathRound(this._r) + ", " + mathRound(this._g) + ", " + mathRound(this._b) + ", " + this._roundA + ")";
+    },
+    toPercentageRgb: function() {
+        return { r: mathRound(bound01(this._r, 255) * 100) + "%", g: mathRound(bound01(this._g, 255) * 100) + "%", b: mathRound(bound01(this._b, 255) * 100) + "%", a: this._a };
+    },
+    toPercentageRgbString: function() {
+        return (this._a == 1) ?
+          "rgb("  + mathRound(bound01(this._r, 255) * 100) + "%, " + mathRound(bound01(this._g, 255) * 100) + "%, " + mathRound(bound01(this._b, 255) * 100) + "%)" :
+          "rgba(" + mathRound(bound01(this._r, 255) * 100) + "%, " + mathRound(bound01(this._g, 255) * 100) + "%, " + mathRound(bound01(this._b, 255) * 100) + "%, " + this._roundA + ")";
+    },
+    toName: function() {
+        if (this._a === 0) {
+            return "transparent";
+        }
+
+        if (this._a < 1) {
+            return false;
+        }
+
+        return hexNames[rgbToHex(this._r, this._g, this._b, true)] || false;
+    },
+    toFilter: function(secondColor) {
+        var hex8String = '#' + rgbaToArgbHex(this._r, this._g, this._b, this._a);
+        var secondHex8String = hex8String;
+        var gradientType = this._gradientType ? "GradientType = 1, " : "";
+
+        if (secondColor) {
+            var s = tinycolor(secondColor);
+            secondHex8String = '#' + rgbaToArgbHex(s._r, s._g, s._b, s._a);
+        }
+
+        return "progid:DXImageTransform.Microsoft.gradient("+gradientType+"startColorstr="+hex8String+",endColorstr="+secondHex8String+")";
+    },
+    toString: function(format) {
+        var formatSet = !!format;
+        format = format || this._format;
+
+        var formattedString = false;
+        var hasAlpha = this._a < 1 && this._a >= 0;
+        var needsAlphaFormat = !formatSet && hasAlpha && (format === "hex" || format === "hex6" || format === "hex3" || format === "hex4" || format === "hex8" || format === "name");
+
+        if (needsAlphaFormat) {
+            // Special case for "transparent", all other non-alpha formats
+            // will return rgba when there is transparency.
+            if (format === "name" && this._a === 0) {
+                return this.toName();
+            }
+            return this.toRgbString();
+        }
+        if (format === "rgb") {
+            formattedString = this.toRgbString();
+        }
+        if (format === "prgb") {
+            formattedString = this.toPercentageRgbString();
+        }
+        if (format === "hex" || format === "hex6") {
+            formattedString = this.toHexString();
+        }
+        if (format === "hex3") {
+            formattedString = this.toHexString(true);
+        }
+        if (format === "hex4") {
+            formattedString = this.toHex8String(true);
+        }
+        if (format === "hex8") {
+            formattedString = this.toHex8String();
+        }
+        if (format === "name") {
+            formattedString = this.toName();
+        }
+        if (format === "hsl") {
+            formattedString = this.toHslString();
+        }
+        if (format === "hsv") {
+            formattedString = this.toHsvString();
+        }
+
+        return formattedString || this.toHexString();
+    },
+    clone: function() {
+        return tinycolor(this.toString());
+    },
+
+    _applyModification: function(fn, args) {
+        var color = fn.apply(null, [this].concat([].slice.call(args)));
+        this._r = color._r;
+        this._g = color._g;
+        this._b = color._b;
+        this.setAlpha(color._a);
+        return this;
+    },
+    lighten: function() {
+        return this._applyModification(lighten, arguments);
+    },
+    brighten: function() {
+        return this._applyModification(brighten, arguments);
+    },
+    darken: function() {
+        return this._applyModification(darken, arguments);
+    },
+    desaturate: function() {
+        return this._applyModification(desaturate, arguments);
+    },
+    saturate: function() {
+        return this._applyModification(saturate, arguments);
+    },
+    greyscale: function() {
+        return this._applyModification(greyscale, arguments);
+    },
+    spin: function() {
+        return this._applyModification(spin, arguments);
+    },
+
+    _applyCombination: function(fn, args) {
+        return fn.apply(null, [this].concat([].slice.call(args)));
+    },
+    analogous: function() {
+        return this._applyCombination(analogous, arguments);
+    },
+    complement: function() {
+        return this._applyCombination(complement, arguments);
+    },
+    monochromatic: function() {
+        return this._applyCombination(monochromatic, arguments);
+    },
+    splitcomplement: function() {
+        return this._applyCombination(splitcomplement, arguments);
+    },
+    triad: function() {
+        return this._applyCombination(triad, arguments);
+    },
+    tetrad: function() {
+        return this._applyCombination(tetrad, arguments);
+    }
+};
+
+// If input is an object, force 1 into "1.0" to handle ratios properly
+// String input requires "1.0" as input, so 1 will be treated as 1
+tinycolor.fromRatio = function(color, opts) {
+    if (typeof color == "object") {
+        var newColor = {};
+        for (var i in color) {
+            if (color.hasOwnProperty(i)) {
+                if (i === "a") {
+                    newColor[i] = color[i];
+                }
+                else {
+                    newColor[i] = convertToPercentage(color[i]);
+                }
+            }
+        }
+        color = newColor;
+    }
+
+    return tinycolor(color, opts);
+};
+
+// Given a string or object, convert that input to RGB
+// Possible string inputs:
+//
+//     "red"
+//     "#f00" or "f00"
+//     "#ff0000" or "ff0000"
+//     "#ff000000" or "ff000000"
+//     "rgb 255 0 0" or "rgb (255, 0, 0)"
+//     "rgb 1.0 0 0" or "rgb (1, 0, 0)"
+//     "rgba (255, 0, 0, 1)" or "rgba 255, 0, 0, 1"
+//     "rgba (1.0, 0, 0, 1)" or "rgba 1.0, 0, 0, 1"
+//     "hsl(0, 100%, 50%)" or "hsl 0 100% 50%"
+//     "hsla(0, 100%, 50%, 1)" or "hsla 0 100% 50%, 1"
+//     "hsv(0, 100%, 100%)" or "hsv 0 100% 100%"
+//
+function inputToRGB(color) {
+
+    var rgb = { r: 0, g: 0, b: 0 };
+    var a = 1;
+    var s = null;
+    var v = null;
+    var l = null;
+    var ok = false;
+    var format = false;
+
+    if (typeof color == "string") {
+        color = stringInputToObject(color);
+    }
+
+    if (typeof color == "object") {
+        if (isValidCSSUnit(color.r) && isValidCSSUnit(color.g) && isValidCSSUnit(color.b)) {
+            rgb = rgbToRgb(color.r, color.g, color.b);
+            ok = true;
+            format = String(color.r).substr(-1) === "%" ? "prgb" : "rgb";
+        }
+        else if (isValidCSSUnit(color.h) && isValidCSSUnit(color.s) && isValidCSSUnit(color.v)) {
+            s = convertToPercentage(color.s);
+            v = convertToPercentage(color.v);
+            rgb = hsvToRgb(color.h, s, v);
+            ok = true;
+            format = "hsv";
+        }
+        else if (isValidCSSUnit(color.h) && isValidCSSUnit(color.s) && isValidCSSUnit(color.l)) {
+            s = convertToPercentage(color.s);
+            l = convertToPercentage(color.l);
+            rgb = hslToRgb(color.h, s, l);
+            ok = true;
+            format = "hsl";
+        }
+
+        if (color.hasOwnProperty("a")) {
+            a = color.a;
+        }
+    }
+
+    a = boundAlpha(a);
+
+    return {
+        ok: ok,
+        format: color.format || format,
+        r: mathMin(255, mathMax(rgb.r, 0)),
+        g: mathMin(255, mathMax(rgb.g, 0)),
+        b: mathMin(255, mathMax(rgb.b, 0)),
+        a: a
+    };
+}
+
+
+// Conversion Functions
+// --------------------
+
+// `rgbToHsl`, `rgbToHsv`, `hslToRgb`, `hsvToRgb` modified from:
+// <http://mjijackson.com/2008/02/rgb-to-hsl-and-rgb-to-hsv-color-model-conversion-algorithms-in-javascript>
+
+// `rgbToRgb`
+// Handle bounds / percentage checking to conform to CSS color spec
+// <http://www.w3.org/TR/css3-color/>
+// *Assumes:* r, g, b in [0, 255] or [0, 1]
+// *Returns:* { r, g, b } in [0, 255]
+function rgbToRgb(r, g, b){
+    return {
+        r: bound01(r, 255) * 255,
+        g: bound01(g, 255) * 255,
+        b: bound01(b, 255) * 255
+    };
+}
+
+// `rgbToHsl`
+// Converts an RGB color value to HSL.
+// *Assumes:* r, g, and b are contained in [0, 255] or [0, 1]
+// *Returns:* { h, s, l } in [0,1]
+function rgbToHsl(r, g, b) {
+
+    r = bound01(r, 255);
+    g = bound01(g, 255);
+    b = bound01(b, 255);
+
+    var max = mathMax(r, g, b), min = mathMin(r, g, b);
+    var h, s, l = (max + min) / 2;
+
+    if(max == min) {
+        h = s = 0; // achromatic
+    }
+    else {
+        var d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch(max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+        }
+
+        h /= 6;
+    }
+
+    return { h: h, s: s, l: l };
+}
+
+// `hslToRgb`
+// Converts an HSL color value to RGB.
+// *Assumes:* h is contained in [0, 1] or [0, 360] and s and l are contained [0, 1] or [0, 100]
+// *Returns:* { r, g, b } in the set [0, 255]
+function hslToRgb(h, s, l) {
+    var r, g, b;
+
+    h = bound01(h, 360);
+    s = bound01(s, 100);
+    l = bound01(l, 100);
+
+    function hue2rgb(p, q, t) {
+        if(t < 0) t += 1;
+        if(t > 1) t -= 1;
+        if(t < 1/6) return p + (q - p) * 6 * t;
+        if(t < 1/2) return q;
+        if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        return p;
+    }
+
+    if(s === 0) {
+        r = g = b = l; // achromatic
+    }
+    else {
+        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        var p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+    }
+
+    return { r: r * 255, g: g * 255, b: b * 255 };
+}
+
+// `rgbToHsv`
+// Converts an RGB color value to HSV
+// *Assumes:* r, g, and b are contained in the set [0, 255] or [0, 1]
+// *Returns:* { h, s, v } in [0,1]
+function rgbToHsv(r, g, b) {
+
+    r = bound01(r, 255);
+    g = bound01(g, 255);
+    b = bound01(b, 255);
+
+    var max = mathMax(r, g, b), min = mathMin(r, g, b);
+    var h, s, v = max;
+
+    var d = max - min;
+    s = max === 0 ? 0 : d / max;
+
+    if(max == min) {
+        h = 0; // achromatic
+    }
+    else {
+        switch(max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+    }
+    return { h: h, s: s, v: v };
+}
+
+// `hsvToRgb`
+// Converts an HSV color value to RGB.
+// *Assumes:* h is contained in [0, 1] or [0, 360] and s and v are contained in [0, 1] or [0, 100]
+// *Returns:* { r, g, b } in the set [0, 255]
+ function hsvToRgb(h, s, v) {
+
+    h = bound01(h, 360) * 6;
+    s = bound01(s, 100);
+    v = bound01(v, 100);
+
+    var i = Math.floor(h),
+        f = h - i,
+        p = v * (1 - s),
+        q = v * (1 - f * s),
+        t = v * (1 - (1 - f) * s),
+        mod = i % 6,
+        r = [v, q, p, p, t, v][mod],
+        g = [t, v, v, q, p, p][mod],
+        b = [p, p, t, v, v, q][mod];
+
+    return { r: r * 255, g: g * 255, b: b * 255 };
+}
+
+// `rgbToHex`
+// Converts an RGB color to hex
+// Assumes r, g, and b are contained in the set [0, 255]
+// Returns a 3 or 6 character hex
+function rgbToHex(r, g, b, allow3Char) {
+
+    var hex = [
+        pad2(mathRound(r).toString(16)),
+        pad2(mathRound(g).toString(16)),
+        pad2(mathRound(b).toString(16))
+    ];
+
+    // Return a 3 character hex if possible
+    if (allow3Char && hex[0].charAt(0) == hex[0].charAt(1) && hex[1].charAt(0) == hex[1].charAt(1) && hex[2].charAt(0) == hex[2].charAt(1)) {
+        return hex[0].charAt(0) + hex[1].charAt(0) + hex[2].charAt(0);
+    }
+
+    return hex.join("");
+}
+
+// `rgbaToHex`
+// Converts an RGBA color plus alpha transparency to hex
+// Assumes r, g, b are contained in the set [0, 255] and
+// a in [0, 1]. Returns a 4 or 8 character rgba hex
+function rgbaToHex(r, g, b, a, allow4Char) {
+
+    var hex = [
+        pad2(mathRound(r).toString(16)),
+        pad2(mathRound(g).toString(16)),
+        pad2(mathRound(b).toString(16)),
+        pad2(convertDecimalToHex(a))
+    ];
+
+    // Return a 4 character hex if possible
+    if (allow4Char && hex[0].charAt(0) == hex[0].charAt(1) && hex[1].charAt(0) == hex[1].charAt(1) && hex[2].charAt(0) == hex[2].charAt(1) && hex[3].charAt(0) == hex[3].charAt(1)) {
+        return hex[0].charAt(0) + hex[1].charAt(0) + hex[2].charAt(0) + hex[3].charAt(0);
+    }
+
+    return hex.join("");
+}
+
+// `rgbaToArgbHex`
+// Converts an RGBA color to an ARGB Hex8 string
+// Rarely used, but required for "toFilter()"
+function rgbaToArgbHex(r, g, b, a) {
+
+    var hex = [
+        pad2(convertDecimalToHex(a)),
+        pad2(mathRound(r).toString(16)),
+        pad2(mathRound(g).toString(16)),
+        pad2(mathRound(b).toString(16))
+    ];
+
+    return hex.join("");
+}
+
+// `equals`
+// Can be called with any tinycolor input
+tinycolor.equals = function (color1, color2) {
+    if (!color1 || !color2) { return false; }
+    return tinycolor(color1).toRgbString() == tinycolor(color2).toRgbString();
+};
+
+tinycolor.random = function() {
+    return tinycolor.fromRatio({
+        r: mathRandom(),
+        g: mathRandom(),
+        b: mathRandom()
+    });
+};
+
+
+// Modification Functions
+// ----------------------
+// Thanks to less.js for some of the basics here
+// <https://github.com/cloudhead/less.js/blob/master/lib/less/functions.js>
+
+function desaturate(color, amount) {
+    amount = (amount === 0) ? 0 : (amount || 10);
+    var hsl = tinycolor(color).toHsl();
+    hsl.s -= amount / 100;
+    hsl.s = clamp01(hsl.s);
+    return tinycolor(hsl);
+}
+
+function saturate(color, amount) {
+    amount = (amount === 0) ? 0 : (amount || 10);
+    var hsl = tinycolor(color).toHsl();
+    hsl.s += amount / 100;
+    hsl.s = clamp01(hsl.s);
+    return tinycolor(hsl);
+}
+
+function greyscale(color) {
+    return tinycolor(color).desaturate(100);
+}
+
+function lighten (color, amount) {
+    amount = (amount === 0) ? 0 : (amount || 10);
+    var hsl = tinycolor(color).toHsl();
+    hsl.l += amount / 100;
+    hsl.l = clamp01(hsl.l);
+    return tinycolor(hsl);
+}
+
+function brighten(color, amount) {
+    amount = (amount === 0) ? 0 : (amount || 10);
+    var rgb = tinycolor(color).toRgb();
+    rgb.r = mathMax(0, mathMin(255, rgb.r - mathRound(255 * - (amount / 100))));
+    rgb.g = mathMax(0, mathMin(255, rgb.g - mathRound(255 * - (amount / 100))));
+    rgb.b = mathMax(0, mathMin(255, rgb.b - mathRound(255 * - (amount / 100))));
+    return tinycolor(rgb);
+}
+
+function darken (color, amount) {
+    amount = (amount === 0) ? 0 : (amount || 10);
+    var hsl = tinycolor(color).toHsl();
+    hsl.l -= amount / 100;
+    hsl.l = clamp01(hsl.l);
+    return tinycolor(hsl);
+}
+
+// Spin takes a positive or negative amount within [-360, 360] indicating the change of hue.
+// Values outside of this range will be wrapped into this range.
+function spin(color, amount) {
+    var hsl = tinycolor(color).toHsl();
+    var hue = (hsl.h + amount) % 360;
+    hsl.h = hue < 0 ? 360 + hue : hue;
+    return tinycolor(hsl);
+}
+
+// Combination Functions
+// ---------------------
+// Thanks to jQuery xColor for some of the ideas behind these
+// <https://github.com/infusion/jQuery-xcolor/blob/master/jquery.xcolor.js>
+
+function complement(color) {
+    var hsl = tinycolor(color).toHsl();
+    hsl.h = (hsl.h + 180) % 360;
+    return tinycolor(hsl);
+}
+
+function triad(color) {
+    var hsl = tinycolor(color).toHsl();
+    var h = hsl.h;
+    return [
+        tinycolor(color),
+        tinycolor({ h: (h + 120) % 360, s: hsl.s, l: hsl.l }),
+        tinycolor({ h: (h + 240) % 360, s: hsl.s, l: hsl.l })
+    ];
+}
+
+function tetrad(color) {
+    var hsl = tinycolor(color).toHsl();
+    var h = hsl.h;
+    return [
+        tinycolor(color),
+        tinycolor({ h: (h + 90) % 360, s: hsl.s, l: hsl.l }),
+        tinycolor({ h: (h + 180) % 360, s: hsl.s, l: hsl.l }),
+        tinycolor({ h: (h + 270) % 360, s: hsl.s, l: hsl.l })
+    ];
+}
+
+function splitcomplement(color) {
+    var hsl = tinycolor(color).toHsl();
+    var h = hsl.h;
+    return [
+        tinycolor(color),
+        tinycolor({ h: (h + 72) % 360, s: hsl.s, l: hsl.l}),
+        tinycolor({ h: (h + 216) % 360, s: hsl.s, l: hsl.l})
+    ];
+}
+
+function analogous(color, results, slices) {
+    results = results || 6;
+    slices = slices || 30;
+
+    var hsl = tinycolor(color).toHsl();
+    var part = 360 / slices;
+    var ret = [tinycolor(color)];
+
+    for (hsl.h = ((hsl.h - (part * results >> 1)) + 720) % 360; --results; ) {
+        hsl.h = (hsl.h + part) % 360;
+        ret.push(tinycolor(hsl));
+    }
+    return ret;
+}
+
+function monochromatic(color, results) {
+    results = results || 6;
+    var hsv = tinycolor(color).toHsv();
+    var h = hsv.h, s = hsv.s, v = hsv.v;
+    var ret = [];
+    var modification = 1 / results;
+
+    while (results--) {
+        ret.push(tinycolor({ h: h, s: s, v: v}));
+        v = (v + modification) % 1;
+    }
+
+    return ret;
+}
+
+// Utility Functions
+// ---------------------
+
+tinycolor.mix = function(color1, color2, amount) {
+    amount = (amount === 0) ? 0 : (amount || 50);
+
+    var rgb1 = tinycolor(color1).toRgb();
+    var rgb2 = tinycolor(color2).toRgb();
+
+    var p = amount / 100;
+
+    var rgba = {
+        r: ((rgb2.r - rgb1.r) * p) + rgb1.r,
+        g: ((rgb2.g - rgb1.g) * p) + rgb1.g,
+        b: ((rgb2.b - rgb1.b) * p) + rgb1.b,
+        a: ((rgb2.a - rgb1.a) * p) + rgb1.a
+    };
+
+    return tinycolor(rgba);
+};
+
+
+// Readability Functions
+// ---------------------
+// <http://www.w3.org/TR/2008/REC-WCAG20-20081211/#contrast-ratiodef (WCAG Version 2)
+
+// `contrast`
+// Analyze the 2 colors and returns the color contrast defined by (WCAG Version 2)
+tinycolor.readability = function(color1, color2) {
+    var c1 = tinycolor(color1);
+    var c2 = tinycolor(color2);
+    return (Math.max(c1.getLuminance(),c2.getLuminance())+0.05) / (Math.min(c1.getLuminance(),c2.getLuminance())+0.05);
+};
+
+// `isReadable`
+// Ensure that foreground and background color combinations meet WCAG2 guidelines.
+// The third argument is an optional Object.
+//      the 'level' property states 'AA' or 'AAA' - if missing or invalid, it defaults to 'AA';
+//      the 'size' property states 'large' or 'small' - if missing or invalid, it defaults to 'small'.
+// If the entire object is absent, isReadable defaults to {level:"AA",size:"small"}.
+
+// *Example*
+//    tinycolor.isReadable("#000", "#111") => false
+//    tinycolor.isReadable("#000", "#111",{level:"AA",size:"large"}) => false
+tinycolor.isReadable = function(color1, color2, wcag2) {
+    var readability = tinycolor.readability(color1, color2);
+    var wcag2Parms, out;
+
+    out = false;
+
+    wcag2Parms = validateWCAG2Parms(wcag2);
+    switch (wcag2Parms.level + wcag2Parms.size) {
+        case "AAsmall":
+        case "AAAlarge":
+            out = readability >= 4.5;
+            break;
+        case "AAlarge":
+            out = readability >= 3;
+            break;
+        case "AAAsmall":
+            out = readability >= 7;
+            break;
+    }
+    return out;
+
+};
+
+// `mostReadable`
+// Given a base color and a list of possible foreground or background
+// colors for that base, returns the most readable color.
+// Optionally returns Black or White if the most readable color is unreadable.
+// *Example*
+//    tinycolor.mostReadable(tinycolor.mostReadable("#123", ["#124", "#125"],{includeFallbackColors:false}).toHexString(); // "#112255"
+//    tinycolor.mostReadable(tinycolor.mostReadable("#123", ["#124", "#125"],{includeFallbackColors:true}).toHexString();  // "#ffffff"
+//    tinycolor.mostReadable("#a8015a", ["#faf3f3"],{includeFallbackColors:true,level:"AAA",size:"large"}).toHexString(); // "#faf3f3"
+//    tinycolor.mostReadable("#a8015a", ["#faf3f3"],{includeFallbackColors:true,level:"AAA",size:"small"}).toHexString(); // "#ffffff"
+tinycolor.mostReadable = function(baseColor, colorList, args) {
+    var bestColor = null;
+    var bestScore = 0;
+    var readability;
+    var includeFallbackColors, level, size ;
+    args = args || {};
+    includeFallbackColors = args.includeFallbackColors ;
+    level = args.level;
+    size = args.size;
+
+    for (var i= 0; i < colorList.length ; i++) {
+        readability = tinycolor.readability(baseColor, colorList[i]);
+        if (readability > bestScore) {
+            bestScore = readability;
+            bestColor = tinycolor(colorList[i]);
+        }
+    }
+
+    if (tinycolor.isReadable(baseColor, bestColor, {"level":level,"size":size}) || !includeFallbackColors) {
+        return bestColor;
+    }
+    else {
+        args.includeFallbackColors=false;
+        return tinycolor.mostReadable(baseColor,["#fff", "#000"],args);
+    }
+};
+
+
+// Big List of Colors
+// ------------------
+// <http://www.w3.org/TR/css3-color/#svg-color>
+var names = tinycolor.names = {
+    aliceblue: "f0f8ff",
+    antiquewhite: "faebd7",
+    aqua: "0ff",
+    aquamarine: "7fffd4",
+    azure: "f0ffff",
+    beige: "f5f5dc",
+    bisque: "ffe4c4",
+    black: "000",
+    blanchedalmond: "ffebcd",
+    blue: "00f",
+    blueviolet: "8a2be2",
+    brown: "a52a2a",
+    burlywood: "deb887",
+    burntsienna: "ea7e5d",
+    cadetblue: "5f9ea0",
+    chartreuse: "7fff00",
+    chocolate: "d2691e",
+    coral: "ff7f50",
+    cornflowerblue: "6495ed",
+    cornsilk: "fff8dc",
+    crimson: "dc143c",
+    cyan: "0ff",
+    darkblue: "00008b",
+    darkcyan: "008b8b",
+    darkgoldenrod: "b8860b",
+    darkgray: "a9a9a9",
+    darkgreen: "006400",
+    darkgrey: "a9a9a9",
+    darkkhaki: "bdb76b",
+    darkmagenta: "8b008b",
+    darkolivegreen: "556b2f",
+    darkorange: "ff8c00",
+    darkorchid: "9932cc",
+    darkred: "8b0000",
+    darksalmon: "e9967a",
+    darkseagreen: "8fbc8f",
+    darkslateblue: "483d8b",
+    darkslategray: "2f4f4f",
+    darkslategrey: "2f4f4f",
+    darkturquoise: "00ced1",
+    darkviolet: "9400d3",
+    deeppink: "ff1493",
+    deepskyblue: "00bfff",
+    dimgray: "696969",
+    dimgrey: "696969",
+    dodgerblue: "1e90ff",
+    firebrick: "b22222",
+    floralwhite: "fffaf0",
+    forestgreen: "228b22",
+    fuchsia: "f0f",
+    gainsboro: "dcdcdc",
+    ghostwhite: "f8f8ff",
+    gold: "ffd700",
+    goldenrod: "daa520",
+    gray: "808080",
+    green: "008000",
+    greenyellow: "adff2f",
+    grey: "808080",
+    honeydew: "f0fff0",
+    hotpink: "ff69b4",
+    indianred: "cd5c5c",
+    indigo: "4b0082",
+    ivory: "fffff0",
+    khaki: "f0e68c",
+    lavender: "e6e6fa",
+    lavenderblush: "fff0f5",
+    lawngreen: "7cfc00",
+    lemonchiffon: "fffacd",
+    lightblue: "add8e6",
+    lightcoral: "f08080",
+    lightcyan: "e0ffff",
+    lightgoldenrodyellow: "fafad2",
+    lightgray: "d3d3d3",
+    lightgreen: "90ee90",
+    lightgrey: "d3d3d3",
+    lightpink: "ffb6c1",
+    lightsalmon: "ffa07a",
+    lightseagreen: "20b2aa",
+    lightskyblue: "87cefa",
+    lightslategray: "789",
+    lightslategrey: "789",
+    lightsteelblue: "b0c4de",
+    lightyellow: "ffffe0",
+    lime: "0f0",
+    limegreen: "32cd32",
+    linen: "faf0e6",
+    magenta: "f0f",
+    maroon: "800000",
+    mediumaquamarine: "66cdaa",
+    mediumblue: "0000cd",
+    mediumorchid: "ba55d3",
+    mediumpurple: "9370db",
+    mediumseagreen: "3cb371",
+    mediumslateblue: "7b68ee",
+    mediumspringgreen: "00fa9a",
+    mediumturquoise: "48d1cc",
+    mediumvioletred: "c71585",
+    midnightblue: "191970",
+    mintcream: "f5fffa",
+    mistyrose: "ffe4e1",
+    moccasin: "ffe4b5",
+    navajowhite: "ffdead",
+    navy: "000080",
+    oldlace: "fdf5e6",
+    olive: "808000",
+    olivedrab: "6b8e23",
+    orange: "ffa500",
+    orangered: "ff4500",
+    orchid: "da70d6",
+    palegoldenrod: "eee8aa",
+    palegreen: "98fb98",
+    paleturquoise: "afeeee",
+    palevioletred: "db7093",
+    papayawhip: "ffefd5",
+    peachpuff: "ffdab9",
+    peru: "cd853f",
+    pink: "ffc0cb",
+    plum: "dda0dd",
+    powderblue: "b0e0e6",
+    purple: "800080",
+    rebeccapurple: "663399",
+    red: "f00",
+    rosybrown: "bc8f8f",
+    royalblue: "4169e1",
+    saddlebrown: "8b4513",
+    salmon: "fa8072",
+    sandybrown: "f4a460",
+    seagreen: "2e8b57",
+    seashell: "fff5ee",
+    sienna: "a0522d",
+    silver: "c0c0c0",
+    skyblue: "87ceeb",
+    slateblue: "6a5acd",
+    slategray: "708090",
+    slategrey: "708090",
+    snow: "fffafa",
+    springgreen: "00ff7f",
+    steelblue: "4682b4",
+    tan: "d2b48c",
+    teal: "008080",
+    thistle: "d8bfd8",
+    tomato: "ff6347",
+    turquoise: "40e0d0",
+    violet: "ee82ee",
+    wheat: "f5deb3",
+    white: "fff",
+    whitesmoke: "f5f5f5",
+    yellow: "ff0",
+    yellowgreen: "9acd32"
+};
+
+// Make it easy to access colors via `hexNames[hex]`
+var hexNames = tinycolor.hexNames = flip(names);
+
+
+// Utilities
+// ---------
+
+// `{ 'name1': 'val1' }` becomes `{ 'val1': 'name1' }`
+function flip(o) {
+    var flipped = { };
+    for (var i in o) {
+        if (o.hasOwnProperty(i)) {
+            flipped[o[i]] = i;
+        }
+    }
+    return flipped;
+}
+
+// Return a valid alpha value [0,1] with all invalid values being set to 1
+function boundAlpha(a) {
+    a = parseFloat(a);
+
+    if (isNaN(a) || a < 0 || a > 1) {
+        a = 1;
+    }
+
+    return a;
+}
+
+// Take input from [0, n] and return it as [0, 1]
+function bound01(n, max) {
+    if (isOnePointZero(n)) { n = "100%"; }
+
+    var processPercent = isPercentage(n);
+    n = mathMin(max, mathMax(0, parseFloat(n)));
+
+    // Automatically convert percentage into number
+    if (processPercent) {
+        n = parseInt(n * max, 10) / 100;
+    }
+
+    // Handle floating point rounding errors
+    if ((Math.abs(n - max) < 0.000001)) {
+        return 1;
+    }
+
+    // Convert into [0, 1] range if it isn't already
+    return (n % max) / parseFloat(max);
+}
+
+// Force a number between 0 and 1
+function clamp01(val) {
+    return mathMin(1, mathMax(0, val));
+}
+
+// Parse a base-16 hex value into a base-10 integer
+function parseIntFromHex(val) {
+    return parseInt(val, 16);
+}
+
+// Need to handle 1.0 as 100%, since once it is a number, there is no difference between it and 1
+// <http://stackoverflow.com/questions/7422072/javascript-how-to-detect-number-as-a-decimal-including-1-0>
+function isOnePointZero(n) {
+    return typeof n == "string" && n.indexOf('.') != -1 && parseFloat(n) === 1;
+}
+
+// Check to see if string passed in is a percentage
+function isPercentage(n) {
+    return typeof n === "string" && n.indexOf('%') != -1;
+}
+
+// Force a hex value to have 2 characters
+function pad2(c) {
+    return c.length == 1 ? '0' + c : '' + c;
+}
+
+// Replace a decimal with it's percentage value
+function convertToPercentage(n) {
+    if (n <= 1) {
+        n = (n * 100) + "%";
+    }
+
+    return n;
+}
+
+// Converts a decimal to a hex value
+function convertDecimalToHex(d) {
+    return Math.round(parseFloat(d) * 255).toString(16);
+}
+// Converts a hex value to a decimal
+function convertHexToDecimal(h) {
+    return (parseIntFromHex(h) / 255);
+}
+
+var matchers = (function() {
+
+    // <http://www.w3.org/TR/css3-values/#integers>
+    var CSS_INTEGER = "[-\\+]?\\d+%?";
+
+    // <http://www.w3.org/TR/css3-values/#number-value>
+    var CSS_NUMBER = "[-\\+]?\\d*\\.\\d+%?";
+
+    // Allow positive/negative integer/number.  Don't capture the either/or, just the entire outcome.
+    var CSS_UNIT = "(?:" + CSS_NUMBER + ")|(?:" + CSS_INTEGER + ")";
+
+    // Actual matching.
+    // Parentheses and commas are optional, but not required.
+    // Whitespace can take the place of commas or opening paren
+    var PERMISSIVE_MATCH3 = "[\\s|\\(]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")\\s*\\)?";
+    var PERMISSIVE_MATCH4 = "[\\s|\\(]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")[,|\\s]+(" + CSS_UNIT + ")\\s*\\)?";
+
+    return {
+        CSS_UNIT: new RegExp(CSS_UNIT),
+        rgb: new RegExp("rgb" + PERMISSIVE_MATCH3),
+        rgba: new RegExp("rgba" + PERMISSIVE_MATCH4),
+        hsl: new RegExp("hsl" + PERMISSIVE_MATCH3),
+        hsla: new RegExp("hsla" + PERMISSIVE_MATCH4),
+        hsv: new RegExp("hsv" + PERMISSIVE_MATCH3),
+        hsva: new RegExp("hsva" + PERMISSIVE_MATCH4),
+        hex3: /^#?([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
+        hex6: /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/,
+        hex4: /^#?([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/,
+        hex8: /^#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/
+    };
+})();
+
+// `isValidCSSUnit`
+// Take in a single string / number and check to see if it looks like a CSS unit
+// (see `matchers` above for definition).
+function isValidCSSUnit(color) {
+    return !!matchers.CSS_UNIT.exec(color);
+}
+
+// `stringInputToObject`
+// Permissive string parsing.  Take in a number of formats, and output an object
+// based on detected format.  Returns `{ r, g, b }` or `{ h, s, l }` or `{ h, s, v}`
+function stringInputToObject(color) {
+
+    color = color.replace(trimLeft,'').replace(trimRight, '').toLowerCase();
+    var named = false;
+    if (names[color]) {
+        color = names[color];
+        named = true;
+    }
+    else if (color == 'transparent') {
+        return { r: 0, g: 0, b: 0, a: 0, format: "name" };
+    }
+
+    // Try to match string input using regular expressions.
+    // Keep most of the number bounding out of this function - don't worry about [0,1] or [0,100] or [0,360]
+    // Just return an object and let the conversion functions handle that.
+    // This way the result will be the same whether the tinycolor is initialized with string or object.
+    var match;
+    if ((match = matchers.rgb.exec(color))) {
+        return { r: match[1], g: match[2], b: match[3] };
+    }
+    if ((match = matchers.rgba.exec(color))) {
+        return { r: match[1], g: match[2], b: match[3], a: match[4] };
+    }
+    if ((match = matchers.hsl.exec(color))) {
+        return { h: match[1], s: match[2], l: match[3] };
+    }
+    if ((match = matchers.hsla.exec(color))) {
+        return { h: match[1], s: match[2], l: match[3], a: match[4] };
+    }
+    if ((match = matchers.hsv.exec(color))) {
+        return { h: match[1], s: match[2], v: match[3] };
+    }
+    if ((match = matchers.hsva.exec(color))) {
+        return { h: match[1], s: match[2], v: match[3], a: match[4] };
+    }
+    if ((match = matchers.hex8.exec(color))) {
+        return {
+            r: parseIntFromHex(match[1]),
+            g: parseIntFromHex(match[2]),
+            b: parseIntFromHex(match[3]),
+            a: convertHexToDecimal(match[4]),
+            format: named ? "name" : "hex8"
+        };
+    }
+    if ((match = matchers.hex6.exec(color))) {
+        return {
+            r: parseIntFromHex(match[1]),
+            g: parseIntFromHex(match[2]),
+            b: parseIntFromHex(match[3]),
+            format: named ? "name" : "hex"
+        };
+    }
+    if ((match = matchers.hex4.exec(color))) {
+        return {
+            r: parseIntFromHex(match[1] + '' + match[1]),
+            g: parseIntFromHex(match[2] + '' + match[2]),
+            b: parseIntFromHex(match[3] + '' + match[3]),
+            a: convertHexToDecimal(match[4] + '' + match[4]),
+            format: named ? "name" : "hex8"
+        };
+    }
+    if ((match = matchers.hex3.exec(color))) {
+        return {
+            r: parseIntFromHex(match[1] + '' + match[1]),
+            g: parseIntFromHex(match[2] + '' + match[2]),
+            b: parseIntFromHex(match[3] + '' + match[3]),
+            format: named ? "name" : "hex"
+        };
+    }
+
+    return false;
+}
+
+function validateWCAG2Parms(parms) {
+    // return valid WCAG2 parms for isReadable.
+    // If input parms are invalid, return {"level":"AA", "size":"small"}
+    var level, size;
+    parms = parms || {"level":"AA", "size":"small"};
+    level = (parms.level || "AA").toUpperCase();
+    size = (parms.size || "small").toLowerCase();
+    if (level !== "AA" && level !== "AAA") {
+        level = "AA";
+    }
+    if (size !== "small" && size !== "large") {
+        size = "small";
+    }
+    return {"level":level, "size":size};
+}
+
+// Node: Export function
+if (typeof module !== "undefined" && module.exports) {
+    module.exports = tinycolor;
+}
+// AMD/requirejs: Define the module
+else if (true) {
+    !(__WEBPACK_AMD_DEFINE_RESULT__ = function () {return tinycolor;}.call(exports, __webpack_require__, exports, module),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+}
+// Browser: Expose to window
+else {
+    window.tinycolor = tinycolor;
+}
+
+})(Math);
 
 
 /***/ }),
@@ -46224,12 +45385,10 @@ module.exports = isTypedArray;
 
 "use strict";
 /**
- * Copyright 2014-2015, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -46247,45 +45406,43 @@ var emptyFunction = __webpack_require__("e6+Q");
 var warning = emptyFunction;
 
 if (true) {
-  (function () {
-    var printWarning = function printWarning(format) {
-      for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        args[_key - 1] = arguments[_key];
+  var printWarning = function printWarning(format) {
+    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    var argIndex = 0;
+    var message = 'Warning: ' + format.replace(/%s/g, function () {
+      return args[argIndex++];
+    });
+    if (typeof console !== 'undefined') {
+      console.error(message);
+    }
+    try {
+      // --- Welcome to debugging React ---
+      // This error was thrown as a convenience so that you can use this stack
+      // to find the callsite that caused this warning to fire.
+      throw new Error(message);
+    } catch (x) {}
+  };
+
+  warning = function warning(condition, format) {
+    if (format === undefined) {
+      throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
+    }
+
+    if (format.indexOf('Failed Composite propType: ') === 0) {
+      return; // Ignore CompositeComponent proptype check.
+    }
+
+    if (!condition) {
+      for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+        args[_key2 - 2] = arguments[_key2];
       }
 
-      var argIndex = 0;
-      var message = 'Warning: ' + format.replace(/%s/g, function () {
-        return args[argIndex++];
-      });
-      if (typeof console !== 'undefined') {
-        console.error(message);
-      }
-      try {
-        // --- Welcome to debugging React ---
-        // This error was thrown as a convenience so that you can use this stack
-        // to find the callsite that caused this warning to fire.
-        throw new Error(message);
-      } catch (x) {}
-    };
-
-    warning = function warning(condition, format) {
-      if (format === undefined) {
-        throw new Error('`warning(condition, format, ...args)` requires a warning ' + 'message argument');
-      }
-
-      if (format.indexOf('Failed Composite propType: ') === 0) {
-        return; // Ignore CompositeComponent proptype check.
-      }
-
-      if (!condition) {
-        for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-          args[_key2 - 2] = arguments[_key2];
-        }
-
-        printWarning.apply(undefined, [format].concat(args));
-      }
-    };
-  })();
+      printWarning.apply(undefined, [format].concat(args));
+    }
+  };
 }
 
 module.exports = warning;
@@ -46356,7 +45513,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Slider = exports.Slider = function Slider(_ref) {
   var hsl = _ref.hsl,
       onChange = _ref.onChange,
-      pointer = _ref.pointer;
+      pointer = _ref.pointer,
+      _ref$className = _ref.className,
+      className = _ref$className === undefined ? '' : _ref$className;
 
   var styles = (0, _reactcss2.default)({
     'default': {
@@ -46372,7 +45531,7 @@ var Slider = exports.Slider = function Slider(_ref) {
 
   return _react2.default.createElement(
     'div',
-    { className: 'slider-picker' },
+    { className: 'slider-picker ' + className },
     _react2.default.createElement(
       'div',
       { style: styles.hue },
@@ -46668,11 +45827,9 @@ var ActionTypes = {
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -46830,12 +45987,10 @@ module.exports = toString;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -47011,6 +46166,33 @@ _assign(SyntheticEvent.prototype, {
 
 SyntheticEvent.Interface = EventInterface;
 
+/**
+ * Helper to reduce boilerplate when creating subclasses.
+ *
+ * @param {function} Class
+ * @param {?object} Interface
+ */
+SyntheticEvent.augmentClass = function (Class, Interface) {
+  var Super = this;
+
+  var E = function () {};
+  E.prototype = Super.prototype;
+  var prototype = new E();
+
+  _assign(prototype, Class.prototype);
+  Class.prototype = prototype;
+  Class.prototype.constructor = Class;
+
+  Class.Interface = _assign({}, Super.Interface, Interface);
+  Class.augmentClass = Super.augmentClass;
+
+  PooledClass.addPoolingTo(Class, PooledClass.fourArgumentPooler);
+};
+
+/** Proxying after everything set on SyntheticEvent
+  * to resolve Proxy issue on some WebKit browsers
+  * in which some Event properties are set to undefined (GH#10010)
+  */
 if (true) {
   if (isProxySupported) {
     /*eslint-disable no-func-assign */
@@ -47034,28 +46216,6 @@ if (true) {
     /*eslint-enable no-func-assign */
   }
 }
-/**
- * Helper to reduce boilerplate when creating subclasses.
- *
- * @param {function} Class
- * @param {?object} Interface
- */
-SyntheticEvent.augmentClass = function (Class, Interface) {
-  var Super = this;
-
-  var E = function () {};
-  E.prototype = Super.prototype;
-  var prototype = new E();
-
-  _assign(prototype, Class.prototype);
-  Class.prototype = prototype;
-  Class.prototype.constructor = Class;
-
-  Class.Interface = _assign({}, Super.Interface, Interface);
-  Class.augmentClass = Super.augmentClass;
-
-  PooledClass.addPoolingTo(Class, PooledClass.fourArgumentPooler);
-};
 
 PooledClass.addPoolingTo(SyntheticEvent, PooledClass.fourArgumentPooler);
 
@@ -47181,12 +46341,10 @@ module.exports = { "default": __webpack_require__("/n6Q"), __esModule: true };
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -47737,12 +46895,10 @@ module.exports = setCacheHas;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -47794,12 +46950,10 @@ module.exports = isTextInputElement;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -47928,11 +47082,9 @@ var Promise = Object(__WEBPACK_IMPORTED_MODULE_0__getNative_js__["default"])(__W
 "use strict";
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -47970,11 +47122,12 @@ module.exports = reactProdInvariant;
 /***/ "ax3d":
 /***/ (function(module, exports, __webpack_require__) {
 
-var shared = __webpack_require__("e8AB")('keys')
-  , uid    = __webpack_require__("3Eo+");
-module.exports = function(key){
+var shared = __webpack_require__("e8AB")('keys');
+var uid = __webpack_require__("3Eo+");
+module.exports = function (key) {
   return shared[key] || (shared[key] = uid(key));
 };
+
 
 /***/ }),
 
@@ -48150,12 +47303,10 @@ module.exports = Promise;
 
 "use strict";
 /**
- * Copyright 2014-2015, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -48231,6 +47382,10 @@ var _react = __webpack_require__("U7vG");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactcss = __webpack_require__("TmTn");
 
 var _reactcss2 = _interopRequireDefault(_reactcss);
@@ -48249,8 +47404,6 @@ var material = _interopRequireWildcard(_materialColors);
 
 var _common = __webpack_require__("SZC+");
 
-var _reactMaterialDesign = __webpack_require__("DdXV");
-
 var _SwatchesGroup = __webpack_require__("SVjf");
 
 var _SwatchesGroup2 = _interopRequireDefault(_SwatchesGroup);
@@ -48265,7 +47418,9 @@ var Swatches = exports.Swatches = function Swatches(_ref) {
       onChange = _ref.onChange,
       onSwatchHover = _ref.onSwatchHover,
       colors = _ref.colors,
-      hex = _ref.hex;
+      hex = _ref.hex,
+      _ref$className = _ref.className,
+      className = _ref$className === undefined ? '' : _ref$className;
 
   var styles = (0, _reactcss2.default)({
     'default': {
@@ -48295,9 +47450,9 @@ var Swatches = exports.Swatches = function Swatches(_ref) {
 
   return _react2.default.createElement(
     'div',
-    { style: styles.picker, className: 'swatches-picker' },
+    { style: styles.picker, className: 'swatches-picker ' + className },
     _react2.default.createElement(
-      _reactMaterialDesign.Raised,
+      _common.Raised,
       null,
       _react2.default.createElement(
         'div',
@@ -48321,8 +47476,13 @@ var Swatches = exports.Swatches = function Swatches(_ref) {
   );
 };
 
-/* eslint-disable max-len */
-Swatches.defaultProps = {
+Swatches.propTypes = {
+  width: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]),
+  height: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number]),
+  colors: _propTypes2.default.arrayOf(_propTypes2.default.arrayOf(_propTypes2.default.string))
+
+  /* eslint-disable max-len */
+};Swatches.defaultProps = {
   width: 320,
   height: 240,
   colors: [[material.red['900'], material.red['700'], material.red['500'], material.red['300'], material.red['100']], [material.pink['900'], material.pink['700'], material.pink['500'], material.pink['300'], material.pink['100']], [material.purple['900'], material.purple['700'], material.purple['500'], material.purple['300'], material.purple['100']], [material.deepPurple['900'], material.deepPurple['700'], material.deepPurple['500'], material.deepPurple['300'], material.deepPurple['100']], [material.indigo['900'], material.indigo['700'], material.indigo['500'], material.indigo['300'], material.indigo['100']], [material.blue['900'], material.blue['700'], material.blue['500'], material.blue['300'], material.blue['100']], [material.lightBlue['900'], material.lightBlue['700'], material.lightBlue['500'], material.lightBlue['300'], material.lightBlue['100']], [material.cyan['900'], material.cyan['700'], material.cyan['500'], material.cyan['300'], material.cyan['100']], [material.teal['900'], material.teal['700'], material.teal['500'], material.teal['300'], material.teal['100']], ['#194D33', material.green['700'], material.green['500'], material.green['300'], material.green['100']], [material.lightGreen['900'], material.lightGreen['700'], material.lightGreen['500'], material.lightGreen['300'], material.lightGreen['100']], [material.lime['900'], material.lime['700'], material.lime['500'], material.lime['300'], material.lime['100']], [material.yellow['900'], material.yellow['700'], material.yellow['500'], material.yellow['300'], material.yellow['100']], [material.amber['900'], material.amber['700'], material.amber['500'], material.amber['300'], material.amber['100']], [material.orange['900'], material.orange['700'], material.orange['500'], material.orange['300'], material.orange['100']], [material.deepOrange['900'], material.deepOrange['700'], material.deepOrange['500'], material.deepOrange['300'], material.deepOrange['100']], [material.brown['900'], material.brown['700'], material.brown['500'], material.brown['300'], material.brown['100']], [material.blueGrey['900'], material.blueGrey['700'], material.blueGrey['500'], material.blueGrey['300'], material.blueGrey['100']], ['#000000', '#525252', '#969696', '#D9D9D9', '#FFFFFF']]
@@ -48611,12 +47771,10 @@ function warning(message) {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -48777,12 +47935,10 @@ module.exports = ReactDOMTextarea;
 
 "use strict";
 /**
- * Copyright 2015-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2015-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -49089,15 +48245,16 @@ module.exports = invariant;
 /***/ "crlp":
 /***/ (function(module, exports, __webpack_require__) {
 
-var global         = __webpack_require__("7KvD")
-  , core           = __webpack_require__("FeBl")
-  , LIBRARY        = __webpack_require__("O4g8")
-  , wksExt         = __webpack_require__("Kh4W")
-  , defineProperty = __webpack_require__("evD5").f;
-module.exports = function(name){
+var global = __webpack_require__("7KvD");
+var core = __webpack_require__("FeBl");
+var LIBRARY = __webpack_require__("O4g8");
+var wksExt = __webpack_require__("Kh4W");
+var defineProperty = __webpack_require__("evD5").f;
+module.exports = function (name) {
   var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
-  if(name.charAt(0) != '_' && !(name in $Symbol))defineProperty($Symbol, name, {value: wksExt.f(name)});
+  if (name.charAt(0) != '_' && !(name in $Symbol)) defineProperty($Symbol, name, { value: wksExt.f(name) });
 };
+
 
 /***/ }),
 
@@ -49106,12 +48263,10 @@ module.exports = function(name){
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -49160,6 +48315,7 @@ var HTMLDOMPropertyConfig = {
     contentEditable: 0,
     contextMenu: 0,
     controls: HAS_BOOLEAN_VALUE,
+    controlsList: 0,
     coords: 0,
     crossOrigin: 0,
     data: 0, // For `<object />` acts as `src`.
@@ -49349,11 +48505,9 @@ module.exports = HTMLDOMPropertyConfig;
 "use strict";
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -49411,11 +48565,9 @@ module.exports = invariant;
 "use strict";
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -49452,12 +48604,10 @@ module.exports = ExecutionEnvironment;
 
 "use strict";
 /**
- * Copyright 2013-present Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -49940,12 +49090,10 @@ module.exports = listCacheDelete;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -49994,12 +49142,10 @@ var Set = Object(__WEBPACK_IMPORTED_MODULE_0__getNative_js__["default"])(__WEBPA
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -50110,17 +49256,18 @@ module.exports = ReactDOMUnknownPropertyHook;
 /***/ "dSzd":
 /***/ (function(module, exports, __webpack_require__) {
 
-var store      = __webpack_require__("e8AB")('wks')
-  , uid        = __webpack_require__("3Eo+")
-  , Symbol     = __webpack_require__("7KvD").Symbol
-  , USE_SYMBOL = typeof Symbol == 'function';
+var store = __webpack_require__("e8AB")('wks');
+var uid = __webpack_require__("3Eo+");
+var Symbol = __webpack_require__("7KvD").Symbol;
+var USE_SYMBOL = typeof Symbol == 'function';
 
-var $exports = module.exports = function(name){
+var $exports = module.exports = function (name) {
   return store[name] || (store[name] =
     USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
 };
 
 $exports.store = store;
+
 
 /***/ }),
 
@@ -50224,11 +49371,9 @@ module.exports = ListCache;
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -50264,25 +49409,27 @@ module.exports = emptyFunction;
 /***/ "e6n0":
 /***/ (function(module, exports, __webpack_require__) {
 
-var def = __webpack_require__("evD5").f
-  , has = __webpack_require__("D2L2")
-  , TAG = __webpack_require__("dSzd")('toStringTag');
+var def = __webpack_require__("evD5").f;
+var has = __webpack_require__("D2L2");
+var TAG = __webpack_require__("dSzd")('toStringTag');
 
-module.exports = function(it, tag, stat){
-  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
+module.exports = function (it, tag, stat) {
+  if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
 };
+
 
 /***/ }),
 
 /***/ "e8AB":
 /***/ (function(module, exports, __webpack_require__) {
 
-var global = __webpack_require__("7KvD")
-  , SHARED = '__core-js_shared__'
-  , store  = global[SHARED] || (global[SHARED] = {});
-module.exports = function(key){
+var global = __webpack_require__("7KvD");
+var SHARED = '__core-js_shared__';
+var store = global[SHARED] || (global[SHARED] = {});
+module.exports = function (key) {
   return store[key] || (store[key] = {});
 };
+
 
 /***/ }),
 
@@ -50447,12 +49594,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -50665,12 +49810,10 @@ module.exports = ReactDOMSelection;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -50788,22 +49931,23 @@ module.exports = PooledClass.addPoolingTo(CallbackQueue);
 /***/ "evD5":
 /***/ (function(module, exports, __webpack_require__) {
 
-var anObject       = __webpack_require__("77Pl")
-  , IE8_DOM_DEFINE = __webpack_require__("SfB7")
-  , toPrimitive    = __webpack_require__("MmMw")
-  , dP             = Object.defineProperty;
+var anObject = __webpack_require__("77Pl");
+var IE8_DOM_DEFINE = __webpack_require__("SfB7");
+var toPrimitive = __webpack_require__("MmMw");
+var dP = Object.defineProperty;
 
-exports.f = __webpack_require__("+E39") ? Object.defineProperty : function defineProperty(O, P, Attributes){
+exports.f = __webpack_require__("+E39") ? Object.defineProperty : function defineProperty(O, P, Attributes) {
   anObject(O);
   P = toPrimitive(P, true);
   anObject(Attributes);
-  if(IE8_DOM_DEFINE)try {
+  if (IE8_DOM_DEFINE) try {
     return dP(O, P, Attributes);
-  } catch(e){ /* empty */ }
-  if('get' in Attributes || 'set' in Attributes)throw TypeError('Accessors not supported!');
-  if('value' in Attributes)O[P] = Attributes.value;
+  } catch (e) { /* empty */ }
+  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
+  if ('value' in Attributes) O[P] = Attributes.value;
   return O;
 };
+
 
 /***/ }),
 
@@ -50905,11 +50049,9 @@ module.exports = function(originalModule) {
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
  */
@@ -50933,12 +50075,10 @@ module.exports = isNode;
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -51161,12 +50301,10 @@ function baseToString(value) {
 
 "use strict";
 /**
- * Copyright 2014-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -51197,12 +50335,10 @@ module.exports = ReactEmptyComponent;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
 
@@ -51227,189 +50363,188 @@ module.exports = function(isValidElement) {
 "use strict";
 
 // ECMAScript 6 symbols shim
-var global         = __webpack_require__("7KvD")
-  , has            = __webpack_require__("D2L2")
-  , DESCRIPTORS    = __webpack_require__("+E39")
-  , $export        = __webpack_require__("kM2E")
-  , redefine       = __webpack_require__("880/")
-  , META           = __webpack_require__("06OY").KEY
-  , $fails         = __webpack_require__("S82l")
-  , shared         = __webpack_require__("e8AB")
-  , setToStringTag = __webpack_require__("e6n0")
-  , uid            = __webpack_require__("3Eo+")
-  , wks            = __webpack_require__("dSzd")
-  , wksExt         = __webpack_require__("Kh4W")
-  , wksDefine      = __webpack_require__("crlp")
-  , keyOf          = __webpack_require__("6vZM")
-  , enumKeys       = __webpack_require__("Xc4G")
-  , isArray        = __webpack_require__("7UMu")
-  , anObject       = __webpack_require__("77Pl")
-  , toIObject      = __webpack_require__("TcQ7")
-  , toPrimitive    = __webpack_require__("MmMw")
-  , createDesc     = __webpack_require__("X8DO")
-  , _create        = __webpack_require__("Yobk")
-  , gOPNExt        = __webpack_require__("Rrel")
-  , $GOPD          = __webpack_require__("LKZe")
-  , $DP            = __webpack_require__("evD5")
-  , $keys          = __webpack_require__("lktj")
-  , gOPD           = $GOPD.f
-  , dP             = $DP.f
-  , gOPN           = gOPNExt.f
-  , $Symbol        = global.Symbol
-  , $JSON          = global.JSON
-  , _stringify     = $JSON && $JSON.stringify
-  , PROTOTYPE      = 'prototype'
-  , HIDDEN         = wks('_hidden')
-  , TO_PRIMITIVE   = wks('toPrimitive')
-  , isEnum         = {}.propertyIsEnumerable
-  , SymbolRegistry = shared('symbol-registry')
-  , AllSymbols     = shared('symbols')
-  , OPSymbols      = shared('op-symbols')
-  , ObjectProto    = Object[PROTOTYPE]
-  , USE_NATIVE     = typeof $Symbol == 'function'
-  , QObject        = global.QObject;
+var global = __webpack_require__("7KvD");
+var has = __webpack_require__("D2L2");
+var DESCRIPTORS = __webpack_require__("+E39");
+var $export = __webpack_require__("kM2E");
+var redefine = __webpack_require__("880/");
+var META = __webpack_require__("06OY").KEY;
+var $fails = __webpack_require__("S82l");
+var shared = __webpack_require__("e8AB");
+var setToStringTag = __webpack_require__("e6n0");
+var uid = __webpack_require__("3Eo+");
+var wks = __webpack_require__("dSzd");
+var wksExt = __webpack_require__("Kh4W");
+var wksDefine = __webpack_require__("crlp");
+var enumKeys = __webpack_require__("Xc4G");
+var isArray = __webpack_require__("7UMu");
+var anObject = __webpack_require__("77Pl");
+var toIObject = __webpack_require__("TcQ7");
+var toPrimitive = __webpack_require__("MmMw");
+var createDesc = __webpack_require__("X8DO");
+var _create = __webpack_require__("Yobk");
+var gOPNExt = __webpack_require__("Rrel");
+var $GOPD = __webpack_require__("LKZe");
+var $DP = __webpack_require__("evD5");
+var $keys = __webpack_require__("lktj");
+var gOPD = $GOPD.f;
+var dP = $DP.f;
+var gOPN = gOPNExt.f;
+var $Symbol = global.Symbol;
+var $JSON = global.JSON;
+var _stringify = $JSON && $JSON.stringify;
+var PROTOTYPE = 'prototype';
+var HIDDEN = wks('_hidden');
+var TO_PRIMITIVE = wks('toPrimitive');
+var isEnum = {}.propertyIsEnumerable;
+var SymbolRegistry = shared('symbol-registry');
+var AllSymbols = shared('symbols');
+var OPSymbols = shared('op-symbols');
+var ObjectProto = Object[PROTOTYPE];
+var USE_NATIVE = typeof $Symbol == 'function';
+var QObject = global.QObject;
 // Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
 var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
 
 // fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
-var setSymbolDesc = DESCRIPTORS && $fails(function(){
+var setSymbolDesc = DESCRIPTORS && $fails(function () {
   return _create(dP({}, 'a', {
-    get: function(){ return dP(this, 'a', {value: 7}).a; }
+    get: function () { return dP(this, 'a', { value: 7 }).a; }
   })).a != 7;
-}) ? function(it, key, D){
+}) ? function (it, key, D) {
   var protoDesc = gOPD(ObjectProto, key);
-  if(protoDesc)delete ObjectProto[key];
+  if (protoDesc) delete ObjectProto[key];
   dP(it, key, D);
-  if(protoDesc && it !== ObjectProto)dP(ObjectProto, key, protoDesc);
+  if (protoDesc && it !== ObjectProto) dP(ObjectProto, key, protoDesc);
 } : dP;
 
-var wrap = function(tag){
+var wrap = function (tag) {
   var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
   sym._k = tag;
   return sym;
 };
 
-var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function(it){
+var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function (it) {
   return typeof it == 'symbol';
-} : function(it){
+} : function (it) {
   return it instanceof $Symbol;
 };
 
-var $defineProperty = function defineProperty(it, key, D){
-  if(it === ObjectProto)$defineProperty(OPSymbols, key, D);
+var $defineProperty = function defineProperty(it, key, D) {
+  if (it === ObjectProto) $defineProperty(OPSymbols, key, D);
   anObject(it);
   key = toPrimitive(key, true);
   anObject(D);
-  if(has(AllSymbols, key)){
-    if(!D.enumerable){
-      if(!has(it, HIDDEN))dP(it, HIDDEN, createDesc(1, {}));
+  if (has(AllSymbols, key)) {
+    if (!D.enumerable) {
+      if (!has(it, HIDDEN)) dP(it, HIDDEN, createDesc(1, {}));
       it[HIDDEN][key] = true;
     } else {
-      if(has(it, HIDDEN) && it[HIDDEN][key])it[HIDDEN][key] = false;
-      D = _create(D, {enumerable: createDesc(0, false)});
+      if (has(it, HIDDEN) && it[HIDDEN][key]) it[HIDDEN][key] = false;
+      D = _create(D, { enumerable: createDesc(0, false) });
     } return setSymbolDesc(it, key, D);
   } return dP(it, key, D);
 };
-var $defineProperties = function defineProperties(it, P){
+var $defineProperties = function defineProperties(it, P) {
   anObject(it);
-  var keys = enumKeys(P = toIObject(P))
-    , i    = 0
-    , l = keys.length
-    , key;
-  while(l > i)$defineProperty(it, key = keys[i++], P[key]);
+  var keys = enumKeys(P = toIObject(P));
+  var i = 0;
+  var l = keys.length;
+  var key;
+  while (l > i) $defineProperty(it, key = keys[i++], P[key]);
   return it;
 };
-var $create = function create(it, P){
+var $create = function create(it, P) {
   return P === undefined ? _create(it) : $defineProperties(_create(it), P);
 };
-var $propertyIsEnumerable = function propertyIsEnumerable(key){
+var $propertyIsEnumerable = function propertyIsEnumerable(key) {
   var E = isEnum.call(this, key = toPrimitive(key, true));
-  if(this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return false;
+  if (this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return false;
   return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
 };
-var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key){
-  it  = toIObject(it);
+var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key) {
+  it = toIObject(it);
   key = toPrimitive(key, true);
-  if(it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return;
+  if (it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return;
   var D = gOPD(it, key);
-  if(D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key]))D.enumerable = true;
+  if (D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key])) D.enumerable = true;
   return D;
 };
-var $getOwnPropertyNames = function getOwnPropertyNames(it){
-  var names  = gOPN(toIObject(it))
-    , result = []
-    , i      = 0
-    , key;
-  while(names.length > i){
-    if(!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META)result.push(key);
+var $getOwnPropertyNames = function getOwnPropertyNames(it) {
+  var names = gOPN(toIObject(it));
+  var result = [];
+  var i = 0;
+  var key;
+  while (names.length > i) {
+    if (!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META) result.push(key);
   } return result;
 };
-var $getOwnPropertySymbols = function getOwnPropertySymbols(it){
-  var IS_OP  = it === ObjectProto
-    , names  = gOPN(IS_OP ? OPSymbols : toIObject(it))
-    , result = []
-    , i      = 0
-    , key;
-  while(names.length > i){
-    if(has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true))result.push(AllSymbols[key]);
+var $getOwnPropertySymbols = function getOwnPropertySymbols(it) {
+  var IS_OP = it === ObjectProto;
+  var names = gOPN(IS_OP ? OPSymbols : toIObject(it));
+  var result = [];
+  var i = 0;
+  var key;
+  while (names.length > i) {
+    if (has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true)) result.push(AllSymbols[key]);
   } return result;
 };
 
 // 19.4.1.1 Symbol([description])
-if(!USE_NATIVE){
-  $Symbol = function Symbol(){
-    if(this instanceof $Symbol)throw TypeError('Symbol is not a constructor!');
+if (!USE_NATIVE) {
+  $Symbol = function Symbol() {
+    if (this instanceof $Symbol) throw TypeError('Symbol is not a constructor!');
     var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
-    var $set = function(value){
-      if(this === ObjectProto)$set.call(OPSymbols, value);
-      if(has(this, HIDDEN) && has(this[HIDDEN], tag))this[HIDDEN][tag] = false;
+    var $set = function (value) {
+      if (this === ObjectProto) $set.call(OPSymbols, value);
+      if (has(this, HIDDEN) && has(this[HIDDEN], tag)) this[HIDDEN][tag] = false;
       setSymbolDesc(this, tag, createDesc(1, value));
     };
-    if(DESCRIPTORS && setter)setSymbolDesc(ObjectProto, tag, {configurable: true, set: $set});
+    if (DESCRIPTORS && setter) setSymbolDesc(ObjectProto, tag, { configurable: true, set: $set });
     return wrap(tag);
   };
-  redefine($Symbol[PROTOTYPE], 'toString', function toString(){
+  redefine($Symbol[PROTOTYPE], 'toString', function toString() {
     return this._k;
   });
 
   $GOPD.f = $getOwnPropertyDescriptor;
-  $DP.f   = $defineProperty;
+  $DP.f = $defineProperty;
   __webpack_require__("n0T6").f = gOPNExt.f = $getOwnPropertyNames;
-  __webpack_require__("NpIQ").f  = $propertyIsEnumerable;
+  __webpack_require__("NpIQ").f = $propertyIsEnumerable;
   __webpack_require__("1kS7").f = $getOwnPropertySymbols;
 
-  if(DESCRIPTORS && !__webpack_require__("O4g8")){
+  if (DESCRIPTORS && !__webpack_require__("O4g8")) {
     redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
   }
 
-  wksExt.f = function(name){
+  wksExt.f = function (name) {
     return wrap(wks(name));
-  }
+  };
 }
 
-$export($export.G + $export.W + $export.F * !USE_NATIVE, {Symbol: $Symbol});
+$export($export.G + $export.W + $export.F * !USE_NATIVE, { Symbol: $Symbol });
 
-for(var symbols = (
+for (var es6Symbols = (
   // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
   'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
-).split(','), i = 0; symbols.length > i; )wks(symbols[i++]);
+).split(','), j = 0; es6Symbols.length > j;)wks(es6Symbols[j++]);
 
-for(var symbols = $keys(wks.store), i = 0; symbols.length > i; )wksDefine(symbols[i++]);
+for (var wellKnownSymbols = $keys(wks.store), k = 0; wellKnownSymbols.length > k;) wksDefine(wellKnownSymbols[k++]);
 
 $export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
   // 19.4.2.1 Symbol.for(key)
-  'for': function(key){
+  'for': function (key) {
     return has(SymbolRegistry, key += '')
       ? SymbolRegistry[key]
       : SymbolRegistry[key] = $Symbol(key);
   },
   // 19.4.2.5 Symbol.keyFor(sym)
-  keyFor: function keyFor(key){
-    if(isSymbol(key))return keyOf(SymbolRegistry, key);
-    throw TypeError(key + ' is not a symbol!');
+  keyFor: function keyFor(sym) {
+    if (!isSymbol(sym)) throw TypeError(sym + ' is not a symbol!');
+    for (var key in SymbolRegistry) if (SymbolRegistry[key] === sym) return key;
   },
-  useSetter: function(){ setter = true; },
-  useSimple: function(){ setter = false; }
+  useSetter: function () { setter = true; },
+  useSimple: function () { setter = false; }
 });
 
 $export($export.S + $export.F * !USE_NATIVE, 'Object', {
@@ -51428,24 +50563,24 @@ $export($export.S + $export.F * !USE_NATIVE, 'Object', {
 });
 
 // 24.3.2 JSON.stringify(value [, replacer [, space]])
-$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function(){
+$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function () {
   var S = $Symbol();
   // MS Edge converts symbol values to JSON as {}
   // WebKit converts symbol values to JSON as null
   // V8 throws on boxed symbols
-  return _stringify([S]) != '[null]' || _stringify({a: S}) != '{}' || _stringify(Object(S)) != '{}';
+  return _stringify([S]) != '[null]' || _stringify({ a: S }) != '{}' || _stringify(Object(S)) != '{}';
 })), 'JSON', {
-  stringify: function stringify(it){
-    if(it === undefined || isSymbol(it))return; // IE8 returns string on undefined
-    var args = [it]
-      , i    = 1
-      , replacer, $replacer;
-    while(arguments.length > i)args.push(arguments[i++]);
+  stringify: function stringify(it) {
+    if (it === undefined || isSymbol(it)) return; // IE8 returns string on undefined
+    var args = [it];
+    var i = 1;
+    var replacer, $replacer;
+    while (arguments.length > i) args.push(arguments[i++]);
     replacer = args[1];
-    if(typeof replacer == 'function')$replacer = replacer;
-    if($replacer || !isArray(replacer))replacer = function(key, value){
-      if($replacer)value = $replacer.call(this, key, value);
-      if(!isSymbol(value))return value;
+    if (typeof replacer == 'function') $replacer = replacer;
+    if ($replacer || !isArray(replacer)) replacer = function (key, value) {
+      if ($replacer) value = $replacer.call(this, key, value);
+      if (!isSymbol(value)) return value;
     };
     args[1] = replacer;
     return _stringify.apply($JSON, args);
@@ -51460,6 +50595,7 @@ setToStringTag($Symbol, 'Symbol');
 setToStringTag(Math, 'Math', true);
 // 24.3.3 JSON[@@toStringTag]
 setToStringTag(global.JSON, 'JSON', true);
+
 
 /***/ }),
 
@@ -51486,6 +50622,20 @@ var storeShape = __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.shape({
   dispatch: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired,
   getState: __WEBPACK_IMPORTED_MODULE_0_prop_types___default.a.func.isRequired
 });
+
+/***/ }),
+
+/***/ "fkB2":
+/***/ (function(module, exports, __webpack_require__) {
+
+var toInteger = __webpack_require__("UuGF");
+var max = Math.max;
+var min = Math.min;
+module.exports = function (index, length) {
+  index = toInteger(index);
+  return index < 0 ? max(index + length, 0) : min(index, length);
+};
+
 
 /***/ }),
 
@@ -51556,12 +50706,10 @@ function baseUnary(func) {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -51796,8 +50944,8 @@ function sagaMiddlewareFactory() {
         if (sagaMonitor && sagaMonitor.actionDispatched) {
           sagaMonitor.actionDispatched(action);
         }
-        var result = next(action // hit reducers
-        );sagaEmitter.emit(action);
+        var result = next(action); // hit reducers
+        sagaEmitter.emit(action);
         return result;
       };
     };
@@ -51823,11 +50971,9 @@ function sagaMiddlewareFactory() {
 "use strict";
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -51943,12 +51089,10 @@ module.exports = isBuffer;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -51970,12 +51114,10 @@ module.exports = getNextDebugID;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  */
 
 
@@ -52015,23 +51157,24 @@ module.exports = stubFalse;
 /***/ "h65t":
 /***/ (function(module, exports, __webpack_require__) {
 
-var toInteger = __webpack_require__("UuGF")
-  , defined   = __webpack_require__("52gC");
+var toInteger = __webpack_require__("UuGF");
+var defined = __webpack_require__("52gC");
 // true  -> String#at
 // false -> String#codePointAt
-module.exports = function(TO_STRING){
-  return function(that, pos){
-    var s = String(defined(that))
-      , i = toInteger(pos)
-      , l = s.length
-      , a, b;
-    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
+module.exports = function (TO_STRING) {
+  return function (that, pos) {
+    var s = String(defined(that));
+    var i = toInteger(pos);
+    var l = s.length;
+    var a, b;
+    if (i < 0 || i >= l) return TO_STRING ? '' : undefined;
     a = s.charCodeAt(i);
     return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
       ? TO_STRING ? s.charAt(i) : a
       : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
   };
 };
+
 
 /***/ }),
 
@@ -52074,14 +51217,15 @@ module.exports = isKey;
 /***/ "hJx8":
 /***/ (function(module, exports, __webpack_require__) {
 
-var dP         = __webpack_require__("evD5")
-  , createDesc = __webpack_require__("X8DO");
-module.exports = __webpack_require__("+E39") ? function(object, key, value){
+var dP = __webpack_require__("evD5");
+var createDesc = __webpack_require__("X8DO");
+module.exports = __webpack_require__("+E39") ? function (object, key, value) {
   return dP.f(object, key, createDesc(1, value));
-} : function(object, key, value){
+} : function (object, key, value) {
   object[key] = value;
   return object;
 };
+
 
 /***/ }),
 
@@ -52090,12 +51234,10 @@ module.exports = __webpack_require__("+E39") ? function(object, key, value){
 
 "use strict";
 /**
- * Copyright 2015-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2015-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -52263,34 +51405,49 @@ var REACT_STATICS = {
 };
 
 var KNOWN_STATICS = {
-    name: true,
-    length: true,
-    prototype: true,
-    caller: true,
-    arguments: true,
-    arity: true
+  name: true,
+  length: true,
+  prototype: true,
+  caller: true,
+  callee: true,
+  arguments: true,
+  arity: true
 };
 
-var isGetOwnPropertySymbolsAvailable = typeof Object.getOwnPropertySymbols === 'function';
+var defineProperty = Object.defineProperty;
+var getOwnPropertyNames = Object.getOwnPropertyNames;
+var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+var getPrototypeOf = Object.getPrototypeOf;
+var objectPrototype = getPrototypeOf && getPrototypeOf(Object);
 
-module.exports = function hoistNonReactStatics(targetComponent, sourceComponent, customStatics) {
+module.exports = function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
     if (typeof sourceComponent !== 'string') { // don't hoist over string (html) components
-        var keys = Object.getOwnPropertyNames(sourceComponent);
 
-        /* istanbul ignore else */
-        if (isGetOwnPropertySymbolsAvailable) {
-            keys = keys.concat(Object.getOwnPropertySymbols(sourceComponent));
+        if (objectPrototype) {
+            var inheritedComponent = getPrototypeOf(sourceComponent);
+            if (inheritedComponent && inheritedComponent !== objectPrototype) {
+                hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
+            }
+        }
+
+        var keys = getOwnPropertyNames(sourceComponent);
+
+        if (getOwnPropertySymbols) {
+            keys = keys.concat(getOwnPropertySymbols(sourceComponent));
         }
 
         for (var i = 0; i < keys.length; ++i) {
-            if (!REACT_STATICS[keys[i]] && !KNOWN_STATICS[keys[i]] && (!customStatics || !customStatics[keys[i]])) {
-                try {
-                    targetComponent[keys[i]] = sourceComponent[keys[i]];
-                } catch (error) {
-
-                }
+            var key = keys[i];
+            if (!REACT_STATICS[key] && !KNOWN_STATICS[key] && (!blacklist || !blacklist[key])) {
+                var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
+                try { // Avoid failures from read-only properties
+                    defineProperty(targetComponent, key, descriptor);
+                } catch (e) {}
             }
         }
+
+        return targetComponent;
     }
 
     return targetComponent;
@@ -52461,8 +51618,8 @@ var ChromeFields = exports.ChromeFields = function (_React$Component) {
       } else if (data.h || data.s || data.l) {
         _this.props.onChange({
           h: data.h || _this.props.hsl.h,
-          s: data.s && data.s.replace('%', '') || _this.props.hsl.s,
-          l: data.l && data.l.replace('%', '') || _this.props.hsl.l,
+          s: data.s && data.s || _this.props.hsl.s,
+          l: data.l && data.l || _this.props.hsl.l,
           source: 'hsl'
         }, e);
       }
@@ -52492,6 +51649,8 @@ var ChromeFields = exports.ChromeFields = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var styles = (0, _reactcss2.default)({
         'default': {
           wrap: {
@@ -52683,7 +51842,9 @@ var ChromeFields = exports.ChromeFields = function (_React$Component) {
           { style: styles.toggle },
           _react2.default.createElement(
             'div',
-            { style: styles.icon, onClick: this.toggleViews, ref: 'icon' },
+            { style: styles.icon, onClick: this.toggleViews, ref: function ref(icon) {
+                return _this2.icon = icon;
+              } },
             _react2.default.createElement(
               'svg',
               {
@@ -52694,12 +51855,16 @@ var ChromeFields = exports.ChromeFields = function (_React$Component) {
                 onMouseOut: this.hideHighlight
               },
               _react2.default.createElement('path', {
-                ref: 'iconUp',
+                ref: function ref(iconUp) {
+                  return _this2.iconUp = iconUp;
+                },
                 fill: '#333',
                 d: 'M12,5.83L15.17,9L16.58,7.59L12,3L7.41,7.59L8.83,9L12,5.83Z'
               }),
               _react2.default.createElement('path', {
-                ref: 'iconDown',
+                ref: function ref(iconDown) {
+                  return _this2.iconDown = iconDown;
+                },
                 fill: '#333',
                 d: 'M12,18.17L8.83,15L7.42,16.41L12,21L16.59,16.41L15.17,15Z'
               })
@@ -52771,6 +51936,15 @@ var ColorWrap = exports.ColorWrap = function ColorWrap(Picker) {
         }
       };
 
+      _this.handleSwatchHover = function (data, event) {
+        var isValidColor = _color2.default.simpleCheckForValidColor(data);
+        if (isValidColor) {
+          var colors = _color2.default.toState(data, data.h || _this.state.oldHue);
+          _this.setState(colors);
+          _this.props.onSwatchHover && _this.props.onSwatchHover(colors, event);
+        }
+      };
+
       _this.state = _extends({}, _color2.default.toState(props.color, 0));
 
       _this.debounce = (0, _debounce2.default)(function (fn, data, event) {
@@ -52787,21 +51961,30 @@ var ColorWrap = exports.ColorWrap = function ColorWrap(Picker) {
     }, {
       key: 'render',
       value: function render() {
-        return _react2.default.createElement(Picker, _extends({}, this.props, this.state, { onChange: this.handleChange }));
+        var optionalEvents = {};
+        if (this.props.onSwatchHover) {
+          optionalEvents.onSwatchHover = this.handleSwatchHover;
+        }
+
+        return _react2.default.createElement(Picker, _extends({}, this.props, this.state, {
+          onChange: this.handleChange
+        }, optionalEvents));
       }
     }]);
 
     return ColorPicker;
   }(_react.PureComponent || _react.Component);
 
-  ColorPicker.defaultProps = {
+  ColorPicker.propTypes = _extends({}, Picker.propTypes);
+
+  ColorPicker.defaultProps = _extends({}, Picker.defaultProps, {
     color: {
       h: 250,
       s: 0.50,
       l: 0.20,
       a: 1
     }
-  };
+  });
 
   return ColorPicker;
 };
@@ -52860,11 +52043,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* eslint-disable no-invalid-this */
+
 
 var handleFocus = exports.handleFocus = function handleFocus(Component) {
   var Span = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'span';
-
   return function (_React$Component) {
     _inherits(Focus, _React$Component);
 
@@ -52938,12 +52121,10 @@ module.exports = assignValue;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -53000,7 +52181,9 @@ if (true) {
   if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function' && typeof document !== 'undefined' && typeof document.createEvent === 'function') {
     var fakeNode = document.createElement('react');
     ReactErrorUtils.invokeGuardedCallback = function (name, func, a) {
-      var boundFunc = func.bind(null, a);
+      var boundFunc = function () {
+        func(a);
+      };
       var evtType = 'react-' + name;
       fakeNode.addEventListener(evtType, boundFunc, false);
       var evt = document.createEvent('Event');
@@ -53088,12 +52271,10 @@ function baseIsArguments(value) {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -53138,12 +52319,10 @@ module.exports = adler32;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -53408,12 +52587,10 @@ module.exports = assocIndexOf;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -53718,7 +52895,7 @@ var Alpha = exports.Alpha = function (_ref) {
     }
 
     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref2 = Alpha.__proto__ || Object.getPrototypeOf(Alpha)).call.apply(_ref2, [this].concat(args))), _this), _this.handleChange = function (e, skip) {
-      var change = alpha.calculateChange(e, skip, _this.props, _this.refs.container);
+      var change = alpha.calculateChange(e, skip, _this.props, _this.container);
       change && _this.props.onChange && _this.props.onChange(change, e);
     }, _this.handleMouseDown = function (e) {
       _this.handleChange(e, true);
@@ -53740,6 +52917,8 @@ var Alpha = exports.Alpha = function (_ref) {
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var rgb = this.props.rgb;
       var styles = (0, _reactcss2.default)({
         'default': {
@@ -53804,7 +52983,9 @@ var Alpha = exports.Alpha = function (_ref) {
           'div',
           {
             style: styles.container,
-            ref: 'container',
+            ref: function ref(container) {
+              return _this2.container = container;
+            },
             onMouseDown: this.handleMouseDown,
             onTouchMove: this.handleChange,
             onTouchStart: this.handleChange
@@ -53849,8 +53030,6 @@ var _color = __webpack_require__("nzRJ");
 
 var _color2 = _interopRequireDefault(_color);
 
-var _reactMaterialDesign = __webpack_require__("DdXV");
-
 var _common = __webpack_require__("SZC+");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -53858,7 +53037,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var Material = exports.Material = function Material(_ref) {
   var onChange = _ref.onChange,
       hex = _ref.hex,
-      rgb = _ref.rgb;
+      rgb = _ref.rgb,
+      _ref$className = _ref.className,
+      className = _ref$className === undefined ? '' : _ref$className;
 
   var styles = (0, _reactcss2.default)({
     'default': {
@@ -53944,11 +53125,11 @@ var Material = exports.Material = function Material(_ref) {
   };
 
   return _react2.default.createElement(
-    _reactMaterialDesign.Raised,
+    _common.Raised,
     null,
     _react2.default.createElement(
       'div',
-      { style: styles.material, className: 'material-picker' },
+      { style: styles.material, className: 'material-picker ' + className },
       _react2.default.createElement(_common.EditableInput, {
         style: { wrap: styles.HEXwrap, input: styles.HEXinput, label: styles.HEXlabel },
         label: 'hex',
@@ -54131,12 +53312,10 @@ exports.default = PhotoshopBotton;
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -54225,12 +53404,10 @@ module.exports = checkReactTypeSpec;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -54274,28 +53451,28 @@ module.exports = SyntheticTouchEvent;
 /***/ "kM2E":
 /***/ (function(module, exports, __webpack_require__) {
 
-var global    = __webpack_require__("7KvD")
-  , core      = __webpack_require__("FeBl")
-  , ctx       = __webpack_require__("+ZMJ")
-  , hide      = __webpack_require__("hJx8")
-  , PROTOTYPE = 'prototype';
+var global = __webpack_require__("7KvD");
+var core = __webpack_require__("FeBl");
+var ctx = __webpack_require__("+ZMJ");
+var hide = __webpack_require__("hJx8");
+var PROTOTYPE = 'prototype';
 
-var $export = function(type, name, source){
-  var IS_FORCED = type & $export.F
-    , IS_GLOBAL = type & $export.G
-    , IS_STATIC = type & $export.S
-    , IS_PROTO  = type & $export.P
-    , IS_BIND   = type & $export.B
-    , IS_WRAP   = type & $export.W
-    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
-    , expProto  = exports[PROTOTYPE]
-    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
-    , key, own, out;
-  if(IS_GLOBAL)source = name;
-  for(key in source){
+var $export = function (type, name, source) {
+  var IS_FORCED = type & $export.F;
+  var IS_GLOBAL = type & $export.G;
+  var IS_STATIC = type & $export.S;
+  var IS_PROTO = type & $export.P;
+  var IS_BIND = type & $export.B;
+  var IS_WRAP = type & $export.W;
+  var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
+  var expProto = exports[PROTOTYPE];
+  var target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE];
+  var key, own, out;
+  if (IS_GLOBAL) source = name;
+  for (key in source) {
     // contains in native
     own = !IS_FORCED && target && target[key] !== undefined;
-    if(own && key in exports)continue;
+    if (own && key in exports) continue;
     // export native or passed
     out = own ? target[key] : source[key];
     // prevent global pollution for namespaces
@@ -54303,11 +53480,11 @@ var $export = function(type, name, source){
     // bind timers to global for call from export context
     : IS_BIND && own ? ctx(out, global)
     // wrap global constructors for prevent change them in library
-    : IS_WRAP && target[key] == out ? (function(C){
-      var F = function(a, b, c){
-        if(this instanceof C){
-          switch(arguments.length){
-            case 0: return new C;
+    : IS_WRAP && target[key] == out ? (function (C) {
+      var F = function (a, b, c) {
+        if (this instanceof C) {
+          switch (arguments.length) {
+            case 0: return new C();
             case 1: return new C(a);
             case 2: return new C(a, b);
           } return new C(a, b, c);
@@ -54318,10 +53495,10 @@ var $export = function(type, name, source){
     // make static versions for prototype methods
     })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
     // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
-    if(IS_PROTO){
+    if (IS_PROTO) {
       (exports.virtual || (exports.virtual = {}))[key] = out;
       // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
-      if(type & $export.R && expProto && !expProto[key])hide(expProto, key, out);
+      if (type & $export.R && expProto && !expProto[key]) hide(expProto, key, out);
     }
   }
 };
@@ -54333,8 +53510,9 @@ $export.P = 8;   // proto
 $export.B = 16;  // bind
 $export.W = 32;  // wrap
 $export.U = 64;  // safe
-$export.R = 128; // real proto method for `library` 
+$export.R = 128; // real proto method for `library`
 module.exports = $export;
+
 
 /***/ }),
 
@@ -54343,12 +53521,10 @@ module.exports = $export;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -54577,12 +53753,10 @@ module.exports = TransactionImpl;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -55343,6 +54517,10 @@ ReactDOMComponent.Mixin = {
         // happen after `_updateDOMProperties`. Otherwise HTML5 input validations
         // raise warnings and prevent the new value from being assigned.
         ReactDOMInput.updateWrapper(this);
+
+        // We also check that we haven't missed a value update, such as a
+        // Radio group shifting the checked value to another named radio input.
+        inputValueTracking.updateValueIfChanged(this);
         break;
       case 'textarea':
         ReactDOMTextarea.updateWrapper(this);
@@ -55626,7 +54804,9 @@ var AlphaPicker = exports.AlphaPicker = function AlphaPicker(_ref) {
       direction = _ref.direction,
       style = _ref.style,
       renderers = _ref.renderers,
-      pointer = _ref.pointer;
+      pointer = _ref.pointer,
+      _ref$className = _ref.className,
+      className = _ref$className === undefined ? '' : _ref$className;
 
   var styles = (0, _reactcss2.default)({
     'default': {
@@ -55644,7 +54824,7 @@ var AlphaPicker = exports.AlphaPicker = function AlphaPicker(_ref) {
 
   return _react2.default.createElement(
     'div',
-    { style: styles.picker, className: 'alpha-picker' },
+    { style: styles.picker, className: 'alpha-picker ' + className },
     _react2.default.createElement(_common.Alpha, _extends({}, styles.alpha, {
       rgb: rgb,
       hsl: hsl,
@@ -55752,12 +54932,10 @@ module.exports = cloneDeep;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -56025,10 +55203,11 @@ function compose() {
 /***/ "lOnJ":
 /***/ (function(module, exports) {
 
-module.exports = function(it){
-  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+module.exports = function (it) {
+  if (typeof it != 'function') throw TypeError(it + ' is not a function!');
   return it;
 };
+
 
 /***/ }),
 
@@ -56037,12 +55216,10 @@ module.exports = function(it){
 
 "use strict";
 /**
- * Copyright 2015-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2015-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -56308,12 +55485,13 @@ module.exports = arrayFilter;
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys       = __webpack_require__("Ibhu")
-  , enumBugKeys = __webpack_require__("xnc9");
+var $keys = __webpack_require__("Ibhu");
+var enumBugKeys = __webpack_require__("xnc9");
 
-module.exports = Object.keys || function keys(O){
+module.exports = Object.keys || function keys(O) {
   return $keys(O, enumBugKeys);
 };
+
 
 /***/ }),
 
@@ -56322,12 +55500,10 @@ module.exports = Object.keys || function keys(O){
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -56367,12 +55543,10 @@ module.exports = SyntheticTransitionEvent;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -56449,11 +55623,9 @@ module.exports = cloneBuffer;
 "use strict";
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
  */
@@ -56513,12 +55685,10 @@ module.exports = getValue;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -56693,12 +55863,13 @@ function verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, dis
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys      = __webpack_require__("Ibhu")
-  , hiddenKeys = __webpack_require__("xnc9").concat('length', 'prototype');
+var $keys = __webpack_require__("Ibhu");
+var hiddenKeys = __webpack_require__("xnc9").concat('length', 'prototype');
 
-exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
+exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   return $keys(O, hiddenKeys);
 };
+
 
 /***/ }),
 
@@ -56707,12 +55878,10 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -56947,6 +56116,10 @@ var _react = __webpack_require__("U7vG");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
 var _reactcss = __webpack_require__("TmTn");
 
 var _reactcss2 = _interopRequireDefault(_reactcss);
@@ -56973,7 +56146,9 @@ var Sketch = exports.Sketch = function Sketch(_ref) {
       onSwatchHover = _ref.onSwatchHover,
       disableAlpha = _ref.disableAlpha,
       presetColors = _ref.presetColors,
-      renderers = _ref.renderers;
+      renderers = _ref.renderers,
+      _ref$className = _ref.className,
+      className = _ref$className === undefined ? '' : _ref$className;
 
   var styles = (0, _reactcss2.default)({
     'default': {
@@ -57052,7 +56227,7 @@ var Sketch = exports.Sketch = function Sketch(_ref) {
 
   return _react2.default.createElement(
     'div',
-    { style: styles.picker, className: 'sketch-picker' },
+    { style: styles.picker, className: 'sketch-picker ' + className },
     _react2.default.createElement(
       'div',
       { style: styles.saturation },
@@ -57104,13 +56279,23 @@ var Sketch = exports.Sketch = function Sketch(_ref) {
       onChange: onChange,
       disableAlpha: disableAlpha
     }),
-    _react2.default.createElement(_SketchPresetColors2.default, { colors: presetColors, onClick: onChange, onSwatchHover: onSwatchHover })
+    _react2.default.createElement(_SketchPresetColors2.default, {
+      colors: presetColors,
+      onClick: onChange,
+      onSwatchHover: onSwatchHover
+    })
   );
 };
 
+Sketch.propTypes = {
+  disableAlpha: _propTypes2.default.bool,
+  width: _propTypes2.default.oneOfType([_propTypes2.default.string, _propTypes2.default.number])
+};
+
 Sketch.defaultProps = {
-  presetColors: ['#D0021B', '#F5A623', '#F8E71C', '#8B572A', '#7ED321', '#417505', '#BD10E0', '#9013FE', '#4A90E2', '#50E3C2', '#B8E986', '#000000', '#4A4A4A', '#9B9B9B', '#FFFFFF'],
-  width: 200
+  disableAlpha: false,
+  width: 200,
+  presetColors: ['#D0021B', '#F5A623', '#F8E71C', '#8B572A', '#7ED321', '#417505', '#BD10E0', '#9013FE', '#4A90E2', '#50E3C2', '#B8E986', '#000000', '#4A4A4A', '#9B9B9B', '#FFFFFF']
 };
 
 exports.default = (0, _common.ColorWrap)(Sketch);
@@ -57126,11 +56311,13 @@ exports.default = (0, _common.ColorWrap)(Sketch);
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.calculateChange = calculateChange;
-function calculateChange(e, skip, props, container) {
-  !skip && e.preventDefault();
-  var containerWidth = container.clientWidth;
-  var containerHeight = container.clientHeight;
+var calculateChange = exports.calculateChange = function calculateChange(e, skip, props, container) {
+  e.preventDefault();
+
+  var _container$getBoundin = container.getBoundingClientRect(),
+      containerWidth = _container$getBoundin.width,
+      containerHeight = _container$getBoundin.height;
+
   var x = typeof e.pageX === 'number' ? e.pageX : e.touches[0].pageX;
   var y = typeof e.pageY === 'number' ? e.pageY : e.touches[0].pageY;
   var left = x - (container.getBoundingClientRect().left + window.pageXOffset);
@@ -57156,7 +56343,7 @@ function calculateChange(e, skip, props, container) {
     a: props.hsl.a,
     source: 'rgb'
   };
-}
+};
 
 /***/ }),
 
@@ -57207,7 +56394,7 @@ var _each = __webpack_require__("9uKM");
 
 var _each2 = _interopRequireDefault(_each);
 
-var _tinycolor = __webpack_require__("Lza1");
+var _tinycolor = __webpack_require__("YrBu");
 
 var _tinycolor2 = _interopRequireDefault(_tinycolor);
 
@@ -57215,7 +56402,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.default = {
   simpleCheckForValidColor: function simpleCheckForValidColor(data) {
-    var keysToCheck = ['r', 'g', 'b', 'a', 'h', 's', 'a', 'v'];
+    var keysToCheck = ['r', 'g', 'b', 'a', 'h', 's', 'l', 'v'];
     var checked = 0;
     var passed = 0;
     (0, _each2.default)(keysToCheck, function (letter) {
@@ -57271,17 +56458,8 @@ var red = exports.red = {
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
  */
@@ -57784,7 +56962,7 @@ var EditableInput = exports.EditableInput = function (_ref) {
     };
 
     _this.handleChange = function (e) {
-      if (!!_this.props.label) {
+      if (_this.props.label) {
         _this.props.onChange && _this.props.onChange(_defineProperty({}, _this.props.label, e.target.value), e);
       } else {
         _this.props.onChange && _this.props.onChange(e.target.value, e);
@@ -57794,7 +56972,12 @@ var EditableInput = exports.EditableInput = function (_ref) {
     };
 
     _this.handleKeyDown = function (e) {
-      var number = Number(e.target.value);
+      // In case `e.target.value` is a percentage remove the `%` character
+      // and update accordingly with a percentage
+      // https://github.com/casesandberg/react-color/issues/383
+      var stringValue = String(e.target.value);
+      var isPercentage = stringValue.indexOf('%') > -1;
+      var number = Number(stringValue.replace(/%/g, ''));
       if (!isNaN(number)) {
         var amount = _this.props.arrowOffset || 1;
 
@@ -57806,7 +56989,11 @@ var EditableInput = exports.EditableInput = function (_ref) {
             _this.props.onChange && _this.props.onChange(number + amount, e);
           }
 
-          _this.setState({ value: number + amount });
+          if (isPercentage) {
+            _this.setState({ value: number + amount + '%' });
+          } else {
+            _this.setState({ value: number + amount });
+          }
         }
 
         // Down
@@ -57817,7 +57004,11 @@ var EditableInput = exports.EditableInput = function (_ref) {
             _this.props.onChange && _this.props.onChange(number - amount, e);
           }
 
-          _this.setState({ value: number - amount });
+          if (isPercentage) {
+            _this.setState({ value: number - amount + '%' });
+          } else {
+            _this.setState({ value: number - amount });
+          }
         }
       }
     };
@@ -57859,7 +57050,7 @@ var EditableInput = exports.EditableInput = function (_ref) {
   _createClass(EditableInput, [{
     key: 'componentWillReceiveProps',
     value: function componentWillReceiveProps(nextProps) {
-      var input = this.refs.input;
+      var input = this.input;
       if (nextProps.value !== this.state.value) {
         if (input === document.activeElement) {
           this.setState({ blurValue: String(nextProps.value).toUpperCase() });
@@ -57876,6 +57067,8 @@ var EditableInput = exports.EditableInput = function (_ref) {
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
       var styles = (0, _reactcss2.default)({
         'default': {
           wrap: {
@@ -57901,12 +57094,15 @@ var EditableInput = exports.EditableInput = function (_ref) {
         { style: styles.wrap },
         _react2.default.createElement('input', {
           style: styles.input,
-          ref: 'input',
+          ref: function ref(input) {
+            return _this2.input = input;
+          },
           value: this.state.value,
           onKeyDown: this.handleKeyDown,
           onChange: this.handleChange,
           onBlur: this.handleBlur,
-          placeholder: this.props.placeholder
+          placeholder: this.props.placeholder,
+          spellCheck: 'false'
         }),
         this.props.label ? _react2.default.createElement(
           'span',
@@ -58063,12 +57259,10 @@ module.exports = getMapData;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -58128,12 +57322,10 @@ module.exports = KeyEscapeUtils;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -58158,12 +57350,10 @@ module.exports = AutoFocusUtils;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -58223,12 +57413,10 @@ module.exports = KeyEscapeUtils;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -58692,19 +57880,20 @@ exports.default = SliderPointer;
 /***/ "qio6":
 /***/ (function(module, exports, __webpack_require__) {
 
-var dP       = __webpack_require__("evD5")
-  , anObject = __webpack_require__("77Pl")
-  , getKeys  = __webpack_require__("lktj");
+var dP = __webpack_require__("evD5");
+var anObject = __webpack_require__("77Pl");
+var getKeys = __webpack_require__("lktj");
 
-module.exports = __webpack_require__("+E39") ? Object.defineProperties : function defineProperties(O, Properties){
+module.exports = __webpack_require__("+E39") ? Object.defineProperties : function defineProperties(O, Properties) {
   anObject(O);
-  var keys   = getKeys(Properties)
-    , length = keys.length
-    , i = 0
-    , P;
-  while(length > i)dP.f(O, P = keys[i++], Properties[P]);
+  var keys = getKeys(Properties);
+  var length = keys.length;
+  var i = 0;
+  var P;
+  while (length > i) dP.f(O, P = keys[i++], Properties[P]);
   return O;
 };
+
 
 /***/ }),
 
@@ -58726,12 +57915,10 @@ module.exports = Uint8Array;
 
 "use strict";
 /**
- * Copyright 2016-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2016-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -59121,12 +58308,10 @@ function getNative(object, key) {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -59439,9 +58624,10 @@ exports.default = active;
 
 // 7.1.13 ToObject(argument)
 var defined = __webpack_require__("52gC");
-module.exports = function(it){
+module.exports = function (it) {
   return Object(defined(it));
 };
+
 
 /***/ }),
 
@@ -59625,12 +58811,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -59650,12 +58834,10 @@ module.exports = ReactDOMFeatureFlags;
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -59745,11 +58927,9 @@ module.exports = checkReactTypeSpec;
 "use strict";
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
  * 
@@ -60023,6 +59203,124 @@ function createAction(type) {
 
 /***/ }),
 
+/***/ "tRvz":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Raised = undefined;
+
+var _react = __webpack_require__("U7vG");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__("KSGD");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _reactcss = __webpack_require__("TmTn");
+
+var _reactcss2 = _interopRequireDefault(_reactcss);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Raised = exports.Raised = function Raised(_ref) {
+  var zDepth = _ref.zDepth,
+      radius = _ref.radius,
+      background = _ref.background,
+      children = _ref.children;
+
+  var styles = (0, _reactcss2.default)({
+    'default': {
+      wrap: {
+        position: 'relative',
+        display: 'inline-block'
+      },
+      content: {
+        position: 'relative'
+      },
+      bg: {
+        absolute: '0px 0px 0px 0px',
+        boxShadow: '0 ' + zDepth + 'px ' + zDepth * 4 + 'px rgba(0,0,0,.24)',
+        borderRadius: radius,
+        background: background
+      }
+    },
+    'zDepth-0': {
+      bg: {
+        boxShadow: 'none'
+      }
+    },
+
+    'zDepth-1': {
+      bg: {
+        boxShadow: '0 2px 10px rgba(0,0,0,.12), 0 2px 5px rgba(0,0,0,.16)'
+      }
+    },
+    'zDepth-2': {
+      bg: {
+        boxShadow: '0 6px 20px rgba(0,0,0,.19), 0 8px 17px rgba(0,0,0,.2)'
+      }
+    },
+    'zDepth-3': {
+      bg: {
+        boxShadow: '0 17px 50px rgba(0,0,0,.19), 0 12px 15px rgba(0,0,0,.24)'
+      }
+    },
+    'zDepth-4': {
+      bg: {
+        boxShadow: '0 25px 55px rgba(0,0,0,.21), 0 16px 28px rgba(0,0,0,.22)'
+      }
+    },
+    'zDepth-5': {
+      bg: {
+        boxShadow: '0 40px 77px rgba(0,0,0,.22), 0 27px 24px rgba(0,0,0,.2)'
+      }
+    },
+    'square': {
+      bg: {
+        borderRadius: '0'
+      }
+    },
+    'circle': {
+      bg: {
+        borderRadius: '50%'
+      }
+    }
+  }, { 'zDepth-1': zDepth === 1 });
+
+  return _react2.default.createElement(
+    'div',
+    { style: styles.wrap },
+    _react2.default.createElement('div', { style: styles.bg }),
+    _react2.default.createElement(
+      'div',
+      { style: styles.content },
+      children
+    )
+  );
+};
+
+Raised.propTypes = {
+  background: _propTypes2.default.string,
+  zDepth: _propTypes2.default.oneOf([0, 1, 2, 3, 4, 5]),
+  radius: _propTypes2.default.number
+};
+
+Raised.defaultProps = {
+  background: '#fff',
+  zDepth: 1,
+  radius: 2
+};
+
+exports.default = Raised;
+
+/***/ }),
+
 /***/ "tTKH":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -60100,12 +59398,10 @@ exports.default = SliderSwatch;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -60365,11 +59661,9 @@ module.exports = getRawTag;
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
  */
@@ -60458,12 +59752,10 @@ module.exports = hashDelete;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -60545,17 +59837,19 @@ module.exports = exports["default"];
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.render = render;
-exports.get = get;
 var checkboardCache = {};
 
-function render(c1, c2, size, serverCanvas) {
-  if (typeof document === 'undefined' && !serverCanvas) return null;
+var render = exports.render = function render(c1, c2, size, serverCanvas) {
+  if (typeof document === 'undefined' && !serverCanvas) {
+    return null;
+  }
   var canvas = serverCanvas ? new serverCanvas() : document.createElement('canvas');
   canvas.width = size * 2;
   canvas.height = size * 2;
   var ctx = canvas.getContext('2d');
-  if (!ctx) return null; // If no context can be found, return early.
+  if (!ctx) {
+    return null;
+  } // If no context can be found, return early.
   ctx.fillStyle = c1;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = c2;
@@ -60563,9 +59857,9 @@ function render(c1, c2, size, serverCanvas) {
   ctx.translate(size, size);
   ctx.fillRect(0, 0, size, size);
   return canvas.toDataURL();
-}
+};
 
-function get(c1, c2, size, serverCanvas) {
+var get = exports.get = function get(c1, c2, size, serverCanvas) {
   var key = c1 + '-' + c2 + '-' + size + (serverCanvas ? '-server' : '');
   var checkboard = render(c1, c2, size, serverCanvas);
 
@@ -60574,7 +59868,7 @@ function get(c1, c2, size, serverCanvas) {
   }
   checkboardCache[key] = checkboard;
   return checkboard;
-}
+};
 
 /***/ }),
 
@@ -60625,9 +59919,8 @@ function toString(value) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.calculateChange = calculateChange;
-function calculateChange(e, skip, props, container) {
-  !skip && e.preventDefault();
+var calculateChange = exports.calculateChange = function calculateChange(e, skip, props, container) {
+  e.preventDefault();
   var containerWidth = container.clientWidth;
   var containerHeight = container.clientHeight;
   var x = typeof e.pageX === 'number' ? e.pageX : e.touches[0].pageX;
@@ -60677,7 +59970,7 @@ function calculateChange(e, skip, props, container) {
     }
   }
   return null;
-}
+};
 
 /***/ }),
 
@@ -60793,25 +60086,28 @@ exports.default = hover;
 
 // false -> Array#indexOf
 // true  -> Array#includes
-var toIObject = __webpack_require__("TcQ7")
-  , toLength  = __webpack_require__("QRG4")
-  , toIndex   = __webpack_require__("QyNh");
-module.exports = function(IS_INCLUDES){
-  return function($this, el, fromIndex){
-    var O      = toIObject($this)
-      , length = toLength(O.length)
-      , index  = toIndex(fromIndex, length)
-      , value;
+var toIObject = __webpack_require__("TcQ7");
+var toLength = __webpack_require__("QRG4");
+var toAbsoluteIndex = __webpack_require__("fkB2");
+module.exports = function (IS_INCLUDES) {
+  return function ($this, el, fromIndex) {
+    var O = toIObject($this);
+    var length = toLength(O.length);
+    var index = toAbsoluteIndex(fromIndex, length);
+    var value;
     // Array#includes uses SameValueZero equality algorithm
-    if(IS_INCLUDES && el != el)while(length > index){
+    // eslint-disable-next-line no-self-compare
+    if (IS_INCLUDES && el != el) while (length > index) {
       value = O[index++];
-      if(value != value)return true;
-    // Array#toIndex ignores holes, Array#includes - not
-    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
-      if(O[index] === el)return IS_INCLUDES || index || 0;
+      // eslint-disable-next-line no-self-compare
+      if (value != value) return true;
+    // Array#indexOf ignores holes, Array#includes - not
+    } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
+      if (O[index] === el) return IS_INCLUDES || index || 0;
     } return !IS_INCLUDES && -1;
   };
 };
+
 
 /***/ }),
 
@@ -60820,75 +60116,76 @@ module.exports = function(IS_INCLUDES){
 
 "use strict";
 
-var LIBRARY        = __webpack_require__("O4g8")
-  , $export        = __webpack_require__("kM2E")
-  , redefine       = __webpack_require__("880/")
-  , hide           = __webpack_require__("hJx8")
-  , has            = __webpack_require__("D2L2")
-  , Iterators      = __webpack_require__("/bQp")
-  , $iterCreate    = __webpack_require__("94VQ")
-  , setToStringTag = __webpack_require__("e6n0")
-  , getPrototypeOf = __webpack_require__("PzxK")
-  , ITERATOR       = __webpack_require__("dSzd")('iterator')
-  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
-  , FF_ITERATOR    = '@@iterator'
-  , KEYS           = 'keys'
-  , VALUES         = 'values';
+var LIBRARY = __webpack_require__("O4g8");
+var $export = __webpack_require__("kM2E");
+var redefine = __webpack_require__("880/");
+var hide = __webpack_require__("hJx8");
+var has = __webpack_require__("D2L2");
+var Iterators = __webpack_require__("/bQp");
+var $iterCreate = __webpack_require__("94VQ");
+var setToStringTag = __webpack_require__("e6n0");
+var getPrototypeOf = __webpack_require__("PzxK");
+var ITERATOR = __webpack_require__("dSzd")('iterator');
+var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
+var FF_ITERATOR = '@@iterator';
+var KEYS = 'keys';
+var VALUES = 'values';
 
-var returnThis = function(){ return this; };
+var returnThis = function () { return this; };
 
-module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
+module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
   $iterCreate(Constructor, NAME, next);
-  var getMethod = function(kind){
-    if(!BUGGY && kind in proto)return proto[kind];
-    switch(kind){
-      case KEYS: return function keys(){ return new Constructor(this, kind); };
-      case VALUES: return function values(){ return new Constructor(this, kind); };
-    } return function entries(){ return new Constructor(this, kind); };
+  var getMethod = function (kind) {
+    if (!BUGGY && kind in proto) return proto[kind];
+    switch (kind) {
+      case KEYS: return function keys() { return new Constructor(this, kind); };
+      case VALUES: return function values() { return new Constructor(this, kind); };
+    } return function entries() { return new Constructor(this, kind); };
   };
-  var TAG        = NAME + ' Iterator'
-    , DEF_VALUES = DEFAULT == VALUES
-    , VALUES_BUG = false
-    , proto      = Base.prototype
-    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
-    , $default   = $native || getMethod(DEFAULT)
-    , $entries   = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined
-    , $anyNative = NAME == 'Array' ? proto.entries || $native : $native
-    , methods, key, IteratorPrototype;
+  var TAG = NAME + ' Iterator';
+  var DEF_VALUES = DEFAULT == VALUES;
+  var VALUES_BUG = false;
+  var proto = Base.prototype;
+  var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
+  var $default = $native || getMethod(DEFAULT);
+  var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
+  var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
+  var methods, key, IteratorPrototype;
   // Fix native
-  if($anyNative){
-    IteratorPrototype = getPrototypeOf($anyNative.call(new Base));
-    if(IteratorPrototype !== Object.prototype){
+  if ($anyNative) {
+    IteratorPrototype = getPrototypeOf($anyNative.call(new Base()));
+    if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
       // Set @@toStringTag to native iterators
       setToStringTag(IteratorPrototype, TAG, true);
       // fix for some old engines
-      if(!LIBRARY && !has(IteratorPrototype, ITERATOR))hide(IteratorPrototype, ITERATOR, returnThis);
+      if (!LIBRARY && !has(IteratorPrototype, ITERATOR)) hide(IteratorPrototype, ITERATOR, returnThis);
     }
   }
   // fix Array#{values, @@iterator}.name in V8 / FF
-  if(DEF_VALUES && $native && $native.name !== VALUES){
+  if (DEF_VALUES && $native && $native.name !== VALUES) {
     VALUES_BUG = true;
-    $default = function values(){ return $native.call(this); };
+    $default = function values() { return $native.call(this); };
   }
   // Define iterator
-  if((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
+  if ((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])) {
     hide(proto, ITERATOR, $default);
   }
   // Plug for library
   Iterators[NAME] = $default;
-  Iterators[TAG]  = returnThis;
-  if(DEFAULT){
+  Iterators[TAG] = returnThis;
+  if (DEFAULT) {
     methods = {
-      values:  DEF_VALUES ? $default : getMethod(VALUES),
-      keys:    IS_SET     ? $default : getMethod(KEYS),
+      values: DEF_VALUES ? $default : getMethod(VALUES),
+      keys: IS_SET ? $default : getMethod(KEYS),
       entries: $entries
     };
-    if(FORCED)for(key in methods){
-      if(!(key in proto))redefine(proto, key, methods[key]);
+    if (FORCED) for (key in methods) {
+      if (!(key in proto)) redefine(proto, key, methods[key]);
     } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
   }
   return methods;
 };
+
 
 /***/ }),
 
@@ -60897,12 +60194,10 @@ module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -61072,12 +60367,10 @@ module.exports = ReactDOMFactories;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -61146,12 +60439,10 @@ module.exports = ReactDefaultBatchingStrategy;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -61359,7 +60650,7 @@ function enqueueUpdate(component) {
  * if no updates are currently being performed.
  */
 function asap(callback, context) {
-  !batchingStrategy.isBatchingUpdates ?  true ? invariant(false, 'ReactUpdates.asap: Can\'t enqueue an asap callback in a context whereupdates are not being batched.') : _prodInvariant('125') : void 0;
+  invariant(batchingStrategy.isBatchingUpdates, "ReactUpdates.asap: Can't enqueue an asap callback in a context where" + 'updates are not being batched.');
   asapCallbackQueue.enqueue(callback, context);
   asapEnqueued = true;
 }
@@ -61474,12 +60765,10 @@ module.exports = getPrototype;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -61521,12 +60810,10 @@ module.exports = getIteratorFn;
 
 "use strict";
 /**
- * Copyright 2014-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -61590,11 +60877,9 @@ module.exports = ReactDOMEmptyComponent;
 
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
  */
@@ -61815,12 +61100,10 @@ module.exports = identity;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -61860,12 +61143,10 @@ module.exports = SyntheticAnimationEvent;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -61902,12 +61183,10 @@ module.exports = SyntheticCompositionEvent;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -63054,30 +62333,30 @@ function arrayMap(array, iteratee) {
 
 "use strict";
 
-var addToUnscopables = __webpack_require__("4mcu")
-  , step             = __webpack_require__("EGZi")
-  , Iterators        = __webpack_require__("/bQp")
-  , toIObject        = __webpack_require__("TcQ7");
+var addToUnscopables = __webpack_require__("4mcu");
+var step = __webpack_require__("EGZi");
+var Iterators = __webpack_require__("/bQp");
+var toIObject = __webpack_require__("TcQ7");
 
 // 22.1.3.4 Array.prototype.entries()
 // 22.1.3.13 Array.prototype.keys()
 // 22.1.3.29 Array.prototype.values()
 // 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = __webpack_require__("vIB/")(Array, 'Array', function(iterated, kind){
+module.exports = __webpack_require__("vIB/")(Array, 'Array', function (iterated, kind) {
   this._t = toIObject(iterated); // target
   this._i = 0;                   // next index
   this._k = kind;                // kind
 // 22.1.5.2.1 %ArrayIteratorPrototype%.next()
-}, function(){
-  var O     = this._t
-    , kind  = this._k
-    , index = this._i++;
-  if(!O || index >= O.length){
+}, function () {
+  var O = this._t;
+  var kind = this._k;
+  var index = this._i++;
+  if (!O || index >= O.length) {
     this._t = undefined;
     return step(1);
   }
-  if(kind == 'keys'  )return step(0, index);
-  if(kind == 'values')return step(0, O[index]);
+  if (kind == 'keys') return step(0, index);
+  if (kind == 'values') return step(0, O[index]);
   return step(0, [index, O[index]]);
 }, 'values');
 
@@ -63087,6 +62366,7 @@ Iterators.Arguments = Iterators.Array;
 addToUnscopables('keys');
 addToUnscopables('values');
 addToUnscopables('entries');
+
 
 /***/ }),
 
@@ -63200,8 +62480,8 @@ function channel() {
   }
 
   function flush(cb) {
-    checkForbiddenStates // TODO: check if some new state should be forbidden now
-    ();Object(__WEBPACK_IMPORTED_MODULE_0__utils__["check"])(cb, __WEBPACK_IMPORTED_MODULE_0__utils__["is"].func, "channel.flush' callback must be a function");
+    checkForbiddenStates(); // TODO: check if some new state should be forbidden now
+    Object(__WEBPACK_IMPORTED_MODULE_0__utils__["check"])(cb, __WEBPACK_IMPORTED_MODULE_0__utils__["is"].func, "channel.flush' callback must be a function");
     if (closed && buffer.isEmpty()) {
       cb(END);
       return;
@@ -63344,12 +62624,10 @@ function isMasked(func) {
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -63519,6 +62797,7 @@ module.exports = (
   'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
 ).split(',');
 
+
 /***/ }),
 
 /***/ "xoSC":
@@ -63637,12 +62916,10 @@ module.exports = getAllKeysIn;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -63890,12 +63167,10 @@ module.exports = isObject;
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/**
- * Copyright 2014-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2014-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -64050,12 +63325,10 @@ module.exports = ReactChildReconciler;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -64102,12 +63375,10 @@ module.exports = ReactInstanceMap;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -64125,12 +63396,10 @@ module.exports = ReactPropTypesSecret;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -64242,12 +63511,10 @@ module.exports = ReactDOM;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -64730,12 +63997,10 @@ module.exports = memoize;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
@@ -64820,22 +64085,23 @@ module.exports = SyntheticKeyboardEvent;
 
 "use strict";
 
-var $at  = __webpack_require__("h65t")(true);
+var $at = __webpack_require__("h65t")(true);
 
 // 21.1.3.27 String.prototype[@@iterator]()
-__webpack_require__("vIB/")(String, 'String', function(iterated){
+__webpack_require__("vIB/")(String, 'String', function (iterated) {
   this._t = String(iterated); // target
   this._i = 0;                // next index
 // 21.1.5.2.1 %StringIteratorPrototype%.next()
-}, function(){
-  var O     = this._t
-    , index = this._i
-    , point;
-  if(index >= O.length)return {value: undefined, done: true};
+}, function () {
+  var O = this._t;
+  var index = this._i;
+  var point;
+  if (index >= O.length) return { value: undefined, done: true };
   point = $at(O, index);
   this._i += point.length;
-  return {value: point, done: false};
+  return { value: point, done: false };
 });
+
 
 /***/ }),
 
@@ -64844,12 +64110,10 @@ __webpack_require__("vIB/")(String, 'String', function(iterated){
 
 "use strict";
 /**
- * Copyright 2016-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2016-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * 
  */
@@ -64885,11 +64149,9 @@ module.exports = ReactHostOperationHistoryHook;
 "use strict";
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
- * All rights reserved.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  * @typechecks
  */
@@ -64973,7 +64235,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_fbjs_lib_shallowEqual__ = __webpack_require__("sgb3");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_fbjs_lib_shallowEqual___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_fbjs_lib_shallowEqual__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_hoist_non_react_statics__ = __webpack_require__("hYij");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_hoist_non_react_statics__ = __webpack_require__("OCGy");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_hoist_non_react_statics___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_hoist_non_react_statics__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_change_emitter__ = __webpack_require__("Fvgr");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_change_emitter___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_change_emitter__);
@@ -66046,12 +65308,10 @@ module.exports = stackSet;
 
 "use strict";
 /**
- * Copyright 2013-present, Facebook, Inc.
- * All rights reserved.
+ * Copyright (c) 2013-present, Facebook, Inc.
  *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree. An additional grant
- * of patent rights can be found in the PATENTS file in the same directory.
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
  *
  */
 
