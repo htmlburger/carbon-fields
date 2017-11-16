@@ -119,7 +119,7 @@ class Complex_Field extends Field {
 	/**
 	 * Set array of hierarchy field names
 	 *
-	 * @return Field $this
+	 * @return self  $this
 	 */
 	public function set_hierarchy( $hierarchy ) {
 		parent::set_hierarchy( $hierarchy );
@@ -154,7 +154,7 @@ class Complex_Field extends Field {
 	 *
 	 * @param  Datastore_Interface $datastore
 	 * @param  boolean             $set_as_default
-	 * @return Field               $this
+	 * @return self                $this
 	 */
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		if ( $set_as_default && ! $this->has_default_datastore() ) {
@@ -278,7 +278,7 @@ class Complex_Field extends Field {
 	 * Set the group label Underscore template.
 	 *
 	 * @param  string|callable $template
-	 * @return Field           $this
+	 * @return self            $this
 	 */
 	public function set_header_template( $template ) {
 		$template = is_callable( $template ) ? call_user_func( $template ) : $template;
@@ -363,7 +363,7 @@ class Complex_Field extends Field {
 	 * Load the field value from an input array based on its name.
 	 *
 	 * @param  array $input Array of field names and values.
-	 * @return Field $this
+	 * @return self  $this
 	 */
 	public function set_value_from_input( $input ) {
 		if ( ! isset( $input[ $this->get_name() ] ) ) {
@@ -517,7 +517,7 @@ class Complex_Field extends Field {
 	 * Set the full value tree of all groups and their fields
 	 *
 	 * @see    Internal Glossary in DEVELOPMENT.MD
-	 * @return Field    $this
+	 * @return self     $this
 	 */
 	public function set_value_tree( $value_tree ) {
 		$this->value_tree = $value_tree;
@@ -592,7 +592,7 @@ class Complex_Field extends Field {
 	 * Modify the layout of this field.
 	 *
 	 * @param  string $layout
-	 * @return Field  $this
+	 * @return self   $this
 	 */
 	public function set_layout( $layout ) {
 		$available_layouts = array(
@@ -627,7 +627,7 @@ class Complex_Field extends Field {
 	 * Set the minimum number of entries.
 	 *
 	 * @param  int   $min
-	 * @return Field $this
+	 * @return self  $this
 	 */
 	public function set_min( $min ) {
 		$this->values_min = intval( $min );
@@ -647,7 +647,7 @@ class Complex_Field extends Field {
 	 * Set the maximum number of entries.
 	 *
 	 * @param  int   $max
-	 * @return Field $this
+	 * @return self  $this
 	 */
 	public function set_max( $max ) {
 		$this->values_max = intval( $max );
@@ -668,7 +668,7 @@ class Complex_Field extends Field {
 	 * This state relates to the state of which the groups are rendered.
 	 *
 	 * @param  bool  $collapsed
-	 * @return Field $this
+	 * @return self  $this
 	 */
 	public function set_collapsed( $collapsed = true ) {
 		$this->collapsed = $collapsed;
@@ -688,7 +688,7 @@ class Complex_Field extends Field {
 	 * Set whether duplicate groups are allowed.
 	 *
 	 * @param  bool  $allowed
-	 * @return Field $this
+	 * @return self  $this
 	 */
 	public function set_duplicate_groups_allowed( $allowed ) {
 		$this->duplicate_groups_allowed = $allowed;

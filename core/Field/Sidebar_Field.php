@@ -21,7 +21,7 @@ class Sidebar_Field extends Select_Field {
 	/**
 	 * Disable adding new sidebars.
 	 *
-	 * @return Field $this
+	 * @return self  $this
 	 */
 	public function disable_add_new() {
 		$this->enable_add_new = false;
@@ -32,7 +32,7 @@ class Sidebar_Field extends Select_Field {
 	 * Specify sidebars to be excluded.
 	 *
 	 * @param  array $sidebars
-	 * @return Field $this
+	 * @return self  $this
 	 */
 	public function set_excluded_sidebars( $sidebars ) {
 		$this->excluded_sidebars = $sidebars;
@@ -42,7 +42,7 @@ class Sidebar_Field extends Select_Field {
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 *
-	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @param  bool  $load Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
 	public function to_json( $load ) {

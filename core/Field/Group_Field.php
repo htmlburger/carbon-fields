@@ -151,8 +151,8 @@ class Group_Field {
 	/**
 	 * Set the group label.
 	 *
-	 * @param  string      $label If null, the label will be generated from the group name
-	 * @return Group_Field $this
+	 * @param  string $label If null, the label will be generated from the group name
+	 * @return self   $this
 	 */
 	public function set_label( $label ) {
 		if ( is_null( $label ) ) {
@@ -175,8 +175,8 @@ class Group_Field {
 	/**
 	 * Set the label template.
 	 *
-	 * @param  string      $template
-	 * @return Group_Field $this
+	 * @param  string $template
+	 * @return self   $this
 	 */
 	public function set_label_template( $template ) {
 		$this->label_template = $template;
@@ -202,8 +202,8 @@ class Group_Field {
 	/**
 	 * Set the group name.
 	 *
-	 * @param  string      $name Group name, either sanitized or not
-	 * @return Group_Field $this
+	 * @param  string $name Group name, either sanitized or not
+	 * @return self   $this
 	 */
 	public function set_name( $name ) {
 		if ( ! $name ) {
@@ -231,9 +231,9 @@ class Group_Field {
 	/**
 	 * Assign a DataStore instance for all group fields.
 	 *
-	 * @param  object      $datastore
-	 * @param  boolean     $set_as_default
-	 * @return Group_Field $this
+	 * @param  object  $datastore
+	 * @param  boolean $set_as_default
+	 * @return self    $this
 	 */
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {
 		foreach ( $this->fields as $field ) {

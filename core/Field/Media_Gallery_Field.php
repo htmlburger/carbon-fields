@@ -77,7 +77,7 @@ class Media_Gallery_Field extends Field {
 	 * Set whether entry duplicates are allowed.
 	 *
 	 * @param  boolean $allowed
-	 * @return Field   $this
+	 * @return self    $this
 	 */
 	public function set_duplicates_allowed( $allowed ) {
 		$this->duplicates_allowed = $allowed;
@@ -88,7 +88,7 @@ class Media_Gallery_Field extends Field {
 	 * Load the field value from an input array based on its name
 	 *
 	 * @param  array $input Array of field names and values.
-	 * @return Field $this
+	 * @return self  $this
 	 */
 	public function set_value_from_input( $input ) {
 		if ( ! isset( $input[ $this->name ] ) ) {

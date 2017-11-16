@@ -87,7 +87,7 @@ class Date_Field extends Field {
 	 * Set storage format
 	 *
 	 * @param  string $storage_format
-	 * @return Field  $this
+	 * @return self   $this
 	 */
 	public function set_storage_format( $storage_format ) {
 		$this->storage_format = $storage_format;
@@ -111,7 +111,7 @@ class Date_Field extends Field {
 	 *
 	 * @param  string $php_format
 	 * @param  string $js_format
-	 * @return Field  $this
+	 * @return self   $this
 	 */
 	public function set_input_format( $php_format, $js_format ) {
 		$this->input_format_php = $php_format;
@@ -132,7 +132,7 @@ class Date_Field extends Field {
 	 * Set datepicker options
 	 *
 	 * @param  array $options
-	 * @return Field $this
+	 * @return self  $this
 	 */
 	public function set_picker_options( $options ) {
 		$this->picker_options = array_replace( $this->picker_options, $options );

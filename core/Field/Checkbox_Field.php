@@ -33,7 +33,7 @@ class Checkbox_Field extends Field {
 	 * Set the option value.
 	 *
 	 * @param  string $value New value
-	 * @return Field  $this
+	 * @return self   $this
 	 */
 	public function set_option_value( $value ) {
 		$this->option_value = $value;

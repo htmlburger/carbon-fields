@@ -32,7 +32,7 @@ abstract class Predefined_Options_Field extends Field {
 	 * Accepts either array of data or a callback that returns the data.
 	 *
 	 * @param  array|callable $options
-	 * @return Field          $this
+	 * @return self           $this
 	 */
 	public function set_options( $options ) {
 		if ( ! is_callable( $options ) && ! is_array( $options ) ) {
@@ -49,7 +49,7 @@ abstract class Predefined_Options_Field extends Field {
 	 * Accepts either array of data or a callback that returns the data.
 	 *
 	 * @param  array|callable $options
-	 * @return Field          $this
+	 * @return self           $this
 	 */
 	public function add_options( $options ) {
 		if ( ! is_callable( $options ) && ! is_array( $options ) ) {

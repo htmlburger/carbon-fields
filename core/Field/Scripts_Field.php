@@ -67,7 +67,7 @@ abstract class Scripts_Field extends Textarea_Field {
 	 * Set the hook name
 	 *
 	 * @param  string $hook_name
-	 * @return Field  $this
+	 * @return self   $this
 	 */
 	public function set_hook_name( $hook_name ) {
 		$this->hook_name = $hook_name;
@@ -87,7 +87,7 @@ abstract class Scripts_Field extends Textarea_Field {
 	 * Set the hook priority
 	 *
 	 * @param  integer $hook_priority
-	 * @return Field   $this
+	 * @return self    $this
 	 */
 	public function set_hook_priority( $hook_priority ) {
 		$this->hook_priority = $hook_priority;
@@ -99,7 +99,7 @@ abstract class Scripts_Field extends Textarea_Field {
 	 *
 	 * @param  string  $hook_name
 	 * @param  integer $hook_priority
-	 * @return Field   $this
+	 * @return self    $this
 	 */
 	public function set_hook( $hook_name, $hook_priority = 10 ) {
 		$this->set_hook_name( $hook_name );
