@@ -602,7 +602,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @return Field $this
 	 */
 	public function set_default_value( $default_value ) {
-		$this->default_value = strval( $default_value );
+		$this->default_value = $default_value;
 		return $this;
 	}
 
