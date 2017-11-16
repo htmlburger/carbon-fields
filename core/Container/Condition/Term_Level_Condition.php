@@ -21,7 +21,10 @@ class Term_Level_Condition extends Condition {
 		if ( $term ) {
 			$term_level = count( get_ancestors( $term->term_id, $term->taxonomy, 'taxonomy' ) ) + 1;
 		}
-		$value = max( 1, intval( $this->get_value() ) );
+		$value = $this->get_value();
+		if ( is_numeric( $value ) ) {
+			$value = max( 1, intval( $this->get_value() ) );
+		}
 
 		return $this->compare(
 			$term_level,
