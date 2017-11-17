@@ -92,6 +92,29 @@ class Map_Field extends Field {
 	}
 
 	/**
+	 * Returns an array that holds the field data, suitable for JSON representation.
+	 *
+	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @return array
+	 */
+	public function to_json( $load ) {
+		$field_data = parent::to_json( $load );
+
+		$value_set = $this->get_value();
+		$field_data = array_merge( $field_data, array(
+			'value' => array(
+				'lat' => floatval( $value_set['lat'] ),
+				'lng' => floatval( $value_set['lng'] ),
+				'zoom' => intval( $value_set['zoom'] ),
+				'address' => $value_set['address'],
+				'value' => $value_set[ Value_Set::VALUE_PROPERTY ],
+			),
+		) );
+
+		return $field_data;
+	}
+
+	/**
 	 * Set the coords and zoom of this field.
 	 *
 	 * @param  string $lat  Latitude
