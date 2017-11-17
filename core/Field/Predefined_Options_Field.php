@@ -92,7 +92,7 @@ abstract class Predefined_Options_Field extends Field {
 	/**
 	 * Retrieve the current options.
 	 *
-	 * @return array $options
+	 * @return array
 	 */
 	public function get_options() {
 		return $this->load_options();
@@ -138,9 +138,9 @@ abstract class Predefined_Options_Field extends Field {
 	 * @param  array $values
 	 * @return array
 	 */
-	protected function get_values_from_options( $value ) {
+	protected function get_values_from_options( $values ) {
 		$options_values = $this->get_options_values();
-		$value = Helper::get_valid_options( $value, $options_values );
-		return $value;
+		$values = Helper::get_valid_options( $values, $options_values );
+		return $values;
 	}
 }
