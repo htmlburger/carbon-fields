@@ -11,6 +11,7 @@ import {
 	setStatic
 } from 'recompose';
 import Select from 'react-select';
+import $ from 'jquery';
 
 /**
  * The internal dependencies.
@@ -30,23 +31,42 @@ import { TYPE_MULTISELECT } from 'fields/constants';
  * @param  {Function}      props.handleChange
  * @return {React.Element}
  */
-export const MultiselectField = ({
-	name,
-	field,
-	handleChange
-}) => {
-	return <Field field={field}>
-		<Select
-			name={field.name}
-			multi
-			joinValues={true}
-			delimiter={field.valueDelimiter}
-			value={field.value}
-			options={field.options}
-			disabled={!field.ui.is_visible}
-			onChange={handleChange}
-		/>
-	</Field>;
+export class MultiselectField extends React.Component {
+	constructor() {
+		super();
+		this.handleChange = this.handleChange.bind(this);
+	}
+
+	handleChange(value) {
+		this.props.handleChange(value);
+
+		// React select does NOT trigger the event so we have to
+		// (the change event is tracked by WordPress widgets for example)
+		$(this.selectInput.value).trigger('change');
+	}
+
+	render() {
+		const {
+			name,
+			field
+		} = this.props;
+
+		return (
+			<Field field={field}>
+				<Select
+					ref={ref => this.selectInput = ref}
+					name={field.name}
+					multi
+					joinValues={true}
+					delimiter={field.valueDelimiter}
+					value={field.value}
+					options={field.options}
+					disabled={!field.ui.is_visible}
+					onChange={this.handleChange}
+				/>
+			</Field>
+		);
+	}
 };
 
 /**
