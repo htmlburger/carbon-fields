@@ -45,39 +45,38 @@ class Set_Field extends Predefined_Options_Field {
 			return $this->set_value( array() );
 		}
 
-		$options = $this->parse_options( $this->get_options() );
-		$options = wp_list_pluck( $options, 'value' );
+		$options_values = $this->get_options_values();
 
 		$value = stripslashes_deep( $input[ $this->get_name() ] );
-		$value = Helper::get_valid_options( $value, $options );
+		$value = Helper::get_valid_options( $value, $options_values );
 
 		return $this->set_value( $value );
 	}
 
 	/**
-	 * Returns an array that holds the field data, suitable for JSON representation.
-	 *
-	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
+		$options = $this->parse_options( $this->get_options(), true );
+		$value = array_map( 'strval', $this->get_formatted_value() );
+
 		$field_data = array_merge( $field_data, array(
+			'options' => $options,
+			'value' => $value,
 			'limit_options' => $this->limit_options,
-			'options' => $this->parse_options( $this->get_options() ),
 		) );
 
 		return $field_data;
 	}
 
 	/**
-	 * Set the number of the options to be displayed at the initial field display.
-	 *
-	 * @param  int $limit
+	 * {@inheritDoc}
 	 */
-	public function limit_options( $limit ) {
-		$this->limit_options = $limit;
-		return $this;
+	public function get_formatted_value() {
+		$value = $this->get_value();
+		$value = $this->get_values_from_options( $value );
+		return $value;
 	}
 }

@@ -78,8 +78,8 @@ MultiselectField.propTypes = {
 	name: PropTypes.string,
 	field: PropTypes.shape({
 		id: PropTypes.string,
-		value: PropTypes.arrayOf(PropTypes.string),
 		valueDelimiter: PropTypes.string,
+		value: PropTypes.arrayOf(PropTypes.string),
 		options: PropTypes.arrayOf(PropTypes.shape({
 			value: PropTypes.string,
 			label: PropTypes.string,

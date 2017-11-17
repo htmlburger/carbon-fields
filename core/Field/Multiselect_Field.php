@@ -46,32 +46,27 @@ class Multiselect_Field extends Predefined_Options_Field {
 		}
 
 		$value_delimiter = $this->value_delimiter;
-
-		$options = $this->parse_options( $this->get_options() );
-		$options = wp_list_pluck( $options, 'value' );
+		$options_values = $this->get_options_values();
 
 		$value = stripslashes_deep( $input[ $this->get_name() ] );
 		$value = Delimiter::split( $value, $this->value_delimiter );
 		$value = array_map( function( $val ) use ( $value_delimiter ) {
 			return Delimiter::unquote( $val, $value_delimiter );
 		}, $value );
-		$value = Helper::get_valid_options( $value, $options );
+		$value = Helper::get_valid_options( $value, $options_values );
 
 		return $this->set_value( $value );
 	}
 
 	/**
-	 * Returns an array that holds the field data, suitable for JSON representation.
-	 *
-	 * @param  bool  $load Should the value be loaded from the database or use the value from the current instance.
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
 		$value_delimiter = $this->value_delimiter;
 
-		$options = $this->parse_options( $this->get_options() );
+		$options = $this->parse_options( $this->get_options(), true );
 		$options = array_map( function( $option ) use ( $value_delimiter ) {
 			$option['value'] = Delimiter::quote( $option['value'], $value_delimiter );
 			return $option;
@@ -88,5 +83,14 @@ class Multiselect_Field extends Predefined_Options_Field {
 		) );
 
 		return $field_data;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function get_formatted_value() {
+		$value = $this->get_value();
+		$value = $this->get_values_from_options( $value );
+		return $value;
 	}
 }

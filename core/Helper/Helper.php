@@ -571,9 +571,15 @@ class Helper {
 	 * @return array
 	 */
 	public static function get_valid_options( $input, $options ) {
+		// enfore comparison to be string so we do not get unexpected matches
+		// for cases such as "string without any numbers" == 0
+		// in array_search()
+		$search_options = array_map( 'strval', $options );
+
 		$valid_input = array();
 		foreach ( $input as $raw_value ) {
-			$index = array_search( $raw_value, $options );
+			$index = array_search( strval( $raw_value ), $search_options, true );
+
 			if ( $index === false ) {
 				continue;
 			}

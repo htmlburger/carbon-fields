@@ -143,7 +143,7 @@ export const enhance = compose(
 					: without(field.value, target.value)
 				),
 
-				isChecked: ({ field }) => option => field.value.indexOf(String(option.value)) > -1,
+				isChecked: ({ field }) => option => field.value.indexOf(option.value) > -1,
 				isHidden: ({ field, expanded }) => index => index + 1 > field.limit_options && field.limit_options > 0 && !expanded,
 				showAllOptions: ({ setExpanded }) => preventDefault(() => setExpanded(true)),
 			}),
