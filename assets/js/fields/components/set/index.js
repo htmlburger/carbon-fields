@@ -61,7 +61,7 @@ export const SetField = ({
 								disabled={!field.ui.is_visible}
 								onChange={handleChange} />
 
-							{option.name}
+							{option.label}
 						</label>
 					</p>;
 				})

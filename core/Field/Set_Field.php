@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Value_Set\Value_Set;
 
 /**
@@ -37,32 +38,20 @@ class Set_Field extends Predefined_Options_Field {
 	}
 
 	/**
-	 * Set the number of the options to be displayed at the initial field display.
-	 *
-	 * @param  int $limit
-	 */
-	public function limit_options( $limit ) {
-		$this->limit_options = $limit;
-		return $this;
-	}
-
-	/**
-	 * Load the field value from an input array based on its name
-	 *
-	 * @param  array $input Array of field names and values.
-	 * @return self  $this
+	 * {@inheritDoc}
 	 */
 	public function set_value_from_input( $input ) {
-		if ( ! isset( $input[ $this->name ] ) ) {
-			$this->set_value( array() );
-		} else {
-			$value = stripslashes_deep( $input[ $this->name ] );
-			if ( is_array( $value ) ) {
-				$value = array_values( $value );
-			}
-			$this->set_value( $value );
+		if ( ! isset( $input[ $this->get_name() ] ) ) {
+			return $this->set_value( array() );
 		}
-		return $this;
+
+		$options = $this->parse_options( $this->get_options() );
+		$options = wp_list_pluck( $options, 'value' );
+
+		$value = stripslashes_deep( $input[ $this->get_name() ] );
+		$value = Helper::get_valid_options( $value, $options );
+
+		return $this->set_value( $value );
 	}
 
 	/**
@@ -80,5 +69,15 @@ class Set_Field extends Predefined_Options_Field {
 		) );
 
 		return $field_data;
+	}
+
+	/**
+	 * Set the number of the options to be displayed at the initial field display.
+	 *
+	 * @param  int $limit
+	 */
+	public function limit_options( $limit ) {
+		$this->limit_options = $limit;
+		return $this;
 	}
 }

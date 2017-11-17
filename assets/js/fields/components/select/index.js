@@ -38,9 +38,9 @@ export const SelectField = ({
 			{...field.attributes} >
 
 			{
-				field.options.map(({ name, value }, index) => {
+				field.options.map(({ value, label }, index) => {
 					return <option key={index} value={value}>
-						{name}
+						{label}
 					</option>;
 				})
 			}

@@ -51,7 +51,7 @@ export const RadioField = ({
 								onChange={handleChange(option)}
 								{...field.attributes} />
 
-							{option.name}
+							{option.label}
 						</label>
 					</li>
 				))
@@ -70,7 +70,7 @@ RadioField.propTypes = {
 	field: PropTypes.shape({
 		attributes: PropTypes.object,
 		options: PropTypes.arrayOf(PropTypes.shape({
-			name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+			label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 			value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 		})),
 	}),

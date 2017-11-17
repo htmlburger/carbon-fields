@@ -44,7 +44,7 @@ export const RadioImageField = ({
 								{...field.attributes} />
 
 							<figure className="carbon-radio-image-holder">
-								<img src={option.name} />
+								<img src={option.label} />
 							</figure>
 						</label>
 					</div>
@@ -64,7 +64,7 @@ RadioImageField.propTypes = {
 	field: PropTypes.shape({
 		attributes: PropTypes.object,
 		options: PropTypes.arrayOf(PropTypes.shape({
-			name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+			label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 			value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 		})),
 	}),

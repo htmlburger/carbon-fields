@@ -38,13 +38,10 @@ class Multiselect_Field extends Predefined_Options_Field {
 	}
 
 	/**
-	 * Load the field value from an input array based on its name
-	 *
-	 * @param  array $input Array of field names and values.
-	 * @return self  $this
+	 * {@inheritDoc}
 	 */
 	public function set_value_from_input( $input ) {
-		if ( ! isset( $input[ $this->name ] ) ) {
+		if ( ! isset( $input[ $this->get_name() ] ) ) {
 			return $this->set_value( array() );
 		}
 
@@ -53,7 +50,7 @@ class Multiselect_Field extends Predefined_Options_Field {
 		$options = $this->parse_options( $this->get_options() );
 		$options = wp_list_pluck( $options, 'value' );
 
-		$value = stripslashes_deep( $input[ $this->name ] );
+		$value = stripslashes_deep( $input[ $this->get_name() ] );
 		$value = Delimiter::split( $value, $this->value_delimiter );
 		$value = array_map( function( $val ) use ( $value_delimiter ) {
 			return Delimiter::unquote( $val, $value_delimiter );

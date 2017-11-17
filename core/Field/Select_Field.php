@@ -2,10 +2,33 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Helper\Helper;
+
 /**
  * Select dropdown field class.
  */
 class Select_Field extends Predefined_Options_Field {
+	/**
+	 * {@inheritDoc}
+	 */
+	public function set_value_from_input( $input ) {
+		$options = $this->parse_options( $this->get_options() );
+		$options = wp_list_pluck( $options, 'value' );
+
+		$value = null;
+
+		if ( isset( $input[ $this->get_name() ] ) ) {
+			$value = stripslashes_deep( $input[ $this->get_name() ] );
+			$value = Helper::get_valid_options( array( $value ), $options );
+			$value = ! empty( $value ) ? $value[0] : null;
+		}
+
+		if ( $value === null ) {
+			$value = $options[0];
+		}
+
+		return $this->set_value( $value );
+	}
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
