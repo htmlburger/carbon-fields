@@ -113,8 +113,8 @@ abstract class Predefined_Options_Field extends Field {
 
 		foreach ( $options as $key => $value ) {
 			$parsed[] = array(
-				'name' => $value,
-				'value' => $key,
+				'value' => strval( $key ),
+				'label' => strval( $value ),
 			);
 		}
 

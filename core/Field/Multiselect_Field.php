@@ -2,6 +2,8 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Helper\Delimiter;
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Value_Set\Value_Set;
 
 /**
@@ -9,20 +11,19 @@ use Carbon_Fields\Value_Set\Value_Set;
  * Allows to create a select where multiple values can be selected.
  */
 class Multiselect_Field extends Predefined_Options_Field {
-
-	/**
-	 * The options limit.
-	 *
-	 * @var int
-	 */
-	protected $limit_options = 0;
-
 	/**
 	 * Default field value
 	 *
 	 * @var array
 	 */
 	protected $default_value = array();
+
+	/**
+	 * Value delimiter
+	 *
+	 * @var string
+	 */
+	protected $value_delimiter = '|';
 
 	/**
 	 * Create a field from a certain type with the specified label.
@@ -37,71 +38,58 @@ class Multiselect_Field extends Predefined_Options_Field {
 	}
 
 	/**
-	 * Set the number of the options to be displayed at the initial field display.
-	 *
-	 * @param  int $limit
-	 */
-	public function limit_options( $limit ) {
-		$this->limit_options = $limit;
-		return $this;
-	}
-
-	/**
 	 * Load the field value from an input array based on its name
 	 *
 	 * @param  array $input Array of field names and values.
-	 * @return Field $this
+	 * @return self  $this
 	 */
 	public function set_value_from_input( $input ) {
 		if ( ! isset( $input[ $this->name ] ) ) {
-			$this->set_value( array() );
-		} else {
-			$value = stripslashes_deep( $input[ $this->name ] );
-			if ( is_array( $value ) ) {
-				$value = array_values( $value );
-			}
-			$this->set_value( $value );
+			return $this->set_value( array() );
 		}
-		return $this;
+
+		$value_delimiter = $this->value_delimiter;
+
+		$options = $this->parse_options( $this->get_options() );
+		$options = wp_list_pluck( $options, 'value' );
+
+		$value = stripslashes_deep( $input[ $this->name ] );
+		$value = Delimiter::split( $value, $this->value_delimiter );
+		$value = array_map( function( $val ) use ( $value_delimiter ) {
+			return Delimiter::unquote( $val, $value_delimiter );
+		}, $value );
+		$value = Helper::get_valid_options( $value, $options );
+
+		return $this->set_value( $value );
 	}
 
 	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 *
-	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
+	 * @param  bool  $load Should the value be loaded from the database or use the value from the current instance.
 	 * @return array
 	 */
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
+		$value_delimiter = $this->value_delimiter;
+
+		$options = $this->parse_options( $this->get_options() );
+		$options = array_map( function( $option ) use ( $value_delimiter ) {
+			$option['value'] = Delimiter::quote( $option['value'], $value_delimiter );
+			return $option;
+		}, $options );
+
+		$value = array_map( function( $value ) use ( $value_delimiter ) {
+			return Delimiter::quote( $value, $value_delimiter );
+		}, $this->get_formatted_value() );
+
 		$field_data = array_merge( $field_data, array(
-			'limit_options' => $this->limit_options,
-			'options' => $this->parse_options( $this->get_options() ),
+			'options' => $options,
+			'value' => $value,
+			'valueDelimiter' => $this->value_delimiter,
 		) );
 
 		return $field_data;
-	}
-	/**
-	 * Changes the options array structure. This is needed to keep the array items order when it is JSON encoded.
-	 * Will also work with a callable that returns an array.
-	 *
-	 * @param array|callable $options
-	 * @return array
-	 */
-	protected function parse_options( $options ) {
-		$parsed = array();
-
-		if ( is_callable( $options ) ) {
-			$options = call_user_func( $options );
-		}
-
-		foreach ( $options as $key => $value ) {
-			$parsed[] = array(
-				'label' => $value,
-				'value' => $key,
-			);
-		}
-
-		return $parsed;
 	}
 }

@@ -6,20 +6,15 @@ import PropTypes from 'prop-types';
 import {
 	compose,
 	withHandlers,
-	withState,
 	branch,
 	renderComponent,
-	withProps,
 	setStatic
 } from 'recompose';
-import { without } from 'lodash';
 import Select from 'react-select';
 
 /**
  * The internal dependencies.
  */
-import { preventDefault } from 'lib/helpers';
-
 import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
 import withStore from 'fields/decorators/with-store';
@@ -42,8 +37,10 @@ export const MultiselectField = ({
 }) => {
 	return <Field field={field}>
 		<Select
-			name={field.name + '[]'}
+			name={field.name}
 			multi
+			joinValues={true}
+			delimiter={field.valueDelimiter}
 			value={field.value}
 			options={field.options}
 			disabled={!field.ui.is_visible}
@@ -62,9 +59,10 @@ MultiselectField.propTypes = {
 	field: PropTypes.shape({
 		id: PropTypes.string,
 		value: PropTypes.arrayOf(PropTypes.string),
+		valueDelimiter: PropTypes.string,
 		options: PropTypes.arrayOf(PropTypes.shape({
-			label: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-			value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+			value: PropTypes.string,
+			label: PropTypes.string,
 		})),
 	}),
 	handleChange: PropTypes.func

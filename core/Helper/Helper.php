@@ -562,4 +562,24 @@ class Helper {
 		}
 		return $input;
 	}
+
+	/**
+	 * Get valid input from an input array compared to predefined options
+	 *
+	 * @param  array $input
+	 * @param  array $options
+	 * @return array
+	 */
+	public static function get_valid_options( $input, $options ) {
+		$valid_input = array();
+		foreach ( $input as $raw_value ) {
+			$index = array_search( $raw_value, $options );
+			if ( $index === false ) {
+				continue;
+			}
+
+			$valid_input[] = $options[ $index ];
+		}
+		return $valid_input;
+	}
 }
