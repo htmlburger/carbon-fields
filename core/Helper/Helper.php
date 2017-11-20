@@ -98,7 +98,7 @@ class Helper {
 	 * Shorthand for get_post_meta().
 	 * Uses the ID of the current post in the loop.
 	 *
-	 * @param  string $name         Custom field name.
+	 * @param  string $name         Field name
 	 * @param  string $container_id
 	 * @return mixed  Meta value.
 	 */
@@ -109,8 +109,8 @@ class Helper {
 	/**
 	 * Get post meta field for a post.
 	 *
-	 * @param  int    $id           Post ID.
-	 * @param  string $name         Custom field name.
+	 * @param  int    $id           Post ID
+	 * @param  string $name         Field name
 	 * @param  string $container_id
 	 * @return mixed  Meta value.
 	 */
@@ -122,7 +122,7 @@ class Helper {
 	 * Set post meta field for a post.
 	 *
 	 * @param  int    $id           Post ID
-	 * @param  string $name         Custom field name
+	 * @param  string $name         Field name
 	 * @param  array  $value
 	 * @param  string $container_id
 	 */
@@ -133,9 +133,9 @@ class Helper {
 	/**
 	 * Get theme option field value.
 	 *
-	 * @param  string $name         Custom field name
+	 * @param  string $name         Field name
 	 * @param  string $container_id
-	 * @return mixed  Option        value
+	 * @return mixed
 	 */
 	public static function get_theme_option( $name, $container_id = '' ) {
 		return static::get_value( null, 'theme_options', $container_id, $name );
@@ -153,34 +153,46 @@ class Helper {
 	}
 
 	/**
-	 * Get network option field value from main site.
+	 * Get network option field value for the main site.
 	 *
-	 * @param  string $name         Custom field name
+	 * @param  string $name         Field name
 	 * @param  string $container_id
-	 * @return mixed  Option        value
+	 * @return mixed
 	 */
 	public static function get_the_network_option( $name, $container_id = '' ) {
-		$site_id = defined( 'SITE_ID_CURRENT_SITE' ) ? SITE_ID_CURRENT_SITE : 1;
-		return static::get_value( $site_id, 'network', $container_id, $name );
+		$id = defined( 'SITE_ID_CURRENT_SITE' ) ? SITE_ID_CURRENT_SITE : 1;
+		return static::get_network_option( $id, $name, $container_id );
 	}
 
 	/**
-	 * Get network option field value from specific site.
+	 * Get network option field value for a site.
 	 *
-	 * @param  string $site_id      Site ID
-	 * @param  string $name         Custom field name
+	 * @param  string $id           Site ID
+	 * @param  string $name         Field name
 	 * @param  string $container_id
-	 * @return mixed  Option        value
+	 * @return mixed
 	 */
-	public static function get_network_option( $site_id = 0, $name, $container_id = '' ) {
-		return static::get_value( $site_id, 'network', $container_id, $name );
+	public static function get_network_option( $id, $name, $container_id = '' ) {
+		return static::get_value( $id, 'network', $container_id, $name );
+	}
+
+	/**
+	 * Set network option field value for a site.
+	 *
+	 * @param  string $id           Site ID
+	 * @param  string $name         Field name
+	 * @param  string $container_id
+	 * @return mixed
+	 */
+	public static function set_network_option( $id, $name, $value, $container_id = '' ) {
+		return static::set_value( $id, 'network', $container_id, $name, $value );
 	}
 
 	/**
 	 * Get term meta field for a term.
 	 *
-	 * @param  int    $id           Term ID.
-	 * @param  string $name         Custom field name.
+	 * @param  int    $id           Term ID
+	 * @param  string $name         Field name
 	 * @param  string $container_id
 	 * @return mixed  Meta value.
 	 */
@@ -203,8 +215,8 @@ class Helper {
 	/**
 	 * Get user meta field for a user.
 	 *
-	 * @param  int    $id           User ID.
-	 * @param  string $name         Custom field name.
+	 * @param  int    $id           User ID
+	 * @param  string $name         Field name
 	 * @param  string $container_id
 	 * @return mixed  Meta value.
 	 */
@@ -227,8 +239,8 @@ class Helper {
 	/**
 	 * Get comment meta field for a comment.
 	 *
-	 * @param  int    $id           Comment ID.
-	 * @param  string $name         Custom field name.
+	 * @param  int    $id           Comment ID
+	 * @param  string $name         Field name
 	 * @param  string $container_id
 	 * @return mixed  Meta value.
 	 */
@@ -251,8 +263,8 @@ class Helper {
 	/**
 	 * Get nav menu item meta field for a nav menu item.
 	 *
-	 * @param  int    $id           Nav menu item ID.
-	 * @param  string $name         Custom field name.
+	 * @param  int    $id           Nav menu item ID
+	 * @param  string $name         Field name
 	 * @param  string $container_id
 	 * @return mixed  Meta value.
 	 */

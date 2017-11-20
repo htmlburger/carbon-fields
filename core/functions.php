@@ -45,15 +45,27 @@ if ( ! function_exists( 'carbon_get_theme_option' ) ) {
 	}
 }
 
+if ( ! function_exists( 'carbon_set_theme_option' ) ) {
+	function carbon_set_theme_option( $name, $value, $container_id = '' ) {
+		return Helper::set_theme_option( $name, $value, $container_id );
+	}
+}
+
 if ( ! function_exists( 'carbon_get_the_network_option' ) ) {
-	function carbon_get_the_network_option( $name ) {
-		return Helper::get_the_network_option( $name );
+	function carbon_get_the_network_option( $name, $container_id = '' ) {
+		return Helper::get_the_network_option( $name, $container_id );
 	}
 }
 
 if ( ! function_exists( 'carbon_get_network_option' ) ) {
-	function carbon_get_network_option( $side_id, $name ) {
-		return Helper::get_network_option( $side_id, $name );
+	function carbon_get_network_option( $id, $name, $container_id = '' ) {
+		return Helper::get_network_option( $id, $name, $container_id );
+	}
+}
+
+if ( ! function_exists( 'carbon_set_network_option' ) ) {
+	function carbon_set_network_option( $id, $name, $value, $container_id = '' ) {
+		return Helper::set_network_option( $id, $name, $value, $container_id );
 	}
 }
 
@@ -102,12 +114,6 @@ if ( ! function_exists( 'carbon_get_nav_menu_item_meta' ) ) {
 if ( ! function_exists( 'carbon_set_nav_menu_item_meta' ) ) {
 	function carbon_set_nav_menu_item_meta( $id, $name, $value, $container_id = '' ) {
 		return Helper::set_nav_menu_item_meta( $id, $name, $value, $container_id );
-	}
-}
-
-if ( ! function_exists( 'carbon_set_theme_option' ) ) {
-	function carbon_set_theme_option( $name, $value, $container_id = '' ) {
-		return Helper::set_theme_option( $name, $value, $container_id );
 	}
 }
 
