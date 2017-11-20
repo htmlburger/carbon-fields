@@ -19,16 +19,16 @@ class Color {
 		$hex = strlen( $hex ) > 6 ? $hex : $hex . 'FF';
 
 		$int = hexdec( $hex );
-		$r = ($int >> 24) & 255;
-		$g = ($int >> 16) & 255;
-		$b = ($int >> 8) & 255;
-		$a = floatval($int & 255) / 255;
+		$red = ( $int >> 24 ) & 255;
+		$green = ( $int >> 16 ) & 255;
+		$blue = ( $int >> 8 ) & 255;
+		$alpha = floatval( $int & 255 ) / 255;
 
 		return array(
-			'red' => $r,
-			'green' => $g,
-			'blue' => $b,
-			'alpha' => $a,
+			'red' => $red,
+			'green' => $green,
+			'blue' => $blue,
+			'alpha' => $alpha,
 		);
 	}
 }
