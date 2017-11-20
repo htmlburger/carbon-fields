@@ -70,7 +70,7 @@ class Color_Field extends Field {
 	/**
 	 * Set whether alpha is enabled
 	 *
-	 * @param  boolean $alpha_enabled
+	 * @param  boolean $enabled
 	 * @return self    $this
 	 */
 	public function set_alpha_enabled( $enabled = true ) {
