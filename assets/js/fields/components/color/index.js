@@ -9,6 +9,7 @@ import {
 	withState,
 	setStatic
 } from 'recompose';
+import color from 'hex-and-rgba';
 
 /**
  * The internal dependencies.
@@ -40,27 +41,29 @@ export const ColorField = ({
 	hidePicker,
 	clearValue
 }) => {
-	const preview = field.value.length > 0 ? (
-		<span className="carbon-color-preview" style={{ backgroundColor: field.value }}></span>
-	) : (
-		<span className="carbon-color-preview carbon-color-preview-empty">
-			<span className="carbon-color-preview-block carbon-color-preview-empty-tl"></span>
-			<span className="carbon-color-preview-block carbon-color-preview-empty-br"></span>
-		</span>
-	);
+	const colorHex = field.value ? field.value : '#FFFFFFFF';
+	const [r, g, b, a] = color.hexToRgba(colorHex);
+	const rgbaColor = { r, g, b, a: field.alphaEnabled ? a : 1 };
+	const backgroundStyle = field.value.length > 0
+		? { backgroundColor: `rgba(${rgbaColor.r}, ${rgbaColor.g}, ${rgbaColor.b}, ${rgbaColor.a})` }
+		: {};
 
 	return <Field field={field}>
 		<div className="carbon-color">
 			<span className="pickcolor button carbon-color-button hide-if-no-js" onClick={showPicker}>
-				{preview}
+				<span className="carbon-color-preview-holder">
+					<span className="carbon-color-preview" style={backgroundStyle}>
+					</span>
+				</span>
 
 				<span className="carbon-color-button-text">{carbonFieldsL10n.field.colorSelectColor}</span>
 			</span>
 
 			<Colorpicker
 				visible={pickerVisible}
-				value={field.value}
+				enableAlpha={field.alphaEnabled}
 				palette={field.palette}
+				value={rgbaColor}
 				onChange={handleChange}
 				onClose={hidePicker} />
 
@@ -89,6 +92,8 @@ ColorField.propTypes = {
 	field: PropTypes.shape({
 		id: PropTypes.string,
 		value: PropTypes.string,
+		alphaEnabled: PropTypes.bool,
+		palette: PropTypes.arrayOf(PropTypes.string),
 	}),
 	pickerVisible: PropTypes.bool,
 	handleChange: PropTypes.func,
@@ -121,7 +126,13 @@ export const enhance = compose(
 	 * Pass some handlers to the component.
 	 */
 	withHandlers({
-		handleChange: ({ field, setFieldValue }) => ({ hex }) => setFieldValue(field.id, hex),
+		handleChange: ({ field, setFieldValue }) => ({ rgb }) => {
+			let hexWithAlpha = color.rgbaToHex(rgb.r, rgb.g, rgb.b, rgb.a).toUpperCase();
+			if (!field.alphaEnabled) {
+				hexWithAlpha = hexWithAlpha.substr(0, 7);
+			}
+			setFieldValue(field.id, hexWithAlpha);
+		},
 		showPicker: ({ setPickerVisibility }) => () => setPickerVisibility(true),
 		hidePicker: ({ setPickerVisibility }) => () => setPickerVisibility(false),
 		clearValue: ({ field, setFieldValue }) => () => setFieldValue(field.id, ''),

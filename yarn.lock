@@ -2313,6 +2313,10 @@ hawk@~6.0.2:
     hoek "4.x.x"
     sntp "2.x.x"
 
+hex-and-rgba@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/hex-and-rgba/-/hex-and-rgba-1.2.0.tgz#1f7ff2ef2f0a1050db59c8a39887aacaa0699b21"
+
 hmac-drbg@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/hmac-drbg/-/hmac-drbg-1.0.1.tgz#d2745701025a6c775a6c545793ed502fc0c649a1"

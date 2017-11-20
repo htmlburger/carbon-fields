@@ -66,6 +66,7 @@
     "babel-runtime": "^6.23.0",
     "classnames": "^2.2.5",
     "core-js": "^2.5.1",
+    "hex-and-rgba": "^1.2.0",
     "locutus": "^2.0.8",
     "lodash": "^4.17.4",
     "object-path-immutable": "^0.5.1",

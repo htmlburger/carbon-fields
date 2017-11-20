@@ -7,11 +7,9 @@
 .carbon-color .carbon-color-clear-button span { line-height: 26px; }
 .carbon-color .carbon-color-button-text { padding: 0 10px; }
 
-.carbon-color .carbon-color-preview { display: inline-block; vertical-align: top; width: 28px; height: 100%; background: #fff; border-radius: 3px 0 0 3px; border-right: 1px solid $color-border-darker; }
-.carbon-color .carbon-color-preview-empty { background: #fff; position: relative; }
-.carbon-color .carbon-color-preview-empty .carbon-color-preview-block { display: block; position: absolute; width: 50%; height: 50%; }
-.carbon-color .carbon-color-preview-empty .carbon-color-preview-empty-tl { left: 0; top: 0; background: #ccc; }
-.carbon-color .carbon-color-preview-empty .carbon-color-preview-empty-br { right: 0; bottom: 0; background: #ccc; }
+.carbon-color .carbon-color-preview-holder { background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAMUlEQVQ4T2NkYGAQYcAP3uCTZhw1gGGYhAGBZIA/nYDCgBDAm9BGDWAAJyRCgLaBCAAgXwixzAS0pgAAAABJRU5ErkJggg=="); background-repeat: repeat; display: inline-block; }
+
+.carbon-color .carbon-color-preview { display: inline-block; vertical-align: top; width: 28px; height: 26px;  border-radius: 3px 0 0 3px; border-right: 1px solid $color-border-darker; }
 
 .carbon-color input.carbon-color-field { display: inline-block; vertical-align: top; width: 80px; opacity: 0; transition: background-color .5s ease; }
 .carbon-color input.carbon-color-field.error { background-color: #e74444; }
@@ -25,6 +23,7 @@
 @media (max-width: 782px) {
 	.carbon-color .carbon-color-button,
 	.carbon-color .carbon-color-button span { height: 39px; line-height: 37px; }
+	.carbon-color span.carbon-color-preview-holder { height: 37px; }
 	.carbon-container .carbon-field .carbon-color .carbon-color-button .carbon-color-preview { width: 39px; height: 37px; margin: 0 !important; vertical-align: top !important; }
 	.carbon-container .carbon-field .carbon-color .carbon-color-button .carbon-color-button-text,
 	.carbon-container .carbon-field .carbon-color .carbon-color-clear-button span { margin: 0 !important; vertical-align: top; }
