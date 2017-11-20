@@ -52,6 +52,9 @@ class Select_Field extends Predefined_Options_Field {
 	 */
 	public function get_formatted_value() {
 		$options_values = $this->get_options_values();
+		if ( empty( $options_values ) ) {
+			$options_values[] = '';
+		}
 
 		$value = $this->get_value();
 		$value = $this->get_values_from_options( array( $value ) );
