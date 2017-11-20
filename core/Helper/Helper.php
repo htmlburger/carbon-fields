@@ -100,7 +100,7 @@ class Helper {
 	 *
 	 * @param  string $name         Field name
 	 * @param  string $container_id
-	 * @return mixed  Meta value.
+	 * @return mixed
 	 */
 	public static function get_the_post_meta( $name, $container_id = '' ) {
 		return static::get_post_meta( get_the_ID(), $name, $container_id );
@@ -112,7 +112,7 @@ class Helper {
 	 * @param  int    $id           Post ID
 	 * @param  string $name         Field name
 	 * @param  string $container_id
-	 * @return mixed  Meta value.
+	 * @return mixed
 	 */
 	public static function get_post_meta( $id, $name, $container_id = '' ) {
 		return static::get_value( $id, 'post_meta', $container_id, $name );
@@ -194,7 +194,7 @@ class Helper {
 	 * @param  int    $id           Term ID
 	 * @param  string $name         Field name
 	 * @param  string $container_id
-	 * @return mixed  Meta value.
+	 * @return mixed
 	 */
 	public static function get_term_meta( $id, $name, $container_id = '' ) {
 		return static::get_value( $id, 'term_meta', $container_id, $name );
@@ -218,7 +218,7 @@ class Helper {
 	 * @param  int    $id           User ID
 	 * @param  string $name         Field name
 	 * @param  string $container_id
-	 * @return mixed  Meta value.
+	 * @return mixed
 	 */
 	public static function get_user_meta( $id, $name, $container_id = '' ) {
 		return static::get_value( $id, 'user_meta', $container_id, $name );
@@ -242,7 +242,7 @@ class Helper {
 	 * @param  int    $id           Comment ID
 	 * @param  string $name         Field name
 	 * @param  string $container_id
-	 * @return mixed  Meta value.
+	 * @return mixed
 	 */
 	public static function get_comment_meta( $id, $name, $container_id = '' ) {
 		return static::get_value( $id, 'comment_meta', $container_id, $name );
@@ -266,7 +266,7 @@ class Helper {
 	 * @param  int    $id           Nav menu item ID
 	 * @param  string $name         Field name
 	 * @param  string $container_id
-	 * @return mixed  Meta value.
+	 * @return mixed
 	 */
 	public static function get_nav_menu_item_meta( $id, $name, $container_id = '' ) {
 		return static::get_value( $id, 'nav_menu_item', $container_id, $name );
