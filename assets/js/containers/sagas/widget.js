@@ -4,8 +4,8 @@
 import $ from 'jquery';
 import ReactDOM from 'react-dom';
 import { startsWith } from 'lodash';
-import { delay } from 'redux-saga';
-import { put, call, take, select, fork, all } from 'redux-saga/effects';
+import { delay, buffers } from 'redux-saga';
+import { put, call, take, select, fork, all, actionChannel } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
@@ -19,9 +19,9 @@ import {
 import { compactInput } from 'lib/helpers';
 
 import { removeContainer, receiveContainer, validateContainer, submitForm, toggleContainerBox } from 'containers/actions';
-import { getContainerById } from 'containers/selectors';
+import { getContainerById, getContainerDomNodeById } from 'containers/selectors';
 
-import { removeFields } from 'fields/actions';
+import { removeFields, setFieldValue } from 'fields/actions';
 import { getFieldById, getFieldsByRoots, hasInvalidFields } from 'fields/selectors';
 import { TYPE_MAP } from 'fields/constants';
 import { ID_PREFIX } from 'containers/constants';
@@ -87,6 +87,17 @@ export function* workerAddedOrUpdatedEvent() {
 			widgetInstance.liveUpdateMode = false;
 		}
 
+	}
+}
+
+export function* workerTriggerChangeEvent() {
+	const updateChannel = yield actionChannel(setFieldValue, buffers.none());
+
+	while (true) {
+		const { payload: { fieldId } } = yield take(updateChannel);
+		const field = yield select(getFieldById, fieldId);
+		const containerDomNode = yield select(getContainerDomNodeById, field.container_id);
+		$(containerDomNode).trigger('change');
 	}
 }
 
@@ -222,6 +233,7 @@ export default function* foreman() {
 	const workers = [
 		call(workerAddedOrUpdatedEvent),
 		call(workerToggleWidget),
+		call(workerTriggerChangeEvent),
 		call(workerFormSubmit)
 	];
 

@@ -2,6 +2,7 @@
  * The external dependencies.
  */
 import { filter, pickBy } from 'lodash';
+import $ from 'jquery';
 
 /**
  * Get all containers.
@@ -36,3 +37,12 @@ export const getContainersByType = (state, containerType) => pickBy(getContainer
  * @return {Object}
  */
 export const getVisibleContainers = state => filter(getContainers(state), container => container.ui.is_visible);
+
+/**
+ * Get a container dom node by id.
+ *
+ * @param  {Object} state
+ * @param  {String} containerId
+ * @return {Object}
+ */
+export const getContainerDomNodeById = (state, containerId) => $(`.carbon-container-${containerId}:first`).get(0);
