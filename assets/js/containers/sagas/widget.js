@@ -90,6 +90,12 @@ export function* workerAddedOrUpdatedEvent() {
 	}
 }
 
+/**
+ * Trigger a generel "change" event on the widget container in order to deal with
+ * this requirement as of WP 4.9 (otherwise the save button will not activate)
+ *
+ * @return {void}
+ */
 export function* workerTriggerChangeEvent() {
 	const updateChannel = yield actionChannel(setFieldValue, buffers.none());
 
