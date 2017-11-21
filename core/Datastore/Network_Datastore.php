@@ -9,18 +9,14 @@ use Carbon_Fields\Field\Field;
  */
 class Network_Datastore extends Meta_Datastore {
 	/**
-	 * Retrieve the type of meta data.
-	 *
-	 * @return string
+	 * {@inheritDoc}
 	 */
 	public function get_meta_type() {
 		return 'site';
 	}
 
 	/**
-	 * Retrieve the meta table name to query.
-	 *
-	 * @return string
+	 * {@inheritDoc}
 	 */
 	public function get_table_name() {
 		global $wpdb;
@@ -28,9 +24,7 @@ class Network_Datastore extends Meta_Datastore {
 	}
 
 	/**
-	 * Retrieve the meta table field name to query by.
-	 *
-	 * @return string
+	 * {@inheritDoc}
 	 */
 	public function get_table_field_name() {
 		return 'site_id';
