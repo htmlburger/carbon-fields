@@ -539,7 +539,7 @@ class Helper {
 	 * @return array
 	 */
 	public static function input() {
-		$input = $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : $_GET;
+		$input = isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : $_GET;
 		$input = stripslashes_deep( $input );
 
 		if ( \Carbon_Fields\COMPACT_INPUT ) {
