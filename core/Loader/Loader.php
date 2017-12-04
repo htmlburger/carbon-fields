@@ -106,6 +106,8 @@ class Loader {
 	 * Initialize main scripts
 	 */
 	public function enqueue_scripts() {
+		$locale = get_locale();
+		$short_locale = substr( $locale, 0, 2 );
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 		wp_enqueue_style( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.css', array(), \Carbon_Fields\VERSION );
@@ -119,10 +121,14 @@ class Loader {
 			'compactInputKey' => \Carbon_Fields\COMPACT_INPUT_KEY,
 		) ) );
 		wp_localize_script( 'carbon-fields-vendor', 'carbonFieldsL10n', apply_filters( 'carbon_fields_l10n', array(
+			'locale' => $locale,
+			'shortLocale' => $short_locale,
+
 			'container' => array(
 				'pleaseFillTheRequiredFields' => __( 'Please fill out all required fields highlighted below.', 'carbon-fields' ),
 				'changesMadeSaveAlert' => __( 'The changes you made will be lost if you navigate away from this page.', 'carbon-fields' ),
 			),
+
 			'field' => array(
 				'geocodeZeroResults' => __( 'The address could not be found. ', 'carbon-fields' ),
 				'geocodeNotSuccessful' => __( 'Geocode was not successful for the following reason: ', 'carbon-fields' ),

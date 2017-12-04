@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
+import FlatpickrJS from 'flatpickr';
 import Flatpickr from 'react-flatpickr';
 import { head, isUndefined } from 'lodash';
 import {
@@ -158,7 +159,13 @@ export const enhance = compose(
 			? carbonFieldsL10n.field.selectTime
 			: carbonFieldsL10n.field.selectDate;
 
+		let locale = 'default';
+		if (!isUndefined(FlatpickrJS.l10ns[locale])) {
+			locale = carbonFieldsL10n.shortLocale;
+		}
+
 		const options = {
+			locale,
 			...field.picker_options,
 			wrap: true,
 			onReady: handleReady,
