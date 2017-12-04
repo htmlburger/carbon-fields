@@ -78,15 +78,12 @@ export function* workerAddedOrUpdatedEvent() {
 					.off('keydown', 'input')
 					.off('change input propertychange', ':input');
 
-			const widgetId = getWidgetId(widget);
-			const containerId = widgetIdToContainerId(widgetId);
-
-			const widgetInstance = yield call(wp.customize.Widgets.getWidgetFormControlForWidget, containerId);
+			const widgetId = yield call(getWidgetId, widget);
+			const widgetInstance = yield call(wp.customize.Widgets.getWidgetFormControlForWidget, widgetId);
 
 			// Change the flag for 'live mode' so we can receive proper `widget-updated` events.
 			widgetInstance.liveUpdateMode = false;
 		}
-
 	}
 }
 
@@ -190,7 +187,7 @@ export function* workerFormSubmit() {
 
 			// Submit the widget.
 			if (!(yield select(hasInvalidFields))) {
-				const widget = yield call(wp.customize.Widgets.getWidgetFormControlForWidget, containerId);
+				const widget = yield call(wp.customize.Widgets.getWidgetFormControlForWidget, widgetId);
 
 				// Call the built-in logic of WordPress to update the widget.
 				yield call([widget, widget.updateWidget], { disable_form: true });
