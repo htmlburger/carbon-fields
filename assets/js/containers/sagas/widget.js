@@ -40,6 +40,11 @@ function getWidgetId(widget) {
 }
 
 /**
+ * Track the widgets that are being added.
+ */
+const widgetsToAdd = new Set();
+
+/**
  * Re-init the container when the widget is created/saved.
  *
  * @return {void}
@@ -57,6 +62,14 @@ export function* workerAddedOrUpdatedEvent() {
 
 		// We don't care about other widgets.
 		if (!container) {
+			continue;
+		}
+
+		const widgetId = yield call(getWidgetId, widget);
+
+		if (event.type === 'widget-before-added') {
+			yield call([widgetsToAdd, 'add'], widgetId);
+
 			continue;
 		}
 
@@ -78,7 +91,6 @@ export function* workerAddedOrUpdatedEvent() {
 					.off('keydown', 'input')
 					.off('change input propertychange', ':input');
 
-			const widgetId = yield call(getWidgetId, widget);
 			const widgetInstance = yield call(wp.customize.Widgets.getWidgetFormControlForWidget, widgetId);
 
 			// Change the flag for 'live mode' so we can receive proper `widget-updated` events.
@@ -125,8 +137,12 @@ export function* workerDestroyContainer(ajaxEvent, ajaxAction) {
 			continue;
 		}
 
-		// Remove the current instance from DOM.
-		ReactDOM.unmountComponentAtNode(document.querySelector(`.container-${containerId}`));
+		// Don't remove the container since we just add it.
+		if (widgetsToAdd.has(widgetId)) {
+			yield call([widgetsToAdd, 'delete'], widgetId);
+
+			continue;
+		}
 
 		// Get the container from the store.
 		const container = yield select(getContainerById, containerId);
@@ -136,6 +152,9 @@ export function* workerDestroyContainer(ajaxEvent, ajaxAction) {
 		if (!container) {
 			continue;
 		}
+
+		// Remove the current instance from DOM.
+		ReactDOM.unmountComponentAtNode(document.querySelector(`.container-${containerId}`));
 
 		// Get the fields that belongs to the container.
 		const fieldsIds = yield select(getFieldsByRoots, container.fields);
