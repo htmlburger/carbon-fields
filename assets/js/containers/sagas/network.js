@@ -2,7 +2,7 @@
  * The internal dependencies.
  */
 import optionPage from 'containers/sagas/common/option-page';
-import { TYPE_THEME_OPTIONS } from 'containers/constants';
+import { TYPE_NETWORK } from 'containers/constants';
 
 /**
  * Start to work.
@@ -11,5 +11,5 @@ import { TYPE_THEME_OPTIONS } from 'containers/constants';
  * @return {void}
  */
 export default function* foreman(store) {
-	yield optionPage(store, TYPE_THEME_OPTIONS, 'theme-options-form');
+	yield optionPage(store, TYPE_NETWORK, 'network-form');
 }

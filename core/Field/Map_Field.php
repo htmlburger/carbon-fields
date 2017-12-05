@@ -12,32 +12,20 @@ use Carbon_Fields\Value_Set\Value_Set;
 class Map_Field extends Field {
 
 	/**
-	 * Whether to lazy load this field.
-	 *
-	 * @var bool
+	 * {@inheritDoc}
+	 */
+	protected $default_value = array(
+		Value_Set::VALUE_PROPERTY => '40.346544,-101.645507',
+		'lat' => 40.346544,
+		'lng' => -101.645507,
+		'zoom' => 10,
+		'address' => '',
+	);
+
+	/**
+	 * {@inheritDoc}
 	 */
 	protected $lazyload = true;
-
-	/**
-	 * Default latitude.
-	 *
-	 * @var float
-	 */
-	protected $default_lat = 40.346544;
-
-	/**
-	 * Default longitude.
-	 *
-	 * @var float
-	 */
-	protected $default_lng = -101.645507;
-
-	/**
-	 * Default zoom.
-	 *
-	 * @var int
-	 */
-	protected $default_zoom = 10;
 
 	/**
 	 * Create a field from a certain type with the specified label.
@@ -113,15 +101,6 @@ class Map_Field extends Field {
 		$field_data = parent::to_json( $load );
 
 		$value_set = $this->get_value();
-		if ( $value_set === null ) {
-			$value_set = array(
-				'lat' => floatval( $this->default_lat ),
-				'lng' => floatval( $this->default_lng ),
-				'zoom' => intval( $this->default_zoom ),
-				'address' => '',
-			);
-			$value_set[ Value_Set::VALUE_PROPERTY ] = $this->lat_lng_to_latlng( $value_set['lat'], $value_set['lng'] );
-		}
 		$field_data = array_merge( $field_data, array(
 			'value' => array(
 				'lat' => floatval( $value_set['lat'] ),
@@ -144,10 +123,14 @@ class Map_Field extends Field {
 	 * @return self   $this
 	 */
 	public function set_position( $lat, $lng, $zoom ) {
-		$this->default_lat = floatval( $lat );
-		$this->default_lng = floatval( $lng );
-		$this->default_zoom = $zoom;
-
-		return $this;
+		return $this->set_default_value( array_merge(
+			$this->get_default_value(),
+			array(
+				Value_Set::VALUE_PROPERTY => $this->lat_lng_to_latlng( $lat, $lng ),
+				'lat' => $lat,
+				'lng' => $lng,
+				'zoom' => $zoom,
+			)
+		) );
 	}
 }

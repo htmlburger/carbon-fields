@@ -10,6 +10,8 @@ import {
 	renderComponent,
 	setStatic
 } from 'recompose';
+import Select from 'react-select';
+import $ from 'jquery';
 
 /**
  * The internal dependencies.
@@ -18,64 +20,55 @@ import Field from 'fields/components/field';
 import NoOptions from 'fields/components/no-options';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { TYPE_RADIO } from 'fields/constants';
+import { TYPE_MULTISELECT } from 'fields/constants';
 
 /**
- * Render a radio input field.
+ * Render a collection of checkbox inputs.
  *
  * @param  {Object}        props
- * @param  {String}        props.name
+ * @param  {Object}        props.name
  * @param  {Object}        props.field
  * @param  {Function}      props.handleChange
- * @param  {Function}      props.isChecked
  * @return {React.Element}
  */
-export const RadioField = ({
+export const MultiselectField = ({
 	name,
 	field,
-	handleChange,
-	isChecked
+	handleChange
 }) => {
-	return <Field field={field}>
-		<ul className="carbon-radio-list">
-			{
-				field.options.map((option, index) => (
-					<li key={index}>
-						<label>
-							<input
-								type="radio"
-								name={name}
-								value={option.value}
-								checked={isChecked(option)}
-								disabled={!field.ui.is_visible}
-								onChange={handleChange(option)}
-								{...field.attributes} />
-
-							{option.label}
-						</label>
-					</li>
-				))
-			}
-		</ul>
-	</Field>;
-}
+	return (
+		<Field field={field}>
+			<Select
+				name={name}
+				multi
+				joinValues={true}
+				delimiter={field.valueDelimiter}
+				value={field.value}
+				options={field.options}
+				disabled={!field.ui.is_visible}
+				onChange={handleChange}
+			/>
+		</Field>
+	);
+};
 
 /**
  * Validate the props.
  *
  * @type {Object}
  */
-RadioField.propTypes = {
+MultiselectField.propTypes = {
 	name: PropTypes.string,
 	field: PropTypes.shape({
-		attributes: PropTypes.object,
-		value: PropTypes.string,
+		id: PropTypes.string,
+		valueDelimiter: PropTypes.string,
+		value: PropTypes.arrayOf(PropTypes.string),
 		options: PropTypes.arrayOf(PropTypes.shape({
 			value: PropTypes.string,
 			label: PropTypes.string,
 		})),
 	}),
-	handleChange: PropTypes.func,
+	handleChange: PropTypes.func
 };
 
 /**
@@ -111,9 +104,8 @@ export const enhance = compose(
 			 * Pass some handlers to the component.
 			 */
 			withHandlers({
-				handleChange: ({ field, setFieldValue }) => ({ value }) => () => setFieldValue(field.id, value),
-				isChecked: ({ field }) => option => option.value === field.value,
-			})
+				handleChange: ({ field, setFieldValue }) => value => setFieldValue(field.id, value.map(item => item.value))
+			}),
 		),
 
 		/**
@@ -124,5 +116,5 @@ export const enhance = compose(
 );
 
 export default setStatic('type', [
-	TYPE_RADIO,
-])(enhance(RadioField));
+	TYPE_MULTISELECT,
+])(enhance(MultiselectField));

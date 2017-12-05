@@ -264,11 +264,11 @@ export function createWidgetsChannel() {
 
 		// Cancel the subscription.
 		const unsubscribe = () => {
-			$(document).off('widget-added widget-updated', handler);
+			$(document).off('widget-before-added widget-added widget-updated', handler);
 		};
 
 		// Setup the subscription.
-		$(document).on('widget-added widget-updated', handler);
+		$(document).on('widget-before-added widget-added widget-updated', handler);
 
 		return unsubscribe;
 	}, buffers.fixed(1));

@@ -17,7 +17,11 @@ import {
 	registerFieldValidator
 } from 'lib/registry';
 
-import { autoload, patchTagBoxAPI } from 'lib/helpers';
+import {
+	autoload,
+	patchTagBoxAPI,
+ 	patchWidgetsSaveAPI
+} from 'lib/helpers';
 import { ready } from 'lib/actions';
 
 import configureStore from 'store';
@@ -39,6 +43,10 @@ _.noConflict();
 if (!_.isUndefined(window.tagBox)) {
 	patchTagBoxAPI(tagBox, 'flushTags');
 	patchTagBoxAPI(tagBox, 'parseTags');
+}
+
+if (!_.isUndefined(window.wpWidgets)) {
+	patchWidgetsSaveAPI(wpWidgets);
 }
 
 /**

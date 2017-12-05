@@ -4,8 +4,8 @@
 import $ from 'jquery';
 import ReactDOM from 'react-dom';
 import { startsWith } from 'lodash';
-import { delay } from 'redux-saga';
-import { put, call, take, select, fork, all } from 'redux-saga/effects';
+import { delay, buffers } from 'redux-saga';
+import { put, call, take, select, fork, all, actionChannel } from 'redux-saga/effects';
 
 /**
  * The internal dependencies.
@@ -19,9 +19,9 @@ import {
 import { compactInput } from 'lib/helpers';
 
 import { removeContainer, receiveContainer, validateContainer, submitForm, toggleContainerBox } from 'containers/actions';
-import { getContainerById } from 'containers/selectors';
+import { getContainerById, getContainerDomNodeById } from 'containers/selectors';
 
-import { removeFields } from 'fields/actions';
+import { removeFields, setFieldValue } from 'fields/actions';
 import { getFieldById, getFieldsByRoots, hasInvalidFields } from 'fields/selectors';
 import { TYPE_MAP } from 'fields/constants';
 import { ID_PREFIX } from 'containers/constants';
@@ -38,6 +38,11 @@ function getWidgetId(widget) {
 		.val();
 	return widgetId;
 }
+
+/**
+ * Track the widgets that are being added.
+ */
+const widgetsToAdd = new Set();
 
 /**
  * Re-init the container when the widget is created/saved.
@@ -60,6 +65,14 @@ export function* workerAddedOrUpdatedEvent() {
 			continue;
 		}
 
+		const widgetId = yield call(getWidgetId, widget);
+
+		if (event.type === 'widget-before-added') {
+			yield call([widgetsToAdd, 'add'], widgetId);
+
+			continue;
+		}
+
 		yield put(receiveContainer(container, true));
 
 		// WARNING: This piece of code manipulates the core behavior of WordPress Widgets.
@@ -78,15 +91,28 @@ export function* workerAddedOrUpdatedEvent() {
 					.off('keydown', 'input')
 					.off('change input propertychange', ':input');
 
-			const widgetId = getWidgetId(widget);
-			const containerId = widgetIdToContainerId(widgetId);
-
-			const widgetInstance = yield call(wp.customize.Widgets.getWidgetFormControlForWidget, containerId);
+			const widgetInstance = yield call(wp.customize.Widgets.getWidgetFormControlForWidget, widgetId);
 
 			// Change the flag for 'live mode' so we can receive proper `widget-updated` events.
 			widgetInstance.liveUpdateMode = false;
 		}
+	}
+}
 
+/**
+ * Trigger a generel "change" event on the widget container in order to deal with
+ * this requirement as of WP 4.9 (otherwise the save button will not activate)
+ *
+ * @return {void}
+ */
+export function* workerTriggerChangeEvent() {
+	const updateChannel = yield actionChannel(setFieldValue, buffers.none());
+
+	while (true) {
+		const { payload: { fieldId } } = yield take(updateChannel);
+		const field = yield select(getFieldById, fieldId);
+		const containerDomNode = yield select(getContainerDomNodeById, field.container_id);
+		$(containerDomNode).trigger('change');
 	}
 }
 
@@ -111,8 +137,12 @@ export function* workerDestroyContainer(ajaxEvent, ajaxAction) {
 			continue;
 		}
 
-		// Remove the current instance from DOM.
-		ReactDOM.unmountComponentAtNode(document.querySelector(`.container-${containerId}`));
+		// Don't remove the container since we just add it.
+		if (widgetsToAdd.has(widgetId)) {
+			yield call([widgetsToAdd, 'delete'], widgetId);
+
+			continue;
+		}
 
 		// Get the container from the store.
 		const container = yield select(getContainerById, containerId);
@@ -122,6 +152,9 @@ export function* workerDestroyContainer(ajaxEvent, ajaxAction) {
 		if (!container) {
 			continue;
 		}
+
+		// Remove the current instance from DOM.
+		ReactDOM.unmountComponentAtNode(document.querySelector(`.container-${containerId}`));
 
 		// Get the fields that belongs to the container.
 		const fieldsIds = yield select(getFieldsByRoots, container.fields);
@@ -173,7 +206,7 @@ export function* workerFormSubmit() {
 
 			// Submit the widget.
 			if (!(yield select(hasInvalidFields))) {
-				const widget = yield call(wp.customize.Widgets.getWidgetFormControlForWidget, containerId);
+				const widget = yield call(wp.customize.Widgets.getWidgetFormControlForWidget, widgetId);
 
 				// Call the built-in logic of WordPress to update the widget.
 				yield call([widget, widget.updateWidget], { disable_form: true });
@@ -222,6 +255,7 @@ export default function* foreman() {
 	const workers = [
 		call(workerAddedOrUpdatedEvent),
 		call(workerToggleWidget),
+		call(workerTriggerChangeEvent),
 		call(workerFormSubmit)
 	];
 

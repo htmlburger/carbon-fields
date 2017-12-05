@@ -2,28 +2,28 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Helper\Delimiter;
 use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Value_Set\Value_Set;
 
 /**
- * Set field class.
- * Allows to create a set of checkboxes where multiple can be selected.
+ * Multiselect field class.
+ * Allows to create a select where multiple values can be selected.
  */
-class Set_Field extends Predefined_Options_Field {
-
-	/**
-	 * The options limit.
-	 *
-	 * @var int
-	 */
-	protected $limit_options = 0;
-
+class Multiselect_Field extends Predefined_Options_Field {
 	/**
 	 * Default field value
 	 *
 	 * @var array
 	 */
 	protected $default_value = array();
+
+	/**
+	 * Value delimiter
+	 *
+	 * @var string
+	 */
+	protected $value_delimiter = '|';
 
 	/**
 	 * Create a field from a certain type with the specified label.
@@ -45,9 +45,14 @@ class Set_Field extends Predefined_Options_Field {
 			return $this->set_value( array() );
 		}
 
+		$value_delimiter = $this->value_delimiter;
 		$options_values = $this->get_options_values();
 
 		$value = stripslashes_deep( $input[ $this->get_name() ] );
+		$value = Delimiter::split( $value, $this->value_delimiter );
+		$value = array_map( function( $val ) use ( $value_delimiter ) {
+			return Delimiter::unquote( $val, $value_delimiter );
+		}, $value );
 		$value = Helper::get_valid_options( $value, $options_values );
 
 		return $this->set_value( $value );
@@ -59,13 +64,22 @@ class Set_Field extends Predefined_Options_Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
+		$value_delimiter = $this->value_delimiter;
+
 		$options = $this->parse_options( $this->get_options(), true );
-		$value = array_map( 'strval', $this->get_formatted_value() );
+		$options = array_map( function( $option ) use ( $value_delimiter ) {
+			$option['value'] = Delimiter::quote( $option['value'], $value_delimiter );
+			return $option;
+		}, $options );
+
+		$value = array_map( function( $value ) use ( $value_delimiter ) {
+			return Delimiter::quote( $value, $value_delimiter );
+		}, $this->get_formatted_value() );
 
 		$field_data = array_merge( $field_data, array(
 			'options' => $options,
 			'value' => $value,
-			'limit_options' => $this->limit_options,
+			'valueDelimiter' => $this->value_delimiter,
 		) );
 
 		return $field_data;

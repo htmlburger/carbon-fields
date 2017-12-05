@@ -1,0 +1,23 @@
+/* ------------------------------------------------------------ *\
+	Multiselect - overrides for 'react-select/dist/react-select.css'
+\* ------------------------------------------------------------ */
+
+.carbon-field .Select-control { border-radius: 0; border: 1px solid #ddd; -webkit-box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.07 ); box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.07 ); background-color: #fff; color: #32373c; outline: none; -webkit-transition: 0.05s border-color ease-in-out; transition: 0.05s border-color ease-in-out; }
+.carbon-field .Select-control:hover { -webkit-box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.07 ); box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.07 ); }
+.carbon-field .Select--multi .Select-value { border-color: #d9d9d9; background-color: transparent; color: #24282d; }
+.carbon-field .Select--multi .Select-value-icon { color: #cd4c15; }
+.carbon-field .Select--multi .Select-value-icon:focus,
+.carbon-field .Select--multi .Select-value-icon:hover { background-color: #fff; }
+.carbon-field .Select-option.is-focused { color: #fff; background-color: #0085ba; }
+.carbon-field .is-open > .Select-control { border-color: #d9d9d9; }
+.carbon-field .Select-arrow-zone .Select-arrow { border-width: 6px 3px 2.5px; border-color: #24282d transparent transparent; }
+.carbon-field .is-open > .Select-control .Select-arrow { border-width: 0 3px 6px; border-color: transparent transparent #24282d; }
+.carbon-field .Select-arrow-zone { text-align: right; padding-right: 6px; }
+.carbon-field .is-focused:not(.is-open) > .Select-control { border-color: #ddd; box-shadow: none; }
+.carbon-field .Select-menu-outer { z-index: 2; }
+.carbon-field .Select-menu-outer,
+.carbon-field .Select-menu-outer .Select-menu,
+.carbon-field .Select-menu-outer .Select-option:last-child { border-radius: 0; }
+.carbon-field .Select-option { padding: 4px 6px; }
+.carbon-field .Select-input > input { padding: 8px 0; line-height: 18px; }
+.carbon-field .Select--multi .Select-value { margin-top: 6px; }

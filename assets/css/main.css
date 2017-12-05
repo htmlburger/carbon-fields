@@ -10,6 +10,7 @@
 \* ------------------------------------------------------------ */
 
 @import 'flatpickr';
+@import 'react-select/dist/react-select.css';
 
 /* ------------------------------------------------------------ *\
 	Modules
@@ -36,6 +37,7 @@
 @import url(modules/_fields.html);
 @import url(modules/_fields.map);
 @import url(modules/_fields.media-gallery);
+@import url(modules/_fields.multiselect);
 @import url(modules/_fields.oembed);
 @import url(modules/_fields.radio-image);
 @import url(modules/_fields.rich);

@@ -61,7 +61,7 @@ export const SetField = ({
 								disabled={!field.ui.is_visible}
 								onChange={handleChange} />
 
-							{option.name}
+							{option.label}
 						</label>
 					</p>;
 				})
@@ -87,8 +87,8 @@ SetField.propTypes = {
 		id: PropTypes.string,
 		value: PropTypes.arrayOf(PropTypes.string),
 		options: PropTypes.arrayOf(PropTypes.shape({
-			name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-			value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+			value: PropTypes.string,
+			label: PropTypes.string,
 		})),
 	}),
 	hasHiddenOptions: PropTypes.bool,
@@ -143,7 +143,7 @@ export const enhance = compose(
 					: without(field.value, target.value)
 				),
 
-				isChecked: ({ field }) => option => field.value.indexOf(String(option.value)) > -1,
+				isChecked: ({ field }) => option => field.value.indexOf(option.value) > -1,
 				isHidden: ({ field, expanded }) => index => index + 1 > field.limit_options && field.limit_options > 0 && !expanded,
 				showAllOptions: ({ setExpanded }) => preventDefault(() => setExpanded(true)),
 			}),

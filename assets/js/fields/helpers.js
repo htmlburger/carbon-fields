@@ -27,7 +27,7 @@ export function fetchAttachment(attachmentId) {
 	return new Promise((resolve, reject) => {
 		const request = $.get(window.ajaxurl, {
 			action: 'get-attachment',
-			id: attachmentId 
+			id: attachmentId
 		}, null, 'json');
 
 		request.done((response) => {
@@ -81,6 +81,13 @@ export function flattenField(field, parent, parentType, accumulator) {
 	// that we know is unique.
 	field.id = uniqueId('carbon-field-');
 
+	// Add a pointer to the container to which belongs the field.
+	if (parentType === PARENT_TYPE_CONTAINER) {
+		field.container_id = parent.id;
+	} else {
+		field.container_id = parent.container_id;
+	}
+
 	// The complex field represents a nested structure
 	// of fields. We need to flatten them as well.
 	if (type === TYPE_COMPLEX) {
@@ -95,13 +102,6 @@ export function flattenField(field, parent, parentType, accumulator) {
 	field.meta = {};
 	field.parent = parent.id;
 	field.parentType = parentType;
-
-	// Add a pointer to the container to which belongs the field.
-	if (parentType === PARENT_TYPE_CONTAINER) {
-		field.container_id = parent.id;
-	} else {
-		field.container_id = parent.container_id;
-	}
 
 	// Convert the value of the field, because React
 	// doesn't likes inputs with null values.

@@ -1,3 +1,3 @@
 <?php
-$container_css_class = 'theme-options';
+$container_css_class = 'network';
 require( 'common/options-page.php' );

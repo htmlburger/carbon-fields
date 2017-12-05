@@ -2,6 +2,7 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Helper\Helper;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
@@ -91,10 +92,20 @@ abstract class Predefined_Options_Field extends Field {
 	/**
 	 * Retrieve the current options.
 	 *
-	 * @return array|callable $options
+	 * @return array
 	 */
 	public function get_options() {
 		return $this->load_options();
+	}
+
+	/**
+	 * Retrieve the current options' values only.
+	 *
+	 * @return array $options
+	 */
+	protected function get_options_values() {
+		$options = $this->parse_options( $this->get_options() );
+		return wp_list_pluck( $options, 'value' );
 	}
 
 	/**
@@ -104,7 +115,7 @@ abstract class Predefined_Options_Field extends Field {
 	 * @param array|callable $options
 	 * @return array
 	 */
-	protected function parse_options( $options ) {
+	protected function parse_options( $options, $stringify_value = false ) {
 		$parsed = array();
 
 		if ( is_callable( $options ) ) {
@@ -113,11 +124,23 @@ abstract class Predefined_Options_Field extends Field {
 
 		foreach ( $options as $key => $value ) {
 			$parsed[] = array(
-				'name' => $value,
-				'value' => $key,
+				'value' => $stringify_value ? strval( $key ) : $key,
+				'label' => strval( $value ),
 			);
 		}
 
 		return $parsed;
+	}
+
+	/**
+	 * Get an array of all values that are both in the passed array and the predefined list of options
+	 *
+	 * @param  array $values
+	 * @return array
+	 */
+	protected function get_values_from_options( $values ) {
+		$options_values = $this->get_options_values();
+		$values = Helper::get_valid_options( $values, $options_values );
+		return $values;
 	}
 }

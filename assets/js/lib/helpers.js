@@ -112,6 +112,36 @@ export function patchTagBoxAPI(tagBox, method) {
 }
 
 /**
+ * Monkey-patch the `save` method of Widgets API
+ * so we can intercept the AJAX request.
+ *
+ * @param  {Object} widgets
+ * @return {void}
+ */
+export function patchWidgetsSaveAPI(widgets) {
+	widgets._save = widgets.save;
+	widgets.save = function(...args) {
+		const [
+			widget,
+			remove,
+			animate,
+			order
+		] = args;
+
+		// Trigger an event so we hook just before the AJAX request.
+		// The signature of arguments is `node, 0, 0, 1`.
+		if (!remove && !animate && order) {
+			$(document).trigger('widget-before-added', [widget]);
+		}
+
+		// Execute the AJAX request on the next tick of the event loop.
+		// This way we are sure that our fields are in DOM and they will be presented
+		// in the body of the request.
+		setTimeout(() => widgets._save(...args), 0);
+	}
+}
+
+/**
  * Get select option's level based on its className
  *
  * @param  {Object} option

@@ -21,6 +21,7 @@ export const Colorpicker = ({
 	visible,
 	value,
 	palette,
+	enableAlpha,
 	handleChange
 }) => {
 	const popover = {
@@ -28,11 +29,11 @@ export const Colorpicker = ({
 		zIndex: 9999
 	};
 
-	return 	<div style={popover} hidden={!visible}>
+	return <div style={popover} hidden={!visible}>
 		<SketchPicker
 			color={value}
 			onChange={handleChange}
-			disableAlpha={true}
+			disableAlpha={!enableAlpha}
 			presetColors={palette} />
 	</div>;
 };
@@ -44,8 +45,9 @@ export const Colorpicker = ({
  */
 Colorpicker.propTypes = {
 	visible: PropTypes.bool,
-	value: PropTypes.string,
+	value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
 	palette: PropTypes.arrayOf(PropTypes.string),
+	enableAlpha: PropTypes.bool,
 	handleChange: PropTypes.func,
 };
 

@@ -316,7 +316,7 @@ class Key_Toolset {
 	 * @return array<string>
 	 */
 	public function storage_key_to_segments_array( $storage_key ) {
-		$key = substr( $storage_key, 1 ); // drop the key prefix
+		$key = substr( $storage_key, strlen( static::KEY_PREFIX ) ); // drop the key prefix
 		$segments = explode( static::SEGMENT_GLUE, $key );
 		return $segments;
 	}
