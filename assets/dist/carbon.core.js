@@ -13475,7 +13475,7 @@ var makeGetSidebarFieldOptions = exports.makeGetSidebarFieldOptions = function m
 		sidebars = (0, _lodash.map)(sidebars, function (_ref3) {
 			var id = _ref3.id,
 			    name = _ref3.name;
-			return { name: name, value: id };
+			return { label: name, value: id };
 		});
 
 		return [].concat((0, _toConsumableArray3.default)(sidebars), (0, _toConsumableArray3.default)(field.options));
@@ -29522,12 +29522,12 @@ var SidebarField = exports.SidebarField = function SidebarField(_ref) {
 				disabled: !field.ui.is_visible,
 				onChange: handleChange },
 			options.map(function (_ref2, index) {
-				var name = _ref2.name,
+				var label = _ref2.label,
 				    value = _ref2.value;
 				return _react2.default.createElement(
 					'option',
 					{ key: index, value: value },
-					name
+					label
 				);
 			})
 		)
@@ -29616,7 +29616,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		return function (_ref4) {
 			var value = _ref4.target.value;
 
-			if (value === 'new') {
+			if (value === '__add_new') {
 				value = (0, _lodash.trim)(window.prompt(carbonFieldsL10n.field.enterNameOfNewSidebar));
 
 				if (!value) {
