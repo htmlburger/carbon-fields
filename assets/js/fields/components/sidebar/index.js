@@ -43,9 +43,9 @@ export const SidebarField = ({
 			onChange={handleChange} >
 
 			{
-				options.map(({ name, value }, index) => (
+				options.map(({ label, value }, index) => (
 					<option key={index} value={value}>
-						{name}
+						{label}
 					</option>
 				))
 			}
@@ -130,7 +130,7 @@ export const enhance = compose(
 	 */
 	withHandlers({
 		handleChange: ({ field, options, setFieldValue, addSidebar }) => ({ target: { value } }) => {
-			if (value === 'new') {
+			if (value === '__add_new') {
 				value = trim(window.prompt(carbonFieldsL10n.field.enterNameOfNewSidebar));
 
 				if (!value) {

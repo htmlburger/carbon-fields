@@ -247,7 +247,7 @@ export const makeGetSidebarFieldOptions = () => createSelector([
 	const excluded = get(field, 'excluded_sidebars', []);
 
 	sidebars = filter(sidebars, ({ id, name }) => excluded.indexOf(id) === -1 && excluded.indexOf(name) === -1);
-	sidebars = map(sidebars, ({ id, name }) => ({ name: name, value: id }));
+	sidebars = map(sidebars, ({ id, name }) => ({ label: name, value: id }));
 
 	return [
 		...sidebars,

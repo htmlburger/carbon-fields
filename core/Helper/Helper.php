@@ -624,4 +624,29 @@ class Helper {
 		}
 		return $valid_input;
 	}
+
+	/**
+	 * Get an array of active sidebars
+	 *
+	 * @return array
+	 */
+	public static function get_active_sidebars() {
+		global $wp_registered_sidebars;
+
+		$sidebars = array();
+
+		foreach ( $wp_registered_sidebars as $sidebar ) {
+			// Check if we have inactive sidebars
+			if ( isset( $sidebar['class'] ) && strpos( $sidebar['class'], 'inactive-sidebar' ) !== false ) {
+				continue;
+			}
+
+			$sidebars[] = array(
+				'id'   => $sidebar['id'],
+				'name' => $sidebar['name'],
+			);
+		}
+
+		return $sidebars;
+	}
 }
