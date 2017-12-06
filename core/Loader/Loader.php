@@ -2,13 +2,14 @@
 
 namespace Carbon_Fields\Loader;
 
-use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Container\Repository as ContainerRepository;
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+use Carbon_Fields\Helper\Helper;
+use Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
+use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Service\Legacy_Storage_Service_v_1_5;
 use Carbon_Fields\Service\Meta_Query_Service;
 use Carbon_Fields\Service\REST_API_Service;
-use Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
-use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Loader and main initialization
@@ -218,7 +219,6 @@ class Loader {
 	 * @return array $carbon_data
 	 */
 	public function get_json_data() {
-		global $wp_registered_sidebars;
 		global $pagenow;
 
 		$carbon_data = array(
@@ -235,17 +235,7 @@ class Loader {
 			$carbon_data['containers'][] = $container_data;
 		}
 
-		foreach ( $wp_registered_sidebars as $sidebar ) {
-			// Check if we have inactive sidebars
-			if ( isset( $sidebar['class'] ) && strpos( $sidebar['class'], 'inactive-sidebar' ) !== false ) {
-				continue;
-			}
-
-			$carbon_data['sidebars'][] = array(
-				'name' => $sidebar['name'],
-				'id'   => $sidebar['id'],
-			);
-		}
+		$carbon_data['sidebars'] = Helper::get_active_sidebars();
 
 		return $carbon_data;
 	}
