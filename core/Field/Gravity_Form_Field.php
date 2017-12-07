@@ -8,13 +8,6 @@ namespace Carbon_Fields\Field;
 class Gravity_Form_Field extends Select_Field {
 
 	/**
-	 * Admin initialization actions
-	 */
-	public function admin_init() {
-		$this->set_options( $this->get_gravity_form_options() );
-	}
-
-	/**
 	 * Whether the Gravity Forms plugin is installed and activated.
 	 *
 	 * @return bool
@@ -25,6 +18,13 @@ class Gravity_Form_Field extends Select_Field {
 		}
 
 		return false;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	protected function load_options() {
+		return $this->get_gravity_form_options();
 	}
 
 	/**
@@ -55,10 +55,7 @@ class Gravity_Form_Field extends Select_Field {
 	}
 
 	/**
-	 * Returns an array that holds the field data, suitable for JSON representation.
-	 *
-	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	public function to_json( $load ) {
 		$this->set_options( apply_filters( 'carbon_fields_gravity_form_options', $this->get_options() ) );
