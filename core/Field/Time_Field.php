@@ -14,6 +14,7 @@ class Time_Field extends Date_Field {
 		'allowInput' => true,
 		'enableTime' => true,
 		'noCalendar' => true,
+		'enableSeconds' => true,
 	);
 
 	/**
@@ -24,10 +25,10 @@ class Time_Field extends Date_Field {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $input_format_php = 'g:i A';
+	protected $input_format_php = 'g:i:s A';
 
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $input_format_js = 'h:i K';
+	protected $input_format_js = 'h:i:S K';
 }

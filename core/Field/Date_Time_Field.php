@@ -13,6 +13,7 @@ class Date_Time_Field extends Time_Field {
 	protected $picker_options = array(
 		'allowInput' => true,
 		'enableTime' => true,
+		'enableSeconds' => true,
 	);
 
 	/**
@@ -23,10 +24,10 @@ class Date_Time_Field extends Time_Field {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $input_format_php = 'Y-m-d g:i A';
+	protected $input_format_php = 'Y-m-d g:i:s A';
 
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $input_format_js = 'Y-m-d h:i K';
+	protected $input_format_js = 'Y-m-d h:i:S K';
 }
