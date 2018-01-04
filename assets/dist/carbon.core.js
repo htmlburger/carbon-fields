@@ -6111,28 +6111,35 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Render the 'Add Entry' button.
  *
  * @param  {Object}        props
+ * @param  {Boolean}       props.showAddButton
  * @param  {String}        props.addButtonText
- * @param  {String}        props.collapseAllButtonText
  * @param  {React.Element} props.children
  * @param  {Function}      props.addGroup
  * @param  {Function}      props.toggleAll
+ * @param  {Boolean}       props.showCollapseAllButton
+ * @param  {String}        props.collapseAllButtonText
  * @return {React.Element}
  */
 /**
  * The external dependencies.
  */
 var ComplexActions = exports.ComplexActions = function ComplexActions(_ref) {
-	var addButtonText = _ref.addButtonText,
-	    showCollapseAll = _ref.showCollapseAll,
-	    collapseAllButtonText = _ref.collapseAllButtonText,
-	    children = _ref.children,
+	var showAddButton = _ref.showAddButton,
+	    addButtonText = _ref.addButtonText,
 	    addGroup = _ref.addGroup,
-	    toggleAll = _ref.toggleAll;
+	    toggleAll = _ref.toggleAll,
+	    showCollapseAllButton = _ref.showCollapseAllButton,
+	    collapseAllButtonText = _ref.collapseAllButtonText,
+	    children = _ref.children;
+
+	if (!showAddButton && !showCollapseAllButton) {
+		return null;
+	}
 
 	return _react2.default.createElement(
 		'div',
 		{ className: 'carbon-actions' },
-		_react2.default.createElement(
+		showAddButton && _react2.default.createElement(
 			'div',
 			{ className: 'carbon-button' },
 			_react2.default.createElement(
@@ -6142,7 +6149,7 @@ var ComplexActions = exports.ComplexActions = function ComplexActions(_ref) {
 			),
 			children
 		),
-		showCollapseAll && _react2.default.createElement(
+		showCollapseAllButton && _react2.default.createElement(
 			'div',
 			{ className: 'carbon-button carbon-button-collapse-all' },
 			_react2.default.createElement(
@@ -6165,11 +6172,12 @@ var ComplexActions = exports.ComplexActions = function ComplexActions(_ref) {
  * The internal dependencies.
  */
 ComplexActions.propTypes = {
+	showAddButton: _propTypes2.default.bool,
 	addButtonText: _propTypes2.default.string,
-	showCollapseAll: _propTypes2.default.bool,
-	collapseAllButtonText: _propTypes2.default.string,
 	onAddClick: _propTypes2.default.func,
 	onToggleAllClick: _propTypes2.default.func,
+	showCollapseAllButton: _propTypes2.default.bool,
+	collapseAllButtonText: _propTypes2.default.string,
 	children: _propTypes2.default.element
 };
 
@@ -11295,36 +11303,6 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 	var availableGroups = (0, _lodash.filter)(field.group_types, function (groupType) {
 		return (0, _lodash.includes)(enabledGroupTypes, groupType.name);
 	});
-	var complexTabActions = (0, _lodash.isEmpty)(availableGroups) ? null : _react2.default.createElement(
-		_actions2.default,
-		{
-			addButtonText: '+',
-			showCollapseAll: false,
-			collapseAllButtonText: '',
-			onAddClick: handleAddGroupClick,
-			onToggleAllClick: handleToggleAllGroupsClick },
-		_react2.default.createElement(_popover2.default, {
-			groups: availableGroups,
-			visible: popoverVisible,
-			onItemClick: handleAddGroupClick,
-			onClose: handlePopoverClose,
-			outsideClickIgnoreClass: 'carbon-button' })
-	);
-	var complexButtonActions = (0, _lodash.isEmpty)(availableGroups) ? null : _react2.default.createElement(
-		_actions2.default,
-		{
-			addButtonText: carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name),
-			showCollapseAll: field.value.length > 0,
-			collapseAllButtonText: allGroupsCollapsed ? carbonFieldsL10n.field.complexExpandAllButton : carbonFieldsL10n.field.complexCollapseAllButton,
-			onAddClick: handleAddGroupClick,
-			onToggleAllClick: handleToggleAllGroupsClick },
-		_react2.default.createElement(_popover2.default, {
-			groups: availableGroups,
-			visible: popoverVisible,
-			onItemClick: handleAddGroupClick,
-			onClose: handlePopoverClose,
-			outsideClickIgnoreClass: 'carbon-button' })
-	);
 
 	return _react2.default.createElement(
 		_field2.default,
@@ -11351,7 +11329,22 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 							current: field.ui.current_tab,
 							onClick: handleTabClick,
 							onSort: handleSort },
-						complexTabActions
+						_react2.default.createElement(
+							_actions2.default,
+							{
+								showAddButton: !(0, _lodash.isEmpty)(availableGroups),
+								addButtonText: '+',
+								onAddClick: handleAddGroupClick,
+								onToggleAllClick: handleToggleAllGroupsClick,
+								showCollapseAllButton: false,
+								collapseAllButtonText: '' },
+							_react2.default.createElement(_popover2.default, {
+								groups: availableGroups,
+								visible: popoverVisible,
+								onItemClick: handleAddGroupClick,
+								onClose: handlePopoverClose,
+								outsideClickIgnoreClass: 'carbon-button' })
+						)
 					)
 				),
 				_react2.default.createElement(
@@ -11368,7 +11361,7 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 								layout: field.layout,
 								group: group,
 								active: isGroupActive(group.id),
-								cloneEnabled: field.duplicate_groups_allowed,
+								cloneEnabled: field.duplicate_groups_allowed && !(0, _lodash.isEmpty)(availableGroups),
 								onClone: handleCloneGroupClick,
 								onRemove: handleRemoveGroupClick,
 								onExpand: handleGroupExpand,
@@ -11377,7 +11370,22 @@ var ComplexField = exports.ComplexField = function ComplexField(_ref) {
 					)
 				)
 			),
-			complexButtonActions
+			_react2.default.createElement(
+				_actions2.default,
+				{
+					showAddButton: !(0, _lodash.isEmpty)(availableGroups),
+					addButtonText: carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name),
+					onAddClick: handleAddGroupClick,
+					onToggleAllClick: handleToggleAllGroupsClick,
+					showCollapseAllButton: !(0, _lodash.isEmpty)(field.value),
+					collapseAllButtonText: allGroupsCollapsed ? carbonFieldsL10n.field.complexExpandAllButton : carbonFieldsL10n.field.complexCollapseAllButton },
+				_react2.default.createElement(_popover2.default, {
+					groups: availableGroups,
+					visible: popoverVisible,
+					onItemClick: handleAddGroupClick,
+					onClose: handlePopoverClose,
+					outsideClickIgnoreClass: 'carbon-button' })
+			)
 		)
 	);
 };
@@ -11529,6 +11537,10 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 		enabledGroupTypes = (0, _lodash.filter)(enabledGroupTypes, function (groupType) {
 			return (0, _lodash.findIndex)(field.value, { name: groupType }) === -1;
 		});
+	}
+
+	if (field.max > 0 && field.value.length >= field.max) {
+		enabledGroupTypes = [];
 	}
 
 	var allGroupsCollapsed = (0, _lodash.every)(field.value, function (group) {
@@ -29713,10 +29725,10 @@ var MediaGalleryList = exports.MediaGalleryList = function MediaGalleryList(_ref
 	return _react2.default.createElement(
 		'div',
 		{ className: 'carbon-media-gallery-list' },
-		_react2.default.createElement(
+		items.length > 0 ? _react2.default.createElement(
 			_sortableList2.default,
 			{ options: sortableOptions, onSort: onSort },
-			items.length > 0 ? _react2.default.createElement(
+			_react2.default.createElement(
 				'ul',
 				{ className: 'carbon-media-gallery-list-items' },
 				items.map(function (item, index) {
@@ -29732,14 +29744,14 @@ var MediaGalleryList = exports.MediaGalleryList = function MediaGalleryList(_ref
 						isSelected: field.selected == item
 					});
 				})
-			) : _react2.default.createElement(
-				'div',
-				{ className: 'carbon-media-gallery-no-files' },
-				_react2.default.createElement(
-					'p',
-					null,
-					carbonFieldsL10n.field.mediaGalleryNoFiles
-				)
+			)
+		) : _react2.default.createElement(
+			'div',
+			{ className: 'carbon-media-gallery-no-files' },
+			_react2.default.createElement(
+				'p',
+				null,
+				carbonFieldsL10n.field.mediaGalleryNoFiles
 			)
 		),
 		_react2.default.createElement(
