@@ -212,7 +212,6 @@ class Field implements Datastore_Holder_Interface {
 	 */
 	public function __clone() {
 		$this->set_value_set( clone $this->get_value_set() );
-		$this->set_datastore( clone $this->get_datastore(), $this->has_default_datastore() );
 	}
 
 	/**
