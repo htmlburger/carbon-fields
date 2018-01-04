@@ -15693,7 +15693,7 @@ function workerAddedOrUpdatedEvent() {
 
 				case 4:
 					if (false) {
-						_context.next = 30;
+						_context.next = 29;
 						break;
 					}
 
@@ -15723,7 +15723,7 @@ function workerAddedOrUpdatedEvent() {
 					widgetId = _context.sent;
 
 					if (!(event.type === 'widget-before-added')) {
-						_context.next = 20;
+						_context.next = 19;
 						break;
 					}
 
@@ -15731,35 +15731,32 @@ function workerAddedOrUpdatedEvent() {
 					return (0, _effects.call)([widgetsToAdd, 'add'], widgetId);
 
 				case 19:
-					return _context.abrupt('continue', 4);
-
-				case 20:
-					_context.next = 22;
+					_context.next = 21;
 					return (0, _effects.put)((0, _actions.receiveContainer)(container, true));
 
-				case 22:
+				case 21:
 					if (!(pagenow === _constants.PAGE_NOW_CUSTOMIZE && event.type === 'widget-added')) {
-						_context.next = 28;
+						_context.next = 27;
 						break;
 					}
 
 					(0, _jquery2.default)(widget).find('[name="savewidget"]').off('click').show().end().find('.widget-content:first').off('keydown', 'input').off('change input propertychange', ':input');
 
-					_context.next = 26;
+					_context.next = 25;
 					return (0, _effects.call)(wp.customize.Widgets.getWidgetFormControlForWidget, widgetId);
 
-				case 26:
+				case 25:
 					widgetInstance = _context.sent;
 
 
 					// Change the flag for 'live mode' so we can receive proper `widget-updated` events.
 					widgetInstance.liveUpdateMode = false;
 
-				case 28:
+				case 27:
 					_context.next = 4;
 					break;
 
-				case 30:
+				case 29:
 				case 'end':
 					return _context.stop();
 			}
@@ -17340,12 +17337,7 @@ function patchWidgetsSaveAPI(widgets) {
 			(0, _jquery2.default)(document).trigger('widget-before-added', [widget]);
 		}
 
-		// Execute the AJAX request on the next tick of the event loop.
-		// This way we are sure that our fields are in DOM and they will be presented
-		// in the body of the request.
-		setTimeout(function () {
-			return widgets._save.apply(widgets, args);
-		}, 0);
+		widgets._save.apply(widgets, args);
 	};
 }
 
