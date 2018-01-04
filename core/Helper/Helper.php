@@ -47,6 +47,7 @@ class Helper {
 
 		$clone = clone $field;
 		if ( $object_id !== null ) {
+			$clone->set_datastore( clone $clone->get_datastore(), $clone->has_default_datastore() );
 			$clone->get_datastore()->set_object_id( $object_id );
 		}
 		return $clone;
