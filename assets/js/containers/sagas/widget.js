@@ -69,8 +69,6 @@ export function* workerAddedOrUpdatedEvent() {
 
 		if (event.type === 'widget-before-added') {
 			yield call([widgetsToAdd, 'add'], widgetId);
-
-			continue;
 		}
 
 		yield put(receiveContainer(container, true));
