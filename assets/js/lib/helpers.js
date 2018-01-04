@@ -134,10 +134,7 @@ export function patchWidgetsSaveAPI(widgets) {
 			$(document).trigger('widget-before-added', [widget]);
 		}
 
-		// Execute the AJAX request on the next tick of the event loop.
-		// This way we are sure that our fields are in DOM and they will be presented
-		// in the body of the request.
-		setTimeout(() => widgets._save(...args), 0);
+		widgets._save(...args)
 	}
 }
 
