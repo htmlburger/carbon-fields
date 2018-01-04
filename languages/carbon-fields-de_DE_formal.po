@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Carbon Fields\n"
-"POT-Creation-Date: 2017-10-16 11:12+0300\n"
-"PO-Revision-Date: 2017-10-16 11:12+0300\n"
+"POT-Creation-Date: 2017-12-13 09:24+0200\n"
+"PO-Revision-Date: 2017-12-13 09:24+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.1\n"
+"X-Generator: Poedit 2.0.5\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
@@ -28,6 +28,7 @@ msgstr ""
 msgid "General"
 msgstr "Allgemein"
 
+#: core/Container/Network_Container.php:52
 #: core/Container/Theme_Options_Container.php:207
 msgid "Settings saved."
 msgstr "Ihre Einstellungen wurden gespeichert."
@@ -50,12 +51,12 @@ msgstr ""
 "Wenn Sie Skripte in den Kopfbereich hinzufügen möchten, sollten Sie sie hier "
 "einfügen."
 
-#: core/Field/Sidebar_Field.php:50
+#: core/Field/Sidebar_Field.php:74
 msgctxt "sidebar"
 msgid "Add New"
 msgstr "Erstellen"
 
-#: core/Helper/Helper.php:500
+#: core/Helper/Helper.php:536
 msgid "F j, Y"
 msgstr "j. F Y"
 
@@ -88,7 +89,7 @@ msgid "Add Sidebar"
 msgstr "Seitenleiste hinzufügen"
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:182
-#: core/Loader/Loader.php:143
+#: core/Loader/Loader.php:154
 msgid "Please enter the name of the new sidebar:"
 msgstr "Name der neue Seitenleiste:"
 
@@ -96,223 +97,223 @@ msgstr "Name der neue Seitenleiste:"
 msgid "Are you sure you wish to remove this sidebar?"
 msgstr "Möchen Sie diese Seitenleiste wirklich entfernen?"
 
-#: core/Loader/Loader.php:119
+#: core/Loader/Loader.php:129
 msgid "Please fill out all required fields highlighted below."
 msgstr "Bitte füllen Sie alle markierten Pflichtfelder unten aus."
 
-#: core/Loader/Loader.php:120
+#: core/Loader/Loader.php:130
 msgid "The changes you made will be lost if you navigate away from this page."
 msgstr ""
 "Ihre getätigten Änderungen gehen verloren, wenn Sie diese Seite verlassen."
 
-#: core/Loader/Loader.php:123
+#: core/Loader/Loader.php:134
 msgid "The address could not be found. "
 msgstr "Die Adresse wurde nicht gefunden."
 
-#: core/Loader/Loader.php:124
+#: core/Loader/Loader.php:135
 msgid "Geocode was not successful for the following reason: "
 msgstr "Der Geocode war aus folgenden Gründen nicht erfolgreich:"
 
-#: core/Loader/Loader.php:125
+#: core/Loader/Loader.php:136
 msgid "Locate address on the map:"
 msgstr "Adresse in der Karte finden:"
 
-#: core/Loader/Loader.php:126
+#: core/Loader/Loader.php:137
 #, php-format
 msgid "Minimum number of items not reached (%s items)"
 msgstr "Minimale Anzahl von Einträgen wurde nicht erreicht (%s Elemente)"
 
-#: core/Loader/Loader.php:127
+#: core/Loader/Loader.php:138
 #, php-format
 msgid "Maximum number of items reached (%s items)"
 msgstr "Maximale Anzahl von Einträgen wurde erreicht. (%s Einträge)"
 
-#: core/Loader/Loader.php:129
+#: core/Loader/Loader.php:140
 #, php-format
 msgid "There are no %s yet. Click <a href=\"#\">here</a> to add one."
 msgstr ""
 "Es gibt noch keine %s bis jetzt. Klicken Sie <a href=\"#\">hier</a> zum "
 "Hinzufügen."
 
-#: core/Loader/Loader.php:130
+#: core/Loader/Loader.php:141
 #, php-format
 msgid "Minimum number of rows not reached (%1$d %2$s)"
 msgstr "Minimale Anzahl von Zeilen wurde nicht erreicht (%1$d %2$s)"
 
-#: core/Loader/Loader.php:131
+#: core/Loader/Loader.php:142
 #, php-format
 msgid "Maximum number of rows exceeded (%1$d %2$s)"
 msgstr "Maximale Anzahl von Zeilen überschritten (%1$d %2$s)"
 
-#: core/Loader/Loader.php:132
+#: core/Loader/Loader.php:143
 #, php-format
 msgctxt "Complex field"
 msgid "Add %s"
 msgstr "%s hinzufügen"
 
-#: core/Loader/Loader.php:133
+#: core/Loader/Loader.php:144
 msgctxt "Complex field"
 msgid "Clone"
 msgstr "Klonen"
 
-#: core/Loader/Loader.php:134
+#: core/Loader/Loader.php:145
 msgctxt "Complex field"
 msgid "Remove"
 msgstr "Entfernen"
 
-#: core/Loader/Loader.php:135
+#: core/Loader/Loader.php:146
 msgctxt "Complex field"
 msgid "Collapse/Expand"
 msgstr "Ein/Ausklappen"
 
-#: core/Loader/Loader.php:136
+#: core/Loader/Loader.php:147
 msgctxt "Complex field groups"
 msgid "Collapse All"
 msgstr ""
 
-#: core/Loader/Loader.php:137
+#: core/Loader/Loader.php:148
 msgctxt "Complex field groups"
 msgid "Expand All"
 msgstr ""
 
-#: core/Loader/Loader.php:139
+#: core/Loader/Loader.php:150
 msgid "Please fill out all fields correctly. "
 msgstr "Bitte füllen Sie alle Felder korrekt aus."
 
-#: core/Loader/Loader.php:140
+#: core/Loader/Loader.php:151
 msgid "This field is required. "
 msgstr "Dieses Feld ist erforderlich."
 
-#: core/Loader/Loader.php:141
+#: core/Loader/Loader.php:152
 msgid "Please choose an option. "
 msgstr "Bitte wählen Sie eine Option."
 
-#: core/Loader/Loader.php:145
+#: core/Loader/Loader.php:156
 msgid "Select Time"
 msgstr "Zeitpunkt"
 
-#: core/Loader/Loader.php:146
+#: core/Loader/Loader.php:157
 msgid "Select Date"
 msgstr "Datum"
 
-#: core/Loader/Loader.php:148
+#: core/Loader/Loader.php:159
 #, php-format
 msgid "%1$d selected item"
 msgstr "%1$d ausgewähltes Element"
 
-#: core/Loader/Loader.php:149
+#: core/Loader/Loader.php:160
 #, php-format
 msgid "%1$d selected items"
 msgstr "%1$d ausgewählte Elemente"
 
-#: core/Loader/Loader.php:150
+#: core/Loader/Loader.php:161
 #, php-format
 msgid "%1$d selected item out of %2$d"
 msgstr "%1$d ausgewähltes Element aus %2$d"
 
-#: core/Loader/Loader.php:151
+#: core/Loader/Loader.php:162
 #, php-format
 msgid "%1$d selected items out of %2$d"
 msgstr "%1$d ausgewählte Elemente aus %2$d"
 
-#: core/Loader/Loader.php:153
+#: core/Loader/Loader.php:164
 msgid "Select a color"
 msgstr "Wähle Sie eine Farbe"
 
-#: core/Loader/Loader.php:155
+#: core/Loader/Loader.php:166
 msgid "No options."
 msgstr "Keine Optionen."
 
-#: core/Loader/Loader.php:157
+#: core/Loader/Loader.php:168
 msgid "Show all options"
 msgstr "Alle Optionen anzeigen"
 
-#: core/Loader/Loader.php:159
+#: core/Loader/Loader.php:170
 msgid "Search..."
 msgstr "Suche..."
 
-#: core/Loader/Loader.php:161
+#: core/Loader/Loader.php:172
 msgctxt "WordPress media attachment"
 msgid "URL"
 msgstr "URL"
 
-#: core/Loader/Loader.php:162
+#: core/Loader/Loader.php:173
 msgctxt "WordPress media attachment"
 msgid "Title"
 msgstr "Überschrift"
 
-#: core/Loader/Loader.php:163
+#: core/Loader/Loader.php:174
 msgctxt "WordPress media attachment"
 msgid "Artist"
 msgstr "Künstler"
 
-#: core/Loader/Loader.php:164
+#: core/Loader/Loader.php:175
 msgctxt "WordPress media attachment"
 msgid "Album"
 msgstr "Album"
 
-#: core/Loader/Loader.php:165
+#: core/Loader/Loader.php:176
 msgctxt "WordPress media attachment"
 msgid "Caption"
 msgstr "Beschriftung"
 
-#: core/Loader/Loader.php:166
+#: core/Loader/Loader.php:177
 msgctxt "WordPress media attachment"
 msgid "Alt Text"
 msgstr "Alt-Text"
 
-#: core/Loader/Loader.php:167
+#: core/Loader/Loader.php:178
 msgctxt "WordPress media attachment"
 msgid "Description"
 msgstr "Beschreibung"
 
-#: core/Loader/Loader.php:168
+#: core/Loader/Loader.php:179
 msgctxt "WordPress media attachment"
 msgid "Close"
 msgstr "Schließen"
 
-#: core/Loader/Loader.php:169
+#: core/Loader/Loader.php:180
 msgctxt "WordPress media attachment"
 msgid "Save"
 msgstr "Speichern"
 
-#: core/Loader/Loader.php:171
+#: core/Loader/Loader.php:182
 msgctxt "oEmbed field"
 msgid "Not Found"
 msgstr "Nicht gefunden"
 
-#: core/Loader/Loader.php:173
+#: core/Loader/Loader.php:184
 msgid "No files selected."
 msgstr "Keine Dateien ausgewählt."
 
-#: core/Loader/Loader.php:174
+#: core/Loader/Loader.php:185
 msgid "Add File"
 msgstr "Datei hinzufügen"
 
-#: core/Loader/Loader.php:175 core/Loader/Loader.php:179
+#: core/Loader/Loader.php:186 core/Loader/Loader.php:190
 msgctxt "WordPress Media Browser"
 msgid "Files"
 msgstr "Dateien"
 
-#: core/Loader/Loader.php:176 core/Loader/Loader.php:180
+#: core/Loader/Loader.php:187 core/Loader/Loader.php:191
 msgctxt "WordPress Media Browser"
 msgid "Select File"
 msgstr "Datei auswählen"
 
-#: core/Loader/Loader.php:178
+#: core/Loader/Loader.php:189
 msgid "Select File"
 msgstr "Datei auswählen"
 
-#: core/Loader/Loader.php:182
+#: core/Loader/Loader.php:193
 msgid "Select Image"
 msgstr "Bild auswählen"
 
-#: core/Loader/Loader.php:183
+#: core/Loader/Loader.php:194
 msgctxt "WordPress Media Browser"
 msgid "Images"
 msgstr "Bilder"
 
-#: core/Loader/Loader.php:184
+#: core/Loader/Loader.php:195
 msgctxt "WordPress Media Browser"
 msgid "Select Image"
 msgstr "Bild auswählen"
@@ -325,11 +326,11 @@ msgstr "Keine Optionsnamen verfügbar"
 msgid "Theme Options updated."
 msgstr "Theme-Optionen aktualisiert."
 
-#: templates/Container/theme_options.php:29
+#: templates/Container/common/options-page.php:34
 msgid "Actions"
 msgstr "Aktionen"
 
-#: templates/Container/theme_options.php:38
+#: templates/Container/common/options-page.php:43
 msgid "Save Changes"
 msgstr "Änderungen speichern"
 

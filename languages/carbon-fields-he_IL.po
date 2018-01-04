@@ -3,9 +3,9 @@ msgstr ""
 "Project-Id-Version: Carbon Fields\n"
 "POT-Creation-Date: 2017-12-13 09:25+0200\n"
 "PO-Revision-Date: 2017-12-13 09:25+0200\n"
-"Last-Translator: DieGOs <9585999@gmail.com>\n"
-"Language-Team: Russian\n"
-"Language: ru_RU\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: he_IL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,8 +15,7 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
 "esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
 "_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10 >= 2 && n"
-"%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: assets\n"
 "X-Poedit-SearchPathExcluded-1: languages\n"
@@ -27,310 +26,328 @@ msgstr ""
 
 #: core/Container/Container.php:711
 msgid "General"
-msgstr "Основные"
+msgstr "כללי"
 
 #: core/Container/Network_Container.php:52
 #: core/Container/Theme_Options_Container.php:207
 msgid "Settings saved."
-msgstr "Настройки сохранены"
+msgstr "ההגדרות נשמרו."
 
 #: core/Field/Footer_Scripts_Field.php:20
 msgid ""
 "If you need to add scripts to your footer (like Google Analytics tracking "
 "code), you should enter them in this box."
 msgstr ""
-"Если в футер необходимо добавить скрипты (код Google Analytics), их нужно "
-"указать здесь."
+"אם ברצונך להוסיף קבצי סקריפט בפוטר  (כמו קוד מעקב Google Analytics), להזין "
+"בתיבה זו."
 
 #: core/Field/Gravity_Form_Field.php:47
 msgid "No form"
-msgstr "Нет формы"
+msgstr "לא נמצא טופס"
 
 #: core/Field/Header_Scripts_Field.php:20
 msgid "If you need to add scripts to your header, you should enter them here."
-msgstr "Если в заголовок необходимо добавить скрипты, их нужно указать здеcь."
+msgstr "אם ברצונך להוסיף קבצי סקריפט להידר של העמוד, להזין אותם כאן."
 
 #: core/Field/Sidebar_Field.php:74
 msgctxt "sidebar"
 msgid "Add New"
-msgstr "Добавить новый"
+msgstr "הוספת סרגל צד חדש"
 
 #: core/Helper/Helper.php:536
 msgid "F j, Y"
-msgstr ""
+msgstr "F j, Y"
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:69
 msgid "Please enter a name for the sidebar."
-msgstr "Пожалуйста, введите название для сайдбара."
+msgstr "בבקשה הזן שם לסיידבאר"
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:72
 msgid "Unknown action attempted."
-msgstr "Неизвестная операция."
+msgstr "בוצע ניסיון לבצע פעולה לא ידועה"
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:102
 msgid "Sidebar with the same ID is already registered."
-msgstr "Сайдбар с этим ID уже зарегистрирован."
+msgstr "סיידבר עם אותו מזהה רשום כבר."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:112
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:142
 msgid ""
 "Failed to update option storing your custom sidebars. Please contact support."
 msgstr ""
-"Не удалось обновить параметры вашего сайдбара. Обратитесь в службу поддержки."
+"הצליח לעדכן אפשרות את הסיידבר המותאום אישי שלך. נא ליצור קשר עם התמיכה."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:137
 msgid "Sidebar not found."
-msgstr "Сайдбар не найден."
+msgstr "סיידבאר לא נמצא."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:181
 msgid "Add Sidebar"
-msgstr "Добавить сайдбар"
+msgstr "הוסף סיידבר"
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:182
 #: core/Loader/Loader.php:154
 msgid "Please enter the name of the new sidebar:"
-msgstr "Пожалуйста, введите название для сайдбара."
+msgstr "בבקשה הזן שם לסיידבאר"
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:183
 msgid "Are you sure you wish to remove this sidebar?"
-msgstr "Действительно удалить сайдбар?"
+msgstr "האם אתה בטוח שברצונך להסיר את הסיידבאר?"
 
 #: core/Loader/Loader.php:129
 msgid "Please fill out all required fields highlighted below."
-msgstr "Пожалуйста, заполните указанные поля."
+msgstr "נא למלא את כל השדות הנדרשים המסומנים להלן."
 
 #: core/Loader/Loader.php:130
 msgid "The changes you made will be lost if you navigate away from this page."
-msgstr "При переходе на другую страницу все изменения будут потеряны."
+msgstr "השינויים שביצעת לא ישמרו אם תצא מדף זה."
 
 #: core/Loader/Loader.php:134
 msgid "The address could not be found. "
-msgstr "Адрес не найден."
+msgstr "לא היתה אפשרות למצוא את הכתובת."
 
 #: core/Loader/Loader.php:135
 msgid "Geocode was not successful for the following reason: "
-msgstr "Запрос геокодера завершился ошибкой:"
+msgstr "GEO code נכשל מהסיבה הבאה"
 
 #: core/Loader/Loader.php:136
 msgid "Locate address on the map:"
-msgstr "Найти адрес на карте"
+msgstr "אתר כתובת במפה"
 
 #: core/Loader/Loader.php:137
 #, php-format
 msgid "Minimum number of items not reached (%s items)"
-msgstr "Минимальное количество элементов не достигнуто (%s)"
+msgstr "לא מולא המספר המינימלי של פריטים (%s פריטים)"
 
 #: core/Loader/Loader.php:138
 #, php-format
 msgid "Maximum number of items reached (%s items)"
-msgstr "Достигнуто максимальное число элементов (%s элементов)"
+msgstr "מולא מספר מקסימלי של פריטים  (%s פריטים)"
 
 #: core/Loader/Loader.php:140
 #, php-format
 msgid "There are no %s yet. Click <a href=\"#\">here</a> to add one."
-msgstr ""
-"%s пока еще не добавлено. Нажмите <a href=«#»>здесь</a>, чтобы добавить "
-"элемент."
+msgstr "אין עדיין %s. לחץ <a href=\"#\">כאן</a> כדי להוסיף אחד."
 
 #: core/Loader/Loader.php:141
 #, php-format
 msgid "Minimum number of rows not reached (%1$d %2$s)"
-msgstr "Минимальное количество строк не достигнуто (%1$d %2$s)"
+msgstr "המספר המינימלי של שורות לא מולא  (%1$d %2$s)"
 
 #: core/Loader/Loader.php:142
 #, php-format
 msgid "Maximum number of rows exceeded (%1$d %2$s)"
-msgstr "Достигнуто максимальное число рядов (%1$d %2$s)"
+msgstr "מולא מספר מקסימלי של שורות (%1$d %2$s)"
 
 #: core/Loader/Loader.php:143
 #, php-format
 msgctxt "Complex field"
 msgid "Add %s"
-msgstr "Добавить %s"
+msgstr "הוסף %s"
 
 #: core/Loader/Loader.php:144
 msgctxt "Complex field"
 msgid "Clone"
-msgstr "Копировать"
+msgstr "שכפל"
 
 #: core/Loader/Loader.php:145
 msgctxt "Complex field"
 msgid "Remove"
-msgstr "Удалить"
+msgstr "הסר"
 
 #: core/Loader/Loader.php:146
 msgctxt "Complex field"
 msgid "Collapse/Expand"
-msgstr "Свернуть/Развернуть"
+msgstr "סגור/פתח"
 
 #: core/Loader/Loader.php:147
 msgctxt "Complex field groups"
 msgid "Collapse All"
-msgstr ""
+msgstr "סגור הכול"
 
 #: core/Loader/Loader.php:148
 msgctxt "Complex field groups"
 msgid "Expand All"
-msgstr ""
+msgstr "פתח הכול"
 
 #: core/Loader/Loader.php:150
 msgid "Please fill out all fields correctly. "
-msgstr "Убедитесь, что все поля заполнены верно."
+msgstr "נא למלא את כל השדות הנדרשים המסומנים להלן."
 
 #: core/Loader/Loader.php:151
 msgid "This field is required. "
-msgstr "Обязательное поле."
+msgstr "שדה חובה"
 
 #: core/Loader/Loader.php:152
 msgid "Please choose an option. "
-msgstr "Пожалуйста, выберите вариант."
+msgstr "בבקשה בחר אפשרות"
 
 #: core/Loader/Loader.php:156
 msgid "Select Time"
-msgstr "Выберите время"
+msgstr "בחר שעה"
 
 #: core/Loader/Loader.php:157
 msgid "Select Date"
-msgstr "Выберите дату"
+msgstr "בחר תאריך"
 
 #: core/Loader/Loader.php:159
 #, php-format
 msgid "%1$d selected item"
-msgstr "%1$d выбрать элемент"
+msgstr "פריט נבחר %1$d"
 
 #: core/Loader/Loader.php:160
 #, php-format
 msgid "%1$d selected items"
-msgstr "%1$d выбранные элементы"
+msgstr "פריטים נבחרו %1$d"
 
 #: core/Loader/Loader.php:161
-#, fuzzy, php-format
+#, php-format
 msgid "%1$d selected item out of %2$d"
-msgstr "%1$d выбрать элемент"
+msgstr "%1$d נבחר מתוך %2$d"
 
 #: core/Loader/Loader.php:162
-#, fuzzy, php-format
+#, php-format
 msgid "%1$d selected items out of %2$d"
-msgstr "%1$d выбранные элементы"
+msgstr "%1$d נבחרו מתוך %2$d"
 
 #: core/Loader/Loader.php:164
 msgid "Select a color"
-msgstr "Выбирите цвет"
+msgstr "בחר צבע"
 
 #: core/Loader/Loader.php:166
 msgid "No options."
-msgstr "Нет опций."
+msgstr "אין אפשרויות"
 
 #: core/Loader/Loader.php:168
 msgid "Show all options"
-msgstr "Показать все опции"
+msgstr "הצג כל האפשרויות"
 
 #: core/Loader/Loader.php:170
 msgid "Search..."
-msgstr "Поиск..."
+msgstr "חיפוש"
 
 #: core/Loader/Loader.php:172
 msgctxt "WordPress media attachment"
 msgid "URL"
-msgstr "URL"
+msgstr "כתובת אתר"
 
 #: core/Loader/Loader.php:173
 msgctxt "WordPress media attachment"
 msgid "Title"
-msgstr "Заголовок"
+msgstr "כותרת"
 
 #: core/Loader/Loader.php:174
 msgctxt "WordPress media attachment"
 msgid "Artist"
-msgstr "Исполнитель"
+msgstr "אומן"
 
 #: core/Loader/Loader.php:175
 msgctxt "WordPress media attachment"
 msgid "Album"
-msgstr "Альбом"
+msgstr "אלבום"
 
 #: core/Loader/Loader.php:176
 msgctxt "WordPress media attachment"
 msgid "Caption"
-msgstr "Подпись"
+msgstr "אזור כיתוב"
 
 #: core/Loader/Loader.php:177
 msgctxt "WordPress media attachment"
 msgid "Alt Text"
-msgstr "Текст"
+msgstr "תיאור טקסט"
 
 #: core/Loader/Loader.php:178
 msgctxt "WordPress media attachment"
 msgid "Description"
-msgstr "Описание"
+msgstr "תיאור"
 
 #: core/Loader/Loader.php:179
 msgctxt "WordPress media attachment"
 msgid "Close"
-msgstr "Закрыть"
+msgstr "סגור"
 
 #: core/Loader/Loader.php:180
 msgctxt "WordPress media attachment"
 msgid "Save"
-msgstr "Сохранить"
+msgstr "שמור"
 
 #: core/Loader/Loader.php:182
 msgctxt "oEmbed field"
 msgid "Not Found"
-msgstr "Не найдено"
+msgstr "לא נמצא"
 
 #: core/Loader/Loader.php:184
 msgid "No files selected."
-msgstr "Файлы не выбраны"
+msgstr "לא נבחרו קבצים"
 
 #: core/Loader/Loader.php:185
 msgid "Add File"
-msgstr "Добавить новый"
+msgstr "הוסף קובץ"
 
 #: core/Loader/Loader.php:186 core/Loader/Loader.php:190
 msgctxt "WordPress Media Browser"
 msgid "Files"
-msgstr "Файлы"
+msgstr "קבצים"
 
 #: core/Loader/Loader.php:187 core/Loader/Loader.php:191
 msgctxt "WordPress Media Browser"
 msgid "Select File"
-msgstr "Выбрать файл"
+msgstr "בחר קובץ"
 
 #: core/Loader/Loader.php:189
 msgid "Select File"
-msgstr "Выбрать файл"
+msgstr "בחר קובץ"
 
 #: core/Loader/Loader.php:193
 msgid "Select Image"
-msgstr "Выбрать изображение"
+msgstr "בחר תמונה"
 
 #: core/Loader/Loader.php:194
 msgctxt "WordPress Media Browser"
 msgid "Images"
-msgstr "Изображения"
+msgstr "תמונות"
 
 #: core/Loader/Loader.php:195
 msgctxt "WordPress Media Browser"
 msgid "Select Image"
-msgstr "Выбрать изображение"
+msgstr "בחר תמונה"
 
 #: core/REST_API/Router.php:287
 msgid "No option names provided"
-msgstr "Не указаны имена опций"
+msgstr "לא סופקו אפשרויות לשמות"
 
 #: core/REST_API/Router.php:298
 msgid "Theme Options updated."
-msgstr "Опции темы обновлены."
+msgstr "הגדרות תבנית נשמרו"
 
 #: templates/Container/common/options-page.php:34
 msgid "Actions"
-msgstr "Действия"
+msgstr "פעולות"
 
 #: templates/Container/common/options-page.php:43
 msgid "Save Changes"
-msgstr "Сохранить изменения"
+msgstr "שמור שינויים"
 
 #: templates/Container/widget.php:4
 msgid "No options are available for this widget."
-msgstr "Нет доступных настроек для этого виджета."
+msgstr "אין אפשרויות זמינות עבור יישומון זה."
+
+#~ msgid ""
+#~ "The new version of Carbon Fields is a major update. Please make sure you "
+#~ "have a full backup before updating and test any add-ons or custom "
+#~ "functionality.\n"
+#~ "Developers should review the upgrade guide on %1$s."
+#~ msgstr ""
+#~ "הגירסה החדשה של קרבון פילדס הוא עדכון מקיף. אנא בצע גיבוי מלא לפני עדכון "
+#~ "ולבדוק כל תוספות או פונקציונליות מותאמת אישית.\n"
+#~ "מפתחים בבקשה לקרוא את המדריך שדרוג על %1$s."
+
+#~ msgid "Carbon Fields"
+#~ msgstr "קרבון פילדס"
+
+#~ msgid ""
+#~ "WordPress developer-friendly custom fields for post types, taxonomy "
+#~ "terms, users, comments, widgets, options, navigation menus and more."
+#~ msgstr ""
+#~ "תוסף קסטום פילדס ידידותי למפתחים עבור פוסט טייפס, טקסונומיס, משתמשים, "
+#~ "תגובות, וידג'טים, אפשרויות, ניווט, תפריטים ועוד."

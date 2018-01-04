@@ -14,30 +14,39 @@ import { preventDefault } from 'lib/helpers';
  * Render the 'Add Entry' button.
  *
  * @param  {Object}        props
+ * @param  {Boolean}       props.showAddButton
  * @param  {String}        props.addButtonText
- * @param  {String}        props.collapseAllButtonText
  * @param  {React.Element} props.children
  * @param  {Function}      props.addGroup
  * @param  {Function}      props.toggleAll
+ * @param  {Boolean}       props.showCollapseAllButton
+ * @param  {String}        props.collapseAllButtonText
  * @return {React.Element}
  */
 export const ComplexActions = ({
+	showAddButton,
 	addButtonText,
-	showCollapseAll,
-	collapseAllButtonText,
-	children,
 	addGroup,
-	toggleAll
+	toggleAll,
+	showCollapseAllButton,
+	collapseAllButtonText,
+	children
 }) => {
-	return <div className="carbon-actions">
-		<div className="carbon-button">
-			<a href="#" className="button" onClick={addGroup}>
-				{addButtonText}
-			</a>
+	if ( !showAddButton && !showCollapseAllButton ) {
+		return null;
+	}
 
-			{children}
-		</div>
-		{showCollapseAll &&
+	return <div className="carbon-actions">
+		{showAddButton &&
+			<div className="carbon-button">
+				<a href="#" className="button" onClick={addGroup}>
+					{addButtonText}
+				</a>
+
+				{children}
+			</div>
+		}
+		{showCollapseAllButton &&
 			<div className="carbon-button carbon-button-collapse-all">
 				<a href="#" className="button" onClick={toggleAll}>
 					{collapseAllButtonText}
@@ -53,11 +62,12 @@ export const ComplexActions = ({
  * @type {Object}
  */
 ComplexActions.propTypes = {
+	showAddButton: PropTypes.bool,
 	addButtonText: PropTypes.string,
-	showCollapseAll: PropTypes.bool,
-	collapseAllButtonText: PropTypes.string,
 	onAddClick: PropTypes.func,
 	onToggleAllClick: PropTypes.func,
+	showCollapseAllButton: PropTypes.bool,
+	collapseAllButtonText: PropTypes.string,
 	children: PropTypes.element,
 };
 

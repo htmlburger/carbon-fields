@@ -8,6 +8,11 @@ namespace Carbon_Fields\Field;
 class Date_Field extends Field {
 
 	/**
+	 * {@inheritDoc}
+	 */
+	protected $allowed_attributes = array( 'placeholder' );
+
+	/**
 	 * The storage format for use in PHP
 	 *
 	 * @var string

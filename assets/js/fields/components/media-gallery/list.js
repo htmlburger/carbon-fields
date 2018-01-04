@@ -42,9 +42,9 @@ export const MediaGalleryList = ({
 	onSort,
 }) => {
 	return <div className="carbon-media-gallery-list">
-		<SortableList options={sortableOptions} onSort={onSort}>
-			{
-				items.length > 0 ?
+		{
+			items.length > 0 ?
+			<SortableList options={sortableOptions} onSort={onSort}>
 				<ul className="carbon-media-gallery-list-items">
 					{
 						items.map((item, index) => {
@@ -61,12 +61,12 @@ export const MediaGalleryList = ({
 							/>
 						})
 					}
-				</ul> :
-				<div className="carbon-media-gallery-no-files">
-					<p>{carbonFieldsL10n.field.mediaGalleryNoFiles}</p>
-				</div>
-			}
-		</SortableList>
+				</ul>
+			</SortableList> :
+			<div className="carbon-media-gallery-no-files">
+				<p>{carbonFieldsL10n.field.mediaGalleryNoFiles}</p>
+			</div>
+		}
 
 		<div className="carbon-media-gallery-actions">
 			<button type="button" className="button button-secondary" onClick={openBrowser}>

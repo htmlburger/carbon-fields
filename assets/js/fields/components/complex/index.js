@@ -99,36 +99,6 @@ export const ComplexField = ({
 	handleSort
 }) => {
 	const availableGroups = filter(field.group_types, groupType => includes(enabledGroupTypes, groupType.name));
-	const complexTabActions = isEmpty(availableGroups) ? null : (
-		<ComplexActions
-			addButtonText="+"
-			showCollapseAll={false}
-			collapseAllButtonText=""
-			onAddClick={handleAddGroupClick}
-			onToggleAllClick={handleToggleAllGroupsClick}>
-				<ComplexPopover
-					groups={availableGroups}
-					visible={popoverVisible}
-					onItemClick={handleAddGroupClick}
-					onClose={handlePopoverClose}
-					outsideClickIgnoreClass="carbon-button" />
-		</ComplexActions>
-	);
-	const complexButtonActions = isEmpty(availableGroups) ? null : (
-		<ComplexActions
-			addButtonText={carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name)}
-			showCollapseAll={field.value.length > 0}
-			collapseAllButtonText={allGroupsCollapsed ? carbonFieldsL10n.field.complexExpandAllButton : carbonFieldsL10n.field.complexCollapseAllButton}
-			onAddClick={handleAddGroupClick}
-			onToggleAllClick={handleToggleAllGroupsClick}>
-				<ComplexPopover
-					groups={availableGroups}
-					visible={popoverVisible}
-					onItemClick={handleAddGroupClick}
-					onClose={handlePopoverClose}
-					outsideClickIgnoreClass="carbon-button" />
-		</ComplexActions>
-	);
 
 	return <Field field={field}>
 		<div className={cx('carbon-subcontainer', 'carbon-grid', { 'multiple-groups': field.multiple_groups }, { 'carbon-complex-tabbed': tabbed })}>
@@ -146,7 +116,20 @@ export const ComplexField = ({
 						current={field.ui.current_tab}
 						onClick={handleTabClick}
 						onSort={handleSort}>
-							{complexTabActions}
+							<ComplexActions
+								showAddButton={!isEmpty(availableGroups)}
+								addButtonText="+"
+								onAddClick={handleAddGroupClick}
+								onToggleAllClick={handleToggleAllGroupsClick}
+								showCollapseAllButton={false}
+								collapseAllButtonText="">
+									<ComplexPopover
+										groups={availableGroups}
+										visible={popoverVisible}
+										onItemClick={handleAddGroupClick}
+										onClose={handlePopoverClose}
+										outsideClickIgnoreClass="carbon-button" />
+							</ComplexActions>
 					</ComplexTabs>
 				</SortableList>
 
@@ -161,7 +144,7 @@ export const ComplexField = ({
 									layout={field.layout}
 									group={group}
 									active={isGroupActive(group.id)}
-									cloneEnabled={field.duplicate_groups_allowed}
+									cloneEnabled={field.duplicate_groups_allowed && !isEmpty(availableGroups)}
 									onClone={handleCloneGroupClick}
 									onRemove={handleRemoveGroupClick}
 									onExpand={handleGroupExpand}
@@ -172,7 +155,20 @@ export const ComplexField = ({
 				</SortableList>
 			</div>
 
-			{complexButtonActions}
+			<ComplexActions
+				showAddButton={!isEmpty(availableGroups)}
+				addButtonText={carbonFieldsL10n.field.complexAddButton.replace('%s', field.labels.singular_name)}
+				onAddClick={handleAddGroupClick}
+				onToggleAllClick={handleToggleAllGroupsClick}
+				showCollapseAllButton={!isEmpty(field.value)}
+				collapseAllButtonText={allGroupsCollapsed ? carbonFieldsL10n.field.complexExpandAllButton : carbonFieldsL10n.field.complexCollapseAllButton}>
+					<ComplexPopover
+						groups={availableGroups}
+						visible={popoverVisible}
+						onItemClick={handleAddGroupClick}
+						onClose={handlePopoverClose}
+						outsideClickIgnoreClass="carbon-button" />
+			</ComplexActions>
 		</div>
 	</Field>;
 };
@@ -322,6 +318,10 @@ export const enhance = compose(
 		let enabledGroupTypes = map(field.group_types, 'name');
 		if (!field.duplicate_groups_allowed) {
 			enabledGroupTypes = filter(enabledGroupTypes, groupType => findIndex(field.value, {name: groupType}) === -1);
+		}
+
+		if (field.max > 0 && field.value.length >= field.max) {
+			enabledGroupTypes = [];
 		}
 
 		let allGroupsCollapsed = every(field.value, group => group.collapsed);
