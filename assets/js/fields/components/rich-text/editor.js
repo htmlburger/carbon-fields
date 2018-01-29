@@ -110,7 +110,7 @@ class RichTextEditor extends React.Component {
 				const editorSetup = (editor) => {
 					this.editor = editor;
 
-					editor.on('blur', () => {
+					editor.on('blur Change', () => {
 						if (editor.isDirty()) {
 							onChange(editor.getContent());
 						}

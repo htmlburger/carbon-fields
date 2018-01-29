@@ -13,7 +13,7 @@ _Please enter the actual, unexpected behavior here_
 ## Container definition
 ```php
 // Please add your entire container defintion here so issues
-// are ease to reproduce
+// are easy to reproduce
 ```
 
 ## Steps to Reproduce the Problem
