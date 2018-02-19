@@ -1,5 +1,3 @@
-dist: precise
-
 language: php
 
 sudo: false
