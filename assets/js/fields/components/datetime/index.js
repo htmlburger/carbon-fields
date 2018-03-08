@@ -160,7 +160,7 @@ export const enhance = compose(
 			: carbonFieldsL10n.field.selectDate;
 
 		let locale = 'default';
-		if (!isUndefined(FlatpickrJS.l10ns[locale])) {
+		if (!isUndefined(FlatpickrJS.l10ns[carbonFieldsL10n.shortLocale])) {
 			locale = carbonFieldsL10n.shortLocale;
 		}
 

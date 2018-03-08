@@ -30,7 +30,8 @@ class Helper {
 	}
 
 	/**
-	 * Get a clone of a field with a value loaded
+	 * Get a clone of a field with a value loaded.
+	 * WARNING: The datastore is cloned!
 	 *
 	 * @param  int    $object_id      Object id to get value for (e.g. post_id, term_id etc.)
 	 * @param  string $container_type Container type to search in. Optional if $container_id is supplied
@@ -54,6 +55,41 @@ class Helper {
 	}
 
 	/**
+	 * Execute an action with a clone of a field with a value loaded.
+	 * WARNING: The datastore reference is kept!
+	 *
+	 * @param  int      $object_id      Object id to get value for (e.g. post_id, term_id etc.)
+	 * @param  string   $container_type Container type to search in. Optional if $container_id is supplied
+	 * @param  string   $container_id   Container id to search in. Optional if $container_type is supplied
+	 * @param  string   $field_name     Field name to search for
+	 * @param  \Closure $action         Action to execute
+	 * @return void
+	 */
+	public static function with_field_clone( $object_id, $container_type, $container_id, $field_name, $action ) {
+		$field = static::get_field( $container_type, $container_id, $field_name );
+
+		if ( ! $field ) {
+			return;
+		}
+
+		$clone = clone $field;
+		$datastore = $clone->get_datastore();
+		$datastore_object_id = $datastore->get_object_id();
+
+		if ( $object_id !== null ) {
+			$datastore->set_object_id( $object_id );
+		}
+
+		$result = $action($clone);
+
+		if ( $object_id !== null ) {
+			$datastore->set_object_id( $datastore_object_id );
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Get a value formatted for end-users
 	 *
 	 * @param  int    $object_id      Object id to get value for (e.g. post_id, term_id etc.)
@@ -63,36 +99,49 @@ class Helper {
 	 * @return mixed
 	 */
 	public static function get_value( $object_id, $container_type, $container_id, $field_name ) {
-		$field = static::get_field_clone( $object_id, $container_type, $container_id, $field_name );
+		return static::with_field_clone(
+			$object_id,
+			$container_type,
+			$container_id,
+			$field_name,
+			function( $field ) {
+				if ( ! $field ) {
+					return '';
+				}
 
-		if ( ! $field ) {
-			return '';
-		}
-
-		$field->load();
-		return $field->get_formatted_value();
+				$field->load();
+				return $field->get_formatted_value();
+			}
+		);
 	}
 
 	/**
 	 * Set value for a field
 	 *
-	 * @param int    $object_id      Object id to get value for (e.g. post_id, term_id etc.)
-	 * @param string $container_type Container type to search in
-	 * @param string $container_id
-	 * @param string $field_name     Field name
-	 * @param array $value Field expects a `value_set`; Complex_Field expects a `value_tree` - refer to DEVELOPMENT.md
+	 * @param  int    $object_id      Object id to get value for (e.g. post_id, term_id etc.)
+	 * @param  string $container_type Container type to search in
+	 * @param  string $container_id
+	 * @param  string $field_name     Field name
+	 * @param  array  $value          Field expects a `value_set`. Complex_Field expects a `value_tree` - refer to DEVELOPMENT.md
+	 * @return void
 	 */
 	public static function set_value( $object_id, $container_type, $container_id, $field_name, $value ) {
-		$field = static::get_field_clone( $object_id, $container_type, $container_id, $field_name );
+		static::with_field_clone(
+			$object_id,
+			$container_type,
+			$container_id,
+			$field_name,
+			function( $field ) use ( $container_id, $field_name, $value ) {
+				if ( ! $field ) {
+					$container_message = $container_id ? 'in container with id "' . $container_id . '"' : 'in containers of type "' . $container_type . '"';
+					Incorrect_Syntax_Exception::raise( 'Could not find a field which satisfies the supplied pattern ' . $container_message . ': ' . $field_name );
+					return;
+				}
 
-		if ( ! $field ) {
-			$container_message = $container_id ? 'in container with id "' . $container_id . '"' : 'in containers of type "' . $container_type . '"';
-			Incorrect_Syntax_Exception::raise( 'Could not find a field which satisfies the supplied pattern ' . $container_message . ': ' . $field_name );
-			return;
-		}
-
-		$field->set_value( $value );
-		$field->save();
+				$field->set_value( $value );
+				$field->save();
+			}
+		);
 	}
 
 	/**
