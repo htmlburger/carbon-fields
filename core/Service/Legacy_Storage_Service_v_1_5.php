@@ -198,13 +198,13 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 	/**
 	 * Get a key-value array of legacy values for fields in the container of the passed datastore
 	 *
-	 * @param Container $container
+	 * @param  Container           $container
+	 * @param  Datastore_Interface $datastore
 	 * @return array
 	 */
-	protected function get_legacy_storage_array_from_database( Container $container ) {
+	protected function get_legacy_storage_array_from_database( Container $container, Datastore_Interface $datastore ) {
 		global $wpdb;
 
-		$datastore = $container->get_datastore();
 		$table = $this->get_table_details_for_datastore( $datastore );
 
 		if ( $table['table_id_column'] && ! $datastore->get_object_id() ) {
@@ -253,11 +253,13 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 			return array(); // unhandled datastore type or no registered containers
 		}
 
-		if ( ! isset( $this->storage_array_cache[ $container->get_id() ] ) ) {
-			$this->storage_array_cache[ $container->get_id() ] = $this->get_legacy_storage_array_from_database( $container );
+		$cache_key = $container->get_id() . '-' . strval($datastore->get_object_id());
+
+		if ( ! isset( $this->storage_array_cache[ $cache_key ] ) ) {
+			$this->storage_array_cache[ $cache_key ] = $this->get_legacy_storage_array_from_database( $container, $datastore );
 		}
 
-		return $this->storage_array_cache[ $container->get_id() ];
+		return $this->storage_array_cache[ $cache_key ];
 	}
 
 	/**
