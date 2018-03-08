@@ -10932,7 +10932,7 @@ var enhance = exports.enhance = (0, _recompose.compose)(
 	var buttonText = field.type === _constants.TYPE_TIME ? carbonFieldsL10n.field.selectTime : carbonFieldsL10n.field.selectDate;
 
 	var locale = 'default';
-	if (!(0, _lodash.isUndefined)(_flatpickr2.default.l10ns[locale])) {
+	if (!(0, _lodash.isUndefined)(_flatpickr2.default.l10ns[carbonFieldsL10n.shortLocale])) {
 		locale = carbonFieldsL10n.shortLocale;
 	}
 
