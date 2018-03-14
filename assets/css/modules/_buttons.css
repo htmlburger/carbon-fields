@@ -7,6 +7,8 @@
 .carbon-button ul { position: absolute; z-index: 9999; left: 100%; top: 50%; min-width: 180px; margin: 0; background: $color-label; border-radius: 3px; transform: translate(10px, -50%); }
 .carbon-button ul:before { content: ''; position: absolute; right: 100%; top: 50%; margin-top: -5px; border-width: 5px 5px 5px 0; border-style: solid; border-color: transparent $color-label; }
 
+.carbon-container .carbon-button ul { list-style-type: none; }
+
 .carbon-button li { margin: 0; }
 
 .carbon-button li a { display: block; padding: 8px 10px; font-size: 12px; font-weight: 600; line-height: 1.5; text-decoration: none; white-space: nowrap; color: #fff; box-shadow: none; }

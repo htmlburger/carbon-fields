@@ -1,0 +1,8 @@
+/* ------------------------------------------------------------ *\
+	Gutenberg overrides
+\* ------------------------------------------------------------ */
+
+.edit-post-meta-boxes-area .carbon-container input,
+.edit-post-meta-boxes-area .carbon-container select,
+.edit-post-meta-boxes-area .carbon-container textarea { border-radius: 0; }
+.edit-post-meta-boxes-area .carbon-container input { max-width: none; line-height: normal; }
