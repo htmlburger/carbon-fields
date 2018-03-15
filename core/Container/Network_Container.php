@@ -43,19 +43,6 @@ class Network_Container extends Theme_Options_Container {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public function render() {
-		$input = stripslashes_deep( $_GET );
-		$request_settings_updated = isset( $input['settings-updated'] ) ? $input['settings-updated'] : '';
-		if ( $request_settings_updated === 'true' ) {
-			$this->notifications[] = __( 'Settings saved.', 'carbon-fields' );
-		}
-
-		include \Carbon_Fields\DIR . '/templates/Container/network.php';
-	}
-
-	/**
 	 * Check if a site exists by id
 	 *
 	 * @param  integer $id
