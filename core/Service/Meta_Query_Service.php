@@ -80,8 +80,7 @@ class Meta_Query_Service extends Service {
 		$property = isset( $condition['carbon_field_property'] ) ? $condition['carbon_field_property'] : Value_Set::VALUE_PROPERTY;
 
 		// bail if we cannot find the field
-		// bail if the field is a simple root field ( we don't need to do anything in this case ) UNLESS we are looking for a custom property
-		if ( $field !== null && ( ! $field->is_simple_root_field() || $property !== Value_Set::VALUE_PROPERTY ) ) {
+		if ( $field !== null ) {
 			$storage_key = $this->key_toolset->get_storage_key_with_index_wildcards(
 				$field->is_simple_root_field(),
 				array_merge( $field->get_hierarchy(), array( $field->get_base_name() ) ),
