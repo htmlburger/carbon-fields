@@ -131,7 +131,7 @@ class Helper {
 			$container_type,
 			$container_id,
 			$field_name,
-			function( $field ) use ( $container_id, $field_name, $value ) {
+			function( $field ) use ( $container_type, $container_id, $field_name, $value ) {
 				if ( ! $field ) {
 					$container_message = $container_id ? 'in container with id "' . $container_id . '"' : 'in containers of type "' . $container_type . '"';
 					Incorrect_Syntax_Exception::raise( 'Could not find a field which satisfies the supplied pattern ' . $container_message . ': ' . $field_name );

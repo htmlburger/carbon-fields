@@ -11,8 +11,8 @@ class Field {
 	/**
 	 * A proxy for the abstract field factory method.
 	 *
-	 * @see    Carbon_Fields\Field\Field::factory()
-	 * @return Carbon_Fields\Field\Field
+	 * @see    \Carbon_Fields\Field\Field::factory()
+	 * @return \Carbon_Fields\Field\Field
 	 */
 	public static function factory() {
 		return call_user_func_array( array( '\Carbon_Fields\Field\Field', 'factory' ), func_get_args() );
@@ -21,8 +21,8 @@ class Field {
 	/**
 	 * An alias of factory().
 	 *
-	 * @see    Field::factory()
-	 * @return Carbon_Fields\Field\Field
+	 * @see    \Carbon_Fields\Field\Field::factory()
+	 * @return \Carbon_Fields\Field\Field
 	 */
 	public static function make() {
 		return call_user_func_array( array( get_class(), 'factory' ), func_get_args() );

@@ -6,7 +6,6 @@
 
 .wp-customizer .carbon-container.carbon-container-widget { margin: 0 0 10px; border-width: 0; }
 
-
 /* Media Gallery Field */
 .carbon-container-widget .carbon-media-gallery-list-items { height: auto; max-height: 260px; }
 .carbon-container-widget .carbon-media-gallery-list-items .carbon-media-gallery-list-item { flex-basis: 33.333334% !important; }

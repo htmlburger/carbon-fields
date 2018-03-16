@@ -253,7 +253,7 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 			return array(); // unhandled datastore type or no registered containers
 		}
 
-		$cache_key = $container->get_id() . '-' . strval($datastore->get_object_id());
+		$cache_key = $container->get_id() . '-' . strval( $datastore->get_object_id() );
 
 		if ( ! isset( $this->storage_array_cache[ $cache_key ] ) ) {
 			$this->storage_array_cache[ $cache_key ] = $this->get_legacy_storage_array_from_database( $container, $datastore );

@@ -104,7 +104,7 @@ class Theme_Options_Container extends Container {
 			$this->errors[] = $e->getMessage();
 		}
 
-		do_action( 'carbon_fields_theme_options_container_saved', $user_data, $this );
+		do_action( 'carbon_fields_' . $this->type . '_container_saved', $user_data, $this );
 
 		if ( ! headers_sent() ) {
 			wp_redirect( add_query_arg( array( 'settings-updated' => 'true' ) ) );
@@ -207,7 +207,7 @@ class Theme_Options_Container extends Container {
 			$this->notifications[] = __( 'Settings saved.', 'carbon-fields' );
 		}
 
-		include \Carbon_Fields\DIR . '/templates/Container/theme_options.php';
+		include \Carbon_Fields\DIR . '/templates/Container/' . $this->type . '.php';
 	}
 
 	/**

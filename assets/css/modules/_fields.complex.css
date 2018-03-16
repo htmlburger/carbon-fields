@@ -47,7 +47,7 @@
 
 /*  Drag Handle  */
 
-.carbon-drag-handle { position: relative; min-height: 1.5em; padding: 12px 90px 12px 54px; background: $color-grey-bg; border: 1px solid $color-border; cursor: move; font-size: 12px; font-weight: 600; line-height: 1.5; color: $color-label; }
+.carbon-drag-handle { box-sizing: content-box; position: relative; min-height: 1.5em; padding: 12px 90px 12px 54px; background: $color-grey-bg; border: 1px solid $color-border; cursor: move; font-size: 12px; font-weight: 600; line-height: 1.5; color: $color-label; }
 .carbon-drag-handle:hover { border-color: $color-border-active; }
 .carbon-drag-handle .group-number { position: absolute; left: 0; top: 0; width: 43px; height: 100%; line-height: 42px; border-right: 1px solid $color-border; text-align: center; }
 
