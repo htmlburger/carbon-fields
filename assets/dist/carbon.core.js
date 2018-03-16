@@ -10034,7 +10034,7 @@ var Api = function () {
 
 			if (field.type === _constants.TYPE_COMPLEX) {
 				var value = [];
-				for (var i = field.value.length - 1; i >= 0; i--) {
+				for (var i = 0; i < field.value.length; i++) {
 					var group = field.value[i];
 					var fieldValue = (0, _defineProperty3.default)({}, _constants.TYPE_PROPERTY, group.name);
 
