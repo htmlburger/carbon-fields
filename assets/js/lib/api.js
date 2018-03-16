@@ -43,7 +43,7 @@ class Api {
 
 		if (field.type === TYPE_COMPLEX) {
 			let value = [];
-			for (let i = field.value.length - 1; i >= 0; i--) {
+			for (let i = 0; i < field.value.length; i++) {
 				let group = field.value[i];
 				let fieldValue = {[TYPE_PROPERTY]: group.name};
 
