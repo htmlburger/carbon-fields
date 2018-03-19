@@ -204,13 +204,7 @@ class Loader {
 		global $post, $wp_meta_boxes;
 
 		$context = 'carbon_fields_after_title';
-		foreach ( $wp_meta_boxes as $post_type => $meta_boxes ) {
-			if ( empty( $meta_boxes[ $context ] ) ) {
-				continue;
-			}
-			do_meta_boxes( get_current_screen(), $context, $post );
-			unset( $wp_meta_boxes[ $post_type ][ $context ] );
-		}
+		do_meta_boxes( get_current_screen(), $context, $post );
 	}
 
 	/**
