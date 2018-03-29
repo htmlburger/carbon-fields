@@ -46,6 +46,8 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 	 * @param string $value
 	 */
 	protected function save_key_value_pair( $key, $value ) {
+		$value = wp_slash( $value );
+
 		if ( ! update_metadata( $this->get_meta_type(), $this->get_object_id(), $key, $value ) ) {
 			add_metadata( $this->get_meta_type(), $this->get_object_id(), $key, $value, true );
 		}
