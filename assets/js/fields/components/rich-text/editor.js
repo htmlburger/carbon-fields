@@ -62,20 +62,24 @@ class RichTextEditor extends React.Component {
 	 */
 	render() {
 		const { id, children, richEditing, mediaButtons } = this.props;
+
 		const classes = [
 			'carbon-wysiwyg',
 			'wp-editor-wrap',
 			{ 'tmce-active': richEditing },
 			{ 'html-active': !richEditing },
 		];
+		const mediaButtonsHTML = mediaButtons ? _.template(mediaButtons)({ id }) : null;
 
 		return <div id={`wp-${id}-wrap`} className={cx(classes)} ref={node => this.node = node}>
-			<div id={`wp-${id}-media-buttons`} className="hide-if-no-js wp-media-buttons">
-				<a href="#" className="button insert-media add_media" data-editor={id} title="Add Media">
-					<span className="wp-media-buttons-icon"></span> Add Media
-				</a>
-				<span dangerouslySetInnerHTML={{__html: mediaButtons}}></span>
-			</div>
+			{
+				mediaButtonsHTML
+				?
+					<div id={`wp-${id}-media-buttons`} className="hide-if-no-js wp-media-buttons">
+						<span dangerouslySetInnerHTML={{__html: mediaButtonsHTML}}></span>
+					</div>
+				:	null
+			}
 
 			{
 				richEditing
