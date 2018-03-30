@@ -95,7 +95,7 @@ export const enhance = compose(
 				let tabId;
 
 				if (ui.tabs_in_url) {
-					const hash = window.location.hash.replace(/^#!/, '');
+					const hash = decodeURI(window.location.hash.replace(/^#!/, ''));
 					const tab = find(tabs, ['id', hash]);
 
 					if (tab) {
