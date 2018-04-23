@@ -435,7 +435,7 @@ class Field implements Datastore_Holder_Interface {
 
 		$save = apply_filters( 'carbon_fields_should_save_field_value', true, $this->get_value(), $this );
 		if ( $save ) {
-			$this->get_datastore()->save( $this );
+			$this->get_datastore()->save( apply_filters( 'carbon_fields_before_field_save', $this ) );
 		}
 	}
 
@@ -443,7 +443,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Delete value from storage
 	 */
 	public function delete() {
-		$this->get_datastore()->delete( $this );
+		$this->get_datastore()->delete( apply_filters( 'carbon_fields_before_field_delete', $this ) );
 	}
 
 	/**
