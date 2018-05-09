@@ -565,7 +565,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return boolean
 	 */
 	protected function register_field_name( $name ) {
-		if ( in_array( $name, $this->registered_field_names ) ) {
+		if ( in_array( $name, $this->registered_field_names, true ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
 			return false;
 		}
@@ -692,7 +692,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		}
 
 		$untabbed_fields = array_filter( $this->fields, function( $field ) use ( $tabbed_fields_names ) {
-			return ! in_array( $field->get_name(), $tabbed_fields_names );
+			return ! in_array( $field->get_name(), $tabbed_fields_names, true );
 		} );
 
 		return $untabbed_fields;

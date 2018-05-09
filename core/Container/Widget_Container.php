@@ -48,7 +48,7 @@ class Widget_Container extends Container {
 		$request_action = isset( $input['action'] ) ? $input['action'] : '';
 		$is_widget_save = ( $request_action === 'save-widget' );
 
-		if ( ( ! $screen || ! in_array( $screen->id, array( 'widgets', 'customize' ) ) ) && ! $is_widget_save ) {
+		if ( ( ! $screen || ! in_array( $screen->id, array( 'widgets', 'customize' ), true ) ) && ! $is_widget_save ) {
 			return false;
 		}
 

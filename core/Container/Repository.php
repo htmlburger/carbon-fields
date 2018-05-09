@@ -170,7 +170,7 @@ class Repository {
 	 * @param string $id
 	 */
 	public function is_unique_container_id( $id ) {
-		return ! in_array( $id, $this->registered_container_ids );
+		return ! in_array( $id, $this->registered_container_ids, true );
 	}
 
 	/**

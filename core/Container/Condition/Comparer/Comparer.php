@@ -18,7 +18,7 @@ abstract class Comparer {
 	 * @return bool
 	 */
 	public function supports_comparison_operator( $comparison_operator ) {
-		return in_array( $comparison_operator, $this->supported_comparison_operators );
+		return in_array( $comparison_operator, $this->supported_comparison_operators, true );
 	}
 
 	/**

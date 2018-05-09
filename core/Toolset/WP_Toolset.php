@@ -63,7 +63,9 @@ class WP_Toolset {
 	 */
 	public function get_term_by_descriptor( $term_descriptor ) {
 		if ( ! is_array( $term_descriptor ) || ! isset( $term_descriptor['value'] ) || ! isset( $term_descriptor['taxonomy'] ) ) {
+			// @codingStandardsIgnoreStart
 			Incorrect_Syntax_Exception::raise( 'Term descriptor passed is invalid. Please supply an array with a "value" and a "taxonomy" key: ' . print_r( $term_descriptor, true ) );
+			// @codingStandardsIgnoreEnd
 			return null;
 		}
 
@@ -73,7 +75,9 @@ class WP_Toolset {
 		$term = get_term_by( $field, $value, $taxonomy );
 
 		if ( ! $term ) {
+			// @codingStandardsIgnoreStart
 			Incorrect_Syntax_Exception::raise( 'Failed to load term for descriptor: ' . print_r( $term_descriptor, true ) );
+			// @codingStandardsIgnoreEnd
 			return new \WP_Term( new \stdClass() );
 		}
 

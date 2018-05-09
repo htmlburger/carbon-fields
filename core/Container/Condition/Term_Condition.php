@@ -100,11 +100,11 @@ class Term_Condition extends Condition {
 				break;
 			case 'IN':
 				$value_term_ids = $this->get_term_ids_from_full_term_descriptors( $this->get_value() );
-				return in_array( $term_id, $value_term_ids );
+				return in_array( $term_id, $value_term_ids, true );
 				break;
 			case 'NOT IN':
 				$value_term_ids = $this->get_term_ids_from_full_term_descriptors( $this->get_value() );
-				return ! in_array( $term_id, $value_term_ids );
+				return ! in_array( $term_id, $value_term_ids, true );
 				break;
 		}
 

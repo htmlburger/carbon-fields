@@ -369,7 +369,7 @@ class Helper {
 			$relation = strtoupper( $array[ $relation_key ] );
 		}
 
-		if ( ! in_array( $relation, $allowed_relations ) ) {
+		if ( ! in_array( $relation, $allowed_relations, true ) ) {
 			Incorrect_Syntax_Exception::raise( 'Invalid relation type ' . $relation . '. ' .
 			'The rule should be one of the following: "' . implode( '", "', $allowed_relations ) . '"' );
 		}
@@ -520,7 +520,7 @@ class Helper {
 				$original_file = basename( $meta['file'] );
 				$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
 
-				if ( $original_file === $filename || in_array( $filename, $cropped_image_files ) ) {
+				if ( $original_file === $filename || in_array( $filename, $cropped_image_files, true ) ) {
 					return intval( $post_id );
 				}
 			}
@@ -600,10 +600,10 @@ class Helper {
 
 		$attachment_meta['default_thumb_url'] = wp_mime_type_icon( $id );
 
-		if ( $attachment_meta['file_type'] == 'image' ) {
+		if ( $attachment_meta['file_type'] === 'image' ) {
 			$attachment_meta['thumb_url'] = $attachment_meta['file_url'];
 
-			if ( $type == 'id' ) {
+			if ( $type === 'id' ) {
 				$thumb_src = wp_get_attachment_image_src( $id, 'thumbnail' );
 				$attachment_meta['thumb_url'] = $thumb_src[0];
 			}

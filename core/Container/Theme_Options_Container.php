@@ -235,7 +235,7 @@ class Theme_Options_Container extends Container {
 			static::$registered_pages[ $parent ] = array();
 		}
 
-		if ( in_array( $file, static::$registered_pages[ $parent ] ) ) {
+		if ( in_array( $file, static::$registered_pages[ $parent ], true ) ) {
 			Incorrect_Syntax_Exception::raise( 'Page "' . $file . '" with parent "' . $parent . '" is already registered. Please set a name for the container.' );
 			return false;
 		}
