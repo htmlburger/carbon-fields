@@ -85,7 +85,7 @@ class Loader {
 			foreach ( $e->getTrace() as $trace ) {
 				$callback .= '<br/>' . ( isset( $trace['file'] ) ? $trace['file'] . ':' . $trace['line'] : $trace['function'] . '()' );
 			}
-			wp_die( '<h3>' . $e->getMessage() . '</h3><small>' . $callback . '</small>' );
+			wp_die( '<h3>' . esc_html( $e->getMessage() ) . '</h3><small>' . esc_html( $callback ) . '</small>' );
 		}
 	}
 
