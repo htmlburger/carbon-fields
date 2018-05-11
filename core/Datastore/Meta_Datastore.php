@@ -26,6 +26,7 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 
 		$storage_key_comparisons = $this->key_toolset->storage_key_patterns_to_sql( '`meta_key`', $storage_key_patterns );
 
+		// @codingStandardsIgnoreStart sanitized in `storage_key_patterns_to_sql`
 		$storage_array = $wpdb->get_results( '
 			SELECT `meta_key` AS `key`, `meta_value` AS `value`
 			FROM ' . $this->get_table_name() . '
@@ -33,6 +34,7 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 				AND ' . $storage_key_comparisons . '
 			ORDER BY `meta_key` ASC
 		' );
+		// @codingStandardsIgnoreEnd
 
 		$storage_array = apply_filters( 'carbon_fields_datastore_storage_array', $storage_array, $this, $storage_key_patterns );
 

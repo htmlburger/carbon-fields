@@ -26,12 +26,14 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 
 		$storage_key_comparisons = $this->key_toolset->storage_key_patterns_to_sql( '`option_name`', $storage_key_patterns );
 
+		// @codingStandardsIgnoreStart sanitized in `storage_key_patterns_to_sql`
 		$storage_array = $wpdb->get_results( '
 			SELECT `option_name` AS `key`, `option_value` AS `value`
 			FROM ' . $wpdb->options . '
 			WHERE ' . $storage_key_comparisons . '
 			ORDER BY `option_name` ASC
 		' );
+		// @codingStandardsIgnoreEnd
 
 		$storage_array = apply_filters( 'carbon_fields_datastore_storage_array', $storage_array, $this, $storage_key_patterns );
 
