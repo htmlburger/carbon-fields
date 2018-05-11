@@ -49,6 +49,7 @@ class Term_Meta_Datastore extends Meta_Datastore {
 			$charset_collate .= ' COLLATE ' . $wpdb->collate;
 		}
 
+		// @codingStandardsIgnoreStart sanitized above.
 		$wpdb->query( 'CREATE TABLE ' . $wpdb->prefix . 'termmeta (
 			meta_id bigint(20) unsigned NOT NULL auto_increment,
 			term_id bigint(20) unsigned NOT NULL default "0",
@@ -58,6 +59,7 @@ class Term_Meta_Datastore extends Meta_Datastore {
 			KEY term_id (term_id),
 			KEY meta_key (meta_key)
 		) ' . $charset_collate . ';' );
+		// @codingStandardsIgnoreEnd
 	}
 
 	/**

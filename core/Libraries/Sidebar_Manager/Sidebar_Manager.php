@@ -38,7 +38,7 @@ class Sidebar_Manager {
 			'data' => null,
 		);
 
-		$input = stripslashes_deep( $_POST );
+		$input = stripslashes_deep( $_POST ); // CSRF ok. verfied below.
 		$action = isset( $input['action'] ) ? $input['action'] : '';
 		$nonce = isset( $input['nonce'] ) ? $input['nonce'] : '';
 

@@ -116,11 +116,13 @@ class Theme_Options_Datastore extends Key_Value_Datastore {
 		);
 		$storage_key_comparisons = $this->key_toolset->storage_key_patterns_to_sql( '`option_name`', $storage_key_patterns );
 
+		// @codingStandardsIgnoreStart sanitized in `storage_key_patterns_to_sql`
 		$option_names = $wpdb->get_col( '
 			SELECT `option_name`
 			FROM `' . $wpdb->options . '`
 			WHERE ' . $storage_key_comparisons . '
 		' );
+		// @codingStandardsIgnoreEnd
 
 		foreach ( $option_names as $option_name ) {
 			delete_option( $option_name );

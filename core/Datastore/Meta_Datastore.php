@@ -71,12 +71,14 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 		);
 		$storage_key_comparisons = $this->key_toolset->storage_key_patterns_to_sql( '`meta_key`', $storage_key_patterns );
 
+		// @codingStandardsIgnoreStart sanitized in `storage_key_patterns_to_sql`
 		$meta_keys = $wpdb->get_col( '
 			SELECT `meta_key`
 			FROM `' . $this->get_table_name() . '`
 			WHERE `' . $this->get_table_field_name() . '` = ' . intval( $this->get_object_id() ) . '
 				AND ' . $storage_key_comparisons . '
 		' );
+		// @codingStandardsIgnoreEnd
 
 		foreach ( $meta_keys as $meta_key ) {
 			delete_metadata( $this->get_meta_type(), $this->get_object_id(), $meta_key );
