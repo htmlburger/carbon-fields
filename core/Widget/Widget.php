@@ -156,7 +156,7 @@ abstract class Widget extends \WP_Widget {
 		$this->datastore->import_storage( $instance );
 
 		if ( $this->print_wrappers ) {
-			echo $args['before_widget'];
+			echo $args['before_widget']; // XSS ok.
 		}
 
 		$instance_values = array();
@@ -168,7 +168,7 @@ abstract class Widget extends \WP_Widget {
 		$this->front_end( $args, $instance_values );
 
 		if ( $this->print_wrappers ) {
-			echo $args['after_widget'];
+			echo $args['after_widget']; // XSS ok.
 		}
 	}
 

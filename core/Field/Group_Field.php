@@ -196,7 +196,7 @@ class Group_Field {
 	 * Print the label template.
 	 */
 	public function template_label() {
-		echo $this->label_template;
+		echo $this->label_template; // XSS ok.
 	}
 
 	/**

@@ -52,7 +52,7 @@ abstract class Scripts_Field extends Textarea_Field {
 		}
 
 		$this->load();
-		echo $this->get_formatted_value();
+		echo $this->get_formatted_value(); // XSS ok.
 	}
 
 	/**

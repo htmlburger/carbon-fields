@@ -54,7 +54,7 @@ class Rich_Text_Field extends Textarea_Field {
 		$upload_image_button = '<a href="#" class="button insert-media add_media" data-editor="<%- id %>" title="Add Media">
 			<span class="wp-media-buttons-icon"></span> Add Media
 		</a>';
-		echo apply_filters( 'crb_upload_image_button_html', $upload_image_button, $this->base_name );
+		echo apply_filters( 'crb_upload_image_button_html', $upload_image_button, $this->base_name ); // XSS ok.
 	}
 
 	/**
