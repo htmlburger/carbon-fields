@@ -210,7 +210,7 @@ export const enhance = compose(
 			// For big containers and non-mobile devices, use the inline edit
 			// Otherwise, fallback to Media Browser
 
-			if ( $container.outerWidth() > 767 ) {
+			if ( $container.outerWidth() > 767 && field.can_edit_inline ) {
 				const attachmentMeta = field.value_meta[ item ];
 
 				updateField(field.id, {
