@@ -95,7 +95,7 @@ class Media_Gallery_Field extends Field {
 	 * Set wether the edit functionality will open inline or in the media popup
 	 *
 	 * @param boolean $can_edit_inline
-	 * @param  self   $this
+	 * @return  self   $this
 	 */
 	public function set_edit_inline( $can_edit_inline )
 	{
