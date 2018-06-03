@@ -321,9 +321,9 @@ class Association_Field extends Field {
 		// fetch and prepare post types archives as association items
 		$post_types = get_post_types($args, 'names');
 		foreach ( $post_types as &$p ) {
-			$post_type_object = get_post_type_object($p);
+			$post_type = $p;
 			$p = array(
-				'id' => $post_type_object->name,
+				'id' => $post_type,
 				'title' => $this->get_title_by_type( $p, $type['type'] ),
 				'type' => $type['type'],
 				'subtype' => 'post_type_archive',
