@@ -138,7 +138,7 @@ class Association_Field extends Field {
 			Value_Set::VALUE_PROPERTY => $value_string,
 			'type' => $type,
 			'subtype' => $subtype,
-			'id' => intval( $id ),
+			'id' => ( $type == 'post_type_archive' ) ? $id : intval( $id ),
 		);
 		return $property_array;
 	}
@@ -179,7 +179,7 @@ class Association_Field extends Field {
 	 *
 	 * Can be overriden or extended by the `carbon_association_title` filter.
 	 *
-	 * @param int $id The database ID of the item.
+	 * @param int|string $id The database ID of the item or post type name if type is "post_type_archive".
 	 * @param string $type Item type (post, term, user, comment, or a custom one).
 	 * @param string $subtype The subtype - "page", "post", "category", etc.
 	 * @return string $title The title of the item.
@@ -200,14 +200,19 @@ class Association_Field extends Field {
 			}
 		}
 
+		if ( $type === 'post_type_archive' ) {
+			$post_type_object = get_post_type_object($id);
+			$title = $post_type_object->label;
+		}
+
 		/**
 		 * Filter the title of the association item.
 		 *
-		 * @param string $title   The unfiltered item title.
-		 * @param string $name    Name of the association field.
-		 * @param int    $id      The database ID of the item.
-		 * @param string $type    Item type (post, term, user, comment, or a custom one).
-		 * @param string $subtype Subtype - "page", "post", "category", etc.
+		 * @param string     $title   The unfiltered item title.
+		 * @param string     $name    Name of the association field.
+		 * @param int|string $id      The database ID of the item or post type name if type is "post_type_archive".
+		 * @param string     $type    Item type (post, term, user, comment, or a custom one).
+		 * @param string     $subtype Subtype - "page", "post", "category", etc.
 		 */
 		$title = apply_filters( 'carbon_fields_association_field_title', $title, $this->get_base_name(), $id, $type, $subtype );
 
@@ -223,9 +228,9 @@ class Association_Field extends Field {
 	 *
 	 * Can be overriden or extended by the `carbon_association_item_label` filter.
 	 *
-	 * @param int     $id      The database ID of the item.
-	 * @param string  $type    Item type (post, term, user, comment, or a custom one).
-	 * @param string  $subtype Subtype - "page", "post", "category", etc.
+	 * @param int|string $id The database ID of the item or post type name if type is "post_type_archive".
+	 * @param string $type Item type (post, term, user, comment, or a custom one).
+	 * @param string $subtype Subtype - "page", "post", "category", etc.
 	 * @return string $label The label of the item.
 	 */
 	protected function get_item_label( $id, $type, $subtype = '' ) {
@@ -237,16 +242,18 @@ class Association_Field extends Field {
 		} elseif ( $type === 'term' ) {
 			$taxonomy_object = get_taxonomy( $subtype );
 			$label = $taxonomy_object->labels->singular_name;
+		} elseif ( $type === 'post_type_archive' ) {
+			$label = __('Post Type Archive');
 		}
 
 		/**
 		 * Filter the label of the association item.
 		 *
-		 * @param string $label   The unfiltered item label.
-		 * @param string $name    Name of the association field.
-		 * @param int    $id      The database ID of the item.
-		 * @param string $type    Item type (post, term, user, comment, or a custom one).
-		 * @param string $subtype Subtype - "page", "post", "category", etc.
+		 * @param string     $label   The unfiltered item label.
+		 * @param string     $name    Name of the association field.
+		 * @param int|string $id      The database ID of the item or post type name if type is "post_type_archive".
+		 * @param string     $type    Item type (post, term, user, comment, or a custom one).
+		 * @param string     $subtype Subtype - "page", "post", "category", etc.
 		 */
 		return apply_filters( 'carbon_fields_association_field_item_label', $label, $this->get_base_name(), $id, $type, $subtype );
 	}
@@ -284,6 +291,41 @@ class Association_Field extends Field {
 			);
 		}
 		return $posts;
+	}
+
+	/**
+	 * Get post type archive options
+	 *
+	 * @return array $options
+	 */
+	protected function get_post_type_archive_options( $type ) {
+		/**
+		 * Filter the default query when fetching post types for a particular field.
+		 *
+		 * @param array $args The parameters, passed to get_post_types().
+		 */
+		$filter_name = 'carbon_fields_association_field_options_' . $this->get_base_name() . '_' . $type['type'];
+		$args = apply_filters( $filter_name, array(
+			'public' => true,
+			'has_archive' => true,
+		) );
+
+		// fetch and prepare post types archives as association items
+		$post_types = get_post_types($args, 'names');
+		foreach ( $post_types as &$p ) {
+			$post_type = $p;
+			$p = array(
+				'id' => $post_type,
+				'title' => $this->get_title_by_type( $p, $type['type'] ),
+				'type' => $type['type'],
+				'subtype' => 'post_type_archive',
+				'label' => $this->get_item_label( $p, $type['type'] ),
+				'is_trashed' => false,
+				'edit_link' => false,
+			);
+		}
+		$post_type_archives = array_values($post_types);
+		return $post_type_archives;
 	}
 
 	/**
@@ -538,7 +580,7 @@ class Association_Field extends Field {
 	 * where the value of each array item contains:
 	 * 	- Type of data (post, term, user or comment)
 	 * 	- Subtype of data (the particular post type or taxonomy)
-	 * 	- ID of the item (the database ID of the item)
+	 * 	- ID of the item (the database ID of the item) or post type name if type is "post_type_archive"
 	 */
 	protected function value_to_json() {
 		$value_set = $this->get_value();
@@ -547,7 +589,7 @@ class Association_Field extends Field {
 			$item = array(
 				'type' => $entry['type'],
 				'subtype' => $entry['subtype'],
-				'id' => intval( $entry['id'] ),
+				'id' => ( $entry['type'] == 'post_type_archive' ) ? $entry['id'] : intval( $entry['id'] ),
 				'title' => $this->get_title_by_type( $entry['id'], $entry['type'], $entry['subtype'] ),
 				'label' => $this->get_item_label( $entry['id'], $entry['type'], $entry['subtype'] ),
 				'is_trashed' => ( $entry['type'] == 'post' && get_post_status( $entry['id'] ) === 'trash' ),
