@@ -214,11 +214,7 @@ class Association_Field extends Field {
 		 * @param string     $type    Item type (post, term, user, comment, or a custom one).
 		 * @param string     $subtype Subtype - "page", "post", "category", etc.
 		 */
-		if ( $type == 'post_type_archive' ) {
-			$title = apply_filters( 'carbon_fields_association_field_title', $title, $type, $id, $type, $subtype );
-		} else {
-			$title = apply_filters( 'carbon_fields_association_field_title', $title, $this->get_base_name(), $id, $type, $subtype );
-		}
+		$title = apply_filters( 'carbon_fields_association_field_title', $title, $this->get_base_name(), $id, $type, $subtype );
 
 		if ( ! $title ) {
 			$title = '(no title) - ID: ' . $id;
@@ -259,11 +255,7 @@ class Association_Field extends Field {
 		 * @param string     $type    Item type (post, term, user, comment, or a custom one).
 		 * @param string     $subtype Subtype - "page", "post", "category", etc.
 		 */
-		if ( $type == 'post_type_archive' ) {
-			return apply_filters( 'carbon_fields_association_field_item_label', $label, $type, $id, $type, $subtype );
-		} else {
-			return apply_filters( 'carbon_fields_association_field_item_label', $label, $this->get_base_name(), $id, $type, $subtype );
-		}
+		return apply_filters( 'carbon_fields_association_field_item_label', $label, $this->get_base_name(), $id, $type, $subtype );
 	}
 
 	/**
