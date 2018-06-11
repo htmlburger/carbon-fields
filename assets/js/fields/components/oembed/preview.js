@@ -52,7 +52,7 @@ class OEmbedPreview extends React.Component {
 
 	/**
 	 * Lifecycle Hook.
-	 * 
+	 *
 	 * @return {void}
 	 */
 	componentDidUpdate() {
@@ -61,14 +61,14 @@ class OEmbedPreview extends React.Component {
 
 	/**
 	 * Lifecycle Hooks.
-	 * 
+	 *
 	 * @return {void}
 	 */
 	componentWillReceiveProps() {
 		this.renderIframe();
 	}
 
-	checkMessageForResize() {
+	checkMessageForResize(event) {
 		const iframe = this.iframe;
 
 		// Attempt to parse the message data as JSON if passed as string
