@@ -15,6 +15,6 @@ export default compose(
 	setStatic('type', TYPE_NETWORK),
 	withStore(),
 	withSetup({}, {
-		tabs_in_url: true
+		tabs_in_url: false
 	})
 )(Container);
