@@ -2032,9 +2032,9 @@ find-up@^2.0.0, find-up@^2.1.0:
   dependencies:
     locate-path "^2.0.0"
 
-flatpickr@^4.0.5:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-4.1.2.tgz#2bbebe46e1fd74d7ef10bf987229aa23eaac1265"
+flatpickr@^4.3.2:
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/flatpickr/-/flatpickr-4.5.1.tgz#f65eaf54c07538f87d6f68a67b03cf816d7fb82f"
 
 flatten@^1.0.2:
   version "1.0.2"
@@ -4195,11 +4195,11 @@ react-dom@^16:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
-react-flatpickr@^3.3.0:
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/react-flatpickr/-/react-flatpickr-3.6.2.tgz#755d6e64ef213f30d12c9890485ede9f3da09c29"
+react-flatpickr@^3.6.4:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/react-flatpickr/-/react-flatpickr-3.6.4.tgz#41a8406d00d787b629839ae1f5a01ed3bb6e84ac"
   dependencies:
-    flatpickr "^4.0.5"
+    flatpickr "^4.3.2"
     prop-types "^15.5.10"
 
 react-input-autosize@^2.0.1:

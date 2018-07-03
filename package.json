@@ -75,7 +75,7 @@
     "react": "^16",
     "react-color": "^2.11.7",
     "react-dom": "^16",
-    "react-flatpickr": "^3.3.0",
+    "react-flatpickr": "^3.6.4",
     "react-onclickoutside": "^5.11.1",
     "react-redux": "^5.0.4",
     "react-select": "^1.0.0-rc.10",
