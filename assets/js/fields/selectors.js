@@ -284,7 +284,11 @@ export const getComplexGroupLabel = (state, group, index) => {
 			$_index: index,
 			...fieldValues,
 		};
-		return template(group.label_template)(args);
+		const label = template(group.label_template)(args);
+		if (!label) {
+			return group.label;
+		};
+		return label;
 	} catch (e) {
 		console.error(e);
 	}
