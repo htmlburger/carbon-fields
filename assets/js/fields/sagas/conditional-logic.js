@@ -2,7 +2,7 @@
  * The external dependencies.
  */
 import { takeEvery, put, call, select, all } from 'redux-saga/effects';
-import { isEmpty, omit, some, every, includes, isUndefined } from 'lodash';
+import { isEmpty, omit, some, every, includes, isUndefined, isArray, isObject } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -56,7 +56,9 @@ export function* workerValidate(field, siblings, { payload: { fieldId, data } } 
 	let valid;
 
 	for (const rule of rules) {
-		const field = yield select(getFieldById, siblings[rule.field]);
+		let fieldRule = !isArray(rule.field) ? rule.field.split('/') : rule.field;
+
+		const field = yield select(getFieldById, siblings[fieldRule[0]]);
 
 		if (!field) {
 			console.warn(`An unknown field is used in condition - ${rule.field}.`);
@@ -64,6 +66,17 @@ export function* workerValidate(field, siblings, { payload: { fieldId, data } } 
 		}
 
 		let fieldValue = field.ui.is_visible ? field.value : getTypeDefaultValue(field.value);
+
+		if (isArray(fieldValue) || isObject(fieldValue)) {
+			for (var i = 1; i < fieldRule.length; i++) {
+				if (!fieldValue[fieldRule[i]]) {
+					continue;
+				}
+
+				fieldValue = fieldValue[fieldRule[i]] || null;
+			}
+		}
+
 		results.push(yield call(compare, fieldValue, rule.value, rule.compare));
 	}
 
