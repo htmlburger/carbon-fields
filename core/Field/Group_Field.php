@@ -196,7 +196,7 @@ class Group_Field {
 	 * Print the label template.
 	 */
 	public function template_label() {
-		echo $this->label_template;
+		echo $this->label_template; // XSS ok.
 	}
 
 	/**
@@ -250,7 +250,7 @@ class Group_Field {
 	 * @return boolean
 	 */
 	public function register_field_name( $name ) {
-		if ( in_array( $name, $this->registered_field_names ) ) {
+		if ( in_array( $name, $this->registered_field_names, true ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
 			return false;
 		}

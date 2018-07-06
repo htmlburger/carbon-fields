@@ -23,12 +23,16 @@ class Scalar_Comparer extends Comparer {
 	 */
 	public function is_correct( $a, $comparison_operator, $b ) {
 		if ( ! is_scalar( $a ) ) {
+			// @codingStandardsIgnoreStart
 			Incorrect_Syntax_Exception::raise( 'Environment value for comparison is not scalar: ' . print_r( $a, true ) );
+			// @codingStandardsIgnoreEnd
 			return false;
 		}
 
 		if ( ! is_scalar( $b ) ) {
+			// @codingStandardsIgnoreStart
 			Incorrect_Syntax_Exception::raise( 'Supplied comparison value is not scalar: ' . print_r( $b, true ) );
+			// @codingStandardsIgnoreEnd
 			return false;
 		}
 

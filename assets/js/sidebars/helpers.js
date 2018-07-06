@@ -14,6 +14,7 @@ export function request(action, name) {
 	return new Promise((resolve, reject) => {
 		const request = $.post(window.ajaxurl, {
 			action: `carbon_fields_${action}_sidebar`,
+			nonce: carbonFieldsSecurity[`${action}SidebarNonce`],
 			name: name
 		}, null, 'json');
 

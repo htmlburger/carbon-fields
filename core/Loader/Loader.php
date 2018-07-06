@@ -85,7 +85,7 @@ class Loader {
 			foreach ( $e->getTrace() as $trace ) {
 				$callback .= '<br/>' . ( isset( $trace['file'] ) ? $trace['file'] . ':' . $trace['line'] : $trace['function'] . '()' );
 			}
-			wp_die( '<h3>' . $e->getMessage() . '</h3><small>' . $callback . '</small>' );
+			wp_die( '<h3>' . esc_html( $e->getMessage() ) . '</h3><small>' . esc_html( $callback ) . '</small>' );
 		}
 	}
 
@@ -117,6 +117,11 @@ class Loader {
 		wp_enqueue_script( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.core' . $suffix . '.js', array( 'carbon-fields-vendor', 'quicktags', 'editor' ), \Carbon_Fields\VERSION );
 		wp_enqueue_script( 'carbon-fields-boot', \Carbon_Fields\URL . '/assets/dist/carbon.boot' . $suffix . '.js', array( 'carbon-fields-core' ), \Carbon_Fields\VERSION );
 
+		wp_localize_script( 'carbon-fields-core', 'carbonFieldsSecurity', apply_filters( 'carbon_fields_config', array(
+			'addSidebarNonce' => wp_create_nonce( 'carbon_fields_add_sidebar' ),
+			'removeSidebarNonce' => wp_create_nonce( 'carbon_fields_remove_sidebar' ),
+		) ) );
+		
 		wp_localize_script( 'carbon-fields-vendor', 'carbonFieldsConfig', apply_filters( 'carbon_fields_config', array(
 			'compactInput' => \Carbon_Fields\COMPACT_INPUT,
 			'compactInputKey' => \Carbon_Fields\COMPACT_INPUT_KEY,

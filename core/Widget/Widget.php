@@ -156,7 +156,7 @@ abstract class Widget extends \WP_Widget {
 		$this->datastore->import_storage( $instance );
 
 		if ( $this->print_wrappers ) {
-			echo $args['before_widget'];
+			echo $args['before_widget']; // XSS ok.
 		}
 
 		$instance_values = array();
@@ -168,7 +168,7 @@ abstract class Widget extends \WP_Widget {
 		$this->front_end( $args, $instance_values );
 
 		if ( $this->print_wrappers ) {
-			echo $args['after_widget'];
+			echo $args['after_widget']; // XSS ok.
 		}
 	}
 
@@ -210,7 +210,7 @@ abstract class Widget extends \WP_Widget {
 	public function register_field_name( $name ) {
 		static $registered_field_names = array();
 
-		if ( in_array( $name, $registered_field_names ) ) {
+		if ( in_array( $name, $registered_field_names, true ) ) {
 			Incorrect_Syntax_Exception::raise( 'Field name "' . $name . '" already registered' );
 			return false;
 		}
@@ -225,7 +225,7 @@ abstract class Widget extends \WP_Widget {
 	 * @param  string $id Widget ID
 	 */
 	public function register_widget_id( $id ) {
-		if ( in_array( $id, static::$registered_widget_ids ) ) {
+		if ( in_array( $id, static::$registered_widget_ids, true ) ) {
 			Incorrect_Syntax_Exception::raise( 'Widget with ID "' . $id . '" already registered. Please change the widget title' );
 			return;
 		}

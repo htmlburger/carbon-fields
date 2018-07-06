@@ -38,10 +38,15 @@ class Sidebar_Manager {
 			'data' => null,
 		);
 
-		$input = stripslashes_deep( $_POST );
+		$input = stripslashes_deep( $_POST ); // CSRF ok. verfied below.
 		$action = isset( $input['action'] ) ? $input['action'] : '';
+		$nonce = isset( $input['nonce'] ) ? $input['nonce'] : '';
 
-		$result = $this->execute_action( $action, $input );
+		if ( ! wp_verify_nonce( $nonce, $action ) ) {
+			$result = new \WP_Error( 'update-failed', __( 'Failed to update option storing your custom sidebars. Please contact support.', 'carbon-fields' ) );		
+		} else {
+			$result = $this->execute_action( $action, $input );
+		}
 
 		if ( is_wp_error( $result ) ) {
 			$response['success'] = false;

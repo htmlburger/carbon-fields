@@ -119,7 +119,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @return bool
 	 */
 	public function is_condition_type_allowed( $condition_type ) {
-		$in_list = in_array( $condition_type, $this->get_condition_type_list() );
+		$in_list = in_array( $condition_type, $this->get_condition_type_list(), true );
 		if ( $this->is_condition_type_list_whitelist() ) {
 			return $in_list;
 		}
@@ -224,7 +224,7 @@ class Fulfillable_Collection implements Fulfillable {
 	 * @param string      $fulfillable_comparison See static::$supported_fulfillable_comparisons
 	 */
 	public function add_fulfillable( Fulfillable $fulfillable, $fulfillable_comparison ) {
-		if ( ! in_array( $fulfillable_comparison, $this->supported_fulfillable_comparisons ) ) {
+		if ( ! in_array( $fulfillable_comparison, $this->supported_fulfillable_comparisons, true ) ) {
 			Incorrect_Syntax_Exception::raise( 'Invalid fulfillable comparison passed: ' . $fulfillable_comparison );
 			return;
 		}
@@ -277,7 +277,7 @@ class Fulfillable_Collection implements Fulfillable {
 				$collection->add_fulfillable( $filtered_collection, $fulfillable_comparison );
 			} else {
 				$type = $this->condition_factory->get_type( get_class( $fulfillable ) );
-				if ( ! in_array( $type, $condition_whitelist ) ) {
+				if ( ! in_array( $type, $condition_whitelist, true ) ) {
 					continue;
 				}
 
@@ -315,12 +315,12 @@ class Fulfillable_Collection implements Fulfillable {
 				$type = $this->condition_factory->get_type( get_class( $fulfillable ) );
 				$comparison_operator = $fulfillable->get_comparison_operator();
 
-				$condition_type_match = in_array( $type, $condition_types );
+				$condition_type_match = in_array( $type, $condition_types, true );
 				if ( $condition_types_blacklist ) {
 					$condition_type_match = ! $condition_type_match;
 				}
 
-				$comparison_operator_match = in_array( $comparison_operator, $comparison_operators );
+				$comparison_operator_match = in_array( $comparison_operator, $comparison_operators, true );
 				if ( $comparison_operators_blacklist ) {
 					$comparison_operator_match = ! $comparison_operator_match;
 				}
@@ -362,13 +362,13 @@ class Fulfillable_Collection implements Fulfillable {
 
 			// minor optimization - avoid unnecessary AND check if $fulfilled is currently false
 			// false && whatever is always false
-			if ( $fulfillable_comparison == 'AND' && $fulfilled ) {
+			if ( $fulfillable_comparison === 'AND' && $fulfilled ) {
 				$fulfilled = $fulfillable->is_fulfilled( $environment );
 			}
 
 			// minor optimization - avoid unnecessary OR check if $fulfilled is currently true
 			// true || whatever is always true
-			if ( $fulfillable_comparison == 'OR' && ! $fulfilled ) {
+			if ( $fulfillable_comparison === 'OR' && ! $fulfilled ) {
 				$fulfilled = $fulfillable->is_fulfilled( $environment );
 			}
 		}

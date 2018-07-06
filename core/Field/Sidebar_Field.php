@@ -28,7 +28,7 @@ class Sidebar_Field extends Select_Field {
 		$options = array();
 
 		foreach ( $sidebars as $sidebar ) {
-			if ( in_array( $sidebar['id'], $this->excluded_sidebars ) ) {
+			if ( in_array( $sidebar['id'], $this->excluded_sidebars, true ) ) {
 				continue;
 			}
 

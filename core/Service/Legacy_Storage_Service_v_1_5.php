@@ -231,7 +231,9 @@ class Legacy_Storage_Service_v_1_5 extends Service {
 			WHERE ' . $where_clause . '
 		';
 
+		// @codingStandardsIgnoreStart sanitized above
 		$raw_results = $wpdb->get_results( $query );
+		// @codingStandardsIgnoreEnd
 
 		$results = array();
 		foreach ( $raw_results as $result ) {

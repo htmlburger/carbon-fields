@@ -315,7 +315,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @param string $class_name
 	 */
 	public static function activate_field_type( $class_name ) {
-		if ( in_array( $class_name, static::$activated_field_types ) ) {
+		if ( in_array( $class_name, static::$activated_field_types, true ) ) {
 			return;
 		}
 
@@ -380,7 +380,7 @@ class Field implements Datastore_Holder_Interface {
 		return (
 			empty( $hierarchy )
 			&&
-			in_array( $this->get_value_set()->get_type(), array( Value_Set::TYPE_SINGLE_VALUE, Value_Set::TYPE_MULTIPLE_PROPERTIES ) )
+			in_array( $this->get_value_set()->get_type(), array( Value_Set::TYPE_SINGLE_VALUE, Value_Set::TYPE_MULTIPLE_PROPERTIES ), true )
 		);
 	}
 
@@ -749,7 +749,7 @@ class Field implements Datastore_Holder_Interface {
 			$name = preg_replace( '/^\-+|\-+$/', '', $name );
 		}
 
-		if ( ! $is_data_attribute && ! in_array( $name, $this->allowed_attributes ) ) {
+		if ( ! $is_data_attribute && ! in_array( $name, $this->allowed_attributes, true ) ) {
 			Incorrect_Syntax_Exception::raise( 'Only the following attributes are allowed: ' . implode( ', ', array_merge( $this->allowed_attributes, array( 'data-*' ) ) ) );
 			return $this;
 		}
@@ -968,13 +968,13 @@ class Field implements Datastore_Holder_Interface {
 			'value' => '',
 		), $rule );
 
-		if ( ! in_array( $rule['compare'], $allowed_operators ) ) {
+		if ( ! in_array( $rule['compare'], $allowed_operators, true ) ) {
 			Incorrect_Syntax_Exception::raise( 'Invalid conditional logic compare operator: <code>' . $rule['compare'] . '</code><br>Allowed operators are: <code>' .
 			implode( ', ', $allowed_operators ) . '</code>' );
 			return null;
 		}
 
-		if ( in_array( $rule['compare'], $array_operators ) && ! is_array( $rule['value'] ) ) {
+		if ( in_array( $rule['compare'], $array_operators, true ) && ! is_array( $rule['value'] ) ) {
 			Incorrect_Syntax_Exception::raise( 'Invalid conditional logic value format. An array is expected, when using the "' . $rule['compare'] . '" operator.' );
 			return null;
 		}

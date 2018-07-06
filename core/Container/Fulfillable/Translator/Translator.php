@@ -24,7 +24,9 @@ abstract class Translator {
 			return $this->fulfillable_collection_to_foreign( $fulfillable );
 		}
 
+		// @codingStandardsIgnoreStart
 		Incorrect_Syntax_Exception::raise( 'Attempted to translate an unsupported object: ' . print_r( $fulfillable, true ) );
+		// @codingStandardsIgnoreEnd
 		return null;
 	}
 

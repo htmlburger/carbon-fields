@@ -279,7 +279,7 @@ class Association_Field extends Field {
 				'type' => $type['type'],
 				'subtype' => $type['post_type'],
 				'label' => $this->get_item_label( $p, $type['type'], $type['post_type'] ),
-				'is_trashed' => ( get_post_status( $p ) == 'trash' ),
+				'is_trashed' => ( get_post_status( $p ) === 'trash' ),
 				'edit_link' => $this->get_object_edit_link( $type, $p ),
 			);
 		}
@@ -550,7 +550,7 @@ class Association_Field extends Field {
 				'id' => intval( $entry['id'] ),
 				'title' => $this->get_title_by_type( $entry['id'], $entry['type'], $entry['subtype'] ),
 				'label' => $this->get_item_label( $entry['id'], $entry['type'], $entry['subtype'] ),
-				'is_trashed' => ( $entry['type'] == 'post' && get_post_status( $entry['id'] ) === 'trash' ),
+				'is_trashed' => ( $entry['type'] === 'post' && get_post_status( $entry['id'] ) === 'trash' ),
 			);
 			$value[] = $item;
 		}

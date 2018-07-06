@@ -23,7 +23,9 @@ class Custom_Comparer extends Comparer {
 	 */
 	public function is_correct( $a, $comparison_operator, $b ) {
 		if ( ! is_callable( $b ) ) {
+			// @codingStandardsIgnoreStart
 			Incorrect_Syntax_Exception::raise( 'Supplied comparison value is not a callable: ' . print_r( $b, true ) );
+			// @codingStandardsIgnoreEnd
 			return false;
 		}
 

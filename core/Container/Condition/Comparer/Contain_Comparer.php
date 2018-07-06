@@ -23,15 +23,17 @@ class Contain_Comparer extends Comparer {
 	 */
 	public function is_correct( $a, $comparison_operator, $b ) {
 		if ( ! is_array( $b ) ) {
+			// @codingStandardsIgnoreStart
 			Incorrect_Syntax_Exception::raise( 'Supplied comparison value is not an array: ' . print_r( $b, true ) );
+			// @codingStandardsIgnoreEnd
 			return false;
 		}
 
 		switch ( $comparison_operator ) {
 			case 'IN':
-				return in_array( $a, $b );
+				return in_array( $a, $b, true );
 			case 'NOT IN':
-				return ! in_array( $a, $b );
+				return ! in_array( $a, $b, true );
 		}
 		return false;
 	}

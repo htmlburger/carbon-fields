@@ -3,35 +3,35 @@ if ( ! isset( $container_css_class ) ) {
 	$container_css_class = 'generic-container';
 }
 ?>
-<div class="wrap carbon-<?php echo $container_css_class; ?>">
-	<h2><?php echo $this->title ?></h2>
+<div class="wrap carbon-<?php echo esc_attr( $container_css_class ); ?>">
+	<h2><?php echo esc_html( $this->title ) ?></h2>
 
 	<?php if ( $this->errors ) :  ?>
 		<div class="error settings-error">
 			<?php foreach ( $this->errors as $error ) :  ?>
-				<p><strong><?php echo $error; ?></strong></p>
+				<p><strong><?php echo esc_html( $error ); ?></strong></p>
 			<?php endforeach ?>
 		</div>
 	<?php elseif ( $this->notifications ) :  ?>
 		<?php foreach ( $this->notifications as $notification ) :  ?>
 			<div class="settings-error updated">
-				<p><strong><?php echo $notification ?></strong></p>
+				<p><strong><?php echo esc_html( $notification ) ?></strong></p>
 			</div>
 		<?php endforeach ?>
 	<?php endif; ?>
 
-	<form method="post" id="<?php echo $container_css_class; ?>-form" enctype="multipart/form-data" action="">
+	<form method="post" id="<?php echo esc_attr( $container_css_class ); ?>-form" enctype="multipart/form-data" action="">
 		<div id="poststuff">
 			<div id="post-body" class="metabox-holder columns-2">
 				<div id="post-body-content">
-					<div class="postbox carbon-box" id="<?php echo $this->get_id(); ?>">
-						<fieldset class="inside container-holder carbon-grid <?php echo $container_css_class; ?>-container container-<?php echo $this->get_id(); ?> <?php echo $this->is_tabbed() ? '' : 'carbon-fields-collection' ?>"></fieldset>
+					<div class="postbox carbon-box" id="<?php echo esc_attr( $this->get_id() ); ?>">
+						<fieldset class="inside container-holder carbon-grid <?php echo esc_attr( $container_css_class ); ?>-container container-<?php echo esc_attr( $this->get_id() ); ?> <?php echo $this->is_tabbed() ? '' : 'carbon-fields-collection' ?>"></fieldset>
 					</div>
 				</div>
 
 				<div id="postbox-container-1" class="postbox-container">
 					<div id="submitdiv" class="postbox">
-						<h3><?php _e( 'Actions', 'carbon-fields' ); ?></h3>
+						<h3><?php esc_html_e( 'Actions', 'carbon-fields' ); ?></h3>
 
 						<div id="major-publishing-actions">
 

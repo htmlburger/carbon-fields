@@ -83,7 +83,7 @@ class Value_Set {
 	 * @param array $additional_properties
 	 */
 	public function __construct( $type = self::TYPE_SINGLE_VALUE, $additional_properties = array() ) {
-		if ( ! in_array( $type, $this->valid_types ) ) {
+		if ( ! in_array( $type, $this->valid_types, true ) ) {
 			Incorrect_Syntax_Exception::raise( "Invalid type specified for Value_Set: $type" );
 		}
 
