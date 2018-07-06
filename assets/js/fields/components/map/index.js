@@ -101,6 +101,7 @@ const MapField = ({
 			lat={field.value.lat}
 			lng={field.value.lng}
 			address={field.value.address}
+			search_detail_level={field.search_detail_level}
 			zoom={field.value.zoom}
 			onChange={handleChange} />
 	</Field>;

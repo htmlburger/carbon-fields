@@ -134,7 +134,7 @@ class GoogleMap extends React.Component {
 			geocoder.geocode({ 'latLng': latlng }, (results, status) => {
 				if (status === google.maps.GeocoderStatus.OK && results[1]) {
 					this.props.onChange({
-						address: results[1].formatted_address
+						address: results[this.props.search_detail_level].formatted_address
 					});
 				} else {
 					console.warn('Geocoder failed: ', status, results);
@@ -180,6 +180,7 @@ class GoogleMap extends React.Component {
  */
 GoogleMap.propTypes = {
 	className: PropTypes.string,
+	search_detail_level: PropTypes.number,
 	lat: PropTypes.number,
 	lng: PropTypes.number,
 	zoom: PropTypes.number,

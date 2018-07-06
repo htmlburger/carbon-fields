@@ -3,6 +3,7 @@
 namespace Carbon_Fields\Field;
 
 use Carbon_Fields\Value_Set\Value_Set;
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Google Maps with Address field class.
@@ -26,6 +27,13 @@ class Map_Field extends Field {
 	 * {@inheritDoc}
 	 */
 	protected $lazyload = true;
+
+	/**
+	 * Search Field detail level
+	 *
+	 * @var        integer
+	 */
+	protected $search_detail_level = 0;
 
 	/**
 	 * Create a field from a certain type with the specified label.
@@ -102,6 +110,7 @@ class Map_Field extends Field {
 
 		$value_set = $this->get_value();
 		$field_data = array_merge( $field_data, array(
+			'search_detail_level' => $this->search_detail_level,
 			'value' => array(
 				'lat' => floatval( $value_set['lat'] ),
 				'lng' => floatval( $value_set['lng'] ),
@@ -132,5 +141,27 @@ class Map_Field extends Field {
 				'zoom' => $zoom,
 			)
 		) );
+	}
+
+
+	/**
+	 * Set the level of detail recveived from address search field.
+	 * Level can be anything between 0 and 5:
+	 * - 0 being the most detailed (full address)
+	 * - 5 being the most generic (i.e. country)
+	 *
+	 * @param      integer  $level
+	 * @return self   $this
+	 */
+	public function search_detail_level( $level )
+	{
+		if ($level > 5 || $level < 0) {
+			Incorrect_Syntax_Exception::raise( 'Map level out of range! Accepted: 0 - 5. Provided: ' . $level );
+			return $this;
+		}
+
+		$this->search_detail_level = (int) $level;
+
+		return $this;
 	}
 }

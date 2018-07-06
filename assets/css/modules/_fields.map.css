@@ -10,33 +10,12 @@
 
 .carbon-map-search-button { position: absolute; left: 8px; top: 50%; margin-top: -10px; font-size: 0; color: $color-grey-font; background: none; border: none; box-shadow: none; cursor: pointer; }
 
-.carbon-map-search-autocomplete {
-  position: relative;
-}
+.carbon-map-search-autocomplete { position: relative; }
 
-.carbon-map-search-autocomplete--results {
-  box-shadow: 5px 5px 5px rgba(0, 0, 0, .3);
-  position:absolute;
-  left: 1em;
-  right: 1em;
-  top: 0;
-  z-index: 999;
-  background: #fff;
-}
+.carbon-map-search-autocomplete--results { box-shadow: 5px 5px 5px rgba(0, 0, 0, .3); position:absolute; left: 1em; right: 1em; top: 0; z-index: 999; background: #fff; }
 
-.carbon-map-search-autocomplete-search-field {}
+.carbon-map-search-autocomplete--loading { font-weight: 700; padding: 10px; text-align: center; }
 
-.carbon-map-search-autocomplete--loading {
-  font-weight: 700;
-  padding: 10px;
-  text-align: center;
-}
+.carbon-map-search-autocomplete--item { padding: 5px; cursor: pointer; }
 
-.carbon-map-search-autocomplete--item {
-  padding: 5px;
-  cursor: pointer;
-}
-
-.carbon-map-search-autocomplete--item.is-active {
-  background: #b2ebf2;
-}
+.carbon-map-search-autocomplete--item.is-active { background: #b2ebf2; }
