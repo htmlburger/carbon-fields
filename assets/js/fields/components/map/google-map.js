@@ -147,7 +147,6 @@ class GoogleMap extends React.Component {
 			this.props.onChange({
 				lat: this.marker.getPosition().lat(),
 				lng: this.marker.getPosition().lng(),
-				address: ''
 			});
 
 			convertLatLngToAddress(this.marker.getPosition().lat(), this.marker.getPosition().lng());
