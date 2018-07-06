@@ -68,6 +68,7 @@ const MapField = ({
 			className="carbon-map-canvas"
 			lat={field.value.lat}
 			lng={field.value.lng}
+			address={field.value.address}
 			zoom={field.value.zoom}
 			onChange={handleChange} />
 	</Field>;

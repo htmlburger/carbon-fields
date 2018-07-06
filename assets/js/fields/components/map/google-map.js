@@ -103,6 +103,7 @@ class GoogleMap extends React.Component {
 	 * @return {void}
 	 */
 	setupMapEvents() {
+
 		// Enable the zoom with scrollwheel when the user interacts with the map.
 		const enableScrollZoom = () => {
 			this.map.setOptions({
@@ -125,12 +126,31 @@ class GoogleMap extends React.Component {
 
 		google.maps.event.addListener(this.map, 'zoom_changed', handleZoomChange);
 
+
+	  const convertLatLngToAddress = (lat, lng) => {
+			let latlng = new google.maps.LatLng(lat, lng);
+		  let geocoder = new google.maps.Geocoder();
+
+			geocoder.geocode({ 'latLng': latlng }, (results, status) => {
+				if (status === google.maps.GeocoderStatus.OK && results[1]) {
+					this.props.onChange({
+						address: results[1].formatted_address
+					});
+				} else {
+					console.warn('Geocoder failed: ', status, results);
+				}
+			});
+	  }
+
 		// Update the position when the marker is moved.
 		const handleDragEnd = () => {
 			this.props.onChange({
 				lat: this.marker.getPosition().lat(),
 				lng: this.marker.getPosition().lng(),
+				address: ''
 			});
+
+			convertLatLngToAddress(this.marker.getPosition().lat(), this.marker.getPosition().lng());
 		};
 
 		google.maps.event.addListener(this.marker, 'dragend', handleDragEnd);
@@ -163,6 +183,7 @@ GoogleMap.propTypes = {
 	lat: PropTypes.number,
 	lng: PropTypes.number,
 	zoom: PropTypes.number,
+	address: PropTypes.string,
 	onChange: PropTypes.func
 };
 
