@@ -168,6 +168,7 @@ class Loader {
 				'setShowAll' => __( 'Show all options', 'carbon-fields' ),
 
 				'searchPlaceholder' => __( 'Search...', 'carbon-fields' ),
+				'loading' => __( 'Loading', 'carbon-fields' ),
 
 				'editAttachmentUrl' => _x( 'URL', 'WordPress media attachment', 'carbon-fields' ),
 				'editAttachmentTitle' => _x( 'Title', 'WordPress media attachment', 'carbon-fields' ),
