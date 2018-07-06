@@ -153,9 +153,8 @@ class Map_Field extends Field {
 	 * @param      integer  $level
 	 * @return self   $this
 	 */
-	public function search_detail_level( $level )
-	{
-		if ($level > 5 || $level < 0) {
+	public function search_detail_level( $level ) {
+		if ( $level > 5 || $level < 0 ) {
 			Incorrect_Syntax_Exception::raise( 'Map level out of range! Accepted: 0 - 5. Provided: ' . $level );
 			return $this;
 		}
