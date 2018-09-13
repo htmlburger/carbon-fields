@@ -9,6 +9,19 @@ use Carbon_Fields\Helper\Helper;
  */
 class Select_Field extends Predefined_Options_Field {
 	/**
+	 * Sets either the select has a nice UI
+	 *
+	 * @var        boolean
+	 */
+	protected $has_ui = false;
+
+	public function set_has_ui( $state ) {
+		$this->has_ui = (bool) $state;
+
+		return $this;
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function set_value_from_input( $input ) {
@@ -42,6 +55,7 @@ class Select_Field extends Predefined_Options_Field {
 		$field_data = array_merge( $field_data, array(
 			'value' => strval( $value ),
 			'options' => $options,
+			'has_ui' => $this->has_ui,
 		) );
 
 		return $field_data;
