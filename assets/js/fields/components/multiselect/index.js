@@ -8,6 +8,8 @@ import {
 	withHandlers,
 	branch,
 	renderComponent,
+	lifecycle,
+	withState,
 	setStatic
 } from 'recompose';
 import Select from 'react-select';
@@ -34,19 +36,20 @@ import { TYPE_MULTISELECT } from 'fields/constants';
 export const MultiselectField = ({
 	name,
 	field,
-	handleChange
+	handleChange,
+	parsedValue
 }) => {
 	return (
 		<Field field={field}>
 			<Select
 				name={name}
-				multi
-				joinValues={true}
 				delimiter={field.valueDelimiter}
-				value={field.value}
+				value={parsedValue}
 				options={field.options}
 				disabled={!field.ui.is_visible}
 				onChange={handleChange}
+				classNamePrefix='carbon-select'
+				isMulti={field.isMulti || true}
 			/>
 		</Field>
 	);
@@ -81,6 +84,15 @@ export const enhance = compose(
 	 * Connect to the Redux store.
 	 */
 	withStore(),
+	withState('parsedValue', 'setParsedValue'),
+
+	lifecycle({
+		componentWillMount() {
+			let { field, setParsedValue } = this.props;
+			let values = field.options.filter(option => field.value.indexOf(option.value) > -1 );
+			setParsedValue(values)
+		},
+	}),
 
 	/**
 	 * Render "No-Options" component when the field doesn't have options.
@@ -104,7 +116,10 @@ export const enhance = compose(
 			 * Pass some handlers to the component.
 			 */
 			withHandlers({
-				handleChange: ({ field, setFieldValue }) => value => setFieldValue(field.id, value.map(item => item.value))
+				handleChange: ({ field, setFieldValue, setParsedValue }) => value => {
+					setParsedValue(value);
+					setFieldValue(field.id, value.map(item => item.value))
+				}
 			}),
 		),
 
