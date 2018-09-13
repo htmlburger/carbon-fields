@@ -3,7 +3,15 @@
  */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, withHandlers, branch, renderComponent, setStatic } from 'recompose';
+import {
+	compose,
+	withHandlers,
+	branch,
+	renderComponent,
+	setStatic,
+	lifecycle,
+	withState
+} from 'recompose';
 
 /**
  * The internal dependencies.
@@ -14,37 +22,31 @@ import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { TYPE_SELECT, TYPE_GRAVITY_FORM, VALIDATION_BASE } from 'fields/constants';
 
+import ClassicSelect from './ClassicSelect';
+import StyledSelect from './StyledSelect';
+
 /**
  * Render a select input field.
  *
  * @param  {Object}   props
  * @param  {Object}   props.name
  * @param  {Object}   props.field
- * @param  {Function} props.handleChange
+ * @param  {Function} props.setFieldValue
  * @return {React.Element}
  */
 export const SelectField = ({
 	name,
 	field,
-	handleChange
+	setFieldValue
 }) => {
-	return <Field field={field}>
-		<select
-			id={field.id}
-			name={name}
-			value={field.value}
-			disabled={!field.ui.is_visible}
-			onChange={handleChange}
-			{...field.attributes} >
+	let args = {
+		name,
+		field,
+		setFieldValue
+	}
 
-			{
-				field.options.map(({ value, label }, index) => {
-					return <option key={index} value={value}>
-						{label}
-					</option>;
-				})
-			}
-		</select>
+	return <Field field={field}>
+		{ field.has_ui ? <StyledSelect { ...args } /> : <ClassicSelect { ...args } /> }
 	</Field>;
 };
 
@@ -62,8 +64,7 @@ SelectField.propTypes = {
 			value: PropTypes.string,
 			label: PropTypes.string,
 		})),
-	}),
-	handleChange: PropTypes.func,
+	})
 };
 
 /**
@@ -116,9 +117,7 @@ export const enhance = compose(
 			/**
 			 * Pass some handlers to the component.
 			 */
-			withHandlers({
-				handleChange: ({ field, setFieldValue }) => ({ target: { value } }) => setFieldValue(field.id, value),
-			})
+			withHandlers()
 		),
 
 		/**
