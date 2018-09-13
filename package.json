@@ -78,7 +78,7 @@
     "react-flatpickr": "^3.6.4",
     "react-onclickoutside": "^5.11.1",
     "react-redux": "^5.0.4",
-    "react-select": "^1.0.0-rc.10",
+    "react-select": "^2.0.0",
     "recompose": "^0.23.1",
     "redux": "^3.6.0",
     "redux-actions": "^2.0.1",
