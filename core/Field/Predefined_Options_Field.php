@@ -105,7 +105,19 @@ abstract class Predefined_Options_Field extends Field {
 	 */
 	protected function get_options_values() {
 		$options = $this->parse_options( $this->get_options() );
-		return wp_list_pluck( $options, 'value' );
+
+		$values = array_map( function( $value ) {
+			return is_array( $value ) ? wp_list_pluck( $value, 'value' ) : $value;
+		}, wp_list_pluck( $options, 'value' ) );
+
+		$values = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($values));
+		$extractedValues = [];
+
+		foreach ($values as $key => $value) {
+			$extractedValues[] = $value;
+		}
+
+		return array_filter($extractedValues);
 	}
 
 	/**
@@ -123,10 +135,17 @@ abstract class Predefined_Options_Field extends Field {
 		}
 
 		foreach ( $options as $key => $value ) {
-			$parsed[] = array(
-				'value' => $stringify_value ? strval( $key ) : $key,
-				'label' => strval( $value ),
-			);
+			if (is_array($value)) {
+				$parsed[] = array(
+					'value' => $this->parse_options( $value, $stringify_value ),
+					'label' => strval( $key ),
+				);
+			} else {
+				$parsed[] = array(
+					'value' => $stringify_value ? strval( $key ) : $key,
+					'label' => strval( $value ),
+				);
+			}
 		}
 
 		return $parsed;
