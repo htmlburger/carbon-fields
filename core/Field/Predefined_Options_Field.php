@@ -111,7 +111,7 @@ abstract class Predefined_Options_Field extends Field {
 		}, $options );
 
 		$values = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($values));
-		$extractedValues = [];
+		$extractedValues = array();
 
 		foreach ($values as $key => $value) {
 			$extractedValues[] = $value;
