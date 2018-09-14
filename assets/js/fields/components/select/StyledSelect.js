@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 
 export default class extends React.Component {
 	render() {
 		let { field, name } = this.props;
+
 		return <Select
 				name={name}
 				value={this.getFieldValueForDisplay()}
@@ -16,16 +17,35 @@ export default class extends React.Component {
 			/>
 	}
 
+	componentWillMount() {
+		this.flattenedOptions = [];
+		this.flattenOptionsArray(this.props.field.options);
+	}
+
+	/**
+	 * Flattens the options array
+	 *
+	 * @param      {object}  options  The options
+	 */
+	flattenOptionsArray(options) {
+		options.forEach(option => {
+			if (option.options) {
+				this.flattenOptionsArray(option.options);
+			} else {
+				this.flattenedOptions.push(option);
+			}
+		})
+	}
+
 	handleChange(select) {
 		let { setFieldValue, field } = this.props;
-		this.fieldValue = select;
-
 		setFieldValue(field.id, select.value);
 	}
 
 	getFieldValueForDisplay() {
 		let { field } = this.props;
-
-		return field.options.filter(option => option.value == field.value);
+		return this.flattenedOptions.filter(option => {
+			return option.value == field.value;
+		});
 	}
 }
