@@ -21,7 +21,7 @@ abstract class Predefined_Options_Field extends Field {
 	/**
 	 * Check if an array is indexed
 	 *
-	 * @param  array   $array
+	 * @param  array $array
 	 * @return boolean
 	 */
 	protected function is_indexed_array( $array ) {
@@ -106,18 +106,21 @@ abstract class Predefined_Options_Field extends Field {
 	protected function get_options_values() {
 		$options = $this->parse_options( $this->get_options() );
 
-		$values = array_map( function( $value ) {
-			return isset($value['options']) ? wp_list_pluck( $value['options'], 'value' ) : $value['value'];
-		}, $options );
+		$values = array_map(
+			function( $value ) {
+					return isset( $value['options'] ) ? wp_list_pluck( $value['options'], 'value' ) : $value['value'];
+			},
+			$options
+		);
 
-		$values = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($values));
-		$extractedValues = array();
+		$values           = new \RecursiveIteratorIterator( new \RecursiveArrayIterator( $values ) );
+		$extracted_values = array();
 
-		foreach ($values as $key => $value) {
-			$extractedValues[] = $value;
+		foreach ( $values as $key => $value ) {
+			$extracted_values[] = $value;
 		}
 
-		return array_filter($extractedValues);
+		return array_filter( $extracted_values );
 	}
 
 	/**
@@ -125,6 +128,7 @@ abstract class Predefined_Options_Field extends Field {
 	 * Will also work with a callable that returns an array.
 	 *
 	 * @param array|callable $options
+	 * @param boolean        $stringify_value
 	 * @return array
 	 */
 	protected function parse_options( $options, $stringify_value = false ) {
@@ -135,10 +139,10 @@ abstract class Predefined_Options_Field extends Field {
 		}
 
 		foreach ( $options as $key => $value ) {
-			if (is_array($value)) {
+			if ( is_array( $value ) ) {
 				$parsed[] = array(
 					'options' => $this->parse_options( $value, $stringify_value ),
-					'label' => strval( $key ),
+					'label'   => strval( $key ),
 				);
 			} else {
 				$parsed[] = array(
@@ -159,7 +163,7 @@ abstract class Predefined_Options_Field extends Field {
 	 */
 	protected function get_values_from_options( $values ) {
 		$options_values = $this->get_options_values();
-		$values = Helper::get_valid_options( $values, $options_values );
+		$values         = Helper::get_valid_options( $values, $options_values );
 		return $values;
 	}
 }
