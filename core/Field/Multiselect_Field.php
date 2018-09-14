@@ -61,6 +61,16 @@ class Multiselect_Field extends Predefined_Options_Field {
 		return $this->set_value( $value );
 	}
 
+	public function quote_options_array( $option ) {
+		if ( isset( $option['options'] ) ) {
+			$option['options'] = array_map( array( $this, 'quote_options_array' ), $option['options'] );
+		} else {
+			$option['value'] = Delimiter::quote( $option['value'], $this->value_delimiter );
+		}
+
+		return $option;
+	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -70,13 +80,7 @@ class Multiselect_Field extends Predefined_Options_Field {
 		$value_delimiter = $this->value_delimiter;
 
 		$options = $this->parse_options( $this->get_options(), true );
-		$options = array_map(
-			function( $option ) use ( $value_delimiter ) {
-					$option['value'] = Delimiter::quote( $option['value'], $value_delimiter );
-					return $option;
-			},
-			$options
-		);
+		$options = array_map( array( $this, 'quote_options_array' ), $options );
 
 		$value = array_map(
 			function( $value ) use ( $value_delimiter ) {
