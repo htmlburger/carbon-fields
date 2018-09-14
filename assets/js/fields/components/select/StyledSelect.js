@@ -5,7 +5,7 @@ import Select, { components } from 'react-select';
 
 export default class extends React.Component {
 	render() {
-		let { field, name } = this.props;
+		let { field, name, isMulti, delimiter } = this.props;
 
 		return <Select
 				name={name}
@@ -14,6 +14,9 @@ export default class extends React.Component {
 				disabled={!field.ui.is_visible}
 				onChange={this.handleChange.bind(this)}
 				classNamePrefix='carbon-select'
+
+				isMulti={isMulti || false}
+				delimiter={isMulti ? delimiter || '' : false}
 			/>
 	}
 
@@ -38,14 +41,21 @@ export default class extends React.Component {
 	}
 
 	handleChange(select) {
-		let { setFieldValue, field } = this.props;
-		setFieldValue(field.id, select.value);
+		let { setFieldValue, field, isMulti } = this.props;
+		if (isMulti) {
+			setFieldValue(field.id, select.map(item => item.value))
+		} else {
+			setFieldValue(field.id, select.value);
+		}
 	}
 
 	getFieldValueForDisplay() {
-		let { field } = this.props;
+		let { field, isMulti } = this.props;
+
 		return this.flattenedOptions.filter(option => {
-			return option.value == field.value;
+			return isMulti ?
+				field.value.indexOf(option.value) > -1 :
+				option.value == field.value;
 		});
 	}
 }

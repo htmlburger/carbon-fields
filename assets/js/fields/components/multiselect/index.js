@@ -12,7 +12,8 @@ import {
 	withState,
 	setStatic
 } from 'recompose';
-import Select from 'react-select';
+import Select from '../select/StyledSelect';
+
 import $ from 'jquery';
 
 /**
@@ -30,27 +31,24 @@ import { TYPE_MULTISELECT } from 'fields/constants';
  * @param  {Object}        props
  * @param  {Object}        props.name
  * @param  {Object}        props.field
- * @param  {Function}      props.handleChange
  * @return {React.Element}
  */
 export const MultiselectField = ({
 	name,
 	field,
-	handleChange,
-	parsedValue
+	setFieldValue
 }) => {
+	let args = {
+		name,
+		field,
+		setFieldValue,
+		delimiter:field.valueDelimiter,
+		isMulti: true
+	}
+
 	return (
 		<Field field={field}>
-			<Select
-				name={name}
-				delimiter={field.valueDelimiter}
-				value={parsedValue}
-				options={field.options}
-				disabled={!field.ui.is_visible}
-				onChange={handleChange}
-				classNamePrefix='carbon-select'
-				isMulti={field.isMulti || true}
-			/>
+			<Select { ...args} />
 		</Field>
 	);
 };
@@ -71,7 +69,6 @@ MultiselectField.propTypes = {
 			label: PropTypes.string,
 		})),
 	}),
-	handleChange: PropTypes.func
 };
 
 /**
@@ -85,14 +82,6 @@ export const enhance = compose(
 	 */
 	withStore(),
 	withState('parsedValue', 'setParsedValue'),
-
-	lifecycle({
-		componentWillMount() {
-			let { field, setParsedValue } = this.props;
-			let values = field.options.filter(option => field.value.indexOf(option.value) > -1 );
-			setParsedValue(values)
-		},
-	}),
 
 	/**
 	 * Render "No-Options" component when the field doesn't have options.
@@ -115,12 +104,7 @@ export const enhance = compose(
 			/**
 			 * Pass some handlers to the component.
 			 */
-			withHandlers({
-				handleChange: ({ field, setFieldValue, setParsedValue }) => value => {
-					setParsedValue(value);
-					setFieldValue(field.id, value.map(item => item.value))
-				}
-			}),
+			withHandlers(),
 		),
 
 		/**
