@@ -107,8 +107,8 @@ abstract class Predefined_Options_Field extends Field {
 		$options = $this->parse_options( $this->get_options() );
 
 		$values = array_map( function( $value ) {
-			return is_array( $value ) ? wp_list_pluck( $value, 'value' ) : $value;
-		}, wp_list_pluck( $options, 'value' ) );
+			return isset($value['options']) ? wp_list_pluck( $value['options'], 'value' ) : $value['value'];
+		}, $options );
 
 		$values = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($values));
 		$extractedValues = [];
@@ -137,7 +137,7 @@ abstract class Predefined_Options_Field extends Field {
 		foreach ( $options as $key => $value ) {
 			if (is_array($value)) {
 				$parsed[] = array(
-					'value' => $this->parse_options( $value, $stringify_value ),
+					'options' => $this->parse_options( $value, $stringify_value ),
 					'label' => strval( $key ),
 				);
 			} else {

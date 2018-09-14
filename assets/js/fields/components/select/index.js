@@ -62,10 +62,10 @@ SelectField.propTypes = {
 		value: PropTypes.string,
 		options: PropTypes.oneOfType([
 			PropTypes.arrayOf(PropTypes.shape({
-				value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
 				label: PropTypes.string,
+				value: PropTypes.string,
+				options: PropTypes.array,
 			})),
-			PropTypes.object,
 		]),
 	})
 };

@@ -18,9 +18,9 @@ export default class extends React.Component {
 
 	renderOptions(options) {
 		return options.map((option, index) => {
-			if (typeof option.value === 'object') {
+			if (option.options) {
 				return <optgroup label={option.label} key={index}>
-					{this.renderOptions(option.value)}
+					{this.renderOptions(option.options)}
 				</optgroup>;
 			}
 
