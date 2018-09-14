@@ -120,7 +120,7 @@ abstract class Predefined_Options_Field extends Field {
 			$extracted_values[] = $value;
 		}
 
-		return array_filter( $extracted_values );
+		return array_values( $extracted_values );
 	}
 
 	/**
