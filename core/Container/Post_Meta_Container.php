@@ -196,14 +196,14 @@ class Post_Meta_Container extends Container {
 		$this->post_types = $this->get_post_type_visibility();
 
 		foreach ( $this->post_types as $post_type ) {
-			add_meta_box(
-				$this->get_id(),
-				$this->title,
-				array( $this, 'render' ),
-				$post_type,
-				$this->settings['meta_box_context'],
-				$this->settings['meta_box_priority']
-			);
+			// add_meta_box(
+			// 	$this->get_id(),
+			// 	$this->title,
+			// 	array( $this, 'render' ),
+			// 	$post_type,
+			// 	$this->settings['meta_box_context'],
+			// 	$this->settings['meta_box_priority']
+			// );
 
 			$container_id = $this->get_id();
 			add_filter( "postbox_classes_{$post_type}_{$container_id}", array( $this, 'add_postbox_classes' ) );
