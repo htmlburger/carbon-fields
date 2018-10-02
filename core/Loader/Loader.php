@@ -218,6 +218,7 @@ class Loader {
 		global $pagenow;
 
 		$carbon_data = array(
+			'blocks' => array(),
 			'containers' => array(),
 			'sidebars' => array(),
 			'pagenow' => $pagenow,
@@ -228,7 +229,11 @@ class Loader {
 		foreach ( $containers as $container ) {
 			$container_data = $container->to_json( true );
 
-			$carbon_data['containers'][] = $container_data;
+			if ( is_a($container, '\\Carbon_Fields\\Container\\Block_Container', true ) ) {
+				$carbon_data['blocks'][] = $container_data;
+			} else {
+				$carbon_data['containers'][] = $container_data;
+			}
 		}
 
 		$carbon_data['sidebars'] = Helper::get_active_sidebars();
@@ -240,13 +245,8 @@ class Loader {
 	 * Print the carbon JSON data script.
 	 */
 	public function print_json_data_script() {
-		?>
-<script type="text/javascript">
-<!--//--><![CDATA[//><!--
-var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
-//--><!]]>
-</script>
-		<?php
+		wp_add_inline_script( 'carbon-fields-gutenberg', 'window.cf = window.cf || {}', 'before' );
+		wp_add_inline_script( 'carbon-fields-gutenberg', sprintf( 'window.cf.preloaded = %s', wp_json_encode( $this->get_json_data() ) ), 'before' );
 	}
 
 	/**
