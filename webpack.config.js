@@ -29,6 +29,8 @@ module.exports = {
 		'react': 'React',
 		'react-dom': 'ReactDOM',
 		'jquery': 'jQuery',
-		'lodash': 'lodash'
+		'lodash': 'lodash',
+		'@wordpress/blocks': 'wp.blocks',
+		'@wordpress/element': 'wp.element'
 	}
 };
