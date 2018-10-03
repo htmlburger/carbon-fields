@@ -31,6 +31,7 @@ module.exports = {
 		'jquery': 'jQuery',
 		'lodash': 'lodash',
 		'@wordpress/blocks': 'wp.blocks',
-		'@wordpress/element': 'wp.element'
+		'@wordpress/element': 'wp.element',
+		'@wordpress/data': 'wp.data'
 	}
 };
