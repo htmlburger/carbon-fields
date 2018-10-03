@@ -10,8 +10,8 @@ import { combineReducers } from '@wordpress/data';
  * @param  {Object} action
  * @return {Object}
  */
-export function fieldDefinitionsByBlockName(state = {}, action) {
-	switch (action.type) {
+export function fieldDefinitionsByBlockName( state = {}, action ) {
+	switch ( action.type ) {
 		case 'SETUP_FIELD_DEFINITIONS':
 			return action.payload.definitions;
 
@@ -20,6 +20,6 @@ export function fieldDefinitionsByBlockName(state = {}, action) {
 	}
 }
 
-export default combineReducers({
+export default combineReducers( {
 	fieldDefinitionsByBlockName
-});
+} );

@@ -16,20 +16,20 @@ import transformFieldsToAttributes from '@gutenberg/utils/transform-fields-to-at
 /**
  * Register the store.
  */
-registerStore('carbon-fields', store);
+registerStore( 'carbon-fields', store );
 
 /**
  * Register the blocks.
  */
-let definitions = {};
+const definitions = {};
 
-get(window.cf, 'preloaded.blocks', []).forEach((container) => {
-	const name = kebabCase(container.id).replace('carbon-fields-container-', '');
-	const attributes = transformFieldsToAttributes(container);
+get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
+	const name = kebabCase( container.id ).replace( 'carbon-fields-container-', '' );
+	const attributes = transformFieldsToAttributes( container );
 
-	definitions[name] = container.fields;
+	definitions[ name ] = container.fields;
 
-	registerBlockType(`carbon-fields/${name}`, {
+	registerBlockType( `carbon-fields/${ name }`, {
 		category: 'common',
 		title: container.title,
 		edit: BlockEdit,
@@ -40,10 +40,10 @@ get(window.cf, 'preloaded.blocks', []).forEach((container) => {
 			anchor: false,
 			html: false
 		}
-	});
-});
+	} );
+} );
 
 /**
  * Load the definitions in store.
  */
-dispatch('carbon-fields').setupFieldDefinitions(definitions);
+dispatch( 'carbon-fields' ).setupFieldDefinitions( definitions );

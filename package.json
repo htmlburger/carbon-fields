@@ -7,7 +7,13 @@
     "test": "tests"
   },
   "scripts": {
-    "dev": "webpack --mode development --watch"
+    "dev": "webpack --mode development --watch",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "assets/js/gutenberg/**/*": [
+      "eslint"
+    ]
   },
   "repository": {
     "type": "git",
@@ -33,6 +39,12 @@
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.2",
     "babel-plugin-module-resolver": "^3.1.1",
+    "eslint": "^5.6.1",
+    "eslint-config-wordpress": "^2.0.0",
+    "eslint-plugin-react": "^7.11.1",
+    "eslint-plugin-wordpress": "https://github.com/WordPress-Coding-Standards/eslint-plugin-wordpress#a650f73e2461ddae0faec900c0199b3c258cb5da",
+    "husky": "^1.1.0",
+    "lint-staged": "^7.3.0",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.1"
   },

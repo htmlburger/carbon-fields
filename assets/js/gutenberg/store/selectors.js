@@ -5,6 +5,6 @@
  * @param  {string} blockName
  * @return {Object[]}
  */
-export function getFieldDefinitionsByBlockName(state, blockName) {
-	return state.fieldDefinitionsByBlockName[blockName] || [];
+export function getFieldDefinitionsByBlockName( state, blockName ) {
+	return state.fieldDefinitionsByBlockName[ blockName ] || [];
 }
