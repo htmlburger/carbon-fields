@@ -2,12 +2,15 @@
   "name": "carbon-fields",
   "version": "2.2.0",
   "description": "WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options, navigation menus and more.",
-  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "directories": {
     "test": "tests"
   },
   "scripts": {
-    "dev": "webpack --mode development --watch",
+    "dev": "webpack --mode development -w",
     "precommit": "lint-staged"
   },
   "lint-staged": {
@@ -45,8 +48,9 @@
     "eslint-plugin-wordpress": "https://github.com/WordPress-Coding-Standards/eslint-plugin-wordpress#a650f73e2461ddae0faec900c0199b3c258cb5da",
     "husky": "^1.1.0",
     "lint-staged": "^7.3.0",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.1"
+    "webpack": "4.19.1",
+    "webpack-cli": "^3.1.1",
+    "webpack-merge": "^4.1.4"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",

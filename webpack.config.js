@@ -1,15 +1,55 @@
-const path = require('path');
+/**
+ * External dependencies.
+ */
+const path = require( 'path' );
+const webpack = require( 'webpack' );
+const merge = require( 'webpack-merge' );
 
-module.exports = {
-	entry: {
-		'carbon.gutenberg': './assets/js/gutenberg/index.js'
-	},
+/**
+ * The absolute path to the build locations.
+ *
+ * @type {string}
+ */
+const classicBuildPath = path.resolve( __dirname, 'build/classic' );
+const gutenbergBuildPath = path.resolve( __dirname, 'build/gutenberg' );
 
+/**
+ * The build configuration of `env` package.
+ *
+ * @type {Object}
+ */
+const envPackageConfig = {
+	entry: './packages/env/index.js',
 	output: {
-		path: path.resolve(__dirname, 'assets/dist/js'),
-		filename: '[name].js'
+		filename: 'env.js'
 	},
+	module: {
+		rules: [
+			{
+				test: /\.js$/,
+				exclude: /node_modules/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						cacheDirectory: true
+					}
+				}
+			}
+		]
+	}
+};
 
+/**
+ * The build configuration of `gutenberg` package.
+ *
+ * @type {Object}
+ */
+const gutenbergPackageConfig = {
+	entry: './packages/gutenberg/index.js',
+	output: {
+		path: gutenbergBuildPath,
+		filename: 'gutenberg.js'
+	},
 	module: {
 		rules: [
 			{
@@ -24,14 +64,36 @@ module.exports = {
 			}
 		]
 	},
-
 	externals: {
-		'react': 'React',
-		'react-dom': 'ReactDOM',
-		'jquery': 'jQuery',
-		'lodash': 'lodash',
-		'@wordpress/blocks': 'wp.blocks',
-		'@wordpress/element': 'wp.element',
-		'@wordpress/data': 'wp.data'
+		'@carbon-fields/element': 'cf.element'
 	}
 };
+
+module.exports = [
+	/**
+	 * ./packages/env
+	 */
+	merge( envPackageConfig, {
+		output: {
+			path: gutenbergBuildPath
+		},
+		externals: {
+			'lodash': 'lodash'
+		}
+	} ),
+	merge( envPackageConfig, {
+		output: {
+			path: classicBuildPath
+		},
+		plugins: [
+			new webpack.ProvidePlugin( {
+				'window.wp.element': '@wordpress/element'
+			} )
+		]
+	} ),
+
+	/**
+	 * ./packages/gutenberg
+	 */
+	gutenbergPackageConfig
+]

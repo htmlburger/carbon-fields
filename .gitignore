@@ -29,3 +29,4 @@ composer.lock
 
 # Bundled assets
 /assets/dist/
+/build

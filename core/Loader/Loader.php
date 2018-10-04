@@ -110,14 +110,19 @@ class Loader {
 		$locale = get_locale();
 		$short_locale = substr( $locale, 0, 2 );
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+		$context = wp_script_is( 'wp-element' ) ? 'gutenberg' : 'classic';
 
 		wp_enqueue_style( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.css', array(), \Carbon_Fields\VERSION );
+
+		wp_enqueue_script( 'carbon-fields-env', \Carbon_Fields\URL . '/build/' . $context . '/env' . $suffix . '.js', array(), \Carbon_Fields\VERSION );
+
+		if ( $context === 'gutenberg' ) {
+			wp_enqueue_script( 'carbon-fields-gutenberg', \Carbon_Fields\URL . '/build/' . $context . '/gutenberg' . $suffix . '.js', array( 'carbon-fields-env' ), \Carbon_Fields\VERSION );
+		}
 
 		wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/assets/dist/carbon.vendor' . $suffix . '.js', array( 'jquery' ), \Carbon_Fields\VERSION );
 		wp_enqueue_script( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.core' . $suffix . '.js', array( 'carbon-fields-vendor', 'quicktags', 'editor' ), \Carbon_Fields\VERSION );
 		wp_enqueue_script( 'carbon-fields-boot', \Carbon_Fields\URL . '/assets/dist/carbon.boot' . $suffix . '.js', array( 'carbon-fields-core' ), \Carbon_Fields\VERSION );
-
-		wp_enqueue_script( 'carbon-fields-gutenberg', \Carbon_Fields\URL . '/assets/dist/js/carbon.gutenberg' . $suffix . '.js', array( 'jquery' ), \Carbon_Fields\VERSION );
 
 		wp_localize_script( 'carbon-fields-vendor', 'carbonFieldsConfig', apply_filters( 'carbon_fields_config', array(
 			'compactInput' => \Carbon_Fields\COMPACT_INPUT,
@@ -245,8 +250,8 @@ class Loader {
 	 * Print the carbon JSON data script.
 	 */
 	public function print_json_data_script() {
-		wp_add_inline_script( 'carbon-fields-gutenberg', 'window.cf = window.cf || {}', 'before' );
-		wp_add_inline_script( 'carbon-fields-gutenberg', sprintf( 'window.cf.preloaded = %s', wp_json_encode( $this->get_json_data() ) ), 'before' );
+		wp_add_inline_script( 'carbon-fields-env', 'window.cf = window.cf || {}', 'before' );
+		wp_add_inline_script( 'carbon-fields-env', sprintf( 'window.cf.preloaded = %s', wp_json_encode( $this->get_json_data() ) ), 'before' );
 		?>
 <script type="text/javascript">
 <!--//--><![CDATA[//><!--
