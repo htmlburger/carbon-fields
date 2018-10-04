@@ -10,7 +10,7 @@
     "test": "tests"
   },
   "scripts": {
-    "dev": "webpack --mode development -w",
+    "dev": "webpack --watch --mode development",
     "precommit": "lint-staged"
   },
   "lint-staged": {

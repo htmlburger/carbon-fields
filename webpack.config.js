@@ -65,7 +65,10 @@ const gutenbergPackageConfig = {
 		]
 	},
 	externals: {
-		'@carbon-fields/element': 'cf.element'
+		'@wordpress/element': 'wp.element',
+		'@wordpress/blocks': 'wp.blocks',
+		'@wordpress/data': 'wp.data',
+		'lodash': 'lodash'
 	}
 };
 
