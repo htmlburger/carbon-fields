@@ -18,6 +18,37 @@ import {
 } from 'fields/constants';
 
 /**
+ * Fetches the entries for an assocation field from the Server.
+ *
+ * @param  {String} options.term
+ * @param  {Number} options.page]
+ * @return {Promise}
+ */
+export function fetchAssociationEntries({ fieldName, term, page, containerId }) {
+	return new Promise((resolve, reject) => {
+		const request = $.get(window.ajaxurl, {
+			action: 'carbon_fields_fetch_association_results',
+			term,
+			page,
+			field_name: fieldName,
+			container_id: containerId,
+		}, null, 'json');
+
+		request.done((response) => {
+			if (!response || !response.success) {
+				reject(response.error || 'An error occurred while trying to fetch attachment.');
+			} else {
+				resolve(response);
+			}
+		});
+
+		request.fail((xhr, status) => {
+			reject(`Request failed: ${status}`);
+		});
+	});
+}
+
+/**
  * Fetches the Attachment Data from the Server.
  *
  * @param  {Number} attachmentId

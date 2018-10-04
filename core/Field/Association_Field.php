@@ -70,7 +70,25 @@ class Association_Field extends Field {
 	public function __construct( $type, $name, $label ) {
 		$this->wp_toolset = \Carbon_Fields\Carbon_Fields::resolve( 'wp_toolset' );
 		$this->set_value_set( new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'type' => '', 'subtype' => '', 'id' => 0 ) ) );
+
+		add_action( 'wp_ajax_carbon_fields_fetch_association_results', array( get_class(), 'handle_ajax_call' ) );
+
 		parent::__construct( $type, $name, $label );
+	}
+
+	/**
+	 * @todo
+	 */
+	public static function handle_ajax_call() {
+		$page   = isset( $_GET['page'] )   ? absint( $_GET['page'] )                : 1;
+		$search = isset( $_GET['search'] ) ? sanitize_text_field( $_GET['search'] ) : '';
+
+		$field = \Carbon_Fields\Helper\Helper::get_field( null, $_GET['container_id'], $_GET['field_name'] );
+
+		return wp_send_json_success( $field->get_options( array(
+			'page'   => $page,
+			'search' => $search,
+		) ) );
 	}
 
 	/**
@@ -256,7 +274,12 @@ class Association_Field extends Field {
 	 *
 	 * @return array $options
 	 */
-	protected function get_post_options( $type ) {
+	protected function get_post_options( $type, $args ) {
+		$args = wp_parse_args( array(
+			'page'   => 1,
+			'search' => '',
+		), $args );
+
 		/**
 		 * Filter the default query when fetching posts for a particular field.
 		 *
@@ -265,9 +288,12 @@ class Association_Field extends Field {
 		$filter_name = 'carbon_fields_association_field_options_' . $this->get_base_name() . '_' . $type['type'] . '_' . $type['post_type'];
 		$args = apply_filters( $filter_name, array(
 			'post_type' => $type['post_type'],
-			'posts_per_page' => -1,
+			// 'posts_per_page' => -1,
+			'posts_per_page' => 10,
 			'fields' => 'ids',
 			'suppress_filters' => false,
+			's' => $args['search'],
+			'page' => $args['page'],
 		) );
 
 		// fetch and prepare posts as association items
@@ -387,16 +413,24 @@ class Association_Field extends Field {
 	/**
 	 * Generate the item options.
 	 *
+	 * @access public
+	 *
+	 * @param  array $args
 	 * @return array $options The selectable options of the association field.
 	 */
-	public function get_options() {
+	public function get_options( $args = array() ) {
+		$args = wp_parse_args( [
+			'page' => '',
+			'term' => '',
+		], $args );
+
 		$options = array();
 
 		foreach ( $this->types as $type ) {
 			$method = 'get_' . $type['type'] . '_options';
 			$callable = array( $this, $method );
 			if ( is_callable( $callable ) ) {
-				$options = array_merge( $options, call_user_func( $callable, $type ) );
+				$options = array_merge( $options, call_user_func( $callable, $type, $args ) );
 			}
 		}
 
@@ -564,6 +598,7 @@ class Association_Field extends Field {
 	 * @return mixed      The JSON field data.
 	 */
 	public function to_json( $load ) {
+
 		$field_data = parent::to_json( $load );
 
 		$field_data = array_merge( $field_data, array(

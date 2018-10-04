@@ -1,7 +1,9 @@
 /**
  * The external dependencies.
  */
+import $ from 'jquery';
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import {
 	compose,
@@ -29,6 +31,7 @@ import SortableList from 'fields/components/sortable-list';
 import AssociationList from 'fields/components/association/list';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
+import { requestAssociationEntries } from 'fields/actions';
 import { TYPE_ASSOCIATION, VALIDATION_ASSOCIATION } from 'fields/constants';
 
 /**
@@ -54,6 +57,7 @@ export const AssociationField = ({
 	field,
 	items,
 	term,
+	isLoading,
 	sortableOptions,
 	setTerm,
 	handleAddItem,
@@ -85,6 +89,10 @@ export const AssociationField = ({
 
 			<div className="carbon-association-body">
 				<div className="carbon-association-left">
+					<div className={`carbon-association-left-spinner ${isLoading ? 'is-active' : ''}`}>
+						<span className={`spinner ${isLoading ? 'is-active' : ''}`} />
+					</div>
+
 					<AssociationList
 						items={items}
 						onItemClick={handleAddItem} />
@@ -134,6 +142,54 @@ export const enhance = compose(
 	withStore(),
 
 	/**
+	 * Track current search term.
+	 */
+	withState('term', 'setTerm', ''),
+
+	/**
+	 * Set field items.
+	 */
+	withState('items', 'setItems', []),
+
+	/**
+	 * Track loading items status.
+	 */
+	withState('isLoading', 'setIsLoading', false),
+
+	/**
+	 * Track current page.
+	 */
+	withState('page', 'setPage', 1),
+
+	withHandlers({
+		fetchItems: ({
+			field,
+			term,
+			page,
+			setItems,
+			setIsLoading,
+		}) => () => {
+			let args = {
+				term: term,
+				page: page,
+				field_name: field.base_name,
+				container_id: field.container_id,
+			};
+
+			setIsLoading(true);
+
+			$.get(window.ajaxurl, {
+				action: 'carbon_fields_fetch_association_results',
+				...args
+			}, null, 'json')
+				.then(({ success, data }) => {
+					setIsLoading(false);
+					setItems(data);
+				});
+		},
+	}),
+
+	/**
 	 * Attach the setup hooks.
 	 */
 	withSetup({
@@ -141,19 +197,28 @@ export const enhance = compose(
 			const {
 				field,
 				ui,
+				page,
 				setupField,
-				setupValidation
+				setupValidation,
+				fetchItems,
+				setPage,
 			} = this.props;
+
+			fetchItems();
+
+			const $sourceList = $(ReactDOM.findDOMNode(this)).find('.carbon-association-left .carbon-association-list');
+
+			$sourceList.on('scroll', () => {
+				if ($sourceList[0].scrollHeight - $sourceList.scrollTop() == $sourceList.outerHeight()) {
+					setPage(page + 1);
+					fetchItems();
+				}
+			});
 
 			setupField(field.id, field.type, ui);
 			setupValidation(field.id, VALIDATION_ASSOCIATION);
 		},
 	}),
-
-	/**
-	 * Track current search term.
-	 */
-	withState('term', 'setTerm', ''),
 
 	/**
 	 * Pass some props to the component.
@@ -187,7 +252,7 @@ export const enhance = compose(
 		};
 
 		return {
-			items,
+			// items,
 			sortableOptions,
 		};
 	}),
@@ -223,7 +288,7 @@ export const enhance = compose(
 			setFieldValue(field.id, newItems);
 		},
 
-		handleRemoveItem: ({ field, setFieldValue }) => item => setFieldValue(field.id, without(field.value, item)),
+		handleRemoveItem: ({ field, setFieldValue }) => item => setFieldValue(field.id, without(field.value, item))
 	})
 );
 
