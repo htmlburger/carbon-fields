@@ -438,9 +438,8 @@ class Association_Field extends Field {
 					break;
 
 				case 'term':
-
 					$sql_statement = 
-						"SELECT `t`.`term_id` AS `ID`, `t`.`name` AS `title`, 'term' as `type`, `tt`.`taxonomy` AS `subtype`
+						"SELECT `t`.`term_id` AS `ID`, `t`.`name` AS `title` ,'term' as `type`, `tt`.`taxonomy` AS `subtype`
 						 FROM `{$wpdb->terms}` AS `t`
 						 INNER JOIN `{$wpdb->term_taxonomy}` AS `tt`
 						 ON `t`.`term_id` = `tt`.`term_id`
@@ -448,6 +447,28 @@ class Association_Field extends Field {
 
 					if ( ! empty( $args['term'] ) ) {
 						$sql_statement .= $wpdb->prepare( ' AND ((`t`.`name` LIKE %s) OR (`t`.`slug` LIKE %s))', '%' . $args['term'] . '%', '%' . $args['term'] . '%' );
+					}
+
+					break;
+
+				case 'comment':
+					$sql_statement = 
+						"SELECT `comment_ID` AS `ID`, '' AS `title`, 'comment' AS `type`, 'comment' AS `subtype`
+						 FROM `{$wpdb->comments}`";
+
+					if ( ! empty( $args['term'] ) ) {
+						$sql_statement .= " WHERE `comment_content` LIKE '%{$args['term']}%' ";
+					}
+
+					break;
+
+				case 'user':
+					$sql_statement = 
+						"SELECT `ID`, '' AS `title`, 'user' AS `type`, 'user' AS `subtype`
+						 FROM `{$wpdb->users}`";
+
+					if ( ! empty( $args['term'] ) ) {
+						$sql_statement .= " WHERE `user_login` LIKE '%{$args['term']}%' OR `user_url` LIKE '%{$args['term']}%' OR `user_email` LIKE '%{$args['term']}%' OR `user_nicename` LIKE '%{$args['term']}%' OR `display_name` LIKE '%{$args['term']}%' ";
 					}
 
 					break;
@@ -485,6 +506,26 @@ class Association_Field extends Field {
 					'type'       => $result->type,
 					'subtype'    => $result->subtype,
 					'label'      => $this->get_item_label( $result, $result->type, $result->subtype ),
+					'is_trashed' => false,
+					'edit_link'  => $this->get_object_edit_link( get_object_vars( $result ), $result->ID ),
+				];
+			} else if ( $result->type === 'comment' ) {
+				$options[] = [
+					'id'         => intval( $result->ID ),
+					'title'      => $this->get_title_by_type( $result->ID, 'comment' ),
+					'type'       => 'comment',
+					'subtype'    => 'comment',
+					'label'      => $this->get_item_label( $result->ID, 'comment' ),
+					'is_trashed' => false,
+					'edit_link'  => $this->get_object_edit_link( get_object_vars( $result ), $result->ID ),
+				];
+			} else if ( $result->type === 'user' ) {
+				$options[] = [
+					'id'         => intval( $result->ID ),
+					'title'      => $this->get_title_by_type( $result->ID, 'user' ),
+					'type'       => 'user',
+					'subtype'    => 'user',
+					'label'      => $this->get_item_label( $result->ID, 'user' ),
 					'is_trashed' => false,
 					'edit_link'  => $this->get_object_edit_link( get_object_vars( $result ), $result->ID ),
 				];
