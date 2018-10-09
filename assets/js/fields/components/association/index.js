@@ -18,6 +18,7 @@ import {
 	isMatch,
 	sortBy,
 	includes,
+	debounce,
 	find
 } from 'lodash';
 import { vsprintf } from 'sprintf-js';
@@ -59,7 +60,7 @@ export const AssociationField = ({
 	term,
 	isLoading,
 	sortableOptions,
-	setTerm,
+	onSearchTermChange,
 	handleAddItem,
 	handleRemoveItem,
 	handleSortItems
@@ -85,7 +86,7 @@ export const AssociationField = ({
 
 			<SearchInput
 				term={term}
-				onChange={setTerm} />
+				onChange={onSearchTermChange} />
 
 			<div className="carbon-association-body">
 				<div className="carbon-association-left">
@@ -147,11 +148,6 @@ export const enhance = compose(
 	withState('term', 'setTerm', ''),
 
 	/**
-	 * Set field items.
-	 */
-	withState('items', 'setItems', []),
-
-	/**
 	 * Track loading items status.
 	 */
 	withState('isLoading', 'setIsLoading', false),
@@ -161,13 +157,27 @@ export const enhance = compose(
 	 */
 	withState('page', 'setPage', 1),
 
+	/**
+	 * Set field items.
+	 */
+	withState('items', 'setItems', []),
+	withHandlers({
+		appendItems: ({ items, setItems }) => newItems => {
+			setItems([ ...items, ...newItems ]);
+		},
+
+		clearItems: ({ setItems }) => () => {
+			setItems([]);
+		},
+	}),
+
 	withHandlers({
 		fetchItems: ({
 			field,
 			term,
 			page,
-			setItems,
 			setIsLoading,
+			appendItems,
 		}) => () => {
 			let args = {
 				term: term,
@@ -178,15 +188,38 @@ export const enhance = compose(
 
 			setIsLoading(true);
 
-			$.get(window.ajaxurl, {
+			return $.get(window.ajaxurl, {
 				action: 'carbon_fields_fetch_association_results',
 				...args
 			}, null, 'json')
-				.then(({ success, data }) => {
+				.then((response) => {
 					setIsLoading(false);
-					setItems(data);
+					return response;
 				});
 		},
+
+		onReceiveItems: ({ setItems, clearItems }) => ({ success, data }) => {
+			clearItems();
+			setItems(data);
+		},
+
+		onReceiveNextPageItems: ({ appendItems }) => ({ success, data }) => {
+			appendItems(data);
+		},
+	}),
+
+	withHandlers({
+		onSearchTermChange: ({
+			setPage,
+			setTerm,
+			fetchItems,
+			onReceiveItems,
+		}) => debounce(term => {
+			setPage(1);
+			setTerm(term);
+
+			fetchItems().then(response => onReceiveItems(response));
+		}, 200),
 	}),
 
 	/**
@@ -200,18 +233,25 @@ export const enhance = compose(
 				page,
 				setupField,
 				setupValidation,
+				setItems,
 				fetchItems,
+				appendItems,
+				onReceiveItems,
+				onReceiveNextPageItems,
 				setPage,
 			} = this.props;
 
-			fetchItems();
+			// fetch initial data
+			fetchItems().then(response => onReceiveItems(response));
 
 			const $sourceList = $(ReactDOM.findDOMNode(this)).find('.carbon-association-left .carbon-association-list');
 
 			$sourceList.on('scroll', () => {
 				if ($sourceList[0].scrollHeight - $sourceList.scrollTop() == $sourceList.outerHeight()) {
 					setPage(page + 1);
-					fetchItems();
+
+					// fetch next page data
+					fetchItems().then(response => onReceiveNextPageItems(response));
 				}
 			});
 
