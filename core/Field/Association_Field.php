@@ -13,6 +13,7 @@ use Carbon_Fields\Value_Set\Value_Set;
  *  - Comments
  */
 class Association_Field extends Field {
+	const ENTRIES_PER_PAGE = 10;
 
 	/**
 	 * WP_Toolset instance for WP data loading
@@ -76,18 +77,21 @@ class Association_Field extends Field {
 		parent::__construct( $type, $name, $label );
 	}
 
+	public static function field_type_activated() {
+	}
+
 	/**
 	 * @todo
 	 */
 	public static function handle_ajax_call() {
-		$page   = isset( $_GET['page'] )   ? absint( $_GET['page'] )                : 1;
-		$search = isset( $_GET['search'] ) ? sanitize_text_field( $_GET['search'] ) : '';
+		$page = isset( $_GET['page'] ) ? absint( $_GET['page'] )              : 1;
+		$term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';
 
 		$field = \Carbon_Fields\Helper\Helper::get_field( null, $_GET['container_id'], $_GET['field_name'] );
 
-		return wp_send_json_success( $field->get_options( array(
-			'page'   => $page,
-			'search' => $search,
+		return wp_send_json_success( $field->get_union_options( array(
+			'page' => $page,
+			'term' => $term,
 		) ) );
 	}
 
@@ -410,6 +414,95 @@ class Association_Field extends Field {
 		return $comments;
 	}
 
+	public function get_union_options( $args = array() ) {
+		global $wpdb;
+
+		$args = wp_parse_args( $args, [
+			'page' => 1,
+			'term' => '',
+		] );
+
+		$sql_queries = [];
+
+		foreach ( $this->types as $type ) {
+			switch ( $type['type'] ) {
+				case 'post':
+					$sql_statement = 
+						"SELECT `ID`, `post_title` AS `title`, 'post' AS `type`, `post_type` AS `subtype`
+						 FROM `{$wpdb->posts}`
+						 WHERE `post_type` = '{$type['post_type']}' AND `post_status` = 'publish'";
+
+					if ( ! empty( $args['term'] ) ) {
+						$sql_statement .= " AND `post_title` LIKE '%{$args['term']}%' ";
+					}
+
+					break;
+
+				case 'term':
+
+					$sql_statement = 
+						"SELECT `t`.`term_id` AS `ID`, `t`.`name` AS `title`, 'term' as `type`, `tt`.`taxonomy` AS `subtype`
+						 FROM `{$wpdb->terms}` AS `t`
+						 INNER JOIN `{$wpdb->term_taxonomy}` AS `tt`
+						 ON `t`.`term_id` = `tt`.`term_id`
+						 WHERE `tt`.`taxonomy` IN ('{$type['taxonomy']}')";
+
+					if ( ! empty( $args['term'] ) ) {
+						$sql_statement .= $wpdb->prepare( ' AND ((`t`.`name` LIKE %s) OR (`t`.`slug` LIKE %s))', '%' . $args['term'] . '%', '%' . $args['term'] . '%' );
+					}
+
+					break;
+			}
+
+			$sql_queries[] = $sql_statement;
+		}
+
+		$sql_queries = implode( " UNION ", $sql_queries );
+
+		$per_page = static::ENTRIES_PER_PAGE;
+		$offset   = ($args['page'] - 1) * $per_page;
+
+		$sql_queries .= " ORDER BY `title` LIMIT {$per_page} OFFSET {$offset}";
+
+		$results = $wpdb->get_results( $sql_queries );
+
+		$options = [];
+
+		foreach ( $results as $result ) {
+			if ( $result->type === 'post' ) {
+				$options[] = [
+					'id'         => intval( $result->ID ),
+					'title'      => $this->get_title_by_type( $result->ID, $result->type, $result->subtype ),
+					'type'       => $result->type,
+					'subtype'    => $result->subtype,
+					'label'      => $this->get_item_label( $result->ID, $result->type, $result->subtype ),
+					'is_trashed' => ( get_post_status( $result->ID ) == 'trash' ),
+					'edit_link'  => $this->get_object_edit_link( get_object_vars( $result ), $result->ID ),
+				];
+			} else if ( $result->type === 'term' ) {
+				$options[] = [
+					'id'         => intval( $result->ID ),
+					'title'      => $result->title,
+					'type'       => $result->type,
+					'subtype'    => $result->subtype,
+					'label'      => $this->get_item_label( $result, $result->type, $result->subtype ),
+					'is_trashed' => false,
+					'edit_link'  => $this->get_object_edit_link( get_object_vars( $result ), $result->ID ),
+				];
+			}
+		}
+
+		/**
+		 * Filter the final list of options, available to a certain association field.
+		 *
+		 * @param array $options Unfiltered options items.
+		 * @param string $name Name of the association field.
+		 */
+		$options = apply_filters( 'carbon_fields_association_field_options', $options, $this->get_base_name() );
+
+		return $options;
+	}
+
 	/**
 	 * Generate the item options.
 	 *
@@ -460,7 +553,7 @@ class Association_Field extends Field {
 				break;
 
 			case 'term':
-				$edit_link = get_edit_term_link( $id, $type['taxonomy'], $type['type'] );
+				$edit_link = get_edit_term_link( $id, '', $type['type'] );
 				break;
 
 			case 'comment':
