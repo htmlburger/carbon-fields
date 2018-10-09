@@ -220,6 +220,18 @@ export const enhance = compose(
 
 			fetchItems().then(response => onReceiveItems(response));
 		}, 200),
+
+		onListScroll: ({ page, setPage, fetchItems, onReceiveNextPageItems }) => event => {
+			const $sourceList = $(event.target);
+
+			if ($sourceList[0].scrollHeight - $sourceList.scrollTop() == $sourceList.outerHeight()) {
+				console.log(page);
+				setPage(page + 1);
+
+				// fetch next page data
+				fetchItems().then(response => onReceiveNextPageItems(response));
+			}
+		}
 	}),
 
 	/**
@@ -239,6 +251,7 @@ export const enhance = compose(
 				onReceiveItems,
 				onReceiveNextPageItems,
 				setPage,
+				onListScroll
 			} = this.props;
 
 			// fetch initial data
@@ -246,14 +259,7 @@ export const enhance = compose(
 
 			const $sourceList = $(ReactDOM.findDOMNode(this)).find('.carbon-association-left .carbon-association-list');
 
-			$sourceList.on('scroll', () => {
-				if ($sourceList[0].scrollHeight - $sourceList.scrollTop() == $sourceList.outerHeight()) {
-					setPage(page + 1);
-
-					// fetch next page data
-					fetchItems().then(response => onReceiveNextPageItems(response));
-				}
-			});
+			$sourceList.on('scroll', onListScroll);
 
 			setupField(field.id, field.type, ui);
 			setupValidation(field.id, VALIDATION_ASSOCIATION);
