@@ -16,8 +16,6 @@ class Association_Field extends Field {
 	use Association\Queries_Options,
 		Association\Formats_Options;
 
-	const ENTRIES_PER_PAGE = 10;
-
 	/**
 	 * WP_Toolset instance for WP data loading
 	 *
@@ -38,6 +36,13 @@ class Association_Field extends Field {
 	 * @var integer
 	 */
 	protected $max = -1;
+
+	/**
+	 * Max items per page. -1 for no limit
+	 *
+	 * @var integer
+	 */
+	protected $items_per_page = 10;
 
 	/**
 	 * Allow items to be added multiple times
@@ -229,7 +234,7 @@ class Association_Field extends Field {
 
 		$sql_queries = implode( " UNION ", $sql_queries );
 
-		$per_page = static::ENTRIES_PER_PAGE;
+		$per_page = $this->get_items_per_page();
 		$offset   = ($args['page'] - 1) * $per_page;
 
 		$sql_queries .= " ORDER BY `title` LIMIT {$per_page} OFFSET {$offset}";
@@ -304,6 +309,27 @@ class Association_Field extends Field {
 	public function set_max( $max ) {
 		$this->max = intval( $max );
 		return $this;
+	}
+
+	/**
+	 * Set the items per page.
+	 *
+	 * @param  int   $items_per_page
+	 * @return self  $this
+	 */
+	public function set_items_per_page( $items_per_page ) {
+		$this->items_per_page = intval( $items_per_page );
+		return $this;
+	}
+
+	/**
+	 * Get the items per page.
+	 *
+	 * @param  int   $items_per_page
+	 * @return self  $this
+	 */
+	public function get_items_per_page() {
+		return $this->items_per_page;
 	}
 
 	/**
