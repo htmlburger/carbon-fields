@@ -3,7 +3,7 @@
 /**
  * External dependencies.
  */
-import { withFilters } from '@wordpress/components';
+import { applyFilters } from '@wordpress/hooks';
 import { isString, isFunction } from 'lodash';
 
 /**
@@ -61,5 +61,5 @@ export function getFieldType( type, context ) {
 		return;
 	}
 
-	return withFilters( `carbon-fields.${ type }-field.${ context }` )( fieldType );
+	return applyFilters( `carbon-fields.${ type }-field.${ context }`, fieldType );
 }

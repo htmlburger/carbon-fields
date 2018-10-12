@@ -5,7 +5,7 @@ import { registerFieldType } from 'lib/registry';
 import TextField from 'components/text';
 
 /**
- * Register the core fields.
+ * Registers core fields.
  */
 [
 	[ 'text', TextField ]

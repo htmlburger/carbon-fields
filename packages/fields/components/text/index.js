@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import { Component } from '@carbon-fields/element';
+import { Component } from '@wordpress/element';
 
 class TextField extends Component {
 	/**

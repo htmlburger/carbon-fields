@@ -8,8 +8,8 @@ module.exports = {
 			modules: false
 		}],
 		['@babel/preset-react', {
-			pragma: 'cf.element.createElement',
-			pragmaFrag: 'cf.element.Fragment'
+			pragma: 'wp.element.createElement',
+			pragmaFrag: 'wp.element.Fragment'
 		}]
 	],
 	plugins: [

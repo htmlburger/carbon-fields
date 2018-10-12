@@ -25,6 +25,41 @@ const stats = {
 };
 
 /**
+ * The WordPress packages used across the code.
+ *
+ * @type {string[]}
+ */
+const wpPackages = [
+	'@wordpress/element',
+	'@wordpress/hooks'
+];
+
+const wpExternals = wpPackages.reduce( ( externals, package ) => {
+	externals[ package ] = [
+		'wp',
+		package.replace( '@wordpress/', '' )
+	];
+
+	return externals;
+}, {} );
+
+const wpProxyExternals = wpPackages.reduce( ( externals, package ) => {
+	externals[ package ] = [
+		'cf',
+		'vendor',
+		package
+	];
+
+	return externals;
+}, {} );
+
+const wpProviders = wpPackages.reduce( ( providers, package ) => {
+	providers[ wpExternals[ package ].join( '.' ) ] = package;
+
+	return providers;
+}, {} );
+
+/**
  * The build configuration of `env` package.
  *
  * @type {Object}
@@ -85,11 +120,6 @@ const otherPackagesConfig = {
 			}
 		]
 	},
-	externals: {
-		'@wordpress/components': ['wp', 'components'],
-		'@carbon-fields/element': [ 'cf', 'element' ],
-		'lodash': 'lodash'
-	},
 	stats
 };
 
@@ -122,14 +152,11 @@ const gutenbergPackageConfig = {
 		externals[ `@carbon-fields/${ name }` ] = [ 'cf', name ];
 
 		return externals;
-	}, {
-		'@wordpress/components': 'wp.components',
-		'@wordpress/element': 'wp.element',
+	}, Object.assign( {}, wpExternals, {
 		'@wordpress/blocks': 'wp.blocks',
 		'@wordpress/data': 'wp.data',
-		'@wordpress/hooks': 'wp.hooks',
 		'lodash': 'lodash'
-	} ),
+	 } ) ),
 	stats
 };
 
@@ -141,18 +168,16 @@ module.exports = [
 		output: {
 			path: gutenbergBuildPath
 		},
-		externals: {
+		externals: Object.assign( {}, wpExternals, {
 			'lodash': 'lodash'
-		}
+		} )
 	} ),
 	merge( envPackageConfig, {
 		output: {
 			path: classicBuildPath
 		},
 		plugins: [
-			new webpack.ProvidePlugin( {
-				'window.wp.element': '@wordpress/element'
-			} )
+			new webpack.ProvidePlugin( wpProviders )
 		]
 	} ),
 
@@ -162,17 +187,18 @@ module.exports = [
 	merge( otherPackagesConfig, {
 		output: {
 			path: gutenbergBuildPath
-		}
+		},
+		externals: Object.assign( {}, wpExternals, {
+			'lodash': 'lodash'
+		} )
 	} ),
 	merge( otherPackagesConfig, {
 		output: {
 			path: classicBuildPath
 		},
-		plugins: [
-			new webpack.ProvidePlugin( {
-				'wp.components': '@wordpress/components'
-			} )
-		]
+		externals: Object.assign( {}, wpProxyExternals, {
+			'lodash': [ 'cf', 'vendor', 'lodash' ]
+		} )
 	} ),
 
 	/**
