@@ -8,6 +8,17 @@ use WP_User_Query;
 use WP_Comment_Query;
 
 trait Queries_Options {
+	/**
+	 * Helper method to prepare the SQL needed to search for options of type 'post'.
+	 *
+	 * Creates a 'fake' WP_Query with only one result in order to catch the SQL
+	 * that it will construct in order to support all of the WP_Query arguments.
+	 *
+	 * @access public
+	 * 
+	 * @param  array  $args
+	 * @return string
+	 */
 	public function get_post_options_sql( $args = array() ) {
 		$type        = $args['type'];
 		$post_type   = $args['post_type'];
@@ -47,12 +58,31 @@ trait Queries_Options {
 		return $posts_query->request;
 	}
 
+	/**
+	 * Modify the "SELECT" columns for the WP_Query.
+	 *
+	 * @access public
+	 * 
+	 * @param  string $fields
+	 * @return string
+	 */
 	public function get_post_options_sql_select_clause( $fields ) {
 		global $wpdb;
 
 		return $fields . " , `{$wpdb->posts}`.`post_title` AS `title`, 'post' AS `type`, `{$wpdb->posts}`.`post_type` AS `subtype` ";
 	}
 
+	/**
+	 * Helper method to prepare the SQL needed to search for options of type 'term'.
+	 *
+	 * Creates a 'fake' WP_Term_Query with only one result in order to catch the SQL
+	 * that it will construct in order to support all of the WP_Term_Query arguments.
+	 *
+	 * @access public
+	 * 
+	 * @param  array  $args
+	 * @return string
+	 */
 	public function get_term_options_sql( $args = array() ) {
 		$type        = $args['type'];
 		$taxonomy    = $args['taxonomy'];
@@ -86,16 +116,43 @@ trait Queries_Options {
 		return $terms_query->request;
 	}
 
+	/**
+	 * Modify the "SELECT" columns for the WP_Term_Query.
+	 *
+	 * @access public
+	 * 
+	 * @param  array  $fields
+	 * @return array
+	 */
 	public function get_term_options_sql_select_clause( $fields ) {
 		return array( '`t`.`term_id` AS `ID`', '`t`.`name` AS `title`', '\'term\' as `type`', '`tt`.`taxonomy` AS `subtype`' );
 	}
 
+	/**
+	 * Modify the clauses for the SQL request of the WP_Term_Query.
+	 *
+	 * @access public
+	 * 
+	 * @param  array  $clauses
+	 * @return array
+	 */
 	public function get_term_options_sql_clauses( $clauses ) {
 		unset( $clauses['orderby'], $clauses['order'], $clauses['limits'] );
 
 		return $clauses;
 	}
 
+	/**
+	 * Helper method to prepare the SQL needed to search for options of type 'user'.
+	 *
+	 * Creates a 'fake' WP_User_Query with only one result in order to catch the SQL
+	 * that it will construct in order to support all of the WP_User_Query arguments.
+	 *
+	 * @access public
+	 * 
+	 * @param  array  $args
+	 * @return string
+	 */
 	public function get_user_options_sql( $args = array() ) {
 		global $wpdb;
 
@@ -123,6 +180,17 @@ trait Queries_Options {
 		return "SELECT `{$wpdb->users}`.`ID`, '' AS `title`, 'user' AS `type`, 'user' AS `subtype` {$users_query->query_from} {$users_query->query_where}";
 	}
 
+	/**
+	 * Helper method to prepare the SQL needed to search for options of type 'comment'.
+	 *
+	 * Creates a 'fake' WP_Comment_Query with only one result in order to catch the SQL
+	 * that it will construct in order to support all of the WP_Comment_Query arguments.
+	 *
+	 * @access public
+	 * 
+	 * @param  array  $args
+	 * @return string
+	 */
 	public function get_comment_options_sql( $args = array() ) {
 		$type        = $args['type'];
 		$search_term = $args['term'];
@@ -148,11 +216,19 @@ trait Queries_Options {
 		$comments_query->query( $args );
 
 		remove_filter( 'comments_clauses', array( $this, 'get_comments_clauses' ) );
-		
 
 		return $comments_query->request;
 	}
 
+	/**
+	 * Modify the "SELECT" columns and the clauses for the SQL request
+	 * performed by the WP_Comment_Query.
+	 *
+	 * @access public
+	 * 
+	 * @param  array  $clauses
+	 * @return array
+	 */
 	public function get_comments_clauses( $clauses ) {
 		global $wpdb;
 

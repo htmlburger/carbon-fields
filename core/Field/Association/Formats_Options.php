@@ -116,6 +116,12 @@ trait Formats_Options {
 		return $edit_link;
 	}
 
+	/**
+	 * Prepares an option of type 'post' for JS usage.
+	 * 
+	 * @param  array  $data 
+	 * @return array
+	 */
 	public function format_post_option( $data ) {
 		return array(
 			'id'         => intval( $data->ID ),
@@ -128,6 +134,12 @@ trait Formats_Options {
 		);
 	}
 
+	/**
+	 * Prepares an option of type 'term' for JS usage.
+	 * 
+	 * @param  array  $data 
+	 * @return array
+	 */
 	public function format_term_option( $data ) {
 		return array(
 			'id'         => intval( $data->ID ),
@@ -140,6 +152,12 @@ trait Formats_Options {
 		);
 	}
 
+	/**
+	 * Prepares an option of type 'comment' for JS usage.
+	 * 
+	 * @param  array  $data 
+	 * @return array
+	 */
 	public function format_comment_option( $data ) {
 		return array(
 			'id'         => intval( $data->ID ),
@@ -152,6 +170,12 @@ trait Formats_Options {
 		);
 	}
 
+	/**
+	 * Prepares an option of type 'user' for JS usage.
+	 * 
+	 * @param  array  $data 
+	 * @return array
+	 */
 	public function format_user_option( $data ) {
 		return array(
 			'id'         => intval( $data->ID ),
