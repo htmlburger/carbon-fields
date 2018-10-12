@@ -14,6 +14,17 @@ const classicBuildPath = path.resolve( __dirname, 'build/classic' );
 const gutenbergBuildPath = path.resolve( __dirname, 'build/gutenberg' );
 
 /**
+ * The configuration of build's stats.
+ *
+ * @type {Object}
+ */
+const stats = {
+	modules: false,
+	hash: false,
+	builtAt: false
+};
+
+/**
  * The build configuration of `env` package.
  *
  * @type {Object}
@@ -36,7 +47,50 @@ const envPackageConfig = {
 				}
 			}
 		]
-	}
+	},
+	stats
+};
+
+/**
+ * The build configuration for the rest of packages.
+ *
+ * @type {Object}
+ */
+const otherPackages = [
+	'fields'
+];
+
+const otherPackagesConfig = {
+	entry: otherPackages.reduce( ( entries, name ) => {
+		entries[ name ] = `./packages/${ name }`;
+
+		return entries;
+	}, {} ),
+	output: {
+		filename: '[name].js',
+		library: [ 'cf', '[name]' ],
+		libraryTarget: 'this'
+	},
+	module: {
+		rules: [
+			{
+				test: /\.js$/,
+				exclude: /node_modules/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						cacheDirectory: true
+					}
+				}
+			}
+		]
+	},
+	externals: {
+		'@wordpress/components': ['wp', 'components'],
+		'@carbon-fields/element': [ 'cf', 'element' ],
+		'lodash': 'lodash'
+	},
+	stats
 };
 
 /**
@@ -64,12 +118,19 @@ const gutenbergPackageConfig = {
 			}
 		]
 	},
-	externals: {
+	externals: otherPackages.reduce( ( externals, name ) => {
+		externals[ `@carbon-fields/${ name }` ] = [ 'cf', name ];
+
+		return externals;
+	}, {
+		'@wordpress/components': 'wp.components',
 		'@wordpress/element': 'wp.element',
 		'@wordpress/blocks': 'wp.blocks',
 		'@wordpress/data': 'wp.data',
+		'@wordpress/hooks': 'wp.hooks',
 		'lodash': 'lodash'
-	}
+	} ),
+	stats
 };
 
 module.exports = [
@@ -96,7 +157,26 @@ module.exports = [
 	} ),
 
 	/**
+	 * ./packages/*
+	 */
+	merge( otherPackagesConfig, {
+		output: {
+			path: gutenbergBuildPath
+		}
+	} ),
+	merge( otherPackagesConfig, {
+		output: {
+			path: classicBuildPath
+		},
+		plugins: [
+			new webpack.ProvidePlugin( {
+				'wp.components': '@wordpress/components'
+			} )
+		]
+	} ),
+
+	/**
 	 * ./packages/gutenberg
 	 */
 	gutenbergPackageConfig
-]
+];

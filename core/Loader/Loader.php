@@ -115,6 +115,7 @@ class Loader {
 		wp_enqueue_style( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.css', array(), \Carbon_Fields\VERSION );
 
 		wp_enqueue_script( 'carbon-fields-env', \Carbon_Fields\URL . '/build/' . $context . '/env' . $suffix . '.js', array(), \Carbon_Fields\VERSION );
+		wp_enqueue_script( 'carbon-fields-fields', \Carbon_Fields\URL . '/build/' . $context . '/fields' . $suffix . '.js', array(), \Carbon_Fields\VERSION );
 
 		if ( $context === 'gutenberg' ) {
 			wp_enqueue_script( 'carbon-fields-gutenberg', \Carbon_Fields\URL . '/build/' . $context . '/gutenberg' . $suffix . '.js', array( 'carbon-fields-env' ), \Carbon_Fields\VERSION );

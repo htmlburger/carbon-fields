@@ -15,7 +15,7 @@ sftp-config.json
 Thumbs.db
 
 # Node
-/node_modules/
+node_modules
 
 # Unit tests
 /tmp

@@ -6,5 +6,7 @@
  * @return {Object[]}
  */
 export function getFieldDefinitionsByBlockName( state, blockName ) {
-	return state.fieldDefinitionsByBlockName[ blockName ] || [];
+	return state.fieldDefinitionsByBlockName[
+		blockName.replace( 'carbon-fields/', '' )
+	] || [];
 }

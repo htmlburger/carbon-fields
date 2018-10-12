@@ -10,11 +10,11 @@
     "test": "tests"
   },
   "scripts": {
-    "dev": "webpack --watch --mode development",
+    "dev": "webpack --mode development --watch",
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "assets/js/gutenberg/**/*": [
+    "packages/**/*.js": [
       "eslint"
     ]
   },
@@ -54,6 +54,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
+    "@wordpress/components": "^4.1.0",
     "redux": "^4.0.0"
   }
 }

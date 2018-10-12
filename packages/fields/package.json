@@ -1,0 +1,7 @@
+{
+  "name": "@carbon-fields/fields",
+  "version": "3.0.0",
+  "dependencies": {
+    "@babel/runtime": "^7.0.0"
+  }
+}
