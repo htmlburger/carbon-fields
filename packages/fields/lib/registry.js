@@ -3,8 +3,12 @@
 /**
  * External dependencies.
  */
-import { applyFilters } from '@wordpress/hooks';
 import { isString, isFunction } from 'lodash';
+
+/**
+ * Internal dependencies.
+ */
+import withFilters from '../utils/with-filters';
 
 /**
  * Keeps track of registered field types.
@@ -12,6 +16,13 @@ import { isString, isFunction } from 'lodash';
  * @type {Object}
  */
 const fieldTypes = {};
+
+/**
+ * Keeps track of field types that are already wrapped with `withFilters` helper.
+ *
+ * @type {Object}
+ */
+const fieldTypesWithFilters = {};
 
 /**
  * Registers a new field types.
@@ -61,5 +72,9 @@ export function getFieldType( type, context ) {
 		return;
 	}
 
-	return applyFilters( `carbon-fields.${ type }-field.${ context }`, fieldType );
+	if ( ! fieldTypesWithFilters[ type ] ) {
+		fieldTypesWithFilters[ type ] = withFilters( `carbon-fields.${ type }-field.${ context }` )( fieldType );
+	}
+
+	return fieldTypesWithFilters[ type ];
 }

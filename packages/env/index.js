@@ -1,6 +1,7 @@
 /**
  * External dependencies.
  */
+import * as compose from '@wordpress/compose';
 import * as element from '@wordpress/element';
 import * as hooks from '@wordpress/hooks';
 import * as _ from 'lodash';
@@ -17,6 +18,7 @@ if ( ! window.lodash ) {
  */
 window.cf = window.cf || {};
 window.cf.vendor = [
+	[ '@wordpress/compose', compose ],
 	[ '@wordpress/element', element ],
 	[ '@wordpress/hooks', hooks ],
 	[ 'lodash', _ ]

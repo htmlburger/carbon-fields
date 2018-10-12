@@ -30,6 +30,7 @@ const stats = {
  * @type {string[]}
  */
 const wpPackages = [
+	'@wordpress/compose',
 	'@wordpress/element',
 	'@wordpress/hooks'
 ];
@@ -153,6 +154,7 @@ const gutenbergPackageConfig = {
 
 		return externals;
 	}, Object.assign( {}, wpExternals, {
+		'@wordpress/components': 'wp.components',
 		'@wordpress/blocks': 'wp.blocks',
 		'@wordpress/data': 'wp.data',
 		'lodash': 'lodash'
