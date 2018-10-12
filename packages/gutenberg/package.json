@@ -5,6 +5,7 @@
     "@babel/runtime": "^7.0.0",
     "@carbon-fields/fields": "^3.0.0",
     "@wordpress/blocks": "^4.0.1",
+    "@wordpress/components": "^4.1.0",
     "@wordpress/data": "^2.1.1",
     "@wordpress/element": "^2.1.1",
     "@wordpress/hooks": "^2.0.2",

@@ -4,6 +4,7 @@
 import { Component, Fragment } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
 import { getFieldType } from '@carbon-fields/fields';
+import { get } from 'lodash';
 
 class BlockEdit extends Component {
 	/**
@@ -12,17 +13,30 @@ class BlockEdit extends Component {
 	 * @return {Object}
 	 */
 	render() {
+		const {
+			fields,
+			attributes,
+			setAttributes
+		} = this.props;
+
 		return (
 			<Fragment>
-				{ this.props.fields.map( ( field, index ) => {
+				{ fields.map( ( field, index ) => {
 					const Field = getFieldType( field.type, 'gutenberg' );
 
 					if ( ! Field ) {
 						return null;
 					}
 
+					const value = get( attributes, field.base_name );
+
 					return (
-						<Field key={ index } />
+						<Field
+							key={ index }
+							field={ field }
+							value={ value }
+							onChange={ setAttributes }
+						/>
 					);
 				} ) }
 			</Fragment>
