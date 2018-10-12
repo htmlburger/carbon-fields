@@ -2,6 +2,7 @@
   "name": "@carbon-fields/gutenberg",
   "version": "3.0.0",
   "dependencies": {
-    "@babel/runtime": "^7.0.0"
+    "@babel/runtime": "^7.0.0",
+    "@carbon-fields/fields": "^3.0.0"
   }
 }

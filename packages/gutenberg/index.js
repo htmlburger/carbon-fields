@@ -8,10 +8,11 @@ import { registerBlockType } from '@wordpress/blocks';
 /**
  * Internal dependencies.
  */
-import store from 'store';
-import BlockEdit from 'components/block-edit';
-import BlockSave from 'components/block-save';
-import transformFieldsToAttributes from 'utils/transform-fields-to-attributes';
+import './fields';
+import store from './store';
+import BlockEdit from './components/block-edit';
+import BlockSave from './components/block-save';
+import transformFieldsToAttributes from './utils/transform-fields-to-attributes';
 
 /**
  * Register the store.

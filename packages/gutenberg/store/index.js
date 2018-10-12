@@ -1,9 +1,9 @@
 /**
  * Internal dependencies.
  */
-import reducer from 'store/reducer';
-import * as actions from 'store/actions';
-import * as selectors from 'store/selectors';
+import reducer from './reducer';
+import * as actions from './actions';
+import * as selectors from './selectors';
 
 export default {
 	reducer,
