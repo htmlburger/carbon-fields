@@ -24,6 +24,7 @@ class Block_Container extends Container {
 	 */
 	public function init() {
 		add_action( 'init', array( $this, '_attach' ) );
+		add_filter( 'block_categories', array($this, 'attach_block_category'), 10, 2 );
 	}
 
 	/**
@@ -96,7 +97,87 @@ class Block_Container extends Container {
 	}
 
 	/**
+	 * Attaches the custom block category if existing.
+	 *
+	 * @param $categories The registered blocks categories
+	 *
+	 * @return array
+	 */
+	public function attach_block_category( $categories ) {
+		if (!isset($this->settings['block_category_slug'])) {
+			return $categories;
+		}
+
+
+		foreach ($categories as $category) {
+			if ($category['slug'] === $this->settings['block_category_slug']) {
+				return $categories;
+			}
+		}
+
+		return array_merge(
+			$categories,
+			[
+				[
+					'slug' => $this->settings['block_category_slug'],
+					'title' => $this->settings['block_category_title'],
+				]
+			]
+		);
+	}
+
+	/**
 	 * Output the container markup
 	 */
 	public function render() {}
+
+	/**
+	 * Sets the description of the rendered block
+	 *
+	 * @see https://wordpress.org/gutenberg/handbook/block-api/#category
+	 * @param string $description
+	 */
+	public function set_description( $description ) {
+		$this->settings['block_description'] = $description;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the category of the rendered block
+	 *
+	 * @see https://wordpress.org/gutenberg/handbook/block-api/#category
+	 * @param string $category
+	 */
+	public function set_category( $slug, $title = null ) {
+		$this->settings['block_category_slug'] = $slug;
+		$this->settings['block_category_title'] = $title ? $title : Helper::normalize_label($slug);
+
+		return $this;
+	}
+
+	/**
+	 * Sets the icon of the rendered block
+	 *
+	 * @see https://developer.wordpress.org/resource/dashicons
+	 * @see https://wordpress.org/gutenberg/handbook/block-api/#icon-optional
+	 * @param string $icon
+	 */
+	public function set_icon( $icon ) {
+		$this->settings['block_icon'] = $icon;
+
+		return $this;
+	}
+
+	/**
+	 * Sets the keywords of the rendered block
+	 *
+	 * @see https://wordpress.org/gutenberg/handbook/block-api/#keywords-optional
+	 * @param array $keywords
+	 */
+	public function set_keywords( $keywords = [] ) {
+		$this->settings['block_keywords'] = array_slice($keywords, 0, 3);
+
+		return $this;
+	}
 }
