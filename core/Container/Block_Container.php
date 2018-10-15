@@ -25,6 +25,8 @@ class Block_Container extends Container {
 	public function init() {
 		add_action( 'init', array( $this, '_attach' ) );
 		add_filter( 'block_categories', array($this, 'attach_block_category'), 10, 2 );
+
+		$this->register_block();
 	}
 
 	/**
@@ -94,6 +96,27 @@ class Block_Container extends Container {
 	 */
 	public function should_activate() {
 		return true;
+	}
+
+	/**
+	 * Register the block type
+	 *
+	 */
+	private function register_block() {
+		if (!isset($this->settings['block_callback'])) {
+			throw new \Exception( __( "'set_render_callback' is required for the Block Container!", 'crb' ) );
+		}
+
+		if (!is_callable($this->settings['block_callback'])) {
+			throw new \Exception( __( "'set_render_callback' must be a valid callback!", 'crb' ) );
+		}
+
+		$name = str_replace( 'carbon-fields-container-', '', str_replace('_', '-', $this->id ));
+		$callback = $this->settings['block_callback'];
+
+		register_block_type( 'carbon-fields/' . $name, array(
+			'render_callback' => $callback,
+		) );
 	}
 
 	/**
@@ -177,6 +200,18 @@ class Block_Container extends Container {
 	 */
 	public function set_keywords( $keywords = [] ) {
 		$this->settings['block_keywords'] = array_slice($keywords, 0, 3);
+
+		return $this;
+	}
+
+	/**
+	 * Sets the keywords of the rendered block
+	 *
+	 * @see https://wordpress.org/gutenberg/handbook/block-api/#keywords-optional
+	 * @param callable $render_callback
+	 */
+	public function set_render_callback( $render_callback ) {
+		$this->settings['block_callback'] = $render_callback;
 
 		return $this;
 	}
