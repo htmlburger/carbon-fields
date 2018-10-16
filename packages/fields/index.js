@@ -6,6 +6,7 @@ import CheckboxField from 'components/checkbox';
 import ColorField from 'components/color';
 import HtmlField from 'components/html';
 import RadioField from 'components/radio';
+import RadioImageField from 'components/radio-image';
 import TextField from 'components/text';
 
 /**
@@ -16,6 +17,7 @@ import TextField from 'components/text';
 	[ 'color', ColorField ],
 	[ 'html', HtmlField ],
 	[ 'radio', RadioField ],
+	[ 'radio_image', RadioImageField ],
 	[ 'text', TextField ]
 ].forEach( ( field ) => registerFieldType( ...field ) );
 
