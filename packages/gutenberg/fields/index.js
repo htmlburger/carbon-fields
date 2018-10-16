@@ -4,4 +4,5 @@
 import './checkbox';
 import './color';
 import './html';
+import './radio';
 import './text';
