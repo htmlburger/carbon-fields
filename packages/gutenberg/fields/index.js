@@ -6,4 +6,5 @@ import './color';
 import './html';
 import './radio';
 import './radio-image';
+import './select';
 import './text';

@@ -3,7 +3,7 @@
  */
 import { Component } from '@wordpress/element';
 
-class RadioField extends Component {
+class SelectField extends Component {
 	/**
 	 * Render the component.
 	 *
@@ -14,4 +14,4 @@ class RadioField extends Component {
 	}
 }
 
-export default RadioField;
+export default SelectField;

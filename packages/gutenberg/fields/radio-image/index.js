@@ -9,7 +9,7 @@ import { RadioControl } from '@wordpress/components';
  *
  * @return {Object}
  */
-const RadioField = ( {
+const RadioImageField = ( {
 	field,
 	value,
 	onChange
@@ -31,10 +31,10 @@ const RadioField = ( {
 	);
 };
 
-addFilter( 'carbon-fields.radio_image-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalRadioField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.radio_image-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalRadioImageField ) => ( originalProps ) => {
 	return (
-		<OriginalRadioField>
-			{ () => <RadioField { ...originalProps } /> }
-		</OriginalRadioField>
+		<OriginalRadioImageField>
+			{ () => <RadioImageField { ...originalProps } /> }
+		</OriginalRadioImageField>
 	);
 } );

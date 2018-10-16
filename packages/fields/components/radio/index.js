@@ -3,7 +3,7 @@
  */
 import { Component } from '@wordpress/element';
 
-class CheckboxField extends Component {
+class RadioField extends Component {
 	/**
 	 * Render the component.
 	 *
@@ -14,4 +14,4 @@ class CheckboxField extends Component {
 	}
 }
 
-export default CheckboxField;
+export default RadioField;
