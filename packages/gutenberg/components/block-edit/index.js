@@ -3,7 +3,7 @@
  */
 import { Component, Fragment } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
-import { getFieldType } from '@carbon-fields/fields';
+import { getFieldType } from '@carbon-fields/core';
 import { get } from 'lodash';
 
 class BlockEdit extends Component {
