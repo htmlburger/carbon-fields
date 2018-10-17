@@ -88,23 +88,16 @@ const envPackageConfig = {
 };
 
 /**
- * The build configuration for the rest of packages.
+ * The build configuration of `core` package.
  *
  * @type {Object}
  */
-const otherPackages = [
-	'fields'
-];
 
-const otherPackagesConfig = {
-	entry: otherPackages.reduce( ( entries, name ) => {
-		entries[ name ] = `./packages/${ name }`;
-
-		return entries;
-	}, {} ),
+const corePackageConfig = {
+	entry: './packages/core/index.js',
 	output: {
-		filename: '[name].js',
-		library: [ 'cf', '[name]' ],
+		filename: 'core.js',
+		library: [ 'cf', 'core' ],
 		libraryTarget: 'this'
 	},
 	module: {
@@ -149,16 +142,13 @@ const gutenbergPackageConfig = {
 			}
 		]
 	},
-	externals: otherPackages.reduce( ( externals, name ) => {
-		externals[ `@carbon-fields/${ name }` ] = [ 'cf', name ];
-
-		return externals;
-	}, Object.assign( {}, wpExternals, {
+	externals: Object.assign( {}, wpExternals, {
 		'@wordpress/components': 'wp.components',
 		'@wordpress/blocks': 'wp.blocks',
 		'@wordpress/data': 'wp.data',
+		'@carbon-fields/core': 'cf.core',
 		'lodash': 'lodash'
-	 } ) ),
+	 } ),
 	stats
 };
 
@@ -184,9 +174,9 @@ module.exports = [
 	} ),
 
 	/**
-	 * ./packages/*
+	 * ./packages/core
 	 */
-	merge( otherPackagesConfig, {
+	merge( corePackageConfig, {
 		output: {
 			path: gutenbergBuildPath
 		},
@@ -194,7 +184,7 @@ module.exports = [
 			'lodash': 'lodash'
 		} )
 	} ),
-	merge( otherPackagesConfig, {
+	merge( corePackageConfig, {
 		output: {
 			path: classicBuildPath
 		},

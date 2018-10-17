@@ -1,7 +1,7 @@
 module.exports = {
 	plugins: [
 		['module-resolver', {
-			root: ['./packages/fields']
+			root: ['./packages/core']
 		}]
 	]
 };
