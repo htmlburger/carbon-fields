@@ -157,6 +157,7 @@ const gutenbergPackageConfig = {
 		'@wordpress/components': 'wp.components',
 		'@wordpress/blocks': 'wp.blocks',
 		'@wordpress/data': 'wp.data',
+		'@wordpress/editor': 'wp.editor',
 		'lodash': 'lodash'
 	 } ) ),
 	stats
