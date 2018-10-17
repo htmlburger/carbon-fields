@@ -8,6 +8,7 @@ import HtmlField from 'components/html';
 import RadioField from 'components/radio';
 import RadioImageField from 'components/radio-image';
 import SelectField from 'components/select';
+import SetField from 'components/set';
 import TextField from 'components/text';
 
 /**
@@ -20,6 +21,7 @@ import TextField from 'components/text';
 	[ 'radio', RadioField ],
 	[ 'radio_image', RadioImageField ],
 	[ 'select', SelectField ],
+	[ 'set', SetField ],
 	[ 'text', TextField ]
 ].forEach( ( field ) => registerFieldType( ...field ) );
 
