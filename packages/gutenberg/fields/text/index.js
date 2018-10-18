@@ -7,6 +7,10 @@ import { TextControl } from '@wordpress/components';
 /**
  * Renders the field.
  *
+ * @param  {Object}   props
+ * @param  {Object}   props.field
+ * @param  {string}   props.value
+ * @param  {Function} props.onChange
  * @return {Object}
  */
 const TextField = ( {
@@ -14,24 +18,25 @@ const TextField = ( {
 	value,
 	onChange
 } ) => {
-	// eslint-disable-next-line no-shadow
-	const handleChange = ( value ) => onChange( {
-		[ field.base_name ]: value
-	} );
-
 	return (
 		<TextControl
 			label={ field.label }
 			value={ value }
-			onChange={ handleChange }
+			onChange={ ( value ) => onChange( field.base_name, value ) } // eslint-disable-line no-shadow
 		/>
 	);
 };
 
 addFilter( 'carbon-fields.text-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalTextField ) => ( originalProps ) => {
 	return (
-		<OriginalTextField>
-			{ () => <TextField { ...originalProps } /> }
+		<OriginalTextField { ...originalProps }>
+			{ ( { handleChange } ) => (
+				<TextField
+					field={ originalProps.field }
+					value={ originalProps.value }
+					onChange={ handleChange }
+				/>
+			) }
 		</OriginalTextField>
 	);
 } );
