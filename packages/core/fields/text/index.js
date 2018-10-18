@@ -7,13 +7,13 @@ class TextField extends Component {
 	/**
 	 * Handles the change of the input.
 	 *
-	 * @param  {string} fieldId
+	 * @param  {string} fieldKey The name(Gutenberg) or the identifier(Classic Editor) of field.
 	 * @param  {string} value
 	 * @return {void}
 	 */
-	handleChange = ( fieldId, value ) => {
+	handleChange = ( fieldKey, value ) => {
 		this.props.onChange( {
-			[ fieldId ]: value
+			[ fieldKey ]: value
 		} );
 	}
 
