@@ -10,11 +10,10 @@ class FileField extends Component {
 	 * @param  {Object} media
 	 * @return {Null}
 	 */
-	handleSelect = ( media ) => {
+	handleSelect = ( { id, filename, mime, url } ) => {
 		const { onChange, field } = this.props;
 
-		// TODO Add value type limitations
-		onChange( { [ field.base_name ]: media } );
+		onChange( { [ field.base_name ]: { id, filename, mime, url } } );
 	}
 
 	/**
