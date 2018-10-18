@@ -4,6 +4,7 @@
 import { registerFieldType } from './lib/registry';
 import CheckboxField from './components/checkbox';
 import ColorField from './components/color';
+import FileField from './components/file';
 import HtmlField from './components/html';
 import RadioField from './components/radio';
 import RadioImageField from './components/radio-image';
@@ -17,6 +18,7 @@ import TextField from './components/text';
 [
 	[ 'checkbox', CheckboxField ],
 	[ 'color', ColorField ],
+	[ 'file', FileField ],
 	[ 'html', HtmlField ],
 	[ 'radio', RadioField ],
 	[ 'radio_image', RadioImageField ],

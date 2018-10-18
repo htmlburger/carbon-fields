@@ -24,6 +24,9 @@ module.exports = {
 		'wordpress',
 		'react'
 	],
+	globals: {
+		'carbonFieldsL10n': true
+	},
 	rules: {
 		'array-bracket-spacing': [ 'error', 'always' ],
 		'arrow-parens': [ 'error', 'always' ],
