@@ -1270,15 +1270,6 @@
     is-promise "^2.1.0"
     rungen "^0.3.2"
 
-"@wordpress/rich-text@^1.0.0-beta.2":
-  version "1.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@wordpress/rich-text/-/rich-text-1.0.0-beta.2.tgz#33588bba205bf5b22090546a37c752a62cd454e4"
-  integrity sha512-WbZ6zZkKqNY6mumW9sDUmsYCHa9wahP6UZ9HeEEHEmzK/E/Yk5ouah0lwba2q/DRl9UZJBpst9MFWF0dlDd9HQ==
-  dependencies:
-    "@babel/runtime" "^7.0.0"
-    "@wordpress/escape-html" "^1.0.0-beta.2"
-    lodash "^4.17.10"
-
 "@wordpress/shortcode@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@wordpress/shortcode/-/shortcode-2.0.2.tgz#a297758ae624bf11e82194cfce4ca3a62f6d4da7"

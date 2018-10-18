@@ -4,6 +4,7 @@
 import * as compose from '@wordpress/compose';
 import * as element from '@wordpress/element';
 import * as hooks from '@wordpress/hooks';
+import * as i18n from '@wordpress/i18n';
 import * as classnames from 'classnames';
 import * as _ from 'lodash';
 
@@ -22,6 +23,7 @@ window.cf.vendor = [
 	[ '@wordpress/compose', compose ],
 	[ '@wordpress/element', element ],
 	[ '@wordpress/hooks', hooks ],
+	[ '@wordpress/i18n', i18n ],
 	[ 'classnames', classnames ],
 	[ 'lodash', _ ]
 ].reduce( ( vendors, [ key, implementation ] ) => {
