@@ -5,14 +5,14 @@ import { registerContainerType } from './registry/containers';
 import BaseContainer from './containers/base';
 
 import { registerFieldType } from './registry/fields';
-import CheckboxField from './components/checkbox';
-import ColorField from './components/color';
-import FileField from './components/file';
-import HtmlField from './components/html';
-import RadioField from './components/radio';
-import SelectField from './components/select';
-import SetField from './components/set';
-import TextField from './components/text';
+import CheckboxField from './fields/checkbox';
+import ColorField from './fields/color';
+import FileField from './fields/file';
+import HtmlField from './fields/html';
+import RadioField from './fields/radio';
+import SelectField from './fields/select';
+import SetField from './fields/set';
+import TextField from './fields/text';
 
 /**
  * Registers containers.
