@@ -6,6 +6,7 @@
     "@wordpress/compose": "^2.0.2",
     "@wordpress/element": "^2.1.1",
     "@wordpress/hooks": "^2.0.2",
+    "classnames": "^2.2.6",
     "lodash": "^4.17.11"
   }
 }

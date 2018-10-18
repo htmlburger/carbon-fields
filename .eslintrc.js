@@ -25,6 +25,7 @@ module.exports = {
 		'react'
 	],
 	rules: {
+		'operator-linebreak': [ 'error', 'before' ],
 		'array-bracket-spacing': [ 'error', 'always' ],
 		'arrow-parens': [ 'error', 'always' ],
 		'arrow-spacing': 'error',
