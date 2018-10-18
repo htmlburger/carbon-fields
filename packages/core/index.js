@@ -1,6 +1,7 @@
 /**
  * Internal dependencies.
  */
+import './store';
 import { registerContainerType } from './registry/containers';
 import BaseContainer from './containers/base';
 

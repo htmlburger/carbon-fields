@@ -32,7 +32,8 @@ const stats = {
 const wpPackages = [
 	'@wordpress/compose',
 	'@wordpress/element',
-	'@wordpress/hooks'
+	'@wordpress/hooks',
+	'@wordpress/data'
 ];
 
 const wpExternals = wpPackages.reduce( ( externals, package ) => {
@@ -148,7 +149,6 @@ const gutenbergPackageConfig = {
 	externals: Object.assign( {}, wpExternals, {
 		'@wordpress/components': 'wp.components',
 		'@wordpress/blocks': 'wp.blocks',
-		'@wordpress/data': 'wp.data',
 		'@wordpress/editor': 'wp.editor',
 		'@carbon-fields/core': 'cf.core',
 		'lodash': 'lodash'
