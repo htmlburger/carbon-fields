@@ -1,7 +1,7 @@
 /**
  * Internal dependencies.
  */
-import { registerFieldType } from './lib/registry';
+import { registerFieldType } from './registry/fields';
 import CheckboxField from './components/checkbox';
 import ColorField from './components/color';
 import FileField from './components/file';
@@ -26,4 +26,5 @@ import TextField from './components/text';
 	[ 'text', TextField ]
 ].forEach( ( field ) => registerFieldType( ...field ) );
 
-export * from './lib/registry';
+export * from './registry/containers';
+export * from './registry/fields';
