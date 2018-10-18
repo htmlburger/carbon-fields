@@ -1,4 +1,9 @@
 /**
+ * The external dependencies.
+ */
+import { Component } from '@wordpress/element';
+
+/**
  * Internal dependencies.
  */
 import { registerContainerType } from './registry/containers';
@@ -29,6 +34,7 @@ import TextField from './fields/text';
 	[ 'color', ColorField ],
 	[ 'file', FileField ],
 	[ 'gravity_form', SelectField ],
+	[ 'hidden', Component ],
 	[ 'html', HtmlField ],
 	[ 'radio', RadioField ],
 	[ 'radio_image', RadioField ],
