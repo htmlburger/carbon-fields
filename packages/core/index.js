@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { registerStore } from '@wordpress/data';
+import { Component } from '@wordpress/element';
 
 /**
  * Internal dependencies.
@@ -41,6 +42,7 @@ registerStore( 'carbon-fields/core', store );
 	[ 'color', ColorField ],
 	[ 'file', FileField ],
 	[ 'gravity_form', SelectField ],
+	[ 'hidden', Component ],
 	[ 'html', HtmlField ],
 	[ 'radio', RadioField ],
 	[ 'radio_image', RadioField ],

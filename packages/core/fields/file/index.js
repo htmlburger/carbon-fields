@@ -2,7 +2,6 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { Placeholder } from '@wordpress/components';
 
 class FileField extends Component {
 	/**
@@ -17,43 +16,12 @@ class FileField extends Component {
 	}
 
 	/**
-	 * Provide the file component
-	 *
-	 * @return {Null}
-	 */
-	renderFileComponent = () => {
-		const { value } = this.props;
-
-		if ( ! value ) {
-			return null;
-		}
-
-		if ( /image/.test( value.mime ) ) {
-			return (
-				<img src={ value.url } />
-			);
-		}
-
-		return (
-			<Placeholder
-				icon="media-document"
-				label={ value.filename }
-			/>
-		);
-	}
-
-	/**
 	 * Render the component.
 	 *
 	 * @return {Object}
 	 */
 	render() {
-		const { buttonLabelProp, children } = this.props;
-
-		const buttonLabel = carbonFieldsL10n.field[ buttonLabelProp ];
-
-		return children( {
-			buttonLabel,
+		return this.props.children( {
 			handleSelect: this.handleSelect,
 			renderFileComponent: this.renderFileComponent
 		} );
