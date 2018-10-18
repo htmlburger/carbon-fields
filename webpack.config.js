@@ -149,6 +149,8 @@ const gutenbergPackageConfig = {
 		'@wordpress/components': 'wp.components',
 		'@wordpress/blocks': 'wp.blocks',
 		'@wordpress/data': 'wp.data',
+		'@wordpress/editor': 'wp.editor',
+		'@wordpress/rich-text': 'wp.rich-text',
 		'@carbon-fields/core': 'cf.core',
 		'lodash': 'lodash'
 	 } ),
