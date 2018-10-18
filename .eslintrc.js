@@ -28,6 +28,7 @@ module.exports = {
 		'carbonFieldsL10n': true
 	},
 	rules: {
+		'operator-linebreak': [ 'error', 'before' ],
 		'array-bracket-spacing': [ 'error', 'always' ],
 		'arrow-parens': [ 'error', 'always' ],
 		'arrow-spacing': 'error',

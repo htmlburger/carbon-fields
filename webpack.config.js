@@ -114,6 +114,9 @@ const corePackageConfig = {
 			}
 		]
 	},
+	externals: {
+		'classnames': [ 'cf', 'vendor', 'classnames' ]
+	},
 	stats
 };
 
