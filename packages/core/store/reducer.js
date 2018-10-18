@@ -11,7 +11,13 @@ import { combineReducers } from '@wordpress/data';
  * @return {Object}
  */
 export function containers( state = {}, action ) {
-	return state;
+	switch ( action.type ) {
+		case 'SETUP_STATE':
+			return action.payload.containers;
+
+		default:
+			return state;
+	}
 }
 
 /**
@@ -22,7 +28,13 @@ export function containers( state = {}, action ) {
  * @return {Object}
  */
 export function fields( state = {}, action ) {
-	return state;
+	switch ( action.type ) {
+		case 'SETUP_STATE':
+			return action.payload.fields;
+
+		default:
+			return state;
+	}
 }
 
 export default combineReducers( {

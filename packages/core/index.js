@@ -1,12 +1,12 @@
 /**
  * External dependencies.
  */
-import { registerStore } from '@wordpress/data';
 import { Component } from '@wordpress/element';
 
 /**
  * Internal dependencies.
  */
+import './store';
 import { registerContainerType } from './registry/containers';
 import BaseContainer from './containers/base';
 
@@ -19,13 +19,6 @@ import RadioField from './fields/radio';
 import SelectField from './fields/select';
 import SetField from './fields/set';
 import TextField from './fields/text';
-
-import store from './store';
-
-/**
- * Register store.
- */
-registerStore( 'carbon-fields/core', store );
 
 /**
  * Registers containers.
