@@ -9,7 +9,7 @@ import { SelectControl } from '@wordpress/components';
  *
  * @return {Object}
  */
-const SelectField = ( {
+export const SelectField = ( {
 	field,
 	value,
 	onChange

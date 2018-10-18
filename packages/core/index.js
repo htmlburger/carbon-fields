@@ -18,6 +18,7 @@ import TextField from './components/text';
 	[ 'checkbox', CheckboxField ],
 	[ 'color', ColorField ],
 	[ 'file', FileField ],
+	[ 'gravity_form', SelectField ],
 	[ 'html', HtmlField ],
 	[ 'radio', RadioField ],
 	[ 'radio_image', RadioField ],
