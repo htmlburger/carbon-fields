@@ -14,6 +14,7 @@ import RadioField from './fields/radio';
 import SelectField from './fields/select';
 import SetField from './fields/set';
 import TextField from './fields/text';
+import TextareaField from './fields/textarea';
 
 /**
  * Registers containers.
@@ -36,7 +37,8 @@ import TextField from './fields/text';
 	[ 'radio_image', RadioField ],
 	[ 'select', SelectField ],
 	[ 'set', SetField ],
-	[ 'text', TextField ]
+	[ 'text', TextField ],
+	[ 'textarea', TextareaField ]
 ].forEach( ( field ) => registerFieldType( ...field ) );
 
 /**
