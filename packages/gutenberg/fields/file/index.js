@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { addFilter } from '@wordpress/hooks';
+import { Fragment } from '@wordpress/element';
 import { BaseControl, Button } from '@wordpress/components';
 import { MediaUpload } from '@wordpress/editor';
 
@@ -14,7 +15,8 @@ const FileField = ( {
 	buttonLabel,
 	field,
 	value,
-	handleSelect
+	handleSelect,
+	renderFileComponent
 } ) => {
 	return (
 		<BaseControl label={ field.label }>
@@ -22,19 +24,23 @@ const FileField = ( {
 				onSelect={ handleSelect }
 				value={ value }
 				render={ ( { open } ) => (
-					<Button onClick={ open }>
-						{ buttonLabel }
-					</Button>
+					<Fragment>
+						<Button isDefault onClick={ open }>
+							{ buttonLabel }
+						</Button>
+
+						{ renderFileComponent() }
+					</Fragment>
 				) }
 			/>
 		</BaseControl>
 	);
 };
 
-addFilter( 'carbon-fields.file-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalFileField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.file-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalFileField ) => ( { field, value, onChange } ) => {
 	return (
-		<OriginalFileField { ...originalProps } >
-			{ ( { ...props } ) => <FileField { ...originalProps } { ...props } /> }
+		<OriginalFileField buttonLabelProp="fileButtonLabel" field={ field } onChange={ onChange } value={ value }>
+			{ ( { ...props } ) => <FileField field={ field } value={ value } { ...props } /> }
 		</OriginalFileField>
 	);
 } );
