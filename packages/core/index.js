@@ -1,9 +1,4 @@
 /**
- * The external dependencies.
- */
-import { Component } from '@wordpress/element';
-
-/**
  * Internal dependencies.
  */
 import { registerContainerType } from './registry/containers';
@@ -13,6 +8,7 @@ import { registerFieldType } from './registry/fields';
 import CheckboxField from './fields/checkbox';
 import ColorField from './fields/color';
 import FileField from './fields/file';
+import HiddenField from './fields/hidden';
 import HtmlField from './fields/html';
 import RadioField from './fields/radio';
 import SelectField from './fields/select';
@@ -34,7 +30,7 @@ import TextField from './fields/text';
 	[ 'color', ColorField ],
 	[ 'file', FileField ],
 	[ 'gravity_form', SelectField ],
-	[ 'hidden', Component ],
+	[ 'hidden', HiddenField ],
 	[ 'html', HtmlField ],
 	[ 'radio', RadioField ],
 	[ 'radio_image', RadioField ],
