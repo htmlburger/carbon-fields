@@ -14,6 +14,7 @@ import HtmlField from './fields/html';
 import RadioField from './fields/radio';
 import SelectField from './fields/select';
 import SetField from './fields/set';
+import SidebarField from './fields/sidebar';
 import TextField from './fields/text';
 import TextareaField from './fields/textarea';
 
@@ -38,6 +39,7 @@ import TextareaField from './fields/textarea';
 	[ 'radio_image', RadioField ],
 	[ 'select', SelectField ],
 	[ 'set', SetField ],
+	[ 'sidebar', SidebarField ],
 	[ 'text', TextField ],
 	[ 'textarea', TextareaField ]
 ].forEach( ( field ) => registerFieldType( ...field ) );
