@@ -122,6 +122,38 @@ const corePackageConfig = {
 };
 
 /**
+ * The build configuration of `metaboxes` package.
+ *
+ * @type {Object}
+ */
+const metaboxesPackageConfig = {
+	entry: './packages/metaboxes/index.js',
+	output: {
+		path: gutenbergBuildPath,
+		filename: 'metaboxes.js'
+	},
+	module: {
+		rules: [
+			{
+				test: /\.js$/,
+				exclude: /node_modules/,
+				use: {
+					loader: 'babel-loader',
+					options: {
+						cacheDirectory: true
+					}
+				}
+			}
+		]
+	},
+	externals: {
+		'@carbon-fields/core': 'cf.core',
+		'classnames': [ 'cf', 'vendor', 'classnames' ]
+	},
+	stats
+};
+
+/**
  * The build configuration of `gutenberg` package.
  *
  * @type {Object}
@@ -189,6 +221,26 @@ module.exports = [
 		} )
 	} ),
 	merge( corePackageConfig, {
+		output: {
+			path: classicBuildPath
+		},
+		externals: Object.assign( {}, wpProxyExternals, {
+			'lodash': [ 'cf', 'vendor', 'lodash' ]
+		} )
+	} ),
+
+	/**
+	 * ./packages/metaboxesß
+	 */
+	merge( metaboxesPackageConfig, {
+		output: {
+			path: gutenbergBuildPath
+		},
+		externals: Object.assign( {}, wpExternals, {
+			'lodash': 'lodash'
+		} )
+	} ),
+	merge( metaboxesPackageConfig, {
 		output: {
 			path: classicBuildPath
 		},

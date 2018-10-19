@@ -1,0 +1,12 @@
+{
+  "name": "@carbon-fields/metaboxes",
+  "version": "3.0.0",
+  "dependencies": {
+    "@babel/runtime": "^7.0.0",
+    "@carbon-fields/core": "^3.0.0",
+    "@wordpress/data": "^2.1.1",
+    "@wordpress/element": "^2.1.1",
+    "@wordpress/hooks": "^2.0.2",
+    "lodash": "^4.17.11"
+  }
+}
