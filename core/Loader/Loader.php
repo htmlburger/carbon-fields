@@ -114,12 +114,12 @@ class Loader {
 
 		// wp_enqueue_style( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.css', array(), \Carbon_Fields\VERSION );
 
-		wp_enqueue_script( 'carbon-fields-env', \Carbon_Fields\URL . '/build/' . $context . '/env' . $suffix . '.js', array(), \Carbon_Fields\VERSION );
+		wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/build/' . $context . '/vendor' . $suffix . '.js', array(), \Carbon_Fields\VERSION );
 		wp_enqueue_script( 'carbon-fields-new-core', \Carbon_Fields\URL . '/build/' . $context . '/core' . $suffix . '.js', array(), \Carbon_Fields\VERSION );
 		wp_enqueue_script( 'carbon-fields-metaboxes', \Carbon_Fields\URL . '/build/' . $context . '/metaboxes' . $suffix . '.js', array(), \Carbon_Fields\VERSION );
 
 		if ( $context === 'gutenberg' ) {
-			wp_enqueue_script( 'carbon-fields-gutenberg', \Carbon_Fields\URL . '/build/' . $context . '/gutenberg' . $suffix . '.js', array( 'carbon-fields-env' ), \Carbon_Fields\VERSION );
+			wp_enqueue_script( 'carbon-fields-blocks', \Carbon_Fields\URL . '/build/' . $context . '/blocks' . $suffix . '.js', array( 'carbon-fields-vendor' ), \Carbon_Fields\VERSION );
 		}
 
 		// wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/assets/dist/carbon.vendor' . $suffix . '.js', array( 'jquery' ), \Carbon_Fields\VERSION );
@@ -252,8 +252,8 @@ class Loader {
 	 * Print the carbon JSON data script.
 	 */
 	public function print_json_data_script() {
-		wp_add_inline_script( 'carbon-fields-env', 'window.cf = window.cf || {}', 'before' );
-		wp_add_inline_script( 'carbon-fields-env', sprintf( 'window.cf.preloaded = %s', wp_json_encode( $this->get_json_data() ) ), 'before' );
+		wp_add_inline_script( 'carbon-fields-vendor', 'window.cf = window.cf || {}', 'before' );
+		wp_add_inline_script( 'carbon-fields-vendor', sprintf( 'window.cf.preloaded = %s', wp_json_encode( $this->get_json_data() ) ), 'before' );
 		?>
 <script type="text/javascript">
 <!--//--><![CDATA[//><!--

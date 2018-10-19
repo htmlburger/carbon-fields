@@ -12,9 +12,9 @@ const paths = require( './paths' );
 const wpPackages = require( './wp-packages' );
 
 const config = {
-	entry: './packages/env/index.js',
+	entry: './packages/vendor/index.js',
 	output: {
-		filename: 'env.js'
+		filename: 'vendor.js'
 	}
 };
 

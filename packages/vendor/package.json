@@ -1,5 +1,5 @@
 {
-  "name": "@carbon-fields/env",
+  "name": "@carbon-fields/vendor",
   "version": "3.0.0",
   "dependencies": {
     "@babel/runtime": "^7.0.0",
