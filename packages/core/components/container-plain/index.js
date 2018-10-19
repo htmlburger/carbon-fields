@@ -8,14 +8,13 @@ import ContainerNonce from '../container-nonce';
  * Renders plain variant of the container.
  *
  * @param  {Object} props
- * @param  {Object} props.container
  * @return {Object}
  */
-const ContainerPlain = ( { container } ) => {
-	const { nonce } = container;
+const ContainerPlain = ( props ) => {
+	const { nonce } = props.container;
 
 	return (
-		<ContainerBase container={ container }>
+		<ContainerBase { ...props }>
 			<ContainerNonce name={ nonce.name } value={ nonce.value } />
 		</ContainerBase>
 	);

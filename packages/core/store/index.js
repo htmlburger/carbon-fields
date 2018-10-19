@@ -11,9 +11,9 @@ import {
 /**
  * Internal dependencies.
  */
+import flattenField from '../utils/flatten-field';
 import reducer from './reducer';
 import * as actions from './actions';
-import flattenField from '../utils/flatten-field';
 
 /**
  * Register the store.
@@ -33,4 +33,7 @@ const containers = get( window.cf, 'preloaded.containers', [] ).map( ( container
 	} );
 } );
 
-dispatch( 'carbon-fields/core' ).setupState( keyBy( containers, 'id' ), keyBy( fields, 'id' ) );
+dispatch( 'carbon-fields/core' ).setupState(
+	keyBy( containers, 'id' ),
+	keyBy( fields, 'id' )
+);
