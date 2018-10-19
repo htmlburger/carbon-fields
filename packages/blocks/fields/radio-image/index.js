@@ -31,7 +31,7 @@ const RadioImageField = ( {
 	);
 };
 
-addFilter( 'carbon-fields.radio_image-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalRadioImageField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.radio_image-field.block', 'carbon-fields/blocks', ( OriginalRadioImageField ) => ( originalProps ) => {
 	return (
 		<OriginalRadioImageField>
 			{ () => <RadioImageField { ...originalProps } /> }

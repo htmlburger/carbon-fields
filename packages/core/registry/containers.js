@@ -6,5 +6,8 @@ import { createRegistry } from './base';
 export const {
 	registerContainerType,
 	getContainerType
-} = createRegistry( 'container' );
+} = createRegistry( 'container', [
+	'classic',
+	'gutenberg'
+] );
 

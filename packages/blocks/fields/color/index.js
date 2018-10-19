@@ -31,7 +31,7 @@ const ColorField = ( {
 	);
 };
 
-addFilter( 'carbon-fields.color-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalColorField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.color-field.block', 'carbon-fields/blocks', ( OriginalColorField ) => ( originalProps ) => {
 	return (
 		<OriginalColorField>
 			{ () => <ColorField { ...originalProps } /> }

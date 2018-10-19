@@ -35,7 +35,7 @@ const SetField = ( {
 	);
 };
 
-addFilter( 'carbon-fields.set-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalSetField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.set-field.block', 'carbon-fields/blocks', ( OriginalSetField ) => ( originalProps ) => {
 	return (
 		<OriginalSetField>
 			{ ( { ...props } ) => <SetField { ...originalProps } { ...props } /> }

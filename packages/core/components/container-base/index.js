@@ -26,7 +26,7 @@ const ContainerBase = ( { container, children } ) => {
 			{ children }
 
 			{ container.fields.map( ( field ) => {
-				const Field = getFieldType( field.type, 'classic' );
+				const Field = getFieldType( field.type, 'metabox' );
 
 				if ( ! Field ) {
 					return null;

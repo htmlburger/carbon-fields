@@ -27,7 +27,7 @@ const TextField = ( {
 	);
 };
 
-addFilter( 'carbon-fields.text-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalTextField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.text-field.block', 'carbon-fields/blocks', ( OriginalTextField ) => ( originalProps ) => {
 	return (
 		<OriginalTextField { ...originalProps }>
 			{ ( { handleChange } ) => (

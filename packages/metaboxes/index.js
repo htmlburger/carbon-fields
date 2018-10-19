@@ -3,7 +3,7 @@
 /**
  * External dependencies.
  */
-import { get } from 'lodash';
+import { get, isUndefined } from 'lodash';
 import { render } from '@wordpress/element';
 import { getContainerType } from '@carbon-fields/core';
 
@@ -13,15 +13,22 @@ import { getContainerType } from '@carbon-fields/core';
 import './fields';
 
 /**
+ * Detects if we're rendering on page that is using Gutenberg.
+ *
+ * @type {boolean}
+ */
+const isGutenberg = ! isUndefined( window._wpLoadGutenbergEditor );
+
+/**
  * Abracadabra! Poof! Containers everywhere ...
  */
 get( window.cf, 'preloaded.containers', [] ).forEach( ( container ) => {
-	const Component = getContainerType( container.type, 'gutenberg' );
 	const node = document.querySelector( `.container-${ container.id }` );
+	const Component = getContainerType( container.type, isGutenberg ? 'gutenberg' : 'classic' );
 
 	if ( node ) {
 		render(
-			<Component context="gutenberg" container={ container } />,
+			<Component container={ container } />,
 			node
 		);
 	} else {

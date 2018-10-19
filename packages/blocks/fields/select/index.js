@@ -29,7 +29,7 @@ export const SelectField = ( {
 	);
 };
 
-addFilter( 'carbon-fields.select-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalSelectField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.select-field.block', 'carbon-fields/blocks', ( OriginalSelectField ) => ( originalProps ) => {
 	return (
 		<OriginalSelectField>
 			{ () => <SelectField { ...originalProps } /> }
