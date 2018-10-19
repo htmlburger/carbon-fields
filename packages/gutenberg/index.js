@@ -67,7 +67,7 @@ get( window.cf, 'preloaded.containers', [] ).forEach( ( container ) => {
 
 	if ( node ) {
 		render(
-			<Component container={ container } />,
+			<Component context="gutenberg" container={ container } />,
 			node
 		);
 	} else {

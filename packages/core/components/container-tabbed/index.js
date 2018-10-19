@@ -11,14 +11,14 @@ import ContainerNonce from '../container-nonce';
  * @param  {Object} props.container
  * @return {Object}
  */
-const ContainerTabbed = ( { container } ) => {
-	const { nonce } = container;
+const ContainerTabbed = ( props ) => {
+	const { nonce } = props.container;
 
 	return (
 		<div className="carbon-tabs carbon-tabs-stacked">
 			<ContainerNonce name={ nonce.name } value={ nonce.value } />
 
-			<ContainerBase container={ container } />
+			<ContainerBase { ...props } />
 		</div>
 	);
 };
