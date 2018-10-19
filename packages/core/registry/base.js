@@ -89,10 +89,14 @@ export function createRegistry( domain, supportedContexts ) {
 		}
 
 		if ( ! enhancedTypes[ type ] ) {
-			enhancedTypes[ type ] = withFilters( `carbon-fields.${ type }-${ domain }.${ context }` )( types[ type ] );
+			enhancedTypes[ type ] = {};
 		}
 
-		return enhancedTypes[ type ];
+		if ( ! enhancedTypes[ type ][ context ] ) {
+			enhancedTypes[ type ][ context ] = withFilters( `carbon-fields.${ type }-${ domain }.${ context }` )( types[ type ] );
+		}
+
+		return enhancedTypes[ type ][ context ];
 	}
 
 	return {
