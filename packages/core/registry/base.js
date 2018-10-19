@@ -21,10 +21,11 @@ import withFilters from '../utils/with-filters';
 /**
  * Creates a new registry.
  *
- * @param  {string} domain
+ * @param  {string}   domain
+ * @param  {string[]} supportedContexts
  * @return {boolean}
  */
-export function createRegistry( domain ) {
+export function createRegistry( domain, supportedContexts ) {
 	const domainStartCased = startCase( domain );
 
 	/**
@@ -77,8 +78,8 @@ export function createRegistry( domain ) {
 	 * @return {?Object}
 	 */
 	function getType( type, context ) {
-		if ( ! [ 'classic', 'gutenberg' ].includes( context ) ) {
-			console.error( 'The provided context isn\'t a valid one. Must be "classic" or "gutenberg".' );
+		if ( ! supportedContexts.includes( context ) ) {
+			console.error( `The provided context isn\'t a valid one. Must be one of - ${ supportedContexts.join( ', ' ) } .` );
 			return;
 		}
 

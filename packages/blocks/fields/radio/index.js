@@ -29,7 +29,7 @@ const RadioField = ( {
 	);
 };
 
-addFilter( 'carbon-fields.radio-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalRadioField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.radio-field.block', 'carbon-fields/blocks', ( OriginalRadioField ) => ( originalProps ) => {
 	return (
 		<OriginalRadioField>
 			{ () => <RadioField { ...originalProps } /> }

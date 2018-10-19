@@ -22,7 +22,7 @@ class BlockEdit extends Component {
 		return (
 			<Fragment>
 				{ fields.map( ( field, index ) => {
-					const Field = getFieldType( field.type, 'gutenberg' );
+					const Field = getFieldType( field.type, 'block' );
 
 					if ( ! Field ) {
 						return null;

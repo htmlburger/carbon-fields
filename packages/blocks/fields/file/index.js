@@ -61,7 +61,7 @@ const FileField = ( {
 	);
 };
 
-addFilter( 'carbon-fields.file-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalFileField ) => ( { field, value, onChange } ) => {
+addFilter( 'carbon-fields.file-field.block', 'carbon-fields/blocks', ( OriginalFileField ) => ( { field, value, onChange } ) => {
 	return (
 		<OriginalFileField
 			field={ field }

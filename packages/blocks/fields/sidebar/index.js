@@ -3,4 +3,4 @@
  */
 import { addFilter } from '@wordpress/hooks';
 
-addFilter( 'carbon-fields.sidebar-field.gutenberg', 'carbon-fields/gutenberg', () => () => null );
+addFilter( 'carbon-fields.sidebar-field.block', 'carbon-fields/blocks', () => () => null );

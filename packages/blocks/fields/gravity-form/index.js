@@ -8,7 +8,7 @@ import { addFilter } from '@wordpress/hooks';
  */
 import { SelectField } from '../select';
 
-addFilter( 'carbon-fields.gravity_form-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalSelectField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.gravity_form-field.block', 'carbon-fields/blocks', ( OriginalSelectField ) => ( originalProps ) => {
 	return (
 		<OriginalSelectField>
 			{ () => <SelectField { ...originalProps } /> }

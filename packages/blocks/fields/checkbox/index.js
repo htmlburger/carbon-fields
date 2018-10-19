@@ -28,7 +28,7 @@ const CheckboxField = ( {
 	);
 };
 
-addFilter( 'carbon-fields.checkbox-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalCheckboxField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.checkbox-field.block', 'carbon-fields/blocks', ( OriginalCheckboxField ) => ( originalProps ) => {
 	return (
 		<OriginalCheckboxField>
 			{ () => <CheckboxField { ...originalProps } /> }

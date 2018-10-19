@@ -15,7 +15,7 @@ const HtmlField = ( { field } ) => (
 	</RawHTML>
 );
 
-addFilter( 'carbon-fields.html-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalHtmlField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.html-field.block', 'carbon-fields/blocks', ( OriginalHtmlField ) => ( originalProps ) => {
 	return (
 		<OriginalHtmlField>
 			{ () => <HtmlField { ...originalProps } /> }

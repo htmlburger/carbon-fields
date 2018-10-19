@@ -31,7 +31,7 @@ const TextareaField = ( {
 	);
 };
 
-addFilter( 'carbon-fields.textarea-field.gutenberg', 'carbon-fields/gutenberg', ( OriginalTextareaField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.textarea-field.block', 'carbon-fields/blocks', ( OriginalTextareaField ) => ( originalProps ) => {
 	return (
 		<OriginalTextareaField { ...originalProps }>
 			{ ( { handleChange } ) => (

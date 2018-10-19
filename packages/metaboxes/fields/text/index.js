@@ -37,7 +37,7 @@ const TextField = ( {
 	);
 };
 
-addFilter( 'carbon-fields.text-field.classic', 'carbon-fields/classic', ( OriginalTextField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.text-field.metabox', 'carbon-fields/metaboxes', ( OriginalTextField ) => ( originalProps ) => {
 	return (
 		<OriginalTextField { ...originalProps }>
 			{ ( { handleChange } ) => (
