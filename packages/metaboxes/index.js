@@ -8,6 +8,11 @@ import { render } from '@wordpress/element';
 import { getContainerType } from '@carbon-fields/core';
 
 /**
+ * The internal dependencies.
+ */
+import './fields';
+
+/**
  * Abracadabra! Poof! Containers everywhere ...
  */
 get( window.cf, 'preloaded.containers', [] ).forEach( ( container ) => {
