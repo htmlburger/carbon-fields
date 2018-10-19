@@ -23,7 +23,6 @@ const TextField = ( {
 			id={ field.id }
 			name={ name }
 			value={ value }
-			disabled={ ! field.ui.is_visible }
 			className="regular-text"
 			onChange={ onChange }
 			{ ...field.attributes }
@@ -31,7 +30,7 @@ const TextField = ( {
 	);
 };
 
-addFilter( 'carbon-fields.text-field.gutenberg', 'carbon-fields/classic', ( OriginalTextField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.text-field.classic', 'carbon-fields/classic', ( OriginalTextField ) => ( originalProps ) => {
 	return (
 		<OriginalTextField { ...originalProps }>
 			{ ( { handleChange } ) => (
