@@ -1,0 +1,38 @@
+/**
+ * External dependencies.
+ */
+const webpack = require( 'webpack' );
+const merge = require( 'webpack-merge' );
+
+/**
+ * Internal dependencies.
+ */
+const base = require( './webpack.base' );
+const paths = require( './paths' );
+const wpPackages = require( './wp-packages' );
+
+const config = {
+	entry: './packages/env/index.js',
+	output: {
+		filename: 'env.js'
+	}
+};
+
+module.exports = [
+	merge( base, config, {
+		output: {
+			path: paths.gutenbergBuildPath
+		},
+		externals: Object.assign( {}, wpPackages.externals, {
+			'lodash': 'lodash'
+		} )
+	} ),
+	merge( base, config, {
+		output: {
+			path: paths.classicBuildPath
+		},
+		plugins: [
+			new webpack.ProvidePlugin( wpPackages.providers )
+		]
+	} )
+];
