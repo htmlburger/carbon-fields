@@ -4,6 +4,11 @@
 import { addFilter } from '@wordpress/hooks';
 
 /**
+ * The internal dependencies.
+ */
+import Base from '../base';
+
+/**
  * Renders the field.
  *
  * @param  {Object}   props
@@ -18,15 +23,17 @@ const TextField = ( {
 	onChange
 } ) => {
 	return (
-		<input
-			type="text"
-			id={ field.id }
-			name={ name }
-			value={ value }
-			className="regular-text"
-			onChange={ onChange }
-			{ ...field.attributes }
-		/>
+		<Base field={ field } >
+			<input
+				type="text"
+				id={ field.id }
+				name={ name }
+				value={ value }
+				className="regular-text"
+				onChange={ onChange }
+				{ ...field.attributes }
+			/>
+		</Base>
 	);
 };
 
