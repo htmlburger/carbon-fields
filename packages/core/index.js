@@ -1,9 +1,4 @@
 /**
- * External dependencies.
- */
-import { Component } from '@wordpress/element';
-
-/**
  * Internal dependencies.
  */
 import './store';
@@ -14,11 +9,13 @@ import { registerFieldType } from './registry/fields';
 import CheckboxField from './fields/checkbox';
 import ColorField from './fields/color';
 import FileField from './fields/file';
+import HiddenField from './fields/hidden';
 import HtmlField from './fields/html';
 import RadioField from './fields/radio';
 import SelectField from './fields/select';
 import SetField from './fields/set';
 import TextField from './fields/text';
+import TextareaField from './fields/textarea';
 
 /**
  * Registers containers.
@@ -35,13 +32,14 @@ import TextField from './fields/text';
 	[ 'color', ColorField ],
 	[ 'file', FileField ],
 	[ 'gravity_form', SelectField ],
-	[ 'hidden', Component ],
+	[ 'hidden', HiddenField ],
 	[ 'html', HtmlField ],
 	[ 'radio', RadioField ],
 	[ 'radio_image', RadioField ],
 	[ 'select', SelectField ],
 	[ 'set', SetField ],
-	[ 'text', TextField ]
+	[ 'text', TextField ],
+	[ 'textarea', TextareaField ]
 ].forEach( ( field ) => registerFieldType( ...field ) );
 
 /**
