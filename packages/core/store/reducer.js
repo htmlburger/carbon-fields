@@ -1,6 +1,7 @@
 /**
  * External dependencies.
  */
+import produce from 'immer';
 import { combineReducers } from '@wordpress/data';
 
 /**
@@ -31,6 +32,13 @@ export function fields( state = {}, action ) {
 	switch ( action.type ) {
 		case 'SETUP_STATE':
 			return action.payload.fields;
+
+		case 'UPDATE_FIELD_VALUE':
+			return produce( state, ( draft ) => {
+				const { fieldKey, value } = action.payload;
+
+				draft[ fieldKey ].value = value;
+			} );
 
 		default:
 			return state;

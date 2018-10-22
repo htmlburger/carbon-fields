@@ -14,3 +14,20 @@ export function setupState( containers, fields ) {
 		}
 	};
 }
+
+/**
+ * Returns an action object used to update the field's value.
+ *
+ * @param  {string} fieldKey
+ * @param  {mixed}  value
+ * @return {Object}
+ */
+export function updateFieldValue( fieldKey, value ) {
+	return {
+		type: 'UPDATE_FIELD_VALUE',
+		payload: {
+			fieldKey,
+			value
+		}
+	};
+}
