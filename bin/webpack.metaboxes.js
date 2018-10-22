@@ -27,8 +27,7 @@ module.exports = [
 			path: paths.gutenbergBuildPath
 		},
 		externals: Object.assign( {}, wpPackages.externals, {
-			'lodash': 'lodash',
-			'classnames': 'classnames'
+			'lodash': 'lodash'
 		} )
 	} ),
 	merge( base, config, {
