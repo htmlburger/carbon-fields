@@ -2,7 +2,16 @@
  * External dependencies.
  */
 import { addFilter } from '@wordpress/hooks';
-import { BaseControl, DropdownMenu, Button } from '@wordpress/components';
+import {
+	BaseControl,
+	DropdownMenu,
+	Button
+} from '@wordpress/components';
+
+/**
+ * The internal dependencies.
+ */
+import renderFields from '../../utils/render-fields';
 
 /**
  * Renders the field.
@@ -15,27 +24,37 @@ import { BaseControl, DropdownMenu, Button } from '@wordpress/components';
  */
 const ComplexField = ( {
 	field,
-	hasGroups
+	value,
+	onChange,
+	hasGroups,
+	onAdd,
+	getAddLabel
 } ) => {
 	const button = hasGroups()
 		? (
 			<DropdownMenu
-				label="Add new"
-				controls={ field.group_types.map( ( type ) => ( {
-					title: type.label ? type.label : field.labels.singular_name,
-					onClick: () => {}
+				icon="plus"
+				label={ getAddLabel() }
+				controls={ field.groups.map( ( group ) => ( {
+					title: getAddLabel( group.label ? group.label : field.labels.singular_name ),
+					onClick: () => onAdd( group.group_id )
 				} ) ) }
 			/>
 		)
 		: (
-			<Button isDefault onClick={ () => {} }>
-				Add new
+			<Button isDefault onClick={ () => onAdd( field.groups[ 0 ].group_id ) }>
+				{ getAddLabel( field.labels.singular_name ) }
 			</Button>
 		);
 
 	return (
 		<BaseControl label={ field.labels.plural_name }>
-			{ button }
+			{ value.length === 0 && button }
+
+			{
+				// TODO Fix renderFields function - properly pass depth
+			}
+			{ value.length > 0 && value.map( ( entry ) => renderFields( entry.fields, field.attributes, onChange, 1 ) ) }
 		</BaseControl>
 	);
 };
@@ -43,12 +62,19 @@ const ComplexField = ( {
 addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( OriginalComplexField ) => ( originalProps ) => {
 	return (
 		<OriginalComplexField { ...originalProps }>
-			{ ( { handleChange, hasGroups } ) => (
+			{ ( {
+				handleChange,
+				hasGroups,
+				getAddLabel,
+				handleAdd
+			} ) => (
 				<ComplexField
 					field={ originalProps.field }
 					value={ originalProps.value }
 					onChange={ handleChange }
 					hasGroups={ hasGroups }
+					getAddLabel={ getAddLabel }
+					onAdd={ handleAdd }
 				/>
 			) }
 		</OriginalComplexField>

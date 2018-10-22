@@ -10,6 +10,9 @@ module.exports = {
 			jsx: true
 		}
 	},
+	globals: {
+		carbonFieldsL10n: true
+	},
 	settings: {
 		react: {
 			version: '16.4'
