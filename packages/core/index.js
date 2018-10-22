@@ -8,6 +8,7 @@ import BaseContainer from './containers/base';
 import { registerFieldType } from './registry/fields';
 import CheckboxField from './fields/checkbox';
 import ColorField from './fields/color';
+import ComplexField from './fields/complex';
 import FileField from './fields/file';
 import HiddenField from './fields/hidden';
 import HtmlField from './fields/html';
@@ -31,6 +32,7 @@ import TextareaField from './fields/textarea';
 [
 	[ 'checkbox', CheckboxField ],
 	[ 'color', ColorField ],
+	[ 'complex', ComplexField ],
 	[ 'file', FileField ],
 	[ 'gravity_form', SelectField ],
 	[ 'hidden', HiddenField ],
