@@ -2,7 +2,7 @@
  * External dependencies.
  */
 import { addFilter } from '@wordpress/hooks';
-import { BaseControl } from '@wordpress/components';
+import { BaseControl, DropdownMenu, Button } from '@wordpress/components';
 
 /**
  * Renders the field.
@@ -14,10 +14,28 @@ import { BaseControl } from '@wordpress/components';
  * @return {Object}
  */
 const ComplexField = ( {
-	field
+	field,
+	hasGroups
 } ) => {
+	const button = hasGroups()
+		? (
+			<DropdownMenu
+				label="Add new"
+				controls={ field.group_types.map( ( type ) => ( {
+					title: type.label ? type.label : field.labels.singular_name,
+					onClick: () => {}
+				} ) ) }
+			/>
+		)
+		: (
+			<Button isDefault onClick={ () => {} }>
+				Add new
+			</Button>
+		);
+
 	return (
 		<BaseControl label={ field.labels.plural_name }>
+			{ button }
 		</BaseControl>
 	);
 };
@@ -25,11 +43,12 @@ const ComplexField = ( {
 addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( OriginalComplexField ) => ( originalProps ) => {
 	return (
 		<OriginalComplexField { ...originalProps }>
-			{ ( { handleChange } ) => (
+			{ ( { handleChange, hasGroups } ) => (
 				<ComplexField
 					field={ originalProps.field }
 					value={ originalProps.value }
 					onChange={ handleChange }
+					hasGroups={ hasGroups }
 				/>
 			) }
 		</OriginalComplexField>

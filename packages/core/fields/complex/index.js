@@ -11,7 +11,17 @@ class Complex extends Component {
 	 * @param  {string} value
 	 * @return {void}
 	 */
-	handleChange = () => {
+	handleChange = ( fieldKey, value ) => {
+		// TODO investigate values updating strategies
+		this.props.onChange( {
+			[ fieldKey ]: value
+		} );
+	}
+
+	hasGroups = () => {
+		const { field } = this.props;
+
+		return field.groups.length > 1;
 	}
 
 	/**
