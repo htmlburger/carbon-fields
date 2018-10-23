@@ -2,18 +2,13 @@
  * External dependencies.
  */
 import { addFilter } from '@wordpress/hooks';
-import {
-	BaseControl,
-	DropdownMenu,
-	Button,
-	TabPanel
-} from '@wordpress/components';
+import { BaseControl, DropdownMenu, Button } from '@wordpress/components';
 import { get } from 'lodash';
 
 /**
  * The internal dependencies.
  */
-import renderFields from '../../utils/render-fields';
+import Fields from './fields';
 
 /**
  * Renders the field.
@@ -32,7 +27,8 @@ const ComplexField = ( {
 	hasGroups,
 	onAdd,
 	getAddLabel,
-	getFields
+	getFields,
+	getGroupLabel
 } ) => {
 	const onTabSelect = ( tabName ) => {
 		if ( tabName !== 'add' ) {
@@ -40,7 +36,7 @@ const ComplexField = ( {
 		}
 
 		if ( ! hasGroups() ) {
-			return onAdd( field.groups[ 0 ].group_id );
+			return onAdd( field.groups[ 0 ].name );
 		}
 	};
 
@@ -50,44 +46,43 @@ const ComplexField = ( {
 				icon="plus"
 				label={ getAddLabel() }
 				controls={ field.groups.map( ( group ) => ( {
-					title: getAddLabel( group.label ? group.label : field.labels.singular_name ),
-					onClick: () => onAdd( group.group_id )
+					title: getGroupLabel( group.name, true ),
+					onClick: () => onAdd( group.name )
 				} ) ) }
 			/>
 		)
 		: (
-			<Button isDefault onClick={ () => onAdd( field.groups[ 0 ].group_id ) }>
+			<Button isDefault onClick={ () => onAdd( field.groups[ 0 ].name ) }>
 				{ getAddLabel( field.labels.singular_name ) }
 			</Button>
 		);
 
-	const tabs = value.map( ( entry, index ) => ( {
-		name: `${ entry.name }-${ index }`,
-		title: entry.label ? entry.label : index + 1,
-		fields: getFields( entry._type ),
-		index: index
-	} ) );
+	const sanitizedValue = [
+		...value.map( ( entry, index ) => ( {
+			name: `${ entry._name }-${ index }`,
+			title: getGroupLabel( entry._name ),
+			fields: getFields( entry._name ),
+			attributes: get( value, index, {} ),
+			index: index
+		} ) ),
+		{
+			name: 'add',
+			title: '+'
+		}
+	];
 
 	return (
 		<BaseControl label={ field.labels.plural_name }>
 			{ value.length === 0 && button }
 
 			{ value.length > 0 && (
-				<TabPanel className="my-tab-panel"
-					activeClass="active-tab"
+				<Fields
+					value={ sanitizedValue }
 					onSelect={ onTabSelect }
-					tabs={ [ ...tabs, { icon: 'plus', name: 'add', title: getAddLabel() } ] }
-				>
-					{ ( tab ) => tab.fields && tab.fields.length > 0
-						? renderFields(
-							tab.fields,
-							get( value, tab.index, {} ),
-							( childValue ) => onChildChange( tab.index, childValue ),
-							depth + 1
-						)
-						: button
-					}
-				</TabPanel>
+					depth={ depth }
+					button={ button }
+					onChange={ onChildChange }
+				/>
 			) }
 		</BaseControl>
 	);
@@ -102,19 +97,23 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 				hasGroups,
 				getAddLabel,
 				handleAdd,
-				getGroupFields
-			} ) => (
-				<ComplexField
-					depth={ depth }
-					field={ originalProps.field }
-					value={ originalProps.value }
-					onChildChange={ handleChildChange }
-					hasGroups={ hasGroups }
-					getAddLabel={ getAddLabel }
-					onAdd={ handleAdd }
-					getFields={ getGroupFields }
-				/>
-			) }
+				getGroupFields,
+				getGroupLabel
+			} ) => {
+				return (
+					<ComplexField
+						depth={ depth }
+						field={ originalProps.field }
+						value={ originalProps.value }
+						onChildChange={ handleChildChange }
+						hasGroups={ hasGroups }
+						getAddLabel={ getAddLabel }
+						onAdd={ handleAdd }
+						getFields={ getGroupFields }
+						getGroupLabel={ getGroupLabel }
+					/>
+				);
+			} }
 		</OriginalComplexField>
 	);
 } );
