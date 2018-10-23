@@ -6,9 +6,7 @@ import {
 	BaseControl,
 	DropdownMenu,
 	Button,
-	Panel,
-	PanelBody,
-	PanelRow
+	TabPanel
 } from '@wordpress/components';
 
 /**
@@ -34,6 +32,16 @@ const ComplexField = ( {
 	onAdd,
 	getAddLabel
 } ) => {
+	const onTabSelect = ( tabName ) => {
+		if ( tabName !== 'add' ) {
+			return;
+		}
+
+		if ( ! hasGroups() ) {
+			return onAdd( field.groups[ 0 ].group_id );
+		}
+	};
+
 	const button = hasGroups()
 		? (
 			<DropdownMenu
@@ -51,24 +59,27 @@ const ComplexField = ( {
 			</Button>
 		);
 
+	const tabs = value.map( ( entry, index ) => ( {
+		name: `${ entry.name }-${ index }`,
+		title: entry.label ? entry.label : index + 1,
+		fields: entry.fields
+	} ) );
+
 	return (
 		<BaseControl label={ field.labels.plural_name }>
 			{ value.length === 0 && button }
 
 			{ value.length > 0 && (
-				<Panel>
-					{ value.map( ( entry, index ) => (
-						<PanelBody
-							key={ `${ entry.groupd_id }-${ index }` }
-							title={ entry.label }
-							initialOpen={ index === 0 }
-						>
-							<PanelRow>
-								{ renderFields( entry.fields, field.attributes, onChange, depth + 1 ) }
-							</PanelRow>
-						</PanelBody>
-					) ) }
-				</Panel>
+				<TabPanel className="my-tab-panel"
+					activeClass="active-tab"
+					onSelect={ onTabSelect }
+					tabs={ [ ...tabs, { icon: 'plus', name: 'add', title: getAddLabel() } ] }
+				>
+					{ ( tab ) => tab.fields && tab.fields.length > 0
+						? renderFields( tab.fields, field.attributes, onChange, depth + 1 )
+						: button
+					}
+				</TabPanel>
 			) }
 		</BaseControl>
 	);
