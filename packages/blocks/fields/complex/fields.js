@@ -13,7 +13,6 @@ import renderFields from '../../utils/render-fields';
  *
  * @param  {Object}   props
  * @param  {Array}    props.value
- * @param  {Function} props.onSelect
  * @param  {number}   props.depth
  * @param  {Object}   props.button
  * @param  {Function} props.onChange
@@ -21,14 +20,12 @@ import renderFields from '../../utils/render-fields';
  */
 const Fields = ( {
 	value,
-	onSelect,
 	depth,
 	button,
 	onChange
 } ) => (
 	<TabPanel className="my-tab-panel"
 		activeClass="active-tab"
-		onSelect={ onSelect }
 		tabs={ value }
 	>
 		{ ( tab ) => tab.fields && tab.fields.length > 0

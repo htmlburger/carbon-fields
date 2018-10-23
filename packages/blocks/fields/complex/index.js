@@ -2,12 +2,13 @@
  * External dependencies.
  */
 import { addFilter } from '@wordpress/hooks';
-import { BaseControl, DropdownMenu, Button } from '@wordpress/components';
+import { BaseControl } from '@wordpress/components';
 import { get } from 'lodash';
 
 /**
  * The internal dependencies.
  */
+import AddButton from './add-button';
 import Fields from './fields';
 
 /**
@@ -20,73 +21,17 @@ import Fields from './fields';
  * @return {Object}
  */
 const ComplexField = ( {
-	depth,
 	field,
 	value,
-	onChildChange,
-	hasGroups,
-	onAdd,
-	getAddLabel,
-	getFields,
-	getGroupLabel
-} ) => {
-	const onTabSelect = ( tabName ) => {
-		if ( tabName !== 'add' ) {
-			return;
-		}
+	addButton,
+	fields
+} ) => (
+	<BaseControl label={ field.label }>
+		{ value.length === 0 && addButton }
 
-		if ( ! hasGroups() ) {
-			return onAdd( field.groups[ 0 ].name );
-		}
-	};
-
-	const button = hasGroups()
-		? (
-			<DropdownMenu
-				icon="plus"
-				label={ getAddLabel() }
-				controls={ field.groups.map( ( group ) => ( {
-					title: getGroupLabel( group.name, true ),
-					onClick: () => onAdd( group.name )
-				} ) ) }
-			/>
-		)
-		: (
-			<Button isDefault onClick={ () => onAdd( field.groups[ 0 ].name ) }>
-				{ getAddLabel( field.labels.singular_name ) }
-			</Button>
-		);
-
-	const sanitizedValue = [
-		...value.map( ( entry, index ) => ( {
-			name: `${ entry._name }-${ index }`,
-			title: getGroupLabel( entry._name ),
-			fields: getFields( entry._name ),
-			attributes: get( value, index, {} ),
-			index: index
-		} ) ),
-		{
-			name: 'add',
-			title: '+'
-		}
-	];
-
-	return (
-		<BaseControl label={ field.labels.plural_name }>
-			{ value.length === 0 && button }
-
-			{ value.length > 0 && (
-				<Fields
-					value={ sanitizedValue }
-					onSelect={ onTabSelect }
-					depth={ depth }
-					button={ button }
-					onChange={ onChildChange }
-				/>
-			) }
-		</BaseControl>
-	);
-};
+		{ value.length > 0 && fields }
+	</BaseControl>
+);
 
 addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( OriginalComplexField ) => ( originalProps ) => {
 	return (
@@ -100,17 +45,45 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 				getGroupFields,
 				getGroupLabel
 			} ) => {
+				const sanitizedValue = [
+					...originalProps.value.map( ( entry, index ) => ( {
+						name: `${ entry._type }-${ index }`,
+						title: getGroupLabel( entry._type ),
+						fields: getGroupFields( entry._type ),
+						attributes: get( originalProps.value, index, {} ),
+						index: index
+					} ) ),
+					{
+						name: 'add',
+						title: '+'
+					}
+				];
+
+				const buttonComponent = (
+					<AddButton
+						addLabel={ getAddLabel() }
+						hasGroups={ hasGroups() }
+						groups={ originalProps.field.groups }
+						getLabel={ getGroupLabel }
+						onClick={ handleAdd }
+					/>
+				);
+
+				const fieldsComponent = (
+					<Fields
+						value={ sanitizedValue }
+						depth={ depth }
+						button={ buttonComponent }
+						onChange={ handleChildChange }
+					/>
+				);
+
 				return (
 					<ComplexField
-						depth={ depth }
 						field={ originalProps.field }
 						value={ originalProps.value }
-						onChildChange={ handleChildChange }
-						hasGroups={ hasGroups }
-						getAddLabel={ getAddLabel }
-						onAdd={ handleAdd }
-						getFields={ getGroupFields }
-						getGroupLabel={ getGroupLabel }
+						addButton={ buttonComponent }
+						fields={ fieldsComponent }
 					/>
 				);
 			} }
