@@ -5,7 +5,10 @@ import { addFilter } from '@wordpress/hooks';
 import {
 	BaseControl,
 	DropdownMenu,
-	Button
+	Button,
+	Panel,
+	PanelBody,
+	PanelRow
 } from '@wordpress/components';
 
 /**
@@ -23,6 +26,7 @@ import renderFields from '../../utils/render-fields';
  * @return {Object}
  */
 const ComplexField = ( {
+	depth,
 	field,
 	value,
 	onChange,
@@ -51,10 +55,21 @@ const ComplexField = ( {
 		<BaseControl label={ field.labels.plural_name }>
 			{ value.length === 0 && button }
 
-			{
-				// TODO Fix renderFields function - properly pass depth
-			}
-			{ value.length > 0 && value.map( ( entry ) => renderFields( entry.fields, field.attributes, onChange, 1 ) ) }
+			{ value.length > 0 && (
+				<Panel>
+					{ value.map( ( entry, index ) => (
+						<PanelBody
+							key={ `${ entry.groupd_id }-${ index }` }
+							title={ entry.label }
+							initialOpen={ index === 0 }
+						>
+							<PanelRow>
+								{ renderFields( entry.fields, field.attributes, onChange, depth + 1 ) }
+							</PanelRow>
+						</PanelBody>
+					) ) }
+				</Panel>
+			) }
 		</BaseControl>
 	);
 };
@@ -63,12 +78,14 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 	return (
 		<OriginalComplexField { ...originalProps }>
 			{ ( {
+				depth,
 				handleChange,
 				hasGroups,
 				getAddLabel,
 				handleAdd
 			} ) => (
 				<ComplexField
+					depth={ depth }
 					field={ originalProps.field }
 					value={ originalProps.value }
 					onChange={ handleChange }

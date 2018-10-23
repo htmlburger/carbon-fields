@@ -2,7 +2,7 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { find } from 'lodash';
+import { assign, find, get } from 'lodash';
 
 class Complex extends Component {
 	/**
@@ -13,10 +13,22 @@ class Complex extends Component {
 	 * @return {void}
 	 */
 	handleChange = ( fieldKey, value ) => {
-		// TODO investigate values updating strategies
 		this.props.onChange( {
 			[ fieldKey ]: value
 		} );
+	}
+
+	/**
+	 * Handles the change of the child input.
+	 *
+	 * @param  {string} fieldKey The name(Gutenberg) or the identifier(Classic Editor) of field.
+	 * @param  {string} value
+	 * @return {void}
+	 */
+	handleChildChange = ( fieldKey, value ) => {
+		const newValue = assign( value, get( this.props.value, fieldKey, {} ) );
+
+		this.props.onChange( this.props.field.base_name, newValue );
 	}
 
 	/**
@@ -55,6 +67,7 @@ class Complex extends Component {
 	 */
 	render() {
 		return this.props.children( {
+			depth: this.props.depth,
 			handleChange: this.handleChange,
 			hasGroups: this.hasGroups,
 			getAddLabel: this.getAddLabel,
