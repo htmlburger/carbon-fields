@@ -101,14 +101,14 @@ class Complex extends Component {
 	getGroupLabel = ( name, add = false ) => {
 		const group = this.getGroupByName( name );
 
-		// Avoid use of '_.get' as 'label' is always set, but not always filled
-		const label = group.label
-			? group.label
-			: this.props.field.label;
+		if ( ! group ) {
+			return;
+		}
 
-		return add
-			? this.getAddLabel( label )
-			: label;
+		// Avoid use of '_.get' as 'label' is always set, but not always filled
+		const label = group.label ? group.label : this.props.field.label;
+
+		return add ? this.getAddLabel( label ) : label;
 	}
 
 	/**
