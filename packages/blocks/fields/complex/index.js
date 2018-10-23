@@ -8,6 +8,7 @@ import {
 	Button,
 	TabPanel
 } from '@wordpress/components';
+import { get } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -27,10 +28,11 @@ const ComplexField = ( {
 	depth,
 	field,
 	value,
-	onChange,
+	onChildChange,
 	hasGroups,
 	onAdd,
-	getAddLabel
+	getAddLabel,
+	getFields
 } ) => {
 	const onTabSelect = ( tabName ) => {
 		if ( tabName !== 'add' ) {
@@ -62,7 +64,8 @@ const ComplexField = ( {
 	const tabs = value.map( ( entry, index ) => ( {
 		name: `${ entry.name }-${ index }`,
 		title: entry.label ? entry.label : index + 1,
-		fields: entry.fields
+		fields: getFields( entry._type ),
+		index: index
 	} ) );
 
 	return (
@@ -76,7 +79,12 @@ const ComplexField = ( {
 					tabs={ [ ...tabs, { icon: 'plus', name: 'add', title: getAddLabel() } ] }
 				>
 					{ ( tab ) => tab.fields && tab.fields.length > 0
-						? renderFields( tab.fields, field.attributes, onChange, depth + 1 )
+						? renderFields(
+							tab.fields,
+							get( value, tab.index, {} ),
+							( childValue ) => onChildChange( tab.index, childValue ),
+							depth + 1
+						)
 						: button
 					}
 				</TabPanel>
@@ -90,19 +98,21 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 		<OriginalComplexField { ...originalProps }>
 			{ ( {
 				depth,
-				handleChange,
+				handleChildChange,
 				hasGroups,
 				getAddLabel,
-				handleAdd
+				handleAdd,
+				getGroupFields
 			} ) => (
 				<ComplexField
 					depth={ depth }
 					field={ originalProps.field }
 					value={ originalProps.value }
-					onChange={ handleChange }
+					onChildChange={ handleChildChange }
 					hasGroups={ hasGroups }
 					getAddLabel={ getAddLabel }
 					onAdd={ handleAdd }
+					getFields={ getGroupFields }
 				/>
 			) }
 		</OriginalComplexField>
