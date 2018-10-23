@@ -3,13 +3,13 @@
  */
 import { Component } from '@wordpress/element';
 import {
-	cloneDeep,
 	assign,
 	find,
 	get,
 	zipObject,
 	map
 } from 'lodash';
+import produce from 'immer';
 
 class Complex extends Component {
 	/**
@@ -32,18 +32,18 @@ class Complex extends Component {
 	 * @param  {string} value      The { fieldKey: value } pair of the input
 	 * @return {void}
 	 */
-	handleChildChange = ( childIndex, value ) => {
-		const valueClone = cloneDeep( this.props.value );
-		const child = get( valueClone, childIndex, null );
+	handleChildChange = ( childIndex, value ) => this.handleChange(
+		this.props.field.base_name,
+		produce( this.props.value, ( draft ) => {
+			const child = get( draft, childIndex, null );
 
-		if ( ! child ) {
-			return;
-		}
+			if ( ! child ) {
+				return;
+			}
 
-		assign( child, value );
-
-		this.handleChange( this.props.field.base_name, valueClone );
-	}
+			assign( child, value );
+		} )
+	)
 
 	/**
 	 * Checks if the field has multiple groups.
@@ -71,13 +71,15 @@ class Complex extends Component {
 
 		const group = find( field.groups, ( groupItem ) => groupItem.group_id === groupId );
 
-		this.handleChange( field.base_name, [ ...value, ...[ {
-			_type: group.name,
-			...zipObject(
-				map( group.fields, 'base_name' ),
-				map( group.fields, 'value' )
-			)
-		} ] ] );
+		this.handleChange( field.base_name, produce( value, ( draft ) => {
+			draft.push( {
+				_type: group.name,
+				...zipObject(
+					map( group.fields, 'base_name' ),
+					map( group.fields, 'value' )
+				)
+			} );
+		} ) );
 	}
 
 	/**
