@@ -8,7 +8,7 @@ export default function renderFields(
 	fields,
 	attributes,
 	onChange,
-	depth = 0,
+	depth = 0
 ) {
 	return fields.map( ( field, index ) => {
 		const Field = getFieldType( field.type, 'block' );
@@ -16,7 +16,6 @@ export default function renderFields(
 		if ( ! Field ) {
 			return null;
 		}
-
 		const value = get( attributes, field.base_name );
 
 		return (
