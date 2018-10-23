@@ -63,17 +63,18 @@ class Complex extends Component {
 	/**
 	 * Handles the click of the click of the add buttons.
 	 *
-	 * @param  {string} groupId The id of the fields group which should be added
+	 * @param  {string} groupName The id of the fields group which should be added
 	 * @return {void}
 	 */
-	handleAdd = ( groupId ) => {
+	handleAdd = ( groupName ) => {
 		const { field, value } = this.props;
 
-		const group = find( field.groups, ( groupItem ) => groupItem.group_id === groupId );
+		const group = this.getGroupByName( groupName );
 
 		this.handleChange( field.base_name, produce( value, ( draft ) => {
 			draft.push( {
-				_type: group.name,
+				// Keep '_type' for backwards compatibility - legacy code might depend on it
+				_type: groupName,
 				...zipObject(
 					map( group.fields, 'base_name' ),
 					map( group.fields, 'value' )
@@ -83,16 +84,39 @@ class Complex extends Component {
 	}
 
 	/**
-	 * Retrieve the fields associated to the provided group type
+	 * Retrieve the fields associated to the provided group name
 	 *
-	 * @param  {string} type The type of the group for which the fields should be retrieved
+	 * @param  {string} name The name of the group for which the fields should be retrieved
 	 * @return {Array}
 	 */
-	getGroupFields = ( type ) => {
-		const group = find( this.props.field.groups, ( groupItem ) => groupItem.name === type );
+	getGroupFields = ( name ) => get( this.getGroupByName( name ), 'fields', [] )
 
-		return get( group, 'fields', [] );
+	/**
+	 * Retrieve the group label by name
+	 *
+	 * @param  {string}  name The name of the group for which the label should be retrieved
+	 * @param  {boolean} add Returns the label with the localized 'Add', prefix
+	 * @return {Array}
+	 */
+	getGroupLabel = ( name, add = false ) => {
+		const group = this.getGroupByName( name );
+
+		// Avoid use of '_.get' as 'label' is always set, but not always filled
+		const label = group.label
+			? group.label
+			: this.props.field.label;
+
+		return add
+			? this.getAddLabel( label )
+			: label;
 	}
+
+	/**
+	 * Retrieve the group by provided name
+	 * @param  {string} name The name of the group
+	 * @return {Object|Null}
+	 */
+	getGroupByName = ( name ) => find( this.props.field.groups, ( group ) => group.name === name )
 
 	/**
 	 * Render the component.
@@ -107,7 +131,8 @@ class Complex extends Component {
 			hasGroups: this.hasGroups,
 			getAddLabel: this.getAddLabel,
 			handleAdd: this.handleAdd,
-			getGroupFields: this.getGroupFields
+			getGroupFields: this.getGroupFields,
+			getGroupLabel: this.getGroupLabel
 		} );
 	}
 }
