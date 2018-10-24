@@ -15,8 +15,9 @@ import { getContainerType } from './containers/registry';
 /**
  * The internal dependencies.
  */
-import './containers';
+import './store';
 import './fields';
+import './containers';
 
 /**
  * Detects if we're rendering on page that is using Gutenberg.
@@ -28,7 +29,7 @@ const isGutenberg = ! isUndefined( window._wpLoadGutenbergEditor );
 /**
  * Abracadabra! Poof! Containers everywhere ...
  */
-values( select( 'carbon-fields/core' ).getContainers() ).forEach( ( container ) => {
+values( select( 'carbon-fields/metaboxes' ).getContainers() ).forEach( ( container ) => {
 	const node = document.querySelector( `.container-${ container.id }` );
 	const Component = getContainerType( container.type, isGutenberg ? 'gutenberg' : 'classic' );
 

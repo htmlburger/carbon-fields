@@ -1,7 +1,6 @@
 /**
  * Internal dependencies.
  */
-import './store';
 import { registerFieldType } from './registry/fields';
 import CheckboxField from './fields/checkbox';
 import ColorField from './fields/color';
