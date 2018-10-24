@@ -1,29 +1,38 @@
 /**
  * External dependencies.
  */
-import { addFilter } from '@wordpress/hooks';
-import { Fragment } from '@wordpress/element';
-import { BaseControl, Button, Placeholder } from '@wordpress/components';
-import { MediaUpload } from '@wordpress/editor';
 import { __ } from '@wordpress/i18n';
+import { addFilter } from '@wordpress/hooks';
+import { Fragment, Component } from '@wordpress/element';
+import { MediaUpload } from '@wordpress/editor';
+import {
+	BaseControl,
+	Button,
+	Placeholder
+} from '@wordpress/components';
+import { pick } from 'lodash';
 
-/**
- * Renders the field.
- *
- * @return {Object}
- */
-const FileField = ( {
-	buttonLabel,
-	field,
-	value,
-	handleSelect
-} ) => {
+class FileField extends Component {
 	/**
-	 * Provide the file component
+	 * Handles the file selection.
 	 *
-	 * @return {Null|Object}
+	 * @param  {Object} file
+	 * @return {void}
 	 */
-	const renderFileComponent = () => {
+	handleSelect = ( file ) => {
+		const { field, onChange } = this.props;
+
+		onChange( field.base_name, pick( file, [ 'id', 'filename', 'mime', 'url' ] ) );
+	}
+
+	/**
+	 * Renders the preview of the selected file.
+	 *
+	 * @return {mixed}
+	 */
+	renderPreview() {
+		const { value } = this.props;
+
 		if ( ! value ) {
 			return null;
 		}
@@ -35,45 +44,55 @@ const FileField = ( {
 		}
 
 		return (
-			<Placeholder
-				icon="media-document"
-				label={ value.filename }
-			/>
+			<Placeholder icon="media-document" label={ value.filename } />
 		);
-	};
+	}
 
+	/**
+	 * Renders the component.
+	 *
+	 * @return {Object}
+	 */
+	render() {
+		const {
+			field,
+			value,
+			buttonLabel
+		} = this.props;
+
+		return (
+			<BaseControl label={ field.label }>
+				<MediaUpload
+					onSelect={ this.handleSelect }
+					value={ value }
+					render={ ( { open } ) => (
+						<Fragment>
+							<Button isDefault onClick={ open }>
+								{ buttonLabel }
+							</Button>
+
+							{ this.renderPreview() }
+						</Fragment>
+					) }
+				/>
+			</BaseControl>
+		);
+	}
+}
+
+addFilter( 'carbon-fields.file-field.block', 'carbon-fields/blocks', ( OriginalFileField ) => ( props ) => {
 	return (
-		<BaseControl label={ field.label }>
-			<MediaUpload
-				onSelect={ handleSelect }
-				value={ value }
-				render={ ( { open } ) => (
-					<Fragment>
-						<Button isDefault onClick={ open }>
-							{ buttonLabel }
-						</Button>
-
-						{ renderFileComponent() }
-					</Fragment>
-				) }
-			/>
-		</BaseControl>
-	);
-};
-
-addFilter( 'carbon-fields.file-field.block', 'carbon-fields/blocks', ( OriginalFileField ) => ( { field, value, onChange } ) => {
-	return (
-		<OriginalFileField
-			field={ field }
-			onChange={ onChange }
-			value={ value }
-		>
-			{ ( { ...props } ) => (
+		<OriginalFileField { ...props }>
+			{ ( {
+				field,
+				value,
+				handleChange
+			} ) => (
 				<FileField
 					field={ field }
 					value={ value }
 					buttonLabel={ __( 'Select File' ) }
-					{ ...props }
+					onChange={ handleChange }
 				/>
 			) }
 		</OriginalFileField>
