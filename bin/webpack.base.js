@@ -1,4 +1,12 @@
+/**
+ * External dependencies.
+ */
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+
 module.exports = {
+	output: {
+		filename: '[name].js'
+	},
 	module: {
 		rules: [
 			{
@@ -10,9 +18,32 @@ module.exports = {
 						cacheDirectory: true
 					}
 				}
+			},
+			{
+				test: /\.scss$/,
+				use: [
+					MiniCssExtractPlugin.loader,
+					{
+						loader: 'css-loader',
+						options: {
+							importLoaders: 2
+						}
+					},
+					{
+						loader: 'postcss-loader'
+					},
+					{
+						loader: 'sass-loader'
+					}
+				]
 			}
 		]
 	},
+	plugins: [
+		new MiniCssExtractPlugin( {
+			filename: '[name].css'
+		} )
+	],
 	stats: {
 		modules: false,
 		hash: false,

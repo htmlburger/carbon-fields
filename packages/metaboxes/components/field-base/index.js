@@ -8,6 +8,11 @@
 import cx from 'classnames';
 
 /**
+ * Internal dependencies.
+ */
+import './style.scss';
+
+/**
  * Renders the base wrapper of the field.
  *
  * @param  {Object} props

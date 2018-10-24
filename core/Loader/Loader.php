@@ -114,6 +114,8 @@ class Loader {
 
 		// wp_enqueue_style( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.css', array(), \Carbon_Fields\VERSION );
 
+		wp_enqueue_style( 'carbon-fields-metaboxes', \Carbon_Fields\URL . '/build/' . $context . '/metaboxes' . $suffix . '.css', array(), \Carbon_Fields\VERSION );
+
 		wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/build/' . $context . '/vendor' . $suffix . '.js', array(), \Carbon_Fields\VERSION );
 		wp_enqueue_script( 'carbon-fields-new-core', \Carbon_Fields\URL . '/build/' . $context . '/core' . $suffix . '.js', array(), \Carbon_Fields\VERSION );
 		wp_enqueue_script( 'carbon-fields-metaboxes', \Carbon_Fields\URL . '/build/' . $context . '/metaboxes' . $suffix . '.js', array(), \Carbon_Fields\VERSION );

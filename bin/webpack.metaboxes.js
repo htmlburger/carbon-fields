@@ -11,14 +11,13 @@ const paths = require( './paths' );
 const wpPackages = require( './wp-packages' );
 
 const config = {
-	entry: './packages/metaboxes/index.js',
-	output: {
-		filename: 'metaboxes.js'
+	entry: {
+		metaboxes: './packages/metaboxes/index.js'
 	},
 	externals: {
 		'@carbon-fields/core': 'cf.core',
 		'classnames': [ 'cf', 'vendor', 'classnames' ]
-	},
+	}
 };
 
 module.exports = [

@@ -11,10 +11,11 @@ const paths = require( './paths' );
 const wpPackages = require( './wp-packages' );
 
 const config = {
-	entry: './packages/core/index.js',
+	entry: {
+		core: './packages/core/index.js'
+	},
 	output: {
-		filename: 'core.js',
-		library: [ 'cf', 'core' ],
+		library: [ 'cf', '[name]' ],
 		libraryTarget: 'this'
 	},
 	externals: {

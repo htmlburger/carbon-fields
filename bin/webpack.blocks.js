@@ -12,10 +12,11 @@ const wpPackages = require( './wp-packages' );
 
 module.exports = [
 	merge( base, {
-		entry: './packages/blocks/index.js',
+		entry: {
+			blocks: './packages/blocks/index.js'
+		},
 		output: {
 			path: paths.gutenbergBuildPath,
-			filename: 'blocks.js'
 		},
 		externals: Object.assign( {}, wpPackages.externals, {
 			'@wordpress/components': 'wp.components',

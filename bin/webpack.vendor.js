@@ -12,9 +12,8 @@ const paths = require( './paths' );
 const wpPackages = require( './wp-packages' );
 
 const config = {
-	entry: './packages/vendor/index.js',
-	output: {
-		filename: 'vendor.js'
+	entry: {
+		vendor: './packages/vendor/index.js'
 	}
 };
 
