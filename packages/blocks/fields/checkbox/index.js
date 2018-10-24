@@ -1,37 +1,55 @@
 /**
  * External dependencies.
  */
-import { addFilter } from '@wordpress/hooks';
+import { Component } from '@wordpress/element';
 import { CheckboxControl } from '@wordpress/components';
+import { addFilter } from '@wordpress/hooks';
 
-/**
- * Renders the field.
- *
- * @return {Object}
- */
-const CheckboxField = ( {
-	field,
-	value,
-	onChange
-} ) => {
-	// eslint-disable-next-line no-shadow
-	const handleChange = ( value ) => onChange( {
-		[ field.base_name ]: value
-	} );
+class CheckboxField extends Component {
+	/**
+	 * Handles the change of the checkbox.
+	 *
+	 * @param  {string} value
+	 * @return {void}
+	 */
+	handleChange = ( value ) => {
+		const { field, onChange } = this.props;
 
+		onChange( field.base_name, value );
+	}
+
+	/**
+	 * Renders the component.
+	 *
+	 * @return {Object}
+	 */
+	render() {
+		const { field, value } = this.props;
+
+		return (
+			<CheckboxControl
+				label={ field.option_label }
+				checked={ value }
+				onChange={ this.handleChange }
+			/>
+		);
+	}
+}
+
+addFilter( 'carbon-fields.checkbox-field.block', 'carbon-fields/blocks', ( OriginalCheckboxField ) => ( props ) => {
 	return (
-		<CheckboxControl
-			label={ field.option_label }
-			checked={ value }
-			onChange={ handleChange }
-		/>
-	);
-};
-
-addFilter( 'carbon-fields.checkbox-field.block', 'carbon-fields/blocks', ( OriginalCheckboxField ) => ( originalProps ) => {
-	return (
-		<OriginalCheckboxField>
-			{ () => <CheckboxField { ...originalProps } /> }
+		<OriginalCheckboxField { ...props }>
+			{ ( {
+				field,
+				value,
+				handleChange
+			} ) => (
+				<CheckboxField
+					field={ field }
+					value={ value }
+					onChange={ handleChange }
+				/>
+			) }
 		</OriginalCheckboxField>
 	);
 } );
