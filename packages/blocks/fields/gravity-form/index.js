@@ -8,10 +8,20 @@ import { addFilter } from '@wordpress/hooks';
  */
 import { SelectField } from '../select';
 
-addFilter( 'carbon-fields.gravity_form-field.block', 'carbon-fields/blocks', ( OriginalSelectField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.gravity_form-field.block', 'carbon-fields/blocks', ( OriginalSelectField ) => ( props ) => {
 	return (
-		<OriginalSelectField>
-			{ () => <SelectField { ...originalProps } /> }
+		<OriginalSelectField { ...props }>
+			{ ( {
+				field,
+				value,
+				handleChange
+			} ) => (
+				<SelectField
+					field={ field }
+					value={ value }
+					onChange={ handleChange }
+				/>
+			) }
 		</OriginalSelectField>
 	);
 } );
