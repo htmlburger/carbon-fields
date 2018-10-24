@@ -11,20 +11,29 @@ import renderFields from '../../utils/render-fields';
 
 class BlockEdit extends Component {
 	/**
+	 * Handles the change of the field's value.
+	 *
+	 * @param  {string} fieldName
+	 * @param  {mixed}  value
+	 * @return {void}
+	 */
+	handleFieldChange = ( fieldName, value ) => {
+		this.props.setAttributes( {
+			[ fieldName ]: value
+		} );
+	}
+
+	/**
 	 * Render the component.
 	 *
 	 * @return {Object}
 	 */
 	render() {
-		const {
-			fields,
-			attributes,
-			setAttributes
-		} = this.props;
+		const { fields, attributes } = this.props;
 
 		return (
 			<Fragment>
-				{ renderFields( fields, attributes, setAttributes ) }
+				{ renderFields( fields, attributes, this.handleFieldChange ) }
 			</Fragment>
 		);
 	}

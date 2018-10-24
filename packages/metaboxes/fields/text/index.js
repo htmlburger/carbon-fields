@@ -7,6 +7,7 @@ import { addFilter } from '@wordpress/hooks';
  * The internal dependencies.
  */
 import Base from '../base';
+import withStore from '../../components/with-store';
 
 /**
  * Renders the field.
@@ -22,31 +23,35 @@ const TextField = ( {
 	value,
 	onChange
 } ) => {
+	const handleChange = ( e ) => {
+		onChange( field.id, e.target.value );
+	};
+
 	return (
 		<Base field={ field } >
 			<input
 				type="text"
 				id={ field.id }
-				name={ name }
+				name={ field.base_name }
 				value={ value }
 				className="regular-text"
-				onChange={ onChange }
+				onChange={ handleChange }
 				{ ...field.attributes }
 			/>
 		</Base>
 	);
 };
 
-addFilter( 'carbon-fields.text-field.metabox', 'carbon-fields/metaboxes', ( OriginalTextField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.text-field.metabox', 'carbon-fields/metaboxes', ( OriginalTextField ) => withStore( ( props ) => {
 	return (
-		<OriginalTextField { ...originalProps }>
+		<OriginalTextField { ...props }>
 			{ ( { handleChange } ) => (
 				<TextField
-					field={ originalProps.field }
-					value={ originalProps.value }
+					field={ props.field }
+					value={ props.value }
 					onChange={ handleChange }
 				/>
 			) }
 		</OriginalTextField>
 	);
-} );
+} ) );
