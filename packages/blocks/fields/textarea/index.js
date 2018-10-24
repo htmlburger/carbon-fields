@@ -1,44 +1,56 @@
 /**
  * External dependencies.
  */
-import { addFilter } from '@wordpress/hooks';
-import { BaseControl } from '@wordpress/components';
+import { Component } from '@wordpress/element';
 import { RichText } from '@wordpress/editor';
+import { BaseControl } from '@wordpress/components';
+import { addFilter } from '@wordpress/hooks';
 
-/**
- * Renders the field.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {string}   props.value
- * @param  {Function} props.onChange
- * @return {Object}
- */
-const TextareaField = ( {
-	field,
-	value,
-	onChange
-} ) => {
-	return (
-		<BaseControl label={ field.label } >
-			<RichText
-				value={ value }
-				multiline={ true }
-				formattingControls={ [] }
-				onChange={ ( value ) => onChange( field.base_name, value ) } // eslint-disable-line no-shadow
-			/>
-		</BaseControl>
-	);
-};
+class TextareaField extends Component {
+	/**
+	 * Handles the change of the textare.
+	 *
+	 * @param  {string} value
+	 * @return {void}
+	 */
+	handleChange = ( value ) => {
+		const { field, onChange } = this.props;
 
-addFilter( 'carbon-fields.textarea-field.block', 'carbon-fields/blocks', ( OriginalTextareaField ) => ( originalProps ) => {
+		onChange( field.base_name, value );
+	}
+
+	/**
+	 * Renders the component.
+	 *
+	 * @return {Object}
+	 */
+	render() {
+		const { field, value } = this.props;
+
+		return (
+			<BaseControl label={ field.label }>
+				<RichText
+					value={ value }
+					formattingControls={ [] }
+					multiline
+					onChange={ this.handleChange }
+				/>
+			</BaseControl>
+		);
+	}
+}
+
+addFilter( 'carbon-fields.textarea-field.block', 'carbon-fields/blocks', ( OriginalTextareaField ) => ( props ) => {
 	return (
-		<OriginalTextareaField { ...originalProps }>
-			{ ( { handleChange } ) => (
+		<OriginalTextareaField { ...props }>
+			{ ( {
+				field,
+				value,
+				handleChange
+			} ) => (
 				<TextareaField
-					tan
-					field={ originalProps.field }
-					value={ originalProps.value }
+					field={ field }
+					value={ value }
 					onChange={ handleChange }
 				/>
 			) }

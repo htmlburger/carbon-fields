@@ -10,8 +10,16 @@ class TextareaField extends Component {
 	 * @return {Object}
 	 */
 	render() {
+		const {
+			field,
+			value,
+			onChange
+		} = this.props;
+
 		return this.props.children( {
-			handleChange: this.props.onChange
+			field,
+			value,
+			handleChange: onChange
 		} );
 	}
 }
