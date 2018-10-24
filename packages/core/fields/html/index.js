@@ -10,7 +10,9 @@ class HtmlField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		return this.props.children();
+		return this.props.children( {
+			field: this.props.field
+		} );
 	}
 }
 
