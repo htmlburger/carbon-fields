@@ -7,7 +7,7 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * The internal dependencies.
  */
-import Base from '../base';
+import FieldBase from '../../components/field-base';
 import withStore from '../../components/with-store';
 
 class TextField extends Component {
@@ -32,7 +32,7 @@ class TextField extends Component {
 		const { field, value } = this.props;
 
 		return (
-			<Base field={ field } >
+			<FieldBase field={ field } >
 				<input
 					type="text"
 					className="regular-text"
@@ -42,7 +42,7 @@ class TextField extends Component {
 					onChange={ this.handleChange }
 					{ ...field.attributes }
 				/>
-			</Base>
+			</FieldBase>
 		);
 	}
 }

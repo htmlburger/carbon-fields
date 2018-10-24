@@ -40,7 +40,7 @@ class BlockEdit extends Component {
 }
 
 export default withSelect( ( select, ownProps ) => {
-	const { getFieldDefinitionsByBlockName } = select( 'carbon-fields' );
+	const { getFieldDefinitionsByBlockName } = select( 'carbon-fields/blocks' );
 
 	return {
 		fields: getFieldDefinitionsByBlockName( ownProps.name )

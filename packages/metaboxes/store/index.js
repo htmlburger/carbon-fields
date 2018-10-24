@@ -19,7 +19,7 @@ import * as selectors from './selectors';
 /**
  * Register the store.
  */
-registerStore( 'carbon-fields/core', {
+registerStore( 'carbon-fields/metaboxes', {
 	reducer,
 	actions,
 	selectors
@@ -35,7 +35,7 @@ const containers = get( window.cf, 'preloaded.containers', [] ).map( ( container
 	} );
 } );
 
-dispatch( 'carbon-fields/core' ).setupState(
+dispatch( 'carbon-fields/metaboxes' ).setupState(
 	keyBy( containers, 'id' ),
 	keyBy( fields, 'id' )
 );

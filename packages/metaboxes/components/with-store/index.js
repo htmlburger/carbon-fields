@@ -13,7 +13,7 @@ import { compose, createHigherOrderComponent } from '@wordpress/compose';
  */
 export default createHigherOrderComponent( ( Component ) => {
 	const applyWithSelect = withSelect( ( select, { id } ) => {
-		const field = select( 'carbon-fields/core' ).getFieldById( id );
+		const field = select( 'carbon-fields/metaboxes' ).getFieldById( id );
 
 		return {
 			field
@@ -21,7 +21,7 @@ export default createHigherOrderComponent( ( Component ) => {
 	} );
 
 	const applyWithDispatch = withDispatch( ( dispatch ) => {
-		const { updateFieldValue } = dispatch( 'carbon-fields/core' );
+		const { updateFieldValue } = dispatch( 'carbon-fields/metaboxes' );
 
 		return {
 			onChange: updateFieldValue

@@ -7,6 +7,8 @@ import { RawHTML } from '@wordpress/element';
 /**
  * Renders the field.
  *
+ * @param  {Object} props
+ * @param  {Object} props.field
  * @return {Object}
  */
 const HtmlField = ( { field } ) => (
@@ -15,10 +17,12 @@ const HtmlField = ( { field } ) => (
 	</RawHTML>
 );
 
-addFilter( 'carbon-fields.html-field.block', 'carbon-fields/blocks', ( OriginalHtmlField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.html-field.block', 'carbon-fields/blocks', ( OriginalHtmlField ) => ( props ) => {
 	return (
-		<OriginalHtmlField>
-			{ () => <HtmlField { ...originalProps } /> }
+		<OriginalHtmlField { ...props }>
+			{ ( { field } ) => (
+				<HtmlField field={ field } />
+			) }
 		</OriginalHtmlField>
 	);
 } );
