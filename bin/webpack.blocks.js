@@ -22,6 +22,7 @@ module.exports = [
 			'@wordpress/components': 'wp.components',
 			'@wordpress/blocks': 'wp.blocks',
 			'@wordpress/editor': 'wp.editor',
+			'@wordpress/i18n': 'wp.i18n',
 			'@carbon-fields/core': 'cf.core',
 			'lodash': 'lodash'
 		 } )
