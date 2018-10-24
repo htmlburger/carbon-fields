@@ -1,38 +1,56 @@
 /**
  * External dependencies.
  */
+import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { SelectControl } from '@wordpress/components';
 
-/**
- * Renders the field.
- *
- * @return {Object}
- */
-export const SelectField = ( {
-	field,
-	value,
-	onChange
-} ) => {
-	// eslint-disable-next-line no-shadow
-	const handleChange = ( value ) => onChange( {
-		[ field.base_name ]: value
-	} );
+class SelectField extends Component {
+	/**
+	 * Handles the change of the select.
+	 *
+	 * @param  {string} value
+	 * @return {void}
+	 */
+	handleChange = ( value ) => {
+		const { field, onChange } = this.props;
 
-	return (
-		<SelectControl
-			label={ field.label }
-			selected={ value }
-			options={ field.options }
-			onChange={ handleChange }
-		/>
-	);
-};
+		onChange( field.base_name, value );
+	}
 
-addFilter( 'carbon-fields.select-field.block', 'carbon-fields/blocks', ( OriginalSelectField ) => ( originalProps ) => {
+	/**
+	 * Renders the component.
+	 *
+	 * @return {Object}
+	 */
+	render() {
+		const { field, value } = this.props;
+
+		return (
+			<SelectControl
+				label={ field.label }
+				selected={ value }
+				options={ field.options }
+				onChange={ this.handleChange }
+			/>
+		);
+	}
+}
+
+addFilter( 'carbon-fields.select-field.block', 'carbon-fields/blocks', ( OriginalSelectField ) => ( props ) => {
 	return (
-		<OriginalSelectField>
-			{ () => <SelectField { ...originalProps } /> }
+		<OriginalSelectField { ...props }>
+			{ ( {
+				field,
+				value,
+				handleChange
+			} ) => (
+				<SelectField
+					field={ field }
+					value={ value }
+					onChange={ handleChange }
+				/>
+			) }
 		</OriginalSelectField>
 	);
 } );
