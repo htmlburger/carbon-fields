@@ -10,7 +10,17 @@ class RadioField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		return this.props.children();
+		const {
+			field,
+			value,
+			onChange
+		} = this.props;
+
+		return this.props.children( {
+			field,
+			value,
+			handleChange: onChange
+		} );
 	}
 }
 
