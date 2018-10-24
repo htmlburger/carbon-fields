@@ -1,9 +1,13 @@
+/* Remove when https://github.com/babel/babel-eslint/issues/530 is fixed */
+/* eslint template-curly-spacing: 'off' */
+/* eslint indent: 'off' */
+
 /**
  * External dependencies.
  */
 import { addFilter } from '@wordpress/hooks';
 import { BaseControl } from '@wordpress/components';
-import { get } from 'lodash';
+import { get, curry } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -37,6 +41,8 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 	return (
 		<OriginalComplexField { ...originalProps }>
 			{ ( {
+				field,
+				value,
 				depth,
 				handleChildChange,
 				hasGroups,
@@ -45,43 +51,40 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 				getGroupFields,
 				getGroupLabel
 			} ) => {
-				const sanitizedValue = [
-					...originalProps.value.map( ( entry, index ) => ( {
-						name: `${ entry._type }-${ index }`,
-						title: getGroupLabel( entry._type ),
-						fields: getGroupFields( entry._type ),
-						attributes: get( originalProps.value, index, {} ),
-						index: index
-					} ) ),
-					{
-						name: 'add',
-						title: '+'
-					}
-				];
+				const sanitizedValue = value.map( ( entry, index ) => ( {
+					name: `${ entry._type }-${ index }`,
+					title: getGroupLabel( entry._type ),
+					fields: getGroupFields( entry._type ),
+					attributes: get( value, index, {} ),
+					index: index
+				} ) );
+
+				const curryWithFieldKey = ( callback ) => curry( callback )( field.base_name );
 
 				const buttonComponent = (
 					<AddButton
 						addLabel={ getAddLabel() }
 						hasGroups={ hasGroups() }
-						groups={ originalProps.field.groups }
+						groups={ field.groups }
 						getLabel={ getGroupLabel }
-						onClick={ handleAdd }
+						onClick={ curryWithFieldKey( handleAdd ) }
 					/>
 				);
 
 				const fieldsComponent = (
 					<Fields
+						elementId={ field.id }
 						value={ sanitizedValue }
 						depth={ depth }
 						button={ buttonComponent }
-						onChange={ handleChildChange }
+						onChange={ curryWithFieldKey( handleChildChange ) }
 					/>
 				);
 
 				return (
 					<ComplexField
-						field={ originalProps.field }
-						value={ originalProps.value }
+						field={ field }
+						value={ value }
 						addButton={ buttonComponent }
 						fields={ fieldsComponent }
 					/>
