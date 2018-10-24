@@ -2,9 +2,6 @@
  * Internal dependencies.
  */
 import './store';
-import { registerContainerType } from './registry/containers';
-import BaseContainer from './containers/base';
-
 import { registerFieldType } from './registry/fields';
 import CheckboxField from './fields/checkbox';
 import ColorField from './fields/color';
@@ -18,13 +15,6 @@ import SetField from './fields/set';
 import SidebarField from './fields/sidebar';
 import TextField from './fields/text';
 import TextareaField from './fields/textarea';
-
-/**
- * Registers containers.
- */
-[
-	[ 'post_meta', BaseContainer ]
-].forEach( ( container ) => registerContainerType( ...container ) );
 
 /**
  * Registers core fields.
@@ -49,5 +39,5 @@ import TextareaField from './fields/textarea';
 /**
  * Exposes the public interface.
  */
-export * from './registry/containers';
+export * from './registry/base';
 export * from './registry/fields';

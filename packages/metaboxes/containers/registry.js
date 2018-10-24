@@ -1,7 +1,7 @@
 /**
- * Internal dependencies.
+ * External dependencies.
  */
-import { createRegistry } from './base';
+import { createRegistry } from '@carbon-fields/core';
 
 export const {
 	registerContainerType,

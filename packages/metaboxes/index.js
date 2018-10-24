@@ -6,11 +6,16 @@
 import { values, isUndefined } from 'lodash';
 import { render } from '@wordpress/element';
 import { select } from '@wordpress/data';
-import { getContainerType } from '@carbon-fields/core';
+
+/**
+ * Internal dependencies.
+ */
+import { getContainerType } from './containers/registry';
 
 /**
  * The internal dependencies.
  */
+import './containers';
 import './fields';
 
 /**
