@@ -1,6 +1,7 @@
 /**
  * External dependencies.
  */
+import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 
 /**
@@ -9,46 +10,54 @@ import { addFilter } from '@wordpress/hooks';
 import Base from '../base';
 import withStore from '../../components/with-store';
 
-/**
- * Renders the field.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {string}   props.value
- * @param  {Function} props.onChange
- * @return {Object}
- */
-const TextField = ( {
-	field,
-	value,
-	onChange
-} ) => {
-	const handleChange = ( e ) => {
-		onChange( field.id, e.target.value );
-	};
+class TextField extends Component {
+	/**
+	 * Handles the change of the input.
+	 *
+	 * @param  {Object} e
+	 * @return {void}
+	 */
+	handleChange = ( e ) => {
+		const { field, onChange } = this.props;
 
-	return (
-		<Base field={ field } >
-			<input
-				type="text"
-				id={ field.id }
-				name={ field.base_name }
-				value={ value }
-				className="regular-text"
-				onChange={ handleChange }
-				{ ...field.attributes }
-			/>
-		</Base>
-	);
-};
+		onChange( field.id, e.target.value );
+	}
+
+	/**
+	 * Renders the component.
+	 *
+	 * @return {Object}
+	 */
+	render() {
+		const { field, value } = this.props;
+
+		return (
+			<Base field={ field } >
+				<input
+					type="text"
+					className="regular-text"
+					id={ field.id }
+					name={ field.base_name }
+					value={ value }
+					onChange={ this.handleChange }
+					{ ...field.attributes }
+				/>
+			</Base>
+		);
+	}
+}
 
 addFilter( 'carbon-fields.text-field.metabox', 'carbon-fields/metaboxes', ( OriginalTextField ) => withStore( ( props ) => {
 	return (
 		<OriginalTextField { ...props }>
-			{ ( { handleChange } ) => (
+			{ ( {
+				field,
+				value,
+				handleChange
+			} ) => (
 				<TextField
-					field={ props.field }
-					value={ props.value }
+					field={ field }
+					value={ value }
 					onChange={ handleChange }
 				/>
 			) }

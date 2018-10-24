@@ -1,39 +1,52 @@
 /**
  * External dependencies.
  */
+import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { TextControl } from '@wordpress/components';
 
-/**
- * Renders the field.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {string}   props.value
- * @param  {Function} props.onChange
- * @return {Object}
- */
-const TextField = ( {
-	field,
-	value,
-	onChange
-} ) => {
-	return (
-		<TextControl
-			label={ field.label }
-			value={ value }
-			onChange={ ( value ) => onChange( field.base_name, value ) } // eslint-disable-line no-shadow
-		/>
-	);
-};
+class TextField extends Component {
+	/**
+	 * Handles the change of the input.
+	 *
+	 * @param  {string} value
+	 * @return {void}
+	 */
+	handleChange = ( value ) => {
+		const { field, onChange } = this.props;
 
-addFilter( 'carbon-fields.text-field.block', 'carbon-fields/blocks', ( OriginalTextField ) => ( originalProps ) => {
+		onChange( field.base_name, value );
+	}
+
+	/**
+	 * Renders the component.
+	 *
+	 * @return {Object}
+	 */
+	render() {
+		const { field, value } = this.props;
+
+		return (
+			<TextControl
+				label={ field.label }
+				value={ value }
+				onChange={ this.handleChange }
+			/>
+		);
+	}
+}
+
+addFilter( 'carbon-fields.text-field.block', 'carbon-fields/blocks', ( OriginalTextField ) => ( props ) => {
 	return (
-		<OriginalTextField { ...originalProps }>
-			{ ( { handleChange } ) => (
+		<OriginalTextField { ...props }>
+			{ ( {
+				field,
+				value,
+				handleChange
+			} ) => (
 				<TextField
-					field={ originalProps.field }
-					value={ originalProps.value }
+					field={ field }
+					value={ value }
 					onChange={ handleChange }
 				/>
 			) }
