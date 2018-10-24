@@ -1,20 +1,23 @@
+/* Remove when https://github.com/babel/babel-eslint/issues/530 is fixed */
+/* eslint template-curly-spacing: 'off' */
+/* eslint indent: 'off' */
+
 /**
- * The external dependencies.
+ * External dependencies.
  */
 import cx from 'classnames';
 
 /**
- * The base component used to render the fields.
- * Extending of this component is done via composition.
+ * Renders the base wrapper of the field.
  *
- * @abstract
- * @param  { Object }  props
- * @param  { Object }  props.field
- * @param  { Element } props.children
- * @return { React.Element }
+ * @param  {Object} props
+ * @param  {Object} props.field
+ * @param  {mixed}  props.children
+ * @return {Object}
  */
-export const Base = ( { field, children } ) => {
+export const FieldBase = ( { field, children } ) => {
 	const styles = !! field.width ? { flexBasis: `${ field.width }%` } : null;
+
 	const classes = [
 		'carbon-field',
 		`carbon-${ field.type }`,
@@ -43,4 +46,4 @@ export const Base = ( { field, children } ) => {
 	</div>;
 };
 
-export default Base;
+export default FieldBase;
