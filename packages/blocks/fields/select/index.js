@@ -5,7 +5,7 @@ import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { SelectControl } from '@wordpress/components';
 
-class SelectField extends Component {
+export class SelectField extends Component {
 	/**
 	 * Handles the change of the select.
 	 *
