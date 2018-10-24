@@ -14,13 +14,15 @@ import {
 import flattenField from '../utils/flatten-field';
 import reducer from './reducer';
 import * as actions from './actions';
+import * as selectors from './selectors';
 
 /**
  * Register the store.
  */
 registerStore( 'carbon-fields/core', {
 	reducer,
-	actions
+	actions,
+	selectors
 } );
 
 /**

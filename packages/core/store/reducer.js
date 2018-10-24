@@ -35,9 +35,9 @@ export function fields( state = {}, action ) {
 
 		case 'UPDATE_FIELD_VALUE':
 			return produce( state, ( draft ) => {
-				const { fieldKey, value } = action.payload;
+				const { fieldId, value } = action.payload;
 
-				draft[ fieldKey ].value = value;
+				draft[ fieldId ].value = value;
 			} );
 
 		default:

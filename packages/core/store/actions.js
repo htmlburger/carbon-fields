@@ -18,15 +18,15 @@ export function setupState( containers, fields ) {
 /**
  * Returns an action object used to update the field's value.
  *
- * @param  {string} fieldKey
+ * @param  {string} fieldId
  * @param  {mixed}  value
  * @return {Object}
  */
-export function updateFieldValue( fieldKey, value ) {
+export function updateFieldValue( fieldId, value ) {
 	return {
 		type: 'UPDATE_FIELD_VALUE',
 		payload: {
-			fieldKey,
+			fieldId,
 			value
 		}
 	};

@@ -3,7 +3,6 @@
  */
 import classnames from 'classnames';
 import { getFieldType } from '@carbon-fields/core';
-import { get } from 'lodash';
 
 /**
  * Renders the base wrapper of the container.
@@ -32,15 +31,8 @@ const ContainerBase = ( { container, children } ) => {
 					return null;
 				}
 
-				const value = get( field, 'value', null );
-
 				return (
-					<Field
-						key={ field.id }
-						field={ field }
-						value={ value }
-						onChange={ ( ) => alert('TODO') } // eslint-disable-line
-					/>
+					<Field key={ field.id } id={ field.id } />
 				);
 			} ) }
 		</div>
