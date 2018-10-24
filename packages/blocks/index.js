@@ -4,22 +4,17 @@
  * External dependencies.
  */
 import { get, kebabCase } from 'lodash';
-import { registerStore, dispatch } from '@wordpress/data';
+import { dispatch } from '@wordpress/data';
 import { registerBlockType } from '@wordpress/blocks';
 
 /**
  * Internal dependencies.
  */
 import './fields';
-import store from './store';
+import './store';
 import BlockEdit from './components/block-edit';
 import BlockSave from './components/block-save';
 import transformFieldsToAttributes from './utils/transform-fields-to-attributes';
-
-/**
- * Register the store.
- */
-registerStore( 'carbon-fields', store );
 
 /**
  * Register the blocks.
@@ -54,4 +49,4 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 /**
  * Load the definitions in store.
  */
-dispatch( 'carbon-fields' ).setupFieldDefinitions( definitions );
+dispatch( 'carbon-fields/blocks' ).setupFieldDefinitions( definitions );
