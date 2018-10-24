@@ -20,20 +20,19 @@ class Complex extends Component {
 	 * @return {void}
 	 */
 	handleChange = ( fieldKey, value ) => {
-		this.props.onChange( {
-			[ fieldKey ]: value
-		} );
+		this.props.onChange( fieldKey, value );
 	}
 
 	/**
 	 * Handles the change of the child input.
 	 *
+	 * @param  {string} fieldKey   Тhe field identifier used for the data update
 	 * @param  {string} childIndex The index of the group of values in the main value array.
 	 * @param  {string} value      The { fieldKey: value } pair of the input
 	 * @return {void}
 	 */
-	handleChildChange = ( childIndex, value ) => this.handleChange(
-		this.props.field.base_name,
+	handleChildChange = ( fieldKey, childIndex, value ) => this.props.onChange(
+		fieldKey,
 		produce( this.props.value, ( draft ) => {
 			const child = get( draft, childIndex, null );
 
@@ -63,15 +62,16 @@ class Complex extends Component {
 	/**
 	 * Handles the click of the click of the add buttons.
 	 *
+	 * @param  {string} fieldKey  Тhe field identifier used for the data update
 	 * @param  {string} groupName The id of the fields group which should be added
 	 * @return {void}
 	 */
-	handleAdd = ( groupName ) => {
-		const { field, value } = this.props;
+	handleAdd = ( fieldKey, groupName ) => {
+		const { value } = this.props;
 
 		const group = this.getGroupByName( groupName );
 
-		this.handleChange( field.base_name, produce( value, ( draft ) => {
+		this.props.onChange( fieldKey, produce( value, ( draft ) => {
 			draft.push( {
 				// Keep '_type' for backwards compatibility - legacy code might depend on it
 				_type: groupName,
@@ -126,7 +126,7 @@ class Complex extends Component {
 	render() {
 		return this.props.children( {
 			depth: this.props.depth,
-			handleChange: this.handleChange,
+			handleChange: this.onChange,
 			handleChildChange: this.handleChildChange,
 			hasGroups: this.hasGroups,
 			getAddLabel: this.getAddLabel,
