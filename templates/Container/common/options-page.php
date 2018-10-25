@@ -1,4 +1,5 @@
 <?php
+$container_id = $this->get_id();
 if ( ! isset( $container_css_class ) ) {
 	$container_css_class = 'generic-container';
 }
@@ -24,12 +25,20 @@ if ( ! isset( $container_css_class ) ) {
 		<div id="poststuff">
 			<div id="post-body" class="metabox-holder columns-2">
 				<div id="post-body-content">
+
+					<?php do_action( "{$container_id}_before_fields" ); ?>
+
 					<div class="postbox carbon-box" id="<?php echo $this->get_id(); ?>">
 						<fieldset class="inside container-holder carbon-grid <?php echo $container_css_class; ?>-container container-<?php echo $this->get_id(); ?> <?php echo $this->is_tabbed() ? '' : 'carbon-fields-collection' ?>"></fieldset>
 					</div>
+
+					<?php do_action( "{$container_id}_after_fields" ); ?>
 				</div>
 
 				<div id="postbox-container-1" class="postbox-container">
+
+					<?php do_action( "{$container_id}_before_sidebar" ); ?>
+
 					<div id="submitdiv" class="postbox">
 						<h3><?php _e( 'Actions', 'carbon-fields' ); ?></h3>
 
@@ -49,6 +58,9 @@ if ( ! isset( $container_css_class ) ) {
 							<div class="clear"></div>
 						</div>
 					</div>
+
+					<?php do_action( "{$container_id}_after_sidebar" ); ?>
+
 				</div>
 			</div>
 		</div>
