@@ -49,7 +49,8 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 				getAddLabel,
 				handleAdd,
 				getGroupFields,
-				getGroupLabel
+				getGroupLabel,
+				handleSorting
 			} ) => {
 				const sanitizedValue = value.map( ( entry, index ) => ( {
 					name: `${ entry._type }-${ index }`,
@@ -69,7 +70,7 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 						getLabel={ getGroupLabel }
 						onClick={ curryWithFieldKey( handleAdd ) }
 					/>
-				);
+			);
 
 				const fieldsComponent = (
 					<Fields
@@ -78,6 +79,7 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 						depth={ depth }
 						button={ buttonComponent }
 						onChange={ curryWithFieldKey( handleChildChange ) }
+						onSort={ curryWithFieldKey( handleSorting ) }
 					/>
 				);
 

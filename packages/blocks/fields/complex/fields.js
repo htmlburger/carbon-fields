@@ -14,14 +14,34 @@ import {
 } from '@wordpress/components';
 import {
 	DragDropContext,
-	Draggable,
-	Droppable
-} from 'react-beautiful-dnd';
+	DropTarget,
+	DragSource
+} from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
 
 /**
  * The internal dependencies.
  */
 import renderFields from '../../utils/render-fields';
+
+const cardSource = {
+	beginDrag( props ) {
+		return props;
+	}
+};
+
+function collect( connect, monitor ) {
+	return {
+		connectDragSource: connect.dragSource(),
+		isDragging: monitor.isDragging()
+	};
+}
+
+function dropCollect( connect ) {
+	return {
+		connectDropTarget: connect.dropTarget()
+	};
+}
 
 class Fields extends Component {
 	constructor() {
@@ -38,13 +58,6 @@ class Fields extends Component {
 	 * @return {void}
 	 */
 	handleSelect = ( index ) => this.setState( { selectedIndex: index } )
-
-	/**
-	 * Handles the drop event of the drag-and-drop context
-	 * @param  {number} index
-	 * @return {void}
-	 */
-	handleDragEnd = () => {}
 
 	/**
 	 * Handles the drop event of the drag-and-drop context
@@ -74,47 +87,44 @@ class Fields extends Component {
 			button
 		} = this.props;
 
+		const DropContainer = DropTarget( 'navigation', {}, dropCollect )( ( { connectDropTarget, children } ) => (
+			connectDropTarget(
+				<div>
+					{ children }
+				</div>
+			)
+		) );
+
+		const DragButton = DragSource( 'button', cardSource, collect )( ( { connectDragSource, children } ) => (
+			connectDragSource(
+				<span>
+					{ children }
+				</span>
+			)
+		) );
+
 		// TODO Split into navigation + body
 		return (
 			<Panel>
-				<NavigableMenu>
-					<DragDropContext
-						onDragEnd={ this.handleDragEnd }
-					>
-						<Droppable droppableId={ `droppable-${ elementId }` } direction="horizontal">
-							{ ( droppableProvided ) => (
-								<div
-									ref={ droppableProvided.innerRef }
-									{ ...droppableProvided.droppableProps }
+				<DropContainer>
+					<NavigableMenu>
+						{ value.map( ( navButton, index ) => (
+							<DragButton
+								key={ `${ elementId }-button-${ index }` }
+							>
+								<Button
+									isPrimary={ selectedIndex === index }
+									isDefault={ selectedIndex !== index }
+									onClick={ () => this.handleSelect( index ) }
 								>
-									{ value.map( ( navButton, index ) => (
-										<Draggable
-											key={ `${ elementId }-button-${ index }` }
-											draggableId={ `${ elementId }-button-${ index }` }
-											index={ index }
-											>
-											{ ( draggableProvided ) => (
-												<Button
-													ref={ draggableProvided.innerRef }
-													href="#" // Make the element 'a' tag - works for draggable
-													isPrimary={ selectedIndex === index }
-													isDefault={ selectedIndex !== index }
-													onClick={ () => this.handleSelect( index ) }
-													{ ...draggableProvided.draggableProps }
-													{ ...draggableProvided.dragHandleProps }
-												>
-													{ navButton.title }
-												</Button>
-											) }
-										</Draggable>
-									) ) }
-								</div>
-							) }
-						</Droppable>
-					</DragDropContext>
+									{ navButton.title }
+								</Button>
+							</DragButton>
+						) ) }
 
-					{ button }
-				</NavigableMenu>
+						{ button }
+					</NavigableMenu>
+				</DropContainer>
 
 				<PanelBody>
 					{ renderFields(
@@ -129,4 +139,4 @@ class Fields extends Component {
 	}
 }
 
-export default Fields;
+export default DragDropContext( HTML5Backend )( Fields );
