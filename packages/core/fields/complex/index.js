@@ -13,25 +13,20 @@ import produce from 'immer';
 
 class Complex extends Component {
 	/**
-	 * Handles the change of the input.
-	 *
-	 * @param  {string} fieldKey The name(Gutenberg) or the identifier(Classic Editor) of field.
-	 * @param  {string} value
-	 * @return {void}
-	 */
-	handleChange = ( fieldKey, value ) => {
-		this.props.onChange( fieldKey, value );
-	}
-
-	/**
 	 * Handles the change of the child input.
 	 *
-	 * @param  {string} fieldKey   Тhe field identifier used for the data update
-	 * @param  {string} childIndex The index of the group of values in the main value array.
-	 * @param  {string} value      The { fieldKey: value } pair of the input
+	 * @param  {string}        fieldKey      Тhe field identifier used for the data update
+	 * @param  {string}        childIndex    The index of the group of values in the main value array.
+	 * @param  {string}        childFieldKey The field key of the child field being updated
+	 * @param  {Object|string} childValue    The value of the child field being updated
 	 * @return {void}
 	 */
-	handleChildChange = ( fieldKey, childIndex, value ) => this.props.onChange(
+	handleChildChange = (
+		fieldKey,
+		childIndex,
+		childFieldKey,
+		childValue
+	) => this.props.onChange(
 		fieldKey,
 		produce( this.props.value, ( draft ) => {
 			const child = get( draft, childIndex, null );
@@ -40,7 +35,7 @@ class Complex extends Component {
 				return;
 			}
 
-			assign( child, value );
+			assign( child, { [ childFieldKey ]: childValue } );
 		} )
 	)
 
@@ -119,12 +114,26 @@ class Complex extends Component {
 	getGroupByName = ( name ) => find( this.props.field.groups, ( group ) => group.name === name )
 
 	/**
+	 * Handles the drop event of the drag-and-drop context
+	 * @param  {string}        fieldKey
+	 * @param  {string|number} dropIndex
+	 * @param  {string|number} startIndex
+	 * @return {void}
+	 */
+	handleSorting = ( fieldKey, dropIndex, startIndex ) => {
+		// TODO
+		return { fieldKey, dropIndex, startIndex };
+	}
+
+	/**
 	 * Render the component.
 	 *
 	 * @return {Object}
 	 */
 	render() {
 		return this.props.children( {
+			field: this.props.field,
+			value: this.props.value,
 			depth: this.props.depth,
 			handleChange: this.onChange,
 			handleChildChange: this.handleChildChange,
@@ -132,7 +141,8 @@ class Complex extends Component {
 			getAddLabel: this.getAddLabel,
 			handleAdd: this.handleAdd,
 			getGroupFields: this.getGroupFields,
-			getGroupLabel: this.getGroupLabel
+			getGroupLabel: this.getGroupLabel,
+			handleSorting: this.handleSorting
 		} );
 	}
 }

@@ -12,36 +12,13 @@ import {
 	Panel,
 	PanelBody
 } from '@wordpress/components';
-import {
-	DragDropContext,
-	DropTarget,
-	DragSource
-} from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
 
 /**
  * The internal dependencies.
  */
-import renderFields from '../../utils/render-fields';
-
-const cardSource = {
-	beginDrag( props ) {
-		return props;
-	}
-};
-
-function collect( connect, monitor ) {
-	return {
-		connectDragSource: connect.dragSource(),
-		isDragging: monitor.isDragging()
-	};
-}
-
-function dropCollect( connect ) {
-	return {
-		connectDropTarget: connect.dropTarget()
-	};
-}
+import renderFields from '../../../utils/render-fields';
+import Drop from './dnd-drop';
+import Drag from './dnd-drag';
 
 class Fields extends Component {
 	constructor() {
@@ -84,33 +61,20 @@ class Fields extends Component {
 			elementId,
 			value,
 			depth,
-			button
+			button,
+			onSort
 		} = this.props;
-
-		const DropContainer = DropTarget( 'navigation', {}, dropCollect )( ( { connectDropTarget, children } ) => (
-			connectDropTarget(
-				<div>
-					{ children }
-				</div>
-			)
-		) );
-
-		const DragButton = DragSource( 'button', cardSource, collect )( ( { connectDragSource, children } ) => (
-			connectDragSource(
-				<span>
-					{ children }
-				</span>
-			)
-		) );
 
 		// TODO Split into navigation + body
 		return (
 			<Panel>
-				<DropContainer>
+				<Drop>
 					<NavigableMenu>
 						{ value.map( ( navButton, index ) => (
-							<DragButton
+							<Drag
+								id={ index }
 								key={ `${ elementId }-button-${ index }` }
+								move={ onSort }
 							>
 								<Button
 									isPrimary={ selectedIndex === index }
@@ -119,12 +83,12 @@ class Fields extends Component {
 								>
 									{ navButton.title }
 								</Button>
-							</DragButton>
+							</Drag>
 						) ) }
 
 						{ button }
 					</NavigableMenu>
-				</DropContainer>
+				</Drop>
 
 				<PanelBody>
 					{ renderFields(
@@ -139,4 +103,4 @@ class Fields extends Component {
 	}
 }
 
-export default DragDropContext( HTML5Backend )( Fields );
+export default Fields;
