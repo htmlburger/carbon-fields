@@ -80,24 +80,7 @@ class Association_Field extends Field {
 		$this->wp_toolset = \Carbon_Fields\Carbon_Fields::resolve( 'wp_toolset' );
 		$this->set_value_set( new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'type' => '', 'subtype' => '', 'id' => 0 ) ) );
 
-		add_action( 'wp_ajax_carbon_fields_fetch_association_results', array( get_class(), 'handle_ajax_call' ) );
-
 		parent::__construct( $type, $name, $label );
-	}
-
-	/**
-	 * @todo
-	 */
-	public static function handle_ajax_call() {
-		$page = isset( $_GET['page'] ) ? absint( $_GET['page'] )              : 1;
-		$term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';
-
-		$field = \Carbon_Fields\Helper\Helper::get_field( null, $_GET['container_id'], $_GET['field_name'] );
-
-		return wp_send_json_success( $field->get_options( array(
-			'page' => $page,
-			'term' => $term,
-		) ) );
 	}
 
 	/**
@@ -237,7 +220,7 @@ class Association_Field extends Field {
 		$per_page = $this->get_items_per_page();
 		$offset   = ($args['page'] - 1) * $per_page;
 
-		$sql_queries .= " ORDER BY `title` LIMIT {$per_page} OFFSET {$offset}";
+		$sql_queries .= " ORDER BY `title` ASC LIMIT {$per_page} OFFSET {$offset}";
 
 		$results = $wpdb->get_results( $sql_queries );
 

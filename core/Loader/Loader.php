@@ -48,6 +48,7 @@ class Loader {
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data_script' ), 9 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'print_bootstrap_js' ), 100 );
 		add_action( 'edit_form_after_title', array( $this, 'add_carbon_fields_meta_box_contexts' ) );
+		add_action( 'wp_ajax_carbon_fields_fetch_association_options', array( $this, 'fetch_association_options' ) );
 
 		# Enable the legacy storage service
 		\Carbon_Fields\Carbon_Fields::service( 'legacy_storage' )->enable();
@@ -258,5 +259,27 @@ var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
 			}
 		</script>
 		<?php
+	}
+
+	/**
+	 * Handle association field options fetch.
+	 *
+	 * @access public
+	 *
+	 * @return array
+	 */
+	public function fetch_association_options() {
+		$page = isset( $_GET['page'] ) ? absint( $_GET['page'] )              : 1;
+		$term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';
+
+		$container_id = $_GET['container_id'];
+		$field_name   = $_GET['field_name'];
+
+		$field = Helper::get_field( null, $container_id, $field_name );
+
+		return wp_send_json_success( $field->get_options( array(
+			'page' => $page,
+			'term' => $term,
+		) ) );
 	}
 }

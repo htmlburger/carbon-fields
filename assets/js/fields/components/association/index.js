@@ -32,7 +32,8 @@ import SortableList from 'fields/components/sortable-list';
 import AssociationList from 'fields/components/association/list';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { requestAssociationEntries } from 'fields/actions';
+import { getFieldHierarchyById } from 'fields/selectors';
+import { requestAssociationItems } from 'fields/actions';
 import { TYPE_ASSOCIATION, VALIDATION_ASSOCIATION } from 'fields/constants';
 
 /**
@@ -95,7 +96,7 @@ export const AssociationField = ({
 					</div>
 
 					<AssociationList
-						items={items}
+						items={field.ui.items || []}
 						onItemClick={handleAddItem} />
 				</div>
 
@@ -124,6 +125,9 @@ AssociationField.propTypes = {
 	field: PropTypes.shape({
 		value: PropTypes.arrayOf(PropTypes.object),
 		max: PropTypes.number,
+		ui: PropTypes.shape({
+			items: PropTypes.arrayOf(PropTypes.object)
+		}),
 	}),
 	items: PropTypes.arrayOf(PropTypes.object),
 	term: PropTypes.string,
@@ -140,7 +144,9 @@ export const enhance = compose(
 	/**
 	 * Connect to the Redux store.
 	 */
-	withStore(),
+	withStore(undefined, {
+		requestAssociationItems
+	}),
 
 	/**
 	 * Track current search term.
@@ -160,7 +166,8 @@ export const enhance = compose(
 	/**
 	 * Set field items.
 	 */
-	withState('items', 'setItems', []),
+	// withState('items', 'setItems', []),
+
 	withHandlers({
 		appendItems: ({ items, setItems }) => newItems => {
 			setItems([ ...items, ...newItems ]);
@@ -172,64 +179,40 @@ export const enhance = compose(
 	}),
 
 	withHandlers({
-		fetchItems: ({
-			field,
-			term,
-			page,
-			setIsLoading,
-			appendItems,
-		}) => () => {
-			let args = {
-				term: term,
-				page: page,
-				field_name: field.base_name,
-				container_id: field.container_id,
-			};
-
-			setIsLoading(true);
-
-			return $.get(window.ajaxurl, {
-				action: 'carbon_fields_fetch_association_results',
-				...args
-			}, null, 'json')
-				.then((response) => {
-					setIsLoading(false);
-					return response;
-				});
-		},
-
-		onReceiveItems: ({ setItems, clearItems }) => ({ success, data }) => {
-			clearItems();
-			setItems(data);
-		},
-
-		onReceiveNextPageItems: ({ appendItems }) => ({ success, data }) => {
-			appendItems(data);
-		},
-	}),
-
-	withHandlers({
 		onSearchTermChange: ({
-			setPage,
-			setTerm,
-			fetchItems,
-			onReceiveItems,
+			field,
+			setUI,
+			requestAssociationItems,
 		}) => debounce(term => {
-			setPage(1);
-			setTerm(term);
+			setUI(field.id, {
+				term: term,
+				page: 1,
+			});
 
-			fetchItems().then(response => onReceiveItems(response));
+			requestAssociationItems(field, {
+				term: term,
+				page: 1,
+			});
 		}, 200),
 
-		onListScroll: ({ page, setPage, fetchItems, onReceiveNextPageItems }) => event => {
+		onListScroll: ({
+			field,
+			ui,
+			setUI,
+			requestAssociationItems
+		}) => event => {
 			const $sourceList = $(event.target);
 
 			if ($sourceList[0].scrollHeight - $sourceList.scrollTop() == $sourceList.outerHeight()) {
-				console.log(page);
-				setPage(page + 1);
+				setUI(field.id, {
+					page: field.ui.page + 1,
+				});
 
 				// fetch next page data
-				fetchItems().then(response => onReceiveNextPageItems(response));
+				requestAssociationItems(field, {
+					term: field.ui.term,
+					page: field.ui.page + 1,
+				});
 			}
 		}
 	}),
@@ -242,20 +225,16 @@ export const enhance = compose(
 			const {
 				field,
 				ui,
-				page,
 				setupField,
 				setupValidation,
-				setItems,
-				fetchItems,
-				appendItems,
-				onReceiveItems,
-				onReceiveNextPageItems,
-				setPage,
-				onListScroll
+				onListScroll,
+				requestAssociationItems
 			} = this.props;
 
-			// fetch initial data
-			fetchItems().then(response => onReceiveItems(response));
+			requestAssociationItems(field, {
+				term: '',
+				page: 1,
+			});
 
 			const $sourceList = $(ReactDOM.findDOMNode(this)).find('.carbon-association-left .carbon-association-list');
 
@@ -264,6 +243,10 @@ export const enhance = compose(
 			setupField(field.id, field.type, ui);
 			setupValidation(field.id, VALIDATION_ASSOCIATION);
 		},
+	}, {
+		items: [],
+		term: '',
+		page: 1,
 	}),
 
 	/**

@@ -1,80 +1,69 @@
 /**
  * The external dependencies.
  */
-// import $ from 'jquery';
-// import { all, call, put, take, takeEvery, fork } from 'redux-saga/effects';
+import $ from 'jquery';
+import { all, call, put, select, takeEvery } from 'redux-saga/effects';
 
-// /**
-//  * The internal dependencies.
-//  */
-// import { createScrollChannel } from 'lib/events';
-// import { fetchAssociationEntries } from 'fields/helpers';
-// import { requestAssociationEntries } from 'fields/actions';
+/**
+ * The internal dependencies.
+ */
+import {
+	requestAssociationItems,
+	setAssociationItems
+} from 'fields/actions';
+import {
+	getFieldHierarchyById
+} from 'fields/selectors';
 
-// import { receiveContainer } from 'containers/actions';
 
-// export function* workerRequestAssociationEntries({ payload, type }) {
-// 	const { options } = payload;
+/**
+ * Get the items for the source list in association fields.
+ * 
+ * @param  {Options} args
+ * @return {Promise<Object, String>}
+ */
+const fetchAssociationItems = (args) => {
+	return new Promise((resolve, reject) => {
+		$.get(window.ajaxurl, args, null, 'json')
+		 .done((response) => {
+		 	resolve(response)
+		 })
+		 .fail(() => {
+		 	reject('An error occured');
+		 });
+	});
+};
 
-// 	const channel = yield call(fetchAssociationEntries, options);
-// 		console.log( channel );
+/**
+ * @TODO -- docs
+ * @param {[type]} options.payload [description]
+ * @yield {[type]} [description]
+ */
+export function* workerRequestAssociationItems({ payload }) {
+	const { field, options, method = 'set' } = payload;
 
-// 	while (true) {
-// 		const result = yield take(channel);
-// 		console.log( result );
-// 		// const $containers = $(data).find('[data-json]');
+	const fieldHierarchyName = yield select(getFieldHierarchyById, field.id);
 
-// 		// // Close the channel since we don't have any
-// 		// // registered containers.
-// 		// if ($containers.length < 1) {
-// 		// 	channel.close();
-// 		// 	break;
-// 		// }
+	const args = {
+		action: 'carbon_fields_fetch_association_options',
+		...options,
+		field_name: fieldHierarchyName,
+		container_id: field.container_id,
+	};
 
-// 		// for (let i = 0; i < $containers.length; i++) {
-// 		// 	let $container = $($containers[i]);
-// 		// 	yield put(receiveContainer($container.data('json'), false));
-// 		// }
-// 	}
-// }
+	const { data } = yield call(fetchAssociationItems, args);
 
-// export function* workerScrollAssociationList(element) {
-// 	console.log(element);
+	yield put(setAssociationItems(field.id, data, method));
+}
 
-// 	const channel = yield call(createScrollChannel, element);
-// 	// const $container = $('.carbon-box:first');
-// 	// const $panel = $('#postbox-container-1');
-// 	// const $bar = $('#wpadminbar');
 
-// 	while (true) {
-// 		const { value } = yield take(channel);
-// 		console.log( value );
-// 		// const offset = $bar.height() + 10;
-// 		// const threshold = $container.offset().top - offset;
-
-// 		// // In some situations the threshold is negative number because
-// 		// // the container element isn't rendered yet.
-// 		// if (threshold > 0) {
-// 		// 	$panel
-// 		// 		.toggleClass('fixed', value >= threshold)
-// 		// 		.css('top', offset);
-// 		// }
-// 	}
-// }
-
-// /**
-//  * Start to work.
-//  *
-//  * @return {void}
-//  */
+/**
+ * Start to work.
+ *
+ * @return {void}
+ */
 export default function* foreman() {
-// 	console.log(a);
-// 	console.log(b);
-// 	console.log(c);
-
-// 	yield all([
-// 		// takeEvery(requestAssociationEntries, workerRequestAssociationEntries),
-// 	]);
-
-// 	yield fork(workerScrollAssociationList);
+	yield all([
+		takeEvery(requestAssociationItems, workerRequestAssociationItems),
+	]);
 }

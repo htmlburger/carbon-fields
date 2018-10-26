@@ -214,13 +214,22 @@ export const addMultipleFiles = createAction('fields/ADD_MULTIPLE_FILES', (field
 export const geocodeAddress = createAction('fields/GEOCODE_ADDRESS', (fieldId, address) => ({ fieldId, address }));
 
 /**
- * Request the entries to be displayed in the association field.
+ * Request the items to be displayed in the association field.
  *
  * @param  {String} fieldId
  * @param  {Object} options
  * @return {Object} 
  */
-export const requestAssociationEntries = createAction('fields/REQUEST_ASSOCIATION_ENTRIES', (fieldId, options) => ({ fieldId, options }));
+export const requestAssociationItems = createAction('fields/REQUEST_ASSOCIATION_ITEMS', (field, options) => ({ field, options }));
+
+/**
+ * Set the items to be displayed in the association field.
+ *
+ * @param  {String} fieldId
+ * @param  {Object} options
+ * @return {Object} 
+ */
+export const setAssociationItems = createAction('fields/SET_ASSOCIATION_ITEMS', (fieldId, items) => ({ fieldId, items }));
 
 /**
  * Update the validation status of the field.
