@@ -10,17 +10,16 @@ import { addFilter } from '@wordpress/hooks';
 import FieldBase from '../../components/field-base';
 import withStore from '../../components/with-store';
 
-class TextField extends Component {
+class CheckboxField extends Component {
 	/**
 	 * Handles the change of the input.
 	 *
-	 * @param  {Object} e
 	 * @return {void}
 	 */
-	handleChange = ( e ) => {
+	handleChange = () => {
 		const { field, onChange } = this.props;
 
-		onChange( field.id, e.target.value );
+		onChange( field.id, ! field.value );
 	}
 
 	/**
@@ -33,29 +32,34 @@ class TextField extends Component {
 
 		return (
 			<FieldBase field={ field } >
-				<input
-					type="text"
-					className="regular-text"
-					id={ field.id }
-					name={ field.base_name }
-					value={ field.value }
-					onChange={ this.handleChange }
-					{ ...field.attributes }
-				/>
+				<label>
+					<input
+						type="checkbox"
+						id={ field.id }
+						name={ field.base_name }
+						checked={ field.value }
+						onChange={ this.handleChange }
+						{ ...field.attributes }
+					/>
+
+					{ field.option_label }
+
+					{ field.required && <span className="carbon-required">*</span> }
+				</label>
 			</FieldBase>
 		);
 	}
 }
 
-addFilter( 'carbon-fields.text-field.metabox', 'carbon-fields/metaboxes', ( OriginalTextField ) => withStore( ( props ) => {
+addFilter( 'carbon-fields.checkbox-field.metabox', 'carbon-fields/metaboxes', ( OriginalCheckboxField ) => withStore( ( props ) => {
 	return (
-		<OriginalTextField { ...props }>
+		<OriginalCheckboxField { ...props }>
 			{ ( { field, handleChange } ) => (
-				<TextField
+				<CheckboxField
 					field={ field }
 					onChange={ handleChange }
 				/>
 			) }
-		</OriginalTextField>
+		</OriginalCheckboxField>
 	);
 } ) );
