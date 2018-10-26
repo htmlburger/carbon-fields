@@ -9,6 +9,7 @@
     "@wordpress/hooks": "^2.0.2",
     "classnames": "^2.2.6",
     "immer": "^1.7.2",
-    "lodash": "^4.17.11"
+    "lodash": "^4.17.11",
+    "react-color": "^2.14.1"
   }
 }
