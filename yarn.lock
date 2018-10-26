@@ -5983,7 +5983,7 @@ react-click-outside@^2.3.1:
   dependencies:
     hoist-non-react-statics "^1.2.0"
 
-react-color@^2.13.4:
+react-color@^2.13.4, react-color@^2.14.1:
   version "2.14.1"
   resolved "https://registry.yarnpkg.com/react-color/-/react-color-2.14.1.tgz#db8ad4f45d81e74896fc2e1c99508927c6d084e0"
   integrity sha512-ssv2ArSZdhTbIs29hyfw8JW+s3G4BCx/ILkwCajWZzrcx/2ZQfRpsaLVt38LAPbxe50LLszlmGtRerA14JzzRw==
