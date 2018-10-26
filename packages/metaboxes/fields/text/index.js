@@ -29,7 +29,7 @@ class TextField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field, value } = this.props;
+		const { field } = this.props;
 
 		return (
 			<FieldBase field={ field } >
@@ -38,7 +38,7 @@ class TextField extends Component {
 					className="regular-text"
 					id={ field.id }
 					name={ field.base_name }
-					value={ value }
+					value={ field.value }
 					onChange={ this.handleChange }
 					{ ...field.attributes }
 				/>
