@@ -37,6 +37,7 @@ export class SelectField extends Component {
 					name={ field.base_name }
 					id={ field.id }
 					value={ field.value }
+					onChange={ this.handleChange }
 				>
 					{ field.options.map( ( { value, label } ) => (
 						<option key={ value } value={ value }>{ label }</option>
