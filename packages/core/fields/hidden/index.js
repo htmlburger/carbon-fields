@@ -10,7 +10,13 @@ class HiddenField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		return this.props.children();
+		if ( ! this.props.children ) {
+			return null;
+		}
+
+		return this.props.children( {
+			field: this.props.field
+		} );
 	}
 }
 
