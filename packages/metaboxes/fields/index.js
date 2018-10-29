@@ -10,3 +10,4 @@ import './radio';
 import './radio-image';
 import './select';
 import './text';
+import './textarea';
