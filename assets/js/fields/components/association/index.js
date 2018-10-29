@@ -17,7 +17,6 @@ import {
 	without,
 	isMatch,
 	sortBy,
-	includes,
 	debounce,
 	find
 } from 'lodash';
@@ -33,7 +32,7 @@ import AssociationList from 'fields/components/association/list';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
 import { getFieldHierarchyById } from 'fields/selectors';
-import { requestAssociationItems } from 'fields/actions';
+import { requestAssociationOptions } from 'fields/actions';
 import { TYPE_ASSOCIATION, VALIDATION_ASSOCIATION } from 'fields/constants';
 
 /**
@@ -57,9 +56,6 @@ import { TYPE_ASSOCIATION, VALIDATION_ASSOCIATION } from 'fields/constants';
 export const AssociationField = ({
 	name,
 	field,
-	items,
-	term,
-	isLoading,
 	sortableOptions,
 	onSearchTermChange,
 	handleAddItem,
@@ -77,6 +73,8 @@ export const AssociationField = ({
 		? vsprintf(counterLabels[0], counterLabelArgs)
 		: vsprintf(counterLabels[1], counterLabelArgs);
 
+	let isLoading = field.ui.isLoading || false;
+
 	return <Field field={field}>
 		<div className="carbon-association-container carbon-association">
 			<div className="selected-items-container">
@@ -86,7 +84,7 @@ export const AssociationField = ({
 			</div>
 
 			<SearchInput
-				term={term}
+				term={field.ui.term || ''}
 				onChange={onSearchTermChange} />
 
 			<div className="carbon-association-body">
@@ -96,7 +94,7 @@ export const AssociationField = ({
 					</div>
 
 					<AssociationList
-						items={field.ui.items || []}
+						items={field.options || []}
 						onItemClick={handleAddItem} />
 				</div>
 
@@ -126,11 +124,12 @@ AssociationField.propTypes = {
 		value: PropTypes.arrayOf(PropTypes.object),
 		max: PropTypes.number,
 		ui: PropTypes.shape({
-			items: PropTypes.arrayOf(PropTypes.object)
+			term: PropTypes.string,
+			page: PropTypes.integer,
+			isLoading: PropTypes.boolean,
 		}),
 	}),
-	items: PropTypes.arrayOf(PropTypes.object),
-	term: PropTypes.string,
+	options: PropTypes.arrayOf(PropTypes.object),
 	handleAddItem: PropTypes.func,
 	handleRemoveItem: PropTypes.func,
 };
@@ -145,51 +144,22 @@ export const enhance = compose(
 	 * Connect to the Redux store.
 	 */
 	withStore(undefined, {
-		requestAssociationItems
-	}),
-
-	/**
-	 * Track current search term.
-	 */
-	withState('term', 'setTerm', ''),
-
-	/**
-	 * Track loading items status.
-	 */
-	withState('isLoading', 'setIsLoading', false),
-
-	/**
-	 * Track current page.
-	 */
-	withState('page', 'setPage', 1),
-
-	/**
-	 * Set field items.
-	 */
-	// withState('items', 'setItems', []),
-
-	withHandlers({
-		appendItems: ({ items, setItems }) => newItems => {
-			setItems([ ...items, ...newItems ]);
-		},
-
-		clearItems: ({ setItems }) => () => {
-			setItems([]);
-		},
+		requestAssociationOptions
 	}),
 
 	withHandlers({
 		onSearchTermChange: ({
 			field,
 			setUI,
-			requestAssociationItems,
+			requestAssociationOptions,
 		}) => debounce(term => {
 			setUI(field.id, {
 				term: term,
 				page: 1,
+				isLoading: true,
 			});
 
-			requestAssociationItems(field, {
+			requestAssociationOptions(field, {
 				term: term,
 				page: 1,
 			});
@@ -197,22 +167,22 @@ export const enhance = compose(
 
 		onListScroll: ({
 			field,
-			ui,
 			setUI,
-			requestAssociationItems
+			requestAssociationOptions
 		}) => event => {
 			const $sourceList = $(event.target);
 
-			if ($sourceList[0].scrollHeight - $sourceList.scrollTop() == $sourceList.outerHeight()) {
+			if ($sourceList[0].scrollHeight - $sourceList.scrollTop() <= $sourceList.outerHeight()) {
 				setUI(field.id, {
 					page: field.ui.page + 1,
+					isLoading: true,
 				});
 
 				// fetch next page data
-				requestAssociationItems(field, {
+				requestAssociationOptions(field, {
 					term: field.ui.term,
 					page: field.ui.page + 1,
-				});
+				}, true);
 			}
 		}
 	}),
@@ -224,14 +194,19 @@ export const enhance = compose(
 		componentDidMount() {
 			const {
 				field,
-				ui,
 				setupField,
 				setupValidation,
 				onListScroll,
-				requestAssociationItems
+				requestAssociationOptions
 			} = this.props;
 
-			requestAssociationItems(field, {
+			let { ui } = this.props;
+
+			ui = { ...ui, ...{
+				isLoading: true
+			} };
+
+			requestAssociationOptions(field, {
 				term: '',
 				page: 1,
 			});
@@ -244,7 +219,6 @@ export const enhance = compose(
 			setupValidation(field.id, VALIDATION_ASSOCIATION);
 		},
 	}, {
-		items: [],
 		term: '',
 		page: 1,
 	}),
@@ -252,22 +226,18 @@ export const enhance = compose(
 	/**
 	 * Pass some props to the component.
 	 */
-	withProps(({ field, term }) => {
-		let items = field.options;
-
-		if (term) {
-			items = items.filter(({ title }) => includes(title.toLowerCase(), term.toLowerCase()));
-		}
+	withProps(({ field }) => {
+		let options = field.options;
 
 		if (!field.duplicates_allowed) {
-			items = items.map(item => {
-				item.disabled = !!find(field.value, selectedItem => isMatch(selectedItem, {
-					id: item.id,
-					type: item.type,
-					subtype: item.subtype,
+			options = options.map(option => {
+				option.disabled = !!find(field.value, selectedOption => isMatch(selectedOption, {
+					id: option.id,
+					type: option.type,
+					subtype: option.subtype,
 				}));
 
-				return item;
+				return option;
 			});
 		}
 
@@ -281,7 +251,7 @@ export const enhance = compose(
 		};
 
 		return {
-			// items,
+			options,
 			sortableOptions,
 		};
 	}),

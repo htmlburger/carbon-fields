@@ -25,7 +25,8 @@ import {
 	expandComplexGroup,
 	collapseComplexGroup,
 	switchComplexTab,
-	setAssociationItems,
+	setAssociationOptions,
+	appendAssociationOptions,
 } from 'fields/actions';
 import { getFieldHierarchyById } from 'fields/selectors';
 
@@ -75,5 +76,7 @@ export default decorateFieldReducer(handleActions({
 
 	[switchComplexTab]: (state, { payload: { fieldId, groupId } }) => immutable.set(state, `${fieldId}.ui.current_tab`, groupId),
 
-	[setAssociationItems]: (state, { payload: { fieldId, items } }) => immutable.set(state, `${fieldId}.ui.items`, items),
+	[setAssociationOptions]: (state, { payload: { fieldId, options } }) => immutable.set(state, `${fieldId}.options`, options),
+
+	[appendAssociationOptions]: (state, { payload: { fieldId, options } }) => immutable.set(state, `${fieldId}.options`, [ ...state[`${fieldId}`].options, ...options ]),
 }, {}));

@@ -8,21 +8,26 @@ import { all, call, put, select, takeEvery } from 'redux-saga/effects';
  * The internal dependencies.
  */
 import {
-	requestAssociationItems,
-	setAssociationItems
+	setUI,
+	requestAssociationOptions,
+	setAssociationOptions,
+	appendAssociationOptions,
 } from 'fields/actions';
 import {
 	getFieldHierarchyById
 } from 'fields/selectors';
 
 
+const FETCH_ASSOCIATION_OPTIONS_AJAX_ACTION = 'carbon_fields_fetch_association_options';
+
+
 /**
- * Get the items for the source list in association fields.
+ * Get the options for the source list in association fields.
  * 
  * @param  {Options} args
  * @return {Promise<Object, String>}
  */
-const fetchAssociationItems = (args) => {
+const fetchAssociationOptions = (args) => {
 	return new Promise((resolve, reject) => {
 		$.get(window.ajaxurl, args, null, 'json')
 		 .done((response) => {
@@ -35,25 +40,33 @@ const fetchAssociationItems = (args) => {
 };
 
 /**
- * @TODO -- docs
- * @param {[type]} options.payload [description]
- * @yield {[type]} [description]
+ * Handle the request to fetch association options.
+ * 
+ * @param {Object} options.payload
  */
-export function* workerRequestAssociationItems({ payload }) {
-	const { field, options, method = 'set' } = payload;
+export function* workerRequestAssociationOptions({ payload }) {
+	const { field, options, append = false } = payload;
 
 	const fieldHierarchyName = yield select(getFieldHierarchyById, field.id);
 
 	const args = {
-		action: 'carbon_fields_fetch_association_options',
+		action: FETCH_ASSOCIATION_OPTIONS_AJAX_ACTION,
 		...options,
 		field_name: fieldHierarchyName,
 		container_id: field.container_id,
 	};
 
-	const { data } = yield call(fetchAssociationItems, args);
+	const { data } = yield call(fetchAssociationOptions, args);
 
-	yield put(setAssociationItems(field.id, data, method));
+	yield put(setUI(field.id, {
+		isLoading: false,
+	}));
+
+	if (append) {
+		yield put(appendAssociationOptions(field.id, data));
+	} else {
+		yield put(setAssociationOptions(field.id, data));
+	}
 }
 
 
@@ -64,6 +77,6 @@ export function* workerRequestAssociationItems({ payload }) {
  */
 export default function* foreman() {
 	yield all([
-		takeEvery(requestAssociationItems, workerRequestAssociationItems),
+		takeEvery(requestAssociationOptions, workerRequestAssociationOptions),
 	]);
 }
