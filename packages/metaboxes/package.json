@@ -9,7 +9,6 @@
     "@wordpress/element": "^2.1.1",
     "@wordpress/hooks": "^2.0.2",
     "callbag-basics": "^3.0.0",
-    "callbag-interval": "^1.1.0",
     "classnames": "^2.2.6",
     "immer": "^1.7.2",
     "lodash": "^4.17.11",
