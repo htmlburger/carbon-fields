@@ -31,3 +31,22 @@ export function updateFieldValue( fieldId, value ) {
 		}
 	};
 }
+
+/**
+ * Returns an action object used to update the container's meta.
+ *
+ * @param  {string} containerId
+ * @param  {string} key
+ * @param  {mixed}  value
+ * @return {Object}
+ */
+export function updateContainerMeta( containerId, key, value ) {
+	return {
+		type: 'UPDATE_CONTAINER_META',
+		payload: {
+			containerId,
+			key,
+			value
+		}
+	};
+}

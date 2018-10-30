@@ -1160,6 +1160,17 @@
     "@wordpress/is-shallow-equal" "^1.1.4"
     lodash "^4.17.10"
 
+"@wordpress/compose@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@wordpress/compose/-/compose-2.1.0.tgz#cd15101418fd70b2a9bd7968fd7ca3a832e935c3"
+  integrity sha512-QtjesFxEdLAUoBxFQ7rkpUG5aA4ccRxZI71fz0RkMiBVKoUHIqy+R6VGViL/wkdYigmfD9KU89Rg3Ksk40hVIA==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    "@wordpress/deprecated" "^2.0.3"
+    "@wordpress/element" "^2.1.5"
+    "@wordpress/is-shallow-equal" "^1.1.4"
+    lodash "^4.17.10"
+
 "@wordpress/core-data@^2.0.3":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@wordpress/core-data/-/core-data-2.0.3.tgz#f15ebf9fa55bbb98651c4c56786b8ba750a66140"
@@ -1221,6 +1232,14 @@
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@wordpress/hooks" "^2.0.2"
+
+"@wordpress/deprecated@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@wordpress/deprecated/-/deprecated-2.0.3.tgz#f3de9feb12cf990e7bc5335f06da6a35843f55ce"
+  integrity sha512-5v8h6BJ9xQFTho7ucitshpIahD+rVnAhgc/4juYmPLb9/GJzwY1J91Ve5mcjcjgWhdtjBKO0TCq/S4PCfS812w==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    "@wordpress/hooks" "^2.0.3"
 
 "@wordpress/dom-ready@^2.0.2":
   version "2.0.2"
@@ -1322,6 +1341,17 @@
     react "^16.4.1"
     react-dom "^16.4.1"
 
+"@wordpress/element@^2.1.5":
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/@wordpress/element/-/element-2.1.5.tgz#edf94960660ec563a506c08ef9897f7a5602b61a"
+  integrity sha512-y567y5SZv3VXDrUw/qpO7ElrTc8/BhumAivVlpAItychfn/PdTxd2l5V1Cc91Uc2/JDoAhPCRIO23UFWX+Ehtw==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    "@wordpress/escape-html" "^1.0.1"
+    lodash "^4.17.10"
+    react "^16.4.1"
+    react-dom "^16.4.1"
+
 "@wordpress/escape-html@^1.0.0-beta.1":
   version "1.0.0-beta.1"
   resolved "https://registry.yarnpkg.com/@wordpress/escape-html/-/escape-html-1.0.0-beta.1.tgz#dff62aae8c24f7e85c4e74c0a4336643fd218686"
@@ -1347,6 +1377,13 @@
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@wordpress/hooks/-/hooks-2.0.2.tgz#4ee56c30dc057b362d05951881cf7b2c302416f4"
   integrity sha512-yWdkjw6YP2kDF+cjjRfkI2cjTRiETaRFMwJpoqnQWxfay1oBtgvaGuRrYrm0rCxxOqCD/4/di2co5VHQxP9Rhw==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+
+"@wordpress/hooks@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@wordpress/hooks/-/hooks-2.0.3.tgz#287767eaa038d6434ce5a4c384ed29f73c4af58c"
+  integrity sha512-dMXM8VX1MfMN+vrstOdpCXioo4evtvjTESVnSc+AjKVOAWOCbuT/ci3aDLy8DreyDrWYgUR35Gfh7Y8JJix7vA==
   dependencies:
     "@babel/runtime" "^7.0.0"
 
@@ -2053,6 +2090,156 @@ cache-base@^1.0.1:
     to-object-path "^0.3.0"
     union-value "^1.0.0"
     unset-value "^1.0.0"
+
+callbag-basics@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-basics/-/callbag-basics-3.0.0.tgz#1ee7a9a3d6d225b7c7ec6ead6fcdd2e8b6495b58"
+  integrity sha512-kJXq1LCIMk/oj1OePF626wdwzzZzx4LVZhkgmJ1t9AqYVKrhUA/AuraiVCafq43EI9UXeVlt8Y1E+CPdXOWphA==
+  dependencies:
+    callbag "1.0.x"
+    callbag-combine "1.0.x"
+    callbag-concat "1.0.x"
+    callbag-filter "1.0.x"
+    callbag-flatten "1.0.x"
+    callbag-for-each "1.0.x"
+    callbag-from-event "1.0.x"
+    callbag-from-iter "1.0.x"
+    callbag-from-obs "1.1.x"
+    callbag-from-promise "1.0.x"
+    callbag-interval "1.0.x"
+    callbag-map "1.0.x"
+    callbag-merge "2.0.x"
+    callbag-pipe "1.1.x"
+    callbag-scan "1.0.x"
+    callbag-share "1.0.x"
+    callbag-skip "1.0.x"
+    callbag-take "1.0.x"
+
+callbag-combine@1.0.x:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/callbag-combine/-/callbag-combine-1.0.2.tgz#7a340b8113bd481dd82e8aa7ed83af27f4b90db5"
+  integrity sha512-1o1EgkhQcxG/SUWCCk4EgGuIVcVbC0znLXmAm/+XedX/mk4/+QkZLzs4Xyh8RpXhtGRO8EunXxaJT20L4gGTSQ==
+
+callbag-concat@1.0.x:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/callbag-concat/-/callbag-concat-1.0.1.tgz#9023732ab2a3c5b98e06628e6eb603da2e696280"
+  integrity sha512-dwJA0aU/xE8eeoQ5I/lXQQM/7fKIJm0dRXGzLfx1LPo+EJaJIKPxqH12qgLIsAyQ3R1vtlg171iUMK4q8uy2jA==
+
+callbag-drop-repeats@~1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-drop-repeats/-/callbag-drop-repeats-1.0.0.tgz#bfa4d765880875435746948ec9076b979569e89b"
+  integrity sha512-245BVou0/p9wEtlFxTY3pO6i3xlkxacYNFvE77GyldE8qbwSmkmLRZnQ18Xr0uY/4gSyu1xF6Zv/pyg0Q/d2Zg==
+
+callbag-filter@1.0.x, callbag-filter@~1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/callbag-filter/-/callbag-filter-1.0.1.tgz#82d3b80231cf890fd6e0d61c3a33cd09dcb52570"
+  integrity sha512-cfFvNCAQr9f1jhZuOw9eS1Ij8h/2/qouiF4Pip7pCVseOvqztgpl/VlLzomsp8tLBIcw3RVvPcTfEiOZzifKDg==
+
+callbag-flatten@1.0.x:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-flatten/-/callbag-flatten-1.0.0.tgz#d9f85adab0fb7f79084f5d6e42cd9e5f5bd0979a"
+  integrity sha512-hhll0EXt6Hz5cMEcS7Y7rysfldNr2aBCo3ALIBoCyTWtEGpYjaHBQiWaiGBEizHBtTbrbl3HHGAeIt2RRtmrPg==
+
+callbag-for-each@1.0.x:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/callbag-for-each/-/callbag-for-each-1.0.1.tgz#8c0ad8c7e8f713c9e6a21d44655b6b77033c3520"
+  integrity sha512-gi72tiwXCs2fLpsH8MQ98bVl6JjKsVHCVg6uQJjKsUUzADwvj4Vl6E0+Ygbf4sXztnJZgJJIs9N6XgqgtM4PRQ==
+
+callbag-from-event@1.0.x:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-from-event/-/callbag-from-event-1.0.0.tgz#e3a8931cd46775256eff3a960a743ad1c7ccfea9"
+  integrity sha512-Ir0gVsjXpj3EMzPCt6OSwEndGOzD1utgHz21DL0U/YlOfnbNMM0YWgleu9/ZrsQ33dzDMvoEG8SxlD8tJB9k9g==
+
+callbag-from-iter@1.0.x:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-from-iter/-/callbag-from-iter-1.0.0.tgz#2a4a1c079128caa0e29c81539846fdfa94a7cee8"
+  integrity sha512-qHERRsd9kcLQlAi2CrspFZidG++m7F34f87icIA8UJEfgn8c4plc3Xh0qn5J4PSeBdlPTLFRRYkWrYv3/JvdOw==
+
+callbag-from-obs@1.1.x:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/callbag-from-obs/-/callbag-from-obs-1.1.0.tgz#512afc7d722ac3235d7aee9e1c182a6ecd6d3504"
+  integrity sha512-9ydowRHZquu05Ug8NSXq2RKUxkBbpNei2ildzXVvXyQnrCz8NxeI4gtUB2GBMIBohDngLoqTTpXGtSGnz+ik3g==
+
+callbag-from-obs@~1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/callbag-from-obs/-/callbag-from-obs-1.2.0.tgz#f092f302f302b53abaf1a4d7a5393f9a65fac517"
+  integrity sha512-InhdPC6P4Gdpg7nuXSkocDFlb+//sbwCrVCYhxOHhSVm1gDcw/zSA+IF1gHdYtk4RQKKaCymUFCkVVUVSRThVQ==
+  dependencies:
+    symbol-observable "^1.2.0"
+
+callbag-from-promise@1.0.x:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-from-promise/-/callbag-from-promise-1.0.0.tgz#805ae6d75c4e8be62235e310e4106e5f250ee416"
+  integrity sha512-1S0ig7VY+TV94180eBBLuQSjaT8X1XPflGZAppC5YTLfx1ZP4A6dfmkm9K7CtpEzeDWaLr//gNdQw2H1qT3jPQ==
+
+callbag-interval@1.0.x:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-interval/-/callbag-interval-1.0.0.tgz#a88063300b835b594afc2793c08b4df2e0d4e058"
+  integrity sha512-8wlAZwqX4qKuIbRuqj5aIZmVhNepf61bildMfGROYLyzefTmaoKxag/xf4FHQk0kfVDKfz9x4nZYkLVgHuRdJA==
+
+callbag-interval@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/callbag-interval/-/callbag-interval-1.1.0.tgz#161ae4b5bf36b98bd5ef7caa3c3f8161fc032338"
+  integrity sha512-xkYj7t/l9+GaP0kvPi6LadF3ZNSiQAhbEzwnnTrDB/UtkBCrzKPZ9Kiti8P8oHYxL2jGEuRWi86PD3uM7qXLbg==
+  dependencies:
+    callbag "^1.1.0"
+
+callbag-map@1.0.x, callbag-map@~1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/callbag-map/-/callbag-map-1.0.1.tgz#a5bcd41cde60c226cdd22f5868beb7b2ecd6c167"
+  integrity sha512-JotprLfl5D/DqArAUlygHOBVkTi2VKfueU71EtbEs2N5dUKlcjkZzSf6BkAWN/EHmgwaaCbVQIhsgvRKYYl1iw==
+
+callbag-merge@2.0.x:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/callbag-merge/-/callbag-merge-2.0.1.tgz#69c2c031fdb40964fe766399fb5af21f50d3270e"
+  integrity sha512-Kl6JQ8Swc7DBuIL+Yjkgm92l82vrD2yQCNZHO8M8o6zVI+a0/RAAPLD5qrnGA1WwHLOOD6xAYsm0gzfzAJ3hkA==
+
+callbag-pipe@1.1.x, callbag-pipe@~1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/callbag-pipe/-/callbag-pipe-1.1.1.tgz#f9d9f651f0bb64bc78d91f7132d738f066e3a4cf"
+  integrity sha512-gPTHExrElPAOu/s91aySM1dCGCuQhbTLvvHwrqI/2aMW0qOda2nCZpmE0ML94l2tDy6Y4fqlI1SyAxqgLkZl6w==
+
+callbag-scan@1.0.x:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/callbag-scan/-/callbag-scan-1.0.1.tgz#4634df4823705deb8a5e5fe3a5b3dc48a107ea81"
+  integrity sha512-pnxvxShHTpdn4BIl15QUu/wQPOxFasyUU1NpbVS4aPREe0pUrBKUvMvgCVEMy1takUAuV7MWXcBI5U59UyW39A==
+
+callbag-share@1.0.x:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/callbag-share/-/callbag-share-1.0.2.tgz#5faf3f2112a797dbb0e53840acf7c8ef71922891"
+  integrity sha512-I6ZdyMX0ctl6FFIYYe9hTRY8gVn3cYwtSgZcT8AEG1NDonUiJJf7ZjNibsjHkZ3OYyu7ZZUzbuq8R5BWJOtVMQ==
+
+callbag-skip@1.0.x:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-skip/-/callbag-skip-1.0.0.tgz#91f60c434d1a7aba02b8b7ef1aad82da0a805ceb"
+  integrity sha512-XCvIT+mDa4K4HIbEoF6mhoM1YrXq7aLVDD0JvA/Px8MN//Nuxkp4bP3ivuD2u9vyYdubXHmAD4RwHJUm8azcjQ==
+
+callbag-start-with@~3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/callbag-start-with/-/callbag-start-with-3.1.0.tgz#58c7f7cb3f3f44049e130166c2cf884c76e332ac"
+  integrity sha512-jeEvUoZqZj8ZVMgST7ci9wCH33e9vaARQCFrPy/8et0HYL6RNzgwi3BmfcIy63d6vpqGbciYex/3T4TiFxGgyA==
+
+callbag-take@1.0.x:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-take/-/callbag-take-1.0.0.tgz#d3d3acf3f73ef9a7cda42958dfb4de37b9c0a2b8"
+  integrity sha512-qQ220/N6gOJRS4JS/mEVzbsADCaet5QAYZimrvGjjzT87eclQugJOzsae6efaGMf2KejKlPu8LxWZzs+zZ/hBw==
+
+callbag-to-obs@~1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-to-obs/-/callbag-to-obs-1.0.0.tgz#a198e82d86f1283cd40583970c96c8acc35d9ad3"
+  integrity sha512-lHxKSHy0EtUyzzE+iVlBBbuFzM5vXj03pP3Fquxy+Vn2/E5qzXgwGvoTMbXxPvwjBOmBPfmVAJl0p+ERuWYUcg==
+  dependencies:
+    symbol-observable "^1.2.0"
+
+callbag@1.0.x:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/callbag/-/callbag-1.0.3.tgz#d78c111107fbf02c01370084967645093ff8fd73"
+  integrity sha512-1Tlt+Lxu+O+g86xaM1rnGuETRHpz96erCRZJgxGW2817+zbBiOmYr7rUVmM+sf+s88YEezFtIJRqvlr5tmv3ag==
+
+callbag@^1.1.0, callbag@~1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/callbag/-/callbag-1.1.0.tgz#9cbbc3352832da43e764d588ed43121d4b09c42a"
+  integrity sha512-JVZp2vA53+THwOOan8eedGhS7xwzwR1u8HFK02WDMI9pITGoQ42j2sYP742qs7yddtEjIDGgNe1Y6DN90w3oIQ==
 
 caller-path@^0.1.0:
   version "0.1.0"
@@ -6214,6 +6401,21 @@ reflect.ownkeys@^0.2.0:
   resolved "https://registry.yarnpkg.com/reflect.ownkeys/-/reflect.ownkeys-0.2.0.tgz#749aceec7f3fdf8b63f927a04809e90c5c0b3460"
   integrity sha1-dJrO7H8/34tj+SegSAnpDFwLNGA=
 
+refract-callbag@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/refract-callbag/-/refract-callbag-2.2.0.tgz#2f9b6a8dc8108634f3f4fb1e6490ae0cc7967230"
+  integrity sha512-UmfIwgTm5fO2eCW/1/x5SnZUQUIASw35EiP7vbMFN2oIwGfTNwwH+6fXJd9DCTtZkuQAV1sX0N1dKWEPDaHwFw==
+  dependencies:
+    callbag "~1.1.0"
+    callbag-drop-repeats "~1.0.0"
+    callbag-filter "~1.0.1"
+    callbag-from-obs "~1.2.0"
+    callbag-map "~1.0.1"
+    callbag-pipe "~1.1.1"
+    callbag-start-with "~3.1.0"
+    callbag-to-obs "~1.0.0"
+    symbol-observable "~1.2.0"
+
 refx@^3.0.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/refx/-/refx-3.1.1.tgz#8ca1b4844ac81ff8e8b79523fdd082cac9b05517"
@@ -6955,7 +7157,7 @@ supports-color@^5.3.0, supports-color@^5.4.0, supports-color@^5.5.0:
   dependencies:
     has-flag "^3.0.0"
 
-symbol-observable@^1.0.4, symbol-observable@^1.1.0, symbol-observable@^1.2.0:
+symbol-observable@^1.0.4, symbol-observable@^1.1.0, symbol-observable@^1.2.0, symbol-observable@~1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
   integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==

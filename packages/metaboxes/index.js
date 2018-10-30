@@ -35,7 +35,7 @@ values( select( 'carbon-fields/metaboxes' ).getContainers() ).forEach( ( contain
 
 	if ( node ) {
 		render(
-			<Component container={ container } />,
+			<Component id={ container.id } />,
 			node
 		);
 	} else {
