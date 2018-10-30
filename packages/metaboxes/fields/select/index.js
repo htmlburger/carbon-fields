@@ -9,6 +9,7 @@ import { addFilter } from '@wordpress/hooks';
  */
 import FieldBase from '../../components/field-base';
 import withStore from '../../components/with-store';
+import NoOptions from '../no-options';
 
 export class SelectField extends Component {
 	/**
@@ -24,6 +25,28 @@ export class SelectField extends Component {
 	}
 
 	/**
+	 * Renders the radio options
+	 *
+	 * @return {Object}
+	 */
+	renderOptions() {
+		const { field } = this.props;
+
+		return (
+			<select
+				name={ field.base_name }
+				id={ field.id }
+				value={ field.value }
+				onChange={ this.handleChange }
+			>
+				{ field.options.map( ( { value, label } ) => (
+					<option key={ value } value={ value }>{ label }</option>
+				) ) }
+			</select>
+		);
+	}
+
+	/**
 	 * Renders the component.
 	 *
 	 * @return {Object}
@@ -33,16 +56,10 @@ export class SelectField extends Component {
 
 		return (
 			<FieldBase field={ field } >
-				<select
-					name={ field.base_name }
-					id={ field.id }
-					value={ field.value }
-					onChange={ this.handleChange }
-				>
-					{ field.options.map( ( { value, label } ) => (
-						<option key={ value } value={ value }>{ label }</option>
-					) ) }
-				</select>
+				{ field.options.length > 0
+					? this.renderOptions()
+					: <NoOptions />
+				}
 			</FieldBase>
 		);
 	}

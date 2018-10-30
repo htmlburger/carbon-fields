@@ -13,8 +13,9 @@ import { addFilter } from '@wordpress/hooks';
  */
 import FieldBase from '../../components/field-base';
 import withStore from '../../components/with-store';
+import NoOptions from '../no-options';
 
-class RadioField extends Component {
+export class RadioField extends Component {
 	/**
 	 * Handles the change of the input.
 	 *
@@ -28,6 +29,31 @@ class RadioField extends Component {
 	}
 
 	/**
+	 * Renders the radio options
+	 *
+	 * @return {Object}
+	 */
+	renderOptions() {
+		const { field } = this.props;
+
+		return field.options.map( ( { value, label } ) => (
+			<label key={ `${ field.id }-${ value }` }>
+				<input
+					type="radio"
+					id={ `${ field.id }-${ value }` }
+					name={ `${ field.base_name }-${ value }` }
+					checked={ field.value === value }
+					value={ value }
+					onChange={ this.handleChange }
+					{ ...field.attributes }
+				/>
+
+				{ label }
+			</label>
+		) );
+	}
+
+	/**
 	 * Renders the component.
 	 *
 	 * @return {Object}
@@ -37,23 +63,10 @@ class RadioField extends Component {
 
 		return (
 			<FieldBase field={ field } >
-				{ field.options.map( ( { value, label } ) => (
-					<label key={ `${ field.id }-${ value }` }>
-						<input
-							type="radio"
-							id={ `${ field.id }-${ value }` }
-							name={ `${ field.base_name }-${ value }` }
-							checked={ field.value === value }
-							value={ value }
-							onChange={ this.handleChange }
-							{ ...field.attributes }
-						/>
-
-						{ label }
-
-						{ field.required && <span className="carbon-required">*</span> }
-					</label>
-				) ) }
+				{ field.options.length > 0
+					? this.renderOptions()
+					: <NoOptions />
+				}
 			</FieldBase>
 		);
 	}

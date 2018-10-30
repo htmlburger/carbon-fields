@@ -13,6 +13,7 @@ import { addFilter } from '@wordpress/hooks';
  */
 import FieldBase from '../../components/field-base';
 import withStore from '../../components/with-store';
+import NoOptions from '../no-options';
 
 class SetField extends Component {
 	/**
@@ -28,30 +29,44 @@ class SetField extends Component {
 	}
 
 	/**
+	 * Renders the set options
+	 *
+	 * @return {Object}
+	 */
+	renderOptions() {
+		const { field, isChecked } = this.props;
+
+		return field.options.map( ( option ) => (
+			<label key={ `${ field.id }-${ option.value }` }>
+				<input
+					type="checkbox"
+					id={ `${ field.id }-${ option.value }` }
+					name={ `${ field.base_name }-${ option.value }` }
+					checked={ isChecked( field.value, option ) }
+					value={ option.value }
+					onChange={ this.handleChange }
+					{ ...field.attributes }
+				/>
+
+				{ option.label }
+			</label>
+		) );
+	}
+
+	/**
 	 * Renders the component.
 	 *
 	 * @return {Object}
 	 */
 	render() {
-		const { field, isChecked } = this.props;
+		const { field } = this.props;
 
 		return (
 			<FieldBase field={ field } >
-				{ field.options.map( ( option ) => (
-					<label key={ `${ field.id }-${ option.value }` }>
-						<input
-							type="checkbox"
-							id={ `${ field.id }-${ option.value }` }
-							name={ `${ field.base_name }-${ option.value }` }
-							checked={ isChecked( field.value, option ) }
-							value={ option.value }
-							onChange={ this.handleChange }
-							{ ...field.attributes }
-						/>
-
-						{ option.label }
-					</label>
-				) ) }
+				{ field.options.length > 0
+					? this.renderOptions()
+					: <NoOptions />
+				}
 			</FieldBase>
 		);
 	}
