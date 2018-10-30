@@ -2,11 +2,11 @@
  * Internal dependencies.
  */
 import { registerContainerType } from './registry';
-import BaseContainer from './base';
+import PostMetaContainer from './post-meta';
 
 /**
  * Registers the containers.
  */
 [
-	[ 'post_meta', BaseContainer ]
+	[ 'post_meta', PostMetaContainer ]
 ].forEach( ( container ) => registerContainerType( ...container ) );
