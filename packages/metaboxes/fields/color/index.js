@@ -13,6 +13,11 @@ import withStore from '../../components/with-store';
 import hexToRgba from '../../utils/hex-to-rgba';
 
 class ColorField extends Component {
+	/**
+	 * Defines the initial state
+	 *
+	 * @return {void}
+	 */
 	constructor() {
 		super();
 
@@ -21,6 +26,11 @@ class ColorField extends Component {
 		};
 	}
 
+	/**
+	 * Lifecycle hook.
+	 *
+	 * @return {void}
+	 */
 	componentDidMount() {
 		[
 			'click',
@@ -28,6 +38,11 @@ class ColorField extends Component {
 		].map( ( event ) => document.addEventListener( event, this.handleClickOutside ) );
 	}
 
+	/**
+	 * Lifecycle hook.
+	 *
+	 * @return {void}
+	 */
 	componentWillUnmount() {
 		[
 			'click',
@@ -38,7 +53,7 @@ class ColorField extends Component {
 	/**
 	 * Handles clicking outside of the color picker component
 	 *
-	 * @param {Object} e The click event
+	 * @param {Object} e
 	 * @return {void}
 	 */
 	handleClickOutside = ( e ) => {
