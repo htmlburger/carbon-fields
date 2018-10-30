@@ -19,12 +19,14 @@ module.exports = [
 			path: paths.gutenbergBuildPath,
 		},
 		externals: Object.assign( {}, wpPackages.externals, {
-			'@wordpress/components': 'wp.components',
-			'@wordpress/blocks': 'wp.blocks',
-			'@wordpress/editor': 'wp.editor',
-			'@wordpress/i18n': 'wp.i18n',
+			'react': [ 'cf', 'vendor', 'react' ],
+			'react-dom': [ 'cf', 'vendor', 'react-dom' ],
+			'@wordpress/components': [ 'wp', 'components' ],
+			'@wordpress/blocks': [ 'wp', 'blocks' ],
+			'@wordpress/editor': [ 'wp', 'editor' ],
+			'@wordpress/i18n': [ 'wp', 'i18n' ],
 			'@carbon-fields/core': 'cf.core',
-			'lodash': 'lodash'
-		 } )
+			'lodash': [ 'lodash' ]
+		} )
 	} )
 ];

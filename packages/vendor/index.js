@@ -1,10 +1,12 @@
 /**
  * External dependencies.
  */
+import React from 'react';
+import ReactDOM from 'react-dom';
 import * as compose from '@wordpress/compose';
 import * as element from '@wordpress/element';
 import * as hooks from '@wordpress/hooks';
-import * as i18n from '@wordpress/i18n';
+import * as data from '@wordpress/data';
 import * as classnames from 'classnames';
 import * as _ from 'lodash';
 
@@ -20,10 +22,12 @@ if ( ! window.lodash ) {
  */
 window.cf = window.cf || {};
 window.cf.vendor = [
+	[ 'react', React ],
+	[ 'react-dom', ReactDOM ],
 	[ '@wordpress/compose', compose ],
 	[ '@wordpress/element', element ],
 	[ '@wordpress/hooks', hooks ],
-	[ '@wordpress/i18n', i18n ],
+	[ '@wordpress/data', data ],
 	[ 'classnames', classnames ],
 	[ 'lodash', _ ]
 ].reduce( ( vendors, [ key, implementation ] ) => {

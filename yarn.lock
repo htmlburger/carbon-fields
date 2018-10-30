@@ -1216,6 +1216,21 @@
     lodash "^4.17.10"
     redux "^4.0.0"
 
+"@wordpress/data@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@wordpress/data/-/data-3.0.0.tgz#2e33ec8dc7baad7f030963f38774d7daf4b06d37"
+  integrity sha512-aOEZJHW9K+6ZjxkK7Hzq5jOU1l4ph4yhj9s2l3cHMgHQg8fh2sIdxNqKpADd0+qXxFInIWOgNcgH7A0+BUsbog==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    "@wordpress/compose" "^2.1.0"
+    "@wordpress/element" "^2.1.5"
+    "@wordpress/is-shallow-equal" "^1.1.4"
+    "@wordpress/redux-routine" "^3.0.3"
+    equivalent-key-map "^0.2.2"
+    is-promise "^2.1.0"
+    lodash "^4.17.10"
+    redux "^4.0.0"
+
 "@wordpress/date@^2.0.3":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@wordpress/date/-/date-2.0.3.tgz#1ca46d26af2cc953db0cf2e85286954473483f69"
@@ -1438,6 +1453,15 @@
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@wordpress/redux-routine/-/redux-routine-3.0.1.tgz#da7fe742742931c0eb9fc520697dad6ba504c507"
   integrity sha512-BSg/0nrGy9u1ZFNNrsESo6KQYsIUBrlsTVi5gExta+o9uamHTXKAXhasq+wnjm4GqnPkdYck6zNQ/xbeqxNvgA==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    is-promise "^2.1.0"
+    rungen "^0.3.2"
+
+"@wordpress/redux-routine@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@wordpress/redux-routine/-/redux-routine-3.0.3.tgz#882c8a8f350ea50a2ca027a103375a46f1bee5a0"
+  integrity sha512-wT8GoG0qtwxq8J5g0uYxZYoNcnhQloFvMTkDQsaWWAvaO1wsTaamYbusHc6q7PS+EsS2TioQkZsxTtei6YwBBg==
   dependencies:
     "@babel/runtime" "^7.0.0"
     is-promise "^2.1.0"
@@ -3011,7 +3035,7 @@ enhanced-resolve@^4.1.0:
     memory-fs "^0.4.0"
     tapable "^1.0.0"
 
-equivalent-key-map@^0.2.0, equivalent-key-map@^0.2.1:
+equivalent-key-map@^0.2.0, equivalent-key-map@^0.2.1, equivalent-key-map@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/equivalent-key-map/-/equivalent-key-map-0.2.2.tgz#be4d57049bb8d46a81d6e256c1628465620c2a13"
   integrity sha512-xvHeyCDbZzkpN4VHQj/n+j2lOwL0VWszG30X4cOrc9Y7Tuo2qCdZK/0AMod23Z5dCtNUbaju6p0rwOhHUk05ew==

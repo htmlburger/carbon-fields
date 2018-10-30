@@ -1,6 +1,7 @@
 /**
  * External dependencies.
  */
+const webpack = require( 'webpack' );
 const merge = require( 'webpack-merge' );
 
 /**
@@ -15,8 +16,10 @@ const config = {
 		metaboxes: './packages/metaboxes/index.js'
 	},
 	externals: {
-		'@carbon-fields/core': 'cf.core',
-		'classnames': [ 'cf', 'vendor', 'classnames' ]
+		'react': [ 'cf', 'vendor', 'react' ],
+		'react-dom': [ 'cf', 'vendor', 'react-dom' ],
+		'classnames': [ 'cf', 'vendor', 'classnames' ],
+		'@carbon-fields/core': [ 'cf', 'core' ]
 	}
 };
 
@@ -26,7 +29,7 @@ module.exports = [
 			path: paths.gutenbergBuildPath
 		},
 		externals: Object.assign( {}, wpPackages.externals, {
-			'lodash': 'lodash'
+			'lodash': [ 'lodash' ]
 		} )
 	} ),
 	merge( base, config, {
@@ -35,6 +38,11 @@ module.exports = [
 		},
 		externals: Object.assign( {}, wpPackages.proxyExternals, {
 			'lodash': [ 'cf', 'vendor', 'lodash' ]
-		} )
+		} ),
+		plugins: [
+			new webpack.ProvidePlugin( {
+				'wp.element': '@wordpress/element'
+			} )
+		]
 	} )
 ];
