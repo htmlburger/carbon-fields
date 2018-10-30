@@ -14,6 +14,7 @@ class SetField extends Component {
 	render() {
 		const {
 			field,
+			value,
 			isChecked,
 			onChange
 		} = this.props;
@@ -24,8 +25,8 @@ class SetField extends Component {
 					<ToggleControl
 						key={ index }
 						label={ option.label }
-						checked={ isChecked( option ) }
-						onChange={ () => onChange( field.base_name, option.value ) }
+						checked={ isChecked( value, option ) }
+						onChange={ () => onChange( field.base_name, value, option.value ) }
 					/>
 				) ) }
 			</BaseControl>

@@ -8,25 +8,27 @@ class SetField extends Component {
 	/**
 	 * Handles the change of the field.
 	 *
-	 * @param  {string} fieldKey
-	 * @param  {mixed}  value
+	 * @param  {string}        fieldKey
+	 * @param  {Array}         values
+	 * @param  {string|number} optionValue
 	 * @return {void}
 	 */
-	handleChange = ( fieldKey, value ) => {
+	handleChange = ( fieldKey, values, optionValue ) => {
 		this.props.onChange(
 			fieldKey,
-			xor( this.props.value, [ value ] )
+			xor( values, [ optionValue ] )
 		);
 	}
 
 	/**
 	 * Checks if the given option is checked.
 	 *
+	 * @param  {Array} values
 	 * @param  {Object} option
 	 * @return {boolean}
 	 */
-	isChecked = ( option ) => {
-		return this.props.value.indexOf( option.value ) > -1;
+	isChecked = ( values, option ) => {
+		return values.indexOf( option.value ) > -1;
 	}
 
 	/**
