@@ -12,6 +12,8 @@ import withStore from '../../components/with-store';
 /**
  * Renders the component.
  *
+ * @param {Object} props
+ * @param {Object} props.field
  * @return {Object}
  */
 const HtmlField = ( { field } ) => (

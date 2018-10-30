@@ -14,7 +14,7 @@ export class SelectField extends Component {
 	/**
 	 * Handles the change of the input.
 	 *
-	 * @param {Object} e The change event of the select field
+	 * @param {Object} e
 	 * @return {void}
 	 */
 	handleChange = ( e ) => {

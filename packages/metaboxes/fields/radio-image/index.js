@@ -18,7 +18,7 @@ class RadioImageField extends Component {
 	/**
 	 * Handles the change of the input.
 	 *
-	 * @param {Object} e The event object
+	 * @param {Object} e
 	 * @return {void}
 	 */
 	handleChange = ( e ) => {
