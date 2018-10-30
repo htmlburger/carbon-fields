@@ -1,6 +1,7 @@
 /**
  * Internal dependencies.
  */
+import './classic';
 import './gutenberg';
 import BaseContainer from '../base';
 
