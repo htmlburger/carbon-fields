@@ -10,5 +10,6 @@ import './radio';
 import './radio-image';
 import './select';
 import './set';
+import './sidebar';
 import './text';
 import './textarea';
