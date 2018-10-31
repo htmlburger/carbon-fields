@@ -20,10 +20,10 @@ export class MultiselectField extends Component {
 	 * @param {string|number} option.value
 	 * @return {void}
 	 */
-	handleChange = ( option ) => {
+	handleChange = ( { value } ) => {
 		const { field, onChange } = this.props;
 
-		onChange( field.id, field.value, option );
+		onChange( field.id, field.value, value );
 	}
 
 	/**
@@ -32,7 +32,7 @@ export class MultiselectField extends Component {
 	 * @return {Object}
 	 */
 	renderOptions() {
-		const { field } = this.props;
+		const { field, filterValues } = this.props;
 
 		return (
 			<Select
@@ -40,7 +40,7 @@ export class MultiselectField extends Component {
 				joinValues
 				id={ field.id }
 				name={ name }
-				value={ field.value }
+				value={ filterValues( field.value ) }
 				options={ field.options }
 				onChange={ this.handleChange }
 			/>
@@ -69,10 +69,15 @@ export class MultiselectField extends Component {
 addFilter( 'carbon-fields.multiselect-field.metabox', 'carbon-fields/metaboxes', ( OriginalMultiselectField ) => withStore( ( props ) => {
 	return (
 		<OriginalMultiselectField { ...props }>
-			{ ( { field, handleChange } ) => (
+			{ ( {
+				field,
+				handleChange,
+				filterValues
+			} ) => (
 				<MultiselectField
 					field={ field }
 					onChange={ handleChange }
+					filterValues={ filterValues }
 				/>
 			) }
 		</OriginalMultiselectField>

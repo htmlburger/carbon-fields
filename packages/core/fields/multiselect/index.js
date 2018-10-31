@@ -21,6 +21,18 @@ class MultiselectField extends Component {
 	}
 
 	/**
+	 * Filter the field options which are contained as values
+	 *
+	 * @param {Array} values
+	 * @return {Array}
+	 */
+	filterValues = ( values ) => {
+		const { field } = this.props;
+
+		return field.options.filter( ( option ) => values.indexOf( option.value ) > -1 );
+	}
+
+	/**
 	 * Render the component.
 	 *
 	 * @return {Object}
@@ -31,7 +43,8 @@ class MultiselectField extends Component {
 		return this.props.children( {
 			field,
 			value,
-			handleChange: this.handleChange
+			handleChange: this.handleChange,
+			filterValues: this.filterValues
 		} );
 	}
 }
