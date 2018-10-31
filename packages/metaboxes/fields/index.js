@@ -6,6 +6,7 @@ import './color';
 import './gravity-form';
 import './hidden';
 import './html';
+import './multiselect';
 import './radio';
 import './radio-image';
 import './select';
