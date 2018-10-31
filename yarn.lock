@@ -6433,6 +6433,21 @@ refract-callbag@^2.2.0:
     callbag-to-obs "~1.0.0"
     symbol-observable "~1.2.0"
 
+refract-callbag@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/refract-callbag/-/refract-callbag-2.2.2.tgz#a08f32498462174363f20198a96625dea6dee3a5"
+  integrity sha512-iE0bR3ExnwfzHLH4awHeLpgCz1i+7Mmg4umCPleN6LvtFe/bsuSxIoFrzYrtFivJg8GJGeHVPmc8V02So07ULw==
+  dependencies:
+    callbag "~1.1.0"
+    callbag-drop-repeats "~1.0.0"
+    callbag-filter "~1.0.1"
+    callbag-from-obs "~1.2.0"
+    callbag-map "~1.0.1"
+    callbag-pipe "~1.1.1"
+    callbag-start-with "~3.1.0"
+    callbag-to-obs "~1.0.0"
+    symbol-observable "~1.2.0"
+
 refx@^3.0.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/refx/-/refx-3.1.1.tgz#8ca1b4844ac81ff8e8b79523fdd082cac9b05517"

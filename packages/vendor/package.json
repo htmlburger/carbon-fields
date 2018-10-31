@@ -7,9 +7,11 @@
     "@wordpress/data": "^3.0.0",
     "@wordpress/element": "^2.1.1",
     "@wordpress/hooks": "^2.0.2",
+    "callbag-basics": "^3.0.0",
     "classnames": "^2.2.6",
     "lodash": "^4.17.11",
     "react": "^16.5.2",
-    "react-dom": "^16.5.2"
+    "react-dom": "^16.5.2",
+    "refract-callbag": "^2.2.2"
   }
 }

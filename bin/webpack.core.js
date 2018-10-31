@@ -20,6 +20,8 @@ const config = {
 		libraryTarget: 'this'
 	},
 	externals: {
+		'refract-callbag': [ 'cf', 'vendor', 'refract-callbag' ],
+		'callbag-basics': [ 'cf', 'vendor', 'callbag-basics' ],
 		'classnames': [ 'cf', 'vendor', 'classnames' ]
 	}
 };

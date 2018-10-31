@@ -2,7 +2,7 @@
  * External dependencies.
  */
 import produce from 'immer';
-import { set } from 'lodash';
+import { set, forEach } from 'lodash';
 import { combineReducers } from '@wordpress/data';
 
 /**
@@ -50,6 +50,15 @@ export function fields( state = {}, action ) {
 				const { fieldId, value } = action.payload;
 
 				draft[ fieldId ].value = value;
+			} );
+
+		case 'RECEIVE_SIDEBAR':
+			return produce( state, ( draft ) => {
+				forEach( draft, ( field ) => {
+					if ( field.type === 'sidebar' ) {
+						field.options.unshift( action.payload );
+					}
+				} );
 			} );
 
 		default:

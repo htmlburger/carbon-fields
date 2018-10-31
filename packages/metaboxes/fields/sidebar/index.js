@@ -2,9 +2,9 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { withDispatch } from '@wordpress/data';
 import { addFilter } from '@wordpress/hooks';
 import { compose } from '@wordpress/compose';
-import { __ } from '@wordpress/i18n';
 
 /**
  * The internal dependencies.
@@ -14,28 +14,15 @@ import withStore from '../../components/with-store';
 
 class SidebarField extends Component {
 	/**
-	 * Handles the change of the new sidebar name input field
+	 * Handles the change of the select.
 	 *
 	 * @param  {Object} e
 	 * @return {void}
 	 */
-	handleNewSidebarInput = ( e ) => this.props.onNewSidebarNameChagne( e.target.value )
-
-	/**
-	 * Handles the change of the select field.
-	 *
-	 * @param {Object} e
-	 * @return {void}
-	 */
-	handleChange = ( e = {} ) => {
+	handleChange = ( e ) => {
 		const { field, onChange } = this.props;
 
-		onChange(
-			field.id,
-			e.target
-				? e.target.value
-				: null
-		);
+		onChange( field.id, e.target.value );
 	}
 
 	/**
@@ -44,68 +31,46 @@ class SidebarField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const {
-			field,
-			canAddNew,
-			newSidebarName
-		} = this.props;
+		const { field } = this.props;
 
 		return (
-			<FieldBase field={ field } >
+			<FieldBase field={ field }>
 				<select
-					disabled={ canAddNew() }
-					name={ field.base_name }
 					id={ field.id }
+					name={ field.base_name }
 					value={ field.value }
 					onChange={ this.handleChange }
 				>
+					<option value="0" disabled>Please choose</option>
+
 					{ field.options.map( ( { value, label } ) => (
-						<option key={ value } value={ value }>{ label }</option>
+						<option key={ value } value={ value }>
+							{ label }
+						</option>
 					) ) }
 				</select>
-
-				{ canAddNew() && (
-					<div className="carbon--sidebar--new">
-						<input
-							type="text"
-							value={ newSidebarName }
-							onChange={ this.handleNewSidebarInput }
-						/>
-
-						<button type="button" className="is-button is-default" onClick={ this.handleChange }>
-							{ __( 'Cancel' ) }
-						</button>
-
-						<button type="button" className="is-button is-primary" onClick={ () => {} }>
-							{ __( 'Add New' ) }
-						</button>
-					</div>
-				) }
 			</FieldBase>
 		);
 	}
 }
 
-addFilter( 'carbon-fields.sidebar-field.metabox', 'carbon-fields/metaboxes', ( OriginalSelectField ) => compose(
-	withStore
+const applyWithDispatch = withDispatch( ( dispatch ) => {
+	const { receiveSidebar } = dispatch( 'carbon-fields/metaboxes' );
+
+	return {
+		onAdded: receiveSidebar
+	};
+} );
+
+addFilter( 'carbon-fields.sidebar-field.metabox', 'carbon-fields/metaboxes', ( OriginalSidebarField ) => compose(
+	withStore,
+	applyWithDispatch
 )( ( props ) => {
 	return (
-		<OriginalSelectField { ...props }>
-			{ ( {
-				field,
-				handleChange,
-				canAddNew,
-				handleNewSidebarNameChange,
-				newSidebarName
-			} ) => (
-				<SidebarField
-					field={ field }
-					onChange={ handleChange }
-					onNewSidebarNameChagne={ handleNewSidebarNameChange }
-					canAddNew={ canAddNew }
-					newSidebarName={ newSidebarName }
-				/>
+		<OriginalSidebarField { ...props }>
+			{ ( { field, handleChange } ) => (
+				<SidebarField field={ field } onChange={ handleChange } />
 			) }
-		</OriginalSelectField>
+		</OriginalSidebarField>
 	);
 } ) );

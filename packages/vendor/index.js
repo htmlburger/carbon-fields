@@ -9,6 +9,8 @@ import * as hooks from '@wordpress/hooks';
 import * as data from '@wordpress/data';
 import * as classnames from 'classnames';
 import * as _ from 'lodash';
+import * as refractCallbag from 'refract-callbag';
+import * as callbagBasics from 'callbag-basics';
 
 /**
  * Prevent the conflicts with WordPress's Underscore lib.
@@ -29,7 +31,9 @@ window.cf.vendor = [
 	[ '@wordpress/hooks', hooks ],
 	[ '@wordpress/data', data ],
 	[ 'classnames', classnames ],
-	[ 'lodash', _ ]
+	[ 'lodash', _ ],
+	[ 'refract-callbag', refractCallbag ],
+	[ 'callbag-basics', callbagBasics ]
 ].reduce( ( vendors, [ key, implementation ] ) => {
 	vendors[ key ] = implementation;
 

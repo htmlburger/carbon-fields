@@ -28,11 +28,14 @@ class Sidebar_Field extends Select_Field {
 		$options = array();
 
 		foreach ( $sidebars as $sidebar ) {
-			if ( in_array( $sidebar['id'], $this->excluded_sidebars ) ) {
+			if ( in_array( $sidebar[ 'id' ], $this->excluded_sidebars ) ) {
 				continue;
 			}
 
-			$options[ $sidebar['id'] ] = $sidebar['name'];
+			$options[] = array(
+				'value' => $sidebar[ 'id' ],
+				'label' => $sidebar[ 'name' ],
+			);
 		}
 
 		return $options;
@@ -66,7 +69,7 @@ class Sidebar_Field extends Select_Field {
 	 * @return array
 	 */
 	public function to_json( $load ) {
-		$options = array();
+		$options = $this->load_options();
 
 		if ( $this->enable_add_new ) {
 			$options[] = array(

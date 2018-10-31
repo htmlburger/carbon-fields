@@ -50,3 +50,16 @@ export function updateContainerMeta( containerId, key, value ) {
 		}
 	};
 }
+
+/**
+ * Returns an actions object used to add the created sidebar to all fields.
+ *
+ * @param  {Object} sidebar
+ * @return {Object}
+ */
+export function receiveSidebar( sidebar ) {
+	return {
+		type: 'RECEIVE_SIDEBAR',
+		payload: sidebar
+	};
+}
