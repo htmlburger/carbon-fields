@@ -3,6 +3,7 @@
  */
 import './checkbox';
 import './color';
+import './datetime';
 import './gravity-form';
 import './hidden';
 import './html';
