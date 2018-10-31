@@ -12,7 +12,7 @@ import { addFilter } from '@wordpress/hooks';
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
-import withStore from '../../components/with-store';
+import withField from '../../components/with-field';
 import NoOptions from '../no-options';
 
 class SetField extends Component {
@@ -72,7 +72,7 @@ class SetField extends Component {
 	}
 }
 
-addFilter( 'carbon-fields.set-field.metabox', 'carbon-fields/metaboxes', ( OriginalSetField ) => withStore( ( props ) => {
+addFilter( 'carbon-fields.set-field.metabox', 'carbon-fields/metaboxes', ( OriginalSetField ) => withField( ( props ) => {
 	return (
 		<OriginalSetField { ...props }>
 			{ ( {

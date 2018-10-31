@@ -9,7 +9,7 @@ import { SketchPicker } from 'react-color';
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
-import withStore from '../../components/with-store';
+import withField from '../../components/with-field';
 import hexToRgba from '../../utils/hex-to-rgba';
 
 class ColorField extends Component {
@@ -168,7 +168,7 @@ class ColorField extends Component {
 	}
 }
 
-addFilter( 'carbon-fields.color-field.metabox', 'carbon-fields/metaboxes', ( OriginalColorField ) => withStore( ( props ) => {
+addFilter( 'carbon-fields.color-field.metabox', 'carbon-fields/metaboxes', ( OriginalColorField ) => withField( ( props ) => {
 	return (
 		<OriginalColorField { ...props }>
 			{ ( { field, handleChange } ) => (

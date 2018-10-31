@@ -10,7 +10,7 @@ import { __ } from '@wordpress/i18n';
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
-import withStore from '../../components/with-store';
+import withField from '../../components/with-field';
 
 class SidebarField extends Component {
 	/**
@@ -87,7 +87,7 @@ class SidebarField extends Component {
 }
 
 addFilter( 'carbon-fields.sidebar-field.metabox', 'carbon-fields/metaboxes', ( OriginalSelectField ) => compose(
-	withStore
+	withField
 )( ( props ) => {
 	return (
 		<OriginalSelectField { ...props }>

@@ -8,7 +8,7 @@ import { addFilter } from '@wordpress/hooks';
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
-import withStore from '../../components/with-store';
+import withField from '../../components/with-field';
 
 class HiddenField extends Component {
 	/**
@@ -34,7 +34,7 @@ class HiddenField extends Component {
 	}
 }
 
-addFilter( 'carbon-fields.hidden-field.metabox', 'carbon-fields/metaboxes', ( OriginalHiddenField ) => withStore( ( props ) => {
+addFilter( 'carbon-fields.hidden-field.metabox', 'carbon-fields/metaboxes', ( OriginalHiddenField ) => withField( ( props ) => {
 	return (
 		<OriginalHiddenField { ...props }>
 			{ ( { field } ) => (

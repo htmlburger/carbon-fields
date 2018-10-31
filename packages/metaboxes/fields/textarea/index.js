@@ -8,7 +8,7 @@ import { addFilter } from '@wordpress/hooks';
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
-import withStore from '../../components/with-store';
+import withField from '../../components/with-field';
 
 class TextareaField extends Component {
 	/**
@@ -46,7 +46,7 @@ class TextareaField extends Component {
 	}
 }
 
-addFilter( 'carbon-fields.textarea-field.metabox', 'carbon-fields/metaboxes', ( OriginalTextareaField ) => withStore( ( props ) => {
+addFilter( 'carbon-fields.textarea-field.metabox', 'carbon-fields/metaboxes', ( OriginalTextareaField ) => withField( ( props ) => {
 	return (
 		<OriginalTextareaField { ...props }>
 			{ ( { field, handleChange } ) => (

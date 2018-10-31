@@ -9,7 +9,7 @@ import Select from 'react-select';
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
-import withStore from '../../components/with-store';
+import withField from '../../components/with-field';
 import NoOptions from '../no-options';
 
 export class MultiselectField extends Component {
@@ -66,7 +66,7 @@ export class MultiselectField extends Component {
 	}
 }
 
-addFilter( 'carbon-fields.multiselect-field.metabox', 'carbon-fields/metaboxes', ( OriginalMultiselectField ) => withStore( ( props ) => {
+addFilter( 'carbon-fields.multiselect-field.metabox', 'carbon-fields/metaboxes', ( OriginalMultiselectField ) => withField( ( props ) => {
 	return (
 		<OriginalMultiselectField { ...props }>
 			{ ( {

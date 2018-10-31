@@ -8,7 +8,7 @@ import { addFilter } from '@wordpress/hooks';
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
-import withStore from '../../components/with-store';
+import withField from '../../components/with-field';
 
 class SeparatorField extends Component {
 	/**
@@ -27,7 +27,7 @@ class SeparatorField extends Component {
 	}
 }
 
-addFilter( 'carbon-fields.separator-field.metabox', 'carbon-fields/metaboxes', ( OriginalSeparatorField ) => withStore( ( props ) => {
+addFilter( 'carbon-fields.separator-field.metabox', 'carbon-fields/metaboxes', ( OriginalSeparatorField ) => withField( ( props ) => {
 	return (
 		<OriginalSeparatorField { ...props }>
 			{ ( { field } ) => (
