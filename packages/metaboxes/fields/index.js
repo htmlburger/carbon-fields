@@ -10,6 +10,7 @@ import './multiselect';
 import './radio';
 import './radio-image';
 import './select';
+import './separator';
 import './set';
 import './sidebar';
 import './text';

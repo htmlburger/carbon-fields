@@ -11,6 +11,7 @@ import HtmlField from './html';
 import MultiselectField from './multiselect';
 import RadioField from './radio';
 import SelectField from './select';
+import SeparatorField from './separator';
 import SetField from './set';
 import SidebarField from './sidebar';
 import TextField from './text';
@@ -31,6 +32,7 @@ import TextareaField from './textarea';
 	[ 'radio', RadioField ],
 	[ 'radio_image', RadioField ],
 	[ 'select', SelectField ],
+	[ 'separator', SeparatorField ],
 	[ 'set', SetField ],
 	[ 'sidebar', SidebarField ],
 	[ 'text', TextField ],
