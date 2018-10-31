@@ -14,7 +14,7 @@
     "immer": "^1.7.2",
     "lodash": "^4.17.11",
     "react-color": "^2.14.1",
-    "react-select": "^2.1.1",
+    "react-select": "2.1.1",
     "refract-callbag": "^2.2.0"
   }
 }

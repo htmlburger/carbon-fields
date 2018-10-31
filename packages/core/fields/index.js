@@ -8,6 +8,7 @@ import ComplexField from './complex';
 import FileField from './file';
 import HiddenField from './hidden';
 import HtmlField from './html';
+import MultiselectField from './multiselect';
 import RadioField from './radio';
 import SelectField from './select';
 import SetField from './set';
@@ -26,6 +27,7 @@ import TextareaField from './textarea';
 	[ 'gravity_form', SelectField ],
 	[ 'hidden', HiddenField ],
 	[ 'html', HtmlField ],
+	[ 'multiselect', MultiselectField ],
 	[ 'radio', RadioField ],
 	[ 'radio_image', RadioField ],
 	[ 'select', SelectField ],
