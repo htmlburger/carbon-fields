@@ -7,7 +7,7 @@ import { addFilter } from '@wordpress/hooks';
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
-import withStore from '../../components/with-store';
+import withField from '../../components/with-field';
 
 /**
  * Renders the component.
@@ -22,7 +22,7 @@ const HtmlField = ( { field } ) => (
 	</FieldBase>
 );
 
-addFilter( 'carbon-fields.html-field.metabox', 'carbon-fields/metaboxes', ( OriginalHtmlField ) => withStore( ( props ) => {
+addFilter( 'carbon-fields.html-field.metabox', 'carbon-fields/metaboxes', ( OriginalHtmlField ) => withField( ( props ) => {
 	return (
 		<OriginalHtmlField { ...props }>
 			{ ( { field } ) => (

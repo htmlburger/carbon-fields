@@ -10,7 +10,7 @@ import { compose } from '@wordpress/compose';
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
-import withStore from '../../components/with-store';
+import withField from '../../components/with-field';
 
 class SidebarField extends Component {
 	/**
@@ -63,7 +63,7 @@ const applyWithDispatch = withDispatch( ( dispatch ) => {
 } );
 
 addFilter( 'carbon-fields.sidebar-field.metabox', 'carbon-fields/metaboxes', ( OriginalSidebarField ) => compose(
-	withStore,
+	withField,
 	applyWithDispatch
 )( ( props ) => {
 	return (

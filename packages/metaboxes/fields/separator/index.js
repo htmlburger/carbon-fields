@@ -10,7 +10,7 @@ import { addFilter } from '@wordpress/hooks';
 import FieldBase from '../../components/field-base';
 import withField from '../../components/with-field';
 
-class HiddenField extends Component {
+class SeparatorField extends Component {
 	/**
 	 * Renders the component.
 	 *
@@ -21,25 +21,18 @@ class HiddenField extends Component {
 
 		return (
 			<FieldBase field={ { ...field, label: null } } >
-				<input
-					type="hidden"
-					id={ field.id }
-					name={ field.base_name }
-					value={ field.value }
-					className="hidden-text"
-					{ ...field.attributes }
-				/>
+				<h3>{ field.label }</h3>
 			</FieldBase>
 		);
 	}
 }
 
-addFilter( 'carbon-fields.hidden-field.metabox', 'carbon-fields/metaboxes', ( OriginalHiddenField ) => withField( ( props ) => {
+addFilter( 'carbon-fields.separator-field.metabox', 'carbon-fields/metaboxes', ( OriginalSeparatorField ) => withField( ( props ) => {
 	return (
-		<OriginalHiddenField { ...props }>
+		<OriginalSeparatorField { ...props }>
 			{ ( { field } ) => (
-				<HiddenField field={ field } />
+				<SeparatorField field={ field } />
 			) }
-		</OriginalHiddenField>
+		</OriginalSeparatorField>
 	);
 } ) );

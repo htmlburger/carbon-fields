@@ -29,4 +29,4 @@ export default createHigherOrderComponent( ( Component ) => {
 	} );
 
 	return compose( applyWithSelect, applyWithDispatch )( Component );
-}, 'withStore' );
+}, 'withField' );

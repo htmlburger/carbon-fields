@@ -6,10 +6,10 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * The internal dependencies.
  */
-import withStore from '../../components/with-store';
+import withField from '../../components/with-field';
 import { RadioField } from '../radio';
 
-addFilter( 'carbon-fields.radio_image-field.metabox', 'carbon-fields/metaboxes', ( OriginalRadioImageField ) => withStore( ( props ) => {
+addFilter( 'carbon-fields.radio_image-field.metabox', 'carbon-fields/metaboxes', ( OriginalRadioImageField ) => withField( ( props ) => {
 	return (
 		<OriginalRadioImageField { ...props }>
 			{ ( { field, handleChange } ) => (

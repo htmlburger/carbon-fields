@@ -3,6 +3,7 @@
  */
 import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
+import Select from 'react-select';
 
 /**
  * The internal dependencies.
@@ -11,17 +12,18 @@ import FieldBase from '../../components/field-base';
 import withField from '../../components/with-field';
 import NoOptions from '../no-options';
 
-export class SelectField extends Component {
+export class MultiselectField extends Component {
 	/**
 	 * Handles the change of the input.
 	 *
-	 * @param {Object} e
+	 * @param {Object}        option
+	 * @param {string|number} option.value
 	 * @return {void}
 	 */
-	handleChange = ( e ) => {
+	handleChange = ( { value } ) => {
 		const { field, onChange } = this.props;
 
-		onChange( field.id, e.target.value );
+		onChange( field.id, field.value, value );
 	}
 
 	/**
@@ -30,19 +32,18 @@ export class SelectField extends Component {
 	 * @return {Object}
 	 */
 	renderOptions() {
-		const { field } = this.props;
+		const { field, filterValues } = this.props;
 
 		return (
-			<select
-				name={ field.base_name }
+			<Select
+				multi
+				joinValues
 				id={ field.id }
-				value={ field.value }
+				name={ name }
+				value={ filterValues( field.value ) }
+				options={ field.options }
 				onChange={ this.handleChange }
-			>
-				{ field.options.map( ( { value, label } ) => (
-					<option key={ value } value={ value }>{ label }</option>
-				) ) }
-			</select>
+			/>
 		);
 	}
 
@@ -65,15 +66,20 @@ export class SelectField extends Component {
 	}
 }
 
-addFilter( 'carbon-fields.select-field.metabox', 'carbon-fields/metaboxes', ( OriginalSelectField ) => withField( ( props ) => {
+addFilter( 'carbon-fields.multiselect-field.metabox', 'carbon-fields/metaboxes', ( OriginalMultiselectField ) => withField( ( props ) => {
 	return (
-		<OriginalSelectField { ...props }>
-			{ ( { field, handleChange } ) => (
-				<SelectField
+		<OriginalMultiselectField { ...props }>
+			{ ( {
+				field,
+				handleChange,
+				filterValues
+			} ) => (
+				<MultiselectField
 					field={ field }
 					onChange={ handleChange }
+					filterValues={ filterValues }
 				/>
 			) }
-		</OriginalSelectField>
+		</OriginalMultiselectField>
 	);
 } ) );

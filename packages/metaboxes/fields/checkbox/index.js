@@ -8,7 +8,7 @@ import { addFilter } from '@wordpress/hooks';
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
-import withStore from '../../components/with-store';
+import withField from '../../components/with-field';
 
 class CheckboxField extends Component {
 	/**
@@ -51,7 +51,7 @@ class CheckboxField extends Component {
 	}
 }
 
-addFilter( 'carbon-fields.checkbox-field.metabox', 'carbon-fields/metaboxes', ( OriginalCheckboxField ) => withStore( ( props ) => {
+addFilter( 'carbon-fields.checkbox-field.metabox', 'carbon-fields/metaboxes', ( OriginalCheckboxField ) => withField( ( props ) => {
 	return (
 		<OriginalCheckboxField { ...props }>
 			{ ( { field, handleChange } ) => (
