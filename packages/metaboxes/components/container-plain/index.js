@@ -1,7 +1,7 @@
 /**
  * Internal dependencies.
  */
-import ContainerBase from '../container-base';
+import ContainerShell from '../container-shell';
 import ContainerNonce from '../container-nonce';
 
 /**
@@ -14,9 +14,9 @@ const ContainerPlain = ( props ) => {
 	const { nonce } = props.container;
 
 	return (
-		<ContainerBase { ...props }>
+		<ContainerShell { ...props }>
 			<ContainerNonce name={ nonce.name } value={ nonce.value } />
-		</ContainerBase>
+		</ContainerShell>
 	);
 };
 
