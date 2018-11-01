@@ -1,5 +1,5 @@
 /**
- * The function that causes the side-effects.
+ * The function that causes the side effects.
  *
  * @return {Function}
  */

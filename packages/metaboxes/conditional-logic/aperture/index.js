@@ -14,7 +14,7 @@ import {
 import './post-parent';
 
 /**
- * The function that controls the stream of side-effects.
+ * The function that controls the stream of side effects.
  *
  * @param  {Object} props
  * @param  {string} props.context

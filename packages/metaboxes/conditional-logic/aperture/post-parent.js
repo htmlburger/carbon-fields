@@ -34,7 +34,7 @@ const INITIAL_STATE = {
 };
 
 /**
- * Extracts the post's parent from the option.
+ * Extracts `post_parent_id` from the option.
  *
  * @param  {Object} option
  * @return {number}
@@ -46,7 +46,7 @@ function getParentIdFromOption( option ) {
 }
 
 /**
- * Extracts the post's level from the option.
+ * Extracts `post_level` from the option.
  *
  * @param  {Object} option
  * @return {number}
@@ -66,7 +66,7 @@ function getLevelFromOption( option ) {
 }
 
 /**
- * Extracts the post's ancestors from the option.
+ * Extracts `post_ancestors` from the option.
  *
  * @param  {Object} option
  * @return {number[]}
@@ -119,7 +119,7 @@ function getParentIdAncestorsAndLevelFromSelect( node ) {
 }
 
 /**
- * Extracts the post's ancestors from the list.
+ * Extracts `post_ancestors` from the list.
  *
  * @param  {number}   parentId
  * @param  {Object[]} posts
@@ -187,6 +187,7 @@ addFilter( 'carbon-fields.conditional-logic-post-parent.gutenberg', 'carbon-fiel
 				return INITIAL_STATE;
 			}
 
+			// Borrowed from https://github.com/WordPress/gutenberg/blob/master/packages/editor/src/components/page-attributes/parent.js
 			const items = getEntityRecords( 'postType', postTypeSlug, {
 				per_page: -1,
 				exclude: postId,
