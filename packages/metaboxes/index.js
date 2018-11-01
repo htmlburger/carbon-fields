@@ -10,6 +10,7 @@ import { select } from '@wordpress/data';
 /**
  * Internal dependencies.
  */
+import initializeConditionalLogic from './conditional-logic';
 import { getContainerType } from './containers/registry';
 
 /**
@@ -20,18 +21,20 @@ import './fields';
 import './containers';
 
 /**
- * Detects if we're rendering on page that is using Gutenberg.
+ * Determines the rendering context.
  *
- * @type {boolean}
+ * @type {string}
  */
-const isGutenberg = ! isUndefined( window._wpLoadGutenbergEditor );
+const context = ! isUndefined( window._wpLoadGutenbergEditor ) ? 'gutenberg' : 'classic';
 
 /**
  * Abracadabra! Poof! Containers everywhere ...
  */
+initializeConditionalLogic( context );
+
 values( select( 'carbon-fields/metaboxes' ).getContainers() ).forEach( ( container ) => {
 	const node = document.querySelector( `.container-${ container.id }` );
-	const Component = getContainerType( container.type, isGutenberg ? 'gutenberg' : 'classic' );
+	const Component = getContainerType( container.type, context );
 
 	if ( node ) {
 		render(
