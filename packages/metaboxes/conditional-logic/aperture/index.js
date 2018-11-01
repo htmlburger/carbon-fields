@@ -2,7 +2,11 @@
  * External dependencies.
  */
 import { applyFilters } from '@wordpress/hooks';
-import { combine } from 'callbag-basics';
+import {
+	pipe,
+	map,
+	combine
+} from 'callbag-basics';
 
 /**
  * Internal dependencies.
@@ -20,6 +24,13 @@ export default function aperture( { context } ) {
 	return function() {
 		const postParent$ = applyFilters( `carbon-fields.conditional-logic-post-parent.${ context }` );
 
-		return combine( postParent$ );
+		return pipe(
+			combine(
+				postParent$
+			),
+			map( ( [ postParent ] ) => ( {
+				...postParent
+			} ) )
+		);
 	};
 }

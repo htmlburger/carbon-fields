@@ -2227,6 +2227,11 @@ callbag-concat@1.0.x:
   resolved "https://registry.yarnpkg.com/callbag-concat/-/callbag-concat-1.0.1.tgz#9023732ab2a3c5b98e06628e6eb603da2e696280"
   integrity sha512-dwJA0aU/xE8eeoQ5I/lXQQM/7fKIJm0dRXGzLfx1LPo+EJaJIKPxqH12qgLIsAyQ3R1vtlg171iUMK4q8uy2jA==
 
+callbag-distinct-until-changed@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-distinct-until-changed/-/callbag-distinct-until-changed-1.0.0.tgz#8fc772e8bf8fbd0a2bb645ab34707fecf53d0506"
+  integrity sha512-Q6YDbQGZgT1rG1xZLRBkS55jQ5ydeSY2SxLufJ3L8pf5EWHJg9hhgdZHC7B4AaLFtkFImqC45I3TECwHxmwS7g==
+
 callbag-drop-repeats@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/callbag-drop-repeats/-/callbag-drop-repeats-1.0.0.tgz#bfa4d765880875435746948ec9076b979569e89b"
