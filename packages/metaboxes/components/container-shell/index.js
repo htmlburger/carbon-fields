@@ -12,7 +12,7 @@ import { getFieldType } from '@carbon-fields/core';
  * @param  {mixed}  props.children
  * @return {Object}
  */
-const ContainerBase = ( { container, children } ) => {
+const ContainerShell = ( { container, children } ) => {
 	const classes = classnames( [
 		'carbon-container',
 		`carbon-container-${ container.id }`,
@@ -39,4 +39,4 @@ const ContainerBase = ( { container, children } ) => {
 	);
 };
 
-export default ContainerBase;
+export default ContainerShell;
