@@ -15,9 +15,10 @@ import postAncestorId from '../conditions/post-ancestor-id';
  * @type {Object}
  */
 const conditions = {
+	post_ancestor_id: postAncestorId,
 	post_parent_id: base,
 	post_level: base,
-	post_ancestor_id: postAncestorId
+	post_format: base
 };
 
 /**

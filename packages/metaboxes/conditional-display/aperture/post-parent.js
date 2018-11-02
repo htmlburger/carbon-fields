@@ -1,6 +1,7 @@
 /**
  * External dependencies.
  */
+import of from 'callbag-of';
 import startWith from 'callbag-start-with';
 import distinctUntilChanged from 'callbag-distinct-until-changed';
 import { addFilter } from '@wordpress/hooks';
@@ -149,12 +150,11 @@ addFilter( 'carbon-fields.conditional-display-post-parent.classic', 'carbon-fiel
 	const node = document.querySelector( 'select#parent_id' );
 
 	if ( ! node ) {
-		return startWith( INITIAL_STATE );
+		return of( INITIAL_STATE );
 	}
 
 	return pipe(
 		fromEvent( node, 'change' ),
-		distinctUntilChanged(),
 		map( ( { target } ) => getParentIdAncestorsAndLevelFromSelect( target ) ),
 		startWith( getParentIdAncestorsAndLevelFromSelect( node ) )
 	);
