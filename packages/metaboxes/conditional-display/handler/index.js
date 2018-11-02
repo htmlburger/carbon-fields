@@ -18,7 +18,8 @@ const conditions = {
 	post_ancestor_id: postAncestorId,
 	post_parent_id: base,
 	post_level: base,
-	post_format: base
+	post_format: base,
+	post_template: base
 };
 
 /**
