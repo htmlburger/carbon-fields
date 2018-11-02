@@ -7,6 +7,7 @@ import { find } from 'lodash';
  * Internal dependencies.
  */
 import equality from '../comparers/equality';
+import contain from '../comparers/contain';
 
 export default {
 	/**
@@ -15,7 +16,8 @@ export default {
 	 * @type {Function[]}
 	 */
 	comparers: [
-		equality
+		equality,
+		contain
 	],
 
 	/**
