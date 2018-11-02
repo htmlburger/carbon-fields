@@ -1,6 +1,8 @@
 /**
  * External dependencies.
  */
+import { compose } from '@wordpress/compose';
+import { withSelect } from '@wordpress/data';
 import { withEffects } from 'refract-callbag';
 
 /**
@@ -18,4 +20,17 @@ function ConditionalLogic() {
 	return null;
 }
 
-export default withEffects( handler )( aperture )( ConditionalLogic );
+const applyWithSelect = withSelect( ( select ) => {
+	const containers = select( 'carbon-fields/metaboxes' ).getContainers();
+
+	return {
+		containers
+	};
+} );
+
+const applyWitEffects = withEffects( handler )( aperture );
+
+export default compose(
+	applyWithSelect,
+	applyWitEffects
+)( ConditionalLogic );
