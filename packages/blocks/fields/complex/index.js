@@ -1,7 +1,3 @@
-/* Remove when https://github.com/babel/babel-eslint/issues/530 is fixed */
-/* eslint template-curly-spacing: 'off' */
-/* eslint indent: 'off' */
-
 /**
  * External dependencies.
  */
@@ -70,7 +66,7 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 						getLabel={ getGroupLabel }
 						onClick={ curryWithFieldKey( handleAdd ) }
 					/>
-			);
+				);
 
 				const fieldsComponent = (
 					<Fields
