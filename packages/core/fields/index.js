@@ -2,6 +2,7 @@
  * Internal dependencies.
  */
 import { registerFieldType } from '../registry/fields';
+import AssociationField from './association';
 import CheckboxField from './checkbox';
 import ColorField from './color';
 import ComplexField from './complex';
@@ -21,6 +22,7 @@ import TextareaField from './textarea';
  * Registers the fields.
  */
 [
+	[ 'association', AssociationField ],
 	[ 'checkbox', CheckboxField ],
 	[ 'color', ColorField ],
 	[ 'complex', ComplexField ],
