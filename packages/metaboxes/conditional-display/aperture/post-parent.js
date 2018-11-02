@@ -1,6 +1,7 @@
 /**
  * External dependencies.
  */
+import of from 'callbag-of';
 import startWith from 'callbag-start-with';
 import distinctUntilChanged from 'callbag-distinct-until-changed';
 import { addFilter } from '@wordpress/hooks';
@@ -145,16 +146,15 @@ function getAncestorsFromPostsList( parentId, posts, ancestors = [] ) {
 /**
  * Defines the side effects for Classic Editor.
  */
-addFilter( 'carbon-fields.conditional-logic-post-parent.classic', 'carbon-fields/metaboxes', ( ) => {
+addFilter( 'carbon-fields.conditional-display-post-parent.classic', 'carbon-fields/metaboxes', ( ) => {
 	const node = document.querySelector( 'select#parent_id' );
 
 	if ( ! node ) {
-		return startWith( INITIAL_STATE );
+		return of( INITIAL_STATE );
 	}
 
 	return pipe(
 		fromEvent( node, 'change' ),
-		distinctUntilChanged(),
 		map( ( { target } ) => getParentIdAncestorsAndLevelFromSelect( target ) ),
 		startWith( getParentIdAncestorsAndLevelFromSelect( node ) )
 	);
@@ -163,7 +163,7 @@ addFilter( 'carbon-fields.conditional-logic-post-parent.classic', 'carbon-fields
 /**
  * Defines the side effects for Gutenberg.
  */
-addFilter( 'carbon-fields.conditional-logic-post-parent.gutenberg', 'carbon-fields/metaboxes', ( ) => {
+addFilter( 'carbon-fields.conditional-display-post-parent.gutenberg', 'carbon-fields/metaboxes', ( ) => {
 	const { getPostType, getEntityRecords } = select( 'core' );
 
 	return pipe(

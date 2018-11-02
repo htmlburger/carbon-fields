@@ -7,6 +7,8 @@ import { find } from 'lodash';
  * Internal dependencies.
  */
 import equality from '../comparers/equality';
+import contain from '../comparers/contain';
+import scalar from '../comparers/scalar';
 
 export default {
 	/**
@@ -15,7 +17,9 @@ export default {
 	 * @type {Function[]}
 	 */
 	comparers: [
-		equality
+		equality,
+		contain,
+		scalar
 	],
 
 	/**
@@ -26,13 +30,9 @@ export default {
 	 * @return {boolean}
 	 */
 	isFulfiled( definition, values ) {
-		const {
-			type,
-			compare,
-			value
-		} = definition;
+		const { compare, value } = definition;
 
-		return this.firstComparerIsCorrect( values[ type ], compare, value );
+		return this.firstComparerIsCorrect( this.getEnvironmentValue( definition, values ), compare, value );
 	},
 
 	/**
@@ -44,7 +44,7 @@ export default {
 	 * @return {boolean}
 	 */
 	firstComparerIsCorrect( a, operator, b ) {
-		const comparer = find( this.comparers, ( { isOperatorSupported } ) => isOperatorSupported( operator ) );
+		const comparer = find( this.comparers, ( item ) => item.isOperatorSupported( operator ) );
 
 		if ( ! comparer ) {
 			// eslint-disable-next-line no-console
@@ -54,5 +54,16 @@ export default {
 		}
 
 		return comparer.evaluate( a, operator, b );
+	},
+
+	/**
+	 * Returns the value from the environment.
+	 *
+	 * @param  {Object} definition
+	 * @param  {Object} values
+	 * @return {Object}
+	 */
+	getEnvironmentValue( definition, values ) {
+		return values[ definition.type ];
 	}
 };

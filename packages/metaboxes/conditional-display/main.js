@@ -16,7 +16,7 @@ import handler from './handler';
  *
  * @return {null}
  */
-function ConditionalLogic() {
+function ConditionalDisplay() {
 	return null;
 }
 
@@ -33,4 +33,4 @@ const applyWitEffects = withEffects( handler )( aperture );
 export default compose(
 	applyWithSelect,
 	applyWitEffects
-)( ConditionalLogic );
+)( ConditionalDisplay );
