@@ -121,6 +121,8 @@ class Loader {
 		wp_enqueue_script( 'carbon-fields-metaboxes', \Carbon_Fields\URL . '/build/' . $context . '/metaboxes' . $suffix . '.js', array(), \Carbon_Fields\VERSION );
 
 		if ( $context === 'gutenberg' ) {
+			wp_enqueue_style( 'carbon-fields-blocks-css', \Carbon_Fields\URL . '/build/' . $context . '/blocks' . $suffix . '.css', array(), \Carbon_Fields\VERSION );
+
 			wp_enqueue_script( 'carbon-fields-blocks', \Carbon_Fields\URL . '/build/' . $context . '/blocks' . $suffix . '.js', array( 'carbon-fields-vendor' ), \Carbon_Fields\VERSION );
 		}
 

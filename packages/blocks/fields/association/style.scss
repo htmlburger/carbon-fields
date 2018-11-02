@@ -1,0 +1,40 @@
+.cf-field-association {
+	border: 1px solid #e2e4e7;
+
+	&__body {
+		display: flex;
+		flex-direction: row;
+	}
+
+	&__col {
+		flex: 0 0 50%;
+		padding: 3px 7px;
+
+		&--selected {
+			border-left: 1px solid #e2e4e7;
+		}
+	}
+
+	&__option {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
+		&-thumbnail {
+			width: 30px;
+			height: 30px;
+			margin-right: 6px;
+		}
+
+		&-actions {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			margin-left: auto;
+		}
+
+		&--selected {
+			opacity: .6;
+		}
+	}
+}
