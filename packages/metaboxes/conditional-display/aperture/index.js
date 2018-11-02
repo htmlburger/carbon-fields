@@ -22,7 +22,7 @@ import './post-parent';
  */
 export default function aperture( { context } ) {
 	return function() {
-		const postParent$ = applyFilters( `carbon-fields.conditional-logic-post-parent.${ context }` );
+		const postParent$ = applyFilters( `carbon-fields.conditional-display-post-parent.${ context }` );
 
 		return pipe(
 			combine(

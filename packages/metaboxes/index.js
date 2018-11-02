@@ -10,7 +10,7 @@ import { select } from '@wordpress/data';
 /**
  * Internal dependencies.
  */
-import initializeConditionalLogic from './conditional-logic';
+import initializeConditionalDisplay from './conditional-display';
 import { getContainerType } from './containers/registry';
 
 /**
@@ -30,7 +30,7 @@ const context = ! isUndefined( window._wpLoadGutenbergEditor ) ? 'gutenberg' : '
 /**
  * Abracadabra! Poof! Containers everywhere ...
  */
-initializeConditionalLogic( context );
+initializeConditionalDisplay( context );
 
 values( select( 'carbon-fields/metaboxes' ).getContainers() ).forEach( ( container ) => {
 	const node = document.querySelector( `.container-${ container.id }` );

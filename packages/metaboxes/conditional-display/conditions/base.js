@@ -44,7 +44,7 @@ export default {
 	 * @return {boolean}
 	 */
 	firstComparerIsCorrect( a, operator, b ) {
-		const comparer = find( this.comparers, ( { isOperatorSupported } ) => isOperatorSupported( operator ) );
+		const comparer = find( this.comparers, ( item ) => item.isOperatorSupported( operator ) );
 
 		if ( ! comparer ) {
 			// eslint-disable-next-line no-console
