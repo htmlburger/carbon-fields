@@ -30,13 +30,9 @@ export default {
 	 * @return {boolean}
 	 */
 	isFulfiled( definition, values ) {
-		const {
-			type,
-			compare,
-			value
-		} = definition;
+		const { compare, value } = definition;
 
-		return this.firstComparerIsCorrect( values[ type ], compare, value );
+		return this.firstComparerIsCorrect( this.getEnvironmentValue( definition, values ), compare, value );
 	},
 
 	/**
@@ -58,5 +54,16 @@ export default {
 		}
 
 		return comparer.evaluate( a, operator, b );
+	},
+
+	/**
+	 * Returns the value from the environment.
+	 *
+	 * @param  {Object} definition
+	 * @param  {Object} values
+	 * @return {Object}
+	 */
+	getEnvironmentValue( definition, values ) {
+		return values[ definition.type ];
 	}
 };
