@@ -8,6 +8,7 @@ import { find } from 'lodash';
  */
 import equality from '../comparers/equality';
 import contain from '../comparers/contain';
+import scalar from '../comparers/scalar';
 
 export default {
 	/**
@@ -17,7 +18,8 @@ export default {
 	 */
 	comparers: [
 		equality,
-		contain
+		contain,
+		scalar
 	],
 
 	/**
