@@ -13,7 +13,29 @@ import './style.scss';
 import FieldBase from '../../components/field-base';
 import withField from '../../components/with-field';
 
-class DatetimeField extends Component {
+export class DatetimeField extends Component {
+	/**
+	 * Handles the intialization of the flatpickr component.
+	 *
+	 * @param  {Object} selectedDateObject
+	 * @param  {string} selectedDateString
+	 * @param  {Object} instance
+	 * @return {void}
+	 */
+	handleReady = (
+		[ selectedDateObject ], // eslint-disable-line no-unused-vars
+		selectedDateString = '', // eslint-disable-line no-unused-vars
+		instance
+	) => {
+		this.props.field.picker = instance;
+	}
+
+	/**
+	 * Handles the blur event of the date input element.
+	 *
+	 * @param  {Object} e
+	 * @return {void}
+	 */
 	handleManualInput = ( e ) => {
 		const { field, onChange } = this.props;
 		const value = e.target.value;
@@ -23,26 +45,36 @@ class DatetimeField extends Component {
 		}
 	}
 
-	handleReady = ( [ selectedDate ], selectedDateStr, instance ) => { // eslint-disable-line no-unused-vars
-		this.props.field.picker = instance;
-	}
-
 	/**
-	 * Handles the change of the input.
+	 * Handles the blur event of the date input element.
 	 *
 	 * @param  {Object} e
 	 * @return {void}
 	 */
-	handleChange = ( e ) => {
-		const { field, onChange } = this.props;
-
-		onChange( field.id, e.target.value );
-	}
-
 	formatManualInput = ( e ) => {
 		const value = e.target.value;
 
 		this.props.field.picker.setDate( value, true );
+	}
+
+	/**
+	 * Handles the change of the flatpickr component.
+	 *
+	 * @param  {Object} selectedDateObject
+	 * @param  {string} selectedDateString
+	 * @param  {Object} instance
+	 * @return {void}
+	 */
+	handleChange = (
+		[ selectedDateObject ], // eslint-disable-line no-unused-vars
+		selectedDateString = '',
+		instance // eslint-disable-line no-unused-vars
+	) => {
+		const { field, onChange } = this.props;
+
+		if ( selectedDateString !== field.value ) {
+			onChange( field.id, selectedDateString );
+		}
 	}
 
 	/**
@@ -59,6 +91,13 @@ class DatetimeField extends Component {
 		return (
 			<FieldBase field={ field } >
 				<Flatpickr
+					options={ {
+						...field.picker_options,
+						wrap: true
+					} }
+					value={ field.value }
+					onReady={ this.handleReady }
+					onChange={ this.handleChange }
 					className="carbon-field-group-holder"
 				>
 					<input
@@ -67,7 +106,6 @@ class DatetimeField extends Component {
 						value={ field.value }
 						onChange={ this.handleManualInput }
 						onBlur={ this.formatManualInput }
-						wrap={ true }
 						className="regular-text carbon-field-group-input"
 						data-input
 						{ ...field.attributes }
