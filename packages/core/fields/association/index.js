@@ -2,7 +2,18 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { cloneDeep, find, isMatch, without } from 'lodash';
+import { withEffects, toProps } from 'refract-callbag';
+import {
+	cloneDeep,
+	find,
+	isMatch,
+	without
+} from 'lodash';
+import {
+	map,
+	pipe,
+	merge
+} from 'callbag-basics';
 
 class AssociationField extends Component {
 	/**
@@ -18,6 +29,14 @@ class AssociationField extends Component {
 			field.base_name,
 			value
 		);
+	}
+
+	handleQueryTermChange = ( queryTerm ) => {
+		const { field, onFetchOptions } = this.props;
+
+		field.queryTerm = queryTerm;
+
+		onFetchOptions( queryTerm );
 	}
 
 	/**
@@ -87,9 +106,81 @@ class AssociationField extends Component {
 			value: value,
 			handleChange: this.handleChange,
 			handleAddItem: this.handleAddItem,
-			handleRemoveItem: this.handleRemoveItem
+			handleRemoveItem: this.handleRemoveItem,
+			handleQueryTermChange: this.handleQueryTermChange
 		} );
 	}
 }
 
-export default AssociationField;
+/**
+ * The function that controls the stream of side-effects.
+ *
+ * @return {Function}
+ */
+function aperture() {
+	return function( component ) {
+		const [ fetchOptions$, fetchOptions ] = component.useEvent( 'fetchOptions', null );
+
+		const fetchOptionsProps$ = pipe(
+			fetchOptions$,
+			map( () => toProps( {
+				onFetchOptions: fetchOptions
+			} ) )
+		);
+
+		const fetchOptionsEffect$ = pipe(
+			fetchOptions$,
+			map( ( fieldKey ) => ( {
+				type: 'FETCH_OPTIONS',
+				payload: {
+					fieldKey
+				}
+			} ) )
+		);
+
+		return merge( fetchOptionsProps$, fetchOptionsEffect$ );
+	};
+}
+
+/**
+ * The function that causes the side effects.
+ *
+ * @param  {Object} props
+ * @return {Function}
+ */
+function handler( props ) {
+	return function( effect ) {
+		switch ( effect.type ) {
+			case 'FETCH_OPTIONS':
+				const request = window.jQuery.post( window.ajaxurl, {
+					action: 'carbon_fields_fetch_association_options',
+					page: 1,
+					term: 1
+				}, null, 'json' );
+
+				/* eslint-disable-next-line no-alert */
+				const errorHandler = () => alert( 'An error occurred while trying to create the sidebar.' );
+
+				request.done( ( response ) => {
+					if ( response && response.success ) {
+						const { onAdded, onChange } = props;
+
+						const sidebar = {
+							value: response.data.id,
+							label: response.data.name
+						};
+
+						onAdded( sidebar );
+						onChange( effect.payload.fieldKey, sidebar.value );
+					} else {
+						errorHandler();
+					}
+				} );
+
+				request.fail( errorHandler );
+				break;
+		}
+	};
+}
+
+export default withEffects( handler )( aperture )( AssociationField );

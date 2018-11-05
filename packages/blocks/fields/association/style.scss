@@ -1,17 +1,34 @@
 .cf-field-association {
-	border: 1px solid #e2e4e7;
-
 	&__body {
 		display: flex;
 		flex-direction: row;
+		flex-wrap: wrap;
+	}
+
+	&__search-bar {
+		flex: 0 0 100%;
+
+		.components-base-control__field {
+			margin-bottom: 0;
+
+			.components-text-control__input {
+				border-radius: 0;
+				margin: 0;
+				border-color: #e2e4e7;
+			}
+		}
 	}
 
 	&__col {
 		flex: 0 0 50%;
 		padding: 3px 7px;
+		border: 1px solid #e2e4e7;
+		border-top: 0;
+		max-height: 150px;
+		overflow-y: scroll;
 
 		&--selected {
-			border-left: 1px solid #e2e4e7;
+			border-left: 0;
 		}
 	}
 
