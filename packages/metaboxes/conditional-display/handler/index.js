@@ -8,6 +8,7 @@ import { get, map } from 'lodash';
  */
 import base from '../conditions/base';
 import postAncestorId from '../conditions/post-ancestor-id';
+import postTerm from '../conditions/post-term';
 
 /**
  * Keeps track of supported conditions.
@@ -16,6 +17,7 @@ import postAncestorId from '../conditions/post-ancestor-id';
  */
 const conditions = {
 	post_ancestor_id: postAncestorId,
+	post_term: postTerm,
 	post_parent_id: base,
 	post_level: base,
 	post_format: base,
