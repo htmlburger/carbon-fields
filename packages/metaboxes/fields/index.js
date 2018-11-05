@@ -3,6 +3,8 @@
  */
 import './checkbox';
 import './color';
+import './date';
+import './datetime';
 import './gravity-form';
 import './hidden';
 import './html';
@@ -15,3 +17,4 @@ import './set';
 import './sidebar';
 import './text';
 import './textarea';
+import './time';

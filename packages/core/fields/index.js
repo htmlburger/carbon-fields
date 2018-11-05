@@ -6,6 +6,7 @@ import AssociationField from './association';
 import CheckboxField from './checkbox';
 import ColorField from './color';
 import ComplexField from './complex';
+import DatetimeField from './datetime';
 import FileField from './file';
 import HiddenField from './hidden';
 import HtmlField from './html';
@@ -26,6 +27,8 @@ import TextareaField from './textarea';
 	[ 'checkbox', CheckboxField ],
 	[ 'color', ColorField ],
 	[ 'complex', ComplexField ],
+	[ 'date', DatetimeField ],
+	[ 'date_time', DatetimeField ],
 	[ 'file', FileField ],
 	[ 'gravity_form', SelectField ],
 	[ 'hidden', HiddenField ],
@@ -38,5 +41,6 @@ import TextareaField from './textarea';
 	[ 'set', SetField ],
 	[ 'sidebar', SidebarField ],
 	[ 'text', TextField ],
-	[ 'textarea', TextareaField ]
+	[ 'textarea', TextareaField ],
+	[ 'time', DatetimeField ]
 ].forEach( ( field ) => registerFieldType( ...field ) );

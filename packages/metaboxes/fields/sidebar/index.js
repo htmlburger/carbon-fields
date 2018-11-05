@@ -26,7 +26,7 @@ class SidebarField extends Component {
 	}
 
 	/**
-	 * Rendes the component
+	 * Renders the component
 	 *
 	 * @return {Object}
 	 */

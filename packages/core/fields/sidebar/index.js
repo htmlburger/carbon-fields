@@ -91,7 +91,7 @@ function handler( props ) {
 		switch ( effect.type ) {
 			case 'ADD_SIDEBAR':
 				/* eslint-disable-next-line no-alert */
-				const name = trim( window.prompt( 'Please enter the name of the new sidebar:' ) );
+				const name = trim( window.prompt( 'Please enter the name of the new sidebar2:' ) );
 
 				if ( ! name ) {
 					return;
