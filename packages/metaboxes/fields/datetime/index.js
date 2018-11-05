@@ -9,6 +9,7 @@ import Flatpickr from 'react-flatpickr';
 /**
  * The internal dependencies.
  */
+import './style.scss';
 import FieldBase from '../../components/field-base';
 import withField from '../../components/with-field';
 
@@ -58,10 +59,6 @@ class DatetimeField extends Component {
 		return (
 			<FieldBase field={ field } >
 				<Flatpickr
-					options={ field.picker_options }
-					onReady={ this.handleReady }
-					onChange={ this.handleChange }
-					onClose={ this.handleClose }
 					className="carbon-field-group-holder"
 				>
 					<input
