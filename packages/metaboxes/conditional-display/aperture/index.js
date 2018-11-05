@@ -16,6 +16,7 @@ import {
 import './post-parent';
 import './post-format';
 import './post-template';
+import './post-term';
 
 /**
  * The function that controls the stream of side effects.
@@ -29,12 +30,14 @@ export default function aperture( { context } ) {
 		const postParent$ = applyFilters( `carbon-fields.conditional-display-post-parent.${ context }` );
 		const postFormat$ = applyFilters( `carbon-fields.conditional-display-post-format.${ context }` );
 		const postTemplate$ = applyFilters( `carbon-fields.conditional-display-post-template.${ context }` );
+		const postTerm$ = applyFilters( `carbon-fields.conditional-display-post-term.${ context }` );
 
 		return pipe(
 			merge(
 				postParent$,
 				postFormat$,
-				postTemplate$
+				postTemplate$,
+				postTerm$
 			),
 			scan( ( previous, current ) => produce( previous, ( draft ) => {
 				assign( draft, current );
