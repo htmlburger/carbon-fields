@@ -148,36 +148,38 @@ function aperture() {
  * @param  {Object} props
  * @return {Function}
  */
-function handler( props ) {
+function handler() {
 	return function( effect ) {
 		switch ( effect.type ) {
 			case 'FETCH_OPTIONS':
-				const request = window.jQuery.post( window.ajaxurl, {
-					action: 'carbon_fields_fetch_association_options',
-					page: 1,
-					term: 1
-				}, null, 'json' );
+				// eslint-disable-next-line
+				console.log( 'working here...' );
+				// const request = window.jQuery.post( window.ajaxurl, {
+				// 	action: 'carbon_fields_fetch_association_options',
+				// 	page: 1,
+				// 	term: 1
+				// }, null, 'json' );
 
-				/* eslint-disable-next-line no-alert */
-				const errorHandler = () => alert( 'An error occurred while trying to create the sidebar.' );
+				// /* eslint-disable-next-line no-alert */
+				// const errorHandler = () => alert( 'An error occurred while trying to create the sidebar.' );
 
-				request.done( ( response ) => {
-					if ( response && response.success ) {
-						const { onAdded, onChange } = props;
+				// request.done( ( response ) => {
+				// 	if ( response && response.success ) {
+				// 		const { onAdded, onChange } = props;
 
-						const sidebar = {
-							value: response.data.id,
-							label: response.data.name
-						};
+				// 		const sidebar = {
+				// 			value: response.data.id,
+				// 			label: response.data.name
+				// 		};
 
-						onAdded( sidebar );
-						onChange( effect.payload.fieldKey, sidebar.value );
-					} else {
-						errorHandler();
-					}
-				} );
+				// 		onAdded( sidebar );
+				// 		onChange( effect.payload.fieldKey, sidebar.value );
+				// 	} else {
+				// 		errorHandler();
+				// 	}
+				// } );
 
-				request.fail( errorHandler );
+				// request.fail( errorHandler );
 				break;
 		}
 	};

@@ -4,16 +4,12 @@
 import cx from 'classnames';
 import { Component } from '@wordpress/element';
 import { BaseControl, IconButton, TextControl } from '@wordpress/components';
-import { withDispatch } from '@wordpress/data';
 import { addFilter } from '@wordpress/hooks';
-import { compose } from '@wordpress/compose';
 
 /**
  * Internal dependencies.
  */
 import './style.scss';
-
-import withField from '../../components/with-field';
 
 class AssociationField extends Component {
 	/**
@@ -109,18 +105,7 @@ class AssociationField extends Component {
 	}
 }
 
-const applyWithDispatch = withDispatch( ( dispatch ) => {
-	const { fetchAssociationOptions } = dispatch( 'carbon-fields/blocks' );
-
-	return {
-		onFetchOptions: fetchAssociationOptions
-	};
-} );
-
-addFilter( 'carbon-fields.association-field.block', 'carbon-fields/blocks', ( OriginalAssociationField ) => compose(
-	withField,
-	applyWithDispatch
-)( ( props ) => {
+addFilter( 'carbon-fields.association-field.block', 'carbon-fields/blocks', ( OriginalAssociationField ) => ( props ) => {
 	return (
 		<OriginalAssociationField { ...props }>
 			{ ( {
@@ -142,4 +127,4 @@ addFilter( 'carbon-fields.association-field.block', 'carbon-fields/blocks', ( Or
 			) }
 		</OriginalAssociationField>
 	);
-} ) );
+} );
