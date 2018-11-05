@@ -7,6 +7,7 @@ import { get, map } from 'lodash';
  * Internal dependencies.
  */
 import base from '../conditions/base';
+import boolean from '../conditions/boolean';
 import postAncestorId from '../conditions/post-ancestor-id';
 import postTerm from '../conditions/post-term';
 
@@ -16,6 +17,7 @@ import postTerm from '../conditions/post-term';
  * @type {Object}
  */
 const conditions = {
+	boolean,
 	post_ancestor_id: postAncestorId,
 	post_term: postTerm,
 	post_parent_id: base,
