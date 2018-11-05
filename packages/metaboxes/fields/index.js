@@ -17,3 +17,4 @@ import './set';
 import './sidebar';
 import './text';
 import './textarea';
+import './time';
