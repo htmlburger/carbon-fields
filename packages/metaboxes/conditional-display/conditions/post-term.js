@@ -54,6 +54,7 @@ export default {
 			return results[ method ]( Boolean );
 		}
 
+		// TODO: Improve value resolution in context of Gutenberg
 		value = value.taxonomy_object.hierarchical
 			? value.term_object.term_id
 			: value.term_object.name;
