@@ -1,41 +1,27 @@
 /**
  * External dependencies.
  */
-import classnames from 'classnames';
-import { getFieldType } from '@carbon-fields/core';
+import { isObject } from 'lodash';
 
 /**
- * Renders the base wrapper of the container.
+ * Internal dependencies.
+ */
+import ContainerPlain from '../container-plain';
+import ContainerTabbed from '../container-tabbed';
+
+/**
+ * Renders the container.
  *
  * @param  {Object} props
- * @param  {Object} props.container
- * @param  {mixed}  props.children
  * @return {Object}
  */
-const ContainerBase = ( { container, children } ) => {
-	const classes = classnames( [
-		'carbon-container',
-		`carbon-container-${ container.id }`,
-		`carbon-container-${ container.type }`,
-		...container.classes
-	] );
+const ContainerBase = ( props ) => {
+	const isTabbed = isObject( props.container.settings.tabs );
 
 	return (
-		<div className={ classes }>
-			{ children }
-
-			{ container.fields.map( ( field ) => {
-				const Field = getFieldType( field.type, 'metabox' );
-
-				if ( ! Field ) {
-					return null;
-				}
-
-				return (
-					<Field key={ field.id } id={ field.id } />
-				);
-			} ) }
-		</div>
+		isTabbed
+			? <ContainerTabbed { ...props } />
+			: <ContainerPlain { ...props } />
 	);
 };
 

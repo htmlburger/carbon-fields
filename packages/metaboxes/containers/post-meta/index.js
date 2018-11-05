@@ -3,6 +3,6 @@
  */
 import './classic';
 import './gutenberg';
-import BaseContainer from '../base';
+import ContainerBase from '../../components/container-base';
 
-export default BaseContainer;
+export default ContainerBase;

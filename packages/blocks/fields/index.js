@@ -1,6 +1,7 @@
 /**
  * Internal dependencies.
  */
+import './association';
 import './checkbox';
 import './color';
 import './complex';

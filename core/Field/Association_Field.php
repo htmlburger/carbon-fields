@@ -281,6 +281,7 @@ class Association_Field extends Field {
 				'label' => $this->get_item_label( $p, $type['type'], $type['post_type'] ),
 				'is_trashed' => ( get_post_status( $p ) == 'trash' ),
 				'edit_link' => $this->get_object_edit_link( $type, $p ),
+				'thumbnail' => get_the_post_thumbnail_url( $p, 'thumbnail' ),
 			);
 		}
 		return $posts;

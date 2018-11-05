@@ -1,9 +1,5 @@
 /* eslint no-console: [ 'error', { allow: [ 'error' ] } ] */
 
-/* Remove when https://github.com/babel/babel-eslint/issues/530 is fixed */
-/* eslint template-curly-spacing: 'off' */
-/* eslint indent: 'off' */
-
 /**
  * External dependencies.
  */

@@ -1,7 +1,7 @@
 /**
  * Internal dependencies.
  */
-import ContainerBase from '../container-base';
+import ContainerShell from '../container-shell';
 import ContainerNonce from '../container-nonce';
 
 /**
@@ -18,7 +18,7 @@ const ContainerTabbed = ( props ) => {
 		<div className="carbon-tabs carbon-tabs-stacked">
 			<ContainerNonce name={ nonce.name } value={ nonce.value } />
 
-			<ContainerBase { ...props } />
+			<ContainerShell { ...props } />
 		</div>
 	);
 };
