@@ -7,6 +7,7 @@ import TermMetaContainer from './term-meta';
 import UserMetaContainer from './user-meta';
 import CommentMetaContainer from './comment-meta';
 import ThemeOptionsContainer from './theme-options';
+import NavMenuItemContainer from './nav-menu-item';
 
 /**
  * Registers the containers.
@@ -16,5 +17,6 @@ import ThemeOptionsContainer from './theme-options';
 	[ 'term_meta', TermMetaContainer ],
 	[ 'user_meta', UserMetaContainer ],
 	[ 'comment_meta', CommentMetaContainer ],
-	[ 'theme_options', ThemeOptionsContainer ]
+	[ 'theme_options', ThemeOptionsContainer ],
+	[ 'nav_menu_item', NavMenuItemContainer ]
 ].forEach( ( container ) => registerContainerType( ...container ) );
