@@ -28,7 +28,8 @@ const conditions = {
 	post_template: base,
 	term_level: base,
 	term_parent: termParentId,
-	term_ancestor: termAncestorId
+	term_ancestor: termAncestorId,
+	user_role: base
 };
 
 /**

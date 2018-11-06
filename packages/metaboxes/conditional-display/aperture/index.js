@@ -18,6 +18,7 @@ import './post-format';
 import './post-template';
 import './post-term';
 import './term-parent';
+import './user-role';
 
 /**
  * The function that controls the stream of side effects.
@@ -33,6 +34,7 @@ export default function aperture( { context } ) {
 		const postTemplate$ = applyFilters( `carbon-fields.conditional-display-post-template.${ context }` );
 		const postTerm$ = applyFilters( `carbon-fields.conditional-display-post-term.${ context }` );
 		const termParent$ = applyFilters( `carbon-fields.conditional-display-term-parent.${ context }` );
+		const userRole$ = applyFilters( `carbon-fields.conditional-display-user-role.${ context }` );
 
 		return pipe(
 			merge(
@@ -40,7 +42,8 @@ export default function aperture( { context } ) {
 				postFormat$,
 				postTemplate$,
 				postTerm$,
-				termParent$
+				termParent$,
+				userRole$
 			),
 			scan( ( previous, current ) => produce( previous, ( draft ) => {
 				assign( draft, current );
