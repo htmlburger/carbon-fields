@@ -1,6 +1,8 @@
 /**
  * External dependencies.
  */
+import produce from 'immer';
+import { forEach } from 'lodash';
 import { combineReducers } from '@wordpress/data';
 
 /**
@@ -20,6 +22,30 @@ export function fieldDefinitionsByBlockName( state = {}, action ) {
 	}
 }
 
+/**
+ * The reducer that keeps track of the fields.
+ *
+ * @param  {Object} state
+ * @param  {Object} action
+ * @return {Object}
+ */
+export function fields( state = {}, action ) {
+	switch ( action.type ) {
+		case 'RECEIVE_ASSOCIATION_OPTIONS':
+			return produce( state, ( draft ) => {
+				forEach( draft, ( field ) => {
+					if ( field.type === 'association' ) {
+						field.options.unshift( action.payload );
+					}
+				} );
+			} );
+
+		default:
+			return state;
+	}
+}
+
 export default combineReducers( {
-	fieldDefinitionsByBlockName
+	fieldDefinitionsByBlockName,
+	fields
 } );

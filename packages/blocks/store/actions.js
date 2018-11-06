@@ -16,12 +16,24 @@ export function setupFieldDefinitions( definitions ) {
 /**
  * Returns an actions object used to request options for an association field.
  *
- * @param  {Object} sidebar
  * @return {Object}
  */
 export function fetchAssociationOptions() {
 	return {
 		type: 'FETCH_ASSOCIATION_OPTIONS',
 		payload: {}
+	};
+}
+
+/**
+ * Returns an actions object used to receive options for all association fields.
+ *
+ * @param  {Object} options
+ * @return {Object}
+ */
+export function receiveAssociationOptions( options ) {
+	return {
+		type: 'RECEIVE_ASSOCIATION_OPTIONS',
+		payload: options
 	};
 }

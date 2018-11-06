@@ -86,8 +86,14 @@ class AssociationField extends Component {
 	render() {
 		const {
 			field,
-			value
+			value,
+			onFetchOptions
 		} = this.props;
+
+		onFetchOptions( {
+			container_id: field.container_id,
+			field_name: field.base_name
+		} );
 
 		if ( ! field.duplicates_allowed ) {
 			field.options = field.options.map( ( option ) => {
@@ -130,11 +136,9 @@ function aperture() {
 
 		const fetchOptionsEffect$ = pipe(
 			fetchOptions$,
-			map( ( fieldKey ) => ( {
+			map( ( payload ) => ( {
 				type: 'FETCH_OPTIONS',
-				payload: {
-					fieldKey
-				}
+				payload: payload
 			} ) )
 		);
 
@@ -150,21 +154,25 @@ function aperture() {
  */
 function handler() {
 	return function( effect ) {
-		switch ( effect.type ) {
+		const { payload, type } = effect;
+
+		switch ( type ) {
 			case 'FETCH_OPTIONS':
 				// eslint-disable-next-line
-				console.log( 'working here...' );
-				// const request = window.jQuery.post( window.ajaxurl, {
-				// 	action: 'carbon_fields_fetch_association_options',
-				// 	page: 1,
-				// 	term: 1
-				// }, null, 'json' );
+				const request = window.jQuery.get( window.ajaxurl, {
+					action: 'carbon_fields_fetch_association_options',
+					page: 1,
+					term: '',
+					container_id: payload.container_id,
+					field_name: payload.field_name
+				}, null, 'json' );
 
-				// /* eslint-disable-next-line no-alert */
-				// const errorHandler = () => alert( 'An error occurred while trying to create the sidebar.' );
+				/* eslint-disable-next-line no-alert */
+				// const errorHandler = () => alert( 'An error occurred while trying to fetch association options.' );
 
 				// request.done( ( response ) => {
 				// 	if ( response && response.success ) {
+				// 		console.log( props );
 				// 		const { onAdded, onChange } = props;
 
 				// 		const sidebar = {
