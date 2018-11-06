@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { compose, withState } from '@wordpress/compose';
 import { withEffects, toProps } from 'refract-callbag';
 import {
 	cloneDeep,
@@ -152,20 +153,22 @@ function aperture() {
  * @param  {Object} props
  * @return {Function}
  */
-function handler() {
+function handler( props ) {
 	return function( effect ) {
-		const { payload, type } = effect;
+		const { type } = effect;
 
 		switch ( type ) {
 			case 'FETCH_OPTIONS':
 				// eslint-disable-next-line
-				const request = window.jQuery.get( window.ajaxurl, {
-					action: 'carbon_fields_fetch_association_options',
-					page: 1,
-					term: '',
-					container_id: payload.container_id,
-					field_name: payload.field_name
-				}, null, 'json' );
+				// const request = window.jQuery.get( window.ajaxurl, {
+				// 	action: 'carbon_fields_fetch_association_options',
+				// 	page: 1,
+				// 	term: '',
+				// 	container_id: payload.container_id,
+				// 	field_name: payload.field_name
+				// }, null, 'json' );
+
+				props.setState( [] );
 
 				/* eslint-disable-next-line no-alert */
 				// const errorHandler = () => alert( 'An error occurred while trying to fetch association options.' );
@@ -193,4 +196,13 @@ function handler() {
 	};
 }
 
-export default withEffects( handler )( aperture )( AssociationField );
+const applyWithState = withState( {
+	options: []
+} );
+
+const applyWithEffects = withEffects( handler )( aperture );
+
+export default compose(
+	applyWithState,
+	applyWithEffects
+)( AssociationField );
