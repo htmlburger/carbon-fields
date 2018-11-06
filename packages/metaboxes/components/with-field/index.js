@@ -12,11 +12,15 @@ import { compose, createHigherOrderComponent } from '@wordpress/compose';
  * @return {Function}
  */
 export default createHigherOrderComponent( ( Component ) => {
-	const applyWithSelect = withSelect( ( select, { id } ) => {
-		const field = select( 'carbon-fields/metaboxes' ).getFieldById( id );
+	const applyWithSelect = withSelect( ( select, props ) => {
+		const field = select( 'carbon-fields/metaboxes' ).getFieldById( props.id );
+		const name = props.name || field.name;
+		const { value } = field;
 
 		return {
-			field
+			field,
+			name,
+			value
 		};
 	} );
 
