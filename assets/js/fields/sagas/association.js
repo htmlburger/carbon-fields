@@ -1,80 +1,82 @@
 /**
  * The external dependencies.
  */
-// import $ from 'jquery';
-// import { all, call, put, take, takeEvery, fork } from 'redux-saga/effects';
+import $ from 'jquery';
+import { all, call, put, select, takeEvery } from 'redux-saga/effects';
 
-// /**
-//  * The internal dependencies.
-//  */
-// import { createScrollChannel } from 'lib/events';
-// import { fetchAssociationEntries } from 'fields/helpers';
-// import { requestAssociationEntries } from 'fields/actions';
+/**
+ * The internal dependencies.
+ */
+import {
+	setUI,
+	requestAssociationOptions,
+	setAssociationOptions,
+	appendAssociationOptions,
+} from 'fields/actions';
+import {
+	getFieldHierarchyById
+} from 'fields/selectors';
 
-// import { receiveContainer } from 'containers/actions';
 
-// export function* workerRequestAssociationEntries({ payload, type }) {
-// 	const { options } = payload;
+const FETCH_ASSOCIATION_OPTIONS_AJAX_ACTION = 'carbon_fields_fetch_association_options';
 
-// 	const channel = yield call(fetchAssociationEntries, options);
-// 		console.log( channel );
 
-// 	while (true) {
-// 		const result = yield take(channel);
-// 		console.log( result );
-// 		// const $containers = $(data).find('[data-json]');
+/**
+ * Get the options for the source list in association fields.
+ *
+ * @param  {Options} args
+ * @return {Promise<Object, String>}
+ */
+const fetchAssociationOptions = (args) => {
+	return new Promise((resolve, reject) => {
+		$.get(window.ajaxurl, args, null, 'json')
+		 .done((response) => {
+		 	resolve(response)
+		 })
+		 .fail(() => {
+		 	reject('An error occured');
+		 });
+	});
+};
 
-// 		// // Close the channel since we don't have any
-// 		// // registered containers.
-// 		// if ($containers.length < 1) {
-// 		// 	channel.close();
-// 		// 	break;
-// 		// }
+/**
+ * Handle the request to fetch association options.
+ *
+ * @param {Object} options.payload
+ */
+export function* workerRequestAssociationOptions({ payload }) {
+	const { field, options, append = false } = payload;
 
-// 		// for (let i = 0; i < $containers.length; i++) {
-// 		// 	let $container = $($containers[i]);
-// 		// 	yield put(receiveContainer($container.data('json'), false));
-// 		// }
-// 	}
-// }
+	const fieldHierarchyName = yield select(getFieldHierarchyById, field.id);
 
-// export function* workerScrollAssociationList(element) {
-// 	console.log(element);
+	const args = {
+		action: FETCH_ASSOCIATION_OPTIONS_AJAX_ACTION,
+		...options,
+		field_name: fieldHierarchyName,
+		container_id: field.container_id,
+	};
 
-// 	const channel = yield call(createScrollChannel, element);
-// 	// const $container = $('.carbon-box:first');
-// 	// const $panel = $('#postbox-container-1');
-// 	// const $bar = $('#wpadminbar');
+	const { data } = yield call(fetchAssociationOptions, args);
 
-// 	while (true) {
-// 		const { value } = yield take(channel);
-// 		console.log( value );
-// 		// const offset = $bar.height() + 10;
-// 		// const threshold = $container.offset().top - offset;
+	yield put(setUI(field.id, {
+		isLoading: false,
+	}));
 
-// 		// // In some situations the threshold is negative number because
-// 		// // the container element isn't rendered yet.
-// 		// if (threshold > 0) {
-// 		// 	$panel
-// 		// 		.toggleClass('fixed', value >= threshold)
-// 		// 		.css('top', offset);
-// 		// }
-// 	}
-// }
+	if (append) {
+		yield put(appendAssociationOptions(field.id, data));
+	} else {
+		yield put(setAssociationOptions(field.id, data));
+	}
+}
 
-// /**
-//  * Start to work.
-//  *
-//  * @return {void}
-//  */
+
+/**
+ * Start to work.
+ *
+ * @return {void}
+ */
 export default function* foreman() {
-// 	console.log(a);
-// 	console.log(b);
-// 	console.log(c);
-
-// 	yield all([
-// 		// takeEvery(requestAssociationEntries, workerRequestAssociationEntries),
-// 	]);
-
-// 	yield fork(workerScrollAssociationList);
+	yield all([
+		takeEvery(requestAssociationOptions, workerRequestAssociationOptions),
+	]);
 }

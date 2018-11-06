@@ -32,7 +32,8 @@ import SortableList from 'fields/components/sortable-list';
 import AssociationList from 'fields/components/association/list';
 import withStore from 'fields/decorators/with-store';
 import withSetup from 'fields/decorators/with-setup';
-import { requestAssociationEntries } from 'fields/actions';
+import { getFieldHierarchyById } from 'fields/selectors';
+import { requestAssociationOptions } from 'fields/actions';
 import { TYPE_ASSOCIATION, VALIDATION_ASSOCIATION } from 'fields/constants';
 
 /**
@@ -56,9 +57,6 @@ import { TYPE_ASSOCIATION, VALIDATION_ASSOCIATION } from 'fields/constants';
 export const AssociationField = ({
 	name,
 	field,
-	items,
-	term,
-	isLoading,
 	sortableOptions,
 	onSearchTermChange,
 	handleAddItem,
@@ -76,6 +74,8 @@ export const AssociationField = ({
 		? vsprintf(counterLabels[0], counterLabelArgs)
 		: vsprintf(counterLabels[1], counterLabelArgs);
 
+	let isLoading = field.ui.isLoading || false;
+
 	return <Field field={field}>
 		<div className="carbon-association-container carbon-association">
 			<div className="selected-items-container">
@@ -85,7 +85,7 @@ export const AssociationField = ({
 			</div>
 
 			<SearchInput
-				term={term}
+				term={field.ui.term || ''}
 				onChange={onSearchTermChange} />
 
 			<div className="carbon-association-body">
@@ -95,7 +95,7 @@ export const AssociationField = ({
 					</div>
 
 					<AssociationList
-						items={items}
+						items={field.options || []}
 						onItemClick={handleAddItem} />
 				</div>
 
@@ -124,9 +124,13 @@ AssociationField.propTypes = {
 	field: PropTypes.shape({
 		value: PropTypes.arrayOf(PropTypes.object),
 		max: PropTypes.number,
+		ui: PropTypes.shape({
+			term: PropTypes.string,
+			page: PropTypes.integer,
+			isLoading: PropTypes.boolean,
+		}),
 	}),
-	items: PropTypes.arrayOf(PropTypes.object),
-	term: PropTypes.string,
+	options: PropTypes.arrayOf(PropTypes.object),
 	handleAddItem: PropTypes.func,
 	handleRemoveItem: PropTypes.func,
 };
@@ -140,7 +144,49 @@ export const enhance = compose(
 	/**
 	 * Connect to the Redux store.
 	 */
-	withStore(),
+	withStore(undefined, {
+		requestAssociationOptions
+	}),
+
+	withHandlers({
+		onSearchTermChange: ({
+			field,
+			setUI,
+			requestAssociationOptions,
+		}) => debounce(term => {
+			setUI(field.id, {
+				term: term,
+				page: 1,
+				isLoading: true,
+			});
+
+			requestAssociationOptions(field, {
+				term: term,
+				page: 1,
+			});
+		}, 200),
+
+		onListScroll: ({
+			field,
+			setUI,
+			requestAssociationOptions
+		}) => event => {
+			const $sourceList = $(event.target);
+
+			if ($sourceList[0].scrollHeight - $sourceList.scrollTop() <= $sourceList.outerHeight()) {
+				setUI(field.id, {
+					page: field.ui.page + 1,
+					isLoading: true,
+				});
+
+				// fetch next page data
+				requestAssociationOptions(field, {
+					term: field.ui.term,
+					page: field.ui.page + 1,
+				}, true);
+			}
+		}
+	}),
 
 	/**
 	 * Track current search term.
@@ -241,21 +287,22 @@ export const enhance = compose(
 		componentDidMount() {
 			const {
 				field,
-				ui,
-				page,
 				setupField,
 				setupValidation,
-				setItems,
-				fetchItems,
-				appendItems,
-				onReceiveItems,
-				onReceiveNextPageItems,
-				setPage,
-				onListScroll
+				onListScroll,
+				requestAssociationOptions
 			} = this.props;
 
-			// fetch initial data
-			fetchItems().then(response => onReceiveItems(response));
+			let { ui } = this.props;
+
+			ui = { ...ui, ...{
+				isLoading: true
+			} };
+
+			requestAssociationOptions(field, {
+				term: '',
+				page: 1,
+			});
 
 			const $sourceList = $(ReactDOM.findDOMNode(this)).find('.carbon-association-left .carbon-association-list');
 
@@ -264,27 +311,26 @@ export const enhance = compose(
 			setupField(field.id, field.type, ui);
 			setupValidation(field.id, VALIDATION_ASSOCIATION);
 		},
+	}, {
+		term: '',
+		page: 1,
 	}),
 
 	/**
 	 * Pass some props to the component.
 	 */
-	withProps(({ field, term }) => {
-		let items = field.options;
-
-		if (term) {
-			items = items.filter(({ title }) => includes(title.toLowerCase(), term.toLowerCase()));
-		}
+	withProps(({ field }) => {
+		let options = field.options;
 
 		if (!field.duplicates_allowed) {
-			items = items.map(item => {
-				item.disabled = !!find(field.value, selectedItem => isMatch(selectedItem, {
-					id: item.id,
-					type: item.type,
-					subtype: item.subtype,
+			options = options.map(option => {
+				option.disabled = !!find(field.value, selectedOption => isMatch(selectedOption, {
+					id: option.id,
+					type: option.type,
+					subtype: option.subtype,
 				}));
 
-				return item;
+				return option;
 			});
 		}
 
@@ -298,7 +344,7 @@ export const enhance = compose(
 		};
 
 		return {
-			// items,
+			options,
 			sortableOptions,
 		};
 	}),

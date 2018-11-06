@@ -4,6 +4,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import cx from 'classnames';
+import { decode } from 'he';
 import { withHandlers } from 'recompose';
 
 /**
@@ -47,7 +48,7 @@ export const AssociationListItem = ({
 
 			<span className="dashicons-before dashicons-plus-alt"></span>
 
-			{item.title}
+			{decode(item.title)}
 
 			{
 				item.is_trashed

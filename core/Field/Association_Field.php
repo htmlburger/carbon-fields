@@ -13,7 +13,8 @@ use Carbon_Fields\Value_Set\Value_Set;
  *  - Comments
  */
 class Association_Field extends Field {
-	const ENTRIES_PER_PAGE = 10;
+	use Association\Queries_Options,
+		Association\Formats_Options;
 
 	/**
 	 * WP_Toolset instance for WP data loading
@@ -35,6 +36,13 @@ class Association_Field extends Field {
 	 * @var integer
 	 */
 	protected $max = -1;
+
+	/**
+	 * Max items per page. -1 for no limit
+	 *
+	 * @var integer
+	 */
+	protected $items_per_page = 10;
 
 	/**
 	 * Allow items to be added multiple times
@@ -71,28 +79,7 @@ class Association_Field extends Field {
 	public function __construct( $type, $name, $label ) {
 		$this->wp_toolset = \Carbon_Fields\Carbon_Fields::resolve( 'wp_toolset' );
 		$this->set_value_set( new Value_Set( Value_Set::TYPE_VALUE_SET, array( 'type' => '', 'subtype' => '', 'id' => 0 ) ) );
-
-		add_action( 'wp_ajax_carbon_fields_fetch_association_results', array( get_class(), 'handle_ajax_call' ) );
-
 		parent::__construct( $type, $name, $label );
-	}
-
-	public static function field_type_activated() {
-	}
-
-	/**
-	 * @todo
-	 */
-	public static function handle_ajax_call() {
-		$page = isset( $_GET['page'] ) ? absint( $_GET['page'] )              : 1;
-		$term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';
-
-		$field = \Carbon_Fields\Helper\Helper::get_field( null, $_GET['container_id'], $_GET['field_name'] );
-
-		return wp_send_json_success( $field->get_union_options( array(
-			'page' => $page,
-			'term' => $term,
-		) ) );
 	}
 
 	/**
@@ -193,355 +180,8 @@ class Association_Field extends Field {
 			$property_array = $this->value_string_to_property_array( $value_string );
 			$value_set[] = $property_array;
 		}
+
 		return $value_set;
-	}
-
-	/**
-	 * Used to get the title of an item.
-	 *
-	 * Can be overriden or extended by the `carbon_association_title` filter.
-	 *
-	 * @param int $id The database ID of the item.
-	 * @param string $type Item type (post, term, user, comment, or a custom one).
-	 * @param string $subtype The subtype - "page", "post", "category", etc.
-	 * @return string $title The title of the item.
-	 */
-	protected function get_title_by_type( $id, $type, $subtype = '' ) {
-		$title = '';
-
-		$method = 'get_' . $type . '_title';
-		$callable = array( $this->wp_toolset, $method );
-		if ( is_callable( $callable ) ) {
-			$title = call_user_func( $callable, $id, $subtype );
-		}
-
-		if ( $type === 'comment' ) {
-			$max = apply_filters( 'carbon_fields_association_field_comment_length', 30, $this->get_base_name() );
-			if ( strlen( $title ) > $max ) {
-				$title = substr( $title, 0, $max ) . '...';
-			}
-		}
-
-		/**
-		 * Filter the title of the association item.
-		 *
-		 * @param string $title   The unfiltered item title.
-		 * @param string $name    Name of the association field.
-		 * @param int    $id      The database ID of the item.
-		 * @param string $type    Item type (post, term, user, comment, or a custom one).
-		 * @param string $subtype Subtype - "page", "post", "category", etc.
-		 */
-		$title = apply_filters( 'carbon_fields_association_field_title', $title, $this->get_base_name(), $id, $type, $subtype );
-
-		if ( ! $title ) {
-			$title = '(no title) - ID: ' . $id;
-		}
-
-		return $title;
-	}
-
-	/**
-	 * Used to get the label of an item.
-	 *
-	 * Can be overriden or extended by the `carbon_association_item_label` filter.
-	 *
-	 * @param int     $id      The database ID of the item.
-	 * @param string  $type    Item type (post, term, user, comment, or a custom one).
-	 * @param string  $subtype Subtype - "page", "post", "category", etc.
-	 * @return string $label The label of the item.
-	 */
-	protected function get_item_label( $id, $type, $subtype = '' ) {
-		$label = $subtype ? $subtype : $type;
-
-		if ( $type === 'post' ) {
-			$post_type_object = get_post_type_object( $subtype );
-			$label = $post_type_object->labels->singular_name;
-		} elseif ( $type === 'term' ) {
-			$taxonomy_object = get_taxonomy( $subtype );
-			$label = $taxonomy_object->labels->singular_name;
-		}
-
-		/**
-		 * Filter the label of the association item.
-		 *
-		 * @param string $label   The unfiltered item label.
-		 * @param string $name    Name of the association field.
-		 * @param int    $id      The database ID of the item.
-		 * @param string $type    Item type (post, term, user, comment, or a custom one).
-		 * @param string $subtype Subtype - "page", "post", "category", etc.
-		 */
-		return apply_filters( 'carbon_fields_association_field_item_label', $label, $this->get_base_name(), $id, $type, $subtype );
-	}
-
-	/**
-	 * Get post options
-	 *
-	 * @return array $options
-	 */
-	protected function get_post_options( $type, $args ) {
-		$args = wp_parse_args( array(
-			'page'   => 1,
-			'search' => '',
-		), $args );
-
-		/**
-		 * Filter the default query when fetching posts for a particular field.
-		 *
-		 * @param array $args The parameters, passed to get_posts().
-		 */
-		$filter_name = 'carbon_fields_association_field_options_' . $this->get_base_name() . '_' . $type['type'] . '_' . $type['post_type'];
-		$args = apply_filters( $filter_name, array(
-			'post_type' => $type['post_type'],
-			// 'posts_per_page' => -1,
-			'posts_per_page' => 10,
-			'fields' => 'ids',
-			'suppress_filters' => false,
-			's' => $args['search'],
-			'page' => $args['page'],
-		) );
-
-		// fetch and prepare posts as association items
-		$posts = get_posts( $args );
-		foreach ( $posts as &$p ) {
-			$p = array(
-				'id' => intval( $p ),
-				'title' => $this->get_title_by_type( $p, $type['type'], $type['post_type'] ),
-				'type' => $type['type'],
-				'subtype' => $type['post_type'],
-				'label' => $this->get_item_label( $p, $type['type'], $type['post_type'] ),
-				'is_trashed' => ( get_post_status( $p ) == 'trash' ),
-				'edit_link' => $this->get_object_edit_link( $type, $p ),
-				'thumbnail' => get_the_post_thumbnail_url( $p, 'thumbnail' ),
-			);
-		}
-		return $posts;
-	}
-
-	/**
-	 * Get term options
-	 *
-	 * @return array $options
-	 */
-	protected function get_term_options( $type ) {
-		/**
-		 * Filter the default parameters when fetching terms for a particular field.
-		 *
-		 * @param array $args The parameters, passed to get_terms().
-		 */
-		$filter_name = 'carbon_fields_association_field_options_' . $this->get_base_name() . '_' . $type['type'] . '_' . $type['taxonomy'];
-		$args = apply_filters( $filter_name, array(
-			'hide_empty' => 0,
-			'fields' => 'id=>name',
-		) );
-
-		// fetch and prepare terms as association items
-		$terms = get_terms( $type['taxonomy'], $args );
-		foreach ( $terms as $term_id => &$term ) {
-			$term = array(
-				'id' => intval( $term_id ),
-				'title' => $term,
-				'type' => $type['type'],
-				'subtype' => $type['taxonomy'],
-				'label' => $this->get_item_label( $term_id, $type['type'], $type['taxonomy'] ),
-				'is_trashed' => false,
-				'edit_link' => $this->get_object_edit_link( $type, $term_id ),
-			);
-		}
-		return $terms;
-	}
-
-	/**
-	 * Get user options
-	 *
-	 * @return array $options
-	 */
-	protected function get_user_options( $type ) {
-		/**
-		 * Filter the default parameters when fetching users for a particular field.
-		 *
-		 * @param array $args The parameters, passed to get_users().
-		 */
-		$filter_name = 'carbon_fields_association_field_options_' . $this->get_base_name() . '_' . $type['type'];
-		$args = apply_filters( $filter_name, array(
-			'fields' => 'ID',
-		) );
-
-		// fetch and prepare users as association items
-		$users = get_users( $args );
-		foreach ( $users as &$u ) {
-			$u = array(
-				'id' => intval( $u ),
-				'title' => $this->get_title_by_type( $u, $type['type'] ),
-				'type' => $type['type'],
-				'subtype' => 'user',
-				'label' => $this->get_item_label( $u, $type['type'] ),
-				'is_trashed' => false,
-				'edit_link' => $this->get_object_edit_link( $type, $u ),
-			);
-		}
-		return $users;
-	}
-
-	/**
-	 * Get comment options
-	 *
-	 * @return array $options
-	 */
-	protected function get_comment_options( $type ) {
-		/**
-		 * Filter the default parameters when fetching comments for a particular field.
-		 *
-		 * @param array $args The parameters, passed to get_comments().
-		 */
-		$filter_name = 'carbon_fields_association_field_options_' . $this->get_base_name() . '_' . $type['type'];
-		$args = apply_filters( $filter_name, array(
-			'fields' => 'ids',
-		) );
-
-		// fetch and prepare comments as association items
-		$comments = get_comments( $args );
-		foreach ( $comments as &$c ) {
-			$c = array(
-				'id' => intval( $c ),
-				'title' => $this->get_title_by_type( $c, $type['type'] ),
-				'type' => $type['type'],
-				'subtype' => 'comment',
-				'label' => $this->get_item_label( $c, $type['type'] ),
-				'is_trashed' => false,
-				'edit_link' => $this->get_object_edit_link( $type, $c ),
-			);
-		}
-		return $comments;
-	}
-
-	public function get_union_options( $args = array() ) {
-		global $wpdb;
-
-		$args = wp_parse_args( $args, [
-			'page' => 1,
-			'term' => '',
-		] );
-
-		$sql_queries = [];
-
-		foreach ( $this->types as $type ) {
-			switch ( $type['type'] ) {
-				case 'post':
-					$sql_statement = 
-						"SELECT `ID`, `post_title` AS `title`, 'post' AS `type`, `post_type` AS `subtype`
-						 FROM `{$wpdb->posts}`
-						 WHERE `post_type` = '{$type['post_type']}' AND `post_status` = 'publish'";
-
-					if ( ! empty( $args['term'] ) ) {
-						$sql_statement .= " AND `post_title` LIKE '%{$args['term']}%' ";
-					}
-
-					break;
-
-				case 'term':
-					$sql_statement = 
-						"SELECT `t`.`term_id` AS `ID`, `t`.`name` AS `title` ,'term' as `type`, `tt`.`taxonomy` AS `subtype`
-						 FROM `{$wpdb->terms}` AS `t`
-						 INNER JOIN `{$wpdb->term_taxonomy}` AS `tt`
-						 ON `t`.`term_id` = `tt`.`term_id`
-						 WHERE `tt`.`taxonomy` IN ('{$type['taxonomy']}')";
-
-					if ( ! empty( $args['term'] ) ) {
-						$sql_statement .= $wpdb->prepare( ' AND ((`t`.`name` LIKE %s) OR (`t`.`slug` LIKE %s))', '%' . $args['term'] . '%', '%' . $args['term'] . '%' );
-					}
-
-					break;
-
-				case 'comment':
-					$sql_statement = 
-						"SELECT `comment_ID` AS `ID`, '' AS `title`, 'comment' AS `type`, 'comment' AS `subtype`
-						 FROM `{$wpdb->comments}`";
-
-					if ( ! empty( $args['term'] ) ) {
-						$sql_statement .= " WHERE `comment_content` LIKE '%{$args['term']}%' ";
-					}
-
-					break;
-
-				case 'user':
-					$sql_statement = 
-						"SELECT `ID`, '' AS `title`, 'user' AS `type`, 'user' AS `subtype`
-						 FROM `{$wpdb->users}`";
-
-					if ( ! empty( $args['term'] ) ) {
-						$sql_statement .= " WHERE `user_login` LIKE '%{$args['term']}%' OR `user_url` LIKE '%{$args['term']}%' OR `user_email` LIKE '%{$args['term']}%' OR `user_nicename` LIKE '%{$args['term']}%' OR `display_name` LIKE '%{$args['term']}%' ";
-					}
-
-					break;
-			}
-
-			$sql_queries[] = $sql_statement;
-		}
-
-		$sql_queries = implode( " UNION ", $sql_queries );
-
-		$per_page = static::ENTRIES_PER_PAGE;
-		$offset   = ($args['page'] - 1) * $per_page;
-
-		$sql_queries .= " ORDER BY `title` LIMIT {$per_page} OFFSET {$offset}";
-
-		$results = $wpdb->get_results( $sql_queries );
-
-		$options = [];
-
-		foreach ( $results as $result ) {
-			if ( $result->type === 'post' ) {
-				$options[] = [
-					'id'         => intval( $result->ID ),
-					'title'      => $this->get_title_by_type( $result->ID, $result->type, $result->subtype ),
-					'type'       => $result->type,
-					'subtype'    => $result->subtype,
-					'label'      => $this->get_item_label( $result->ID, $result->type, $result->subtype ),
-					'is_trashed' => ( get_post_status( $result->ID ) == 'trash' ),
-					'edit_link'  => $this->get_object_edit_link( get_object_vars( $result ), $result->ID ),
-				];
-			} else if ( $result->type === 'term' ) {
-				$options[] = [
-					'id'         => intval( $result->ID ),
-					'title'      => $result->title,
-					'type'       => $result->type,
-					'subtype'    => $result->subtype,
-					'label'      => $this->get_item_label( $result, $result->type, $result->subtype ),
-					'is_trashed' => false,
-					'edit_link'  => $this->get_object_edit_link( get_object_vars( $result ), $result->ID ),
-				];
-			} else if ( $result->type === 'comment' ) {
-				$options[] = [
-					'id'         => intval( $result->ID ),
-					'title'      => $this->get_title_by_type( $result->ID, 'comment' ),
-					'type'       => 'comment',
-					'subtype'    => 'comment',
-					'label'      => $this->get_item_label( $result->ID, 'comment' ),
-					'is_trashed' => false,
-					'edit_link'  => $this->get_object_edit_link( get_object_vars( $result ), $result->ID ),
-				];
-			} else if ( $result->type === 'user' ) {
-				$options[] = [
-					'id'         => intval( $result->ID ),
-					'title'      => $this->get_title_by_type( $result->ID, 'user' ),
-					'type'       => 'user',
-					'subtype'    => 'user',
-					'label'      => $this->get_item_label( $result->ID, 'user' ),
-					'is_trashed' => false,
-					'edit_link'  => $this->get_object_edit_link( get_object_vars( $result ), $result->ID ),
-				];
-			}
-		}
-
-		/**
-		 * Filter the final list of options, available to a certain association field.
-		 *
-		 * @param array $options Unfiltered options items.
-		 * @param string $name Name of the association field.
-		 */
-		$options = apply_filters( 'carbon_fields_association_field_options', $options, $this->get_base_name() );
-
-		return $options;
 	}
 
 	/**
@@ -553,19 +193,42 @@ class Association_Field extends Field {
 	 * @return array $options The selectable options of the association field.
 	 */
 	public function get_options( $args = array() ) {
-		$args = wp_parse_args( [
-			'page' => '',
-			'term' => '',
-		], $args );
+		global $wpdb;
 
-		$options = array();
+		$args = wp_parse_args( $args, [
+			'page' => 1,
+			'term' => '',
+		] );
+
+		$sql_queries = [];
 
 		foreach ( $this->types as $type ) {
-			$method = 'get_' . $type['type'] . '_options';
-			$callable = array( $this, $method );
-			if ( is_callable( $callable ) ) {
-				$options = array_merge( $options, call_user_func( $callable, $type, $args ) );
-			}
+			$type_args = array_merge( $type, [
+				'term' => $args['term'],
+			] );
+
+			$callback = "get_{$type['type']}_options_sql";
+
+			$sql_statement = $this->$callback( $type_args );
+
+			$sql_queries[] = $sql_statement;
+		}
+
+		$sql_queries = implode( " UNION ", $sql_queries );
+
+		$per_page = $this->get_items_per_page();
+		$offset   = ($args['page'] - 1) * $per_page;
+
+		$sql_queries .= " ORDER BY `title` ASC LIMIT {$per_page} OFFSET {$offset}";
+
+		$results = $wpdb->get_results( $sql_queries );
+
+		$options = [];
+
+		foreach ( $results as $result ) {
+			$callback = "format_{$result->type}_option";
+
+			$options[] = $this->$callback( $result );
 		}
 
 		/**
@@ -577,40 +240,6 @@ class Association_Field extends Field {
 		$options = apply_filters( 'carbon_fields_association_field_options', $options, $this->get_base_name() );
 
 		return $options;
-	}
-
-	/**
-	 * Retrieve the edit link of a particular object.
-	 *
-	 * @param  string $type Object type.
-	 * @param  int $id      ID of the object.
-	 * @return string       URL of the edit link.
-	 */
-	protected function get_object_edit_link( $type, $id ) {
-		switch ( $type['type'] ) {
-
-			case 'post':
-				$edit_link = get_edit_post_link( $id );
-				break;
-
-			case 'term':
-				$edit_link = get_edit_term_link( $id, '', $type['type'] );
-				break;
-
-			case 'comment':
-				$edit_link = get_edit_comment_link( $id );
-				break;
-
-			case 'user':
-				$edit_link = get_edit_user_link( $id );
-				break;
-
-			default:
-				$edit_link = false;
-
-		}
-
-		return $edit_link;
 	}
 
 	/**
@@ -662,6 +291,27 @@ class Association_Field extends Field {
 	public function set_max( $max ) {
 		$this->max = intval( $max );
 		return $this;
+	}
+
+	/**
+	 * Set the items per page.
+	 *
+	 * @param  int   $items_per_page
+	 * @return self  $this
+	 */
+	public function set_items_per_page( $items_per_page ) {
+		$this->items_per_page = intval( $items_per_page );
+		return $this;
+	}
+
+	/**
+	 * Get the items per page.
+	 *
+	 * @param  int   $items_per_page
+	 * @return self  $this
+	 */
+	public function get_items_per_page() {
+		return $this->items_per_page;
 	}
 
 	/**
@@ -737,7 +387,7 @@ class Association_Field extends Field {
 
 		$field_data = array_merge( $field_data, array(
 			'value' => $this->value_to_json(),
-			'options' => $this->get_options(),
+			'options' => array(),
 			'min' => $this->get_min(),
 			'max' => $this->get_max(),
 			'duplicates_allowed' => $this->duplicates_allowed,

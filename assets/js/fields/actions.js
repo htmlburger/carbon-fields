@@ -214,13 +214,42 @@ export const addMultipleFiles = createAction('fields/ADD_MULTIPLE_FILES', (field
 export const geocodeAddress = createAction('fields/GEOCODE_ADDRESS', (fieldId, address) => ({ fieldId, address }));
 
 /**
- * Request the entries to be displayed in the association field.
+ * Indicate when an association field's source list is scrolling.
+ *
+ * @param  {String}  fieldId
+ * @param  {Object}  options
+ * @param  {Boolean} append
+ * @return {Object}
+ */
+export const scrollAssociationOptionsList = createAction('fields/SCROLL_ASSOCIATION_OPTIONS_LIST', (field) => ({ field }));
+
+/**
+ * Request the options to be displayed in the association field.
+ *
+ * @param  {String}  fieldId
+ * @param  {Object}  options
+ * @param  {Boolean} append
+ * @return {Object}
+ */
+export const requestAssociationOptions = createAction('fields/REQUEST_ASSOCIATION_OPTIONS', (field, options, append = false) => ({ field, options, append }));
+
+/**
+ * Set options for the association field source list.
  *
  * @param  {String} fieldId
  * @param  {Object} options
- * @return {Object} 
+ * @return {Object}
  */
-export const requestAssociationEntries = createAction('fields/REQUEST_ASSOCIATION_ENTRIES', (fieldId, options) => ({ fieldId, options }));
+export const setAssociationOptions = createAction('fields/SET_ASSOCIATION_OPTIONS', (fieldId, options) => ({ fieldId, options }));
+
+/**
+ * Append options for the association field source list.
+ *
+ * @param  {String} fieldId
+ * @param  {Object} options
+ * @return {Object}
+ */
+export const appendAssociationOptions = createAction('fields/APPEND_ASSOCIATION_OPTIONS', (fieldId, options) => ({ fieldId, options }));
 
 /**
  * Update the validation status of the field.
