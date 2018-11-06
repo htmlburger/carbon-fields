@@ -18,6 +18,7 @@ import WidgetContainer from './widget';
 	[ 'term_meta', TermMetaContainer ],
 	[ 'user_meta', UserMetaContainer ],
 	[ 'comment_meta', CommentMetaContainer ],
+	[ 'network', ThemeOptionsContainer ],
 	[ 'theme_options', ThemeOptionsContainer ],
 	[ 'nav_menu_item', NavMenuItemContainer ],
 	[ 'widget', WidgetContainer ]
