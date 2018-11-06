@@ -22,6 +22,9 @@ import {
  * Internal dependencies.
  */
 import fromSelector from '../utils/from-selector';
+import getParentIdFromOption from '../utils/get-parent-id-from-option';
+import getLevelFromOption from '../utils/get-level-from-option';
+import getAncestorsFromOption from '../utils/get-ancestors-from-option';
 
 /**
  * The default state.
@@ -33,72 +36,6 @@ const INITIAL_STATE = {
 	post_parent_id: 0,
 	post_level: 1
 };
-
-/**
- * Extracts `post_parent_id` from the option.
- *
- * @param  {Object} option
- * @return {number}
- */
-function getParentIdFromOption( option ) {
-	const value = parseInt( option.value, 10 );
-
-	return ! isNaN( value ) ? value : 0;
-}
-
-/**
- * Extracts `post_level` from the option.
- *
- * @param  {Object} option
- * @return {number}
- */
-function getLevelFromOption( option ) {
-	let level = 0;
-
-	if ( option.className ) {
-		const matches = option.className.match( /^level-(\d+)/ );
-
-		if ( matches ) {
-			level = parseInt( matches[ 1 ], 10 ) + 1;
-		}
-	}
-
-	return level;
-}
-
-/**
- * Extracts `post_ancestors` from the option.
- *
- * @param  {Object} option
- * @return {number[]}
- */
-function getAncestorsFromOption( option ) {
-	const ancestors = [];
-
-	let previousOption = option;
-	let level = getLevelFromOption( option );
-
-	while ( level > 0 && previousOption ) {
-		if ( getLevelFromOption( previousOption ) !== level ) {
-			previousOption = previousOption.previousSibling;
-
-			// Skip this iteration because the option isn't an ancestor.
-			continue;
-		}
-
-		const id = parseInt( previousOption.value, 10 );
-
-		if ( id > 0 ) {
-			ancestors.unshift( id );
-		}
-
-		previousOption = previousOption.previousSibling;
-
-		level--;
-	}
-
-	return ancestors;
-}
 
 /**
  * Extracts the `post_ancestors`, `post_parent_id` & `post_level` from the select.
