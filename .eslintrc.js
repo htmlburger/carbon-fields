@@ -66,7 +66,7 @@ module.exports = {
 		'no-negated-in-lhs': 'error',
 		'no-nested-ternary': 'error',
 		'no-redeclare': 'error',
-		'no-shadow': [ 'error', { hoist: 'functions' } ],
+		'no-shadow': [ 'error', { hoist: 'never' } ],
 		'no-undef': 'error',
 		'no-undef-init': 'error',
 		'no-unreachable': 'error',

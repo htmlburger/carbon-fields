@@ -34,6 +34,27 @@ export function containers( state = {}, action ) {
 }
 
 /**
+ * Deletes a field.
+ *
+ * @param  {string} fieldId
+ * @param  {Object} fields
+ * @return {void}
+ */
+function deleteField( fieldId, fields ) {
+	const field = fields[ fieldId ];
+
+	if ( field.type === 'complex' ) {
+		field.value.forEach( ( group ) => {
+			group.fields.forEach( ( groupField ) => {
+				deleteField( groupField.id, fields );
+			} );
+		} );
+	}
+
+	delete fields[ fieldId ];
+}
+
+/**
  * The reducer that keeps track of the fields.
  *
  * @param  {Object} state
@@ -54,10 +75,7 @@ export function fields( state = {}, action ) {
 
 		case 'ADD_FIELDS':
 			return produce( state, ( draft ) => {
-				// eslint-disable-next-line no-shadow
-				const { fields } = action.payload;
-
-				fields.forEach( ( field ) => {
+				action.payload.fields.forEach( ( field ) => {
 					draft[ field.id ] = field;
 				} );
 			} );
@@ -67,7 +85,7 @@ export function fields( state = {}, action ) {
 				const { fieldIds } = action.payload;
 
 				fieldIds.forEach( ( fieldId ) => {
-					delete draft[ fieldId ];
+					deleteField( fieldId, draft );
 				} );
 			} );
 

@@ -1,25 +1,21 @@
 /**
  * External dependencies.
  */
-import of from 'callbag-of';
 import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { compose } from '@wordpress/compose';
-import { select, withDispatch } from '@wordpress/data';
-import { cloneDeep, uniqueId } from 'lodash';
-import { toProps, withEffects } from 'refract-callbag';
+import { withDispatch } from '@wordpress/data';
 import {
-	map,
-	merge,
-	pipe
-} from 'callbag-basics';
+	cloneDeep,
+	uniqueId,
+	without
+} from 'lodash';
 
 /**
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
 import withField from '../../components/with-field';
-import getFieldsFromComplexGroup from '../../utils/get-fields-from-complex-group';
 import flattenField from '../../utils/flatten-field';
 import ComplexInserter from './inserter';
 import ComplexGroup from './group';
@@ -57,6 +53,32 @@ class ComplexField extends Component {
 	}
 
 	/**
+	 * Handles the removal of a group.
+	 *
+	 * @param  {Object} group
+	 * @return {void}
+	 */
+	handleRemoveGroup = ( group ) => {
+		const {
+			field,
+			value,
+			removeFields,
+			onChange
+		} = this.props;
+
+		onChange( field.id, without( value, group ) );
+
+		// Delay removal of fields because React will complain
+		// about missing objects.
+		// TODO: Investigate why this is necessary.
+		setTimeout( () => {
+			const fieldIds = group.fields.map( ( groupField ) => groupField.id );
+
+			removeFields( fieldIds );
+		}, 1 );
+	}
+
+	/**
 	 * Renders the component.
 	 *
 	 * @return {Object}
@@ -65,8 +87,7 @@ class ComplexField extends Component {
 		const {
 			field,
 			name,
-			value,
-			onRemoveGroup
+			value
 		} = this.props;
 
 		return (
@@ -79,7 +100,7 @@ class ComplexField extends Component {
 						index={ index }
 						group={ group }
 						prefix={ `${ name }[${ index }]` }
-						onRemove={ onRemoveGroup }
+						onRemove={ this.handleRemoveGroup }
 					/>
 				) ) }
 
@@ -89,59 +110,6 @@ class ComplexField extends Component {
 	}
 }
 
-/**
- * The function that controls the stream of side effects.
- *
- * @return {Function}
- */
-function aperture() {
-	return function( component ) {
-		const [ removeGroup$, removeGroup ] = component.useEvent( 'removeGroup' );
-
-		return merge(
-			pipe(
-				of( {
-					onRemoveGroup: removeGroup
-				} ),
-				map( toProps )
-			),
-
-			pipe(
-				removeGroup$,
-				map( ( group ) => ( {
-					type: 'REMOVE_GROUP',
-					payload: group
-				} ) )
-			)
-		);
-	};
-}
-
-/**
- * The function that causes the side effects.
- *
- * @param  {Object} props
- * @return {Function}
- */
-function handler( props ) {
-	return function( effect ) {
-		switch ( effect.type ) {
-			case 'REMOVE_GROUP':
-				const allFields = select( 'carbon-fields/metaboxes' ).getFields();
-				const groupFields = getFieldsFromComplexGroup( effect.payload, allFields );
-				const field = allFields[ props.id ];
-				const value = field.value.filter( ( group ) => group.id !== effect.payload.id );
-				const fieldIds = groupFields.map( ( groupField ) => groupField.id );
-
-				props.onChange( field.id, value );
-				props.removeFields( fieldIds );
-
-				break;
-		}
-	};
-}
-
-const applyWithEffects = withEffects( handler )( aperture );
 const applyWithDispatch = withDispatch( ( dispatch ) => {
 	const { addFields, removeFields } = dispatch( 'carbon-fields/metaboxes' );
 
@@ -153,8 +121,7 @@ const applyWithDispatch = withDispatch( ( dispatch ) => {
 
 addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( OriginalComplexField ) => compose(
 	withField,
-	applyWithDispatch,
-	applyWithEffects
+	applyWithDispatch
 )( ( props ) => {
 	return (
 		<OriginalComplexField { ...props }>
@@ -171,7 +138,6 @@ addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( O
 					addFields={ props.addFields }
 					removeFields={ props.removeFields }
 					onChange={ handleChange }
-					onRemoveGroup={ props.onRemoveGroup }
 				/>
 			) }
 		</OriginalComplexField>
