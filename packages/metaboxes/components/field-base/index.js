@@ -20,29 +20,31 @@ export const FieldBase = ( { field, children } ) => {
 	const styles = !! field.width ? { flexBasis: `${ field.width }%` } : null;
 
 	const classes = [
-		'carbon-field',
-		`carbon-${ field.type }`,
-		{ 'has-width': !! field.width },
+		'cf-field',
+		`cf-${ field.type }`,
+		{ 'cf-field--has-width': !! field.width },
 		...field.classes
 	];
 
 	return <div className={ cx( classes ) } style={ styles } >
-		{ field.label && (
-			<label htmlFor={ field.id }>
-				{ field.label }
+		<div className="cf-field__head">
+			{ field.label && (
+				<label className="cf-field__label" htmlFor={ field.id }>
+					{ field.label }
 
-				{ field.required && (
-					<span className="carbon-required">*</span>
-				) }
-			</label>
-		) }
+					{ field.required && (
+						<span className="cf-field__asterisk">*</span>
+					) }
+				</label>
+			) }
+		</div>
 
-		<div className="field-holder">
+		<div className="cf-field__body">
 			{ children }
 		</div>
 
 		{ field.help_text && (
-			<em className="carbon-help-text" dangerouslySetInnerHTML={ { __html: field.help_text } }></em>
+			<em className="cf-field__help" dangerouslySetInnerHTML={ { __html: field.help_text } }></em>
 		) }
 	</div>;
 };
