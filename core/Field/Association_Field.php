@@ -42,7 +42,7 @@ class Association_Field extends Field {
 	 *
 	 * @var integer
 	 */
-	protected $items_per_page = 10;
+	protected $items_per_page = 20;
 
 	/**
 	 * Allow items to be added multiple times
@@ -234,12 +234,15 @@ class Association_Field extends Field {
 		/**
 		 * Filter the final list of options, available to a certain association field.
 		 *
-		 * @param array $options Unfiltered options items.
+		 * @param array  $options Unfiltered options items.
 		 * @param string $name Name of the association field.
 		 */
 		$options = apply_filters( 'carbon_fields_association_field_options', $options, $this->get_base_name() );
 
-		return $options;
+		return [
+			'total_options' => $wpdb->get_var( "SELECT COUNT(*) FROM (" . preg_replace( '~(LIMIT .*)$~', '', $sql_queries ) . ") as t" ),
+			'options'       => $options,
+		];
 	}
 
 	/**
@@ -382,14 +385,13 @@ class Association_Field extends Field {
 	 * @return mixed      The JSON field data.
 	 */
 	public function to_json( $load ) {
-
 		$field_data = parent::to_json( $load );
 
 		$field_data = array_merge( $field_data, array(
-			'value' => $this->value_to_json(),
-			'options' => $this->get_options(),
-			'min' => $this->get_min(),
-			'max' => $this->get_max(),
+			'value'              => $this->value_to_json(),
+			'options'            => $this->get_options(),
+			'min'                => $this->get_min(),
+			'max'                => $this->get_max(),
 			'duplicates_allowed' => $this->duplicates_allowed,
 		) );
 

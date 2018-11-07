@@ -21,6 +21,7 @@ class AssociationField extends Component {
 		const {
 			field,
 			options,
+			totalOptionsCount,
 			value,
 			onAddItem,
 			onRemoveItem,
@@ -29,8 +30,13 @@ class AssociationField extends Component {
 
 		return (
 			<BaseControl
+				className="cf-field-association-wrapper"
 				label={ field.label }
 			>
+				<strong className="cf-field-association__counter">
+					showing { options.length } of { totalOptionsCount } results
+				</strong>
+
 				<div className="cf-field-association">
 					<div className="cf-field-association__body">
 						<div className="cf-field-association__search-bar">
@@ -89,9 +95,15 @@ class AssociationField extends Component {
 
 											<img className="cf-field-association__option-thumbnail" src={ option.thumbnail ? option.thumbnail : '' } />
 
-											<span className="cf-field-association__option-title">
-												{ option.title }
-											</span>
+											<div className="cf-field-association__option-content">
+												<span className="cf-field-association__option-title">
+													{ option.title }
+												</span>
+
+												<span className="cf-field-association__option-type">
+													{ option.type }
+												</span>
+											</div>
 
 											<div className="cf-field-association__option-actions">
 												<IconButton
@@ -119,6 +131,7 @@ addFilter( 'carbon-fields.association-field.block', 'carbon-fields/blocks', ( Or
 				field,
 				value,
 				options,
+				totalOptionsCount,
 				handleChange,
 				handleAddItem,
 				handleRemoveItem,
@@ -128,6 +141,7 @@ addFilter( 'carbon-fields.association-field.block', 'carbon-fields/blocks', ( Or
 					field={ field }
 					value={ value }
 					options={ options }
+					totalOptionsCount={ totalOptionsCount }
 					onChange={ handleChange }
 					onAddItem={ handleAddItem }
 					onRemoveItem={ handleRemoveItem }
