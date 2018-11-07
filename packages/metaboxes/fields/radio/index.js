@@ -71,9 +71,16 @@ export class RadioField extends Component {
 addFilter( 'carbon-fields.radio-field.metabox', 'carbon-fields/metaboxes', ( OriginalRadioField ) => withField( ( props ) => {
 	return (
 		<OriginalRadioField { ...props }>
-			{ ( { field, handleChange } ) => (
+			{ ( {
+				field,
+				name,
+				value,
+				handleChange
+			} ) => (
 				<RadioField
 					field={ field }
+					name={ name }
+					value={ value }
 					onChange={ handleChange }
 				/>
 			) }

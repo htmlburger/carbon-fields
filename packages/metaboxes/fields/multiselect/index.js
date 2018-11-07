@@ -32,7 +32,12 @@ export class MultiselectField extends Component {
 	 * @return {Object}
 	 */
 	renderOptions() {
-		const { field, filterValues } = this.props;
+		const {
+			field,
+			name,
+			value,
+			filterValues
+		} = this.props;
 
 		return (
 			<Select
@@ -40,7 +45,7 @@ export class MultiselectField extends Component {
 				joinValues
 				id={ field.id }
 				name={ name }
-				value={ filterValues( field.value ) }
+				value={ filterValues( value ) }
 				options={ field.options }
 				onChange={ this.handleChange }
 			/>
@@ -71,13 +76,17 @@ addFilter( 'carbon-fields.multiselect-field.metabox', 'carbon-fields/metaboxes',
 		<OriginalMultiselectField { ...props }>
 			{ ( {
 				field,
+				name,
+				value,
 				handleChange,
 				filterValues
 			} ) => (
 				<MultiselectField
 					field={ field }
-					onChange={ handleChange }
+					name={ name }
+					value={ value }
 					filterValues={ filterValues }
+					onChange={ handleChange }
 				/>
 			) }
 		</OriginalMultiselectField>

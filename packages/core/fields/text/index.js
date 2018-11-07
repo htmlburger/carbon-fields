@@ -12,12 +12,15 @@ class TextField extends Component {
 	render() {
 		const {
 			field,
+			name,
 			value,
+			children,
 			onChange
 		} = this.props;
 
-		return this.props.children( {
+		return children( {
 			field,
+			name,
 			value,
 			handleChange: onChange
 		} );

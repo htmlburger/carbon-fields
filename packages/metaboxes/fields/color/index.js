@@ -112,7 +112,10 @@ class ColorField extends Component {
 	 */
 	render() {
 		const { showPicker } = this.state;
-		const { field } = this.props;
+		const {
+			field,
+			value
+		} = this.props;
 
 		return (
 			<FieldBase field={ field }>
@@ -144,7 +147,7 @@ class ColorField extends Component {
 							style={ { position: 'absolute', zIndex: 9999 } }
 						>
 							<SketchPicker
-								color={ field.value }
+								color={ value }
 								onChange={ this.handleChange }
 								disableAlpha={ ! field.alphaEnabled }
 								presetColors={ field.palette }
@@ -159,8 +162,8 @@ class ColorField extends Component {
 					<input
 						type="hidden"
 						id={ field.id }
-						name={ field.base_name }
-						value={ field.value }
+						name={ name }
+						value={ value }
 					/>
 				</div>
 			</FieldBase>
@@ -171,9 +174,16 @@ class ColorField extends Component {
 addFilter( 'carbon-fields.color-field.metabox', 'carbon-fields/metaboxes', ( OriginalColorField ) => withField( ( props ) => {
 	return (
 		<OriginalColorField { ...props }>
-			{ ( { field, handleChange } ) => (
+			{ ( {
+				field,
+				name,
+				value,
+				handleChange
+			} ) => (
 				<ColorField
 					field={ field }
+					name={ name }
+					value={ value }
 					onChange={ handleChange }
 				/>
 			) }

@@ -29,15 +29,19 @@ class TextareaField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field } = this.props;
+		const {
+			field,
+			name,
+			value
+		} = this.props;
 
 		return (
 			<FieldBase field={ field } >
 				<textarea
 					className="regular-text"
 					id={ field.id }
-					name={ field.base_name }
-					value={ field.value }
+					name={ name }
+					value={ value }
 					onChange={ this.handleChange }
 					{ ...field.attributes }
 				/>
@@ -49,9 +53,16 @@ class TextareaField extends Component {
 addFilter( 'carbon-fields.textarea-field.metabox', 'carbon-fields/metaboxes', ( OriginalTextareaField ) => withField( ( props ) => {
 	return (
 		<OriginalTextareaField { ...props }>
-			{ ( { field, handleChange } ) => (
+			{ ( {
+				field,
+				name,
+				value,
+				handleChange
+			} ) => (
 				<TextareaField
 					field={ field }
+					name={ name }
+					value={ value }
 					onChange={ handleChange }
 				/>
 			) }

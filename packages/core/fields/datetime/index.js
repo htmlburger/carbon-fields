@@ -12,13 +12,15 @@ class DatetimeField extends Component {
 	render() {
 		const {
 			field,
+			name,
 			value,
-			onChange,
-			children
+			children,
+			onChange
 		} = this.props;
 
 		return children( {
 			field,
+			name,
 			value,
 			handleChange: onChange
 		} );

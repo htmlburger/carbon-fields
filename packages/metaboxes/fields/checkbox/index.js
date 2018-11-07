@@ -28,7 +28,11 @@ class CheckboxField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field } = this.props;
+		const {
+			field,
+			name,
+			value
+		} = this.props;
 
 		return (
 			<FieldBase field={ field } >
@@ -36,8 +40,8 @@ class CheckboxField extends Component {
 					<input
 						type="checkbox"
 						id={ field.id }
-						name={ field.base_name }
-						checked={ field.value }
+						name={ name }
+						checked={ value }
 						onChange={ this.handleChange }
 						{ ...field.attributes }
 					/>
@@ -54,9 +58,16 @@ class CheckboxField extends Component {
 addFilter( 'carbon-fields.checkbox-field.metabox', 'carbon-fields/metaboxes', ( OriginalCheckboxField ) => withField( ( props ) => {
 	return (
 		<OriginalCheckboxField { ...props }>
-			{ ( { field, handleChange } ) => (
+			{ ( {
+				field,
+				name,
+				value,
+				handleChange
+			} ) => (
 				<CheckboxField
 					field={ field }
+					name={ name }
+					value={ value }
 					onChange={ handleChange }
 				/>
 			) }

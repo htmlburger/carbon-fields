@@ -30,17 +30,23 @@ export class SelectField extends Component {
 	 * @return {Object}
 	 */
 	renderOptions() {
-		const { field } = this.props;
+		const {
+			field,
+			name,
+			value
+		} = this.props;
 
 		return (
 			<select
-				name={ field.base_name }
 				id={ field.id }
-				value={ field.value }
+				name={ name }
+				value={ value }
 				onChange={ this.handleChange }
 			>
-				{ field.options.map( ( { value, label } ) => (
-					<option key={ value } value={ value }>{ label }</option>
+				{ field.options.map( ( option ) => (
+					<option key={ option.value } value={ option.value }>
+						{ option.label }
+					</option>
 				) ) }
 			</select>
 		);
@@ -68,9 +74,16 @@ export class SelectField extends Component {
 addFilter( 'carbon-fields.select-field.metabox', 'carbon-fields/metaboxes', ( OriginalSelectField ) => withField( ( props ) => {
 	return (
 		<OriginalSelectField { ...props }>
-			{ ( { field, handleChange } ) => (
+			{ ( {
+				field,
+				name,
+				value,
+				handleChange
+			} ) => (
 				<SelectField
 					field={ field }
+					name={ name }
+					value={ value }
 					onChange={ handleChange }
 				/>
 			) }

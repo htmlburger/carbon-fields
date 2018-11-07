@@ -17,15 +17,19 @@ class HiddenField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field } = this.props;
+		const {
+			field,
+			name,
+			value
+		} = this.props;
 
 		return (
 			<FieldBase field={ { ...field, label: null } } >
 				<input
 					type="hidden"
 					id={ field.id }
-					name={ field.base_name }
-					value={ field.value }
+					name={ name }
+					value={ value }
 					className="hidden-text"
 					{ ...field.attributes }
 				/>
@@ -37,8 +41,16 @@ class HiddenField extends Component {
 addFilter( 'carbon-fields.hidden-field.metabox', 'carbon-fields/metaboxes', ( OriginalHiddenField ) => withField( ( props ) => {
 	return (
 		<OriginalHiddenField { ...props }>
-			{ ( { field } ) => (
-				<HiddenField field={ field } />
+			{ ( {
+				field,
+				name,
+				value
+			} ) => (
+				<HiddenField
+					field={ field }
+					name={ name }
+					value={ value }
+				/>
 			) }
 		</OriginalHiddenField>
 	);

@@ -37,10 +37,16 @@ class SetField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field, value } = this.props;
-
-		return this.props.children( {
+		const {
 			field,
+			name,
+			value,
+			children
+		} = this.props;
+
+		return children( {
+			field,
+			name,
 			value,
 			isChecked: this.isChecked,
 			handleChange: this.handleChange

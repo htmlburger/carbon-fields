@@ -30,15 +30,20 @@ class SetField extends Component {
 	 * @return {Object}
 	 */
 	renderOptions() {
-		const { field, isChecked } = this.props;
+		const {
+			field,
+			name,
+			value,
+			isChecked
+		} = this.props;
 
 		return field.options.map( ( option ) => (
 			<label key={ `${ field.id }-${ option.value }` }>
 				<input
 					type="checkbox"
 					id={ `${ field.id }-${ option.value }` }
-					name={ `${ field.base_name }-${ option.value }` }
-					checked={ isChecked( field.value, option ) }
+					name={ `${ name }-${ option.value }` }
+					checked={ isChecked( value, option ) }
 					value={ option.value }
 					onChange={ this.handleChange }
 					{ ...field.attributes }
@@ -73,11 +78,15 @@ addFilter( 'carbon-fields.set-field.metabox', 'carbon-fields/metaboxes', ( Origi
 		<OriginalSetField { ...props }>
 			{ ( {
 				field,
-				handleChange,
-				isChecked
+				name,
+				value,
+				isChecked,
+				handleChange
 			} ) => (
 				<SetField
 					field={ field }
+					name={ name }
+					value={ value }
 					isChecked={ isChecked }
 					onChange={ handleChange }
 				/>

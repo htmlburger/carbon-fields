@@ -85,6 +85,8 @@ export class DatetimeField extends Component {
 	render() {
 		const {
 			field,
+			name,
+			value,
 			buttonText
 		} = this.props;
 
@@ -95,15 +97,15 @@ export class DatetimeField extends Component {
 						...field.picker_options,
 						wrap: true
 					} }
-					value={ field.value }
+					value={ value }
 					onReady={ this.handleReady }
 					onChange={ this.handleChange }
 					className="carbon-field-group-holder"
 				>
 					<input
 						type="text"
-						name={ field.base_name }
-						value={ field.value }
+						name={ name }
+						value={ value }
 						onChange={ this.handleManualInput }
 						onBlur={ this.formatManualInput }
 						className="regular-text carbon-field-group-input"
@@ -127,12 +129,19 @@ export class DatetimeField extends Component {
 addFilter( 'carbon-fields.date_time-field.metabox', 'carbon-fields/metaboxes', ( OriginalDatetimeField ) => withField( ( props ) => {
 	return (
 		<OriginalDatetimeField { ...props }>
-			{ ( { field, handleChange } ) => {
+			{ ( {
+				field,
+				name,
+				value,
+				handleChange
+			} ) => {
 				return (
 					<DatetimeField
 						field={ field }
-						onChange={ handleChange }
+						name={ name }
+						value={ value }
 						buttonText={ __( 'Select Date' ) }
+						onChange={ handleChange }
 					/>
 				);
 			} }

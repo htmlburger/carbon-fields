@@ -29,7 +29,11 @@ class TextField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field } = this.props;
+		const {
+			field,
+			name,
+			value
+		} = this.props;
 
 		return (
 			<FieldBase field={ field } >
@@ -37,8 +41,8 @@ class TextField extends Component {
 					type="text"
 					className="regular-text"
 					id={ field.id }
-					name={ field.base_name }
-					value={ field.value }
+					name={ name }
+					value={ value }
 					onChange={ this.handleChange }
 					{ ...field.attributes }
 				/>
@@ -50,9 +54,16 @@ class TextField extends Component {
 addFilter( 'carbon-fields.text-field.metabox', 'carbon-fields/metaboxes', ( OriginalTextField ) => withField( ( props ) => {
 	return (
 		<OriginalTextField { ...props }>
-			{ ( { field, handleChange } ) => (
+			{ ( {
+				field,
+				name,
+				value,
+				handleChange
+			} ) => (
 				<TextField
 					field={ field }
+					name={ name }
+					value={ value }
 					onChange={ handleChange }
 				/>
 			) }

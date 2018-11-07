@@ -31,21 +31,25 @@ class SidebarField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field } = this.props;
+		const {
+			field,
+			name,
+			value
+		} = this.props;
 
 		return (
 			<FieldBase field={ field }>
 				<select
 					id={ field.id }
-					name={ field.base_name }
-					value={ field.value }
+					name={ name }
+					value={ value }
 					onChange={ this.handleChange }
 				>
 					<option value="0" disabled>Please choose</option>
 
-					{ field.options.map( ( { value, label } ) => (
-						<option key={ value } value={ value }>
-							{ label }
+					{ field.options.map( ( option ) => (
+						<option key={ option.value } value={ option.value }>
+							{ option.label }
 						</option>
 					) ) }
 				</select>
@@ -68,8 +72,18 @@ addFilter( 'carbon-fields.sidebar-field.metabox', 'carbon-fields/metaboxes', ( O
 )( ( props ) => {
 	return (
 		<OriginalSidebarField { ...props }>
-			{ ( { field, handleChange } ) => (
-				<SidebarField field={ field } onChange={ handleChange } />
+			{ ( {
+				field,
+				name,
+				value,
+				handleChange
+			} ) => (
+				<SidebarField
+					field={ field }
+					name={ name }
+					value={ value }
+					onChange={ handleChange }
+				/>
 			) }
 		</OriginalSidebarField>
 	);

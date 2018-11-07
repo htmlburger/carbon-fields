@@ -38,10 +38,16 @@ class MultiselectField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field, value } = this.props;
-
-		return this.props.children( {
+		const {
 			field,
+			name,
+			value,
+			children
+		} = this.props;
+
+		return children( {
+			field,
+			name,
 			value,
 			handleChange: this.handleChange,
 			filterValues: this.filterValues

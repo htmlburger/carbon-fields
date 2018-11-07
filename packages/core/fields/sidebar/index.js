@@ -36,6 +36,8 @@ class SidebarField extends Component {
 	render() {
 		const {
 			field,
+			name,
+			value,
 			children
 		} = this.props;
 
@@ -44,7 +46,9 @@ class SidebarField extends Component {
 		}
 
 		return children( {
-			field: field,
+			field,
+			name,
+			value,
 			handleChange: this.handleChange
 		} );
 	}
