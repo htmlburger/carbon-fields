@@ -19,6 +19,7 @@ import {
 import FieldBase from '../../components/field-base';
 import withField from '../../components/with-field';
 import getFieldsFromComplexGroup from '../../utils/get-fields-from-complex-group';
+import ComplexInserter from './inserter';
 import ComplexGroup from './group';
 import ComplexActions from './actions';
 
@@ -37,7 +38,9 @@ class ComplexField extends Component {
 		} = this.props;
 
 		return (
-			<FieldBase field={ field } >
+			<FieldBase field={ field }>
+				<ComplexInserter groups={ field.groups } onSelect={ () => {} } />
+
 				{ value.map( ( group, index ) => (
 					<ComplexGroup
 						key={ group.id }
