@@ -6,6 +6,7 @@ import { compose, withState } from '@wordpress/compose';
 import { withEffects, toProps } from 'refract-callbag';
 import {
 	cloneDeep,
+	debounce,
 	find,
 	isMatch,
 	without
@@ -33,7 +34,7 @@ class AssociationField extends Component {
 		);
 	}
 
-	handleQueryTermChange = ( queryTerm ) => {
+	handleQueryTermChange = debounce( ( queryTerm ) => {
 		const {
 			onFetchOptions,
 			setState
@@ -46,7 +47,7 @@ class AssociationField extends Component {
 		onFetchOptions( {
 			queryTerm: queryTerm
 		} );
-	}
+	}, 300 );
 
 	/**
 	 * Handles addition of a new item.
@@ -94,7 +95,8 @@ class AssociationField extends Component {
 		} = this.props;
 
 		setState( {
-			options: field.options
+			options: field.options.options,
+			totalOptionsCount: field.options.total_options
 		} );
 	}
 
@@ -106,7 +108,8 @@ class AssociationField extends Component {
 	render() {
 		const {
 			field,
-			value
+			value,
+			totalOptionsCount
 		} = this.props;
 
 		let { options } = this.props;
@@ -127,6 +130,7 @@ class AssociationField extends Component {
 			field: field,
 			value: value,
 			options: options,
+			totalOptionsCount: totalOptionsCount,
 			handleChange: this.handleChange,
 			handleAddItem: this.handleAddItem,
 			handleRemoveItem: this.handleRemoveItem,
@@ -190,7 +194,8 @@ function handler( props ) {
 				request.done( ( response ) => {
 					if ( response && response.success ) {
 						props.setState( {
-							options: response.data
+							options: response.data.options,
+							totalOptionsCount: response.data.total_options
 						} );
 					} else {
 						errorHandler();
@@ -205,6 +210,7 @@ function handler( props ) {
 
 const applyWithState = withState( {
 	options: [],
+	totalOptionsCount: 0,
 	queryTerm: ''
 } );
 
