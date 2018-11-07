@@ -14,13 +14,15 @@ class ComplexField extends Component {
 			field,
 			name,
 			value,
-			children
+			children,
+			onChange
 		} = this.props;
 
 		return children( {
 			field,
 			name,
-			value
+			value,
+			handleChange: onChange
 		} );
 	}
 }

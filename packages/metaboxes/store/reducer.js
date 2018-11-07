@@ -52,6 +52,16 @@ export function fields( state = {}, action ) {
 				draft[ fieldId ].value = value;
 			} );
 
+		case 'ADD_FIELDS':
+			return produce( state, ( draft ) => {
+				// eslint-disable-next-line no-shadow
+				const { fields } = action.payload;
+
+				fields.forEach( ( field ) => {
+					draft[ field.id ] = field;
+				} );
+			} );
+
 		case 'REMOVE_FIELDS':
 			return produce( state, ( draft ) => {
 				const { fieldIds } = action.payload;

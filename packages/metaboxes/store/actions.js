@@ -52,6 +52,21 @@ export function updateContainerMeta( containerId, key, value ) {
 }
 
 /**
+ * Returns an action object used to add the fields.
+ *
+ * @param  {Object[]} fields
+ * @return {Object}
+ */
+export function addFields( fields ) {
+	return {
+		type: 'ADD_FIELDS',
+		payload: {
+			fields
+		}
+	};
+}
+
+/**
  * Returns an action object used to remove the fields.
  *
  * @param  {string[]} fieldIds
