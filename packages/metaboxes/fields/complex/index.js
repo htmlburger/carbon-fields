@@ -20,6 +20,7 @@ import FieldBase from '../../components/field-base';
 import withField from '../../components/with-field';
 import getFieldsFromComplexGroup from '../../utils/get-fields-from-complex-group';
 import ComplexGroup from './group';
+import ComplexActions from './actions';
 
 class ComplexField extends Component {
 	/**
@@ -46,6 +47,8 @@ class ComplexField extends Component {
 						onRemove={ onRemoveGroup }
 					/>
 				) ) }
+
+				<ComplexActions />
 			</FieldBase>
 		);
 	}
