@@ -7,6 +7,20 @@ import { getFieldType } from '@carbon-fields/core';
 
 class ComplexGroup extends Component {
 	/**
+	 * Handles the click on the "Clone" button.
+	 *
+	 * @return {void}
+	 */
+	handleCloneClick = () => {
+		const {
+			group,
+			onClone
+		} = this.props;
+
+		onClone( group );
+	}
+
+	/**
 	 * Handles the click on the "Remove" button.
 	 *
 	 * @return {void}
@@ -79,7 +93,7 @@ class ComplexGroup extends Component {
 					<button type="button" className="cf-complex-group__action">
 						<span className="dashicons-before dashicons-admin-page cf-complex-group__action-icon"></span>
 
-						<span className="cf-complex-group__action-text">
+						<span className="cf-complex-group__action-text" onClick={ this.handleCloneClick }>
 							Duplicate
 						</span>
 					</button>

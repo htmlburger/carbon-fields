@@ -67,6 +67,23 @@ export function addFields( fields ) {
 }
 
 /**
+ * Returns an action object used to clone the fields.
+ *
+ * @param  {string[]} originFieldIds
+ * @param  {string[]} cloneFieldIds
+ * @return {Object}
+ */
+export function cloneFields( originFieldIds, cloneFieldIds ) {
+	return {
+		type: 'CLONE_FIELDS',
+		payload: {
+			originFieldIds,
+			cloneFieldIds
+		}
+	};
+}
+
+/**
  * Returns an action object used to remove the fields.
  *
  * @param  {string[]} fieldIds

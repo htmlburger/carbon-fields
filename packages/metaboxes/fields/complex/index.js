@@ -53,6 +53,33 @@ class ComplexField extends Component {
 	}
 
 	/**
+	 * Handles cloning of a group.
+	 *
+	 * @param  {Object} group
+	 * @return {void}
+	 */
+	handleCloneGroup = ( group ) => {
+		const {
+			field,
+			value,
+			cloneFields,
+			onChange
+		} = this.props;
+
+		const originFieldIds = group.fields.map( ( groupField ) => groupField.id );
+		const cloneFieldIds = originFieldIds.map( () => uniqueId( 'carbon-fields-' ) );
+		const cloneGroup = cloneDeep( group );
+
+		cloneGroup.id = uniqueId( 'carbon-fields-' );
+		cloneGroup.fields.forEach( ( groupField, index ) => {
+			groupField.id = cloneFieldIds[ index ];
+		} );
+
+		cloneFields( originFieldIds, cloneFieldIds );
+		onChange( field.id, value.concat( cloneGroup ) );
+	}
+
+	/**
 	 * Handles the removal of a group.
 	 *
 	 * @param  {Object} group
@@ -100,6 +127,7 @@ class ComplexField extends Component {
 						index={ index }
 						group={ group }
 						prefix={ `${ name }[${ index }]` }
+						onClone={ this.handleCloneGroup }
 						onRemove={ this.handleRemoveGroup }
 					/>
 				) ) }
@@ -111,10 +139,15 @@ class ComplexField extends Component {
 }
 
 const applyWithDispatch = withDispatch( ( dispatch ) => {
-	const { addFields, removeFields } = dispatch( 'carbon-fields/metaboxes' );
+	const {
+		addFields,
+		cloneFields,
+		removeFields
+	} = dispatch( 'carbon-fields/metaboxes' );
 
 	return {
 		addFields,
+		cloneFields,
 		removeFields
 	};
 } );
@@ -136,6 +169,7 @@ addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( O
 					name={ name }
 					value={ value }
 					addFields={ props.addFields }
+					cloneFields={ props.cloneFields }
 					removeFields={ props.removeFields }
 					onChange={ handleChange }
 				/>

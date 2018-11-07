@@ -2,8 +2,13 @@
  * External dependencies.
  */
 import produce from 'immer';
-import { set, forEach } from 'lodash';
 import { combineReducers } from '@wordpress/data';
+import {
+	set,
+	forEach,
+	cloneDeep,
+	uniqueId
+} from 'lodash';
 
 /**
  * The reducer that keeps track of the containers.
@@ -31,6 +36,36 @@ export function containers( state = {}, action ) {
 		default:
 			return state;
 	}
+}
+
+/**
+ * Clones a field.
+ *
+ * @param  {string} originId
+ * @param  {string} cloneId
+ * @param  {Object} fields
+ * @return {void}
+ */
+function cloneField( originId, cloneId, fields ) {
+	const field = cloneDeep( fields[ originId ] );
+
+	field.id = cloneId;
+
+	if ( field.type === 'complex' ) {
+		field.value.forEach( ( group ) => {
+			group.id = uniqueId( 'carbon-fields-' );
+
+			group.fields.forEach( ( groupField ) => {
+				const cloneGroupFieldId = uniqueId( 'carbon-fields-' );
+
+				cloneField( groupField.id, cloneGroupFieldId, fields );
+
+				groupField.id = cloneGroupFieldId;
+			} );
+		} );
+	}
+
+	fields[ cloneId ] = field;
 }
 
 /**
@@ -77,6 +112,15 @@ export function fields( state = {}, action ) {
 			return produce( state, ( draft ) => {
 				action.payload.fields.forEach( ( field ) => {
 					draft[ field.id ] = field;
+				} );
+			} );
+
+		case 'CLONE_FIELDS':
+			return produce( state, ( draft ) => {
+				const { originFieldIds, cloneFieldIds } = action.payload;
+
+				originFieldIds.forEach( ( originFieldId, index ) => {
+					cloneField( originFieldId, cloneFieldIds[ index ], draft );
 				} );
 			} );
 
