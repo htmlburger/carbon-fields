@@ -95,9 +95,15 @@ class AssociationField extends Component {
 
 											<img className="cf-field-association__option-thumbnail" src={ option.thumbnail ? option.thumbnail : '' } />
 
-											<span className="cf-field-association__option-title">
-												{ option.title }
-											</span>
+											<div className="cf-field-association__option-content">
+												<span className="cf-field-association__option-title">
+													{ option.title }
+												</span>
+
+												<span className="cf-field-association__option-type">
+													{ option.type }
+												</span>
+											</div>
 
 											<div className="cf-field-association__option-actions">
 												<IconButton
