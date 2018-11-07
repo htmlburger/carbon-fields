@@ -52,6 +52,21 @@ export function updateContainerMeta( containerId, key, value ) {
 }
 
 /**
+ * Returns an action object used to remove the fields.
+ *
+ * @param  {string[]} fieldIds
+ * @return {Object}
+ */
+export function removeFields( fieldIds ) {
+	return {
+		type: 'REMOVE_FIELDS',
+		payload: {
+			fieldIds
+		}
+	};
+}
+
+/**
  * Returns an actions object used to add the created sidebar to all fields.
  *
  * @param  {Object} sidebar

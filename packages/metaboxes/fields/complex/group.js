@@ -7,6 +7,20 @@ import { getFieldType } from '@carbon-fields/core';
 
 class ComplexGroup extends Component {
 	/**
+	 * Handles the click on the "Remove" button.
+	 *
+	 * @return {void}
+	 */
+	handleRemoveClick = () => {
+		const {
+			group,
+			onRemove
+		} = this.props;
+
+		onRemove( group );
+	}
+
+	/**
 	 * Renders the component.
 	 *
 	 * @return {Object}
@@ -78,7 +92,7 @@ class ComplexGroup extends Component {
 						</span>
 					</button>
 
-					<button type="button" className="cf-complex-group__action">
+					<button type="button" className="cf-complex-group__action" onClick={ this.handleRemoveClick }>
 						<span className="dashicons-before dashicons-trash cf-complex-group__action-icon"></span>
 
 						<span className="cf-complex-group__action-text">
