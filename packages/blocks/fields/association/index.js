@@ -20,6 +20,7 @@ class AssociationField extends Component {
 	render() {
 		const {
 			field,
+			options,
 			value,
 			onAddItem,
 			onRemoveItem,
@@ -42,14 +43,20 @@ class AssociationField extends Component {
 
 						<div className="cf-field-association__col cf-field-association__col--source">
 							{
-								field.options.map( ( option, index ) => {
+								options.map( ( option, index ) => {
 									return (
 										<div className={ cx( 'cf-field-association__option', { 'cf-field-association__option--selected': option.disabled } ) } key={ index }>
 											<img className="cf-field-association__option-thumbnail" src={ option.thumbnail ? option.thumbnail : '' } />
 
-											<span className="cf-field-association__option-title">
-												{ option.title }
-											</span>
+											<div className="cf-field-association__option-content">
+												<span className="cf-field-association__option-title">
+													{ option.title }
+												</span>
+
+												<span className="cf-field-association__option-type">
+													{ option.type }
+												</span>
+											</div>
 
 											<div className="cf-field-association__option-actions">
 												<IconButton
@@ -111,6 +118,7 @@ addFilter( 'carbon-fields.association-field.block', 'carbon-fields/blocks', ( Or
 			{ ( {
 				field,
 				value,
+				options,
 				handleChange,
 				handleAddItem,
 				handleRemoveItem,
@@ -119,6 +127,7 @@ addFilter( 'carbon-fields.association-field.block', 'carbon-fields/blocks', ( Or
 				<AssociationField
 					field={ field }
 					value={ value }
+					options={ options }
 					onChange={ handleChange }
 					onAddItem={ handleAddItem }
 					onRemoveItem={ handleRemoveItem }

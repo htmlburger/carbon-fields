@@ -387,7 +387,7 @@ class Association_Field extends Field {
 
 		$field_data = array_merge( $field_data, array(
 			'value' => $this->value_to_json(),
-			'options' => array(),
+			'options' => $this->get_options(),
 			'min' => $this->get_min(),
 			'max' => $this->get_max(),
 			'duplicates_allowed' => $this->duplicates_allowed,
