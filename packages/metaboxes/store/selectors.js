@@ -1,5 +1,5 @@
 /**
- * Gets the containers.
+ * Returns the containers.
  *
  * @param  {Object} state
  * @return {Object[]}
@@ -17,6 +17,16 @@ export function getContainers( state ) {
  */
 export function getContainerById( state, containerId ) {
 	return state.containers[ containerId ];
+}
+
+/**
+ * Returns the fields.
+ *
+ * @param  {Object} state
+ * @return {Object}
+ */
+export function getFields( state ) {
+	return state.fields;
 }
 
 /**

@@ -52,6 +52,15 @@ export function fields( state = {}, action ) {
 				draft[ fieldId ].value = value;
 			} );
 
+		case 'REMOVE_FIELDS':
+			return produce( state, ( draft ) => {
+				const { fieldIds } = action.payload;
+
+				fieldIds.forEach( ( fieldId ) => {
+					delete draft[ fieldId ];
+				} );
+			} );
+
 		case 'RECEIVE_SIDEBAR':
 			return produce( state, ( draft ) => {
 				forEach( draft, ( field ) => {
