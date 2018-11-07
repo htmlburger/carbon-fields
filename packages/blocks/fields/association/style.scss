@@ -24,34 +24,46 @@
 		padding: 3px 7px;
 		border: 1px solid #e2e4e7;
 		border-top: 0;
-		max-height: 150px;
+		height: 150px;
 		overflow-y: scroll;
 
 		&--selected {
 			border-left: 0;
 		}
 	}
+}
 
-	&__option {
+.cf-field-association__option {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+
+	&-thumbnail {
+		width: 30px;
+		height: 30px;
+		margin-right: 6px;
+	}
+
+	&-actions {
 		display: flex;
 		flex-direction: row;
-		align-items: center;
-
-		&-thumbnail {
-			width: 30px;
-			height: 30px;
-			margin-right: 6px;
-		}
-
-		&-actions {
-			display: flex;
-			flex-direction: row;
-			flex-wrap: nowrap;
-			margin-left: auto;
-		}
-
-		&--selected {
-			opacity: .6;
-		}
+		flex-wrap: nowrap;
+		margin-left: auto;
 	}
+
+	&--selected {
+		opacity: .6;
+	}
+}
+
+.cf-field-association__option-content {
+	display: flex;
+	flex-direction: column;
+	line-height: 16px;
+}
+
+.cf-field-association__option-type {
+	font-size: 12px;
+	line-height: 14px;
+	opacity: .82;
 }

@@ -15,6 +15,7 @@ import {
 	pipe,
 	merge
 } from 'callbag-basics';
+import of from 'callbag-of';
 
 class AssociationField extends Component {
 	/**
@@ -33,11 +34,18 @@ class AssociationField extends Component {
 	}
 
 	handleQueryTermChange = ( queryTerm ) => {
-		const { field, onFetchOptions } = this.props;
+		const {
+			onFetchOptions,
+			setState
+		} = this.props;
 
-		field.queryTerm = queryTerm;
+		setState( {
+			queryTerm: queryTerm
+		} );
 
-		onFetchOptions( queryTerm );
+		onFetchOptions( {
+			queryTerm: queryTerm
+		} );
 	}
 
 	/**
@@ -79,6 +87,17 @@ class AssociationField extends Component {
 		this.handleChange( without( value, option ) );
 	}
 
+	componentDidMount() {
+		const {
+			field,
+			setState
+		} = this.props;
+
+		setState( {
+			options: field.options
+		} );
+	}
+
 	/**
 	 * Render the component.
 	 *
@@ -87,17 +106,13 @@ class AssociationField extends Component {
 	render() {
 		const {
 			field,
-			value,
-			onFetchOptions
+			value
 		} = this.props;
 
-		onFetchOptions( {
-			container_id: field.container_id,
-			field_name: field.base_name
-		} );
+		let { options } = this.props;
 
 		if ( ! field.duplicates_allowed ) {
-			field.options = field.options.map( ( option ) => {
+			options = options.map( ( option ) => {
 				option.disabled = !! find( value, ( selectedOption ) => isMatch( selectedOption, {
 					id: option.id,
 					type: option.type,
@@ -111,6 +126,7 @@ class AssociationField extends Component {
 		return this.props.children( {
 			field: field,
 			value: value,
+			options: options,
 			handleChange: this.handleChange,
 			handleAddItem: this.handleAddItem,
 			handleRemoveItem: this.handleRemoveItem,
@@ -126,13 +142,13 @@ class AssociationField extends Component {
  */
 function aperture() {
 	return function( component ) {
-		const [ fetchOptions$, fetchOptions ] = component.useEvent( 'fetchOptions', null );
+		const [ fetchOptions$, fetchOptions ] = component.useEvent( 'fetchOptions' );
 
 		const fetchOptionsProps$ = pipe(
-			fetchOptions$,
-			map( () => toProps( {
+			of( {
 				onFetchOptions: fetchOptions
-			} ) )
+			} ),
+			map( toProps )
 		);
 
 		const fetchOptionsEffect$ = pipe(
@@ -155,49 +171,41 @@ function aperture() {
  */
 function handler( props ) {
 	return function( effect ) {
-		const { type } = effect;
+		const { payload, type } = effect;
+		const { field } = props;
 
 		switch ( type ) {
 			case 'FETCH_OPTIONS':
 				// eslint-disable-next-line
-				// const request = window.jQuery.get( window.ajaxurl, {
-				// 	action: 'carbon_fields_fetch_association_options',
-				// 	page: 1,
-				// 	term: '',
-				// 	container_id: payload.container_id,
-				// 	field_name: payload.field_name
-				// }, null, 'json' );
-
-				props.setState( [] );
+				const request = window.jQuery.get( window.ajaxurl, {
+					action: 'carbon_fields_fetch_association_options',
+					term: payload.queryTerm,
+					container_id: field.container_id,
+					field_name: field.base_name
+				}, null, 'json' );
 
 				/* eslint-disable-next-line no-alert */
-				// const errorHandler = () => alert( 'An error occurred while trying to fetch association options.' );
+				const errorHandler = () => alert( 'An error occurred while trying to fetch association options.' );
 
-				// request.done( ( response ) => {
-				// 	if ( response && response.success ) {
-				// 		console.log( props );
-				// 		const { onAdded, onChange } = props;
+				request.done( ( response ) => {
+					if ( response && response.success ) {
+						props.setState( {
+							options: response.data
+						} );
+					} else {
+						errorHandler();
+					}
+				} );
 
-				// 		const sidebar = {
-				// 			value: response.data.id,
-				// 			label: response.data.name
-				// 		};
-
-				// 		onAdded( sidebar );
-				// 		onChange( effect.payload.fieldKey, sidebar.value );
-				// 	} else {
-				// 		errorHandler();
-				// 	}
-				// } );
-
-				// request.fail( errorHandler );
+				request.fail( errorHandler );
 				break;
 		}
 	};
 }
 
 const applyWithState = withState( {
-	options: []
+	options: [],
+	queryTerm: ''
 } );
 
 const applyWithEffects = withEffects( handler )( aperture );

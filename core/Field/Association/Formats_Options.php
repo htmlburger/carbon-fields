@@ -118,14 +118,15 @@ trait Formats_Options {
 
 	/**
 	 * Prepares an option of type 'post' for JS usage.
-	 * 
-	 * @param  array  $data 
+	 *
+	 * @param  array  $data
 	 * @return array
 	 */
 	public function format_post_option( $data ) {
 		return array(
 			'id'         => intval( $data->ID ),
 			'title'      => $this->get_title_by_type( $data->ID, $data->type, $data->subtype ),
+			'thumbnail'  => get_the_post_thumbnail_url( $data->ID, 'thumbnail' ),
 			'type'       => $data->type,
 			'subtype'    => $data->subtype,
 			'label'      => $this->get_item_label( $data->ID, $data->type, $data->subtype ),
@@ -136,8 +137,8 @@ trait Formats_Options {
 
 	/**
 	 * Prepares an option of type 'term' for JS usage.
-	 * 
-	 * @param  array  $data 
+	 *
+	 * @param  array  $data
 	 * @return array
 	 */
 	public function format_term_option( $data ) {
@@ -154,8 +155,8 @@ trait Formats_Options {
 
 	/**
 	 * Prepares an option of type 'comment' for JS usage.
-	 * 
-	 * @param  array  $data 
+	 *
+	 * @param  array  $data
 	 * @return array
 	 */
 	public function format_comment_option( $data ) {
@@ -172,8 +173,8 @@ trait Formats_Options {
 
 	/**
 	 * Prepares an option of type 'user' for JS usage.
-	 * 
-	 * @param  array  $data 
+	 *
+	 * @param  array  $data
 	 * @return array
 	 */
 	public function format_user_option( $data ) {
