@@ -29,6 +29,7 @@ class ComplexField extends Component {
 				{ value.map( ( group, index ) => (
 					<ComplexGroup
 						key={ group.id }
+						index={ index }
 						group={ group }
 						prefix={ `${ name }[${ index }]` }
 					/>

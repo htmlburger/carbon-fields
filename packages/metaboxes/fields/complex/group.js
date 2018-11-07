@@ -12,7 +12,11 @@ class ComplexGroup extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { group, prefix } = this.props;
+		const {
+			index,
+			group,
+			prefix
+		} = this.props;
 
 		const classes = cx(
 			'cf-complex-group',
@@ -31,7 +35,7 @@ class ComplexGroup extends Component {
 
 				<div className="cf-complex-group__head">
 					<span className="cf-complex-group__index">
-						1
+						{ index + 1 }
 					</span>
 
 					<span className="cf-complex-group__title">
