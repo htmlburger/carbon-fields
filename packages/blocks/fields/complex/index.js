@@ -17,12 +17,15 @@ class ComplexField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field } = this.props;
+		const { field, inserterButtonText } = this.props;
 
 		return (
 			<Panel>
 				<PanelHeader label={ field.label }>
-					<ComplexInserter groups={ field.groups } />
+					<ComplexInserter
+						buttonText={ inserterButtonText }
+						groups={ field.groups }
+					/>
 				</PanelHeader>
 			</Panel>
 		);
@@ -32,9 +35,17 @@ class ComplexField extends Component {
 addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( OriginalComplexField ) => ( props ) => {
 	return (
 		<OriginalComplexField { ...props }>
-			{ ( { field, value } ) => {
+			{ ( {
+				field,
+				value,
+				inserterButtonText
+			} ) => {
 				return (
-					<ComplexField field={ field } value={ value } />
+					<ComplexField
+						field={ field }
+						value={ value }
+						inserterButtonText={ inserterButtonText }
+					/>
 				);
 			} }
 		</OriginalComplexField>

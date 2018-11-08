@@ -20,7 +20,7 @@ class ComplexInserter extends Component {
 	renderToggle = ( { onToggle } ) => {
 		return (
 			<Button isDefault onClick={ onToggle }>
-				Add Entry
+				{ this.props.buttonText }
 			</Button>
 		);
 	}
@@ -50,12 +50,16 @@ class ComplexInserter extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { groups, onSelect } = this.props;
+		const {
+			buttonText,
+			groups,
+			onSelect
+		} = this.props;
 
 		if ( groups.length === 1 ) {
 			return (
 				<Button isDefault onClick={ () => onSelect( groups[ 0 ] ) }>
-					Add Entry
+					{ buttonText }
 				</Button>
 			);
 		}
