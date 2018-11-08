@@ -126,10 +126,20 @@ class AssociationField extends Component {
 			} );
 		}
 
+		const sortableOptions = {
+			axis: 'y',
+			items: 'li',
+			forceHelperSize: true,
+			forcePlaceholderSize: true,
+			scroll: true,
+			handle: '.mobile-handle'
+		};
+
 		return this.props.children( {
 			field: field,
 			value: value,
 			options: options,
+			sortableOptions: sortableOptions,
 			totalOptionsCount: totalOptionsCount,
 			handleChange: this.handleChange,
 			handleAddItem: this.handleAddItem,
