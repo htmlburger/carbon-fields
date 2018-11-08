@@ -2,8 +2,13 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { Panel } from '@wordpress/components';
+import { Panel, PanelHeader } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
+
+/**
+ * Internal dependencies.
+ */
+import ComplexInserter from './inserter';
 
 class ComplexField extends Component {
 	/**
@@ -15,8 +20,10 @@ class ComplexField extends Component {
 		const { field } = this.props;
 
 		return (
-			<Panel header={ field.label }>
-
+			<Panel>
+				<PanelHeader label={ field.label }>
+					<ComplexInserter groups={ field.groups } />
+				</PanelHeader>
 			</Panel>
 		);
 	}

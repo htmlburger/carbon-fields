@@ -1,0 +1,73 @@
+/**
+ * External dependencies.
+ */
+import { Component } from '@wordpress/element';
+import {
+	Dropdown,
+	Button,
+	MenuGroup,
+	MenuItem
+} from '@wordpress/components';
+
+class ComplexInserter extends Component {
+	/**
+	 * Renders the element used to show/hide the menu.
+	 *
+	 * @param  {Object}   props
+	 * @param  {Function} props.onToggle
+	 * @return {Object}
+	 */
+	renderToggle = ( { onToggle } ) => {
+		return (
+			<Button isDefault onClick={ onToggle }>
+				Add Entry
+			</Button>
+		);
+	}
+
+	/**
+	 * Renders the menu.
+	 *
+	 * @return {Object}
+	 */
+	renderMenu = () => {
+		const { groups, onSelect } = this.props;
+
+		return (
+			<MenuGroup>
+				{ groups.map( ( group ) => (
+					<MenuItem key={ group.id } onClick={ () => onSelect( group ) }>
+						{ group.label }
+					</MenuItem>
+				) ) }
+			</MenuGroup>
+		);
+	}
+
+	/**
+	 * Renders the component.
+	 *
+	 * @return {Object}
+	 */
+	render() {
+		const { groups, onSelect } = this.props;
+
+		if ( groups.length === 1 ) {
+			return (
+				<Button isDefault onClick={ () => onSelect( groups[ 0 ] ) }>
+					Add Entry
+				</Button>
+			);
+		}
+
+		return (
+			<Dropdown
+				position="bottom center"
+				renderToggle={ this.renderToggle }
+				renderContent={ this.renderMenu }
+			/>
+		);
+	}
+}
+
+export default ComplexInserter;
