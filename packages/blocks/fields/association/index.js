@@ -3,7 +3,7 @@
  */
 import cx from 'classnames';
 import { Component } from '@wordpress/element';
-import { BaseControl, IconButton, TextControl } from '@wordpress/components';
+import { BaseControl, Icon, IconButton, TextControl } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
 
 /**
@@ -90,7 +90,9 @@ class AssociationField extends Component {
 									return (
 										<div className="cf-field-association__option" key={ index }>
 											<div className="cf-field-association__option-sort">
-
+												<Icon
+													icon="menu"
+												/>
 											</div>
 
 											<img className="cf-field-association__option-thumbnail" src={ option.thumbnail ? option.thumbnail : '' } />

@@ -56,6 +56,12 @@
 	}
 }
 
+.cf-field-association__option-sort {
+	height: 20px;
+	margin-right: 6px;
+	cursor: grab;
+}
+
 .cf-field-association__option-content {
 	display: flex;
 	flex-direction: column;
