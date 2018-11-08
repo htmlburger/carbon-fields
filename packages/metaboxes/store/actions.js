@@ -52,6 +52,38 @@ export function updateContainerMeta( containerId, key, value ) {
 }
 
 /**
+ * Returns an action object used to add the fields.
+ *
+ * @param  {Object[]} fields
+ * @return {Object}
+ */
+export function addFields( fields ) {
+	return {
+		type: 'ADD_FIELDS',
+		payload: {
+			fields
+		}
+	};
+}
+
+/**
+ * Returns an action object used to clone the fields.
+ *
+ * @param  {string[]} originFieldIds
+ * @param  {string[]} cloneFieldIds
+ * @return {Object}
+ */
+export function cloneFields( originFieldIds, cloneFieldIds ) {
+	return {
+		type: 'CLONE_FIELDS',
+		payload: {
+			originFieldIds,
+			cloneFieldIds
+		}
+	};
+}
+
+/**
  * Returns an action object used to remove the fields.
  *
  * @param  {string[]} fieldIds

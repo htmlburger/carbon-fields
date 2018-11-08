@@ -7,6 +7,34 @@ import { getFieldType } from '@carbon-fields/core';
 
 class ComplexGroup extends Component {
 	/**
+	 * Handles the click on the "Toggle" button.
+	 *
+	 * @return {void}
+	 */
+	handleToggleClick = () => {
+		const {
+			index,
+			onToggle
+		} = this.props;
+
+		onToggle( index );
+	}
+
+	/**
+	 * Handles the click on the "Clone" button.
+	 *
+	 * @return {void}
+	 */
+	handleCloneClick = () => {
+		const {
+			group,
+			onClone
+		} = this.props;
+
+		onClone( group );
+	}
+
+	/**
 	 * Handles the click on the "Remove" button.
 	 *
 	 * @return {void}
@@ -32,15 +60,24 @@ class ComplexGroup extends Component {
 			prefix
 		} = this.props;
 
-		const classes = cx(
+		const groupClasses = cx(
 			'cf-complex-group',
 			{
 				'cf-complex-group--collapsed': group.collapsed
 			}
 		);
 
+		const toggleClasses = cx(
+			'dashicons-before',
+			'cf-complex-group__action-icon',
+			{
+				'dashicons-arrow-up': ! group.collapsed,
+				'dashicons-arrow-down': group.collapsed
+			}
+		);
+
 		return (
-			<div className={ classes }>
+			<div className={ groupClasses }>
 				<input
 					type="hidden"
 					name={ `${ prefix }[value]` }
@@ -57,7 +94,7 @@ class ComplexGroup extends Component {
 					</span>
 				</div>
 
-				<div className="cf-complex-group__body">
+				<div className="cf-complex-group__body" hidden={ group.collapsed }>
 					{ group.fields.map( ( field ) => {
 						const Field = getFieldType( field.type, 'metabox' );
 
@@ -79,13 +116,13 @@ class ComplexGroup extends Component {
 					<button type="button" className="cf-complex-group__action">
 						<span className="dashicons-before dashicons-admin-page cf-complex-group__action-icon"></span>
 
-						<span className="cf-complex-group__action-text">
+						<span className="cf-complex-group__action-text" onClick={ this.handleCloneClick }>
 							Duplicate
 						</span>
 					</button>
 
-					<button type="button" className="cf-complex-group__action">
-						<span className="dashicons-before dashicons-arrow-up cf-complex-group__action-icon"></span>
+					<button type="button" className="cf-complex-group__action" onClick={ this.handleToggleClick }>
+						<span className={ toggleClasses }></span>
 
 						<span className="cf-complex-group__action-text">
 							Collapse

@@ -1,28 +1,132 @@
 /**
  * External dependencies.
  */
-import of from 'callbag-of';
+import cx from 'classnames';
+import produce from 'immer';
 import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { compose } from '@wordpress/compose';
-import { select, dispatch } from '@wordpress/data';
-import { toProps, withEffects } from 'refract-callbag';
+import { withDispatch } from '@wordpress/data';
 import {
-	map,
-	merge,
-	pipe
-} from 'callbag-basics';
+	cloneDeep,
+	uniqueId,
+	without
+} from 'lodash';
 
 /**
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
 import withField from '../../components/with-field';
-import getFieldsFromComplexGroup from '../../utils/get-fields-from-complex-group';
+import flattenField from '../../utils/flatten-field';
+import ComplexInserter from './inserter';
 import ComplexGroup from './group';
 import ComplexActions from './actions';
 
 class ComplexField extends Component {
+	/**
+	 * Handles the selection of a group in the inserter.
+	 *
+	 * @param  {Object} group
+	 * @return {void}
+	 */
+	handleInserterSelect = ( group ) => {
+		const {
+			field,
+			value,
+			addFields,
+			onChange
+		} = this.props;
+
+		// Create a copy of the group to prevent
+		// incidentally modifications.
+		group = cloneDeep( group );
+
+		// Get a flat list of all fields for this group.
+		const fields = [];
+
+		group.id = uniqueId( 'carbon-fields-' );
+		group.container_id = field.container_id;
+		group.fields = group.fields.map( ( groupField ) => flattenField( groupField, field.container_id, fields ) );
+
+		// Push the group to the field.
+		addFields( fields );
+		onChange( field.id, value.concat( group ) );
+	}
+
+	/**
+	 * Handles expanding/collapsing of a group.
+	 *
+	 * @param  {number} groupIndex
+	 * @return {void}
+	 */
+	handleToggleGroup = ( groupIndex ) => {
+		const {
+			field,
+			value,
+			onChange
+		} = this.props;
+
+		onChange( field.id, produce( value, ( draft ) => {
+			const group = draft[ groupIndex ];
+
+			group.collapsed = ! group.collapsed;
+		} ) );
+	}
+
+	/**
+	 * Handles cloning of a group.
+	 *
+	 * @param  {Object} group
+	 * @return {void}
+	 */
+	handleCloneGroup = ( group ) => {
+		const {
+			field,
+			value,
+			cloneFields,
+			onChange
+		} = this.props;
+
+		const originFieldIds = group.fields.map( ( groupField ) => groupField.id );
+		const cloneFieldIds = originFieldIds.map( () => uniqueId( 'carbon-fields-' ) );
+		const cloneGroup = cloneDeep( group );
+
+		cloneGroup.id = uniqueId( 'carbon-fields-' );
+		cloneGroup.fields.forEach( ( groupField, index ) => {
+			groupField.id = cloneFieldIds[ index ];
+		} );
+
+		cloneFields( originFieldIds, cloneFieldIds );
+		onChange( field.id, value.concat( cloneGroup ) );
+	}
+
+	/**
+	 * Handles the removal of a group.
+	 *
+	 * @param  {Object} group
+	 * @return {void}
+	 */
+	handleRemoveGroup = ( group ) => {
+		const {
+			field,
+			value,
+			removeFields,
+			onChange
+		} = this.props;
+
+		onChange( field.id, without( value, group ) );
+
+		// Delay removal of fields because React will complain
+		// about missing objects.
+		// TODO: Investigate why this is necessary.
+		setTimeout( () => {
+			const fieldIds = group.fields.map( ( groupField ) => groupField.id );
+
+			removeFields( fieldIds );
+		}, 1 );
+	}
+
 	/**
 	 * Renders the component.
 	 *
@@ -32,21 +136,33 @@ class ComplexField extends Component {
 		const {
 			field,
 			name,
-			value,
-			onRemoveGroup
+			value
 		} = this.props;
 
+		const classes = cx(
+			`cf-complex--${ field.layout }`,
+			{
+				'cf-complex--multiple-groups': field.groups.length > 1
+			}
+		);
+
 		return (
-			<FieldBase field={ field } >
-				{ value.map( ( group, index ) => (
-					<ComplexGroup
-						key={ group.id }
-						index={ index }
-						group={ group }
-						prefix={ `${ name }[${ index }]` }
-						onRemove={ onRemoveGroup }
-					/>
-				) ) }
+			<FieldBase className={ classes } field={ field }>
+				<ComplexInserter groups={ field.groups } onSelect={ this.handleInserterSelect } />
+
+				<div className="cf-complex__groups">
+					{ value.map( ( group, index ) => (
+						<ComplexGroup
+							key={ group.id }
+							index={ index }
+							group={ group }
+							prefix={ `${ name }[${ index }]` }
+							onToggle={ this.handleToggleGroup }
+							onClone={ this.handleCloneGroup }
+							onRemove={ this.handleRemoveGroup }
+						/>
+					) ) }
+				</div>
 
 				<ComplexActions />
 			</FieldBase>
@@ -54,77 +170,40 @@ class ComplexField extends Component {
 	}
 }
 
-/**
- * The function that controls the stream of side effects.
- *
- * @return {Function}
- */
-function aperture() {
-	return function( component ) {
-		const [ removeGroup$, removeGroup ] = component.useEvent( 'removeGroup' );
+const applyWithDispatch = withDispatch( ( dispatch ) => {
+	const {
+		addFields,
+		cloneFields,
+		removeFields
+	} = dispatch( 'carbon-fields/metaboxes' );
 
-		return merge(
-			pipe(
-				of( {
-					onRemoveGroup: removeGroup
-				} ),
-				map( toProps )
-			),
-
-			pipe(
-				removeGroup$,
-				map( ( group ) => ( {
-					type: 'REMOVE_GROUP',
-					payload: group
-				} ) )
-			)
-		);
+	return {
+		addFields,
+		cloneFields,
+		removeFields
 	};
-}
-
-/**
- * The function that causes the side effects.
- *
- * @param  {Object} props
- * @return {Function}
- */
-function handler( props ) {
-	return function( effect ) {
-		switch ( effect.type ) {
-			case 'REMOVE_GROUP':
-				const allFields = select( 'carbon-fields/metaboxes' ).getFields();
-				const groupFields = getFieldsFromComplexGroup( effect.payload, allFields );
-				const field = allFields[ props.id ];
-				const value = field.value.filter( ( group ) => group.id !== effect.payload.id );
-				const fieldIds = groupFields.map( ( groupField ) => groupField.id );
-
-				props.onChange( field.id, value );
-
-				dispatch( 'carbon-fields/metaboxes' ).removeFields( fieldIds );
-
-				break;
-		}
-	};
-}
-
-const applyWithEffects = withEffects( handler )( aperture );
+} );
 
 addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( OriginalComplexField ) => compose(
 	withField,
-	applyWithEffects
+	applyWithDispatch
 )( ( props ) => {
 	return (
 		<OriginalComplexField { ...props }>
 			{ ( {
 				field,
 				name,
-				value
+				value,
+				handleChange
 			} ) => (
 				<ComplexField
 					field={ field }
 					name={ name }
 					value={ value }
-					onRemoveGroup={ props.onRemoveGroup }
+					addFields={ props.addFields }
+					cloneFields={ props.cloneFields }
+					removeFields={ props.removeFields }
+					onChange={ handleChange }
 				/>
 			) }
 		</OriginalComplexField>
