@@ -219,6 +219,7 @@ class ComplexField extends Component {
 							group={ group }
 							prefix={ `${ name }[${ index }]` }
 							hidden={ this.isTabbed && group.id !== currentTab }
+							allowClone={ field.duplicate_groups_allowed }
 							onToggle={ this.handleToggleGroup }
 							onClone={ this.handleCloneGroup }
 							onRemove={ this.handleRemoveGroup }

@@ -58,7 +58,8 @@ class ComplexGroup extends Component {
 			index,
 			group,
 			prefix,
-			hidden
+			hidden,
+			allowClone
 		} = this.props;
 
 		const groupClasses = cx(
@@ -114,13 +115,15 @@ class ComplexGroup extends Component {
 				</div>
 
 				<div className="cf-complex-group__actions">
-					<button type="button" className="cf-complex-group__action" onClick={ this.handleCloneClick }>
-						<span className="dashicons-before dashicons-admin-page cf-complex-group__action-icon"></span>
+					{ allowClone && (
+						<button type="button" className="cf-complex-group__action" onClick={ this.handleCloneClick }>
+							<span className="dashicons-before dashicons-admin-page cf-complex-group__action-icon"></span>
 
-						<span className="cf-complex-group__action-text">
-							Duplicate
-						</span>
-					</button>
+							<span className="cf-complex-group__action-text">
+								Duplicate
+							</span>
+						</button>
+					) }
 
 					<button type="button" className="cf-complex-group__action" onClick={ this.handleToggleClick }>
 						<span className={ toggleClasses }></span>
