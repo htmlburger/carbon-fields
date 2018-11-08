@@ -22,8 +22,8 @@ import withField from '../../components/with-field';
 import flattenField from '../../utils/flatten-field';
 import ComplexTabs from './tabs';
 import ComplexInserter from './inserter';
+import ComplexToggler from './toggler';
 import ComplexGroup from './group';
-import ComplexActions from './actions';
 
 class ComplexField extends Component {
 	state = {
@@ -79,6 +79,26 @@ class ComplexField extends Component {
 		// Push the group to the field.
 		addFields( fields );
 		onChange( field.id, value.concat( group ) );
+	}
+
+	/**
+	 * Handles expanding/collapsing of all groups.
+	 *
+	 * @param  {boolean} collapsed
+	 * @return {void}
+	 */
+	handleToggleAllGroups = ( collapsed ) => {
+		const {
+			field,
+			value,
+			onChange
+		} = this.props;
+
+		onChange( field.id, produce( value, ( draft ) => {
+			draft.forEach( ( group ) => {
+				group.collapsed = collapsed;
+			} );
+		} ) );
 	}
 
 	/**
@@ -207,7 +227,18 @@ class ComplexField extends Component {
 				</div>
 
 				{ ! this.isTabbed && (
-					<ComplexActions />
+					<div className="cf-complex__actions">
+						<ComplexInserter
+							buttonText="Add Entry"
+							groups={ field.groups }
+							onSelect={ this.handleInserterSelect }
+						/>
+
+						<ComplexToggler
+							groups={ value }
+							onToggle={ this.handleToggleAllGroups }
+						/>
+					</div>
 				) }
 			</FieldBase>
 		);
