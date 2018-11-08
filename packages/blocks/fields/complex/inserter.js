@@ -28,15 +28,23 @@ class ComplexInserter extends Component {
 	/**
 	 * Renders the menu.
 	 *
+	 * @param  {Object}   props
+	 * @param  {Function} props.onClose
 	 * @return {Object}
 	 */
-	renderMenu = () => {
+	renderMenu = ( { onClose } ) => {
 		const { groups, onSelect } = this.props;
 
 		return (
 			<MenuGroup>
 				{ groups.map( ( group ) => (
-					<MenuItem key={ group.id } onClick={ () => onSelect( group ) }>
+					<MenuItem
+						key={ group.group_id }
+						onClick={ () => {
+							onSelect( group );
+							onClose();
+						} }
+					>
 						{ group.label }
 					</MenuItem>
 				) ) }
