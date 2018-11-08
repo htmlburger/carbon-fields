@@ -1,15 +1,11 @@
 /**
  * External dependencies.
  */
-import { Component } from '@wordpress/element';
-import { compose, withState } from '@wordpress/compose';
 import { withEffects, toProps } from 'refract-callbag';
 import {
-	cloneDeep,
 	debounce,
 	find,
-	isMatch,
-	without
+	isMatch
 } from 'lodash';
 import {
 	map,
@@ -18,22 +14,13 @@ import {
 } from 'callbag-basics';
 import of from 'callbag-of';
 
+/**
+ * WordPress dependencies.
+ */
+import { Component } from '@wordpress/element';
+import { compose, withState } from '@wordpress/compose';
+
 class AssociationField extends Component {
-	/**
-	 * Handles the change of the field.
-	 *
-	 * @param  {Array} value
-	 * @return {void}
-	 */
-	handleChange = ( value ) => {
-		const { field } = this.props;
-
-		this.props.onChange(
-			field.base_name,
-			value
-		);
-	}
-
 	handleQueryTermChange = debounce( ( queryTerm ) => {
 		const {
 			onFetchOptions,
@@ -48,45 +35,6 @@ class AssociationField extends Component {
 			queryTerm: queryTerm
 		} );
 	}, 300 );
-
-	/**
-	 * Handles addition of a new item.
-	 *
-	 * @param  {Array} option
-	 * @return {void}
-	 */
-	handleAddItem = ( option ) => {
-		const { field, value } = this.props;
-
-		// Don't do anything if the duplicates aren't allowed and
-		// the item is already selected.
-		if ( ! field.duplicates_allowed && option.disabled ) {
-			return;
-		}
-
-		// Don't do anything, because the maximum is reached.
-		if ( field.max > 0 && value.length >= field.max ) {
-			// alert( carbonFieldsL10n.field.maxNumItemsReached.replace( '%s', field.max ) );
-			return;
-		}
-
-		this.handleChange( [
-			...value,
-			cloneDeep( option )
-		] );
-	}
-
-	/**
-	 * Handles addition of a new item.
-	 *
-	 * @param  {Array} option
-	 * @return {void}
-	 */
-	handleRemoveItem = ( option ) => {
-		const { value } = this.props;
-
-		this.handleChange( without( value, option ) );
-	}
 
 	componentDidMount() {
 		const {
@@ -108,8 +56,10 @@ class AssociationField extends Component {
 	render() {
 		const {
 			field,
+			name,
 			value,
-			totalOptionsCount
+			totalOptionsCount,
+			onChange
 		} = this.props;
 
 		let { options } = this.props;
@@ -137,13 +87,12 @@ class AssociationField extends Component {
 
 		return this.props.children( {
 			field: field,
+			name: name,
 			value: value,
 			options: options,
 			sortableOptions: sortableOptions,
 			totalOptionsCount: totalOptionsCount,
-			handleChange: this.handleChange,
-			handleAddItem: this.handleAddItem,
-			handleRemoveItem: this.handleRemoveItem,
+			handleChange: onChange,
 			handleQueryTermChange: this.handleQueryTermChange
 		} );
 	}

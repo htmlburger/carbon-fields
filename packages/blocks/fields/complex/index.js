@@ -1,91 +1,33 @@
 /**
  * External dependencies.
  */
+import { Component } from '@wordpress/element';
+import { Panel } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
-import { BaseControl } from '@wordpress/components';
-import { get, curry } from 'lodash';
 
-/**
- * The internal dependencies.
- */
-import AddButton from './add-button';
-import Fields from './fields';
+class ComplexField extends Component {
+	/**
+	 * Renders the component.
+	 *
+	 * @return {Object}
+	 */
+	render() {
+		const { field } = this.props;
 
-/**
- * Renders the field.
- *
- * @param  {Object}   props
- * @param  {Object}   props.field
- * @param  {string}   props.value
- * @param  {Function} props.onChange
- * @return {Object}
- */
-const ComplexField = ( {
-	field,
-	value,
-	addButton,
-	fields
-} ) => (
-	<BaseControl label={ field.label }>
-		{ value.length === 0 && addButton }
+		return (
+			<Panel header={ field.label }>
 
-		{ value.length > 0 && fields }
-	</BaseControl>
-);
+			</Panel>
+		);
+	}
+}
 
-addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( OriginalComplexField ) => ( originalProps ) => {
+addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( OriginalComplexField ) => ( props ) => {
 	return (
-		<OriginalComplexField { ...originalProps }>
-			{ ( {
-				field,
-				value,
-				depth,
-				handleChildChange,
-				hasGroups,
-				getAddLabel,
-				handleAdd,
-				getGroupFields,
-				getGroupLabel,
-				handleSorting
-			} ) => {
-				const sanitizedValue = value.map( ( entry, index ) => ( {
-					name: `${ entry._type }-${ index }`,
-					title: getGroupLabel( entry._type ),
-					fields: getGroupFields( entry._type ),
-					attributes: get( value, index, {} ),
-					index: index
-				} ) );
-
-				const curryWithFieldKey = ( callback ) => curry( callback )( field.base_name );
-
-				const buttonComponent = (
-					<AddButton
-						addLabel={ getAddLabel() }
-						hasGroups={ hasGroups() }
-						groups={ field.groups }
-						getLabel={ getGroupLabel }
-						onClick={ curryWithFieldKey( handleAdd ) }
-					/>
-				);
-
-				const fieldsComponent = (
-					<Fields
-						elementId={ field.id }
-						value={ sanitizedValue }
-						depth={ depth }
-						button={ buttonComponent }
-						onChange={ curryWithFieldKey( handleChildChange ) }
-						onSort={ curryWithFieldKey( handleSorting ) }
-					/>
-				);
-
+		<OriginalComplexField { ...props }>
+			{ ( { field, value } ) => {
 				return (
-					<ComplexField
-						field={ field }
-						value={ value }
-						addButton={ buttonComponent }
-						fields={ fieldsComponent }
-					/>
+					<ComplexField field={ field } value={ value } />
 				);
 			} }
 		</OriginalComplexField>
