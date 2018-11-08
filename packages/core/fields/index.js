@@ -11,6 +11,7 @@ import FileField from './file';
 import HiddenField from './hidden';
 import HtmlField from './html';
 import MultiselectField from './multiselect';
+import OembedField from './oembed';
 import RadioField from './radio';
 import SelectField from './select';
 import SeparatorField from './separator';
@@ -34,6 +35,7 @@ import TextareaField from './textarea';
 	[ 'hidden', HiddenField ],
 	[ 'html', HtmlField ],
 	[ 'multiselect', MultiselectField ],
+	[ 'oembed', OembedField ],
 	[ 'radio', RadioField ],
 	[ 'radio_image', RadioField ],
 	[ 'select', SelectField ],
