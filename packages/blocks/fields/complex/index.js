@@ -2,8 +2,13 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { Panel } from '@wordpress/components';
+import { Panel, PanelHeader } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
+
+/**
+ * Internal dependencies.
+ */
+import ComplexInserter from './inserter';
 
 class ComplexField extends Component {
 	/**
@@ -12,11 +17,16 @@ class ComplexField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field } = this.props;
+		const { field, inserterButtonText } = this.props;
 
 		return (
-			<Panel header={ field.label }>
-
+			<Panel>
+				<PanelHeader label={ field.label }>
+					<ComplexInserter
+						buttonText={ inserterButtonText }
+						groups={ field.groups }
+					/>
+				</PanelHeader>
 			</Panel>
 		);
 	}
@@ -25,9 +35,17 @@ class ComplexField extends Component {
 addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( OriginalComplexField ) => ( props ) => {
 	return (
 		<OriginalComplexField { ...props }>
-			{ ( { field, value } ) => {
+			{ ( {
+				field,
+				value,
+				inserterButtonText
+			} ) => {
 				return (
-					<ComplexField field={ field } value={ value } />
+					<ComplexField
+						field={ field }
+						value={ value }
+						inserterButtonText={ inserterButtonText }
+					/>
 				);
 			} }
 		</OriginalComplexField>

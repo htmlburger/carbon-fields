@@ -7,6 +7,7 @@ import './color';
 import './complex';
 import './date';
 import './datetime';
+import './file';
 import './gravity-form';
 import './hidden';
 import './html';

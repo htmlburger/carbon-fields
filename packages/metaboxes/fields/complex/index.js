@@ -219,7 +219,8 @@ class ComplexField extends Component {
 		const {
 			field,
 			name,
-			value
+			value,
+			inserterButtonText
 		} = this.props;
 
 		const classes = cx(
@@ -267,7 +268,7 @@ class ComplexField extends Component {
 					<div className="cf-complex__actions">
 						{ this.availableGroups.length && ! this.isMaximumReached && (
 							<ComplexInserter
-								buttonText="Add Entry"
+								buttonText={ inserterButtonText }
 								groups={ this.availableGroups }
 								onSelect={ this.handleInserterSelect }
 							/>
@@ -308,12 +309,14 @@ addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( O
 				field,
 				name,
 				value,
+				inserterButtonText,
 				handleChange
 			} ) => (
 				<ComplexField
 					field={ field }
 					name={ name }
 					value={ value }
+					inserterButtonText={ inserterButtonText }
 					addFields={ props.addFields }
 					cloneFields={ props.cloneFields }
 					removeFields={ props.removeFields }
