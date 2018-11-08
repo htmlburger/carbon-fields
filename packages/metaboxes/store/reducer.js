@@ -5,6 +5,9 @@ import produce from 'immer';
 import { combineReducers } from '@wordpress/data';
 import {
 	set,
+	omit,
+	keyBy,
+	assign,
 	forEach,
 	cloneDeep,
 	uniqueId
@@ -41,12 +44,13 @@ export function containers( state = {}, action ) {
 /**
  * Clones a field.
  *
- * @param  {string} originId
- * @param  {string} cloneId
- * @param  {Object} fields
- * @return {void}
+ * @param  {string}   originId
+ * @param  {string}   cloneId
+ * @param  {Object}   fields
+ * @param  {Object[]} accumulator
+ * @return {Object[]}
  */
-function cloneField( originId, cloneId, fields ) {
+function cloneField( originId, cloneId, fields, accumulator ) {
 	const field = cloneDeep( fields[ originId ] );
 
 	field.id = cloneId;
@@ -55,38 +59,40 @@ function cloneField( originId, cloneId, fields ) {
 		field.value.forEach( ( group ) => {
 			group.id = uniqueId( 'carbon-fields-' );
 
-			group.fields.forEach( ( groupField ) => {
+			accumulator = group.fields.reduce( ( groupAccumulator, groupField ) => {
+				const originGroupFieldId = groupField.id;
 				const cloneGroupFieldId = uniqueId( 'carbon-fields-' );
 
-				cloneField( groupField.id, cloneGroupFieldId, fields );
-
 				groupField.id = cloneGroupFieldId;
-			} );
+
+				return cloneField( originGroupFieldId, cloneGroupFieldId, fields, groupAccumulator );
+			}, accumulator );
 		} );
 	}
 
-	fields[ cloneId ] = field;
+	return accumulator.concat( field );
 }
 
 /**
- * Deletes a field.
+ * Returns a list of field ids by a given root id.
  *
- * @param  {string} fieldId
- * @param  {Object} fields
- * @return {void}
+ * @param  {string}   fieldId
+ * @param  {Object}   fields
+ * @param  {string[]} accumulator
+ * @return {string[]}
  */
-function deleteField( fieldId, fields ) {
+function getFieldIdsByRootId( fieldId, fields, accumulator ) {
 	const field = fields[ fieldId ];
 
 	if ( field.type === 'complex' ) {
 		field.value.forEach( ( group ) => {
-			group.fields.forEach( ( groupField ) => {
-				deleteField( groupField.id, fields );
-			} );
+			accumulator = group.fields.reduce( ( groupAccumulator, groupField ) => {
+				return getFieldIdsByRootId( groupField.id, fields, groupAccumulator );
+			}, accumulator );
 		} );
 	}
 
-	delete fields[ fieldId ];
+	return accumulator.concat( fieldId );
 }
 
 /**
@@ -119,19 +125,19 @@ export function fields( state = {}, action ) {
 			return produce( state, ( draft ) => {
 				const { originFieldIds, cloneFieldIds } = action.payload;
 
-				originFieldIds.forEach( ( originFieldId, index ) => {
-					cloneField( originFieldId, cloneFieldIds[ index ], draft );
-				} );
+				const clonedFields = originFieldIds.reduce( ( accumulator, originFieldId, index ) => {
+					return cloneField( originFieldId, cloneFieldIds[ index ], draft, accumulator );
+				}, [] );
+
+				assign( draft, keyBy( clonedFields, 'id' ) );
 			} );
 
 		case 'REMOVE_FIELDS':
-			return produce( state, ( draft ) => {
-				const { fieldIds } = action.payload;
+			const fieldIds = action.payload.fieldIds.reduce( ( accumulator, fieldId ) => {
+				return getFieldIdsByRootId( fieldId, state, accumulator );
+			}, [] );
 
-				fieldIds.forEach( ( fieldId ) => {
-					deleteField( fieldId, draft );
-				} );
-			} );
+			return omit( state, fieldIds );
 
 		case 'RECEIVE_SIDEBAR':
 			return produce( state, ( draft ) => {
