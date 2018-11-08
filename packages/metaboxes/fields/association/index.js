@@ -11,13 +11,13 @@ import {
  * WordPress dependencies.
  */
 import { Component } from '@wordpress/element';
-import { BaseControl, Icon, IconButton, TextControl } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
 
 /**
  * Internal dependencies.
  */
-import './style.scss';
+import FieldBase from '../../components/field-base';
+import withField from '../../components/with-field';
 
 class AssociationField extends Component {
 	/**
@@ -30,7 +30,7 @@ class AssociationField extends Component {
 		const { field } = this.props;
 
 		this.props.onChange(
-			field.base_name,
+			field.id,
 			value
 		);
 	}
@@ -82,17 +82,14 @@ class AssociationField extends Component {
 	render() {
 		const {
 			field,
+			name,
 			options,
 			totalOptionsCount,
-			value,
-			onQueryTermChange
+			value
 		} = this.props;
 
 		return (
-			<BaseControl
-				className="cf-field-association-wrapper"
-				label={ field.label }
-			>
+			<FieldBase field={ field } className="cf-field-association-wrapper">
 				<strong className="cf-field-association__counter">
 					showing { options.length } of { totalOptionsCount } results
 				</strong>
@@ -100,11 +97,7 @@ class AssociationField extends Component {
 				<div className="cf-field-association">
 					<div className="cf-field-association__body">
 						<div className="cf-field-association__search-bar">
-							<TextControl
-								value={ field.queryTerm }
-								onChange={ onQueryTermChange }
-								placeholder={ carbonFieldsL10n.field.searchPlaceholder }
-							/>
+							<input type="text" value={ field.queryTerm } placeholder={ carbonFieldsL10n.field.searchPlaceholder } />
 						</div>
 
 						<div className="cf-field-association__col cf-field-association__col--source">
@@ -125,18 +118,22 @@ class AssociationField extends Component {
 											</div>
 
 											<div className="cf-field-association__option-actions">
-												<IconButton
-													icon="edit"
-													label="Edit"
+												<a
 													href={ option.edit_link }
 													target="_blank"
-												/>
+													rel="noopener noreferrer"
+													aria-label="Edit"
+												>
+													Edit
+												</a>
 
-												<IconButton
-													icon="plus-alt"
-													label="Add"
+												<button
+													type="button"
+													aria-label="Add"
 													onClick={ () => this.handleAddItem( option ) }
-												/>
+												>
+													Add
+												</button>
 											</div>
 										</div>
 									);
@@ -150,9 +147,7 @@ class AssociationField extends Component {
 									return (
 										<div className="cf-field-association__option" key={ index }>
 											<div className="cf-field-association__option-sort">
-												<Icon
-													icon="menu"
-												/>
+												+
 											</div>
 
 											<img className="cf-field-association__option-thumbnail" src={ option.thumbnail ? option.thumbnail : '' } />
@@ -168,12 +163,21 @@ class AssociationField extends Component {
 											</div>
 
 											<div className="cf-field-association__option-actions">
-												<IconButton
-													icon="editor-removeformatting"
-													label="Remove"
+												<button
+													type="button"
+													aria-label="Remove"
 													onClick={ () => this.handleRemoveItem( option ) }
-												/>
+												>
+													Remove
+												</button>
 											</div>
+
+											<input
+												type="hidden"
+												name={ `${ name }[${ index }]` }
+												value={ `${ option.type }:${ option.subtype }:${ option.id }` }
+												readOnly={ true }
+											/>
 										</div>
 									);
 								} )
@@ -181,16 +185,17 @@ class AssociationField extends Component {
 						</div>
 					</div>
 				</div>
-			</BaseControl>
+			</FieldBase>
 		);
 	}
 }
 
-addFilter( 'carbon-fields.association-field.block', 'carbon-fields/blocks', ( OriginalAssociationField ) => ( props ) => {
+addFilter( 'carbon-fields.association-field.metabox', 'carbon-fields/metaboxes', ( OriginalAssociationField ) => withField( ( props ) => {
 	return (
 		<OriginalAssociationField { ...props }>
 			{ ( {
 				field,
+				name,
 				value,
 				options,
 				totalOptionsCount,
@@ -199,6 +204,7 @@ addFilter( 'carbon-fields.association-field.block', 'carbon-fields/blocks', ( Or
 			} ) => (
 				<AssociationField
 					field={ field }
+					name={ name }
 					value={ value }
 					options={ options }
 					totalOptionsCount={ totalOptionsCount }
@@ -208,4 +214,4 @@ addFilter( 'carbon-fields.association-field.block', 'carbon-fields/blocks', ( Or
 			) }
 		</OriginalAssociationField>
 	);
-} );
+} ) );
