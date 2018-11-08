@@ -26,6 +26,11 @@ import ComplexToggler from './toggler';
 import ComplexGroup from './group';
 
 class ComplexField extends Component {
+	/**
+	 * Local state.
+	 *
+	 * @type {Object}
+	 */
 	state = {
 		currentTab: get( this.props.value, '0.id', null )
 	};
@@ -37,6 +42,17 @@ class ComplexField extends Component {
 	 */
 	get isTabbed() {
 		return this.props.field.layout.indexOf( 'tabbed' ) > -1;
+	}
+
+	/**
+	 * Returns true if the maximum number of entries is reached.
+	 *
+	 * @return {boolean}
+	 */
+	get isMaximumReached() {
+		const { field, value } = this.props;
+
+		return field.max > 0 && value.length >= field.max;
 	}
 
 	/**
@@ -221,7 +237,7 @@ class ComplexField extends Component {
 						groups={ value }
 						onChange={ this.handleTabsChange }
 					>
-						{ this.availableGroups.length && (
+						{ this.availableGroups.length && ! this.isMaximumReached && (
 							<ComplexInserter
 								buttonText="+"
 								groups={ this.availableGroups }
@@ -239,7 +255,7 @@ class ComplexField extends Component {
 							group={ group }
 							prefix={ `${ name }[${ index }]` }
 							hidden={ this.isTabbed && group.id !== currentTab }
-							allowClone={ field.duplicate_groups_allowed }
+							allowClone={ field.duplicate_groups_allowed && ! this.isMaximumReached }
 							onToggle={ this.handleToggleGroup }
 							onClone={ this.handleCloneGroup }
 							onRemove={ this.handleRemoveGroup }
@@ -249,7 +265,7 @@ class ComplexField extends Component {
 
 				{ ! this.isTabbed && (
 					<div className="cf-complex__actions">
-						{ this.availableGroups.length && (
+						{ this.availableGroups.length && ! this.isMaximumReached && (
 							<ComplexInserter
 								buttonText="Add Entry"
 								groups={ this.availableGroups }
