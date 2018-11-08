@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import cx from 'classnames';
+import produce from 'immer';
 import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { compose } from '@wordpress/compose';
@@ -51,6 +52,26 @@ class ComplexField extends Component {
 		// Push the group to the field.
 		addFields( fields );
 		onChange( field.id, value.concat( group ) );
+	}
+
+	/**
+	 * Handles expanding/collapsing of a group.
+	 *
+	 * @param  {number} groupIndex
+	 * @return {void}
+	 */
+	handleToggleGroup = ( groupIndex ) => {
+		const {
+			field,
+			value,
+			onChange
+		} = this.props;
+
+		onChange( field.id, produce( value, ( draft ) => {
+			const group = draft[ groupIndex ];
+
+			group.collapsed = ! group.collapsed;
+		} ) );
 	}
 
 	/**
@@ -136,6 +157,7 @@ class ComplexField extends Component {
 							index={ index }
 							group={ group }
 							prefix={ `${ name }[${ index }]` }
+							onToggle={ this.handleToggleGroup }
 							onClone={ this.handleCloneGroup }
 							onRemove={ this.handleRemoveGroup }
 						/>
