@@ -40,6 +40,24 @@ class ComplexField extends Component {
 	}
 
 	/**
+	 * Returns a list of groups that can be added if the field
+	 * doesn't allow duplicating of groups.
+	 *
+	 * @return {Object[]}
+	 */
+	get availableGroups() {
+		const { field, value } = this.props;
+
+		if ( field.duplicate_groups_allowed ) {
+			return field.groups;
+		}
+
+		const existingGroupNames = value.map( ( { name } ) => name );
+
+		return field.groups.filter( ( { name } ) => existingGroupNames.indexOf( name ) === -1 );
+	}
+
+	/**
 	 * Handles changing of tabs.
 	 *
 	 * @param  {string} groupId
@@ -203,11 +221,13 @@ class ComplexField extends Component {
 						groups={ value }
 						onChange={ this.handleTabsChange }
 					>
-						<ComplexInserter
-							buttonText="+"
-							groups={ field.groups }
-							onSelect={ this.handleInserterSelect }
-						/>
+						{ this.availableGroups.length && (
+							<ComplexInserter
+								buttonText="+"
+								groups={ this.availableGroups }
+								onSelect={ this.handleInserterSelect }
+							/>
+						) }
 					</ComplexTabs>
 				) }
 
@@ -229,11 +249,13 @@ class ComplexField extends Component {
 
 				{ ! this.isTabbed && (
 					<div className="cf-complex__actions">
-						<ComplexInserter
-							buttonText="Add Entry"
-							groups={ field.groups }
-							onSelect={ this.handleInserterSelect }
-						/>
+						{ this.availableGroups.length && (
+							<ComplexInserter
+								buttonText="Add Entry"
+								groups={ this.availableGroups }
+								onSelect={ this.handleInserterSelect }
+							/>
+						) }
 
 						<ComplexToggler
 							groups={ value }
