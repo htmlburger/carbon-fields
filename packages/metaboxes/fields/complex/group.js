@@ -57,7 +57,8 @@ class ComplexGroup extends Component {
 		const {
 			index,
 			group,
-			prefix
+			prefix,
+			hidden
 		} = this.props;
 
 		const groupClasses = cx(
@@ -77,7 +78,7 @@ class ComplexGroup extends Component {
 		);
 
 		return (
-			<div className={ groupClasses }>
+			<div className={ groupClasses } hidden={ hidden }>
 				<input
 					type="hidden"
 					name={ `${ prefix }[value]` }

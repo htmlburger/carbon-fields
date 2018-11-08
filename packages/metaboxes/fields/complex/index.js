@@ -8,6 +8,7 @@ import { addFilter } from '@wordpress/hooks';
 import { compose } from '@wordpress/compose';
 import { withDispatch } from '@wordpress/data';
 import {
+	get,
 	cloneDeep,
 	uniqueId,
 	without
@@ -19,11 +20,37 @@ import {
 import FieldBase from '../../components/field-base';
 import withField from '../../components/with-field';
 import flattenField from '../../utils/flatten-field';
+import ComplexTabs from './tabs';
 import ComplexInserter from './inserter';
 import ComplexGroup from './group';
 import ComplexActions from './actions';
 
 class ComplexField extends Component {
+	state = {
+		currentTab: get( this.props.value, '0.id', null )
+	};
+
+	/**
+	 * Returns true if the field is using tabs for the layout.
+	 *
+	 * @return {boolean}
+	 */
+	get isTabbed() {
+		return this.props.field.layout.indexOf( 'tabbed' ) > -1;
+	}
+
+	/**
+	 * Handles changing of tabs.
+	 *
+	 * @param  {string} groupId
+	 * @return {void}
+	 */
+	handleTabsChange = ( groupId ) => {
+		this.setState( {
+			currentTab: groupId
+		} );
+	}
+
 	/**
 	 * Handles the selection of a group in the inserter.
 	 *
@@ -133,6 +160,8 @@ class ComplexField extends Component {
 	 * @return {Object}
 	 */
 	render() {
+		const { currentTab } = this.state;
+
 		const {
 			field,
 			name,
@@ -148,7 +177,19 @@ class ComplexField extends Component {
 
 		return (
 			<FieldBase className={ classes } field={ field }>
-				<ComplexInserter groups={ field.groups } onSelect={ this.handleInserterSelect } />
+				{ this.isTabbed && (
+					<ComplexTabs
+						current={ currentTab }
+						groups={ value }
+						onChange={ this.handleTabsChange }
+					>
+						<ComplexInserter
+							buttonText="+"
+							groups={ field.groups }
+							onSelect={ this.handleInserterSelect }
+						/>
+					</ComplexTabs>
+				) }
 
 				<div className="cf-complex__groups">
 					{ value.map( ( group, index ) => (
@@ -157,6 +198,7 @@ class ComplexField extends Component {
 							index={ index }
 							group={ group }
 							prefix={ `${ name }[${ index }]` }
+							hidden={ this.isTabbed && group.id !== currentTab }
 							onToggle={ this.handleToggleGroup }
 							onClone={ this.handleCloneGroup }
 							onRemove={ this.handleRemoveGroup }
@@ -164,7 +206,9 @@ class ComplexField extends Component {
 					) ) }
 				</div>
 
-				<ComplexActions />
+				{ ! this.isTabbed && (
+					<ComplexActions />
+				) }
 			</FieldBase>
 		);
 	}

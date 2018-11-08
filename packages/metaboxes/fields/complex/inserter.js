@@ -62,12 +62,12 @@ class ComplexInserter extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { groups } = this.props;
+		const { buttonText, groups } = this.props;
 
 		return (
 			<div className="cf-complex__inserter">
 				<button type="button" className="cf-complex__inserter-button" onClick={ this.handleAddClick }>
-					Add entry
+					{ buttonText }
 				</button>
 
 				{ groups.length > 1 && (
