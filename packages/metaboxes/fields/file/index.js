@@ -9,8 +9,10 @@ import cx from 'classnames';
 import {
 	map,
 	pipe,
-	merge
+	merge,
+	combine
 } from 'callbag-basics';
+import of from 'callbag-of';
 import { withEffects, toProps } from 'refract-callbag';
 
 /**
@@ -102,39 +104,6 @@ class FileField extends Component {
 }
 
 /**
- * Setups media-related actions
- *
- * @param  {Object} component
- * @param  {Object} data
- * @param  {Object} data.event
- * @param  {Object} data.prop
- * @param  {Object} data.type
- * @return {Array}
- */
-function setupActionAperture( component, { event, prop, type } ) {
-	const [ channel$, action ] = component.useEvent( event, null );
-
-	const prop$ = pipe(
-		channel$,
-		map( () => toProps( {
-			[ prop ]: action
-		} ) )
-	);
-
-	const effect$ = pipe(
-		channel$,
-		map( ( data ) => ( {
-			type,
-			payload: {
-				data
-			}
-		} ) )
-	);
-
-	return [ prop$, effect$ ];
-}
-
-/**
  * The function that controls the stream of side-effects.
  *
  * @return {Function}
@@ -145,9 +114,38 @@ function aperture() {
 			{ event: 'initMediaBrowserEvent', prop: 'initMediaBrowser', type: 'INIT_MEDIA_BROWSER' },
 			{ event: 'openMediaBrowserEvent', prop: 'openMediaBrowser', type: 'OPEN_MEDIA_BROWSER' },
 			{ event: 'destroyMediaBrowserEvent', prop: 'destroyMediaBrowser', type: 'DESTROY_MEDIA_BROWSER' }
-		].map( ( action ) => setupActionAperture( component, action ) );
+		].map( ( actionData ) => {
+			const [ actionChannel$, action ] = component.useEvent( actionData.event );
 
-		return merge( ...actions.flat( 2 ) );
+			return {
+				...actionData,
+				action,
+				channel$: actionChannel$
+			};
+		} );
+
+		const combined$ = pipe(
+			combine( ...actions.map( ( { action, prop } ) => of( {
+				action,
+				prop
+			} ) ) ),
+			map( ( combinedActions ) => toProps(
+				...combinedActions.map( ( { action, prop } ) => ( {
+					[ prop ]: action
+				} ) )
+			) )
+		);
+
+		return merge(
+			combined$,
+			...actions.map( ( { channel$, type } ) => pipe(
+				channel$,
+				map( ( payload ) => ( {
+					type,
+					payload
+				} ) )
+			) )
+		);
 	};
 }
 
@@ -183,6 +181,9 @@ addFilter( 'carbon-fields.file-field.metabox', 'carbon-fields/metaboxes', ( Orig
 					field={ field }
 					buttonLabel={ __( 'Select File' ) }
 					onChange={ handleChange }
+					initMediaBrowser={ props.initMediaBrowser }
+					openMediaBrowser={ props.openMediaBrowser }
+					destroyMediaBrowser={ props.destroyMediaBrowser }
 				/>
 			) }
 		</OriginalFileField>
