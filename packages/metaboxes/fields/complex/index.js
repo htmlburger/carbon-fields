@@ -1,6 +1,7 @@
 /**
  * External dependencies.
  */
+import cx from 'classnames';
 import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { compose } from '@wordpress/compose';
@@ -117,20 +118,29 @@ class ComplexField extends Component {
 			value
 		} = this.props;
 
+		const classes = cx(
+			`cf-complex--${ field.layout }`,
+			{
+				'cf-complex--multiple-groups': field.groups.length > 1
+			}
+		);
+
 		return (
-			<FieldBase field={ field }>
+			<FieldBase className={ classes } field={ field }>
 				<ComplexInserter groups={ field.groups } onSelect={ this.handleInserterSelect } />
 
-				{ value.map( ( group, index ) => (
-					<ComplexGroup
-						key={ group.id }
-						index={ index }
-						group={ group }
-						prefix={ `${ name }[${ index }]` }
-						onClone={ this.handleCloneGroup }
-						onRemove={ this.handleRemoveGroup }
-					/>
-				) ) }
+				<div className="cf-complex__groups">
+					{ value.map( ( group, index ) => (
+						<ComplexGroup
+							key={ group.id }
+							index={ index }
+							group={ group }
+							prefix={ `${ name }[${ index }]` }
+							onClone={ this.handleCloneGroup }
+							onRemove={ this.handleRemoveGroup }
+						/>
+					) ) }
+				</div>
 
 				<ComplexActions />
 			</FieldBase>

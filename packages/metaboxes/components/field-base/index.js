@@ -12,17 +12,23 @@ import './style.scss';
  * Renders the base wrapper of the field.
  *
  * @param  {Object} props
+ * @param  {string} props.className
  * @param  {Object} props.field
  * @param  {mixed}  props.children
  * @return {Object}
  */
-export const FieldBase = ( { field, children } ) => {
+export const FieldBase = ( {
+	className,
+	field,
+	children
+} ) => {
 	const styles = !! field.width ? { flexBasis: `${ field.width }%` } : null;
 
 	const classes = [
 		'cf-field',
 		`cf-${ field.type }`,
 		{ 'cf-field--has-width': !! field.width },
+		className,
 		...field.classes
 	];
 
