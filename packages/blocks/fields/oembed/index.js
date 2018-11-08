@@ -3,7 +3,12 @@
  */
 import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
-import { TextControl } from '@wordpress/components';
+import { BaseControl, TextControl } from '@wordpress/components';
+
+/**
+ * Internal dependencies.
+ */
+import OembedPreview from './preview';
 
 class OembedField extends Component {
 	/**
@@ -13,9 +18,14 @@ class OembedField extends Component {
 	 * @return {void}
 	 */
 	handleChange = ( value ) => {
-		const { field, onChange } = this.props;
+		const {
+			field,
+			onChange,
+			onSearchSubmit
+		} = this.props;
 
 		onChange( field.base_name, value );
+		onSearchSubmit( value );
 	}
 
 	/**
@@ -24,30 +34,55 @@ class OembedField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field, value } = this.props;
+		const {
+			field,
+			value,
+			embedCode,
+			embedType,
+			provider
+		} = this.props;
 
 		return (
-			<TextControl
-				label={ field.label }
-				value={ value }
-				onChange={ this.handleChange }
-			/>
+			<BaseControl>
+				<TextControl
+					label={ field.label }
+					value={ value }
+					onChange={ this.handleChange }
+				/>
+
+				{
+					embedCode
+						? <OembedPreview
+							html={ embedCode }
+							type={ embedType }
+							provider={ provider }
+						/> : null
+				}
+			</BaseControl>
 		);
 	}
 }
 
-addFilter( 'carbon-fields.oembed.block', 'carbon-fields/blocks', ( OriginalOembedField ) => ( props ) => {
+addFilter( 'carbon-fields.oembed-field.block', 'carbon-fields/blocks', ( OriginalOembedField ) => ( props ) => {
 	return (
 		<OriginalOembedField { ...props }>
 			{ ( {
 				field,
 				value,
-				handleChange
+				handleChange,
+				handleSearchSubmit,
+				embedCode,
+				embedType,
+				provider
 			} ) => (
 				<OembedField
 					field={ field }
 					value={ value }
 					onChange={ handleChange }
+					onSearchSubmit={ handleSearchSubmit }
+					embedCode={ embedCode }
+					embedType={ embedType }
+					provider={ provider }
 				/>
 			) }
 		</OriginalOembedField>
