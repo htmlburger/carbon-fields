@@ -9,12 +9,25 @@ import {
 	PanelRow,
 	Toolbar,
 	ToolbarButton
-
 } from '@wordpress/components';
 import { getFieldType } from '@carbon-fields/core';
 import { get } from 'lodash';
 
 class ComplexGroup extends Component {
+	/**
+	 * Handles the click on the "Remove" button.
+	 *
+	 * @return {void}
+	 */
+	handleRemoveClick = () => {
+		const {
+			index,
+			onRemove
+		} = this.props;
+
+		onRemove( index );
+	}
+
 	/**
 	 * Renders the component.
 	 *
@@ -34,7 +47,7 @@ class ComplexGroup extends Component {
 					<Toolbar isCollapsed={ false }>
 						<ToolbarButton icon="arrow-up" />
 						<ToolbarButton icon="admin-page" />
-						<ToolbarButton icon="trash" />
+						<ToolbarButton icon="trash" onClick={ this.handleRemoveClick } />
 					</Toolbar>
 				</PanelHeader>
 

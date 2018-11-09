@@ -43,7 +43,7 @@ class ComplexField extends Component {
 	}
 
 	/**
-	 * Handles adding of a group.
+	 * Handles adding of group.
 	 *
 	 * @param  {Object} group
 	 * @return {void}
@@ -65,6 +65,24 @@ class ComplexField extends Component {
 		}, data );
 
 		onChange( name, value.concat( data ) );
+	}
+
+	/**
+	 * Handles removing of group.
+	 *
+	 * @param  {number} groupIndex
+	 * @return {void}
+	 */
+	handleRemoveGroup = ( groupIndex ) => {
+		const {
+			name,
+			value,
+			onChange
+		} = this.props;
+
+		onChange( name, produce( value, ( draft ) => {
+			draft.splice( groupIndex, 1 );
+		} ) );
 	}
 
 	/**
@@ -95,6 +113,7 @@ class ComplexField extends Component {
 									group={ group }
 									values={ values }
 									onChildChange={ this.handleChildFieldChange }
+									onRemove={ this.handleRemoveGroup }
 								/>
 							);
 						} ) }
