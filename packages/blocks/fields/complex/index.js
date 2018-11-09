@@ -13,7 +13,8 @@ import { addFilter } from '@wordpress/hooks';
 import {
 	find,
 	set,
-	cloneDeep
+	cloneDeep,
+	without
 } from 'lodash';
 
 /**
@@ -23,6 +24,15 @@ import ComplexInserter from './inserter';
 import ComplexGroup from './group';
 
 class ComplexField extends Component {
+	/**
+	 * Local state.
+	 *
+	 * @type {Object}
+	 */
+	state = {
+		collapsedGroups: []
+	};
+
 	/**
 	 * Handles the change of a child field.
 	 *
@@ -108,6 +118,24 @@ class ComplexField extends Component {
 	}
 
 	/**
+	 * Handles expanding/collapsing of group.
+	 *
+	 * @param  {number} groupIndex
+	 * @return {void}
+	 */
+	handleToggleGroup = ( groupIndex ) => {
+		this.setState( ( { collapsedGroups } ) => {
+			if ( collapsedGroups.indexOf( groupIndex ) > -1 ) {
+				collapsedGroups = without( collapsedGroups, groupIndex );
+			} else {
+				collapsedGroups = [ ...collapsedGroups, groupIndex ];
+			}
+
+			return { collapsedGroups };
+		} );
+	}
+
+	/**
 	 * Renders the component.
 	 *
 	 * @return {Object}
@@ -134,7 +162,9 @@ class ComplexField extends Component {
 									index={ index }
 									group={ group }
 									values={ values }
+									collapsed={ this.state.collapsedGroups.indexOf( index ) > -1 }
 									onChildChange={ this.handleChildFieldChange }
+									onToggle={ this.handleToggleGroup }
 									onClone={ this.handleCloneGroup }
 									onRemove={ this.handleRemoveGroup }
 								/>

@@ -43,6 +43,20 @@ class ComplexGroup extends Component {
 	}
 
 	/**
+	 * Handles the click on the "Toggle" button.
+	 *
+	 * @return {void}
+	 */
+	handleToggleClick = () => {
+		const {
+			index,
+			onToggle
+		} = this.props;
+
+		onToggle( index );
+	}
+
+	/**
 	 * Renders the component.
 	 *
 	 * @return {Object}
@@ -52,6 +66,7 @@ class ComplexGroup extends Component {
 			index,
 			group,
 			values,
+			collapsed,
 			onChildChange
 		} = this.props;
 
@@ -59,13 +74,18 @@ class ComplexGroup extends Component {
 			<Panel>
 				<PanelHeader label={ index + 1 }>
 					<Toolbar isCollapsed={ false }>
-						<ToolbarButton icon="arrow-up" />
+						<ToolbarButton
+							icon={ collapsed ? 'arrow-down' : 'arrow-up' }
+							onClick={ this.handleToggleClick }
+						/>
+
 						<ToolbarButton icon="admin-page" onClick={ this.handleCloneClick } />
+
 						<ToolbarButton icon="trash" onClick={ this.handleRemoveClick } />
 					</Toolbar>
 				</PanelHeader>
 
-				<PanelBody>
+				<PanelBody opened={ ! collapsed }>
 					{ group.fields.map( ( field, fieldIndex ) => {
 						const Field = getFieldType( field.type, 'block' );
 
