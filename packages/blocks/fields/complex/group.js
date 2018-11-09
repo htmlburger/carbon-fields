@@ -13,11 +13,16 @@ class ComplexGroup extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { group, values } = this.props;
+		const {
+			index,
+			group,
+			values,
+			onChildChange
+		} = this.props;
 
 		return (
 			<PanelRow>
-				{ group.fields.map( ( field, index ) => {
+				{ group.fields.map( ( field, fieldIndex ) => {
 					const Field = getFieldType( field.type, 'block' );
 
 					if ( ! Field ) {
@@ -28,9 +33,11 @@ class ComplexGroup extends Component {
 
 					return (
 						<Field
-							key={ index }
+							key={ fieldIndex }
 							field={ field }
+							name={ `${ index }.${ field.base_name }` }
 							value={ value }
+							onChange={ onChildChange }
 						/>
 					);
 				} ) }

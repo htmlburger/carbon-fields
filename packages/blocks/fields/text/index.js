@@ -13,9 +13,9 @@ class TextField extends Component {
 	 * @return {void}
 	 */
 	handleChange = ( value ) => {
-		const { field, onChange } = this.props;
+		const { name, onChange } = this.props;
 
-		onChange( field.base_name, value );
+		onChange( name, value );
 	}
 
 	/**
@@ -41,11 +41,13 @@ addFilter( 'carbon-fields.text-field.block', 'carbon-fields/blocks', ( OriginalT
 		<OriginalTextField { ...props }>
 			{ ( {
 				field,
+				name,
 				value,
 				handleChange
 			} ) => (
 				<TextField
 					field={ field }
+					name={ name }
 					value={ value }
 					onChange={ handleChange }
 				/>
