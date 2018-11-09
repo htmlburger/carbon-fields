@@ -5,6 +5,7 @@ import produce from 'immer';
 import { Fragment, Component } from '@wordpress/element';
 import {
 	BaseControl,
+	Button,
 	Panel,
 	PanelHeader,
 	PanelBody
@@ -118,6 +119,25 @@ class ComplexField extends Component {
 	}
 
 	/**
+	 * Handles expanding/collapsing of all groups.
+	 *
+	 * @return {void}
+	 */
+	handleToggleAllGroups = () => {
+		const { value } = this.props;
+
+		this.setState( ( { collapsedGroups } ) => {
+			if ( collapsedGroups.length !== value.length ) {
+				collapsedGroups = value.map( ( group, index ) => index );
+			} else {
+				collapsedGroups = [];
+			}
+
+			return { collapsedGroups };
+		} );
+	}
+
+	/**
 	 * Handles expanding/collapsing of group.
 	 *
 	 * @param  {number} groupIndex
@@ -141,6 +161,8 @@ class ComplexField extends Component {
 	 * @return {Object}
 	 */
 	render() {
+		const { collapsedGroups } = this.state;
+
 		const {
 			field,
 			value,
@@ -162,7 +184,7 @@ class ComplexField extends Component {
 									index={ index }
 									group={ group }
 									values={ values }
-									collapsed={ this.state.collapsedGroups.indexOf( index ) > -1 }
+									collapsed={ collapsedGroups.indexOf( index ) > -1 }
 									onChildChange={ this.handleChildFieldChange }
 									onToggle={ this.handleToggleGroup }
 									onClone={ this.handleCloneGroup }
@@ -178,6 +200,14 @@ class ComplexField extends Component {
 							groups={ field.groups }
 							onSelect={ this.handleAddGroup }
 						/>
+
+						<Button isDefault onClick={ this.handleToggleAllGroups }>
+							{
+								collapsedGroups.length === value.length
+									? 'Expand All'
+									: 'Collapse All'
+							}
+						</Button>
 					</PanelHeader>
 				</Panel>
 			</Fragment>
