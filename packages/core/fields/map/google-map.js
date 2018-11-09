@@ -14,13 +14,19 @@ class GoogleMap extends Component {
 		// eslint-disable-next-line
 		this.node = ReactDOM.findDOMNode( this );
 
-		this.initMap();
-		this.setupMapEvents();
-		this.redrawMap( this.props );
+		const interval = setInterval( () => {
+			if ( typeof window.google !== 'undefined' ) {
+				clearInterval( interval );
 
-		this.cancelResizeObserver = observeResize( this.node, () => {
-			this.redrawMap( this.props );
-		} );
+				this.initMap();
+				this.setupMapEvents();
+				this.redrawMap( this.props );
+
+				this.cancelResizeObserver = observeResize( this.node, () => {
+					this.redrawMap( this.props );
+				} );
+			}
+		}, 50 );
 	}
 
 	/**

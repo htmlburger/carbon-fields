@@ -11,6 +11,7 @@ import './file';
 import './gravity-form';
 import './hidden';
 import './html';
+import './map';
 import './multiselect';
 import './oembed';
 import './radio';

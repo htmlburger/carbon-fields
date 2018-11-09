@@ -127,7 +127,7 @@ function handler( props ) {
 							}
 						};
 
-						onChange( field.base_name, newValue );
+						onChange( field.id, newValue );
 					} )
 					.catch( ( alert ) => {
 						// eslint-disable-next-line
@@ -145,6 +145,5 @@ function handler( props ) {
 const applyWithEffects = withEffects( handler )( aperture );
 
 export default compose(
-	// applyWithState,
 	applyWithEffects
 )( MapField );
