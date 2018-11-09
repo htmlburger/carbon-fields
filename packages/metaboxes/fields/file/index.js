@@ -5,13 +5,15 @@ import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { compose } from '@wordpress/compose';
 import { __ } from '@wordpress/i18n';
-import cx from 'classnames';
 import {
 	map,
 	pipe,
-	merge
+	merge,
+	combine
 } from 'callbag-basics';
+import of from 'callbag-of';
 import { withEffects, toProps } from 'refract-callbag';
+import { pick } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -26,7 +28,7 @@ class FileField extends Component {
 	 * @return {void}
 	 */
 	componentDidMount() {
-		this.props.initMediaBrowser();
+		this.props.initMediaBrowser( this.handleSelect );
 	}
 
 	/**
@@ -45,15 +47,21 @@ class FileField extends Component {
 	 * @return {void}
 	 */
 	handleClear = () => {
+		const { field, onChange } = this.props;
+
+		onChange( field.id, {} );
 	}
 
 	/**
-	 * Handles the open action of the fiel field
+	 * Handles the file selection.
 	 *
-	 * @param  {Object} e
+	 * @param  {Object} file
 	 * @return {void}
 	 */
-	handleOpen = () => {
+	handleSelect = ( file ) => {
+		const { field, onChange } = this.props;
+
+		onChange( field.id, pick( file, [ 'id', 'filename', 'mime', 'url' ] ) );
 	}
 
 	/**
@@ -78,19 +86,19 @@ class FileField extends Component {
 						value={ field.value }
 						readOnly />
 
-					<div className={ cx( 'carbon-description', { hidden: ! field.value } ) }>
-						<div className={ cx( 'carbon-attachment-preview', { hidden: ! field.value_meta.thumb_url } ) }>
-							<img src={ field.value_meta.thumb_url } className="thumbnail-image" />
+					{ field.value.id && (
+						<div className="carbon-description" >
+							<div className="carbon-attachment-preview" >
+								<img src={ field.value.url } className="thumbnail-image" />
 
-							<div className="carbon-file-remove dashicons-before dashicons-no-alt" onClick={ this.handleClear }></div>
+								<div className="carbon-file-remove dashicons-before dashicons-no-alt" onClick={ this.handleClear }></div>
+							</div>
+
+							<span className="carbon-attachment-file-name">
+								{ field.value.filename }
+							</span>
 						</div>
-
-						<input
-							type="text"
-							className="carbon-attachment-file-name"
-							value={ field.value_meta.file_url ? field.value_meta.file_url : '' }
-							readOnly />
-					</div>
+					) }
 
 					<span className="button" onClick={ openMediaBrowser }>
 						{ buttonLabel }
@@ -99,39 +107,6 @@ class FileField extends Component {
 			</FieldBase>
 		);
 	}
-}
-
-/**
- * Setups media-related actions
- *
- * @param  {Object} component
- * @param  {Object} data
- * @param  {Object} data.event
- * @param  {Object} data.prop
- * @param  {Object} data.type
- * @return {Array}
- */
-function setupActionAperture( component, { event, prop, type } ) {
-	const [ channel$, action ] = component.useEvent( event, null );
-
-	const prop$ = pipe(
-		channel$,
-		map( () => toProps( {
-			[ prop ]: action
-		} ) )
-	);
-
-	const effect$ = pipe(
-		channel$,
-		map( ( data ) => ( {
-			type,
-			payload: {
-				data
-			}
-		} ) )
-	);
-
-	return [ prop$, effect$ ];
 }
 
 /**
@@ -145,26 +120,86 @@ function aperture() {
 			{ event: 'initMediaBrowserEvent', prop: 'initMediaBrowser', type: 'INIT_MEDIA_BROWSER' },
 			{ event: 'openMediaBrowserEvent', prop: 'openMediaBrowser', type: 'OPEN_MEDIA_BROWSER' },
 			{ event: 'destroyMediaBrowserEvent', prop: 'destroyMediaBrowser', type: 'DESTROY_MEDIA_BROWSER' }
-		].map( ( action ) => setupActionAperture( component, action ) );
+		].map( ( actionData ) => {
+			const [ actionChannel$, action ] = component.useEvent( actionData.event );
 
-		return merge( ...actions.flat( 2 ) );
+			return {
+				...actionData,
+				action,
+				channel$: actionChannel$
+			};
+		} );
+
+		const combined$ = pipe(
+			combine( ...actions.map( ( { action, prop } ) => of( {
+				action,
+				prop
+			} ) ) ),
+			map( ( combinedActions ) => toProps( combinedActions.reduce(
+				( acc, curr ) => ( {
+					...acc,
+					[ curr.prop ]: curr.action
+				} ), {}
+			) ) )
+		);
+
+		return merge(
+			combined$,
+			...actions.map( ( { channel$, type } ) => pipe(
+				channel$,
+				map( ( payload ) => ( {
+					type,
+					payload
+				} ) )
+			) )
+		);
 	};
 }
 
 /**
  * The function that causes the side effects.
  *
- * @param  {Object} props
  * @return {Function}
  */
 function handler() {
+	let mediaBrowser = null;
+
 	return function( effect ) {
 		switch ( effect.type ) {
 			case 'INIT_MEDIA_BROWSER':
+				const onSelect = effect.payload;
+
+				if ( ! onSelect ) {
+					return;
+				}
+
+				mediaBrowser = wp.media( {
+					title: __( 'Select or Upload file of your choice' ),
+					button: {
+						text: __( 'Use this File' )
+					},
+					multiple: false
+				} );
+
+				mediaBrowser.on( 'select', () => {
+					const file = mediaBrowser.state()
+						.get( 'selection' )
+						.first()
+						.toJSON();
+
+					onSelect( file );
+				} );
+
 				break;
 			case 'OPEN_MEDIA_BROWSER':
+				if ( mediaBrowser ) {
+					mediaBrowser.open();
+				}
+
 				break;
 			case 'DESTROY_MEDIA_BROWSER':
+				mediaBrowser = null;
+
 				break;
 		}
 	};
@@ -183,6 +218,9 @@ addFilter( 'carbon-fields.file-field.metabox', 'carbon-fields/metaboxes', ( Orig
 					field={ field }
 					buttonLabel={ __( 'Select File' ) }
 					onChange={ handleChange }
+					initMediaBrowser={ props.initMediaBrowser }
+					openMediaBrowser={ props.openMediaBrowser }
+					destroyMediaBrowser={ props.destroyMediaBrowser }
 				/>
 			) }
 		</OriginalFileField>

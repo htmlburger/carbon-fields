@@ -3,11 +3,8 @@
  */
 import { Component, Fragment } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
-
-/**
- * The internal dependencies.
- */
-import renderFields from '../../utils/render-fields';
+import { getFieldType } from '@carbon-fields/core';
+import { get } from 'lodash';
 
 class BlockEdit extends Component {
 	/**
@@ -33,7 +30,24 @@ class BlockEdit extends Component {
 
 		return (
 			<Fragment>
-				{ renderFields( fields, attributes, this.handleFieldChange ) }
+				{ fields.map( ( field, index ) => {
+					const Field = getFieldType( field.type, 'block' );
+
+					if ( ! Field ) {
+						return null;
+					}
+					const value = get( attributes, field.base_name );
+
+					return (
+						<Field
+							key={ index }
+							field={ field }
+							name={ field.base_name }
+							value={ value }
+							onChange={ this.handleFieldChange }
+						/>
+					);
+				} ) }
 			</Fragment>
 		);
 	}
