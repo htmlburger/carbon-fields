@@ -116,6 +116,8 @@ class ComplexField extends Component {
 		onChange( name, produce( value, ( draft ) => {
 			draft.splice( groupIndex, 1 );
 		} ) );
+
+		this.handleToggleGroup( groupIndex );
 	}
 
 	/**
