@@ -2,7 +2,12 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { PanelRow } from '@wordpress/components';
+import {
+	Panel,
+	PanelHeader,
+	PanelBody,
+	PanelRow
+} from '@wordpress/components';
 import { getFieldType } from '@carbon-fields/core';
 import { get } from 'lodash';
 
@@ -21,27 +26,32 @@ class ComplexGroup extends Component {
 		} = this.props;
 
 		return (
-			<PanelRow>
-				{ group.fields.map( ( field, fieldIndex ) => {
-					const Field = getFieldType( field.type, 'block' );
+			<Panel>
+				<PanelHeader label={ index + 1 } />
 
-					if ( ! Field ) {
-						return null;
-					}
+				<PanelBody>
+					{ group.fields.map( ( field, fieldIndex ) => {
+						const Field = getFieldType( field.type, 'block' );
 
-					const value = get( values, field.base_name );
+						if ( ! Field ) {
+							return null;
+						}
 
-					return (
-						<Field
-							key={ fieldIndex }
-							field={ field }
-							name={ `${ index }.${ field.base_name }` }
-							value={ value }
-							onChange={ onChildChange }
-						/>
-					);
-				} ) }
-			</PanelRow>
+						const value = get( values, field.base_name );
+
+						return (
+							<PanelRow key={ fieldIndex }>
+								<Field
+									field={ field }
+									name={ `${ index }.${ field.base_name }` }
+									value={ value }
+									onChange={ onChildChange }
+								/>
+							</PanelRow>
+						);
+					} ) }
+				</PanelBody>
+			</Panel>
 		);
 	}
 }

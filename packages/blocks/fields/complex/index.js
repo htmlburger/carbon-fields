@@ -2,8 +2,13 @@
  * External dependencies.
  */
 import produce from 'immer';
-import { Component } from '@wordpress/element';
-import { Panel, PanelHeader, PanelBody } from '@wordpress/components';
+import { Fragment, Component } from '@wordpress/element';
+import {
+	BaseControl,
+	Panel,
+	PanelHeader,
+	PanelBody
+} from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
 import { find, set } from 'lodash';
 
@@ -75,31 +80,35 @@ class ComplexField extends Component {
 		} = this.props;
 
 		return (
-			<Panel>
-				<PanelHeader label={ field.label }>
-					<ComplexInserter
-						buttonText={ inserterButtonText }
-						groups={ field.groups }
-						onSelect={ this.handleAddGroup }
-					/>
-				</PanelHeader>
+			<Fragment>
+				<BaseControl label={ field.label } />
 
-				<PanelBody>
-					{ value.map( ( { _type, ...values }, index ) => {
-						const group = find( field.groups, [ 'name', _type ] );
+				<Panel>
+					<PanelBody>
+						{ value.map( ( { _type, ...values }, index ) => {
+							const group = find( field.groups, [ 'name', _type ] );
 
-						return (
-							<ComplexGroup
-								key={ index }
-								index={ index }
-								group={ group }
-								values={ values }
-								onChildChange={ this.handleChildFieldChange }
-							/>
-						);
-					} ) }
-				</PanelBody>
-			</Panel>
+							return (
+								<ComplexGroup
+									key={ index }
+									index={ index }
+									group={ group }
+									values={ values }
+									onChildChange={ this.handleChildFieldChange }
+								/>
+							);
+						} ) }
+					</PanelBody>
+
+					<PanelHeader>
+						<ComplexInserter
+							buttonText={ inserterButtonText }
+							groups={ field.groups }
+							onSelect={ this.handleAddGroup }
+						/>
+					</PanelHeader>
+				</Panel>
+			</Fragment>
 		);
 	}
 }
