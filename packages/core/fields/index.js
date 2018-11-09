@@ -10,6 +10,7 @@ import DatetimeField from './datetime';
 import FileField from './file';
 import HiddenField from './hidden';
 import HtmlField from './html';
+import MapField from './map';
 import MultiselectField from './multiselect';
 import OembedField from './oembed';
 import RadioField from './radio';
@@ -34,6 +35,7 @@ import TextareaField from './textarea';
 	[ 'gravity_form', SelectField ],
 	[ 'hidden', HiddenField ],
 	[ 'html', HtmlField ],
+	[ 'map', MapField ],
 	[ 'multiselect', MultiselectField ],
 	[ 'oembed', OembedField ],
 	[ 'radio', RadioField ],
