@@ -15,6 +15,20 @@ import { get } from 'lodash';
 
 class ComplexGroup extends Component {
 	/**
+	 * Handles the click on the "Clone" button.
+	 *
+	 * @return {void}
+	 */
+	handleCloneClick = () => {
+		const {
+			index,
+			onClone
+		} = this.props;
+
+		onClone( index );
+	}
+
+	/**
 	 * Handles the click on the "Remove" button.
 	 *
 	 * @return {void}
@@ -46,7 +60,7 @@ class ComplexGroup extends Component {
 				<PanelHeader label={ index + 1 }>
 					<Toolbar isCollapsed={ false }>
 						<ToolbarButton icon="arrow-up" />
-						<ToolbarButton icon="admin-page" />
+						<ToolbarButton icon="admin-page" onClick={ this.handleCloneClick } />
 						<ToolbarButton icon="trash" onClick={ this.handleRemoveClick } />
 					</Toolbar>
 				</PanelHeader>

@@ -10,7 +10,11 @@ import {
 	PanelBody
 } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
-import { find, set } from 'lodash';
+import {
+	find,
+	set,
+	cloneDeep
+} from 'lodash';
 
 /**
  * Internal dependencies.
@@ -68,6 +72,24 @@ class ComplexField extends Component {
 	}
 
 	/**
+	 * Handles cloning of group.
+	 *
+	 * @param  {number} groupIndex
+	 * @return {void}
+	 */
+	handleCloneGroup = ( groupIndex ) => {
+		const {
+			name,
+			value,
+			onChange
+		} = this.props;
+
+		onChange( name, produce( value, ( draft ) => {
+			draft.splice( groupIndex, 0, cloneDeep( draft[ groupIndex ] ) );
+		} ) );
+	}
+
+	/**
 	 * Handles removing of group.
 	 *
 	 * @param  {number} groupIndex
@@ -113,6 +135,7 @@ class ComplexField extends Component {
 									group={ group }
 									values={ values }
 									onChildChange={ this.handleChildFieldChange }
+									onClone={ this.handleCloneGroup }
 									onRemove={ this.handleRemoveGroup }
 								/>
 							);
