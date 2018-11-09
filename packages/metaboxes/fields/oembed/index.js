@@ -3,29 +3,30 @@
  */
 import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
-import { BaseControl, TextControl } from '@wordpress/components';
 
 /**
  * Internal dependencies.
  */
+import FieldBase from '../../components/field-base';
+import withField from '../../components/with-field';
 import OembedPreview from './preview';
 
 class OembedField extends Component {
 	/**
 	 * Handles the change of the input.
 	 *
-	 * @param  {string} value
+	 * @param  {Event} e
 	 * @return {void}
 	 */
-	handleChange = ( value ) => {
+	handleChange = ( e ) => {
 		const {
 			field,
 			onChange,
 			onSearchSubmit
 		} = this.props;
 
-		onChange( field.base_name, value );
-		onSearchSubmit( value );
+		onChange( field.id, e.target.value );
+		onSearchSubmit( e.target.value );
 	}
 
 	/**
@@ -36,6 +37,7 @@ class OembedField extends Component {
 	render() {
 		const {
 			field,
+			name,
 			value,
 			embedCode,
 			embedType,
@@ -43,12 +45,8 @@ class OembedField extends Component {
 		} = this.props;
 
 		return (
-			<BaseControl>
-				<TextControl
-					label={ field.label }
-					value={ value }
-					onChange={ this.handleChange }
-				/>
+			<FieldBase field={ field } className="cf-field-oembed-wrapper">
+				<input type="text" value={ value } onChange={ this.handleChange } />
 
 				{
 					embedCode
@@ -58,16 +56,24 @@ class OembedField extends Component {
 							provider={ provider }
 						/> : null
 				}
-			</BaseControl>
+
+				<input
+					type="hidden"
+					id={ field.id }
+					name={ name }
+					value={ value }
+					readOnly />
+			</FieldBase>
 		);
 	}
 }
 
-addFilter( 'carbon-fields.oembed-field.block', 'carbon-fields/blocks', ( OriginalOembedField ) => ( props ) => {
+addFilter( 'carbon-fields.oembed-field.metabox', 'carbon-fields/metaboxes', ( OriginalOembedField ) => withField( ( props ) => {
 	return (
 		<OriginalOembedField { ...props }>
 			{ ( {
 				field,
+				name,
 				value,
 				handleChange,
 				handleSearchSubmit,
@@ -77,6 +83,7 @@ addFilter( 'carbon-fields.oembed-field.block', 'carbon-fields/blocks', ( Origina
 			} ) => (
 				<OembedField
 					field={ field }
+					name={ name }
 					value={ value }
 					onChange={ handleChange }
 					onSearchSubmit={ handleSearchSubmit }
@@ -87,4 +94,4 @@ addFilter( 'carbon-fields.oembed-field.block', 'carbon-fields/blocks', ( Origina
 			) }
 		</OriginalOembedField>
 	);
-} );
+} ) );

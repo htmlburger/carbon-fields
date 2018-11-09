@@ -12,6 +12,7 @@ import './gravity-form';
 import './hidden';
 import './html';
 import './multiselect';
+import './oembed';
 import './radio';
 import './radio-image';
 import './select';
