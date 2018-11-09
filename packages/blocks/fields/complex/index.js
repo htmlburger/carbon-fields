@@ -45,7 +45,7 @@ class ComplexField extends Component {
 	 */
 	handleAddGroup = ( group ) => {
 		const {
-			field,
+			name,
 			value,
 			onChange
 		} = this.props;
@@ -53,13 +53,13 @@ class ComplexField extends Component {
 
 		data._type = group.name;
 
-		group.fields.reduce( ( accumulator, groupfield ) => {
-			accumulator[ groupfield.base_name ] = groupfield.default_value;
+		group.fields.reduce( ( accumulator, field ) => {
+			accumulator[ field.base_name ] = field.default_value;
 
 			return accumulator;
 		}, data );
 
-		onChange( field.base_name, value.concat( data ) );
+		onChange( name, value.concat( data ) );
 	}
 
 	/**
