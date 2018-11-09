@@ -6,7 +6,10 @@ import {
 	Panel,
 	PanelHeader,
 	PanelBody,
-	PanelRow
+	PanelRow,
+	Toolbar,
+	ToolbarButton
+
 } from '@wordpress/components';
 import { getFieldType } from '@carbon-fields/core';
 import { get } from 'lodash';
@@ -27,7 +30,13 @@ class ComplexGroup extends Component {
 
 		return (
 			<Panel>
-				<PanelHeader label={ index + 1 } />
+				<PanelHeader label={ index + 1 }>
+					<Toolbar isCollapsed={ false }>
+						<ToolbarButton icon="arrow-up" />
+						<ToolbarButton icon="admin-page" />
+						<ToolbarButton icon="trash" />
+					</Toolbar>
+				</PanelHeader>
 
 				<PanelBody>
 					{ group.fields.map( ( field, fieldIndex ) => {
