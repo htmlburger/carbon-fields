@@ -14,6 +14,7 @@ import MapField from './map';
 import MultiselectField from './multiselect';
 import OembedField from './oembed';
 import RadioField from './radio';
+import RichTextField from './rich-text';
 import SelectField from './select';
 import SeparatorField from './separator';
 import SetField from './set';
@@ -40,6 +41,7 @@ import TextareaField from './textarea';
 	[ 'oembed', OembedField ],
 	[ 'radio', RadioField ],
 	[ 'radio_image', RadioField ],
+	[ 'rich_text', RichTextField ],
 	[ 'select', SelectField ],
 	[ 'separator', SeparatorField ],
 	[ 'set', SetField ],
