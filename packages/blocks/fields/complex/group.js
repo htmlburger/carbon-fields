@@ -21,11 +21,11 @@ class ComplexGroup extends Component {
 	 */
 	handleCloneClick = () => {
 		const {
-			index,
+			id,
 			onClone
 		} = this.props;
 
-		onClone( index );
+		onClone( id );
 	}
 
 	/**
@@ -35,11 +35,11 @@ class ComplexGroup extends Component {
 	 */
 	handleRemoveClick = () => {
 		const {
-			index,
+			id,
 			onRemove
 		} = this.props;
 
-		onRemove( index );
+		onRemove( id );
 	}
 
 	/**
@@ -49,11 +49,11 @@ class ComplexGroup extends Component {
 	 */
 	handleToggleClick = () => {
 		const {
-			index,
+			id,
 			onToggle
 		} = this.props;
 
-		onToggle( index );
+		onToggle( id );
 	}
 
 	/**

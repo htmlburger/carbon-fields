@@ -14,6 +14,7 @@ import {
 import { addFilter } from '@wordpress/hooks';
 import {
 	find,
+	findIndex,
 	get,
 	set,
 	cloneDeep,
@@ -70,7 +71,8 @@ class ComplexField extends Component {
 		const {
 			name,
 			value,
-			onChange
+			onChange,
+			onTabsChange
 		} = this.props;
 		const data = {};
 
@@ -84,15 +86,16 @@ class ComplexField extends Component {
 		}, data );
 
 		onChange( name, value.concat( data ) );
+		onTabsChange( data._id );
 	}
 
 	/**
 	 * Handles cloning of group.
 	 *
-	 * @param  {number} groupIndex
+	 * @param  {string} groupId
 	 * @return {void}
 	 */
-	handleCloneGroup = ( groupIndex ) => {
+	handleCloneGroup = ( groupId ) => {
 		const {
 			name,
 			value,
@@ -100,28 +103,38 @@ class ComplexField extends Component {
 		} = this.props;
 
 		onChange( name, produce( value, ( draft ) => {
-			draft.splice( groupIndex, 0, cloneDeep( draft[ groupIndex ] ) );
+			const group = find( draft, [ '_id', groupId ] );
+			const index = draft.indexOf( group );
+			const clonedGroup = cloneDeep( group );
+
+			clonedGroup._id = nanoid();
+
+			draft.splice( index, 0, clonedGroup );
 		} ) );
 	}
 
 	/**
 	 * Handles removing of group.
 	 *
-	 * @param  {number} groupIndex
+	 * @param  {string} groupId
 	 * @return {void}
 	 */
-	handleRemoveGroup = ( groupIndex ) => {
+	handleRemoveGroup = ( groupId ) => {
 		const {
 			name,
 			value,
 			onChange
 		} = this.props;
 
+		const groupIndex = findIndex( value, [ '_id', groupId ] );
+
 		onChange( name, produce( value, ( draft ) => {
 			draft.splice( groupIndex, 1 );
 		} ) );
 
-		this.handleToggleGroup( groupIndex );
+		this.setState( ( { collapsedGroups } ) => ( {
+			collapsedGroups: without( collapsedGroups, groupId )
+		} ) );
 	}
 
 	/**
@@ -146,15 +159,15 @@ class ComplexField extends Component {
 	/**
 	 * Handles expanding/collapsing of group.
 	 *
-	 * @param  {number} groupIndex
+	 * @param  {string} groupId
 	 * @return {void}
 	 */
-	handleToggleGroup = ( groupIndex ) => {
+	handleToggleGroup = ( groupId ) => {
 		this.setState( ( { collapsedGroups } ) => {
-			if ( collapsedGroups.indexOf( groupIndex ) > -1 ) {
-				collapsedGroups = without( collapsedGroups, groupIndex );
+			if ( collapsedGroups.indexOf( groupId ) > -1 ) {
+				collapsedGroups = without( collapsedGroups, groupId );
 			} else {
-				collapsedGroups = [ ...collapsedGroups, groupIndex ];
+				collapsedGroups = [ ...collapsedGroups, groupId ];
 			}
 
 			return { collapsedGroups };
@@ -217,12 +230,13 @@ class ComplexField extends Component {
 
 							return (
 								<ComplexGroup
-									key={ index }
+									key={ _id }
+									id={ _id }
 									index={ index }
 									group={ group }
 									values={ values }
 									hidden={ isTabbed && currentTab !== _id }
-									collapsed={ collapsedGroups.indexOf( index ) > -1 }
+									collapsed={ collapsedGroups.indexOf( _id ) > -1 }
 									onChildChange={ this.handleChildFieldChange }
 									onToggle={ this.handleToggleGroup }
 									onClone={ this.handleCloneGroup }
