@@ -133,10 +133,10 @@ class ComplexGroup extends Component {
 						</span>
 					</button>
 
-					<button type="button" className="cf-complex-group__action" onClick={ this.handleRemoveClick }>
-						<span className="dashicons-before dashicons-trash cf-complex-group__action-icon"></span>
+					<button type="button" className="cf-metaboxes-complex__group-action" onClick={ this.handleRemoveClick }>
+						<span className="dashicons-before dashicons-trash cf-metaboxes-complex__group-action-icon"></span>
 
-						<span className="cf-complex-group__action-text">
+						<span className="cf-metaboxes-complex__group-action-text">
 							Remove
 						</span>
 					</button>
