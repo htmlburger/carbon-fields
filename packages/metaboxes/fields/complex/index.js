@@ -23,17 +23,6 @@ import ComplexGroup from './group';
 
 class ComplexField extends Component {
 	/**
-	 * Returns true if the maximum number of entries is reached.
-	 *
-	 * @return {boolean}
-	 */
-	get isMaximumReached() {
-		const { field, value } = this.props;
-
-		return field.max > 0 && value.length >= field.max;
-	}
-
-	/**
 	 * Returns a list of groups that can be added if the field
 	 * doesn't allow duplicating of groups.
 	 *
@@ -186,6 +175,7 @@ class ComplexField extends Component {
 			value,
 			isTabbed,
 			currentTab,
+			isMaximumReached,
 			inserterButtonText,
 			onTabsChange
 		} = this.props;
@@ -205,7 +195,7 @@ class ComplexField extends Component {
 						groups={ value }
 						onChange={ onTabsChange }
 					>
-						{ this.availableGroups.length && ! this.isMaximumReached && (
+						{ this.availableGroups.length && ! isMaximumReached && (
 							<ComplexInserter
 								buttonText="+"
 								groups={ this.availableGroups }
@@ -223,7 +213,7 @@ class ComplexField extends Component {
 							group={ group }
 							prefix={ `${ name }[${ index }]` }
 							hidden={ isTabbed && group.id !== currentTab }
-							allowClone={ field.duplicate_groups_allowed && ! this.isMaximumReached }
+							allowClone={ field.duplicate_groups_allowed && ! isMaximumReached }
 							onToggle={ this.handleToggleGroup }
 							onClone={ this.handleCloneGroup }
 							onRemove={ this.handleRemoveGroup }
@@ -233,7 +223,7 @@ class ComplexField extends Component {
 
 				{ ! isTabbed && (
 					<div className="cf-complex__actions">
-						{ this.availableGroups.length && ! this.isMaximumReached && (
+						{ this.availableGroups.length && ! isMaximumReached && (
 							<ComplexInserter
 								buttonText={ inserterButtonText }
 								groups={ this.availableGroups }
@@ -278,6 +268,7 @@ addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( O
 				value,
 				isTabbed,
 				currentTab,
+				isMaximumReached,
 				inserterButtonText,
 				handleChange,
 				handleTabsChange
@@ -288,6 +279,7 @@ addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( O
 					value={ value }
 					isTabbed={ isTabbed }
 					currentTab={ currentTab }
+					isMaximumReached={ isMaximumReached }
 					inserterButtonText={ inserterButtonText }
 					addFields={ props.addFields }
 					cloneFields={ props.cloneFields }

@@ -41,6 +41,17 @@ class ComplexField extends Component {
 	}
 
 	/**
+	 * Returns true if the maximum number of entries is reached.
+	 *
+	 * @return {boolean}
+	 */
+	get isMaximumReached() {
+		const { field, value } = this.props;
+
+		return field.max > 0 && value.length >= field.max;
+	}
+
+	/**
 	 * Returns the text used in "Add Entry" button.
 	 *
 	 * TODO: Switch to @wordpress/i18n
@@ -70,7 +81,11 @@ class ComplexField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { isTabbed, inserterButtonText } = this;
+		const {
+			isTabbed,
+			isMaximumReached,
+			inserterButtonText
+		} = this;
 
 		const { currentTab } = this.state;
 
@@ -88,6 +103,7 @@ class ComplexField extends Component {
 			value,
 			isTabbed,
 			currentTab,
+			isMaximumReached,
 			inserterButtonText,
 			handleChange: onChange,
 			handleTabsChange: this.handleTabsChange

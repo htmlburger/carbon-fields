@@ -189,6 +189,7 @@ class ComplexField extends Component {
 			value,
 			isTabbed,
 			currentTab,
+			isMaximumReached,
 			inserterButtonText,
 			onTabsChange
 		} = this.props;
@@ -221,11 +222,13 @@ class ComplexField extends Component {
 							current={ currentTab }
 							onChange={ onTabsChange }
 						>
-							<ComplexInserter
-								buttonText="+"
-								groups={ field.groups }
-								onSelect={ this.handleAddGroup }
-							/>
+							{ ! isMaximumReached && (
+								<ComplexInserter
+									buttonText="+"
+									groups={ field.groups }
+									onSelect={ this.handleAddGroup }
+								/>
+							) }
 						</ComplexTabs>
 					) }
 
@@ -256,11 +259,13 @@ class ComplexField extends Component {
 					</PanelBody>
 
 					<PanelHeader>
-						<ComplexInserter
-							buttonText={ inserterButtonText }
-							groups={ field.groups }
-							onSelect={ this.handleAddGroup }
-						/>
+						{ ! isMaximumReached && (
+							<ComplexInserter
+								buttonText={ inserterButtonText }
+								groups={ field.groups }
+								onSelect={ this.handleAddGroup }
+							/>
+						) }
 
 						<Button isDefault onClick={ this.handleToggleAllGroups }>
 							{
@@ -285,6 +290,7 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 				value,
 				isTabbed,
 				currentTab,
+				isMaximumReached,
 				inserterButtonText,
 				handleChange,
 				handleTabsChange
@@ -296,6 +302,7 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 						value={ value }
 						isTabbed={ isTabbed }
 						currentTab={ currentTab }
+						isMaximumReached={ isMaximumReached }
 						inserterButtonText={ inserterButtonText }
 						onChange={ handleChange }
 						onTabsChange={ handleTabsChange }
