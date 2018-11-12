@@ -147,7 +147,7 @@ class ComplexField extends Component {
 
 		this.setState( ( { collapsedGroups } ) => {
 			if ( collapsedGroups.length !== value.length ) {
-				collapsedGroups = value.map( ( group, index ) => index );
+				collapsedGroups = value.map( ( group ) => group._id );
 			} else {
 				collapsedGroups = [];
 			}
