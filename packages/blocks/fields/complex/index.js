@@ -10,7 +10,8 @@ import {
 	Button,
 	Panel,
 	PanelHeader,
-	PanelBody
+	PanelBody,
+	Placeholder
 } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
 import {
@@ -219,7 +220,7 @@ class ComplexField extends Component {
 				<BaseControl label={ field.label } />
 
 				<Panel>
-					{ isTabbed && (
+					{ isTabbed && !! value.length && (
 						<ComplexTabs
 							items={ tabs }
 							current={ currentTab }
@@ -236,6 +237,16 @@ class ComplexField extends Component {
 					) }
 
 					<PanelBody>
+						{ ! value.length && (
+							<Placeholder label="There are no entries yet.">
+								<ComplexInserter
+									buttonText={ inserterButtonText }
+									groups={ availableGroups }
+									onSelect={ this.handleAddGroup }
+								/>
+							</Placeholder>
+						) }
+
 						{ value.map( ( {
 							_id,
 							_type,
@@ -262,23 +273,25 @@ class ComplexField extends Component {
 						} ) }
 					</PanelBody>
 
-					<PanelHeader>
-						{ !! availableGroups.length && ! isMaximumReached && (
-							<ComplexInserter
-								buttonText={ inserterButtonText }
-								groups={ availableGroups }
-								onSelect={ this.handleAddGroup }
-							/>
-						) }
+					{ ! isTabbed && !! value.length && (
+						<PanelHeader>
+							{ !! availableGroups.length && ! isMaximumReached && (
+								<ComplexInserter
+									buttonText={ inserterButtonText }
+									groups={ availableGroups }
+									onSelect={ this.handleAddGroup }
+								/>
+							) }
 
-						<Button isDefault onClick={ this.handleToggleAllGroups }>
-							{
-								collapsedGroups.length === value.length
-									? 'Expand All'
-									: 'Collapse All'
-							}
-						</Button>
-					</PanelHeader>
+							<Button isDefault onClick={ this.handleToggleAllGroups }>
+								{
+									collapsedGroups.length === value.length
+										? 'Expand All'
+										: 'Collapse All'
+								}
+							</Button>
+						</PanelHeader>
+					) }
 				</Panel>
 			</FieldBase>
 		);
