@@ -1,9 +1,10 @@
 /**
  * External dependencies.
  */
+import cx from 'classnames';
 import produce from 'immer';
 import nanoid from 'nanoid';
-import { Fragment, Component } from '@wordpress/element';
+import { Component } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
@@ -24,6 +25,7 @@ import {
 /**
  * Internal dependencies.
  */
+import FieldBase from '../../components/field-base';
 import ComplexInserter from './inserter';
 import ComplexTabs from './tabs';
 import ComplexGroup from './group';
@@ -191,6 +193,13 @@ class ComplexField extends Component {
 			onTabsChange
 		} = this.props;
 
+		const classes = cx(
+			`cf-blocks-complex--${ field.layout }`,
+			{
+				'cf-blocks-complex--multiple-groups': field.groups.length > 1
+			}
+		);
+
 		const tabs = value.map( ( { _id, _type } ) => {
 			const group = find( field.groups, [ 'name', _type ] );
 			const label = get( group, 'label', '' );
@@ -202,7 +211,7 @@ class ComplexField extends Component {
 		} );
 
 		return (
-			<Fragment>
+			<FieldBase className={ classes } field={ field }>
 				<BaseControl label={ field.label } />
 
 				<Panel>
@@ -262,7 +271,7 @@ class ComplexField extends Component {
 						</Button>
 					</PanelHeader>
 				</Panel>
-			</Fragment>
+			</FieldBase>
 		);
 	}
 }

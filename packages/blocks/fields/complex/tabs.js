@@ -19,10 +19,11 @@ class ComplexTabs extends Component {
 		} = this.props;
 
 		return (
-			<PanelHeader>
+			<PanelHeader className="cf-blocks-complex__tabs">
 				{ items.map( ( item, index ) => (
 					<Button
 						key={ item.id }
+						className="cf-blocks-complex__tabs-item"
 						isDefault={ item.id !== current }
 						isPrimary={ item.id === current }
 						onClick={ () => onChange( item.id ) }

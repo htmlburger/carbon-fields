@@ -76,7 +76,7 @@ class ComplexGroup extends Component {
 		}
 
 		return (
-			<Panel>
+			<Panel className="cf-blocks-complex__group">
 				<PanelHeader label={ index + 1 }>
 					<Toolbar isCollapsed={ false }>
 						<ToolbarButton
