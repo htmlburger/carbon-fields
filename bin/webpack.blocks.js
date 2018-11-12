@@ -21,6 +21,7 @@ module.exports = [
 		externals: Object.assign( {}, wpPackages.externals, {
 			'react': [ 'cf', 'vendor', 'react' ],
 			'react-dom': [ 'cf', 'vendor', 'react-dom' ],
+			'nanoid': [ 'cf', 'vendor', 'nanoid' ],
 			'@wordpress/components': [ 'wp', 'components' ],
 			'@wordpress/blocks': [ 'wp', 'blocks' ],
 			'@wordpress/editor': [ 'wp', 'editor' ],

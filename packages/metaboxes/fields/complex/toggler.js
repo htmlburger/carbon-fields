@@ -10,7 +10,7 @@ function ComplexToggler( { groups, onToggle } ) {
 	const allGroupsAreCollapsed = groups.every( ( { collapsed } ) => collapsed );
 
 	return (
-		<button type="button" className="cf-complex__toggler" onClick={ () => onToggle( ! allGroupsAreCollapsed ) }>
+		<button type="button" className="cf-metaboxes-complex__toggler" onClick={ () => onToggle( ! allGroupsAreCollapsed ) }>
 			{ allGroupsAreCollapsed ? 'Expand All' : 'Collapse All' }
 		</button>
 	);

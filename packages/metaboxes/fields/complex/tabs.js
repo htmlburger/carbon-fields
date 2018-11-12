@@ -19,13 +19,13 @@ class ComplexTabs extends Component {
 		} = this.props;
 
 		return (
-			<div className="cf-complex__tabs">
-				<ul className="cf-complex__tabs-list">
+			<div className="cf-metaboxes-complex__tabs">
+				<ul className="cf-metaboxes-complex__tabs-list">
 					{ groups.map( ( group, index ) => {
 						const classes = cx(
-							'cf-complex__tabs-item',
+							'cf-metaboxes-complex__tabs-item',
 							{
-								'cf-complex__tabs-item--current': group.id === current
+								'cf-metaboxes-complex__tabs-item--current': group.id === current
 							}
 						);
 
@@ -38,13 +38,13 @@ class ComplexTabs extends Component {
 								{
 									group.label
 										? <span
-											className="cf-complex__tabs-title"
+											className="cf-metaboxes-complex__tabs-title"
 											dangerouslySetInnerHTML={ { __html: group.label } }
 										></span>
 										: null
 								}
 
-								<span className="cf-complex__tabs-index">
+								<span className="cf-metaboxes-complex__tabs-index">
 									{ index + 1 }
 								</span>
 							</li>

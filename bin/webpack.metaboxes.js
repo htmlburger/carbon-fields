@@ -18,6 +18,7 @@ const config = {
 	externals: {
 		'react': [ 'cf', 'vendor', 'react' ],
 		'react-dom': [ 'cf', 'vendor', 'react-dom' ],
+		'nanoid': [ 'cf', 'vendor', 'nanoid' ],
 		'refract-callbag': [ 'cf', 'vendor', 'refract-callbag' ],
 		'callbag-basics': [ 'cf', 'vendor', 'callbag-basics' ],
 		'classnames': [ 'cf', 'vendor', 'classnames' ],

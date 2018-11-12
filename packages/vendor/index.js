@@ -3,6 +3,7 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
+import nanoid from 'nanoid';
 import * as compose from '@wordpress/compose';
 import * as element from '@wordpress/element';
 import * as hooks from '@wordpress/hooks';
@@ -26,6 +27,7 @@ window.cf = window.cf || {};
 window.cf.vendor = [
 	[ 'react', React ],
 	[ 'react-dom', ReactDOM ],
+	[ 'nanoid', nanoid ],
 	[ '@wordpress/compose', compose ],
 	[ '@wordpress/element', element ],
 	[ '@wordpress/hooks', hooks ],

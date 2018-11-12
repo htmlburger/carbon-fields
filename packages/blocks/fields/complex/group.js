@@ -21,11 +21,11 @@ class ComplexGroup extends Component {
 	 */
 	handleCloneClick = () => {
 		const {
-			index,
+			id,
 			onClone
 		} = this.props;
 
-		onClone( index );
+		onClone( id );
 	}
 
 	/**
@@ -35,11 +35,11 @@ class ComplexGroup extends Component {
 	 */
 	handleRemoveClick = () => {
 		const {
-			index,
+			id,
 			onRemove
 		} = this.props;
 
-		onRemove( index );
+		onRemove( id );
 	}
 
 	/**
@@ -49,11 +49,11 @@ class ComplexGroup extends Component {
 	 */
 	handleToggleClick = () => {
 		const {
-			index,
+			id,
 			onToggle
 		} = this.props;
 
-		onToggle( index );
+		onToggle( id );
 	}
 
 	/**
@@ -66,12 +66,18 @@ class ComplexGroup extends Component {
 			index,
 			group,
 			values,
+			hidden,
 			collapsed,
+			allowClone,
 			onChildChange
 		} = this.props;
 
+		if ( hidden ) {
+			return null;
+		}
+
 		return (
-			<Panel>
+			<Panel className="cf-blocks-complex__group">
 				<PanelHeader label={ index + 1 }>
 					<Toolbar isCollapsed={ false }>
 						<ToolbarButton
@@ -79,7 +85,9 @@ class ComplexGroup extends Component {
 							onClick={ this.handleToggleClick }
 						/>
 
-						<ToolbarButton icon="admin-page" onClick={ this.handleCloneClick } />
+						{ allowClone && (
+							<ToolbarButton icon="admin-page" onClick={ this.handleCloneClick } />
+						) }
 
 						<ToolbarButton icon="trash" onClick={ this.handleRemoveClick } />
 					</Toolbar>

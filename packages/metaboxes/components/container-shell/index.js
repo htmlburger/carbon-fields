@@ -3,6 +3,7 @@
  */
 import classnames from 'classnames';
 import { getFieldType } from '@carbon-fields/core';
+import { kebabCase } from 'lodash';
 
 /**
  * Renders the base wrapper of the container.
@@ -14,9 +15,9 @@ import { getFieldType } from '@carbon-fields/core';
  */
 const ContainerShell = ( { container, children } ) => {
 	const classes = classnames( [
-		'carbon-container',
-		`carbon-container-${ container.id }`,
-		`carbon-container-${ container.type }`,
+		'cf-metaboxes-container',
+		`cf-metaboxes-container-${ container.id }`,
+		`cf-metaboxes-container-${ kebabCase( container.type ) }`,
 		...container.classes
 	] );
 

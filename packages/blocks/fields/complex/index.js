@@ -1,8 +1,10 @@
 /**
  * External dependencies.
  */
+import cx from 'classnames';
 import produce from 'immer';
-import { Fragment, Component } from '@wordpress/element';
+import nanoid from 'nanoid';
+import { Component } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
@@ -13,6 +15,8 @@ import {
 import { addFilter } from '@wordpress/hooks';
 import {
 	find,
+	findIndex,
+	get,
 	set,
 	cloneDeep,
 	without
@@ -21,7 +25,9 @@ import {
 /**
  * Internal dependencies.
  */
+import FieldBase from '../../components/field-base';
 import ComplexInserter from './inserter';
+import ComplexTabs from './tabs';
 import ComplexGroup from './group';
 
 class ComplexField extends Component {
@@ -67,10 +73,12 @@ class ComplexField extends Component {
 		const {
 			name,
 			value,
-			onChange
+			onChange,
+			onTabsChange
 		} = this.props;
 		const data = {};
 
+		data._id = nanoid();
 		data._type = group.name;
 
 		group.fields.reduce( ( accumulator, field ) => {
@@ -80,15 +88,16 @@ class ComplexField extends Component {
 		}, data );
 
 		onChange( name, value.concat( data ) );
+		onTabsChange( data._id );
 	}
 
 	/**
 	 * Handles cloning of group.
 	 *
-	 * @param  {number} groupIndex
+	 * @param  {string} groupId
 	 * @return {void}
 	 */
-	handleCloneGroup = ( groupIndex ) => {
+	handleCloneGroup = ( groupId ) => {
 		const {
 			name,
 			value,
@@ -96,28 +105,38 @@ class ComplexField extends Component {
 		} = this.props;
 
 		onChange( name, produce( value, ( draft ) => {
-			draft.splice( groupIndex, 0, cloneDeep( draft[ groupIndex ] ) );
+			const group = find( draft, [ '_id', groupId ] );
+			const index = draft.indexOf( group );
+			const clonedGroup = cloneDeep( group );
+
+			clonedGroup._id = nanoid();
+
+			draft.splice( index, 0, clonedGroup );
 		} ) );
 	}
 
 	/**
 	 * Handles removing of group.
 	 *
-	 * @param  {number} groupIndex
+	 * @param  {string} groupId
 	 * @return {void}
 	 */
-	handleRemoveGroup = ( groupIndex ) => {
+	handleRemoveGroup = ( groupId ) => {
 		const {
 			name,
 			value,
 			onChange
 		} = this.props;
 
+		const groupIndex = findIndex( value, [ '_id', groupId ] );
+
 		onChange( name, produce( value, ( draft ) => {
 			draft.splice( groupIndex, 1 );
 		} ) );
 
-		this.handleToggleGroup( groupIndex );
+		this.setState( ( { collapsedGroups } ) => ( {
+			collapsedGroups: without( collapsedGroups, groupId )
+		} ) );
 	}
 
 	/**
@@ -130,7 +149,7 @@ class ComplexField extends Component {
 
 		this.setState( ( { collapsedGroups } ) => {
 			if ( collapsedGroups.length !== value.length ) {
-				collapsedGroups = value.map( ( group, index ) => index );
+				collapsedGroups = value.map( ( group ) => group._id );
 			} else {
 				collapsedGroups = [];
 			}
@@ -142,15 +161,15 @@ class ComplexField extends Component {
 	/**
 	 * Handles expanding/collapsing of group.
 	 *
-	 * @param  {number} groupIndex
+	 * @param  {string} groupId
 	 * @return {void}
 	 */
-	handleToggleGroup = ( groupIndex ) => {
+	handleToggleGroup = ( groupId ) => {
 		this.setState( ( { collapsedGroups } ) => {
-			if ( collapsedGroups.indexOf( groupIndex ) > -1 ) {
-				collapsedGroups = without( collapsedGroups, groupIndex );
+			if ( collapsedGroups.indexOf( groupId ) > -1 ) {
+				collapsedGroups = without( collapsedGroups, groupId );
 			} else {
-				collapsedGroups = [ ...collapsedGroups, groupIndex ];
+				collapsedGroups = [ ...collapsedGroups, groupId ];
 			}
 
 			return { collapsedGroups };
@@ -168,25 +187,72 @@ class ComplexField extends Component {
 		const {
 			field,
 			value,
-			inserterButtonText
+			isTabbed,
+			currentTab,
+			isMaximumReached,
+			inserterButtonText,
+			getAvailableGroups,
+			onTabsChange
 		} = this.props;
 
+		const classes = cx(
+			`cf-blocks-complex--${ field.layout }`,
+			{
+				'cf-blocks-complex--multiple-groups': field.groups.length > 1
+			}
+		);
+
+		const availableGroups = getAvailableGroups( '_type' );
+
+		const tabs = value.map( ( { _id, _type } ) => {
+			const group = find( field.groups, [ 'name', _type ] );
+			const label = get( group, 'label', '' );
+
+			return {
+				id: _id,
+				label
+			};
+		} );
+
 		return (
-			<Fragment>
+			<FieldBase className={ classes } field={ field }>
 				<BaseControl label={ field.label } />
 
 				<Panel>
+					{ isTabbed && (
+						<ComplexTabs
+							items={ tabs }
+							current={ currentTab }
+							onChange={ onTabsChange }
+						>
+							{ !! availableGroups.length && ! isMaximumReached && (
+								<ComplexInserter
+									buttonText="+"
+									groups={ availableGroups }
+									onSelect={ this.handleAddGroup }
+								/>
+							) }
+						</ComplexTabs>
+					) }
+
 					<PanelBody>
-						{ value.map( ( { _type, ...values }, index ) => {
+						{ value.map( ( {
+							_id,
+							_type,
+							...values
+						}, index ) => {
 							const group = find( field.groups, [ 'name', _type ] );
 
 							return (
 								<ComplexGroup
-									key={ index }
+									key={ _id }
+									id={ _id }
 									index={ index }
 									group={ group }
 									values={ values }
-									collapsed={ collapsedGroups.indexOf( index ) > -1 }
+									hidden={ isTabbed && currentTab !== _id }
+									collapsed={ collapsedGroups.indexOf( _id ) > -1 }
+									allowClone={ field.duplicate_groups_allowed && ! isMaximumReached }
 									onChildChange={ this.handleChildFieldChange }
 									onToggle={ this.handleToggleGroup }
 									onClone={ this.handleCloneGroup }
@@ -197,11 +263,13 @@ class ComplexField extends Component {
 					</PanelBody>
 
 					<PanelHeader>
-						<ComplexInserter
-							buttonText={ inserterButtonText }
-							groups={ field.groups }
-							onSelect={ this.handleAddGroup }
-						/>
+						{ !! availableGroups.length && ! isMaximumReached && (
+							<ComplexInserter
+								buttonText={ inserterButtonText }
+								groups={ availableGroups }
+								onSelect={ this.handleAddGroup }
+							/>
+						) }
 
 						<Button isDefault onClick={ this.handleToggleAllGroups }>
 							{
@@ -212,7 +280,7 @@ class ComplexField extends Component {
 						</Button>
 					</PanelHeader>
 				</Panel>
-			</Fragment>
+			</FieldBase>
 		);
 	}
 }
@@ -224,16 +292,26 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 				field,
 				name,
 				value,
+				isTabbed,
+				currentTab,
+				isMaximumReached,
 				inserterButtonText,
-				handleChange
+				getAvailableGroups,
+				handleChange,
+				handleTabsChange
 			} ) => {
 				return (
 					<ComplexField
 						field={ field }
 						name={ name }
 						value={ value }
+						isTabbed={ isTabbed }
+						currentTab={ currentTab }
+						isMaximumReached={ isMaximumReached }
 						inserterButtonText={ inserterButtonText }
+						getAvailableGroups={ getAvailableGroups }
 						onChange={ handleChange }
+						onTabsChange={ handleTabsChange }
 					/>
 				);
 			} }

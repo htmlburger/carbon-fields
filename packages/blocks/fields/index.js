@@ -9,6 +9,7 @@ import './file';
 import './gravity-form';
 import './hidden';
 import './html';
+import './map';
 import './oembed';
 import './radio';
 import './radio-image';

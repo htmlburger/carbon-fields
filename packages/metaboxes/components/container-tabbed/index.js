@@ -15,7 +15,7 @@ const ContainerTabbed = ( props ) => {
 	const { nonce } = props.container;
 
 	return (
-		<div className="carbon-tabs carbon-tabs-stacked">
+		<div className="cf-metaboxes-tabs">
 			<ContainerNonce name={ nonce.name } value={ nonce.value } />
 
 			<ContainerShell { ...props } />
