@@ -164,9 +164,9 @@ class ComplexField extends Component {
 		} = this.props;
 
 		const classes = cx(
-			`cf-complex--${ field.layout }`,
+			`cf-metaboxes-complex--${ field.layout }`,
 			{
-				'cf-complex--multiple-groups': field.groups.length > 1
+				'cf-metaboxes-complex--multiple-groups': field.groups.length > 1
 			}
 		);
 
@@ -190,7 +190,7 @@ class ComplexField extends Component {
 					</ComplexTabs>
 				) }
 
-				<div className="cf-complex__groups">
+				<div className="cf-metaboxes-complex__groups">
 					{ value.map( ( group, index ) => (
 						<ComplexGroup
 							key={ group.id }
@@ -207,7 +207,7 @@ class ComplexField extends Component {
 				</div>
 
 				{ ! isTabbed && (
-					<div className="cf-complex__actions">
+					<div className="cf-metaboxes-complex__actions">
 						{ !! availableGroups.length && ! isMaximumReached && (
 							<ComplexInserter
 								buttonText={ inserterButtonText }

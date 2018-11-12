@@ -63,15 +63,15 @@ class ComplexGroup extends Component {
 		} = this.props;
 
 		const groupClasses = cx(
-			'cf-complex-group',
+			'cf-metaboxes-complex__group',
 			{
-				'cf-complex-group--collapsed': group.collapsed
+				'cf-metaboxes-complex__group--collapsed': group.collapsed
 			}
 		);
 
 		const toggleClasses = cx(
 			'dashicons-before',
-			'cf-complex-group__action-icon',
+			'cf-metaboxes-complex__group-action-icon',
 			{
 				'dashicons-arrow-up': ! group.collapsed,
 				'dashicons-arrow-down': group.collapsed
@@ -86,17 +86,17 @@ class ComplexGroup extends Component {
 					value={ group.name }
 				/>
 
-				<div className="cf-complex-group__head">
-					<span className="cf-complex-group__index">
+				<div className="cf-metaboxes-complex__group-head">
+					<span className="cf-metaboxes-complex__group-index">
 						{ index + 1 }
 					</span>
 
-					<span className="cf-complex-group__title">
+					<span className="cf-metaboxes-complex__group-title">
 						Complex Title
 					</span>
 				</div>
 
-				<div className="cf-complex-group__body" hidden={ group.collapsed }>
+				<div className="cf-metaboxes-complex__group-body" hidden={ group.collapsed }>
 					{ group.fields.map( ( field ) => {
 						const Field = getFieldType( field.type, 'metabox' );
 
@@ -114,21 +114,21 @@ class ComplexGroup extends Component {
 					} ) }
 				</div>
 
-				<div className="cf-complex-group__actions">
+				<div className="cf-metaboxes-complex__group-actions">
 					{ allowClone && (
-						<button type="button" className="cf-complex-group__action" onClick={ this.handleCloneClick }>
-							<span className="dashicons-before dashicons-admin-page cf-complex-group__action-icon"></span>
+						<button type="button" className="cf-metaboxes-complex__group-action" onClick={ this.handleCloneClick }>
+							<span className="dashicons-before dashicons-admin-page cf-metaboxes-complex__group-action-icon"></span>
 
-							<span className="cf-complex-group__action-text">
+							<span className="cf-metaboxes-complex__group-action-text">
 								Duplicate
 							</span>
 						</button>
 					) }
 
-					<button type="button" className="cf-complex-group__action" onClick={ this.handleToggleClick }>
+					<button type="button" className="cf-metaboxes-complex__group-action" onClick={ this.handleToggleClick }>
 						<span className={ toggleClasses }></span>
 
-						<span className="cf-complex-group__action-text">
+						<span className="cf-metaboxes-complex__group-action-text">
 							Collapse
 						</span>
 					</button>
