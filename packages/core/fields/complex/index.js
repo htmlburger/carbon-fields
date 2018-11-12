@@ -64,6 +64,25 @@ class ComplexField extends Component {
 	}
 
 	/**
+	 * Returns a list of groups that can be added if the field
+	 * doesn't allow duplicating of groups.
+	 *
+	 * @param  {string} key
+	 * @return {Object[]}
+	 */
+	getAvailableGroups = ( key ) => {
+		const { field, value } = this.props;
+
+		if ( field.duplicate_groups_allowed ) {
+			return field.groups;
+		}
+
+		const existingGroupNames = value.map( ( group ) => group[ key ] );
+
+		return field.groups.filter( ( { name } ) => existingGroupNames.indexOf( name ) === -1 );
+	}
+
+	/**
 	 * Handles changing of tabs.
 	 *
 	 * @param  {string} groupId
@@ -105,6 +124,7 @@ class ComplexField extends Component {
 			currentTab,
 			isMaximumReached,
 			inserterButtonText,
+			getAvailableGroups: this.getAvailableGroups,
 			handleChange: onChange,
 			handleTabsChange: this.handleTabsChange
 		} );

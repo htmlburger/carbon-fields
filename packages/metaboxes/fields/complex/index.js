@@ -23,24 +23,6 @@ import ComplexGroup from './group';
 
 class ComplexField extends Component {
 	/**
-	 * Returns a list of groups that can be added if the field
-	 * doesn't allow duplicating of groups.
-	 *
-	 * @return {Object[]}
-	 */
-	get availableGroups() {
-		const { field, value } = this.props;
-
-		if ( field.duplicate_groups_allowed ) {
-			return field.groups;
-		}
-
-		const existingGroupNames = value.map( ( { name } ) => name );
-
-		return field.groups.filter( ( { name } ) => existingGroupNames.indexOf( name ) === -1 );
-	}
-
-	/**
 	 * Handles the selection of a group in the inserter.
 	 *
 	 * @param  {Object} group
@@ -177,6 +159,7 @@ class ComplexField extends Component {
 			currentTab,
 			isMaximumReached,
 			inserterButtonText,
+			getAvailableGroups,
 			onTabsChange
 		} = this.props;
 
@@ -187,6 +170,8 @@ class ComplexField extends Component {
 			}
 		);
 
+		const availableGroups = getAvailableGroups( 'name' );
+
 		return (
 			<FieldBase className={ classes } field={ field }>
 				{ isTabbed && (
@@ -195,10 +180,10 @@ class ComplexField extends Component {
 						groups={ value }
 						onChange={ onTabsChange }
 					>
-						{ this.availableGroups.length && ! isMaximumReached && (
+						{ !! availableGroups.length && ! isMaximumReached && (
 							<ComplexInserter
 								buttonText="+"
-								groups={ this.availableGroups }
+								groups={ availableGroups }
 								onSelect={ this.handleInserterSelect }
 							/>
 						) }
@@ -223,10 +208,10 @@ class ComplexField extends Component {
 
 				{ ! isTabbed && (
 					<div className="cf-complex__actions">
-						{ this.availableGroups.length && ! isMaximumReached && (
+						{ !! availableGroups.length && ! isMaximumReached && (
 							<ComplexInserter
 								buttonText={ inserterButtonText }
-								groups={ this.availableGroups }
+								groups={ availableGroups }
 								onSelect={ this.handleInserterSelect }
 							/>
 						) }
@@ -270,6 +255,7 @@ addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( O
 				currentTab,
 				isMaximumReached,
 				inserterButtonText,
+				getAvailableGroups,
 				handleChange,
 				handleTabsChange
 			} ) => (
@@ -284,6 +270,7 @@ addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( O
 					addFields={ props.addFields }
 					cloneFields={ props.cloneFields }
 					removeFields={ props.removeFields }
+					getAvailableGroups={ getAvailableGroups }
 					onChange={ handleChange }
 					onTabsChange={ handleTabsChange }
 				/>

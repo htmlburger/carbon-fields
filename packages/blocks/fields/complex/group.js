@@ -68,6 +68,7 @@ class ComplexGroup extends Component {
 			values,
 			hidden,
 			collapsed,
+			allowClone,
 			onChildChange
 		} = this.props;
 
@@ -84,7 +85,9 @@ class ComplexGroup extends Component {
 							onClick={ this.handleToggleClick }
 						/>
 
-						<ToolbarButton icon="admin-page" onClick={ this.handleCloneClick } />
+						{ allowClone && (
+							<ToolbarButton icon="admin-page" onClick={ this.handleCloneClick } />
+						) }
 
 						<ToolbarButton icon="trash" onClick={ this.handleRemoveClick } />
 					</Toolbar>

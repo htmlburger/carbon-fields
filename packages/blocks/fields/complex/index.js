@@ -191,6 +191,7 @@ class ComplexField extends Component {
 			currentTab,
 			isMaximumReached,
 			inserterButtonText,
+			getAvailableGroups,
 			onTabsChange
 		} = this.props;
 
@@ -200,6 +201,8 @@ class ComplexField extends Component {
 				'cf-blocks-complex--multiple-groups': field.groups.length > 1
 			}
 		);
+
+		const availableGroups = getAvailableGroups( '_type' );
 
 		const tabs = value.map( ( { _id, _type } ) => {
 			const group = find( field.groups, [ 'name', _type ] );
@@ -222,10 +225,10 @@ class ComplexField extends Component {
 							current={ currentTab }
 							onChange={ onTabsChange }
 						>
-							{ ! isMaximumReached && (
+							{ !! availableGroups.length && ! isMaximumReached && (
 								<ComplexInserter
 									buttonText="+"
-									groups={ field.groups }
+									groups={ availableGroups }
 									onSelect={ this.handleAddGroup }
 								/>
 							) }
@@ -249,6 +252,7 @@ class ComplexField extends Component {
 									values={ values }
 									hidden={ isTabbed && currentTab !== _id }
 									collapsed={ collapsedGroups.indexOf( _id ) > -1 }
+									allowClone={ field.duplicate_groups_allowed && ! isMaximumReached }
 									onChildChange={ this.handleChildFieldChange }
 									onToggle={ this.handleToggleGroup }
 									onClone={ this.handleCloneGroup }
@@ -259,10 +263,10 @@ class ComplexField extends Component {
 					</PanelBody>
 
 					<PanelHeader>
-						{ ! isMaximumReached && (
+						{ !! availableGroups.length && ! isMaximumReached && (
 							<ComplexInserter
 								buttonText={ inserterButtonText }
-								groups={ field.groups }
+								groups={ availableGroups }
 								onSelect={ this.handleAddGroup }
 							/>
 						) }
@@ -292,6 +296,7 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 				currentTab,
 				isMaximumReached,
 				inserterButtonText,
+				getAvailableGroups,
 				handleChange,
 				handleTabsChange
 			} ) => {
@@ -304,6 +309,7 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 						currentTab={ currentTab }
 						isMaximumReached={ isMaximumReached }
 						inserterButtonText={ inserterButtonText }
+						getAvailableGroups={ getAvailableGroups }
 						onChange={ handleChange }
 						onTabsChange={ handleTabsChange }
 					/>
