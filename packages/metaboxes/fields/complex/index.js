@@ -20,6 +20,7 @@ import ComplexTabs from './tabs';
 import ComplexInserter from './inserter';
 import ComplexToggler from './toggler';
 import ComplexGroup from './group';
+import ComplexPlaceholder from './placeholder';
 
 class ComplexField extends Component {
 	/**
@@ -174,7 +175,7 @@ class ComplexField extends Component {
 
 		return (
 			<FieldBase className={ classes } field={ field }>
-				{ isTabbed && (
+				{ isTabbed && !! value.length && (
 					<ComplexTabs
 						current={ currentTab }
 						groups={ value }
@@ -188,6 +189,16 @@ class ComplexField extends Component {
 							/>
 						) }
 					</ComplexTabs>
+				) }
+
+				{ ! value.length && (
+					<ComplexPlaceholder label="There are no entries yet.">
+						<ComplexInserter
+							buttonText={ inserterButtonText }
+							groups={ availableGroups }
+							onSelect={ this.handleInserterSelect }
+						/>
+					</ComplexPlaceholder>
 				) }
 
 				<div className="cf-metaboxes-complex__groups">
@@ -206,7 +217,7 @@ class ComplexField extends Component {
 					) ) }
 				</div>
 
-				{ ! isTabbed && (
+				{ ! isTabbed && !! value.length && (
 					<div className="cf-metaboxes-complex__actions">
 						{ !! availableGroups.length && ! isMaximumReached && (
 							<ComplexInserter
