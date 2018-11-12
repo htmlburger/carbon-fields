@@ -13,9 +13,9 @@ class RadioField extends Component {
 	 * @return {void}
 	 */
 	handleChange = ( value ) => {
-		const { field, onChange } = this.props;
+		const { name, onChange } = this.props;
 
-		onChange( field.base_name, value );
+		onChange( name, value );
 	}
 
 	/**
@@ -42,11 +42,13 @@ addFilter( 'carbon-fields.radio-field.block', 'carbon-fields/blocks', ( Original
 		<OriginalRadioField { ...props }>
 			{ ( {
 				field,
+				name,
 				value,
 				handleChange
 			} ) => (
 				<RadioField
 					field={ field }
+					name={ name }
 					value={ value }
 					onChange={ handleChange }
 				/>

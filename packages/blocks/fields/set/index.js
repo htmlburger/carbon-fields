@@ -14,6 +14,7 @@ class SetField extends Component {
 	render() {
 		const {
 			field,
+			name,
 			value,
 			isChecked,
 			onChange
@@ -26,7 +27,7 @@ class SetField extends Component {
 						key={ index }
 						label={ option.label }
 						checked={ isChecked( value, option ) }
-						onChange={ () => onChange( field.base_name, value, option.value ) }
+						onChange={ () => onChange( name, value, option.value ) }
 					/>
 				) ) }
 			</BaseControl>
@@ -39,12 +40,14 @@ addFilter( 'carbon-fields.set-field.block', 'carbon-fields/blocks', ( OriginalSe
 		<OriginalSetField { ...props }>
 			{ ( {
 				field,
+				name,
 				value,
 				isChecked,
 				handleChange
 			} ) => (
 				<SetField
 					field={ field }
+					name={ name }
 					value={ value }
 					isChecked={ isChecked }
 					onChange={ handleChange }

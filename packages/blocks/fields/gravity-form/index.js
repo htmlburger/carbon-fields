@@ -13,11 +13,13 @@ addFilter( 'carbon-fields.gravity_form-field.block', 'carbon-fields/blocks', ( O
 		<OriginalSelectField { ...props }>
 			{ ( {
 				field,
+				name,
 				value,
 				handleChange
 			} ) => (
 				<SelectField
 					field={ field }
+					name={ name }
 					value={ value }
 					onChange={ handleChange }
 				/>

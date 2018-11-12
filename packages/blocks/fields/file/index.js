@@ -20,9 +20,9 @@ class FileField extends Component {
 	 * @return {void}
 	 */
 	handleSelect = ( file ) => {
-		const { field, onChange } = this.props;
+		const { name, onChange } = this.props;
 
-		onChange( field.base_name, pick( file, [ 'id', 'filename', 'mime', 'url' ] ) );
+		onChange( name, pick( file, [ 'id', 'filename', 'mime', 'url' ] ) );
 	}
 
 	/**
@@ -85,11 +85,13 @@ addFilter( 'carbon-fields.file-field.block', 'carbon-fields/blocks', ( OriginalF
 		<OriginalFileField { ...props }>
 			{ ( {
 				field,
+				name,
 				value,
 				handleChange
 			} ) => (
 				<FileField
 					field={ field }
+					name={ name }
 					value={ value }
 					buttonLabel={ __( 'Select File' ) }
 					onChange={ handleChange }

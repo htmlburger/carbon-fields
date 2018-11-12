@@ -13,9 +13,9 @@ class CheckboxField extends Component {
 	 * @return {void}
 	 */
 	handleChange = ( value ) => {
-		const { field, onChange } = this.props;
+		const { name, onChange } = this.props;
 
-		onChange( field.base_name, value );
+		onChange( name, value );
 	}
 
 	/**
@@ -41,11 +41,13 @@ addFilter( 'carbon-fields.checkbox-field.block', 'carbon-fields/blocks', ( Origi
 		<OriginalCheckboxField { ...props }>
 			{ ( {
 				field,
+				name,
 				value,
 				handleChange
 			} ) => (
 				<CheckboxField
 					field={ field }
+					name={ name }
 					value={ value }
 					onChange={ handleChange }
 				/>

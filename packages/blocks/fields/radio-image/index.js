@@ -13,9 +13,9 @@ class RadioImageField extends Component {
 	 * @return {void}
 	 */
 	handleChange = ( value ) => {
-		const { field, onChange } = this.props;
+		const { name, onChange } = this.props;
 
-		onChange( field.base_name, value );
+		onChange( name, value );
 	}
 
 	/**
@@ -45,10 +45,12 @@ addFilter( 'carbon-fields.radio_image-field.block', 'carbon-fields/blocks', ( Or
 		<OriginalRadioImageField { ...props }>
 			{ ( {
 				field,
+				name,
 				value,
 				handleChange
 			} ) => (
 				<RadioImageField
+					name={ name }
 					field={ field }
 					value={ value }
 					onChange={ handleChange }

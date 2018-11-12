@@ -13,9 +13,9 @@ export class SelectField extends Component {
 	 * @return {void}
 	 */
 	handleChange = ( value ) => {
-		const { field, onChange } = this.props;
+		const { name, onChange } = this.props;
 
-		onChange( field.base_name, value );
+		onChange( name, value );
 	}
 
 	/**
@@ -42,11 +42,13 @@ addFilter( 'carbon-fields.select-field.block', 'carbon-fields/blocks', ( Origina
 		<OriginalSelectField { ...props }>
 			{ ( {
 				field,
+				name,
 				value,
 				handleChange
 			} ) => (
 				<SelectField
 					field={ field }
+					name={ name }
 					value={ value }
 					onChange={ handleChange }
 				/>
