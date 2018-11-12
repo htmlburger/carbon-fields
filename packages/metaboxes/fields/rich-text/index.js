@@ -33,33 +33,18 @@ class RichTextField extends Component {
 	 * @return {void}
 	 */
 	componentDidMount() {
+		// Required for adequate initialization
 		setTimeout( this.initEditor, 100 );
 	}
 
 	/**
 	 * Lifecycle hook.
 	 *
-	 * @param  {Object} nextProps
 	 * @return {void}
 	 */
-	componentDidUpdate( nextProps ) {
-		const { value } = nextProps;
-
-		// TODO Investigate dragging and handle dragging action
-
-		if ( this.editor && this.editor.getContent() !== value ) {
-			this.editor.setContent( value );
-		}
+	componentWillUnmount() {
+		this.destroyEditor();
 	}
-
-	/**
-	 * Lifecycle hook.
-	 *
-	 * @return {void}
-	 */
-	// componentWillUnmount() {
-	// 	this.destroyEditor();
-	// }
 
 	/**
 	 * Handles the change of the input.
@@ -72,9 +57,7 @@ class RichTextField extends Component {
 
 		onChange(
 			field.id,
-			isString( eventOrValue )
-				? eventOrValue
-				: eventOrValue.target.value
+			isString( eventOrValue ) ? eventOrValue : eventOrValue.target.value
 		);
 	}
 
@@ -84,7 +67,11 @@ class RichTextField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field, name } = this.props;
+		const {
+			field,
+			value,
+			name
+		} = this.props;
 
 		const classes = [
 			'carbon-wysiwyg',
@@ -120,9 +107,11 @@ class RichTextField extends Component {
 
 					<div id={ `wp-${ field.id }-editor-container` } className="wp-editor-container">
 						<textarea
+							style={ { width: '100%' } }
 							className="regular-text"
 							id={ field.id }
 							name={ name }
+							value={ value }
 							onChange={ this.handleChange }
 							{ ...field.attributes }
 						/>
@@ -144,20 +133,12 @@ class RichTextField extends Component {
 			const editorSetup = ( editor ) => {
 				this.editor = editor;
 
-				editor.on( 'blur change', () => {
-					if ( editor.isDirty() ) {
-						this.handleChange( editor.getContent() );
-					}
+				editor.on( 'blur Change', () => {
+					editor.save();
+
+					this.handleChange( editor.getContent() );
 				} );
-
-				// this.cancelResizeObserver = observeResize(
-				// 	this.node,
-				// 	debounce(() => {
-				// 		this.editor.execCommand( 'wpAutoResize', null, null, { skip_focus: true } );
-				// 	}, 100)
-				// );
 			};
-
 			const editorOptions = {
 				...window.tinyMCEPreInit.mceInit.carbon_settings,
 				selector: `#${ field.id }`,
@@ -185,7 +166,6 @@ class RichTextField extends Component {
 	 */
 	destroyEditor() {
 		if ( this.editor ) {
-			this.cancelResizeObserver();
 			this.editor.remove();
 
 			this.node = null;
