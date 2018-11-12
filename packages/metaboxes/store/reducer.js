@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import produce from 'immer';
+import nanoid from 'nanoid';
 import { combineReducers } from '@wordpress/data';
 import {
 	set,
@@ -9,8 +10,7 @@ import {
 	keyBy,
 	assign,
 	forEach,
-	cloneDeep,
-	uniqueId
+	cloneDeep
 } from 'lodash';
 
 /**
@@ -57,11 +57,11 @@ function cloneField( originId, cloneId, fields, accumulator ) {
 
 	if ( field.type === 'complex' ) {
 		field.value.forEach( ( group ) => {
-			group.id = uniqueId( 'carbon-fields-' );
+			group.id = nanoid();
 
 			accumulator = group.fields.reduce( ( groupAccumulator, groupField ) => {
 				const originGroupFieldId = groupField.id;
-				const cloneGroupFieldId = uniqueId( 'carbon-fields-' );
+				const cloneGroupFieldId = nanoid();
 
 				groupField.id = cloneGroupFieldId;
 

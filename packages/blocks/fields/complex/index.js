@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import produce from 'immer';
+import nanoid from 'nanoid';
 import { Fragment, Component } from '@wordpress/element';
 import {
 	BaseControl,
@@ -16,8 +17,7 @@ import {
 	get,
 	set,
 	cloneDeep,
-	without,
-	uniqueId
+	without
 } from 'lodash';
 
 /**
@@ -74,7 +74,7 @@ class ComplexField extends Component {
 		} = this.props;
 		const data = {};
 
-		data._id = uniqueId( 'carbon-fields-' );
+		data._id = nanoid();
 		data._type = group.name;
 
 		group.fields.reduce( ( accumulator, field ) => {

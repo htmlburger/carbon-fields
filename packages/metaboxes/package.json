@@ -16,6 +16,7 @@
     "classnames": "^2.2.6",
     "immer": "^1.7.2",
     "lodash": "^4.17.11",
+    "nanoid": "^2.0.0",
     "react-color": "^2.14.1",
     "react-flatpickr": "^3.6.4",
     "react-onclickoutside": "^6.7.1",

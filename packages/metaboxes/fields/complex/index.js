@@ -3,15 +3,12 @@
  */
 import cx from 'classnames';
 import produce from 'immer';
+import nanoid from 'nanoid';
 import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { compose } from '@wordpress/compose';
 import { withDispatch } from '@wordpress/data';
-import {
-	cloneDeep,
-	uniqueId,
-	without
-} from 'lodash';
+import { cloneDeep, without } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -75,7 +72,7 @@ class ComplexField extends Component {
 		// Get a flat list of all fields for this group.
 		const fields = [];
 
-		group.id = uniqueId( 'carbon-fields-' );
+		group.id = nanoid();
 		group.container_id = field.container_id;
 		group.fields = group.fields.map( ( groupField ) => flattenField( groupField, field.container_id, fields ) );
 
@@ -139,10 +136,10 @@ class ComplexField extends Component {
 		} = this.props;
 
 		const originFieldIds = group.fields.map( ( groupField ) => groupField.id );
-		const cloneFieldIds = originFieldIds.map( () => uniqueId( 'carbon-fields-' ) );
+		const cloneFieldIds = originFieldIds.map( () => nanoid() );
 		const cloneGroup = cloneDeep( group );
 
-		cloneGroup.id = uniqueId( 'carbon-fields-' );
+		cloneGroup.id = nanoid();
 		cloneGroup.fields.forEach( ( groupField, index ) => {
 			groupField.id = cloneFieldIds[ index ];
 		} );
