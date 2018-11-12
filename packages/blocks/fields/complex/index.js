@@ -13,15 +13,18 @@ import {
 import { addFilter } from '@wordpress/hooks';
 import {
 	find,
+	get,
 	set,
 	cloneDeep,
-	without
+	without,
+	uniqueId
 } from 'lodash';
 
 /**
  * Internal dependencies.
  */
 import ComplexInserter from './inserter';
+import ComplexTabs from './tabs';
 import ComplexGroup from './group';
 
 class ComplexField extends Component {
@@ -71,6 +74,7 @@ class ComplexField extends Component {
 		} = this.props;
 		const data = {};
 
+		data._id = uniqueId( 'carbon-fields-' );
 		data._type = group.name;
 
 		group.fields.reduce( ( accumulator, field ) => {
@@ -168,16 +172,47 @@ class ComplexField extends Component {
 		const {
 			field,
 			value,
-			inserterButtonText
+			isTabbed,
+			currentTab,
+			inserterButtonText,
+			onTabsChange
 		} = this.props;
+
+		const tabs = value.map( ( { _id, _type } ) => {
+			const group = find( field.groups, [ 'name', _type ] );
+			const label = get( group, 'label', '' );
+
+			return {
+				id: _id,
+				label
+			};
+		} );
 
 		return (
 			<Fragment>
 				<BaseControl label={ field.label } />
 
 				<Panel>
+					{ isTabbed && (
+						<ComplexTabs
+							items={ tabs }
+							current={ currentTab }
+							onChange={ onTabsChange }
+						>
+							<ComplexInserter
+								buttonText="+"
+								groups={ field.groups }
+								onSelect={ this.handleAddGroup }
+							/>
+						</ComplexTabs>
+					) }
+
 					<PanelBody>
-						{ value.map( ( { _type, ...values }, index ) => {
+						{ value.map( ( {
+							_id,
+							_type,
+							...values
+						}, index ) => {
 							const group = find( field.groups, [ 'name', _type ] );
 
 							return (
@@ -186,6 +221,7 @@ class ComplexField extends Component {
 									index={ index }
 									group={ group }
 									values={ values }
+									hidden={ isTabbed && currentTab !== _id }
 									collapsed={ collapsedGroups.indexOf( index ) > -1 }
 									onChildChange={ this.handleChildFieldChange }
 									onToggle={ this.handleToggleGroup }
@@ -224,16 +260,22 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 				field,
 				name,
 				value,
+				isTabbed,
+				currentTab,
 				inserterButtonText,
-				handleChange
+				handleChange,
+				handleTabsChange
 			} ) => {
 				return (
 					<ComplexField
 						field={ field }
 						name={ name }
 						value={ value }
+						isTabbed={ isTabbed }
+						currentTab={ currentTab }
 						inserterButtonText={ inserterButtonText }
 						onChange={ handleChange }
+						onTabsChange={ handleTabsChange }
 					/>
 				);
 			} }

@@ -8,7 +8,6 @@ import { addFilter } from '@wordpress/hooks';
 import { compose } from '@wordpress/compose';
 import { withDispatch } from '@wordpress/data';
 import {
-	get,
 	cloneDeep,
 	uniqueId,
 	without
@@ -26,24 +25,6 @@ import ComplexToggler from './toggler';
 import ComplexGroup from './group';
 
 class ComplexField extends Component {
-	/**
-	 * Local state.
-	 *
-	 * @type {Object}
-	 */
-	state = {
-		currentTab: get( this.props.value, '0.id', null )
-	};
-
-	/**
-	 * Returns true if the field is using tabs for the layout.
-	 *
-	 * @return {boolean}
-	 */
-	get isTabbed() {
-		return this.props.field.layout.indexOf( 'tabbed' ) > -1;
-	}
-
 	/**
 	 * Returns true if the maximum number of entries is reached.
 	 *
@@ -71,18 +52,6 @@ class ComplexField extends Component {
 		const existingGroupNames = value.map( ( { name } ) => name );
 
 		return field.groups.filter( ( { name } ) => existingGroupNames.indexOf( name ) === -1 );
-	}
-
-	/**
-	 * Handles changing of tabs.
-	 *
-	 * @param  {string} groupId
-	 * @return {void}
-	 */
-	handleTabsChange = ( groupId ) => {
-		this.setState( {
-			currentTab: groupId
-		} );
 	}
 
 	/**
@@ -214,13 +183,14 @@ class ComplexField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { currentTab } = this.state;
-
 		const {
 			field,
 			name,
 			value,
-			inserterButtonText
+			isTabbed,
+			currentTab,
+			inserterButtonText,
+			onTabsChange
 		} = this.props;
 
 		const classes = cx(
@@ -232,11 +202,11 @@ class ComplexField extends Component {
 
 		return (
 			<FieldBase className={ classes } field={ field }>
-				{ this.isTabbed && (
+				{ isTabbed && (
 					<ComplexTabs
 						current={ currentTab }
 						groups={ value }
-						onChange={ this.handleTabsChange }
+						onChange={ onTabsChange }
 					>
 						{ this.availableGroups.length && ! this.isMaximumReached && (
 							<ComplexInserter
@@ -255,7 +225,7 @@ class ComplexField extends Component {
 							index={ index }
 							group={ group }
 							prefix={ `${ name }[${ index }]` }
-							hidden={ this.isTabbed && group.id !== currentTab }
+							hidden={ isTabbed && group.id !== currentTab }
 							allowClone={ field.duplicate_groups_allowed && ! this.isMaximumReached }
 							onToggle={ this.handleToggleGroup }
 							onClone={ this.handleCloneGroup }
@@ -264,7 +234,7 @@ class ComplexField extends Component {
 					) ) }
 				</div>
 
-				{ ! this.isTabbed && (
+				{ ! isTabbed && (
 					<div className="cf-complex__actions">
 						{ this.availableGroups.length && ! this.isMaximumReached && (
 							<ComplexInserter
@@ -309,18 +279,24 @@ addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( O
 				field,
 				name,
 				value,
+				isTabbed,
+				currentTab,
 				inserterButtonText,
-				handleChange
+				handleChange,
+				handleTabsChange
 			} ) => (
 				<ComplexField
 					field={ field }
 					name={ name }
 					value={ value }
+					isTabbed={ isTabbed }
+					currentTab={ currentTab }
 					inserterButtonText={ inserterButtonText }
 					addFields={ props.addFields }
 					cloneFields={ props.cloneFields }
 					removeFields={ props.removeFields }
 					onChange={ handleChange }
+					onTabsChange={ handleTabsChange }
 				/>
 			) }
 		</OriginalComplexField>

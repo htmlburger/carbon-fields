@@ -66,9 +66,14 @@ class ComplexGroup extends Component {
 			index,
 			group,
 			values,
+			hidden,
 			collapsed,
 			onChildChange
 		} = this.props;
+
+		if ( hidden ) {
+			return null;
+		}
 
 		return (
 			<Panel>
