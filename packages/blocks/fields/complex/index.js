@@ -74,6 +74,7 @@ class ComplexField extends Component {
 		const {
 			name,
 			value,
+			isTabbed,
 			onChange,
 			onTabsChange
 		} = this.props;
@@ -89,7 +90,10 @@ class ComplexField extends Component {
 		}, data );
 
 		onChange( name, value.concat( data ) );
-		onTabsChange( data._id );
+
+		if ( isTabbed ) {
+			onTabsChange( data._id );
+		}
 	}
 
 	/**
