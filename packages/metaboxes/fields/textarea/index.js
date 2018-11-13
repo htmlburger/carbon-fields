@@ -38,7 +38,6 @@ class TextareaField extends Component {
 		return (
 			<FieldBase field={ field } >
 				<textarea
-					className="regular-text"
 					id={ field.id }
 					name={ name }
 					value={ value }

@@ -119,10 +119,10 @@ class ColorField extends Component {
 
 		return (
 			<FieldBase field={ field }>
-				<div className="carbon-color">
+				<div className="cf-metaboxes-color__inner">
 					<span
 						onClick={ this.togglePicker }
-						className="pickcolor carbon-color-preview-holder hide-if-no-js"
+						className="cf-metaboxes-color__preview"
 						style={ {
 							display: 'inline-block',
 							backgroundColor: this.getBackgrounColor(),
@@ -134,18 +134,12 @@ class ColorField extends Component {
 					>
 					</span>
 
-					<span
-						className="button pickcolor carbon-color-button hide-if-no-js"
-						onClick={ this.togglePicker }
-					>
+					<span className="button cf-metaboxes-color__toggle" onClick={ this.togglePicker }>
 						{ carbonFieldsL10n.field.colorSelectColor }
 					</span>
 
 					{ showPicker && (
-						<div
-							id="carbon-color-picker-wrapper"
-							style={ { position: 'absolute', zIndex: 9999 } }
-						>
+						<div id="carbon-color-picker-wrapper" style={ { position: 'absolute', zIndex: 9999 } }>
 							<SketchPicker
 								color={ value }
 								onChange={ this.handleChange }
@@ -155,13 +149,12 @@ class ColorField extends Component {
 						</div>
 					) }
 
-					<span className="button carbon-color-button carbon-color-clear-button" onClick={ () => this.handleChange() }>
+					<span className="button cf-metaboxes-color__reset" onClick={ () => this.handleChange() }>
 						<span className="dashicons dashicons-no"></span>
 					</span>
 
 					<input
 						type="hidden"
-						id={ field.id }
 						name={ name }
 						value={ value }
 					/>

@@ -39,7 +39,6 @@ class TextField extends Component {
 			<FieldBase field={ field } >
 				<input
 					type="text"
-					className="regular-text"
 					id={ field.id }
 					name={ name }
 					value={ value }
