@@ -49,14 +49,21 @@ class MapField extends Component {
 
 		return (
 			<FieldBase field={ field } >
-				<div className="cf-field-map-search">
-					<p>{ carbonFieldsL10n.field.mapLocateAddress }</p>
+				<div className="cf-metaboxes-map__search">
+					<label className="cf-metaboxes-map__search-label">
+						{ carbonFieldsL10n.field.mapLocateAddress }
+					</label>
 
-					<input type="text" value={ value.address } onChange={ ( event ) => this.handleChange( event.target.value ) } />
+					<input
+						type="text"
+						className="cf-metaboxes-map__search-input"
+						value={ value.address }
+						onChange={ ( event ) => this.handleChange( event.target.value ) }
+					/>
 				</div>
 
 				<GoogleMap
-					className="cf-field-map-canvas"
+					className="cf-metaboxes-map__canvas"
 					lat={ value.lat }
 					lng={ value.lng }
 					zoom={ value.zoom }

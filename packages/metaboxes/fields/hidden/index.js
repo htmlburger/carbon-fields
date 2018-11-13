@@ -27,7 +27,6 @@ class HiddenField extends Component {
 			<FieldBase field={ { ...field, label: null } } >
 				<input
 					type="hidden"
-					id={ field.id }
 					name={ name }
 					value={ value }
 					className="hidden-text"

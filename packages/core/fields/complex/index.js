@@ -2,33 +2,25 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { get } from 'lodash';
+import { get, isUndefined } from 'lodash';
 
 class ComplexField extends Component {
 	/**
-	 * Constructor.
+	 * Local state.
 	 *
-	 * @param {Object} props
+	 * @type {Object}
 	 */
-	constructor( props ) {
-		super( props );
+	state = {
+		currentTab: null
+	};
 
-		const locations = [ 'id', '_id' ];
-		let currentTab = null;
-
-		for ( const location of locations ) {
-			const id = get( props.value, `0.${ location }` );
-
-			if ( id ) {
-				currentTab = id;
-
-				break;
-			}
-		}
-
-		this.state = {
-			currentTab
-		};
+	/**
+	 * Lifecycle hook.
+	 *
+	 * @return {void}
+	 */
+	componentDidMount() {
+		this.resetCurrentTab();
 	}
 
 	/**
@@ -95,6 +87,39 @@ class ComplexField extends Component {
 	}
 
 	/**
+	 * Resets the current tab when group is removed.
+	 *
+	 * @param  {number} [groupIndex]
+	 * @return {void}
+	 */
+	resetCurrentTab = ( groupIndex ) => {
+		const { value } = this.props;
+		let currentTab = null;
+
+		if ( isUndefined( groupIndex ) ) {
+			groupIndex = 0;
+		} else {
+			groupIndex = groupIndex > 0 ? groupIndex - 1 : 1;
+		}
+
+		const locations = [ 'id', '_id' ];
+
+		for ( const location of locations ) {
+			const id = get( value, `${ groupIndex }.${ location }` );
+
+			if ( id ) {
+				currentTab = id;
+
+				break;
+			}
+		}
+
+		this.setState( {
+			currentTab
+		} );
+	}
+
+	/**
 	 * Render the component.
 	 *
 	 * @return {Object}
@@ -125,6 +150,7 @@ class ComplexField extends Component {
 			isMaximumReached,
 			inserterButtonText,
 			getAvailableGroups: this.getAvailableGroups,
+			resetCurrentTab: this.resetCurrentTab,
 			handleChange: onChange,
 			handleTabsChange: this.handleTabsChange
 		} );

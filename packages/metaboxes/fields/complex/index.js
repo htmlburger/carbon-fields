@@ -20,20 +20,23 @@ import ComplexTabs from './tabs';
 import ComplexInserter from './inserter';
 import ComplexToggler from './toggler';
 import ComplexGroup from './group';
+import ComplexPlaceholder from './placeholder';
 
 class ComplexField extends Component {
 	/**
-	 * Handles the selection of a group in the inserter.
+	 * Handles adding of group.
 	 *
 	 * @param  {Object} group
 	 * @return {void}
 	 */
-	handleInserterSelect = ( group ) => {
+	handleAddGroup = ( group ) => {
 		const {
 			field,
 			value,
+			isTabbed,
 			addFields,
-			onChange
+			onChange,
+			onTabsChange
 		} = this.props;
 
 		// Create a copy of the group to prevent
@@ -50,6 +53,10 @@ class ComplexField extends Component {
 		// Push the group to the field.
 		addFields( fields );
 		onChange( field.id, value.concat( group ) );
+
+		if ( isTabbed ) {
+			onTabsChange( group.id );
+		}
 	}
 
 	/**
@@ -73,7 +80,7 @@ class ComplexField extends Component {
 	}
 
 	/**
-	 * Handles expanding/collapsing of a group.
+	 * Handles expanding/collapsing of group.
 	 *
 	 * @param  {number} groupIndex
 	 * @return {void}
@@ -93,7 +100,7 @@ class ComplexField extends Component {
 	}
 
 	/**
-	 * Handles cloning of a group.
+	 * Handles cloning of group.
 	 *
 	 * @param  {Object} group
 	 * @return {void}
@@ -102,25 +109,34 @@ class ComplexField extends Component {
 		const {
 			field,
 			value,
+			isTabbed,
 			cloneFields,
-			onChange
+			onChange,
+			onTabsChange
 		} = this.props;
 
 		const originFieldIds = group.fields.map( ( groupField ) => groupField.id );
 		const cloneFieldIds = originFieldIds.map( () => nanoid() );
-		const cloneGroup = cloneDeep( group );
+		const clonedGroup = cloneDeep( group );
 
-		cloneGroup.id = nanoid();
-		cloneGroup.fields.forEach( ( groupField, index ) => {
+		clonedGroup.id = nanoid();
+		clonedGroup.fields.forEach( ( groupField, index ) => {
 			groupField.id = cloneFieldIds[ index ];
 		} );
 
 		cloneFields( originFieldIds, cloneFieldIds );
-		onChange( field.id, value.concat( cloneGroup ) );
+
+		onChange( field.id, produce( value, ( draft ) => {
+			draft.splice( value.indexOf( group ) + 1, 0, clonedGroup );
+		} ) );
+
+		if ( isTabbed ) {
+			onTabsChange( clonedGroup.id );
+		}
 	}
 
 	/**
-	 * Handles the removal of a group.
+	 * Handles the removal of group.
 	 *
 	 * @param  {Object} group
 	 * @return {void}
@@ -129,9 +145,15 @@ class ComplexField extends Component {
 		const {
 			field,
 			value,
+			isTabbed,
 			removeFields,
+			resetCurrentTab,
 			onChange
 		} = this.props;
+
+		if ( isTabbed ) {
+			resetCurrentTab( value.indexOf( group ) );
+		}
 
 		onChange( field.id, without( value, group ) );
 
@@ -174,7 +196,7 @@ class ComplexField extends Component {
 
 		return (
 			<FieldBase className={ classes } field={ field }>
-				{ isTabbed && (
+				{ isTabbed && !! value.length && (
 					<ComplexTabs
 						current={ currentTab }
 						groups={ value }
@@ -184,10 +206,20 @@ class ComplexField extends Component {
 							<ComplexInserter
 								buttonText="+"
 								groups={ availableGroups }
-								onSelect={ this.handleInserterSelect }
+								onSelect={ this.handleAddGroup }
 							/>
 						) }
 					</ComplexTabs>
+				) }
+
+				{ ! value.length && (
+					<ComplexPlaceholder label="There are no entries yet.">
+						<ComplexInserter
+							buttonText={ inserterButtonText }
+							groups={ availableGroups }
+							onSelect={ this.handleAddGroup }
+						/>
+					</ComplexPlaceholder>
 				) }
 
 				<div className="cf-metaboxes-complex__groups">
@@ -206,13 +238,13 @@ class ComplexField extends Component {
 					) ) }
 				</div>
 
-				{ ! isTabbed && (
+				{ ! isTabbed && !! value.length && (
 					<div className="cf-metaboxes-complex__actions">
 						{ !! availableGroups.length && ! isMaximumReached && (
 							<ComplexInserter
 								buttonText={ inserterButtonText }
 								groups={ availableGroups }
-								onSelect={ this.handleInserterSelect }
+								onSelect={ this.handleAddGroup }
 							/>
 						) }
 
@@ -256,6 +288,7 @@ addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( O
 				isMaximumReached,
 				inserterButtonText,
 				getAvailableGroups,
+				resetCurrentTab,
 				handleChange,
 				handleTabsChange
 			} ) => (
@@ -271,6 +304,7 @@ addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( O
 					cloneFields={ props.cloneFields }
 					removeFields={ props.removeFields }
 					getAvailableGroups={ getAvailableGroups }
+					resetCurrentTab={ resetCurrentTab }
 					onChange={ handleChange }
 					onTabsChange={ handleTabsChange }
 				/>

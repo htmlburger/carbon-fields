@@ -14,7 +14,7 @@ import './style.scss';
 class MapField extends Component {
 	handleChange = ( newValue ) => {
 		const {
-			field,
+			name,
 			value,
 			onChange,
 			handleAddressChange
@@ -27,7 +27,7 @@ class MapField extends Component {
 		}
 
 		onChange(
-			field.base_name,
+			name,
 			{
 				...value,
 				...newValue

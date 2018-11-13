@@ -10,7 +10,8 @@ import {
 	Button,
 	Panel,
 	PanelHeader,
-	PanelBody
+	PanelBody,
+	Placeholder
 } from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
 import {
@@ -73,6 +74,7 @@ class ComplexField extends Component {
 		const {
 			name,
 			value,
+			isTabbed,
 			onChange,
 			onTabsChange
 		} = this.props;
@@ -88,7 +90,10 @@ class ComplexField extends Component {
 		}, data );
 
 		onChange( name, value.concat( data ) );
-		onTabsChange( data._id );
+
+		if ( isTabbed ) {
+			onTabsChange( data._id );
+		}
 	}
 
 	/**
@@ -101,18 +106,24 @@ class ComplexField extends Component {
 		const {
 			name,
 			value,
-			onChange
+			isTabbed,
+			onChange,
+			onTabsChange
 		} = this.props;
 
+		const group = find( value, [ '_id', groupId ] );
+		const index = value.indexOf( group );
+		const clonedGroup = cloneDeep( group );
+
+		clonedGroup._id = nanoid();
+
 		onChange( name, produce( value, ( draft ) => {
-			const group = find( draft, [ '_id', groupId ] );
-			const index = draft.indexOf( group );
-			const clonedGroup = cloneDeep( group );
-
-			clonedGroup._id = nanoid();
-
-			draft.splice( index, 0, clonedGroup );
+			draft.splice( index + 1, 0, clonedGroup );
 		} ) );
+
+		if ( isTabbed ) {
+			onTabsChange( clonedGroup._id );
+		}
 	}
 
 	/**
@@ -125,10 +136,16 @@ class ComplexField extends Component {
 		const {
 			name,
 			value,
-			onChange
+			isTabbed,
+			onChange,
+			resetCurrentTab
 		} = this.props;
 
 		const groupIndex = findIndex( value, [ '_id', groupId ] );
+
+		if ( isTabbed ) {
+			resetCurrentTab( groupIndex );
+		}
 
 		onChange( name, produce( value, ( draft ) => {
 			draft.splice( groupIndex, 1 );
@@ -219,7 +236,7 @@ class ComplexField extends Component {
 				<BaseControl label={ field.label } />
 
 				<Panel>
-					{ isTabbed && (
+					{ isTabbed && !! value.length && (
 						<ComplexTabs
 							items={ tabs }
 							current={ currentTab }
@@ -236,6 +253,16 @@ class ComplexField extends Component {
 					) }
 
 					<PanelBody>
+						{ ! value.length && (
+							<Placeholder label="There are no entries yet.">
+								<ComplexInserter
+									buttonText={ inserterButtonText }
+									groups={ availableGroups }
+									onSelect={ this.handleAddGroup }
+								/>
+							</Placeholder>
+						) }
+
 						{ value.map( ( {
 							_id,
 							_type,
@@ -262,23 +289,25 @@ class ComplexField extends Component {
 						} ) }
 					</PanelBody>
 
-					<PanelHeader>
-						{ !! availableGroups.length && ! isMaximumReached && (
-							<ComplexInserter
-								buttonText={ inserterButtonText }
-								groups={ availableGroups }
-								onSelect={ this.handleAddGroup }
-							/>
-						) }
+					{ ! isTabbed && !! value.length && (
+						<PanelHeader>
+							{ !! availableGroups.length && ! isMaximumReached && (
+								<ComplexInserter
+									buttonText={ inserterButtonText }
+									groups={ availableGroups }
+									onSelect={ this.handleAddGroup }
+								/>
+							) }
 
-						<Button isDefault onClick={ this.handleToggleAllGroups }>
-							{
-								collapsedGroups.length === value.length
-									? 'Expand All'
-									: 'Collapse All'
-							}
-						</Button>
-					</PanelHeader>
+							<Button isDefault onClick={ this.handleToggleAllGroups }>
+								{
+									collapsedGroups.length === value.length
+										? 'Expand All'
+										: 'Collapse All'
+								}
+							</Button>
+						</PanelHeader>
+					) }
 				</Panel>
 			</FieldBase>
 		);
@@ -297,6 +326,7 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 				isMaximumReached,
 				inserterButtonText,
 				getAvailableGroups,
+				resetCurrentTab,
 				handleChange,
 				handleTabsChange
 			} ) => {
@@ -310,6 +340,7 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 						isMaximumReached={ isMaximumReached }
 						inserterButtonText={ inserterButtonText }
 						getAvailableGroups={ getAvailableGroups }
+						resetCurrentTab={ resetCurrentTab }
 						onChange={ handleChange }
 						onTabsChange={ handleTabsChange }
 					/>

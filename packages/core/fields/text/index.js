@@ -3,7 +3,24 @@
  */
 import { Component } from '@wordpress/element';
 
+/**
+ * Internal dependencies.
+ */
+import FieldBase from '../../components/field-base';
+
 class TextField extends Component {
+	/**
+	 * Handles the change of the input.
+	 *
+	 * @param  {Object} e
+	 * @return {void}
+	 */
+	handleChange = ( e ) => {
+		const { id, onChange } = this.props;
+
+		onChange( id, e.target.value );
+	}
+
 	/**
 	 * Render the component.
 	 *
@@ -13,17 +30,21 @@ class TextField extends Component {
 		const {
 			field,
 			name,
-			value,
-			children,
-			onChange
+			value
 		} = this.props;
 
-		return children( {
-			field,
-			name,
-			value,
-			handleChange: onChange
-		} );
+		return (
+			<FieldBase field={ field }>
+				<input
+					type="text"
+					id={ field.id }
+					name={ name }
+					value={ value }
+					onChange={ this.handleChange }
+					{ ...field.attributes }
+				/>
+			</FieldBase>
+		);
 	}
 }
 

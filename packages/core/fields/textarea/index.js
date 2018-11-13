@@ -3,9 +3,26 @@
  */
 import { Component } from '@wordpress/element';
 
+/**
+ * The internal dependencies.
+ */
+import FieldBase from '../../components/field-base';
+
 class TextareaField extends Component {
 	/**
-	 * Render the component.
+	 * Handles the change of the input.
+	 *
+	 * @param  {Object} e
+	 * @return {void}
+	 */
+	handleChange = ( e ) => {
+		const { id, onChange } = this.props;
+
+		onChange( id, e.target.value );
+	}
+
+	/**
+	 * Renders the component.
 	 *
 	 * @return {Object}
 	 */
@@ -13,17 +30,20 @@ class TextareaField extends Component {
 		const {
 			field,
 			name,
-			value,
-			children,
-			onChange
+			value
 		} = this.props;
 
-		return children( {
-			field,
-			name,
-			value,
-			handleChange: onChange
-		} );
+		return (
+			<FieldBase field={ field } >
+				<textarea
+					id={ field.id }
+					name={ name }
+					value={ value }
+					onChange={ this.handleChange }
+					{ ...field.attributes }
+				/>
+			</FieldBase>
+		);
 	}
 }
 

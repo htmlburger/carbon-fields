@@ -19,12 +19,12 @@ class OembedField extends Component {
 	 */
 	handleChange = ( value ) => {
 		const {
-			field,
+			name,
 			onChange,
 			onSearchSubmit
 		} = this.props;
 
-		onChange( field.base_name, value );
+		onChange( name, value );
 		onSearchSubmit( value );
 	}
 
@@ -68,6 +68,7 @@ addFilter( 'carbon-fields.oembed-field.block', 'carbon-fields/blocks', ( Origina
 		<OriginalOembedField { ...props }>
 			{ ( {
 				field,
+				name,
 				value,
 				handleChange,
 				handleSearchSubmit,
@@ -77,6 +78,7 @@ addFilter( 'carbon-fields.oembed-field.block', 'carbon-fields/blocks', ( Origina
 			} ) => (
 				<OembedField
 					field={ field }
+					name={ name }
 					value={ value }
 					onChange={ handleChange }
 					onSearchSubmit={ handleSearchSubmit }
