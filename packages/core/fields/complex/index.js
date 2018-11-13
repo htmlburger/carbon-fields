@@ -2,7 +2,7 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { get } from 'lodash';
+import { get, isUndefined } from 'lodash';
 
 class ComplexField extends Component {
 	/**
@@ -20,7 +20,7 @@ class ComplexField extends Component {
 	 * @return {void}
 	 */
 	componentDidMount() {
-		this.resetCurrentTab( 0 );
+		this.resetCurrentTab();
 	}
 
 	/**
@@ -89,28 +89,33 @@ class ComplexField extends Component {
 	/**
 	 * Resets the current tab when group is removed.
 	 *
-	 * @param  {number} groupIndex
+	 * @param  {number} [groupIndex]
 	 * @return {void}
 	 */
 	resetCurrentTab = ( groupIndex ) => {
-		groupIndex = Math.max( groupIndex - 1, 0 );
+		const { value } = this.props;
+		let currentTab = null;
+
+		if ( isUndefined( groupIndex ) ) {
+			groupIndex = 0;
+		} else {
+			groupIndex = groupIndex > 0 ? groupIndex - 1 : 1;
+		}
 
 		const locations = [ 'id', '_id' ];
 
 		for ( const location of locations ) {
-			const id = get( this.props.value, `${ groupIndex }.${ location }` );
+			const id = get( value, `${ groupIndex }.${ location }` );
 
 			if ( id ) {
-				this.setState( {
-					currentTab: id
-				} );
+				currentTab = id;
 
-				return;
+				break;
 			}
 		}
 
 		this.setState( {
-			currentTab: null
+			currentTab
 		} );
 	}
 
