@@ -41,6 +41,7 @@ class BlockEdit extends Component {
 					return (
 						<Field
 							key={ index }
+							id={ field.base_name }
 							field={ field }
 							name={ field.base_name }
 							value={ value }
