@@ -24,17 +24,19 @@ import ComplexPlaceholder from './placeholder';
 
 class ComplexField extends Component {
 	/**
-	 * Handles the selection of a group in the inserter.
+	 * Handles adding of group.
 	 *
 	 * @param  {Object} group
 	 * @return {void}
 	 */
-	handleInserterSelect = ( group ) => {
+	handleAddGroup = ( group ) => {
 		const {
 			field,
 			value,
+			isTabbed,
 			addFields,
-			onChange
+			onChange,
+			onTabsChange
 		} = this.props;
 
 		// Create a copy of the group to prevent
@@ -51,6 +53,10 @@ class ComplexField extends Component {
 		// Push the group to the field.
 		addFields( fields );
 		onChange( field.id, value.concat( group ) );
+
+		if ( isTabbed ) {
+			onTabsChange( group.id );
+		}
 	}
 
 	/**
@@ -74,7 +80,7 @@ class ComplexField extends Component {
 	}
 
 	/**
-	 * Handles expanding/collapsing of a group.
+	 * Handles expanding/collapsing of group.
 	 *
 	 * @param  {number} groupIndex
 	 * @return {void}
@@ -94,7 +100,7 @@ class ComplexField extends Component {
 	}
 
 	/**
-	 * Handles cloning of a group.
+	 * Handles cloning of group.
 	 *
 	 * @param  {Object} group
 	 * @return {void}
@@ -103,25 +109,34 @@ class ComplexField extends Component {
 		const {
 			field,
 			value,
+			isTabbed,
 			cloneFields,
-			onChange
+			onChange,
+			onTabsChange
 		} = this.props;
 
 		const originFieldIds = group.fields.map( ( groupField ) => groupField.id );
 		const cloneFieldIds = originFieldIds.map( () => nanoid() );
-		const cloneGroup = cloneDeep( group );
+		const clonedGroup = cloneDeep( group );
 
-		cloneGroup.id = nanoid();
-		cloneGroup.fields.forEach( ( groupField, index ) => {
+		clonedGroup.id = nanoid();
+		clonedGroup.fields.forEach( ( groupField, index ) => {
 			groupField.id = cloneFieldIds[ index ];
 		} );
 
 		cloneFields( originFieldIds, cloneFieldIds );
-		onChange( field.id, value.concat( cloneGroup ) );
+
+		onChange( field.id, produce( value, ( draft ) => {
+			draft.splice( value.indexOf( group ) + 1, 0, clonedGroup );
+		} ) );
+
+		if ( isTabbed ) {
+			onTabsChange( clonedGroup.id );
+		}
 	}
 
 	/**
-	 * Handles the removal of a group.
+	 * Handles the removal of group.
 	 *
 	 * @param  {Object} group
 	 * @return {void}
@@ -191,7 +206,7 @@ class ComplexField extends Component {
 							<ComplexInserter
 								buttonText="+"
 								groups={ availableGroups }
-								onSelect={ this.handleInserterSelect }
+								onSelect={ this.handleAddGroup }
 							/>
 						) }
 					</ComplexTabs>
@@ -202,7 +217,7 @@ class ComplexField extends Component {
 						<ComplexInserter
 							buttonText={ inserterButtonText }
 							groups={ availableGroups }
-							onSelect={ this.handleInserterSelect }
+							onSelect={ this.handleAddGroup }
 						/>
 					</ComplexPlaceholder>
 				) }
@@ -229,7 +244,7 @@ class ComplexField extends Component {
 							<ComplexInserter
 								buttonText={ inserterButtonText }
 								groups={ availableGroups }
-								onSelect={ this.handleInserterSelect }
+								onSelect={ this.handleAddGroup }
 							/>
 						) }
 
