@@ -130,9 +130,15 @@ class ComplexField extends Component {
 		const {
 			field,
 			value,
+			isTabbed,
 			removeFields,
+			resetCurrentTab,
 			onChange
 		} = this.props;
+
+		if ( isTabbed ) {
+			resetCurrentTab( value.indexOf( group ) );
+		}
 
 		onChange( field.id, without( value, group ) );
 
@@ -267,6 +273,7 @@ addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( O
 				isMaximumReached,
 				inserterButtonText,
 				getAvailableGroups,
+				resetCurrentTab,
 				handleChange,
 				handleTabsChange
 			} ) => (
@@ -282,6 +289,7 @@ addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( O
 					cloneFields={ props.cloneFields }
 					removeFields={ props.removeFields }
 					getAvailableGroups={ getAvailableGroups }
+					resetCurrentTab={ resetCurrentTab }
 					onChange={ handleChange }
 					onTabsChange={ handleTabsChange }
 				/>

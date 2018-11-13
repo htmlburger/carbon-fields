@@ -126,10 +126,16 @@ class ComplexField extends Component {
 		const {
 			name,
 			value,
-			onChange
+			isTabbed,
+			onChange,
+			resetCurrentTab
 		} = this.props;
 
 		const groupIndex = findIndex( value, [ '_id', groupId ] );
+
+		if ( isTabbed ) {
+			resetCurrentTab( groupIndex );
+		}
 
 		onChange( name, produce( value, ( draft ) => {
 			draft.splice( groupIndex, 1 );
@@ -310,6 +316,7 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 				isMaximumReached,
 				inserterButtonText,
 				getAvailableGroups,
+				resetCurrentTab,
 				handleChange,
 				handleTabsChange
 			} ) => {
@@ -323,6 +330,7 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 						isMaximumReached={ isMaximumReached }
 						inserterButtonText={ inserterButtonText }
 						getAvailableGroups={ getAvailableGroups }
+						resetCurrentTab={ resetCurrentTab }
 						onChange={ handleChange }
 						onTabsChange={ handleTabsChange }
 					/>
