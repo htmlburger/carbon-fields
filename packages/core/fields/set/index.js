@@ -4,19 +4,28 @@
 import { Component } from '@wordpress/element';
 import { xor } from 'lodash';
 
+/**
+ * Internal dependencies.
+ */
+import FieldBase from '../../components/field-base';
+
 class SetField extends Component {
 	/**
 	 * Handles the change of the field.
 	 *
-	 * @param  {string}        fieldKey
-	 * @param  {Array}         values
-	 * @param  {string|number} optionValue
+	 * @param  {Object} e
 	 * @return {void}
 	 */
-	handleChange = ( fieldKey, values, optionValue ) => {
-		this.props.onChange(
-			fieldKey,
-			xor( values, [ optionValue ] )
+	handleChange = ( e ) => {
+		const {
+			id,
+			value,
+			onChange
+		} = this.props;
+
+		onChange(
+			id,
+			xor( value, [ e.target.value ] )
 		);
 	}
 
@@ -31,26 +40,46 @@ class SetField extends Component {
 		return values.indexOf( option.value ) > -1;
 	}
 
+	renderOptions() {
+		const {
+			field,
+			name,
+			value
+		} = this.props;
+
+		return field.options.map( ( option ) => (
+			<label key={ `${ field.id }-${ option.value }` }>
+				<input
+					type="checkbox"
+					id={ `${ field.id }-${ option.value }` }
+					name={ `${ name }-${ option.value }` }
+					checked={ this.isChecked( value, option ) }
+					value={ option.value }
+					onChange={ this.handleChange }
+					{ ...field.attributes }
+				/>
+
+				{ option.label }
+			</label>
+		) );
+	}
+
 	/**
 	 * Render the component.
 	 *
 	 * @return {Object}
 	 */
 	render() {
-		const {
-			field,
-			name,
-			value,
-			children
-		} = this.props;
+		const { field } = this.props;
 
-		return children( {
-			field,
-			name,
-			value,
-			isChecked: this.isChecked,
-			handleChange: this.handleChange
-		} );
+		return (
+			<FieldBase field={ field }>
+				{ field.options.length > 0
+					? this.renderOptions()
+					: 'TODO'
+				}
+			</FieldBase>
+		);
 	}
 }
 
