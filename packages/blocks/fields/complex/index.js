@@ -102,18 +102,24 @@ class ComplexField extends Component {
 		const {
 			name,
 			value,
-			onChange
+			isTabbed,
+			onChange,
+			onTabsChange
 		} = this.props;
 
+		const group = find( value, [ '_id', groupId ] );
+		const index = value.indexOf( group );
+		const clonedGroup = cloneDeep( group );
+
+		clonedGroup._id = nanoid();
+
 		onChange( name, produce( value, ( draft ) => {
-			const group = find( draft, [ '_id', groupId ] );
-			const index = draft.indexOf( group );
-			const clonedGroup = cloneDeep( group );
-
-			clonedGroup._id = nanoid();
-
-			draft.splice( index, 0, clonedGroup );
+			draft.splice( index + 1, 0, clonedGroup );
 		} ) );
+
+		if ( isTabbed ) {
+			onTabsChange( clonedGroup._id );
+		}
 	}
 
 	/**
