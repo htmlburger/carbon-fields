@@ -45,8 +45,12 @@ class OembedField extends Component {
 		} = this.props;
 
 		return (
-			<FieldBase field={ field } className="cf-field-oembed-wrapper">
-				<input type="text" value={ value } onChange={ this.handleChange } />
+			<FieldBase field={ field }>
+				<input
+					type="text"
+					value={ value }
+					onChange={ this.handleChange }
+				/>
 
 				{
 					embedCode
@@ -54,12 +58,12 @@ class OembedField extends Component {
 							html={ embedCode }
 							type={ embedType }
 							provider={ provider }
-						/> : null
+						/>
+						: null
 				}
 
 				<input
 					type="hidden"
-					id={ field.id }
 					name={ name }
 					value={ value }
 					readOnly />

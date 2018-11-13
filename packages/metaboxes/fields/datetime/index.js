@@ -100,7 +100,7 @@ export class DatetimeField extends Component {
 					value={ value }
 					onReady={ this.handleReady }
 					onChange={ this.handleChange }
-					className="carbon-field-group-holder"
+					className="cf-metaboxes-datetime__inner"
 				>
 					<input
 						type="text"
@@ -108,14 +108,14 @@ export class DatetimeField extends Component {
 						value={ value }
 						onChange={ this.handleManualInput }
 						onBlur={ this.formatManualInput }
-						className="regular-text carbon-field-group-input"
+						className="cf-metaboxes-datetime__input"
 						data-input
 						{ ...field.attributes }
 					/>
 
 					<button
 						type="button"
-						className="button"
+						className="button cf-metaboxes-datetime__button"
 						data-toggle
 					>
 						{ buttonText }

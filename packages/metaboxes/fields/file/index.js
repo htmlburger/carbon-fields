@@ -78,29 +78,29 @@ class FileField extends Component {
 
 		return (
 			<FieldBase field={ field }>
-				<div className="carbon-attachment">
+				<div className="cf-metaboxes-file__inner">
 					<input
 						type="hidden"
-						id={ field.id }
 						name={ field.base_name }
 						value={ field.value }
-						readOnly />
+						readOnly
+					/>
 
 					{ field.value.id && (
-						<div className="carbon-description" >
-							<div className="carbon-attachment-preview" >
-								<img src={ field.value.url } className="thumbnail-image" />
+						<div className="cf-metaboxes-file__content">
+							<div className="cf-metaboxes-file__preview" >
+								<img src={ field.value.url } className="cf-metaboxes-file__image" />
 
-								<div className="carbon-file-remove dashicons-before dashicons-no-alt" onClick={ this.handleClear }></div>
+								<div className="cf-metaboxes-file__remove dashicons-before dashicons-no-alt" onClick={ this.handleClear }></div>
 							</div>
 
-							<span className="carbon-attachment-file-name">
+							<span className="cf-metaboxes-file__name">
 								{ field.value.filename }
 							</span>
 						</div>
 					) }
 
-					<span className="button" onClick={ openMediaBrowser }>
+					<span className="button cf-metaboxes-file__browse" onClick={ openMediaBrowser }>
 						{ buttonLabel }
 					</span>
 				</div>

@@ -35,8 +35,8 @@ class CheckboxField extends Component {
 		} = this.props;
 
 		return (
-			<FieldBase field={ field } >
-				<label>
+			<FieldBase field={ field }>
+				<label className="cf-metaboxes-checkbox__inner">
 					<input
 						type="checkbox"
 						id={ field.id }
@@ -47,8 +47,6 @@ class CheckboxField extends Component {
 					/>
 
 					{ field.option_label }
-
-					{ field.required && <span className="carbon-required">*</span> }
 				</label>
 			</FieldBase>
 		);
