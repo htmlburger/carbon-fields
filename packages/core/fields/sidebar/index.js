@@ -10,21 +10,31 @@ import {
 	merge
 } from 'callbag-basics';
 
+/**
+ * Internal dependencies.
+ */
+import FieldBase from '../../components/field-base';
+
 class SidebarField extends Component {
 	/**
 	 * Handles the change of the field.
 	 *
-	 * @param  {string} fieldKey
-	 * @param  {string} value
+	 * @param  {Object} e
 	 * @return {void}
 	 */
-	handleChange = ( fieldKey, value ) => {
-		const { onAdd, onChange } = this.props;
+	handleChange = ( e ) => {
+		const {
+			id,
+			onAdd,
+			onChange
+		} = this.props;
+
+		const { value } = e.target;
 
 		if ( value !== '__add_new' ) {
-			onChange( fieldKey, value );
+			onChange( id, value );
 		} else {
-			onAdd( fieldKey );
+			onAdd( id );
 		}
 	}
 
@@ -35,22 +45,30 @@ class SidebarField extends Component {
 	 */
 	render() {
 		const {
-			field,
+			id,
 			name,
 			value,
-			children
+			field
 		} = this.props;
 
-		if ( ! children ) {
-			return null;
-		}
+		return (
+			<FieldBase field={ field }>
+				<select
+					id={ id }
+					name={ name }
+					value={ value }
+					onChange={ this.handleChange }
+				>
+					<option value="0" disabled>Please choose</option>
 
-		return children( {
-			field,
-			name,
-			value,
-			handleChange: this.handleChange
-		} );
+					{ field.options.map( ( option ) => (
+						<option key={ option.value } value={ option.value }>
+							{ option.label }
+						</option>
+					) ) }
+				</select>
+			</FieldBase>
+		);
 	}
 }
 
