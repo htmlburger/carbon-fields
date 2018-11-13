@@ -11,6 +11,7 @@ import FileField from './file';
 import HiddenField from './hidden';
 import HtmlField from './html';
 import MapField from './map';
+import MediaGalleryField from './media-gallery';
 import MultiselectField from './multiselect';
 import OembedField from './oembed';
 import RadioField from './radio';
@@ -37,6 +38,7 @@ import TextareaField from './textarea';
 	[ 'html', HtmlField ],
 	[ 'map', MapField ],
 	[ 'multiselect', MultiselectField ],
+	[ 'media_gallery', MediaGalleryField ],
 	[ 'oembed', OembedField ],
 	[ 'radio', RadioField ],
 	[ 'radio_image', RadioField ],
