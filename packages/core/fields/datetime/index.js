@@ -8,6 +8,7 @@ import Flatpickr from 'react-flatpickr';
  * The internal dependencies.
  */
 import './style.scss';
+import FieldBase from '../../components/field-base';
 
 class DatetimeField extends Component {
 	/**
@@ -30,20 +31,20 @@ class DatetimeField extends Component {
 	 * Handles the blur event of the date input element.
 	 *
 	 * @param  {Object} e
-	 * @param  {string} fieldKey
+	 * @param  {string} id
 	 * @return {void}
 	 */
 	handleManualInput = ( e ) => {
 		const {
 			field,
-			fieldKey,
+			id,
 			onChange
 		} = this.props;
 
 		const value = e.target.value;
 
 		if ( value !== field.value ) {
-			onChange( fieldKey, value );
+			onChange( id, value );
 		}
 	}
 
@@ -74,12 +75,12 @@ class DatetimeField extends Component {
 	) => {
 		const {
 			field,
-			fieldKey,
+			id,
 			onChange
 		} = this.props;
 
 		if ( selectedDateString !== field.value ) {
-			onChange( fieldKey, selectedDateString );
+			onChange( id, selectedDateString );
 		}
 	}
 
@@ -97,35 +98,37 @@ class DatetimeField extends Component {
 		} = this.props;
 
 		return (
-			<Flatpickr
-				options={ {
-					...field.picker_options,
-					wrap: true
-				} }
-				value={ value }
-				onReady={ this.handleReady }
-				onChange={ this.handleChange }
-				className="carbon-field-group-holder"
-			>
-				<input
-					type="text"
-					name={ name }
+			<FieldBase field={ field }>
+				<Flatpickr
+					options={ {
+						...field.picker_options,
+						wrap: true
+					} }
 					value={ value }
-					onChange={ this.handleManualInput }
-					onBlur={ this.formatManualInput }
-					className="regular-text carbon-field-group-input"
-					data-input
-					{ ...field.attributes }
-				/>
-
-				<button
-					type="button"
-					className="button"
-					data-toggle
+					onReady={ this.handleReady }
+					onChange={ this.handleChange }
+					className="carbon-field-group-holder"
 				>
-					{ buttonText }
-				</button>
-			</Flatpickr>
+					<input
+						type="text"
+						name={ name }
+						value={ value }
+						onChange={ this.handleManualInput }
+						onBlur={ this.formatManualInput }
+						className="regular-text carbon-field-group-input"
+						data-input
+						{ ...field.attributes }
+					/>
+
+					<button
+						type="button"
+						className="button"
+						data-toggle
+					>
+						{ buttonText }
+					</button>
+				</Flatpickr>
+			</FieldBase>
 		);
 	}
 }
