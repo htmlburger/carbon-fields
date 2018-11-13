@@ -5,7 +5,7 @@ import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { RadioControl } from '@wordpress/components';
 
-class RadioField extends Component {
+export class RadioField extends Component {
 	/**
 	 * Handles the change of the radios.
 	 *
@@ -24,13 +24,17 @@ class RadioField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field, value } = this.props;
+		const {
+			field,
+			value,
+			options
+		} = this.props;
 
 		return (
 			<RadioControl
 				label={ field.label }
 				selected={ value }
-				options={ field.options }
+				options={ options }
 				onChange={ this.handleChange }
 			/>
 		);
@@ -50,6 +54,7 @@ addFilter( 'carbon-fields.radio-field.block', 'carbon-fields/blocks', ( Original
 					field={ field }
 					name={ name }
 					value={ value }
+					options={ field.options }
 					onChange={ handleChange }
 				/>
 			) }
