@@ -3,6 +3,11 @@
  */
 import { Component } from '@wordpress/element';
 
+/**
+ * The internal dependencies.
+ */
+import FieldBase from '../../components/field-base';
+
 class HtmlField extends Component {
 	/**
 	 * Render the component.
@@ -10,9 +15,13 @@ class HtmlField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		return this.props.children( {
-			field: this.props.field
-		} );
+		const { field } = this.props;
+
+		return (
+			<FieldBase field={ field } >
+				<div dangerouslySetInnerHTML={ { __html: field.html } }></div>
+			</FieldBase>
+		);
 	}
 }
 
