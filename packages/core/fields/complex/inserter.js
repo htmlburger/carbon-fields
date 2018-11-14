@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-// import onClickOutside from 'react-onclickoutside';
+import onClickOutside from 'react-onclickoutside';
 import { Component } from '@wordpress/element';
 
 class ComplexInserter extends Component {
@@ -20,7 +20,6 @@ class ComplexInserter extends Component {
 	 * @return {void}
 	 */
 	handleClickOutside = () => {
-		// TODO: Wrap element with `onClickOutside`.
 		this.setState( {
 			menuVisible: false
 		} );
@@ -89,4 +88,4 @@ class ComplexInserter extends Component {
 	}
 }
 
-export default ComplexInserter;
+export default onClickOutside( ComplexInserter );
