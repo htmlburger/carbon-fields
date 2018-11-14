@@ -62,6 +62,10 @@ class Revisions_Service extends Service {
 	}
 
 	public function maybe_copy_meta_to_revision( $post_id, $container ) {
+		if ( $container->get_revisions_disabled() ) {
+			return;
+		}
+
 		$revision = $this->get_latest_post_revision( $post_id );
 		if ( empty( $revision ) ) {
 			return;
