@@ -11,6 +11,7 @@
 }
 
 .cf-field-media-gallery__list-item {
+	position: relative;
 	flex: 0 0 calc(33.333334% - 16px);
 	margin: 8px;
 
@@ -31,4 +32,22 @@
 	min-height: 100px;
 	display: block;
 	padding: 0;
+}
+
+.cf-field-media-gallery__list-item__actions {
+	background-color: #0085ba;
+	padding: 2px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 20;
+	display: none;
+}
+
+.cf-field-media-gallery__list-item:hover .cf-field-media-gallery__list-item__actions {
+	display: inline-flex;
+}
+
+.cf-field-media-gallery__list-item__actions button {
+	color: #fff;
 }
