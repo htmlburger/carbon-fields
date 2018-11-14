@@ -22,7 +22,7 @@ import FieldBase from '../../components/field-base';
 import OembedPreview from './preview';
 
 class OembedField extends Component {
-	handleSearchSubmit = debounce( ( value ) => {
+	handleSearch = debounce( ( value ) => {
 		const {
 			isLoading,
 			setState,
@@ -61,7 +61,7 @@ class OembedField extends Component {
 			if ( domNode.getBoundingClientRect().width > 0 ) {
 				clearInterval( i );
 
-				this.handleSearchSubmit( value );
+				this.handleSearch( value );
 			}
 		}, 100 );
 	}
@@ -77,7 +77,7 @@ class OembedField extends Component {
 
 		onChange( id, e.target.value );
 
-		this.handleSearchSubmit( e.target.value );
+		this.handleSearch( e.target.value );
 	}
 
 	/**
