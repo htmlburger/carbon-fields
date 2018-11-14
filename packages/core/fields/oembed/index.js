@@ -15,6 +15,12 @@ import {
 	debounce
 } from 'lodash';
 
+/**
+ * The internal dependencies.
+ */
+import FieldBase from '../../components/field-base';
+import OembedPreview from './preview';
+
 class OembedField extends Component {
 	handleSearchSubmit = debounce( ( value ) => {
 		const {
@@ -61,7 +67,21 @@ class OembedField extends Component {
 	}
 
 	/**
-	 * Render the component.
+	 * Handles the change of the input.
+	 *
+	 * @param  {Event} e
+	 * @return {void}
+	 */
+	handleChange = ( e ) => {
+		const { id, onChange } = this.props;
+
+		onChange( id, e.target.value );
+
+		this.handleSearchSubmit( e.target.value );
+	}
+
+	/**
+	 * Renders the component.
 	 *
 	 * @return {Object}
 	 */
@@ -70,23 +90,36 @@ class OembedField extends Component {
 			field,
 			name,
 			value,
-			children,
-			onChange,
 			embedCode,
 			embedType,
 			provider
 		} = this.props;
 
-		return children( {
-			field,
-			name,
-			value,
-			handleChange: onChange,
-			handleSearchSubmit: this.handleSearchSubmit,
-			embedCode,
-			embedType,
-			provider
-		} );
+		return (
+			<FieldBase field={ field }>
+				<input
+					type="text"
+					value={ value }
+					onChange={ this.handleChange }
+				/>
+
+				{
+					embedCode
+						? <OembedPreview
+							html={ embedCode }
+							type={ embedType }
+							provider={ provider }
+						/>
+						: null
+				}
+
+				<input
+					type="hidden"
+					name={ name }
+					value={ value }
+					readOnly />
+			</FieldBase>
+		);
 	}
 }
 
