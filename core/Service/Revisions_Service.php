@@ -5,6 +5,8 @@ namespace Carbon_Fields\Service;
 use Carbon_Fields\Carbon_Fields;
 
 class Revisions_Service extends Service {
+	const CHANGE_KEY = '_carbon_changed';
+
 	protected function enabled() {
 		add_filter( 'carbon_get_post_meta_post_id', [ $this, 'update_post_id_on_preview' ], 10, 3 );
 		add_action( 'carbon_fields_post_meta_container_saved', [ $this, 'maybe_copy_meta_to_revision' ], 10, 2 );
@@ -24,7 +26,7 @@ class Revisions_Service extends Service {
 	}
 
 	public function check_for_changes( $return, $last_revision, $post ) {
-		if ( empty( $_POST['_carbon_changed'] ) ) {
+		if ( empty( $_POST[ self::CHANGE_KEY ] ) ) {
 			return $return;
 		}
 
@@ -75,8 +77,8 @@ class Revisions_Service extends Service {
 			return $fields;
 		}
 
-		if ( ! empty( $_POST['_carbon_changed'] ) ) {
-			$fields['_carbon_changed'] = 2;
+		if ( ! empty( $_POST[ self::CHANGE_KEY ] ) ) {
+			$fields[ self::CHANGE_KEY ] = 2;
 		}
 
 		return $fields;
