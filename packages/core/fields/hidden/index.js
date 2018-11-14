@@ -3,9 +3,14 @@
  */
 import { Component } from '@wordpress/element';
 
+/**
+ * The internal dependencies.
+ */
+import FieldBase from '../../components/field-base';
+
 class HiddenField extends Component {
 	/**
-	 * Render the component.
+	 * Renders the component.
 	 *
 	 * @return {Object}
 	 */
@@ -13,15 +18,20 @@ class HiddenField extends Component {
 		const {
 			field,
 			name,
-			value,
-			children
+			value
 		} = this.props;
 
-		return children( {
-			field,
-			name,
-			value
-		} );
+		return (
+			<FieldBase field={ { ...field, label: null } } >
+				<input
+					type="hidden"
+					name={ name }
+					value={ value }
+					className="hidden-text"
+					{ ...field.attributes }
+				/>
+			</FieldBase>
+		);
 	}
 }
 
