@@ -3,7 +3,11 @@
  */
 import cx from 'classnames';
 import { Component } from '@wordpress/element';
-import { getFieldType } from '@carbon-fields/core';
+
+/**
+ * Internal dependencies.
+ */
+import { getFieldType } from '../../registry/fields';
 
 class ComplexGroup extends Component {
 	/**
