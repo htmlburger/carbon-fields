@@ -62,7 +62,7 @@ class Revisions_Service extends Service {
 	}
 
 	public function maybe_copy_meta_to_revision( $post_id, $container ) {
-		if ( $container->get_revisions_disabled() ) {
+		if ( ! $container || $container->get_revisions_disabled() ) {
 			return;
 		}
 
@@ -97,11 +97,8 @@ class Revisions_Service extends Service {
 		$is_revision_diff_ajax = $is_doing_ajax && $is_revision_action;
 		$is_restoring = ! empty( $_GET['action'] ) && $_GET['action'] === 'restore';
 
-		if ( ! $is_revision_screen && ! $is_revision_diff_ajax ) {
-			return $fields;
-		}
-
-		if ( $is_restoring ) {
+		// exit early if not on the revision screens or if a restore revision is in progress
+		if ( $is_restoring || ( ! $is_revision_screen && ! $is_revision_diff_ajax ) ) {
 			return $fields;
 		}
 
@@ -112,10 +109,9 @@ class Revisions_Service extends Service {
 			$post_id = $post->ID;
 		}
 
-		// get all revisioned fields for post and append them to $fields
-		$revisioned_fields = $this->get_revisioned_fields( $post_id );
+		$revisioned_fields = $this->get_revisioned_fields();
 		$fields = array_merge( $fields, $revisioned_fields );
-		// hook into _wp_post_revision_field_{$name} and return values for rendering
+		// this hook is used when displaying the field values
 		foreach ( $revisioned_fields as $name => $label ) {
 			add_filter( "_wp_post_revision_field_{$name}", [ $this, 'update_revision_field_value' ], 10, 4 );
 		}
@@ -144,7 +140,7 @@ class Revisions_Service extends Service {
 		}
 	}
 
-	protected function get_revisioned_fields( $post_id ) {
+	protected function get_revisioned_fields() {
 		$repository = Carbon_Fields::resolve( 'container_repository' );
 		$containers = $repository->get_containers( 'post_meta' );
 		$containers = array_filter( $containers, function( $container ) {
