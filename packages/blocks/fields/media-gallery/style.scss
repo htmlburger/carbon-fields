@@ -51,3 +51,18 @@
 .cf-field-media-gallery__list-item__actions button {
 	color: #fff;
 }
+
+.cf-field-media-gallery__list-item:not(.cf-field-media-gallery__list-item--image) figure {
+	background: rgba(139,139,150,.1);
+	padding: 1em;
+	text-align: center;
+	flex-wrap: wrap;
+}
+
+.cf-field-media-gallery__list-item:not(.cf-field-media-gallery__list-item--image) figure > .dashicons {
+	margin: auto;
+}
+
+.cf-field-media-gallery__list-item figcaption {
+	width: 100%;
+}
