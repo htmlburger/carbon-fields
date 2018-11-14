@@ -78,7 +78,7 @@ class MapField extends Component {
 				</div>
 
 				<GoogleMap
-					className="cf-metaboxes-map__canvas"
+					className="cf-field-map-canvas"
 					lat={ value.lat }
 					lng={ value.lng }
 					zoom={ value.zoom }
