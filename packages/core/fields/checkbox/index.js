@@ -15,9 +15,19 @@ class CheckboxField extends Component {
 	 * @return {void}
 	 */
 	handleChange = () => {
-		const { field, id, onChange } = this.props;
+		const {
+			id,
+			field,
+			value,
+			onChange
+		} = this.props;
 
-		onChange( id, ! field.value );
+		onChange(
+			id,
+			value === field.option_value
+				? ''
+				: field.option_value
+		);
 	}
 
 	/**
