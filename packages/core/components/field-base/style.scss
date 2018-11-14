@@ -1,3 +1,12 @@
-.cf-field {
+.cf-field,
+.cf-field__head,
+.cf-field__body {
 	box-sizing: border-box;
+}
+
+.cf-field__label {
+	display: block;
+	padding-bottom: 5px;
+	font-weight: 600;
+	color: #23282d;
 }

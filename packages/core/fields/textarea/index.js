@@ -6,6 +6,7 @@ import { Component } from '@wordpress/element';
 /**
  * The internal dependencies.
  */
+import './style.scss';
 import FieldBase from '../../components/field-base';
 
 class TextareaField extends Component {
@@ -40,6 +41,7 @@ class TextareaField extends Component {
 					id={ id }
 					name={ name }
 					value={ value }
+					rows={ field.rows }
 					onChange={ this.handleChange }
 					{ ...field.attributes }
 				/>
