@@ -88,10 +88,19 @@ class MediaGalleryField extends Component {
 				<ul className="cf-field-media-gallery__list">
 					{ value.map( ( id, index ) => {
 						const mediaItem = mediaData[ id ] || null;
+						const className = [ 'cf-field-media-gallery__list-item' ];
+
+						if ( mediaItem ) {
+							className.push( `cf-field-media-gallery__list-item--${ mediaItem.media_type }` );
+						}
+
+						if ( selectedItem === index ) {
+							className.push( 'cf-field-media-gallery__list-item--selected' );
+						}
 
 						return (
 							mediaItem
-								? <li className={ `cf-field-media-gallery__list-item ${ selectedItem === index ? 'cf-field-media-gallery__list-item--selected' : '' }` } key={ index } onClick={ () => this.handleMediaItemSelect( index ) }>
+								? <li className={ className.join( ' ' ) } key={ index } onClick={ () => this.handleMediaItemSelect( index ) }>
 									<figure tabIndex="-1">
 										<div className="cf-field-media-gallery__list-item__actions">
 											<button type="button" aria-label="Remove File" className="components-button components-icon-button blocks-gallery-item__remove" onClick={ () => this.handleMediaItemRemove( index ) }>
@@ -101,7 +110,17 @@ class MediaGalleryField extends Component {
 											</button>
 										</div>
 
-										<img src={ mediaItem.source_url } data-id={ mediaItem.id } />
+										{
+											mediaItem.media_type === 'image'
+												? <img src={ mediaItem.source_url } data-id={ mediaItem.id } />
+												: <span className="dashicons dashicons-format-aside"></span>
+										}
+
+										{
+											mediaItem.media_type !== 'image'
+												? <figcaption><span>{ mediaItem.title.rendered }</span></figcaption>
+												: ''
+										}
 									</figure>
 								</li> : ''
 						);
