@@ -8,8 +8,8 @@
  */
 function ComplexPlaceholder( { label, children } ) {
 	return (
-		<div className="cf-metaboxes-complex__placeholder">
-			<p className="cf-metaboxes-complex__placeholder-label">
+		<div className="cf-complex__placeholder">
+			<p className="cf-complex__placeholder-label">
 				{ label }
 			</p>
 
