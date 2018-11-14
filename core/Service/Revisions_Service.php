@@ -186,21 +186,13 @@ class Revisions_Service extends Service {
 
 	    $field_keys = [];
 	    foreach ( $containers as $container ) {
-	        foreach ($container->get_fields() as $field) {
+	        foreach ( $container->get_fields() as $field ) {
 	            $field_keys[] = $field->get_name();
 	        }
 	    }
 
 	    $meta = get_post_meta( $from_id );
-	    $meta_to_copy = array_filter( $meta, function( $value, $key ) use ( $field_keys ) {
-	        foreach ( $field_keys as $field_key ) {
-	            if ( strpos( $key, $field_key ) === 0 ) {
-	                return true;
-	            }
-	        }
-
-	        return false;
-	    }, ARRAY_FILTER_USE_BOTH );
+	    $meta_to_copy = $this->filter_meta_by_keys( $meta, $field_keys );
 
 	    if ( ! $meta_to_copy ) {
 	    	return;
@@ -208,6 +200,29 @@ class Revisions_Service extends Service {
 
 	    $this->delete_old_meta( $to_id, $meta_to_copy );
 	    $this->insert_new_meta( $to_id, $meta_to_copy );
+	}
+
+	protected function meta_key_matches_names( $meta_key, $names ) {
+		foreach ( $names as $name ) {
+			if ( strpos( $meta_key, $name ) === 0 ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	protected function filter_meta_by_keys( $meta, $field_keys ) {
+		$filtered_meta = [];
+		foreach ( $meta as $meta_key => $meta_value ) {
+			if ( ! $this->meta_key_matches_names( $meta_key, $field_keys ) ) {
+				continue;
+			}
+
+			$filtered_meta[ $meta_key ] = $meta_value;
+		}
+
+		return $filtered_meta;
 	}
 
 	protected function delete_old_meta( $to_id, $meta_to_copy ) {
@@ -262,15 +277,5 @@ class Revisions_Service extends Service {
 		);
 
 		return implode( ',', $keys );
-	}
-
-	protected function meta_key_matches_names( $meta_key, $names ) {
-		foreach ( $names as $name ) {
-			if ( strpos( $meta_key, $name ) === 0 ) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 }
