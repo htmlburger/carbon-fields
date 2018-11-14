@@ -12,6 +12,7 @@ import './gravity-form';
 import './hidden';
 import './html';
 import './map';
+import './media-gallery';
 import './oembed';
 import './radio';
 import './radio-image';

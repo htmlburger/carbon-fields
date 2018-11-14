@@ -1,0 +1,34 @@
+.cf-field-media-gallery {
+	box-sizing: border-box;
+}
+
+.cf-field-media-gallery__list {
+	display: flex;
+	flex-direction: row;
+	list-style-type: none !important;
+	flex-wrap: wrap;
+	margin: 0 -8px !important;
+}
+
+.cf-field-media-gallery__list-item {
+	flex: 0 0 calc(33.333334% - 16px);
+	margin: 8px;
+
+	&--selected {
+		outline: 4px solid #0085ba;
+	}
+}
+
+.cf-field-media-gallery__list-item figure {
+	margin: 0;
+	height: 100%;
+	align-items: flex-end;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.cf-field-media-gallery__list-item .editor-media-placeholder {
+	min-height: 100px;
+	display: block;
+	padding: 0;
+}
