@@ -8,6 +8,7 @@ import { xor } from 'lodash';
  * Internal dependencies.
  */
 import FieldBase from '../../components/field-base';
+import NoOptions from '../../components/no-options';
 
 class SetField extends Component {
 	/**
@@ -40,7 +41,12 @@ class SetField extends Component {
 		return values.indexOf( option.value ) > -1;
 	}
 
-	renderOptions() {
+	/**
+	 * Render the component.
+	 *
+	 * @return {Object}
+	 */
+	render() {
 		const {
 			id,
 			field,
@@ -48,36 +54,28 @@ class SetField extends Component {
 			value
 		} = this.props;
 
-		return field.options.map( ( option ) => (
-			<label key={ `${ id }-${ option.value }` }>
-				<input
-					type="checkbox"
-					id={ `${ id }-${ option.value }` }
-					name={ `${ name }-${ option.value }` }
-					checked={ this.isChecked( value, option ) }
-					value={ option.value }
-					onChange={ this.handleChange }
-					{ ...field.attributes }
-				/>
-
-				{ option.label }
-			</label>
-		) );
-	}
-
-	/**
-	 * Render the component.
-	 *
-	 * @return {Object}
-	 */
-	render() {
-		const { field } = this.props;
-
 		return (
-			<FieldBase field={ field }>
-				{ field.options.length > 0
-					? this.renderOptions()
-					: 'TODO'
+			<FieldBase id={ id } field={ field }>
+				{
+					field.options.length > 0
+						? (
+							field.options.map( ( option ) => (
+								<label key={ `${ id }-${ option.value }` }>
+									<input
+										type="checkbox"
+										id={ `${ id }-${ option.value }` }
+										name={ `${ name }-${ option.value }` }
+										checked={ this.isChecked( value, option ) }
+										value={ option.value }
+										onChange={ this.handleChange }
+										{ ...field.attributes }
+									/>
+
+									{ option.label }
+								</label>
+							) )
+						)
+						: <NoOptions />
 				}
 			</FieldBase>
 		);

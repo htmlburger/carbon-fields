@@ -42,11 +42,11 @@ class MultiselectField extends Component {
 	}
 
 	/**
-	 * Renders the radio options
+	 * Renders the component.
 	 *
 	 * @return {Object}
 	 */
-	renderOptions() {
+	render() {
 		const {
 			id,
 			field,
@@ -55,31 +55,21 @@ class MultiselectField extends Component {
 		} = this.props;
 
 		return (
-			<Select
-				multi
-				joinValues
-				id={ id }
-				name={ name }
-				value={ this.filterValues( value ) }
-				options={ field.options }
-				onChange={ this.handleChange }
-			/>
-		);
-	}
-
-	/**
-	 * Renders the component.
-	 *
-	 * @return {Object}
-	 */
-	render() {
-		const { id, field } = this.props;
-
-		return (
 			<FieldBase id={ id } field={ field } >
-				{ field.options.length > 0
-					? this.renderOptions()
-					: <NoOptions />
+				{
+					field.options.length > 0
+						? (
+							<Select
+								multi
+								joinValues
+								id={ id }
+								name={ name }
+								value={ this.filterValues( value ) }
+								options={ field.options }
+								onChange={ this.handleChange }
+							/>
+						)
+						: <NoOptions />
 				}
 			</FieldBase>
 		);
