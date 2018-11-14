@@ -1,8 +1,12 @@
 /**
  * External dependencies.
  */
-import nanoid from 'nanoid';
 import { pick, cloneDeep } from 'lodash';
+
+/**
+ * Carbon Fields dependencies.
+ */
+import { uniqueId } from '@carbon-fields/core';
 
 /**
  * Flattens a field.
@@ -16,7 +20,7 @@ export default function flattenField( field, containerId, accumulator ) {
 	field = cloneDeep( field );
 
 	// Replace the id of the field.
-	field.id = nanoid();
+	field.id = uniqueId();
 
 	// Keep reference to the container.
 	field.container_id = containerId;
@@ -25,7 +29,7 @@ export default function flattenField( field, containerId, accumulator ) {
 	// So we need to flat them as well.
 	if ( field.type === 'complex' ) {
 		field.value.forEach( ( group ) => {
-			group.id = nanoid();
+			group.id = uniqueId();
 			group.container_id = containerId;
 			group.fields = group.fields.map( ( groupField ) => flattenField( groupField, containerId, accumulator ) );
 		} );
