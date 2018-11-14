@@ -40,6 +40,7 @@ class CheckboxField extends Component {
 						id={ field.id }
 						name={ name }
 						checked={ value }
+						value={ field.option_value }
 						onChange={ this.handleChange }
 						{ ...field.attributes }
 					/>
