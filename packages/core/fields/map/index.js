@@ -14,6 +14,13 @@ import of from 'callbag-of';
 import { Component } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
 
+/**
+ * The internal dependencies.
+ */
+import GoogleMap from './google-map';
+import FieldBase from '../../components/field-base';
+import './style.scss';
+
 class MapField extends Component {
 	handleAddressChange = debounce( ( address ) => {
 		const {
@@ -25,27 +32,60 @@ class MapField extends Component {
 		} );
 	}, 200 )
 
+	handleChange = ( newValue ) => {
+		const {
+			id,
+			value,
+			onChange
+		} = this.props;
+
+		if ( typeof newValue === 'string' ) {
+			newValue = { address: newValue };
+
+			this.handleAddressChange( newValue.address );
+		}
+
+		onChange(
+			id,
+			{
+				...value,
+				...newValue
+			}
+		);
+	}
+
 	/**
-	 * Render the component.
+	 * Renders the component.
 	 *
 	 * @return {Object}
 	 */
 	render() {
-		const {
-			field,
-			name,
-			value,
-			children,
-			onChange
-		} = this.props;
+		const { field, value } = this.props;
 
-		return children( {
-			field,
-			name,
-			value,
-			handleChange: onChange,
-			handleAddressChange: this.handleAddressChange
-		} );
+		return (
+			<FieldBase field={ field } >
+				<div className="cf-metaboxes-map__search">
+					<label className="cf-metaboxes-map__search-label">
+						{ carbonFieldsL10n.field.mapLocateAddress }
+					</label>
+
+					<input
+						type="text"
+						className="cf-metaboxes-map__search-input"
+						value={ value.address }
+						onChange={ ( event ) => this.handleChange( event.target.value ) }
+					/>
+				</div>
+
+				<GoogleMap
+					className="cf-field-map-canvas"
+					lat={ value.lat }
+					lng={ value.lng }
+					zoom={ value.zoom }
+					onChange={ this.handleChange }
+				/>
+			</FieldBase>
+		);
 	}
 }
 
