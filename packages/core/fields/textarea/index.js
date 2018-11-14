@@ -40,6 +40,7 @@ class TextareaField extends Component {
 					id={ id }
 					name={ name }
 					value={ value }
+					rows={ field.rows }
 					onChange={ this.handleChange }
 					{ ...field.attributes }
 				/>
