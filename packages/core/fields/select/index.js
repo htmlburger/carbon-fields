@@ -6,6 +6,7 @@ import { Component } from '@wordpress/element';
 /**
  * The internal dependencies.
  */
+import './style.scss';
 import FieldBase from '../../components/field-base';
 import NoOptions from '../../components/no-options';
 
