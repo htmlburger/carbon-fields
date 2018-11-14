@@ -36,15 +36,16 @@ class BlockEdit extends Component {
 					if ( ! Field ) {
 						return null;
 					}
+
 					const value = get( attributes, field.base_name );
 
 					return (
 						<Field
 							key={ index }
 							id={ field.base_name }
-							field={ field }
 							name={ field.base_name }
 							value={ value }
+							field={ field }
 							onChange={ this.handleFieldChange }
 						/>
 					);

@@ -1,35 +1,20 @@
 /**
  * External dependencies.
  */
-import cx from 'classnames';
 import produce from 'immer';
 import nanoid from 'nanoid';
 import { Component } from '@wordpress/element';
-import {
-	BaseControl,
-	Button,
-	Panel,
-	PanelHeader,
-	PanelBody,
-	Placeholder
-} from '@wordpress/components';
 import { addFilter } from '@wordpress/hooks';
 import {
-	find,
-	findIndex,
 	get,
 	set,
+	find,
+	omit,
+	assign,
+	without,
 	cloneDeep,
-	without
+	findIndex
 } from 'lodash';
-
-/**
- * Internal dependencies.
- */
-import FieldBase from '../../components/field-base';
-import ComplexInserter from './inserter';
-import ComplexTabs from './tabs';
-import ComplexGroup from './group';
 
 class ComplexField extends Component {
 	/**
@@ -42,42 +27,19 @@ class ComplexField extends Component {
 	};
 
 	/**
-	 * Handles the change of a child field.
+	 * Handles adding of group.
 	 *
-	 * @param  {string} childName
-	 * @param  {mixed}  childValue
+	 * @param  {Object}   group
+	 * @param  {Function} callback
 	 * @return {void}
 	 */
-	handleChildFieldChange = ( childName, childValue ) => {
+	handleAddGroup = ( group, callback ) => {
 		const {
 			name,
 			value,
 			onChange
 		} = this.props;
 
-		onChange( name, produce( value, ( draft ) => {
-			const path = childName.split( '.' );
-			const index = parseInt( path.shift(), 10 );
-			const group = draft[ index ];
-
-			set( group, path, childValue );
-		} ) );
-	}
-
-	/**
-	 * Handles adding of group.
-	 *
-	 * @param  {Object} group
-	 * @return {void}
-	 */
-	handleAddGroup = ( group ) => {
-		const {
-			name,
-			value,
-			isTabbed,
-			onChange,
-			onTabsChange
-		} = this.props;
 		const data = {};
 
 		data._id = nanoid();
@@ -91,24 +53,21 @@ class ComplexField extends Component {
 
 		onChange( name, value.concat( data ) );
 
-		if ( isTabbed ) {
-			onTabsChange( data._id );
-		}
+		callback( data );
 	}
 
 	/**
 	 * Handles cloning of group.
 	 *
-	 * @param  {string} groupId
+	 * @param  {string}   groupId
+	 * @param  {Function} callback
 	 * @return {void}
 	 */
-	handleCloneGroup = ( groupId ) => {
+	handleCloneGroup = ( groupId, callback ) => {
 		const {
 			name,
 			value,
-			isTabbed,
-			onChange,
-			onTabsChange
+			onChange
 		} = this.props;
 
 		const group = find( value, [ '_id', groupId ] );
@@ -121,9 +80,7 @@ class ComplexField extends Component {
 			draft.splice( index + 1, 0, clonedGroup );
 		} ) );
 
-		if ( isTabbed ) {
-			onTabsChange( clonedGroup._id );
-		}
+		callback( clonedGroup );
 	}
 
 	/**
@@ -136,16 +93,10 @@ class ComplexField extends Component {
 		const {
 			name,
 			value,
-			isTabbed,
-			onChange,
-			resetCurrentTab
+			onChange
 		} = this.props;
 
 		const groupIndex = findIndex( value, [ '_id', groupId ] );
-
-		if ( isTabbed ) {
-			resetCurrentTab( groupIndex );
-		}
 
 		onChange( name, produce( value, ( draft ) => {
 			draft.splice( groupIndex, 1 );
@@ -154,6 +105,24 @@ class ComplexField extends Component {
 		this.setState( ( { collapsedGroups } ) => ( {
 			collapsedGroups: without( collapsedGroups, groupId )
 		} ) );
+	}
+
+	/**
+	 * Handles expanding/collapsing of group.
+	 *
+	 * @param  {string} groupId
+	 * @return {void}
+	 */
+	handleToggleGroup = ( groupId ) => {
+		this.setState( ( { collapsedGroups } ) => {
+			if ( collapsedGroups.indexOf( groupId ) > -1 ) {
+				collapsedGroups = without( collapsedGroups, groupId );
+			} else {
+				collapsedGroups = [ ...collapsedGroups, groupId ];
+			}
+
+			return { collapsedGroups };
+		} );
 	}
 
 	/**
@@ -176,21 +145,68 @@ class ComplexField extends Component {
 	}
 
 	/**
-	 * Handles expanding/collapsing of group.
+	 * Handles setuping of group.
 	 *
-	 * @param  {string} groupId
+	 * @param  {Object} group
+	 * @param  {Object} props
+	 * @return {Object}
+	 */
+	handleGroupSetup = ( group, props ) => {
+		const fields = get( find( this.props.field.groups, [ 'name', group._type ] ), 'fields', [] );
+		const values = omit( group, [ '_id', '_type' ] );
+
+		return assign( {}, props, {
+			key: group._id,
+			id: group._id,
+			fields: fields,
+			collapsed: this.state.collapsedGroups.indexOf( group._id ) > -1,
+			context: 'block',
+			values
+		} );
+	}
+
+	/**
+	 * Handles setuping of group's field.
+	 *
+	 * @param  {Object} field
+	 * @param  {Object} props
+	 * @param  {Object} groupProps
+	 * @return {Object}
+	 */
+	handleGroupFieldSetup = ( field, props, groupProps ) => {
+		const id = `${ groupProps.id }-${ field.base_name }`;
+		const value = get( groupProps, `values.${ field.base_name }` );
+
+		return assign( {}, props, {
+			key: id,
+			id: id,
+			name: `${ groupProps.index }.[${ field.base_name }]`,
+			field,
+			value,
+			onChange: this.handleGroupFieldChange
+		} );
+	}
+
+	/**
+	 * Handles the change of group field.
+	 *
+	 * @param  {string} fieldId
+	 * @param  {mixed}  fieldValue
 	 * @return {void}
 	 */
-	handleToggleGroup = ( groupId ) => {
-		this.setState( ( { collapsedGroups } ) => {
-			if ( collapsedGroups.indexOf( groupId ) > -1 ) {
-				collapsedGroups = without( collapsedGroups, groupId );
-			} else {
-				collapsedGroups = [ ...collapsedGroups, groupId ];
-			}
+	handleGroupFieldChange = ( fieldId, fieldValue ) => {
+		const {
+			id,
+			value,
+			onChange
+		} = this.props;
 
-			return { collapsedGroups };
-		} );
+		onChange( id, produce( value, ( draft ) => {
+			const path = fieldId.split( '-' );
+			const group = find( draft, [ '_id', path.shift() ] );
+
+			set( group, path, fieldValue );
+		} ) );
 	}
 
 	/**
@@ -199,153 +215,70 @@ class ComplexField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { collapsedGroups } = this.state;
-
 		const {
-			field,
-			value,
-			isTabbed,
-			currentTab,
-			isMaximumReached,
-			inserterButtonText,
-			getAvailableGroups,
-			onTabsChange
-		} = this.props;
+			handleGroupSetup,
+			handleGroupFieldSetup,
+			handleAddGroup,
+			handleCloneGroup,
+			handleRemoveGroup,
+			handleToggleGroup,
+			handleToggleAllGroups
+		} = this;
 
-		const classes = cx(
-			`cf-blocks-complex--${ field.layout }`,
-			{
-				'cf-blocks-complex--multiple-groups': field.groups.length > 1
-			}
-		);
+		const { value, children } = this.props;
 
-		const availableGroups = getAvailableGroups( '_type' );
+		const allGroupsAreCollapsed = this.state.collapsedGroups.length === value.length;
 
-		const tabs = value.map( ( { _id, _type } ) => {
-			const group = find( field.groups, [ 'name', _type ] );
-			const label = get( group, 'label', '' );
-
-			return {
-				id: _id,
-				label
-			};
+		return children( {
+			allGroupsAreCollapsed,
+			handleGroupSetup,
+			handleGroupFieldSetup,
+			handleAddGroup,
+			handleCloneGroup,
+			handleRemoveGroup,
+			handleToggleGroup,
+			handleToggleAllGroups
 		} );
-
-		return (
-			<FieldBase className={ classes } field={ field }>
-				<BaseControl label={ field.label } />
-
-				<Panel>
-					{ isTabbed && !! value.length && (
-						<ComplexTabs
-							items={ tabs }
-							current={ currentTab }
-							onChange={ onTabsChange }
-						>
-							{ !! availableGroups.length && ! isMaximumReached && (
-								<ComplexInserter
-									buttonText="+"
-									groups={ availableGroups }
-									onSelect={ this.handleAddGroup }
-								/>
-							) }
-						</ComplexTabs>
-					) }
-
-					<PanelBody>
-						{ ! value.length && (
-							<Placeholder label="There are no entries yet.">
-								<ComplexInserter
-									buttonText={ inserterButtonText }
-									groups={ availableGroups }
-									onSelect={ this.handleAddGroup }
-								/>
-							</Placeholder>
-						) }
-
-						{ value.map( ( {
-							_id,
-							_type,
-							...values
-						}, index ) => {
-							const group = find( field.groups, [ 'name', _type ] );
-
-							return (
-								<ComplexGroup
-									key={ _id }
-									id={ _id }
-									index={ index }
-									group={ group }
-									values={ values }
-									hidden={ isTabbed && currentTab !== _id }
-									collapsed={ collapsedGroups.indexOf( _id ) > -1 }
-									allowClone={ field.duplicate_groups_allowed && ! isMaximumReached }
-									onChildChange={ this.handleChildFieldChange }
-									onToggle={ this.handleToggleGroup }
-									onClone={ this.handleCloneGroup }
-									onRemove={ this.handleRemoveGroup }
-								/>
-							);
-						} ) }
-					</PanelBody>
-
-					{ ! isTabbed && !! value.length && (
-						<PanelHeader>
-							{ !! availableGroups.length && ! isMaximumReached && (
-								<ComplexInserter
-									buttonText={ inserterButtonText }
-									groups={ availableGroups }
-									onSelect={ this.handleAddGroup }
-								/>
-							) }
-
-							<Button isDefault onClick={ this.handleToggleAllGroups }>
-								{
-									collapsedGroups.length === value.length
-										? 'Expand All'
-										: 'Collapse All'
-								}
-							</Button>
-						</PanelHeader>
-					) }
-				</Panel>
-			</FieldBase>
-		);
 	}
 }
 
 addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( OriginalComplexField ) => ( props ) => {
+	const {
+		id,
+		field,
+		name,
+		value
+	} = props;
+
 	return (
-		<OriginalComplexField { ...props }>
+		<ComplexField { ...props }>
 			{ ( {
-				field,
-				name,
-				value,
-				isTabbed,
-				currentTab,
-				isMaximumReached,
-				inserterButtonText,
-				getAvailableGroups,
-				resetCurrentTab,
-				handleChange,
-				handleTabsChange
-			} ) => {
-				return (
-					<ComplexField
-						field={ field }
-						name={ name }
-						value={ value }
-						isTabbed={ isTabbed }
-						currentTab={ currentTab }
-						isMaximumReached={ isMaximumReached }
-						inserterButtonText={ inserterButtonText }
-						getAvailableGroups={ getAvailableGroups }
-						resetCurrentTab={ resetCurrentTab }
-						onChange={ handleChange }
-						onTabsChange={ handleTabsChange }
-					/>
-				);
-			} }
-		</OriginalComplexField>
+				allGroupsAreCollapsed,
+				handleGroupSetup,
+				handleGroupFieldSetup,
+				handleAddGroup,
+				handleCloneGroup,
+				handleRemoveGroup,
+				handleToggleGroup,
+				handleToggleAllGroups
+			} ) => (
+				<OriginalComplexField
+					groupIdKey="_id"
+					groupFilterKey="_type"
+					id={ id }
+					field={ field }
+					name={ name }
+					value={ value }
+					allGroupsAreCollapsed={ allGroupsAreCollapsed }
+					onGroupSetup={ handleGroupSetup }
+					onGroupFieldSetup={ handleGroupFieldSetup }
+					onAddGroup={ handleAddGroup }
+					onCloneGroup={ handleCloneGroup }
+					onRemoveGroup={ handleRemoveGroup }
+					onToggleGroup={ handleToggleGroup }
+					onToggleAllGroups={ handleToggleAllGroups }
+				/>
+			) }
+		</ComplexField>
 	);
 } );

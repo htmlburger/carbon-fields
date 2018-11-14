@@ -12,39 +12,39 @@ class ComplexTabs extends Component {
 	 */
 	render() {
 		const {
+			items,
 			current,
-			groups,
 			children,
 			onChange
 		} = this.props;
 
 		return (
-			<div className="cf-metaboxes-complex__tabs">
-				<ul className="cf-metaboxes-complex__tabs-list">
-					{ groups.map( ( group, index ) => {
+			<div className="cf-complex__tabs">
+				<ul className="cf-complex__tabs-list">
+					{ items.map( ( item, index ) => {
 						const classes = cx(
-							'cf-metaboxes-complex__tabs-item',
+							'cf-complex__tabs-item',
 							{
-								'cf-metaboxes-complex__tabs-item--current': group.id === current
+								'cf-complex__tabs-item--current': item.id === current
 							}
 						);
 
 						return (
 							<li
-								key={ group.id }
+								key={ item.id }
 								className={ classes }
-								onClick={ () => onChange( group.id ) }
+								onClick={ () => onChange( item.id ) }
 							>
 								{
-									group.label
+									item.label
 										? <span
-											className="cf-metaboxes-complex__tabs-title"
-											dangerouslySetInnerHTML={ { __html: group.label } }
+											className="cf-complex__tabs-title"
+											dangerouslySetInnerHTML={ { __html: item.label } }
 										></span>
 										: null
 								}
 
-								<span className="cf-metaboxes-complex__tabs-index">
+								<span className="cf-complex__tabs-index">
 									{ index + 1 }
 								</span>
 							</li>

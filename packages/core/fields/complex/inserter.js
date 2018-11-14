@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import onClickOutside from 'react-onclickoutside';
+// import onClickOutside from 'react-onclickoutside';
 import { Component } from '@wordpress/element';
 
 class ComplexInserter extends Component {
@@ -20,6 +20,7 @@ class ComplexInserter extends Component {
 	 * @return {void}
 	 */
 	handleClickOutside = () => {
+		// TODO: Wrap element with `onClickOutside`.
 		this.setState( {
 			menuVisible: false
 		} );
@@ -65,16 +66,16 @@ class ComplexInserter extends Component {
 		const { buttonText, groups } = this.props;
 
 		return (
-			<div className="cf-metaboxes-complex__inserter">
-				<button type="button" className="cf-metaboxes-complex__inserter-button" onClick={ this.handleAddClick }>
+			<div className="cf-complex__inserter">
+				<button type="button" className="cf-complex__inserter-button" onClick={ this.handleAddClick }>
 					{ buttonText }
 				</button>
 
 				{ groups.length > 1 && (
-					<ul className="cf-metaboxes-complex__inserter-menu" hidden={ ! this.state.menuVisible }>
+					<ul className="cf-complex__inserter-menu" hidden={ ! this.state.menuVisible }>
 						{ groups.map( ( group, index ) => (
 							<li
-								className="cf-metaboxes-complex__inserter-item"
+								className="cf-complex__inserter-item"
 								key={ index }
 								onClick={ () => this.handleItemClick( group ) }
 							>
@@ -88,4 +89,4 @@ class ComplexInserter extends Component {
 	}
 }
 
-export default onClickOutside( ComplexInserter );
+export default ComplexInserter;

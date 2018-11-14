@@ -14,6 +14,7 @@
     "react-dnd": "^5.0.0",
     "react-dnd-html5-backend": "^5.0.1",
     "react-flatpickr": "^3.6.4",
+    "react-onclickoutside": "^6.7.1",
     "refract-callbag": "^2.2.2"
   }
 }
