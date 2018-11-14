@@ -113,9 +113,7 @@ class Loader {
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 		$context = wp_script_is( 'wp-element' ) ? 'gutenberg' : 'classic';
 
-		// wp_enqueue_style( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.css', array(), \Carbon_Fields\VERSION );
-
-		wp_enqueue_style( 'carbon-fields-metaboxes', \Carbon_Fields\URL . '/build/' . $context . '/core' . $suffix . '.css', array(), \Carbon_Fields\VERSION );
+		wp_enqueue_style( 'carbon-fields-core', \Carbon_Fields\URL . '/build/' . $context . '/core' . $suffix . '.css', array(), \Carbon_Fields\VERSION );
 		wp_enqueue_style( 'carbon-fields-metaboxes', \Carbon_Fields\URL . '/build/' . $context . '/metaboxes' . $suffix . '.css', array(), \Carbon_Fields\VERSION );
 
 		wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/build/' . $context . '/vendor' . $suffix . '.js', array(), \Carbon_Fields\VERSION );
@@ -127,6 +125,8 @@ class Loader {
 
 			wp_enqueue_script( 'carbon-fields-blocks', \Carbon_Fields\URL . '/build/' . $context . '/blocks' . $suffix . '.js', array( 'carbon-fields-vendor' ), \Carbon_Fields\VERSION );
 		}
+
+		// wp_enqueue_style( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.css', array(), \Carbon_Fields\VERSION );
 
 		// wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/assets/dist/carbon.vendor' . $suffix . '.js', array( 'jquery' ), \Carbon_Fields\VERSION );
 		// wp_enqueue_script( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.core' . $suffix . '.js', array( 'carbon-fields-vendor', 'quicktags', 'editor' ), \Carbon_Fields\VERSION );
