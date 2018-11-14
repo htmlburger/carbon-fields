@@ -9,6 +9,7 @@ import {
 	pipe,
 	merge
 } from 'callbag-basics';
+import of from 'callbag-of';
 
 /**
  * Internal dependencies.
@@ -52,7 +53,7 @@ class SidebarField extends Component {
 		} = this.props;
 
 		return (
-			<FieldBase field={ field }>
+			<FieldBase id={ id } field={ field }>
 				<select
 					id={ id }
 					name={ name }
@@ -79,13 +80,13 @@ class SidebarField extends Component {
  */
 function aperture() {
 	return function( component ) {
-		const [ addSidebar$, addSidebar ] = component.useEvent( 'addSidebar', null );
+		const [ addSidebar$, addSidebar ] = component.useEvent( 'addSidebar' );
 
 		const addSidebarProps$ = pipe(
-			addSidebar$,
-			map( () => toProps( {
+			of( {
 				onAdd: addSidebar
-			} ) )
+			} ),
+			map( toProps )
 		);
 
 		const addSidebarEffect$ = pipe(

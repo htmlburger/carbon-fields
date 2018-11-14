@@ -2,7 +2,6 @@
  * External dependencies.
  */
 import produce from 'immer';
-import nanoid from 'nanoid';
 import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import {
@@ -15,6 +14,11 @@ import {
 	cloneDeep,
 	findIndex
 } from 'lodash';
+
+/**
+ * Carbon Fields dependencies.
+ */
+import { uniqueId } from '@carbon-fields/core';
 
 class ComplexField extends Component {
 	/**
@@ -42,7 +46,7 @@ class ComplexField extends Component {
 
 		const data = {};
 
-		data._id = nanoid();
+		data._id = uniqueId();
 		data._type = group.name;
 
 		group.fields.reduce( ( accumulator, field ) => {
@@ -74,7 +78,7 @@ class ComplexField extends Component {
 		const index = value.indexOf( group );
 		const clonedGroup = cloneDeep( group );
 
-		clonedGroup._id = nanoid();
+		clonedGroup._id = uniqueId();
 
 		onChange( name, produce( value, ( draft ) => {
 			draft.splice( index + 1, 0, clonedGroup );
@@ -180,7 +184,6 @@ class ComplexField extends Component {
 		return assign( {}, props, {
 			key: id,
 			id: id,
-			name: `${ groupProps.index }.[${ field.base_name }]`,
 			field,
 			value,
 			onChange: this.handleGroupFieldChange

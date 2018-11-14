@@ -28,15 +28,16 @@ class TextareaField extends Component {
 	 */
 	render() {
 		const {
+			id,
 			field,
 			name,
 			value
 		} = this.props;
 
 		return (
-			<FieldBase field={ field } >
+			<FieldBase id={ id } field={ field } >
 				<textarea
-					id={ field.id }
+					id={ id }
 					name={ name }
 					value={ value }
 					onChange={ this.handleChange }

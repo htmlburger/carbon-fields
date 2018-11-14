@@ -27,6 +27,7 @@ class CheckboxField extends Component {
 	 */
 	render() {
 		const {
+			id,
 			field,
 			name,
 			value
@@ -37,9 +38,10 @@ class CheckboxField extends Component {
 				<label className="cf-metaboxes-checkbox__inner">
 					<input
 						type="checkbox"
-						id={ field.id }
+						id={ id }
 						name={ name }
 						checked={ value }
+						value={ field.option_value }
 						onChange={ this.handleChange }
 						{ ...field.attributes }
 					/>

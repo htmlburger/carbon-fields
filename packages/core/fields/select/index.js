@@ -23,46 +23,37 @@ export class SelectField extends Component {
 	}
 
 	/**
-	 * Renders the radio options
+	 * Renders the component.
 	 *
 	 * @return {Object}
 	 */
-	renderOptions() {
+	render() {
 		const {
+			id,
 			field,
 			name,
 			value
 		} = this.props;
 
 		return (
-			<select
-				id={ field.id }
-				name={ name }
-				value={ value }
-				onChange={ this.handleChange }
-			>
-				{ field.options.map( ( option ) => (
-					<option key={ option.value } value={ option.value }>
-						{ option.label }
-					</option>
-				) ) }
-			</select>
-		);
-	}
-
-	/**
-	 * Renders the component.
-	 *
-	 * @return {Object}
-	 */
-	render() {
-		const { field } = this.props;
-
-		return (
-			<FieldBase field={ field } >
-				{ field.options.length > 0
-					? this.renderOptions()
-					: <NoOptions />
+			<FieldBase id={ id } field={ field } >
+				{
+					field.options.length > 0
+						? (
+							<select
+								id={ id }
+								name={ name }
+								value={ value }
+								onChange={ this.handleChange }
+							>
+								{ field.options.map( ( option ) => (
+									<option key={ option.value } value={ option.value }>
+										{ option.label }
+									</option>
+								) ) }
+							</select>
+						)
+						: <NoOptions />
 				}
 			</FieldBase>
 		);

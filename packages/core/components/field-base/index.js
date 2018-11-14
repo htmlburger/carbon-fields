@@ -13,16 +13,18 @@ import './style.scss';
  * Renders the base wrapper of the field.
  *
  * @param  {Object} props
- * @param  {string} props.className
+ * @param  {string} props.id
  * @param  {Object} props.field
+ * @param  {string} props.className
  * @param  {mixed}  props.children
  * @return {Object}
  */
-export const FieldBase = ( {
-	className,
+function FieldBase( {
+	id,
 	field,
+	className,
 	children
-} ) => {
+} ) {
 	const styles = !! field.width ? { flexBasis: `${ field.width }%` } : null;
 
 	const classes = [
@@ -37,7 +39,7 @@ export const FieldBase = ( {
 		<div className={ cx( classes ) } style={ styles }>
 			<div className="cf-field__head">
 				{ field.label && (
-					<label className="cf-field__label" htmlFor={ field.id }>
+					<label className="cf-field__label" htmlFor={ id }>
 						{ field.label }
 
 						{ field.required && (
@@ -56,6 +58,6 @@ export const FieldBase = ( {
 			) }
 		</div>
 	);
-};
+}
 
 export default FieldBase;
