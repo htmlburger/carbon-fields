@@ -3,21 +3,30 @@
  */
 import { Component } from '@wordpress/element';
 import { xor } from 'lodash';
+import Select from 'react-select';
+
+/**
+ * The internal dependencies.
+ */
+import FieldBase from '../../components/field-base';
+import NoOptions from '../../components/no-options';
 
 class MultiselectField extends Component {
 	/**
-	 * Handles the change of the field.
+	 * Handles the change of the input.
 	 *
-	 * @param  {string}        fieldKey
-	 * @param  {Array}         values
-	 * @param  {string|number} optionValue
+	 * @param {Object}        option
+	 * @param {string|number} option.value
 	 * @return {void}
 	 */
-	handleChange = ( fieldKey, values, optionValue ) => {
-		this.props.onChange(
-			fieldKey,
-			xor( values, [ optionValue ] )
-		);
+	handleChange = ( { value } ) => {
+		const {
+			id,
+			field,
+			onChange
+		} = this.props;
+
+		onChange( id, xor( field.value, [ value ] ) );
 	}
 
 	/**
@@ -33,25 +42,47 @@ class MultiselectField extends Component {
 	}
 
 	/**
-	 * Render the component.
+	 * Renders the radio options
+	 *
+	 * @return {Object}
+	 */
+	renderOptions() {
+		const {
+			id,
+			field,
+			name,
+			value
+		} = this.props;
+
+		return (
+			<Select
+				multi
+				joinValues
+				id={ id }
+				name={ name }
+				value={ this.filterValues( value ) }
+				options={ field.options }
+				onChange={ this.handleChange }
+			/>
+		);
+	}
+
+	/**
+	 * Renders the component.
 	 *
 	 * @return {Object}
 	 */
 	render() {
-		const {
-			field,
-			name,
-			value,
-			children
-		} = this.props;
+		const { field } = this.props;
 
-		return children( {
-			field,
-			name,
-			value,
-			handleChange: this.handleChange,
-			filterValues: this.filterValues
-		} );
+		return (
+			<FieldBase field={ field } >
+				{ field.options.length > 0
+					? this.renderOptions()
+					: <NoOptions />
+				}
+			</FieldBase>
+		);
 	}
 }
 

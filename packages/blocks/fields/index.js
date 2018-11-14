@@ -13,6 +13,7 @@ import './hidden';
 import './html';
 import './map';
 import './media-gallery';
+import './multiselect';
 import './oembed';
 import './radio';
 import './radio-image';
