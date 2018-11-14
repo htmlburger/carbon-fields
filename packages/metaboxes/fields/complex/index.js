@@ -1,42 +1,40 @@
 /**
  * External dependencies.
  */
-import cx from 'classnames';
 import produce from 'immer';
 import nanoid from 'nanoid';
 import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { compose } from '@wordpress/compose';
 import { withDispatch } from '@wordpress/data';
-import { cloneDeep, without } from 'lodash';
+import {
+	find,
+	assign,
+	without,
+	cloneDeep
+} from 'lodash';
 
 /**
  * The internal dependencies.
  */
-import FieldBase from '../../components/field-base';
 import withField from '../../components/with-field';
 import flattenField from '../../utils/flatten-field';
-import ComplexTabs from './tabs';
-import ComplexInserter from './inserter';
-import ComplexToggler from './toggler';
-import ComplexGroup from './group';
-import ComplexPlaceholder from './placeholder';
 
 class ComplexField extends Component {
 	/**
 	 * Handles adding of group.
 	 *
-	 * @param  {Object} group
-	 * @return {void}
+	 * @param  {Object}   group
+	 * @param  {Function} callback
+	 * @return {Object}
 	 */
-	handleAddGroup = ( group ) => {
+	handleAddGroup = ( group, callback ) => {
 		const {
+			id,
 			field,
 			value,
-			isTabbed,
 			addFields,
-			onChange,
-			onTabsChange
+			onChange
 		} = this.props;
 
 		// Create a copy of the group to prevent
@@ -52,11 +50,88 @@ class ComplexField extends Component {
 
 		// Push the group to the field.
 		addFields( fields );
-		onChange( field.id, value.concat( group ) );
+		onChange( id, value.concat( group ) );
 
-		if ( isTabbed ) {
-			onTabsChange( group.id );
-		}
+		callback( group );
+	}
+
+	/**
+	 * Handles cloning of group.
+	 *
+	 * @param  {Object}   group
+	 * @param  {Function} callback
+	 * @return {void}
+	 */
+	handleCloneGroup = ( group, callback ) => {
+		const {
+			id,
+			value,
+			cloneFields,
+			onChange
+		} = this.props;
+
+		const originFieldIds = group.fields.map( ( groupField ) => groupField.id );
+		const cloneFieldIds = originFieldIds.map( () => nanoid() );
+		const clonedGroup = cloneDeep( group );
+
+		clonedGroup.id = nanoid();
+		clonedGroup.fields.forEach( ( groupField, index ) => {
+			groupField.id = cloneFieldIds[ index ];
+		} );
+
+		cloneFields( originFieldIds, cloneFieldIds );
+
+		onChange( id, produce( value, ( draft ) => {
+			draft.splice( value.indexOf( group ) + 1, 0, clonedGroup );
+		} ) );
+
+		callback( clonedGroup );
+	}
+
+	/**
+	 * Handles removing of group.
+	 *
+	 * @param  {Object} group
+	 * @return {void}
+	 */
+	handleRemoveGroup = ( group ) => {
+		const {
+			id,
+			value,
+			removeFields,
+			onChange
+		} = this.props;
+
+		onChange( id, without( value, group ) );
+
+		// Delay removal of fields because React will complain
+		// about missing objects.
+		// TODO: Investigate why this is necessary.
+		setTimeout( () => {
+			const fieldIds = group.fields.map( ( groupField ) => groupField.id );
+
+			removeFields( fieldIds );
+		}, 1 );
+	}
+
+	/**
+	 * Handles expanding/collapsing of group.
+	 *
+	 * @param  {string} groupId
+	 * @return {void}
+	 */
+	handleToggleGroup = ( groupId ) => {
+		const {
+			field,
+			value,
+			onChange
+		} = this.props;
+
+		onChange( field.id, produce( value, ( draft ) => {
+			const group = find( draft, [ 'id', groupId ] );
+
+			group.collapsed = ! group.collapsed;
+		} ) );
 	}
 
 	/**
@@ -80,91 +155,38 @@ class ComplexField extends Component {
 	}
 
 	/**
-	 * Handles expanding/collapsing of group.
-	 *
-	 * @param  {number} groupIndex
-	 * @return {void}
-	 */
-	handleToggleGroup = ( groupIndex ) => {
-		const {
-			field,
-			value,
-			onChange
-		} = this.props;
-
-		onChange( field.id, produce( value, ( draft ) => {
-			const group = draft[ groupIndex ];
-
-			group.collapsed = ! group.collapsed;
-		} ) );
-	}
-
-	/**
-	 * Handles cloning of group.
+	 * Handles setuping of group.
 	 *
 	 * @param  {Object} group
-	 * @return {void}
+	 * @param  {Object} props
+	 * @return {Object}
 	 */
-	handleCloneGroup = ( group ) => {
-		const {
-			field,
-			value,
-			isTabbed,
-			cloneFields,
-			onChange,
-			onTabsChange
-		} = this.props;
-
-		const originFieldIds = group.fields.map( ( groupField ) => groupField.id );
-		const cloneFieldIds = originFieldIds.map( () => nanoid() );
-		const clonedGroup = cloneDeep( group );
-
-		clonedGroup.id = nanoid();
-		clonedGroup.fields.forEach( ( groupField, index ) => {
-			groupField.id = cloneFieldIds[ index ];
+	handleGroupSetup = ( group, props ) => {
+		return assign( {}, props, {
+			key: group.id,
+			id: group.id,
+			name: group.name,
+			prefix: `${ this.props.name }[${ props.index }]`,
+			fields: group.fields,
+			collapsed: group.collapsed,
+			context: 'metabox'
 		} );
-
-		cloneFields( originFieldIds, cloneFieldIds );
-
-		onChange( field.id, produce( value, ( draft ) => {
-			draft.splice( value.indexOf( group ) + 1, 0, clonedGroup );
-		} ) );
-
-		if ( isTabbed ) {
-			onTabsChange( clonedGroup.id );
-		}
 	}
 
 	/**
-	 * Handles the removal of group.
+	 * Handles setuping of group's field.
 	 *
-	 * @param  {Object} group
-	 * @return {void}
+	 * @param  {Object} field
+	 * @param  {Object} props
+	 * @param  {Object} groupProps
+	 * @return {Object}
 	 */
-	handleRemoveGroup = ( group ) => {
-		const {
-			field,
-			value,
-			isTabbed,
-			removeFields,
-			resetCurrentTab,
-			onChange
-		} = this.props;
-
-		if ( isTabbed ) {
-			resetCurrentTab( value.indexOf( group ) );
-		}
-
-		onChange( field.id, without( value, group ) );
-
-		// Delay removal of fields because React will complain
-		// about missing objects.
-		// TODO: Investigate why this is necessary.
-		setTimeout( () => {
-			const fieldIds = group.fields.map( ( groupField ) => groupField.id );
-
-			removeFields( fieldIds );
-		}, 1 );
+	handleGroupFieldSetup = ( field, props, groupProps ) => {
+		return assign( {}, props, {
+			key: field.id,
+			id: field.id,
+			name: `${ groupProps.prefix }[${ field.name }]`
+		} );
 	}
 
 	/**
@@ -174,88 +196,29 @@ class ComplexField extends Component {
 	 */
 	render() {
 		const {
-			field,
-			name,
-			value,
-			isTabbed,
-			currentTab,
-			isMaximumReached,
-			inserterButtonText,
-			getAvailableGroups,
-			onTabsChange
-		} = this.props;
+			handleGroupSetup,
+			handleGroupFieldSetup,
+			handleAddGroup,
+			handleCloneGroup,
+			handleRemoveGroup,
+			handleToggleGroup,
+			handleToggleAllGroups
+		} = this;
 
-		const classes = cx(
-			`cf-metaboxes-complex--${ field.layout }`,
-			{
-				'cf-metaboxes-complex--multiple-groups': field.groups.length > 1
-			}
-		);
+		const { value, children } = this.props;
 
-		const availableGroups = getAvailableGroups( 'name' );
+		const allGroupsAreCollapsed = value.every( ( { collapsed } ) => collapsed );
 
-		return (
-			<FieldBase className={ classes } field={ field }>
-				{ isTabbed && !! value.length && (
-					<ComplexTabs
-						current={ currentTab }
-						groups={ value }
-						onChange={ onTabsChange }
-					>
-						{ !! availableGroups.length && ! isMaximumReached && (
-							<ComplexInserter
-								buttonText="+"
-								groups={ availableGroups }
-								onSelect={ this.handleAddGroup }
-							/>
-						) }
-					</ComplexTabs>
-				) }
-
-				{ ! value.length && (
-					<ComplexPlaceholder label="There are no entries yet.">
-						<ComplexInserter
-							buttonText={ inserterButtonText }
-							groups={ availableGroups }
-							onSelect={ this.handleAddGroup }
-						/>
-					</ComplexPlaceholder>
-				) }
-
-				<div className="cf-metaboxes-complex__groups">
-					{ value.map( ( group, index ) => (
-						<ComplexGroup
-							key={ group.id }
-							index={ index }
-							group={ group }
-							prefix={ `${ name }[${ index }]` }
-							hidden={ isTabbed && group.id !== currentTab }
-							allowClone={ field.duplicate_groups_allowed && ! isMaximumReached }
-							onToggle={ this.handleToggleGroup }
-							onClone={ this.handleCloneGroup }
-							onRemove={ this.handleRemoveGroup }
-						/>
-					) ) }
-				</div>
-
-				{ ! isTabbed && !! value.length && (
-					<div className="cf-metaboxes-complex__actions">
-						{ !! availableGroups.length && ! isMaximumReached && (
-							<ComplexInserter
-								buttonText={ inserterButtonText }
-								groups={ availableGroups }
-								onSelect={ this.handleAddGroup }
-							/>
-						) }
-
-						<ComplexToggler
-							groups={ value }
-							onToggle={ this.handleToggleAllGroups }
-						/>
-					</div>
-				) }
-			</FieldBase>
-		);
+		return children( {
+			allGroupsAreCollapsed,
+			handleGroupSetup,
+			handleGroupFieldSetup,
+			handleAddGroup,
+			handleCloneGroup,
+			handleRemoveGroup,
+			handleToggleGroup,
+			handleToggleAllGroups
+		} );
 	}
 }
 
@@ -277,38 +240,42 @@ addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( O
 	withField,
 	applyWithDispatch
 )( ( props ) => {
+	const {
+		id,
+		field,
+		name,
+		value
+	} = props;
+
 	return (
-		<OriginalComplexField { ...props }>
+		<ComplexField { ...props }>
 			{ ( {
-				field,
-				name,
-				value,
-				isTabbed,
-				currentTab,
-				isMaximumReached,
-				inserterButtonText,
-				getAvailableGroups,
-				resetCurrentTab,
-				handleChange,
-				handleTabsChange
+				allGroupsAreCollapsed,
+				handleGroupSetup,
+				handleGroupFieldSetup,
+				handleAddGroup,
+				handleCloneGroup,
+				handleRemoveGroup,
+				handleToggleGroup,
+				handleToggleAllGroups
 			} ) => (
-				<ComplexField
+				<OriginalComplexField
+					groupIdKey="id"
+					groupFilterKey="name"
+					id={ id }
 					field={ field }
 					name={ name }
 					value={ value }
-					isTabbed={ isTabbed }
-					currentTab={ currentTab }
-					isMaximumReached={ isMaximumReached }
-					inserterButtonText={ inserterButtonText }
-					addFields={ props.addFields }
-					cloneFields={ props.cloneFields }
-					removeFields={ props.removeFields }
-					getAvailableGroups={ getAvailableGroups }
-					resetCurrentTab={ resetCurrentTab }
-					onChange={ handleChange }
-					onTabsChange={ handleTabsChange }
+					allGroupsAreCollapsed={ allGroupsAreCollapsed }
+					onGroupSetup={ handleGroupSetup }
+					onGroupFieldSetup={ handleGroupFieldSetup }
+					onAddGroup={ handleAddGroup }
+					onCloneGroup={ handleCloneGroup }
+					onRemoveGroup={ handleRemoveGroup }
+					onToggleGroup={ handleToggleGroup }
+					onToggleAllGroups={ handleToggleAllGroups }
 				/>
 			) }
-		</OriginalComplexField>
+		</ComplexField>
 	);
 } ) );

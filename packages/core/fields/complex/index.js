@@ -1,8 +1,18 @@
 /**
  * External dependencies.
  */
+import cx from 'classnames';
 import { Component } from '@wordpress/element';
-import { get, isUndefined } from 'lodash';
+import { get, find } from 'lodash';
+
+/**
+ * The internal dependencies.
+ */
+import FieldBase from '../../components/field-base';
+import ComplexTabs from './tabs';
+import ComplexInserter from './inserter';
+import ComplexGroup from './group';
+import ComplexPlaceholder from './placeholder';
 
 class ComplexField extends Component {
 	/**
@@ -11,17 +21,8 @@ class ComplexField extends Component {
 	 * @type {Object}
 	 */
 	state = {
-		currentTab: null
+		currentTab: get( this.props.value, `0.${ this.props.groupIdKey }`, null )
 	};
-
-	/**
-	 * Lifecycle hook.
-	 *
-	 * @return {void}
-	 */
-	componentDidMount() {
-		this.resetCurrentTab();
-	}
 
 	/**
 	 * Returns true if the field is using tabs for the layout.
@@ -56,13 +57,25 @@ class ComplexField extends Component {
 	}
 
 	/**
+	 * Finds a group.
+	 *
+	 * @param  {string} groupId
+	 * @return {?Object}
+	 */
+	findGroup( groupId ) {
+		const { value, groupIdKey } = this.props;
+
+		return find( value, [ groupIdKey, groupId ] );
+	}
+
+	/**
 	 * Returns a list of groups that can be added if the field
 	 * doesn't allow duplicating of groups.
 	 *
 	 * @param  {string} key
 	 * @return {Object[]}
 	 */
-	getAvailableGroups = ( key ) => {
+	getAvailableGroups( key ) {
 		const { field, value } = this.props;
 
 		if ( field.duplicate_groups_allowed ) {
@@ -72,6 +85,78 @@ class ComplexField extends Component {
 		const existingGroupNames = value.map( ( group ) => group[ key ] );
 
 		return field.groups.filter( ( { name } ) => existingGroupNames.indexOf( name ) === -1 );
+	}
+
+	/**
+	 * Handles adding of group.
+	 *
+	 * @param  {Object} selection
+	 * @return {void}
+	 */
+	handleAddGroup = ( selection ) => {
+		const { groupIdKey, onAddGroup } = this.props;
+
+		onAddGroup( selection, ( group ) => {
+			if ( this.isTabbed ) {
+				this.handleTabsChange( group[ groupIdKey ] );
+			}
+		} );
+	}
+
+	/**
+	 * Handles cloning of group.
+	 *
+	 * @param  {string} groupId
+	 * @return {void}
+	 */
+	handleCloneGroup = ( groupId ) => {
+		const { groupIdKey, onCloneGroup } = this.props;
+
+		const group = this.findGroup( groupId );
+
+		onCloneGroup( group, ( clonedGroup ) => {
+			if ( this.isTabbed ) {
+				this.handleTabsChange( clonedGroup[ groupIdKey ] );
+			}
+		} );
+	}
+
+	/**
+	 * Handles removing of group.
+	 *
+	 * @param  {string} groupId
+	 * @return {void}
+	 */
+	handleRemoveGroup = ( groupId ) => {
+		const {
+			value,
+			groupIdKey,
+			onRemoveGroup
+		} = this.props;
+
+		const group = this.findGroup( groupId );
+
+		if ( this.isTabbed ) {
+			const currentIndex = value.indexOf( group );
+			const nextIndex = currentIndex > 0 ? currentIndex - 1 : 1;
+
+			this.setState( {
+				currentTab: get( value, `${ nextIndex }.${ groupIdKey }`, null )
+			} );
+		}
+
+		onRemoveGroup( group );
+	}
+
+	/**
+	 * Handles click on the "Expand/Collapse All" button.
+	 *
+	 * @return {void}
+	 */
+	handleToggleAllClick = () => {
+		const { allGroupsAreCollapsed, onToggleAllGroups } = this.props;
+
+		onToggleAllGroups( ! allGroupsAreCollapsed );
 	}
 
 	/**
@@ -87,73 +172,105 @@ class ComplexField extends Component {
 	}
 
 	/**
-	 * Resets the current tab when group is removed.
-	 *
-	 * @param  {number} [groupIndex]
-	 * @return {void}
-	 */
-	resetCurrentTab = ( groupIndex ) => {
-		const { value } = this.props;
-		let currentTab = null;
-
-		if ( isUndefined( groupIndex ) ) {
-			groupIndex = 0;
-		} else {
-			groupIndex = groupIndex > 0 ? groupIndex - 1 : 1;
-		}
-
-		const locations = [ 'id', '_id' ];
-
-		for ( const location of locations ) {
-			const id = get( value, `${ groupIndex }.${ location }` );
-
-			if ( id ) {
-				currentTab = id;
-
-				break;
-			}
-		}
-
-		this.setState( {
-			currentTab
-		} );
-	}
-
-	/**
-	 * Render the component.
+	 * Renders the component.
 	 *
 	 * @return {Object}
 	 */
 	render() {
-		const {
-			isTabbed,
-			isMaximumReached,
-			inserterButtonText
-		} = this;
-
 		const { currentTab } = this.state;
 
 		const {
 			field,
-			name,
 			value,
-			children,
-			onChange
+			groupIdKey,
+			groupFilterKey,
+			allGroupsAreCollapsed,
+			onGroupSetup,
+			onGroupFieldSetup,
+			onToggleGroup
 		} = this.props;
 
-		return children( {
-			field,
-			name,
-			value,
-			isTabbed,
-			currentTab,
-			isMaximumReached,
-			inserterButtonText,
-			getAvailableGroups: this.getAvailableGroups,
-			resetCurrentTab: this.resetCurrentTab,
-			handleChange: onChange,
-			handleTabsChange: this.handleTabsChange
+		const classes = cx(
+			`cf-complex--${ field.layout }`,
+			{
+				'cf-complex--multiple-groups': field.groups.length > 1
+			}
+		);
+
+		const availableGroups = this.getAvailableGroups( groupFilterKey );
+
+		// TODO: Move this to a memoized function.
+		const tabs = value.map( ( group ) => {
+			const id = group[ groupIdKey ];
+			const label = get( find( field.groups, [ 'name', group[ groupFilterKey ] ] ), 'label', '' );
+
+			return {
+				id,
+				label
+			};
 		} );
+
+		return (
+			<FieldBase className={ classes } field={ field }>
+				{ this.isTabbed && !! value.length && (
+					<ComplexTabs
+						items={ tabs }
+						current={ currentTab }
+						onChange={ this.handleTabsChange }
+					>
+						{ !! availableGroups.length && ! this.isMaximumReached && (
+							<ComplexInserter
+								buttonText="+"
+								groups={ availableGroups }
+								onSelect={ this.handleAddGroup }
+							/>
+						) }
+					</ComplexTabs>
+				) }
+
+				{ ! value.length && (
+					<ComplexPlaceholder label="There are no entries yet.">
+						<ComplexInserter
+							buttonText={ this.inserterButtonText }
+							groups={ availableGroups }
+							onSelect={ this.handleAddGroup }
+						/>
+					</ComplexPlaceholder>
+				) }
+
+				<div className="cf-metaboxes-complex__groups">
+					{ value.map( ( group, index ) => (
+						// The `key` will be assigned via `onGroupSetup`.
+						// eslint-disable-next-line react/jsx-key
+						<ComplexGroup { ...onGroupSetup( group, {
+							index,
+							hidden: this.isTabbed && group[ groupIdKey ] !== currentTab,
+							allowClone: field.duplicate_groups_allowed && ! this.isMaximumReached,
+							onFieldSetup: onGroupFieldSetup,
+							onClone: this.handleCloneGroup,
+							onRemove: this.handleRemoveGroup,
+							onToggle: onToggleGroup
+						} ) } />
+					) ) }
+				</div>
+
+				{ ! this.isTabbed && !! value.length && (
+					<div className="cf-metaboxes-complex__actions">
+						{ !! availableGroups.length && ! this.isMaximumReached && (
+							<ComplexInserter
+								buttonText={ this.inserterButtonText }
+								groups={ availableGroups }
+								onSelect={ this.handleAddGroup }
+							/>
+						) }
+
+						<button type="button" className="cf-complex__toggler" onClick={ this.handleToggleAllClick }>
+							{ allGroupsAreCollapsed ? 'Expand All' : 'Collapse All' }
+						</button>
+					</div>
+				) }
+			</FieldBase>
+		);
 	}
 }
 

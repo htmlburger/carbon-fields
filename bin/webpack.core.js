@@ -20,6 +20,8 @@ const config = {
 		libraryTarget: 'this'
 	},
 	externals: {
+		'react': [ 'cf', 'vendor', 'react' ],
+		'react-dom': [ 'cf', 'vendor', 'react-dom' ],
 		'refract-callbag': [ 'cf', 'vendor', 'refract-callbag' ],
 		'callbag-basics': [ 'cf', 'vendor', 'callbag-basics' ],
 		'classnames': [ 'cf', 'vendor', 'classnames' ]
