@@ -17,6 +17,7 @@ import './multiselect';
 import './oembed';
 import './radio';
 import './radio-image';
+import './rich-text';
 import './select';
 import './set';
 import './sidebar';
