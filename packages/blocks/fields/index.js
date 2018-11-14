@@ -19,6 +19,7 @@ import './radio';
 import './radio-image';
 import './rich-text';
 import './select';
+import './separator';
 import './set';
 import './sidebar';
 import './text';
