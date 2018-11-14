@@ -28,16 +28,17 @@ class TextField extends Component {
 	 */
 	render() {
 		const {
-			field,
+			id,
 			name,
-			value
+			value,
+			field
 		} = this.props;
 
 		return (
-			<FieldBase field={ field }>
+			<FieldBase id={ id } field={ field }>
 				<input
 					type="text"
-					id={ field.id }
+					id={ id }
 					name={ name }
 					value={ value }
 					onChange={ this.handleChange }

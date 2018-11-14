@@ -42,16 +42,17 @@ class SetField extends Component {
 
 	renderOptions() {
 		const {
+			id,
 			field,
 			name,
 			value
 		} = this.props;
 
 		return field.options.map( ( option ) => (
-			<label key={ `${ field.id }-${ option.value }` }>
+			<label key={ `${ id }-${ option.value }` }>
 				<input
 					type="checkbox"
-					id={ `${ field.id }-${ option.value }` }
+					id={ `${ id }-${ option.value }` }
 					name={ `${ name }-${ option.value }` }
 					checked={ this.isChecked( value, option ) }
 					value={ option.value }

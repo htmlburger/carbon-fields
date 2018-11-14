@@ -91,6 +91,7 @@ class DatetimeField extends Component {
 	 */
 	render() {
 		const {
+			id,
 			field,
 			name,
 			value,
@@ -111,6 +112,7 @@ class DatetimeField extends Component {
 				>
 					<input
 						type="text"
+						id={ id }
 						name={ name }
 						value={ value }
 						onChange={ this.handleManualInput }

@@ -52,7 +52,7 @@ class SidebarField extends Component {
 		} = this.props;
 
 		return (
-			<FieldBase field={ field }>
+			<FieldBase id={ id } field={ field }>
 				<select
 					id={ id }
 					name={ name }

@@ -29,6 +29,7 @@ export class SelectField extends Component {
 	 */
 	renderOptions() {
 		const {
+			id,
 			field,
 			name,
 			value
@@ -36,7 +37,7 @@ export class SelectField extends Component {
 
 		return (
 			<select
-				id={ field.id }
+				id={ id }
 				name={ name }
 				value={ value }
 				onChange={ this.handleChange }
@@ -56,10 +57,10 @@ export class SelectField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field } = this.props;
+		const { id, field } = this.props;
 
 		return (
-			<FieldBase field={ field } >
+			<FieldBase id={ id } field={ field } >
 				{ field.options.length > 0
 					? this.renderOptions()
 					: <NoOptions />

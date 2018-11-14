@@ -73,10 +73,10 @@ class MultiselectField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field } = this.props;
+		const { id, field } = this.props;
 
 		return (
-			<FieldBase field={ field } >
+			<FieldBase id={ id } field={ field } >
 				{ field.options.length > 0
 					? this.renderOptions()
 					: <NoOptions />
