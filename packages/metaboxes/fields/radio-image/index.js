@@ -16,7 +16,7 @@ addFilter( 'carbon-fields.radio_image-field.metabox', 'carbon-fields/metaboxes',
 				...props.field,
 				options: props.field.options.map( ( option ) => ( {
 					...option,
-					label: ( <img src={ option.label } /> )
+					label: ( <img className="cf-radio-image__image" src={ option.label } /> )
 				} ) )
 			} }
 		/>
