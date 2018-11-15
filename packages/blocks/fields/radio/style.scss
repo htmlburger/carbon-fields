@@ -7,13 +7,3 @@
 		list-style: none outside none;
 	}
 }
-
-.cf-radio__label {
-	.wp-block & {
-		font-family: $wp-font;
-		font-size: $wp-font-size;
-		line-height: $wp-line-height;
-		color: $gb-dark-gray-500;
-		vertical-align: middle;
-	}
-}
