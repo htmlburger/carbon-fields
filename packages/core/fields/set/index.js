@@ -66,7 +66,7 @@ class SetField extends Component {
 										<input
 											type="checkbox"
 											id={ `${ id }-${ option.value }` }
-											name={ `${ name }-${ option.value }` }
+											name={ `${ name }[]` }
 											checked={ this.isChecked( value, option ) }
 											value={ option.value }
 											className="cf-set__input"
