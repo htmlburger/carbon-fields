@@ -10,4 +10,8 @@
 
 .cf-field__label {
 	display: block;
+
+	.cf-html & {
+		display: none;
+	}
 }

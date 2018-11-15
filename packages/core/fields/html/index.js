@@ -1,28 +1,28 @@
 /**
  * External dependencies.
  */
-import { Component } from '@wordpress/element';
+import { RawHTML } from '@wordpress/element';
 
 /**
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
 
-class HtmlField extends Component {
-	/**
-	 * Render the component.
-	 *
-	 * @return {Object}
-	 */
-	render() {
-		const { field } = this.props;
-
-		return (
-			<FieldBase field={ field } >
-				<div dangerouslySetInnerHTML={ { __html: field.html } }></div>
-			</FieldBase>
-		);
-	}
+/**
+ * Renders the field.
+ *
+ * @param  {Object} props
+ * @param  {Object} props.field
+ * @return {Object}
+ */
+function HtmlField( { field } ) {
+	return (
+		<FieldBase field={ field }>
+			<RawHTML className="cf-html__content">
+				{ field.html }
+			</RawHTML>
+		</FieldBase>
+	);
 }
 
 export default HtmlField;
