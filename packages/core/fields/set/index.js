@@ -7,6 +7,7 @@ import { xor } from 'lodash';
 /**
  * Internal dependencies.
  */
+import './style.scss';
 import FieldBase from '../../components/field-base';
 import NoOptions from '../../components/no-options';
 
@@ -59,21 +60,26 @@ class SetField extends Component {
 				{
 					field.options.length > 0
 						? (
-							field.options.map( ( option ) => (
-								<label key={ `${ id }-${ option.value }` }>
-									<input
-										type="checkbox"
-										id={ `${ id }-${ option.value }` }
-										name={ `${ name }-${ option.value }` }
-										checked={ this.isChecked( value, option ) }
-										value={ option.value }
-										onChange={ this.handleChange }
-										{ ...field.attributes }
-									/>
+							<ul className="cf-set__list">
+								{ field.options.map( ( option, index ) => (
+									<li className="cf-set__list-item" key={ index }>
+										<input
+											type="checkbox"
+											id={ `${ id }-${ option.value }` }
+											name={ `${ name }-${ option.value }` }
+											checked={ this.isChecked( value, option ) }
+											value={ option.value }
+											className="cf-set__input"
+											onChange={ this.handleChange }
+											{ ...field.attributes }
+										/>
 
-									{ option.label }
-								</label>
-							) )
+										<label className="cf-set__label" htmlFor={ `${ id }-${ option.value }` }>
+											{ option.label }
+										</label>
+									</li>
+								) ) }
+							</ul>
 						)
 						: <NoOptions />
 				}

@@ -1,9 +1,9 @@
 /* ==========================================================================
-   Textarea
+   Set
    ========================================================================== */
 
-.cf-textarea__input {
-	display: block;
-	width: 100%;
-	resize: vertical;
+.cf-set__list {
+	.wp-block & {
+		list-style: none outside none;
+	}
 }

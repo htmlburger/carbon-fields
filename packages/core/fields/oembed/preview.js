@@ -87,10 +87,11 @@ class OembedPreview extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		return <div className="carbon-oembed-preview">
+		return <div className="cf-oembed__preview">
 			<iframe
 				ref={ ( node ) => this.iframe = node }
 				scrolling="no"
+				className="cf-oembed__frame"
 				onLoad={ this.renderIframe }
 				width={ Math.ceil( this.state.width ) }
 				height={ Math.ceil( this.state.height ) }
