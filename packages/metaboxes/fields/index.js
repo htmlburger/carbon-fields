@@ -14,6 +14,7 @@ import './gravity-form';
 import './header-scripts';
 import './hidden';
 import './html';
+import './image';
 import './map';
 import './media-gallery';
 import './multiselect';
