@@ -42,6 +42,7 @@ class TextareaField extends Component {
 					name={ name }
 					value={ value }
 					rows={ field.rows }
+					className="cf-textarea__input"
 					onChange={ this.handleChange }
 					{ ...field.attributes }
 				/>
