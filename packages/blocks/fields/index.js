@@ -1,6 +1,7 @@
 /**
  * Internal dependencies.
  */
+import './style.scss';
 import './association';
 import './checkbox';
 import './color';
