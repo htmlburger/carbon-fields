@@ -6,6 +6,7 @@ import { Component } from '@wordpress/element';
 /**
  * The internal dependencies.
  */
+import './style.scss';
 import FieldBase from '../../components/field-base';
 import NoOptions from '../../components/no-options';
 
@@ -35,21 +36,28 @@ class RadioField extends Component {
 			name
 		} = this.props;
 
-		return field.options.map( ( { value: optionValue, label } ) => (
-			<label key={ `${ id }-${ optionValue }` }>
-				<input
-					type="radio"
-					id={ `${ id }-${ optionValue }` }
-					name={ `${ id }-${ name }` }
-					checked={ value === optionValue }
-					value={ optionValue }
-					onChange={ this.handleChange }
-					{ ...field.attributes }
-				/>
+		return (
+			<ul className="cf-radio__list">
+				{ field.options.map( ( option, index ) => (
+					<li className="cf-radio__list-item" key={ index }>
+						<input
+							type="radio"
+							id={ `${ id }-${ option.value }` }
+							name={ `${ id }-${ name }` }
+							value={ option.value }
+							checked={ value === option.value }
+							className="cf-radio__input"
+							onChange={ this.handleChange }
+							{ ...field.attributes }
+						/>
 
-				{ label }
-			</label>
-		) );
+						<label className="cf-radio__label" htmlFor={ `${ id }-${ option.value }` }>
+							{ option.label }
+						</label>
+					</li>
+				) ) }
+			</ul>
+		);
 	}
 
 	/**
