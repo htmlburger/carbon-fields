@@ -18,6 +18,7 @@ import {
 /**
  * The internal dependencies.
  */
+import './style.scss';
 import FieldBase from '../../components/field-base';
 import OembedPreview from './preview';
 
@@ -99,6 +100,8 @@ class OembedField extends Component {
 			<FieldBase field={ field }>
 				<input
 					type="text"
+					className="cf-oembed__input"
+					placeholder="Search..."
 					value={ value }
 					onChange={ this.handleChange }
 				/>
@@ -117,7 +120,8 @@ class OembedField extends Component {
 					type="hidden"
 					name={ name }
 					value={ value }
-					readOnly />
+					readOnly
+				/>
 			</FieldBase>
 		);
 	}
