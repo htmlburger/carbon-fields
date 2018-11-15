@@ -7,7 +7,6 @@ import { withEffects, toProps } from 'refract-callbag';
 import cx from 'classnames';
 import {
 	cloneDeep,
-	debounce,
 	find,
 	isMatch,
 	without
@@ -25,7 +24,7 @@ import of from 'callbag-of';
 import FieldBase from '../../components/field-base';
 
 class AssociationField extends Component {
-	handleQueryTermChange = debounce( ( queryTerm ) => {
+	handleQueryTermChange = ( queryTerm ) => {
 		const {
 			onFetchOptions,
 			setState
@@ -38,7 +37,7 @@ class AssociationField extends Component {
 		onFetchOptions( {
 			queryTerm: queryTerm
 		} );
-	}, 300 );
+	}
 
 	/**
 	 * Handles addition of a new item.
@@ -154,7 +153,7 @@ class AssociationField extends Component {
 								type="text"
 								value={ queryTerm }
 								placeholder={ carbonFieldsL10n.field.searchPlaceholder }
-								onChange={ this.handleQueryTermChange }
+								onChange={ ( event ) => this.handleQueryTermChange( event.target.value ) }
 							/>
 						</div>
 
