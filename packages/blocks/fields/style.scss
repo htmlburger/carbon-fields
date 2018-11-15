@@ -2,12 +2,17 @@
    Field
    ========================================================================== */
 
-.cf-field__label {
+.cf-field__body {
 	.wp-block & {
-		margin-bottom: 4px;
 		font-family: $wp-font;
 		font-size: $wp-font-size;
 		line-height: $wp-line-height;
 		color: $gb-dark-gray-500;
+	}
+}
+
+.cf-field__label {
+	.wp-block & {
+		margin-bottom: 4px;
 	}
 }
