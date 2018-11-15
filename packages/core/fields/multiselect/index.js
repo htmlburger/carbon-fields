@@ -19,14 +19,14 @@ class MultiselectField extends Component {
 	 * @param {string|number} option.value
 	 * @return {void}
 	 */
-	handleChange = ( { value } ) => {
+	handleChange = ( { value: optionValue } ) => {
 		const {
 			id,
-			field,
+			value,
 			onChange
 		} = this.props;
 
-		onChange( id, xor( field.value, [ value ] ) );
+		onChange( id, xor( value, [ optionValue ] ) );
 	}
 
 	/**

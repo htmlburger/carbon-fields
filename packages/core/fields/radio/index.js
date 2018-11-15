@@ -43,7 +43,7 @@ class RadioField extends Component {
 						<input
 							type="radio"
 							id={ `${ id }-${ option.value }` }
-							name={ `${ id }-${ name }` }
+							name={ name }
 							value={ option.value }
 							checked={ value === option.value }
 							className="cf-radio__input"
