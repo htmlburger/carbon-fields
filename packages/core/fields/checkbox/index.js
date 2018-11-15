@@ -6,6 +6,7 @@ import { Component } from '@wordpress/element';
 /**
  * Internal dependencies.
  */
+import './style.scss';
 import FieldBase from '../../components/field-base';
 
 class CheckboxField extends Component {
@@ -45,17 +46,18 @@ class CheckboxField extends Component {
 
 		return (
 			<FieldBase field={ field }>
-				<label className="cf-metaboxes-checkbox__inner">
-					<input
-						type="checkbox"
-						id={ id }
-						name={ name }
-						checked={ value }
-						value={ field.option_value }
-						onChange={ this.handleChange }
-						{ ...field.attributes }
-					/>
+				<input
+					type="checkbox"
+					id={ id }
+					name={ name }
+					checked={ value }
+					value={ field.option_value }
+					className="cf-checkbox__input"
+					onChange={ this.handleChange }
+					{ ...field.attributes }
+				/>
 
+				<label className="cf-checkbox__label" htmlFor={ id }>
 					{ field.option_label }
 				</label>
 			</FieldBase>
