@@ -6,6 +6,11 @@ import { Component } from '@wordpress/element';
 import { omit } from 'lodash';
 
 /**
+ * Internal dependencies.
+ */
+import './style.scss';
+
+/**
  * The keycode used to represent the "Enter" key.
  *
  * @type {number}
@@ -61,17 +66,19 @@ class SearchInput extends Component {
 		} = this.props;
 
 		return (
-			<input
-				type="text"
-				autoComplete="off"
-				className={ cx( 'cf-search-input', className ) }
-				defaultValue={ value }
-				onChange={ this.handleChange }
-				onKeyDown={ this.handleKeyDown }
-				{ ...omit( props, [
-					'onChange'
-				] ) }
-			/>
+			<div className={ cx( 'cf-search-input dashicons-before dashicons-search', className ) }>
+				<input
+					type="text"
+					autoComplete="off"
+					className="cf-search-input__inner"
+					defaultValue={ value }
+					onChange={ this.handleChange }
+					onKeyDown={ this.handleKeyDown }
+					{ ...omit( props, [
+						'onChange'
+					] ) }
+				/>
+			</div>
 		);
 	}
 }
