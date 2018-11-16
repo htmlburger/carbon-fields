@@ -3,6 +3,7 @@
  */
 import { Component } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { compose, withState } from '@wordpress/compose';
 import {
 	map,
 	pipe,
@@ -11,6 +12,7 @@ import {
 } from 'callbag-basics';
 import of from 'callbag-of';
 import { withEffects, toProps } from 'refract-callbag';
+import { pick } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -25,6 +27,15 @@ class FileField extends Component {
 	 * @return {void}
 	 */
 	componentDidMount() {
+		const {
+			value,
+			fetchFileMeta
+		} = this.props;
+
+		if ( value ) {
+			fetchFileMeta( value );
+		}
+
 		this.props.initMediaBrowser( this.handleSelect );
 	}
 
@@ -58,7 +69,7 @@ class FileField extends Component {
 	handleSelect = ( file ) => {
 		const { id, onChange } = this.props;
 
-		onChange( id, file );
+		onChange( id, file.id );
 	}
 
 	/**
@@ -72,9 +83,8 @@ class FileField extends Component {
 			field,
 			value,
 			name,
-			buttonLabel,
 			openMediaBrowser,
-			fileData
+			fileMeta
 		} = this.props;
 
 		return (
@@ -89,20 +99,20 @@ class FileField extends Component {
 
 					{ value && (
 						<div className="cf-file__content">
-							<div className="cf-file__preview" >
-								<img src={ fileData.url } className="cf-file__image" />
+							<div className="cf-file__preview">
+								<img src={ fileMeta.sizes ? fileMeta.sizes.thumbnail.url : fileMeta.icon } className="cf-file__image" />
 
 								<button type="button" className="cf-file__remove dashicons-before dashicons-no-alt" onClick={ this.handleClear }></button>
 							</div>
 
-							<span className="cf-file__name" title={ fileData.filename }>
-								{ fileData.filename }
+							<span className="cf-file__name" title={ fileMeta.filename }>
+								{ fileMeta.filename }
 							</span>
 						</div>
 					) }
 
 					<button type="button" className="button cf-file__browse" onClick={ openMediaBrowser }>
-						{ buttonLabel }
+						{ __( 'Select File' ) }
 					</button>
 				</div>
 			</FieldBase>
@@ -120,7 +130,8 @@ function aperture() {
 		const actions = [
 			{ event: 'initMediaBrowserEvent', prop: 'initMediaBrowser', type: 'INIT_MEDIA_BROWSER' },
 			{ event: 'openMediaBrowserEvent', prop: 'openMediaBrowser', type: 'OPEN_MEDIA_BROWSER' },
-			{ event: 'destroyMediaBrowserEvent', prop: 'destroyMediaBrowser', type: 'DESTROY_MEDIA_BROWSER' }
+			{ event: 'destroyMediaBrowserEvent', prop: 'destroyMediaBrowser', type: 'DESTROY_MEDIA_BROWSER' },
+			{ event: 'fetchFileMetaEvent', prop: 'fetchFileMeta', type: 'FETCH_FILE_META' }
 		].map( ( actionData ) => {
 			const [ actionChannel$, action ] = component.useEvent( actionData.event );
 
@@ -160,9 +171,10 @@ function aperture() {
 /**
  * The function that causes the side effects.
  *
+ * @param  {Object} props
  * @return {Function}
  */
-function handler() {
+function handler( props ) {
 	let mediaBrowser = null;
 
 	return function( effect ) {
@@ -188,6 +200,10 @@ function handler() {
 						.first()
 						.toJSON();
 
+					props.setState( {
+						fileMeta: pick( file, 'id', 'url', 'icon', 'filename', 'sizes' )
+					} );
+
 					onSelect( file );
 				} );
 
@@ -202,10 +218,45 @@ function handler() {
 				mediaBrowser = null;
 
 				break;
+			case 'FETCH_FILE_META':
+				// eslint-disable-next-line
+				let request = $.post( window.ajaxurl, {
+					action: 'query-attachments',
+					query: {
+						post__in: [ effect.payload ]
+					}
+				} );
+
+				/* eslint-disable-next-line no-alert */
+				const errorHandler = () => alert( 'An error occurred while trying to fetch association options.' );
+
+				request.done( ( response ) => {
+					props.setState( {
+						fileMeta: pick( response.data[ 0 ], 'id', 'url', 'icon', 'filename', 'sizes' )
+					} );
+				} );
+
+				request.fail( () => {
+					errorHandler();
+
+					props.setState( {
+						error: carbonFieldsL10n.field.oembedNotFound,
+						isLoading: false
+					} );
+				} );
+
+				break;
 		}
 	};
 }
 
+const applyWithState = withState( {
+	fileMeta: {}
+} );
+
 const applyWitEffects = withEffects( handler )( aperture );
 
-export default applyWitEffects( FileField );
+export default compose(
+	applyWithState,
+	applyWitEffects
+)( FileField );
