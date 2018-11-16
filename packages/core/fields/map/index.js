@@ -1,57 +1,61 @@
 /**
  * External dependencies.
  */
+import of from 'callbag-of';
+import { Component } from '@wordpress/element';
 import { withEffects, toProps } from 'refract-callbag';
-import {
-	debounce
-} from 'lodash';
+import { debounce } from 'lodash';
 import {
 	map,
 	pipe,
 	merge
 } from 'callbag-basics';
-import of from 'callbag-of';
-import { Component } from '@wordpress/element';
-import { compose } from '@wordpress/compose';
 
 /**
  * The internal dependencies.
  */
+import './style.scss';
 import GoogleMap from './google-map';
 import FieldBase from '../../components/field-base';
-import './style.scss';
 
 class MapField extends Component {
-	handleAddressChange = debounce( ( address ) => {
-		const {
-			onGeocodeAddress
-		} = this.props;
+	/**
+	 * Finds the coordinates of the given address.
+	 *
+	 * @param  {string} address
+	 * @return {void}
+	 */
+	geocodeAddress = debounce( ( address ) => {
+		this.props.onGeocodeAddress( { address } );
+	}, 250 )
 
-		onGeocodeAddress( {
-			address
-		} );
-	}, 200 )
+	/**
+	 * Handles the change of search.
+	 *
+	 * @param  {Object} e
+	 * @return {void}
+	 */
+	handleSearchChange = ( e ) => {
+		this.geocodeAddress( e.target.value );
+	}
 
-	handleChange = ( newValue ) => {
+	/**
+	 * Handles the change of map location.
+	 *
+	 * @param  {Object} location
+	 * @return {void}
+	 */
+	handleMapChange = ( location ) => {
 		const {
 			id,
 			value,
 			onChange
 		} = this.props;
 
-		if ( typeof newValue === 'string' ) {
-			newValue = { address: newValue };
-
-			this.handleAddressChange( newValue.address );
-		}
-
-		onChange(
-			id,
-			{
-				...value,
-				...newValue
-			}
-		);
+		onChange( id, {
+			...value,
+			...location
+		} );
 	}
 
 	/**
@@ -60,29 +64,33 @@ class MapField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field, value } = this.props;
+		const {
+			id,
+			field,
+			value
+		} = this.props;
 
 		return (
-			<FieldBase field={ field } >
-				<div className="cf-metaboxes-map__search">
-					<label className="cf-metaboxes-map__search-label">
+			<FieldBase id={ id } field={ field }>
+				<div className="cf-map__search">
+					<label className="cf-map__search-label">
 						{ carbonFieldsL10n.field.mapLocateAddress }
 					</label>
 
 					<input
 						type="text"
-						className="cf-metaboxes-map__search-input"
-						value={ value.address }
-						onChange={ ( event ) => this.handleChange( event.target.value ) }
+						className="cf-map__search-input"
+						defaultValue={ value.address }
+						onChange={ this.handleSearchChange }
 					/>
 				</div>
 
 				<GoogleMap
-					className="cf-field-map-canvas"
+					className="cf-map__canvas"
 					lat={ value.lat }
 					lng={ value.lng }
 					zoom={ value.zoom }
-					onChange={ this.handleChange }
+					onChange={ this.handleMapChange }
 				/>
 			</FieldBase>
 		);
@@ -127,9 +135,9 @@ function handler( props ) {
 	return function( effect ) {
 		const { payload, type } = effect;
 		const {
-			field,
-			onChange,
-			value
+			id,
+			value,
+			onChange
 		} = props;
 
 		switch ( type ) {
@@ -157,17 +165,13 @@ function handler( props ) {
 
 				geocode( payload.address )
 					.then( ( { lat, lng } ) => {
-						const newValue = {
+						onChange( id, {
 							...value,
-							...{
-								address: payload.address,
-								lat,
-								lng,
-								value: `${ lat },${ lng }`
-							}
-						};
-
-						onChange( field.id, newValue );
+							address: payload.address,
+							value: `${ lat },${ lng }`,
+							lat,
+							lng
+						} );
 					} )
 					.catch( ( alert ) => {
 						// eslint-disable-next-line
@@ -182,8 +186,4 @@ function handler( props ) {
 	};
 }
 
-const applyWithEffects = withEffects( handler )( aperture );
-
-export default compose(
-	applyWithEffects
-)( MapField );
+export default withEffects( handler )( aperture )( MapField );
