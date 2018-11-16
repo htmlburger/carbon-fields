@@ -8,6 +8,12 @@
 	box-sizing: border-box;
 }
 
+.cf-field__body {
+	.cf-rich-text & {
+		box-sizing: content-box;
+	}
+}
+
 .cf-field__label {
 	display: block;
 
