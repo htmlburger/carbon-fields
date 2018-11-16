@@ -21,14 +21,16 @@
 .cf-search-input__inner {
 	display: block;
 	width: 100%;
+	margin: 0;
 
-	.cf-field &,
+	.cf-container &,
 	.wp-block .cf-field & {
 		padding-left: 35px;
 	}
 
-	.cf-field & {
+	.cf-container & {
 		padding-top: 8px;
 		padding-bottom: 8px;
+		border-color: $wp-color-gray-light-500;
 	}
 }

@@ -66,11 +66,11 @@ class SearchInput extends Component {
 		} = this.props;
 
 		return (
-			<div className="cf-search-input dashicons-before dashicons-search">
+			<div className={ cx( 'cf-search-input dashicons-before dashicons-search', className ) }>
 				<input
 					type="text"
 					autoComplete="off"
-					className={ cx( 'cf-search-input__inner', className ) }
+					className="cf-search-input__inner"
 					defaultValue={ value }
 					onChange={ this.handleChange }
 					onKeyDown={ this.handleKeyDown }
