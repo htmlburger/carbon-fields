@@ -15,9 +15,9 @@ import { kebabCase } from 'lodash';
  */
 const ContainerShell = ( { container, children } ) => {
 	const classes = classnames( [
-		'cf-metaboxes-container',
-		`cf-metaboxes-container-${ container.id }`,
-		`cf-metaboxes-container-${ kebabCase( container.type ) }`,
+		'cf-container',
+		`cf-container-${ container.id }`,
+		`cf-container-${ kebabCase( container.type ) }`,
 		...container.classes
 	] );
 
