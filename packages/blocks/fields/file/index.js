@@ -6,6 +6,11 @@ import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { pick } from 'lodash';
 
+/**
+ * Internal dependencies.
+ */
+import './style.scss';
+
 export class FileField extends Component {
 	/**
 	 * Handles the change of the field
