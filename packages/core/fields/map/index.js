@@ -15,29 +15,22 @@ import {
  * The internal dependencies.
  */
 import './style.scss';
-import GoogleMap from './google-map';
 import FieldBase from '../../components/field-base';
+import SearchInput from '../../components/search-input';
+import GoogleMap from './google-map';
 
 class MapField extends Component {
 	/**
-	 * Finds the coordinates of the given address.
+	 * Handles the change of search.
 	 *
 	 * @param  {string} address
 	 * @return {void}
 	 */
-	geocodeAddress = debounce( ( address ) => {
-		this.props.onGeocodeAddress( { address } );
+	handleSearchChange = debounce( ( address ) => {
+		if ( address ) {
+			this.props.onGeocodeAddress( { address } );
+		}
 	}, 250 )
-
-	/**
-	 * Handles the change of search.
-	 *
-	 * @param  {Object} e
-	 * @return {void}
-	 */
-	handleSearchChange = ( e ) => {
-		this.geocodeAddress( e.target.value );
-	}
 
 	/**
 	 * Handles the change of map location.
@@ -72,18 +65,12 @@ class MapField extends Component {
 
 		return (
 			<FieldBase id={ id } field={ field }>
-				<div className="cf-map__search">
-					<label className="cf-map__search-label">
-						{ carbonFieldsL10n.field.mapLocateAddress }
-					</label>
-
-					<input
-						type="text"
-						className="cf-map__search-input"
-						defaultValue={ value.address }
-						onChange={ this.handleSearchChange }
-					/>
-				</div>
+				<SearchInput
+					id={ id }
+					className="cf-map__search"
+					value={ value.address }
+					onChange={ this.handleSearchChange }
+				/>
 
 				<GoogleMap
 					className="cf-map__canvas"
