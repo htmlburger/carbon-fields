@@ -75,17 +75,21 @@ class ColorField extends Component {
 
 		return (
 			<FieldBase id={ id } field={ field } >
-				<div className="cf-metaboxes-color__inner">
-					<span
-						onClick={ this.togglePicker }
-						className="cf-metaboxes-color__preview"
-						style={ { backgroundColor: this.getBackgrounColor() } }
-					>
-					</span>
+				<input
+					type="hidden"
+					id={ id }
+					name={ name }
+					value={ value }
+				/>
 
-					<span className="button cf-metaboxes-color__toggle" onClick={ this.togglePicker }>
-						{ carbonFieldsL10n.field.colorSelectColor }
-					</span>
+				<div className="cf-color__inner">
+					<button type="button" className="button cf-color__toggle" onClick={ this.togglePicker }>
+						<span className="cf-color__preview" style={ { backgroundColor: this.getBackgrounColor() } }></span>
+
+						<span className="cf-color__toggle-text">
+							{ carbonFieldsL10n.field.colorSelectColor }
+						</span>
+					</button>
 
 					{ showPicker && (
 						<Picker
@@ -97,17 +101,10 @@ class ColorField extends Component {
 						/>
 					) }
 
-					<span className="button cf-metaboxes-color__reset" onClick={ () => this.handleChange() }>
+					<button type="button" className="button-link cf-color__reset" onClick={ () => this.handleChange() }>
 						<span className="dashicons dashicons-no"></span>
-					</span>
-
+					</button>
 				</div>
-				<input
-					type="hidden"
-					id={ id }
-					name={ name }
-					value={ value }
-				/>
 			</FieldBase>
 		);
 	}
