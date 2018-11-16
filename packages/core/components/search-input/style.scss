@@ -1,0 +1,34 @@
+/* ==========================================================================
+   Search Input
+   ========================================================================== */
+
+.cf-search-input {
+	position: relative;
+
+	.wp-block & {
+		margin-bottom: 4px;
+	}
+
+	&::before {
+		position: absolute;
+		top: 50%;
+		left: 9px;
+		margin-top: -10px;
+		color: $wp-color-base-gray;
+	}
+}
+
+.cf-search-input__inner {
+	display: block;
+	width: 100%;
+
+	.cf-field &,
+	.wp-block .cf-field & {
+		padding-left: 35px;
+	}
+
+	.cf-field & {
+		padding-top: 8px;
+		padding-bottom: 8px;
+	}
+}
