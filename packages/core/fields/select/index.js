@@ -45,6 +45,7 @@ export class SelectField extends Component {
 								id={ id }
 								name={ name }
 								value={ value }
+								className="cf-select__input"
 								onChange={ this.handleChange }
 							>
 								{ field.options.map( ( option ) => (

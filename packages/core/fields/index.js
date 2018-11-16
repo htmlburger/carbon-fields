@@ -39,6 +39,7 @@ import TextareaField from './textarea';
 	[ 'header_scripts', TextareaField ],
 	[ 'hidden', HiddenField ],
 	[ 'html', HtmlField ],
+	[ 'image', FileField ],
 	[ 'map', MapField ],
 	[ 'multiselect', MultiselectField ],
 	[ 'media_gallery', MediaGalleryField ],

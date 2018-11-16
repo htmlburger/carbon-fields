@@ -1,7 +1,10 @@
 /**
  * External dependencies.
  */
+const path = require( 'path' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+
+console.log( path.resolve( __dirname, '../assets/styles' ) );
 
 module.exports = {
 	output: {
@@ -26,7 +29,7 @@ module.exports = {
 					{
 						loader: 'css-loader',
 						options: {
-							importLoaders: 2
+							importLoaders: 3
 						}
 					},
 					{
@@ -34,6 +37,12 @@ module.exports = {
 					},
 					{
 						loader: 'sass-loader'
+					},
+					{
+						loader: 'sass-resources-loader',
+						options: {
+							resources: path.resolve( __dirname, '../assets/styles/*.scss' )
+						}
 					}
 				]
 			}

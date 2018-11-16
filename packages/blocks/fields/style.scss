@@ -2,16 +2,17 @@
    Field
    ========================================================================== */
 
-.cf-field,
-.cf-field__head,
-.cf-field__body {
-	box-sizing: border-box;
+.cf-field {
+	.wp-block & {
+		font-family: $wp-font;
+		font-size: $wp-font-size;
+		line-height: $wp-line-height;
+		color: $gb-dark-gray-500;
+	}
 }
 
 .cf-field__label {
-	display: block;
-
-	.cf-html & {
-		display: none;
+	.wp-block & {
+		margin-bottom: 4px;
 	}
 }

@@ -31,9 +31,9 @@ class ColorField extends Component {
 	 * @return {void}
 	 */
 	getBackgrounColor = () => {
-		const { field } = this.props;
+		const { field, value } = this.props;
 
-		const colorHex = field.value ? field.value : '#FFFFFFFF';
+		const colorHex = value ? value : '#FFFFFFFF';
 		const [ r, g, b, a ] = hexToRgba( colorHex );
 		const rgbaColor = { r, g, b, a: field.alphaEnabled ? a : 1 };
 
@@ -68,12 +68,13 @@ class ColorField extends Component {
 	render() {
 		const { showPicker } = this.state;
 		const {
+			id,
 			field,
 			value
 		} = this.props;
 
 		return (
-			<FieldBase field={ field }>
+			<FieldBase id={ id } field={ field } >
 				<div className="cf-metaboxes-color__inner">
 					<span
 						onClick={ this.togglePicker }
@@ -100,12 +101,13 @@ class ColorField extends Component {
 						<span className="dashicons dashicons-no"></span>
 					</span>
 
-					<input
-						type="hidden"
-						name={ name }
-						value={ value }
-					/>
 				</div>
+				<input
+					type="hidden"
+					id={ id }
+					name={ name }
+					value={ value }
+				/>
 			</FieldBase>
 		);
 	}

@@ -1,0 +1,29 @@
+/* ==========================================================================
+   Radio
+   ========================================================================== */
+
+.cf-radio__list {
+	.wp-block & {
+		list-style: none outside none;
+	}
+}
+
+.cf-radio__label {
+	.wp-block .cf-radio-image .cf-radio__input:focus ~ & {
+		border-radius: $gb-radius-round-rectangle;
+		box-shadow: 0 0 0 1px $wp-color-medium-blue;
+	}
+}
+
+.cf-radio-image__image {
+	.wp-block & {
+		border: 1px solid $gb-dark-gray-150;
+		border-radius: $gb-radius-round-rectangle;
+	}
+
+	.wp-block .cf-radio__input:focus ~ .cf-radio__label &,
+	.wp-block .cf-radio__input:checked ~ .cf-radio__label & {
+		border-color: $wp-color-medium-blue;
+	}
+}
+

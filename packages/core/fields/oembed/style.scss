@@ -1,9 +1,11 @@
 /* ==========================================================================
-   Textarea
+   oEmbed
    ========================================================================== */
 
-.cf-textarea__input {
-	display: block;
+.cf-oembed__input {
 	width: 100%;
-	resize: vertical;
+}
+
+.cf-oembed__preview {
+	padding: 12px;
 }

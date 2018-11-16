@@ -1,9 +1,11 @@
 /* ==========================================================================
-   Textarea
+   Field
    ========================================================================== */
 
-.cf-textarea__input {
-	display: block;
-	width: 100%;
-	resize: vertical;
+.cf-field__label {
+	.inside & {
+		padding-bottom: 5px;
+		font-weight: 600;
+		color: $wp-color-dark-gray;
+	}
 }

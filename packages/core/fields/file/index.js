@@ -16,22 +16,8 @@ import { withEffects, toProps } from 'refract-callbag';
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
-import { getEmptyFileMeta, setupMetaFromFile } from '../../utils/setup-meta-from-file';
 
 class FileField extends Component {
-	/**
-	 * Defines the components state
-	 *
-	 * @return {void}
-	 */
-	constructor() {
-		super();
-
-		this.state = {
-			valueMeta: getEmptyFileMeta()
-		};
-	}
-
 	/**
 	 * Lifecycle hook
 	 *
@@ -39,8 +25,6 @@ class FileField extends Component {
 	 */
 	componentDidMount() {
 		this.props.initMediaBrowser( this.handleSelect );
-
-		this.setState( { valueMeta: this.props.field.value_meta } );
 	}
 
 	/**
@@ -62,8 +46,6 @@ class FileField extends Component {
 		const { id, onChange } = this.props;
 
 		onChange( id, null );
-
-		this.setState( { valueMeta: getEmptyFileMeta() } );
 	}
 
 	/**
@@ -75,9 +57,7 @@ class FileField extends Component {
 	handleSelect = ( file ) => {
 		const { id, onChange } = this.props;
 
-		onChange( id, file.id );
-
-		this.setState( { valueMeta: setupMetaFromFile( file ) } );
+		onChange( id, file );
 	}
 
 	/**
@@ -86,34 +66,36 @@ class FileField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { valueMeta } = this.state;
 		const {
+			id,
 			field,
+			value,
 			name,
 			buttonLabel,
-			openMediaBrowser
+			openMediaBrowser,
+			fileData
 		} = this.props;
 
 		return (
-			<FieldBase field={ field }>
+			<FieldBase id={ id } field={ field }>
 				<div className="cf-metaboxes-file__inner">
 					<input
 						type="hidden"
 						name={ name }
-						value={ field.value }
+						value={ value }
 						readOnly
 					/>
 
-					{ field.value && (
+					{ value && (
 						<div className="cf-metaboxes-file__content">
 							<div className="cf-metaboxes-file__preview" >
-								<img src={ valueMeta.file_url } className="cf-metaboxes-file__image" />
+								<img src={ fileData.url } className="cf-metaboxes-file__image" />
 
 								<button type="button" className="cf-metaboxes-file__remove dashicons-before dashicons-no-alt" onClick={ this.handleClear }></button>
 							</div>
 
 							<span className="cf-metaboxes-file__name">
-								{ valueMeta.file_name }
+								{ fileData.filename }
 							</span>
 						</div>
 					) }

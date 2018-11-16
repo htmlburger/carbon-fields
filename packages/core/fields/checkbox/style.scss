@@ -1,9 +1,9 @@
 /* ==========================================================================
-   Textarea
+   Checkbox
    ========================================================================== */
 
-.cf-textarea__input {
-	display: block;
-	width: 100%;
-	resize: vertical;
+.cf-checkbox__input {
+	.cf-field & {
+		margin-top: 0;
+	}
 }
