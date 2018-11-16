@@ -59,8 +59,9 @@ class MapField extends Component {
 	render() {
 		const {
 			id,
-			field,
-			value
+			name,
+			value,
+			field
 		} = this.props;
 
 		return (
@@ -68,6 +69,7 @@ class MapField extends Component {
 				<SearchInput
 					id={ id }
 					className="cf-map__search"
+					name={ `${ name }[address]` }
 					value={ value.address }
 					onChange={ this.handleSearchChange }
 				/>
@@ -78,6 +80,26 @@ class MapField extends Component {
 					lng={ value.lng }
 					zoom={ value.zoom }
 					onChange={ this.handleMapChange }
+				/>
+
+				<input
+					type="hidden"
+					name={ `${ name }[lat]` }
+					value={ value.lat }
+				/>
+
+				<input
+					type="hidden"
+					name={ `${ name }[lng]` }
+					value={ value.lng }
+					readOnly
+				/>
+
+				<input
+					type="hidden"
+					name={ `${ name }[zoom]` }
+					value={ value.zoom }
+					readOnly
 				/>
 			</FieldBase>
 		);
