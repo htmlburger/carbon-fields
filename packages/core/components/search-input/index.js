@@ -63,6 +63,7 @@ class SearchInput extends Component {
 		return (
 			<input
 				type="text"
+				autoComplete="off"
 				className={ cx( 'cf-search-input', className ) }
 				defaultValue={ value }
 				onChange={ this.handleChange }
