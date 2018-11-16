@@ -15,6 +15,7 @@ import { withEffects, toProps } from 'refract-callbag';
 /**
  * The internal dependencies.
  */
+import './style.scss';
 import FieldBase from '../../components/field-base';
 
 class FileField extends Component {
@@ -78,7 +79,7 @@ class FileField extends Component {
 
 		return (
 			<FieldBase id={ id } field={ field }>
-				<div className="cf-metaboxes-file__inner">
+				<div className="cf-file__inner">
 					<input
 						type="hidden"
 						name={ name }
@@ -87,20 +88,20 @@ class FileField extends Component {
 					/>
 
 					{ value && (
-						<div className="cf-metaboxes-file__content">
-							<div className="cf-metaboxes-file__preview" >
-								<img src={ fileData.url } className="cf-metaboxes-file__image" />
+						<div className="cf-file__content">
+							<div className="cf-file__preview" >
+								<img src={ fileData.url } className="cf-file__image" />
 
-								<button type="button" className="cf-metaboxes-file__remove dashicons-before dashicons-no-alt" onClick={ this.handleClear }></button>
+								<button type="button" className="cf-file__remove dashicons-before dashicons-no-alt" onClick={ this.handleClear }></button>
 							</div>
 
-							<span className="cf-metaboxes-file__name">
+							<span className="cf-file__name" title={ fileData.filename }>
 								{ fileData.filename }
 							</span>
 						</div>
 					) }
 
-					<button type="button" className="button cf-metaboxes-file__browse" onClick={ openMediaBrowser }>
+					<button type="button" className="button cf-file__browse" onClick={ openMediaBrowser }>
 						{ buttonLabel }
 					</button>
 				</div>
