@@ -62,6 +62,7 @@ class ComplexGroup extends Component {
 			index,
 			name,
 			prefix,
+			tabbed,
 			hidden,
 			collapsed,
 			allowClone,
@@ -96,15 +97,17 @@ class ComplexGroup extends Component {
 					/>
 				) }
 
-				<div className="cf-complex__group-head">
-					<span className="cf-complex__group-index">
-						{ index + 1 }
-					</span>
+				{ ! tabbed && (
+					<div className="cf-complex__group-head">
+						<span className="cf-complex__group-index">
+							{ index + 1 }
+						</span>
 
-					<span className="cf-complex__group-title">
-						Complex Title
-					</span>
-				</div>
+						<span className="cf-complex__group-title">
+							Complex Title
+						</span>
+					</div>
+				) }
 
 				<div className="cf-complex__group-body" hidden={ collapsed }>
 					{ fields.map( ( field ) => {
@@ -133,14 +136,6 @@ class ComplexGroup extends Component {
 						</button>
 					) }
 
-					<button type="button" className="cf-complex__group-action" onClick={ this.handleToggleClick }>
-						<span className={ toggleClasses }></span>
-
-						<span className="cf-complex__group-action-text">
-							Collapse
-						</span>
-					</button>
-
 					<button type="button" className="cf-complex__group-action" onClick={ this.handleRemoveClick }>
 						<span className="dashicons-before dashicons-trash cf-complex__group-action-icon"></span>
 
@@ -148,6 +143,16 @@ class ComplexGroup extends Component {
 							Remove
 						</span>
 					</button>
+
+					{ ! tabbed && (
+						<button type="button" className="cf-complex__group-action" onClick={ this.handleToggleClick }>
+							<span className={ toggleClasses }></span>
+
+							<span className="cf-complex__group-action-text">
+								Collapse
+							</span>
+						</button>
+					) }
 				</div>
 			</div>
 		);

@@ -66,7 +66,7 @@ class ComplexInserter extends Component {
 
 		return (
 			<div className="cf-complex__inserter">
-				<button type="button" className="cf-complex__inserter-button" onClick={ this.handleAddClick }>
+				<button type="button" className="button cf-complex__inserter-button" onClick={ this.handleAddClick }>
 					{ buttonText }
 				</button>
 

@@ -21,6 +21,7 @@ import { uniqueId } from '@carbon-fields/core';
 /**
  * Internal dependencies.
  */
+import './style.scss';
 import withField from '../../components/with-field';
 import flattenField from '../../utils/flatten-field';
 

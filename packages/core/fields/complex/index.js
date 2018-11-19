@@ -8,6 +8,7 @@ import { get, find } from 'lodash';
 /**
  * The internal dependencies.
  */
+import './style.scss';
 import FieldBase from '../../components/field-base';
 import ComplexTabs from './tabs';
 import ComplexInserter from './inserter';
@@ -238,12 +239,13 @@ class ComplexField extends Component {
 					</ComplexPlaceholder>
 				) }
 
-				<div className="cf-metaboxes-complex__groups">
+				<div className="cf-complex__groups">
 					{ value.map( ( group, index ) => (
 						// The `key` will be assigned via `onGroupSetup`.
 						// eslint-disable-next-line react/jsx-key
 						<ComplexGroup { ...onGroupSetup( group, {
 							index,
+							tabbed: this.isTabbed,
 							hidden: this.isTabbed && group[ groupIdKey ] !== currentTab,
 							allowClone: field.duplicate_groups_allowed && ! this.isMaximumReached,
 							onFieldSetup: onGroupFieldSetup,
@@ -255,7 +257,7 @@ class ComplexField extends Component {
 				</div>
 
 				{ ! this.isTabbed && !! value.length && (
-					<div className="cf-metaboxes-complex__actions">
+					<div className="cf-complex__actions">
 						{ !! availableGroups.length && ! this.isMaximumReached && (
 							<ComplexInserter
 								buttonText={ this.inserterButtonText }
@@ -264,7 +266,7 @@ class ComplexField extends Component {
 							/>
 						) }
 
-						<button type="button" className="cf-complex__toggler" onClick={ this.handleToggleAllClick }>
+						<button type="button" className="button cf-complex__toggler" onClick={ this.handleToggleAllClick }>
 							{ allGroupsAreCollapsed ? 'Expand All' : 'Collapse All' }
 						</button>
 					</div>
