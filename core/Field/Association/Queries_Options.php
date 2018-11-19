@@ -15,7 +15,7 @@ trait Queries_Options {
 	 * that it will construct in order to support all of the WP_Query arguments.
 	 *
 	 * @access public
-	 * 
+	 *
 	 * @param  array  $args
 	 * @return string
 	 */
@@ -62,7 +62,7 @@ trait Queries_Options {
 	 * Modify the "SELECT" columns for the WP_Query.
 	 *
 	 * @access public
-	 * 
+	 *
 	 * @param  string $fields
 	 * @return string
 	 */
@@ -79,7 +79,7 @@ trait Queries_Options {
 	 * that it will construct in order to support all of the WP_Term_Query arguments.
 	 *
 	 * @access public
-	 * 
+	 *
 	 * @param  array  $args
 	 * @return string
 	 */
@@ -99,6 +99,7 @@ trait Queries_Options {
 
 		$args = apply_filters( $filter_name, array(
 			'hide_empty'             => 0,
+			'taxonomy'               => $taxonomy,
 			'fields'                 => 'count',
 			'number'                 => 1,
 			'search'                 => $search_term,
@@ -120,7 +121,7 @@ trait Queries_Options {
 	 * Modify the "SELECT" columns for the WP_Term_Query.
 	 *
 	 * @access public
-	 * 
+	 *
 	 * @param  array  $fields
 	 * @return array
 	 */
@@ -132,7 +133,7 @@ trait Queries_Options {
 	 * Modify the clauses for the SQL request of the WP_Term_Query.
 	 *
 	 * @access public
-	 * 
+	 *
 	 * @param  array  $clauses
 	 * @return array
 	 */
@@ -149,7 +150,7 @@ trait Queries_Options {
 	 * that it will construct in order to support all of the WP_User_Query arguments.
 	 *
 	 * @access public
-	 * 
+	 *
 	 * @param  array  $args
 	 * @return string
 	 */
@@ -187,7 +188,7 @@ trait Queries_Options {
 	 * that it will construct in order to support all of the WP_Comment_Query arguments.
 	 *
 	 * @access public
-	 * 
+	 *
 	 * @param  array  $args
 	 * @return string
 	 */
@@ -225,7 +226,7 @@ trait Queries_Options {
 	 * performed by the WP_Comment_Query.
 	 *
 	 * @access public
-	 * 
+	 *
 	 * @param  array  $clauses
 	 * @return array
 	 */
