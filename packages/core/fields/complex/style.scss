@@ -1,0 +1,122 @@
+/* ==========================================================================
+   Complex
+   ========================================================================== */
+
+.cf-complex__group {
+	position: relative;
+	margin-bottom: 12px;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.cf-complex__group-head {
+	display: flex;
+	border: 1px solid $wp-color-gray-light-500;
+	background-color: $wp-color-gray-light-100;
+	font-family: $wp-font;
+	font-size: $wp-font-size;
+	font-weight: 600;
+	line-height: $wp-line-height;
+	color: $wp-color-dark-gray;
+	cursor: move;
+	transition: border-color $transition-base;
+
+	&:hover {
+		border-color: $wp-color-dark-silver-gray;
+	}
+}
+
+.cf-complex__group-index {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 42px;
+	height: 42px;
+	border-right: 1px solid $wp-color-gray-light-500;
+}
+
+.cf-complex__group-title {
+	display: flex;
+	align-items: center;
+	padding: 0 12px;
+}
+
+.cf-complex__group-body {
+	border-width: 0 1px 1px;
+	border-style: solid;
+	border-color: $wp-color-gray-light-500;
+}
+
+.cf-complex__group-actions {
+	display: flex;
+	align-items: center;
+
+	.cf-complex--grid & {
+		position: absolute;
+		top: 12px;
+		right: 12px;
+	}
+}
+
+.cf-complex__group-action {
+	display: inline-flex;
+	padding: 0;
+	border: 0;
+	margin-left: 12px;
+	outline: none;
+	background-color: transparent;
+	color: $wp-color-dark-silver-gray;
+	cursor: pointer;
+	transition: color $transition-base;
+
+	&:first-child {
+		margin-left: 0;
+	}
+
+	&:hover {
+		color: $wp-color-dark-gray;
+	}
+}
+
+.cf-complex__group-action-text {
+	display: none;
+}
+
+.cf-complex__actions {
+	display: flex;
+	align-items: center;
+	margin-top: 12px;
+}
+
+.cf-complex__inserter {
+	position: relative;
+	display: inline-block;
+}
+
+.cf-complex__inserter-menu {
+	position: absolute;
+	top: 50%;
+	left: 100%;
+	min-width: 180px;
+	margin: 0;
+	transform: translate(10px, -50%);
+}
+
+.cf-complex__inserter-item {
+	padding: 8px 12px;
+	margin: 0;
+	cursor: pointer;
+	transition: color $transition-base;
+}
+
+.cf-complex__toggler {
+	.cf-complex__actions & {
+		margin-left: auto;
+	}
+}
+
+.cf-complex__placeholder-label {
+	margin: 8px 0 12px;
+}

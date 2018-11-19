@@ -133,19 +133,19 @@ class ComplexGroup extends Component {
 						</button>
 					) }
 
-					<button type="button" className="cf-complex__group-action" onClick={ this.handleToggleClick }>
-						<span className={ toggleClasses }></span>
-
-						<span className="cf-complex__group-action-text">
-							Collapse
-						</span>
-					</button>
-
 					<button type="button" className="cf-complex__group-action" onClick={ this.handleRemoveClick }>
 						<span className="dashicons-before dashicons-trash cf-complex__group-action-icon"></span>
 
 						<span className="cf-complex__group-action-text">
 							Remove
+						</span>
+					</button>
+
+					<button type="button" className="cf-complex__group-action" onClick={ this.handleToggleClick }>
+						<span className={ toggleClasses }></span>
+
+						<span className="cf-complex__group-action-text">
+							Collapse
 						</span>
 					</button>
 				</div>

@@ -20,6 +20,11 @@ import {
  */
 import { uniqueId } from '@carbon-fields/core';
 
+/**
+ * Internal dependencies.
+ */
+import './style.scss';
+
 class ComplexField extends Component {
 	/**
 	 * Local state.
