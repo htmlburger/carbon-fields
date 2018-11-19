@@ -99,7 +99,7 @@ class DatetimeField extends Component {
 		} = this.props;
 
 		return (
-			<FieldBase field={ field }>
+			<FieldBase id={ id } field={ field }>
 				<Flatpickr
 					options={ {
 						...field.picker_options,
@@ -108,7 +108,7 @@ class DatetimeField extends Component {
 					value={ value }
 					onReady={ this.handleReady }
 					onChange={ this.handleChange }
-					className="carbon-field-group-holder"
+					className="cf-datetime__inner"
 				>
 					<input
 						type="text"
@@ -117,16 +117,12 @@ class DatetimeField extends Component {
 						value={ value }
 						onChange={ this.handleManualInput }
 						onBlur={ this.formatManualInput }
-						className="regular-text carbon-field-group-input"
+						className="cf-datetime__input"
 						data-input
 						{ ...field.attributes }
 					/>
 
-					<button
-						type="button"
-						className="button"
-						data-toggle
-					>
+					<button type="button" className="button cf-datetime__button" data-toggle>
 						{ buttonText }
 					</button>
 				</Flatpickr>
