@@ -2,7 +2,6 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
 import { compose, withState } from '@wordpress/compose';
 
 /**
@@ -108,7 +107,10 @@ class MediaGalleryField extends Component {
 			name,
 			value,
 			attachmentsData,
-			selectedItem
+			selectedItem,
+			buttonLabel,
+			mediaLibraryButtonLabel,
+			mediaLibraryTitle
 		} = this.props;
 
 		return (
@@ -116,8 +118,8 @@ class MediaGalleryField extends Component {
 				<MediaLibrary
 					onSelect={ this.handleSelect }
 					multiple={ true }
-					title={ __( 'Choose items for the media gallery' ) }
-					buttonLabel={ __( 'Add Items' ) }
+					title={ mediaLibraryTitle }
+					buttonLabel={ mediaLibraryButtonLabel }
 				>
 					{
 						( { openMediaBrowser } ) => {
@@ -172,7 +174,7 @@ class MediaGalleryField extends Component {
 								</ul>
 
 								<button type="button" className="button cf-metaboxes-file__browse" onClick={ openMediaBrowser }>
-									{ __( 'Add Items' ) }
+									{ buttonLabel }
 								</button>
 							</div>;
 						}

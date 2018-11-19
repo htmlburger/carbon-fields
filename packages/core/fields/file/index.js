@@ -2,7 +2,6 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
 import { compose, withState } from '@wordpress/compose';
 
 /**
@@ -79,7 +78,10 @@ class FileField extends Component {
 			field,
 			value,
 			name,
-			fileData
+			fileData,
+			buttonLabel,
+			mediaLibraryButtonLabel,
+			mediaLibraryTitle
 		} = this.props;
 
 		return (
@@ -87,8 +89,8 @@ class FileField extends Component {
 				<MediaLibrary
 					onSelect={ this.handleSelect }
 					multiple={ false }
-					title={ __( 'Select or Upload file of your choice' ) }
-					buttonLabel={ __( 'Use this File' ) }
+					title={ mediaLibraryTitle }
+					buttonLabel={ mediaLibraryButtonLabel }
 				>
 					{
 						( { openMediaBrowser } ) => {
@@ -115,7 +117,7 @@ class FileField extends Component {
 								) }
 
 								<button type="button" className="button cf-file__browse" onClick={ openMediaBrowser }>
-									{ __( 'Select File' ) }
+									{ buttonLabel }
 								</button>
 							</div>;
 						}

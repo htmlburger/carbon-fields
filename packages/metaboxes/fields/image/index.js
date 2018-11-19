@@ -8,14 +8,14 @@ import { __ } from '@wordpress/i18n';
  * The internal dependencies.
  */
 import withField from '../../components/with-field';
-import { FileField } from '../file';
 
-addFilter( 'carbon-fields.image-field.metabox', 'carbon-fields/metaboxes', ( OriginalFileField ) => withField( ( props ) => {
+addFilter( 'carbon-fields.image-field.metabox', 'carbon-fields/metaboxes', ( OriginalImageField ) => withField( ( props ) => {
 	return (
-		<FileField { ...props }>
-			{ ( subProps ) => (
-				<OriginalFileField buttonLabel={ __( 'Select Image' ) } { ...props } { ...subProps } />
-			) }
-		</FileField>
+		<OriginalImageField
+			buttonLabel={ __( 'Select Image' ) }
+			mediaLibraryButtonLabel={ __( 'Use Image' ) }
+			mediaLibraryTitle={ __( 'Select Image' ) }
+			{ ...props }
+		/>
 	);
 } ) );
