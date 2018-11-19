@@ -12,6 +12,11 @@
 	.cf-rich-text & {
 		box-sizing: content-box;
 	}
+
+	.cf-complex > & {
+		display: flex;
+		align-items: flex-start;
+	}
 }
 
 .cf-field__label {

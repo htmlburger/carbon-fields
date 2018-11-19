@@ -30,7 +30,21 @@
 		transition: color $transition-base;
 
 		&:hover {
-			color: $wp-color-dark-silver-gray;
+			color: $wp-color-medium-blue;
 		}
+	}
+}
+
+.cf-complex__inserter-button {
+	.postbox .cf-complex__tabs & {
+		font-weight: 600;
+		color: $wp-color-dark-gray;
+	}
+}
+
+.cf-complex__tabs-item {
+	.postbox & {
+		font-weight: 600;
+		color: $wp-color-dark-gray;
 	}
 }

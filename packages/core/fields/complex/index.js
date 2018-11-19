@@ -245,6 +245,7 @@ class ComplexField extends Component {
 						// eslint-disable-next-line react/jsx-key
 						<ComplexGroup { ...onGroupSetup( group, {
 							index,
+							tabbed: this.isTabbed,
 							hidden: this.isTabbed && group[ groupIdKey ] !== currentTab,
 							allowClone: field.duplicate_groups_allowed && ! this.isMaximumReached,
 							onFieldSetup: onGroupFieldSetup,

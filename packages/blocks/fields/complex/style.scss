@@ -50,3 +50,13 @@
 		}
 	}
 }
+
+.cf-complex__tabs-item {
+	.wp-block & {
+		color: $gb-dark-gray-500;
+	}
+
+	.wp-block &--current {
+		color: $gb-dark-gray-900;
+	}
+}
