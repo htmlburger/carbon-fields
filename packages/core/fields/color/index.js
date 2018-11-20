@@ -66,6 +66,7 @@ class ColorField extends Component {
 		const {
 			id,
 			field,
+			name,
 			value
 		} = this.props;
 
