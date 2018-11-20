@@ -27,7 +27,7 @@ class Picker extends Component {
 		} = this.props;
 
 		return (
-			<div id="carbon-color-picker-wrapper" style={ { position: 'absolute', zIndex: 9999 } }>
+			<div id="carbon-color-picker-wrapper" className="cf-color__picker">
 				<SketchPicker
 					color={ color }
 					onChange={ onChange }
