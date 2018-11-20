@@ -2,44 +2,32 @@
    Media Gallery
    ========================================================================== */
 
-.cf-media-gallery__item {
-	.wp-block & {
-		@media (min-width: 1440px) {
-			flex-basis: 16.6667%;
-		}
-
-		@media (min-width: 1680px) {
-			flex-basis: 16.6667%;
-		}
-	}
-}
-
 .cf-media-gallery__inner {
-	.wp-block & {
+	.postbox & {
 		border: 1px solid $wp-color-gray-light-500;
 	}
 }
 
 .cf-media-gallery__actions {
-	.wp-block & {
+	.postbox & {
 		border-top: 1px solid $wp-color-gray-light-500;
 	}
 }
 
 .cf-media-gallery__item-inner {
-	.wp-block & {
+	.postbox & {
 		border: 1px solid $wp-color-gray-light-500;
 	}
 }
 
 .cf-media-gallery__item-preview {
-	.wp-block & {
+	.postbox & {
 		background-color: $wp-color-gray-light-200;
 	}
 }
 
 .cf-media-gallery__item-name {
-	.wp-block & {
+	.postbox & {
 		border-top: 1px solid $wp-color-gray-light-500;
 		background-color: $wp-color-gray-light-200;
 	}

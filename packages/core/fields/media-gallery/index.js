@@ -7,6 +7,7 @@ import { compose, withState } from '@wordpress/compose';
 /**
  * Internal dependencies.
  */
+import './style.scss';
 import FieldBase from '../../components/field-base';
 import MediaLibrary from '../../components/media-library';
 import fetchAttachmentsData from '../../utils/fetch-attachments-data';
@@ -103,6 +104,7 @@ class MediaGalleryField extends Component {
 	 */
 	render() {
 		const {
+			id,
 			field,
 			name,
 			value,
@@ -114,7 +116,7 @@ class MediaGalleryField extends Component {
 		} = this.props;
 
 		return (
-			<FieldBase field={ field } >
+			<FieldBase id={ id } field={ field } >
 				<MediaLibrary
 					onSelect={ this.handleSelect }
 					multiple={ true }
@@ -123,60 +125,72 @@ class MediaGalleryField extends Component {
 				>
 					{
 						( { openMediaBrowser } ) => {
-							return <div>
-								<ul className="cf-field-media-gallery__list">
-									{ value.map( ( id, index ) => {
-										const attachment = attachmentsData.find( ( attachmentData ) => attachmentData.id === id );
-										const className = [ 'cf-field-media-gallery__list-item' ];
+							return (
+								<div className="cf-media-gallery__inner">
+									<ul className="cf-media-gallery__list">
+										{ value.map( ( id, index ) => { // eslint-disable-line no-shadow
+											const attachment = attachmentsData.find( ( attachmentData ) => attachmentData.id === id );
+											const className = [ 'cf-media-gallery__item' ];
 
-										if ( attachment ) {
-											className.push( `cf-field-media-gallery__list-item--${ attachment.type }` );
-										}
+											if ( attachment ) {
+												className.push( `cf-media-gallery__item--${ attachment.type }` );
+											}
 
-										if ( selectedItem === index ) {
-											className.push( 'cf-field-media-gallery__list-item--selected' );
-										}
+											if ( selectedItem === index ) {
+												className.push( 'cf-media-gallery__item--selected' );
+											}
 
-										return (
-											attachment
-												? <li className={ className.join( ' ' ) } key={ index } onClick={ () => this.handleAttachmentSelect( index ) }>
-													<figure tabIndex="-1">
-														<div className="cf-field-media-gallery__list-item__actions">
-															<button type="button" aria-label="Remove File" className="components-button components-icon-button blocks-gallery-item__remove" onClick={ () => this.handleAttachmentRemove( index ) }>
-																<svg aria-hidden="true" role="img" className="dashicon dashicons-no-alt" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">
-																	<path d="M14.95 6.46L11.41 10l3.54 3.54-1.41 1.41L10 11.42l-3.53 3.53-1.42-1.42L8.58 10 5.05 6.47l1.42-1.42L10 8.58l3.54-3.53z"></path>
-																</svg>
-															</button>
+											return (
+												attachment
+													? <li className={ className.join( ' ' ) } key={ index } onClick={ () => this.handleAttachmentSelect( index ) }>
+														<div className="cf-media-gallery__item-inner">
+															<div className="cf-media-gallery__item-preview">
+																{
+																	attachment.type === 'image'
+																		? (
+																			<img
+																				className="cf-media-gallery__item-thumb"
+																				src={ attachment.sizes.thumbnail.url }
+																			/>
+																		)
+																		: (
+																			<img
+																				className="cf-media-gallery__item-icon"
+																				src={ attachment.icon }
+																			/>
+																		)
+																}
+															</div>
+
+															<span className="cf-media-gallery__item-name">
+																{ attachment.filename }
+															</span>
+
+															<button
+																type="button"
+																className="cf-media-gallery__item-remove dashicons-before dashicons-no-alt"
+																onClick={ () => this.handleAttachmentRemove( index ) }
+															></button>
 														</div>
 
-														{
-															attachment.type === 'image'
-																? <img src={ attachment.sizes.medium.url } data-id={ attachment.id } />
-																: <span className="dashicons dashicons-format-aside"></span>
-														}
+														<input
+															type="hidden"
+															name={ `${ name }[${ index }]` }
+															value={ id }
+															readOnly
+														/>
+													</li> : ''
+											);
+										} ) }
+									</ul>
 
-														{
-															attachment.type !== 'image'
-																? <figcaption><span>{ attachment.filename }</span></figcaption>
-																: ''
-														}
-													</figure>
-
-													<input
-														type="hidden"
-														name={ `${ name }[${ index }]` }
-														value={ id }
-														readOnly
-													/>
-												</li> : ''
-										);
-									} ) }
-								</ul>
-
-								<button type="button" className="button cf-metaboxes-file__browse" onClick={ openMediaBrowser }>
-									{ buttonLabel }
-								</button>
-							</div>;
+									<div className="cf-media-gallery__actions">
+										<button type="button" className="button cf-media-gallery__browse" onClick={ openMediaBrowser }>
+											{ buttonLabel }
+										</button>
+									</div>
+								</div>
+							);
 						}
 					}
 				</MediaLibrary>
