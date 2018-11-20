@@ -21,21 +21,24 @@ import of from 'callbag-of';
 /**
  * Internal dependencies.
  */
+import './style.scss';
 import FieldBase from '../../components/field-base';
+import SearchInput from '../../components/search-input';
 
 class AssociationField extends Component {
-	handleQueryTermChange = ( queryTerm ) => {
-		const {
-			onFetchOptions,
-			setState
-		} = this.props;
-
-		setState( {
-			queryTerm: queryTerm
+	/**
+	 * Handles the change of search.
+	 *
+	 * @param  {string} queryTerm
+	 * @return {void}
+	 */
+	handleSearchChange = ( queryTerm ) => {
+		this.props.setState( {
+			queryTerm
 		} );
 
-		onFetchOptions( {
-			queryTerm: queryTerm
+		this.props.onFetchOptions( {
+			queryTerm
 		} );
 	}
 
@@ -106,6 +109,7 @@ class AssociationField extends Component {
 	 */
 	render() {
 		const {
+			id,
 			field,
 			name,
 			value,
@@ -138,95 +142,87 @@ class AssociationField extends Component {
 		};
 
 		return (
-			<FieldBase
-				field={ field }
-				className="cf-field-association-wrapper"
-			>
-				<strong className="cf-field-association__counter">
-					showing { options.length } of { totalOptionsCount } results
-				</strong>
+			<FieldBase id={ id } field={ field }>
+				<div className="cf-association__bar">
+					<SearchInput
+						value={ queryTerm }
+						onChange={ this.handleSearchChange }
+					/>
 
-				<div className="cf-field-association">
-					<div className="cf-field-association__body">
-						<div className="cf-field-association__search-bar">
-							<input
-								type="text"
-								value={ queryTerm }
-								placeholder={ carbonFieldsL10n.field.searchPlaceholder }
-								onChange={ ( event ) => this.handleQueryTermChange( event.target.value ) }
-							/>
-						</div>
+					<span className="cf-association__counter">
+						Showing { options.length } of { totalOptionsCount } results
+					</span>
+				</div>
 
-						<div className="cf-field-association__col cf-field-association__col--source">
-							{
-								options.map( ( option, index ) => {
-									return (
-										<div className={ cx( 'cf-field-association__option', { 'cf-field-association__option--selected': option.disabled } ) } key={ index }>
-											<img className="cf-field-association__option-thumbnail" src={ option.thumbnail ? option.thumbnail : '' } />
+				<div className="cf-association__cols">
+					<div className="cf-association__col">
+						{
+							options.map( ( option, index ) => {
+								return (
+									<div className={ cx( 'cf-association__option', { 'cf-association__option--selected': option.disabled } ) } key={ index }>
+										{ option.thumbnail && (
+											<img className="cf-association__option-thumb" src={ option.thumbnail } />
+										) }
 
-											<div className="cf-field-association__option-content">
-												<span className="cf-field-association__option-title">
-													{ option.title }
-												</span>
+										<div className="cf-association__option-content">
+											<span className="cf-association__option-title">
+												{ option.title }
+											</span>
 
-												<span className="cf-field-association__option-type">
-													{ option.type }
-												</span>
-											</div>
-
-											<div className="cf-field-association__option-actions">
-												<a href={ option.edit_link }>
-													<span className="dashicons dashicons-edit"></span> Edit
-												</a>
-
-												<button type="button" className="is-small" onClick={ () => this.handleAddItem( option ) }>
-													<span className="dashicons dashicons-plus"></span> Add
-												</button>
-											</div>
+											<span className="cf-association__option-type">
+												{ option.type }
+											</span>
 										</div>
-									);
-								} )
-							}
-						</div>
 
-						<div className="cf-field-association__col cf-field-association__col--selected">
-							{
-								value.map( ( option, index ) => {
-									return (
-										<div className="cf-field-association__option" key={ index }>
-											<div className="cf-field-association__option-sort">
-												<span className="dashicons dashicons-menu"></span>
-											</div>
+										<div className="cf-association__option-actions">
+											<a className="cf-association__option-action dashicons dashicons-edit" href={ option.edit_link }></a>
 
-											<img className="cf-field-association__option-thumbnail" src={ option.thumbnail ? option.thumbnail : '' } />
-
-											<div className="cf-field-association__option-content">
-												<span className="cf-field-association__option-title">
-													{ option.title }
-												</span>
-
-												<span className="cf-field-association__option-type">
-													{ option.type }
-												</span>
-											</div>
-
-											<div className="cf-field-association__option-actions">
-												<button type="button" onClick={ () => this.handleRemoveItem( option ) }>
-													<span className="dashicons dashicons-trash"></span> Remove
+											{ ! option.disabled && (
+												<button type="button" className="cf-association__option-action dashicons dashicons-plus-alt" onClick={ () => this.handleAddItem( option ) }>
 												</button>
-											</div>
-
-											<input
-												type="hidden"
-												name={ `${ name }[${ index }]` }
-												value={ `${ option.type }:${ option.subtype }:${ option.id }` }
-												readOnly={ true }
-											/>
+											) }
 										</div>
-									);
-								} )
-							}
-						</div>
+									</div>
+								);
+							} )
+						}
+					</div>
+
+					<div className="cf-association__col">
+						{
+							value.map( ( option, index ) => {
+								return (
+									<div className="cf-association__option" key={ index }>
+										<span className="cf-association__option-sort dashicons dashicons-menu"></span>
+
+										{ option.thumbnail && (
+											<img className="cf-association__option-thumb" src={ option.thumbnail } />
+										) }
+
+										<div className="cf-association__option-content">
+											<span className="cf-association__option-title">
+												{ option.title }
+											</span>
+
+											<span className="cf-association__option-type">
+												{ option.type }
+											</span>
+										</div>
+
+										<div className="cf-association__option-actions">
+											<button type="button" className="cf-association__option-action dashicons dashicons-dismiss" onClick={ () => this.handleRemoveItem( option ) }></button>
+										</div>
+
+										<input
+											type="hidden"
+											name={ `${ name }[${ index }]` }
+											value={ `${ option.type }:${ option.subtype }:${ option.id }` }
+											readOnly
+										/>
+									</div>
+								);
+							} )
+						}
 					</div>
 				</div>
 			</FieldBase>
