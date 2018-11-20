@@ -20,6 +20,7 @@ import {
  */
 import './style.scss';
 import FieldBase from '../../components/field-base';
+import SearchInput from '../../components/search-input';
 import OembedPreview from './preview';
 
 class OembedField extends Component {
@@ -83,15 +84,15 @@ class OembedField extends Component {
 	/**
 	 * Handles the change of the input.
 	 *
-	 * @param  {Event} e
+	 * @param  {string} value
 	 * @return {void}
 	 */
-	handleChange = ( e ) => {
+	handleChange = ( value ) => {
 		const { id, onChange } = this.props;
 
-		onChange( id, e.target.value );
+		onChange( id, value );
 
-		this.handleSearch( e.target.value );
+		this.handleSearch( value );
 	}
 
 	/**
@@ -101,6 +102,7 @@ class OembedField extends Component {
 	 */
 	render() {
 		const {
+			id,
 			field,
 			name,
 			value,
@@ -110,12 +112,10 @@ class OembedField extends Component {
 		} = this.props;
 
 		return (
-			<FieldBase field={ field }>
+			<FieldBase id={ id } field={ field }>
 				<div ref={ this.node }>
-					<input
-						type="text"
-						className="cf-oembed__input"
-						placeholder="Search..."
+					<SearchInput
+						id={ id }
 						value={ value }
 						onChange={ this.handleChange }
 					/>
