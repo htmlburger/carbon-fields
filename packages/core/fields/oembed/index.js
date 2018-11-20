@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import { Component } from '@wordpress/element';
+import { Component, createRef } from '@wordpress/element';
 import { withEffects, toProps } from 'refract-callbag';
 import { compose, withState } from '@wordpress/compose';
 import {
@@ -23,6 +23,36 @@ import FieldBase from '../../components/field-base';
 import OembedPreview from './preview';
 
 class OembedField extends Component {
+	/**
+	 * Keeps references to the DOM node.
+	 *
+	 * @type {Object}
+	 */
+	node = createRef();
+
+	/**
+	 * Lifecycle hook.
+	 *
+	 * @return {void}
+	 */
+	componentDidMount() {
+		const { value } = this.props;
+
+		const i = setInterval( () => {
+			if ( this.node.current.getBoundingClientRect().width > 0 ) {
+				clearInterval( i );
+
+				this.handleSearch( value );
+			}
+		}, 100 );
+	}
+
+	/**
+	 * Handles the load of the oembed preview.
+	 *
+	 * @param  {String} value
+	 * @return {void}
+	 */
 	handleSearch = debounce( ( value ) => {
 		const {
 			isLoading,
@@ -49,23 +79,6 @@ class OembedField extends Component {
 
 		onFetchEmbedCode( value );
 	}, 200 )
-
-	componentDidMount() {
-		const {
-			value
-		} = this.props;
-
-		// eslint-disable-next-line
-		const domNode = ReactDOM.findDOMNode( this );
-
-		const i = setInterval( () => {
-			if ( domNode.getBoundingClientRect().width > 0 ) {
-				clearInterval( i );
-
-				this.handleSearch( value );
-			}
-		}, 100 );
-	}
 
 	/**
 	 * Handles the change of the input.
@@ -98,30 +111,32 @@ class OembedField extends Component {
 
 		return (
 			<FieldBase field={ field }>
-				<input
-					type="text"
-					className="cf-oembed__input"
-					placeholder="Search..."
-					value={ value }
-					onChange={ this.handleChange }
-				/>
+				<div ref={ this.node }>
+					<input
+						type="text"
+						className="cf-oembed__input"
+						placeholder="Search..."
+						value={ value }
+						onChange={ this.handleChange }
+					/>
 
-				{
-					embedCode
-						? <OembedPreview
-							html={ embedCode }
-							type={ embedType }
-							provider={ provider }
-						/>
-						: null
-				}
+					{
+						embedCode
+							? <OembedPreview
+								html={ embedCode }
+								type={ embedType }
+								provider={ provider }
+							/>
+							: null
+					}
 
-				<input
-					type="hidden"
-					name={ name }
-					value={ value }
-					readOnly
-				/>
+					<input
+						type="hidden"
+						name={ name }
+						value={ value }
+						readOnly
+					/>
+				</div>
 			</FieldBase>
 		);
 	}
@@ -174,7 +189,7 @@ function handler( props ) {
 				} );
 
 				/* eslint-disable-next-line no-alert */
-				const errorHandler = () => alert( 'An error occurred while trying to fetch association options.' );
+				const errorHandler = () => alert( 'An error occurred while trying to fetch oembed preview.' );
 
 				request.done( ( response ) => {
 					props.setState( {

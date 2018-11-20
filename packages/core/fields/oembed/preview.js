@@ -114,9 +114,11 @@ class OembedPreview extends Component {
 		const observeAndResizeJS = `
 			( function() {
 				var observer;
+
 				if ( ! window.MutationObserver || ! document.body || ! window.parent ) {
 					return;
 				}
+
 				function sendResize() {
 					var clientBoundingRect = document.body.getBoundingClientRect();
 
@@ -136,10 +138,13 @@ class OembedPreview extends Component {
 					childList: true,
 					subtree: true
 				} );
+
 				window.addEventListener( 'load', sendResize, true );
+
 				// Hack: Remove viewport unit styles, as these are relative
 				// the iframe root and interfere with our mechanism for
 				// determining the unconstrained page bounds.
+
 				function removeViewportStyles( ruleOrNode ) {
 					[ 'width', 'height', 'minHeight', 'maxHeight' ].forEach( function( style ) {
 						if ( /^\\d+(vmin|vmax|vh|vw)$/.test( ruleOrNode.style[ style ] ) ) {
@@ -147,6 +152,7 @@ class OembedPreview extends Component {
 						}
 					} );
 				}
+
 				Array.prototype.forEach.call( document.querySelectorAll( '[style]' ), removeViewportStyles );
 				Array.prototype.forEach.call( document.styleSheets, function( stylesheet ) {
 					Array.prototype.forEach.call( stylesheet.cssRules || stylesheet.rules, removeViewportStyles );
@@ -176,6 +182,7 @@ class OembedPreview extends Component {
 				<head>
 					<style dangerouslySetInnerHTML={ { __html: style } } />
 				</head>
+
 				<body data-resizable-iframe-connected="data-resizable-iframe-connected" className={ this.props.type + ' ' + this.props.provider }>
 					<div dangerouslySetInnerHTML={ { __html: this.props.html } } />
 					<script type="text/javascript" dangerouslySetInnerHTML={ { __html: observeAndResizeJS } } />
