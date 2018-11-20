@@ -64,6 +64,10 @@
 
 .cf-complex__group-body {
 	border: 1px solid $wp-color-gray-light-500;
+
+	.cf-complex--grid & {
+		border-top-width: 0;
+	}
 }
 
 /**
