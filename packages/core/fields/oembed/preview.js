@@ -37,16 +37,6 @@ class OembedPreview extends Component {
 	}
 
 	/**
-	 * Lifecycle Hooks.
-	 *
-	 * @return {void}
-	 */
-	// eslint-disable-next-line
-	UNSAFE_componentWillReceiveProps() {
-		this.renderIframe();
-	}
-
-	/**
 	 * Lifecycle Hook.
 	 *
 	 * @return {void}
