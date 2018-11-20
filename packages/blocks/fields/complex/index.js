@@ -68,18 +68,17 @@ class ComplexField extends Component {
 	/**
 	 * Handles cloning of group.
 	 *
-	 * @param  {string}   groupId
+	 * @param  {Object}   group
 	 * @param  {Function} callback
 	 * @return {void}
 	 */
-	handleCloneGroup = ( groupId, callback ) => {
+	handleCloneGroup = ( group, callback ) => {
 		const {
 			name,
 			value,
 			onChange
 		} = this.props;
 
-		const group = find( value, [ '_id', groupId ] );
 		const index = value.indexOf( group );
 		const clonedGroup = cloneDeep( group );
 
@@ -95,24 +94,24 @@ class ComplexField extends Component {
 	/**
 	 * Handles removing of group.
 	 *
-	 * @param  {string} groupId
+	 * @param  {Object} group
 	 * @return {void}
 	 */
-	handleRemoveGroup = ( groupId ) => {
+	handleRemoveGroup = ( group ) => {
 		const {
 			name,
 			value,
 			onChange
 		} = this.props;
 
-		const groupIndex = findIndex( value, [ '_id', groupId ] );
+		const groupIndex = findIndex( value, [ '_id', group._id ] );
 
 		onChange( name, produce( value, ( draft ) => {
 			draft.splice( groupIndex, 1 );
 		} ) );
 
 		this.setState( ( { collapsedGroups } ) => ( {
-			collapsedGroups: without( collapsedGroups, groupId )
+			collapsedGroups: without( collapsedGroups, group._id )
 		} ) );
 	}
 
