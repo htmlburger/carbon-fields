@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { get } from 'lodash';
 
 /**
  * Internal dependencies.
@@ -39,14 +40,13 @@ class ColorField extends Component {
 	/**
 	 * Handles the change of the input.
 	 *
-	 * @param {Object|Null} color
-	 * @param {string}      hex
+	 * @param  {Object} [color]
 	 * @return {void}
 	 */
-	handleChange = ( { hex = null } = {} ) => {
+	handleChange = ( color ) => {
 		const { id, onChange } = this.props;
 
-		onChange( id, hex );
+		onChange( id, get( color, 'hex', '' ) );
 	}
 
 	/**
