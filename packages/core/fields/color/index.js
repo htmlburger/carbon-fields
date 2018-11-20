@@ -13,16 +13,12 @@ import hexToRgba from '../../utils/hex-to-rgba';
 
 class ColorField extends Component {
 	/**
-	 * Defines the initial state
+	 * Defines the initial state.
 	 *
-	 * @return {void}
+	 * @type {Object}
 	 */
-	constructor() {
-		super();
-
-		this.state = {
-			showPicker: false
-		};
+	state = {
+		showPicker: false
 	}
 
 	/**
