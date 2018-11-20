@@ -1,0 +1,25 @@
+/* ==========================================================================
+   Association
+   ========================================================================== */
+
+.cf-association__cols {
+	.postbox & {
+		border-width: 0 1px 1px;
+		border-style: solid;
+		border-color: $wp-color-gray-light-500;
+	}
+
+	.postbox &::before {
+		background-color: $wp-color-gray-light-500;
+	}
+}
+
+.cf-association__option {
+	.postbox & + & {
+		border-top: 1px solid $wp-color-gray-light-500;
+	}
+
+	.postbox &--selected {
+		background-color: $wp-color-gray-light-100;
+	}
+}

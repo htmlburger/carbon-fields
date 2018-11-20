@@ -1,75 +1,25 @@
-.cf-field-association {
-	&__body {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: wrap;
+/* ==========================================================================
+   Association
+   ========================================================================== */
+
+.cf-association__cols {
+	.wp-block & {
+		border-width: 1px;
+		border-style: solid;
+		border-color: $gb-dark-gray-150;
 	}
 
-	&__search-bar {
-		flex: 0 0 100%;
-
-		.components-base-control__field {
-			margin-bottom: 0;
-
-			.components-text-control__input {
-				border-radius: 0;
-				margin: 0;
-				border-color: #e2e4e7;
-			}
-		}
-	}
-
-	&__col {
-		flex: 0 0 50%;
-		padding: 3px 7px;
-		border: 1px solid #e2e4e7;
-		border-top: 0;
-		height: 150px;
-		overflow-y: scroll;
-
-		&--selected {
-			border-left: 0;
-		}
+	.wp-block &::before {
+		background-color: $gb-dark-gray-150;
 	}
 }
 
-.cf-field-association__option {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
-
-	&-thumbnail {
-		width: 30px;
-		height: 30px;
-		margin-right: 6px;
+.cf-association__option {
+	.wp-block & + & {
+		border-top: 1px solid $gb-dark-gray-150;
 	}
 
-	&-actions {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
-		margin-left: auto;
+	.wp-block &--selected {
+		background-color: $gb-light-gray-200;
 	}
-
-	&--selected {
-		opacity: .6;
-	}
-}
-
-.cf-field-association__option-sort {
-	height: 20px;
-	margin-right: 6px;
-	cursor: grab;
-}
-
-.cf-field-association__option-content {
-	display: flex;
-	flex-direction: column;
-	line-height: 16px;
-}
-
-.cf-field-association__option-type {
-	font-size: 12px;
-	line-height: 14px;
-	opacity: .82;
 }
