@@ -239,22 +239,24 @@ class ComplexField extends Component {
 					</ComplexPlaceholder>
 				) }
 
-				<div className="cf-complex__groups">
-					{ value.map( ( group, index ) => (
-						// The `key` will be assigned via `onGroupSetup`.
-						// eslint-disable-next-line react/jsx-key
-						<ComplexGroup { ...onGroupSetup( group, {
-							index,
-							tabbed: this.isTabbed,
-							hidden: this.isTabbed && group[ groupIdKey ] !== currentTab,
-							allowClone: field.duplicate_groups_allowed && ! this.isMaximumReached,
-							onFieldSetup: onGroupFieldSetup,
-							onClone: this.handleCloneGroup,
-							onRemove: this.handleRemoveGroup,
-							onToggle: onToggleGroup
-						} ) } />
-					) ) }
-				</div>
+				{ !! value.length && (
+					<div className="cf-complex__groups">
+						{ value.map( ( group, index ) => (
+							// The `key` will be assigned via `onGroupSetup`.
+							// eslint-disable-next-line react/jsx-key
+							<ComplexGroup { ...onGroupSetup( group, {
+								index,
+								tabbed: this.isTabbed,
+								hidden: this.isTabbed && group[ groupIdKey ] !== currentTab,
+								allowClone: field.duplicate_groups_allowed && ! this.isMaximumReached,
+								onFieldSetup: onGroupFieldSetup,
+								onClone: this.handleCloneGroup,
+								onRemove: this.handleRemoveGroup,
+								onToggle: onToggleGroup
+							} ) } />
+						) ) }
+					</div>
+				) }
 
 				{ ! this.isTabbed && !! value.length && (
 					<div className="cf-complex__actions">

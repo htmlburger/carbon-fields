@@ -6,6 +6,7 @@ import { isObject } from 'lodash';
 /**
  * Internal dependencies.
  */
+import './style.scss';
 import ContainerPlain from '../container-plain';
 import ContainerTabbed from '../container-tabbed';
 

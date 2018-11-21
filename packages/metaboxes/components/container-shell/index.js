@@ -6,6 +6,11 @@ import { getFieldType } from '@carbon-fields/core';
 import { kebabCase } from 'lodash';
 
 /**
+ * Internal dependencies.
+ */
+import './style.scss';
+
+/**
  * Renders the base wrapper of the container.
  *
  * @param  {Object} props

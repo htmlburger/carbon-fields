@@ -27,6 +27,7 @@
  */
 
 .cf-complex__group-head {
+	position: relative;
 	display: flex;
 	border: 1px solid $wp-color-gray-light-500;
 	background-color: $wp-color-gray-light-100;
@@ -63,10 +64,12 @@
  */
 
 .cf-complex__group-body {
-	border: 1px solid $wp-color-gray-light-500;
+	border-width: 0 0 1px 1px;
+	border-style: solid;
+	border-color: $wp-color-gray-light-500;
 
 	.cf-complex--grid & {
-		border-top-width: 0;
+		margin-top: -1px;
 	}
 }
 
@@ -167,20 +170,19 @@
 	display: flex;
 	align-items: center;
 
-	.cf-complex--grid & {
-		position: absolute;
-		top: 12px;
-		right: 12px;
-	}
-
-	.cf-complex--tabbed-horizontal &,
-	.cf-complex--tabbed-vertical & {
+	&--tabbed {
 		justify-content: flex-end;
 		padding: 8px 12px;
 		border-width: 0 1px 1px;
 		border-style: solid;
 		border-color: $wp-color-gray-light-500;
 		background-color: $wp-color-gray-light-100;
+	}
+
+	.cf-complex--grid & {
+		position: absolute;
+		top: 12px;
+		right: 12px;
 	}
 }
 

@@ -10,6 +10,14 @@
 		color: $gb-dark-gray-500;
 		margin-top: 14px;
 	}
+
+	.wp-block .cf-complex & {
+		padding: $size-base * 2;
+		border-width: 1px 1px 0 0;
+		border-style: solid;
+		border-color: $wp-color-gray-light-500;
+		margin-top: 0;
+	}
 }
 
 .cf-field__label {

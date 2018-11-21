@@ -87,6 +87,13 @@ class ComplexGroup extends Component {
 			}
 		);
 
+		const actionsClasses = cx(
+			'cf-complex__group-actions',
+			{
+				'cf-complex__group-actions--tabbed': tabbed
+			}
+		);
+
 		return (
 			<div className={ groupClasses } hidden={ hidden }>
 				{ name && (
@@ -125,7 +132,7 @@ class ComplexGroup extends Component {
 					} ) }
 				</div>
 
-				<div className="cf-complex__group-actions">
+				<div className={ actionsClasses }>
 					{ allowClone && (
 						<button type="button" className="cf-complex__group-action" onClick={ this.handleCloneClick }>
 							<span className="dashicons-before dashicons-admin-page cf-complex__group-action-icon"></span>
