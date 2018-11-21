@@ -4,7 +4,6 @@
 import produce from 'immer';
 import { combineReducers } from '@wordpress/data';
 import {
-	set,
 	omit,
 	keyBy,
 	assign,
@@ -28,17 +27,6 @@ export function containers( state = {}, action ) {
 	switch ( action.type ) {
 		case 'SETUP_STATE':
 			return action.payload.containers;
-
-		case 'UPDATE_CONTAINER_META':
-			return produce( state, ( draft ) => {
-				const {
-					containerId,
-					key,
-					value
-				} = action.payload;
-
-				set( draft, `${ containerId }.meta.${ key }`, value );
-			} );
 
 		default:
 			return state;
