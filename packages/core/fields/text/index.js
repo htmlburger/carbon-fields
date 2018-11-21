@@ -6,6 +6,7 @@ import { Component } from '@wordpress/element';
 /**
  * Internal dependencies.
  */
+import './style.scss';
 import FieldBase from '../../components/field-base';
 
 class TextField extends Component {
@@ -41,6 +42,7 @@ class TextField extends Component {
 					id={ id }
 					name={ name }
 					value={ value }
+					className="cf-text__input"
 					onChange={ this.handleChange }
 					{ ...field.attributes }
 				/>

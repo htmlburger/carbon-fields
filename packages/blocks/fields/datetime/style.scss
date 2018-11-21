@@ -1,0 +1,21 @@
+/* ==========================================================================
+   DateTime
+   ========================================================================== */
+
+.cf-datetime__input {
+	.wp-block .cf-field & {
+		border-color: $wp-color-gray-light-500;
+		border-radius: 0;
+
+		&:focus {
+			box-shadow: none;
+		}
+	}
+}
+
+.cf-datetime__button {
+	.wp-block & {
+		height: auto;
+		border-color: $wp-color-gray-light-500;
+	}
+}
