@@ -44,7 +44,7 @@ class ComplexField extends Component {
 	 */
 	handleAddGroup = ( group, callback ) => {
 		const {
-			name,
+			id,
 			value,
 			onChange
 		} = this.props;
@@ -60,7 +60,7 @@ class ComplexField extends Component {
 			return accumulator;
 		}, data );
 
-		onChange( name, value.concat( data ) );
+		onChange( id, value.concat( data ) );
 
 		callback( data );
 	}
@@ -74,7 +74,7 @@ class ComplexField extends Component {
 	 */
 	handleCloneGroup = ( group, callback ) => {
 		const {
-			name,
+			id,
 			value,
 			onChange
 		} = this.props;
@@ -84,7 +84,7 @@ class ComplexField extends Component {
 
 		clonedGroup._id = uniqueId();
 
-		onChange( name, produce( value, ( draft ) => {
+		onChange( id, produce( value, ( draft ) => {
 			draft.splice( index + 1, 0, clonedGroup );
 		} ) );
 
@@ -99,14 +99,14 @@ class ComplexField extends Component {
 	 */
 	handleRemoveGroup = ( group ) => {
 		const {
-			name,
+			id,
 			value,
 			onChange
 		} = this.props;
 
 		const groupIndex = findIndex( value, [ '_id', group._id ] );
 
-		onChange( name, produce( value, ( draft ) => {
+		onChange( id, produce( value, ( draft ) => {
 			draft.splice( groupIndex, 1 );
 		} ) );
 
