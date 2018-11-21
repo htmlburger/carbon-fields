@@ -8,17 +8,9 @@
 	}
 }
 
-.cf-radio__label {
-	.wp-block .cf-radio-image .cf-radio__input:focus ~ & {
-		border-radius: $gb-radius-round-rectangle;
-		box-shadow: 0 0 0 1px $wp-color-medium-blue;
-	}
-}
-
 .cf-radio-image__image {
 	.wp-block & {
-		border: 1px solid $gb-dark-gray-150;
-		border-radius: $gb-radius-round-rectangle;
+		border: 1px solid $wp-color-gray-light-500;
 	}
 
 	.wp-block .cf-radio__input:focus ~ .cf-radio__label &,
