@@ -3,12 +3,19 @@
  */
 const path = require( 'path' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+const OptimizeCssAssetsPlugin = require( 'optimize-css-assets-webpack-plugin' );
+const TerserPlugin = require( 'terser-webpack-plugin' );
 
-console.log( path.resolve( __dirname, '../assets/styles' ) );
+/**
+ * Indicates if we're running the build process in production mode.
+ *
+ * @type {Boolean}
+ */
+const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
 	output: {
-		filename: '[name].js'
+		filename: isProduction ? '[name].min.js' : '[name].js'
 	},
 	module: {
 		rules: [
@@ -50,12 +57,29 @@ module.exports = {
 	},
 	plugins: [
 		new MiniCssExtractPlugin( {
-			filename: '[name].css'
-		} )
+			filename: isProduction ? '[name].min.css' : '[name].css'
+		} ),
+
+		...(
+			isProduction
+			? [
+				new OptimizeCssAssetsPlugin( {
+					cssProcessorPluginOptions: {
+						preset: [ 'default', { discardComments: { removeAll: true } } ]
+					}
+				} ),
+				new TerserPlugin( {
+					cache: true,
+					parallel: true
+				} )
+			]
+			: []
+		)
 	],
 	stats: {
 		modules: false,
 		hash: false,
-		builtAt: false
+		builtAt: false,
+		children: false
 	}
 };
