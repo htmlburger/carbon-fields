@@ -6,6 +6,7 @@ import { Component } from '@wordpress/element';
 /**
  * Internal dependencies.
  */
+import './style.scss';
 import FieldBase from '../../components/field-base';
 
 class TextField extends Component {
