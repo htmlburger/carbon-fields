@@ -1,17 +1,19 @@
 /**
  * External dependencies.
  */
+import { __ } from '@wordpress/i18n';
 import { Component } from '@wordpress/element';
 import { compose, withState } from '@wordpress/compose';
 import { withEffects, toProps } from 'refract-callbag';
 import cx from 'classnames';
 import {
-	cloneDeep,
 	find,
 	isMatch,
-	without
+	without,
+	pick
 } from 'lodash';
 import {
+	combine,
 	map,
 	merge,
 	pipe
@@ -22,10 +24,34 @@ import of from 'callbag-of';
  * Internal dependencies.
  */
 import './style.scss';
+import apiFetch from '../../utils/api-fetch';
 import FieldBase from '../../components/field-base';
 import SearchInput from '../../components/search-input';
 
 class AssociationField extends Component {
+	/**
+	 * Lifecycle hook.
+	 *
+	 * @return {void}
+	 */
+	componentDidMount() {
+		const {
+			fetchSelectedOptions,
+			field,
+			value,
+			setState
+		} = this.props;
+
+		setState( {
+			options: field.options.options,
+			totalOptionsCount: field.options.total_options
+		} );
+
+		if ( value ) {
+			fetchSelectedOptions();
+		}
+	}
+
 	/**
 	 * Handles the change of search.
 	 *
@@ -33,13 +59,13 @@ class AssociationField extends Component {
 	 * @return {void}
 	 */
 	handleSearchChange = ( queryTerm ) => {
-		this.props.setState( {
-			queryTerm
-		} );
+		const {
+			onFetchOptions,
+			setState
+		} = this.props;
 
-		this.props.onFetchOptions( {
-			queryTerm
-		} );
+		setState( { queryTerm } );
+		onFetchOptions( { queryTerm } );
 	}
 
 	/**
@@ -53,7 +79,9 @@ class AssociationField extends Component {
 			field,
 			id,
 			value,
-			onChange
+			onChange,
+			setState,
+			selectedOptions
 		} = this.props;
 
 		// Don't do anything if the duplicates aren't allowed and
@@ -70,8 +98,12 @@ class AssociationField extends Component {
 
 		onChange( id, [
 			...value,
-			cloneDeep( option )
+			pick( option, 'id', 'type', 'subtype' )
 		] );
+
+		setState( {
+			selectedOptions: [ ...selectedOptions, option ]
+		} );
 	}
 
 	/**
@@ -84,21 +116,14 @@ class AssociationField extends Component {
 		const {
 			value,
 			id,
-			onChange
+			onChange,
+			setState,
+			selectedOptions
 		} = this.props;
 
 		onChange( id, without( value, option ) );
-	}
-
-	componentDidMount() {
-		const {
-			field,
-			setState
-		} = this.props;
-
 		setState( {
-			options: field.options.options,
-			totalOptionsCount: field.options.total_options
+			selectedOptions: without( selectedOptions, option )
 		} );
 	}
 
@@ -114,6 +139,7 @@ class AssociationField extends Component {
 			name,
 			value,
 			totalOptionsCount,
+			selectedOptions,
 			queryTerm
 		} = this.props;
 
@@ -190,22 +216,28 @@ class AssociationField extends Component {
 
 					<div className="cf-association__col">
 						{
-							value.map( ( option, index ) => {
+							selectedOptions.length && value.map( ( option, index ) => {
+								const optionData = selectedOptions.find( ( selectedOption ) => {
+									return selectedOption.id === option.id
+										&& selectedOption.type === option.type
+										&& selectedOption.subtype === option.subtype;
+								} );
+
 								return (
 									<div className="cf-association__option" key={ index }>
 										<span className="cf-association__option-sort dashicons dashicons-menu"></span>
 
-										{ option.thumbnail && (
-											<img className="cf-association__option-thumb" src={ option.thumbnail } />
+										{ optionData.thumbnail && (
+											<img className="cf-association__option-thumb" src={ optionData.thumbnail } />
 										) }
 
 										<div className="cf-association__option-content">
 											<span className="cf-association__option-title">
-												{ option.title }
+												{ optionData.title }
 											</span>
 
 											<span className="cf-association__option-type">
-												{ option.type }
+												{ optionData.type }
 											</span>
 										</div>
 
@@ -216,7 +248,7 @@ class AssociationField extends Component {
 										<input
 											type="hidden"
 											name={ `${ name }[${ index }]` }
-											value={ `${ option.type }:${ option.subtype }:${ option.id }` }
+											value={ `${ optionData.type }:${ optionData.subtype }:${ optionData.id }` }
 											readOnly
 										/>
 									</div>
@@ -230,6 +262,8 @@ class AssociationField extends Component {
 	}
 }
 
+const fetchData = ( field, data ) => apiFetch( `${ window.wpApiSettings.root }carbon-fields/v1/association/`, 'get', { container_id: field.container_id, field_id: field.base_name, ...data } );
+
 /**
  * The function that controls the stream of side-effects.
  *
@@ -237,24 +271,42 @@ class AssociationField extends Component {
  */
 function aperture() {
 	return function( component ) {
-		const [ fetchOptions$, fetchOptions ] = component.useEvent( 'fetchOptions' );
+		const actions = [
+			{ event: 'fetchOptionsEvent', prop: 'fetchOptions', type: 'FETCH_OPTIONS' },
+			{ event: 'fetchSelectedOptionsEvent', prop: 'fetchSelectedOptions', type: 'FETCH_SELECTED_OPTIONS' }
+		].map( ( actionData ) => {
+			const [ actionChannel$, action ] = component.useEvent( actionData.event );
 
-		const fetchOptionsProps$ = pipe(
-			of( {
-				onFetchOptions: fetchOptions
-			} ),
-			map( toProps )
+			return {
+				...actionData,
+				action,
+				channel$: actionChannel$
+			};
+		} );
+
+		const combined$ = pipe(
+			combine( ...actions.map( ( { action, prop } ) => of( {
+				action,
+				prop
+			} ) ) ),
+			map( ( combinedActions ) => toProps( combinedActions.reduce(
+				( acc, curr ) => ( {
+					...acc,
+					[ curr.prop ]: curr.action
+				} ), {}
+			) ) )
 		);
 
-		const fetchOptionsEffect$ = pipe(
-			fetchOptions$,
-			map( ( payload ) => ( {
-				type: 'FETCH_OPTIONS',
-				payload: payload
-			} ) )
+		return merge(
+			combined$,
+			...actions.map( ( { channel$, type } ) => pipe(
+				channel$,
+				map( ( payload ) => ( {
+					type,
+					payload
+				} ) )
+			) )
 		);
-
-		return merge( fetchOptionsProps$, fetchOptionsEffect$ );
 	};
 }
 
@@ -267,7 +319,7 @@ function aperture() {
 function handler( props ) {
 	return function( effect ) {
 		const { payload, type } = effect;
-		const { field } = props;
+		const { field, setState, selectedOptions } = props;
 
 		switch ( type ) {
 			case 'FETCH_OPTIONS':
@@ -280,11 +332,11 @@ function handler( props ) {
 				}, null, 'json' );
 
 				/* eslint-disable-next-line no-alert */
-				const errorHandler = () => alert( 'An error occurred while trying to fetch association options.' );
+				const errorHandler = () => alert( __( 'An error occurred while trying to fetch association options.' ) );
 
 				request.done( ( response ) => {
 					if ( response && response.success ) {
-						props.setState( {
+						setState( {
 							options: response.data.options,
 							totalOptionsCount: response.data.total_options
 						} );
@@ -295,12 +347,23 @@ function handler( props ) {
 
 				request.fail( errorHandler );
 				break;
+
+			case 'FETCH_SELECTED_OPTIONS':
+				fetchData( field, { options: props.value } )
+					.then( ( response ) => {
+						setState( {
+							selectedOptions: [ ...selectedOptions, ...response ]
+						} );
+					} );
+
+				break;
 		}
 	};
 }
 
 const applyWithState = withState( {
 	options: [],
+	selectedOptions: [],
 	totalOptionsCount: 0,
 	queryTerm: ''
 } );

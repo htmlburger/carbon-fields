@@ -6,6 +6,26 @@ use WP_Query;
 
 trait Formats_Options {
 	/**
+	 * Used to get the thumbnail of an item.
+	 *
+	 * Can be overriden or extended by the `carbon_fields_association_field_option_thumbnail` filter.
+	 *
+	 * @param int $id The database ID of the item.
+	 * @param string $type Item type (post, term, user, comment, or a custom one).
+	 * @param string $subtype The subtype - "page", "post", "category", etc.
+	 * @return string $title The title of the item.
+	 */
+	public function get_thumbnail_by_type( $id, $type, $subtype = '' ) {
+		$thumbnail_url = '';
+
+		if ( $type === 'post' ) {
+			$thumbnail_url = get_the_post_thumbnail_url( $id, 'thumbnail' );
+		}
+
+		return apply_filters( 'carbon_fields_association_field_option_thumbnail', $thumbnail_url, $id, $type, $subtype );
+	}
+
+	/**
 	 * Used to get the title of an item.
 	 *
 	 * Can be overriden or extended by the `carbon_association_title` filter.
@@ -15,7 +35,7 @@ trait Formats_Options {
 	 * @param string $subtype The subtype - "page", "post", "category", etc.
 	 * @return string $title The title of the item.
 	 */
-	protected function get_title_by_type( $id, $type, $subtype = '' ) {
+	public function get_title_by_type( $id, $type, $subtype = '' ) {
 		$title = '';
 
 		$method = 'get_' . $type . '_title';
@@ -59,7 +79,7 @@ trait Formats_Options {
 	 * @param string  $subtype Subtype - "page", "post", "category", etc.
 	 * @return string $label The label of the item.
 	 */
-	protected function get_item_label( $id, $type, $subtype = '' ) {
+	public function get_item_label( $id, $type, $subtype = '' ) {
 		$label = $subtype ? $subtype : $type;
 
 		if ( $type === 'post' ) {
@@ -145,6 +165,7 @@ trait Formats_Options {
 		return array(
 			'id'         => intval( $data->ID ),
 			'title'      => $data->title,
+			'thumbnail'  => '',
 			'type'       => $data->type,
 			'subtype'    => $data->subtype,
 			'label'      => $this->get_item_label( $data, $data->type, $data->subtype ),
@@ -163,6 +184,7 @@ trait Formats_Options {
 		return array(
 			'id'         => intval( $data->ID ),
 			'title'      => $this->get_title_by_type( $data->ID, 'comment' ),
+			'thumbnail'  => '',
 			'type'       => 'comment',
 			'subtype'    => 'comment',
 			'label'      => $this->get_item_label( $data->ID, 'comment' ),
@@ -181,6 +203,7 @@ trait Formats_Options {
 		return array(
 			'id'         => intval( $data->ID ),
 			'title'      => $this->get_title_by_type( $data->ID, 'user' ),
+			'thumbnail'  => get_avatar_url( $data->ID, array( 'size' => 150 ) ),
 			'type'       => 'user',
 			'subtype'    => 'user',
 			'label'      => $this->get_item_label( $data->ID, 'user' ),
