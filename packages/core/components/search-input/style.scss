@@ -5,16 +5,19 @@
 .cf-search-input {
 	position: relative;
 
-	.wp-block & {
-		margin-bottom: 4px;
-	}
-
 	&::before {
 		position: absolute;
 		top: 50%;
 		left: 9px;
 		margin-top: -10px;
-		color: $wp-color-base-gray;
+
+		.postbox & {
+			color: $wp-color-base-gray;
+		}
+
+		.wp-block & {
+			color: $gb-dark-gray-500;
+		}
 	}
 }
 
@@ -32,5 +35,14 @@
 		padding-top: 8px;
 		padding-bottom: 8px;
 		border-color: $wp-color-gray-light-500;
+	}
+
+	.wp-block .cf-field & {
+		border-radius: 0;
+		border-color: $wp-color-gray-light-500;
+
+		&:focus {
+			box-shadow: none;
+		}
 	}
 }
