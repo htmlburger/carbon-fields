@@ -43,7 +43,6 @@ class BlockEdit extends Component {
 						<Field
 							key={ index }
 							id={ field.base_name }
-							name={ field.base_name }
 							value={ value }
 							field={ field }
 							onChange={ this.handleFieldChange }
