@@ -4,22 +4,7 @@
 
 .cf-association__cols {
 	.wp-block & {
-		border-width: 1px;
-		border-style: solid;
-		border-color: $gb-dark-gray-150;
-	}
-
-	.wp-block &::before {
-		background-color: $gb-dark-gray-150;
-	}
-}
-
-.cf-association__option {
-	.wp-block & + & {
-		border-top: 1px solid $gb-dark-gray-150;
-	}
-
-	.wp-block &--selected {
-		background-color: $gb-light-gray-200;
+		border-top-width: 1px;
+		margin-top: 4px;
 	}
 }
