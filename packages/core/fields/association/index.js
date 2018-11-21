@@ -60,12 +60,12 @@ class AssociationField extends Component {
 	 */
 	handleSearchChange = ( queryTerm ) => {
 		const {
-			onFetchOptions,
+			fetchOptions,
 			setState
 		} = this.props;
 
 		setState( { queryTerm } );
-		onFetchOptions( { queryTerm } );
+		fetchOptions( { queryTerm } );
 	}
 
 	/**
