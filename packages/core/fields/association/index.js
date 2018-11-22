@@ -2,7 +2,7 @@
  * External dependencies.
  */
 import { __ } from '@wordpress/i18n';
-import { Component } from '@wordpress/element';
+import { Component, createRef } from '@wordpress/element';
 import { compose, withState } from '@wordpress/compose';
 import { withEffects, toProps } from 'refract-callbag';
 import cx from 'classnames';
@@ -27,8 +27,16 @@ import './style.scss';
 import apiFetch from '../../utils/api-fetch';
 import FieldBase from '../../components/field-base';
 import SearchInput from '../../components/search-input';
+import Sortable from '../../components/sortable';
 
 class AssociationField extends Component {
+	/**
+	 * Keeps reference to the DOM node that contains the selected items.
+	 *
+	 * @type {Object}
+	 */
+	selectedList = createRef();
+
 	/**
 	 * Lifecycle hook.
 	 *
@@ -128,6 +136,18 @@ class AssociationField extends Component {
 	}
 
 	/**
+	 * Handles sorting of selected options.
+	 *
+	 * @param  {Object[]} items
+	 * @return {void}
+	 */
+	handleSort = ( items ) => {
+		const { id, onChange } = this.props;
+
+		onChange( id, items );
+	}
+
+	/**
 	 * Render the component.
 	 *
 	 * @return {Object}
@@ -214,48 +234,60 @@ class AssociationField extends Component {
 						}
 					</div>
 
-					<div className="cf-association__col">
-						{
-							selectedOptions.length && value.map( ( option, index ) => {
-								const optionData = selectedOptions.find( ( selectedOption ) => {
-									return selectedOption.id === option.id
-										&& selectedOption.type === option.type
-										&& selectedOption.subtype === option.subtype;
-								} );
+					<Sortable
+						forwardedRef={ this.selectedList }
+						items={ value }
+						options={ {
+							axis: 'y',
+							forceHelperSize: true,
+							forcePlaceholderSize: true,
+							scroll: true
+						} }
+						onUpdate={ this.handleSort }
+					>
+						<div className="cf-association__col" ref={ this.selectedList }>
+							{
+								selectedOptions.length && value.map( ( option, index ) => {
+									const optionData = selectedOptions.find( ( selectedOption ) => {
+										return selectedOption.id === option.id
+											&& selectedOption.type === option.type
+											&& selectedOption.subtype === option.subtype;
+									} );
 
-								return (
-									<div className="cf-association__option" key={ index }>
-										<span className="cf-association__option-sort dashicons dashicons-menu"></span>
+									return (
+										<div className="cf-association__option" key={ index }>
+											<span className="cf-association__option-sort dashicons dashicons-menu"></span>
 
-										{ optionData.thumbnail && (
-											<img className="cf-association__option-thumb" src={ optionData.thumbnail } />
-										) }
+											{ optionData.thumbnail && (
+												<img className="cf-association__option-thumb" src={ optionData.thumbnail } />
+											) }
 
-										<div className="cf-association__option-content">
-											<span className="cf-association__option-title">
-												{ optionData.title }
-											</span>
+											<div className="cf-association__option-content">
+												<span className="cf-association__option-title">
+													{ optionData.title }
+												</span>
 
-											<span className="cf-association__option-type">
-												{ optionData.type }
-											</span>
+												<span className="cf-association__option-type">
+													{ optionData.type }
+												</span>
+											</div>
+
+											<div className="cf-association__option-actions">
+												<button type="button" className="cf-association__option-action dashicons dashicons-dismiss" onClick={ () => this.handleRemoveItem( option ) }></button>
+											</div>
+
+											<input
+												type="hidden"
+												name={ `${ name }[${ index }]` }
+												value={ `${ optionData.type }:${ optionData.subtype }:${ optionData.id }` }
+												readOnly
+											/>
 										</div>
-
-										<div className="cf-association__option-actions">
-											<button type="button" className="cf-association__option-action dashicons dashicons-dismiss" onClick={ () => this.handleRemoveItem( option ) }></button>
-										</div>
-
-										<input
-											type="hidden"
-											name={ `${ name }[${ index }]` }
-											value={ `${ optionData.type }:${ optionData.subtype }:${ optionData.id }` }
-											readOnly
-										/>
-									</div>
-								);
-							} )
-						}
-					</div>
+									);
+								} )
+							}
+						</div>
+					</Sortable>
 				</div>
 			</FieldBase>
 		);
