@@ -142,46 +142,49 @@ class MediaGalleryField extends Component {
 													className.push( 'cf-media-gallery__item--selected' );
 												}
 
+												if ( ! attachment ) {
+													return null;
+												}
+
 												return (
-													attachment
-														? <li className={ className.join( ' ' ) } key={ index } onClick={ () => this.handleAttachmentSelect( index ) }>
-															<div className="cf-media-gallery__item-inner">
-																<div className="cf-media-gallery__item-preview">
-																	{
-																		attachment.type === 'image'
-																			? (
-																				<img
-																					className="cf-media-gallery__item-thumb"
-																					src={ attachment.sizes.thumbnail.url }
-																				/>
-																			)
-																			: (
-																				<img
-																					className="cf-media-gallery__item-icon"
-																					src={ attachment.icon }
-																				/>
-																			)
-																	}
-																</div>
-
-																<span className="cf-media-gallery__item-name">
-																	{ attachment.filename }
-																</span>
-
-																<button
-																	type="button"
-																	className="cf-media-gallery__item-remove dashicons-before dashicons-no-alt"
-																	onClick={ () => this.handleAttachmentRemove( index ) }
-																></button>
+													<li className={ className.join( ' ' ) } key={ index } onClick={ () => this.handleAttachmentSelect( index ) }>
+														<div className="cf-media-gallery__item-inner">
+															<div className="cf-media-gallery__item-preview">
+																{
+																	attachment.type === 'image'
+																		? (
+																			<img
+																				className="cf-media-gallery__item-thumb"
+																				src={ attachment.sizes.thumbnail.url }
+																			/>
+																		)
+																		: (
+																			<img
+																				className="cf-media-gallery__item-icon"
+																				src={ attachment.icon }
+																			/>
+																		)
+																}
 															</div>
 
-															<input
-																type="hidden"
-																name={ `${ name }[${ index }]` }
-																value={ id }
-																readOnly
-															/>
-														</li> : ''
+															<span className="cf-media-gallery__item-name">
+																{ attachment.filename }
+															</span>
+
+															<button
+																type="button"
+																className="cf-media-gallery__item-remove dashicons-before dashicons-no-alt"
+																onClick={ () => this.handleAttachmentRemove( index ) }
+															></button>
+														</div>
+
+														<input
+															type="hidden"
+															name={ `${ name }[${ index }]` }
+															value={ id }
+															readOnly
+														/>
+													</li>
 												);
 											} ) }
 										</ul>
