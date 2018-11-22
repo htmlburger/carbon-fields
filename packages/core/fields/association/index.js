@@ -247,7 +247,7 @@ class AssociationField extends Component {
 					>
 						<div className="cf-association__col" ref={ this.selectedList }>
 							{
-								selectedOptions.length && value.map( ( option, index ) => {
+								!! selectedOptions.length && value.map( ( option, index ) => {
 									const optionData = selectedOptions.find( ( selectedOption ) => {
 										return selectedOption.id === option.id
 											&& selectedOption.type === option.type

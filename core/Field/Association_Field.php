@@ -490,6 +490,7 @@ class Association_Field extends Field {
 
 		$args = apply_filters( $filter_name, array(
 			'hide_empty'             => 0,
+			'taxonomy'               => $taxonomy,
 			'fields'                 => 'count',
 			'number'                 => 1,
 			'search'                 => $search_term,
