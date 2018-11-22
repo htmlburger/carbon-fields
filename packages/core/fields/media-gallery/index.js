@@ -122,6 +122,7 @@ class MediaGalleryField extends Component {
 					multiple={ true }
 					title={ mediaLibraryTitle }
 					buttonLabel={ mediaLibraryButtonLabel }
+					typeFilter={ field.type_filter }
 				>
 					{
 						( { openMediaBrowser } ) => {

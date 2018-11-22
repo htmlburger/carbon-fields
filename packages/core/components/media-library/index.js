@@ -19,9 +19,12 @@ class MediaLibrary extends Component {
 	 * @return {void}
 	 */
 	componentDidMount() {
-		const { onSelect } = this.props;
+		const { onSelect, typeFilter } = this.props;
 
-		this.props.initMediaBrowser( onSelect );
+		this.props.initMediaBrowser( {
+			onSelect,
+			typeFilter
+		} );
 	}
 
 	/**
@@ -106,7 +109,7 @@ function handler( props ) {
 	return function( effect ) {
 		switch ( effect.type ) {
 			case 'INIT_MEDIA_BROWSER':
-				const onSelect = effect.payload;
+				const { onSelect, typeFilter } = effect.payload;
 
 				if ( ! onSelect ) {
 					return;
@@ -114,6 +117,9 @@ function handler( props ) {
 
 				mediaBrowser = wp.media( {
 					title: props.title,
+					library: {
+						type: typeFilter
+					},
 					button: {
 						text: props.buttonLabel
 					},
