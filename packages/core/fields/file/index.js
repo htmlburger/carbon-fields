@@ -91,6 +91,7 @@ class FileField extends Component {
 					multiple={ false }
 					title={ mediaLibraryTitle }
 					buttonLabel={ mediaLibraryButtonLabel }
+					typeFilter={ field.type_filter }
 				>
 					{
 						( { openMediaBrowser } ) => {
