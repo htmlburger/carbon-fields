@@ -2,60 +2,62 @@
  * External dependencies.
  */
 import cx from 'classnames';
-import { Component } from '@wordpress/element';
+import { forwardRef } from '@wordpress/element';
 
-class ComplexTabs extends Component {
-	/**
-	 * Renders the component.
-	 *
-	 * @return {Object}
-	 */
-	render() {
-		const {
-			items,
-			current,
-			children,
-			onChange
-		} = this.props;
+/**
+ * Renders the tabs navigation.
+ *
+ * @param  {Object}   props
+ * @param  {Object[]} props.items
+ * @param  {string}   props.current
+ * @param  {mixed}    props.children
+ * @param  {Function} props.onChange
+ * @param  {Object}   ref
+ * @return {void}
+ */
+function ComplexTabs( {
+	items,
+	current,
+	children,
+	onChange
+}, ref ) {
+	return (
+		<div className="cf-complex__tabs">
+			<ul className="cf-complex__tabs-list" ref={ ref }>
+				{ items.map( ( item, index ) => {
+					const classes = cx(
+						'cf-complex__tabs-item',
+						{
+							'cf-complex__tabs-item--current': item.id === current
+						}
+					);
 
-		return (
-			<div className="cf-complex__tabs">
-				<ul className="cf-complex__tabs-list">
-					{ items.map( ( item, index ) => {
-						const classes = cx(
-							'cf-complex__tabs-item',
+					return (
+						<li
+							key={ item.id }
+							className={ classes }
+							onClick={ () => onChange( item.id ) }
+						>
 							{
-								'cf-complex__tabs-item--current': item.id === current
+								item.label
+									? <span
+										className="cf-complex__tabs-title"
+										dangerouslySetInnerHTML={ { __html: item.label } }
+									></span>
+									: null
 							}
-						);
 
-						return (
-							<li
-								key={ item.id }
-								className={ classes }
-								onClick={ () => onChange( item.id ) }
-							>
-								{
-									item.label
-										? <span
-											className="cf-complex__tabs-title"
-											dangerouslySetInnerHTML={ { __html: item.label } }
-										></span>
-										: null
-								}
+							<span className="cf-complex__tabs-index">
+								{ index + 1 }
+							</span>
+						</li>
+					);
+				} ) }
+			</ul>
 
-								<span className="cf-complex__tabs-index">
-									{ index + 1 }
-								</span>
-							</li>
-						);
-					} ) }
-				</ul>
-
-				{ children }
-			</div>
-		);
-	}
+			{ children }
+		</div>
+	);
 }
 
-export default ComplexTabs;
+export default forwardRef( ComplexTabs );
