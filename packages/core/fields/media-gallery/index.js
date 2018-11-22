@@ -25,20 +25,6 @@ class MediaGalleryField extends Component {
 	attachmentsList = createRef();
 
 	/**
-	 * Handles the attachments meta set.
-	 *
-	 * @param  {Object} attachmentsData
-	 * @return {void}
-	 */
-	handleAttachmentsDataChange = ( attachmentsData ) => {
-		const { setState } = this.props;
-
-		setState( {
-			attachmentsData: [ ...this.props.attachmentsData, ...attachmentsData ]
-		} );
-	}
-
-	/**
 	 * Handles the file selection.
 	 *
 	 * @param  {Object} attachments
@@ -48,12 +34,15 @@ class MediaGalleryField extends Component {
 		const {
 			id,
 			onChange,
+			setState,
 			value
 		} = this.props;
 
 		onChange( id, [ ...value, ...attachments.map( ( attachment ) => attachment.id ) ] );
 
-		this.handleAttachmentsDataChange( attachments );
+		setState( {
+			attachmentsData: [ ...this.props.attachmentsData, ...attachments ]
+		} );
 	}
 
 	/**
@@ -81,20 +70,11 @@ class MediaGalleryField extends Component {
 	 * @return {void}
 	 */
 	handleAttachmentSelect = ( itemId ) => {
-		const {
-			selectedItem,
-			setState
-		} = this.props;
+		const { setState } = this.props;
 
-		if ( selectedItem === itemId ) {
-			setState( {
-				selectedItem: null
-			} );
-		} else {
-			setState( {
-				selectedItem: itemId
-			} );
-		}
+		setState( ( { selectedItem } ) => ( {
+			selectedItem: selectedItem !== itemId ? itemId : null
+		} ) );
 	}
 
 	/**
