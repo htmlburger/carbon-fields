@@ -48,11 +48,18 @@ class Sortable extends Component {
 	 * @return {void}
 	 */
 	handleUpdate = ( e, ui, ) => {
-		const { items, onUpdate } = this.props;
+		const {
+			items,
+			forwardedRef,
+			onUpdate
+		} = this.props;
+
 		const oldIndex = ui.item.data( 'index' );
 		const newIndex = ui.item.index();
 
 		ui.item.removeData( 'index' );
+
+		window.jQuery( forwardedRef.current ).sortable( 'cancel' );
 
 		onUpdate( produce( items, ( draft ) => {
 			draft.splice( newIndex, 0, ...draft.splice( oldIndex, 1 ) );
