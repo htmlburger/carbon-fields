@@ -3,7 +3,6 @@
  */
 import produce from 'immer';
 import { Component, createRef } from '@wordpress/element';
-import { compose, withState } from '@wordpress/compose';
 
 /**
  * Internal dependencies.
@@ -15,6 +14,16 @@ import Sortable from '../../components/sortable';
 import fetchAttachmentsData from '../../utils/fetch-attachments-data';
 
 class MediaGalleryField extends Component {
+	/**
+	 * Defines the initial state.
+	 *
+	 * @type {Object}
+	 */
+	state = {
+		attachmentsData: [],
+		selectedItem: null
+	}
+
 	/**
 	 * Keeps reference to the list that contains selected attachments.
 	 *
@@ -44,7 +53,7 @@ class MediaGalleryField extends Component {
 	 * @return {void}
 	 */
 	handleAttachmentsDataChange = ( attachmentsData ) => {
-		this.props.setState( { attachmentsData } );
+		this.setState( { attachmentsData } );
 	}
 
 	/**
@@ -91,16 +100,15 @@ class MediaGalleryField extends Component {
 	 */
 	handleAttachmentSelect = ( itemId ) => {
 		const {
-			setState,
 			selectedItem
 		} = this.props;
 
 		if ( selectedItem === itemId ) {
-			setState( {
+			this.setState( {
 				selectedItem: null
 			} );
 		} else {
-			setState( {
+			this.setState( {
 				selectedItem: itemId
 			} );
 		}
@@ -129,12 +137,15 @@ class MediaGalleryField extends Component {
 			field,
 			name,
 			value,
-			attachmentsData,
-			selectedItem,
 			buttonLabel,
 			mediaLibraryButtonLabel,
 			mediaLibraryTitle
 		} = this.props;
+
+		const {
+			attachmentsData,
+			selectedItem
+		} = this.state;
 
 		return (
 			<FieldBase id={ id } field={ field }>
@@ -231,11 +242,4 @@ class MediaGalleryField extends Component {
 	}
 }
 
-const applyWithState = withState( {
-	attachmentsData: [],
-	selectedItem: null
-} );
-
-export default compose(
-	applyWithState
-)( MediaGalleryField );
+export default MediaGalleryField;
