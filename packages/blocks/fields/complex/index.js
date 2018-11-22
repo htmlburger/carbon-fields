@@ -284,6 +284,7 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 					onRemoveGroup={ handleRemoveGroup }
 					onToggleGroup={ handleToggleGroup }
 					onToggleAllGroups={ handleToggleAllGroups }
+					onChange={ props.onChange }
 				/>
 			) }
 		</ComplexField>

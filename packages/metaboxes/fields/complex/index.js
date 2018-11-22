@@ -279,6 +279,7 @@ addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( O
 					onRemoveGroup={ handleRemoveGroup }
 					onToggleGroup={ handleToggleGroup }
 					onToggleAllGroups={ handleToggleAllGroups }
+					onChange={ props.onChange }
 				/>
 			) }
 		</ComplexField>
