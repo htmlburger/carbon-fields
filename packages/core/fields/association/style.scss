@@ -57,6 +57,11 @@
 	& + & {
 		border-top: 1px solid $wp-color-gray-light-500;
 	}
+
+	&.ui-sortable-helper {
+		border-top: 0;
+		background-color: $wp-color-gray-light-100;
+	}
 }
 
 .cf-association__option-thumb {
