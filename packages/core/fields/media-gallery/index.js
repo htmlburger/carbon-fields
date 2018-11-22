@@ -2,7 +2,10 @@
  * External dependencies.
  */
 import produce from 'immer';
+import { withEffects } from 'refract-callbag';
+import { map, pipe } from 'callbag-basics';
 import { Component, createRef } from '@wordpress/element';
+import { withState, compose } from '@wordpress/compose';
 
 /**
  * Internal dependencies.
@@ -15,36 +18,11 @@ import fetchAttachmentsData from '../../utils/fetch-attachments-data';
 
 class MediaGalleryField extends Component {
 	/**
-	 * Defines the initial state.
-	 *
-	 * @type {Object}
-	 */
-	state = {
-		attachmentsData: [],
-		selectedItem: null
-	}
-
-	/**
 	 * Keeps reference to the list that contains selected attachments.
 	 *
 	 * @type {Object}
 	 */
 	attachmentsList = createRef();
-
-	/**
-	 * Lifecycle Hook.
-	 *
-	 * @return {void}
-	 */
-	componentDidMount() {
-		const { value } = this.props;
-
-		if ( value ) {
-			fetchAttachmentsData( value ).then( ( attachmentsData ) => {
-				this.handleAttachmentsDataChange( attachmentsData );
-			} );
-		}
-	}
 
 	/**
 	 * Handles the attachments meta set.
@@ -53,8 +31,10 @@ class MediaGalleryField extends Component {
 	 * @return {void}
 	 */
 	handleAttachmentsDataChange = ( attachmentsData ) => {
-		this.setState( {
-			attachmentsData: [ ...this.state.attachmentsData, ...attachmentsData ]
+		const { setState } = this.props;
+
+		setState( {
+			attachmentsData: [ ...this.props.attachmentsData, ...attachmentsData ]
 		} );
 	}
 
@@ -102,15 +82,16 @@ class MediaGalleryField extends Component {
 	 */
 	handleAttachmentSelect = ( itemId ) => {
 		const {
-			selectedItem
+			selectedItem,
+			setState
 		} = this.props;
 
 		if ( selectedItem === itemId ) {
-			this.setState( {
+			setState( {
 				selectedItem: null
 			} );
 		} else {
-			this.setState( {
+			setState( {
 				selectedItem: itemId
 			} );
 		}
@@ -141,13 +122,10 @@ class MediaGalleryField extends Component {
 			value,
 			buttonLabel,
 			mediaLibraryButtonLabel,
-			mediaLibraryTitle
-		} = this.props;
-
-		const {
+			mediaLibraryTitle,
 			attachmentsData,
 			selectedItem
-		} = this.state;
+		} = this.props;
 
 		return (
 			<FieldBase id={ id } field={ field }>
@@ -244,4 +222,41 @@ class MediaGalleryField extends Component {
 	}
 }
 
-export default MediaGalleryField;
+function aperture() {
+	return function( component ) {
+		const mount$ = component.mount;
+
+		return pipe( mount$, map( () => ( {
+			type: 'COMPONENT_MOUNTED'
+		} ) ) );
+	};
+}
+
+function handler( props ) {
+	return function( effect ) {
+		switch ( effect.type ) {
+			case 'COMPONENT_MOUNTED':
+				const { value, setState } = props;
+
+				fetchAttachmentsData( value ).then( ( attachmentsData ) => {
+					setState( {
+						attachmentsData: [ ...props.attachmentsData, ...attachmentsData ]
+					} );
+				} );
+
+				break;
+		}
+	};
+}
+
+const applyWithState = withState( {
+	attachmentsData: [],
+	selectedItem: null
+} );
+
+const applyWithEffects = withEffects( handler )( aperture );
+
+export default compose(
+	applyWithState,
+	applyWithEffects
+)( MediaGalleryField );
