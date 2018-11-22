@@ -74,6 +74,7 @@
 	min-height: 100%;
 	max-width: 150%;
 	transform: translate(-50%, -50%);
+	pointer-events: none;
 }
 
 .cf-media-gallery__item-icon {
@@ -91,6 +92,7 @@
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	cursor: move;
 }
 
 .cf-media-gallery__item-remove {
