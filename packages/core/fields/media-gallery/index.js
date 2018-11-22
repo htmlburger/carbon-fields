@@ -53,7 +53,9 @@ class MediaGalleryField extends Component {
 	 * @return {void}
 	 */
 	handleAttachmentsDataChange = ( attachmentsData ) => {
-		this.setState( { attachmentsData } );
+		this.setState( {
+			attachmentsData: [ ...this.state.attachmentsData, ...attachmentsData ]
+		} );
 	}
 
 	/**
