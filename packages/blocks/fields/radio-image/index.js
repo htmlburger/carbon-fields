@@ -3,6 +3,11 @@
  */
 import { addFilter } from '@wordpress/hooks';
 
+/**
+ * Internal dependencies.
+ */
+import './style.scss';
+
 addFilter( 'carbon-fields.radio_image-field.block', 'carbon-fields/blocks', ( OriginalRadioField ) => ( props ) => {
 	return (
 		<OriginalRadioField

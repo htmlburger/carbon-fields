@@ -4,11 +4,18 @@
 
 .cf-radio__list {
 	margin: 0;
+
+	.cf-radio-image & {
+		display: flex;
+		flex-wrap: wrap;
+	}
 }
 
 .cf-radio__list-item {
 	.cf-radio-image & {
+		flex: 0 0 10%;
 		position: relative;
+		padding: 4px;
 	}
 }
 
