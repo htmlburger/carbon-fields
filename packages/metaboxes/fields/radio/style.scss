@@ -15,7 +15,7 @@
 
 	.inside .cf-radio__input:focus ~ .cf-radio__label &,
 	.inside .cf-radio__input:checked ~ .cf-radio__label & {
-		border-color: $wp-color-medium-blue;
+		outline: 4px solid $wp-color-medium-blue;
 	}
 }
 
