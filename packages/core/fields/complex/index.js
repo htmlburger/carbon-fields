@@ -2,7 +2,7 @@
  * External dependencies.
  */
 import cx from 'classnames';
-import { Component } from '@wordpress/element';
+import { Component, createRef } from '@wordpress/element';
 import { get, find } from 'lodash';
 
 /**
@@ -10,12 +10,27 @@ import { get, find } from 'lodash';
  */
 import './style.scss';
 import FieldBase from '../../components/field-base';
+import Sortable from '../../components/sortable';
 import ComplexTabs from './tabs';
 import ComplexInserter from './inserter';
 import ComplexGroup from './group';
 import ComplexPlaceholder from './placeholder';
 
 class ComplexField extends Component {
+	/**
+	 * Keeps reference to the DOM that contains the groups.
+	 *
+	 * @type {Object}
+	 */
+	groupsList = createRef();
+
+	/**
+	 * Keeps reference to the DOM that contains the tabs.
+	 *
+	 * @type {Object}
+	 */
+	tabsList = createRef();
+
 	/**
 	 * Local state.
 	 *
@@ -161,6 +176,18 @@ class ComplexField extends Component {
 	}
 
 	/**
+	 * Handles sorting of groups.
+	 *
+	 * @param  {Object[]} groups
+	 * @return {void}
+	 */
+	handleSortGroups = ( groups ) => {
+		const { id, onChange } = this.props;
+
+		onChange( id, groups );
+	}
+
+	/**
 	 * Handles changing of tabs.
 	 *
 	 * @param  {string} groupId
@@ -214,19 +241,30 @@ class ComplexField extends Component {
 		return (
 			<FieldBase className={ classes } field={ field }>
 				{ this.isTabbed && !! value.length && (
-					<ComplexTabs
-						items={ tabs }
-						current={ currentTab }
-						onChange={ this.handleTabsChange }
+					<Sortable
+						items={ value }
+						forwardedRef={ this.tabsList }
+						options={ {
+							axis: field.layout === 'tabbed-vertical' ? 'y' : 'x',
+							forcePlaceholderSize: true
+						} }
+						onUpdate={ this.handleSortGroups }
 					>
-						{ !! availableGroups.length && ! this.isMaximumReached && (
-							<ComplexInserter
-								buttonText="+"
-								groups={ availableGroups }
-								onSelect={ this.handleAddGroup }
-							/>
-						) }
-					</ComplexTabs>
+						<ComplexTabs
+							ref={ this.tabsList }
+							items={ tabs }
+							current={ currentTab }
+							onChange={ this.handleTabsChange }
+						>
+							{ !! availableGroups.length && ! this.isMaximumReached && (
+								<ComplexInserter
+									buttonText="+"
+									groups={ availableGroups }
+									onSelect={ this.handleAddGroup }
+								/>
+							) }
+						</ComplexTabs>
+					</Sortable>
 				) }
 
 				{ ! value.length && (
@@ -240,22 +278,31 @@ class ComplexField extends Component {
 				) }
 
 				{ !! value.length && (
-					<div className="cf-complex__groups">
-						{ value.map( ( group, index ) => (
-							// The `key` will be assigned via `onGroupSetup`.
-							// eslint-disable-next-line react/jsx-key
-							<ComplexGroup { ...onGroupSetup( group, {
-								index,
-								tabbed: this.isTabbed,
-								hidden: this.isTabbed && group[ groupIdKey ] !== currentTab,
-								allowClone: field.duplicate_groups_allowed && ! this.isMaximumReached,
-								onFieldSetup: onGroupFieldSetup,
-								onClone: this.handleCloneGroup,
-								onRemove: this.handleRemoveGroup,
-								onToggle: onToggleGroup
-							} ) } />
-						) ) }
-					</div>
+					<Sortable
+						items={ value }
+						options={ {
+							handle: '.cf-complex__group-head'
+						} }
+						forwardedRef={ this.groupsList }
+						onUpdate={ this.handleSortGroups }
+					>
+						<div className="cf-complex__groups" ref={ this.groupsList }>
+							{ value.map( ( group, index ) => (
+								// The `key` will be assigned via `onGroupSetup`.
+								// eslint-disable-next-line react/jsx-key
+								<ComplexGroup { ...onGroupSetup( group, {
+									index,
+									tabbed: this.isTabbed,
+									hidden: this.isTabbed && group[ groupIdKey ] !== currentTab,
+									allowClone: field.duplicate_groups_allowed && ! this.isMaximumReached,
+									onFieldSetup: onGroupFieldSetup,
+									onClone: this.handleCloneGroup,
+									onRemove: this.handleRemoveGroup,
+									onToggle: onToggleGroup
+								} ) } />
+							) ) }
+						</div>
+					</Sortable>
 				) }
 
 				{ ! this.isTabbed && !! value.length && (
