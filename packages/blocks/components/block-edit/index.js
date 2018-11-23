@@ -16,7 +16,7 @@ class BlockEdit extends Component {
 	 * @return {void}
 	 */
 	handleFieldChange = ( fieldId, value ) => {
-		const fieldName = fieldId.split( '|' ).pop();
+		const fieldName = fieldId.replace( /^.+__(.+)?$/, '$1' );
 
 		this.props.setAttributes( {
 			[ fieldName ]: value
@@ -49,7 +49,7 @@ class BlockEdit extends Component {
 					return (
 						<Field
 							key={ index }
-							id={ `cf-${ clientId }|${ field.base_name }` }
+							id={ `cf-${ clientId }__${ field.base_name }` }
 							value={ value }
 							field={ field }
 							onChange={ this.handleFieldChange }
