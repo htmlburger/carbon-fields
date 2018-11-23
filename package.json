@@ -75,6 +75,7 @@
     "@wordpress/i18n": "^3.0.1",
     "callbag-basics": "^3.0.0",
     "callbag-distinct-until-changed": "^1.0.0",
+    "callbag-drop-until": "^1.0.0",
     "callbag-from-delegated-event": "^2.0.0",
     "callbag-of": "^1.0.1",
     "callbag-start-with": "^3.1.0",
