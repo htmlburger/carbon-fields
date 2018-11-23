@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { isString } from 'lodash';
 import cx from 'classnames';
@@ -10,6 +11,7 @@ import cx from 'classnames';
  * The internal dependencies.
  */
 import FieldBase from '../../components/field-base';
+import validator from '../../validators/required';
 
 class RichTextField extends Component {
 	/**
@@ -67,9 +69,10 @@ class RichTextField extends Component {
 	render() {
 		const {
 			id,
-			field,
+			name,
 			value,
-			name
+			error,
+			field
 		} = this.props;
 
 		const classes = [
@@ -80,7 +83,11 @@ class RichTextField extends Component {
 		];
 
 		return (
-			<FieldBase field={ field } >
+			<FieldBase
+				id={ id }
+				field={ field }
+				error={ error }
+			>
 				<div
 					id={ `wp-${ id }-wrap` }
 					className={ cx( classes ) }
@@ -174,5 +181,7 @@ class RichTextField extends Component {
 		delete window.QTags.instances[ this.props.id ];
 	}
 }
+
+addFilter( 'carbon-fields.rich_text.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default RichTextField;

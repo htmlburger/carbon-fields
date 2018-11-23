@@ -1797,6 +1797,11 @@ callbag-drop-repeats@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/callbag-drop-repeats/-/callbag-drop-repeats-1.0.0.tgz#bfa4d765880875435746948ec9076b979569e89b"
 
+callbag-drop-until@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-drop-until/-/callbag-drop-until-1.0.0.tgz#14b52b19d82b926231ad2a6f609bb6bca819b519"
+  integrity sha512-TUPdrnVRXKm7wnuMqUFEEzesv2ewoREj4fdJ6INUhUKTbCJVpSiZquBjxBjBRN7rwNyZwZ4HX9LGNvwup+Stqg==
+
 callbag-filter@1.0.x, callbag-filter@^1.0.0, callbag-filter@~1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/callbag-filter/-/callbag-filter-1.0.1.tgz#82d3b80231cf890fd6e0d61c3a33cd09dcb52570"

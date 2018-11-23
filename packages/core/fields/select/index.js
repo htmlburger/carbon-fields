@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { addFilter } from '@wordpress/hooks';
 
 /**
  * The internal dependencies.
@@ -9,6 +10,7 @@ import { Component } from '@wordpress/element';
 import './style.scss';
 import FieldBase from '../../components/field-base';
 import NoOptions from '../../components/no-options';
+import validator from '../../validators/required';
 
 export class SelectField extends Component {
 	/**
@@ -31,13 +33,18 @@ export class SelectField extends Component {
 	render() {
 		const {
 			id,
-			field,
 			name,
-			value
+			value,
+			error,
+			field
 		} = this.props;
 
 		return (
-			<FieldBase id={ id } field={ field } >
+			<FieldBase
+				id={ id }
+				field={ field }
+				error={ error }
+			>
 				{
 					field.options.length > 0
 						? (
@@ -61,5 +68,7 @@ export class SelectField extends Component {
 		);
 	}
 }
+
+addFilter( 'carbon-fields.select.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default SelectField;

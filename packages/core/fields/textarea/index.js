@@ -2,12 +2,14 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { addFilter } from '@wordpress/hooks';
 
 /**
  * The internal dependencies.
  */
 import './style.scss';
 import FieldBase from '../../components/field-base';
+import validator from '../../validators/required';
 
 class TextareaField extends Component {
 	/**
@@ -30,13 +32,18 @@ class TextareaField extends Component {
 	render() {
 		const {
 			id,
-			field,
 			name,
-			value
+			value,
+			error,
+			field
 		} = this.props;
 
 		return (
-			<FieldBase id={ id } field={ field } >
+			<FieldBase
+				id={ id }
+				field={ field }
+				error={ error }
+			>
 				<textarea
 					id={ id }
 					name={ name }
@@ -50,5 +57,7 @@ class TextareaField extends Component {
 		);
 	}
 }
+
+addFilter( 'carbon-fields.textarea.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default TextareaField;

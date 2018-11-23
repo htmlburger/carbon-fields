@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { addFilter } from '@wordpress/hooks';
 import { xor } from 'lodash';
 
 /**
@@ -10,6 +11,7 @@ import { xor } from 'lodash';
 import './style.scss';
 import FieldBase from '../../components/field-base';
 import NoOptions from '../../components/no-options';
+import validator from '../../validators/required';
 
 class SetField extends Component {
 	/**
@@ -50,13 +52,18 @@ class SetField extends Component {
 	render() {
 		const {
 			id,
-			field,
 			name,
-			value
+			value,
+			error,
+			field
 		} = this.props;
 
 		return (
-			<FieldBase id={ id } field={ field }>
+			<FieldBase
+				id={ id }
+				field={ field }
+				error={ error }
+			>
 				{
 					field.options.length > 0
 						? (
@@ -87,5 +94,7 @@ class SetField extends Component {
 		);
 	}
 }
+
+addFilter( 'carbon-fields.set.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default SetField;

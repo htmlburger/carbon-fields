@@ -12,16 +12,18 @@ import './style.scss';
 /**
  * Renders the base wrapper of the field.
  *
- * @param  {Object} props
- * @param  {string} props.id
- * @param  {Object} props.field
- * @param  {string} props.className
- * @param  {mixed}  props.children
+ * @param  {Object}  props
+ * @param  {string}  props.id
+ * @param  {Object}  props.field
+ * @param  {?string} props.error
+ * @param  {string}  props.className
+ * @param  {mixed}   props.children
  * @return {Object}
  */
 function FieldBase( {
 	id,
 	field,
+	error,
 	className,
 	children
 } ) {
@@ -30,7 +32,10 @@ function FieldBase( {
 	const classes = [
 		'cf-field',
 		`cf-${ kebabCase( field.type ) }`,
-		{ 'cf-field--has-width': !! field.width },
+		{
+			'cf-field--has-width': !! field.width,
+			'cf-field--invalid': !! error
+		},
 		className,
 		...field.classes
 	];
@@ -55,6 +60,12 @@ function FieldBase( {
 
 			{ field.help_text && (
 				<em className="cf-field__help" dangerouslySetInnerHTML={ { __html: field.help_text } }></em>
+			) }
+
+			{ error && (
+				<span className="cf-field__error">
+					{ error }
+				</span>
 			) }
 		</div>
 	);

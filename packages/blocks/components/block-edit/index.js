@@ -3,6 +3,7 @@
  */
 import { Component, Fragment } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
+import { compose } from '@wordpress/compose';
 import { getFieldType } from '@carbon-fields/core';
 import { get } from 'lodash';
 
@@ -10,11 +11,13 @@ class BlockEdit extends Component {
 	/**
 	 * Handles the change of the field's value.
 	 *
-	 * @param  {string} fieldName
+	 * @param  {string} fieldId
 	 * @param  {mixed}  value
 	 * @return {void}
 	 */
-	handleFieldChange = ( fieldName, value ) => {
+	handleFieldChange = ( fieldId, value ) => {
+		const fieldName = fieldId.replace( /^.+__(.+)?$/, '$1' );
+
 		this.props.setAttributes( {
 			[ fieldName ]: value
 		} );
@@ -26,7 +29,11 @@ class BlockEdit extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { fields, attributes } = this.props;
+		const {
+			clientId,
+			fields,
+			attributes
+		} = this.props;
 
 		return (
 			<Fragment>
@@ -42,7 +49,7 @@ class BlockEdit extends Component {
 					return (
 						<Field
 							key={ index }
-							id={ field.base_name }
+							id={ `cf-${ clientId }__${ field.base_name }` }
 							value={ value }
 							field={ field }
 							onChange={ this.handleFieldChange }
@@ -54,10 +61,14 @@ class BlockEdit extends Component {
 	}
 }
 
-export default withSelect( ( select, ownProps ) => {
+const applyWithSelect = withSelect( ( select, ownProps ) => {
 	const { getFieldDefinitionsByBlockName } = select( 'carbon-fields/blocks' );
 
 	return {
 		fields: getFieldDefinitionsByBlockName( ownProps.name )
 	};
-} )( BlockEdit );
+} );
+
+export default compose(
+	applyWithSelect
+)( BlockEdit );
