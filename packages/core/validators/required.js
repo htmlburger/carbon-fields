@@ -10,7 +10,9 @@ import { isObject, isEmpty } from 'lodash';
  * @return {?string}
  */
 export default function required( value ) {
-	if ( ( isObject( value ) && ! isEmpty( value ) ) || !! value ) {
+	const isObjectValue = isObject( value );
+
+	if ( ( isObjectValue && ! isEmpty( value ) ) || ( ! isObjectValue && !! value ) ) {
 		return null;
 	}
 
