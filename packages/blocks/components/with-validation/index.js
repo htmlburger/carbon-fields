@@ -28,6 +28,7 @@ function aperture( props ) {
 		}
 
 		const mount$ = component.mount;
+		const unmount$ = component.unmount;
 		const value$ = component.observe( 'value' );
 
 		return merge(
@@ -35,6 +36,7 @@ function aperture( props ) {
 				combine( value$, mount$ ),
 				take( 1 ),
 				map( ( [ value ] ) => ( {
+					type: 'VALIDATE',
 					payload: {
 						value,
 						transient: true
@@ -47,10 +49,18 @@ function aperture( props ) {
 				dropUntil( mount$ ),
 				distinctUntilChanged(),
 				map( ( value ) => ( {
+					type: 'VALIDATE',
 					payload: {
 						value,
 						transient: false
 					}
+				} ) )
+			),
+
+			pipe(
+				unmount$,
+				map( () => ( {
+					type: 'RESET'
 				} ) )
 			)
 		);
@@ -74,28 +84,40 @@ function handler( props ) {
 			clearValidationError
 		} = props;
 
-		const { value, transient } = effect.payload;
+		switch ( effect.type ) {
+			case 'VALIDATE':
+				const { value, transient } = effect.payload;
 
-		const error = applyFilters(
-			`carbon-fields.${ field.type }.validate`,
-			null,
-			id,
-			field,
-			value
-		);
+				const error = applyFilters(
+					`carbon-fields.${ field.type }.validate`,
+					null,
+					id,
+					field,
+					value
+				);
 
-		if ( error ) {
-			lockPostSaving( id );
+				if ( error ) {
+					lockPostSaving( id );
 
-			if ( ! transient ) {
-				setValidationError( id, error );
-			}
-		} else {
-			unlockPostSaving( id );
+					if ( ! transient ) {
+						setValidationError( id, error );
+					}
+				} else {
+					unlockPostSaving( id );
 
-			if ( ! transient ) {
+					if ( ! transient ) {
+						clearValidationError( id );
+					}
+				}
+
+				break;
+
+			case 'RESET':
+				unlockPostSaving( id );
+
 				clearValidationError( id );
-			}
+
+				break;
 		}
 	};
 }
