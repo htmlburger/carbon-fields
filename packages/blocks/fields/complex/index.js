@@ -182,7 +182,7 @@ class ComplexField extends Component {
 	 * @return {Object}
 	 */
 	handleGroupFieldSetup = ( field, props, groupProps ) => {
-		const id = `${ groupProps.id }-${ field.base_name }`;
+		const id = `${ this.props.id }|${ groupProps.id }|${ field.base_name }`;
 		const value = get( groupProps, `values.${ field.base_name }` );
 
 		return assign( {}, props, {
@@ -209,10 +209,11 @@ class ComplexField extends Component {
 		} = this.props;
 
 		onChange( id, produce( value, ( draft ) => {
-			const path = fieldId.split( '-' );
-			const group = find( draft, [ '_id', path.shift() ] );
+			const path = fieldId.split( '|' );
+			const fieldName = path.pop();
+			const group = find( draft, [ '_id', path.pop() ] );
 
-			set( group, path, fieldValue );
+			set( group, fieldName, fieldValue );
 		} ) );
 	}
 

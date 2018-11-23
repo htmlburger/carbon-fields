@@ -16,5 +16,5 @@ const ALPHABET = 'Uint8ArdomValuesObj012345679BCDEFGHIJKLMNPQRSTWXYZ_cfghkpqvwxy
  * @return {string}
  */
 export default function uniqueId() {
-	return `cf${ generate( ALPHABET, 21 ) }`;
+	return `cf-${ generate( ALPHABET, 21 ) }`;
 }
