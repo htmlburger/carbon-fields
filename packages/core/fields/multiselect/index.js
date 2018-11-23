@@ -2,7 +2,6 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { xor } from 'lodash';
 import Select from 'react-select';
 
 /**
@@ -15,18 +14,16 @@ class MultiselectField extends Component {
 	/**
 	 * Handles the change of the input.
 	 *
-	 * @param {Object}        option
-	 * @param {string|number} option.value
+	 * @param {Object} selected
 	 * @return {void}
 	 */
-	handleChange = ( { value: optionValue } ) => {
+	handleChange = ( selected ) => {
 		const {
 			id,
-			value,
 			onChange
 		} = this.props;
 
-		onChange( id, xor( value, [ optionValue ] ) );
+		onChange( id, selected.map( ( item ) => item.value ) );
 	}
 
 	/**
@@ -60,13 +57,15 @@ class MultiselectField extends Component {
 					field.options.length > 0
 						? (
 							<Select
-								multi
+								isMulti
 								joinValues
 								id={ id }
 								name={ name }
 								value={ this.filterValues( value ) }
 								options={ field.options }
 								onChange={ this.handleChange }
+								className="cf-react-select-container"
+								classNamePrefix="cf-react-select"
 							/>
 						)
 						: <NoOptions />

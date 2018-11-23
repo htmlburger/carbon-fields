@@ -47,6 +47,8 @@
 	display: flex;
 	align-items: center;
 	padding: 4px 8px;
+	height: 32px;
+	box-sizing: border-box;
 
 	&--selected {
 		background-color: $wp-color-gray-light-100;
@@ -54,6 +56,11 @@
 
 	& + & {
 		border-top: 1px solid $wp-color-gray-light-500;
+	}
+
+	&.ui-sortable-helper {
+		border-top: 0;
+		background-color: $wp-color-gray-light-100;
 	}
 }
 

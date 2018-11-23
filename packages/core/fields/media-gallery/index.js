@@ -2,8 +2,10 @@
  * External dependencies.
  */
 import produce from 'immer';
+import { withEffects } from 'refract-callbag';
+import { map, pipe } from 'callbag-basics';
 import { Component, createRef } from '@wordpress/element';
-import { compose, withState } from '@wordpress/compose';
+import { withState, compose } from '@wordpress/compose';
 
 /**
  * Internal dependencies.
@@ -23,31 +25,6 @@ class MediaGalleryField extends Component {
 	attachmentsList = createRef();
 
 	/**
-	 * Lifecycle Hook.
-	 *
-	 * @return {void}
-	 */
-	componentDidMount() {
-		const { value } = this.props;
-
-		if ( value ) {
-			fetchAttachmentsData( value ).then( ( attachmentsData ) => {
-				this.handleAttachmentsDataChange( attachmentsData );
-			} );
-		}
-	}
-
-	/**
-	 * Handles the attachments meta set.
-	 *
-	 * @param  {Object} attachmentsData
-	 * @return {void}
-	 */
-	handleAttachmentsDataChange = ( attachmentsData ) => {
-		this.props.setState( { attachmentsData } );
-	}
-
-	/**
 	 * Handles the file selection.
 	 *
 	 * @param  {Object} attachments
@@ -57,12 +34,15 @@ class MediaGalleryField extends Component {
 		const {
 			id,
 			onChange,
+			setState,
 			value
 		} = this.props;
 
 		onChange( id, [ ...value, ...attachments.map( ( attachment ) => attachment.id ) ] );
 
-		this.handleAttachmentsDataChange( attachments );
+		setState( {
+			attachmentsData: [ ...this.props.attachmentsData, ...attachments ]
+		} );
 	}
 
 	/**
@@ -90,20 +70,11 @@ class MediaGalleryField extends Component {
 	 * @return {void}
 	 */
 	handleAttachmentSelect = ( itemId ) => {
-		const {
-			setState,
-			selectedItem
-		} = this.props;
+		const { setState } = this.props;
 
-		if ( selectedItem === itemId ) {
-			setState( {
-				selectedItem: null
-			} );
-		} else {
-			setState( {
-				selectedItem: itemId
-			} );
-		}
+		setState( ( { selectedItem } ) => ( {
+			selectedItem: selectedItem !== itemId ? itemId : null
+		} ) );
 	}
 
 	/**
@@ -129,11 +100,11 @@ class MediaGalleryField extends Component {
 			field,
 			name,
 			value,
-			attachmentsData,
-			selectedItem,
 			buttonLabel,
 			mediaLibraryButtonLabel,
-			mediaLibraryTitle
+			mediaLibraryTitle,
+			attachmentsData,
+			selectedItem
 		} = this.props;
 
 		return (
@@ -171,46 +142,49 @@ class MediaGalleryField extends Component {
 													className.push( 'cf-media-gallery__item--selected' );
 												}
 
+												if ( ! attachment ) {
+													return null;
+												}
+
 												return (
-													attachment
-														? <li className={ className.join( ' ' ) } key={ index } onClick={ () => this.handleAttachmentSelect( index ) }>
-															<div className="cf-media-gallery__item-inner">
-																<div className="cf-media-gallery__item-preview">
-																	{
-																		attachment.type === 'image'
-																			? (
-																				<img
-																					className="cf-media-gallery__item-thumb"
-																					src={ attachment.sizes.thumbnail.url }
-																				/>
-																			)
-																			: (
-																				<img
-																					className="cf-media-gallery__item-icon"
-																					src={ attachment.icon }
-																				/>
-																			)
-																	}
-																</div>
-
-																<span className="cf-media-gallery__item-name">
-																	{ attachment.filename }
-																</span>
-
-																<button
-																	type="button"
-																	className="cf-media-gallery__item-remove dashicons-before dashicons-no-alt"
-																	onClick={ () => this.handleAttachmentRemove( index ) }
-																></button>
+													<li className={ className.join( ' ' ) } key={ index } onClick={ () => this.handleAttachmentSelect( index ) }>
+														<div className="cf-media-gallery__item-inner">
+															<div className="cf-media-gallery__item-preview">
+																{
+																	attachment.type === 'image'
+																		? (
+																			<img
+																				className="cf-media-gallery__item-thumb"
+																				src={ attachment.sizes.thumbnail.url }
+																			/>
+																		)
+																		: (
+																			<img
+																				className="cf-media-gallery__item-icon"
+																				src={ attachment.icon }
+																			/>
+																		)
+																}
 															</div>
 
-															<input
-																type="hidden"
-																name={ `${ name }[${ index }]` }
-																value={ id }
-																readOnly
-															/>
-														</li> : ''
+															<span className="cf-media-gallery__item-name">
+																{ attachment.filename }
+															</span>
+
+															<button
+																type="button"
+																className="cf-media-gallery__item-remove dashicons-before dashicons-no-alt"
+																onClick={ () => this.handleAttachmentRemove( index ) }
+															></button>
+														</div>
+
+														<input
+															type="hidden"
+															name={ `${ name }[${ index }]` }
+															value={ id }
+															readOnly
+														/>
+													</li>
 												);
 											} ) }
 										</ul>
@@ -231,11 +205,41 @@ class MediaGalleryField extends Component {
 	}
 }
 
+function aperture() {
+	return function( component ) {
+		const mount$ = component.mount;
+
+		return pipe( mount$, map( () => ( {
+			type: 'COMPONENT_MOUNTED'
+		} ) ) );
+	};
+}
+
+function handler( props ) {
+	return function( effect ) {
+		switch ( effect.type ) {
+			case 'COMPONENT_MOUNTED':
+				const { value, setState } = props;
+
+				fetchAttachmentsData( value ).then( ( attachmentsData ) => {
+					setState( {
+						attachmentsData: [ ...props.attachmentsData, ...attachmentsData ]
+					} );
+				} );
+
+				break;
+		}
+	};
+}
+
 const applyWithState = withState( {
 	attachmentsData: [],
 	selectedItem: null
 } );
 
+const applyWithEffects = withEffects( handler )( aperture );
+
 export default compose(
-	applyWithState
+	applyWithState,
+	applyWithEffects
 )( MediaGalleryField );

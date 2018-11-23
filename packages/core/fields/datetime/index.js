@@ -36,15 +36,13 @@ class DatetimeField extends Component {
 	 */
 	handleManualInput = ( e ) => {
 		const {
-			field,
 			id,
-			onChange
+			onChange,
+			value
 		} = this.props;
 
-		const value = e.target.value;
-
-		if ( value !== field.value ) {
-			onChange( id, value );
+		if ( e.target.value !== value ) {
+			onChange( id, e.target.value );
 		}
 	}
 
@@ -74,12 +72,12 @@ class DatetimeField extends Component {
 		instance // eslint-disable-line no-unused-vars
 	) => {
 		const {
-			field,
 			id,
-			onChange
+			onChange,
+			value
 		} = this.props;
 
-		if ( selectedDateString !== field.value ) {
+		if ( selectedDateString !== value ) {
 			onChange( id, selectedDateString );
 		}
 	}
