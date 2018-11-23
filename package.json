@@ -74,6 +74,7 @@
     "@wordpress/hooks": "^2.0.3",
     "@wordpress/i18n": "^3.0.1",
     "callbag-basics": "^3.0.0",
+    "callbag-create": "^1.1.1",
     "callbag-distinct-until-changed": "^1.0.0",
     "callbag-from-delegated-event": "^2.0.0",
     "callbag-of": "^1.0.1",
