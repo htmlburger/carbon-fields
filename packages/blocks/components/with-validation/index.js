@@ -90,8 +90,6 @@ function handler( props ) {
 
 				const error = applyFilters(
 					`carbon-fields.${ field.type }.validate`,
-					null,
-					id,
 					field,
 					value
 				);
