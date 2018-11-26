@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { addFilter } from '@wordpress/hooks';
 import Flatpickr from 'react-flatpickr';
 
 /**
@@ -9,8 +10,9 @@ import Flatpickr from 'react-flatpickr';
  */
 import './style.scss';
 import FieldBase from '../../components/field-base';
+import validator from '../../validators/required';
 
-class DatetimeField extends Component {
+class DateTimeField extends Component {
 	/**
 	 * Handles the intialization of the flatpickr component.
 	 *
@@ -90,14 +92,19 @@ class DatetimeField extends Component {
 	render() {
 		const {
 			id,
-			field,
 			name,
 			value,
+			error,
+			field,
 			buttonText
 		} = this.props;
 
 		return (
-			<FieldBase id={ id } field={ field }>
+			<FieldBase
+				id={ id }
+				field={ field }
+				error={ error }
+			>
 				<Flatpickr
 					options={ {
 						...field.picker_options,
@@ -129,4 +136,8 @@ class DatetimeField extends Component {
 	}
 }
 
-export default DatetimeField;
+addFilter( 'carbon-fields.date.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
+addFilter( 'carbon-fields.time.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
+addFilter( 'carbon-fields.date_time.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
+
+export default DateTimeField;
