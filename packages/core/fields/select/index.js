@@ -40,10 +40,6 @@ export class SelectField extends Component {
 			field
 		} = this.props;
 
-		const baseValue = field.default_value
-			? field.default_value
-			: get( field.options, '[0].value', '' );
-
 		return (
 			<FieldBase
 				id={ id }
@@ -56,7 +52,7 @@ export class SelectField extends Component {
 							<select
 								id={ id }
 								name={ name }
-								value={ value ? value : baseValue }
+								value={ value ? value : get( field.options, '[0].value', '' ) }
 								className="cf-select__input"
 								onChange={ this.handleChange }
 							>
