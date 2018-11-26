@@ -4,13 +4,15 @@
 import { __ } from '@wordpress/i18n';
 import { Component, createRef } from '@wordpress/element';
 import { compose, withState } from '@wordpress/compose';
+import { addFilter } from '@wordpress/hooks';
 import { withEffects, toProps } from 'refract-callbag';
 import cx from 'classnames';
 import {
 	find,
-	isMatch,
+	pick,
 	without,
-	pick
+	isMatch,
+	isEmpty
 } from 'lodash';
 import {
 	combine,
@@ -24,10 +26,10 @@ import of from 'callbag-of';
  * Internal dependencies.
  */
 import './style.scss';
-import apiFetch from '../../utils/api-fetch';
 import FieldBase from '../../components/field-base';
 import SearchInput from '../../components/search-input';
 import Sortable from '../../components/sortable';
+import apiFetch from '../../utils/api-fetch';
 
 class AssociationField extends Component {
 	/**
@@ -155,9 +157,10 @@ class AssociationField extends Component {
 	render() {
 		const {
 			id,
-			field,
 			name,
 			value,
+			error,
+			field,
 			totalOptionsCount,
 			selectedOptions,
 			queryTerm
@@ -188,7 +191,11 @@ class AssociationField extends Component {
 		};
 
 		return (
-			<FieldBase id={ id } field={ field }>
+			<FieldBase
+				id={ id }
+				field={ field }
+				error={ error }
+			>
 				<div className="cf-association__bar">
 					<SearchInput
 						value={ queryTerm }
@@ -401,6 +408,20 @@ const applyWithState = withState( {
 } );
 
 const applyWithEffects = withEffects( handler )( aperture );
+
+addFilter( 'carbon-fields.association.validate', 'carbon-fields/core', ( field, value ) => {
+	const { min, required } = field;
+
+	if ( required && isEmpty( value ) ) {
+		return carbonFieldsL10n.field.messageRequiredField;
+	}
+
+	if ( min > 0 && value.length < min ) {
+		return carbonFieldsL10n.field.minNumItemsNotReached.replace( '%s', field.min );
+	}
+
+	return null;
+} );
 
 export default compose(
 	applyWithState,
