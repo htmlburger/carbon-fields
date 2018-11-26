@@ -3,7 +3,12 @@
  */
 import cx from 'classnames';
 import { Component, createRef } from '@wordpress/element';
-import { get, find } from 'lodash';
+import { addFilter } from '@wordpress/hooks';
+import {
+	get,
+	find,
+	isEmpty
+} from 'lodash';
 
 /**
  * The internal dependencies.
@@ -208,8 +213,9 @@ class ComplexField extends Component {
 		const { currentTab } = this.state;
 
 		const {
-			field,
 			value,
+			field,
+			error,
 			groupIdKey,
 			groupFilterKey,
 			allGroupsAreCollapsed,
@@ -239,7 +245,11 @@ class ComplexField extends Component {
 		} );
 
 		return (
-			<FieldBase className={ classes } field={ field }>
+			<FieldBase
+				className={ classes }
+				field={ field }
+				error={ error }
+			>
 				{ this.isTabbed && !! value.length && (
 					<Sortable
 						items={ value }
@@ -324,5 +334,27 @@ class ComplexField extends Component {
 		);
 	}
 }
+
+addFilter( 'carbon-fields.complex.validate', 'carbon-fields/core', ( field, value ) => {
+	const {
+		min,
+		labels,
+		required
+	} = field;
+
+	if ( required && isEmpty( value ) ) {
+		return carbonFieldsL10n.field.messageRequiredField;
+	}
+
+	if ( min > 0 && value.length < min ) {
+		const label = min === 1 ? labels.singular_name : labels.plural_name;
+
+		return carbonFieldsL10n.field.complexMinNumRowsNotReached
+			.replace( '%1$d', min )
+			.replace( '%2$s', label.toLowerCase() );
+	}
+
+	return null;
+} );
 
 export default ComplexField;
