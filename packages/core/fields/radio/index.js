@@ -82,5 +82,6 @@ class RadioField extends Component {
 }
 
 addFilter( 'carbon-fields.radio.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
+addFilter( 'carbon-fields.radio_image.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default RadioField;
