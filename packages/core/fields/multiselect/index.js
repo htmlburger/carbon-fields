@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { addFilter } from '@wordpress/hooks';
 import Select from 'react-select';
 
 /**
@@ -9,6 +10,7 @@ import Select from 'react-select';
  */
 import FieldBase from '../../components/field-base';
 import NoOptions from '../../components/no-options';
+import validator from '../../validators/required';
 
 class MultiselectField extends Component {
 	/**
@@ -46,13 +48,18 @@ class MultiselectField extends Component {
 	render() {
 		const {
 			id,
-			field,
 			name,
-			value
+			value,
+			error,
+			field
 		} = this.props;
 
 		return (
-			<FieldBase id={ id } field={ field } >
+			<FieldBase
+				id={ id }
+				field={ field }
+				error={ error }
+			>
 				{
 					field.options.length > 0
 						? (
@@ -74,5 +81,7 @@ class MultiselectField extends Component {
 		);
 	}
 }
+
+addFilter( 'carbon-fields.multiselect.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default MultiselectField;

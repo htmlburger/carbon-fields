@@ -3,4 +3,9 @@
  */
 import { addFilter } from '@wordpress/hooks';
 
-addFilter( 'carbon-fields.multiselect-field.block', 'carbon-fields/blocks', ( OriginalMultiselectField ) => OriginalMultiselectField );
+/**
+ * Internal dependencies.
+ */
+import withValidation from '../../components/with-validation';
+
+addFilter( 'carbon-fields.multiselect-field.block', 'carbon-fields/blocks', ( OriginalMultiselectField ) => withValidation( OriginalMultiselectField ) );
