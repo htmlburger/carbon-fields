@@ -4,7 +4,7 @@
 import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
-import { isString } from 'lodash';
+import { isString, template } from 'lodash';
 import cx from 'classnames';
 
 /**
@@ -82,6 +82,10 @@ class RichTextField extends Component {
 			{ 'html-active': ! field.rich_editing }
 		];
 
+		const mediaButtonsHTML = field.media_buttons
+			? template( field.media_buttons )( { id } )
+			: null;
+
 		return (
 			<FieldBase
 				id={ id }
@@ -95,7 +99,7 @@ class RichTextField extends Component {
 				>
 					{ field.media_buttons && (
 						<div id={ `wp-${ id }-media-buttons` } className="hide-if-no-js wp-media-buttons">
-							<span dangerouslySetInnerHTML={ { __html: field.media_buttons } }></span>
+							<span dangerouslySetInnerHTML={ { __html: mediaButtonsHTML } }></span>
 						</div>
 					) }
 
