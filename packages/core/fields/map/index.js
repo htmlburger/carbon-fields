@@ -3,6 +3,7 @@
  */
 import of from 'callbag-of';
 import { Component } from '@wordpress/element';
+import { addFilter } from '@wordpress/hooks';
 import { withEffects, toProps } from 'refract-callbag';
 import { debounce } from 'lodash';
 import {
@@ -15,6 +16,7 @@ import {
  * The internal dependencies.
  */
 import './style.scss';
+import validator from '../../validators/required';
 import FieldBase from '../../components/field-base';
 import SearchInput from '../../components/search-input';
 import GoogleMap from './google-map';
@@ -61,11 +63,16 @@ class MapField extends Component {
 			id,
 			name,
 			value,
+			error,
 			field
 		} = this.props;
 
 		return (
-			<FieldBase id={ id } field={ field }>
+			<FieldBase
+				id={ id }
+				field={ field }
+				error={ error }
+			>
 				<SearchInput
 					id={ id }
 					className="cf-map__search"
@@ -194,5 +201,7 @@ function handler( props ) {
 		}
 	};
 }
+
+addFilter( 'carbon-fields.map.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default withEffects( handler )( aperture )( MapField );
