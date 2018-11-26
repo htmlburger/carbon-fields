@@ -2,12 +2,14 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { addFilter } from '@wordpress/hooks';
 
 /**
  * Internal dependencies.
  */
 import './style.scss';
 import FieldBase from '../../components/field-base';
+import validator from '../../validators/required';
 
 class CheckboxField extends Component {
 	/**
@@ -39,13 +41,14 @@ class CheckboxField extends Component {
 	render() {
 		const {
 			id,
-			field,
 			name,
-			value
+			value,
+			error,
+			field
 		} = this.props;
 
 		return (
-			<FieldBase field={ field }>
+			<FieldBase field={ field } error={ error }>
 				<input
 					type="checkbox"
 					id={ id }
@@ -64,5 +67,7 @@ class CheckboxField extends Component {
 		);
 	}
 }
+
+addFilter( 'carbon-fields.checkbox.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default CheckboxField;

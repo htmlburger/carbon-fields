@@ -3,4 +3,9 @@
  */
 import { addFilter } from '@wordpress/hooks';
 
-addFilter( 'carbon-fields.checkbox-field.block', 'carbon-fields/blocks', ( OriginalCheckboxField ) => OriginalCheckboxField );
+/**
+ * Internal dependencies.
+ */
+import withValidation from '../../components/with-validation';
+
+addFilter( 'carbon-fields.checkbox-field.block', 'carbon-fields/blocks', ( OriginalCheckboxField ) => withValidation( OriginalCheckboxField ) );
