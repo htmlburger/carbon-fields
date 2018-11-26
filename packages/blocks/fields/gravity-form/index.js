@@ -3,4 +3,9 @@
  */
 import { addFilter } from '@wordpress/hooks';
 
-addFilter( 'carbon-fields.gravity_form-field.block', 'carbon-fields/blocks', ( OriginalSelectField ) => OriginalSelectField );
+/**
+ * Internal dependencies.
+ */
+import withValidation from '../../components/with-validation';
+
+addFilter( 'carbon-fields.gravity_form-field.block', 'carbon-fields/blocks', ( OriginalSelectField ) => withValidation( OriginalSelectField ) );

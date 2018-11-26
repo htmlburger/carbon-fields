@@ -70,5 +70,6 @@ export class SelectField extends Component {
 }
 
 addFilter( 'carbon-fields.select.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
+addFilter( 'carbon-fields.gravity_form.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default SelectField;
