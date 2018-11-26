@@ -230,7 +230,10 @@ class AssociationField extends Component {
 										<div className="cf-association__option-actions">
 											<a className="cf-association__option-action dashicons dashicons-edit" href={ option.edit_link }></a>
 
-											{ ! option.disabled && (
+											{ (
+												! option.disabled
+												&& value.length < field.max
+											) && (
 												<button type="button" className="cf-association__option-action dashicons dashicons-plus-alt" onClick={ () => this.handleAddItem( option ) }>
 												</button>
 											) }
