@@ -3,6 +3,7 @@
  */
 import { Component } from '@wordpress/element';
 import { compose, withState } from '@wordpress/compose';
+import { addFilter } from '@wordpress/hooks';
 
 /**
  * Internal dependencies.
@@ -10,6 +11,7 @@ import { compose, withState } from '@wordpress/compose';
 import './style.scss';
 import FieldBase from '../../components/field-base';
 import MediaLibrary from '../../components/media-library';
+import validator from '../../validators/required';
 import fetchAttachmentsData from '../../utils/fetch-attachments-data';
 
 class FileField extends Component {
@@ -75,9 +77,10 @@ class FileField extends Component {
 	render() {
 		const {
 			id,
-			field,
 			value,
 			name,
+			error,
+			field,
 			fileData,
 			buttonLabel,
 			mediaLibraryButtonLabel,
@@ -85,7 +88,11 @@ class FileField extends Component {
 		} = this.props;
 
 		return (
-			<FieldBase id={ id } field={ field }>
+			<FieldBase
+				id={ id }
+				field={ field }
+				error={ error }
+			>
 				<MediaLibrary
 					onSelect={ this.handleSelect }
 					multiple={ false }
@@ -132,6 +139,8 @@ class FileField extends Component {
 const applyWithState = withState( {
 	fileData: {}
 } );
+
+addFilter( 'carbon-fields.file.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default compose(
 	applyWithState
