@@ -105,16 +105,21 @@ class OembedField extends Component {
 	render() {
 		const {
 			id,
-			field,
 			name,
 			value,
+			error,
+			field,
 			embedCode,
 			embedType,
 			provider
 		} = this.props;
 
 		return (
-			<FieldBase id={ id } field={ field }>
+			<FieldBase
+				id={ id }
+				field={ field }
+				error={ error }
+			>
 				<div ref={ this.node }>
 					<SearchInput
 						id={ id }
