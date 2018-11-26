@@ -8,8 +8,9 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies.
  */
 import './style.scss';
+import withValidation from '../../components/with-validation';
 
-addFilter( 'carbon-fields.media_gallery-field.block', 'carbon-fields/blocks', ( OriginalMediaGalleryField ) => ( props ) => {
+addFilter( 'carbon-fields.media_gallery-field.block', 'carbon-fields/blocks', ( OriginalMediaGalleryField ) => withValidation( ( props ) => {
 	return (
 		<OriginalMediaGalleryField
 			buttonLabel={ __( 'Select Attachments' ) }
@@ -18,4 +19,4 @@ addFilter( 'carbon-fields.media_gallery-field.block', 'carbon-fields/blocks', ( 
 			{ ...props }
 		/>
 	);
-} );
+} ) );

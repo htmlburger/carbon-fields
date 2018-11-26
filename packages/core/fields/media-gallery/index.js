@@ -6,6 +6,7 @@ import { withEffects } from 'refract-callbag';
 import { map, pipe } from 'callbag-basics';
 import { Component, createRef } from '@wordpress/element';
 import { withState, compose } from '@wordpress/compose';
+import { addFilter } from '@wordpress/hooks';
 
 /**
  * Internal dependencies.
@@ -15,6 +16,7 @@ import FieldBase from '../../components/field-base';
 import MediaLibrary from '../../components/media-library';
 import Sortable from '../../components/sortable';
 import fetchAttachmentsData from '../../utils/fetch-attachments-data';
+import validator from '../../validators/required';
 
 class MediaGalleryField extends Component {
 	/**
@@ -97,9 +99,10 @@ class MediaGalleryField extends Component {
 	render() {
 		const {
 			id,
-			field,
 			name,
 			value,
+			error,
+			field,
 			buttonLabel,
 			mediaLibraryButtonLabel,
 			mediaLibraryTitle,
@@ -108,7 +111,11 @@ class MediaGalleryField extends Component {
 		} = this.props;
 
 		return (
-			<FieldBase id={ id } field={ field }>
+			<FieldBase
+				id={ id }
+				field={ field }
+				error={ error }
+			>
 				<Sortable
 					items={ value }
 					forwardedRef={ this.attachmentsList }
@@ -238,6 +245,8 @@ const applyWithState = withState( {
 } );
 
 const applyWithEffects = withEffects( handler )( aperture );
+
+addFilter( 'carbon-fields.media_gallery.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default compose(
 	applyWithState,
