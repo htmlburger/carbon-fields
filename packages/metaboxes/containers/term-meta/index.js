@@ -3,8 +3,10 @@
  */
 import { addFilter } from '@wordpress/hooks';
 import { compose } from '@wordpress/compose';
+import { dispatch } from '@wordpress/data';
 import { withEffects } from 'refract-callbag';
 import { map, pipe } from 'callbag-basics';
+import { get, keyBy } from 'lodash';
 
 /**
  * Internal dependencies.
@@ -12,6 +14,7 @@ import { map, pipe } from 'callbag-basics';
 import ContainerBase from '../../components/container-base';
 import withContainer from '../../components/with-container';
 import fromAjaxEvent from '../../utils/from-ajax-event';
+import { normalizePreloadedState } from '../../store/helpers';
 
 function aperture() {
 	return function() {
@@ -30,6 +33,12 @@ function handler() {
 	return function( effect ) {
 		switch ( effect.type ) {
 			case 'RESET':
+				const { containers, fields } = normalizePreloadedState( get( window.cf, 'preloaded.containers', [] ) );
+
+				dispatch( 'carbon-fields/metaboxes' ).setupState(
+					keyBy( containers, 'id' ),
+					keyBy( fields, 'id' )
+				);
 
 				break;
 		}
