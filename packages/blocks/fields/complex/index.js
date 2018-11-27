@@ -252,7 +252,7 @@ class ComplexField extends Component {
 	}
 }
 
-addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( OriginalComplexField ) => withValidation( ( props ) => {
+addFilter( 'carbon-fields.complex.block', 'carbon-fields/blocks', ( OriginalComplexField ) => withValidation( ( props ) => {
 	const {
 		id,
 		name,

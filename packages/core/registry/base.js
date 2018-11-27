@@ -3,16 +3,12 @@
 /**
  * External dependencies.
  */
+import { applyFilters } from '@wordpress/hooks';
 import {
 	isString,
 	isFunction,
 	startCase
 } from 'lodash';
-
-/**
- * Internal dependencies.
- */
-import withFilters from '../utils/with-filters';
 
 /**
  * Creates a new registry.
@@ -30,13 +26,6 @@ export function createRegistry( domain, supportedContexts ) {
 	 * @type {Object}
 	 */
 	const types = {};
-
-	/**
-	 * Keeps track of types that are already wrapped with `withFilters` helper.
-	 *
-	 * @type {Object}
-	 */
-	const enhancedTypes = {};
 
 	/**
 	 * Registers a new type.
@@ -61,7 +50,12 @@ export function createRegistry( domain, supportedContexts ) {
 			return false;
 		}
 
-		types[ type ] = component;
+		types[ type ] = supportedContexts.reduce( ( accumulator, context ) => {
+			return {
+				...accumulator,
+				[ context ]: applyFilters( `carbon-fields.register-${ domain }-type`, type, context, component )
+			};
+		}, {} );
 
 		return true;
 	}
@@ -84,15 +78,7 @@ export function createRegistry( domain, supportedContexts ) {
 			return;
 		}
 
-		if ( ! enhancedTypes[ type ] ) {
-			enhancedTypes[ type ] = {};
-		}
-
-		if ( ! enhancedTypes[ type ][ context ] ) {
-			enhancedTypes[ type ][ context ] = withFilters( `carbon-fields.${ type }-${ domain }.${ context }` )( types[ type ] );
-		}
-
-		return enhancedTypes[ type ][ context ];
+		return types[ type ][ context ];
 	}
 
 	return {

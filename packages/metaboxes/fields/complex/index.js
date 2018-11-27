@@ -23,7 +23,6 @@ import { uniqueId } from '@carbon-fields/core';
  */
 import './style.scss';
 import Field from '../../components/field';
-import withField from '../../components/with-field';
 import flattenField from '../../utils/flatten-field';
 
 class ComplexField extends Component {
@@ -242,8 +241,7 @@ const applyWithDispatch = withDispatch( ( dispatch ) => {
 	};
 } );
 
-addFilter( 'carbon-fields.complex-field.metabox', 'carbon-fields/metaboxes', ( OriginalComplexField ) => compose(
-	withField,
+addFilter( 'carbon-fields.complex.metabox', 'carbon-fields/metaboxes', ( OriginalComplexField ) => compose(
 	applyWithDispatch
 )( ( props ) => {
 	const {

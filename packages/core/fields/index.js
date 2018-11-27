@@ -1,6 +1,13 @@
 /**
+ * External dependencies.
+ */
+import { compose } from '@wordpress/compose';
+import { addFilter } from '@wordpress/hooks';
+
+/**
  * Internal dependencies.
  */
+import withFilters from '../utils/with-filters';
 import { registerFieldType } from '../registry/fields';
 import AssociationField from './association';
 import CheckboxField from './checkbox';
@@ -22,6 +29,16 @@ import SetField from './set';
 import SidebarField from './sidebar';
 import TextField from './text';
 import TextareaField from './textarea';
+
+/**
+ * Extends the fields with necessary hooks.
+ */
+addFilter( 'carbon-fields.register-field-type', 'carbon-fields/core', ( type, context, component ) => {
+	return compose(
+		withFilters( `carbon-fields.field-edit.${ context }` ),
+		withFilters( `carbon-fields.${ type }.${ context }` )
+	)( component );
+} );
 
 /**
  * Registers the fields.
