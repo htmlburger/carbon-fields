@@ -8,7 +8,8 @@ import {
 	keyBy,
 	assign,
 	forEach,
-	cloneDeep
+	cloneDeep,
+	values
 } from 'lodash';
 
 /**
@@ -27,6 +28,13 @@ export function containers( state = {}, action ) {
 	switch ( action.type ) {
 		case 'SETUP_STATE':
 			return action.payload.containers;
+
+		case 'UPDATE_STATE':
+			return produce( state, ( draft ) => {
+				values( action.payload.containers ).forEach( ( container ) => {
+					draft[ container.id ] = container;
+				} );
+			} );
 
 		default:
 			return state;
@@ -98,6 +106,13 @@ export function fields( state = {}, action ) {
 	switch ( action.type ) {
 		case 'SETUP_STATE':
 			return action.payload.fields;
+
+		case 'UPDATE_STATE':
+			return produce( state, ( draft ) => {
+				values( action.payload.fields ).forEach( ( field ) => {
+					draft[ field.id ] = field;
+				} );
+			} );
 
 		case 'UPDATE_FIELD_VALUE':
 			return produce( state, ( draft ) => {
