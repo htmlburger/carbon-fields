@@ -1,9 +1,13 @@
 /**
  * External dependencies.
  */
-import classnames from 'classnames';
-import { getFieldType } from '@carbon-fields/core';
+import cx from 'classnames';
 import { kebabCase } from 'lodash';
+
+/**
+ * Carbon Fields dependencies.
+ */
+import { getFieldType } from '@carbon-fields/core';
 
 /**
  * Internal dependencies.
@@ -19,8 +23,8 @@ import Field from '../field';
  * @param  {mixed}  props.children
  * @return {Object}
  */
-const ContainerShell = ( { container, children } ) => {
-	const classes = classnames( [
+function Container( { container, children } ) {
+	const classes = cx( [
 		'cf-container',
 		`cf-container-${ container.id }`,
 		`cf-container-${ kebabCase( container.type ) }`,
@@ -29,6 +33,12 @@ const ContainerShell = ( { container, children } ) => {
 
 	return (
 		<div className={ classes }>
+			<input
+				type="hidden"
+				name={ container.nonce.name }
+				value={ container.nonce.value }
+			/>
+
 			{ children }
 
 			{ container.fields.map( ( field ) => {
@@ -46,6 +56,6 @@ const ContainerShell = ( { container, children } ) => {
 			} ) }
 		</div>
 	);
-};
+}
 
-export default ContainerShell;
+export default Container;
