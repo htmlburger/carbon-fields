@@ -8,8 +8,7 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies.
  */
 import './style.scss';
-import withValidation from '../../components/with-validation';
 
-addFilter( 'carbon-fields.date_time-field.block', 'carbon-fields/blocks', ( OriginalDateTimeField ) => withValidation( ( props ) => (
+addFilter( 'carbon-fields.date_time.block', 'carbon-fields/blocks', ( OriginalDateTimeField ) => ( props ) => (
 	<OriginalDateTimeField buttonText={ __( 'Select Date' ) } { ...props } />
-) ) );
+) );

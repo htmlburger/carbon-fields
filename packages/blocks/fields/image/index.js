@@ -4,12 +4,7 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
-/**
- * Internal dependencies.
- */
-import withValidation from '../../components/with-validation';
-
-addFilter( 'carbon-fields.image-field.block', 'carbon-fields/blocks', ( OriginalImageField ) => withValidation( ( props ) => {
+addFilter( 'carbon-fields.image.block', 'carbon-fields/blocks', ( OriginalImageField ) => ( props ) => {
 	return (
 		<OriginalImageField
 			buttonLabel={ __( 'Select Image' ) }
@@ -18,4 +13,4 @@ addFilter( 'carbon-fields.image-field.block', 'carbon-fields/blocks', ( Original
 			{ ...props }
 		/>
 	);
-} ) );
+} );

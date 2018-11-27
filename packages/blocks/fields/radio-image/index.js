@@ -7,9 +7,8 @@ import { addFilter } from '@wordpress/hooks';
  * Internal dependencies.
  */
 import './style.scss';
-import withValidation from '../../components/with-validation';
 
-addFilter( 'carbon-fields.radio_image-field.block', 'carbon-fields/blocks', ( OriginalRadioField ) => withValidation( ( props ) => {
+addFilter( 'carbon-fields.radio_image.block', 'carbon-fields/blocks', ( OriginalRadioField ) => ( props ) => {
 	return (
 		<OriginalRadioField
 			{ ...props }
@@ -22,4 +21,4 @@ addFilter( 'carbon-fields.radio_image-field.block', 'carbon-fields/blocks', ( Or
 			} }
 		/>
 	);
-} ) );
+} );

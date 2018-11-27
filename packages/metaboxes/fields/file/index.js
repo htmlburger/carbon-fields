@@ -4,12 +4,7 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
-/**
- * The internal dependencies.
- */
-import withField from '../../components/with-field';
-
-addFilter( 'carbon-fields.file-field.metabox', 'carbon-fields/metaboxes', ( OriginalFileField ) => withField( ( props ) => {
+addFilter( 'carbon-fields.file.metabox', 'carbon-fields/metaboxes', ( OriginalFileField ) => ( props ) => {
 	return (
 		<OriginalFileField
 			buttonLabel={ __( 'Select File' ) }
@@ -18,4 +13,4 @@ addFilter( 'carbon-fields.file-field.metabox', 'carbon-fields/metaboxes', ( Orig
 			{ ...props }
 		/>
 	);
-} ) );
+} );

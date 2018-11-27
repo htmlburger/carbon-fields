@@ -8,9 +8,8 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies.
  */
 import './style.scss';
-import withValidation from '../../components/with-validation';
 
-addFilter( 'carbon-fields.file-field.block', 'carbon-fields/blocks', ( OriginalFileField ) => withValidation( ( props ) => {
+addFilter( 'carbon-fields.file.block', 'carbon-fields/blocks', ( OriginalFileField ) => ( props ) => {
 	return (
 		<OriginalFileField
 			buttonLabel={ __( 'Select File' ) }
@@ -19,4 +18,4 @@ addFilter( 'carbon-fields.file-field.block', 'carbon-fields/blocks', ( OriginalF
 			{ ...props }
 		/>
 	);
-} ) );
+} );

@@ -8,9 +8,8 @@ import { __ } from '@wordpress/i18n';
  * The internal dependencies.
  */
 import './style.scss';
-import withField from '../../components/with-field';
 
-addFilter( 'carbon-fields.media_gallery-field.metabox', 'carbon-fields/metaboxes', ( OriginalMediaGalleryField ) => withField( ( props ) => {
+addFilter( 'carbon-fields.media_gallery.metabox', 'carbon-fields/metaboxes', ( OriginalMediaGalleryField ) => ( props ) => {
 	return (
 		<OriginalMediaGalleryField
 			buttonLabel={ __( 'Select Attachments' ) }
@@ -19,4 +18,4 @@ addFilter( 'carbon-fields.media_gallery-field.metabox', 'carbon-fields/metaboxes
 			{ ...props }
 		/>
 	);
-} ) );
+} );
