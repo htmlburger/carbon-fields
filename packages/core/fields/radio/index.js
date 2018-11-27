@@ -8,7 +8,6 @@ import { addFilter } from '@wordpress/hooks';
  * The internal dependencies.
  */
 import './style.scss';
-import FieldBase from '../../components/field-base';
 import NoOptions from '../../components/no-options';
 import validator from '../../validators/required';
 
@@ -71,12 +70,9 @@ class RadioField extends Component {
 		const { field } = this.props;
 
 		return (
-			<FieldBase field={ field } >
-				{ field.options.length > 0
-					? this.renderOptions()
-					: <NoOptions />
-				}
-			</FieldBase>
+			field.options.length > 0
+				? this.renderOptions()
+				: <NoOptions />
 		);
 	}
 }

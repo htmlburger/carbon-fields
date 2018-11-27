@@ -3,11 +3,6 @@
  */
 import { Component } from '@wordpress/element';
 
-/**
- * The internal dependencies.
- */
-import FieldBase from '../../components/field-base';
-
 class SeparatorField extends Component {
 	/**
 	 * Renders the component.
@@ -15,12 +10,8 @@ class SeparatorField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { field } = this.props;
-
 		return (
-			<FieldBase field={ { ...field, label: null } } >
-				<h3>{ field.label }</h3>
-			</FieldBase>
+			<h3>{ this.props.field.label }</h3>
 		);
 	}
 }

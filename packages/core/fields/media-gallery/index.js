@@ -12,7 +12,6 @@ import { addFilter } from '@wordpress/hooks';
  * Internal dependencies.
  */
 import './style.scss';
-import FieldBase from '../../components/field-base';
 import MediaLibrary from '../../components/media-library';
 import Sortable from '../../components/sortable';
 import fetchAttachmentsData from '../../utils/fetch-attachments-data';
@@ -98,10 +97,8 @@ class MediaGalleryField extends Component {
 	 */
 	render() {
 		const {
-			id,
 			name,
 			value,
-			error,
 			field,
 			buttonLabel,
 			mediaLibraryButtonLabel,
@@ -111,103 +108,97 @@ class MediaGalleryField extends Component {
 		} = this.props;
 
 		return (
-			<FieldBase
-				id={ id }
-				field={ field }
-				error={ error }
+			<Sortable
+				items={ value }
+				forwardedRef={ this.attachmentsList }
+				options={ {
+					handle: '.cf-media-gallery__item-name',
+					forcePlaceholderSize: true
+				} }
+				onUpdate={ this.handleSort }
 			>
-				<Sortable
-					items={ value }
-					forwardedRef={ this.attachmentsList }
-					options={ {
-						handle: '.cf-media-gallery__item-name',
-						forcePlaceholderSize: true
-					} }
-					onUpdate={ this.handleSort }
+				<MediaLibrary
+					onSelect={ this.handleSelect }
+					multiple={ true }
+					title={ mediaLibraryTitle }
+					buttonLabel={ mediaLibraryButtonLabel }
+					typeFilter={ field.type_filter }
 				>
-					<MediaLibrary
-						onSelect={ this.handleSelect }
-						multiple={ true }
-						title={ mediaLibraryTitle }
-						buttonLabel={ mediaLibraryButtonLabel }
-						typeFilter={ field.type_filter }
-					>
-						{
-							( { openMediaBrowser } ) => {
-								return (
-									<div className="cf-media-gallery__inner">
-										<ul className="cf-media-gallery__list" ref={ this.attachmentsList }>
-											{ value.map( ( id, index ) => { // eslint-disable-line no-shadow
-												const attachment = attachmentsData.find( ( attachmentData ) => attachmentData.id === id );
-												const className = [ 'cf-media-gallery__item' ];
+					{
+						( { openMediaBrowser } ) => {
+							return (
+								<div className="cf-media-gallery__inner">
+									<ul className="cf-media-gallery__list" ref={ this.attachmentsList }>
+										{ value.map( ( id, index ) => { // eslint-disable-line no-shadow
+											const attachment = attachmentsData.find( ( attachmentData ) => attachmentData.id === id );
+											const className = [ 'cf-media-gallery__item' ];
 
-												if ( attachment ) {
-													className.push( `cf-media-gallery__item--${ attachment.type }` );
-												}
+											if ( attachment ) {
+												className.push( `cf-media-gallery__item--${ attachment.type }` );
+											}
 
-												if ( selectedItem === index ) {
-													className.push( 'cf-media-gallery__item--selected' );
-												}
+											if ( selectedItem === index ) {
+												className.push( 'cf-media-gallery__item--selected' );
+											}
 
-												if ( ! attachment ) {
-													return null;
-												}
+											if ( ! attachment ) {
+												return null;
+											}
 
-												return (
-													<li className={ className.join( ' ' ) } key={ index } onClick={ () => this.handleAttachmentSelect( index ) }>
-														<div className="cf-media-gallery__item-inner">
-															<div className="cf-media-gallery__item-preview">
-																{
-																	attachment.type === 'image'
-																		? (
-																			<img
-																				className="cf-media-gallery__item-thumb"
-																				src={ attachment.sizes.thumbnail.url }
-																			/>
-																		)
-																		: (
-																			<img
-																				className="cf-media-gallery__item-icon"
-																				src={ attachment.icon }
-																			/>
-																		)
-																}
-															</div>
-
-															<span className="cf-media-gallery__item-name">
-																{ attachment.filename }
-															</span>
-
-															<button
-																type="button"
-																className="cf-media-gallery__item-remove dashicons-before dashicons-no-alt"
-																onClick={ () => this.handleAttachmentRemove( index ) }
-															></button>
+											return (
+												<li className={ className.join( ' ' ) } key={ index } onClick={ () => this.handleAttachmentSelect( index ) }>
+													<div className="cf-media-gallery__item-inner">
+														<div className="cf-media-gallery__item-preview">
+															{
+																attachment.type === 'image'
+																	? (
+																		<img
+																			className="cf-media-gallery__item-thumb"
+																			src={ attachment.sizes.thumbnail.url }
+																		/>
+																	)
+																	: (
+																		<img
+																			className="cf-media-gallery__item-icon"
+																			src={ attachment.icon }
+																		/>
+																	)
+															}
 														</div>
 
-														<input
-															type="hidden"
-															name={ `${ name }[${ index }]` }
-															value={ id }
-															readOnly
-														/>
-													</li>
-												);
-											} ) }
-										</ul>
+														<span className="cf-media-gallery__item-name">
+															{ attachment.filename }
+														</span>
 
-										<div className="cf-media-gallery__actions">
-											<button type="button" className="button cf-media-gallery__browse" onClick={ openMediaBrowser }>
-												{ buttonLabel }
-											</button>
-										</div>
+														<button
+															type="button"
+															className="cf-media-gallery__item-remove dashicons-before dashicons-no-alt"
+															onClick={ () => this.handleAttachmentRemove( index ) }
+														></button>
+													</div>
+
+													<input
+														type="hidden"
+														name={ `${ name }[${ index }]` }
+														value={ id }
+														readOnly
+													/>
+												</li>
+											);
+										} ) }
+									</ul>
+
+									<div className="cf-media-gallery__actions">
+										<button type="button" className="button cf-media-gallery__browse" onClick={ openMediaBrowser }>
+											{ buttonLabel }
+										</button>
 									</div>
-								);
-							}
+								</div>
+							);
 						}
-					</MediaLibrary>
-				</Sortable>
-			</FieldBase>
+					}
+				</MediaLibrary>
+			</Sortable>
 		);
 	}
 }

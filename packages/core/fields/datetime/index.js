@@ -9,7 +9,6 @@ import Flatpickr from 'react-flatpickr';
  * The internal dependencies.
  */
 import './style.scss';
-import FieldBase from '../../components/field-base';
 import validator from '../../validators/required';
 
 class DateTimeField extends Component {
@@ -94,44 +93,37 @@ class DateTimeField extends Component {
 			id,
 			name,
 			value,
-			error,
 			field,
 			buttonText
 		} = this.props;
 
 		return (
-			<FieldBase
-				id={ id }
-				field={ field }
-				error={ error }
+			<Flatpickr
+				options={ {
+					...field.picker_options,
+					wrap: true
+				} }
+				value={ value }
+				onReady={ this.handleReady }
+				onChange={ this.handleChange }
+				className="cf-datetime__inner"
 			>
-				<Flatpickr
-					options={ {
-						...field.picker_options,
-						wrap: true
-					} }
+				<input
+					type="text"
+					id={ id }
+					name={ name }
 					value={ value }
-					onReady={ this.handleReady }
-					onChange={ this.handleChange }
-					className="cf-datetime__inner"
-				>
-					<input
-						type="text"
-						id={ id }
-						name={ name }
-						value={ value }
-						onChange={ this.handleManualInput }
-						onBlur={ this.formatManualInput }
-						className="cf-datetime__input"
-						data-input
-						{ ...field.attributes }
-					/>
+					onChange={ this.handleManualInput }
+					onBlur={ this.formatManualInput }
+					className="cf-datetime__input"
+					data-input
+					{ ...field.attributes }
+				/>
 
-					<button type="button" className="button cf-datetime__button" data-toggle>
-						{ buttonText }
-					</button>
-				</Flatpickr>
-			</FieldBase>
+				<button type="button" className="button cf-datetime__button" data-toggle>
+					{ buttonText }
+				</button>
+			</Flatpickr>
 		);
 	}
 }

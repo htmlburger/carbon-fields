@@ -4,11 +4,6 @@
 import { RawHTML } from '@wordpress/element';
 
 /**
- * The internal dependencies.
- */
-import FieldBase from '../../components/field-base';
-
-/**
  * Renders the field.
  *
  * @param  {Object} props
@@ -17,11 +12,9 @@ import FieldBase from '../../components/field-base';
  */
 function HtmlField( { field } ) {
 	return (
-		<FieldBase field={ field }>
-			<RawHTML className="cf-html__content">
-				{ field.html }
-			</RawHTML>
-		</FieldBase>
+		<RawHTML className="cf-html__content">
+			{ field.html }
+		</RawHTML>
 	);
 }
 

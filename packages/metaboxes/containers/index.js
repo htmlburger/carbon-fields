@@ -1,4 +1,14 @@
 /**
+ * External dependencies.
+ */
+import { addFilter } from '@wordpress/hooks';
+
+/**
+ * Carbon Fields dependencies.
+ */
+import { withFilters } from '@carbon-fields/core';
+
+/**
  * Internal dependencies.
  */
 import { registerContainerType } from './registry';
@@ -9,6 +19,13 @@ import CommentMetaContainer from './comment-meta';
 import ThemeOptionsContainer from './theme-options';
 import NavMenuItemContainer from './nav-menu-item';
 import WidgetContainer from './widget';
+
+/**
+ * Extends the containers with necessary hooks.
+ */
+addFilter( 'carbon-fields.register-container-type', 'carbon-fields/metaboxes', ( type, context, component ) => {
+	return withFilters( `carbon-fields.${ type }-container.${ context }` )( component );
+} );
 
 /**
  * Registers the containers.

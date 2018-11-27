@@ -1,14 +1,13 @@
 /**
  * External dependencies.
  */
-import { Component } from '@wordpress/element';
+import { Component, Fragment } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 
 /**
  * Internal dependencies.
  */
 import './style.scss';
-import FieldBase from '../../components/field-base';
 import validator from '../../validators/required';
 
 class CheckboxField extends Component {
@@ -43,12 +42,11 @@ class CheckboxField extends Component {
 			id,
 			name,
 			value,
-			error,
 			field
 		} = this.props;
 
 		return (
-			<FieldBase field={ field } error={ error }>
+			<Fragment>
 				<input
 					type="checkbox"
 					id={ id }
@@ -63,7 +61,7 @@ class CheckboxField extends Component {
 				<label className="cf-checkbox__label" htmlFor={ id }>
 					{ field.option_label }
 				</label>
-			</FieldBase>
+			</Fragment>
 		);
 	}
 }

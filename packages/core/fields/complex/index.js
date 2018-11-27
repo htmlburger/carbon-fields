@@ -2,8 +2,12 @@
  * External dependencies.
  */
 import cx from 'classnames';
-import { Component, createRef } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
+import {
+	Component,
+	Fragment,
+	createRef
+} from '@wordpress/element';
 import {
 	get,
 	find,
@@ -14,7 +18,6 @@ import {
  * The internal dependencies.
  */
 import './style.scss';
-import FieldBase from '../../components/field-base';
 import Sortable from '../../components/sortable';
 import { getComplexLabel } from '../../utils/get-complex-label.js';
 import ComplexTabs from './tabs';
@@ -216,7 +219,6 @@ class ComplexField extends Component {
 		const {
 			value,
 			field,
-			error,
 			groupIdKey,
 			groupFilterKey,
 			allGroupsAreCollapsed,
@@ -225,6 +227,8 @@ class ComplexField extends Component {
 			onToggleGroup
 		} = this.props;
 
+		// TODO: Add this via hook
+		// eslint-disable-next-line
 		const classes = cx(
 			`cf-complex--${ field.layout }`,
 			{
@@ -246,11 +250,7 @@ class ComplexField extends Component {
 		} );
 
 		return (
-			<FieldBase
-				className={ classes }
-				field={ field }
-				error={ error }
-			>
+			<Fragment>
 				{ this.isTabbed && !! value.length && (
 					<Sortable
 						items={ value }
@@ -332,7 +332,7 @@ class ComplexField extends Component {
 						</button>
 					</div>
 				) }
-			</FieldBase>
+			</Fragment>
 		);
 	}
 }

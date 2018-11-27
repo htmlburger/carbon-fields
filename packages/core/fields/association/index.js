@@ -2,7 +2,11 @@
  * External dependencies.
  */
 import { __ } from '@wordpress/i18n';
-import { Component, createRef } from '@wordpress/element';
+import {
+	Component,
+	Fragment,
+	createRef
+} from '@wordpress/element';
 import { compose, withState } from '@wordpress/compose';
 import { addFilter } from '@wordpress/hooks';
 import { withEffects, toProps } from 'refract-callbag';
@@ -26,7 +30,6 @@ import of from 'callbag-of';
  * Internal dependencies.
  */
 import './style.scss';
-import FieldBase from '../../components/field-base';
 import SearchInput from '../../components/search-input';
 import Sortable from '../../components/sortable';
 import apiFetch from '../../utils/api-fetch';
@@ -156,10 +159,8 @@ class AssociationField extends Component {
 	 */
 	render() {
 		const {
-			id,
 			name,
 			value,
-			error,
 			field,
 			totalOptionsCount,
 			selectedOptions,
@@ -191,11 +192,7 @@ class AssociationField extends Component {
 		};
 
 		return (
-			<FieldBase
-				id={ id }
-				field={ field }
-				error={ error }
-			>
+			<Fragment>
 				<div className="cf-association__bar">
 					<SearchInput
 						value={ queryTerm }
@@ -299,7 +296,7 @@ class AssociationField extends Component {
 						</div>
 					</Sortable>
 				</div>
-			</FieldBase>
+			</Fragment>
 		);
 	}
 }

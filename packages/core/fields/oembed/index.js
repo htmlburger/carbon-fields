@@ -21,7 +21,6 @@ import {
  */
 import './style.scss';
 import validator from '../../validators/required';
-import FieldBase from '../../components/field-base';
 import SearchInput from '../../components/search-input';
 import OembedPreview from './preview';
 
@@ -107,44 +106,36 @@ class OembedField extends Component {
 			id,
 			name,
 			value,
-			error,
-			field,
 			embedCode,
 			embedType,
 			provider
 		} = this.props;
 
 		return (
-			<FieldBase
-				id={ id }
-				field={ field }
-				error={ error }
-			>
-				<div ref={ this.node }>
-					<SearchInput
-						id={ id }
-						value={ value }
-						onChange={ this.handleChange }
-					/>
+			<div ref={ this.node }>
+				<SearchInput
+					id={ id }
+					value={ value }
+					onChange={ this.handleChange }
+				/>
 
-					{
-						embedCode
-							? <OembedPreview
-								html={ embedCode }
-								type={ embedType }
-								provider={ provider }
-							/>
-							: null
-					}
+				{
+					embedCode
+						? <OembedPreview
+							html={ embedCode }
+							type={ embedType }
+							provider={ provider }
+						/>
+						: null
+				}
 
-					<input
-						type="hidden"
-						name={ name }
-						value={ value }
-						readOnly
-					/>
-				</div>
-			</FieldBase>
+				<input
+					type="hidden"
+					name={ name }
+					value={ value }
+					readOnly
+				/>
+			</div>
 		);
 	}
 }

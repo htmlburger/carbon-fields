@@ -119,16 +119,20 @@ class ComplexGroup extends Component {
 
 				<div className="cf-complex__group-body" hidden={ collapsed }>
 					{ fields.map( ( field ) => {
-						const Field = getFieldType( field.type, context );
+						const FieldEdit = getFieldType( field.type, context );
 
-						if ( ! Field ) {
+						if ( ! FieldEdit ) {
 							return null;
 						}
+
+						const [ Field, props ] = onFieldSetup( field, {}, this.props );
 
 						return (
 							// The `key` will be assigned via `onFieldSetup`.
 							// eslint-disable-next-line react/jsx-key
-							<Field { ...onFieldSetup( field, {}, this.props ) } />
+							<Field { ...props }>
+								<FieldEdit { ...props } />
+							</Field>
 						);
 					} ) }
 				</div>
