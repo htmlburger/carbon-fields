@@ -3,6 +3,7 @@
  */
 import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
+import { get } from 'lodash';
 
 /**
  * The internal dependencies.
@@ -43,7 +44,7 @@ export class SelectField extends Component {
 					<select
 						id={ id }
 						name={ name }
-						value={ value }
+						value={ value ? value : get( field.options, '[0].value', '' ) }
 						className="cf-select__input"
 						onChange={ this.handleChange }
 					>
