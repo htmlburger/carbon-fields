@@ -10,7 +10,6 @@ import { get } from 'lodash';
  */
 import './style.scss';
 import Picker from './picker';
-import FieldBase from '../../components/field-base';
 import validator from '../../validators/required';
 import hexToRgba from '../../utils/hex-to-rgba';
 
@@ -69,16 +68,11 @@ class ColorField extends Component {
 			id,
 			name,
 			value,
-			error,
 			field
 		} = this.props;
 
 		return (
-			<FieldBase
-				id={ id }
-				field={ field }
-				error={ error }
-			>
+			<div className="cf-color__inner">
 				<input
 					type="hidden"
 					id={ id }
@@ -86,30 +80,28 @@ class ColorField extends Component {
 					value={ value }
 				/>
 
-				<div className="cf-color__inner">
-					<button type="button" className="button cf-color__toggle" onClick={ this.togglePicker }>
-						<span className="cf-color__preview" style={ { backgroundColor: this.getBackgrounColor() } }></span>
+				<button type="button" className="button cf-color__toggle" onClick={ this.togglePicker }>
+					<span className="cf-color__preview" style={ { backgroundColor: this.getBackgrounColor() } }></span>
 
-						<span className="cf-color__toggle-text">
-							{ carbonFieldsL10n.field.colorSelectColor }
-						</span>
-					</button>
+					<span className="cf-color__toggle-text">
+						{ carbonFieldsL10n.field.colorSelectColor }
+					</span>
+				</button>
 
-					{ showPicker && (
-						<Picker
-							color={ value }
-							onChange={ this.handleChange }
-							disableAlpha={ ! field.alphaEnabled }
-							presetColors={ field.palette }
-							onClose={ () => showPicker ? this.togglePicker() : null }
-						/>
-					) }
+				{ showPicker && (
+					<Picker
+						color={ value }
+						onChange={ this.handleChange }
+						disableAlpha={ ! field.alphaEnabled }
+						presetColors={ field.palette }
+						onClose={ () => showPicker ? this.togglePicker() : null }
+					/>
+				) }
 
-					<button type="button" className="button-link cf-color__reset" onClick={ () => this.handleChange() }>
-						<span className="dashicons dashicons-no"></span>
-					</button>
-				</div>
-			</FieldBase>
+				<button type="button" className="button-link cf-color__reset" onClick={ () => this.handleChange() }>
+					<span className="dashicons dashicons-no"></span>
+				</button>
+			</div>
 		);
 	}
 }

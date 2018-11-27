@@ -10,7 +10,6 @@ import cx from 'classnames';
 /**
  * The internal dependencies.
  */
-import FieldBase from '../../components/field-base';
 import validator from '../../validators/required';
 
 class RichTextField extends Component {
@@ -71,7 +70,6 @@ class RichTextField extends Component {
 			id,
 			name,
 			value,
-			error,
 			field
 		} = this.props;
 
@@ -87,47 +85,41 @@ class RichTextField extends Component {
 			: null;
 
 		return (
-			<FieldBase
-				id={ id }
-				field={ field }
-				error={ error }
+			<div
+				id={ `wp-${ id }-wrap` }
+				className={ cx( classes ) }
+				ref={ ( node ) => this.editorNode = node }
 			>
-				<div
-					id={ `wp-${ id }-wrap` }
-					className={ cx( classes ) }
-					ref={ ( node ) => this.editorNode = node }
-				>
-					{ field.media_buttons && (
-						<div id={ `wp-${ id }-media-buttons` } className="hide-if-no-js wp-media-buttons">
-							<span dangerouslySetInnerHTML={ { __html: mediaButtonsHTML } }></span>
-						</div>
-					) }
-
-					{ field.rich_editing && (
-						<div className="wp-editor-tabs">
-							<button type="button" id={ `${ id }-tmce` } className="wp-switch-editor switch-tmce" data-wp-editor-id={ id }>
-								{ __( 'Visual' ) }
-							</button>
-
-							<button type="button" id={ `${ id }-html` } className="wp-switch-editor switch-html" data-wp-editor-id={ id }>
-								{ __( 'Text' ) }
-							</button>
-						</div>
-					) }
-
-					<div id={ `wp-${ id }-editor-container` } className="wp-editor-container">
-						<textarea
-							style={ { width: '100%' } }
-							className="regular-text"
-							id={ id }
-							name={ name }
-							value={ value }
-							onChange={ this.handleChange }
-							{ ...field.attributes }
-						/>
+				{ field.media_buttons && (
+					<div id={ `wp-${ id }-media-buttons` } className="hide-if-no-js wp-media-buttons">
+						<span dangerouslySetInnerHTML={ { __html: mediaButtonsHTML } }></span>
 					</div>
+				) }
+
+				{ field.rich_editing && (
+					<div className="wp-editor-tabs">
+						<button type="button" id={ `${ id }-tmce` } className="wp-switch-editor switch-tmce" data-wp-editor-id={ id }>
+							{ __( 'Visual' ) }
+						</button>
+
+						<button type="button" id={ `${ id }-html` } className="wp-switch-editor switch-html" data-wp-editor-id={ id }>
+							{ __( 'Text' ) }
+						</button>
+					</div>
+				) }
+
+				<div id={ `wp-${ id }-editor-container` } className="wp-editor-container">
+					<textarea
+						style={ { width: '100%' } }
+						className="regular-text"
+						id={ id }
+						name={ name }
+						value={ value }
+						onChange={ this.handleChange }
+						{ ...field.attributes }
+					/>
 				</div>
-			</FieldBase>
+			</div>
 		);
 	}
 

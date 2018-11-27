@@ -22,6 +22,7 @@ import { uniqueId } from '@carbon-fields/core';
  * Internal dependencies.
  */
 import './style.scss';
+import Field from '../../components/field';
 import withField from '../../components/with-field';
 import flattenField from '../../utils/flatten-field';
 
@@ -184,14 +185,14 @@ class ComplexField extends Component {
 	 * @param  {Object} field
 	 * @param  {Object} props
 	 * @param  {Object} groupProps
-	 * @return {Object}
+	 * @return {Array}
 	 */
 	handleGroupFieldSetup = ( field, props, groupProps ) => {
-		return assign( {}, props, {
+		return [ Field, assign( {}, props, {
 			key: field.id,
 			id: field.id,
 			name: `${ groupProps.prefix }[${ field.name }]`
-		} );
+		} ) ];
 	}
 
 	/**

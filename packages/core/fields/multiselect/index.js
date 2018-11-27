@@ -8,7 +8,6 @@ import Select from 'react-select';
 /**
  * The internal dependencies.
  */
-import FieldBase from '../../components/field-base';
 import NoOptions from '../../components/no-options';
 import validator from '../../validators/required';
 
@@ -50,34 +49,25 @@ class MultiselectField extends Component {
 			id,
 			name,
 			value,
-			error,
 			field
 		} = this.props;
 
 		return (
-			<FieldBase
-				id={ id }
-				field={ field }
-				error={ error }
-			>
-				{
-					field.options.length > 0
-						? (
-							<Select
-								isMulti
-								joinValues
-								id={ id }
-								name={ name }
-								value={ this.filterValues( value ) }
-								options={ field.options }
-								onChange={ this.handleChange }
-								className="cf-react-select-container"
-								classNamePrefix="cf-react-select"
-							/>
-						)
-						: <NoOptions />
-				}
-			</FieldBase>
+			field.options.length > 0
+				? (
+					<Select
+						isMulti
+						joinValues
+						id={ id }
+						name={ name }
+						value={ this.filterValues( value ) }
+						options={ field.options }
+						onChange={ this.handleChange }
+						className="cf-react-select-container"
+						classNamePrefix="cf-react-select"
+					/>
+				)
+				: <NoOptions />
 		);
 	}
 }

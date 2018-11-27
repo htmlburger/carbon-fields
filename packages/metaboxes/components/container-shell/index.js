@@ -9,6 +9,7 @@ import { kebabCase } from 'lodash';
  * Internal dependencies.
  */
 import './style.scss';
+import Field from '../field';
 
 /**
  * Renders the base wrapper of the container.
@@ -31,14 +32,16 @@ const ContainerShell = ( { container, children } ) => {
 			{ children }
 
 			{ container.fields.map( ( field ) => {
-				const Field = getFieldType( field.type, 'metabox' );
+				const FieldEdit = getFieldType( field.type, 'metabox' );
 
-				if ( ! Field ) {
+				if ( ! FieldEdit ) {
 					return null;
 				}
 
 				return (
-					<Field key={ field.id } id={ field.id } />
+					<Field key={ field.id } id={ field.id }>
+						<FieldEdit id={ field.id } />
+					</Field>
 				);
 			} ) }
 		</div>

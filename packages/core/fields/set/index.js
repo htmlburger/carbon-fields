@@ -9,7 +9,6 @@ import { xor } from 'lodash';
  * Internal dependencies.
  */
 import './style.scss';
-import FieldBase from '../../components/field-base';
 import NoOptions from '../../components/no-options';
 import validator from '../../validators/required';
 
@@ -54,43 +53,34 @@ class SetField extends Component {
 			id,
 			name,
 			value,
-			error,
 			field
 		} = this.props;
 
 		return (
-			<FieldBase
-				id={ id }
-				field={ field }
-				error={ error }
-			>
-				{
-					field.options.length > 0
-						? (
-							<ul className="cf-set__list">
-								{ field.options.map( ( option, index ) => (
-									<li className="cf-set__list-item" key={ index }>
-										<input
-											type="checkbox"
-											id={ `${ id }-${ option.value }` }
-											name={ `${ name }[]` }
-											checked={ this.isChecked( value, option ) }
-											value={ option.value }
-											className="cf-set__input"
-											onChange={ this.handleChange }
-											{ ...field.attributes }
-										/>
+			field.options.length > 0
+				? (
+					<ul className="cf-set__list">
+						{ field.options.map( ( option, index ) => (
+							<li className="cf-set__list-item" key={ index }>
+								<input
+									type="checkbox"
+									id={ `${ id }-${ option.value }` }
+									name={ `${ name }[]` }
+									checked={ this.isChecked( value, option ) }
+									value={ option.value }
+									className="cf-set__input"
+									onChange={ this.handleChange }
+									{ ...field.attributes }
+								/>
 
-										<label className="cf-set__label" htmlFor={ `${ id }-${ option.value }` }>
-											{ option.label }
-										</label>
-									</li>
-								) ) }
-							</ul>
-						)
-						: <NoOptions />
-				}
-			</FieldBase>
+								<label className="cf-set__label" htmlFor={ `${ id }-${ option.value }` }>
+									{ option.label }
+								</label>
+							</li>
+						) ) }
+					</ul>
+				)
+				: <NoOptions />
 		);
 	}
 }
