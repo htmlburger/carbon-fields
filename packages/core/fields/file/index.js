@@ -2,7 +2,6 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { compose, withState } from '@wordpress/compose';
 import { addFilter } from '@wordpress/hooks';
 
 /**
@@ -14,6 +13,19 @@ import validator from '../../validators/required';
 import fetchAttachmentsData from '../../utils/fetch-attachments-data';
 
 class FileField extends Component {
+	/**
+	 * Define the component state
+	 *
+	 * @return {void}
+	 */
+	constructor() {
+		super();
+
+		this.state = {
+			fileData: {}
+		};
+	}
+
 	/**
 	 * Lifecycle Hook.
 	 *
@@ -38,7 +50,7 @@ class FileField extends Component {
 	 * @return {void}
 	 */
 	handleFileMetaChange = ( fileData ) => {
-		this.props.setState( { fileData } );
+		this.setState( { fileData } );
 	}
 
 	/**
@@ -78,11 +90,11 @@ class FileField extends Component {
 			value,
 			name,
 			field,
-			fileData,
 			buttonLabel,
 			mediaLibraryButtonLabel,
 			mediaLibraryTitle
 		} = this.props;
+		const { fileData } = this.state;
 
 		return (
 			<MediaLibrary
@@ -127,13 +139,7 @@ class FileField extends Component {
 	}
 }
 
-const applyWithState = withState( {
-	fileData: {}
-} );
-
 addFilter( 'carbon-fields.file.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 addFilter( 'carbon-fields.image.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
-export default compose(
-	applyWithState
-)( FileField );
+export default FileField;
