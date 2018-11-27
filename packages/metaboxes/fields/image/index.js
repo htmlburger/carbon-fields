@@ -4,12 +4,7 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
-/**
- * The internal dependencies.
- */
-import withField from '../../components/with-field';
-
-addFilter( 'carbon-fields.image-field.metabox', 'carbon-fields/metaboxes', ( OriginalImageField ) => withField( ( props ) => {
+addFilter( 'carbon-fields.image.metabox', 'carbon-fields/metaboxes', ( OriginalImageField ) => ( props ) => {
 	return (
 		<OriginalImageField
 			buttonLabel={ __( 'Select Image' ) }
@@ -18,4 +13,4 @@ addFilter( 'carbon-fields.image-field.metabox', 'carbon-fields/metaboxes', ( Ori
 			{ ...props }
 		/>
 	);
-} ) );
+} );

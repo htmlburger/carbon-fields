@@ -3,12 +3,7 @@
  */
 import { addFilter } from '@wordpress/hooks';
 
-/**
- * The internal dependencies.
- */
-import withField from '../../components/with-field';
-
-addFilter( 'carbon-fields.radio_image-field.metabox', 'carbon-fields/metaboxes', ( OriginalRadioField ) => withField( ( props ) => {
+addFilter( 'carbon-fields.radio_image.metabox', 'carbon-fields/metaboxes', ( OriginalRadioField ) => ( props ) => {
 	return (
 		<OriginalRadioField
 			{ ...props }
@@ -21,4 +16,4 @@ addFilter( 'carbon-fields.radio_image-field.metabox', 'carbon-fields/metaboxes',
 			} }
 		/>
 	);
-} ) );
+} );

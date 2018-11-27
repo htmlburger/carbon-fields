@@ -2,13 +2,14 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { addFilter } from '@wordpress/hooks';
 import Select from 'react-select';
 
 /**
  * The internal dependencies.
  */
-import FieldBase from '../../components/field-base';
 import NoOptions from '../../components/no-options';
+import validator from '../../validators/required';
 
 class MultiselectField extends Component {
 	/**
@@ -46,33 +47,31 @@ class MultiselectField extends Component {
 	render() {
 		const {
 			id,
-			field,
 			name,
-			value
+			value,
+			field
 		} = this.props;
 
 		return (
-			<FieldBase id={ id } field={ field } >
-				{
-					field.options.length > 0
-						? (
-							<Select
-								isMulti
-								joinValues
-								id={ id }
-								name={ name }
-								value={ this.filterValues( value ) }
-								options={ field.options }
-								onChange={ this.handleChange }
-								className="cf-react-select-container"
-								classNamePrefix="cf-react-select"
-							/>
-						)
-						: <NoOptions />
-				}
-			</FieldBase>
+			field.options.length > 0
+				? (
+					<Select
+						isMulti
+						joinValues
+						id={ id }
+						name={ name }
+						value={ this.filterValues( value ) }
+						options={ field.options }
+						onChange={ this.handleChange }
+						className="cf-react-select-container"
+						classNamePrefix="cf-react-select"
+					/>
+				)
+				: <NoOptions />
 		);
 	}
 }
+
+addFilter( 'carbon-fields.multiselect.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default MultiselectField;

@@ -9,7 +9,7 @@ import { __ } from '@wordpress/i18n';
  */
 import './style.scss';
 
-addFilter( 'carbon-fields.file-field.block', 'carbon-fields/blocks', ( OriginalFileField ) => ( props ) => {
+addFilter( 'carbon-fields.file.block', 'carbon-fields/blocks', ( OriginalFileField ) => ( props ) => {
 	return (
 		<OriginalFileField
 			buttonLabel={ __( 'Select File' ) }

@@ -24,6 +24,8 @@ import { uniqueId } from '@carbon-fields/core';
  * Internal dependencies.
  */
 import './style.scss';
+import Field from '../../components/field';
+import withValidation from '../../components/with-validation';
 
 class ComplexField extends Component {
 	/**
@@ -179,19 +181,19 @@ class ComplexField extends Component {
 	 * @param  {Object} field
 	 * @param  {Object} props
 	 * @param  {Object} groupProps
-	 * @return {Object}
+	 * @return {Array}
 	 */
 	handleGroupFieldSetup = ( field, props, groupProps ) => {
 		const id = `${ groupProps.id }__${ field.base_name }`;
 		const value = get( groupProps, `values.${ field.base_name }` );
 
-		return assign( {}, props, {
+		return [ Field, assign( {}, props, {
 			key: id,
 			id: id,
 			field,
 			value,
 			onChange: this.handleGroupFieldChange
-		} );
+		} ) ];
 	}
 
 	/**
@@ -250,12 +252,13 @@ class ComplexField extends Component {
 	}
 }
 
-addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( OriginalComplexField ) => ( props ) => {
+addFilter( 'carbon-fields.complex.block', 'carbon-fields/blocks', ( OriginalComplexField ) => withValidation( ( props ) => {
 	const {
 		id,
-		field,
 		name,
-		value
+		value,
+		error,
+		field
 	} = props;
 
 	return (
@@ -274,9 +277,10 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 					groupIdKey="_id"
 					groupFilterKey="_type"
 					id={ id }
-					field={ field }
 					name={ name }
 					value={ value }
+					error={ error }
+					field={ field }
 					allGroupsAreCollapsed={ allGroupsAreCollapsed }
 					onGroupSetup={ handleGroupSetup }
 					onGroupFieldSetup={ handleGroupFieldSetup }
@@ -290,4 +294,4 @@ addFilter( 'carbon-fields.complex-field.block', 'carbon-fields/blocks', ( Origin
 			) }
 		</ComplexField>
 	);
-} );
+} ) );

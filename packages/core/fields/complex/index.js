@@ -2,15 +2,24 @@
  * External dependencies.
  */
 import cx from 'classnames';
-import { Component, createRef } from '@wordpress/element';
-import { get, find } from 'lodash';
+import { addFilter } from '@wordpress/hooks';
+import {
+	Component,
+	Fragment,
+	createRef
+} from '@wordpress/element';
+import {
+	get,
+	find,
+	isEmpty
+} from 'lodash';
 
 /**
  * The internal dependencies.
  */
 import './style.scss';
-import FieldBase from '../../components/field-base';
 import Sortable from '../../components/sortable';
+import { getComplexLabel } from '../../utils/get-complex-label.js';
 import ComplexTabs from './tabs';
 import ComplexInserter from './inserter';
 import ComplexGroup from './group';
@@ -208,8 +217,8 @@ class ComplexField extends Component {
 		const { currentTab } = this.state;
 
 		const {
-			field,
 			value,
+			field,
 			groupIdKey,
 			groupFilterKey,
 			allGroupsAreCollapsed,
@@ -218,6 +227,8 @@ class ComplexField extends Component {
 			onToggleGroup
 		} = this.props;
 
+		// TODO: Add this via hook
+		// eslint-disable-next-line
 		const classes = cx(
 			`cf-complex--${ field.layout }`,
 			{
@@ -228,9 +239,9 @@ class ComplexField extends Component {
 		const availableGroups = this.getAvailableGroups( groupFilterKey );
 
 		// TODO: Move this to a memoized function.
-		const tabs = value.map( ( group ) => {
+		const tabs = value.map( ( group, index ) => {
 			const id = group[ groupIdKey ];
-			const label = get( find( field.groups, [ 'name', group[ groupFilterKey ] ] ), 'label', '' );
+			const label = getComplexLabel( field.groups, group, index );
 
 			return {
 				id,
@@ -239,7 +250,7 @@ class ComplexField extends Component {
 		} );
 
 		return (
-			<FieldBase className={ classes } field={ field }>
+			<Fragment>
 				{ this.isTabbed && !! value.length && (
 					<Sortable
 						items={ value }
@@ -292,6 +303,7 @@ class ComplexField extends Component {
 								// eslint-disable-next-line react/jsx-key
 								<ComplexGroup { ...onGroupSetup( group, {
 									index,
+									label: getComplexLabel( field.groups, group, index ),
 									tabbed: this.isTabbed,
 									hidden: this.isTabbed && group[ groupIdKey ] !== currentTab,
 									allowClone: field.duplicate_groups_allowed && ! this.isMaximumReached,
@@ -320,9 +332,31 @@ class ComplexField extends Component {
 						</button>
 					</div>
 				) }
-			</FieldBase>
+			</Fragment>
 		);
 	}
 }
+
+addFilter( 'carbon-fields.complex.validate', 'carbon-fields/core', ( field, value ) => {
+	const {
+		min,
+		labels,
+		required
+	} = field;
+
+	if ( required && isEmpty( value ) ) {
+		return carbonFieldsL10n.field.messageRequiredField;
+	}
+
+	if ( min > 0 && value.length < min ) {
+		const label = min === 1 ? labels.singular_name : labels.plural_name;
+
+		return carbonFieldsL10n.field.complexMinNumRowsNotReached
+			.replace( '%1$d', min )
+			.replace( '%2$s', label.toLowerCase() );
+	}
+
+	return null;
+} );
 
 export default ComplexField;

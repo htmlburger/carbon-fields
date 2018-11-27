@@ -1,6 +1,7 @@
 /**
  * External dependencies.
  */
+import of from 'callbag-of';
 import { Component } from '@wordpress/element';
 import { withEffects, toProps } from 'refract-callbag';
 import { trim } from 'lodash';
@@ -9,12 +10,6 @@ import {
 	pipe,
 	merge
 } from 'callbag-basics';
-import of from 'callbag-of';
-
-/**
- * Internal dependencies.
- */
-import FieldBase from '../../components/field-base';
 
 class SidebarField extends Component {
 	/**
@@ -53,22 +48,20 @@ class SidebarField extends Component {
 		} = this.props;
 
 		return (
-			<FieldBase id={ id } field={ field }>
-				<select
-					id={ id }
-					name={ name }
-					value={ value }
-					onChange={ this.handleChange }
-				>
-					<option value="0" disabled>Please choose</option>
+			<select
+				id={ id }
+				name={ name }
+				value={ value }
+				onChange={ this.handleChange }
+			>
+				<option value="0" disabled>Please choose</option>
 
-					{ field.options.map( ( option ) => (
-						<option key={ option.value } value={ option.value }>
-							{ option.label }
-						</option>
-					) ) }
-				</select>
-			</FieldBase>
+				{ field.options.map( ( option ) => (
+					<option key={ option.value } value={ option.value }>
+						{ option.label }
+					</option>
+				) ) }
+			</select>
 		);
 	}
 }

@@ -2,8 +2,9 @@
  * External dependencies.
  */
 import { Component, createRef } from '@wordpress/element';
-import { withEffects, toProps } from 'refract-callbag';
 import { compose, withState } from '@wordpress/compose';
+import { addFilter } from '@wordpress/hooks';
+import { withEffects, toProps } from 'refract-callbag';
 import {
 	map,
 	pipe,
@@ -19,7 +20,7 @@ import {
  * The internal dependencies.
  */
 import './style.scss';
-import FieldBase from '../../components/field-base';
+import validator from '../../validators/required';
 import SearchInput from '../../components/search-input';
 import OembedPreview from './preview';
 
@@ -103,7 +104,6 @@ class OembedField extends Component {
 	render() {
 		const {
 			id,
-			field,
 			name,
 			value,
 			embedCode,
@@ -112,32 +112,30 @@ class OembedField extends Component {
 		} = this.props;
 
 		return (
-			<FieldBase id={ id } field={ field }>
-				<div ref={ this.node }>
-					<SearchInput
-						id={ id }
-						value={ value }
-						onChange={ this.handleChange }
-					/>
+			<div ref={ this.node }>
+				<SearchInput
+					id={ id }
+					value={ value }
+					onChange={ this.handleChange }
+				/>
 
-					{
-						embedCode
-							? <OembedPreview
-								html={ embedCode }
-								type={ embedType }
-								provider={ provider }
-							/>
-							: null
-					}
+				{
+					embedCode
+						? <OembedPreview
+							html={ embedCode }
+							type={ embedType }
+							provider={ provider }
+						/>
+						: null
+				}
 
-					<input
-						type="hidden"
-						name={ name }
-						value={ value }
-						readOnly
-					/>
-				</div>
-			</FieldBase>
+				<input
+					type="hidden"
+					name={ name }
+					value={ value }
+					readOnly
+				/>
+			</div>
 		);
 	}
 }
@@ -223,6 +221,8 @@ const applyWithState = withState( {
 } );
 
 const applyWithEffects = withEffects( handler )( aperture );
+
+addFilter( 'carbon-fields.oembed.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default compose(
 	applyWithState,

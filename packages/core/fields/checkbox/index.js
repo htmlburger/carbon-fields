@@ -1,13 +1,14 @@
 /**
  * External dependencies.
  */
-import { Component } from '@wordpress/element';
+import { Component, Fragment } from '@wordpress/element';
+import { addFilter } from '@wordpress/hooks';
 
 /**
  * Internal dependencies.
  */
 import './style.scss';
-import FieldBase from '../../components/field-base';
+import validator from '../../validators/required';
 
 class CheckboxField extends Component {
 	/**
@@ -39,13 +40,13 @@ class CheckboxField extends Component {
 	render() {
 		const {
 			id,
-			field,
 			name,
-			value
+			value,
+			field
 		} = this.props;
 
 		return (
-			<FieldBase field={ field }>
+			<Fragment>
 				<input
 					type="checkbox"
 					id={ id }
@@ -60,9 +61,11 @@ class CheckboxField extends Component {
 				<label className="cf-checkbox__label" htmlFor={ id }>
 					{ field.option_label }
 				</label>
-			</FieldBase>
+			</Fragment>
 		);
 	}
 }
+
+addFilter( 'carbon-fields.checkbox.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default CheckboxField;

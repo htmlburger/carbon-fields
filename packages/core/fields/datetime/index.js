@@ -2,15 +2,16 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { addFilter } from '@wordpress/hooks';
 import Flatpickr from 'react-flatpickr';
 
 /**
  * The internal dependencies.
  */
 import './style.scss';
-import FieldBase from '../../components/field-base';
+import validator from '../../validators/required';
 
-class DatetimeField extends Component {
+class DateTimeField extends Component {
 	/**
 	 * Handles the intialization of the flatpickr component.
 	 *
@@ -90,43 +91,45 @@ class DatetimeField extends Component {
 	render() {
 		const {
 			id,
-			field,
 			name,
 			value,
+			field,
 			buttonText
 		} = this.props;
 
 		return (
-			<FieldBase id={ id } field={ field }>
-				<Flatpickr
-					options={ {
-						...field.picker_options,
-						wrap: true
-					} }
+			<Flatpickr
+				options={ {
+					...field.picker_options,
+					wrap: true
+				} }
+				value={ value }
+				onReady={ this.handleReady }
+				onChange={ this.handleChange }
+				className="cf-datetime__inner"
+			>
+				<input
+					type="text"
+					id={ id }
+					name={ name }
 					value={ value }
-					onReady={ this.handleReady }
-					onChange={ this.handleChange }
-					className="cf-datetime__inner"
-				>
-					<input
-						type="text"
-						id={ id }
-						name={ name }
-						value={ value }
-						onChange={ this.handleManualInput }
-						onBlur={ this.formatManualInput }
-						className="cf-datetime__input"
-						data-input
-						{ ...field.attributes }
-					/>
+					onChange={ this.handleManualInput }
+					onBlur={ this.formatManualInput }
+					className="cf-datetime__input"
+					data-input
+					{ ...field.attributes }
+				/>
 
-					<button type="button" className="button cf-datetime__button" data-toggle>
-						{ buttonText }
-					</button>
-				</Flatpickr>
-			</FieldBase>
+				<button type="button" className="button cf-datetime__button" data-toggle>
+					{ buttonText }
+				</button>
+			</Flatpickr>
 		);
 	}
 }
 
-export default DatetimeField;
+addFilter( 'carbon-fields.date.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
+addFilter( 'carbon-fields.time.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
+addFilter( 'carbon-fields.date_time.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
+
+export default DateTimeField;

@@ -8,7 +8,7 @@ import { addFilter } from '@wordpress/hooks';
  */
 import './style.scss';
 
-addFilter( 'carbon-fields.radio_image-field.block', 'carbon-fields/blocks', ( OriginalRadioField ) => ( props ) => {
+addFilter( 'carbon-fields.radio_image.block', 'carbon-fields/blocks', ( OriginalRadioField ) => ( props ) => {
 	return (
 		<OriginalRadioField
 			{ ...props }

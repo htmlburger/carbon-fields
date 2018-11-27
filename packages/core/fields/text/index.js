@@ -8,7 +8,6 @@ import { addFilter } from '@wordpress/hooks';
  * Internal dependencies.
  */
 import './style.scss';
-import FieldBase from '../../components/field-base';
 import validator from '../../validators/required';
 
 class TextField extends Component {
@@ -34,26 +33,19 @@ class TextField extends Component {
 			id,
 			name,
 			value,
-			error,
 			field
 		} = this.props;
 
 		return (
-			<FieldBase
+			<input
+				type="text"
 				id={ id }
-				field={ field }
-				error={ error }
-			>
-				<input
-					type="text"
-					id={ id }
-					name={ name }
-					value={ value }
-					className="cf-text__input"
-					onChange={ this.handleChange }
-					{ ...field.attributes }
-				/>
-			</FieldBase>
+				name={ name }
+				value={ value }
+				className="cf-text__input"
+				onChange={ this.handleChange }
+				{ ...field.attributes }
+			/>
 		);
 	}
 }

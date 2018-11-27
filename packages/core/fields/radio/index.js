@@ -2,13 +2,14 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { addFilter } from '@wordpress/hooks';
 
 /**
  * The internal dependencies.
  */
 import './style.scss';
-import FieldBase from '../../components/field-base';
 import NoOptions from '../../components/no-options';
+import validator from '../../validators/required';
 
 class RadioField extends Component {
 	/**
@@ -69,14 +70,14 @@ class RadioField extends Component {
 		const { field } = this.props;
 
 		return (
-			<FieldBase field={ field } >
-				{ field.options.length > 0
-					? this.renderOptions()
-					: <NoOptions />
-				}
-			</FieldBase>
+			field.options.length > 0
+				? this.renderOptions()
+				: <NoOptions />
 		);
 	}
 }
+
+addFilter( 'carbon-fields.radio.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
+addFilter( 'carbon-fields.radio_image.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default RadioField;

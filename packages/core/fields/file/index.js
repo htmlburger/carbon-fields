@@ -3,13 +3,14 @@
  */
 import { Component } from '@wordpress/element';
 import { compose, withState } from '@wordpress/compose';
+import { addFilter } from '@wordpress/hooks';
 
 /**
  * Internal dependencies.
  */
 import './style.scss';
-import FieldBase from '../../components/field-base';
 import MediaLibrary from '../../components/media-library';
+import validator from '../../validators/required';
 import fetchAttachmentsData from '../../utils/fetch-attachments-data';
 
 class FileField extends Component {
@@ -74,10 +75,9 @@ class FileField extends Component {
 	 */
 	render() {
 		const {
-			id,
-			field,
 			value,
 			name,
+			field,
 			fileData,
 			buttonLabel,
 			mediaLibraryButtonLabel,
@@ -85,46 +85,44 @@ class FileField extends Component {
 		} = this.props;
 
 		return (
-			<FieldBase id={ id } field={ field }>
-				<MediaLibrary
-					onSelect={ this.handleSelect }
-					multiple={ false }
-					title={ mediaLibraryTitle }
-					buttonLabel={ mediaLibraryButtonLabel }
-					typeFilter={ field.type_filter }
-				>
-					{
-						( { openMediaBrowser } ) => {
-							return <div className="cf-file__inner">
-								<input
-									type="hidden"
-									name={ name }
-									value={ value }
-									readOnly
-								/>
+			<MediaLibrary
+				onSelect={ this.handleSelect }
+				multiple={ false }
+				title={ mediaLibraryTitle }
+				buttonLabel={ mediaLibraryButtonLabel }
+				typeFilter={ field.type_filter }
+			>
+				{
+					( { openMediaBrowser } ) => {
+						return <div className="cf-file__inner">
+							<input
+								type="hidden"
+								name={ name }
+								value={ value }
+								readOnly
+							/>
 
-								{ value && (
-									<div className="cf-file__content">
-										<div className="cf-file__preview">
-											<img src={ fileData.sizes ? fileData.sizes.thumbnail.url : fileData.icon } className="cf-file__image" />
+							{ value && (
+								<div className="cf-file__content">
+									<div className="cf-file__preview">
+										<img src={ fileData.sizes ? fileData.sizes.thumbnail.url : fileData.icon } className="cf-file__image" />
 
-											<button type="button" className="cf-file__remove dashicons-before dashicons-no-alt" onClick={ this.handleClear }></button>
-										</div>
-
-										<span className="cf-file__name" title={ fileData.filename }>
-											{ fileData.filename }
-										</span>
+										<button type="button" className="cf-file__remove dashicons-before dashicons-no-alt" onClick={ this.handleClear }></button>
 									</div>
-								) }
 
-								<button type="button" className="button cf-file__browse" onClick={ openMediaBrowser }>
-									{ buttonLabel }
-								</button>
-							</div>;
-						}
+									<span className="cf-file__name" title={ fileData.filename }>
+										{ fileData.filename }
+									</span>
+								</div>
+							) }
+
+							<button type="button" className="button cf-file__browse" onClick={ openMediaBrowser }>
+								{ buttonLabel }
+							</button>
+						</div>;
 					}
-				</MediaLibrary>
-			</FieldBase>
+				}
+			</MediaLibrary>
 		);
 	}
 }
@@ -132,6 +130,9 @@ class FileField extends Component {
 const applyWithState = withState( {
 	fileData: {}
 } );
+
+addFilter( 'carbon-fields.file.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
+addFilter( 'carbon-fields.image.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default compose(
 	applyWithState

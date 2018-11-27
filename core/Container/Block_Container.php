@@ -26,7 +26,9 @@ class Block_Container extends Container {
 		add_action( 'init', array( $this, '_attach' ) );
 		add_filter( 'block_categories', array($this, 'attach_block_category'), 10, 2 );
 
-		$this->register_block();
+		if ($this->is_valid_attach()) {
+			$this->register_block();
+		}
 	}
 
 	/**
@@ -61,7 +63,7 @@ class Block_Container extends Container {
 	 * @return bool True if the container is allowed to be attached
 	 */
 	public function is_valid_attach_for_request() {
-		return true;
+		return function_exists('register_block_type');
 	}
 
 	/**
@@ -80,7 +82,11 @@ class Block_Container extends Container {
 	 * @return bool
 	 */
 	public function is_valid_attach_for_object( $object_id = null ) {
-		return true;
+		if ( ! function_exists( 'register_block_type' ) ) {
+			return false;
+		}
+
+		return $this->all_conditions_pass( intval( $post->ID ) );
 	}
 
 	/**

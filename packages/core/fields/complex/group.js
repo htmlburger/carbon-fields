@@ -60,6 +60,7 @@ class ComplexGroup extends Component {
 	render() {
 		const {
 			index,
+			label,
 			name,
 			prefix,
 			tabbed,
@@ -111,23 +112,27 @@ class ComplexGroup extends Component {
 						</span>
 
 						<span className="cf-complex__group-title">
-							Complex Title
+							{ label }
 						</span>
 					</div>
 				) }
 
 				<div className="cf-complex__group-body" hidden={ collapsed }>
 					{ fields.map( ( field ) => {
-						const Field = getFieldType( field.type, context );
+						const FieldEdit = getFieldType( field.type, context );
 
-						if ( ! Field ) {
+						if ( ! FieldEdit ) {
 							return null;
 						}
+
+						const [ Field, props ] = onFieldSetup( field, {}, this.props );
 
 						return (
 							// The `key` will be assigned via `onFieldSetup`.
 							// eslint-disable-next-line react/jsx-key
-							<Field { ...onFieldSetup( field, {}, this.props ) } />
+							<Field { ...props }>
+								<FieldEdit { ...props } />
+							</Field>
 						);
 					} ) }
 				</div>

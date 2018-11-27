@@ -47,7 +47,7 @@ class Sortable extends Component {
 	 * @param  {Object} ui
 	 * @return {void}
 	 */
-	handleUpdate = ( e, ui, ) => {
+	handleUpdate = ( e, ui ) => {
 		const {
 			items,
 			forwardedRef,

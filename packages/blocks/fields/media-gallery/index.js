@@ -9,7 +9,7 @@ import { __ } from '@wordpress/i18n';
  */
 import './style.scss';
 
-addFilter( 'carbon-fields.media_gallery-field.block', 'carbon-fields/blocks', ( OriginalMediaGalleryField ) => ( props ) => {
+addFilter( 'carbon-fields.media_gallery.block', 'carbon-fields/blocks', ( OriginalMediaGalleryField ) => ( props ) => {
 	return (
 		<OriginalMediaGalleryField
 			buttonLabel={ __( 'Select Attachments' ) }
