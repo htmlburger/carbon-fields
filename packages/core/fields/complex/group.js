@@ -60,6 +60,7 @@ class ComplexGroup extends Component {
 	render() {
 		const {
 			index,
+			label,
 			name,
 			prefix,
 			tabbed,
@@ -111,7 +112,7 @@ class ComplexGroup extends Component {
 						</span>
 
 						<span className="cf-complex__group-title">
-							Complex Title
+							{ label }
 						</span>
 					</div>
 				) }

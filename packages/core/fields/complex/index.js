@@ -16,6 +16,7 @@ import {
 import './style.scss';
 import FieldBase from '../../components/field-base';
 import Sortable from '../../components/sortable';
+import { getComplexLabel } from '../../utils/get-complex-label.js';
 import ComplexTabs from './tabs';
 import ComplexInserter from './inserter';
 import ComplexGroup from './group';
@@ -234,9 +235,9 @@ class ComplexField extends Component {
 		const availableGroups = this.getAvailableGroups( groupFilterKey );
 
 		// TODO: Move this to a memoized function.
-		const tabs = value.map( ( group ) => {
+		const tabs = value.map( ( group, index ) => {
 			const id = group[ groupIdKey ];
-			const label = get( find( field.groups, [ 'name', group[ groupFilterKey ] ] ), 'label', '' );
+			const label = getComplexLabel( field.groups, group, index );
 
 			return {
 				id,
@@ -302,6 +303,7 @@ class ComplexField extends Component {
 								// eslint-disable-next-line react/jsx-key
 								<ComplexGroup { ...onGroupSetup( group, {
 									index,
+									label: getComplexLabel( field.groups, group, index ),
 									tabbed: this.isTabbed,
 									hidden: this.isTabbed && group[ groupIdKey ] !== currentTab,
 									allowClone: field.duplicate_groups_allowed && ! this.isMaximumReached,
