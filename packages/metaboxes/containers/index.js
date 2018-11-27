@@ -15,6 +15,7 @@ import { withFilters } from '@carbon-fields/core';
 import withContainer from '../hocs/with-container';
 import Container from '../components/container';
 import { registerContainerType } from './registry';
+import './term-meta';
 
 /**
  * Extends the containers with necessary hooks.

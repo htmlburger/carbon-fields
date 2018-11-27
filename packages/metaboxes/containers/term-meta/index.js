@@ -2,7 +2,6 @@
  * External dependencies.
  */
 import { addFilter } from '@wordpress/hooks';
-import { compose } from '@wordpress/compose';
 import { dispatch } from '@wordpress/data';
 import { withEffects } from 'refract-callbag';
 import { map, pipe } from 'callbag-basics';
@@ -11,8 +10,6 @@ import { get, keyBy } from 'lodash';
 /**
  * Internal dependencies.
  */
-import ContainerBase from '../../components/container-base';
-import withContainer from '../../components/with-container';
 import fromAjaxEvent from '../../utils/from-ajax-event';
 import { normalizePreloadedState } from '../../store/helpers';
 
@@ -45,13 +42,4 @@ function handler() {
 	};
 }
 
-addFilter( 'carbon-fields.term_meta-container.classic', 'carbon-fields/metaboxes', ( OriginalTermMetaContainer ) => {
-	const container = withContainer( ( props ) => <OriginalTermMetaContainer { ...props } /> );
-	const applyWithEffects = withEffects( handler )( aperture );
-
-	return compose(
-		applyWithEffects
-	)( container );
-} );
-
-export default ContainerBase;
+addFilter( 'carbon-fields.term_meta.classic', 'carbon-fields/metaboxes', withEffects( handler )( aperture ) );
