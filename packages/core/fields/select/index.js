@@ -2,7 +2,6 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { addFilter } from '@wordpress/hooks';
 import { get } from 'lodash';
 
 /**
@@ -10,7 +9,6 @@ import { get } from 'lodash';
  */
 import './style.scss';
 import NoOptions from '../../components/no-options';
-import validator from '../../validators/required';
 
 export class SelectField extends Component {
 	/**
@@ -59,8 +57,5 @@ export class SelectField extends Component {
 		);
 	}
 }
-
-addFilter( 'carbon-fields.select.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
-addFilter( 'carbon-fields.gravity_form.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default SelectField;

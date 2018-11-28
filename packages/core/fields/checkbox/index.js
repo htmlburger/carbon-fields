@@ -2,13 +2,11 @@
  * External dependencies.
  */
 import { Component, Fragment } from '@wordpress/element';
-import { addFilter } from '@wordpress/hooks';
 
 /**
  * Internal dependencies.
  */
 import './style.scss';
-import validator from '../../validators/required';
 
 class CheckboxField extends Component {
 	/**
@@ -65,7 +63,5 @@ class CheckboxField extends Component {
 		);
 	}
 }
-
-addFilter( 'carbon-fields.checkbox.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default CheckboxField;

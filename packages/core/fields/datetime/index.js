@@ -2,14 +2,12 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { addFilter } from '@wordpress/hooks';
 import Flatpickr from 'react-flatpickr';
 
 /**
  * The internal dependencies.
  */
 import './style.scss';
-import validator from '../../validators/required';
 
 class DateTimeField extends Component {
 	/**
@@ -127,9 +125,5 @@ class DateTimeField extends Component {
 		);
 	}
 }
-
-addFilter( 'carbon-fields.date.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
-addFilter( 'carbon-fields.time.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
-addFilter( 'carbon-fields.date_time.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default DateTimeField;

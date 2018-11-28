@@ -2,13 +2,11 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { addFilter } from '@wordpress/hooks';
 
 /**
  * The internal dependencies.
  */
 import './style.scss';
-import validator from '../../validators/required';
 
 class TextareaField extends Component {
 	/**
@@ -49,7 +47,5 @@ class TextareaField extends Component {
 		);
 	}
 }
-
-addFilter( 'carbon-fields.textarea.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default TextareaField;
