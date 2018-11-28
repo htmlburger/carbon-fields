@@ -11,6 +11,7 @@ import { select } from '@wordpress/data';
  * Internal dependencies.
  */
 import initializeConditionalDisplay from './conditional-display';
+import initializeMonitors from './monitors';
 import isGutenberg from './utils/is-gutenberg';
 import { getContainerType } from './containers/registry';
 
@@ -31,6 +32,7 @@ const context = isGutenberg() ? 'gutenberg' : 'classic';
 /**
  * Abracadabra! Poof! Containers everywhere ...
  */
+initializeMonitors( context );
 initializeConditionalDisplay( context );
 
 values( select( 'carbon-fields/metaboxes' ).getContainers() ).forEach( ( container ) => {
