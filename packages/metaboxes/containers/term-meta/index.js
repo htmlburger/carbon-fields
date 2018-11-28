@@ -1,16 +1,11 @@
 /**
  * External dependencies.
  */
+import _ from 'lodash';
 import { addFilter } from '@wordpress/hooks';
 import { dispatch } from '@wordpress/data';
 import { withEffects } from 'refract-callbag';
-import {
-	get,
-	map,
-	find,
-	keyBy,
-	filter
-} from 'lodash';
+import { pipe, filter } from 'callbag-basics';
 
 /**
  * Internal dependencies.
@@ -25,7 +20,12 @@ import { normalizePreloadedState } from '../../store/helpers';
  */
 function aperture() {
 	return function() {
-		return fromAjaxEvent( 'ajaxSuccess', 'add-tag' );
+		return pipe(
+			fromAjaxEvent( 'ajaxSuccess', 'add-tag' ),
+			filter( ( { settings, data } ) => {
+				return settings.data.indexOf( 'carbon_fields_container' ) > -1 && ! data.documentElement.querySelector( 'wp_error' );
+			} )
+		);
 	};
 }
 
@@ -38,19 +38,19 @@ function aperture() {
 function handler( props ) {
 	return function() {
 		// Collects identifiers of current fields so we can remove them later.
-		const oldFieldIds = map( props.container.fields, 'id' );
+		const oldFieldIds = _.map( props.container.fields, 'id' );
 
 		// Get a fresh copy of the container and fields.
-		const { containers, fields } = normalizePreloadedState( get( window.cf, 'preloaded.containers', [] ) );
-		const container = find( containers, [ 'id', props.id ] );
-		const containerFields = filter( fields, [ 'container_id', props.id ] );
+		const { containers, fields } = normalizePreloadedState( _.get( window.cf, 'preloaded.containers', [] ) );
+		const container = _.find( containers, [ 'id', props.id ] );
+		const containerFields = _.filter( fields, [ 'container_id', props.id ] );
 
 		// Replace the container and add the new fields.
 		const { updateState, removeFields } = dispatch( 'carbon-fields/metaboxes' );
 
 		updateState(
-			keyBy( [ container ], 'id' ),
-			keyBy( containerFields, 'id' )
+			_.keyBy( [ container ], 'id' ),
+			_.keyBy( containerFields, 'id' )
 		);
 
 		removeFields( oldFieldIds );
