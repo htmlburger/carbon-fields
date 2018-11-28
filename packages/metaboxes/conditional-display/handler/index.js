@@ -91,9 +91,14 @@ export default function handler( { containers } ) {
 
 		results.forEach( ( [ id, result ] ) => {
 			const node = document.getElementById( id );
+			const fieldset = document.querySelector( `#${ id } fieldset` );
 
 			if ( node ) {
 				node.hidden = ! result;
+			}
+
+			if ( fieldset ) {
+				fieldset.disabled = ! result;
 			}
 		} );
 	};
