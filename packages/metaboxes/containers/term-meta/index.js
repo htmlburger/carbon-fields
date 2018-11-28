@@ -4,8 +4,13 @@
 import { addFilter } from '@wordpress/hooks';
 import { dispatch } from '@wordpress/data';
 import { withEffects } from 'refract-callbag';
-import { map, pipe } from 'callbag-basics';
-import { get, keyBy } from 'lodash';
+import {
+	get,
+	map,
+	find,
+	keyBy,
+	filter
+} from 'lodash';
 
 /**
  * Internal dependencies.
@@ -13,37 +18,42 @@ import { get, keyBy } from 'lodash';
 import fromAjaxEvent from '../../utils/from-ajax-event';
 import { normalizePreloadedState } from '../../store/helpers';
 
+/**
+ * The function that controls the stream of side effects.
+ *
+ * @return {Function}
+ */
 function aperture() {
 	return function() {
-		return pipe(
-			fromAjaxEvent( 'ajaxSuccess', 'add-tag' ),
-			map( ( { settings, data } ) => ( { settings, data } ) ),
-			map( ( payload ) => ( {
-				type: 'RESET_CONTAINER',
-				payload: payload
-			} ) )
-		);
+		return fromAjaxEvent( 'ajaxSuccess', 'add-tag' );
 	};
 }
 
+/**
+ * The function that causes the side effects.
+ *
+ * @param  {Object} props
+ * @return {Function}
+ */
 function handler( props ) {
-	const { id } = props;
+	return function() {
+		// Collects identifiers of current fields so we can remove them later.
+		const oldFieldIds = map( props.container.fields, 'id' );
 
-	return function( effect ) {
-		switch ( effect.type ) {
-			case 'RESET_CONTAINER':
-				const { containers, fields } = normalizePreloadedState( get( window.cf, 'preloaded.containers', [] ) );
+		// Get a fresh copy of the container and fields.
+		const { containers, fields } = normalizePreloadedState( get( window.cf, 'preloaded.containers', [] ) );
+		const container = find( containers, [ 'id', props.id ] );
+		const containerFields = filter( fields, [ 'container_id', props.id ] );
 
-				const container = containers.find( ( c ) => c.id === id );
-				const containerFields = fields.filter( ( field ) => container.fields.map( ( f ) => f.id ).indexOf( field.id ) !== -1 );
+		// Replace the container and add the new fields.
+		const { updateState, removeFields } = dispatch( 'carbon-fields/metaboxes' );
 
-				dispatch( 'carbon-fields/metaboxes' ).updateState(
-					keyBy( [ container ], 'id' ),
-					keyBy( containerFields, 'id' )
-				);
+		updateState(
+			keyBy( [ container ], 'id' ),
+			keyBy( containerFields, 'id' )
+		);
 
-				break;
-		}
+		removeFields( oldFieldIds );
 	};
 }
 
