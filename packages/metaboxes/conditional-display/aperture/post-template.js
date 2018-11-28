@@ -17,7 +17,7 @@ import {
 /**
  * Internal dependencies.
  */
-import fromSelector from '../utils/from-selector';
+import fromSelector from '../../utils/from-selector';
 
 /**
  * The default state.

@@ -19,7 +19,7 @@ import { pull, fromPairs } from 'lodash';
 /**
  * Internal dependencies.
  */
-import fromSelector from '../utils/from-selector';
+import fromSelector from '../../utils/from-selector';
 
 /**
  * Applies a monkey patch to the specified method of `window.tagBox` API
