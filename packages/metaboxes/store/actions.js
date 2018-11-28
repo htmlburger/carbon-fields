@@ -97,6 +97,32 @@ export function removeFields( fieldIds ) {
 }
 
 /**
+ * Returns an action object used to add the created container to all containers.
+ *
+ * @param  {Object} container
+ * @return {Object}
+ */
+export function receiveContainer( container ) {
+	return {
+		type: 'RECEIVE_CONTAINER',
+		payload: container
+	};
+}
+
+/**
+ * Returns an action object used to add a container to all containers.
+ *
+ * @param  {Object} container
+ * @return {Object}
+ */
+export function addContainer( container ) {
+	return {
+		type: 'ADD_CONTAINER',
+		payload: container
+	};
+}
+
+/**
  * Returns an action object used to add the created sidebar to all fields.
  *
  * @param  {Object} sidebar
