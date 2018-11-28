@@ -1,6 +1,7 @@
 /**
  * External dependencies.
  */
+import produce from 'immer';
 import { __ } from '@wordpress/i18n';
 import {
 	Component,
@@ -170,14 +171,16 @@ class AssociationField extends Component {
 		let { options } = this.props;
 
 		if ( ! field.duplicates_allowed ) {
-			options = options.map( ( option ) => {
-				option.disabled = !! find( value, ( selectedOption ) => isMatch( selectedOption, {
-					id: option.id,
-					type: option.type,
-					subtype: option.subtype
-				} ) );
+			options = produce( options, ( draft ) => {
+				draft.map( ( option ) => {
+					option.disabled = !! find( value, ( selectedOption ) => isMatch( selectedOption, {
+						id: option.id,
+						type: option.type,
+						subtype: option.subtype
+					} ) );
 
-				return option;
+					return option;
+				} );
 			} );
 		}
 
