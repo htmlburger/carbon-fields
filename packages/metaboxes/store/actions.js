@@ -16,6 +16,23 @@ export function setupState( containers, fields ) {
 }
 
 /**
+ * Returns an action object used to update the state.
+ *
+ * @param  {Object[]} containers
+ * @param  {Object}   fields
+ * @return {Object}
+ */
+export function updateState( containers, fields ) {
+	return {
+		type: 'UPDATE_STATE',
+		payload: {
+			containers,
+			fields
+		}
+	};
+}
+
+/**
  * Returns an action object used to update the field's value.
  *
  * @param  {string} fieldId

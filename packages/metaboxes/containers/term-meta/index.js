@@ -19,22 +19,27 @@ function aperture() {
 			fromAjaxEvent( 'ajaxSuccess', 'add-tag' ),
 			map( ( { settings, data } ) => ( { settings, data } ) ),
 			map( ( payload ) => ( {
-				type: 'RESET',
+				type: 'RESET_CONTAINER',
 				payload: payload
 			} ) )
 		);
 	};
 }
 
-function handler() {
+function handler( props ) {
+	const { id } = props;
+
 	return function( effect ) {
 		switch ( effect.type ) {
-			case 'RESET':
+			case 'RESET_CONTAINER':
 				const { containers, fields } = normalizePreloadedState( get( window.cf, 'preloaded.containers', [] ) );
 
-				dispatch( 'carbon-fields/metaboxes' ).setupState(
-					keyBy( containers, 'id' ),
-					keyBy( fields, 'id' )
+				const container = containers.find( ( c ) => c.id === id );
+				const containerFields = fields.filter( ( field ) => container.fields.map( ( f ) => f.id ).indexOf( field.id ) !== -1 );
+
+				dispatch( 'carbon-fields/metaboxes' ).updateState(
+					keyBy( [ container ], 'id' ),
+					keyBy( containerFields, 'id' )
 				);
 
 				break;
