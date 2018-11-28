@@ -1,4 +1,19 @@
 /**
+ * External dependencies.
+ */
+import { addFilter } from '@wordpress/hooks';
+
+/**
+ * Carbon Fields dependencies.
+ */
+import { withValidation } from '@carbon-fields/core';
+
+/**
+ * Connects every field to the store.
+ */
+addFilter( 'carbon-fields.field-edit.block', 'carbon-fields/blocks', withValidation );
+
+/**
  * Internal dependencies.
  */
 import './style.scss';

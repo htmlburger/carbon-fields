@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import cx from 'classnames';
+import { withSelect } from '@wordpress/data';
 import { kebabCase } from 'lodash';
 
 /**
@@ -71,4 +72,6 @@ function Field( {
 	);
 }
 
-export default Field;
+export default withSelect( ( select, props ) => ( {
+	error: select( 'carbon-fields/core' ).getValidationError( props.id )
+} ) )( Field );

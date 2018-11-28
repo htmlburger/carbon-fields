@@ -2,15 +2,9 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { isString, template } from 'lodash';
 import cx from 'classnames';
-
-/**
- * The internal dependencies.
- */
-import validator from '../../validators/required';
 
 class RichTextField extends Component {
 	/**
@@ -177,7 +171,5 @@ class RichTextField extends Component {
 		delete window.QTags.instances[ this.props.id ];
 	}
 }
-
-addFilter( 'carbon-fields.rich_text.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default RichTextField;

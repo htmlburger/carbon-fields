@@ -7,8 +7,10 @@ export { default as GoogleMap } from './fields/map/google-map';
 export { default as uniqueId } from './utils/unique-id';
 export { default as Field } from './components/field';
 export { default as withFilters } from './utils/with-filters';
+export { default as withValidation } from './validation';
 
 /**
  * Internal dependencies.
  */
+import './store';
 import './fields';
