@@ -84,7 +84,9 @@ function handler( props ) {
 			id,
 			field,
 			markAsInvalid,
-			markAsValid
+			markAsValid,
+			lockSaving,
+			unlockSaving
 		} = props;
 
 		switch ( effect.type ) {
@@ -100,17 +102,22 @@ function handler( props ) {
 					if ( ! transient ) {
 						markAsInvalid( id, error );
 					}
+
+					lockSaving( id );
 				} else {
-					// eslint-disable-next-line
 					if ( ! transient ) {
 						markAsValid( id );
 					}
+
+					unlockSaving( id );
 				}
 
 				break;
 
 			case 'RESET':
 				markAsValid( id );
+
+				unlockSaving( id );
 
 				break;
 		}

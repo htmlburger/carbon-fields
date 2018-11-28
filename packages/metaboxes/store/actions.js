@@ -97,7 +97,7 @@ export function removeFields( fieldIds ) {
 }
 
 /**
- * Returns an actions object used to add the created sidebar to all fields.
+ * Returns an action object used to add the created sidebar to all fields.
  *
  * @param  {Object} sidebar
  * @return {Object}
@@ -106,5 +106,35 @@ export function receiveSidebar( sidebar ) {
 	return {
 		type: 'RECEIVE_SIDEBAR',
 		payload: sidebar
+	};
+}
+
+/**
+ * Returns an action object used to signal that saving is locked.
+ *
+ * @param  {string} lockName
+ * @return {Object}
+ */
+export function lockSaving( lockName ) {
+	return {
+		type: 'LOCK_SAVING',
+		payload: {
+			lockName
+		}
+	};
+}
+
+/**
+ * Returns an action object used to signal that saving is unlocked.
+ *
+ * @param  {string} lockName
+ * @return {Object}
+ */
+export function unlockSaving( lockName ) {
+	return {
+		type: 'UNLOCK_SAVING',
+		payload: {
+			lockName
+		}
 	};
 }

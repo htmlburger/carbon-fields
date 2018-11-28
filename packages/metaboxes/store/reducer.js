@@ -160,7 +160,31 @@ export function fields( state = {}, action ) {
 	}
 }
 
+/**
+ * The reducer that keeps track of the save locks.
+ *
+ * @param  {Object} state
+ * @param  {Object} action
+ * @return {Object}
+ */
+export function savingLock( state = {}, action ) {
+	switch ( action.type ) {
+		case 'LOCK_SAVING':
+			return {
+				...state,
+				[ action.payload.lockName ]: true
+			};
+
+		case 'UNLOCK_SAVING':
+			return omit( state, [ action.payload.lockName ] );
+
+		default:
+			return state;
+	}
+}
+
 export default combineReducers( {
 	containers,
-	fields
+	fields,
+	savingLock
 } );

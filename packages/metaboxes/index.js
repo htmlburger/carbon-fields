@@ -3,7 +3,7 @@
 /**
  * External dependencies.
  */
-import { values, isUndefined } from 'lodash';
+import { values } from 'lodash';
 import { render } from '@wordpress/element';
 import { select } from '@wordpress/data';
 
@@ -11,6 +11,7 @@ import { select } from '@wordpress/data';
  * Internal dependencies.
  */
 import initializeConditionalDisplay from './conditional-display';
+import isGutenberg from './utils/is-gutenberg';
 import { getContainerType } from './containers/registry';
 
 /**
@@ -25,7 +26,7 @@ import './containers';
  *
  * @type {string}
  */
-const context = ! isUndefined( window._wpLoadGutenbergEditor ) ? 'gutenberg' : 'classic';
+const context = isGutenberg() ? 'gutenberg' : 'classic';
 
 /**
  * Abracadabra! Poof! Containers everywhere ...
