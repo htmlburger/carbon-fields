@@ -1,8 +1,8 @@
 /**
  * External dependencies.
  */
-import { withSelect, withDispatch } from '@wordpress/data';
-import { compose, createHigherOrderComponent } from '@wordpress/compose';
+import { withSelect } from '@wordpress/data';
+import { createHigherOrderComponent } from '@wordpress/compose';
 
 /**
  * Creates a high-order component which adds connection
@@ -20,13 +20,5 @@ export default createHigherOrderComponent( ( Component ) => {
 		};
 	} );
 
-	const applyWithDispatch = withDispatch( ( dispatch ) => {
-		const { updateContainerMeta } = dispatch( 'carbon-fields/metaboxes' );
-
-		return {
-			updateContainerMeta
-		};
-	} );
-
-	return compose( applyWithSelect, applyWithDispatch )( Component );
+	return applyWithSelect( Component );
 }, 'withContainer' );
