@@ -1,7 +1,6 @@
 /**
  * External dependencies.
  */
-import cx from 'classnames';
 import { addFilter } from '@wordpress/hooks';
 import {
 	Component,
@@ -227,15 +226,6 @@ class ComplexField extends Component {
 			onToggleGroup
 		} = this.props;
 
-		// TODO: Add this via hook
-		// eslint-disable-next-line
-		const classes = cx(
-			`cf-complex--${ field.layout }`,
-			{
-				'cf-complex--multiple-groups': field.groups.length > 1
-			}
-		);
-
 		const availableGroups = this.getAvailableGroups( groupFilterKey );
 
 		// TODO: Move this to a memoized function.
@@ -336,6 +326,16 @@ class ComplexField extends Component {
 		);
 	}
 }
+
+addFilter( 'carbon-fields.field-wrapper', 'carbon-fields/core', ( OriginalField ) => ( props ) => {
+	const { field } = props;
+
+	if ( field.type !== 'complex' ) {
+		return <OriginalField { ...props } />;
+	}
+
+	return <OriginalField className={ `cf-complex--${ field.layout }` } { ...props } />;
+} );
 
 addFilter( 'carbon-fields.complex.validate', 'carbon-fields/core', ( field, value ) => {
 	const {
