@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import { assign } from 'lodash';
+import { assign, endsWith } from 'lodash';
 
 /**
  * Internal dependencies.
@@ -16,11 +16,13 @@ import flattenField from '../utils/flatten-field';
  */
 export function normalizePreloadedState( state ) {
 	const fields = [];
-	const containers = state.map( ( container ) => {
-		return assign( {}, container, {
-			fields: container.fields.map( ( field ) => flattenField( field, container.id, fields ) )
+	const containers = state
+		.filter( ( { id } ) => ! endsWith( id, '__i__' ) )
+		.map( ( container ) => {
+			return assign( {}, container, {
+				fields: container.fields.map( ( field ) => flattenField( field, container.id, fields ) )
+			} );
 		} );
-	} );
 
 	return { containers, fields };
 }

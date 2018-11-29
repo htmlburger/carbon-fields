@@ -36,6 +36,11 @@ export function containers( state = {}, action ) {
 				} );
 			} );
 
+		case 'ADD_CONTAINER':
+			return produce( state, ( draft ) => {
+				draft[ action.payload.id ] = action.payload;
+			} );
+
 		default:
 			return state;
 	}

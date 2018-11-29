@@ -4,7 +4,6 @@
  * External dependencies.
  */
 import { values } from 'lodash';
-import { render } from '@wordpress/element';
 import { select } from '@wordpress/data';
 
 /**
@@ -12,7 +11,7 @@ import { select } from '@wordpress/data';
  */
 import initializeMonitors from './monitors';
 import isGutenberg from './utils/is-gutenberg';
-import { getContainerType } from './containers/registry';
+import { renderContainer } from './containers/helpers';
 
 /**
  * The internal dependencies.
@@ -33,16 +32,5 @@ const context = isGutenberg() ? 'gutenberg' : 'classic';
  */
 initializeMonitors( context );
 
-values( select( 'carbon-fields/metaboxes' ).getContainers() ).forEach( ( container ) => {
-	const node = document.querySelector( `.container-${ container.id }` );
-	const Component = getContainerType( container.type, context );
-
-	if ( node ) {
-		render(
-			<Component id={ container.id } />,
-			node
-		);
-	} else {
-		console.error( `Could not find DOM element for container "${ container.id }".` );
-	}
-} );
+values( select( 'carbon-fields/metaboxes' ).getContainers() )
+	.forEach( ( container ) => renderContainer( container, context ) );
