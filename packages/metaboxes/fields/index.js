@@ -14,6 +14,7 @@ import { withValidation } from '@carbon-fields/core';
  * Internal dependencies.
  */
 import withField from '../hocs/with-field';
+import withConditionalLogic from '../hocs/with-conditional-logic';
 import isGutenberg from '../utils/is-gutenberg';
 
 /**
@@ -38,7 +39,8 @@ addFilter( 'carbon-fields.field-edit.metabox', 'carbon-fields/metaboxes', compos
 			unlockSaving
 		};
 	} ),
-	withValidation
+	withValidation,
+	withConditionalLogic
 ) );
 
 import './style.scss';
