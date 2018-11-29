@@ -12,7 +12,7 @@ import { map } from 'lodash';
 import fromWidgetEvent from '../../utils/from-widget-event';
 import urldecode from '../../utils/urldecode';
 import flattenField from '../../utils/flatten-field';
-import { renderContainer } from '../../containers';
+import { renderContainer } from '../../containers/helpers';
 import { PAGE_NOW_CUSTOMIZE } from '../../lib/constants';
 
 /**
