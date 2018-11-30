@@ -41,6 +41,9 @@ export function containers( state = {}, action ) {
 				draft[ action.payload.id ] = action.payload;
 			} );
 
+		case 'REMOVE_CONTAINER':
+			return omit( state, action.payload );
+
 		default:
 			return state;
 	}

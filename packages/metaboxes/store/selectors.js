@@ -1,4 +1,9 @@
 /**
+ * External dependencies.
+ */
+import { filter } from 'lodash';
+
+/**
  * Returns the containers.
  *
  * @param  {Object} state
@@ -27,6 +32,17 @@ export function getContainerById( state, containerId ) {
  */
 export function getFields( state ) {
 	return state.fields;
+}
+
+/**
+ * Returns the fields that belong to the specified container.
+ *
+ * @param  {Object} state
+ * @param  {string} containerId
+ * @return {Object[]}
+ */
+export function getFieldsByContainerId( state, containerId ) {
+	return filter( state.fields, [ 'container_id', containerId ] );
 }
 
 /**

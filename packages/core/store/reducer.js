@@ -2,10 +2,10 @@
  * External dependencies.
  */
 import { combineReducers } from '@wordpress/data';
-import { omit } from 'lodash';
+import { omit, without } from 'lodash';
 
 /**
- * The reducer that keeps track of the field validation.
+ * The reducer that keeps track of the field's validation status.
  *
  * @param  {Object} state
  * @param  {Object} action
@@ -29,6 +29,36 @@ export function validation( state = {}, action ) {
 	}
 }
 
+/**
+ * The reducer that keeps track of the fields that are hidden
+ * by conditional logic.
+ *
+ * @param  {string[]} state
+ * @param  {Object}   action
+ * @return {Object}
+ */
+export function hiddenFields( state = [], action ) {
+	switch ( action.type ) {
+		case 'SHOW_FIELD':
+			if ( state.indexOf( action.payload.fieldId ) === -1 ) {
+				return state;
+			}
+
+			return without( state, action.payload.fieldId );
+
+		case 'HIDE_FIELD':
+			if ( state.indexOf( action.payload.fieldId ) > -1 ) {
+				return state;
+			}
+
+			return state.concat( action.payload.fieldId );
+
+		default:
+			return state;
+	}
+}
+
 export default combineReducers( {
-	validation
+	validation,
+	hiddenFields
 } );

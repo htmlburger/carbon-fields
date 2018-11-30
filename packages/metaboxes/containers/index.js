@@ -16,6 +16,7 @@ import withContainer from '../hocs/with-container';
 import Container from '../components/container';
 import { registerContainerType } from './registry';
 import './term-meta';
+import './widget';
 
 /**
  * Extends the containers with necessary hooks.

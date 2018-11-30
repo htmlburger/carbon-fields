@@ -1,6 +1,9 @@
 /**
  * External dependencies.
  */
+import of from 'callbag-of';
+import distinctUntilChanged from 'callbag-distinct-until-changed';
+import { pipe, merge } from 'callbag-basics';
 import { select } from '@wordpress/data';
 import {
 	get,
@@ -8,7 +11,9 @@ import {
 	find,
 	some,
 	pick,
+	keyBy,
 	repeat,
+	isEqual,
 	fromPairs,
 	difference,
 	startsWith
@@ -50,10 +55,21 @@ function mapParentPrefix( fields, depth = 0 ) {
  * The function used to track dependencies required
  * by conditional logic.
  *
+ * @param  {Object} props
  * @return {Object}
  */
-function input() {
-	return fromSelector( select( 'carbon-fields/metaboxes' ).getFields );
+function input( props ) {
+	const { getFieldsByContainerId } = select( 'carbon-fields/metaboxes' );
+
+	return pipe(
+		merge(
+			of( getFieldsByContainerId( props.field.container_id ) ),
+
+			fromSelector( getFieldsByContainerId, props.field.container_id )
+		),
+
+		distinctUntilChanged( isEqual )
+	);
 }
 
 /**
@@ -65,6 +81,8 @@ function input() {
  * @return {Object}
  */
 function output( props, fields ) {
+	fields = keyBy( fields, 'id' );
+
 	const container = select( 'carbon-fields/metaboxes' ).getContainerById( props.field.container_id );
 	const isTopLevelField = some( container.fields, [ 'id', props.id ] );
 	let siblingFields = [];
@@ -132,14 +150,14 @@ function output( props, fields ) {
 				depth--;
 			}
 		}
-
-		siblingFields = siblingFields.map( ( [ id, name ] ) => ( [
-			name,
-			get( fields, `${ id }.value` )
-		] ) );
-
-		return fromPairs( siblingFields );
 	}
+
+	siblingFields = siblingFields.map( ( [ id, name ] ) => ( [
+		name,
+		get( fields, `${ id }.value` )
+	] ) );
+
+	return fromPairs( siblingFields );
 }
 
 export default withConditionalLogic( input, output );

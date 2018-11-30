@@ -8,3 +8,14 @@
 export function getValidationError( state, fieldId ) {
 	return state.validation[ fieldId ] || null;
 }
+
+/**
+ * Returns whether the field is visible.
+ *
+ * @param  {Object} state
+ * @param  {string} fieldId
+ * @return {boolean}
+ */
+export function isFieldVisible( state, fieldId ) {
+	return state.hiddenFields.indexOf( fieldId ) === -1;
+}
