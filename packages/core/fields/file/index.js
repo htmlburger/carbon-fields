@@ -2,7 +2,6 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { compose, withState } from '@wordpress/compose';
 
 /**
  * Internal dependencies.
@@ -12,6 +11,19 @@ import MediaLibrary from '../../components/media-library';
 import fetchAttachmentsData from '../../utils/fetch-attachments-data';
 
 class FileField extends Component {
+	/**
+	 * Define the component state
+	 *
+	 * @return {void}
+	 */
+	constructor() {
+		super();
+
+		this.state = {
+			fileData: {}
+		};
+	}
+
 	/**
 	 * Lifecycle Hook.
 	 *
@@ -36,7 +48,7 @@ class FileField extends Component {
 	 * @return {void}
 	 */
 	handleFileMetaChange = ( fileData ) => {
-		this.props.setState( { fileData } );
+		this.setState( { fileData } );
 	}
 
 	/**
@@ -76,11 +88,11 @@ class FileField extends Component {
 			value,
 			name,
 			field,
-			fileData,
 			buttonLabel,
 			mediaLibraryButtonLabel,
 			mediaLibraryTitle
 		} = this.props;
+		const { fileData } = this.state;
 
 		return (
 			<MediaLibrary
@@ -125,10 +137,4 @@ class FileField extends Component {
 	}
 }
 
-const applyWithState = withState( {
-	fileData: {}
-} );
-
-export default compose(
-	applyWithState
-)( FileField );
+export default FileField;

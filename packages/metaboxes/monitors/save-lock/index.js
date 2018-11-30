@@ -5,9 +5,9 @@ import { withEffects } from 'refract-callbag';
 import { select } from '@wordpress/data';
 
 /**
- * Internal dependencies.
+ * Carbon Fields dependencies.
  */
-import fromSelector from '../../utils/from-selector';
+import { fromSelector } from '@carbon-fields/core';
 
 /**
  * Toggles the ability to save the page.
@@ -37,8 +37,8 @@ function aperture() {
 function handler() {
 	return function( isLocked ) {
 		const nodes = document.querySelectorAll( `
-			#publishing-action input#publish, 
-			#publishing-action input#save, 
+			#publishing-action input#publish,
+			#publishing-action input#save,
 			#addtag input#submit,
 			#edittag input[type="submit"],
 			#your-profile input#submit

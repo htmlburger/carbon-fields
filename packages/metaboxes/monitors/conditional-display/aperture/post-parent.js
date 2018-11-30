@@ -19,9 +19,13 @@ import {
 } from 'callbag-basics';
 
 /**
+ * Carbon Fields dependencies.
+ */
+import { fromSelector } from '@carbon-fields/core';
+
+/**
  * Internal dependencies.
  */
-import fromSelector from '../../../utils/from-selector';
 import getParentIdFromOption from '../utils/get-parent-id-from-option';
 import getLevelFromOption from '../utils/get-level-from-option';
 import getAncestorsFromOption from '../utils/get-ancestors-from-option';

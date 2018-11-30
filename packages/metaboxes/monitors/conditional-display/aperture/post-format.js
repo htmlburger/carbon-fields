@@ -14,9 +14,9 @@ import {
 } from 'callbag-basics';
 
 /**
- * Internal dependencies.
+ * Carbon Fields dependencies.
  */
-import fromSelector from '../../../utils/from-selector';
+import { fromSelector } from '@carbon-fields/core';
 
 /**
  * The default state.
