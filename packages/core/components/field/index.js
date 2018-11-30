@@ -2,12 +2,15 @@
  * External dependencies.
  */
 import cx from 'classnames';
+import { compose } from '@wordpress/compose';
+import { withSelect } from '@wordpress/data';
 import { kebabCase } from 'lodash';
 
 /**
  * Internal dependencies.
  */
 import './style.scss';
+import withFilters from '../../utils/with-filters';
 
 /**
  * Renders the base wrapper of the field.
@@ -71,4 +74,9 @@ function Field( {
 	);
 }
 
-export default Field;
+export default compose(
+	withSelect( ( select, props ) => ( {
+		error: select( 'carbon-fields/core' ).getValidationError( props.id )
+	} ) ),
+	withFilters( 'carbon-fields.field-wrapper' )
+)( Field );

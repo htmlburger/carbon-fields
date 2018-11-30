@@ -1,48 +1,60 @@
 /**
  * External dependencies.
  */
+import _ from 'lodash';
 import { addFilter } from '@wordpress/hooks';
-import { compose } from '@wordpress/compose';
+import { dispatch } from '@wordpress/data';
 import { withEffects } from 'refract-callbag';
-import { map, pipe } from 'callbag-basics';
+import { pipe, filter } from 'callbag-basics';
 
 /**
  * Internal dependencies.
  */
-import ContainerBase from '../../components/container-base';
-import withContainer from '../../components/with-container';
 import fromAjaxEvent from '../../utils/from-ajax-event';
+import { normalizePreloadedState } from '../../store/helpers';
 
+/**
+ * The function that controls the stream of side effects.
+ *
+ * @return {Function}
+ */
 function aperture() {
 	return function() {
 		return pipe(
 			fromAjaxEvent( 'ajaxSuccess', 'add-tag' ),
-			map( ( { settings, data } ) => ( { settings, data } ) ),
-			map( ( payload ) => ( {
-				type: 'RESET',
-				payload: payload
-			} ) )
+			filter( ( { settings, data } ) => {
+				return settings.data.indexOf( 'carbon_fields_container' ) > -1 && ! data.documentElement.querySelector( 'wp_error' );
+			} )
 		);
 	};
 }
 
-function handler() {
-	return function( effect ) {
-		switch ( effect.type ) {
-			case 'RESET':
+/**
+ * The function that causes the side effects.
+ *
+ * @param  {Object} props
+ * @return {Function}
+ */
+function handler( props ) {
+	return function() {
+		// Collects identifiers of current fields so we can remove them later.
+		const oldFieldIds = _.map( props.container.fields, 'id' );
 
-				break;
-		}
+		// Get a fresh copy of the container and fields.
+		const { containers, fields } = normalizePreloadedState( _.get( window.cf, 'preloaded.containers', [] ) );
+		const container = _.find( containers, [ 'id', props.id ] );
+		const containerFields = _.filter( fields, [ 'container_id', props.id ] );
+
+		// Replace the container and add the new fields.
+		const { updateState, removeFields } = dispatch( 'carbon-fields/metaboxes' );
+
+		updateState(
+			_.keyBy( [ container ], 'id' ),
+			_.keyBy( containerFields, 'id' )
+		);
+
+		removeFields( oldFieldIds );
 	};
 }
 
-addFilter( 'carbon-fields.term_meta-container.classic', 'carbon-fields/metaboxes', ( OriginalTermMetaContainer ) => {
-	const container = withContainer( ( props ) => <OriginalTermMetaContainer { ...props } /> );
-	const applyWithEffects = withEffects( handler )( aperture );
-
-	return compose(
-		applyWithEffects
-	)( container );
-} );
-
-export default ContainerBase;
+addFilter( 'carbon-fields.term_meta.classic', 'carbon-fields/metaboxes', withEffects( handler )( aperture ) );

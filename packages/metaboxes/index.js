@@ -3,15 +3,15 @@
 /**
  * External dependencies.
  */
-import { values, isUndefined } from 'lodash';
-import { render } from '@wordpress/element';
+import { values } from 'lodash';
 import { select } from '@wordpress/data';
 
 /**
  * Internal dependencies.
  */
-import initializeConditionalDisplay from './conditional-display';
-import { getContainerType } from './containers/registry';
+import initializeMonitors from './monitors';
+import isGutenberg from './utils/is-gutenberg';
+import { renderContainer } from './containers/helpers';
 
 /**
  * The internal dependencies.
@@ -25,23 +25,12 @@ import './containers';
  *
  * @type {string}
  */
-const context = ! isUndefined( window._wpLoadGutenbergEditor ) ? 'gutenberg' : 'classic';
+const context = isGutenberg() ? 'gutenberg' : 'classic';
 
 /**
  * Abracadabra! Poof! Containers everywhere ...
  */
-initializeConditionalDisplay( context );
+initializeMonitors( context );
 
-values( select( 'carbon-fields/metaboxes' ).getContainers() ).forEach( ( container ) => {
-	const node = document.querySelector( `.container-${ container.id }` );
-	const Component = getContainerType( container.type, context );
-
-	if ( node ) {
-		render(
-			<Component id={ container.id } />,
-			node
-		);
-	} else {
-		console.error( `Could not find DOM element for container "${ container.id }".` );
-	}
-} );
+values( select( 'carbon-fields/metaboxes' ).getContainers() )
+	.forEach( ( container ) => renderContainer( container, context ) );

@@ -8,7 +8,8 @@ import {
 	keyBy,
 	assign,
 	forEach,
-	cloneDeep
+	cloneDeep,
+	values
 } from 'lodash';
 
 /**
@@ -27,6 +28,18 @@ export function containers( state = {}, action ) {
 	switch ( action.type ) {
 		case 'SETUP_STATE':
 			return action.payload.containers;
+
+		case 'UPDATE_STATE':
+			return produce( state, ( draft ) => {
+				values( action.payload.containers ).forEach( ( container ) => {
+					draft[ container.id ] = container;
+				} );
+			} );
+
+		case 'ADD_CONTAINER':
+			return produce( state, ( draft ) => {
+				draft[ action.payload.id ] = action.payload;
+			} );
 
 		default:
 			return state;
@@ -99,6 +112,13 @@ export function fields( state = {}, action ) {
 		case 'SETUP_STATE':
 			return action.payload.fields;
 
+		case 'UPDATE_STATE':
+			return produce( state, ( draft ) => {
+				values( action.payload.fields ).forEach( ( field ) => {
+					draft[ field.id ] = field;
+				} );
+			} );
+
 		case 'UPDATE_FIELD_VALUE':
 			return produce( state, ( draft ) => {
 				const { fieldId, value } = action.payload;
@@ -145,7 +165,31 @@ export function fields( state = {}, action ) {
 	}
 }
 
+/**
+ * The reducer that keeps track of the save locks.
+ *
+ * @param  {Object} state
+ * @param  {Object} action
+ * @return {Object}
+ */
+export function savingLock( state = {}, action ) {
+	switch ( action.type ) {
+		case 'LOCK_SAVING':
+			return {
+				...state,
+				[ action.payload.lockName ]: true
+			};
+
+		case 'UNLOCK_SAVING':
+			return omit( state, [ action.payload.lockName ] );
+
+		default:
+			return state;
+	}
+}
+
 export default combineReducers( {
 	containers,
-	fields
+	fields,
+	savingLock
 } );

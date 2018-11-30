@@ -2,14 +2,12 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { addFilter } from '@wordpress/hooks';
 
 /**
  * Internal dependencies.
  */
 import './style.scss';
 import MediaLibrary from '../../components/media-library';
-import validator from '../../validators/required';
 import fetchAttachmentsData from '../../utils/fetch-attachments-data';
 
 class FileField extends Component {
@@ -138,8 +136,5 @@ class FileField extends Component {
 		);
 	}
 }
-
-addFilter( 'carbon-fields.file.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
-addFilter( 'carbon-fields.image.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default FileField;

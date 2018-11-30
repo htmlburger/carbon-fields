@@ -3,7 +3,6 @@
  */
 import { Component, createRef } from '@wordpress/element';
 import { compose, withState } from '@wordpress/compose';
-import { addFilter } from '@wordpress/hooks';
 import { withEffects, toProps } from 'refract-callbag';
 import {
 	map,
@@ -20,7 +19,6 @@ import {
  * The internal dependencies.
  */
 import './style.scss';
-import validator from '../../validators/required';
 import SearchInput from '../../components/search-input';
 import OembedPreview from './preview';
 
@@ -221,8 +219,6 @@ const applyWithState = withState( {
 } );
 
 const applyWithEffects = withEffects( handler )( aperture );
-
-addFilter( 'carbon-fields.oembed.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default compose(
 	applyWithState,

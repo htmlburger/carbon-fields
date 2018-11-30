@@ -16,6 +16,23 @@ export function setupState( containers, fields ) {
 }
 
 /**
+ * Returns an action object used to update the state.
+ *
+ * @param  {Object[]} containers
+ * @param  {Object}   fields
+ * @return {Object}
+ */
+export function updateState( containers, fields ) {
+	return {
+		type: 'UPDATE_STATE',
+		payload: {
+			containers,
+			fields
+		}
+	};
+}
+
+/**
  * Returns an action object used to update the field's value.
  *
  * @param  {string} fieldId
@@ -80,7 +97,20 @@ export function removeFields( fieldIds ) {
 }
 
 /**
- * Returns an actions object used to add the created sidebar to all fields.
+ * Returns an action object used to add a container to all containers.
+ *
+ * @param  {Object} container
+ * @return {Object}
+ */
+export function addContainer( container ) {
+	return {
+		type: 'ADD_CONTAINER',
+		payload: container
+	};
+}
+
+/**
+ * Returns an action object used to add the created sidebar to all fields.
  *
  * @param  {Object} sidebar
  * @return {Object}
@@ -89,5 +119,35 @@ export function receiveSidebar( sidebar ) {
 	return {
 		type: 'RECEIVE_SIDEBAR',
 		payload: sidebar
+	};
+}
+
+/**
+ * Returns an action object used to signal that saving is locked.
+ *
+ * @param  {string} lockName
+ * @return {Object}
+ */
+export function lockSaving( lockName ) {
+	return {
+		type: 'LOCK_SAVING',
+		payload: {
+			lockName
+		}
+	};
+}
+
+/**
+ * Returns an action object used to signal that saving is unlocked.
+ *
+ * @param  {string} lockName
+ * @return {Object}
+ */
+export function unlockSaving( lockName ) {
+	return {
+		type: 'UNLOCK_SAVING',
+		payload: {
+			lockName
+		}
 	};
 }

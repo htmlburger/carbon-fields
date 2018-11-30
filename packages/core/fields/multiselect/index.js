@@ -2,14 +2,12 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { addFilter } from '@wordpress/hooks';
 import Select from 'react-select';
 
 /**
  * The internal dependencies.
  */
 import NoOptions from '../../components/no-options';
-import validator from '../../validators/required';
 
 class MultiselectField extends Component {
 	/**
@@ -71,7 +69,5 @@ class MultiselectField extends Component {
 		);
 	}
 }
-
-addFilter( 'carbon-fields.multiselect.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default MultiselectField;

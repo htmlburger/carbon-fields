@@ -3,7 +3,6 @@
  */
 import { registerStore, dispatch } from '@wordpress/data';
 import {
-	assign,
 	get,
 	keyBy
 } from 'lodash';
@@ -11,10 +10,10 @@ import {
 /**
  * Internal dependencies.
  */
-import flattenField from '../utils/flatten-field';
 import reducer from './reducer';
 import * as actions from './actions';
 import * as selectors from './selectors';
+import { normalizePreloadedState } from './helpers';
 
 /**
  * Register the store.
@@ -28,12 +27,7 @@ registerStore( 'carbon-fields/metaboxes', {
 /**
  * Hydrate the store's state.
  */
-const fields = [];
-const containers = get( window.cf, 'preloaded.containers', [] ).map( ( container ) => {
-	return assign( {}, container, {
-		fields: container.fields.map( ( field ) => flattenField( field, container.id, fields ) )
-	} );
-} );
+const { containers, fields } = normalizePreloadedState( get( window.cf, 'preloaded.containers', [] ) );
 
 dispatch( 'carbon-fields/metaboxes' ).setupState(
 	keyBy( containers, 'id' ),

@@ -184,12 +184,14 @@ class ComplexField extends Component {
 	 * @return {Array}
 	 */
 	handleGroupFieldSetup = ( field, props, groupProps ) => {
-		const id = `${ groupProps.id }__${ field.base_name }`;
+		const { blockId } = this.props;
+		const id = `${ this.props.id }__${ groupProps.id }__${ field.base_name }`;
 		const value = get( groupProps, `values.${ field.base_name }` );
 
 		return [ Field, assign( {}, props, {
 			key: id,
 			id: id,
+			blockId,
 			field,
 			value,
 			onChange: this.handleGroupFieldChange

@@ -39,3 +39,13 @@ export function getFields( state ) {
 export function getFieldById( state, fieldId ) {
 	return state.fields[ fieldId ];
 }
+
+/**
+ * Returns whether saving is locked.
+ *
+ * @param  {Object} state
+ * @return {boolean}
+ */
+export function isSavingLocked( state ) {
+	return Object.keys( state.savingLock ).length > 0;
+}

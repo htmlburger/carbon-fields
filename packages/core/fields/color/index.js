@@ -2,7 +2,6 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
-import { addFilter } from '@wordpress/hooks';
 import { get } from 'lodash';
 
 /**
@@ -10,7 +9,6 @@ import { get } from 'lodash';
  */
 import './style.scss';
 import Picker from './picker';
-import validator from '../../validators/required';
 import hexToRgba from '../../utils/hex-to-rgba';
 
 class ColorField extends Component {
@@ -105,7 +103,5 @@ class ColorField extends Component {
 		);
 	}
 }
-
-addFilter( 'carbon-fields.color.validate', 'carbon-fields/core', ( field, value ) => validator( value ) );
 
 export default ColorField;

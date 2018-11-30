@@ -1,0 +1,15 @@
+/* ==========================================================================
+   Container
+   ========================================================================== */
+
+#poststuff .carbon-box .inside,
+.carbon-box .inside {
+	padding: 0;
+	margin: 0;
+}
+
+.cf-container {
+	display: flex;
+	flex-wrap: wrap;
+	margin: -1px -1px 0 0;
+}
