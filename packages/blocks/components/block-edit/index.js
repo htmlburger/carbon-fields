@@ -63,6 +63,7 @@ class BlockEdit extends Component {
 						>
 							<FieldEdit
 								id={ id }
+								blockId={ clientId }
 								value={ value }
 								field={ field }
 								onChange={ this.handleFieldChange }
