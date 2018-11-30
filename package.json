@@ -68,7 +68,7 @@
     "@wordpress/blocks": "^5.3.1",
     "@wordpress/components": "^6.0.1",
     "@wordpress/compose": "^2.1.2",
-    "@wordpress/data": "^3.1.2",
+    "@wordpress/data": "^4.0.1",
     "@wordpress/editor": "^7.0.1",
     "@wordpress/element": "^2.1.7",
     "@wordpress/hooks": "^2.0.3",
