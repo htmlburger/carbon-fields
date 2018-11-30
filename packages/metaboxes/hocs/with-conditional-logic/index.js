@@ -17,12 +17,7 @@ import {
 /**
  * Carbon Fields dependencies.
  */
-import { withConditionalLogic } from '@carbon-fields/core';
-
-/**
- * Internal dependencies.
- */
-import fromSelector from '../../utils/from-selector';
+import { fromSelector, withConditionalLogic } from '@carbon-fields/core';
 
 /**
  * Returns all root fields from the given holder
