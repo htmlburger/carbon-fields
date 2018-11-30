@@ -110,6 +110,19 @@ export function addContainer( container ) {
 }
 
 /**
+ * Returns an action object used to remove a container from all containers.
+ *
+ * @param  {Object} container
+ * @return {Object}
+ */
+export function removeContainer( container ) {
+	return {
+		type: 'REMOVE_CONTAINER',
+		payload: container
+	};
+}
+
+/**
  * Returns an action object used to add the created sidebar to all fields.
  *
  * @param  {Object} sidebar
