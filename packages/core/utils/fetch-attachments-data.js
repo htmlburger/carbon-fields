@@ -1,3 +1,8 @@
+/**
+ * The external dependencies.
+ */
+import { __ } from '@wordpress/i18n';
+
 export default ( attachments ) => {
 	return new Promise( ( resolve, reject ) => {
 		// eslint-disable-next-line
@@ -13,7 +18,7 @@ export default ( attachments ) => {
 		} );
 
 		request.fail( () => {
-			reject( 'An error occurred while trying to fetch files data.' );
+			reject( __( 'An error occurred while trying to fetch files data.', 'carbon-fields' ) );
 		} );
 	} );
 };

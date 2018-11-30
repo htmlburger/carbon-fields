@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { render } from '@wordpress/element';
+import { __, sprintf } from '@wordpress/i18n';
 
 /**
  * Internal dependencies.
@@ -26,6 +27,6 @@ export const renderContainer = ( container, context ) => {
 		);
 	} else {
 		// eslint-disable-next-line no-console
-		console.error( `Could not find DOM element for container "${ container.id }".` );
+		console.error( sprintf( __( 'Could not find DOM element for container "%1$s".', 'carbon-fields' ), [ container.id ] ) );
 	}
 };

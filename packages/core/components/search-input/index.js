@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import cx from 'classnames';
+import { __ } from '@wordpress/i18n';
 import { Component } from '@wordpress/element';
 import { omit } from 'lodash';
 
@@ -26,7 +27,7 @@ class SearchInput extends Component {
 	 * @type {Object}
 	 */
 	static defaultProps = {
-		placeholder: carbonFieldsL10n.field.searchPlaceholder
+		placeholder: __( 'Search...', 'carbon-fields' )
 	};
 
 	/**

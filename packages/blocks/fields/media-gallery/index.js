@@ -12,9 +12,9 @@ import './style.scss';
 addFilter( 'carbon-fields.media_gallery.block', 'carbon-fields/blocks', ( OriginalMediaGalleryField ) => ( props ) => {
 	return (
 		<OriginalMediaGalleryField
-			buttonLabel={ __( 'Select Attachments' ) }
-			mediaLibraryButtonLabel={ __( 'Use Attachments' ) }
-			mediaLibraryTitle={ __( 'Select Attachments' ) }
+			buttonLabel={ __( 'Select Attachments', 'carbon-fields' ) }
+			mediaLibraryButtonLabel={ __( 'Use Attachments', 'carbon-fields' ) }
+			mediaLibraryTitle={ __( 'Select Attachments', 'carbon-fields' ) }
 			{ ...props }
 		/>
 	);

@@ -1,6 +1,7 @@
 /**
  * External dependencies.
  */
+import { __, sprintf } from '@wordpress/i18n';
 import { get, map } from 'lodash';
 
 /**
@@ -49,7 +50,7 @@ function evaluate( definitions, values, relation ) {
 				return condition.isFulfiled( definition, values );
 			} else { // eslint-disable-line no-else-return
 				// eslint-disable-next-line no-console
-				console.error( `Unsupported container condition - "${ definition.type }".` );
+				console.error( sprintf( __( 'Unsupported container condition - "%1$s".', 'carbon-fields' ), [ definition.type ] ) );
 
 				return false;
 			}
@@ -67,7 +68,7 @@ function evaluate( definitions, values, relation ) {
 
 		default:
 			// eslint-disable-next-line no-console
-			console.error( `Unsupported container condition relation used - "${ relation }".` );
+			console.error( sprintf( __( 'Unsupported container condition relation used - "%1$s".', 'carbon-fields' ), [ relation ] ) );
 
 			return false;
 	}

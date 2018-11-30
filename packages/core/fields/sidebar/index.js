@@ -3,6 +3,7 @@
  */
 import of from 'callbag-of';
 import { Component } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { withEffects, toProps } from 'refract-callbag';
 import { trim } from 'lodash';
 import {
@@ -107,7 +108,7 @@ function handler( props ) {
 		switch ( effect.type ) {
 			case 'ADD_SIDEBAR':
 				/* eslint-disable-next-line no-alert */
-				const name = trim( window.prompt( 'Please enter the name of the new sidebar:' ) );
+				const name = trim( window.prompt( __( 'Please enter the name of the new sidebar:', 'carbon-fields' ) ) );
 
 				if ( ! name ) {
 					return;
@@ -125,7 +126,7 @@ function handler( props ) {
 				}, null, 'json' );
 
 				/* eslint-disable-next-line no-alert */
-				const errorHandler = () => alert( 'An error occurred while trying to create the sidebar.' );
+				const errorHandler = () => alert( __( 'An error occurred while trying to create the sidebar.', 'carbon-fields' ) );
 
 				request.done( ( response ) => {
 					if ( response && response.success ) {

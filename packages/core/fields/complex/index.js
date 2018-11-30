@@ -7,6 +7,7 @@ import {
 	Fragment,
 	createRef
 } from '@wordpress/element';
+import { __, _x, sprintf } from '@wordpress/i18n';
 import {
 	get,
 	find,
@@ -77,7 +78,7 @@ class ComplexField extends Component {
 	get inserterButtonText() {
 		const { field } = this.props;
 
-		return window.carbonFieldsL10n.field.complexAddButton.replace( '%s', field.labels.singular_name );
+		return sprintf( _x( 'Add %s', 'Complex field', 'carbon-fields' ), [ field.labels.singular_name ] );
 	}
 
 	/**
@@ -345,15 +346,13 @@ addFilter( 'carbon-fields.complex.validate', 'carbon-fields/core', ( field, valu
 	} = field;
 
 	if ( required && isEmpty( value ) ) {
-		return carbonFieldsL10n.field.messageRequiredField;
+		return __( 'This field is required. ', 'carbon-fields' );
 	}
 
 	if ( min > 0 && value.length < min ) {
 		const label = min === 1 ? labels.singular_name : labels.plural_name;
 
-		return carbonFieldsL10n.field.complexMinNumRowsNotReached
-			.replace( '%1$d', min )
-			.replace( '%2$s', label.toLowerCase() );
+		return sprintf( __( 'Minimum number of rows not reached (%1$s %2$s)', 'carbon-fields' ), [ min, label.toLowerCase() ] );
 	}
 
 	return null;

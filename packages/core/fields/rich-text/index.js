@@ -93,11 +93,11 @@ class RichTextField extends Component {
 				{ field.rich_editing && (
 					<div className="wp-editor-tabs">
 						<button type="button" id={ `${ id }-tmce` } className="wp-switch-editor switch-tmce" data-wp-editor-id={ id }>
-							{ __( 'Visual' ) }
+							{ __( 'Visual', 'carbon-fields' ) }
 						</button>
 
 						<button type="button" id={ `${ id }-html` } className="wp-switch-editor switch-html" data-wp-editor-id={ id }>
-							{ __( 'Text' ) }
+							{ __( 'Text', 'carbon-fields' ) }
 						</button>
 					</div>
 				) }

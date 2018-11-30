@@ -4,6 +4,7 @@
  * External dependencies.
  */
 import { applyFilters } from '@wordpress/hooks';
+import { __, sprintf } from '@wordpress/i18n';
 import {
 	isString,
 	isFunction,
@@ -36,17 +37,17 @@ export function createRegistry( domain, supportedContexts ) {
 	 */
 	function registerType( type, component ) {
 		if ( ! isString( type ) ) {
-			console.error( `${ domainStartCased } type must be a string.` );
+			console.error( sprintf( __( '%1$s type must be a string.', 'carbon-fields' ), [ domainStartCased ] ) );
 			return false;
 		}
 
 		if ( types[ type ] ) {
-			console.error( `${ domainStartCased } ${ type } is already registered.` );
+			console.error( sprintf( __( '%1$s %2$s is already registered.', 'carbon-fields' ), [ domainStartCased, type ] ) );
 			return false;
 		}
 
 		if ( ! component || ! isFunction( component ) ) {
-			console.error( 'The "component" param must be a function.' );
+			console.error( __( 'The "component" param must be a function.', 'carbon-fields' ) );
 			return false;
 		}
 

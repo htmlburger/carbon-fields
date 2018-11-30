@@ -3,6 +3,7 @@
  */
 import of from 'callbag-of';
 import { Component, Fragment } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { withEffects, toProps } from 'refract-callbag';
 import { debounce } from 'lodash';
 import {
@@ -162,9 +163,9 @@ function handler( props ) {
 									lng: location.lng()
 								} );
 							} else if ( status === 'ZERO_RESULTS' ) {
-								reject( carbonFieldsL10n.field.geocodeZeroResults );
+								reject( __( 'The address could not be found. ', 'carbon-fields' ) );
 							} else {
-								reject( `${ carbonFieldsL10n.field.geocodeNotSuccessful } ${ status }` );
+								reject( `${ __( 'Geocode was not successful for the following reason: ', 'carbon-fields' ) } ${ status }` );
 							}
 						} );
 					} );

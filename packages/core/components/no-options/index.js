@@ -1,4 +1,9 @@
 /**
+ * The external dependencies.
+ */
+import { __ } from '@wordpress/i18n';
+
+/**
  * Render a notice to inform the user that the field doesn't have
  * any options.
  *
@@ -6,7 +11,7 @@
  */
 const NoOptions = () => (
 	<em>
-		{ carbonFieldsL10n.field.noOptions }
+		{ __( 'No options.', 'carbon-fields' ) }
 	</em>
 );
 

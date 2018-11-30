@@ -2,7 +2,7 @@
  * External dependencies.
  */
 import produce from 'immer';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import {
 	Component,
 	Fragment,
@@ -18,6 +18,7 @@ import {
 	without,
 	isMatch,
 	isEmpty
+
 } from 'lodash';
 import {
 	combine,
@@ -203,7 +204,7 @@ class AssociationField extends Component {
 					/>
 
 					<span className="cf-association__counter">
-						Showing { options.length } of { totalOptionsCount } results
+						{ sprintf( __( 'Showing %1$s of %2$s results', 'carbon-fields' ), [ options.length, totalOptionsCount ] ) }
 					</span>
 				</div>
 
@@ -374,7 +375,7 @@ function handler( props ) {
 				}, null, 'json' );
 
 				/* eslint-disable-next-line no-alert */
-				const errorHandler = () => alert( __( 'An error occurred while trying to fetch association options.' ) );
+				const errorHandler = () => alert( __( 'An error occurred while trying to fetch association options.', 'carbon-fields' ) );
 
 				request.done( ( response ) => {
 					if ( response && response.success ) {
@@ -416,11 +417,11 @@ addFilter( 'carbon-fields.association.validate', 'carbon-fields/core', ( field, 
 	const { min, required } = field;
 
 	if ( required && isEmpty( value ) ) {
-		return carbonFieldsL10n.field.messageRequiredField;
+		return __( 'This field is required. ', 'carbon-fields' );
 	}
 
 	if ( min > 0 && value.length < min ) {
-		return carbonFieldsL10n.field.minNumItemsNotReached.replace( '%s', field.min );
+		return sprintf( __( 'Minimum number of items not reached (%s items)', 'carbon-fields' ), [ field.min ] );
 	}
 
 	return null;

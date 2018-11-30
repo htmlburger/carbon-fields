@@ -12,9 +12,9 @@ import './style.scss';
 addFilter( 'carbon-fields.file.block', 'carbon-fields/blocks', ( OriginalFileField ) => ( props ) => {
 	return (
 		<OriginalFileField
-			buttonLabel={ __( 'Select File' ) }
-			mediaLibraryButtonLabel={ __( 'Use File' ) }
-			mediaLibraryTitle={ __( 'Select File' ) }
+			buttonLabel={ __( 'Select File', 'carbon-fields' ) }
+			mediaLibraryButtonLabel={ __( 'Use File', 'carbon-fields' ) }
+			mediaLibraryTitle={ __( 'Select File', 'carbon-fields' ) }
 			{ ...props }
 		/>
 	);

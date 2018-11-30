@@ -3,6 +3,7 @@
  */
 import cx from 'classnames';
 import { Component } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies.
@@ -143,7 +144,7 @@ class ComplexGroup extends Component {
 							<span className="dashicons-before dashicons-admin-page cf-complex__group-action-icon"></span>
 
 							<span className="cf-complex__group-action-text">
-								Duplicate
+								{ __( 'Duplicate', 'carbon-fields' ) }
 							</span>
 						</button>
 					) }
@@ -152,7 +153,7 @@ class ComplexGroup extends Component {
 						<span className="dashicons-before dashicons-trash cf-complex__group-action-icon"></span>
 
 						<span className="cf-complex__group-action-text">
-							Remove
+							{ __( 'Remove', 'carbon-fields' ) }
 						</span>
 					</button>
 
@@ -161,7 +162,7 @@ class ComplexGroup extends Component {
 							<span className={ toggleClasses }></span>
 
 							<span className="cf-complex__group-action-text">
-								Collapse
+								{ __( 'Collapse', 'carbon-fields' ) }
 							</span>
 						</button>
 					) }

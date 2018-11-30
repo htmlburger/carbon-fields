@@ -7,9 +7,9 @@ import { __ } from '@wordpress/i18n';
 addFilter( 'carbon-fields.image.metabox', 'carbon-fields/metaboxes', ( OriginalImageField ) => ( props ) => {
 	return (
 		<OriginalImageField
-			buttonLabel={ __( 'Select Image' ) }
-			mediaLibraryButtonLabel={ __( 'Use Image' ) }
-			mediaLibraryTitle={ __( 'Select Image' ) }
+			buttonLabel={ __( 'Select Image', 'carbon-fields' ) }
+			mediaLibraryButtonLabel={ __( 'Use Image', 'carbon-fields' ) }
+			mediaLibraryTitle={ __( 'Select Image', 'carbon-fields' ) }
 			{ ...props }
 		/>
 	);

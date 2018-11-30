@@ -3,6 +3,7 @@
  */
 import { Component, createRef } from '@wordpress/element';
 import { compose, withState } from '@wordpress/compose';
+import { __, _x } from '@wordpress/i18n';
 import { withEffects, toProps } from 'refract-callbag';
 import {
 	map,
@@ -185,7 +186,7 @@ function handler( props ) {
 				} );
 
 				/* eslint-disable-next-line no-alert */
-				const errorHandler = () => alert( 'An error occurred while trying to fetch oembed preview.' );
+				const errorHandler = () => alert( __( 'An error occurred while trying to fetch oembed preview.', 'carbon-fields' ) );
 
 				request.done( ( response ) => {
 					props.setState( {
@@ -200,7 +201,7 @@ function handler( props ) {
 					errorHandler();
 
 					props.setState( {
-						error: carbonFieldsL10n.field.oembedNotFound,
+						error: _x( 'Not Found', 'oEmbed field', 'carbon-fields' ),
 						isLoading: false
 					} );
 				} );

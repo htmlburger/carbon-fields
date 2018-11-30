@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import { get } from 'lodash';
 
 /**
@@ -82,7 +83,7 @@ class ColorField extends Component {
 					<span className="cf-color__preview" style={ { backgroundColor: this.getBackgrounColor() } }></span>
 
 					<span className="cf-color__toggle-text">
-						{ carbonFieldsL10n.field.colorSelectColor }
+						{ __( 'Select a color', 'carbon-fields' ) }
 					</span>
 				</button>
 

@@ -1,6 +1,7 @@
 /**
  * External dependencies.
  */
+import { __ } from '@wordpress/i18n';
 import { isObject, isEmpty } from 'lodash';
 
 /**
@@ -16,5 +17,5 @@ export default function required( value ) {
 		return null;
 	}
 
-	return carbonFieldsL10n.field.messageRequiredField;
+	return __( 'This field is required. ', 'carbon-fields' );
 }

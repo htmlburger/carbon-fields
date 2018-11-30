@@ -1,0 +1,54 @@
+msgid ""
+msgstr ""
+"Language: bg\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+
+#: packages/metaboxes/containers/helpers.js:30
+msgid "Could not find DOM element for container \"%1$d\"."
+msgstr "DOM елемент за контейнер \"%1$d\" не беше намерен"
+
+#: packages/metaboxes/fields/date/index.js:7
+#: packages/metaboxes/fields/datetime/index.js:7
+msgid "Select Date"
+msgstr "Изберете дата"
+
+#: packages/metaboxes/fields/file/index.js:11
+msgid "Use File"
+msgstr "Използвай файла"
+
+#: packages/metaboxes/fields/file/index.js:12
+msgid "Select File"
+msgstr "Избор на файл"
+
+#: packages/metaboxes/fields/image/index.js:11
+msgid "Use Image"
+msgstr "Използвай снимката"
+
+#: packages/metaboxes/fields/image/index.js:12
+msgid "Select Image"
+msgstr "Избор на снимка"
+
+#: packages/metaboxes/fields/media-gallery/index.js:16
+msgid "Use Attachments"
+msgstr "Прикачи избраните"
+
+#: packages/metaboxes/fields/media-gallery/index.js:17
+msgid "Select Attachments"
+msgstr "Избери файлове за прикачване"
+
+#: packages/metaboxes/fields/time/index.js:7
+msgid "Select Time"
+msgstr "Изберете време"
+
+#: packages/metaboxes/monitors/conditional-display/conditions/base.js:52
+msgid "Unsupported container condition comparison operator used - \"%1$d\"."
+msgstr "Неподдържан оператор за сравнение използван като условие на контейнер - \"%1$d\"."
+
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:53
+msgid "Unsupported container condition - \"%1$d\"."
+msgstr "Неподдържано условие за контейнер - \"%1$d\"."
+
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:71
+msgid "Unsupported container condition relation used - \"%1$d\"."
+msgstr "Неподдържанна връзка на условия използвана на контейнер - \"%1$d\"."

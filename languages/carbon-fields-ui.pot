@@ -1,0 +1,58 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+
+#: packages/core/fields/association/index.js:207
+msgid "Showing %1$s of %2$s results"
+msgstr ""
+
+#: packages/core/fields/association/index.js:378
+msgid "An error occurred while trying to fetch association options."
+msgstr ""
+
+#: packages/core/fields/association/index.js:420
+#: packages/core/fields/complex/index.js:349
+msgid "This field is required. "
+msgstr ""
+
+#: packages/core/fields/association/index.js:424
+msgid "Minimum number of items not reached (%s items)"
+msgstr ""
+
+#: packages/core/fields/complex/index.js:355
+msgid "Minimum number of rows not reached (%1$s %2$s)"
+msgstr ""
+
+#: packages/core/registry/base.js:40
+msgid "%1$s type must be a string."
+msgstr ""
+
+#: packages/core/registry/base.js:45
+msgid "%1$s %2$s is already registered."
+msgstr ""
+
+#: packages/core/registry/base.js:50
+msgid "The \"component\" param must be a function."
+msgstr ""
+
+#: packages/metaboxes/containers/helpers.js:30
+msgid "Could not find DOM element for container \"%1$s\"."
+msgstr ""
+
+#: packages/metaboxes/monitors/conditional-display/conditions/base.js:52
+msgid "Unsupported container condition comparison operator used - \"%1$s\"."
+msgstr ""
+
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:53
+msgid "Unsupported container condition - \"%1$s\"."
+msgstr ""
+
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:71
+msgid "Unsupported container condition relation used - \"%1$s\"."
+msgstr ""
+
+#: packages/core/fields/complex/index.js:81
+msgctxt "Complex field"
+msgid "Add %s"
+msgstr ""

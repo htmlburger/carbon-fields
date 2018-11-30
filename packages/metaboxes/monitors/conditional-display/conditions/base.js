@@ -1,6 +1,7 @@
 /**
  * External dependencies.
  */
+import { __, sprintf } from '@wordpress/i18n';
 import { find } from 'lodash';
 
 /**
@@ -48,7 +49,7 @@ export default {
 
 		if ( ! comparer ) {
 			// eslint-disable-next-line no-console
-			console.error( `Unsupported container condition comparison operator used - "${ operator }".` );
+			console.error( sprintf( __( 'Unsupported container condition comparison operator used - "%1$s".', 'carbon-fields' ), [ operator ] ) );
 
 			return false;
 		}
