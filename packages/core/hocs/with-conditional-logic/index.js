@@ -1,9 +1,22 @@
+/* eslint no-console: [ 'error', { allow: [ 'error' ] } ] */
+
 /**
  * External dependencies.
  */
-import { createHigherOrderComponent } from '@wordpress/compose';
+import { createHigherOrderComponent, compose } from '@wordpress/compose';
+import { withDispatch } from '@wordpress/data';
 import { withEffects } from 'refract-callbag';
-import { isEmpty } from 'lodash';
+import {
+	has,
+	some,
+	every,
+	isEmpty
+} from 'lodash';
+
+/**
+ * Internal dependencies.
+ */
+import compare from './compare';
 
 /**
  * Creates a high-order components which adds ability to evalute
@@ -38,11 +51,55 @@ export default function withConditionalLogic( input, output ) {
 	 */
 	function handler( props ) {
 		return function( effect ) {
-			output( props, effect );
+			const { relation, rules } = props.field.conditional_logic;
+			const data = output( props, effect );
+
+			const results = rules.reduce( ( accumulator, rule ) => {
+				if ( ! has( data, rule.field ) ) {
+					// eslint-disable-next-line
+					console.error( `An unknown field is used in condition - "${ rule.field }".` );
+
+					return accumulator.concat( false );
+				}
+
+				// TODO: Handle the conditional logic for chained fields. Probably we'll need the id of each sibling.
+				// See https://github.com/htmlburger/carbon-fields/commit/3628a86c8840c8323f45c829a96c512a9985ad10#diff-b1aea524a4b1ab510e28e01a54c25fcd
+				const result = compare( data[ rule.field ], rule.compare, rule.value );
+
+				return accumulator.concat( result );
+			}, [] );
+
+			let isVisible = false;
+
+			switch ( relation ) {
+				case 'AND':
+					isVisible = every( results );
+					break;
+
+				case 'OR':
+					isVisible = some( results );
+					break;
+			}
+
+			if ( isVisible ) {
+				props.showField( props.id );
+			} else {
+				props.hideField( props.id );
+			}
 		};
 	}
 
 	return createHigherOrderComponent( ( OriginalComponent ) => {
-		return withEffects( handler )( aperture )( OriginalComponent );
+		return compose(
+			withDispatch( ( dispatch ) => {
+				const { showField, hideField } = dispatch( 'carbon-fields/core' );
+
+				return {
+					showField,
+					hideField
+				};
+			} ),
+			withEffects( handler )( aperture )
+		)( OriginalComponent );
 	}, 'withConditionalLogic' );
 }

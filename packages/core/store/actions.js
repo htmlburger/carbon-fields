@@ -29,3 +29,33 @@ export function markAsInvalid( fieldId, error ) {
 		}
 	};
 }
+
+/**
+ * Returns an action object used to show the field.
+ *
+ * @param  {string} fieldId
+ * @return {Object}
+ */
+export function showField( fieldId ) {
+	return {
+		type: 'SHOW_FIELD',
+		payload: {
+			fieldId
+		}
+	};
+}
+
+/**
+ * Returns an action object used to hide the field.
+ *
+ * @param  {string} fieldId
+ * @return {Object}
+ */
+export function hideField( fieldId ) {
+	return {
+		type: 'HIDE_FIELD',
+		payload: {
+			fieldId
+		}
+	};
+}

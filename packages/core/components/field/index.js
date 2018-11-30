@@ -19,6 +19,7 @@ import withFilters from '../../utils/with-filters';
  * @param  {string}  props.id
  * @param  {Object}  props.field
  * @param  {?string} props.error
+ * @param  {boolean} props.hidden
  * @param  {string}  props.className
  * @param  {mixed}   props.children
  * @return {Object}
@@ -27,6 +28,7 @@ function Field( {
 	id,
 	field,
 	error,
+	hidden,
 	className,
 	children
 } ) {
@@ -44,7 +46,11 @@ function Field( {
 	];
 
 	return (
-		<div className={ cx( classes ) } style={ styles }>
+		<div
+			className={ cx( classes ) }
+			style={ styles }
+			hidden={ hidden }
+		>
 			<div className="cf-field__head">
 				{ field.label && (
 					<label className="cf-field__label" htmlFor={ id }>
@@ -75,8 +81,13 @@ function Field( {
 }
 
 export default compose(
-	withSelect( ( select, props ) => ( {
-		error: select( 'carbon-fields/core' ).getValidationError( props.id )
-	} ) ),
+	withSelect( ( select, props ) => {
+		const { getValidationError, isFieldVisible } = select( 'carbon-fields/core' );
+
+		return {
+			error: getValidationError( props.id ),
+			hidden: ! isFieldVisible( props.id )
+		};
+	} ),
 	withFilters( 'carbon-fields.field-wrapper' )
 )( Field );
