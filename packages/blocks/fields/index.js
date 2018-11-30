@@ -11,6 +11,11 @@ import { withDispatch } from '@wordpress/data';
 import { withValidation } from '@carbon-fields/core';
 
 /**
+ * Internal dependencies.
+ */
+import withConditionalLogic from '../hocs/with-conditional-logic';
+
+/**
  * Connects every field to the store.
  */
 addFilter( 'carbon-fields.field-edit.block', 'carbon-fields/blocks', compose(
@@ -22,7 +27,8 @@ addFilter( 'carbon-fields.field-edit.block', 'carbon-fields/blocks', compose(
 			unlockSaving: unlockPostSaving
 		};
 	} ),
-	withValidation
+	withValidation,
+	withConditionalLogic
 ) );
 
 /**
