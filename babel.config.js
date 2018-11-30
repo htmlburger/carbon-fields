@@ -13,5 +13,17 @@ module.exports = {
 		'@babel/plugin-proposal-object-rest-spread',
 		'@babel/plugin-syntax-async-generators',
 		'@babel/plugin-transform-runtime'
-	]
+	],
+	env: {
+		production: {
+			plugins: [
+				[
+					"@wordpress/babel-plugin-makepot",
+					{
+						"output": "languages/carbon-fields-ui.pot"
+					}
+				]
+			],
+		},
+	},
 };
