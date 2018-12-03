@@ -11,7 +11,7 @@ import { kebabCase } from 'lodash';
  */
 import './style.scss';
 import Disabled from '../../components/disabled';
-import withFilters from '../../utils/with-filters';
+import withFilters from '../../hocs/with-filters';
 
 /**
  * Renders the base wrapper of the field.

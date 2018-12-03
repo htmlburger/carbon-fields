@@ -1,7 +1,7 @@
 /**
  * Internal dependencies.
  */
-import { createRegistry } from './base';
+import { createRegistry } from './';
 
 export const {
 	registerFieldType,
