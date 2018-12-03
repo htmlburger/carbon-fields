@@ -1,18 +1,20 @@
 export default ( attachments ) => {
 	return new Promise( ( resolve, reject ) => {
 		// eslint-disable-next-line
-		let request = $.post( window.ajaxurl, {
-			action: 'query-attachments',
-			query: {
-				post__in: attachments
+		let result = wp.media.ajax( {
+			data: {
+				action: 'query-attachments',
+				query: {
+					post__in: attachments
+				}
 			}
 		} );
 
-		request.done( ( response ) => {
-			resolve( response.data );
+		result.done( ( response ) => {
+			resolve( response );
 		} );
 
-		request.fail( () => {
+		result.fail( () => {
 			reject( 'An error occurred while trying to fetch files data.' );
 		} );
 	} );
