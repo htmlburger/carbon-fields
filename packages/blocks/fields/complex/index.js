@@ -25,7 +25,6 @@ import { uniqueId } from '@carbon-fields/core';
  */
 import './style.scss';
 import Field from '../../components/field';
-import withValidation from '../../components/with-validation';
 
 class ComplexField extends Component {
 	/**
@@ -254,7 +253,7 @@ class ComplexField extends Component {
 	}
 }
 
-addFilter( 'carbon-fields.complex.block', 'carbon-fields/blocks', ( OriginalComplexField ) => withValidation( ( props ) => {
+addFilter( 'carbon-fields.complex.block', 'carbon-fields/blocks', ( OriginalComplexField ) => ( props ) => {
 	const {
 		id,
 		name,
@@ -296,4 +295,4 @@ addFilter( 'carbon-fields.complex.block', 'carbon-fields/blocks', ( OriginalComp
 			) }
 		</ComplexField>
 	);
-} ) );
+} );
