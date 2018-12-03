@@ -27,7 +27,7 @@ class SearchInput extends Component {
 	 * @type {Object}
 	 */
 	static defaultProps = {
-		placeholder: __( 'Search...', 'carbon-fields' )
+		placeholder: __( 'Search...', 'carbon-fields-ui' )
 	};
 
 	/**

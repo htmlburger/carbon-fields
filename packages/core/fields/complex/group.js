@@ -144,7 +144,7 @@ class ComplexGroup extends Component {
 							<span className="dashicons-before dashicons-admin-page cf-complex__group-action-icon"></span>
 
 							<span className="cf-complex__group-action-text">
-								{ __( 'Duplicate', 'carbon-fields' ) }
+								{ __( 'Duplicate', 'carbon-fields-ui' ) }
 							</span>
 						</button>
 					) }
@@ -153,7 +153,7 @@ class ComplexGroup extends Component {
 						<span className="dashicons-before dashicons-trash cf-complex__group-action-icon"></span>
 
 						<span className="cf-complex__group-action-text">
-							{ __( 'Remove', 'carbon-fields' ) }
+							{ __( 'Remove', 'carbon-fields-ui' ) }
 						</span>
 					</button>
 
@@ -162,7 +162,7 @@ class ComplexGroup extends Component {
 							<span className={ toggleClasses }></span>
 
 							<span className="cf-complex__group-action-text">
-								{ __( 'Collapse', 'carbon-fields' ) }
+								{ __( 'Collapse', 'carbon-fields-ui' ) }
 							</span>
 						</button>
 					) }

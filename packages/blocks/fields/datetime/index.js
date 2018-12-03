@@ -10,5 +10,5 @@ import { __ } from '@wordpress/i18n';
 import './style.scss';
 
 addFilter( 'carbon-fields.date_time.block', 'carbon-fields/blocks', ( OriginalDateTimeField ) => ( props ) => (
-	<OriginalDateTimeField buttonText={ __( 'Select Date', 'carbon-fields' ) } { ...props } />
+	<OriginalDateTimeField buttonText={ __( 'Select Date', 'carbon-fields-ui' ) } { ...props } />
 ) );

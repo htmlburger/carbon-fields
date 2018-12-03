@@ -163,9 +163,9 @@ function handler( props ) {
 									lng: location.lng()
 								} );
 							} else if ( status === 'ZERO_RESULTS' ) {
-								reject( __( 'The address could not be found. ', 'carbon-fields' ) );
+								reject( __( 'The address could not be found. ', 'carbon-fields-ui' ) );
 							} else {
-								reject( `${ __( 'Geocode was not successful for the following reason: ', 'carbon-fields' ) } ${ status }` );
+								reject( `${ __( 'Geocode was not successful for the following reason: ', 'carbon-fields-ui' ) } ${ status }` );
 							}
 						} );
 					} );

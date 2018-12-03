@@ -49,7 +49,7 @@ export default {
 
 		if ( ! comparer ) {
 			// eslint-disable-next-line no-console
-			console.error( sprintf( __( 'Unsupported container condition comparison operator used - "%1$s".', 'carbon-fields' ), [ operator ] ) );
+			console.error( sprintf( __( 'Unsupported container condition comparison operator used - "%1$s".', 'carbon-fields-ui' ), operator ) );
 
 			return false;
 		}

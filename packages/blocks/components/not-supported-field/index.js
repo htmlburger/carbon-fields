@@ -11,7 +11,7 @@ import { __, sprintf } from '@wordpress/i18n';
  */
 const NotSupportedField = ( { type } ) => (
 	<em>
-		{ sprintf( __( `Field of type '%s' is not supported in Gutenberg.`, 'carbon-fields' ), [ type ] ) }
+		{ sprintf( __( `Field of type '%s' is not supported in Gutenberg.`, 'carbon-fields-ui' ), [ type ] ) }
 	</em>
 );
 

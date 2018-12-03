@@ -27,6 +27,6 @@ export const renderContainer = ( container, context ) => {
 		);
 	} else {
 		// eslint-disable-next-line no-console
-		console.error( sprintf( __( 'Could not find DOM element for container "%1$s".', 'carbon-fields' ), [ container.id ] ) );
+		console.error( sprintf( __( 'Could not find DOM element for container "%1$s".', 'carbon-fields-ui' ), container.id ) );
 	}
 };

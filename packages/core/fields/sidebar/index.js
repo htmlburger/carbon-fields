@@ -108,7 +108,7 @@ function handler( props ) {
 		switch ( effect.type ) {
 			case 'ADD_SIDEBAR':
 				/* eslint-disable-next-line no-alert */
-				const name = trim( window.prompt( __( 'Please enter the name of the new sidebar:', 'carbon-fields' ) ) );
+				const name = trim( window.prompt( __( 'Please enter the name of the new sidebar:', 'carbon-fields-ui' ) ) );
 
 				if ( ! name ) {
 					return;
@@ -126,7 +126,7 @@ function handler( props ) {
 				}, null, 'json' );
 
 				/* eslint-disable-next-line no-alert */
-				const errorHandler = () => alert( __( 'An error occurred while trying to create the sidebar.', 'carbon-fields' ) );
+				const errorHandler = () => alert( __( 'An error occurred while trying to create the sidebar.', 'carbon-fields-ui' ) );
 
 				request.done( ( response ) => {
 					if ( response && response.success ) {

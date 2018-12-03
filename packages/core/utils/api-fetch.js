@@ -16,7 +16,7 @@ export default ( url, method, data = null ) => {
 		} );
 
 		request.fail( () => {
-			reject( __( 'An error occured.', 'carbon-fields' ) );
+			reject( __( 'An error occured.', 'carbon-fields-ui' ) );
 		} );
 	} );
 };

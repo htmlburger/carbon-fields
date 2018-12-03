@@ -18,7 +18,7 @@ export default ( attachments ) => {
 		} );
 
 		request.fail( () => {
-			reject( __( 'An error occurred while trying to fetch files data.', 'carbon-fields' ) );
+			reject( __( 'An error occurred while trying to fetch files data.', 'carbon-fields-ui' ) );
 		} );
 	} );
 };

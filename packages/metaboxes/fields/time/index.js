@@ -4,4 +4,4 @@
 import { addFilter } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 
-addFilter( 'carbon-fields.time.metabox', 'carbon-fields/metaboxes', ( OriginalDatetimeField ) => ( props ) => ( <OriginalDatetimeField buttonText={ __( 'Select Time', 'carbon-fields' ) } { ...props } /> ) );
+addFilter( 'carbon-fields.time.metabox', 'carbon-fields/metaboxes', ( OriginalDatetimeField ) => ( props ) => ( <OriginalDatetimeField buttonText={ __( 'Select Time', 'carbon-fields-ui' ) } { ...props } /> ) );

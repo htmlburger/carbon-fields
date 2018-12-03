@@ -11,7 +11,7 @@ import { __ } from '@wordpress/i18n';
  */
 const NoOptions = () => (
 	<em>
-		{ __( 'No options.', 'carbon-fields' ) }
+		{ __( 'No options.', 'carbon-fields-ui' ) }
 	</em>
 );
 

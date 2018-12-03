@@ -37,17 +37,21 @@ export function createRegistry( domain, supportedContexts ) {
 	 */
 	function registerType( type, component ) {
 		if ( ! isString( type ) ) {
-			console.error( sprintf( __( '%1$s type must be a string.', 'carbon-fields' ), [ domainStartCased ] ) );
+			console.error( sprintf( __( '%1$s type must be a string.', 'carbon-fields-ui' ), domainStartCased ) );
 			return false;
 		}
 
 		if ( types[ type ] ) {
-			console.error( sprintf( __( '%1$s %2$s is already registered.', 'carbon-fields' ), [ domainStartCased, type ] ) );
+			console.error( sprintf(
+				__( '%1$s %2$s is already registered.', 'carbon-fields-ui' ),
+				domainStartCased,
+				type
+			) );
 			return false;
 		}
 
 		if ( ! component || ! isFunction( component ) ) {
-			console.error( __( 'The "component" param must be a function.', 'carbon-fields' ) );
+			console.error( __( 'The "component" param must be a function.', 'carbon-fields-ui' ) );
 			return false;
 		}
 

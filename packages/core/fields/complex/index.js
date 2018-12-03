@@ -72,13 +72,12 @@ class ComplexField extends Component {
 	/**
 	 * Returns the text used in "Add Entry" button.
 	 *
-	 * TODO: Switch to @wordpress/i18n
 	 * @return {string}
 	 */
 	get inserterButtonText() {
 		const { field } = this.props;
 
-		return sprintf( _x( 'Add %s', 'Complex field', 'carbon-fields' ), [ field.labels.singular_name ] );
+		return sprintf( _x( 'Add %s', 'Complex field', 'carbon-fields-ui' ), field.labels.singular_name );
 	}
 
 	/**
@@ -346,13 +345,17 @@ addFilter( 'carbon-fields.complex.validate', 'carbon-fields/core', ( field, valu
 	} = field;
 
 	if ( required && isEmpty( value ) ) {
-		return __( 'This field is required. ', 'carbon-fields' );
+		return __( 'This field is required. ', 'carbon-fields-ui' );
 	}
 
 	if ( min > 0 && value.length < min ) {
 		const label = min === 1 ? labels.singular_name : labels.plural_name;
 
-		return sprintf( __( 'Minimum number of rows not reached (%1$s %2$s)', 'carbon-fields' ), [ min, label.toLowerCase() ] );
+		return sprintf(
+			__( 'Minimum number of rows not reached (%1$d %2$s)', 'carbon-fields-ui' ),
+			Number( min ),
+			label.toLowerCase()
+		);
 	}
 
 	return null;

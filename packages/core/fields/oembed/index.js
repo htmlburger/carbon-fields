@@ -186,7 +186,7 @@ function handler( props ) {
 				} );
 
 				/* eslint-disable-next-line no-alert */
-				const errorHandler = () => alert( __( 'An error occurred while trying to fetch oembed preview.', 'carbon-fields' ) );
+				const errorHandler = () => alert( __( 'An error occurred while trying to fetch oembed preview.', 'carbon-fields-ui' ) );
 
 				request.done( ( response ) => {
 					props.setState( {
@@ -197,11 +197,11 @@ function handler( props ) {
 					} );
 				} );
 
-				request.fail( () => {
+				request.done( () => {
 					errorHandler();
 
 					props.setState( {
-						error: _x( 'Not Found', 'oEmbed field', 'carbon-fields' ),
+						error: _x( 'Not Found', 'oEmbed field', 'carbon-fields-ui' ),
 						isLoading: false
 					} );
 				} );

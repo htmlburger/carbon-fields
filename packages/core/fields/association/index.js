@@ -204,7 +204,11 @@ class AssociationField extends Component {
 					/>
 
 					<span className="cf-association__counter">
-						{ sprintf( __( 'Showing %1$s of %2$s results', 'carbon-fields' ), [ options.length, totalOptionsCount ] ) }
+						{ sprintf(
+							__( 'Showing %1$d of %2$d results', 'carbon-fields-ui' ),
+							Number( options.length ),
+							Number( totalOptionsCount )
+						) }
 					</span>
 				</div>
 
@@ -233,7 +237,7 @@ class AssociationField extends Component {
 
 											{ (
 												! option.disabled
-												&& value.length < field.max
+												&& ( field.max < 0 || value.length < field.max )
 											) && (
 												<button type="button" className="cf-association__option-action dashicons dashicons-plus-alt" onClick={ () => this.handleAddItem( option ) }>
 												</button>
@@ -375,7 +379,7 @@ function handler( props ) {
 				}, null, 'json' );
 
 				/* eslint-disable-next-line no-alert */
-				const errorHandler = () => alert( __( 'An error occurred while trying to fetch association options.', 'carbon-fields' ) );
+				const errorHandler = () => alert( __( 'An error occurred while trying to fetch association options.', 'carbon-fields-ui' ) );
 
 				request.done( ( response ) => {
 					if ( response && response.success ) {
@@ -417,11 +421,11 @@ addFilter( 'carbon-fields.association.validate', 'carbon-fields/core', ( field, 
 	const { min, required } = field;
 
 	if ( required && isEmpty( value ) ) {
-		return __( 'This field is required. ', 'carbon-fields' );
+		return __( 'This field is required. ', 'carbon-fields-ui' );
 	}
 
 	if ( min > 0 && value.length < min ) {
-		return sprintf( __( 'Minimum number of items not reached (%s items)', 'carbon-fields' ), [ field.min ] );
+		return sprintf( __( 'Minimum number of items not reached (%s items)', 'carbon-fields-ui' ), [ field.min ] );
 	}
 
 	return null;

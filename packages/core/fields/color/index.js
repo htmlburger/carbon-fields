@@ -83,7 +83,7 @@ class ColorField extends Component {
 					<span className="cf-color__preview" style={ { backgroundColor: this.getBackgrounColor() } }></span>
 
 					<span className="cf-color__toggle-text">
-						{ __( 'Select a color', 'carbon-fields' ) }
+						{ __( 'Select a color', 'carbon-fields-ui' ) }
 					</span>
 				</button>
 
