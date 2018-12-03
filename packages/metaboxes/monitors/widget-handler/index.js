@@ -5,26 +5,19 @@ import { compose } from '@wordpress/compose';
 import { dispatch, select } from '@wordpress/data';
 import { unmountComponentAtNode } from '@wordpress/element';
 import { withEffects } from 'refract-callbag';
-import { merge } from 'callbag-basics';
-import { map, isString, startsWith } from 'lodash';
+import { map, merge, pipe } from 'callbag-basics';
 
 /**
  * Internal dependencies.
  */
-import fromWidgetEvent from '../../utils/from-widget-event';
-import fromAjaxEvent from '../../utils/from-ajax-event';
 import urldecode from '../../utils/urldecode';
 import flattenField from '../../utils/flatten-field';
 import { renderContainer } from '../../containers/helpers';
-import { PAGE_NOW_CUSTOMIZE } from '../../lib/constants';
-
-const ID_PREFIX = 'carbon_fields_container_';
-const carbonWidgetIdPrefix = 'carbon_fields_';
-
-/**
- * Track the widgets that are being added.
- */
-const widgetsToAdd = new Set();
+import { CARBON_FIELDS_CONTAINER_ID_PREFIX, PAGE_NOW_CUSTOMIZE } from '../../lib/constants';
+import {
+	fromCreatedUpdatedWidgetEvent,
+	fromDeleteWidgetEvent
+} from '../../utils/widget-events';
 
 const getWidgetId = ( widget ) => {
 	return window.jQuery( widget )
@@ -33,7 +26,7 @@ const getWidgetId = ( widget ) => {
 };
 
 const widgetIdToContainerId = ( widgetId ) => {
-	return ID_PREFIX + widgetId;
+	return CARBON_FIELDS_CONTAINER_ID_PREFIX + widgetId;
 };
 
 /**
@@ -54,21 +47,21 @@ function WidgetHandler() {
 function aperture() {
 	return function() {
 		return merge(
-			// pipe(
-			fromWidgetEvent(),
-			// 		map( ( payload ) => ( {
-			// 			type: 'CREATED_WIDGET',
-			// 			payload
-			// 		} ) )
-			// 	),
+			pipe(
+				fromCreatedUpdatedWidgetEvent(),
+				map( ( payload ) => ( {
+					type: 'CREATED_UPDATED_WIDGET',
+					payload
+				} ) )
+			),
 
-			// 	pipe(
-			fromAjaxEvent( 'ajaxSend', 'save-widget' ),
-			// 		map( ( payload ) => ( {
-			// 			type: 'DELETED_WIDGET',
-			// 			payload
-			// 		} ) )
-			// 	)
+			pipe(
+				fromDeleteWidgetEvent(),
+				map( ( payload ) => ( {
+					type: 'DELETED_WIDGET',
+					payload
+				} ) )
+			)
 		);
 	};
 }
@@ -80,7 +73,7 @@ function aperture() {
  */
 function handler() {
 	return function( effect ) {
-		const { event } = effect;
+		const { type } = effect;
 		const { getContainerById } = select( 'carbon-fields/metaboxes' );
 		const {
 			addContainer,
@@ -89,44 +82,34 @@ function handler() {
 			removeFields
 		} = dispatch( 'carbon-fields/metaboxes' );
 
-		let widgetId, container;
+		switch ( type ) {
+			case 'CREATED_UPDATED_WIDGET': {
+				const { $widgetContainer } = effect.payload;
 
-		switch ( event.type ) {
-			case 'widget-updated':
-			case 'widget-added':
-				// handle create / update widget
-				const { widget } = effect;
-
-				if ( ! widget ) {
-					return;
-				}
-
-				container = window.jQuery( widget )
+				let containerData = $widgetContainer
 					.find( '[data-json]' )
 					.data( 'json' );
 
-				if ( ! container ) {
+				if ( ! containerData ) {
 					return;
 				}
 
-				widgetId = getWidgetId( widget );
-
-				if ( event.type === 'widget-before-added' ) {
-					widgetsToAdd.add( widgetId );
-				}
+				const widgetId = getWidgetId( $widgetContainer );
 
 				const fields = [];
 
-				container = urldecode( container );
-				container = JSON.parse( container );
+				containerData = urldecode( containerData );
+				containerData = JSON.parse( containerData );
+
+				const container = containerData;
 
 				let oldFieldIds;
 
 				if ( event.type === 'widget-updated' ) {
-					oldFieldIds = map( getContainerById( container.id ).fields, 'id' );
+					oldFieldIds = _.map( getContainerById( container.id ).fields, 'id' );
 				}
 
-				container.fields = map( container.fields, ( field ) => flattenField( field, container, fields ) );
+				container.fields = _.map( container.fields, ( field ) => flattenField( field, container, fields ) );
 
 				addFields( fields );
 				addContainer( container );
@@ -147,7 +130,7 @@ function handler() {
 				const pagenow = 'todo';
 
 				if ( pagenow === PAGE_NOW_CUSTOMIZE && event.type === 'widget-added' ) {
-					window.jQuery( widget )
+					window.jQuery( $widgetContainer )
 						.find( '[name="savewidget"]' )
 						.off( 'click' )
 						.show()
@@ -163,38 +146,27 @@ function handler() {
 				}
 
 				break;
+			}
 
-			// handle delete widget
-			case 'ajaxSend':
-				if ( isString( effect.settings ) || effect.settings.data.indexOf( 'delete_widget=1' ) === -1 ) {
-					return;
-				}
-
-				const { data } = effect.settings;
-				widgetId = data.match( /widget-id=(.+?)\&/ )[ 1 ];
+			case 'DELETED_WIDGET': {
+				const { widgetId } = effect.payload;
 				const containerId = widgetIdToContainerId( widgetId );
 
-				// Don't care about other widgets.
-				if ( ! startsWith( widgetId, carbonWidgetIdPrefix ) ) {
-					return;
-				}
-
 				// Get the container from the store.
-				container = getContainerById( containerId );
+				const container = getContainerById( containerId );
 
 				// Remove the current instance from DOM.
 				unmountComponentAtNode( document.querySelector( `.container-${ containerId }` ) );
 
 				// Get the fields that belongs to the container.
-				const fieldsIds = map( container.fields, 'id' );
+				const fieldsIds = _.map( container.fields, 'id' );
 
 				// Remove everything from the store.
-				setTimeout( () => {
-					removeContainer( containerId );
-					removeFields( fieldsIds );
-				}, 1 );
+				removeContainer( containerId );
+				removeFields( fieldsIds );
 
 				break;
+			}
 		}
 	};
 }

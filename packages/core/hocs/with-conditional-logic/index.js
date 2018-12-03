@@ -4,7 +4,7 @@
  * External dependencies.
  */
 import { createHigherOrderComponent, compose } from '@wordpress/compose';
-import { withDispatch } from '@wordpress/data';
+import { withDispatch, withSelect } from '@wordpress/data';
 import { withEffects } from 'refract-callbag';
 import {
 	has,
@@ -99,6 +99,9 @@ export default function withConditionalLogic( input, output ) {
 					hideField
 				};
 			} ),
+			withSelect( ( select, props ) => ( {
+				visible: select( 'carbon-fields/core' ).isFieldVisible( props.id )
+			} ) ),
 			withEffects( handler )( aperture )
 		)( OriginalComponent );
 	}, 'withConditionalLogic' );

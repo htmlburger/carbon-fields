@@ -66,7 +66,7 @@ export function createRegistry( domain, supportedContexts ) {
 	}
 
 	/**
-	 * Returns a registered field type.
+	 * Returns a registered type.
 	 *
 	 * @param  {string} type
 	 * @param  {string} context

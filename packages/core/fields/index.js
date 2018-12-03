@@ -7,7 +7,7 @@ import { addFilter } from '@wordpress/hooks';
 /**
  * Internal dependencies.
  */
-import withFilters from '../utils/with-filters';
+import withFilters from '../hocs/with-filters';
 import { registerFieldType } from '../registry/fields';
 import AssociationField from './association';
 import CheckboxField from './checkbox';

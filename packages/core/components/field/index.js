@@ -10,7 +10,8 @@ import { kebabCase } from 'lodash';
  * Internal dependencies.
  */
 import './style.scss';
-import withFilters from '../../utils/with-filters';
+import Disabled from '../../components/disabled';
+import withFilters from '../../hocs/with-filters';
 
 /**
  * Renders the base wrapper of the field.
@@ -63,9 +64,17 @@ function Field( {
 				) }
 			</div>
 
-			<div className="cf-field__body">
-				{ children }
-			</div>
+			{ ! hidden && (
+				<div className="cf-field__body">
+					{ children }
+				</div>
+			) }
+
+			{ hidden && (
+				<Disabled className="cf-field__body">
+					{ children }
+				</Disabled>
+			) }
 
 			{ field.help_text && (
 				<em className="cf-field__help" dangerouslySetInnerHTML={ { __html: field.help_text } }></em>

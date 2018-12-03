@@ -3,17 +3,24 @@
  */
 import dropUntil from 'callbag-drop-until';
 import distinctUntilChanged from 'callbag-distinct-until-changed';
-import { applyFilters } from '@wordpress/hooks';
+import { hasFilter, applyFilters } from '@wordpress/hooks';
 import { compose } from '@wordpress/compose';
-import { withDispatch, withSelect } from '@wordpress/data';
+import { withDispatch } from '@wordpress/data';
 import { withEffects } from 'refract-callbag';
+import { debounce } from 'callbag-debounce';
 import {
 	map,
 	merge,
+	filter,
 	combine,
 	pipe,
 	take
 } from 'callbag-basics';
+
+/**
+ * Internal dependencies.
+ */
+import required from './required';
 
 /**
  * The function that controls the stream of side-effects.
@@ -30,10 +37,12 @@ function aperture( props ) {
 		const mount$ = component.mount;
 		const unmount$ = component.unmount;
 		const value$ = component.observe( 'value' );
+		const visible$ = component.observe( 'visible' );
 
 		return merge(
 			pipe(
-				combine( value$, mount$ ),
+				combine( value$, visible$, mount$ ),
+				filter( ( [ , visible ] ) => visible ),
 				take( 1 ),
 				map( ( [ value ] ) => ( {
 					type: 'VALIDATE',
@@ -48,6 +57,7 @@ function aperture( props ) {
 				value$,
 				dropUntil( mount$ ),
 				distinctUntilChanged(),
+				debounce( 250 ),
 				map( ( value ) => ( {
 					type: 'VALIDATE',
 					payload: {
@@ -78,42 +88,41 @@ function handler( props ) {
 		const {
 			id,
 			field,
-			lockPostSaving,
-			unlockPostSaving,
-			setValidationError,
-			clearValidationError
+			markAsInvalid,
+			markAsValid,
+			lockSaving,
+			unlockSaving
 		} = props;
 
 		switch ( effect.type ) {
 			case 'VALIDATE':
 				const { value, transient } = effect.payload;
 
-				const error = applyFilters(
-					`carbon-fields.${ field.type }.validate`,
-					field,
-					value
-				);
+				const hook = `carbon-fields.${ field.type }.validate`;
+				const error = hasFilter( hook )
+					? applyFilters( hook, field, value )
+					: required( value );
 
 				if ( error ) {
-					lockPostSaving( id );
-
 					if ( ! transient ) {
-						setValidationError( id, error );
+						markAsInvalid( id, error );
 					}
+
+					lockSaving( id );
 				} else {
-					unlockPostSaving( id );
-
 					if ( ! transient ) {
-						clearValidationError( id );
+						markAsValid( id );
 					}
+
+					unlockSaving( id );
 				}
 
 				break;
 
 			case 'RESET':
-				unlockPostSaving( id );
+				markAsValid( id );
 
-				clearValidationError( id );
+				unlockSaving( id );
 
 				break;
 		}
@@ -122,24 +131,16 @@ function handler( props ) {
 
 const applyWithEffects = withEffects( handler )( aperture );
 
-const applyWithSelect = withSelect( ( select, props ) => ( {
-	error: select( 'carbon-fields/blocks' ).getValidationErrorByFieldId( props.id )
-} ) );
-
 const applyWithDispatch = withDispatch( ( dispatch ) => {
-	const { lockPostSaving, unlockPostSaving } = dispatch( 'core/editor' );
-	const { setValidationError, clearValidationError } = dispatch( 'carbon-fields/blocks' );
+	const { markAsValid, markAsInvalid } = dispatch( 'carbon-fields/core' );
 
 	return {
-		lockPostSaving,
-		unlockPostSaving,
-		setValidationError,
-		clearValidationError
+		markAsValid,
+		markAsInvalid
 	};
 } );
 
 export default compose(
-	applyWithSelect,
 	applyWithDispatch,
 	applyWithEffects
 );

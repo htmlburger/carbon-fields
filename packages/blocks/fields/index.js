@@ -19,6 +19,7 @@ import withConditionalLogic from '../hocs/with-conditional-logic';
  * Connects every field to the store.
  */
 addFilter( 'carbon-fields.field-edit.block', 'carbon-fields/blocks', compose(
+	withConditionalLogic,
 	withDispatch( ( dispatch ) => {
 		const { lockPostSaving, unlockPostSaving } = dispatch( 'core/editor' );
 
@@ -27,8 +28,7 @@ addFilter( 'carbon-fields.field-edit.block', 'carbon-fields/blocks', compose(
 			unlockSaving: unlockPostSaving
 		};
 	} ),
-	withValidation,
-	withConditionalLogic
+	withValidation
 ) );
 
 /**

@@ -2139,6 +2139,11 @@ callbag-create@^1.1.1:
   resolved "https://registry.yarnpkg.com/callbag-create/-/callbag-create-1.1.1.tgz#328719f7d10f105846d83d2ca9e45c996093f7f2"
   integrity sha512-9j1aiW7wlGwB/GXjnlRaqrikhB3zuatdl0YE1x6dZFN/HSuYcbo9u9LmtiB684+jlpfzzUssDJm4slztHCyXcA==
 
+callbag-debounce@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/callbag-debounce/-/callbag-debounce-2.1.2.tgz#f272bd08b4dca2b40f429761f30b99a3d27033d5"
+  integrity sha512-whFjt0TcPKKw3jEfdBvFXioySMmErDHgmrvQxcefu0JSFPonJFJbNRyz62hczxzxFaCe1Kk6oVvqK9DJybxQLg==
+
 callbag-distinct-until-changed@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/callbag-distinct-until-changed/-/callbag-distinct-until-changed-1.0.0.tgz#8fc772e8bf8fbd0a2bb645ab34707fecf53d0506"
