@@ -22,6 +22,7 @@ import isGutenberg from '../utils/is-gutenberg';
  */
 addFilter( 'carbon-fields.field-edit.metabox', 'carbon-fields/metaboxes', compose(
 	withField,
+	withConditionalLogic,
 	withDispatch( ( dispatch ) => {
 		if ( isGutenberg() ) {
 			const { lockPostSaving, unlockPostSaving } = dispatch( 'core/editor' );
@@ -39,8 +40,7 @@ addFilter( 'carbon-fields.field-edit.metabox', 'carbon-fields/metaboxes', compos
 			unlockSaving
 		};
 	} ),
-	withValidation,
-	withConditionalLogic
+	withValidation
 ) );
 
 import './style.scss';

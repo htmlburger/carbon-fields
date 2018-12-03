@@ -7,9 +7,11 @@ import { hasFilter, applyFilters } from '@wordpress/hooks';
 import { compose } from '@wordpress/compose';
 import { withDispatch } from '@wordpress/data';
 import { withEffects } from 'refract-callbag';
+import { debounce } from 'callbag-debounce';
 import {
 	map,
 	merge,
+	filter,
 	combine,
 	pipe,
 	take
@@ -35,10 +37,12 @@ function aperture( props ) {
 		const mount$ = component.mount;
 		const unmount$ = component.unmount;
 		const value$ = component.observe( 'value' );
+		const visible$ = component.observe( 'visible' );
 
 		return merge(
 			pipe(
-				combine( value$, mount$ ),
+				combine( value$, visible$, mount$ ),
+				filter( ( [ , visible ] ) => visible ),
 				take( 1 ),
 				map( ( [ value ] ) => ( {
 					type: 'VALIDATE',
@@ -53,6 +57,7 @@ function aperture( props ) {
 				value$,
 				dropUntil( mount$ ),
 				distinctUntilChanged(),
+				debounce( 250 ),
 				map( ( value ) => ( {
 					type: 'VALIDATE',
 					payload: {

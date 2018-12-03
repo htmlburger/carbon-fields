@@ -3,6 +3,7 @@
  */
 import of from 'callbag-of';
 import distinctUntilChanged from 'callbag-distinct-until-changed';
+import { debounce } from 'callbag-debounce';
 import { pipe, merge } from 'callbag-basics';
 import { select } from '@wordpress/data';
 import {
@@ -67,6 +68,8 @@ function input( props ) {
 
 			fromSelector( getFieldsByContainerId, props.field.container_id )
 		),
+
+		debounce( 250 ),
 
 		distinctUntilChanged( isEqual )
 	);
