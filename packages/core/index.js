@@ -1,4 +1,9 @@
 /**
+ * The external dependencies.
+ */
+import { setLocaleData } from '@wordpress/i18n';
+
+/**
  * Exposes the public interface.
  */
 export * from './registry/base';
@@ -16,3 +21,8 @@ export { default as withConditionalLogic } from './hocs/with-conditional-logic';
  */
 import './store';
 import './fields';
+
+/**
+ * Sets the locale data for the package type
+ */
+setLocaleData( window.cf.locale, 'carbon-fields-ui' );

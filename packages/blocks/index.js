@@ -6,6 +6,7 @@
 import { get, kebabCase } from 'lodash';
 import { dispatch } from '@wordpress/data';
 import { registerBlockType } from '@wordpress/blocks';
+import { setLocaleData } from '@wordpress/i18n';
 
 /**
  * Internal dependencies.
@@ -15,6 +16,11 @@ import './store';
 import BlockEdit from './components/block-edit';
 import BlockSave from './components/block-save';
 import transformFieldsToAttributes from './utils/transform-fields-to-attributes';
+
+/**
+ * Sets the locale data for the package type
+ */
+setLocaleData( window.cf.locale, 'carbon-fields-ui' );
 
 /**
  * Register the blocks.

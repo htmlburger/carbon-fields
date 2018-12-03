@@ -5,6 +5,7 @@
  */
 import { values } from 'lodash';
 import { select } from '@wordpress/data';
+import { setLocaleData } from '@wordpress/i18n';
 
 /**
  * Internal dependencies.
@@ -19,6 +20,11 @@ import { renderContainer } from './containers/helpers';
 import './store';
 import './fields';
 import './containers';
+
+/**
+ * Sets the locale data for the package type
+ */
+setLocaleData( window.cf.locale, 'carbon-fields-ui' );
 
 /**
  * Determines the rendering context.

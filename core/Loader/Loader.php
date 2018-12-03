@@ -41,6 +41,7 @@ class Loader {
 		include_once( \Carbon_Fields\DIR . '/core/functions.php' );
 
 		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
+		// add_action( 'admin_enqueue_scripts', array( $this, 'load_ui_textdomain' ), 10000 );
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
 		add_action( 'carbon_fields_fields_registered', array( $this, 'initialize_containers' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_media_browser' ), 0 );
@@ -69,9 +70,37 @@ class Loader {
 	public function load_textdomain() {
 		$dir = \Carbon_Fields\DIR . '/languages/';
 		$domain = 'carbon-fields';
+		$domain_ui = 'carbon-fields-ui';
 		$locale = get_locale();
 		$path = $dir . $domain . '-' . $locale . '.mo';
+		$path_ui = $dir . $domain_ui . '-' . $locale . '.mo';
 		load_textdomain( $domain, $path );
+		load_textdomain( $domain_ui, $path_ui );
+	}
+
+	/**
+	 * Load the ui textdomain
+	 */
+	public function load_ui_textdomain() {
+		$domain ='carbon-fields-ui';
+		$translations = get_translations_for_domain( $domain );
+
+		$locale = array(
+			'' => array(
+				'domain' => $domain,
+				'lang'   => is_admin() ? get_user_locale() : get_locale(),
+			),
+		);
+
+		if ( ! empty( $translations->headers['Plural-Forms'] ) ) {
+			$locale['']['plural_forms'] = $translations->headers['Plural-Forms'];
+		}
+
+		foreach ( $translations->entries as $msgid => $entry ) {
+			$locale[ $msgid ] = $entry->translations;
+		}
+
+		return $locale;
 	}
 
 	/**
@@ -126,90 +155,17 @@ class Loader {
 			wp_enqueue_script( 'carbon-fields-blocks', \Carbon_Fields\URL . '/build/' . $context . '/blocks' . $suffix . '.js', array( 'carbon-fields-vendor' ), \Carbon_Fields\VERSION );
 		}
 
+
 		// wp_enqueue_style( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.css', array(), \Carbon_Fields\VERSION );
 
 		// wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/assets/dist/carbon.vendor' . $suffix . '.js', array( 'jquery' ), \Carbon_Fields\VERSION );
 		// wp_enqueue_script( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.core' . $suffix . '.js', array( 'carbon-fields-vendor', 'quicktags', 'editor' ), \Carbon_Fields\VERSION );
 		// wp_enqueue_script( 'carbon-fields-boot', \Carbon_Fields\URL . '/assets/dist/carbon.boot' . $suffix . '.js', array( 'carbon-fields-core' ), \Carbon_Fields\VERSION );
 
-		wp_localize_script( 'carbon-fields-vendor', 'carbonFieldsConfig', apply_filters( 'carbon_fields_config', array(
-			'compactInput' => \Carbon_Fields\COMPACT_INPUT,
-			'compactInputKey' => \Carbon_Fields\COMPACT_INPUT_KEY,
+		wp_localize_script( 'carbon-fields-vendor', 'cf', apply_filters( 'carbon_fields_config', array(
+			'locale' => $this->load_ui_textdomain(),
 		) ) );
-		wp_localize_script( 'carbon-fields-vendor', 'carbonFieldsL10n', apply_filters( 'carbon_fields_l10n', array(
-			'locale' => $locale,
-			'shortLocale' => $short_locale,
 
-			'container' => array(
-				'pleaseFillTheRequiredFields' => __( 'Please fill out all required fields highlighted below.', 'carbon-fields' ),
-				'changesMadeSaveAlert' => __( 'The changes you made will be lost if you navigate away from this page.', 'carbon-fields' ),
-			),
-
-			'field' => array(
-				'geocodeZeroResults' => __( 'The address could not be found. ', 'carbon-fields' ),
-				'geocodeNotSuccessful' => __( 'Geocode was not successful for the following reason: ', 'carbon-fields' ),
-				'mapLocateAddress' => __( 'Locate address on the map:', 'carbon-fields' ),
-				'minNumItemsNotReached' => __( 'Minimum number of items not reached (%s items)', 'carbon-fields' ),
-				'maxNumItemsReached' => __( 'Maximum number of items reached (%s items)', 'carbon-fields' ),
-
-				'complexNoRows' => __( 'There are no %s yet. Click <a href="#">here</a> to add one.', 'carbon-fields' ),
-				'complexMinNumRowsNotReached' => __( 'Minimum number of rows not reached (%1$d %2$s)', 'carbon-fields' ),
-				'complexMaxNumRowsExceeded' => __( 'Maximum number of rows exceeded (%1$d %2$s)', 'carbon-fields' ),
-				'complexAddButton' => _x( 'Add %s', 'Complex field', 'carbon-fields' ),
-				'complexCloneButton' => _x( 'Clone', 'Complex field', 'carbon-fields' ),
-				'complexRemoveButton' => _x( 'Remove', 'Complex field', 'carbon-fields' ),
-				'complexCollapseExpandButton' => _x( 'Collapse/Expand', 'Complex field', 'carbon-fields' ),
-				'complexCollapseAllButton' => _x( 'Collapse All', 'Complex field groups', 'carbon-fields' ),
-				'complexExpandAllButton' => _x( 'Expand All', 'Complex field groups', 'carbon-fields' ),
-
-				'messageFormValidationFailed' => __( 'Please fill out all fields correctly. ', 'carbon-fields' ),
-				'messageRequiredField' => __( 'This field is required. ', 'carbon-fields' ),
-				'messageChooseOption' => __( 'Please choose an option. ', 'carbon-fields' ),
-
-				'enterNameOfNewSidebar' => __( 'Please enter the name of the new sidebar:', 'carbon-fields' ),
-
-				'selectTime' => __( 'Select Time', 'carbon-fields' ),
-				'selectDate' => __( 'Select Date', 'carbon-fields' ),
-
-				'associationSelectedItem' => __( '%1$d selected item', 'carbon-fields' ),
-				'associationSelectedItems' => __( '%1$d selected items', 'carbon-fields' ),
-				'associationSelectedItemOutOf' => __( '%1$d selected item out of %2$d', 'carbon-fields' ),
-				'associationSelectedItemsOutOf' => __( '%1$d selected items out of %2$d', 'carbon-fields' ),
-
-				'colorSelectColor' => __( 'Select a color', 'carbon-fields' ),
-
-				'noOptions' => __( 'No options.', 'carbon-fields' ),
-
-				'setShowAll' => __( 'Show all options', 'carbon-fields' ),
-
-				'searchPlaceholder' => __( 'Search...', 'carbon-fields' ),
-
-				'editAttachmentUrl' => _x( 'URL', 'WordPress media attachment', 'carbon-fields' ),
-				'editAttachmentTitle' => _x( 'Title', 'WordPress media attachment', 'carbon-fields' ),
-				'editAttachmentArtist' => _x( 'Artist', 'WordPress media attachment', 'carbon-fields' ),
-				'editAttachmentAlbum' => _x( 'Album', 'WordPress media attachment', 'carbon-fields' ),
-				'editAttachmentCaption' => _x( 'Caption', 'WordPress media attachment', 'carbon-fields' ),
-				'editAttachmentAlt' => _x( 'Alt Text', 'WordPress media attachment', 'carbon-fields' ),
-				'editAttachmentDescription' => _x( 'Description', 'WordPress media attachment', 'carbon-fields' ),
-				'editAttachmentClose' => _x( 'Close', 'WordPress media attachment', 'carbon-fields' ),
-				'editAttachmentSave' => _x( 'Save', 'WordPress media attachment', 'carbon-fields' ),
-
-				'oembedNotFound' => _x( 'Not Found', 'oEmbed field', 'carbon-fields' ),
-
-				'mediaGalleryNoFiles' => __( 'No files selected.', 'carbon-fields' ),
-				'mediaGalleryButtonLabel' => __( 'Add File', 'carbon-fields' ),
-				'mediaGalleryBrowserTitle' => _x( 'Files', 'WordPress Media Browser', 'carbon-fields' ),
-				'mediaGalleryBrowserButtonLabel' => _x( 'Select File', 'WordPress Media Browser', 'carbon-fields' ),
-
-				'fileButtonLabel' => __( 'Select File', 'carbon-fields' ),
-				'fileBrowserTitle' => _x( 'Files', 'WordPress Media Browser', 'carbon-fields' ),
-				'fileBrowserButtonLabel' => _x( 'Select File', 'WordPress Media Browser', 'carbon-fields' ),
-
-				'imageButtonLabel' => __( 'Select Image', 'carbon-fields' ),
-				'imageBrowserTitle' => _x( 'Images', 'WordPress Media Browser', 'carbon-fields' ),
-				'imageBrowserButtonLabel' => _x( 'Select Image', 'WordPress Media Browser', 'carbon-fields' ),
-			),
-		) ) );
 	}
 
 	/**
