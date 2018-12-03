@@ -5,32 +5,62 @@ import { Component } from '@wordpress/element';
 import Flatpickr from 'react-flatpickr';
 
 /**
- * The internal dependencies.
+ * Internal dependencies.
  */
 import './style.scss';
 
 class DateTimeField extends Component {
 	/**
-	 * Handles the intialization of the flatpickr component.
+	 * Keeps reference to the instance of Flatpickr.
 	 *
-	 * @param  {Object} selectedDateObject
-	 * @param  {string} selectedDateString
-	 * @param  {Object} instance
+	 * @type {Object}
+	 */
+	picker = null;
+
+	/**
+	 * Lifecycle hook.
+	 *
 	 * @return {void}
 	 */
-	handleReady = (
-		[ selectedDateObject ], // eslint-disable-line no-unused-vars
-		selectedDateString = '', // eslint-disable-line no-unused-vars
-		instance
-	) => {
-		this.props.field.picker = instance;
+	componentWillUnmount() {
+		this.picker = null;
 	}
 
 	/**
-	 * Handles the blur event of the date input element.
+	 * Handles the intialization of the flatpickr component.
+	 *
+	 * @param  {Date[]} selectedDates
+	 * @param  {string} selectedDateStr
+	 * @param  {Object} instance
+	 * @return {void}
+	 */
+	handleReady = ( selectedDates, selectedDateStr, instance ) => {
+		this.picker = instance;
+	}
+
+	/**
+	 * Handles the change.
+	 *
+	 * @param  {Date[]} selectedDates
+	 * @param  {string} selectedDateStr
+	 * @return {void}
+	 */
+	handleChange = ( selectedDates, selectedDateStr ) => {
+		const {
+			id,
+			onChange,
+			value
+		} = this.props;
+
+		if ( selectedDateStr !== value ) {
+			onChange( id, selectedDateStr );
+		}
+	}
+
+	/**
+	 * Handles manual input of dates.
 	 *
 	 * @param  {Object} e
-	 * @param  {string} id
 	 * @return {void}
 	 */
 	handleManualInput = ( e ) => {
@@ -46,39 +76,13 @@ class DateTimeField extends Component {
 	}
 
 	/**
-	 * Handles the blur event of the date input element.
+	 * Formats the date added manually.
 	 *
 	 * @param  {Object} e
 	 * @return {void}
 	 */
 	formatManualInput = ( e ) => {
-		const value = e.target.value;
-
-		this.props.field.picker.setDate( value, true );
-	}
-
-	/**
-	 * Handles the change of the flatpickr component.
-	 *
-	 * @param  {Object} selectedDateObject
-	 * @param  {string} selectedDateString
-	 * @param  {Object} instance
-	 * @return {void}
-	 */
-	handleChange = (
-		[ selectedDateObject ], // eslint-disable-line no-unused-vars
-		selectedDateString = '',
-		instance // eslint-disable-line no-unused-vars
-	) => {
-		const {
-			id,
-			onChange,
-			value
-		} = this.props;
-
-		if ( selectedDateString !== value ) {
-			onChange( id, selectedDateString );
-		}
+		this.picker.setDate( e.target.value, true );
 	}
 
 	/**
