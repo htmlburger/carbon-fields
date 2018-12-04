@@ -12,6 +12,7 @@ import { forEach } from 'lodash';
 import './hooks';
 import './widget';
 import './term-meta';
+import './theme-options';
 import Container from '../components/container';
 import { getContainerType, registerContainerType } from './registry';
 
