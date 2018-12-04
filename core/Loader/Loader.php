@@ -44,9 +44,7 @@ class Loader {
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
 		add_action( 'carbon_fields_fields_registered', array( $this, 'initialize_containers' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_media_browser' ), 0 );
-		add_action( 'admin_print_footer_scripts', array( $this, 'enqueue_scripts' ), 0 );
-		add_action( 'admin_print_footer_scripts', array( $this, 'print_json_data_script' ), 9 );
-		add_action( 'admin_print_footer_scripts', array( $this, 'print_bootstrap_js' ), 100 );
+		add_action( 'admin_print_footer_scripts', array( $this, 'enqueue_assets' ), 9 );
 		add_action( 'edit_form_after_title', array( $this, 'add_carbon_fields_meta_box_contexts' ) );
 		add_action( 'wp_ajax_carbon_fields_fetch_association_options', array( $this, 'fetch_association_options' ) );
 
@@ -133,35 +131,83 @@ class Loader {
 	}
 
 	/**
-	 * Initialize main scripts
+	 * Returns the rendering context for the assets.
+	 *
+	 * @return string
 	 */
-	public function enqueue_scripts() {
+	protected function get_assets_context() {
+		return wp_script_is( 'wp-element' ) ? 'gutenberg' : 'classic';
+	}
+
+	/**
+	 * Returns the suffix that should be applied to the assets.
+	 *
+	 * @return string
+	 */
+	protected function get_assets_suffix() {
+		return defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	}
+
+	/**
+	 * Registers and enqueues a style.
+	 *
+	 * @param  string $src
+	 * @param  array  $deps
+	 * @return void
+	 */
+	protected function enqueue_style( $src, $deps = array() ) {
+		$suffix = $this->get_assets_suffix();
+		$context = $this->get_assets_context();
+
+		wp_enqueue_style(
+			'carbon-fields-' . $src,
+			\Carbon_Fields\URL . '/build/' . $context . '/' . $src . $suffix . '.css',
+			$deps,
+			\Carbon_Fields\VERSION
+		);
+	}
+
+	/**
+	 * Registers and enqueues a script.
+	 *
+	 * @param  string $src
+	 * @param  array  $deps
+	 * @return void
+	 */
+	protected function enqueue_script( $src, $deps = array() ) {
+		$suffix = $this->get_assets_suffix();
+		$context = $this->get_assets_context();
+
+		wp_enqueue_script(
+			'carbon-fields-' . $src,
+			\Carbon_Fields\URL . '/build/' . $context . '/' . $src . $suffix . '.js',
+			$deps,
+			\Carbon_Fields\VERSION
+		);
+	}
+
+	/**
+	 * Enqueues the assets.
+	 *
+	 * @return void
+	 */
+	public function enqueue_assets() {
 		global $pagenow;
 
-		$locale = get_locale();
-		$short_locale = substr( $locale, 0, 2 );
-		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-		$context = wp_script_is( 'wp-element' ) ? 'gutenberg' : 'classic';
+		$this->enqueue_style( 'core' );
+		$this->enqueue_style( 'metaboxes' );
 
-		wp_enqueue_style( 'carbon-fields-core', \Carbon_Fields\URL . '/build/' . $context . '/core' . $suffix . '.css', array(), \Carbon_Fields\VERSION );
-		wp_enqueue_style( 'carbon-fields-metaboxes', \Carbon_Fields\URL . '/build/' . $context . '/metaboxes' . $suffix . '.css', array(), \Carbon_Fields\VERSION );
+		$this->enqueue_script( 'vendor', array( 'jquery' ) );
+		$this->enqueue_script( 'core', array( 'carbon-fields-vendor' ) );
+		$this->enqueue_script( 'metaboxes', array( 'carbon-fields-vendor', 'carbon-fields-core' ) );
 
-		wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/build/' . $context . '/vendor' . $suffix . '.js', array( 'jquery' ), \Carbon_Fields\VERSION );
-		wp_enqueue_script( 'carbon-fields-new-core', \Carbon_Fields\URL . '/build/' . $context . '/core' . $suffix . '.js', array(), \Carbon_Fields\VERSION );
-		wp_enqueue_script( 'carbon-fields-metaboxes', \Carbon_Fields\URL . '/build/' . $context . '/metaboxes' . $suffix . '.js', array(), \Carbon_Fields\VERSION );
-
-		if ( $context === 'gutenberg' ) {
-			wp_enqueue_style( 'carbon-fields-blocks-css', \Carbon_Fields\URL . '/build/' . $context . '/blocks' . $suffix . '.css', array(), \Carbon_Fields\VERSION );
-
-			wp_enqueue_script( 'carbon-fields-blocks', \Carbon_Fields\URL . '/build/' . $context . '/blocks' . $suffix . '.js', array( 'carbon-fields-vendor' ), \Carbon_Fields\VERSION );
+		if ( $this->get_assets_context() === 'gutenberg' ) {
+			$this->enqueue_style( 'blocks' );
+			$this->enqueue_script( 'blocks', array( 'carbon-fields-vendor', 'carbon-fields-core' ) );
 		}
 
-
-		// wp_enqueue_style( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.css', array(), \Carbon_Fields\VERSION );
-
-		// wp_enqueue_script( 'carbon-fields-vendor', \Carbon_Fields\URL . '/assets/dist/carbon.vendor' . $suffix . '.js', array( 'jquery' ), \Carbon_Fields\VERSION );
-		// wp_enqueue_script( 'carbon-fields-core', \Carbon_Fields\URL . '/assets/dist/carbon.core' . $suffix . '.js', array( 'carbon-fields-vendor', 'quicktags', 'editor' ), \Carbon_Fields\VERSION );
-		// wp_enqueue_script( 'carbon-fields-boot', \Carbon_Fields\URL . '/assets/dist/carbon.boot' . $suffix . '.js', array( 'carbon-fields-core' ), \Carbon_Fields\VERSION );
+		wp_add_inline_script( 'carbon-fields-vendor', 'window.cf = window.cf || {}', 'before' );
+		wp_add_inline_script( 'carbon-fields-vendor', sprintf( 'window.cf.preloaded = %s', wp_json_encode( $this->get_json_data() ) ), 'before' );
 
 		wp_localize_script( 'carbon-fields-vendor', 'cf', apply_filters( 'carbon_fields_config', array(
 			'config' => array(
@@ -174,7 +220,6 @@ class Loader {
 			'compactInput' => \Carbon_Fields\COMPACT_INPUT,
 			'compactInputKey' => \Carbon_Fields\COMPACT_INPUT_KEY,
 		) ) );
-
 	}
 
 	/**
@@ -214,34 +259,6 @@ class Loader {
 		$carbon_data['sidebars'] = Helper::get_active_sidebars();
 
 		return $carbon_data;
-	}
-
-	/**
-	 * Print the carbon JSON data script.
-	 */
-	public function print_json_data_script() {
-		wp_add_inline_script( 'carbon-fields-vendor', 'window.cf = window.cf || {}', 'before' );
-		wp_add_inline_script( 'carbon-fields-vendor', sprintf( 'window.cf.preloaded = %s', wp_json_encode( $this->get_json_data() ) ), 'before' );
-		?>
-<script type="text/javascript">
-<!--//--><![CDATA[//><!--
-var carbon_json = <?php echo wp_json_encode( $this->get_json_data() ); ?>;
-//--><!]]>
-</script>
-		<?php
-	}
-
-	/**
-	 * Print the bootstrap code for the fields.
-	 */
-	public function print_bootstrap_js() {
-		?>
-		<script type="text/javascript">
-			if (window['carbon.boot'] && typeof window['carbon.boot'].default === 'function') {
-				window['carbon.boot'].default();
-			}
-		</script>
-		<?php
 	}
 
 	/**
