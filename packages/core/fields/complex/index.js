@@ -7,11 +7,7 @@ import {
 	Fragment,
 	createRef
 } from '@wordpress/element';
-import {
-	__,
-	_x,
-	sprintf
-} from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import {
 	get,
 	find,
@@ -82,7 +78,7 @@ class ComplexField extends Component {
 	get inserterButtonText() {
 		const { field } = this.props;
 
-		return sprintf( _x( 'Add %s', 'Complex field', 'carbon-fields-ui' ), field.labels.singular_name );
+		return sprintf( __( 'Add %s', 'carbon-fields-ui' ), field.labels.singular_name );
 	}
 
 	/**

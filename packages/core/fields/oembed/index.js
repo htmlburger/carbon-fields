@@ -3,7 +3,7 @@
  */
 import { Component, createRef } from '@wordpress/element';
 import { compose, withState } from '@wordpress/compose';
-import { __, _x } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { withEffects, toProps } from 'refract-callbag';
 import {
 	map,
@@ -201,7 +201,7 @@ function handler( props ) {
 					errorHandler();
 
 					props.setState( {
-						error: _x( 'Not Found', 'oEmbed field', 'carbon-fields-ui' ),
+						error: __( 'Not Found', 'carbon-fields-ui' ),
 						isLoading: false
 					} );
 				} );

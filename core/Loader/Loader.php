@@ -78,7 +78,7 @@ class Loader {
 	/**
 	 * Load the ui textdomain
 	 */
-	public function load_ui_textdomain() {
+	public function get_ui_translations() {
 		$domain ='carbon-fields-ui';
 		$translations = get_translations_for_domain( $domain );
 
@@ -192,6 +192,8 @@ class Loader {
 	 * @return void
 	 */
 	public function enqueue_assets() {
+		global $pagenow;
+
 		$this->enqueue_style( 'core' );
 		$this->enqueue_style( 'metaboxes' );
 
@@ -208,7 +210,15 @@ class Loader {
 		wp_add_inline_script( 'carbon-fields-vendor', sprintf( 'window.cf.preloaded = %s', wp_json_encode( $this->get_json_data() ) ), 'before' );
 
 		wp_localize_script( 'carbon-fields-vendor', 'cf', apply_filters( 'carbon_fields_config', array(
-			'locale' => $this->load_ui_textdomain(),
+			'config' => array(
+				'locale' => $this->get_ui_translations(),
+				'pagenow' => $pagenow,
+			)
+		) ) );
+
+		wp_localize_script( 'carbon-fields-vendor', 'carbonFieldsConfig', apply_filters( 'carbon_fields_config', array(
+			'compactInput' => \Carbon_Fields\COMPACT_INPUT,
+			'compactInputKey' => \Carbon_Fields\COMPACT_INPUT_KEY,
 		) ) );
 	}
 
@@ -228,13 +238,10 @@ class Loader {
 	 * @return array $carbon_data
 	 */
 	public function get_json_data() {
-		global $pagenow;
-
 		$carbon_data = array(
 			'blocks' => array(),
 			'containers' => array(),
 			'sidebars' => array(),
-			'pagenow' => $pagenow,
 		);
 
 		$containers = $this->container_repository->get_active_containers();
