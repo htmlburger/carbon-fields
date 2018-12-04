@@ -161,11 +161,9 @@ msgid "Unsupported container condition relation used - \"%1$s\"."
 msgstr "Неподдържанна връзка на условия използвана на контейнер - \"%1$s\"."
 
 #: packages/core/fields/complex/index.js:81
-msgctxt "Complex field"
 msgid "Add %s"
 msgstr "Добави %s"
 
 #: packages/core/fields/oembed/index.js:204
-msgctxt "oEmbed field"
 msgid "Not Found"
 msgstr "Не беше намерен"

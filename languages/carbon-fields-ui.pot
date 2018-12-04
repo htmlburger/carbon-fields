@@ -160,11 +160,9 @@ msgid "Unsupported container condition relation used - \"%1$s\"."
 msgstr ""
 
 #: packages/core/fields/complex/index.js:80
-msgctxt "Complex field"
 msgid "Add %s"
 msgstr ""
 
 #: packages/core/fields/oembed/index.js:204
-msgctxt "oEmbed field"
 msgid "Not Found"
 msgstr ""
