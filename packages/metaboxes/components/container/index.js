@@ -2,7 +2,13 @@
  * External dependencies.
  */
 import cx from 'classnames';
-import { kebabCase } from 'lodash';
+import { Component } from '@wordpress/element';
+import {
+	map,
+	find,
+	kebabCase,
+	isPlainObject
+} from 'lodash';
 
 /**
  * Carbon Fields dependencies.
@@ -15,47 +21,150 @@ import { getFieldType } from '@carbon-fields/core';
 import './style.scss';
 import Field from '../field';
 
-/**
- * Renders the base wrapper of the container.
- *
- * @param  {Object} props
- * @param  {Object} props.container
- * @param  {mixed}  props.children
- * @return {Object}
- */
-function Container( { container, children } ) {
-	const classes = cx( [
-		'cf-container',
-		`cf-container-${ container.id }`,
-		`cf-container-${ kebabCase( container.type ) }`,
-		...container.classes
-	] );
+class Container extends Component {
+	/**
+	 * Local state.
+	 *
+	 * @type {Object}
+	 */
+	state = {
+		currentTab: null
+	};
 
-	return (
-		<div className={ classes }>
-			<input
-				type="hidden"
-				name={ container.nonce.name }
-				value={ container.nonce.value }
-			/>
+	/**
+	 * Lifecycle hook.
+	 *
+	 * @return {void}
+	 */
+	componentDidMount() {
+		const { container } = this.props;
 
-			{ children }
+		if ( this.isTabbed( container ) ) {
+			this.setState( {
+				currentTab: Object.keys( container.settings.tabs )[ 0 ]
+			} );
+		}
+	}
 
-			{ container.fields.map( ( field ) => {
-				const FieldEdit = getFieldType( field.type, 'metabox' );
+	/**
+	 * Returns whether the container uses tabs.
+	 *
+	 * @param  {Object} container
+	 * @return {boolean}
+	 */
+	isTabbed( container ) {
+		return isPlainObject( container.settings.tabs );
+	}
 
-				if ( ! FieldEdit ) {
-					return null;
-				}
+	/**
+	 * Renders the given field.
+	 *
+	 * @param  {Object} field
+	 * @return {Object}
+	 */
+	renderField( field ) {
+		const FieldEdit = getFieldType( field.type, 'metabox' );
 
-				return (
-					<Field key={ field.id } id={ field.id }>
-						<FieldEdit id={ field.id } />
-					</Field>
-				);
-			} ) }
-		</div>
-	);
+		if ( ! FieldEdit ) {
+			return null;
+		}
+
+		return (
+			<Field key={ field.id } id={ field.id }>
+				<FieldEdit id={ field.id } />
+			</Field>
+		);
+	}
+
+	/**
+	 * Handles click on the tabs.
+	 *
+	 * @param  {string} tab
+	 * @return {void}
+	 */
+	handleTabClick = ( tab ) => {
+		this.setState( {
+			currentTab: tab
+		} );
+	}
+
+	/**
+	 * Renders the component.
+	 *
+	 * @return {Object}
+	 */
+	render() {
+		const { currentTab } = this.state;
+		const { container } = this.props;
+
+		const hasTabs = this.isTabbed( container );
+
+		const classes = cx( [
+			'cf-container',
+			`cf-container-${ container.id }`,
+			`cf-container-${ kebabCase( container.type ) }`,
+			...container.classes,
+			{
+				'cf-container--plain': ! hasTabs
+			}
+		] );
+
+		return (
+			<div className={ classes }>
+				<input
+					type="hidden"
+					name={ container.nonce.name }
+					value={ container.nonce.value }
+				/>
+
+				{ hasTabs && (
+					<div className="cf-container__tabs">
+						<ul className="cf-container__tabs-list">
+							{ map( container.settings.tabs, ( fieldNames, tabName ) => {
+								// eslint-disable-next-line no-shadow
+								const classes = cx(
+									'cf-container__tabs-item',
+									{
+										'cf-container__tabs-item--current': tabName === currentTab
+									}
+								);
+
+								return (
+									<li
+										key={ tabName }
+										className={ classes }
+										onClick={ () => this.handleTabClick( tabName ) }
+									>
+										{ tabName }
+									</li>
+								);
+							} ) }
+						</ul>
+					</div>
+				) }
+
+				{ hasTabs && (
+					map( container.settings.tabs, ( fieldNames, tabName ) => {
+						return (
+							<div className="cf-container__fields" key={ tabName } hidden={ tabName !== currentTab }>
+								{ map( fieldNames, ( fieldName ) => {
+									const field = find( container.fields, [ 'name', fieldName ] );
+
+									return this.renderField( field );
+								} ) }
+							</div>
+						);
+					} )
+				) }
+
+				{ ! hasTabs && (
+					<div className="cf-container__fields">
+						{ map( container.fields, this.renderField ) }
+					</div>
+				) }
+			</div>
+		);
+	}
 }
 
 export default Container;
