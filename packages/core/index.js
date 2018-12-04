@@ -12,7 +12,7 @@ import './fields';
 /**
  * Sets the locale data for the package type
  */
-setLocaleData( window.cf.locale, 'carbon-fields-ui' );
+setLocaleData( window.cf.config.locale, 'carbon-fields-ui' );
 
 /**
  * Public API.

@@ -136,6 +136,8 @@ class Loader {
 	 * Initialize main scripts
 	 */
 	public function enqueue_scripts() {
+		global $pagenow;
+
 		$locale = get_locale();
 		$short_locale = substr( $locale, 0, 2 );
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
@@ -162,7 +164,10 @@ class Loader {
 		// wp_enqueue_script( 'carbon-fields-boot', \Carbon_Fields\URL . '/assets/dist/carbon.boot' . $suffix . '.js', array( 'carbon-fields-core' ), \Carbon_Fields\VERSION );
 
 		wp_localize_script( 'carbon-fields-vendor', 'cf', apply_filters( 'carbon_fields_config', array(
-			'locale' => $this->get_ui_translations(),
+			'config' => array(
+				'locale' => $this->get_ui_translations(),
+				'pagenow' => $pagenow,
+			)
 		) ) );
 
 		wp_localize_script( 'carbon-fields-vendor', 'carbonFieldsConfig', apply_filters( 'carbon_fields_config', array(
@@ -188,13 +193,10 @@ class Loader {
 	 * @return array $carbon_data
 	 */
 	public function get_json_data() {
-		global $pagenow;
-
 		$carbon_data = array(
 			'blocks' => array(),
 			'containers' => array(),
 			'sidebars' => array(),
-			'pagenow' => $pagenow,
 		);
 
 		$containers = $this->container_repository->get_active_containers();

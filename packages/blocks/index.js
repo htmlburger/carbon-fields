@@ -20,7 +20,7 @@ import transformFieldsToAttributes from './utils/transform-fields-to-attributes'
 /**
  * Sets the locale data for the package type
  */
-setLocaleData( window.cf.locale, 'carbon-fields-ui' );
+setLocaleData( window.cf.config.locale, 'carbon-fields-ui' );
 
 /**
  * Register the blocks.
