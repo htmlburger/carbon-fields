@@ -12,7 +12,7 @@ import { map, merge, pipe } from 'callbag-basics';
  */
 import urldecode from '../../utils/urldecode';
 import flattenField from '../../utils/flatten-field';
-import { renderContainer } from '../../containers/helpers';
+import { renderContainer } from '../../containers';
 import { CARBON_FIELDS_CONTAINER_ID_PREFIX, PAGE_NOW_CUSTOMIZE } from '../../lib/constants';
 import {
 	fromCreatedUpdatedWidgetEvent,
