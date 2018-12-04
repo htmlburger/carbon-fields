@@ -41,7 +41,6 @@ class Loader {
 		include_once( \Carbon_Fields\DIR . '/core/functions.php' );
 
 		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
-		// add_action( 'admin_enqueue_scripts', array( $this, 'load_ui_textdomain' ), 10000 );
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
 		add_action( 'carbon_fields_fields_registered', array( $this, 'initialize_containers' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_media_browser' ), 0 );
@@ -81,7 +80,7 @@ class Loader {
 	/**
 	 * Load the ui textdomain
 	 */
-	public function load_ui_textdomain() {
+	public function get_ui_translations() {
 		$domain ='carbon-fields-ui';
 		$translations = get_translations_for_domain( $domain );
 
@@ -163,7 +162,7 @@ class Loader {
 		// wp_enqueue_script( 'carbon-fields-boot', \Carbon_Fields\URL . '/assets/dist/carbon.boot' . $suffix . '.js', array( 'carbon-fields-core' ), \Carbon_Fields\VERSION );
 
 		wp_localize_script( 'carbon-fields-vendor', 'cf', apply_filters( 'carbon_fields_config', array(
-			'locale' => $this->load_ui_textdomain(),
+			'locale' => $this->get_ui_translations(),
 		) ) );
 
 		wp_localize_script( 'carbon-fields-vendor', 'carbonFieldsConfig', apply_filters( 'carbon_fields_config', array(
