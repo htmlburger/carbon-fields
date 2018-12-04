@@ -34,7 +34,6 @@ addFilter( 'carbon-fields.field-edit.block', 'carbon-fields/blocks', compose(
 /**
  * Internal dependencies.
  */
-import './style.scss';
 import './association';
 import './complex';
 import './date';

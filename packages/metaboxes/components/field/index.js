@@ -11,6 +11,7 @@ import { Field, withFilters } from '@carbon-fields/core';
 /**
  * Internal dependencies.
  */
+import './style.scss';
 import withField from '../../hocs/with-field';
 
 export default compose(

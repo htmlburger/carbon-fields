@@ -11,7 +11,9 @@ import { __, sprintf } from '@wordpress/i18n';
 import {
 	get,
 	find,
-	isEmpty
+	isEmpty,
+	isString,
+	template
 } from 'lodash';
 
 /**
@@ -19,7 +21,6 @@ import {
  */
 import './style.scss';
 import Sortable from '../../components/sortable';
-import { getComplexLabel } from '../../utils/get-complex-label.js';
 import ComplexTabs from './tabs';
 import ComplexInserter from './inserter';
 import ComplexGroup from './group';
@@ -109,6 +110,41 @@ class ComplexField extends Component {
 		const existingGroupNames = value.map( ( group ) => group[ key ] );
 
 		return field.groups.filter( ( { name } ) => existingGroupNames.indexOf( name ) === -1 );
+	}
+
+	/**
+	 * Returns a list of labels of existing groups.
+	 *
+	 * @return {string[]}
+	 */
+	getGroupLabels() {
+		const { field, groupValues } = this.props;
+
+		return groupValues.map( ( [ name, values ], index ) => {
+			const group = find( field.groups, [ 'name', name ] );
+
+			if ( ! group ) {
+				return 'N/A';
+			}
+
+			if ( ! isString( group.label_template ) ) {
+				return group.label;
+			}
+
+			try {
+				const label = template( group.label_template )( {
+					$_index: index,
+					...values
+				} );
+
+				return label || group.label;
+			} catch ( e ) {
+				// eslint-disable-next-line no-console
+				console.error( `Couldn't create the label of group - ${ e.message }` );
+
+				return 'N/A';
+			}
+		} );
 	}
 
 	/**
@@ -227,11 +263,12 @@ class ComplexField extends Component {
 		} = this.props;
 
 		const availableGroups = this.getAvailableGroups( groupFilterKey );
+		const groupLabels = this.getGroupLabels();
 
 		// TODO: Move this to a memoized function.
 		const tabs = value.map( ( group, index ) => {
 			const id = group[ groupIdKey ];
-			const label = getComplexLabel( field.groups, group, index );
+			const label = groupLabels[ index ];
 
 			return {
 				id,
@@ -293,7 +330,7 @@ class ComplexField extends Component {
 								// eslint-disable-next-line react/jsx-key
 								<ComplexGroup { ...onGroupSetup( group, {
 									index,
-									label: getComplexLabel( field.groups, group, index ),
+									label: groupLabels[ index ],
 									tabbed: this.isTabbed,
 									hidden: this.isTabbed && group[ groupIdKey ] !== currentTab,
 									allowClone: field.duplicate_groups_allowed && ! this.isMaximumReached,

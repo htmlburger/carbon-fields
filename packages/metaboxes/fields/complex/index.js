@@ -5,7 +5,7 @@ import produce from 'immer';
 import { Component } from '@wordpress/element';
 import { addFilter } from '@wordpress/hooks';
 import { compose } from '@wordpress/compose';
-import { withDispatch } from '@wordpress/data';
+import { withDispatch, withSelect } from '@wordpress/data';
 import {
 	find,
 	assign,
@@ -227,6 +227,19 @@ class ComplexField extends Component {
 	}
 }
 
+const applyWithSelect = withSelect( ( select, props ) => {
+	const { getComplexGroupValues } = select( 'carbon-fields/metaboxes' );
+	const groupValues = props.value.map( ( group ) => {
+		const fieldIds = group.fields.map( ( field ) => field.id );
+
+		return [ group.name, getComplexGroupValues( fieldIds ) ];
+	} );
+
+	return {
+		groupValues
+	};
+} );
+
 const applyWithDispatch = withDispatch( ( dispatch ) => {
 	const {
 		addFields,
@@ -242,13 +255,15 @@ const applyWithDispatch = withDispatch( ( dispatch ) => {
 } );
 
 addFilter( 'carbon-fields.complex.metabox', 'carbon-fields/metaboxes', ( OriginalComplexField ) => compose(
+	applyWithSelect,
 	applyWithDispatch
 )( ( props ) => {
 	const {
 		id,
 		field,
 		name,
-		value
+		value,
+		groupValues
 	} = props;
 
 	return (
@@ -270,6 +285,7 @@ addFilter( 'carbon-fields.complex.metabox', 'carbon-fields/metaboxes', ( Origina
 					field={ field }
 					name={ name }
 					value={ value }
+					groupValues={ groupValues }
 					allGroupsAreCollapsed={ allGroupsAreCollapsed }
 					onGroupSetup={ handleGroupSetup }
 					onGroupFieldSetup={ handleGroupFieldSetup }

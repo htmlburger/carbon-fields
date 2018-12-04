@@ -1,7 +1,12 @@
 /**
  * External dependencies.
  */
-import { filter } from 'lodash';
+import {
+	filter,
+	pick,
+	mapValues,
+	mapKeys
+} from 'lodash';
 
 /**
  * Returns the containers.
@@ -64,4 +69,20 @@ export function getFieldById( state, fieldId ) {
  */
 export function isSavingLocked( state ) {
 	return Object.keys( state.savingLock ).length > 0;
+}
+
+/**
+ * Returns a map of field values for a given group.
+ *
+ * @param  {Object}   state
+ * @param  {string[]} fieldIds
+ * @return {Object}
+ */
+export function getComplexGroupValues( state, fieldIds ) {
+	let fields = pick( getFields( state ), fieldIds );
+
+	fields = mapKeys( fields, ( field ) => field.base_name.replace( /\-/g, '_' ) );
+	fields = mapValues( fields, ( field ) => field.value );
+
+	return fields;
 }

@@ -10,6 +10,7 @@ import {
 	find,
 	omit,
 	assign,
+	mapKeys,
 	without,
 	cloneDeep,
 	findIndex
@@ -35,6 +36,19 @@ class ComplexField extends Component {
 	state = {
 		collapsedGroups: []
 	};
+
+	/**
+	 * Returns a list of group values.
+	 *
+	 * @return {Array}
+	 */
+	getGroupValues() {
+		return this.props.value.map( ( group ) => {
+			const values = mapKeys( omit( group, [ '_id', '_type' ] ), ( value, key ) => key.replace( /\-/g, '_' ) );
+
+			return [ group._type, values ];
+		} );
+	}
 
 	/**
 	 * Handles adding of group.
@@ -238,9 +252,11 @@ class ComplexField extends Component {
 
 		const { value, children } = this.props;
 
+		const groupValues = this.getGroupValues();
 		const allGroupsAreCollapsed = this.state.collapsedGroups.length === value.length;
 
 		return children( {
+			groupValues,
 			allGroupsAreCollapsed,
 			handleGroupSetup,
 			handleGroupFieldSetup,
@@ -265,6 +281,7 @@ addFilter( 'carbon-fields.complex.block', 'carbon-fields/blocks', ( OriginalComp
 	return (
 		<ComplexField { ...props }>
 			{ ( {
+				groupValues,
 				allGroupsAreCollapsed,
 				handleGroupSetup,
 				handleGroupFieldSetup,
@@ -282,6 +299,7 @@ addFilter( 'carbon-fields.complex.block', 'carbon-fields/blocks', ( OriginalComp
 					value={ value }
 					error={ error }
 					field={ field }
+					groupValues={ groupValues }
 					allGroupsAreCollapsed={ allGroupsAreCollapsed }
 					onGroupSetup={ handleGroupSetup }
 					onGroupFieldSetup={ handleGroupFieldSetup }
