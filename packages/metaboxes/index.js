@@ -1,10 +1,6 @@
-/* eslint no-console: [ 'error', { allow: [ 'error' ] } ] */
-
 /**
  * External dependencies.
  */
-import { values } from 'lodash';
-import { select } from '@wordpress/data';
 import { setLocaleData } from '@wordpress/i18n';
 
 /**
@@ -13,8 +9,8 @@ import { setLocaleData } from '@wordpress/i18n';
 import './store';
 import './fields';
 import initializeMonitors from './monitors';
+import initializeContainers from './containers';
 import isGutenberg from './utils/is-gutenberg';
-import { renderContainer } from './containers';
 
 /**
  * Sets the locale data for the package type
@@ -32,6 +28,4 @@ const context = isGutenberg() ? 'gutenberg' : 'classic';
  * Abracadabra! Poof! Containers everywhere ...
  */
 initializeMonitors( context );
-
-values( select( 'carbon-fields/metaboxes' ).getContainers() )
-	.forEach( ( container ) => renderContainer( container, context ) );
+initializeContainers( context );

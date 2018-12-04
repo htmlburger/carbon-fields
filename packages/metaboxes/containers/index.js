@@ -2,7 +2,9 @@
  * External dependencies.
  */
 import { render } from '@wordpress/element';
+import { select } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
+import { forEach } from 'lodash';
 
 /**
  * Internal dependencies.
@@ -47,4 +49,18 @@ export function renderContainer( container, context ) {
 		// eslint-disable-next-line no-console
 		console.error( sprintf( __( 'Could not find DOM element for container "%1$s".', 'carbon-fields-ui' ), container.id ) );
 	}
+}
+
+/**
+ * Initializes the containers.
+ *
+ * @param  {string} context
+ * @return {void}
+ */
+export default function initializeContainers( context ) {
+	const containers = select( 'carbon-fields/metaboxes' ).getContainers();
+
+	forEach( containers, ( container ) => {
+		renderContainer( container, context );
+	} );
 }
