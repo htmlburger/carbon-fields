@@ -166,6 +166,11 @@ class Loader {
 			'locale' => $this->load_ui_textdomain(),
 		) ) );
 
+		wp_localize_script( 'carbon-fields-vendor', 'carbonFieldsConfig', apply_filters( 'carbon_fields_config', array(
+			'compactInput' => \Carbon_Fields\COMPACT_INPUT,
+			'compactInputKey' => \Carbon_Fields\COMPACT_INPUT_KEY,
+		) ) );
+
 	}
 
 	/**
