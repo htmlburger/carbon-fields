@@ -10,16 +10,11 @@ import { setLocaleData } from '@wordpress/i18n';
 /**
  * Internal dependencies.
  */
-import initializeMonitors from './monitors';
-import isGutenberg from './utils/is-gutenberg';
-import { renderContainer } from './containers/helpers';
-
-/**
- * The internal dependencies.
- */
 import './store';
 import './fields';
-import './containers';
+import initializeMonitors from './monitors';
+import isGutenberg from './utils/is-gutenberg';
+import { renderContainer } from './containers';
 
 /**
  * Sets the locale data for the package type
