@@ -16,12 +16,10 @@ import './style.scss';
  * @return {Function}
  */
 function aperture() {
-	return function() {
-		return pipe(
-			fromEvent( window, 'scroll' ),
-			map( () => window.jQuery( window ).scrollTop() )
-		);
-	};
+	return pipe(
+		fromEvent( window, 'scroll' ),
+		map( () => window.jQuery( window ).scrollTop() )
+	);
 }
 
 /**
@@ -49,4 +47,4 @@ function handler() {
 	};
 }
 
-addFilter( 'carbon-fields.theme_options.classic', 'carbon-fields/metaboxes', withEffects( handler )( aperture ) );
+addFilter( 'carbon-fields.theme_options.classic', 'carbon-fields/metaboxes', withEffects( aperture, { handler } ) );

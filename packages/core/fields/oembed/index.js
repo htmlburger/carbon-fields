@@ -142,29 +142,28 @@ class OembedField extends Component {
 /**
  * The function that controls the stream of side-effects.
  *
+ * @param  {Object} component
  * @return {Function}
  */
-function aperture() {
-	return function( component ) {
-		const [ fetchEmbedCode$, fetchEmbedCode ] = component.useEvent( 'fetchEmbedCode' );
+function aperture( component ) {
+	const [ fetchEmbedCode$, fetchEmbedCode ] = component.useEvent( 'fetchEmbedCode' );
 
-		const fetchEmbedCodeProps$ = pipe(
-			of( {
-				onFetchEmbedCode: fetchEmbedCode
-			} ),
-			map( toProps )
-		);
+	const fetchEmbedCodeProps$ = pipe(
+		of( {
+			onFetchEmbedCode: fetchEmbedCode
+		} ),
+		map( toProps )
+	);
 
-		const fetchEmbedCodeEffect$ = pipe(
-			fetchEmbedCode$,
-			map( ( payload ) => ( {
-				type: 'FETCH_EMBED_CODE',
-				payload: payload
-			} ) )
-		);
+	const fetchEmbedCodeEffect$ = pipe(
+		fetchEmbedCode$,
+		map( ( payload ) => ( {
+			type: 'FETCH_EMBED_CODE',
+			payload: payload
+		} ) )
+	);
 
-		return merge( fetchEmbedCodeProps$, fetchEmbedCodeEffect$ );
-	};
+	return merge( fetchEmbedCodeProps$, fetchEmbedCodeEffect$ );
 }
 
 /**
@@ -219,7 +218,7 @@ const applyWithState = withState( {
 	isLoading: false
 } );
 
-const applyWithEffects = withEffects( handler )( aperture );
+const applyWithEffects = withEffects( aperture, { handler } );
 
 export default compose(
 	applyWithState,

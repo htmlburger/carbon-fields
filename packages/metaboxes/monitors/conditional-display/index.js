@@ -28,7 +28,7 @@ const applyWithSelect = withSelect( ( select ) => {
 	};
 } );
 
-const applyWitEffects = withEffects( handler )( aperture );
+const applyWitEffects = withEffects( aperture, { handler } );
 
 export default compose(
 	applyWithSelect,

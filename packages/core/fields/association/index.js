@@ -314,47 +314,46 @@ const fetchData = ( field, data ) => apiFetch( `${ window.wpApiSettings.root }ca
 /**
  * The function that controls the stream of side-effects.
  *
+ * @param  {Object} component
  * @return {Function}
  */
-function aperture() {
-	return function( component ) {
-		const actions = [
-			{ event: 'fetchOptionsEvent', prop: 'fetchOptions', type: 'FETCH_OPTIONS' },
-			{ event: 'fetchSelectedOptionsEvent', prop: 'fetchSelectedOptions', type: 'FETCH_SELECTED_OPTIONS' }
-		].map( ( actionData ) => {
-			const [ actionChannel$, action ] = component.useEvent( actionData.event );
+function aperture( component ) {
+	const actions = [
+		{ event: 'fetchOptionsEvent', prop: 'fetchOptions', type: 'FETCH_OPTIONS' },
+		{ event: 'fetchSelectedOptionsEvent', prop: 'fetchSelectedOptions', type: 'FETCH_SELECTED_OPTIONS' }
+	].map( ( actionData ) => {
+		const [ actionChannel$, action ] = component.useEvent( actionData.event );
 
-			return {
-				...actionData,
-				action,
-				channel$: actionChannel$
-			};
-		} );
+		return {
+			...actionData,
+			action,
+			channel$: actionChannel$
+		};
+	} );
 
-		const combined$ = pipe(
-			combine( ...actions.map( ( { action, prop } ) => of( {
-				action,
-				prop
-			} ) ) ),
-			map( ( combinedActions ) => toProps( combinedActions.reduce(
-				( acc, curr ) => ( {
-					...acc,
-					[ curr.prop ]: curr.action
-				} ), {}
-			) ) )
-		);
+	const combined$ = pipe(
+		combine( ...actions.map( ( { action, prop } ) => of( {
+			action,
+			prop
+		} ) ) ),
+		map( ( combinedActions ) => toProps( combinedActions.reduce(
+			( acc, curr ) => ( {
+				...acc,
+				[ curr.prop ]: curr.action
+			} ), {}
+		) ) )
+	);
 
-		return merge(
-			combined$,
-			...actions.map( ( { channel$, type } ) => pipe(
-				channel$,
-				map( ( payload ) => ( {
-					type,
-					payload
-				} ) )
-			) )
-		);
-	};
+	return merge(
+		combined$,
+		...actions.map( ( { channel$, type } ) => pipe(
+			channel$,
+			map( ( payload ) => ( {
+				type,
+				payload
+			} ) )
+		) )
+	);
 }
 
 /**
@@ -415,7 +414,7 @@ const applyWithState = withState( {
 	queryTerm: ''
 } );
 
-const applyWithEffects = withEffects( handler )( aperture );
+const applyWithEffects = withEffects( aperture, { handler } );
 
 addFilter( 'carbon-fields.association.validate', 'carbon-fields/core', ( field, value ) => {
 	const { min, required } = field;

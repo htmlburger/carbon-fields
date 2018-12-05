@@ -108,29 +108,28 @@ class MapField extends Component {
 /**
  * The function that controls the stream of side-effects.
  *
+ * @param  {Object} component
  * @return {Function}
  */
-function aperture() {
-	return function( component ) {
-		const [ geocodeAddress$, geocodeAddress ] = component.useEvent( 'geocodeAddress' );
+function aperture( component ) {
+	const [ geocodeAddress$, geocodeAddress ] = component.useEvent( 'geocodeAddress' );
 
-		const geocodeAddressProps$ = pipe(
-			of( {
-				onGeocodeAddress: geocodeAddress
-			} ),
-			map( toProps )
-		);
+	const geocodeAddressProps$ = pipe(
+		of( {
+			onGeocodeAddress: geocodeAddress
+		} ),
+		map( toProps )
+	);
 
-		const geocodeAddressEffect$ = pipe(
-			geocodeAddress$,
-			map( ( payload ) => ( {
-				type: 'GEOCODE_ADDRESS',
-				payload: payload
-			} ) )
-		);
+	const geocodeAddressEffect$ = pipe(
+		geocodeAddress$,
+		map( ( payload ) => ( {
+			type: 'GEOCODE_ADDRESS',
+			payload: payload
+		} ) )
+	);
 
-		return merge( geocodeAddressProps$, geocodeAddressEffect$ );
-	};
+	return merge( geocodeAddressProps$, geocodeAddressEffect$ );
 }
 
 /**
@@ -194,4 +193,4 @@ function handler( props ) {
 	};
 }
 
-export default withEffects( handler )( aperture )( MapField );
+export default withEffects( aperture, { handler } )( MapField );

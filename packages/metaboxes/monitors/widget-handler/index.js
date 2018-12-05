@@ -45,25 +45,23 @@ function WidgetHandler() {
  * @return {Function}
  */
 function aperture() {
-	return function() {
-		return merge(
-			pipe(
-				fromCreatedUpdatedWidgetEvent(),
-				map( ( payload ) => ( {
-					type: 'CREATED_UPDATED_WIDGET',
-					payload
-				} ) )
-			),
+	return merge(
+		pipe(
+			fromCreatedUpdatedWidgetEvent(),
+			map( ( payload ) => ( {
+				type: 'CREATED_UPDATED_WIDGET',
+				payload
+			} ) )
+		),
 
-			pipe(
-				fromDeleteWidgetEvent(),
-				map( ( payload ) => ( {
-					type: 'DELETED_WIDGET',
-					payload
-				} ) )
-			)
-		);
-	};
+		pipe(
+			fromDeleteWidgetEvent(),
+			map( ( payload ) => ( {
+				type: 'DELETED_WIDGET',
+				payload
+			} ) )
+		)
+	);
 }
 
 /**
@@ -123,7 +121,7 @@ function handler() {
 				// WARNING: This piece of code manipulates the core behavior of WordPress Widgets.
 				// Some day this code will stop to work and we'll need to find another workaround.
 				//
-				// * Disable the submit handler since it breaks our validation logic.
+				// * Disable the submit { handler } since it breaks our validation logic.
 				// * Disable live preview mode because we can't detect when the widget is updated/synced.
 				// * Show the "Apply" button because it's hidden by the live mode.
 
@@ -169,7 +167,7 @@ function handler() {
 	};
 }
 
-const applyWithEffects = withEffects( handler )( aperture );
+const applyWithEffects = withEffects( aperture, { handler } );
 
 export default compose(
 	applyWithEffects

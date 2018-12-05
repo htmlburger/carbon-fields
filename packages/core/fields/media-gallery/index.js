@@ -201,14 +201,12 @@ class MediaGalleryField extends Component {
 	}
 }
 
-function aperture() {
-	return function( component ) {
-		const mount$ = component.mount;
+function aperture( component ) {
+	const mount$ = component.mount;
 
-		return pipe( mount$, map( () => ( {
-			type: 'COMPONENT_MOUNTED'
-		} ) ) );
-	};
+	return pipe( mount$, map( () => ( {
+		type: 'COMPONENT_MOUNTED'
+	} ) ) );
 }
 
 function handler( props ) {
@@ -233,7 +231,7 @@ const applyWithState = withState( {
 	selectedItem: null
 } );
 
-const applyWithEffects = withEffects( handler )( aperture );
+const applyWithEffects = withEffects( aperture, { handler } );
 
 export default compose(
 	applyWithState,

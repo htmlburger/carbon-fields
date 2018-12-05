@@ -24,9 +24,7 @@ function UnsavedChanges() {
  * @return {Function}
  */
 function aperture() {
-	return function() {
-		return fromSelector( select( 'carbon-fields/metaboxes' ).isDirty );
-	};
+	return fromSelector( select( 'carbon-fields/metaboxes' ).isDirty );
 }
 
 /**
@@ -46,4 +44,4 @@ function handler() {
 	};
 }
 
-export default withEffects( handler )( aperture )( UnsavedChanges );
+export default withEffects( aperture, { handler } )( UnsavedChanges );

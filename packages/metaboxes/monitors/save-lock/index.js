@@ -24,9 +24,7 @@ function SaveLock() {
  * @return {Function}
  */
 function aperture() {
-	return function() {
-		return fromSelector( select( 'carbon-fields/metaboxes' ).isSavingLocked );
-	};
+	return fromSelector( select( 'carbon-fields/metaboxes' ).isSavingLocked );
 }
 
 /**
@@ -50,4 +48,4 @@ function handler() {
 	};
 }
 
-export default withEffects( handler )( aperture )( SaveLock );
+export default withEffects( aperture, { handler } )( SaveLock );

@@ -30,17 +30,16 @@ export default function withConditionalLogic( input, output ) {
 	/**
 	 * The function that controls the stream of side-effects.
 	 *
+	 * @param  {Object} component
 	 * @param  {Object} props
 	 * @return {Function}
 	 */
-	function aperture( props ) {
-		return function( component ) {
-			if ( isEmpty( props.field.conditional_logic ) ) {
-				return;
-			}
+	function aperture( component, props ) {
+		if ( isEmpty( props.field.conditional_logic ) ) {
+			return;
+		}
 
-			return input( props, component );
-		};
+		return input( props, component );
 	}
 
 	/**
@@ -102,7 +101,7 @@ export default function withConditionalLogic( input, output ) {
 			withSelect( ( select, props ) => ( {
 				visible: select( 'carbon-fields/core' ).isFieldVisible( props.id )
 			} ) ),
-			withEffects( handler )( aperture )
+			withEffects( aperture, { handler } )
 		)( OriginalComponent );
 	}, 'withConditionalLogic' );
 }

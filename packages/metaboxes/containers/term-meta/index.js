@@ -19,14 +19,12 @@ import { normalizePreloadedState } from '../../store/helpers';
  * @return {Function}
  */
 function aperture() {
-	return function() {
-		return pipe(
-			fromAjaxEvent( 'ajaxSuccess', 'add-tag' ),
-			filter( ( { settings, data } ) => {
-				return settings.data.indexOf( 'carbon_fields_container' ) > -1 && ! data.documentElement.querySelector( 'wp_error' );
-			} )
-		);
-	};
+	return pipe(
+		fromAjaxEvent( 'ajaxSuccess', 'add-tag' ),
+		filter( ( { settings, data } ) => {
+			return settings.data.indexOf( 'carbon_fields_container' ) > -1 && ! data.documentElement.querySelector( 'wp_error' );
+		} )
+	);
 }
 
 /**
@@ -57,4 +55,4 @@ function handler( props ) {
 	};
 }
 
-addFilter( 'carbon-fields.term_meta.classic', 'carbon-fields/metaboxes', withEffects( handler )( aperture ) );
+addFilter( 'carbon-fields.term_meta.classic', 'carbon-fields/metaboxes', withEffects( aperture, { handler } ) );
