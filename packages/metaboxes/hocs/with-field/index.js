@@ -13,9 +13,18 @@ import { compose, createHigherOrderComponent } from '@wordpress/compose';
  */
 export default createHigherOrderComponent( ( Component ) => {
 	const applyWithSelect = withSelect( ( select, props ) => {
+		const compact = window.cf.config.compactInput;
 		const field = select( 'carbon-fields/metaboxes' ).getFieldById( props.id );
-		const name = props.name || field.name;
 		const { value } = field;
+
+		let name = props.name || field.name;
+
+		/**
+		 * Wrap top-level field names in compact input key
+		 */
+		if ( compact && name.indexOf( '[' ) === -1 ) {
+			name = `${ window.cf.config.compactInputKey }[${ name }]`;
+		}
 
 		return {
 			field,

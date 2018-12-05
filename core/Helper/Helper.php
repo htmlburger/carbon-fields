@@ -643,8 +643,8 @@ class Helper {
 	 */
 	public static function expand_compacted_input( $input ) {
 		if ( isset( $input[ \Carbon_Fields\COMPACT_INPUT_KEY ] ) ) {
-			$json = json_decode( $input[ \Carbon_Fields\COMPACT_INPUT_KEY ], true );
-			$input = array_merge( $input, $json );
+			$inputs = $input[ \Carbon_Fields\COMPACT_INPUT_KEY ];
+			$input = array_merge( $input, $inputs );
 		}
 		return $input;
 	}
