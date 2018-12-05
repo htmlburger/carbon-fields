@@ -2,7 +2,10 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { Toolbar } from '@wordpress/components';
+import { BlockControls } from '@wordpress/editor';
 import { withSelect } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
 import { get } from 'lodash';
 
 /**
@@ -17,6 +20,15 @@ import Field from '../field';
 import './style.scss';
 
 class BlockEdit extends Component {
+	/**
+	 * Local state.
+	 *
+	 * @type {Object}
+	 */
+	state = {
+		mode: 'edit'
+	};
+
 	/**
 	 * Handles the change of the field's value.
 	 *
@@ -33,6 +45,35 @@ class BlockEdit extends Component {
 	}
 
 	/**
+	 * Handles changing of the mode.
+	 *
+	 * @return {void}
+	 */
+	handleModeChange = () => {
+		this.setState( {
+			mode: this.isInEditMode ? 'preview' : 'edit'
+		} );
+	}
+
+	/**
+	 * Returns whether the block is in edit mode.
+	 *
+	 * @return {boolean}
+	 */
+	get isInEditMode() {
+		return this.state.mode === 'edit';
+	}
+
+	/**
+	 * Returns whether the block is in edit mode.
+	 *
+	 * @return {boolean}
+	 */
+	get isInPreviewMode() {
+		return this.state.mode === 'preview';
+	}
+
+	/**
 	 * Render the component.
 	 *
 	 * @return {Object}
@@ -46,6 +87,18 @@ class BlockEdit extends Component {
 
 		return (
 			<div className="cf-block-wrapper">
+				<BlockControls>
+					<Toolbar controls={ [ {
+						icon: this.isInEditMode
+							? 'visibility'
+							: 'hidden',
+						title: this.isInEditMode
+							? __( 'Show preview', 'carbon-fields-ui' )
+							: __( 'Hide preview', 'carbon-fields-ui' ),
+						onClick: this.handleModeChange
+					} ] } />
+				</BlockControls>
+
 				{ fields.map( ( field, index ) => {
 					const FieldEdit = getFieldType( field.type, 'block' );
 
