@@ -26,7 +26,13 @@ class Sortable extends Component {
 	 * @return {void}
 	 */
 	componentWillUnmount() {
-		window.jQuery( this.props.forwardedRef.current ).sortable( 'destroy' );
+		const { forwardedRef } = this.props;
+		const $element = window.jQuery( forwardedRef.current );
+		const instance = $element.sortable( 'instance' );
+
+		if ( instance ) {
+			$element.sortable( 'destroy' );
+		}
 	}
 
 	/**
