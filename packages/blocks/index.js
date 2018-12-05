@@ -29,7 +29,7 @@ const definitions = {};
 
 get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 	const name = kebabCase( container.id ).replace( 'carbon-fields-container-', '' );
-	const attributes = transformFieldsToAttributes( container );
+	const fields = transformFieldsToAttributes( container.fields );
 
 	const getBlockSetting = ( key, def = null ) => get( container, `settings.${ key }`, def );
 
@@ -48,19 +48,21 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 
 	registerBlockType( `carbon-fields/${ name }`, {
 		id: container.id,
+		title: container.title,
 		icon: getBlockSetting( 'icon' ),
 		category: getBlockSetting( 'category.slug' ),
 		keywords: getBlockSetting( 'keywords', [] ),
 		description: getBlockSetting( 'description', '' ),
-		title: container.title,
-		edit: BlockEdit,
-		save: BlockSave,
-		attributes,
+		attributes: {
+			data: fields
+		},
 		supports: {
 			alignWide: false,
 			anchor: false,
 			html: false
-		}
+		},
+		edit: BlockEdit,
+		save: BlockSave
 	} );
 } );
 

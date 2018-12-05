@@ -52,7 +52,7 @@ function input( props ) {
 	return pipe(
 		fromSelector( select( 'core/editor' ).getBlock, props.blockId ),
 		distinctUntilChanged(),
-		map( ( { attributes } ) => attributes )
+		map( ( { attributes } ) => attributes.data )
 	);
 }
 
@@ -61,15 +61,15 @@ function input( props ) {
  * evaluated by conditional logic.
  *
  * @param  {Object} props
- * @param  {Object} attributes
+ * @param  {Object} fields
  * @return {Object}
  */
-function output( props, attributes ) {
-	const isTopLevelField = has( attributes, props.field.base_name );
+function output( props, fields ) {
+	const isTopLevelField = has( fields, props.field.base_name );
 	let siblingFields = {};
 
 	if ( isTopLevelField ) {
-		siblingFields = mapParentPrefix( omit( attributes, [ props.field.base_name ] ) );
+		siblingFields = mapParentPrefix( omit( fields, [ props.field.base_name ] ) );
 	} else {
 		// Get the hierarchy.
 		const path = props.id.split( '__' );
@@ -94,7 +94,7 @@ function output( props, attributes ) {
 		}, 0 );
 
 		// Collect fields that are siblings of root field.
-		siblingFields = omit( attributes, [ rootFieldName ] );
+		siblingFields = omit( fields, [ rootFieldName ] );
 		siblingFields = mapParentPrefix( siblingFields, depth + 1 );
 
 		// Keep reference to the full path of the field.
@@ -106,11 +106,11 @@ function output( props, attributes ) {
 			const isNestedComplex = ! isGroup;
 
 			if ( isGroup ) {
-				const groupIndex = findIndex( get( attributes, pathPrefix ), [ '_id', chunk ] );
+				const groupIndex = findIndex( get( fields, pathPrefix ), [ '_id', chunk ] );
 
 				pathPrefix = `${ pathPrefix }.${ groupIndex }`;
 
-				let groupFields = get( attributes, pathPrefix );
+				let groupFields = get( fields, pathPrefix );
 				groupFields = omit( groupFields, [ '_id', '_type', props.field.base_name ] );
 				groupFields = mapParentPrefix( groupFields, depth );
 
