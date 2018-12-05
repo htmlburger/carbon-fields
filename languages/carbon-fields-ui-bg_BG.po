@@ -58,21 +58,21 @@ msgstr "Няма дефинирани опции."
 msgid "Search..."
 msgstr "Търси..."
 
-#: packages/core/fields/association/index.js:207
+#: packages/core/fields/association/index.js:208
 msgid "Showing %1$d of %2$d results"
 msgstr "Показани %1$d от %2$d резултата"
 
-#: packages/core/fields/association/index.js:378
+#: packages/core/fields/association/index.js:382
 msgid "An error occurred while trying to fetch association options."
 msgstr "Грешка бе получена при опита да се вземат опциите за асоциация."
 
-#: packages/core/fields/association/index.js:420
-#: packages/core/fields/complex/index.js:349
-#: packages/core/validation/required.js:20
+#: packages/core/fields/association/index.js:424
+#: packages/core/fields/complex/index.js:385
+#: packages/core/hocs/with-validation/required.js:20
 msgid "This field is required. "
 msgstr "Това поле е задължително."
 
-#: packages/core/fields/association/index.js:424
+#: packages/core/fields/association/index.js:428
 msgid "Minimum number of items not reached (%s items)"
 msgstr "Минималния брой селектирани не е достигнат ( %s минимум )"
 
@@ -92,9 +92,13 @@ msgstr "Премахни"
 msgid "Collapse"
 msgstr "Разгъни"
 
-#: packages/core/fields/complex/index.js:355
+#: packages/core/fields/complex/index.js:392
 msgid "Minimum number of rows not reached (%1$d %2$s)"
 msgstr "Минималния брой редове не беше достигнат (%1$d %2$s)"
+
+#: packages/core/fields/complex/index.js:81
+msgid "Add %s"
+msgstr "Добави %s"
 
 #: packages/core/fields/map/index.js:166
 msgid "The address could not be found. "
@@ -107,6 +111,10 @@ msgstr "Геокодирането беше неуспешно поради сл
 #: packages/core/fields/oembed/index.js:189
 msgid "An error occurred while trying to fetch oembed preview."
 msgstr "Грешка беше получена при опита да се вземе предварителния преглед на полето"
+
+#: packages/core/fields/oembed/index.js:204
+msgid "Not Found"
+msgstr "Не беше намерен"
 
 #: packages/core/fields/rich-text/index.js:100
 msgid "Text"
@@ -124,15 +132,15 @@ msgstr "Моля въведете име на новата странична л
 msgid "An error occurred while trying to create the sidebar."
 msgstr "Грешка беше получена при опита да се създаде нова странична лента"
 
-#: packages/core/registry/base.js:40
+#: packages/core/registry/index.js:40
 msgid "%1$s type must be a string."
 msgstr "%1$s типът трябва да е от тип текст"
 
-#: packages/core/registry/base.js:45
+#: packages/core/registry/index.js:46
 msgid "%1$s %2$s is already registered."
 msgstr "%1$s %2$s е вече регистриран."
 
-#: packages/core/registry/base.js:50
+#: packages/core/registry/index.js:54
 msgid "The \"component\" param must be a function."
 msgstr "Параметъра \"component\" трябва да е от тип фукнция"
 
@@ -140,11 +148,11 @@ msgstr "Параметъра \"component\" трябва да е от тип фу
 msgid "An error occured."
 msgstr "Грешка беше получена"
 
-#: packages/core/utils/fetch-attachments-data.js:21
+#: packages/core/utils/fetch-attachments-data.js:23
 msgid "An error occurred while trying to fetch files data."
 msgstr "Грешка беше получена при опита да се вземе информация за файловете"
 
-#: packages/metaboxes/containers/helpers.js:30
+#: packages/metaboxes/containers/index.js:51
 msgid "Could not find DOM element for container \"%1$s\"."
 msgstr "DOM елемент за контейнер \"%1$s\" не беше намерен"
 
@@ -159,11 +167,3 @@ msgstr "Неподдържано условие за контейнер - \"%1$s
 #: packages/metaboxes/monitors/conditional-display/handler/index.js:71
 msgid "Unsupported container condition relation used - \"%1$s\"."
 msgstr "Неподдържанна връзка на условия използвана на контейнер - \"%1$s\"."
-
-#: packages/core/fields/complex/index.js:81
-msgid "Add %s"
-msgstr "Добави %s"
-
-#: packages/core/fields/oembed/index.js:204
-msgid "Not Found"
-msgstr "Не беше намерен"
