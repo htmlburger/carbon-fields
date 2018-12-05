@@ -127,10 +127,9 @@ function handler() {
 				// * Disable live preview mode because we can't detect when the widget is updated/synced.
 				// * Show the "Apply" button because it's hidden by the live mode.
 
-				if ( window.cf.config.pagenow === PAGE_NOW_CUSTOMIZE && event.type === 'widget-added' ) {
+				if ( window.cf.config.pagenow === PAGE_NOW_CUSTOMIZE && effect.payload.event.type === 'widget-added' ) {
 					window.jQuery( $widgetContainer )
 						.find( '[name="savewidget"]' )
-						.off( 'click' )
 						.show()
 						.end()
 						.find( '.widget-content:first' )
