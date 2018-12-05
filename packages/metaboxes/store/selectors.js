@@ -72,6 +72,16 @@ export function isSavingLocked( state ) {
 }
 
 /**
+ * Returns whether the metaboxes fields contain unsaved changed.
+ *
+ * @param  {Object} state
+ * @return {boolean}
+ */
+export function isDirty( state ) {
+	return state.isDirty;
+}
+
+/**
  * Returns a map of field values for a given group.
  *
  * @param  {Object}   state

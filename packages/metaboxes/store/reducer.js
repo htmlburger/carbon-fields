@@ -191,8 +191,26 @@ export function savingLock( state = {}, action ) {
 	}
 }
 
+/**
+ * The reducer that keeps track of the save locks.
+ *
+ * @param  {Object} state
+ * @param  {Object} action
+ * @return {Object}
+ */
+export function isDirty( state = {}, action ) {
+	switch ( action.type ) {
+		case 'UPDATE_FIELD_VALUE':
+			return true;
+
+		default:
+			return state;
+	}
+}
+
 export default combineReducers( {
 	containers,
 	fields,
-	savingLock
+	savingLock,
+	isDirty
 } );
