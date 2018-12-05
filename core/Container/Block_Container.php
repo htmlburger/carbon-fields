@@ -3,11 +3,16 @@
 namespace Carbon_Fields\Container;
 
 use Carbon_Fields\Datastore\Datastore;
+use Carbon_Fields\Helper\Helper;
 
-/**
- * Theme options container class.
- */
 class Block_Container extends Container {
+	/***
+	 * Block type render callback.
+	 *
+	 * @var callable
+	 */
+	protected $render_callback;
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -17,208 +22,194 @@ class Block_Container extends Container {
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'empty' ), $this->has_default_datastore() );
 		}
+
+		// Set "common" as default category for the block type.
+		$this->settings[ 'category' ] = array(
+			'slug' => 'common',
+		);
 	}
 
 	/**
-	 * Attach container as a theme options page/subpage.
+	 * {@inheritDoc}
 	 */
 	public function init() {
 		add_action( 'init', array( $this, '_attach' ) );
-		add_filter( 'block_categories', array($this, 'attach_block_category'), 10, 2 );
-
-		if ($this->is_valid_attach()) {
-			$this->register_block();
-		}
 	}
 
 	/**
-	 * Checks whether the current save request is valid
-	 *
-	 * @return bool
+	 * {@inheritDoc}
 	 */
 	public function is_valid_save() {
-		return true;
+		// Return false because Gutenberg
+		// will handle saving.
+		return false;
 	}
 
 	/**
-	 * Perform save operation after successful is_valid_save() check.
-	 * The call is propagated to all fields in the container.
-	 *
-	 * @param mixed $user_data
+	 * {@inheritDoc}
 	 */
-	public function save( $user_data = null ) {}
+	public function save( $data = null ) {
+		// Nothing to do here because
+		// the data is saved by Gutenberg.
+	}
 
 	/**
-	 * Get environment array for page request (in admin)
-	 *
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	protected function get_environment_for_request() {
 		return array();
 	}
 
 	/**
-	 * Perform checks whether the container should be attached during the current request
-	 *
-	 * @return bool True if the container is allowed to be attached
+	 * {@inheritDoc}
 	 */
 	public function is_valid_attach_for_request() {
-		return function_exists('register_block_type');
+		return function_exists( 'register_block_type' );
 	}
 
 	/**
-	 * Get environment array for object id
-	 *
-	 * @return array
+	 * {@inheritDoc}
 	 */
 	protected function get_environment_for_object( $object_id ) {
 		return array();
 	}
 
 	/**
-	 * Check container attachment rules against object id
-	 *
-	 * @param int $object_id
-	 * @return bool
+	 * {@inheritDoc}
 	 */
 	public function is_valid_attach_for_object( $object_id = null ) {
-		if ( ! function_exists( 'register_block_type' ) ) {
-			return false;
-		}
-
-		return $this->all_conditions_pass( intval( $post->ID ) );
+		return function_exists( 'register_block_type' );
 	}
 
 	/**
-	 * Add theme options container pages.
-	 * Hook the container saving action.
+	 * {@inheritDoc}
 	 */
-	public function attach() {}
+	public function attach() {
+		add_filter( 'block_categories', array( $this, 'attach_block_category' ), 10, 2 );
 
-	/**
-	 * Whether this container is currently viewed.
-	 *
-	 * @return boolean
-	 */
-	public function should_activate() {
-		return true;
+		$this->register_block();
 	}
 
 	/**
-	 * Register the block type
+	 * Attach the category of the block type.
 	 *
-	 */
-	private function register_block() {
-		if (!isset($this->settings['block_callback'])) {
-			throw new \Exception( __( "'set_render_callback' is required for the Block Container!", 'crb' ) );
-		}
-
-		if (!is_callable($this->settings['block_callback'])) {
-			throw new \Exception( __( "'set_render_callback' must be a valid callback!", 'crb' ) );
-		}
-
-		$name = str_replace( 'carbon-fields-container-', '', str_replace('_', '-', $this->id ));
-		$callback = $this->settings['block_callback'];
-
-		register_block_type( 'carbon-fields/' . $name, array(
-			'render_callback' => $callback,
-		) );
-	}
-
-	/**
-	 * Attaches the custom block category if existing.
-	 *
-	 * @param $categories The registered blocks categories
-	 *
+	 * @param  array $categories
 	 * @return array
 	 */
 	public function attach_block_category( $categories ) {
-		if (!isset($this->settings['block_category_slug'])) {
-			return $categories;
-		}
-
-
-		foreach ($categories as $category) {
-			if ($category['slug'] === $this->settings['block_category_slug']) {
+		foreach ( $categories as $category ) {
+			if ( $category[ 'slug' ] === $this->settings[ 'category' ][ 'slug' ] ) {
 				return $categories;
 			}
 		}
 
-		return array_merge(
-			$categories,
-			[
-				[
-					'slug' => $this->settings['block_category_slug'],
-					'title' => $this->settings['block_category_title'],
-				]
-			]
-		);
+		return array_merge( $categories, [ $this->settings[ 'category' ] ] );
 	}
 
 	/**
-	 * Output the container markup
-	 */
-	public function render() {}
-
-	/**
-	 * Sets the description of the rendered block
+	 * Set the description of the block type.
 	 *
-	 * @see https://wordpress.org/gutenberg/handbook/block-api/#category
-	 * @param string $description
+	 * @see https://wordpress.org/gutenberg/handbook/designers-developers/developers/block-api/block-registration/#description-optional
+	 *
+	 * @param  string $description
+	 * @return Block_Container
 	 */
 	public function set_description( $description ) {
-		$this->settings['block_description'] = $description;
+		$this->settings[ 'description' ] = $description;
 
 		return $this;
 	}
 
 	/**
-	 * Sets the category of the rendered block
+	 * Set the category of the block type.
 	 *
-	 * @see https://wordpress.org/gutenberg/handbook/block-api/#category
-	 * @param string $category
+	 * @see https://wordpress.org/gutenberg/handbook/designers-developers/developers/block-api/block-registration/#category
+	 *
+	 * @param  string $slug
+	 * @param  string $title
+	 * @param  string $icon
+	 * @return Block_Container
 	 */
-	public function set_category( $slug, $title = null ) {
-		$this->settings['block_category_slug'] = $slug;
-		$this->settings['block_category_title'] = $title ? $title : Helper::normalize_label($slug);
+	public function set_category( $slug, $title = null, $icon = null ) {
+		$this->settings[ 'category' ][ 'slug' ] = $slug;
+		$this->settings[ 'category' ][ 'icon' ] = $icon;
+		$this->settings[ 'category' ][ 'title' ] = $title ?: Helper::normalize_label( $slug );
 
 		return $this;
 	}
 
 	/**
-	 * Sets the icon of the rendered block
+	 * Set the icon of the block type.
 	 *
 	 * @see https://developer.wordpress.org/resource/dashicons
-	 * @see https://wordpress.org/gutenberg/handbook/block-api/#icon-optional
-	 * @param string $icon
+	 * @see https://wordpress.org/gutenberg/handbook/designers-developers/developers/block-api/block-registration/#icon-optional
+	 *
+	 * @param  string $icon
+	 * @return Block_Container
 	 */
 	public function set_icon( $icon ) {
-		$this->settings['block_icon'] = $icon;
+		$this->settings[ 'icon' ] = $icon;
 
 		return $this;
 	}
 
 	/**
-	 * Sets the keywords of the rendered block
+	 * Set the keywords of the block type.
 	 *
-	 * @see https://wordpress.org/gutenberg/handbook/block-api/#keywords-optional
-	 * @param array $keywords
+	 * @see https://wordpress.org/gutenberg/handbook/designers-developers/developers/block-api/block-registration/#keywords-optional
+	 *
+	 * @param  array $keywords
+	 * @return Block_Container
 	 */
 	public function set_keywords( $keywords = [] ) {
-		$this->settings['block_keywords'] = array_slice($keywords, 0, 3);
+		$this->settings[ 'keywords' ] = array_slice( $keywords, 0, 3 );
 
 		return $this;
 	}
 
 	/**
-	 * Sets the keywords of the rendered block
+	 * Set the render callback of the block type.
 	 *
-	 * @see https://wordpress.org/gutenberg/handbook/block-api/#keywords-optional
-	 * @param callable $render_callback
+	 * @see https://wordpress.org/gutenberg/handbook/designers-developers/developers/tutorials/block-tutorial/creating-dynamic-blocks/
+	 *
+	 * @param  callable $render_callback
+	 * @return Block_Container
 	 */
 	public function set_render_callback( $render_callback ) {
-		$this->settings['block_callback'] = $render_callback;
+		$this->render_callback = $render_callback;
 
 		return $this;
+	}
+
+	/**
+	 * Register the block type.
+	 *
+	 * @return void
+	 */
+	protected function register_block() {
+		if ( is_null( $this->render_callback ) ) {
+			throw new \Exception( __( "'render_callback' is required for the blocks.", 'crb' ) );
+		}
+
+		if ( ! is_callable( $this->render_callback ) ) {
+			throw new \Exception( __( "'render_callback' must be a callable.", 'crb' ) );
+		}
+
+		$name = str_replace( 'carbon-fields-container-', '', str_replace( '_', '-', $this->id ) );
+		$name = 'carbon-fields/' . $name;
+		$callback = $this->render_callback;
+
+		$attributes = array_reduce( $this->get_fields(), function( $attributes, $field ) {
+			$attributes[ $field->get_base_name() ] = array(
+				'default' => $field->get_default_value(),
+			);
+
+			return $attributes;
+		}, array() );
+
+		register_block_type( $name, array(
+			'attributes' => $attributes,
+			'render_callback' => $callback,
+		) );
 	}
 }

@@ -31,7 +31,7 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 	const name = kebabCase( container.id ).replace( 'carbon-fields-container-', '' );
 	const attributes = transformFieldsToAttributes( container );
 
-	const getBlockSetting = ( key, def = null ) => get( container, `settings.block_${ key }`, def );
+	const getBlockSetting = ( key, def = null ) => get( container, `settings.${ key }`, def );
 
 	let containerFields = [ ...container.fields ];
 
@@ -49,7 +49,7 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 	registerBlockType( `carbon-fields/${ name }`, {
 		id: container.id,
 		icon: getBlockSetting( 'icon' ),
-		category: getBlockSetting( 'category_slug', 'common' ),
+		category: getBlockSetting( 'category.slug' ),
 		keywords: getBlockSetting( 'keywords', [] ),
 		description: getBlockSetting( 'description', '' ),
 		title: container.title,
