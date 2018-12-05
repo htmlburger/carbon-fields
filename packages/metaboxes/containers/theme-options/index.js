@@ -3,11 +3,11 @@
  */
 import { addFilter } from '@wordpress/hooks';
 import { withEffects } from 'refract-callbag';
+import { fromEvent, map, pipe } from 'callbag-basics';
 
 /**
  * Internal dependencies.
  */
-import fromScrollEvent from '../../utils/from-scroll-event';
 import './style.scss';
 
 /**
@@ -17,7 +17,10 @@ import './style.scss';
  */
 function aperture() {
 	return function() {
-		return fromScrollEvent( window );
+		return pipe(
+			fromEvent( window, 'scroll' ),
+			map( () => window.jQuery( window ).scrollTop() )
+		);
 	};
 }
 
