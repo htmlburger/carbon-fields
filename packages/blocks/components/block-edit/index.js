@@ -16,8 +16,8 @@ import { getFieldType } from '@carbon-fields/core';
 /**
  * Internal dependencies.
  */
-import Field from '../field';
 import './style.scss';
+import Field from '../field';
 
 class BlockEdit extends Component {
 	/**
@@ -86,7 +86,7 @@ class BlockEdit extends Component {
 		} = this.props;
 
 		return (
-			<div className="cf-block-wrapper">
+			<div className="cf-block__fields">
 				<BlockControls>
 					<Toolbar controls={ [ {
 						icon: this.isInEditMode
