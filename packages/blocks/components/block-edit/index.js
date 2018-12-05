@@ -41,10 +41,15 @@ class BlockEdit extends Component {
 	 * @return {void}
 	 */
 	handleFieldChange = ( fieldId, value ) => {
+		const { attributes, setAttributes } = this.props;
+
 		const fieldName = fieldId.replace( /^.+__(.+)?$/, '$1' );
 
-		this.props.setAttributes( {
-			[ fieldName ]: value
+		setAttributes( {
+			data: {
+				...attributes.data,
+				[ fieldName ]: value
+			}
 		} );
 	}
 
@@ -99,7 +104,7 @@ class BlockEdit extends Component {
 					}
 
 					const id = `cf-${ clientId }__${ field.base_name }`;
-					const value = get( attributes, field.base_name );
+					const value = get( attributes.data, field.base_name );
 
 					return (
 						<Field

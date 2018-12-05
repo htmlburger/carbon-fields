@@ -182,6 +182,23 @@ class Block_Container extends Container {
 	}
 
 	/**
+	 * Render the block type.
+	 *
+	 * @param  array  $attributes
+	 * @param  string $content
+	 * @return string
+	 */
+	public function render_block( $attributes, $content ) {
+		$fields = $attributes[ 'data' ];
+		$block = array(
+			'attributes' => $attributes,
+			'content' => $content,
+		);
+
+		return call_user_func( $this->render_callback , $fields, $block );
+	}
+
+	/**
 	 * Register the block type.
 	 *
 	 * @return void
@@ -197,19 +214,18 @@ class Block_Container extends Container {
 
 		$name = str_replace( 'carbon-fields-container-', '', str_replace( '_', '-', $this->id ) );
 		$name = 'carbon-fields/' . $name;
-		$callback = $this->render_callback;
 
 		$attributes = array_reduce( $this->get_fields(), function( $attributes, $field ) {
-			$attributes[ $field->get_base_name() ] = array(
-				'default' => $field->get_default_value(),
-			);
+			$attributes[ 'data' ][ $field->get_base_name() ] = $field->get_default_value();
 
 			return $attributes;
-		}, array() );
+		}, array(
+			'data' => array(),
+		) );
 
 		register_block_type( $name, array(
 			'attributes' => $attributes,
-			'render_callback' => $callback,
+			'render_callback' => array( $this, 'render_block' ),
 		) );
 	}
 }
