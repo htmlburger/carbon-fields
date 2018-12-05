@@ -27,7 +27,7 @@ import required from './required';
  *
  * @param  {Object} component
  * @param  {Object} props
- * @return {Function}
+ * @return {Object}
  */
 function aperture( component, props ) {
 	if ( ! props.field.required ) {

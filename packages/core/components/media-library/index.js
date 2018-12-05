@@ -54,7 +54,7 @@ class MediaLibrary extends Component {
  * The function that controls the stream of side-effects.
  *
  * @param  {Object} component
- * @return {Function}
+ * @return {Object}
  */
 function aperture( component ) {
 	const actions = [

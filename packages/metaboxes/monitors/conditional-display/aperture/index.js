@@ -25,7 +25,7 @@ import './user-role';
  *
  * @param  {Object} props
  * @param  {string} props.context
- * @return {Function}
+ * @return {Object}
  */
 // eslint-disable-next-line no-unused-vars
 export default function aperture( component, { context } ) {

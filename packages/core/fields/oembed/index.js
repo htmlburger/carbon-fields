@@ -143,7 +143,7 @@ class OembedField extends Component {
  * The function that controls the stream of side-effects.
  *
  * @param  {Object} component
- * @return {Function}
+ * @return {Object}
  */
 function aperture( component ) {
 	const [ fetchEmbedCode$, fetchEmbedCode ] = component.useEvent( 'fetchEmbedCode' );

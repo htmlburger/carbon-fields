@@ -32,7 +32,7 @@ export default function withConditionalLogic( input, output ) {
 	 *
 	 * @param  {Object} component
 	 * @param  {Object} props
-	 * @return {Function}
+	 * @return {Object}
 	 */
 	function aperture( component, props ) {
 		if ( isEmpty( props.field.conditional_logic ) ) {

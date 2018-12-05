@@ -315,7 +315,7 @@ const fetchData = ( field, data ) => apiFetch( `${ window.wpApiSettings.root }ca
  * The function that controls the stream of side-effects.
  *
  * @param  {Object} component
- * @return {Function}
+ * @return {Object}
  */
 function aperture( component ) {
 	const actions = [

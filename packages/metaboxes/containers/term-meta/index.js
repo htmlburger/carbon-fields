@@ -16,7 +16,7 @@ import { normalizePreloadedState } from '../../store/helpers';
 /**
  * The function that controls the stream of side effects.
  *
- * @return {Function}
+ * @return {Object}
  */
 function aperture() {
 	return pipe(
