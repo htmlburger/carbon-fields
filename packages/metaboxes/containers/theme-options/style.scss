@@ -1,0 +1,10 @@
+/* ==========================================================================
+   Theme Options
+   ========================================================================== */
+
+#postbox-container-1.fixed {
+	.carbon-theme-options #post-body.columns-2 &,
+	.carbon-network #post-body.columns-2 & {
+		position: fixed; right: 0; margin-right: 20px;
+	}
+}

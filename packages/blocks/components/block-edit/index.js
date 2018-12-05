@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import { Component, Fragment } from '@wordpress/element';
+import { Component } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
 import { get } from 'lodash';
 
@@ -14,6 +14,7 @@ import { getFieldType } from '@carbon-fields/core';
  * Internal dependencies.
  */
 import Field from '../field';
+import './style.scss';
 
 class BlockEdit extends Component {
 	/**
@@ -44,7 +45,7 @@ class BlockEdit extends Component {
 		} = this.props;
 
 		return (
-			<Fragment>
+			<div className="cf-block-wrapper">
 				{ fields.map( ( field, index ) => {
 					const FieldEdit = getFieldType( field.type, 'block' );
 
@@ -71,7 +72,7 @@ class BlockEdit extends Component {
 						</Field>
 					);
 				} ) }
-			</Fragment>
+			</div>
 		);
 	}
 }

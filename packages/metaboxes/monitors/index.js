@@ -9,6 +9,7 @@ import { Fragment, render } from '@wordpress/element';
 import SaveLock from './save-lock';
 import ConditionalDisplay from './conditional-display';
 import WidgetHandler from './widget-handler';
+import UnsavedChanges from './unsaved-changes';
 import isGutenberg from '../utils/is-gutenberg';
 
 /**
@@ -22,6 +23,10 @@ export default function initializeMonitors( context ) {
 		<Fragment>
 			{ ! isGutenberg() && (
 				<SaveLock />
+			) }
+
+			{ ! isGutenberg() && (
+				<UnsavedChanges />
 			) }
 
 			<WidgetHandler />
