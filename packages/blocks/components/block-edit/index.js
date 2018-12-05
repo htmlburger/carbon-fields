@@ -1,9 +1,13 @@
 /**
  * External dependencies.
  */
-import { Component } from '@wordpress/element';
-import { Toolbar } from '@wordpress/components';
-import { BlockControls } from '@wordpress/editor';
+import { Component, Fragment } from '@wordpress/element';
+import {
+	Toolbar,
+	PanelBody,
+	ServerSideRender
+} from '@wordpress/components';
+import { BlockControls, InspectorControls } from '@wordpress/editor';
 import { withSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import { get } from 'lodash';
@@ -74,11 +78,11 @@ class BlockEdit extends Component {
 	}
 
 	/**
-	 * Render the component.
+	 * Renders the fields.
 	 *
 	 * @return {Object}
 	 */
-	render() {
+	renderFields() {
 		const {
 			clientId,
 			fields,
@@ -87,18 +91,6 @@ class BlockEdit extends Component {
 
 		return (
 			<div className="cf-block__fields">
-				<BlockControls>
-					<Toolbar controls={ [ {
-						icon: this.isInEditMode
-							? 'visibility'
-							: 'hidden',
-						title: this.isInEditMode
-							? __( 'Show preview', 'carbon-fields-ui' )
-							: __( 'Hide preview', 'carbon-fields-ui' ),
-						onClick: this.handleModeChange
-					} ] } />
-				</BlockControls>
-
 				{ fields.map( ( field, index ) => {
 					const FieldEdit = getFieldType( field.type, 'block' );
 
@@ -126,6 +118,45 @@ class BlockEdit extends Component {
 					);
 				} ) }
 			</div>
+		);
+	}
+
+	/**
+	 * Render the component.
+	 *
+	 * @return {Object}
+	 */
+	render() {
+		const { name, attributes } = this.props;
+
+		return (
+			<Fragment>
+				<BlockControls>
+					<Toolbar controls={ [ {
+						icon: this.isInEditMode
+							? 'visibility'
+							: 'hidden',
+						title: this.isInEditMode
+							? __( 'Show preview', 'carbon-fields-ui' )
+							: __( 'Hide preview', 'carbon-fields-ui' ),
+						onClick: this.handleModeChange
+					} ] } />
+				</BlockControls>
+
+				{ this.isInEditMode && this.renderFields() }
+
+				{ this.isInPreviewMode && (
+					<ServerSideRender block={ name } attributes={ attributes } />
+				) }
+
+				{ this.isInPreviewMode && (
+					<InspectorControls>
+						<PanelBody title={ __( 'Fields', 'carbon-fields-ui' ) }>
+							{ this.renderFields() }
+						</PanelBody>
+					</InspectorControls>
+				) }
+			</Fragment>
 		);
 	}
 }
