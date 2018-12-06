@@ -54,15 +54,15 @@ class MultiselectField extends Component {
 			field.options.length > 0
 				? (
 					<Select
-						isMulti
-						joinValues
 						id={ id }
 						name={ name }
 						value={ this.filterValues( value ) }
 						options={ field.options }
+						delimiter={ field.valueDelimiter }
 						onChange={ this.handleChange }
 						className="cf-react-select-container"
 						classNamePrefix="cf-react-select"
+						isMulti
 					/>
 				)
 				: <NoOptions />
