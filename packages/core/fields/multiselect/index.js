@@ -60,8 +60,8 @@ class MultiselectField extends Component {
 						options={ field.options }
 						delimiter={ field.valueDelimiter }
 						onChange={ this.handleChange }
-						className="cf-react-select-container"
-						classNamePrefix="cf-react-select"
+						className="cf-multiselect__select"
+						classNamePrefix="cf-multiselect"
 						isMulti
 					/>
 				)
