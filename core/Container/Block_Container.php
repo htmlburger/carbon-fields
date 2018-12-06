@@ -270,11 +270,14 @@ class Block_Container extends Container {
 		$style = isset( $this->settings[ 'style' ] ) ? $this->settings[ 'style' ] : null;
 		$editor_style = isset( $this->settings[ 'editor_style' ] ) ? $this->settings[ 'editor_style' ] : null;
 		$attributes = array_reduce( $this->get_fields(), function( $attributes, $field ) {
-			$attributes[ 'data' ][ $field->get_base_name() ] = $field->get_default_value();
+			$attributes[ 'data' ][ 'default' ][ $field->get_base_name() ] = $field->get_default_value();
 
 			return $attributes;
 		}, array(
-			'data' => array(),
+			'data' => array(
+				'type' => 'object',
+				'default' => array(),
+			),
 		) );
 
 		register_block_type( $name, array(

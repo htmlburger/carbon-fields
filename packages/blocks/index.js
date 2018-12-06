@@ -54,7 +54,10 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 		keywords: getBlockSetting( 'keywords', [] ),
 		description: getBlockSetting( 'description', '' ),
 		attributes: {
-			data: fields
+			data: {
+				type: 'object',
+				default: fields
+			}
 		},
 		supports: {
 			preview: getBlockSetting( 'preview' ),
