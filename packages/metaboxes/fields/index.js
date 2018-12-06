@@ -50,6 +50,5 @@ import './file';
 import './image';
 import './media-gallery';
 import './radio';
-import './radio-image';
 import './sidebar';
 import './time';

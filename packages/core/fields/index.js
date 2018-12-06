@@ -22,6 +22,7 @@ import MediaGalleryField from './media-gallery';
 import MultiselectField from './multiselect';
 import OembedField from './oembed';
 import RadioField from './radio';
+import RadioImageField from './radio-image';
 import RichTextField from './rich-text';
 import SelectField from './select';
 import SeparatorField from './separator';
@@ -62,7 +63,7 @@ addFilter( 'carbon-fields.register-field-type', 'carbon-fields/core', ( type, co
 	[ 'media_gallery', MediaGalleryField ],
 	[ 'oembed', OembedField ],
 	[ 'radio', RadioField ],
-	[ 'radio_image', RadioField ],
+	[ 'radio_image', RadioImageField ],
 	[ 'rich_text', RichTextField ],
 	[ 'select', SelectField ],
 	[ 'separator', SeparatorField ],
