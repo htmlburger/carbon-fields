@@ -6,6 +6,16 @@ use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Helper\Helper;
 
 class Block_Container extends Container {
+	/**
+	 * {@inheritDoc}
+	 */
+	public $settings = array(
+		'preview' => true,
+		'category' => array(
+			'slug' => 'common',
+		),
+	);
+
 	/***
 	 * Block type render callback.
 	 *
@@ -22,11 +32,6 @@ class Block_Container extends Container {
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'empty' ), $this->has_default_datastore() );
 		}
-
-		// Set "common" as default category for the block type.
-		$this->settings[ 'category' ] = array(
-			'slug' => 'common',
-		);
 	}
 
 	/**
@@ -168,20 +173,6 @@ class Block_Container extends Container {
 	}
 
 	/**
-	 * Set the render callback of the block type.
-	 *
-	 * @see https://wordpress.org/gutenberg/handbook/designers-developers/developers/tutorials/block-tutorial/creating-dynamic-blocks/
-	 *
-	 * @param  callable $render_callback
-	 * @return Block_Container
-	 */
-	public function set_render_callback( $render_callback ) {
-		$this->render_callback = $render_callback;
-
-		return $this;
-	}
-
-	/**
 	 * Set a style handle.
 	 *
 	 * @param  string $key
@@ -216,6 +207,32 @@ class Block_Container extends Container {
 	 */
 	public function set_editor_style( $handle ) {
 		return $this->set_style_handle( 'editor_style', $handle );
+	}
+
+	/**
+	 * Set whether the preview mode is available for the block type.
+	 *
+	 * @param  boolean $preview
+	 * @return Block_Container
+	 */
+	public function set_preview_mode( $preview = true ) {
+		$this->settings[ 'preview' ] = $preview;
+
+		return $this;
+	}
+
+	/**
+	 * Set the render callback of the block type.
+	 *
+	 * @see https://wordpress.org/gutenberg/handbook/designers-developers/developers/tutorials/block-tutorial/creating-dynamic-blocks/
+	 *
+	 * @param  callable $render_callback
+	 * @return Block_Container
+	 */
+	public function set_render_callback( $render_callback ) {
+		$this->render_callback = $render_callback;
+
+		return $this;
 	}
 
 	/**

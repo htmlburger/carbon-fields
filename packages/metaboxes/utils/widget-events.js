@@ -32,7 +32,7 @@ const isCarbonFieldsWidgetBeingDeleted = ( xhrResponse ) => {
 export const fromCreatedUpdatedWidgetEvent = () => {
 	return create( ( sink ) => {
 		// Emit the event through the channel.
-		const handler = ( event, $widgetContainer ) => {
+		const { handler } = ( event, $widgetContainer ) => {
 			sink( 1, {
 				event,
 				$widgetContainer
@@ -41,11 +41,11 @@ export const fromCreatedUpdatedWidgetEvent = () => {
 
 		// Cancel the subscription.
 		const unsubscribe = () => {
-			window.jQuery( document ).off( 'widget-added widget-updated', handler );
+			window.jQuery( document ).off( 'widget-added widget-updated', { handler } );
 		};
 
 		// Setup the subscription.
-		window.jQuery( document ).on( 'widget-added widget-updated', handler );
+		window.jQuery( document ).on( 'widget-added widget-updated', { handler } );
 
 		return unsubscribe;
 	} );
@@ -60,7 +60,7 @@ export const fromDeleteWidgetEvent = () => {
 		let disposed = false;
 
 		// Emit the event through the channel.
-		const handler = ( event, xhr ) => {
+		const { handler } = ( event, xhr ) => {
 			// Don't care about other widgets.
 			const widgetId = isCarbonFieldsWidgetBeingDeleted( xhr.responseText );
 
@@ -78,7 +78,7 @@ export const fromDeleteWidgetEvent = () => {
 			}
 
 			disposed = true;
-			window.jQuery( document ).ajaxSuccess( handler );
+			window.jQuery( document ).ajaxSuccess( { handler } );
 		} );
 
 		if ( disposed ) {
@@ -86,6 +86,6 @@ export const fromDeleteWidgetEvent = () => {
 		}
 
 		// Setup the subscription.
-		window.jQuery( document ).ajaxSuccess( handler );
+		window.jQuery( document ).ajaxSuccess( { handler } );
 	};
 };
