@@ -66,6 +66,8 @@ class Sidebar_Field extends Select_Field {
 	 * @return array
 	 */
 	public function to_json( $load ) {
+		$options = [];
+
 		if ( $this->enable_add_new ) {
 			$options[] = array(
 				'value' => '__add_new',
@@ -81,7 +83,6 @@ class Sidebar_Field extends Select_Field {
 		) );
 
 		$field_data['options'] = array_merge( $field_data['options'], $options );
-
 
 		if ( ! empty( $this->excluded_sidebars ) ) {
 			$field_data = array_merge( $field_data, array(
