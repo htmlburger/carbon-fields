@@ -182,6 +182,43 @@ class Block_Container extends Container {
 	}
 
 	/**
+	 * Set a style handle.
+	 *
+	 * @param  string $key
+	 * @param  string $handle
+	 * @return Block_Container
+	 */
+	protected function set_style_handle( $key, $handle ) {
+		if ( ! wp_style_is( $handle ) ) {
+			throw new \Exception( __( "Style '$handle' is not enqueued.", 'crb' ) );
+		}
+
+		$this->settings[ $key ] = $handle;
+
+		return $this;
+	}
+
+	/**
+	 * Set the style of the block type.
+	 *
+	 * @param  string $handle
+	 * @return Block_Container
+	 */
+	public function set_style( $handle ) {
+		return $this->set_style_handle( 'style', $handle );
+	}
+
+	/**
+	 * Set the editor style of the block type.
+	 *
+	 * @param  string $handle
+	 * @return Block_Container
+	 */
+	public function set_editor_style( $handle ) {
+		return $this->set_style_handle( 'editor_style', $handle );
+	}
+
+	/**
 	 * Render the block type.
 	 *
 	 * @param  array  $attributes
@@ -212,9 +249,9 @@ class Block_Container extends Container {
 			throw new \Exception( __( "'render_callback' must be a callable.", 'crb' ) );
 		}
 
-		$name = str_replace( 'carbon-fields-container-', '', str_replace( '_', '-', $this->id ) );
-		$name = 'carbon-fields/' . $name;
-
+		$name = str_replace( 'carbon-fields-container-', 'carbon-fields/', str_replace( '_', '-', $this->id ) );
+		$style = isset( $this->settings[ 'style' ] ) ? $this->settings[ 'style' ] : null;
+		$editor_style = isset( $this->settings[ 'editor_style' ] ) ? $this->settings[ 'editor_style' ] : null;
 		$attributes = array_reduce( $this->get_fields(), function( $attributes, $field ) {
 			$attributes[ 'data' ][ $field->get_base_name() ] = $field->get_default_value();
 
@@ -224,6 +261,8 @@ class Block_Container extends Container {
 		) );
 
 		register_block_type( $name, array(
+			'style' => $style,
+			'editor_style' => $editor_style,
 			'attributes' => $attributes,
 			'render_callback' => array( $this, 'render_block' ),
 		) );
