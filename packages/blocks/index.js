@@ -57,6 +57,7 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 			data: fields
 		},
 		supports: {
+			preview: getBlockSetting( 'preview' ),
 			alignWide: false,
 			anchor: false,
 			html: false

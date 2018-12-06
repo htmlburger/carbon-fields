@@ -132,21 +132,27 @@ class BlockEdit extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { name, attributes } = this.props;
+		const {
+			name,
+			attributes,
+			supportsPreview
+		} = this.props;
 
 		return (
 			<Fragment>
-				<BlockControls>
-					<Toolbar controls={ [ {
-						icon: this.isInEditMode
-							? 'visibility'
-							: 'hidden',
-						title: this.isInEditMode
-							? __( 'Show preview', 'carbon-fields-ui' )
-							: __( 'Hide preview', 'carbon-fields-ui' ),
-						onClick: this.handleModeChange
-					} ] } />
-				</BlockControls>
+				{ supportsPreview && (
+					<BlockControls>
+						<Toolbar controls={ [ {
+							icon: this.isInEditMode
+								? 'visibility'
+								: 'hidden',
+							title: this.isInEditMode
+								? __( 'Show preview', 'carbon-fields-ui' )
+								: __( 'Hide preview', 'carbon-fields-ui' ),
+							onClick: this.handleModeChange
+						} ] } />
+					</BlockControls>
+				) }
 
 				{ this.isInEditMode && this.renderFields() }
 
@@ -166,10 +172,12 @@ class BlockEdit extends Component {
 	}
 }
 
-export default withSelect( ( select, ownProps ) => {
+export default withSelect( ( select, { name } ) => {
+	const { hasBlockSupport } = select( 'core/blocks' );
 	const { getFieldDefinitionsByBlockName } = select( 'carbon-fields/blocks' );
 
 	return {
-		fields: getFieldDefinitionsByBlockName( ownProps.name )
+		fields: getFieldDefinitionsByBlockName( name ),
+		supportsPreview: hasBlockSupport( name, 'preview' )
 	};
 } )( BlockEdit );
