@@ -32,10 +32,7 @@ class Sidebar_Field extends Select_Field {
 				continue;
 			}
 
-			$options[] = array(
-				'value' => $sidebar[ 'id' ],
-				'label' => $sidebar[ 'name' ],
-			);
+			$options[ $sidebar['id'] ] = $sidebar['name'];
 		}
 
 		return $options;
@@ -69,8 +66,6 @@ class Sidebar_Field extends Select_Field {
 	 * @return array
 	 */
 	public function to_json( $load ) {
-		$options = $this->load_options();
-
 		if ( $this->enable_add_new ) {
 			$options[] = array(
 				'value' => '__add_new',
@@ -79,13 +74,14 @@ class Sidebar_Field extends Select_Field {
 		}
 
 		$field_data = parent::to_json( $load );
-
 		// override default value and options behavior since sidebars are
 		// loaded separately and not as a part of the field options
 		$field_data = array_merge( $field_data, array(
 			'value' => $this->get_formatted_value(),
-			'options' => $options,
 		) );
+
+		$field_data['options'] = array_merge( $field_data['options'], $options );
+
 
 		if ( ! empty( $this->excluded_sidebars ) ) {
 			$field_data = array_merge( $field_data, array(

@@ -25,29 +25,28 @@ import './user-role';
  *
  * @param  {Object} props
  * @param  {string} props.context
- * @return {Function}
+ * @return {Object}
  */
-export default function aperture( { context } ) {
-	return function() {
-		const postParent$ = applyFilters( `carbon-fields.conditional-display-post-parent.${ context }` );
-		const postFormat$ = applyFilters( `carbon-fields.conditional-display-post-format.${ context }` );
-		const postTemplate$ = applyFilters( `carbon-fields.conditional-display-post-template.${ context }` );
-		const postTerm$ = applyFilters( `carbon-fields.conditional-display-post-term.${ context }` );
-		const termParent$ = applyFilters( `carbon-fields.conditional-display-term-parent.${ context }` );
-		const userRole$ = applyFilters( `carbon-fields.conditional-display-user-role.${ context }` );
+// eslint-disable-next-line no-unused-vars
+export default function aperture( component, { context } ) {
+	const postParent$ = applyFilters( `carbon-fields.conditional-display-post-parent.${ context }` );
+	const postFormat$ = applyFilters( `carbon-fields.conditional-display-post-format.${ context }` );
+	const postTemplate$ = applyFilters( `carbon-fields.conditional-display-post-template.${ context }` );
+	const postTerm$ = applyFilters( `carbon-fields.conditional-display-post-term.${ context }` );
+	const termParent$ = applyFilters( `carbon-fields.conditional-display-term-parent.${ context }` );
+	const userRole$ = applyFilters( `carbon-fields.conditional-display-user-role.${ context }` );
 
-		return pipe(
-			merge(
-				postParent$,
-				postFormat$,
-				postTemplate$,
-				postTerm$,
-				termParent$,
-				userRole$
-			),
-			scan( ( previous, current ) => produce( previous, ( draft ) => {
-				assign( draft, current );
-			} ) )
-		);
-	};
+	return pipe(
+		merge(
+			postParent$,
+			postFormat$,
+			postTemplate$,
+			postTerm$,
+			termParent$,
+			userRole$
+		),
+		scan( ( previous, current ) => produce( previous, ( draft ) => {
+			assign( draft, current );
+		} ) )
+	);
 }

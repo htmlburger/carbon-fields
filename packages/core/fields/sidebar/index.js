@@ -70,31 +70,30 @@ class SidebarField extends Component {
 /**
  * The function that controls the stream of side-effects.
  *
- * @return {Function}
+ * @param  {Object} component
+ * @return {Object}
  */
-function aperture() {
-	return function( component ) {
-		const [ addSidebar$, addSidebar ] = component.useEvent( 'addSidebar' );
+function aperture( component ) {
+	const [ addSidebar$, addSidebar ] = component.useEvent( 'addSidebar' );
 
-		const addSidebarProps$ = pipe(
-			of( {
-				onAdd: addSidebar
-			} ),
-			map( toProps )
-		);
+	const addSidebarProps$ = pipe(
+		of( {
+			onAdd: addSidebar
+		} ),
+		map( toProps )
+	);
 
-		const addSidebarEffect$ = pipe(
-			addSidebar$,
-			map( ( fieldKey ) => ( {
-				type: 'ADD_SIDEBAR',
-				payload: {
-					fieldKey
-				}
-			} ) )
-		);
+	const addSidebarEffect$ = pipe(
+		addSidebar$,
+		map( ( fieldKey ) => ( {
+			type: 'ADD_SIDEBAR',
+			payload: {
+				fieldKey
+			}
+		} ) )
+	);
 
-		return merge( addSidebarProps$, addSidebarEffect$ );
-	};
+	return merge( addSidebarProps$, addSidebarEffect$ );
 }
 
 /**
@@ -150,4 +149,4 @@ function handler( props ) {
 	};
 }
 
-export default withEffects( handler )( aperture )( SidebarField );
+export default withEffects( aperture, { handler } )( SidebarField );

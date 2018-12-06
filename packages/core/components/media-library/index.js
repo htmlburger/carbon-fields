@@ -53,48 +53,47 @@ class MediaLibrary extends Component {
 /**
  * The function that controls the stream of side-effects.
  *
- * @return {Function}
+ * @param  {Object} component
+ * @return {Object}
  */
-function aperture() {
-	return function( component ) {
-		const actions = [
-			{ event: 'initMediaBrowserEvent', prop: 'initMediaBrowser', type: 'INIT_MEDIA_BROWSER' },
-			{ event: 'openMediaBrowserEvent', prop: 'openMediaBrowser', type: 'OPEN_MEDIA_BROWSER' },
-			{ event: 'destroyMediaBrowserEvent', prop: 'destroyMediaBrowser', type: 'DESTROY_MEDIA_BROWSER' }
-		].map( ( actionData ) => {
-			const [ actionChannel$, action ] = component.useEvent( actionData.event );
+function aperture( component ) {
+	const actions = [
+		{ event: 'initMediaBrowserEvent', prop: 'initMediaBrowser', type: 'INIT_MEDIA_BROWSER' },
+		{ event: 'openMediaBrowserEvent', prop: 'openMediaBrowser', type: 'OPEN_MEDIA_BROWSER' },
+		{ event: 'destroyMediaBrowserEvent', prop: 'destroyMediaBrowser', type: 'DESTROY_MEDIA_BROWSER' }
+	].map( ( actionData ) => {
+		const [ actionChannel$, action ] = component.useEvent( actionData.event );
 
-			return {
-				...actionData,
-				action,
-				channel$: actionChannel$
-			};
-		} );
+		return {
+			...actionData,
+			action,
+			channel$: actionChannel$
+		};
+	} );
 
-		const combined$ = pipe(
-			combine( ...actions.map( ( { action, prop } ) => of( {
-				action,
-				prop
-			} ) ) ),
-			map( ( combinedActions ) => toProps( combinedActions.reduce(
-				( acc, curr ) => ( {
-					...acc,
-					[ curr.prop ]: curr.action
-				} ), {}
-			) ) )
-		);
+	const combined$ = pipe(
+		combine( ...actions.map( ( { action, prop } ) => of( {
+			action,
+			prop
+		} ) ) ),
+		map( ( combinedActions ) => toProps( combinedActions.reduce(
+			( acc, curr ) => ( {
+				...acc,
+				[ curr.prop ]: curr.action
+			} ), {}
+		) ) )
+	);
 
-		return merge(
-			combined$,
-			...actions.map( ( { channel$, type } ) => pipe(
-				channel$,
-				map( ( payload ) => ( {
-					type,
-					payload
-				} ) )
-			) )
-		);
-	};
+	return merge(
+		combined$,
+		...actions.map( ( { channel$, type } ) => pipe(
+			channel$,
+			map( ( payload ) => ( {
+				type,
+				payload
+			} ) )
+		) )
+	);
 }
 
 /**
@@ -149,7 +148,7 @@ function handler( props ) {
 	};
 }
 
-const applyWithEffects = withEffects( handler )( aperture );
+const applyWithEffects = withEffects( aperture, { handler } );
 
 export default compose(
 	applyWithEffects

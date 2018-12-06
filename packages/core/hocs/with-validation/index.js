@@ -25,56 +25,55 @@ import required from './required';
 /**
  * The function that controls the stream of side-effects.
  *
+ * @param  {Object} component
  * @param  {Object} props
- * @return {Function}
+ * @return {Object}
  */
-function aperture( props ) {
-	return function( component ) {
-		if ( ! props.field.required ) {
-			return;
-		}
+function aperture( component, props ) {
+	if ( ! props.field.required ) {
+		return;
+	}
 
-		const mount$ = component.mount;
-		const unmount$ = component.unmount;
-		const value$ = component.observe( 'value' );
-		const visible$ = component.observe( 'visible' );
+	const mount$ = component.mount;
+	const unmount$ = component.unmount;
+	const value$ = component.observe( 'value' );
+	const visible$ = component.observe( 'visible' );
 
-		return merge(
-			pipe(
-				combine( value$, visible$, mount$ ),
-				filter( ( [ , visible ] ) => visible ),
-				take( 1 ),
-				map( ( [ value ] ) => ( {
-					type: 'VALIDATE',
-					payload: {
-						value,
-						transient: true
-					}
-				} ) )
-			),
+	return merge(
+		pipe(
+			combine( value$, visible$, mount$ ),
+			filter( ( [ , visible ] ) => visible ),
+			take( 1 ),
+			map( ( [ value ] ) => ( {
+				type: 'VALIDATE',
+				payload: {
+					value,
+					transient: true
+				}
+			} ) )
+		),
 
-			pipe(
-				value$,
-				dropUntil( mount$ ),
-				distinctUntilChanged(),
-				debounce( 250 ),
-				map( ( value ) => ( {
-					type: 'VALIDATE',
-					payload: {
-						value,
-						transient: false
-					}
-				} ) )
-			),
+		pipe(
+			value$,
+			dropUntil( mount$ ),
+			distinctUntilChanged(),
+			debounce( 250 ),
+			map( ( value ) => ( {
+				type: 'VALIDATE',
+				payload: {
+					value,
+					transient: false
+				}
+			} ) )
+		),
 
-			pipe(
-				unmount$,
-				map( () => ( {
-					type: 'RESET'
-				} ) )
-			)
-		);
-	};
+		pipe(
+			unmount$,
+			map( () => ( {
+				type: 'RESET'
+			} ) )
+		)
+	);
 }
 
 /**
@@ -129,7 +128,7 @@ function handler( props ) {
 	};
 }
 
-const applyWithEffects = withEffects( handler )( aperture );
+const applyWithEffects = withEffects( aperture, { handler } );
 
 const applyWithDispatch = withDispatch( ( dispatch ) => {
 	const { markAsValid, markAsInvalid } = dispatch( 'carbon-fields/core' );
