@@ -10,6 +10,7 @@ class Block_Container extends Container {
 	 * {@inheritDoc}
 	 */
 	public $settings = array(
+		'preview' => true,
 		'category' => array(
 			'slug' => 'common',
 		),
@@ -206,6 +207,18 @@ class Block_Container extends Container {
 	 */
 	public function set_editor_style( $handle ) {
 		return $this->set_style_handle( 'editor_style', $handle );
+	}
+
+	/**
+	 * Set whether the preview mode is available for the block type.
+	 *
+	 * @param  boolean $preview
+	 * @return Block_Container
+	 */
+	public function set_preview_mode( $preview = true ) {
+		$this->settings[ 'preview' ] = $preview;
+
+		return $this;
 	}
 
 	/**
