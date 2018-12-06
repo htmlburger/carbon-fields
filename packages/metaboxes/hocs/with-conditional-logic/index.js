@@ -94,14 +94,16 @@ function output( props, fields ) {
 		siblingFields = getFieldsFromFieldsHolder( container, fields, [ props.id ] );
 		siblingFields = mapParentPrefix( siblingFields );
 	} else {
+		const fieldName = props.name.replace( new RegExp( `^${ window.cf.config.compactInputKey }\\[(.+?)\\]` ), '$1' );
+
 		// Get the root field.
 		const rootField = find( fields, ( field ) => {
 			return field.container_id === props.field.container_id
-				&& startsWith( props.name, field.name );
+				&& startsWith( fieldName, field.name );
 		} );
 
 		// Get the hierarchy.
-		let path = props.name.split( /\[|\]/g );
+		let path = fieldName.split( /\[|\]/g );
 
 		// Remove the chunk with name of root field
 		// because we already have it.
