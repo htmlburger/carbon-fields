@@ -70,6 +70,10 @@
 	border-style: solid;
 	border-color: $wp-color-gray-light-500;
 
+	&[hidden] {
+		display: none;
+	}
+
 	.cf-complex--grid & {
 		margin-top: -1px;
 	}
