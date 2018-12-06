@@ -11,6 +11,7 @@ import ConditionalDisplay from './conditional-display';
 import WidgetHandler from './widget-handler';
 import UnsavedChanges from './unsaved-changes';
 import isGutenberg from '../utils/is-gutenberg';
+import { PAGE_NOW_WIDGETS, PAGE_NOW_CUSTOMIZE } from '../lib/constants';
 
 /**
  * Initializes the monitors.
@@ -19,6 +20,8 @@ import isGutenberg from '../utils/is-gutenberg';
  * @return {void}
  */
 export default function initializeMonitors( context ) {
+	const { pagenow } = window.cf.config;
+
 	render(
 		<Fragment>
 			{ ! isGutenberg() && (
@@ -29,7 +32,9 @@ export default function initializeMonitors( context ) {
 				<UnsavedChanges />
 			) }
 
-			<WidgetHandler />
+			{ ( pagenow === PAGE_NOW_WIDGETS || pagenow === PAGE_NOW_CUSTOMIZE ) && (
+				<WidgetHandler />
+			) }
 
 			<ConditionalDisplay context={ context } />
 		</Fragment>,

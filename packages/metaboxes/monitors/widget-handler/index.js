@@ -1,42 +1,47 @@
 /**
  * External dependencies.
  */
-import { compose } from '@wordpress/compose';
 import { dispatch, select } from '@wordpress/data';
 import { unmountComponentAtNode } from '@wordpress/element';
+import { startsWith, flow } from 'lodash';
 import { withEffects } from 'refract-callbag';
-import { map, merge, pipe } from 'callbag-basics';
+import {
+	map,
+	merge,
+	pipe,
+	filter
+} from 'callbag-basics';
 
 /**
  * Internal dependencies.
  */
 import urldecode from '../../utils/urldecode';
 import flattenField from '../../utils/flatten-field';
+import fromEventPattern from '../../utils/from-event-pattern';
 import { renderContainer } from '../../containers';
-import { CARBON_FIELDS_CONTAINER_ID_PREFIX, PAGE_NOW_CUSTOMIZE } from '../../lib/constants';
 import {
-	fromCreatedUpdatedWidgetEvent,
-	fromDeleteWidgetEvent
-} from '../../utils/widget-events';
-
-const getWidgetId = ( widget ) => {
-	return window.jQuery( widget )
-		.find( '[name="widget-id"]' )
-		.val();
-};
-
-const widgetIdToContainerId = ( widgetId ) => {
-	return CARBON_FIELDS_CONTAINER_ID_PREFIX + widgetId;
-};
+	CARBON_FIELDS_CONTAINER_ID_PREFIX,
+	CARBON_FIELDS_CONTAINER_WIDGET_ID_PREFIX,
+	PAGE_NOW_CUSTOMIZE
+} from '../../lib/constants';
 
 /**
- * Performs the evaluation of conditions.
+ * Performs the re-initialization of widgets.
  *
- * @todo Improve docs
  * @return {null}
  */
 function WidgetHandler() {
 	return null;
+}
+
+/**
+ * Returns whether the widget is created by Carbon Fields.
+ *
+ * @param  {string} identifier
+ * @return {boolean}
+ */
+function isCarbonFieldsWidget( identifier ) {
+	return identifier.indexOf( CARBON_FIELDS_CONTAINER_WIDGET_ID_PREFIX ) > -1;
 }
 
 /**
@@ -47,17 +52,39 @@ function WidgetHandler() {
 function aperture() {
 	return merge(
 		pipe(
-			fromCreatedUpdatedWidgetEvent(),
+			fromEventPattern(
+				( handler ) => window.jQuery( document ).on( 'widget-added widget-updated', handler ),
+				( handler ) => window.jQuery( document ).off( 'widget-added widget-updated', handler ),
+				( event, $widget ) => ( {
+					event,
+					$widget
+				} )
+			),
+			filter( ( { $widget } ) => {
+				return isCarbonFieldsWidget( $widget[ 0 ].id );
+			} ),
 			map( ( payload ) => ( {
-				type: 'CREATED_UPDATED_WIDGET',
+				type: 'WIDGET_CREATED_OR_UPDATED',
 				payload
 			} ) )
 		),
 
 		pipe(
-			fromDeleteWidgetEvent(),
+			fromEventPattern(
+				( handler ) => window.jQuery( document ).on( 'ajaxSuccess', handler ),
+				( handler ) => window.jQuery( document ).off( 'ajaxSuccess', handler ),
+				( event, xhr, options, data ) => ( {
+					event,
+					xhr,
+					options,
+					data
+				} )
+			),
+			filter( ( { data } ) => {
+				return startsWith( data, 'deleted:' ) && isCarbonFieldsWidget( data );
+			} ),
 			map( ( payload ) => ( {
-				type: 'DELETED_WIDGET',
+				type: 'WIDGET_DELETED',
 				payload
 			} ) )
 		)
@@ -71,7 +98,6 @@ function aperture() {
  */
 function handler() {
 	return function( effect ) {
-		const { type } = effect;
 		const { getContainerById } = select( 'carbon-fields/metaboxes' );
 		const {
 			addContainer,
@@ -80,34 +106,27 @@ function handler() {
 			removeFields
 		} = dispatch( 'carbon-fields/metaboxes' );
 
-		switch ( type ) {
-			case 'CREATED_UPDATED_WIDGET': {
-				const { $widgetContainer } = effect.payload;
+		switch ( effect.type ) {
+			case 'WIDGET_CREATED_OR_UPDATED': {
+				const { event, $widget } = effect.payload;
 
-				let containerData = $widgetContainer
-					.find( '[data-json]' )
-					.data( 'json' );
-
-				if ( ! containerData ) {
-					return;
-				}
-
-				const widgetId = getWidgetId( $widgetContainer );
+				const container = flow(
+					urldecode,
+					JSON.parse
+				)(
+					$widget
+						.find( '[data-json]' )
+						.data( 'json' )
+				);
 
 				const fields = [];
-
-				containerData = urldecode( containerData );
-				containerData = JSON.parse( containerData );
-
-				const container = containerData;
-
 				let oldFieldIds;
 
 				if ( event.type === 'widget-updated' ) {
-					oldFieldIds = _.map( getContainerById( container.id ).fields, 'id' );
+					oldFieldIds = getContainerById( container.id ).fields.map( ( { id } ) => id );
 				}
 
-				container.fields = _.map( container.fields, ( field ) => flattenField( field, container, fields ) );
+				container.fields = container.fields.map( ( field ) => flattenField( field, container, fields ) );
 
 				addFields( fields );
 				addContainer( container );
@@ -124,9 +143,12 @@ function handler() {
 				// * Disable the submit { handler } since it breaks our validation logic.
 				// * Disable live preview mode because we can't detect when the widget is updated/synced.
 				// * Show the "Apply" button because it's hidden by the live mode.
+				if ( window.cf.config.pagenow === PAGE_NOW_CUSTOMIZE && event.type === 'widget-added' ) {
+					const widgetId = $widget
+						.find( '[name="widget-id"]' )
+						.val();
 
-				if ( window.cf.config.pagenow === PAGE_NOW_CUSTOMIZE && effect.payload.event.type === 'widget-added' ) {
-					window.jQuery( $widgetContainer )
+					$widget
 						.find( '[name="savewidget"]' )
 						.show()
 						.end()
@@ -134,18 +156,18 @@ function handler() {
 						.off( 'keydown', 'input' )
 						.off( 'change input propertychange', ':input' );
 
-					const widgetInstance = wp.customize.Widgets.getWidgetFormControlForWidget( widgetId );
+					const instance = wp.customize.Widgets.getWidgetFormControlForWidget( widgetId );
 
 					// Change the flag for 'live mode' so we can receive proper `widget-updated` events.
-					widgetInstance.liveUpdateMode = false;
+					instance.liveUpdateMode = false;
 				}
 
 				break;
 			}
 
-			case 'DELETED_WIDGET': {
-				const { widgetId } = effect.payload;
-				const containerId = widgetIdToContainerId( widgetId );
+			case 'WIDGET_DELETED': {
+				const widgetId = effect.payload.data.replace( 'deleted:', '' );
+				const containerId = `${ CARBON_FIELDS_CONTAINER_ID_PREFIX }${ widgetId }`;
 
 				// Get the container from the store.
 				const container = getContainerById( containerId );
@@ -166,8 +188,4 @@ function handler() {
 	};
 }
 
-const applyWithEffects = withEffects( aperture, { handler } );
-
-export default compose(
-	applyWithEffects
-)( WidgetHandler );
+export default withEffects( aperture, { handler } )( WidgetHandler );
