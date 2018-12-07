@@ -3,7 +3,7 @@
    ========================================================================== */
 
 .cf-oembed__preview {
-	.wp-block:focus-within & {
+	.block-editor .cf-field:focus-within & {
 		border-color: $wp-color-medium-blue;
 	}
 }
