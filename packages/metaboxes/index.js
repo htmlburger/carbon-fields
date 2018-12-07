@@ -27,5 +27,5 @@ const context = isGutenberg() ? 'gutenberg' : 'classic';
 /**
  * Abracadabra! Poof! Containers everywhere ...
  */
-initializeMonitors( context );
 initializeContainers( context );
+initializeMonitors( context );

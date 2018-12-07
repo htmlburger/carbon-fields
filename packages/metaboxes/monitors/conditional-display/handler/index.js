@@ -1,12 +1,14 @@
 /**
  * External dependencies.
  */
+import { unmountComponentAtNode } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { get, map } from 'lodash';
 
 /**
  * Internal dependencies.
  */
+import { renderContainer } from '../../../containers';
 import base from '../conditions/base';
 import boolean from '../conditions/boolean';
 import postTerm from '../conditions/post-term';
@@ -79,9 +81,10 @@ function evaluate( definitions, values, relation ) {
  *
  * @param  {Object} props
  * @param  {Object} props.containers
+ * @param  {string} props.context
  * @return {Function}
  */
-export default function handler( { containers } ) {
+export default function handler( { containers, context } ) {
 	return function( effect ) {
 		const results = map( containers, ( container, id ) => {
 			return [
@@ -91,15 +94,21 @@ export default function handler( { containers } ) {
 		} );
 
 		results.forEach( ( [ id, result ] ) => {
-			const node = document.getElementById( id );
-			const fieldset = document.querySelector( `#${ id } fieldset` );
+			const postboxNode = document.getElementById( id );
+			const containerNode = document.querySelector( `.container-${ id }` );
 
-			if ( node ) {
-				node.hidden = ! result;
+			if ( postboxNode ) {
+				postboxNode.hidden = ! result;
 			}
 
-			if ( fieldset ) {
-				fieldset.disabled = ! result;
+			if ( containerNode ) {
+				if ( result && ! containerNode.childElementCount ) {
+					renderContainer( containers[ id ], context );
+				}
+
+				if ( ! result && !! containerNode.childElementCount ) {
+					unmountComponentAtNode( containerNode );
+				}
 			}
 		} );
 	};
