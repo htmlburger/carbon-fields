@@ -8,13 +8,6 @@ namespace Carbon_Fields\Field;
 class Rich_Text_Field extends Textarea_Field {
 
 	/**
-	 * Defines if the rich text field should be loaded only when scrolled into view
-	 *
-	 * @var boolean
-	 */
-	protected $lazyload = true;
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public static function field_type_activated() {
