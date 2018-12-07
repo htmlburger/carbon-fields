@@ -10,10 +10,18 @@
 	margin: 0;
 	overflow-y: auto;
 	list-style: none outside none;
+
+	&:empty {
+		display: none;
+	}
 }
 
 .cf-media-gallery__actions {
 	padding: 8px;
+
+	.cf-media-gallery__list:empty ~ & {
+		border-top-width: 0;
+	}
 }
 
 .cf-media-gallery__item {
