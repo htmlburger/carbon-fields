@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { get } from 'lodash';
 
 /**
  * Internal dependencies.
@@ -12,17 +13,13 @@ import fetchAttachmentsData from '../../utils/fetch-attachments-data';
 
 class FileField extends Component {
 	/**
-	 * Define the component state
+	 * Local state.
 	 *
-	 * @return {void}
+	 * @type {Object}
 	 */
-	constructor() {
-		super();
-
-		this.state = {
-			fileData: {}
-		};
-	}
+	state = {
+		data: {}
+	};
 
 	/**
 	 * Lifecycle Hook.
@@ -30,13 +27,11 @@ class FileField extends Component {
 	 * @return {void}
 	 */
 	componentDidMount() {
-		const {
-			value
-		} = this.props;
+		const { value, field } = this.props;
 
 		if ( value ) {
-			fetchAttachmentsData( [ value ] ).then( ( fileData ) => {
-				this.handleFileMetaChange( fileData[ 0 ] );
+			fetchAttachmentsData( [ field.value_meta.id ] ).then( ( [ data = {} ] ) => {
+				this.handleFileDataChange( data );
 			} );
 		}
 	}
@@ -44,15 +39,15 @@ class FileField extends Component {
 	/**
 	 * Handles the file meta set.
 	 *
-	 * @param  {Object} fileData
+	 * @param  {Object} data
 	 * @return {void}
 	 */
-	handleFileMetaChange = ( fileData ) => {
-		this.setState( { fileData } );
+	handleFileDataChange = ( data ) => {
+		this.setState( { data } );
 	}
 
 	/**
-	 * Handles the clear action of the file field
+	 * Handles the clear action of the file field.
 	 *
 	 * @return {void}
 	 */
@@ -61,7 +56,7 @@ class FileField extends Component {
 
 		onChange( id, '' );
 
-		this.handleFileMetaChange( {} );
+		this.handleFileDataChange( {} );
 	}
 
 	/**
@@ -71,11 +66,17 @@ class FileField extends Component {
 	 * @return {void}
 	 */
 	handleSelect = ( files ) => {
-		const { id, onChange } = this.props;
+		const {
+			id,
+			field,
+			onChange
+		} = this.props;
 
-		onChange( id, files[ 0 ].id );
+		const [ file ] = files;
 
-		this.handleFileMetaChange( files[ 0 ] );
+		onChange( id, get( file, field.value_type, file.id ) );
+
+		this.handleFileDataChange( file );
 	}
 
 	/**
@@ -84,6 +85,8 @@ class FileField extends Component {
 	 * @return {Object}
 	 */
 	render() {
+		const { data } = this.state;
+
 		const {
 			value,
 			name,
@@ -92,7 +95,6 @@ class FileField extends Component {
 			mediaLibraryButtonLabel,
 			mediaLibraryTitle
 		} = this.props;
-		const { fileData } = this.state;
 
 		return (
 			<MediaLibrary
@@ -112,16 +114,16 @@ class FileField extends Component {
 								readOnly
 							/>
 
-							{ value && (
+							{ value && data.id && (
 								<div className="cf-file__content">
 									<div className="cf-file__preview">
-										<img src={ fileData.sizes ? fileData.sizes.thumbnail.url : fileData.icon } className="cf-file__image" />
+										<img src={ data.sizes ? data.sizes.thumbnail.url : data.icon } className="cf-file__image" />
 
 										<button type="button" className="cf-file__remove dashicons-before dashicons-no-alt" onClick={ this.handleClear }></button>
 									</div>
 
-									<span className="cf-file__name" title={ fileData.filename }>
-										{ fileData.filename }
+									<span className="cf-file__name" title={ data.filename }>
+										{ data.filename }
 									</span>
 								</div>
 							) }
