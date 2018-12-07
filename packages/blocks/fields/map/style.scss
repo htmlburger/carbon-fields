@@ -3,7 +3,7 @@
    ========================================================================== */
 
 .cf-map__canvas {
-	.wp-block:focus-within & {
+	.block-editor .cf-map:focus-within & {
 		border-color: $wp-color-medium-blue;
 	}
 }
