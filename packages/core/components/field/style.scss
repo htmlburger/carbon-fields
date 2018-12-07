@@ -27,3 +27,13 @@
 		display: none;
 	}
 }
+
+.cf-field__asterisk {
+	color: $wp-color-accent-red;
+}
+
+.cf-field__error {
+	display: block;
+	margin-top: $size-base;
+	color: $wp-color-accent-red;
+}
