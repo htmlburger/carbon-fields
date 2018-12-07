@@ -21,8 +21,11 @@ export default createHigherOrderComponent( ( Component ) => {
 
 		/**
 		 * Wrap top-level field names in compact input key.
+		 *
+		 * The fields in widgets don't need this prefix because
+		 * their input is already compacted by the `widget` namespace.
 		 */
-		if ( compactInput && ! props.name ) {
+		if ( compactInput && ! props.name && name.indexOf( 'widget-carbon_fields' ) === -1 ) {
 			name = `${ compactInputKey }[${ name }]`;
 		}
 
