@@ -538,6 +538,7 @@ class Helper {
 	 */
 	public static function get_attachment_metadata( $id, $type ) {
 		$attachment_meta = array(
+			'id'                => 0,
 			'thumb_url'         => '',
 			'default_thumb_url' => '',
 			'file_ext'          => '',
@@ -578,6 +579,7 @@ class Helper {
 		$meta                           = wp_get_attachment_metadata( $attachment->ID );
 		list( $src, $width, $height )   = wp_get_attachment_image_src( $attachment->ID, 'full' );
 
+		$attachment_meta['id']          = intval( $id );
 		$attachment_meta['edit_nonce']  = wp_create_nonce( 'update-post_' . $id );
 		$attachment_meta['title']       = get_the_title( $id );
 		$attachment_meta['caption']     = get_post_field( 'post_excerpt', $id );
