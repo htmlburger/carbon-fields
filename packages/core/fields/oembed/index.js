@@ -196,7 +196,7 @@ function handler( props ) {
 					} );
 				} );
 
-				request.done( () => {
+				request.fail( () => {
 					errorHandler();
 
 					props.setState( {
