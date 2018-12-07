@@ -3,14 +3,14 @@
    ========================================================================== */
 
 .cf-complex__placeholder-label {
-	.wp-block & {
+	.block-editor & {
 		font-size: $wp-font-size;
 		line-height: $wp-line-height;
 	}
 }
 
 .cf-complex__inserter-menu {
-	.wp-block & {
+	.block-editor & {
 		z-index: 10;
 		list-style: none outside none;
 		border: 1px solid $gb-light-gray-500;
@@ -42,7 +42,7 @@
 }
 
 .cf-complex__inserter-item {
-	.wp-block & {
+	.block-editor & {
 		color: $gb-dark-gray-600;
 
 		&:hover {
@@ -52,11 +52,11 @@
 }
 
 .cf-complex__tabs-item {
-	.wp-block & {
+	.block-editor & {
 		color: $gb-dark-gray-500;
 	}
 
-	.wp-block &--current {
+	.block-editor &--current {
 		color: $gb-dark-gray-900;
 	}
 }
