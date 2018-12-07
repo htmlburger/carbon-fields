@@ -37,6 +37,25 @@ class FileField extends Component {
 	}
 
 	/**
+	 * Returns an URL to the attachment's thumbnail.
+	 *
+	 * @return {string}
+	 */
+	getThumb() {
+		const { data } = this.state;
+
+		if ( data.sizes ) {
+			const size = data.sizes.thumbnail || data.sizes.full;
+
+			if ( size ) {
+				return size.url;
+			}
+		}
+
+		return data.icon;
+	}
+
+	/**
 	 * Handles the file meta set.
 	 *
 	 * @param  {Object} data
@@ -117,7 +136,7 @@ class FileField extends Component {
 							{ value && data.id && (
 								<div className="cf-file__content">
 									<div className="cf-file__preview">
-										<img src={ data.sizes ? data.sizes.thumbnail.url : data.icon } className="cf-file__image" />
+										<img src={ this.getThumb() } className="cf-file__image" />
 
 										<button type="button" className="cf-file__remove dashicons-before dashicons-no-alt" onClick={ this.handleClear }></button>
 									</div>
