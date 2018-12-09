@@ -67,6 +67,7 @@
   "dependencies": {
     "@babel/runtime": "^7.1.5",
     "@wordpress/blocks": "^6.0.2",
+    "@wordpress/browserslist-config": "^2.2.2",
     "@wordpress/components": "^7.0.3",
     "@wordpress/compose": "^3.0.0",
     "@wordpress/data": "^4.0.1",

@@ -1128,6 +1128,11 @@
     tinycolor2 "^1.4.1"
     uuid "^3.3.2"
 
+"@wordpress/browserslist-config@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@wordpress/browserslist-config/-/browserslist-config-2.2.2.tgz#8bc88e9e3b363ba9d64207b811d5daaaecee3ee6"
+  integrity sha512-RZ9XeDeXTc/l3RdSnfYYwcsylFPouV+2ZpQQaAgALSXthMWJT2wU61zD4mH9aMI5Oo6Z8OUVI2vOZM/7HObPxw==
+
 "@wordpress/components@^7.0.3":
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/@wordpress/components/-/components-7.0.3.tgz#792934119445d4452c997f23872f0f81d83ee1c9"
