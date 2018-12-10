@@ -57,6 +57,9 @@ class Loader {
 		# Enable the REST API service
 		\Carbon_Fields\Carbon_Fields::service( 'rest_api' )->enable();
 
+		# Enable post meta revisions service
+		\Carbon_Fields\Carbon_Fields::service( 'revisions' )->enable();
+
 		# Initialize sidebar manager
 		$this->sidebar_manager->boot();
 	}

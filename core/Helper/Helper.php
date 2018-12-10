@@ -165,6 +165,7 @@ class Helper {
 	 * @return mixed
 	 */
 	public static function get_post_meta( $id, $name, $container_id = '' ) {
+		$id = apply_filters( 'carbon_get_post_meta_post_id', $id, $name, $container_id );
 		return static::get_value( $id, 'post_meta', $container_id, $name );
 	}
 

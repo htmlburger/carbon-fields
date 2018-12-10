@@ -10,6 +10,7 @@ use Carbon_Fields\Toolset\Key_Toolset;
 use Carbon_Fields\Toolset\WP_Toolset;
 use Carbon_Fields\Service\Meta_Query_Service;
 use Carbon_Fields\Service\Legacy_Storage_Service_v_1_5;
+use Carbon_Fields\Service\Revisions_Service;
 use Carbon_Fields\Service\REST_API_Service;
 use Carbon_Fields\Libraries\Sidebar_Manager\Sidebar_Manager;
 
@@ -350,6 +351,10 @@ final class Carbon_Fields {
 		$ioc['services'] = function() {
 			return new PimpleContainer();
 		};
+
+		$ioc['services']['revisions'] = function() use ( $ioc ) {
+			return new Revisions_Service();
+		};		
 
 		$ioc['services']['meta_query'] = function() use ( $ioc ) {
 			return new Meta_Query_Service( $ioc['container_repository'], $ioc['key_toolset'] );
