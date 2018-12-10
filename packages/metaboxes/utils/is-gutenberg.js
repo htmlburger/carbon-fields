@@ -9,5 +9,5 @@ import { isUndefined } from 'lodash';
  * @return {boolean}
  */
 export default function isGutenberg() {
-	return ! isUndefined( window._wpLoadGutenbergEditor );
+	return ! isUndefined( window._wpLoadGutenbergEditor ) || ! isUndefined( window._wpLoadBlockEditor );
 }
