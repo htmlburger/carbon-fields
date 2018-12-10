@@ -60,7 +60,7 @@ addFilter( 'carbon-fields.conditional-display-post-template.classic', 'carbon-fi
 /**
  * Defines the side effects for Gutenberg.
  */
-addFilter( 'carbon-fields.conditional-display-post-template.gutenberg', 'carbon-fields/metaboxes', ( ) => {
+addFilter( 'carbon-fields.conditional-display-post-template.gutenberg', 'carbon-fields/metaboxes', () => {
 	return pipe(
 		fromSelector( select( 'core/editor' ).getEditedPostAttribute, 'template' ),
 		distinctUntilChanged(),
