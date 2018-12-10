@@ -1,12 +1,12 @@
 module.exports = {
 	presets: [
-		['@babel/preset-env', {
+		[ '@babel/preset-env', {
 			modules: false
-		}],
-		['@babel/preset-react', {
+		} ],
+		[ '@babel/preset-react', {
 			pragma: 'wp.element.createElement',
 			pragmaFrag: 'wp.element.Fragment'
-		}]
+		} ]
 	],
 	plugins: [
 		'@babel/plugin-proposal-class-properties',
@@ -17,13 +17,10 @@ module.exports = {
 	env: {
 		production: {
 			plugins: [
-				[
-					"@wordpress/babel-plugin-makepot",
-					{
-						"output": "languages/carbon-fields-ui.pot"
-					}
-				]
-			],
-		},
-	},
+				[ '@wordpress/babel-plugin-makepot', {
+					'output': 'languages/carbon-fields-ui.pot'
+				} ]
+			]
+		}
+	}
 };
