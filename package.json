@@ -9,13 +9,7 @@
     "start": "npm run development -- --watch",
     "build": "npm run development && npm run production",
     "development": "cross-env NODE_ENV=development webpack --mode development",
-    "production": "cross-env NODE_ENV=production webpack --mode production",
-    "precommit": "lint-staged"
-  },
-  "lint-staged": {
-    "packages/**/*.js": [
-      "eslint"
-    ]
+    "production": "cross-env NODE_ENV=production webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -50,8 +44,8 @@
     "eslint-config-wordpress": "^2.0.0",
     "eslint-plugin-react": "^7.11.1",
     "eslint-plugin-wordpress": "https://github.com/WordPress-Coding-Standards/eslint-plugin-wordpress#a650f73e2461ddae0faec900c0199b3c258cb5da",
-    "husky": "^1.1.0",
-    "lint-staged": "^7.3.0",
+    "husky": "^1.2.0",
+    "lint-staged": "^8.1.0",
     "mini-css-extract-plugin": "^0.4.4",
     "node-sass": "^4.9.4",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
