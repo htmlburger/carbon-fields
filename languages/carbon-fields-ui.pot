@@ -3,6 +3,18 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
+#: packages/blocks/components/block-edit/index.js:150
+msgid "Show preview"
+msgstr ""
+
+#: packages/blocks/components/block-edit/index.js:151
+msgid "Hide preview"
+msgstr ""
+
+#: packages/blocks/components/block-edit/index.js:165
+msgid "Fields"
+msgstr ""
+
 #: packages/blocks/components/not-supported-field/index.js:14
 msgid "Field of type '%s' is not supported in Gutenberg."
 msgstr ""
@@ -61,17 +73,17 @@ msgstr ""
 msgid "Showing %1$d of %2$d results"
 msgstr ""
 
-#: packages/core/fields/association/index.js:382
+#: packages/core/fields/association/index.js:381
 msgid "An error occurred while trying to fetch association options."
 msgstr ""
 
-#: packages/core/fields/association/index.js:424
+#: packages/core/fields/association/index.js:423
 #: packages/core/fields/complex/index.js:385
 #: packages/core/hocs/with-validation/required.js:20
 msgid "This field is required. "
 msgstr ""
 
-#: packages/core/fields/association/index.js:428
+#: packages/core/fields/association/index.js:427
 msgid "Minimum number of items not reached (%s items)"
 msgstr ""
 
@@ -99,19 +111,19 @@ msgstr ""
 msgid "Add %s"
 msgstr ""
 
-#: packages/core/fields/map/index.js:166
+#: packages/core/fields/map/index.js:165
 msgid "The address could not be found. "
 msgstr ""
 
-#: packages/core/fields/map/index.js:168
+#: packages/core/fields/map/index.js:167
 msgid "Geocode was not successful for the following reason: "
 msgstr ""
 
-#: packages/core/fields/oembed/index.js:189
+#: packages/core/fields/oembed/index.js:188
 msgid "An error occurred while trying to fetch oembed preview."
 msgstr ""
 
-#: packages/core/fields/oembed/index.js:204
+#: packages/core/fields/oembed/index.js:203
 msgid "Not Found"
 msgstr ""
 
@@ -123,11 +135,11 @@ msgstr ""
 msgid "Visual"
 msgstr ""
 
-#: packages/core/fields/sidebar/index.js:111
+#: packages/core/fields/sidebar/index.js:110
 msgid "Please enter the name of the new sidebar:"
 msgstr ""
 
-#: packages/core/fields/sidebar/index.js:129
+#: packages/core/fields/sidebar/index.js:128
 msgid "An error occurred while trying to create the sidebar."
 msgstr ""
 
@@ -159,10 +171,10 @@ msgstr ""
 msgid "Unsupported container condition comparison operator used - \"%1$s\"."
 msgstr ""
 
-#: packages/metaboxes/monitors/conditional-display/handler/index.js:53
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:55
 msgid "Unsupported container condition - \"%1$s\"."
 msgstr ""
 
-#: packages/metaboxes/monitors/conditional-display/handler/index.js:71
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:73
 msgid "Unsupported container condition relation used - \"%1$s\"."
 msgstr ""
