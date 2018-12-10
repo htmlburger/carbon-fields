@@ -89,12 +89,22 @@
             "name": "Viktor Vasilev",
             "email": "liberalcho@gmail.com",
             "role": "Developer"
+        },
+        {
+            "name": "Georgi Georgiev",
+            "email": "george.georgiev96@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Atanas Vasilev",
+            "email": "atanasvasilev91@gmail.com",
+            "role": "Developer"
         }
     ],
     "support": {
         "source": "https://github.com/htmlburger/carbon-fields",
-        "docs": "http://carbonfields.net/docs/",
         "issues": "https://github.com/htmlburger/carbon-fields/issues",
+        "docs": "http://carbonfields.net/docs/",
         "email": "wordpress@htmlburger.com"
     },
     "autoload": {
