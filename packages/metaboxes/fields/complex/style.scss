@@ -1,0 +1,50 @@
+/* ==========================================================================
+   Complex
+   ========================================================================== */
+
+.cf-complex__inserter-menu {
+	.postbox & {
+		margin: 0;
+		border-radius: $wp-radius-round;
+		background-color: $wp-color-ultra-dark-gray;
+
+		&:before {
+			position: absolute;
+			top: 50%;
+			right: 100%;
+			width: 0;
+			height: 0;
+			border-width: 5px 5px 5px 0;
+			border-style: solid;
+			border-color: transparent $wp-color-ultra-dark-gray;
+			margin-top: -5px;
+			content: '';
+		}
+	}
+}
+
+.cf-complex__inserter-item {
+	.postbox & {
+		font-weight: 600;
+		color: $color-white;
+		transition: color $transition-base;
+
+		&:hover {
+			color: $wp-color-medium-blue;
+		}
+	}
+}
+
+.cf-complex__inserter-button {
+	.postbox .cf-complex__tabs & {
+		font-weight: 600;
+		color: $wp-color-dark-gray;
+	}
+}
+
+.cf-complex__tabs-item {
+	.postbox & {
+		font-weight: 600;
+		color: $wp-color-dark-gray;
+	}
+}

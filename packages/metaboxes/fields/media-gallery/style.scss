@@ -1,0 +1,34 @@
+/* ==========================================================================
+   Media Gallery
+   ========================================================================== */
+
+.cf-media-gallery__inner {
+	.postbox & {
+		border: 1px solid $wp-color-gray-light-500;
+	}
+}
+
+.cf-media-gallery__actions {
+	.postbox & {
+		border-top: 1px solid $wp-color-gray-light-500;
+	}
+}
+
+.cf-media-gallery__item-inner {
+	.postbox & {
+		border: 1px solid $wp-color-gray-light-500;
+	}
+}
+
+.cf-media-gallery__item-preview {
+	.postbox & {
+		background-color: $wp-color-gray-light-200;
+	}
+}
+
+.cf-media-gallery__item-name {
+	.postbox & {
+		border-top: 1px solid $wp-color-gray-light-500;
+		background-color: $wp-color-gray-light-200;
+	}
+}

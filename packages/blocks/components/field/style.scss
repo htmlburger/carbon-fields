@@ -1,0 +1,31 @@
+/* ==========================================================================
+   Field
+   ========================================================================== */
+
+.cf-field {
+	.block-editor .cf-block__fields > &:not(:first-child) {
+		margin-top: 14px;
+	}
+
+	.wp-block & {
+		font-family: $wp-font;
+		font-size: $wp-font-size;
+		line-height: $wp-line-height;
+		color: $gb-dark-gray-500;
+		min-width: 0;
+	}
+
+	.block-editor .cf-complex & {
+		padding: $size-base * 2;
+		border-width: 1px 1px 0 0;
+		border-style: solid;
+		border-color: $wp-color-gray-light-500;
+		margin-top: 0;
+	}
+}
+
+.cf-field__label {
+	.block-editor & {
+		margin-bottom: 4px;
+	}
+}

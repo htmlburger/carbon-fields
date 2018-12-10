@@ -1,0 +1,16 @@
+/* ==========================================================================
+   Textarea
+   ========================================================================== */
+
+.cf-textarea__input {
+	.wp-block .cf-field & {
+		border-color: $wp-color-gray-light-500;
+		border-radius: 0;
+		transition: border-color $transition-base;
+
+		&:focus {
+			border-color: $wp-color-medium-blue;
+			box-shadow: none;
+		}
+	}
+}

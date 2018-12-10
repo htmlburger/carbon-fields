@@ -1,0 +1,94 @@
+/* ==========================================================================
+   File
+   ========================================================================== */
+
+.cf-file__inner {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 130px;
+	height: 130px;
+	border: 1px dashed $wp-color-gray-light-800;
+	box-sizing: border-box;
+}
+
+.cf-file__content {
+	position: absolute;
+	top: -1px;
+	right: -1px;
+	bottom: -1px;
+	left: -1px;
+	border: 1px solid $wp-color-gray-light-800;
+}
+
+.cf-file__preview {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 28px;
+	width: 100%;
+	overflow: hidden;
+	background-color: $wp-color-gray-light-500;
+	box-shadow: 0 0 15px transparentize($color-black, .9) inset;
+}
+
+.cf-file__image {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	height: auto;
+	max-width: 100%;
+	transform: translate(-50%, -50%);
+}
+
+.cf-file__name {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 5px;
+	border-top: 1px solid $wp-color-gray-light-800;
+	overflow: hidden;
+	background-color: $wp-color-gray-light-200;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.cf-file__browse {
+	position: relative;
+
+	.cf-file__content ~ & {
+		margin-bottom: 29px;
+		visibility: hidden;
+		opacity: 0;
+		transition: visibility $transition-base, opacity $transition-base;
+	}
+
+	.cf-file__inner:hover .cf-file__content ~ & {
+		visibility: visible;
+		opacity: 1;
+	}
+}
+
+.cf-file__remove {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	padding: 0;
+	border: 0;
+	outline: none;
+	background-color: transparent;
+	cursor: pointer;
+	transition: opacity $transition-base;
+
+	&:hover {
+		opacity: .8;
+	}
+
+	&::before {
+		border-radius: 50%;
+		background-color: $wp-color-ultra-dark-gray;
+		color: $color-white;
+	}
+}

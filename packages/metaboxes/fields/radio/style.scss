@@ -1,0 +1,21 @@
+/* ==========================================================================
+   Radio
+   ========================================================================== */
+
+.cf-radio__label {
+	.inside .cf-radio-image .cf-radio__input:focus ~ & {
+		box-shadow: 0 0 2px transparentize($wp-color-medium-blue, 0.2);
+	}
+}
+
+.cf-radio-image__image {
+	.inside & {
+		border: 1px solid $wp-color-gray-light-800;
+	}
+
+	.inside .cf-radio__input:focus ~ .cf-radio__label &,
+	.inside .cf-radio__input:checked ~ .cf-radio__label & {
+		outline: 4px solid $wp-color-medium-blue;
+	}
+}
+

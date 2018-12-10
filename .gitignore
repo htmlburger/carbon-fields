@@ -15,7 +15,7 @@ sftp-config.json
 Thumbs.db
 
 # Node
-/node_modules/
+node_modules
 
 # Unit tests
 /tmp
@@ -29,3 +29,5 @@ composer.lock
 
 # Bundled assets
 /assets/dist/
+/build
+carbon-fields.zip

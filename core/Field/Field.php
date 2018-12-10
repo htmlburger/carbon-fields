@@ -144,14 +144,6 @@ class Field implements Datastore_Holder_Interface {
 	protected $autoload = false;
 
 	/**
-	 * Whether or not this field will be initialized when the field is in the viewport (visible).
-	 *
-	 * @see set_lazyload()
-	 * @var bool
-	 */
-	protected $lazyload = false;
-
-	/**
 	 * Key-value array of attribtues and their values
 	 *
 	 * @var array
@@ -828,26 +820,6 @@ class Field implements Datastore_Holder_Interface {
 	}
 
 	/**
-	 * Return whether or not this field should be lazyloaded.
-	 *
-	 * @return bool
-	 */
-	public function get_lazyload() {
-		return $this->lazyload;
-	}
-
-	/**
-	 * Whether or not this field will be initialized when the field is in the viewport (visible).
-	 *
-	 * @param  bool  $lazyload
-	 * @return self  $this
-	 */
-	public function set_lazyload( $lazyload ) {
-		$this->lazyload = $lazyload;
-		return $this;
-	}
-
-	/**
 	 * Get the field width.
 	 *
 	 * @return int $width
@@ -1058,7 +1030,6 @@ class Field implements Datastore_Holder_Interface {
 			'help_text' => $this->get_help_text(),
 			'context' => $this->get_context(),
 			'required' => $this->is_required(),
-			'lazyload' => $this->get_lazyload(),
 			'width' => $this->get_width(),
 			'classes' => $this->get_classes(),
 			'conditional_logic' => $this->get_conditional_logic(),

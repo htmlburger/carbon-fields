@@ -23,11 +23,6 @@ class Map_Field extends Field {
 	);
 
 	/**
-	 * {@inheritDoc}
-	 */
-	protected $lazyload = true;
-
-	/**
 	 * Create a field from a certain type with the specified label.
 	 *
 	 * @param string $type  Field type

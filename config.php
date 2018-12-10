@@ -4,7 +4,7 @@ namespace Carbon_Fields;
 
 # Define version constant
 if ( ! defined( __NAMESPACE__ . '\VERSION' ) ) {
-	define( __NAMESPACE__ . '\VERSION', '2.2.0' );
+	define( __NAMESPACE__ . '\VERSION', '3.0.0-beta.1' );
 }
 
 # Define root directory
@@ -19,7 +19,7 @@ if ( ! defined( __NAMESPACE__ . '\URL' ) ) {
 
 # Define whether to compact input fields into a single one to avoid hitting max_input_vars
 if ( ! defined( __NAMESPACE__ . '\COMPACT_INPUT' ) ) {
-	define( __NAMESPACE__ . '\COMPACT_INPUT', false );
+	define( __NAMESPACE__ . '\COMPACT_INPUT', true );
 }
 
 # Define whether to compact input fields into a single one to avoid hitting max_input_vars
