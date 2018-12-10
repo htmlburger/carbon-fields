@@ -212,12 +212,15 @@ class Loader {
 		wp_add_inline_script( 'carbon-fields-vendor', 'window.cf = window.cf || {}', 'before' );
 		wp_add_inline_script( 'carbon-fields-vendor', sprintf( 'window.cf.preloaded = %s', wp_json_encode( $this->get_json_data() ) ), 'before' );
 
+		$revisions = \Carbon_Fields\Carbon_Fields::service( 'revisions' );
+
 		wp_localize_script( 'carbon-fields-vendor', 'cf', apply_filters( 'carbon_fields_config', array(
 			'config' => array(
 				'locale' => $this->get_ui_translations(),
 				'pagenow' => $pagenow,
 				'compactInput' => \Carbon_Fields\COMPACT_INPUT,
 				'compactInputKey' => \Carbon_Fields\COMPACT_INPUT_KEY,
+				'revisionsInputKey' => $revisions::CHANGE_KEY,
 			)
 		) ) );
 	}

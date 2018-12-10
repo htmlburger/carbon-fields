@@ -192,13 +192,13 @@ export function savingLock( state = {}, action ) {
 }
 
 /**
- * The reducer that keeps track of the save locks.
+ * The reducer that keeps track if there is dirty fields.
  *
- * @param  {Object} state
- * @param  {Object} action
+ * @param  {boolean} state
+ * @param  {Object}  action
  * @return {Object}
  */
-export function isDirty( state = {}, action ) {
+export function isDirty( state = false, action ) {
 	switch ( action.type ) {
 		case 'UPDATE_FIELD_VALUE':
 			return true;

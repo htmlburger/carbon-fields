@@ -5,7 +5,7 @@ namespace Carbon_Fields\Service;
 use Carbon_Fields\Carbon_Fields;
 
 class Revisions_Service extends Service {
-	const CHANGE_KEY = '_carbon_changed';
+	const CHANGE_KEY = 'carbon_fields_changed';
 
 	protected function enabled() {
 		add_filter( 'carbon_get_post_meta_post_id', [ $this, 'update_post_id_on_preview' ], 10, 3 );
@@ -77,6 +77,7 @@ class Revisions_Service extends Service {
 	public function maybe_save_revision( $fields, $post = null ) {
 		$wp_preview = ( ! empty( $_POST['wp-preview'] ) ) ? $_POST['wp-preview'] : '';
 		$in_preview = $wp_preview === 'dopreview';
+
 		if ( ! $in_preview ) {
 			return $fields;
 		}
@@ -89,6 +90,14 @@ class Revisions_Service extends Service {
 	}
 
 	public function add_fields_to_revision( $fields, $post = null ) {
+		// When Gutenberg is saving the post
+		// this function isn't defined yet.
+		// Also we don't need it at all because the metaboxes
+		// are saved by separate request.
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return $fields;
+		}
+
 		$current_screen = get_current_screen();
 
 		$is_revision_screen = $current_screen && $current_screen->id === 'revision';
