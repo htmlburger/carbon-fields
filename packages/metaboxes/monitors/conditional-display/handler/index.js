@@ -102,11 +102,15 @@ export default function handler( { containers, context } ) {
 			}
 
 			if ( containerNode ) {
-				if ( result && ! containerNode.childElementCount ) {
+				if ( result && ! containerNode.dataset.mounted ) {
+					containerNode.dataset.mounted = true;
+
 					renderContainer( containers[ id ], context );
 				}
 
-				if ( ! result && !! containerNode.childElementCount ) {
+				if ( ! result && containerNode.dataset.mounted ) {
+					delete containerNode.dataset.mounted;
+
 					unmountComponentAtNode( containerNode );
 				}
 			}
