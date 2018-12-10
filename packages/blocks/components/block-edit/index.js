@@ -104,7 +104,7 @@ class BlockEdit extends Component {
 					}
 
 					const id = `cf-${ clientId }__${ field.base_name }`;
-					const value = get( attributes.data, field.base_name );
+					const value = get( attributes.data, field.base_name, field.default_value );
 
 					return (
 						<Field
