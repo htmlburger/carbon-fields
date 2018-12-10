@@ -249,7 +249,11 @@ class Block_Container extends Container {
 			'content' => $content,
 		);
 
-		return call_user_func( $this->render_callback , $fields, $block );
+		ob_start();
+
+		call_user_func( $this->render_callback , $fields, $block );
+
+		return ob_get_clean();
 	}
 
 	/**
