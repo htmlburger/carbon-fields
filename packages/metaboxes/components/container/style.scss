@@ -2,6 +2,12 @@
    Container
    ========================================================================== */
 
+.carbon-box {
+	&.hide-if-js:not([hidden]) {
+		display: block;
+	}
+}
+
 #poststuff .carbon-box .inside,
 .carbon-box .inside {
 	padding: 0;
