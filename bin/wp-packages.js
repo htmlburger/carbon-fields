@@ -7,7 +7,8 @@ module.exports.packages = [
 	'@wordpress/compose',
 	'@wordpress/element',
 	'@wordpress/hooks',
-	'@wordpress/data'
+	'@wordpress/data',
+	'@wordpress/i18n'
 ];
 
 /**

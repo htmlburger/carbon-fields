@@ -35,6 +35,7 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@wordpress/babel-plugin-makepot": "^2.1.2",
+    "@wordpress/browserslist-config": "^2.2.2",
     "autoprefixer": "^9.3.1",
     "babel-eslint": "^8.2.6",
     "babel-loader": "^8.0.2",
@@ -55,14 +56,13 @@
     "sass-loader": "^7.1.0",
     "sass-resources-loader": "^2.0.0",
     "terser-webpack-plugin": "^1.1.0",
-    "webpack": "4.19.1",
+    "webpack": "^4.27.1",
     "webpack-cli": "^3.1.1",
     "webpack-merge": "^4.1.4"
   },
   "dependencies": {
     "@babel/runtime": "^7.1.5",
     "@wordpress/blocks": "^6.0.2",
-    "@wordpress/browserslist-config": "^2.2.2",
     "@wordpress/components": "^7.0.3",
     "@wordpress/compose": "^3.0.0",
     "@wordpress/data": "^4.0.1",

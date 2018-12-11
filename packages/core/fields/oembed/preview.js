@@ -1,8 +1,7 @@
 /**
  * External dependencies.
  */
-import { renderToStaticMarkup } from 'react-dom/server';
-import { Component } from '@wordpress/element';
+import { Component, renderToString } from '@wordpress/element';
 
 class OembedPreview extends Component {
 	constructor() {
@@ -181,7 +180,7 @@ class OembedPreview extends Component {
 		);
 
 		this.iframe.contentWindow.document.open();
-		this.iframe.contentWindow.document.write( '<!DOCTYPE html>' + renderToStaticMarkup( htmlDoc ) );
+		this.iframe.contentWindow.document.write( '<!DOCTYPE html>' + renderToString( htmlDoc ) );
 		this.iframe.contentWindow.document.close();
 	}
 }

@@ -4,10 +4,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import nanoid from 'nanoid';
+import immer from 'immer';
 import * as compose from '@wordpress/compose';
 import * as element from '@wordpress/element';
 import * as hooks from '@wordpress/hooks';
 import * as data from '@wordpress/data';
+import * as i18n from '@wordpress/i18n';
 import * as classnames from 'classnames';
 import * as _ from 'lodash';
 import * as refractCallbag from 'refract-callbag';
@@ -28,10 +30,12 @@ window.cf.vendor = [
 	[ 'react', React ],
 	[ 'react-dom', ReactDOM ],
 	[ 'nanoid', nanoid ],
+	[ 'immer', immer ],
 	[ '@wordpress/compose', compose ],
 	[ '@wordpress/element', element ],
 	[ '@wordpress/hooks', hooks ],
 	[ '@wordpress/data', data ],
+	[ '@wordpress/i18n', i18n ],
 	[ 'classnames', classnames ],
 	[ 'lodash', _ ],
 	[ 'refract-callbag', refractCallbag ],

@@ -22,6 +22,7 @@ module.exports = [
 			'react': [ 'cf', 'vendor', 'react' ],
 			'react-dom': [ 'cf', 'vendor', 'react-dom' ],
 			'nanoid': [ 'cf', 'vendor', 'nanoid' ],
+			'immer': [ 'cf', 'vendor', 'immer' ],
 			'@wordpress/components': [ 'wp', 'components' ],
 			'@wordpress/blocks': [ 'wp', 'blocks' ],
 			'@wordpress/editor': [ 'wp', 'editor' ],

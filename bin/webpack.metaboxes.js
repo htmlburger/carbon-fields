@@ -22,6 +22,7 @@ const config = {
 		'refract-callbag': [ 'cf', 'vendor', 'refract-callbag' ],
 		'callbag-basics': [ 'cf', 'vendor', 'callbag-basics' ],
 		'classnames': [ 'cf', 'vendor', 'classnames' ],
+		'immer': [ 'cf', 'vendor', 'immer' ],
 		'@carbon-fields/core': [ 'cf', 'core' ]
 	}
 };

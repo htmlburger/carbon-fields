@@ -18,7 +18,7 @@ module.exports = {
 		production: {
 			plugins: [
 				[ '@wordpress/babel-plugin-makepot', {
-					'output': 'languages/carbon-fields-ui.pot'
+					output: 'languages/carbon-fields-ui.pot'
 				} ]
 			]
 		}
