@@ -17,7 +17,7 @@ class Empty_Datastore extends Datastore {
 	 * {@inheritDoc}
 	 */
 	public function load( Field $field ) {
-		return array();
+		return;
 	}
 
 	/**

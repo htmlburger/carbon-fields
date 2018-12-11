@@ -97,12 +97,6 @@ class Map_Field extends Field {
 
 		$value_set = $this->get_value();
 
-		// Avoid PHP warnings when the field is added within
-		// Gutenberg block container
-		if ( empty( $value_set ) ) {
-			$value_set = $this->default_value;
-		}
-
 		$field_data = array_merge( $field_data, array(
 			'value' => array(
 				'lat' => floatval( $value_set['lat'] ),
