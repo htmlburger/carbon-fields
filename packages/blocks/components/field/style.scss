@@ -3,8 +3,8 @@
    ========================================================================== */
 
 .cf-field {
-	.block-editor .cf-block__fields > &:not(:first-child) {
-		margin-top: 14px;
+	.block-editor & {
+		padding: $size-base * 2 0;
 	}
 
 	.wp-block & {
@@ -12,15 +12,14 @@
 		font-size: $wp-font-size;
 		line-height: $wp-line-height;
 		color: $gb-dark-gray-500;
+		padding: $size-base * 2	;
 		min-width: 0;
 	}
 
 	.block-editor .cf-complex & {
-		padding: $size-base * 2;
 		border-width: 1px 1px 0 0;
 		border-style: solid;
 		border-color: $wp-color-gray-light-500;
-		margin-top: 0;
 	}
 }
 

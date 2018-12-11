@@ -5,4 +5,8 @@
 .cf-block__fields {
 	display: flex;
 	flex-wrap: wrap;
+
+	.wp-block & {
+		margin: $size-base * -2;
+	}
 }

@@ -4,6 +4,7 @@
 
 .cf-datetime__input {
 	.wp-block .cf-field & {
+		min-width: 0;
 		border-color: $wp-color-gray-light-500;
 		border-radius: 0;
 
