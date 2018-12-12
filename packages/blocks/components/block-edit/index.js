@@ -157,7 +157,9 @@ class BlockEdit extends Component {
 				{ this.isInEditMode && this.renderFields() }
 
 				{ this.isInPreviewMode && (
-					<ServerSideRender block={ name } attributes={ attributes } />
+					<div className="cf-block__preview">
+						<ServerSideRender block={ name } attributes={ attributes } />
+					</div>
 				) }
 
 				{ this.isInPreviewMode && (
