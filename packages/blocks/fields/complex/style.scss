@@ -51,6 +51,12 @@
 	}
 }
 
+.cf-complex__inserter-button {
+	.edit-post-sidebar .cf-complex__tabs & {
+		border-color: $gb-dark-gray-150;
+	}
+}
+
 .cf-complex__tabs-item {
 	.block-editor & {
 		color: $gb-dark-gray-500;
@@ -58,5 +64,29 @@
 
 	.block-editor &--current {
 		color: $gb-dark-gray-900;
+	}
+}
+
+.cf-complex__group-head {
+	.edit-post-sidebar & {
+		border-color: $gb-dark-gray-150;
+	}
+}
+
+.cf-complex__group-body {
+	.edit-post-sidebar & {
+		border-color: $gb-dark-gray-150;
+	}
+}
+
+.cf-complex__group-actions {
+	.edit-post-sidebar &--tabbed {
+		border-color: $gb-dark-gray-150;
+	}
+}
+
+.cf-complex__tabs-item {
+	.edit-post-sidebar & {
+		border-color: $gb-dark-gray-150;
 	}
 }

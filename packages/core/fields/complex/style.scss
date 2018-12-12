@@ -276,11 +276,11 @@
 	}
 
 	.cf-complex--tabbed-horizontal &--current {
-		border-bottom-color: $color-white;
+		border-bottom-color: $color-white !important;
 	}
 
 	.cf-complex--tabbed-vertical &--current {
-		border-right-color: $color-white;
+		border-right-color: $color-white !important;
 	}
 }
 
