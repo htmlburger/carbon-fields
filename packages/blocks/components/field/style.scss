@@ -3,8 +3,8 @@
    ========================================================================== */
 
 .cf-field {
-	.block-editor & {
-		padding: $size-base * 2 0;
+	.edit-post-sidebar & {
+		padding-top: $size-base;
 	}
 
 	.wp-block & {

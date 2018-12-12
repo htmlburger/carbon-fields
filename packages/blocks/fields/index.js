@@ -51,6 +51,7 @@ import './radio-image';
 import './select';
 import './set';
 import './sidebar';
+import './separator';
 import './text';
 import './textarea';
 import './time';

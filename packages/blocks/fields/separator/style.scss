@@ -1,9 +1,9 @@
 /* ==========================================================================
-   Radio
+   Separator
    ========================================================================== */
 
-.cf-radio__list {
-	.wp-block & {
-		list-style: none outside none;
+.cf-separator {
+	.block-editor & h3 {
+		margin: 0;
 	}
 }
