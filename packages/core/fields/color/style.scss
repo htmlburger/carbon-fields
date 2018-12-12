@@ -35,6 +35,10 @@
 		margin-left: 5px;
 		text-decoration: none;
 	}
+
+	.cf-color &:focus {
+		box-shadow: none;
+	}
 }
 
 .cf-color__picker {
