@@ -12,8 +12,12 @@
 }
 
 .cf-radio__list-item {
+	&:last-child {
+		margin-bottom: 0;
+	}
+
 	.cf-radio-image & {
-		flex: 0 0 10%;
+		flex: 0 0 20%;
 		position: relative;
 		padding: 4px;
 	}
