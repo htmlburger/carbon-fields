@@ -22,6 +22,10 @@
 	&[hidden] {
 		display: none;
 	}
+
+	.block-editor & {
+		border-left: 1px solid $wp-color-gray-light-500;
+	}
 }
 
 .cf-container__tabs {
