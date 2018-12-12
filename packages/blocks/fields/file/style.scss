@@ -3,7 +3,19 @@
    ========================================================================== */
 
 .cf-file__inner {
-	.wp-block & {
-		width: 100%;
+	.edit-post-sidebar & {
+		border-color: $gb-dark-gray-150;
+	}
+}
+
+.cf-file__content {
+	.edit-post-sidebar & {
+		border-color: $gb-dark-gray-150;
+	}
+}
+
+.cf-file__name {
+	.edit-post-sidebar & {
+		border-color: $gb-dark-gray-150;
 	}
 }

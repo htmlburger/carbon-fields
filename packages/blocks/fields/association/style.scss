@@ -7,6 +7,14 @@
 		border-top-width: 1px;
 		margin-top: 4px;
 	}
+
+	.edit-post-sidebar & {
+		border-color: $gb-dark-gray-150;
+	}
+
+	.edit-post-sidebar &::before {
+		background-color: $gb-dark-gray-150;
+	}
 }
 
 .cf-association__counter {
@@ -18,6 +26,10 @@
 .cf-association__option {
 	.edit-post-sidebar & {
 		height: 40px;
+	}
+
+	.edit-post-sidebar & + & {
+		border-top-color: $gb-dark-gray-150;
 	}
 }
 
