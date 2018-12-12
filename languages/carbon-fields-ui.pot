@@ -11,7 +11,7 @@ msgstr ""
 msgid "Hide preview"
 msgstr ""
 
-#: packages/blocks/components/block-edit/index.js:165
+#: packages/blocks/components/block-edit/index.js:167
 msgid "Fields"
 msgstr ""
 
@@ -19,10 +19,10 @@ msgstr ""
 msgid "Field of type '%s' is not supported in Gutenberg."
 msgstr ""
 
-#: packages/blocks/fields/date/index.js:8
-#: packages/blocks/fields/datetime/index.js:13
-#: packages/metaboxes/fields/date/index.js:7
-#: packages/metaboxes/fields/datetime/index.js:7
+#: packages/blocks/fields/date/index.js:9
+#: packages/blocks/fields/datetime/index.js:14
+#: packages/metaboxes/fields/date/index.js:9
+#: packages/metaboxes/fields/datetime/index.js:9
 msgid "Select Date"
 msgstr ""
 
@@ -56,8 +56,8 @@ msgstr ""
 msgid "Select Attachments"
 msgstr ""
 
-#: packages/blocks/fields/time/index.js:8
-#: packages/metaboxes/fields/time/index.js:7
+#: packages/blocks/fields/time/index.js:10
+#: packages/metaboxes/fields/time/index.js:10
 msgid "Select Time"
 msgstr ""
 
