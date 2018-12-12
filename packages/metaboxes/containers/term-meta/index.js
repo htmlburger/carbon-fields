@@ -12,6 +12,7 @@ import { pipe, filter } from 'callbag-basics';
  */
 import fromAjaxEvent from '../../utils/from-ajax-event';
 import { normalizePreloadedState } from '../../store/helpers';
+import './style.scss';
 
 /**
  * The function that controls the stream of side effects.

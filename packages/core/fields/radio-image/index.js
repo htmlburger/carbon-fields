@@ -3,6 +3,7 @@
  */
 import withProps from '../../hocs/with-props';
 import RadioField from '../radio';
+import './style.scss';
 
 export default withProps( ( props ) => {
 	return {

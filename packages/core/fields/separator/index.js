@@ -3,6 +3,11 @@
  */
 import { Component } from '@wordpress/element';
 
+/**
+ * Internal dependencies.
+ */
+import './style.scss';
+
 class SeparatorField extends Component {
 	/**
 	 * Renders the component.

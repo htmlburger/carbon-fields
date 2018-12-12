@@ -8,6 +8,14 @@
 	}
 }
 
+.cf-radio__list-item {
+	box-sizing: border-box;
+
+	.cf-container-term-meta & {
+		flex: 0 0 20%;
+	}
+}
+
 .cf-radio-image__image {
 	border: 1px solid $wp-color-gray-light-500;
 
