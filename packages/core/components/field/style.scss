@@ -23,7 +23,8 @@
 .cf-field__label {
 	display: block;
 
-	.cf-html & {
+	.cf-html &,
+	.cf-separator & {
 		display: none;
 	}
 }
