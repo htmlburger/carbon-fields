@@ -96,6 +96,7 @@ class DateTimeField extends Component {
 			name,
 			value,
 			field,
+			icon,
 			buttonText
 		} = this.props;
 
@@ -108,7 +109,7 @@ class DateTimeField extends Component {
 				value={ value }
 				onReady={ this.handleReady }
 				onChange={ this.handleChange }
-				className="cf-datetime__inner"
+				className={ `cf-datetime__inner dashicons-before dashicons-${ icon || 'calendar' }` }
 			>
 				<input
 					type="text"

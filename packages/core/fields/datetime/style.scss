@@ -7,6 +7,10 @@
 .cf-datetime__inner {
 	display: flex;
 	align-items: stretch;
+
+	&::before {
+		display: none;
+	}
 }
 
 .cf-datetime__input {
