@@ -1,0 +1,34 @@
+/* ==========================================================================
+   Colors
+   ========================================================================== */
+
+$color-black: #000;
+$color-white: #fff;
+
+/* ==========================================================================
+   WordPress Colors - https://make.wordpress.org/design/handbook/design-guide/foundations/colors/
+   ========================================================================== */
+
+$wp-color-medium-blue: #00a0d2;
+$wp-color-accent-red: #dc3232;
+$wp-color-ultra-dark-gray: #191e23;
+$wp-color-dark-gray: #23282d;
+$wp-color-base-gray: #32373c;
+$wp-color-dark-silver-gray: #82878c;
+$wp-color-gray-light-800: lighten($wp-color-base-gray, 52%);
+$wp-color-gray-light-500: lighten($wp-color-base-gray, 68%);
+$wp-color-gray-light-200: lighten($wp-color-base-gray, 74%);
+$wp-color-gray-light-100: lighten($wp-color-base-gray, 77%);
+
+/* ==========================================================================
+   Gutenberg Colors - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_colors.scss
+   ========================================================================== */
+
+$gb-dark-gray-900: #191e23;
+$gb-dark-gray-600: #40464d;
+$gb-dark-gray-500: #555d66;
+$gb-dark-gray-150: #8d96a0;
+$gb-light-gray-500: #e2e4e7;
+$gb-light-gray-200: #f3f4f5;
+$gb-dark-opacity-light-500: rgba(#9197a2, 0.25);
+$gb-dark-opacity-light-200: rgba(#8b8b96, .1);

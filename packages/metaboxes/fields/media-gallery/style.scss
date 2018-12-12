@@ -1,0 +1,54 @@
+/* ==========================================================================
+   Media Gallery
+   ========================================================================== */
+
+.cf-media-gallery__inner {
+	.postbox & {
+		border: 1px solid $wp-color-gray-light-500;
+	}
+}
+
+.cf-media-gallery__actions {
+	.postbox & {
+		border-top: 1px solid $wp-color-gray-light-500;
+	}
+
+	.cf-container-term-meta & {
+		padding-left: 0;
+	}
+}
+
+.cf-media-gallery__list {
+	.cf-container-term-meta & {
+		margin: 0 -8px;
+		max-height: 285px;
+	}
+}
+
+.cf-media-gallery__item {
+	.cf-container-term-meta & {
+		flex-basis: 20%;
+	}
+}
+
+.cf-media-gallery__item-inner {
+	.postbox &,
+	.cf-container-term-meta & {
+		border: 1px solid $wp-color-gray-light-500;
+	}
+}
+
+.cf-media-gallery__item-preview {
+	.postbox &,
+	.cf-container-term-meta & {
+		background-color: $wp-color-gray-light-200;
+	}
+}
+
+.cf-media-gallery__item-name {
+	.postbox &,
+	.cf-container-term-meta & {
+		border-top: 1px solid $wp-color-gray-light-500;
+		background-color: $wp-color-gray-light-200;
+	}
+}

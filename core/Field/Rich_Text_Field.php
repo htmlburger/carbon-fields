@@ -8,13 +8,6 @@ namespace Carbon_Fields\Field;
 class Rich_Text_Field extends Textarea_Field {
 
 	/**
-	 * Defines if the rich text field should be loaded only when scrolled into view
-	 *
-	 * @var boolean
-	 */
-	protected $lazyload = true;
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public static function field_type_activated() {
@@ -47,6 +40,17 @@ class Rich_Text_Field extends Textarea_Field {
 	}
 
 	/**
+	 * Display Upload Image Button
+	 *
+	 */
+	public function upload_image_button_html() {
+		$upload_image_button = '<a href="#" class="button insert-media add_media" data-editor="<%- id %>" title="Add Media">
+			<span class="wp-media-buttons-icon"></span> Add Media
+		</a>';
+		echo apply_filters( 'crb_upload_image_button_html', $upload_image_button, $this->base_name );
+	}
+
+	/**
 	 * Returns an array that holds the field data, suitable for JSON representation.
 	 *
 	 * @param bool $load  Should the value be loaded from the database or use the value from the current instance.
@@ -57,9 +61,14 @@ class Rich_Text_Field extends Textarea_Field {
 
 		ob_start();
 		remove_action( 'media_buttons', 'media_buttons' );
+
+		$this->upload_image_button_html();
+
 		do_action( 'media_buttons' );
+
 		add_action( 'media_buttons', 'media_buttons' );
-		$media_buttons = ob_get_clean();
+
+		$media_buttons = apply_filters( 'crb_media_buttons_html', ob_get_clean(), $this->base_name );
 
 		$field_data = array_merge( $field_data, array(
 			'rich_editing' => user_can_richedit(),

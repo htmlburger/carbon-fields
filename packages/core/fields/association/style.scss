@@ -1,0 +1,136 @@
+/* ==========================================================================
+   Association
+   ========================================================================== */
+
+.cf-association__bar {
+	position: relative;
+	z-index: 1;
+}
+
+.cf-association__counter {
+	position: absolute;
+	top: 50%;
+	right: 8px;
+	font-size: 12px;
+	line-height: 1;
+	color: $wp-color-dark-gray;
+	transform: translateY(-50%);
+	pointer-events: none;
+}
+
+.cf-association__cols {
+	background: #fff;
+	position: relative;
+	z-index: 0;
+	display: flex;
+	border-width: 0 1px 1px;
+	border-style: solid;
+	border-color: $wp-color-gray-light-500;
+
+	&::before {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		width: 1px;
+		height: 100%;
+		background-color: $wp-color-gray-light-500;
+		content: '';
+	}
+}
+
+.cf-association__col {
+	width: 50%;
+	max-height: 160px;
+	overflow-y: auto;
+}
+
+.cf-association__option {
+	display: flex;
+	align-items: center;
+	padding: 4px 8px;
+	height: 32px;
+	box-sizing: border-box;
+
+	&--selected {
+		background-color: $wp-color-gray-light-100;
+	}
+
+	& + & {
+		border-top: 1px solid $wp-color-gray-light-500;
+	}
+
+	&.ui-sortable-helper {
+		border-top: 0;
+		background-color: $wp-color-gray-light-100;
+	}
+}
+
+.cf-association__option-thumb {
+	flex: none;
+	display: block;
+	width: 24px;
+	height: 24px;
+	margin-right: 8px;
+}
+
+.cf-association__option-content {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex: 1;
+	margin-right: 8px;
+}
+
+.cf-association__option-title {
+	overflow: hidden;
+	font-size: $wp-font-size;
+	line-height: $wp-line-height;
+	color: $wp-color-base-gray;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+
+	.cf-association__option--selected & {
+		color: $wp-color-dark-silver-gray;
+	}
+}
+
+.cf-association__option-type {
+	font-size: 9px;
+	line-height: 1;
+	text-transform: uppercase;
+	color: $wp-color-dark-silver-gray;
+}
+
+.cf-association__option-actions {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	.cf-association__col:first-child & {
+		min-width: 48px;
+	}
+}
+
+.cf-association__option-sort {
+	margin-right: 4px;
+	color: $wp-color-dark-silver-gray;
+	cursor: move;
+}
+
+.cf-association__option-action {
+	padding: 0;
+	border: 0;
+	outline: none;
+	color: $wp-color-dark-silver-gray;
+	transition: color $transition-base;
+	cursor: pointer;
+
+	&:focus {
+		color: $wp-color-dark-silver-gray;
+		box-shadow: none;
+	}
+
+	&:hover {
+		color: $wp-color-dark-gray;
+	}
+}

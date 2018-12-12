@@ -1,0 +1,69 @@
+/* ==========================================================================
+   Media Gallery
+   ========================================================================== */
+
+.cf-media-gallery__item {
+	.block-editor & {
+		@media (min-width: 1440px) {
+			flex-basis: 16.6667%;
+		}
+
+		@media (min-width: 1680px) {
+			flex-basis: 16.6667%;
+		}
+	}
+
+	.edit-post-sidebar & {
+		flex-basis: 50%;
+	}
+}
+
+.cf-media-gallery__inner {
+	.wp-block & {
+		border: 1px solid $wp-color-gray-light-500;
+	}
+
+	.edit-post-sidebar & {
+		border: 1px solid $gb-dark-gray-150;
+	}
+}
+
+.cf-media-gallery__actions {
+	.wp-block & {
+		border-top: 1px solid $wp-color-gray-light-500;
+	}
+
+	.edit-post-sidebar & {
+		border-top: 1px solid $gb-dark-gray-150;
+	}
+}
+
+.cf-media-gallery__item-inner {
+	.wp-block & {
+		border: 1px solid $wp-color-gray-light-500;
+	}
+
+	.edit-post-sidebar & {
+		border: 1px solid $gb-dark-gray-150;
+	}
+}
+
+.cf-media-gallery__item-preview {
+	.block-editor & {
+		background-color: $wp-color-gray-light-200;
+	}
+}
+
+.cf-media-gallery__item-name {
+	.block-editor & {
+		background-color: $wp-color-gray-light-200;
+	}
+
+	.wp-block & {
+		border-top: 1px solid $wp-color-gray-light-500;
+	}
+
+	.edit-post-sidebar & {
+		border-top: 1px solid $gb-dark-gray-150;
+	}
+}

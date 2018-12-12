@@ -1,0 +1,332 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Carbon Fields\n"
+"POT-Creation-Date: 2018-04-26 22:12+0800\n"
+"PO-Revision-Date: 2018-04-27 08:31+0800\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.11\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Last-Translator: Amos Lee <iwillhappy1314@gmail.com>\n"
+"Language: zh_CN\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: assets\n"
+"X-Poedit-SearchPathExcluded-1: languages\n"
+"X-Poedit-SearchPathExcluded-2: node_modules\n"
+"X-Poedit-SearchPathExcluded-3: tests\n"
+"X-Poedit-SearchPathExcluded-4: tmp\n"
+"X-Poedit-SearchPathExcluded-5: vendor\n"
+
+#: core/Container/Container.php:711
+msgid "General"
+msgstr "通用设置"
+
+#: core/Container/Network_Container.php:52
+#: core/Container/Theme_Options_Container.php:207
+msgid "Settings saved."
+msgstr "设置已保存"
+
+#: core/Field/Footer_Scripts_Field.php:20
+msgid ""
+"If you need to add scripts to your footer (like Google Analytics tracking "
+"code), you should enter them in this box."
+msgstr ""
+"如果你需要将 JavaScript 代码添加到网站页脚（如 Goolge Analytics 跟踪代码），"
+"请这里输入"
+
+#: core/Field/Gravity_Form_Field.php:47
+msgid "No form"
+msgstr "没有表单"
+
+#: core/Field/Header_Scripts_Field.php:20
+msgid "If you need to add scripts to your header, you should enter them here."
+msgstr "如果你需要将 JavaScript 代码添加到你的页头，请这里输入"
+
+#: core/Field/Sidebar_Field.php:74
+msgctxt "sidebar"
+msgid "Add New"
+msgstr "添加"
+
+#: core/Helper/Helper.php:536
+msgid "F j, Y"
+msgstr "Y 年 m 月 d 日"
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:69
+msgid "Please enter a name for the sidebar."
+msgstr "请输入边栏名称。"
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:72
+msgid "Unknown action attempted."
+msgstr "未知操作。"
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:102
+msgid "Sidebar with the same ID is already registered."
+msgstr "相同的侧边栏 ID 已被注册"
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:112
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:142
+msgid ""
+"Failed to update option storing your custom sidebars. Please contact support."
+msgstr "存储自定义侧边栏时发生错误。请联系技术支持。"
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:137
+msgid "Sidebar not found."
+msgstr "未找到侧边栏"
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:181
+msgid "Add Sidebar"
+msgstr "添加侧边栏"
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:182
+#: core/Loader/Loader.php:154
+msgid "Please enter the name of the new sidebar:"
+msgstr "请输入新侧边栏名称"
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:183
+msgid "Are you sure you wish to remove this sidebar?"
+msgstr "确定要删除这个侧边栏吗？"
+
+#: core/Loader/Loader.php:129
+msgid "Please fill out all required fields highlighted below."
+msgstr "请填写所有必填字段。"
+
+#: core/Loader/Loader.php:130
+msgid "The changes you made will be lost if you navigate away from this page."
+msgstr "如果离开这个页面，你所做的更改将丢失。"
+
+#: core/Loader/Loader.php:134
+msgid "The address could not be found. "
+msgstr "找不到这个地址。"
+
+#: core/Loader/Loader.php:135
+msgid "Geocode was not successful for the following reason: "
+msgstr "因为以下原因，Geocode 不成功："
+
+#: core/Loader/Loader.php:136
+msgid "Locate address on the map:"
+msgstr "在地图上定位地址："
+
+#: core/Loader/Loader.php:137
+#, php-format
+msgid "Minimum number of items not reached (%s items)"
+msgstr "输入未达到最小要求（%s）"
+
+#: core/Loader/Loader.php:138
+#, php-format
+msgid "Maximum number of items reached (%s items)"
+msgstr "输入已超出最大要求（%s）"
+
+#: core/Loader/Loader.php:140
+#, php-format
+msgid "There are no %s yet. Click <a href=\"#\">here</a> to add one."
+msgstr "目前还没有 %s，点击<a href=\"#\">这里</a>添加一个。"
+
+#: core/Loader/Loader.php:141
+#, php-format
+msgid "Minimum number of rows not reached (%1$d %2$s)"
+msgstr "未达到最小要求 (%1$d %2$s)"
+
+#: core/Loader/Loader.php:142
+#, php-format
+msgid "Maximum number of rows exceeded (%1$d %2$s)"
+msgstr "已超出最大要求（%1$d %2$s）"
+
+#: core/Loader/Loader.php:143
+#, php-format
+msgctxt "Complex field"
+msgid "Add %s"
+msgstr "添加%s"
+
+#: core/Loader/Loader.php:144
+msgctxt "Complex field"
+msgid "Clone"
+msgstr "复制"
+
+#: core/Loader/Loader.php:145
+msgctxt "Complex field"
+msgid "Remove"
+msgstr "删除"
+
+#: core/Loader/Loader.php:146
+msgctxt "Complex field"
+msgid "Collapse/Expand"
+msgstr "折叠/展开"
+
+#: core/Loader/Loader.php:147
+msgctxt "Complex field groups"
+msgid "Collapse All"
+msgstr "全部折叠"
+
+#: core/Loader/Loader.php:148
+msgctxt "Complex field groups"
+msgid "Expand All"
+msgstr "全部展开"
+
+#: core/Loader/Loader.php:150
+msgid "Please fill out all fields correctly. "
+msgstr "请正确地填写所有字段。"
+
+#: core/Loader/Loader.php:151
+msgid "This field is required. "
+msgstr "此字段为必填项"
+
+#: core/Loader/Loader.php:152
+msgid "Please choose an option. "
+msgstr "请选择一项"
+
+#: core/Loader/Loader.php:156
+msgid "Select Time"
+msgstr "选择时间"
+
+#: core/Loader/Loader.php:157
+msgid "Select Date"
+msgstr "选择日期"
+
+#: core/Loader/Loader.php:159
+#, php-format
+msgid "%1$d selected item"
+msgstr "已选择 %1$d 项"
+
+#: core/Loader/Loader.php:160
+#, php-format
+msgid "%1$d selected items"
+msgstr "已选择 %1$d 项"
+
+#: core/Loader/Loader.php:161
+#, php-format
+msgid "%1$d selected item out of %2$d"
+msgstr "已选择 %2$d 项中的 %1$d 项"
+
+#: core/Loader/Loader.php:162
+#, php-format
+msgid "%1$d selected items out of %2$d"
+msgstr "已选择 %2$d 项中的 %1$d 项"
+
+#: core/Loader/Loader.php:164
+msgid "Select a color"
+msgstr "选择颜色"
+
+#: core/Loader/Loader.php:166
+msgid "No options."
+msgstr "没有选项"
+
+#: core/Loader/Loader.php:168
+msgid "Show all options"
+msgstr "显示所有"
+
+#: core/Loader/Loader.php:170
+msgid "Search..."
+msgstr "搜索 …"
+
+#: core/Loader/Loader.php:172
+msgctxt "WordPress media attachment"
+msgid "URL"
+msgstr "URL"
+
+#: core/Loader/Loader.php:173
+msgctxt "WordPress media attachment"
+msgid "Title"
+msgstr "标题"
+
+#: core/Loader/Loader.php:174
+msgctxt "WordPress media attachment"
+msgid "Artist"
+msgstr "艺术家"
+
+#: core/Loader/Loader.php:175
+msgctxt "WordPress media attachment"
+msgid "Album"
+msgstr "相册"
+
+#: core/Loader/Loader.php:176
+msgctxt "WordPress media attachment"
+msgid "Caption"
+msgstr "图片说明"
+
+#: core/Loader/Loader.php:177
+msgctxt "WordPress media attachment"
+msgid "Alt Text"
+msgstr "替代文字"
+
+#: core/Loader/Loader.php:178
+msgctxt "WordPress media attachment"
+msgid "Description"
+msgstr "描述"
+
+#: core/Loader/Loader.php:179
+msgctxt "WordPress media attachment"
+msgid "Close"
+msgstr "关闭 "
+
+#: core/Loader/Loader.php:180
+msgctxt "WordPress media attachment"
+msgid "Save"
+msgstr "保存"
+
+#: core/Loader/Loader.php:182
+msgctxt "oEmbed field"
+msgid "Not Found"
+msgstr "未找到"
+
+#: core/Loader/Loader.php:184
+msgid "No files selected."
+msgstr "没有选择文件"
+
+#: core/Loader/Loader.php:185
+msgid "Add File"
+msgstr "添加文件"
+
+#: core/Loader/Loader.php:186 core/Loader/Loader.php:190
+msgctxt "WordPress Media Browser"
+msgid "Files"
+msgstr "文件"
+
+#: core/Loader/Loader.php:187 core/Loader/Loader.php:191
+msgctxt "WordPress Media Browser"
+msgid "Select File"
+msgstr "选择文件"
+
+#: core/Loader/Loader.php:189
+msgid "Select File"
+msgstr "选择文件"
+
+#: core/Loader/Loader.php:193
+msgid "Select Image"
+msgstr "选择图片"
+
+#: core/Loader/Loader.php:194
+msgctxt "WordPress Media Browser"
+msgid "Images"
+msgstr "图片"
+
+#: core/Loader/Loader.php:195
+msgctxt "WordPress Media Browser"
+msgid "Select Image"
+msgstr "选择图片"
+
+#: core/REST_API/Router.php:287
+msgid "No option names provided"
+msgstr "没有提供选项名称"
+
+#: core/REST_API/Router.php:298
+msgid "Theme Options updated."
+msgstr "主题选项已更新"
+
+#: templates/Container/common/options-page.php:34
+msgid "Actions"
+msgstr "操作"
+
+#: templates/Container/common/options-page.php:43
+msgid "Save Changes"
+msgstr "保存修改"
+
+#: templates/Container/widget.php:4
+msgid "No options are available for this widget."
+msgstr "这个小工具没有提供选项。"

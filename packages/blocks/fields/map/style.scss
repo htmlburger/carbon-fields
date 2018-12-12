@@ -1,0 +1,15 @@
+/* ==========================================================================
+   Map
+   ========================================================================== */
+
+.cf-map__canvas {
+	.edit-post-sidebar & {
+		border-color: $gb-dark-gray-150;
+		border-top-width: 1px;
+		margin-top: $size-base;
+	}
+
+	.block-editor .cf-map__search:focus-within ~ & {
+		border-color: $wp-color-medium-blue;
+	}
+}

@@ -1,0 +1,47 @@
+/* ==========================================================================
+   Color
+   ========================================================================== */
+
+.cf-color__inner {
+	display: flex;
+	align-items: center;
+}
+
+.cf-color__toggle {
+	position: relative;
+	overflow: hidden;
+}
+
+.cf-color__toggle-text {
+	margin-left: 27px;
+}
+
+.cf-color__preview {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 26px;
+	height: 100%;
+	border-right: 1px solid #ccc;
+
+	.cf-color__toggle:hover &,
+	.cf-color__toggle:active & {
+		border-color: #999;
+	}
+}
+
+.cf-color__reset {
+	.cf-color & {
+		margin-left: 5px;
+		text-decoration: none;
+	}
+
+	.cf-color &:focus {
+		box-shadow: none;
+	}
+}
+
+.cf-color__picker {
+	position: absolute;
+	z-index: 9999;
+}

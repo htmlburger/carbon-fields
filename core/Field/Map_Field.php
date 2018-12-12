@@ -23,11 +23,6 @@ class Map_Field extends Field {
 	);
 
 	/**
-	 * {@inheritDoc}
-	 */
-	protected $lazyload = true;
-
-	/**
 	 * Create a field from a certain type with the specified label.
 	 *
 	 * @param string $type  Field type
@@ -101,6 +96,7 @@ class Map_Field extends Field {
 		$field_data = parent::to_json( $load );
 
 		$value_set = $this->get_value();
+
 		$field_data = array_merge( $field_data, array(
 			'value' => array(
 				'lat' => floatval( $value_set['lat'] ),

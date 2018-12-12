@@ -420,7 +420,7 @@ class Complex_Field extends Field {
 
 		$save = apply_filters( 'carbon_fields_should_save_field_value', true, $this->get_value(), $this );
 		if ( $save ) {
-			$this->get_datastore()->save( $this );
+			$this->get_datastore()->save( apply_filters( 'carbon_fields_before_complex_field_save', $this ) );
 			$field_groups = $this->get_prefilled_groups( $this->get_value(), $this->get_value_tree() );
 			foreach ( $field_groups as $group_index => $fields ) {
 				foreach ( $fields as $field ) {

@@ -1,0 +1,92 @@
+/* ==========================================================================
+   Complex
+   ========================================================================== */
+
+.cf-complex__placeholder-label {
+	.block-editor & {
+		font-size: $wp-font-size;
+		line-height: $wp-line-height;
+	}
+}
+
+.cf-complex__inserter-menu {
+	.block-editor & {
+		z-index: 10;
+		list-style: none outside none;
+		border: 1px solid $gb-light-gray-500;
+		box-shadow: 0 3px 30px rgba($gb-dark-gray-900, .1);
+		background-color: $color-white;
+
+		&::before,
+		&::after {
+			position: absolute;
+			top: 50%;
+			right: 100%;
+			width: 0;
+			height: 0;
+			border-width: 8px 8px 8px 0;
+			border-style: solid;
+			margin-top: -8px;
+			content: '';
+		}
+
+		&::before {
+			border-color: transparent $gb-light-gray-500;
+			margin-right: 1px;
+		}
+
+		&::after {
+			border-color: transparent $color-white;
+		}
+	}
+}
+
+.cf-complex__inserter-item {
+	.block-editor & {
+		color: $gb-dark-gray-600;
+
+		&:hover {
+			color: $gb-dark-gray-900;
+		}
+	}
+}
+
+.cf-complex__inserter-button {
+	.edit-post-sidebar .cf-complex__tabs & {
+		border-color: $gb-dark-gray-150;
+	}
+}
+
+.cf-complex__tabs-item {
+	.block-editor & {
+		color: $gb-dark-gray-500;
+	}
+
+	.block-editor &--current {
+		color: $gb-dark-gray-900;
+	}
+}
+
+.cf-complex__group-head {
+	.edit-post-sidebar & {
+		border-color: $gb-dark-gray-150;
+	}
+}
+
+.cf-complex__group-body {
+	.edit-post-sidebar & {
+		border-color: $gb-dark-gray-150;
+	}
+}
+
+.cf-complex__group-actions {
+	.edit-post-sidebar &--tabbed {
+		border-color: $gb-dark-gray-150;
+	}
+}
+
+.cf-complex__tabs-item {
+	.edit-post-sidebar & {
+		border-color: $gb-dark-gray-150;
+	}
+}

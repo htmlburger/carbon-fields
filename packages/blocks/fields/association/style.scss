@@ -1,0 +1,70 @@
+/* ==========================================================================
+   Association
+   ========================================================================== */
+
+.cf-association__cols {
+	.block-editor & {
+		border-top-width: 1px;
+		margin-top: 4px;
+	}
+
+	.edit-post-sidebar & {
+		border-color: $gb-dark-gray-150;
+	}
+
+	.edit-post-sidebar &::before {
+		background-color: $gb-dark-gray-150;
+	}
+}
+
+.cf-association__counter {
+	.edit-post-sidebar & {
+		display: none;
+	}
+}
+
+.cf-association__option {
+	.edit-post-sidebar & {
+		height: 40px;
+	}
+
+	.edit-post-sidebar & + & {
+		border-top-color: $gb-dark-gray-150;
+	}
+}
+
+.cf-association__option-thumb {
+	.edit-post-sidebar & {
+		display: none;
+	}
+}
+
+.cf-association__option-content {
+	.edit-post-sidebar & {
+		align-items: flex-start;
+		flex-direction: column;
+		min-width: 0;
+	}
+}
+
+.cf-association__option-title {
+	.edit-post-sidebar & {
+		width: 100%;
+	}
+}
+
+.cf-association__option-actions {
+	.edit-post-sidebar .cf-association__col:first-child & {
+		min-width: 0;
+	}
+
+	.edit-post-sidebar & {
+		margin-left: auto;
+	}
+}
+
+.cf-association__option-action {
+	.edit-post-sidebar &--edit {
+		display: none;
+	}
+}

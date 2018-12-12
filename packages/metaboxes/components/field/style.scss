@@ -1,0 +1,27 @@
+/* ==========================================================================
+   Field
+   ========================================================================== */
+
+.cf-field {
+	.postbox & {
+		flex: 1 1 100%;
+		padding: $size-base * 3;
+		border-width: 1px 1px 0 0;
+		border-style: solid;
+		border-color: $wp-color-gray-light-500;
+	}
+}
+
+.cf-field__label {
+	.postbox & {
+		padding-bottom: 5px;
+		font-weight: 600;
+		color: $wp-color-dark-gray;
+	}
+}
+
+.cf-field__help {
+	display: inline-block;
+	color: #666;
+	margin-top: 10px;
+}

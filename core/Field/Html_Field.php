@@ -42,6 +42,7 @@ class Html_Field extends Field {
 
 		$field_data = array_merge( $field_data, array(
 			'html' => $this->field_html,
+			'default_value' => $this->field_html,
 		) );
 
 		return $field_data;

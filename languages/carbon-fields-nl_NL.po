@@ -1,0 +1,326 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Carbon Fields\n"
+"POT-Creation-Date: 2017-09-04 14:45+0300\n"
+"PO-Revision-Date: 2018-10-23 14:59+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: \n"
+"Language: nl_NL\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: assets\n"
+"X-Poedit-SearchPathExcluded-1: languages\n"
+"X-Poedit-SearchPathExcluded-2: node_modules\n"
+"X-Poedit-SearchPathExcluded-3: tests\n"
+"X-Poedit-SearchPathExcluded-4: tmp\n"
+"X-Poedit-SearchPathExcluded-5: vendor\n"
+
+#: core/Container/Container.php:711
+msgid "General"
+msgstr "Algemeen"
+
+#: core/Container/Theme_Options_Container.php:211
+msgid "Settings saved."
+msgstr "Instellingen opgeslagen."
+
+#: core/Field/Footer_Scripts_Field.php:20
+msgid ""
+"If you need to add scripts to your footer (like Google Analytics tracking "
+"code), you should enter them in this box."
+msgstr ""
+"Als u scripts wilt toevoegen aan uw footer (zoals Google Analytics-"
+"trackingcode), moet u deze in dit vak invoeren."
+
+#: core/Field/Gravity_Form_Field.php:47
+msgid "No form"
+msgstr "Geen formulier"
+
+#: core/Field/Header_Scripts_Field.php:20
+msgid "If you need to add scripts to your header, you should enter them here."
+msgstr "Als u scripts in uw header wilt toevoegen, moet u deze hier invoeren."
+
+#: core/Field/Sidebar_Field.php:50
+msgctxt "sidebar"
+msgid "Add New"
+msgstr "Toevoegen"
+
+#: core/Helper/Helper.php:413
+msgid "F j, Y"
+msgstr "j-n-Y"
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:69
+msgid "Please enter a name for the sidebar."
+msgstr "Vul a.u.b. een naam in voor de sidebar."
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:72
+msgid "Unknown action attempted."
+msgstr "Onbekende actie geprobeerd."
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:102
+msgid "Sidebar with the same ID is already registered."
+msgstr "Sidebar met dezelfde ID is al geregistreerd."
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:112
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:142
+msgid ""
+"Failed to update option storing your custom sidebars. Please contact support."
+msgstr ""
+"Mislukt om de optie bij te werken die uw aangepaste sidebars opslaat. Neem "
+"contact op met support."
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:137
+msgid "Sidebar not found."
+msgstr "Sidebar niet gevonden."
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:181
+msgid "Add Sidebar"
+msgstr "Sidebar toevoegen"
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:182
+#: core/Loader/Loader.php:141
+msgid "Please enter the name of the new sidebar:"
+msgstr "Vul a.u.b. de naam van de nieuwe sidebar in:"
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:183
+msgid "Are you sure you wish to remove this sidebar?"
+msgstr "Weet u zeker dat u deze sidebar wilt verwijderen?"
+
+#: core/Loader/Loader.php:119
+msgid "Please fill out all required fields highlighted below."
+msgstr "Vul a.u.b. alle verplichte velden in die hieronder zijn aangegeven."
+
+#: core/Loader/Loader.php:120
+msgid "The changes you made will be lost if you navigate away from this page."
+msgstr ""
+"De wijzigingen die u heeft gemaakt, zullen verloren gaan als u van deze "
+"pagina weg navigeert."
+
+#: core/Loader/Loader.php:123
+msgid "The address could not be found. "
+msgstr "Het adres kon niet gevonden worden. "
+
+#: core/Loader/Loader.php:124
+msgid "Geocode was not successful for the following reason: "
+msgstr "Geocode was niet succesvol om de volgende reden: "
+
+#: core/Loader/Loader.php:125
+msgid "Locate address on the map:"
+msgstr "Zoek adres op de kaart:"
+
+#: core/Loader/Loader.php:126
+#, php-format
+msgid "Minimum number of items not reached (%s items)"
+msgstr "Minimale aantal items niet bereikt (%s items)"
+
+#: core/Loader/Loader.php:127
+#, php-format
+msgid "Maximum number of items reached (%s items)"
+msgstr "Maximale aantal items bereikt (%s items)"
+
+#: core/Loader/Loader.php:129
+#, php-format
+msgid "There are no %s yet. Click <a href=\"#\">here</a> to add one."
+msgstr ""
+"Er zijn nog geen %s. Klik <a href=\"#\">hier</a> om er één toe te voegen."
+
+#: core/Loader/Loader.php:130
+#, php-format
+msgid "Minimum number of rows not reached (%1$d %2$s)"
+msgstr "Minimale aantal rijen niet bereikt (%1$d %2$s)"
+
+#: core/Loader/Loader.php:131
+#, php-format
+msgid "Maximum number of rows exceeded (%1$d %2$s)"
+msgstr "Maximale aantal rijen overschreden (%1$d %2$s)"
+
+#: core/Loader/Loader.php:132
+#, php-format
+msgctxt "Complex field"
+msgid "Add %s"
+msgstr "%s toevoegen"
+
+#: core/Loader/Loader.php:133
+msgctxt "Complex field"
+msgid "Clone"
+msgstr "Dupliceer"
+
+#: core/Loader/Loader.php:134
+msgctxt "Complex field"
+msgid "Remove"
+msgstr "Verwijder"
+
+#: core/Loader/Loader.php:135
+msgctxt "Complex field"
+msgid "Collapse/Expand"
+msgstr "Samen/uitvouwen"
+
+#: core/Loader/Loader.php:137
+msgid "Please fill out all fields correctly. "
+msgstr "Vul a.u.b. alle velden correct in. "
+
+#: core/Loader/Loader.php:138
+msgid "This field is required. "
+msgstr "Dit veld is verplicht. "
+
+#: core/Loader/Loader.php:139
+msgid "Please choose an option. "
+msgstr "Kies a.u.b. een optie. "
+
+#: core/Loader/Loader.php:143
+msgid "Select Time"
+msgstr "Kies Tijd"
+
+#: core/Loader/Loader.php:144
+msgid "Select Date"
+msgstr "Kies Datum"
+
+#: core/Loader/Loader.php:146
+#, php-format
+msgid "%1$d selected item"
+msgstr "%1$d gekozen item"
+
+#: core/Loader/Loader.php:147
+#, php-format
+msgid "%1$d selected items"
+msgstr "%1$d gekozen items"
+
+#: core/Loader/Loader.php:148
+#, php-format
+msgid "%1$d selected item out of %2$d"
+msgstr "%1$d gekozen item van %2$d"
+
+#: core/Loader/Loader.php:149
+#, php-format
+msgid "%1$d selected items out of %2$d"
+msgstr "%1$d gekozen items van %2$d"
+
+#: core/Loader/Loader.php:151
+msgid "Select a color"
+msgstr "Kies een kleur"
+
+#: core/Loader/Loader.php:153
+msgid "No options."
+msgstr "Geen opties."
+
+#: core/Loader/Loader.php:155
+msgid "Show all options"
+msgstr "Laat alle opties zien"
+
+#: core/Loader/Loader.php:157
+msgid "Search..."
+msgstr "Zoeken..."
+
+#: core/Loader/Loader.php:159
+msgctxt "WordPress media attachment"
+msgid "URL"
+msgstr "URL"
+
+#: core/Loader/Loader.php:160
+msgctxt "WordPress media attachment"
+msgid "Title"
+msgstr "Titel"
+
+#: core/Loader/Loader.php:161
+msgctxt "WordPress media attachment"
+msgid "Artist"
+msgstr "Artiest"
+
+#: core/Loader/Loader.php:162
+msgctxt "WordPress media attachment"
+msgid "Album"
+msgstr "Album"
+
+#: core/Loader/Loader.php:163
+msgctxt "WordPress media attachment"
+msgid "Caption"
+msgstr "Onderschrift"
+
+#: core/Loader/Loader.php:164
+msgctxt "WordPress media attachment"
+msgid "Alt Text"
+msgstr "Alt-tekst"
+
+#: core/Loader/Loader.php:165
+msgctxt "WordPress media attachment"
+msgid "Description"
+msgstr "Omschrijving"
+
+#: core/Loader/Loader.php:166
+msgctxt "WordPress media attachment"
+msgid "Close"
+msgstr "Sluiten"
+
+#: core/Loader/Loader.php:167
+msgctxt "WordPress media attachment"
+msgid "Save"
+msgstr "Opslaan"
+
+#: core/Loader/Loader.php:169
+msgctxt "oEmbed field"
+msgid "Not Found"
+msgstr "Niet Gevonden"
+
+#: core/Loader/Loader.php:171
+msgid "No files selected."
+msgstr "Geen bestanden gekozen."
+
+#: core/Loader/Loader.php:172
+msgid "Add File"
+msgstr "Bestand toevoegen"
+
+#: core/Loader/Loader.php:173 core/Loader/Loader.php:177
+msgctxt "WordPress Media Browser"
+msgid "Files"
+msgstr "Bestanden"
+
+#: core/Loader/Loader.php:174 core/Loader/Loader.php:178
+msgctxt "WordPress Media Browser"
+msgid "Select File"
+msgstr "Kies Bestand"
+
+#: core/Loader/Loader.php:176
+msgid "Select File"
+msgstr "Kies Bestand"
+
+#: core/Loader/Loader.php:180
+msgid "Select Image"
+msgstr "Kies Afbeelding"
+
+#: core/Loader/Loader.php:181
+msgctxt "WordPress Media Browser"
+msgid "Images"
+msgstr "Afbeeldingen"
+
+#: core/Loader/Loader.php:182
+msgctxt "WordPress Media Browser"
+msgid "Select Image"
+msgstr "Kies Afbeelding"
+
+#: core/REST_API/Router.php:287
+msgid "No option names provided"
+msgstr "Geen optie namen gegeven"
+
+#: core/REST_API/Router.php:298
+msgid "Theme Options updated."
+msgstr "Thema opties geüpdatet."
+
+#: templates/Container/theme_options.php:29
+msgid "Actions"
+msgstr "Acties"
+
+#: templates/Container/theme_options.php:38
+msgid "Save Changes"
+msgstr "Veranderingen Opslaan"
+
+#: templates/Container/widget.php:5
+msgid "No options are available for this widget."
+msgstr "Geen opties beschikbaar voor deze widget."

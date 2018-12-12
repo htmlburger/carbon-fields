@@ -1,0 +1,30 @@
+/* ==========================================================================
+   DateTime
+   ========================================================================== */
+
+@import '~flatpickr/dist/flatpickr.min.css';
+
+.cf-datetime__inner {
+	display: flex;
+	align-items: stretch;
+
+	&::before {
+		display: none;
+	}
+}
+
+.cf-datetime__input {
+	flex: 1;
+	margin: 0;
+}
+
+.cf-datetime__button {
+	flex: 0 0 auto;
+
+	.cf-field & {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+		margin-bottom: 0;
+		box-shadow: none;
+	}
+}

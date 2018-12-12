@@ -21,6 +21,13 @@ class Post_Meta_Container extends Container {
 	protected $post_id;
 
 	/**
+	 * Determines whether revisions are disabled for this container
+	 *
+	 * @var bool
+	 */
+	protected $revisions_disabled = false;
+
+	/**
 	 * List of default container settings
 	 *
 	 * @see init()
@@ -69,18 +76,20 @@ class Post_Meta_Container extends Container {
 	 * @return bool
 	 */
 	public function is_valid_save() {
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		$params = func_get_args();
+		$post_id = $params[0];
+		$post_type = get_post_type( $post_id );
+
+		$wp_preview = ( ! empty( $_POST['wp-preview'] ) ) ? $_POST['wp-preview'] : '';
+		$in_preview = $wp_preview === 'dopreview';
+		$doing_autosave = defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE;
+		$is_revision = $post_type === 'revision';
+
+		if ( ( $doing_autosave || $is_revision ) && ( ! $in_preview || $this->revisions_disabled ) ) {
 			return false;
 		}
 
 		if ( ! $this->verified_nonce_in_request() ) {
-			return false;
-		}
-
-		$params = func_get_args();
-		$post_id = $params[0];
-		$post_type = get_post_type( $post_id );
-		if ( $post_type === 'revision' ) {
 			return false;
 		}
 
@@ -164,11 +173,19 @@ class Post_Meta_Container extends Container {
 	 */
 	protected function get_environment_for_object( $object_id ) {
 		$post = get_post( intval( $object_id ) );
+		$post_type = $post->post_type;
+
+		if ( $post_type === 'revision' ) {
+			$parent = get_post( intval( $post->post_parent ) );
+			if ( $parent ) {
+				$post_type = $parent->post_type;
+			}
+		}
 
 		$environment = array(
 			'post_id' => $post->ID,
 			'post' => $post,
-			'post_type' => get_post_type( $post->ID ),
+			'post_type' => $post_type,
 		);
 		return $environment;
 	}
@@ -230,7 +247,7 @@ class Post_Meta_Container extends Container {
 	 *
 	 * @param int $post_id
 	 */
-	protected function set_post_id( $post_id ) {
+	public function set_post_id( $post_id ) {
 		$this->post_id = $post_id;
 		$this->get_datastore()->set_object_id( $post_id );
 
@@ -429,5 +446,14 @@ class Post_Meta_Container extends Container {
 	public function set_priority( $priority ) {
 		$this->settings['meta_box_priority'] = $priority;
 		return $this;
+	}
+
+	public function set_revisions_disabled( $revisions_disabled ) {
+		$this->revisions_disabled = $revisions_disabled;
+		return $this;
+	}
+
+	public function get_revisions_disabled() {
+		return $this->revisions_disabled;
 	}
 }

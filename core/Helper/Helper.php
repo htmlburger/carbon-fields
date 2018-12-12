@@ -165,6 +165,7 @@ class Helper {
 	 * @return mixed
 	 */
 	public static function get_post_meta( $id, $name, $container_id = '' ) {
+		$id = apply_filters( 'carbon_get_post_meta_post_id', $id, $name, $container_id );
 		return static::get_value( $id, 'post_meta', $container_id, $name );
 	}
 
@@ -538,6 +539,7 @@ class Helper {
 	 */
 	public static function get_attachment_metadata( $id, $type ) {
 		$attachment_meta = array(
+			'id'                => 0,
 			'thumb_url'         => '',
 			'default_thumb_url' => '',
 			'file_ext'          => '',
@@ -578,6 +580,7 @@ class Helper {
 		$meta                           = wp_get_attachment_metadata( $attachment->ID );
 		list( $src, $width, $height )   = wp_get_attachment_image_src( $attachment->ID, 'full' );
 
+		$attachment_meta['id']          = intval( $id );
 		$attachment_meta['edit_nonce']  = wp_create_nonce( 'update-post_' . $id );
 		$attachment_meta['title']       = get_the_title( $id );
 		$attachment_meta['caption']     = get_post_field( 'post_excerpt', $id );
@@ -643,8 +646,8 @@ class Helper {
 	 */
 	public static function expand_compacted_input( $input ) {
 		if ( isset( $input[ \Carbon_Fields\COMPACT_INPUT_KEY ] ) ) {
-			$json = json_decode( $input[ \Carbon_Fields\COMPACT_INPUT_KEY ], true );
-			$input = array_merge( $input, $json );
+			$inputs = $input[ \Carbon_Fields\COMPACT_INPUT_KEY ];
+			$input = array_merge( $input, $inputs );
 		}
 		return $input;
 	}

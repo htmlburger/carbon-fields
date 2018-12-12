@@ -1,0 +1,64 @@
+/* ==========================================================================
+   Container
+   ========================================================================== */
+
+.carbon-box {
+	&.hide-if-js:not([hidden]) {
+		display: block;
+	}
+}
+
+#poststuff .carbon-box .inside,
+.carbon-box .inside {
+	padding: 0;
+	margin: 0;
+}
+
+.cf-container__fields {
+	display: flex;
+	flex-wrap: wrap;
+	margin: -1px -1px 0 0;
+
+	&[hidden] {
+		display: none;
+	}
+
+	.block-editor & {
+		border-left: 1px solid $wp-color-gray-light-500;
+	}
+}
+
+.cf-container__tabs {
+	position: relative;
+	z-index: 1;
+	padding: ($size-base * 3) ($size-base * 3) 0;
+	border-bottom: 1px solid $wp-color-gray-light-500;
+	background-color: $wp-color-gray-light-100;
+}
+
+.cf-container__tabs-list {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0 0 -1px;
+}
+
+.cf-container__tabs-item {
+	display: flex;
+	align-items: center;
+	padding: ($size-base * 2) ($size-base * 3);
+	border: 1px solid $wp-color-gray-light-500;
+	margin: 0 ($size-base * 2) 0 0;
+	background-color: $wp-color-gray-light-100;
+	font-size: 12px;
+	cursor: pointer;
+	transition: background-color $transition-base, border-color $transition-base;
+
+	&:hover {
+		background-color: $color-white;
+	}
+
+	&--current {
+		background-color: $color-white;
+		border-bottom-color: $color-white;
+	}
+}

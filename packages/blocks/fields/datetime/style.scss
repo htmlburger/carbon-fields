@@ -1,0 +1,44 @@
+/* ==========================================================================
+   DateTime
+   ========================================================================== */
+
+.cf-datetime__inner {
+	.edit-post-sidebar & {
+		position: relative;
+	}
+
+	.edit-post-sidebar &::before {
+		position: absolute;
+		top: 50%;
+		left: 9px;
+		display: inline-block;
+		margin-top: -10px;
+	}
+}
+
+.cf-datetime__input {
+	.wp-block .cf-field & {
+		min-width: 0;
+		border-color: $wp-color-gray-light-500;
+		border-radius: 0;
+
+		&:focus {
+			box-shadow: none;
+		}
+	}
+
+	.edit-post-sidebar .cf-field & {
+		padding-left: 35px;
+	}
+}
+
+.cf-datetime__button {
+	.wp-block & {
+		height: auto;
+		border-color: $wp-color-gray-light-500;
+	}
+
+	.edit-post-sidebar & {
+		display: none;
+	}
+}

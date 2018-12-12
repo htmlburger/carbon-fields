@@ -1,0 +1,169 @@
+msgid ""
+msgstr ""
+"Language: bg\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"X-Generator: babel-plugin-makepot\n"
+
+#: packages/blocks/components/not-supported-field/index.js:14
+msgid "Field of type '%s' is not supported in Gutenberg."
+msgstr "Поле от тип '%s'не се поддържа в Gutenberg."
+
+#: packages/blocks/fields/date/index.js:8
+#: packages/blocks/fields/datetime/index.js:13
+#: packages/metaboxes/fields/date/index.js:7
+#: packages/metaboxes/fields/datetime/index.js:7
+msgid "Select Date"
+msgstr "Изберете дата"
+
+#: packages/blocks/fields/file/index.js:16
+#: packages/metaboxes/fields/file/index.js:11
+msgid "Use File"
+msgstr "Използвай файла"
+
+#: packages/blocks/fields/file/index.js:17
+#: packages/metaboxes/fields/file/index.js:12
+msgid "Select File"
+msgstr "Избор на файл"
+
+#: packages/blocks/fields/image/index.js:11
+#: packages/metaboxes/fields/image/index.js:11
+msgid "Use Image"
+msgstr "Използвай снимката"
+
+#: packages/blocks/fields/image/index.js:12
+#: packages/metaboxes/fields/image/index.js:12
+msgid "Select Image"
+msgstr "Избор на снимка"
+
+#: packages/blocks/fields/media-gallery/index.js:16
+#: packages/metaboxes/fields/media-gallery/index.js:16
+msgid "Use Attachments"
+msgstr "Прикачи избраните"
+
+#: packages/blocks/fields/media-gallery/index.js:17
+#: packages/metaboxes/fields/media-gallery/index.js:17
+msgid "Select Attachments"
+msgstr "Избери файлове"
+
+#: packages/blocks/fields/time/index.js:8
+#: packages/metaboxes/fields/time/index.js:7
+msgid "Select Time"
+msgstr "Изберете време"
+
+#: packages/core/components/no-options/index.js:14
+msgid "No options."
+msgstr "Няма дефинирани опции."
+
+#: packages/core/components/search-input/index.js:30
+msgid "Search..."
+msgstr "Търси..."
+
+#: packages/core/fields/association/index.js:208
+msgid "Showing %1$d of %2$d results"
+msgstr "Показани %1$d от %2$d резултата"
+
+#: packages/core/fields/association/index.js:382
+msgid "An error occurred while trying to fetch association options."
+msgstr "Грешка бе получена при опита да се вземат опциите за асоциация."
+
+#: packages/core/fields/association/index.js:424
+#: packages/core/fields/complex/index.js:385
+#: packages/core/hocs/with-validation/required.js:20
+msgid "This field is required. "
+msgstr "Това поле е задължително."
+
+#: packages/core/fields/association/index.js:428
+msgid "Minimum number of items not reached (%s items)"
+msgstr "Минималния брой селектирани не е достигнат ( %s минимум )"
+
+#: packages/core/fields/color/index.js:86
+msgid "Select a color"
+msgstr "Изберете цвят"
+
+#: packages/core/fields/complex/group.js:147
+msgid "Duplicate"
+msgstr "Дупликирай"
+
+#: packages/core/fields/complex/group.js:156
+msgid "Remove"
+msgstr "Премахни"
+
+#: packages/core/fields/complex/group.js:165
+msgid "Collapse"
+msgstr "Разгъни"
+
+#: packages/core/fields/complex/index.js:392
+msgid "Minimum number of rows not reached (%1$d %2$s)"
+msgstr "Минималния брой редове не беше достигнат (%1$d %2$s)"
+
+#: packages/core/fields/complex/index.js:81
+msgid "Add %s"
+msgstr "Добави %s"
+
+#: packages/core/fields/map/index.js:166
+msgid "The address could not be found. "
+msgstr "Адресът не беше намерен"
+
+#: packages/core/fields/map/index.js:168
+msgid "Geocode was not successful for the following reason: "
+msgstr "Геокодирането беше неуспешно поради следната причина: "
+
+#: packages/core/fields/oembed/index.js:189
+msgid "An error occurred while trying to fetch oembed preview."
+msgstr "Грешка беше получена при опита да се вземе предварителния преглед на полето"
+
+#: packages/core/fields/oembed/index.js:204
+msgid "Not Found"
+msgstr "Не беше намерен"
+
+#: packages/core/fields/rich-text/index.js:100
+msgid "Text"
+msgstr "Текстов"
+
+#: packages/core/fields/rich-text/index.js:96
+msgid "Visual"
+msgstr "Визуален"
+
+#: packages/core/fields/sidebar/index.js:111
+msgid "Please enter the name of the new sidebar:"
+msgstr "Моля въведете име на новата странична лента"
+
+#: packages/core/fields/sidebar/index.js:129
+msgid "An error occurred while trying to create the sidebar."
+msgstr "Грешка беше получена при опита да се създаде нова странична лента"
+
+#: packages/core/registry/index.js:40
+msgid "%1$s type must be a string."
+msgstr "%1$s типът трябва да е от тип текст"
+
+#: packages/core/registry/index.js:46
+msgid "%1$s %2$s is already registered."
+msgstr "%1$s %2$s е вече регистриран."
+
+#: packages/core/registry/index.js:54
+msgid "The \"component\" param must be a function."
+msgstr "Параметъра \"component\" трябва да е от тип фукнция"
+
+#: packages/core/utils/api-fetch.js:19
+msgid "An error occured."
+msgstr "Грешка беше получена"
+
+#: packages/core/utils/fetch-attachments-data.js:23
+msgid "An error occurred while trying to fetch files data."
+msgstr "Грешка беше получена при опита да се вземе информация за файловете"
+
+#: packages/metaboxes/containers/index.js:51
+msgid "Could not find DOM element for container \"%1$s\"."
+msgstr "DOM елемент за контейнер \"%1$s\" не беше намерен"
+
+#: packages/metaboxes/monitors/conditional-display/conditions/base.js:52
+msgid "Unsupported container condition comparison operator used - \"%1$s\"."
+msgstr "Неподдържан оператор за сравнение използван като условие на контейнер - \"%1$s\"."
+
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:53
+msgid "Unsupported container condition - \"%1$s\"."
+msgstr "Неподдържано условие за контейнер - \"%1$s\"."
+
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:71
+msgid "Unsupported container condition relation used - \"%1$s\"."
+msgstr "Неподдържанна връзка на условия използвана на контейнер - \"%1$s\"."

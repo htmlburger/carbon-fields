@@ -1,0 +1,40 @@
+/* ==========================================================================
+   Field
+   ========================================================================== */
+
+.cf-field,
+.cf-field__head,
+.cf-field__body {
+	box-sizing: border-box;
+	flex: 1 1 100%;
+}
+
+.cf-field__body {
+	.cf-rich-text & {
+		box-sizing: content-box;
+	}
+
+	.cf-complex--tabbed-vertical > & {
+		display: flex;
+		align-items: flex-start;
+	}
+}
+
+.cf-field__label {
+	display: block;
+
+	.cf-html &,
+	.cf-separator & {
+		display: none;
+	}
+}
+
+.cf-field__asterisk {
+	color: $wp-color-accent-red;
+}
+
+.cf-field__error {
+	display: block;
+	margin-top: $size-base;
+	color: $wp-color-accent-red;
+}
