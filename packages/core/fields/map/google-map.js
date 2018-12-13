@@ -18,21 +18,13 @@ class GoogleMap extends Component {
 	 * @return {void}
 	 */
 	componentDidMount() {
-		// Google Maps SDK isn't loaded at this moment.
-		// TODO: Delay initialization of metaboxes & blocks.
-		const interval = setInterval( () => {
-			if ( window.google ) {
-				clearInterval( interval );
+		this.setupMap();
+		this.setupMapEvents();
+		this.updateMap( this.props );
 
-				this.setupMap();
-				this.setupMapEvents();
-				this.updateMap( this.props );
-
-				this.cancelResizeObserver = observeResize( this.node.current, () => {
-					this.updateMap( this.props );
-				} );
-			}
-		}, 100 );
+		this.cancelResizeObserver = observeResize( this.node.current, () => {
+			this.updateMap( this.props );
+		} );
 	}
 
 	/**
