@@ -14,6 +14,8 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 /**
  * Base container class.
  * Defines the key container methods and their default implementations.
+ *
+ * @mixin Block_Container|Comment_Meta_Container|Nav_Menu_Item_Container|Network_Container|Post_Meta_Container|Term_Meta_Container|Theme_Options_Container|User_Meta_Container|Widget_Container
  */
 abstract class Container implements Datastore_Holder_Interface {
 	/**
