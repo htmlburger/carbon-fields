@@ -1,0 +1,15 @@
+/* ==========================================================================
+   Multiselect
+   ========================================================================== */
+
+.cf-multiselect__control {
+	.postbox & {
+		border-color: #ddd;
+		box-shadow: 0 1px 2px transparentize($color-black, 0.93) inset;
+	}
+
+	.postbox &--is-focused,
+	.postbox &--is-focused:hover {
+		box-shadow: 0 0 2px transparentize($wp-color-blue, 0.2);
+	}
+}

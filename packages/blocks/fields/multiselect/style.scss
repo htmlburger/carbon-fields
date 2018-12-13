@@ -1,0 +1,20 @@
+/* ==========================================================================
+   Multiselect
+   ========================================================================== */
+
+.cf-multiselect__control  {
+	.wp-block & {
+		border-radius: 0;
+	}
+
+	.edit-post-sidebar &,
+	.edit-post-sidebar &:hover {
+		border-color: $gb-dark-gray-150;
+	}
+
+	.edit-post-sidebar &--is-focused,
+	.edit-post-sidebar &--is-focused:hover {
+		border-color: $wp-color-medium-blue;
+		box-shadow: 0 0 0 1px $wp-color-medium-blue;
+	}
+}

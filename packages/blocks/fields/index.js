@@ -44,6 +44,7 @@ import './header-scripts';
 import './hidden';
 import './image';
 import './map';
+import './multiselect';
 import './media-gallery';
 import './oembed';
 import './radio';

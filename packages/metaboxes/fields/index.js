@@ -48,6 +48,7 @@ import './date';
 import './datetime';
 import './file';
 import './image';
+import './multiselect';
 import './media-gallery';
 import './radio';
 import './sidebar';
