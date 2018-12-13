@@ -29,7 +29,7 @@ if ( ! isset( $container_css_class ) ) {
 					<?php do_action( "{$container_id}_before_fields" ); ?>
 
 					<div class="postbox carbon-box" id="<?php echo $this->get_id(); ?>">
-						<fieldset class="inside container-holder carbon-grid <?php echo $container_css_class; ?>-container container-<?php echo $this->get_id(); ?> <?php echo $this->is_tabbed() ? '' : 'carbon-fields-collection' ?>"></fieldset>
+						<fieldset class="inside <?php echo $container_css_class; ?>-container container-<?php echo $this->get_id(); ?>"></fieldset>
 					</div>
 
 					<?php do_action( "{$container_id}_after_fields" ); ?>
