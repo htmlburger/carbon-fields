@@ -319,7 +319,10 @@ class ComplexField extends Component {
 					<Sortable
 						items={ value }
 						options={ {
-							handle: '.cf-complex__group-head'
+							axis: 'y',
+							handle: '.cf-complex__group-head',
+							placeholder: 'cf-complex__group-placeholder',
+							forcePlaceholderSize: true
 						} }
 						forwardedRef={ this.groupsList }
 						onUpdate={ this.handleSortGroups }
