@@ -118,7 +118,7 @@ class ComplexGroup extends Component {
 					</div>
 				) }
 
-				<div className="cf-complex__group-body" hidden={ collapsed }>
+				<div className="cf-complex__group-body" hidden={ ! tabbed && collapsed }>
 					{ fields.map( ( field ) => {
 						const FieldEdit = getFieldType( field.type, context );
 
