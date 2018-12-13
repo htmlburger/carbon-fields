@@ -13,6 +13,7 @@ import AssociationField from './association';
 import CheckboxField from './checkbox';
 import ColorField from './color';
 import ComplexField from './complex';
+import DateField from './date';
 import DateTimeField from './datetime';
 import FileField from './file';
 import HiddenField from './hidden';
@@ -30,6 +31,7 @@ import SetField from './set';
 import SidebarField from './sidebar';
 import TextField from './text';
 import TextareaField from './textarea';
+import TimeField from './time';
 
 /**
  * Extends the fields with necessary hooks.
@@ -49,7 +51,7 @@ addFilter( 'carbon-fields.register-field-type', 'carbon-fields/core', ( type, co
 	[ 'checkbox', CheckboxField ],
 	[ 'color', ColorField ],
 	[ 'complex', ComplexField ],
-	[ 'date', DateTimeField ],
+	[ 'date', DateField ],
 	[ 'date_time', DateTimeField ],
 	[ 'file', FileField ],
 	[ 'footer_scripts', TextareaField ],
@@ -71,5 +73,5 @@ addFilter( 'carbon-fields.register-field-type', 'carbon-fields/core', ( type, co
 	[ 'sidebar', SidebarField ],
 	[ 'text', TextField ],
 	[ 'textarea', TextareaField ],
-	[ 'time', DateTimeField ]
+	[ 'time', TimeField ]
 ].forEach( ( field ) => registerFieldType( ...field ) );

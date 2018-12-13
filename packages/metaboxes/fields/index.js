@@ -44,7 +44,6 @@ addFilter( 'carbon-fields.field-edit.metabox', 'carbon-fields/metaboxes', compos
 ) );
 
 import './complex';
-import './date';
 import './datetime';
 import './file';
 import './image';
@@ -52,4 +51,3 @@ import './multiselect';
 import './media-gallery';
 import './radio';
 import './sidebar';
-import './time';
