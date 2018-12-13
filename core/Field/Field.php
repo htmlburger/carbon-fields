@@ -14,6 +14,8 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * Base field class.
  * Defines the key container methods and their default implementations.
  * Implements factory design pattern.
+ *
+ * @mixin Association_Field|Checkbox_Field|Color_Field|Complex_Field|Date_Field|Date_Time_Field|File_Field|Footer_Scripts_Field|Gravity_Form_Field|Header_Scripts_Field|Hidden_Field|Html_Field|Image_Field|Map_Field|Media_Gallery_Field|Multiselect_Field|OEmbed_Field|Predefined_Options_Field|Radio_Field|Radio_Image_Field|Rich_Text_Field|Scripts_Field|Select_Field|Separator_Field|Set_Field|Sidebar_Field|Text_Field|Textarea_Field|Time_Field
  */
 class Field implements Datastore_Holder_Interface {
 
