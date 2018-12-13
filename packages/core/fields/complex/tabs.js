@@ -40,16 +40,18 @@ function ComplexTabs( {
 						>
 							{
 								item.label
-									? <span
-										className="cf-complex__tabs-title"
-										dangerouslySetInnerHTML={ { __html: item.label } }
-									></span>
-									: null
+									? (
+										<span
+											className="cf-complex__tabs-title"
+											dangerouslySetInnerHTML={ { __html: item.label } }
+										></span>
+									)
+									: (
+										<span className="cf-complex__tabs-index">
+											{ index + 1 }
+										</span>
+									)
 							}
-
-							<span className="cf-complex__tabs-index">
-								{ index + 1 }
-							</span>
 						</li>
 					);
 				} ) }
