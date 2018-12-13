@@ -635,6 +635,10 @@ class Helper {
 			$input = static::expand_compacted_input( $input );
 		}
 
+		if ( ! current_user_can( 'unfiltered_html' ) ) {
+			$input = wp_kses_post_deep( $input );
+		}
+
 		return $input;
 	}
 
