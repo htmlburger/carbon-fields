@@ -78,6 +78,7 @@
 	align-items: center;
 	justify-content: space-between;
 	flex: 1;
+	min-width: 0;
 	margin-right: 8px;
 }
 
@@ -88,6 +89,7 @@
 	color: $wp-color-base-gray;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	margin-right: $size-base;
 
 	.cf-association__option--selected & {
 		color: $wp-color-dark-silver-gray;
