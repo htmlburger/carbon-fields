@@ -13,6 +13,7 @@ import './hooks';
 import './widget';
 import './term-meta';
 import './theme-options';
+import './user-meta';
 import Container from '../components/container';
 import { getContainerType, registerContainerType } from './registry';
 

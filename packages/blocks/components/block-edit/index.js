@@ -117,6 +117,7 @@ class BlockEdit extends Component {
 								blockId={ clientId }
 								value={ value }
 								field={ field }
+								name={ field.base_name }
 								onChange={ this.handleFieldChange }
 							/>
 						</Field>

@@ -17,3 +17,9 @@
 		margin-top: 0;
 	}
 }
+
+.cf-set__label {
+	.cf-container-term-meta & {
+		display: inline;
+	}
+}

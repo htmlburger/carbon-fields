@@ -1,0 +1,69 @@
+/* ==========================================================================
+   Multiselect
+   ========================================================================== */
+
+.cf-multiselect__control {
+	height: 30px;
+	min-height: 0;
+	border-color: $wp-color-gray-light-500;
+
+	&:hover {
+		border-color: $wp-color-gray-light-500;
+	}
+
+	&--is-focused,
+	&--is-focused:hover {
+		border-color: $wp-color-medium-blue !important;
+		box-shadow: none;
+	}
+}
+
+.cf-multiselect__placeholder {
+	color: $wp-color-gray-light-800;
+}
+
+.cf-multiselect__value-container {
+	padding-left: $size-base;
+	padding-right: $size-base;
+}
+
+.cf-multiselect__multi-value {
+	align-items: center;
+	margin: 0;
+	background-color: transparent;
+}
+
+.cf-multiselect__multi-value__label {
+	padding-left: 3px;
+	font-size: 12px;
+	line-height: 1;
+}
+
+.cf-multiselect__multi-value__remove {
+	padding: 0;
+
+	&:hover {
+		background-color: transparent;
+	}
+}
+
+.cf-multiselect__input {
+	input[id],
+	input[id]:focus {
+		box-shadow: none;
+	}
+}
+
+.cf-multiselect__menu {
+	z-index: 9999;
+}
+
+.cf-multiselect__option {
+	padding: $size-base;
+
+	&--is-focused {
+		background-color: $wp-color-medium-blue;
+		color: $color-white;
+	}
+}
+

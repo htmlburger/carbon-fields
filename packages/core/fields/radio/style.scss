@@ -24,6 +24,10 @@
 }
 
 .cf-radio__label {
+	.cf-container-term-meta & {
+		display: inline;
+	}
+
 	.cf-radio-image & {
 		display: inline-block;
 	}

@@ -25,3 +25,79 @@
 	color: #666;
 	margin-top: 10px;
 }
+
+/* ==========================================================================
+   Multiselect
+   ========================================================================== */
+
+// .cf-multiselect__control {
+// 	min-height: 0;
+// 	height: 30px;
+// 	border-color: $wp-color-gray-light-500;
+// 	box-shadow: 0 1px 2px transparentize($color-black, 0.93) inset;
+
+// 	&:hover {
+// 		border-color: $wp-color-gray-light-500;
+// 	}
+
+// 	&--is-focused,
+// 	&--is-focused:hover {
+// 		border-color: $wp-color-medium-blue;
+// 		box-shadow: 0 0 2px transparentize($wp-color-blue, 0.2);
+// 	}
+// }
+
+// .cf-multiselect__indicator {
+// 	padding: $size-base;
+// }
+
+// .cf-multiselect__indicator-separator {
+// 	background-color: $wp-color-gray-light-500;
+// }
+
+// .cf-multiselect__value-container {
+// 	padding-left: $size-base;
+// 	padding-right: $size-base;
+// }
+
+// .cf-multiselect__multi-value {
+// 	align-items: center;
+// 	margin: 0;
+// 	background-color: transparent;
+// }
+
+// .cf-multiselect__multi-value__label {
+// 	padding-left: 3px;
+// }
+
+// .cf-multiselect__multi-value__remove {
+// 	padding: 0;
+
+// 	&:hover {
+// 		background-color: transparent;
+// 	}
+// }
+
+// .cf-multiselect__input {
+// 	input,
+// 	input:focus {
+// 		box-shadow: none;
+// 	}
+// }
+
+// .cf-multiselect__menu {
+// 	margin: $size-base / 2 0;
+// }
+
+// .cf-multiselect__option {
+// 	padding: $size-base;
+
+// 	&--is-focused {
+// 		background-color: $wp-color-medium-blue;
+// 		color: $color-white;
+// 	}
+// }
+
+// .cf-multiselect__dropdown-indicator {
+// 	// color: $wp-color-dark-gray;
+// }

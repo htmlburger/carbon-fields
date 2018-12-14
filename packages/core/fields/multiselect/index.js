@@ -7,6 +7,7 @@ import Select from 'react-select';
 /**
  * The internal dependencies.
  */
+import './style.scss';
 import NoOptions from '../../components/no-options';
 
 class MultiselectField extends Component {

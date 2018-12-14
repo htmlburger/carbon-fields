@@ -9,6 +9,12 @@
 	flex: 1 1 100%;
 }
 
+.cf-field {
+	@media (max-width: 1024px) {
+		flex-basis: 100% !important;
+	}
+}
+
 .cf-field__body {
 	.cf-rich-text & {
 		box-sizing: content-box;

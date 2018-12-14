@@ -36,7 +36,6 @@ addFilter( 'carbon-fields.field-edit.block', 'carbon-fields/blocks', compose(
  */
 import './association';
 import './complex';
-import './date';
 import './datetime';
 import './file';
 import './footer-scripts';
@@ -44,6 +43,7 @@ import './header-scripts';
 import './hidden';
 import './image';
 import './map';
+import './multiselect';
 import './media-gallery';
 import './oembed';
 import './radio';
@@ -54,4 +54,3 @@ import './sidebar';
 import './separator';
 import './text';
 import './textarea';
-import './time';
