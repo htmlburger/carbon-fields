@@ -1,53 +1,17 @@
 /**
  * External dependencies.
  */
-import { Component } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
 import { withEffects, toProps } from 'refract-callbag';
 import {
 	map,
 	pipe,
-	merge,
-	combine
+	merge
 } from 'callbag-basics';
 import of from 'callbag-of';
 
-class MediaLibrary extends Component {
-	/**
-	 * Lifecycle hook.
-	 *
-	 * @return {void}
-	 */
-	componentDidMount() {
-		const { onSelect, typeFilter } = this.props;
-
-		this.props.initMediaBrowser( {
-			onSelect,
-			typeFilter
-		} );
-	}
-
-	/**
-	 * Lifecycle hook.
-	 *
-	 * @return {void}
-	 */
-	componentWillUnmount() {
-		this.props.destroyMediaBrowser();
-	}
-
-	/**
-	 * Render the component.
-	 *
-	 * @return {Object}
-	 */
-	render() {
-		const { openMediaBrowser } = this.props;
-
-		return this.props.children( {
-			openMediaBrowser
-		} );
-	}
+function MediaLibrary( { children, openMediaBrowser } ) {
+	return children( { openMediaBrowser } );
 }
 
 /**
@@ -57,42 +21,39 @@ class MediaLibrary extends Component {
  * @return {Object}
  */
 function aperture( component ) {
-	const actions = [
-		{ event: 'initMediaBrowserEvent', prop: 'initMediaBrowser', type: 'INIT_MEDIA_BROWSER' },
-		{ event: 'openMediaBrowserEvent', prop: 'openMediaBrowser', type: 'OPEN_MEDIA_BROWSER' },
-		{ event: 'destroyMediaBrowserEvent', prop: 'destroyMediaBrowser', type: 'DESTROY_MEDIA_BROWSER' }
-	].map( ( actionData ) => {
-		const [ actionChannel$, action ] = component.useEvent( actionData.event );
-
-		return {
-			...actionData,
-			action,
-			channel$: actionChannel$
-		};
-	} );
-
-	const combined$ = pipe(
-		combine( ...actions.map( ( { action, prop } ) => of( {
-			action,
-			prop
-		} ) ) ),
-		map( ( combinedActions ) => toProps( combinedActions.reduce(
-			( acc, curr ) => ( {
-				...acc,
-				[ curr.prop ]: curr.action
-			} ), {}
-		) ) )
-	);
+	const mount$ = component.mount;
+	const unmount$ = component.unmount;
+	const [ openMediaBrowserEvent$, openMediaBrowser ] = component.useEvent( 'openMediaBrowserEvent' );
 
 	return merge(
-		combined$,
-		...actions.map( ( { channel$, type } ) => pipe(
-			channel$,
+		pipe(
+			mount$,
+			map( () => ( {
+				type: 'INIT'
+			} ) )
+		),
+
+		pipe(
+			unmount$,
+			map( () => ( {
+				type: 'DESTROY'
+			} ) )
+		),
+
+		pipe(
+			of( {
+				openMediaBrowser
+			} ),
+			map( toProps )
+		),
+
+		pipe(
+			openMediaBrowserEvent$,
 			map( ( payload ) => ( {
-				type,
+				type: 'OPEN',
 				payload
 			} ) )
-		) )
+		)
 	);
 }
 
@@ -107,12 +68,8 @@ function handler( props ) {
 
 	return function( effect ) {
 		switch ( effect.type ) {
-			case 'INIT_MEDIA_BROWSER':
-				const { onSelect, typeFilter } = effect.payload;
-
-				if ( ! onSelect ) {
-					return;
-				}
+			case 'INIT':
+				const { onSelect, typeFilter } = props;
 
 				mediaBrowser = wp.media( {
 					title: props.title,
@@ -134,13 +91,13 @@ function handler( props ) {
 				} );
 
 				break;
-			case 'OPEN_MEDIA_BROWSER':
+			case 'OPEN':
 				if ( mediaBrowser ) {
 					mediaBrowser.open();
 				}
 
 				break;
-			case 'DESTROY_MEDIA_BROWSER':
+			case 'DESTROY':
 				mediaBrowser = null;
 
 				break;
