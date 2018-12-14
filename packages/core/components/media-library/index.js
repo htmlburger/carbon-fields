@@ -1,7 +1,6 @@
 /**
  * External dependencies.
  */
-import { Component } from '@wordpress/element';
 import { compose } from '@wordpress/compose';
 import { withEffects, toProps } from 'refract-callbag';
 import {
@@ -11,19 +10,8 @@ import {
 } from 'callbag-basics';
 import of from 'callbag-of';
 
-class MediaLibrary extends Component {
-	/**
-	 * Render the component.
-	 *
-	 * @return {Object}
-	 */
-	render() {
-		const { openMediaBrowser } = this.props;
-
-		return this.props.children( {
-			openMediaBrowser
-		} );
-	}
+function MediaLibrary( { children, openMediaBrowser } ) {
+	return children( { openMediaBrowser } );
 }
 
 /**
