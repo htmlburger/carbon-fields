@@ -62,7 +62,7 @@ class Container extends Component {
 	 * @param  {Object} field
 	 * @return {Object}
 	 */
-	renderField( field ) {
+	renderField = ( field ) => {
 		const FieldEdit = getFieldType( field.type, 'metabox' );
 
 		if ( ! FieldEdit ) {
@@ -71,7 +71,7 @@ class Container extends Component {
 
 		return (
 			<Field key={ field.id } id={ field.id }>
-				<FieldEdit id={ field.id } />
+				<FieldEdit id={ field.id } containerId={ this.props.id } />
 			</Field>
 		);
 	}

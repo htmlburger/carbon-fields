@@ -309,8 +309,6 @@ class AssociationField extends Component {
 	}
 }
 
-const fetchData = ( field, data ) => apiFetch( `${ window.wpApiSettings.root }carbon-fields/v1/association/`, 'get', { container_id: field.container_id, field_id: field.base_name, ...data } );
-
 /**
  * The function that controls the stream of side-effects.
  *
@@ -365,7 +363,11 @@ function aperture( component ) {
 function handler( props ) {
 	return function( effect ) {
 		const { payload, type } = effect;
-		const { field, setState, selectedOptions } = props;
+		const {
+			setState,
+			selectedOptions,
+			hierarchyResolver
+		} = props;
 
 		switch ( type ) {
 			case 'FETCH_OPTIONS':
@@ -373,8 +375,8 @@ function handler( props ) {
 				const request = window.jQuery.get( window.ajaxurl, {
 					action: 'carbon_fields_fetch_association_options',
 					term: payload.queryTerm,
-					container_id: field.container_id,
-					field_name: field.base_name
+					container_id: props.containerId,
+					field_name: hierarchyResolver()
 				}, null, 'json' );
 
 				/* eslint-disable-next-line no-alert */
@@ -395,7 +397,15 @@ function handler( props ) {
 				break;
 
 			case 'FETCH_SELECTED_OPTIONS':
-				fetchData( field, { options: props.value } )
+				apiFetch(
+					`${ window.wpApiSettings.root }carbon-fields/v1/association/`,
+					'get',
+					{
+						container_id: props.containerId,
+						options: props.value,
+						field_id: hierarchyResolver()
+					}
+				)
 					.then( ( response ) => {
 						setState( {
 							selectedOptions: [ ...selectedOptions, ...response ]

@@ -43,6 +43,7 @@ addFilter( 'carbon-fields.field-edit.metabox', 'carbon-fields/metaboxes', compos
 	withValidation
 ) );
 
+import './association';
 import './complex';
 import './datetime';
 import './file';

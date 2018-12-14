@@ -114,6 +114,7 @@ class BlockEdit extends Component {
 						>
 							<FieldEdit
 								id={ id }
+								containerId={ attributes.containerId }
 								blockId={ clientId }
 								value={ value }
 								field={ field }

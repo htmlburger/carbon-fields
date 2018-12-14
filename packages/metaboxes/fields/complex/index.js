@@ -190,6 +190,7 @@ class ComplexField extends Component {
 		return [ Field, assign( {}, props, {
 			key: field.id,
 			id: field.id,
+			containerId: this.props.containerId,
 			name: `${ groupProps.prefix }[${ field.name }]`
 		} ) ];
 	}

@@ -33,10 +33,7 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 
 	const getBlockSetting = ( key, def = null ) => get( container, `settings.${ key }`, def );
 
-	definitions[ name ] = container.fields.map( ( field ) => ( {
-		...field,
-		container_id: container.id
-	} ) );
+	definitions[ name ] = container.fields.map( ( field ) => ( { ...field } ) );
 
 	registerBlockType( `carbon-fields/${ name }`, {
 		id: container.id,
@@ -46,6 +43,10 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 		keywords: getBlockSetting( 'keywords', [] ),
 		description: getBlockSetting( 'description', '' ),
 		attributes: {
+			containerId: {
+				type: 'string',
+				default: container.id
+			},
 			data: {
 				type: 'object',
 				default: fields

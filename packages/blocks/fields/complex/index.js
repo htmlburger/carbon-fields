@@ -213,6 +213,7 @@ class ComplexField extends Component {
 			key: id,
 			id: id,
 			name: field.base_name,
+			containerId: this.props.containerId,
 			blockId,
 			field,
 			value,
