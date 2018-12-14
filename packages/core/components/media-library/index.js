@@ -29,20 +29,20 @@ function aperture( component ) {
 		pipe(
 			mount$,
 			map( () => ( {
-				type: 'COMPONENT_MOUNTED'
+				type: 'INIT'
 			} ) )
 		),
 
 		pipe(
 			unmount$,
 			map( () => ( {
-				type: 'COMPONENT_UNMOUNTED'
+				type: 'DESTROY'
 			} ) )
 		),
 
 		pipe(
 			of( {
-				openMediaBrowser: openMediaBrowser
+				openMediaBrowser
 			} ),
 			map( toProps )
 		),
@@ -50,7 +50,7 @@ function aperture( component ) {
 		pipe(
 			openMediaBrowserEvent$,
 			map( ( payload ) => ( {
-				type: 'OPEN_MEDIA_BROWSER',
+				type: 'OPEN',
 				payload
 			} ) )
 		)
@@ -68,7 +68,7 @@ function handler( props ) {
 
 	return function( effect ) {
 		switch ( effect.type ) {
-			case 'COMPONENT_MOUNTED':
+			case 'INIT':
 				const { onSelect, typeFilter } = props;
 
 				mediaBrowser = wp.media( {
@@ -91,13 +91,13 @@ function handler( props ) {
 				} );
 
 				break;
-			case 'OPEN_MEDIA_BROWSER':
+			case 'OPEN':
 				if ( mediaBrowser ) {
 					mediaBrowser.open();
 				}
 
 				break;
-			case 'COMPONENT_UNMOUNTED':
+			case 'DESTROY':
 				mediaBrowser = null;
 
 				break;
