@@ -271,6 +271,10 @@ class Block_Container extends Container {
 
 			return $attributes;
 		}, array(
+			'containerId' => array(
+				'type' => 'string',
+				'default' => $this->get_id(),
+			),
 			'data' => array(
 				'type' => 'object',
 				'default' => array(),
