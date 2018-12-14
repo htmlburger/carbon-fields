@@ -212,6 +212,7 @@ class ComplexField extends Component {
 		return [ Field, assign( {}, props, {
 			key: id,
 			id: id,
+			name: field.base_name,
 			blockId,
 			field,
 			value,

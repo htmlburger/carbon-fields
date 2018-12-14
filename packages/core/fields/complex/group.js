@@ -132,10 +132,7 @@ class ComplexGroup extends Component {
 							// The `key` will be assigned via `onFieldSetup`.
 							// eslint-disable-next-line react/jsx-key
 							<Field { ...props }>
-								<FieldEdit
-									{ ...props }
-									name={ field.base_name }
-								/>
+								<FieldEdit { ...props } />
 							</Field>
 						);
 					} ) }
