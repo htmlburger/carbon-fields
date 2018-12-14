@@ -76,6 +76,8 @@ class ComplexGroup extends Component {
 		const groupClasses = cx(
 			'cf-complex__group',
 			{
+				'cf-complex__group--grid': ! tabbed,
+				'cf-complex__group--tabbed': tabbed,
 				'cf-complex__group--collapsed': collapsed
 			}
 		);
@@ -92,6 +94,7 @@ class ComplexGroup extends Component {
 		const actionsClasses = cx(
 			'cf-complex__group-actions',
 			{
+				'cf-complex__group-actions--grid': ! tabbed,
 				'cf-complex__group-actions--tabbed': tabbed
 			}
 		);

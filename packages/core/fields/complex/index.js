@@ -292,6 +292,7 @@ class ComplexField extends Component {
 							ref={ this.tabsList }
 							items={ tabs }
 							current={ currentTab }
+							layout={ field.layout }
 							onChange={ this.handleTabsChange }
 						>
 							{ !! availableGroups.length && ! this.isMaximumReached && (

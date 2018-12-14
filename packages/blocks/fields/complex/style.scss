@@ -65,6 +65,10 @@
 	.block-editor &--current {
 		color: $gb-dark-gray-900;
 	}
+
+	.edit-post-sidebar & {
+		border-color: $gb-dark-gray-150;
+	}
 }
 
 .cf-complex__group-head {
@@ -75,18 +79,13 @@
 
 .cf-complex__group-body {
 	.edit-post-sidebar & {
+		display: block;
 		border-color: $gb-dark-gray-150;
 	}
 }
 
 .cf-complex__group-actions {
 	.edit-post-sidebar &--tabbed {
-		border-color: $gb-dark-gray-150;
-	}
-}
-
-.cf-complex__tabs-item {
-	.edit-post-sidebar & {
 		border-color: $gb-dark-gray-150;
 	}
 }
