@@ -185,16 +185,6 @@ class AssociationField extends Component {
 			} );
 		}
 
-		// eslint-disable-next-line
-		const sortableOptions = {
-			axis: 'y',
-			items: 'li',
-			forceHelperSize: true,
-			forcePlaceholderSize: true,
-			scroll: true,
-			handle: '.mobile-handle'
-		};
-
 		return (
 			<Fragment>
 				<div className="cf-association__bar">
@@ -256,7 +246,8 @@ class AssociationField extends Component {
 							axis: 'y',
 							forceHelperSize: true,
 							forcePlaceholderSize: true,
-							scroll: true
+							scroll: true,
+							handle: '.cf-association__option-sort'
 						} }
 						onUpdate={ this.handleSort }
 					>
