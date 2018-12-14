@@ -83,10 +83,6 @@ function handler( props ) {
 			case 'COMPONENT_MOUNTED':
 				const { onSelect, typeFilter } = props;
 
-				if ( ! onSelect ) {
-					return;
-				}
-
 				mediaBrowser = wp.media( {
 					title: props.title,
 					library: {
