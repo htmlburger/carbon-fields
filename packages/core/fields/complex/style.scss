@@ -129,13 +129,13 @@
 		height: 36px;
 	}
 
-	.cf-complex--tabbed-horizontal & {
+	.cf-complex__tabs--tabbed-horizontal & {
 		width: 36px;
 		align-self: flex-end;
 		margin-bottom: 4px;
 	}
 
-	.cf-complex--tabbed-vertical & {
+	.cf-complex__tabs--tabbed-vertical & {
 		display: block;
 	}
 }
