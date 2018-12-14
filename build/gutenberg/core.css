@@ -85,6 +85,7 @@
   align-items: center;
   justify-content: space-between;
   flex: 1;
+  min-width: 0;
   margin-right: 8px; }
 
 .cf-association__option-title {
@@ -93,7 +94,8 @@
   line-height: 1.4;
   color: #32373c;
   white-space: nowrap;
-  text-overflow: ellipsis; }
+  text-overflow: ellipsis;
+  margin-right: 4px; }
   .cf-association__option--selected .cf-association__option-title {
     color: #82878c; }
 
@@ -295,11 +297,27 @@
   .cf-complex--tabbed-vertical .cf-complex__groups {
     flex: 0 0 80%; }
 
-.cf-complex--grid .cf-complex__group {
-  position: relative;
-  margin-bottom: 12px; }
-  .cf-complex--grid .cf-complex__group:last-child {
-    margin-bottom: 0; }
+.cf-complex__group {
+  box-sizing: border-box; }
+  .cf-complex--grid .cf-complex__group {
+    position: relative;
+    margin-bottom: 12px; }
+    .cf-complex--grid .cf-complex__group:last-child {
+      margin-bottom: 0; }
+
+.cf-complex__group-placeholder {
+  position: relative; }
+  .cf-complex__group-placeholder:not(:last-child) {
+    margin-bottom: 12px; }
+  .cf-complex__group-placeholder::before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px dashed #e2e4e7;
+    box-sizing: border-box;
+    content: ''; }
 
 /**
  * Head
@@ -340,7 +358,8 @@
   flex-wrap: wrap;
   border-width: 0 0 1px 1px;
   border-style: solid;
-  border-color: #e2e4e7; }
+  border-color: #e2e4e7;
+  background-color: #fff; }
   .cf-complex__group-body[hidden] {
     display: none; }
   .cf-complex--grid .cf-complex__group-body {
@@ -1507,6 +1526,75 @@ span.flatpickr-weekday {
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
    ========================================================================== */
 /* ==========================================================================
+   Multiselect
+   ========================================================================== */
+.cf-multiselect__control {
+  height: 30px;
+  min-height: 0;
+  border-color: #e2e4e7; }
+  .cf-multiselect__control:hover {
+    border-color: #e2e4e7; }
+  .cf-multiselect__control--is-focused, .cf-multiselect__control--is-focused:hover {
+    border-color: #00a0d2 !important;
+    box-shadow: none; }
+
+.cf-multiselect__placeholder {
+  color: #b5bcc2; }
+
+.cf-multiselect__value-container {
+  padding-left: 4px;
+  padding-right: 4px; }
+
+.cf-multiselect__multi-value {
+  align-items: center;
+  margin: 0;
+  background-color: transparent; }
+
+.cf-multiselect__multi-value__label {
+  padding-left: 3px;
+  font-size: 12px;
+  line-height: 1; }
+
+.cf-multiselect__multi-value__remove {
+  padding: 0; }
+  .cf-multiselect__multi-value__remove:hover {
+    background-color: transparent; }
+
+.cf-multiselect__input input[id],
+.cf-multiselect__input input[id]:focus {
+  box-shadow: none; }
+
+.cf-multiselect__menu {
+  z-index: 9999; }
+
+.cf-multiselect__option {
+  padding: 4px; }
+  .cf-multiselect__option--is-focused {
+    background-color: #00a0d2;
+    color: #fff; }
+
+/* ==========================================================================
+   Colors
+   ========================================================================== */
+/* ==========================================================================
+   WordPress Colors - https://make.wordpress.org/design/handbook/design-guide/foundations/colors/
+   ========================================================================== */
+/* ==========================================================================
+   Gutenberg Colors - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_colors.scss
+   ========================================================================== */
+/* ==========================================================================
+   Fonts
+   ========================================================================== */
+/* ==========================================================================
+   Variables
+   ========================================================================== */
+/* ==========================================================================
+   WordPress Variables
+   ========================================================================== */
+/* ==========================================================================
+   Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
+   ========================================================================== */
+/* ==========================================================================
    oEmbed
    ========================================================================== */
 .cf-oembed__preview {
@@ -1558,6 +1646,9 @@ span.flatpickr-weekday {
   flex: 0 0 20%;
   position: relative;
   padding: 4px; }
+
+.cf-container-term-meta .cf-radio__label {
+  display: inline; }
 
 .cf-radio-image .cf-radio__label {
   display: inline-block; }
@@ -1678,6 +1769,10 @@ span.flatpickr-weekday {
 .cf-container-term-meta .cf-separator .cf-field__head {
   display: none; }
 
+.cf-container-term-meta .cf-separator .cf-field__body {
+  position: absolute;
+  left: 0; }
+
 /* ==========================================================================
    Colors
    ========================================================================== */
@@ -1710,6 +1805,9 @@ span.flatpickr-weekday {
 
 .cf-field .cf-set__input {
   margin-top: 0; }
+
+.cf-container-term-meta .cf-set__label {
+  display: inline; }
 
 /* ==========================================================================
    Colors
@@ -1798,6 +1896,10 @@ span.flatpickr-weekday {
 .cf-field__body {
   box-sizing: border-box;
   flex: 1 1 100%; }
+
+@media (max-width: 1024px) {
+  .cf-field {
+    flex-basis: 100% !important; } }
 
 .cf-rich-text .cf-field__body {
   box-sizing: content-box; }
