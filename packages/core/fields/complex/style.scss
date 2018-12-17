@@ -311,5 +311,12 @@
  */
 
 .cf-complex__placeholder-label {
-	margin: 8px 0 12px;
+	&#{&} {
+		margin: $size-base * 2 0 $size-base * 3;
+	}
+
+	.cf-container-term-meta & {
+		font-style: normal;
+		color: inherit;
+	}
 }
