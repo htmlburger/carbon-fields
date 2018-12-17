@@ -28,7 +28,8 @@
 		border-left: 1px solid $wp-color-gray-light-500;
 	}
 
-	.cf-container-term-meta & {
+	.cf-container-term-meta &,
+	.cf-container-user-meta & {
 		border-width: 0 0 1px 1px;
 		border-style: solid;
 		border-color: $wp-color-gray-light-500;
