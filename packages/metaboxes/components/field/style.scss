@@ -13,7 +13,8 @@
 }
 
 .cf-field__head {
-	.term-php .cf-container__fields > .cf-field > & {
+	.term-php .cf-container__fields > .cf-field > &,
+	.cf-container-user-meta .cf-container__fields > .cf-field > & {
 		position: absolute;
 		left: 0;
 		font-weight: 600;
@@ -27,7 +28,8 @@
 		color: $wp-color-dark-gray;
 	}
 
-	.cf-container-term-meta & {
+	.cf-container-term-meta &,
+	.cf-container-user-meta & {
 		margin: 0 !important;
 	}
 }
