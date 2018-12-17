@@ -53,6 +53,10 @@ class ComplexField extends Component {
 		group.container_id = field.container_id;
 		group.fields = group.fields.map( ( groupField ) => flattenField( groupField, field.container_id, fields ) );
 
+		// Make sure that the group is expanded even
+		// `set_collapsed(true)` is used.
+		group.collapsed = false;
+
 		// Push the group to the field.
 		addFields( fields );
 		onChange( id, value.concat( group ) );
