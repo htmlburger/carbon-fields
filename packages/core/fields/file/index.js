@@ -9,7 +9,7 @@ import { get } from 'lodash';
  */
 import './style.scss';
 import MediaLibrary from '../../components/media-library';
-import fetchAttachmentsData from '../../utils/fetch-attachments-data';
+import apiFetch from '../../utils/api-fetch';
 
 class FileField extends Component {
 	/**
@@ -30,9 +30,11 @@ class FileField extends Component {
 		const { value, field } = this.props;
 
 		if ( value ) {
-			fetchAttachmentsData( [ field.value_meta.id ] ).then( ( [ data = {} ] ) => {
-				this.handleFileDataChange( data );
-			} );
+			// TODO: Refactor this to use `@wordpress/api-fetch` package.
+			apiFetch(
+				`${ window.wpApiSettings.root }carbon-fields/v1/attachment/?type=${ field.value_type }&value=${ value }`,
+				'get'
+			).then( this.handleFileDataChange );
 		}
 	}
 
@@ -50,6 +52,10 @@ class FileField extends Component {
 			if ( size ) {
 				return size.url;
 			}
+		}
+
+		if ( data.thumb_url ) {
+			return data.thumb_url;
 		}
 
 		return data.icon;
@@ -141,8 +147,8 @@ class FileField extends Component {
 										<button type="button" className="cf-file__remove dashicons-before dashicons-no-alt" onClick={ this.handleClear }></button>
 									</div>
 
-									<span className="cf-file__name" title={ data.filename }>
-										{ data.filename }
+									<span className="cf-file__name" title={ data.filename || data.file_name }>
+										{ data.filename || data.file_name }
 									</span>
 								</div>
 							) }
