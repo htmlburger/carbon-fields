@@ -6,6 +6,7 @@
 import { createHigherOrderComponent, compose } from '@wordpress/compose';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { withEffects } from 'refract-callbag';
+import { __, sprintf } from '@wordpress/i18n';
 import {
 	has,
 	some,
@@ -56,7 +57,12 @@ export default function withConditionalLogic( input, output ) {
 			const results = rules.reduce( ( accumulator, rule ) => {
 				if ( ! has( data, rule.field ) ) {
 					// eslint-disable-next-line
-					console.error( `An unknown field is used in condition - "${ rule.field }".` );
+					console.error(
+						sprintf(
+							__( 'An unknown field is used in condition - "%s"', 'carbon-fields-ui' ),
+							rule.field
+						)
+					);
 
 					return accumulator.concat( false );
 				}

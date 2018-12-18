@@ -162,7 +162,7 @@ function handler( props ) {
 									lng: location.lng()
 								} );
 							} else if ( status === 'ZERO_RESULTS' ) {
-								reject( __( 'The address could not be found. ', 'carbon-fields-ui' ) );
+								reject( __( 'The address could not be found.', 'carbon-fields-ui' ) );
 							} else {
 								reject( `${ __( 'Geocode was not successful for the following reason: ', 'carbon-fields-ui' ) } ${ status }` );
 							}
@@ -182,7 +182,7 @@ function handler( props ) {
 					} )
 					.catch( ( alert ) => {
 						// eslint-disable-next-line
-						console.log( 'Error alert' );
+						console.log( __( 'Error alert', 'carbon-fields-ui' ) );
 
 						// eslint-disable-next-line
 						console.log( alert );

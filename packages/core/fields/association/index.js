@@ -107,7 +107,13 @@ class AssociationField extends Component {
 
 		// Don't do anything, because the maximum is reached.
 		if ( field.max > 0 && value.length >= field.max ) {
-			// alert( carbonFieldsL10n.field.maxNumItemsReached.replace( '%s', field.max ) );
+			// eslint-disable-next-line no-alert
+			alert(
+				sprintf(
+					__( 'Maximum number of items reached (%s items)', 'carbon-fields-ui' ),
+					Number( field.max )
+				)
+			);
 			return;
 		}
 
@@ -421,7 +427,7 @@ addFilter( 'carbon-fields.association.validate', 'carbon-fields/core', ( field, 
 	const { min, required } = field;
 
 	if ( required && isEmpty( value ) ) {
-		return __( 'This field is required. ', 'carbon-fields-ui' );
+		return __( 'This field is required.', 'carbon-fields-ui' );
 	}
 
 	if ( min > 0 && value.length < min ) {

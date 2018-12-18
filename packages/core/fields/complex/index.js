@@ -140,7 +140,12 @@ class ComplexField extends Component {
 				return label || group.label;
 			} catch ( e ) {
 				// eslint-disable-next-line no-console
-				console.error( `Couldn't create the label of group - ${ e.message }` );
+				console.error(
+					sprintf(
+						__( 'Couldn\'t create the label of group - %s', 'carbon-fields-ui' ),
+						e.message
+					)
+				);
 
 				return 'N/A';
 			}
@@ -359,7 +364,7 @@ class ComplexField extends Component {
 						) }
 
 						<button type="button" className="button cf-complex__toggler" onClick={ this.handleToggleAllClick }>
-							{ allGroupsAreCollapsed ? 'Expand All' : 'Collapse All' }
+							{ allGroupsAreCollapsed ? __( 'Expand All', 'carbon-fields-ui' ) : __( 'Collapse All', 'carbon-fields-ui' ) }
 						</button>
 					</div>
 				) }
@@ -386,7 +391,7 @@ addFilter( 'carbon-fields.complex.validate', 'carbon-fields/core', ( field, valu
 	} = field;
 
 	if ( required && isEmpty( value ) ) {
-		return __( 'This field is required. ', 'carbon-fields-ui' );
+		return __( 'This field is required.', 'carbon-fields-ui' );
 	}
 
 	if ( min > 0 && value.length < min ) {
