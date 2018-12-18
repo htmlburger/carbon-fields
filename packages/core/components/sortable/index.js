@@ -16,7 +16,8 @@ class Sortable extends Component {
 		window.jQuery( forwardedRef.current ).sortable( {
 			...options,
 			start: this.handleStart,
-			update: this.handleUpdate
+			update: this.handleUpdate,
+			stop: this.handleStop
 		} );
 	}
 
@@ -43,6 +44,12 @@ class Sortable extends Component {
 	 * @return {void}
 	 */
 	handleStart = ( e, ui ) => {
+		const { onStart } = this.props;
+
+		if ( onStart ) {
+			onStart( e, ui );
+		}
+
 		ui.item.data( 'index', ui.item.index() );
 	}
 
@@ -70,6 +77,21 @@ class Sortable extends Component {
 		onUpdate( produce( items, ( draft ) => {
 			draft.splice( newIndex, 0, ...draft.splice( oldIndex, 1 ) );
 		} ) );
+	}
+
+	/**
+	 * Handles the `stop` event.
+	 *
+	 * @param  {Object} e
+	 * @param  {Object} ui
+	 * @return {void}
+	 */
+	handleStop = ( e, ui ) => {
+		const { onStop } = this.props;
+
+		if ( onStop ) {
+			onStop( e, ui );
+		}
 	}
 
 	/**
