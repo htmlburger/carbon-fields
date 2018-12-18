@@ -187,7 +187,6 @@ class ComplexField extends Component {
 		const values = omit( group, [ '_id', '_type' ] );
 
 		return assign( {}, props, {
-			key: group._id,
 			id: group._id,
 			fields: fields,
 			collapsed: this.state.collapsedGroups.indexOf( group._id ) > -1,

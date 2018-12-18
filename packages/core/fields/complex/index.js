@@ -370,7 +370,7 @@ class ComplexField extends Component {
 							{ value.map( ( group, index ) => (
 								// The `key` will be assigned via `onGroupSetup`.
 								// eslint-disable-next-line react/jsx-key
-								<ComplexGroup { ...onGroupSetup( group, {
+								<ComplexGroup key={ `${ group[ groupFilterKey ] }-${ index }` } { ...onGroupSetup( group, {
 									index,
 									label: groupLabels[ index ],
 									dragged: group[ groupIdKey ] === currentDraggedGroup,
