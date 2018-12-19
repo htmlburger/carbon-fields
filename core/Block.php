@@ -8,12 +8,9 @@ namespace Carbon_Fields;
  */
 class Block extends Container {
 	/**
-	 * An alias of factory().
-	 *
-	 * @see    \Carbon_Fields\Container\Container::factory()
-	 * @return \Carbon_Fields\Container\Container
+	 * {@inheritDoc}
 	 */
 	public static function make() {
-		return call_user_func_array( array( 'parent', 'make' ), array_merge( array('block'), func_get_args() ) );
+		return call_user_func_array( array( 'parent', 'make' ), array_merge( array( 'block' ), func_get_args() ) );
 	}
 }
