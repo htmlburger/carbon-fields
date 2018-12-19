@@ -125,16 +125,17 @@
 .block-editor .cf-complex__tabs-item--current {
   color: #191e23; }
 
+.edit-post-sidebar .cf-complex__tabs-item {
+  border-color: #8d96a0; }
+
 .edit-post-sidebar .cf-complex__group-head {
   border-color: #8d96a0; }
 
 .edit-post-sidebar .cf-complex__group-body {
+  display: block;
   border-color: #8d96a0; }
 
 .edit-post-sidebar .cf-complex__group-actions--tabbed {
-  border-color: #8d96a0; }
-
-.edit-post-sidebar .cf-complex__tabs-item {
   border-color: #8d96a0; }
 
 /* ==========================================================================
@@ -683,9 +684,30 @@
 /* ==========================================================================
    Block
    ========================================================================== */
+.cf-block__tabs {
+  margin-bottom: 16px; }
+
+.wp-block .cf-block__tabs-list {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  list-style: none outside none; }
+
+.cf-block__tabs-item {
+  padding: 8px;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer; }
+  .cf-block__tabs-item--current {
+    box-shadow: 0 3px 0 #00a0d2; }
+
 .cf-block__fields {
   display: flex;
   flex-wrap: wrap; }
+  .cf-block__fields[hidden] {
+    display: none; }
   .wp-block .cf-block__fields {
     margin: -8px; }
 

@@ -77,26 +77,32 @@
 /* ==========================================================================
    Field
    ========================================================================== */
-.postbox .cf-field {
+.cf-container .cf-field {
   flex: 1 1 100%;
   padding: 12px;
   border-width: 1px 1px 0 0;
   border-style: solid;
   border-color: #e2e4e7; }
 
-.postbox .cf-field__label {
+.term-php .cf-container__fields > .cf-field > .cf-field__head,
+.cf-container-user-meta .cf-container__fields > .cf-field > .cf-field__head {
+  position: absolute;
+  left: 0;
+  font-weight: 600; }
+
+.cf-container .cf-field__label {
   padding-bottom: 5px;
   font-weight: 600;
   color: #23282d; }
+
+.cf-container-term-meta .cf-field__label,
+.cf-container-user-meta .cf-field__label {
+  margin: 0 !important; }
 
 .cf-field__help {
   display: inline-block;
   color: #666;
   margin-top: 10px; }
-
-/* ==========================================================================
-   Multiselect
-   ========================================================================== */
 
 /* ==========================================================================
    Colors
@@ -266,47 +272,6 @@
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
    ========================================================================== */
 /* ==========================================================================
-   Term Meta
-   ========================================================================== */
-.cf-container-term-meta {
-  margin-bottom: 13px; }
-  .carbon-table-row .cf-container-term-meta {
-    margin-bottom: 0; }
-  .cf-container-term-meta .cf-field {
-    margin-top: 13px; }
-    .cf-container-term-meta .cf-field:first-child {
-      margin-top: 0; }
-
-.carbon-table-row .cf-field__head {
-  position: absolute;
-  left: 0;
-  font-weight: 600; }
-
-.carbon-table-row .cf-field__body {
-  width: 95%; }
-
-/* ==========================================================================
-   Colors
-   ========================================================================== */
-/* ==========================================================================
-   WordPress Colors - https://make.wordpress.org/design/handbook/design-guide/foundations/colors/
-   ========================================================================== */
-/* ==========================================================================
-   Gutenberg Colors - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_colors.scss
-   ========================================================================== */
-/* ==========================================================================
-   Fonts
-   ========================================================================== */
-/* ==========================================================================
-   Variables
-   ========================================================================== */
-/* ==========================================================================
-   WordPress Variables
-   ========================================================================== */
-/* ==========================================================================
-   Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
-   ========================================================================== */
-/* ==========================================================================
    Theme Options
    ========================================================================== */
 .carbon-theme-options #post-body.columns-2 #postbox-container-1.fixed,
@@ -377,11 +342,18 @@
 .cf-container__fields {
   display: flex;
   flex-wrap: wrap;
-  margin: -1px -1px 0 0; }
+  margin: -1px -1px 0 0;
+  background-color: #fff; }
   .cf-container__fields[hidden] {
     display: none; }
   .block-editor .cf-container__fields {
     border-left: 1px solid #e2e4e7; }
+  .cf-container-term-meta .cf-container__fields,
+  .cf-container-user-meta .cf-container__fields {
+    border-width: 0 0 1px 1px;
+    border-style: solid;
+    border-color: #e2e4e7;
+    margin: 0; }
 
 .cf-container__tabs {
   position: relative;
