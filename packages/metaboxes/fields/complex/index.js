@@ -53,6 +53,10 @@ class ComplexField extends Component {
 		group.container_id = field.container_id;
 		group.fields = group.fields.map( ( groupField ) => flattenField( groupField, field.container_id, fields ) );
 
+		// Make sure that the group is expanded even
+		// `set_collapsed(true)` is used.
+		group.collapsed = false;
+
 		// Push the group to the field.
 		addFields( fields );
 		onChange( id, value.concat( group ) );
@@ -168,7 +172,6 @@ class ComplexField extends Component {
 	 */
 	handleGroupSetup = ( group, props ) => {
 		return assign( {}, props, {
-			key: group.id,
 			id: group.id,
 			name: group.name,
 			prefix: `${ this.props.name }[${ props.index }]`,
@@ -190,6 +193,7 @@ class ComplexField extends Component {
 		return [ Field, assign( {}, props, {
 			key: field.id,
 			id: field.id,
+			containerId: this.props.containerId,
 			name: `${ groupProps.prefix }[${ field.name }]`
 		} ) ];
 	}

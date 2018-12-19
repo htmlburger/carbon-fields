@@ -55,7 +55,7 @@ class SidebarField extends Component {
 				value={ value }
 				onChange={ this.handleChange }
 			>
-				<option value="0" disabled>Please choose</option>
+				<option value="0" disabled>{ __( 'Please choose', 'carbon-fields-ui' ) }</option>
 
 				{ field.options.map( ( option ) => (
 					<option key={ option.value } value={ option.value }>

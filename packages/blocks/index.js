@@ -3,10 +3,14 @@
 /**
  * External dependencies.
  */
-import { get, kebabCase } from 'lodash';
 import { dispatch } from '@wordpress/data';
 import { registerBlockType } from '@wordpress/blocks';
 import { setLocaleData } from '@wordpress/i18n';
+import {
+	get,
+	kebabCase,
+	isPlainObject
+} from 'lodash';
 
 /**
  * Internal dependencies.
@@ -25,7 +29,8 @@ setLocaleData( window.cf.config.locale, 'carbon-fields-ui' );
 /**
  * Register the blocks.
  */
-const definitions = {};
+const containerDefinitions = {};
+const fieldDefinitions = {};
 
 get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 	const name = kebabCase( container.id ).replace( 'carbon-fields-container-', '' );
@@ -33,13 +38,10 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 
 	const getBlockSetting = ( key, def = null ) => get( container, `settings.${ key }`, def );
 
-	definitions[ name ] = container.fields.map( ( field ) => ( {
-		...field,
-		container_id: container.id
-	} ) );
+	containerDefinitions[ name ] = container;
+	fieldDefinitions[ name ] = container.fields.map( ( field ) => ( { ...field } ) );
 
 	registerBlockType( `carbon-fields/${ name }`, {
-		id: container.id,
 		title: container.title,
 		icon: getBlockSetting( 'icon' ),
 		category: getBlockSetting( 'category.slug' ),
@@ -52,6 +54,7 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 			}
 		},
 		supports: {
+			tabs: isPlainObject( getBlockSetting( 'tabs' ) ),
 			preview: getBlockSetting( 'preview' ),
 			alignWide: false,
 			anchor: false,
@@ -65,4 +68,5 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 /**
  * Load the definitions in store.
  */
-dispatch( 'carbon-fields/blocks' ).setupFieldDefinitions( definitions );
+dispatch( 'carbon-fields/blocks' ).setupContainerDefinitions( containerDefinitions );
+dispatch( 'carbon-fields/blocks' ).setupFieldDefinitions( fieldDefinitions );

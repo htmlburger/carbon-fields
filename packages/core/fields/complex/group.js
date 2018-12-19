@@ -66,6 +66,7 @@ class ComplexGroup extends Component {
 			prefix,
 			tabbed,
 			hidden,
+			dragged,
 			collapsed,
 			allowClone,
 			fields,
@@ -76,7 +77,10 @@ class ComplexGroup extends Component {
 		const groupClasses = cx(
 			'cf-complex__group',
 			{
-				'cf-complex__group--collapsed': collapsed
+				'cf-complex__group--grid': ! tabbed,
+				'cf-complex__group--tabbed': tabbed,
+				'cf-complex__group--collapsed': collapsed,
+				'cf-complex__group--dragged': dragged
 			}
 		);
 
@@ -92,6 +96,7 @@ class ComplexGroup extends Component {
 		const actionsClasses = cx(
 			'cf-complex__group-actions',
 			{
+				'cf-complex__group-actions--grid': ! tabbed,
 				'cf-complex__group-actions--tabbed': tabbed
 			}
 		);
@@ -118,25 +123,27 @@ class ComplexGroup extends Component {
 					</div>
 				) }
 
-				<div className="cf-complex__group-body" hidden={ ! tabbed && collapsed }>
-					{ fields.map( ( field ) => {
-						const FieldEdit = getFieldType( field.type, context );
+				{ ! dragged && (
+					<div className="cf-complex__group-body" hidden={ ! tabbed && collapsed }>
+						{ fields.map( ( field ) => {
+							const FieldEdit = getFieldType( field.type, context );
 
-						if ( ! FieldEdit ) {
-							return null;
-						}
+							if ( ! FieldEdit ) {
+								return null;
+							}
 
-						const [ Field, props ] = onFieldSetup( field, {}, this.props );
+							const [ Field, props ] = onFieldSetup( field, {}, this.props );
 
-						return (
-							// The `key` will be assigned via `onFieldSetup`.
-							// eslint-disable-next-line react/jsx-key
-							<Field { ...props }>
-								<FieldEdit { ...props } />
-							</Field>
-						);
-					} ) }
-				</div>
+							return (
+								// The `key` will be assigned via `onFieldSetup`.
+								// eslint-disable-next-line react/jsx-key
+								<Field { ...props }>
+									<FieldEdit { ...props } />
+								</Field>
+							);
+						} ) }
+					</div>
+				) }
 
 				<div className={ actionsClasses }>
 					{ allowClone && (

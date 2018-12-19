@@ -107,7 +107,13 @@ class AssociationField extends Component {
 
 		// Don't do anything, because the maximum is reached.
 		if ( field.max > 0 && value.length >= field.max ) {
-			// alert( carbonFieldsL10n.field.maxNumItemsReached.replace( '%s', field.max ) );
+			// eslint-disable-next-line no-alert
+			alert(
+				sprintf(
+					__( 'Maximum number of items reached (%s items)', 'carbon-fields-ui' ),
+					Number( field.max )
+				)
+			);
 			return;
 		}
 
@@ -185,16 +191,6 @@ class AssociationField extends Component {
 			} );
 		}
 
-		// eslint-disable-next-line
-		const sortableOptions = {
-			axis: 'y',
-			items: 'li',
-			forceHelperSize: true,
-			forcePlaceholderSize: true,
-			scroll: true,
-			handle: '.mobile-handle'
-		};
-
 		return (
 			<Fragment>
 				<div className="cf-association__bar">
@@ -256,7 +252,8 @@ class AssociationField extends Component {
 							axis: 'y',
 							forceHelperSize: true,
 							forcePlaceholderSize: true,
-							scroll: true
+							scroll: true,
+							handle: '.cf-association__option-sort'
 						} }
 						onUpdate={ this.handleSort }
 					>
@@ -308,8 +305,6 @@ class AssociationField extends Component {
 		);
 	}
 }
-
-const fetchData = ( field, data ) => apiFetch( `${ window.wpApiSettings.root }carbon-fields/v1/association/`, 'get', { container_id: field.container_id, field_id: field.base_name, ...data } );
 
 /**
  * The function that controls the stream of side-effects.
@@ -365,7 +360,11 @@ function aperture( component ) {
 function handler( props ) {
 	return function( effect ) {
 		const { payload, type } = effect;
-		const { field, setState, selectedOptions } = props;
+		const {
+			setState,
+			selectedOptions,
+			hierarchyResolver
+		} = props;
 
 		switch ( type ) {
 			case 'FETCH_OPTIONS':
@@ -373,8 +372,8 @@ function handler( props ) {
 				const request = window.jQuery.get( window.ajaxurl, {
 					action: 'carbon_fields_fetch_association_options',
 					term: payload.queryTerm,
-					container_id: field.container_id,
-					field_name: field.base_name
+					container_id: props.containerId,
+					field_name: hierarchyResolver()
 				}, null, 'json' );
 
 				/* eslint-disable-next-line no-alert */
@@ -395,7 +394,15 @@ function handler( props ) {
 				break;
 
 			case 'FETCH_SELECTED_OPTIONS':
-				fetchData( field, { options: props.value } )
+				apiFetch(
+					`${ window.wpApiSettings.root }carbon-fields/v1/association/`,
+					'get',
+					{
+						container_id: props.containerId,
+						options: props.value,
+						field_id: hierarchyResolver()
+					}
+				)
 					.then( ( response ) => {
 						setState( {
 							selectedOptions: [ ...selectedOptions, ...response ]
@@ -420,7 +427,7 @@ addFilter( 'carbon-fields.association.validate', 'carbon-fields/core', ( field, 
 	const { min, required } = field;
 
 	if ( required && isEmpty( value ) ) {
-		return __( 'This field is required. ', 'carbon-fields-ui' );
+		return __( 'This field is required.', 'carbon-fields-ui' );
 	}
 
 	if ( min > 0 && value.length < min ) {

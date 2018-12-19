@@ -74,12 +74,23 @@ export function createRegistry( domain, supportedContexts ) {
 	 */
 	function getType( type, context ) {
 		if ( ! supportedContexts.includes( context ) ) {
-			console.error( `The provided context isn\'t a valid one. Must be one of - ${ supportedContexts.join( ', ' ) } .` );
+			console.error(
+				sprintf(
+					__( 'The provided context isn\'t a valid one. Must be one of - %s .', 'carbon-fields-ui' ),
+					supportedContexts.join( ', ' )
+				)
+			);
 			return;
 		}
 
 		if ( ! types[ type ] ) {
-			console.error( `${ domainStartCased } ${ type } isn\'t registered.` );
+			console.error(
+				sprintf(
+					__( '%s %s isn\'t registered.', 'carbon-fields-ui' ),
+					domainStartCased,
+					type
+				)
+			);
 			return;
 		}
 

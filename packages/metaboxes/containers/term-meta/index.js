@@ -10,9 +10,8 @@ import { pipe, filter } from 'callbag-basics';
 /**
  * Internal dependencies.
  */
-import fromAjaxEvent from '../../utils/from-ajax-event';
+import fromEventPattern from '../../utils/from-event-pattern';
 import { normalizePreloadedState } from '../../store/helpers';
-import './style.scss';
 
 /**
  * The function that controls the stream of side effects.
@@ -21,9 +20,18 @@ import './style.scss';
  */
 function aperture() {
 	return pipe(
-		fromAjaxEvent( 'ajaxSuccess', 'add-tag' ),
-		filter( ( { settings, data } ) => {
-			return settings.data.indexOf( 'carbon_fields_container' ) > -1 && ! data.documentElement.querySelector( 'wp_error' );
+		fromEventPattern(
+			( handler ) => window.jQuery( document ).on( 'ajaxSuccess', handler ),
+			( handler ) => window.jQuery( document ).off( 'ajaxSuccess', handler ),
+			( e, xhr, options, data ) => ( {
+				options,
+				data
+			} )
+		),
+		filter( ( { options, data } ) => {
+			return options.data.indexOf( 'carbon_fields_container' ) > -1
+				&& options.data.indexOf( 'add-tag' ) > -1
+				&& ! data.documentElement.querySelector( 'wp_error' );
 		} )
 	);
 }

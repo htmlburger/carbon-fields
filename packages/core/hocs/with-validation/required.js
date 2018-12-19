@@ -17,5 +17,5 @@ export default function required( value ) {
 		return null;
 	}
 
-	return __( 'This field is required. ', 'carbon-fields-ui' );
+	return __( 'This field is required.', 'carbon-fields-ui' );
 }
