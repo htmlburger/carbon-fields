@@ -2,9 +2,39 @@
    Block
    ========================================================================== */
 
+.cf-block__tabs {
+	margin-bottom: $size-base * 4;
+}
+
+.cf-block__tabs-list {
+	.wp-block & {
+		display: flex;
+		padding: 0;
+		margin: 0;
+		list-style: none outside none;
+	}
+}
+
+.cf-block__tabs-item {
+	padding: $size-base * 2;
+	margin: 0;
+	font-family: $wp-font;
+	font-size: $wp-font-size;
+	line-height: 1;
+	cursor: pointer;
+
+	&--current {
+		box-shadow: 0 3px 0 $wp-color-medium-blue;
+	}
+}
+
 .cf-block__fields {
 	display: flex;
 	flex-wrap: wrap;
+
+	&[hidden] {
+		display: none;
+	}
 
 	.wp-block & {
 		margin: $size-base * -2;

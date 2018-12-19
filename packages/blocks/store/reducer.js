@@ -4,7 +4,24 @@
 import { combineReducers } from '@wordpress/data';
 
 /**
- * The reducer that keeps track of field defitions keyed by block's name.
+ * The reducer that keeps track of container definitions keyed by block's name.
+ *
+ * @param  {Object} state
+ * @param  {Object} action
+ * @return {Object}
+ */
+export function containerDefinitionsByBlockName( state = {}, action ) {
+	switch ( action.type ) {
+		case 'SETUP_CONTAINER_DEFINITIONS':
+			return action.payload.definitions;
+
+		default:
+			return state;
+	}
+}
+
+/**
+ * The reducer that keeps track of field definitions keyed by block's name.
  *
  * @param  {Object} state
  * @param  {Object} action
@@ -21,5 +38,6 @@ export function fieldDefinitionsByBlockName( state = {}, action ) {
 }
 
 export default combineReducers( {
+	containerDefinitionsByBlockName,
 	fieldDefinitionsByBlockName
 } );

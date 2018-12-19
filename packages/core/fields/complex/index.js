@@ -47,6 +47,7 @@ class ComplexField extends Component {
 	 * @type {Object}
 	 */
 	state = {
+		currentDraggedGroup: null,
 		currentTab: get( this.props.value, `0.${ this.props.groupIdKey }`, null )
 	};
 
@@ -225,15 +226,43 @@ class ComplexField extends Component {
 	}
 
 	/**
+	 * Handles the start of groups sorting.
+	 *
+	 * @param  {Object} e
+	 * @param  {Object} ui
+	 * @return {void}
+	 */
+	handleGroupsSortStart = ( e, ui ) => {
+		const { value, groupIdKey } = this.props;
+		const index = ui.item.index();
+		const id = get( value, `${ index }.${ groupIdKey }`, null );
+
+		this.setState( {
+			currentDraggedGroup: id
+		} );
+	}
+
+	/**
 	 * Handles sorting of groups.
 	 *
 	 * @param  {Object[]} groups
 	 * @return {void}
 	 */
-	handleSortGroups = ( groups ) => {
+	handleGroupsSortUpdate = ( groups ) => {
 		const { id, onChange } = this.props;
 
 		onChange( id, groups );
+	}
+
+	/**
+	 * Handles the stop of groups sorting
+	 *
+	 * @return {void}
+	 */
+	handleGroupsSortStop = () => {
+		this.setState( {
+			currentDraggedGroup: null
+		} );
 	}
 
 	/**
@@ -254,7 +283,7 @@ class ComplexField extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		const { currentTab } = this.state;
+		const { currentDraggedGroup, currentTab } = this.state;
 
 		const {
 			value,
@@ -291,7 +320,7 @@ class ComplexField extends Component {
 							axis: field.layout === 'tabbed-vertical' ? 'y' : 'x',
 							forcePlaceholderSize: true
 						} }
-						onUpdate={ this.handleSortGroups }
+						onUpdate={ this.handleGroupsSortUpdate }
 					>
 						<ComplexTabs
 							ref={ this.tabsList }
@@ -325,21 +354,26 @@ class ComplexField extends Component {
 					<Sortable
 						items={ value }
 						options={ {
-							axis: 'y',
+							// axis: 'y',
+							helper: 'clone',
 							handle: '.cf-complex__group-head',
 							placeholder: 'cf-complex__group-placeholder',
+							forceHelperSize: true,
 							forcePlaceholderSize: true
 						} }
 						forwardedRef={ this.groupsList }
-						onUpdate={ this.handleSortGroups }
+						onStart={ this.handleGroupsSortStart }
+						onUpdate={ this.handleGroupsSortUpdate }
+						onStop={ this.handleGroupsSortStop }
 					>
 						<div className="cf-complex__groups" ref={ this.groupsList }>
 							{ value.map( ( group, index ) => (
 								// The `key` will be assigned via `onGroupSetup`.
 								// eslint-disable-next-line react/jsx-key
-								<ComplexGroup { ...onGroupSetup( group, {
+								<ComplexGroup key={ `${ group[ groupFilterKey ] }-${ index }` } { ...onGroupSetup( group, {
 									index,
 									label: groupLabels[ index ],
+									dragged: group[ groupIdKey ] === currentDraggedGroup,
 									tabbed: this.isTabbed,
 									hidden: this.isTabbed && group[ groupIdKey ] !== currentTab,
 									allowClone: field.duplicate_groups_allowed && ! this.isMaximumReached,

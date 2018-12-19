@@ -172,7 +172,6 @@ class ComplexField extends Component {
 	 */
 	handleGroupSetup = ( group, props ) => {
 		return assign( {}, props, {
-			key: group.id,
 			id: group.id,
 			name: group.name,
 			prefix: `${ this.props.name }[${ props.index }]`,
