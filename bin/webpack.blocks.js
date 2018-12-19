@@ -27,6 +27,7 @@ module.exports = [
 			'@wordpress/blocks': [ 'wp', 'blocks' ],
 			'@wordpress/editor': [ 'wp', 'editor' ],
 			'@wordpress/i18n': [ 'wp', 'i18n' ],
+			'@wordpress/date': [ 'wp', 'date' ],
 			'@carbon-fields/core': 'cf.core',
 			'lodash': [ 'lodash' ]
 		} )
