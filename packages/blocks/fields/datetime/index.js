@@ -64,3 +64,33 @@ addFilter( 'carbon-fields.date_time.block', 'carbon-fields/blocks', ( OriginalDa
 		</DateTimeField>
 	);
 } );
+
+addFilter( 'carbon-fields.date.block', 'carbon-fields/blocks', ( OriginalDateField ) => ( props ) => {
+	return (
+		<DateTimeField { ...props }>
+			{ ( {
+				handleChange
+			} ) => (
+				<OriginalDateField
+					{ ...props }
+					onChange={ handleChange }
+				/>
+			) }
+		</DateTimeField>
+	);
+} );
+
+addFilter( 'carbon-fields.time.block', 'carbon-fields/blocks', ( OriginalTimeField ) => ( props ) => {
+	return (
+		<DateTimeField { ...props }>
+			{ ( {
+				handleChange
+			} ) => (
+				<OriginalTimeField
+					{ ...props }
+					onChange={ handleChange }
+				/>
+			) }
+		</DateTimeField>
+	);
+} );
