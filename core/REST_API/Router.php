@@ -284,7 +284,7 @@ class Router {
 	public function get_association_data() {
 		$container_id = $_GET['container_id'];
 		$field_id     = $_GET['field_id'];
-		$options      = isset( $_GET['options'] ) ? $_GET['options'] : [];
+		$options      = isset( $_GET['options'] ) ? $_GET['options'] : array();
 		$return_value = array();
 
 		$field = Helper::get_field( null, $container_id, $field_id );
