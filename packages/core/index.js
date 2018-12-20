@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { setLocaleData } from '@wordpress/i18n';
+import { doAction } from '@wordpress/hooks';
 
 /**
  * Internal dependencies.
@@ -26,3 +27,12 @@ export { default as withValidation } from './hocs/with-validation';
 export { default as withConditionalLogic } from './hocs/with-conditional-logic';
 export { default as uniqueId } from './utils/unique-id';
 export { default as fromSelector } from './utils/from-selector';
+
+/**
+ * Triggers the initialization of Carbon Fields.
+ *
+ * @return {void}
+ */
+export function initialize() {
+	doAction( 'carbon-fields.init' );
+}

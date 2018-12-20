@@ -45,6 +45,7 @@ class Loader {
 		add_action( 'carbon_fields_fields_registered', array( $this, 'initialize_containers' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_media_browser' ), 0 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'enqueue_assets' ), 9 );
+		add_action( 'admin_print_footer_scripts', array( $this, 'initialize_ui' ), 9999 );
 		add_action( 'edit_form_after_title', array( $this, 'add_carbon_fields_meta_box_contexts' ) );
 		add_action( 'wp_ajax_carbon_fields_fetch_association_options', array( $this, 'fetch_association_options' ) );
 
@@ -223,6 +224,21 @@ class Loader {
 				'revisionsInputKey' => $revisions::CHANGE_KEY,
 			)
 		) ) );
+	}
+
+	/**
+	 * Trigger the initialization of the UI.
+	 *
+	 * @return void
+	 */
+	public function initialize_ui() {
+		?>
+			<script>
+				if ( typeof cf.core.initialize === 'function' ) {
+					cf.core.initialize();
+				}
+			</script>
+		<?php
 	}
 
 	/**

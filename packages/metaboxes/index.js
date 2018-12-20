@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { setLocaleData } from '@wordpress/i18n';
+import { addAction } from '@wordpress/hooks';
 
 /**
  * Internal dependencies.
@@ -27,5 +28,7 @@ const context = isGutenberg() ? 'gutenberg' : 'classic';
 /**
  * Abracadabra! Poof! Containers everywhere ...
  */
-initializeContainers( context );
-initializeMonitors( context );
+addAction( 'carbon-fields.init', 'carbon-fields/metaboxes', () => {
+	initializeContainers( context );
+	initializeMonitors( context );
+} );

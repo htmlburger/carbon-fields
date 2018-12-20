@@ -8,21 +8,21 @@ class Revisions_Service extends Service {
 	const CHANGE_KEY = 'carbon_fields_changed';
 
 	protected function enabled() {
-		add_filter( 'carbon_get_post_meta_post_id', [ $this, 'update_post_id_on_preview' ], 10, 3 );
-		add_action( 'carbon_fields_post_meta_container_saved', [ $this, 'maybe_copy_meta_to_revision' ], 10, 2 );
-		add_filter('_wp_post_revision_fields', [ $this, 'maybe_save_revision' ], 10, 2 );
-		add_filter('_wp_post_revision_fields', [ $this, 'add_fields_to_revision' ], 10, 2 );
-		add_action( 'wp_restore_post_revision', [ $this, 'restore_post_revision' ], 10, 2 );
-		add_filter( 'wp_save_post_revision_check_for_changes', [ $this, 'check_for_changes' ], 10, 3 );
+		add_filter( 'carbon_get_post_meta_post_id', array( $this, 'update_post_id_on_preview' ), 10, 3 );
+		add_action( 'carbon_fields_post_meta_container_saved', array( $this, 'maybe_copy_meta_to_revision' ), 10, 2 );
+		add_filter('_wp_post_revision_fields', array( $this, 'maybe_save_revision' ), 10, 2 );
+		add_filter('_wp_post_revision_fields', array( $this, 'add_fields_to_revision' ), 10, 2 );
+		add_action( 'wp_restore_post_revision', array( $this, 'restore_post_revision' ), 10, 2 );
+		add_filter( 'wp_save_post_revision_check_for_changes', array( $this, 'check_for_changes' ), 10, 3 );
 	}
 
 	protected function disabled() {
-		remove_filter( 'carbon_get_post_meta_post_id', [ $this, 'update_post_id_on_preview' ], 10, 3 );
-		remove_action( 'carbon_fields_post_meta_container_saved', [ $this, 'maybe_copy_meta_to_revision' ], 10, 2 );
-		remove_filter('_wp_post_revision_fields', [ $this, 'maybe_save_revision' ], 10, 2 );
-		remove_filter('_wp_post_revision_fields', [ $this, 'add_fields_to_revision' ], 10, 2 );
-		remove_action( 'wp_restore_post_revision', [ $this, 'restore_post_revision' ], 10, 2 );
-		remove_filter( 'wp_save_post_revision_check_for_changes', [ $this, 'check_for_changes' ], 10, 3 );
+		remove_filter( 'carbon_get_post_meta_post_id', array( $this, 'update_post_id_on_preview' ), 10, 3 );
+		remove_action( 'carbon_fields_post_meta_container_saved', array( $this, 'maybe_copy_meta_to_revision' ), 10, 2 );
+		remove_filter('_wp_post_revision_fields', array( $this, 'maybe_save_revision' ), 10, 2 );
+		remove_filter('_wp_post_revision_fields', array( $this, 'add_fields_to_revision' ), 10, 2 );
+		remove_action( 'wp_restore_post_revision', array( $this, 'restore_post_revision' ), 10, 2 );
+		remove_filter( 'wp_save_post_revision_check_for_changes', array( $this, 'check_for_changes' ), 10, 3 );
 	}
 
 	public function check_for_changes( $return, $last_revision, $post ) {
@@ -122,7 +122,7 @@ class Revisions_Service extends Service {
 		$fields = array_merge( $fields, $revisioned_fields );
 		// this hook is used when displaying the field values
 		foreach ( $revisioned_fields as $name => $label ) {
-			add_filter( "_wp_post_revision_field_{$name}", [ $this, 'update_revision_field_value' ], 10, 4 );
+			add_filter( "_wp_post_revision_field_{$name}", array( $this, 'update_revision_field_value' ), 10, 4 );
 		}
 
 		return $fields;
@@ -155,7 +155,7 @@ class Revisions_Service extends Service {
 		$containers = array_filter( $containers, function( $container ) {
 			return !$container->get_revisions_disabled();
 		} );
-		$fields = [];
+		$fields = array();
 		foreach ( $containers as $container ) {
 			foreach ( $container->get_fields() as $field ) {
 				$fields[ $field->get_name() ] = $field->get_label();
@@ -195,7 +195,7 @@ class Revisions_Service extends Service {
 	        return !$container->get_revisions_disabled();
 	    } );
 
-	    $field_keys = [];
+	    $field_keys = array();
 	    foreach ( $containers as $container ) {
 	        foreach ( $container->get_fields() as $field ) {
 	            $field_keys[] = $field->get_name();
@@ -224,7 +224,7 @@ class Revisions_Service extends Service {
 	}
 
 	protected function filter_meta_by_keys( $meta, $field_keys ) {
-		$filtered_meta = [];
+		$filtered_meta = array();
 		foreach ( $meta as $meta_key => $meta_value ) {
 			if ( ! $this->meta_key_matches_names( $meta_key, $field_keys ) ) {
 				continue;
@@ -258,7 +258,7 @@ class Revisions_Service extends Service {
 			return;
 		}
 
-		$values = [];
+		$values = array();
 		foreach ( $meta_to_copy as $meta_key => $meta_value ) {
 			$meta_value_string = ( is_array( $meta_value ) ) ? $meta_value[0] : $meta_value;
 			$value = '(';

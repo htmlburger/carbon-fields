@@ -108,7 +108,7 @@ class Block_Container extends Container {
 			}
 		}
 
-		return array_merge( $categories, [ $this->settings[ 'category' ] ] );
+		return array_merge( $categories, array( $this->settings[ 'category' ] ) );
 	}
 
 	/**
@@ -166,7 +166,7 @@ class Block_Container extends Container {
 	 * @param  array $keywords
 	 * @return Block_Container
 	 */
-	public function set_keywords( $keywords = [] ) {
+	public function set_keywords( $keywords = array() ) {
 		$this->settings[ 'keywords' ] = array_slice( $keywords, 0, 3 );
 
 		return $this;

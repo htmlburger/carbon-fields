@@ -1,6 +1,6 @@
 {
   "name": "carbon-fields",
-  "version": "3.0.0-rc.3",
+  "version": "3.0.0",
   "description": "WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options, navigation menus and more.",
   "directories": {
     "test": "tests"
@@ -8,7 +8,6 @@
   "scripts": {
     "start": "npm run development -- --watch",
     "build": "npm run development && npm run production",
-    "package": "./bin/package.sh",
     "development": "cross-env NODE_ENV=development webpack --mode development",
     "production": "cross-env NODE_ENV=production webpack --mode production"
   },

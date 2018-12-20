@@ -33,7 +33,7 @@ This setup is only meant for development use - for production follow [Quickstart
 
 1. Make sure your local branches are up to date
 1. Always start your contribution branches from the `development` branch
-1. If you are making JavaScript contributions, run `npm run dev` or `yarn run dev` to run the dev build task (tracks file changes)
+1. If you are making JavaScript contributions, run `npm run start` or `yarn start` to run the dev build task (tracks file changes)
 
 ## Pull Request Process
 
