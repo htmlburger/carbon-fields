@@ -108,7 +108,7 @@ class Block_Container extends Container {
 			}
 		}
 
-		return array_merge( $categories, [ $this->settings[ 'category' ] ] );
+		return array_merge( $categories, array( $this->settings[ 'category' ] ) );
 	}
 
 	/**
