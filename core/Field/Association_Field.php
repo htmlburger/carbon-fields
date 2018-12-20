@@ -196,17 +196,17 @@ class Association_Field extends Field {
 	public function get_options( $args = array() ) {
 		global $wpdb;
 
-		$args = wp_parse_args( $args, [
+		$args = wp_parse_args( $args, array(
 			'page' => 1,
 			'term' => '',
-		] );
+		) );
 
-		$sql_queries = [];
+		$sql_queries = array();
 
 		foreach ( $this->types as $type ) {
-			$type_args = array_merge( $type, [
+			$type_args = array_merge( $type, array(
 				'term' => $args['term'],
-			] );
+			) );
 
 			$callback = "get_{$type['type']}_options_sql";
 
@@ -224,7 +224,7 @@ class Association_Field extends Field {
 
 		$results = $wpdb->get_results( $sql_queries );
 
-		$options = [];
+		$options = array();
 
 		foreach ( $results as $result ) {
 			$callback = "format_{$result->type}_option";
@@ -240,10 +240,10 @@ class Association_Field extends Field {
 		 */
 		$options = apply_filters( 'carbon_fields_association_field_options', $options, $this->get_base_name() );
 
-		return [
+		return array(
 			'total_options' => $wpdb->get_var( "SELECT COUNT(*) FROM (" . preg_replace( '~(LIMIT .*)$~', '', $sql_queries ) . ") as t" ),
 			'options'       => $options,
-		];
+		);
 	}
 
 	/**
