@@ -166,7 +166,7 @@ class Block_Container extends Container {
 	 * @param  array $keywords
 	 * @return Block_Container
 	 */
-	public function set_keywords( $keywords = [] ) {
+	public function set_keywords( $keywords = array() ) {
 		$this->settings[ 'keywords' ] = array_slice( $keywords, 0, 3 );
 
 		return $this;
