@@ -139,7 +139,7 @@ class FileField extends Component {
 								readOnly
 							/>
 
-							{ value && data.id && (
+							{ ( value && !! data.id ) && (
 								<div className="cf-file__content">
 									<div className="cf-file__preview">
 										<img src={ this.getThumb() } className="cf-file__image" />
