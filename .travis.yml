@@ -24,6 +24,9 @@ matrix:
   include:
   - php: 5.3
     dist: precise
+    env: WP_VERSION=5.0 WP_MULTISITE=0
+  - php: 5.3
+    dist: precise
     env: WP_VERSION=4.9 WP_MULTISITE=0
   - php: 5.3
     dist: precise
@@ -37,6 +40,9 @@ matrix:
   - php: 5.3
     dist: precise
     env: WP_VERSION=4.5 WP_MULTISITE=0
+  - php: 5.3
+    dist: precise
+    env: WP_VERSION=5.0 WP_MULTISITE=1
   - php: 5.3
     dist: precise
     env: WP_VERSION=4.9 WP_MULTISITE=1
