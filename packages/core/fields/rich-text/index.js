@@ -26,8 +26,9 @@ class RichTextField extends Component {
 	 * @return {void}
 	 */
 	componentDidMount() {
-		// Required for adequate initialization
-		setTimeout( this.initEditor, 100 );
+		if ( this.props.visible ) {
+			this.timer = setTimeout( this.initEditor, 250 );
+		}
 	}
 
 	/**
@@ -36,6 +37,8 @@ class RichTextField extends Component {
 	 * @return {void}
 	 */
 	componentWillUnmount() {
+		clearTimeout( this.timer );
+
 		this.destroyEditor();
 	}
 
