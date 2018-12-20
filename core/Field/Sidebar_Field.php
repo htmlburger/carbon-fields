@@ -66,7 +66,7 @@ class Sidebar_Field extends Select_Field {
 	 * @return array
 	 */
 	public function to_json( $load ) {
-		$options = [];
+		$options = array();
 
 		if ( $this->enable_add_new ) {
 			$options[] = array(

@@ -155,7 +155,7 @@ class Revisions_Service extends Service {
 		$containers = array_filter( $containers, function( $container ) {
 			return !$container->get_revisions_disabled();
 		} );
-		$fields = [];
+		$fields = array();
 		foreach ( $containers as $container ) {
 			foreach ( $container->get_fields() as $field ) {
 				$fields[ $field->get_name() ] = $field->get_label();
@@ -195,7 +195,7 @@ class Revisions_Service extends Service {
 	        return !$container->get_revisions_disabled();
 	    } );
 
-	    $field_keys = [];
+	    $field_keys = array();
 	    foreach ( $containers as $container ) {
 	        foreach ( $container->get_fields() as $field ) {
 	            $field_keys[] = $field->get_name();
@@ -224,7 +224,7 @@ class Revisions_Service extends Service {
 	}
 
 	protected function filter_meta_by_keys( $meta, $field_keys ) {
-		$filtered_meta = [];
+		$filtered_meta = array();
 		foreach ( $meta as $meta_key => $meta_value ) {
 			if ( ! $this->meta_key_matches_names( $meta_key, $field_keys ) ) {
 				continue;
@@ -258,7 +258,7 @@ class Revisions_Service extends Service {
 			return;
 		}
 
-		$values = [];
+		$values = array();
 		foreach ( $meta_to_copy as $meta_key => $meta_value ) {
 			$meta_value_string = ( is_array( $meta_value ) ) ? $meta_value[0] : $meta_value;
 			$value = '(';
