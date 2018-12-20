@@ -12,22 +12,13 @@ class CheckboxField extends Component {
 	/**
 	 * Handles the change of the input.
 	 *
+	 * @param  {Object} e
 	 * @return {void}
 	 */
-	handleChange = () => {
-		const {
-			id,
-			field,
-			value,
-			onChange
-		} = this.props;
+	handleChange = ( e ) => {
+		const { id, onChange } = this.props;
 
-		onChange(
-			id,
-			value === field.option_value
-				? ''
-				: field.option_value
-		);
+		onChange( id, e.target.checked );
 	}
 
 	/**
@@ -50,7 +41,7 @@ class CheckboxField extends Component {
 					id={ id }
 					name={ name }
 					checked={ value }
-					value={ field.option_value }
+					value={ value ? field.option_value : '' }
 					className="cf-checkbox__input"
 					onChange={ this.handleChange }
 					{ ...field.attributes }
