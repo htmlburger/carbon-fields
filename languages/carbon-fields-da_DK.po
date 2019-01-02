@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Carbon Fields\n"
-"POT-Creation-Date: 2017-12-13 09:24+0200\n"
-"PO-Revision-Date: 2017-12-13 09:24+0200\n"
+"POT-Creation-Date: 2019-01-02 15:20+0200\n"
+"PO-Revision-Date: 2019-01-02 15:44+0200\n"
 "Last-Translator: Nicolai Olesen <nicolai@convey.dk>\n"
 "Language-Team: \n"
 "Language: da_DK\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.5\n"
+"X-Generator: Poedit 2.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
@@ -24,11 +24,18 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-4: tmp\n"
 "X-Poedit-SearchPathExcluded-5: vendor\n"
 
-#: core/Container/Container.php:711
+#: core/Container/Block_Container.php:259
+msgid "'render_callback' is required for the blocks."
+msgstr ""
+
+#: core/Container/Block_Container.php:263
+msgid "'render_callback' must be a callable."
+msgstr ""
+
+#: core/Container/Container.php:712
 msgid "General"
 msgstr "Generelt"
 
-#: core/Container/Network_Container.php:52
 #: core/Container/Theme_Options_Container.php:207
 msgid "Settings saved."
 msgstr "Indstillinger gemt."
@@ -55,7 +62,7 @@ msgctxt "sidebar"
 msgid "Add New"
 msgstr "Tilføj Ny"
 
-#: core/Helper/Helper.php:536
+#: core/Helper/Helper.php:612
 msgid "F j, Y"
 msgstr "F j, Y"
 
@@ -88,7 +95,6 @@ msgid "Add Sidebar"
 msgstr "Tilføj Sidebar"
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:182
-#: core/Loader/Loader.php:154
 msgid "Please enter the name of the new sidebar:"
 msgstr "Indtast venligst et navn til sidebaren:"
 
@@ -96,238 +102,19 @@ msgstr "Indtast venligst et navn til sidebaren:"
 msgid "Are you sure you wish to remove this sidebar?"
 msgstr "Er du sikker på, at du vil fjerne denne sidebar?"
 
-#: core/Loader/Loader.php:129
-msgid "Please fill out all required fields highlighted below."
-msgstr "Udfyld venligst de påkrævede felter."
-
-#: core/Loader/Loader.php:130
-msgid "The changes you made will be lost if you navigate away from this page."
-msgstr ""
-"Ændringerne, du har lavet, mistes, hvis du navigerer væk fra denne side."
-
-#: core/Loader/Loader.php:134
-msgid "The address could not be found. "
-msgstr "Adressen kunne ikke findes."
-
-#: core/Loader/Loader.php:135
-msgid "Geocode was not successful for the following reason: "
-msgstr "Geocode lykkedes ikke af følgende grund:"
-
-#: core/Loader/Loader.php:136
-msgid "Locate address on the map:"
-msgstr "Vælg placering på kortet:"
-
-#: core/Loader/Loader.php:137
-#, php-format
-msgid "Minimum number of items not reached (%s items)"
-msgstr "Mindste antal elementer ikke nået (%s items)"
-
-#: core/Loader/Loader.php:138
-#, php-format
-msgid "Maximum number of items reached (%s items)"
-msgstr "Maks antal elementer nået (%s items)"
-
-#: core/Loader/Loader.php:140
-#, php-format
-msgid "There are no %s yet. Click <a href=\"#\">here</a> to add one."
-msgstr "Der er ingen %s endnu. Klik <a href=\"#\">her</a> at tilføje en."
-
-#: core/Loader/Loader.php:141
-#, php-format
-msgid "Minimum number of rows not reached (%1$d %2$s)"
-msgstr "Mindste antal rækker ikke nået (%1$d %2$s)"
-
-#: core/Loader/Loader.php:142
-#, php-format
-msgid "Maximum number of rows exceeded (%1$d %2$s)"
-msgstr "Maksimalt antal rækker overskredet (%1$d %2$s)"
-
-#: core/Loader/Loader.php:143
-#, php-format
-msgctxt "Complex field"
-msgid "Add %s"
-msgstr "Tilføj %s"
-
-#: core/Loader/Loader.php:144
-msgctxt "Complex field"
-msgid "Clone"
-msgstr "Klon"
-
-#: core/Loader/Loader.php:145
-msgctxt "Complex field"
-msgid "Remove"
-msgstr "Fjern"
-
-#: core/Loader/Loader.php:146
-msgctxt "Complex field"
-msgid "Collapse/Expand"
-msgstr "Skjul/Udvid"
-
-#: core/Loader/Loader.php:147
-msgctxt "Complex field groups"
-msgid "Collapse All"
-msgstr "Skjul Alle"
-
-#: core/Loader/Loader.php:148
-msgctxt "Complex field groups"
-msgid "Expand All"
-msgstr "Udvid Alle"
-
-#: core/Loader/Loader.php:150
-msgid "Please fill out all fields correctly. "
-msgstr "Udfyld venligst alle felter korrekt."
-
-#: core/Loader/Loader.php:151
-msgid "This field is required. "
-msgstr "Dette felt er påkrævet."
-
-#: core/Loader/Loader.php:152
-msgid "Please choose an option. "
-msgstr "Vælg en mulighed."
-
-#: core/Loader/Loader.php:156
-msgid "Select Time"
-msgstr "Vælg Tidspunkt"
-
-#: core/Loader/Loader.php:157
-msgid "Select Date"
-msgstr "Vælg Dato"
-
-#: core/Loader/Loader.php:159
-#, php-format
-msgid "%1$d selected item"
-msgstr "%1$d valgt"
-
-#: core/Loader/Loader.php:160
-#, php-format
-msgid "%1$d selected items"
-msgstr "%1$d markerede elementer"
-
-#: core/Loader/Loader.php:161
-#, php-format
-msgid "%1$d selected item out of %2$d"
-msgstr "%1$d markerede element ud af %2$d"
-
-#: core/Loader/Loader.php:162
-#, php-format
-msgid "%1$d selected items out of %2$d"
-msgstr "%1$d markerede elementer ud af %2$d"
-
-#: core/Loader/Loader.php:164
-msgid "Select a color"
-msgstr "Vælg en farve"
-
-#: core/Loader/Loader.php:166
-msgid "No options."
-msgstr "Ingen valgmuligheder."
-
-#: core/Loader/Loader.php:168
-msgid "Show all options"
-msgstr "Vis alle tilvalg"
-
-#: core/Loader/Loader.php:170
-msgid "Search..."
-msgstr "Søg..."
-
-#: core/Loader/Loader.php:172
-msgctxt "WordPress media attachment"
-msgid "URL"
-msgstr "URL"
-
-#: core/Loader/Loader.php:173
-msgctxt "WordPress media attachment"
-msgid "Title"
-msgstr "Titel"
-
-#: core/Loader/Loader.php:174
-msgctxt "WordPress media attachment"
-msgid "Artist"
-msgstr "Kunstner"
-
-#: core/Loader/Loader.php:175
-msgctxt "WordPress media attachment"
-msgid "Album"
-msgstr "Album"
-
-#: core/Loader/Loader.php:176
-msgctxt "WordPress media attachment"
-msgid "Caption"
-msgstr "Billedtekst"
-
-#: core/Loader/Loader.php:177
-msgctxt "WordPress media attachment"
-msgid "Alt Text"
-msgstr "Alternativ Tekst"
-
-#: core/Loader/Loader.php:178
-msgctxt "WordPress media attachment"
-msgid "Description"
-msgstr "Beskrivelse"
-
-#: core/Loader/Loader.php:179
-msgctxt "WordPress media attachment"
-msgid "Close"
-msgstr "Luk"
-
-#: core/Loader/Loader.php:180
-msgctxt "WordPress media attachment"
-msgid "Save"
-msgstr "Gem"
-
-#: core/Loader/Loader.php:182
-msgctxt "oEmbed field"
-msgid "Not Found"
-msgstr "Ikke Fundet"
-
-#: core/Loader/Loader.php:184
-msgid "No files selected."
-msgstr "Ingen filer valgt."
-
-#: core/Loader/Loader.php:185
-msgid "Add File"
-msgstr "Tilføj fil"
-
-#: core/Loader/Loader.php:186 core/Loader/Loader.php:190
-msgctxt "WordPress Media Browser"
-msgid "Files"
-msgstr "Filer"
-
-#: core/Loader/Loader.php:187 core/Loader/Loader.php:191
-msgctxt "WordPress Media Browser"
-msgid "Select File"
-msgstr "Vælg fil"
-
-#: core/Loader/Loader.php:189
-msgid "Select File"
-msgstr "Vælg fil"
-
-#: core/Loader/Loader.php:193
-msgid "Select Image"
-msgstr "Vælg billede"
-
-#: core/Loader/Loader.php:194
-msgctxt "WordPress Media Browser"
-msgid "Images"
-msgstr "Billeder"
-
-#: core/Loader/Loader.php:195
-msgctxt "WordPress Media Browser"
-msgid "Select Image"
-msgstr "Vælg billede"
-
-#: core/REST_API/Router.php:287
+#: core/REST_API/Router.php:341
 msgid "No option names provided"
 msgstr "Navn for indstillinger mangles"
 
-#: core/REST_API/Router.php:298
+#: core/REST_API/Router.php:352
 msgid "Theme Options updated."
 msgstr "Tema indstillinger opdateret."
 
-#: templates/Container/common/options-page.php:34
+#: templates/Container/common/options-page.php:43
 msgid "Actions"
 msgstr "Handlinger"
 
-#: templates/Container/common/options-page.php:43
+#: templates/Container/common/options-page.php:52
 msgid "Save Changes"
 msgstr "Gem ændringer"
 
