@@ -499,7 +499,17 @@ class Helper {
 	public static function get_attachment_id( $url ) {
 		$attachment_id = 0;
 		$dir           = wp_upload_dir();
-		$filename      = basename( $url );
+
+		/**
+		 * Filters the attachment URL from which the attachment ID is being determined.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param string $url
+		 */
+		$url = apply_filters( 'carbon_fields_attachment_id_base_url', $url );
+
+		$filename = basename( $url );
 
 		if ( strpos( $url, $dir['baseurl'] . '/' ) !== false ) {
 			$query_args = array(
