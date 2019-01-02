@@ -23,5 +23,7 @@ export default function fromSelector( selector, ...args ) {
 				unsubscribe();
 			}
 		} );
+
+		sink( 1, selector( ...args ) );
 	};
 }
