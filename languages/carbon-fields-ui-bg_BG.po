@@ -1,15 +1,16 @@
 msgid ""
 msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"X-Generator: Poedit 2.2\n"
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
 "Language-Team: \n"
-"Language: bg\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: bg_BG\n"
 
 #: packages/blocks/components/block-edit/index.js:152
 msgid "Show preview"
@@ -25,13 +26,13 @@ msgstr "Полета"
 
 #: packages/blocks/components/not-supported-field/index.js:14
 msgid "Field of type '%s' is not supported in Gutenberg."
-msgstr "Поле от тип '%s'не се поддържа в Gutenberg."
+msgstr "Поле от тип ‘%s’ не се поддържа в Gutenberg."
 
 #: packages/blocks/fields/datetime/index.js:14
 #: packages/core/fields/date/index.js:15
 #: packages/metaboxes/fields/datetime/index.js:9
 msgid "Select Date"
-msgstr "Изберете дата"
+msgstr "Избери дата"
 
 #: packages/blocks/fields/file/index.js:16
 #: packages/metaboxes/fields/file/index.js:11
@@ -41,22 +42,22 @@ msgstr "Използвай файла"
 #: packages/blocks/fields/file/index.js:17
 #: packages/metaboxes/fields/file/index.js:12
 msgid "Select File"
-msgstr "Избор на файл"
+msgstr "Избери файл"
 
 #: packages/blocks/fields/image/index.js:11
 #: packages/metaboxes/fields/image/index.js:11
 msgid "Use Image"
-msgstr "Използвай снимката"
+msgstr "Използвай изображението"
 
 #: packages/blocks/fields/image/index.js:12
 #: packages/metaboxes/fields/image/index.js:12
 msgid "Select Image"
-msgstr "Избор на снимка"
+msgstr "Избери изображение"
 
 #: packages/blocks/fields/media-gallery/index.js:16
 #: packages/metaboxes/fields/media-gallery/index.js:16
 msgid "Use Attachments"
-msgstr "Прикачи избраните"
+msgstr "Използвай файловете"
 
 #: packages/blocks/fields/media-gallery/index.js:17
 #: packages/metaboxes/fields/media-gallery/index.js:17
@@ -65,15 +66,15 @@ msgstr "Избери файлове"
 
 #: packages/core/components/no-options/index.js:14
 msgid "No options."
-msgstr "Няма дефинирани опции."
+msgstr "Не са дефинирани опции."
 
 #: packages/core/components/search-input/index.js:30
 msgid "Search..."
-msgstr "Търси..."
+msgstr "Търси…"
 
 #: packages/core/fields/association/index.js:113
 msgid "Maximum number of items reached (%s items)"
-msgstr "Максималният брой селектирани е достигнат ( %s максимум )"
+msgstr "Максималният брой на избрани елементи е достигнат (%s)"
 
 #: packages/core/fields/association/index.js:204
 msgid "Showing %1$d of %2$d results"
@@ -81,7 +82,7 @@ msgstr "Показани %1$d от %2$d резултата"
 
 #: packages/core/fields/association/index.js:380
 msgid "An error occurred while trying to fetch association options."
-msgstr "Грешка бе получена при опита да се вземат опциите за асоциация."
+msgstr "Възникна грешка при опита да се получат елементите."
 
 #: packages/core/fields/association/index.js:430
 #: packages/core/fields/complex/index.js:394
@@ -91,7 +92,7 @@ msgstr "Това поле е задължително."
 
 #: packages/core/fields/association/index.js:434
 msgid "Minimum number of items not reached (%s items)"
-msgstr "Минималния брой селектирани не е достигнат ( %s минимум )"
+msgstr "Минималния брой на избрани елементи не е достигнат (%s)"
 
 #: packages/core/fields/color/index.js:86
 msgid "Select a color"
@@ -99,7 +100,7 @@ msgstr "Изберете цвят"
 
 #: packages/core/fields/complex/group.js:150
 msgid "Duplicate"
-msgstr "Дупликирай"
+msgstr "Дублирай"
 
 #: packages/core/fields/complex/group.js:159
 msgid "Remove"
@@ -107,11 +108,11 @@ msgstr "Премахни"
 
 #: packages/core/fields/complex/group.js:168
 msgid "Collapse"
-msgstr "Разгъни"
+msgstr "Свий"
 
 #: packages/core/fields/complex/index.js:145
 msgid "Couldn't create the label of group - %s"
-msgstr "Име на групата не може да бъде създадено - %s"
+msgstr ""
 
 #: packages/core/fields/complex/index.js:367
 msgid "Expand All"
@@ -123,7 +124,7 @@ msgstr "Свий всички"
 
 #: packages/core/fields/complex/index.js:401
 msgid "Minimum number of rows not reached (%1$d %2$s)"
-msgstr "Минималния брой редове не беше достигнат (%1$d %2$s)"
+msgstr "Минималния брой не е достигнат (%1$d %2$s)"
 
 #: packages/core/fields/complex/index.js:81
 msgid "Add %s"
@@ -131,28 +132,27 @@ msgstr "Добави %s"
 
 #: packages/core/fields/map/index.js:165
 msgid "The address could not be found."
-msgstr "Адресът не беше намерен."
+msgstr "Адресът не може да бъде открит."
 
 #: packages/core/fields/map/index.js:167
 msgid "Geocode was not successful for the following reason: "
-msgstr "Геокодирането беше неуспешно поради следната причина: "
+msgstr "Геолокацията не беше успешна:"
 
 #: packages/core/fields/map/index.js:185
 msgid "Error alert"
-msgstr "Възникна грешка"
+msgstr ""
 
 #: packages/core/fields/oembed/index.js:188
 msgid "An error occurred while trying to fetch oembed preview."
-msgstr ""
-"Грешка беше получена при опита да се вземе предварителния преглед на полето"
+msgstr "Възникна грешка при опита да се получи прегледа."
 
 #: packages/core/fields/oembed/index.js:203
 msgid "Not Found"
-msgstr "Не беше намерен"
+msgstr "Няма резултат"
 
 #: packages/core/fields/rich-text/index.js:100
 msgid "Text"
-msgstr "Текстов"
+msgstr "Текст"
 
 #: packages/core/fields/rich-text/index.js:96
 msgid "Visual"
@@ -160,67 +160,64 @@ msgstr "Визуален"
 
 #: packages/core/fields/sidebar/index.js:110
 msgid "Please enter the name of the new sidebar:"
-msgstr "Моля въведете име на новата странична лента"
+msgstr "Моля въведете име за страничната лента:"
 
 #: packages/core/fields/sidebar/index.js:128
 msgid "An error occurred while trying to create the sidebar."
-msgstr "Грешка беше получена при опита да се създаде нова странична лента"
+msgstr "Възникна грешка при създаването на страничната лента."
 
 #: packages/core/fields/sidebar/index.js:58
 msgid "Please choose"
-msgstr "Изберете"
+msgstr "Избери"
 
 #: packages/core/fields/time/index.js:16
 msgid "Select Time"
-msgstr "Изберете време"
+msgstr "Избери време"
 
 #: packages/core/hocs/with-conditional-logic/index.js:62
 msgid "An unknown field is used in condition - \"%s\""
-msgstr "Непознато поле е използвано в условие - \"%s\""
+msgstr ""
 
 #: packages/core/registry/index.js:40
 msgid "%1$s type must be a string."
-msgstr "%1$s типът трябва да е от тип текст"
+msgstr ""
 
 #: packages/core/registry/index.js:46
 msgid "%1$s %2$s is already registered."
-msgstr "%1$s %2$s е вече регистриран."
+msgstr ""
 
 #: packages/core/registry/index.js:54
 msgid "The \"component\" param must be a function."
-msgstr "Параметъра \"component\" трябва да е от тип фукнция"
+msgstr ""
 
 #: packages/core/registry/index.js:79
 msgid "The provided context isn't a valid one. Must be one of - %s ."
 msgstr ""
-"Посочения контекст не е валиден. Моля изберете един от следните - %s ."
 
 #: packages/core/registry/index.js:89
 msgid "%s %s isn't registered."
-msgstr "%1$s %2$s е вече регистриран."
+msgstr ""
 
 #: packages/core/utils/api-fetch.js:19
 msgid "An error occured."
-msgstr "Грешка беше получена"
+msgstr "Възникна грешка."
 
 #: packages/core/utils/fetch-attachments-data.js:23
 msgid "An error occurred while trying to fetch files data."
-msgstr "Грешка беше получена при опита да се вземе информация за файловете"
+msgstr "Възникна грешка при получаването на информацията за файла."
 
 #: packages/metaboxes/containers/index.js:52
 msgid "Could not find DOM element for container \"%1$s\"."
-msgstr "DOM елемент за контейнер \"%1$s\" не беше намерен"
+msgstr ""
 
 #: packages/metaboxes/monitors/conditional-display/conditions/base.js:52
 msgid "Unsupported container condition comparison operator used - \"%1$s\"."
 msgstr ""
-"Неподдържан оператор за сравнение използван като условие на контейнер - "
-"\"%1$s\"."
 
 #: packages/metaboxes/monitors/conditional-display/handler/index.js:55
 msgid "Unsupported container condition - \"%1$s\"."
-msgstr "Неподдържано условие за контейнер - \"%1$s\"."
+msgstr ""
 
 #: packages/metaboxes/monitors/conditional-display/handler/index.js:73
 msgid "Unsupported container condition relation used - \"%1$s\"."
-msgstr "Неподдържанна връзка на условия използвана на контейнер - \"%1$s\"."
+msgstr ""
