@@ -126,22 +126,14 @@ class Media_Gallery_Field extends Field {
 	 * Converts the field values into a usable associative array.
 	 *
 	 * @access protected
+	 *
 	 * @return array
 	 */
 	protected function value_to_json() {
-		$value_set  = $this->get_value();
-		$value_meta = array();
-
-		foreach ( $value_set as $attachment_id ) {
-			$attachment_id     = absint( $attachment_id );
-			$attachment_metata = Helper::get_attachment_metadata( $attachment_id, $this->value_type );
-
-			$value_meta[ $attachment_id ] = $attachment_metata;
-		}
+		$value_set = $this->get_value();
 
 		return array(
-			'value'      => array_map( 'absint', $value_set ),
-			'value_meta' => $value_meta,
+			'value' => array_map( 'absint', $value_set ),
 		);
 	}
 
