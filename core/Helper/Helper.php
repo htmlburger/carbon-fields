@@ -490,44 +490,57 @@ class Helper {
 	 * Get an attachment ID given a file URL
 	 * Modified version of https://wpscholar.com/blog/get-attachment-id-from-wp-image-url/
 	 *
+	 * @static
+	 * @access public
+	 *
 	 * @param  string  $url
-	 * @return integet
+	 * @return integer
 	 */
 	public static function get_attachment_id( $url ) {
-		$dir = wp_upload_dir();
-		$filename = basename( $url );
+		$attachment_id = 0;
+		$dir           = wp_upload_dir();
+		$filename      = basename( $url );
 
-		if ( strpos( $url, $dir['baseurl'] . '/' ) === false ) {
-			return 0;
-		}
+		if ( strpos( $url, $dir['baseurl'] . '/' ) !== false ) {
+			$query_args = array(
+				'post_type'   => 'attachment',
+				'post_status' => 'inherit',
+				'fields'      => 'ids',
+				'meta_query'  => array(
+					array(
+						'value'   => $filename,
+						'compare' => 'LIKE',
+						'key'     => '_wp_attachment_metadata',
+					),
+				)
+			);
 
-		$query_args = array(
-			'post_type'   => 'attachment',
-			'post_status' => 'inherit',
-			'fields'      => 'ids',
-			'meta_query'  => array(
-				array(
-					'value'   => $filename,
-					'compare' => 'LIKE',
-					'key'     => '_wp_attachment_metadata',
-				),
-			)
-		);
-		$query = new WP_Query( $query_args );
+			$query = new WP_Query( $query_args );
 
-		if ( $query->have_posts() ) {
-			foreach ( $query->posts as $post_id ) {
-				$meta = wp_get_attachment_metadata( $post_id );
-				$original_file = basename( $meta['file'] );
-				$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
+			if ( $query->have_posts() ) {
+				foreach ( $query->posts as $post_id ) {
+					$meta                = wp_get_attachment_metadata( $post_id );
+					$original_file       = basename( $meta['file'] );
+					$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
 
-				if ( $original_file === $filename || in_array( $filename, $cropped_image_files ) ) {
-					return intval( $post_id );
+					if ( $original_file === $filename || in_array( $filename, $cropped_image_files ) ) {
+						$attachment_id = intval( $post_id );
+
+						break;
+					}
 				}
 			}
 		}
 
-		return 0;
+		/**
+		 * Filters the attachment id found from the passed attachment URL.
+		 *
+		 * @since 3.0.0
+		 *
+		 * @param  integer $attachment_id
+		 * @param  string  $url
+		 */
+		return apply_filters( 'carbon_fields_attachment_id_from_url', $attachment_id, $url );
 	}
 
 	/**
