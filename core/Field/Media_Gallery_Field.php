@@ -97,9 +97,9 @@ class Media_Gallery_Field extends Field {
 	 * @param boolean $can_edit_inline
 	 * @return  self   $this
 	 */
-	public function set_edit_inline( $can_edit_inline )
-	{
+	public function set_edit_inline( $can_edit_inline ) {
 		$this->can_edit_inline = $can_edit_inline;
+
 		return $this;
 	}
 
@@ -119,6 +119,7 @@ class Media_Gallery_Field extends Field {
 			}
 			$this->set_value( $value );
 		}
+
 		return $this;
 	}
 
@@ -147,10 +148,10 @@ class Media_Gallery_Field extends Field {
 		$field_data = parent::to_json( $load );
 
 		$field_data = array_merge( $field_data, $this->value_to_json(), array(
-			'value_type'          => $this->value_type,
-			'type_filter'         => $this->file_type,
-			'can_edit_inline'         => $this->can_edit_inline,
-			'duplicates_allowed'  => $this->get_duplicates_allowed(),
+			'value_type'         => $this->value_type,
+			'type_filter'        => $this->file_type,
+			'can_edit_inline'    => $this->can_edit_inline,
+			'duplicates_allowed' => $this->get_duplicates_allowed(),
 		) );
 
 		return $field_data;
