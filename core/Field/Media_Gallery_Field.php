@@ -97,9 +97,9 @@ class Media_Gallery_Field extends Field {
 	 * @param boolean $can_edit_inline
 	 * @return  self   $this
 	 */
-	public function set_edit_inline( $can_edit_inline )
-	{
+	public function set_edit_inline( $can_edit_inline ) {
 		$this->can_edit_inline = $can_edit_inline;
+
 		return $this;
 	}
 
@@ -119,6 +119,7 @@ class Media_Gallery_Field extends Field {
 			}
 			$this->set_value( $value );
 		}
+
 		return $this;
 	}
 
@@ -126,22 +127,14 @@ class Media_Gallery_Field extends Field {
 	 * Converts the field values into a usable associative array.
 	 *
 	 * @access protected
+	 *
 	 * @return array
 	 */
 	protected function value_to_json() {
-		$value_set  = $this->get_value();
-		$value_meta = array();
-
-		foreach ( $value_set as $attachment_id ) {
-			$attachment_id     = absint( $attachment_id );
-			$attachment_metata = Helper::get_attachment_metadata( $attachment_id, $this->value_type );
-
-			$value_meta[ $attachment_id ] = $attachment_metata;
-		}
+		$value_set = $this->get_value();
 
 		return array(
-			'value'      => array_map( 'absint', $value_set ),
-			'value_meta' => $value_meta,
+			'value' => array_map( 'absint', $value_set ),
 		);
 	}
 
@@ -155,10 +148,10 @@ class Media_Gallery_Field extends Field {
 		$field_data = parent::to_json( $load );
 
 		$field_data = array_merge( $field_data, $this->value_to_json(), array(
-			'value_type'          => $this->value_type,
-			'type_filter'         => $this->file_type,
-			'can_edit_inline'         => $this->can_edit_inline,
-			'duplicates_allowed'  => $this->get_duplicates_allowed(),
+			'value_type'         => $this->value_type,
+			'type_filter'        => $this->file_type,
+			'can_edit_inline'    => $this->can_edit_inline,
+			'duplicates_allowed' => $this->get_duplicates_allowed(),
 		) );
 
 		return $field_data;

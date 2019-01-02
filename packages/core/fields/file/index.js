@@ -62,6 +62,17 @@ class FileField extends Component {
 	}
 
 	/**
+	 * Returns the filename to the attachment thumbnail.
+	 *
+	 * @return {string}
+	 */
+	getFileName() {
+		const { data } = this.state;
+
+		return data.filename || data.file_name;
+	}
+
+	/**
 	 * Handles the file meta set.
 	 *
 	 * @param  {Object} data
@@ -147,8 +158,8 @@ class FileField extends Component {
 										<button type="button" className="cf-file__remove dashicons-before dashicons-no-alt" onClick={ this.handleClear }></button>
 									</div>
 
-									<span className="cf-file__name" title={ data.filename || data.file_name }>
-										{ data.filename || data.file_name }
+									<span className="cf-file__name" title={ this.getFileName() }>
+										{ this.getFileName() }
 									</span>
 								</div>
 							) }

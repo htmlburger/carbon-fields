@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Carbon Fields\n"
-"POT-Creation-Date: 2017-12-13 09:24+0200\n"
-"PO-Revision-Date: 2017-12-13 09:27+0200\n"
+"POT-Creation-Date: 2019-01-02 15:20+0200\n"
+"PO-Revision-Date: 2019-01-02 15:42+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: bg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.5\n"
+"X-Generator: Poedit 2.2\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
@@ -24,11 +24,18 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-4: tmp\n"
 "X-Poedit-SearchPathExcluded-5: vendor\n"
 
-#: core/Container/Container.php:711
+#: core/Container/Block_Container.php:259
+msgid "'render_callback' is required for the blocks."
+msgstr ""
+
+#: core/Container/Block_Container.php:263
+msgid "'render_callback' must be a callable."
+msgstr ""
+
+#: core/Container/Container.php:712
 msgid "General"
 msgstr "Основни"
 
-#: core/Container/Network_Container.php:52
 #: core/Container/Theme_Options_Container.php:207
 msgid "Settings saved."
 msgstr "Настройките бяха запазени."
@@ -56,7 +63,7 @@ msgctxt "sidebar"
 msgid "Add New"
 msgstr "Добавяне на нова"
 
-#: core/Helper/Helper.php:536
+#: core/Helper/Helper.php:612
 msgid "F j, Y"
 msgstr "F j, Y"
 
@@ -88,7 +95,6 @@ msgid "Add Sidebar"
 msgstr "Добавяне на странична лента"
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:182
-#: core/Loader/Loader.php:154
 msgid "Please enter the name of the new sidebar:"
 msgstr "Моля, въведете името на новата странична лента:"
 
@@ -96,359 +102,22 @@ msgstr "Моля, въведете името на новата страничн
 msgid "Are you sure you wish to remove this sidebar?"
 msgstr "Сигурни ли сте че искате да премахнете тази странична лента?"
 
-#: core/Loader/Loader.php:129
-msgid "Please fill out all required fields highlighted below."
-msgstr "Моля, попълнете всички задължителни полета, подчертани по-долу."
-
-#: core/Loader/Loader.php:130
-msgid "The changes you made will be lost if you navigate away from this page."
-msgstr "Направените промени ще бъдат загубени ако излезете от страницата."
-
-#: core/Loader/Loader.php:134
-msgid "The address could not be found. "
-msgstr "Адресът не беше намерен."
-
-#: core/Loader/Loader.php:135
-msgid "Geocode was not successful for the following reason: "
-msgstr "Геолокацията не бе успешна поради следната причина:"
-
-#: core/Loader/Loader.php:136
-msgid "Locate address on the map:"
-msgstr "Потърсете адрес:"
-
-#: core/Loader/Loader.php:137
-#, php-format
-msgid "Minimum number of items not reached (%s items)"
-msgstr "Минималния брой елементи не бе достигнат (%s елемента)"
-
-#: core/Loader/Loader.php:138
-#, php-format
-msgid "Maximum number of items reached (%s items)"
-msgstr "Максималния брой елементи бе достигнат (%s елемента)"
-
-#: core/Loader/Loader.php:140
-#, php-format
-msgid "There are no %s yet. Click <a href=\"#\">here</a> to add one."
-msgstr ""
-"Няма никакви %s в момента. Натиснете <a href=\"#\">тук</a> за да добавите "
-"нови."
-
-#: core/Loader/Loader.php:141
-#, php-format
-msgid "Minimum number of rows not reached (%1$d %2$s)"
-msgstr "Минималния брой елементи не бе достигнат (%1$d елемента)"
-
-#: core/Loader/Loader.php:142
-#, php-format
-msgid "Maximum number of rows exceeded (%1$d %2$s)"
-msgstr "Максималния брой елементи бе достигнат (%1$d елемента)"
-
-#: core/Loader/Loader.php:143
-#, php-format
-msgctxt "Complex field"
-msgid "Add %s"
-msgstr "Добавяне на %s"
-
-#: core/Loader/Loader.php:144
-msgctxt "Complex field"
-msgid "Clone"
-msgstr "Клониране"
-
-#: core/Loader/Loader.php:145
-msgctxt "Complex field"
-msgid "Remove"
-msgstr "Премахване"
-
-#: core/Loader/Loader.php:146
-msgctxt "Complex field"
-msgid "Collapse/Expand"
-msgstr "Свиване/Разпъване"
-
-#: core/Loader/Loader.php:147
-msgctxt "Complex field groups"
-msgid "Collapse All"
-msgstr "Скрий всички"
-
-#: core/Loader/Loader.php:148
-msgctxt "Complex field groups"
-msgid "Expand All"
-msgstr "Покажи всички"
-
-#: core/Loader/Loader.php:150
-msgid "Please fill out all fields correctly. "
-msgstr "Моля, попълнете правилно всички полета."
-
-#: core/Loader/Loader.php:151
-msgid "This field is required. "
-msgstr "Това поле е задължително."
-
-#: core/Loader/Loader.php:152
-msgid "Please choose an option. "
-msgstr "Моля, изберете."
-
-#: core/Loader/Loader.php:156
-msgid "Select Time"
-msgstr "Изберете време"
-
-#: core/Loader/Loader.php:157
-msgid "Select Date"
-msgstr "Изберете дата"
-
-#: core/Loader/Loader.php:159
-#, php-format
-msgid "%1$d selected item"
-msgstr "%1$d избран елемент"
-
-#: core/Loader/Loader.php:160
-#, php-format
-msgid "%1$d selected items"
-msgstr "%1$d избрани елементи"
-
-#: core/Loader/Loader.php:161
-#, php-format
-msgid "%1$d selected item out of %2$d"
-msgstr "%1$d избран елемент от %2$d"
-
-#: core/Loader/Loader.php:162
-#, php-format
-msgid "%1$d selected items out of %2$d"
-msgstr "%1$d избрани елементи от %2$d"
-
-#: core/Loader/Loader.php:164
-msgid "Select a color"
-msgstr "Изберете цвят"
-
-#: core/Loader/Loader.php:166
-msgid "No options."
-msgstr "Няма опции."
-
-#: core/Loader/Loader.php:168
-msgid "Show all options"
-msgstr "Покажи всички опции"
-
-#: core/Loader/Loader.php:170
-msgid "Search..."
-msgstr "Търсене..."
-
-#: core/Loader/Loader.php:172
-msgctxt "WordPress media attachment"
-msgid "URL"
-msgstr "Връзка"
-
-#: core/Loader/Loader.php:173
-msgctxt "WordPress media attachment"
-msgid "Title"
-msgstr "Заглавие"
-
-#: core/Loader/Loader.php:174
-msgctxt "WordPress media attachment"
-msgid "Artist"
-msgstr "Автор"
-
-#: core/Loader/Loader.php:175
-msgctxt "WordPress media attachment"
-msgid "Album"
-msgstr "Албум"
-
-#: core/Loader/Loader.php:176
-msgctxt "WordPress media attachment"
-msgid "Caption"
-msgstr "Надпис"
-
-#: core/Loader/Loader.php:177
-msgctxt "WordPress media attachment"
-msgid "Alt Text"
-msgstr "Допълнителен текст"
-
-#: core/Loader/Loader.php:178
-msgctxt "WordPress media attachment"
-msgid "Description"
-msgstr "Описание"
-
-#: core/Loader/Loader.php:179
-msgctxt "WordPress media attachment"
-msgid "Close"
-msgstr "Затвори"
-
-#: core/Loader/Loader.php:180
-msgctxt "WordPress media attachment"
-msgid "Save"
-msgstr "Запази"
-
-#: core/Loader/Loader.php:182
-msgctxt "oEmbed field"
-msgid "Not Found"
-msgstr "Няма резултати"
-
-#: core/Loader/Loader.php:184
-msgid "No files selected."
-msgstr "Няма избрани файлове."
-
-#: core/Loader/Loader.php:185
-msgid "Add File"
-msgstr "Добавяне на нов файл"
-
-#: core/Loader/Loader.php:186 core/Loader/Loader.php:190
-msgctxt "WordPress Media Browser"
-msgid "Files"
-msgstr "Файлове"
-
-#: core/Loader/Loader.php:187 core/Loader/Loader.php:191
-msgctxt "WordPress Media Browser"
-msgid "Select File"
-msgstr "Избор на файл"
-
-#: core/Loader/Loader.php:189
-msgid "Select File"
-msgstr "Избор на файл"
-
-#: core/Loader/Loader.php:193
-msgid "Select Image"
-msgstr "Избор на картинка"
-
-#: core/Loader/Loader.php:194
-msgctxt "WordPress Media Browser"
-msgid "Images"
-msgstr "Изображения"
-
-#: core/Loader/Loader.php:195
-msgctxt "WordPress Media Browser"
-msgid "Select Image"
-msgstr "Избор на изображение"
-
-#: core/REST_API/Router.php:287
+#: core/REST_API/Router.php:341
 msgid "No option names provided"
 msgstr "Липсват имена на настройки"
 
-#: core/REST_API/Router.php:298
+#: core/REST_API/Router.php:352
 msgid "Theme Options updated."
 msgstr "Настройките са обновени."
 
-#: templates/Container/common/options-page.php:34
+#: templates/Container/common/options-page.php:43
 msgid "Actions"
 msgstr "Действия"
 
-#: templates/Container/common/options-page.php:43
+#: templates/Container/common/options-page.php:52
 msgid "Save Changes"
 msgstr "Запазване"
 
 #: templates/Container/widget.php:4
 msgid "No options are available for this widget."
 msgstr "Няма налични опции за тази джаджа."
-
-#~ msgid "out of"
-#~ msgstr "от"
-
-#~ msgid "Edit"
-#~ msgstr "Редактиране"
-
-#~ msgid "Select a Color"
-#~ msgstr "Изберете цвят"
-
-#~ msgid "Entry"
-#~ msgstr "Запис"
-
-#~ msgid "Entries"
-#~ msgstr "Записи"
-
-#~ msgid ""
-#~ "Complex field layouts are deprecated, please use <code>set_width()</code> "
-#~ "instead."
-#~ msgstr ""
-#~ "Използването на complex field layouts е непрепоръчително, вместо това "
-#~ "използвайте <code>set_width()</code>."
-
-#~ msgid "Date"
-#~ msgstr "Дата"
-
-#~ msgid "Cannot create more than %s rows"
-#~ msgstr "Повече от %s реда не могат да бъдат създавани"
-
-#~ msgid "Minimum number of rows not reached (%d %s)"
-#~ msgstr "Минималния брой редове не бе достигнат (%d %s)"
-
-#~ msgid "View File"
-#~ msgstr "Разглеждане на файл"
-
-#~ msgid "Please install Gravity Forms plugin"
-#~ msgstr "Моля, инсталирайте разширението Gravity Forms"
-
-#~ msgid "No Gravity Forms have been found."
-#~ msgstr "Не бяха открити никакви Gravity Forms формуляри."
-
-#~ msgid "Locate Address on the map"
-#~ msgstr "Намиране на адрес на картата"
-
-#~ msgid "Find"
-#~ msgstr "Намиране"
-
-#~ msgid "no options"
-#~ msgstr "Няма опции"
-
-#~ msgid "Associated:"
-#~ msgstr "Асоциирани:"
-
-#~ msgid "Add Media"
-#~ msgstr "Добавяне на медиен файл"
-
-#~ msgid "Visual"
-#~ msgstr "Визуален"
-
-#~ msgid "Show All Options"
-#~ msgstr "Показване на всички възможности"
-
-#~ msgid "%s (Invalid)"
-#~ msgstr "%s (Невалиден)"
-
-#~ msgid "%s (Pending)"
-#~ msgstr "%s (Очакващ редакция)"
-
-#~ msgid "sub item"
-#~ msgstr "Под-елемент"
-
-#~ msgid "Move up"
-#~ msgstr "Преместване нагоре"
-
-#~ msgid "Move down"
-#~ msgstr "Преместване надолу"
-
-#~ msgid "Edit Menu Item"
-#~ msgstr "Редакция на меню елемент"
-
-#~ msgid "Navigation Label"
-#~ msgstr "Етикет"
-
-#~ msgid "Title Attribute"
-#~ msgstr "Title атрибут"
-
-#~ msgid "Open link in a new window/tab"
-#~ msgstr "Отваряне в нов прозорец/таб"
-
-#~ msgid "CSS Classes (optional)"
-#~ msgstr "CSS класове (по избор)"
-
-#~ msgid "Link Relationship (XFN)"
-#~ msgstr "XFN"
-
-#~ msgid ""
-#~ "The description will be displayed in the menu if the current theme "
-#~ "supports it."
-#~ msgstr "Описанието ще бъде показано в менюто ако текущата тема го поддържа."
-
-#~ msgid "Move"
-#~ msgstr "Преместване"
-
-#~ msgid "Up one"
-#~ msgstr "С един елемент нагоре"
-
-#~ msgid "Down one"
-#~ msgstr "С един елемент надолу"
-
-#~ msgid "To the top"
-#~ msgstr "Към най-горе"
-
-#~ msgid "Original: %s"
-#~ msgstr "Оригинален елемент: %s"
-
-#~ msgid "Cancel"
-#~ msgstr "Отказ"
