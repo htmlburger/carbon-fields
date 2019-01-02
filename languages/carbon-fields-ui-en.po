@@ -26,7 +26,7 @@ msgstr "Fields"
 
 #: packages/blocks/components/not-supported-field/index.js:14
 msgid "Field of type '%s' is not supported in Gutenberg."
-msgstr "Field of type '%s' is not supported in Gutenberg."
+msgstr "Field of type ‘%s’ is not supported in Gutenberg."
 
 #: packages/blocks/fields/datetime/index.js:14
 #: packages/core/fields/date/index.js:15
@@ -70,7 +70,7 @@ msgstr "No options."
 
 #: packages/core/components/search-input/index.js:30
 msgid "Search..."
-msgstr "Search..."
+msgstr "Search…"
 
 #: packages/core/fields/association/index.js:113
 msgid "Maximum number of items reached (%s items)"
@@ -112,7 +112,7 @@ msgstr "Collapse"
 
 #: packages/core/fields/complex/index.js:145
 msgid "Couldn't create the label of group - %s"
-msgstr "Couldn't create the label of group - %s"
+msgstr "Couldn’t create the label of group - %s"
 
 #: packages/core/fields/complex/index.js:367
 msgid "Expand All"
@@ -140,7 +140,7 @@ msgstr "Geocode was not successful for the following reason: "
 
 #: packages/core/fields/map/index.js:185
 msgid "Error alert"
-msgstr "Error alert"
+msgstr ""
 
 #: packages/core/fields/oembed/index.js:188
 msgid "An error occurred while trying to fetch oembed preview."
@@ -176,27 +176,27 @@ msgstr "Select Time"
 
 #: packages/core/hocs/with-conditional-logic/index.js:62
 msgid "An unknown field is used in condition - \"%s\""
-msgstr "An unknown field is used in condition - \"%s\""
+msgstr ""
 
 #: packages/core/registry/index.js:40
 msgid "%1$s type must be a string."
-msgstr "%1$s type must be a string."
+msgstr ""
 
 #: packages/core/registry/index.js:46
 msgid "%1$s %2$s is already registered."
-msgstr "The provided context isn't a valid one. Must be one of - %s ."
+msgstr ""
 
 #: packages/core/registry/index.js:54
 msgid "The \"component\" param must be a function."
-msgstr "The provided context isn't a valid one. Must be one of - %s ."
+msgstr ""
 
 #: packages/core/registry/index.js:79
 msgid "The provided context isn't a valid one. Must be one of - %s ."
-msgstr "The provided context isn't a valid one. Must be one of - %s ."
+msgstr ""
 
 #: packages/core/registry/index.js:89
 msgid "%s %s isn't registered."
-msgstr "%s %s isn't registered."
+msgstr "%s %s isn’t registered."
 
 #: packages/core/utils/api-fetch.js:19
 msgid "An error occured."
@@ -208,16 +208,16 @@ msgstr "An error occurred while trying to fetch files data."
 
 #: packages/metaboxes/containers/index.js:52
 msgid "Could not find DOM element for container \"%1$s\"."
-msgstr "Could not find DOM element for container \"%1$s\"."
+msgstr ""
 
 #: packages/metaboxes/monitors/conditional-display/conditions/base.js:52
 msgid "Unsupported container condition comparison operator used - \"%1$s\"."
-msgstr "Unsupported container condition comparison operator used - \"%1$s\"."
+msgstr ""
 
 #: packages/metaboxes/monitors/conditional-display/handler/index.js:55
 msgid "Unsupported container condition - \"%1$s\"."
-msgstr "Unsupported container condition - \"%1$s\"."
+msgstr ""
 
 #: packages/metaboxes/monitors/conditional-display/handler/index.js:73
 msgid "Unsupported container condition relation used - \"%1$s\"."
-msgstr "Unsupported container condition relation used - \"%1$s\"."
+msgstr ""
