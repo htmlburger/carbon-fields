@@ -695,9 +695,7 @@
   line-height: 16px;
   height: 28px;
   padding: 10px;
-  z-index: 3;
-  color: rgba(0, 0, 0, 0.9);
-  fill: rgba(0, 0, 0, 0.9); }
+  z-index: 3; }
 
 .flatpickr-months .flatpickr-prev-month.disabled, .flatpickr-months .flatpickr-next-month.disabled {
   display: none; }
@@ -1140,6 +1138,7 @@ span.flatpickr-weekday {
   padding: 0;
   height: inherit;
   line-height: inherit;
+  cursor: pointer;
   color: #393939;
   font-size: 14px;
   position: relative;
@@ -1179,8 +1178,8 @@ span.flatpickr-weekday {
   text-align: center;
   font-weight: 400; }
 
-.flatpickr-time input:hover, .flatpickr-time .flatpickr-am-pm:hover, .flatpickr-time input:focus, .flatpickr-time .flatpickr-am-pm:focus {
-  background: #f3f3f3; }
+.flatpickr-time .flatpickr-am-pm:hover, .flatpickr-time .flatpickr-am-pm:focus {
+  background: #f0f0f0; }
 
 .flatpickr-input[readonly] {
   cursor: pointer; }
