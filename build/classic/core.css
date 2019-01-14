@@ -292,6 +292,7 @@
    Complex
    ========================================================================== */
 .cf-complex__groups {
+  flex: 1;
   position: relative;
   z-index: 0; }
   .cf-complex--tabbed-vertical > .cf-complex__groups {
@@ -422,7 +423,8 @@
   min-width: 180px;
   margin: 0;
   -webkit-transform: translate(10px, -50%);
-          transform: translate(10px, -50%); }
+          transform: translate(10px, -50%);
+  z-index: 1; }
 
 .cf-complex__inserter-item {
   padding: 8px 12px;
