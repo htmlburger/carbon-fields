@@ -3,6 +3,7 @@
    ========================================================================== */
 
 .cf-complex__groups {
+	flex: 1;
 	position: relative;
 	z-index: 0;
 
@@ -181,6 +182,7 @@
 	min-width: 180px;
 	margin: 0;
 	transform: translate(10px, -50%);
+	z-index: 1;
 }
 
 .cf-complex__inserter-item {

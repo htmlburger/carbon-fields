@@ -3,15 +3,15 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
-#: packages/blocks/components/block-edit/index.js:152
+#: packages/blocks/components/block-edit/index.js:201
 msgid "Show preview"
 msgstr ""
 
-#: packages/blocks/components/block-edit/index.js:153
+#: packages/blocks/components/block-edit/index.js:202
 msgid "Hide preview"
 msgstr ""
 
-#: packages/blocks/components/block-edit/index.js:169
+#: packages/blocks/components/block-edit/index.js:271
 msgid "Fields"
 msgstr ""
 
@@ -19,7 +19,7 @@ msgstr ""
 msgid "Field of type '%s' is not supported in Gutenberg."
 msgstr ""
 
-#: packages/blocks/fields/datetime/index.js:14
+#: packages/blocks/fields/datetime/index.js:59
 #: packages/core/fields/date/index.js:15
 #: packages/metaboxes/fields/datetime/index.js:9
 msgid "Select Date"
@@ -76,7 +76,7 @@ msgid "An error occurred while trying to fetch association options."
 msgstr ""
 
 #: packages/core/fields/association/index.js:430
-#: packages/core/fields/complex/index.js:394
+#: packages/core/fields/complex/index.js:428
 #: packages/core/hocs/with-validation/required.js:20
 msgid "This field is required."
 msgstr ""
@@ -89,35 +89,35 @@ msgstr ""
 msgid "Select a color"
 msgstr ""
 
-#: packages/core/fields/complex/group.js:150
+#: packages/core/fields/complex/group.js:154
 msgid "Duplicate"
 msgstr ""
 
-#: packages/core/fields/complex/group.js:159
+#: packages/core/fields/complex/group.js:163
 msgid "Remove"
 msgstr ""
 
-#: packages/core/fields/complex/group.js:168
+#: packages/core/fields/complex/group.js:172
 msgid "Collapse"
 msgstr ""
 
-#: packages/core/fields/complex/index.js:145
+#: packages/core/fields/complex/index.js:146
 msgid "Couldn't create the label of group - %s"
 msgstr ""
 
-#: packages/core/fields/complex/index.js:367
+#: packages/core/fields/complex/index.js:401
 msgid "Expand All"
 msgstr ""
 
-#: packages/core/fields/complex/index.js:367
+#: packages/core/fields/complex/index.js:401
 msgid "Collapse All"
 msgstr ""
 
-#: packages/core/fields/complex/index.js:401
+#: packages/core/fields/complex/index.js:435
 msgid "Minimum number of rows not reached (%1$d %2$s)"
 msgstr ""
 
-#: packages/core/fields/complex/index.js:81
+#: packages/core/fields/complex/index.js:82
 msgid "Add %s"
 msgstr ""
 
@@ -141,11 +141,11 @@ msgstr ""
 msgid "Not Found"
 msgstr ""
 
-#: packages/core/fields/rich-text/index.js:100
+#: packages/core/fields/rich-text/index.js:103
 msgid "Text"
 msgstr ""
 
-#: packages/core/fields/rich-text/index.js:96
+#: packages/core/fields/rich-text/index.js:99
 msgid "Visual"
 msgstr ""
 
