@@ -24,7 +24,7 @@ import stripCompactInputPrefix from '../../utils/strip-compact-input-prefix';
  */
 function findFieldByName( fields, name ) {
 	return find( fields, ( field ) => {
-		return field.name.indexOf( name ) === 0;
+		return field.name === name;
 	} );
 }
 
