@@ -44,9 +44,16 @@ class ColorField extends Component {
 	 * @return {void}
 	 */
 	handleChange = ( color ) => {
-		const { id, onChange } = this.props;
+		const { id, field, onChange } = this.props;
+		const colorHex = get( color, 'hex', '' );
 
-		onChange( id, get( color, 'hex', '' ) );
+		if ( colorHex && field.alphaEnabled ) {
+			const alpha = get( color, 'rgb.a', 1 );
+			const alphaHex = Math.round( parseFloat( alpha ) * 255 ).toString( 16 ).padStart( 2, '0' );
+			onChange( id, colorHex + alphaHex );
+		} else {
+			onChange( id, colorHex );
+		}
 	}
 
 	/**
