@@ -4,13 +4,13 @@
 import { Component } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { get } from 'lodash';
+import tinycolor from 'tinycolor2';
 
 /**
  * Internal dependencies.
  */
 import './style.scss';
 import Picker from './picker';
-import hexToRgba from '../../utils/hex-to-rgba';
 
 class ColorField extends Component {
 	/**
@@ -28,13 +28,9 @@ class ColorField extends Component {
 	 * @return {void}
 	 */
 	getBackgrounColor = () => {
-		const { field, value } = this.props;
+		const colorHex = this.props.value || '#FFFFFFFF';
 
-		const colorHex = value ? value : '#FFFFFFFF';
-		const [ r, g, b, a ] = hexToRgba( colorHex );
-		const rgbaColor = { r, g, b, a: field.alphaEnabled ? a : 1 };
-
-		return `rgba(${ Object.values( rgbaColor ).join( ', ' ) })`;
+		return tinycolor( colorHex ).toRgbString();
 	}
 
 	/**
@@ -45,15 +41,10 @@ class ColorField extends Component {
 	 */
 	handleChange = ( color ) => {
 		const { id, field, onChange } = this.props;
-		const colorHex = get( color, 'hex', '' );
+		const rgb = get( color, 'rgb', '' );
+		const format = field.alphaEnabled ? 'hex8' : 'hex6';
 
-		if ( colorHex && field.alphaEnabled ) {
-			const alpha = get( color, 'rgb.a', 1 );
-			const alphaHex = Math.round( parseFloat( alpha ) * 255 ).toString( 16 ).padStart( 2, '0' );
-			onChange( id, colorHex + alphaHex );
-		} else {
-			onChange( id, colorHex );
-		}
+		onChange( id, rgb ? tinycolor( rgb ).toString( format ) : '' );
 	}
 
 	/**
