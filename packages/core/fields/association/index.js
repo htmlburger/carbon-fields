@@ -229,7 +229,7 @@ class AssociationField extends Component {
 										</div>
 
 										<div className="cf-association__option-actions">
-											<a className="cf-association__option-action cf-association__option-action--edit dashicons dashicons-edit" href={ option.edit_link.replace( '&amp;', '&', 'g' ) }></a>
+											<a className="cf-association__option-action cf-association__option-action--edit dashicons dashicons-edit" href={ option.edit_link.replace( '&amp;', '&', 'g' ) } target="_blank" rel="noopener noreferrer"></a>
 
 											{ (
 												! option.disabled
