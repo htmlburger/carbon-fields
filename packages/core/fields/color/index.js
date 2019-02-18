@@ -27,7 +27,7 @@ class ColorField extends Component {
 	 *
 	 * @return {void}
 	 */
-	getBackgrounColor = () => {
+	getBackgroundColor = () => {
 		const { field, value } = this.props;
 
 		const colorHex = value ? value : '#FFFFFFFF';
@@ -80,7 +80,7 @@ class ColorField extends Component {
 				/>
 
 				<button type="button" className="button cf-color__toggle" onClick={ this.togglePicker }>
-					<span className="cf-color__preview" style={ { backgroundColor: this.getBackgrounColor() } }></span>
+					<span className="cf-color__preview" style={ { backgroundColor: this.getBackgroundColor() } }></span>
 
 					<span className="cf-color__toggle-text">
 						{ __( 'Select a color', 'carbon-fields-ui' ) }
