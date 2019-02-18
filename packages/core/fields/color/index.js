@@ -10,7 +10,7 @@ import { get } from 'lodash';
  */
 import './style.scss';
 import Picker from './picker';
-import hexToRgba from '../../utils/hex-to-rgba';
+import { hexToRgba, rgbaToHex } from '../../utils/hex-and-rgba';
 
 class ColorField extends Component {
 	/**
@@ -44,9 +44,15 @@ class ColorField extends Component {
 	 * @return {void}
 	 */
 	handleChange = ( color ) => {
-		const { id, onChange } = this.props;
+		const { id, onChange, field } = this.props;
 
-		onChange( id, get( color, 'hex', '' ) );
+		let value = get( color, 'hex', '' ).toUpperCase();
+
+		if ( field.alphaEnabled ) {
+			value = rgbaToHex( get( color, 'rgb', null ) );
+		}
+
+		onChange( id, value );
 	}
 
 	/**
