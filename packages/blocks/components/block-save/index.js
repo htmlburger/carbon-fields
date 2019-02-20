@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import { Component } from '@wordpress/element';
+import { InnerBlocks } from '@wordpress/editor';
 
 class BlockSave extends Component {
 	/**
@@ -10,7 +11,9 @@ class BlockSave extends Component {
 	 * @return {Object}
 	 */
 	render() {
-		return null;
+		return (
+			<InnerBlocks.Content />
+		);
 	}
 }
 

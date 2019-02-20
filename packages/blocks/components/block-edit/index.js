@@ -8,7 +8,11 @@ import {
 	PanelBody,
 	ServerSideRender
 } from '@wordpress/components';
-import { BlockControls, InspectorControls } from '@wordpress/editor';
+import {
+	InnerBlocks,
+	BlockControls,
+	InspectorControls
+} from '@wordpress/editor';
 import { withSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import {
@@ -191,6 +195,8 @@ class BlockEdit extends Component {
 
 		return (
 			<Fragment>
+				<InnerBlocks />
+
 				{ supportsPreview && (
 					<BlockControls>
 						<Toolbar controls={ [ {

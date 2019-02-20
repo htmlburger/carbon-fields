@@ -239,12 +239,23 @@ class Block_Container extends Container {
 	 * Render the block type.
 	 *
 	 * @param  array  $attributes
+	 * @param  string $content
 	 * @return string
 	 */
-	public function render_block( $attributes ) {
+	public function render_block( $attributes, $content ) {
+		$fields = $attributes[ 'data' ];
+		$block = [
+			'content' => $content,
+			'attributes' => $attributes,
+		];
+
+		// Unset the "data" property because we
+		// pass it as separate argument to the callback.
+		unset($block['attributes']['data']);
+
 		ob_start();
 
-		call_user_func( $this->render_callback , $attributes[ 'data' ] );
+		call_user_func( $this->render_callback , $fields, $block );
 
 		return ob_get_clean();
 	}
