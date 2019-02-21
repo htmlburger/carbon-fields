@@ -14,6 +14,7 @@ class Block_Container extends Container {
 		'inner_blocks' => array(
 			'enabled' => false,
 			'position' => 'above',
+			'template' => null,
 			'allowed_blocks' => null,
 		),
 		'category' => array(
@@ -251,6 +252,24 @@ class Block_Container extends Container {
 		}
 
 		$this->settings[ 'inner_blocks' ][ 'position' ] = $inner_blocks_position;
+
+		return $this;
+	}
+
+	/**
+	 * Set the default template that should be rendered in inner blocks.
+	 *
+	 * @see https://github.com/WordPress/gutenberg/tree/master/packages/editor/src/components/inner-blocks#template
+	 *
+	 * @param  array[]|null $template
+	 * @return Block_Container
+	 */
+	public function set_inner_blocks_template( $template = null ) {
+		if ( ! is_array( $template ) && ! is_null( $template ) ) {
+			throw new \Exception( __( "The template must be an 'array' or 'null'.", 'crb' ) );
+		}
+
+		$this->settings[ 'inner_blocks' ][ 'template' ] = $template;
 
 		return $this;
 	}
