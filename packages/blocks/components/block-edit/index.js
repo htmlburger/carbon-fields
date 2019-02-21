@@ -194,11 +194,13 @@ class BlockEdit extends Component {
 			supportsInnerBlocks
 		} = this.props;
 
+		const innerBlocks = ( supportsInnerBlocks && (
+			<InnerBlocks />
+		) );
+
 		return (
 			<Fragment>
-				{ supportsInnerBlocks && (
-					<InnerBlocks />
-				) }
+				{ container.settings.inner_blocks.position === 'above' && innerBlocks }
 
 				{ supportsPreview && (
 					<BlockControls>
@@ -260,6 +262,8 @@ class BlockEdit extends Component {
 						<ServerSideRender block={ name } attributes={ attributes } />
 					</div>
 				) }
+
+				{ container.settings.inner_blocks.position === 'below' && innerBlocks }
 
 				{ this.isInPreviewMode && (
 					<InspectorControls>

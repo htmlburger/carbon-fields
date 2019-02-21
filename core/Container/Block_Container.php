@@ -11,7 +11,10 @@ class Block_Container extends Container {
 	 */
 	public $settings = array(
 		'preview' => true,
-		'inner_blocks' => false,
+		'inner_blocks' => array(
+			'enabled' => false,
+			'position' => 'above',
+		),
 		'category' => array(
 			'slug' => 'common',
 		),
@@ -229,7 +232,24 @@ class Block_Container extends Container {
 	 * @return Block_Container
 	 */
 	public function set_inner_blocks( $inner_blocks = true ) {
-		$this->settings[ 'inner_blocks' ] = $inner_blocks;
+		$this->settings[ 'inner_blocks' ][ 'enabled' ] = $inner_blocks;
+
+		return $this;
+	}
+
+	/**
+	 * Set the position of the inner blocks to be rendered
+	 * above or below the fields.
+	 *
+	 * @param  string $inner_blocks_position
+	 * @return Block_Container
+	 */
+	public function set_inner_blocks_position( $inner_blocks_position = 'above' ) {
+		if ( ! in_array( $inner_blocks_position, [ 'above', 'below' ] ) ) {
+			throw new \Exception( __( "The position of inner blocks must be 'above' or 'below'.", 'crb' ) );
+		}
+
+		$this->settings[ 'inner_blocks' ][ 'position' ] = $inner_blocks_position;
 
 		return $this;
 	}
