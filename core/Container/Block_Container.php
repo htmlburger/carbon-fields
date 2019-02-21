@@ -14,6 +14,7 @@ class Block_Container extends Container {
 		'inner_blocks' => array(
 			'enabled' => false,
 			'position' => 'above',
+			'allowed_blocks' => null,
 		),
 		'category' => array(
 			'slug' => 'common',
@@ -250,6 +251,24 @@ class Block_Container extends Container {
 		}
 
 		$this->settings[ 'inner_blocks' ][ 'position' ] = $inner_blocks_position;
+
+		return $this;
+	}
+
+	/**
+	 * Set the list of allowed blocks that can be inserted.
+	 *
+	 * @see https://github.com/WordPress/gutenberg/tree/master/packages/editor/src/components/inner-blocks#allowedblocks
+	 *
+	 * @param  string[]|null $allowed_inner_blocks
+	 * @return Block_Container
+	 */
+	public function set_allowed_inner_blocks( $allowed_inner_blocks = null ) {
+		if ( ! is_array( $allowed_inner_blocks ) && ! is_null( $allowed_inner_blocks ) ) {
+			throw new \Exception( __( "The allowed blocks must be an 'array' or 'null'.", 'crb' ) );
+		}
+
+		$this->settings[ 'inner_blocks' ][ 'allowed_blocks' ] = $allowed_inner_blocks;
 
 		return $this;
 	}

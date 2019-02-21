@@ -195,7 +195,11 @@ class BlockEdit extends Component {
 		} = this.props;
 
 		const innerBlocks = ( supportsInnerBlocks && (
-			<InnerBlocks />
+			<div className="cf-block__inner-blocks">
+				<InnerBlocks
+					allowedBlocks={ container.settings.inner_blocks.allowed_blocks }
+				/>
+			</div>
 		) );
 
 		return (
