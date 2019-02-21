@@ -15,6 +15,7 @@ class Block_Container extends Container {
 			'enabled' => false,
 			'position' => 'above',
 			'template' => null,
+			'template_lock' => null,
 			'allowed_blocks' => null,
 		),
 		'category' => array(
@@ -270,6 +271,24 @@ class Block_Container extends Container {
 		}
 
 		$this->settings[ 'inner_blocks' ][ 'template' ] = $template;
+
+		return $this;
+	}
+
+	/**
+	 * Set the lock mode used by template of inner blocks.
+	 *
+	 * @see https://github.com/WordPress/gutenberg/tree/master/packages/editor/src/components/inner-blocks#templatelock
+	 *
+	 * @param  string|boolean|null $lock
+	 * @return Block_Container
+	 */
+	public function set_inner_blocks_template_lock( $lock = null ) {
+		if ( is_string( $lock ) && ! in_array( $lock, [ 'all', 'insert' ] ) ) {
+			throw new \Exception( __( "The template lock must be 'all', 'insert', 'false' or 'null'.", 'crb' ) );
+		}
+
+		$this->settings[ 'inner_blocks' ][ 'template_lock' ] = $lock;
 
 		return $this;
 	}

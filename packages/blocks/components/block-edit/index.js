@@ -198,6 +198,7 @@ class BlockEdit extends Component {
 			<div className="cf-block__inner-blocks">
 				<InnerBlocks
 					template={ container.settings.inner_blocks.template }
+					templateLock={ container.settings.inner_blocks.template_lock }
 					allowedBlocks={ container.settings.inner_blocks.allowed_blocks }
 				/>
 			</div>
