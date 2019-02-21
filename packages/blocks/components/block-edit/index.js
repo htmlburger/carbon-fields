@@ -190,12 +190,15 @@ class BlockEdit extends Component {
 			container,
 			attributes,
 			supportsTabs,
-			supportsPreview
+			supportsPreview,
+			supportsInnerBlocks
 		} = this.props;
 
 		return (
 			<Fragment>
-				<InnerBlocks />
+				{ supportsInnerBlocks && (
+					<InnerBlocks />
+				) }
 
 				{ supportsPreview && (
 					<BlockControls>
@@ -297,6 +300,7 @@ export default withSelect( ( select, { name } ) => {
 		container: getContainerDefinitionByBlockName( name ),
 		fields: getFieldDefinitionsByBlockName( name ),
 		supportsTabs: hasBlockSupport( name, 'tabs' ),
-		supportsPreview: hasBlockSupport( name, 'preview' )
+		supportsPreview: hasBlockSupport( name, 'preview' ),
+		supportsInnerBlocks: hasBlockSupport( name, 'innerBlocks' )
 	};
 } )( BlockEdit );

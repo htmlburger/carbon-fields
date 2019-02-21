@@ -11,6 +11,7 @@ class Block_Container extends Container {
 	 */
 	public $settings = array(
 		'preview' => true,
+		'inner_blocks' => false,
 		'category' => array(
 			'slug' => 'common',
 		),
@@ -217,6 +218,18 @@ class Block_Container extends Container {
 	 */
 	public function set_preview_mode( $preview = true ) {
 		$this->settings[ 'preview' ] = $preview;
+
+		return $this;
+	}
+
+	/**
+	 * Set whether the inner blocks are available for the block type.
+	 *
+	 * @param  boolean $inner_blocks
+	 * @return Block_Container
+	 */
+	public function set_inner_blocks( $inner_blocks = true ) {
+		$this->settings[ 'inner_blocks' ] = $inner_blocks;
 
 		return $this;
 	}

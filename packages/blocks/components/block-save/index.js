@@ -8,13 +8,34 @@ class BlockSave extends Component {
 	/**
 	 * Render the component.
 	 *
-	 * @return {Object}
+	 * @return {null}
 	 */
 	render() {
-		return (
-			<InnerBlocks.Content />
-		);
+		return null;
 	}
 }
+
+/**
+ * Adds the content of inner blocks to the saved content.
+ *
+ * @param  {mixed} element
+ * @param  {Object} blockType
+ * @return {mixed}
+ */
+function addInnerBlocksContent( element, blockType ) {
+	if ( ! /^carbon\-fields\/.+$/.test( blockType.name ) ) {
+		return element;
+	}
+
+	if ( ! blockType.supports.innerBlocks ) {
+		return element;
+	}
+
+	return (
+		<InnerBlocks.Content />
+	);
+}
+
+wp.hooks.addFilter( 'blocks.getSaveElement', 'carbon-fields/blocks', addInnerBlocksContent );
 
 export default BlockSave;

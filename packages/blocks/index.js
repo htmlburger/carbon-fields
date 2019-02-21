@@ -56,6 +56,7 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 		supports: {
 			tabs: isPlainObject( getBlockSetting( 'tabs' ) ),
 			preview: getBlockSetting( 'preview' ),
+			innerBlocks: getBlockSetting( 'inner_blocks' ),
 			alignWide: false,
 			anchor: false,
 			html: false
