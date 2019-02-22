@@ -295,18 +295,21 @@ class BlockEdit extends Component {
 	}
 }
 
-export default withSelect( ( select, { name } ) => {
+export default withSelect( ( select, { clientId, name } ) => {
 	const { hasBlockSupport } = select( 'core/blocks' );
+	const { getBlockRootClientId } = select( 'core/editor' );
 	const {
 		getContainerDefinitionByBlockName,
 		getFieldDefinitionsByBlockName
 	} = select( 'carbon-fields/blocks' );
 
+	const rootClientId = getBlockRootClientId( clientId );
+
 	return {
 		container: getContainerDefinitionByBlockName( name ),
 		fields: getFieldDefinitionsByBlockName( name ),
 		supportsTabs: hasBlockSupport( name, 'tabs' ),
-		supportsPreview: hasBlockSupport( name, 'preview' ),
+		supportsPreview: hasBlockSupport( name, 'preview' ) && ! rootClientId,
 		supportsInnerBlocks: hasBlockSupport( name, 'innerBlocks' )
 	};
 } )( BlockEdit );
