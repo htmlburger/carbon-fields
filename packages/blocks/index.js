@@ -44,6 +44,7 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 	registerBlockType( `carbon-fields/${ name }`, {
 		title: container.title,
 		icon: getBlockSetting( 'icon' ),
+		parent: getBlockSetting( 'parent', [] ),
 		category: getBlockSetting( 'category.slug' ),
 		keywords: getBlockSetting( 'keywords', [] ),
 		description: getBlockSetting( 'description', '' ),

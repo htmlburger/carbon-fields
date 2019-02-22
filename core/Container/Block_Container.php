@@ -11,6 +11,7 @@ class Block_Container extends Container {
 	 */
 	public $settings = array(
 		'preview' => true,
+		'parent' => null,
 		'inner_blocks' => array(
 			'enabled' => false,
 			'position' => 'above',
@@ -224,6 +225,24 @@ class Block_Container extends Container {
 	 */
 	public function set_preview_mode( $preview = true ) {
 		$this->settings[ 'preview' ] = $preview;
+
+		return $this;
+	}
+
+	/**
+	 * Set the parent block(s) in which the block type can be inserted.
+	 *
+	 * @see https://wordpress.org/gutenberg/handbook/designers-developers/developers/block-api/block-registration/#parent-optional
+	 *
+	 * @param  string|string[]|null $parent
+	 * @return Block_Container
+	 */
+	public function set_parent( $parent = null ) {
+		if ( ! is_array( $parent ) && ! is_string( $parent ) && ! is_null( $parent ) ) {
+			throw new \Exception( __( "The parent must be 'array', 'string' or 'null'.", 'crb' ) );
+		}
+
+		$this->settings[ 'parent' ] = is_string( $parent ) ? array( $parent ) : $parent;
 
 		return $this;
 	}
