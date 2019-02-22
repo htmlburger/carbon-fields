@@ -325,7 +325,12 @@ class Block_Container extends Container {
 			throw new \Exception( __( "The allowed blocks must be an 'array' or 'null'.", 'crb' ) );
 		}
 
-		$this->settings[ 'inner_blocks' ][ 'allowed_blocks' ] = $allowed_inner_blocks;
+		$this->settings[ 'inner_blocks' ][ 'allowed_blocks' ] = array_map(function ($block) {
+			if ($block instanceof self) {
+				return $block->get_block_type_name();
+			}
+			return $block;
+		}, $allowed_inner_blocks);
 
 		return $this;
 	}
@@ -370,6 +375,13 @@ class Block_Container extends Container {
 	}
 
 	/**
+	 * Returns the block type name, e.g. "carbon-fields/testimonial"
+	 */
+	private function get_block_type_name() {
+		return str_replace( 'carbon-fields-container-', 'carbon-fields/', str_replace( '_', '-', $this->id ) );
+	}
+
+	/**
 	 * Register the block type.
 	 *
 	 * @return void
@@ -383,7 +395,6 @@ class Block_Container extends Container {
 			throw new \Exception( __( "'render_callback' must be a callable.", 'crb' ) );
 		}
 
-		$name = str_replace( 'carbon-fields-container-', 'carbon-fields/', str_replace( '_', '-', $this->id ) );
 		$style = isset( $this->settings[ 'style' ] ) ? $this->settings[ 'style' ] : null;
 		$editor_style = isset( $this->settings[ 'editor_style' ] ) ? $this->settings[ 'editor_style' ] : null;
 		$attributes = array_reduce( $this->get_fields(), function( $attributes, $field ) {
@@ -397,7 +408,7 @@ class Block_Container extends Container {
 			),
 		) );
 
-		register_block_type( $name, array(
+		register_block_type( $this->get_block_type_name(), array(
 			'style' => $style,
 			'editor_style' => $editor_style,
 			'attributes' => $attributes,
