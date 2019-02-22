@@ -61,6 +61,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.1.5",
+    "@wordpress/api-fetch": "^2.2.8",
     "@wordpress/blocks": "^6.0.2",
     "@wordpress/components": "^7.0.3",
     "@wordpress/compose": "^3.0.0",

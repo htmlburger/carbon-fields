@@ -952,6 +952,16 @@
     "@wordpress/i18n" "^3.1.0"
     "@wordpress/url" "^2.3.1"
 
+"@wordpress/api-fetch@^2.2.8":
+  version "2.2.8"
+  resolved "https://registry.yarnpkg.com/@wordpress/api-fetch/-/api-fetch-2.2.8.tgz#be9a586ccb3f5c31201d75a76eabd4b7bc2a16b2"
+  integrity sha512-mbdP9GvDe8Ojv8cobk30mfg2btEZDQEe7IgO+rGSlvVlHC88U8cc2VgOLNX6c9/6/sCvkoGd4Tsy85VbdTlTXw==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    "@wordpress/hooks" "^2.0.5"
+    "@wordpress/i18n" "^3.1.1"
+    "@wordpress/url" "^2.3.3"
+
 "@wordpress/autop@^2.0.2":
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/@wordpress/autop/-/autop-2.0.2.tgz#97d676ec9d85a9e3b2cfd4c3a596114728e6a18e"
@@ -1179,6 +1189,13 @@
   dependencies:
     "@babel/runtime" "^7.0.0"
 
+"@wordpress/hooks@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@wordpress/hooks/-/hooks-2.0.5.tgz#fef43b4c2a107852303a1007cc1fa0f38f93250e"
+  integrity sha512-EcE7lm5p6f3qB6nJClY3LPejFpbjo66b6j4ihgLLgrWMKqs4lLPGS2OzK4KyP0O52cofKj+Tv/wBaAiYSufFcA==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+
 "@wordpress/html-entities@^2.0.3":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@wordpress/html-entities/-/html-entities-2.0.3.tgz#f4dbfccf183952c95ae7e0053f3f918fb1d9439e"
@@ -1188,6 +1205,18 @@
 "@wordpress/i18n@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@wordpress/i18n/-/i18n-3.1.0.tgz#c7115aab16a4f2f91fc7fede02681cb4c7f1b69b"
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    gettext-parser "^1.3.1"
+    lodash "^4.17.10"
+    memize "^1.0.5"
+    sprintf-js "^1.1.1"
+    tannin "^1.0.1"
+
+"@wordpress/i18n@^3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@wordpress/i18n/-/i18n-3.1.1.tgz#0bd0da86701c1be892e0df07f5c9016bdffe80d0"
+  integrity sha512-qZx3GcrIfPG5uOhYjb/Sz0XBT7OMkdFXYa966S8/gxWIkewD5TWV0ROQ9UX6+u7ScbblNdS87irJI0FDQ0lM3Q==
   dependencies:
     "@babel/runtime" "^7.0.0"
     gettext-parser "^1.3.1"
@@ -1269,6 +1298,14 @@
 "@wordpress/url@^2.3.1":
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/@wordpress/url/-/url-2.3.1.tgz#b95e066dae02e22cee333e05f67ed63dbfe4fa33"
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    qs "^6.5.2"
+
+"@wordpress/url@^2.3.3":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@wordpress/url/-/url-2.3.3.tgz#7c3c4149d2360763ed59b17b5e8e1a17065ffbee"
+  integrity sha512-WGqQjOyu02E7bJ77G8385GGjUYpvF8vDqZXXHW06/WRSb4nW6fmMIM65UWdBaYY5XecAkpglCqwd8DNbquLucQ==
   dependencies:
     "@babel/runtime" "^7.0.0"
     qs "^6.5.2"

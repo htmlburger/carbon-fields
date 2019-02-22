@@ -3,11 +3,7 @@
  */
 import cx from 'classnames';
 import { Component, Fragment } from '@wordpress/element';
-import {
-	Toolbar,
-	PanelBody,
-	ServerSideRender
-} from '@wordpress/components';
+import { Toolbar, PanelBody } from '@wordpress/components';
 import {
 	InnerBlocks,
 	BlockControls,
@@ -31,6 +27,7 @@ import { getFieldType } from '@carbon-fields/core';
  */
 import './style.scss';
 import Field from '../field';
+import ServerSideRender from '../server-side-render';
 
 class BlockEdit extends Component {
 	/**
@@ -186,15 +183,14 @@ class BlockEdit extends Component {
 		const { currentTab } = this.state;
 
 		const {
-			name,
+			clientId,
 			container,
-			attributes,
 			supportsTabs,
 			supportsPreview,
 			supportsInnerBlocks
 		} = this.props;
 
-		const innerBlocks = ( supportsInnerBlocks && (
+		const innerBlocks = ( ( supportsInnerBlocks && this.isInEditMode ) && (
 			<div className="cf-block__inner-blocks">
 				<InnerBlocks
 					template={ container.settings.inner_blocks.template }
@@ -265,7 +261,7 @@ class BlockEdit extends Component {
 
 				{ this.isInPreviewMode && (
 					<div className="cf-block__preview">
-						<ServerSideRender block={ name } attributes={ attributes } />
+						<ServerSideRender clientId={ clientId } />
 					</div>
 				) }
 
