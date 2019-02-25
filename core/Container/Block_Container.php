@@ -263,15 +263,15 @@ class Block_Container extends Container {
 	 * Set the position of the inner blocks to be rendered
 	 * above or below the fields.
 	 *
-	 * @param  string $inner_blocks_position
+	 * @param  string $position
 	 * @return Block_Container
 	 */
-	public function set_inner_blocks_position( $inner_blocks_position = 'above' ) {
-		if ( ! in_array( $inner_blocks_position, [ 'above', 'below' ] ) ) {
+	public function set_inner_blocks_position( $position = 'above' ) {
+		if ( ! in_array( $position, [ 'above', 'below' ] ) ) {
 			throw new \Exception( __( "The position of inner blocks must be 'above' or 'below'.", 'crb' ) );
 		}
 
-		$this->settings[ 'inner_blocks' ][ 'position' ] = $inner_blocks_position;
+		$this->settings[ 'inner_blocks' ][ 'position' ] = $position;
 
 		return $this;
 	}
@@ -317,11 +317,11 @@ class Block_Container extends Container {
 	 *
 	 * @see https://github.com/WordPress/gutenberg/tree/master/packages/editor/src/components/inner-blocks#allowedblocks
 	 *
-	 * @param  string[]|null $allowed_inner_blocks
+	 * @param  string[]|null $blocks
 	 * @return Block_Container
 	 */
-	public function set_allowed_inner_blocks( $allowed_inner_blocks = null ) {
-		if ( ! is_array( $allowed_inner_blocks ) && ! is_null( $allowed_inner_blocks ) ) {
+	public function set_allowed_inner_blocks( $blocks = null ) {
+		if ( ! is_array( $blocks ) && ! is_null( $blocks ) ) {
 			throw new \Exception( __( "The allowed blocks must be an 'array' or 'null'.", 'crb' ) );
 		}
 
@@ -329,8 +329,9 @@ class Block_Container extends Container {
 			if ($block instanceof self) {
 				return $block->get_block_type_name();
 			}
+
 			return $block;
-		}, $allowed_inner_blocks);
+		}, $blocks);
 
 		return $this;
 	}
