@@ -11,6 +11,14 @@ class Block_Container extends Container {
 	 */
 	public $settings = array(
 		'preview' => true,
+		'parent' => null,
+		'inner_blocks' => array(
+			'enabled' => false,
+			'position' => 'above',
+			'template' => null,
+			'template_lock' => null,
+			'allowed_blocks' => null,
+		),
 		'category' => array(
 			'slug' => 'common',
 		),
@@ -222,6 +230,117 @@ class Block_Container extends Container {
 	}
 
 	/**
+	 * Set the parent block(s) in which the block type can be inserted.
+	 *
+	 * @see https://wordpress.org/gutenberg/handbook/designers-developers/developers/block-api/block-registration/#parent-optional
+	 *
+	 * @param  string|string[]|null $parent
+	 * @return Block_Container
+	 */
+	public function set_parent( $parent = null ) {
+		if ( ! is_array( $parent ) && ! is_string( $parent ) && ! is_null( $parent ) ) {
+			throw new \Exception( __( "The parent must be 'array', 'string' or 'null'.", 'crb' ) );
+		}
+
+		$this->settings[ 'parent' ] = is_string( $parent ) ? array( $parent ) : $parent;
+
+		return $this;
+	}
+
+	/**
+	 * Set whether the inner blocks are available for the block type.
+	 *
+	 * @param  boolean $inner_blocks
+	 * @return Block_Container
+	 */
+	public function set_inner_blocks( $inner_blocks = true ) {
+		$this->settings[ 'inner_blocks' ][ 'enabled' ] = $inner_blocks;
+
+		return $this;
+	}
+
+	/**
+	 * Set the position of the inner blocks to be rendered
+	 * above or below the fields.
+	 *
+	 * @param  string $position
+	 * @return Block_Container
+	 */
+	public function set_inner_blocks_position( $position = 'above' ) {
+		if ( ! in_array( $position, [ 'above', 'below' ] ) ) {
+			throw new \Exception( __( "The position of inner blocks must be 'above' or 'below'.", 'crb' ) );
+		}
+
+		$this->settings[ 'inner_blocks' ][ 'position' ] = $position;
+
+		return $this;
+	}
+
+	/**
+	 * Set the default template that should be rendered in inner blocks.
+	 *
+	 * @see https://github.com/WordPress/gutenberg/tree/master/packages/editor/src/components/inner-blocks#template
+	 *
+	 * @param  array[]|null $template
+	 * @return Block_Container
+	 */
+	public function set_inner_blocks_template( $template = null ) {
+		if ( ! is_array( $template ) && ! is_null( $template ) ) {
+			throw new \Exception( __( "The template must be an 'array' or 'null'.", 'crb' ) );
+		}
+
+		$this->settings[ 'inner_blocks' ][ 'template' ] = $template;
+
+		return $this;
+	}
+
+	/**
+	 * Set the lock mode used by template of inner blocks.
+	 *
+	 * @see https://github.com/WordPress/gutenberg/tree/master/packages/editor/src/components/inner-blocks#templatelock
+	 *
+	 * @param  string|boolean|null $lock
+	 * @return Block_Container
+	 */
+	public function set_inner_blocks_template_lock( $lock = null ) {
+		if ( is_string( $lock ) && ! in_array( $lock, [ 'all', 'insert' ] ) ) {
+			throw new \Exception( __( "The template lock must be 'all', 'insert', 'false' or 'null'.", 'crb' ) );
+		}
+
+		$this->settings[ 'inner_blocks' ][ 'template_lock' ] = $lock;
+
+		return $this;
+	}
+
+	/**
+	 * Set the list of allowed blocks that can be inserted.
+	 *
+	 * @see https://github.com/WordPress/gutenberg/tree/master/packages/editor/src/components/inner-blocks#allowedblocks
+	 *
+	 * @param  string[]|null $blocks
+	 * @return Block_Container
+	 */
+	public function set_allowed_inner_blocks( $blocks = null ) {
+		if ( ! is_array( $blocks ) && ! is_null( $blocks ) ) {
+			throw new \Exception( __( "The allowed blocks must be an 'array' or 'null'.", 'crb' ) );
+		}
+
+		if ( is_array( $blocks ) ) {
+			$this->settings[ 'inner_blocks' ][ 'allowed_blocks' ] = array_map( function ( $block ) {
+				if ( $block instanceof self ) {
+					return $block->get_block_type_name();
+				}
+
+				return $block;
+			}, $blocks );
+		} else {
+			$this->settings[ 'inner_blocks' ][ 'allowed_blocks' ] = $blocks;
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Set the render callback of the block type.
 	 *
 	 * @see https://wordpress.org/gutenberg/handbook/designers-developers/developers/tutorials/block-tutorial/creating-dynamic-blocks/
@@ -239,14 +358,28 @@ class Block_Container extends Container {
 	 * Render the block type.
 	 *
 	 * @param  array  $attributes
+	 * @param  string $content
 	 * @return string
 	 */
-	public function render_block( $attributes ) {
+	public function render_block( $attributes, $content ) {
+		$fields = $attributes['data'];
+
+		// Unset the "data" property because we
+		// pass it as separate argument to the callback.
+		unset($attributes['data']);
+
 		ob_start();
 
-		call_user_func( $this->render_callback , $attributes[ 'data' ] );
+		call_user_func( $this->render_callback , $fields, $attributes, $content );
 
 		return ob_get_clean();
+	}
+
+	/**
+	 * Returns the block type name, e.g. "carbon-fields/testimonial"
+	 */
+	private function get_block_type_name() {
+		return str_replace( 'carbon-fields-container-', 'carbon-fields/', str_replace( '_', '-', $this->id ) );
 	}
 
 	/**
@@ -263,7 +396,6 @@ class Block_Container extends Container {
 			throw new \Exception( __( "'render_callback' must be a callable.", 'crb' ) );
 		}
 
-		$name = str_replace( 'carbon-fields-container-', 'carbon-fields/', str_replace( '_', '-', $this->id ) );
 		$style = isset( $this->settings[ 'style' ] ) ? $this->settings[ 'style' ] : null;
 		$editor_style = isset( $this->settings[ 'editor_style' ] ) ? $this->settings[ 'editor_style' ] : null;
 		$attributes = array_reduce( $this->get_fields(), function( $attributes, $field ) {
@@ -277,7 +409,7 @@ class Block_Container extends Container {
 			),
 		) );
 
-		register_block_type( $name, array(
+		register_block_type( $this->get_block_type_name(), array(
 			'style' => $style,
 			'editor_style' => $editor_style,
 			'attributes' => $attributes,

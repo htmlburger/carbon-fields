@@ -58,6 +58,13 @@ class Router {
 			'permission_callback' => 'allow_access',
 			'methods'             => 'GET',
 		),
+		'block_renderer' => array(
+			'path'                => '/block-renderer',
+			'callback'            => 'block_renderer',
+			'permission_callback' => 'block_renderer_permission',
+			'methods'             => 'POST',
+			'args'                => 'block_renderer_args_schema',
+		)
 	);
 
 	/**
@@ -177,6 +184,7 @@ class Router {
 			'methods'             => $route['methods'],
 			'permission_callback' => array( $this, $route['permission_callback'] ),
 			'callback'            => array( $this, $route['callback'] ),
+			'args'                => isset( $route['args'] ) ? call_user_func( array( $this, $route['args'] ) ) : array(),
 		) );
 	}
 
@@ -350,5 +358,111 @@ class Router {
 		}
 
 		return new \WP_REST_Response( __( 'Theme Options updated.', 'carbon-fields' ), 200 );
+	}
+
+	/**
+	 * Checks if a given request has access to read blocks.
+	 *
+	 * @see https://github.com/WordPress/WordPress/blob/master/wp-includes/rest-api/endpoints/class-wp-rest-block-renderer-controller.php#L78-L116
+	 *
+	 * @param  WP_REST_Request
+	 * @return true|WP_Error
+	 */
+	public function block_renderer_permission( $request ) {
+		global $post;
+
+		$post_id = isset( $request['post_id'] ) ? intval( $request['post_id'] ) : 0;
+
+		if ( 0 < $post_id ) {
+			$post = get_post( $post_id );
+
+			if ( ! $post || ! current_user_can( 'edit_post', $post->ID ) ) {
+				return new \WP_Error(
+					'block_cannot_read',
+					__( 'Sorry, you are not allowed to read blocks of this post.', 'carbon-fields' ),
+					array(
+						'status' => rest_authorization_required_code(),
+					)
+				);
+			}
+		} else {
+			if ( ! current_user_can( 'edit_posts' ) ) {
+				return new \WP_Error(
+					'block_cannot_read',
+					__( 'Sorry, you are not allowed to read blocks as this user.', 'carbon-fields' ),
+					array(
+						'status' => rest_authorization_required_code(),
+					)
+				);
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Returns the schema of the accepted arguments.
+	 *
+	 * @see https://github.com/WordPress/WordPress/blob/master/wp-includes/rest-api/endpoints/class-wp-rest-block-renderer-controller.php#L56-L71
+	 *
+	 * @return array
+	 */
+	public function block_renderer_args_schema() {
+		return array(
+			'name'       => array(
+				'type'        => 'string',
+				'required'    => true,
+				'description' => __( 'The name of the block.', 'carbon-fields' ),
+			),
+			'content'    => array(
+				'type'        => 'string',
+				'required'    => true,
+				'description' => __( 'The content of the block.', 'carbon-fields' ),
+			),
+			'post_id'    => array(
+				'type'        => 'integer',
+				'description' => __( 'ID of the post context.', 'carbon-fields' ),
+			),
+		);
+	}
+
+	/**
+	 * Returns block output from block's registered render_callback.
+	 *
+	 * @see https://github.com/WordPress/WordPress/blob/master/wp-includes/rest-api/endpoints/class-wp-rest-block-renderer-controller.php#L118-L154
+	 *
+	 * @param  WP_REST_Request $request
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function block_renderer( $request ) {
+		global $post;
+
+		$post_id = isset( $request['post_id'] ) ? intval( $request['post_id'] ) : 0;
+
+		if ( 0 < $post_id ) {
+			$post = get_post( $post_id );
+
+			// Set up postdata since this will be needed if post_id was set.
+			setup_postdata( $post );
+		}
+
+		$registry = \WP_Block_Type_Registry::get_instance();
+		$block    = $registry->get_registered( $request['name'] );
+
+		if ( null === $block ) {
+			return new \WP_Error(
+				'block_invalid',
+				__( 'Invalid block.' ),
+				array(
+					'status' => 404,
+				)
+			);
+		}
+
+		$data = array(
+			'rendered' => do_blocks( $request['content'] ),
+		);
+
+		return rest_ensure_response( $data );
 	}
 }
