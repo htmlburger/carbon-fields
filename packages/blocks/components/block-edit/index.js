@@ -3,12 +3,12 @@
  */
 import cx from 'classnames';
 import { Component, Fragment } from '@wordpress/element';
+import { Toolbar, PanelBody } from '@wordpress/components';
 import {
-	Toolbar,
-	PanelBody,
-	ServerSideRender
-} from '@wordpress/components';
-import { BlockControls, InspectorControls } from '@wordpress/editor';
+	InnerBlocks,
+	BlockControls,
+	InspectorControls
+} from '@wordpress/editor';
 import { withSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import {
@@ -27,6 +27,7 @@ import { getFieldType } from '@carbon-fields/core';
  */
 import './style.scss';
 import Field from '../field';
+import ServerSideRender from '../server-side-render';
 
 class BlockEdit extends Component {
 	/**
@@ -182,15 +183,27 @@ class BlockEdit extends Component {
 		const { currentTab } = this.state;
 
 		const {
-			name,
+			clientId,
 			container,
-			attributes,
 			supportsTabs,
-			supportsPreview
+			supportsPreview,
+			supportsInnerBlocks
 		} = this.props;
+
+		const innerBlocks = ( ( supportsInnerBlocks && this.isInEditMode ) && (
+			<div className="cf-block__inner-blocks">
+				<InnerBlocks
+					template={ container.settings.inner_blocks.template }
+					templateLock={ container.settings.inner_blocks.template_lock }
+					allowedBlocks={ container.settings.inner_blocks.allowed_blocks }
+				/>
+			</div>
+		) );
 
 		return (
 			<Fragment>
+				{ container.settings.inner_blocks.position === 'above' && innerBlocks }
+
 				{ supportsPreview && (
 					<BlockControls>
 						<Toolbar controls={ [ {
@@ -248,9 +261,11 @@ class BlockEdit extends Component {
 
 				{ this.isInPreviewMode && (
 					<div className="cf-block__preview">
-						<ServerSideRender block={ name } attributes={ attributes } />
+						<ServerSideRender clientId={ clientId } />
 					</div>
 				) }
+
+				{ container.settings.inner_blocks.position === 'below' && innerBlocks }
 
 				{ this.isInPreviewMode && (
 					<InspectorControls>
@@ -280,17 +295,21 @@ class BlockEdit extends Component {
 	}
 }
 
-export default withSelect( ( select, { name } ) => {
+export default withSelect( ( select, { clientId, name } ) => {
 	const { hasBlockSupport } = select( 'core/blocks' );
+	const { getBlockRootClientId } = select( 'core/editor' );
 	const {
 		getContainerDefinitionByBlockName,
 		getFieldDefinitionsByBlockName
 	} = select( 'carbon-fields/blocks' );
 
+	const rootClientId = getBlockRootClientId( clientId );
+
 	return {
 		container: getContainerDefinitionByBlockName( name ),
 		fields: getFieldDefinitionsByBlockName( name ),
 		supportsTabs: hasBlockSupport( name, 'tabs' ),
-		supportsPreview: hasBlockSupport( name, 'preview' )
+		supportsPreview: hasBlockSupport( name, 'preview' ) && ! rootClientId,
+		supportsInnerBlocks: hasBlockSupport( name, 'innerBlocks' )
 	};
 } )( BlockEdit );
