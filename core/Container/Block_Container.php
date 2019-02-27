@@ -325,13 +325,17 @@ class Block_Container extends Container {
 			throw new \Exception( __( "The allowed blocks must be an 'array' or 'null'.", 'crb' ) );
 		}
 
-		$this->settings[ 'inner_blocks' ][ 'allowed_blocks' ] = array_map(function ($block) {
-			if ($block instanceof self) {
-				return $block->get_block_type_name();
-			}
+		if ( is_array( $blocks ) ) {
+			$this->settings[ 'inner_blocks' ][ 'allowed_blocks' ] = array_map( function ( $block ) {
+				if ( $block instanceof self ) {
+					return $block->get_block_type_name();
+				}
 
-			return $block;
-		}, $blocks);
+				return $block;
+			}, $blocks );
+		} else {
+			$this->settings[ 'inner_blocks' ][ 'allowed_blocks' ] = $blocks;
+		}
 
 		return $this;
 	}
