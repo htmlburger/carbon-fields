@@ -1,0 +1,223 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"X-Generator: Poedit 2.2.1\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Language: ru\n"
+
+#: packages/blocks/components/block-edit/index.js:201
+msgid "Show preview"
+msgstr "Предварительный просмотр"
+
+#: packages/blocks/components/block-edit/index.js:202
+msgid "Hide preview"
+msgstr "Скрыть предварительный просмотр"
+
+#: packages/blocks/components/block-edit/index.js:271
+msgid "Fields"
+msgstr "Поля"
+
+#: packages/blocks/components/not-supported-field/index.js:14
+msgid "Field of type '%s' is not supported in Gutenberg."
+msgstr "Поле типа '%s' не поддерживается в Gutenberg."
+
+#: packages/blocks/fields/datetime/index.js:59
+#: packages/core/fields/date/index.js:15
+#: packages/metaboxes/fields/datetime/index.js:9
+msgid "Select Date"
+msgstr "Выбрать Дату"
+
+#: packages/blocks/fields/file/index.js:16
+#: packages/metaboxes/fields/file/index.js:11
+msgid "Use File"
+msgstr "Выбрать"
+
+#: packages/blocks/fields/file/index.js:17
+#: packages/metaboxes/fields/file/index.js:12
+msgid "Select File"
+msgstr "Выбрать файл"
+
+#: packages/blocks/fields/image/index.js:11
+#: packages/metaboxes/fields/image/index.js:11
+msgid "Use Image"
+msgstr "Выбрать"
+
+#: packages/blocks/fields/image/index.js:12
+#: packages/metaboxes/fields/image/index.js:12
+msgid "Select Image"
+msgstr "Выбрать Изображение"
+
+#: packages/blocks/fields/media-gallery/index.js:16
+#: packages/metaboxes/fields/media-gallery/index.js:16
+msgid "Use Attachments"
+msgstr "Выбрать"
+
+#: packages/blocks/fields/media-gallery/index.js:17
+#: packages/metaboxes/fields/media-gallery/index.js:17
+msgid "Select Attachments"
+msgstr "Выбрать Файлы"
+
+#: packages/core/components/no-options/index.js:14
+msgid "No options."
+msgstr "Нет опций."
+
+#: packages/core/components/search-input/index.js:30
+msgid "Search..."
+msgstr "Поиск..."
+
+#: packages/core/fields/association/index.js:113
+msgid "Maximum number of items reached (%s items)"
+msgstr "Достигнуто максимальное число элементов (%s элементов)"
+
+#: packages/core/fields/association/index.js:204
+msgid "Showing %1$d of %2$d results"
+msgstr "Показаны %1$d из %2$d результатов"
+
+#: packages/core/fields/association/index.js:380
+msgid "An error occurred while trying to fetch association options."
+msgstr "Произошла ошибка при попытке получить параметры ассоциации."
+
+#: packages/core/fields/association/index.js:430
+#: packages/core/fields/complex/index.js:428
+#: packages/core/hocs/with-validation/required.js:20
+msgid "This field is required."
+msgstr "Обязательное поле."
+
+#: packages/core/fields/association/index.js:434
+msgid "Minimum number of items not reached (%s items)"
+msgstr "Минимальное количество элементов не достигнуто (%s)"
+
+#: packages/core/fields/color/index.js:86
+msgid "Select a color"
+msgstr "Выбрать цвет"
+
+#: packages/core/fields/complex/group.js:154
+msgid "Duplicate"
+msgstr "Дублировать"
+
+#: packages/core/fields/complex/group.js:163
+msgid "Remove"
+msgstr "Удалить"
+
+#: packages/core/fields/complex/group.js:172
+msgid "Collapse"
+msgstr "Свернуть"
+
+#: packages/core/fields/complex/index.js:146
+msgid "Couldn't create the label of group - %s"
+msgstr "Не удалось создать метку группы - %s"
+
+#: packages/core/fields/complex/index.js:401
+msgid "Expand All"
+msgstr "Развернуть все"
+
+#: packages/core/fields/complex/index.js:401
+msgid "Collapse All"
+msgstr "Свернуть все"
+
+#: packages/core/fields/complex/index.js:435
+msgid "Minimum number of rows not reached (%1$d %2$s)"
+msgstr "Минимальное количество строк не достигнуто (%1$d %2$s)"
+
+#: packages/core/fields/complex/index.js:82
+msgid "Add %s"
+msgstr "Добавить %s"
+
+#: packages/core/fields/map/index.js:165
+msgid "The address could not be found."
+msgstr "Адрес не найден."
+
+#: packages/core/fields/map/index.js:167
+msgid "Geocode was not successful for the following reason: "
+msgstr "Запрос геокодера завершился ошибкой: "
+
+#: packages/core/fields/map/index.js:185
+msgid "Error alert"
+msgstr "Предупреждение об ошибке"
+
+#: packages/core/fields/oembed/index.js:188
+msgid "An error occurred while trying to fetch oembed preview."
+msgstr "Произошла ошибка при попытке получить предварительный просмотр oembed."
+
+#: packages/core/fields/oembed/index.js:203
+msgid "Not Found"
+msgstr "Не найдено"
+
+#: packages/core/fields/rich-text/index.js:103
+msgid "Text"
+msgstr "Текст"
+
+#: packages/core/fields/rich-text/index.js:99
+msgid "Visual"
+msgstr "Визуальный"
+
+#: packages/core/fields/sidebar/index.js:110
+msgid "Please enter the name of the new sidebar:"
+msgstr "Пожалуйста, введите название для сайдбара:"
+
+#: packages/core/fields/sidebar/index.js:128
+msgid "An error occurred while trying to create the sidebar."
+msgstr "Произошла ошибка при попытке создать боковую панель."
+
+#: packages/core/fields/sidebar/index.js:58
+msgid "Please choose"
+msgstr "Пожалуйста, выберите"
+
+#: packages/core/fields/time/index.js:16
+msgid "Select Time"
+msgstr "Выбрать время"
+
+#: packages/core/hocs/with-conditional-logic/index.js:62
+msgid "An unknown field is used in condition - \"%s\""
+msgstr "Неизвестное поле используется в условии - \"%s\""
+
+#: packages/core/registry/index.js:40
+msgid "%1$s type must be a string."
+msgstr "%1$s тип должен быть строкой."
+
+#: packages/core/registry/index.js:46
+msgid "%1$s %2$s is already registered."
+msgstr "%1$s %2$s уже зарегистрирован."
+
+#: packages/core/registry/index.js:54
+msgid "The \"component\" param must be a function."
+msgstr "Параметр \"component\" должен быть функцией."
+
+#: packages/core/registry/index.js:79
+msgid "The provided context isn't a valid one. Must be one of - %s ."
+msgstr "Этот контекст не является допустимым. Должно быть один из - %s ."
+
+#: packages/core/registry/index.js:89
+msgid "%s %s isn't registered."
+msgstr "%s %s не зарегистрирован."
+
+#: packages/core/utils/api-fetch.js:19
+msgid "An error occured."
+msgstr "Произошла ошибка."
+
+#: packages/core/utils/fetch-attachments-data.js:23
+msgid "An error occurred while trying to fetch files data."
+msgstr "Произошла ошибка при попытке получить данные файлов."
+
+#: packages/metaboxes/containers/index.js:52
+msgid "Could not find DOM element for container \"%1$s\"."
+msgstr "Не удалось найти элемент DOM для контейнера \"%1$s\"."
+
+#: packages/metaboxes/monitors/conditional-display/conditions/base.js:52
+msgid "Unsupported container condition comparison operator used - \"%1$s\"."
+msgstr "Используется неподдерживаемый оператор сравнения условий контейнера - \"%1$s\"."
+
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:55
+msgid "Unsupported container condition - \"%1$s\"."
+msgstr "Неподдерживаемое условие контейнера - \"%1$s\"."
+
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:73
+msgid "Unsupported container condition relation used - \"%1$s\"."
+msgstr "Используется неподдерживаемое отношение условий контейнера - \"%1$s\"."
