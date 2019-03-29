@@ -57,12 +57,10 @@ class AssociationField extends Component {
 	 */
 	componentDidMount() {
 		const {
-			fetchOptions,
 			fetchSelectedOptions,
 			field,
 			value,
-			setState,
-			queryTerm
+			setState
 		} = this.props;
 
 		setState( {
@@ -74,20 +72,46 @@ class AssociationField extends Component {
 			fetchSelectedOptions();
 		}
 
-		this.sourceList.current.onscroll = () => {
-			if ( this.sourceList.current.offsetHeight + this.sourceList.current.scrollTop === this.sourceList.current.scrollHeight ) {
-				setState( {
-					page: this.props.page + 1
-				} );
+		this.sourceList.current.addEventListener( 'scroll', this.handleSourceListScroll );
+	}
 
-				fetchOptions( {
-					type: 'append',
-					options: this.props.options,
-					queryTerm,
-					page: this.props.page
-				} );
-			}
-		};
+	/**
+	 * Lifecycle hook.
+	 *
+	 * @return {void}
+	 */
+	componentWillUnmount() {
+		this.sourceList.current.removeEventListener( 'scroll', this.handleSourceListScroll );
+	}
+
+	/**
+	 * Handles the scroll event of the source list.
+	 *
+	 * @return {void}
+	 */
+	handleSourceListScroll = () => {
+		const {
+			fetchOptions,
+			setState,
+			options,
+			page,
+			queryTerm
+		} = this.props;
+
+		const sourceList = this.sourceList.current;
+
+		if ( sourceList.offsetHeight + sourceList.scrollTop === sourceList.scrollHeight ) {
+			setState( {
+				page: page + 1
+			} );
+
+			fetchOptions( {
+				type: 'append',
+				options: options,
+				queryTerm,
+				page: page
+			} );
+		}
 	}
 
 	/**
