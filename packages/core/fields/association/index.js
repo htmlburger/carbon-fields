@@ -18,7 +18,6 @@ import {
 	without,
 	isMatch,
 	isEmpty
-
 } from 'lodash';
 import {
 	combine,
@@ -399,7 +398,7 @@ function handler( props ) {
 					'get',
 					{
 						container_id: props.containerId,
-						options: props.value,
+						options: props.value.map( ( option ) => `${ option.id }:${ option.type }:${ option.subtype }` ).join( ';' ),
 						field_id: hierarchyResolver()
 					}
 				)
