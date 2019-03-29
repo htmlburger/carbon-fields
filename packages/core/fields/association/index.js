@@ -44,6 +44,13 @@ class AssociationField extends Component {
 	selectedList = createRef();
 
 	/**
+	 * Keeps reference to the DOM bnode that contains the options.
+	 *
+	 * @type {Object}
+	 */
+	sourceList = createRef();
+
+	/**
 	 * Lifecycle hook.
 	 *
 	 * @return {void}
@@ -64,6 +71,47 @@ class AssociationField extends Component {
 		if ( value ) {
 			fetchSelectedOptions();
 		}
+
+		this.sourceList.current.addEventListener( 'scroll', this.handleSourceListScroll );
+	}
+
+	/**
+	 * Lifecycle hook.
+	 *
+	 * @return {void}
+	 */
+	componentWillUnmount() {
+		this.sourceList.current.removeEventListener( 'scroll', this.handleSourceListScroll );
+	}
+
+	/**
+	 * Handles the scroll event of the source list.
+	 *
+	 * @return {void}
+	 */
+	handleSourceListScroll = () => {
+		const {
+			fetchOptions,
+			setState,
+			options,
+			page,
+			queryTerm
+		} = this.props;
+
+		const sourceList = this.sourceList.current;
+
+		if ( sourceList.offsetHeight + sourceList.scrollTop === sourceList.scrollHeight ) {
+			setState( {
+				page: page + 1
+			} );
+
+			fetchOptions( {
+				type: 'append',
+				options: options,
+				queryTerm,
+				page: page + 1
+			} );
+		}
 	}
 
 	/**
@@ -78,8 +126,16 @@ class AssociationField extends Component {
 			setState
 		} = this.props;
 
-		setState( { queryTerm } );
-		fetchOptions( { queryTerm } );
+		setState( {
+			page: 1,
+			queryTerm
+		} );
+
+		fetchOptions( {
+			type: 'replace',
+			page: 1,
+			queryTerm
+		} );
 	}
 
 	/**
@@ -208,7 +264,7 @@ class AssociationField extends Component {
 				</div>
 
 				<div className="cf-association__cols">
-					<div className="cf-association__col">
+					<div className="cf-association__col" ref={ this.sourceList }>
 						{
 							options.map( ( option, index ) => {
 								return (
@@ -373,6 +429,7 @@ function handler( props ) {
 				const request = window.jQuery.get( window.ajaxurl, {
 					action: 'carbon_fields_fetch_association_options',
 					term: payload.queryTerm,
+					page: payload.page || 1,
 					container_id: props.containerId,
 					field_name: hierarchyResolver()
 				}, null, 'json' );
@@ -383,7 +440,7 @@ function handler( props ) {
 				request.done( ( response ) => {
 					if ( response && response.success ) {
 						setState( {
-							options: response.data.options,
+							options: payload.type === 'replace' ? response.data.options : [ ...payload.options, ...response.data.options ],
 							totalOptionsCount: response.data.total_options
 						} );
 					} else {
@@ -419,7 +476,8 @@ const applyWithState = withState( {
 	options: [],
 	selectedOptions: [],
 	totalOptionsCount: 0,
-	queryTerm: ''
+	queryTerm: '',
+	page: 1
 } );
 
 const applyWithEffects = withEffects( aperture, { handler } );
