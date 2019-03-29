@@ -109,7 +109,7 @@ class AssociationField extends Component {
 				type: 'append',
 				options: options,
 				queryTerm,
-				page: page
+				page: page + 1
 			} );
 		}
 	}
