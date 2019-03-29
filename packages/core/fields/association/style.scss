@@ -5,17 +5,33 @@
 .cf-association__bar {
 	position: relative;
 	z-index: 1;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-direction: row;
+
+	.cf-search-input {
+		flex: 1 1 auto;
+	}
+
+	.cf-search-input__inner {
+		border-bottom: 0;
+	}
 }
 
 .cf-association__counter {
-	position: absolute;
-	top: 50%;
-	right: 8px;
 	font-size: 12px;
-	line-height: 1;
 	color: $wp-color-dark-gray;
-	transform: translateY(-50%);
 	pointer-events: none;
+	margin-right: 25px;
+	margin-left: 10px;
+}
+
+.cf-association__spinner {
+	float: none;
+	position: absolute;
+	right: 0;
+	margin: 0;
 }
 
 .cf-association__cols {
@@ -23,7 +39,7 @@
 	position: relative;
 	z-index: 0;
 	display: flex;
-	border-width: 0 1px 1px;
+	border-width: 1px;
 	border-style: solid;
 	border-color: $wp-color-gray-light-500;
 

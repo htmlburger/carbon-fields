@@ -227,7 +227,8 @@ class AssociationField extends Component {
 			field,
 			totalOptionsCount,
 			selectedOptions,
-			queryTerm
+			queryTerm,
+			isLoading
 		} = this.props;
 
 		let { options } = this.props;
@@ -261,6 +262,12 @@ class AssociationField extends Component {
 							Number( totalOptionsCount )
 						) }
 					</span>
+
+					{
+						isLoading
+							? <span className="cf-association__spinner spinner is-active"></span>
+							: ''
+					}
 				</div>
 
 				<div className="cf-association__cols">
@@ -423,6 +430,10 @@ function handler( props ) {
 
 		switch ( type ) {
 			case 'FETCH_OPTIONS':
+				setState( {
+					isLoading: true
+				} );
+
 				// eslint-disable-next-line
 				const request = window.jQuery.get( window.ajaxurl, {
 					action: 'carbon_fields_fetch_association_options',
@@ -447,6 +458,11 @@ function handler( props ) {
 				} );
 
 				request.fail( errorHandler );
+				request.always( () => {
+					setState( {
+						isLoading: false
+					} );
+				} );
 				break;
 
 			case 'FETCH_SELECTED_OPTIONS':
@@ -475,7 +491,8 @@ const applyWithState = withState( {
 	selectedOptions: [],
 	totalOptionsCount: 0,
 	queryTerm: '',
-	page: 1
+	page: 1,
+	isLoading: true
 } );
 
 const applyWithEffects = withEffects( aperture, { handler } );
