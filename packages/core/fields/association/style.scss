@@ -99,17 +99,27 @@
 }
 
 .cf-association__option-title {
-	overflow: hidden;
-	font-size: $wp-font-size;
-	line-height: $wp-line-height;
-	color: $wp-color-base-gray;
-	white-space: nowrap;
-	text-overflow: ellipsis;
+	flex: 1;
+	position: relative;
 	margin-right: $size-base;
 
 	.cf-association__option--selected & {
 		color: $wp-color-dark-silver-gray;
 	}
+}
+
+.cf-association__option-title-inner {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	font-size: $wp-font-size;
+	line-height: $wp-line-height;
+	color: $wp-color-base-gray;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	transform: translateY(-50%);
 }
 
 .cf-association__option-type {
