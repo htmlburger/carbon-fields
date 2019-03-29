@@ -1,7 +1,6 @@
 /**
  * External dependencies.
  */
-import { unmountComponentAtNode } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import { get, map } from 'lodash';
 
@@ -96,22 +95,25 @@ export default function handler( { containers, context } ) {
 		results.forEach( ( [ id, result ] ) => {
 			const postboxNode = document.getElementById( id );
 			const containerNode = document.querySelector( `.container-${ id }` );
+			const isMounted = !! containerNode.dataset.mounted;
 
 			if ( postboxNode ) {
 				postboxNode.hidden = ! result;
 			}
 
 			if ( containerNode ) {
-				if ( result && ! containerNode.dataset.mounted ) {
-					containerNode.dataset.mounted = true;
-
+				if ( result && ! isMounted ) {
 					renderContainer( containers[ id ], context );
 				}
 
-				if ( ! result && containerNode.dataset.mounted ) {
+				if ( ! result && isMounted ) {
 					delete containerNode.dataset.mounted;
 
-					unmountComponentAtNode( containerNode );
+					// Rely on React's internals instead of `unmountComponentAtNode`
+					// due to https://github.com/facebook/react/issues/13690.
+					// TODO: Conditionally render the fields in the container, this way
+					// we can move away from mount/unmount cycles.
+					containerNode._reactRootContainer.unmount();
 				}
 			}
 		} );
