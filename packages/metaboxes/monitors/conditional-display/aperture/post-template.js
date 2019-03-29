@@ -35,8 +35,15 @@ const INITIAL_STATE = {
  * @return {Object}
  */
 function getPostTemplateFromSelect( node ) {
+	let { value } = node;
+
+	// In Gutenberg for the "Default" template is used an empty string.
+	if ( value === 'default' ) {
+		value = '';
+	}
+
 	return {
-		post_template: node.value
+		post_template: value
 	};
 }
 
