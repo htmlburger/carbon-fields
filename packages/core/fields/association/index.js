@@ -255,6 +255,12 @@ class AssociationField extends Component {
 						onChange={ this.handleSearchChange }
 					/>
 
+					{
+						isLoading
+							? <span className="cf-association__spinner spinner is-active"></span>
+							: ''
+					}
+
 					<span className="cf-association__counter">
 						{ sprintf(
 							__( 'Showing %1$d of %2$d results', 'carbon-fields-ui' ),
@@ -262,12 +268,6 @@ class AssociationField extends Component {
 							Number( totalOptionsCount )
 						) }
 					</span>
-
-					{
-						isLoading
-							? <span className="cf-association__spinner spinner is-active"></span>
-							: ''
-					}
 				</div>
 
 				<div className="cf-association__cols">
@@ -494,7 +494,7 @@ const applyWithState = withState( {
 	totalOptionsCount: 0,
 	queryTerm: '',
 	page: 1,
-	isLoading: true
+	isLoading: false
 } );
 
 const applyWithEffects = withEffects( aperture, { handler } );
