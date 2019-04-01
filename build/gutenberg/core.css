@@ -24,25 +24,51 @@
    ========================================================================== */
 .cf-association__bar {
   position: relative;
-  z-index: 1; }
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  border-color: #e2e4e7;
+  border-style: solid;
+  border-width: 1px 1px 0;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07); }
+  .cf-association__bar .cf-search-input {
+    flex: 1 1 auto; }
+  .cf-association__bar .cf-search-input__inner {
+    border: 0;
+    box-shadow: none; }
+    .cf-association__bar .cf-search-input__inner:focus {
+      border-color: none;
+      box-shadow: none;
+      outline: none; }
+  .cf-association__bar[focus-within] {
+    border-color: #5b9dd9;
+    box-shadow: 0 0 2px rgba(30, 140, 190, 0.8);
+    outline: 2px solid transparent; }
+  .cf-association__bar:focus-within {
+    border-color: #5b9dd9;
+    box-shadow: 0 0 2px rgba(30, 140, 190, 0.8);
+    outline: 2px solid transparent; }
 
 .cf-association__counter {
-  position: absolute;
-  top: 50%;
-  right: 8px;
   font-size: 12px;
-  line-height: 1;
   color: #23282d;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
-  pointer-events: none; }
+  pointer-events: none;
+  margin-right: 5px;
+  margin-left: 5px; }
+
+.cf-association__spinner {
+  float: none;
+  margin: 0;
+  margin-left: 5px; }
 
 .cf-association__cols {
   background: #fff;
   position: relative;
   z-index: 0;
   display: flex;
-  border-width: 0 1px 1px;
+  border-width: 1px;
   border-style: solid;
   border-color: #e2e4e7; }
   .cf-association__cols::before {
@@ -89,15 +115,25 @@
   margin-right: 8px; }
 
 .cf-association__option-title {
-  overflow: hidden;
-  font-size: 13px;
-  line-height: 1.4;
-  color: #32373c;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  flex: 1;
+  position: relative;
   margin-right: 4px; }
   .cf-association__option--selected .cf-association__option-title {
     color: #82878c; }
+
+.cf-association__option-title-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #32373c;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%); }
 
 .cf-association__option-type {
   font-size: 9px;
