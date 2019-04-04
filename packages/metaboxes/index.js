@@ -14,6 +14,11 @@ import initializeContainers from './containers';
 import isGutenberg from './utils/is-gutenberg';
 
 /**
+ * Public API.
+ */
+export { registerContainerType, getContainerType } from './containers/registry';
+
+/**
  * Sets the locale data for the package type
  */
 setLocaleData( window.cf.config.locale, 'carbon-fields-ui' );

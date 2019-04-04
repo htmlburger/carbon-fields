@@ -45,7 +45,10 @@ export function renderContainer( container, context ) {
 	if ( node ) {
 		render(
 			<Component id={ container.id } />,
-			node
+			node,
+			() => {
+				node.dataset.mounted = true;
+			}
 		);
 	} else {
 		// eslint-disable-next-line no-console
