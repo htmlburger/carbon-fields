@@ -28,6 +28,31 @@ function findFieldByName( fields, name ) {
 	} );
 }
 
+/**
+ * Returns a field with the given ID
+ *
+ * @param {Object[]} fields
+ * @param {string} id
+ * @return {?Object}
+ */
+function findFieldByID( fields, id ) {
+	return find( fields, ( field ) => {
+		return field.id === id;
+	} );
+}
+
+/**
+ * Return nested fields by accessor string
+ * @param {Object[]} fields
+ * @param {string} accessor
+ * @return {?Object}
+ */
+function findNestedFieldsByAccessor( fields, accessor ) {
+	let whichChild = accessor.match( /value\.(\d)\./ );
+	whichChild = parseInt( whichChild[ 1 ], 10 );
+	return fields[ whichChild ].fields;
+}
+
 addFilter( 'carbon-fields.association.metabox', 'carbon-fields/metaboxes', withProps( ( props ) => {
 	return {
 		hierarchyResolver() {
@@ -64,7 +89,14 @@ addFilter( 'carbon-fields.association.metabox', 'carbon-fields/metaboxes', withP
 				}
 
 				if ( isNestedComplex ) {
-					const field = findFieldByName( fields, chunk );
+					const nestedFields = findNestedFieldsByAccessor( rootField.value, accessor );
+					let field = findFieldByName( nestedFields, chunk );
+
+					if ( field ) {
+						field = findFieldByID( fields, field.id );
+					} else {
+						field = findFieldByName( fields, chunk );
+					}
 
 					accessor = fields.indexOf( field );
 					hierarchy = `${ hierarchy }${ field.base_name }`;
