@@ -68,7 +68,7 @@ class AssociationField extends Component {
 			totalOptionsCount: field.options.total_options
 		} );
 
-		if ( value ) {
+		if ( value.length ) {
 			fetchSelectedOptions();
 		}
 
