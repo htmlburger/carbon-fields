@@ -302,15 +302,20 @@ class Router {
 		$options = array_map( function ( $option ) {
 			$option = explode( ':', $option );
 
-			return [
+			$res = [
 				'id'      => $option[0],
 				'type'    => $option[1],
 				'subtype' => $option[2],
 			];
+			if ( ! empty( $option[3] ) ) {
+				$res['taxTerm'] = intval( $option[3] );
+			}
+			return $res;
 		}, $options );
 
 		foreach ( $options as $option ) {
 			$item = array(
+				'taxTerm'    => ! empty( $option['taxTerm'] ) ? $option['taxTerm'] : 0,
 				'type'       => $option['type'],
 				'subtype'    => $option['subtype'],
 				'thumbnail'  => $field->get_thumbnail_by_type( $option['id'], $option['type'], $option['subtype'] ),
