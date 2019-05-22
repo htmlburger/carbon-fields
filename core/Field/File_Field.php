@@ -23,6 +23,7 @@ class File_Field extends Field {
 	 * Change the type of the field
 	 *
 	 * @param string $type
+	 * @return File_Field
 	 */
 	public function set_type( $type ) {
 		$this->field_type = $type;
@@ -33,6 +34,7 @@ class File_Field extends Field {
 	 * Change the value type of the field.
 	 *
 	 * @param string $value_type
+	 * @return File_Field
 	 */
 	public function set_value_type( $value_type ) {
 		$this->value_type = $value_type;

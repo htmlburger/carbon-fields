@@ -77,7 +77,7 @@ class Widget_Datastore extends Key_Value_Datastore {
 	 */
 	public function delete( Field $field ) {
 		$storage_key_patterns = $this->key_toolset->get_storage_key_deleter_patterns(
-			is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ),
+			( $field instanceof \Carbon_Fields\Field\Complex_Field ),
 			$field->is_simple_root_field(),
 			$this->get_full_hierarchy_for_field( $field ),
 			$this->get_full_hierarchy_index_for_field( $field )

@@ -119,6 +119,7 @@ class Complex_Field extends Field {
 	/**
 	 * Set array of hierarchy field names
 	 *
+	 * @param array $hierarchy
 	 * @return self  $this
 	 */
 	public function set_hierarchy( $hierarchy ) {
@@ -230,6 +231,7 @@ class Complex_Field extends Field {
 
 		$reserved_names = array( Value_Set::VALUE_PROPERTY, static::TYPE_PROPERTY );
 		foreach ( $fields as $field ) {
+			/** @var \Carbon_Fields\Field\Field $field */
 			if ( in_array( $field->get_base_name(), $reserved_names ) ) {
 				Incorrect_Syntax_Exception::raise( '"' . $field->get_base_name() . '" is a reserved keyword for Complex fields and cannot be used for a field name.' );
 				return $this;
@@ -303,6 +305,7 @@ class Complex_Field extends Field {
 	 *  - plural_name - the plural entries label
 	 *
 	 * @param  array $labels Labels
+	 * @return Complex_Field
 	 */
 	public function setup_labels( $labels ) {
 		$this->labels = array_merge( $this->labels, $labels );
@@ -392,7 +395,7 @@ class Complex_Field extends Field {
 				$tmp_field = $this->get_clone_under_field_in_hierarchy( $field, $this, $input_group_index );
 
 				$tmp_field->set_value_from_input( $values );
-				if ( is_a( $tmp_field, get_class() ) ) {
+				if ( $tmp_field instanceof Complex_Field ) {
 					$value_group[ $tmp_field->get_base_name() ] = $tmp_field->get_value_tree();
 				} else {
 					$value_group[ $tmp_field->get_base_name() ] = $tmp_field->get_full_value();
@@ -424,7 +427,7 @@ class Complex_Field extends Field {
 			$field_groups = $this->get_prefilled_groups( $this->get_value(), $this->get_value_tree() );
 			foreach ( $field_groups as $group_index => $fields ) {
 				foreach ( $fields as $field ) {
-					if ( ! is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
+					if ( ! ( $field instanceof Field ) ) {
 						continue;
 					}
 					$field->save();
@@ -443,7 +446,7 @@ class Complex_Field extends Field {
 		foreach ( $field_groups as $group_index => $field_group ) {
 			$value[ $group_index ] = array();
 			foreach ( $field_group as $key => $field ) {
-				if ( is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
+				if ( $field instanceof Field ) {
 					$value[ $group_index ][ $field->get_base_name() ] = $field->get_formatted_value();
 				} else {
 					if ( $key === Value_Set::VALUE_PROPERTY ) {
@@ -517,6 +520,7 @@ class Complex_Field extends Field {
 	 * Set the full value tree of all groups and their fields
 	 *
 	 * @see    Internal Glossary in DEVELOPMENT.MD
+	 * @param array $value_tree
 	 * @return self     $this
 	 */
 	public function set_value_tree( $value_tree ) {
@@ -556,7 +560,7 @@ class Complex_Field extends Field {
 			);
 
 			foreach ( $fields as $field ) {
-				if ( ! is_a( $field, __NAMESPACE__ . '\\Field' ) ) {
+				if ( ! ( $field instanceof Field ) ) {
 					continue;
 				}
 				$data['fields'][] = $field->to_json( false );

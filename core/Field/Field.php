@@ -335,6 +335,7 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Set array of hierarchy field names
 	 *
+	 * @param array $hierarchy
 	 * @return self  $this
 	 */
 	public function set_hierarchy( $hierarchy ) {

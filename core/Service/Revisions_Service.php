@@ -17,12 +17,12 @@ class Revisions_Service extends Service {
 	}
 
 	protected function disabled() {
-		remove_filter( 'carbon_get_post_meta_post_id', array( $this, 'update_post_id_on_preview' ), 10, 3 );
-		remove_action( 'carbon_fields_post_meta_container_saved', array( $this, 'maybe_copy_meta_to_revision' ), 10, 2 );
-		remove_filter('_wp_post_revision_fields', array( $this, 'maybe_save_revision' ), 10, 2 );
-		remove_filter('_wp_post_revision_fields', array( $this, 'add_fields_to_revision' ), 10, 2 );
-		remove_action( 'wp_restore_post_revision', array( $this, 'restore_post_revision' ), 10, 2 );
-		remove_filter( 'wp_save_post_revision_check_for_changes', array( $this, 'check_for_changes' ), 10, 3 );
+		remove_filter( 'carbon_get_post_meta_post_id', array( $this, 'update_post_id_on_preview' ), 10 );
+		remove_action( 'carbon_fields_post_meta_container_saved', array( $this, 'maybe_copy_meta_to_revision' ), 10 );
+		remove_filter('_wp_post_revision_fields', array( $this, 'maybe_save_revision' ), 10 );
+		remove_filter('_wp_post_revision_fields', array( $this, 'add_fields_to_revision' ), 10 );
+		remove_action( 'wp_restore_post_revision', array( $this, 'restore_post_revision' ), 10 );
+		remove_filter( 'wp_save_post_revision_check_for_changes', array( $this, 'check_for_changes' ), 10 );
 	}
 
 	public function check_for_changes( $return, $last_revision, $post ) {
@@ -61,6 +61,10 @@ class Revisions_Service extends Service {
 		return $revision->ID;
 	}
 
+	/**
+	 * @param int $post_id
+	 * @param \Carbon_Fields\Container\Post_Meta_Container $container
+	 */
 	public function maybe_copy_meta_to_revision( $post_id, $container ) {
 		if ( ! $container || $container->get_revisions_disabled() ) {
 			return;
@@ -128,6 +132,14 @@ class Revisions_Service extends Service {
 		return $fields;
 	}
 
+	/**
+	 * @param mixed $value
+	 * @param string $field_name
+	 * @param \WP_Post $post
+	 * @param bool $direction
+	 *
+	 * @return int|mixed
+	 */
 	public function update_revision_field_value( $value, $field_name, $post = null, $direction = false ) {
 		if ( empty( $post ) ) {
 			return $value;
@@ -153,10 +165,12 @@ class Revisions_Service extends Service {
 		$repository = Carbon_Fields::resolve( 'container_repository' );
 		$containers = $repository->get_containers( 'post_meta' );
 		$containers = array_filter( $containers, function( $container ) {
+			/** @var \Carbon_Fields\Container\Post_Meta_Container $container */
 			return !$container->get_revisions_disabled();
 		} );
 		$fields = array();
 		foreach ( $containers as $container ) {
+			/** @var \Carbon_Fields\Container\Post_Meta_Container $container */
 			foreach ( $container->get_fields() as $field ) {
 				$fields[ $field->get_name() ] = $field->get_label();
 			}
@@ -192,11 +206,13 @@ class Revisions_Service extends Service {
 	    $repository = Carbon_Fields::resolve( 'container_repository' );
 	    $containers = $repository->get_containers( 'post_meta' );
 	    $containers = array_filter( $containers, function( $container ) {
+		    /** @var \Carbon_Fields\Container\Post_Meta_Container $container */
 	        return !$container->get_revisions_disabled();
 	    } );
 
 	    $field_keys = array();
 	    foreach ( $containers as $container ) {
+		    /** @var \Carbon_Fields\Container\Post_Meta_Container $container */
 	        foreach ( $container->get_fields() as $field ) {
 	            $field_keys[] = $field->get_name();
 	        }

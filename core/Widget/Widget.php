@@ -3,7 +3,6 @@
 namespace Carbon_Fields\Widget;
 
 use Carbon_Fields\Helper\Helper;
-use Carbon_Fields\Field\Field;
 use Carbon_Fields\Container\Container;
 use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
@@ -17,7 +16,7 @@ abstract class Widget extends \WP_Widget {
 	/**
 	 * Widget Datastore
 	 *
-	 * @var Widget_Datastore
+	 * @var \Carbon_Fields\Datastore\Widget_Datastore
 	 */
 	protected $datastore;
 
@@ -190,7 +189,7 @@ abstract class Widget extends \WP_Widget {
 	 */
 	public function add_fields( $fields ) {
 		foreach ( $fields as $field ) {
-			if ( ! is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
+			if ( ! ( $field instanceof \Carbon_Fields\Field\Field ) ) {
 				Incorrect_Syntax_Exception::raise( 'Object must be of type Carbon_Fields\\Field\\Field' );
 				return;
 			}

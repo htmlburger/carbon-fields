@@ -146,7 +146,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		if ( $name === '' ) {
 			$name = $id;
 			$id = '';
-		}
+	}
 
 		$type = Helper::normalize_type( $raw_type );
 		$repository = Carbon_Fields::resolve( 'container_repository' );
@@ -452,7 +452,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Returns the private container array of fields.
 	 * Use only if you are completely aware of what you are doing.
 	 *
-	 * @return array
+	 * @return \Carbon_Fields\Field\Field[]
 	 */
 	public function get_fields() {
 		return $this->fields;
@@ -539,7 +539,7 @@ abstract class Container implements Datastore_Holder_Interface {
 					$field = clone $f;
 					$field->set_hierarchy_index( $hierarchy_index );
 				} else {
-					if ( ! is_a( $f, 'Carbon_Fields\\Field\\Complex_Field' ) ) {
+					if ( ! ( $f instanceof \Carbon_Fields\Field\Complex_Field ) ) {
 						return null;
 					}
 
@@ -805,7 +805,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 */
 	public function add_fields( $fields ) {
 		foreach ( $fields as $field ) {
-			if ( ! is_a( $field, 'Carbon_Fields\\Field\\Field' ) ) {
+			if ( ! ( $field instanceof Field ) ) {
 				Incorrect_Syntax_Exception::raise( 'Object must be of type Carbon_Fields\\Field\\Field' );
 				return $this;
 			}
