@@ -3,9 +3,6 @@
 namespace Carbon_Fields\Field;
 
 use Carbon_Fields\Datastore\Datastore_Interface;
-use Carbon_Fields\Helper\Helper;
-use Carbon_Fields\Field\Field;
-use Carbon_Fields\Field\Group_Field;
 use Carbon_Fields\Value_Set\Value_Set;
 use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
@@ -231,7 +228,7 @@ class Complex_Field extends Field {
 
 		$reserved_names = array( Value_Set::VALUE_PROPERTY, static::TYPE_PROPERTY );
 		foreach ( $fields as $field ) {
-			/** @var \Carbon_Fields\Field\Field $field */
+			/** @var Field $field */
 			if ( in_array( $field->get_base_name(), $reserved_names ) ) {
 				Incorrect_Syntax_Exception::raise( '"' . $field->get_base_name() . '" is a reserved keyword for Complex fields and cannot be used for a field name.' );
 				return $this;

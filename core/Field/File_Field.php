@@ -2,8 +2,6 @@
 
 namespace Carbon_Fields\Field;
 
-use Carbon_Fields\Helper\Helper;
-
 
 /**
  * File upload field class.

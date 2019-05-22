@@ -64,11 +64,25 @@ abstract class Container implements Datastore_Holder_Interface {
 	public $settings = array();
 
 	/**
+	 * Unique ID of the container
+	 *
+	 * @var string
+	 */
+	public $id;
+
+	/**
 	 * Title of the container
 	 *
 	 * @var string
 	 */
 	public $title = '';
+
+	/**
+	 * Type of the container
+	 *
+	 * @var string
+	 */
+	public $type;
 
 	/**
 	 * List of notification messages to be displayed on the front-end
@@ -106,7 +120,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 *
 	 * @see set_datastore()
 	 * @see get_datastore()
-	 * @var object
+	 * @var Datastore_Interface
 	 */
 	protected $datastore;
 
@@ -129,7 +143,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	/**
 	 * Translator to use when translating conditions to json
 	 *
-	 * @var Carbon_Fields\Container\Fulfillable\Translator\Translator
+	 * @var \Carbon_Fields\Container\Fulfillable\Translator\Translator
 	 */
 	protected $condition_translator;
 
@@ -205,7 +219,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @param string                 $title                Title of the container
 	 * @param string                 $type                 Type of the container
 	 * @param Fulfillable_Collection $condition_collection
-	 * @param Carbon_Fields\Container\Fulfillable\Translator\Translator $condition_translator
+	 * @param \Carbon_Fields\Container\Fulfillable\Translator\Translator $condition_translator
 	 */
 	public function __construct( $id, $title, $type, $condition_collection, $condition_translator ) {
 		Carbon_Fields::verify_boot();
@@ -452,7 +466,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Returns the private container array of fields.
 	 * Use only if you are completely aware of what you are doing.
 	 *
-	 * @return \Carbon_Fields\Field\Field[]
+	 * @return Field[]
 	 */
 	public function get_fields() {
 		return $this->fields;
@@ -587,6 +601,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * Set datastore instance
 	 *
 	 * @param Datastore_Interface $datastore
+	 * @param bool                $set_as_default (optional)
 	 * @return Container $this
 	 */
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default = false ) {

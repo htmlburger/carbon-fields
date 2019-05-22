@@ -210,8 +210,6 @@ final class Carbon_Fields {
 
 	/**
 	 * Throw exception if fields have not been registered yet
-	 *
-	 * @throws Incorrect_Syntax_Exception
 	 */
 	public static function verify_fields_registered() {
 		$register_action = 'carbon_fields_register_fields';

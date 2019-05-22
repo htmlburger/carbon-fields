@@ -116,7 +116,7 @@ class Map_Field extends Field {
 	 * @param  string $lat  Latitude
 	 * @param  string $lng  Longitude
 	 * @param  int    $zoom Zoom level
-	 * @return self   $this
+	 * @return $this
 	 */
 	public function set_position( $lat, $lng, $zoom ) {
 		return $this->set_default_value( array_merge(

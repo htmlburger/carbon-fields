@@ -102,7 +102,9 @@ class Date_Field extends Field {
 	/**
 	 * Get the expected input format in php and js variants
 	 *
-	 * @return array
+	 * @param string $php_format
+	 * @param string $js_format
+	 * @return self $this
 	 */
 	public function get_input_format( $php_format, $js_format ) {
 		$this->input_format_php = $php_format;
