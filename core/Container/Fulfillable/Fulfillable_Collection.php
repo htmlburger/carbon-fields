@@ -133,8 +133,8 @@ class Fulfillable_Collection implements Fulfillable {
 		$condition_type_list = $this->get_condition_type_list();
 		$fulfillables = $this->get_fulfillables();
 		foreach ( $fulfillables as $fulfillable ) {
-			if ( is_a( $fulfillable['fulfillable'], get_class() ) ) {
-				$fulfillable->set_condition_type_list( $condition_type_list, $this->is_condition_type_list_whitelist() );
+			if ( $fulfillable['fulfillable'] instanceof Fulfillable_Collection ) {
+				$fulfillable['fulfillable']->set_condition_type_list( $condition_type_list, $this->is_condition_type_list_whitelist() );
 			}
 		}
 	}
@@ -268,7 +268,7 @@ class Fulfillable_Collection implements Fulfillable {
 			$fulfillable = $fulfillable_tuple['fulfillable'];
 			$fulfillable_comparison = $fulfillable_tuple['fulfillable_comparison'];
 
-			if ( is_a( $fulfillable, get_class() ) ) {
+			if ( $fulfillable instanceof Fulfillable_Collection ) {
 				$filtered_collection = $fulfillable->filter( $condition_whitelist );
 				$filtered_collection_fulfillables = $filtered_collection->get_fulfillables();
 				if ( empty( $filtered_collection_fulfillables ) ) {
@@ -308,7 +308,7 @@ class Fulfillable_Collection implements Fulfillable {
 			$fulfillable = $fulfillable_tuple['fulfillable'];
 			$fulfillable_comparison = $fulfillable_tuple['fulfillable_comparison'];
 
-			if ( is_a( $fulfillable, get_class() ) ) {
+			if ( $fulfillable instanceof Fulfillable_Collection ) {
 				$evaluated_collection = $fulfillable->evaluate( $condition_types, $environment, $comparison_operators, $condition_types_blacklist, $comparison_operators_blacklist );
 				$collection->add_fulfillable( $evaluated_collection, $fulfillable_comparison );
 			} else {

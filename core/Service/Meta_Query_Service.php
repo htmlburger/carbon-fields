@@ -60,6 +60,9 @@ class Meta_Query_Service extends Service {
 	/**
 	 * Recursive function to replace meta keys in meta_query arrays
 	 *
+	 * @param $condition
+	 * @param $container_type
+	 *
 	 * @return array
 	 */
 	protected function filter_meta_query_array( $condition, $container_type ) {
@@ -109,6 +112,8 @@ class Meta_Query_Service extends Service {
 
 	/**
 	 * Hook to pre_get_posts to filter the meta_query array
+	 *
+	 * @param \WP_Query $query
 	 */
 	public function hook_pre_get_posts( $query ) {
 		$meta_query = $query->get( 'meta_query' );
@@ -124,6 +129,8 @@ class Meta_Query_Service extends Service {
 
 	/**
 	 * Hook to pre_get_terms to filter the meta_query array
+	 *
+	 * @param \WP_Query $query
 	 */
 	public function hook_pre_get_terms( $query ) {
 		$meta_query = ! empty( $query->query_vars['meta_query'] ) ? $query->query_vars['meta_query'] : array();
@@ -139,6 +146,8 @@ class Meta_Query_Service extends Service {
 
 	/**
 	 * Hook to pre_get_users to filter the meta_query array
+	 *
+	 * @param \WP_Query $query
 	 */
 	public function hook_pre_get_users( $query ) {
 		$meta_query = $query->get( 'meta_query' );

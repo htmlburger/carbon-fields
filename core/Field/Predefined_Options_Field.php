@@ -113,6 +113,7 @@ abstract class Predefined_Options_Field extends Field {
 	 * Will also work with a callable that returns an array.
 	 *
 	 * @param array|callable $options
+	 * @param bool $stringify_value (optional)
 	 * @return array
 	 */
 	protected function parse_options( $options, $stringify_value = false ) {

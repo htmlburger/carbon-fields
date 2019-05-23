@@ -52,7 +52,7 @@ final class Carbon_Fields {
 	/**
 	 * Singleton implementation
 	 *
-	 * @return Carbon_Fields\Carbon_Fields
+	 * @return Carbon_Fields
 	 */
 	public static function instance() {
 		static $instance = null;
@@ -266,7 +266,8 @@ final class Carbon_Fields {
 	 * Add a listener to an event
 	 *
 	 * @param string   $event
-	 * @return Listener $listener
+	 * @param Event\Listener $listener
+	 * @return Event\Listener $listener
 	 */
 	public static function add_listener( $event, $listener ) {
 		return static::instance()->get_emitter()->add_listener( $event, $listener );
@@ -275,7 +276,7 @@ final class Carbon_Fields {
 	/**
 	 * Remove a listener from any event
 	 *
-	 * @param Listener $listener
+	 * @param Event\Listener $listener
 	 */
 	public static function remove_listener( $listener ) {
 		static::instance()->get_emitter()->remove_listener( $listener );
@@ -286,7 +287,7 @@ final class Carbon_Fields {
 	 *
 	 * @param  string   $event    The event to listen for
 	 * @param  string   $callable The callable to call when the event is broadcasted
-	 * @return Listener
+	 * @return Event\Listener
 	 */
 	public static function on( $event, $callable ) {
 		return static::instance()->get_emitter()->on( $event, $callable );
@@ -297,7 +298,7 @@ final class Carbon_Fields {
 	 *
 	 * @param  string   $event    The event to listen for
 	 * @param  string   $callable The callable to call when the event is broadcasted
-	 * @return Listener
+	 * @return Event\Listener
 	 */
 	public static function once( $event, $callable ) {
 		return static::instance()->get_emitter()->once( $event, $callable );
@@ -354,7 +355,7 @@ final class Carbon_Fields {
 
 		$ioc['services']['revisions'] = function() use ( $ioc ) {
 			return new Revisions_Service();
-		};		
+		};
 
 		$ioc['services']['meta_query'] = function() use ( $ioc ) {
 			return new Meta_Query_Service( $ioc['container_repository'], $ioc['key_toolset'] );

@@ -20,7 +20,7 @@ abstract class Condition implements Fulfillable {
 	/**
 	 * Comparers to use for condition checking
 	 *
-	 * @var array<Comparer>
+	 * @var \Carbon_Fields\Container\Condition\Comparer\Comparer[]
 	 */
 	protected $comparers = array();
 
@@ -57,7 +57,7 @@ abstract class Condition implements Fulfillable {
 	/**
 	 * Get the condition comparers
 	 *
-	 * @return array<Comparer>
+	 * @return \Carbon_Fields\Container\Condition\Comparer\Comparer[]
 	 */
 	protected function get_comparers() {
 		return $this->comparers;
@@ -66,7 +66,7 @@ abstract class Condition implements Fulfillable {
 	/**
 	 * Set the condition comparers
 	 *
-	 * @param array<Comparer> $comparers
+	 * @param \Carbon_Fields\Container\Condition\Comparer\Comparer[] $comparers
 	 * @return Condition $this
 	 */
 	public function set_comparers( $comparers ) {
@@ -108,7 +108,7 @@ abstract class Condition implements Fulfillable {
 	 * Set comparison sign
 	 *
 	 * @param string $comparison_operator
-	 * @return Comparer $this
+	 * @return $this
 	 */
 	public function set_comparison_operator( $comparison_operator ) {
 		$this->comparison_operator = $comparison_operator;

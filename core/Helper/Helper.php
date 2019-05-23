@@ -17,7 +17,7 @@ class Helper {
 	 * @param  string  $container_type Container type to search in. Optional if $container_id is supplied
 	 * @param  string  $container_id   Container id to search in. Optional if $container_type is supplied
 	 * @param  string  $field_name     Field name to search for
-	 * @return boolean
+	 * @return \Carbon_Fields\Field\Field
 	 */
 	public static function get_field( $container_type, $container_id, $field_name ) {
 		\Carbon_Fields\Carbon_Fields::verify_fields_registered();
@@ -37,7 +37,7 @@ class Helper {
 	 * @param  string $container_type Container type to search in. Optional if $container_id is supplied
 	 * @param  string $container_id   Container id to search in. Optional if $container_type is supplied
 	 * @param  string $field_name     Field name to search for
-	 * @return mixed
+	 * @return \Carbon_Fields\Field\Field
 	 */
 	public static function get_field_clone( $object_id, $container_type, $container_id, $field_name ) {
 		$field = static::get_field( $container_type, $container_id, $field_name );
@@ -63,7 +63,7 @@ class Helper {
 	 * @param  string   $container_id   Container id to search in. Optional if $container_type is supplied
 	 * @param  string   $field_name     Field name to search for
 	 * @param  \Closure $action         Action to execute
-	 * @return void
+	 * @return void|mixed
 	 */
 	public static function with_field_clone( $object_id, $container_type, $container_id, $field_name, $action ) {
 		$field = static::get_field( $container_type, $container_id, $field_name );
@@ -108,7 +108,7 @@ class Helper {
 				if ( ! $field ) {
 					return '';
 				}
-
+				/** @var \Carbon_Fields\Field\Field $field */
 				$field->load();
 				return $field->get_formatted_value();
 			}
@@ -137,7 +137,7 @@ class Helper {
 					Incorrect_Syntax_Exception::raise( 'Could not find a field which satisfies the supplied pattern ' . $container_message . ': ' . $field_name );
 					return;
 				}
-
+				/** @var \Carbon_Fields\Field\Field $field */
 				$field->set_value( $value );
 				$field->save();
 			}
@@ -178,7 +178,7 @@ class Helper {
 	 * @param  string $container_id
 	 */
 	public static function set_post_meta( $id, $name, $value, $container_id = '' ) {
-		return static::set_value( $id, 'post_meta', $container_id, $name, $value );
+		static::set_value( $id, 'post_meta', $container_id, $name, $value );
 	}
 
 	/**
@@ -200,7 +200,7 @@ class Helper {
 	 * @param  string $container_id
 	 */
 	public static function set_theme_option( $name, $value, $container_id = '' ) {
-		return static::set_value( null, 'theme_options', $container_id, $name, $value );
+		static::set_value( null, 'theme_options', $container_id, $name, $value );
 	}
 
 	/**
@@ -232,11 +232,11 @@ class Helper {
 	 *
 	 * @param  string $id           Site ID
 	 * @param  string $name         Field name
+	 * @param  array  $value
 	 * @param  string $container_id
-	 * @return mixed
 	 */
 	public static function set_network_option( $id, $name, $value, $container_id = '' ) {
-		return static::set_value( $id, 'network', $container_id, $name, $value );
+		static::set_value( $id, 'network', $container_id, $name, $value );
 	}
 
 	/**
@@ -260,7 +260,7 @@ class Helper {
 	 * @param  string $container_id
 	 */
 	public static function set_term_meta( $id, $name, $value, $container_id = '' ) {
-		return static::set_value( $id, 'term_meta', $container_id, $name, $value );
+		static::set_value( $id, 'term_meta', $container_id, $name, $value );
 	}
 
 	/**
@@ -284,7 +284,7 @@ class Helper {
 	 * @param  string $container_id
 	 */
 	public static function set_user_meta( $id, $name, $value, $container_id = '' ) {
-		return static::set_value( $id, 'user_meta', $container_id, $name, $value );
+		static::set_value( $id, 'user_meta', $container_id, $name, $value );
 	}
 
 	/**
@@ -308,7 +308,7 @@ class Helper {
 	 * @param  string $container_id
 	 */
 	public static function set_comment_meta( $id, $name, $value, $container_id = '' ) {
-		return static::set_value( $id, 'comment_meta', $container_id, $name, $value );
+		static::set_value( $id, 'comment_meta', $container_id, $name, $value );
 	}
 
 	/**
@@ -332,7 +332,7 @@ class Helper {
 	 * @param  string $container_id
 	 */
 	public static function set_nav_menu_item_meta( $id, $name, $value, $container_id = '' ) {
-		return static::set_value( $id, 'nav_menu_item', $container_id, $name, $value );
+		static::set_value( $id, 'nav_menu_item', $container_id, $name, $value );
 	}
 
 	/**
@@ -561,7 +561,7 @@ class Helper {
 	 *
 	 * @param  string  $id
 	 * @param  string  $type Value Type. Can be either id or url.
-	 * @return boolean
+	 * @return array
 	 */
 	public static function get_attachment_metadata( $id, $type ) {
 		$attachment_metadata = array(

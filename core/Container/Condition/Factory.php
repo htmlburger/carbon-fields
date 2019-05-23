@@ -14,6 +14,8 @@ class Factory {
 
 	/**
 	 * Constructor
+	 *
+	 * @param \Carbon_Fields\Pimple\Container $ioc
 	 */
 	public function __construct( $ioc ) {
 		$this->ioc = $ioc;
