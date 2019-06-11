@@ -11,14 +11,14 @@ msgstr ""
 msgid "Showing %1$d of %2$d results"
 msgstr ""
 
-#: packages/core/fields/association/index.js:449
+#: packages/core/fields/association/index.js:456
 msgid "An error occurred while trying to fetch association options."
 msgstr ""
 
-#: packages/core/fields/association/index.js:506
+#: packages/core/fields/association/index.js:513
 msgid "This field is required."
 msgstr ""
 
-#: packages/core/fields/association/index.js:510
+#: packages/core/fields/association/index.js:517
 msgid "Minimum number of items not reached (%s items)"
 msgstr ""
