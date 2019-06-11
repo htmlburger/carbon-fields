@@ -201,7 +201,7 @@ class Loader {
 		$this->enqueue_style( 'core' );
 		$this->enqueue_style( 'metaboxes' );
 
-		$this->enqueue_script( 'vendor', array( 'jquery' ) );
+		$this->enqueue_script( 'vendor', array( 'wp-polyfill', 'jquery' ) );
 		$this->enqueue_script( 'core', array( 'carbon-fields-vendor' ) );
 		$this->enqueue_script( 'metaboxes', array( 'carbon-fields-vendor', 'carbon-fields-core' ) );
 
