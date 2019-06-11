@@ -201,7 +201,7 @@ class Loader {
 		$this->enqueue_style( 'core' );
 		$this->enqueue_style( 'metaboxes' );
 
-		$this->enqueue_script( 'vendor', array( 'jquery' ) );
+		$this->enqueue_script( 'vendor', array( 'wp-polyfill', 'jquery' ) );
 		$this->enqueue_script( 'core', array( 'carbon-fields-vendor' ) );
 		$this->enqueue_script( 'metaboxes', array( 'carbon-fields-vendor', 'carbon-fields-core' ) );
 
@@ -294,6 +294,7 @@ class Loader {
 		$container_id = $_GET['container_id'];
 		$field_name   = $_GET['field_name'];
 
+		/** @var \Carbon_Fields\Field\Association_Field $field */
 		$field = Helper::get_field( null, $container_id, $field_name );
 
 		return wp_send_json_success( $field->get_options( array(

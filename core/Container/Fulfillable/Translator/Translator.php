@@ -16,11 +16,11 @@ abstract class Translator {
 	 * @return mixed
 	 */
 	public function fulfillable_to_foreign( Fulfillable $fulfillable ) {
-		if ( is_a( $fulfillable, 'Carbon_Fields\\Container\\Condition\\Condition' ) ) {
+		if ( $fulfillable instanceof Condition ) {
 			return $this->condition_to_foreign( $fulfillable );
 		}
 
-		if ( is_a( $fulfillable, 'Carbon_Fields\\Container\\Fulfillable\\Fulfillable_Collection' ) ) {
+		if ( $fulfillable instanceof Fulfillable_Collection ) {
 			return $this->fulfillable_collection_to_foreign( $fulfillable );
 		}
 

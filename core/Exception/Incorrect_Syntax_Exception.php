@@ -9,6 +9,9 @@ class Incorrect_Syntax_Exception extends \Exception {
 
 	/**
 	 * Throw an exception when WP_DEBUG is enabled, and show a friendly admin notice otherwise
+	 *
+	 * @param string $message
+	 * @param int    $code    (optional)
 	 */
 	public static function raise( $message, $code = null ) {
 		if ( empty( static::$errors ) ) {

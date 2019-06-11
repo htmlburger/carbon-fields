@@ -52,7 +52,7 @@ class Repository {
 	/**
 	 * Register a container with the repository
 	 *
-	 * @return array
+	 * @param Container $container
 	 */
 	public function register_container( Container $container ) {
 		$this->register_unique_container_id( $container->get_id() );
@@ -63,7 +63,7 @@ class Repository {
 	/**
 	 * Initialize registered containers
 	 *
-	 * @return array
+	 * @return Container[]
 	 */
 	public function initialize_containers() {
 		$initialized_containers = array();
@@ -79,7 +79,7 @@ class Repository {
 	 * Return all containers
 	 *
 	 * @param string $type Container type to filter for
-	 * @return array
+	 * @return Container[]
 	 */
 	public function get_containers( $type = null ) {
 		$raw_containers = $this->containers;
@@ -105,7 +105,7 @@ class Repository {
 	 * @param  string                    $field_name
 	 * @param  string                    $container_id
 	 * @param  bool                      $include_nested_fields
-	 * @return Carbon_Fields\Field\Field
+	 * @return \Carbon_Fields\Field\Field
 	 */
 	public function get_field_in_container( $field_name, $container_id, $include_nested_fields = true ) {
 		$containers = $this->get_containers();
@@ -133,7 +133,7 @@ class Repository {
 	 * @param  string                    $field_name
 	 * @param  string                    $container_type
 	 * @param  bool                      $include_nested_fields
-	 * @return Carbon_Fields\Field\Field
+	 * @return \Carbon_Fields\Field\Field
 	 */
 	public function get_field_in_containers( $field_name, $container_type = null, $include_nested_fields = true ) {
 		$containers = $this->get_containers( $container_type );
@@ -156,10 +156,11 @@ class Repository {
 	/**
 	 * Return all currently active containers
 	 *
-	 * @return array
+	 * @return Container[]
 	 */
 	public function get_active_containers() {
 		return array_filter( $this->containers, function( $container ) {
+			/** @var Container $container */
 			return $container->is_active();
 		} );
 	}
@@ -168,6 +169,7 @@ class Repository {
 	 * Check if container identificator id is unique
 	 *
 	 * @param string $id
+	 * @return bool
 	 */
 	public function is_unique_container_id( $id ) {
 		return ! in_array( $id, $this->registered_container_ids );
@@ -177,6 +179,7 @@ class Repository {
 	 * Generate a unique container identificator id based on container title
 	 *
 	 * @param string $title
+	 * @return string
 	 */
 	public function get_unique_container_id( $title ) {
 		$id = remove_accents( $title );
@@ -193,7 +196,7 @@ class Repository {
 			$id_suffix = $wids;
 			$id = substr( $id, 0, -strlen( $wids ) );
 		}
-		
+
 		$id = preg_replace( '~[\s]+~', '_', $id );
 		$id = preg_replace( '~[^\w\-\_]+~', '', $id );
 

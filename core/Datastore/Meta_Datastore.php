@@ -19,7 +19,7 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 	 *
 	 * @param Field $field The field to retrieve value for.
 	 * @param array $storage_key_patterns
-	 * @return array<stdClass> Array of {key, value} objects
+	 * @return \stdClass[] Array of {key, value} objects
 	 */
 	protected function get_storage_array( Field $field, $storage_key_patterns ) {
 		global $wpdb;
@@ -62,7 +62,7 @@ abstract class Meta_Datastore extends Key_Value_Datastore {
 		global $wpdb;
 
 		$storage_key_patterns = $this->key_toolset->get_storage_key_deleter_patterns(
-			is_a( $field, 'Carbon_Fields\\Field\\Complex_Field' ),
+			( $field instanceof \Carbon_Fields\Field\Complex_Field ),
 			$field->is_simple_root_field(),
 			$this->get_full_hierarchy_for_field( $field ),
 			$this->get_full_hierarchy_index_for_field( $field )

@@ -3,7 +3,6 @@
 namespace Carbon_Fields\Field;
 
 use Carbon_Fields\Carbon_Fields;
-use Carbon_Fields\Pimple\Container as PimpleContainer;
 use Carbon_Fields\Datastore\Datastore_Interface;
 use Carbon_Fields\Datastore\Datastore_Holder_Interface;
 use Carbon_Fields\Value_Set\Value_Set;
@@ -335,6 +334,7 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Set array of hierarchy field names
 	 *
+	 * @param array $hierarchy
 	 * @return self  $this
 	 */
 	public function set_hierarchy( $hierarchy ) {
@@ -354,6 +354,7 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Set array of hierarchy indexes
 	 *
+	 * @param array $hierarchy_index
 	 * @return self  $this
 	 */
 	public function set_hierarchy_index( $hierarchy_index ) {
@@ -565,6 +566,9 @@ class Field implements Datastore_Holder_Interface {
 
 	/**
 	 * Alias for $this->get_value_set()->set( $value );
+	 *
+	 * @param mixed $value
+	 * @return self  $this
 	 */
 	public function set_value( $value ) {
 		$this->get_value_set()->set( $value );
@@ -591,7 +595,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Set default field value
 	 *
 	 * @param  mixed $default_value
-	 * @return self  $this
+	 * @return $this
 	 */
 	public function set_default_value( $default_value ) {
 		$this->default_value = $default_value;
@@ -610,6 +614,7 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Set field base name as defined in the container.
 	 *
+	 * @param string $name
 	 * @return self  $this
 	 */
 	public function set_base_name( $name ) {
@@ -772,7 +777,7 @@ class Field implements Datastore_Holder_Interface {
 	/**
 	 * Return the field help text
 	 *
-	 * @return object $this
+	 * @return string
 	 */
 	public function get_help_text() {
 		return $this->help_text;
@@ -782,6 +787,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Set additional text to be displayed during field render,
 	 * containing information and guidance for the user
 	 *
+	 * @param string $help_text
 	 * @return self  $this
 	 */
 	public function set_help_text( $help_text ) {
@@ -793,6 +799,7 @@ class Field implements Datastore_Holder_Interface {
 	 * Alias for set_help_text()
 	 *
 	 * @see set_help_text()
+	 * @param string $help_text
 	 * @return object $this
 	 */
 	public function help_text( $help_text ) {

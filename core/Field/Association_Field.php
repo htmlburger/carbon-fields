@@ -20,7 +20,7 @@ class Association_Field extends Field {
 	/**
 	 * WP_Toolset instance for WP data loading
 	 *
-	 * @var Carbon_Fields\Toolset\WP_Toolset
+	 * @var \Carbon_Fields\Toolset\WP_Toolset
 	 */
 	protected $wp_toolset;
 
@@ -109,6 +109,7 @@ class Association_Field extends Field {
 	/**
 	 * Get value string for legacy value
 	 *
+	 * @param string $legacy_value
 	 * @return string
 	 */
 	protected function get_value_string_for_legacy_value( $legacy_value ) {
@@ -311,8 +312,7 @@ class Association_Field extends Field {
 	/**
 	 * Get the items per page.
 	 *
-	 * @param  int   $items_per_page
-	 * @return self  $this
+	 * @return int
 	 */
 	public function get_items_per_page() {
 		return $this->items_per_page;
@@ -731,7 +731,7 @@ class Association_Field extends Field {
 	/**
 	 * Retrieve the edit link of a particular object.
 	 *
-	 * @param  string $type Object type.
+	 * @param  array $type Object type.
 	 * @param  int $id      ID of the object.
 	 * @return string       URL of the edit link.
 	 */
@@ -765,7 +765,7 @@ class Association_Field extends Field {
 	/**
 	 * Prepares an option of type 'post' for JS usage.
 	 *
-	 * @param  array  $data
+	 * @param  \stdClass  $data
 	 * @return array
 	 */
 	public function format_post_option( $data ) {
@@ -784,7 +784,7 @@ class Association_Field extends Field {
 	/**
 	 * Prepares an option of type 'term' for JS usage.
 	 *
-	 * @param  array  $data
+	 * @param  \stdClass  $data
 	 * @return array
 	 */
 	public function format_term_option( $data ) {
@@ -794,7 +794,7 @@ class Association_Field extends Field {
 			'thumbnail'  => '',
 			'type'       => $data->type,
 			'subtype'    => $data->subtype,
-			'label'      => $this->get_item_label( $data, $data->type, $data->subtype ),
+			'label'      => $this->get_item_label( $data->ID, $data->type, $data->subtype ),
 			'is_trashed' => false,
 			'edit_link'  => $this->get_object_edit_link( get_object_vars( $data ), $data->ID ),
 		);
@@ -803,7 +803,7 @@ class Association_Field extends Field {
 	/**
 	 * Prepares an option of type 'comment' for JS usage.
 	 *
-	 * @param  array  $data
+	 * @param  \stdClass  $data
 	 * @return array
 	 */
 	public function format_comment_option( $data ) {
@@ -822,7 +822,7 @@ class Association_Field extends Field {
 	/**
 	 * Prepares an option of type 'user' for JS usage.
 	 *
-	 * @param  array  $data
+	 * @param  \stdClass  $data
 	 * @return array
 	 */
 	public function format_user_option( $data ) {

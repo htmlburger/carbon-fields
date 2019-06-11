@@ -15,7 +15,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	/**
 	 * Key Toolset for key generation and comparison utilities
 	 *
-	 * @var Key_Toolset
+	 * @var \Carbon_Fields\Toolset\Key_Toolset
 	 */
 	protected $key_toolset;
 
@@ -55,7 +55,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 * Convert a cascading storage array to a value tree array
 	 *
 	 * @see Internal Glossary in DEVELOPMENT.MD
-	 * @param array<stdClass> $storage_array
+	 * @param \stdClass[] $storage_array
 	 * @return array
 	 */
 	protected function cascading_storage_array_to_value_tree_array( $storage_array ) {
@@ -137,7 +137,7 @@ abstract class Key_Value_Datastore extends Datastore {
 	 *
 	 * @param Field $field The field to retrieve value for.
 	 * @param array $storage_key_patterns
-	 * @return array<stdClass> Array of {key, value} objects
+	 * @return \stdClass[] Array of {key, value} objects
 	 */
 	abstract protected function get_storage_array( Field $field, $storage_key_patterns );
 

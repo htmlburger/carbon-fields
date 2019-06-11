@@ -15,6 +15,7 @@ interface Datastore_Holder_Interface {
 	 * Set datastore instance
 	 *
 	 * @param Datastore_Interface $datastore
+	 * @param boolean             $set_as_default
 	 * @return object $this
 	 */
 	public function set_datastore( Datastore_Interface $datastore, $set_as_default );
