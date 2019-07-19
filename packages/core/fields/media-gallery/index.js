@@ -87,6 +87,23 @@ class MediaGalleryField extends Component {
 
 		onChange( id, attachments );
 	}
+	
+	/**
+	 * Returns an URL to the attachment's thumbnail.
+	 *
+	 * @return {string}
+	 */
+	getAttachmentThumb( attachment ) {
+		if ( attachment.sizes ) {
+			const size = attachment.sizes.thumbnail || attachment.sizes.full;
+
+			if ( size ) {
+				return size.url;
+			}
+		}
+
+		return attachment.url;
+	}
 
 	/**
 	 * Render the component.
@@ -152,7 +169,7 @@ class MediaGalleryField extends Component {
 																	? (
 																		<img
 																			className="cf-media-gallery__item-thumb"
-																			src={ attachment.sizes.thumbnail.url }
+																			src={ this.getAttachmentThumb( attachment ) }
 																		/>
 																	)
 																	: (
