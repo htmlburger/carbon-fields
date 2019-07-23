@@ -257,7 +257,7 @@ class Key_Toolset {
 					$comparison = $table_column . ' = "' . esc_sql( $storage_key ) . '"';
 					break;
 				case static::PATTERN_COMPARISON_STARTS_WITH:
-					$comparison = $table_column . ' LIKE "' . esc_sql( $storage_key ) . '%"';
+					$comparison = $table_column . ' LIKE "' . esc_like( $storage_key ) . '%"';
 					break;
 				default:
 					Incorrect_Syntax_Exception::raise( 'Unsupported storage key pattern type used: "' . $type . '"' );
