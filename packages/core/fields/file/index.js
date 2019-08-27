@@ -32,9 +32,14 @@ class FileField extends Component {
 		if ( value ) {
 			// TODO: Refactor this to use `@wordpress/api-fetch` package.
 			apiFetch(
-				`${ window.wpApiSettings.root }carbon-fields/v1/attachment/?type=${ field.value_type }&value=${ value }`,
-				'get'
-			).then( this.handleFileDataChange );
+				`${ window.wpApiSettings.root }carbon-fields/v1/attachment/`,
+				'get',
+				{
+					type: field.value_type,
+					value: value
+				}
+			)
+				.then( this.handleFileDataChange );
 		}
 	}
 
