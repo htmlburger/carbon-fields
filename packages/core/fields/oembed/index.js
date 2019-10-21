@@ -40,7 +40,7 @@ class OembedField extends Component {
 		const { value } = this.props;
 
 		const i = setInterval( () => {
-			if ( this.node.current.getBoundingClientRect().width > 0 ) {
+			if ( this.node.current !== null && this.node.current.getBoundingClientRect().width > 0 ) {
 				clearInterval( i );
 
 				this.handleSearch( value );
