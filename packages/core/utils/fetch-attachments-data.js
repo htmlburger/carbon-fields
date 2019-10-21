@@ -10,7 +10,8 @@ export default ( attachments ) => {
 			data: {
 				action: 'query-attachments',
 				query: {
-					post__in: attachments
+					post__in: attachments,
+					posts_per_page: attachments.length
 				}
 			}
 		} );
