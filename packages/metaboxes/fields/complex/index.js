@@ -107,20 +107,14 @@ class ComplexField extends Component {
 		const {
 			id,
 			value,
-			removeFields,
 			onChange
 		} = this.props;
 
-		onChange( id, without( value, group ) );
-
-		// Delay removal of fields because React will complain
-		// about missing objects.
-		// TODO: Investigate why this is necessary.
-		setTimeout( () => {
-			const fieldIds = group.fields.map( ( groupField ) => groupField.id );
-
-			removeFields( fieldIds );
-		}, 1 );
+		onChange(
+			id,
+			without( value, group ),
+			group.fields.map( ( groupField ) => groupField.id )
+		);
 	}
 
 	/**
@@ -245,16 +239,11 @@ const applyWithSelect = withSelect( ( select, props ) => {
 } );
 
 const applyWithDispatch = withDispatch( ( dispatch ) => {
-	const {
-		addFields,
-		cloneFields,
-		removeFields
-	} = dispatch( 'carbon-fields/metaboxes' );
+	const { addFields, cloneFields } = dispatch( 'carbon-fields/metaboxes' );
 
 	return {
 		addFields,
-		cloneFields,
-		removeFields
+		cloneFields
 	};
 } );
 

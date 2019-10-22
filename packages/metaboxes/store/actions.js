@@ -35,16 +35,19 @@ export function updateState( containers, fields ) {
 /**
  * Returns an action object used to update the field's value.
  *
- * @param  {string} fieldId
- * @param  {mixed}  value
+ * @param  {string}   fieldId
+ * @param  {mixed}    value
+ * @param  {string[]} fieldsToRemove It's used by the complex fields to remove the nested
+ *                                 fields within a single action.
  * @return {Object}
  */
-export function updateFieldValue( fieldId, value ) {
+export function updateFieldValue( fieldId, value, fieldsToRemove = [] ) {
 	return {
 		type: 'UPDATE_FIELD_VALUE',
 		payload: {
 			fieldId,
-			value
+			value,
+			fieldsToRemove
 		}
 	};
 }

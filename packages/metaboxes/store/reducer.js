@@ -9,7 +9,8 @@ import {
 	assign,
 	forEach,
 	cloneDeep,
-	values
+	values,
+	unset
 } from 'lodash';
 
 /**
@@ -124,9 +125,21 @@ export function fields( state = {}, action ) {
 
 		case 'UPDATE_FIELD_VALUE':
 			return produce( state, ( draft ) => {
-				const { fieldId, value } = action.payload;
+				const {
+					fieldId,
+					value,
+					fieldsToRemove
+				} = action.payload;
 
 				draft[ fieldId ].value = value;
+
+				const fieldIdsToRemove = fieldsToRemove.reduce( ( accumulator, fieldIdToRemove ) => {
+					return getFieldIdsByRootId( fieldIdToRemove, state, accumulator );
+				}, [] );
+
+				fieldIdsToRemove.forEach( ( fieldIdToRemove ) => {
+					unset( draft, fieldIdToRemove );
+				} );
 			} );
 
 		case 'ADD_FIELDS':
