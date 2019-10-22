@@ -15,7 +15,7 @@ export default createHigherOrderComponent( ( Component ) => {
 	const applyWithSelect = withSelect( ( select, props ) => {
 		const { compactInput, compactInputKey } = window.cf.config;
 		const field = select( 'carbon-fields/metaboxes' ).getFieldById( props.id );
-		const { value } = field;
+		const value = field && field.value;
 
 		let name = props.name || field.name;
 

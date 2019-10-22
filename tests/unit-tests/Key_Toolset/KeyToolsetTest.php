@@ -309,7 +309,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 			'_field' => Key_Toolset::PATTERN_COMPARISON_EQUAL,
 			'_field|' => Key_Toolset::PATTERN_COMPARISON_STARTS_WITH,
 		);
-		$expected = ' ( `option_name` = "_field" OR `option_name` LIKE "_field|%" ) ';
+		$expected = ' ( `option_name` = "_field" OR `option_name` LIKE "\_field|%" ) ';
 		$received = $this->subject->storage_key_patterns_to_sql( $table_column, $patterns );
 		$this->assertSame( $expected, $received );
 	}

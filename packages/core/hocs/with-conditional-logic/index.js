@@ -9,6 +9,7 @@ import { withEffects } from 'refract-callbag';
 import { __, sprintf } from '@wordpress/i18n';
 import {
 	has,
+	find,
 	some,
 	every,
 	isEmpty
@@ -51,6 +52,12 @@ export default function withConditionalLogic( input, output ) {
 	 */
 	function handler( props ) {
 		return function( effect ) {
+			const fieldExists = find( effect, [ 'id', props.id ] );
+
+			if ( ! fieldExists ) {
+				return;
+			}
+
 			const { relation, rules } = props.field.conditional_logic;
 			const data = output( props, effect );
 
