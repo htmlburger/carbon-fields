@@ -1,6 +1,6 @@
 {
     "name": "htmlburger/carbon-fields",
-    "type": "wordpress-theme",
+    "type": "wordpress-muplugin",
     "require": {
         "composer/installers": "~1.0"
     }
