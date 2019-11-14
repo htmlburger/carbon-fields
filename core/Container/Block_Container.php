@@ -12,6 +12,7 @@ class Block_Container extends Container {
 	public $settings = array(
 		'preview' => true,
 		'parent' => null,
+		'icon' => 'block-default',
 		'inner_blocks' => array(
 			'enabled' => false,
 			'position' => 'above',
