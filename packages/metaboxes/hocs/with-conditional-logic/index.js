@@ -4,6 +4,7 @@
 import of from 'callbag-of';
 import distinctUntilChanged from 'callbag-distinct-until-changed';
 import { pipe, merge } from 'callbag-basics';
+import { isUndefined } from 'lodash';
 import { select } from '@wordpress/data';
 import {
 	get,
@@ -137,19 +138,20 @@ function output( props, fields ) {
 				pathPrefix = `${ pathPrefix }[${ chunk }]`;
 
 				const group = get( fields, pathPrefix );
-				const groupFields = getFieldsFromFieldsHolder( group, fields, [ props.id ] );
-
-				siblingFields = siblingFields.concat( mapParentPrefix( groupFields, depth ) );
-
-				pathPrefix = `${ pathPrefix }.fields`;
+				if ( !isUndefined( group ) ) {
+					const groupFields = getFieldsFromFieldsHolder( group, fields, [ props.id ] );
+					siblingFields = siblingFields.concat( mapParentPrefix( groupFields, depth ) );
+					pathPrefix = `${ pathPrefix }.fields`;
+				}
 			}
 
 			if ( isNestedComplex ) {
 				const groupField = find( get( fields, pathPrefix ), [ 'name', chunk ] );
 
-				pathPrefix = `${ groupField.id }.value`;
-
-				depth--;
+				if ( !isUndefined( groupField ) ) {
+					pathPrefix = `${ groupField.id }.value`;
+					depth--;
+				}
 			}
 		}
 	}
