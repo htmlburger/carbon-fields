@@ -2011,6 +2011,13 @@ callbag-start-with@^3.1.0, callbag-start-with@~3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/callbag-start-with/-/callbag-start-with-3.1.0.tgz#58c7f7cb3f3f44049e130166c2cf884c76e332ac"
 
+callbag-take-until@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-take-until/-/callbag-take-until-3.0.0.tgz#062129ff0f6584a3eee987518c30e601c938870e"
+  integrity sha512-wjHwrMpr3J1xjVnuUu8vxaWI6l9howbwGqIrwXByzKc3A2mxeNzzwAYxp76AUn45hiB98qpUSpshytHqRmTk3Q==
+  dependencies:
+    callbag "^1.2.0"
+
 callbag-take@1.0.x:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/callbag-take/-/callbag-take-1.0.0.tgz#d3d3acf3f73ef9a7cda42958dfb4de37b9c0a2b8"
@@ -2028,6 +2035,11 @@ callbag@1.0.x:
 callbag@^1.1.0, callbag@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/callbag/-/callbag-1.1.0.tgz#9cbbc3352832da43e764d588ed43121d4b09c42a"
+
+callbag@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/callbag/-/callbag-1.2.0.tgz#45e73962a466056c6e5f86f5627b35cf0c4df101"
+  integrity sha512-RMcVOk2oyA8CyCt/HsLEvnvvttKlaGVaG0uOo5IY7RpdiPLhStjxv5oYre33VJfT8kJE+cuKLSNHooz7yCUdhQ==
 
 caller-callsite@^2.0.0:
   version "2.0.0"
