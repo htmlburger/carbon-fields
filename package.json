@@ -1,6 +1,6 @@
 {
   "name": "carbon-fields",
-  "version": "3.1.7",
+  "version": "3.1.8",
   "description": "WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options, navigation menus and more.",
   "directories": {
     "test": "tests"
@@ -79,6 +79,7 @@
     "callbag-from-delegated-event": "^2.0.0",
     "callbag-of": "^1.0.1",
     "callbag-start-with": "^3.1.0",
+    "callbag-take-until": "^3.0.0",
     "classnames": "^2.2.6",
     "immer": "^1.7.4",
     "lodash": "^4.17.13",

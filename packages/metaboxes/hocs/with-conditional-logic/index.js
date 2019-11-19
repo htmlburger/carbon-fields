@@ -2,6 +2,7 @@
  * External dependencies.
  */
 import of from 'callbag-of';
+import takeUntil from 'callbag-take-until';
 import distinctUntilChanged from 'callbag-distinct-until-changed';
 import { pipe, merge } from 'callbag-basics';
 import { select } from '@wordpress/data';
@@ -56,9 +57,10 @@ function mapParentPrefix( fields, depth = 0 ) {
  * by conditional logic.
  *
  * @param  {Object} props
+ * @param  {Object} component
  * @return {Object}
  */
-function input( props ) {
+function input( props, component ) {
 	const { getFieldsByContainerId } = select( 'carbon-fields/metaboxes' );
 
 	return pipe(
@@ -67,6 +69,8 @@ function input( props ) {
 
 			fromSelector( getFieldsByContainerId, props.containerId )
 		),
+
+		takeUntil( component.unmount ),
 
 		distinctUntilChanged( isEqual )
 	);
