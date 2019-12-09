@@ -17,6 +17,7 @@ import isGutenberg from './utils/is-gutenberg';
  * Public API.
  */
 export { registerContainerType, getContainerType } from './containers/registry';
+export { default as stripCompactInputPrefix } from './utils/strip-compact-input-prefix';
 
 /**
  * Sets the locale data for the package type
