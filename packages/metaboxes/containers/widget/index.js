@@ -45,7 +45,7 @@ function handler( props ) {
 				// trigger change when the expand button is clicked
 				$carbonContainer
 					.closest( '.widget' )
-					.find( '.widget-action' )
+					.find( '.widget-top' )
 					.on( 'click', () => {
 						setTimeout( () => {
 							$carbonContainer.trigger( 'change' );
