@@ -6,9 +6,13 @@
 	.cf-container & {
 		flex: 1 1 100%;
 		padding: $size-base * 3;
-		border-width: 1px 1px 0 0;
+		border-width: 0 1px 0 0;
 		border-style: solid;
 		border-color: $wp-color-gray-light-500;
+	}
+
+	.cf-container & + & {
+		border-top-width: 1px;
 	}
 }
 

@@ -3,8 +3,29 @@
    ========================================================================== */
 
 .cf-container-widget {
+	margin-bottom: 13px;
 
 	.cf-field {
-		margin: 1em 0 .2em;
+		margin: 1em 0 0;
+		padding: 0;
+		border-width: 0;
+	}
+
+	.cf-field + .cf-field {
+		border-top-width: 0;
+	}
+
+	.cf-complex__group-body {
+		border-width: 1px 1px 1px 1px;
+		margin-top: 0;
+	}
+
+	.cf-complex__group-body .cf-field {
+		padding: 12px;
+	}
+
+	.cf-complex__group-body .cf-field + .cf-field {
+		border-width: 1px 0 0 0;
+		padding-top: 1em;
 	}
 }
