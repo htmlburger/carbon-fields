@@ -1,36 +1,25 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Carbon Fields\n"
-"POT-Creation-Date: 2019-01-02 15:20+0200\n"
-"PO-Revision-Date: 2019-01-02 15:50+0200\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2019-12-18 19:38+0100\n"
+"PO-Revision-Date: 2019-12-19 09:14+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.2\n"
-"X-Poedit-Basepath: ..\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Generator: Poedit 2.2.4\n"
+"X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: assets\n"
-"X-Poedit-SearchPathExcluded-1: languages\n"
-"X-Poedit-SearchPathExcluded-2: node_modules\n"
-"X-Poedit-SearchPathExcluded-3: tests\n"
-"X-Poedit-SearchPathExcluded-4: tmp\n"
-"X-Poedit-SearchPathExcluded-5: vendor\n"
+"Language: fr_FR\n"
 
 #: core/Container/Block_Container.php:259
 msgid "'render_callback' is required for the blocks."
-msgstr ""
+msgstr "'render_callback' est requis pour les blocks."
 
 #: core/Container/Block_Container.php:263
 msgid "'render_callback' must be a callable."
-msgstr ""
+msgstr "'render_callback' doit être de type callable."
 
 #: core/Container/Container.php:712
 msgid "General"
@@ -41,12 +30,8 @@ msgid "Settings saved."
 msgstr "Paramètres sauvegardés."
 
 #: core/Field/Footer_Scripts_Field.php:20
-msgid ""
-"If you need to add scripts to your footer (like Google Analytics tracking "
-"code), you should enter them in this box."
-msgstr ""
-"Si vous avez besoin d'ajouter des scripts dans votre pied de page (un code "
-"Google Analytics, par exemple), vous devez le saisir dans cette case."
+msgid "If you need to add scripts to your footer (like Google Analytics tracking code), you should enter them in this box."
+msgstr "Si vous avez besoin d'ajouter des scripts dans votre pied de page (un code Google Analytics, par exemple), vous devez le saisir dans cette case."
 
 #: core/Field/Gravity_Form_Field.php:47
 msgid "No form"
@@ -54,9 +39,7 @@ msgstr "Aucun formulaire"
 
 #: core/Field/Header_Scripts_Field.php:20
 msgid "If you need to add scripts to your header, you should enter them here."
-msgstr ""
-"Si vous avez besoin d’ajouter des scripts dans votre header, vous devez les "
-"entrer ici."
+msgstr "Si vous avez besoin d’ajouter des scripts dans votre header, vous devez les entrer ici."
 
 #: core/Field/Sidebar_Field.php:74
 msgctxt "sidebar"
@@ -65,17 +48,15 @@ msgstr "Ajouter une nouvelle"
 
 #: core/Helper/Helper.php:612
 msgid "F j, Y"
-msgstr ""
+msgstr "F j, Y"
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:69
-#, fuzzy
-#| msgid "Please enter the name of the new sidebar:"
 msgid "Please enter a name for the sidebar."
-msgstr "Veuillez saisir le nom de la nouvelle barre latérale :"
+msgstr "Veuillez saisir le nom de la nouvelle barre latérale."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:72
 msgid "Unknown action attempted."
-msgstr ""
+msgstr "Tentative d'action inconnue."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:102
 msgid "Sidebar with the same ID is already registered."
@@ -83,9 +64,8 @@ msgstr "Une Barre latérale portant le même ID existe déjà."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:112
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:142
-msgid ""
-"Failed to update option storing your custom sidebars. Please contact support."
-msgstr ""
+msgid "Failed to update option storing your custom sidebars. Please contact support."
+msgstr "Échec de la mise à jour de vos sidebars personnalisées. Veuillez contacter le support."
 
 #: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:137
 msgid "Sidebar not found."
@@ -105,11 +85,11 @@ msgstr "Etes-vous sûr de vouloir supprimer cette barre latérale ?"
 
 #: core/REST_API/Router.php:341
 msgid "No option names provided"
-msgstr ""
+msgstr "Pas d'option name fourni"
 
 #: core/REST_API/Router.php:352
 msgid "Theme Options updated."
-msgstr ""
+msgstr "Les options de thème ont été mises à jour."
 
 #: templates/Container/common/options-page.php:43
 msgid "Actions"
