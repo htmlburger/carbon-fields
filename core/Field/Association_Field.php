@@ -259,6 +259,15 @@ class Association_Field extends Field {
 	}
 
 	/**
+	 * Get the types.
+	 *
+	 * @return  array $types New types
+	 */
+	public function get_types() {
+		return $this->types;
+	}
+
+	/**
 	 * Get the minimum allowed number of selected entries.
 	 *
 	 * @return int
