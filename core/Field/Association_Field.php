@@ -248,6 +248,17 @@ class Association_Field extends Field {
 	}
 
 	/**
+	 * Get the types.
+	 *
+	 * @access public
+	 *
+	 * @return array
+	 */
+	public function get_types() {
+		return $this->types;
+	}
+
+	/**
 	 * Modify the types.
 	 *
 	 * @param  array $types New types
