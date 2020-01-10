@@ -17,11 +17,9 @@ import * as refractCallbag from 'refract-callbag';
 import * as callbagBasics from 'callbag-basics';
 
 /**
- * Prevent the conflicts with WordPress's Underscore lib.
+ * Prevent the conflicts with WordPress's Underscore lib and other 3rd party plugins.
  */
-if ( ! window.lodash ) {
-	_.noConflict();
-}
+_.noConflict();
 
 /**
  * Setup the vendor variables used by Carbon Fields.
