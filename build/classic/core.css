@@ -367,6 +367,7 @@
   position: relative;
   display: flex;
   border: 1px solid #e2e4e7;
+  border-bottom: 0;
   background-color: #fbfbfc;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   font-size: 13px;
@@ -397,14 +398,12 @@
 .cf-complex__group-body {
   display: flex;
   flex-wrap: wrap;
-  border-width: 0 0 1px 1px;
+  border-width: 1px 0 1px 1px;
   border-style: solid;
   border-color: #e2e4e7;
   background-color: #fff; }
   .cf-complex__group-body[hidden] {
     display: none; }
-  .cf-complex__group--grid > .cf-complex__group-body {
-    margin-top: -1px; }
 
 /**
  * Actions
@@ -1277,13 +1276,12 @@ span.flatpickr-weekday {
 
 .cf-datetime__input {
   flex: 1;
-  margin: 0; }
+  margin: 0;
+  margin-right: 6px; }
 
 .cf-datetime__button {
   flex: 0 0 auto; }
   .cf-field .cf-datetime__button {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
     margin-bottom: 0;
     box-shadow: none; }
 
@@ -1575,7 +1573,6 @@ span.flatpickr-weekday {
    Multiselect
    ========================================================================== */
 .cf-multiselect__control {
-  height: 30px;
   min-height: 0;
   border-color: #e2e4e7; }
   .cf-multiselect__control:hover {
@@ -1618,6 +1615,9 @@ span.flatpickr-weekday {
   .cf-multiselect__option--is-focused {
     background-color: #00a0d2;
     color: #fff; }
+
+.cf-multiselect__indicator {
+  padding: 5px; }
 
 /* ==========================================================================
    Colors

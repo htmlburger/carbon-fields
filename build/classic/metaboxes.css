@@ -80,9 +80,12 @@
 .cf-container .cf-field {
   flex: 1 1 100%;
   padding: 12px;
-  border-width: 1px 1px 0 0;
+  border-width: 0 1px 0 0;
   border-style: solid;
   border-color: #e2e4e7; }
+
+.cf-container .cf-field + .cf-field {
+  border-top-width: 1px; }
 
 .term-php .cf-container__fields > .cf-field > .cf-field__head,
 .cf-container-user-meta .cf-container__fields > .cf-field > .cf-field__head {
@@ -247,8 +250,22 @@
 /* ==========================================================================
    Widget
    ========================================================================== */
-.cf-container-widget .cf-field {
-  margin: 1em 0 .2em; }
+.cf-container-widget {
+  margin-bottom: 13px; }
+  .cf-container-widget .cf-field {
+    margin: 1em 0 0;
+    padding: 0;
+    border-width: 0; }
+  .cf-container-widget .cf-field + .cf-field {
+    border-top-width: 0; }
+  .cf-container-widget .cf-complex__group-body {
+    border-width: 1px 1px 1px 1px;
+    margin-top: 0; }
+  .cf-container-widget .cf-complex__group-body .cf-field {
+    padding: 12px; }
+  .cf-container-widget .cf-complex__group-body .cf-field + .cf-field {
+    border-width: 1px 0 0 0;
+    padding-top: 1em; }
 
 /* ==========================================================================
    Colors
