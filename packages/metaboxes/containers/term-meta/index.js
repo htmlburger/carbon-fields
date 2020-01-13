@@ -29,7 +29,8 @@ function aperture() {
 			} )
 		),
 		filter( ( { options, data } ) => {
-			return options.data.indexOf( 'carbon_fields_container' ) > -1
+			return options.data
+				&& options.data.indexOf( 'carbon_fields_container' ) > -1
 				&& options.data.indexOf( 'add-tag' ) > -1
 				&& ! data.documentElement.querySelector( 'wp_error' );
 		} )
