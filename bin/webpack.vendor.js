@@ -25,7 +25,8 @@ module.exports = [
 		externals: Object.assign( {}, wpPackages.externals, {
 			'lodash': 'lodash',
 			'react': 'React',
-			'react-dom': 'ReactDOM'
+			'react-dom': 'ReactDOM',
+			'jquery': 'jQuery',
 		} )
 	} ),
 	merge( base, config, {
