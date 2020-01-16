@@ -113,6 +113,10 @@ msgstr ""
 msgid "Couldn't create the label of group - %s"
 msgstr ""
 
+#: packages/core/fields/complex/index.js:344
+msgid "There are no entries yet."
+msgstr ""
+
 #: packages/core/fields/complex/index.js:401
 msgid "Expand All"
 msgstr ""
