@@ -663,7 +663,7 @@ class Helper {
 	 * @return array
 	 */
 	public static function get_valid_options( $input, $options ) {
-		// enfore comparison to be string so we do not get unexpected matches
+		// enforce comparison to be string so we do not get unexpected matches
 		// for cases such as "string without any numbers" == 0
 		// in array_search()
 		$search_options = array_map( 'strval', $options );
