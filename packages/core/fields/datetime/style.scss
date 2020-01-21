@@ -7,6 +7,8 @@
 .cf-datetime__inner {
 	display: flex;
 	align-items: stretch;
+	flex-wrap: wrap;
+	margin-top: -5px;
 
 	&::before {
 		display: none;
@@ -15,8 +17,11 @@
 
 .cf-datetime__input {
 	flex: 1;
-	margin: 0;
-	margin-right: 6px;
+	margin: 5px 6px 0 0;
+}
+
+.wp-core-ui .button.cf-datetime__button {
+	margin-top: 5px;
 }
 
 .cf-datetime__button {

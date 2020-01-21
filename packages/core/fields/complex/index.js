@@ -341,7 +341,7 @@ class ComplexField extends Component {
 				) }
 
 				{ ! value.length && (
-					<ComplexPlaceholder label="There are no entries yet.">
+					<ComplexPlaceholder label={ __( 'There are no entries yet.', 'carbon-fields-ui' ) }>
 						<ComplexInserter
 							buttonText={ this.inserterButtonText }
 							groups={ availableGroups }
