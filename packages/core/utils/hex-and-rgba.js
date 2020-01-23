@@ -4,7 +4,7 @@
 import { flow } from 'lodash';
 
 /**
- * Converts the given hex color to RGBA
+ * Converts the given Hex color to RGBA.
  *
  * @param  {string} hex
  * @return {Array}
@@ -16,7 +16,7 @@ export const hexToRgba = ( hex ) => flow( [
 ] )( hex );
 
 /**
- * Converts the given RGBA to hex color
+ * Converts the given RGBA to Hex color.
  *
  * @param  {Object} rgba
  * @return {string}
@@ -26,16 +26,22 @@ export const rgbaToHex = ( rgba ) => {
 		return null;
 	}
 
-	const { r, g, b } = rgba;
-	let { a } = rgba;
+	const r = rgba.r.toString( 16 );
+	const g = rgba.g.toString( 16 );
+	const b = rgba.b.toString( 16 );
+	const a = Math.floor( rgba.a * 255 ).toString( 16 );
 
-	a = Math.floor( a * 255 );
+	return [ r, g, b, a ].reduce( ( memo, part ) => {
+		if ( part.length === 1 ) {
+			part = `0${ part }`;
+		}
 
-	return '#' + [ r, g, b, a ].map( ( part ) => part.toString( 16 ).toUpperCase() ).join( '' );
+		return `${ memo }${ part }`;
+	}, '#' );
 };
 
 /**
- * Removes the '#' symbol if existing in the given hex
+ * Removes the '#' symbol if existing in the given Hex.
  *
  * @param  {string} hex
  * @return {string}
@@ -43,7 +49,7 @@ export const rgbaToHex = ( rgba ) => {
 const removeHash = ( hex ) => hex.replace( '#', '' );
 
 /**
- * Splits the hex string in to-be-decimal groups
+ * Splits the Hex string in to-be-decimal groups.
  *
  * @param  {string} hex
  * @return {Array}
@@ -61,7 +67,8 @@ const splitHex = ( hex ) => {
 };
 
 /**
- * Converts the given hex parts to decimal values
+ * Converts the given Hex parts to decimal values.
+ *
  * @param  {Array} hexParts
  * @return {Array}
  */
