@@ -9,9 +9,10 @@ import { Fragment, render } from '@wordpress/element';
 import SaveLock from './save-lock';
 import ConditionalDisplay from './conditional-display';
 import WidgetHandler from './widget-handler';
+import NavMenuHandler from './nav-menu-handler';
 import RevisionsFlag from './revisions-flag';
 import isGutenberg from '../utils/is-gutenberg';
-import { PAGE_NOW_WIDGETS, PAGE_NOW_CUSTOMIZE } from '../lib/constants';
+import { PAGE_NOW_WIDGETS, PAGE_NOW_CUSTOMIZE, PAGE_NOW_NAV } from '../lib/constants';
 
 /**
  * Initializes the monitors.
@@ -30,6 +31,10 @@ export default function initializeMonitors( context ) {
 
 			{ ( pagenow === PAGE_NOW_WIDGETS || pagenow === PAGE_NOW_CUSTOMIZE ) && (
 				<WidgetHandler />
+			) }
+
+			{ ( pagenow === PAGE_NOW_NAV ) && (
+				<NavMenuHandler />
 			) }
 
 			<ConditionalDisplay context={ context } />
