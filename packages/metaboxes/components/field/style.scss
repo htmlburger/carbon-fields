@@ -17,7 +17,7 @@
 }
 
 .cf-field__head {
-	.term-php .cf-container__fields > .cf-field > &,
+	.term-php .cf-container__fields > .cf-field:not(.cf-field--has-width) > &,
 	.cf-container-user-meta .cf-container__fields > .cf-field > & {
 		position: absolute;
 		left: 0;
