@@ -51,7 +51,7 @@ class FileField extends Component {
 			let size = data.sizes.thumbnail || data.sizes.full;
 
 			if ( previewSize.width > size.width || previewSize.height > size.height ) {
-				size = data.sizes.full;
+				size = data.sizes.large || data.sizes.full;
 			}
 
 			if ( size ) {
