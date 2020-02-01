@@ -50,7 +50,7 @@ class FileField extends Component {
 		if ( data.sizes ) {
 			let size = data.sizes.thumbnail || data.sizes.full;
 
-			if ( previewSize.width > size.width || previewSize.height > size.height ) {
+			if ( typeof previewSize !== 'undefined' && ( previewSize.width > size.width || previewSize.height > size.height ) ) {
 				size = data.sizes.large || data.sizes.full;
 			}
 
@@ -79,6 +79,10 @@ class FileField extends Component {
 
 	getPreviewSize() {
 		const { preview_size: previewSize } = this.props.field;
+
+		if ( typeof previewSize === 'undefined' ) {
+			return {};
+		}
 
 		return {
 			maxWidth: previewSize.width,
