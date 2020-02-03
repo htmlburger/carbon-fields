@@ -32,9 +32,13 @@ export class SelectField extends Component {
 		const {
 			id,
 			name,
-			value,
-			field
+			field,
+			onChange
 		} = this.props;
+
+		const value = this.props.value || get( field.options, '[0].value', '' );
+
+		onChange( id, value );
 
 		return (
 			field.options.length > 0
@@ -42,7 +46,7 @@ export class SelectField extends Component {
 					<select
 						id={ id }
 						name={ name }
-						value={ value ? value : get( field.options, '[0].value', '' ) }
+						value={ value }
 						className="cf-select__input"
 						onChange={ this.handleChange }
 					>
