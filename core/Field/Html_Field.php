@@ -2,6 +2,8 @@
 
 namespace Carbon_Fields\Field;
 
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
+
 /**
  * HTML field class.
  * Allows to create a field that displays any HTML in a container.
@@ -22,11 +24,12 @@ class Html_Field extends Field {
 	 * @return self            $this
 	 */
 	public function set_html( $callback_or_html ) {
-		if ( is_callable( $callback_or_html ) ) {
-			$this->field_html = call_user_func( $callback_or_html );
-		} else {
-			$this->field_html = $callback_or_html;
+		if ( ! is_callable( $callback_or_html ) && ! is_string( $callback_or_html ) ) {
+			Incorrect_Syntax_Exception::raise( 'Only strings and callbacks are allowed in the <code>set_html()</code> method.' );
+			return $this;
 		}
+
+		$this->field_html = $callback_or_html;
 
 		return $this;
 	}
@@ -40,9 +43,11 @@ class Html_Field extends Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
+		$field_html = is_callable( $this->field_html ) ? call_user_func( $this->field_html ) : $this->field_html;
+
 		$field_data = array_merge( $field_data, array(
-			'html' => $this->field_html,
-			'default_value' => $this->field_html,
+			'html' => $field_html,
+			'default_value' => $field_html,
 		) );
 
 		return $field_data;
