@@ -49,7 +49,9 @@ class RichTextField extends Component {
 	componentWillUnmount() {
 		clearTimeout( this.timer );
 
-		this.cancelObserver();
+		if ( typeof this.cancelObserver !== 'undefined' ) {
+			this.cancelObserver();
+		}
 
 		this.destroyEditor();
 	}
