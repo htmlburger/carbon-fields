@@ -4,12 +4,14 @@ namespace Carbon_Fields\Container;
 
 use Carbon_Fields\Datastore\Datastore;
 use Carbon_Fields\Helper\Helper;
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 class Block_Container extends Container {
 	/**
 	 * {@inheritDoc}
 	 */
 	public $settings = array(
+		'mode' => 'edit',
 		'preview' => true,
 		'parent' => null,
 		'icon' => 'block-default',
@@ -22,6 +24,27 @@ class Block_Container extends Container {
 		),
 		'category' => array(
 			'slug' => 'common',
+		),
+	);
+
+	/**
+	 * Mode map for settings
+	 *
+	 * @see set_mode()
+	 * @var array
+	 */
+	protected $mode_map = array(
+		'both' => array(
+			'mode' => 'edit',
+			'preview' => true,
+		),
+		'edit' => array(
+			'mode' => 'edit',
+			'preview' => false,
+		),
+		'preview' => array(
+			'mode' => 'preview',
+			'preview' => false,
 		),
 	);
 
@@ -225,7 +248,28 @@ class Block_Container extends Container {
 	 * @return Block_Container
 	 */
 	public function set_preview_mode( $preview = true ) {
-		$this->settings[ 'preview' ] = $preview;
+		_deprecated_function( __FUNCTION__, '3.0', 'set_mode()' );
+
+		$mode = $preview ? 'both' : 'edit';
+		$this->set_mode( $mode );
+
+		return $this;
+	}
+
+	/**
+	 * Set the mode for the block type.
+	 *
+	 * @param  string $mode
+	 * @return Block_Container
+	 */
+	public function set_mode( $mode ) {
+		$modes = array_keys( $this->mode_map );
+		if ( ! in_array( $mode, $modes ) ) {
+			Incorrect_Syntax_Exception::raise( 'The mode must be one of the following: ' . implode( ', ', $modes ) );
+		}
+
+		$this->settings[ 'mode' ] = $this->mode_map[ $mode ][ 'mode' ];
+		$this->settings[ 'preview' ] = $this->mode_map[ $mode ][ 'preview' ];
 
 		return $this;
 	}
