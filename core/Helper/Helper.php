@@ -520,7 +520,7 @@ class Helper {
 					array(
 						'value'   => $filename,
 						'compare' => 'LIKE',
-						'key'     => '_wp_attachment_metadata',
+						'key'     => '_wp_attached_file',
 					),
 				)
 			);
@@ -529,9 +529,14 @@ class Helper {
 
 			if ( $query->have_posts() ) {
 				foreach ( $query->posts as $post_id ) {
-					$meta                = wp_get_attachment_metadata( $post_id );
-					$original_file       = basename( $meta['file'] );
-					$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
+					$meta = wp_get_attachment_metadata( $post_id );
+					if ( empty( $meta ) ) {
+						$original_file = basename( wp_get_attachment_url( $post_id ) );
+						$cropped_image_files = array( $original_file );
+					} else {
+						$original_file       = basename( $meta['file'] );
+						$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
+					}
 
 					if ( $original_file === $filename || in_array( $filename, $cropped_image_files ) ) {
 						$attachment_id = intval( $post_id );
