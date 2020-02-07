@@ -34,7 +34,9 @@ class FileField extends Component {
 			apiFetch(
 				`${ window.wpApiSettings.root }carbon-fields/v1/attachment/?type=${ field.value_type }&value=${ value }`,
 				'get'
-			).then( this.handleFileDataChange );
+			).then( ( data ) => {
+				this.handleFileDataChange( data[ 0 ] );
+			} );
 		}
 	}
 

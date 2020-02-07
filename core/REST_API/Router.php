@@ -347,7 +347,7 @@ class Router {
 			$data[] = Helper::get_attachment_metadata( $value, $type );
 		}
 
-		return count( $data ) === 1 ? array_shift( $data ) : $data;
+		return $data;
 	}
 
 	/**
