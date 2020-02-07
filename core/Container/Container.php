@@ -801,6 +801,10 @@ abstract class Container implements Datastore_Holder_Interface {
 			$container_data['fields'][] = $field_data;
 		}
 
+		if ( isset( $_GET['cftab'] ) ) {
+			$container_data['settings']['current_tab'] = sanitize_text_field( $_GET['cftab'] );
+		}
+
 		return $container_data;
 	}
 
