@@ -4,6 +4,7 @@ namespace Carbon_Fields\Field;
 
 use Carbon_Fields\Value_Set\Value_Set;
 use Carbon_Fields\Helper\Helper;
+use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
 
 /**
  * Set field class.
@@ -23,6 +24,7 @@ class Media_Gallery_Field extends Field {
 
 	/**
 	 * What value to store
+	 * Available types: id, url
 	 *
 	 * @var string
 	 */
@@ -69,6 +71,23 @@ class Media_Gallery_Field extends Field {
 	 */
 	public function set_type( $type ) {
 		$this->file_type = $type;
+		return $this;
+	}
+
+	/**
+	 * Change the value type of the field.
+	 *
+	 * @param string $value_type
+	 * @return Media_Gallery_Field
+	 */
+	public function set_value_type( $value_type ) {
+		$types = array( 'url', 'id' );
+		if ( ! in_array( $value_type, $types ) ) {
+			Incorrect_Syntax_Exception::raise( 'Value Type must be one of the following: ' . implode( ', ', $types ) );
+			return $this;
+		}
+
+		$this->value_type = $value_type;
 		return $this;
 	}
 
@@ -133,9 +152,12 @@ class Media_Gallery_Field extends Field {
 	 */
 	protected function value_to_json() {
 		$value_set = $this->get_value();
+		if ( $this->value_type === 'id' ) {
+			$value_set = array_map( 'absint', $value_set );
+		}
 
 		return array(
-			'value' => array_map( 'absint', $value_set ),
+			'value' => $value_set,
 		);
 	}
 

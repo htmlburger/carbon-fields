@@ -6,6 +6,7 @@ import { withEffects } from 'refract-callbag';
 import { map, pipe } from 'callbag-basics';
 import { Component, createRef } from '@wordpress/element';
 import { withState, compose } from '@wordpress/compose';
+import { get } from 'lodash';
 
 /**
  * Internal dependencies.
@@ -13,7 +14,7 @@ import { withState, compose } from '@wordpress/compose';
 import './style.scss';
 import MediaLibrary from '../../components/media-library';
 import Sortable from '../../components/sortable';
-import fetchAttachmentsData from '../../utils/fetch-attachments-data';
+import apiFetch from '../../utils/api-fetch';
 
 class MediaGalleryField extends Component {
 	/**
@@ -34,10 +35,11 @@ class MediaGalleryField extends Component {
 			id,
 			onChange,
 			setState,
-			value
+			value,
+			field
 		} = this.props;
 
-		onChange( id, [ ...value, ...attachments.map( ( attachment ) => attachment.id ) ] );
+		onChange( id, [ ...value, ...attachments.map( ( attachment ) => get( attachment, field.value_type, attachment.id ) ) ] );
 
 		setState( {
 			attachmentsData: [ ...this.props.attachmentsData, ...attachments ]
@@ -87,10 +89,11 @@ class MediaGalleryField extends Component {
 
 		onChange( id, attachments );
 	}
-	
+
 	/**
 	 * Returns an URL to the attachment's thumbnail.
 	 *
+	 * @param {Object} attachment
 	 * @return {string}
 	 */
 	getAttachmentThumb( attachment ) {
@@ -103,6 +106,26 @@ class MediaGalleryField extends Component {
 		}
 
 		return attachment.url;
+	}
+
+	/**
+	 * Returns the filename of the attachment thumbnail.
+	 *
+	 * @param {Object} attachment
+	 * @return {string}
+	 */
+	getAttachmentName( attachment ) {
+		return attachment.filename || attachment.file_name;
+	}
+
+	/**
+	 * Returns the attachment type.
+	 *
+	 * @param {Object} attachment
+	 * @return {string}
+	 */
+	getAttachmentType( attachment ) {
+		return attachment.type || attachment.file_type;
 	}
 
 	/**
@@ -145,11 +168,22 @@ class MediaGalleryField extends Component {
 								<div className="cf-media-gallery__inner">
 									<ul className="cf-media-gallery__list" ref={ this.attachmentsList }>
 										{ value.map( ( id, index ) => { // eslint-disable-line no-shadow
-											const attachment = attachmentsData.find( ( attachmentData ) => attachmentData.id === id );
+											const attachment = attachmentsData.find( ( attachmentData ) => {
+												const attachmentValue = get( attachmentData, this.props.field.value_type, attachmentData.id );
+
+												return attachmentValue === id;
+											} );
+
+											if ( typeof attachment === 'undefined' ) {
+												return;
+											}
+
 											const className = [ 'cf-media-gallery__item' ];
 
+											const attachmentType = this.getAttachmentType( attachment );
+
 											if ( attachment ) {
-												className.push( `cf-media-gallery__item--${ attachment.type }` );
+												className.push( `cf-media-gallery__item--${ attachmentType }` );
 											}
 
 											if ( selectedItem === index ) {
@@ -165,7 +199,7 @@ class MediaGalleryField extends Component {
 													<div className="cf-media-gallery__item-inner">
 														<div className="cf-media-gallery__item-preview">
 															{
-																attachment.type === 'image'
+																attachmentType === 'image'
 																	? (
 																		<img
 																			className="cf-media-gallery__item-thumb"
@@ -182,7 +216,7 @@ class MediaGalleryField extends Component {
 														</div>
 
 														<span className="cf-media-gallery__item-name">
-															{ attachment.filename }
+															{ this.getAttachmentName( attachment ) }
 														</span>
 
 														<button
@@ -230,13 +264,18 @@ function handler( props ) {
 	return function( effect ) {
 		switch ( effect.type ) {
 			case 'COMPONENT_MOUNTED':
-				const { value, setState } = props;
+				const { value, setState, field } = props;
 
-				fetchAttachmentsData( value ).then( ( attachmentsData ) => {
-					setState( {
-						attachmentsData: [ ...props.attachmentsData, ...attachmentsData ]
+				if ( value.length ) {
+					apiFetch(
+						`${ window.wpApiSettings.root }carbon-fields/v1/attachment/?type=${ field.value_type }&value=${ value }`,
+						'get'
+					).then( ( attachmentsData ) => {
+						setState( {
+							attachmentsData: [ ...props.attachmentsData, ...attachmentsData ]
+						} );
 					} );
-				} );
+				}
 
 				break;
 		}

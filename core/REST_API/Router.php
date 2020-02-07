@@ -339,10 +339,15 @@ class Router {
 	 * @return array
 	 */
 	public function get_attachment_data() {
-		$type  = sanitize_text_field( $_GET['type'] );
-		$value = sanitize_text_field( $_GET['value'] );
+		$type   = sanitize_text_field( $_GET['type'] );
+		$values = explode( ',', sanitize_text_field( $_GET['value'] ) );
 
-		return Helper::get_attachment_metadata( $value, $type );
+		$data = [];
+		foreach ( $values as $value ) {
+			$data[] = Helper::get_attachment_metadata( $value, $type );
+		}
+
+		return count( $data ) === 1 ? array_shift( $data ) : $data;
 	}
 
 	/**
