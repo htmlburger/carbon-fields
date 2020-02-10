@@ -347,7 +347,9 @@ class AssociationField extends Component {
 
 											<div className="cf-association__option-content">
 												<span className="cf-association__option-title">
-													{ optionData.title }
+													<span className="cf-association__option-title-inner">
+														{ optionData.title }
+													</span>
 												</span>
 
 												<span className="cf-association__option-type">
