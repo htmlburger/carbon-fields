@@ -87,7 +87,7 @@
 .cf-container .cf-field + .cf-field {
   border-top-width: 1px; }
 
-.term-php .cf-container__fields > .cf-field > .cf-field__head,
+.term-php .cf-container__fields > .cf-field:not(.cf-field--has-width) > .cf-field__head,
 .cf-container-user-meta .cf-container__fields > .cf-field > .cf-field__head {
   position: absolute;
   left: 0;
