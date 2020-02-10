@@ -23,7 +23,7 @@ export const hexToRgba = ( hex ) => flow( [
  */
 export const rgbaToHex = ( rgba ) => {
 	if ( ! rgba ) {
-		return null;
+		return '';
 	}
 
 	const r = rgba.r.toString( 16 );
