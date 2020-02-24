@@ -30,6 +30,7 @@ class Rich_Text_Field extends Textarea_Field {
 					'wp_autoresize_on' => true,
 				),
 			);
+			$settings = apply_filters( 'crb_rich_text_field_settings', $settings );
 
 			add_filter( 'user_can_richedit', '__return_true' );
 			wp_editor( '', 'carbon_settings', $settings );
