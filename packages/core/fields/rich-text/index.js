@@ -153,7 +153,7 @@ class RichTextField extends Component {
 			};
 
 			const editorOptions = {
-				...window.tinyMCEPreInit.mceInit[ `carbon_settings_${ field.editor_index }` ],
+				...window.tinyMCEPreInit.mceInit[ field.settings_reference ],
 				selector: `#${ id }`,
 				setup: editorSetup
 			};

@@ -7,20 +7,6 @@ namespace Carbon_Fields\Field;
  */
 class Rich_Text_Field extends Textarea_Field {
 	/**
-	 * Total number of Rich_Text_Field objects
-	 *
-	 * @var integer
-	 */
-	private static $instance_count = 1;
-
-	/**
-	 * Current instance index
-	 *
-	 * @var integer
-	 */
-	protected $editor_index;
-
-	/**
 	 * WP Editor settings
 	 *
 	 * @link https://developer.wordpress.org/reference/classes/_wp_editors/parse_settings/
@@ -34,6 +20,13 @@ class Rich_Text_Field extends Textarea_Field {
 	);
 
 	/**
+	 * WP Editor settings reference
+	 *
+	 * @var string
+	 */
+	protected $settings_reference;
+
+	/**
 	* Set the editor settings
 	*
 	* @param  array $settings
@@ -43,6 +36,15 @@ class Rich_Text_Field extends Textarea_Field {
 		$this->settings = array_merge( $this->settings, $settings );
 
 		return $this;
+	}
+
+	/**
+	 * Get the editor settings reference
+	 *
+	 * @return string
+	 */
+	protected function get_settings_reference() {
+		return 'carbon_fields_settings_' . $this->id;
 	}
 
 	/**
@@ -65,11 +67,8 @@ class Rich_Text_Field extends Textarea_Field {
 		<div style="display:none;">
 			<?php
 			add_filter( 'user_can_richedit', '__return_true' );
-			wp_editor( '', 'carbon_settings_' . self::$instance_count, $this->settings );
+			wp_editor( '', $this->get_settings_reference(), $this->settings );
 			remove_filter( 'user_can_richedit', '__return_true' );
-
-			$this->editor_index = self::$instance_count;
-			self::$instance_count++;
 			?>
 		</div>
 		<?php
@@ -109,7 +108,7 @@ class Rich_Text_Field extends Textarea_Field {
 		$field_data = array_merge( $field_data, array(
 			'rich_editing' => user_can_richedit(),
 			'media_buttons' => $media_buttons,
-			'editor_index' => $this->editor_index,
+			'settings_reference' => $this->get_settings_reference(),
 		) );
 
 		return $field_data;
