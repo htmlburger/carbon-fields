@@ -6,12 +6,52 @@ namespace Carbon_Fields\Field;
  * WYSIWYG rich text area field class.
  */
 class Rich_Text_Field extends Textarea_Field {
+	/**
+	 * Total number of Rich_Text_Field objects
+	 *
+	 * @var integer
+	 */
+	private static $instance_count = 1;
+
+	/**
+	 * Current instance index
+	 *
+	 * @var integer
+	 */
+	protected $editor_index;
+
+	/**
+	 * WP Editor settings
+	 *
+	 * @link https://developer.wordpress.org/reference/classes/_wp_editors/parse_settings/
+	 * @var array
+	 */
+	protected $settings = array(
+		'tinymce' => array(
+			'resize' => true,
+			'wp_autoresize_on' => true,
+		),
+	);
+
+	/**
+	* Set the editor settings
+	*
+	* @param  array $settings
+	* @return self  $this
+	*/
+	public function set_settings( $settings ) {
+		$this->settings = array_merge( $this->settings, $settings );
+
+		return $this;
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public static function field_type_activated() {
-		add_action( 'admin_footer', array( get_class(), 'editor_init' ) );
+	public function activate() {
+		parent::activate();
+
+		add_action( 'admin_footer', array( $this, 'editor_init' ) );
 	}
 
 	/**
@@ -20,20 +60,16 @@ class Rich_Text_Field extends Textarea_Field {
 	 * Instead of enqueueing all required scripts and stylesheets and setting up TinyMCE,
 	 * wp_editor() automatically enqueues and sets up everything.
 	 */
-	public static function editor_init() {
+	public function editor_init() {
 		?>
 		<div style="display:none;">
 			<?php
-			$settings = array(
-				'tinymce' => array(
-					'resize' => true,
-					'wp_autoresize_on' => true,
-				),
-			);
-
 			add_filter( 'user_can_richedit', '__return_true' );
-			wp_editor( '', 'carbon_settings', $settings );
+			wp_editor( '', 'carbon_settings_' . self::$instance_count, $this->settings );
 			remove_filter( 'user_can_richedit', '__return_true' );
+
+			$this->editor_index = self::$instance_count;
+			self::$instance_count++;
 			?>
 		</div>
 		<?php
@@ -73,6 +109,7 @@ class Rich_Text_Field extends Textarea_Field {
 		$field_data = array_merge( $field_data, array(
 			'rich_editing' => user_can_richedit(),
 			'media_buttons' => $media_buttons,
+			'editor_index' => $this->editor_index,
 		) );
 
 		return $field_data;

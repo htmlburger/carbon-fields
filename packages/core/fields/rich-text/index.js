@@ -141,7 +141,6 @@ class RichTextField extends Component {
 	 */
 	initEditor = () => {
 		const { id, field } = this.props;
-
 		if ( field.rich_editing ) {
 			const editorSetup = ( editor ) => {
 				this.editor = editor;
@@ -154,7 +153,7 @@ class RichTextField extends Component {
 			};
 
 			const editorOptions = {
-				...window.tinyMCEPreInit.mceInit.carbon_settings,
+				...window.tinyMCEPreInit.mceInit[ `carbon_settings_${ field.editor_index }` ],
 				selector: `#${ id }`,
 				setup: editorSetup
 			};
