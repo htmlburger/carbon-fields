@@ -7,6 +7,14 @@ namespace Carbon_Fields\Field;
  */
 class Rich_Text_Field extends Textarea_Field {
 	/**
+	 * All Rich Text Fields settings references.
+	 * Used to prevent duplicated wp_editor initialization with the same settings.
+	 *
+	 * @var array
+	 */
+	protected static $settings_references = [];
+
+	/**
 	 * WP Editor settings
 	 *
 	 * @link https://developer.wordpress.org/reference/classes/_wp_editors/parse_settings/
@@ -20,7 +28,12 @@ class Rich_Text_Field extends Textarea_Field {
 		),
 	);
 
-	protected static $instances_references = [];
+	/**
+	 * MD5 Hash of the instance settings
+	 *
+	 * @var string
+	 */
+	protected $settings_hash = null;
 
 	/**
 	 * WP Editor settings reference
@@ -42,14 +55,25 @@ class Rich_Text_Field extends Textarea_Field {
 	}
 
 	/**
+	 * Calc the settings hash
+	 *
+	 * @return string
+	 */
+	protected function calc_settings_hash() {
+		return md5( json_encode( $this->settings ) );
+	}
+
+	/**
 	 * Get the editor settings reference
 	 *
 	 * @return string
 	 */
 	protected function get_settings_reference() {
-		$reference_id = md5( json_encode( $this->settings ) );
+		if ( is_null( $this->settings_hash ) ) {
+			$this->settings_hash = $this->calc_settings_hash();
+		}
 
-		return 'carbon_fields_settings_' . $reference_id;
+		return 'carbon_fields_settings_' . $this->settings_hash;
 	}
 
 	/**
@@ -68,11 +92,11 @@ class Rich_Text_Field extends Textarea_Field {
 	 * wp_editor() automatically enqueues and sets up everything.
 	 */
 	public function editor_init() {
-		if( in_array( $this->get_settings_reference(), self::$instances_references ) ) {
+		if( in_array( $this->get_settings_reference(), self::$settings_references ) ) {
 			return;
 		}
 
-		self::$instances_references[] = $this->get_settings_reference();
+		self::$settings_references[] = $this->get_settings_reference();
 		?>
 		<div style="display:none;">
 			<?php
@@ -104,7 +128,7 @@ class Rich_Text_Field extends Textarea_Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
-		$media_buttons = false;
+		$media_buttons = '';
 		if ( $this->settings['media_buttons'] ) {
 			ob_start();
 			remove_action( 'media_buttons', 'media_buttons' );
@@ -119,7 +143,7 @@ class Rich_Text_Field extends Textarea_Field {
 		}
 
 		$field_data = array_merge( $field_data, array(
-			'rich_editing' => user_can_richedit(),
+			'rich_editing' => user_can_richedit() && ! empty( $this->settings['tinymce'] ),
 			'media_buttons' => $media_buttons,
 			'settings_reference' => $this->get_settings_reference(),
 		) );
