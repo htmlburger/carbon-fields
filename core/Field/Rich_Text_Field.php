@@ -13,11 +13,14 @@ class Rich_Text_Field extends Textarea_Field {
 	 * @var array
 	 */
 	protected $settings = array(
+		'media_buttons' => true,
 		'tinymce' => array(
 			'resize' => true,
 			'wp_autoresize_on' => true,
 		),
 	);
+
+	protected static $instances_references = [];
 
 	/**
 	 * WP Editor settings reference
@@ -44,7 +47,9 @@ class Rich_Text_Field extends Textarea_Field {
 	 * @return string
 	 */
 	protected function get_settings_reference() {
-		return 'carbon_fields_settings_' . $this->id;
+		$reference_id = md5( json_encode( $this->settings ) );
+
+		return 'carbon_fields_settings_' . $reference_id;
 	}
 
 	/**
@@ -63,6 +68,11 @@ class Rich_Text_Field extends Textarea_Field {
 	 * wp_editor() automatically enqueues and sets up everything.
 	 */
 	public function editor_init() {
+		if( in_array( $this->get_settings_reference(), self::$instances_references ) ) {
+			return;
+		}
+
+		self::$instances_references[] = $this->get_settings_reference();
 		?>
 		<div style="display:none;">
 			<?php
@@ -94,16 +104,19 @@ class Rich_Text_Field extends Textarea_Field {
 	public function to_json( $load ) {
 		$field_data = parent::to_json( $load );
 
-		ob_start();
-		remove_action( 'media_buttons', 'media_buttons' );
+		$media_buttons = false;
+		if ( $this->settings['media_buttons'] ) {
+			ob_start();
+			remove_action( 'media_buttons', 'media_buttons' );
 
-		$this->upload_image_button_html();
+			$this->upload_image_button_html();
 
-		do_action( 'media_buttons' );
+			do_action( 'media_buttons' );
 
-		add_action( 'media_buttons', 'media_buttons' );
+			add_action( 'media_buttons', 'media_buttons' );
 
-		$media_buttons = apply_filters( 'crb_media_buttons_html', ob_get_clean(), $this->base_name );
+			$media_buttons = apply_filters( 'crb_media_buttons_html', ob_get_clean(), $this->base_name );
+		}
 
 		$field_data = array_merge( $field_data, array(
 			'rich_editing' => user_can_richedit(),

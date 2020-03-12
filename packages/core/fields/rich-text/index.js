@@ -95,6 +95,8 @@ class RichTextField extends Component {
 			? template( field.media_buttons )( { id } )
 			: null;
 
+		const shouldRenderTabs = field.rich_editing && window.tinyMCEPreInit.qtInit[ field.settings_reference ];
+
 		return (
 			<div
 				id={ `wp-${ id }-wrap` }
@@ -107,7 +109,7 @@ class RichTextField extends Component {
 					</div>
 				) }
 
-				{ field.rich_editing && (
+				{ shouldRenderTabs && (
 					<div className="wp-editor-tabs">
 						<button type="button" id={ `${ id }-tmce` } className="wp-switch-editor switch-tmce" data-wp-editor-id={ id }>
 							{ __( 'Visual', 'carbon-fields-ui' ) }
@@ -161,15 +163,17 @@ class RichTextField extends Component {
 			window.tinymce.init( editorOptions );
 		}
 
-		const quickTagsOptions = {
-			...window.tinyMCEPreInit,
-			id
-		};
+		const quickTagsOptions = { ...window.tinyMCEPreInit.qtInit[ field.settings_reference ] };
 
-		window.quicktags( quickTagsOptions );
+		if ( quickTagsOptions ) {
+			const qtagInstance = window.quicktags( {
+				...quickTagsOptions,
+				id
+			} );
 
-		// Force the initialization of the quick tags.
-		window.QTags._buttonsInit();
+			// Force the initialization of the quick tags.
+			window.QTags._buttonsInit( qtagInstance.id );
+		}
 	}
 
 	/**
