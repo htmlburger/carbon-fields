@@ -153,11 +153,11 @@ msgstr ""
 msgid "Not Found"
 msgstr ""
 
-#: packages/core/fields/rich-text/index.js:113
+#: packages/core/fields/rich-text/index.js:115
 msgid "Visual"
 msgstr ""
 
-#: packages/core/fields/rich-text/index.js:117
+#: packages/core/fields/rich-text/index.js:119
 msgid "Text"
 msgstr ""
 
