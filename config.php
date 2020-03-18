@@ -4,7 +4,7 @@ namespace Carbon_Fields;
 
 # Define version constant
 if ( ! defined( __NAMESPACE__ . '\VERSION' ) ) {
-	define( __NAMESPACE__ . '\VERSION', '3.1.14' );
+	define( __NAMESPACE__ . '\VERSION', '3.1.15' );
 }
 
 # Define root directory
