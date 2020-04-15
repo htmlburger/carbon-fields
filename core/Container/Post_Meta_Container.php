@@ -175,11 +175,9 @@ class Post_Meta_Container extends Container {
 		$post = get_post( intval( $object_id ) );
 		$post_type = $post->post_type;
 
-		if ( $post_type === 'revision' ) {
-			$parent = get_post( intval( $post->post_parent ) );
-			if ( $parent ) {
-				$post_type = $parent->post_type;
-			}
+		if ( wp_is_post_revision( $post ) !== false ) {
+			$post = get_post( intval( $post->post_parent ) );
+			$post_type = $post->post_type;
 		}
 
 		$environment = array(
