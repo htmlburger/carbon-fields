@@ -35,7 +35,15 @@ class RichTextField extends Component {
 
 			this.cancelObserver = observe( this.node.current, debounce( () => {
 				if ( this.editor ) {
+					/**
+					 * On each call of the `wpAutoResize` method the global `wpActiveEditor` reference
+					 * is changed to the element that will be resized. In some cases this is causing
+					 * conflicts with other plugins so we need to preserve and restore the previously
+					 * referenced element.
+					 */
+					const activeEdtior = window.wpActiveEditor;
 					this.editor.execCommand( 'wpAutoResize' );
+					window.wpActiveEditor = activeEdtior;
 				}
 			}, 100 ) );
 		}
