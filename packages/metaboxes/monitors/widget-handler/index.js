@@ -71,8 +71,8 @@ function aperture() {
 
 		pipe(
 			fromEventPattern(
-				( handler ) => window.jQuery( document ).on( 'ajaxSuccess', handler ),
-				( handler ) => window.jQuery( document ).off( 'ajaxSuccess', handler ),
+				( handler ) => window.jQuery( document ).on( 'ajaxSend', handler ),
+				( handler ) => window.jQuery( document ).off( 'ajaxSend', handler ),
 				( event, xhr, options, data ) => ( {
 					event,
 					xhr,
@@ -80,11 +80,11 @@ function aperture() {
 					data
 				} )
 			),
-			filter( ( { data } ) => {
-				return startsWith( data, 'deleted:' ) && isCarbonFieldsWidget( data );
+			filter( ( { options } ) => {
+				return startsWith( options.data, CARBON_FIELDS_CONTAINER_ID_PREFIX );
 			} ),
 			map( ( payload ) => ( {
-				type: 'WIDGET_DELETED',
+				type: 'WIDGET_BEIGN_UPDATED_OR_DELETED',
 				payload
 			} ) )
 		)
@@ -120,20 +120,11 @@ function handler() {
 				);
 
 				const fields = [];
-				let oldFieldIds;
-
-				if ( event.type === 'widget-updated' ) {
-					oldFieldIds = getContainerById( container.id ).fields.map( ( { id } ) => id );
-				}
 
 				container.fields = container.fields.map( ( field ) => flattenField( field, container, fields ) );
 
 				addFields( fields );
 				addContainer( container );
-
-				if ( event.type === 'widget-updated' ) {
-					removeFields( oldFieldIds );
-				}
 
 				renderContainer( container, 'classic' );
 
@@ -165,8 +156,9 @@ function handler() {
 				break;
 			}
 
-			case 'WIDGET_DELETED': {
-				const widgetId = effect.payload.data.replace( 'deleted:', '' );
+			case 'WIDGET_BEIGN_UPDATED_OR_DELETED': {
+				const [ , widgetId ] = effect.payload.options.data.match( /widget-id=(.+?)&/ );
+
 				const containerId = `${ CARBON_FIELDS_CONTAINER_ID_PREFIX }${ widgetId }`;
 
 				// Get the container from the store.
