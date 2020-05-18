@@ -3,6 +3,26 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "X-Generator: babel-plugin-makepot\n"
 
+#: packages/core/fields/association/index.js:168
+msgid "Maximum number of items reached (%s items)"
+msgstr ""
+
+#: packages/core/fields/association/index.js:266
+msgid "Showing %1$d of %2$d results"
+msgstr ""
+
+#: packages/core/fields/association/index.js:458
+msgid "An error occurred while trying to fetch association options."
+msgstr ""
+
+#: packages/core/fields/association/index.js:515
+msgid "This field is required."
+msgstr ""
+
+#: packages/core/fields/association/index.js:519
+msgid "Minimum number of items not reached (%s items)"
+msgstr ""
+
 #: packages/core/fields/rich-text/index.js:123
 msgid "Visual"
 msgstr ""
