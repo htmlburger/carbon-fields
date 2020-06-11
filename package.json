@@ -82,6 +82,7 @@
     "callbag-take-until": "^3.0.0",
     "classnames": "^2.2.6",
     "immer": "^1.7.4",
+    "jquery.1": "^1.0.0",
     "lodash": "^4.17.13",
     "nanoid": "^2.0.0",
     "observe-resize": "^1.1.3",
