@@ -132,7 +132,7 @@ class Container_Condition_Provider implements ServiceProviderInterface {
 			$condition->set_comparers( $ioc['container_condition_comparer_collections']['array'] );
 			return $condition;
 		} );
-		$cc_ioc['user_capabiltiy'] = $cc_ioc->factory( function() use ( $ioc ) {
+		$cc_ioc['user_capability'] = $cc_ioc->factory( function() use ( $ioc ) {
 			$condition = new \Carbon_Fields\Container\Condition\User_Capability_Condition();
 			$condition->set_comparers( array(
 				// Only support the custom comparer as this condition has its own comparison methods
