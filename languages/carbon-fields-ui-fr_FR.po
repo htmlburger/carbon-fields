@@ -1,0 +1,49 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"X-Generator: Poedit 2.2.4\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: fr_FR\n"
+
+#: packages/core/fields/complex/index.js:146
+msgid "Couldn't create the label of group - %s"
+msgstr "Impossible de créer le label du groupe - %s"
+
+#: packages/core/fields/complex/index.js:344
+msgid "There are no entries yet."
+msgstr "Il n'y a pas encore d'entrée."
+
+#: packages/core/fields/complex/index.js:401
+msgid "Expand All"
+msgstr "Tout déplier"
+
+#: packages/core/fields/complex/index.js:401
+msgid "Collapse All"
+msgstr "Tout replier"
+
+#: packages/core/fields/complex/index.js:428
+msgid "This field is required."
+msgstr "Ce champ est requis."
+
+#: packages/core/fields/complex/index.js:435
+msgid "Minimum number of rows not reached (%1$d %2$s)"
+msgstr "Le nombre minimum de lignes n'est pas atteint"
+
+#: packages/core/fields/complex/index.js:82
+msgid "Add %s"
+msgstr "Ajouter une %s"
+
+#: packages/core/fields/oembed/index.js:188
+msgid "An error occurred while trying to fetch oembed preview."
+msgstr "Une erreur est survenue lors de la tentative de récupération de l'aperçu du oembed."
+
+#: packages/core/fields/oembed/index.js:203
+msgid "Not Found"
+msgstr "Introuvable"
