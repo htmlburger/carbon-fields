@@ -46,6 +46,10 @@ function Field( {
 		...field.classes
 	];
 
+	if ( field.hidden ) {
+		return ( null );
+	}
+
 	return (
 		<div
 			className={ cx( classes ) }
