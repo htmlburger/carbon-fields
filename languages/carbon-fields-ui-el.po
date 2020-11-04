@@ -1,0 +1,223 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"X-Generator: Poedit 2.2.3\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: el\n"
+
+#: packages/blocks/components/block-edit/index.js:201
+msgid "Show preview"
+msgstr "Προβολή προεπισκόπησης"
+
+#: packages/blocks/components/block-edit/index.js:202
+msgid "Hide preview"
+msgstr "Απόκρυψη προεπισκόπησης"
+
+#: packages/blocks/components/block-edit/index.js:271
+msgid "Fields"
+msgstr "Πεδία"
+
+#: packages/blocks/components/not-supported-field/index.js:14
+msgid "Field of type '%s' is not supported in Gutenberg."
+msgstr "Το πεδίο τύπου ‘%s’ δεν υποστηρίζεται από το Gutenberg."
+
+#: packages/blocks/fields/datetime/index.js:59
+#: packages/core/fields/date/index.js:15
+#: packages/metaboxes/fields/datetime/index.js:9
+msgid "Select Date"
+msgstr "Επιλέξτε ημερομηνία"
+
+#: packages/blocks/fields/file/index.js:16
+#: packages/metaboxes/fields/file/index.js:11
+msgid "Use File"
+msgstr "Χρήση Αρχείου"
+
+#: packages/blocks/fields/file/index.js:17
+#: packages/metaboxes/fields/file/index.js:12
+msgid "Select File"
+msgstr "Επιλέξτε Αρχείο"
+
+#: packages/blocks/fields/image/index.js:11
+#: packages/metaboxes/fields/image/index.js:11
+msgid "Use Image"
+msgstr "Χρήση Εικόνας"
+
+#: packages/blocks/fields/image/index.js:12
+#: packages/metaboxes/fields/image/index.js:12
+msgid "Select Image"
+msgstr "Επιλογή Εικόνας"
+
+#: packages/blocks/fields/media-gallery/index.js:16
+#: packages/metaboxes/fields/media-gallery/index.js:16
+msgid "Use Attachments"
+msgstr "Χρήση συνημμένων"
+
+#: packages/blocks/fields/media-gallery/index.js:17
+#: packages/metaboxes/fields/media-gallery/index.js:17
+msgid "Select Attachments"
+msgstr "Επιλογή Συνημμένων"
+
+#: packages/core/components/no-options/index.js:14
+msgid "No options."
+msgstr "Χωρίς επιλογές."
+
+#: packages/core/components/search-input/index.js:30
+msgid "Search..."
+msgstr "Αναζήτηση..."
+
+#: packages/core/fields/association/index.js:113
+msgid "Maximum number of items reached (%s items)"
+msgstr "Μέγιστος αριθμός στοιχείων που αναζητήθηκαν (%s στοιχεία)"
+
+#: packages/core/fields/association/index.js:204
+msgid "Showing %1$d of %2$d results"
+msgstr "Εμφανίζονται %1$d από %2$d αποτελέσματα"
+
+#: packages/core/fields/association/index.js:380
+msgid "An error occurred while trying to fetch association options."
+msgstr "Παρουσιάστηκε σφάλμα κατά την προσπάθεια λήψης επιλογών σύνδεσης."
+
+#: packages/core/fields/association/index.js:430
+#: packages/core/fields/complex/index.js:428
+#: packages/core/hocs/with-validation/required.js:20
+msgid "This field is required."
+msgstr "Αυτό το πεδίο είναι υποχρεωτικό."
+
+#: packages/core/fields/association/index.js:434
+msgid "Minimum number of items not reached (%s items)"
+msgstr "Ελάχιστος αριθμός αντικειμένων που δεν αναζητήθηκαν (%s στοιχεία)"
+
+#: packages/core/fields/color/index.js:86
+msgid "Select a color"
+msgstr "Επιλέξτε ένα χρώμα"
+
+#: packages/core/fields/complex/group.js:154
+msgid "Duplicate"
+msgstr "Αντιγραφή"
+
+#: packages/core/fields/complex/group.js:163
+msgid "Remove"
+msgstr "Αφαίρεση"
+
+#: packages/core/fields/complex/group.js:172
+msgid "Collapse"
+msgstr "Σύμπτηξη"
+
+#: packages/core/fields/complex/index.js:146
+msgid "Couldn't create the label of group - %s"
+msgstr "Δεν ήταν δυνατή η δημιουργία της ετικέτας της ομάδας - %s"
+
+#: packages/core/fields/complex/index.js:401
+msgid "Expand All"
+msgstr "Ανάπτυξη όλων"
+
+#: packages/core/fields/complex/index.js:401
+msgid "Collapse All"
+msgstr "Σύμπτυξη όλων"
+
+#: packages/core/fields/complex/index.js:435
+msgid "Minimum number of rows not reached (%1$d %2$s)"
+msgstr "Ελάχιστος αριθμός εγγραφών που δεν έχουν αναζητηθεί (%1$d %2$s)"
+
+#: packages/core/fields/complex/index.js:82
+msgid "Add %s"
+msgstr "Προσθήκη %s"
+
+#: packages/core/fields/map/index.js:165
+msgid "The address could not be found."
+msgstr "Δεν ήταν δυνατή η εύρεση της διεύθυνσης."
+
+#: packages/core/fields/map/index.js:167
+msgid "Geocode was not successful for the following reason: "
+msgstr "Ο γεωκωδικός δεν ήταν επιτυχής για τον ακόλουθο λόγο: "
+
+#: packages/core/fields/map/index.js:185
+msgid "Error alert"
+msgstr "Ειδοποίηση σφάλματος"
+
+#: packages/core/fields/oembed/index.js:188
+msgid "An error occurred while trying to fetch oembed preview."
+msgstr "Παρουσιάστηκε σφάλμα κατά την προσπάθεια λήψης προεπισκόπησης."
+
+#: packages/core/fields/oembed/index.js:203
+msgid "Not Found"
+msgstr "Δε βρέθηκε"
+
+#: packages/core/fields/rich-text/index.js:103
+msgid "Text"
+msgstr "Κείμενο"
+
+#: packages/core/fields/rich-text/index.js:99
+msgid "Visual"
+msgstr "Οπτικό"
+
+#: packages/core/fields/sidebar/index.js:110
+msgid "Please enter the name of the new sidebar:"
+msgstr "Παρακαλώ δώστε το όνομα του νέου sidebar:"
+
+#: packages/core/fields/sidebar/index.js:128
+msgid "An error occurred while trying to create the sidebar."
+msgstr "Παρουσιάστηκε σφάλμα κατά την προσπάθεια δημιουργίας του sidebar."
+
+#: packages/core/fields/sidebar/index.js:58
+msgid "Please choose"
+msgstr "Παρακαλώ επιλέξτε"
+
+#: packages/core/fields/time/index.js:16
+msgid "Select Time"
+msgstr "Επιλέξτε Ώρα"
+
+#: packages/core/hocs/with-conditional-logic/index.js:62
+msgid "An unknown field is used in condition - \"%s\""
+msgstr "Ένα άγνωστο πεδίο χρησιμοποιείται στη συνθήκη - \" %s\""
+
+#: packages/core/registry/index.js:40
+msgid "%1$s type must be a string."
+msgstr "Ο τύπος %1$s πρέπει να είναι ένα αλφαριθμητικό."
+
+#: packages/core/registry/index.js:46
+msgid "%1$s %2$s is already registered."
+msgstr "Το %1$s %2$s είναι ήδη εγγεγραμμένο."
+
+#: packages/core/registry/index.js:54
+msgid "The \"component\" param must be a function."
+msgstr "Η παράμετρος \"component\" πρέπει να είναι μια συνάρτηση."
+
+#: packages/core/registry/index.js:79
+msgid "The provided context isn't a valid one. Must be one of - %s ."
+msgstr "Το δοσμένο context δεν είναι έγκυρο. Πρέπει να είναι ένα από τα - %s."
+
+#: packages/core/registry/index.js:89
+msgid "%s %s isn't registered."
+msgstr "Το %s %s δεν είναι καταχωρημένο."
+
+#: packages/core/utils/api-fetch.js:19
+msgid "An error occured."
+msgstr "Προέκυψε ένα σφάλμα."
+
+#: packages/core/utils/fetch-attachments-data.js:23
+msgid "An error occurred while trying to fetch files data."
+msgstr "Παρουσιάστηκε σφάλμα κατά την προσπάθεια λήψης των δεδομένων των αρχείων."
+
+#: packages/metaboxes/containers/index.js:52
+msgid "Could not find DOM element for container \"%1$s\"."
+msgstr "Δεν βρέθηκε το στοιχείο DOM για το container \"%1$s\"."
+
+#: packages/metaboxes/monitors/conditional-display/conditions/base.js:52
+msgid "Unsupported container condition comparison operator used - \"%1$s\"."
+msgstr "Χρησιμοποιηθήκε μη υποστηριζόμενος τελεστής σύγκρισης container - \"%1$s\"."
+
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:55
+msgid "Unsupported container condition - \"%1$s\"."
+msgstr "Μη υποστηριζόμενη κατάσταση container - \"%1$s\"."
+
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:73
+msgid "Unsupported container condition relation used - \"%1$s\"."
+msgstr "Χρησιμοποιήθηκε μη υποστηριζόμενη κατάσταση συσχέτισης container - \"%1$s\"."
