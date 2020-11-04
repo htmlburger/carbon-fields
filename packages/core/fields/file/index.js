@@ -30,9 +30,17 @@ class FileField extends Component {
 		const { value, field } = this.props;
 
 		if ( value ) {
+			let endpoint = '';
+
+			if ( window.wpApiSettings.root.indexOf( '?rest_route' ) !== -1 ) {
+				endpoint = `${ window.wpApiSettings.root }carbon-fields/v1/attachment&type=${ field.value_type }&value=${ value }`;
+			} else {
+				endpoint = `${ window.wpApiSettings.root }carbon-fields/v1/attachment?type=${ field.value_type }&value=${ value }`;
+			}
+
 			// TODO: Refactor this to use `@wordpress/api-fetch` package.
 			apiFetch(
-				`${ window.wpApiSettings.root }carbon-fields/v1/attachment/?type=${ field.value_type }&value=${ value }`,
+				endpoint,
 				'get'
 			).then( this.handleFileDataChange );
 		}
