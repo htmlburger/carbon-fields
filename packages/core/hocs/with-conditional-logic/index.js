@@ -52,7 +52,7 @@ export default function withConditionalLogic( input, output ) {
 	 */
 	function handler( props ) {
 		return function( effect ) {
-			const fieldExists = find( effect, [ 'id', props.id ] );
+			const fieldExists = has( effect, props.name ) || find( effect, [ 'id', props.id ] );
 
 			if ( ! fieldExists ) {
 				return;

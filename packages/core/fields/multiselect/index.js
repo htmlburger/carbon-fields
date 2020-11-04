@@ -35,7 +35,7 @@ class MultiselectField extends Component {
 	filterValues = ( values ) => {
 		const { field } = this.props;
 
-		return field.options.filter( ( option ) => values.indexOf( option.value ) > -1 );
+		return values.map( ( value ) => field.options.find( ( option ) => option.value === value ) );
 	}
 
 	/**

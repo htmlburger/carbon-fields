@@ -57,6 +57,7 @@ class Router {
 			'callback'            => 'get_attachment_data',
 			'permission_callback' => 'allow_access',
 			'methods'             => 'GET',
+			'args'                => 'attachment_data_args_schema',
 		),
 		'block_renderer' => array(
 			'path'                => '/block-renderer',
@@ -417,6 +418,26 @@ class Router {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Returns the schema of the accepted arguments.
+	 *
+	 * @return array
+	 */
+	public function attachment_data_args_schema() {
+		return array(
+			'type'       => array(
+				'type'        => 'string',
+				'required'    => true,
+				'description' => __( 'The requested type: ID or URL.', 'carbon-fields' ),
+			),
+			'value'    => array(
+				'type'        => 'string',
+				'required'    => true,
+				'description' => __( 'The ID / URL of the attachment', 'carbon-fields' ),
+			),
+		);
 	}
 
 	/**

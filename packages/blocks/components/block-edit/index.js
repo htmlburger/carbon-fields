@@ -36,7 +36,7 @@ class BlockEdit extends Component {
 	 * @type {Object}
 	 */
 	state = {
-		mode: 'edit',
+		mode: this.props.container.settings.mode,
 		currentTab: this.props.supportsTabs
 			? Object.keys( this.props.container.settings.tabs )[ 0 ]
 			: null
