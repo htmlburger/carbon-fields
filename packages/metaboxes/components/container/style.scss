@@ -17,7 +17,7 @@
 .cf-container__fields {
 	display: flex;
 	flex-wrap: wrap;
-	margin: -1px -1px 0 0;
+	margin: 0 -1px 0 0;
 	background-color: $color-white;
 
 	&[hidden] {
