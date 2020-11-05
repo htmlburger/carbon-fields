@@ -1594,16 +1594,21 @@ span.flatpickr-weekday {
 
 .cf-multiselect__multi-value {
   align-items: center;
+  padding: 5px 3px;
   margin: 0;
-  background-color: transparent; }
+  background-color: #e2e4e7; }
+  .cf-multiselect__multi-value + .cf-multiselect__multi-value {
+    margin-left: 5px; }
 
 .cf-multiselect__multi-value__label {
   padding-left: 3px;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1; }
 
 .cf-multiselect__multi-value__remove {
-  padding: 0; }
+  padding: 0;
+  margin-top: 1px;
+  cursor: pointer; }
   .cf-multiselect__multi-value__remove:hover {
     background-color: transparent; }
 
@@ -1621,7 +1626,8 @@ span.flatpickr-weekday {
     color: #fff; }
 
 .cf-multiselect__indicator {
-  padding: 5px; }
+  padding: 5px;
+  cursor: pointer; }
 
 /* ==========================================================================
    Colors

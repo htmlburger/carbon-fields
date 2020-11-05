@@ -94,7 +94,7 @@
   font-weight: 600; }
 
 .cf-container .cf-field__label {
-  padding-bottom: 5px;
+  padding-bottom: 6.5px;
   font-weight: 600;
   color: #23282d; }
 
@@ -359,7 +359,7 @@
 .cf-container__fields {
   display: flex;
   flex-wrap: wrap;
-  margin: -1px -1px 0 0;
+  margin: 0 -1px 0 0;
   background-color: #fff; }
   .cf-container__fields[hidden] {
     display: none; }
