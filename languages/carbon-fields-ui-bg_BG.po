@@ -1,26 +1,26 @@
 msgid ""
 msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
-"X-Generator: Poedit 2.2\n"
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
-"Language-Team: \n"
-"MIME-Version: 1.0\n"
-"Content-Transfer-Encoding: 8bit\n"
 "Last-Translator: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language-Team: \n"
 "Language: bg_BG\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.4.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: packages/blocks/components/block-edit/index.js:152
+#: packages/blocks/components/block-edit/index.js:214
 msgid "Show preview"
 msgstr "Покажи прегледа"
 
-#: packages/blocks/components/block-edit/index.js:153
+#: packages/blocks/components/block-edit/index.js:215
 msgid "Hide preview"
 msgstr "Скрий прегледа"
 
-#: packages/blocks/components/block-edit/index.js:169
+#: packages/blocks/components/block-edit/index.js:286
 msgid "Fields"
 msgstr "Полета"
 
@@ -28,7 +28,17 @@ msgstr "Полета"
 msgid "Field of type '%s' is not supported in Gutenberg."
 msgstr "Поле от тип ‘%s’ не се поддържа в Gutenberg."
 
-#: packages/blocks/fields/datetime/index.js:14
+#: packages/blocks/components/server-side-render/index.js:129
+msgid "Error loading block: %s"
+msgstr ""
+
+#: packages/blocks/components/server-side-render/index.js:135
+#, fuzzy
+#| msgid "Not Found"
+msgid "No results found."
+msgstr "Няма резултат"
+
+#: packages/blocks/fields/datetime/index.js:59
 #: packages/core/fields/date/index.js:15
 #: packages/metaboxes/fields/datetime/index.js:9
 msgid "Select Date"
@@ -72,61 +82,65 @@ msgstr "Не са дефинирани опции."
 msgid "Search..."
 msgstr "Търси…"
 
-#: packages/core/fields/association/index.js:113
+#: packages/core/fields/association/index.js:168
 msgid "Maximum number of items reached (%s items)"
 msgstr "Максималният брой на избрани елементи е достигнат (%s)"
 
-#: packages/core/fields/association/index.js:204
+#: packages/core/fields/association/index.js:266
 msgid "Showing %1$d of %2$d results"
 msgstr "Показани %1$d от %2$d резултата"
 
-#: packages/core/fields/association/index.js:380
+#: packages/core/fields/association/index.js:458
 msgid "An error occurred while trying to fetch association options."
 msgstr "Възникна грешка при опита да се получат елементите."
 
-#: packages/core/fields/association/index.js:430
-#: packages/core/fields/complex/index.js:394
+#: packages/core/fields/association/index.js:515
+#: packages/core/fields/complex/index.js:428
 #: packages/core/hocs/with-validation/required.js:20
 msgid "This field is required."
 msgstr "Това поле е задължително."
 
-#: packages/core/fields/association/index.js:434
+#: packages/core/fields/association/index.js:519
 msgid "Minimum number of items not reached (%s items)"
 msgstr "Минималния брой на избрани елементи не е достигнат (%s)"
 
-#: packages/core/fields/color/index.js:86
+#: packages/core/fields/color/index.js:92
 msgid "Select a color"
 msgstr "Изберете цвят"
 
-#: packages/core/fields/complex/group.js:150
+#: packages/core/fields/complex/group.js:154
 msgid "Duplicate"
 msgstr "Дублирай"
 
-#: packages/core/fields/complex/group.js:159
+#: packages/core/fields/complex/group.js:163
 msgid "Remove"
 msgstr "Премахни"
 
-#: packages/core/fields/complex/group.js:168
+#: packages/core/fields/complex/group.js:172
 msgid "Collapse"
 msgstr "Свий"
 
-#: packages/core/fields/complex/index.js:145
+#: packages/core/fields/complex/index.js:146
 msgid "Couldn't create the label of group - %s"
 msgstr ""
 
-#: packages/core/fields/complex/index.js:367
+#: packages/core/fields/complex/index.js:344
+msgid "There are no entries yet."
+msgstr ""
+
+#: packages/core/fields/complex/index.js:401
 msgid "Expand All"
 msgstr "Разгъни всички"
 
-#: packages/core/fields/complex/index.js:367
+#: packages/core/fields/complex/index.js:401
 msgid "Collapse All"
 msgstr "Свий всички"
 
-#: packages/core/fields/complex/index.js:401
+#: packages/core/fields/complex/index.js:435
 msgid "Minimum number of rows not reached (%1$d %2$s)"
 msgstr "Минималния брой не е достигнат (%1$d %2$s)"
 
-#: packages/core/fields/complex/index.js:81
+#: packages/core/fields/complex/index.js:82
 msgid "Add %s"
 msgstr "Добави %s"
 
@@ -150,13 +164,13 @@ msgstr "Възникна грешка при опита да се получи �
 msgid "Not Found"
 msgstr "Няма резултат"
 
-#: packages/core/fields/rich-text/index.js:100
-msgid "Text"
-msgstr "Текст"
-
-#: packages/core/fields/rich-text/index.js:96
+#: packages/core/fields/rich-text/index.js:123
 msgid "Visual"
 msgstr "Визуален"
+
+#: packages/core/fields/rich-text/index.js:127
+msgid "Text"
+msgstr "Текст"
 
 #: packages/core/fields/sidebar/index.js:110
 msgid "Please enter the name of the new sidebar:"
@@ -174,7 +188,7 @@ msgstr "Избери"
 msgid "Select Time"
 msgstr "Избери време"
 
-#: packages/core/hocs/with-conditional-logic/index.js:62
+#: packages/core/hocs/with-conditional-logic/index.js:69
 msgid "An unknown field is used in condition - \"%s\""
 msgstr ""
 
@@ -202,11 +216,11 @@ msgstr ""
 msgid "An error occured."
 msgstr "Възникна грешка."
 
-#: packages/core/utils/fetch-attachments-data.js:23
+#: packages/core/utils/fetch-attachments-data.js:24
 msgid "An error occurred while trying to fetch files data."
 msgstr "Възникна грешка при получаването на информацията за файла."
 
-#: packages/metaboxes/containers/index.js:52
+#: packages/metaboxes/containers/index.js:55
 msgid "Could not find DOM element for container \"%1$s\"."
 msgstr ""
 
