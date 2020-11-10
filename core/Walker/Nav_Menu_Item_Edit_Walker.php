@@ -26,6 +26,7 @@ class Nav_Menu_Item_Edit_Walker extends \Walker_Nav_Menu_Edit {
 		// Generates the HTML
 		ob_start();
 		do_action( 'carbon_fields_print_nav_menu_item_container_fields', $item, $output, $depth, $args, $id );
+		do_action( 'wp_nav_menu_item_custom_fields', $item->ID, $item, $depth, $args, $id );
 		echo $flag;
 		$fields = ob_get_clean();
 
