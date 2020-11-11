@@ -140,7 +140,13 @@ class Loader {
 	 * @return string
 	 */
 	protected function get_assets_context() {
-		return get_current_screen()->is_block_editor() ? 'gutenberg' : 'classic';
+		$current_screen = get_current_screen();
+
+		if ( is_null( $current_screen ) ) {
+			return 'classic';
+		}
+
+		return $current_screen->is_block_editor() ? 'gutenberg' : 'classic';
 	}
 
 	/**
