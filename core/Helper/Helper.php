@@ -598,13 +598,13 @@ class Helper {
 		}
 
 		$attachment_metadata['id']        = intval( $id );
-		$attachment_metadata['file_url']  = is_numeric( $id ) ? wp_get_attachment_url( $id ) : $id;
-		$attachment_metadata['file_name'] = basename( $attachment_metadata['file_url'] );
-		$attachment_metadata['filetype']  = wp_check_filetype( $attachment_metadata['file_url'] );
+		$attachment_metadata['url']       = is_numeric( $id ) ? wp_get_attachment_url( $id ) : $id;
+		$attachment_metadata['file_name'] = basename( $attachment_metadata['url'] );
+		$attachment_metadata['filetype']  = wp_check_filetype( $attachment_metadata['url'] );
 		$attachment_metadata['file_type'] = preg_replace( '~\/.+$~', '', $attachment_metadata['filetype']['type'] ); // image, video, etc..
 
 		if ( $attachment_metadata['file_type'] == 'image' ) {
-			$attachment_metadata['thumb_url'] = $attachment_metadata['file_url'];
+			$attachment_metadata['thumb_url'] = $attachment_metadata['url'];
 
 			if ( $type == 'id' ) {
 				$attachment_metadata['thumb_url'] = wp_get_attachment_thumb_url( $id );

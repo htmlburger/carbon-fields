@@ -42,7 +42,9 @@ class FileField extends Component {
 			apiFetch(
 				endpoint,
 				'get'
-			).then( this.handleFileDataChange );
+			).then( ( data ) => {
+				this.handleFileDataChange( data[ 0 ] );
+			} );
 		}
 	}
 
