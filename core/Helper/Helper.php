@@ -509,7 +509,7 @@ class Helper {
 		 */
 		$url = apply_filters( 'carbon_fields_attachment_id_base_url', $url );
 
-		$filename = basename( $url );
+		$filename = wp_basename( $url );
 
 		if ( strpos( $url, $dir['baseurl'] . '/' ) !== false ) {
 			$query_args = array(
@@ -530,7 +530,7 @@ class Helper {
 			if ( $query->have_posts() ) {
 				foreach ( $query->posts as $post_id ) {
 					$meta                = wp_get_attachment_metadata( $post_id );
-					$original_file       = basename( $meta['file'] );
+					$original_file       = wp_basename( $meta['file'] );
 					$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
 
 					if ( $original_file === $filename || in_array( $filename, $cropped_image_files ) ) {
@@ -599,7 +599,7 @@ class Helper {
 
 		$attachment_metadata['id']        = intval( $id );
 		$attachment_metadata['file_url']  = is_numeric( $id ) ? wp_get_attachment_url( $id ) : $id;
-		$attachment_metadata['file_name'] = basename( $attachment_metadata['file_url'] );
+		$attachment_metadata['file_name'] = wp_basename( $attachment_metadata['file_url'] );
 		$attachment_metadata['filetype']  = wp_check_filetype( $attachment_metadata['file_url'] );
 		$attachment_metadata['file_type'] = preg_replace( '~\/.+$~', '', $attachment_metadata['filetype']['type'] ); // image, video, etc..
 
