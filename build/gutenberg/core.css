@@ -22,6 +22,14 @@
 /* ==========================================================================
    Association
    ========================================================================== */
+.container-carbon_fields_container_word_settings {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%; }
+
+.cf-container .cf-field {
+  max-width: 100%; }
+
 .cf-association__bar {
   position: relative;
   z-index: 1;
@@ -84,6 +92,10 @@
   width: 50%;
   max-height: 160px;
   overflow-y: auto; }
+  .cf-association__col.ui-sortable .cf-association__option-title {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis; }
 
 .cf-association__option {
   display: flex;
@@ -333,8 +345,7 @@
    ========================================================================== */
 .cf-complex__groups {
   flex: 1;
-  position: relative;
-  z-index: 0; }
+  position: relative; }
   .cf-complex--tabbed-vertical > .cf-complex__groups {
     flex: 0 0 80%; }
 
