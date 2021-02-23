@@ -1,6 +1,6 @@
 {
   "name": "carbon-fields",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options, navigation menus and more.",
   "directories": {
     "test": "tests"
@@ -48,7 +48,7 @@
     "husky": "^1.2.0",
     "lint-staged": "^8.1.0",
     "mini-css-extract-plugin": "^0.4.4",
-    "node-sass": "^4.9.4",
+    "node-sass": "^4.13.1",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.2.0",

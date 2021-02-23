@@ -750,7 +750,7 @@ class Association_Field extends Field {
 		switch ( $type['type'] ) {
 
 			case 'post':
-				$edit_link = get_edit_post_link( $id );
+				$edit_link = get_edit_post_link( $id, '' );
 				break;
 
 			case 'term':

@@ -39,9 +39,6 @@ function handler( props ) {
 
 				const $carbonContainer = window.jQuery( `.container-${ container.id }` );
 
-				// trigger change immediately after save, since the container is expanded
-				$carbonContainer.trigger( 'change' );
-
 				// trigger change when the expand button is clicked
 				$carbonContainer
 					.closest( '.widget' )
@@ -49,6 +46,7 @@ function handler( props ) {
 					.on( 'click', () => {
 						setTimeout( () => {
 							$carbonContainer.trigger( 'change' );
+							$carbonContainer.closest( 'form' ).find( 'input[type="submit"]' ).trigger( 'click' );
 						}, 500 );
 					} );
 

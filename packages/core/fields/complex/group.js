@@ -147,7 +147,7 @@ class ComplexGroup extends Component {
 
 				<div className={ actionsClasses }>
 					{ allowClone && (
-						<button type="button" className="cf-complex__group-action" onClick={ this.handleCloneClick }>
+						<button type="button" title={ __( 'Duplicate', 'carbon-fields-ui' ) } className="cf-complex__group-action" onClick={ this.handleCloneClick }>
 							<span className="dashicons-before dashicons-admin-page cf-complex__group-action-icon"></span>
 
 							<span className="cf-complex__group-action-text">
@@ -156,7 +156,7 @@ class ComplexGroup extends Component {
 						</button>
 					) }
 
-					<button type="button" className="cf-complex__group-action" onClick={ this.handleRemoveClick }>
+					<button type="button" title={ __( 'Remove', 'carbon-fields-ui' ) } className="cf-complex__group-action" onClick={ this.handleRemoveClick }>
 						<span className="dashicons-before dashicons-trash cf-complex__group-action-icon"></span>
 
 						<span className="cf-complex__group-action-text">
@@ -165,7 +165,7 @@ class ComplexGroup extends Component {
 					</button>
 
 					{ ! tabbed && (
-						<button type="button" className="cf-complex__group-action" onClick={ this.handleToggleClick }>
+						<button type="button" title={ __( 'Collapse', 'carbon-fields-ui' ) } className="cf-complex__group-action" onClick={ this.handleToggleClick }>
 							<span className={ toggleClasses }></span>
 
 							<span className="cf-complex__group-action-text">

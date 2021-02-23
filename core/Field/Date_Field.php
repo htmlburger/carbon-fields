@@ -10,7 +10,7 @@ class Date_Field extends Field {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $allowed_attributes = array( 'placeholder' );
+	protected $allowed_attributes = array( 'placeholder', 'autocomplete' );
 
 	/**
 	 * The storage format for use in PHP
