@@ -17,7 +17,8 @@ import {
 	pick,
 	without,
 	isMatch,
-	isEmpty
+	isEmpty,
+	debounce
 } from 'lodash';
 import {
 	combine,
@@ -120,7 +121,7 @@ class AssociationField extends Component {
 	 * @param  {string} queryTerm
 	 * @return {void}
 	 */
-	handleSearchChange = ( queryTerm ) => {
+	handleSearchChange = debounce( ( queryTerm ) => {
 		const {
 			fetchOptions,
 			setState
@@ -136,7 +137,7 @@ class AssociationField extends Component {
 			page: 1,
 			queryTerm
 		} );
-	}
+	}, 250 )
 
 	/**
 	 * Handles addition of a new item.
