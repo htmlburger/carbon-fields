@@ -22,7 +22,6 @@
 	border-color: $wp-color-gray-light-500;
 	border-style: solid;
 	border-width: 1px;
-	box-shadow: inset 0 1px 2px rgba( 0, 0, 0, 0.07 );
 
 	.cf-search-input {
 		flex: 1 1 auto;
@@ -50,7 +49,7 @@
 	font-size: 12px;
 	color: $wp-color-dark-gray;
 	pointer-events: none;
-	margin-right: 5px;
+	margin-right: 10px;
 	margin-left: 5px;
 }
 
@@ -86,7 +85,6 @@
 	overflow-y: auto;
 
 	&.ui-sortable .cf-association__option-title {
-		overflow: hidden;
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
@@ -166,8 +164,8 @@
 	align-items: center;
 	justify-content: space-between;
 
-	.cf-association__col:first-child & {
-		min-width: 48px;
+	button {
+		margin-left: 8px;
 	}
 }
 
@@ -184,6 +182,7 @@
 	color: $wp-color-dark-silver-gray;
 	transition: color $transition-base;
 	cursor: pointer;
+	background: transparent;
 
 	&:focus {
 		color: $wp-color-dark-silver-gray;
