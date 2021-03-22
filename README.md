@@ -17,7 +17,7 @@ See [Quickstart](https://github.com/htmlburger/carbon-fields-docs/tree/master/do
 ### Documentation & Other Resources
 
 * [Website](http://carbonfields.net/)
-* [Documentation (website)](http://carbonfields.net/docs/)
+* [Documentation (website)](https://docs.carbonfields.net/)
 * [Documentation (GitHub)](https://github.com/htmlburger/carbon-fields-docs)
 * [FAQ](http://carbonfields.net/faq/)
 * [Support](http://carbonfields.net/support/)
