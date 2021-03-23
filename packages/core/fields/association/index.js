@@ -289,7 +289,7 @@ class AssociationField extends Component {
 											</span>
 
 											<span className="cf-association__option-type">
-												{ option.type }
+												{ option.label }
 											</span>
 										</div>
 
