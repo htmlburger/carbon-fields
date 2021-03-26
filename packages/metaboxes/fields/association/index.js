@@ -32,6 +32,7 @@ addFilter( 'carbon-fields.association.metabox', 'carbon-fields/metaboxes', withP
 	return {
 		hierarchyResolver() {
 			// Get all fields.
+			const container = select( 'carbon-fields/metaboxes' ).getContainerById( props.containerId );
 			const fields = select( 'carbon-fields/metaboxes' ).getFieldsByContainerId( props.containerId );
 
 			// Get a clean version of field's name.
@@ -42,6 +43,10 @@ addFilter( 'carbon-fields.association.metabox', 'carbon-fields/metaboxes', withP
 
 			// Remove chunks that are empty.
 			path = path.filter( ( chunk ) => chunk !== '' );
+
+			if ( container.type === 'widget' ) {
+				return props.field.base_name;
+			}
 
 			// Get the root field.
 			const rootFieldName = path.shift();

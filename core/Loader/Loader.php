@@ -42,6 +42,7 @@ class Loader {
 
 		add_action( 'after_setup_theme', array( $this, 'load_textdomain' ), 9999 );
 		add_action( 'init', array( $this, 'trigger_fields_register' ), 0 );
+		add_action( 'rest_api_init', array( $this, 'initialize_widgets' ) );
 		add_action( 'carbon_fields_fields_registered', array( $this, 'initialize_containers' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_media_browser' ), 0 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'enqueue_assets' ), 9 );
@@ -284,6 +285,31 @@ class Loader {
 		$carbon_data['sidebars'] = Helper::get_active_sidebars();
 
 		return $carbon_data;
+	}
+
+	/**
+	 * Register widget containers for REST API
+	 * in order to be able to interract with the containers
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function initialize_widgets() {
+		global $wp_registered_widgets;
+
+		// Get used (active and inactive) widgets from Carbon Fields
+		$carbon_fields_widgets_ids = array_filter( array_merge( ...array_values( wp_get_sidebars_widgets() ) ), function ( $widget_id ) {
+			return substr( $widget_id, 0, 14 ) === 'carbon_fields_';
+		} );
+
+		foreach ( $carbon_fields_widgets_ids as $widget_id ) {
+			if ( isset( $wp_registered_widgets[ $widget_id ] ) ) {
+				$widget_class = $wp_registered_widgets[ $widget_id ]['callback'][0];
+
+				$widget_class->_set( $wp_registered_widgets[ $widget_id ]['params'][0]['number'] );
+				$widget_class->register_container();
+			}
+		}
 	}
 
 	/**

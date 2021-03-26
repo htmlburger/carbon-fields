@@ -42,7 +42,7 @@ class RichTextField extends Component {
 					 * referenced element.
 					 */
 					const activeEdtior = window.wpActiveEditor;
-					this.editor.execCommand( 'wpAutoResize' );
+					this.editor.execCommand( 'wpAutoResize', undefined, undefined, { skip_focus: true } );
 					window.wpActiveEditor = activeEdtior;
 				}
 			}, 100 ) );

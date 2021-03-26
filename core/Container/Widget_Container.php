@@ -23,7 +23,6 @@ class Widget_Container extends Container {
 	 */
 	public function init() {
 		$this->_attach();
-		$this->render();
 
 		return $this;
 	}
@@ -43,6 +42,10 @@ class Widget_Container extends Container {
 	 * @return bool True if the container is allowed to be attached
 	 */
 	public function is_valid_attach_for_request() {
+		if ( did_action( 'rest_api_init' ) || doing_action( 'rest_api_init' ) ) {
+			return true;
+		}
+
 		$screen = get_current_screen();
 		$input = Helper::input();
 		$request_action = isset( $input['action'] ) ? $input['action'] : '';
