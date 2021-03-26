@@ -70,7 +70,7 @@
     "@wordpress/editor": "^9.0.3",
     "@wordpress/element": "^2.1.8",
     "@wordpress/hooks": "^2.0.3",
-    "@wordpress/i18n": "^3.1.0",
+    "@wordpress/i18n": "^3.19.0",
     "callbag-basics": "^3.0.0",
     "callbag-create": "^1.1.1",
     "callbag-debounce": "^2.1.2",
