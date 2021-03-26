@@ -121,10 +121,22 @@ abstract class Widget extends \WP_Widget {
 	/**
 	 * Outputs the settings update form.
 	 *
-	 * @param array $instance Current settings.
+	 * @param  array $instance Current settings.
+	 * @return void
 	 */
 	public function form( $instance ) {
 		$this->datastore->import_storage( $instance );
+
+		$this->register_container( true );
+	}
+
+	/**
+	 * Registers the container definition for the widget.
+	 *
+	 * @param  boolean $render Whether the form should be rendered
+	 * @return void
+	 */
+	public function register_container( $render = false ) {
 		$custom_fields = array();
 
 		foreach ( $this->custom_fields as $field ) {
@@ -137,9 +149,13 @@ abstract class Widget extends \WP_Widget {
 			$custom_fields[] = $tmp_field;
 		}
 
-		Container::factory( 'widget', $this->id, $this->id )
+		$container = Container::factory( 'widget', $this->id, $this->id )
 			->add_fields( $custom_fields )
 			->init();
+
+		if ( $render ) {
+			$container->render();
+		}
 	}
 
 	/**

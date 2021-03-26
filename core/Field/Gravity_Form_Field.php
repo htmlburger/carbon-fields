@@ -51,14 +51,14 @@ class Gravity_Form_Field extends Select_Field {
 			$options[ $form->id ] = $form->title;
 		}
 
-		return $options;
+		return apply_filters( 'carbon_fields_gravity_form_options', $options );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function to_json( $load ) {
-		$this->set_options( apply_filters( 'carbon_fields_gravity_form_options', $this->get_options() ) );
+		$this->set_options( $this->get_options() );
 		return parent::to_json( $load );
 	}
 }

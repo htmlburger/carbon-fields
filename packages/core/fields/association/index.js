@@ -289,7 +289,7 @@ class AssociationField extends Component {
 											</span>
 
 											<span className="cf-association__option-type">
-												{ option.type }
+												{ option.label }
 											</span>
 										</div>
 
@@ -447,30 +447,30 @@ function handler( props ) {
 				} );
 
 				// eslint-disable-next-line
-				const request = window.jQuery.get( window.ajaxurl, {
-					action: 'carbon_fields_fetch_association_options',
-					term: payload.queryTerm,
-					page: payload.page || 1,
-					container_id: props.containerId,
-					field_name: hierarchyResolver()
-				}, null, 'json' );
+				const request = apiFetch(
+					`${ window.wpApiSettings.root }carbon-fields/v1/association/options`,
+					'get',
+					{
+						container_id: props.containerId,
+						options: props.value.map( ( option ) => `${ option.id }:${ option.type }:${ option.subtype }` ).join( ';' ),
+						field_id: hierarchyResolver,
+						term: payload.queryTerm,
+						page: payload.page || 1
+					}
+				);
 
 				/* eslint-disable-next-line no-alert */
 				const errorHandler = () => alert( __( 'An error occurred while trying to fetch association options.', 'carbon-fields-ui' ) );
 
-				request.done( ( response ) => {
-					if ( response && response.success ) {
-						setState( {
-							options: payload.type === 'replace' ? response.data.options : [ ...payload.options, ...response.data.options ],
-							totalOptionsCount: response.data.total_options
-						} );
-					} else {
-						errorHandler();
-					}
+				request.then( ( response ) => {
+					setState( {
+						options: payload.type === 'replace' ? response.options : [ ...payload.options, ...response.options ],
+						totalOptionsCount: response.total_options
+					} );
 				} );
 
-				request.fail( errorHandler );
-				request.always( () => {
+				request.catch( errorHandler );
+				request.finally( () => {
 					setState( {
 						isLoading: false
 					} );
@@ -484,7 +484,7 @@ function handler( props ) {
 					{
 						container_id: props.containerId,
 						options: props.value.map( ( option ) => `${ option.id }:${ option.type }:${ option.subtype }` ).join( ';' ),
-						field_id: hierarchyResolver()
+						field_id: hierarchyResolver
 					}
 				)
 					.then( ( response ) => {

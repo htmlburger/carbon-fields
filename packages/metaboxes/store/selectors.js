@@ -82,6 +82,16 @@ export function isDirty( state ) {
 }
 
 /**
+ * Returns whether the metaboxes fields contain unsaved changed.
+ *
+ * @param  {Object} state
+ * @return {boolean}
+ */
+export function isFieldUpdated( state ) {
+	return state.isFieldUpdated;
+}
+
+/**
  * Returns a map of field values for a given group.
  *
  * @param  {Object}   state
