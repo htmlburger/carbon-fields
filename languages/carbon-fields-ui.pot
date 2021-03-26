@@ -11,7 +11,7 @@ msgstr ""
 msgid "Showing %1$d of %2$d results"
 msgstr ""
 
-#: packages/core/fields/association/index.js:459
+#: packages/core/fields/association/index.js:463
 msgid "An error occurred while trying to fetch association options."
 msgstr ""
 
@@ -21,4 +21,12 @@ msgstr ""
 
 #: packages/core/fields/association/index.js:520
 msgid "Minimum number of items not reached (%s items)"
+msgstr ""
+
+#: packages/core/fields/rich-text/index.js:123
+msgid "Visual"
+msgstr ""
+
+#: packages/core/fields/rich-text/index.js:127
+msgid "Text"
 msgstr ""
