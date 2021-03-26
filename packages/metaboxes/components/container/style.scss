@@ -54,13 +54,19 @@
 .cf-container__tabs-item {
 	display: flex;
 	align-items: center;
-	padding: ($size-base * 2) ($size-base * 3);
 	border: 1px solid $wp-color-gray-light-500;
 	margin: 0 ($size-base * 2) 0 0;
 	background-color: $wp-color-gray-light-100;
 	font-size: 12px;
 	cursor: pointer;
 	transition: background-color $transition-base, border-color $transition-base;
+
+	button {
+		background: 0;
+		border: 0;
+		padding: ($size-base * 2) ($size-base * 3);
+		margin: 0;
+	}
 
 	&:hover {
 		background-color: $color-white;

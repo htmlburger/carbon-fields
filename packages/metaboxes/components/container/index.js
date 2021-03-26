@@ -133,9 +133,16 @@ class Container extends Component {
 									<li
 										key={ tabName }
 										className={ classes }
-										onClick={ () => this.handleTabClick( tabName ) }
+										tabIndex={ -1 }
+										role="tab"
+										aria-selected={ currentTab === tabName }
 									>
-										{ tabName }
+										<button
+											type="button"
+											onClick={ () => this.handleTabClick( tabName ) }
+										>
+											{ tabName }
+										</button>
 									</li>
 								);
 							} ) }
