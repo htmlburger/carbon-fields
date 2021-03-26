@@ -223,6 +223,7 @@ class AssociationField extends Component {
 	 */
 	render() {
 		const {
+			id,
 			name,
 			value,
 			field,
@@ -252,6 +253,7 @@ class AssociationField extends Component {
 			<Fragment>
 				<div className="cf-association__bar">
 					<SearchInput
+						id={ id }
 						value={ queryTerm }
 						onChange={ this.handleSearchChange }
 					/>
@@ -278,7 +280,7 @@ class AssociationField extends Component {
 								return (
 									<div className={ cx( 'cf-association__option', { 'cf-association__option--selected': option.disabled } ) } key={ index }>
 										{ option.thumbnail && (
-											<img className="cf-association__option-thumb" src={ option.thumbnail } />
+											<img className="cf-association__option-thumb" alt={ __( 'Thumbnail', 'carbon-fields-ui' ) } src={ option.thumbnail } />
 										) }
 
 										<div className="cf-association__option-content">
@@ -300,6 +302,7 @@ class AssociationField extends Component {
 													href={ option.edit_link.replace( '&amp;', '&', 'g' ) }
 													target="_blank"
 													rel="noopener noreferrer"
+													aria-label={ __( 'Edit', 'carbon-fields-ui' ) }
 												></a>
 											) }
 
@@ -307,7 +310,7 @@ class AssociationField extends Component {
 												! option.disabled
 												&& ( field.max < 0 || value.length < field.max )
 											) && (
-												<button type="button" className="cf-association__option-action dashicons dashicons-plus-alt" onClick={ () => this.handleAddItem( option ) }>
+												<button type="button" className="cf-association__option-action dashicons dashicons-plus-alt" aria-label={ __( 'Add', 'carbon-fields-ui' ) } onClick={ () => this.handleAddItem( option ) }>
 												</button>
 											) }
 										</div>
@@ -359,7 +362,7 @@ class AssociationField extends Component {
 											</div>
 
 											<div className="cf-association__option-actions">
-												<button type="button" className="cf-association__option-action dashicons dashicons-dismiss" onClick={ () => this.handleRemoveItem( option ) }></button>
+												<button type="button" className="cf-association__option-action dashicons dashicons-dismiss" aria-label={ __( 'Remove', 'carbon-fields-ui' ) } onClick={ () => this.handleRemoveItem( option ) }></button>
 											</div>
 
 											<input
