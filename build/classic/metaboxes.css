@@ -387,13 +387,17 @@
 .cf-container__tabs-item {
   display: flex;
   align-items: center;
-  padding: 8px 12px;
   border: 1px solid #e2e4e7;
   margin: 0 8px 0 0;
   background-color: #fbfbfc;
   font-size: 12px;
   cursor: pointer;
   transition: background-color 0.1s linear, border-color 0.1s linear; }
+  .cf-container__tabs-item button {
+    background: 0;
+    border: 0;
+    padding: 8px 12px;
+    margin: 0; }
   .cf-container__tabs-item:hover {
     background-color: #fff; }
   .cf-container__tabs-item--current {
