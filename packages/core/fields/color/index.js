@@ -103,7 +103,7 @@ class ColorField extends Component {
 					/>
 				) }
 
-				<button type="button" className="button-link cf-color__reset" onClick={ () => this.handleChange() }>
+				<button type="button" className="button-link cf-color__reset" aria-label={ __( 'Clear', 'carbon-fields-ui' ) } onClick={ () => this.handleChange() }>
 					<span className="dashicons dashicons-no"></span>
 				</button>
 			</div>

@@ -801,7 +801,7 @@ class Association_Field extends Field {
 	public function format_term_option( $data ) {
 		return array(
 			'id'         => intval( $data->ID ),
-			'title'      => $data->title,
+			'title'      => $this->get_title_by_type( $data->ID, $data->type, $data->subtype ),
 			'thumbnail'  => '',
 			'type'       => $data->type,
 			'subtype'    => $data->subtype,
