@@ -297,7 +297,7 @@ class BlockEdit extends Component {
 
 export default withSelect( ( select, { clientId, name } ) => {
 	const { hasBlockSupport } = select( 'core/blocks' );
-	const { getBlockRootClientId } = select( 'core/editor' );
+	const { getBlockRootClientId } = select( 'core/block-editor' );
 	const {
 		getContainerDefinitionByBlockName,
 		getFieldDefinitionsByBlockName
