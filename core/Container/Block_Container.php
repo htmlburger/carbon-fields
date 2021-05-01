@@ -242,6 +242,43 @@ class Block_Container extends Container {
 	}
 
 	/**
+	 * Set a script handle.
+	 *
+	 * @param  string $key
+	 * @param  string $handle
+	 * @return Block_Container
+	 */
+	protected function set_script_handle( $key, $handle ) {
+		if ( ! wp_script_is( $handle, "enqueued" ) && ! wp_script_is( $handle, "registered" ) ) {
+			throw new \Exception( __( "script '$handle' is not enqueued or registered.", 'crb' ) );
+		}
+
+		$this->settings[ $key ] = $handle;
+
+		return $this;
+	}
+
+	/**
+	 * Set the script of the block type.
+	 *
+	 * @param  string $handle
+	 * @return Block_Container
+	 */
+	public function set_script( $handle ) {
+		return $this->set_script_handle( 'script', $handle );
+	}
+
+	/**
+	 * Set the editor script of the block type.
+	 *
+	 * @param  string $handle
+	 * @return Block_Container
+	 */
+	public function set_editor_script( $handle ) {
+		return $this->set_script_handle( 'editor_script', $handle );
+	}
+
+	/**
 	 * Set whether the preview mode is available for the block type.
 	 *
 	 * @param  boolean $preview
@@ -443,6 +480,8 @@ class Block_Container extends Container {
 
 		$style = isset( $this->settings[ 'style' ] ) ? $this->settings[ 'style' ] : null;
 		$editor_style = isset( $this->settings[ 'editor_style' ] ) ? $this->settings[ 'editor_style' ] : null;
+		$script = isset( $this->settings[ 'script' ] ) ? $this->settings[ 'script' ] : null;
+		$editor_script = isset( $this->settings[ 'editor_script' ] ) ? $this->settings[ 'editor_script' ] : null;
 		$attributes = array_reduce( $this->get_fields(), function( $attributes, $field ) {
 			$attributes[ 'data' ][ 'default' ][ $field->get_base_name() ] = $field->get_default_value();
 
@@ -457,6 +496,8 @@ class Block_Container extends Container {
 		register_block_type( $this->get_block_type_name(), array(
 			'style' => $style,
 			'editor_style' => $editor_style,
+			'script' => $script,
+			'editor_script' => $editor_script,
 			'attributes' => $attributes,
 			'render_callback' => array( $this, 'render_block' ),
 		) );
