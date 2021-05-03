@@ -210,9 +210,10 @@ class Block_Container extends Container {
 	 * @param  string $key
 	 * @param  string $handle
 	 * @return Block_Container
+	 * @throws \Exception
 	 */
 	protected function set_style_handle( $key, $handle ) {
-		if ( ! wp_style_is( $handle ) ) {
+		if ( ! wp_style_is( $handle, 'registered' ) ) {
 			throw new \Exception( __( "Style '$handle' is not enqueued.", 'crb' ) );
 		}
 
