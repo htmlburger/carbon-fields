@@ -6382,9 +6382,10 @@ reflect.ownkeys@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/reflect.ownkeys/-/reflect.ownkeys-0.2.0.tgz#749aceec7f3fdf8b63f927a04809e90c5c0b3460"
 
-refract-callbag@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/refract-callbag/-/refract-callbag-4.0.0.tgz#fa30214aa05a6b24a098b40fdb4e080c38fbca4f"
+refract-callbag@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/refract-callbag/-/refract-callbag-4.2.3.tgz#56f1e6451047f640343d75b78c352180f50442e6"
+  integrity sha512-UO586xCl1U2fOGTD70Lwgas0OeysBuhYz4MCs7vbyJ/ao/Boc6DVO++TF/8vgXX5vKnBC6JvdvaWEhjxnfAUNw==
   dependencies:
     callbag "~1.1.0"
     callbag-drop-repeats "~1.0.0"

@@ -91,6 +91,6 @@
     "react-flatpickr": "^3.6.4",
     "react-onclickoutside": "^6.7.1",
     "react-select": "^2.1.1",
-    "refract-callbag": "^4.0.0"
+    "refract-callbag": "^4.2.3"
   }
 }
