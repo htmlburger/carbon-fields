@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import generate from 'nanoid/generate';
+import { customAlphabet } from 'nanoid';
 
 /**
  * Alphabet that doesn't contain `-`.
@@ -16,5 +16,5 @@ const ALPHABET = 'Uint8ArdomValuesObj012345679BCDEFGHIJKLMNPQRSTWXYZ_cfghkpqvwxy
  * @return {string}
  */
 export default function uniqueId() {
-	return `cf-${ generate( ALPHABET, 21 ) }`;
+	return `cf-${ customAlphabet( ALPHABET, 21 ) }`;
 }

@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import nanoid from 'nanoid';
+import { nanoid } from 'nanoid';
 import immer from 'immer';
 import * as apiFetch from '@wordpress/api-fetch';
 import * as compose from '@wordpress/compose';
