@@ -213,7 +213,8 @@ class Block_Container extends Container {
 	 */
 	protected function set_style_handle( $key, $handle ) {
 		if ( ! wp_style_is( $handle ) ) {
-			throw new \Exception( __( "Style '$handle' is not enqueued.", 'crb' ) );
+			// Commting this , It was breaking the other plugins built with carbonfields if any of them use ->set_style() method for Block
+			//throw new \Exception( __( "Style '$handle' is not enqueued.", 'crb' ) );
 		}
 
 		$this->settings[ $key ] = $handle;
