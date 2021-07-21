@@ -636,6 +636,13 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
+"@babel/runtime@^7.13.10":
+  version "7.14.8"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.14.8.tgz#7119a56f421018852694290b9f9148097391b446"
+  integrity sha512-twj3L8Og5SaCRCErB4x4ajbvBIVV77CGeFglHpeg5WC5FF8TZzBWXtTJ4MqaD9QszLYTtr+IsaAL2rEUevb+eg==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@7.0.0-beta.44":
   version "7.0.0-beta.44"
   resolved "https://registry.npmjs.org/@babel/template/-/template-7.0.0-beta.44.tgz#f8832f4fdcee5d59bf515e595fc5106c529b394f"
@@ -1101,13 +1108,14 @@
     moment "^2.22.1"
     moment-timezone "^0.5.16"
 
-"@wordpress/date@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@wordpress/date/-/date-3.0.1.tgz#3899ed528ffcd7e1befcfc35bc91ffdee40a1c77"
+"@wordpress/date@^4.2.0":
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/@wordpress/date/-/date-4.2.0.tgz#5b4fb7d9eef8cdab6cd5bae3bf28f6cd24aebee5"
+  integrity sha512-BLOBh6IAIm2s2YZxOT+dd6HQcsm5UxCSWio9YUrCNGK6P6wrYNA7y0l6XF70LMOIXrp/cMMcQDEL1NPn6T0Sjw==
   dependencies:
-    "@babel/runtime" "^7.0.0"
+    "@babel/runtime" "^7.13.10"
     moment "^2.22.1"
-    moment-timezone "^0.5.16"
+    moment-timezone "^0.5.31"
 
 "@wordpress/deprecated@^2.0.3":
   version "2.0.3"
@@ -4850,6 +4858,13 @@ mixin-object@^2.0.1:
 moment-timezone@^0.5.16:
   version "0.5.23"
   resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.23.tgz#7cbb00db2c14c71b19303cb47b0fb0a6d8651463"
+  dependencies:
+    moment ">= 2.9.0"
+
+moment-timezone@^0.5.31:
+  version "0.5.33"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.33.tgz#b252fd6bb57f341c9b59a5ab61a8e51a73bbd22c"
+  integrity sha512-PTc2vcT8K9J5/9rDEPe5czSIKgLoGsH8UNpA4qZTVw0Vd/Uz19geE9abbIOQKaAQFcnQ3v5YEXrbSc5BpshH+w==
   dependencies:
     moment ">= 2.9.0"
 

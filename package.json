@@ -66,7 +66,7 @@
     "@wordpress/components": "^7.0.3",
     "@wordpress/compose": "^3.0.0",
     "@wordpress/data": "^4.0.1",
-    "@wordpress/date": "^3.0.1",
+    "@wordpress/date": "^4.2.0",
     "@wordpress/editor": "^9.0.3",
     "@wordpress/element": "^2.1.8",
     "@wordpress/hooks": "^2.12.0",
