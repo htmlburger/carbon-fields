@@ -34,7 +34,7 @@
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "@wordpress/babel-plugin-makepot": "^2.1.2",
-    "@wordpress/browserslist-config": "^2.2.2",
+    "@wordpress/browserslist-config": "^4.1.0",
     "autoprefixer": "^9.3.1",
     "babel-eslint": "^8.2.6",
     "babel-loader": "^8.0.2",
