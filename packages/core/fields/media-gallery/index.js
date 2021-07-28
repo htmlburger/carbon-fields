@@ -87,10 +87,11 @@ class MediaGalleryField extends Component {
 
 		onChange( id, attachments );
 	}
-	
+
 	/**
 	 * Returns an URL to the attachment's thumbnail.
 	 *
+	 * @param  {Object} attachment
 	 * @return {string}
 	 */
 	getAttachmentThumb( attachment ) {
@@ -251,6 +252,6 @@ const applyWithState = withState( {
 const applyWithEffects = withEffects( aperture, { handler } );
 
 export default compose(
-	applyWithState,
-	applyWithEffects
+	applyWithEffects,
+	applyWithState
 )( MediaGalleryField );

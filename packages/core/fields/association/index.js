@@ -527,6 +527,6 @@ addFilter( 'carbon-fields.association.validate', 'carbon-fields/core', ( field, 
 } );
 
 export default compose(
-	applyWithState,
-	applyWithEffects
+	applyWithEffects,
+	applyWithState
 )( AssociationField );

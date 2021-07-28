@@ -220,6 +220,6 @@ const applyWithState = withState( {
 const applyWithEffects = withEffects( aperture, { handler } );
 
 export default compose(
-	applyWithState,
-	applyWithEffects
+	applyWithEffects,
+	applyWithState
 )( OembedField );
