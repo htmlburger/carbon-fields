@@ -71,26 +71,47 @@ msgstr ""
 msgid "Search..."
 msgstr ""
 
-#: packages/core/fields/association/index.js:168
+#: packages/core/fields/association/index.js:169
 msgid "Maximum number of items reached (%s items)"
 msgstr ""
 
-#: packages/core/fields/association/index.js:266
+#: packages/core/fields/association/index.js:269
 msgid "Showing %1$d of %2$d results"
 msgstr ""
 
-#: packages/core/fields/association/index.js:458
+#: packages/core/fields/association/index.js:283
+msgid "Thumbnail"
+msgstr ""
+
+#: packages/core/fields/association/index.js:305
+msgid "Edit"
+msgstr ""
+
+#: packages/core/fields/association/index.js:313
+msgid "Add"
+msgstr ""
+
+#: packages/core/fields/association/index.js:365
+#: packages/core/fields/complex/group.js:163
+msgid "Remove"
+msgstr ""
+
+#: packages/core/fields/association/index.js:466
 msgid "An error occurred while trying to fetch association options."
 msgstr ""
 
-#: packages/core/fields/association/index.js:515
+#: packages/core/fields/association/index.js:519
 #: packages/core/fields/complex/index.js:428
 #: packages/core/hocs/with-validation/required.js:20
 msgid "This field is required."
 msgstr ""
 
-#: packages/core/fields/association/index.js:519
+#: packages/core/fields/association/index.js:523
 msgid "Minimum number of items not reached (%s items)"
+msgstr ""
+
+#: packages/core/fields/color/index.js:106
+msgid "Clear"
 msgstr ""
 
 #: packages/core/fields/color/index.js:92
@@ -99,10 +120,6 @@ msgstr ""
 
 #: packages/core/fields/complex/group.js:154
 msgid "Duplicate"
-msgstr ""
-
-#: packages/core/fields/complex/group.js:163
-msgid "Remove"
 msgstr ""
 
 #: packages/core/fields/complex/group.js:172
@@ -145,11 +162,11 @@ msgstr ""
 msgid "Error alert"
 msgstr ""
 
-#: packages/core/fields/oembed/index.js:188
+#: packages/core/fields/oembed/index.js:187
 msgid "An error occurred while trying to fetch oembed preview."
 msgstr ""
 
-#: packages/core/fields/oembed/index.js:203
+#: packages/core/fields/oembed/index.js:202
 msgid "Not Found"
 msgstr ""
 
