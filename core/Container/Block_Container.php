@@ -122,7 +122,7 @@ class Block_Container extends Container {
 	 * {@inheritDoc}
 	 */
 	public function attach() {
-		add_filter( 'block_categories', array( $this, 'attach_block_category' ), 10, 2 );
+		add_filter( 'block_categories_all', array( $this, 'attach_block_category' ), 10, 2 );
 
 		$this->register_block();
 	}
