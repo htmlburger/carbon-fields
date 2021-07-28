@@ -12,6 +12,10 @@
 		min-width: 0;
 	}
 
+	.wp-block-widget-area & {
+		padding: 6.5px 20px;
+	}
+
 	.edit-post-sidebar .cf-block__fields > & {
 		padding: $size-base 0 0;
 	}
@@ -28,7 +32,16 @@
 }
 
 .cf-field__label {
+	font-size: 13px;
+	font-weight: 600;
+	color: $wp-color-dark-gray;
+
 	.block-editor & {
 		margin-bottom: 4px;
 	}
+
+	.wp-block-widget-area & {
+		margin-bottom: 6.5px;
+	}
+
 }
