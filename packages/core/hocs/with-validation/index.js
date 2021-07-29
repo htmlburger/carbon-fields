@@ -140,6 +140,6 @@ const applyWithDispatch = withDispatch( ( dispatch ) => {
 } );
 
 export default compose(
-	applyWithEffects,
-	applyWithDispatch
+	applyWithDispatch,
+	applyWithEffects
 );
