@@ -14,9 +14,28 @@
 	margin: 0;
 }
 
+.cf-container {
+	&--plain {
+		display: block;
+	}
+
+	&--tabbed {
+		display: flex;
+
+		&-horizontal {
+			flex-direction: column;
+		}
+
+		&-vertical {
+			flex-direction: row;
+		}
+	}
+}
+
 .cf-container__fields {
 	display: flex;
 	flex-wrap: wrap;
+	flex: 1;
 	margin: 0 -1px 0 0;
 	background-color: $color-white;
 
@@ -40,40 +59,88 @@
 .cf-container__tabs {
 	position: relative;
 	z-index: 1;
-	padding: ($size-base * 3) ($size-base * 3) 0;
-	border-bottom: 1px solid $wp-color-gray-light-500;
 	background-color: $wp-color-gray-light-100;
-}
 
-.cf-container__tabs-list {
-	display: flex;
-	flex-wrap: wrap;
-	margin: 0 0 -1px;
-}
+	&-list {
+		display: flex;
+		flex-wrap: wrap;
+		margin: 0 0 -1px;
 
-.cf-container__tabs-item {
-	display: flex;
-	align-items: center;
-	border: 1px solid $wp-color-gray-light-500;
-	margin: 0 ($size-base * 2) 0 0;
-	background-color: $wp-color-gray-light-100;
-	font-size: 12px;
-	cursor: pointer;
-	transition: background-color $transition-base, border-color $transition-base;
+		.cf-container__tabs-item {
+			display: flex;
+			align-items: center;
+			border: 1px solid $wp-color-gray-light-500;
+			margin: 0 ($size-base * 2) 0 0;
+			background-color: $wp-color-gray-light-100;
+			font-size: 13px;
+			cursor: pointer;
+			transition: background-color $transition-base, border-color $transition-base;
 
-	button {
-		background: 0;
-		border: 0;
-		padding: ($size-base * 2) ($size-base * 3);
-		margin: 0;
+			button {
+				background: 0;
+				border: 0;
+				padding: ($size-base * 2.5) ($size-base * 3);
+				margin: 0;
+				flex: 1;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+
+				span {
+					margin-right: 5px;
+				}
+			}
+
+			&:hover {
+				background-color: $color-white;
+			}
+
+			&--current {
+				background-color: $color-white;
+				border-bottom-color: $color-white;
+			}
+		}
+
 	}
 
-	&:hover {
-		background-color: $color-white;
+	&--tabbed-horizontal {
+		padding: ($size-base * 3) ($size-base * 3) 0;
+		border-bottom: 1px solid $wp-color-gray-light-500;
+
+		.cf-container__tabs-list {
+			display: flex;
+			flex-direction: row;
+		}
 	}
 
-	&--current {
-		background-color: $color-white;
-		border-bottom-color: $color-white;
+	&--tabbed-vertical {
+		width: 300px;
+		border-right: 1px solid $wp-color-gray-light-500;
+
+		.cf-container__tabs-list {
+			display: flex;
+			flex-direction: column;
+
+			.cf-container__tabs-item {
+				margin: 0;
+				justify-content: flex-start;
+				border: 0;
+				border-top: 1px solid $gb-light-gray-500;
+				border-bottom: 1px solid $gb-light-gray-500;
+
+				&:first-of-type {
+					border-top: 0;
+				}
+
+				button {
+					text-align: left;
+					font-weight: 500;
+				}
+			}
+
+			.cf-container__tabs-item + .cf-container__tabs-item {
+				border-top: 0;
+			}
+		}
 	}
 }
