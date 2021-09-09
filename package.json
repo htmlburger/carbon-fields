@@ -81,7 +81,7 @@
     "callbag-start-with": "^3.1.0",
     "callbag-take-until": "^3.0.0",
     "classnames": "^2.2.6",
-    "immer": "^9.0.5",
+    "immer": "^9.0.6",
     "lodash": "^4.17.21",
     "nanoid": "^2.0.0",
     "observe-resize": "^1.1.3",
