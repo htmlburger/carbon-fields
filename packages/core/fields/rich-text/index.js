@@ -173,7 +173,7 @@ class RichTextField extends Component {
 
 		const quickTagsOptions = { ...window.tinyMCEPreInit.qtInit[ field.settings_reference ] };
 
-		if ( quickTagsOptions ) {
+		if ( quickTagsOptions.length ) {
 			const qtagInstance = window.quicktags( {
 				...quickTagsOptions,
 				id
@@ -197,7 +197,9 @@ class RichTextField extends Component {
 			this.editor = null;
 		}
 
-		delete window.QTags.instances[ this.props.id ];
+		if (typeof window.QTags !== 'undefined' && window.QTags.instances[ this.props.id ]) {
+			delete window.QTags.instances[ this.props.id ];
+		}
 	}
 }
 
