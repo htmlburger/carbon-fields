@@ -148,8 +148,9 @@ class MediaGalleryField extends Component {
 										{ value.map( ( id, index ) => { // eslint-disable-line no-shadow
 											const attachment = attachmentsData.find( ( attachmentData ) => attachmentData.id === id );
 											const className = [ 'cf-media-gallery__item' ];
+											const isAttachmentLoaded = !! attachment;
 
-											if ( attachment ) {
+											if ( isAttachmentLoaded ) {
 												className.push( `cf-media-gallery__item--${ attachment.type }` );
 											}
 
@@ -157,15 +158,11 @@ class MediaGalleryField extends Component {
 												className.push( 'cf-media-gallery__item--selected' );
 											}
 
-											if ( ! attachment ) {
-												return null;
-											}
-
 											return (
 												<li className={ className.join( ' ' ) } key={ index } onClick={ () => this.handleAttachmentSelect( index ) }>
 													<div className="cf-media-gallery__item-inner">
 														<div className="cf-media-gallery__item-preview">
-															{
+															{ isAttachmentLoaded && (
 																attachment.type === 'image'
 																	? (
 																		<img
@@ -179,18 +176,22 @@ class MediaGalleryField extends Component {
 																			src={ attachment.icon }
 																		/>
 																	)
-															}
+															) }
 														</div>
 
-														<span className="cf-media-gallery__item-name">
-															{ attachment.filename }
-														</span>
+														{ isAttachmentLoaded && (
+															<span className="cf-media-gallery__item-name">
+																{ attachment.filename }
+															</span>
+														) }
 
-														<button
-															type="button"
-															className="cf-media-gallery__item-remove dashicons-before dashicons-no-alt"
-															onClick={ () => this.handleAttachmentRemove( index ) }
-														></button>
+														{ isAttachmentLoaded && (
+															<button
+																type="button"
+																className="cf-media-gallery__item-remove dashicons-before dashicons-no-alt"
+																onClick={ () => this.handleAttachmentRemove( index ) }
+															></button>
+														) }
 													</div>
 
 													<input
