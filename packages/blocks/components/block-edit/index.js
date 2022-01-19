@@ -3,7 +3,7 @@
  */
 import cx from 'classnames';
 import { Component, Fragment } from '@wordpress/element';
-import { Toolbar, PanelBody } from '@wordpress/components';
+import { ToolbarGroup, PanelBody } from '@wordpress/components';
 import {
 	InnerBlocks,
 	BlockControls,
@@ -206,7 +206,7 @@ class BlockEdit extends Component {
 
 				{ supportsPreview && (
 					<BlockControls>
-						<Toolbar controls={ [ {
+						<ToolbarGroup label="Options" controls={ [ {
 							icon: this.isInEditMode
 								? 'visibility'
 								: 'hidden',
@@ -297,7 +297,7 @@ class BlockEdit extends Component {
 
 export default withSelect( ( select, { clientId, name } ) => {
 	const { hasBlockSupport } = select( 'core/blocks' );
-	const { getBlockRootClientId } = select( 'core/editor' );
+	const { getBlockRootClientId } = select( 'core/block-editor' );
 	const {
 		getContainerDefinitionByBlockName,
 		getFieldDefinitionsByBlockName

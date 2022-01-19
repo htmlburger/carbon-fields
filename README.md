@@ -8,7 +8,7 @@ Carbon fields can be used as a composer package for easy creation of custom fiel
 
 Custom fields can be created for post types, taxonomy terms, users, comments, options, navigation menus and even widgets.
 
-Supports PHP5.3 or higher.
+Supports PHP 5.6.20 or higher.
 
 ### Quickstart
 

@@ -28,9 +28,9 @@ const applyWithSelect = withSelect( ( select ) => {
 	};
 } );
 
-const applyWitEffects = withEffects( aperture, { handler } );
+const applyWithEffects = withEffects( aperture, { handler } );
 
 export default compose(
-	applyWithSelect,
-	applyWitEffects
+	applyWithEffects,
+	applyWithSelect
 )( ConditionalDisplay );

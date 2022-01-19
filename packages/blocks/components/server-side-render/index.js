@@ -146,7 +146,7 @@ class ServerSideRender extends Component {
 }
 
 export default withSelect( ( select, { clientId } ) => {
-	const { getBlock } = select( 'core/editor' );
+	const { getBlock } = select( 'core/block-editor' );
 
 	return {
 		block: getBlock( clientId )

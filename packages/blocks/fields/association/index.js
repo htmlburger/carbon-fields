@@ -19,7 +19,7 @@ addFilter( 'carbon-fields.association.block', 'carbon-fields/blocks', withProps(
 	return {
 		hierarchyResolver() {
 			// Get the block that contains the field.
-			const block = select( 'core/editor' ).getBlock( props.blockId );
+			const block = select( 'core/block-editor' ).getBlock( props.blockId );
 
 			// Get the path.
 			const path = props.id.split( '__' );
