@@ -62,7 +62,7 @@ class Router {
 			'path'                => '/attachment',
 			'callback'            => 'get_attachment_data',
 			'permission_callback' => 'allow_access',
-			'methods'             => 'POST',
+			'methods'             => array( 'GET', 'POST' ),
 			'args'                => 'attachment_data_args_schema',
 		),
 		'block_renderer' => array(
