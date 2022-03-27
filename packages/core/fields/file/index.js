@@ -9,7 +9,7 @@ import { get } from 'lodash';
  */
 import './style.scss';
 import MediaLibrary from '../../components/media-library';
-import apiFetch from '../../utils/api-fetch';
+import apiFetch from '@wordpress/api-fetch';
 
 class FileField extends Component {
 	/**
@@ -27,24 +27,49 @@ class FileField extends Component {
 	 * @return {void}
 	 */
 	componentDidMount() {
-		const { value, field } = this.props;
-
-		if ( value ) {
-			let endpoint = '';
-
-			if ( window.wpApiSettings.root.indexOf( '?rest_route' ) !== -1 ) {
-				endpoint = `${ window.wpApiSettings.root }carbon-fields/v1/attachment&type=${ field.value_type }&value=${ value }`;
-			} else {
-				endpoint = `${ window.wpApiSettings.root }carbon-fields/v1/attachment?type=${ field.value_type }&value=${ value }`;
-			}
-
-			// TODO: Refactor this to use `@wordpress/api-fetch` package.
-			apiFetch(
-				endpoint,
-				'get'
-			).then( this.handleFileDataChange );
-		}
+        this.fetchMetadata();
 	}
+
+    getCachedMetadata(cacheKey) {
+        return JSON.parse(localStorage.getItem(cacheKey));
+    }
+
+    setCachedMetadata(cacheKey, value) {
+        localStorage.setItem(cacheKey, JSON.stringify(value));
+    }
+
+    fetchMetadata() {
+        const { value, field } = this.props;
+        let cacheKey = 'cf_filefield_cache_';
+
+        if (field.value_type === 'id') {
+            cacheKey += value;
+        } else {
+            cacheKey += value;
+        }
+
+        if (field) {
+            let data = this.getCachedMetadata(cacheKey);
+
+            if (data !== null) {
+                this.handleFileDataChange(data);
+                return;
+            }
+
+            apiFetch({
+                method: 'post',
+                path: `/wp-json/carbon-fields/v1/attachment`,
+                data: {
+                    type: field.value_type,
+                    value: value
+                }
+            }).then( (data) => {
+                this.setCachedMetadata(cacheKey, data);
+                this.handleFileDataChange(data);
+            });
+
+        }
+    }
 
 	/**
 	 * Returns an URL to the attachment's thumbnail.
