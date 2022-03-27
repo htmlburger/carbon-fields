@@ -30,6 +30,17 @@ class FileField extends Component {
         this.fetchMetadata();
 	}
 
+    getCacheKey(field, value) {
+        let cacheKey = 'cf_filefield_cache_';
+        if (field.value_type === 'id') {
+            cacheKey += value;
+        } else {
+            cacheKey += btoa(value);
+        }
+
+        return cacheKey;
+    }
+
     getCachedMetadata(cacheKey) {
         return JSON.parse(localStorage.getItem(cacheKey));
     }
@@ -40,15 +51,9 @@ class FileField extends Component {
 
     fetchMetadata() {
         const { value, field } = this.props;
-        let cacheKey = 'cf_filefield_cache_';
 
-        if (field.value_type === 'id') {
-            cacheKey += value;
-        } else {
-            cacheKey += value;
-        }
-
-        if (field) {
+        if (value) {
+            let cacheKey = this.getCacheKey(field, value);
             let data = this.getCachedMetadata(cacheKey);
 
             if (data !== null) {
@@ -58,7 +63,7 @@ class FileField extends Component {
 
             apiFetch({
                 method: 'post',
-                path: `/wp-json/carbon-fields/v1/attachment`,
+                path: '/wp-json/carbon-fields/v1/attachment',
                 data: {
                     type: field.value_type,
                     value: value
@@ -142,10 +147,27 @@ class FileField extends Component {
 		} = this.props;
 
 		const [ file ] = files;
-
 		onChange( id, get( file, field.value_type, file.id ) );
 
-		this.handleFileDataChange( file );
+        let value;
+        switch (field.value_type) {
+            case 'id':
+                value = file.id;
+                break;
+            case 'url':
+                value = file.url;
+                break;
+            default:
+                break;
+        }
+
+        this.setCachedMetadata(this.getCacheKey(field, value), {
+            id: file.id,
+            filename: file.filename,
+            sizes: file.sizes
+        });
+
+        this.handleFileDataChange( file );
 	}
 
 	/**
