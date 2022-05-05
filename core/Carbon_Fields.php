@@ -236,10 +236,16 @@ final class Carbon_Fields {
 			WP_PLUGIN_DIR => \plugins_url(), # If installed as a plugin
 			WP_CONTENT_DIR => \content_url(), # If anywhere in wp-content
 			ABSPATH => \site_url( '/' ), # If anywhere else within the WordPress installation
+
+			// Add plugins, content, and root paths with resolved symlinks,
+			// see https://github.com/htmlburger/carbon-fields/issues/1096
+			realpath( WP_PLUGIN_DIR ) => \plugins_url(),
+			realpath( WP_CONTENT_DIR ) => \content_url(),
+			realpath( ABSPATH ) => \site_url( '/' ),
 		);
 
 		foreach ( $possible_locations as $test_dir => $test_url ) {
-			$test_dir_normalized = realpath( str_replace( '\\' ,'/', $test_dir ) );
+			$test_dir_normalized = str_replace( '\\' ,'/', $test_dir );
 			$url = str_replace( $test_dir_normalized, $test_url, $url, $count );
 
 			if ( $count > 0 ) {
