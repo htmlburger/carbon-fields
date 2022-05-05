@@ -239,7 +239,7 @@ final class Carbon_Fields {
 		);
 
 		foreach ( $possible_locations as $test_dir => $test_url ) {
-			$test_dir_normalized = str_replace( '\\' ,'/', $test_dir );
+			$test_dir_normalized = realpath( str_replace( '\\' ,'/', $test_dir ) );
 			$url = str_replace( $test_dir_normalized, $test_url, $url, $count );
 
 			if ( $count > 0 ) {
