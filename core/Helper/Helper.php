@@ -531,7 +531,7 @@ class Helper {
 				foreach ( $query->posts as $post_id ) {
 					$meta                = wp_get_attachment_metadata( $post_id );
 					$original_file       = wp_basename( $meta['file'] );
-					$cropped_image_files = wp_list_pluck( $meta['sizes'], 'file' );
+					$cropped_image_files = wp_list_pluck( $meta['sizes'] ?: array(), 'file' );
 
 					if ( $original_file === $filename || in_array( $filename, $cropped_image_files ) ) {
 						$attachment_id = intval( $post_id );
