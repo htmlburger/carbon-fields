@@ -863,9 +863,9 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @param array $fields
 	 * @return Container $this
 	 */
-	public function add_tab( $tab_name, $fields ) {
+	public function add_tab( $tab_name, $fields, $queue_end = self::TABS_TAIL ) {
 		$this->add_fields( $fields );
-		$this->create_tab( $tab_name, $fields );
+		$this->create_tab( $tab_name, $fields, $queue_end );
 		return $this;
 	}
 
