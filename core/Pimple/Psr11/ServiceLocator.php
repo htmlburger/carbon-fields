@@ -3,7 +3,7 @@
 /*
  * This file is part of Pimple.
  *
- * Copyright (c) 2009-2017 Fabien Potencier
+ * Copyright (c) 2009 Fabien Potencier
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,29 +27,49 @@
 namespace Carbon_Fields\Pimple\Psr11;
 
 use Pimple\Container as PimpleContainer;
+use Pimple\Exception\UnknownIdentifierException;
 use Psr\Container\ContainerInterface;
 
 /**
- * PSR-11 compliant wrapper.
+ * Pimple PSR-11 service locator.
  *
  * @author Pascal Luna <skalpa@zetareticuli.org>
  */
-final class Container implements ContainerInterface
+class ServiceLocator implements ContainerInterface
 {
-    private $pimple;
+    private $container;
+    private $aliases = [];
 
-    public function __construct(PimpleContainer $pimple)
+    /**
+     * @param PimpleContainer $container The Container instance used to locate services
+     * @param array           $ids       Array of service ids that can be located. String keys can be used to define aliases
+     */
+    public function __construct(PimpleContainer $container, array $ids)
     {
-        $this->pimple = $pimple;
+        $this->container = $container;
+
+        foreach ($ids as $key => $id) {
+            $this->aliases[\is_int($key) ? $id : $key] = $id;
+        }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function get(string $id)
     {
-        return $this->pimple[$id];
+        if (!isset($this->aliases[$id])) {
+            throw new UnknownIdentifierException($id);
+        }
+
+        return $this->container[$this->aliases[$id]];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function has(string $id): bool
     {
-        return isset($this->pimple[$id]);
+        return isset($this->aliases[$id]) && isset($this->container[$this->aliases[$id]]);
     }
 }
