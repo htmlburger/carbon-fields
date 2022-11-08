@@ -26,13 +26,20 @@
 
 namespace Carbon_Fields\Pimple\Exception;
 
-use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
- * A closure or invokable object was expected.
+ * An attempt to perform an operation that requires a service identifier was made.
  *
  * @author Pascal Luna <skalpa@zetareticuli.org>
  */
-class ExpectedInvokableException extends \InvalidArgumentException implements ContainerExceptionInterface
+class InvalidServiceIdentifierException extends \InvalidArgumentException implements NotFoundExceptionInterface
 {
+    /**
+     * @param string $id The invalid identifier
+     */
+    public function __construct($id)
+    {
+        parent::__construct(\sprintf('Identifier "%s" does not contain an object definition.', $id));
+    }
 }
