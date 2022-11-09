@@ -1,5 +1,5 @@
 {
-    "name": "htmlburger/carbon-fields",
+    "name": "xzone404/carbon-fields",
     "description": "WordPress developer-friendly custom fields for post types, taxonomy terms, users, comments, widgets, options and more.",
     "license": "GPL-2.0-only",
     "homepage": "http://carbonfields.net/",
@@ -113,7 +113,7 @@
         }
     },
     "require": {
-        "php": "^5.6.20"
+        "php": ">=5.6.20"
     },
     "require-dev": {
         "phpunit/phpunit": "7.5.20",
