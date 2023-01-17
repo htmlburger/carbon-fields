@@ -1,0 +1,127 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Carbon Fields\n"
+"POT-Creation-Date: 2019-01-02 15:20+0200\n"
+"PO-Revision-Date: 2023-01-16 17:02+0200\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.0\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Last-Translator: \n"
+"Language: uk\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: assets\n"
+"X-Poedit-SearchPathExcluded-1: languages\n"
+"X-Poedit-SearchPathExcluded-2: node_modules\n"
+"X-Poedit-SearchPathExcluded-3: tests\n"
+"X-Poedit-SearchPathExcluded-4: tmp\n"
+"X-Poedit-SearchPathExcluded-5: vendor\n"
+"X-Poedit-SearchPathExcluded-6: packages\n"
+"X-Poedit-SearchPathExcluded-7: build\n"
+"X-Poedit-SearchPathExcluded-8: bin\n"
+
+#: core/Container/Block_Container.php:259
+msgid "'render_callback' is required for the blocks."
+msgstr "'render_callback' потрібен для блоків."
+
+#: core/Container/Block_Container.php:263
+msgid "'render_callback' must be a callable."
+msgstr "'render_callback' має бути викликом."
+
+#: core/Container/Container.php:712
+msgid "General"
+msgstr "Загальні"
+
+#: core/Container/Theme_Options_Container.php:207
+msgid "Settings saved."
+msgstr "Налаштування збережено."
+
+#: core/Field/Footer_Scripts_Field.php:20
+msgid ""
+"If you need to add scripts to your footer (like Google Analytics tracking "
+"code), you should enter them in this box."
+msgstr ""
+"Якщо вам потрібно додати сценарії до нижнього колонтитула (наприклад, код "
+"відстеження Google Analytics), ви повинні ввести їх у це поле."
+
+#: core/Field/Gravity_Form_Field.php:47
+msgid "No form"
+msgstr "Відсутня форма"
+
+#: core/Field/Header_Scripts_Field.php:20
+msgid "If you need to add scripts to your header, you should enter them here."
+msgstr ""
+"Якщо вам потрібно додати сценарії в заголовок, ви повинні ввести їх тут."
+
+#: core/Field/Sidebar_Field.php:74
+msgctxt "sidebar"
+msgid "Add New"
+msgstr "Додати новий"
+
+#: core/Helper/Helper.php:612
+msgid "F j, Y"
+msgstr "F j, Y"
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:69
+msgid "Please enter a name for the sidebar."
+msgstr "Введіть назву бічної панелі."
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:72
+msgid "Unknown action attempted."
+msgstr "Спроба невідомої дії."
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:102
+msgid "Sidebar with the same ID is already registered."
+msgstr "Бічна панель із таким самим ідентифікатором уже зареєстрована."
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:112
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:142
+msgid ""
+"Failed to update option storing your custom sidebars. Please contact support."
+msgstr ""
+"Не вдалося оновити опцію збереження ваших власних бічних панелей. Зверніться "
+"до служби підтримки."
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:137
+msgid "Sidebar not found."
+msgstr "Бічна панель не знайдена."
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:181
+msgid "Add Sidebar"
+msgstr "Додати бічну панель"
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:182
+msgid "Please enter the name of the new sidebar:"
+msgstr "Будь ласка, введіть назву нової бічної панелі:"
+
+#: core/Libraries/Sidebar_Manager/Sidebar_Manager.php:183
+msgid "Are you sure you wish to remove this sidebar?"
+msgstr "Ви впевнені, що хочете видалити цю бічну панель?"
+
+#: core/REST_API/Router.php:341
+msgid "No option names provided"
+msgstr "Назви варіантів не надано"
+
+#: core/REST_API/Router.php:352
+msgid "Theme Options updated."
+msgstr "Параметри теми оновлено."
+
+#: templates/Container/common/options-page.php:43
+msgid "Actions"
+msgstr "Дії"
+
+#: templates/Container/common/options-page.php:52
+msgid "Save Changes"
+msgstr "Зберегти зміни"
+
+#: templates/Container/widget.php:4
+msgid "No options are available for this widget."
+msgstr "Для цього віджета немає опцій."
