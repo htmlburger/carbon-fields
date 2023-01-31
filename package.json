@@ -48,10 +48,10 @@
     "husky": "^7.0.1",
     "lint-staged": "^8.1.0",
     "mini-css-extract-plugin": "^0.4.4",
-    "node-sass": "^4.13.1",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.2.0",
+    "sass": "^1.24.0",
     "sass-loader": "^7.1.0",
     "sass-resources-loader": "^2.0.0",
     "terser-webpack-plugin": "^1.1.0",
@@ -63,11 +63,11 @@
     "@babel/runtime": "^7.14.8",
     "@wordpress/api-fetch": "^5.2.0",
     "@wordpress/blocks": "^10.0.0",
-    "@wordpress/components": "^14.2.0",
+    "@wordpress/components": "^20.0.0",
     "@wordpress/compose": "^4.2.0",
     "@wordpress/data": "^5.2.0",
     "@wordpress/date": "^4.2.0",
-    "@wordpress/editor": "^10.2.0",
+    "@wordpress/editor": "^12.2.2",
     "@wordpress/element": "^3.2.0",
     "@wordpress/hooks": "^3.2.0",
     "@wordpress/i18n": "^4.2.0",
@@ -90,7 +90,7 @@
     "react-dom": "^17.0.2",
     "react-flatpickr": "^3.6.4",
     "react-onclickoutside": "^6.11.2",
-    "react-select": "^2.1.1",
-    "refract-callbag": "4.2.1"
+    "react-select": "^3.1.1",
+    "refract-callbag": "^5.0.0-rc.0"
   }
 }
