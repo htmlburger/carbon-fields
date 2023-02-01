@@ -3050,6 +3050,11 @@ callbag-drop-until@^1.0.0:
   resolved "https://registry.yarnpkg.com/callbag-drop-until/-/callbag-drop-until-1.0.0.tgz#14b52b19d82b926231ad2a6f609bb6bca819b519"
   integrity sha512-TUPdrnVRXKm7wnuMqUFEEzesv2ewoREj4fdJ6INUhUKTbCJVpSiZquBjxBjBRN7rwNyZwZ4HX9LGNvwup+Stqg==
 
+callbag-empty@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/callbag-empty/-/callbag-empty-1.0.1.tgz#d6211e4197f5315c037239ba5097b51840e7101e"
+  integrity sha512-kndc7wvDCvg4zOtErJJlhT+l7CfjZLRV+vXDF2+W/oN7r5gycRUz/v3mzPevOUyqmARF0bgqNtKbdR1kp4MpvQ==
+
 callbag-filter@1, callbag-filter@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/callbag-filter/-/callbag-filter-1.1.0.tgz#d3116bf839702e859ee7e76eb9525925a6bff8b3"
