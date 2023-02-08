@@ -24,21 +24,22 @@
  * THE SOFTWARE.
  */
 
-namespace Carbon_Fields\Pimple;
+namespace Carbon_Fields\Pimple\Exception;
+
+use Psr\Container\ContainerExceptionInterface;
 
 /**
- * Pimple service provider interface.
+ * An attempt to modify a frozen service was made.
  *
- * @author  Fabien Potencier
- * @author  Dominik Zogg
+ * @author Pascal Luna <skalpa@zetareticuli.org>
  */
-interface ServiceProviderInterface
+class FrozenServiceException extends \RuntimeException implements ContainerExceptionInterface
 {
     /**
-     * Registers services on the given container.
-     *
-     * This method should only be used to configure services and parameters.
-     * It should not get services.
+     * @param string $id Identifier of the frozen service
      */
-    public function register(Container $pimple);
+    public function __construct($id)
+    {
+        parent::__construct(\sprintf('Cannot override frozen service "%s".', $id));
+    }
 }

@@ -24,21 +24,15 @@
  * THE SOFTWARE.
  */
 
-namespace Carbon_Fields\Pimple;
+namespace Carbon_Fields\Pimple\Exception;
+
+use Psr\Container\ContainerExceptionInterface;
 
 /**
- * Pimple service provider interface.
+ * A closure or invokable object was expected.
  *
- * @author  Fabien Potencier
- * @author  Dominik Zogg
+ * @author Pascal Luna <skalpa@zetareticuli.org>
  */
-interface ServiceProviderInterface
+class ExpectedInvokableException extends \InvalidArgumentException implements ContainerExceptionInterface
 {
-    /**
-     * Registers services on the given container.
-     *
-     * This method should only be used to configure services and parameters.
-     * It should not get services.
-     */
-    public function register(Container $pimple);
 }

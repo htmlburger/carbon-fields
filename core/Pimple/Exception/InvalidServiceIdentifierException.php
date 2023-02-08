@@ -24,21 +24,22 @@
  * THE SOFTWARE.
  */
 
-namespace Carbon_Fields\Pimple;
+namespace Carbon_Fields\Pimple\Exception;
+
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
- * Pimple service provider interface.
+ * An attempt to perform an operation that requires a service identifier was made.
  *
- * @author  Fabien Potencier
- * @author  Dominik Zogg
+ * @author Pascal Luna <skalpa@zetareticuli.org>
  */
-interface ServiceProviderInterface
+class InvalidServiceIdentifierException extends \InvalidArgumentException implements NotFoundExceptionInterface
 {
     /**
-     * Registers services on the given container.
-     *
-     * This method should only be used to configure services and parameters.
-     * It should not get services.
+     * @param string $id The invalid identifier
      */
-    public function register(Container $pimple);
+    public function __construct($id)
+    {
+        parent::__construct(\sprintf('Identifier "%s" does not contain an object definition.', $id));
+    }
 }
