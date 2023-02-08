@@ -24,21 +24,22 @@
  * THE SOFTWARE.
  */
 
-namespace Carbon_Fields\Pimple;
+namespace Carbon_Fields\Pimple\Exception;
+
+use Psr\Container\NotFoundExceptionInterface;
 
 /**
- * Pimple service provider interface.
+ * The identifier of a valid service or parameter was expected.
  *
- * @author  Fabien Potencier
- * @author  Dominik Zogg
+ * @author Pascal Luna <skalpa@zetareticuli.org>
  */
-interface ServiceProviderInterface
+class UnknownIdentifierException extends \InvalidArgumentException implements NotFoundExceptionInterface
 {
     /**
-     * Registers services on the given container.
-     *
-     * This method should only be used to configure services and parameters.
-     * It should not get services.
+     * @param string $id The unknown identifier
      */
-    public function register(Container $pimple);
+    public function __construct($id)
+    {
+        parent::__construct(\sprintf('Identifier "%s" is not defined.', $id));
+    }
 }
