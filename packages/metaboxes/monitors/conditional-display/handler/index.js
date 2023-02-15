@@ -114,7 +114,7 @@ export default function handler( { containers, context } ) {
 					// due to https://github.com/facebook/react/issues/13690.
 					// TODO: Conditionally render the fields in the container, this way
 					// we can move away from mount/unmount cycles.
-					containerNode._reactRootContainer.unmount();
+					//containerNode._reactRootContainer.unmount(); // -- causes a memory leak bug
 				}
 			}
 		} );
