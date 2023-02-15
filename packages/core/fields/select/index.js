@@ -23,7 +23,7 @@ export class SelectField extends Component {
 		onChange( id, e.target.value );
 	}
 
-	componentWillUnmount() {
+	componentMount() {
 		onChange( id, value );
 	}
 
