@@ -14,6 +14,7 @@ import {
 	every,
 	isEmpty
 } from 'lodash';
+import empty from 'callbag-empty';
 
 /**
  * Internal dependencies.
@@ -38,7 +39,7 @@ export default function withConditionalLogic( input, output ) {
 	 */
 	function aperture( component, props ) {
 		if ( isEmpty( props.field.conditional_logic ) ) {
-			return;
+			return empty;
 		}
 
 		return input( props, component );

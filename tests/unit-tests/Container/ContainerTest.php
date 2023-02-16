@@ -13,8 +13,19 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * @coversDefaultClass Carbon_Fields\Container\Container
  */
 class ContainerTest extends WP_UnitTestCase {
+	public $containerId;
+	public $containerTitle;
+	public $containerType;
+	public $containerTypeUpperCase;
+	public $containerTypeSpaced;
+	public $containerTypeInvalid;
+	public $containerTypeClass;
+	public $containerTypeDatastoreClass;
+	public $containerTypeBrokenClass;
+	public $containerConditionFulfillableCollection;
+	public $containerConditionTranslatorJson;
 
-	public function setUp() {
+	public function setUp(): void {
 		$ioc = new PimpleContainer();
 		
 		$ioc['container_repository'] = function( $ioc ) {
@@ -61,7 +72,7 @@ class ContainerTest extends WP_UnitTestCase {
 		$this->containerConditionTranslatorJson = $ioc['container_condition_translator_json'];
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		\Carbon_Fields\Carbon_Fields::instance()->install( new PimpleContainer() );
 	}
 

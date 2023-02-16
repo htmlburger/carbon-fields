@@ -13,7 +13,7 @@ class Incorrect_Syntax_Exception extends \Exception {
 	 * @param string $message
 	 * @param int    $code    (optional)
 	 */
-	public static function raise( $message, $code = null ) {
+	public static function raise( $message, $code = 0 ) {
 		if ( empty( static::$errors ) ) {
 			add_action( 'admin_notices', array( __NAMESPACE__ . '\\Incorrect_Syntax_Exception', 'print_errors' ) );
 			add_action( 'network_admin_notices', array( __NAMESPACE__ . '\\Incorrect_Syntax_Exception', 'print_errors' ) );

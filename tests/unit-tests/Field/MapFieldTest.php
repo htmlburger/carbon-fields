@@ -9,11 +9,13 @@ use Carbon_Fields\Value_Set\Value_Set;
  * @coversDefaultClass Carbon_Fields\Field\Map_Field
  */
 class MapFieldTest extends WP_UnitTestCase {
-	public function setUp() {
+	public $subject;
+	
+	public function setUp(): void {
 		$this->subject = M::mock( 'Carbon_Fields\Field\Map_Field' )->makePartial();
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		M::close();
 		unset( $this->subject );
 	}
