@@ -58,7 +58,7 @@ addFilter( 'carbon-fields.conditional-display-post-template.classic', 'carbon-fi
 	}
 
 	return pipe(
-		fromEvent( node, 'change' ),
+		fromEvent.default( node, 'change' ),
 		map( ( { target } ) => getPostTemplateFromSelect( target ) ),
 		startWith( getPostTemplateFromSelect( node ) )
 	);

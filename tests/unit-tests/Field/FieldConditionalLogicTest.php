@@ -8,11 +8,11 @@ use Carbon_Fields\Field\Field;
 class FieldConditionalLogicTest extends WP_UnitTestCase {
 	private $field;
 
-	public function setup() {
+	public function setUp(): void {
 		$this->field = Field::make( 'text', 'color' );
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		unset( $this->field );
 	}
 

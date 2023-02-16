@@ -8,7 +8,10 @@ use Carbon_Fields\Helper\Color;
  * @coversDefaultClass Carbon_Fields\Helper\Color
  */
 class ColorTest extends WP_UnitTestCase {
-	public function setUp() {
+	public $rgba_solid;
+	public $rgba_transparent;
+
+	public function setUp(): void {
 		$this->rgba_solid = array(
 			'red' => 17,
 			'green' => 34,
@@ -24,7 +27,7 @@ class ColorTest extends WP_UnitTestCase {
 		);
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		M::close();
 	}
 

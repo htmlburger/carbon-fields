@@ -8,11 +8,13 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * @coversDefaultClass Carbon_Fields\Field\Field
  */
 class FieldInitializationTest extends WP_UnitTestCase {
-	public function setup() {
+	public $fieldName;
+	
+	public function setUp(): void {
 		$this->fieldName = '_color';
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		// This is required just to overwrite code in WP_UnitTestCase
 		// that accesses the database
 	}

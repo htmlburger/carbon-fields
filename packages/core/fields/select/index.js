@@ -23,6 +23,10 @@ export class SelectField extends Component {
 		onChange( id, e.target.value );
 	}
 
+	componentMount() {
+		onChange( id, value );
+	}
+
 	/**
 	 * Renders the component.
 	 *
@@ -37,8 +41,6 @@ export class SelectField extends Component {
 		} = this.props;
 
 		const value = this.props.value || get( field.options, '[0].value', '' );
-
-		onChange( id, value );
 
 		return (
 			field.options.length > 0

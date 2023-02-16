@@ -9,12 +9,13 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * @coversDefaultClass Carbon_Fields\Field\Predefined_Options_Field
  */
 class PredefinedOptionsFieldTest extends WP_UnitTestCase {
+	public $subject;
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->subject = M::mock( 'Carbon_Fields\Field\Predefined_Options_Field' )->makePartial();
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		M::close();
 		unset( $this->subject );
 	}

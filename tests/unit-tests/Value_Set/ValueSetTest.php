@@ -9,11 +9,11 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 class ValueSetTest extends WP_UnitTestCase {
 
-	public function setUp() {
+	public function setUp(): void {
 		
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		M::close();
 	}
 
