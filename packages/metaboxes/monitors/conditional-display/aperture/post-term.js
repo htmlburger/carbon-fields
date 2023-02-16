@@ -134,7 +134,7 @@ function trackNonHierarchicalTaxonomies() {
 		const taxonomy = node.id.replace( 'tagsdiv-', '' );
 
 		return pipe(
-			fromEvent( node.querySelector( 'textarea.the-tags' ), 'change' ),
+			fromEvent.default( node.querySelector( 'textarea.the-tags' ), 'change' ),
 			map( ( { target } ) => ( {
 				[ taxonomy ]: target.value
 					? target.value.split( TAGS_DELIMITER )

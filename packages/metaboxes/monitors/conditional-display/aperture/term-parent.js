@@ -58,7 +58,7 @@ addFilter( 'carbon-fields.conditional-display-term-parent.classic', 'carbon-fiel
 	}
 
 	return pipe(
-		fromEvent( node, 'change' ),
+		fromEvent.default( node, 'change' ),
 		map( ( { target } ) => getParentIdAncestorsAndLevelFromSelect( target ) ),
 		startWith( getParentIdAncestorsAndLevelFromSelect( node ) )
 	);
