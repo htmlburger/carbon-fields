@@ -13,7 +13,7 @@ use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
  */
 class MiscTest extends WP_UnitTestCase {
 
-	public function setUp() {
+	public function setUp(): void {
 		$ioc = new PimpleContainer();
 
 		$ioc['container_repository'] = function( $ioc ) {
@@ -52,7 +52,7 @@ class MiscTest extends WP_UnitTestCase {
 		$this->container = Carbon_Fields\Container::make( 'theme_options', 'Theme Options' );
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		M::close();
 		unset( $this->text_field );
 		unset( $this->set_field );

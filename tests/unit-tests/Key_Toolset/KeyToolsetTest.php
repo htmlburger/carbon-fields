@@ -12,7 +12,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 
 	protected $connected_to_db = false;
 
-	public function setUp() {
+	public function setUp(): void {
 		global $wpdb;
 
 		if ( ! $this->connected_to_db ) {
@@ -21,7 +21,7 @@ class KeyToolsetTest extends WP_UnitTestCase {
 		$this->subject = new Key_Toolset();
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		global $wpdb;
 
 		M::close();

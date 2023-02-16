@@ -14,7 +14,7 @@ use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
  */
 class LegacyStorageServicev15Test extends WP_UnitTestCase {
 
-	public function setUp() {
+	public function setUp(): void {
 		$ioc = new PimpleContainer();
 		
 		$ioc['container_repository'] = function( $ioc ) {
@@ -113,7 +113,7 @@ class LegacyStorageServicev15Test extends WP_UnitTestCase {
 		$this->subject = M::mock( 'Carbon_Fields\\Service\\Legacy_Storage_Service_v_1_5', array( $ioc['container_repository'], $ioc['key_toolset'] ) )->shouldDeferMissing();
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		M::close();
 		unset( $this->subject );
 	}

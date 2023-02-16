@@ -10,7 +10,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 class RepositoryTest extends WP_UnitTestCase {
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->containerId = 'carbon_fields_container_page_settings';
 		$this->containerTitle = 'Page Settings';
 		$this->containerType = 'post_meta';
@@ -19,7 +19,7 @@ class RepositoryTest extends WP_UnitTestCase {
 		$this->repository = new Repository();
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		M::close();
 		$this->repository = null;
 	}

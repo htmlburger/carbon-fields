@@ -13,7 +13,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  */
 class ArrayTranslatorTest extends WP_UnitTestCase {
 
-	public function setUp() {
+	public function setUp(): void {
 		$ioc = new PimpleContainer();
 
 		/* Conditions */
@@ -93,7 +93,7 @@ class ArrayTranslatorTest extends WP_UnitTestCase {
 		$this->subject = $ioc['container_condition_translator_array'];
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		M::close();
 		$this->subject = null;
 	}

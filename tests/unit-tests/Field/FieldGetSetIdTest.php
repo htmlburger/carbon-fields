@@ -5,11 +5,11 @@
  */
 class FieldGetSetId extends WP_UnitTestCase {
 
-	public function setUp() {
+	public function setUp(): void {
 		$this->field = $this->getMockForAbstractClass( 'Carbon_Fields\Field\Field', array(), '', false );
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		unset( $this->field );
 	}
 

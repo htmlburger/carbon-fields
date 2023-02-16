@@ -10,8 +10,10 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * @coversDefaultClass Carbon_Fields\Container\Fulfillable\Fulfillable_Collection
  */
 class FulfillableCollectionTest extends WP_UnitTestCase {
+	public $subject;
+	public $condition_factory;
 
-	public function setUp() {
+	public function setUp(): void {
 		$ioc = new PimpleContainer();
 		$ioc->register( new \Carbon_Fields\Provider\Container_Condition_Provider() );
 		\Carbon_Fields\Carbon_Fields::instance()->install( $ioc );
@@ -20,7 +22,7 @@ class FulfillableCollectionTest extends WP_UnitTestCase {
 		$this->condition_factory = $ioc['container_condition_factory'];
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		M::close();
 		$this->condition_factory = null;
 		$this->subject = null;
