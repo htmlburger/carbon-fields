@@ -8,6 +8,8 @@ use Carbon_Fields\Value_Set\Value_Set;
  * @coversDefaultClass Carbon_Fields\Field\Field
  */
 class FieldLoadSaveTest extends WP_UnitTestCase {
+	public $subject;
+	public $datastore;
 
 	public function setUp(): void {
 		$this->subject = M::mock( 'Carbon_Fields\Field\Field' )->makePartial();

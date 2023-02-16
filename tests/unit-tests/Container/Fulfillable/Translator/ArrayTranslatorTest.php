@@ -12,6 +12,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * @coversDefaultClass Carbon_Fields\Container\Fulfillable\Translator\Array_Translator
  */
 class ArrayTranslatorTest extends WP_UnitTestCase {
+	public $subject;
 
 	public function setUp(): void {
 		$ioc = new PimpleContainer();

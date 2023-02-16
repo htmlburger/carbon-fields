@@ -4,6 +4,7 @@
  * @coversDefaultClass Carbon_Fields\Field\Field
  */
 class FieldGetSetId extends WP_UnitTestCase {
+	public $field;
 
 	public function setUp(): void {
 		$this->field = $this->getMockForAbstractClass( 'Carbon_Fields\Field\Field', array(), '', false );

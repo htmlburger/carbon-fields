@@ -13,6 +13,10 @@ use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
  * @coversDefaultClass Carbon_Fields\Service\Legacy_Storage_Service_v_1_5
  */
 class LegacyStorageServicev15Test extends WP_UnitTestCase {
+	public $datastore;
+	public $container;
+	public $subject;
+	public $legacy_storage_array;
 
 	public function setUp(): void {
 		$ioc = new PimpleContainer();

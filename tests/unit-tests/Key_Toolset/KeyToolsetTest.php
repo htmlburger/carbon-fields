@@ -9,6 +9,7 @@ use Carbon_Fields\Exception\Incorrect_Syntax_Exception;
  * @coversDefaultClass Carbon_Fields\Toolset\Key_Toolset
  */
 class KeyToolsetTest extends WP_UnitTestCase {
+	public $subject;
 
 	protected $connected_to_db = false;
 

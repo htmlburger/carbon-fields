@@ -12,6 +12,10 @@ use Carbon_Fields\Container\Condition\Factory as ConditionFactory;
  * @coversDefaultClass Carbon_Fields\Field\Field
  */
 class MiscTest extends WP_UnitTestCase {
+	public $text_field;
+	public $set_field;
+	public $complex_field;
+	public $container;
 
 	public function setUp(): void {
 		$ioc = new PimpleContainer();
