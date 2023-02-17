@@ -213,7 +213,7 @@ class Block_Container extends Container {
 	 */
 	protected function set_style_handle( $key, $handle ) {
 		if ( ! wp_style_is( $handle, 'registered' ) ) {
-			throw new \Exception( __( "Style '$handle' is not enqueued.", 'crb' ) );
+			throw new \Exception( __( "Style '$handle' is not registered.", 'crb' ) );
 		}
 
 		$this->settings[ $key ] = $handle;
