@@ -25,34 +25,39 @@
 .postbox .cf-complex__inserter-menu {
   margin: 0;
   border-radius: 3px;
-  background-color: #191e23; }
-  .postbox .cf-complex__inserter-menu:before {
-    position: absolute;
-    top: 50%;
-    right: 100%;
-    width: 0;
-    height: 0;
-    border-width: 5px 5px 5px 0;
-    border-style: solid;
-    border-color: transparent #191e23;
-    margin-top: -5px;
-    content: ''; }
+  background-color: #191e23;
+}
+.postbox .cf-complex__inserter-menu:before {
+  position: absolute;
+  top: 50%;
+  right: 100%;
+  width: 0;
+  height: 0;
+  border-width: 5px 5px 5px 0;
+  border-style: solid;
+  border-color: transparent #191e23;
+  margin-top: -5px;
+  content: "";
+}
 
 .postbox .cf-complex__inserter-item {
   font-weight: 600;
   color: #fff;
-  transition: color 0.1s linear; }
-  .postbox .cf-complex__inserter-item:hover {
-    color: #00a0d2; }
+  transition: color 0.1s linear;
+}
+.postbox .cf-complex__inserter-item:hover {
+  color: #00a0d2;
+}
 
 .postbox .cf-complex__tabs .cf-complex__inserter-button {
   font-weight: 600;
-  color: #23282d; }
+  color: #23282d;
+}
 
 .postbox .cf-complex__tabs-item {
   font-weight: 600;
-  color: #23282d; }
-
+  color: #23282d;
+}
 /* ==========================================================================
    Colors
    ========================================================================== */
@@ -82,31 +87,32 @@
   padding: 12px;
   border-width: 0 1px 0 0;
   border-style: solid;
-  border-color: #e2e4e7; }
-
+  border-color: #e2e4e7;
+}
 .cf-container .cf-field + .cf-field {
-  border-top-width: 1px; }
+  border-top-width: 1px;
+}
 
-.term-php .cf-container__fields > .cf-field:not(.cf-field--has-width) > .cf-field__head,
-.cf-container-user-meta .cf-container__fields > .cf-field > .cf-field__head {
+.term-php .cf-container__fields > .cf-field:not(.cf-field--has-width) > .cf-field__head, .cf-container-user-meta .cf-container__fields > .cf-field > .cf-field__head {
   position: absolute;
   left: 0;
-  font-weight: 600; }
+  font-weight: 600;
+}
 
 .cf-container .cf-field__label {
   padding-bottom: 6.5px;
   font-weight: 600;
-  color: #23282d; }
-
-.cf-container-term-meta .cf-field__label,
-.cf-container-user-meta .cf-field__label {
-  margin: 0 !important; }
+  color: #23282d;
+}
+.cf-container-term-meta .cf-field__label, .cf-container-user-meta .cf-field__label {
+  margin: 0 !important;
+}
 
 .cf-field__help {
   display: inline-block;
   color: #666;
-  margin-top: 10px; }
-
+  margin-top: 10px;
+}
 /* ==========================================================================
    Colors
    ========================================================================== */
@@ -133,12 +139,11 @@
    ========================================================================== */
 .postbox .cf-multiselect__control {
   border-color: #ddd;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07) inset; }
-
-.postbox .cf-multiselect__control--is-focused,
-.postbox .cf-multiselect__control--is-focused:hover {
-  box-shadow: 0 0 2px rgba(0, 115, 170, 0.8); }
-
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07) inset;
+}
+.postbox .cf-multiselect__control--is-focused, .postbox .cf-multiselect__control--is-focused:hover {
+  box-shadow: 0 0 2px rgba(0, 115, 170, 0.8);
+}
 /* ==========================================================================
    Colors
    ========================================================================== */
@@ -164,34 +169,37 @@
    Media Gallery
    ========================================================================== */
 .postbox .cf-media-gallery__inner {
-  border: 1px solid #e2e4e7; }
+  border: 1px solid #e2e4e7;
+}
 
 .postbox .cf-media-gallery__actions {
-  border-top: 1px solid #e2e4e7; }
-
+  border-top: 1px solid #e2e4e7;
+}
 .cf-container-term-meta .cf-media-gallery__actions {
-  padding-left: 0; }
+  padding-left: 0;
+}
 
 .cf-container-term-meta .cf-media-gallery__list {
   margin: 0 -8px;
-  max-height: 285px; }
+  max-height: 285px;
+}
 
 .cf-container-term-meta .cf-media-gallery__item {
-  flex-basis: 20%; }
+  flex-basis: 20%;
+}
 
-.postbox .cf-media-gallery__item-inner,
-.cf-container-term-meta .cf-media-gallery__item-inner {
-  border: 1px solid #e2e4e7; }
+.postbox .cf-media-gallery__item-inner, .cf-container-term-meta .cf-media-gallery__item-inner {
+  border: 1px solid #e2e4e7;
+}
 
-.postbox .cf-media-gallery__item-preview,
-.cf-container-term-meta .cf-media-gallery__item-preview {
-  background-color: #f3f4f5; }
+.postbox .cf-media-gallery__item-preview, .cf-container-term-meta .cf-media-gallery__item-preview {
+  background-color: #f3f4f5;
+}
 
-.postbox .cf-media-gallery__item-name,
-.cf-container-term-meta .cf-media-gallery__item-name {
+.postbox .cf-media-gallery__item-name, .cf-container-term-meta .cf-media-gallery__item-name {
   border-top: 1px solid #e2e4e7;
-  background-color: #f3f4f5; }
-
+  background-color: #f3f4f5;
+}
 /* ==========================================================================
    Colors
    ========================================================================== */
@@ -217,15 +225,15 @@
    Radio
    ========================================================================== */
 .inside .cf-radio-image .cf-radio__input:focus ~ .cf-radio__label {
-  box-shadow: 0 0 2px rgba(0, 160, 210, 0.8); }
+  box-shadow: 0 0 2px rgba(0, 160, 210, 0.8);
+}
 
 .inside .cf-radio-image__image {
-  border: 1px solid #b5bcc2; }
-
-.inside .cf-radio__input:focus ~ .cf-radio__label .cf-radio-image__image,
-.inside .cf-radio__input:checked ~ .cf-radio__label .cf-radio-image__image {
-  outline: 4px solid #00a0d2; }
-
+  border: 1px solid #b5bcc2;
+}
+.inside .cf-radio__input:focus ~ .cf-radio__label .cf-radio-image__image, .inside .cf-radio__input:checked ~ .cf-radio__label .cf-radio-image__image {
+  outline: 4px solid #00a0d2;
+}
 /* ==========================================================================
    Colors
    ========================================================================== */
@@ -251,22 +259,27 @@
    Widget
    ========================================================================== */
 .cf-container-widget {
-  margin-bottom: 13px; }
-  .cf-container-widget .cf-field {
-    margin: 1em 0 0;
-    padding: 0;
-    border-width: 0; }
-  .cf-container-widget .cf-field + .cf-field {
-    border-top-width: 0; }
-  .cf-container-widget .cf-complex__group-body {
-    border-width: 1px 1px 1px 1px;
-    margin-top: 0; }
-  .cf-container-widget .cf-complex__group-body .cf-field {
-    padding: 12px; }
-  .cf-container-widget .cf-complex__group-body .cf-field + .cf-field {
-    border-width: 1px 0 0 0;
-    padding-top: 1em; }
-
+  margin-bottom: 13px;
+}
+.cf-container-widget .cf-field {
+  margin: 1em 0 0;
+  padding: 0;
+  border-width: 0;
+}
+.cf-container-widget .cf-field + .cf-field {
+  border-top-width: 0;
+}
+.cf-container-widget .cf-complex__group-body {
+  border-width: 1px 1px 1px 1px;
+  margin-top: 0;
+}
+.cf-container-widget .cf-complex__group-body .cf-field {
+  padding: 12px;
+}
+.cf-container-widget .cf-complex__group-body .cf-field + .cf-field {
+  border-width: 1px 0 0 0;
+  padding-top: 1em;
+}
 /* ==========================================================================
    Colors
    ========================================================================== */
@@ -291,12 +304,11 @@
 /* ==========================================================================
    Theme Options
    ========================================================================== */
-.carbon-theme-options #post-body.columns-2 #postbox-container-1.fixed,
-.carbon-network #post-body.columns-2 #postbox-container-1.fixed {
+.carbon-theme-options #post-body.columns-2 #postbox-container-1.fixed, .carbon-network #post-body.columns-2 #postbox-container-1.fixed {
   position: fixed;
   right: 0;
-  margin-right: 20px; }
-
+  margin-right: 20px;
+}
 /* ==========================================================================
    Colors
    ========================================================================== */
@@ -322,8 +334,8 @@
    User Meta
    ========================================================================== */
 .cf-container-user-meta {
-  max-width: 600px; }
-
+  max-width: 600px;
+}
 /* ==========================================================================
    Colors
    ========================================================================== */
@@ -349,58 +361,118 @@
    Container
    ========================================================================== */
 .carbon-box.hide-if-js:not([hidden]) {
-  display: block; }
+  display: block;
+}
 
 #poststuff .carbon-box .inside,
 .carbon-box .inside {
   padding: 0;
-  margin: 0; }
+  margin: 0;
+}
+
+.cf-container--plain {
+  display: block;
+}
+.cf-container--tabbed {
+  display: flex;
+}
+.cf-container--tabbed-horizontal {
+  flex-direction: column;
+}
+.cf-container--tabbed-vertical {
+  flex-direction: row;
+}
 
 .cf-container__fields {
   display: flex;
   flex-wrap: wrap;
+  flex: 1;
   margin: 0 -1px 0 0;
-  background-color: #fff; }
-  .cf-container__fields[hidden] {
-    display: none; }
-  .block-editor .cf-container__fields {
-    border-left: 1px solid #e2e4e7; }
-  .cf-container-term-meta .cf-container__fields,
-  .cf-container-user-meta .cf-container__fields {
-    border-width: 0 0 1px 1px;
-    border-style: solid;
-    border-color: #e2e4e7;
-    margin: 0; }
+  background-color: #fff;
+}
+.cf-container__fields[hidden] {
+  display: none;
+}
+.block-editor .cf-container__fields {
+  border-left: 1px solid #e2e4e7;
+}
+.cf-container-term-meta .cf-container__fields, .cf-container-user-meta .cf-container__fields {
+  border-width: 0 0 1px 1px;
+  border-style: solid;
+  border-color: #e2e4e7;
+  margin: 0;
+}
 
 .cf-container__tabs {
   position: relative;
   z-index: 1;
-  padding: 12px 12px 0;
-  border-bottom: 1px solid #e2e4e7;
-  background-color: #fbfbfc; }
-
+  background-color: #fbfbfc;
+}
 .cf-container__tabs-list {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 0 -1px; }
-
-.cf-container__tabs-item {
+  margin: 0 0 -1px;
+}
+.cf-container__tabs-list .cf-container__tabs-item {
   display: flex;
   align-items: center;
   border: 1px solid #e2e4e7;
   margin: 0 8px 0 0;
   background-color: #fbfbfc;
-  font-size: 12px;
+  font-size: 13px;
   cursor: pointer;
-  transition: background-color 0.1s linear, border-color 0.1s linear; }
-  .cf-container__tabs-item button {
-    background: 0;
-    border: 0;
-    padding: 8px 12px;
-    margin: 0; }
-  .cf-container__tabs-item:hover {
-    background-color: #fff; }
-  .cf-container__tabs-item--current {
-    background-color: #fff;
-    border-bottom-color: #fff; }
-
+  transition: background-color 0.1s linear, border-color 0.1s linear;
+}
+.cf-container__tabs-list .cf-container__tabs-item button {
+  background: 0;
+  border: 0;
+  padding: 10px 12px;
+  margin: 0;
+  flex: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.cf-container__tabs-list .cf-container__tabs-item button span {
+  margin-right: 5px;
+}
+.cf-container__tabs-list .cf-container__tabs-item:hover {
+  background-color: #fff;
+}
+.cf-container__tabs-list .cf-container__tabs-item--current {
+  background-color: #fff;
+  border-bottom-color: #fff;
+}
+.cf-container__tabs--tabbed-horizontal {
+  padding: 12px 12px 0;
+  border-bottom: 1px solid #e2e4e7;
+}
+.cf-container__tabs--tabbed-horizontal .cf-container__tabs-list {
+  display: flex;
+  flex-direction: row;
+}
+.cf-container__tabs--tabbed-vertical {
+  width: 300px;
+  border-right: 1px solid #e2e4e7;
+}
+.cf-container__tabs--tabbed-vertical .cf-container__tabs-list {
+  display: flex;
+  flex-direction: column;
+}
+.cf-container__tabs--tabbed-vertical .cf-container__tabs-list .cf-container__tabs-item {
+  margin: 0;
+  justify-content: flex-start;
+  border: 0;
+  border-top: 1px solid #e2e4e7;
+  border-bottom: 1px solid #e2e4e7;
+}
+.cf-container__tabs--tabbed-vertical .cf-container__tabs-list .cf-container__tabs-item:first-of-type {
+  border-top: 0;
+}
+.cf-container__tabs--tabbed-vertical .cf-container__tabs-list .cf-container__tabs-item button {
+  text-align: left;
+  font-weight: 500;
+}
+.cf-container__tabs--tabbed-vertical .cf-container__tabs-list .cf-container__tabs-item + .cf-container__tabs-item {
+  border-top: 0;
+}
