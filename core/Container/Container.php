@@ -174,7 +174,7 @@ abstract class Container implements Datastore_Holder_Interface {
 		if ( $name === '' ) {
 			$name = $id;
 			$id = '';
-	}
+		}
 
 		$type = Helper::normalize_type( $raw_type );
 		$repository = Carbon_Fields::resolve( 'container_repository' );

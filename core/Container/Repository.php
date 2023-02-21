@@ -182,6 +182,7 @@ class Repository {
 	 * @return string
 	 */
 	public function get_unique_container_id( $title ) {
+		$title = Helper::cyr_to_lat( $title );
 		$id = remove_accents( $title );
 		$id = strtolower( $id );
 
