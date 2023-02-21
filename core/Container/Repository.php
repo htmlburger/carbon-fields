@@ -182,7 +182,6 @@ class Repository {
 	 * @return string
 	 */
 	public function get_unique_container_id( $title ) {
-		$title = Helper::cyr_to_lat( $title );
 		$id = remove_accents( $title );
 		$id = strtolower( $id );
 
@@ -197,9 +196,18 @@ class Repository {
 			$id_suffix = $wids;
 			$id = substr( $id, 0, -strlen( $wids ) );
 		}
-
 		$id = preg_replace( '~[\s]+~', '_', $id );
 		$id = preg_replace( '~[^\w\-\_]+~', '', $id );
+
+		// Remove multiple sequential underscores from the slug
+		$id = preg_replace( '~_+~', '_', $id );
+
+		// Sometimes we're unable to produce slug because the 
+		// source language isn't latin; in those cases
+		// we just produce stable hash from the title
+		if (empty($id) || $id === '_') {
+			$id = substr( md5( $title ), 0, 8 );
+		}
 
 		$id = $id_prefix . $id . $id_suffix;
 
