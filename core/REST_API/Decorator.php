@@ -57,7 +57,23 @@ class Decorator {
 
 				$getter = function( $object, $field_name ) use ( $container ) {
 					$object_id = self::get_object_id( $object, $container->type );
-					return Helper::get_value( $object_id, $container->type, '', $field_name );
+
+					$value = Helper::get_value( $object_id, $container->type, '', $field_name );
+					$field = Helper::get_field( $container->type, $container->id, $field_name );
+
+					if ( apply_filters( 'carbon_fields_rest_api_return_attachments_as_urls', false, $value, $field, $object_id ) ) {
+                        $attachments_class = [
+                            "Carbon_Fields\Field\Media_Gallery_Field",
+                            "Carbon_Fields\Field\File_Field",
+                            "Carbon_Fields\Field\Image_Field"
+                        ];
+
+                        if ( in_array( get_class( $field ), $attachments_class ) ) {
+                            $value = Helper::get_attachments_urls($value);
+                        }
+                    }
+
+					return $value;
 				};
 
 				$setter = function( $value, $object, $field_name ) use ( $container ) {

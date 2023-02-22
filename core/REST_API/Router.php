@@ -248,8 +248,24 @@ class Router {
 			if ( ! $field->get_visible_in_rest_api() ) {
 				continue;
 			}
-			$values[ $field->get_base_name() ] = Helper::get_value( $object_id, $container_type, '', $field->get_base_name() );
+
+			$value = Helper::get_value( $object_id, $container_type, '', $field->get_base_name() );
+
+			if ( apply_filters( 'carbon_fields_rest_api_return_attachments_as_urls', false, $value, $field, $object_id ) ) {
+				$attachments_class = [
+					"Carbon_Fields\Field\Media_Gallery_Field",
+					"Carbon_Fields\Field\File_Field",
+					"Carbon_Fields\Field\Image_Field"
+				];
+
+				if ( in_array( get_class( $field ), $attachments_class ) ) {
+					$value = Helper::get_attachments_urls($value);
+				}
+			}
+
+			$values[ $field->get_base_name() ] = $value;
 		}
+
 		return $values;
 	}
 

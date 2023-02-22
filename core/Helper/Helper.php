@@ -706,4 +706,18 @@ class Helper {
 
 		return $sidebars;
 	}
+
+	public static function get_attachments_urls( $media_files ) {
+		if ( empty( $media_files ) ) {
+            return is_array( $media_files ) ? [] : "";
+        }
+
+        if ( ! is_array( $media_files ) && (int) $media_files > 0 ) {
+            return wp_get_attachment_url( $media_files );
+        }
+
+        return array_map( function( $media_file ) {
+            return wp_get_attachment_url( $media_file );
+        }, $media_files );
+    }
 }
