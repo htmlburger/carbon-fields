@@ -22,12 +22,12 @@
 /* ==========================================================================
    Complex
    ========================================================================== */
-.postbox .cf-complex__inserter-menu {
+.postbox .cf-complex__inserter-menu, body[class*=taxonomy-] .cf-complex__inserter-menu {
   margin: 0;
   border-radius: 3px;
   background-color: #191e23;
 }
-.postbox .cf-complex__inserter-menu:before {
+.postbox .cf-complex__inserter-menu:before, body[class*=taxonomy-] .cf-complex__inserter-menu:before {
   position: absolute;
   top: 50%;
   right: 100%;
@@ -40,21 +40,21 @@
   content: "";
 }
 
-.postbox .cf-complex__inserter-item {
+.postbox .cf-complex__inserter-item, body[class*=taxonomy-] .cf-complex__inserter-item {
   font-weight: 600;
   color: #fff;
   transition: color 0.1s linear;
 }
-.postbox .cf-complex__inserter-item:hover {
+.postbox .cf-complex__inserter-item:hover, body[class*=taxonomy-] .cf-complex__inserter-item:hover {
   color: #00a0d2;
 }
 
-.postbox .cf-complex__tabs .cf-complex__inserter-button {
+.postbox .cf-complex__tabs .cf-complex__inserter-button, body[class*=taxonomy-] .cf-complex__tabs .cf-complex__inserter-button {
   font-weight: 600;
   color: #23282d;
 }
 
-.postbox .cf-complex__tabs-item {
+.postbox .cf-complex__tabs-item, body[class*=taxonomy] .cf-complex__tabs-item {
   font-weight: 600;
   color: #23282d;
 }

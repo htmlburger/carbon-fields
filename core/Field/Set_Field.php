@@ -18,6 +18,13 @@ class Set_Field extends Predefined_Options_Field {
 	protected $default_value = array();
 
 	/**
+	 * The options limit.
+	 *
+	 * @var int
+	 */
+	protected $limit_options = 0;
+
+	/**
 	 * Create a field from a certain type with the specified label.
 	 *
 	 * @param string $type  Field type
@@ -57,6 +64,7 @@ class Set_Field extends Predefined_Options_Field {
 		$field_data = array_merge( $field_data, array(
 			'options' => $options,
 			'value' => $value,
+			'limit_options' => $this->limit_options,
 		) );
 
 		return $field_data;
@@ -69,5 +77,15 @@ class Set_Field extends Predefined_Options_Field {
 		$value = $this->get_value();
 		$value = $this->get_values_from_options( $value );
 		return $value;
+	}
+
+	/**
+	 * Set the number of the options to be displayed at the initial field display.
+	 *
+	 * @param  int $limit
+	 */
+	public function limit_options( $limit ) {
+		$this->limit_options = $limit;
+		return $this;
 	}
 }

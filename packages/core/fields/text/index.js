@@ -34,6 +34,11 @@ class TextField extends Component {
 			field
 		} = this.props;
 
+		if ( field.attributes && field.attributes.inputmode ) {
+			field.attributes.inputMode = field.attributes.inputmode;
+			delete field.attributes.inputmode
+		}
+
 		return (
 			<input
 				type="text"
