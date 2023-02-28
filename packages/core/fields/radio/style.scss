@@ -49,6 +49,20 @@
 		outline: 0;
 		opacity: 0;
 	}
+
+	&[type="checkbox"] {
+		border-radius: 50%;
+	}
+
+	&[type="checkbox"]:checked:before {
+		content: "";
+		background: var(--wp-admin-theme-color);
+		border-radius: 50%;
+		width: 0.5rem;
+		height: 0.5rem;
+		margin: 0.1875rem;
+		line-height: 1.14285714;
+	}
 }
 
 .cf-radio-image__image {

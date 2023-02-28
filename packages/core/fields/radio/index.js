@@ -40,7 +40,7 @@ class RadioField extends Component {
 				{ field.options.map( ( option, index ) => (
 					<li className="cf-radio__list-item" key={ index }>
 						<input
-							type="radio"
+							type="checkbox"
 							id={ `${ id }-${ option.value }` }
 							name={ name }
 							value={ option.value }
