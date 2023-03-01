@@ -40,6 +40,8 @@ class Date_Field extends Field {
 	 */
 	protected $picker_options = array(
 		'allowInput' => true,
+		'altInput' => true,
+		'altFormat' => "j M Y",
 	);
 
 	/**
