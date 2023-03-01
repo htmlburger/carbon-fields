@@ -2291,6 +2291,9 @@ span.flatpickr-weekday {
     flex-basis: 100% !important;
   }
 }
+.cf-field.cf-block-preview {
+  display: none;
+}
 
 .cf-rich-text .cf-field__body {
   box-sizing: content-box;
@@ -2303,7 +2306,7 @@ span.flatpickr-weekday {
 .cf-field__label {
   display: block;
 }
-.cf-html .cf-field__label, .cf-separator .cf-field__label {
+.cf-html .cf-field__label, .cf-separator .cf-field__label, .cf-block-preview .cf-field__label {
   display: none;
 }
 

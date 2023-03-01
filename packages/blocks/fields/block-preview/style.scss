@@ -1,0 +1,15 @@
+/* ------------------------------------------------------------ *\ 
+    Block Preview iFrame
+\* ------------------------------------------------------------ */
+
+body.block-editor-iframe__body {
+    .cf-block-preview {
+        display: block;
+    }
+
+    // Hide all other fields except the HTML fields with preview
+    // Also check if there is preview field at all or just show all fields
+    .cf-block__fields:has(.cf-block-preview) .cf-field:not(.cf-block-preview) {
+        display: none;
+    }
+}

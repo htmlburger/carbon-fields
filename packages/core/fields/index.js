@@ -32,6 +32,7 @@ import SidebarField from './sidebar';
 import TextField from './text';
 import TextareaField from './textarea';
 import TimeField from './time';
+import BlockPreviewField from './block-preview';
 
 /**
  * Extends the fields with necessary hooks.
@@ -73,5 +74,6 @@ addFilter( 'carbon-fields.register-field-type', 'carbon-fields/core', ( type, co
 	[ 'sidebar', SidebarField ],
 	[ 'text', TextField ],
 	[ 'textarea', TextareaField ],
-	[ 'time', TimeField ]
+	[ 'time', TimeField ],
+	[ 'block_preview', BlockPreviewField ]
 ].forEach( ( field ) => registerFieldType( ...field ) );

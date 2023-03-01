@@ -33,6 +33,7 @@ namespace Carbon_Fields;
  * @method static \Carbon_Fields\Field\Text_Field make_text( string $name, string $label = null )
  * @method static \Carbon_Fields\Field\Textarea_Field make_textarea( string $name, string $label = null )
  * @method static \Carbon_Fields\Field\Time_Field make_time( string $name, string $label = null )
+ * @method static \Carbon_Fields\Field\Block_Preview_Field make_html( string $name, string $label = null )
  */
 class Field {
 

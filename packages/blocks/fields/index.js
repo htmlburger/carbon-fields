@@ -60,3 +60,4 @@ import './sidebar';
 import './separator';
 import './text';
 import './textarea';
+import './block-preview';
