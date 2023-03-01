@@ -6,7 +6,6 @@ namespace Carbon_Fields\Field;
  * Time picker field class.
  */
 class Time_Field extends Date_Field {
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -15,12 +14,14 @@ class Time_Field extends Date_Field {
 		'enableTime' => true,
 		'noCalendar' => true,
 		'enableSeconds' => true,
+		'altInput' => true,
+		'altFormat' => "h:i:S K",
 	);
 
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $storage_format = 'H:i:s';
+	protected $storage_format = 'Y-m-d H:i:s';
 
 	/**
 	 * {@inheritDoc}
@@ -30,5 +31,5 @@ class Time_Field extends Date_Field {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $input_format_js = 'h:i:S K';
+	protected $input_format_js = 'Y-m-d h:i:S K';
 }
