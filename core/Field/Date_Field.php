@@ -85,6 +85,12 @@ class Date_Field extends Field {
 	 * @return string
 	 */
 	public function get_storage_format() {
+		if ( $this->get_context() === 'block' ) {
+			$this->input_format_js = "Y-m-d h:i:S K";
+
+			return "Y-m-d H:i:s";
+		}
+
 		return $this->storage_format;
 	}
 

@@ -21,7 +21,7 @@ class Time_Field extends Date_Field {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $storage_format = 'Y-m-d H:i:s';
+	protected $storage_format = 'H:i:s';
 
 	/**
 	 * {@inheritDoc}
@@ -31,5 +31,15 @@ class Time_Field extends Date_Field {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $input_format_js = 'Y-m-d h:i:S K';
+	protected $input_format_js = 'h:i:S K';
+
+	public function get_storage_format() {
+		if ( $this->get_context() === 'block' ) {
+			$this->input_format_js = "Y-m-d h:i:S K";
+
+			return "Y-m-d H:i:s";
+		}
+
+		return $this->storage_format;
+	}
 }
