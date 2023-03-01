@@ -10,10 +10,12 @@
 
 	.edit-post-sidebar & {
 		border-color: $gb-dark-gray-150;
+		flex-direction: column;
 	}
 
 	.edit-post-sidebar &::before {
 		background-color: $gb-dark-gray-150;
+		display: none;
 	}
 }
 

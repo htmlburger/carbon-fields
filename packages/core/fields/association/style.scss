@@ -88,6 +88,14 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
+
+	.edit-post-sidebar .cf-association__cols & {
+		width: 100%;
+
+		&:first-child {
+			border-bottom: 3px solid $wp-color-dark-gray;
+		}
+	}
 }
 
 .cf-association__option {
@@ -157,6 +165,10 @@
 	line-height: 1;
 	text-transform: uppercase;
 	color: $wp-color-dark-silver-gray;
+
+	.edit-post-sidebar .cf-association__col & {
+		display: none;
+	}
 }
 
 .cf-association__option-actions {

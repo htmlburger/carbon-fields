@@ -28,9 +28,11 @@
 }
 .edit-post-sidebar .cf-association__cols {
   border-color: #8d96a0;
+  flex-direction: column;
 }
 .edit-post-sidebar .cf-association__cols::before {
   background-color: #8d96a0;
+  display: none;
 }
 
 .edit-post-sidebar .cf-association__counter {
