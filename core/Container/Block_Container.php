@@ -412,7 +412,7 @@ class Block_Container extends Container {
 			return $post_id;
 		}
 
-        $admin_url = $_SERVER['HTTP_REFERER'];
+        $admin_url = isset( $_SERVER['HTTP_REFERER'] ) && ! empty( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : null;
         if ( ! empty( $admin_url ) ) {
             $parsed_url = parse_url( $admin_url );
             if ( isset( $parsed_url['query']) && ! empty( $parsed_url['query'] ) ) {
@@ -425,6 +425,10 @@ class Block_Container extends Container {
                 }
             }
         }
+
+		if ( empty( $post_id ) ) {
+			$post_id = get_the_ID();
+		}
 
         return $post_id;
 	}
