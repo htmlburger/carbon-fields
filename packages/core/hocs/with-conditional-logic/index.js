@@ -53,7 +53,24 @@ export default function withConditionalLogic( input, output ) {
 	 */
 	function handler( props ) {
 		return function( effect ) {
-			const fieldExists = has( effect, props.name ) || find( effect, [ 'id', props.id ] );
+			let fieldExists = has( effect, props.name ) || find( effect, [ 'id', props.id ] );
+
+			if ( typeof fieldExists === 'undefined' ) {
+				/*
+				 * Issue: When conditonal logic is used in Container
+				 * it would return array of all fields with IDs, and other props,
+				 * but when it is in Block container it only return the field name
+				 * Fix: trim the field ID, leave only the field name and try to
+				 * find the real field in effect by it.
+				 * 
+				 * Eg.: cf-43e66f51-560c-432f-8335-b866884a0b6d__new_hero_items__cf-4HrGgZu2fYEy8gUqLLXfo__external_url_bwt
+				 * would become just "new_hero_items" in innerId[1]
+				*/
+				let innerId = /__(.*?)__/g.exec( props.id ); 
+				if ( innerId && innerId.length && innerId[1] ) {
+					fieldExists = has( effect, innerId[1] ) || find( effect, [ 'id', innerId[1] ] );
+				}
+			}
 
 			if ( ! fieldExists ) {
 				return;
