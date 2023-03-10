@@ -56,7 +56,7 @@
 
 	&[type="checkbox"]:checked:before {
 		content: "";
-		background: var(--wp-admin-theme-color);
+		background-color: var(--wp-admin-theme-color, #3582c4);
 		border-radius: 50%;
 		width: 0.5rem;
 		height: 0.5rem;
