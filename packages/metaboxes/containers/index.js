@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import { render } from '@wordpress/element';
+import { createRoot } from '@wordpress/element';
 import { select } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
 import { forEach } from 'lodash';
@@ -16,6 +16,7 @@ import './theme-options';
 import './user-meta';
 import Container from '../components/container';
 import { getContainerType, registerContainerType } from './registry';
+import { registerContainerRoot } from './root-registry';
 
 /**
  * Registers the containers.
@@ -43,13 +44,11 @@ export function renderContainer( container, context ) {
 	const Component = getContainerType( container.type, context );
 
 	if ( node ) {
-		render(
-			<Component id={ container.id } />,
-			node,
-			() => {
-				node.dataset.mounted = true;
-			}
-		);
+		const root = createRoot( node );
+
+		root.render( <Component id={ container.id } /> );
+
+		registerContainerRoot( container.id, root );
 	} else {
 		// eslint-disable-next-line no-console
 		console.error( sprintf( __( 'Could not find DOM element for container "%1$s".', 'carbon-fields-ui' ), container.id ) );
