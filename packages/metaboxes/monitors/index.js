@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import { Fragment, render } from '@wordpress/element';
+import { Fragment, createRoot } from '@wordpress/element';
 
 /**
  * Internal dependencies.
@@ -22,7 +22,7 @@ import { PAGE_NOW_WIDGETS, PAGE_NOW_CUSTOMIZE } from '../lib/constants';
 export default function initializeMonitors( context ) {
 	const { pagenow } = window.cf.config;
 
-	render(
+	createRoot(document.createElement( 'div' )).render(
 		<Fragment>
 			{ ! isGutenberg() && (
 				<SaveLock />
@@ -33,14 +33,13 @@ export default function initializeMonitors( context ) {
 			) }
 
 			<ConditionalDisplay context={ context } />
-		</Fragment>,
-		document.createElement( 'div' )
+		</Fragment>
 	);
 
 	const postStuffNode = document.querySelector( '#poststuff' );
 
 	if ( postStuffNode ) {
-		render( <RevisionsFlag />, postStuffNode.appendChild( document.createElement( 'div' ) ) );
+		createRoot(postStuffNode.appendChild( document.createElement( 'div' ) )).render(<RevisionsFlag />);
 	}
 }
 

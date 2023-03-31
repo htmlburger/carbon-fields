@@ -110,7 +110,7 @@ export default function handler( { containers, context } ) {
 				}
 
 				if ( ! result && containerRoot ) {
-					containerRoot.unmount();
+					setTimeout( () => containerRoot?.unmount() );
 				}
 			}
 		} );
