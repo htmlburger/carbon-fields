@@ -44,10 +44,10 @@ if ( ! window.wp?.element?.createRoot && typeof window.wp?.element?.render === "
 	 */
 	window.wp.element.createRoot = ( domNode ) => ( {
 		render: ( reactNode ) => {
-			console.warn( "CFields: Using patched `reactRoot.render()`!", domNode );
+			console.warn( "Carbon Fields: Using patched `reactRoot.render()`! Please update to at least WordPress v6.2", domNode );
 			window.wp.element.render( reactNode, domNode );
 		},
-		unmount: () => console.error( "Unsupported in this patch!" ),
+		unmount: () => console.warn( "Carbon Fields: Using patched `reactRoot.unmount()`! Please update to at least WordPress v6.2" )		
 	} );
 }
 

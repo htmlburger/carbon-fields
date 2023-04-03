@@ -52,7 +52,7 @@ function input( props ) {
 	return pipe(
 		fromSelector( select( 'core/block-editor' ).getBlock, props.blockId ),
 		distinctUntilChanged(),
-		map( ( { attributes } ) => attributes.data )
+		map( ( blockData ) => blockData?.attributes?.data )
 	);
 }
 
