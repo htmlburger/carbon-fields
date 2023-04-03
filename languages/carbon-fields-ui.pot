@@ -178,6 +178,14 @@ msgstr ""
 msgid "Text"
 msgstr ""
 
+#: packages/core/fields/set/index.js:110
+msgid "Show All Options"
+msgstr ""
+
+#: packages/core/fields/set/index.js:111
+msgid "Show Less Options"
+msgstr ""
+
 #: packages/core/fields/sidebar/index.js:110
 msgid "Please enter the name of the new sidebar:"
 msgstr ""
@@ -194,7 +202,7 @@ msgstr ""
 msgid "Select Time"
 msgstr ""
 
-#: packages/core/hocs/with-conditional-logic/index.js:70
+#: packages/core/hocs/with-conditional-logic/index.js:87
 msgid "An unknown field is used in condition - \"%s\""
 msgstr ""
 
@@ -226,7 +234,7 @@ msgstr ""
 msgid "An error occurred while trying to fetch files data."
 msgstr ""
 
-#: packages/metaboxes/containers/index.js:55
+#: packages/metaboxes/containers/index.js:54
 msgid "Could not find DOM element for container \"%1$s\"."
 msgstr ""
 
@@ -234,10 +242,10 @@ msgstr ""
 msgid "Unsupported container condition comparison operator used - \"%1$s\"."
 msgstr ""
 
-#: packages/metaboxes/monitors/conditional-display/handler/index.js:55
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:56
 msgid "Unsupported container condition - \"%1$s\"."
 msgstr ""
 
-#: packages/metaboxes/monitors/conditional-display/handler/index.js:73
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:74
 msgid "Unsupported container condition relation used - \"%1$s\"."
 msgstr ""
