@@ -16,6 +16,7 @@ import './theme-options';
 import './user-meta';
 import Container from '../components/container';
 import { getContainerType, registerContainerType } from './registry';
+import { registerContainerRoot } from './root-registry';
 
 /**
  * Registers the containers.
@@ -46,8 +47,11 @@ export function renderContainer( container, context ) {
 		const NodeComponent = <Component id={ container.id } />;
 
 		if ( createRoot ) {
-			createRoot( node ).render( NodeComponent );
+			const nodeRoot = createRoot( node );
+			nodeRoot.render( NodeComponent );
 			node.dataset.mounted = true;
+
+			registerContainerRoot( container.id, nodeRoot );
 		} else {
 			render(
 				NodeComponent,
