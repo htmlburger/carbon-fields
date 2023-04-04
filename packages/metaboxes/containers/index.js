@@ -49,7 +49,6 @@ export function renderContainer( container, context ) {
 		if ( createRoot ) {
 			const nodeRoot = createRoot( node );
 			nodeRoot.render( NodeComponent );
-			node.dataset.mounted = true;
 
 			registerContainerRoot( container.id, nodeRoot );
 		} else {

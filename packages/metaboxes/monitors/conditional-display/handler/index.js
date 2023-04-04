@@ -121,13 +121,13 @@ export default function handler( { containers, context } ) {
 					}
 	
 					if ( ! result && isMounted ) {
-						delete containerNode.dataset.mounted;
+						delete containerNode?.dataset?.mounted;
 	
 						// Rely on React's internals instead of `unmountComponentAtNode`
 						// due to https://github.com/facebook/react/issues/13690.
 						// TODO: Conditionally render the fields in the container, this way
 						// we can move away from mount/unmount cycles.
-						containerNode._reactRootContainer.unmount();
+						containerNode?._reactRootContainer?.unmount();
 					}
 				}
 			}
