@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import { createRoot } from '@wordpress/element';
+import { render, createRoot } from '@wordpress/element';
 import { select } from '@wordpress/data';
 import { __, sprintf } from '@wordpress/i18n';
 import { forEach } from 'lodash';
@@ -44,11 +44,22 @@ export function renderContainer( container, context ) {
 	const Component = getContainerType( container.type, context );
 
 	if ( node ) {
-		const root = createRoot( node );
+		const NodeComponent = <Component id={ container.id } />;
 
-		root.render( <Component id={ container.id } /> );
+		if ( createRoot ) {
+			const nodeRoot = createRoot( node );
+			nodeRoot.render( NodeComponent );
 
-		registerContainerRoot( container.id, root );
+			registerContainerRoot( container.id, nodeRoot );
+		} else {
+			render(
+				NodeComponent,
+				node,
+				() => {
+					node.dataset.mounted = true;
+				}
+			);
+		}
 	} else {
 		// eslint-disable-next-line no-console
 		console.error( sprintf( __( 'Could not find DOM element for container "%1$s".', 'carbon-fields-ui' ), container.id ) );
