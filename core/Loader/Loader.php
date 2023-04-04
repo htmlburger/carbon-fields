@@ -204,6 +204,7 @@ class Loader {
 	 */
 	public function enqueue_assets() {
 		global $pagenow;
+		global $wp_version;
 
 		$this->enqueue_style( 'core' );
 		$this->enqueue_style( 'metaboxes' );
@@ -229,6 +230,7 @@ class Loader {
 				'compactInput' => \Carbon_Fields\COMPACT_INPUT,
 				'compactInputKey' => \Carbon_Fields\COMPACT_INPUT_KEY,
 				'revisionsInputKey' => $revisions::CHANGE_KEY,
+				'wp_version' => $wp_version,
 			)
 		) ) );
 	}
