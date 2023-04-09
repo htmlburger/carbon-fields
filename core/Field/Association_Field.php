@@ -441,6 +441,7 @@ class Association_Field extends Field {
 			'fields'           => 'ids',
 			'suppress_filters' => false,
 			's'                => $search_term,
+			'post_status'      => 'publish',
 		) );
 
 		add_filter( 'posts_fields_request', array( $this, 'get_post_options_sql_select_clause' ) );
