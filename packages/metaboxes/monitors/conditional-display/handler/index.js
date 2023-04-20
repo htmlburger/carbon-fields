@@ -98,7 +98,7 @@ export default function handler( { containers, context } ) {
 		results.forEach( ( [ id, result ] ) => {
 			const postboxNode = document.getElementById( id );
 			const containerNode = document.querySelector( `.container-${ id }` );
-			const isMounted = !! containerNode.dataset.mounted;
+			const isMounted = containerNode ? !!containerNode.dataset.mounted : false;
 
 			if ( postboxNode ) {
 				postboxNode.hidden = ! result;
