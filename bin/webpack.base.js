@@ -21,7 +21,12 @@ module.exports = {
 		rules: [
 			{
 				test: /\.js$/,
-				exclude: /node_modules/,
+				// exclude: /node_modules/,
+				exclude: /node_modules\/(?![\@wordpress|babel\-loader].*)/,
+				// include: [
+				// 	path.resolve(__dirname, '../node_modules/@wordpress'),
+				// 	path.resolve(__dirname, '../packages'),
+				// ],
 				use: {
 					loader: 'babel-loader',
 					options: {

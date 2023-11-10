@@ -9,8 +9,15 @@ module.exports = {
 		} ]
 	],
 	plugins: [
+		["add-module-exports", {
+			"addDefaultProperty": true
+		  }],
 		'@babel/plugin-proposal-class-properties',
 		'@babel/plugin-proposal-object-rest-spread',
+		'@babel/plugin-transform-optional-chaining',
+		// ['@babel/plugin-transform-modules-commonjs', {
+		// 	importInterop: "babel"
+		// }],
 		'@babel/plugin-syntax-async-generators',
 		'@babel/plugin-transform-runtime'
 	],
