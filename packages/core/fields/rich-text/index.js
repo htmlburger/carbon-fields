@@ -48,7 +48,7 @@ class RichTextField extends Component {
 
 			resizeObserver.observe( this.node.current );
 
-			this.cancelObserver = resizeObserver.disconnect;
+			this.observer = resizeObserver;
 		}
 	}
 
@@ -60,8 +60,8 @@ class RichTextField extends Component {
 	componentWillUnmount() {
 		clearTimeout( this.timer );
 
-		if ( typeof this.cancelObserver !== 'undefined' ) {
-			this.cancelObserver();
+		if ( typeof this.observer !== 'undefined' ) {
+			this.observer.disconnect();
 		}
 
 		this.destroyEditor();

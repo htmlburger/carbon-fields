@@ -27,7 +27,7 @@ class GoogleMap extends Component {
 
 		resizeObserver.observe( this.node.current );
 
-		this.cancelResizeObserver = resizeObserver.disconnect;
+		this.observer = resizeObserver;
 	}
 
 	/**
@@ -68,7 +68,7 @@ class GoogleMap extends Component {
 	 * @return {void}
 	 */
 	componentWillUnmount() {
-		this.cancelResizeObserver();
+		this.observer.disconnect();
 
 		window.google.maps.event.clearInstanceListeners( this.map );
 	}
