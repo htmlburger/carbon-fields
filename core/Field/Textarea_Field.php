@@ -10,7 +10,7 @@ class Textarea_Field extends Field {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $allowed_attributes = array( 'maxLength', 'minLength', 'placeholder', 'readOnly', 'is' );
+	protected $allowed_attributes = array( 'maxLength', 'minLength', 'placeholder', 'readOnly', 'is', 'autocomplete' );
 
 	/**
 	 * Number of rows (affects textarea height)
