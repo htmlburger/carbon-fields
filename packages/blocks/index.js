@@ -60,7 +60,7 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 			innerBlocks: getBlockSetting( 'inner_blocks.enabled' ),
 			alignWide: true,
 			align: ['wide', 'full'],
-			anchor: false,
+			anchor: true,
 			html: false
 		},
 		edit: BlockEdit,
