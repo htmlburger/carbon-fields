@@ -52,7 +52,14 @@ get( window.cf, 'preloaded.blocks', [] ).forEach( ( container ) => {
 			data: {
 				type: 'object',
 				default: fields
-			}
+			},
+			anchor: {
+				type: 'string',
+				source: 'attribute',
+				attribute: 'id',
+				selector: '*'
+			},
+
 		},
 		supports: {
 			tabs: isPlainObject( getBlockSetting( 'tabs' ) ),
