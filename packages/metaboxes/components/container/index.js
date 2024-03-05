@@ -40,10 +40,25 @@ class Container extends Component {
 		const { container } = this.props;
 
 		if ( this.isTabbed( container ) ) {
-			this.setState( {
-				currentTab: Object.keys( container.settings.tabs )[ 0 ]
-			} );
+			const tabNames = Object.keys( container.settings.tabs );
+			const currentTab = tabNames.includes( container.settings.current_tab ) ? container.settings.current_tab : tabNames[ 0 ];
+
+			this.setState( { currentTab } );
 		}
+	}
+
+	/**
+	 * Adds "cftab" query parameter to the current url.
+	 *
+	 * @param {string} tabName
+	 * @return {void}
+	 */
+	addTabNameToUrl( tabName ) {
+		const url = new URL( window.location.href );
+
+		url.searchParams.set( 'cftab', tabName );
+
+		history.pushState( {}, '', url.href );
 	}
 
 	/**
@@ -83,6 +98,8 @@ class Container extends Component {
 	 * @return {void}
 	 */
 	handleTabClick = ( tab ) => {
+		this.addTabNameToUrl( tab );
+
 		this.setState( {
 			currentTab: tab
 		} );
