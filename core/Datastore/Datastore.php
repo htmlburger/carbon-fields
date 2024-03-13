@@ -76,6 +76,6 @@ abstract class Datastore implements Datastore_Interface {
 	 * @return Datastore_Interface
 	 */
 	public static function make() {
-		return call_user_func_array( array( get_class(), 'factory' ), func_get_args() );
+		return call_user_func_array( array( self::class, 'factory' ), func_get_args() );
 	}
 }
