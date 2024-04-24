@@ -13,6 +13,12 @@
 	box-sizing: border-box;
 }
 
+.cf-field.cf-image {
+	.cf-file__inner {
+		width: auto;
+	}
+}
+
 .cf-file__content {
 	position: absolute;
 	top: -1px;

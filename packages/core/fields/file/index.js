@@ -53,9 +53,14 @@ class FileField extends Component {
 	 */
 	getThumb() {
 		const { data } = this.state;
+		const { preview_size: previewSize } = this.props.field;
 
 		if ( data.sizes ) {
-			const size = data.sizes.thumbnail || data.sizes.full;
+			let size = data.sizes.thumbnail || data.sizes.full;
+
+			if ( typeof previewSize !== 'undefined' && ( previewSize.width > size.width || previewSize.height > size.height ) ) {
+				size = data.sizes.large || data.sizes.full;
+			}
 
 			if ( size ) {
 				return size.url;
@@ -78,6 +83,19 @@ class FileField extends Component {
 		const { data } = this.state;
 
 		return data.filename || data.file_name;
+	}
+
+	getPreviewSize() {
+		const { preview_size: previewSize } = this.props.field;
+
+		if ( typeof previewSize === 'undefined' ) {
+			return {};
+		}
+
+		return {
+			maxWidth: previewSize.width,
+			height: previewSize.height
+		};
 	}
 
 	/**
@@ -150,7 +168,7 @@ class FileField extends Component {
 			>
 				{
 					( { openMediaBrowser } ) => {
-						return <div className="cf-file__inner">
+						return <div className="cf-file__inner" style={ this.getPreviewSize() }>
 							<input
 								type="hidden"
 								name={ name }
