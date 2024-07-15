@@ -33,7 +33,7 @@ class Container {
 	 * @return \Carbon_Fields\Container\Container
 	 */
 	public static function make() {
-		return call_user_func_array( array( get_class(), 'factory' ), func_get_args() );
+		return call_user_func_array( array( static::class, 'factory' ), func_get_args() );
 	}
 
 	/**
@@ -46,9 +46,9 @@ class Container {
 		if ( strpos( $method, 'make_' ) === 0 ) {
 			$raw_type = substr_replace( $method, '', 0, 5 );
 			array_unshift( $arguments, $raw_type );
-			return call_user_func_array( array( get_class(), 'factory' ), $arguments );
+			return call_user_func_array( array( static::class, 'factory' ), $arguments );
 		} else {
-			trigger_error( sprintf( 'Call to undefined function: %s::%s().', get_class(), $method ), E_USER_ERROR );
+			trigger_error( sprintf( 'Call to undefined function: %s::%s().', static::class, $method ), E_USER_ERROR );
 		}
 	}
 }
