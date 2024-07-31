@@ -249,7 +249,7 @@ class Field implements Datastore_Holder_Interface {
 	 * @return Field
 	 */
 	public static function make() {
-		return call_user_func_array( array( get_class(), 'factory' ), func_get_args() );
+		return call_user_func_array( array( static::class, 'factory' ), func_get_args() );
 	}
 
 	/**
@@ -293,8 +293,8 @@ class Field implements Datastore_Holder_Interface {
 	public function activate() {
 		$this->admin_init();
 
-		add_action( 'admin_print_footer_scripts', array( get_class(), 'admin_hook_scripts' ), 5 );
-		add_action( 'admin_print_footer_scripts', array( get_class(), 'admin_hook_styles' ), 5 );
+		add_action( 'admin_print_footer_scripts', array( static::class, 'admin_hook_scripts' ), 5 );
+		add_action( 'admin_print_footer_scripts', array( static::class, 'admin_hook_styles' ), 5 );
 		static::activate_field_type( get_class( $this ) );
 
 		do_action( 'carbon_fields_field_activated', $this );

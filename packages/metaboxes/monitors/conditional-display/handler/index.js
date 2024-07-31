@@ -98,7 +98,7 @@ export default function handler( { containers, context } ) {
 		results.forEach( ( [ id, result ] ) => {
 			const postboxNode = document.getElementById( id );
 			const containerNode = document.querySelector( `.container-${ id }` );
-			const isMounted = !! containerNode.dataset.mounted;
+			const isMounted = !! containerNode?.dataset?.mounted;
 
 			if ( postboxNode ) {
 				postboxNode.hidden = ! result;
@@ -119,10 +119,10 @@ export default function handler( { containers, context } ) {
 					if ( result && ! isMounted ) {
 						renderContainer( containers[ id ], context );
 					}
-	
+
 					if ( ! result && isMounted ) {
 						delete containerNode?.dataset?.mounted;
-	
+
 						// Rely on React's internals instead of `unmountComponentAtNode`
 						// due to https://github.com/facebook/react/issues/13690.
 						// TODO: Conditionally render the fields in the container, this way

@@ -37,7 +37,7 @@ class Nav_Menu_Item_Container extends Container {
 		}
 
 		// Register the custom edit walker only once
-		$callable = array( get_class(), 'edit_walker' );
+		$callable = array( static::class, 'edit_walker' );
 		if ( ! has_filter( 'wp_edit_nav_menu_walker', $callable ) ) {
 			add_filter( 'wp_edit_nav_menu_walker', $callable, 10, 2 );
 		}

@@ -23,7 +23,7 @@ class MultiselectField extends Component {
 			onChange
 		} = this.props;
 
-		onChange( id, selected.map( ( item ) => item.value ) );
+		onChange( id, selected?.map( ( item ) => item.value ) ?? [] );
 	}
 
 	/**

@@ -223,7 +223,7 @@ abstract class Container implements Datastore_Holder_Interface {
 	 * @return Container
 	 */
 	public static function make() {
-		return call_user_func_array( array( get_class(), 'factory' ), func_get_args() );
+		return call_user_func_array( array( static::class, 'factory' ), func_get_args() );
 	}
 
 	/**
