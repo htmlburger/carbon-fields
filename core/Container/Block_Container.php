@@ -438,21 +438,20 @@ class Block_Container extends Container {
 	 *
 	 * @param  array  $attributes
 	 * @param  string $content
+	 * @param  \WP_Block $block
 	 * @return string
 	 */
-	public function render_block( $attributes, $content ) {
+	public function render_block( $attributes, $content, $block = null ) { // added variable at the end 
 		$fields = $attributes['data'];
 		$post_id = $this->get_post_id();
-
 		// Unset the "data" property because we
 		// pass it as separate argument to the callback.
 		unset($attributes['data']);
-
 		ob_start();
-
-		call_user_func( $this->render_callback , $fields, $attributes, $content, $post_id );
-
-		return ob_get_clean();
+		call_user_func( $this->render_callback , $fields, $attributes, $content, $post_id, $block );
+		$toReturn = ob_get_contents();
+		ob_clean();
+		return $toReturn;
 	}
 
 	/**
