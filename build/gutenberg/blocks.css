@@ -334,9 +334,6 @@
   border-top-width: 1px;
   margin-top: 4px;
 }
-.block-editor .cf-map__search[focus-within] ~ .cf-map__canvas {
-  border-color: #00a0d2;
-}
 .block-editor .cf-map__search:focus-within ~ .cf-map__canvas {
   border-color: #00a0d2;
 }
@@ -474,9 +471,6 @@
   border-color: #8d96a0;
   border-top-width: 1px;
   margin-top: 4px;
-}
-.block-editor .cf-oembed[focus-within] .cf-oembed__preview {
-  border-color: #00a0d2;
 }
 .block-editor .cf-oembed:focus-within .cf-oembed__preview {
   border-color: #00a0d2;
