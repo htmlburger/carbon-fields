@@ -15,10 +15,6 @@ msgstr ""
 msgid "Fields"
 msgstr ""
 
-#: packages/blocks/components/not-supported-field/index.js:14
-msgid "Field of type '%s' is not supported in Gutenberg."
-msgstr ""
-
 #: packages/blocks/components/server-side-render/index.js:129
 msgid "Error loading block: %s"
 msgstr ""
@@ -170,11 +166,11 @@ msgstr ""
 msgid "Not Found"
 msgstr ""
 
-#: packages/core/fields/rich-text/index.js:123
+#: packages/core/fields/rich-text/index.js:126
 msgid "Visual"
 msgstr ""
 
-#: packages/core/fields/rich-text/index.js:127
+#: packages/core/fields/rich-text/index.js:130
 msgid "Text"
 msgstr ""
 
@@ -234,7 +230,7 @@ msgstr ""
 msgid "An error occurred while trying to fetch files data."
 msgstr ""
 
-#: packages/metaboxes/containers/index.js:54
+#: packages/metaboxes/containers/index.js:65
 msgid "Could not find DOM element for container \"%1$s\"."
 msgstr ""
 
@@ -242,10 +238,10 @@ msgstr ""
 msgid "Unsupported container condition comparison operator used - \"%1$s\"."
 msgstr ""
 
-#: packages/metaboxes/monitors/conditional-display/handler/index.js:56
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:57
 msgid "Unsupported container condition - \"%1$s\"."
 msgstr ""
 
-#: packages/metaboxes/monitors/conditional-display/handler/index.js:74
+#: packages/metaboxes/monitors/conditional-display/handler/index.js:75
 msgid "Unsupported container condition relation used - \"%1$s\"."
 msgstr ""
