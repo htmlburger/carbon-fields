@@ -69,7 +69,6 @@ module.exports = {
 					}
 				} ),
 				new TerserPlugin( {
-					cache: true,
 					parallel: true
 				} )
 			]

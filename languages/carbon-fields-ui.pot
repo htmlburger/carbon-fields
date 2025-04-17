@@ -15,10 +15,6 @@ msgstr ""
 msgid "Fields"
 msgstr ""
 
-#: packages/blocks/components/not-supported-field/index.js:14
-msgid "Field of type '%s' is not supported in Gutenberg."
-msgstr ""
-
 #: packages/blocks/components/server-side-render/index.js:129
 msgid "Error loading block: %s"
 msgstr ""

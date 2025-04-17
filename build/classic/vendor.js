@@ -1974,7 +1974,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ \"./node_modules/@babel/runtime/helpers/esm/slicedToArray.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\n/* harmony import */ var nanoid__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! nanoid */ \"./node_modules/nanoid/index.browser.js\");\n/* harmony import */ var nanoid__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(nanoid__WEBPACK_IMPORTED_MODULE_9__);\n/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! immer */ \"./node_modules/immer/dist/immer.esm.mjs\");\n/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/api-fetch */ \"./node_modules/@wordpress/api-fetch/build-module/index.js\");\n/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @wordpress/compose */ \"./node_modules/@wordpress/compose/build-module/index.js\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/element */ \"./node_modules/@wordpress/element/build-module/index.js\");\n/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/hooks */ \"./node_modules/@wordpress/hooks/build-module/index.js\");\n/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/data */ \"./node_modules/@wordpress/data/build-module/index.js\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ \"./node_modules/@wordpress/i18n/build-module/index.js\");\n/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! classnames */ \"./node_modules/classnames/index.js\");\n/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_6__);\n/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! lodash */ \"./node_modules/lodash/lodash.js\");\n/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_7__);\n/* harmony import */ var refract_callbag__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! refract-callbag */ \"./node_modules/refract-callbag/index.es.js\");\n/* harmony import */ var callbag_basics__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! callbag-basics */ \"./node_modules/callbag-basics/index.js\");\n/* harmony import */ var callbag_basics__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(callbag_basics__WEBPACK_IMPORTED_MODULE_8__);\n\n/**\n * External dependencies.\n */\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/**\n * Prevent the conflicts with WordPress's Underscore lib and other 3rd party plugins.\n */\nlodash__WEBPACK_IMPORTED_MODULE_7__.noConflict();\n\n/**\n * Setup the vendor variables used by Carbon Fields.\n */\nwindow.cf = window.cf || {};\nwindow.cf.vendor = [['react', (react__WEBPACK_IMPORTED_MODULE_1___default())], ['react-dom', react_dom__WEBPACK_IMPORTED_MODULE_2__], ['nanoid', (nanoid__WEBPACK_IMPORTED_MODULE_9___default())], ['immer', immer__WEBPACK_IMPORTED_MODULE_10__[\"default\"]], ['@wordpress/api-fetch', _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3__], ['@wordpress/compose', _wordpress_compose__WEBPACK_IMPORTED_MODULE_11__], ['@wordpress/element', _wordpress_element__WEBPACK_IMPORTED_MODULE_12__], ['@wordpress/hooks', _wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__], ['@wordpress/data', _wordpress_data__WEBPACK_IMPORTED_MODULE_13__], ['@wordpress/i18n', _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__], ['classnames', classnames__WEBPACK_IMPORTED_MODULE_6__], ['lodash', lodash__WEBPACK_IMPORTED_MODULE_7__], ['refract-callbag', refract_callbag__WEBPACK_IMPORTED_MODULE_14__], ['callbag-basics', callbag_basics__WEBPACK_IMPORTED_MODULE_8__]].reduce(function (vendors, _ref) {\n  var _ref2 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(_ref, 2),\n    key = _ref2[0],\n    implementation = _ref2[1];\n  vendors[key] = implementation;\n  return vendors;\n}, {});\n\n/**\n * Setup the enviroment variables used by Carbon Fields.\n */\nwindow.cf.hooks = _wordpress_hooks__WEBPACK_IMPORTED_MODULE_4__;\nwindow.cf.element = _wordpress_element__WEBPACK_IMPORTED_MODULE_12__;\n\n//# sourceURL=webpack://carbon-fields/./packages/vendor/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\n/* harmony import */ var nanoid__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! nanoid */ \"./node_modules/nanoid/index.browser.js\");\n/* harmony import */ var nanoid__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(nanoid__WEBPACK_IMPORTED_MODULE_8__);\n/* harmony import */ var immer__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! immer */ \"./node_modules/immer/dist/immer.esm.mjs\");\n/* harmony import */ var _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/api-fetch */ \"./node_modules/@wordpress/api-fetch/build-module/index.js\");\n/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @wordpress/compose */ \"./node_modules/@wordpress/compose/build-module/index.js\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @wordpress/element */ \"./node_modules/@wordpress/element/build-module/index.js\");\n/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/hooks */ \"./node_modules/@wordpress/hooks/build-module/index.js\");\n/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/data */ \"./node_modules/@wordpress/data/build-module/index.js\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/i18n */ \"./node_modules/@wordpress/i18n/build-module/index.js\");\n/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! classnames */ \"./node_modules/classnames/index.js\");\n/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! lodash */ \"./node_modules/lodash/lodash.js\");\n/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_6__);\n/* harmony import */ var refract_callbag__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! refract-callbag */ \"./node_modules/refract-callbag/index.es.js\");\n/* harmony import */ var callbag_basics__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! callbag-basics */ \"./node_modules/callbag-basics/index.js\");\n/* harmony import */ var callbag_basics__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(callbag_basics__WEBPACK_IMPORTED_MODULE_7__);\n/**\n * External dependencies.\n */\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/**\n * Prevent the conflicts with WordPress's Underscore lib and other 3rd party plugins.\n */\nlodash__WEBPACK_IMPORTED_MODULE_6__.noConflict();\n\n/**\n * Setup the vendor variables used by Carbon Fields.\n */\nwindow.cf = window.cf || {};\nwindow.cf.vendor = [['react', (react__WEBPACK_IMPORTED_MODULE_0___default())], ['react-dom', react_dom__WEBPACK_IMPORTED_MODULE_1__], ['nanoid', (nanoid__WEBPACK_IMPORTED_MODULE_8___default())], ['immer', immer__WEBPACK_IMPORTED_MODULE_9__[\"default\"]], ['@wordpress/api-fetch', _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_2__], ['@wordpress/compose', _wordpress_compose__WEBPACK_IMPORTED_MODULE_10__], ['@wordpress/element', _wordpress_element__WEBPACK_IMPORTED_MODULE_11__], ['@wordpress/hooks', _wordpress_hooks__WEBPACK_IMPORTED_MODULE_3__], ['@wordpress/data', _wordpress_data__WEBPACK_IMPORTED_MODULE_12__], ['@wordpress/i18n', _wordpress_i18n__WEBPACK_IMPORTED_MODULE_4__], ['classnames', classnames__WEBPACK_IMPORTED_MODULE_5__], ['lodash', lodash__WEBPACK_IMPORTED_MODULE_6__], ['refract-callbag', refract_callbag__WEBPACK_IMPORTED_MODULE_13__], ['callbag-basics', callbag_basics__WEBPACK_IMPORTED_MODULE_7__]].reduce((vendors, [key, implementation]) => {\n  vendors[key] = implementation;\n  return vendors;\n}, {});\n\n/**\n * Setup the enviroment variables used by Carbon Fields.\n */\nwindow.cf.hooks = _wordpress_hooks__WEBPACK_IMPORTED_MODULE_3__;\nwindow.cf.element = _wordpress_element__WEBPACK_IMPORTED_MODULE_11__;\n\n//# sourceURL=webpack://carbon-fields/./packages/vendor/index.js?");
 
 /***/ }),
 
@@ -2656,28 +2656,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js":
-/*!*********************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js ***!
-  \*********************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ _arrayLikeToArray)\n/* harmony export */ });\nfunction _arrayLikeToArray(arr, len) {\n  if (len == null || len > arr.length) len = arr.length;\n  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];\n  return arr2;\n}\n\n//# sourceURL=webpack://carbon-fields/./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js?");
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js":
-/*!*******************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js ***!
-  \*******************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ _arrayWithHoles)\n/* harmony export */ });\nfunction _arrayWithHoles(arr) {\n  if (Array.isArray(arr)) return arr;\n}\n\n//# sourceURL=webpack://carbon-fields/./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js?");
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime/helpers/esm/defineProperty.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/defineProperty.js ***!
@@ -2700,28 +2678,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js":
-/*!*************************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js ***!
-  \*************************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ _iterableToArrayLimit)\n/* harmony export */ });\nfunction _iterableToArrayLimit(r, l) {\n  var t = null == r ? null : \"undefined\" != typeof Symbol && r[Symbol.iterator] || r[\"@@iterator\"];\n  if (null != t) {\n    var e,\n      n,\n      i,\n      u,\n      a = [],\n      f = !0,\n      o = !1;\n    try {\n      if (i = (t = t.call(r)).next, 0 === l) {\n        if (Object(t) !== t) return;\n        f = !1;\n      } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0);\n    } catch (r) {\n      o = !0, n = r;\n    } finally {\n      try {\n        if (!f && null != t[\"return\"] && (u = t[\"return\"](), Object(u) !== u)) return;\n      } finally {\n        if (o) throw n;\n      }\n    }\n    return a;\n  }\n}\n\n//# sourceURL=webpack://carbon-fields/./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js?");
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js":
-/*!********************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js ***!
-  \********************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ _nonIterableRest)\n/* harmony export */ });\nfunction _nonIterableRest() {\n  throw new TypeError(\"Invalid attempt to destructure non-iterable instance.\\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.\");\n}\n\n//# sourceURL=webpack://carbon-fields/./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js?");
-
-/***/ }),
-
 /***/ "./node_modules/@babel/runtime/helpers/esm/objectSpread2.js":
 /*!******************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/objectSpread2.js ***!
@@ -2730,17 +2686,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ _objectSpread2)\n/* harmony export */ });\n/* harmony import */ var _defineProperty_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./defineProperty.js */ \"./node_modules/@babel/runtime/helpers/esm/defineProperty.js\");\n\nfunction ownKeys(e, r) {\n  var t = Object.keys(e);\n  if (Object.getOwnPropertySymbols) {\n    var o = Object.getOwnPropertySymbols(e);\n    r && (o = o.filter(function (r) {\n      return Object.getOwnPropertyDescriptor(e, r).enumerable;\n    })), t.push.apply(t, o);\n  }\n  return t;\n}\nfunction _objectSpread2(e) {\n  for (var r = 1; r < arguments.length; r++) {\n    var t = null != arguments[r] ? arguments[r] : {};\n    r % 2 ? ownKeys(Object(t), !0).forEach(function (r) {\n      (0,_defineProperty_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(e, r, t[r]);\n    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) {\n      Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));\n    });\n  }\n  return e;\n}\n\n//# sourceURL=webpack://carbon-fields/./node_modules/@babel/runtime/helpers/esm/objectSpread2.js?");
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime/helpers/esm/slicedToArray.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/esm/slicedToArray.js ***!
-  \******************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ _slicedToArray)\n/* harmony export */ });\n/* harmony import */ var _arrayWithHoles_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./arrayWithHoles.js */ \"./node_modules/@babel/runtime/helpers/esm/arrayWithHoles.js\");\n/* harmony import */ var _iterableToArrayLimit_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./iterableToArrayLimit.js */ \"./node_modules/@babel/runtime/helpers/esm/iterableToArrayLimit.js\");\n/* harmony import */ var _unsupportedIterableToArray_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./unsupportedIterableToArray.js */ \"./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js\");\n/* harmony import */ var _nonIterableRest_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./nonIterableRest.js */ \"./node_modules/@babel/runtime/helpers/esm/nonIterableRest.js\");\n\n\n\n\nfunction _slicedToArray(arr, i) {\n  return (0,_arrayWithHoles_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(arr) || (0,_iterableToArrayLimit_js__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(arr, i) || (0,_unsupportedIterableToArray_js__WEBPACK_IMPORTED_MODULE_2__[\"default\"])(arr, i) || (0,_nonIterableRest_js__WEBPACK_IMPORTED_MODULE_3__[\"default\"])();\n}\n\n//# sourceURL=webpack://carbon-fields/./node_modules/@babel/runtime/helpers/esm/slicedToArray.js?");
 
 /***/ }),
 
@@ -2774,17 +2719,6 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ _typeof)\n/* harmony export */ });\nfunction _typeof(o) {\n  \"@babel/helpers - typeof\";\n\n  return _typeof = \"function\" == typeof Symbol && \"symbol\" == typeof Symbol.iterator ? function (o) {\n    return typeof o;\n  } : function (o) {\n    return o && \"function\" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? \"symbol\" : typeof o;\n  }, _typeof(o);\n}\n\n//# sourceURL=webpack://carbon-fields/./node_modules/@babel/runtime/helpers/esm/typeof.js?");
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js":
-/*!*******************************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js ***!
-  \*******************************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ _unsupportedIterableToArray)\n/* harmony export */ });\n/* harmony import */ var _arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./arrayLikeToArray.js */ \"./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js\");\n\nfunction _unsupportedIterableToArray(o, minLen) {\n  if (!o) return;\n  if (typeof o === \"string\") return (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(o, minLen);\n  var n = Object.prototype.toString.call(o).slice(8, -1);\n  if (n === \"Object\" && o.constructor) n = o.constructor.name;\n  if (n === \"Map\" || n === \"Set\") return Array.from(o);\n  if (n === \"Arguments\" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(o, minLen);\n}\n\n//# sourceURL=webpack://carbon-fields/./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js?");
 
 /***/ }),
 
