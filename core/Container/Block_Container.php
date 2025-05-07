@@ -449,9 +449,7 @@ class Block_Container extends Container {
 		unset($attributes['data']);
 		ob_start();
 		call_user_func( $this->render_callback , $fields, $attributes, $content, $post_id, $block );
-		$toReturn = ob_get_contents();
-		ob_clean();
-		return $toReturn;
+		return ob_get_clean();
 	}
 
 	/**
