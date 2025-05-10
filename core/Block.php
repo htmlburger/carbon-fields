@@ -8,7 +8,8 @@ namespace Carbon_Fields;
  */
 class Block extends Container {
 	/**
-	 * {@inheritDoc}
+	 * @see    \Carbon_Fields\Container\Container::factory()
+	 * @return \Carbon_Fields\Container\Block_Container
 	 */
 	public static function make() {
 		return call_user_func_array( array( parent::class, 'make' ), array_merge( array( 'block' ), func_get_args() ) );

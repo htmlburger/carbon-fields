@@ -25,6 +25,7 @@ class Block_Container extends Container {
 		'category' => array(
 			'slug' => 'common',
 		),
+		'api_version' => null,
 	);
 
 	/**
@@ -63,6 +64,12 @@ class Block_Container extends Container {
 
 		if ( ! $this->get_datastore() ) {
 			$this->set_datastore( Datastore::make( 'empty' ), $this->has_default_datastore() );
+		}
+
+		// check to see if block api_version is set globally.
+		$filtered_block_api_version = apply_filters( 'carbon_fields_set_block_api_version', null );
+		if ( ! is_null( $filtered_block_api_version ) ) {
+			$this->settings[ 'api_version' ] = $filtered_block_api_version;
 		}
 	}
 
@@ -400,6 +407,20 @@ class Block_Container extends Container {
 	}
 
 	/**
+	 * Set the Block Api Version.
+	 *
+	 * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-api-versions/
+	 *
+	 * @param  float|null $version - null will use the default.
+	 * @return Block_Container
+	 */
+	public function set_api_version( $version = null ) {
+		$this->settings[ 'api_version' ] = $version;
+
+		return $this;
+	}
+
+	/**
 	 * Get the post id where the block is used in.
 	 * Try with the GET param, and if this is an
 	 * AJAX request get previuos (admin) edit page.
@@ -486,11 +507,18 @@ class Block_Container extends Container {
 			),
 		) );
 
-		register_block_type( $this->get_block_type_name(), array(
+		$block_type_settings = array(
 			'style' => $style,
 			'editor_style' => $editor_style,
 			'attributes' => $attributes,
 			'render_callback' => array( $this, 'render_block' ),
-		) );
+		);
+
+		// pass api_version if set.
+		if ( ! is_null( $this->settings[ 'api_version' ] ) && is_numeric( $this->settings[ 'api_version' ] ) ) {
+			$block_type_settings[ 'api_version' ] = floatval( $this->settings[ 'api_version' ] );
+		}
+
+		register_block_type( $this->get_block_type_name(), $block_type_settings );
 	}
 }
