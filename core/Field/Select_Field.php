@@ -8,6 +8,14 @@ use Carbon_Fields\Helper\Helper;
  * Select dropdown field class.
  */
 class Select_Field extends Predefined_Options_Field {
+
+	/**
+	 * Allowed HTML attributes for the field.
+	 *
+	 * @var string[]
+	 */
+	protected $allowed_attributes = [ 'disabled' ];
+
 	/**
 	 * {@inheritDoc}
 	 */
