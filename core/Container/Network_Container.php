@@ -43,18 +43,17 @@ class Network_Container extends Theme_Options_Container {
 	}
 
 	/**
-	 * Check if a site exists by id
+	 * Check if a network site exists by id
 	 *
 	 * @param  integer $id
 	 * @return boolean
 	 */
 	protected function site_exists( $id ) {
-		if ( ! function_exists( 'get_blog_status' ) ) {
-			return false;
-		}
-
-		$blog_domain = get_blog_status( $id, 'domain' );
-		return ! empty( $blog_domain );
+		global $wpdb;
+		$network = $wpdb->get_row( $wpdb->prepare(
+			"SELECT id FROM {$wpdb->site} WHERE id = %d", $id
+		) );
+		return ! empty( $network );
 	}
 
 	/**
