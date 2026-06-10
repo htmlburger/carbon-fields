@@ -321,10 +321,14 @@ class Router {
 	 * @return array
 	 */
 	public function get_association_data() {
-		$container_id = $_GET['container_id'];
-		$field_id     = $_GET['field_id'];
-		$options      = isset( $_GET['options'] ) ? explode( ';', $_GET['options'] ) : array();
+		$container_id = isset( $_GET['container_id'] ) ? sanitize_text_field( $_GET['container_id'] ) : '';
+		$field_id     = isset( $_GET['field_id'] ) ? sanitize_text_field( $_GET['field_id'] ) : '';
+		$options      = isset( $_GET['options'] ) ? explode( ';', sanitize_text_field( $_GET['options'] ) ) : array();
 		$return_value = array();
+
+		if ( ! $container_id || ! $field_id ) {
+			return $return_value;
+		}
 
 		/** @var \Carbon_Fields\Field\Association_Field $field */
 		$field = Helper::get_field( null, $container_id, $field_id );
@@ -367,8 +371,12 @@ class Router {
 		$page = isset( $_GET['page'] ) ? absint( $_GET['page'] )              : 1;
 		$term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';
 
-		$container_id = $_GET['container_id'];
-		$field_id     = $_GET['field_id'];
+		$container_id = isset( $_GET['container_id'] ) ? sanitize_text_field( $_GET['container_id'] ) : '';
+		$field_id     = isset( $_GET['field_id'] ) ? sanitize_text_field( $_GET['field_id'] ) : '';
+
+		if ( ! $container_id || ! $field_id ) {
+			return array();
+		}
 
 		/** @var \Carbon_Fields\Field\Association_Field $field */
 		$field = Helper::get_field( null, $container_id, $field_id );
