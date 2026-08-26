@@ -24,6 +24,10 @@
 	}
 }
 
+.cf-media-gallery__browse.button {
+	@include cf-button-chrome;
+}
+
 .cf-media-gallery__item {
 	flex: 0 0 100%;
 	min-width: 0;

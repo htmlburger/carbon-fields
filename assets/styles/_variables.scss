@@ -16,3 +16,129 @@ $wp-radius-round: 3px;
    ========================================================================== */
 
 $gb-radius-round-rectangle: 4px;
+
+/* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+
+$wp-admin-theme-color: var(--wp-admin-theme-color, #3858e9);
+$wp-admin-theme-color-darker-10: var(--wp-admin-theme-color-darker-10, #2145e6);
+$wp-admin-theme-color-darker-20: var(--wp-admin-theme-color-darker-20, #183ad6);
+$wp-admin-border-width-focus: var(--wp-admin-border-width-focus, 1.5px);
+
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+
+@mixin cf-input-chrome {
+	box-sizing: border-box;
+	min-height: 30px;
+	padding: 0 8px;
+	border: 1px solid $wp-color-dark-silver-gray;
+	border-radius: 4px;
+	background-color: $color-white;
+	color: $wp-color-base-gray;
+	font-size: $wp-font-size;
+	line-height: $wp-line-height;
+	box-shadow: none;
+
+	&:focus {
+		border-color: $wp-admin-theme-color;
+		box-shadow: 0 0 0 $wp-admin-border-width-focus $wp-admin-theme-color;
+		outline: 2px solid transparent;
+	}
+}
+
+@mixin cf-select-chrome {
+	@include cf-input-chrome;
+	width: 100%;
+	padding-right: $size-base * 8;
+	border-color: $wp-color-gray-light-500;
+	appearance: none;
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23cccccc'%3E%3Cpath d='M4.516 7.548c0.436-0.446 1.043-0.481 1.576 0l3.908 3.747 3.908-3.747c0.533-0.481 1.141-0.446 1.574 0 0.436 0.445 0.408 1.197 0 1.615-0.406 0.418-4.695 4.502-4.695 4.502-0.217 0.223-0.502 0.335-0.787 0.335s-0.57-0.112-0.789-0.335c0 0-4.287-4.084-4.695-4.502s-0.436-1.17 0-1.615z'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right $size-base center;
+	background-size: 16px 16px;
+}
+
+@mixin cf-button-chrome {
+	box-sizing: border-box;
+	min-height: 30px;
+	padding: 0 10px;
+	border: 1px solid $wp-admin-theme-color;
+	border-radius: 2px;
+	background: none;
+	color: $wp-admin-theme-color;
+	font-size: $wp-font-size;
+	line-height: 2.15384615;
+	white-space: nowrap;
+	vertical-align: top;
+	cursor: pointer;
+	box-shadow: none;
+
+	&:hover {
+		border-color: $wp-admin-theme-color-darker-10;
+		color: $wp-admin-theme-color-darker-10;
+	}
+
+	&:focus {
+		background: none;
+		border-color: $wp-admin-theme-color;
+		color: $wp-admin-theme-color;
+		box-shadow: 0 0 0 $wp-admin-border-width-focus $wp-admin-theme-color;
+		outline: 1px solid transparent;
+		outline-offset: 0;
+	}
+
+	&:active {
+		border-color: $wp-admin-theme-color-darker-20;
+		color: $wp-admin-theme-color-darker-20;
+		box-shadow: none;
+	}
+}
+
+@mixin cf-button-link-chrome {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: $wp-color-blue;
+	text-decoration: underline;
+	cursor: pointer;
+
+	&:hover {
+		color: $wp-admin-theme-color;
+	}
+
+	&:focus {
+		color: $wp-admin-theme-color;
+		box-shadow: 0 0 0 $wp-admin-border-width-focus $wp-admin-theme-color;
+		outline: 1px solid transparent;
+		outline-offset: 0;
+	}
+}
+
+@mixin cf-content-alignment {
+	.alignleft {
+		float: left;
+		margin: 0 1.5em 1.5em 0;
+	}
+
+	.alignright {
+		float: right;
+		margin: 0 0 1.5em 1.5em;
+	}
+
+	.aligncenter {
+		display: block;
+		margin: 0 auto 1.5em;
+	}
+
+	.wp-caption {
+		max-width: 100%;
+
+		.wp-caption-text {
+			font-size: 13px;
+			text-align: center;
+		}
+	}
+}

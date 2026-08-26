@@ -1,0 +1,44 @@
+diff --git a/node_modules/flatpickr/dist/esm/index.js b/node_modules/flatpickr/dist/esm/index.js
+index 6e4d05f..167792c 100644
+--- a/node_modules/flatpickr/dist/esm/index.js
++++ b/node_modules/flatpickr/dist/esm/index.js
+@@ -1977,7 +1977,7 @@ function FlatpickrInstance(element, instanceConfig) {
+ function _flatpickr(nodeList, config) {
+     var nodes = Array.prototype.slice
+         .call(nodeList)
+-        .filter(function (x) { return x instanceof HTMLElement; });
++        .filter(function (x) { return x && x.nodeType === 1; });
+     var instances = [];
+     for (var i = 0; i < nodes.length; i++) {
+         var node = nodes[i];
+@@ -2011,7 +2011,7 @@ var flatpickr = function (selector, config) {
+     if (typeof selector === "string") {
+         return _flatpickr(window.document.querySelectorAll(selector), config);
+     }
+-    else if (selector instanceof Node) {
++    else if (selector && typeof selector.nodeType === "number") {
+         return _flatpickr([selector], config);
+     }
+     else {
+diff --git a/node_modules/flatpickr/dist/flatpickr.js b/node_modules/flatpickr/dist/flatpickr.js
+index 2bcc9f3..48381a7 100644
+--- a/node_modules/flatpickr/dist/flatpickr.js
++++ b/node_modules/flatpickr/dist/flatpickr.js
+@@ -2642,7 +2642,7 @@
+         // static list
+         var nodes = Array.prototype.slice
+             .call(nodeList)
+-            .filter(function (x) { return x instanceof HTMLElement; });
++            .filter(function (x) { return x && x.nodeType === 1; });
+         var instances = [];
+         for (var i = 0; i < nodes.length; i++) {
+             var node = nodes[i];
+@@ -2679,7 +2679,7 @@
+         if (typeof selector === "string") {
+             return _flatpickr(window.document.querySelectorAll(selector), config);
+         }
+-        else if (selector instanceof Node) {
++        else if (selector && typeof selector.nodeType === "number") {
+             return _flatpickr([selector], config);
+         }
+         else {

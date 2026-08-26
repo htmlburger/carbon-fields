@@ -14,7 +14,7 @@
 
 	.edit-post-sidebar &--is-focused,
 	.edit-post-sidebar &--is-focused:hover {
-		border-color: $wp-color-medium-blue;
-		box-shadow: 0 0 0 1px $wp-color-medium-blue;
+		border-color: $wp-admin-theme-color;
+		box-shadow: 0 0 0 1px $wp-admin-theme-color;
 	}
 }

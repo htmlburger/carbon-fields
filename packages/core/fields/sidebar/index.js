@@ -12,6 +12,11 @@ import {
 	merge
 } from 'callbag-basics';
 
+/**
+ * Internal dependencies.
+ */
+import './style.scss';
+
 class SidebarField extends Component {
 	/**
 	 * Handles the change of the field.
@@ -53,6 +58,7 @@ class SidebarField extends Component {
 				id={ id }
 				name={ name }
 				value={ value }
+				className="cf-sidebar__input"
 				onChange={ this.handleChange }
 			>
 				<option value="0" disabled>{ __( 'Please choose', 'carbon-fields-ui' ) }</option>

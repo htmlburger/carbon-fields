@@ -109,7 +109,9 @@
 	margin-top: 12px;
 }
 
-.cf-complex__toggler {
+.cf-complex__toggler.button {
+	@include cf-button-chrome;
+
 	.cf-complex__actions & {
 		margin-left: auto;
 	}
@@ -138,7 +140,9 @@
 	}
 }
 
-.cf-complex__inserter-button {
+.cf-complex__inserter-button.button {
+	@include cf-button-chrome;
+
 	.cf-complex__tabs & {
 		display: flex;
 		align-items: center;

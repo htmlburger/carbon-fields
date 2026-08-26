@@ -3,11 +3,15 @@
    ========================================================================== */
 
 .cf-checkbox__input {
+	height: 16px;
+	vertical-align: middle;
+
 	.cf-field & {
 		margin-top: 0;
 	}
 }
 
 .cf-checkbox__label {
+	margin-left: 5px;
 	font-size: 13px;
 }

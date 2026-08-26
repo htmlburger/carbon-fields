@@ -1,0 +1,81 @@
+/* ==========================================================================
+   Rich Text
+   ========================================================================== */
+
+.cf-rich-text__preview {
+	display: block;
+	width: 100%;
+	min-height: 100px;
+	max-height: 300px;
+	padding: $size-base * 2;
+	overflow: hidden;
+	box-sizing: border-box;
+	border: 1px dashed $wp-color-dark-silver-gray;
+	border-radius: 4px;
+	background-color: $color-white;
+	text-align: left;
+	cursor: pointer;
+	transition: border-color $transition-base;
+
+	&:hover,
+	&:focus {
+		border-color: $wp-admin-theme-color;
+	}
+}
+
+.cf-rich-text__preview-content {
+	@include cf-content-alignment;
+	pointer-events: none;
+
+	img {
+		max-width: 100%;
+		height: auto;
+	}
+}
+
+.cf-rich-text__preview-placeholder {
+	color: $wp-color-dark-silver-gray;
+	font-style: italic;
+}
+
+.cf-rich-text__modal-backdrop {
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 100000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba($color-black, .6);
+}
+
+.cf-rich-text__modal {
+	position: relative;
+	width: 100%;
+	max-width: 700px;
+	max-height: 80vh;
+	padding: $size-base * 10 $size-base * 4 $size-base * 4;
+	overflow-y: auto;
+	box-sizing: border-box;
+	border-radius: 4px;
+	background-color: $color-white;
+	box-shadow: 0 4px 20px rgba($color-black, .3);
+}
+
+.cf-rich-text__modal-close {
+	position: absolute;
+	z-index: 1;
+	top: $size-base * 2;
+	right: $size-base * 2;
+	padding: $size-base $size-base * 2;
+	border: 1px solid $wp-color-gray-light-500;
+	border-radius: 4px;
+	background-color: $wp-color-gray-light-100;
+	cursor: pointer;
+
+	&:hover {
+		background-color: $wp-color-gray-light-200;
+	}
+}

@@ -3,7 +3,8 @@
    ========================================================================== */
 
 .cf-association__cols {
-	.block-editor & {
+	.block-editor &,
+	.editor-styles-wrapper & {
 		border-top-width: 1px;
 		margin-top: 4px;
 	}

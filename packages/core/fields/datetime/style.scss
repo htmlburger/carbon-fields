@@ -4,28 +4,31 @@
 
 @import '~flatpickr/dist/flatpickr.min.css';
 
-.cf-datetime__inner {
+.cf-field .flatpickr-wrapper {
+	position: relative;
 	display: flex;
-	align-items: stretch;
+	align-items: center;
 	flex-wrap: wrap;
+	width: 100%;
 	margin-top: -5px;
+}
 
-	&::before {
-		display: none;
-	}
+.cf-datetime__inner {
+	display: contents;
 }
 
 .cf-datetime__input {
+	@include cf-input-chrome;
+	order: 1;
 	flex: 1;
 	margin: 5px 6px 0 0;
 }
 
-.wp-core-ui .button.cf-datetime__button {
-	margin-top: 5px;
-}
-
-.cf-datetime__button {
+.cf-datetime__button.button {
+	@include cf-button-chrome;
+	order: 2;
 	flex: 0 0 auto;
+	margin-top: 5px;
 
 	.cf-field & {
 		margin-bottom: 0;
