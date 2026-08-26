@@ -4,21 +4,29 @@
 
 .cf-set__list {
 	margin: 0;
+	padding-left: 0;
 }
 
 .cf-set__list-item {
+	display: flex;
+	align-items: center;
+
 	&:last-child {
 		margin-bottom: 0;
 	}
 }
 
 .cf-set__input {
+	height: 16px;
+
 	.cf-field & {
 		margin-top: 0;
 	}
 }
 
 .cf-set__label {
+	margin-left: 5px;
+
 	.cf-container-term-meta & {
 		display: inline;
 	}

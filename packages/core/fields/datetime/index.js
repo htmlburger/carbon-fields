@@ -23,6 +23,10 @@ class DateTimeField extends Component {
 	 * @return {void}
 	 */
 	componentWillUnmount() {
+		if ( this.ownerDocument ) {
+			this.ownerDocument.removeEventListener( 'mousedown', this.handleOutsideClick, true );
+		}
+
 		this.picker = null;
 	}
 
@@ -36,6 +40,30 @@ class DateTimeField extends Component {
 	 */
 	handleReady = ( selectedDates, selectedDateStr, instance ) => {
 		this.picker = instance;
+
+		this.ownerDocument = instance.element.ownerDocument;
+		this.ownerDocument.addEventListener( 'mousedown', this.handleOutsideClick, true );
+	}
+
+	/**
+	 * Closes the calendar when clicking outside of the field or the
+	 * (reparented) calendar itself.
+	 *
+	 * @param  {Object} event
+	 * @return {void}
+	 */
+	handleOutsideClick = ( event ) => {
+		if ( ! this.picker || ! this.picker.isOpen ) {
+			return;
+		}
+
+		const { element, calendarContainer } = this.picker;
+
+		if ( element.contains( event.target ) || ( calendarContainer && calendarContainer.contains( event.target ) ) ) {
+			return;
+		}
+
+		this.picker.close();
 	}
 
 	/**
@@ -100,16 +128,20 @@ class DateTimeField extends Component {
 			buttonText
 		} = this.props;
 
+		const inputIconClass = `cf-datetime__input--${ icon || 'calendar' }`;
+
 		return (
 			<Flatpickr
 				options={ {
 					...field.picker_options,
-					wrap: true
+					wrap: true,
+					static: true,
+					altInputClass: `cf-datetime__input ${ inputIconClass }`
 				} }
 				value={ value }
 				onReady={ this.handleReady }
 				onChange={ this.handleChange }
-				className={ `cf-datetime__inner dashicons-before dashicons-${ icon || 'calendar' }` }
+				className="cf-datetime__inner"
 			>
 				<input
 					type="text"
@@ -118,7 +150,7 @@ class DateTimeField extends Component {
 					value={ value }
 					onChange={ this.handleManualInput }
 					onBlur={ this.formatManualInput }
-					className="cf-datetime__input"
+					className={ `cf-datetime__input ${ inputIconClass }` }
 					data-input
 					{ ...field.attributes }
 				/>

@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import { createRef, Component } from '@wordpress/element';
+import { createRef, createPortal, Component } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
 	isString,
@@ -9,6 +9,11 @@ import {
 	debounce
 } from 'lodash';
 import cx from 'classnames';
+
+/**
+ * Internal dependencies.
+ */
+import './style.scss';
 
 class RichTextField extends Component {
 	/**
@@ -21,6 +26,11 @@ class RichTextField extends Component {
 
 		this.node = createRef();
 		this.editor = null;
+
+		this.state = {
+			iframed: false,
+			modalOpen: false
+		};
 	}
 
 	/**
@@ -30,25 +40,26 @@ class RichTextField extends Component {
 	 */
 	componentDidMount() {
 		if ( this.props.visible ) {
+			if ( this.node.current.ownerDocument !== document ) {
+				this.setState( { iframed: true } );
+			} else {
+				this.attachAutoResizeObserver();
+				this.timer = setTimeout( this.initEditor, 250 );
+			}
+		}
+	}
+
+	/**
+	 * Lifecycle hook.
+	 *
+	 * @param  {Object} prevProps
+	 * @param  {Object} prevState
+	 * @return {void}
+	 */
+	componentDidUpdate( prevProps, prevState ) {
+		if ( this.state.modalOpen && ! prevState.modalOpen ) {
+			this.attachAutoResizeObserver();
 			this.timer = setTimeout( this.initEditor, 250 );
-
-			const resizeObserver = new ResizeObserver( debounce( () => {
-				if ( this.editor ) {
-					/**
-					 * On each call of the `wpAutoResize` method the global `wpActiveEditor` reference
-					 * is changed to the element that will be resized. In some cases this is causing
-					 * conflicts with other plugins so we need to preserve and restore the previously
-					 * referenced element.
-					 */
-					const activeEdtior = window.wpActiveEditor;
-					this.editor.execCommand( 'wpAutoResize', undefined, undefined, { skip_focus: true } );
-					window.wpActiveEditor = activeEdtior;
-				}
-			}, 100 ) );
-
-			resizeObserver.observe( this.node.current );
-
-			this.observer = resizeObserver;
 		}
 	}
 
@@ -60,11 +71,76 @@ class RichTextField extends Component {
 	componentWillUnmount() {
 		clearTimeout( this.timer );
 
-		if ( typeof this.observer !== 'undefined' ) {
+		if ( this.observer ) {
 			this.observer.disconnect();
 		}
 
 		this.destroyEditor();
+	}
+
+	/**
+	 * Keeps the editor auto-resized to its content.
+	 *
+	 * @return {void}
+	 */
+	attachAutoResizeObserver() {
+		const resizeObserver = new ResizeObserver( debounce( () => {
+			if ( this.editor ) {
+				/**
+				 * On each call of the `wpAutoResize` method the global `wpActiveEditor` reference
+				 * is changed to the element that will be resized. In some cases this is causing
+				 * conflicts with other plugins so we need to preserve and restore the previously
+				 * referenced element.
+				 */
+				const activeEdtior = window.wpActiveEditor;
+				this.editor.execCommand( 'wpAutoResize', undefined, undefined, { skip_focus: true } );
+				window.wpActiveEditor = activeEdtior;
+			}
+		}, 100 ) );
+
+		resizeObserver.observe( this.node.current );
+
+		this.observer = resizeObserver;
+	}
+
+	/**
+	 * Opens the modal editor (iframed context only).
+	 *
+	 * @return {void}
+	 */
+	openModal = () => {
+		this.setState( { modalOpen: true } );
+	}
+
+	/**
+	 * Closes the modal editor and tears down the WYSIWYG instance so it can be
+	 * cleanly re-initialized the next time the modal opens.
+	 *
+	 * @return {void}
+	 */
+	closeModal = () => {
+		clearTimeout( this.timer );
+
+		if ( this.observer ) {
+			this.observer.disconnect();
+			this.observer = undefined;
+		}
+
+		this.destroyEditor();
+
+		this.setState( { modalOpen: false } );
+	}
+
+	/**
+	 * Closes the modal editor when the `Escape` key is pressed.
+	 *
+	 * @param  {Object} event
+	 * @return {void}
+	 */
+	handleModalKeyDown = ( event ) => {
+		if ( event.key === 'Escape' ) {
+			this.closeModal();
+		}
 	}
 
 	/**
@@ -108,7 +184,7 @@ class RichTextField extends Component {
 
 		const shouldRenderTabs = field.rich_editing && window.tinyMCEPreInit.qtInit[ field.settings_reference ];
 
-		return (
+		const editor = (
 			<div
 				id={ `wp-${ id }-wrap` }
 				className={ cx( classes ) }
@@ -145,6 +221,35 @@ class RichTextField extends Component {
 				</div>
 			</div>
 		);
+
+		if ( ! this.state.iframed ) {
+			return editor;
+		}
+
+		return (
+			<div className="cf-rich-text__preview-wrap">
+				<button type="button" className="cf-rich-text__preview" onClick={ this.openModal }>
+					{ value ? (
+						<span className="cf-rich-text__preview-content" dangerouslySetInnerHTML={ { __html: value } } />
+					) : (
+						<span className="cf-rich-text__preview-placeholder">{ __( 'Click to edit', 'carbon-fields-ui' ) }</span>
+					) }
+				</button>
+
+				{ this.state.modalOpen && createPortal(
+					<div className="cf-rich-text__modal-backdrop" onKeyDown={ this.handleModalKeyDown }>
+						<div className="cf-rich-text__modal">
+							<button type="button" className="cf-rich-text__modal-close" onClick={ this.closeModal }>
+								{ __( 'Close', 'carbon-fields-ui' ) }
+							</button>
+
+							{ editor }
+						</div>
+					</div>,
+					document.body
+				) }
+			</div>
+		);
 	}
 
 	/**
@@ -165,9 +270,12 @@ class RichTextField extends Component {
 				} );
 			};
 
+			// eslint-disable-next-line no-unused-vars
+			const { selector, ...mceInit } = window.tinyMCEPreInit.mceInit[ field.settings_reference ];
+
 			const editorOptions = {
-				...window.tinyMCEPreInit.mceInit[ field.settings_reference ],
-				selector: `#${ id }`,
+				...mceInit,
+				target: this.node.current.ownerDocument.getElementById( id ),
 				setup: editorSetup
 			};
 
@@ -196,11 +304,12 @@ class RichTextField extends Component {
 		if ( this.editor ) {
 			this.editor.remove();
 
-			this.node = null;
 			this.editor = null;
 		}
 
-		delete window.QTags.instances[ this.props.id ];
+		if ( window.QTags && window.QTags.instances ) {
+			delete window.QTags.instances[ this.props.id ];
+		}
 	}
 }
 

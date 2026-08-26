@@ -3,11 +3,13 @@
    ========================================================================== */
 
 .cf-color__inner {
+	position: relative;
 	display: flex;
 	align-items: center;
 }
 
-.cf-color__toggle {
+.cf-color__toggle.button {
+	@include cf-button-chrome;
 	position: relative;
 	overflow: hidden;
 }
@@ -31,6 +33,8 @@
 }
 
 .cf-color__reset {
+	@include cf-button-link-chrome;
+
 	.cf-color & {
 		margin-left: 5px;
 		text-decoration: none;
@@ -41,7 +45,3 @@
 	}
 }
 
-.cf-color__picker {
-	position: absolute;
-	z-index: 9999;
-}

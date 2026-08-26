@@ -1,7 +1,7 @@
 /**
  * External dependencies.
  */
-import { Component } from '@wordpress/element';
+import { createRef, Component } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { get } from 'lodash';
 
@@ -14,12 +14,61 @@ import { hexToRgba, rgbaToHex } from '../../utils/hex-and-rgba';
 
 class ColorField extends Component {
 	/**
+	 * Define the project base properties
+	 *
+	 * @return {void}
+	 */
+	constructor() {
+		super();
+
+		this.node = createRef();
+	}
+
+	/**
 	 * Defines the initial state.
 	 *
 	 * @type {Object}
 	 */
 	state = {
 		showPicker: false
+	}
+
+	/**
+	 * Lifecycle hook.
+	 *
+	 * @param  {Object} prevProps
+	 * @param  {Object} prevState
+	 * @return {void}
+	 */
+	componentDidUpdate( prevProps, prevState ) {
+		if ( this.state.showPicker && ! prevState.showPicker ) {
+			this.node.current.ownerDocument.addEventListener( 'mousedown', this.handleOutsideClick, true );
+		} else if ( ! this.state.showPicker && prevState.showPicker ) {
+			this.node.current.ownerDocument.removeEventListener( 'mousedown', this.handleOutsideClick, true );
+		}
+	}
+
+	/**
+	 * Lifecycle hook.
+	 *
+	 * @return {void}
+	 */
+	componentWillUnmount() {
+		if ( this.state.showPicker ) {
+			this.node.current.ownerDocument.removeEventListener( 'mousedown', this.handleOutsideClick, true );
+		}
+	}
+
+	/**
+	 * Closes the picker when clicking outside of this field.
+	 *
+	 * @param  {Object} event
+	 * @return {void}
+	 */
+	handleOutsideClick = ( event ) => {
+		if ( this.node.current && ! this.node.current.contains( event.target ) ) {
+			this.setState( { showPicker: false } );
+		}
 	}
 
 	/**
@@ -77,7 +126,7 @@ class ColorField extends Component {
 		} = this.props;
 
 		return (
-			<div className="cf-color__inner">
+			<div className="cf-color__inner" ref={ this.node }>
 				<input
 					type="hidden"
 					id={ id }
@@ -95,11 +144,11 @@ class ColorField extends Component {
 
 				{ showPicker && (
 					<Picker
+						anchor={ this.node.current }
 						color={ value }
 						onChange={ this.handleChange }
 						disableAlpha={ ! field.alphaEnabled }
 						presetColors={ field.palette }
-						onClose={ () => showPicker ? this.togglePicker() : null }
 					/>
 				) }
 

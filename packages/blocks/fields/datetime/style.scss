@@ -2,20 +2,6 @@
    DateTime
    ========================================================================== */
 
-.cf-datetime__inner {
-	.edit-post-sidebar & {
-		position: relative;
-	}
-
-	.edit-post-sidebar &::before {
-		position: absolute;
-		top: 50%;
-		left: 9px;
-		display: inline-block;
-		margin-top: -10px;
-	}
-}
-
 .cf-datetime__input {
 	.wp-block .cf-field & {
 		min-width: 0;
@@ -29,6 +15,26 @@
 
 	.edit-post-sidebar .cf-field & {
 		padding-left: 35px;
+	}
+}
+
+.cf-datetime__input--calendar,
+.cf-datetime__input--clock {
+	.edit-post-sidebar .cf-field & {
+		background-repeat: no-repeat;
+		background-position: left 8px center;
+	}
+}
+
+.cf-datetime__input--calendar {
+	.edit-post-sidebar .cf-field & {
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2382878c' stroke-width='1.3'%3E%3Crect x='2.5' y='4' width='15' height='13' rx='1.5'/%3E%3Cline x1='2.5' y1='8' x2='17.5' y2='8'/%3E%3Cline x1='6' y1='2' x2='6' y2='5.5'/%3E%3Cline x1='14' y1='2' x2='14' y2='5.5'/%3E%3C/svg%3E");
+	}
+}
+
+.cf-datetime__input--clock {
+	.edit-post-sidebar .cf-field & {
+		background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2382878c' stroke-width='1.3'%3E%3Ccircle cx='10' cy='10' r='7.5'/%3E%3Cline x1='10' y1='10' x2='10' y2='5.5'/%3E%3Cline x1='10' y1='10' x2='13' y2='12'/%3E%3C/svg%3E");
 	}
 }
 

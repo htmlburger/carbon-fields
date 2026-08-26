@@ -4,6 +4,11 @@
 import { RawHTML } from '@wordpress/element';
 
 /**
+ * Internal dependencies.
+ */
+import './style.scss';
+
+/**
  * Renders the field.
  *
  * @param  {Object} props

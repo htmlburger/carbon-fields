@@ -24,7 +24,7 @@
 	cursor: pointer;
 
 	&--current {
-		box-shadow: 0 3px 0 $wp-color-medium-blue;
+		box-shadow: 0 3px 0 $wp-admin-theme-color;
 	}
 }
 
@@ -42,7 +42,13 @@
 }
 
 .cf-block__preview {
+	@include cf-content-alignment;
 	min-height: 100px;
+
+	img {
+		max-width: 100%;
+		height: auto;
+	}
 }
 
 .cf-block__inner-blocks .block-list-appender {

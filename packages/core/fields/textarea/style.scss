@@ -3,7 +3,9 @@
    ========================================================================== */
 
 .cf-textarea__input {
+	@include cf-input-chrome;
 	display: block;
 	width: 100% !important;
+	padding: 6px 8px;
 	resize: vertical;
 }

@@ -3,7 +3,7 @@
    ========================================================================== */
 
 .cf-select__input {
+	@include cf-select-chrome;
 	display: block;
-	width: 100%;
 	margin: 0;
 }

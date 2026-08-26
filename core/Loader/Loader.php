@@ -46,6 +46,7 @@ class Loader {
 		add_action( 'carbon_fields_fields_registered', array( $this, 'initialize_containers' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_media_browser' ), 0 );
 		add_action( 'admin_print_footer_scripts', array( $this, 'enqueue_assets' ), 9 );
+		add_action( 'enqueue_block_assets', array( $this, 'enqueue_iframed_styles' ) );
 		add_action( 'admin_print_footer_scripts', array( $this, 'initialize_ui' ), 9999 );
 		add_action( 'edit_form_after_title', array( $this, 'add_carbon_fields_meta_box_contexts' ) );
 		add_action( 'wp_ajax_carbon_fields_fetch_association_options', array( $this, 'fetch_association_options' ) );
@@ -209,8 +210,14 @@ class Loader {
 		$this->enqueue_style( 'core' );
 		$this->enqueue_style( 'metaboxes' );
 
+		$core_deps = array( 'carbon-fields-vendor' );
+
+		if ( $this->get_assets_context() === 'gutenberg' ) {
+			$core_deps[] = 'wp-components';
+		}
+
 		$this->enqueue_script( 'vendor', array( 'wp-polyfill', 'jquery', 'lodash' ) );
-		$this->enqueue_script( 'core', array( 'carbon-fields-vendor' ) );
+		$this->enqueue_script( 'core', $core_deps );
 		$this->enqueue_script( 'metaboxes', array( 'carbon-fields-vendor', 'carbon-fields-core' ) );
 
 		if ( $this->get_assets_context() === 'gutenberg' ) {
@@ -233,6 +240,25 @@ class Loader {
 				'wp_version' => $wp_version,
 			)
 		) ) );
+	}
+
+	/**
+	 * Re-enqueues the field styles for the block editor's canvas iframe.
+	 *
+	 * @return void
+	 */
+	public function enqueue_iframed_styles() {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$this->enqueue_style( 'core' );
+
+		if ( $this->get_assets_context() === 'gutenberg' ) {
+			$this->enqueue_style( 'blocks' );
+		}
+
+		wp_enqueue_style( 'dashicons' );
 	}
 
 	/**

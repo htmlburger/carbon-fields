@@ -3,6 +3,7 @@
    ========================================================================== */
 
 .cf-text__input {
+	@include cf-input-chrome;
 	display: block;
 	width: 100% !important;
 	margin: 0;

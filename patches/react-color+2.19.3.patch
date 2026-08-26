@@ -1,0 +1,150 @@
+diff --git a/node_modules/react-color/es/components/common/Alpha.js b/node_modules/react-color/es/components/common/Alpha.js
+index 43ff887..075ff39 100644
+--- a/node_modules/react-color/es/components/common/Alpha.js
++++ b/node_modules/react-color/es/components/common/Alpha.js
+@@ -31,15 +31,19 @@ export var Alpha = function (_ref) {
+     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref2 = Alpha.__proto__ || Object.getPrototypeOf(Alpha)).call.apply(_ref2, [this].concat(args))), _this), _this.handleChange = function (e) {
+       var change = alpha.calculateChange(e, _this.props.hsl, _this.props.direction, _this.props.a, _this.container);
+       change && typeof _this.props.onChange === 'function' && _this.props.onChange(change, e);
++    }, _this.getContainerRenderWindow = function () {
++      return _this.container && _this.container.ownerDocument && _this.container.ownerDocument.defaultView || window;
+     }, _this.handleMouseDown = function (e) {
+       _this.handleChange(e);
+-      window.addEventListener('mousemove', _this.handleChange);
+-      window.addEventListener('mouseup', _this.handleMouseUp);
++      var renderWindow = _this.getContainerRenderWindow();
++      renderWindow.addEventListener('mousemove', _this.handleChange);
++      renderWindow.addEventListener('mouseup', _this.handleMouseUp);
+     }, _this.handleMouseUp = function () {
+       _this.unbindEventListeners();
+     }, _this.unbindEventListeners = function () {
+-      window.removeEventListener('mousemove', _this.handleChange);
+-      window.removeEventListener('mouseup', _this.handleMouseUp);
++      var renderWindow = _this.getContainerRenderWindow();
++      renderWindow.removeEventListener('mousemove', _this.handleChange);
++      renderWindow.removeEventListener('mouseup', _this.handleMouseUp);
+     }, _temp), _possibleConstructorReturn(_this, _ret);
+   }
+ 
+diff --git a/node_modules/react-color/es/components/common/Hue.js b/node_modules/react-color/es/components/common/Hue.js
+index 0c67998..78cdef4 100644
+--- a/node_modules/react-color/es/components/common/Hue.js
++++ b/node_modules/react-color/es/components/common/Hue.js
+@@ -27,10 +27,13 @@ export var Hue = function (_ref) {
+     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref2 = Hue.__proto__ || Object.getPrototypeOf(Hue)).call.apply(_ref2, [this].concat(args))), _this), _this.handleChange = function (e) {
+       var change = hue.calculateChange(e, _this.props.direction, _this.props.hsl, _this.container);
+       change && typeof _this.props.onChange === 'function' && _this.props.onChange(change, e);
++    }, _this.getContainerRenderWindow = function () {
++      return _this.container && _this.container.ownerDocument && _this.container.ownerDocument.defaultView || window;
+     }, _this.handleMouseDown = function (e) {
+       _this.handleChange(e);
+-      window.addEventListener('mousemove', _this.handleChange);
+-      window.addEventListener('mouseup', _this.handleMouseUp);
++      var renderWindow = _this.getContainerRenderWindow();
++      renderWindow.addEventListener('mousemove', _this.handleChange);
++      renderWindow.addEventListener('mouseup', _this.handleMouseUp);
+     }, _this.handleMouseUp = function () {
+       _this.unbindEventListeners();
+     }, _temp), _possibleConstructorReturn(_this, _ret);
+@@ -44,8 +47,9 @@ export var Hue = function (_ref) {
+   }, {
+     key: 'unbindEventListeners',
+     value: function unbindEventListeners() {
+-      window.removeEventListener('mousemove', this.handleChange);
+-      window.removeEventListener('mouseup', this.handleMouseUp);
++      var renderWindow = this.getContainerRenderWindow();
++      renderWindow.removeEventListener('mousemove', this.handleChange);
++      renderWindow.removeEventListener('mouseup', this.handleMouseUp);
+     }
+   }, {
+     key: 'render',
+diff --git a/node_modules/react-color/es/components/common/Saturation.js b/node_modules/react-color/es/components/common/Saturation.js
+index 8e2f44c..514002f 100644
+--- a/node_modules/react-color/es/components/common/Saturation.js
++++ b/node_modules/react-color/es/components/common/Saturation.js
+@@ -51,6 +51,10 @@ export var Saturation = function (_ref) {
+     value: function getContainerRenderWindow() {
+       var container = this.container;
+ 
++      if (container && container.ownerDocument && container.ownerDocument.defaultView) {
++        return container.ownerDocument.defaultView;
++      }
++
+       var renderWindow = window;
+       while (!renderWindow.document.contains(container) && renderWindow.parent !== renderWindow) {
+         renderWindow = renderWindow.parent;
+diff --git a/node_modules/react-color/lib/components/common/Alpha.js b/node_modules/react-color/lib/components/common/Alpha.js
+index 12dcb8b..605c285 100644
+--- a/node_modules/react-color/lib/components/common/Alpha.js
++++ b/node_modules/react-color/lib/components/common/Alpha.js
+@@ -52,15 +52,19 @@ var Alpha = exports.Alpha = function (_ref) {
+     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref2 = Alpha.__proto__ || Object.getPrototypeOf(Alpha)).call.apply(_ref2, [this].concat(args))), _this), _this.handleChange = function (e) {
+       var change = alpha.calculateChange(e, _this.props.hsl, _this.props.direction, _this.props.a, _this.container);
+       change && typeof _this.props.onChange === 'function' && _this.props.onChange(change, e);
++    }, _this.getContainerRenderWindow = function () {
++      return _this.container && _this.container.ownerDocument && _this.container.ownerDocument.defaultView || window;
+     }, _this.handleMouseDown = function (e) {
+       _this.handleChange(e);
+-      window.addEventListener('mousemove', _this.handleChange);
+-      window.addEventListener('mouseup', _this.handleMouseUp);
++      var renderWindow = _this.getContainerRenderWindow();
++      renderWindow.addEventListener('mousemove', _this.handleChange);
++      renderWindow.addEventListener('mouseup', _this.handleMouseUp);
+     }, _this.handleMouseUp = function () {
+       _this.unbindEventListeners();
+     }, _this.unbindEventListeners = function () {
+-      window.removeEventListener('mousemove', _this.handleChange);
+-      window.removeEventListener('mouseup', _this.handleMouseUp);
++      var renderWindow = _this.getContainerRenderWindow();
++      renderWindow.removeEventListener('mousemove', _this.handleChange);
++      renderWindow.removeEventListener('mouseup', _this.handleMouseUp);
+     }, _temp), _possibleConstructorReturn(_this, _ret);
+   }
+ 
+diff --git a/node_modules/react-color/lib/components/common/Hue.js b/node_modules/react-color/lib/components/common/Hue.js
+index 0131199..777ff10 100644
+--- a/node_modules/react-color/lib/components/common/Hue.js
++++ b/node_modules/react-color/lib/components/common/Hue.js
+@@ -46,10 +46,13 @@ var Hue = exports.Hue = function (_ref) {
+     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref2 = Hue.__proto__ || Object.getPrototypeOf(Hue)).call.apply(_ref2, [this].concat(args))), _this), _this.handleChange = function (e) {
+       var change = hue.calculateChange(e, _this.props.direction, _this.props.hsl, _this.container);
+       change && typeof _this.props.onChange === 'function' && _this.props.onChange(change, e);
++    }, _this.getContainerRenderWindow = function () {
++      return _this.container && _this.container.ownerDocument && _this.container.ownerDocument.defaultView || window;
+     }, _this.handleMouseDown = function (e) {
+       _this.handleChange(e);
+-      window.addEventListener('mousemove', _this.handleChange);
+-      window.addEventListener('mouseup', _this.handleMouseUp);
++      var renderWindow = _this.getContainerRenderWindow();
++      renderWindow.addEventListener('mousemove', _this.handleChange);
++      renderWindow.addEventListener('mouseup', _this.handleMouseUp);
+     }, _this.handleMouseUp = function () {
+       _this.unbindEventListeners();
+     }, _temp), _possibleConstructorReturn(_this, _ret);
+@@ -63,8 +66,9 @@ var Hue = exports.Hue = function (_ref) {
+   }, {
+     key: 'unbindEventListeners',
+     value: function unbindEventListeners() {
+-      window.removeEventListener('mousemove', this.handleChange);
+-      window.removeEventListener('mouseup', this.handleMouseUp);
++      var renderWindow = this.getContainerRenderWindow();
++      renderWindow.removeEventListener('mousemove', this.handleChange);
++      renderWindow.removeEventListener('mouseup', this.handleMouseUp);
+     }
+   }, {
+     key: 'render',
+diff --git a/node_modules/react-color/lib/components/common/Saturation.js b/node_modules/react-color/lib/components/common/Saturation.js
+index 0a80592..1d04298 100644
+--- a/node_modules/react-color/lib/components/common/Saturation.js
++++ b/node_modules/react-color/lib/components/common/Saturation.js
+@@ -73,6 +73,10 @@ var Saturation = exports.Saturation = function (_ref) {
+     value: function getContainerRenderWindow() {
+       var container = this.container;
+ 
++      if (container && container.ownerDocument && container.ownerDocument.defaultView) {
++        return container.ownerDocument.defaultView;
++      }
++
+       var renderWindow = window;
+       while (!renderWindow.document.contains(container) && renderWindow.parent !== renderWindow) {
+         renderWindow = renderWindow.parent;

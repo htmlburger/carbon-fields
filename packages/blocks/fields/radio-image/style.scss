@@ -3,7 +3,8 @@
    ========================================================================== */
 
 .cf-radio__list-item {
-	.block-editor & {
+	.block-editor &,
+	.editor-styles-wrapper & {
 		margin: 0;
 	}
 
@@ -32,7 +33,9 @@
 	}
 
 	.block-editor .cf-radio__input:focus ~ .cf-radio__label &,
-	.block-editor .cf-radio__input:checked ~ .cf-radio__label & {
-		outline: 2px solid $wp-color-medium-blue;
+	.block-editor .cf-radio__input:checked ~ .cf-radio__label &,
+	.editor-styles-wrapper .cf-radio__input:focus ~ .cf-radio__label &,
+	.editor-styles-wrapper .cf-radio__input:checked ~ .cf-radio__label & {
+		outline: 2px solid $wp-admin-theme-color;
 	}
 }

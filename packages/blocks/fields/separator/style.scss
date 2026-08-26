@@ -3,7 +3,8 @@
    ========================================================================== */
 
 .cf-separator {
-	.block-editor & h3 {
+	.block-editor & h3,
+	.editor-styles-wrapper & h3 {
 		margin: 0;
 	}
 }

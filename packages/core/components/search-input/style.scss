@@ -22,12 +22,14 @@
 }
 
 .cf-search-input__inner {
+	@include cf-input-chrome;
 	display: block;
 	width: 100%;
 	margin: 0;
 
 	.cf-container &,
-	.block-editor .cf-field & {
+	.block-editor .cf-field &,
+	.editor-styles-wrapper .cf-field & {
 		padding-left: 35px;
 	}
 
@@ -38,6 +40,7 @@
 	}
 
 	.block-editor .cf-container &,
+	.editor-styles-wrapper .cf-container &,
 	.wp-block .cf-field &,
 	.edit-post-sidebar .cf-block__fields & {
 		border-radius: 0;

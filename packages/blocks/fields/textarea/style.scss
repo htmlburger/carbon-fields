@@ -9,7 +9,7 @@
 		transition: border-color $transition-base;
 
 		&:focus {
-			border-color: $wp-color-medium-blue;
+			border-color: $wp-admin-theme-color;
 			box-shadow: none;
 		}
 	}

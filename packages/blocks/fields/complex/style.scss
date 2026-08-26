@@ -8,7 +8,8 @@
 }
 
 .cf-complex__inserter-menu {
-	.block-editor & {
+	.block-editor &,
+	.editor-styles-wrapper & {
 		z-index: 10;
 		list-style: none outside none;
 		border: 1px solid $gb-light-gray-500;
@@ -40,7 +41,8 @@
 }
 
 .cf-complex__inserter-item {
-	.block-editor & {
+	.block-editor &,
+	.editor-styles-wrapper & {
 		color: $gb-dark-gray-600;
 
 		&:hover {
@@ -56,11 +58,13 @@
 }
 
 .cf-complex__tabs-item {
-	.block-editor & {
+	.block-editor &,
+	.editor-styles-wrapper & {
 		color: $gb-dark-gray-500;
 	}
 
-	.block-editor &--current {
+	.block-editor &--current,
+	.editor-styles-wrapper &--current {
 		color: $gb-dark-gray-900;
 	}
 

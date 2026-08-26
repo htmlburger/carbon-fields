@@ -1,7 +1,9 @@
 /**
  * External dependencies.
  */
-import { Component } from '@wordpress/element';
+import { createRef, Component } from '@wordpress/element';
+import { CacheProvider } from '@emotion/core';
+import createCache from '@emotion/cache';
 import Select from 'react-select';
 
 /**
@@ -11,6 +13,35 @@ import './style.scss';
 import NoOptions from '../../components/no-options';
 
 class MultiselectField extends Component {
+	/**
+	 * Define the project base properties
+	 *
+	 * @return {void}
+	 */
+	constructor() {
+		super();
+
+		this.wrapper = createRef();
+
+		this.state = {
+			cache: null
+		};
+	}
+
+	/**
+	 * Lifecycle hook.
+	 *
+	 * @return {void}
+	 */
+	componentDidMount() {
+		this.setState( {
+			cache: createCache( {
+				key: 'cf-multiselect',
+				container: this.wrapper.current.ownerDocument.head
+			} )
+		} );
+	}
+
 	/**
 	 * Handles the change of the input.
 	 *
@@ -51,22 +82,29 @@ class MultiselectField extends Component {
 			field
 		} = this.props;
 
+		const { cache } = this.state;
+
 		return (
-			field.options.length > 0
-				? (
-					<Select
-						id={ id }
-						name={ name }
-						value={ this.filterValues( value ) }
-						options={ field.options }
-						delimiter={ field.valueDelimiter }
-						onChange={ this.handleChange }
-						className="cf-multiselect__select"
-						classNamePrefix="cf-multiselect"
-						isMulti
-					/>
-				)
-				: <NoOptions />
+			<div ref={ this.wrapper }>
+				{ field.options.length > 0
+					? cache && (
+						<CacheProvider value={ cache }>
+							<Select
+								id={ id }
+								name={ name }
+								value={ this.filterValues( value ) }
+								options={ field.options }
+								delimiter={ field.valueDelimiter }
+								onChange={ this.handleChange }
+								className="cf-multiselect__select"
+								classNamePrefix="cf-multiselect"
+								isMulti
+							/>
+						</CacheProvider>
+					)
+					: <NoOptions />
+				}
+			</div>
 		);
 	}
 }
