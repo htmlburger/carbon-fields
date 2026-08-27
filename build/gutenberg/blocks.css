@@ -20,9 +20,15 @@
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
    ========================================================================== */
 /* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
    Association
    ========================================================================== */
-.block-editor .cf-association__cols {
+.block-editor .cf-association__cols, .editor-styles-wrapper .cf-association__cols {
   border-top-width: 1px;
   margin-top: 4px;
 }
@@ -92,6 +98,12 @@
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
    ========================================================================== */
 /* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
    Complex
    ========================================================================== */
 .cf-complex__placeholder-label {
@@ -99,14 +111,14 @@
   line-height: 1.4;
 }
 
-.block-editor .cf-complex__inserter-menu {
+.block-editor .cf-complex__inserter-menu, .editor-styles-wrapper .cf-complex__inserter-menu {
   z-index: 10;
   list-style: none outside none;
   border: 1px solid #e2e4e7;
   box-shadow: 0 3px 30px rgba(25, 30, 35, 0.1);
   background-color: #fff;
 }
-.block-editor .cf-complex__inserter-menu::before, .block-editor .cf-complex__inserter-menu::after {
+.block-editor .cf-complex__inserter-menu::before, .block-editor .cf-complex__inserter-menu::after, .editor-styles-wrapper .cf-complex__inserter-menu::before, .editor-styles-wrapper .cf-complex__inserter-menu::after {
   position: absolute;
   top: 50%;
   right: 100%;
@@ -117,18 +129,18 @@
   margin-top: -8px;
   content: "";
 }
-.block-editor .cf-complex__inserter-menu::before {
+.block-editor .cf-complex__inserter-menu::before, .editor-styles-wrapper .cf-complex__inserter-menu::before {
   border-color: transparent #e2e4e7;
   margin-right: 1px;
 }
-.block-editor .cf-complex__inserter-menu::after {
+.block-editor .cf-complex__inserter-menu::after, .editor-styles-wrapper .cf-complex__inserter-menu::after {
   border-color: transparent #fff;
 }
 
-.block-editor .cf-complex__inserter-item {
+.block-editor .cf-complex__inserter-item, .editor-styles-wrapper .cf-complex__inserter-item {
   color: #40464d;
 }
-.block-editor .cf-complex__inserter-item:hover {
+.block-editor .cf-complex__inserter-item:hover, .editor-styles-wrapper .cf-complex__inserter-item:hover {
   color: #191e23;
 }
 
@@ -136,10 +148,10 @@
   border-color: #8d96a0;
 }
 
-.block-editor .cf-complex__tabs-item {
+.block-editor .cf-complex__tabs-item, .editor-styles-wrapper .cf-complex__tabs-item {
   color: #555d66;
 }
-.block-editor .cf-complex__tabs-item--current {
+.block-editor .cf-complex__tabs-item--current, .editor-styles-wrapper .cf-complex__tabs-item--current {
   color: #191e23;
 }
 .edit-post-sidebar .cf-complex__tabs-item {
@@ -180,9 +192,15 @@
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
    ========================================================================== */
 /* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
    Field
    ========================================================================== */
-.block-editor .cf-field {
+.block-editor .cf-field, .editor-styles-wrapper .cf-field {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   font-size: 13px;
   line-height: 1.4;
@@ -196,7 +214,7 @@
 .edit-post-sidebar .cf-block__fields > .cf-field {
   padding: 4px 0 0;
 }
-.block-editor .cf-complex .cf-field {
+.block-editor .cf-complex .cf-field, .editor-styles-wrapper .cf-complex .cf-field {
   border-width: 1px 1px 0 0;
   border-style: solid;
   border-color: #e2e4e7;
@@ -210,7 +228,7 @@
   font-weight: 600;
   color: #23282d;
 }
-.block-editor .cf-field__label {
+.block-editor .cf-field__label, .editor-styles-wrapper .cf-field__label {
   margin-bottom: 4px;
 }
 .wp-block-widget-area .cf-field__label {
@@ -238,19 +256,14 @@
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
    ========================================================================== */
 /* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
    DateTime
    ========================================================================== */
-.edit-post-sidebar .cf-datetime__inner {
-  position: relative;
-}
-.edit-post-sidebar .cf-datetime__inner::before {
-  position: absolute;
-  top: 50%;
-  left: 9px;
-  display: inline-block;
-  margin-top: -10px;
-}
-
 .wp-block .cf-field .cf-datetime__input {
   min-width: 0;
   border-color: #e2e4e7;
@@ -261,6 +274,20 @@
 }
 .edit-post-sidebar .cf-field .cf-datetime__input {
   padding-left: 35px;
+}
+
+.edit-post-sidebar .cf-field .cf-datetime__input--calendar,
+.edit-post-sidebar .cf-field .cf-datetime__input--clock {
+  background-repeat: no-repeat;
+  background-position: left 8px center;
+}
+
+.edit-post-sidebar .cf-field .cf-datetime__input--calendar {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2382878c' stroke-width='1.3'%3E%3Crect x='2.5' y='4' width='15' height='13' rx='1.5'/%3E%3Cline x1='2.5' y1='8' x2='17.5' y2='8'/%3E%3Cline x1='6' y1='2' x2='6' y2='5.5'/%3E%3Cline x1='14' y1='2' x2='14' y2='5.5'/%3E%3C/svg%3E");
+}
+
+.edit-post-sidebar .cf-field .cf-datetime__input--clock {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%2382878c' stroke-width='1.3'%3E%3Ccircle cx='10' cy='10' r='7.5'/%3E%3Cline x1='10' y1='10' x2='10' y2='5.5'/%3E%3Cline x1='10' y1='10' x2='13' y2='12'/%3E%3C/svg%3E");
 }
 
 .wp-block .cf-datetime__button {
@@ -290,6 +317,12 @@
    ========================================================================== */
 /* ==========================================================================
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
+   ========================================================================== */
+/* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
    ========================================================================== */
 /* ==========================================================================
    File
@@ -327,6 +360,12 @@
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
    ========================================================================== */
 /* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
    Map
    ========================================================================== */
 .edit-post-sidebar .cf-map__canvas {
@@ -334,8 +373,13 @@
   border-top-width: 1px;
   margin-top: 4px;
 }
-.block-editor .cf-map__search:focus-within ~ .cf-map__canvas {
-  border-color: #00a0d2;
+.block-editor .cf-map__search[focus-within] ~ .cf-map__canvas, .editor-styles-wrapper .cf-map__search[focus-within] ~ .cf-map__canvas {
+  border-color: #3858e9;
+  border-color: var(--wp-admin-theme-color, #3858e9);
+}
+.block-editor .cf-map__search:focus-within ~ .cf-map__canvas, .editor-styles-wrapper .cf-map__search:focus-within ~ .cf-map__canvas {
+  border-color: #3858e9;
+  border-color: var(--wp-admin-theme-color, #3858e9);
 }
 /* ==========================================================================
    Colors
@@ -357,6 +401,12 @@
    ========================================================================== */
 /* ==========================================================================
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
+   ========================================================================== */
+/* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
    ========================================================================== */
 /* ==========================================================================
    Multiselect
@@ -368,8 +418,10 @@
   border-color: #8d96a0;
 }
 .edit-post-sidebar .cf-multiselect__control--is-focused, .edit-post-sidebar .cf-multiselect__control--is-focused:hover {
-  border-color: #00a0d2;
-  box-shadow: 0 0 0 1px #00a0d2;
+  border-color: #3858e9;
+  border-color: var(--wp-admin-theme-color, #3858e9);
+  box-shadow: 0 0 0 1px #3858e9;
+  box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #3858e9);
 }
 /* ==========================================================================
    Colors
@@ -393,15 +445,21 @@
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
    ========================================================================== */
 /* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
    Media Gallery
    ========================================================================== */
 @media (min-width: 1440px) {
-  .block-editor .cf-media-gallery__item {
+  .block-editor .cf-media-gallery__item, .editor-styles-wrapper .cf-media-gallery__item {
     flex-basis: 16.6667%;
   }
 }
 @media (min-width: 1680px) {
-  .block-editor .cf-media-gallery__item {
+  .block-editor .cf-media-gallery__item, .editor-styles-wrapper .cf-media-gallery__item {
     flex-basis: 16.6667%;
   }
 }
@@ -430,11 +488,11 @@
   border: 1px solid #8d96a0;
 }
 
-.block-editor .cf-media-gallery__item-preview {
+.block-editor .cf-media-gallery__item-preview, .editor-styles-wrapper .cf-media-gallery__item-preview {
   background-color: #f3f4f5;
 }
 
-.block-editor .cf-media-gallery__item-name {
+.block-editor .cf-media-gallery__item-name, .editor-styles-wrapper .cf-media-gallery__item-name {
   background-color: #f3f4f5;
 }
 .wp-block .cf-media-gallery__item-name {
@@ -465,6 +523,12 @@
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
    ========================================================================== */
 /* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
    oEmbed
    ========================================================================== */
 .edit-post-sidebar .cf-oembed__preview {
@@ -472,8 +536,13 @@
   border-top-width: 1px;
   margin-top: 4px;
 }
-.block-editor .cf-oembed:focus-within .cf-oembed__preview {
-  border-color: #00a0d2;
+.block-editor .cf-oembed[focus-within] .cf-oembed__preview, .editor-styles-wrapper .cf-oembed[focus-within] .cf-oembed__preview {
+  border-color: #3858e9;
+  border-color: var(--wp-admin-theme-color, #3858e9);
+}
+.block-editor .cf-oembed:focus-within .cf-oembed__preview, .editor-styles-wrapper .cf-oembed:focus-within .cf-oembed__preview {
+  border-color: #3858e9;
+  border-color: var(--wp-admin-theme-color, #3858e9);
 }
 /* ==========================================================================
    Colors
@@ -495,6 +564,12 @@
    ========================================================================== */
 /* ==========================================================================
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
+   ========================================================================== */
+/* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
    ========================================================================== */
 /* ==========================================================================
    Radio
@@ -524,9 +599,15 @@
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
    ========================================================================== */
 /* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
    Radio Image
    ========================================================================== */
-.block-editor .cf-radio__list-item {
+.block-editor .cf-radio__list-item, .editor-styles-wrapper .cf-radio__list-item {
   margin: 0;
 }
 @media (min-width: 1440px) {
@@ -549,8 +630,9 @@
 .edit-post-sidebar .cf-radio-image__image {
   border: 1px solid #8d96a0;
 }
-.block-editor .cf-radio__input:focus ~ .cf-radio__label .cf-radio-image__image, .block-editor .cf-radio__input:checked ~ .cf-radio__label .cf-radio-image__image {
-  outline: 2px solid #00a0d2;
+.block-editor .cf-radio__input:focus ~ .cf-radio__label .cf-radio-image__image, .block-editor .cf-radio__input:checked ~ .cf-radio__label .cf-radio-image__image, .editor-styles-wrapper .cf-radio__input:focus ~ .cf-radio__label .cf-radio-image__image, .editor-styles-wrapper .cf-radio__input:checked ~ .cf-radio__label .cf-radio-image__image {
+  outline: 2px solid #3858e9;
+  outline: 2px solid var(--wp-admin-theme-color, #3858e9);
 }
 /* ==========================================================================
    Colors
@@ -572,6 +654,12 @@
    ========================================================================== */
 /* ==========================================================================
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
+   ========================================================================== */
+/* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
    ========================================================================== */
 /* ==========================================================================
    Select
@@ -605,6 +693,12 @@
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
    ========================================================================== */
 /* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
    Set
    ========================================================================== */
 .wp-block .cf-set__list {
@@ -632,9 +726,15 @@
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
    ========================================================================== */
 /* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
    Separator
    ========================================================================== */
-.block-editor .cf-separator h3 {
+.block-editor .cf-separator h3, .editor-styles-wrapper .cf-separator h3 {
   margin: 0;
 }
 /* ==========================================================================
@@ -657,6 +757,12 @@
    ========================================================================== */
 /* ==========================================================================
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
+   ========================================================================== */
+/* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
    ========================================================================== */
 /* ==========================================================================
    Text
@@ -690,6 +796,12 @@
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
    ========================================================================== */
 /* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
    Textarea
    ========================================================================== */
 .wp-block .cf-field .cf-textarea__input {
@@ -698,7 +810,8 @@
   transition: border-color 0.1s linear;
 }
 .wp-block .cf-field .cf-textarea__input:focus {
-  border-color: #00a0d2;
+  border-color: #3858e9;
+  border-color: var(--wp-admin-theme-color, #3858e9);
   box-shadow: none;
 }
 /* ==========================================================================
@@ -721,6 +834,12 @@
    ========================================================================== */
 /* ==========================================================================
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
+   ========================================================================== */
+/* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
    ========================================================================== */
 /* ------------------------------------------------------------ *\ 
     Block Preview iFrame
@@ -756,6 +875,12 @@ body.block-editor-iframe__body .cf-block__fields:has(.cf-block-preview) .cf-fiel
    Gutenberg Variables - https://github.com/WordPress/gutenberg/blob/master/assets/stylesheets/_variables.scss
    ========================================================================== */
 /* ==========================================================================
+   WP Admin CSS Custom Properties - https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-admin/css/common.css
+   ========================================================================== */
+/* ==========================================================================
+   Mixins
+   ========================================================================== */
+/* ==========================================================================
    Block
    ========================================================================== */
 .cf-block__tabs {
@@ -778,7 +903,8 @@ body.block-editor-iframe__body .cf-block__fields:has(.cf-block-preview) .cf-fiel
   cursor: pointer;
 }
 .cf-block__tabs-item--current {
-  box-shadow: 0 3px 0 #00a0d2;
+  box-shadow: 0 3px 0 #3858e9;
+  box-shadow: 0 3px 0 var(--wp-admin-theme-color, #3858e9);
 }
 
 .cf-block__fields {
@@ -794,6 +920,29 @@ body.block-editor-iframe__body .cf-block__fields:has(.cf-block-preview) .cf-fiel
 
 .cf-block__preview {
   min-height: 100px;
+}
+.cf-block__preview .alignleft {
+  float: left;
+  margin: 0 1.5em 1.5em 0;
+}
+.cf-block__preview .alignright {
+  float: right;
+  margin: 0 0 1.5em 1.5em;
+}
+.cf-block__preview .aligncenter {
+  display: block;
+  margin: 0 auto 1.5em;
+}
+.cf-block__preview .wp-caption {
+  max-width: 100%;
+}
+.cf-block__preview .wp-caption .wp-caption-text {
+  font-size: 13px;
+  text-align: center;
+}
+.cf-block__preview img {
+  max-width: 100%;
+  height: auto;
 }
 
 .cf-block__inner-blocks .block-list-appender {
