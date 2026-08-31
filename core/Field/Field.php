@@ -154,7 +154,7 @@ class Field implements Datastore_Holder_Interface {
 	 *
 	 * @var array<string>
 	 */
-	protected $allowed_attributes = array();
+	protected $allowed_attributes = array( 'disabled' );
 
 	/**
 	 * The width of the field.
