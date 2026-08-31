@@ -21,6 +21,13 @@ class Checkbox_Field extends Field {
 	protected $option_value = 'yes';
 
 	/**
+	 * Allowed HTML attributes for the field.
+	 *
+	 * @var string[]
+	 */
+	protected $allowed_attributes = [ 'disabled' ];
+
+	/**
 	 * Get the option value.
 	 *
 	 * @return string

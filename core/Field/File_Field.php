@@ -18,6 +18,13 @@ class File_Field extends Field {
 	public $value_type = 'id';
 
 	/**
+	 * Allowed HTML attributes for the field.
+	 *
+	 * @var string[]
+	 */
+	protected $allowed_attributes = [ 'disabled' ];
+
+	/**
 	 * Change the type of the field
 	 *
 	 * @param string $type

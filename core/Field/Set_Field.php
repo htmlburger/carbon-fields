@@ -25,6 +25,13 @@ class Set_Field extends Predefined_Options_Field {
 	protected $limit_options = 0;
 
 	/**
+	 * Allowed HTML attributes for the field.
+	 *
+	 * @var string[]
+	 */
+	protected $allowed_attributes = [ 'disabled' ];
+
+	/**
 	 * Create a field from a certain type with the specified label.
 	 *
 	 * @param string $type  Field type

@@ -12,5 +12,5 @@ class Text_Field extends Field {
 	/**
 	 * {@inheritDoc}
 	 */
-	protected $allowed_attributes = array( 'list', 'max', 'maxLength', 'min', 'pattern', 'placeholder', 'readOnly', 'step', 'type', 'is', 'inputmode', 'autocomplete' );
+	protected $allowed_attributes = array( 'disabled', 'list', 'max', 'maxLength', 'min', 'pattern', 'placeholder', 'readOnly', 'step', 'type', 'is', 'inputmode', 'autocomplete' );
 }
