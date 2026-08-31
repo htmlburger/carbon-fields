@@ -168,11 +168,27 @@ class Router {
 	}
 
 	/**
-	 * Allow access to an endpoint
+	 * Allow access to an endpoint.
 	 *
-	 * @return bool
+	 * Requires the user to be logged in by default. Use the
+	 * `carbon_fields_rest_api_allow_public_access` filter to allow
+	 * unauthenticated access for intentionally public endpoints.
+	 *
+	 * @return bool|\WP_Error
 	 */
 	public function allow_access() {
+		if ( apply_filters( 'carbon_fields_rest_api_allow_public_access', false ) ) {
+			return true;
+		}
+
+		if ( ! is_user_logged_in() ) {
+			return new \WP_Error(
+				'rest_forbidden',
+				__( 'You must be logged in to access Carbon Fields data.', 'carbon-fields' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
 		return true;
 	}
 
