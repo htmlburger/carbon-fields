@@ -258,7 +258,7 @@ class Router {
 					"Carbon_Fields\Field\Image_Field"
 				];
 
-				if ( in_array( get_class( $field ), $attachments_class ) ) {
+				if ( in_array( get_class( $field ), $attachments_class, true ) ) {
 					$value = Helper::get_attachments_urls($value);
 				}
 			}
@@ -321,21 +321,25 @@ class Router {
 	 * @return array
 	 */
 	public function get_association_data() {
-		$container_id = $_GET['container_id'];
-		$field_id     = $_GET['field_id'];
+		$container_id = isset( $_GET['container_id'] ) ? sanitize_text_field( $_GET['container_id'] ) : '';
+		$field_id     = isset( $_GET['field_id'] ) ? sanitize_text_field( $_GET['field_id'] ) : '';
 		$options      = isset( $_GET['options'] ) ? explode( ';', $_GET['options'] ) : array();
 		$return_value = array();
 
 		/** @var \Carbon_Fields\Field\Association_Field $field */
 		$field = Helper::get_field( null, $container_id, $field_id );
 
+		if ( ! $field ) {
+			return $return_value;
+		}
+
 		$options = array_map( function ( $option ) {
-			$option = explode( ':', $option );
+			$parts = array_pad( explode( ':', $option ), 3, '' );
 
 			return [
-				'id'      => $option[0],
-				'type'    => $option[1],
-				'subtype' => $option[2],
+				'id'      => $parts[0],
+				'type'    => $parts[1],
+				'subtype' => $parts[2],
 			];
 		}, $options );
 
@@ -367,11 +371,15 @@ class Router {
 		$page = isset( $_GET['page'] ) ? absint( $_GET['page'] )              : 1;
 		$term = isset( $_GET['term'] ) ? sanitize_text_field( $_GET['term'] ) : '';
 
-		$container_id = $_GET['container_id'];
-		$field_id     = $_GET['field_id'];
+		$container_id = isset( $_GET['container_id'] ) ? sanitize_text_field( $_GET['container_id'] ) : '';
+		$field_id     = isset( $_GET['field_id'] ) ? sanitize_text_field( $_GET['field_id'] ) : '';
 
 		/** @var \Carbon_Fields\Field\Association_Field $field */
 		$field = Helper::get_field( null, $container_id, $field_id );
+
+		if ( ! $field ) {
+			return array();
+		}
 
 		return $field->get_options( array(
 			'page' => $page,
