@@ -185,13 +185,11 @@ class MediaGalleryField extends Component {
 															</span>
 														) }
 
-														{ isAttachmentLoaded && (
-															<button
-																type="button"
-																className="cf-media-gallery__item-remove dashicons-before dashicons-no-alt"
-																onClick={ () => this.handleAttachmentRemove( index ) }
-															></button>
-														) }
+														<button
+															type="button"
+															className="cf-media-gallery__item-remove dashicons-before dashicons-no-alt"
+															onClick={ () => this.handleAttachmentRemove( index ) }
+														></button>
 													</div>
 
 													<input
